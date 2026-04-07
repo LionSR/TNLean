@@ -110,6 +110,16 @@ def IsInjective (A : MPSTensor d D) : Prop :=
 lemma IsInjective.span_eq_top {A : MPSTensor d D} (hA : IsInjective A) :
     Submodule.span ℂ (Set.range A) = ⊤ := hA
 
+/-- An injective MPS tensor on `D ≥ 1` bond dimension implies `d ≥ 1`. -/
+theorem neZero_d_of_isInjective {A : MPSTensor d D} [NeZero D]
+    (hA : IsInjective A) : NeZero d := by
+  by_contra h
+  simp only [not_neZero] at h
+  subst h
+  have hempty : Set.range A = ∅ := Set.range_eq_empty_iff.mpr inferInstance
+  rw [IsInjective, hempty, Submodule.span_empty] at hA
+  exact bot_ne_top hA
+
 /-- `N`-block injectivity: after blocking `N` sites, the set of all products
 `A^{i₁} * ⋯ * A^{i_N}` spans the full matrix algebra.
 
