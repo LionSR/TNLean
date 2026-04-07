@@ -284,3 +284,4 @@ import TNLean.Channel.Determinant
 
 -- PEPS (exploratory)
 import TNLean.PEPS.Defs
+import TNLean.PEPS.FundamentalTheorem
