@@ -58,7 +58,7 @@ jobs:
         run: |
           cd docbuild
           lake update
-          lake build
+          lake build TNLean:docs
 
       - name: Deploy to gh-pages
         run: |
