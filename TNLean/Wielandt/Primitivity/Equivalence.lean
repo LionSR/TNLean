@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 
 import TNLean.Wielandt.Primitivity.EasyDirections
-import TNLean.Wielandt.Primitivity.ImpliesStronglyIrreducible
+import TNLean.Wielandt.Primitivity.ImpliesStronglyIrreducibleAux
 import TNLean.Wielandt.Primitivity.StronglyIrreducibleToFullRank
 
 /-!
@@ -27,18 +27,19 @@ The following are equivalent for an MPS tensor `A` with `∑ Aᵢ† Aᵢ = 1`:
 
 ## Directions proved
 
-| Direction | Theorem | File |
-|-----------|---------|------|
-| **(b) → (a)** | `isPrimitivePaper_of_hasEventuallyFullKrausRank` | `Primitivity/EasyDirections.lean` |
-| **(a) → (c)** | `isStronglyIrreduciblePaper_of_isPrimitivePaper` | `Primitivity/ImpliesStronglyIrreducible.lean` |
-| **(c) → (b)** | `hasEventuallyFullKrausRank_of_isStronglyIrreduciblePaper` | `Primitivity/StronglyIrreducibleToFullRank.lean` |
+| Dir | Theorem | File |
+|-----|---------|------|
+| **(b)→(a)** | `isPrimitivePaper_of_hasEventuallyFullKrausRank` | `EasyDirections` |
+| **(a)→(c)** | `isStronglyIrreduciblePaper_of_isPrimitivePaper` | `ImpliesStronglyIrreducibleAux` |
+| **(c)→(b)** | `hasEventuallyFullKrausRank_of_isStronglyIrreduciblePaper` | `StronglyIrreducibleToFullRank` |
 
 Together these close the cycle **(a) → (c) → (b) → (a)**, establishing the
 full equivalence of all three conditions.
 
 Within TNLean this is the preferred Proposition 3 entry point on the root
 import surface. The direction-specific files
-`Primitivity/ImpliesStronglyIrreducible.lean` and
+`Primitivity/ImpliesStronglyIrreducible.lean`,
+`Primitivity/ImpliesStronglyIrreducibleAux.lean`, and
 `Primitivity/StronglyIrreducibleToFullRank.lean` remain specialized
 implementation modules, while the canonical / FT / BNT assembly does not
 import these wrappers directly.
@@ -98,7 +99,8 @@ theorem prop3_ba_isNormal (A : MPSTensor d D)
 If the MPS tensor `A` is paper primitive and normalized (`∑ Aᵢ† Aᵢ = 1`), then
 it is strongly irreducible.
 
-This is proved in `Primitivity/ImpliesStronglyIrreducible.lean` and recalled here for convenience.
+This is proved in `Primitivity/ImpliesStronglyIrreducibleAux.lean`
+and recalled here for convenience.
 Paper: arXiv:0909.5347, Proposition 3(a)→(c); Wolf, Chapter 6.
 -/
 theorem prop3_ac [NeZero D] (A : MPSTensor d D)
