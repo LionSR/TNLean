@@ -1,0 +1,4036 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>
+  MathJax = { 
+    tex: {
+		    inlineMath: [['$','$'], ['\\(','\\)']]
+	} }
+</script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+<meta name="generator" content="plasTeX" />
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>The Algebraic Fundamental Theorem</title>
+<link rel="next" href="ch-symmetry.html" title="Symmetries and String Order" />
+<link rel="prev" href="ch-semigroup.html" title="Quantum Dynamical Semigroups" />
+<link rel="up" href="index.html" title="Fundamental Theorem of Matrix Product States" />
+<link rel="stylesheet" href="styles/theme-white.css" />
+<link rel="stylesheet" href="styles/amsthm.css" />
+<link rel="stylesheet" href="styles/showmore.css" />
+<link rel="stylesheet" href="styles/blueprint.css" />
+<link rel="stylesheet" href="styles/extra_styles.css" />
+</head>
+
+<body>
+<header>
+<svg  id="toc-toggle" class="icon icon-list-numbered "><use xlink:href="symbol-defs.svg#icon-list-numbered"></use></svg>
+<h1 id="doc_title"><a href="index.html">Fundamental Theorem of Matrix Product States</a></h1>
+</header>
+
+<div class="wrapper">
+<nav class="toc">
+<ul class="sub-toc-0">
+<li class="">
+  <a href="ch-intro.html"><span class="toc_ref">1</span> <span class="toc_entry">Introduction</span></a>
+ </li>
+<li class="">
+  <a href="ch-mps.html"><span class="toc_ref">2</span> <span class="toc_entry">Matrix Product Vectors</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-1">
+     <li class="">
+  <a href="ch-mps.html#a0000000003"><span class="toc_ref">2.1</span> <span class="toc_entry">Basic definitions</span></a>
+ </li>
+<li class="">
+  <a href="ch-mps.html#a0000000004"><span class="toc_ref">2.2</span> <span class="toc_entry">Periodic-chain aliases</span></a>
+ </li>
+<li class="">
+  <a href="ch-mps.html#a0000000005"><span class="toc_ref">2.3</span> <span class="toc_entry">Gauge equivalence and same MPV</span></a>
+ </li>
+<li class="">
+  <a href="ch-mps.html#a0000000006"><span class="toc_ref">2.4</span> <span class="toc_entry">Injectivity and normality</span></a>
+ </li>
+<li class="">
+  <a href="ch-mps.html#a0000000007"><span class="toc_ref">2.5</span> <span class="toc_entry">Canonical form</span></a>
+ </li>
+<li class="">
+  <a href="ch-mps.html#a0000000008"><span class="toc_ref">2.6</span> <span class="toc_entry">Blocking</span></a>
+ </li>
+<li class="">
+  <a href="ch-mps.html#a0000000009"><span class="toc_ref">2.7</span> <span class="toc_entry">MPV overlap</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="ch-mpdo.html"><span class="toc_ref">3</span> <span class="toc_entry">Matrix Product Operators and Density Operators</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-1">
+     <li class="">
+  <a href="ch-mpdo.html#a0000000010"><span class="toc_ref">3.1</span> <span class="toc_entry">MPO tensors</span></a>
+ </li>
+<li class="">
+  <a href="ch-mpdo.html#a0000000011"><span class="toc_ref">3.2</span> <span class="toc_entry">Transfer maps</span></a>
+ </li>
+<li class="">
+  <a href="ch-mpdo.html#a0000000012"><span class="toc_ref">3.3</span> <span class="toc_entry">MPDOs and LPDOs</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="ch-single.html"><span class="toc_ref">4</span> <span class="toc_entry">The Single-Block Fundamental Theorem</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-1">
+     <li class="">
+  <a href="ch-single.html#a0000000013"><span class="toc_ref">4.1</span> <span class="toc_entry">Trace pairing</span></a>
+ </li>
+<li class="">
+  <a href="ch-single.html#a0000000014"><span class="toc_ref">4.2</span> <span class="toc_entry">Linear extension</span></a>
+ </li>
+<li class="">
+  <a href="ch-single.html#a0000000015"><span class="toc_ref">4.3</span> <span class="toc_entry">Simplicity and Skolem–Noether</span></a>
+ </li>
+<li class="">
+  <a href="ch-single.html#a0000000016"><span class="toc_ref">4.4</span> <span class="toc_entry">Proof of the single-block theorem</span></a>
+ </li>
+<li class="">
+  <a href="ch-single.html#a0000000017"><span class="toc_ref">4.5</span> <span class="toc_entry">Alternative fixed-length non-TI setup</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="ch-channels.html"><span class="toc_ref">5</span> <span class="toc_entry">Quantum Channels and Positive Maps</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-1">
+     <li class="">
+  <a href="ch-channels.html#a0000000018"><span class="toc_ref">5.1</span> <span class="toc_entry">Positive maps and channels</span></a>
+ </li>
+<li class="">
+  <a href="ch-channels.html#a0000000019"><span class="toc_ref">5.2</span> <span class="toc_entry">Irreducibility</span></a>
+ </li>
+<li class="">
+  <a href="ch-channels.html#a0000000020"><span class="toc_ref">5.3</span> <span class="toc_entry">Cesàro fixed-point theorem</span></a>
+ </li>
+<li class="">
+  <a href="ch-channels.html#a0000000021"><span class="toc_ref">5.4</span> <span class="toc_entry">Fixed-point projection</span></a>
+ </li>
+<li class="">
+  <a href="ch-channels.html#a0000000022"><span class="toc_ref">5.5</span> <span class="toc_entry">Peripheral spectrum and primitivity</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-2">
+     <li class="">
+  <a href="ch-channels.html#subsec:periodicity_removal_power"><span class="toc_ref">5.5.1</span> <span class="toc_entry">Periodicity removal by powering</span></a>
+ </li>
+<li class="">
+  <a href="ch-channels.html#subsec:peripheral_closure_fixedpoint"><span class="toc_ref">5.5.2</span> <span class="toc_entry">Peripheral closure via adjoint fixed point</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="ch-channels.html#sec:representations_infrastructure"><span class="toc_ref">5.6</span> <span class="toc_entry">Representations: infrastructure</span></a>
+ </li>
+<li class="">
+  <a href="ch-channels.html#sec:choi_jamiolkowski"><span class="toc_ref">5.7</span> <span class="toc_entry">Choi–Jamiołkowski isomorphism (Wolf Prop.&#160;2.1)</span></a>
+ </li>
+<li class="">
+  <a href="ch-channels.html#sec:kraus_representation"><span class="toc_ref">5.8</span> <span class="toc_entry">Kraus representation theorem (Wolf Thm.&#160;2.1)</span></a>
+ </li>
+<li class="">
+  <a href="ch-channels.html#sec:stinespring"><span class="toc_ref">5.9</span> <span class="toc_entry">Stinespring dilation (Wolf Thm.&#160;2.2)</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-2">
+     <li class="">
+  <a href="ch-channels.html#subsec:trace_pairing_expansion"><span class="toc_ref">5.9.1</span> <span class="toc_entry">Trace-pairing expansion in transfer-matrix form</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="ch-channels.html#sec:channel_determinant"><span class="toc_ref">5.10</span> <span class="toc_entry">Determinant of a quantum channel (Wolf §6.1.1)</span></a>
+ </li>
+<li class="">
+  <a href="ch-channels.html#sec:fixed_point_algebra"><span class="toc_ref">5.11</span> <span class="toc_entry">Fixed-point algebra (Wolf Thms.&#160;6.12–6.13)</span></a>
+ </li>
+<li class="">
+  <a href="ch-channels.html#sec:quantum_dynamical_semigroups"><span class="toc_ref">5.12</span> <span class="toc_entry">Quantum dynamical semigroups</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="ch-entropy.html"><span class="toc_ref">6</span> <span class="toc_entry">Quantum Entropy</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-1">
+     <li class="">
+  <a href="ch-entropy.html#a0000000023"><span class="toc_ref">6.1</span> <span class="toc_entry">Von Neumann entropy</span></a>
+ </li>
+<li class="">
+  <a href="ch-entropy.html#a0000000024"><span class="toc_ref">6.2</span> <span class="toc_entry">Tripartite partial traces</span></a>
+ </li>
+<li class="">
+  <a href="ch-entropy.html#a0000000025"><span class="toc_ref">6.3</span> <span class="toc_entry">Strong subadditivity</span></a>
+ </li>
+<li class="">
+  <a href="ch-entropy.html#a0000000026"><span class="toc_ref">6.4</span> <span class="toc_entry">Mutual information</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="ch-schwarz.html"><span class="toc_ref">7</span> <span class="toc_entry">Schwarz Inequalities and Multiplicative Domains</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-1">
+     <li class="">
+  <a href="ch-schwarz.html#a0000000027"><span class="toc_ref">7.1</span> <span class="toc_entry">Kadison–Schwarz inequality</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-2">
+     <li class="">
+  <a href="ch-schwarz.html#a0000000028"><span class="toc_ref">7.1.1</span> <span class="toc_entry">Two-positive maps and the generalized Schwarz inequality</span></a>
+ </li>
+<li class="">
+  <a href="ch-schwarz.html#a0000000029"><span class="toc_ref">7.1.2</span> <span class="toc_entry">Douglas-type factorization lemmas</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="ch-schwarz.html#a0000000030"><span class="toc_ref">7.2</span> <span class="toc_entry">Multiplicative domain</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-2">
+     <li class="">
+  <a href="ch-schwarz.html#a0000000031"><span class="toc_ref">7.2.1</span> <span class="toc_entry">Full multiplicative-domain structure</span></a>
+ </li>
+<li class="">
+  <a href="ch-schwarz.html#a0000000032"><span class="toc_ref">7.2.2</span> <span class="toc_entry">Schwarz inequality for normal operators</span></a>
+ </li>
+<li class="">
+  <a href="ch-schwarz.html#a0000000033"><span class="toc_ref">7.2.3</span> <span class="toc_entry">Schwarz inequality for subnormal and commuting-dominant operators</span></a>
+ </li>
+<li class="">
+  <a href="ch-schwarz.html#a0000000034"><span class="toc_ref">7.2.4</span> <span class="toc_entry">Positive maps preserve order and spectral intervals</span></a>
+ </li>
+<li class="">
+  <a href="ch-schwarz.html#a0000000035"><span class="toc_ref">7.2.5</span> <span class="toc_entry">Wolf Example 5.3</span></a>
+ </li>
+
+  </ul>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="ch-qpf.html"><span class="toc_ref">8</span> <span class="toc_entry">Perron–Frobenius Theory for Channels and Transfer Maps</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-1">
+     <li class="">
+  <a href="ch-qpf.html#a0000000036"><span class="toc_ref">8.1</span> <span class="toc_entry">Positive definiteness</span></a>
+ </li>
+<li class="">
+  <a href="ch-qpf.html#a0000000037"><span class="toc_ref">8.2</span> <span class="toc_entry">Uniqueness</span></a>
+ </li>
+<li class="">
+  <a href="ch-qpf.html#a0000000038"><span class="toc_ref">8.3</span> <span class="toc_entry">Existence and the Perron–Frobenius theorem</span></a>
+ </li>
+<li class="">
+  <a href="ch-qpf.html#a0000000039"><span class="toc_ref">8.4</span> <span class="toc_entry">Right- and left-canonical gauges</span></a>
+ </li>
+<li class="">
+  <a href="ch-qpf.html#a0000000040"><span class="toc_ref">8.5</span> <span class="toc_entry">Similarity preserves irreducibility</span></a>
+ </li>
+<li class="">
+  <a href="ch-qpf.html#sec:pf_eigenvector"><span class="toc_ref">8.6</span> <span class="toc_entry">Perron–Frobenius eigenvector existence</span></a>
+ </li>
+<li class="">
+  <a href="ch-qpf.html#a0000000041"><span class="toc_ref">8.7</span> <span class="toc_entry">Exponential positivity for irreducible CP maps</span></a>
+ </li>
+<li class="">
+  <a href="ch-qpf.html#a0000000042"><span class="toc_ref">8.8</span> <span class="toc_entry">Ergodicity of irreducible channels</span></a>
+ </li>
+<li class="">
+  <a href="ch-qpf.html#a0000000043"><span class="toc_ref">8.9</span> <span class="toc_entry">Spectral radius at the Perron eigenvalue</span></a>
+ </li>
+<li class="">
+  <a href="ch-qpf.html#a0000000044"><span class="toc_ref">8.10</span> <span class="toc_entry">Spectral characterization of irreducibility</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="ch-spectral.html"><span class="toc_ref">9</span> <span class="toc_entry">Spectral Gap and Block Separation</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-1">
+     <li class="">
+  <a href="ch-spectral.html#a0000000045"><span class="toc_ref">9.1</span> <span class="toc_entry">Mixed transfer operator</span></a>
+ </li>
+<li class="">
+  <a href="ch-spectral.html#a0000000046"><span class="toc_ref">9.2</span> <span class="toc_entry">MPV overlap as transfer trace</span></a>
+ </li>
+<li class="">
+  <a href="ch-spectral.html#a0000000047"><span class="toc_ref">9.3</span> <span class="toc_entry">Frobenius norm infrastructure</span></a>
+ </li>
+<li class="">
+  <a href="ch-spectral.html#a0000000048"><span class="toc_ref">9.4</span> <span class="toc_entry">Eigenvalue bound and spectral gap</span></a>
+ </li>
+<li class="">
+  <a href="ch-spectral.html#a0000000049"><span class="toc_ref">9.5</span> <span class="toc_entry">Spectral gap — rectangular case</span></a>
+ </li>
+<li class="">
+  <a href="ch-spectral.html#a0000000050"><span class="toc_ref">9.6</span> <span class="toc_entry">MPV overlap decay</span></a>
+ </li>
+<li class="">
+  <a href="ch-spectral.html#a0000000051"><span class="toc_ref">9.7</span> <span class="toc_entry">Block separation</span></a>
+ </li>
+<li class="">
+  <a href="ch-spectral.html#a0000000052"><span class="toc_ref">9.8</span> <span class="toc_entry">Spectral gap under irreducible-TP hypotheses</span></a>
+ </li>
+<li class="">
+  <a href="ch-spectral.html#a0000000053"><span class="toc_ref">9.9</span> <span class="toc_entry">Conditional expectation from a faithful fixed point (Wolf Thm.&#160;6.15)</span></a>
+ </li>
+<li class="">
+  <a href="ch-spectral.html#a0000000054"><span class="toc_ref">9.10</span> <span class="toc_entry">Stationary support (Wolf §6.4)</span></a>
+ </li>
+<li class="">
+  <a href="ch-spectral.html#a0000000055"><span class="toc_ref">9.11</span> <span class="toc_entry">Wedderburn decomposition of the fixed-point algebra (Wolf Thm.&#160;6.14)</span></a>
+ </li>
+<li class="">
+  <a href="ch-spectral.html#a0000000056"><span class="toc_ref">9.12</span> <span class="toc_entry">Additional Wolf Chapter&#160;6 equivalences</span></a>
+ </li>
+<li class="">
+  <a href="ch-spectral.html#a0000000057"><span class="toc_ref">9.13</span> <span class="toc_entry">Peripheral eigenvalue group structure (Wolf Thm.&#160;6.6)</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-2">
+     <li class="">
+  <a href="ch-spectral.html#a0000000058"><span class="toc_ref">9.13.1</span> <span class="toc_entry">Cyclic decomposition declarations</span></a>
+ </li>
+<li class="">
+  <a href="ch-spectral.html#a0000000059"><span class="toc_ref">9.13.2</span> <span class="toc_entry">Peripheral group-structure declarations</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="ch-spectral.html#a0000000060"><span class="toc_ref">9.14</span> <span class="toc_entry">Primitive overlap convergence (spectral-gap form)</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="ch-wielandt.html"><span class="toc_ref">10</span> <span class="toc_entry">Wielandt Bound</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-1">
+     <li class="">
+  <a href="ch-wielandt.html#a0000000061"><span class="toc_ref">10.1</span> <span class="toc_entry">Cumulative span</span></a>
+ </li>
+<li class="">
+  <a href="ch-wielandt.html#a0000000062"><span class="toc_ref">10.2</span> <span class="toc_entry">Fitting decomposition</span></a>
+ </li>
+<li class="">
+  <a href="ch-wielandt.html#a0000000063"><span class="toc_ref">10.3</span> <span class="toc_entry">Nonzero trace product</span></a>
+ </li>
+<li class="">
+  <a href="ch-wielandt.html#a0000000064"><span class="toc_ref">10.4</span> <span class="toc_entry">Eigenvector extraction</span></a>
+ </li>
+<li class="">
+  <a href="ch-wielandt.html#a0000000065"><span class="toc_ref">10.5</span> <span class="toc_entry">Eigenvector spreading</span></a>
+ </li>
+<li class="">
+  <a href="ch-wielandt.html#a0000000066"><span class="toc_ref">10.6</span> <span class="toc_entry">Proof of the cumulative Wielandt bound</span></a>
+ </li>
+<li class="">
+  <a href="ch-wielandt.html#sec:lemma2b"><span class="toc_ref">10.7</span> <span class="toc_entry">Lemma&#160;2(b): fixed-length matrix spanning</span></a>
+ </li>
+<li class="">
+  <a href="ch-wielandt.html#sec:rectangular_span"><span class="toc_ref">10.8</span> <span class="toc_entry">Blocked tensor and rectangular span</span></a>
+ </li>
+<li class="">
+  <a href="ch-wielandt.html#a0000000067"><span class="toc_ref">10.9</span> <span class="toc_entry">Primitive MPS tensors</span></a>
+ </li>
+<li class="">
+  <a href="ch-wielandt.html#a0000000068"><span class="toc_ref">10.10</span> <span class="toc_entry">Primitivity and normality</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-2">
+     <li class="">
+  <a href="ch-wielandt.html#subsec:prim_to_normal"><span class="toc_ref">10.10.1</span> <span class="toc_entry">From primitivity to normality</span></a>
+ </li>
+<li class="">
+  <a href="ch-wielandt.html#subsec:prim_implies_irred"><span class="toc_ref">10.10.2</span> <span class="toc_entry">Primitive implies irreducible</span></a>
+ </li>
+<li class="">
+  <a href="ch-wielandt.html#subsec:prim_bridge_normality"><span class="toc_ref">10.10.3</span> <span class="toc_entry">From primitivity to strong irreducibility and normality</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="ch-wielandt.html#sec:cumspan_to_wordspan"><span class="toc_ref">10.11</span> <span class="toc_entry">Cumulative span to word span</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="ch-canonical.html"><span class="toc_ref">11</span> <span class="toc_entry">Canonical Form Reduction</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-1">
+     <li class="">
+  <a href="ch-canonical.html#a0000000069"><span class="toc_ref">11.1</span> <span class="toc_entry">Block-diagonal construction</span></a>
+ </li>
+<li class="">
+  <a href="ch-canonical.html#a0000000070"><span class="toc_ref">11.2</span> <span class="toc_entry">Transfer map normalization</span></a>
+ </li>
+<li class="">
+  <a href="ch-canonical.html#a0000000071"><span class="toc_ref">11.3</span> <span class="toc_entry">Invariant subspace decomposition</span></a>
+ </li>
+<li class="">
+  <a href="ch-canonical.html#a0000000072"><span class="toc_ref">11.4</span> <span class="toc_entry">Iterated reduction</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-2">
+     <li class="">
+  <a href="ch-canonical.html#subsec:burnside_bridge"><span class="toc_ref">11.4.1</span> <span class="toc_entry">From irreducibility to full spanning via Burnside’s theorem</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="ch-canonical.html#a0000000073"><span class="toc_ref">11.5</span> <span class="toc_entry">Proportional single-block theorem</span></a>
+ </li>
+<li class="">
+  <a href="ch-canonical.html#a0000000074"><span class="toc_ref">11.6</span> <span class="toc_entry">Canonical form from peripheral primitivity</span></a>
+ </li>
+<li class="">
+  <a href="ch-canonical.html#sec:normal_canonical_form"><span class="toc_ref">11.7</span> <span class="toc_entry">Normal canonical form</span></a>
+ </li>
+<li class="">
+  <a href="ch-canonical.html#sec:canonical_pipeline_1606"><span class="toc_ref">11.8</span> <span class="toc_entry">Steps toward canonical form existence</span></a>
+ </li>
+<li class="">
+  <a href="ch-canonical.html#sec:zero_block_separation"><span class="toc_ref">11.9</span> <span class="toc_entry">Zero-block separation</span></a>
+ </li>
+<li class="">
+  <a href="ch-canonical.html#sec:tp_gauge_arbitrary"><span class="toc_ref">11.10</span> <span class="toc_entry">Arbitrary-input TP-gauge reduction</span></a>
+ </li>
+<li class="">
+  <a href="ch-canonical.html#sec:blocking_infrastructure"><span class="toc_ref">11.11</span> <span class="toc_entry">Blocking infrastructure</span></a>
+ </li>
+<li class="">
+  <a href="ch-canonical.html#sec:cyclic_sectors"><span class="toc_ref">11.12</span> <span class="toc_entry">Cyclic sector decomposition</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-2">
+     <li class="">
+  <a href="ch-canonical.html#sec:sector_irreducibility_helpers"><span class="toc_ref">11.12.1</span> <span class="toc_entry">Sector irreducibility helpers</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="ch-canonical.html#sec:assembly_pipeline"><span class="toc_ref">11.13</span> <span class="toc_entry">Reduction to primitive blocks</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-2">
+     <li class="">
+  <a href="ch-canonical.html#a0000000075"><span class="toc_ref">11.13.1</span> <span class="toc_entry">Basis of Normal Tensors</span></a>
+ </li>
+<li class="">
+  <a href="ch-canonical.html#a0000000076"><span class="toc_ref">11.13.2</span> <span class="toc_entry">Equal-Norm Blocks</span></a>
+ </li>
+<li class="">
+  <a href="ch-canonical.html#a0000000077"><span class="toc_ref">11.13.3</span> <span class="toc_entry">Cyclic Sectors</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="ch-canonical.html#sec:pipeline_status"><span class="toc_ref">11.14</span> <span class="toc_entry">Open directions</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="ch-block_perm.html"><span class="toc_ref">12</span> <span class="toc_entry">Block Permutation and Separation</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-1">
+     <li class="">
+  <a href="ch-block_perm.html#a0000000078"><span class="toc_ref">12.1</span> <span class="toc_entry">Block permutation algebra</span></a>
+ </li>
+<li class="">
+  <a href="ch-block_perm.html#a0000000079"><span class="toc_ref">12.2</span> <span class="toc_entry">Product algebra linear extension</span></a>
+ </li>
+<li class="">
+  <a href="ch-block_perm.html#a0000000080"><span class="toc_ref">12.3</span> <span class="toc_entry">Block separation</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="ch-bnt.html"><span class="toc_ref">13</span> <span class="toc_entry">Basis of Normal Tensors</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-1">
+     <li class="">
+  <a href="ch-bnt.html#a0000000081"><span class="toc_ref">13.1</span> <span class="toc_entry">Basis of normal tensors</span></a>
+ </li>
+<li class="">
+  <a href="ch-bnt.html#a0000000082"><span class="toc_ref">13.2</span> <span class="toc_entry">Permutation rigidity for bases of normal tensors</span></a>
+ </li>
+<li class="">
+  <a href="ch-bnt.html#a0000000083"><span class="toc_ref">13.3</span> <span class="toc_entry">Coefficient convergence</span></a>
+ </li>
+<li class="">
+  <a href="ch-bnt.html#a0000000084"><span class="toc_ref">13.4</span> <span class="toc_entry">Newton–Girard identities</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="ch-assembly.html"><span class="toc_ref">14</span> <span class="toc_entry">Proof of the Fundamental Theorem</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-1">
+     <li class="">
+  <a href="ch-assembly.html#sec:assembly_weak"><span class="toc_ref">14.1</span> <span class="toc_entry">Weak Fundamental Theorem</span></a>
+ </li>
+<li class="">
+  <a href="ch-assembly.html#sec:assembly_proportional"><span class="toc_ref">14.2</span> <span class="toc_entry">Proportional Fundamental Theorem</span></a>
+ </li>
+<li class="">
+  <a href="ch-assembly.html#sec:assembly_equal"><span class="toc_ref">14.3</span> <span class="toc_entry">Equal-MPV Fundamental Theorem</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-2">
+     <li class="">
+  <a href="ch-assembly.html#sec:route_b"><span class="toc_ref">14.3.1</span> <span class="toc_entry">Multiplicity data with repeated blocks</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="ch-assembly.html#sec:periodic_ft"><span class="toc_ref">14.4</span> <span class="toc_entry">Periodic Fundamental Theorem (de las Cuevas–Cirac–Schuch–Pérez-García)</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-2">
+     <li class="">
+  <a href="ch-assembly.html#a0000000085"><span class="toc_ref">14.4.1</span> <span class="toc_entry">Irreducible form</span></a>
+ </li>
+<li class="">
+  <a href="ch-assembly.html#a0000000086"><span class="toc_ref">14.4.2</span> <span class="toc_entry">Common-period assembly helpers</span></a>
+ </li>
+<li class="">
+  <a href="ch-assembly.html#a0000000087"><span class="toc_ref">14.4.3</span> <span class="toc_entry">The \(Z\)-gauge degree of freedom</span></a>
+ </li>
+<li class="">
+  <a href="ch-assembly.html#a0000000088"><span class="toc_ref">14.4.4</span> <span class="toc_entry">Statement of the periodic Fundamental Theorem</span></a>
+ </li>
+<li class="">
+  <a href="ch-assembly.html#a0000000089"><span class="toc_ref">14.4.5</span> <span class="toc_entry">Periodic overlap dichotomy (Proposition 3.3)</span></a>
+ </li>
+
+  </ul>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="ch-semigroup.html"><span class="toc_ref">15</span> <span class="toc_entry">Quantum Dynamical Semigroups</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-1">
+     <li class="">
+  <a href="ch-semigroup.html#sec:semigroup_defs"><span class="toc_ref">15.1</span> <span class="toc_entry">Dynamical semigroups and the exponential form</span></a>
+ </li>
+<li class="">
+  <a href="ch-semigroup.html#sec:perturbation"><span class="toc_ref">15.2</span> <span class="toc_entry">Perturbation theory</span></a>
+ </li>
+<li class="">
+  <a href="ch-semigroup.html#sec:gksl_generators"><span class="toc_ref">15.3</span> <span class="toc_entry">GKSL/Lindblad generators</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-2">
+     <li class="">
+  <a href="ch-semigroup.html#a0000000090"><span class="toc_ref">15.3.1</span> <span class="toc_entry">Generator decomposition and conditional complete positivity</span></a>
+ </li>
+<li class="">
+  <a href="ch-semigroup.html#a0000000091"><span class="toc_ref">15.3.2</span> <span class="toc_entry">The Lindblad form</span></a>
+ </li>
+<li class="">
+  <a href="ch-semigroup.html#a0000000092"><span class="toc_ref">15.3.3</span> <span class="toc_entry">Prop.&#160;7.2: Characterization of conditional complete positivity</span></a>
+ </li>
+<li class="">
+  <a href="ch-semigroup.html#a0000000093"><span class="toc_ref">15.3.4</span> <span class="toc_entry">Prop.&#160;7.3: CP semigroups and CCP generators</span></a>
+ </li>
+<li class="">
+  <a href="ch-semigroup.html#a0000000094"><span class="toc_ref">15.3.5</span> <span class="toc_entry">Prop.&#160;7.4: Freedom in generator representation</span></a>
+ </li>
+<li class="">
+  <a href="ch-semigroup.html#a0000000095"><span class="toc_ref">15.3.6</span> <span class="toc_entry">Prop.&#160;7.4 item 2: Uniqueness of the traceless Lindblad form</span></a>
+ </li>
+<li class="">
+  <a href="ch-semigroup.html#a0000000096"><span class="toc_ref">15.3.7</span> <span class="toc_entry">Trace-annihilation and trace preservation</span></a>
+ </li>
+<li class="">
+  <a href="ch-semigroup.html#a0000000097"><span class="toc_ref">15.3.8</span> <span class="toc_entry">Thm.&#160;7.1: The GKSL/Lindblad theorem</span></a>
+ </li>
+<li class="">
+  <a href="ch-semigroup.html#a0000000098"><span class="toc_ref">15.3.9</span> <span class="toc_entry">Kossakowski matrix form</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="ch-semigroup.html#sec:qds_primitivity"><span class="toc_ref">15.4</span> <span class="toc_entry">Primitivity and irreducibility of QDS</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-2">
+     <li class="">
+  <a href="ch-semigroup.html#a0000000099"><span class="toc_ref">15.4.1</span> <span class="toc_entry">Auxiliary spectral and semigroup lemmas</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="ch-semigroup.html#sec:liouvillian_kernel"><span class="toc_ref">15.5</span> <span class="toc_entry">Kernel of the adjoint Liouvillian</span></a>
+ </li>
+<li class="">
+  <a href="ch-semigroup.html#sec:qds_reducibility"><span class="toc_ref">15.6</span> <span class="toc_entry">Reducibility of quantum dynamical semigroups</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-2">
+     <li class="">
+  <a href="ch-semigroup.html#sec:cor_7_2_sufficient_conditions"><span class="toc_ref">15.6.1</span> <span class="toc_entry">Cor.&#160;7.2: Sufficient conditions for non-reducibility</span></a>
+ </li>
+
+  </ul>
+ </li>
+
+  </ul>
+ </li>
+<li class=" active current">
+  <a href="ch-algebraic_ft.html"><span class="toc_ref">16</span> <span class="toc_entry">The Algebraic Fundamental Theorem</span></a>
+  <span class="expand-toc">▼</span>
+  <ul class="sub-toc-1 active">
+     <li class="">
+  <a href="ch-algebraic_ft.html#sec:decomposition_map"><span class="toc_ref">16.1</span> <span class="toc_entry">One-sided inverse and decomposition</span></a>
+ </li>
+<li class="">
+  <a href="ch-algebraic_ft.html#sec:phys_realize"><span class="toc_ref">16.2</span> <span class="toc_entry">Physical realisation of virtual insertions</span></a>
+ </li>
+<li class="">
+  <a href="ch-algebraic_ft.html#sec:intermediate"><span class="toc_ref">16.3</span> <span class="toc_entry">Intermediate lemmas</span></a>
+ </li>
+<li class="">
+  <a href="ch-algebraic_ft.html#sec:virtual_bond_gauge"><span class="toc_ref">16.4</span> <span class="toc_entry">Same state forces a virtual bond gauge</span></a>
+ </li>
+<li class="">
+  <a href="ch-algebraic_ft.html#sec:tensor_proportional"><span class="toc_ref">16.5</span> <span class="toc_entry">Aligned gauges force proportionality</span></a>
+ </li>
+<li class="">
+  <a href="ch-algebraic_ft.html#sec:ft_chain"><span class="toc_ref">16.6</span> <span class="toc_entry">The Fundamental Theorem for injective chains</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-2">
+     <li class="">
+  <a href="ch-algebraic_ft.html#a0000000100"><span class="toc_ref">16.6.1</span> <span class="toc_entry">Finite-length MPV agreement</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="ch-algebraic_ft.html#sec:ft_corollaries"><span class="toc_ref">16.7</span> <span class="toc_entry">Corollaries</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-2">
+     <li class="">
+  <a href="ch-algebraic_ft.html#a0000000101"><span class="toc_ref">16.7.1</span> <span class="toc_entry">Translation-invariant chains</span></a>
+ </li>
+<li class="">
+  <a href="ch-algebraic_ft.html#a0000000102"><span class="toc_ref">16.7.2</span> <span class="toc_entry">Non-TI descriptions of TI states</span></a>
+ </li>
+<li class="">
+  <a href="ch-algebraic_ft.html#a0000000103"><span class="toc_ref">16.7.3</span> <span class="toc_entry">Normal MPS (blocked injectivity)</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="ch-algebraic_ft.html#sec:pi_algebra"><span class="toc_ref">16.8</span> <span class="toc_entry">Product algebra construction and per-block gauge</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-2">
+     <li class="">
+  <a href="ch-algebraic_ft.html#a0000000104"><span class="toc_ref">16.8.1</span> <span class="toc_entry">Per-block linear extension</span></a>
+ </li>
+<li class="">
+  <a href="ch-algebraic_ft.html#a0000000105"><span class="toc_ref">16.8.2</span> <span class="toc_entry">Product algebra automorphism</span></a>
+ </li>
+<li class="">
+  <a href="ch-algebraic_ft.html#a0000000106"><span class="toc_ref">16.8.3</span> <span class="toc_entry">Nondegeneracy of the product trace pairing</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="ch-algebraic_ft.html#sec:multi_block_ft"><span class="toc_ref">16.9</span> <span class="toc_entry">The multi-block Fundamental Theorem</span></a>
+ </li>
+<li class="">
+  <a href="ch-algebraic_ft.html#sec:block_separation"><span class="toc_ref">16.10</span> <span class="toc_entry">Block separation from canonical form</span></a>
+ </li>
+<li class="">
+  <a href="ch-algebraic_ft.html#sec:ti_reduction"><span class="toc_ref">16.11</span> <span class="toc_entry">TI reduction corollary</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-2">
+     <li class="">
+  <a href="ch-algebraic_ft.html#a0000000107"><span class="toc_ref">16.11.1</span> <span class="toc_entry">Global symmetry via gauge composition</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="ch-algebraic_ft.html#sec:closing"><span class="toc_ref">16.12</span> <span class="toc_entry">Closing remarks</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="ch-symmetry.html"><span class="toc_ref">17</span> <span class="toc_entry">Symmetries and String Order</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-1">
+     <li class="">
+  <a href="ch-symmetry.html#a0000000108"><span class="toc_ref">17.1</span> <span class="toc_entry">Physical Symmetries Give Virtual Gauges</span></a>
+ </li>
+<li class="">
+  <a href="ch-symmetry.html#a0000000109"><span class="toc_ref">17.2</span> <span class="toc_entry">Virtual Representation Theorem</span></a>
+ </li>
+<li class="">
+  <a href="ch-symmetry.html#a0000000110"><span class="toc_ref">17.3</span> <span class="toc_entry">Cohomology Classes of Virtual Symmetry Data</span></a>
+ </li>
+<li class="">
+  <a href="ch-symmetry.html#a0000000111"><span class="toc_ref">17.4</span> <span class="toc_entry">Permutation-Based Physical Symmetry</span></a>
+ </li>
+<li class="">
+  <a href="ch-symmetry.html#a0000000112"><span class="toc_ref">17.5</span> <span class="toc_entry">String Order and Local Symmetry Equivalence</span></a>
+ </li>
+<li class="">
+  <a href="ch-symmetry.html#a0000000113"><span class="toc_ref">17.6</span> <span class="toc_entry">SPT Phase Classification</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="ch-parent_hamiltonian.html"><span class="toc_ref">18</span> <span class="toc_entry">Parent Hamiltonians</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-1">
+     <li class="">
+  <a href="ch-parent_hamiltonian.html#sec:ground_space_parent"><span class="toc_ref">18.1</span> <span class="toc_entry">Local ground space \(G_L(A)\)</span></a>
+ </li>
+<li class="">
+  <a href="ch-parent_hamiltonian.html#sec:parent_interaction_defs"><span class="toc_ref">18.2</span> <span class="toc_entry">Parent interaction and chain Hamiltonian</span></a>
+ </li>
+<li class="">
+  <a href="ch-parent_hamiltonian.html#sec:intersection_unique"><span class="toc_ref">18.3</span> <span class="toc_entry">Intersection property and unique ground state</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-2">
+     <li class="">
+  <a href="ch-parent_hamiltonian.html#a0000000114"><span class="toc_ref">18.3.1</span> <span class="toc_entry">Restriction maps</span></a>
+ </li>
+<li class="">
+  <a href="ch-parent_hamiltonian.html#a0000000115"><span class="toc_ref">18.3.2</span> <span class="toc_entry">Forward direction: ground space restricts</span></a>
+ </li>
+<li class="">
+  <a href="ch-parent_hamiltonian.html#a0000000116"><span class="toc_ref">18.3.3</span> <span class="toc_entry">Injectivity of the ground-space map</span></a>
+ </li>
+<li class="">
+  <a href="ch-parent_hamiltonian.html#a0000000117"><span class="toc_ref">18.3.4</span> <span class="toc_entry">The intersection property</span></a>
+ </li>
+<li class="">
+  <a href="ch-parent_hamiltonian.html#a0000000118"><span class="toc_ref">18.3.5</span> <span class="toc_entry">Unique ground state</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="ch-parent_hamiltonian.html#sec:commuting_parent_ham"><span class="toc_ref">18.4</span> <span class="toc_entry">Commuting parent Hamiltonians</span></a>
+ </li>
+<li class="">
+  <a href="ch-parent_hamiltonian.html#sec:decorrelation"><span class="toc_ref">18.5</span> <span class="toc_entry">Decorrelation and commuting parent Hamiltonians</span></a>
+ </li>
+<li class="">
+  <a href="ch-parent_hamiltonian.html#sec:spectral_gap"><span class="toc_ref">18.6</span> <span class="toc_entry">Spectral gap</span></a>
+ </li>
+<li class="">
+  <a href="ch-parent_hamiltonian.html#sec:degenerate_ground_space"><span class="toc_ref">18.7</span> <span class="toc_entry">Ground space of non-injective MPS</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="ch-correlations.html"><span class="toc_ref">19</span> <span class="toc_entry">Exponential Decay of Correlations</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-1">
+     <li class="">
+  <a href="ch-correlations.html#a0000000119"><span class="toc_ref">19.1</span> <span class="toc_entry">Connected correlators from the transfer map</span></a>
+ </li>
+<li class="">
+  <a href="ch-correlations.html#a0000000120"><span class="toc_ref">19.2</span> <span class="toc_entry">Spectral expansion and exponential decay</span></a>
+ </li>
+<li class="">
+  <a href="ch-correlations.html#a0000000121"><span class="toc_ref">19.3</span> <span class="toc_entry">Quantitative spectral gap bounds</span></a>
+ </li>
+<li class="">
+  <a href="ch-correlations.html#a0000000122"><span class="toc_ref">19.4</span> <span class="toc_entry">Relation to parent Hamiltonians</span></a>
+ </li>
+<li class="">
+  <a href="ch-correlations.html#a0000000123"><span class="toc_ref">19.5</span> <span class="toc_entry">Renormalization fixed points and zero correlation length</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="ch-examples.html"><span class="toc_ref">20</span> <span class="toc_entry">Concrete Examples</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-1">
+     <li class="">
+  <a href="ch-examples.html#sec:ghz"><span class="toc_ref">20.1</span> <span class="toc_entry">The GHZ state</span></a>
+ </li>
+<li class="">
+  <a href="ch-examples.html#sec:aklt"><span class="toc_ref">20.2</span> <span class="toc_entry">The AKLT state</span></a>
+ </li>
+<li class="">
+  <a href="ch-examples.html#sec:cluster"><span class="toc_ref">20.3</span> <span class="toc_entry">The cluster state</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="sect0001.html"><span class="toc_ref">21</span> <span class="toc_entry">Bibliography</span></a>
+ </li>
+<li ><a href="dep_graph_document.html">Dependency graph</a></li>
+</ul>
+</nav>
+
+<div class="content">
+<div class="content-wrapper">
+
+
+<div class="main-text">
+<h1 id="ch:algebraic_ft">16 The Algebraic Fundamental Theorem</h1>
+
+<p>This chapter develops the one-dimensional MPS results of <span class="cite">
+</span>: the Fundamental Theorem for injective and normal MPS on a finite periodic chain of fixed length. The argument is purely algebraic, working directly with \(M_{D}(\mathbb {C})\). Two preparatory lemmas—the virtual bond gauge (Lemma&#160;<a href="ch-algebraic_ft.html#lem:virtual_bond_gauge">16.11</a>) and the proportionality lemma (Lemma&#160;<a href="ch-algebraic_ft.html#lem:tensor_proportional">16.12</a>)—carry the entire argument, yielding the main theorem and its corollaries for translation-invariant chains, non-TI descriptions of TI states, and normal MPS. </p>
+<p>Throughout, \(D\) is the bond dimension and \(d\) is the physical dimension with \(d \ge D^2\). The extensions to injective and normal PEPS on arbitrary graphs and the improved system-size bound (\(2L+1\) in place of \(3L\)) are left for future work. The chain bookkeeping layer (Definition&#160;<a href="ch-single.html#def:non_ti_chain">4.12</a>), including same chain state, injectivity, and cyclic gauge equivalence, was introduced in Chapter&#160;<a href="ch-single.html">4</a>. </p>
+<h1 id="sec:decomposition_map">16.1 One-sided inverse and decomposition</h1>
+
+<p>If \(A\) is injective, the linear combination map \(\Phi _A(c) := \sum _{i} c_i A^i : \mathbb {C}^d \to M_{D}(\mathbb {C})\) is surjective and admits a right inverse. </p>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:exists_rightInverse">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">16.1</span>
+    <span class="lemma_thmtitle">Existence of a right inverse</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-algebraic_ft.html#lem:exists_rightInverse">#</a>
+    
+    <a class="icon proof" href="ch-algebraic_ft.html#a0000000694"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mps.html#def:injective">Definition 2.20</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://LionSR.github.io/TNLean/docs/find/#doc/MPSTensor.IsInjective.exists_rightInverse" class="lean_decl">MPSTensor.IsInjective.exists_rightInverse</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>   If \(A\) is injective, then there exists a \(\mathbb {C}\)-linear map \(\Psi : M_{D}(\mathbb {C}) \to \mathbb {C}^d\) satisfying \(\Phi _A \circ \Psi = \mathrm{id}_{M_{D}(\mathbb {C})}\). </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000694">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Surjectivity of \(\Phi _A\) yields a linear section by choice. </p>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:decomposition_map">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">16.2</span>
+    <span class="definition_thmtitle">Decomposition map</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-algebraic_ft.html#def:decomposition_map">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mps.html#def:injective">Definition 2.20</a></li>
+          
+          <li><a href="ch-algebraic_ft.html#lem:exists_rightInverse">Lemma 16.1</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://LionSR.github.io/TNLean/docs/find/#doc/MPSTensor.decompositionMap" class="lean_decl">MPSTensor.decompositionMap</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>   Let \(A\) be an injective MPS tensor. The <em>decomposition map</em> \(\Psi _A : M_{D}(\mathbb {C}) \to \mathbb {C}^d\) is a fixed choice of right inverse of \(\Phi _A\). </p>
+
+  </div>
+</div>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:exists_decomposition">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">16.3</span>
+    <span class="lemma_thmtitle">Decomposition property</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-algebraic_ft.html#lem:exists_decomposition">#</a>
+    
+    <a class="icon proof" href="ch-algebraic_ft.html#a0000000695"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-algebraic_ft.html#def:decomposition_map">Definition 16.2</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://LionSR.github.io/TNLean/docs/find/#doc/MPSTensor.IsInjective.exists_decomposition" class="lean_decl">MPSTensor.IsInjective.exists_decomposition</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>   If \(A\) is injective, then for every \(X \in M_{D}(\mathbb {C})\) there exist coefficients \(c \in \mathbb {C}^d\) such that </p>
+<div class="displaymath" id="a0000000696">
+  \[  X = \sum _{i=0}^{d-1} c_i\,  A^i.  \]
+</div>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000695">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Take \(c = \Psi _A(X)\). Then \(\Phi _A(c) = \Phi _A(\Psi _A(X)) = X\). </p>
+
+  </div>
+</div>
+<div class="remark_thmwrapper theorem-style-remark" id="rem:decomposition_nonunique">
+  <div class="remark_thmheading">
+    <span class="remark_thmcaption">
+    Remark
+    </span>
+    <span class="remark_thmlabel">16.4</span>
+    <span class="remark_thmtitle">Non-uniqueness of the decomposition</span>
+    <div class="thm_header_extras">
+
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-algebraic_ft.html#rem:decomposition_nonunique">#</a>
+    
+    
+    
+        </div>
+  </div>
+  <div class="remark_thmcontent">
+  <p>  When \(d {\gt} D^2\), the map \(\Phi _A\) has a nontrivial kernel, so the section \(\Psi _A\) is not unique. The statements that follow depend only on \(\Phi _A \circ \Psi _A = \mathrm{id}\), so the choice does not affect the conclusions. </p>
+
+  </div>
+</div>
+<h1 id="sec:phys_realize">16.2 Physical realisation of virtual insertions</h1>
+
+<p>For an injective tensor \(A\), the physical realisation map encodes the effect of inserting a virtual matrix \(X\) on the bond as a \(d \times d\) operation on the physical indices. </p>
+<div class="definition_thmwrapper theorem-style-definition" id="def:phys_realize">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">16.5</span>
+    <span class="definition_thmtitle">Physical realisation map</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-algebraic_ft.html#def:phys_realize">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-algebraic_ft.html#def:decomposition_map">Definition 16.2</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://LionSR.github.io/TNLean/docs/find/#doc/MPSTensor.physRealize" class="lean_decl">MPSTensor.physRealize</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>   Let \(A\) be an injective tensor. For \(X \in M_{D}(\mathbb {C})\), define the \(d \times d\) matrix \(O_A(X) \in M_{d}(\mathbb {C})\) by </p>
+<div class="displaymath" id="a0000000697">
+  \[  O_A(X)_{ij} := (\Psi _A(A^i X))_j,  \]
+</div>
+<p> so that row&#160;\(i\) of \(O_A(X)\) contains the decomposition coefficients of \(A^i X\) in the spanning set \(\{ A^j\} \). Diagrammatically, the inserted virtual matrix is re-expressed as a physical operation on the same local tensor: </p>
+<div class="displaymath" id="a0000000698">
+  \[  \begin{array}{ccccccccc} \multicolumn{3}{c}{X} & & &  \multicolumn{3}{c}{O_A(X)} \\ & & & & & &  \vert & & \\ \bullet &  \text{---} &  \textcolor{red}{\bullet } & &  = & &  \bullet & & \\ & & & & & &  \vert & & \\ & & & & & &  \textcolor{red}{\bullet } & & \end{array}  \]
+</div>
+<p> The map \(X \mapsto O_A(X)\) is \(\mathbb {C}\)-linear. </p>
+
+  </div>
+</div>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:physRealize_spec">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">16.6</span>
+    <span class="lemma_thmtitle">Defining property of the physical realisation map</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-algebraic_ft.html#lem:physRealize_spec">#</a>
+    
+    <a class="icon proof" href="ch-algebraic_ft.html#a0000000699"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-algebraic_ft.html#def:phys_realize">Definition 16.5</a></li>
+          
+          <li><a href="ch-algebraic_ft.html#def:decomposition_map">Definition 16.2</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://LionSR.github.io/TNLean/docs/find/#doc/MPSTensor.physRealize_spec" class="lean_decl">MPSTensor.physRealize_spec</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>   For every \(X \in M_{D}(\mathbb {C})\) and every physical index \(i\), </p>
+<div class="displaymath" id="a0000000700">
+  \[  A^i\,  X = \sum _{j=0}^{d-1} O_A(X)_{ij}\,  A^j.  \]
+</div>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000699">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>By definition, \(O_A(X)_{ij} = (\Psi _A(A^i X))_j\). Applying \(\Phi _A\) gives \(\sum _j O_A(X)_{ij} A^j = \Phi _A(\Psi _A(A^i X)) = A^i X\), where the last step uses \(\Phi _A \circ \Psi _A = \mathrm{id}\). </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:physRealize_mul">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">16.7</span>
+    <span class="theorem_thmtitle">Physical realisation is multiplicative – basis case</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-algebraic_ft.html#thm:physRealize_mul">#</a>
+    
+    <a class="icon proof" href="ch-algebraic_ft.html#a0000000701"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-algebraic_ft.html#def:phys_realize">Definition 16.5</a></li>
+          
+          <li><a href="ch-algebraic_ft.html#lem:physRealize_spec">Lemma 16.6</a></li>
+          
+          <li><a href="ch-mps.html#def:injective">Definition 2.20</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://LionSR.github.io/TNLean/docs/find/#doc/MPSTensor.physRealize_mul" class="lean_decl">MPSTensor.physRealize_mul</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   Let \(A\) be an injective MPS tensor such that \(\{ A^i\} _{i=0}^{d-1}\) is a <em>basis</em> of \(M_{D}(\mathbb {C})\) (i.e. \(d = D^2\) and the matrices are linearly independent). For all \(X, Y \in M_{D}(\mathbb {C})\), </p>
+<div class="displaymath" id="a0000000702">
+  \[  O_A(XY) = O_A(X)\,  O_A(Y).  \]
+</div>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000701">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Applying Lemma&#160;<a href="ch-algebraic_ft.html#lem:physRealize_spec">16.6</a> to \(X\) and substituting the resulting formula for \(A^j Y\) gives \(A^i(XY) = \sum _k (O_A(X)\,  O_A(Y))_{ik} A^k\). Applying Lemma&#160;<a href="ch-algebraic_ft.html#lem:physRealize_spec">16.6</a> directly to \(XY\) gives \(A^i(XY) = \sum _k O_A(XY)_{ik} A^k\). Since \(\{ A^k\} \) is a basis, the coefficients agree. </p>
+
+  </div>
+</div>
+<div class="remark_thmwrapper theorem-style-remark" id="rem:physRealize_mul_general">
+  <div class="remark_thmheading">
+    <span class="remark_thmcaption">
+    Remark
+    </span>
+    <span class="remark_thmlabel">16.8</span>
+    <span class="remark_thmtitle">General injective case</span>
+    <div class="thm_header_extras">
+
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-algebraic_ft.html#rem:physRealize_mul_general">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-algebraic_ft.html#thm:physRealize_mul">Theorem 16.7</a></li>
+          
+          <li><a href="ch-mps.html#def:injective">Definition 2.20</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+        </div>
+  </div>
+  <div class="remark_thmcontent">
+  <p>   When \(d {\gt} D^2\), the decomposition is non-unique, so \(O_A(XY) = O_A(X)\, O_A(Y)\) need not hold coefficient-wise even though both sides define the same matrix in \(M_{D}(\mathbb {C})\). The general multiplicativity statement for arbitrary injective \(A\) is left open here; the proofs below avoid it by working with trace pairings instead. </p>
+
+  </div>
+</div>
+<h1 id="sec:intermediate">16.3 Intermediate lemmas</h1>
+
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:blocking_preserves_injectivity">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">16.9</span>
+    <span class="lemma_thmtitle">Blocking preserves injectivity</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-algebraic_ft.html#lem:blocking_preserves_injectivity">#</a>
+    
+    <a class="icon proof" href="ch-algebraic_ft.html#a0000000703"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mps.html#def:injective">Definition 2.20</a></li>
+          
+          <li><a href="ch-mps.html#def:blocked_tensor">Definition 2.28</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://LionSR.github.io/TNLean/docs/find/#doc/MPSTensor.chainCombinedTensor_isInjective" class="lean_decl">MPSTensor.chainCombinedTensor_isInjective</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>   Let \(A_0, \dots , A_{m-1}\) be injective MPS tensors with compatible bond dimensions. Then the blocked tensor \((A_0 \otimes \cdots \otimes A_{m-1})^{(i_0,\dots ,i_{m-1})} := A_0^{i_0} A_1^{i_1} \cdots A_{m-1}^{i_{m-1}}\) is again injective. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000703">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>The span of the blocked matrices contains all products \(A_0^{i_0} \cdots A_{m-1}^{i_{m-1}}\). Since each \(\{ A_k^i\} _i\) spans \(M_{D}(\mathbb {C})\), these products span all of \(M_{D}(\mathbb {C})\). </p>
+
+  </div>
+</div>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:center_scalar">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">16.10</span>
+    <span class="lemma_thmtitle">Centre of \(M_{D}(\mathbb {C})\)</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-algebraic_ft.html#lem:center_scalar">#</a>
+    
+    <a class="icon proof" href="ch-algebraic_ft.html#a0000000704"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://LionSR.github.io/TNLean/docs/find/#doc/Matrix.isScalar_of_commute_span_eq_top" class="lean_decl">Matrix.isScalar_of_commute_span_eq_top</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>  If \(Z \in M_{D}(\mathbb {C})\) commutes with every element of \(M_{D}(\mathbb {C})\), then \(Z = \lambda \mathbb {1}_D\) for some \(\lambda \in \mathbb {C}\). </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000704">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Standard: \(Z\) commutes with every matrix unit \(E_{ij}\), which forces all off-diagonal entries to vanish and all diagonal entries to agree. </p>
+
+  </div>
+</div>
+<h1 id="sec:virtual_bond_gauge">16.4 Same state forces a virtual bond gauge</h1>
+
+<p>This section proves Lemma&#160;1 of <span class="cite">
+</span>: if two injective chains of length \(n \ge 3\) generate the same state, then on each bond the virtual insertion algebras are related by an inner automorphism. </p>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:virtual_bond_gauge">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">16.11</span>
+    <span class="lemma_thmtitle">Virtual bond gauge – Lemma&#160;1 of <span class="cite">
+</span></span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-algebraic_ft.html#lem:virtual_bond_gauge">#</a>
+    
+    <a class="icon proof" href="ch-algebraic_ft.html#a0000000705"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-algebraic_ft.html#thm:physRealize_mul">Theorem 16.7</a></li>
+          
+          <li><a href="ch-single.html#thm:simplicity">Theorem 4.8</a></li>
+          
+          <li><a href="ch-single.html#thm:skolem_noether">Theorem 4.9</a></li>
+          
+          <li><a href="ch-single.html#def:non_ti_chain">Definition 4.12</a></li>
+          
+          <li><a href="ch-algebraic_ft.html#lem:blocking_preserves_injectivity">Lemma 16.9</a></li>
+          
+          <li><a href="ch-algebraic_ft.html#thm:physRealize_mul">Theorem 16.7</a></li>
+          
+          <li><a href="ch-single.html#thm:simplicity">Theorem 4.8</a></li>
+          
+          <li><a href="ch-single.html#thm:skolem_noether">Theorem 4.9</a></li>
+          
+          <li><a href="ch-algebraic_ft.html#lem:blocking_preserves_injectivity">Lemma 16.9</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://LionSR.github.io/TNLean/docs/find/#doc/MPSTensor.virtual_bond_gauge" class="lean_decl">MPSTensor.virtual_bond_gauge</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>   Let \(\mathbf{A} = (A_0, \dots , A_{n-1})\) and \(\mathbf{B} = (B_0, \dots , B_{n-1})\) be two injective non-TI periodic chains of length \(n \ge 3\) that generate the same chain state. Fix a bond position \(k \in \{ 0, \dots , n-1\} \). Then there exists an invertible matrix \(Z_k \in \mathrm{GL}_D(\mathbb {C})\), unique up to a nonzero scalar multiple, such that for every \(X \in M_{D}(\mathbb {C})\), </p>
+<div class="displaymath" id="a0000000706">
+  \[  O_{A, k}(X) = O_{B, k}(Z_k^{-1} X Z_k),  \]
+</div>
+<p> where \(O_{A,k}\) (resp. \(O_{B,k}\)) denotes the physical realisation map obtained by blocking the sites adjacent to bond&#160;\(k\) in the \(\mathbf{A}\)-chain (resp. \(\mathbf{B}\)-chain) to form a three-site chain. Equivalently, inserting \(X\) on bond&#160;\(k\) in the \(\mathbf{A}\)-chain gives the same physical operation as inserting \(Z_k^{-1} X Z_k\) on bond&#160;\(k\) in the \(\mathbf{B}\)-chain. After blocking to three sites, this is the equality between the blocked \(\mathbf{A}\)-chain contraction </p>
+<div class="displaymath" id="a0000000707">
+  \[  \begin{array}{ccccccc} \sigma _0 & &  \sigma _1 & &  \sigma _2 & & \\ \vert & &  \vert & &  \vert & & \\ \bullet &  \text{---} &  \textcolor{red}{\bullet } &  \text{---} &  \bullet & & \\ & &  X & & & & \end{array}  \]
+</div>
+<p> and the corresponding blocked \(\mathbf{B}\)-chain contraction with \(X\) replaced by \(Z_k^{-1} X Z_k\). </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000705">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> Block the sites on either side of bond&#160;\(k\) into a three-site chain and compare the same local insertion across the two blocked chains: </p>
+<div class="displaymath" id="a0000000708">
+  \[  \begin{array}{ccccccccccc}& &  \sigma _k & & & & & &  \sigma _k & & \\ & &  \vert & & & & & &  \vert & & \\ \bullet &  \text{---} &  \textcolor{red}{\bullet } &  \text{---} &  \bullet &  = &  \bullet &  \text{---} &  \textcolor{red}{\bullet } &  \text{---} &  \bullet \\ & &  X & & & & & &  Z_k^{-1} X Z_k & & \end{array}  \]
+</div>
+<p> The remaining sites are compressed into an effective boundary matrix, so the local comparison is read through the blocked realisation map </p>
+<div class="displaymath" id="a0000000709">
+  \[  \begin{array}{ccccccc} \sigma _{k-1} & & & & & &  \sigma _{k+1} \\ \vert & &  \vert & &  \vert & & \\ \bullet &  \text{---} &  \bullet &  \text{---} &  \bullet &  \text{---} &  \textcolor{red}{\bullet } \\ & & & & & &  X \\ \multicolumn{7}{c}{3} \end{array}.  \]
+</div>
+<p> Then Lemma&#160;<a href="ch-algebraic_ft.html#lem:blocking_preserves_injectivity">16.9</a> ensures injectivity, and both \(O_{A,k}\) and \(O_{B,k}\) are algebra homomorphisms from \(M_{D}(\mathbb {C})\) (established in <span class="cite">
+</span> via diagrammatic inversion rather than coefficient uniqueness; see Remark&#160;<a href="ch-algebraic_ft.html#rem:physRealize_mul_general">16.8</a>). Since both chains generate the same state, for every \(X \in M_{D}(\mathbb {C})\) there is a unique \(Y \in M_{D}(\mathbb {C})\) with \(O_{A,k}(X) = O_{B,k}(Y)\); set \(T(X) = Y\). Linearity of \(O_{A,k}\) and \(O_{B,k}\) and uniqueness of \(Y\) make \(T\) \(\mathbb {C}\)-linear, and since both maps are algebra homomorphisms, \(T\) is multiplicative. Thus \(T\) is a nonzero \(\mathbb {C}\)-algebra endomorphism of \(M_{D}(\mathbb {C})\), hence bijective by Theorem&#160;<a href="ch-single.html#thm:simplicity">4.8</a>. Skolem–Noether (Theorem&#160;<a href="ch-single.html#thm:skolem_noether">4.9</a>) gives \(Z_k \in \mathrm{GL}_D(\mathbb {C})\) with \(T(X) = Z_k^{-1} X Z_k\), and uniqueness up to a scalar follows because two inner automorphisms \(\operatorname {Ad}(Z)\) and \(\operatorname {Ad}(Z')\) agree iff \(Z' Z^{-1}\) is central (Lemma&#160;<a href="ch-algebraic_ft.html#lem:center_scalar">16.10</a>). </p>
+
+  </div>
+</div>
+<h1 id="sec:tensor_proportional">16.5 Aligned gauges force proportionality</h1>
+
+<p>After applying Lemma&#160;<a href="ch-algebraic_ft.html#lem:virtual_bond_gauge">16.11</a> to each bond and absorbing the gauge matrices, one obtains two chains whose virtual-insertion operations agree on every bond. Lemma&#160;2 of <span class="cite">
+</span> shows that this agreement forces the local tensors to be proportional. </p>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:tensor_proportional">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">16.12</span>
+    <span class="lemma_thmtitle">Aligned gauges force proportionality – Lemma&#160;2 of <span class="cite">
+</span></span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-algebraic_ft.html#lem:tensor_proportional">#</a>
+    
+    <a class="icon proof" href="ch-algebraic_ft.html#a0000000710"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mps.html#def:injective">Definition 2.20</a></li>
+          
+          <li><a href="ch-algebraic_ft.html#def:decomposition_map">Definition 16.2</a></li>
+          
+          <li><a href="ch-algebraic_ft.html#lem:center_scalar">Lemma 16.10</a></li>
+          
+          <li><a href="ch-algebraic_ft.html#def:decomposition_map">Definition 16.2</a></li>
+          
+          <li><a href="ch-algebraic_ft.html#lem:center_scalar">Lemma 16.10</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://LionSR.github.io/TNLean/docs/find/#doc/MPSTensor.tensor_proportional" class="lean_decl">MPSTensor.tensor_proportional</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>   Let \(A_1, A_2\) and \(B_1, B_2\) be injective MPS tensors with the same bond dimension \(D\). Suppose that for all \(X \in M_{D}(\mathbb {C})\) (on the internal bond) and all \(Y \in M_{D}(\mathbb {C})\) (on the external bond), </p>
+<div class="displaymath" id="<plasTeX.TeXFragment object at 0x152bf9790>">
+  \begin{align}  \operatorname {tr}(A_1^{i}\,  X\,  A_2^{j}) & = \operatorname {tr}(B_1^{i}\,  X\,  B_2^{j}) \qquad \text{for all } i, j, \label{eq:internal_bond} \\ \operatorname {tr}(A_2^{j}\,  Y\,  A_1^{i}) & = \operatorname {tr}(B_2^{j}\,  Y\,  B_1^{i}) \qquad \text{for all } i, j. \label{eq:external_bond} \end{align}
+</div>
+<p> Diagrammatically, ?? is the equality obtained by inserting \(X\) on the bond between the two sites, </p>
+<div class="displaymath" id="a0000000711">
+  \[  \begin{array}{ccccc} i & & & &  j \\ \vert & & & &  \vert \\ \bullet &  \text{---} &  \textcolor{red}{\bullet } &  \text{---} &  \bullet \\ & &  X & & \\ & &  \operatorname {Tr} & & \end{array}  \]
+</div>
+<p> while ?? is the corresponding equality with the insertion \(Y\) on the outer trace bond, </p>
+<div class="displaymath" id="a0000000712">
+  \[  \begin{array}{ccccc} i & & & &  j \\ \vert & & & &  \vert \\ \bullet &  \text{---} &  \bullet & & \\ & &  \textcolor{red}{\bullet } & & \\ & &  Y & & \end{array}  \]
+</div>
+<p> so the two hypotheses distinguish the internal and external virtual loops of the two-site periodic chain. </p>
+<p>Then there exists a nonzero scalar \(\lambda \in \mathbb {C}^{\times }\) such that </p>
+<div class="displaymath" id="a0000000713">
+  \[  A_1^{i} = \lambda \,  B_1^{i} \qquad \text{and}\qquad A_2^{j} = \lambda ^{-1}\,  B_2^{j}  \]
+</div>
+<p> for all physical indices \(i, j\). </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000710">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> By cyclicity and non-degeneracy of the trace pairing, conditions ?? and ?? give </p>
+<div class="displaymath" id="a0000000714">
+  \[  A_2^{j} A_1^{i} = B_2^{j} B_1^{i} \qquad \text{and}\qquad A_1^{i} A_2^{j} = B_1^{i} B_2^{j} \qquad \text{for all } i, j.  \]
+</div>
+<p> Write \(\mathbb {1}_D = \sum _j c_j A_2^j\) using the decomposition map \(\Psi _{A_2}\), and define \(Z := \sum _j c_j B_2^j \in M_{D}(\mathbb {C})\). This is the point where the two-site comparison collapses to a single boundary matrix: </p>
+<div class="displaymath" id="a0000000715">
+  \[  \begin{array}{ccccccc} i & & & & & &  j \\ \vert & &  \vert & &  \vert & & \\ \bullet &  \text{---} &  \bullet &  \text{---} &  \bullet &  \text{---} &  \textcolor{red}{\bullet } \\ & & & & & &  Z \\ \multicolumn{7}{c}{2} \end{array} \qquad \begin{array}{ccccccccccc}& &  i & & & & & &  i & & \\ & &  \vert & & & & & &  \vert & & \\ \bullet &  \text{---} &  \textcolor{red}{\bullet } &  \text{---} &  \bullet &  = &  \bullet &  \text{---} &  \textcolor{red}{\bullet } &  \text{---} &  \bullet \\ & &  Z & & & & & &  \lambda \mathbb {1} & & \end{array}  \]
+</div>
+<p> The first product identity gives \(A_1^i = Z B_1^i\), and the second gives \(A_1^i = B_1^i Z\). Hence \(Z\) commutes with every \(B_1^i\); since \(\{ B_1^i\} \) spans \(M_{D}(\mathbb {C})\), \(Z\) is central. By Lemma&#160;<a href="ch-algebraic_ft.html#lem:center_scalar">16.10</a>, \(Z = \lambda \mathbb {1}_D\) for some \(\lambda \in \mathbb {C}^{\times }\) (nonzero since the tensors are nonzero). Thus \(A_1^i = \lambda B_1^i\), and substituting into the first product identity forces \(A_2^j = \lambda ^{-1} B_2^j\). </p>
+
+  </div>
+</div>
+<h1 id="sec:ft_chain">16.6 The Fundamental Theorem for injective chains</h1>
+
+<p>Combining Lemma&#160;<a href="ch-algebraic_ft.html#lem:virtual_bond_gauge">16.11</a> with Lemma&#160;<a href="ch-algebraic_ft.html#lem:tensor_proportional">16.12</a> yields the main theorem of <span class="cite">
+</span> for non-translation-invariant injective MPS. </p>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:fundamentalTheorem_injective_chain">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">16.13</span>
+    <span class="theorem_thmtitle">Fundamental Theorem for injective chains – Theorem&#160;1 of <span class="cite">
+</span></span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-algebraic_ft.html#thm:fundamentalTheorem_injective_chain">#</a>
+    
+    <a class="icon proof" href="ch-algebraic_ft.html#a0000000716"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-algebraic_ft.html#lem:virtual_bond_gauge">Lemma 16.11</a></li>
+          
+          <li><a href="ch-algebraic_ft.html#lem:tensor_proportional">Lemma 16.12</a></li>
+          
+          <li><a href="ch-single.html#def:non_ti_chain">Definition 4.12</a></li>
+          
+          <li><a href="ch-algebraic_ft.html#lem:virtual_bond_gauge">Lemma 16.11</a></li>
+          
+          <li><a href="ch-algebraic_ft.html#lem:tensor_proportional">Lemma 16.12</a></li>
+          
+          <li><a href="ch-algebraic_ft.html#lem:blocking_preserves_injectivity">Lemma 16.9</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://LionSR.github.io/TNLean/docs/find/#doc/MPSChainTensor.fundamentalTheorem_injective_chain" class="lean_decl">MPSChainTensor.fundamentalTheorem_injective_chain</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   Let \(\mathbf{A} = (A_0, \dots , A_{n-1})\) and \(\mathbf{B} = (B_0, \dots , B_{n-1})\) be two injective non-TI periodic chains of length \(n \ge 3\) that generate the same chain state. Then \(\mathbf{A}\) and \(\mathbf{B}\) are cyclically gauge equivalent: there exist invertible matrices \(Z_0, \dots , Z_{n-1} \in \mathrm{GL}_D(\mathbb {C})\), unique up to a common nonzero scalar factor, such that </p>
+<div class="displaymath" id="a0000000717">
+  \[  B_k^i = Z_k^{-1}\,  A_k^i\,  Z_{k+1}  \]
+</div>
+<p> for every site \(k \in \{ 0, \dots , n-1\} \) and every physical index \(i\), with \(Z_n = Z_0\). </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000716">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> Apply Lemma&#160;<a href="ch-algebraic_ft.html#lem:virtual_bond_gauge">16.11</a> at each bond to obtain \(Z_k \in \mathrm{GL}_D(\mathbb {C})\) with \(O_{A,k}(X) = O_{B,k}(Z_k^{-1} X Z_k)\). Redefine \(\widetilde{B}_k^i := Z_k B_k^i Z_{k+1}^{-1}\); the virtual insertion operations of \(\mathbf{A}\) and \(\widetilde{\mathbf{B}}\) then agree on every bond. After the bond gauges have been aligned, the argument reduces to the same local replacement step repeated around the chain: </p>
+<div class="displaymath" id="a0000000718">
+  \[  \begin{array}{ccccccccccc}& &  \sigma _k & & & & & &  \sigma _k & & \\ & &  \vert & & & & & &  \vert & & \\ \bullet &  \text{---} &  \textcolor{red}{\bullet } &  \text{---} &  \bullet &  = &  \bullet &  \text{---} &  \textcolor{red}{\bullet } &  \text{---} &  \bullet \\ & &  \lambda _k & & & & & &  \mathbb {1} & & \end{array}  \]
+</div>
+<p> For each adjacent pair \((k, k{+}1)\), block the remaining sites into a two-site chain; the agreement on both bonds gives exactly hypotheses ??–?? of Lemma&#160;<a href="ch-algebraic_ft.html#lem:tensor_proportional">16.12</a>, yielding \(A_k^i = \lambda _k \widetilde{B}_k^i\) for some \(\lambda _k \in \mathbb {C}^{\times }\). Choosing a configuration \(\sigma \) with nonzero trace and substituting \(A_k^{\sigma _k} = \lambda _k \widetilde{B}_k^{\sigma _k}\) into the chain-state identity forces \(\prod _k \lambda _k = 1\). Set \(\mu _k = \prod _{j {\lt} k} \lambda _j\) and replace \(Z_k\) by \(\mu _k Z_k\); then \(B_k^i = Z_k^{-1} A_k^i Z_{k+1}\) for all \(k\) and \(i\), with \(Z_n = Z_0\). Uniqueness up to a common scalar follows from the uniqueness clause of Lemma&#160;<a href="ch-algebraic_ft.html#lem:virtual_bond_gauge">16.11</a>. </p>
+
+  </div>
+</div>
+<div class="remark_thmwrapper theorem-style-remark" id="rem:ft_chain_sameMPV">
+  <div class="remark_thmheading">
+    <span class="remark_thmcaption">
+    Remark
+    </span>
+    <span class="remark_thmlabel">16.14</span>
+    <span class="remark_thmtitle">A stronger equal-MPV variant</span>
+    <div class="thm_header_extras">
+
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-algebraic_ft.html#rem:ft_chain_sameMPV">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-algebraic_ft.html#thm:fundamentalTheorem_injective_chain">Theorem 16.13</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+        </div>
+  </div>
+  <div class="remark_thmcontent">
+  <p>   A stronger variant of the chain theorem assumes equality of all MPV coefficients for the combined tensor, rather than equality of the chain state at one fixed length. Reference&#160;<span class="cite">
+</span> closes this gap by a blocking argument when \(n \ge 3\). That reduction is stated separately from the main chain theorem. </p>
+
+  </div>
+</div>
+<div class="remark_thmwrapper theorem-style-remark" id="rem:ft_vs_singleBlock">
+  <div class="remark_thmheading">
+    <span class="remark_thmcaption">
+    Remark
+    </span>
+    <span class="remark_thmlabel">16.15</span>
+    <span class="remark_thmtitle">Relationship to the translation-invariant all-sizes theorem</span>
+    <div class="thm_header_extras">
+
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-algebraic_ft.html#rem:ft_vs_singleBlock">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-algebraic_ft.html#thm:fundamentalTheorem_injective_chain">Theorem 16.13</a></li>
+          
+          <li><a href="ch-mps.html#def:injective">Definition 2.20</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+        </div>
+  </div>
+  <div class="remark_thmcontent">
+  <p>   Theorem&#160;<a href="ch-algebraic_ft.html#thm:fundamentalTheorem_injective_chain">16.13</a> handles non-TI chains at fixed length \(n \ge 3\), concluding gauge equivalence up to a common scalar. The single-block Fundamental Theorem (Theorem&#160;<a href="ch-single.html#thm:ft_single">4.11</a>) instead assumes agreement for every system size; the additional hypothesis eliminates the phase ambiguity, yielding exact gauge equivalence \(B^i = X A^i X^{-1}\). The two results are complementary and neither implies the other in full generality. </p>
+
+  </div>
+</div>
+<h2 id="a0000000100">16.6.1 Finite-length MPV agreement</h2>
+<div class="definition_thmwrapper theorem-style-definition" id="def:same_mpv_from">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">16.16</span>
+    <span class="definition_thmtitle">Finite-length MPV agreement</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-algebraic_ft.html#def:same_mpv_from">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mps.html#def:same_mpv">Definition 2.11</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://LionSR.github.io/TNLean/docs/find/#doc/MPSTensor.SameMPVFrom" class="lean_decl">MPSTensor.SameMPVFrom</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>   Two tensors \(A\) and \(B\) of the same bond dimension satisfy <em>finite-length MPV agreement from \(N_0\) onward</em> if they generate the same MPV family for all system sizes \(N \ge N_0\): </p>
+<div class="displaymath" id="a0000000719">
+  \[  V^{(N)}(A)_\sigma = V^{(N)}(B)_\sigma \qquad \text{for all } N \ge N_0,\; \sigma \in [d]^N.  \]
+</div>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:sameMPV_of_sameMPVFrom">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">16.17</span>
+    <span class="theorem_thmtitle">Finite-length agreement implies full agreement</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-algebraic_ft.html#thm:sameMPV_of_sameMPVFrom">#</a>
+    
+    <a class="icon proof" href="ch-algebraic_ft.html#a0000000720"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-algebraic_ft.html#def:same_mpv_from">Definition 16.16</a></li>
+          
+          <li><a href="ch-mps.html#def:injective">Definition 2.20</a></li>
+          
+          <li><a href="ch-mps.html#def:same_mpv">Definition 2.11</a></li>
+          
+          <li><a href="ch-algebraic_ft.html#def:same_mpv_from">Definition 16.16</a></li>
+          
+          <li><a href="ch-mps.html#def:injective">Definition 2.20</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://LionSR.github.io/TNLean/docs/find/#doc/MPSTensor.sameMPV_of_sameMPVFrom_of_injective" class="lean_decl">MPSTensor.sameMPV_of_sameMPVFrom_of_injective</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   Let \(A\) be an injective tensor and \(B\) a tensor of the same bond dimension. If \(A\) and \(B\) generate the same MPV family for every system size \(N \ge N_0\), then they generate the same MPV family for every system size. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000720">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> Write \(1 = \sum _i c_i A^i\) (by injectivity) and set \(S = \sum _i c_i B^i\). </p>
+<ol class="enumerate">
+  <li><p>Show that the length-\(N_0\) word span of \(B\) is all of \(M_{D}(\mathbb {C})\) via the composition identity \(\Phi _A \circ \ell _A = \Phi _B \circ \ell _B\) (from trace agreement at length \(N_0 + 1\)) and a finrank transfer argument. </p>
+</li>
+  <li><p>Derive \(S = 1\) by trace nondegeneracy: for every \(M \in M_{D}(\mathbb {C})\), \(\operatorname{tr}(M(S - 1)) = 0\). </p>
+</li>
+  <li><p>Downward induction on \(k = N_0 - |w|\): decompose \(\operatorname{tr}(w_A)\) and \(\operatorname{tr}(w_B)\) using \(1 = \sum c_i A^i\) and \(S = 1\) respectively, then apply the inductive hypothesis at length \(|w| + 1\). </p>
+</li>
+</ol>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:ft_singleBlock_finiteLength">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">16.18</span>
+    <span class="theorem_thmtitle">Strengthened single-block FT (finite-length)</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-algebraic_ft.html#thm:ft_singleBlock_finiteLength">#</a>
+    
+    <a class="icon proof" href="ch-algebraic_ft.html#a0000000721"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-algebraic_ft.html#thm:sameMPV_of_sameMPVFrom">Theorem 16.17</a></li>
+          
+          <li><a href="ch-single.html#thm:ft_single">Theorem 4.11</a></li>
+          
+          <li><a href="ch-mps.html#def:gauge_equiv">Definition 2.10</a></li>
+          
+          <li><a href="ch-algebraic_ft.html#thm:sameMPV_of_sameMPVFrom">Theorem 16.17</a></li>
+          
+          <li><a href="ch-single.html#thm:ft_single">Theorem 4.11</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://LionSR.github.io/TNLean/docs/find/#doc/MPSTensor.fundamentalTheorem_singleBlock_finiteLength" class="lean_decl">MPSTensor.fundamentalTheorem_singleBlock_finiteLength</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   If \(A\) is injective and \(A\), \(B\) agree on all MPV coefficients for system sizes \(N \ge N_0\) (for any threshold \(N_0\)), then \(A\) and \(B\) are gauge equivalent. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000721">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> Apply Theorem&#160;<a href="ch-algebraic_ft.html#thm:sameMPV_of_sameMPVFrom">16.17</a> to obtain equality of the MPV families for all system sizes, then invoke the single-block Fundamental Theorem (Theorem&#160;<a href="ch-single.html#thm:ft_single">4.11</a>). </p>
+
+  </div>
+</div>
+<h1 id="sec:ft_corollaries">16.7 Corollaries</h1>
+
+<h2 id="a0000000101">16.7.1 Translation-invariant chains</h2>
+<div class="corollary_thmwrapper theorem-style-plain" id="cor:ft_ti_chain">
+  <div class="corollary_thmheading">
+    <span class="corollary_thmcaption">
+    Corollary
+    </span>
+    <span class="corollary_thmlabel">16.19</span>
+    <span class="corollary_thmtitle">TI case</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-algebraic_ft.html#cor:ft_ti_chain">#</a>
+    
+    <a class="icon proof" href="ch-algebraic_ft.html#a0000000722"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-algebraic_ft.html#thm:fundamentalTheorem_injective_chain">Theorem 16.13</a></li>
+          
+          <li><a href="ch-single.html#def:non_ti_chain">Definition 4.12</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://LionSR.github.io/TNLean/docs/find/#doc/MPSChainTensor.ti_tensors_collapse_to_single_gauge" class="lean_decl">MPSChainTensor.ti_tensors_collapse_to_single_gauge</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="corollary_thmcontent">
+  <p>   Let \(A\) and \(B\) be injective MPS tensors of bond dimension \(D\). Suppose the two translation-invariant chains \((A, A, \dots , A)\) and \((B, B, \dots , B)\) of length \(n \ge 3\) generate the same chain state. Then there exists an invertible \(Z \in \mathrm{GL}_D(\mathbb {C})\), unique up to a scalar, and a scalar \(\lambda \in \mathbb {C}^{\times }\) with \(\lambda ^n = 1\), such that </p>
+<div class="displaymath" id="a0000000723">
+  \[  B^i = \lambda \,  Z^{-1}\,  A^i\,  Z  \]
+</div>
+<p> for every physical index&#160;\(i\). </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000722">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Apply Theorem&#160;<a href="ch-algebraic_ft.html#thm:fundamentalTheorem_injective_chain">16.13</a> to the two constant chains to obtain \(Z_0, \dots , Z_{n-1}\) with \(B^i = Z_k^{-1} A^i Z_{k+1}\) for all \(k\) and \(i\). Setting \(G_k = Z_k Z_0^{-1}\), the relation \(Z_k^{-1} A^i Z_{k+1} = Z_{k+1}^{-1} A^i Z_{k+2}\) shows \(A^i = G_k^{-1} A^i G_k\) for each \(k\). Since \(\{ A^i\} \) spans \(M_{D}(\mathbb {C})\), each \(G_k\) commutes with all of \(M_{D}(\mathbb {C})\), so \(G_k = \mu _k \mathbb {1}\) by Lemma&#160;<a href="ch-algebraic_ft.html#lem:center_scalar">16.10</a>. Hence \(Z_k = \mu _k Z_0\), and the cyclic condition \(Z_n = Z_0\) forces \((\mu _1)^n = 1\). Setting \(Z = Z_0\) and \(\lambda = \mu _1\) yields the result. </p>
+
+  </div>
+</div>
+<h2 id="a0000000102">16.7.2 Non-TI descriptions of TI states</h2>
+<div class="corollary_thmwrapper theorem-style-plain" id="cor:non_ti_to_ti">
+  <div class="corollary_thmheading">
+    <span class="corollary_thmcaption">
+    Corollary
+    </span>
+    <span class="corollary_thmlabel">16.20</span>
+    <span class="corollary_thmtitle">Non-TI realisation of a TI state</span>
+    <div class="thm_header_extras">
+
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-algebraic_ft.html#cor:non_ti_to_ti">#</a>
+    
+    <a class="icon proof" href="ch-algebraic_ft.html#a0000000724"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-algebraic_ft.html#thm:fundamentalTheorem_injective_chain">Theorem 16.13</a></li>
+          
+          <li><a href="ch-single.html#def:non_ti_chain">Definition 4.12</a></li>
+          
+          <li><a href="ch-algebraic_ft.html#thm:fundamentalTheorem_injective_chain">Theorem 16.13</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+        </div>
+  </div>
+  <div class="corollary_thmcontent">
+  <p>  Let \(\mathbf{A} = (A_0, \dots , A_{n-1})\) be an injective non-TI chain of length \(n \ge 3\). Suppose the state generated by \(\mathbf{A}\) is translation-invariant, i.e. it equals the state generated by the cyclically shifted chain \((A_1, \dots , A_{n-1}, A_0)\). Then \(\mathbf{A}\) admits a translation-invariant description with the same bond dimension: there exist an injective tensor \(B\) such that the TI chain \((B, \dots , B)\) generates the same state as \(\mathbf{A}\). Explicitly, \(B^i = A_0^i\,  Z_0^{-1}\) (right multiplication, <em>not</em> conjugation), where \(Z_0\) is defined below. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000724">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> The cyclic shift \(\sigma (\mathbf{A}) = (A_1, \dots , A_{n-1}, A_0)\) generates the same state by hypothesis. Apply Theorem&#160;<a href="ch-algebraic_ft.html#thm:fundamentalTheorem_injective_chain">16.13</a>: there exist invertible \(Z_0, \dots , Z_{n-1}\) with \(A_{k+1}^i = Z_k^{-1}\,  A_k^i\,  Z_{k+1}\) for all \(k\) and \(i\) (indices mod&#160;\(n\)). Define \(L_k = Z_0 Z_1 \cdots Z_{k-1}\) and \(R_k = Z_1 Z_2 \cdots Z_k\) for \(k \ge 1\), with \(L_0 = R_0 = \mathbb {1}\). Iterating the gauge relation gives \(A_k^i = L_k^{-1}\,  A_0^i\,  R_k\). Since \(R_k\,  L_{k+1}^{-1} = Z_0^{-1}\) for every \(k\), substituting into the trace yields </p>
+<div class="displaymath" id="a0000000725">
+  \[  \operatorname{tr}(A_0^{\sigma _0} \cdots A_{n-1}^{\sigma _{n-1}}) = \operatorname{tr}\bigl(A_0^{\sigma _0}\,  Z_0^{-1}\,  A_0^{\sigma _1} Z_0^{-1} \cdots A_0^{\sigma _{n-1}}\,  Z_0^{-1}\bigr).  \]
+</div>
+<p> Hence the state is generated by the TI chain with tensor \(B^i := A_0^i\,  Z_0^{-1}\). Since \(A_0\) is injective and \(Z_0\) is invertible, \(B\) is injective. </p>
+
+  </div>
+</div>
+<p>Symmetry-theoretic consequences of the Fundamental Theorem, including virtual representations and string order, are developed in Chapter&#160;<a href="ch-symmetry.html">17</a>. </p>
+<h2 id="a0000000103">16.7.3 Normal MPS (blocked injectivity)</h2>
+<div class="corollary_thmwrapper theorem-style-plain" id="cor:normal_mps_ft">
+  <div class="corollary_thmheading">
+    <span class="corollary_thmcaption">
+    Corollary
+    </span>
+    <span class="corollary_thmlabel">16.21</span>
+    <span class="corollary_thmtitle">Normal MPS Fundamental Theorem</span>
+    <div class="thm_header_extras">
+
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-algebraic_ft.html#cor:normal_mps_ft">#</a>
+    
+    <a class="icon proof" href="ch-algebraic_ft.html#a0000000726"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-algebraic_ft.html#thm:fundamentalTheorem_injective_chain">Theorem 16.13</a></li>
+          
+          <li><a href="ch-mps.html#def:injective">Definition 2.20</a></li>
+          
+          <li><a href="ch-mps.html#def:blocked_tensor">Definition 2.28</a></li>
+          
+          <li><a href="ch-mps.html#def:normal">Definition 2.22</a></li>
+          
+          <li><a href="ch-algebraic_ft.html#lem:blocking_preserves_injectivity">Lemma 16.9</a></li>
+          
+          <li><a href="ch-algebraic_ft.html#thm:fundamentalTheorem_injective_chain">Theorem 16.13</a></li>
+          
+          <li><a href="ch-algebraic_ft.html#lem:blocking_preserves_injectivity">Lemma 16.9</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://LionSR.github.io/TNLean/docs/find/#doc/MPSChainTensor.fundamentalTheorem_blockedChain" class="lean_decl">MPSChainTensor.fundamentalTheorem_blockedChain</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="corollary_thmcontent">
+  <p>   Let \(\{ A_k\} _{k=0}^{n-1}\) and \(\{ B_k\} _{k=0}^{n-1}\) be two non-TI periodic MPS on \(n\) sites. Suppose that blocking any \(L\) consecutive sites in either chain yields an injective tensor, and that \(n \ge 3L\). If both chains generate the same state, then there exist invertible matrices \(Z_0, \dots , Z_{n-1} \in \mathrm{GL}_D(\mathbb {C})\), unique up to a common scalar, such that for every site \(k\) and physical index \(i\), </p>
+<div class="displaymath" id="a0000000727">
+  \[  B_k^i = Z_k^{-1}\,  A_k^i\,  Z_{k+1},  \]
+</div>
+<p> with \(Z_n = Z_0\). That is, gauge equivalence holds for the <em>original</em> (unblocked) tensors. The reduction to the injective case proceeds by grouping the chain into consecutive length-\(L\) blocks and then applying the injective-chain theorem to the blocked local tensors. The remaining passage from blocked gauges back to the original site tensors is the reason this corollary remains marked . </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000726">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> Block every \(L\) consecutive sites to form a chain of length \(m = \lfloor n/L \rfloor \ge 3\) with injective local tensors \(A^{[L]}\) and \(B^{[L]}\) (injective by hypothesis). The blocked chains generate the same state, so Theorem&#160;<a href="ch-algebraic_ft.html#thm:fundamentalTheorem_injective_chain">16.13</a> gives invertible gauges \(\widehat{Z}_0, \dots , \widehat{Z}_{m-1}\) with \((B^{[L]})_k = \widehat{Z}_k^{-1}\,  (A^{[L]})_k\,  \widehat{Z}_{k+1}\). Applying Lemma&#160;<a href="ch-algebraic_ft.html#lem:tensor_proportional">16.12</a> within each \(L\)-block then decomposes the blocked gauge equivalence into site-by-site gauges, yielding \(Z_0, \dots , Z_{n-1}\) for the original tensors. </p>
+
+  </div>
+</div>
+<h1 id="sec:pi_algebra">16.8 Product algebra construction and per-block gauge</h1>
+
+<p>The chain Fundamental Theorem (Theorem&#160;<a href="ch-algebraic_ft.html#thm:fundamentalTheorem_injective_chain">16.13</a>) handles non-TI periodic chains. A parallel line of argument addresses block-diagonal tensors: given a family of injective block tensors \(\{ A_k^i\} _{k=0}^{r-1}\) with block dimensions \(D_k\) and a second family \(\{ B_k^i\} \) with per-block \(\mathcal{V}(A_k) = \mathcal{V}(B_k)\), one seeks per-block gauge equivalence \(B_k^i = X_k\,  A_k^i\,  X_k^{-1}\) for each&#160;\(k\) independently, and a global block-permutation plus inner-automorphism decomposition. </p>
+<h2 id="a0000000104">16.8.1 Per-block linear extension</h2>
+<div class="definition_thmwrapper theorem-style-definition" id="def:perBlockLinearExtension">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">16.22</span>
+    <span class="definition_thmtitle">Per-block linear extension</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-algebraic_ft.html#def:perBlockLinearExtension">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mps.html#def:injective">Definition 2.20</a></li>
+          
+          <li><a href="ch-mps.html#def:same_mpv">Definition 2.11</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://LionSR.github.io/TNLean/docs/find/#doc/MPSTensor.perBlockLinearExtension" class="lean_decl">MPSTensor.perBlockLinearExtension</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>   Let \(A_k, B_k\) be MPS tensors of bond dimension \(D_k\) with \(A_k\) injective and \(\mathcal{V}(A_k) = \mathcal{V}(B_k)\) for each block \(k \in \{ 0, \dots , r{-}1\} \). The <em>per-block linear extension</em> \(T_k : M_{D_k}(\mathbb {C}) \to M_{D_k}(\mathbb {C})\) is the unique \(\mathbb {C}\)-linear map satisfying \(T_k(A_k^i) = B_k^i\) for every physical index&#160;\(i\). </p>
+
+  </div>
+</div>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:perBlockLinearExtension_mul">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">16.23</span>
+    <span class="lemma_thmtitle">Per-block multiplicativity</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-algebraic_ft.html#lem:perBlockLinearExtension_mul">#</a>
+    
+    <a class="icon proof" href="ch-algebraic_ft.html#a0000000728"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-algebraic_ft.html#def:perBlockLinearExtension">Definition 16.22</a></li>
+          
+          <li><a href="ch-algebraic_ft.html#def:perBlockLinearExtension">Definition 16.22</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://LionSR.github.io/TNLean/docs/find/#doc/MPSTensor.perBlockLinearExtension_mul" class="lean_decl">MPSTensor.perBlockLinearExtension_mul</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>   For each block&#160;\(k\), the per-block linear extension \(T_k\) is multiplicative: \(T_k(MN) = T_k(M)\,  T_k(N)\) for all \(M, N \in M_{D_k}(\mathbb {C})\). </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000728">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> Since \(\{ A_k^i\} \) spans \(M_{D_k}(\mathbb {C})\), it suffices to check on spanning elements, where the result follows from the MPV identity. </p>
+
+  </div>
+</div>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:perBlockLinearExtension_bijective">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">16.24</span>
+    <span class="lemma_thmtitle">Per-block bijectivity</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-algebraic_ft.html#lem:perBlockLinearExtension_bijective">#</a>
+    
+    <a class="icon proof" href="ch-algebraic_ft.html#a0000000729"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-algebraic_ft.html#lem:perBlockLinearExtension_mul">Lemma 16.23</a></li>
+          
+          <li><a href="ch-algebraic_ft.html#lem:perBlockLinearExtension_mul">Lemma 16.23</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://LionSR.github.io/TNLean/docs/find/#doc/MPSTensor.perBlockLinearExtension_bijective" class="lean_decl">MPSTensor.perBlockLinearExtension_bijective</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>   Each \(T_k\) is bijective. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000729">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> A nonzero multiplicative linear endomorphism of \(M_{D_k}(\mathbb {C})\) is automatically bijective: injectivity follows from the simplicity of \(M_{D_k}(\mathbb {C})\) (the kernel is a proper ideal, hence zero), and surjectivity from finite dimension. Non-vanishing of \(T_k\) is established via the trace pairing: if \(T_k = 0\), then all \(B_k^i = 0\), contradicting the non-vanishing of the trace pairing for injective tensors. </p>
+
+  </div>
+</div>
+<h2 id="a0000000105">16.8.2 Product algebra automorphism</h2>
+<div class="definition_thmwrapper theorem-style-definition" id="def:piAlgEquiv">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">16.25</span>
+    <span class="definition_thmtitle">Product algebra automorphism</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-algebraic_ft.html#def:piAlgEquiv">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-algebraic_ft.html#def:perBlockLinearExtension">Definition 16.22</a></li>
+          
+          <li><a href="ch-algebraic_ft.html#lem:perBlockLinearExtension_mul">Lemma 16.23</a></li>
+          
+          <li><a href="ch-algebraic_ft.html#lem:perBlockLinearExtension_bijective">Lemma 16.24</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://LionSR.github.io/TNLean/docs/find/#doc/MPSTensor.piAlgEquiv" class="lean_decl">MPSTensor.piAlgEquiv</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>   The <em>product algebra automorphism</em> is the \(\mathbb {C}\)-algebra equivalence </p>
+<div class="displaymath" id="a0000000730">
+  \[  T : \prod _{k=0}^{r-1} M_{D_k}(\mathbb {C}) \; \xrightarrow {\; \sim \; }\;  \prod _{k=0}^{r-1} M_{D_k}(\mathbb {C})  \]
+</div>
+<p> defined by \(T(M)_k = T_k(M_k)\), where each \(T_k\) is the per-block linear extension. It is an algebra automorphism since each \(T_k\) is a multiplicative, unital, bijective linear map. Diagrammatically, this is the blockwise map on the product algebra obtained by applying the corresponding per-block extension to each summand. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:piAlgEquiv_decomposition">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">16.26</span>
+    <span class="theorem_thmtitle">Block-permutation decomposition</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-algebraic_ft.html#thm:piAlgEquiv_decomposition">#</a>
+    
+    <a class="icon proof" href="ch-algebraic_ft.html#a0000000731"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-algebraic_ft.html#def:piAlgEquiv">Definition 16.25</a></li>
+          
+          <li><a href="ch-single.html#thm:skolem_noether">Theorem 4.9</a></li>
+          
+          <li><a href="ch-algebraic_ft.html#def:piAlgEquiv">Definition 16.25</a></li>
+          
+          <li><a href="ch-single.html#thm:skolem_noether">Theorem 4.9</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://LionSR.github.io/TNLean/docs/find/#doc/MPSTensor.piAlgEquiv_decomposition" class="lean_decl">MPSTensor.piAlgEquiv_decomposition</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   The product algebra automorphism \(T\) decomposes as a block permutation composed with per-block inner automorphisms: there exist a permutation \(\sigma \in S_r\) (with \(D_{\sigma (k)} = D_k\) for all&#160;\(k\)) and invertible matrices \(X_k \in \mathrm{GL}_{D_k}(\mathbb {C})\) such that </p>
+<div class="displaymath" id="a0000000732">
+  \[  (T(M))_{\sigma (k)} = X_k\,  M\,  X_k^{-1}  \]
+</div>
+<p> for all \(M \in M_{D_k}(\mathbb {C})\) (viewed as supported in block&#160;\(k\)) and all&#160;\(k\). Equivalently, the product-algebra automorphism first permutes the simple matrix blocks and then acts inside each block by an inner conjugation. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000731">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> The automorphism \(T\) permutes the block ideals of \(\prod _k M_{D_k}(\mathbb {C})\) (each block ideal is simple, and an automorphism sends simple ideals to simple ideals of the same dimension). This gives the permutation \(\sigma \). On each block, the restricted map is a \(\mathbb {C}\)-algebra automorphism of \(M_{D_k}(\mathbb {C})\); by Skolem–Noether (Theorem&#160;<a href="ch-single.html#thm:skolem_noether">4.9</a>), it is inner. Thus \(T\) splits algebraically into the permutation of block ideals followed by inner conjugation on each surviving block. </p>
+
+  </div>
+</div>
+<h2 id="a0000000106">16.8.3 Nondegeneracy of the product trace pairing</h2>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:piTrace_mul_right_eq_zero">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">16.27</span>
+    <span class="lemma_thmtitle">Nondegeneracy of the product trace pairing</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-algebraic_ft.html#lem:piTrace_mul_right_eq_zero">#</a>
+    
+    <a class="icon proof" href="ch-algebraic_ft.html#a0000000733"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://LionSR.github.io/TNLean/docs/find/#doc/MPSTensor.piTrace_mul_right_eq_zero" class="lean_decl">MPSTensor.piTrace_mul_right_eq_zero</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>  Let \(M = (M_0, \dots , M_{r-1}) \in \prod _{k} M_{D_k}(\mathbb {C})\). If \(\sum _{k} \operatorname{tr}(M_k N_k) = 0\) for all \(N = (N_0, \dots , N_{r-1})\), then \(M = 0\). </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000733">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Choose \(N\) supported on a single block&#160;\(k\) (all other components zero). The hypothesis reduces to \(\operatorname{tr}(M_k N_k) = 0\) for all \(N_k\), so \(M_k = 0\) by nondegeneracy of the matrix trace pairing on \(M_{D_k}(\mathbb {C})\). Since \(k\) was arbitrary, \(M = 0\). </p>
+
+  </div>
+</div>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:piTraceMulRightPi_ker_eq_bot">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">16.28</span>
+    <span class="lemma_thmtitle">Injectivity of the product Gram map</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-algebraic_ft.html#lem:piTraceMulRightPi_ker_eq_bot">#</a>
+    
+    <a class="icon proof" href="ch-algebraic_ft.html#a0000000734"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mps.html#def:injective">Definition 2.20</a></li>
+          
+          <li><a href="ch-mps.html#def:injective">Definition 2.20</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://LionSR.github.io/TNLean/docs/find/#doc/MPSTensor.piTraceMulRightPi_ker_eq_bot" class="lean_decl">MPSTensor.piTraceMulRightPi_ker_eq_bot</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>   Let \(\{ A_k\} \) be a family of injective block tensors. The product Gram map \(M \mapsto \bigl(k, i \mapsto \operatorname{tr}(M_k \cdot A_k^i)\bigr)\) is injective. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000734">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> Reduces to per-block injectivity of the Gram map \(M_k \mapsto (i \mapsto \operatorname{tr}(M_k \cdot A_k^i))\), which holds by injectivity of \(A_k\) (the matrices \(\{ A_k^i\} \) span \(M_{D_k}(\mathbb {C})\), so the trace pairing against them separates points). </p>
+
+  </div>
+</div>
+<h1 id="sec:multi_block_ft">16.9 The multi-block Fundamental Theorem</h1>
+
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:fundamentalTheorem_multiBlock_full">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">16.29</span>
+    <span class="theorem_thmtitle">Multi-block Fundamental Theorem</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-algebraic_ft.html#thm:fundamentalTheorem_multiBlock_full">#</a>
+    
+    <a class="icon proof" href="ch-algebraic_ft.html#a0000000735"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mps.html#def:injective">Definition 2.20</a></li>
+          
+          <li><a href="ch-mps.html#def:same_mpv">Definition 2.11</a></li>
+          
+          <li><a href="ch-mps.html#def:gauge_equiv">Definition 2.10</a></li>
+          
+          <li><a href="ch-algebraic_ft.html#lem:perBlockLinearExtension_bijective">Lemma 16.24</a></li>
+          
+          <li><a href="ch-algebraic_ft.html#lem:perBlockLinearExtension_bijective">Lemma 16.24</a></li>
+          
+          <li><a href="ch-algebraic_ft.html#thm:piAlgEquiv_decomposition">Theorem 16.26</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://LionSR.github.io/TNLean/docs/find/#doc/MPSTensor.fundamentalTheorem_multiBlock_full" class="lean_decl">MPSTensor.fundamentalTheorem_multiBlock_full</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   Let \(\{ A_k\} _{k=0}^{r-1}\) and \(\{ B_k\} _{k=0}^{r-1}\) be two families of MPS tensors with block dimensions \(D_k\), each \(A_k\) injective, and \(\mathcal{V}(A_k) = \mathcal{V}(B_k)\) for all&#160;\(k\). Then: </p>
+<ol class="enumerate">
+  <li><p>Per-block gauge equivalence: \(B_k^i = X_k\,  A_k^i\,  X_k^{-1}\) for some \(X_k \in \mathrm{GL}_{D_k}(\mathbb {C})\), for every \(k\) and \(i\). </p>
+</li>
+  <li><p>Global gauge equivalence: the block-diagonal tensors \(\bigoplus _k \mu _k A_k\) and \(\bigoplus _k \mu _k B_k\) are gauge equivalent. </p>
+</li>
+</ol>
+<p> The second clause is obtained from the first by assembling the per-block gauges into one block-diagonal gauge. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000735">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> Per-block gauge equivalence follows from applying the single-block Fundamental Theorem (existing) to each block, using injectivity of \(A_k\) and \(\mathcal{V}(A_k) = \mathcal{V}(B_k)\). Global gauge equivalence is assembled from the per-block gauges via the block-diagonal structure. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:perBlock_sameMPV_iff_gaugeEquiv">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">16.30</span>
+    <span class="theorem_thmtitle">Per-block equality of MPV families and per-block gauge equivalence</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-algebraic_ft.html#thm:perBlock_sameMPV_iff_gaugeEquiv">#</a>
+    
+    <a class="icon proof" href="ch-algebraic_ft.html#a0000000736"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mps.html#def:injective">Definition 2.20</a></li>
+          
+          <li><a href="ch-mps.html#def:same_mpv">Definition 2.11</a></li>
+          
+          <li><a href="ch-mps.html#def:gauge_equiv">Definition 2.10</a></li>
+          
+          <li><a href="ch-mps.html#def:gauge_equiv">Definition 2.10</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://LionSR.github.io/TNLean/docs/find/#doc/MPSTensor.perBlock_sameMPV_iff_gaugeEquiv" class="lean_decl">MPSTensor.perBlock_sameMPV_iff_gaugeEquiv</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   Let \(\{ A_k\} \) be a family of injective block tensors. Then \(\mathcal{V}(A_k) = \mathcal{V}(B_k)\) for all&#160;\(k\) if and only if \(A_k\) and \(B_k\) are gauge equivalent for all&#160;\(k\). </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000736">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> The forward direction is the single-block Fundamental Theorem applied blockwise. The reverse direction holds because gauge equivalence preserves all traces of word evaluations. </p>
+
+  </div>
+</div>
+<h1 id="sec:block_separation">16.10 Block separation from canonical form</h1>
+
+<p>The multi-block Fundamental Theorem (Theorem&#160;<a href="ch-algebraic_ft.html#thm:fundamentalTheorem_multiBlock_full">16.29</a>) assumes per-block \(\mathcal{V}(A_k) = \mathcal{V}(B_k)\). In practice, one starts from the weaker global hypothesis that the block-diagonal tensors satisfy the same MPV family: \(\mathcal{V}\! \bigl(\bigoplus _k \mu _k A_k\bigr) = \mathcal{V}\! \bigl(\bigoplus _k \mu _k B_k\bigr)\). Block separation extracts the per-block identities from the global one under canonical-form normalization. The first step is the weighted block-sum identity </p>
+<div class="displaymath" id="a0000000737">
+  \[  \sum _k \mu _k^N V^{(N)}(A_k)_\sigma = \sum _k \mu _k^N V^{(N)}(B_k)_\sigma ,  \]
+</div>
+<p> which is then combined with overlap estimates and the leading-block peel. </p>
+<div class="definition_thmwrapper theorem-style-definition" id="def:isCanonicalForm">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">16.31</span>
+    <span class="definition_thmtitle">Canonical form</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-algebraic_ft.html#def:isCanonicalForm">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mps.html#def:injective">Definition 2.20</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://LionSR.github.io/TNLean/docs/find/#doc/MPSTensor.IsCanonicalForm" class="lean_decl">MPSTensor.IsCanonicalForm</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>   A family of block tensors \(\{ A_k\} _{k=0}^{r-1}\) with scaling weights \(\mu _0, \dots , \mu _{r-1} \in \mathbb {C}^{\times }\) is in <em>canonical form</em> if: </p>
+<ol class="enumerate">
+  <li><p>each \(A_k\) is injective, </p>
+</li>
+  <li><p>each \(A_k\) is left-canonical: \(\sum _i (A_k^i)^{\dagger }\,  A_k^i = \mathbb {1}_{D_k}\), </p>
+</li>
+  <li><p>the weights are strictly ordered by norm: \(|\mu _0| {\gt} |\mu _1| {\gt} \cdots {\gt} |\mu _{r-1}| {\gt} 0\), </p>
+</li>
+  <li><p>the self-overlaps are normalised: \(O_{A_k A_k}(N) \to 1\) as \(N \to \infty \). </p>
+</li>
+</ol>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:normal_canonical_form">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">16.32</span>
+    <span class="definition_thmtitle">Normal canonical form</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-algebraic_ft.html#def:normal_canonical_form">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-algebraic_ft.html#def:isCanonicalForm">Definition 16.31</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://LionSR.github.io/TNLean/docs/find/#doc/MPSTensor.IsNormalCanonicalForm" class="lean_decl">MPSTensor.IsNormalCanonicalForm</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>   A family is in <em>normal canonical form</em> if it satisfies the canonical-form conditions with each block additionally <em>irreducible</em> (no nontrivial invariant projection) and <em>primitive</em> (the transfer map has spectral gap). </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:per_block_sameMPV_of_canonical_form">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">16.33</span>
+    <span class="theorem_thmtitle">Block separation from canonical form</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-algebraic_ft.html#thm:per_block_sameMPV_of_canonical_form">#</a>
+    
+    <a class="icon proof" href="ch-algebraic_ft.html#a0000000738"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-algebraic_ft.html#def:isCanonicalForm">Definition 16.31</a></li>
+          
+          <li><a href="ch-mps.html#def:same_mpv">Definition 2.11</a></li>
+          
+          <li><a href="ch-algebraic_ft.html#def:isCanonicalForm">Definition 16.31</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://LionSR.github.io/TNLean/docs/find/#doc/MPSTensor.per_block_sameMPV_of_canonical_form" class="lean_decl">MPSTensor.per_block_sameMPV_of_canonical_form</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   Let \(\{ A_k\} \) be in canonical form with weights \(\{ \mu _k\} \), and let \(\{ B_k\} \) be another family with each \(B_k\) injective and left-canonical. If \(\mathcal{V}\! \bigl(\bigoplus _k \mu _k A_k\bigr) = \mathcal{V}\! \bigl(\bigoplus _k \mu _k B_k\bigr)\), then \(\mathcal{V}(A_k) = \mathcal{V}(B_k)\) for each block&#160;\(k\) individually. The proof isolates the leading block and treats the remaining blocks as an exponentially decaying tail with \(\rho = |\mu _1|/|\mu _0| {\lt} 1\). </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000738">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> The proof proceeds by strong induction on the number of blocks&#160;\(r\). For \(r = 1\), the weighted sum degenerates and the result is immediate after cancelling \(\mu _0^N \ne 0\). </p>
+<p>For \(r \ge 2\), the global identity \(\sum _k \mu _k^N\,  \bigl(V^{(N)}(A_k)_\sigma - V^{(N)}(B_k)_\sigma \bigr) = 0\) holds for all \(N\) and \(\sigma \). </p>
+<div class="displaymath" id="a0000000739">
+  \[  \mu _0^N \bigl(V^{(N)}(A_0)_\sigma - V^{(N)}(B_0)_\sigma \bigr) = - \sum _{k \ge 1} \mu _k^N \bigl(V^{(N)}(A_k)_\sigma - V^{(N)}(B_k)_\sigma \bigr).  \]
+</div>
+<p> Dividing by \(\mu _0^N\) shows that the right-hand side is \(O(\rho ^N)\) with \(\rho = |\mu _1|/|\mu _0| {\lt} 1\). Multiplying by the MPV components of \(A_0\) and summing over \(\sigma \) converts this to an overlap identity. Dividing by \(|\mu _0|^{2N}\) and using the strict norm ordering \(|\mu _1| / |\mu _0| {\lt} 1\), the tail terms \((k \ge 1)\) decay geometrically with ratio \(\rho = |\mu _1| / |\mu _0|\). The leading term (\(k = 0\)) therefore converges: \(O_{A_0 B_0}(N) \to 1\) as \(N \to \infty \). Combined with the normalised self-overlap \(O_{A_0 A_0}(N) \to 1\), this gives \(\mathcal{V}(A_0) = \mathcal{V}(B_0)\) via the gauge-phase equivalence criterion. Subtracting the leading block and applying the inductive hypothesis yields \(\mathcal{V}(A_k) = \mathcal{V}(B_k)\) for all remaining \(k\). </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:fundamentalTheorem_canonicalForm">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">16.34</span>
+    <span class="theorem_thmtitle">Fundamental Theorem from canonical form</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-algebraic_ft.html#thm:fundamentalTheorem_canonicalForm">#</a>
+    
+    <a class="icon proof" href="ch-algebraic_ft.html#a0000000740"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-algebraic_ft.html#thm:per_block_sameMPV_of_canonical_form">Theorem 16.33</a></li>
+          
+          <li><a href="ch-algebraic_ft.html#thm:fundamentalTheorem_multiBlock_full">Theorem 16.29</a></li>
+          
+          <li><a href="ch-algebraic_ft.html#thm:per_block_sameMPV_of_canonical_form">Theorem 16.33</a></li>
+          
+          <li><a href="ch-algebraic_ft.html#thm:fundamentalTheorem_multiBlock_full">Theorem 16.29</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://LionSR.github.io/TNLean/docs/find/#doc/MPSTensor.fundamentalTheorem_canonicalForm" class="lean_decl">MPSTensor.fundamentalTheorem_canonicalForm</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   Under the hypotheses of Theorem&#160;<a href="ch-algebraic_ft.html#thm:per_block_sameMPV_of_canonical_form">16.33</a>, every block pair \(A_k, B_k\) is gauge equivalent, and the block-diagonal tensors are globally gauge equivalent. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000740">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> Theorem&#160;<a href="ch-algebraic_ft.html#thm:per_block_sameMPV_of_canonical_form">16.33</a> gives per-block \(\mathcal{V}(A_k) = \mathcal{V}(B_k)\). Theorem&#160;<a href="ch-algebraic_ft.html#thm:fundamentalTheorem_multiBlock_full">16.29</a> converts this to per-block and global gauge equivalence. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:fundamentalTheorem_canonicalForm_explicit">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">16.35</span>
+    <span class="theorem_thmtitle">Explicit gauge from canonical form</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-algebraic_ft.html#thm:fundamentalTheorem_canonicalForm_explicit">#</a>
+    
+    <a class="icon proof" href="ch-algebraic_ft.html#a0000000741"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-algebraic_ft.html#thm:fundamentalTheorem_canonicalForm">Theorem 16.34</a></li>
+          
+          <li><a href="ch-algebraic_ft.html#thm:fundamentalTheorem_canonicalForm">Theorem 16.34</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://LionSR.github.io/TNLean/docs/find/#doc/MPSTensor.fundamentalTheorem_canonicalForm_explicit" class="lean_decl">MPSTensor.fundamentalTheorem_canonicalForm_explicit</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   Under the same hypotheses, there exist invertible matrices \(X_k \in \mathrm{GL}_{D_k}(\mathbb {C})\) such that \(B_k^i = X_k\,  A_k^i\,  X_k^{-1}\) for every block \(k\) and physical index \(i\). </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000741">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> Extract the gauge matrices from Theorem&#160;<a href="ch-algebraic_ft.html#thm:fundamentalTheorem_canonicalForm">16.34</a> by choice. </p>
+
+  </div>
+</div>
+<h1 id="sec:ti_reduction">16.11 TI reduction corollary</h1>
+
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:ti_reduction_corollary">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">16.36</span>
+    <span class="theorem_thmtitle">TI reduction corollary</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-algebraic_ft.html#thm:ti_reduction_corollary">#</a>
+    
+    <a class="icon proof" href="ch-algebraic_ft.html#a0000000742"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mps.html#def:injective">Definition 2.20</a></li>
+          
+          <li><a href="ch-mps.html#def:same_mpv">Definition 2.11</a></li>
+          
+          <li><a href="ch-algebraic_ft.html#cor:ft_ti_chain">Corollary 16.19</a></li>
+          
+          <li><a href="ch-algebraic_ft.html#cor:ft_ti_chain">Corollary 16.19</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://LionSR.github.io/TNLean/docs/find/#doc/MPSChainTensor.ti_reduction_corollary" class="lean_decl">MPSChainTensor.ti_reduction_corollary</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   Let \(A\) and \(B\) be MPS tensors of bond dimension \(D\) with \(A\) injective. Consider the two constant (translation-invariant) chains \((A, \dots , A)\) and \((B, \dots , B)\) of length \(n \ge 1\). If the combined tensors of the two chains generate the same MPV family, then: </p>
+<ol class="enumerate">
+  <li><p>\(B\) is gauge equivalent to \(A\): there exists \(X \in \mathrm{GL}_D(\mathbb {C})\) with \(B^i = X\,  A^i\,  X^{-1}\) for all&#160;\(i\). </p>
+</li>
+  <li><p>\(B\) is injective. </p>
+</li>
+</ol>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000742">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> Block the constant chain into a combined tensor and apply Corollary&#160;<a href="ch-algebraic_ft.html#cor:ft_ti_chain">16.19</a> to obtain a single uniform gauge. On the combined-site index \((k,i)\) this is the local relation </p>
+<div class="displaymath" id="a0000000743">
+  \[  \begin{array}{ccccc}& &  (k,i) & & \\ & &  \vert & & \\ \textcolor{red}{\bullet } &  \text{---} &  \bullet &  \text{---} &  \textcolor{red}{\bullet } \\ X & & & &  X^{-1} \end{array}  \]
+</div>
+<p> and reading this back on each site gives \(B^i = X A^i X^{-1}\). Injectivity of \(B\) then follows from gauge equivalence to the injective tensor \(A\). </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:ti_reduction_of_sameState">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">16.37</span>
+    <span class="theorem_thmtitle">TI reduction from same state</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-algebraic_ft.html#thm:ti_reduction_of_sameState">#</a>
+    
+    <a class="icon proof" href="ch-algebraic_ft.html#a0000000744"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-algebraic_ft.html#thm:ti_reduction_corollary">Theorem 16.36</a></li>
+          
+          <li><a href="ch-algebraic_ft.html#thm:fundamentalTheorem_injective_chain">Theorem 16.13</a></li>
+          
+          <li><a href="ch-algebraic_ft.html#thm:ti_reduction_corollary">Theorem 16.36</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://LionSR.github.io/TNLean/docs/find/#doc/MPSChainTensor.ti_reduction_of_sameState" class="lean_decl">MPSChainTensor.ti_reduction_of_sameState</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   Under the same setup, if \(n \ge 3\) and the two constant chains generate the same chain state (rather than the same MPV family on the combined tensor), the same conclusion holds, provided one can pass from equality of chain states to equality of MPV families on the combined tensor. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000744">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> The additional hypothesis converts equality of chain states at length \(n \ge 3\) to equality of MPV families on the combined tensor. Then Theorem&#160;<a href="ch-algebraic_ft.html#thm:ti_reduction_corollary">16.36</a> applies. </p>
+
+  </div>
+</div>
+<h2 id="a0000000107">16.11.1 Global symmetry via gauge composition</h2>
+<p>The virtual representation theorem (Theorem&#160;<a href="ch-symmetry.html#thm:virtual_rep_injective">17.21</a>) relies on the fact that composing two gauge transformations yields another gauge up to a scalar factor. </p>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:gauge_ratio_commutes">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">16.38</span>
+    <span class="lemma_thmtitle">Gauge ratio commutes with tensor matrices</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-algebraic_ft.html#lem:gauge_ratio_commutes">#</a>
+    
+    <a class="icon proof" href="ch-algebraic_ft.html#a0000000745"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mps.html#def:gauge_equiv">Definition 2.10</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://LionSR.github.io/TNLean/docs/find/#doc/MPSTensor.gauge_ratio_commutes" class="lean_decl">MPSTensor.gauge_ratio_commutes</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>   Diagrammatically, the hypothesis is that the two local gauges </p>
+<div class="displaymath" id="a0000000746">
+  \[  \begin{array}{ccccc}& &  i & & \\ & &  \vert & & \\ \textcolor{red}{\bullet } &  \text{---} &  \bullet &  \text{---} &  \textcolor{red}{\bullet } \\ X & & & &  X^{-1} \end{array} \qquad \text{and}\qquad \begin{array}{ccccc}& &  i & & \\ & &  \vert & & \\ \textcolor{red}{\bullet } &  \text{---} &  \bullet &  \text{---} &  \textcolor{red}{\bullet } \\ Y & & & &  Y^{-1} \end{array}  \]
+</div>
+<p> produce the same target tensor \(B^i\) from the same source tensor \(A^i\). If \(X, Y \in \mathrm{GL}_D(\mathbb {C})\) both conjugate an MPS tensor \(A\) to the same tensor \(B\) (i.e. \(B^i = X A^i X^{-1} = Y A^i Y^{-1}\) for all \(i\)), then \(Y^{-1} X\) commutes with every \(A^i\). </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000745">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Direct matrix calculation: conjugating both gauge relations and composing gives \((Y^{-1} X) A^i = A^i (Y^{-1} X)\). </p>
+
+  </div>
+</div>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:gauge_ratio_isScalar">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">16.39</span>
+    <span class="lemma_thmtitle">Gauge ratio is scalar for injective tensors</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-algebraic_ft.html#lem:gauge_ratio_isScalar">#</a>
+    
+    <a class="icon proof" href="ch-algebraic_ft.html#a0000000747"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-algebraic_ft.html#lem:gauge_ratio_commutes">Lemma 16.38</a></li>
+          
+          <li><a href="ch-mps.html#def:injective">Definition 2.20</a></li>
+          
+          <li><a href="ch-algebraic_ft.html#lem:center_scalar">Lemma 16.10</a></li>
+          
+          <li><a href="ch-algebraic_ft.html#lem:gauge_ratio_commutes">Lemma 16.38</a></li>
+          
+          <li><a href="ch-algebraic_ft.html#lem:center_scalar">Lemma 16.10</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://LionSR.github.io/TNLean/docs/find/#doc/MPSTensor.gauge_ratio_isScalar" class="lean_decl">MPSTensor.gauge_ratio_isScalar</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>   Under the same hypotheses, if \(A\) is additionally injective, then \(Y^{-1} X = \lambda \mathbb {1}_D\) for some scalar \(\lambda \in \mathbb {C}\). </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000747">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> The same two-gauge picture shows that the ratio \(Y^{-1}X\) acts invisibly on the local tensor. By Lemma&#160;<a href="ch-algebraic_ft.html#lem:gauge_ratio_commutes">16.38</a>, \(Y^{-1}X\) commutes with all \(A^i\). Since \(\{ A^i\} \) spans \(M_{D}(\mathbb {C})\), the matrix \(Y^{-1}X\) commutes with all of \(M_{D}(\mathbb {C})\). By Lemma&#160;<a href="ch-algebraic_ft.html#lem:center_scalar">16.10</a>, it is a scalar matrix. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:gaugeMatrix_projective_mul">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">16.40</span>
+    <span class="theorem_thmtitle">Projective multiplication law for gauge matrices</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-algebraic_ft.html#thm:gaugeMatrix_projective_mul">#</a>
+    
+    <a class="icon proof" href="ch-algebraic_ft.html#a0000000748"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-algebraic_ft.html#lem:gauge_ratio_isScalar">Lemma 16.39</a></li>
+          
+          <li><a href="ch-mps.html#def:injective">Definition 2.20</a></li>
+          
+          <li><a href="ch-symmetry.html#def:on_site_symmetric">Definition 17.12</a></li>
+          
+          <li><a href="ch-symmetry.html#lem:twisted_tensor_mul">Lemma 17.13</a></li>
+          
+          <li><a href="ch-algebraic_ft.html#lem:gauge_ratio_isScalar">Lemma 16.39</a></li>
+          
+          <li><a href="ch-symmetry.html#lem:twisted_tensor_mul">Lemma 17.13</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://LionSR.github.io/TNLean/docs/find/#doc/MPSTensor.gaugeMatrix_projective_mul" class="lean_decl">MPSTensor.gaugeMatrix_projective_mul</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   Let \(A\) be an injective MPS tensor with on-site symmetry under a group representation \(U : G \to \mathrm{GL}_d(\mathbb {C})\). For each \(g \in G\), let \(X(g) \in \mathrm{GL}_D(\mathbb {C})\) satisfy \(\widetilde{A}_g^i = X(g)\,  A^i\,  X(g)^{-1}\) for all&#160;\(i\). Then for all \(g, h \in G\), there exists \(c(g,h) \in \mathbb {C}\) such that </p>
+<div class="displaymath" id="a0000000749">
+  \[  X(h)\,  X(g) = c(g,h)\,  X(g \cdot h).  \]
+</div>
+<p> In fact \(c(g,h) \ne 0\) since both sides are invertible, so \(c(g,h) \in \mathbb {C}^{\times }\). Diagrammatically, the two candidate gauges are competing local replacements for the same twisted tensor: </p>
+<div class="displaymath" id="a0000000750">
+  \[  \begin{array}{ccccccccccc}& &  i & & & & & &  i & & \\ & &  \vert & & & & & &  \vert & & \\ \bullet &  \text{---} &  \textcolor{red}{\bullet } &  \text{---} &  \bullet &  = &  \bullet &  \text{---} &  \textcolor{red}{\bullet } &  \text{---} &  \bullet \\ & &  X(h)\, X(g) & & & & & &  X(gh) & & \end{array}  \]
+</div>
+<p> and both sides conjugate \(A^i\) to the same twisted tensor \(\widetilde{A}_{gh}^i\). </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000748">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> By the composition law \(\widetilde{A}_{gh} = \widetilde{(\widetilde{A}_h)}_g\) (Lemma&#160;<a href="ch-symmetry.html#lem:twisted_tensor_mul">17.13</a>), both \(X(h)\, X(g)\) and \(X(gh)\) conjugate \(A\) to \(\widetilde{A}_{gh}\). Lemma&#160;<a href="ch-algebraic_ft.html#lem:gauge_ratio_isScalar">16.39</a> then gives the scalar factor. </p>
+
+  </div>
+</div>
+<h1 id="sec:closing">16.12 Closing remarks</h1>
+
+<div class="remark_thmwrapper theorem-style-remark" id="a0000000751">
+  <div class="remark_thmheading">
+    <span class="remark_thmcaption">
+    Remark
+    </span>
+    <span class="remark_thmlabel">16.41</span>
+    <div class="thm_header_extras">
+
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-algebraic_ft.html#a0000000751">#</a>
+    
+    
+    
+        </div>
+  </div>
+  <div class="remark_thmcontent">
+  <p>Appendix&#160;A of&#160;<span class="cite">
+</span> strengthens the normal-MPS bound from \(n \ge 3L\) to \(n \ge 2L + 1\) by a more refined blocking argument. The injective PEPS theorem and the normal PEPS theorem on arbitrary graphs both rest on the same two core lemmas (Lemma&#160;<a href="ch-algebraic_ft.html#lem:virtual_bond_gauge">16.11</a> and Lemma&#160;<a href="ch-algebraic_ft.html#lem:tensor_proportional">16.12</a>); the graph geometry enters only through the blocking step that reduces to a three-site chain. </p>
+
+  </div>
+</div>
+
+</div> <!--main-text -->
+</div> <!-- content-wrapper -->
+</div> <!-- content -->
+</div> <!-- wrapper -->
+
+<nav class="prev_up_next">
+  <svg  id="showmore-minus" class="icon icon-eye-minus showmore"><use xlink:href="symbol-defs.svg#icon-eye-minus"></use></svg>
+
+  <svg  id="showmore-plus" class="icon icon-eye-plus showmore"><use xlink:href="symbol-defs.svg#icon-eye-plus"></use></svg>
+
+  <a href="ch-semigroup.html" title="Quantum Dynamical Semigroups"><svg  class="icon icon-arrow-left "><use xlink:href="symbol-defs.svg#icon-arrow-left"></use></svg>
+</a>
+  <a href="index.html" title="Fundamental Theorem of Matrix Product States"><svg  class="icon icon-arrow-up "><use xlink:href="symbol-defs.svg#icon-arrow-up"></use></svg>
+</a>
+  <a href="ch-symmetry.html" title="Symmetries and String Order"><svg  class="icon icon-arrow-right "><use xlink:href="symbol-defs.svg#icon-arrow-right"></use></svg>
+</a>
+</nav>
+
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/plastex.js"></script>
+<script type="text/javascript" src="js/svgxuse.js"></script>
+<script type="text/javascript" src="js/js.cookie.min.js"></script>
+<script type="text/javascript" src="js/showmore.js"></script>
+</body>
+</html>
