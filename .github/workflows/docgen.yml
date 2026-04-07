@@ -22,7 +22,6 @@ jobs:
     timeout-minutes: 480
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Cleanup to free disk space
         uses: jlumbroso/free-disk-space@main
