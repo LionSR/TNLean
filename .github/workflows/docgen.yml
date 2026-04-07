@@ -17,7 +17,7 @@ jobs:
   build_project:
     runs-on: ubuntu-latest
     name: Build project and generate docs
-    timeout-minutes: 360
+    timeout-minutes: 330
     steps:
       - name: Cleanup to free disk space
         uses: jlumbroso/free-disk-space@main
@@ -60,40 +60,7 @@ jobs:
           lake build TNLean:docs
 
       - name: Deploy to gh-pages
-        run: |
-          git clone --branch gh-pages --single-branch --depth 1 \
-            "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" /tmp/gh-pages
-
-          # Update blueprint
-          rm -rf /tmp/gh-pages/blueprint
-          mkdir -p /tmp/gh-pages/blueprint
-          cp -r blueprint/web/* /tmp/gh-pages/blueprint/
-          cp blueprint/print/print.pdf /tmp/gh-pages/blueprint.pdf
-
-          # Update homepage (clean first to remove stale files)
-          rm -rf /tmp/gh-pages/_layouts /tmp/gh-pages/assets
-          cp home_page/_config.yml /tmp/gh-pages/
-          cp home_page/index.md /tmp/gh-pages/
-          cp home_page/404.html /tmp/gh-pages/ 2>/dev/null || true
-          cp home_page/Gemfile /tmp/gh-pages/ 2>/dev/null || true
-          cp -r home_page/assets /tmp/gh-pages/ 2>/dev/null || true
-          cp -r home_page/_layouts /tmp/gh-pages/ 2>/dev/null || true
-
-          # Update API docs (fail if not generated)
-          if [ ! -d "docbuild/.lake/build/doc" ]; then
-            echo "::error::API docs were not generated (docbuild/.lake/build/doc missing)"
-            exit 1
-          fi
-          rm -rf /tmp/gh-pages/docs
-          cp -r docbuild/.lake/build/doc /tmp/gh-pages/docs
-
-          cd /tmp/gh-pages
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add -A
-          if git diff --cached --quiet; then
-            echo "No changes to deploy."
-          else
-            git commit -m "Full docs update from ${{ github.sha }}"
-            git push origin gh-pages
-          fi
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: ./scripts/deploy-to-gh-pages.sh --with-docs --ci

@@ -49,32 +49,7 @@ jobs:
           leanblueprint web
 
       - name: Deploy to gh-pages
-        run: |
-          git clone --branch gh-pages --single-branch --depth 1 \
-            "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" /tmp/gh-pages
-
-          # Update blueprint
-          rm -rf /tmp/gh-pages/blueprint
-          mkdir -p /tmp/gh-pages/blueprint
-          cp -r blueprint/web/* /tmp/gh-pages/blueprint/
-          cp blueprint/print/print.pdf /tmp/gh-pages/blueprint.pdf
-
-          # Update homepage (clean first to remove stale files)
-          rm -rf /tmp/gh-pages/_layouts /tmp/gh-pages/assets
-          cp home_page/_config.yml /tmp/gh-pages/
-          cp home_page/index.md /tmp/gh-pages/
-          cp home_page/404.html /tmp/gh-pages/ 2>/dev/null || true
-          cp home_page/Gemfile /tmp/gh-pages/ 2>/dev/null || true
-          cp -r home_page/assets /tmp/gh-pages/ 2>/dev/null || true
-          cp -r home_page/_layouts /tmp/gh-pages/ 2>/dev/null || true
-
-          cd /tmp/gh-pages
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add -A
-          if git diff --cached --quiet; then
-            echo "No changes to deploy."
-          else
-            git commit -m "Update blueprint from ${{ github.sha }}"
-            git push origin gh-pages
-          fi
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: ./scripts/deploy-to-gh-pages.sh --ci
