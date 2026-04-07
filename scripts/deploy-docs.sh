@@ -50,6 +50,8 @@ fi
 
 echo "==> Committing and pushing..."
 cd "$WORK_DIR/site"
+git config user.name "$(git -C "$REPO_ROOT" config user.name || echo 'deploy-script')"
+git config user.email "$(git -C "$REPO_ROOT" config user.email || echo 'deploy@local')"
 git add -A
 if git diff --cached --quiet; then
   echo "No changes to deploy."
