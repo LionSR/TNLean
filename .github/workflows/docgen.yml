@@ -17,7 +17,7 @@ jobs:
   build_project:
     runs-on: ubuntu-latest
     name: Build project and generate docs
-    timeout-minutes: 720
+    timeout-minutes: 360
     steps:
       - name: Cleanup to free disk space
         uses: jlumbroso/free-disk-space@main
