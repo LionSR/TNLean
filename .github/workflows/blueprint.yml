@@ -74,9 +74,11 @@ jobs:
 
       - name: Assemble site
         run: |
-          mkdir -p _site/blueprint
+          mkdir -p _site/blueprint _site/docs
           cp blueprint/print/print.pdf _site/blueprint.pdf
           cp -r blueprint/web/* _site/blueprint/
+          # Placeholder so /docs/ doesn't 404 between docgen runs
+          echo '<html><head><meta http-equiv="refresh" content="0;url=/TNLean/"></head><body>API docs are generated weekly. <a href="/TNLean/">Back to home</a>.</body></html>' > _site/docs/index.html
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
