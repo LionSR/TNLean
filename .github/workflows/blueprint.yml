@@ -59,7 +59,8 @@ jobs:
           cp -r blueprint/web/* /tmp/gh-pages/blueprint/
           cp blueprint/print/print.pdf /tmp/gh-pages/blueprint.pdf
 
-          # Update homepage
+          # Update homepage (clean first to remove stale files)
+          rm -rf /tmp/gh-pages/_layouts /tmp/gh-pages/assets
           cp home_page/_config.yml /tmp/gh-pages/
           cp home_page/index.md /tmp/gh-pages/
           cp home_page/404.html /tmp/gh-pages/ 2>/dev/null || true
