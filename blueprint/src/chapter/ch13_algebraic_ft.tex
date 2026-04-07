@@ -1127,6 +1127,111 @@ scalar factor.
 \end{proof}
 
 %% ---------------------------------------------------------
+\section{Fundamental Theorem for injective PEPS (scaffold)}%
+\label{sec:peps_ft}
+%% ---------------------------------------------------------
+
+The following definitions and results extend the Fundamental Theorem to
+injective PEPS on simple graphs, following
+Theorem~2 of~\cite{Molnar2018NormalPEPS}.
+
+\begin{definition}[Edge gauge at a vertex]%
+\label{def:edgeGaugeAt}
+\lean{TNLean.PEPS.edgeGaugeAt}
+\leanok
+\uses{}
+    For an edge $e = (u,w)$ with $u < w$ and gauge $X_e \in \mathrm{GL}(D_e)$,
+    the gauge matrix applied at vertex $v$ is $X_e$ if $v = u$ and
+    $(X_e^{-1})^\top$ if $v = w$.
+\end{definition}
+
+\begin{definition}[Gauge vertex action]%
+\label{def:gaugeVertex}
+\lean{TNLean.PEPS.gaugeVertex}
+\leanok
+\uses{def:edgeGaugeAt}
+    The gauged vertex tensor is
+    $(\mathrm{gaugeVertex}\; X\; A\; v)(\eta, \sigma)
+    = \sum_{\eta'} \bigl(\prod_{ie} M_{ie}(\eta(ie), \eta'(ie))\bigr)
+      A_v(\eta', \sigma)$.
+\end{definition}
+
+\begin{definition}[Apply gauge]%
+\label{def:applyGauge}
+\lean{TNLean.PEPS.applyGauge}
+\leanok
+\uses{def:gaugeVertex}
+    The PEPS tensor obtained by applying edge-gauge matrices to $A$.
+\end{definition}
+
+\begin{definition}[Gauge equivalence for PEPS]%
+\label{def:GaugeEquivPEPS}
+\lean{TNLean.PEPS.GaugeEquiv}
+\leanok
+\uses{def:gaugeVertex}
+    Two PEPS tensors $A, B$ are gauge-equivalent if they have the same bond
+    dimensions and $B$ is obtained from $A$ by applying invertible gauge
+    matrices on each edge.
+\end{definition}
+
+\begin{theorem}[Gauge invariance of PEPS state]%
+\label{thm:applyGauge_stateCoeff}
+\lean{TNLean.PEPS.applyGauge_stateCoeff}
+\uses{def:applyGauge}
+    Applying a gauge to a PEPS tensor preserves the state coefficients.
+\end{theorem}
+
+\begin{theorem}[Gauge equivalence implies same state]%
+\label{thm:GaugeEquiv_sameState}
+\lean{TNLean.PEPS.GaugeEquiv.sameState}
+\uses{def:GaugeEquivPEPS, thm:applyGauge_stateCoeff}
+    Gauge equivalence implies that the two PEPS tensors represent the same state.
+\end{theorem}
+
+\begin{definition}[Local tensor evaluation]%
+\label{def:localTensorEval}
+\lean{TNLean.PEPS.localTensorEval}
+\leanok
+\uses{}
+    The local tensor evaluated at vertex $v$ with virtual-index weighting $f$,
+    computing $\sum_\eta (\prod_{ie} f(ie)(\eta(ie))) \cdot A_v(\eta, \sigma)$.
+    This is multilinear in the components of $f$, not linear in the full tuple.
+\end{definition}
+
+\begin{theorem}[Local gauge extraction]%
+\label{thm:localGauge_exists}
+\lean{TNLean.PEPS.localGauge_exists}
+\uses{def:gaugeVertex, def:localTensorEval}
+    At a single vertex, vertex-injectivity of both tensors and the
+    same-state condition force a local gauge relation.
+\end{theorem}
+
+\begin{theorem}[Gauge consistency]%
+\label{thm:gaugeConsistency}
+\lean{TNLean.PEPS.gaugeConsistency}
+\uses{thm:localGauge_exists, def:gaugeVertex}
+    Local gauges extracted at adjacent vertices are consistent across
+    shared edges, yielding a global gauge family.
+\end{theorem}
+
+\begin{theorem}[Fundamental Theorem for injective PEPS]%
+\label{thm:fundamentalTheorem_PEPS}
+\lean{TNLean.PEPS.fundamentalTheorem_PEPS}
+\uses{thm:gaugeConsistency, def:GaugeEquivPEPS}
+    If two PEPS tensors on a simple graph are both vertex-injective and
+    generate the same state, then they are gauge-equivalent
+    (Theorem~2 of~\cite{Molnar2018NormalPEPS}).
+\end{theorem}
+
+\begin{theorem}[Gauge uniqueness up to scalar]%
+\label{thm:gauge_unique_up_to_scalar}
+\lean{TNLean.PEPS.gauge_unique_up_to_scalar}
+\uses{def:gaugeVertex}
+    On a connected graph, the gauge family in the Fundamental Theorem is
+    unique up to a global multiplicative scalar.
+\end{theorem}
+
+%% ---------------------------------------------------------
 \section{Closing remarks}%
 \label{sec:closing}
 %% ---------------------------------------------------------
