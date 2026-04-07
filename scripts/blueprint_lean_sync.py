@@ -283,7 +283,23 @@ def collect_blueprint_entries(blueprint_src: Path) -> list[BlueprintEntry]:
 def read_lean_decls_file(path: Path) -> set[str]:
     if not path.exists():
         return set()
-    return {line.strip() for line in path.read_text().splitlines() if line.strip()}
+    decls = {line.strip() for line in path.read_text().splitlines() if line.strip()}
+    if not decls:
+        # leanblueprint web can clobber lean_decls to empty when kpsewhich is
+        # missing; fall back to the committed version so the sync check still
+        # works after that step.
+        import subprocess
+        try:
+            out = subprocess.check_output(
+                ["git", "show", "HEAD:blueprint/lean_decls"],
+                cwd=path.parent.parent,
+                text=True,
+                stderr=subprocess.DEVNULL,
+            )
+            decls = {l.strip() for l in out.splitlines() if l.strip()}
+        except (subprocess.CalledProcessError, FileNotFoundError):
+            pass
+    return decls
 
 
 # ---------------------------------------------------------------------------
