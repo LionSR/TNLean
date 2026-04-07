@@ -17,7 +17,6 @@ leanblueprint web
 
 echo "==> Building API docs (this may take a while)..."
 cd "$REPO_ROOT/docbuild"
-lake update
 lake build TNLean:docs
 
 echo "==> Cloning gh-pages branch..."
