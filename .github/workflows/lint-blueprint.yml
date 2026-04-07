@@ -68,9 +68,6 @@ jobs:
             exit "$cmd_status"
           fi
 
-      - name: Build project (needed for checkdecls to find declarations)
-        run: lake build
-
       - name: Generate lean_decls from blueprint .tex files
         run: python3 scripts/blueprint_lean_sync.py --root . --update-lean-decls
 

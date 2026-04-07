@@ -1,4 +1,4 @@
-name: Compile blueprint
+name: Blueprint
 
 on:
   push:
@@ -27,6 +27,9 @@ jobs:
   build_project:
     runs-on: ubuntu-latest
     name: Build project
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Cleanup to free disk space
         uses: jlumbroso/free-disk-space@main
@@ -49,8 +52,35 @@ jobs:
         with:
           build: true
 
-      - name: Compile blueprint and documentation
-        uses: leanprover-community/docgen-action@main
+      - name: Install graphviz headers
+        run: sudo apt-get update && sudo apt-get install -y graphviz libgraphviz-dev
+
+      - name: Install leanblueprint
+        run: |
+          pipx install leanblueprint
+          pipx inject --include-apps --force leanblueprint plastex
+
+      - name: Build blueprint
+        working-directory: blueprint
+        run: |
+          leanblueprint pdf
+          leanblueprint web
+
+      - name: Build homepage with Jekyll
+        uses: actions/jekyll-build-pages@v1
         with:
-          blueprint: true
-          homepage: home_page
+          source: home_page
+          destination: ./_site
+
+      - name: Assemble site
+        run: |
+          mkdir -p _site/blueprint
+          cp blueprint/print/print.pdf _site/blueprint.pdf
+          cp -r blueprint/web/* _site/blueprint/
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
