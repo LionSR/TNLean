@@ -28,7 +28,7 @@ their spectral decomposition, and quantitative bounds on decay rates.
     Fix an MPS tensor and a right fixed point of its transfer map.
     Write the tensor as $A$ and the fixed point as $\rho^R$.
     Under the hypotheses of Theorem~\ref{thm:qpf}, that fixed point exists
-    and is unique up to scaling.
+    and is unique up to scaling; we normalize it so that $\tr(\rho^R)=1$.
     For a local observable $X \in \MN{D}$ define
     \[
         \langle X_0 \rangle := \tr(X\rho^R).
@@ -214,15 +214,6 @@ and rates for the single-tensor transfer map $\E_A$.
     $\delta > 0$ separating $1$ from the remaining spectrum.
 \end{proof}
 
-\begin{remark}[Status of quantitative bounds]\label{rem:quantitative_status}
-    \uses{thm:exponential_convergence_primitive,
-          thm:correlation_length_bound}
-    All three quantitative bounds above are now fully proved:
-    exponential convergence of primitive irreducible channels,
-    the correlation length bound for injective tensors, and
-    the spectral gap from injectivity.
-\end{remark}
-
 \section{Relation to parent Hamiltonians}
 
 \begin{remark}\label{rem:correlations_parent_hamiltonian}
@@ -286,17 +277,20 @@ and rates for the single-tensor transfer map $\E_A$.
 \begin{remark}\label{rem:zero_correlation_length}
     \uses{thm:spectral_radius_le_one, def:correlation_length, def:is_rfp}
     The identity $\E^2=\E$ is equivalent to vanishing subleading spectrum;
-    equivalently, $\xi=0$ and connected correlations vanish at nonzero
-    separation.
+    equivalently, $\xi=0$ and connected correlations become
+    separation-independent for all separations $n \ge 1$.
 \end{remark}
 
 \begin{definition}[Correlations independent of distance]\label{def:is_cid}
     \lean{MPSTensor.IsCID}
     \leanok
     \uses{def:connected_correlator}
-    An MPS tensor has \emph{correlations independent of distance} (CID) when
-    its connected two-point function $C(X,Y;n)$ is constant in the
-    separation $n$ for all local observables $X$ and $Y$.
+    For a positive definite right fixed point $\rho^R > 0$, an MPS tensor has
+    \emph{correlations independent of distance} (CID) when for all local
+    observables $X$ and $Y$ and all separations $n,m \ge 1$,
+    \[
+        C(X,Y;n) = C(X,Y;m).
+    \]
 \end{definition}
 
 \begin{theorem}[CID implies RFP]\label{thm:isCID_implies_isRFP}
