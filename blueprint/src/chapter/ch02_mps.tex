@@ -175,7 +175,7 @@ boundary conditions (PBC).
     \uses{def:mpv}
     Two tensors $A$ and $B$ (of the same bond dimension)
     \emph{generate the same MPV family}
-    if $\ket{V^{(N)}(A)} = \ket{V^{(N)}(B)}$ for every system size~$N \ge 1$.
+    if $\ket{V^{(N)}(A)} = \ket{V^{(N)}(B)}$ for every system size~$N$.
 \end{definition}
 
 \begin{definition}[Same MPV — different bond dimensions]\label{def:same_mpv2}
@@ -185,7 +185,7 @@ boundary conditions (PBC).
     For tensors $A$ and $B$ of possibly different bond
     dimensions $D_1$ and $D_2$,
     we write $\mc{V}(A) = \mc{V}(B)$ if
-    $\ket{V^{(N)}(A)} = \ket{V^{(N)}(B)}$ for every $N \ge 1$.
+    $\ket{V^{(N)}(A)} = \ket{V^{(N)}(B)}$ for every $N$.
 \end{definition}
 
 \begin{remark}\leanok
@@ -552,9 +552,10 @@ boundary conditions (PBC).
     \label{lem:overlap_eq_of_pos_mpv}
     \lean{MPSTensor.mpvOverlap_eq_of_pos_mpv_eq}\leanok
     \uses{def:mpv_overlap}
-    If $V^{(N)}(A)_\sigma = V^{(N)}(B)_\sigma$ for all $N > 0$
-    and all $\sigma$, then $O_{AC}(N) = O_{BC}(N)$ for all
-    positive $N$ and any third tensor $C$.
+    If $V^{(N)}(A)_\sigma = V^{(N)}(A')_\sigma$ and
+    $V^{(N)}(B)_\sigma = V^{(N)}(B')_\sigma$ for all $N > 0$
+    and all $\sigma$, then $O_{AB}(N) = O_{A'B'}(N)$ for all
+    positive~$N$.
 \end{lemma}
 \begin{proof}\leanok
     \uses{def:mpv_overlap}
