@@ -534,16 +534,31 @@ the Perron--Frobenius fixed point.
 
 \begin{proof}
     \leanok
-    \uses{thm:spectral_radius_le_one, thm:eigenvalue_bound, thm:qpf}
+    \uses{thm:modulus_one_gauge, thm:qpf, thm:right_canonical_gauge,
+          thm:ks_peripheral, thm:kraus_commute,
+          thm:left_multiplicative_identity, thm:psd_fp_pd_irred,
+          thm:skolem_noether}
     Choose a modulus-one eigenvector as in
     Theorem~\ref{thm:modulus_one_gauge}.
-    Instead of requiring injectivity to deduce invertibility of the
-    intertwiner, one uses the Perron--Frobenius fixed points
-    (Theorem~\ref{thm:qpf}), which are positive definite under
-    irreducibility.
-    The Kadison--Schwarz--Cauchy--Schwarz chain then yields a
-    positive-definite intertwiner, and the Skolem--Noether argument
-    the conclusion follows by the same argument.
+    The proof follows the five-step structure of
+    Theorem~\ref{thm:modulus_one_gauge}, with one key adaptation.
+    Steps~1--3 (separate gauging, block Kraus family, KS equality and
+    Kraus commutation) proceed identically: the gauging uses the
+    unique positive definite fixed points guaranteed by irreducibility
+    (Theorem~\ref{thm:qpf}) and the right-canonical gauge
+    (Theorem~\ref{thm:right_canonical_gauge}).
+    The change is in Step~4: the Kadison--Schwarz equality gives
+    $X'^\dagger X'$ as a nonzero positive semidefinite fixed point of
+    $\E_{B'}$.
+    Under injectivity this is immediately positive definite (the fixed
+    point is unique up to scaling).
+    Under the weaker hypothesis of irreducibility,
+    Theorem~\ref{thm:psd_fp_pd_irred} upgrades it to positive
+    definite, giving invertibility of~$X'$.
+    The intertwining identity $A'^i X' = X' B'^i$ follows from Kraus
+    commutation alone and does not require the Kraus operators to
+    span~$\MN{D}$.
+    Step~5 (Skolem--Noether conclusion) is unchanged.
 \end{proof}
 
 \begin{theorem}[Strict spectral gap (irreducible-TP)]%
