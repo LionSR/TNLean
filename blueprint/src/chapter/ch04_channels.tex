@@ -1195,6 +1195,14 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
     $E(XY) = E(X) E(Y) = XY$.
 \end{proof}
 
+\begin{remark}\leanok
+    The multiplicative-domain step in the proof above uses the left
+    multiplicative identity (Theorem~\ref{thm:left_multiplicative_identity})
+    from Chapter~\ref{ch:schwarz}, which appears later in the document. The
+    logical dependency is acyclic: Chapter~\ref{ch:schwarz} does not use any
+    result from~\S\ref{sec:fixed_point_algebra}.
+\end{remark}
+
 \begin{definition}[Adjoint fixed points]\label{def:adjoint_fixed_points}
     \lean{Kraus.adjointFixedPoints}\leanok
     \uses{def:kraus_adjoint_map}
