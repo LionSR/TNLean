@@ -1151,9 +1151,11 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
     Forward direction: $|\det T| = 1$ together with $|\mu| \le 1$ for every
     eigenvalue $\mu$ (from trace preservation and positivity) forces every
     eigenvalue to satisfy $|\mu| = 1$. Hence $T$ is bijective. A bijective
-    CPTP map is a $*$-automorphism: for every $X$, the Kadison--Schwarz
-    inequality $T(X^\dagger X) \ge T(X)^\dagger T(X)$ becomes an equality by
-    bijectivity and trace preservation, so $T$ preserves products. By the
+    CPTP map is a $*$-automorphism: the Heisenberg dual
+    $T^*(Y) = \sum_i K_i^\dagger Y K_i$ is unital (since $T$ is TP), so the
+    Kadison--Schwarz inequality
+    $T^*(Y^\dagger Y) \ge T^*(Y)^\dagger T^*(Y)$ becomes an equality for every
+    $Y$. Hence $T^*$, and therefore $T$, preserves products. By the
     Skolem--Noether theorem, every $*$-automorphism of $\MN{D}$ has the form
     $T(\rho) = U \rho U^\dagger$ for some unitary $U$. Kraus freedom then
     gives $K_i = c_i U$ with $\sum_i |c_i|^2 = 1$.
