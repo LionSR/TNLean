@@ -49,6 +49,7 @@ gap---is the approach adopted in this chapter.
 \begin{theorem}[Dimension preservation]\label{thm:dim_preserved}
     \lean{MPSTensor.dim_preserved}
     \leanok
+    Assume $D_k \ge 1$ for all~$k$.
     If $T$ is an algebra automorphism of
     $\prod_{k=1}^r \MN{D_k}$,
     and $\pi$ is the induced permutation, then
@@ -66,6 +67,7 @@ gap---is the approach adopted in this chapter.
 \begin{theorem}[Decomposition of automorphisms of $\prod \MN{D_k}$]\label{thm:pi_auto_decomp}
     \lean{MPSTensor.algEquiv_pi_matrix_decomposition}
     \leanok
+    Assume $D_k \ge 1$ for all~$k$.
     Every $\C$-algebra automorphism $T$ of $\prod_{k=1}^r \MN{D_k}$
     decomposes as a block permutation~$\pi$ followed by
     per-block inner automorphisms:
