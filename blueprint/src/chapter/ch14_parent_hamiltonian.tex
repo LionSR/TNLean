@@ -461,9 +461,9 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     : \text{for every cyclic window } [i,i{+}L{-}1],\;
     \psi|_{[i,i+L-1]} \in G_L(A)\bigr\},
   \]
-  where $\psi|_{[i,i+L-1]}$ denotes the restriction obtained by fixing
-  all physical indices outside the window to arbitrary values and summing
-  over the outside configurations.
+  where the condition $\psi|_{[i,i+L-1]} \in G_L(A)$ means that for every
+  choice of physical indices outside the window, the restriction of $\psi$
+  to that window lies in $G_L(A)$.
   When $N = 0$ or $L > N$, set $\mathcal{G}_{N,L}(A) := \top$ by convention.
 \end{definition}
 
@@ -477,6 +477,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 \end{theorem}
 
 \begin{proof}
+  \leanok
   Suppose for contradiction that $V^{(N)}(A) = 0$, i.e.\
   $\tr(A^\sigma) = 0$ for every word $\sigma$ of length~$N$.
   For any words $w$ and $u$ with $|w| = N - L_0$ and $|u| = L_0$,
@@ -484,8 +485,9 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
   Since $A$ is $L_0$-block-injective, $\{A^u : |u| = L_0\}$
   spans $\MN{D}$.  By nondegeneracy of the trace pairing,
   $A^w = 0$ for every $|w| = N - L_0$.
-  Repeating the argument with words of length $N - 2L_0$ (using
-  $\tr(A^{w'} A^{u_1} A^{u_2}) = \tr(A^{w'} \cdot 0) = 0$) and iterating,
+  Repeating the argument with words of length $N - 2L_0$ (since
+  $|w'| + L_0 = N - L_0$, the product $A^{w'} A^{u_1}$ has length
+  $N - L_0$, so $A^{w'} A^{u_1} = 0$ by the previous step) and iterating,
   we eventually reach $\tr(A^u) = 0$ for $|u| = L_0$, which gives
   $I = 0$, a contradiction.
 \end{proof}
@@ -520,6 +522,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 \begin{theorem}[Unique ground state on the periodic chain]%
   \label{thm:ground_space_unique_periodic}
   \lean{MPSTensor.groundSpace_unique_periodic}
+  \leanok
   \uses{thm:ground_space_intersection, def:has_unique_ground_state,
         lem:mpv_mem_ground_space, thm:mpv_ne_zero_blk_injective}
   For an injective tensor~$A$ on a periodic chain of $N \ge L$ sites with
@@ -528,6 +531,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 \end{theorem}
 
 \begin{proof}
+  \leanok
   \uses{thm:ground_space_intersection, lem:contiguous_mem_ground_space,
         lem:mpv_mem_ground_space, thm:ground_space_map_injective,
         thm:mpv_ne_zero_blk_injective}
@@ -544,22 +548,22 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \TNPeriodicGauge{N}{X}{1}
   \]
 
-  \textbf{Step 2 (PBC forces $X$ scalar).}
-  By translation invariance with periodic boundary conditions, the
-  representation above holds for \emph{every} cyclic rotation of the
-  sites.  In particular, for any one-letter prefix
-  $u = (i_1)$ and suffix
-  $w = (i_2,\dots,i_N)$:
+  \textbf{Step 2 (wrapping window forces $X$ scalar).}
+  The chain ground space condition from
+  Definition~\ref{def:chain_ground_space} requires $\psi|_W \in G_L(A)$
+  for every cyclic window $W$, including those that wrap around the
+  boundary. In particular, the window starting at site $N-1$ gives
   \[
-    \psi(u,w) = \tr(A^u A^w X) = \tr(A^w X A^u),
+    \bigl(\psi|_W\bigr)(i_N, i_1, \dots, i_{L-1})
+    = \tr(A^{i_1} \cdots A^{i_{L-1}} \cdot X A^{i_N}),
   \]
-  by trace cyclicity.  Since $A$ is injective, the products
-  $\{A^u : |u| = 1\}$ span $\MN{D}$
-  (Definition~\ref{def:injective}).
-  Comparing the two representations and using nondegeneracy of the
-  trace pairing, $X$ commutes with every element of $\MN{D}$.
-  By Schur's lemma for the full matrix algebra, $X = \lambda I$ for
-  some $\lambda \in \C$.
+  for some boundary matrix depending on $X$. Comparing this with the
+  representation $\psi = \Gamma_N(X)$ from Step~1 and using trace
+  cyclicity gives $A^j X = X A^j$ for every $j$. Since $A$ is injective,
+  the matrices $\{A^j : 0 \le j \le d-1\}$ span $\MN{D}$
+  (Definition~\ref{def:injective}), so $X$ commutes with every element of
+  $\MN{D}$. By Schur's lemma for the full matrix algebra, $X = \lambda I$
+  for some $\lambda \in \C$.
 
   \textbf{Step 3 (conclude).}
   $\psi(\sigma) = \lambda\,\tr(A^\sigma) = \lambda\,V^{(N)}(A)(\sigma)$,
