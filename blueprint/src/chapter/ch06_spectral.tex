@@ -323,8 +323,8 @@ a block embedding of a mixed-transfer eigenvector.
     transfer maps $\E_A, \E_B$ (Theorem~\ref{thm:qpf}) and gauge each
     tensor separately to a unital Kraus family
     (Theorem~\ref{thm:right_canonical_gauge}): set
-    $A'^i = \rho_A^{1/2} A^i \rho_A^{-1/2}$ and similarly for~$B$.
-    Let $X' = \rho_A^{1/2} X \rho_B^{-1/2}$ denote the correspondingly
+    $A'^i = \rho_A^{-1/2} A^i \rho_A^{1/2}$ and similarly for~$B$.
+    Let $X' = \rho_A^{-1/2} X \rho_B^{1/2}$ denote the correspondingly
     gauged eigenvector.
 
     \emph{Step~2 (Block Kraus family and off-diagonal embedding).}
@@ -617,9 +617,8 @@ the Perron--Frobenius fixed point.
     Choose a modulus-one eigenvector $X \in M_{D_1 \times D_2}(\C)$.
     The Cauchy--Schwarz rigidity argument produces an intertwiner
     $X'$ with $A'^i X' = X' B'^i$ for all~$i$.
-    Since $\{B'^i\}$ spans $M_{D_2}(\C)$ (irreducibility), the kernel
-    of $X'$ is a $B'$-invariant subspace, forced to be $\{0\}$;
-    similarly for $X'^\dagger$.
+    Since $\ker(X')$ is invariant under all $B'^i$, irreducibility
+    forces $\ker(X') = \{0\}$; similarly for $X'^\dagger$.
     This gives $D_1 = D_2$, contradicting the hypothesis.
 \end{proof}
 
