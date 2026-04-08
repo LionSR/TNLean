@@ -28,7 +28,7 @@ connecting an **arbitrary MPS tensor** to a blocked canonical form.
 The reduction threads through the following components:
 
 1. **Zero-block separation** (`exists_irreducible_blockDecomp_liveBlocks`):
-   split an arbitrary tensor into zero tail + live irreducible blocks.
+   split an arbitrary tensor into trivial block + nontrivial irreducible blocks.
 
 2. **TP gauge** (`exists_tp_gauge_from_arbitrary_with_zeroTail`):
    apply the Perron–Frobenius / TP-gauge step blockwise, producing irreducible,
@@ -47,7 +47,7 @@ The reduction threads through the following components:
 
 * `exists_tp_primitive_blockDecomp_after_blocking`:
   For any `A : MPSTensor d D`, there exists a blocking period `p > 0` such that
-  `blockTensor A p` admits a decomposition into a zero tail and a weighted family
+  `blockTensor A p` admits a decomposition into a trivial block and a weighted family
   of TP-gauged blocks with primitive transfer maps.
 
 * `exists_normalCanonicalForm_after_blocking_conditional`:
@@ -117,7 +117,7 @@ an arbitrary `A : MPSTensor d D` and produces blocked TP-primitive data.
 For any `A : MPSTensor d D`, there exists a blocking period `p > 0` and
 a decomposition:
 
-* a **zero tail** of dimension `zeroTailDim` (accumulating all-zero irreducible
+* a **trivial block** of dimension `zeroTailDim` (accumulating all-zero irreducible
   blocks from the original decomposition);
 * a family of **blocked live blocks** `blocks k` indexed by `Fin r`, each with:
   - left-canonical (TP) normalization `∑ᵢ (blocks k i)ᴴ * (blocks k i) = I`;
@@ -131,7 +131,7 @@ The MPV relationship holds:
     + mpv (toTensorFromBlocks μ blocks) σ
 ```
 
-In particular, for system sizes `N > 0`, the zero tail vanishes and
+In particular, for system sizes `N > 0`, the trivial block vanishes and
 `blockTensor A p` has the same MPVs as `toTensorFromBlocks μ blocks`.
 
 **Note on the original blocks**: The pre-blocking blocks (from step 2) ARE
@@ -202,7 +202,7 @@ theorem exists_tp_primitive_blockDecomp_after_blocking (A : MPSTensor d D) :
     rw [hblock D A]
     -- Pre-blocking MPV identity: mpv A σflat = zero-tail + live-blocks.
     rw [hMPV₀ (N * P) σflat]
-    -- Zero tail: both sides equal `if N = 0 then zeroTailDim else 0`.
+    -- Trivial block: both sides equal `if N = 0 then zeroTailDim else 0`.
     have hNP_iff : N * P = 0 ↔ N = 0 := by
       rw [Nat.mul_eq_zero]
       exact ⟨fun h => h.resolve_right hP.ne', fun h => Or.inl h⟩
@@ -1004,7 +1004,7 @@ end CyclicSectorFromMPS
 The fundamental theorem of MPS (1606.00608 version, after blocking) asserts:
 
 For any MPS tensor `A`, there exists a blocking period `p > 0` such that
-`blockTensor A p` admits a decomposition into a zero tail plus a direct sum
+`blockTensor A p` admits a decomposition into a trivial block plus a direct sum
 of TP sectors, where each sector is left-canonical and the direct sum is
 `SameMPV₂`-equivalent to the blocked tensor.
 
@@ -1018,7 +1018,7 @@ The full end-to-end statement chains:
 
 The theorem `exists_tp_sector_decomp_after_blocking` below provides:
 - A blocking period `p > 0`
-- A zero tail of dimension `zeroTailDim`
+- A trivial block of dimension `zeroTailDim`
 - A family of TP sector blocks
 - The MPV relationship: `blockTensor A p` is `SameMPV₂`-equivalent to
   `zeroMPSTensor + toTensorFromBlocks μ sectors` for some weights `μ`
@@ -1037,7 +1037,7 @@ section FundamentalTheorem1606
 --
 -- For any MPS tensor `A`, there exists a blocking period `p > 0` and a
 -- decomposition of the blocked tensor into:
--- 1. A zero tail (irreducible blocks with zero spectral weight)
+-- 1. A trivial block (irreducible blocks with zero spectral weight)
 -- 2. A family of TP blocks with primitive transfer maps
 --
 -- Additionally, the weights `μ k` satisfy `μ k ≠ 0` and the full MPV

@@ -198,7 +198,7 @@ end HasNormalizedSelfOverlap
 
 /-! ### Canonical form predicate -/
 
-/-- Bundled canonical-form predicate combining injectivity, left-canonical normalization
+/-- Bundled canonical-form conditions combining injectivity, left-canonical normalization
 `∑ᵢ Aᵢ† Aᵢ = I`, strict weight data, and overlap normalization in a single proposition. -/
 structure IsCanonicalForm {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k)) : Prop where
@@ -226,22 +226,22 @@ namespace IsCanonicalForm
 variable {r : ℕ} {dim : Fin r → ℕ}
 variable {μ : Fin r → ℂ} {A : (k : Fin r) → MPSTensor d (dim k)}
 
-/-- Project the bundled predicate to blockwise injectivity data. -/
+/-- Project the bundled conditions to blockwise injectivity data. -/
 def toHasInjectiveBlocks (hCF : IsCanonicalForm μ A) : HasInjectiveBlocks (d := d) A :=
   HasInjectiveBlocks.ofForall hCF.block_injective
 
-/-- Project the bundled predicate to left-canonical block-family normalization. -/
+/-- Project the bundled conditions to left-canonical block-family normalization. -/
 def toIsLeftCanonicalBlockFamily (hCF : IsCanonicalForm μ A) :
     IsLeftCanonicalBlockFamily (d := d) A :=
   IsLeftCanonicalBlockFamily.ofForall hCF.leftCanonical
 
-/-- Project the bundled predicate to the separated weight data. -/
+/-- Project the bundled conditions to the separated weight data. -/
 def toHasStrictOrderedNonzeroWeights (hCF : IsCanonicalForm μ A) :
     HasStrictOrderedNonzeroWeights μ where
   mu_strict_anti := hCF.mu_strict_anti
   mu_ne_zero := hCF.mu_ne_zero
 
-/-- Project the bundled predicate to self-overlap normalization data. -/
+/-- Project the bundled conditions to self-overlap normalization data. -/
 def toHasNormalizedSelfOverlap (hCF : IsCanonicalForm μ A) :
     HasNormalizedSelfOverlap (d := d) A :=
   HasNormalizedSelfOverlap.ofForall hCF.overlap_tendsto_one
@@ -270,7 +270,7 @@ end IsCanonicalForm
 
 /-! ### Normal canonical form predicate -/
 
-/-- Bundled normal-canonical-form predicate: each block is irreducible,
+/-- Bundled normal-canonical-form conditions: each block is irreducible,
 left-canonical, and peripheral-spectrum primitive, with strictly ordered
 nonzero weights and positive bond dimensions.
 
@@ -301,22 +301,22 @@ namespace IsNormalCanonicalForm
 variable {r : ℕ} {dim : Fin r → ℕ}
 variable {μ : Fin r → ℂ} {A : (k : Fin r) → MPSTensor d (dim k)}
 
-/-- Project the bundled predicate to blockwise irreducibility data. -/
+/-- Project the bundled conditions to blockwise irreducibility data. -/
 def toHasIrreducibleBlocks (hNCF : IsNormalCanonicalForm μ A) :
     HasIrreducibleBlocks (d := d) A :=
   HasIrreducibleBlocks.ofForall hNCF.block_irreducible
 
-/-- Project the bundled predicate to left-canonical block-family normalization. -/
+/-- Project the bundled conditions to left-canonical block-family normalization. -/
 def toIsLeftCanonicalBlockFamily (hNCF : IsNormalCanonicalForm μ A) :
     IsLeftCanonicalBlockFamily (d := d) A :=
   IsLeftCanonicalBlockFamily.ofForall hNCF.leftCanonical
 
-/-- Project the bundled predicate to blockwise peripheral primitivity data. -/
+/-- Project the bundled conditions to blockwise peripheral primitivity data. -/
 def toHasPrimitiveBlocks (hNCF : IsNormalCanonicalForm μ A) :
     HasPrimitiveBlocks (d := d) A :=
   HasPrimitiveBlocks.ofForall hNCF.block_primitive
 
-/-- Project the bundled predicate to the separated weight data. -/
+/-- Project the bundled conditions to the separated weight data. -/
 def toHasStrictOrderedNonzeroWeights (hNCF : IsNormalCanonicalForm μ A) :
     HasStrictOrderedNonzeroWeights μ where
   mu_strict_anti := hNCF.mu_strict_anti
