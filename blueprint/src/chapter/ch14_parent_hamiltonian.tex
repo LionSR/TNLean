@@ -339,7 +339,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
   \lean{MPSTensor.groundSpace_intersection}
   \leanok
   \uses{thm:ground_space_map_injective, def:in_left_ground, def:in_right_ground,
-        def:ground_space_parent, lem:exists_decomposition}
+        def:ground_space_parent}
   If $A$ is injective and $L \ge 2$, then a state $\psi$ on $L+1$ sites
   satisfying both the left and right ground conditions lies in $G_{L+1}(A)$:
   \[
@@ -366,11 +366,11 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \item Matching on the $(L{-}1)$-site overlap and using nondegeneracy of
       the trace pairing:
       $A^j Y_i = Z_j A^i$ for all $i,j$.
-    \item Apply the decomposition property
-      (Lemma~\ref{lem:exists_decomposition}): writing the identity as a
-      linear combination of the matrices $A^j$ yields
-      $Y_i = X' A^i$ for a single matrix
-      $X' = \sum_j \Psi(\mathbf{1})_j \cdot Z_j$.
+    \item Since $A$ is injective, the matrices $\{A^j\}$ span $\MN{D}$
+      (Definition~\ref{def:injective}), so $\Id = \sum_j c_j A^j$ for
+      some coefficients $c_j \in \C$.  Then
+      $Y_i = \Id \cdot Y_i = \sum_j c_j A^j Y_i = \sum_j c_j Z_j A^i = X' A^i$,
+      where $X' := \sum_j c_j Z_j$.
     \item By trace cyclicity,
       $\psi(\sigma) = \tr(A^\sigma X')$, so $\psi \in G_{L+1}(A)$.
   \end{enumerate}
@@ -456,9 +456,16 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
   \lean{MPSTensor.chainGroundSpace}
   \leanok
   \uses{def:ground_space_parent}
-  For $N>0$ and $L \le N$, this is the intersection over cyclic window
-  positions and outside configurations of comaps of $G_L(A)$ under the cyclic
-  restriction maps; otherwise it is set to $\top$ by convention.
+  For $N > 0$ and $L \le N$, define the \emph{periodic chain ground space}
+  \[
+    \mathcal{G}_{N,L}(A) := \bigl\{\psi \in (\{0,\dots,d{-}1\}^N \to \C)
+    : \text{for every cyclic window } [i,i{+}L{-}1],\;
+    \psi|_{[i,i+L-1]} \in G_L(A)\bigr\},
+  \]
+  where $\psi|_{[i,i+L-1]}$ denotes the restriction obtained by fixing
+  all physical indices outside the window to arbitrary values and summing
+  over the outside configurations.
+  When $N = 0$ or $L > N$, set $\mathcal{G}_{N,L}(A) := \top$ by convention.
 \end{definition}
 
 \begin{theorem}[MPV nonvanishing for block-injective tensors]%
@@ -467,11 +474,22 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
   \leanok
   \uses{def:mpv, def:l_blk_injective}
   If $A$ is $L_0$-block-injective with $L_0 > 0$ and $N \ge L_0 + 1$,
-  then $\mathrm{mpv}(A) \ne 0$ in the $N$-site space.  The proof uses a
-  descent argument: assuming all traces of length-$N$ products vanish,
-  trace nondegeneracy forces all products of length $N - L_0$ to vanish,
-  and induction reaches a contradiction.
+  then $V^{(N)}(A) \ne 0$ in the $N$-site space.
 \end{theorem}
+
+\begin{proof}
+  Suppose for contradiction that $V^{(N)}(A) = 0$, i.e.\
+  $\tr(A^\sigma) = 0$ for every word $\sigma$ of length~$N$.
+  For any words $w$ and $u$ with $|w| = N - L_0$ and $|u| = L_0$,
+  we have $\tr(A^w A^u) = 0$.
+  Since $A$ is $L_0$-block-injective, $\{A^u : |u| = L_0\}$
+  spans $\MN{D}$.  By nondegeneracy of the trace pairing,
+  $A^w = 0$ for every $|w| = N - L_0$.
+  Repeating the argument with words of length $N - 2L_0$ (using
+  $\tr(A^{w'} A^{u_1} A^{u_2}) = \tr(A^{w'} \cdot 0) = 0$) and iterating,
+  we eventually reach $\tr(A^u) = 0$ for $|u| = L_0$, which gives
+  $I = 0$, a contradiction.
+\end{proof}
 
 \begin{theorem}[Chain ground space for block-injective tensors]%
   \label{thm:chain_ground_space_eq_mpv_blk}
@@ -498,19 +516,52 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
   \label{thm:ground_space_unique_periodic}
   \lean{MPSTensor.groundSpace_unique_periodic}
   \uses{thm:ground_space_intersection, def:has_unique_ground_state,
-        lem:mpv_mem_ground_space}
-  For an injective tensor~$A$ on a periodic chain of $N \ge 2$ sites with
-  interaction range~$L$, the chain ground space is one-dimensional, spanned
-  by the MPV.  The proof iterates the intersection property across the chain
-  and uses the periodic boundary condition to constrain the boundary matrix
-  $X$ to a scalar multiple of~$I$:
+        lem:mpv_mem_ground_space, thm:mpv_ne_zero_blk_injective}
+  For an injective tensor~$A$ on a periodic chain of $N \ge L$ sites with
+  interaction range $L \ge 2$, the chain ground space is one-dimensional,
+  spanned by the MPV.
+\end{theorem}
+
+\begin{proof}
+  \uses{thm:ground_space_intersection, lem:contiguous_mem_ground_space,
+        lem:mpv_mem_ground_space, thm:ground_space_map_injective,
+        thm:mpv_ne_zero_blk_injective}
+  \textbf{Step 1 (iterate intersection).}
+  By Lemma~\ref{lem:contiguous_mem_ground_space}, any state $\psi$ in
+  the chain ground space lies in $G_N(A)$, so there exists
+  $X \in \MN{D}$ with
+  \[
+    \psi(\sigma_1,\dots,\sigma_N) = \tr(A^{\sigma_1}\cdots A^{\sigma_N} X).
+  \]
+  In tensor-network form, the boundary operator sits on the closing
+  virtual bond:
   \[
     \TNPeriodicGauge{N}{X}{1}
   \]
-  that is, the boundary operator sits on the closing virtual bond. The
-  periodicity and the conclusion that $X$ must be scalar are expressed in the
-  surrounding argument, not by extra labels inside the picture.
-\end{theorem}
+
+  \textbf{Step 2 (PBC forces $X$ scalar).}
+  By translation invariance with periodic boundary conditions, the
+  representation above holds for \emph{every} cyclic rotation of the
+  sites.  In particular, for any one-letter prefix
+  $u = (i_1)$ and suffix
+  $w = (i_2,\dots,i_N)$:
+  \[
+    \psi(u,w) = \tr(A^u A^w X) = \tr(A^w X A^u),
+  \]
+  by trace cyclicity.  Since $A$ is injective, the products
+  $\{A^u : |u| = 1\}$ span $\MN{D}$
+  (Definition~\ref{def:injective}).
+  Comparing the two representations and using nondegeneracy of the
+  trace pairing, $X$ commutes with every element of $\MN{D}$.
+  By Schur's lemma for the full matrix algebra, $X = \lambda I$ for
+  some $\lambda \in \C$.
+
+  \textbf{Step 3 (conclude).}
+  $\psi(\sigma) = \lambda\,\tr(A^\sigma) = \lambda\,V^{(N)}(A)(\sigma)$,
+  so every ground state is proportional to the MPV.  Since the MPV is
+  nonzero by Theorem~\ref{thm:mpv_ne_zero_blk_injective} applied with
+  $L_0 = 1$, the ground space is one-dimensional.
+\end{proof}
 
 \begin{theorem}[Unique ground state for block-injective tensors]%
   \label{thm:unique_gs_injective}
@@ -556,11 +607,9 @@ interaction projectors commute with each other.
   \uses{def:is_nncph}
   If $A$ is a renormalization fixed point (RFP), then its parent
   Hamiltonian with $L = 2$ has commuting local terms.
-  \textbf{Status:} not yet formalized in Lean. The previous declaration
-  \texttt{MPSTensor.isNNCPH\_of\_isRFP} was removed after its proof was found
-  to be incorrect; this theorem will return once the RFP structural-form
-  infrastructure needed for Theorem~3.10 is in place.
-  See \cite[Theorem~3.10]{Cirac2021Matrix}.
+  \textbf{Status:} A previous proof attempt was found incorrect and removed;
+  this result awaits the structural-form infrastructure for renormalization
+  fixed points needed for \cite[Theorem~3.10]{Cirac2021Matrix}.
 \end{theorem}
 
 \section{Decorrelation and commuting parent Hamiltonians}%
@@ -614,10 +663,9 @@ Appendix~D, \S D.2 of~\cite{Cirac2021Matrix}.
   \lean{Decorrelation.HasCommutingParentHam.isDecorrelated}
   \leanok
   \uses{thm:commuting_ham_is_decorrelated, def:has_commuting_parent_ham, def:is_decorrelated}
-  Convenience wrapper: if $P_K$ satisfies \texttt{HasCommutingParentHam}
-  and observables respect locality, then regions $A$ and $B$ are
-  decorrelated w.r.t.\ $K$. Delegates to
-  Theorem~\ref{thm:commuting_ham_is_decorrelated}.
+  Corollary of Theorem~\ref{thm:commuting_ham_is_decorrelated}: if
+  $P_K$ has a commuting parent Hamiltonian decomposition and observables
+  respect locality, then regions $A$ and $B$ are decorrelated w.r.t.\ $K$.
 \end{theorem}
 
 \begin{lemma}[Frustration-free identity]\label{lem:frustration_free_ham_eq}
@@ -943,7 +991,8 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
   $G_{L_0+1}(A) \subseteq \sum_k G_{L_0+1}(A_k)$: any local ground
   state of $A$ on $L_0{+}1$ sites is a sum of local ground states of
   the individual blocks, because the off-diagonal blocks vanish in
-  the transfer map (the canonical form ensures that distinct blocks
+  the transfer map (the canonical form and block separation
+  (Theorem~\ref{thm:block_sep}, Chapter~\ref{ch:block_perm}) ensure that distinct blocks
   have orthogonal images under $\Gamma_{L_0+1}$ for
   $L_0{+}1 \ge L_0$, so the sum is in fact direct).
   Each normal block $A_k$ has injectivity length $L_k \le L_0$, so
