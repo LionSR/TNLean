@@ -144,10 +144,9 @@ mechanism, and this chapter develops its symmetry consequences.
     \lean{MPSTensor.rotatePhysical_toTensorFromBlocks}
     \leanok
     \uses{def:rotate_physical}
-    $\operatorname{rotatePhysical}\, u\,
-    (\operatorname{toTensorFromBlocks}\, \mu\, A)
-    = \operatorname{toTensorFromBlocks}\, \mu\,
-    (k \mapsto (A_k)_u)$.
+    The rotated block-diagonal tensor satisfies
+    $(\bigoplus_k \mu_k A_k)_u
+    = \bigoplus_k \mu_k (A_k)_u$.
 \end{theorem}
 
 \begin{proof}\leanok
