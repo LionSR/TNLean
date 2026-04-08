@@ -370,6 +370,17 @@ a block embedding of a mixed-transfer eigenvector.
     to be simultaneously unital and trace-preserving.
 \end{proof}
 
+\begin{remark}[Two gauge conventions]\label{rem:gauge_conventions}\leanok
+    The right-canonical gauge used here, $A'^i = \rho^{-1/2} A^i \rho^{1/2}$,
+    makes $\{A'^i\}$ a \emph{unital} Kraus family ($\sum_i A'^i (A'^i)^\dagger = \Id$).
+    A different convention, $\tilde{A}^i = \rho^{1/2} A^i \rho^{-1/2}$, makes
+    the family \emph{trace-preserving} ($\sum_i (\tilde{A}^i)^\dagger \tilde{A}^i = \Id$).
+    The Lean codebase implements both:
+    the unital version via direct matrix square-root inversion
+    (used in the spectral-gap proof), and the TP version via
+    \texttt{tpGauge} (used in the canonical-form reduction).
+\end{remark}
+
 \begin{theorem}[Strict spectral gap]\label{thm:spectral_gap}
     \lean{MPSTensor.spectralRadius_mixedTransfer_lt_one}
     \leanok
