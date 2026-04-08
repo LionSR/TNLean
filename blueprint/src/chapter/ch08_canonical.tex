@@ -263,7 +263,7 @@ and~\cite[Ch.~6]{Wolf2012Quantum}.
 	\uses{def:has_inv_proj}
 	An MPS tensor~$A$ is \emph{irreducible}
 	if it has no nontrivial invariant projection, i.e.
-	$\neg\,\mathrm{HasInvariantProj}(A)$.
+	has no nontrivial invariant projection.
 \end{definition}
 
 \begin{theorem}[Irreducible block decomposition]\label{thm:irred_decomp}
@@ -490,7 +490,7 @@ For Burnside-style arguments it is more natural to work with invariant
 
 \begin{proof}\leanok
 	\uses{thm:proportional_ft, thm:primitive_implies_irreducible}
-	From $\mathrm{IsPrimitiveMPS}$, extract left-canonical normalization
+	From primitivity, extract a left-canonical normalization
 	($\sum_i (A^i)^\dagger A^i = \Id$), overlap convergence
 	($O_{AA}(N) \to 1$), and irreducibility
 	(Theorem~\ref{thm:primitive_implies_irreducible}).
@@ -697,7 +697,7 @@ is developed in \cite{DeLasCuevas2017Irreducible}; see Chapter~\ref{ch:assembly}
 for a discussion of that extension.
 
 \begin{theorem}[Irreducible block decomposition]%
-	\label{thm:irred_decomp_pipeline}
+	\label{thm:irred_decomp_reduction}
 	\lean{MPSTensor.exists_irreducible_blockDecomp}
 	\leanok
 	\uses{def:irreducible_tensor}
@@ -751,13 +751,13 @@ for a discussion of that extension.
 	if that block has already been placed in TP gauge and $D_k > 0$,
 	one obtains CFII data (unitary, diagonal PD fixed point,
 	MPV preservation).
-	The conclusion is CFII data; further arguments are needed to obtain
+	The conclusion is the CFII normalization; the remaining reduction to
 	normal canonical form.
 \end{theorem}
 
 \begin{proof}\leanok
-	\uses{thm:irred_decomp_pipeline, thm:CFII_data}
-	Combine Theorems~\ref{thm:irred_decomp_pipeline}
+	\uses{thm:irred_decomp_reduction, thm:CFII_data}
+	Combine Theorems~\ref{thm:irred_decomp_reduction}
 	and~\ref{thm:CFII_data}.
 \end{proof}
 
@@ -1046,7 +1046,7 @@ The following results separate the zero blocks from the
 	with unit weights such that $A$ generates the same MPV family
 	as $\bigoplus_{k=1}^m C_k$.
 	Moreover, each sector satisfies the per-sector trace relation
-	$\operatorname{mpv}(C_k, \sigma) = \operatorname{tr}(P_k \cdot A^{i_1} \cdots A^{i_N})$
+	$V^{(N)}(C_k)(\sigma) = \operatorname{tr}(P_k \cdot A^{i_1} \cdots A^{i_N})$
 	for every word $\sigma = (i_1, \dots, i_N)$.
 \end{theorem}
 
@@ -1106,7 +1106,7 @@ The following results separate the zero blocks from the
 	\]
 	Here the operator $Z$ is inserted on the closing virtual bond, while the
 	order-$m$ periodicity is part of the accompanying algebraic statement.
-	Feed into Theorem~\ref{thm:blockdecomp_adjoint_fixed}.
+	Apply Theorem~\ref{thm:blockdecomp_adjoint_fixed}.
 \end{proof}
 
 \subsection{Sector irreducibility helpers}%
@@ -1243,7 +1243,7 @@ The following results separate the zero blocks from the
 \end{proof}
 
 \section{Reduction to primitive blocks}%
-\label{sec:assembly_pipeline}
+\label{sec:reduction_to_normal_form}
 
 \begin{theorem}[Arbitrary tensor to primitive block decomposition]%
 	\label{thm:tp_primitive_blockdecomp}
@@ -1268,7 +1268,7 @@ The following results separate the zero blocks from the
 	and left-canonical live blocks.
 	Apply Theorem~\ref{thm:common_blocking_period} to find a common
 	blocking period $p$ making all transfer maps primitive.
-	Thread through via Theorem~\ref{thm:samempv_blocking_distributes}.
+	Apply Theorem~\ref{thm:samempv_blocking_distributes}.
 \end{proof}
 
 \begin{theorem}[TP-primitive irreducible tensor is normal]%

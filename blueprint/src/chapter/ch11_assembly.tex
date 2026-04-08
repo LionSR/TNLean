@@ -24,9 +24,9 @@ with an extra $Z$-gauge degree of freedom.
 \section{Weak Fundamental Theorem}%
 \label{sec:assembly_weak}
 
-The following theorem combines the full upstream reduction
+The following theorem combines the reduction to canonical form
 (zero-block separation, TP gauge, blocking, primitivity)
-with the downstream Fundamental Theorem for normal canonical form data.
+with the Fundamental Theorem for normal canonical form.
 It is conditional on the extra hypotheses (tensor irreducibility and
 distinct weight norms) that the automatic reduction does not yet produce.
 
@@ -182,7 +182,7 @@ distinct weight norms) that the automatic reduction does not yet produce.
 \section{Equal-MPV Fundamental Theorem}%
 \label{sec:assembly_equal}
 
-\begin{theorem}[Fundamental Theorem --- equal MPV case (target statement)]\label{thm:ft_equal}
+\begin{theorem}[Fundamental Theorem --- equal MPV case]\label{thm:ft_equal}
 	\notready
 	\uses{def:cf_bnt, def:gauge_equiv}
 	Let $A_{\mathrm{tot}}$ and $B_{\mathrm{tot}}$ be MPS tensors
@@ -476,9 +476,7 @@ directly to periodic tensors.
 	\cite{DeLasCuevas2017Irreducible} would require:
 	\begin{enumerate}
 		\item a definition of $m$-periodic irreducible tensors and
-		      their cyclic-sector decomposition (partial infrastructure
-		      exists in Section~\ref{sec:cyclic_sectors} of
-		      Chapter~\ref{ch:canonical}),
+		      their cyclic-sector decomposition (see below),
 		\item the off-diagonal structure of a periodic block's transfer
 		      matrix (the cyclic permutation of sectors), and
 		\item the notion of equivalence between periodic blocks that
@@ -486,7 +484,7 @@ directly to periodic tensors.
 	\end{enumerate}
 \end{remark}
 
-\subsection{Common-period assembly helpers}
+\subsection{Common-period blocking lemmas}
 
 \begin{definition}[LCM period for a finite block family]
 	\label{def:lcm_period}
@@ -671,7 +669,7 @@ The following is Theorem~3.8 (``equal case'') of \cite{DeLasCuevas2017Irreducibl
 	projections $P_0,\dotsc,P_{m-1}$ on the ambient bond space such that
 	$\sum_k P_k = \Id$, each $P_k$ commutes with every blocked letter
 	$P_k A^{(m)}_i = A^{(m)}_i P_k$, and
-	$\operatorname{mpv}(C_k)(\sigma) = \operatorname{tr}(P_k \cdot
+	$V^{(N)}(C_k)(\sigma) = \operatorname{tr}(P_k \cdot
 	\operatorname{evalWord}(A^{(m)}, \sigma))$ for every word~$\sigma$.
 \end{definition}
 
