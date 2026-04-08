@@ -16,7 +16,7 @@ with the SPT phase classification results.
 
 The core definitions (twisted transfer map, string order parameter, conditions
 C1/C2/C3 and their equivalences) live in `TNLean.MPS.Symmetry.StringOrderDefs`.
-The auxiliary TP-gauge infrastructure and long supporting proofs live in
+The auxiliary TP-gauge lemmas and long supporting proofs live in
 `TNLean.MPS.Symmetry.StringOrderAux`.
 
 ## Main definitions
@@ -142,8 +142,8 @@ theorem twistedTransfer_modulus_one_implies_gaugePhase
     (gaugeEquiv_tpGauge (A := setup.B) (ρ := setup.σ) setup.hσ_pd)
 
 /-- A non-decaying string-order parameter forces the twisted companion family to be
-gauge-phase equivalent to the original tensor. This is the reuse-heavy bridge from
-string order to the mixed-transfer peripheral spectrum. -/
+gauge-phase equivalent to the original tensor. This identifies the modulus-one
+peripheral spectrum needed for the mixed-transfer rigidity argument. -/
 theorem gaugePhaseEquiv_twisted_of_hasStringOrder
     (A : MPSTensor d D)
     (hA : IsInjective A)

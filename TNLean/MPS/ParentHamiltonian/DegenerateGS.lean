@@ -10,7 +10,7 @@ import TNLean.MPS.FundamentalTheorem.Multi
 /-!
 # Degenerate ground space = BNT span (block-injective parent Hamiltonians)
 
-This file formalizes the declaration-level interface for the block-injective case:
+This file states the block-injective ground-space result:
 for a canonical-form/BNT decomposition, the periodic parent-Hamiltonian ground
 space equals the span of the BNT states.
 
