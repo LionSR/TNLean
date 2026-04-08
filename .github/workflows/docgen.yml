@@ -1,0 +1,77 @@
+name: Full documentation
+
+on:
+  schedule:
+    # Run weekly on Sunday at 06:00 UTC
+    - cron: '0 6 * * 0'
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: 'Branch to build docs from (default: main)'
+        required: false
+        default: 'main'
+
+concurrency:
+  group: gh-pages-deploy
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  build_project:
+    runs-on: ubuntu-latest
+    name: Build project and generate docs
+    timeout-minutes: 330
+    steps:
+      - name: Cleanup to free disk space
+        uses: jlumbroso/free-disk-space@main
+        with:
+          tool-cache: false
+          android: true
+          dotnet: false
+          haskell: false
+          large-packages: false
+          docker-images: false
+          swap-storage: false
+
+      - name: Checkout project
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          ref: ${{ inputs.ref || 'main' }}
+
+      - name: Build project
+        uses: leanprover/lean-action@v1
+        with:
+          build: true
+
+      - name: Install TeX and graphviz
+        run: sudo apt-get update && sudo apt-get install -y texlive-latex-extra texlive-fonts-recommended texlive-science latexmk graphviz libgraphviz-dev
+
+      - name: Install leanblueprint
+        run: |
+          pipx install leanblueprint
+          pipx inject --include-apps --force leanblueprint plastex
+
+      - name: Build blueprint
+        working-directory: blueprint
+        run: |
+          leanblueprint pdf
+          set -o pipefail
+          leanblueprint web 2>&1 | tee /tmp/blueprint-output.txt
+          if grep -q "^ERROR:" /tmp/blueprint-output.txt; then
+            echo "::error::Blueprint has unresolved labels (see ERROR lines above)"
+            exit 1
+          fi
+
+      - name: Generate API docs
+        run: |
+          cd docbuild
+          lake build TNLean:docs
+
+      - name: Deploy to gh-pages
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: ./scripts/deploy-to-gh-pages.sh --with-docs --ci
