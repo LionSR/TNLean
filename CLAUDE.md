@@ -27,6 +27,7 @@ cd blueprint && leanblueprint checkdecls
 # Blueprint web/PDF generation
 cd blueprint && leanblueprint web
 cd blueprint && leanblueprint pdf
+
 ```
 
 ## Lean Toolchain & Dependencies

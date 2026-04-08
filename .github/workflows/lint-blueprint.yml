@@ -68,7 +68,7 @@ jobs:
             exit "$cmd_status"
           fi
 
-      - name: Build project (needed for checkdecls to find declarations)
+      - name: Build project (needed for checkdecls)
         run: lake build
 
       - name: Generate lean_decls from blueprint .tex files
