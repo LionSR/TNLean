@@ -6,9 +6,9 @@ import TNLean.MPS.ParentHamiltonian.Defs
 import TNLean.MPS.ParentHamiltonian.Basic
 
 /-!
-# Martingale-method spectral-gap scaffolding for parent Hamiltonians
+# Martingale-method spectral-gap framework for parent Hamiltonians
 
-This file introduces a first formal scaffold for the martingale approach to proving
+This file sets up the martingale approach to proving
 that MPS parent Hamiltonians are gapped.
 
 The intended proof route is:
@@ -17,7 +17,7 @@ The intended proof route is:
 3. intersection property (`groundSpace_intersection`),
 4. a martingale estimate (Nachtergaele / Kastoryano–Lucia).
 
-The final quantitative assembly is left as future work.
+The quantitative martingale estimate is left as future work.
 
 ## Main results
 

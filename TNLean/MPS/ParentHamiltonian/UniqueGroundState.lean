@@ -83,13 +83,13 @@ On a periodic chain of `N` sites, the ground space of the parent Hamiltonian
 is the set of states whose restriction to every cyclic window of `L` consecutive
 sites lies in `G_L(A)`.
 
-The full periodic-chain window restriction still depends on the chain-level
-embedding API. We therefore expose only the chain ground-space interface for
-now, and will define it from local window constraints once the operator
-formalization lands. -/
+The full periodic-chain window restriction is not yet expressed directly in
+terms of cyclic window maps. We therefore expose only the chain ground-space
+interface for now, and will define it from local window constraints once those
+maps are in place. -/
 
 -- TODO(parent-hamiltonian): define `chainGroundSpace` as the intersection of
--- cyclic window ground submodules once the periodic window embedding API lands.
+-- cyclic window ground submodules once the periodic window maps are in place.
 
 /-- The periodic chain ground space: the set of states `ψ` on `N` sites such
 that every cyclic window of `L` consecutive sites restricts into `G_L(A)`.

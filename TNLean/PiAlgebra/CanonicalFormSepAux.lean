@@ -28,7 +28,7 @@ and block-separation core helper lemmas that underpin the main block-separation 
 
 - Additive split API: `HasInjectiveBlocks`, `HasIrreducibleBlocks`, `HasPrimitiveBlocks`,
   `IsLeftCanonicalBlockFamily`, `HasStrictOrderedNonzeroWeights`, `HasNormalizedSelfOverlap`.
-- Bundled predicates: `IsCanonicalForm`, `IsNormalCanonicalForm` with projections and
+- Bundled conditions: `IsCanonicalForm`, `IsNormalCanonicalForm` with projections and
   round-trip constructors.
 - Section `AlgebraicLemmas`: characteristic polynomial utilities.
 - Section `OverlapBounds`: MPV overlap bounds from left-canonical normalization.
@@ -196,7 +196,7 @@ def ofForall
 
 end HasNormalizedSelfOverlap
 
-/-! ### Canonical form predicate -/
+/-! ### Canonical form conditions -/
 
 /-- Bundled canonical-form conditions combining injectivity, left-canonical normalization
 `∑ᵢ Aᵢ† Aᵢ = I`, strict weight data, and overlap normalization in a single proposition. -/
@@ -268,7 +268,7 @@ theorem mu_norm_injective (hCF : IsCanonicalForm μ A) :
 
 end IsCanonicalForm
 
-/-! ### Normal canonical form predicate -/
+/-! ### Normal canonical form conditions -/
 
 /-- Bundled normal-canonical-form conditions: each block is irreducible,
 left-canonical, and peripheral-spectrum primitive, with strictly ordered
@@ -277,7 +277,7 @@ nonzero weights and positive bond dimensions.
 This is the weaker “normal tensor” block notion from arXiv:1606.00608:
 each block is irreducible and its transfer map has peripheral spectrum `{1}`.
 The irreducibility field is stored separately on purpose: the repository's peripheral-spectrum
-primitive predicate does not by itself imply irreducibility for arbitrary transfer maps.
+primitive condition does not by itself imply irreducibility for arbitrary transfer maps.
 The self-overlap normalization is intended to be derived from primitivity rather than stored as a
 field. -/
 structure IsNormalCanonicalForm {r : ℕ} {dim : Fin r → ℕ}

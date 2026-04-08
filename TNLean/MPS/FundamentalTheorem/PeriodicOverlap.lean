@@ -63,10 +63,10 @@ assemble the global gauge unitary.
 The main theorems in this file are currently stated with `sorry` proofs.
 The same-period sector statements (Case 2 and Case 3 helpers) are formulated
 using **compressed sector tensors** on corner bond spaces, matching the output
-of `exists_cyclic_sector_decomp_after_blocking_of_isPeriodic` and the live
-cyclic-sector API in `CanonicalForm/CyclicSectors.lean`.
+of `exists_cyclic_sector_decomp_after_blocking_of_isPeriodic` and the cyclic-sector
+decomposition results in `CanonicalForm/CyclicSectors.lean`.
 
-This module therefore serves as a skeleton / proof sketch and should not yet be
+This module records the intended mathematical statements and should not yet be
 relied on as a completed formalization of Proposition 3.3.
 
 ## References
@@ -581,11 +581,12 @@ lemma sectorTensor_proportional_of_blockedMatch
   -- Step 6: Telescope κ_v = e^{i(φ_v - φ_{v+1})} and assemble U
   sorry
 
-/-- **Case 3 assembly**: If two periodic tensors have the same period and
+/-- **Case 3: a matching sector implies gauge equivalence**. If two periodic tensors have
+the same period and
 a compressed sector match exists, then they are related by a gauge
 transformation with a unit-modulus phase: `A^i = e^{iξ} U B^i U†`.
 
-The hypotheses mirror the compressed corner API: `blocksA`/`blocksB` are
+The hypotheses describe compressed sector decompositions: `blocksA`/`blocksB` are
 the cyclic-sector tensors on corner bond spaces, tied back to the
 original blocked tensors via `SameMPV₂` and to the cyclic orbit
 structure via `IsCyclicSectorDecomp`. The `hSomeMatch` witness
@@ -651,7 +652,7 @@ irreducible form II, either their overlap decays to zero, or `D_a = D_b` and
 they are related by a gauge transformation up to a unit-modulus phase (which
 forces `m_a = m_b`).
 
-This is the core technical result of the paper: all downstream theorems
+This is the core technical result of the paper: all subsequent theorems
 (proportional FT, equal FT with Z-gauge, symmetry corollary) depend on it. -/
 theorem periodicOverlapDichotomy
     {D₁ D₂ : ℕ} [NeZero D₁] [NeZero D₂]
