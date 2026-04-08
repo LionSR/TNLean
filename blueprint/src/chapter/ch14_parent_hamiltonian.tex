@@ -1,3 +1,4 @@
+
 \chapter{Parent Hamiltonians}\label{ch:parent_hamiltonian}
 
 This chapter introduces the local ground-space construction and the parent
@@ -6,7 +7,7 @@ We follow the standard setup from
 \cite{Cirac2021Matrix, PerezGarcia2007Matrix}, with the $N$-site Hilbert space modelled as
 coefficient functions
 \[
-  \{0,\dots,d{-}1\}^N \to \C,
+    \{0,\ldots,d{-}1\}^N \to \C,
 \]
 rather than as an explicit tensor product.
 
@@ -14,91 +15,91 @@ rather than as an explicit tensor product.
 
 Fix an MPS tensor $A = \{A^i\}_{i=0}^{d-1}$ with $A^i \in \MN{D}$ and a block
 length $L \ge 1$.
-For a word $w = (i_1,\dots,i_L)$, write
+For a word $w = (i_1,\ldots,i_L)$, write
 $A^w := A^{i_1}\cdots A^{i_L}$.
 The local ground-space map is
 \[
-  \Gamma_L : \MN{D} \to \bigl(\{0,\dots,d{-}1\}^L \to \C\bigr),
-  \qquad
-  \Gamma_L(X)(\sigma) := \tr\!\bigl(A^{\sigma} X\bigr),
+    \Gamma_L : \MN{D} \to (\{0,\ldots,d{-}1\}^L \to \C),
+    \qquad
+    \Gamma_L(X)(\sigma) := \tr\!(A^{\sigma} X),
 \]
 where $A^{\sigma}$ abbreviates
 $A^{\sigma(0)}\cdots A^{\sigma(L-1)}$.
 
 \begin{definition}[Ground-space map]\label{def:ground_space_map}
-  \lean{MPSTensor.groundSpaceMap}
-  \leanok
-  \uses{def:eval_word}
-  The map $\Gamma_L$ above is a $\C$-linear map
-  \[
-    \Gamma_L : \MN{D} \to \bigl(\{0,\dots,d{-}1\}^L \to \C\bigr).
-  \]
-  In tensor-network notation,
-  \[
-    \TNGroundSpaceMap{A}{\sigma_1}{\sigma_L}{L}{X}
-  \]
-  the upper chain denotes the word tensor $A^\sigma$ with open physical
-  indices $\sigma_1,\dots,\sigma_L$, and the lower red node denotes the boundary
-  matrix $X$ inserted on the closing virtual bond before taking the trace.
-  The chain length~$L$ is fixed by the surrounding formula, not by an extra
-  label inside the diagram.
+    \lean{MPSTensor.groundSpaceMap}
+    \leanok
+    \uses{def:eval_word}
+    The map $\Gamma_L$ above is a $\C$-linear map
+    \[
+        \Gamma_L : \MN{D} \to (\{0,\ldots,d{-}1\}^L \to \C).
+    \]
+    In tensor-network notation,
+    \[
+        \TNGroundSpaceMap{A}{\sigma_1}{\sigma_L}{L}{X}
+    \]
+    the upper chain denotes the word tensor $A^\sigma$ with open physical
+    indices $\sigma_1,\ldots,\sigma_L$, and the lower red node denotes the boundary
+    matrix $X$ inserted on the closing virtual bond before taking the trace.
+    The chain length~$L$ is fixed by the surrounding formula, not by an extra
+    label inside the diagram.
 \end{definition}
 
 \begin{definition}[Local ground space]\label{def:ground_space_parent}
-  \lean{MPSTensor.groundSpace}
-  \leanok
-  \uses{def:ground_space_map}
-  The \emph{local ground space} is the image
-  \[
-    G_L(A) := \mathrm{im}(\Gamma_L)
-    \subseteq \bigl(\{0,\dots,d{-}1\}^L \to \C\bigr).
-  \]
+    \lean{MPSTensor.groundSpace}
+    \leanok
+    \uses{def:ground_space_map}
+    The \emph{local ground space} is the image
+    \[
+        G_L(A) := \mathrm{im}(\Gamma_L)
+        \subseteq (\{0,\ldots,d{-}1\}^L \to \C).
+    \]
 \end{definition}
 
 \begin{lemma}[Dimension bound]\label{lem:ground_space_finrank_le}
-  \lean{MPSTensor.groundSpace_finrank_le}
-  \leanok
-  \uses{def:ground_space_parent}
-  For every $L$,
-  \[
-    \dim G_L(A) \le D^2.
-  \]
+    \lean{MPSTensor.groundSpace_finrank_le}
+    \leanok
+    \uses{def:ground_space_parent}
+    For every $L$,
+    \[
+        \dim G_L(A) \le D^2.
+    \]
 \end{lemma}
 
 \begin{proof}
-  \leanok
-  Since $G_L(A)$ is the range of a linear map from $\MN{D}$,
-  \[
-    \dim G_L(A) \le \dim \MN{D} = D^2.
-  \]
+    \leanok
+    Since $G_L(A)$ is the range of a linear map from $\MN{D}$,
+    \[
+        \dim G_L(A) \le \dim \MN{D} = D^2.
+    \]
 \end{proof}
 
 \begin{lemma}[Ambient-space dimension]\label{lem:nsite_space_finrank}
-  \lean{MPSTensor.nSiteSpace_finrank}
-  \leanok
-  The coefficient-function model satisfies
-  \[
-    \dim\!\bigl(\{0,\dots,d{-}1\}^L \to \C\bigr)=d^L.
-  \]
+    \lean{MPSTensor.nSiteSpace_finrank}
+    \leanok
+    The coefficient-function model satisfies
+    \[
+        \dim\!(\{0,\ldots,d{-}1\}^L \to \C)=d^L.
+    \]
 \end{lemma}
 
 \begin{lemma}[Nontriviality criterion]\label{lem:ground_space_ne_top}
-  \lean{MPSTensor.groundSpace_ne_top}
-  \leanok
-  \uses{lem:ground_space_finrank_le, lem:nsite_space_finrank}
-  If $d^L > D^2$, then $G_L(A)$ is a proper subspace of the local Hilbert
-  space:
-  \[
-    G_L(A) \neq \bigl(\{0,\dots,d{-}1\}^L \to \C\bigr).
-  \]
+    \lean{MPSTensor.groundSpace_ne_top}
+    \leanok
+    \uses{lem:ground_space_finrank_le, lem:nsite_space_finrank}
+    If $d^L > D^2$, then $G_L(A)$ is a proper subspace of the local Hilbert
+    space:
+    \[
+        G_L(A) \neq (\{0,\ldots,d{-}1\}^L \to \C).
+    \]
 \end{lemma}
 
 \begin{proof}
-  \leanok
-  If $G_L(A)$ were the whole space, its dimension would be $d^L$ by
-  Lemma~\ref{lem:nsite_space_finrank};
-  Lemma~\ref{lem:ground_space_finrank_le} gives the contradiction
-  $d^L \le D^2$.
+    \leanok
+    If $G_L(A)$ were the whole space, its dimension would be $d^L$ by
+    Lemma~\ref{lem:nsite_space_finrank};
+    Lemma~\ref{lem:ground_space_finrank_le} gives the contradiction
+    $d^L \le D^2$.
 \end{proof}
 
 \section{Parent interaction and chain Hamiltonian}\label{sec:parent_interaction_defs}
@@ -107,116 +108,116 @@ The parent interaction at range $L$ is the orthogonal projector
 onto $G_L(A)^\perp$ in the $L$-site Euclidean space.
 
 \begin{definition}[Parent interaction]\label{def:parent_interaction}
-  \lean{MPSTensor.parentInteraction}
-  \leanok
-  \uses{def:ground_space_parent}
-  The parent interaction at range $L$ is the orthogonal projector
-  \[
-    h_L(A) := \Pi_{G_L(A)^\perp},
-  \]
-  on the local $L$-site space.
+    \lean{MPSTensor.parentInteraction}
+    \leanok
+    \uses{def:ground_space_parent}
+    The parent interaction at range $L$ is the orthogonal projector
+    \[
+        h_L(A) := \Pi_{G_L(A)^\perp},
+    \]
+    on the local $L$-site space.
 \end{definition}
 
 \begin{lemma}[Parent interaction kills ground-space elements]\label{lem:parent_interaction_apply_mem_ground_space}
-  \lean{MPSTensor.parentInteraction_apply_mem_groundSpace}
-  \leanok
-  \uses{def:parent_interaction, def:ground_space_parent}
-  For any $v \in G_L(A)$, we have $h_L(A)\,v = 0$.
+    \lean{MPSTensor.parentInteraction_apply_mem_groundSpace}
+    \leanok
+    \uses{def:parent_interaction, def:ground_space_parent}
+    For any $v \in G_L(A)$, we have $h_L(A)\,v = 0$.
 \end{lemma}
 
 \begin{proof}
-  \leanok
-  Since $h_L(A)$ is the star-projection onto $G_L(A)^\perp$, it
-  annihilates every element of $G_L(A)$.
+    \leanok
+    Since $h_L(A)$ is the star-projection onto $G_L(A)^\perp$, it
+    annihilates every element of $G_L(A)$.
 \end{proof}
 
 For a periodic chain of length $N$, the parent Hamiltonian is the sum of
 translated copies of the local interaction.
 
 \begin{definition}[Translated local term]\label{def:local_term_parent}
-  \lean{MPSTensor.localTerm}
-  \leanok
-  \uses{def:parent_interaction}
-  For each site index $i \in \{0,\dots,N{-}1\}$, the translated local term
-  $h_i$ embeds the parent interaction into the full $N$-site space at
-  position~$i$ (with periodic boundary conditions). Thus $h_i$ acts on the
-  cyclic interval $[i,i+L-1]$ and as the identity outside that interval.
+    \lean{MPSTensor.localTerm}
+    \leanok
+    \uses{def:parent_interaction}
+    For each site index $i \in \{0,\ldots,N{-}1\}$, the translated local term
+    $h_i$ embeds the parent interaction into the full $N$-site space at
+    position~$i$ (with periodic boundary conditions). Thus $h_i$ acts on the
+    cyclic interval $[i,i+L-1]$ and as the identity outside that interval.
 \end{definition}
 
 \begin{definition}[Parent Hamiltonian]\label{def:parent_hamiltonian}
-  \lean{MPSTensor.parentHamiltonian}
-  \leanok
-  \uses{def:local_term_parent}
-  The chain Hamiltonian is
-  \[
-    H_N(A,L) := \sum_{i=0}^{N-1} h_i.
-  \]
+    \lean{MPSTensor.parentHamiltonian}
+    \leanok
+    \uses{def:local_term_parent}
+    The chain Hamiltonian is
+    \[
+        H_N(A,L) := \sum_{i=0}^{N-1} h_i.
+    \]
 \end{definition}
 
 \begin{definition}[Frustration-free condition]\label{def:is_frustration_free}
-  \lean{MPSTensor.IsFrustrationFree}
-  \leanok
-  \uses{def:local_term_parent}
-  A state $\psi$ is frustration-free if each local term annihilates it:
-  \[
-    \forall\, i \in \{0,\dots,N{-}1\},\quad h_i \psi = 0.
-  \]
+    \lean{MPSTensor.IsFrustrationFree}
+    \leanok
+    \uses{def:local_term_parent}
+    A state $\psi$ is frustration-free if each local term annihilates it:
+    \[
+        \forall\, i \in \{0,\ldots,N{-}1\},\quad h_i \psi = 0.
+    \]
 \end{definition}
 
 \begin{lemma}[MPV window membership]\label{lem:mpv_window_mem_ground_space}
-  \lean{MPSTensor.mpv_window_mem_groundSpace}
-  \leanok
-  \uses{def:ground_space_parent, def:mpv}
-  For any window of $L$ consecutive sites starting at position~$i$ in an
-  $N$-site periodic chain ($L \le N$), the restriction of the MPV state to
-  that window lies in $G_L(A)$.
+    \lean{MPSTensor.mpv_window_mem_groundSpace}
+    \leanok
+    \uses{def:ground_space_parent, def:mpv}
+    For any window of $L$ consecutive sites starting at position~$i$ in an
+    $N$-site periodic chain ($L \le N$), the restriction of the MPV state to
+    that window lies in $G_L(A)$.
 \end{lemma}
 
 \begin{proof}
-  \leanok
-  The witness is the product of $A$-matrices on the complement sites.
-  Trace cyclicity rotates the full $N$-site product so that window
-  indices come first, matching the ground-space map definition.
+    \leanok
+    The witness is the product of $A$-matrices on the complement sites.
+    Trace cyclicity rotates the full $N$-site product so that window
+    indices come first, matching the ground-space map definition.
 \end{proof}
 
 \begin{lemma}[Local term annihilates the MPV]\label{lem:local_term_annihilates_mpv}
-  \lean{MPSTensor.localTerm_annihilates_mpv}
-  \leanok
-  \uses{def:local_term_parent, def:mpv, lem:mpv_window_mem_ground_space, lem:parent_interaction_apply_mem_ground_space}
-  For each site $i$, $h_i\,V^{(N)}(A) = 0$.
+    \lean{MPSTensor.localTerm_annihilates_mpv}
+    \leanok
+    \uses{def:local_term_parent, def:mpv, lem:mpv_window_mem_ground_space, lem:parent_interaction_apply_mem_ground_space}
+    For each site $i$, $h_i\,V^{(N)}(A) = 0$.
 \end{lemma}
 
 \begin{proof}
-  \leanok
-  Combines MPV window membership with the fact that the parent
-  interaction kills ground-space elements.
+    \leanok
+    Combines MPV window membership with the fact that the parent
+    interaction kills ground-space elements.
 \end{proof}
 
 \begin{lemma}[Parent Hamiltonian annihilates the MPV]\label{lem:parent_hamiltonian_annihilates}
-  \lean{MPSTensor.parentHamiltonian_annihilates}
-  \leanok
-  \uses{def:parent_hamiltonian, def:mpv, lem:local_term_annihilates_mpv}
-  For every $N$, the MPV state satisfies
-  \[
-    H_N(A,L)\,V^{(N)}(A) = 0.
-  \]
+    \lean{MPSTensor.parentHamiltonian_annihilates}
+    \leanok
+    \uses{def:parent_hamiltonian, def:mpv, lem:local_term_annihilates_mpv}
+    For every $N$, the MPV state satisfies
+    \[
+        H_N(A,L)\,V^{(N)}(A) = 0.
+    \]
 \end{lemma}
 
 \begin{proof}
-  \leanok
-  Sum of zeros, since each local term annihilates the MPV.
+    \leanok
+    Sum of zeros, since each local term annihilates the MPV.
 \end{proof}
 
 \begin{lemma}[Frustration-freeness of the MPV]\label{lem:parent_hamiltonian_ff}
-  \lean{MPSTensor.parentHamiltonian_frustrationFree}
-  \leanok
-  \uses{def:is_frustration_free, def:mpv, lem:local_term_annihilates_mpv}
-  The MPV state is frustration-free for the parent model.
+    \lean{MPSTensor.parentHamiltonian_frustrationFree}
+    \leanok
+    \uses{def:is_frustration_free, def:mpv, lem:local_term_annihilates_mpv}
+    The MPV state is frustration-free for the parent model.
 \end{lemma}
 
 \begin{proof}
-  \leanok
-  Immediate from Lemma~\ref{lem:local_term_annihilates_mpv}.
+    \leanok
+    Immediate from Lemma~\ref{lem:local_term_annihilates_mpv}.
 \end{proof}
 
 \section{Intersection property and unique ground state}\label{sec:intersection_unique}
@@ -229,365 +230,369 @@ chain.
 
 Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 \begin{definition}[Left restriction]\label{def:restrict_last}
-  \lean{MPSTensor.restrictLast}
-  \leanok
-  Fix the last physical index $j$:
-  \[
-    (\mathrm{restrictLast}\;\psi\;j)(\sigma) := \psi(\sigma_1,\dots,\sigma_L,j).
-  \]
+    \lean{MPSTensor.restrictLast}
+    \leanok
+    Fix the last physical index $j$:
+    \[
+        (\mathrm{restrictLast} \psi j)(\sigma) := \psi(\sigma_1,\ldots,\sigma_L,j).
+    \]
 \end{definition}
 
 \begin{definition}[Right restriction]\label{def:restrict_first}
-  \lean{MPSTensor.restrictFirst}
-  \leanok
-  Fix the first physical index $i$:
-  \[
-    (\mathrm{restrictFirst}\;\psi\;i)(\sigma) := \psi(i,\sigma_1,\dots,\sigma_L).
-  \]
+    \lean{MPSTensor.restrictFirst}
+    \leanok
+    Fix the first physical index $i$:
+    \[
+        (\mathrm{restrictFirst} \psi i)(\sigma) := \psi(i,\sigma_1,\ldots,\sigma_L).
+    \]
 \end{definition}
 
 \begin{definition}[Left ground membership]\label{def:in_left_ground}
-  \lean{MPSTensor.InLeftGround}
-  \leanok
-  \uses{def:restrict_last, def:ground_space_parent}
-  A state $\psi$ on $L+1$ sites satisfies the left ground condition if
-  $\mathrm{restrictLast}\;\psi\;j \in G_L(A)$ for every $j$.
+    \lean{MPSTensor.InLeftGround}
+    \leanok
+    \uses{def:restrict_last, def:ground_space_parent}
+    A state $\psi$ on $L+1$ sites satisfies the left ground condition if
+    $\mathrm{restrictLast} \psi j \in G_L(A)$ for every $j$.
 \end{definition}
 
 \begin{definition}[Right ground membership]\label{def:in_right_ground}
-  \lean{MPSTensor.InRightGround}
-  \leanok
-  \uses{def:restrict_first, def:ground_space_parent}
-  A state $\psi$ on $L+1$ sites satisfies the right ground condition if
-  $\mathrm{restrictFirst}\;\psi\;i \in G_L(A)$ for every $i$.
+    \lean{MPSTensor.InRightGround}
+    \leanok
+    \uses{def:restrict_first, def:ground_space_parent}
+    A state $\psi$ on $L+1$ sites satisfies the right ground condition if
+    $\mathrm{restrictFirst} \psi i \in G_L(A)$ for every $i$.
 \end{definition}
 
 \subsection{Forward direction: ground space restricts}
 
 \begin{lemma}[Left restriction]\label{lem:ground_space_in_left_ground}
-  \lean{MPSTensor.groundSpace_inLeftGround}
-  \leanok
-  \uses{def:ground_space_parent, def:in_left_ground}
-  If $\psi \in G_{L+1}(A)$, i.e.\ $\psi(\sigma) = \tr(A^\sigma X)$ for some~$X$,
-  then $\mathrm{restrictLast}\;\psi\;j \in G_L(A)$ with witness $A^j X$.
+    \lean{MPSTensor.groundSpace_inLeftGround}
+    \leanok
+    \uses{def:ground_space_parent, def:in_left_ground}
+    If $\psi \in G_{L+1}(A)$, i.e.\ $\psi(\sigma) = \tr(A^\sigma X)$ for some~$X$,
+    then $\mathrm{restrictLast} \psi j \in G_L(A)$ with witness $A^j X$.
 \end{lemma}
 
 \begin{proof}
-  \leanok
-  The restriction simply absorbs the last tensor into the boundary matrix:
-  \[
-    \TNGroundSpaceMap{A}{\sigma_1}{\sigma_L}{L}{A^j X}
-  \]
-  Direct computation:
-  $\psi(\sigma_1,\dots,\sigma_L,j) = \tr(A^{\sigma_1}\cdots A^{\sigma_L} \cdot A^j \cdot X)
-   = \Gamma_L(A^j X)(\sigma)$.
+    \leanok
+    The restriction simply absorbs the last tensor into the boundary matrix:
+    \[
+        \TNGroundSpaceMap{A}{\sigma_1}{\sigma_L}{L}{A^j X}
+    \]
+    Direct computation:
+    $\psi(\sigma_1,\ldots,\sigma_L,j) = \tr(A^{\sigma_1}\cdots A^{\sigma_L} \cdot A^j \cdot X)
+        = \Gamma_L(A^j X)(\sigma)$.
 \end{proof}
 
 \begin{lemma}[Right restriction]\label{lem:ground_space_in_right_ground}
-  \lean{MPSTensor.groundSpace_inRightGround}
-  \leanok
-  \uses{def:ground_space_parent, def:in_right_ground}
-  If $\psi \in G_{L+1}(A)$ with $\psi(\sigma) = \tr(A^\sigma X)$, then
-  $\mathrm{restrictFirst}\;\psi\;i \in G_L(A)$ with witness $X A^i$.
+    \lean{MPSTensor.groundSpace_inRightGround}
+    \leanok
+    \uses{def:ground_space_parent, def:in_right_ground}
+    If $\psi \in G_{L+1}(A)$ with $\psi(\sigma) = \tr(A^\sigma X)$, then
+    $\mathrm{restrictFirst} \psi i \in G_L(A)$ with witness $X A^i$.
 \end{lemma}
 
 \begin{proof}
-  \leanok
-  On the right restriction one first rotates the trace and then reads the
-  resulting boundary matrix on the shortened window:
-  \[
-    \TNGroundSpaceMap{A}{\sigma_1}{\sigma_L}{L}{X A^i}
-  \]
-  By trace cyclicity:
-  $\psi(i,\sigma_1,\dots,\sigma_L) = \tr(A^i A^{\sigma} X)
-   = \tr(A^{\sigma} \cdot X A^i) = \Gamma_L(X A^i)(\sigma)$.
+    \leanok
+    On the right restriction one first rotates the trace and then reads the
+    resulting boundary matrix on the shortened window:
+    \[
+        \TNGroundSpaceMap{A}{\sigma_1}{\sigma_L}{L}{X A^i}
+    \]
+    By trace cyclicity:
+    $\psi(i,\sigma_1,\ldots,\sigma_L) = \tr(A^i A^{\sigma} X)
+        = \tr(A^{\sigma} \cdot X A^i) = \Gamma_L(X A^i)(\sigma)$.
 \end{proof}
 
 \subsection{Injectivity of the ground-space map}
 
 \begin{theorem}[Ground-space map injectivity]\label{thm:ground_space_map_injective}
-  \lean{MPSTensor.groundSpaceMap_injective}
-  \leanok
-  \uses{def:ground_space_map, def:injective}
-  If $A$ is injective and $L \ge 1$, then $\Gamma_L$ is injective.
+    \lean{MPSTensor.groundSpaceMap_injective}
+    \leanok
+    \uses{def:ground_space_map, def:injective}
+    If $A$ is injective and $L \ge 1$, then $\Gamma_L$ is injective.
 \end{theorem}
 
 \begin{proof}
-  \leanok
-  If $\Gamma_L(X) = 0$ then $\tr(A^\sigma X) = 0$ for every length-$L$ word
-  $\sigma$.  Since $A$ is injective, the products $\{A^\sigma\}_\sigma$ span
-  $\MN{D}$, so the trace pairing gives $X = 0$.
+    \leanok
+    If $\Gamma_L(X) = 0$ then $\tr(A^\sigma X) = 0$ for every length-$L$ word
+    $\sigma$. Since $A$ is injective, the products $\{A^\sigma\}_\sigma$ span
+    $\MN{D}$, so the trace pairing gives $X = 0$.
 \end{proof}
 
 \begin{theorem}[Ground-space dimension]\label{thm:ground_space_finrank_eq}
-  \lean{MPSTensor.groundSpace_finrank_eq}
-  \leanok
-  \uses{thm:ground_space_map_injective, lem:ground_space_finrank_le}
-  If $A$ is injective and $L \ge 1$, then $\dim G_L(A) = D^2$.
+    \lean{MPSTensor.groundSpace_finrank_eq}
+    \leanok
+    \uses{thm:ground_space_map_injective, lem:ground_space_finrank_le}
+    If $A$ is injective and $L \ge 1$, then $\dim G_L(A) = D^2$.
 \end{theorem}
 
 \begin{proof}
-  \leanok
-  The upper bound $\dim G_L(A) \le D^2$ is Lemma~\ref{lem:ground_space_finrank_le}.
-  Injectivity of $\Gamma_L$ gives $\dim G_L(A) = \dim \MN{D} = D^2$.
+    \leanok
+    The upper bound $\dim G_L(A) \le D^2$ is Lemma~\ref{lem:ground_space_finrank_le}.
+    Injectivity of $\Gamma_L$ gives $\dim G_L(A) = \dim \MN{D} = D^2$.
 \end{proof}
 
 \subsection{The intersection property}
 
 \begin{theorem}[Intersection property]\label{thm:ground_space_intersection}
-  \lean{MPSTensor.groundSpace_intersection}
-  \leanok
-  \uses{thm:ground_space_map_injective, def:in_left_ground, def:in_right_ground,
+    \lean{MPSTensor.groundSpace_intersection}
+    \leanok
+    \uses{thm:ground_space_map_injective, def:in_left_ground, def:in_right_ground,
         def:ground_space_parent}
-  If $A$ is injective and $L \ge 2$, then a state $\psi$ on $L+1$ sites
-  satisfying both the left and right ground conditions lies in $G_{L+1}(A)$:
-  \[
-    \psi \in G_L^{\mathrm{left}} \cap G_L^{\mathrm{right}}
-    \;\Longrightarrow\;
-    \psi \in G_{L+1}(A).
-  \]
+    If $A$ is injective and $L \ge 2$, then a state $\psi$ on $L+1$ sites
+    satisfying both the left and right ground conditions lies in $G_{L+1}(A)$:
+    \[
+        \psi \in G_L^{\mathrm{left}} \cap G_L^{\mathrm{right}}
+        \Longrightarrow
+        \psi \in G_{L+1}(A).
+    \]
 \end{theorem}
 
 \begin{proof}
-  \leanok
-  The ``invert-and-regrow'' argument compares the left and right
-  restrictions on their common $(L-1)$-site overlap and then reconstructs the
-  full $(L+1)$-site word from a single boundary matrix:
-  \[
-    \TNBoundaryRegrow{X'}{\sigma_1}{\sigma_{L+1}}{L+1}
-  \]
-  \begin{enumerate}
-    \item From the right ground condition, for each physical index~$i$ there
-      exists a unique $Y_i \in \MN{D}$ (by injectivity of $\Gamma_L$) such
-      that $\psi(i,\sigma) = \tr(A^\sigma Y_i)$.
-    \item Similarly, from the left ground condition, for each~$j$ there exists
-      a unique $Z_j$ with $\psi(\sigma,j) = \tr(A^\sigma Z_j)$.
-    \item Matching on the $(L{-}1)$-site overlap and using nondegeneracy of
-      the trace pairing:
-      $A^j Y_i = Z_j A^i$ for all $i,j$.
-    \item Since $A$ is injective, the matrices $\{A^j\}$ span $\MN{D}$
-      (Definition~\ref{def:injective}), so $\Id = \sum_j c_j A^j$ for
-      some coefficients $c_j \in \C$.  Then
-      $Y_i = \Id \cdot Y_i = \sum_j c_j A^j Y_i = \sum_j c_j Z_j A^i = X' A^i$,
-      where $X' := \sum_j c_j Z_j$.
-    \item By trace cyclicity,
-      $\psi(\sigma) = \tr(A^\sigma X')$, so $\psi \in G_{L+1}(A)$.
-  \end{enumerate}
+    \leanok
+    The ``invert-and-regrow'' argument compares the left and right
+    restrictions on their common $(L-1)$-site overlap and then reconstructs the
+    full $(L+1)$-site word from a single boundary matrix:
+    \[
+        \TNBoundaryRegrow{X'}{\sigma_1}{\sigma_{L+1}}{L+1}
+    \]
+    \begin{enumerate}
+        \item From the right ground condition, for each physical index~$i$ there
+              exists a unique $Y_i \in \MN{D}$ (by injectivity of $\Gamma_L$) such
+              that $\psi(i,\sigma) = \tr(A^\sigma Y_i)$.
+        \item Similarly, from the left ground condition, for each~$j$ there exists
+              a unique $Z_j$ with $\psi(\sigma,j) = \tr(A^\sigma Z_j)$.
+        \item Matching on the $(L{-}1)$-site overlap and using nondegeneracy of
+              the trace pairing:
+              $A^j Y_i = Z_j A^i$ for all $i,j$.
+        \item Since $A$ is injective, the matrices $\{A^j\}$ span $\MN{D}$
+              (Definition~\ref{def:injective}), so $\Id = \sum_j c_j A^j$ for
+              some coefficients $c_j \in \C$. Then
+              $Y_i = \Id \cdot Y_i = \sum_j c_j A^j Y_i = \sum_j c_j Z_j A^i = X' A^i$,
+              where $X' := \sum_j c_j Z_j$.
+        \item By trace cyclicity,
+              $\psi(\sigma) = \tr(A^\sigma X')$, so $\psi \in G_{L+1}(A)$.
+    \end{enumerate}
 \end{proof}
 
 \begin{theorem}[Intersection characterization]\label{thm:ground_space_iff}
-  \lean{MPSTensor.groundSpace_iff_left_right}
-  \leanok
-  \uses{lem:ground_space_in_left_ground, lem:ground_space_in_right_ground,
+    \lean{MPSTensor.groundSpace_iff_left_right}
+    \leanok
+    \uses{lem:ground_space_in_left_ground, lem:ground_space_in_right_ground,
         thm:ground_space_intersection}
-  For injective $A$ and $L \ge 2$:
-  $\psi \in G_{L+1}(A) \iff \psi \in G_L^{\mathrm{left}} \cap G_L^{\mathrm{right}}$.
+    For injective $A$ and $L \ge 2$:
+    $\psi \in G_{L+1}(A) \iff \psi \in G_L^{\mathrm{left}} \cap G_L^{\mathrm{right}}$.
 \end{theorem}
 
 \begin{proof}
-  \leanok
-  Immediate from the two forward-direction lemmas and
-  Theorem~\ref{thm:ground_space_intersection}.
+    \leanok
+    Immediate from the two forward-direction lemmas and
+    Theorem~\ref{thm:ground_space_intersection}.
 \end{proof}
 
 \subsection{Unique ground state}
 
 \begin{lemma}[Iterated contiguous-window intersection]\label{lem:contiguous_mem_ground_space}
-  \lean{MPSTensor.contiguous_mem_groundSpace}
-  \leanok
-  \uses{thm:ground_space_intersection}
-  If an $N$-site state satisfies the $L$-site ground condition on every
-  non-wrapping contiguous window (with $L \ge 2$), then it lies in $G_N(A)$.
+    \lean{MPSTensor.contiguous_mem_groundSpace}
+    \leanok
+    \uses{thm:ground_space_intersection}
+    If an $N$-site state satisfies the $L$-site ground condition on every
+    non-wrapping contiguous window (with $L \ge 2$), then it lies in $G_N(A)$.
 \end{lemma}
 
 \begin{proof}
-  \leanok
-  The induction repeatedly merges two neighbouring admissible windows
-  $[i,i+L-1]$ and $[i+1,i+L]$ into the larger window $[i,i+L]$ by applying
-  Theorem~\ref{thm:ground_space_intersection} to their common overlap
-  $[i+1,i+L-1]$.
-  Strong induction on window size, combining adjacent windows via
-  Theorem~\ref{thm:ground_space_intersection} at each step.
+    \leanok
+    The induction repeatedly merges two neighbouring admissible windows
+    $[i,i+L-1]$ and $[i+1,i+L]$ into the larger window $[i,i+L]$ by applying
+    Theorem~\ref{thm:ground_space_intersection} to their common overlap
+    $[i+1,i+L-1]$.
+    Strong induction on window size, combining adjacent windows via
+    Theorem~\ref{thm:ground_space_intersection} at each step.
 \end{proof}
 
 \begin{definition}[MPV submodule]\label{def:mpv_submodule}
-  \lean{MPSTensor.mpvSubmodule}
-  \leanok
-  \uses{def:mpv}
-  The subspace spanned by the MPV state
-  $V^{(N)}(A)(\sigma) = \tr(A^{\sigma_0}\cdots A^{\sigma_{N-1}})$.
+    \lean{MPSTensor.mpvSubmodule}
+    \leanok
+    \uses{def:mpv}
+    The subspace spanned by the MPV state
+    $V^{(N)}(A)(\sigma) = \tr(A^{\sigma_0}\cdots A^{\sigma_{N-1}})$.
 \end{definition}
 
 \begin{lemma}[MPV lies in the ground space]\label{lem:mpv_mem_ground_space}
-  \lean{MPSTensor.mpv_mem_groundSpace}
-  \leanok
-  \uses{def:ground_space_parent, def:mpv}
-  $V^{(N)}(A) \in G_N(A)$ for every $N$, with boundary matrix $X = I$.
+    \lean{MPSTensor.mpv_mem_groundSpace}
+    \leanok
+    \uses{def:ground_space_parent, def:mpv}
+    $V^{(N)}(A) \in G_N(A)$ for every $N$, with boundary matrix $X = I$.
 \end{lemma}
 
 \begin{proof}
-  \leanok
-  $V^{(N)}(A)(\sigma) = \tr(A^\sigma) = \tr(A^\sigma \cdot I) = \Gamma_N(I)(\sigma)$.
+    \leanok
+    $V^{(N)}(A)(\sigma) = \tr(A^\sigma) = \tr(A^\sigma \cdot I) = \Gamma_N(I)(\sigma)$.
 \end{proof}
 
 \begin{definition}[Unique ground state]\label{def:has_unique_ground_state}
-  \lean{MPSTensor.HasUniqueGroundState}
-  \leanok
-  A submodule $S$ has a unique ground state if $\dim S = 1$.
+    \lean{MPSTensor.HasUniqueGroundState}
+    \leanok
+    A submodule $S$ has a unique ground state if $\dim S = 1$.
 \end{definition}
 
 \begin{theorem}[One-dimensionality criterion]\label{thm:has_unique_ground_state_iff_proportional}
-  \lean{MPSTensor.hasUniqueGroundState_iff_proportional}
-  \leanok
-  \uses{def:has_unique_ground_state}
-  For finite-dimensional $S$, $\dim S = 1$ iff there exists a nonzero
-  $\psi_0 \in S$ such that every $\psi \in S$ is of the form $c\,\psi_0$.
+    \lean{MPSTensor.hasUniqueGroundState_iff_proportional}
+    \leanok
+    \uses{def:has_unique_ground_state}
+    For finite-dimensional $S$, $\dim S = 1$ iff there exists a nonzero
+    $\psi_0 \in S$ such that every $\psi \in S$ is of the form $c\,\psi_0$.
 \end{theorem}
 
 \begin{proof}
-  \leanok
-  Apply the standard finite-dimensional criterion that a nonzero space has
-  dimension one exactly when all of its vectors are proportional to a single
-  nonzero vector.
+    \leanok
+    Apply the standard finite-dimensional criterion that a nonzero space has
+    dimension one exactly when all of its vectors are proportional to a single
+    nonzero vector.
 \end{proof}
 
 \begin{definition}[Periodic chain ground space]\label{def:chain_ground_space}
-  \lean{MPSTensor.chainGroundSpace}
-  \leanok
-  \uses{def:ground_space_parent}
-  For $N > 0$ and $L \le N$, define the \emph{periodic chain ground space}
-  \[
-    \mathcal{G}_{N,L}(A) := \bigl\{\psi \in (\{0,\dots,d{-}1\}^N \to \C)
-    : \text{for every cyclic window } [i,i{+}L{-}1],\;
-    \psi|_{[i,i+L-1]} \in G_L(A)\bigr\},
-  \]
-  where the condition $\psi|_{[i,i+L-1]} \in G_L(A)$ means that for every
-  choice of physical indices outside the window, the restriction of $\psi$
-  to that window lies in $G_L(A)$.
-  When $N = 0$ or $L > N$, set $\mathcal{G}_{N,L}(A) := \top$ by convention.
+    \lean{MPSTensor.chainGroundSpace}
+    \leanok
+    \uses{def:ground_space_parent}
+    For $N > 0$ and $L \le N$, define the \emph{periodic chain ground space}
+    \[
+        \mathcal{G}_{N,L}(A) := \bigl\{\psi \in (\{0,\ldots,d{-}1\}^N \to \C)
+        : \text{for every cyclic window } [i,i{+}L{-}1],
+        \psi|_{[i,i+L-1]} \in G_L(A)\bigr\},
+    \]
+    where the condition $\psi|_{[i,i+L-1]} \in G_L(A)$ means that for every
+    choice of physical indices outside the window, the restriction of $\psi$
+    to that window lies in $G_L(A)$.
+    When $N = 0$ or $L > N$, set $\mathcal{G}_{N,L}(A) := \top$ by convention.
 \end{definition}
 
 \begin{theorem}[MPV nonvanishing for block-injective tensors]%
-  \label{thm:mpv_ne_zero_blk_injective}
-  \lean{MPSTensor.mpv_ne_zero_of_isNBlkInjective}
-  \leanok
-  \uses{def:mpv, def:l_blk_injective}
-  If $A$ is $L_0$-block-injective with $L_0 > 0$ and $N \ge L_0 + 1$,
-  then $V^{(N)}(A) \ne 0$ in the $N$-site space.
+    \label{thm:mpv_ne_zero_blk_injective}
+    \lean{MPSTensor.mpv_ne_zero_of_isNBlkInjective}
+    \leanok
+    \uses{def:mpv, def:l_blk_injective}
+    If $A$ is $L_0$-block-injective with $L_0 > 0$, $D \ge 1$, and
+    $N \ge L_0 + 1$, then $V^{(N)}(A) \ne 0$ in the $N$-site space.
 \end{theorem}
 
 \begin{proof}
-  \leanok
-  Suppose for contradiction that $V^{(N)}(A) = 0$, i.e.\
-  $\tr(A^\sigma) = 0$ for every word $\sigma$ of length~$N$.
-  For any words $w$ and $u$ with $|w| = N - L_0$ and $|u| = L_0$,
-  we have $\tr(A^w A^u) = 0$.
-  Since $A$ is $L_0$-block-injective, $\{A^u : |u| = L_0\}$
-  spans $\MN{D}$.  By nondegeneracy of the trace pairing,
-  $A^w = 0$ for every $|w| = N - L_0$.
-  Repeating the argument with words of length $N - 2L_0$ (since
-  $|w'| + L_0 = N - L_0$, the product $A^{w'} A^{u_1}$ has length
-  $N - L_0$, so $A^{w'} A^{u_1} = 0$ by the previous step) and iterating,
-  we eventually reach $\tr(A^u) = 0$ for $|u| = L_0$, which gives
-  $I = 0$, a contradiction.
+    \leanok
+    Suppose for contradiction that $V^{(N)}(A) = 0$, i.e.\
+    $\tr(A^\sigma) = 0$ for every word $\sigma$ of length~$N$.
+    For any words $w$ and $u$ with $|w| = N - L_0$ and $|u| = L_0$,
+    we have $\tr(A^w A^u) = 0$.
+    Since $A$ is $L_0$-block-injective, $\{A^u : |u| = L_0\}$
+    spans $\MN{D}$. By nondegeneracy of the trace pairing,
+    $A^w = 0$ for every $|w| = N - L_0$.
+    Repeating the argument with words of length $N - 2L_0$ (since
+    $|w'| + L_0 = N - L_0$, the product $A^{w'} A^{u_1}$ has length
+    $N - L_0$, so $A^{w'} A^{u_1} = 0$ by the previous step) and iterating,
+    we eventually reach $\tr(A^u) = 0$ for $|u| = L_0$, which gives
+    $I = 0$, a contradiction.
 \end{proof}
 
 \begin{theorem}[Chain ground space for block-injective tensors]%
-  \label{thm:chain_ground_space_eq_mpv_blk}
-  \lean{MPSTensor.chainGroundSpace_eq_mpvSubmodule}
-  \notready
-  \uses{def:chain_ground_space, def:mpv_submodule, def:l_blk_injective}
-  If $A$ is $L_0$-block-injective and the window size satisfies
-  $L \ge 2L_0$, then on the periodic chain with $N \ge 2$ sites,
-  the chain ground space equals the MPV submodule:
-  $\mathcal{G}_{N,L}(A) = \operatorname{span}\{V^{(N)}(A)\}$.
+    \label{thm:chain_ground_space_eq_mpv_blk}
+    \lean{MPSTensor.chainGroundSpace_eq_mpvSubmodule}
+    \notready
+    \uses{def:chain_ground_space, def:mpv_submodule, def:l_blk_injective}
+    If $A$ is $L_0$-block-injective, $D \ge 1$, and the window size satisfies
+    $L \ge 2L_0$, then on the periodic chain with $N \ge 2$ sites,
+    the chain ground space equals the MPV submodule:
+    $\mathcal{G}_{N,L}(A) = \spn\bigl\{V^{(N)}(A)\bigr\}$.
 \end{theorem}
 
+\noindent\emph{Remark.} The Lean formalization currently proves the injective
+special case (with $L_0 = 1$); the block-injective generalization is future
+work.
+
 \begin{theorem}[Chain ground space for normal tensors]%
-  \label{thm:chain_ground_space_eq_mpv_normal}
-  \lean{MPSTensor.chainGroundSpace_eq_mpvSubmodule_normal}
-  \notready
-  \uses{def:chain_ground_space, def:mpv_submodule, def:l_blk_injective,
+    \label{thm:chain_ground_space_eq_mpv_normal}
+    \lean{MPSTensor.chainGroundSpace_eq_mpvSubmodule_normal}
+    \notready
+    \uses{def:chain_ground_space, def:mpv_submodule, def:l_blk_injective,
         def:normal}
-  If $A$ is normal and $L_0$-block-injective, the window requirement
-  is reduced from $2L_0$ to $L_0 < L$.  The normality hypothesis enables
-  the range reduction via the structure theory of normal MPS (peripheral
-  spectrum, canonical form).  See~\cite[\S IV.C]{Cirac2021Matrix}. The
-  normality hypothesis allows the window range to be reduced from $2L_0$
-  to $L_0 + 1$ via the peripheral-spectrum structure of the transfer map
-  (Theorem~\ref{thm:ncf_overlap_tendsto_one}) and the block-separation
-  argument (Theorem~\ref{thm:block_sep}).
+    If $A$ is normal, $L_0$-block-injective, and $D \ge 1$, the window requirement
+    is reduced from $2L_0$ to $L_0 < L$. The normality hypothesis enables this
+    reduction via the structure theory of normal MPS (peripheral spectrum,
+    canonical form); see Ref.~\cite[\S IV.C]{Cirac2021Matrix}. Concretely, the
+    window range can be reduced from $2L_0$ to $L_0 + 1$ via the
+    peripheral-spectrum structure of the transfer map
+    (Theorem~\ref{thm:ncf_overlap_tendsto_one}) and the block-separation
+    argument (Theorem~\ref{thm:block_sep}).
 \end{theorem}
 
 \begin{theorem}[Unique ground state on the periodic chain]%
-  \label{thm:ground_space_unique_periodic}
-  \lean{MPSTensor.groundSpace_unique_periodic}
-  \leanok
-  \uses{thm:ground_space_intersection, def:has_unique_ground_state,
+    \label{thm:ground_space_unique_periodic}
+    \lean{MPSTensor.groundSpace_unique_periodic}
+    \leanok
+    \uses{thm:ground_space_intersection, def:has_unique_ground_state,
         lem:mpv_mem_ground_space, thm:mpv_ne_zero_blk_injective}
-  For an injective tensor~$A$ on a periodic chain of $N \ge L$ sites with
-  interaction range $L \ge 2$, the chain ground space is one-dimensional,
-  spanned by the MPV.
+    For an injective tensor~$A$ with $D \ge 1$ on a periodic chain of $N \ge L$ sites with
+    interaction range $L \ge 2$, the chain ground space is one-dimensional,
+    spanned by the MPV.
 \end{theorem}
 
 \begin{proof}
-  \leanok
-  \uses{thm:ground_space_intersection, lem:contiguous_mem_ground_space,
+    \leanok
+    \uses{thm:ground_space_intersection, lem:contiguous_mem_ground_space,
         lem:mpv_mem_ground_space, thm:ground_space_map_injective,
         thm:mpv_ne_zero_blk_injective}
-  \textbf{Step 1 (iterate intersection).}
-  By Lemma~\ref{lem:contiguous_mem_ground_space}, any state $\psi$ in
-  the chain ground space lies in $G_N(A)$, so there exists
-  $X \in \MN{D}$ with
-  \[
-    \psi(\sigma_1,\dots,\sigma_N) = \tr(A^{\sigma_1}\cdots A^{\sigma_N} X).
-  \]
-  In tensor-network form, the boundary operator sits on the closing
-  virtual bond:
-  \[
-    \TNPeriodicGauge{N}{X}{1}
-  \]
+    \textbf{Step 1 (iterate intersection).}
+    By Lemma~\ref{lem:contiguous_mem_ground_space}, any state $\psi$ in
+    the chain ground space lies in $G_N(A)$, so there exists
+    $X \in \MN{D}$ with
+    \[
+        \psi(\sigma_1,\ldots,\sigma_N) = \tr(A^{\sigma_1}\cdots A^{\sigma_N} X).
+    \]
+    In tensor-network form, the boundary operator sits on the closing
+    virtual bond:
+    \[
+        \TNPeriodicGauge{N}{X}{1}
+    \]
 
-  \textbf{Step 2 (wrapping window forces $X$ scalar).}
-  The chain ground space condition from
-  Definition~\ref{def:chain_ground_space} requires $\psi|_W \in G_L(A)$
-  for every cyclic window $W$, including those that wrap around the
-  boundary. In particular, the window starting at site $N-1$ gives
-  \[
-    \bigl(\psi|_W\bigr)(i_N, i_1, \dots, i_{L-1})
-    = \tr(A^{i_1} \cdots A^{i_{L-1}} \cdot X A^{i_N}),
-  \]
-  for some boundary matrix depending on $X$. Comparing this with the
-  representation $\psi = \Gamma_N(X)$ from Step~1 and using trace
-  cyclicity gives $A^j X = X A^j$ for every $j$. Since $A$ is injective,
-  the matrices $\{A^j : 0 \le j \le d-1\}$ span $\MN{D}$
-  (Definition~\ref{def:injective}), so $X$ commutes with every element of
-  $\MN{D}$. By Schur's lemma for the full matrix algebra, $X = \lambda I$
-  for some $\lambda \in \C$.
+    \textbf{Step 2 (wrapping window forces $X$ scalar).}
+    The chain ground space condition from
+    Definition~\ref{def:chain_ground_space} requires $\psi|_W \in G_L(A)$
+    for every cyclic window $W$, including those that wrap around the
+    boundary. In particular, the window starting at site $N-1$ gives
+    \[
+        (\psi|_W)(i_N, i_1, \ldots, i_{L-1})
+        = \tr(A^{i_1} \cdots A^{i_{L-1}} \cdot X A^{i_N}),
+    \]
+    for some boundary matrix depending on $X$. Comparing this with the
+    representation $\psi = \Gamma_N(X)$ from Step~1 and using trace
+    cyclicity gives $A^j X = X A^j$ for every $j$. Since $A$ is injective,
+    the matrices $\{A^j : 0 \le j \le d-1\}$ span $\MN{D}$
+    (Definition~\ref{def:injective}), so $X$ commutes with every element of
+    $\MN{D}$. By Schur's lemma for the full matrix algebra, $X = \lambda I$
+    for some $\lambda \in \C$.
 
-  \textbf{Step 3 (conclude).}
-  $\psi(\sigma) = \lambda\,\tr(A^\sigma) = \lambda\,V^{(N)}(A)(\sigma)$,
-  so every ground state is proportional to the MPV.  Since the MPV is
-  nonzero by Theorem~\ref{thm:mpv_ne_zero_blk_injective} applied with
-  $L_0 = 1$, the ground space is one-dimensional.
+    \textbf{Step 3 (conclude).}
+    $\psi(\sigma) = \lambda\,\tr(A^\sigma) = \lambda\,V^{(N)}(A)(\sigma)$,
+    so every ground state is proportional to the MPV. Since the MPV is
+    nonzero by Theorem~\ref{thm:mpv_ne_zero_blk_injective} applied with
+    $L_0 = 1$, the ground space is one-dimensional.
 \end{proof}
 
 \begin{theorem}[Unique ground state for block-injective tensors]%
-  \label{thm:unique_gs_injective}
-  \lean{MPSTensor.parentHamiltonian_unique_gs_injective}
-  \notready
-  \uses{thm:ground_space_unique_periodic}
-  If $A$ is $L_0$-block-injective with $L_0 > 0$, the parent Hamiltonian
-  with interaction range $2L_0$ has a unique ground state on the periodic chain.
+    \label{thm:unique_gs_injective}
+    \lean{MPSTensor.parentHamiltonian_unique_gs_injective}
+    \notready
+    \uses{thm:ground_space_unique_periodic}
+    If $A$ is $L_0$-block-injective with $L_0 > 0$ and $D \ge 1$, the parent Hamiltonian
+    with interaction range $2L_0$ has a unique ground state on the periodic chain.
 \end{theorem}
 
 \begin{theorem}[Optimal unique ground state for normal tensors]%
-  \label{thm:unique_gs_normal}
-  \lean{MPSTensor.parentHamiltonian_unique_gs_normal}
-  \notready
-  \uses{thm:unique_gs_injective}
-  If $A$ is normal (hence $L_0$-block-injective for some $L_0 > 0$) and
-  in normal form, the interaction range can be reduced to $L_0 + 1$.
+    \label{thm:unique_gs_normal}
+    \lean{MPSTensor.parentHamiltonian_unique_gs_normal}
+    \notready
+    \uses{thm:unique_gs_injective}
+    If $A$ is normal (hence $L_0$-block-injective for some $L_0 > 0$),
+    $D \ge 1$, and in normal form, the interaction range can be reduced to $L_0 + 1$.
 \end{theorem}
 
 \section{Commuting parent Hamiltonians}\label{sec:commuting_parent_ham}
@@ -596,31 +601,31 @@ A parent Hamiltonian has \emph{commuting} local terms when all translated
 interaction projectors commute with each other.
 
 \begin{definition}[Commuting parent Hamiltonian]\label{def:is_commuting_parent_ham}
-  \lean{MPSTensor.IsCommutingParentHam}
-  \leanok
-  \uses{def:local_term_parent}
-  The parent Hamiltonian with block length~$L$ on $N$ sites has
-  \emph{commuting} local terms if
-  $h_i h_j = h_j h_i$ for all $i,j \in \{0,\dots,N{-}1\}$.
-  See \cite[Definition~3.9]{Cirac2021Matrix}.
+    \lean{MPSTensor.IsCommutingParentHam}
+    \leanok
+    \uses{def:local_term_parent}
+    The parent Hamiltonian with block length~$L$ on $N$ sites has
+    \emph{commuting} local terms if
+    $h_i h_j = h_j h_i$ for all $i,j \in \{0,\ldots,N{-}1\}$.
+    See Ref.~\cite[Definition~3.9]{Cirac2021Matrix}.
 \end{definition}
 
 \begin{definition}[Nearest-neighbor commuting parent Hamiltonian]\label{def:is_nncph}
-  \lean{MPSTensor.IsNNCPH}
-  \leanok
-  \uses{def:is_commuting_parent_ham}
-  A \emph{nearest-neighbor commuting parent Hamiltonian} (NNCPH) is a
-  commuting parent Hamiltonian with block length $L = 2$.
-  See \cite[Definition~3.9]{Cirac2021Matrix}.
+    \lean{MPSTensor.IsNNCPH}
+    \leanok
+    \uses{def:is_commuting_parent_ham}
+    A \emph{nearest-neighbor commuting parent Hamiltonian} (NNCPH) is a
+    commuting parent Hamiltonian with block length $L = 2$.
+    See Ref.~\cite[Definition~3.9]{Cirac2021Matrix}.
 \end{definition}
 
 \begin{theorem}[RFP implies NNCPH]\label{thm:rfp_implies_nncph}
-  \uses{def:is_nncph}
-  If $A$ is a renormalization fixed point (RFP), then its parent
-  Hamiltonian with $L = 2$ has commuting local terms.
-  \textbf{Status:} A previous proof attempt was found incorrect and removed;
-  this result requires the structural theory of renormalization
-  fixed points needed for \cite[Theorem~3.10]{Cirac2021Matrix}.
+    \uses{def:is_nncph}
+    If $A$ is a renormalization fixed point (RFP), then its parent
+    Hamiltonian with $L = 2$ has commuting local terms.
+    \textbf{Status:} A previous proof attempt was found incorrect and removed;
+    this result requires the structural theory of renormalization
+    fixed points needed for \cite[Theorem~3.10]{Cirac2021Matrix}.
 \end{theorem}
 
 \section{Decorrelation and commuting parent Hamiltonians}%
@@ -631,115 +636,115 @@ decorrelation and its connection to commuting parent Hamiltonians, following
 Appendix~D, \S D.2 of~\cite{Cirac2021Matrix}.
 
 \begin{definition}[Decorrelation]\label{def:is_decorrelated}
-  \lean{Decorrelation.IsDecorrelated}
-  \leanok
-  Given an idempotent endomorphism $P_K$ and sets of observables
-  $\mathcal{O}_A$, $\mathcal{O}_B$, regions $A$ and $B$ are
-  \emph{decorrelated} w.r.t.\ $K$ when
-  $P_K \circ O_A \circ (1 - P_K) \circ O_B \circ P_K = 0$
-  for all $O_A \in \mathcal{O}_A$, $O_B \in \mathcal{O}_B$.
+    \lean{Decorrelation.IsDecorrelated}
+    \leanok
+    Given an idempotent endomorphism $P_K$ and sets of observables
+    $\mathcal{O}_A$, $\mathcal{O}_B$, regions $A$ and $B$ are
+    \emph{decorrelated} w.r.t.\ $K$ when
+    $P_K \circ O_A \circ (1 - P_K) \circ O_B \circ P_K = 0$
+    for all $O_A \in \mathcal{O}_A$, $O_B \in \mathcal{O}_B$.
 \end{definition}
 
 \begin{definition}[Commuting parent Hamiltonian structure]\label{def:has_commuting_parent_ham}
-  \lean{Decorrelation.HasCommutingParentHam}
-  \leanok
-  A subspace $K$ (given by its idempotent endomorphism $P_K$) has a
-  \emph{commuting parent Hamiltonian structure} if there exist idempotent
-  endomorphisms $P_{AX}$ and $P_{XB}$ that commute and satisfy
-  $P_{AX} \circ P_{XB} = P_K$.
+    \lean{Decorrelation.HasCommutingParentHam}
+    \leanok
+    A subspace $K$ (given by its idempotent endomorphism $P_K$) has a
+    \emph{commuting parent Hamiltonian structure} if there exist idempotent
+    endomorphisms $P_{AX}$ and $P_{XB}$ that commute and satisfy
+    $P_{AX} \circ P_{XB} = P_K$.
 \end{definition}
 
 \begin{theorem}[Commuting parent Hamiltonian implies decorrelation]%
-  \label{thm:commuting_ham_is_decorrelated}
-  \lean{Decorrelation.commutingHam_isDecorrelated}
-  \leanok
-  \uses{def:is_decorrelated, def:has_commuting_parent_ham}
-  If a subspace $K$ has a commuting parent Hamiltonian decomposition
-  $P_K = P_{AX} \circ P_{XB}$ with $[P_{AX}, P_{XB}] = 0$, and
-  $A$-observables commute with $P_{XB}$ while $B$-observables commute
-  with $P_{AX}$, then regions $A$ and $B$ are decorrelated w.r.t.\ $K$.
-  This is the backward direction of Proposition~D.3
-  from~\cite{Cirac2021Matrix}, Appendix~D, \S D.2.
+    \label{thm:commuting_ham_is_decorrelated}
+    \lean{Decorrelation.commutingHam_isDecorrelated}
+    \leanok
+    \uses{def:is_decorrelated, def:has_commuting_parent_ham}
+    If a subspace $K$ has a commuting parent Hamiltonian decomposition
+    $P_K = P_{AX} \circ P_{XB}$ with $[P_{AX}, P_{XB}] = 0$, and
+    $A$-observables commute with $P_{XB}$ while $B$-observables commute
+    with $P_{AX}$, then regions $A$ and $B$ are decorrelated w.r.t.\ $K$.
+    This is the backward direction of Proposition~D.3
+    from~\cite{Cirac2021Matrix}, Appendix~D, \S D.2.
 \end{theorem}
 
 \begin{proof}
-  \leanok
-  The key identity is $P_{XB} \circ (1 - P_{AX} \circ P_{XB}) \circ P_{AX} = 0$.
-  Using the commutation hypotheses to slide $O_A$ past $P_{XB}$ and $O_B$
-  past $P_{AX}$, the five-fold composition factors through this zero term.
+    \leanok
+    The key identity is $P_{XB} \circ (1 - P_{AX} \circ P_{XB}) \circ P_{AX} = 0$.
+    Using the commutation hypotheses to slide $O_A$ past $P_{XB}$ and $O_B$
+    past $P_{AX}$, the five-fold composition factors through this zero term.
 \end{proof}
 
 \begin{theorem}[Commuting parent Hamiltonian implies decorrelation (bundled)]%
-  \label{thm:has_commuting_parent_ham_is_decorrelated}
-  \lean{Decorrelation.HasCommutingParentHam.isDecorrelated}
-  \leanok
-  \uses{thm:commuting_ham_is_decorrelated, def:has_commuting_parent_ham, def:is_decorrelated}
-  Corollary of Theorem~\ref{thm:commuting_ham_is_decorrelated}: if
-  $P_K$ has a commuting parent Hamiltonian decomposition and observables
-  respect locality, then regions $A$ and $B$ are decorrelated w.r.t.\ $K$.
+    \label{thm:has_commuting_parent_ham_is_decorrelated}
+    \lean{Decorrelation.HasCommutingParentHam.isDecorrelated}
+    \leanok
+    \uses{thm:commuting_ham_is_decorrelated, def:has_commuting_parent_ham, def:is_decorrelated}
+    Corollary of Theorem~\ref{thm:commuting_ham_is_decorrelated}: if
+    $P_K$ has a commuting parent Hamiltonian decomposition and observables
+    respect locality, then regions $A$ and $B$ are decorrelated w.r.t.\ $K$.
 \end{theorem}
 
 \begin{lemma}[Frustration-free identity]\label{lem:frustration_free_ham_eq}
-  \lean{LinearMap.frustration_free_ham_eq}
-  \leanok
-  For any endomorphisms $P$ and $Q$,
-  \[
-    (1-P) + (1-Q) - (1-P)\circ(1-Q) = 1 - P\circ Q.
-  \]
+    \lean{LinearMap.frustration_free_ham_eq}
+    \leanok
+    For any endomorphisms $P$ and $Q$,
+    \[
+        (1-P) + (1-Q) - (1-P)\circ(1-Q) = 1 - P\circ Q.
+    \]
 \end{lemma}
 
 \begin{proof}
-  \leanok
-  Expanding the left-hand side and cancelling gives the result.
+    \leanok
+    Expanding the left-hand side and cancelling gives the result.
 \end{proof}
 
 \begin{theorem}[Commuting parent Hamiltonian identity]%
-  \label{thm:hamiltonian_eq}
-  \lean{Decorrelation.HasCommutingParentHam.hamiltonian_eq}
-  \leanok
-  \uses{def:has_commuting_parent_ham, lem:frustration_free_ham_eq}
-  If $P_K = P_{AX} \circ P_{XB}$ is a commuting parent Hamiltonian
-  decomposition, then
-  \[
-    Q_{AX} + Q_{XB} - Q_{AX} \circ Q_{XB} = 1 - P_K,
-  \]
-  where $Q_{AX} = 1 - P_{AX}$ and $Q_{XB} = 1 - P_{XB}$ are the
-  complementary projectors.
-  This is the frustration-free form of the parent Hamiltonian from
-  \cite{Cirac2021Matrix}, Appendix~D, \S D.2.
+    \label{thm:hamiltonian_eq}
+    \lean{Decorrelation.HasCommutingParentHam.hamiltonian_eq}
+    \leanok
+    \uses{def:has_commuting_parent_ham, lem:frustration_free_ham_eq}
+    If $P_K = P_{AX} \circ P_{XB}$ is a commuting parent Hamiltonian
+    decomposition, then
+    \[
+        Q_{AX} + Q_{XB} - Q_{AX} \circ Q_{XB} = 1 - P_K,
+    \]
+    where $Q_{AX} = 1 - P_{AX}$ and $Q_{XB} = 1 - P_{XB}$ are the
+    complementary projectors.
+    This is the frustration-free form of the parent Hamiltonian from
+    \cite{Cirac2021Matrix}, Appendix~D, \S D.2.
 \end{theorem}
 
 \begin{proof}
-  \leanok
-  \uses{lem:frustration_free_ham_eq}
-  Applying Lemma~\ref{lem:frustration_free_ham_eq} to $P_{AX}$ and
-  $P_{XB}$, and substituting $P_{AX} \circ P_{XB} = P_K$.
+    \leanok
+    \uses{lem:frustration_free_ham_eq}
+    Applying Lemma~\ref{lem:frustration_free_ham_eq} to $P_{AX}$ and
+    $P_{XB}$, and substituting $P_{AX} \circ P_{XB} = P_K$.
 \end{proof}
 
 \begin{theorem}[Ground-space membership]\label{thm:mem_ground_iff}
-  \lean{Decorrelation.HasCommutingParentHam.mem_ground_iff}
-  \leanok
-  \uses{def:has_commuting_parent_ham}
-  If $P_K = P_{AX} \circ P_{XB}$ is a commuting parent Hamiltonian
-  decomposition, then
-  \[
-    P_K v = v
-    \quad\Longleftrightarrow\quad
-    P_{AX} v = v \;\text{ and }\; P_{XB} v = v.
-  \]
-  This is the algebraic form of equation~(D.2) from
-  \cite{Cirac2021Matrix}:
-  $K_{AXB} = (K_{AX} \otimes H_B) \cap (H_A \otimes K_{XB})$.
+    \lean{Decorrelation.HasCommutingParentHam.mem_ground_iff}
+    \leanok
+    \uses{def:has_commuting_parent_ham}
+    If $P_K = P_{AX} \circ P_{XB}$ is a commuting parent Hamiltonian
+    decomposition, then
+    \[
+        P_K v = v
+        \quad\Longleftrightarrow\quad
+        P_{AX} v = v \text{ and }  P_{XB} v = v.
+    \]
+    This is the algebraic form of equation~(D.2) from
+    \cite{Cirac2021Matrix}:
+    $K_{AXB} = (K_{AX} \otimes H_B) \cap (H_A \otimes K_{XB})$.
 \end{theorem}
 
 \begin{proof}
-  \leanok
-  \uses{def:has_commuting_parent_ham}
-  ($\Rightarrow$) If $P_K v = v$, then $P_{AX}(P_K v) = (P_{AX} \circ P_K) v
-  = P_K v = v$ by left absorption, and similarly for $P_{XB}$.
+    \leanok
+    \uses{def:has_commuting_parent_ham}
+    ($\Rightarrow$) If $P_K v = v$, then $P_{AX}(P_K v) = (P_{AX} \circ P_K) v
+        = P_K v = v$ by left absorption, and similarly for $P_{XB}$.
 
-  ($\Leftarrow$) If $P_{AX} v = v$ and $P_{XB} v = v$, then
-  $P_K v = (P_{AX} \circ P_{XB}) v = P_{AX}(P_{XB} v) = P_{AX} v = v$.
+    ($\Leftarrow$) If $P_{AX} v = v$ and $P_{XB} v = v$, then
+    $P_K v = (P_{AX} \circ P_{XB}) v = P_{AX}(P_{XB} v) = P_{AX} v = v$.
 \end{proof}
 
 \section{Spectral gap}\label{sec:spectral_gap}
@@ -751,270 +756,298 @@ criterion due to Kastoryano and
 Lucia~\cite{Kastoryano2018Martingale}.
 
 \begin{theorem}[Martingale criterion for spectral gap]\label{thm:martingale_criterion}
-  \notready
-  \uses{def:is_frustration_free}
-  Consider a frustration-free Hamiltonian
-  \[
-    H = \sum_{i=1}^n h_i
-  \]
-  with projector interaction terms ($h_i^2 = h_i$).
-  Suppose that for every pair of overlapping terms $h_i, h_j$ there
-  exist constants $c_{ij} \ge 0$ and $\gamma > 0$ satisfying
-  \[
-    h_i h_j + h_j h_i
-    \ge -c_{ij}(1-\gamma)(h_i + h_j),
-  \]
-  with $\sum_{j:\,j \ne i} c_{ij} \le 1$ for every $i$.
-  Then the smallest positive eigenvalue of $H$ satisfies
-  $\lambda_{\min}^+(H) \ge \gamma$.
+    \notready
+    \uses{def:is_frustration_free}
+    Consider a frustration-free Hamiltonian
+    \[
+        H = \sum_{i=1}^n h_i
+    \]
+    with projector interaction terms ($h_i^2 = h_i$).
+    Suppose that for every pair of overlapping terms $h_i, h_j$ there
+    exist constants $c_{ij} \ge 0$ and $\gamma > 0$ satisfying
+    \[
+        h_i h_j + h_j h_i
+        \ge -c_{ij}(1-\gamma)(h_i + h_j),
+    \]
+    and suppose further that $c_{ij} = c_{ji}$ for every overlapping
+    pair $(i,j)$ and that $\sum_{j:\,j \ne i} c_{ij} \le 1$ for every $i$.
+    Then the smallest positive eigenvalue of $H$ satisfies
+    $\lambda_{\min}^+(H) \ge \gamma$.
 \end{theorem}
 
 \begin{proof}
-  \notready
-  The relevant geometry is a family of translated length-$L$ projector
-  windows on the ring; two terms $h_i$ and $h_j$ interact only when their
-  supports overlap, equivalently when the cyclic distance $d_N(i,j)$ is
-  smaller than $L$.
-  From $h_i^2 = h_i$,
-  \[
-    H^2 = \sum_i h_i + \sum_{\substack{i < j \\ \text{overlapping}}}
-    (h_i h_j + h_j h_i)
-    + \sum_{\substack{i < j \\ \text{non-overlapping}}}
-    (h_i h_j + h_j h_i).
-  \]
-  Non-overlapping projectors commute ($h_i h_j = h_j h_i$), so their
-  product $h_i h_j$ is itself a projector and hence PSD; thus the last
-  sum is $\ge 0$.
-  For the overlapping sum, the martingale condition gives
-  $h_i h_j + h_j h_i \ge -c_{ij}(1-\gamma)(h_i + h_j)$.
-  Since $h_i h_j + h_j h_i$ is symmetric in $i,j$, we may replace
-  $c_{ij}$ and $c_{ji}$ by $\bar{c}_{ij} := \max(c_{ij}, c_{ji})$;
-  the pairwise bounds are preserved.
-  In the MPS application the constants $c_{ij} = 1/(2(L-1))$ depend
-  only on the cyclic distance $d_N(i,j)$ and are therefore already
-  symmetric, so symmetrization does not affect the row-sum bound.
-  (In general, replacing $c$ by the symmetrized $\bar{c}$ may inflate
-  row sums; the abstract statement should either assume symmetric
-  constants or verify that symmetrization preserves the row-sum
-  hypothesis.)
-  Summing over unordered pairs $\{i,j\}$:
-  \[
-    \sum_{\{i,j\},\,\text{overlap}} (h_i h_j + h_j h_i)
-    \ge -(1-\gamma) \sum_{\{i,j\},\,\text{overlap}}
-    c_{ij}(h_i + h_j).
-  \]
-  Collecting terms for each $h_i$ (using $c_{ij} = c_{ji}$, so
-  that summing over unordered pairs containing $i$ gives
-  $\sum_{j \ne i} c_{ij}$):
-  \[
-    = -(1-\gamma) \sum_i \Bigl(\sum_{j \ne i,\,\text{overlap}}
-    c_{ij}\Bigr) h_i
-    \ge -(1-\gamma) H,
-  \]
-  where the last step uses the row-sum hypothesis
-  $\sum_{j \ne i} c_{ij} \le 1$.
-  Combining: $H^2 \ge H - (1-\gamma)H = \gamma H$.
-  For any eigenvector with $H\psi = \lambda\psi$ and $\lambda > 0$,
-  this gives $\lambda^2 \ge \gamma\lambda$, hence
-  $\lambda \ge \gamma$~\cite{Kastoryano2018Martingale}.
+    \notready
+    The relevant geometry is a family of translated length-$L$ projector
+    windows on the ring; two terms $h_i$ and $h_j$ interact only when their
+    supports overlap, equivalently when the cyclic distance $d_N(i,j)$ is
+    smaller than $L$.
+    From $h_i^2 = h_i$,
+    \[
+        H^2 = \sum_i h_i + \sum_{\substack{i < j \\ \text{overlapping}}}
+        (h_i h_j + h_j h_i) + \sum_{\substack{i < j \\ \text{non-overlapping}}}
+        (h_i h_j + h_j h_i).
+    \]
+    Non-overlapping projectors commute ($h_i h_j = h_j h_i$), so their
+    product $h_i h_j$ is itself a projector and hence PSD; thus the last
+    sum is $\ge 0$.
+    For the overlapping sum, the martingale condition gives
+    $h_i h_j + h_j h_i \ge -c_{ij}(1-\gamma)(h_i + h_j)$.
+    Summing over unordered pairs $\{i,j\}$:
+    \[
+        \sum_{\{i,j\}, \text{overlap}} (h_i h_j + h_j h_i)
+        \ge -(1-\gamma) \sum_{\{i,j\}, \text{overlap}}
+        c_{ij}(h_i + h_j).
+    \]
+    Collecting terms for each $h_i$ and using the symmetry assumption
+    $c_{ij} = c_{ji}$:
+    \[
+        \sum_{\{i,j\}, \text{overlap}} c_{ij}(h_i + h_j)
+        = \sum_i \Bigl(\sum_{\substack{j \ne i \\ \text{overlap}}}
+        c_{ij}\Bigr) h_i
+        \le H,
+    \]
+    where the last inequality uses the row-sum hypothesis
+    $\sum_{j \ne i} c_{ij} \le 1$.
+    Combining, $H^2 \ge H - (1-\gamma)H = \gamma H$.
+    For any eigenvector with $H\psi = \lambda\psi$ and $\lambda > 0$,
+    this gives $\lambda^2 \ge \gamma\lambda$, hence
+    $\lambda \ge \gamma$~\cite{Kastoryano2018Martingale}.
 \end{proof}
 
 \begin{lemma}[Martingale condition for MPS]\label{lem:martingale_mps}
-  \notready
-  \uses{thm:martingale_criterion, def:parent_interaction,
+    \notready
+    \uses{thm:martingale_criterion, def:parent_interaction,
         def:local_term_parent, thm:ground_space_intersection, def:injective}
-  Let $A$ be injective and fix an interaction range $L \ge 2$ as in
-  Definition~\ref{def:parent_interaction}.  Let $h_L(A) := \Pi_{G_L(A)^\perp}$
-  be the $L$-site parent interaction, and for each chain length and site $i$
-  let $h_i$ denote its translate as in Definition~\ref{def:local_term_parent}.
-  Then for every pair of overlapping terms $h_i$ and $h_j$ with
-  $0 < d_N(i,j) < L$, where $d_N(i,j) := \min(|i-j|,\, N-|i-j|)$ is the
-  cyclic distance on the ring (i.e.\ whose $L$-site supports share at
-  least one site under periodic boundary conditions),
-  the martingale condition of Theorem~\ref{thm:martingale_criterion} holds with
-  constants $c_{ij}$ and $\gamma > 0$ depending only on $A$ (not on $N$).
-  \emph{Note:} The proof below fully establishes the martingale constants
-  only for $L = 2$; for $L > 2$ the existence of suitable constants is
-  asserted without complete proof (see the remark at the end of the proof).
-  Only the $L = 2$ case is used in this chapter
-  (Theorem~\ref{thm:parent_hamiltonian_gapped}).
-  (When $L = 1$ the interaction terms have disjoint supports, so there are no
-  overlapping pairs and the spectral gap follows directly without the
-  martingale machinery.)
+    Let $A$ be injective and fix an interaction range $L \ge 2$ as in
+    Definition~\ref{def:parent_interaction}. Let $h_L(A) := \Pi_{G_L(A)^\perp}$
+    be the $L$-site parent interaction, and for each chain length and site $i$
+    let $h_i$ denote its translate as in Definition~\ref{def:local_term_parent}.
+    Then for every pair of overlapping terms $h_i$ and $h_j$ with
+    $0 < d_N(i,j) < L$, where $d_N(i,j) := \min(|i-j|,\, N-|i-j|)$ is the
+    cyclic distance on the ring (i.e.\ whose $L$-site supports share at
+    least one site under periodic boundary conditions),
+    the martingale condition of Theorem~\ref{thm:martingale_criterion} holds with
+    constants $c_{ij}$ and $\gamma > 0$ depending only on $A$ (not on $N$).
+    \emph{Note:} The proof below fully establishes the martingale constants
+    only for $L = 2$; for $L > 2$ the existence of suitable constants is
+    asserted without complete proof (see the remark at the end of the proof).
+    Only the $L = 2$ case is used in this chapter
+    (Theorem~\ref{thm:parent_hamiltonian_gapped}).
+    (When $L = 1$ the interaction terms have disjoint supports, so there are no
+    overlapping pairs and the spectral gap follows directly without the
+    martingale machinery.)
 \end{lemma}
 
 \begin{proof}
-  \uses{thm:ground_space_intersection, def:injective}
-  \notready
-  Two terms $h_i, h_j$ with $0 < d_N(i,j) < L$ have supports overlapping
-  in $L - d_N(i,j)$ sites (where $d_N$ is the cyclic distance on
-  the $N$-site ring).  Since $A$ is injective, the intersection property
-  (Theorem~\ref{thm:ground_space_intersection}) gives the qualitative identity
-  $\ker(h_i) \cap \ker(h_j) = G_{[i,j+L-1]}(A)$.
-  Because the local Hilbert space is finite-dimensional, the subspaces
-  $\ker(h_i)$ and $\ker(h_j)$ live in a fixed finite-dimensional space.
-  The intersection identity shows that $\ker(h_i) \cap \ker(h_j)$ is
-  exactly $G_{[i,j+L-1]}(A)$; in particular there is no non-trivial
-  vector in one kernel that is orthogonal to the other yet lies in both.
-  Hence the Friedrichs angle $\theta_{d_N(i,j)}$ between $\ker(h_i)$ and
-  $\ker(h_j)$ is strictly positive (for the fixed injective tensor
-  $A$).  Because the angle depends only on the overlap pattern
-  $d_N(i,j) \in \{1,\dots,L-1\}$ and not on the absolute position,
-  the number of distinct angles is at most $L-1$.
-  Let $\alpha := \max_{1 \le s < L} \cos\theta_s < 1$ be the
-  worst-case cosine of the Friedrichs angles.
+    \uses{thm:ground_space_intersection, def:injective}
+    \notready
+    Two terms $h_i, h_j$ with $0 < d_N(i,j) < L$ have supports overlapping
+    in $L - d_N(i,j)$ sites (where $d_N$ is the cyclic distance on
+    the $N$-site ring). Since $A$ is injective, the intersection property
+    (Theorem~\ref{thm:ground_space_intersection}) gives the qualitative identity
+    $\ker(h_i) \cap \ker(h_j) = G_{[i,j+L-1]}(A)$.
+    Because the local Hilbert space is finite-dimensional, the subspaces
+    $\ker(h_i)$ and $\ker(h_j)$ live in a fixed finite-dimensional space.
+    The intersection identity shows that $\ker(h_i) \cap \ker(h_j)$ is
+    exactly $G_{[i,j+L-1]}(A)$; in particular there is no non-trivial
+    vector in one kernel that is orthogonal to the other yet lies in both.
+    Hence the Friedrichs angle $\theta_{d_N(i,j)}$ between $\ker(h_i)$ and
+    $\ker(h_j)$ is strictly positive (for the fixed injective tensor
+    $A$). Because the angle depends only on the overlap pattern
+    $d_N(i,j) \in \{1,\ldots,L-1\}$ and not on the absolute position,
+    the number of distinct angles is at most $L-1$.
+    Let $\alpha := \max_{1 \le s < L} \cos\theta_s < 1$ be the
+    worst-case cosine of the Friedrichs angles.
 
-  \emph{Row-sum bound.}
-  Since $L \ge 2$, each site $i$ overlaps with at most $2(L-1)$
-  neighbours (those $j$ with $0 < d_N(i,j) < L$).
-  Set $c_{ij} := \tfrac{1}{2(L-1)}$ for every overlapping pair
-  and $c_{ij} := 0$ otherwise.
-  Then
-  $\sum_{j \ne i} c_{ij} \le 2(L-1)\cdot\tfrac{1}{2(L-1)} = 1$,
-  satisfying the row-sum hypothesis of
-  Theorem~\ref{thm:martingale_criterion}.
+    \emph{Row-sum bound.}
+    Since $L \ge 2$, each site $i$ overlaps with at most $2(L-1)$
+    neighbours (those $j$ with $0 < d_N(i,j) < L$).
+    Set $c_{ij} := \tfrac{1}{2(L-1)}$ for every overlapping pair
+    and $c_{ij} := 0$ otherwise. These constants depend only on the
+    cyclic distance $d_N(i,j)$ and therefore satisfy $c_{ij} = c_{ji}$.
+    Then
+    $\sum_{j \ne i} c_{ij} \le 2(L-1)\cdot\tfrac{1}{2(L-1)} = 1$,
+    satisfying the row-sum hypothesis of
+    Theorem~\ref{thm:martingale_criterion}.
 
-  \emph{Positivity of $\gamma$.}
-  The Friedrichs angle bound gives, for each overlapping pair,
-  $h_i h_j + h_j h_i \ge -\alpha\,(h_i + h_j)$.
-  The martingale inequality holds with
-  $\gamma = 1 - 2(L-1)\alpha$,
-  which requires
-  $c_{ij}(1-\gamma) = \tfrac{1}{2(L-1)} \cdot 2(L-1)\alpha = \alpha$
-  (matching the Friedrichs bound exactly).
-  Since $\alpha < 1$ (the Friedrichs angle is strictly positive),
-  it remains to show $\gamma > 0$, i.e.\ $\alpha < \tfrac{1}{2(L-1)}$.
-  In the blocked picture of
-  Theorem~\ref{thm:parent_hamiltonian_gapped}, $L = 2$ and each site
-  overlaps with at most $2$ neighbours, so the condition reduces to
-  $\alpha < \tfrac{1}{2}$.  For $L = 2$ with an injective tensor,
-  the two projectors $h_i$ and $h_{i+1}$ act on a finite-dimensional
-  space, and the intersection property
-  (Theorem~\ref{thm:ground_space_intersection}) guarantees that
-  $\ker(h_i) \cap \ker(h_{i+1})$ is exactly $G_{[i,i+2]}(A)$;
-  hence $\|P_i P_{i+1}\| < 1$ (the Friedrichs cosine is strictly
-  less than~1).  On a finite-dimensional space with two projectors,
-  the Friedrichs cosine satisfies the quantitative bound
-  $\alpha \le 1 - c_{\min}$ where $c_{\min} > 0$ depends on the
-  minimal principal angle between the two kernels.  The bound
-  $\alpha < \tfrac{1}{2}$ then follows from the
-  Nachtergaele finite-size criterion~\cite{Nachtergaele1996Spectral},
-  which establishes that the overlap $\|P_i P_{i+1}\|$ for injective
-  MPS is bounded away from $1$ by a constant depending only on the
-  tensor~$A$.
-  For general $L > 2$, the uniform constants $c_{ij} = \tfrac{1}{2(L-1)}$
-  make the condition $\alpha < \tfrac{1}{2(L-1)}$ increasingly restrictive
-  as $L$ grows.  A more refined choice of separation-dependent constants
-  $c_{ij} = c_{d_N(i,j)}$ that weight small-separation (large-overlap) pairs
-  more heavily can exploit the exponential decay of the Friedrichs cosine
-  $\alpha_s$ in $s$ to satisfy the row-sum constraint.
-  However, this refinement is not needed for the main result: in
-  Theorem~\ref{thm:parent_hamiltonian_gapped} below, the argument is
-  applied only with $L = 2$ in the blocked picture.
-  In all cases, the constants depend only on $A$ and are independent
-  of~$N$~\cite{Fannes1992Finitely, Kastoryano2018Martingale}.
+    \emph{Positivity of $\gamma$.}
+    The Friedrichs angle bound gives, for each overlapping pair,
+    $h_i h_j + h_j h_i \ge -\alpha\,(h_i + h_j)$.
+    The martingale inequality holds with
+    $\gamma = 1 - 2(L-1)\alpha$,
+    which requires
+    $c_{ij}(1-\gamma) = \tfrac{1}{2(L-1)} \cdot 2(L-1)\alpha = \alpha$
+    (matching the Friedrichs bound exactly).
+    Since $\alpha < 1$ (the Friedrichs angle is strictly positive),
+    it remains to show $\gamma > 0$, i.e.\ $\alpha < \tfrac{1}{2(L-1)}$.
+    In the blocked picture of
+    Theorem~\ref{thm:parent_hamiltonian_gapped}, $L = 2$ and each site
+    overlaps with at most $2$ neighbours, so the condition reduces to
+    $\alpha < \tfrac{1}{2}$. For $L = 2$ with an injective tensor,
+    the two projectors $h_i$ and $h_{i+1}$ act on a finite-dimensional
+    space, and the intersection property
+    (Theorem~\ref{thm:ground_space_intersection}) guarantees that
+    $\ker(h_i) \cap \ker(h_{i+1})$ is exactly $G_{[i,i+2]}(A)$;
+    hence $\|P_i P_{i+1}\| < 1$ (the Friedrichs cosine is strictly
+    less than~1). On a finite-dimensional space with two projectors,
+    the Friedrichs cosine satisfies the quantitative bound
+    $\alpha \le 1 - c_{\min}$ where $c_{\min} > 0$ depends on the
+    minimal principal angle between the two kernels. The bound
+    $\alpha < \tfrac{1}{2}$ then follows from the
+    Nachtergaele finite-size criterion~\cite{Nachtergaele1996Spectral},
+    which establishes that the overlap $\|P_i P_{i+1}\|$ for injective
+    MPS is bounded away from $1$ by a constant depending only on the
+    tensor~$A$.
+    For general $L > 2$, the uniform constants $c_{ij} = \tfrac{1}{2(L-1)}$
+    make the condition $\alpha < \tfrac{1}{2(L-1)}$ increasingly restrictive
+    as $L$ grows. A more refined choice of separation-dependent constants
+    $c_{ij} = c_{d_N(i,j)}$ that weight small-separation (large-overlap) pairs
+    more heavily can exploit the exponential decay of the Friedrichs cosine
+    $\alpha_s$ in $s$ to satisfy the row-sum constraint.
+    However, this refinement is not needed for the main result: in
+    Theorem~\ref{thm:parent_hamiltonian_gapped} below, the argument is
+    applied only with $L = 2$ in the blocked picture.
+    In all cases, the constants depend only on $A$ and are independent
+    of~$N$~\cite{Fannes1992Finitely, Kastoryano2018Martingale}.
 \end{proof}
 
 \begin{theorem}[Spectral gap for MPS parent Hamiltonians]\label{thm:parent_hamiltonian_gapped}
-  \lean{MPSTensor.parentHamiltonian_gapped}
-  \notready
-  \uses{thm:martingale_criterion, lem:martingale_mps,
+    \lean{MPSTensor.parentHamiltonian_gapped}
+    \notready
+    \uses{thm:martingale_criterion, lem:martingale_mps,
         def:parent_hamiltonian}
-  For an $L_0$-block injective MPS tensor $A$, let
-  $L := 2L_0$ be the interaction range (two blocked sites in the
-  $L_0$-blocked picture).
-  There exists $\gamma > 0$ such that for all $N \ge 2L$ with
-  $L_0 \mid N$,
-  \[
-    \lambda_{\min}^+\bigl(H_N(A,L)\bigr) \ge \gamma,
-  \]
-  i.e.\ the parent Hamiltonian is uniformly gapped.
+    For an $L_0$-block injective MPS tensor $A$, let
+    $L := 2L_0$ be the interaction range (two blocked sites in the
+    $L_0$-blocked picture).
+    There exists $\gamma > 0$ such that for all $N \ge 2L$ with
+    $L_0 \mid N$,
+    \[
+        \lambda_{\min}^+(H_N(A,L)) \ge \gamma,
+    \]
+    i.e.\ the parent Hamiltonian is uniformly gapped.
 \end{theorem}
 
 \begin{proof}
-  \uses{thm:martingale_criterion, lem:martingale_mps}
-  \notready
-  Since $A$ is $L_0$-block injective, the blocked tensor
-  $A^{[L_0]}$ is injective with physical dimension $d^{L_0}$ and bond
-  dimension $D$.  Each blocked site represents $L_0$ original sites,
-  so the range-$L = 2L_0$ interaction on the original chain corresponds
-  exactly to a range-$2$ interaction on the blocked chain (two blocked
-  sites).  Thus one passes to the blocked chain and applies the martingale
-  estimate there with interaction range~$2$.
-  \emph{Remark on interaction range:}
-  Theorem~\ref{thm:unique_gs_injective} establishes ground-state
-  uniqueness at range $L_0{+}1$, whereas here we use range $2L_0$.
-  The ground spaces are nested: increasing the interaction range can
-  only shrink (or preserve) the ground space, so uniqueness at range
-  $L_0{+}1$ implies uniqueness at range $2L_0$.  The larger range is
-  needed here so that, after $L_0$-blocking, each blocked interaction
-  term spans exactly $2$ blocked sites, enabling the martingale
-  machinery with $L = 2$.  The divisibility condition $L_0 \mid N$ ensures the blocking
-  is compatible with the periodic chain.
-  Apply Lemma~\ref{lem:martingale_mps} to the
-  injective tensor $A^{[L_0]}$ with range $2$ to obtain the martingale
-  constants $c_{ij}$ and $\gamma > 0$.  These constants depend only on
-  $A^{[L_0]}$ (hence only on $A$ and $L_0$), not on $N$.
-  Theorem~\ref{thm:martingale_criterion} then gives the uniform gap
-  $\lambda_{\min}^+(H_N) \ge \gamma$~\cite{Fannes1992Finitely,
-  Nachtergaele1996Spectral}.
+    \uses{thm:martingale_criterion, lem:martingale_mps}
+    \notready
+    Since $A$ is $L_0$-block injective, the blocked tensor
+    $A^{[L_0]}$ is injective with physical dimension $d^{L_0}$ and bond
+    dimension $D$. Each blocked site represents $L_0$ original sites,
+    so the range-$L = 2L_0$ interaction on the original chain corresponds
+    exactly to a range-$2$ interaction on the blocked chain (two blocked
+    sites). Thus one passes to the blocked chain and applies the martingale
+    estimate there with interaction range~$2$.
+    \emph{Remark on interaction range:}
+    Theorem~\ref{thm:unique_gs_injective} establishes ground-state
+    uniqueness at range $L_0{+}1$, whereas here we use range $2L_0$.
+    The ground spaces are nested: increasing the interaction range can
+    only shrink (or preserve) the ground space, so uniqueness at range
+    $L_0{+}1$ implies uniqueness at range $2L_0$. The larger range is
+    needed here so that, after $L_0$-blocking, each blocked interaction
+    term spans exactly $2$ blocked sites, enabling the martingale
+    machinery with $L = 2$. The divisibility condition $L_0 \mid N$ ensures the blocking
+    is compatible with the periodic chain.
+    Apply Lemma~\ref{lem:martingale_mps} to the
+    injective tensor $A^{[L_0]}$ with range $2$ to obtain the martingale
+    constants $c_{ij}$ and $\gamma > 0$. These constants depend only on
+    $A^{[L_0]}$ (hence only on $A$ and $L_0$), not on $N$.
+    Theorem~\ref{thm:martingale_criterion} then gives the uniform gap
+    $\lambda_{\min}^+(H_N) \ge \gamma$~\cite{Fannes1992Finitely,
+        Nachtergaele1996Spectral}.
 \end{proof}
 
 \section{Ground space of non-injective MPS}\label{sec:degenerate_ground_space}
 
 For a general (non-injective) MPS tensor in block-diagonal canonical form,
 the ground space is no longer one-dimensional.
-Instead, it is spanned by the MPVs of the individual normal blocks —
+Instead, it is spanned by the MPVs of the individual normal blocks ---
 the basis of normal tensors (BNT) from
 Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
 
+\begin{lemma}[Each BNT MPV lies in the Hamiltonian kernel]\label{lem:bnt_mpv_mem_ground_space}
+    \lean{MPSTensor.bnt_mem_groundSpace}
+    \notready
+    \uses{def:parent_hamiltonian, def:bnt, def:normal_cf_bnt,
+        lem:parent_hamiltonian_annihilates}
+    Let $A = \bigoplus_{k=1}^g \mu_k A_k$ be in canonical form with BNT
+    separation (Definition~\ref{def:normal_cf_bnt}), where
+    $\{A_1,\ldots,A_g\}$ is a basis of normal tensors
+    (Definition~\ref{def:bnt}).
+    For $N \ge 2(L_0 + 1)$ (where $L_0$ is the maximum injectivity length of
+    the blocks) and each $k = 1,\ldots,g$,
+    \[
+        V^{(N)}(A_k) \in \ker(H_N(A,L_0{+}1)).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \uses{lem:parent_hamiltonian_annihilates}
+    \notready
+    Each $A_k$ is normal, so
+    Lemma~\ref{lem:parent_hamiltonian_annihilates} (applied to the
+    block-diagonal structure) gives
+    \[
+        H_N(A,L_0{+}1)\,V^{(N)}(A_k) = 0
+    \]
+    for every $k = 1,\ldots,g$. Hence
+    $V^{(N)}(A_k) \in \ker(H_N(A,L_0{+}1))$.
+\end{proof}
+
 \begin{theorem}[Ground space equals span of BNT]\label{thm:gs_eq_bnt_span}
-  \notready
-  \lean{MPSTensor.bnt_mem_groundSpace}
-  \lean{MPSTensor.parentHamiltonian_gs_eq_bnt_span}
-  \uses{def:parent_hamiltonian, def:bnt, def:normal_cf_bnt,
-        thm:unique_gs_normal, def:ground_space_parent}
-  Let $A = \bigoplus_{k=1}^g \mu_k A_k$ be in canonical form with BNT
-  separation (Definition~\ref{def:normal_cf_bnt}), where
-  $\{A_1,\ldots,A_g\}$ is a basis of normal tensors
-  (Definition~\ref{def:bnt}).
-  For $N \ge 2(L_0 + 1)$ (where $L_0$ is the maximum injectivity length of
-  the blocks), the ground space of the parent Hamiltonian satisfies
-  \[
-    \ker\bigl(H_N(A,L_0{+}1)\bigr)
-    = \spn\bigl\{V^{(N)}(A_k) : k = 1,\ldots,g\bigr\}.
-  \]
+    \notready
+    \lean{MPSTensor.parentHamiltonian_gs_eq_bnt_span}
+    \uses{def:parent_hamiltonian, def:bnt, def:normal_cf_bnt,
+        thm:unique_gs_normal, def:ground_space_parent,
+        lem:bnt_mpv_mem_ground_space}
+    Let $A = \bigoplus_{k=1}^g \mu_k A_k$ be in canonical form with BNT
+    separation (Definition~\ref{def:normal_cf_bnt}), where
+    $\{A_1,\ldots,A_g\}$ is a basis of normal tensors
+    (Definition~\ref{def:bnt}).
+    For $N \ge 2(L_0 + 1)$ (where $L_0$ is the maximum injectivity length of
+    the blocks), the ground space of the parent Hamiltonian satisfies
+    \[
+        \ker(H_N(A,L_0{+}1))
+        = \spn\bigl\{V^{(N)}(A_k) : k = 1,\ldots,g\bigr\}.
+    \]
 \end{theorem}
 
 \begin{proof}
-  \uses{thm:unique_gs_normal, thm:ground_space_intersection, def:bnt,
-        lem:parent_hamiltonian_annihilates}
-  \notready
-  \emph{$\supseteq$.} Each $A_k$ is normal, so
-  Lemma~\ref{lem:parent_hamiltonian_annihilates} (applied to the
-  block-diagonal structure) gives
-  $H_N(A,L_0{+}1)\,V^{(N)}(A_k) = 0$.
-  Linearity of the kernel yields the inclusion.
+    \uses{lem:bnt_mpv_mem_ground_space, thm:unique_gs_normal,
+        thm:ground_space_intersection, def:bnt}
+    \notready
+    By Lemma~\ref{lem:bnt_mpv_mem_ground_space} and linearity of the
+    kernel, we have
+    \[
+        \spn\bigl\{V^{(N)}(A_k) : k = 1,\ldots,g\bigr\}
+        \subseteq \ker(H_N(A,L_0{+}1)).
+    \]
 
-  \emph{$\subseteq$.} Take $\psi \in \ker(H_N)$.
-  The block-diagonal structure of $A$ gives, at the interaction
-  range $L_0{+}1$ used in the Hamiltonian, the containment
-  $G_{L_0+1}(A) \subseteq \sum_k G_{L_0+1}(A_k)$: any local ground
-  state of $A$ on $L_0{+}1$ sites is a sum of local ground states of
-  the individual blocks, because the off-diagonal blocks vanish in
-  the transfer map (the canonical form and block separation
-  (Theorem~\ref{thm:block_sep}, Chapter~\ref{ch:block_perm}) ensure that distinct blocks
-  have orthogonal images under $\Gamma_{L_0+1}$ for
-  $L_0{+}1 \ge L_0$, so the sum is in fact direct).
-  Each normal block $A_k$ has injectivity length $L_k \le L_0$, so
-  the $L_k$-blocked tensor $A_k^{[L_k]}$ is injective.
-  Applying Theorem~\ref{thm:ground_space_intersection} to this injective
-  blocked tensor (in unblocked coordinates, as in
-  Theorem~\ref{thm:unique_gs_injective}) and iterating across the
-  chain for each block independently, and using
-  Theorem~\ref{thm:unique_gs_normal} for each normal block, the
-  component of $\psi$ associated with block $A_k$ must be proportional
-  to $V^{(N)}(A_k)$.
-  This gives the
-  inclusion~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
+    For the reverse inclusion, take
+    $\psi \in \ker(H_N(A,L_0{+}1))$.
+    The block-diagonal structure of $A$ gives, at the interaction
+    range $L_0{+}1$ used in the Hamiltonian, the containment
+    $G_{L_0+1}(A) \subseteq \sum_k G_{L_0+1}(A_k)$: any local ground
+    state of $A$ on $L_0{+}1$ sites is a sum of local ground states of
+    the individual blocks, because the off-diagonal blocks vanish in
+    the transfer map (the canonical form and block separation
+    (Theorem~\ref{thm:block_sep}, Chapter~\ref{ch:block_perm}) ensure that distinct blocks
+    have orthogonal images under $\Gamma_{L_0+1}$ for
+    $L_0{+}1 \ge L_0$, so the sum is in fact direct).
+    Each normal block $A_k$ has injectivity length $L_k \le L_0$, so
+    the $L_k$-blocked tensor $A_k^{[L_k]}$ is injective.
+    Applying Theorem~\ref{thm:ground_space_intersection} to this injective
+    blocked tensor (in unblocked coordinates, as in
+    Theorem~\ref{thm:unique_gs_injective}) and iterating across the
+    chain for each block independently, and using
+    Theorem~\ref{thm:unique_gs_normal} for each normal block, the
+    component of $\psi$ associated with block $A_k$ must be proportional
+    to $V^{(N)}(A_k)$.
+    This gives the reverse inclusion~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
 \end{proof}
+
+\noindent\emph{Remark.} The blueprint phrases the previous lemma and theorem
+in terms of the Hamiltonian kernel $\ker(H_N(A,L_0{+}1))$. The
+current Lean formalization instead uses the chain-ground-space object
+\texttt{parentHamiltonianGroundSpace} (defined via
+\texttt{chainGroundSpace}); a bridge theorem between these two formulations is
+not yet stated explicitly here.

@@ -101,13 +101,56 @@ The consistency pass established the following:
 This session should therefore be understood as a documentation-and-blueprint correction pass, not a formal
 development pass.
 
+## Round 2 fixes (continuation session)
+
+A second pass addressed the remaining issues from holistic scouts of chapters 13--16.
+
+### Audits performed (parallel codex scouts)
+Five parallel codex agents audited ch13, ch13b, ch14, ch15, and `\notready`→`\leanok`
+upgrade eligibility against the actual Lean source code. Reports saved in:
+- `ch13_lean_audit.md`, `ch13b_lean_audit.md`, `ch14_lean_audit.md`, `ch15_lean_audit.md`
+- `notready_upgrade_audit.md`
+
+### Changes applied
+
+**ch06_spectral.tex**
+- Added `\notready` to 3 Wedderburn theorems (all sorry in Lean)
+
+**ch11_assembly.tex**
+- Upgraded Periodic FT theorem from `\notready` → `\leanok` (all 4 Lean declarations sorry-free)
+
+**ch12_semigroup.tex**
+- Upgraded `irreducible_semigroup_implies_primitive` and `qds_irreducible_iff_primitive` from `\notready` → `\leanok`
+
+**ch13_algebraic_ft.tex**
+- `physRealize_mul`: removed unnecessary basis hypothesis (Lean proves for all injective)
+- `virtual_bond_gauge`: added Lean-mismatch remark (Lean is 3-site only), added $D \ge 1$
+- `fundamentalTheorem_blockedChain`: added remark about blocked-chain vs original-site mismatch
+- `chainCombinedTensor_isInjective`: annotated with Lean object note
+- Added $D \ge 1$ to `sameMPV_of_sameMPVFrom_of_injective` and `fundamentalTheorem_singleBlock_finiteLength`
+
+**ch13b_symmetry.tex**
+- Replaced `U(1)` → `$\C^\times$` in cocycle/cohomology section (matches Lean `Units ℂ`)
+- Added Lean-mismatch remarks to `LocalSymmetry` and `HasStringOrder` definitions
+- Added missing hypotheses (normalized transfer map, PosDef fixed point, unitary $u$) to 6 string-order theorems
+- Fixed proof sketch at line ~801 to mention Kraus freedom (the actual mechanism)
+- Added $D \ge 1$ to `cohomologousTo_of_isInjective`
+
+**ch14_parent_hamiltonian.tex**
+- Added remark about injective-only Lean scope for `chainGroundSpace_eq_mpvSubmodule`
+- Added symmetry hypothesis $c_{ij} = c_{ji}$ to martingale criterion
+- Split `gs_eq_bnt_span` into inclusion lemma + equality theorem with correct `\lean{}` tags
+- Added remark about `\ker(H_N)` vs `chainGroundSpace` formulation difference
+- Added $D \ge 1$ to 6 theorems matching Lean `[NeZero D]`
+
+**ch15_correlations.tex**
+- `connectedCorrelator_eq_sum`: `\leanok` → `\notready` with Lean status remark (wrapper lemma)
+- `connectedCorrelator_bound`: `\leanok` → `\notready` with Lean status remark (wrapper lemma)
+- ZCL remark softened to note spectral equivalence not yet formalized
+
 ## Files modified in PR #507
 
 PR `#507` was the vehicle for these blueprint updates.
-
-- 14 or more files modified
-- 6 commits
-- Net diff: `+861/-157`
 
 ## Outcome summary
 
@@ -116,5 +159,8 @@ At the end of the session:
 - all reviewed must-fix mathematical issues were corrected,
 - the known reviewer false positive was documented rather than propagated,
 - blueprint prose was cleaned to remove Lean-specific and process-specific language,
-- theorem readiness markers were corrected where proofs were absent, and
-- Lean/blueprint status was re-synchronized without touching the Lean sources.
+- theorem readiness markers were corrected where proofs were absent,
+- Lean/blueprint status was re-synchronized without touching the Lean sources,
+- `\notready` → `\leanok` upgrades verified transitively sorry-free via `#print axioms`,
+- statement-Lean mismatches in ch13/ch13b/ch14/ch15 documented and either fixed or remarked, and
+- all 5 audit reports archived in `blueprint/comments20260407/`.

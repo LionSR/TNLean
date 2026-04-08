@@ -62,7 +62,7 @@ their spectral decomposition, and quantitative bounds on decay rates.
 
 \begin{theorem}[Sum of exponentials]\label{thm:correlator_sum_exponentials}
     \lean{MPSTensor.connectedCorrelator_eq_sum}
-    \leanok
+    \notready
     \uses{def:connected_correlator, thm:spectral_radius_le_one, thm:qpf}
     For a normal MPS, the connected correlator admits a spectral expansion of
     the form
@@ -73,14 +73,23 @@ their spectral decomposition, and quantitative bounds on decay rates.
 \end{theorem}
 
 \begin{proof}
+    \notready
     The leading eigenvalue contribution ($\lambda_1=1$) equals
     $\langle X_0\rangle\langle Y_0\rangle$ and cancels in the connected part.
     Apply spectral decomposition to $\E_A^n$.
 \end{proof}
 
+\begin{remark}[Lean status]
+    The Lean declaration \texttt{connectedCorrelator\_eq\_sum} is currently
+    a packaging lemma: it \emph{assumes} a decomposition
+    $C(X,Y;n) = \sum_j c_j\,\lambda_j^n$ as a hypothesis and restates it.
+    Deriving the decomposition from normality and the spectral theory of
+    the transfer matrix is future work.
+\end{remark}
+
 \begin{theorem}[Exponential decay bound]\label{thm:correlator_exponential_bound}
     \lean{MPSTensor.connectedCorrelator_bound}
-    \leanok
+    \notready
     \uses{thm:correlator_sum_exponentials}
     If $|\lambda_j| \le |\lambda_2| < 1$ for all subleading eigenvalues, then
     there exists $C_{XY}\ge 0$ such that
@@ -90,8 +99,16 @@ their spectral decomposition, and quantitative bounds on decay rates.
 \end{theorem}
 
 \begin{proof}
+    \notready
     Combine the sum-of-exponentials expansion with the triangle inequality.
 \end{proof}
+
+\begin{remark}[Lean status]
+    Similarly, \texttt{connectedCorrelator\_bound} in Lean assumes
+    the bound $\|C(X,Y;n)\| \le C_{XY}\,\|\lambda_2\|^n$ as a hypothesis
+    and repackages it.  The derivation from the spectral expansion
+    is future work.
+\end{remark}
 
 \begin{remark}[Spectral hypothesis and the spectral gap]%
     \label{rem:spectral_hypothesis}
@@ -276,9 +293,11 @@ and rates for the single-tensor transfer map $\E_A$.
 
 \begin{remark}\label{rem:zero_correlation_length}
     \uses{thm:spectral_radius_le_one, def:correlation_length, def:is_rfp}
-    The identity $\E^2=\E$ is equivalent to vanishing subleading spectrum;
-    equivalently, $\xi=0$ and connected correlations become
+    When the transfer map is idempotent ($\E^2=\E$), connected correlations become
     separation-independent for all separations $n \ge 1$.
+    Informally, this corresponds to zero correlation length ($\xi=0$).
+    The full spectral equivalence (idempotence iff vanishing subleading spectrum)
+    is not yet formalized.
 \end{remark}
 
 \begin{definition}[Correlations independent of distance]\label{def:is_cid}
