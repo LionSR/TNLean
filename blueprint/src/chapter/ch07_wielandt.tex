@@ -432,17 +432,30 @@ The results follow~\cite{Sanz2010Quantum}.
 \begin{theorem}[Wielandt chain]\label{thm:wielandt_chain}
     \lean{MPSTensor.wielandt_chain}
     \leanok
-    \uses{def:wielandt_analysis, def:cumulative_vector_span, def:normal}
-    Every normal MPS tensor admits a Wielandt analysis consisting of
-    data $(w_0, \mu, \varphi)$ with
-    $K_{D-1}(A, \varphi) = \C^D$.
+    \uses{def:wielandt_analysis, def:cumulative_vector_span, def:normal,
+          def:cumulative_span}
+    Let $A$ be a normal MPS tensor with bond dimension~$D \ge 1$.
+    Then the following hold simultaneously:
+    \begin{enumerate}
+        \item $T_{D^2}(A) = \MN{D}$ (cumulative span stabilises);
+        \item there exists a word $w_0$ with $|w_0| \le D^2$ and
+              $\tr(A^{w_0}) \ne 0$;
+        \item there exist $w_0, \mu \ne 0, \varphi \ne 0$ with
+              $|w_0| \le D^2$ and $A^{w_0} \varphi = \mu\,\varphi$;
+        \item for every $\varphi \ne 0$,
+              $K_{D^2}(A, \varphi) = \C^D$.
+    \end{enumerate}
 \end{theorem}
 
 \begin{proof}
     \leanok
-    \uses{thm:wielandt_analysis, thm:eigenvector_spreading}
-    Combine Theorems~\ref{thm:wielandt_analysis}
-    and~\ref{thm:eigenvector_spreading}.
+    \uses{thm:wielandt_analysis, thm:eigenvector_spreading,
+          thm:cumulative_eq_top}
+    Items (1)--(3) follow from earlier results
+    (Theorems~\ref{thm:cumulative_eq_top},
+    \ref{thm:wielandt_analysis}).
+    Item (4) combines these with the eigenvector spreading bound
+    (Theorem~\ref{thm:eigenvector_spreading}).
 \end{proof}
 
 \begin{theorem}[Wielandt bound]\label{thm:wielandt_bound}
@@ -744,7 +757,12 @@ used to produce rank-one elements.
               $\varphi \psi^T \in S_m(A^{[L]})$
               for some $m$.
     \end{enumerate}
-    Then $S_{((D-1) + m + (D-1)) \cdot L}(A) = \MN{D}$.
+    Then there exists $N$ such that $S_N(A) = \MN{D}$.
+
+    \noindent\emph{Remark.}
+    The explicit bound $N = ((D{-}1) + m + (D{-}1)) \cdot L$ holds
+    from the proof construction, but the Lean formalization currently
+    only exports the existential conclusion $\exists N,\; S_N(A) = \MN{D}$.
 \end{theorem}
 
 \begin{proof}

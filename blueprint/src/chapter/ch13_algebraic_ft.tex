@@ -226,37 +226,28 @@ injective chains of length $n \ge 3$ generate the same state,
 then on each bond the virtual insertion algebras are related by an
 inner automorphism.
 
-\begin{lemma}[Virtual bond gauge -- Lemma~1 of \protect\cite{Molnar2018NormalPEPS}]%
+\begin{lemma}[Virtual bond gauge -- 3-site case]%
     \label{lem:virtual_bond_gauge}
     \lean{MPSTensor.virtual_bond_gauge}
     \leanok
-    \uses{thm:physRealize_mul, thm:simplicity, thm:skolem_noether,
-        def:non_ti_chain, lem:blocking_preserves_injectivity}
-    Let $\mathbf{A} = (A_0, \ldots, A_{n-1})$ and
-    $\mathbf{B} = (B_0, \ldots, B_{n-1})$ be two injective non-TI
-    periodic chains of length $n \ge 3$ with common bond dimension
-    $D \ge 1$ that generate the same chain state.
-    Fix a bond position $k \in \{0, \ldots, n-1\}$.
-    Then there exists an invertible matrix $Z_k \in \GL_D(\C)$, unique
-    up to a nonzero scalar multiple, such that for every
-    $X \in \MN{D}$,
+    \uses{thm:physRealize_mul, thm:simplicity, thm:skolem_noether}
+    Let $A = (A_0, A_1, A_2)$ and $B = (B_0, B_1, B_2)$ be two
+    3-site injective periodic chains with common bond dimension
+    $D \ge 1$ and $\mc{V}(A) = \mc{V}(B)$ (same MPV family).
+    Then at the middle bond there exists an invertible matrix
+    $Z \in \GL_D(\C)$ such that the virtual-insertion trace
+    coefficients agree after conjugation:
     \[
-        O_{A, k}(X) = O_{B, k}(Z_k^{-1} X Z_k),
+        \tr(A_0^{i_0} X\, A_1^{i_1} A_2^{i_2})
+        = \tr(B_0^{i_0} Z^{-1} X Z\, B_1^{i_1} B_2^{i_2})
     \]
-    where $O_{A,k}$ (resp.\ $O_{B,k}$) denotes the physical realisation
-    map obtained by blocking the sites adjacent to bond~$k$ in the
-    $\mathbf{A}$-chain (resp.\ $\mathbf{B}$-chain) to form a three-site
-    chain.
-    Equivalently, inserting $X$ on bond~$k$ in the $\mathbf{A}$-chain
-    gives the same physical operation as inserting $Z_k^{-1} X Z_k$ on
-    bond~$k$ in the $\mathbf{B}$-chain. After blocking to three sites,
-    this is the equality between the
-    blocked $\mathbf{A}$-chain contraction
-    \[
-        \TNVirtualInsertion{\sigma_0}{\sigma_1}{\sigma_2}{X}
-    \]
-    and the corresponding blocked $\mathbf{B}$-chain contraction with
-    $X$ replaced by $Z_k^{-1} X Z_k$.
+    for all $X \in \MN{D}$ and all physical indices $i_0, i_1, i_2$.
+
+    In the paper~\cite{Molnar2018NormalPEPS}, Lemma~1 is stated for
+    arbitrary chain length $n \ge 3$ and any bond position, with
+    uniqueness of $Z$ up to scalar.
+    The Lean formalization currently proves the 3-site case stated above;
+    the chain-level generalization is future work.
 \end{lemma}
 
 \begin{proof}
@@ -292,11 +283,6 @@ inner automorphism.
     $Z' Z^{-1}$ is central (Lemma~\ref{lem:center_scalar}).
 \end{proof}
 
-\begin{remark}
-    The Lean formalization currently proves a 3-site special case under
-    the stronger \texttt{SameMPV} hypothesis; the general chain-length
-    statement is future work.
-\end{remark}
 
 %% ---------------------------------------------------------
 \section{Aligned gauges force proportionality}%

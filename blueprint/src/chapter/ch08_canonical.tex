@@ -228,13 +228,13 @@ and~\cite[Ch.~6]{Wolf2012Quantum}.
 \begin{theorem}[Two-block decomposition]\label{thm:two_block_decomp}
 	\lean{MPSTensor.exists_twoBlock_decomp_of_posSemidef_fixedPoint_strict}
 	\leanok
-	\uses{def:transfer_map}
+	\uses{def:transfer_map, def:same_mpv2}
 	If the transfer map has a PSD fixed point $\rho$ that is
 	\emph{not} positive definite (i.e.\ $\rho$ has a nontrivial
-	kernel), then $A$ is unitarily equivalent to a
-	two-block upper-triangular tensor.
-	Moreover, the block-diagonal tensor obtained by discarding the
-	off-diagonal blocks generates the same MPV family as~$A$.
+	kernel), then there exist MPS tensors $A_1, A_2$ of smaller
+	bond dimensions such that the two-block tensor
+	$A_1 \oplus A_2$ generates the same MPV family as~$A$:
+	$\mc{V}(A) = \mc{V}(A_1 \oplus A_2)$.
 \end{theorem}
 
 \begin{proof}
@@ -269,11 +269,10 @@ and~\cite[Ch.~6]{Wolf2012Quantum}.
 	\lean{MPSTensor.exists_irreducible_blockDecomp}
 	\leanok
 	\uses{def:irreducible_tensor}
-	Every MPS tensor $A$ can be decomposed (up to unitary
-	equivalence) into a block-diagonal tensor
+	Every MPS tensor $A$ admits a block-diagonal tensor
 	$\bigoplus_{k=1}^r A_k$
-	where each $A_k$ is irreducible.
-	The block-diagonal tensor generates the same MPV as $A$.
+	where each $A_k$ is irreducible and
+	$\mc{V}(A) = \mc{V}\!\bigl(\bigoplus_k A_k\bigr)$.
 \end{theorem}
 
 \begin{proof}
