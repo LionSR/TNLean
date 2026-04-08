@@ -53,7 +53,7 @@ mechanism, and this chapter develops its symmetry consequences.
     \uses{def:mps_tensor}
     Given a matrix $u \in M_d(\C)$ and an MPS tensor~$A$,
     the \emph{physical-index rotation} is the tensor
-    $(\operatorname{rotatePhysical}\, u\, A)^i := \sum_j u_{ij}\, A^j$.
+    $(A_u)^i := \sum_j u_{ij}\, A^j$.
 \end{definition}
 
 \begin{theorem}[Transfer map preserved by physical rotation]%
@@ -63,8 +63,7 @@ mechanism, and this chapter develops its symmetry consequences.
     \uses{def:rotate_physical, def:transfer_map}
     If $u u^\dagger = I$, then the transfer map is invariant under
     physical-index rotation:
-    $\mathcal{E}_{\operatorname{rotatePhysical}\, u\, A}
-     = \mathcal{E}_A$.
+    $\mathcal{E}_{A_u} = \mathcal{E}_A$.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -79,7 +78,7 @@ mechanism, and this chapter develops its symmetry consequences.
     \leanok
     \uses{def:rotate_physical}
     If $u u^\dagger = I$ and $A$ is left-canonical, then
-    $\operatorname{rotatePhysical}\, u\, A$ is left-canonical.
+    $A_u$ is left-canonical.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -95,7 +94,7 @@ mechanism, and this chapter develops its symmetry consequences.
     \leanok
     \uses{def:rotate_physical}
     If $u u^\dagger = I$ and $A$ is irreducible, then
-    $\operatorname{rotatePhysical}\, u\, A$ is irreducible.
+    $A_u$ is irreducible.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -113,8 +112,7 @@ mechanism, and this chapter develops its symmetry consequences.
           thm:left_canonical_rotate_physical,
           thm:irreducible_tensor_rotate_physical}
     If $u u^\dagger = I$ and $A$ is periodic with period~$m$, then
-    $\operatorname{rotatePhysical}\, u\, A$ is periodic with the same
-    period.
+    $A_u$ is periodic with the same period.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -131,8 +129,7 @@ mechanism, and this chapter develops its symmetry consequences.
     \leanok
     \uses{def:rotate_physical, def:same_mpv}
     If $\mathcal{V}(A) = \mathcal{V}(B)$, then
-    $\mathcal{V}(\operatorname{rotatePhysical}\, u\, A)
-     = \mathcal{V}(\operatorname{rotatePhysical}\, u\, B)$.
+    $\mathcal{V}(A_u) = \mathcal{V}(B_u)$.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -150,7 +147,7 @@ mechanism, and this chapter develops its symmetry consequences.
     $\operatorname{rotatePhysical}\, u\,
     (\operatorname{toTensorFromBlocks}\, \mu\, A)
     = \operatorname{toTensorFromBlocks}\, \mu\,
-    (k \mapsto \operatorname{rotatePhysical}\, u\, (A_k))$.
+    (k \mapsto (A_k)_u)$.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -168,8 +165,8 @@ mechanism, and this chapter develops its symmetry consequences.
           thm:same_mpv_rotate_physical,
           thm:rotate_physical_blocks}
     If $u u^\dagger = I$ and $A$ is in irreducible form~II, then
-    $\operatorname{rotatePhysical}\, u\, A$ is in irreducible form~II
-    with the same block structure and rotated blocks.
+    $A_u$ is in irreducible form~II with the same block structure and
+    rotated blocks.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -189,8 +186,8 @@ mechanism, and this chapter develops its symmetry consequences.
     \leanok
     \uses{def:rotate_physical, def:irreducible_form, def:same_mpv, thm:periodic_ft}
     Let $A$ be in irreducible form~II and let $u$ be a matrix such that
-    $B := \operatorname{rotatePhysical}\, u\, A$ is also in irreducible
-    form~II and $\mathcal{V}(A) = \mathcal{V}(B)$.
+    $B := A_u$ is also in irreducible form~II and
+    $\mathcal{V}(A) = \mathcal{V}(B)$.
     Then there exists $m > 0$ such that $A$ and~$B$ are
     $\Z_m$-gauge equivalent.
 \end{corollary}

@@ -29,7 +29,7 @@ $A^{\sigma(0)}\cdots A^{\sigma(L-1)}$.
   \lean{MPSTensor.groundSpaceMap}
   \leanok
   \uses{def:eval_word}
-  The map $\Gamma_L$ above is implemented as a $\C$-linear map
+  The map $\Gamma_L$ above is a $\C$-linear map
   \[
     \Gamma_L : \MN{D} \to \bigl(\{0,\dots,d{-}1\}^L \to \C\bigr).
   \]
@@ -104,8 +104,7 @@ $A^{\sigma(0)}\cdots A^{\sigma(L-1)}$.
 \section{Parent interaction and chain Hamiltonian}\label{sec:parent_interaction_defs}
 
 The parent interaction at range $L$ is the orthogonal projector
-onto $G_L(A)^\perp$, implemented via the star-projection (orthogonal
-complement projection) in the $L$-site Euclidean space.
+onto $G_L(A)^\perp$ in the $L$-site Euclidean space.
 
 \begin{definition}[Parent interaction]\label{def:parent_interaction}
   \lean{MPSTensor.parentInteraction}
@@ -498,7 +497,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
   If $A$ is $L_0$-block-injective and the window size satisfies
   $L \ge 2L_0$, then on the periodic chain with $N \ge 2$ sites,
   the chain ground space equals the MPV submodule:
-  $\mathcal{G}_L(A) = \operatorname{span}\{\mathrm{mpv}(A)\}$.
+  $\mathcal{G}_{N,L}(A) = \operatorname{span}\{V^{(N)}(A)\}$.
 \end{theorem}
 
 \begin{theorem}[Chain ground space for normal tensors]%
@@ -608,7 +607,7 @@ interaction projectors commute with each other.
   If $A$ is a renormalization fixed point (RFP), then its parent
   Hamiltonian with $L = 2$ has commuting local terms.
   \textbf{Status:} A previous proof attempt was found incorrect and removed;
-  this result awaits the structural-form infrastructure for renormalization
+  this result requires the structural theory of renormalization
   fixed points needed for \cite[Theorem~3.10]{Cirac2021Matrix}.
 \end{theorem}
 

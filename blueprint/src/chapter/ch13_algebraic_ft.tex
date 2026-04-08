@@ -1150,8 +1150,8 @@ Theorem~2 of~\cite{Molnar2018NormalPEPS}.
 \lean{TNLean.PEPS.gaugeVertex}
 \leanok
 \uses{def:edgeGaugeAt}
-    The gauged vertex tensor is
-    $(\mathrm{gaugeVertex}\; X\; A\; v)(\eta, \sigma)
+    The gauged tensor at vertex $v$ is $A^X_v$, where
+    $A^X_v(\eta, \sigma)
     = \sum_{\eta'} \bigl(\prod_{ie} M_{ie}(\eta(ie), \eta'(ie))\bigr)
       A_v(\eta', \sigma)$.
 \end{definition}
@@ -1161,7 +1161,8 @@ Theorem~2 of~\cite{Molnar2018NormalPEPS}.
 \lean{TNLean.PEPS.applyGauge}
 \leanok
 \uses{def:gaugeVertex}
-    The PEPS tensor obtained by applying edge-gauge matrices to $A$.
+    The PEPS tensor obtained by applying edge-gauge matrices to $A$, with
+    vertex tensors $A^X_v$.
 \end{definition}
 
 \begin{definition}[Gauge equivalence for PEPS]%
