@@ -126,6 +126,7 @@ finite-dimensional quantum systems.
 
 \begin{theorem}[Strong subadditivity]\label{thm:strong_subadditivity}
     \lean{strong_subadditivity}
+    \notready
     \uses{def:von_neumann_entropy, def:traceA_ABC, def:traceC_ABC, def:traceAC_ABC}
     For a tripartite density matrix $\rho_{ABC}$,
     \[
@@ -137,7 +138,7 @@ finite-dimensional quantum systems.
 \begin{definition}[SSA equality]\label{def:ssa_equality}
     \lean{IsSSAEquality}
     \leanok
-    \uses{thm:strong_subadditivity}
+    \uses{def:von_neumann_entropy, def:traceA_ABC, def:traceC_ABC, def:traceAC_ABC}
     A tripartite density matrix $\rho_{ABC}$ satisfies
     \emph{SSA equality} if
     \[
@@ -159,6 +160,7 @@ finite-dimensional quantum systems.
 \end{definition}
 
 \begin{theorem}[Mutual information is non-negative]\label{thm:mutual_information_nonneg}
+    \notready
     \uses{def:mutual_information, thm:strong_subadditivity}
     For any bipartite density matrix $\rho_{AB}$,
     $I(A{:}B) \ge 0$.
