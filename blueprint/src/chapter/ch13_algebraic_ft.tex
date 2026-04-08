@@ -22,7 +22,7 @@ with $d \ge D^2$.
 The extensions to injective and normal PEPS on arbitrary graphs and the
 improved system-size bound ($2L+1$ in place of $3L$) are left for
 future work.
-The chain bookkeeping layer (Definition~\ref{def:non_ti_chain}),
+The chain data (Definition~\ref{def:non_ti_chain}),
 including same chain state, injectivity, and cyclic gauge equivalence,
 was introduced in Chapter~\ref{ch:single}.
 
@@ -1178,6 +1178,7 @@ Theorem~2 of~\cite{Molnar2018NormalPEPS}.
 \begin{theorem}[Gauge invariance of PEPS state]%
 \label{thm:applyGauge_stateCoeff}
 \lean{TNLean.PEPS.applyGauge_stateCoeff}
+\notready
 \uses{def:applyGauge}
     Applying a gauge to a PEPS tensor preserves the state coefficients.
 \end{theorem}
@@ -1185,6 +1186,7 @@ Theorem~2 of~\cite{Molnar2018NormalPEPS}.
 \begin{theorem}[Gauge equivalence implies same state]%
 \label{thm:GaugeEquiv_sameState}
 \lean{TNLean.PEPS.GaugeEquiv.sameState}
+\notready
 \uses{def:GaugeEquivPEPS, thm:applyGauge_stateCoeff}
     Gauge equivalence implies that the two PEPS tensors represent the same state.
 \end{theorem}
@@ -1202,6 +1204,7 @@ Theorem~2 of~\cite{Molnar2018NormalPEPS}.
 \begin{theorem}[Local gauge extraction]%
 \label{thm:localGauge_exists}
 \lean{TNLean.PEPS.localGauge_exists}
+\notready
 \uses{def:gaugeVertex, def:localTensorEval}
     At a single vertex, vertex-injectivity of both tensors and the
     same-state condition force a local gauge relation.
@@ -1210,6 +1213,7 @@ Theorem~2 of~\cite{Molnar2018NormalPEPS}.
 \begin{theorem}[Gauge consistency]%
 \label{thm:gaugeConsistency}
 \lean{TNLean.PEPS.gaugeConsistency}
+\notready
 \uses{thm:localGauge_exists, def:gaugeVertex}
     Local gauges extracted at adjacent vertices are consistent across
     shared edges, yielding a global gauge family.
@@ -1218,6 +1222,7 @@ Theorem~2 of~\cite{Molnar2018NormalPEPS}.
 \begin{theorem}[Fundamental Theorem for injective PEPS]%
 \label{thm:fundamentalTheorem_PEPS}
 \lean{TNLean.PEPS.fundamentalTheorem_PEPS}
+\notready
 \uses{thm:gaugeConsistency, def:GaugeEquivPEPS}
     If two PEPS tensors on a simple graph are both vertex-injective and
     generate the same state, then they are gauge-equivalent
@@ -1227,6 +1232,7 @@ Theorem~2 of~\cite{Molnar2018NormalPEPS}.
 \begin{theorem}[Gauge uniqueness up to scalar]%
 \label{thm:gauge_unique_up_to_scalar}
 \lean{TNLean.PEPS.gauge_unique_up_to_scalar}
+\notready
 \uses{def:gaugeVertex}
     On a connected graph, the gauge family in the Fundamental Theorem is
     unique up to a global multiplicative scalar.

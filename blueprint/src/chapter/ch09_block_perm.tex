@@ -180,13 +180,13 @@ and Theorem~\ref{thm:overlap_trace} that the bilinear overlap is
 \]
 We use this notation throughout the block-separation argument.
 
-\begin{definition}[Canonical form predicate]\label{def:is_canonical_form}
+\begin{definition}[Canonical form conditions]\label{def:is_canonical_form}
     \lean{MPSTensor.IsCanonicalForm}
     \leanok
     \uses{def:injective}
     A collection of scaling factors $(\mu_k)_{k=1}^r$ and
     block tensors $(A_k)_{k=1}^r$ satisfies the
-    \emph{canonical form predicate} if:
+    \emph{canonical form conditions} if:
     \begin{enumerate}
         \item each $A_k$ is injective,
         \item each $A_k$ satisfies the TP normalization
@@ -228,7 +228,7 @@ We use this notation throughout the block-separation argument.
     Theorem~\ref{thm:canonical_from_primitive} gives this implication:
     per-block primitivity implies overlap convergence,
     so condition~(5) is redundant when primitivity holds.
-    The canonical form predicate retains condition~(5)
+    The canonical form conditions retain condition~(5)
     explicitly because it can be verified independently of primitivity.
 \end{remark}
 
@@ -267,7 +267,7 @@ We use this notation throughout the block-separation argument.
     \lean{MPSTensor.block_separation_core}
     \leanok
     \uses{def:is_canonical_form, def:injective}
-    Let $((\mu_k), (A_k))$ satisfy the canonical form predicate,
+    Let $((\mu_k), (A_k))$ satisfy the canonical form conditions,
     and let $(B_k)$ be injective tensors satisfying the same TP
     normalization $\sum_i (B_k^i)^\dagger B_k^i = \Id$.
     If $\sum_k \mu_k^N (V^{(N)}(A_k)_\sigma - V^{(N)}(B_k)_\sigma) = 0$
@@ -304,7 +304,7 @@ We use this notation throughout the block-separation argument.
     \lean{MPSTensor.per_block_sameMPV_of_canonical_form}
     \leanok
     \uses{def:is_canonical_form}
-    Let $((\mu_k), (A_k))$ satisfy the canonical form predicate,
+    Let $((\mu_k), (A_k))$ satisfy the canonical form conditions,
     and let $(B_k)$ be injective tensors satisfying the same TP
     normalization $\sum_i (B_k^i)^\dagger B_k^i = \Id$.
     If the block-diagonal tensors
@@ -322,7 +322,7 @@ We use this notation throughout the block-separation argument.
     a decaying tail. Concretely, one isolates the leading term
     $\mu_1^N V(A_1)$ and bounds the remaining contribution by
     $O(|\mu_2/\mu_1|^N)$ after dividing by $\mu_1^N$.
-    The canonical form predicate supplies injectivity, TP normalization,
+    The canonical form conditions supply injectivity, TP normalization,
     strict nonzero weights, and self-overlap convergence for $(A_k)$, while
     the hypotheses on $(B_k)$ supply the comparison injectivity and
     TP normalization.
@@ -331,7 +331,7 @@ We use this notation throughout the block-separation argument.
 \begin{theorem}[Block separation from normal canonical form]\label{thm:block_sep_normal}
     \lean{MPSTensor.per_block_sameMPV_of_normal_canonical_form}\leanok
     \uses{def:is_normal_canonical_form}
-    Let $((\mu_k), (A_k))$ satisfy the normal canonical form predicate,
+    Let $((\mu_k), (A_k))$ satisfy the normal canonical form conditions,
     and let $(B_k)$ be irreducible tensors of the same bond dimensions, satisfying the same TP
     normalization $\sum_i (B_k^i)^\dagger B_k^i = \Id$.
     If the block-diagonal tensors
