@@ -79,14 +79,6 @@ their spectral decomposition, and quantitative bounds on decay rates.
     Apply spectral decomposition to $\E_A^n$.
 \end{proof}
 
-\begin{remark}[Lean status]
-    The current Lean formalization of this result is a packaging lemma:
-    it \emph{assumes} a decomposition
-    $C(X,Y;n) = \sum_j c_j\,\lambda_j^n$ as a hypothesis and restates it.
-    Deriving the decomposition from normality and the spectral theory of
-    the transfer matrix is future work.
-\end{remark}
-
 \begin{theorem}[Exponential decay bound]\label{thm:correlator_exponential_bound}
     \lean{MPSTensor.connectedCorrelator_bound}
     \notready
@@ -102,13 +94,6 @@ their spectral decomposition, and quantitative bounds on decay rates.
     \notready
     Combine the sum-of-exponentials expansion with the triangle inequality.
 \end{proof}
-
-\begin{remark}[Lean status]
-    Similarly, the current Lean formalization of this bound assumes
-    $\|C(X,Y;n)\| \le C_{XY}\,\|\lambda_2\|^n$ as a hypothesis
-    and repackages it.  The derivation from the spectral expansion
-    is future work.
-\end{remark}
 
 \begin{remark}[Spectral hypothesis and the spectral gap]%
     \label{rem:spectral_hypothesis}
