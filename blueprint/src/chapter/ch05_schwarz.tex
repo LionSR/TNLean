@@ -160,6 +160,13 @@ convenience.
     for all $X\in \MN{D}$.
 \end{theorem}
 
+\begin{proof}
+    Form the $2 \times 2$ block matrix
+    $\bigl(\begin{smallmatrix} \Id & X \\ X^\dagger & X^\dagger X \end{smallmatrix}\bigr) \ge 0$.
+    Apply $E \otimes \mathrm{id}_2$ (positive by $2$-positivity) and read off the
+    $(2,2)$-block Schur complement: $E(X^\dagger X) - E(X)^\dagger E(X) \ge 0$.
+\end{proof}
+
 \begin{theorem}[Kraus-form Kadison--Schwarz as a special case]
     \lean{kadison_schwarz_from_2positive}
     \leanok
@@ -176,6 +183,12 @@ convenience.
     If $\operatorname{ran}(A)\subseteq \operatorname{ran}(B)$, then
     there exists $C$ such that $A=BC$.
 \end{theorem}
+
+\begin{proof}
+    In finite dimensions, $\operatorname{ran}(A) \subseteq \operatorname{ran}(B)$
+    implies $A = B (B^\dagger B)^{\dagger} B^\dagger A$, where $(B^\dagger B)^{\dagger}$
+    denotes the Moore--Penrose pseudoinverse. Set $C = (B^\dagger B)^{\dagger} B^\dagger A$.
+\end{proof}
 
 \begin{theorem}[Vectorwise range criterion implies factorization]
     \lean{Douglas.factorization_of_forall_mulVec_mem_range}

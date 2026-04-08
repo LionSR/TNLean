@@ -423,9 +423,11 @@ follows~\cite[Appendix~A]{Cirac2017MPDO_AnnPhys}.
 	$\E_A^\dagger \neq 0$.
 	Since $\E_A^\dagger(X) = \sum_i (A^i)^\dagger X A^i$ is a
 	Kraus map, it is positive. Irreducibility of $A$ transfers to the
-	adjoint transfer map (if $\E_A^\dagger$ had a nontrivial invariant
-	projection $P$, then taking adjoints would show that $\Id - P$ is
-	invariant for $\E_A$, contradicting irreducibility of $\E_A$), and
+	adjoint transfer map. More precisely: if $P$ is invariant for
+	$\E_A$ (i.e.\ $(\Id - P)K_i P = 0$ for all Kraus operators $K_i$),
+	then taking adjoints gives $P K_i^\dagger (\Id - P) = 0$, which
+	means $\Id - P$ is invariant for $\E_A^\dagger$. Hence $\E_A$
+	irreducible $\Longleftrightarrow$ $\E_A^\dagger$ irreducible, and
 	together with $\E_A^\dagger \neq 0$ this implies
 	$\E_A^\dagger(\tau) \neq 0$ for every nonzero PSD matrix $\tau$.
 	Hence Theorem~\ref{thm:pf_eigenvector_existence} applies to
