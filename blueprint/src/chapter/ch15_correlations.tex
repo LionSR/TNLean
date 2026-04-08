@@ -80,8 +80,8 @@ their spectral decomposition, and quantitative bounds on decay rates.
 \end{proof}
 
 \begin{remark}[Lean status]
-    The Lean declaration \texttt{connectedCorrelator\_eq\_sum} is currently
-    a packaging lemma: it \emph{assumes} a decomposition
+    The current Lean formalization of this result is a packaging lemma:
+    it \emph{assumes} a decomposition
     $C(X,Y;n) = \sum_j c_j\,\lambda_j^n$ as a hypothesis and restates it.
     Deriving the decomposition from normality and the spectral theory of
     the transfer matrix is future work.
@@ -104,8 +104,8 @@ their spectral decomposition, and quantitative bounds on decay rates.
 \end{proof}
 
 \begin{remark}[Lean status]
-    Similarly, \texttt{connectedCorrelator\_bound} in Lean assumes
-    the bound $\|C(X,Y;n)\| \le C_{XY}\,\|\lambda_2\|^n$ as a hypothesis
+    Similarly, the current Lean formalization of this bound assumes
+    $\|C(X,Y;n)\| \le C_{XY}\,\|\lambda_2\|^n$ as a hypothesis
     and repackages it.  The derivation from the spectral expansion
     is future work.
 \end{remark}

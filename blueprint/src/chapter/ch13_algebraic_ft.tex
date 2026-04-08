@@ -189,9 +189,9 @@ operation on the physical indices.
     Then the blocked tensor
     $(A_0 \otimes \cdots \otimes A_{m-1})^{(i_0,\ldots,i_{m-1})}
         := A_0^{i_0} A_1^{i_1} \cdots A_{m-1}^{i_{m-1}}$
-    is again injective. (In Lean, this is formalized for the
-    repackaged combined tensor \texttt{chainCombinedTensor}, not the
-    physically blocked product tensor.)
+    is again injective. (In Lean, injectivity is proved for the
+    repackaged combined tensor that collects all site tensors into
+    a single family, not for the physically blocked product tensor.)
 \end{lemma}
 
 \begin{proof}
@@ -254,33 +254,19 @@ inner automorphism.
     \leanok
     \uses{thm:physRealize_mul, thm:simplicity, thm:skolem_noether,
         lem:blocking_preserves_injectivity}
-    Block the sites on either side of bond~$k$ into a three-site chain and
-    compare the same local insertion across the two blocked chains:
-    \[
-        \TNLocalEqualityStep{X}{Z_k^{-1} X Z_k}{\sigma_k}
-    \]
-    The remaining sites are compressed into an effective boundary matrix,
-    so the local comparison is read through the blocked realisation map
-    \[
-        \TNBoundaryRegrow{X}{\sigma_{k-1}}{\sigma_{k+1}}{3}.
-    \]
-    Then
-    Lemma~\ref{lem:blocking_preserves_injectivity} ensures injectivity,
-    and both $O_{A,k}$ and $O_{B,k}$ are algebra homomorphisms from
-    $\MN{D}$ by Theorem~\ref{thm:physRealize_mul}.
-    Since both chains generate the same state, for every $X \in \MN{D}$
-    there is a unique $Y \in \MN{D}$ with $O_{A,k}(X) = O_{B,k}(Y)$;
-    set $T(X) = Y$.
-    Linearity of $O_{A,k}$ and $O_{B,k}$ and uniqueness of $Y$ make $T$
-    $\C$-linear, and since both maps are algebra homomorphisms, $T$ is
-    multiplicative.
-    Thus $T$ is a nonzero $\C$-algebra endomorphism of $\MN{D}$, hence
+    The $\mc{V}(A) = \mc{V}(B)$ hypothesis gives, for every $X \in \MN{D}$,
+    equality of the virtual-insertion trace coefficients:
+    $\tr(A_0^{i_0} X\, A_1^{i_1} A_2^{i_2})
+     = \tr(B_0^{i_0} Y\, B_1^{i_1} B_2^{i_2})$
+    for some $Y$ depending on $X$.
+    Since all three site tensors on each side are injective,
+    the physical realisation maps $O_A, O_B$ are algebra homomorphisms
+    by Theorem~\ref{thm:physRealize_mul}.
+    Setting $T(X) = Y$ defines a $\C$-linear multiplicative map,
+    hence a nonzero $\C$-algebra endomorphism of $\MN{D}$, which is
     bijective by Theorem~\ref{thm:simplicity}.
     Skolem--Noether (Theorem~\ref{thm:skolem_noether}) gives
-    $Z_k \in \GL_D(\C)$ with $T(X) = Z_k^{-1} X Z_k$, and uniqueness
-    up to a scalar follows because two inner automorphisms
-    $\operatorname{Ad}(Z)$ and $\operatorname{Ad}(Z')$ agree iff
-    $Z' Z^{-1}$ is central (Lemma~\ref{lem:center_scalar}).
+    $Z \in \GL_D(\C)$ with $T(X) = Z^{-1} X Z$.
 \end{proof}
 
 
