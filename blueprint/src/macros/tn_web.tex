@@ -223,7 +223,7 @@
 \newcommand{\TNPEPSEdgeGaugeOrientation}{%
   \begin{array}{c}
     \text{edge } e = (u,w) \text{ oriented by } u < w \\
-    u \; \text{---} \; X_e \; \text{---} \; (X_e^{-1})^\top \; \text{---} \; w
+    u \; \text{---} \; X_e \; \text{---} \; X_e^{-1} \; \text{---} \; w
   \end{array}%
 }
 
@@ -236,7 +236,7 @@
 
 \newcommand{\TNPEPSGaugeCancellation}{%
   \begin{array}{c}
-    X(i,j)\,(X^{-1})^\top(j,k) = \delta(i,k) \\
+    \sum_j X_e(i,j)\,(X_e^{-1})(j,k) = \delta(i,k) \\
     \text{so the two edge gauges cancel on an internal contraction}
   \end{array}%
 }

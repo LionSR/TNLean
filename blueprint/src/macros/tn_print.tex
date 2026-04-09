@@ -485,7 +485,7 @@
     \TN@tensordot{tnU}{(0,0)}
     \TN@tensordot{tnW}{(3.30,0)}
     \TN@opdotabove{tnXl}{(1.00,0)}{X_e}
-    \TN@opdotabove{tnXr}{(2.30,0)}{(X_e^{-1})^\top}
+    \TN@opdotabove{tnXr}{(2.30,0)}{X_e^{-1}}
     \draw[tn leg] (tnU.east) -- (tnXl.west);
     \draw[tn leg] (tnXl.east) -- (tnXr.west);
     \draw[tn leg] (tnXr.east) -- (tnW.west);
@@ -504,8 +504,8 @@
     \TN@opdotbelow{tnDR}{(0.78,-0.92)}{M_{ve_4}}
     \draw[tn leg] (tnL.east) -- (tnV.west);
     \draw[tn leg] (tnV.east) -- (tnR.west);
-    \draw[tn leg] (tnV.south) -- (tnDL.north);
-    \draw[tn leg] (tnV.south) -- (tnDR.north);
+    \draw[tn leg] ($(tnV.south)-(0.2,0)$) -- (tnDL.north);
+    \draw[tn leg] ($(tnV.south)+(0.2,0)$) -- (tnDR.north);
     \TN@upleg{tnV}{0.54}
     \TN@uplabel{tnV}{0.80}{\sigma}
     \node at ($(tnV.south)+(0,-1.45)$) {$A_v \mapsto A_v^X$};
@@ -521,13 +521,13 @@
     \draw[tn leg] (tnL.east) -- (tnX.west);
     \draw[tn leg] (tnX.east) -- (tnXt.west);
     \draw[tn leg] (tnXt.east) -- (tnR.west);
-    \node at ($(tnX.north)+(0,0.28)$) {$X(i,j)$};
-    \node at ($(tnXt.north)+(0,0.28)$) {$(X^{-1})^\top(j,k)$};
+    \node at ($(tnX.north)+(0,0.28)$) {$X_e(i,j)$};
+    \node at ($(tnXt.north)+(0,0.28)$) {$(X_e^{-1})(j,k)$};
     \node at (4.20,0) {$=$};
     \TN@tensordot{tnL2}{(5.15,0)}
     \TN@tensordot{tnR2}{(6.65,0)}
     \draw[tn leg] (tnL2.east) -- (tnR2.west);
-    \node at (5.90,0.54) {$\delta(i,k)$};
+    \node at (5.90,0.54) {$\sum_j X_e(i,j)\,(X_e^{-1})(j,k) = \delta(i,k)$};
   \end{tikzpicture}%
 }
 
@@ -538,8 +538,8 @@
     \TN@uplabel{tnLv}{0.76}{\sigma}
     \draw[tn leg] (tnLv.west) -- ++(-0.90,0);
     \draw[tn leg] (tnLv.east) -- ++(0.90,0);
-    \draw[tn leg] (tnLv.south) -- ++(-0.72,-0.82);
-    \draw[tn leg] (tnLv.south) -- ++(0.72,-0.82);
+    \draw[tn leg] ($(tnLv.south)-(0.2,0)$) -- ++(-0.72,-0.82);
+    \draw[tn leg] ($(tnLv.south)+(0.2,0)$) -- ++(0.72,-0.82);
     \node at (0,-1.42) {$\mathrm{star}(v)$};
     \node at (2.85,0) {$\xrightarrow[\text{left inverse}]{\text{injective}}$};
     \TN@tensordot{tnRv}{(5.70,0)}
@@ -553,8 +553,8 @@
     \draw[tn leg] (tnRl.east) -- (tnRv.west);
     \draw[tn leg] (tnRv.east) -- (tnRr.west);
     \draw[tn leg] (tnRr.east) -- ++(0.42,0);
-    \draw[tn leg] (tnRv.south) -- (tnRdl.north);
-    \draw[tn leg] (tnRv.south) -- (tnRdr.north);
+    \draw[tn leg] ($(tnRv.south)-(0.2,0)$) -- (tnRdl.north);
+    \draw[tn leg] ($(tnRv.south)+(0.2,0)$) -- (tnRdr.north);
     \node at (5.70,-1.42) {$\text{local edge gauges}$};
   \end{tikzpicture}%
 }
@@ -570,7 +570,7 @@
     \draw[tn leg] (tnU.south) -- ++(-0.55,-0.68);
     \draw[tn leg] (tnW.south) -- ++(0.55,-0.68);
     \TN@opdotabove{tnXl}{(1.02,0)}{X_e}
-    \TN@opdotabove{tnXr}{(2.33,0)}{(X_e^{-1})^\top}
+    \TN@opdotabove{tnXr}{(2.33,0)}{X_e^{-1}}
     \draw[tn leg] (tnU.east) -- (tnXl.west);
     \draw[tn leg] (tnXl.east) -- (tnXr.west);
     \draw[tn leg] (tnXr.east) -- (tnW.west);
