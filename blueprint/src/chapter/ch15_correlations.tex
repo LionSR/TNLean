@@ -251,6 +251,19 @@ and rates for the single-tensor transfer map $\E_A$.
     See \cite[Definition~3.5]{Cirac2021Matrix}.
 \end{definition}
 
+\begin{theorem}[RFP normal tensor is injective]\label{thm:rfp_nt_injective}
+    \lean{MPSTensor.rfp_nt_structural}
+    \leanok
+    \uses{def:is_rfp, def:normal, def:injective}
+    If $A$ is a nonzero normal RFP tensor, then $A$ is injective.
+\end{theorem}
+\begin{proof}\leanok
+    The RFP condition $\E_A^2 = \E_A$ implies that the cumulative span
+    $\spn\{A^w : |w| \le n\}$ stabilises after one step.
+    Since $A$ is normal (hence has an injective blocked form),
+    the one-step span already equals $\MN{D}$, so $A$ is injective.
+\end{proof}
+
 \begin{theorem}[RG flow convergence for canonical-form tensors]%
     \label{thm:rg_flow_converges_of_cf}
     \lean{MPSTensor.rg_flow_converges_of_cf}
