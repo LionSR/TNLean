@@ -54,43 +54,12 @@ noncomputable scoped instance : NormedRing (Matrix (Fin D) (Fin D) ℂ) :=
 noncomputable scoped instance : NormedAlgebra ℂ (Matrix (Fin D) (Fin D) ℂ) :=
   Matrix.linftyOpNormedAlgebra
 
-private noncomputable abbrev endEquivSquareMatrixCLM (D : ℕ) :
-    (Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) ≃ₐ[ℂ]
-      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
-  Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)
-
-local instance instSpectralGapFiniteDimensionalMatrixCLM (D : ℕ) :
-    FiniteDimensional ℂ
-      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
-  (endEquivSquareMatrixCLM D).toLinearEquiv.finiteDimensional
-
-noncomputable local instance instSpectralGapNormedAddCommGroupMatrixCLM (D : ℕ) :
-    NormedAddCommGroup
-      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
-  ContinuousLinearMap.toNormedAddCommGroup
-
-noncomputable local instance instSpectralGapNormedRingMatrixCLM (D : ℕ) :
-    NormedRing
-      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
-  ContinuousLinearMap.toNormedRing
-
-noncomputable local instance instSpectralGapNormedAlgebraMatrixCLM (D : ℕ) :
-    NormedAlgebra ℂ
-      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
-  ContinuousLinearMap.toNormedAlgebra
-
-local instance instSpectralGapCompleteSpaceMatrixCLM (D : ℕ) :
-    CompleteSpace
-      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
-  FiniteDimensional.complete ℂ
-    (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ)
-
 attribute [local instance]
-  instSpectralGapFiniteDimensionalMatrixCLM
-  instSpectralGapNormedAddCommGroupMatrixCLM
-  instSpectralGapNormedRingMatrixCLM
-  instSpectralGapNormedAlgebraMatrixCLM
-  instSpectralGapCompleteSpaceMatrixCLM
+  instGCFiniteDimensionalMatrixCLM
+  instGCNormedAddCommGroupMatrixCLM
+  instGCNormedRingMatrixCLM
+  instGCNormedAlgebraMatrixCLM
+  instGCCompleteSpaceMatrixCLM
 
 /-! ### Spectral radius of the mixed transfer operator -/
 

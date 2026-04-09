@@ -48,43 +48,12 @@ namespace MPSTensor
 
 variable {d D₁ D₂ : ℕ}
 
-private noncomputable abbrev endEquivMatrixRectCLM (m n : ℕ) :
-    (Matrix (Fin m) (Fin n) ℂ →ₗ[ℂ] Matrix (Fin m) (Fin n) ℂ) ≃ₐ[ℂ]
-      (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
-  Module.End.toContinuousLinearMap (Matrix (Fin m) (Fin n) ℂ)
-
-local instance instSpectralGapRectFiniteDimensionalMatrixCLM (m n : ℕ) :
-    FiniteDimensional ℂ
-      (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
-  (endEquivMatrixRectCLM m n).toLinearEquiv.finiteDimensional
-
-noncomputable local instance instSpectralGapRectNormedAddCommGroupMatrixCLM (m n : ℕ) :
-    NormedAddCommGroup
-      (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
-  ContinuousLinearMap.toNormedAddCommGroup
-
-noncomputable local instance instSpectralGapRectNormedRingMatrixCLM (m n : ℕ) :
-    NormedRing
-      (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
-  ContinuousLinearMap.toNormedRing
-
-noncomputable local instance instSpectralGapRectNormedAlgebraMatrixCLM (m n : ℕ) :
-    NormedAlgebra ℂ
-      (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
-  ContinuousLinearMap.toNormedAlgebra
-
-local instance instSpectralGapRectCompleteSpaceMatrixCLM (m n : ℕ) :
-    CompleteSpace
-      (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
-  FiniteDimensional.complete ℂ
-    (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ)
-
 attribute [local instance]
-  instSpectralGapRectFiniteDimensionalMatrixCLM
-  instSpectralGapRectNormedAddCommGroupMatrixCLM
-  instSpectralGapRectNormedRingMatrixCLM
-  instSpectralGapRectNormedAlgebraMatrixCLM
-  instSpectralGapRectCompleteSpaceMatrixCLM
+  instGCFiniteDimensionalMatrixCLM
+  instGCNormedAddCommGroupMatrixCLM
+  instGCNormedRingMatrixCLM
+  instGCNormedAlgebraMatrixCLM
+  instGCCompleteSpaceMatrixCLM
 
 /-! ## Rectangular spectral radius abbreviation -/
 
