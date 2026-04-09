@@ -35,6 +35,8 @@ jobs:
     name: Check blueprint compiles without errors
     steps:
       - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
 
       - uses: actions/setup-python@v5
         with:
@@ -76,6 +78,49 @@ jobs:
 
       - name: Check blueprint and Lean source stay in sync
         run: python3 scripts/blueprint_lean_sync.py --root . --ci
+
+      - name: Warn on changed Lean declarations missing blueprint entries
+        if: github.event_name == 'pull_request'
+        run: |
+          python3 - <<'PY'
+          import subprocess
+
+          base_ref = "origin/${{ github.event.pull_request.base.ref }}"
+
+          changed = subprocess.check_output(
+              [
+                  "git",
+                  "diff",
+                  "--merge-base",
+                  "--name-only",
+                  "--diff-filter=AMR",
+                  base_ref,
+                  "--",
+                  "TNLean/**/*.lean",
+              ],
+              text=True,
+          )
+          changed_lean_files = [line for line in changed.splitlines() if line.endswith(".lean")]
+
+          if not changed_lean_files:
+              print("No changed TNLean/*.lean files in this pull request.")
+              raise SystemExit(0)
+
+          subprocess.run(
+              [
+                  "python3",
+                  "scripts/blueprint_lean_sync.py",
+                  "--root",
+                  ".",
+                  "--warn-missing-blueprint",
+                  "--diff-base",
+                  base_ref,
+                  "--changed-files",
+                  *changed_lean_files,
+              ],
+              check=True,
+          )
+          PY
 
       - name: Check blueprint Lean declarations
         run: lake exe checkdecls blueprint/lean_decls
