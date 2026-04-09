@@ -113,15 +113,15 @@ gap---is the approach adopted in this chapter.
     \lean{MPSTensor.piAlgEquiv}
     \leanok
     \uses{def:per_block_linear_ext}
-    The \emph{product algebra automorphism} is the blockwise assembled map
+    The \emph{product algebra automorphism} is the blockwise map
     $T:\prod_k\MN{D_k}\to\prod_k\MN{D_k}$ defined by
     $T(M)_k := T_k(M_k)$.
     Theorem~\ref{thm:pi_linear_ext} shows that each $T_k$ is a
-    $\C$-algebra homomorphism and that this assembled map is indeed a
+    $\C$-algebra homomorphism and that this map is a
     $\C$-algebra automorphism.
 \end{definition}
 
-\begin{theorem}[Per-block linear extensions assemble]\label{thm:pi_linear_ext}
+\begin{theorem}[Per-block linear extensions define a product algebra automorphism]\label{thm:pi_linear_ext}
     \lean{MPSTensor.piAlgEquiv_decomposition}
     \leanok
     \uses{def:injective, def:per_block_linear_ext}
@@ -129,7 +129,7 @@ gap---is the approach adopted in this chapter.
     $D_k$ for $k = 1, \ldots, r$, and suppose the per-block
     same-MPV condition holds.
     Then the per-block linear extensions $T_k : A_k^i \mapsto B_k^i$
-    assemble into an algebra automorphism of $\prod_k \MN{D_k}$,
+    define an algebra automorphism of $\prod_k \MN{D_k}$,
     which decomposes as a permutation $\pi$ with
     $D_{\pi(k)} = D_k$ and per-block conjugation matrices $X_k$.
 \end{theorem}
@@ -145,7 +145,7 @@ gap---is the approach adopted in this chapter.
     the product gives an algebra automorphism $T$.
     Theorem~\ref{thm:pi_auto_decomp} decomposes $T$ into
     a permutation plus per-block inner automorphisms.
-    Because $T$ is assembled blockwise, it preserves each block ideal,
+    Because $T$ acts blockwise, it preserves each block ideal,
     so in this theorem the permutation is actually $\pi = \mathrm{id}$.
     A nontrivial block permutation only appears after block separation
     identifies which blocks match globally.
@@ -167,8 +167,8 @@ gap---is the approach adopted in this chapter.
     \uses{thm:ft_single, thm:multi_block_global}
     Per-block gauge equivalence follows from the single-block
     FT (Theorem~\ref{thm:ft_single}) applied to each block.
-    Global gauge equivalence follows by assembling the
-    per-block gauge matrices into a block-diagonal matrix
+    Global gauge equivalence follows by placing the
+    per-block gauge matrices on the block diagonal
     (Theorem~\ref{thm:multi_block_global}).
 \end{proof}
 

@@ -282,8 +282,8 @@ distinct weight norms).
 		\mu_j^A = \mu_{\pi(j)}^B \zeta_j.
 	\]
 	Thus the phase factors can be absorbed into the weights, and the
-	resulting blockwise conjugacies assemble to a gauge equivalence of the reindexed
-	weighted block-diagonal tensors.
+	resulting blockwise conjugacies combine to give a gauge equivalence of the
+	reindexed weighted block-diagonal tensors.
 \end{proof}
 
 \begin{theorem}[Fundamental Theorem --- equal MPV case, common block structure]\label{thm:ft_equal_same_structure}
@@ -327,8 +327,11 @@ single weighted block.
 	A \emph{sector datum} over $g$ basis blocks specifies:
 	multiplicities $r_j > 0$, sector weights
 	$\mu_{j,q} \neq 0$ for $q \in \{1,\dotsc,r_j\}$, and the
-	\emph{sector coefficient}
-	$\mathrm{coeff}(N,j) := \sum_{q=1}^{r_j} \mu_{j,q}^N$.
+	\emph{sector coefficients}
+	\[
+		c_{S,j}^{(N)} := \sum_{q=1}^{r_j} \mu_{j,q}^N
+	\]
+	for a sector datum $S$.
 	A \emph{sector decomposition} consists of the basis blocks
 	$(A_j)_{j=1}^g$ together with their sector data.
 \end{definition}
@@ -338,11 +341,11 @@ single weighted block.
 	\lean{MPSTensor.SectorDecomposition.mpv_toTensor_eq_sum_coeff}
 	\leanok
 	\uses{def:paper_sector_data}
-	For a sector decomposition $P$, the MPV of the associated tensor
-	satisfies
+	For a sector decomposition $S$ with associated tensor $A_{\mathrm{tot}}$,
+	the MPV satisfies
 	\[
-		V^{(N)}(P.\mathrm{toTensor})_\sigma
-		= \sum_{j=1}^{g} \mathrm{coeff}(N,j) \cdot V^{(N)}(A_j)_\sigma.
+		V^{(N)}(A_{\mathrm{tot}})_\sigma
+		= \sum_{j=1}^{g} c_{S,j}^{(N)} V^{(N)}(A_j)_\sigma.
 	\]
 \end{theorem}
 
@@ -351,9 +354,10 @@ single weighted block.
 	\lean{MPSTensor.SectorWeightData.coeff_eventually_eq_of_sameMPV}
 	\leanok
 	\uses{def:paper_sector_data, def:bnt}
-	If two sector data $S, T$ over the same basis produce equal total MPVs
+	If two sector data $S, T$ over the same basis, with coefficient arrays
+	$c_{S,j}^{(N)}$ and $c_{T,j}^{(N)}$, produce equal total MPVs
 	and the basis is eventually linearly independent (the BNT property),
-	then $S.\mathrm{coeff}(N,j) = T.\mathrm{coeff}(N,j)$ for all
+	then $c_{S,j}^{(N)} = c_{T,j}^{(N)}$ for all
 	sufficiently large $N$.
 \end{theorem}
 
@@ -392,8 +396,8 @@ single weighted block.
 		      (Theorem~\ref{thm:power_sum_multiset}).
 	\end{enumerate}
 	At the level of block contributions, one compares the weighted sector sums
-	$\sum_j \mathrm{coeff}_A(N,j)\,V^{(N)}(A_j)$ and
-	$\sum_j \mathrm{coeff}_B(N,j)\,V^{(N)}(B_j)$, with the coefficients
+	$\sum_j c_{A,j}^{(N)} V^{(N)}(A_j)$ and
+	$\sum_j c_{B,j}^{(N)} V^{(N)}(B_j)$, with the coefficients
 	now aggregated over the multiplicity layers.
 \end{theorem}
 
@@ -674,8 +678,7 @@ The following is Theorem~3.8 (``equal case'') of \cite{DeLasCuevas2017Irreducibl
 	projections $P_0,\dotsc,P_{m-1}$ on the ambient bond space such that
 	$\sum_k P_k = \Id$, each $P_k$ commutes with every blocked letter
 	$P_k A^{(m)}_i = A^{(m)}_i P_k$, and
-	$V^{(N)}(C_k)(\sigma) = \operatorname{tr}(P_k \cdot
-	\operatorname{evalWord}(A^{(m)}, \sigma))$ for every word~$\sigma$.
+	$V^{(N)}(C_k)_\sigma = \tr(P_k (A^{(m)})^\sigma)$ for every word~$\sigma$.
 \end{definition}
 
 \begin{theorem}[Self-overlap along period multiples]\label{thm:periodic_self_overlap_tendsto}
@@ -691,7 +694,7 @@ The following is Theorem~3.8 (``equal case'') of \cite{DeLasCuevas2017Irreducibl
 	\leanok
 	\uses{def:periodic_tensor}
 	If $A$ and $B$ are periodic with different periods, then
-	$\langle V_N(A), V_N(B)\rangle \to 0$ as $N\to\infty$.
+	$\braket{V^{(N)}(A)}{V^{(N)}(B)} \to 0$ as $N\to\infty$.
 \end{theorem}
 \begin{proof}\leanok
 	Split on whether the bond dimensions agree. If not, dimension mismatch
@@ -746,7 +749,7 @@ The following is Theorem~3.8 (``equal case'') of \cite{DeLasCuevas2017Irreducibl
 	\leanok
 	\uses{def:periodic_tensor}
 	If two periodic tensors have different bond dimensions, then
-	$\langle V_N(A), V_N(B)\rangle \to 0$ as $N\to\infty$.
+	$\braket{V^{(N)}(A)}{V^{(N)}(B)} \to 0$ as $N\to\infty$.
 \end{theorem}
 
 \begin{theorem}[Periodic overlap dichotomy]\label{thm:periodic_overlap_dichotomy}
@@ -756,7 +759,7 @@ The following is Theorem~3.8 (``equal case'') of \cite{DeLasCuevas2017Irreducibl
 	Let $A$ and $B$ be periodic tensors. Then at least one of the following
 	alternatives holds:
 	\begin{enumerate}
-		\item $\langle V_N(A), V_N(B)\rangle \to 0$ as $N\to\infty$;
+		\item $\braket{V^{(N)}(A)}{V^{(N)}(B)} \to 0$ as $N\to\infty$;
 		\item $A$ and $B$ are equivalent up to repeated blocks.
 	\end{enumerate}
 \end{theorem}
@@ -766,7 +769,7 @@ The following is Theorem~3.8 (``equal case'') of \cite{DeLasCuevas2017Irreducibl
 	\uses{thm:periodic_overlap_dichotomy, thm:periodic_self_overlap_tendsto}
 	For a finite family of pairwise non-equivalent periodic tensors whose
 	periods divide a common integer $p$, there is $N_0$ such that for every
-	$N \ge N_0$ the vectors $\{V_{pN}(A_j)\}_j$ are linearly independent.
+	$N \ge N_0$ the vectors $\{\ket{V^{(pN)}(A_j)}\}_j$ are linearly independent.
 \end{theorem}
 
 \begin{remark}[Comparison with the 1606.00608 approach]\notready

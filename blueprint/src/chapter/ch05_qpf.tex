@@ -54,7 +54,7 @@ and~\cite{Evans1978Spectral}.
 	injectivity.
 \end{proof}
 
-\begin{theorem}[PSD fixed point is PD --- irreducible version]\label{thm:psd_fp_pd_irred}
+\begin{theorem}[PSD fixed point is positive definite --- irreducible version]\label{thm:psd_fp_pd_irred}
 	\lean{MPSTensor.posSemidef_fixedPoint_isPosDef_of_irreducible}
 	\leanok
 	\uses{def:irreducible_cp, def:transfer_map}
@@ -181,7 +181,7 @@ and~\cite{Evans1978Spectral}.
 	which is a positive CP map.
 	The Perron--Frobenius existence theorem
 	(Theorem~\ref{thm:pf_eigenvector_existence}) together with the
-	irreducible PSD-to-PosDef upgrade
+	irreducible positive-definiteness upgrade
 	(Theorem~\ref{thm:psd_fp_pd_irred}) gives a positive definite
 	eigenvector $\tau > 0$ with eigenvalue $t > 0$:
 	$E^\dagger(\tau) = t\,\tau$.
@@ -397,7 +397,7 @@ follows~\cite[Appendix~A]{Cirac2017MPDO_AnnPhys}.
 	each $(A^i)^\dagger = 0$ and hence each $A^i = 0$.
 \end{proof}
 
-\begin{theorem}[PosDef adjoint eigenvector for irreducible tensors]%
+\begin{theorem}[Positive-definite adjoint eigenvector for irreducible tensors]%
 	\label{thm:posDef_adjoint_eigenvector}
 	\lean{MPSTensor.exists_posDef_adjoint_eigenvector}
 	\leanok
@@ -440,7 +440,7 @@ follows~\cite[Appendix~A]{Cirac2017MPDO_AnnPhys}.
 	since irreducibility of $\E_A$ transfers to the
 	adjoint and is preserved under scaling).
 	Since $\E_T$ is irreducible with a PSD fixed point,
-	the PSD-to-PosDef upgrade
+	the positive-definiteness upgrade
 	(Theorem~\ref{thm:psd_fp_pd_irred})
 	gives $\sigma_0$ positive definite.
 \end{proof}
