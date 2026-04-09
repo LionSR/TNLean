@@ -688,6 +688,7 @@ the Perron--Frobenius fixed point.
 \end{definition}
 
 \begin{lemma}[Evaluation formula]\label{lem:scalar_conditional_expectation_apply}
+    \notready
     \lean{Kraus.scalarConditionalExpectation_apply}
     \leanok
     \uses{def:scalar_conditional_expectation}
@@ -695,6 +696,7 @@ the Perron--Frobenius fixed point.
 \end{lemma}
 
 \begin{theorem}[Unitality]\label{thm:scalar_conditional_expectation_unital}
+    \notready
     \lean{Kraus.scalarConditionalExpectation_unital}
     \leanok
     \uses{def:scalar_conditional_expectation}
@@ -702,6 +704,7 @@ the Perron--Frobenius fixed point.
 \end{theorem}
 
 \begin{theorem}[Idempotence]\label{thm:scalar_conditional_expectation_idempotent}
+    \notready
     \lean{Kraus.scalarConditionalExpectation_idempotent}
     \leanok
     \uses{def:scalar_conditional_expectation}
@@ -709,6 +712,7 @@ the Perron--Frobenius fixed point.
 \end{theorem}
 
 \begin{lemma}[Range is scalar]\label{lem:scalar_conditional_expectation_range_scalar}
+    \notready
     \lean{Kraus.scalarConditionalExpectation_range_scalar}
     \leanok
     \uses{def:scalar_conditional_expectation}
@@ -716,6 +720,7 @@ the Perron--Frobenius fixed point.
 \end{lemma}
 
 \begin{lemma}[Fixes scalar operators]\label{lem:scalar_conditional_expectation_fixes_scalar}
+    \notready
     \lean{Kraus.scalarConditionalExpectation_fixes_scalar}
     \leanok
     \uses{def:scalar_conditional_expectation}
@@ -723,6 +728,7 @@ the Perron--Frobenius fixed point.
 \end{lemma}
 
 \begin{theorem}[Absorbs the adjoint map]\label{thm:scalar_conditional_expectation_absorbs_adjointMap}
+    \notready
     \lean{Kraus.scalarConditionalExpectation_absorbs_adjointMap}
     \leanok
     \uses{def:scalar_conditional_expectation}
@@ -732,6 +738,7 @@ the Perron--Frobenius fixed point.
 
 \begin{theorem}[Adjoint map absorbs scalar projection]
     \label{thm:adjointMap_absorbs_scalarConditionalExpectation}
+    \notready
     \lean{Kraus.adjointMap_absorbs_scalarConditionalExpectation}
     \leanok
     \uses{def:scalar_conditional_expectation, def:tp_kraus}
@@ -741,6 +748,7 @@ the Perron--Frobenius fixed point.
 
 \begin{lemma}[Image lies in adjoint fixed points]
     \label{lem:scalar_conditional_expectation_mem_adjointFixedPoints}
+    \notready
     \lean{Kraus.scalarConditionalExpectation_mem_adjointFixedPoints}
     \leanok
     \uses{thm:adjointMap_absorbs_scalarConditionalExpectation}
@@ -749,6 +757,7 @@ the Perron--Frobenius fixed point.
 
 \begin{theorem}[Scalar map is a conditional expectation]
     \label{thm:scalar_conditional_expectation_isConditionalExpectation}
+    \notready
     \lean{Kraus.scalarConditionalExpectation_isConditionalExpectation}
     \leanok
     \uses{def:is_conditional_expectation, def:scalar_conditional_expectation,
@@ -884,6 +893,7 @@ used later in the blueprint.
 
 \begin{theorem}[Wolf Thm.~6.2(3): exponential positivity condition]%
     \label{thm:wolf_6_2_item_3}
+    \notready
     \lean{exp_posDef_of_irreducible_cp}
     \lean{irreducible_iff_exp_posDef_forall}
     \leanok
@@ -896,6 +906,7 @@ used later in the blueprint.
 
 \begin{theorem}[Wolf Thm.~6.8: Kraus-span equivalence]%
     \label{thm:wolf_6_8_kraus_span}
+    \notready
     \lean{MPSTensor.wolf_theorem_6_8_kraus_span}
     \leanok
     \uses{def:primitive_channel}
@@ -905,6 +916,7 @@ used later in the blueprint.
 
 \begin{theorem}[Wolf Thm.~6.8: combined equivalence]%
     \label{thm:wolf_6_8_conjunction}
+    \notready
     \lean{MPSTensor.wolf_theorem_6_8_conjunction}
     \leanok
     \uses{thm:wolf_6_8_kraus_span}
@@ -925,6 +937,7 @@ used later in the blueprint.
 
 \begin{theorem}[Wolf Thm.~6.15 (scalar fixed-point algebra case)]
     \label{thm:wolf_6_15_scalar_conditional_expectation}
+    \notready
     \lean{Kraus.scalarConditionalExpectation_isConditionalExpectation}
     \leanok
     \uses{def:channel}
@@ -1035,7 +1048,7 @@ used later in the blueprint.
     Theorem~\ref{thm:peripheral_cyclic_group}.
 \end{proof}
 
-\subsection{Cyclic decomposition}
+\subsection{Cyclic decomposition of irreducible Schwarz maps}
 
 \begin{definition}[Corner preservation]
     \lean{PreservesCorner}
@@ -1064,6 +1077,7 @@ used later in the blueprint.
 \end{definition}
 
 \begin{theorem}[Peripheral unitary eigenvector]
+    \notready
     \lean{MPSTensor.exists_peripheral_unitary_of_irreducible_schwarz}
     \leanok
     \uses{thm:ks_peripheral}
@@ -1072,6 +1086,7 @@ used later in the blueprint.
 \end{theorem}
 
 \begin{theorem}[Powers on a peripheral-unitary orbit]
+    \notready
     \lean{MPSTensor.map_powers_of_peripheral_unitary}
     \leanok
     \uses{thm:ks_peripheral}
@@ -1080,6 +1095,7 @@ used later in the blueprint.
 \end{theorem}
 
 \begin{theorem}[Normalized peripheral unitary]
+    \notready
     \lean{MPSTensor.exists_normalized_peripheral_unitary_of_irreducible_schwarz}
     \leanok
     \uses{thm:ks_peripheral}
@@ -1088,6 +1104,7 @@ used later in the blueprint.
 \end{theorem}
 
 \begin{theorem}[Cyclic projections from a peripheral unitary]
+    \notready
     \lean{exists_cyclic_projections_of_peripheral_unitary}
     \leanok
     \uses{thm:channel_period_divides_dim}
@@ -1096,6 +1113,7 @@ used later in the blueprint.
 \end{theorem}
 
 \begin{theorem}[Cyclic decomposition for irreducible Schwarz maps]
+    \notready
     \lean{MPSTensor.exists_cyclic_decomposition_of_irreducible_schwarz}
     \leanok
     \uses{thm:peripheral_cyclic_group}
@@ -1104,32 +1122,37 @@ used later in the blueprint.
 \end{theorem}
 
 \begin{theorem}[Power maps preserve each cyclic sector]
+    \notready
     \lean{preserves_corner_pow_of_cyclic_decomp}
     \leanok
     Appropriate powers of the channel preserve each sector corner.
 \end{theorem}
 
 \begin{theorem}[Irreducibility of restricted sector dynamics]
+    \notready
     \lean{isIrreducible_restriction_of_cyclic_decomp}
     \leanok
     Each sector restriction is irreducible.
 \end{theorem}
 
 \begin{theorem}[Primitivity of restricted sector dynamics]
+    \notready
     \lean{isPrimitive_restriction_of_cyclic_decomp}
     \leanok
     Each sector restriction is primitive.
 \end{theorem}
 
 \begin{theorem}[Corner invariance at the period]
+    \notready
     \lean{preserves_corner_pow_orderOf_of_perm_decomp}
     \leanok
     The channel raised to the period preserves every cyclic corner.
 \end{theorem}
 
-\subsection{Peripheral group structure}
+\subsection{Group structure of the peripheral spectrum}
 
 \begin{theorem}[Peripheral product closure]
+    \notready
     \lean{PeripheralSpectrum.peripheral_eigenvalues_closed_under_mul}
     \leanok
     \uses{lem:peripheral_mul_closure}
@@ -1137,6 +1160,7 @@ used later in the blueprint.
 \end{theorem}
 
 \begin{theorem}[Peripheral inverse closure]
+    \notready
     \lean{PeripheralSpectrum.peripheral_eigenvalues_closed_under_inv}
     \leanok
     \uses{thm:peripheral_cyclic_structure}
@@ -1144,6 +1168,7 @@ used later in the blueprint.
 \end{theorem}
 
 \begin{theorem}[Peripheral cyclic group with period divisibility]
+    \notready
     \lean{PeripheralSpectrum.peripheral_eigenvalues_form_cyclic_group}
     \leanok
     \uses{thm:peripheral_cyclic_group}
