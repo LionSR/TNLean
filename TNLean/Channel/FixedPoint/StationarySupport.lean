@@ -37,7 +37,10 @@ variable {D : ℕ}
 
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
-private lemma lowerZero_implies_invariance
+/-- If each Kraus operator `K i` is block-upper-triangular with respect to an
+orthogonal projection `P`, then the transfer map preserves the compression
+`P M_D P`. -/
+lemma lowerZero_implies_invariance
     {r : ℕ} (K : Fin r → Mat) {P : Mat}
     (hP : IsOrthogonalProjection P)
     (hLower : ∀ i : Fin r, (1 - P) * K i * P = 0) :
