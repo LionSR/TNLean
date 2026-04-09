@@ -85,19 +85,18 @@ jobs:
           python3 - <<'PY'
           import subprocess
 
-          base = "${{ github.event.pull_request.base.sha }}"
-          head = "${{ github.event.pull_request.head.sha }}"
+          base_ref = "origin/${{ github.event.pull_request.base.ref }}"
 
           changed = subprocess.check_output(
               [
                   "git",
                   "diff",
+                  "--merge-base",
                   "--name-only",
                   "--diff-filter=AMR",
-                  base,
-                  head,
+                  base_ref,
                   "--",
-                  "TNLean",
+                  "TNLean/**/*.lean",
               ],
               text=True,
           )
@@ -115,9 +114,7 @@ jobs:
                   ".",
                   "--warn-missing-blueprint",
                   "--diff-base",
-                  base,
-                  "--diff-head",
-                  head,
+                  base_ref,
                   "--changed-files",
                   *changed_lean_files,
               ],

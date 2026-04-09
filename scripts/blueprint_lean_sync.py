@@ -349,7 +349,6 @@ def _git_diff_changed_lines(root: Path, rel_path: str, diff_base: str, diff_head
         start = int(m.group(1))
         count = int(m.group(2) or "1")
         if count == 0:
-            changed_lines.add(start)
             continue
         changed_lines.update(range(start, start + count))
     return changed_lines
@@ -422,7 +421,7 @@ def print_missing_blueprint_warnings(missing: list[LeanDecl]) -> None:
         print()
         return
 
-    print(f"WARNING: New declarations not yet in blueprint ({len(missing)}):")
+    print(f"WARNING: Changed declarations not yet in blueprint ({len(missing)}):")
     for decl in missing:
         print(f"  - {decl.fqn}  ({decl.file}:{decl.line})")
         if os.getenv("GITHUB_ACTIONS") == "true":
