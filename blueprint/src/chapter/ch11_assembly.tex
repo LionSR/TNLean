@@ -329,8 +329,9 @@ single weighted block.
 	$\mu_{j,q} \neq 0$ for $q \in \{1,\dotsc,r_j\}$, and the
 	\emph{sector coefficients}
 	\[
-		c_j^{(N)} := \sum_{q=1}^{r_j} \mu_{j,q}^N.
+		c_{S,j}^{(N)} := \sum_{q=1}^{r_j} \mu_{j,q}^N
 	\]
+	for a sector datum $S$.
 	A \emph{sector decomposition} consists of the basis blocks
 	$(A_j)_{j=1}^g$ together with their sector data.
 \end{definition}
@@ -340,11 +341,11 @@ single weighted block.
 	\lean{MPSTensor.SectorDecomposition.mpv_toTensor_eq_sum_coeff}
 	\leanok
 	\uses{def:paper_sector_data}
-	For a sector decomposition with associated tensor $A_{\mathrm{tot}}$,
+	For a sector decomposition $S$ with associated tensor $A_{\mathrm{tot}}$,
 	the MPV satisfies
 	\[
 		V^{(N)}(A_{\mathrm{tot}})_\sigma
-		= \sum_{j=1}^{g} c_j^{(N)} V^{(N)}(A_j)_\sigma.
+		= \sum_{j=1}^{g} c_{S,j}^{(N)} V^{(N)}(A_j)_\sigma.
 	\]
 \end{theorem}
 
