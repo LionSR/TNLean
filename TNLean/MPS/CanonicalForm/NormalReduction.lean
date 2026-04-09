@@ -5,8 +5,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.Algebra.IrreducibleTensorAction
 import TNLean.Algebra.MatrixFunctionalCalculus
 import TNLean.MPS.Core.Blocking
+import TNLean.MPS.SharedInfra.Scaling
 import TNLean.MPS.CanonicalForm.Existence
-import TNLean.MPS.FundamentalTheorem.TransferNormalization
 import TNLean.PiAlgebra.CanonicalFormSep
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder TNMatrixCFC
