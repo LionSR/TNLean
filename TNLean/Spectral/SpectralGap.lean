@@ -299,7 +299,7 @@ theorem ker_all_of_inj {D₁ D₂ : ℕ}
 
 /-- If X ≠ 0 and ker(X) is invariant under all matrices, then det(X) ≠ 0.
 
-Fully proved (no sorry). The idea: pick v ≠ 0 with Xv = 0, map v to
+The idea: pick v ≠ 0 with Xv = 0, map v to
 any w via a rank-1 matrix M with Mv = w, then Xw = X(Mv) = 0, so X = 0. -/
 private lemma det_ne_zero_of_ker_all [NeZero D]
     (X : Matrix (Fin D) (Fin D) ℂ)
@@ -340,7 +340,7 @@ private lemma det_ne_zero_of_ker_all [NeZero D]
   exact hX h_X_zero
 
 -- From hFX and X invertible, derive ∑ (X⁻¹ A_i X) * B_i† = μ • 1
--- Fully proved (no sorry).
+-- Algebraic conjugation step used below.
 private lemma sum_conj_mul_conjTranspose [NeZero D]
     (A B : MPSTensor d D) (X : Matrix (Fin D) (Fin D) ℂ) (μ : ℂ)
     (hFX : mixedTransferMap A B X = μ • X)
@@ -355,7 +355,7 @@ private lemma sum_conj_mul_conjTranspose [NeZero D]
   convert key using 1; congr 1; ext i; simp [Matrix.mul_assoc]
 
 -- If ∑ Rᵢ† Rᵢ = 0 then each Rᵢ = 0.
--- Fully proved (no sorry). Uses PSD trace argument.
+-- Uses the PSD trace argument to show each summand vanishes.
 private lemma each_zero_of_sum_conjTranspose_mul_self_zero
     (R : Fin d → Matrix (Fin D) (Fin D) ℂ)
     (h : ∑ i : Fin d, (R i)ᴴ * R i = 0) :

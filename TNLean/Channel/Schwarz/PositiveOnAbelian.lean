@@ -19,11 +19,11 @@ later for the normal-operator Schwarz inequality. The key definition
 `IsPositiveOnCommuting` is phrased in terms of quadratic forms of block matrices
 whose images under the map commute pairwise.
 
-The main amplification theorem is currently left as a placeholder
-`quadraticForm_nonneg_of_isPositiveMap_of_commuting_images` with a
-`-- Wolf Prop 1.6` marker. The surrounding algebraic helper lemmas about the
-normal generators `{A, Aᴴ, Aᴴ * A, 1}` are proved and are intended to support
-later refinements toward Wolf Proposition 5.1.
+The main amplification theorem
+`quadraticForm_nonneg_of_isPositiveMap_of_commuting_images` is proved here,
+with a `-- Wolf Prop 1.6` marker. The surrounding algebraic helper lemmas
+about the normal generators `{A, Aᴴ, Aᴴ * A, 1}` are intended to support later
+refinements toward Wolf Proposition 5.1.
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder BigOperators TNMatrixCFC

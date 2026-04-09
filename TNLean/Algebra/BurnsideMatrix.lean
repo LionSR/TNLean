@@ -26,7 +26,7 @@ project rather than imported from Mathlib.
 * `MPSTensor.IsInvariantSubmodule A W`: `W ≤ (Fin D → ℂ)` is invariant under all `A i`.
 * `MPSTensor.IsIrreducibleAction A`: no nontrivial invariant submodule.
 
-## Main results (all sorry-free)
+## Main results
 
 ### Part 1: Algebra span and cumulative span
 
