@@ -118,7 +118,7 @@ theorem tpGauge_isTP_of_transferMap_conjTranspose_fixedPoint
 
 /-- The gauge-transformed tensor `tpGauge A ρ` is gauge-equivalent to `A` (hence has the same MPV).
 
-We package this as a `GaugeEquiv` witness. -/
+We record this as a `GaugeEquiv` witness. -/
 theorem gaugeEquiv_tpGauge (A : MPSTensor d D) (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) :
     GaugeEquiv (d := d) (D := D) A (tpGauge (d := d) (D := D) A ρ) := by
   classical
