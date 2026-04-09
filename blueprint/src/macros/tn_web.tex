@@ -223,7 +223,7 @@
 \newcommand{\TNPEPSEdgeGaugeOrientation}{%
   \begin{array}{c}
     \text{edge } e = (u,w) \text{ oriented by } u < w \\
-    u \; \text{---} \; X_e \; \text{---} \; X_e^{-1} \; \text{---} \; w
+    u \; \text{---} \; X_e \; \text{---} \; (X_e^{-1})^T \; \text{---} \; w
   \end{array}%
 }
 
@@ -236,8 +236,8 @@
 
 \newcommand{\TNPEPSGaugeCancellation}{%
   \begin{array}{c}
-    \sum_j X_e(i,j)\,(X_e^{-1})(j,k) = \delta(i,k) \\
-    \text{so the two edge gauges cancel on an internal contraction}
+    \sum_j X_e(j,i)\,((X_e^{-1})^T)(j,k) = \delta(i,k) \\
+    \text{so the two edge gauges cancel on the shared edge index}
   \end{array}%
 }
 
@@ -251,6 +251,7 @@
 \newcommand{\TNPEPSGlobalConsistency}{%
   \begin{array}{c}
     \text{local gauges extracted at } u \text{ and } w \text{ agree on the shared edge } e \\
+    u \; \text{---} \; X_e \; \text{---} \; (X_e^{-1})^T \; \text{---} \; w \\
     \text{and define one global edge gauge family}
   \end{array}%
 }
