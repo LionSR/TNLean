@@ -19,7 +19,9 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
+import subprocess
 import sys
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -30,9 +32,14 @@ from pathlib import Path
 # ---------------------------------------------------------------------------
 
 _LEAN_DECL_RE = re.compile(
-    r"^\s*(?:@\[.*?\]\s*)?(?:(?:noncomputable|protected|private)\s+)*(?:def|theorem|lemma|abbrev|instance|class|structure|inductive|axiom|opaque)\s+([\w.'+]+)",
+    r"^\s*(?:@\[.*?\]\s*)?"
+    r"(?:(?:noncomputable|protected|private)\s+)*"
+    r"(def|theorem|lemma|abbrev|instance|class|structure|inductive|axiom|opaque)\s+"
+    r"([\w.'+]+)",
     re.MULTILINE,
 )
+_TRACKED_REVERSE_DECL_KINDS = {"def", "theorem", "lemma"}
+_DIFF_HUNK_RE = re.compile(r"^@@ -\d+(?:,\d+)? \+(\d+)(?:,(\d+))? @@")
 
 _NAMESPACE_OPEN_RE = re.compile(r"^\s*namespace\s+([\w.]+)", re.MULTILINE)
 _SECTION_OPEN_RE = re.compile(
@@ -77,6 +84,9 @@ class LeanDecl:
     file: str
     line: int
     fqn: str  # fully-qualified name including namespace
+    kind: str
+    short_name: str
+    end_line: int
 
 
 @dataclass
@@ -104,62 +114,78 @@ class SyncReport:
 # Parse Lean source tree
 # ---------------------------------------------------------------------------
 
+def collect_file_lean_decls(lean_file: Path, lean_root: Path) -> list[LeanDecl]:
+    """Parse one Lean file and return its declarations with approximate spans."""
+    text = lean_file.read_text(errors="replace")
+    lines = text.splitlines()
+    rel = str(lean_file.relative_to(lean_root.parent))
+
+    # Track namespace and section stacks separately.
+    ns_stack: list[str] = []
+    section_stack: list[str] = []
+    decls: list[LeanDecl] = []
+
+    for i, line in enumerate(lines, 1):
+        m = _NAMESPACE_OPEN_RE.match(line)
+        if m:
+            ns_stack.append(m.group(1))
+            continue
+
+        m = _SECTION_OPEN_RE.match(line)
+        if m:
+            section_stack.append(m.group(1))
+            continue
+
+        m = _NAMESPACE_CLOSE_RE.match(line)
+        if m:
+            closed = m.group(1)
+            if section_stack and section_stack[-1] == closed:
+                section_stack.pop()
+                continue
+            if ns_stack and ns_stack[-1] == closed:
+                ns_stack.pop()
+            elif ns_stack:
+                for j in range(len(ns_stack) - 1, -1, -1):
+                    if ns_stack[j] == closed:
+                        ns_stack = ns_stack[:j]
+                        break
+            continue
+
+        m = _LEAN_DECL_RE.match(line)
+        if m:
+            kind = m.group(1)
+            short_name = m.group(2)
+            prefix = ".".join(ns_stack) + "." if ns_stack else ""
+            fqn = prefix + short_name
+            decls.append(
+                LeanDecl(
+                    file=rel,
+                    line=i,
+                    fqn=fqn,
+                    kind=kind,
+                    short_name=short_name,
+                    end_line=len(lines),
+                )
+            )
+
+    for idx, decl in enumerate(decls):
+        if idx + 1 < len(decls):
+            decl.end_line = decls[idx + 1].line - 1
+
+    return decls
+
+
 def collect_lean_decls(lean_root: Path) -> dict[str, LeanDecl]:
     """Walk all .lean files and return {fqn: LeanDecl}."""
     decls: dict[str, LeanDecl] = {}
 
     for lean_file in sorted(lean_root.rglob("*.lean")):
-        text = lean_file.read_text(errors="replace")
-        lines = text.splitlines()
-
-        # Track namespace and section stacks separately
-        ns_stack: list[str] = []
-        section_stack: list[str] = []
-
-        for i, line in enumerate(lines, 1):
-            # Namespace open
-            m = _NAMESPACE_OPEN_RE.match(line)
-            if m:
-                ns_stack.append(m.group(1))
-                continue
-
-            # Section open (tracked to avoid confusing `end Section` with namespace close)
-            m = _SECTION_OPEN_RE.match(line)
-            if m:
-                section_stack.append(m.group(1))
-                continue
-
-            # Namespace/section close
-            m = _NAMESPACE_CLOSE_RE.match(line)
-            if m:
-                closed = m.group(1)
-                # Check if this closes a section first
-                if section_stack and section_stack[-1] == closed:
-                    section_stack.pop()
-                    continue
-                # Otherwise pop matching namespace
-                if ns_stack and ns_stack[-1] == closed:
-                    ns_stack.pop()
-                elif ns_stack:
-                    for j in range(len(ns_stack) - 1, -1, -1):
-                        if ns_stack[j] == closed:
-                            ns_stack = ns_stack[:j]
-                            break
-                continue
-
-            # Declaration
-            m = _LEAN_DECL_RE.match(line)
-            if m:
-                short_name = m.group(1)
-                prefix = ".".join(ns_stack) + "." if ns_stack else ""
-                fqn = prefix + short_name
-                rel = str(lean_file.relative_to(lean_root.parent))
-                decls[fqn] = LeanDecl(file=rel, line=i, fqn=fqn)
-                # Also store without namespace prefix if the name already
-                # contains dots (e.g. `Foo.bar` at top level), so both
-                # the bare dotted name and the fully-qualified name match.
-                if "." in short_name and fqn != short_name:
-                    decls[short_name] = LeanDecl(file=rel, line=i, fqn=fqn)
+        for decl in collect_file_lean_decls(lean_file, lean_root):
+            decls[decl.fqn] = decl
+            # Also store without namespace prefix if the name already contains
+            # dots (e.g. `Foo.bar` at top level), so both spellings match.
+            if "." in decl.short_name and decl.fqn != decl.short_name:
+                decls[decl.short_name] = decl
 
     return decls
 
@@ -288,7 +314,6 @@ def read_lean_decls_file(path: Path) -> set[str]:
         # leanblueprint web can clobber lean_decls to empty when kpsewhich is
         # missing; fall back to the committed version so the sync check still
         # works after that step.
-        import subprocess
         try:
             out = subprocess.check_output(
                 ["git", "show", "HEAD:blueprint/lean_decls"],
@@ -300,6 +325,114 @@ def read_lean_decls_file(path: Path) -> set[str]:
         except (subprocess.CalledProcessError, FileNotFoundError):
             pass
     return decls
+
+
+def _git_diff_changed_lines(root: Path, rel_path: str, diff_base: str, diff_head: str) -> set[int]:
+    """Return changed line numbers in the post-change file using `git diff -U0`."""
+    try:
+        diff = subprocess.check_output(
+            ["git", "diff", "--unified=0", diff_base, diff_head, "--", rel_path],
+            cwd=root,
+            text=True,
+            stderr=subprocess.DEVNULL,
+        )
+    except subprocess.CalledProcessError as exc:
+        raise RuntimeError(
+            f"Could not diff {rel_path!r} between {diff_base} and {diff_head}"
+        ) from exc
+
+    changed_lines: set[int] = set()
+    for line in diff.splitlines():
+        m = _DIFF_HUNK_RE.match(line)
+        if not m:
+            continue
+        start = int(m.group(1))
+        count = int(m.group(2) or "1")
+        if count == 0:
+            changed_lines.add(start)
+            continue
+        changed_lines.update(range(start, start + count))
+    return changed_lines
+
+
+def _decl_blueprint_spellings(decl: LeanDecl) -> set[str]:
+    names = {decl.fqn}
+    if "." in decl.short_name:
+        names.add(decl.short_name)
+    return names
+
+
+def find_changed_decls_missing_from_blueprint(
+    root: Path,
+    *,
+    changed_files: list[str],
+    diff_base: str,
+    diff_head: str,
+) -> list[LeanDecl]:
+    """Return changed `def`/`theorem`/`lemma` declarations missing from blueprint."""
+    lean_root = root / "TNLean"
+    blueprint_src = root / "blueprint" / "src"
+
+    blueprint_decl_names = {
+        entry.lean_decl for entry in collect_blueprint_entries(blueprint_src)
+    }
+    missing: list[LeanDecl] = []
+    seen: set[str] = set()
+
+    for rel_path in changed_files:
+        if not rel_path.endswith(".lean"):
+            continue
+        abs_path = root / rel_path
+        if not abs_path.is_file():
+            continue
+        try:
+            abs_path.relative_to(lean_root)
+        except ValueError:
+            continue
+
+        changed_lines = _git_diff_changed_lines(root, rel_path, diff_base, diff_head)
+        if not changed_lines:
+            continue
+
+        for decl in collect_file_lean_decls(abs_path, lean_root):
+            if decl.kind not in _TRACKED_REVERSE_DECL_KINDS:
+                continue
+            if not any(decl.line <= line <= decl.end_line for line in changed_lines):
+                continue
+            if _decl_blueprint_spellings(decl) & blueprint_decl_names:
+                continue
+            if decl.fqn in seen:
+                continue
+            seen.add(decl.fqn)
+            missing.append(decl)
+
+    return missing
+
+
+def print_missing_blueprint_warnings(missing: list[LeanDecl]) -> None:
+    """Print a warning-only report for changed declarations missing blueprint refs."""
+    print()
+    print("=" * 70)
+    print("  CHANGED LEAN DECLARATIONS ↔ BLUEPRINT COVERAGE")
+    print("=" * 70)
+    print()
+
+    if not missing:
+        print("✓ No changed def/theorem/lemma declarations are missing blueprint entries.")
+        print()
+        return
+
+    print(f"WARNING: New declarations not yet in blueprint ({len(missing)}):")
+    for decl in missing:
+        print(f"  - {decl.fqn}  ({decl.file}:{decl.line})")
+        if os.getenv("GITHUB_ACTIONS") == "true":
+            print(
+                "::warning "
+                f"file={decl.file},line={decl.line},title=Blueprint update suggested::"
+                f"{decl.fqn} is changed in this PR but has no corresponding "
+                "\\lean{} tag in blueprint/src/chapter."
+            )
+    print()
 
 
 # ---------------------------------------------------------------------------
@@ -515,16 +648,60 @@ def main() -> None:
         action="store_true",
         help="Exit with code 1 on mismatches (for CI)",
     )
+    parser.add_argument(
+        "--warn-missing-blueprint",
+        action="store_true",
+        help=(
+            "Warn about changed def/theorem/lemma declarations in changed Lean files "
+            "that have no corresponding \\lean{} tag in blueprint chapters"
+        ),
+    )
+    parser.add_argument(
+        "--changed-files",
+        nargs="*",
+        default=None,
+        help="Changed Lean files to inspect for reverse blueprint coverage",
+    )
+    parser.add_argument(
+        "--diff-base",
+        default=None,
+        help="Git base revision for reverse blueprint coverage checks",
+    )
+    parser.add_argument(
+        "--diff-head",
+        default="HEAD",
+        help="Git head revision for reverse blueprint coverage checks (default: HEAD)",
+    )
     args = parser.parse_args()
 
-    report = run_sync(
-        args.root,
-        report_file=args.report,
-        update_lean_decls=args.update_lean_decls,
+    should_run_sync = (
+        args.update_lean_decls
+        or args.ci
+        or args.report is not None
+        or not args.warn_missing_blueprint
     )
 
-    if args.ci and not report.ok:
-        sys.exit(1)
+    if should_run_sync:
+        report = run_sync(
+            args.root,
+            report_file=args.report,
+            update_lean_decls=args.update_lean_decls,
+        )
+        if args.ci and not report.ok:
+            sys.exit(1)
+
+    if args.warn_missing_blueprint:
+        if not args.changed_files:
+            parser.error("--warn-missing-blueprint requires --changed-files")
+        if not args.diff_base:
+            parser.error("--warn-missing-blueprint requires --diff-base")
+        missing = find_changed_decls_missing_from_blueprint(
+            args.root,
+            changed_files=args.changed_files,
+            diff_base=args.diff_base,
+            diff_head=args.diff_head,
+        )
+        print_missing_blueprint_warnings(missing)
 
 
 if __name__ == "__main__":
