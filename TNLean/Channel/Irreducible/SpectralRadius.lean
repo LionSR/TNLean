@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Algebra.MatrixOperatorSpace
+import TNLean.Channel.Irreducible.KrausSetup
 import TNLean.Channel.Irreducible.PerronFrobenius
 import TNLean.Channel.Irreducible.Similarity
 import TNLean.Channel.Irreducible.TraceAdjoint
@@ -215,31 +216,14 @@ theorem spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp
     spectralRadius ℂ
       ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)) E) =
       ENNReal.ofReal r := by
-  obtain ⟨n, K, hK⟩ := hCP
-  have hE_eq : E = MPSTensor.transferMap (d := n) (D := D) K :=
-    LinearMap.ext fun X => by
-      simpa [MPSTensor.transferMap_apply] using hK X
-  have hIrrK_map : IsIrreducibleMap (MPSTensor.transferMap (d := n) (D := D) K) := by
-    simpa [hE_eq] using hIrr
-  have hIrrK : MPSTensor.IsIrreducibleTensor (d := n) (D := D) K :=
-    MPSTensor.isIrreducibleTensor_of_isIrreducibleMap K hIrrK_map
+  let hSetup := irreducibleCPKrausSetup (D := D) E hCP hIrr
+  let n := hSetup.n
+  let K := hSetup.K
+  have hE_eq : E = MPSTensor.transferMap (d := n) (D := D) K := hSetup.map_eq
   have hρ_ne : ρ ≠ 0 := (Matrix.PosDef.isUnit hρ_pd).ne_zero
-  have hE_ne : E ≠ 0 := by
-    intro hE0
-    have hρ_zero : (r : ℂ) • ρ = 0 := by
-      simpa [hE0] using hEig.symm
-    have hr_ne : (r : ℂ) ≠ 0 := by
-      exact_mod_cast hr.ne'
-    exact hρ_ne ((smul_eq_zero.mp hρ_zero).resolve_left hr_ne)
-  have hK_nonzero : ∃ i : Fin n, K i ≠ 0 := by
-    by_contra hK_zero
-    push Not at hK_zero
-    have htransfer_zero : MPSTensor.transferMap (d := n) (D := D) K = 0 :=
-      LinearMap.ext fun X => by
-        simp [MPSTensor.transferMap_apply, hK_zero]
-    exact hE_ne (by simpa [hE_eq] using htransfer_zero)
+  have hE_ne : E ≠ 0 := ne_zero_of_pos_eigenvector hρ_ne hr hEig
   obtain ⟨σ, t, hσ_pd, ht_pos, hσ_eig⟩ :=
-    MPSTensor.exists_posDef_adjoint_eigenvector (d := n) (D := D) K hIrrK hK_nonzero
+    hSetup.exists_posDef_adjoint_eigenvector hE_ne
   have htrace : ∀ X : Matrix (Fin D) (Fin D) ℂ,
       Matrix.trace (σ * E X) =
         Matrix.trace (MPSTensor.transferMap (d := n) (D := D) (fun i => (K i)ᴴ) σ * X) :=
@@ -333,7 +317,8 @@ theorem spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp
             (S * (∑ i : Fin n, K i * (S⁻¹ * X * S⁻¹) * (K i)ᴴ) * S) := by
             rw [Matrix.sum_mul_mul]
       _ = (↑r : ℂ)⁻¹ • (S * E (S⁻¹ * X * S⁻¹) * S) := by
-            rw [hK]
+            rw [hE_eq]
+            simp [MPSTensor.transferMap_apply]
       _ = ((↑r : ℂ)⁻¹ • similarityMap (D := D) S⁻¹ E) X := by
             simp [similarityMap, hS_inv_inv, hS_inv_herm, Matrix.mul_assoc]
   set E' : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ :=

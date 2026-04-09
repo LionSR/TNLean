@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Channel.Irreducible.Growth
+import TNLean.Channel.Irreducible.KrausSetup
 import TNLean.Channel.Irreducible.TraceAdjoint
-import TNLean.Channel.PerronFrobenius.Existence
 import TNLean.QPF.Uniqueness
 
 /-!
@@ -176,30 +176,13 @@ theorem eigenvalue_unique_of_irreducible_cp
     (hρ_eig : E ρ = (r₁ : ℂ) • ρ)
     (hσ_eig : E σ = (r₂ : ℂ) • σ) :
     r₁ = r₂ := by
-  obtain ⟨n, K, hK⟩ := hCP
-  have hE_eq : E = MPSTensor.transferMap (d := n) (D := D) K :=
-    LinearMap.ext fun X => by
-      simpa [MPSTensor.transferMap_apply] using hK X
-  have hIrrK_map : IsIrreducibleMap (MPSTensor.transferMap (d := n) (D := D) K) := by
-    simpa [hE_eq] using hIrr
-  have hIrrK : MPSTensor.IsIrreducibleTensor (d := n) (D := D) K :=
-    MPSTensor.isIrreducibleTensor_of_isIrreducibleMap K hIrrK_map
-  have hE_ne : E ≠ 0 := by
-    intro hE0
-    have hρ_zero : (r₁ : ℂ) • ρ = 0 := by
-      simpa [hE0] using hρ_eig.symm
-    have hr₁_ne : (r₁ : ℂ) ≠ 0 := by
-      exact_mod_cast hr₁.ne'
-    exact hρ_ne ((smul_eq_zero.mp hρ_zero).resolve_left hr₁_ne)
-  have hK_nonzero : ∃ i : Fin n, K i ≠ 0 := by
-    by_contra hK_zero
-    push Not at hK_zero
-    have htransfer_zero : MPSTensor.transferMap (d := n) (D := D) K = 0 :=
-      LinearMap.ext fun X => by
-        simp [MPSTensor.transferMap_apply, hK_zero]
-    exact hE_ne (by simpa [hE_eq] using htransfer_zero)
+  let hSetup := irreducibleCPKrausSetup (D := D) E hCP hIrr
+  let n := hSetup.n
+  let K := hSetup.K
+  have hE_eq : E = MPSTensor.transferMap (d := n) (D := D) K := hSetup.map_eq
+  have hE_ne : E ≠ 0 := ne_zero_of_pos_eigenvector hρ_ne hr₁ hρ_eig
   obtain ⟨τ, t, hτ_pd, ht_pos, hτ_eig⟩ :=
-    MPSTensor.exists_posDef_adjoint_eigenvector (d := n) (D := D) K hIrrK hK_nonzero
+    hSetup.exists_posDef_adjoint_eigenvector hE_ne
   have htrace : ∀ X : Matrix (Fin D) (Fin D) ℂ,
       Matrix.trace (τ * E X) =
         Matrix.trace (MPSTensor.transferMap (d := n) (D := D) (fun i => (K i)ᴴ) τ * X) :=
