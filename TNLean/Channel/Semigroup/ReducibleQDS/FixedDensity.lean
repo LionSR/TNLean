@@ -3,9 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Channel.Semigroup.ReducibleQDS.Defs
--- `ReducibleQDS.Defs` does not already import `StationarySupport`, so this is
--- the direct import needed to reuse `Channel.lowerZero_implies_invariance`.
-import TNLean.Channel.FixedPoint.StationarySupport
+import TNLean.MPS.Core.OrthogonalProjectionInvariance
 
 /-!
 # Fixed Density ↔ Kernel Element (Wolf Prop 7.6, (1) ↔ (2)) and (1) → (3)
@@ -90,7 +88,7 @@ private theorem invariantCompression_of_supportProj_fixed_by_channel
   refine ⟨hP_data.1, ?_⟩
   intro X
   rw [hE_eq_transfer]
-  exact Channel.lowerZero_implies_invariance (D := D) K hP_data.1 hP_data.2 X
+  exact MPSTensor.lowerZero_implies_invariance K P hP_data.1 hP_data.2 X
 
 private lemma not_posDef_of_proj_sandwich_eq_self
     {P ρ : Mat}
