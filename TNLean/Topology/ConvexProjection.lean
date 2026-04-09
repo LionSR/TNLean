@@ -8,7 +8,7 @@ import Mathlib.Topology.MetricSpace.Lipschitz
 /-!
 # Nearest-point projection onto a complete convex set
 
-This file packages the Hilbert projection theorem from Mathlib into a reusable
+This file records the Hilbert projection theorem from Mathlib as a reusable
 nearest-point projection on a nonempty complete convex set in a real inner
 product space, together with uniqueness, nonexpansiveness, and continuity.
 -/

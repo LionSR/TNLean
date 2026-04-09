@@ -7,7 +7,7 @@ import Mathlib.Logic.Equiv.Fin.Basic
 /-!
 # Block-triangular trace invariance for MPS tensors
 
-This file packages the observation that strict upper-right blocks do not affect
+This file records the observation that strict upper-right blocks do not affect
 word traces of block upper-triangular tensors. It defines block-sum and
 reindexing helpers and proves `sameMPV_upperFin_diagFin`, reducing an
 upper-triangular tensor to its block-diagonal part.
@@ -69,7 +69,7 @@ lemma trace_fromBlocks_upper (X : Matrix (Fin n) (Fin n) ℂ)
 
 /-- For any word `w`, evaluating `upperSum` gives an upper-triangular block matrix.
 
-We package the (inessential) upper-right block into an auxiliary recursion `UR`. -/
+We record the (inessential) upper-right block in an auxiliary recursion `UR`. -/
 lemma evalWord_upperSum_is_fromBlocks
     (A11 : Fin d → Matrix (Fin n) (Fin n) ℂ)
     (A12 : Fin d → Matrix (Fin n) (Fin m) ℂ)
