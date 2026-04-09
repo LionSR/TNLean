@@ -995,7 +995,7 @@ spectral gap. It is connected to normality through the following results.
     (Chapter~\ref{ch:canonical}, \S\ref{subsec:burnside_bridge})
     and Theorem~\ref{thm:algspan_to_normal}, one obtains
     \[
-        \text{primitive} + \rho\text{ PosDef}
+        \text{primitive} + \rho \text{ positive definite}
         \;\Rightarrow\;
         \text{irreducible}
         \;\Rightarrow\;
@@ -1013,7 +1013,7 @@ spectral gap. It is connected to normality through the following results.
 
 \subsection{Primitive implies irreducible}\label{subsec:prim_implies_irred}
 
-\begin{theorem}[Primitive with PosDef fixed point implies irreducible tensor]%
+\begin{theorem}[Primitive with positive-definite fixed point implies irreducible tensor]%
     \label{thm:primitive_implies_irreducible}
     \lean{MPSTensor.isIrreducibleTensor_of_isPrimitiveMPS_of_posDef}
     \leanok
@@ -1066,7 +1066,7 @@ Definition~\ref{def:primitive_mps} directly to normality
 using the convergence of the transfer-map iterates to the
 projection onto the fixed-point subspace.
 
-\begin{theorem}[Primitive MPS with PosDef fixed point has irreducible transfer map]%
+\begin{theorem}[Primitive MPS with positive-definite fixed point has irreducible transfer map]%
     \label{thm:irreducible_map_from_primitive}
     \lean{MPSTensor.isIrreducibleMap_of_isPrimitiveMPS_of_posDef}
     \leanok
@@ -1092,7 +1092,7 @@ projection onto the fixed-point subspace.
     irreducibility applies.
 \end{proof}
 
-\begin{theorem}[Primitive MPS with PosDef fixed point is strongly irreducible]%
+\begin{theorem}[Primitive MPS with positive-definite fixed point is strongly irreducible]%
     \label{thm:strongly_irred_from_primitive}
     \lean{MPSTensor.isStronglyIrreduciblePaper_of_isPrimitiveMPS_of_posDef}
     \leanok
@@ -1113,7 +1113,7 @@ projection onto the fixed-point subspace.
     (Theorem~\ref{thm:prim_overlap_one}).
 \end{proof}
 
-\begin{theorem}[Primitive MPS with PosDef fixed point is normal]%
+\begin{theorem}[Primitive MPS with positive-definite fixed point is normal]%
     \label{thm:normal_from_primitive_posdef}
     \lean{MPSTensor.isNormal_of_isPrimitiveMPS_with_posDef}
     \leanok
