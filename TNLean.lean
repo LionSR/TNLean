@@ -24,6 +24,7 @@ import TNLean.Algebra.BlockPermutation
 import TNLean.Algebra.SkolemNoether
 import TNLean.Algebra.GramMatrixLI
 import TNLean.Algebra.HermitianHelpers
+import TNLean.Algebra.LinearMapAux
 import TNLean.Algebra.MatrixAux
 import TNLean.Algebra.ScalarPowerSumIdentity
 import TNLean.Algebra.BurnsideMatrix
