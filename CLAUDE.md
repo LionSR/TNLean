@@ -87,6 +87,7 @@ Detailed conventions live in `docs/`. Read the relevant file before working in t
 | [`docs/PROOF_INTEGRITY.md`](docs/PROOF_INTEGRITY.md) | Blockers (`sorry`, `axiom`, kernel bypasses, circular reasoning) and warnings (`maxHeartbeats`, debug artifacts) |
 | [`docs/blueprint_style_guide.md`](docs/blueprint_style_guide.md) | LaTeX conventions, `\lean{}`/`\leanok` tags, notation table, banned AI/software language |
 | [`docs/ci-automation.md`](docs/ci-automation.md) | CI workflows, auto-fix loops, iteration caps, commit message conventions |
+| [`docs/deploy.md`](docs/deploy.md) | Blueprint and API docs deployment (local preview, CI workflows, gh-pages structure) |
 
 ### Quick Reference (from the docs above)
 
