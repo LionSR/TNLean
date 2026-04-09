@@ -4,7 +4,7 @@ import TNLean.MPS.Chain.FundamentalTheorem
 /-!
 # Fundamental theorem endpoint for blocked chains
 
-This module packages a blocked-chain endpoint. The theorem
+This module gives a blocked-chain endpoint. The theorem
 `fundamentalTheorem_blockedChain` is stated for blocked chains built from a
 common blocking length `L`.
 
@@ -16,7 +16,7 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- Bridge between project `N`-block injectivity and injectivity of the physically
+/-- Equivalence between project `N`-block injectivity and injectivity of the physically
 blocked tensor `blockTensor A N`. -/
 lemma isNBlkInjective_iff_blockTensor_isInjective (A : MPSTensor d D) (N : ℕ) :
     IsNBlkInjective A N ↔ IsInjective (blockTensor A N) := by

@@ -74,7 +74,7 @@ decomposes each periodic block into primitive sectors before blocking.
 
 ### Progress on cyclic sector decomposition (#242)
 
-The per-block bridge is now complete:
+The per-block reduction step is now complete:
 
 * `exists_cyclic_sector_decomp_of_TP_of_isIrreducibleTensor`: For each irreducible TP block,
   derives all channel-level hypotheses automatically and produces cyclic
@@ -229,7 +229,7 @@ theorem exists_tp_primitive_blockDecomp_after_blocking (A : MPSTensor d D) :
 ## Conditional normal canonical form
 
 If the blocked weights happen to have pairwise distinct norms, and the blocked
-blocks are irreducible, then the data can be packaged as `IsNormalCanonicalForm`
+blocks are irreducible, then the data yields `IsNormalCanonicalForm`
 after sorting by weight norm.
 
 This is a conditional theorem: the two extra hypotheses are genuine conditions
@@ -317,7 +317,7 @@ For a single block that is TP, has a primitive transfer map, AND is irreducible
 3. `IsPrimitiveMPS A ρ` + `ρ.PosDef`
    → `isNormal_of_isPrimitiveMPS_with_posDef` → `IsNormal A`
 
-We package this chain as a single theorem.
+We record this chain as a single theorem.
 -/
 
 /-- **TP + primitive + irreducible → IsNormal** (per-block chain).
@@ -674,7 +674,7 @@ The cyclic decomposition from `CyclicDecomposition.lean` produces projections `P
 - `∀ k, IsOrthogonalProjection (P k)` and `∑ k, P k = 1`
 - `E†(P(k+1)) = P k` (cyclic), hence `(E†)^m (P k) = P k`
 
-The key bridge: `(E†)^m = transferMap (fun j => (blockTensor A m j)ᴴ)` because the
+The key identity is `(E†)^m = transferMap (fun j => (blockTensor A m j)ᴴ)` because the
 adjoint of the blocked transfer map equals the m-th iterate of the adjoint transfer map.
 This is proved by a tuple-reversal bijection: summing `A_w†·X·A_w` over all length-`m`
 words `w` gives the same result regardless of whether `A_w` or `A_{rev(w)}` is used.
@@ -688,7 +688,7 @@ words `w` gives the same result regardless of whether `A_w` or `A_{rev(w)}` is u
 5. Apply `exists_blockDecomp_of_adjoint_fixed_projections` from `CyclicSectors.lean`
 -/
 
-section CyclicSectorBridge
+section CyclicSectorDecomposition
 
 
 open KadisonSchwarz
@@ -897,10 +897,10 @@ theorem exists_cyclic_sector_decomp_after_blocking
       (blockTensor A m) hTP_blocked (hP := hPproj k) (hFix := hFix k) i
   exact ⟨dim, blocks, P, hLC, hMPV, hPproj, hPsum, hComm, hTrace⟩
 
-end CyclicSectorBridge
+end CyclicSectorDecomposition
 
 /-!
-## Bridge: MPS hypotheses → cyclic sector decomposition
+## From MPS hypotheses to cyclic sector decomposition
 
 For an irreducible TP tensor, all channel-level hypotheses needed by
 `exists_cyclic_sector_decomp_after_blocking` can be derived automatically:
@@ -918,7 +918,7 @@ open KadisonSchwarz
 /-- From an irreducible TP tensor, derive the conjugate-transposed Kraus family `K`,
 its unitality and irreducibility, and a `PosDef` fixed point `ρ` of `Kraus.adjointMap K`.
 
-This bundles the common setup shared by `exists_cyclic_sector_decomp_of_TP_of_isIrreducibleTensor`
+This records the common setup shared by `exists_cyclic_sector_decomp_of_TP_of_isIrreducibleTensor`
 and `exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor`. -/
 theorem conjTranspose_kraus_setup
     {d D : ℕ} [NeZero D]
@@ -955,13 +955,13 @@ theorem conjTranspose_kraus_setup
       Matrix.mul_assoc] using hρ_fix
   exact ⟨K, h_unitalK, hIrrK, ρ, hρ_pd, h_adjfix, rfl⟩
 
-/-- **Bridge: irreducible TP tensor → cyclic sector decomposition.**
+/-- **Irreducible TP tensor yields a cyclic sector decomposition.**
 
 For an irreducible TP tensor `A` with `0 < D`, there exists a period `m > 0`
 such that after blocking by `m`, the blocked tensor admits a decomposition
 into `m` left-canonical (TP) blocks via cyclic spectral projections.
 
-This bridges the MPS-level hypotheses (`IsIrreducibleTensor` + TP) to the
+This carries the MPS-level hypotheses (`IsIrreducibleTensor` + TP) to the
 channel-level cyclic decomposition, deriving all intermediate hypotheses
 (`ρ.PosDef`, `Kraus.adjointMap` fixed point, `IsIrreducibleMap`, peripheral
 spectrum structure) automatically via `conjTranspose_kraus_setup`. -/
@@ -1058,7 +1058,7 @@ additionally satisfy:
 
 then the block structures match up to permutation and gauge-phase equivalence.
 
-This theorem packages the structural content of arXiv:1606.00608, Theorem 1,
+This theorem records the structural content of arXiv:1606.00608, Theorem 1,
 connecting the reduction output to the fundamental theorem conclusion. -/
 theorem fundamentalTheorem_after_blocking_1606_structural
     {d D₁ D₂ : ℕ}

@@ -9,7 +9,7 @@ import Mathlib.Topology.Separation.Hausdorff
 # Small helpers about `Filter.Tendsto`
 
 This file contains a uniqueness-of-limits helper for later compactness and
-convergence arguments. The theorem `Filter.Tendsto.ne_nhds` packages the
+convergence arguments. The theorem `Filter.Tendsto.ne_nhds` records the
 standard T2-space fact that a nontrivial filter cannot tend simultaneously to
 two distinct points.
 -/

@@ -39,7 +39,7 @@ variable {d D : ℕ}
 
 /-! ## Two-block block-diagonal constructor
 
-We package the `r = 2` special case of `toTensorFromBlocks` with weights `μ ≡ 1` into a dedicated
+We record the `r = 2` special case of `toTensorFromBlocks` with weights `μ ≡ 1` in a dedicated
 constructor. This keeps statements readable and avoids elaboration timeouts from large dependent
 `Fin.cases` terms.
 -/
