@@ -618,7 +618,7 @@ directly to periodic tensors.
 
 The following is Theorem~3.8 (``equal case'') of \cite{DeLasCuevas2017Irreducible}.
 
-\begin{theorem}[Periodic Fundamental Theorem]\leanok
+\begin{theorem}[Periodic Fundamental Theorem]\notready
 	\label{thm:periodic_ft}
 	\lean{MPSTensor.zgauge_construction, MPSTensor.equalCase_zgauge_pipeline, MPSTensor.fundamentalTheorem_periodic_equalCase_matching, MPSTensor.fundamentalTheorem_periodic_equalCase}
 	\uses{def:irreducible_form, def:z_gauge_equiv}
@@ -656,9 +656,9 @@ The following is Theorem~3.8 (``equal case'') of \cite{DeLasCuevas2017Irreducibl
 	with $[A^i, Z] = 0$ and $\mathcal{V}(A) = \mathcal{V}(ZA)$.
 
 	\noindent\emph{Remark.}
-	The Lean formalization proves this under the additional hypothesis that the
-	periodic-overlap dichotomy (Proposition~3.3 of~\cite{DeLasCuevas2017Irreducible})
-	holds; that hypothesis will be discharged once the dichotomy is fully formalized.
+	The proof is conditional on the periodic-overlap dichotomy
+	(Proposition~3.3 of~\cite{DeLasCuevas2017Irreducible}),
+	which remains to be proved.
 \end{theorem}
 
 \subsection{Periodic overlap dichotomy (Proposition 3.3)}

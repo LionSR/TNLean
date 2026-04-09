@@ -504,9 +504,8 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     $\mathcal{G}_{N,L}(A) = \spn\bigl\{V^{(N)}(A)\bigr\}$.
 \end{theorem}
 
-\noindent\emph{Remark.} The Lean formalization currently proves the injective
-special case (with $L_0 = 1$); the block-injective generalization is future
-work.
+\noindent\emph{Remark.} The injective special case ($L_0 = 1$) is proved;
+the block-injective generalization is future work.
 
 \begin{theorem}[Chain ground space for normal tensors]%
     \label{thm:chain_ground_space_eq_mpv_normal}
@@ -1045,8 +1044,7 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     This gives the reverse inclusion~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
 \end{proof}
 
-\noindent\emph{Remark.} The blueprint phrases the previous lemma and theorem
-in terms of the Hamiltonian kernel $\ker(H_N(A,L_0{+}1))$. The
-current Lean formalization instead uses the chain ground space
-(Definition~\ref{def:chain_ground_space}); a bridge theorem equating
-this with the Hamiltonian kernel is not yet stated explicitly here.
+\noindent\emph{Remark.} The previous lemma and theorem are stated in terms
+of $\ker(H_N(A,L_0{+}1))$. An equivalent formulation uses the chain
+ground space (Definition~\ref{def:chain_ground_space}); a bridge theorem
+equating these two objects is future work.
