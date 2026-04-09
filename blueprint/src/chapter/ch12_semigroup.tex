@@ -30,9 +30,9 @@ and proves the GKSL theorem.
     $T : \R \to (\MN{D} \to_{\ell} \MN{D})$
     is a \emph{dynamical semigroup} if
     \begin{enumerate}
-        \item (semigroup law) $T(t+s) = T(t) \circ T(s)$
+        \item (semigroup law) $T_{t+s} = T_t \circ T_s$
               for all $t,s \ge 0$; and
-        \item (initial condition) $T(0) = \id$.
+        \item (initial condition) $T_0 = \id$.
     \end{enumerate}
     This is \cite[Eq.~(7.1)]{Wolf2012Quantum}.
 \end{definition}
@@ -41,7 +41,7 @@ and proves the GKSL theorem.
     \lean{IsContinuousDynSemigroup}\leanok
     \uses{def:dyn_semigroup_ch12}
     A dynamical semigroup $T$ is \emph{norm-continuous} if the map
-    $t \mapsto T(t)$ is continuous in the operator norm topology.
+    $t \mapsto T_t$ is continuous in the operator norm topology.
     In finite dimension this coincides with strong continuity.
 \end{definition}
 
@@ -841,50 +841,49 @@ which shows that such generators have the standard Lindblad form.
 
 \begin{remark}[Semigroup irreducible/primitive equivalence]\leanok
     The semigroup analogue of the irreducible/primitive equivalence
-    is now fully proved: starting from one irreducible time slice,
-    the fraction-slice reduction constructs a primitive slice,
-    and the result lifts to the full semigroup
+    starts from one irreducible time slice, constructs a primitive
+    smaller time step, and lifts the conclusion to the full semigroup
     (Theorems~\ref{thm:irreducible_semigroup_implies_primitive}
     and~\ref{thm:qds_irreducible_iff_primitive}).
 \end{remark}
 
-\begin{remark}[Fraction-slice reduction for Proposition~7.5]\leanok
+\begin{remark}[Reduction to a smaller time step in Proposition~7.5]\leanok
     Starting from one irreducible time $t_0$, we construct a
-    positive slice $u=t_0/N$ with
+    positive time step $u=t_0/N$ with
     $T_{t_0}=(T_u)^N$, prove peripheral eigenvalue collapse at time~$u$,
     and deduce primitivity of $T_u$.
 \end{remark}
 
-\begin{theorem}[Fraction-slice eigenvector has nonzero trace]
+\begin{theorem}[Reduced-time eigenvector has nonzero trace]
     \lean{exists_trace_ne_zero_eigenvector_of_fraction_slice}\leanok
-    Under the fraction-slice hypotheses
+    Under the reduced-time hypotheses
     $T_{t_0} = (T_u)^{(\dim \MN{D})!}$, if
     $\mu$ is a peripheral eigenvalue of $T_u$, then $T_u$ admits a
     $\mu$-eigenvector with nonzero trace.
 \end{theorem}
 
-\begin{theorem}[Fraction-slice peripheral collapse]
+\begin{theorem}[Peripheral collapse at the reduced time step]
     \lean{peripheral_eq_one_of_fraction_slice}\leanok
     Under the same hypotheses, every peripheral eigenvalue of $T_u$
     equals $1$.
 \end{theorem}
 
-\begin{theorem}[Fraction-slice primitivity]
+\begin{theorem}[Primitivity at the reduced time step]
     \lean{primitive_of_fraction_slice}\leanok
     Under the same hypotheses, $T_u$ is primitive.
 \end{theorem}
 
-\begin{theorem}[Primitive-slice fixed points are trace-scalars]
+\begin{theorem}[Fixed points of the primitive reduced time step are trace-scalars]
     \lean{fixedPoint_eq_trace_smul_of_primitive_slice}\leanok
     If $T_u$ is primitive and $\sigma$ is the common fixed density, then
     every fixed point of any positive-time slice $T_s$ has the form
     $\tau = \tr(\tau)\,\sigma$.
 \end{theorem}
 
-\begin{theorem}[Existence of a primitive fraction slice]
+\begin{theorem}[Existence of a primitive reduced time step]
     \lean{exists_primitive_fraction_slice}\leanok
     If $T_{t_0}$ is irreducible for some $t_0>0$, then there exists a
-    fraction slice $u \in (0,t_0]$ such that $T_u$ is primitive.
+    reduced time step $u \in (0,t_0]$ such that $T_u$ is primitive.
 \end{theorem}
 
 
