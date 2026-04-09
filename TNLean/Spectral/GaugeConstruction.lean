@@ -1,3 +1,7 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+-/
 import TNLean.Spectral.MixedTransfer
 import TNLean.Channel.FixedPoint.CanonicalGauge
 import TNLean.Channel.Schwarz.Basic
@@ -17,6 +21,9 @@ core used by the spectral-gap rigidity arguments.  The shared pattern is:
 4. use weighted Kadison--Schwarz equality to obtain Kraus-level intertwining;
 5. feed the intertwining identities into the file-specific endgames.
 -/
+
+-- TODO: Extract the duplicated continuous-linear-endomorphism instance block shared by
+-- `SpectralGap.lean`, `SpectralGapRect.lean`, and `SpectralGapNT.lean`.
 
 open scoped Matrix MatrixOrder ComplexOrder BigOperators
 
@@ -80,6 +87,8 @@ theorem det_ne_zero_of_ker_all [NeZero D]
     (hX : X ≠ 0)
     (h_all : ∀ M : Matrix (Fin D) (Fin D) ℂ, ∀ v, X *ᵥ v = 0 → X *ᵥ (M *ᵥ v) = 0) :
     X.det ≠ 0 := by
+  -- TODO: Refactor this proof together with `injective_of_ker_all`; the two arguments are
+  -- nearly identical apart from the final contradiction.
   by_contra h_det
   rw [Matrix.exists_mulVec_eq_zero_iff.symm] at h_det
   obtain ⟨v, hv_ne, hv⟩ := h_det
@@ -190,10 +199,12 @@ theorem isInjective_conjugate {D : ℕ}
       _ = ⊤ := by rw [Submodule.map_top]; exact LinearMap.range_eq_top.2 hφ_surj
   exact this
 
+/-- Complex conjugation preserves unit modulus. -/
 lemma norm_starRingEnd_eq_one {μ : ℂ} (hμ : ‖μ‖ = 1) :
     ‖(starRingEnd ℂ) μ‖ = 1 := by
   simpa [Complex.norm_conj] using hμ
 
+/-- Scalar multiplication by a unit-modulus complex number preserves `N * Nᴴ`. -/
 lemma smul_mul_conjTranspose_of_norm_eq_one {m n : ℕ}
     (μ : ℂ) (hμ : ‖μ‖ = 1) (N : Matrix (Fin m) (Fin n) ℂ) :
     (μ • N) * (μ • N)ᴴ = N * Nᴴ := by
