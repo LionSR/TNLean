@@ -393,14 +393,10 @@ If `A` is `L₀`-block-injective with `L₀ > 0`, the parent Hamiltonian with
 interaction range `2L₀` on a periodic chain of `N ≥ 2L₀` sites has a unique
 ground state.
 
-**Proof sketch**: Rewrite via `chainGroundSpace_eq_mpvSubmodule` (sorry'd),
-then use `mpv_ne_zero_of_isNBlkInjective` to show the MPV submodule is 1D. -/
--- TODO(parent-hamiltonian): remove sorry once `chainGroundSpace_eq_mpvSubmodule`
--- is proved. The reduction is:
---   rw [HasUniqueGroundState,
---     chainGroundSpace_eq_mpvSubmodule hA (by omega) (le_refl _) hN]
---   have hmpv := mpv_ne_zero_of_isNBlkInjective hA hL₀ (by omega)
---   simpa [mpvSubmodule] using finrank_span_singleton (K := ℂ) hmpv
+**Proof sketch**: First rewrite the chain ground space as the MPV submodule
+using `chainGroundSpace_eq_mpvSubmodule_normal`, applying normality obtained
+from block injectivity. Then use `mpv_ne_zero_of_isNBlkInjective` to show the
+MPV submodule is one-dimensional. -/
 theorem parentHamiltonian_unique_gs_injective {A : MPSTensor d D} [NeZero D]
     {L₀ : ℕ} (hA : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {N : ℕ} (hN : 2 * L₀ ≤ N) :
