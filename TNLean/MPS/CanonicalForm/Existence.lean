@@ -20,7 +20,7 @@ This file is an **intermediate construction for the early arbitrary-input part**
 canonical-form construction for MPS tensors from Cirac–Pérez-García–Schuch–Verstraete,
 arXiv:1606.00608.
 
-We currently have (sorry-free) components for:
+We currently have the following components:
 
 * §2.3: iterated invariant-projection splitting → irreducible block decomposition.
 * Appendix A (PF / TP gauge): irreducible + nonzero Kraus operator → Perron--Frobenius
@@ -271,7 +271,7 @@ theorem isIrreducibleTensor_allZero_dim_le_one
 
 
 /-!
-## Honest arbitrary-input continuations (still far from the endpoint)
+## Unconditional arbitrary-input continuations (still far from the endpoint)
 
 The last unconditional arbitrary-input step currently available here is the blockwise PF / TP-gauge
 continuation below: after decomposing `A` into irreducible blocks, one may continue on each block
@@ -293,7 +293,7 @@ Remaining gap for a full end-to-end canonical-form existence theorem:
   the later normal-canonical-form packaging lemmas and the downstream `IsCanonicalForm` builders.
 -/
 
-/-- **Honest TP-gauge continuation for the 1606 reduction (1606.00608 §2.3 + App. A).**
+/-- **Unconditional TP-gauge continuation for the 1606 reduction (1606.00608 §2.3 + App. A).**
 
 From an arbitrary tensor `A` we produce an irreducible block decomposition. Moreover, for each
 resulting block, if one separately knows that the block has some nonzero Kraus operator, then the

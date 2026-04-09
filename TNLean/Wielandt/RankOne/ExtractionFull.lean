@@ -347,7 +347,7 @@ This combines the rank-one extraction with the blocked assembly theorem.
   blocked-tensor full-span witness `wordSpan B N₀ = ⊤`; the blocked assembly then
   produces `wordSpan A ((4D - 2 + N₀) * N₀) = ⊤`.
 
-The bound `N = (4D - 2 + N₀) * N₀` is coarse but sorry-free. -/
+The bound `N = (4D - 2 + N₀) * N₀` is coarse. -/
 theorem wielandt_lemma2b [NeZero D]
     (A : MPSTensor d D) (hN : IsNormal A) :
     ∃ N : ℕ, wordSpan A N = ⊤ := by
