@@ -1,10 +1,8 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+-/
 import TNLean.MPS.Core.Transfer
-
-open scoped Matrix ComplexOrder BigOperators
-
-namespace MPSTensor
-
-variable {d D : ℕ}
 
 /-!
 # Shared scaling lemmas for MPS tensors
@@ -12,6 +10,12 @@ variable {d D : ℕ}
 This module collects the tensor-scaling identities that are used both by the
 canonical-form pipeline and by transfer-normalization arguments.
 -/
+
+open scoped Matrix ComplexOrder BigOperators
+
+namespace MPSTensor
+
+variable {d D : ℕ}
 
 /-- Scaling an MPS tensor by `c` scales the transfer map by `c * star c`. -/
 theorem transferMap_smul (c : ℂ) (A : MPSTensor d D) (X : Matrix (Fin D) (Fin D) ℂ) :
