@@ -1,4 +1,4 @@
-/-  
+/- 
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
@@ -10,6 +10,18 @@ import TNLean.Channel.PerronFrobenius.Existence
 This file factors out the common boilerplate used when an irreducible
 completely positive map is converted into an irreducible Kraus family and then
 paired with the adjoint Perron--Frobenius eigenvector of that family.
+
+## Main declarations
+
+- `IrreducibleCPKrausSetup`: shared Kraus witness for an irreducible CP map
+- `irreducibleCPKrausSetup`: packages the standard Kraus witness attached to an
+  irreducible CP map
+- `ne_zero_of_pos_eigenvector`: a positive-eigenvalue equation with nonzero
+  eigenvector forces a linear map to be nonzero
+- `IrreducibleCPKrausSetup.exists_nonzero_kraus`: a nonzero map in a Kraus
+  setup has a nonzero Kraus operator
+- `IrreducibleCPKrausSetup.exists_posDef_adjoint_eigenvector`: shared adjoint
+  Perron--Frobenius data extracted from an irreducible CP map
 -/
 
 open scoped Matrix ComplexOrder BigOperators
@@ -25,11 +37,15 @@ structure IrreducibleCPKrausSetup
   irreducible : MPSTensor.IsIrreducibleTensor (d := n) (D := D) K
 
 /-- Package the standard Kraus witness attached to an irreducible CP map. -/
-theorem irreducibleCPKrausSetup
+noncomputable def irreducibleCPKrausSetup
     (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (hCP : IsCPMap E) (hIrr : IsIrreducibleMap E) :
     IrreducibleCPKrausSetup (D := D) E := by
-  obtain ⟨n, K, hK⟩ := hCP
+  classical
+  let n : ℕ := Classical.choose hCP
+  let hCP' := Classical.choose_spec hCP
+  let K : MPSTensor n D := Classical.choose hCP'
+  have hK : ∀ X, E X = ∑ i : Fin n, K i * X * (K i)ᴴ := Classical.choose_spec hCP'
   have hE_eq : E = MPSTensor.transferMap (d := n) (D := D) K :=
     LinearMap.ext fun X => by
       simpa [MPSTensor.transferMap_apply] using hK X
@@ -42,6 +58,8 @@ theorem irreducibleCPKrausSetup
       map_eq := hE_eq
       irreducible := MPSTensor.isIrreducibleTensor_of_isIrreducibleMap K hIrrK_map }
 
+-- TODO: This only uses linear-map data and could live in a more general module
+-- in a follow-up refactor.
 /-- A positive-eigenvalue equation with nonzero eigenvector forces the map to be nonzero. -/
 theorem ne_zero_of_pos_eigenvector
     {E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
