@@ -131,7 +131,7 @@ end SingleBlockSeparation
 
 /-! ### Compatibility wrappers exposing the `SameMPV₂` + separation interface
 
-These theorems package the complete construction
+These theorems present the complete construction
 `SameMPV₂` → per-block `SameMPV` (via `hSep`) → per-block `GaugeEquiv`
 → global `GaugeEquiv` → block-permutation decomposition.
 

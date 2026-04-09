@@ -13,15 +13,15 @@ open scoped Matrix BigOperators
 open Filter
 
 /-!
-# Equal-norm bridge: from BNT properties to BNT grouping hypotheses
+# Equal-norm connection: from BNT properties to BNT grouping hypotheses
 
-This file bridges the gap between the BNT overlap/spectral theory and the
+This file relates the BNT overlap/spectral theory to the
 BNT grouping theorem (`exists_bnt_grouping`), which requires `hDimEq` and `hMPVEq`
 for equal-norm blocks.
 
 ## Background (Issue #243)
 
-The existence reduction pipeline (`Assembly.lean`) produces TP + primitive blocks with
+The existence reduction chain (`Assembly.lean`) produces TP + primitive blocks with
 nonzero weights.  The BNT grouping theorem groups blocks by weight norm into a
 `SectorDecomposition`, but requires two hypotheses for equal-norm blocks:
 
@@ -234,7 +234,7 @@ theorem exists_bnt_grouping_of_gaugePhaseEquiv
 /-- **From TP + primitive + irreducible blocks to BNT-grouped
 `SectorDecomposition`.**
 
-This theorem connects the output of the existence reduction
+This theorem relates the output of the existence reduction
 (`exists_tp_primitive_blockDecomp_after_blocking` in `Assembly.lean`) to a
 `SectorDecomposition` with strictly decreasing BNT-level norms.
 
