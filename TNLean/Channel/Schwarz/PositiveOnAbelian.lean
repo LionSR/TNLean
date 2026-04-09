@@ -211,7 +211,10 @@ private lemma familyMain_term_eq
       (Matrix.diagonal (fun o : Option ι => o.elim 0 z))
       = z i • (familyMainKraus C (i, p) * (familyMainKraus C (i, p))ᴴ) := by
   ext r s
-  simp [rectKrausMap, familyMainKraus, Matrix.mul_apply, Matrix.diagonal_apply]
+  simp only [rectKrausMap, univ_unique, PUnit.default_eq_unit, sum_const, card_singleton,
+    smul_apply, Matrix.mul_apply, familyMainKraus, diagonal_apply, mul_ite, ite_mul, zero_mul,
+    mul_zero, sum_ite_eq', mem_univ, ↓reduceIte, conjTranspose_apply, RCLike.star_def,
+    Option.elim_some, one_smul, smul_eq_mul]
   ring
 
 private lemma familyMain_outer_sum
@@ -480,7 +483,9 @@ private lemma blockForm_nonneg_of_scalarPSD_of_commuting {n D : ℕ}
   have hK : ∀ i j, (K i j).IsHermitian := by
     intro i j
     ext r s
-    simp [K, sub_eq_add_neg]
+    simp only [sub_eq_add_neg, smul_add, smul_neg, conjTranspose_apply, add_apply, smul_apply,
+      RCLike.star_def, smul_eq_mul, neg_apply, star_add, star_mul', star_div₀, conj_I,
+      star_ofNat, RingHomCompTriple.comp_apply, RingHom.id_apply, star_neg, K]
     ring
   have hTsymm : ∀ idx, (T idx).IsSymmetric := by
     intro idx
@@ -621,7 +626,8 @@ private lemma blockForm_nonneg_of_scalarPSD_of_commuting {n D : ℕ}
     χ a (Sum.inl (i, j)) + Complex.I * χ a (Sum.inr (i, j))
   have hM_decomp (i j : Fin n) : M i j = H i j + Complex.I • K i j := by
     ext r s
-    simp [H, K, sub_eq_add_neg]
+    simp only [one_div, smul_add, sub_eq_add_neg, smul_neg, add_apply, smul_apply, smul_eq_mul,
+      conjTranspose_apply, RCLike.star_def, neg_apply, H, K]
     ring_nf
     norm_num [Complex.I_sq]
     ring
@@ -859,7 +865,9 @@ private lemma exists_diagonal_family_of_normal
     simp [H, add_comm]
   have hK : K.IsHermitian := by
     ext i j
-    simp [K, sub_eq_add_neg]
+    simp only [sub_eq_add_neg, smul_add, smul_neg, conjTranspose_apply, add_apply, smul_apply,
+      RCLike.star_def, smul_eq_mul, neg_apply, star_add, star_mul', star_div₀, conj_I,
+      star_ofNat, RingHomCompTriple.comp_apply, RingHom.id_apply, star_neg, K]
     ring
   have hHKmat : Commute H K := by
     simpa [H, K] using commute_parts_of_normal (A := A) hA
@@ -919,7 +927,8 @@ private lemma exists_diagonal_family_of_normal
     simpa [ν, Krestr] using hv'
   have hA_decomp : A = H + Complex.I • K := by
     ext i j
-    simp [H, K, sub_eq_add_neg]
+    simp only [one_div, smul_add, sub_eq_add_neg, smul_neg, add_apply, smul_apply, smul_eq_mul,
+      conjTranspose_apply, RCLike.star_def, neg_apply, H, K]
     ring_nf
     norm_num [Complex.I_sq]
     ring
@@ -938,7 +947,8 @@ private lemma exists_diagonal_family_of_normal
         (μ := eig) hAb)
   have hAstar_decomp : Aᴴ = H - Complex.I • K := by
     ext i j
-    simp [H, K, sub_eq_add_neg]
+    simp only [one_div, smul_add, sub_eq_add_neg, smul_neg, add_apply, smul_apply, smul_eq_mul,
+      conjTranspose_apply, RCLike.star_def, neg_apply, H, K]
     ring_nf
     norm_num [Complex.I_sq]
     ring
