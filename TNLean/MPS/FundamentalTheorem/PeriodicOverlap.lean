@@ -10,6 +10,7 @@ import TNLean.MPS.Chain.OneSidedInverse
 import TNLean.MPS.Core.Blocking
 import TNLean.MPS.CanonicalForm.CyclicSectors
 import TNLean.MPS.CanonicalForm.Assembly
+import TNLean.MPS.SharedInfra.KrausAdjointSetup
 import TNLean.Spectral.SpectralGapNT
 import TNLean.Channel.Irreducible.PerronFrobenius
 
