@@ -1135,6 +1135,10 @@ Theorem~2 of~\cite{Molnar2018NormalPEPS}.
     For an edge $e = (u,w)$ with $u < w$ and gauge $X_e \in \mathrm{GL}(D_e)$,
     the gauge matrix applied at vertex $v$ is $X_e$ if $v = u$ and
     $(X_e^{-1})^\top$ if $v = w$.
+    Diagrammatically, the ordered edge carries opposite endpoint actions:
+    \[
+        \TNPEPSEdgeGaugeOrientation
+    \]
 \end{definition}
 
 \begin{definition}[Gauge vertex action]%
@@ -1146,6 +1150,11 @@ Theorem~2 of~\cite{Molnar2018NormalPEPS}.
     $A^X_v(\eta, \sigma)
         = \sum_{\eta'} (\prod_{ie} M_{ie}(\eta(ie), \eta'(ie)))
         A_v(\eta', \sigma)$.
+    In tensor-network notation, one inserts the appropriate gauge matrix on
+    each incident virtual leg of the local tensor:
+    \[
+        \TNPEPSGaugeVertexAction
+    \]
 \end{definition}
 
 \begin{definition}[Apply gauge]%
@@ -1173,6 +1182,10 @@ Theorem~2 of~\cite{Molnar2018NormalPEPS}.
     \notready
     \uses{def:applyGauge}
     Applying a gauge to a PEPS tensor preserves the state coefficients.
+    Along each internal edge, the two endpoint insertions cancel:
+    \[
+        \TNPEPSGaugeCancellation
+    \]
 \end{theorem}
 
 \begin{theorem}[Gauge equivalence implies same state]%
@@ -1200,6 +1213,11 @@ Theorem~2 of~\cite{Molnar2018NormalPEPS}.
     \uses{def:gaugeVertex, def:localTensorEval}
     At a single vertex, vertex-injectivity of both tensors and the
     same-state condition force a local gauge relation.
+    Schematically, injectivity on the star neighbourhood provides a left
+    inverse that isolates the local edge gauges:
+    \[
+        \TNPEPSLocalGaugeExtraction
+    \]
 \end{theorem}
 
 \begin{theorem}[Gauge consistency]%
@@ -1209,6 +1227,11 @@ Theorem~2 of~\cite{Molnar2018NormalPEPS}.
     \uses{thm:localGauge_exists, def:gaugeVertex}
     Local gauges extracted at adjacent vertices are consistent across
     shared edges, yielding a global gauge family.
+    On a shared edge, the two neighbouring local extractions match as one
+    edge gauge:
+    \[
+        \TNPEPSGlobalConsistency
+    \]
 \end{theorem}
 
 \begin{theorem}[Fundamental Theorem for injective PEPS]%
