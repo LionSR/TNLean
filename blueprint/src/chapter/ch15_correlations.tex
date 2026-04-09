@@ -251,6 +251,13 @@ and rates for the single-tensor transfer map $\E_A$.
     See \cite[Definition~3.5]{Cirac2021Matrix}.
 \end{definition}
 
+\begin{theorem}[RFP normal tensor is injective]\label{thm:rfp_nt_injective}
+    \lean{MPSTensor.rfp_nt_structural}
+    \leanok
+    \uses{def:is_rfp, def:normal}
+    If $A$ is a nonzero normal RFP tensor, then $A$ is injective.
+\end{theorem}
+
 \begin{theorem}[RG flow convergence for canonical-form tensors]%
     \label{thm:rg_flow_converges_of_cf}
     \lean{MPSTensor.rg_flow_converges_of_cf}
