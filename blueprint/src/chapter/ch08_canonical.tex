@@ -153,6 +153,46 @@ and~\cite[Ch.~6]{Wolf2012Quantum}.
 	for every block, so the total MPV families agree.
 \end{proof}
 
+\begin{remark}[Why blockwise cancellation cannot be separated without normalization]
+	The implication
+	\[
+		\mc{V}\!\bigl(\textstyle\bigoplus_{k=1}^r \mu_k A_k\bigr)
+		=
+		\mc{V}\!\bigl(\textstyle\bigoplus_{k=1}^r \mu_k B_k\bigr)
+		\quad\Longrightarrow\quad
+		\mc{V}(A_k)=\mc{V}(B_k)\ \text{for all }k
+	\]
+	is false if one assumes only that the weights $\mu_k$ are pairwise
+	distinct and nonzero.
+	Already for $r=2$, with $\mu=(1,2)$ and scalar $1\times 1$ blocks,
+	\[
+		A=(1,3/2), \qquad B=(3,1/2),
+	\]
+	one has
+	\[
+		1^N\!\left(1^N-3^N\right)+2^N\!\left((3/2)^N-(1/2)^N\right)=0
+	\]
+	for every $N \ge 1$, so the two direct sums generate the same MPS
+	family, even though the first blocks already disagree at $N=1$.
+	The reason is exactly the rescaling freedom described above:
+	a nonzero scalar may be moved from the weight $\mu_k$ into the block
+	tensor $A_k$, or conversely, without changing the contribution
+	$\mu_k^N V^{(N)}(A_k)_\sigma$.
+	Thus distinct nonzero weights alone do not identify the individual
+	blocks.
+
+	The canonical-form hypotheses remove this ambiguity.
+	If each block is first placed in the normalization
+	$\sum_i (A_k^i)^\dagger A_k^i = \Id$, then further rescaling is
+	restricted to unit-modulus phases, and the strict ordering
+	$|\mu_1| > \cdots > |\mu_r|$ used in
+	\cite{PerezGarcia2007Matrix,Cirac2021Matrix}
+	prevents trading a nontrivial modulus between the weight and the
+	block tensor.
+	A formal verification of the counterexample is recorded in the archive
+	file `TNLean/Archive/BlockSepCounterexample.lean`.
+\end{remark}
+
 \section{Invariant subspace decomposition}
 
 \begin{theorem}[Unitary conjugation preserves the MPV family]\label{thm:samempv_unitary}
