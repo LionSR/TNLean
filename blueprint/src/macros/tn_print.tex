@@ -478,6 +478,112 @@
   \end{tikzpicture}%
 }
 
+% ---------- PEPS diagrams ----------
+
+\newcommand{\TNPEPSEdgeGaugeOrientation}{%
+  \begin{tikzpicture}[tn picture]
+    \TN@tensordot{tnU}{(0,0)}
+    \TN@tensordot{tnW}{(3.30,0)}
+    \TN@opdotabove{tnXl}{(1.00,0)}{X_e}
+    \TN@opdotabove{tnXr}{(2.30,0)}{(X_e^{-1})^\top}
+    \draw[tn leg] (tnU.east) -- (tnXl.west);
+    \draw[tn leg] (tnXl.east) -- (tnXr.west);
+    \draw[tn leg] (tnXr.east) -- (tnW.west);
+    \node at (1.65,0.72) {$e = (u,w)$};
+    \node at ($(tnU.south)+(0,-0.28)$) {$u$};
+    \node at ($(tnW.south)+(0,-0.28)$) {$w$};
+  \end{tikzpicture}%
+}
+
+\newcommand{\TNPEPSGaugeVertexAction}{%
+  \begin{tikzpicture}[tn picture]
+    \TN@tensordot{tnV}{(0,0)}
+    \TN@opdotleft{tnL}{(-1.05,0)}{M_{ve_1}}
+    \TN@opdotright{tnR}{(1.05,0)}{M_{ve_2}}
+    \TN@opdotbelow{tnDL}{(-0.78,-0.92)}{M_{ve_3}}
+    \TN@opdotbelow{tnDR}{(0.78,-0.92)}{M_{ve_4}}
+    \draw[tn leg] (tnL.east) -- (tnV.west);
+    \draw[tn leg] (tnV.east) -- (tnR.west);
+    \draw[tn leg] ($(tnV.south)-(0.2,0)$) -- (tnDL.north);
+    \draw[tn leg] ($(tnV.south)+(0.2,0)$) -- (tnDR.north);
+    \draw[tn leg] (tnL.west) -- ++(-0.42,0);
+    \draw[tn leg] (tnR.east) -- ++(0.42,0);
+    \draw[tn leg] (tnDL.south) -- ++(-0.30,-0.42);
+    \draw[tn leg] (tnDR.south) -- ++(0.30,-0.42);
+    \TN@upleg{tnV}{0.54}
+    \TN@uplabel{tnV}{0.80}{\sigma}
+    \node at ($(tnV.south)+(0,-1.45)$) {$A_v \mapsto A_v^X$};
+  \end{tikzpicture}%
+}
+
+\newcommand{\TNPEPSGaugeCancellation}{%
+  \begin{tikzpicture}[tn picture]
+    \TN@tensordot{tnL}{(0,0)}
+    \TN@opdot{tnX}{(0.92,0)}
+    \TN@opdot{tnXt}{(2.18,0)}
+    \TN@tensordot{tnR}{(3.10,0)}
+    \draw[tn leg] (tnL.east) -- (tnX.west);
+    \draw[tn leg] (tnX.east) -- (tnXt.west);
+    \draw[tn leg] (tnXt.east) -- (tnR.west);
+    \node at ($(tnX.north)+(0,0.28)$) {$X_e(j,i)$};
+    \node at ($(tnXt.north)+(0,0.28)$) {$((X_e^{-1})^\top)(j,k)$};
+    \node at (4.20,0) {$=$};
+    \TN@tensordot{tnL2}{(5.15,0)}
+    \TN@tensordot{tnR2}{(6.65,0)}
+    \draw[tn leg] (tnL2.east) -- (tnR2.west);
+    \node at (5.90,0.54) {$\sum_j X_e(j,i)\,((X_e^{-1})^\top)(j,k) = \delta(i,k)$};
+  \end{tikzpicture}%
+}
+
+\newcommand{\TNPEPSLocalGaugeExtraction}{%
+  \begin{tikzpicture}[tn picture]
+    \TN@tensordot{tnLv}{(0,0)}
+    \TN@upleg{tnLv}{0.50}
+    \TN@uplabel{tnLv}{0.76}{\sigma}
+    \draw[tn leg] (tnLv.west) -- ++(-0.90,0);
+    \draw[tn leg] (tnLv.east) -- ++(0.90,0);
+    \draw[tn leg] ($(tnLv.south)-(0.2,0)$) -- ++(-0.72,-0.82);
+    \draw[tn leg] ($(tnLv.south)+(0.2,0)$) -- ++(0.72,-0.82);
+    \node at (0,-1.42) {$\mathrm{star}(v)$};
+    \node at (2.85,0) {$\xrightarrow[\text{left inverse}]{\text{injective}}$};
+    \TN@tensordot{tnRv}{(5.70,0)}
+    \TN@upleg{tnRv}{0.50}
+    \TN@uplabel{tnRv}{0.76}{\sigma}
+    \TN@opdot{tnRl}{(4.62,0)}
+    \TN@opdot{tnRr}{(6.78,0)}
+    \TN@opdot{tnRdl}{(4.95,-0.86)}
+    \TN@opdot{tnRdr}{(6.45,-0.86)}
+    \draw[tn leg] (tnRl.west) -- ++(-0.42,0);
+    \draw[tn leg] (tnRl.east) -- (tnRv.west);
+    \draw[tn leg] (tnRv.east) -- (tnRr.west);
+    \draw[tn leg] (tnRr.east) -- ++(0.42,0);
+    \draw[tn leg] ($(tnRv.south)-(0.2,0)$) -- (tnRdl.north);
+    \draw[tn leg] ($(tnRv.south)+(0.2,0)$) -- (tnRdr.north);
+    \node at (5.70,-1.42) {$\text{local edge gauges}$};
+  \end{tikzpicture}%
+}
+
+\newcommand{\TNPEPSGlobalConsistency}{%
+  \begin{tikzpicture}[tn picture]
+    \TN@tensordot{tnU}{(0,0)}
+    \TN@tensordot{tnW}{(3.35,0)}
+    \TN@upleg{tnU}{0.44}
+    \TN@upleg{tnW}{0.44}
+    \draw[tn leg] (tnU.west) -- ++(-0.70,0);
+    \draw[tn leg] (tnW.east) -- ++(0.70,0);
+    \draw[tn leg] (tnU.south) -- ++(-0.55,-0.68);
+    \draw[tn leg] (tnW.south) -- ++(0.55,-0.68);
+    \TN@opdotabove{tnXl}{(1.02,0)}{X_e}
+    \TN@opdotabove{tnXr}{(2.33,0)}{(X_e^{-1})^\top}
+    \draw[tn leg] (tnU.east) -- (tnXl.west);
+    \draw[tn leg] (tnXl.east) -- (tnXr.west);
+    \draw[tn leg] (tnXr.east) -- (tnW.west);
+    \node at (1.67,0.78) {$\text{shared edge } e$};
+    \node at ($(tnU.south)+(0,-0.28)$) {$u$};
+    \node at ($(tnW.south)+(0,-0.28)$) {$w$};
+  \end{tikzpicture}%
+}
+
 % ---------- Compatibility wrappers ----------
 
 \newcommand{\TNMPOCellDiagram}[3]{%
