@@ -85,7 +85,7 @@ lemma eigenvector_pow {V : Type*} [AddCommMonoid V] [Module ℂ V]
     (F : V →ₗ[ℂ] V) (v : V) (μ : ℂ) (h : F v = μ • v) (n : ℕ) :
     (F ^ n) v = μ ^ n • v := by
   induction n with
-  | zero => simp
+  | zero => simp only [pow_zero, Module.End.one_apply, one_smul]
   | succ n ih =>
     change (F ^ n) (F v) = _
     rw [h, map_smul, ih, smul_smul, mul_comm]; ring_nf
@@ -291,7 +291,7 @@ theorem ker_all_of_inj {D₁ D₂ : ℕ}
   | mem y hy =>
     obtain ⟨k, rfl⟩ := hy
     exact h k v hv
-  | zero => simp
+  | zero => simp only [Matrix.conjTranspose_zero, Matrix.zero_mulVec, Matrix.mulVec_zero]
   | add a b _ _ ha hb =>
     rw [Matrix.conjTranspose_add, Matrix.add_mulVec, Matrix.mulVec_add, ha, hb, add_zero]
   | smul c a _ ha =>
@@ -332,7 +332,7 @@ private lemma det_ne_zero_of_ker_all [NeZero D]
     have : (X *ᵥ (fun k => if k = j then 1 else 0)) i = X i j := by
       simp only [Matrix.mulVec, dotProduct]
       rw [Finset.sum_eq_single j]
-      · simp
+      · simp only [if_true, mul_one]
       · intro b _ hbj; simp [hbj]
       · intro hj; exact absurd (Finset.mem_univ j) hj
     rw [show (0 : Matrix (Fin D) (Fin D) ℂ) i j = 0 from rfl]
@@ -365,7 +365,8 @@ private lemma each_zero_of_sum_conjTranspose_mul_self_zero
   have h_each_nonneg : ∀ j, 0 ≤ ((R j)ᴴ * R j).trace.re :=
     fun j => (Complex.le_def.mp (Matrix.posSemidef_conjTranspose_mul_self (R j)).trace_nonneg).1
   have h_tr_sum_re : (∑ j : Fin d, ((R j)ᴴ * R j).trace.re) = 0 := by
-    rw [← Complex.re_sum, ← Matrix.trace_sum, h]; simp
+    rw [← Complex.re_sum, ← Matrix.trace_sum, h]
+    simp only [Matrix.trace_zero, Complex.zero_re]
   have h_tr_re : ((R i)ᴴ * R i).trace.re = 0 :=
     le_antisymm
       (by linarith [Finset.sum_eq_zero_iff_of_nonneg (fun j _ => h_each_nonneg j)
@@ -631,7 +632,7 @@ private lemma eigenvector_gives_gauge [NeZero D]
       _ = Matrix.fromBlocks (1 : Matrix (Fin D) (Fin D) ℂ) 0 0 (1 : Matrix (Fin D) (Fin D) ℂ) := by
         simp [hA'unital, hB'unital]
       _ = (1 : Matrix (Fin D ⊕ Fin D) (Fin D ⊕ Fin D) ℂ) := by
-        simp
+        simp only [Matrix.fromBlocks_one]
   have hEigM : Kraus.map K M = μ • M := by
     have hmap :
         Kraus.map K M =
@@ -817,7 +818,7 @@ private lemma eigenvector_gives_gauge [NeZero D]
       _ = (μ • M)ᴴ := by
         rw [hEigM]
       _ = (starRingEnd ℂ μ) • Mᴴ := by
-        simp
+        simp only [Matrix.conjTranspose_smul, starRingEnd_apply]
   have hKS_Mstar :
       Kraus.map K (Mᴴᴴ * Mᴴ) = (Kraus.map K Mᴴ)ᴴ * Kraus.map K Mᴴ :=
     Kraus.ks_equality_of_peripheral_eigenvector_of_fixedPoint
