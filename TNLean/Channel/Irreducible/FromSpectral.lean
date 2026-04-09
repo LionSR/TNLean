@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Channel.Irreducible.Ergodicity
 import TNLean.Channel.Irreducible.Basic
+import TNLean.Channel.Irreducible.KrausSetup
 import TNLean.Channel.Irreducible.SpectralRadius
 import TNLean.Channel.Irreducible.TraceAdjoint
 import TNLean.Algebra.MatrixOperatorSpace
@@ -200,23 +201,12 @@ theorem hasSpectralProperties_of_irreducible_cp
     exists_posDef_eigenvector_of_irreducible_cp E hCP hIrr hE
   have hρ_ne : ρ ≠ 0 := (Matrix.PosDef.isUnit hρ_pd).ne_zero
   have hCP₀ : IsCPMap E := hCP
-  obtain ⟨n, K, hK⟩ := hCP
-  have hE_eq : E = MPSTensor.transferMap (d := n) (D := D) K :=
-    LinearMap.ext fun X => by
-      simpa [MPSTensor.transferMap_apply] using hK X
-  have hIrrK_map : IsIrreducibleMap (MPSTensor.transferMap (d := n) (D := D) K) := by
-    simpa [hE_eq] using hIrr
-  have hIrrK : MPSTensor.IsIrreducibleTensor (d := n) (D := D) K :=
-    MPSTensor.isIrreducibleTensor_of_isIrreducibleMap K hIrrK_map
-  have hK_nonzero : ∃ i : Fin n, K i ≠ 0 := by
-    by_contra hK_zero
-    push Not at hK_zero
-    have htransfer_zero : MPSTensor.transferMap (d := n) (D := D) K = 0 :=
-      LinearMap.ext fun X => by
-        simp [MPSTensor.transferMap_apply, hK_zero]
-    exact hE (by simpa [hE_eq] using htransfer_zero)
+  let hSetup := irreducibleCPKrausSetup (D := D) E hCP hIrr
+  let n := hSetup.n
+  let K := hSetup.K
+  have hE_eq : E = MPSTensor.transferMap (d := n) (D := D) K := hSetup.map_eq
   obtain ⟨σ, t, hσ_pd, ht, hσ_eig⟩ :=
-    MPSTensor.exists_posDef_adjoint_eigenvector (d := n) (D := D) K hIrrK hK_nonzero
+    hSetup.exists_posDef_adjoint_eigenvector hE
   have htrace : ∀ X : Matrix (Fin D) (Fin D) ℂ,
       Matrix.trace (σ * E X) =
         Matrix.trace (MPSTensor.transferMap (d := n) (D := D) (fun i => (K i)ᴴ) σ * X) :=
