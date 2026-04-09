@@ -405,7 +405,12 @@ theorem parentHamiltonian_unique_gs_injective {A : MPSTensor d D} [NeZero D]
     {L₀ : ℕ} (hA : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {N : ℕ} (hN : 2 * L₀ ≤ N) :
     HasUniqueGroundState (chainGroundSpace A (2 * L₀) N) := by
-  sorry
+  have hNormal : IsNormal A := ⟨L₀, hA⟩
+  have hN' : L₀ + 1 ≤ N := by omega
+  rw [HasUniqueGroundState,
+    chainGroundSpace_eq_mpvSubmodule_normal hNormal hA (by omega) (by omega) hN]
+  have hmpv := mpv_ne_zero_of_isNBlkInjective hA hL₀ hN'
+  simpa [mpvSubmodule] using finrank_span_singleton (K := ℂ) hmpv
 
 /-- **Optimal unique ground state for normal tensors on `L₀ + 1` sites**.
 
