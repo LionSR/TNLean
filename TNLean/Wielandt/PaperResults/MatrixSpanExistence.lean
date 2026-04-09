@@ -26,8 +26,8 @@ Sanz–Pérez-García–Wolf–Cirac, *A quantum version of Wielandt's inequalit
 ## Quantitative status
 
 These wrappers are intentionally **coarse existential** statements. They use the
-backend theorem `wielandt_lemma2b`, which produces a sorry-free witness `N`
-without claiming the paper's exact bound.
+backend theorem `wielandt_lemma2b`, which produces a witness `N` without
+claiming the paper's exact bound.
 
 They record only the qualitative conclusion `∃ N, S_N(A) = M_D(ℂ)`. In
 particular, they do **not** track the explicit `D²` blocked noninvertible bound
