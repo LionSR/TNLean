@@ -234,7 +234,7 @@ theorem wielandt_chain [NeZero D]
 
 /-- **Summary of what's proven and what remains.**
 
-### Proven (sorry-free):
+### Proven:
 1. `cumulativeSpan_eq_top`: T_{D²}(A) = M_D(ℂ) for normal A
 2. `exists_nonzero_trace_word`: Lemma 1 — ∃ word with nonzero trace, length ≤ D²
 3. `exists_eigenvector_of_trace_ne_zero`: Nonzero trace → eigenvalue/eigenvector
