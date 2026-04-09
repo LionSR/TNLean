@@ -339,7 +339,6 @@ private theorem exists_lindblad_form_rank_le_finrank
   · rw [← Finset.smul_sum, ← Finset.smul_sum,
         ← Finset.mul_sum, ← Finset.mul_sum, hadj_eq]
 
-set_option maxHeartbeats 400000 in
 /-- If `1 ∈ ker φ`, then every matrix splits as a scalar multiple of `1`
 plus a traceless element, so `ker φ ⊔ ker(trace) = ⊤`. -/
 private theorem ker_sup_traceless_eq_top_of_one_mem_ker
@@ -395,6 +394,17 @@ private theorem finrank_traceless_submodule
   show Module.finrank ℂ (LinearMap.ker τ) = D * D - 1
   omega
 
+/-- The eigenvalues of an orthogonal projection are all `0` or `1`. -/
+private theorem projection_eigenvalues_zero_or_one
+    {P : Mat} (hP : IsNontrivialProjection P) :
+    ∀ i : Fin D, hP.1.1.eigenvalues i = 0 ∨ hP.1.1.eigenvalues i = 1 := by
+  intro i
+  have hIdem : IsIdempotentElem P := hP.1.2
+  have := hIdem.spectrum_subset ℝ
+    (hP.1.1.eigenvalues_mem_spectrum_real i)
+  simp only [Set.mem_insert_iff, Set.mem_singleton_iff] at this
+  exact this
+
 /-- A nontrivial orthogonal projection has both a `1`-eigenvalue and a
 missing `1`-eigenvalue. -/
 private theorem projection_one_eigenvalue_card_bounds
@@ -405,12 +415,7 @@ private theorem projection_one_eigenvalue_card_bounds
   set eig := hP.1.1.eigenvalues
   set k := (Finset.univ.filter (fun i => eig i = 1)).card
   have heig_01 : ∀ i : Fin D, eig i = 0 ∨ eig i = 1 := by
-    intro i
-    have hIdem : IsIdempotentElem P := hP.1.2
-    have := hIdem.spectrum_subset ℝ
-      (hP.1.1.eigenvalues_mem_spectrum_real i)
-    simp only [Set.mem_insert_iff, Set.mem_singleton_iff] at this
-    exact this
+    simpa [eig] using projection_eigenvalues_zero_or_one (D := D) hP
   have hk_le : k ≤ D := Finset.card_filter_le _ _ |>.trans (by simp [Fintype.card_fin])
   have hk_pos : 1 ≤ k := by
     by_contra h
@@ -476,7 +481,7 @@ private theorem one_eigenvalue_card_mul_sub_ge
 
 /-- The block-compression map `M ↦ (1-P)MP` has range dimension at least
 `D - 1` for any nontrivial orthogonal projection `P`. -/
-private theorem finrank_range_blockCompression_ge
+private theorem finrank_range_block_compression_ge
     {P : Mat} (hP : IsNontrivialProjection P) :
     let φ : Mat →ₗ[ℂ] Mat := (LinearMap.mulLeft ℂ (1 - P)).comp (LinearMap.mulRight ℂ P)
     D - 1 ≤ Module.finrank ℂ (LinearMap.range φ) := by
@@ -489,12 +494,7 @@ private theorem finrank_range_blockCompression_ge
   have hk_pos : 1 ≤ k := Finset.one_le_card.mpr hk_nonempty
   have hkDk : D - 1 ≤ k * (D - k) := one_eigenvalue_card_mul_sub_ge hk_pos hk_lt_D
   have heig_01 : ∀ i : Fin D, eig i = 0 ∨ eig i = 1 := by
-    intro i
-    have hIdem : IsIdempotentElem P := hP.1.2
-    have := hIdem.spectrum_subset ℝ
-      (hP.1.1.eigenvalues_mem_spectrum_real i)
-    simp only [Set.mem_insert_iff, Set.mem_singleton_iff] at this
-    exact this
+    simpa [eig] using projection_eigenvalues_zero_or_one (D := D) hP
   calc
     D - 1 ≤ k * (D - k) := hkDk
     _ ≤ Module.finrank ℂ (LinearMap.range φ) := by
@@ -517,8 +517,7 @@ private theorem finrank_range_blockCompression_ge
           have := congrArg ((star (U : Mat)) * ·) hP_spec
           simp only [← Matrix.mul_assoc, hUU, Matrix.one_mul] at this
           exact this
-        set D₁ : Mat := Matrix.diagonal (RCLike.ofReal ∘ eig) with hD₁_def
-        have hP_eq : P = (U : Mat) * D₁ * star (U : Mat) := hP_spec
+        set D₁ : Mat := Matrix.diagonal (RCLike.ofReal ∘ eig)
         have hφ_fix : ∀ a b : Fin D, eig a = 0 → eig b = 1 →
             φ ((U : Mat) * Matrix.single a b (1 : ℂ) * star (U : Mat)) =
             (U : Mat) * Matrix.single a b (1 : ℂ) * star (U : Mat) := by
@@ -688,7 +687,7 @@ private theorem finrank_traceless_blockUT_add_D_le
     have hgoal : Module.finrank ℂ ↥(K_φ ⊓ K_τ) + D ≤ n := by
       omega
     simpa [n, Nat.pow_two] using hgoal
-  simpa [φ] using finrank_range_blockCompression_ge (D := D) hP
+  simpa [φ] using finrank_range_block_compression_ge (D := D) hP
 
 /-- Shifting Lindblad operators by scalar multiples of identity preserves
 `toLinearMap` while making operators traceless.  Block-UT is preserved. -/
