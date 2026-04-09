@@ -11,14 +11,14 @@ import TNLean.Topology.TendstoHelpers
 
 import Mathlib.Data.Real.Sqrt
 
-open scoped Matrix BigOperators
-
 /-!
 # Shared gauge-phase lemmas for MPS tensors
 
 This module collects the generic gauge-phase identities used by both the
 single-block proportional FT and the canonical-form equal-norm bridge.
 -/
+
+open scoped Matrix BigOperators
 
 namespace MPSTensor
 
