@@ -318,7 +318,7 @@ private theorem positiveTracePreserving_eigenvalue_norm_le_one [NeZero d]
     have hz_pow_decomp : ∀ n : ℕ, (T ^ n) z = (T ^ n) x + Complex.I • (T ^ n) y := by
       intro n
       rw [hz_decomp]
-      simp
+      simp only [map_add, map_smul]
     by_contra hμ_le
     have hμ_gt : 1 < ‖μ‖ := lt_of_not_ge hμ_le
     have hz_norm_pos : 0 < ‖z‖ := norm_pos_iff.mpr hz_ne
@@ -333,7 +333,7 @@ private theorem positiveTracePreserving_eigenvalue_norm_le_one [NeZero d]
         _ ≤ ‖(T ^ n) x‖ + ‖Complex.I • (T ^ n) y‖ := norm_add_le _ _
         _ = ‖(T ^ n) x‖ + ‖(T ^ n) y‖ := by
           rw [norm_smul]
-          simp
+          simp only [Complex.norm_I, one_mul]
         _ ≤ Cx + Cy := add_le_add (hCx n) (hCy n)
     exact (not_lt_of_ge hpow_le) hpow_gt
   · have hμ_eq : μ = 1 := by
@@ -342,7 +342,7 @@ private theorem positiveTracePreserving_eigenvalue_norm_le_one [NeZero d]
         μ * Matrix.trace z = Matrix.trace (μ • z) := by simp [Matrix.trace_smul, smul_eq_mul]
         _ = Matrix.trace (T z) := by rw [hz_eig]
         _ = Matrix.trace z := hTP z
-        _ = 1 * Matrix.trace z := by simp
+        _ = 1 * Matrix.trace z := by simp only [one_mul]
     simp [hμ_eq]
 
 /-- If every factor in a finite product has norm at most `1`, then the product also has norm at
@@ -402,7 +402,7 @@ private lemma norm_eq_one_of_prod_norm_eq_one
     (s : Multiset ℂ) (hs : ∀ μ ∈ s, ‖μ‖ ≤ 1) (hprod : ‖s.prod‖ = 1) :
     ∀ μ ∈ s, ‖μ‖ = 1 := by
   induction s using Multiset.induction with
-  | empty => intro μ hμ; simp at hμ
+  | empty => intro μ hμ; simp only [Multiset.notMem_zero] at hμ
   | @cons a s ih =>
     intro μ hμ
     have ha : ‖a‖ ≤ 1 := hs a (Multiset.mem_cons_self a s)
@@ -491,7 +491,8 @@ private theorem sum_stdBasis_mul_conjTranspose :
     _ = ∑ i : Fin d, (d : ℂ) • Matrix.single i i (1 : ℂ) := by
           refine Finset.sum_congr rfl ?_
           intro i _
-          simp
+          simp only [Finset.sum_const, Finset.card_univ, Fintype.card_fin, smul_single,
+            nsmul_eq_mul, mul_one, smul_eq_mul]
     _ = (d : ℂ) • ∑ i : Fin d, Matrix.single i i (1 : ℂ) := by rw [Finset.smul_sum]
     _ = (d : ℂ) • (1 : MatrixAlg d) := by rw [sum_single_diag_one]
 
@@ -700,7 +701,7 @@ private theorem heisenberg_dual_multiplicative [NeZero d]
           _ = star (Matrix.trace (T (Matrix.stdBasis ℂ (Fin d) (Fin d) i) *
                 (Matrix.stdBasis ℂ (Fin d) (Fin d) j)ᴴ)) := by
                 rw [← Matrix.trace_conjTranspose]
-                simp
+                simp only [conjTranspose_mul, conjTranspose_conjTranspose]
           _ = star ((T (Matrix.stdBasis ℂ (Fin d) (Fin d) i)) j.1 j.2) := by
                 rcases j with ⟨c, d⟩
                 simp [Matrix.stdBasis_eq_single, Matrix.conjTranspose_single,
@@ -713,7 +714,8 @@ private theorem heisenberg_dual_multiplicative [NeZero d]
       _ = ‖Matrix.det ((LinearMap.toMatrix b b T)ᴴ)‖ := by rw [hmat]
       _ = ‖star (Matrix.det (LinearMap.toMatrix b b T))‖ := by
             rw [Matrix.det_conjTranspose]
-      _ = ‖Matrix.det (LinearMap.toMatrix b b T)‖ := by simp
+      _ = ‖Matrix.det (LinearMap.toMatrix b b T)‖ := by
+            simp only [LinearMap.det_toMatrix, RCLike.star_def, RCLike.norm_conj]
       _ = ‖LinearMap.det T‖ := by rw [LinearMap.det_toMatrix (b := b) (f := T)]
       _ = ‖channelDet T‖ := by rw [← channelDet_eq_linearMap_det]
       _ = 1 := hdet
@@ -768,9 +770,11 @@ private theorem heisenberg_dual_multiplicative [NeZero d]
               rw [show (∑ ij : Fin d × Fin d, e ij * (e ij)ᴴ) =
                   (d : ℂ) • (1 : MatrixAlg d) by
                 simpa [e] using sum_stdBasis_mul_conjTranspose (d := d)]
-        _ = Matrix.trace ((d : ℂ) • Td (1 : MatrixAlg d)) := by simp
+        _ = Matrix.trace ((d : ℂ) • Td (1 : MatrixAlg d)) := by
+              simp only [map_smul, trace_smul, smul_eq_mul]
         _ = Matrix.trace ((d : ℂ) • (1 : MatrixAlg d)) := by rw [hTd_one]
-        _ = (d : ℂ) * d := by simp
+        _ = (d : ℂ) * d := by
+              simp only [trace_smul, trace_one, Fintype.card_fin, smul_eq_mul]
     have hfirst : ∑ ij : Fin d × Fin d,
         (Matrix.trace (KadisonSchwarz.krausMap L (e ij * (e ij)ᴴ))).re = (d : ℝ) ^ 2 := by
       rw [← Complex.re_sum, hfirstC]
@@ -857,12 +861,12 @@ private theorem heisenberg_dual_multiplicative [NeZero d]
         KadisonSchwarz.krausMap L (eᴴ * e)
             = KadisonSchwarz.krausMap L (es * esᴴ) := by
                 rw [hes]
-                simp
+                simp only [conjTranspose_conjTranspose]
         _ = KadisonSchwarz.krausMap L es * (KadisonSchwarz.krausMap L es)ᴴ :=
               hks_all_basis (ij.2, ij.1)
         _ = (KadisonSchwarz.krausMap L e)ᴴ * KadisonSchwarz.krausMap L e := by
               rw [hTd_es]
-              simp
+              simp only [conjTranspose_conjTranspose]
     have h := KadisonSchwarz.kraus_commute_of_ks_equality
       (K := L) hL_unital (X := e) hks_basis
     intro a; have ha := h a
