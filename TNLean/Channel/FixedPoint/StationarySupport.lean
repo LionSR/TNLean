@@ -40,6 +40,8 @@ local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 /-- If each Kraus operator `K i` is block-upper-triangular with respect to an
 orthogonal projection `P`, then the transfer map preserves the compression
 `P M_D P`. -/
+-- Intentionally public so `ReducibleQDS.FixedDensity` can reuse this helper
+-- instead of carrying a second local copy of the same proof.
 lemma lowerZero_implies_invariance
     {r : ℕ} (K : Fin r → Mat) {P : Mat}
     (hP : IsOrthogonalProjection P)
@@ -218,6 +220,9 @@ were vacuous/trivial. They should be replaced by:
 * a non-vacuous Prop. 6.9 equivalence (irreducibility ↔ full support of
   stationary states), and
 * Prop. 6.10 minimality of stationary support without assuming irreducibility.
+* TODO: if we want to also deduplicate the near-copy in
+  `MPS/Irreducible/FormII.lean`, extract `lowerZero_implies_invariance` to a
+  lighter shared helper rather than adding cross-layer imports.
 -/
 
 end Channel
