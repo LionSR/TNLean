@@ -297,7 +297,8 @@ private theorem exists_lindblad_form_rank_le_finrank
   refine ⟨⟨m, G.H, L', G.H_hermitian⟩, ?_, le_refl m⟩
   -- Show toLinearMap agrees
   -- Key: Σ_j L_j ρ L_j† = Σ_i L'_i ρ L'_i† (and similarly for L†L)
-  -- because both equal Σ_{k,l} (α†α)_{lk} (e_k ρ e_l†) = Σ_{k,l} (B†B)_{lk} (e_k ρ e_l†)
+  -- because both equal
+  -- Σ_{k,l} (α†α)_{lk} (e_k ρ e_l†) = Σ_{k,l} (B†B)_{lk} (e_k ρ e_l†)
   let f : Fin m → Mat := fun k => (e k : Mat)
   -- Rewrite sums using basis expansion
   have hsum_expand : ∀ N : Mat,
@@ -339,163 +340,164 @@ private theorem exists_lindblad_form_rank_le_finrank
         ← Finset.mul_sum, ← Finset.mul_sum, hadj_eq]
 
 set_option maxHeartbeats 400000 in
-/-- For a nontrivial projection `P`, the traceless block-upper-triangular
-subspace `{M | (1-P)*M*P = 0 ∧ trace M = 0}` has `finrank ≤ D² - D`.
-Equivalently, `finrank + D ≤ D²`. -/
-private theorem finrank_traceless_blockUT_add_D_le
-    {P : Mat} (hP : IsNontrivialProjection P) :
-    Module.finrank ℂ
-      ((LinearMap.ker ((LinearMap.mulLeft ℂ (1 - P)).comp
-        (LinearMap.mulRight ℂ P))) ⊓
-       (LinearMap.ker (Matrix.traceLinearMap (Fin D) ℂ ℂ)) :
-        Submodule ℂ Mat) + D ≤ D ^ 2 := by
-  set φ : Mat →ₗ[ℂ] Mat := (LinearMap.mulLeft ℂ (1 - P)).comp (LinearMap.mulRight ℂ P)
-  set τ : Mat →ₗ[ℂ] ℂ := Matrix.traceLinearMap (Fin D) ℂ ℂ
-  set K_φ := LinearMap.ker φ
-  set K_τ := LinearMap.ker τ
-  by_cases hD : D = 0
-  · subst hD; exact absurd (Subsingleton.elim P 0) hP.2.1
-  haveI : NeZero D := ⟨hD⟩
-  have hD_pos : 0 < D := Nat.pos_of_ne_zero hD
-  have hD_ne : (D : ℂ) ≠ 0 := Nat.cast_ne_zero.mpr hD
-  have hfin_mat : Module.finrank ℂ Mat = D * D := by
-    simp [Module.finrank_matrix, Fintype.card_fin]
-  -- φ(M) = (1-P)*M*P; note that φ(1) = (1-P)*P = 0
-  have hφ_apply : ∀ M : Mat, φ M = (1 - P) * (M * P) := by
-    intro M; rfl
-  have hφ_one : φ (1 : Mat) = 0 := by
-    rw [hφ_apply, Matrix.one_mul]; exact orthogonalProjection_complement_mul hP.1
-  have hI_in_Kφ : (1 : Mat) ∈ K_φ := LinearMap.mem_ker.mpr hφ_one
-  -- τ(1) = D ≠ 0
+/-- If `1 ∈ ker φ`, then every matrix splits as a scalar multiple of `1`
+plus a traceless element, so `ker φ ⊔ ker(trace) = ⊤`. -/
+private theorem ker_sup_traceless_eq_top_of_one_mem_ker
+    (φ : Mat →ₗ[ℂ] Mat)
+    (hφ_one : φ (1 : Mat) = 0)
+    (hD_ne : (D : ℂ) ≠ 0) :
+    LinearMap.ker φ ⊔
+      LinearMap.ker (Matrix.traceLinearMap (Fin D) ℂ ℂ) = ⊤ := by
+  let τ : Mat →ₗ[ℂ] ℂ := Matrix.traceLinearMap (Fin D) ℂ ℂ
+  have hI_in_ker : (1 : Mat) ∈ LinearMap.ker φ := LinearMap.mem_ker.mpr hφ_one
   have htrI : τ (1 : Mat) = (D : ℂ) := by
     change Matrix.trace (1 : Mat) = _
     simp [Matrix.trace_one, Fintype.card_fin]
-  -- K_φ ⊔ K_τ = ⊤
-  have h_sup : K_φ ⊔ K_τ = ⊤ := by
-    rw [eq_top_iff]; intro x _
-    -- x = traceless_part + scalar_multiple_of_identity
-    -- where traceless_part ∈ K_τ and scalar_multiple ∈ K_φ
-    have hmem_Kτ : (x - (τ x / (D : ℂ)) • (1 : Mat)) ∈ K_τ := by
-      change _ ∈ LinearMap.ker τ
-      rw [LinearMap.mem_ker, map_sub, map_smul, htrI, smul_eq_mul,
-        div_mul_cancel₀ _ hD_ne, sub_self]
-    have hmem_Kφ : ((τ x / (D : ℂ)) • (1 : Mat)) ∈ K_φ :=
-      Submodule.smul_mem _ _ hI_in_Kφ
-    have hdecomp : x = (τ x / (D : ℂ)) • (1 : Mat) + (x - (τ x / (D : ℂ)) • (1 : Mat)) := by
-      rw [add_sub_cancel]
-    rw [hdecomp]
-    exact Submodule.add_mem_sup hmem_Kφ hmem_Kτ
-  -- Dimension formula
-  have hdim := Submodule.finrank_sup_add_finrank_inf_eq K_φ K_τ
-  rw [h_sup, show Module.finrank ℂ (⊤ : Submodule ℂ Mat) = D * D from
-    by rw [finrank_top]; exact hfin_mat] at hdim
-  -- finrank(K_τ) = D*D - 1
-  have hfin_Kτ : Module.finrank ℂ K_τ = D * D - 1 := by
-    have h_rn := τ.finrank_range_add_finrank_ker; rw [hfin_mat] at h_rn
-    have h_range : Module.finrank ℂ (LinearMap.range τ) = 1 := by
-      have : LinearMap.range τ = ⊤ := by
-        rw [LinearMap.range_eq_top]; intro c
-        exact ⟨(c / (D : ℂ)) • (1 : Mat), by
-          rw [map_smul, htrI, smul_eq_mul, div_mul_cancel₀ c hD_ne]⟩
-      rw [this, finrank_top]; exact Module.finrank_self ℂ
-    rw [h_range] at h_rn
-    show Module.finrank ℂ (LinearMap.ker τ) = D * D - 1
-    omega
-  rw [hfin_Kτ] at hdim
-  -- rank-nullity for φ
-  have h_rn_φ := φ.finrank_range_add_finrank_ker; rw [hfin_mat] at h_rn_φ
-  -- Need: finrank(range φ) ≥ D - 1
-  suffices h_range_lb : Module.finrank ℂ (LinearMap.range φ) ≥ D - 1 by
-    have hKφ_ge : 1 ≤ Module.finrank ℂ K_φ := by
-      rw [Nat.one_le_iff_ne_zero, ne_eq, Submodule.finrank_eq_zero]
-      intro h; exact one_ne_zero (h ▸ hI_in_Kφ : (1 : Mat) ∈ (⊥ : Submodule ℂ Mat))
-    rw [Nat.pow_two]
-    -- hdim : D * D + finrank(V) = finrank(K_φ) + (D * D - 1)
-    -- h_rn_φ : finrank(range φ) + finrank(K_φ) = D * D
-    -- h_range_lb : finrank(range φ) ≥ D - 1
-    -- hKφ_ge : finrank(K_φ) ≥ 1
-    -- Need: finrank(V) + D ≤ D * D
-    -- From h_rn_φ: finrank(K_φ) = D*D - finrank(range φ) ≤ D*D - (D-1) = D*D - D + 1
-    -- From hdim: finrank(V) = finrank(K_φ) + D*D - 1 - D*D = finrank(K_φ) - 1
-    -- (only valid when finrank(K_φ) ≥ 1, which we have)
-    -- So finrank(V) + D ≤ finrank(K_φ) - 1 + D ≤ D*D - D + 1 - 1 + D = D*D
-    -- But we need to be careful with Nat subtraction. Let's use omega with right setup.
-    -- First ensure K_φ vars are about ker φ, not K_φ
-    have : Module.finrank ℂ K_φ = Module.finrank ℂ (LinearMap.ker φ) := rfl
-    have : Module.finrank ℂ K_τ = Module.finrank ℂ (LinearMap.ker τ) := rfl
-    have : Module.finrank ℂ ↥(K_φ ⊓ K_τ) =
-      Module.finrank ℂ ↥(LinearMap.ker φ ⊓ LinearMap.ker τ) := rfl
-    omega
-  -- Eigenvalues of P are in {0, 1} (from IdempotentElem.spectrum_subset)
-  have heig_01 : ∀ i : Fin D, hP.1.1.eigenvalues i = 0 ∨ hP.1.1.eigenvalues i = 1 := by
+  rw [eq_top_iff]
+  intro x _
+  have hmem_trace :
+      x - (τ x / (D : ℂ)) • (1 : Mat) ∈ LinearMap.ker τ := by
+    rw [LinearMap.mem_ker, map_sub, map_smul, htrI, smul_eq_mul,
+      div_mul_cancel₀ _ hD_ne, sub_self]
+  have hmem_phi : ((τ x / (D : ℂ)) • (1 : Mat)) ∈ LinearMap.ker φ :=
+    Submodule.smul_mem _ _ hI_in_ker
+  have hdecomp :
+      x = (τ x / (D : ℂ)) • (1 : Mat) +
+        (x - (τ x / (D : ℂ)) • (1 : Mat)) := by
+    rw [add_sub_cancel]
+  rw [hdecomp]
+  exact Submodule.add_mem_sup hmem_phi hmem_trace
+
+/-- The traceless subspace of `Mat` has codimension `1`. -/
+private theorem finrank_traceless_submodule
+    (hD : D ≠ 0) :
+    Module.finrank ℂ
+      (LinearMap.ker (Matrix.traceLinearMap (Fin D) ℂ ℂ)) = D * D - 1 := by
+  haveI : NeZero D := ⟨hD⟩
+  let τ : Mat →ₗ[ℂ] ℂ := Matrix.traceLinearMap (Fin D) ℂ ℂ
+  have hfin_mat : Module.finrank ℂ Mat = D * D := by
+    simp [Module.finrank_matrix, Fintype.card_fin]
+  have hD_ne : (D : ℂ) ≠ 0 := Nat.cast_ne_zero.mpr hD
+  have htrI : τ (1 : Mat) = (D : ℂ) := by
+    change Matrix.trace (1 : Mat) = _
+    simp [Matrix.trace_one, Fintype.card_fin]
+  have h_rn := τ.finrank_range_add_finrank_ker
+  rw [hfin_mat] at h_rn
+  have h_range : Module.finrank ℂ (LinearMap.range τ) = 1 := by
+    have : LinearMap.range τ = ⊤ := by
+      rw [LinearMap.range_eq_top]
+      intro c
+      refine ⟨(c / (D : ℂ)) • (1 : Mat), ?_⟩
+      rw [map_smul, htrI, smul_eq_mul, div_mul_cancel₀ c hD_ne]
+    rw [this, finrank_top]
+    exact Module.finrank_self ℂ
+  rw [h_range] at h_rn
+  show Module.finrank ℂ (LinearMap.ker τ) = D * D - 1
+  omega
+
+/-- A nontrivial orthogonal projection has both a `1`-eigenvalue and a
+missing `1`-eigenvalue. -/
+private theorem projection_one_eigenvalue_card_bounds
+    {P : Mat} (hP : IsNontrivialProjection P) :
+    let eig := hP.1.1.eigenvalues
+    let k := (Finset.univ.filter (fun i => eig i = 1)).card
+    1 ≤ k ∧ k < D := by
+  set eig := hP.1.1.eigenvalues
+  set k := (Finset.univ.filter (fun i => eig i = 1)).card
+  have heig_01 : ∀ i : Fin D, eig i = 0 ∨ eig i = 1 := by
     intro i
     have hIdem : IsIdempotentElem P := hP.1.2
     have := hIdem.spectrum_subset ℝ
       (hP.1.1.eigenvalues_mem_spectrum_real i)
-    simp only [Set.mem_insert_iff, Set.mem_singleton_iff] at this; exact this
-  -- k = number of eigenvalue-1's. P nontrivial ⟹ 1 ≤ k ≤ D-1
-  set k := (Finset.univ.filter (fun i => hP.1.1.eigenvalues i = 1)).card
+    simp only [Set.mem_insert_iff, Set.mem_singleton_iff] at this
+    exact this
   have hk_le : k ≤ D := Finset.card_filter_le _ _ |>.trans (by simp [Fintype.card_fin])
   have hk_pos : 1 ≤ k := by
     by_contra h
     push Not at h
     have hk_zero : k = 0 := by omega
-    have : ∀ i, hP.1.1.eigenvalues i = 0 := by
-      intro i; rcases heig_01 i with h | h
-      · exact h
+    have hall_zero : ∀ i, eig i = 0 := by
+      intro i
+      rcases heig_01 i with hi | hi
+      · exact hi
       · exfalso
-        have : i ∈ Finset.univ.filter (fun i => hP.1.1.eigenvalues i = 1) :=
-          Finset.mem_filter.mpr ⟨Finset.mem_univ _, h⟩
+        have : i ∈ Finset.univ.filter (fun i => eig i = 1) :=
+          Finset.mem_filter.mpr ⟨Finset.mem_univ _, hi⟩
         simp [Finset.card_eq_zero.mp hk_zero] at this
     have htr : P.trace = 0 := by
-      rw [hP.1.1.trace_eq_sum_eigenvalues]; simp [this]
+      rw [hP.1.1.trace_eq_sum_eigenvalues]
+      simp [eig, hall_zero]
     exact hP.2.1 ((isOrthogonalProjection_posSemidef hP.1).trace_eq_zero_iff.mp htr)
   have hk_lt_D : k < D := by
-    by_contra h; push Not at h
+    by_contra h
+    push Not at h
     have hk_eq : k = D := le_antisymm hk_le h
-    have : ∀ i, hP.1.1.eigenvalues i = 1 := by
-      intro i; rcases heig_01 i with h | h
+    have hall_one : ∀ i, eig i = 1 := by
+      intro i
+      rcases heig_01 i with hi | hi
       · exfalso
-        have hi_not : i ∉ Finset.univ.filter (fun j => hP.1.1.eigenvalues j = 1) :=
-          Finset.mem_filter.not.mpr (by push Not; intro _; linarith)
-        have : (Finset.univ.filter
-            (fun j => hP.1.1.eigenvalues j = 1)).card <
-            Finset.univ.card :=
-          Finset.card_lt_card ⟨Finset.filter_subset _ _,
+        have hi_not : i ∉ Finset.univ.filter (fun j => eig j = 1) :=
+          Finset.mem_filter.not.mpr (by
+            push Not
+            intro _
+            linarith)
+        have : (Finset.univ.filter (fun j => eig j = 1)).card < Finset.univ.card :=
+          Finset.card_lt_card ⟨
+            Finset.filter_subset _ _,
             fun hsub => hi_not (hsub (Finset.mem_univ _))⟩
-        simp [Fintype.card_fin] at this; omega
-      · exact h
-    -- All eigenvalues 1 → P = 1 via spectral theorem
+        have hk_lt : k < D := by
+          simpa [k, Fintype.card_fin] using this
+        omega
+      · exact hi
     have : P = 1 := by
       conv_lhs => rw [hP.1.1.spectral_theorem]
-      have : RCLike.ofReal ∘ hP.1.1.eigenvalues = fun _ => (1 : ℂ) :=
-        funext (fun i => by simp [‹∀ i, hP.1.1.eigenvalues i = 1› i])
-      rw [this, Matrix.diagonal_one]
+      have hdiag : RCLike.ofReal ∘ eig = fun _ => (1 : ℂ) :=
+        funext (fun i => by simp [hall_one i])
+      rw [hdiag, Matrix.diagonal_one]
       simp [Unitary.conjStarAlgAut]
     exact hP.2.2 this
-  -- k * (D - k) ≥ D - 1 since (k-1)(D-k-1) ≥ 0 and 1 ≤ k ≤ D-1
-  have hkDk : k * (D - k) ≥ D - 1 := by
-    -- D-1 = (k-1) + (D-k) ≤ (k-1)*(D-k) + (D-k) = k*(D-k)
-    -- since (k-1) ≤ (k-1)*(D-k) when D-k ≥ 1.
-    have hDk : 1 ≤ D - k := Nat.sub_pos_of_lt hk_lt_D
-    have step1 : k - 1 ≤ (k - 1) * (D - k) := Nat.le_mul_of_pos_right _ hDk
-    have step2 : (k - 1) * (D - k) + (D - k) ≤ k * (D - k) := by
-      rw [← Nat.succ_pred_eq_of_pos (Nat.pos_of_ne_zero (by omega : k ≠ 0))]
-      simp [Nat.succ_mul]
-    -- (k-1) + (D-k) = D - 1
-    have step3 : (k - 1) + (D - k) = D - 1 := by omega
-    -- Combine: D-1 = (k-1) + (D-k) ≤ (k-1)*(D-k) + (D-k) ≤ k*(D-k)
-    calc D - 1 = (k - 1) + (D - k) := step3.symm
-      _ ≤ (k - 1) * (D - k) + (D - k) := Nat.add_le_add_right step1 _
-      _ ≤ k * (D - k) := step2
-  -- Need: finrank(range φ) ≥ k * (D - k) ≥ D - 1
-  calc D - 1 ≤ k * (D - k) := hkDk
+  simpa [eig, k] using And.intro hk_pos hk_lt_D
+
+/-- If `1 ≤ k < D`, then the rectangle count `k(D-k)` is at least `D-1`. -/
+private theorem one_eigenvalue_card_mul_sub_ge
+    {k : ℕ} (hk_pos : 1 ≤ k) (hk_lt_D : k < D) :
+    D - 1 ≤ k * (D - k) := by
+  have hDk : 1 ≤ D - k := Nat.sub_pos_of_lt hk_lt_D
+  have hstep1 : k - 1 ≤ (k - 1) * (D - k) := Nat.le_mul_of_pos_right _ hDk
+  have hstep2 : (k - 1) * (D - k) + (D - k) ≤ k * (D - k) := by
+    rw [← Nat.succ_pred_eq_of_pos (Nat.pos_of_ne_zero (by omega : k ≠ 0))]
+    simp [Nat.succ_mul]
+  have hstep3 : (k - 1) + (D - k) = D - 1 := by
+    omega
+  calc
+    D - 1 = (k - 1) + (D - k) := hstep3.symm
+    _ ≤ (k - 1) * (D - k) + (D - k) := Nat.add_le_add_right hstep1 _
+    _ ≤ k * (D - k) := hstep2
+
+/-- The block-compression map `M ↦ (1-P)MP` has range dimension at least
+`D - 1` for any nontrivial orthogonal projection `P`. -/
+private theorem finrank_range_blockCompression_ge
+    {P : Mat} (hP : IsNontrivialProjection P) :
+    let φ : Mat →ₗ[ℂ] Mat := (LinearMap.mulLeft ℂ (1 - P)).comp (LinearMap.mulRight ℂ P)
+    D - 1 ≤ Module.finrank ℂ (LinearMap.range φ) := by
+  classical
+  set φ : Mat →ₗ[ℂ] Mat := (LinearMap.mulLeft ℂ (1 - P)).comp (LinearMap.mulRight ℂ P)
+  set eig := hP.1.1.eigenvalues
+  set k := (Finset.univ.filter (fun i => eig i = 1)).card
+  have hk_bounds := projection_one_eigenvalue_card_bounds hP
+  rcases (by simpa [eig, k] using hk_bounds) with ⟨hk_nonempty, hk_lt_D⟩
+  have hk_pos : 1 ≤ k := Finset.one_le_card.mpr hk_nonempty
+  have hkDk : D - 1 ≤ k * (D - k) := one_eigenvalue_card_mul_sub_ge hk_pos hk_lt_D
+  have heig_01 : ∀ i : Fin D, eig i = 0 ∨ eig i = 1 := by
+    intro i
+    have hIdem : IsIdempotentElem P := hP.1.2
+    have := hIdem.spectrum_subset ℝ
+      (hP.1.1.eigenvalues_mem_spectrum_real i)
+    simp only [Set.mem_insert_iff, Set.mem_singleton_iff] at this
+    exact this
+  calc
+    D - 1 ≤ k * (D - k) := hkDk
     _ ≤ Module.finrank ℂ (LinearMap.range φ) := by
-        -- Strategy: conjugate φ by the eigenvector unitary to diagonalize.
-        -- The conjugated map ψ(M) = diag(1-eig)*M*diag(eig) has range dimension
-        -- exactly (D-k)*k, which transfers to φ via the isomorphism.
-        classical
-        set eig := hP.1.1.eigenvalues
         set U : Matrix.unitaryGroup (Fin D) ℂ := hP.1.1.eigenvectorUnitary
         have hUU : (star (U : Mat)) * (U : Mat) = 1 := by
           rw [show star (U : Mat) = ↑(star U) from (Unitary.coe_star (U := U)).symm]
@@ -503,141 +505,95 @@ private theorem finrank_traceless_blockUT_add_D_le
         have hUUs : (U : Mat) * (star (U : Mat)) = 1 := by
           rw [show star (U : Mat) = ↑(star U) from (Unitary.coe_star (U := U)).symm]
           exact Unitary.coe_mul_star_self U
-        -- P = U * diag(eig) * star(U)
         have hP_spec : P = (U : Mat) *
             Matrix.diagonal (RCLike.ofReal ∘ eig) * (star (U : Mat)) := by
           rw [hP.1.1.spectral_theorem, Unitary.conjStarAlgAut_apply]
-        -- Key algebraic facts from spectral decomposition
         have hPU : P * (U : Mat) = (U : Mat) * Matrix.diagonal (RCLike.ofReal ∘ eig) := by
-          have := congr_arg (· * (U : Mat)) hP_spec
+          have := congrArg (· * (U : Mat)) hP_spec
           simp only [Matrix.mul_assoc, hUU, Matrix.mul_one] at this
           exact this
         have hUsP : (star (U : Mat)) * P =
-            Matrix.diagonal (RCLike.ofReal ∘ eig) *
-            (star (U : Mat)) := by
-          have := congr_arg ((star (U : Mat)) * ·) hP_spec
+            Matrix.diagonal (RCLike.ofReal ∘ eig) * (star (U : Mat)) := by
+          have := congrArg ((star (U : Mat)) * ·) hP_spec
           simp only [← Matrix.mul_assoc, hUU, Matrix.one_mul] at this
           exact this
-        -- Define the conjugated map ψ(M) = diag(1-eig) * M * diag(eig)
-        -- Range(ψ) = span{Matrix.single a b 1 | eig_a ≠ 1 ∧ eig_b ≠ 0}
-        -- For eig ∈ {0,1}, this = span{Matrix.single a b 1 | eig_a = 0 ∧ eig_b = 1}
-        -- which has dimension (D-k)*k.
-        -- The conjugation Ψ: M ↦ U*M*star(U) maps range(ψ) to range(φ) bijectively.
-        -- So we construct k*(D-k) linearly independent elements of range(φ).
-        -- For a with eig a = 0, b with eig b = 1:
-        -- φ(U*E_{ab}*star(U)) = (1-P)*(U*E_{ab}*star(U))*P
-        -- = (1-P)*U*E_{ab}*star(U)*P
-        -- using algebra: (1-P)*U = U*(1-diag(eig)) = U*diag(1-eig)
-        --   and star(U)*P = diag(eig)*star(U)
-        -- so = U*diag(1-eig)*E_{ab}*diag(eig)*star(U)
-        -- Now diag(1-eig)*E_{ab}*diag(eig) has (i,j) entry
-        -- = (1-eig_i)*(if i=a,j=b then 1 else 0)*eig_j
-        -- When eig_a=0, eig_b=1: this = E_{ab}
-        -- So φ(U*E_{ab}*star(U)) = U*E_{ab}*star(U).
-        -- Key fact: for eig a = 0, eig b = 1, the matrix U*E_{ab}*U* is a fixed point of φ
-        -- Strategy: rewrite P via spectral theorem, then use noncomm_ring after
-        -- establishing key identities star(U)*U = 1, diag(1-eig)*E*diag(eig) = E.
         set D₁ : Mat := Matrix.diagonal (RCLike.ofReal ∘ eig) with hD₁_def
-        -- P = U * D₁ * star U
         have hP_eq : P = (U : Mat) * D₁ * star (U : Mat) := hP_spec
-        -- star(U) * U = 1 and U * star(U) = 1 (already have hUU, hUUs)
         have hφ_fix : ∀ a b : Fin D, eig a = 0 → eig b = 1 →
-            φ ((U : Mat) * Matrix.single a b 1 * star (U : Mat)) =
-            (U : Mat) * Matrix.single a b 1 * star (U : Mat) := by
+            φ ((U : Mat) * Matrix.single a b (1 : ℂ) * star (U : Mat)) =
+            (U : Mat) * Matrix.single a b (1 : ℂ) * star (U : Mat) := by
           intro a b ha hb
           set E := Matrix.single a b (1 : ℂ)
-          -- D₁ * star(U) * U = D₁ (from hUU)
-          -- star(U) * U * D₁ = D₁ (from hUU)
-          -- diag(1-eig) * E * diag(eig) = E when eig a=0, eig b=1
           have hDE : (1 - D₁) * E * D₁ = E := by
             have hD₁_diag : D₁ = Matrix.diagonal (fun i => (eig i : ℂ)) := by
               simp [D₁, Function.comp]
             have h1D₁ : 1 - D₁ = Matrix.diagonal (fun i => 1 - (eig i : ℂ)) := by
-              rw [hD₁_diag]; ext i j
+              rw [hD₁_diag]
+              ext i j
               simp [Matrix.diagonal_apply, Matrix.one_apply]
               split_ifs <;> ring
             rw [h1D₁, hD₁_diag]
             ext i j
             simp only [Matrix.diagonal_mul, Matrix.mul_diagonal, E, Matrix.single_apply]
-            split_ifs with h1
-            · obtain ⟨rfl, rfl⟩ := h1; simp [ha, hb]
+            split_ifs with hij
+            · obtain ⟨rfl, rfl⟩ := hij
+              simp [ha, hb]
             · simp
-          -- φ(X) = (1-P)*(X*P) where X = U*E*star(U)
-          -- = (1 - U*D₁*star(U)) * (U*E*star(U) * U*D₁*star(U))
-          -- = (1 - U*D₁*star(U)) * U*E*D₁*star(U)     [using star(U)*U*D₁ = D₁]
-          -- = U*E*D₁*star(U) - U*D₁*star(U)*U*E*D₁*star(U)
-          -- = U*E*D₁*star(U) - U*D₁*E*D₁*star(U)
-          -- = U*(E*D₁ - D₁*E*D₁)*star(U)
-          -- = U*((1-D₁)*E*D₁)*star(U)   [since E*D₁ - D₁*E*D₁ = (1-D₁)*E*D₁]
-          -- = U*E*star(U)               [by hDE]
           show (1 - P) * ((U : Mat) * E * star (U : Mat) * P) =
-            (U : Mat) * E * star (U : Mat)
+              (U : Mat) * E * star (U : Mat)
           have h1PU : (1 - P) * (U : Mat) = (U : Mat) * (1 - D₁) := by
             rw [Matrix.sub_mul, Matrix.one_mul, hPU, Matrix.mul_sub, Matrix.mul_one]
-          calc (1 - P) * ((U : Mat) * E * star (U : Mat) * P)
-              = ((1 - P) * ((U : Mat) * E * star (U : Mat))) * P := by
-                rw [← Matrix.mul_assoc]
+          calc
+            (1 - P) * ((U : Mat) * E * star (U : Mat) * P)
+                = ((1 - P) * ((U : Mat) * E * star (U : Mat))) * P := by
+                  rw [← Matrix.mul_assoc]
             _ = ((1 - P) * (U : Mat) * E * star (U : Mat)) * P := by
-                rw [← Matrix.mul_assoc, ← Matrix.mul_assoc]
+                  rw [← Matrix.mul_assoc, ← Matrix.mul_assoc]
             _ = ((U : Mat) * (1 - D₁) * E * star (U : Mat)) * P := by
-                rw [h1PU]
+                  rw [h1PU]
             _ = (U : Mat) * (1 - D₁) * E * (star (U : Mat) * P) := by
-                rw [Matrix.mul_assoc]
+                  rw [Matrix.mul_assoc]
             _ = (U : Mat) * (1 - D₁) * E * (D₁ * star (U : Mat)) := by
-                rw [hUsP]
+                  rw [hUsP]
             _ = (U : Mat) * ((1 - D₁) * E * D₁) * star (U : Mat) := by
-                -- LHS: ((U*(1-D₁))*E) * (D₁*star(U))
-                -- Step: A*(B*C) = (A*B)*C where A=U*(1-D₁)*E, B=D₁, C=star(U)
-                rw [← Matrix.mul_assoc ((U : Mat) * (1 - D₁) * E) D₁]
-                -- Now: ((U*(1-D₁))*E*D₁) * star(U) = (U*((1-D₁)*E*D₁)) * star(U)
-                -- Need: (U*(1-D₁))*E*D₁ = U*((1-D₁)*E*D₁)
-                -- (U*(1-D₁))*E*D₁ = ((U*(1-D₁))*E)*D₁
-                -- = U * ((1-D₁)*E) * D₁       [by mul_assoc U (1-D₁) E backward]
-                -- = U * ((1-D₁)*E*D₁)          [by mul_assoc U ((1-D₁)*E) D₁]
-                congr 1
-                rw [Matrix.mul_assoc (U : Mat) (1 - D₁) E,
+                  rw [← Matrix.mul_assoc ((U : Mat) * (1 - D₁) * E) D₁]
+                  congr 1
+                  rw [Matrix.mul_assoc (U : Mat) (1 - D₁) E,
                     Matrix.mul_assoc (U : Mat) ((1 - D₁) * E) D₁]
             _ = (U : Mat) * E * star (U : Mat) := by
-                rw [hDE]
-        -- Now construct the linearly independent family
+                  rw [hDE]
         set S₀ := Finset.univ.filter (fun i : Fin D => eig i = 0)
         set S₁ := Finset.univ.filter (fun i : Fin D => eig i = 1)
         have hS₁_card : S₁.card = k := rfl
         have hS₀_card : S₀.card = D - k := by
           have hunion : S₀ ∪ S₁ = Finset.univ := by
             ext i
-            simp only [S₀, S₁, Finset.mem_union, Finset.mem_filter, Finset.mem_univ, true_and,
-                        iff_true]
+            simp only [S₀, S₁, Finset.mem_union, Finset.mem_filter, Finset.mem_univ,
+              true_and, iff_true]
             exact heig_01 i
           have hdisj : Disjoint S₀ S₁ := by
             simp only [S₀, S₁, Finset.disjoint_filter]
-            intro i _ h0 h1; linarith
+            intro i _ h0 h1
+            linarith
           have := Finset.card_union_of_disjoint hdisj
           rw [hunion, Finset.card_univ, Fintype.card_fin] at this
           omega
-        -- The family indexed by S₀ × S₁
         have hcard : Fintype.card (↥S₀ × ↥S₁) = (D - k) * k := by
           rw [Fintype.card_prod, Fintype.card_coe, Fintype.card_coe, hS₀_card, hS₁_card]
-        -- Define a family in range(φ)
         set fam : (↥S₀ × ↥S₁) → LinearMap.range φ :=
           fun ⟨⟨a, ha⟩, ⟨b, hb⟩⟩ =>
             ⟨(U : Mat) * Matrix.single a b (1 : ℂ) * star (U : Mat),
              LinearMap.mem_range.mpr ⟨_, hφ_fix a b
                (by simpa [S₀] using ha) (by simpa [S₁] using hb)⟩⟩
-        -- The family is linearly independent
         have hfam_li : LinearIndependent ℂ fam := by
-          -- Suffices: the Subtype.val-composed family is lin indep in Mat
           apply LinearIndependent.of_comp (LinearMap.range φ).subtype
           show LinearIndependent ℂ (fun p : ↥S₀ × ↥S₁ => (fam p : Mat))
-          -- fam(a,b) = U * Matrix.single a b 1 * star(U) = conjStarAlgAut(E_{ab})
-          -- Use: conjStarAlgAut is injective, and E_{ab} are lin indep
-          -- Step 1: express the family as a composition
           have hfam_eq : (fun p : ↥S₀ × ↥S₁ => (fam p : Mat)) =
               (fun M : Mat => (U : Mat) * M * star (U : Mat)) ∘
-              (fun p : ↥S₀ × ↥S₁ => Matrix.single p.1.1 p.2.1 (1 : ℂ)) := by
-            ext ⟨⟨a, ha⟩, ⟨b, hb⟩⟩; rfl
+                (fun p : ↥S₀ × ↥S₁ => Matrix.single p.1.1 p.2.1 (1 : ℂ)) := by
+            ext ⟨⟨a, ha⟩, ⟨b, hb⟩⟩
+            rfl
           rw [hfam_eq]
-          -- Step 2: the conjugation map is injective (linear map with ker = ⊥)
           set conjMap : Mat →ₗ[ℂ] Mat :=
             (LinearMap.mulLeft ℂ (U : Mat)).comp (LinearMap.mulRight ℂ (star (U : Mat)))
           have hconj_ker : LinearMap.ker conjMap = ⊥ := by
@@ -645,19 +601,16 @@ private theorem finrank_traceless_blockUT_add_D_le
             intro M₁ M₂ h
             simp only [conjMap, LinearMap.comp_apply, LinearMap.mulLeft_apply,
               LinearMap.mulRight_apply] at h
-            -- h : U * (M₁ * star U) = U * (M₂ * star U)
-            -- Left-cancel U, right-cancel star U
-            have := congr_arg ((star (U : Mat)) * · * (U : Mat)) h
+            have := congrArg ((star (U : Mat)) * · * (U : Mat)) h
             simp only [← Matrix.mul_assoc, hUU, Matrix.one_mul] at this
             simpa [Matrix.mul_assoc, hUUs, Matrix.mul_one] using this
-          have hfam_eq2 : (fun M : Mat => (U : Mat) * M * star (U : Mat)) = conjMap := by
+          have hfam_eq2 :
+              (fun M : Mat => (U : Mat) * M * star (U : Mat)) = conjMap := by
             ext M
-            simp only [conjMap, LinearMap.comp_apply,
-              LinearMap.mulLeft_apply, LinearMap.mulRight_apply, Matrix.mul_assoc]
+            simp only [conjMap, LinearMap.comp_apply, LinearMap.mulLeft_apply,
+              LinearMap.mulRight_apply, Matrix.mul_assoc]
           rw [hfam_eq2]
           apply LinearIndependent.map' _ conjMap hconj_ker
-          -- Step 3: Matrix.single a b 1 for distinct (a,b) ∈ S₀×S₁ are lin indep
-          -- They form a sub-family of the standard basis
           let ι : ↥S₀ × ↥S₁ → Fin D × Fin D := fun p => (p.1.1, p.2.1)
           have hι_inj : Function.Injective ι := by
             intro ⟨a₁, b₁⟩ ⟨a₂, b₂⟩ h
@@ -669,10 +622,73 @@ private theorem finrank_traceless_blockUT_add_D_le
             simp [ι, Matrix.stdBasis_eq_single]
           rw [hv_eq]
           exact ((Matrix.stdBasis ℂ (Fin D) (Fin D)).linearIndependent).comp ι hι_inj
-        -- finrank(range φ) ≥ card(S₀ × S₁) = (D-k)*k
-        calc k * (D - k) = (D - k) * k := Nat.mul_comm k (D - k)
+        calc
+          k * (D - k) = (D - k) * k := Nat.mul_comm k (D - k)
           _ = Fintype.card (↥S₀ × ↥S₁) := hcard.symm
           _ ≤ Module.finrank ℂ (LinearMap.range φ) := hfam_li.fintype_card_le_finrank
+
+/-- For a nontrivial projection `P`, the traceless block-upper-triangular
+subspace `{M | (1-P)*M*P = 0 ∧ trace M = 0}` has `finrank ≤ D² - D`.
+Equivalently, `finrank + D ≤ D²`. -/
+private theorem finrank_traceless_blockUT_add_D_le
+    {P : Mat} (hP : IsNontrivialProjection P) :
+    Module.finrank ℂ
+      ((LinearMap.ker ((LinearMap.mulLeft ℂ (1 - P)).comp
+        (LinearMap.mulRight ℂ P))) ⊓
+        (LinearMap.ker (Matrix.traceLinearMap (Fin D) ℂ ℂ)) :
+        Submodule ℂ Mat) + D ≤ D ^ 2 := by
+  set φ : Mat →ₗ[ℂ] Mat := (LinearMap.mulLeft ℂ (1 - P)).comp (LinearMap.mulRight ℂ P)
+  set τ : Mat →ₗ[ℂ] ℂ := Matrix.traceLinearMap (Fin D) ℂ ℂ
+  set K_φ := LinearMap.ker φ
+  set K_τ := LinearMap.ker τ
+  by_cases hD : D = 0
+  · subst hD; exact absurd (Subsingleton.elim P 0) hP.2.1
+  haveI : NeZero D := ⟨hD⟩
+  have hD_ne : (D : ℂ) ≠ 0 := Nat.cast_ne_zero.mpr hD
+  have hfin_mat : Module.finrank ℂ Mat = D * D := by
+    simp [Module.finrank_matrix, Fintype.card_fin]
+  have hφ_apply : ∀ M : Mat, φ M = (1 - P) * (M * P) := by
+    intro M; rfl
+  have hφ_one : φ (1 : Mat) = 0 := by
+    rw [hφ_apply, Matrix.one_mul]; exact orthogonalProjection_complement_mul hP.1
+  have h_sup : K_φ ⊔ K_τ = ⊤ := by
+    simpa [φ, τ, K_φ, K_τ] using
+      ker_sup_traceless_eq_top_of_one_mem_ker φ hφ_one hD_ne
+  have hfin_Kτ : Module.finrank ℂ K_τ = D * D - 1 := by
+    simpa [τ, K_τ] using finrank_traceless_submodule (D := D) hD
+  have hfin_sup : Module.finrank ℂ ↥(K_φ ⊔ K_τ) = D * D := by
+    rw [h_sup, finrank_top]
+    exact hfin_mat
+  have hdim :
+      D * D + Module.finrank ℂ ↥(K_φ ⊓ K_τ) =
+        Module.finrank ℂ ↥K_φ + (D * D - 1) := by
+    have hdim0 := Submodule.finrank_sup_add_finrank_inf_eq K_φ K_τ
+    rw [hfin_sup, hfin_Kτ] at hdim0
+    exact hdim0
+  have h_rn_φ :
+      Module.finrank ℂ (LinearMap.range φ) + Module.finrank ℂ ↥K_φ = D * D := by
+    simpa [K_φ, hfin_mat] using φ.finrank_range_add_finrank_ker
+  suffices h_range_lb : Module.finrank ℂ (LinearMap.range φ) ≥ D - 1 by
+    have hD_pos : 0 < D := Nat.pos_of_ne_zero hD
+    set n := D * D
+    have hn_pos : 1 ≤ n := by
+      dsimp [n]
+      exact Nat.succ_le_of_lt (Nat.mul_pos hD_pos hD_pos)
+    have hdim_n :
+        n + Module.finrank ℂ ↥(K_φ ⊓ K_τ) =
+          Module.finrank ℂ ↥K_φ + (n - 1) := by
+      simpa [n] using hdim
+    have h_rn_φ_n :
+        Module.finrank ℂ (LinearMap.range φ) + Module.finrank ℂ ↥K_φ = n := by
+      simpa [n] using h_rn_φ
+    have hfin_inf : Module.finrank ℂ ↥(K_φ ⊓ K_τ) + 1 = Module.finrank ℂ ↥K_φ := by
+      omega
+    have hKφ_le : Module.finrank ℂ ↥K_φ ≤ n - (D - 1) := by
+      omega
+    have hgoal : Module.finrank ℂ ↥(K_φ ⊓ K_τ) + D ≤ n := by
+      omega
+    simpa [n, Nat.pow_two] using hgoal
+  simpa [φ] using finrank_range_blockCompression_ge (D := D) hP
 
 /-- Shifting Lindblad operators by scalar multiples of identity preserves
 `toLinearMap` while making operators traceless.  Block-UT is preserved. -/
