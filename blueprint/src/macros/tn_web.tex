@@ -220,6 +220,41 @@
   \end{array}%
 }
 
+\newcommand{\TNPEPSEdgeGaugeOrientation}{%
+  \begin{array}{c}
+    \text{edge } e = (u,w) \text{ oriented by } u < w \\
+    u \; \text{---} \; X_e \; \text{---} \; (X_e^{-1})^\top \; \text{---} \; w
+  \end{array}%
+}
+
+\newcommand{\TNPEPSGaugeVertexAction}{%
+  \begin{array}{c}
+    \text{one gauge matrix } M_{ve} \text{ is inserted on each incident virtual leg of } A_v \\
+    A_v \mapsto A_v^X
+  \end{array}%
+}
+
+\newcommand{\TNPEPSGaugeCancellation}{%
+  \begin{array}{c}
+    X(i,j)\,(X^{-1})^\top(j,k) = \delta(i,k) \\
+    \text{so the two edge gauges cancel on an internal contraction}
+  \end{array}%
+}
+
+\newcommand{\TNPEPSLocalGaugeExtraction}{%
+  \begin{array}{c}
+    \text{injectivity on } \mathrm{star}(v) \text{ gives a left inverse} \\
+    \text{which isolates the local edge gauges around } v
+  \end{array}%
+}
+
+\newcommand{\TNPEPSGlobalConsistency}{%
+  \begin{array}{c}
+    \text{local gauges extracted at } u \text{ and } w \text{ agree on the shared edge } e \\
+    \text{and define one global edge gauge family}
+  \end{array}%
+}
+
 \newcommand{\TNMPOCellDiagram}[3]{%
   \TNMPOCell{#1}{#2}{#3}%
 }
