@@ -2,74 +2,24 @@
 Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import TNLean.MPS.FundamentalTheorem.Multi
+import TNLean.MPS.SharedInfra.SectorDecomposition
 import TNLean.MPS.BNT.Basic
 import TNLean.Algebra.ScalarPowerSumIdentity
 
 import Mathlib.Data.Fintype.BigOperators
 
 /-!
-# Sector decomposition with per-copy weights for the equal-case fundamental theorem
+# Sector decomposition comparison theorems
 
-This file formalizes the **multiplicity layer** of the MPS fundamental theorem.
+The shared multiplicity layer
+`SectorWeightData` / `SectorDecomposition` now lives in
+`TNLean.MPS.SharedInfra.SectorDecomposition`.
 
-## Mathematical background
+This file adds the higher-level equal-case Fundamental Theorem machinery:
 
-In the canonical form for matrix product states, the total tensor decomposes into a weighted
-block-diagonal sum over a *basis of normal tensors* (BNT) `A_j`.  In the original treatment
-of [PGVWC07, §III], each distinct BNT block appears exactly once.  The review [CPSV21, §IV]
-and the detailed analysis in [CPSV17, §2.3 + Appendix A] refine this by tracking
-**multiplicities**: each basis block `A_j` may appear `r_j` times with distinct sector weights
-`μ_{j,q}` (`q = 1, …, r_j`), so the MPV coefficient of `A_j` at system size `N` is the
-power sum `∑_q (μ_{j,q})^N`.
-
-The equal-case corollary of the fundamental theorem ([CPSV21, Corollary IV.5] /
-[CPSV17, §2.3]) compares two such decompositions.  After matching basis blocks via the
-proportional-case theorem ([CPSV17, Theorem 4.4]), one obtains power-sum identities
-`∑_q (μ_{j,q}^A)^k = ∑_q (μ_{j,q}^B)^k` for each `j` and all positive `k`.  The paper's
-Lemma `Lem:app_simple` (Newton's identities on symmetric functions) then recovers equality
-of the weight multisets.
-
-## Relationship to `IsCanonicalFormBNT`
-
-The existing `IsCanonicalFormBNT` predicate models the **merged case** where each basis block
-appears once (i.e., all `r_j = 1`).  This file's `SectorWeightData` / `SectorDecomposition`
-layer faithfully tracks the per-copy multiplicity structure, complementing the merged
-interface without modifying it.
-
-## Related results in other formalizations
-
-The Newton–Girard / power-sum recovery step is a classical result; our
-`Matrix.sum_pow_eq_implies_multiset_eq` (in `ScalarPowerSumIdentity.lean`) formalizes it via
-the companion matrix approach.  The extrapolation lemma (`geom_sum_eventually_zero`) — that
-an eventually-vanishing linear combination of geometric sequences is identically zero — is
-standard but does not appear to have a direct Mathlib counterpart; we prove it by induction
-with a telescoping argument.
-
-## Main definitions
-
-* `SectorWeightData`: multiplicities `copies j = r_j`, sector weights `weight j q = μ_{j,q}`,
-  positivity of the multiplicities, and nonvanishing of all sector weights.
-* `SectorDecomposition`: a basis family together with the sector weight data.
-* `SectorDecomposition.toTensor`: the flattened block-diagonal tensor obtained by reusing
-  `toTensorFromBlocks` after flattening `(j, q)` to a single block index.
-* `SectorDecomposition.coeff`: the coefficient `coeff N j = ∑_q (μ_{j,q})^N`.
-
-## Main theorems
-
-* `SectorDecomposition.mpv_toTensor_eq_sum_coeff`: the decomposition formula
-  `mpv(total) = ∑_j coeff(N,j) * mpv(A_j)` ([CPSV21, Eq. (IV.26)]).
-
-* `SectorWeightData.coeff_eventually_eq_of_sameMPV`: equal MPVs + BNT linear independence →
-  eventual coefficient agreement.
-
-* `SectorWeightData.weight_multiset_eq_of_copies_eq_of_coeff_eq`: equal multiplicities +
-  equal power sums for all positive k → equal weight multisets
-  (Newton–Girard / [CPSV17, Lemma Lem:app_simple]).
-
-* `SectorWeightData.weight_multiset_eq_of_sameMPV_bnt`: combined equal-case corollary
-  ([CPSV21, Corollary IV.5]), connecting BNT linear independence and equal MPVs to sector
-  weight multiset equality.
+* coefficient comparison from BNT linear independence,
+* Newton–Girard recovery of sector-weight multisets,
+* the combined equal-case corollaries used by the FT stack.
 
 ## References
 
@@ -87,182 +37,6 @@ open scoped Matrix BigOperators
 namespace MPSTensor
 
 variable {d : ℕ}
-
-/--
-Sector multiplicity and weight data over a family of basis blocks.
-
-`copies j` is the multiplicity `r_j` of basis block `j`, while `weight j q` is the sector
-weight `μ_{j,q}` attached to the `q`-th copy.
--/
-structure SectorWeightData (g : ℕ) where
-  /-- The multiplicity `r_j` of the basis block `j`. -/
-  copies : Fin g → ℕ
-  /-- Each basis block occurs at least once. -/
-  copies_pos : ∀ j, 0 < copies j
-  /-- The sector weight `μ_{j,q}` attached to the `q`-th copy of basis block `j`. -/
-  weight : (j : Fin g) → Fin (copies j) → ℂ
-  /-- All sector weights are nonzero. -/
-  weight_ne_zero : ∀ j q, weight j q ≠ 0
-
-namespace SectorWeightData
-
-variable {g : ℕ}
-
-/-- The coefficient `coeff N j = ∑_q (μ_{j,q})^N`. -/
-noncomputable def coeff (S : SectorWeightData g) (N : ℕ) (j : Fin g) : ℂ :=
-  ∑ q : Fin (S.copies j), (S.weight j q) ^ N
-
-end SectorWeightData
-
-/--
-A sector decomposition: a basis of normal tensors together with per-copy sector weight data.
-
-This bundles the basis-block family `A_j` with the multiplicity and weight structure
-`SectorWeightData`.
--/
-structure SectorDecomposition (d : ℕ) where
-  /-- Number of basis blocks `A_j`. -/
-  basisCount : ℕ
-  /-- Bond dimension of each basis block. -/
-  basisDim : Fin basisCount → ℕ
-  /-- The basis-block family `A_j`. -/
-  basis : (j : Fin basisCount) → MPSTensor d (basisDim j)
-  /-- Multiplicities and sector weights lying over the basis blocks. -/
-  sectors : SectorWeightData basisCount
-
-namespace SectorDecomposition
-
-/-- The multiplicity `r_j` of the basis block `j`. -/
-abbrev copies (P : SectorDecomposition d) : Fin P.basisCount → ℕ :=
-  P.sectors.copies
-
-/-- Positivity of the multiplicities. -/
-abbrev copies_pos (P : SectorDecomposition d) : ∀ j, 0 < P.copies j :=
-  P.sectors.copies_pos
-
-/-- The sector weight `μ_{j,q}`. -/
-abbrev weight (P : SectorDecomposition d) : (j : Fin P.basisCount) → Fin (P.copies j) → ℂ :=
-  P.sectors.weight
-
-/-- Nonvanishing of the sector weights. -/
-abbrev weight_ne_zero (P : SectorDecomposition d) : ∀ j q, P.weight j q ≠ 0 :=
-  P.sectors.weight_ne_zero
-
-/-- The coefficient `coeff N j = ∑_q (μ_{j,q})^N`. -/
-noncomputable def coeff (P : SectorDecomposition d) (N : ℕ) (j : Fin P.basisCount) : ℂ :=
-  P.sectors.coeff N j
-
-/-- Total number of sectors after flattening the pairs `(j, q)`. -/
-def totalCopies (P : SectorDecomposition d) : ℕ :=
-  ∑ j : Fin P.basisCount, P.copies j
-
-/-- Flatten the sector index `(j, q)` to a single `Fin totalCopies` index. -/
-noncomputable def flatIndexEquiv (P : SectorDecomposition d) :
-    ((j : Fin P.basisCount) × Fin (P.copies j)) ≃ Fin P.totalCopies :=
-  finSigmaFinEquiv
-
-/-- Bond dimension of the flattened sector block indexed by `s`. -/
-noncomputable def flatDim (P : SectorDecomposition d) : Fin P.totalCopies → ℕ :=
-  fun s ↦ P.basisDim (P.flatIndexEquiv.symm s).1
-
-/-- Weight of the flattened sector block indexed by `s`. -/
-noncomputable def flatWeight (P : SectorDecomposition d) : Fin P.totalCopies → ℂ :=
-  fun s ↦ P.weight (P.flatIndexEquiv.symm s).1 (P.flatIndexEquiv.symm s).2
-
-/-- Basis tensor carried by the flattened sector block indexed by `s`. -/
-noncomputable def flatBasis (P : SectorDecomposition d) :
-    (s : Fin P.totalCopies) → MPSTensor d (P.flatDim s) :=
-  fun s ↦ P.basis (P.flatIndexEquiv.symm s).1
-
-/-- Total bond dimension of the flattened block-diagonal tensor. -/
-noncomputable def totalDim (P : SectorDecomposition d) : ℕ :=
-  ∑ s : Fin P.totalCopies, P.flatDim s
-
-/--
-The total tensor, obtained by flattening `(j, q)` and applying `toTensorFromBlocks`.
--/
-noncomputable def toTensor (P : SectorDecomposition d) : MPSTensor d P.totalDim :=
-  toTensorFromBlocks (d := d) (μ := P.flatWeight) P.flatBasis
-
-/-- `toTensor` is `toTensorFromBlocks` for the flattened sector data. -/
-theorem toTensor_eq_toTensorFromBlocks_flat (P : SectorDecomposition d) :
-    P.toTensor = toTensorFromBlocks (d := d) (μ := P.flatWeight) P.flatBasis :=
-  rfl
-
-/-- Every flattened sector weight is nonzero. -/
-theorem flatWeight_ne_zero (P : SectorDecomposition d) (s : Fin P.totalCopies) :
-    P.flatWeight s ≠ 0 := by
-  simpa [SectorDecomposition.flatWeight] using
-    P.weight_ne_zero (P.flatIndexEquiv.symm s).1 (P.flatIndexEquiv.symm s).2
-
-/--
-Intermediate expansion: first sum over the basis index `j`, then over its copies `q`.
--/
-theorem mpv_toTensor_eq_sum_sectors (P : SectorDecomposition d) {N : ℕ}
-    (σ : Fin N → Fin d) :
-    mpv P.toTensor σ =
-      ∑ j : Fin P.basisCount, ∑ q : Fin (P.copies j),
-        (P.weight j q) ^ N * mpv (P.basis j) σ := by
-  classical
-  let e : ((j : Fin P.basisCount) × Fin (P.copies j)) ≃ Fin P.totalCopies :=
-    P.flatIndexEquiv
-  calc
-    mpv P.toTensor σ
-      = ∑ s : Fin P.totalCopies, (P.flatWeight s) ^ N * mpv (P.flatBasis s) σ := by
-          simpa [SectorDecomposition.toTensor, smul_eq_mul] using
-            (mpv_toTensorFromBlocks_eq_sum (d := d) (μ := P.flatWeight)
-              (A := P.flatBasis) (σ := σ))
-    _ = ∑ x : ((j : Fin P.basisCount) × Fin (P.copies j)),
-          (P.weight x.1 x.2) ^ N * mpv (P.basis x.1) σ := by
-          calc
-            ∑ s : Fin P.totalCopies, (P.flatWeight s) ^ N * mpv (P.flatBasis s) σ
-              = ∑ s : Fin P.totalCopies,
-                  (P.weight (e.symm s).1 (e.symm s).2) ^ N *
-                    mpv (P.basis (e.symm s).1) σ := by
-                      rfl
-            _ = ∑ x : ((j : Fin P.basisCount) × Fin (P.copies j)),
-                  (P.weight x.1 x.2) ^ N * mpv (P.basis x.1) σ := by
-                      let f : ((j : Fin P.basisCount) × Fin (P.copies j)) → ℂ :=
-                        fun x ↦ (P.weight x.1 x.2) ^ N * mpv (P.basis x.1) σ
-                      let g : Fin P.totalCopies → ℂ :=
-                        fun s ↦ (P.weight (e.symm s).1 (e.symm s).2) ^ N *
-                          mpv (P.basis (e.symm s).1) σ
-                      have hfg : ∀ x, f x = g (e x) := by
-                        intro x
-                        simpa [f, g] using (congrArg
-                          (fun y : ((j : Fin P.basisCount) × Fin (P.copies j)) ↦
-                            (P.weight y.1 y.2) ^ N * mpv (P.basis y.1) σ)
-                          (e.symm_apply_apply x)).symm
-                      simpa [f, g] using (Fintype.sum_equiv e f g hfg).symm
-    _ = ∑ j : Fin P.basisCount, ∑ q : Fin (P.copies j),
-          (P.weight j q) ^ N * mpv (P.basis j) σ := by
-          simpa using (Fintype.sum_sigma' fun j q ↦
-            (P.weight j q) ^ N * mpv (P.basis j) σ)
-
-/--
-Decomposition formula: the MPV of the assembled tensor expands with coefficients
-`coeff N j = ∑_q (μ_{j,q})^N` against the basis MPVs.
--/
-theorem mpv_toTensor_eq_sum_coeff (P : SectorDecomposition d) {N : ℕ}
-    (σ : Fin N → Fin d) :
-    mpv P.toTensor σ =
-      ∑ j : Fin P.basisCount, P.coeff N j * mpv (P.basis j) σ := by
-  calc
-    mpv P.toTensor σ
-      = ∑ j : Fin P.basisCount, ∑ q : Fin (P.copies j),
-          (P.weight j q) ^ N * mpv (P.basis j) σ :=
-        P.mpv_toTensor_eq_sum_sectors σ
-    _ = ∑ j : Fin P.basisCount,
-          (∑ q : Fin (P.copies j), (P.weight j q) ^ N) * mpv (P.basis j) σ := by
-          refine Finset.sum_congr rfl ?_
-          intro j _
-          exact (Finset.sum_mul Finset.univ
-            (fun q : Fin (P.copies j) ↦ (P.weight j q) ^ N)
-            (mpv (P.basis j) σ)).symm
-    _ = ∑ j : Fin P.basisCount, P.coeff N j * mpv (P.basis j) σ := by
-          simp [SectorDecomposition.coeff, SectorWeightData.coeff]
-
-end SectorDecomposition
 
 /-! ## Coefficient comparison from BNT linear independence -/
 

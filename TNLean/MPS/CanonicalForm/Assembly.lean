@@ -7,12 +7,16 @@ import TNLean.MPS.CanonicalForm.CyclicSectors
 import TNLean.MPS.CanonicalForm.CyclicSectorAssembly
 import TNLean.MPS.Core.BlockingInfrastructure
 import TNLean.MPS.Core.BlockingTransfer
-import TNLean.MPS.FundamentalTheorem.Full
+import TNLean.MPS.FundamentalTheorem.EqualProportional
+import TNLean.MPS.Overlap.PeripheralToSpectralGap
+import TNLean.MPS.SharedInfra.KrausAdjointSetup
 import TNLean.Channel.Peripheral.CyclicDecomposition
 import TNLean.Channel.Peripheral.GroupStructure
 import TNLean.Wielandt.SpanGrowth.VectorToMatrixSpan
 import TNLean.Wielandt.SpanGrowth.CumulativeSpan
 import TNLean.Wielandt.RectangularSpan.Basic
+import TNLean.Wielandt.Primitivity.ToNormal
+import TNLean.Wielandt.Primitivity.StronglyIrreducibleToFullRank
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
 open Filter
@@ -74,7 +78,7 @@ decomposes each periodic block into primitive sectors before blocking.
 
 ### Progress on cyclic sector decomposition (#242)
 
-The per-block reduction step is now complete:
+The per-block bridge is now complete:
 
 * `exists_cyclic_sector_decomp_of_TP_of_isIrreducibleTensor`: For each irreducible TP block,
   derives all channel-level hypotheses automatically and produces cyclic
@@ -229,7 +233,7 @@ theorem exists_tp_primitive_blockDecomp_after_blocking (A : MPSTensor d D) :
 ## Conditional normal canonical form
 
 If the blocked weights happen to have pairwise distinct norms, and the blocked
-blocks are irreducible, then the data yields `IsNormalCanonicalForm`
+blocks are irreducible, then the data can be packaged as `IsNormalCanonicalForm`
 after sorting by weight norm.
 
 This is a conditional theorem: the two extra hypotheses are genuine conditions
@@ -317,7 +321,7 @@ For a single block that is TP, has a primitive transfer map, AND is irreducible
 3. `IsPrimitiveMPS A ρ` + `ρ.PosDef`
    → `isNormal_of_isPrimitiveMPS_with_posDef` → `IsNormal A`
 
-We record this chain as a single theorem.
+We package this chain as a single theorem.
 -/
 
 /-- **TP + primitive + irreducible → IsNormal** (per-block chain).
@@ -674,7 +678,7 @@ The cyclic decomposition from `CyclicDecomposition.lean` produces projections `P
 - `∀ k, IsOrthogonalProjection (P k)` and `∑ k, P k = 1`
 - `E†(P(k+1)) = P k` (cyclic), hence `(E†)^m (P k) = P k`
 
-The key identity is `(E†)^m = transferMap (fun j => (blockTensor A m j)ᴴ)` because the
+The key bridge: `(E†)^m = transferMap (fun j => (blockTensor A m j)ᴴ)` because the
 adjoint of the blocked transfer map equals the m-th iterate of the adjoint transfer map.
 This is proved by a tuple-reversal bijection: summing `A_w†·X·A_w` over all length-`m`
 words `w` gives the same result regardless of whether `A_w` or `A_{rev(w)}` is used.
@@ -688,7 +692,7 @@ words `w` gives the same result regardless of whether `A_w` or `A_{rev(w)}` is u
 5. Apply `exists_blockDecomp_of_adjoint_fixed_projections` from `CyclicSectors.lean`
 -/
 
-section CyclicSectorDecomposition
+section CyclicSectorBridge
 
 
 open KadisonSchwarz
@@ -897,10 +901,10 @@ theorem exists_cyclic_sector_decomp_after_blocking
       (blockTensor A m) hTP_blocked (hP := hPproj k) (hFix := hFix k) i
   exact ⟨dim, blocks, P, hLC, hMPV, hPproj, hPsum, hComm, hTrace⟩
 
-end CyclicSectorDecomposition
+end CyclicSectorBridge
 
 /-!
-## From MPS hypotheses to cyclic sector decomposition
+## Bridge: MPS hypotheses → cyclic sector decomposition
 
 For an irreducible TP tensor, all channel-level hypotheses needed by
 `exists_cyclic_sector_decomp_after_blocking` can be derived automatically:
@@ -915,53 +919,13 @@ section CyclicSectorFromMPS
 
 open KadisonSchwarz
 
-/-- From an irreducible TP tensor, derive the conjugate-transposed Kraus family `K`,
-its unitality and irreducibility, and a `PosDef` fixed point `ρ` of `Kraus.adjointMap K`.
-
-This records the common setup shared by `exists_cyclic_sector_decomp_of_TP_of_isIrreducibleTensor`
-and `exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor`. -/
-theorem conjTranspose_kraus_setup
-    {d D : ℕ} [NeZero D]
-    (A : MPSTensor d D)
-    (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hIrr : IsIrreducibleTensor A) :
-    ∃ (K : MPSTensor d D)
-      (_ : IsUnitalKraus (d := d) (D := D) K)
-      (_ : IsIrreducibleMap (transferMap (d := d) (D := D) K))
-      (ρ : Matrix (Fin D) (Fin D) ℂ)
-      (_ : ρ.PosDef)
-      (_ : Kraus.adjointMap K ρ = ρ),
-      K = fun i => (A i)ᴴ := by
-  classical
-  have hDpos : 0 < D := NeZero.pos D
-  let K : MPSTensor d D := fun i => (A i)ᴴ
-  have hTP' : IsTPKraus (d := d) (D := D) A := by
-    simpa [IsTPKraus] using hTP
-  have h_unitalK : IsUnitalKraus (d := d) (D := D) K :=
-    isUnitalKraus_conjTranspose (d := d) (D := D) (K := A) hTP'
-  have hIrrK : IsIrreducibleMap (transferMap (d := d) (D := D) K) :=
-    isIrreducibleCP_transferMap_conjTranspose_of_isIrreducibleTensor (d := d) (D := D) A hIrr
-  have hCh : IsChannel (transferMap (d := d) (D := D) A) :=
-    transferMap_isChannel (d := d) (D := D) A (by simpa using hTP)
-  obtain ⟨ρ, hρ_psd, hρ_ne, hρ_fix⟩ :=
-    hCh.exists_posSemidef_fixedPoint (E := transferMap (d := d) (D := D) A) hDpos
-  have hIrrAmap : IsIrreducibleMap (transferMap (d := d) (D := D) A) :=
-    isIrreducibleCP_transferMap_of_isIrreducibleTensor (d := d) (D := D) A hIrr
-  have hρ_pd : ρ.PosDef :=
-    posSemidef_fixedPoint_isPosDef_of_irreducible (A := A) (d := d) (D := D)
-      hIrrAmap ρ hρ_psd hρ_ne hρ_fix
-  have h_adjfix : Kraus.adjointMap K ρ = ρ := by
-    simpa [K, Kraus.adjointMap, transferMap_apply, Matrix.conjTranspose_conjTranspose,
-      Matrix.mul_assoc] using hρ_fix
-  exact ⟨K, h_unitalK, hIrrK, ρ, hρ_pd, h_adjfix, rfl⟩
-
-/-- **Irreducible TP tensor yields a cyclic sector decomposition.**
+/-- **Bridge: irreducible TP tensor → cyclic sector decomposition.**
 
 For an irreducible TP tensor `A` with `0 < D`, there exists a period `m > 0`
 such that after blocking by `m`, the blocked tensor admits a decomposition
 into `m` left-canonical (TP) blocks via cyclic spectral projections.
 
-This carries the MPS-level hypotheses (`IsIrreducibleTensor` + TP) to the
+This bridges the MPS-level hypotheses (`IsIrreducibleTensor` + TP) to the
 channel-level cyclic decomposition, deriving all intermediate hypotheses
 (`ρ.PosDef`, `Kraus.adjointMap` fixed point, `IsIrreducibleMap`, peripheral
 spectrum structure) automatically via `conjTranspose_kraus_setup`. -/
@@ -1058,7 +1022,7 @@ additionally satisfy:
 
 then the block structures match up to permutation and gauge-phase equivalence.
 
-This theorem records the structural content of arXiv:1606.00608, Theorem 1,
+This theorem packages the structural content of arXiv:1606.00608, Theorem 1,
 connecting the reduction output to the fundamental theorem conclusion. -/
 theorem fundamentalTheorem_after_blocking_1606_structural
     {d D₁ D₂ : ℕ}

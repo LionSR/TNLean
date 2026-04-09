@@ -7,7 +7,7 @@ quadratically by `c * star c = ‖c‖²`, and that various structural propertie
 predictably under scaling. These are the key ingredients for the "μ-normalization" step in the
 canonical form.
 -/
-import TNLean.MPS.Core.Transfer
+import TNLean.MPS.SharedInfra.Scaling
 import TNLean.MPS.FundamentalTheorem.Multi
 import Mathlib.Analysis.Complex.Basic
 
@@ -16,66 +16,6 @@ open scoped Matrix ComplexOrder BigOperators
 namespace MPSTensor
 
 variable {d D : ℕ}
-
-/-! ## Lemma 1: Transfer map scales quadratically -/
-
-/-- Scaling an MPS tensor by `c` scales the transfer map by `c * star c`.
-Specifically, `transferMap (c • A) X = (c * starRingEnd ℂ c) • transferMap A X`
-(since `c * star c = ‖c‖²` for complex scalars). -/
-theorem transferMap_smul (c : ℂ) (A : MPSTensor d D) (X : Matrix (Fin D) (Fin D) ℂ) :
-    transferMap (fun i => c • A i) X = (c * starRingEnd ℂ c) • transferMap A X := by
-  simp only [transferMap_apply, Matrix.conjTranspose_smul]
-  -- Each summand: (c • A i) * X * (star c • (A i)ᴴ) = (c * star c) • (A i * X * (A i)ᴴ)
-  simp_rw [smul_mul_assoc, mul_smul_comm, smul_smul, ← Finset.smul_sum]
-  rfl
-
-/-! ## Lemma 2: Left-canonical normalization preserved under unit-norm scaling -/
-
-/-- If `∑ i, (A i)ᴴ * (A i) = 1` and `‖c‖ = 1`, then `∑ i, (c • A i)ᴴ * (c • A i) = 1`.
-
-This is the left-canonical (trace-preserving) normalization condition: scaling by a
-unit-norm complex scalar preserves the condition `∑ Aᵢᴴ Aᵢ = I`. -/
-theorem leftCanonical_smul_of_norm_one (c : ℂ) (hc : ‖c‖ = 1)
-    (A : MPSTensor d D) (hA : ∑ i : Fin d, (A i)ᴴ * (A i) = 1) :
-    ∑ i : Fin d, (c • A i)ᴴ * (c • A i) = 1 := by
-  simp only [Matrix.conjTranspose_smul]
-  -- (star c • (A i)ᴴ) * (c • A i) = (star c * c) • ((A i)ᴴ * A i)
-  simp_rw [smul_mul_smul_comm]
-  rw [← Finset.smul_sum, hA]
-  -- Goal: (star c * c) • 1 = 1
-  have hsc : (star c : ℂ) * c = 1 := by
-    change starRingEnd ℂ c * c = 1
-    have h1 : starRingEnd ℂ c * c = ↑(Complex.normSq c) := by
-      rw [mul_comm, Complex.mul_conj]
-    rw [h1, Complex.normSq_eq_norm_sq, hc, one_pow, Complex.ofReal_one]
-  rw [hsc, one_smul]
-
-/-! ## Lemma 3: MPV scales by c^N under tensor scaling -/
-
-/-- Scaling a tensor by `c` scales mpv by `c^N`. -/
-theorem mpv_smul (c : ℂ) (A : MPSTensor d D) {N : ℕ} (σ : Fin N → Fin d) :
-    mpv (fun i => c • A i) σ = c ^ N * mpv A σ := by
-  simp only [mpv, coeff]
-  rw [evalWord_smul]
-  simp [List.length_ofFn, Matrix.trace_smul]
-
-/-! ## Lemma 4: Injectivity preserved under nonzero scaling -/
-
-/-- If `A` is injective and `c ≠ 0`, then `c • A` is injective. -/
-theorem isInjective_smul (c : ℂ) (hc : c ≠ 0) (A : MPSTensor d D) (hA : IsInjective A) :
-    IsInjective (fun i => c • A i) := by
-  unfold IsInjective at hA ⊢
-  have hrange : Set.range (fun i => c • A i) = (c • ·) '' Set.range A := by
-    ext M
-    simp only [Set.mem_range, Set.mem_image]
-    constructor
-    · rintro ⟨i, rfl⟩; exact ⟨A i, ⟨i, rfl⟩, rfl⟩
-    · rintro ⟨N, ⟨i, rfl⟩, rfl⟩; exact ⟨i, rfl⟩
-  rw [hrange]
-  rw [show (c • · : Matrix (Fin D) (Fin D) ℂ → Matrix (Fin D) (Fin D) ℂ) =
-    (c • LinearMap.id : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) from by
-    ext M; simp]
-  rw [Submodule.span_image, hA, Submodule.map_smul _ _ c hc, Submodule.map_id]
 
 /-! ## Theorem 5: Normalization of μ-scaled block -/
 
@@ -93,22 +33,6 @@ theorem transferMap_smul_block (μ : ℂ) {D' : ℕ} (A : MPSTensor d D')
     (X : Matrix (Fin D') (Fin D') ℂ) :
     transferMap (fun i => μ • A i) X = (μ * starRingEnd ℂ μ) • transferMap A X :=
   transferMap_smul μ A X
-
-/-- Rescaling a tensor by `μ / ‖μ‖` (the phase of `μ`) gives a unit-norm scalar
-that preserves the left-canonical condition. -/
-theorem phase_norm_one {μ : ℂ} (hμ : μ ≠ 0) :
-    ‖μ / ↑‖μ‖‖ = 1 := by
-  rw [norm_div, Complex.norm_real, norm_norm]
-  exact div_self (norm_ne_zero_iff.mpr hμ)
-
-/-- For nonzero `μ`, writing `μ = ‖μ‖ * (μ / ‖μ‖)`, we can split a scaled tensor
-`μ • A` into a modulus part `‖μ‖` and a phase part `(μ/‖μ‖) • A`. -/
-theorem smul_eq_norm_smul_phase (μ : ℂ) (hμ : μ ≠ 0) (M : Matrix (Fin D) (Fin D) ℂ) :
-    μ • M = (↑‖μ‖ : ℂ) • ((μ / ↑‖μ‖) • M) := by
-  rw [smul_smul]
-  congr 1
-  rw [mul_comm, div_mul_cancel₀]
-  exact_mod_cast norm_ne_zero_iff.mpr hμ
 
 /-! ## Theorem 6: Full normalization theorem -/
 
@@ -149,28 +73,5 @@ theorem transferMap_normalize_block {D' : ℕ}
     rw [smul_smul, div_mul_cancel₀]
     exact_mod_cast norm_ne_zero_iff.mpr hμ
   rw [h_eq]
-
-/-- After absorbing the modulus into the tensor, the transfer map of the
-normalized tensor `‖μ‖ • A` has spectral radius scaled by `‖μ‖²`.
-That is, `E_{‖μ‖ • A}(X) = ‖μ‖² • E_A(X)`. -/
-theorem transferMap_norm_smul (μ : ℂ) {D' : ℕ} (A : MPSTensor d D')
-    (X : Matrix (Fin D') (Fin D') ℂ) :
-    transferMap (fun i => (↑‖μ‖ : ℂ) • A i) X =
-      (↑(‖μ‖ ^ 2) : ℂ) • transferMap A X := by
-  rw [transferMap_smul]
-  congr 1
-  rw [Complex.conj_ofReal, ← Complex.ofReal_mul, sq]
-
-/-- **Phase scaling preserves left-canonical normalization**: if `∑ (A i)ᴴ * (A i) = 1`
-and `μ ≠ 0`, then the phase-scaled tensor `(μ / ‖μ‖) • A` also satisfies
-`∑ ((μ/‖μ‖) • A i)ᴴ * ((μ/‖μ‖) • A i) = 1`.
-
-This is used in the μ-normalization step of the canonical form: one can scale each
-block eigenvalue to unit modulus while keeping the block tensor in left-canonical gauge. -/
-theorem leftCanonical_phase_smul {D' : ℕ} (μ : ℂ) (hμ : μ ≠ 0)
-    (A : MPSTensor d D') (hA : ∑ i : Fin d, (A i)ᴴ * (A i) = 1) :
-    ∑ i : Fin d, ((μ / ↑‖μ‖) • A i)ᴴ * ((μ / ↑‖μ‖) • A i) = 1 := by
-  have hn := phase_norm_one (μ := μ) hμ
-  exact leftCanonical_smul_of_norm_one _ hn A hA
 
 end MPSTensor
