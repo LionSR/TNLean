@@ -112,22 +112,25 @@ symmetry-protected topological (SPT) order.
     Set $d = 3$ (spin-1) and $D = 2$.  The AKLT tensor is the family
     $\{A^0, A^1, A^2\} \subset \MN{2}$ defined via the Pauli matrices by
     \[
-        A^0 = \frac{1}{\sqrt{2}}\,\sigma_z,
+        A^0 = \frac{1}{\sqrt{3}}\,\sigma_z,
         \qquad
-        A^1 = \frac{1}{\sqrt{2}}\,\sigma_+,
+        A^1 = \frac{\sqrt{2}}{\sqrt{3}}\,\ketbra{0}{1},
         \qquad
-        A^2 = \frac{1}{\sqrt{2}}\,\sigma_-,
+        A^2 = -\frac{\sqrt{2}}{\sqrt{3}}\,\ketbra{1}{0},
     \]
     where
     $\sigma_z = \ketbra{0}{0} - \ketbra{1}{1}$,
-    $\sigma_+ = \sqrt{2}\,\ketbra{0}{1}$, and
+    so equivalently $A^1 = \frac{1}{\sqrt{3}}\,\sigma_+$ and
+    $A^2 = -\frac{1}{\sqrt{3}}\,\sigma_-$ for
+    $\sigma_+ = \sqrt{2}\,\ketbra{0}{1}$ and
     $\sigma_- = \sqrt{2}\,\ketbra{1}{0}$.
     Equivalently, the matrices are the Clebsch--Gordan coefficients
     coupling spin-$1$ and spin-$\tfrac12$ to spin-$\tfrac12$.
 \end{definition}
 
 \begin{theorem}[AKLT tensor is not injective]\label{thm:aklt_not_injective}
-    \notready
+    \lean{MPSTensor.aklt_not_isInjective}
+    \leanok
     \uses{def:aklt_tensor, def:injective}
     The AKLT tensor is not injective at a single site:
     $\spn_{\C}\{A^0, A^1, A^2\}$ is the three-dimensional space of
@@ -136,7 +139,8 @@ symmetry-protected topological (SPT) order.
 \end{theorem}
 
 \begin{theorem}[AKLT tensor is normal]\label{thm:aklt_normal}
-    \notready
+    \lean{MPSTensor.aklt_isNormal}
+    \leanok
     \uses{def:aklt_tensor, def:transfer_map}
     The transfer map of the AKLT tensor has a unique eigenvalue of
     maximal modulus (a simple spectral-radius eigenvalue); in
@@ -154,6 +158,8 @@ symmetry-protected topological (SPT) order.
     representation.  The projective phase is the non-trivial
     element of $H^2(\mathrm{SO}(3),\mathrm{U}(1)) \cong \Z_2$,
     witnessing a non-trivial SPT phase.
+    The $\mathbb{Z}_2$ subgroup symmetry is proved below; the full
+    $\mathrm{SO}(3)$ projective representation is deferred.
 \end{theorem}
 
 %% ===================================================================

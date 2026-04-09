@@ -15,7 +15,7 @@ import TNLean.Algebra.ScalarPowerSumIdentity
 This file defines zero-correlation-length (ZCL) conditions for MPS tensors,
 following arXiv:1606.00608 §3.2 (Cirac–Pérez-García–Schuch–Verstraete).
 
-Three predicates are introduced:
+Three conditions are introduced:
 
 * `IsCID A` — correlations are independent of distance.
 * `IsLocallyOrthogonal A` — the BNT components have vanishing mixed transfer

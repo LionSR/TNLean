@@ -43,7 +43,7 @@ The proof chain is:
 
 The concrete unitary block-diagonal embedding (Wolf Eq. 1.39) and the
 conditional expectation form with density operators ρ_k (Wolf Eq. 1.40)
-require additional representation-theoretic infrastructure and are deferred
+require additional representation-theoretic results and are deferred
 to future work.
 
 ## References

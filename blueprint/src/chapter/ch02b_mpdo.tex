@@ -173,14 +173,17 @@ legs cyclically and taking the resulting trace.
     \uses{def:lpdo, def:mpdo}
     By the mixed-product property
     $(A \otimes B)(C \otimes D) = (AC) \otimes (BD)$, the $N$-site product
-    decomposes as
+    decomposes as a sum of Kronecker products after transporting along the
+    bond-space identification $e$:
     \[
         M^{\sigma_1 \tau_1} \cdots M^{\sigma_N \tau_N}
-        = \sum_{\kappa} P_\kappa \otimes \overline{Q_\kappa},
+        = \bigl(\sum_{\kappa} P_\kappa \otimes \overline{Q_\kappa}\bigr)
+          \big|_{e},
     \]
     where $P_\kappa = A^{(\sigma_1,\kappa_1)} \cdots A^{(\sigma_N,\kappa_N)}$
     and $Q_\kappa = A^{(\tau_1,\kappa_1)} \cdots A^{(\tau_N,\kappa_N)}$.
-    Taking the trace and using $\tr(X \otimes Y) = \tr(X)\tr(Y)$,
+    Since the trace is invariant under the reindexing by~$e$,
+    we apply $\tr(X \otimes Y) = \tr(X)\tr(Y)$ to obtain
     \[
         \rho^{(N)}(M)_{\sigma,\tau}
         = \sum_\kappa \tr(P_\kappa)\,\overline{\tr(Q_\kappa)}

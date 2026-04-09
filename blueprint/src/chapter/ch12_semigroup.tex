@@ -184,7 +184,7 @@ and proves the GKSL theorem.
     \lean{summable_dysonTerm_of_factorial_bound}\leanok
     Assume a factorial majorant of Dyson--Phillips iterates:
     \[
-      \|\mathrm{dysonTerm}_n(t)\|
+      \|D_n(t)\|
       \le M\,\frac{(t\,\|L'-L\|\,M)^n}{n!}.
     \]
     Then the Dyson series is summable in operator norm.
@@ -839,16 +839,17 @@ which shows that such generators have the standard Lindblad form.
     If all eigenvalues satisfy $|\lambda|<1$, then the spectral radius is $<1$.
 \end{theorem}
 
-\begin{remark}[Remaining gap in the semigroup irreducible/primitive equivalence]\notready
-    To obtain the semigroup analogue of the irreducible/primitive
-    equivalence, it remains to pass from the qualitative spectral
-    theory of a single time slice to a uniform statement for the whole
-    semigroup.
+\begin{remark}[Semigroup irreducible/primitive equivalence]\leanok
+    The semigroup analogue of the irreducible/primitive equivalence
+    is now fully proved: starting from one irreducible time slice,
+    the fraction-slice reduction constructs a primitive slice,
+    and the result lifts to the full semigroup
+    (Theorems~\ref{thm:irreducible_semigroup_implies_primitive}
+    and~\ref{thm:qds_irreducible_iff_primitive}).
 \end{remark}
 
-\begin{remark}[Fraction-slice bridge for Proposition~7.5]\leanok
-    The fraction-slice component of the argument is now formalized in
-    Lean.  Starting from one irreducible time $t_0$, we construct a
+\begin{remark}[Fraction-slice reduction for Proposition~7.5]\leanok
+    Starting from one irreducible time $t_0$, we construct a
     positive slice $u=t_0/N$ with
     $T_{t_0}=(T_u)^N$, prove peripheral eigenvalue collapse at time~$u$,
     and deduce primitivity of $T_u$.
@@ -889,7 +890,7 @@ which shows that such generators have the standard Lindblad form.
 
 \begin{theorem}[Prop.~7.5: Irreducible semigroup implies primitive]
     \label{thm:irreducible_semigroup_implies_primitive}
-    \lean{irreducible_semigroup_implies_primitive}\notready
+    \lean{irreducible_semigroup_implies_primitive}\leanok
     \uses{def:exp_semigroup_ch12}
     Let $T_t = e^{tL}$ be a quantum dynamical semigroup.
     If $T_{t_0}$ is irreducible for some $t_0 > 0$, then
@@ -897,8 +898,7 @@ which shows that such generators have the standard Lindblad form.
     This is \cite[Prop.~7.5]{Wolf2012Quantum}.
 \end{theorem}
 
-\begin{proof}
-    \notready
+\begin{proof}\leanok
     The unique faithful density fixed point $\sigma$ of $T_{t_0}$
     is also fixed by all $T_u$ (semigroup commutativity), so by
     uniqueness it is the common fixed point.
@@ -912,7 +912,7 @@ which shows that such generators have the standard Lindblad form.
 
 \begin{theorem}[Prop.~7.5: Irreducibility iff primitivity for QDS]
     \label{thm:qds_irreducible_iff_primitive}
-    \lean{qds_irreducible_iff_primitive}\notready
+    \lean{qds_irreducible_iff_primitive}\leanok
     \uses{thm:irreducible_semigroup_implies_primitive}
     For a quantum dynamical semigroup $T_t = e^{tL}$:
     \[
@@ -923,8 +923,7 @@ which shows that such generators have the standard Lindblad form.
     This is \cite[Prop.~7.5]{Wolf2012Quantum}.
 \end{theorem}
 
-\begin{proof}
-    \notready
+\begin{proof}\leanok
     \uses{thm:irreducible_semigroup_implies_primitive}
     Forward: apply Theorem~\ref{thm:irreducible_semigroup_implies_primitive}.
     Reverse: take $t_0 = 1$ (or any positive time); primitivity

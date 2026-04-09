@@ -17,7 +17,7 @@ theory of Pérez-García, Wolf, Sanz, Verstraete, Cirac (arXiv:0802.0447):
 
 * The **twisted transfer map** `ℰ_u` and its iterates.
 * The **string order parameter** `R_L(u)` and its boundary refinement.
-* **Local symmetry** and **HasStringOrder** predicates.
+* **Local symmetry** and **HasStringOrder** conditions.
 * **Conditions C1/C2/C3** and their equivalences.
 
 The main equivalence theorems live in `TNLean.MPS.Symmetry.StringOrder`.

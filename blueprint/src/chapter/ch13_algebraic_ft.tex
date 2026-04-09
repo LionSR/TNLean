@@ -1,3 +1,4 @@
+
 %% =========================================================
 %% Chapter: The Algebraic Fundamental Theorem
 %% Covers the fixed-system-size approach of arXiv:1804.04964
@@ -7,8 +8,7 @@
 \chapter{The Algebraic Fundamental Theorem}%
 \label{ch:algebraic_ft}
 
-This chapter develops the one-dimensional MPS results of
-\cite{Molnar2018NormalPEPS}: the Fundamental Theorem for injective
+This chapter develops the one-dimensional MPS results of~\cite{Molnar2018NormalPEPS}: the Fundamental Theorem for injective
 and normal MPS on a finite periodic chain of fixed length.
 The argument is purely algebraic, working directly with $\MN{D}$.
 Two preparatory lemmas---the virtual bond gauge
@@ -22,7 +22,7 @@ with $d \ge D^2$.
 The extensions to injective and normal PEPS on arbitrary graphs and the
 improved system-size bound ($2L+1$ in place of $3L$) are left for
 future work.
-The chain bookkeeping layer (Definition~\ref{def:non_ti_chain}),
+The chain data (Definition~\ref{def:non_ti_chain}),
 including same chain state, injectivity, and cyclic gauge equivalence,
 was introduced in Chapter~\ref{ch:single}.
 
@@ -132,14 +132,12 @@ operation on the physical indices.
     where the last step uses $\Phi_A \circ \Psi_A = \mathrm{id}$.
 \end{proof}
 
-\begin{theorem}[Physical realisation is multiplicative -- basis case]%
+\begin{theorem}[Physical realisation is multiplicative]%
     \label{thm:physRealize_mul}
     \lean{MPSTensor.physRealize_mul}
     \leanok
     \uses{def:phys_realize, lem:physRealize_spec, def:injective}
-    Let $A$ be an injective MPS tensor such that $\{A^i\}_{i=0}^{d-1}$
-    is a \emph{basis} of $\MN{D}$ (i.e.\ $d = D^2$ and the matrices are
-    linearly independent).
+    Let $A$ be an injective MPS tensor.
     For all $X, Y \in \MN{D}$,
     \[
         O_A(XY) = O_A(X)\, O_A(Y).
@@ -148,23 +146,33 @@ operation on the physical indices.
 
 \begin{proof}
     \leanok
-    Applying Lemma~\ref{lem:physRealize_spec} to $X$ and substituting
-    the resulting formula for $A^j Y$ gives
-    $A^i(XY) = \sum_k (O_A(X)\, O_A(Y))_{ik} A^k$.
-    Applying Lemma~\ref{lem:physRealize_spec} directly to $XY$ gives
-    $A^i(XY) = \sum_k O_A(XY)_{ik} A^k$.
-    Since $\{A^k\}$ is a basis, the coefficients agree.
+    Applying Lemma~\ref{lem:physRealize_spec} to $X$ yields
+    \[
+        A^i X = \sum_{j=0}^{d-1} O_A(X)_{ij}\, A^j.
+    \]
+    Multiply by $Y$ on the right and apply the linear map $\Psi_A$:
+    \[
+        \Psi_A(A^i XY)
+        = \sum_{j=0}^{d-1} O_A(X)_{ij}\, \Psi_A(A^j Y).
+    \]
+    Taking the $k$th component of both sides gives
+    \[
+        O_A(XY)_{ik}
+        = \sum_{j=0}^{d-1} O_A(X)_{ij}\, O_A(Y)_{jk}
+        = (O_A(X)\, O_A(Y))_{ik}.
+    \]
+    Since this holds for all $i$ and $k$, the matrices are equal.
 \end{proof}
 
 \begin{remark}[General injective case]
     \label{rem:physRealize_mul_general}
-    \uses{thm:physRealize_mul, def:injective}
-    When $d > D^2$, the decomposition is non-unique, so
-    $O_A(XY) = O_A(X)\,O_A(Y)$ need not hold coefficient-wise even
-    though both sides define the same matrix in $\MN{D}$.
-    The general multiplicativity statement for arbitrary injective $A$
-    is left open here; the proofs below avoid it by working with trace
-    pairings instead.
+    \uses{thm:physRealize_mul, def:injective, def:decomposition_map}
+    When $d > D^2$, the decomposition map $\Psi_A$ need not be unique.
+    Nevertheless, Theorem~\ref{thm:physRealize_mul} is already the
+    general injective statement: for the fixed choice of $\Psi_A$ in
+    Definition~\ref{def:decomposition_map}, the associated physical
+    realisation map $O_A$ is multiplicative.
+    This supersedes the earlier basis-only formulation.
 \end{remark}
 
 %% ---------------------------------------------------------
@@ -176,12 +184,14 @@ operation on the physical indices.
     \lean{MPSTensor.chainCombinedTensor_isInjective}
     \leanok
     \uses{def:injective, def:blocked_tensor}
-    Let $A_0, \dots, A_{m-1}$ be injective MPS tensors with compatible
+    Let $A_0, \ldots, A_{m-1}$ be injective MPS tensors with compatible
     bond dimensions.
     Then the blocked tensor
-    $(A_0 \otimes \cdots \otimes A_{m-1})^{(i_0,\dots,i_{m-1})}
-    := A_0^{i_0} A_1^{i_1} \cdots A_{m-1}^{i_{m-1}}$
-    is again injective.
+    $(A_0 \otimes \cdots \otimes A_{m-1})^{(i_0,\ldots,i_{m-1})}
+        := A_0^{i_0} A_1^{i_1} \cdots A_{m-1}^{i_{m-1}}$
+    is again injective. (In Lean, injectivity is proved for the
+    repackaged combined tensor that collects all site tensors into
+    a single family, not for the physically blocked product tensor.)
 \end{lemma}
 
 \begin{proof}
@@ -211,78 +221,55 @@ operation on the physical indices.
 \label{sec:virtual_bond_gauge}
 %% ---------------------------------------------------------
 
-This section proves Lemma~1 of \cite{Molnar2018NormalPEPS}: if two
+This section proves Lemma~1 of~\cite{Molnar2018NormalPEPS}: if two
 injective chains of length $n \ge 3$ generate the same state,
 then on each bond the virtual insertion algebras are related by an
 inner automorphism.
 
-\begin{lemma}[Virtual bond gauge -- Lemma~1 of \protect\cite{Molnar2018NormalPEPS}]%
+\begin{lemma}[Virtual bond gauge -- 3-site case]%
     \label{lem:virtual_bond_gauge}
     \lean{MPSTensor.virtual_bond_gauge}
     \leanok
-    \uses{thm:physRealize_mul, thm:simplicity, thm:skolem_noether,
-          def:non_ti_chain, lem:blocking_preserves_injectivity}
-    Let $\mathbf{A} = (A_0, \dots, A_{n-1})$ and
-    $\mathbf{B} = (B_0, \dots, B_{n-1})$ be two injective non-TI
-    periodic chains of length $n \ge 3$ that generate the same chain
-    state.
-    Fix a bond position $k \in \{0, \dots, n-1\}$.
-    Then there exists an invertible matrix $Z_k \in \GL_D(\C)$, unique
-    up to a nonzero scalar multiple, such that for every
-    $X \in \MN{D}$,
+    \uses{thm:physRealize_mul, thm:simplicity, thm:skolem_noether}
+    Let $A = (A_0, A_1, A_2)$ and $B = (B_0, B_1, B_2)$ be two
+    3-site injective periodic chains with common bond dimension
+    $D \ge 1$ and $\mc{V}(A) = \mc{V}(B)$ (same MPV family).
+    Then at the middle bond there exists an invertible matrix
+    $Z \in \GL_D(\C)$ such that the virtual-insertion trace
+    coefficients agree after conjugation:
     \[
-        O_{A, k}(X) = O_{B, k}(Z_k^{-1} X Z_k),
+        \tr(A_0^{i_0} X\, A_1^{i_1} A_2^{i_2})
+        = \tr(B_0^{i_0} Z^{-1} X Z\, B_1^{i_1} B_2^{i_2})
     \]
-    where $O_{A,k}$ (resp.\ $O_{B,k}$) denotes the physical realisation
-    map obtained by blocking the sites adjacent to bond~$k$ in the
-    $\mathbf{A}$-chain (resp.\ $\mathbf{B}$-chain) to form a three-site
-    chain.
-    Equivalently, inserting $X$ on bond~$k$ in the $\mathbf{A}$-chain
-    gives the same physical operation as inserting $Z_k^{-1} X Z_k$ on
-    bond~$k$ in the $\mathbf{B}$-chain. After blocking to three sites,
-    this is the equality between the
-    blocked $\mathbf{A}$-chain contraction
-    \[
-        \TNVirtualInsertion{\sigma_0}{\sigma_1}{\sigma_2}{X}
-    \]
-    and the corresponding blocked $\mathbf{B}$-chain contraction with
-    $X$ replaced by $Z_k^{-1} X Z_k$.
+    for all $X \in \MN{D}$ and all physical indices $i_0, i_1, i_2$.
+
+    In the paper~\cite{Molnar2018NormalPEPS}, Lemma~1 is stated for
+    arbitrary chain length $n \ge 3$ and any bond position, with
+    uniqueness of $Z$ up to scalar.
+    The chain-level generalization to arbitrary $n \ge 3$
+    and any bond position is future work.
 \end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:physRealize_mul, thm:simplicity, thm:skolem_noether,
-          lem:blocking_preserves_injectivity}
-    Block the sites on either side of bond~$k$ into a three-site chain and
-    compare the same local insertion across the two blocked chains:
-    \[
-        \TNLocalEqualityStep{X}{Z_k^{-1} X Z_k}{\sigma_k}
-    \]
-    The remaining sites are compressed into an effective boundary matrix,
-    so the local comparison is read through the blocked realisation map
-    \[
-        \TNBoundaryRegrow{X}{\sigma_{k-1}}{\sigma_{k+1}}{3}.
-    \]
-    Then
-    Lemma~\ref{lem:blocking_preserves_injectivity} ensures injectivity,
-    and both $O_{A,k}$ and $O_{B,k}$ are algebra homomorphisms from
-    $\MN{D}$ (established in \cite{Molnar2018NormalPEPS} via
-    diagrammatic inversion rather than coefficient uniqueness;
-    see Remark~\ref{rem:physRealize_mul_general}).
-    Since both chains generate the same state, for every $X \in \MN{D}$
-    there is a unique $Y \in \MN{D}$ with $O_{A,k}(X) = O_{B,k}(Y)$;
-    set $T(X) = Y$.
-    Linearity of $O_{A,k}$ and $O_{B,k}$ and uniqueness of $Y$ make $T$
-    $\C$-linear, and since both maps are algebra homomorphisms, $T$ is
-    multiplicative.
-    Thus $T$ is a nonzero $\C$-algebra endomorphism of $\MN{D}$, hence
+        lem:blocking_preserves_injectivity}
+    The $\mc{V}(A) = \mc{V}(B)$ hypothesis gives, for every $X \in \MN{D}$,
+    equality of the virtual-insertion trace coefficients:
+    $\tr(A_0^{i_0} X\, A_1^{i_1} A_2^{i_2})
+     = \tr(B_0^{i_0} Y\, B_1^{i_1} B_2^{i_2})$
+    for some $Y$ depending on $X$.
+    Since all three site tensors on each side are injective,
+    the physical realisation maps $O_A, O_B$ are algebra homomorphisms
+    by Theorem~\ref{thm:physRealize_mul}.
+    Setting $T(X) = Y$ defines a $\C$-linear multiplicative map,
+    hence a nonzero $\C$-algebra endomorphism of $\MN{D}$, which is
     bijective by Theorem~\ref{thm:simplicity}.
     Skolem--Noether (Theorem~\ref{thm:skolem_noether}) gives
-    $Z_k \in \GL_D(\C)$ with $T(X) = Z_k^{-1} X Z_k$, and uniqueness
-    up to a scalar follows because two inner automorphisms
-    $\operatorname{Ad}(Z)$ and $\operatorname{Ad}(Z')$ agree iff
-    $Z' Z^{-1}$ is central (Lemma~\ref{lem:center_scalar}).
+    $Z \in \GL_D(\C)$ with $T(X) = Z^{-1} X Z$.
 \end{proof}
+
+
 %% ---------------------------------------------------------
 \section{Aligned gauges force proportionality}%
 \label{sec:tensor_proportional}
@@ -291,7 +278,7 @@ inner automorphism.
 After applying Lemma~\ref{lem:virtual_bond_gauge} to each bond and
 absorbing the gauge matrices, one obtains two chains whose
 virtual-insertion operations agree on every bond.
-Lemma~2 of \cite{Molnar2018NormalPEPS} shows that this agreement
+Lemma~2 of~\cite{Molnar2018NormalPEPS} shows that this agreement
 forces the local tensors to be proportional.
 
 \begin{lemma}[Aligned gauges force proportionality -- Lemma~2 of \protect\cite{Molnar2018NormalPEPS}]%
@@ -304,21 +291,21 @@ forces the local tensors to be proportional.
     Suppose that for all $X \in \MN{D}$ (on the internal bond) and
     all $Y \in \MN{D}$ (on the external bond),
     \begin{align}
-        \operatorname{tr}(A_1^{i}\, X\, A_2^{j})
-        &= \operatorname{tr}(B_1^{i}\, X\, B_2^{j})
+        \tr(A_1^{i}\, X\, A_2^{j})
+         &= \tr(B_1^{i}\, X\, B_2^{j})
         \qquad \text{for all } i, j,
-        \label{eq:internal_bond} \\
-        \operatorname{tr}(A_2^{j}\, Y\, A_1^{i})
-        &= \operatorname{tr}(B_2^{j}\, Y\, B_1^{i})
+        \label{eq:internal_bond}\\
+        \tr(A_2^{j}\, Y\, A_1^{i})
+         &= \tr(B_2^{j}\, Y\, B_1^{i})
         \qquad \text{for all } i, j.
         \label{eq:external_bond}
     \end{align}
-    Diagrammatically, \eqref{eq:internal_bond} is the equality obtained
+    Diagrammatically, Eq.~\eqref{eq:internal_bond} is the equality obtained
     by inserting $X$ on the bond between the two sites,
     \[
         \TNInternalTraceInsertion{i}{j}{X}
     \]
-    while \eqref{eq:external_bond} is the corresponding equality with
+    while Eq.~\eqref{eq:external_bond} is the corresponding equality with
     the insertion $Y$ on the outer trace bond,
     \[
         \TNExternalTraceInsertion{i}{j}{Y}
@@ -340,7 +327,7 @@ forces the local tensors to be proportional.
     \leanok
     \uses{def:decomposition_map, lem:center_scalar}
     By cyclicity and non-degeneracy of the trace pairing,
-    conditions \eqref{eq:internal_bond} and \eqref{eq:external_bond}
+    the conditions in Eqs.~\eqref{eq:internal_bond} and~\eqref{eq:external_bond}
     give
     \[
         A_2^{j} A_1^{i} = B_2^{j} B_1^{i}
@@ -373,32 +360,31 @@ forces the local tensors to be proportional.
 %% ---------------------------------------------------------
 
 Combining Lemma~\ref{lem:virtual_bond_gauge} with
-Lemma~\ref{lem:tensor_proportional} yields the main theorem of
-\cite{Molnar2018NormalPEPS} for non-translation-invariant injective MPS.
+Lemma~\ref{lem:tensor_proportional} yields the main theorem of~\cite{Molnar2018NormalPEPS} for non-translation-invariant injective MPS.
 
 \begin{theorem}[Fundamental Theorem for injective chains -- Theorem~1 of \protect\cite{Molnar2018NormalPEPS}]%
     \label{thm:fundamentalTheorem_injective_chain}
     \lean{MPSChainTensor.fundamentalTheorem_injective_chain}
     \leanok
     \uses{lem:virtual_bond_gauge, lem:tensor_proportional,
-          def:non_ti_chain}
-    Let $\mathbf{A} = (A_0, \dots, A_{n-1})$ and
-    $\mathbf{B} = (B_0, \dots, B_{n-1})$ be two injective non-TI periodic
+        def:non_ti_chain}
+    Let $\mathbf{A} = (A_0, \ldots, A_{n-1})$ and
+    $\mathbf{B} = (B_0, \ldots, B_{n-1})$ be two injective non-TI periodic
     chains of length $n \ge 3$ that generate the same chain state.
     Then $\mathbf{A}$ and $\mathbf{B}$ are cyclically gauge equivalent:
-    there exist invertible matrices $Z_0, \dots, Z_{n-1} \in \GL_D(\C)$,
+    there exist invertible matrices $Z_0, \ldots, Z_{n-1} \in \GL_D(\C)$,
     unique up to a common nonzero scalar factor, such that
     \[
         B_k^i = Z_k^{-1}\, A_k^i\, Z_{k+1}
     \]
-    for every site $k \in \{0, \dots, n-1\}$ and every physical index
+    for every site $k \in \{0, \ldots, n-1\}$ and every physical index
     $i$, with $Z_n = Z_0$.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{lem:virtual_bond_gauge, lem:tensor_proportional,
-          lem:blocking_preserves_injectivity}
+        lem:blocking_preserves_injectivity}
     Apply Lemma~\ref{lem:virtual_bond_gauge} at each bond to obtain
     $Z_k \in \GL_D(\C)$ with $O_{A,k}(X) = O_{B,k}(Z_k^{-1} X Z_k)$.
     Redefine $\widetilde{B}_k^i := Z_k B_k^i Z_{k+1}^{-1}$; the
@@ -410,9 +396,9 @@ Lemma~\ref{lem:tensor_proportional} yields the main theorem of
         \TNLocalEqualityStep{\lambda_k}{\Id}{\sigma_k}
     \]
     For each adjacent pair $(k, k{+}1)$, block the remaining sites into
-    a two-site chain; the agreement on both bonds gives exactly
-    hypotheses \eqref{eq:internal_bond}--\eqref{eq:external_bond} of
-    Lemma~\ref{lem:tensor_proportional}, yielding
+    a two-site chain; the agreement on both bonds gives exactly the
+    hypotheses of Eqs.~\eqref{eq:internal_bond}--\eqref{eq:external_bond}
+    in Lemma~\ref{lem:tensor_proportional}, yielding
     $A_k^i = \lambda_k \widetilde{B}_k^i$ for some
     $\lambda_k \in \C^{\times}$.
     Choosing a configuration $\sigma$ with nonzero trace and
@@ -421,8 +407,10 @@ Lemma~\ref{lem:tensor_proportional} yields the main theorem of
     Set $\mu_k = \prod_{j < k} \lambda_j$ and replace $Z_k$ by
     $\mu_k Z_k$; then $B_k^i = Z_k^{-1} A_k^i Z_{k+1}$ for all $k$
     and $i$, with $Z_n = Z_0$.
-    Uniqueness up to a common scalar follows from the uniqueness clause
-    of Lemma~\ref{lem:virtual_bond_gauge}.
+    Uniqueness up to a common scalar follows because any two inner
+    automorphisms $\operatorname{Ad}(Z)$ and $\operatorname{Ad}(Z')$
+    agreeing on $\MN{D}$ differ by a central scalar
+    (Lemma~\ref{lem:center_scalar}).
 \end{proof}
 
 \begin{remark}[A stronger equal-MPV variant]
@@ -462,7 +450,7 @@ Lemma~\ref{lem:tensor_proportional} yields the main theorem of
     the same MPV family for all system sizes $N \ge N_0$:
     \[
         V^{(N)}(A)_\sigma = V^{(N)}(B)_\sigma
-        \qquad \text{for all } N \ge N_0,\;\sigma \in [d]^N.
+        \qquad \text{for all } N \ge N_0, \sigma \in [d]^N.
     \]
 \end{definition}
 
@@ -471,10 +459,10 @@ Lemma~\ref{lem:tensor_proportional} yields the main theorem of
     \lean{MPSTensor.sameMPV_of_sameMPVFrom_of_injective}
     \leanok
     \uses{def:same_mpv_from, def:injective, def:same_mpv}
-    Let $A$ be an injective tensor and $B$ a tensor of the same bond
-    dimension. If $A$ and $B$ generate the same MPV family for every
-    system size $N \ge N_0$, then they generate the same MPV family for
-    every system size.
+    Let $A$ be an injective tensor of bond dimension $D \ge 1$, and let
+    $B$ be a tensor of the same bond dimension. If $A$ and $B$ generate
+    the same MPV family for every system size $N \ge N_0$, then they
+    generate the same MPV family for every system size.
 \end{theorem}
 
 \begin{proof}
@@ -503,9 +491,10 @@ Lemma~\ref{lem:tensor_proportional} yields the main theorem of
     \lean{MPSTensor.fundamentalTheorem_singleBlock_finiteLength}
     \leanok
     \uses{thm:sameMPV_of_sameMPVFrom, thm:ft_single, def:gauge_equiv}
-    If $A$ is injective and $A$, $B$ agree on all MPV coefficients for
-    system sizes $N \ge N_0$ (for any threshold $N_0$), then $A$ and $B$
-    are gauge equivalent.
+    Let $A$ be an injective tensor of bond dimension $D \ge 1$, and let
+    $B$ be a tensor of the same bond dimension. If $A$ and $B$ agree on
+    all MPV coefficients for system sizes $N \ge N_0$ (for any threshold
+    $N_0$), then $A$ and $B$ are gauge equivalent.
 \end{theorem}
 
 \begin{proof}
@@ -529,7 +518,7 @@ Lemma~\ref{lem:tensor_proportional} yields the main theorem of
     \uses{thm:fundamentalTheorem_injective_chain, def:non_ti_chain}
     Let $A$ and $B$ be injective MPS tensors of bond dimension $D$.
     Suppose the two translation-invariant chains
-    $(A, A, \dots, A)$ and $(B, B, \dots, B)$ of length $n \ge 3$
+    $(A, A, \ldots, A)$ and $(B, B, \ldots, B)$ of length $n \ge 3$
     generate the same chain state.
     Then there exists an invertible $Z \in \GL_D(\C)$, unique up to a
     scalar, and a scalar $\lambda \in \C^{\times}$ with $\lambda^n = 1$,
@@ -543,7 +532,7 @@ Lemma~\ref{lem:tensor_proportional} yields the main theorem of
 \begin{proof}
     \leanok
     Apply Theorem~\ref{thm:fundamentalTheorem_injective_chain} to the
-    two constant chains to obtain $Z_0, \dots, Z_{n-1}$ with
+    two constant chains to obtain $Z_0, \ldots, Z_{n-1}$ with
     $B^i = Z_k^{-1} A^i Z_{k+1}$ for all $k$ and $i$.
     Setting $G_k = Z_k Z_0^{-1}$, the relation
     $Z_k^{-1} A^i Z_{k+1} = Z_{k+1}^{-1} A^i Z_{k+2}$ shows
@@ -561,24 +550,24 @@ Lemma~\ref{lem:tensor_proportional} yields the main theorem of
     \label{cor:non_ti_to_ti}
     \notready
     \uses{thm:fundamentalTheorem_injective_chain, def:non_ti_chain}
-    Let $\mathbf{A} = (A_0, \dots, A_{n-1})$ be an injective non-TI
+    Let $\mathbf{A} = (A_0, \ldots, A_{n-1})$ be an injective non-TI
     chain of length $n \ge 3$.
     Suppose the state generated by $\mathbf{A}$ is translation-invariant,
     i.e.\ it equals the state generated by the cyclically shifted chain
-    $(A_1, \dots, A_{n-1}, A_0)$.
+    $(A_1, \ldots, A_{n-1}, A_0)$.
     Then $\mathbf{A}$ admits a translation-invariant description with the
     same bond dimension: there exist an injective tensor $B$ such that
-    the TI chain $(B, \dots, B)$ generates the same state as $\mathbf{A}$.
+    the TI chain $(B, \ldots, B)$ generates the same state as $\mathbf{A}$.
     Explicitly, $B^i = A_0^i\, Z_0^{-1}$ (right multiplication,
     \emph{not} conjugation), where $Z_0$ is defined below.
 \end{corollary}
 
 \begin{proof}
     \uses{thm:fundamentalTheorem_injective_chain}
-    The cyclic shift $\sigma(\mathbf{A}) = (A_1, \dots, A_{n-1}, A_0)$
+    The cyclic shift $\sigma(\mathbf{A}) = (A_1, \ldots, A_{n-1}, A_0)$
     generates the same state by hypothesis.
     Apply Theorem~\ref{thm:fundamentalTheorem_injective_chain}:
-    there exist invertible $Z_0, \dots, Z_{n-1}$ with
+    there exist invertible $Z_0, \ldots, Z_{n-1}$ with
     $A_{k+1}^i = Z_k^{-1}\, A_k^i\, Z_{k+1}$ for all $k$ and $i$
     (indices mod~$n$).
     Define $L_k = Z_0 Z_1 \cdots Z_{k-1}$ and
@@ -589,7 +578,7 @@ Lemma~\ref{lem:tensor_proportional} yields the main theorem of
     \[
         \tr(A_0^{\sigma_0} \cdots A_{n-1}^{\sigma_{n-1}})
         = \tr\bigl(A_0^{\sigma_0}\, Z_0^{-1}\, A_0^{\sigma_1}
-           Z_0^{-1} \cdots A_0^{\sigma_{n-1}}\, Z_0^{-1}\bigr).
+        Z_0^{-1} \cdots A_0^{\sigma_{n-1}}\, Z_0^{-1}\bigr).
     \]
     Hence the state is generated by the TI chain with tensor
     $B^i := A_0^i\, Z_0^{-1}$.
@@ -606,14 +595,14 @@ Chapter~\ref{ch:symmetry}.
     \notready
     \lean{MPSChainTensor.fundamentalTheorem_blockedChain}
     \uses{thm:fundamentalTheorem_injective_chain, def:injective,
-          def:blocked_tensor, def:normal,
-          lem:blocking_preserves_injectivity}
+        def:blocked_tensor, def:normal,
+        lem:blocking_preserves_injectivity}
     Let $\{A_k\}_{k=0}^{n-1}$ and $\{B_k\}_{k=0}^{n-1}$ be two
     non-TI periodic MPS on $n$ sites.
     Suppose that blocking any $L$ consecutive sites in either chain
     yields an injective tensor, and that $n \ge 3L$.
     If both chains generate the same state, then there exist invertible
-    matrices $Z_0, \dots, Z_{n-1} \in \GL_D(\C)$, unique up to a
+    matrices $Z_0, \ldots, Z_{n-1} \in \GL_D(\C)$, unique up to a
     common scalar, such that for every site $k$ and physical index $i$,
     \[
         B_k^i = Z_k^{-1}\, A_k^i\, Z_{k+1},
@@ -629,18 +618,24 @@ Chapter~\ref{ch:symmetry}.
 
 \begin{proof}
     \uses{thm:fundamentalTheorem_injective_chain,
-          lem:blocking_preserves_injectivity}
+        lem:blocking_preserves_injectivity}
     Block every $L$ consecutive sites to form a chain of length
     $m = \lfloor n/L \rfloor \ge 3$ with injective local tensors
     $A^{[L]}$ and $B^{[L]}$ (injective by hypothesis).
     The blocked chains generate the same state, so
     Theorem~\ref{thm:fundamentalTheorem_injective_chain} gives
-    invertible gauges $\widehat{Z}_0, \dots, \widehat{Z}_{m-1}$ with
+    invertible gauges $\widehat{Z}_0, \ldots, \widehat{Z}_{m-1}$ with
     $(B^{[L]})_k = \widehat{Z}_k^{-1}\, (A^{[L]})_k\, \widehat{Z}_{k+1}$.
     Applying Lemma~\ref{lem:tensor_proportional} within each $L$-block
     then decomposes the blocked gauge equivalence into site-by-site
-    gauges, yielding $Z_0, \dots, Z_{n-1}$ for the original tensors.
+    gauges, yielding $Z_0, \ldots, Z_{n-1}$ for the original tensors.
 \end{proof}
+
+\begin{remark}
+    The result above establishes gauge equivalence of blocked constant
+    chains; recovering gauges for the original unblocked site tensors
+    is future work.
+\end{remark}
 
 %% ---------------------------------------------------------
 \section{Product algebra construction and per-block gauge}%
@@ -666,7 +661,7 @@ decomposition.
     \uses{def:injective, def:same_mpv}
     Let $A_k, B_k$ be MPS tensors of bond dimension $D_k$ with
     $A_k$ injective and $\mc{V}(A_k) = \mc{V}(B_k)$ for each block
-    $k \in \{0, \dots, r{-}1\}$.
+    $k \in \{0, \ldots, r{-}1\}$.
     The \emph{per-block linear extension} $T_k : \MN{D_k} \to \MN{D_k}$
     is the unique $\C$-linear map satisfying $T_k(A_k^i) = B_k^i$
     for every physical index~$i$.
@@ -712,12 +707,12 @@ decomposition.
     \lean{MPSTensor.piAlgEquiv}
     \leanok
     \uses{def:perBlockLinearExtension, lem:perBlockLinearExtension_mul,
-          lem:perBlockLinearExtension_bijective}
+        lem:perBlockLinearExtension_bijective}
     The \emph{product algebra automorphism} is the $\C$-algebra
     equivalence
     \[
         T : \prod_{k=0}^{r-1} \MN{D_k}
-        \;\xrightarrow{\;\sim\;}\;
+        \xrightarrow{ \sim }
         \prod_{k=0}^{r-1} \MN{D_k}
     \]
     defined by $T(M)_k = T_k(M_k)$, where each $T_k$ is the per-block
@@ -765,9 +760,9 @@ decomposition.
     \label{lem:piTrace_mul_right_eq_zero}
     \lean{MPSTensor.piTrace_mul_right_eq_zero}
     \leanok
-    Let $M = (M_0, \dots, M_{r-1}) \in \prod_{k} \MN{D_k}$.
+    Let $M = (M_0, \ldots, M_{r-1}) \in \prod_{k} \MN{D_k}$.
     If $\sum_{k} \tr(M_k N_k) = 0$ for all
-    $N = (N_0, \dots, N_{r-1})$, then $M = 0$.
+    $N = (N_0, \ldots, N_{r-1})$, then $M = 0$.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -786,7 +781,7 @@ decomposition.
     \uses{def:injective}
     Let $\{A_k\}$ be a family of injective block tensors.
     The product Gram map
-    $M \mapsto \bigl(k, i \mapsto \tr(M_k \cdot A_k^i)\bigr)$
+    $M \mapsto (k, i \mapsto \tr(M_k \cdot A_k^i))$
     is injective.
 \end{lemma}
 
@@ -807,7 +802,7 @@ decomposition.
     \lean{MPSTensor.fundamentalTheorem_multiBlock_full}
     \leanok
     \uses{def:injective, def:same_mpv, def:gauge_equiv,
-          lem:perBlockLinearExtension_bijective}
+        lem:perBlockLinearExtension_bijective}
     Let $\{A_k\}_{k=0}^{r-1}$ and $\{B_k\}_{k=0}^{r-1}$ be two families
     of MPS tensors with block dimensions $D_k$, each $A_k$ injective, and
     $\mc{V}(A_k) = \mc{V}(B_k)$ for all~$k$.
@@ -825,7 +820,7 @@ decomposition.
 \end{theorem}
 
 \begin{proof}\leanok\uses{lem:perBlockLinearExtension_bijective,
-    thm:piAlgEquiv_decomposition}
+        thm:piAlgEquiv_decomposition}
     Per-block gauge equivalence follows from applying the single-block
     Fundamental Theorem (existing) to each block, using injectivity of
     $A_k$ and $\mc{V}(A_k) = \mc{V}(B_k)$.
@@ -860,15 +855,13 @@ The multi-block Fundamental Theorem
 $\mc{V}(A_k) = \mc{V}(B_k)$.
 In practice, one starts from the weaker global hypothesis that the
 block-diagonal tensors satisfy the same MPV family:
-$\mc{V}\!\bigl(\bigoplus_k \mu_k A_k\bigr) =
-\mc{V}\!\bigl(\bigoplus_k \mu_k B_k\bigr)$.
+$\mc{V}\!(\bigoplus_k \mu_k A_k) =
+    \mc{V}\!(\bigoplus_k \mu_k B_k)$.
 Block separation extracts the per-block identities from the global one
 under canonical-form normalization.
 The first step is the weighted block-sum identity
 \[
-    \sum_k \mu_k^N V^{(N)}(A_k)_\sigma
-    =
-    \sum_k \mu_k^N V^{(N)}(B_k)_\sigma,
+    \sum_k \mu_k^N V^{(N)}(A_k)_\sigma = \sum_k \mu_k^N V^{(N)}(B_k)_\sigma,
 \]
 which is then combined with overlap estimates and the leading-block peel.
 
@@ -877,7 +870,7 @@ which is then combined with overlap estimates and the leading-block peel.
     \leanok
     \uses{def:injective}
     A family of block tensors $\{A_k\}_{k=0}^{r-1}$ with scaling
-    weights $\mu_0, \dots, \mu_{r-1} \in \C^{\times}$ is in
+    weights $\mu_0, \ldots, \mu_{r-1} \in \C^{\times}$ is in
     \emph{canonical form} if:
     \begin{enumerate}
         \item each $A_k$ is injective,
@@ -908,8 +901,8 @@ which is then combined with overlap estimates and the leading-block peel.
     Let $\{A_k\}$ be in canonical form with weights $\{\mu_k\}$, and
     let $\{B_k\}$ be another family with each $B_k$ injective and
     left-canonical.
-    If $\mc{V}\!\bigl(\bigoplus_k \mu_k A_k\bigr)
-    = \mc{V}\!\bigl(\bigoplus_k \mu_k B_k\bigr)$,
+    If $\mc{V}\!(\bigoplus_k \mu_k A_k)
+        = \mc{V}\!(\bigoplus_k \mu_k B_k)$,
     then $\mc{V}(A_k) = \mc{V}(B_k)$ for each block~$k$ individually.
     The proof isolates the leading block and treats the remaining blocks
     as an exponentially decaying tail with
@@ -925,13 +918,13 @@ which is then combined with overlap estimates and the leading-block peel.
 
     For $r \ge 2$, the global identity
     $\sum_k \mu_k^N\, \bigl(V^{(N)}(A_k)_\sigma
-    - V^{(N)}(B_k)_\sigma\bigr) = 0$
+        - V^{(N)}(B_k)_\sigma\bigr) = 0$
     holds for all $N$ and $\sigma$.
     \[
-        \mu_0^N \bigl(V^{(N)}(A_0)_\sigma - V^{(N)}(B_0)_\sigma\bigr)
+        \mu_0^N (V^{(N)}(A_0)_\sigma - V^{(N)}(B_0)_\sigma)
         =
         - \sum_{k \ge 1} \mu_k^N
-        \bigl(V^{(N)}(A_k)_\sigma - V^{(N)}(B_k)_\sigma\bigr).
+        (V^{(N)}(A_k)_\sigma - V^{(N)}(B_k)_\sigma).
     \]
     Dividing by $\mu_0^N$ shows that the right-hand side is
     $O(\rho^N)$ with $\rho = |\mu_1|/|\mu_0| < 1$.
@@ -956,7 +949,7 @@ which is then combined with overlap estimates and the leading-block peel.
     \lean{MPSTensor.fundamentalTheorem_canonicalForm}
     \leanok
     \uses{thm:per_block_sameMPV_of_canonical_form,
-          thm:fundamentalTheorem_multiBlock_full}
+        thm:fundamentalTheorem_multiBlock_full}
     Under the hypotheses of
     Theorem~\ref{thm:per_block_sameMPV_of_canonical_form},
     every block pair $A_k, B_k$ is gauge equivalent, and the
@@ -965,7 +958,7 @@ which is then combined with overlap estimates and the leading-block peel.
 
 \begin{proof}\leanok
     \uses{thm:per_block_sameMPV_of_canonical_form,
-          thm:fundamentalTheorem_multiBlock_full}
+        thm:fundamentalTheorem_multiBlock_full}
     Theorem~\ref{thm:per_block_sameMPV_of_canonical_form} gives per-block
     $\mc{V}(A_k) = \mc{V}(B_k)$.
     Theorem~\ref{thm:fundamentalTheorem_multiBlock_full} converts this
@@ -1002,7 +995,7 @@ which is then combined with overlap estimates and the leading-block peel.
     Let $A$ and $B$ be MPS tensors of bond dimension $D$ with $A$
     injective.
     Consider the two constant (translation-invariant) chains
-    $(A, \dots, A)$ and $(B, \dots, B)$ of length $n \ge 1$.
+    $(A, \ldots, A)$ and $(B, \ldots, B)$ of length $n \ge 1$.
     If the combined tensors of the two chains generate the same MPV
     family, then:
     \begin{enumerate}
@@ -1098,7 +1091,7 @@ scalar factor.
     \lean{MPSTensor.gaugeMatrix_projective_mul}
     \leanok
     \uses{lem:gauge_ratio_isScalar, def:injective,
-          def:on_site_symmetric, lem:twisted_tensor_mul}
+        def:on_site_symmetric, lem:twisted_tensor_mul}
     Let $A$ be an injective MPS tensor with on-site symmetry under a
     group representation $U : G \to \GL_d(\C)$.
     For each $g \in G$, let $X(g) \in \GL_D(\C)$ satisfy
@@ -1127,7 +1120,7 @@ scalar factor.
 \end{proof}
 
 %% ---------------------------------------------------------
-\section{Fundamental Theorem for injective PEPS (scaffold)}%
+\section{Fundamental Theorem for injective PEPS}%
 \label{sec:peps_ft}
 %% ---------------------------------------------------------
 
@@ -1136,97 +1129,104 @@ injective PEPS on simple graphs, following
 Theorem~2 of~\cite{Molnar2018NormalPEPS}.
 
 \begin{definition}[Edge gauge at a vertex]%
-\label{def:edgeGaugeAt}
-\lean{TNLean.PEPS.edgeGaugeAt}
-\leanok
-\uses{}
+    \label{def:edgeGaugeAt}
+    \lean{TNLean.PEPS.edgeGaugeAt}
+    \leanok
+    \uses{}
     For an edge $e = (u,w)$ with $u < w$ and gauge $X_e \in \mathrm{GL}(D_e)$,
     the gauge matrix applied at vertex $v$ is $X_e$ if $v = u$ and
     $(X_e^{-1})^\top$ if $v = w$.
 \end{definition}
 
 \begin{definition}[Gauge vertex action]%
-\label{def:gaugeVertex}
-\lean{TNLean.PEPS.gaugeVertex}
-\leanok
-\uses{def:edgeGaugeAt}
-    The gauged vertex tensor is
-    $(\mathrm{gaugeVertex}\; X\; A\; v)(\eta, \sigma)
-    = \sum_{\eta'} \bigl(\prod_{ie} M_{ie}(\eta(ie), \eta'(ie))\bigr)
-      A_v(\eta', \sigma)$.
+    \label{def:gaugeVertex}
+    \lean{TNLean.PEPS.gaugeVertex}
+    \leanok
+    \uses{def:edgeGaugeAt}
+    The gauged tensor at vertex $v$ is $A^X_v$, where
+    $A^X_v(\eta, \sigma)
+        = \sum_{\eta'} (\prod_{ie} M_{ie}(\eta(ie), \eta'(ie)))
+        A_v(\eta', \sigma)$.
 \end{definition}
 
 \begin{definition}[Apply gauge]%
-\label{def:applyGauge}
-\lean{TNLean.PEPS.applyGauge}
-\leanok
-\uses{def:gaugeVertex}
-    The PEPS tensor obtained by applying edge-gauge matrices to $A$.
+    \label{def:applyGauge}
+    \lean{TNLean.PEPS.applyGauge}
+    \leanok
+    \uses{def:gaugeVertex}
+    The PEPS tensor obtained by applying edge-gauge matrices to $A$, with
+    vertex tensors $A^X_v$.
 \end{definition}
 
 \begin{definition}[Gauge equivalence for PEPS]%
-\label{def:GaugeEquivPEPS}
-\lean{TNLean.PEPS.GaugeEquiv}
-\leanok
-\uses{def:gaugeVertex}
+    \label{def:GaugeEquivPEPS}
+    \lean{TNLean.PEPS.GaugeEquiv}
+    \leanok
+    \uses{def:gaugeVertex}
     Two PEPS tensors $A, B$ are gauge-equivalent if they have the same bond
     dimensions and $B$ is obtained from $A$ by applying invertible gauge
     matrices on each edge.
 \end{definition}
 
 \begin{theorem}[Gauge invariance of PEPS state]%
-\label{thm:applyGauge_stateCoeff}
-\lean{TNLean.PEPS.applyGauge_stateCoeff}
-\uses{def:applyGauge}
+    \label{thm:applyGauge_stateCoeff}
+    \lean{TNLean.PEPS.applyGauge_stateCoeff}
+    \notready
+    \uses{def:applyGauge}
     Applying a gauge to a PEPS tensor preserves the state coefficients.
 \end{theorem}
 
 \begin{theorem}[Gauge equivalence implies same state]%
-\label{thm:GaugeEquiv_sameState}
-\lean{TNLean.PEPS.GaugeEquiv.sameState}
-\uses{def:GaugeEquivPEPS, thm:applyGauge_stateCoeff}
+    \label{thm:GaugeEquiv_sameState}
+    \lean{TNLean.PEPS.GaugeEquiv.sameState}
+    \notready
+    \uses{def:GaugeEquivPEPS, thm:applyGauge_stateCoeff}
     Gauge equivalence implies that the two PEPS tensors represent the same state.
 \end{theorem}
 
 \begin{definition}[Local tensor evaluation]%
-\label{def:localTensorEval}
-\lean{TNLean.PEPS.localTensorEval}
-\leanok
-\uses{}
+    \label{def:localTensorEval}
+    \lean{TNLean.PEPS.localTensorEval}
+    \leanok
+    \uses{}
     The local tensor evaluated at vertex $v$ with virtual-index weighting $f$,
     computing $\sum_\eta (\prod_{ie} f(ie)(\eta(ie))) \cdot A_v(\eta, \sigma)$.
     This is multilinear in the components of $f$, not linear in the full tuple.
 \end{definition}
 
 \begin{theorem}[Local gauge extraction]%
-\label{thm:localGauge_exists}
-\lean{TNLean.PEPS.localGauge_exists}
-\uses{def:gaugeVertex, def:localTensorEval}
+    \label{thm:localGauge_exists}
+    \lean{TNLean.PEPS.localGauge_exists}
+    \notready
+    \uses{def:gaugeVertex, def:localTensorEval}
     At a single vertex, vertex-injectivity of both tensors and the
     same-state condition force a local gauge relation.
 \end{theorem}
 
 \begin{theorem}[Gauge consistency]%
-\label{thm:gaugeConsistency}
-\lean{TNLean.PEPS.gaugeConsistency}
-\uses{thm:localGauge_exists, def:gaugeVertex}
+    \label{thm:gaugeConsistency}
+    \lean{TNLean.PEPS.gaugeConsistency}
+    \notready
+    \uses{thm:localGauge_exists, def:gaugeVertex}
     Local gauges extracted at adjacent vertices are consistent across
     shared edges, yielding a global gauge family.
 \end{theorem}
 
 \begin{theorem}[Fundamental Theorem for injective PEPS]%
-\label{thm:fundamentalTheorem_PEPS}
-\lean{TNLean.PEPS.fundamentalTheorem_PEPS}
-\uses{thm:gaugeConsistency, def:GaugeEquivPEPS}
+    \label{thm:fundamentalTheorem_PEPS}
+    \lean{TNLean.PEPS.fundamentalTheorem_PEPS}
+    \notready
+    \uses{thm:gaugeConsistency, def:GaugeEquivPEPS}
     If two PEPS tensors on a simple graph are both vertex-injective and
     generate the same state, then they are gauge-equivalent
     (Theorem~2 of~\cite{Molnar2018NormalPEPS}).
 \end{theorem}
 
 \begin{theorem}[Gauge uniqueness up to scalar]%
-\label{thm:gauge_unique_up_to_scalar}
-\lean{TNLean.PEPS.gauge_unique_up_to_scalar}
-\uses{def:gaugeVertex}
+    \label{thm:gauge_unique_up_to_scalar}
+    \lean{TNLean.PEPS.gauge_unique_up_to_scalar}
+    \notready
+    \uses{def:gaugeVertex}
     On a connected graph, the gauge family in the Fundamental Theorem is
     unique up to a global multiplicative scalar.
 \end{theorem}
