@@ -19,6 +19,9 @@ variable {d D : ℕ}
 
 /-! ## Theorem 5: Normalization of μ-scaled block -/
 
+-- TODO: This file is trending toward thin wrappers around `TNLean.MPS.SharedInfra.Scaling`;
+-- revisit whether these aliases should be consolidated once the CF/FT dependency cleanup settles.
+
 /-- For a block tensor `μ • A`, the MPV decomposes as `μ^N * mpv(A)`.
 This is the key factorization used in μ-normalization. -/
 theorem mpv_smul_block (μ : ℂ) {D' : ℕ} (A : MPSTensor d D') {N : ℕ}
