@@ -653,6 +653,158 @@ Appendix~D, \S D.2 of~\cite{Cirac2021Matrix}.
     $P_{AX} \circ P_{XB} = P_K$.
 \end{definition}
 
+\begin{theorem}[Idempotence of the product projector]%
+    \label{thm:pk_idem}
+    \lean{Decorrelation.HasCommutingParentHam.pK_idem}
+    \leanok
+    \uses{def:has_commuting_parent_ham}
+    If $P_K = P_{AX} \circ P_{XB}$ is a commuting parent Hamiltonian
+    decomposition, then
+    \[
+        P_K \circ P_K = P_K.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:has_commuting_parent_ham}
+    Since $P_{AX}$ and $P_{XB}$ are idempotent and commute, their product
+    $P_{AX} \circ P_{XB}$ is idempotent. Substituting
+    $P_K = P_{AX} \circ P_{XB}$ gives the claim.
+\end{proof}
+
+\begin{theorem}[Absorption by the left projector]%
+    \label{thm:pAX_comp_pK}
+    \lean{Decorrelation.HasCommutingParentHam.pAX_comp_pK}
+    \leanok
+    \uses{def:has_commuting_parent_ham}
+    If $P_K = P_{AX} \circ P_{XB}$ is a commuting parent Hamiltonian
+    decomposition, then
+    \[
+        P_{AX} \circ P_K = P_K.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:has_commuting_parent_ham}
+    Using $P_K = P_{AX} \circ P_{XB}$ and the idempotence of $P_{AX}$,
+    \[
+        P_{AX} \circ P_K
+        = P_{AX} \circ P_{AX} \circ P_{XB}
+        = P_{AX} \circ P_{XB}
+        = P_K.
+    \]
+\end{proof}
+
+\begin{theorem}[Absorption by the right projector]%
+    \label{thm:pK_comp_pXB}
+    \lean{Decorrelation.HasCommutingParentHam.pK_comp_pXB}
+    \leanok
+    \uses{def:has_commuting_parent_ham}
+    If $P_K = P_{AX} \circ P_{XB}$ is a commuting parent Hamiltonian
+    decomposition, then
+    \[
+        P_K \circ P_{XB} = P_K.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:has_commuting_parent_ham}
+    Using $P_K = P_{AX} \circ P_{XB}$ and the idempotence of $P_{XB}$,
+    \[
+        P_K \circ P_{XB}
+        = P_{AX} \circ P_{XB} \circ P_{XB}
+        = P_{AX} \circ P_{XB}
+        = P_K.
+    \]
+\end{proof}
+
+\begin{theorem}[Cross-absorption by the right projector]%
+    \label{thm:pXB_comp_pK}
+    \lean{Decorrelation.HasCommutingParentHam.pXB_comp_pK}
+    \leanok
+    \uses{def:has_commuting_parent_ham}
+    If $P_K = P_{AX} \circ P_{XB}$ is a commuting parent Hamiltonian
+    decomposition, then
+    \[
+        P_{XB} \circ P_K = P_K.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:has_commuting_parent_ham}
+    By commutativity,
+    $P_{XB} \circ P_K = P_{XB} \circ P_{AX} \circ P_{XB}
+    = P_{AX} \circ P_{XB} \circ P_{XB}$, and idempotence of $P_{XB}$
+    yields $P_{XB} \circ P_K = P_K$.
+\end{proof}
+
+\begin{theorem}[Cross-absorption by the left projector]%
+    \label{thm:pK_comp_pAX}
+    \lean{Decorrelation.HasCommutingParentHam.pK_comp_pAX}
+    \leanok
+    \uses{def:has_commuting_parent_ham}
+    If $P_K = P_{AX} \circ P_{XB}$ is a commuting parent Hamiltonian
+    decomposition, then
+    \[
+        P_K \circ P_{AX} = P_K.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:has_commuting_parent_ham}
+    By commutativity,
+    $P_K \circ P_{AX} = P_{AX} \circ P_{XB} \circ P_{AX}
+    = P_{AX} \circ P_{AX} \circ P_{XB}$, and idempotence of $P_{AX}$
+    yields $P_K \circ P_{AX} = P_K$.
+\end{proof}
+
+\begin{theorem}[Reverse product identity]%
+    \label{thm:reverse_product}
+    \lean{Decorrelation.HasCommutingParentHam.reverse_product}
+    \leanok
+    \uses{def:has_commuting_parent_ham}
+    If $P_K = P_{AX} \circ P_{XB}$ is a commuting parent Hamiltonian
+    decomposition, then
+    \[
+        P_{XB} \circ P_{AX} = P_K.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:has_commuting_parent_ham}
+    This is immediate from commutativity of $P_{AX}$ and $P_{XB}$ together
+    with the identity $P_{AX} \circ P_{XB} = P_K$.
+\end{proof}
+
+\begin{theorem}[Commuting complementary projectors]%
+    \label{thm:complement_comm}
+    \lean{Decorrelation.HasCommutingParentHam.complement_comm}
+    \leanok
+    \uses{def:has_commuting_parent_ham}
+    If $P_K = P_{AX} \circ P_{XB}$ is a commuting parent Hamiltonian
+    decomposition and
+    \[
+        Q_{AX} = 1 - P_{AX}, \qquad Q_{XB} = 1 - P_{XB},
+    \]
+    then
+    \[
+        Q_{AX} \circ Q_{XB} = Q_{XB} \circ Q_{AX}.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:has_commuting_parent_ham}
+    Expanding both products and using $P_{AX} \circ P_{XB}
+    = P_{XB} \circ P_{AX}$ shows that the complementary projectors commute.
+\end{proof}
+
 \begin{theorem}[Commuting parent Hamiltonian implies decorrelation]%
     \label{thm:commuting_ham_is_decorrelated}
     \lean{Decorrelation.commutingHam_isDecorrelated}
