@@ -159,7 +159,7 @@ theorem rfp_nt_structural (A : MPSTensor d D)
 /-- Canonical-form blocks are already injective, so the structural precursor above is automatic. -/
 theorem rfp_cf_structural {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
-    (hCF : IsCanonicalForm μ A) (_hRFP : ∀ k, IsRFP (A k)) :
+    (hCF : IsCanonicalForm μ A) :
     ∀ k, IsInjective (A k) := by
   intro k
   exact hCF.block_injective k
@@ -167,7 +167,7 @@ theorem rfp_cf_structural {r : ℕ} {dim : Fin r → ℕ}
 /-- BNT blocks are already injective, so the same precursor applies blockwise. -/
 theorem rfp_bnt_structural {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
-    (hCF : IsCanonicalFormBNT μ A) (_hRFP : ∀ k, IsRFP (A k)) :
+    (hCF : IsCanonicalFormBNT μ A) :
     ∀ k, IsInjective (A k) := by
   intro k
   exact hCF.toIsCanonicalForm.block_injective k
