@@ -1,7 +1,7 @@
 \chapter{Perron--Frobenius Theory for Channels and Transfer Maps}\label{ch:qpf}
 
-This chapter establishes the Perron--Frobenius theory used throughout
-the blueprint: existence, positive definiteness, and uniqueness of
+This chapter establishes the Perron--Frobenius theory used in subsequent
+chapters: existence, positive definiteness, and uniqueness of
 fixed points for injective and irreducible transfer maps, canonical
 gauge constructions, ergodicity of irreducible channels, the
 spectral-radius identification of Perron eigenvalues, and Wolf's
@@ -255,7 +255,7 @@ and~\cite{Evans1978Spectral}.
 	Define the gauged operators $A'^i = S^{-1} A^i S$.
 	Then $\sum_i A'^i (A'^i)^\dagger = \Id$, i.e.\ the gauged
 	Kraus map is unital. This is the right-canonical normalization
-	used later in the blueprint.
+	used in subsequent chapters.
 \end{theorem}
 
 \begin{proof}
@@ -277,7 +277,7 @@ and~\cite{Evans1978Spectral}.
 	Define $A'^i = S A^i S^{-1}$.
 	Then $\sum_i (A'^i)^\dagger A'^i = \Id$, i.e.\ the gauged
 	Kraus map is trace-preserving. This is the left-canonical
-	normalization used later in the blueprint.
+	normalization used in subsequent chapters.
 \end{theorem}
 
 \begin{proof}
@@ -423,9 +423,11 @@ follows~\cite[Appendix~A]{Cirac2017MPDO_AnnPhys}.
 	$\E_A^\dagger \neq 0$.
 	Since $\E_A^\dagger(X) = \sum_i (A^i)^\dagger X A^i$ is a
 	Kraus map, it is positive. Irreducibility of $A$ transfers to the
-	adjoint transfer map (if $\E_A^\dagger$ had a nontrivial invariant
-	projection $P$, then taking adjoints would show that $\Id - P$ is
-	invariant for $\E_A$, contradicting irreducibility of $\E_A$), and
+	adjoint transfer map. More precisely: if $P$ is invariant for
+	$\E_A$ (i.e.\ $(\Id - P)K_i P = 0$ for all Kraus operators $K_i$),
+	then taking adjoints gives $P K_i^\dagger (\Id - P) = 0$, which
+	means $\Id - P$ is invariant for $\E_A^\dagger$. Hence $\E_A$
+	irreducible $\Longleftrightarrow$ $\E_A^\dagger$ irreducible, and
 	together with $\E_A^\dagger \neq 0$ this implies
 	$\E_A^\dagger(\tau) \neq 0$ for every nonzero PSD matrix $\tau$.
 	Hence Theorem~\ref{thm:pf_eigenvector_existence} applies to

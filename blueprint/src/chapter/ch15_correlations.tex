@@ -28,7 +28,7 @@ their spectral decomposition, and quantitative bounds on decay rates.
     Fix an MPS tensor and a right fixed point of its transfer map.
     Write the tensor as $A$ and the fixed point as $\rho^R$.
     Under the hypotheses of Theorem~\ref{thm:qpf}, that fixed point exists
-    and is unique up to scaling.
+    and is unique up to scaling; we normalize it so that $\tr(\rho^R)=1$.
     For a local observable $X \in \MN{D}$ define
     \[
         \langle X_0 \rangle := \tr(X\rho^R).
@@ -62,7 +62,7 @@ their spectral decomposition, and quantitative bounds on decay rates.
 
 \begin{theorem}[Sum of exponentials]\label{thm:correlator_sum_exponentials}
     \lean{MPSTensor.connectedCorrelator_eq_sum}
-    \leanok
+    \notready
     \uses{def:connected_correlator, thm:spectral_radius_le_one, thm:qpf}
     For a normal MPS, the connected correlator admits a spectral expansion of
     the form
@@ -73,6 +73,7 @@ their spectral decomposition, and quantitative bounds on decay rates.
 \end{theorem}
 
 \begin{proof}
+    \notready
     The leading eigenvalue contribution ($\lambda_1=1$) equals
     $\langle X_0\rangle\langle Y_0\rangle$ and cancels in the connected part.
     Apply spectral decomposition to $\E_A^n$.
@@ -80,7 +81,7 @@ their spectral decomposition, and quantitative bounds on decay rates.
 
 \begin{theorem}[Exponential decay bound]\label{thm:correlator_exponential_bound}
     \lean{MPSTensor.connectedCorrelator_bound}
-    \leanok
+    \notready
     \uses{thm:correlator_sum_exponentials}
     If $|\lambda_j| \le |\lambda_2| < 1$ for all subleading eigenvalues, then
     there exists $C_{XY}\ge 0$ such that
@@ -90,6 +91,7 @@ their spectral decomposition, and quantitative bounds on decay rates.
 \end{theorem}
 
 \begin{proof}
+    \notready
     Combine the sum-of-exponentials expansion with the triangle inequality.
 \end{proof}
 
@@ -138,7 +140,6 @@ The spectral gap theorems in Chapter~\ref{ch:channels} establish
 $\rho(\E_A - P) < 1$ for primitive channels qualitatively.  This section
 records the \emph{quantitative} refinements that give explicit constants
 and rates for the single-tensor transfer map $\E_A$.
-All three quantitative results below are now fully proved.
 
 \begin{theorem}[Exponential convergence of injective primitive channels]%
     \label{thm:exponential_convergence_primitive}
@@ -215,15 +216,6 @@ All three quantitative results below are now fully proved.
     $\delta > 0$ separating $1$ from the remaining spectrum.
 \end{proof}
 
-\begin{remark}[Status of quantitative bounds]\label{rem:quantitative_status}
-    \uses{thm:exponential_convergence_primitive,
-          thm:correlation_length_bound}
-    All three quantitative bounds above are now fully proved:
-    exponential convergence of primitive irreducible channels,
-    the correlation length bound for injective tensors, and
-    the spectral gap from injectivity.
-\end{remark}
-
 \section{Relation to parent Hamiltonians}
 
 \begin{remark}\label{rem:correlations_parent_hamiltonian}
@@ -286,18 +278,23 @@ All three quantitative results below are now fully proved.
 
 \begin{remark}\label{rem:zero_correlation_length}
     \uses{thm:spectral_radius_le_one, def:correlation_length, def:is_rfp}
-    The identity $\E^2=\E$ is equivalent to vanishing subleading spectrum;
-    equivalently, $\xi=0$ and connected correlations vanish at nonzero
-    separation.
+    When the transfer map is idempotent ($\E^2=\E$), connected correlations become
+    separation-independent for all separations $n \ge 1$.
+    Informally, this corresponds to zero correlation length ($\xi=0$).
+    The full spectral equivalence (idempotence iff vanishing subleading spectrum)
+    is not yet formalized.
 \end{remark}
 
 \begin{definition}[Correlations independent of distance]\label{def:is_cid}
     \lean{MPSTensor.IsCID}
     \leanok
     \uses{def:connected_correlator}
-    An MPS tensor has \emph{correlations independent of distance} (CID) when
-    its connected two-point function $C(X,Y;n)$ is constant in the
-    separation $n$ for all local observables $X$ and $Y$.
+    For a positive definite right fixed point $\rho^R > 0$, an MPS tensor has
+    \emph{correlations independent of distance} (CID) when for all local
+    observables $X$ and $Y$ and all separations $n,m \ge 1$,
+    \[
+        C(X,Y;n) = C(X,Y;m).
+    \]
 \end{definition}
 
 \begin{theorem}[CID implies RFP]\label{thm:isCID_implies_isRFP}
@@ -308,12 +305,12 @@ All three quantitative results below are now fully proved.
     transfer map and has correlations independent of distance, then
     its transfer map is idempotent.
     This is the reverse direction of \cite[Theorem~3.8]{Cirac2021Matrix}.
+\end{theorem}
 \begin{proof}\leanok
     Trace nondegeneracy and invertibility of the fixed point reduce
     idempotence to equality of the connected correlator at separations
     $n=2$ and $n=1$.
 \end{proof}
-\end{theorem}
 
 \begin{theorem}[Zero correlation length iff idempotent transfer]%
     \label{thm:zcl_iff_idempotent_transfer}
@@ -323,10 +320,10 @@ All three quantitative results below are now fully proved.
     An MPS tensor has zero correlation length (i.e.\ is both locally
     orthogonal and CID) if and only if its transfer map is idempotent.
     This is \cite[Theorem~3.8]{Cirac2021Matrix}.
+\end{theorem}
 \begin{proof}\leanok
     The forward direction extracts local orthogonality (which equals
     idempotence by definition). The reverse uses
     $\E^n = \E$ for $n \ge 1$ to show the connected correlator is
     separation-independent.
 \end{proof}
-\end{theorem}

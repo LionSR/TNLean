@@ -28,7 +28,7 @@ connecting an **arbitrary MPS tensor** to a blocked canonical form.
 The reduction threads through the following components:
 
 1. **Zero-block separation** (`exists_irreducible_blockDecomp_liveBlocks`):
-   split an arbitrary tensor into zero tail + live irreducible blocks.
+   split an arbitrary tensor into trivial block + nontrivial irreducible blocks.
 
 2. **TP gauge** (`exists_tp_gauge_from_arbitrary_with_zeroTail`):
    apply the Perron–Frobenius / TP-gauge step blockwise, producing irreducible,
@@ -47,7 +47,7 @@ The reduction threads through the following components:
 
 * `exists_tp_primitive_blockDecomp_after_blocking`:
   For any `A : MPSTensor d D`, there exists a blocking period `p > 0` such that
-  `blockTensor A p` admits a decomposition into a zero tail and a weighted family
+  `blockTensor A p` admits a decomposition into a trivial block and a weighted family
   of TP-gauged blocks with primitive transfer maps.
 
 * `exists_normalCanonicalForm_after_blocking_conditional`:
@@ -80,13 +80,13 @@ The per-block bridge is now complete:
   derives all channel-level hypotheses automatically and produces cyclic
   sector blocks via `exists_cyclic_sector_decomp_after_blocking`.
 
-Remaining work for the full pipeline integration:
+Remaining work for the full canonical-form reduction:
 
-* **Common period assembly**: The shared-period helper layer is now available
+* **Common period assembly**: The common-period lemmas are now available
   via `lcmPeriod`, `commonPeriodBlocking`,
   `isPrimitive_transferMap_commonPeriodBlocking`, and
   `transferMap_blockTensor_mul`. What still remains is the full
-  sector-level assembly theorem that packages the cyclic decomposition data
+  sector-level theorem that assembles the cyclic decomposition data
   into a single global direct-sum decomposition.
 
 * **Sector irreducibility**: Each cyclic sector should inherit irreducibility
@@ -117,9 +117,9 @@ an arbitrary `A : MPSTensor d D` and produces blocked TP-primitive data.
 For any `A : MPSTensor d D`, there exists a blocking period `p > 0` and
 a decomposition:
 
-* a **zero tail** of dimension `zeroTailDim` (accumulating all-zero irreducible
+* a **trivial block** of dimension `zeroTailDim` (accumulating all-zero irreducible
   blocks from the original decomposition);
-* a family of **blocked live blocks** `blocks k` indexed by `Fin r`, each with:
+* a family of **weighted blocked blocks** `blocks k` indexed by `Fin r`, each with:
   - left-canonical (TP) normalization `∑ᵢ (blocks k i)ᴴ * (blocks k i) = I`;
   - primitive transfer map `_root_.IsPrimitive (transferMap (blocks k))`;
   - positive bond dimension;
@@ -131,7 +131,7 @@ The MPV relationship holds:
     + mpv (toTensorFromBlocks μ blocks) σ
 ```
 
-In particular, for system sizes `N > 0`, the zero tail vanishes and
+In particular, for system sizes `N > 0`, the trivial block vanishes and
 `blockTensor A p` has the same MPVs as `toTensorFromBlocks μ blocks`.
 
 **Note on the original blocks**: The pre-blocking blocks (from step 2) ARE
@@ -202,7 +202,7 @@ theorem exists_tp_primitive_blockDecomp_after_blocking (A : MPSTensor d D) :
     rw [hblock D A]
     -- Pre-blocking MPV identity: mpv A σflat = zero-tail + live-blocks.
     rw [hMPV₀ (N * P) σflat]
-    -- Zero tail: both sides equal `if N = 0 then zeroTailDim else 0`.
+    -- Trivial block: both sides equal `if N = 0 then zeroTailDim else 0`.
     have hNP_iff : N * P = 0 ↔ N = 0 := by
       rw [Nat.mul_eq_zero]
       exact ⟨fun h => h.resolve_right hP.ne', fun h => Or.inl h⟩
@@ -351,13 +351,13 @@ theorem isNormal_of_tp_primitive_irreducible [NeZero D]
 ## Combined reduction: arbitrary → IsNormal (per block, for primitive blocks)
 
 For the pre-blocking blocks (which ARE irreducible), the chain to IsNormal
-works directly. This shows that the original (unblocked) live blocks become
+works directly. This shows that the original nonzero-weight blocks become
 normal once we know their transfer maps are primitive.
 -/
 
 /-- **Pre-blocking blocks are normal once primitive.**
 
-For the live blocks from the arbitrary-input TP-gauge reduction, if a block
+For the nonzero-weight blocks from the arbitrary-input TP-gauge reduction, if a block
 additionally has a primitive transfer map, then it is normal. -/
 theorem isNormal_live_block_of_primitive [NeZero D]
     (A : MPSTensor d D)
@@ -604,14 +604,13 @@ theorem isIrreducibleTensor_blockTensor_of_tp_primitive_irr [NeZero D]
 /-!
 ## Weak FT: proportional MPVs → block matching (for TP-primitive blocks)
 
-This packages the full reduction output together with the downstream
-FT theorems, showing how the reduction connects to the fundamental theorem
-conclusions.
+This combines the full reduction output with the block-matching conclusions
+of the fundamental theorem.
 
 For two arbitrary tensors A, B with proportional MPVs, the reduction produces
 blocked TP-primitive decompositions. Under the additional hypotheses needed
-for `IsNormalCanonicalForm` (irreducibility + distinct weight norms), the
-downstream FT gives permutation + gauge-phase matching of blocks.
+for `IsNormalCanonicalForm` (irreducibility + distinct weight norms), one obtains
+permutation + gauge-phase matching of blocks.
 -/
 
 /-- **Weak Fundamental Theorem (conditional on irreducibility + distinct weights).**
@@ -619,7 +618,7 @@ downstream FT gives permutation + gauge-phase matching of blocks.
 For two tensor families in TP-primitive normal canonical form with BNT separation,
 if their blocked versions have proportional MPVs (with convergent coefficients), then
 the block counts match and blocks are pairwise gauge-phase equivalent (up to
-permutation). This packages the downstream FT from `Full.lean`. -/
+permutation). This is the corresponding block-matching statement from `Full.lean`. -/
 theorem weakFundamentalTheorem_conditional
     {d' rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
@@ -1004,7 +1003,7 @@ end CyclicSectorFromMPS
 The fundamental theorem of MPS (1606.00608 version, after blocking) asserts:
 
 For any MPS tensor `A`, there exists a blocking period `p > 0` such that
-`blockTensor A p` admits a decomposition into a zero tail plus a direct sum
+`blockTensor A p` admits a decomposition into a trivial block plus a direct sum
 of TP sectors, where each sector is left-canonical and the direct sum is
 `SameMPV₂`-equivalent to the blocked tensor.
 
@@ -1018,7 +1017,7 @@ The full end-to-end statement chains:
 
 The theorem `exists_tp_sector_decomp_after_blocking` below provides:
 - A blocking period `p > 0`
-- A zero tail of dimension `zeroTailDim`
+- A trivial block of dimension `zeroTailDim`
 - A family of TP sector blocks
 - The MPV relationship: `blockTensor A p` is `SameMPV₂`-equivalent to
   `zeroMPSTensor + toTensorFromBlocks μ sectors` for some weights `μ`
@@ -1037,7 +1036,7 @@ section FundamentalTheorem1606
 --
 -- For any MPS tensor `A`, there exists a blocking period `p > 0` and a
 -- decomposition of the blocked tensor into:
--- 1. A zero tail (irreducible blocks with zero spectral weight)
+-- 1. A trivial block (irreducible blocks with zero spectral weight)
 -- 2. A family of TP blocks with primitive transfer maps
 --
 -- Additionally, the weights `μ k` satisfy `μ k ≠ 0` and the full MPV
@@ -1099,8 +1098,8 @@ produce a common blocking period `p` and matching block structures. The remainin
 formalizations are:
 
 1. **Common blocking period**: Re-block both decompositions to `p = lcm(pA, pB)`.
-   This requires "iterated blocking" infrastructure: `blockTensor (blockTensor A pA) q`
-   relates to `blockTensor A (pA * q)`.
+   This requires the relation between `blockTensor (blockTensor A pA) q`
+   and `blockTensor A (pA * q)`.
 
 2. **Sector irreducibility**: Each cyclic sector of a blocked periodic block should be
    irreducible. The orbit-sum lift hypothesis from `isIrreducible_restriction_of_cyclic_decomp`
@@ -1110,8 +1109,8 @@ formalizations are:
 3. **Normal canonical form per sector**: Each irreducible TP-primitive sector becomes
    `IsNormal` via `isNormal_of_tp_primitive_irreducible` (already proved in this file).
 
-4. **BNT separation + weight ordering + gauge-phase matching**: Apply the downstream
-   FT from `Full.lean` via `weakFundamentalTheorem_conditional`.
+4. **BNT separation + weight ordering + gauge-phase matching**: Apply
+   `weakFundamentalTheorem_conditional` to obtain permutation and gauge-phase matching.
 
 Steps 1–2 are the main remaining formalizations; steps 3–4 are already formalized
 and just need to be combined once steps 1–2 are complete.

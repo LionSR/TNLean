@@ -627,11 +627,11 @@ matching the weighted-trace argument in
 \end{proof}
 
 %% =========================================================
-\section{Representations: infrastructure}
+\section{Representations}
 \label{sec:representations_infrastructure}
 %% =========================================================
 
-The following infrastructure supports the Choi--Jamiol\-kowski isomorphism
+The following definitions support the Choi--Jamiol\-kowski isomorphism
 (Theorem~\ref{thm:cp_iff_choi_posSemidef}) and the representation theorems
 of~\cite[Ch.~2]{Wolf2012Quantum}.
 
@@ -901,7 +901,7 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
 
 \begin{proof}
     \leanok
-    Specialise \texttt{kraus\_dual\_eq\_of\_map\_eq} at $Y = \Id$.
+    Specialise Theorem~\ref{thm:kraus_dual_eq_of_map_eq} at $Y = \Id$.
 \end{proof}
 
 \begin{theorem}[Thm.~2.1 item 4: Rectangular Kraus freedom (necessary direction)]\label{thm:kraus_rectangular_freedom}
@@ -909,8 +909,10 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
     \leanok
     \uses{thm:kraus_dual_eq_of_map_eq, thm:kraus_conjTranspose_mul_eq_of_map_eq}
     If $\sum_\alpha B_\alpha X B_\alpha^\dagger = \sum_j A_j X A_j^\dagger$
-    for all $X$ and $r_2 \le r_1$, then there exists a rectangular isometry
-    $V$ ($r_1 \times r_2$, $V^\dagger V = \Id$) such that
+    for all $X$ and $r_2 \le r_1$ (where $\{B_\alpha\}_{\alpha=0}^{r_1-1}$
+    is the larger family and $\{A_j\}_{j=0}^{r_2-1}$ the smaller),
+    then there exists a rectangular isometry
+    $V$ ($r_1 \times r_2$, $V^\dagger V = \Id_{r_2}$) such that
     $B_\alpha = \sum_j V_{\alpha j}\,A_j$.
 \end{theorem}
 
@@ -919,7 +921,7 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
     Pad the smaller family to size $r_1$, establish Gram matrix equality
     $M_B^\dagger M_B = M_{A'}^\dagger M_{A'}$ from dual map equality,
     construct a partial isometry via inner product preservation on the
-    range, and extend to a full isometry $V$ with $V^\dagger V = \Id$.
+    range, and extend to a full isometry $V$ with $V^\dagger V = \Id_{r_2}$.
 \end{proof}
 
 \begin{theorem}[Thm.~2.1 item 4: Rectangular Kraus freedom (general index variant)]\label{thm:kraus_rectangular_freedom'}
@@ -1145,10 +1147,18 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
 \begin{proof}
     \leanok
     \uses{thm:channelDet_norm_le_one}
-    Reverse direction: $|\det(U\,\cdot\, U^\dagger)| = |\det U|^{2d^2} = 1$.
-    Forward direction: $|\det T| = 1$ and Kadison--Schwarz forces each Kraus
-    operator $K_i$ to be a scalar multiple of a unitary; the
-    trace-preservation constraint then pins $T = U\,\cdot\, U^\dagger$.
+    Reverse direction: $|\det(U\,\cdot\, U^\dagger)| = |\det U|^{2D} = 1$.
+    Forward direction: $|\det T| = 1$ together with $|\mu| \le 1$ for every
+    eigenvalue $\mu$ (from trace preservation and positivity) forces every
+    eigenvalue to satisfy $|\mu| = 1$. Hence $T$ is bijective. A bijective
+    CPTP map is a $*$-automorphism: the Heisenberg dual
+    $T^*(Y) = \sum_i K_i^\dagger Y K_i$ is unital (since $T$ is TP), so the
+    Kadison--Schwarz inequality
+    $T^*(Y^\dagger Y) \ge T^*(Y)^\dagger T^*(Y)$ becomes an equality for every
+    $Y$. Hence $T^*$, and therefore $T$, preserves products. By the
+    Skolem--Noether theorem, every $*$-automorphism of $\MN{D}$ has the form
+    $T(\rho) = U \rho U^\dagger$ for some unitary $U$. Kraus freedom then
+    gives $K_i = c_i U$ with $\sum_i |c_i|^2 = 1$.
 \end{proof}
 
 %% =========================================================
@@ -1186,6 +1196,14 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
     This places $X$ in the multiplicative domain, and then
     $E(XY) = E(X) E(Y) = XY$.
 \end{proof}
+
+\begin{remark}\leanok
+    The multiplicative-domain step in the proof above uses the left
+    multiplicative identity (Theorem~\ref{thm:left_multiplicative_identity})
+    from Chapter~\ref{ch:schwarz}, which appears later in the document. The
+    logical dependency is acyclic: Chapter~\ref{ch:schwarz} does not use any
+    result from~\S\ref{sec:fixed_point_algebra}.
+\end{remark}
 
 \begin{definition}[Adjoint fixed points]\label{def:adjoint_fixed_points}
     \lean{Kraus.adjointFixedPoints}\leanok
