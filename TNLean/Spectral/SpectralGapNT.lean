@@ -31,43 +31,12 @@ namespace MPSTensor
 
 variable {d D D₁ D₂ : ℕ}
 
-private noncomputable abbrev endEquivMatrixCLM (m n : ℕ) :
-    (Matrix (Fin m) (Fin n) ℂ →ₗ[ℂ] Matrix (Fin m) (Fin n) ℂ) ≃ₐ[ℂ]
-      (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
-  Module.End.toContinuousLinearMap (Matrix (Fin m) (Fin n) ℂ)
-
-local instance instSpectralGapNTFiniteDimensionalMatrixCLM (m n : ℕ) :
-    FiniteDimensional ℂ
-      (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
-  (endEquivMatrixCLM m n).toLinearEquiv.finiteDimensional
-
-noncomputable local instance instSpectralGapNTNormedAddCommGroupMatrixCLM (m n : ℕ) :
-    NormedAddCommGroup
-      (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
-  ContinuousLinearMap.toNormedAddCommGroup
-
-noncomputable local instance instSpectralGapNTNormedRingMatrixCLM (m n : ℕ) :
-    NormedRing
-      (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
-  ContinuousLinearMap.toNormedRing
-
-noncomputable local instance instSpectralGapNTNormedAlgebraMatrixCLM (m n : ℕ) :
-    NormedAlgebra ℂ
-      (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
-  ContinuousLinearMap.toNormedAlgebra
-
-local instance instSpectralGapNTCompleteSpaceMatrixCLM (m n : ℕ) :
-    CompleteSpace
-      (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
-  FiniteDimensional.complete ℂ
-    (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ)
-
 attribute [local instance]
-  instSpectralGapNTFiniteDimensionalMatrixCLM
-  instSpectralGapNTNormedAddCommGroupMatrixCLM
-  instSpectralGapNTNormedRingMatrixCLM
-  instSpectralGapNTNormedAlgebraMatrixCLM
-  instSpectralGapNTCompleteSpaceMatrixCLM
+  instGCFiniteDimensionalMatrixCLM
+  instGCNormedAddCommGroupMatrixCLM
+  instGCNormedRingMatrixCLM
+  instGCNormedAlgebraMatrixCLM
+  instGCCompleteSpaceMatrixCLM
 
 section SameDimension
 
@@ -348,24 +317,6 @@ private theorem dim_eq_of_modulus_one_eigenvector_of_irreducible_TP
       (by simpa [SB, Matrix.star_eq_conjTranspose] using IsUnit.star hS0B_unit)).ne_zero
   have hSA_u : IsUnit SA.det := Ne.isUnit hSA_det
   have hSB_u : IsUnit SB.det := Ne.isUnit hSB_det
-  have hSAh_det : (SAᴴ).det ≠ 0 := by
-    simpa [Matrix.det_conjTranspose] using star_ne_zero.mpr hSA_det
-  have hSBh_det : (SBᴴ).det ≠ 0 := by
-    simpa [Matrix.det_conjTranspose] using star_ne_zero.mpr hSB_det
-  have hSAh_u : IsUnit (SAᴴ).det := Ne.isUnit hSAh_det
-  have hSBh_u : IsUnit (SBᴴ).det := Ne.isUnit hSBh_det
-  have hSA_inv_mul : SA⁻¹ * SA = (1 : Matrix (Fin D₁) (Fin D₁) ℂ) :=
-    Matrix.nonsing_inv_mul SA hSA_u
-  have hSB_inv_mul : SB⁻¹ * SB = (1 : Matrix (Fin D₂) (Fin D₂) ℂ) :=
-    Matrix.nonsing_inv_mul SB hSB_u
-  have hSAh_inv_mul : (SAᴴ)⁻¹ * SAᴴ = (1 : Matrix (Fin D₁) (Fin D₁) ℂ) :=
-    Matrix.nonsing_inv_mul SAᴴ hSAh_u
-  have hSBh_inv_mul : (SBᴴ)⁻¹ * SBᴴ = (1 : Matrix (Fin D₂) (Fin D₂) ℂ) :=
-    Matrix.nonsing_inv_mul SBᴴ hSBh_u
-  have hSAh_mul_inv : SAᴴ * (SAᴴ)⁻¹ = (1 : Matrix (Fin D₁) (Fin D₁) ℂ) :=
-    Matrix.mul_nonsing_inv SAᴴ hSAh_u
-  have hSBh_mul_inv : SBᴴ * (SBᴴ)⁻¹ = (1 : Matrix (Fin D₂) (Fin D₂) ℂ) :=
-    Matrix.mul_nonsing_inv SBᴴ hSBh_u
   have hSA_mul : SA * SAᴴ = ρA := by
     calc SA * SAᴴ = S0Aᴴ * S0A := by simp [SA]
     _ = ρA := by simpa using hρA_eq.symm

@@ -22,10 +22,51 @@ core used by the spectral-gap rigidity arguments.  The shared pattern is:
 5. feed the intertwining identities into the file-specific endgames.
 -/
 
--- TODO: Extract the duplicated continuous-linear-endomorphism instance block shared by
--- `SpectralGap.lean`, `SpectralGapRect.lean`, and `SpectralGapNT.lean`.
-
 open scoped Matrix MatrixOrder ComplexOrder BigOperators
+
+/-! ### ContinuousLinearMap endomorphism infrastructure
+
+These definitions provide the analytic structure on `Matrix (Fin m) (Fin n) ℂ →L[ℂ] …`
+needed by the spectral-radius arguments. They are activated locally via
+`attribute [local instance]` in each consumer file. -/
+
+private noncomputable abbrev endEquivMatrixCLM (m n : ℕ) :
+    (Matrix (Fin m) (Fin n) ℂ →ₗ[ℂ] Matrix (Fin m) (Fin n) ℂ) ≃ₐ[ℂ]
+      (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
+  Module.End.toContinuousLinearMap (Matrix (Fin m) (Fin n) ℂ)
+
+@[reducible] def instGCFiniteDimensionalMatrixCLM (m n : ℕ) :
+    FiniteDimensional ℂ
+      (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
+  (endEquivMatrixCLM m n).toLinearEquiv.finiteDimensional
+
+@[reducible] noncomputable def instGCNormedAddCommGroupMatrixCLM (m n : ℕ) :
+    NormedAddCommGroup
+      (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
+  by infer_instance
+
+@[reducible] noncomputable def instGCNormedRingMatrixCLM (m n : ℕ) :
+    NormedRing
+      (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
+  by
+    letI := instGCNormedAddCommGroupMatrixCLM m n
+    infer_instance
+
+@[reducible] noncomputable def instGCNormedAlgebraMatrixCLM (m n : ℕ) :
+    NormedAlgebra ℂ
+      (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
+  by
+    letI := instGCNormedAddCommGroupMatrixCLM m n
+    letI := instGCNormedRingMatrixCLM m n
+    infer_instance
+
+@[reducible] def instGCCompleteSpaceMatrixCLM (m n : ℕ) :
+    CompleteSpace
+      (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
+  by
+    letI := instGCFiniteDimensionalMatrixCLM m n
+    exact FiniteDimensional.complete ℂ
+      (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ)
 
 namespace MPSTensor
 
@@ -81,52 +122,6 @@ theorem ker_all_of_inj {D₁ D₂ : ℕ}
   | smul c a _ ha =>
       rw [Matrix.conjTranspose_smul, Matrix.smul_mulVec, Matrix.mulVec_smul, ha, smul_zero]
 
-/-- If `X ≠ 0` and `ker X` is invariant under all matrices, then `det X ≠ 0`. -/
-theorem det_ne_zero_of_ker_all [NeZero D]
-    (X : Matrix (Fin D) (Fin D) ℂ)
-    (hX : X ≠ 0)
-    (h_all : ∀ M : Matrix (Fin D) (Fin D) ℂ, ∀ v, X *ᵥ v = 0 → X *ᵥ (M *ᵥ v) = 0) :
-    X.det ≠ 0 := by
-  -- TODO: Refactor this proof together with `injective_of_ker_all`; the two arguments are
-  -- nearly identical apart from the final contradiction.
-  by_contra h_det
-  rw [Matrix.exists_mulVec_eq_zero_iff.symm] at h_det
-  obtain ⟨v, hv_ne, hv⟩ := h_det
-  have h_surj : ∀ w : Fin D → ℂ, X *ᵥ w = 0 := by
-    intro w
-    have ⟨k, hk⟩ : ∃ k, v k ≠ 0 := by
-      by_contra h_all_zero
-      push Not at h_all_zero
-      exact hv_ne (funext h_all_zero)
-    let c : Fin D → ℂ := fun j => if j = k then (v k)⁻¹ else 0
-    have hMv : (Matrix.vecMulVec w c) *ᵥ v = w := by
-      ext i
-      simp only [Matrix.mulVec, Matrix.vecMulVec, Matrix.of_apply, dotProduct]
-      conv_lhs => arg 2; ext j; rw [mul_assoc]
-      rw [Finset.sum_eq_single k]
-      · simp [c, hk]
-      · intro j _ hjk
-        simp [c, hjk]
-      · intro hk_abs
-        exact absurd (Finset.mem_univ k) hk_abs
-    rw [← hMv]
-    exact h_all _ v hv
-  have h_X_zero : X = 0 := by
-    ext i j
-    have h_ej := h_surj (fun k => if k = j then 1 else 0)
-    have : (X *ᵥ (fun k => if k = j then 1 else 0)) i = X i j := by
-      simp only [Matrix.mulVec, dotProduct]
-      rw [Finset.sum_eq_single j]
-      · simp
-      · intro b _ hbj
-        simp [hbj]
-      · intro hj
-        exact absurd (Finset.mem_univ j) hj
-    rw [show (0 : Matrix (Fin D) (Fin D) ℂ) i j = 0 from rfl]
-    rw [← this]
-    exact congr_fun h_ej i
-  exact hX h_X_zero
-
 /-- If `X ≠ 0` and `ker X` is invariant under all matrices, then `X` is injective. -/
 theorem injective_of_ker_all [NeZero D₂]
     (X : Matrix (Fin D₁) (Fin D₂) ℂ) (hX : X ≠ 0)
@@ -168,6 +163,17 @@ theorem injective_of_ker_all [NeZero D₂]
     rw [← this]
     exact congr_fun h_ej i
   exact hX h_X_zero
+
+/-- If `X ≠ 0` and `ker X` is invariant under all matrices, then `det X ≠ 0`. -/
+theorem det_ne_zero_of_ker_all [NeZero D]
+    (X : Matrix (Fin D) (Fin D) ℂ)
+    (hX : X ≠ 0)
+    (h_all : ∀ M : Matrix (Fin D) (Fin D) ℂ, ∀ v, X *ᵥ v = 0 → X *ᵥ (M *ᵥ v) = 0) :
+    X.det ≠ 0 := by
+  by_contra h_det
+  rw [Matrix.exists_mulVec_eq_zero_iff.symm] at h_det
+  obtain ⟨v, hv_ne, hv⟩ := h_det
+  exact hv_ne (injective_of_ker_all X hX h_all v hv)
 
 /-- Conjugation by an invertible matrix preserves injectivity (spanning). -/
 theorem isInjective_conjugate {D : ℕ}
