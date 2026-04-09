@@ -375,10 +375,11 @@ a block embedding of a mixed-transfer eigenvector.
     makes $\{A'^i\}$ a \emph{unital} Kraus family ($\sum_i A'^i (A'^i)^\dagger = \Id$).
     A different convention, $\tilde{A}^i = \rho^{1/2} A^i \rho^{-1/2}$, makes
     the family \emph{trace-preserving} ($\sum_i (\tilde{A}^i)^\dagger \tilde{A}^i = \Id$).
-    The Lean codebase implements both:
+    Both conventions appear in practice:
     the unital version via direct matrix square-root inversion
-    (used in the spectral-gap proof), and the trace-preserving
-    version (used in the canonical-form reduction).
+    (used in the spectral-gap proof above), and the trace-preserving
+    version (used in the canonical-form reduction of
+    Chapter~\ref{ch:canonical}).
 \end{remark}
 
 \begin{theorem}[Strict spectral gap]\label{thm:spectral_gap}
