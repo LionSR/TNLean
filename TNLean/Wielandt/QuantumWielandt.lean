@@ -66,9 +66,9 @@ If `A` satisfies the spectral-gap predicate `IsPrimitiveMPS A ρ` and the fixed
 point `ρ` is positive definite, then `A` is normal.
 
 The proof factors through strong irreducibility: from `IsPrimitiveMPS + ρ.PosDef`
-one gets `IsStronglyIrreduciblePaper A`, which gives peripheral spectrum `{1}`
-(hence aperiodicity) together with irreducibility, and the Proposition 3(c)→(b)
-backend then yields eventual full Kraus rank.
+one gets `IsStronglyIrreduciblePaper A` (i.e., primitive in Wolf's sense), and
+Wolf's primitivity equivalence (`wolf_theorem_6_8_conjunction`) identifies this
+directly with eventual full Kraus rank, hence normality.
 
 No aperiodicity hypothesis is needed. -/
 theorem isNormal_of_isPrimitiveMPS_of_posDef
