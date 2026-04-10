@@ -31,7 +31,7 @@ namespace MPSTensor
 
 variable {d D D₁ D₂ : ℕ}
 
-attribute [local instance]
+attribute [local instance] Matrix.linftyOpNormedAddCommGroup Matrix.linftyOpNormedSpace
   instGCFiniteDimensionalMatrixCLM
   instGCNormedAddCommGroupMatrixCLM
   instGCNormedRingMatrixCLM
@@ -165,7 +165,12 @@ theorem modulus_one_eigenvalue_implies_gauge_of_irreducible_TP
     haveI : Nonempty (Fin D) := ⟨⟨0, NeZero.pos D⟩⟩
     exact Matrix.nonempty
   haveI : Nontrivial (V →L[ℂ] V) := ContinuousLinearMap.instNontrivialId
-  obtain ⟨μ, hμ_spec, hμ_norm⟩ := spectrum.exists_nnnorm_eq_spectralRadius F'
+  obtain ⟨μ, hμ_spec, hμ_norm⟩ :=
+    @spectrum.exists_nnnorm_eq_spectralRadius_of_nonempty ℂ _ _
+      (instGCNormedRingMatrixCLM D D) (instGCNormedAlgebraMatrixCLM D D)
+      (instGCCompleteSpaceMatrixCLM D D) inferInstance (a := F')
+      (@spectrum.nonempty _ (instGCNormedRingMatrixCLM D D)
+        (instGCNormedAlgebraMatrixCLM D D) (instGCCompleteSpaceMatrixCLM D D) inferInstance F')
   have h_spec_eq := AlgEquiv.spectrum_eq Φ (mixedTransferMap A B)
   have hμ_spec_end : μ ∈ spectrum ℂ (mixedTransferMap A B) := h_spec_eq ▸ hμ_spec
   have hμ_ev : Module.End.HasEigenvalue (mixedTransferMap A B) μ :=
@@ -220,7 +225,9 @@ theorem mixedTransfer_pow_tendsto_zero_of_irreducible_TP
   let Φ : (V →ₗ[ℂ] V) ≃ₐ[ℂ] (V →L[ℂ] V) := Module.End.toContinuousLinearMap V
   let F' : V →L[ℂ] V := Φ (mixedTransferMap A B)
   have h_clm : Filter.Tendsto (fun n => F' ^ n) Filter.atTop (nhds 0) :=
-    pow_tendsto_zero_of_spectralRadius_lt_one F' <| by
+    @pow_tendsto_zero_of_spectralRadius_lt_one (V →L[ℂ] V)
+      (instGCNormedRingMatrixCLM D D) (instGCCompleteSpaceMatrixCLM D D)
+      (instGCNormedAlgebraMatrixCLM D D) F' <| by
       simpa [F', Φ, mixedTransferSpectralRadius] using
         spectralRadius_mixedTransfer_lt_one_of_irreducible_TP
           A B hA_irr hB_irr hA_left hB_left hAB
@@ -468,7 +475,12 @@ theorem mixedTransferSpectralRadius₂_lt_one_of_dim_ne_of_irreducible_TP
       ((Matrix (Fin D₁) (Fin D₂) ℂ) →ₗ[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ) ≃ₐ[ℂ]
         ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ) :=
     Module.End.toContinuousLinearMap (Matrix (Fin D₁) (Fin D₂) ℂ)
-  obtain ⟨μ, hμ_spec, hμ_rad⟩ := spectrum.exists_nnnorm_eq_spectralRadius (a := F)
+  obtain ⟨μ, hμ_spec, hμ_rad⟩ :=
+    @spectrum.exists_nnnorm_eq_spectralRadius_of_nonempty ℂ _ _
+      (instGCNormedRingMatrixCLM D₁ D₂) (instGCNormedAlgebraMatrixCLM D₁ D₂)
+      (instGCCompleteSpaceMatrixCLM D₁ D₂) inferInstance (a := F)
+      (@spectrum.nonempty _ (instGCNormedRingMatrixCLM D₁ D₂)
+        (instGCNormedAlgebraMatrixCLM D₁ D₂) (instGCCompleteSpaceMatrixCLM D₁ D₂) inferInstance F)
   have hμ_one : (↑‖μ‖₊ : ENNReal) = 1 := by
     simpa [hEqF] using hμ_rad
   have hμ_nnn : ‖μ‖₊ = (1 : NNReal) := (ENNReal.coe_eq_one).1 hμ_one
