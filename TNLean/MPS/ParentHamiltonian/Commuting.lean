@@ -86,7 +86,7 @@ The proof uses the structural form (Lemma B.1): RFP tensors generate
 product-of-entangled-pair states, whose parent Hamiltonians have commuting
 local terms.
 
-Gated on: `rfp_nt_structural_full` (the full Appendix B decomposition). -/
+Gated on: the full Appendix B structural decomposition (cf. `rfp_nt_structural`). -/
 theorem rfp_implies_nncph (A : MPSTensor d D) [NeZero D]
     (hRFP : IsRFP A) (hNT : IsNormal A)
     (hLeft : IsLeftCanonical A)

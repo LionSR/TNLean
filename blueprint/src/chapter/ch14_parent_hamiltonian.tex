@@ -620,12 +620,14 @@ interaction projectors commute with each other.
 
 \begin{theorem}[RFP implies NNCPH]\label{thm:rfp_implies_nncph}
     \lean{MPSTensor.rfp_implies_nncph}
+    \notready
     \uses{def:is_rfp, def:is_nncph, def:normal}
-    If $A$ is a renormalization fixed point (RFP), then its parent
-    Hamiltonian with $L = 2$ has commuting local terms.
-    \textbf{Status:} A previous proof attempt was found incorrect and removed;
-    this result requires the structural theory of renormalization
-    fixed points needed for \cite[Theorem~3.10]{Cirac2021Matrix}.
+    If $A$ is a normal renormalization fixed point in left-canonical form,
+    then for every chain length $N \ge 2$ the parent Hamiltonian with
+    $L = 2$ has commuting local terms.
+    \textbf{Status:} Scaffold; requires the structural theory of
+    renormalization fixed points (Appendix~B) needed for
+    \cite[Theorem~3.10]{Cirac2021Matrix}.
 \end{theorem}
 
 \begin{theorem}[NNCPH implies RFP]\label{thm:nncph_implies_rfp}
