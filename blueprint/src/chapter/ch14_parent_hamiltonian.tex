@@ -655,7 +655,7 @@ Appendix~D, \S D.2 of~\cite{Cirac2021Matrix}.
 
 \begin{theorem}[Idempotence gives a trivial commuting parent Hamiltonian]%
     \label{thm:has_commuting_parent_ham_of_idem}
-    \lean{Decorrelation.HasCommutingParentHam.of_idem}
+    \lean{Decorrelation.HasCommutingParentHam.ofIdem}
     \leanok
     \uses{def:has_commuting_parent_ham}
     If
@@ -842,24 +842,6 @@ Appendix~D, \S D.2 of~\cite{Cirac2021Matrix}.
     The key identity is $P_{XB} \circ (1 - P_{AX} \circ P_{XB}) \circ P_{AX} = 0$.
     Using the commutation hypotheses to slide $O_A$ past $P_{XB}$ and $O_B$
     past $P_{AX}$, the five-fold composition factors through this zero term.
-\end{proof}
-
-\begin{theorem}[Decorrelation gives a commuting parent Hamiltonian]%
-    \label{thm:is_decorrelated_commuting_ham}
-    \lean{Decorrelation.isDecorrelated_commutingHam}
-    \leanok
-    \uses{def:is_decorrelated, def:has_commuting_parent_ham, thm:has_commuting_parent_ham_of_idem}
-    If $P_K$ is idempotent and regions $A$ and $B$ are decorrelated w.r.t.\ $K$,
-    then $P_K$ has a commuting parent Hamiltonian structure.
-    In this abstract formulation the conclusion is immediate from the
-    idempotence of $P_K$, by taking $P_{AX} = P_{XB} = P_K$.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{thm:has_commuting_parent_ham_of_idem}
-    Apply Theorem~\ref{thm:has_commuting_parent_ham_of_idem} to the
-    idempotence of $P_K$.
 \end{proof}
 
 \begin{theorem}[Commuting parent Hamiltonian implies decorrelation]%
