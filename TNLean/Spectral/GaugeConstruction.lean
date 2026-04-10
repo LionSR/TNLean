@@ -55,6 +55,7 @@ private noncomputable abbrev endEquivMatrixCLM (m n : ℕ) :
     letI := instGCNormedAddCommGroupMatrixCLM m n
     infer_instance
 
+set_option maxSynthPendingDepth 6 in
 @[reducible] noncomputable def instGCNormedAlgebraMatrixCLM (m n : ℕ) :
     NormedAlgebra ℂ
       (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
