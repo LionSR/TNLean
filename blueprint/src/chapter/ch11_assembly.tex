@@ -62,8 +62,11 @@ distinct weight norms).
     (Theorem~\ref{thm:ft_proportional_nt}).
     The normal canonical form data provide the BNT separation
     and overlap convergence hypotheses;
-    the non-degeneracy condition ensures the block matching
-    is well-defined.
+    the non-degeneracy condition (no two distinct blocks in the same
+    family are gauge-phase equivalent) ensures that the permutation
+    $\pi$ produced by Theorem~\ref{thm:ft_proportional_nt} is uniquely
+    determined, so that the per-block gauge equivalences can be
+    assembled consistently.
 \end{proof}
 
 \section{Proportional Fundamental Theorem}%
@@ -114,6 +117,7 @@ distinct weight norms).
 \end{proof}
 
 \begin{remark}[Coefficient arrays for canonical-form decompositions]
+	\label{rem:cf_coeff_arrays}
 	In applications the coefficient arrays in
 	Theorem~\ref{thm:ft_proportional} come from the block-diagonal
 	decomposition itself. If
@@ -200,17 +204,19 @@ distinct weight norms).
 \end{theorem}
 
 \begin{proof}
-	\uses{thm:ft_proportional, thm:mpv_decomposition, thm:power_sum_multiset}
+	\uses{thm:ft_proportional, thm:ft_equal_explicit, thm:mpv_decomposition}
 	Begin by applying Theorem~\ref{thm:ft_proportional} with $c_N = 1$,
 	which yields a
 	permutation of the matched blocks and blockwise gauge-phase equivalences.
 	One then compares the resulting MPV expansions from
-	Theorem~\ref{thm:mpv_decomposition}. In the general equal case the
-	weights occur with multiplicities, so recovering the individual weights
-	requires a power-sum argument such as
-	Theorem~\ref{thm:power_sum_multiset}. After the weights are identified,
-	the phase factors are absorbed into them and the blockwise conjugacies
-	combine to a global gauge equivalence.
+	Theorem~\ref{thm:mpv_decomposition}. The explicit-coefficient version
+	(Theorem~\ref{thm:ft_equal_explicit}) proves gauge equivalence of the
+	reindexed weighted block-diagonal tensors using BNT linear independence.
+	The remaining step combines this with the coefficient-array construction
+	of Remark~\ref{rem:cf_coeff_arrays} and the weight-recovery machinery
+	of \S\ref{sec:route_b}. After the weights are identified, the phase
+	factors are absorbed into them and the blockwise conjugacies combine to
+	a global gauge equivalence.
 \end{proof}
 
 \begin{theorem}[Fundamental Theorem --- equal MPV case with explicit coefficients]\label{thm:ft_equal_explicit}
@@ -286,6 +292,15 @@ distinct weight norms).
 	resulting blockwise conjugacies combine to give a gauge equivalence of the
 	reindexed weighted block-diagonal tensors.
 \end{proof}
+
+\begin{remark}
+	Theorem~\ref{thm:ft_equal_explicit} recovers
+	\textup{[CPGSV21, Corollary~IV.5]} for tensors in canonical form with
+	BNT separation, without assuming common block structure and without
+	Newton--Girard identities. The weight matching uses BNT linear
+	independence (Theorem~\ref{thm:cf_bnt_is_bnt} and
+	Definition~\ref{def:bnt}) directly.
+\end{remark}
 
 \begin{theorem}[Fundamental Theorem --- equal MPV case, common block structure]\label{thm:ft_equal_same_structure}
 	\lean{MPSTensor.fundamentalTheorem_equalMPV_CFBNT}
