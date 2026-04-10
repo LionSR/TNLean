@@ -196,7 +196,7 @@ legs cyclically and taking the resulting trace.
 \section{Pure-state recovery inside the MPO formalism}
 
 \begin{definition}[MPDO renormalization fixed point]\label{def:is_rfp_mpdo}
-    \lean{MPOTensor.IsRFP_MPDO}
+    \lean{MPOTensor.IsRFP}
     \leanok
     \uses{def:mpo_transfer_map}
     An MPO tensor $M$ is an \emph{MPDO renormalization fixed point} if its
@@ -241,7 +241,7 @@ legs cyclically and taking the resulting trace.
 
 \begin{theorem}[Pure-state recovery of the RFP condition]%
     \label{thm:to_mpo_rfp_iff_rfp}
-    \lean{MPSTensor.toMPOTensor_isRFP_MPDO_iff_isRFP}
+    \lean{MPSTensor.toMPOTensor_isRFP_iff_isRFP}
     \leanok
     \uses{def:is_rfp_mpdo, def:is_rfp, thm:to_mpo_transfer_map}
     For an MPS tensor $A$, its diagonal MPO embedding is MPDO-RFP if and only
@@ -261,7 +261,7 @@ legs cyclically and taking the resulting trace.
 
 \begin{theorem}[Pure-state recovery of zero correlation length]%
     \label{thm:to_mpo_rfp_iff_zcl}
-    \lean{MPSTensor.toMPOTensor_isRFP_MPDO_iff_isZCL}
+    \lean{MPSTensor.toMPOTensor_isRFP_iff_isZCL}
     \leanok
     \uses{thm:to_mpo_rfp_iff_rfp, thm:zcl_iff_idempotent_transfer}
     For an MPS tensor $A$, the diagonal MPO embedding is MPDO-RFP if and only
