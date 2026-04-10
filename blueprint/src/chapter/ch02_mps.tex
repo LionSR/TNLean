@@ -276,6 +276,26 @@ boundary conditions (PBC).
     by cyclicity of the trace.
 \end{proof}
 
+\begin{theorem}[Gauge-phase scaling of MPVs]\label{thm:gauge_phase_mpv_scaling}
+    \lean{MPSTensor.mpv_eq_pow_mul_of_gaugePhase}
+    \leanok
+    \uses{def:gauge_phase_equiv, def:mpv}
+    If
+    \[
+        B^i = \zeta \, X \, A^i \, X^{-1}
+        \qquad \text{for all } i,
+    \]
+    then for every system size~$N$ and configuration~$\sigma$ one has
+    \[
+        V^{(N)}(B)_\sigma = \zeta^N V^{(N)}(A)_\sigma.
+    \]
+\end{theorem}
+
+\begin{proof}\leanok\uses{lem:eval_word_smul, lem:eval_word_gauge}
+    Combine gauge covariance of word evaluation with scalar scaling,
+    then take traces.
+\end{proof}
+
 \section{Injectivity and normality}
 
 \begin{definition}[Injectivity]\label{def:injective}
