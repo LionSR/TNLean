@@ -79,7 +79,7 @@ theorem IsCommutingParentHam.ham_comm_localTerm {A : MPSTensor d D} {L N : ℕ}
   exact _h j i
 
 /-- **Theorem 3.10(i)⟹(iii)** (arXiv:1606.00608): RFP implies NNCPH.
-A renormalization fixed-point tensor in canonical form has a nearest-neighbor
+A renormalization fixed-point tensor in left-canonical form has a nearest-neighbor
 commuting parent Hamiltonian.
 
 The proof uses the structural form (Lemma B.1): RFP tensors generate
