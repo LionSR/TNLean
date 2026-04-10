@@ -34,7 +34,7 @@ surrogate for the paper's vertical canonical form.
   doubled-index MPS tensor `M.toMPSTensor`.
 * `IsVerticalCF`:
   a flattened positive-weight BNT decomposition for `diagonalTensor M`.
-* `lemmaL_blockwise_insert_eq`:
+* `blockwise_insert_eq_of_mpv_agree`:
   a scaffold for Lemma L from the paper.
 * `verticalCF_of_horizontalCF`:
   the Proposition IV.12 / Prop. 4.13 scaffold.
@@ -44,7 +44,27 @@ surrogate for the paper's vertical canonical form.
 * [CPGSV17] arXiv:1606.00608, Proposition IV.12 and the auxiliary Lemma L in the appendix
 -/
 
-open scoped Matrix BigOperators
+open scoped Matrix BigOperators ComplexOrder
+
+namespace MPSTensor
+
+variable {d D : ℕ}
+
+/-- A "first-site insertion" on an MPS tensor. The resulting local tensor is the
+one obtained by contracting the physical index with `Y` at a single site. -/
+noncomputable def insertedTensor
+    (Y : Matrix (Fin d) (Fin d) ℂ) (A : MPSTensor d D) : MPSTensor d D :=
+  fun i => ∑ j : Fin d, Y i j • A j
+
+/-- Coefficient-level formulation of "acting with `Y` on the first spin" of an
+MPV. This is the hypothesis used in the paper's Lemma L. -/
+def FirstSiteActionAgree (A : MPSTensor d D)
+    (Y Z : Matrix (Fin d) (Fin d) ℂ) : Prop :=
+  ∀ (N : ℕ) (σ : Fin (N + 1) → Fin d),
+    ∑ i : Fin d, Y (σ 0) i * MPSTensor.mpv A (Fin.cons i (σ ∘ Fin.succ)) =
+      ∑ i : Fin d, Z (σ 0) i * MPSTensor.mpv A (Fin.cons i (σ ∘ Fin.succ))
+
+end MPSTensor
 
 namespace MPOTensor
 
@@ -70,25 +90,6 @@ lemma verticalTransferMap_apply (M : MPOTensor d D)
     (X : Matrix (Fin D) (Fin D) ℂ) :
     verticalTransferMap M X = ∑ i : Fin d, M i i * X * (M i i)ᴴ := by
   simp [verticalTransferMap, diagonalTensor, MPSTensor.transferMap_apply]
-
-/-- Positive real scalar weights, used to flatten the positive diagonal matrices
-appearing in the paper's `⊕_α μ_α ⊗ M_α` decomposition. -/
-def IsPositiveReal (z : ℂ) : Prop :=
-  0 < z.re ∧ z.im = 0
-
-/-- A "first-site insertion" on an MPS tensor. The resulting local tensor is the
-one obtained by contracting the physical index with `Y` at a single site. -/
-noncomputable def insertedTensor
-    (Y : Matrix (Fin d) (Fin d) ℂ) (A : MPSTensor d D) : MPSTensor d D :=
-  fun i => ∑ j : Fin d, Y i j • A j
-
-/-- Coefficient-level formulation of "acting with `Y` on the first spin" of an
-MPV. This is the hypothesis used in the paper's Lemma L. -/
-def FirstSiteActionAgree (A : MPSTensor d D)
-    (Y Z : Matrix (Fin d) (Fin d) ℂ) : Prop :=
-  ∀ (N : ℕ) (σ : Fin (N + 1) → Fin d),
-    ∑ i : Fin d, Y (σ 0) i * MPSTensor.mpv A (Fin.cons i (σ ∘ Fin.succ)) =
-      ∑ i : Fin d, Z (σ 0) i * MPSTensor.mpv A (Fin.cons i (σ ∘ Fin.succ))
 
 /-- Lightweight horizontal canonical-form data for a family of blocks.
 
@@ -156,7 +157,7 @@ def IsVerticalCF (M : MPOTensor d D) : Prop :=
   ∃ (g : ℕ) (dim : Fin g → ℕ) (mult : Fin g → ℕ)
     (ω : (α : Fin g) → Fin (mult α) → ℂ)
     (A : (α : Fin g) → MPSTensor d (dim α)),
-    (∀ α q, IsPositiveReal (ω α q)) ∧
+    (∀ α q, (0 : ℂ) < ω α q) ∧
       MPSTensor.IsBNT (verticalAssembledTensor dim mult ω A) g dim A ∧
       MPSTensor.SameMPV₂ (diagonalTensor M) (verticalAssembledTensor dim mult ω A)
 
@@ -168,15 +169,15 @@ This is the precise blockwise statement needed in the proof of Proposition
 IV.12. The intended proof follows the paper: use block separation for the
 canonical-form decomposition together with the nonvanishing of the Newton-Girard
 sums of the block weights. -/
-theorem lemmaL_blockwise_insert_eq
+theorem blockwise_insert_eq_of_mpv_agree
     {r : ℕ} {dim : Fin r → ℕ} {μ : Fin r → ℂ}
     (A : (k : Fin r) → MPSTensor d (dim k))
     (hCF : HorizontalCFData (d := d) μ A)
     {Y Z : Matrix (Fin d) (Fin d) ℂ}
     (hAct :
-      FirstSiteActionAgree
+      MPSTensor.FirstSiteActionAgree
         (MPSTensor.toTensorFromBlocks (d := d) (μ := μ) A) Y Z) :
-    ∀ k, insertedTensor Y (A k) = insertedTensor Z (A k) := by
+    ∀ k, MPSTensor.insertedTensor Y (A k) = MPSTensor.insertedTensor Z (A k) := by
   sorry
 
 /-- **Proposition IV.12 / Prop. 4.13** (arXiv:1606.00608): a horizontal
