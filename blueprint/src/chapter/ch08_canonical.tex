@@ -1129,6 +1129,15 @@ The following results separate the zero blocks from the
 	fixed by the adjoint map associated to~$K$.
 \end{theorem}
 
+\begin{proof}\leanok
+	\uses{def:irreducible_tensor, thm:qpf}
+	Left-canonicality gives $\sum_i (A^i)^\dagger A^i = \Id$, so the
+	conjugate-transposed family is unital.
+	Irreducibility of the transfer map passes to the adjoint map,
+	and the quantum Perron--Frobenius theorem provides the required
+	positive-definite fixed point.
+\end{proof}
+
 \begin{theorem}[Cyclic sector decomposition for irreducible TP tensors]%
 	\label{thm:cyclic_sector_decomp_irr_tp}
 	\lean{MPSTensor.exists_cyclic_sector_decomp_of_TP_of_isIrreducibleTensor}
@@ -1412,9 +1421,16 @@ The following results separate the zero blocks from the
 \begin{theorem}[Gauge phases have unit modulus for primitive irreducible blocks]
 	\label{thm:unit_modulus_phase_tp_prim_irred}
 	\lean{MPSTensor.norm_gaugePhase_eq_one_of_irr_TP_primitive}\leanok
+	\uses{def:gauge_phase_equiv, def:irreducible_tensor}
 	For trace-preserving primitive irreducible blocks, every gauge-phase
 	equivalence has a phase factor of modulus~$1$.
 \end{theorem}
+
+\begin{proof}\leanok
+	\uses{def:gauge_phase_equiv, def:irreducible_tensor}
+	Primitivity forces the peripheral spectrum to consist of $\{1\}$ alone,
+	so the gauge phase must have modulus one.
+\end{proof}
 
 \begin{theorem}[BNT partition from gauge equivalence]
 	\label{thm:bnt_grouping_gauge_equiv}
