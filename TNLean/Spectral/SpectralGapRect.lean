@@ -48,40 +48,12 @@ namespace MPSTensor
 
 variable {d D₁ D₂ : ℕ}
 
--- These CLM instances are intentionally defined locally in each Spectral file
--- rather than shared from GaugeConstruction.lean. Centralizing them caused
--- topology diamonds with `Module.End.toContinuousLinearMap` that broke
--- downstream typeclass resolution. See PR #552 for context.
-private noncomputable abbrev endEquivMatrixRectCLM (m n : ℕ) :
-    (Matrix (Fin m) (Fin n) ℂ →ₗ[ℂ] Matrix (Fin m) (Fin n) ℂ) ≃ₐ[ℂ]
-      (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
-  Module.End.toContinuousLinearMap (Matrix (Fin m) (Fin n) ℂ)
-
-local instance instSpectralGapRectFiniteDimensionalMatrixCLM (m n : ℕ) :
-    FiniteDimensional ℂ
-      (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
-  (endEquivMatrixRectCLM m n).toLinearEquiv.finiteDimensional
-
-noncomputable local instance instSpectralGapRectNormedAddCommGroupMatrixCLM (m n : ℕ) :
-    NormedAddCommGroup
-      (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
-  ContinuousLinearMap.toNormedAddCommGroup
-
-noncomputable local instance instSpectralGapRectNormedRingMatrixCLM (m n : ℕ) :
-    NormedRing
-      (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
-  ContinuousLinearMap.toNormedRing
-
-noncomputable local instance instSpectralGapRectNormedAlgebraMatrixCLM (m n : ℕ) :
-    NormedAlgebra ℂ
-      (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
-  ContinuousLinearMap.toNormedAlgebra
-
-local instance instSpectralGapRectCompleteSpaceMatrixCLM (m n : ℕ) :
-    CompleteSpace
-      (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
-  FiniteDimensional.complete ℂ
-    (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ)
+attribute [local instance] Matrix.linftyOpNormedAddCommGroup Matrix.linftyOpNormedSpace
+  instGCFiniteDimensionalMatrixCLM
+  instGCNormedAddCommGroupMatrixCLM
+  instGCNormedRingMatrixCLM
+  instGCNormedAlgebraMatrixCLM
+  instGCCompleteSpaceMatrixCLM
 
 /-! ## Rectangular spectral radius abbreviation -/
 
@@ -337,7 +309,7 @@ end DimensionEquality
 
 section MainTheorem
 
-set_option synthInstance.maxHeartbeats 200000 in
+set_option synthInstance.maxHeartbeats 400000 in
 -- Instance search for the rectangular continuous endomorphism space needs a local
 -- heartbeat bump during the spectral-radius extraction.
 /-- **Dimension-mismatch spectral gap**: the spectral radius of the rectangular mixed transfer
@@ -362,7 +334,14 @@ theorem mixedTransferSpectralRadius₂_lt_one_of_dim_ne
     (Module.End.toContinuousLinearMap (Matrix (Fin D₁) (Fin D₂) ℂ)) (mixedTransferMap₂ A B)
   have hEqF : spectralRadius ℂ F = 1 := by simpa [F] using hEq
   -- If `spectralRadius = 1`, pick `μ ∈ spectrum` with `‖μ‖ = 1`.
-  obtain ⟨μ, hμ_spec, hμ_rad⟩ := spectrum.exists_nnnorm_eq_spectralRadius (a := F)
+  -- Use `@` to supply the `instGC*` instances explicitly, avoiding a `UniformSpace` diamond
+  -- between the strong topology and the operator-norm topology on `E →L[ℂ] E`.
+  obtain ⟨μ, hμ_spec, hμ_rad⟩ :=
+    @spectrum.exists_nnnorm_eq_spectralRadius_of_nonempty ℂ _ _
+      (instGCNormedRingMatrixCLM D₁ D₂) (instGCNormedAlgebraMatrixCLM D₁ D₂)
+      (instGCCompleteSpaceMatrixCLM D₁ D₂) inferInstance (a := F)
+      (@spectrum.nonempty _ (instGCNormedRingMatrixCLM D₁ D₂)
+        (instGCNormedAlgebraMatrixCLM D₁ D₂) (instGCCompleteSpaceMatrixCLM D₁ D₂) inferInstance F)
   have hμ_one : (↑‖μ‖₊ : ENNReal) = 1 := by simpa [hEqF] using hμ_rad
   have hμ_nnn : ‖μ‖₊ = (1 : NNReal) := (ENNReal.coe_eq_one).1 hμ_one
   have hμ_norm : ‖μ‖ = 1 := by
