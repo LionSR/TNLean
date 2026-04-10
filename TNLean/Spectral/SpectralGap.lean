@@ -38,7 +38,7 @@ to zero. This is the mechanism by which the mixed transfer operator
   maps on C*-algebras*, 1978.
 -/
 
-open scoped Matrix ComplexOrder BigOperators NNReal ENNReal
+open scoped Matrix Matrix.Norms.Operator ComplexOrder BigOperators NNReal ENNReal
 
 namespace MPSTensor
 
