@@ -1118,6 +1118,26 @@ The following results separate the zero blocks from the
 	Apply Theorem~\ref{thm:blockdecomp_commuting_projs}.
 \end{proof}
 
+\begin{theorem}[Conjugate-transposed Kraus family for irreducible TP tensors]%
+	\label{thm:conjtranspose_kraus_setup}
+	\lean{MPSTensor.conjTranspose_kraus_setup}
+	\leanok
+	\uses{def:irreducible_tensor, thm:qpf}
+	Let $A$ be a left-canonical MPS tensor with irreducible transfer map.
+	Then the conjugate-transposed family $K_i := (A^i)^\dagger$ is unital
+	and irreducible, and there exists a positive-definite matrix $\rho$
+	fixed by the adjoint map associated to~$K$.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{def:irreducible_tensor, thm:qpf}
+	Left-canonicality gives $\sum_i (A^i)^\dagger A^i = \Id$, so the
+	conjugate-transposed family is unital.
+	Irreducibility of the transfer map passes to the adjoint map,
+	and the quantum Perron--Frobenius theorem provides the required
+	positive-definite fixed point.
+\end{proof}
+
 \begin{theorem}[Cyclic sector decomposition for irreducible TP tensors]%
 	\label{thm:cyclic_sector_decomp_irr_tp}
 	\lean{MPSTensor.exists_cyclic_sector_decomp_of_TP_of_isIrreducibleTensor}
@@ -1130,10 +1150,10 @@ The following results separate the zero blocks from the
 \end{theorem}
 
 \begin{proof}\leanok
-	\uses{thm:blockdecomp_adjoint_fixed}
-	Derive the conjugate-transposed Kraus family $K_i = (A^i)^\dagger$,
-	its unitality and irreducibility, and a positive-definite fixed point
-	$\rho$ of the transfer map.
+	\uses{thm:conjtranspose_kraus_setup, thm:blockdecomp_adjoint_fixed}
+	Apply Theorem~\ref{thm:conjtranspose_kraus_setup} to the
+	conjugate-transposed Kraus family $K_i = (A^i)^\dagger$ to obtain
+	unitality, irreducibility, and a positive-definite fixed point $\rho$.
 	Apply the cyclic structure theorem
 	(peripheral eigenvalues form a cyclic group of order~$m$)
 	to obtain $m$ cyclic spectral projections:
@@ -1397,6 +1417,20 @@ The following results separate the zero blocks from the
 	\lean{MPSTensor.gaugePhaseEquiv_of_nonDecaying_overlap}\leanok
 	For trace-preserving irreducible blocks, a non-decaying cross-overlap forces equal bond dimensions and gauge equivalence up to a unit-modulus phase.
 \end{theorem}
+
+\begin{theorem}[Gauge phases have unit modulus for primitive irreducible blocks]
+	\label{thm:unit_modulus_phase_tp_prim_irred}
+	\lean{MPSTensor.norm_gaugePhase_eq_one_of_irr_TP_primitive}\leanok
+	\uses{def:gauge_phase_equiv, def:irreducible_tensor}
+	For trace-preserving primitive irreducible blocks, every gauge-phase
+	equivalence has a phase factor of modulus~$1$.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{def:gauge_phase_equiv, def:irreducible_tensor}
+	Primitivity forces the peripheral spectrum to consist of $\{1\}$ alone,
+	so the gauge phase must have modulus one.
+\end{proof}
 
 \begin{theorem}[BNT partition from gauge equivalence]
 	\label{thm:bnt_grouping_gauge_equiv}

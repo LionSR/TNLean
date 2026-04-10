@@ -43,12 +43,14 @@ private noncomputable abbrev endEquivMatrixCLM (m n : ℕ) :
 @[reducible] noncomputable def instGCNormedAddCommGroupMatrixCLM (m n : ℕ) :
     NormedAddCommGroup
       (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
-  ContinuousLinearMap.toNormedAddCommGroup
+  by infer_instance
 
 @[reducible] noncomputable def instGCNormedRingMatrixCLM (m n : ℕ) :
     NormedRing
       (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
-  ContinuousLinearMap.toNormedRing
+  by
+    letI := instGCNormedAddCommGroupMatrixCLM m n
+    infer_instance
 
 @[reducible] noncomputable def instGCNormedAlgebraMatrixCLM (m n : ℕ) :
     NormedAlgebra ℂ
