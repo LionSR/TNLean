@@ -264,6 +264,57 @@ and rates for the single-tensor transfer map $\E_A$.
     the one-step span already equals $\MN{D}$, so $A$ is injective.
 \end{proof}
 
+\begin{theorem}[Left-canonical normal RFP tensor is injective]%
+    \label{thm:rfp_nt_structural_of_left_canonical}
+    \lean{MPSTensor.rfp_nt_structural_of_leftCanonical}
+    \leanok
+    \uses{def:is_rfp, def:normal, def:injective}
+    Assume $D > 0$. Let $A$ be a normal renormalization fixed point such that
+    \[
+        \sum_i (A^i)^\dagger A^i = \Id.
+    \]
+    Then $A$ is injective.
+    This is the left-canonical injectivity step in
+    \cite[Appendix~B]{Cirac2021Matrix}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:rfp_nt_injective}
+    The normalization $\sum_i (A^i)^\dagger A^i = \Id$ forces at least one
+    matrix $A^i$ to be nonzero, since otherwise the left-hand side would
+    vanish. Hence $A$ is a nonzero normal renormalization fixed point, and
+    Theorem~\ref{thm:rfp_nt_injective} applies.
+\end{proof}
+
+\begin{theorem}[Unitary diagonal fixed point for a left-canonical normal RFP]%
+    \label{thm:rfp_nt_cfii_diagonal_fixed_point}
+    \lean{MPSTensor.rfp_nt_cfii_diagonal_fixedPoint}
+    \leanok
+    \uses{def:is_rfp, def:normal, def:transfer_map}
+    Assume $D > 0$. Let $A$ be a normal renormalization fixed point such that
+    \[
+        \sum_i (A^i)^\dagger A^i = \Id.
+    \]
+    Then there exist a unitary $U$ and a diagonal positive definite matrix
+    $\Lambda$ such that, for $B^i := U^\dagger A^i U$,
+    \[
+        \sum_i (B^i)^\dagger B^i = \Id
+        \qquad\text{and}\qquad
+        \E_B(\Lambda) = \Lambda.
+    \]
+    This is the diagonal fixed-point reduction in
+    \cite[Appendix~B]{Cirac2021Matrix}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:rfp_nt_structural_of_left_canonical, thm:injective_irreducible,
+          thm:form_II}
+    By Theorem~\ref{thm:rfp_nt_structural_of_left_canonical}, the tensor $A$
+    is injective. Therefore its transfer map is irreducible, and hence $A$ is
+    irreducible as a tensor. Applying Theorem~\ref{thm:form_II} gives a
+    unitary conjugate $B$ for which the trace-preserving normalization remains
+    valid and a diagonal positive definite matrix $\Lambda$ with
+    $\E_B(\Lambda) = \Lambda$.
+\end{proof}
+
 \begin{theorem}[RG flow convergence for canonical-form tensors]%
     \label{thm:rg_flow_converges_of_cf}
     \lean{MPSTensor.rg_flow_converges_of_cf}
