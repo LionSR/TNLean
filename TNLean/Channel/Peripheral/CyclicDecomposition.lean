@@ -536,6 +536,7 @@ private noncomputable def cyclicProjection {γ : ℂ}
   ((↑m : ℂ)⁻¹) • Finset.sum (Finset.range m)
     (fun j => ((((star γ) ^ (k : ℕ)) ^ j : ℂ)) • ((U : MatrixAlg D) ^ j))
 
+/-- Index of `(1 : Fin m)` as a natural number; used as the "next cyclic step" index. -/
 private abbrev cyclicOneIdx (m : ℕ) [NeZero m] : ℕ := ((1 : Fin m) : ℕ)
 
 /-- A primitive root has unit modulus, written as `star γ * γ = 1`. -/
@@ -1115,18 +1116,23 @@ private lemma mul_cyclicProjection_eq_zero_of_ne {γ : ℂ} (hγprim : IsPrimiti
             (γ ^ (l : ℕ) • cyclicProjection (m := m) (γ := γ) U l) := by
               rw [left_mul_cyclicProjection_eq (m := m) hγprim U hUm l]
       _ = γ ^ (l : ℕ) •
-            (cyclicProjection (m := m) (γ := γ) U k * cyclicProjection (m := m) (γ := γ) U l) := by
+            (cyclicProjection (m := m) (γ := γ) U k *
+              cyclicProjection (m := m) (γ := γ) U l) := by
             simp
   have hsub :
       (γ ^ (k : ℕ) - γ ^ (l : ℕ)) •
-          (cyclicProjection (m := m) (γ := γ) U k * cyclicProjection (m := m) (γ := γ) U l) = 0 := by
+          (cyclicProjection (m := m) (γ := γ) U k *
+            cyclicProjection (m := m) (γ := γ) U l) = 0 := by
     calc
       (γ ^ (k : ℕ) - γ ^ (l : ℕ)) •
-          (cyclicProjection (m := m) (γ := γ) U k * cyclicProjection (m := m) (γ := γ) U l)
+          (cyclicProjection (m := m) (γ := γ) U k *
+            cyclicProjection (m := m) (γ := γ) U l)
           = γ ^ (k : ℕ) •
-              (cyclicProjection (m := m) (γ := γ) U k * cyclicProjection (m := m) (γ := γ) U l) -
+              (cyclicProjection (m := m) (γ := γ) U k *
+                cyclicProjection (m := m) (γ := γ) U l) -
               γ ^ (l : ℕ) •
-                (cyclicProjection (m := m) (γ := γ) U k * cyclicProjection (m := m) (γ := γ) U l) := by
+                (cyclicProjection (m := m) (γ := γ) U k *
+                  cyclicProjection (m := m) (γ := γ) U l) := by
                   simp [sub_smul]
       _ = 0 := by rw [← hkEig, ← hlEig]; simp
   have hneq : γ ^ (k : ℕ) - γ ^ (l : ℕ) ≠ 0 := by
