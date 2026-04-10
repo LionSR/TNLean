@@ -8,6 +8,7 @@ import TNLean.Channel.Schwarz.Basic
 import TNLean.Algebra.MatrixAux
 
 import Mathlib.Data.Matrix.Block
+import Mathlib.Analysis.Matrix.Normed
 
 /-!
 # Shared gauge-construction infrastructure for spectral-gap rigidity
@@ -24,36 +25,51 @@ core used by the spectral-gap rigidity arguments.  The shared pattern is:
 
 open scoped Matrix MatrixOrder ComplexOrder BigOperators
 
+attribute [local instance] Matrix.linftyOpNormedAddCommGroup Matrix.linftyOpNormedSpace
+
 /-! ### ContinuousLinearMap endomorphism infrastructure
 
 These definitions provide the analytic structure on `Matrix (Fin m) (Fin n) ℂ →L[ℂ] …`
 needed by the spectral-radius arguments. They are activated locally via
 `attribute [local instance]` in each consumer file. -/
 
-def instGCFiniteDimensionalMatrixCLM (m n : ℕ) :
+private noncomputable abbrev endEquivMatrixCLM (m n : ℕ) :
+    (Matrix (Fin m) (Fin n) ℂ →ₗ[ℂ] Matrix (Fin m) (Fin n) ℂ) ≃ₐ[ℂ]
+      (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
+  Module.End.toContinuousLinearMap (Matrix (Fin m) (Fin n) ℂ)
+
+@[reducible] def instGCFiniteDimensionalMatrixCLM (m n : ℕ) :
     FiniteDimensional ℂ
       (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
-  ContinuousLinearMap.finiteDimensional
+  (endEquivMatrixCLM m n).toLinearEquiv.finiteDimensional
 
-noncomputable def instGCNormedAddCommGroupMatrixCLM (m n : ℕ) :
+@[reducible] noncomputable def instGCNormedAddCommGroupMatrixCLM (m n : ℕ) :
     NormedAddCommGroup
       (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
-  ContinuousLinearMap.toNormedAddCommGroup
+  by infer_instance
 
-noncomputable def instGCNormedRingMatrixCLM (m n : ℕ) :
+@[reducible] noncomputable def instGCNormedRingMatrixCLM (m n : ℕ) :
     NormedRing
       (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
-  ContinuousLinearMap.toNormedRing
+  by
+    letI := instGCNormedAddCommGroupMatrixCLM m n
+    infer_instance
 
-noncomputable def instGCNormedAlgebraMatrixCLM (m n : ℕ) :
+@[reducible] noncomputable def instGCNormedAlgebraMatrixCLM (m n : ℕ) :
     NormedAlgebra ℂ
       (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
-  ContinuousLinearMap.toNormedAlgebra
+  by
+    letI := instGCNormedAddCommGroupMatrixCLM m n
+    letI := instGCNormedRingMatrixCLM m n
+    infer_instance
 
-def instGCCompleteSpaceMatrixCLM (m n : ℕ) :
+@[reducible] def instGCCompleteSpaceMatrixCLM (m n : ℕ) :
     CompleteSpace
       (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
-  ContinuousLinearMap.completeSpace
+  by
+    letI := instGCFiniteDimensionalMatrixCLM m n
+    exact FiniteDimensional.complete ℂ
+      (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ)
 
 namespace MPSTensor
 
