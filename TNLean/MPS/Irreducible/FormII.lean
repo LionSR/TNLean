@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.CanonicalForm.Reduction
+import TNLean.MPS.Core.OrthogonalProjectionInvariance
 import TNLean.QPF.Assembly
 import Mathlib.LinearAlgebra.Matrix.IsDiag
 
@@ -111,62 +112,6 @@ theorem isIrreducibleCP_transferMap_of_isIrreducibleTensor
   push Not at h_neither
   obtain ⟨hP0, hP1⟩ := h_neither
   exact hIrr ⟨P, hProj, hP0, hP1, hLower⟩
-
-/-- The "lower-zero" condition on Kraus operators implies the invariance condition
-for the transfer map.  This is the converse direction of `invariance_implies_lowerZero`.
-
-Given an orthogonal projection `P` with `(1 - P) * A i * P = 0` for all `i`,
-we show `P * E(P X P) * P = E(P X P)` for all `X`, where `E = transferMap A`.
-
-**Proof.**  From `(1 - P) * Aᵢ * P = 0` we obtain `Aᵢ * P = P * Aᵢ * P`.
-Taking conjugate transposes gives `P * Aᵢ† = P * Aᵢ† * P`.
-Then each Kraus term `Aᵢ (PXP) Aᵢ†` simplifies to
-`P * (Aᵢ (PXP) Aᵢ†) * P` using idempotence `P * P = P`,
-so the whole transfer-map image is sandwiched by `P`. -/
-lemma lowerZero_implies_invariance
-    (A : MPSTensor d D) (P : Matrix (Fin D) (Fin D) ℂ)
-    (hProj : IsOrthogonalProjection P)
-    (hLower : ∀ i : Fin d, (1 - P) * A i * P = 0) :
-    ∀ X, P * transferMap (d := d) (D := D) A (P * X * P) * P =
-         transferMap (d := d) (D := D) A (P * X * P) := by
-  intro X
-  -- Key identities from the projection and lower-zero conditions
-  have hPH : Pᴴ = P := hProj.1.eq
-  -- From (1-P)*Aᵢ*P = 0: Aᵢ*P = P*Aᵢ*P
-  have hAP : ∀ i : Fin d, A i * P = P * A i * P := by
-    intro i
-    have key : A i * P - P * A i * P = 0 := by
-      have h : (1 - P) * A i * P = A i * P - P * A i * P := by noncomm_ring
-      rw [← h]; exact hLower i
-    exact eq_of_sub_eq_zero key
-  -- Conjugate transpose: P*Aᵢ†*(1-P) = 0, hence P*Aᵢ† = P*Aᵢ†*P
-  have hPAd : ∀ i : Fin d, P * (A i)ᴴ = P * (A i)ᴴ * P := by
-    intro i
-    have h2 : P * (A i)ᴴ * (1 - P) = 0 := by
-      have h3 := congr_arg Matrix.conjTranspose (hLower i)
-      simp only [Matrix.conjTranspose_zero, Matrix.conjTranspose_mul,
-        Matrix.conjTranspose_sub, Matrix.conjTranspose_one, hPH] at h3
-      -- h3 : P * ((A i)ᴴ * (1 - P)) = 0, need P * (A i)ᴴ * (1 - P) = 0
-      rwa [Matrix.mul_assoc]
-    have key : P * (A i)ᴴ - P * (A i)ᴴ * P = 0 := by
-      have : P * (A i)ᴴ * (1 - P) = P * (A i)ᴴ - P * (A i)ᴴ * P := by noncomm_ring
-      rwa [← this]
-    exact eq_of_sub_eq_zero key
-  -- Now show each Kraus term is sandwiched by P
-  -- Goal: P * E(PXP) * P = E(PXP), suffices to show per summand
-  simp only [transferMap_apply]
-  rw [Finset.mul_sum, Finset.sum_mul]
-  congr 1; ext1 i
-  -- Goal: P * (Aᵢ * (PXP) * Aᵢ†) * P = Aᵢ * (PXP) * Aᵢ†
-  -- Strategy: both sides equal (P*Aᵢ*P)*X*(P*Aᵢ†*P) by ring identity + hAP + hPAd
-  have step1 : A i * (P * X * P) * (A i)ᴴ =
-      (A i * P) * X * (P * (A i)ᴴ) := by noncomm_ring
-  have step2 : (A i * P) * X * (P * (A i)ᴴ) =
-      (P * A i * P) * X * (P * (A i)ᴴ * P) := by
-    conv_lhs => rw [hAP i, hPAd i]
-  have step3 : (P * A i * P) * X * (P * (A i)ᴴ * P) =
-      P * (A i * (P * X * P) * (A i)ᴴ) * P := by noncomm_ring
-  exact ((step1.trans step2).trans step3).symm
 
 /-- **Irreducible CP map ⇒ irreducible tensor.**
 
