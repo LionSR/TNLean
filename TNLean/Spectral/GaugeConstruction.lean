@@ -30,41 +30,30 @@ These definitions provide the analytic structure on `Matrix (Fin m) (Fin n) ℂ 
 needed by the spectral-radius arguments. They are activated locally via
 `attribute [local instance]` in each consumer file. -/
 
-private noncomputable abbrev endEquivMatrixCLM (m n : ℕ) :
-    (Matrix (Fin m) (Fin n) ℂ →ₗ[ℂ] Matrix (Fin m) (Fin n) ℂ) ≃ₐ[ℂ]
-      (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
-  Module.End.toContinuousLinearMap (Matrix (Fin m) (Fin n) ℂ)
-
-@[reducible] def instGCFiniteDimensionalMatrixCLM (m n : ℕ) :
+def instGCFiniteDimensionalMatrixCLM (m n : ℕ) :
     FiniteDimensional ℂ
       (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
-  (endEquivMatrixCLM m n).toLinearEquiv.finiteDimensional
+  ContinuousLinearMap.finiteDimensional
 
-@[reducible] noncomputable def instGCNormedAddCommGroupMatrixCLM (m n : ℕ) :
+noncomputable def instGCNormedAddCommGroupMatrixCLM (m n : ℕ) :
     NormedAddCommGroup
       (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
   ContinuousLinearMap.toNormedAddCommGroup
 
-@[reducible] noncomputable def instGCNormedRingMatrixCLM (m n : ℕ) :
+noncomputable def instGCNormedRingMatrixCLM (m n : ℕ) :
     NormedRing
       (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
   ContinuousLinearMap.toNormedRing
 
-@[reducible] noncomputable def instGCNormedAlgebraMatrixCLM (m n : ℕ) :
+noncomputable def instGCNormedAlgebraMatrixCLM (m n : ℕ) :
     NormedAlgebra ℂ
       (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
-  by
-    letI := instGCNormedAddCommGroupMatrixCLM m n
-    letI := instGCNormedRingMatrixCLM m n
-    infer_instance
+  ContinuousLinearMap.toNormedAlgebra
 
-@[reducible] def instGCCompleteSpaceMatrixCLM (m n : ℕ) :
+def instGCCompleteSpaceMatrixCLM (m n : ℕ) :
     CompleteSpace
       (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
-  by
-    letI := instGCFiniteDimensionalMatrixCLM m n
-    exact FiniteDimensional.complete ℂ
-      (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ)
+  ContinuousLinearMap.completeSpace
 
 namespace MPSTensor
 
