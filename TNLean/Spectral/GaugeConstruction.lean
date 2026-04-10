@@ -50,21 +50,21 @@ private noncomputable abbrev endEquivMatrixCLM (m n : ℕ) :
       (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
   ContinuousLinearMap.toNormedRing
 
+set_option maxSynthPendingDepth 6 in
 @[reducible] noncomputable def instGCNormedAlgebraMatrixCLM (m n : ℕ) :
     NormedAlgebra ℂ
-      (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
-  by
-    letI := instGCNormedAddCommGroupMatrixCLM m n
-    letI := instGCNormedRingMatrixCLM m n
-    infer_instance
+      (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) := by
+  letI := instGCNormedRingMatrixCLM m n
+  exact { ContinuousLinearMap.algebra with
+    norm_smul_le := norm_smul_le }
 
+set_option maxSynthPendingDepth 6 in
 @[reducible] def instGCCompleteSpaceMatrixCLM (m n : ℕ) :
     CompleteSpace
-      (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
-  by
-    letI := instGCFiniteDimensionalMatrixCLM m n
-    exact FiniteDimensional.complete ℂ
-      (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ)
+      (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) := by
+  letI := instGCFiniteDimensionalMatrixCLM m n
+  exact FiniteDimensional.complete ℂ
+    (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ)
 
 namespace MPSTensor
 
