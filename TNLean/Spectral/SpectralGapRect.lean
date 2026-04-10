@@ -43,6 +43,7 @@ This is the "dimension-mismatch" spectral gap: if the bond dimensions differ, th
 -/
 
 open scoped Matrix MatrixOrder ComplexOrder BigOperators NNReal ENNReal Matrix.Norms.Elementwise
+  Matrix.Norms.Operator
 
 namespace MPSTensor
 

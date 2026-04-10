@@ -26,6 +26,7 @@ formalized below as well.
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder BigOperators NNReal ENNReal Matrix.Norms.Elementwise
+  Matrix.Norms.Operator
 
 namespace MPSTensor
 
