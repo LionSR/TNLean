@@ -15,7 +15,7 @@ Hamiltonian implies decorrelation when observables respect locality.
 
 This is the backward direction of Proposition D.3 from arXiv:1606.00608,
 Appendix D, §D.2. The forward direction requires tensor-product infrastructure
-and is deferred.
+and is currently recorded as a scaffold theorem with a proof sketch.
 
 ## Main definitions
 
@@ -30,6 +30,8 @@ and is deferred.
 
 * `Decorrelation.commutingHam_isDecorrelated` — commuting parent Hamiltonian →
   decorrelation (Proposition D.3, backward direction)
+* `Decorrelation.isDecorrelated_commutingHam` — forward-direction scaffold
+  for Proposition D.3, pending tensor-product locality infrastructure
 
 ## References
 
@@ -149,6 +151,56 @@ structure HasCommutingParentHam (P_K : E →ₗ[ℂ] E) where
   hcomm : P_AX ∘ₗ P_XB = P_XB ∘ₗ P_AX
   /-- `P_K` is the intersection projector: `P_AX ∘ P_XB = P_K`. -/
   hK : P_AX ∘ₗ P_XB = P_K
+
+/-- In the current abstract setting, every idempotent endomorphism has a
+trivial `HasCommutingParentHam` witness obtained by taking
+`P_AX = P_XB = P_K`.
+
+This definition is intentionally explicit: it explains why the forward
+direction of Proposition D.3 cannot be formalized meaningfully without
+additional tensor-product locality data. -/
+def HasCommutingParentHam.of_idem
+    {P_K : E →ₗ[ℂ] E} (hK_idem : P_K ∘ₗ P_K = P_K) :
+    HasCommutingParentHam P_K where
+  P_AX := P_K
+  P_XB := P_K
+  hAX_idem := hK_idem
+  hXB_idem := hK_idem
+  hcomm := rfl
+  hK := hK_idem
+
+/-- **Proposition D.3, forward direction** (arXiv:1606.00608, Appendix D, §D.2):
+decorrelation should imply the existence of a commuting parent Hamiltonian.
+
+This theorem is currently a scaffold for the genuine tensor-product statement.
+In the present abstract API, `HasCommutingParentHam` does not yet encode that
+`P_AX` acts only on `H_A ⊗ H_X` and `P_XB` only on `H_X ⊗ H_B`, so the actual
+construction from Appendix D.2 cannot yet be carried out.
+
+TODO(tensor-product): formalize
+* tripartite Hilbert spaces `H_A ⊗ H_X ⊗ H_B`,
+* local observable families on the A and B tensor factors,
+* the intermediate subspaces `K_AX` and `K_XB`,
+* and the locality statement that the resulting projectors commute and satisfy
+  `P_K = P_AX ∘ P_XB = P_XB ∘ P_AX`.
+
+Proof sketch from Appendix D.2:
+1. Use decorrelation with `O_B = id` to force the `P_K`-range to lie in a
+   subspace of the form `K_AX ⊗ H_B`.
+2. Symmetrically, use `O_A = id` to obtain a subspace `H_A ⊗ K_XB`.
+3. Show that the associated local projectors `P_AX` and `P_XB` commute.
+4. Prove that their product is the projector onto
+   `K = (K_AX ⊗ H_B) ∩ (H_A ⊗ K_XB)`.
+
+The backward implication is already formalized as
+`commutingHam_isDecorrelated`. -/
+theorem isDecorrelated_commutingHam
+    (P_K : E →ₗ[ℂ] E)
+    (hK_idem : P_K ∘ₗ P_K = P_K)
+    (ObsA ObsB : Set (E →ₗ[ℂ] E))
+    (hDecorr : IsDecorrelated P_K ObsA ObsB) :
+    Nonempty (HasCommutingParentHam P_K) := by
+  sorry -- TODO: requires tensor-product decomposition of local observables
 
 /-- **Proposition D.3, backward direction** (arXiv:1606.00608, Appendix D, §D.2):
 If a subspace K has a commuting parent Hamiltonian decomposition
