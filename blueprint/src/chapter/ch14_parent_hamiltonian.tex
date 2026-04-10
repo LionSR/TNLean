@@ -619,7 +619,8 @@ interaction projectors commute with each other.
 \end{definition}
 
 \begin{theorem}[RFP implies NNCPH]\label{thm:rfp_implies_nncph}
-    \uses{def:is_nncph}
+    \lean{MPSTensor.rfp_implies_nncph}
+    \uses{def:is_rfp, def:is_nncph}
     If $A$ is a renormalization fixed point (RFP), then its parent
     Hamiltonian with $L = 2$ has commuting local terms.
     \textbf{Status:} A previous proof attempt was found incorrect and removed;

@@ -240,6 +240,27 @@ and rates for the single-tensor transfer map $\E_A$.
     See \cite[Definition~3.2]{Cirac2021Matrix}.
 \end{definition}
 
+\begin{theorem}[Kraus-isometry criterion for RFP]\label{thm:kraus_isometry_implies_rfp}
+    \lean{MPSTensor.isRFP_of_kraus_isometry}
+    \leanok
+    \uses{def:is_rfp}
+    Suppose there exists an isometry
+    $V : \C^d \to \C^{d^2}$, written as coefficients $V_{(i_1,i_2),j}$, such
+    that
+    \[
+        A^{i_1} A^{i_2} = \sum_{j=0}^{d-1} V_{(i_1,i_2),j} A^j
+    \]
+    for all $i_1,i_2 \in \{0,\ldots,d-1\}$.
+    Then $A$ is a renormalization fixed point.
+    This is the backward direction of \cite[Theorem~3.1]{Cirac2021Matrix}.
+\end{theorem}
+\begin{proof}\leanok
+    Expanding $\E_A^2$ gives a double Kraus sum indexed by pairs $(i_1,i_2)$.
+    Substituting the decomposition above and using the isometry relation
+    $V^\dagger V = 1$ collapses the double sum to the single Kraus family
+    $\{A^j\}$, hence $\E_A^2 = \E_A$.
+\end{proof}
+
 \begin{definition}[Local orthogonality]\label{def:is_locally_orthogonal}
     \lean{MPSTensor.IsLocallyOrthogonal}
     \leanok
@@ -310,6 +331,15 @@ and rates for the single-tensor transfer map $\E_A$.
     \]
 \end{definition}
 
+\begin{definition}[Zero correlation length]\label{def:is_zcl}
+    \lean{MPSTensor.IsZCL}
+    \leanok
+    \uses{def:is_locally_orthogonal, def:is_cid}
+    An MPS tensor has \emph{zero correlation length} when it is both locally
+    orthogonal and correlations are independent of distance.
+    See \cite[Definition~3.6]{Cirac2021Matrix}.
+\end{definition}
+
 \begin{theorem}[CID implies RFP]\label{thm:isCID_implies_isRFP}
     \lean{MPSTensor.isCID_implies_isRFP}
     \leanok
@@ -339,4 +369,18 @@ and rates for the single-tensor transfer map $\E_A$.
     idempotence by definition). The reverse uses
     $\E^n = \E$ for $n \ge 1$ to show the connected correlator is
     separation-independent.
+\end{proof}
+
+\begin{theorem}[Canonical-form blocks satisfy RFP iff ZCL]%
+    \label{thm:rfp_iff_zcl}
+    \lean{MPSTensor.rfp_iff_zcl}
+    \leanok
+    \uses{def:is_canonical_form, def:is_rfp, def:is_zcl}
+    For a tensor in canonical form, each block is a renormalization fixed point
+    if and only if it has zero correlation length.
+    This is the RFP--ZCL part of \cite[Theorem~3.10]{Cirac2021Matrix}.
+\end{theorem}
+\begin{proof}\leanok
+    Apply Theorem~\ref{thm:zcl_iff_idempotent_transfer} to the chosen
+    canonical-form block.
 \end{proof}
