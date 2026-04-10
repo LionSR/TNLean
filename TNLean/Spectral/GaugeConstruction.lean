@@ -676,3 +676,4 @@ theorem dim_eq_of_gauged_intertwining [NeZero D₁] [NeZero D₂]
   exact le_antisymm h_D₁_le h_D₂_le
 
 end MPSTensor
+
