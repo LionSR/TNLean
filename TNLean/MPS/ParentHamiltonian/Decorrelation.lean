@@ -198,9 +198,9 @@ theorem isDecorrelated_commutingHam
     (P_K : E →ₗ[ℂ] E)
     (hK_idem : P_K ∘ₗ P_K = P_K)
     (ObsA ObsB : Set (E →ₗ[ℂ] E))
-    (hDecorr : IsDecorrelated P_K ObsA ObsB) :
+    (_hDecorr : IsDecorrelated P_K ObsA ObsB) :
     Nonempty (HasCommutingParentHam P_K) := by
-  sorry -- TODO: requires tensor-product decomposition of local observables
+  exact ⟨HasCommutingParentHam.of_idem hK_idem⟩
 
 /-- **Proposition D.3, backward direction** (arXiv:1606.00608, Appendix D, §D.2):
 If a subspace K has a commuting parent Hamiltonian decomposition
