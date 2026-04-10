@@ -12,7 +12,7 @@ import Mathlib.LinearAlgebra.Dimension.StrongRankCondition
 
 namespace MPSTensor
 
-open scoped Matrix BigOperators ComplexOrder NNReal ENNReal Matrix.Norms.Elementwise
+open scoped Matrix BigOperators ComplexOrder NNReal ENNReal Matrix.Norms.Operator
 open Matrix Filter
 
 /-!
