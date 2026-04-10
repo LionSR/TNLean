@@ -2,6 +2,7 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
+import TNLean.Algebra.LinearMapAux
 import TNLean.Channel.PerronFrobenius.Existence
 
 /-!
@@ -16,8 +17,6 @@ paired with the adjoint Perron--Frobenius eigenvector of that family.
 - `IrreducibleCPKrausSetup`: shared Kraus witness for an irreducible CP map
 - `irreducibleCPKrausSetup`: packages the standard Kraus witness attached to an
   irreducible CP map
-- `ne_zero_of_pos_eigenvector`: a positive-eigenvalue equation with nonzero
-  eigenvector forces a linear map to be nonzero
 - `IrreducibleCPKrausSetup.exists_nonzero_kraus`: a nonzero map in a Kraus
   setup has a nonzero Kraus operator
 - `IrreducibleCPKrausSetup.exists_posDef_adjoint_eigenvector`: shared adjoint
@@ -57,21 +56,6 @@ noncomputable def irreducibleCPKrausSetup
       K := K
       map_eq := hE_eq
       irreducible := MPSTensor.isIrreducibleTensor_of_isIrreducibleMap K hIrrK_map }
-
--- TODO: This only uses linear-map data and could live in a more general module
--- in a follow-up refactor.
-/-- A positive-eigenvalue equation with nonzero eigenvector forces the map to be nonzero. -/
-theorem ne_zero_of_pos_eigenvector
-    {E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
-    {ρ : Matrix (Fin D) (Fin D) ℂ} {r : ℝ}
-    (hρ_ne : ρ ≠ 0) (hr : 0 < r) (hEig : E ρ = (r : ℂ) • ρ) :
-    E ≠ 0 := by
-  intro hE0
-  have hρ_zero : (r : ℂ) • ρ = 0 := by
-    simpa [hE0] using hEig.symm
-  have hr_ne : (r : ℂ) ≠ 0 := by
-    exact_mod_cast hr.ne'
-  exact hρ_ne ((smul_eq_zero.mp hρ_zero).resolve_left hr_ne)
 
 namespace IrreducibleCPKrausSetup
 
