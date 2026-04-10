@@ -8,6 +8,7 @@ import TNLean.Channel.Schwarz.Basic
 import TNLean.Algebra.MatrixAux
 
 import Mathlib.Data.Matrix.Block
+import Mathlib.Analysis.Matrix.Normed
 
 /-!
 # Shared gauge-construction infrastructure for spectral-gap rigidity
@@ -23,6 +24,8 @@ core used by the spectral-gap rigidity arguments.  The shared pattern is:
 -/
 
 open scoped Matrix MatrixOrder ComplexOrder BigOperators
+
+attribute [local instance] Matrix.linftyOpNormedAddCommGroup Matrix.linftyOpNormedSpace
 
 /-! ### ContinuousLinearMap endomorphism infrastructure
 
