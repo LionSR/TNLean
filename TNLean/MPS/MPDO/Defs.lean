@@ -35,6 +35,7 @@ Verstraete):
 * `MPOTensor.IsHermitian`: local hermiticity predicate on the tensor.
 * `MPOTensor.IsMPDO`: global positivity predicate.
 * `MPOTensor.IsLPDO`: local purification predicate.
+* `MPOTensor.IsRFP`: renormalization fixed-point predicate.
 * `MPOTensor.toMPSTensor`: view an MPO tensor as an MPS tensor with doubled
   physical index `Fin (d * d)`.
 
@@ -275,5 +276,12 @@ theorem IsLPDO.isMPDO {M : MPOTensor d D} (h : IsLPDO M) : IsMPDO M := by
   simp_rw [← AddMonoidHom.map_trace (starRingEnd ℂ)]
   -- Push σ τ application inside the sum on the RHS, expand vecMulVec
   erw [Fintype.sum_apply σ, Fintype.sum_apply τ]; congr 1
+
+/-! ### MPDO renormalization fixed points -/
+
+/-- An MPO tensor is an MPDO renormalization fixed point when its transfer map
+is idempotent. -/
+def IsRFP (M : MPOTensor d D) : Prop :=
+  transferMap M ∘ₗ transferMap M = transferMap M
 
 end MPOTensor
