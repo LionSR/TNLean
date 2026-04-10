@@ -41,6 +41,10 @@ arXiv:1606.00608, Definition 4.1, but does not yet encode the explicit
 trace-preserving completely positive blocking and unblocking maps from the
 paper.
 
+For tensors already put into canonical form, compare `MPOTensor.IsZCL` in
+`TNLean/MPS/MPDO/ZCL.lean`: in that setting this provisional fixed-point
+condition matches the corresponding zero-correlation-length condition.
+
 TODO: strengthen this definition to the full `T`/`S` formulation. -/
 def IsRFP (M : MPOTensor d D) : Prop :=
   transferMap M ∘ₗ transferMap M = transferMap M
