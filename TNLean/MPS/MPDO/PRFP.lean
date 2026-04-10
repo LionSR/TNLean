@@ -3,7 +3,6 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.MPDO.Defs
-import TNLean.MPS.MPDO.ZCL
 import TNLean.MPS.RFP.Defs
 
 /-!
@@ -75,17 +74,15 @@ theorem IsPRFP.isLPDO {M : MPOTensor d D} (h : IsPRFP M) : IsLPDO M := by
   rcases h with ⟨dK, D', A, e, hWitness, _hRFP⟩
   exact ⟨dK, D', A, e, hWitness⟩
 
-/-- For an LPDO, PRFP should imply MPO ZCL: idempotence of the purifying MPS
-transfer map is expected to descend to the induced MPO transfer map.
+/-!
+### Future work
 
-TODO: formalize the transfer-map correspondence between an LPDO witness
-`IsLPDOWitness M A e` and the MPO transfer map of `M`, then transport
-`MPSTensor.IsRFP (purifyingMPSTensor A)` across that correspondence. -/
-theorem IsPRFP.isZCL {M : MPOTensor d D} (h : IsPRFP M) : IsZCL M := by
-  rcases h with ⟨dK, D', A, e, hWitness, hRFP⟩
-  -- TODO: show that the MPO transfer map induced by `hWitness` is the channel
-  -- obtained from the purifying MPS tensor `purifyingMPSTensor A`.
-  -- Then `hRFP` yields the required idempotence for `transferMap M`.
-  sorry
+`IsPRFP.isZCL`: for an LPDO, PRFP should imply MPO ZCL. The proof requires
+formalizing the transfer-map correspondence between an LPDO witness
+`IsLPDOWitness M A e` and the MPO transfer map of `M`, then transporting
+`MPSTensor.IsRFP (purifyingMPSTensor A)` across that correspondence. This
+implication is intentionally not exported until the proof is completed, to
+keep the development sound.
+-/
 
 end MPOTensor
