@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Channel.Irreducible.Ergodicity
 import TNLean.Channel.Irreducible.Basic
+import TNLean.MPS.Core.OrthogonalProjectionInvariance
 import TNLean.MPS.Irreducible.FixedPointProjection
 
 /-!
@@ -37,55 +38,6 @@ variable {D : ℕ}
 
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
-/-- If each Kraus operator `K i` is block-upper-triangular with respect to an
-orthogonal projection `P`, then the transfer map preserves the compression
-`P M_D P`. -/
--- Intentionally public so `ReducibleQDS.FixedDensity` can reuse this helper
--- instead of carrying a second local copy of the same proof.
-lemma lowerZero_implies_invariance
-    {r : ℕ} (K : Fin r → Mat) {P : Mat}
-    (hP : IsOrthogonalProjection P)
-    (hLower : ∀ i : Fin r, (1 - P) * K i * P = 0) :
-    ∀ X : Mat,
-      P * MPSTensor.transferMap (d := r) (D := D) K (P * X * P) * P =
-        MPSTensor.transferMap (d := r) (D := D) K (P * X * P) := by
-  intro X
-  have hP_herm : Pᴴ = P := hP.1
-  have hAP : ∀ i : Fin r, K i * P = P * K i * P := by
-    intro i
-    have hkey : K i * P - P * K i * P = 0 := by
-      have h : (1 - P) * K i * P = K i * P - P * K i * P := by
-        noncomm_ring
-      rw [← h]
-      exact hLower i
-    exact eq_of_sub_eq_zero hkey
-  have hPAd : ∀ i : Fin r, P * (K i)ᴴ = P * (K i)ᴴ * P := by
-    intro i
-    have hct : P * (K i)ᴴ * (1 - P) = 0 := by
-      have h := congrArg Matrix.conjTranspose (hLower i)
-      simp only [Matrix.conjTranspose_zero, Matrix.conjTranspose_mul,
-        Matrix.conjTranspose_sub, Matrix.conjTranspose_one, hP_herm] at h
-      simpa [Matrix.mul_assoc] using h
-    have hkey : P * (K i)ᴴ - P * (K i)ᴴ * P = 0 := by
-      have h : P * (K i)ᴴ * (1 - P) = P * (K i)ᴴ - P * (K i)ᴴ * P := by
-        noncomm_ring
-      rwa [← h]
-    exact eq_of_sub_eq_zero hkey
-  simp only [MPSTensor.transferMap_apply]
-  rw [Finset.mul_sum, Finset.sum_mul]
-  apply Finset.sum_congr rfl
-  intro i _
-  have h1 : K i * (P * X * P) * (K i)ᴴ =
-      (K i * P) * X * (P * (K i)ᴴ) := by
-    noncomm_ring
-  have h2 : (K i * P) * X * (P * (K i)ᴴ) =
-      (P * K i * P) * X * (P * (K i)ᴴ * P) := by
-    conv_lhs => rw [hAP i, hPAd i]
-  have h3 : (P * K i * P) * X * (P * (K i)ᴴ * P) =
-      P * (K i * (P * X * P) * (K i)ᴴ) * P := by
-    noncomm_ring
-  exact ((h1.trans h2).trans h3).symm
-
 /-- Lemma 6.4 (support projection of a fixed PSD point is invariant under the
 corner action). -/
 theorem support_proj_fixed
@@ -114,7 +66,7 @@ theorem support_proj_fixed
         (d := r) (D := D) K ρ hρ_psd hρ_fix')
   intro X
   rw [hE_eq_transfer]
-  simpa [P] using lowerZero_implies_invariance (D := D) K hP_data.1 hP_data.2 X
+  simpa [P] using MPSTensor.lowerZero_implies_invariance K P hP_data.1 hP_data.2 X
 
 /-- Chosen stationary state of an irreducible channel. -/
 noncomputable def stationaryState
@@ -220,9 +172,6 @@ were vacuous/trivial. They should be replaced by:
 * a non-vacuous Prop. 6.9 equivalence (irreducibility ↔ full support of
   stationary states), and
 * Prop. 6.10 minimality of stationary support without assuming irreducibility.
-* TODO: if we want to also deduplicate the near-copy in
-  `MPS/Irreducible/FormII.lean`, extract `lowerZero_implies_invariance` to a
-  lighter shared helper rather than adding cross-layer imports.
 -/
 
 end Channel
