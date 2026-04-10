@@ -54,12 +54,40 @@ noncomputable scoped instance : NormedRing (Matrix (Fin D) (Fin D) ℂ) :=
 noncomputable scoped instance : NormedAlgebra ℂ (Matrix (Fin D) (Fin D) ℂ) :=
   Matrix.linftyOpNormedAlgebra
 
-attribute [local instance]
-  instGCFiniteDimensionalMatrixCLM
-  instGCNormedAddCommGroupMatrixCLM
-  instGCNormedRingMatrixCLM
-  instGCNormedAlgebraMatrixCLM
-  instGCCompleteSpaceMatrixCLM
+-- These CLM instances are intentionally defined locally in each Spectral file
+-- rather than shared from GaugeConstruction.lean. Centralizing them caused
+-- topology diamonds with `Module.End.toContinuousLinearMap` that broke
+-- downstream typeclass resolution. See PR #552 for context.
+private noncomputable abbrev endEquivSquareMatrixCLM (D : ℕ) :
+    (Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) ≃ₐ[ℂ]
+      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
+  Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)
+
+local instance instSpectralGapFiniteDimensionalMatrixCLM (D : ℕ) :
+    FiniteDimensional ℂ
+      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
+  (endEquivSquareMatrixCLM D).toLinearEquiv.finiteDimensional
+
+noncomputable local instance instSpectralGapNormedAddCommGroupMatrixCLM (D : ℕ) :
+    NormedAddCommGroup
+      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
+  ContinuousLinearMap.toNormedAddCommGroup
+
+noncomputable local instance instSpectralGapNormedRingMatrixCLM (D : ℕ) :
+    NormedRing
+      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
+  ContinuousLinearMap.toNormedRing
+
+noncomputable local instance instSpectralGapNormedAlgebraMatrixCLM (D : ℕ) :
+    NormedAlgebra ℂ
+      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
+  ContinuousLinearMap.toNormedAlgebra
+
+local instance instSpectralGapCompleteSpaceMatrixCLM (D : ℕ) :
+    CompleteSpace
+      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
+  FiniteDimensional.complete ℂ
+    (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ)
 
 /-! ### Spectral radius of the mixed transfer operator -/
 
