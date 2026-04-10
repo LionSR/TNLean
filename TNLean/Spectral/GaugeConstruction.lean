@@ -30,6 +30,9 @@ These definitions provide the analytic structure on `Matrix (Fin m) (Fin n) ℂ 
 needed by the spectral-radius arguments. They are activated locally via
 `attribute [local instance]` in each consumer file. -/
 
+section CLMInstances
+open scoped Matrix.Norms.Frobenius
+
 private noncomputable abbrev endEquivMatrixCLM (m n : ℕ) :
     (Matrix (Fin m) (Fin n) ℂ →ₗ[ℂ] Matrix (Fin m) (Fin n) ℂ) ≃ₐ[ℂ]
       (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
@@ -59,12 +62,16 @@ private noncomputable abbrev endEquivMatrixCLM (m n : ℕ) :
     infer_instance
 
 @[reducible] def instGCCompleteSpaceMatrixCLM (m n : ℕ) :
-    CompleteSpace
-      (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
+    @CompleteSpace
+      (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ)
+      (instGCNormedAddCommGroupMatrixCLM m n).toPseudoMetricSpace.toUniformSpace :=
   by
     letI := instGCFiniteDimensionalMatrixCLM m n
+    letI := instGCNormedAddCommGroupMatrixCLM m n
     exact FiniteDimensional.complete ℂ
       (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ)
+
+end CLMInstances
 
 namespace MPSTensor
 
