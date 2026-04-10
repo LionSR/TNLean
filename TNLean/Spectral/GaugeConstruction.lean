@@ -30,30 +30,41 @@ These definitions provide the analytic structure on `Matrix (Fin m) (Fin n) ℂ 
 needed by the spectral-radius arguments. They are activated locally via
 `attribute [local instance]` in each consumer file. -/
 
-def instGCFiniteDimensionalMatrixCLM (m n : ℕ) :
+private noncomputable abbrev endEquivMatrixCLM (m n : ℕ) :
+    (Matrix (Fin m) (Fin n) ℂ →ₗ[ℂ] Matrix (Fin m) (Fin n) ℂ) ≃ₐ[ℂ]
+      (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
+  Module.End.toContinuousLinearMap (Matrix (Fin m) (Fin n) ℂ)
+
+@[reducible] def instGCFiniteDimensionalMatrixCLM (m n : ℕ) :
     FiniteDimensional ℂ
       (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
-  ContinuousLinearMap.finiteDimensional
+  (endEquivMatrixCLM m n).toLinearEquiv.finiteDimensional
 
-noncomputable def instGCNormedAddCommGroupMatrixCLM (m n : ℕ) :
+@[reducible] noncomputable def instGCNormedAddCommGroupMatrixCLM (m n : ℕ) :
     NormedAddCommGroup
       (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
   ContinuousLinearMap.toNormedAddCommGroup
 
-noncomputable def instGCNormedRingMatrixCLM (m n : ℕ) :
+@[reducible] noncomputable def instGCNormedRingMatrixCLM (m n : ℕ) :
     NormedRing
       (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
   ContinuousLinearMap.toNormedRing
 
-noncomputable def instGCNormedAlgebraMatrixCLM (m n : ℕ) :
+@[reducible] noncomputable def instGCNormedAlgebraMatrixCLM (m n : ℕ) :
     NormedAlgebra ℂ
       (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
-  ContinuousLinearMap.toNormedAlgebra
+  by
+    letI := instGCNormedAddCommGroupMatrixCLM m n
+    letI := instGCNormedRingMatrixCLM m n
+    infer_instance
 
-def instGCCompleteSpaceMatrixCLM (m n : ℕ) :
+@[reducible] def instGCCompleteSpaceMatrixCLM (m n : ℕ) :
     CompleteSpace
       (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
-  ContinuousLinearMap.completeSpace
+  by
+    letI := instGCFiniteDimensionalMatrixCLM m n
+    exact FiniteDimensional.complete ℂ
+      (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ)
 
 namespace MPSTensor
 
