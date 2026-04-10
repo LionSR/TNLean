@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.Defs
 import TNLean.MPS.Core.Transfer
+import TNLean.MPS.RFP.ZeroCorrelationLength
 import Mathlib.LinearAlgebra.Matrix.PosDef
 import Mathlib.LinearAlgebra.Matrix.Kronecker
 
@@ -276,4 +277,56 @@ theorem IsLPDO.isMPDO {M : MPOTensor d D} (h : IsLPDO M) : IsMPDO M := by
   -- Push σ τ application inside the sum on the RHS, expand vecMulVec
   erw [Fintype.sum_apply σ, Fintype.sum_apply τ]; congr 1
 
+/-! ### Pure-state recovery inside the MPO formalism -/
+
+/-- An MPO tensor is an MPDO renormalization fixed point when its transfer map
+is idempotent. This is the direct mixed-state analogue of `MPSTensor.IsRFP`. -/
+def IsRFP_MPDO (M : MPOTensor d D) : Prop :=
+  transferMap M ∘ₗ transferMap M = transferMap M
+
 end MPOTensor
+
+namespace MPSTensor
+
+open MPOTensor
+
+variable {d D : ℕ}
+
+/-- Embed a pure MPS tensor as a diagonal MPO with trivial bra structure:
+`M^{ij} = δ_{ij} A^i`. -/
+def toMPOTensor (A : MPSTensor d D) : MPOTensor d D :=
+  fun i j => if i = j then A i else 0
+
+@[simp] lemma toMPOTensor_apply_same (A : MPSTensor d D) (i : Fin d) :
+    A.toMPOTensor i i = A i := by
+  simp [toMPOTensor]
+
+@[simp] lemma toMPOTensor_apply_ne (A : MPSTensor d D) {i j : Fin d}
+    (hij : i ≠ j) :
+    A.toMPOTensor i j = 0 := by
+  simp [toMPOTensor, hij]
+
+/-- The transfer map of the diagonal pure-state embedding is exactly the
+original MPS transfer map. -/
+@[simp] theorem toMPOTensor_transferMap (A : MPSTensor d D) :
+    MPOTensor.transferMap A.toMPOTensor = transferMap A := by
+  classical
+  ext X
+  rw [MPOTensor.transferMap_apply, transferMap_apply]
+  simp [toMPOTensor]
+
+/-- For a pure MPS viewed as a diagonal MPO, MPDO-RFP is exactly the original
+pure-state RFP condition. -/
+theorem toMPOTensor_isRFP_MPDO_iff_isRFP (A : MPSTensor d D) :
+    MPOTensor.IsRFP_MPDO A.toMPOTensor ↔ IsRFP A := by
+  rw [MPOTensor.IsRFP_MPDO, IsRFP, toMPOTensor_transferMap]
+
+/-- For a pure MPS embedded as a diagonal MPO, the MPDO RFP condition reduces
+to the pure-state zero-correlation-length condition via
+`MPSTensor.zcl_iff_idempotent_transfer`. -/
+theorem toMPOTensor_isRFP_MPDO_iff_isZCL (A : MPSTensor d D) :
+    MPOTensor.IsRFP_MPDO A.toMPOTensor ↔ IsZCL A := by
+  rw [toMPOTensor_isRFP_MPDO_iff_isRFP]
+  exact (zcl_iff_idempotent_transfer A).symm
+
+end MPSTensor
