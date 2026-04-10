@@ -131,11 +131,27 @@ The periodic parent-Hamiltonian ground space of a canonical-form/BNT tensor
 equals the span of the individual BNT block MPV states.
 
 TODO(#195): prove by combining `bnt_mem_groundSpace` (⊇ direction) with
-block-injective uniqueness from `UniqueGroundState` (⊆ direction). -/
+blockwise decomposition / uniqueness for the assembled tensor (⊆ direction).
+At present the reverse inclusion still needs a periodic-chain theorem showing
+that a state whose cyclic windows lie in the block-diagonal local ground space
+decomposes globally into block components, together with the normal/blockwise
+unique-ground-state reduction from `UniqueGroundState`. -/
 theorem parentHamiltonian_gs_eq_bnt_span
     (A : (j : Fin r) → MPSTensor d (dim j))
     (hCF : IsCanonicalFormBNT μ A) {L N : ℕ} (hL : 1 < L) (hN : N ≥ L + 1) :
     parentHamiltonianGroundSpace (μ := μ) A L N = bntSpan A N := by
-  sorry
+  apply le_antisymm
+  · -- TODO(#195): reverse inclusion.
+    -- The missing step is to decompose any
+    -- `ψ ∈ parentHamiltonianGroundSpace (μ := μ) A L N`
+    -- into block components coming from the local block-diagonal structure of
+    -- `toTensorFromBlocks μ A`, then apply injective uniqueness to each block.
+    -- This currently depends on periodic-chain block decomposition machinery
+    -- that is not yet available upstream.
+    sorry
+  · rw [bntSpan, Submodule.span_le]
+    intro ψ hψ
+    obtain ⟨j, rfl⟩ := Set.mem_range.mp hψ
+    exact bnt_mem_groundSpace A hCF hL hN j
 
 end MPSTensor
