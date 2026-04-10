@@ -81,6 +81,7 @@ jobs:
 
       - name: Warn on changed Lean declarations missing blueprint entries
         if: github.event_name == 'pull_request'
+        continue-on-error: true
         run: |
           python3 - <<'PY'
           import subprocess
