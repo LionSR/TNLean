@@ -3,10 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.RFP.Defs
+import TNLean.MPS.RFP.ZeroCorrelationLength
 import TNLean.Channel.FixedPoint.Algebra
-import TNLean.MPS.Core.CPPrimitive
 import TNLean.MPS.BNT.Construction
-import TNLean.MPS.Irreducible.FormII
 
 /-!
 # Structural form of RFP tensors
@@ -19,10 +18,6 @@ that are renormalization fixed points, following arXiv:1606.00608 §3.4
 
 * `rfp_nt_structural`: formalized structural precursor — a **nonzero** normal RFP tensor is
   already injective
-* `rfp_nt_structural_of_leftCanonical`: left-canonical normal RFP tensors are injective
-  without a separate nonzero hypothesis
-* `rfp_nt_cfii_diagonal_fixedPoint`: Appendix B / CFII reduction step — after unitary
-  conjugation, a left-canonical normal RFP tensor has a diagonal positive-definite fixed point
 * `rfp_cf_structural`: each canonical-form block is injective
 * `rfp_bnt_structural`: each BNT block is injective
 
@@ -37,7 +32,7 @@ identification. What *is* formalized here is the span-collapse step:
 RFP tensor is automatically injective.
 -/
 
-open scoped Matrix ComplexOrder
+open scoped Matrix
 
 namespace MPSTensor
 
@@ -160,76 +155,6 @@ theorem rfp_nt_structural (A : MPSTensor d D)
       change evalWord A (List.ofFn σ) ∈ Submodule.span ℂ (Set.range A)
       exact evalWord_mem_span_of_isRFP A hRFP (List.ofFn σ) hσ_ne
     exact le_antisymm le_top htop_le
-
-/-- A left-canonical tensor has a nonzero Kraus operator as soon as `D ≠ 0`. -/
-private theorem exists_nonzero_of_leftCanonical [DecidableEq (Fin D)] [NeZero D]
-    (A : MPSTensor d D)
-    (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
-    ∃ i, A i ≠ 0 := by
-  by_contra hA
-  push Not at hA
-  have hsum : ∑ i : Fin d, (A i)ᴴ * A i = 0 := by
-    simp [hA]
-  have h1 : (1 : Mat) = 0 := by
-    rw [hLeft] at hsum
-    exact hsum
-  exact (one_ne_zero : (1 : Mat) ≠ 0) h1
-
-/-- Appendix B precursor without a separate nonzero side condition:
-for a left-canonical normal RFP tensor, the one-site Kraus span is already all of `M_D(ℂ)`. -/
-theorem rfp_nt_structural_of_leftCanonical [DecidableEq (Fin D)] [NeZero D]
-    (A : MPSTensor d D)
-    (hNT : IsNormal A) (hRFP : IsRFP A)
-    (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
-    IsInjective A := by
-  exact rfp_nt_structural A hNT hRFP (exists_nonzero_of_leftCanonical A hLeft)
-
-/-- Appendix B / CFII reduction step:
-after unitary conjugation, a left-canonical normal RFP tensor has a diagonal
-positive-definite fixed point for its transfer map. -/
-theorem rfp_nt_cfii_diagonal_fixedPoint [DecidableEq (Fin D)] [NeZero D]
-    (A : MPSTensor d D)
-    (hNT : IsNormal A) (hRFP : IsRFP A)
-    (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
-    ∃ (U : Matrix.unitaryGroup (Fin D) ℂ)
-      (Λ : Matrix (Fin D) (Fin D) ℂ),
-        Λ.PosDef ∧ Λ.IsDiag ∧
-        (∑ i : Fin d, ((↑U : Matrix _ _ ℂ)ᴴ * A i * (↑U : Matrix _ _ ℂ))ᴴ
-                      * ((↑U : Matrix _ _ ℂ)ᴴ * A i * (↑U : Matrix _ _ ℂ)) = 1) ∧
-        transferMap (d := d) (D := D)
-          (fun i => (↑U : Matrix _ _ ℂ)ᴴ * A i * (↑U : Matrix _ _ ℂ)) Λ = Λ := by
-  have hInj : IsInjective A := rfp_nt_structural_of_leftCanonical A hNT hRFP hLeft
-  have hIrrMap : IsIrreducibleMap (transferMap (d := d) (D := D) A) :=
-    injective_implies_irreducibleCP A hInj
-  have hIrrTensor : IsIrreducibleTensor (d := d) (D := D) A :=
-    isIrreducibleTensor_of_isIrreducibleMap A hIrrMap
-  have hD : 0 < D := Nat.pos_of_ne_zero (NeZero.ne D)
-  exact exists_unitary_diag_posDef_fixedPoint_of_leftCanonical_of_isIrreducibleTensor
-    (d := d) (D := D) A hLeft hIrrTensor hD
-
-/-- **Lemma B.1** (arXiv:1606.00608, Appendix B): a normal tensor in canonical
-form II that is an RFP should admit the decomposition `A i = X * Λ * U i * X⁻¹`
-with diagonal positive `Λ` and a physical-index isometry `U`.
-
-The current formalization isolates the missing step to the expected gap:
-classifying idempotent irreducible CP maps as rank-one projections and then
-identifying the resulting Kraus family with the canonical `Λ * U i` form via
-Kraus freedom. The injectivity and CFII diagonal-fixed-point reduction are
-already available as `rfp_nt_structural_of_leftCanonical` and
-`rfp_nt_cfii_diagonal_fixedPoint`. -/
-theorem rfp_nt_structural_full (A : MPSTensor d D) [NeZero D]
-    (hNT : IsNormal A) (hRFP : IsRFP A)
-    (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
-    ∃ (X : Matrix (Fin D) (Fin D) ℂ) (Λ : Fin D → ℝ)
-      (U : MPSTensor d D),
-      X.det ≠ 0 ∧
-      (∀ k, 0 < Λ k) ∧
-      (∑ i : Fin d, (U i)ᴴ * U i = 1) ∧
-      (∀ i, A i = X * Matrix.diagonal (fun k => (Λ k : ℂ)) * U i * X⁻¹) := by
-  -- TODO(#233): use `rfp_nt_cfii_diagonal_fixedPoint` to pass to CFII, prove that the
-  -- idempotent irreducible transfer map is a rank-one projector `X ↦ trace X • ρ`, and
-  -- then apply Kraus freedom in the forward direction to extract the physical-index isometry.
-  sorry
 
 /-- Canonical-form blocks are already injective, so the structural precursor above is automatic. -/
 theorem rfp_cf_structural {r : ℕ} {dim : Fin r → ℕ}
