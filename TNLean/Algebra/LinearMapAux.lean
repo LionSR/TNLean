@@ -17,7 +17,7 @@ theory.
 
 - `LinearMap.ne_zero_of_eigenvector`: a nonzero eigenvector for a nonzero
   eigenvalue forces a linear map to be nonzero
-- `ne_zero_of_pos_eigenvector`: a positive-eigenvalue equation with nonzero
+- `LinearMap.ne_zero_of_pos_eigenvector`: a positive-eigenvalue equation with nonzero
   eigenvector forces a linear map to be nonzero
 -/
 
@@ -34,7 +34,7 @@ theorem LinearMap.ne_zero_of_eigenvector
   exact hρ_ne ((eq_zero_or_eq_zero_of_smul_eq_zero hρ_zero).resolve_left hμ_ne)
 
 /-- A positive-eigenvalue equation with nonzero eigenvector forces a linear map to be nonzero. -/
-theorem ne_zero_of_pos_eigenvector
+theorem LinearMap.ne_zero_of_pos_eigenvector
     {M : Type*}
     [AddCommMonoid M] [Module ℂ M] [NoZeroSMulDivisors ℂ M]
     {E : M →ₗ[ℂ] M} {ρ : M} {r : ℝ}

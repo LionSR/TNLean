@@ -221,7 +221,7 @@ theorem spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp
   let K := hSetup.K
   have hE_eq : E = MPSTensor.transferMap (d := n) (D := D) K := hSetup.map_eq
   have hρ_ne : ρ ≠ 0 := (Matrix.PosDef.isUnit hρ_pd).ne_zero
-  have hE_ne : E ≠ 0 := ne_zero_of_pos_eigenvector hρ_ne hr hEig
+  have hE_ne : E ≠ 0 := LinearMap.ne_zero_of_pos_eigenvector hρ_ne hr hEig
   obtain ⟨σ, t, hσ_pd, ht_pos, hσ_eig⟩ :=
     hSetup.exists_posDef_adjoint_eigenvector hE_ne
   have htrace : ∀ X : Matrix (Fin D) (Fin D) ℂ,
