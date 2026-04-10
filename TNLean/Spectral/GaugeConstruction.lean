@@ -62,7 +62,10 @@ set_option maxSynthPendingDepth 6 in
 @[reducible] noncomputable def instGCNormedAlgebraMatrixCLM (m n : ℕ) :
     NormedAlgebra ℂ
       (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
-  ContinuousLinearMap.toNormedAlgebra
+  by
+    letI := instGCNormedAddCommGroupMatrixCLM m n
+    letI := instGCNormedRingMatrixCLM m n
+    infer_instance
 
 @[reducible] def instGCCompleteSpaceMatrixCLM (m n : ℕ) :
     @CompleteSpace
