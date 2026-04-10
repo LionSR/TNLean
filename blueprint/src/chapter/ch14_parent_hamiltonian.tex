@@ -628,6 +628,15 @@ interaction projectors commute with each other.
     fixed points needed for \cite[Theorem~3.10]{Cirac2021Matrix}.
 \end{theorem}
 
+\begin{theorem}[NNCPH implies RFP]\label{thm:nncph_implies_rfp}
+    \lean{MPSTensor.nncph_implies_rfp}
+    \notready
+    \uses{def:is_rfp, def:is_nncph, def:normal}
+    If $A$ is normal and its parent Hamiltonian with $L = 2$ has
+    commuting local terms for every chain length $N \ge 2$, then $A$ is
+    a renormalization fixed point (RFP).
+\end{theorem}
+
 \section{Decorrelation and commuting parent Hamiltonians}%
 \label{sec:decorrelation}
 

@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.ParentHamiltonian.Defs
+import TNLean.MPS.Periodic.Defs
 import TNLean.MPS.RFP.Defs
 
 /-!
@@ -88,7 +89,7 @@ local terms.
 Gated on: `rfp_nt_structural_full` (the full Appendix B decomposition). -/
 theorem rfp_implies_nncph (A : MPSTensor d D) [NeZero D]
     (hRFP : IsRFP A) (hNT : IsNormal A)
-    (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (hLeft : IsLeftCanonical A)
     (N : ℕ) (hN : 2 ≤ N) :
     IsNNCPH A N := by
   sorry
