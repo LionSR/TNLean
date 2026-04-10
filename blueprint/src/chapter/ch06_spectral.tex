@@ -390,6 +390,14 @@ a block embedding of a mixed-transfer eigenvector.
     \]
 \end{theorem}
 
+\begin{proof}\leanok
+    \uses{thm:ks_peripheral, thm:kraus_commute}
+    Block-embed the gauged families and transported eigenvector into a
+    single unital Kraus map, apply Kadison--Schwarz equality for the
+    modulus-one eigenvalue, then extract the intertwining identities
+    from the block structure.
+\end{proof}
+
 \begin{theorem}[Intertwining yields gauge-phase equivalence]%
     \label{thm:gauged_intertwining_gauge_phase}
     \lean{MPSTensor.gaugePhaseEquiv_of_gauged_intertwining}
@@ -404,6 +412,11 @@ a block embedding of a mixed-transfer eigenvector.
     \]
     Then $A$ and $B$ are gauge-phase equivalent.
 \end{theorem}
+
+\begin{proof}\leanok
+    Compose the two gauge matrices with the intertwiner to obtain a
+    single invertible matrix conjugating $A$ to a scalar multiple of~$B$.
+\end{proof}
 
 \begin{remark}[Two gauge conventions]\label{rem:gauge_conventions}\leanok
     The right-canonical gauge used here, $A'^i = \rho^{-1/2} A^i \rho^{1/2}$,
@@ -452,6 +465,15 @@ a block embedding of a mixed-transfer eigenvector.
     \]
     then $D_1 = D_2$.
 \end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:injective}
+    The intertwining relation shows that $\ker(X)$ is invariant under
+    all generators of~$B$.
+    Since $B$ is injective, its generators span the full matrix algebra,
+    so $\ker(X)$ is trivial and $D_2 \le D_1$.
+    Applying the same argument to $X^\dagger$ gives $D_1 \le D_2$.
+\end{proof}
 
 \begin{theorem}[Rectangular spectral gap]\label{thm:spectral_gap_rect}
     \lean{MPSTensor.mixedTransferSpectralRadius₂_lt_one_of_dim_ne}
@@ -611,7 +633,7 @@ the Perron--Frobenius fixed point.
     Under the weaker hypothesis of irreducibility,
     Theorem~\ref{thm:psd_fp_pd_irred} upgrades it to positive
     definite, giving invertibility of~$X'$.
-    Formally, Theorem~\ref{thm:gauged_intertwining_core} packages the
+    Formally, Theorem~\ref{thm:gauged_intertwining_core} combines the
     separately gauged eigenvector into the required intertwining
     relations.
     Once $X'$ is invertible, Theorem~\ref{thm:gauged_intertwining_gauge_phase}
@@ -830,6 +852,11 @@ behind stationary states, following~\cite[\S6.4]{Wolf2012Quantum}.
     \]
     for all $X \in \MN{D}$.
 \end{lemma}
+
+\begin{proof}\leanok
+    Expand the transfer map and use $(\Id - P) A^i P = 0$ to reduce
+    each Kraus term to the $P$-corner.
+\end{proof}
 
 \begin{theorem}[Support projection invariance (Wolf Lemma~6.4)]%
     \label{thm:support_proj_fixed}
