@@ -126,6 +126,39 @@ legs cyclically and taking the resulting trace.
     so $\E_M(X) \ge 0$ whenever $X \ge 0$.
 \end{proof}
 
+\section{Zero correlation length}
+
+\begin{definition}[Zero correlation length for MPO tensors]%
+    \label{def:mpo_is_zcl}
+    \lean{MPOTensor.IsZCL}
+    \leanok
+    \uses{def:mpo_transfer_map}
+    An MPO tensor $M$ has \emph{zero correlation length} when its transfer map
+    is idempotent:
+    \[
+        \E_M \circ \E_M = \E_M.
+    \]
+    This is the mixed-state analogue of the renormalization fixed-point
+    condition for MPS tensors; see \cite[Definition~4.2]{Cirac2021Matrix}.
+\end{definition}
+
+\begin{theorem}[MPO ZCL iff doubled-index MPS RFP]%
+    \label{thm:mpo_is_zcl_iff_to_mps_rfp}
+    \lean{MPOTensor.isZCL_iff_toMPSTensor_isRFP}
+    \leanok
+    \uses{def:mpo_is_zcl, def:mpo_to_mps, def:is_rfp, lem:mpo_transfer_eq_mps}
+    An MPO tensor has zero correlation length if and only if its doubled-index
+    MPS view is a renormalization fixed point.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    By Lemma~\ref{lem:mpo_transfer_eq_mps}, the transfer map of $M$ agrees with
+    the transfer map of its doubled-index MPS view. Thus
+    $\E_M \circ \E_M = \E_M$ holds exactly when the transfer map of
+    $M.\mathrm{toMPSTensor}$ is idempotent, which is the RFP condition.
+\end{proof}
+
 \section{MPDOs and LPDOs}
 
 \begin{definition}[MPDO]\label{def:mpdo}
