@@ -101,7 +101,7 @@ structure HorizontalCFData {r : ℕ} {dim : Fin r → ℕ}
   /-- Each block is algebraically injective. -/
   block_injective : ∀ k, MPSTensor.IsInjective (A k)
   /-- Each block is left-canonical. -/
-  leftCanonical : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1
+  left_canonical : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1
   /-- No block weight vanishes. -/
   weight_ne_zero : ∀ k, μ k ≠ 0
 
