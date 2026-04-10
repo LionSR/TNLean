@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.ParentHamiltonian.Defs
+import TNLean.MPS.RFP.Defs
 
 /-!
 # Commuting parent Hamiltonians
@@ -21,6 +22,10 @@ parent Hamiltonians (NNCPH).
 
 * `MPSTensor.IsCommutingParentHam.ham_comm_localTerm` — if local terms commute,
   the full Hamiltonian commutes with each local term.
+* `MPSTensor.rfp_implies_nncph` — scaffold for the RFP `⟹` NNCPH direction of
+  Theorem 3.10.
+* `MPSTensor.nncph_implies_rfp` — scaffold for the NNCPH `⟹` RFP direction of
+  Theorem 3.10.
 
 ## References
 
@@ -28,6 +33,8 @@ parent Hamiltonians (NNCPH).
 * [Beigi–Shor–Whalen, CMP 2012] — ground-space characterization for
   commuting nearest-neighbor Hamiltonians in 1D
 -/
+
+open scoped Matrix BigOperators
 
 namespace MPSTensor
 
@@ -69,5 +76,30 @@ theorem IsCommutingParentHam.ham_comm_localTerm {A : MPSTensor d D} {L N : ℕ}
   congr 1
   ext j : 1
   exact _h j i
+
+/-- **Theorem 3.10(i)⟹(iii)** (arXiv:1606.00608): RFP implies NNCPH.
+A renormalization fixed-point tensor in canonical form has a nearest-neighbor
+commuting parent Hamiltonian.
+
+The proof uses the structural form (Lemma B.1): RFP tensors generate
+product-of-entangled-pair states, whose parent Hamiltonians have commuting
+local terms.
+
+Gated on: `rfp_nt_structural_full` (the full Appendix B decomposition). -/
+theorem rfp_implies_nncph (A : MPSTensor d D) [NeZero D]
+    (hRFP : IsRFP A) (hNT : IsNormal A)
+    (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (N : ℕ) (hN : 2 ≤ N) :
+    IsNNCPH A N := by
+  sorry
+
+/-- **Theorem 3.10(iii)⟹(i)** (arXiv:1606.00608): NNCPH implies RFP.
+Gated on [Beigi–Shor–Whalen, CMP 2012] — ground-space characterization
+for commuting nearest-neighbor Hamiltonians in 1D. -/
+theorem nncph_implies_rfp (A : MPSTensor d D) [NeZero D]
+    (hNNCPH : ∀ N, 2 ≤ N → IsNNCPH A N)
+    (hNT : IsNormal A) :
+    IsRFP A := by
+  sorry
 
 end MPSTensor
