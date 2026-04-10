@@ -370,6 +370,41 @@ a block embedding of a mixed-transfer eigenvector.
     to be simultaneously unital and trace-preserving.
 \end{proof}
 
+\begin{theorem}[Gauged peripheral eigenvector yields Kraus intertwining]%
+    \label{thm:gauged_intertwining_core}
+    \lean{MPSTensor.gauged_intertwining_core}
+    \leanok
+    \uses{def:mixed_transfer, thm:qpf, thm:right_canonical_gauge}
+    Let $A$ and $B$ be normalized tensors, and let $X \neq 0$ satisfy
+    $F_{AB}(X) = \mu X$ with $|\mu| = 1$.
+    Choose positive-definite fixed points $\rho_A,\rho_B$ of the transfer maps
+    and gauge to unital families
+    $A'^i = S_A^{-1} A^i S_A$ and $B'^i = S_B^{-1} B^i S_B$ with
+    $S_A S_A^\dagger = \rho_A$ and $S_B S_B^\dagger = \rho_B$.
+    Then the transported matrix $X' = S_A^{-1} X (S_B^\dagger)^{-1}$ is nonzero,
+    the families $A'$ and $B'$ are unital, and for every~$i$ one has
+    \[
+        X' (B'^i)^\dagger = \mu \, (A'^i)^\dagger X',
+        \qquad
+        A'^i X' = \mu \, X' B'^i.
+    \]
+\end{theorem}
+
+\begin{theorem}[Intertwining yields gauge-phase equivalence]%
+    \label{thm:gauged_intertwining_gauge_phase}
+    \lean{MPSTensor.gaugePhaseEquiv_of_gauged_intertwining}
+    \leanok
+    \uses{def:gauge_phase_equiv}
+    Let $A$ and $B$ be tensors of the same bond dimension.
+    Suppose there are invertible gauges taking them to families $A'$ and $B'$,
+    an invertible matrix $X'$, and a scalar $\mu$ with $|\mu| = 1$ such that
+    \[
+        A'^i X' = \mu \, X' B'^i
+        \qquad \text{for all } i.
+    \]
+    Then $A$ and $B$ are gauge-phase equivalent.
+\end{theorem}
+
 \begin{remark}[Two gauge conventions]\label{rem:gauge_conventions}\leanok
     The right-canonical gauge used here, $A'^i = \rho^{-1/2} A^i \rho^{1/2}$,
     makes $\{A'^i\}$ a \emph{unital} Kraus family ($\sum_i A'^i (A'^i)^\dagger = \Id$).
@@ -401,6 +436,23 @@ a block embedding of a mixed-transfer eigenvector.
 
 \section{Spectral gap --- rectangular case}
 
+\begin{theorem}[Rectangular intertwining forces equal bond dimension]%
+    \label{thm:rectangular_intertwining_dim_eq}
+    \lean{MPSTensor.dim_eq_of_gauged_intertwining}
+    \leanok
+    \uses{def:injective}
+    Let $A$ and $B$ be injective tensors of bond dimensions $D_1$ and $D_2$.
+    If there exist $X \in M_{D_1 \times D_2}(\mathbb{C}) \setminus \{0\}$ and
+    $\mu \in \mathbb{C}$ such that
+    \[
+        X (B^i)^\dagger = \mu \, (A^i)^\dagger X,
+        \qquad
+        A^i X = \mu \, X B^i
+        \qquad \text{for all } i,
+    \]
+    then $D_1 = D_2$.
+\end{theorem}
+
 \begin{theorem}[Rectangular spectral gap]\label{thm:spectral_gap_rect}
     \lean{MPSTensor.mixedTransferSpectralRadius₂_lt_one_of_dim_ne}
     \leanok
@@ -413,7 +465,8 @@ a block embedding of a mixed-transfer eigenvector.
 
 \begin{proof}
     \leanok
-    \uses{thm:eigenvalue_bound}
+    \uses{thm:eigenvalue_bound, thm:gauged_intertwining_core,
+          thm:rectangular_intertwining_dim_eq}
     The same word-expansion argument as in
     Theorem~\ref{thm:eigenvalue_bound} gives $|\mu| \le 1$
     for every eigenvalue of $F_{AB}^{\mathrm{rect}}$.
@@ -421,20 +474,10 @@ a block embedding of a mixed-transfer eigenvector.
     modulus-one eigenvector $X \in M_{D_1 \times D_2}(\C) \setminus \{0\}$.
 
     Gauge $A$ and $B$ separately to unital Kraus families and apply the
-    block-embedding Kadison--Schwarz argument as in the square case
-    (Theorem~\ref{thm:modulus_one_gauge}, Steps~2--3).
-    The Kraus commutation relation gives $A'^i X' = X' B'^i$
-    for all~$i$.
-    Now consider $\ker(X') \subseteq \C^{D_2}$. If $v \in \ker(X')$,
-    then $X' B'^i v = A'^i X' v = 0$, so $B'^i v \in \ker(X')$ for
-    every~$i$.  Since $B$ is injective, $\{B'^i\}$ spans $M_{D_2}(\C)$,
-    so $\ker(X')$ is invariant under every $D_2 \times D_2$ matrix and
-    is therefore either $\{0\}$ or $\C^{D_2}$.  Since $X' \ne 0$,
-    we have $\ker(X') = \{0\}$, so $X'$ is injective as a linear
-    map $\C^{D_2} \to \C^{D_1}$ and $D_2 \le D_1$.
-    Applying the same argument to $X'^\dagger$ (using the commutation
-    relation for the adjoint block family) gives $D_1 \le D_2$.
-    Hence $D_1 = D_2$, contradicting the hypothesis.
+    block-embedding Kadison--Schwarz argument as in the square case.
+    The resulting intertwining relations satisfy the hypotheses of
+    Theorem~\ref{thm:rectangular_intertwining_dim_eq}, so $D_1 = D_2$,
+    contradicting the hypothesis.
 \end{proof}
 
 \begin{theorem}[Rectangular overlap decay]\label{thm:overlap_decay_rect}
@@ -549,6 +592,7 @@ the Perron--Frobenius fixed point.
     \uses{thm:modulus_one_gauge, thm:qpf, thm:right_canonical_gauge,
           thm:ks_peripheral, thm:kraus_commute,
           thm:left_multiplicative_identity, thm:psd_fp_pd_irred,
+          thm:gauged_intertwining_core, thm:gauged_intertwining_gauge_phase,
           thm:skolem_noether}
     Choose a modulus-one eigenvector as in
     Theorem~\ref{thm:modulus_one_gauge}.
@@ -567,10 +611,11 @@ the Perron--Frobenius fixed point.
     Under the weaker hypothesis of irreducibility,
     Theorem~\ref{thm:psd_fp_pd_irred} upgrades it to positive
     definite, giving invertibility of~$X'$.
-    The intertwining identity $A'^i X' = X' B'^i$ follows from Kraus
-    commutation alone and does not require the Kraus operators to
-    span~$\MN{D}$.
-    Step~5 (Skolem--Noether conclusion) is unchanged.
+    Formally, Theorem~\ref{thm:gauged_intertwining_core} packages the
+    separately gauged eigenvector into the required intertwining
+    relations.
+    Once $X'$ is invertible, Theorem~\ref{thm:gauged_intertwining_gauge_phase}
+    upgrades the intertwining to gauge-phase equivalence.
 \end{proof}
 
 \begin{theorem}[Strict spectral gap (irreducible-TP)]%
@@ -769,6 +814,23 @@ the Perron--Frobenius fixed point.
 This section records the support-projection theory
 behind stationary states, following~\cite[\S6.4]{Wolf2012Quantum}.
 
+\begin{lemma}[Lower-triangular Kraus condition implies corner invariance]%
+    \label{lem:lower_zero_invariance}
+    \lean{MPSTensor.lowerZero_implies_invariance}
+    \leanok
+    Let $A$ be an MPS tensor and let $P$ be an orthogonal projection.
+    If
+    \[
+        (\Id - P) A^i P = 0
+        \qquad \text{for all } i,
+    \]
+    then
+    \[
+        P \, \E_A(P X P) \, P = \E_A(P X P)
+    \]
+    for all $X \in \MN{D}$.
+\end{lemma}
+
 \begin{theorem}[Support projection invariance (Wolf Lemma~6.4)]%
     \label{thm:support_proj_fixed}
     \lean{Channel.support_proj_fixed}
@@ -786,12 +848,11 @@ behind stationary states, following~\cite[\S6.4]{Wolf2012Quantum}.
 
 \begin{proof}
     \leanok
+    \uses{lem:lower_zero_invariance}
     Write $E$ in Kraus form $E(X) = \sum_i K_i X K_i^\dagger$.
     From $E(\rho) = \rho$ and $\rho \ge 0$ one deduces
-    $(\Id - P) K_i P = 0$ for all~$i$, i.e.\ each Kraus operator
-    maps the range of~$P$ into itself.
-    The identity then follows by expanding the Kraus sum and
-    using $K_i P = P K_i P$.
+    $(\Id - P) K_i P = 0$ for all~$i$.
+    Apply Lemma~\ref{lem:lower_zero_invariance}.
 \end{proof}
 
 \begin{definition}[Stationary state]\label{def:stationaryState}
