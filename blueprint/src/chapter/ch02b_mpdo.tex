@@ -279,8 +279,7 @@ legs cyclically and taking the resulting trace.
 \section{Horizontal and Vertical Canonical Forms}
 
 \begin{definition}[Horizontal canonical form for an MPO]\label{def:horizontal_cf_mpdo}
-    \lean{MPOTensor.IsHorizontalCF}
-    \leanok
+    \notready
     \uses{def:mpo_tensor, def:tensor_from_blocks, def:injective, def:same_mpv2}
     An MPO tensor is in \emph{horizontal canonical form} if its doubled-index
     MPS tensor generates the same MPV family as a block-diagonal tensor
@@ -289,8 +288,7 @@ legs cyclically and taking the resulting trace.
 \end{definition}
 
 \begin{definition}[Vertical canonical form for an MPO]\label{def:vertical_cf_mpdo}
-    \lean{MPOTensor.IsVerticalCF}
-    \leanok
+    \notready
     \uses{def:mpo_tensor, def:bnt, def:same_mpv2, def:tensor_from_blocks}
     An MPO tensor is in \emph{vertical canonical form} if its diagonal MPS
     tensor $\{M^{ii}\}_{i=0}^{d-1}$ generates the same MPV family as a
@@ -304,7 +302,6 @@ legs cyclically and taking the resulting trace.
 
 \begin{lemma}[Blockwise equality from agreement on the MPV family]
     \label{lem:blockwise_insert_eq_of_mpv_agree}
-    \lean{MPOTensor.blockwise_insert_eq_of_mpv_agree}
     \notready
     \uses{def:tensor_from_blocks, def:injective}
     Let $\bigoplus_k \mu_k A_k$ be a block-diagonal tensor whose blocks are
@@ -324,7 +321,6 @@ legs cyclically and taking the resulting trace.
 
 \begin{theorem}[Horizontal canonical form implies vertical canonical form]
     \label{thm:vertical_cf_of_horizontal_cf}
-    \lean{MPOTensor.verticalCF_of_horizontalCF}
     \notready
     \uses{def:mpdo, def:horizontal_cf_mpdo, def:vertical_cf_mpdo,
         lem:blockwise_insert_eq_of_mpv_agree}
