@@ -355,7 +355,7 @@ theorem gauged_intertwining_core
       refine ⟨Sblock, hSblock_unit, ?_⟩
       simp [rhoT, Sblock, Matrix.star_eq_conjTranspose, Matrix.fromBlocks_conjTranspose,
         Matrix.fromBlocks_multiply]
-    exact Matrix.IsStrictlyPositive.posDef hrhoT_strict
+    exact Matrix.isStrictlyPositive_iff_posDef.mp hrhoT_strict
   have hrhoT_fix : Kraus.adjointMap K rhoT = rhoT := by
     have hAblock : ∑ i : Fin d, (A' i)ᴴ * (SAᴴ * SA) * (A' i) = SAᴴ * SA := by
       have hterm :
