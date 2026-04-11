@@ -150,6 +150,23 @@ structure HasCommutingParentHam (P_K : E →ₗ[ℂ] E) where
   /-- `P_K` is the intersection projector: `P_AX ∘ P_XB = P_K`. -/
   hK : P_AX ∘ₗ P_XB = P_K
 
+/-- In the current abstract setting, every idempotent endomorphism has a
+trivial `HasCommutingParentHam` witness obtained by taking
+`P_AX = P_XB = P_K`.
+
+This definition is intentionally explicit: it explains why the forward
+direction of Proposition D.3 cannot be formalized meaningfully without
+additional tensor-product locality data. -/
+def HasCommutingParentHam.ofIdem
+    {P_K : E →ₗ[ℂ] E} (hK_idem : P_K ∘ₗ P_K = P_K) :
+    HasCommutingParentHam P_K where
+  P_AX := P_K
+  P_XB := P_K
+  hAX_idem := hK_idem
+  hXB_idem := hK_idem
+  hcomm := rfl
+  hK := hK_idem
+
 /-- **Proposition D.3, backward direction** (arXiv:1606.00608, Appendix D, §D.2):
 If a subspace K has a commuting parent Hamiltonian decomposition
 `P_K = P_AX ∘ P_XB` with `[P_AX, P_XB] = 0`, and observables on region A
