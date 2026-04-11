@@ -206,7 +206,7 @@ import TNLean.PiAlgebra.GlobalSymmetry
 
 -- Layer 3b: MPO / MPDO / LPDO foundations
 import TNLean.MPS.MPDO.Defs
-import TNLean.MPS.MPDO.VerticalCF
+-- import TNLean.MPS.MPDO.VerticalCF  -- scaffold with sorry; excluded until proofs are complete
 
 -- MPS examples
 import TNLean.MPS.Examples.AKLT
