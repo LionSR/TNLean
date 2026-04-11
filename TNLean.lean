@@ -132,7 +132,6 @@ import TNLean.MPS.Core.Transfer
 import TNLean.MPS.Core.OrthogonalProjectionInvariance
 import TNLean.MPS.Core.BlockingTransfer
 import TNLean.MPS.CanonicalForm.BlockingViaAdjoint
-import TNLean.MPS.FundamentalTheorem.TransferNormalization
 import TNLean.MPS.Irreducible.FixedPointProjection
 import TNLean.MPS.Core.CPPrimitive
 import TNLean.MPS.Core.Correlations
