@@ -25,7 +25,7 @@ spectral-radius infrastructure, and the rectangular different-dimension analogue
 formalized below as well.
 -/
 
-open scoped Matrix ComplexOrder MatrixOrder BigOperators NNReal ENNReal Matrix.Norms.Elementwise
+open scoped Matrix ComplexOrder MatrixOrder BigOperators NNReal ENNReal Matrix.Norms.Operator
 
 namespace MPSTensor
 

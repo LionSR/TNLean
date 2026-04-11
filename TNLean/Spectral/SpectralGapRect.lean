@@ -42,7 +42,7 @@ This is the "dimension-mismatch" spectral gap: if the bond dimensions differ, th
   *Matrix Product State Representations*, 2007, Lemma 5.
 -/
 
-open scoped Matrix MatrixOrder ComplexOrder BigOperators NNReal ENNReal Matrix.Norms.Elementwise
+open scoped Matrix MatrixOrder ComplexOrder BigOperators NNReal ENNReal Matrix.Norms.Operator
 
 namespace MPSTensor
 
