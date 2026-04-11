@@ -7,18 +7,17 @@ import TNLean.MPS.MPDO.ZCL
 /-!
 # General MPDO renormalization fixed point
 
-This file introduces a provisional mixed-state RFP definition for MPO tensors,
-following the transfer-map aspect of arXiv:1606.00608, Definition 4.1.
+This file records consequences of the provisional mixed-state RFP definition for
+MPO tensors, following the transfer-map aspect of arXiv:1606.00608,
+Definition 4.1.
 
 The full definition in the paper is phrased using trace-preserving completely
-positive blocking and unblocking maps. In this first pass we package the
-transfer-map idempotence condition, which is the part already supported by the
-current infrastructure.
+positive blocking and unblocking maps. In this first pass `MPOTensor.IsRFP`
+packages the transfer-map idempotence condition, which is the part already
+supported by the current infrastructure.
 
-## Main definitions
+## Main results
 
-* `MPOTensor.IsRFP`: provisional mixed-state RFP condition via idempotent
-  transfer map.
 * `MPOTensor.isRFP_iff_isZCL`: this provisional RFP condition coincides with
   `MPOTensor.IsZCL`.
 
