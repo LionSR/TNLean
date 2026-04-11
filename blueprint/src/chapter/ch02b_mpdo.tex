@@ -226,6 +226,41 @@ legs cyclically and taking the resulting trace.
     Hence $\rho^{(N)}(M) = \sum_\kappa \ketbra{\psi_\kappa}{\psi_\kappa} \ge 0$.
 \end{proof}
 
+\section{Purification RFP}
+
+\begin{definition}[Purifying MPS tensor]\label{def:purifying_mps_tensor}
+    \lean{MPOTensor.purifyingMPSTensor}
+    \leanok
+    \uses{def:mpo_tensor}
+    Given a purifying family
+    $A^{(i,k)} \in \MN{D'}$ for $i \in \{0,\ldots,d{-}1\}$ and
+    $k \in \{0,\ldots,d_K{-}1\}$, the \emph{purifying MPS tensor} is the
+    MPS tensor with physical dimension $d \cdot d_K$ and bond dimension $D'$
+    obtained by bundling the pair $(i,k)$ into a single index.
+\end{definition}
+
+\begin{definition}[Purification RFP]\label{def:is_prfp}
+    \lean{MPOTensor.IsPRFP}
+    \leanok
+    \uses{def:lpdo, def:purifying_mps_tensor, def:is_rfp}
+    An MPO tensor $M$ has a \emph{purification RFP} if it admits an LPDO
+    witness whose purifying MPS tensor is a pure-state renormalization
+    fixed point.
+    This is \cite[Definition~4.3]{Cirac2021Matrix}.
+\end{definition}
+
+\begin{theorem}[Purification RFP implies LPDO]\label{thm:prfp_is_lpdo}
+    \lean{MPOTensor.IsPRFP.isLPDO}
+    \leanok
+    \uses{def:is_prfp, def:lpdo}
+    A purification-RFP tensor is, in particular, an LPDO.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The PRFP condition provides an LPDO witness by construction.
+\end{proof}
+
 \section{Pure-state recovery inside the MPO formalism}
 
 \begin{definition}[MPDO renormalization fixed point]\label{def:is_rfp_mpdo}
@@ -238,6 +273,36 @@ legs cyclically and taking the resulting trace.
         \E_M \circ \E_M = \E_M.
     \]
 \end{definition}
+
+\begin{theorem}[MPDO RFP iff MPO ZCL]\label{thm:is_rfp_iff_is_zcl}
+    \lean{MPOTensor.isRFP_iff_isZCL}
+    \leanok
+    \uses{def:is_rfp_mpdo, def:mpo_is_zcl}
+    The provisional MPDO renormalization fixed-point condition is equivalent to
+    the zero-correlation-length condition for MPO tensors.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Both conditions assert $\E_M \circ \E_M = \E_M$; they are definitionally
+    identical.
+\end{proof}
+
+\begin{theorem}[MPDO RFP iff doubled-index MPS RFP]\label{thm:is_rfp_iff_to_mps_rfp}
+    \lean{MPOTensor.isRFP_iff_toMPSTensor_isRFP}
+    \leanok
+    \uses{def:is_rfp_mpdo, def:mpo_to_mps, def:is_rfp, def:mpo_is_zcl,
+        thm:mpo_is_zcl_iff_to_mps_rfp}
+    The provisional MPDO RFP condition is equivalent to the pure-state RFP
+    condition for the doubled-index MPS tensor.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpo_is_zcl_iff_to_mps_rfp}
+    Unfold the MPDO RFP condition to its definitional equivalent, MPO ZCL,
+    then apply Theorem~\ref{thm:mpo_is_zcl_iff_to_mps_rfp}.
+\end{proof}
 
 \begin{definition}[Diagonal pure-state embedding as an MPO]\label{def:to_mpo_tensor}
     \lean{MPSTensor.toMPOTensor}
