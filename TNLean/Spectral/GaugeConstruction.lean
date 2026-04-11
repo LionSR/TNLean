@@ -23,7 +23,7 @@ core used by the spectral-gap rigidity arguments.  The shared pattern is:
 5. feed the intertwining identities into the file-specific endgames.
 -/
 
-open scoped Matrix MatrixOrder ComplexOrder BigOperators Matrix.Norms.Operator
+open scoped Matrix MatrixOrder ComplexOrder BigOperators
 
 attribute [local instance] Matrix.linftyOpNormedAddCommGroup Matrix.linftyOpNormedSpace
 
