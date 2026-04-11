@@ -33,22 +33,6 @@ namespace MPOTensor
 
 variable {d D : ℕ}
 
-/-- A provisional mixed-state **renormalization fixed point** condition:
-the MPO transfer map is idempotent.
-
-This captures the transfer-map fixed-point equation from
-arXiv:1606.00608, Definition 4.1, but does not yet encode the explicit
-trace-preserving completely positive blocking and unblocking maps from the
-paper.
-
-For tensors already put into canonical form, compare `MPOTensor.IsZCL` in
-`TNLean/MPS/MPDO/ZCL.lean`: in that setting this provisional fixed-point
-condition matches the corresponding zero-correlation-length condition.
-
-TODO: strengthen this definition to the full `T`/`S` formulation. -/
-def IsRFP (M : MPOTensor d D) : Prop :=
-  transferMap M ∘ₗ transferMap M = transferMap M
-
 /-- In the current development, the provisional mixed-state RFP condition is
 definitionally the same as MPO ZCL. -/
 theorem isRFP_iff_isZCL (M : MPOTensor d D) : IsRFP M ↔ IsZCL M :=
