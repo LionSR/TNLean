@@ -670,8 +670,8 @@ a positive-definite fixed point, peripheral spectrum `{1}`, and is irreducible
    (`isIrreducibleCP_transferMap_of_isIrreducibleTensor`).
 
 This packaged strong-irreducibility statement is exactly the input later fed
-into Proposition 3(c)→(b): peripheral spectrum `{1}` supplies the aperiodicity
-used by the irreducibility-to-normality endpoint.
+into Proposition 3(c)→(b), which yields eventual full Kraus rank (hence
+normality) directly, without passing through an aperiodicity argument.
 
 Paper: Proposition 3 (a)⟹(c) of arXiv:0909.5347.
 This is the full paper-facing (a)→(c) direction. -/
