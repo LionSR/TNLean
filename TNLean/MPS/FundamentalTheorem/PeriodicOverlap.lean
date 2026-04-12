@@ -595,8 +595,9 @@ structure via `IsCyclicSectorDecomp`. Global nondegeneracy
 (`hNondegA : ∀ u, dimA u ≠ 0`) ensures every sector of `A` has
 positive bond dimension, which is needed for normality of each sector
 tensor. The `hSomeMatch` witness provides a single matching sector pair
-`(u₀, v₀)` with compatible dimensions, from which translation
-propagation extends the match to all sectors.
+`(u₀, v₀)` with compatible dimensions (the nondegeneracy of `dimA u₀`
+follows from `hNondegA`), from which translation propagation extends the
+match to all sectors.
 
 This is Eq. (A.17)–(A.18) of arXiv:1708.00029. -/
 theorem periodicOverlap_gaugeEquiv_of_sector_match
@@ -624,18 +625,18 @@ theorem periodicOverlap_gaugeEquiv_of_sector_match
     (hB_cyclic : IsCyclicSectorDecomp B blocksB)
     (hNondegA : ∀ u, dimA u ≠ 0)
     (hSomeMatch : ∃ (u₀ v₀ : Fin m) (hdim : dimA u₀ = dimB v₀),
-      dimA u₀ ≠ 0 ∧ GaugePhaseEquiv
+      GaugePhaseEquiv
         (cast (congr_arg
           (MPSTensor (blockPhysDim d m)) hdim)
           (blocksA u₀))
         (blocksB v₀)) :
     RepeatedBlocks A B := by
   -- Step 1: Extract the matching witness
-  obtain ⟨u₀, v₀, hdim₀, hNondeg₀, hGPE₀⟩ := hSomeMatch
+  obtain ⟨u₀, v₀, hdim₀, hGPE₀⟩ := hSomeMatch
   -- Step 2: Translation propagation (#4) → matching for all offsets
   have hPropag := sectorMatch_propagation A B hA.leftCanonical hB.leftCanonical
     blocksA blocksB hA_blocks_lc hB_blocks_lc hA_mpv hB_mpv
-    hA_cyclic hB_cyclic hdim₀ hNondeg₀ hGPE₀
+    hA_cyclic hB_cyclic hdim₀ (hNondegA u₀) hGPE₀
   -- Step 3: Reindex with q = v₀ - u₀ to get matching for all sector pairs
   set q : Fin m := v₀ - u₀ with q_def
   have hBlockMatch : ∀ u : Fin m,
@@ -719,17 +720,10 @@ theorem periodicOverlapDichotomy
               (blocksA u₀))
             (blocksB v₀)
       · -- Some match → gauge-equivalent (Case 3).
-        have hMatch' : ∃ (u₀ v₀ : Fin m_a) (hdim : dimA u₀ = dimB v₀),
-            dimA u₀ ≠ 0 ∧ GaugePhaseEquiv
-              (cast (congr_arg (MPSTensor (blockPhysDim d m_a)) hdim)
-                (blocksA u₀))
-              (blocksB v₀) := by
-          rcases hMatch with ⟨u₀, v₀, hdim, hGauge⟩
-          exact ⟨u₀, v₀, hdim, hA_nondeg u₀, hGauge⟩
         exact Or.inr ⟨rfl,
           periodicOverlap_gaugeEquiv_of_sector_match A B hA hB
             blocksA blocksB hA_blocks_lc hB_blocks_lc hA_mpv hB_mpv
-            hA_cyclic hB_cyclic hA_nondeg hMatch'⟩
+            hA_cyclic hB_cyclic hA_nondeg hMatch⟩
       · -- No match → orthogonal (Case 2).
         have hNoMatch : ∀ u v (hdim : dimA u = dimB v),
             dimA u ≠ 0 →
