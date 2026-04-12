@@ -91,8 +91,8 @@ theorem fundamentalTheorem_equalMPV_CFBNT
     (hSame : SameMPV₂ (toTensorFromBlocks μ A) (toTensorFromBlocks μ B)) :
     (∀ k, GaugeEquiv (A k) (B k)) ∧
     GaugeEquiv (toTensorFromBlocks μ A) (toTensorFromBlocks μ B) :=
-  fundamentalTheorem_canonicalForm μ A B hA.toIsCanonicalForm hB.block_injective hB.leftCanonical
-    hSame
+  fundamentalTheorem_canonicalForm μ A B hA.toIsCanonicalForm hA.mu_strict_anti
+    hB.block_injective hB.leftCanonical hSame
 
 /-- **Equal-MPV FT for CF-BNT with explicit gauge matrices.** -/
 theorem fundamentalTheorem_equalMPV_CFBNT_explicit
@@ -105,8 +105,8 @@ theorem fundamentalTheorem_equalMPV_CFBNT_explicit
     ∃ (X : ∀ k, GL (Fin (dim k)) ℂ),
     ∀ k i, B k i = (X k : Matrix _ _ ℂ) * A k i *
       (((X k)⁻¹ : GL _ ℂ) : Matrix _ _ ℂ) :=
-  fundamentalTheorem_canonicalForm_explicit μ A B hA.toIsCanonicalForm hB.block_injective
-    hB.leftCanonical hSame
+  fundamentalTheorem_canonicalForm_explicit μ A B hA.toIsCanonicalForm hA.mu_strict_anti
+    hB.block_injective hB.leftCanonical hSame
 
 /-! ## Theorem 2: Proportional-MPV Fundamental Theorem (Thm 4.4)
 

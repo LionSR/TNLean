@@ -27,7 +27,8 @@ and block-separation core helper lemmas that underpin the main block-separation 
 ## Contents
 
 - Additive split API: `HasInjectiveBlocks`, `HasIrreducibleBlocks`, `HasPrimitiveBlocks`,
-  `IsLeftCanonicalBlockFamily`, `HasStrictOrderedNonzeroWeights`, `HasNormalizedSelfOverlap`.
+  `IsLeftCanonicalBlockFamily`, `HasOrderedNonzeroWeights`, `HasStrictOrderedNonzeroWeights`,
+  `HasNormalizedSelfOverlap`.
 - Bundled conditions: `IsCanonicalForm`, `IsNormalCanonicalForm` with projections and
   round-trip constructors.
 - Section `AlgebraicLemmas`: characteristic polynomial utilities.
@@ -147,7 +148,24 @@ theorem tp_gauge (hA : IsLeftCanonicalBlockFamily (d := d) A) :
 
 end IsLeftCanonicalBlockFamily
 
-/-- Strict weight ordering together with nonvanishing coefficients. -/
+/-- Non-increasing weight ordering together with nonvanishing coefficients.
+
+This is the relaxed weight-ordering condition matching the paper definitions
+(PGVWC07, CPGSV21): block weights are non-increasing by modulus, but ties are
+permitted. The strictly decreasing variant `HasStrictOrderedNonzeroWeights`
+is used internally by the block-separation and coefficient-convergence proofs. -/
+structure HasOrderedNonzeroWeights {r : ℕ} (μ : Fin r → ℂ) : Prop where
+  /-- Non-increasing ordering of the block weights by modulus. -/
+  mu_antitone : Antitone (fun k : Fin r => ‖μ k‖)
+  /-- No block weight vanishes. -/
+  mu_ne_zero : ∀ k, μ k ≠ 0
+
+/-- Strict weight ordering together with nonvanishing coefficients.
+
+This is the strengthened weight-ordering condition used in the block-separation
+proofs: `StrictAnti` on moduli guarantees a spectral gap between the dominant
+block and all others, which drives the geometric convergence. At the BNT level,
+the grouping step ensures this holds. -/
 structure HasStrictOrderedNonzeroWeights {r : ℕ} (μ : Fin r → ℂ) : Prop where
   /-- Strict ordering of the block weights by modulus. -/
   mu_strict_anti : StrictAnti (fun k : Fin r => ‖μ k‖)
@@ -158,6 +176,12 @@ namespace HasStrictOrderedNonzeroWeights
 
 variable {r : ℕ}
 variable {μ : Fin r → ℂ}
+
+/-- Weaken strict weight ordering to non-increasing weight ordering. -/
+def toHasOrderedNonzeroWeights (hμ : HasStrictOrderedNonzeroWeights μ) :
+    HasOrderedNonzeroWeights μ where
+  mu_antitone := hμ.mu_strict_anti.antitone
+  mu_ne_zero := hμ.mu_ne_zero
 
 /-- Strictly modulus-ordered nonzero block weights are injective. -/
 theorem mu_injective (hμ : HasStrictOrderedNonzeroWeights μ) : Function.Injective μ := by
@@ -199,15 +223,19 @@ end HasNormalizedSelfOverlap
 /-! ### Canonical form conditions -/
 
 /-- Bundled canonical-form conditions combining injectivity, left-canonical normalization
-`∑ᵢ Aᵢ† Aᵢ = I`, strict weight data, and overlap normalization in a single proposition. -/
+`∑ᵢ Aᵢ† Aᵢ = I`, non-increasing weight data, and overlap normalization in a single proposition.
+
+The weight ordering is `Antitone` (non-increasing by modulus), matching the paper definitions
+(PGVWC07, CPGSV21) which allow blocks with equal moduli. The strictly decreasing variant
+is enforced at the BNT level (`IsCanonicalFormBNT`) after the grouping step. -/
 structure IsCanonicalForm {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k)) : Prop where
   /-- Each block is algebraically injective (`span (range (A k)) = ⊤`). -/
   block_injective : ∀ k, IsInjective (A k)
   /-- Left-canonical normalization: `∑ᵢ Aᵢ† Aᵢ = I`. -/
   leftCanonical : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1
-  /-- Strict ordering of the block weights by modulus. -/
-  mu_strict_anti : StrictAnti (fun k : Fin r => ‖μ k‖)
+  /-- Non-increasing ordering of the block weights by modulus. -/
+  mu_antitone : Antitone (fun k : Fin r => ‖μ k‖)
   /-- No block weight vanishes. -/
   mu_ne_zero : ∀ k, μ k ≠ 0
   /-- **Aperiodicity / overlap normalization**: the MPV self-overlap converges to `1`.
@@ -235,10 +263,10 @@ def toIsLeftCanonicalBlockFamily (hCF : IsCanonicalForm μ A) :
     IsLeftCanonicalBlockFamily (d := d) A :=
   IsLeftCanonicalBlockFamily.ofForall hCF.leftCanonical
 
-/-- Project the bundled conditions to the separated weight data. -/
-def toHasStrictOrderedNonzeroWeights (hCF : IsCanonicalForm μ A) :
-    HasStrictOrderedNonzeroWeights μ where
-  mu_strict_anti := hCF.mu_strict_anti
+/-- Project the bundled conditions to the relaxed (non-increasing) weight data. -/
+def toHasOrderedNonzeroWeights (hCF : IsCanonicalForm μ A) :
+    HasOrderedNonzeroWeights μ where
+  mu_antitone := hCF.mu_antitone
   mu_ne_zero := hCF.mu_ne_zero
 
 /-- Project the bundled conditions to self-overlap normalization data. -/
@@ -246,36 +274,42 @@ def toHasNormalizedSelfOverlap (hCF : IsCanonicalForm μ A) :
     HasNormalizedSelfOverlap (d := d) A :=
   HasNormalizedSelfOverlap.ofForall hCF.overlap_tendsto_one
 
-/-- Rebuild the `IsCanonicalForm` bundle from the additive split API. -/
+/-- Rebuild the `IsCanonicalForm` bundle from the additive split API (relaxed ordering). -/
 def ofSeparatedData
     (hInj : HasInjectiveBlocks (d := d) A)
     (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
-    (hμ : HasStrictOrderedNonzeroWeights μ)
+    (hμ : HasOrderedNonzeroWeights μ)
     (hOverlap : HasNormalizedSelfOverlap (d := d) A) :
     IsCanonicalForm μ A where
   block_injective := hInj.block_injective
   leftCanonical := hLeft.leftCanonical
-  mu_strict_anti := hμ.mu_strict_anti
+  mu_antitone := hμ.mu_antitone
   mu_ne_zero := hμ.mu_ne_zero
   overlap_tendsto_one := hOverlap.overlap_tendsto_one
 
-theorem mu_injective (hCF : IsCanonicalForm μ A) : Function.Injective μ :=
-  hCF.toHasStrictOrderedNonzeroWeights.mu_injective
-
-theorem mu_norm_injective (hCF : IsCanonicalForm μ A) :
-    Function.Injective (fun k : Fin r => ‖μ k‖) :=
-  hCF.toHasStrictOrderedNonzeroWeights.mu_norm_injective
+/-- Rebuild the `IsCanonicalForm` bundle from the additive split API (strict ordering). -/
+def ofStrictSeparatedData
+    (hInj : HasInjectiveBlocks (d := d) A)
+    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
+    (hμ : HasStrictOrderedNonzeroWeights μ)
+    (hOverlap : HasNormalizedSelfOverlap (d := d) A) :
+    IsCanonicalForm μ A :=
+  ofSeparatedData hInj hLeft hμ.toHasOrderedNonzeroWeights hOverlap
 
 end IsCanonicalForm
 
 /-! ### Normal canonical form conditions -/
 
 /-- Bundled normal-canonical-form conditions: each block is irreducible,
-left-canonical, and peripheral-spectrum primitive, with strictly ordered
+left-canonical, and peripheral-spectrum primitive, with non-increasing
 nonzero weights and positive bond dimensions.
 
 This is the weaker “normal tensor” block notion from arXiv:1606.00608:
 each block is irreducible and its transfer map has peripheral spectrum `{1}`.
+The weight ordering is `Antitone` (non-increasing by modulus), matching the paper
+definitions which allow blocks with equal moduli. The strictly decreasing variant
+is enforced at the BNT level (`IsNormalCanonicalFormBNT`).
+
 The irreducibility field is stored separately on purpose: the repository's peripheral-spectrum
 primitive condition does not by itself imply irreducibility for arbitrary transfer maps.
 The self-overlap normalization is intended to be derived from primitivity rather than stored as a
@@ -289,8 +323,8 @@ structure IsNormalCanonicalForm {r : ℕ} {dim : Fin r → ℕ}
   /-- Each block transfer map is primitive in the peripheral-spectrum sense. -/
   block_primitive : ∀ k,
     _root_.IsPrimitive (transferMap (d := d) (D := dim k) (A k))
-  /-- Strict ordering of the block weights by modulus. -/
-  mu_strict_anti : StrictAnti (fun k : Fin r => ‖μ k‖)
+  /-- Non-increasing ordering of the block weights by modulus. -/
+  mu_antitone : Antitone (fun k : Fin r => ‖μ k‖)
   /-- No block weight vanishes. -/
   mu_ne_zero : ∀ k, μ k ≠ 0
   /-- All block bond dimensions are positive. -/
@@ -316,33 +350,36 @@ def toHasPrimitiveBlocks (hNCF : IsNormalCanonicalForm μ A) :
     HasPrimitiveBlocks (d := d) A :=
   HasPrimitiveBlocks.ofForall hNCF.block_primitive
 
-/-- Project the bundled conditions to the separated weight data. -/
-def toHasStrictOrderedNonzeroWeights (hNCF : IsNormalCanonicalForm μ A) :
-    HasStrictOrderedNonzeroWeights μ where
-  mu_strict_anti := hNCF.mu_strict_anti
+/-- Project the bundled conditions to the relaxed (non-increasing) weight data. -/
+def toHasOrderedNonzeroWeights (hNCF : IsNormalCanonicalForm μ A) :
+    HasOrderedNonzeroWeights μ where
+  mu_antitone := hNCF.mu_antitone
   mu_ne_zero := hNCF.mu_ne_zero
 
-/-- Rebuild the `IsNormalCanonicalForm` bundle from the additive split API. -/
+/-- Rebuild the `IsNormalCanonicalForm` bundle from the additive split API (relaxed ordering). -/
 def ofSeparatedData
     (hIrr : HasIrreducibleBlocks (d := d) A)
     (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
     (hPrim : HasPrimitiveBlocks (d := d) A)
-    (hμ : HasStrictOrderedNonzeroWeights μ)
+    (hμ : HasOrderedNonzeroWeights μ)
     (hDim : ∀ k, 0 < dim k) :
     IsNormalCanonicalForm μ A where
   block_irreducible := hIrr.block_irreducible
   leftCanonical := hLeft.leftCanonical
   block_primitive := hPrim.block_primitive
-  mu_strict_anti := hμ.mu_strict_anti
+  mu_antitone := hμ.mu_antitone
   mu_ne_zero := hμ.mu_ne_zero
   dim_pos := hDim
 
-theorem mu_injective (hNCF : IsNormalCanonicalForm μ A) : Function.Injective μ :=
-  hNCF.toHasStrictOrderedNonzeroWeights.mu_injective
-
-theorem mu_norm_injective (hNCF : IsNormalCanonicalForm μ A) :
-    Function.Injective (fun k : Fin r => ‖μ k‖) :=
-  hNCF.toHasStrictOrderedNonzeroWeights.mu_norm_injective
+/-- Rebuild the `IsNormalCanonicalForm` bundle from the additive split API (strict ordering). -/
+def ofStrictSeparatedData
+    (hIrr : HasIrreducibleBlocks (d := d) A)
+    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
+    (hPrim : HasPrimitiveBlocks (d := d) A)
+    (hμ : HasStrictOrderedNonzeroWeights μ)
+    (hDim : ∀ k, 0 < dim k) :
+    IsNormalCanonicalForm μ A :=
+  ofSeparatedData hIrr hLeft hPrim hμ.toHasOrderedNonzeroWeights hDim
 
 /-- In a normal canonical form, each block's self-overlap converges to `1`.
 
@@ -385,7 +422,7 @@ theorem toIsNormalCanonicalForm
   block_irreducible := hIrr
   leftCanonical := hCF.leftCanonical
   block_primitive := hPrim
-  mu_strict_anti := hCF.mu_strict_anti
+  mu_antitone := hCF.mu_antitone
   mu_ne_zero := hCF.mu_ne_zero
   dim_pos := hDim
 

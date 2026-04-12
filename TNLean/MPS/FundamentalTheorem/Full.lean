@@ -216,10 +216,10 @@ private lemma exists_nondecaying_overlap_of_sameMPV₂_CFBNT
     rw [← Finset.sum_div, ← Finset.sum_div]
     exact congr_arg (· / c ^ N) h
   have hμA_le : ∀ j : Fin rA, ‖μA j‖ ≤ ‖μA ⟨0, hrA_pos⟩‖ := by
-    intro j; exact hA.toIsCanonicalForm.mu_strict_anti.antitone
+    intro j; exact hA.toIsCanonicalForm.mu_antitone
       (show (⟨0, hrA_pos⟩ : Fin rA) ≤ j from Fin.mk_le_mk.mpr (Nat.zero_le _))
   have hμB_le : ∀ k : Fin rB, ‖μB k‖ ≤ ‖μB ⟨0, hrB_pos⟩‖ := by
-    intro k; exact hB.toIsCanonicalForm.mu_strict_anti.antitone
+    intro k; exact hB.toIsCanonicalForm.mu_antitone
       (show (⟨0, hrB_pos⟩ : Fin rB) ≤ k from Fin.mk_le_mk.mpr (Nat.zero_le _))
   -- Convergence helpers (`tendsto_inner_zero`, `tendsto_inner_one`,
   -- `bounded_mul_tendsto_zero`, `geometric_mul_bounded_tendsto_zero`,
@@ -250,7 +250,7 @@ private lemma exists_nondecaying_overlap_of_sameMPV₂_CFBNT
           (fun k hk => by
             rw [norm_div]
             exact (div_lt_one (norm_pos_iff.mpr hμB_ne)).mpr
-              (hB.toIsCanonicalForm.mu_strict_anti (by
+              (hB.mu_strict_anti (by
                 simp only [Fin.lt_def]; exact Nat.pos_of_ne_zero (by
                   intro h; exact hk (Fin.ext h)))))
           (fun k hk => hB_inner_off _ _ hk.symm)
@@ -263,7 +263,7 @@ private lemma exists_nondecaying_overlap_of_sameMPV₂_CFBNT
           (fun j hj => by
             rw [norm_div]
             exact (div_lt_one (norm_pos_iff.mpr hμA_ne)).mpr
-              (hA.toIsCanonicalForm.mu_strict_anti (by
+              (hA.mu_strict_anti (by
                 simp only [Fin.lt_def]; exact Nat.pos_of_ne_zero (by
                   intro h; exact hj (Fin.ext h)))))
           (fun j hj => hA_inner_off _ _ hj.symm)
@@ -307,7 +307,7 @@ private lemma exists_nondecaying_overlap_of_sameMPV₂_CFBNT
         (fun j hj => by
           rw [norm_div]
           exact (div_lt_one (norm_pos_iff.mpr hμA_ne)).mpr
-            (hA.toIsCanonicalForm.mu_strict_anti (by
+            (hA.mu_strict_anti (by
               simp only [a0, Fin.lt_def]; exact Nat.pos_of_ne_zero (by
                 intro h; exact hj (Fin.ext h)))))
         (fun j hj => hA_inner_off a0 j hj.symm)
@@ -339,7 +339,7 @@ private lemma exists_nondecaying_overlap_of_sameMPV₂_CFBNT
         (fun k hk => by
           rw [norm_div]
           exact (div_lt_one (norm_pos_iff.mpr hμB_ne)).mpr
-            (hB.toIsCanonicalForm.mu_strict_anti (by
+            (hB.mu_strict_anti (by
               simp only [b0, Fin.lt_def]; exact Nat.pos_of_ne_zero (by
                 intro h; exact hk (Fin.ext h)))))
         (fun k hk => hB_inner_off b0 k hk.symm)
@@ -588,14 +588,14 @@ private lemma exists_nondecaying_overlap_of_sameMPV₂_CFBNT
           (fun k hk => by
             rw [norm_div]
             exact (div_lt_one (norm_pos_iff.mpr hμB_ne)).mpr
-              (hB.toIsCanonicalForm.mu_strict_anti (by
+              (hB.mu_strict_anti (by
                 simp only [b0, Fin.lt_def]; exact Nat.pos_of_ne_zero (by
                   intro h; exact hk (Fin.ext h)))))
           (fun k hk => hB_inner_off b0 k hk.symm)
       -- LHS: all terms → 0 since |μA j₁ / μB b0| < 1 (j₁ ≠ a0, strict ordering).
       have hRatio_lt : ‖μA j₁ / μB b0‖ < 1 := by
         rw [norm_div]; exact (div_lt_one (norm_pos_iff.mpr hμB_ne)).mpr
-          (mu0_norm_eq ▸ hA.toIsCanonicalForm.mu_strict_anti (by
+          (mu0_norm_eq ▸ hA.mu_strict_anti (by
             simp only [a0, Fin.lt_def]; exact Nat.pos_of_ne_zero
               (fun h => hj1 (Fin.ext h))))
       have hLHS_zero : Tendsto (fun N => ∑ j, (μA j / μB b0) ^ N *
@@ -676,7 +676,7 @@ private lemma exists_nondecaying_overlap_of_sameMPV₂_CFBNT
         sum_tendsto_one_of_diag (hμ0 := hμA_ne) (j0 := a0) rfl (hA_inner_diag a0)
           (fun j hj => by
             rw [norm_div]; exact (div_lt_one (norm_pos_iff.mpr hμA_ne)).mpr
-              (hA.toIsCanonicalForm.mu_strict_anti (by
+              (hA.mu_strict_anti (by
                 simp only [a0, Fin.lt_def]; exact Nat.pos_of_ne_zero
                   (fun h => hj (Fin.ext h)))))
           (fun j hj => hA_inner_off a0 j hj.symm)
@@ -697,7 +697,7 @@ private lemma exists_nondecaying_overlap_of_sameMPV₂_CFBNT
             geometric_mul_inner_tendsto_zero _ _ _ (by
               rw [norm_div]
               exact (div_lt_one (norm_pos_iff.mpr hμA_ne)).mpr
-                (lt_of_lt_of_eq (hB.toIsCanonicalForm.mu_strict_anti
+                (lt_of_lt_of_eq (hB.mu_strict_anti
                   (show b0 < k from Fin.mk_lt_mk.mpr (Nat.pos_of_ne_zero
                     (fun h => (Finset.ne_of_mem_erase hk) (Fin.ext h)))))
                   mu0_norm_eq.symm))
@@ -815,7 +815,7 @@ private lemma exists_nondecaying_overlap_of_sameMPV₂_CFBNT
     IsCanonicalFormBNT.ofSeparatedData
       (HasInjectiveBlocks.ofForall (fun k => hA_inj_local (succA k)))
       (IsLeftCanonicalBlockFamily.ofForall (fun k => hA_left_local (succA k)))
-      ⟨hA.toIsCanonicalForm.mu_strict_anti.comp_strictMono succA_strictMono,
+      ⟨hA.mu_strict_anti.comp_strictMono succA_strictMono,
        fun k => hA.toHasStrictOrderedNonzeroWeights.mu_ne_zero (succA k)⟩
       (HasNormalizedSelfOverlap.ofForall (fun k => hA_self (succA k)))
       (fun j k hjk hdim => hA.blocks_not_equiv (succA j) (succA k)
@@ -824,7 +824,7 @@ private lemma exists_nondecaying_overlap_of_sameMPV₂_CFBNT
     IsCanonicalFormBNT.ofSeparatedData
       (HasInjectiveBlocks.ofForall (fun k => hB_inj_local (succB k)))
       (IsLeftCanonicalBlockFamily.ofForall (fun k => hB_left_local (succB k)))
-      ⟨hB.toIsCanonicalForm.mu_strict_anti.comp_strictMono succB_strictMono,
+      ⟨hB.mu_strict_anti.comp_strictMono succB_strictMono,
        fun k => hB.toHasStrictOrderedNonzeroWeights.mu_ne_zero (succB k)⟩
       (HasNormalizedSelfOverlap.ofForall (fun k => hB_self (succB k)))
       (fun j k hjk hdim => hB.blocks_not_equiv (succB j) (succB k)
