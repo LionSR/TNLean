@@ -594,6 +594,17 @@ the block-injective generalization is future work.
     $D \ge 1$, and in normal form, the interaction range can be reduced to $L_0 + 1$.
 \end{theorem}
 
+\begin{proof}
+    \leanok
+    \uses{thm:chain_ground_space_eq_mpv_normal, thm:mpv_ne_zero_blk_injective}
+    By Theorem~\ref{thm:chain_ground_space_eq_mpv_normal}, the chain ground
+    space equals the MPV submodule $\spn_{\C}\{\ket{V^{(N)}(A)}\}$.
+    Since $A$ is $L_0$-block-injective with $L_0 > 0$ and $N \ge L_0 + 1$,
+    the MPV is nonzero by Theorem~\ref{thm:mpv_ne_zero_blk_injective}.
+    A one-dimensional subspace spanned by a nonzero vector has
+    $\dim = 1$.
+\end{proof}
+
 \section{Commuting parent Hamiltonians}\label{sec:commuting_parent_ham}
 
 A parent Hamiltonian has \emph{commuting} local terms when all translated
