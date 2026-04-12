@@ -100,6 +100,287 @@ def GaugeEquiv (A B : Tensor G d) : Prop :=
 
 /-! ### Gauge invariance of PEPS state -/
 
+/-- The lower endpoint incidence of an ordered edge. -/
+private def edgeLeftIncident (e : Edge G) : IncidentEdge G e.1.1 :=
+  ⟨e, Or.inl rfl⟩
+
+/-- The upper endpoint incidence of an ordered edge. -/
+private def edgeRightIncident (e : Edge G) : IncidentEdge G e.1.2 :=
+  ⟨e, Or.inr rfl⟩
+
+/-- Incidences of vertices with edges are the same as choosing an edge and one
+of its two ordered endpoints. -/
+private noncomputable def incidentSigmaEquivEdgeSide :
+    (Sigma fun v : V => IncidentEdge G v) ≃ Edge G × Fin 2 where
+  toFun x :=
+    let e := x.2.1
+    ⟨e, if e.1.1 = x.1 then 0 else 1⟩
+  invFun y :=
+    match y.2 with
+    | 0 => ⟨y.1.1.1, edgeLeftIncident (G := G) y.1⟩
+    | 1 => ⟨y.1.1.2, edgeRightIncident (G := G) y.1⟩
+  left_inv x := by
+    rcases x with ⟨v, ie⟩
+    rcases ie with ⟨e, hinc⟩
+    dsimp
+    by_cases hleft : e.1.1 = v
+    · subst v
+      simp only [↓reduceIte, Fin.isValue, Sigma.mk.injEq, heq_eq_eq, true_and]
+      exact Subtype.ext rfl
+    · have hright : e.1.2 = v := by
+        rcases hinc with h | h
+        · exact False.elim (hleft h)
+        · exact h
+      subst v
+      have hne : ¬e.1.1 = e.1.2 := ne_of_lt e.2.1
+      simp only [hne, ↓reduceIte, Fin.isValue, Sigma.mk.injEq, heq_eq_eq, true_and]
+      exact Subtype.ext rfl
+  right_inv y := by
+    rcases y with ⟨e, side⟩
+    fin_cases side
+    · dsimp [edgeLeftIncident]
+      simp
+    · have hne : ¬e.1.1 = e.1.2 := ne_of_lt e.2.1
+      dsimp [edgeRightIncident]
+      simp [hne]
+
+/-- A vertex-wise assignment of virtual indices before imposing edge
+compatibility. -/
+private abbrev LocalConfig (A : Tensor G d) : Type _ :=
+  (v : V) → (ie : IncidentEdge G v) → Fin (A.bondDim ie.1)
+
+private lemma gauge_sum_left_right {n : Type*} [Fintype n] [DecidableEq n]
+    (X : GL n ℂ) (a b : n) :
+    (∑ j, (X : Matrix n n ℂ) j a * (↑X⁻¹ : Matrix n n ℂ) b j) =
+      if a = b then 1 else 0 := by
+  have h := congr_fun
+    (congr_fun (show (↑X⁻¹ : Matrix n n ℂ) * (↑X : Matrix n n ℂ) = 1 by simp) b) a
+  calc
+    (∑ j, (X : Matrix n n ℂ) j a * (↑X⁻¹ : Matrix n n ℂ) b j)
+        = ∑ j, (↑X⁻¹ : Matrix n n ℂ) b j * (X : Matrix n n ℂ) j a := by
+          refine Finset.sum_congr rfl ?_
+          intro j hj
+          ring
+    _ = ((↑X⁻¹ : Matrix n n ℂ) * (↑X : Matrix n n ℂ)) b a := by
+          simp [Matrix.mul_apply]
+    _ = if a = b then 1 else 0 := by
+          rw [h]
+          simp [Matrix.one_apply, eq_comm]
+
+private lemma gauge_sum_left_right_matrix_inv {n : Type*} [Fintype n] [DecidableEq n]
+    (X : GL n ℂ) (a b : n) :
+    (∑ j, (X : Matrix n n ℂ) j a * ((X : Matrix n n ℂ)⁻¹) b j) =
+      if a = b then 1 else 0 := by
+  simpa [Matrix.GeneralLinearGroup.coe_inv] using gauge_sum_left_right X a b
+
+private lemma prod_incident_eq_prod_edge (f : (v : V) → IncidentEdge G v → ℂ) :
+    (∏ v : V, ∏ ie : IncidentEdge G v, f v ie) =
+      ∏ e : Edge G,
+        f e.1.1 (edgeLeftIncident (G := G) e) *
+          f e.1.2 (edgeRightIncident (G := G) e) := by
+  rw [← Fintype.prod_sigma']
+  calc
+    (∏ x : Sigma fun v : V => IncidentEdge G v, f x.1 x.2)
+        = ∏ y : Edge G × Fin 2,
+            f ((incidentSigmaEquivEdgeSide (G := G)).symm y).1
+              ((incidentSigmaEquivEdgeSide (G := G)).symm y).2 := by
+          let e := incidentSigmaEquivEdgeSide (G := G)
+          calc
+            (∏ x : Sigma fun v : V => IncidentEdge G v, f x.1 x.2)
+                = ∏ x : Sigma fun v : V => IncidentEdge G v,
+                    f (e.symm (e x)).1 (e.symm (e x)).2 := by
+                  refine Finset.prod_congr rfl ?_
+                  intro x hx
+                  rw [Equiv.symm_apply_apply]
+            _ = ∏ y : Edge G × Fin 2, f (e.symm y).1 (e.symm y).2 := by
+                  exact e.prod_comp
+                    (fun y : Edge G × Fin 2 => f (e.symm y).1 (e.symm y).2)
+    _ = ∏ e : Edge G, ∏ side : Fin 2,
+            f ((incidentSigmaEquivEdgeSide (G := G)).symm (e, side)).1
+              ((incidentSigmaEquivEdgeSide (G := G)).symm (e, side)).2 := by
+          rw [Fintype.prod_prod_type]
+    _ = ∏ e : Edge G,
+        f e.1.1 (edgeLeftIncident (G := G) e) *
+          f e.1.2 (edgeRightIncident (G := G) e) := by
+          refine Finset.prod_congr rfl ?_
+          intro e he
+          rw [Fin.prod_univ_two]
+          simp [incidentSigmaEquivEdgeSide]
+
+private lemma gauge_sum_over_virtual (A : Tensor G d)
+    (X : (e : Edge G) → GL (Fin (A.bondDim e)) ℂ)
+    (ξ : LocalConfig (G := G) A) :
+    (∑ η : VirtualConfig A,
+      ∏ v : V, ∏ ie : IncidentEdge G v,
+        edgeGaugeAt A X v ie (η ie.1) (ξ v ie)) =
+      ∏ e : Edge G,
+        if ξ e.1.1 (edgeLeftIncident (G := G) e) =
+            ξ e.1.2 (edgeRightIncident (G := G) e) then 1 else 0 := by
+  classical
+  have hinc : ∀ η : VirtualConfig A,
+      (∏ v : V, ∏ ie : IncidentEdge G v,
+        edgeGaugeAt A X v ie (η ie.1) (ξ v ie)) =
+      ∏ e : Edge G,
+        (X e : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ)
+            (η e) (ξ e.1.1 (edgeLeftIncident (G := G) e)) *
+          ((X e : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ)⁻¹)
+            (ξ e.1.2 (edgeRightIncident (G := G) e)) (η e) := by
+    intro η
+    rw [prod_incident_eq_prod_edge]
+    refine Finset.prod_congr rfl ?_
+    intro e he
+    rw [← Matrix.GeneralLinearGroup.coe_inv (X e)]
+    have hne : ¬e.1.1 = e.1.2 := ne_of_lt e.2.1
+    simp only [edgeGaugeAt, edgeLeftIncident, edgeRightIncident, hne,
+      ↓reduceIte, Matrix.transpose_apply]
+    rfl
+  simp_rw [hinc]
+  rw [show
+      (∑ x : VirtualConfig A,
+        ∏ e : Edge G,
+          (X e : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ)
+              (x e) (ξ e.1.1 (edgeLeftIncident (G := G) e)) *
+            ((X e : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ)⁻¹)
+              (ξ e.1.2 (edgeRightIncident (G := G) e)) (x e)) =
+        ∏ e : Edge G,
+          ∑ j : Fin (A.bondDim e),
+            (X e : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ)
+                j (ξ e.1.1 (edgeLeftIncident (G := G) e)) *
+              ((X e : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ)⁻¹)
+                (ξ e.1.2 (edgeRightIncident (G := G) e)) j by
+      simpa [Fintype.piFinset_univ] using
+        (Finset.prod_univ_sum (fun e : Edge G => Finset.univ)
+          (fun e j =>
+            (X e : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ)
+                j (ξ e.1.1 (edgeLeftIncident (G := G) e)) *
+              ((X e : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ)⁻¹)
+                (ξ e.1.2 (edgeRightIncident (G := G) e)) j)).symm]
+  simp only [gauge_sum_left_right_matrix_inv]
+  rfl
+
+/-- Project a global virtual configuration to a local (vertex-wise) one by
+reading off the index assigned to each incident edge. -/
+private def localConfigOfGlobal (A : Tensor G d) (η : VirtualConfig A) : LocalConfig (G := G) A :=
+  fun _ ie => η ie.1
+
+/-- A local configuration is *consistent* when the two endpoints of every edge
+agree on the virtual index assigned to that edge. -/
+private def IsConsistent (A : Tensor G d) (ξ : LocalConfig (G := G) A) : Prop :=
+  ∀ e : Edge G,
+    ξ e.1.1 (edgeLeftIncident (G := G) e) =
+      ξ e.1.2 (edgeRightIncident (G := G) e)
+
+/-- A global virtual configuration is the same data as a consistent local one:
+the forward direction reads off per-vertex indices, and the inverse recovers
+the global assignment from the lower-endpoint index of each edge. -/
+private noncomputable def virtualConfigEquivConsistentLocal (A : Tensor G d) :
+    VirtualConfig A ≃ {ξ : LocalConfig (G := G) A // IsConsistent A ξ} where
+  toFun η := ⟨localConfigOfGlobal A η, by intro e; rfl⟩
+  invFun ξ e := ξ.1 e.1.1 (edgeLeftIncident (G := G) e)
+  left_inv η := by
+    funext e
+    rfl
+  right_inv ξ := by
+    rcases ξ with ⟨ξ, hξ⟩
+    apply Subtype.ext
+    funext v ie
+    rcases ie with ⟨e, hinc⟩
+    dsimp [localConfigOfGlobal]
+    by_cases hleft : e.1.1 = v
+    · subst v
+      have hEq : (⟨e, hinc⟩ : IncidentEdge G e.1.1) =
+          edgeLeftIncident (G := G) e :=
+        Subtype.ext rfl
+      cases hEq
+      rfl
+    · have hright : e.1.2 = v := by
+        rcases hinc with h | h
+        · exact False.elim (hleft h)
+        · exact h
+      subst v
+      have hEq : (⟨e, hinc⟩ : IncidentEdge G e.1.2) =
+          edgeRightIncident (G := G) e :=
+        Subtype.ext rfl
+      simpa [hEq] using hξ e
+
+private lemma sum_local_with_edge_deltas (A : Tensor G d) (σ : V → Fin d) :
+    (∑ ξ : LocalConfig (G := G) A,
+      (∏ e : Edge G,
+        if ξ e.1.1 (edgeLeftIncident (G := G) e) =
+            ξ e.1.2 (edgeRightIncident (G := G) e) then (1 : ℂ) else 0) *
+        ∏ v : V, A.component v (ξ v) (σ v)) =
+      stateCoeff A σ := by
+  classical
+  let F : LocalConfig (G := G) A → ℂ :=
+    fun ξ => ∏ v : V, A.component v (ξ v) (σ v)
+  have hfilter :
+      (∑ ξ : LocalConfig (G := G) A,
+        (∏ e : Edge G,
+          if ξ e.1.1 (edgeLeftIncident (G := G) e) =
+              ξ e.1.2 (edgeRightIncident (G := G) e) then (1 : ℂ) else 0) * F ξ) =
+        ∑ ξ : {ξ : LocalConfig (G := G) A // IsConsistent A ξ}, F ξ.1 := by
+    calc
+      (∑ ξ : LocalConfig (G := G) A,
+        (∏ e : Edge G,
+          if ξ e.1.1 (edgeLeftIncident (G := G) e) =
+              ξ e.1.2 (edgeRightIncident (G := G) e) then (1 : ℂ) else 0) * F ξ)
+          = ∑ ξ : LocalConfig (G := G) A, if IsConsistent A ξ then F ξ else 0 := by
+            refine Finset.sum_congr rfl ?_
+            intro ξ hξ
+            have hprod :
+                (∏ e : Edge G,
+                  if ξ e.1.1 (edgeLeftIncident (G := G) e) =
+                      ξ e.1.2 (edgeRightIncident (G := G) e) then (1 : ℂ) else 0) =
+                  if IsConsistent A ξ then 1 else 0 := by
+              simp [IsConsistent, Finset.prod_boole]
+            rw [hprod]
+            by_cases h : IsConsistent A ξ <;> simp [h]
+      _ = ∑ ξ : {ξ : LocalConfig (G := G) A // IsConsistent A ξ}, F ξ.1 := by
+            rw [Finset.sum_ite]
+            simp only [Finset.sum_const_zero, add_zero]
+            rw [← Finset.sum_subtype_eq_sum_filter
+              (s := (Finset.univ : Finset (LocalConfig (G := G) A)))
+              (f := F) (p := IsConsistent A)]
+            simp
+  rw [hfilter, stateCoeff]
+  symm
+  calc
+    (∑ η : VirtualConfig A, ∏ v : V, A.component v (fun ie => η ie.1) (σ v))
+        = ∑ ξ : {ξ : LocalConfig (G := G) A // IsConsistent A ξ}, F ξ.1 := by
+          let e := virtualConfigEquivConsistentLocal (G := G) A
+          calc
+            (∑ η : VirtualConfig A, ∏ v : V, A.component v (fun ie => η ie.1) (σ v))
+                = ∑ η : VirtualConfig A, F ((e η).1) := by
+                  rfl
+            _ = ∑ ξ : {ξ : LocalConfig (G := G) A // IsConsistent A ξ}, F ξ.1 := by
+                  exact e.sum_comp
+                    (fun ξ : {ξ : LocalConfig (G := G) A // IsConsistent A ξ} => F ξ.1)
+
+private lemma prod_gaugeVertex_eq_sum_local (A : Tensor G d)
+    (X : (e : Edge G) → GL (Fin (A.bondDim e)) ℂ)
+    (η : VirtualConfig A) (σ : V → Fin d) :
+    (∏ v : V, gaugeVertex A X v (fun ie => η ie.1) (σ v)) =
+      ∑ ξ : LocalConfig (G := G) A,
+        ∏ v : V,
+          (∏ ie : IncidentEdge G v, edgeGaugeAt A X v ie (η ie.1) (ξ v ie)) *
+            A.component v (ξ v) (σ v) := by
+  classical
+  simp_rw [gaugeVertex]
+  rw [show
+      (∏ v : V,
+        ∑ η' : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1),
+          (∏ ie : IncidentEdge G v, edgeGaugeAt A X v ie (η ie.1) (η' ie)) *
+            A.component v η' (σ v)) =
+        ∑ ξ : LocalConfig (G := G) A,
+          ∏ v : V,
+            (∏ ie : IncidentEdge G v, edgeGaugeAt A X v ie (η ie.1) (ξ v ie)) *
+              A.component v (ξ v) (σ v) by
+    simpa [Fintype.piFinset_univ, LocalConfig] using
+      (Finset.prod_univ_sum (fun v : V => Finset.univ)
+        (fun v η' =>
+          (∏ ie : IncidentEdge G v, edgeGaugeAt A X v ie (η ie.1) (η' ie)) *
+            A.component v η' (σ v)))]
+
 /-- Applying a gauge to a PEPS tensor preserves the state coefficients.
 
 The proof relies on the fact that for each edge, the gauge matrix and its
@@ -109,14 +390,65 @@ theorem applyGauge_stateCoeff (A : Tensor G d)
     (X : (e : Edge G) → GL (Fin (A.bondDim e)) ℂ)
     (σ : V → Fin d) :
     stateCoeff (applyGauge A X) σ = stateCoeff A σ := by
-  -- TODO: expand stateCoeff, swap sums, apply gauge cancellation per edge.
-  sorry
+  classical
+  unfold stateCoeff applyGauge
+  dsimp
+  simp_rw [prod_gaugeVertex_eq_sum_local]
+  rw [Finset.sum_comm]
+  trans ∑ ξ : LocalConfig (G := G) A,
+      (∑ η : VirtualConfig A,
+        ∏ v : V, ∏ ie : IncidentEdge G v,
+          edgeGaugeAt A X v ie (η ie.1) (ξ v ie)) *
+        ∏ v : V, A.component v (ξ v) (σ v)
+  · refine Finset.sum_congr rfl ?_
+    intro ξ hξ
+    calc
+      (∑ η : VirtualConfig A,
+        ∏ v : V,
+          (∏ ie : IncidentEdge G v, edgeGaugeAt A X v ie (η ie.1) (ξ v ie)) *
+            A.component v (ξ v) (σ v))
+          = ∑ η : VirtualConfig A,
+              (∏ v : V, ∏ ie : IncidentEdge G v,
+                edgeGaugeAt A X v ie (η ie.1) (ξ v ie)) *
+                ∏ v : V, A.component v (ξ v) (σ v) := by
+            refine Finset.sum_congr rfl ?_
+            intro η hη
+            rw [Finset.prod_mul_distrib]
+      _ = (∑ η : VirtualConfig A,
+            ∏ v : V, ∏ ie : IncidentEdge G v,
+              edgeGaugeAt A X v ie (η ie.1) (ξ v ie)) *
+            ∏ v : V, A.component v (ξ v) (σ v) := by
+            rw [Finset.sum_mul]
+  · simp_rw [gauge_sum_over_virtual]
+    exact sum_local_with_edge_deltas A σ
 
 /-- Gauge equivalence implies the same PEPS state. -/
 theorem GaugeEquiv.sameState {A B : Tensor G d} (h : GaugeEquiv A B) :
     SameState A B := by
-  -- TODO: transport the applyGauge_stateCoeff result through hDim.
-  sorry
+  classical
+  rcases h with ⟨hDim, X, hX⟩
+  intro σ
+  let φ : VirtualConfig A ≃ VirtualConfig B := {
+    toFun := fun η e => Fin.cast (congr_fun hDim e) (η e)
+    invFun := fun η e => Fin.cast (Eq.symm (congr_fun hDim e)) (η e)
+    left_inv := fun η => by
+      funext e
+      simp
+    right_inv := fun η => by
+      funext e
+      simp
+  }
+  have hB : stateCoeff B σ = stateCoeff (applyGauge A X) σ := by
+    unfold stateCoeff
+    rw [← φ.sum_comp (fun η : VirtualConfig B =>
+      ∏ v : V, B.component v (fun ie => η ie.1) (σ v))]
+    dsimp [φ, applyGauge]
+    refine Finset.sum_congr rfl ?_
+    intro η hη
+    refine Finset.prod_congr rfl ?_
+    intro v hv
+    simpa using (hX v (fun ie => η ie.1) (σ v))
+  exact (applyGauge_stateCoeff A X σ).symm.trans hB.symm
 
 /-! ### Local gauge extraction -/
 
