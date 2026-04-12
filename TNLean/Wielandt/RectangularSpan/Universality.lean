@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 
-import TNLean.Wielandt.RectangularSpan.UniversalityAux
+import TNLean.Wielandt.RectangularSpan.UniversalityNilpIndex
 
 /-!
 # Rectangular Span Universality — Sharp Backends (Sections 8g–8h)
