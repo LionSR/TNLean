@@ -5,6 +5,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.Channel.FixedPoint.Algebra
 import Mathlib.RingTheory.SimpleModule.IsAlgClosed
 import Mathlib.RingTheory.Artinian.Module
+import Mathlib.Analysis.CStarAlgebra.Matrix
 
 /-!
 # Wedderburn decomposition of fixed-point `*`-subalgebra (Wolf Theorem 6.14)
@@ -24,19 +25,19 @@ decomposition `ℂ^D = ℂ^{d₀} ⊕ ⊕_k ℂ^{d_k} ⊗ ℂ^{m_k}`.
 ## Main results
 
 * `Kraus.fixedPointAlgebra_isSemisimpleRing`: the carrier type of the
-  adjoint-fixed-point `StarSubalgebra` is a semisimple ring. (sorry — requires
-  showing that `*`-subalgebras over ℂ have trivial Jacobson radical.)
+  adjoint-fixed-point `StarSubalgebra` is a semisimple ring.
 * `Kraus.fixedPointAlgebra_wedderburnArtin`: there exist `n : ℕ` and
   `dims : Fin n → ℕ` such that the fixed-point algebra is algebra-isomorphic
   to `Π i, Matrix (Fin (dims i)) (Fin (dims i)) ℂ`.
 
-## Strategy and gaps
+## Strategy
 
 The proof chain is:
 1. `StarSubalgebra ℂ Mat` is finite-dimensional (subalgebra of `M_D(ℂ)`).
 2. Finite-dimensional ⟹ `IsArtinianRing` — available in Mathlib.
-3. `*`-subalgebra over ℂ ⟹ `IsSemisimpleRing` — **Gap 1** (need to show
-   the Jacobson radical vanishes for `*`-algebras over ℂ).
+3. `*`-subalgebra over ℂ ⟹ `IsSemisimpleRing`: if `x` lies in the Jacobson
+   radical, then `xᴴ * x` is nilpotent and self-adjoint, hence zero by the
+   C⋆-norm identity.
 4. `IsSemisimpleRing` + `FiniteDimensional ℂ` + `IsAlgClosed ℂ` ⟹
    Wedderburn--Artin decomposition — available in Mathlib via
    `IsSemisimpleRing.exists_algEquiv_pi_matrix_of_isAlgClosed`.
@@ -52,7 +53,7 @@ to future work.
 * [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Eq. 1.39–1.40, §1]
 -/
 
-open scoped Matrix ComplexOrder MatrixOrder BigOperators
+open scoped Matrix ComplexOrder MatrixOrder BigOperators Matrix.Norms.L2Operator
 open Matrix Finset Complex
 
 namespace Kraus
@@ -60,6 +61,15 @@ namespace Kraus
 variable {d D : ℕ}
 
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
+
+private theorem selfAdjoint_eq_zero_of_isNilpotent_matrix {x : Mat}
+    (hxsa : IsSelfAdjoint x) (hxnil : IsNilpotent x) : x = 0 := by
+  rcases hxnil with ⟨n, hn⟩
+  obtain ⟨k, hk⟩ : ∃ k : ℕ, n ≤ 2 ^ k := ⟨n, Nat.le_of_lt n.lt_two_pow_self⟩
+  have hpow : x ^ (2 ^ k) = 0 := pow_eq_zero_of_le hk hn
+  have hnormpow : ‖x‖ ^ (2 ^ k) = 0 := by
+    rw [← hxsa.norm_pow_two_pow k, hpow, norm_zero]
+  exact norm_eq_zero.mp (eq_zero_of_pow_eq_zero hnormpow)
 
 /-! ## Abstract Wedderburn--Artin decomposition -/
 
@@ -76,39 +86,46 @@ This is a type alias for the subtype
 abbrev FixedPointAlgebra :=
   ↥(adjointFixedPointsStarSubalgebra (d := d) (D := D) K h_tp hρ hρ_fix)
 
--- TODO: Gap 1 — Prove that `*`-subalgebras of `M_D(ℂ)` are semisimple.
---
--- Mathematical argument: In a `*`-algebra over ℂ, the Jacobson radical is
--- zero. This follows because:
--- (a) For an Artinian ring, J(R) is nilpotent.
--- (b) J(R) is a `*`-ideal in a `*`-algebra (since the Jacobson radical is
---     the intersection of maximal left ideals, and the star-involution
---     exchanges left and right ideals).
--- (c) Every nilpotent self-adjoint element in a `*`-subalgebra of `M_D(ℂ)`
---     is zero (since `x^n = 0` and `x = x*` implies `tr(x^*x) = 0`
---     implies `x = 0` over ℂ).
--- (d) Therefore J(R) = 0, and by the Artinian characterization,
---     `IsSemisimpleRing R`.
---
--- The Mathlib route: `isSemisimpleRing_iff_jacobson` (for Artinian rings,
--- semisimplicity ⟺ Jacobson radical = ⊥). This works for noncommutative
--- rings.
+/-- Every finite-dimensional `*`-subalgebra of `M_D(ℂ)` is a semisimple ring. -/
+theorem starSubalgebra_isSemisimpleRing (S : StarSubalgebra ℂ Mat) :
+    IsSemisimpleRing S := by
+  letI : FiniteDimensional ℂ S :=
+    FiniteDimensional.finiteDimensional_subalgebra S.toSubalgebra
+  haveI : IsArtinianRing S := IsArtinianRing.of_finite ℂ S
+  rw [IsArtinianRing.isSemisimpleRing_iff_jacobson]
+  apply eq_bot_iff.mpr
+  intro x hx
+  let b : S := star x * x
+  have hbJ : b ∈ Ring.jacobson S :=
+    (Ring.jacobson S).mul_mem_left (star x) hx
+  have hbNil : IsNilpotent b := by
+    rcases (IsSemiprimaryRing.isNilpotent (R := S)) with ⟨n, hn⟩
+    exact ⟨n, Ideal.pow_eq_zero_of_mem hn le_rfl hbJ⟩
+  have hbNilMat : IsNilpotent (b : Mat) :=
+    hbNil.map S.subtype
+  have hbSA : IsSelfAdjoint (b : Mat) := by
+    change star (↑b : Mat) = (↑b : Mat)
+    simp [b]
+  have hb0Mat : (b : Mat) = 0 :=
+    selfAdjoint_eq_zero_of_isNilpotent_matrix hbSA hbNilMat
+  have hb0 : b = 0 := Subtype.ext hb0Mat
+  have hx0Mat : (x : Mat) = 0 := by
+    apply CStarRing.star_mul_self_eq_zero_iff (x := (x : Mat)).mp
+    simpa [b] using congrArg Subtype.val hb0
+  exact Subtype.ext hx0Mat
 
 /-- The adjoint-fixed-point `*`-subalgebra is a semisimple ring.
 
 This is the key algebraic input for the Wedderburn--Artin decomposition.
 The proof requires showing that the Jacobson radical of a finite-dimensional
-`*`-subalgebra of `M_D(ℂ)` is trivial.
-
-Note: This is stated as a `theorem` rather than an `instance` because the
-proof is currently sorry'd. Registering a sorry'd instance would pollute
-typeclass synthesis. Once proved, this should be promoted to an `instance`. -/
+`*`-subalgebra of `M_D(ℂ)` is trivial. -/
 theorem fixedPointAlgebra_isSemisimpleRing
     (K : Fin d → Mat) (h_tp : IsTP K) {ρ : Mat}
     (hρ : ρ.PosDef) (hρ_fix : map K ρ = ρ) :
     IsSemisimpleRing
       (↥(adjointFixedPointsStarSubalgebra (d := d) (D := D) K h_tp hρ hρ_fix)) :=
-  sorry
+  starSubalgebra_isSemisimpleRing
+    (adjointFixedPointsStarSubalgebra (d := d) (D := D) K h_tp hρ hρ_fix)
 
 /-- **Abstract Wedderburn--Artin decomposition** of the fixed-point algebra.
 
@@ -118,9 +135,6 @@ adjoint-fixed-point `*`-subalgebra is ℂ-algebra isomorphic to
 
 This follows from `fixedPointAlgebra_isSemisimpleRing` and the Mathlib
 theorem `IsSemisimpleRing.exists_algEquiv_pi_matrix_of_isAlgClosed`. -/
--- TODO: Once `fixedPointAlgebra_isSemisimpleRing` is proved, apply
--- `IsSemisimpleRing.exists_algEquiv_pi_matrix_of_isAlgClosed`.
--- The carrier type is finite-dimensional over ℂ as a subalgebra of M_D(ℂ).
 theorem fixedPointAlgebra_wedderburnArtin
     (K : Fin d → Mat) (h_tp : IsTP K) {ρ : Mat}
     (hρ : ρ.PosDef) (hρ_fix : map K ρ = ρ) :
@@ -129,7 +143,15 @@ theorem fixedPointAlgebra_wedderburnArtin
         Nonempty
           (↥(adjointFixedPointsStarSubalgebra (d := d) (D := D) K h_tp hρ hρ_fix) ≃ₐ[ℂ]
             Π i : Fin n, Matrix (Fin (dims i)) (Fin (dims i)) ℂ) :=
-  sorry
+  letI : IsSemisimpleRing
+      (↥(adjointFixedPointsStarSubalgebra (d := d) (D := D) K h_tp hρ hρ_fix)) :=
+    fixedPointAlgebra_isSemisimpleRing K h_tp hρ hρ_fix
+  letI : FiniteDimensional ℂ
+      (↥(adjointFixedPointsStarSubalgebra (d := d) (D := D) K h_tp hρ hρ_fix)) :=
+    FiniteDimensional.finiteDimensional_subalgebra
+      ((adjointFixedPointsStarSubalgebra (d := d) (D := D) K h_tp hρ hρ_fix).toSubalgebra)
+  IsSemisimpleRing.exists_algEquiv_pi_matrix_of_isAlgClosed ℂ
+    (↥(adjointFixedPointsStarSubalgebra (d := d) (D := D) K h_tp hρ hρ_fix))
 
 end AbstractDecomp
 
