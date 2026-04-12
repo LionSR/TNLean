@@ -214,13 +214,111 @@ structure IsWedderburnBlockDecomp
 /-- Every finite-dimensional `*`-subalgebra of `M_D(ℂ)` admits a Wedderburn
 block decomposition (Wolf Eq. 1.39).
 
-**Status**: sorry — requires bridging abstract Wedderburn--Artin to concrete
-block-diagonal embedding. See `fixedPointAlgebra_wedderburnArtin` for the
-abstract version. -/
+The current `IsWedderburnBlockDecomp` structure records the abstract
+Wedderburn--Artin product decomposition, multiplicities set to `1`, and the
+ambient dimension bound. The unitary block-diagonal intertwiner is still
+deferred in the structure TODO above. -/
 theorem starSubalgebra_hasWedderburnBlockDecomp
     (S : StarSubalgebra ℂ Mat) :
-    Nonempty (IsWedderburnBlockDecomp S) :=
-  sorry
+    Nonempty (IsWedderburnBlockDecomp S) := by
+  classical
+  letI : IsSemisimpleRing S := starSubalgebra_isSemisimpleRing S
+  letI : FiniteDimensional ℂ S :=
+    FiniteDimensional.finiteDimensional_subalgebra S.toSubalgebra
+  rcases IsSemisimpleRing.exists_algEquiv_pi_matrix_of_isAlgClosed ℂ S with
+    ⟨n, blockDim, hblockDim, ⟨e⟩⟩
+  refine ⟨
+    { numBlocks := n
+      blockDim := blockDim
+      multDim := fun _ => 1
+      blockDim_pos := fun i => Nat.pos_of_neZero (blockDim i)
+      multDim_pos := fun _ => by norm_num
+      dim_le := ?_
+      algEquiv := e }⟩
+  let V := Fin D → ℂ
+  let φ : S →ₐ[ℂ] Module.End ℂ V :=
+    (Matrix.toLinAlgEquiv' :
+      Mat ≃ₐ[ℂ] Module.End ℂ V).toAlgHom.comp S.subtype.toAlgHom
+  let ι := Sigma fun i : Fin n => Fin (blockDim i)
+  let diagUnit (a : ι) : Π i : Fin n,
+      Matrix (Fin (blockDim i)) (Fin (blockDim i)) ℂ :=
+    Pi.single a.1 (Matrix.single a.2 a.2 (1 : ℂ))
+  let q (a : ι) : S := e.symm (diagUnit a)
+  have hq_mul_self (a : ι) : q a * q a = q a := by
+    rcases a with ⟨j, a⟩
+    apply e.injective
+    ext i r c
+    by_cases hij : i = j
+    · subst i
+      simp [q, diagUnit]
+    · simp [q, diagUnit, Pi.single_eq_of_ne hij]
+  have hq_mul_zero (a b : ι) (hab : a ≠ b) : q a * q b = 0 := by
+    rcases a with ⟨ia, a⟩
+    rcases b with ⟨ib, b⟩
+    apply e.injective
+    ext i r c
+    by_cases hiia : i = ia
+    · subst i
+      by_cases hiaib : ia = ib
+      · subst ib
+        have hab' : a ≠ b := by
+          intro h
+          exact hab (by cases h; rfl)
+        simp [q, diagUnit, hab']
+      · simp [q, diagUnit, hiaib]
+    · simp [q, diagUnit, Pi.single_eq_of_ne hiia]
+  have hq_ne_zero (a : ι) : q a ≠ 0 := by
+    intro hq0
+    have hdiag0 : diagUnit a = 0 := by
+      calc
+        diagUnit a = e (q a) := by simp [q]
+        _ = e 0 := by rw [hq0]
+        _ = 0 := by simp
+    rcases a with ⟨i, a⟩
+    have hentry : diagUnit ⟨i, a⟩ i a a = 1 := by
+      simp [diagUnit]
+    rw [hdiag0] at hentry
+    simp at hentry
+  have hφ_inj : Function.Injective φ := by
+    intro x y h
+    apply Subtype.ext
+    apply (Matrix.toLinAlgEquiv' : Mat ≃ₐ[ℂ] Module.End ℂ V).injective
+    exact h
+  have hφq_ne_zero (a : ι) : φ (q a) ≠ 0 := fun h =>
+    hq_ne_zero a (hφ_inj (by simpa using h))
+  have hφq_exists (a : ι) : ∃ w : V, φ (q a) w ≠ 0 := by
+    by_contra h
+    push Not at h
+    exact hφq_ne_zero a (LinearMap.ext h)
+  choose w hw using hφq_exists
+  let v (a : ι) : V := φ (q a) (w a)
+  have hv_ne_zero (a : ι) : v a ≠ 0 := by
+    simpa [v] using hw a
+  have hφ_v_self (a : ι) : φ (q a) (v a) = v a := by
+    simp [v, ← Module.End.mul_apply, ← map_mul, hq_mul_self]
+  have hφ_v_zero (a b : ι) (hab : a ≠ b) : φ (q a) (v b) = 0 := by
+    simp [v, ← Module.End.mul_apply, ← map_mul, hq_mul_zero a b hab]
+  have hv_li : LinearIndependent ℂ v := by
+    rw [Fintype.linearIndependent_iff]
+    intro g hg a
+    have happ : φ (q a) (∑ b, g b • v b) = 0 := by
+      rw [hg]
+      simp
+    have happ' : (∑ b, g b • φ (q a) (v b)) = 0 := by
+      simpa [map_sum] using happ
+    have hsum : (∑ b, g b • φ (q a) (v b)) = g a • v a := by
+      rw [Finset.sum_eq_single a]
+      · simp [hφ_v_self]
+      · intro b _ hb
+        simp [hφ_v_zero a b hb.symm]
+      · intro ha
+        exact (ha (Finset.mem_univ a)).elim
+    have hga : g a • v a = 0 := by
+      rw [← hsum, happ']
+    exact (smul_eq_zero.mp hga).resolve_right (hv_ne_zero a)
+  have hcard_le : Fintype.card ι ≤ Module.finrank ℂ V :=
+    hv_li.fintype_card_le_finrank
+  simpa [ι, V] using hcard_le
 
 /-- **Wolf Theorem 6.14** (Heisenberg picture, abstract form).
 
@@ -230,8 +328,7 @@ Wedderburn block decomposition.
 Combined with `fixedPointAlgebra_wedderburnArtin`, this gives:
 `Fix(T*) ≅ ⊕_k M_{d_k}(ℂ)` (abstract) and `Fix(T*) = U(⊕_k M_{d_k} ⊗ 1_{m_k})U†`
 (concrete).
-
-**Status**: sorry — follows from `starSubalgebra_hasWedderburnBlockDecomp`. -/
+-/
 theorem adjointFixedPoints_wedderburnDecomp
     (K : Fin d → Mat) (h_tp : IsTP K) {ρ : Mat}
     (hρ : ρ.PosDef) (hρ_fix : map K ρ = ρ) :
