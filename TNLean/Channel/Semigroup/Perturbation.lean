@@ -389,10 +389,8 @@ theorem dysonTerm_continuous (L L' : MatrixCLM (Fin D)) (n : ℕ) :
       dsimp only
       rw [dysonTerm_succ, setIntegral_Icc_eq_intervalIntegral ht]
     -- On Iic 0: dysonTerm is 0 (hence continuous there).
-    have h_Iic : ContinuousOn (fun t => dysonTerm L L' t (n + 1)) (Set.Iic 0) := by
-      apply ContinuousOn.congr continuousOn_const
-      intro t ht
-      exact dysonTerm_succ_nonpos L L' n ht
+    have h_Iic : ContinuousOn (fun t => dysonTerm L L' t (n + 1)) (Set.Iic 0) :=
+      continuousOn_const.congr fun _ ht => dysonTerm_succ_nonpos L L' n ht
     -- Paste: Ici 0 ∪ Iic 0 = univ, both are closed.
     rw [← continuousOn_univ, ← Set.Ici_union_Iic (a := (0 : ℝ))]
     exact h_Ici.union_of_isClosed h_Iic isClosed_Ici isClosed_Iic
@@ -401,7 +399,7 @@ theorem dysonTerm_continuous (L L' : MatrixCLM (Fin D)) (n : ℕ) :
 
 /-- The integrand `s ↦ T_{t−s} Δ T̃ⁿ(s)` is integrable on `[0, t]`. -/
 private lemma integrableOn_dyson_integrand (L L' : MatrixCLM (Fin D)) (n : ℕ) {t : ℝ}
-    (ht : 0 ≤ t) :
+    (_ : 0 ≤ t) :
     IntegrableOn
       (fun s => expSemigroupCLM L (t - s) * (L' - L) * dysonTerm L L' s n)
       (Set.Icc 0 t) := by
@@ -415,7 +413,7 @@ private lemma integrableOn_dyson_integrand (L L' : MatrixCLM (Fin D)) (n : ℕ) 
 
 /-- The integrand for the remainder is integrable on `[0, t]`. -/
 private lemma integrableOn_remainder_integrand (L L' : MatrixCLM (Fin D)) (N : ℕ)
-    {t : ℝ} (ht : 0 ≤ t) :
+    {t : ℝ} (_ : 0 ≤ t) :
     IntegrableOn
       (fun s => expSemigroupCLM L (t - s) * (L' - L) *
         (expSemigroupCLM L' s - ∑ n ∈ Finset.range N, dysonTerm L L' s n))
