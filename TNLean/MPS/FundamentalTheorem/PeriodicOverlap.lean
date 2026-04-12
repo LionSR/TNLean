@@ -585,18 +585,18 @@ lemma sectorTensor_proportional_of_blockedMatch
   sorry
 
 /-- **Case 3: a matching sector implies gauge equivalence**. If two periodic tensors have
-the same period and
-a compressed sector match exists, then they are related by a gauge
+the same period and a compressed sector match exists, then they are related by a gauge
 transformation with a unit-modulus phase: `A^i = e^{iξ} U B^i U†`.
 
 The hypotheses describe compressed sector decompositions: `blocksA`/`blocksB` are
 the cyclic-sector tensors on corner bond spaces, tied back to the
 original blocked tensors via `SameMPV₂` and to the cyclic orbit
-structure via `IsCyclicSectorDecomp`. The `hSomeMatch` witness
-provides a single matching sector pair `(u₀, v₀)` with compatible
-dimensions and nonzero bond dimension (`dimA u₀ ≠ 0`), which excludes
-the degenerate case where a zero-dimensional `GaugePhaseEquiv` holds
-vacuously.
+structure via `IsCyclicSectorDecomp`. Global nondegeneracy
+(`hNondegA : ∀ u, dimA u ≠ 0`) ensures every sector of `A` has
+positive bond dimension, which is needed for normality of each sector
+tensor. The `hSomeMatch` witness provides a single matching sector pair
+`(u₀, v₀)` with compatible dimensions, from which translation
+propagation extends the match to all sectors.
 
 This is Eq. (A.17)–(A.18) of arXiv:1708.00029. -/
 theorem periodicOverlap_gaugeEquiv_of_sector_match
@@ -714,20 +714,34 @@ theorem periodicOverlapDichotomy
         exists_cyclic_sector_decomp_after_blocking_of_isPeriodic B hB
       -- Case split on whether any compressed sector pair matches.
       by_cases hMatch : ∃ (u₀ v₀ : Fin m_a) (hdim : dimA u₀ = dimB v₀),
-          dimA u₀ ≠ 0 ∧ GaugePhaseEquiv
+          GaugePhaseEquiv
             (cast (congr_arg (MPSTensor (blockPhysDim d m_a)) hdim)
               (blocksA u₀))
             (blocksB v₀)
       · -- Some match → gauge-equivalent (Case 3).
+        have hMatch' : ∃ (u₀ v₀ : Fin m_a) (hdim : dimA u₀ = dimB v₀),
+            dimA u₀ ≠ 0 ∧ GaugePhaseEquiv
+              (cast (congr_arg (MPSTensor (blockPhysDim d m_a)) hdim)
+                (blocksA u₀))
+              (blocksB v₀) := by
+          rcases hMatch with ⟨u₀, v₀, hdim, hGauge⟩
+          exact ⟨u₀, v₀, hdim, hA_nondeg u₀, hGauge⟩
         exact Or.inr ⟨rfl,
           periodicOverlap_gaugeEquiv_of_sector_match A B hA hB
             blocksA blocksB hA_blocks_lc hB_blocks_lc hA_mpv hB_mpv
-            hA_cyclic hB_cyclic hA_nondeg hMatch⟩
+            hA_cyclic hB_cyclic hA_nondeg hMatch'⟩
       · -- No match → orthogonal (Case 2).
-        push Not at hMatch
+        have hNoMatch : ∀ u v (hdim : dimA u = dimB v),
+            dimA u ≠ 0 →
+            ¬ GaugePhaseEquiv
+              (cast (congr_arg (MPSTensor (blockPhysDim d m_a)) hdim)
+                (blocksA u))
+              (blocksB v) := by
+          intro u v hdim _ hGauge
+          exact hMatch ⟨u, v, hdim, hGauge⟩
         exact Or.inl (periodicOverlap_tendsto_zero_of_no_sector_match A B hA hB
           blocksA blocksB hA_blocks_lc hB_blocks_lc hA_mpv hB_mpv
-          hA_cyclic hB_cyclic hMatch)
+          hA_cyclic hB_cyclic hNoMatch)
 
 /-- **Eventual linear independence** (Corollary of Proposition 3.3):
 Given a family of periodic tensors `{A_j}` whose periods all divide a common
