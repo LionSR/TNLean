@@ -298,6 +298,20 @@ and proves the GKSL theorem.
     the sum via uniqueness of limits.
 \end{proof}
 
+\begin{corollary}[Tsum form of the Dyson series]
+    \label{cor:tsum_dysonTerm_eq_ch12}
+    \lean{tsum_dysonTerm_eq}\leanok
+    \uses{thm:dyson_series_eq_ch12}
+    $\sum_{n=0}^{\infty} \widetilde{T}^{(n)}_t = e^{tL'}$
+    (tsum form).
+\end{corollary}
+
+\begin{proof}
+    \leanok
+    \uses{thm:dyson_series_eq_ch12}
+    Immediate from Theorem~\ref{thm:dyson_series_eq_ch12}.
+\end{proof}
+
 %% ---------------------------------------------------------
 \section{GKSL/Lindblad generators}
 \label{sec:gksl_generators}

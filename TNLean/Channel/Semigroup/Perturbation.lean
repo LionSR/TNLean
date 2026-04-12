@@ -16,12 +16,16 @@ import Mathlib.Analysis.SpecialFunctions.Integrals.Basic
 import Mathlib.Analysis.Normed.Group.InfiniteSum
 
 /-!
-# Perturbation bound for dynamical semigroups — Wolf Lemma 7.1 and Corollary 7.1
+# Perturbation theory for dynamical semigroups — Wolf §7.1
 
 ## Main results
 
 * `duhamel_formula` — **Lemma 7.1** (Duhamel/perturbation integral formula)
 * `perturbation_bound` — **Corollary 7.1** (perturbation of generators)
+* `dysonTerm_continuous` — continuity of each Dyson iterate in the time parameter
+* `norm_dysonRemainder_le` — factorial norm bound on the Dyson partial-sum remainder
+* `dyson_series_eq` — **Eq. 7.13** (Dyson–Phillips series = perturbed semigroup)
+* `tsum_dysonTerm_eq` — tsum form of the Dyson series identity
 
 ## References
 
@@ -409,20 +413,6 @@ private lemma integrableOn_dyson_integrand (L L' : MatrixCLM (Fin D)) (n : ℕ) 
     · exact continuousOn_const
   · exact (dysonTerm_continuous L L' n).continuousOn
 
-/-- The integrand from the Duhamel formula is integrable on `[0, t]`. -/
-private lemma integrableOn_duhamel_integrand (L L' : MatrixCLM (Fin D)) {t : ℝ}
-    (ht : 0 ≤ t) :
-    IntegrableOn
-      (fun s => expSemigroupCLM L (t - s) * (L' - L) * expSemigroupCLM L' s)
-      (Set.Icc 0 t) := by
-  apply ContinuousOn.integrableOn_Icc
-  apply ContinuousOn.mul
-  · apply ContinuousOn.mul
-    · exact ((expSemigroupCLM_continuous L).comp
-        (continuous_const.sub continuous_id)).continuousOn
-    · exact continuousOn_const
-  · exact (expSemigroupCLM_continuous L').continuousOn
-
 /-- The integrand for the remainder is integrable on `[0, t]`. -/
 private lemma integrableOn_remainder_integrand (L L' : MatrixCLM (Fin D)) (N : ℕ)
     {t : ℝ} (ht : 0 ≤ t) :
@@ -490,8 +480,8 @@ theorem norm_dysonRemainder_le (L L' : MatrixCLM (Fin D)) {t : ℝ} (ht : 0 ≤ 
   | succ N ihN =>
     have hrep := dysonRemainder_integral_eq L L' hs.1 N
     rw [hrep]
-    set M := ⨆ u ∈ Set.Icc 0 t, ‖expSemigroupCLM L u‖ with hM_def
-    set M' := ⨆ u ∈ Set.Icc 0 t, ‖expSemigroupCLM L' u‖ with hM'_def
+    set M := ⨆ u ∈ Set.Icc 0 t, ‖expSemigroupCLM L u‖
+    set M' := ⨆ u ∈ Set.Icc 0 t, ‖expSemigroupCLM L' u‖
     have hs0 : (0 : ℝ) ≤ s := hs.1
     have hst : s ≤ t := hs.2
     have hM_nn : 0 ≤ M :=
@@ -555,7 +545,6 @@ theorem dyson_series_eq (L L' : MatrixCLM (Fin D)) {t : ℝ} (ht : 0 ≤ t) :
     HasSum (fun n => dysonTerm L L' t n) (expSemigroupCLM L' t) := by
   -- The partial sums converge to the tsum (by summability).
   -- We show they also converge to T'_t, then use uniqueness of limits.
-  have hS := summable_dysonTerm L L' ht
   -- Summable norms (for hasSum_iff_tendsto_nat)
   have hSn : Summable (fun n => ‖dysonTerm L L' t n‖) :=
     .of_nonneg_of_le (fun n => norm_nonneg _)
@@ -568,8 +557,8 @@ theorem dyson_series_eq (L L' : MatrixCLM (Fin D)) {t : ℝ} (ht : 0 ≤ t) :
   -- ‖T'_t - ∑_{n<N} T̃ⁿ(t)‖ ≤ M' · (t·‖Δ‖·M)^N / N! → 0
   rw [Metric.tendsto_atTop]
   intro ε hε
-  set c := t * ‖L' - L‖ * (⨆ u ∈ Set.Icc 0 t, ‖expSemigroupCLM L u‖) with hc_def
-  set M' := ⨆ u ∈ Set.Icc 0 t, ‖expSemigroupCLM L' u‖ with hM'_def
+  set c := t * ‖L' - L‖ * (⨆ u ∈ Set.Icc 0 t, ‖expSemigroupCLM L u‖)
+  set M' := ⨆ u ∈ Set.Icc 0 t, ‖expSemigroupCLM L' u‖
   -- c^N / N! → 0
   have h_tend : Filter.Tendsto (fun N => M' * (c ^ N / ↑(N.factorial)))
       Filter.atTop (nhds 0) := by
