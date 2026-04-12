@@ -843,6 +843,7 @@ For an irreducible TP tensor `A` of period `m`, after blocking by `m`, the block
 spectral projections. Returns:
 - `blocks k`: TP sector tensors (each left-canonical),
 - `P k`: orthogonal projections forming a partition of unity (`∑ P k = 1`),
+- cyclic shift: `transferMap (fun i => (A i)ᴴ) (P (k+1)) = P k`,
 - commutation: each `P k` commutes with every blocked letter,
 - trace relation: `mpv (blocks k) σ = (P k * evalWord (blockTensor A m) σ).trace`,
 - MPV equivalence: the direct-sum tensor is `SameMPV₂`-equivalent to the blocked tensor. -/
