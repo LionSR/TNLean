@@ -104,6 +104,7 @@ def IsCyclicSectorDecomp [NeZero D] [NeZero m] (A : MPSTensor d D)
   ∃ (P : Fin m → Matrix (Fin D) (Fin D) ℂ),
     (∀ k, IsOrthogonalProjection (P k)) ∧
     (∑ k : Fin m, P k = 1) ∧
+    (∀ k, transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k) ∧
     (∀ k (i : Fin (blockPhysDim d m)),
       P k * (blockTensor A m) i = (blockTensor A m) i * P k) ∧
     (∀ k (N : ℕ) (σ : Fin N → Fin (blockPhysDim d m)),
@@ -190,10 +191,10 @@ private theorem exists_cyclic_sector_decomp_after_blocking_of_isPeriodic
           _ = (ω ^ m) ^ (j : ℕ) := by rw [pow_mul]
           _ = 1 := by simp [hωprim.pow_eq_one]
       simpa [hperiph_roots] using hpow
-  obtain ⟨dim, blocks, P, hLC, hMPV, hPproj, hPsum, hComm, hTrace⟩ :=
+  obtain ⟨dim, blocks, P, hLC, hMPV, hPproj, hPsum, hCyclic, hComm, hTrace⟩ :=
     exists_cyclic_sector_decomp_after_blocking
       A hP.leftCanonical hP.irreducible ρ hρ_pd h_adjfix hIrrK hωprim hperiph_range
-  exact ⟨dim, blocks, hLC, hMPV, P, hPproj, hPsum, hComm, hTrace⟩
+  exact ⟨dim, blocks, hLC, hMPV, P, hPproj, hPsum, hCyclic, hComm, hTrace⟩
 
 /-! ## Self-overlap (first paragraph of Appendix A) -/
 
