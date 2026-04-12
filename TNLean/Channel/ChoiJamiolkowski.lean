@@ -72,10 +72,10 @@ noncomputable def choiMatrixLinearMap :
   toFun := choiMatrix
   map_add' T S := by
     ext ⟨i₁, i₂⟩ ⟨j₁, j₂⟩
-    simp [choiMatrix, Matrix.tensorMapId_apply]
+    simp only [choiMatrix, tensorMapId_apply, LinearMap.add_apply, add_apply]
   map_smul' c T := by
     ext ⟨i₁, i₂⟩ ⟨j₁, j₂⟩
-    simp [choiMatrix, Matrix.tensorMapId_apply]
+    simp only [choiMatrix, tensorMapId_apply, LinearMap.smul_apply, smul_apply, smul_eq_mul, RingHom.id_apply]
 
 /-- The projected Choi matrix `P τ P` with `P = 𝟙 - |Ω⟩⟨Ω|`. -/
 noncomputable def projectedChoiMatrix
@@ -96,7 +96,7 @@ theorem choiMatrix_apply
     (i₁ i₂ j₁ j₂ : Fin D) :
     choiMatrix T (i₁, i₂) (j₁, j₂) =
       (T (Matrix.bipartiteSlice (Matrix.omegaProj D) i₂ j₂)) i₁ j₁ := by
-  simp [choiMatrix, Matrix.tensorMapId_apply]
+  simp only [choiMatrix, tensorMapId_apply]
 
 @[simp] theorem choiMatrix_add
     (T S : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) :
@@ -114,9 +114,9 @@ theorem choiMatrix_apply
     choiMatrix (-T) = -choiMatrix T := by
   rw [show -T = (-1 : ℂ) • T by
     ext X i j
-    simp]
+    simp only [LinearMap.neg_apply, neg_apply, LinearMap.smul_apply, smul_apply, smul_eq_mul, neg_mul, one_mul]]
   rw [choiMatrix_smul]
-  simp
+  simp only [neg_smul, one_smul]
 
 theorem choiMatrix_sub
     (T S : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) :
@@ -126,22 +126,22 @@ theorem choiMatrix_sub
 @[simp] theorem projectedChoiMatrix_add
     (T S : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) :
     projectedChoiMatrix (T + S) = projectedChoiMatrix T + projectedChoiMatrix S := by
-  simp [projectedChoiMatrix, choiMatrix_add, add_mul, mul_add]
+  simp only [projectedChoiMatrix, choiMatrix_add, mul_add, add_mul]
 
 @[simp] theorem projectedChoiMatrix_smul
     (c : ℂ)
     (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) :
     projectedChoiMatrix (c • T) = c • projectedChoiMatrix T := by
-  simp [projectedChoiMatrix, choiMatrix_smul]
+  simp only [projectedChoiMatrix, choiMatrix_smul, Algebra.mul_smul_comm, Algebra.smul_mul_assoc]
 
 @[simp] theorem projectedChoiMatrix_neg
     (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) :
     projectedChoiMatrix (-T) = -projectedChoiMatrix T := by
   rw [show -T = (-1 : ℂ) • T by
     ext X i j
-    simp]
+    simp only [LinearMap.neg_apply, neg_apply, LinearMap.smul_apply, smul_apply, smul_eq_mul, neg_mul, one_mul]]
   rw [projectedChoiMatrix_smul]
-  simp
+  simp only [neg_smul, one_smul]
 
 theorem projectedChoiMatrix_sub
     (T S : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) :
@@ -163,10 +163,10 @@ theorem omegaSlice_eq_single (i₂ j₂ : Fin D) :
   simp only [Matrix.bipartiteSlice_apply, Matrix.omegaProj_apply, Matrix.omegaVec_apply,
     Matrix.single_apply]
   by_cases ha : a = i₂ <;> by_cases hb : b = j₂
-  · subst ha hb; simp
-  · subst ha; simp [hb, show ¬(j₂ = b) from Ne.symm hb]
-  · subst hb; simp [ha, show ¬(i₂ = a) from Ne.symm ha]
-  · simp [ha, hb, show ¬(i₂ = a) from Ne.symm ha, show ¬(j₂ = b) from Ne.symm hb]
+  · subst ha hb; simp only [↓reduceIte, one_div, star_inv₀, RCLike.star_def, Complex.conj_ofReal, and_self]
+  · subst ha; simp only [↓reduceIte, one_div, hb, star_zero, mul_zero, show ¬(j₂ = b) from Ne.symm hb, and_false]
+  · subst hb; simp only [ha, ↓reduceIte, one_div, star_inv₀, RCLike.star_def, Complex.conj_ofReal, zero_mul, show ¬(i₂ = a) from Ne.symm ha, and_true]
+  · simp only [ha, ↓reduceIte, hb, star_zero, mul_zero, show ¬(i₂ = a) from Ne.symm ha, show ¬(j₂ = b) from Ne.symm hb, and_self]
 
 /-- `K * (c * c̄ · E_{i,j}) * K† = c · K_col(i) ⊗ c̄ · K_col(j)†` as an outer product. -/
 private theorem mul_single_mul_conjTranspose_eq_vecMulVec
@@ -179,10 +179,10 @@ private theorem mul_single_mul_conjTranspose_eq_vecMulVec
   rw [show Matrix.single i₂ j₂ (c * star c) =
       (c * star c) • Matrix.vecMulVec (Pi.single i₂ (1 : ℂ)) (Pi.single j₂ 1) by
     rw [← Matrix.single_eq_single_vecMulVec_single i₂ j₂]
-    simp]
+    simp only [RCLike.star_def, smul_single, smul_eq_mul, mul_one]]
   rw [Matrix.mul_smul, Matrix.smul_mul, Matrix.mul_vecMulVec, Matrix.vecMulVec_mul]
   ext i₁ j₁
-  simp [Matrix.vecMulVec_apply, Matrix.conjTranspose_apply, Matrix.col, Matrix.row]
+  simp only [RCLike.star_def, mulVec_single, MulOpposite.op_one, col, one_smul, single_vecMul, row, smul_apply, vecMulVec_apply, transpose_apply, conjTranspose_apply, smul_eq_mul, star_mul']
   ring_nf
 
 /-- The omega coefficient `(1/√D)·(1/√D) = 1/D`. -/
@@ -192,13 +192,13 @@ private theorem omegaCoeff_eq_inv (hd : 0 < D) :
       1 / (D : ℂ) := by
   have hdr : (0 : ℝ) < (D : ℝ) := Nat.cast_pos.mpr hd
   rw [show star ((1 : ℂ) / ((D : ℝ).sqrt : ℂ)) =
-      1 / ((D : ℝ).sqrt : ℂ) from by simp [Complex.conj_ofReal]]
+      1 / ((D : ℝ).sqrt : ℂ) from by simp only [one_div, star_inv₀, RCLike.star_def, Complex.conj_ofReal]]
   rw [show (1 : ℂ) / ((D : ℝ).sqrt : ℂ) *
       (1 / ((D : ℝ).sqrt : ℂ)) =
       1 / (((D : ℝ).sqrt : ℂ) ^ 2) from by ring]
   rw [show (((D : ℝ).sqrt : ℂ) ^ 2) = (((D : ℝ).sqrt ^ 2 : ℝ) : ℂ) from by push_cast; ring]
   rw [Real.sq_sqrt hdr.le]
-  simp
+  simp only [Complex.ofReal_natCast, one_div]
 
 theorem choiMatrix_mulLeft
     (A : Matrix (Fin D) (Fin D) ℂ) :
@@ -207,7 +207,7 @@ theorem choiMatrix_mulLeft
         (fun p : Fin D × Fin D => ((1 : ℂ) / ((D : ℝ).sqrt : ℂ)) * A p.1 p.2)
         (Matrix.omegaVec D) := by
   let c : ℂ := (1 : ℂ) / ((D : ℝ).sqrt : ℂ)
-  have hc : star c = c := by simp [c]
+  have hc : star c = c := by simp only [one_div, star_inv₀, RCLike.star_def, Complex.conj_ofReal, c]
   ext ⟨i₁, i₂⟩ ⟨j₁, j₂⟩
   by_cases h : j₁ = j₂
   · subst j₂
@@ -216,7 +216,7 @@ theorem choiMatrix_mulLeft
       Matrix.vecMulVec (fun p : Fin D × Fin D => c * A p.1 p.2) (Matrix.omegaVec D)
         (i₁, i₂) (j₁, j₁)
     rw [Matrix.mul_single_apply_same (i := i₂) (j := j₁) (a := i₁) (M := A)]
-    simp [c, Matrix.vecMulVec_apply, Matrix.omegaVec_apply]
+    simp only [one_div, star_inv₀, RCLike.star_def, Complex.conj_ofReal, vecMulVec_apply, omegaVec_apply, ↓reduceIte, c]
     ring
   · rw [choiMatrix_apply, omegaSlice_eq_single (D := D) i₂ j₂]
     change (A * Matrix.single i₂ j₂ (c * star c)) i₁ j₁ =
@@ -224,7 +224,7 @@ theorem choiMatrix_mulLeft
         (i₁, i₂) (j₁, j₂)
     rw [Matrix.mul_single_apply_of_ne (i := i₂) (j := j₂) (a := i₁) (b := j₁)
       (hbj := h) (M := A)]
-    simp [c, Matrix.vecMulVec_apply, Matrix.omegaVec_apply, h]
+    simp only [one_div, vecMulVec_apply, omegaVec_apply, h, ↓reduceIte, mul_zero, c]
 
 theorem choiMatrix_mulRight
     (A : Matrix (Fin D) (Fin D) ℂ) :
@@ -233,7 +233,7 @@ theorem choiMatrix_mulRight
         (Matrix.omegaVec D)
         (fun p : Fin D × Fin D => ((1 : ℂ) / ((D : ℝ).sqrt : ℂ)) * A p.2 p.1) := by
   let c : ℂ := (1 : ℂ) / ((D : ℝ).sqrt : ℂ)
-  have hc : star c = c := by simp [c]
+  have hc : star c = c := by simp only [one_div, star_inv₀, RCLike.star_def, Complex.conj_ofReal, c]
   ext ⟨i₁, i₂⟩ ⟨j₁, j₂⟩
   by_cases h : i₁ = i₂
   · subst i₂
@@ -242,7 +242,7 @@ theorem choiMatrix_mulRight
       Matrix.vecMulVec (Matrix.omegaVec D)
         (fun p : Fin D × Fin D => c * A p.2 p.1) (i₁, i₁) (j₁, j₂)
     rw [Matrix.single_mul_apply_same (i := i₁) (j := j₂) (b := j₁) (M := A)]
-    simp [c, Matrix.vecMulVec_apply, Matrix.omegaVec_apply]
+    simp only [one_div, star_inv₀, RCLike.star_def, Complex.conj_ofReal, vecMulVec_apply, omegaVec_apply, ↓reduceIte, c]
     ring
   · rw [choiMatrix_apply, omegaSlice_eq_single (D := D) i₂ j₂]
     change (Matrix.single i₂ j₂ (c * star c) * A) i₁ j₁ =
@@ -250,7 +250,7 @@ theorem choiMatrix_mulRight
         (fun p : Fin D × Fin D => c * A p.2 p.1) (i₁, i₂) (j₁, j₂)
     rw [Matrix.single_mul_apply_of_ne (i := i₂) (j := j₂) (a := i₁) (b := j₁)
       (h := h) (M := A)]
-    simp [c, Matrix.vecMulVec_apply, Matrix.omegaVec_apply, h]
+    simp only [one_div, vecMulVec_apply, omegaVec_apply, h, ↓reduceIte, zero_mul, c]
 
 /-! ### Choi matrix of Kraus maps -/
 
@@ -340,8 +340,8 @@ theorem cp_iff_choi_posSemidef [NeZero D] :
       dsimp [c]
       have hsqrt : (((D : ℝ).sqrt : ℂ)) ≠ 0 :=
         Complex.ofReal_ne_zero.mpr <| Real.sqrt_ne_zero'.2 (by exact_mod_cast hDpos)
-      simp [hsqrt]
-    have hstarc : star c = c := by dsimp [c]; simp
+      simp only [one_div, inv_eq_zero, hsqrt, not_false_eq_true]
+    have hstarc : star c = c := by dsimp [c]; simp only [one_div, map_inv₀, Complex.conj_ofReal]
     have hαne : c * star c ≠ 0 := by simpa [hstarc] using mul_ne_zero hc hc
     let K : Fin r → Matrix (Fin D) (Fin D) ℂ := fun m a b => v m (a, b) / c
     let S : Matrix (Fin D) (Fin D) ℂ → Matrix (Fin D) (Fin D) ℂ :=
@@ -354,7 +354,7 @@ theorem cp_iff_choi_posSemidef [NeZero D] :
     refine Matrix.induction_on X ?_ ?_
     · intro p q hp hq
       dsimp [P, S] at *
-      simp [map_add, Matrix.add_mul, Matrix.mul_add, hp, hq, Finset.sum_add_distrib]
+      simp only [map_add, hp, hq, Matrix.mul_add, Matrix.add_mul, sum_add_distrib]
     · intro i j z
       dsimp [P, S]
       have hbase : T (Matrix.single i j (1 : ℂ)) = S (Matrix.single i j 1) := by
@@ -393,16 +393,16 @@ theorem cp_iff_choi_posSemidef [NeZero D] :
                         (mul_single_mul_conjTranspose_eq_vecMulVec
                           (K := K m) (c := (1 : ℂ)) i j)
                   rw [hterm]
-                  simp [div_eq_mul_inv, hstarc, hc, mul_assoc, mul_left_comm, mul_comm]
+                  simp only [hstarc, div_eq_mul_inv, star_mul', RCLike.star_def, star_inv₀, mul_comm, mul_left_comm, mul_assoc, ne_eq, hc, not_false_eq_true, mul_inv_cancel_left₀]
         exact (mul_left_cancel₀ hαne) (h1.trans h2.symm)
       have hSsmul (Y : Matrix (Fin D) (Fin D) ℂ) : S (z • Y) = z • S Y := by
-        dsimp [S]; simp [Finset.smul_sum]
+        dsimp [S]; simp only [Algebra.mul_smul_comm, Algebra.smul_mul_assoc, smul_sum]
       calc
         T (Matrix.single i j z) = z • T (Matrix.single i j (1 : ℂ)) := by
           simpa [Matrix.smul_single] using T.map_smul z (Matrix.single i j (1 : ℂ))
         _ = z • S (Matrix.single i j 1) := by rw [hbase]
         _ = S (z • Matrix.single i j (1 : ℂ)) := by rw [hSsmul]
-        _ = S (Matrix.single i j z) := by simp [Matrix.smul_single]
+        _ = S (Matrix.single i j z) := by simp only [smul_single, smul_eq_mul, mul_one]
 
 /-- **Prop 2.1, trace-preserving correspondence** (Wolf):
 If `T` is trace-preserving, then `tr_A(τ) = (1/D) · 𝟙_D`.
@@ -419,7 +419,7 @@ theorem traceLeft_choiMatrix_of_tp
     calc
       Matrix.traceLeft (choiMatrix T) i i
           = Matrix.trace (T (Matrix.bipartiteSlice (Matrix.omegaProj D) i i)) := by
-              simp [Matrix.traceLeft_apply, choiMatrix_apply, Matrix.trace]
+              simp only [traceLeft_apply, choiMatrix_apply, trace, diag_apply]
       _ = Matrix.trace (Matrix.bipartiteSlice (Matrix.omegaProj D) i i) := by rw [htp]
       _ = Matrix.trace (Matrix.single i i
             (((1 : ℂ) / ((D : ℝ).sqrt : ℂ)) *
@@ -428,11 +428,11 @@ theorem traceLeft_choiMatrix_of_tp
       _ = (1 : ℂ) / (D : ℂ) := by
             rw [Matrix.trace_single_eq_same]
             exact omegaCoeff_eq_inv (D := D) hDpos
-      _ = ((1 / (D : ℂ)) • (1 : Matrix (Fin D) (Fin D) ℂ)) i i := by simp
+      _ = ((1 / (D : ℂ)) • (1 : Matrix (Fin D) (Fin D) ℂ)) i i := by simp only [one_div, smul_apply, one_apply_eq, smul_eq_mul, mul_one]
   · calc
       Matrix.traceLeft (choiMatrix T) i j
           = Matrix.trace (T (Matrix.bipartiteSlice (Matrix.omegaProj D) i j)) := by
-              simp [Matrix.traceLeft_apply, choiMatrix_apply, Matrix.trace]
+              simp only [traceLeft_apply, choiMatrix_apply, trace, diag_apply]
       _ = Matrix.trace (Matrix.bipartiteSlice (Matrix.omegaProj D) i j) := by rw [htp]
       _ = Matrix.trace (Matrix.single i j
             (((1 : ℂ) / ((D : ℝ).sqrt : ℂ)) *
@@ -442,7 +442,7 @@ theorem traceLeft_choiMatrix_of_tp
             simpa using (Matrix.trace_single_eq_of_ne (i := i) (j := j)
               (c := (((1 : ℂ) / ((D : ℝ).sqrt : ℂ)) *
                 star ((1 : ℂ) / ((D : ℝ).sqrt : ℂ)))) hij)
-      _ = ((1 / (D : ℂ)) • (1 : Matrix (Fin D) (Fin D) ℂ)) i j := by simp [hij]
+      _ = ((1 / (D : ℂ)) • (1 : Matrix (Fin D) (Fin D) ℂ)) i j := by simp only [one_div, smul_apply, ne_eq, hij, not_false_eq_true, one_apply_ne, smul_eq_mul, mul_zero]
 
 /-- **Prop 2.1, Hermiticity correspondence** (Wolf):
 `T` preserves Hermiticity (i.e., `T(B†) = T(B)†` for all `B`)
@@ -453,13 +453,13 @@ theorem choiMatrix_isHermitian_iff_hermiticityPreserving [NeZero D] :
   classical
   let c : ℂ := (1 : ℂ) / ((D : ℝ).sqrt : ℂ)
   have hDpos : 0 < D := Nat.pos_of_ne_zero (NeZero.ne D)
-  have hstarc : star c = c := by dsimp [c]; simp
+  have hstarc : star c = c := by dsimp [c]; simp only [one_div, map_inv₀, Complex.conj_ofReal]
   have hαne : c * star c ≠ 0 := by
     have hc : c ≠ 0 := by
       dsimp [c]
       have hsqrt : (((D : ℝ).sqrt : ℂ)) ≠ 0 :=
         Complex.ofReal_ne_zero.mpr <| Real.sqrt_ne_zero'.2 (by exact_mod_cast hDpos)
-      simp [hsqrt]
+      simp only [one_div, inv_eq_zero, hsqrt, not_false_eq_true]
     simpa [hstarc] using mul_ne_zero hc hc
   constructor
   · intro hτ
@@ -483,7 +483,7 @@ theorem choiMatrix_isHermitian_iff_hermiticityPreserving [NeZero D] :
           (T.map_smul (c * star c) (Matrix.single i j (1 : ℂ)))
       have hsmul2' : star (T (Matrix.single i j (c * star c)) b a) =
           (c * star c) * star (T (Matrix.single i j (1 : ℂ)) b a) := by
-        rw [hsmul2]; simp [hstarc, mul_assoc]
+        rw [hsmul2]; simp only [hstarc, mul_assoc, star_mul', RCLike.star_def]
       have hcoeff : (c * star c) * T (Matrix.single j i (1 : ℂ)) a b =
           (c * star c) * star (T (Matrix.single i j (1 : ℂ)) b a) := by
         calc
@@ -496,7 +496,7 @@ theorem choiMatrix_isHermitian_iff_hermiticityPreserving [NeZero D] :
     let P : Matrix (Fin D) (Fin D) ℂ → Prop := fun M => T (Mᴴ) = (T M)ᴴ
     change P B
     refine Matrix.induction_on B ?_ ?_
-    · intro p q hp hq; dsimp [P] at *; simp [map_add, hp, hq]
+    · intro p q hp hq; dsimp [P] at *; simp only [conjTranspose_add, map_add, hp, hq]
     · intro i j z
       dsimp [P]
       calc
@@ -505,7 +505,7 @@ theorem choiMatrix_isHermitian_iff_hermiticityPreserving [NeZero D] :
         _ = (star z) • T (Matrix.single j i (1 : ℂ)) := by
               simpa [Matrix.smul_single] using T.map_smul (star z) (Matrix.single j i (1 : ℂ))
         _ = (star z) • (T (Matrix.single i j (1 : ℂ)))ᴴ := by rw [hsingle]
-        _ = (z • T (Matrix.single i j (1 : ℂ)))ᴴ := by simp [Matrix.conjTranspose_smul]
+        _ = (z • T (Matrix.single i j (1 : ℂ)))ᴴ := by simp only [RCLike.star_def, conjTranspose_smul]
         _ = (T (Matrix.single i j z))ᴴ := by
               simpa [Matrix.smul_single] using
                 congrArg Matrix.conjTranspose (T.map_smul z (Matrix.single i j (1 : ℂ))).symm
@@ -530,13 +530,13 @@ theorem choiMatrix_injective [NeZero D] :
   have hDpos : 0 < D := Nat.pos_of_ne_zero (NeZero.ne D)
   have hstarc : star c = c := by
     dsimp [c]
-    simp
+    simp only [one_div, map_inv₀, Complex.conj_ofReal]
   have hαne : c * star c ≠ 0 := by
     have hc : c ≠ 0 := by
       dsimp [c]
       have hsqrt : (((D : ℝ).sqrt : ℂ)) ≠ 0 :=
         Complex.ofReal_ne_zero.mpr <| Real.sqrt_ne_zero'.2 (by exact_mod_cast hDpos)
-      simp [hsqrt]
+      simp only [one_div, inv_eq_zero, hsqrt, not_false_eq_true]
     simpa [hstarc] using mul_ne_zero hc hc
   have hsingle : ∀ i j : Fin D,
       T (Matrix.single i j (1 : ℂ)) = S (Matrix.single i j (1 : ℂ)) := by
@@ -562,7 +562,7 @@ theorem choiMatrix_injective [NeZero D] :
   refine Matrix.induction_on X ?_ ?_
   · intro p q hp hq
     dsimp [P] at *
-    simp [map_add, hp, hq]
+    simp only [map_add, add_apply, hp, hq]
   · intro p q z
     dsimp [P]
     calc
@@ -575,7 +575,7 @@ theorem choiMatrix_injective [NeZero D] :
         simpa [Matrix.smul_single] using congrArg (fun M => M i j)
           (S.map_smul z (Matrix.single p q (1 : ℂ))).symm
       _ = S (Matrix.single p q z) i j := by
-        simp [Matrix.smul_single]
+        simp only [smul_single, smul_eq_mul, mul_one]
 theorem eq_of_choiMatrix_eq [NeZero D]
     {T S : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
     (hTS : choiMatrix T = choiMatrix S) :
@@ -595,16 +595,16 @@ theorem exists_cpMap_of_choi_posSemidef [NeZero D]
     dsimp [c]
     have hsqrt : (((D : ℝ).sqrt : ℂ)) ≠ 0 :=
       Complex.ofReal_ne_zero.mpr <| Real.sqrt_ne_zero'.2 (by exact_mod_cast hDpos)
-    simp [hsqrt]
+    simp only [one_div, inv_eq_zero, hsqrt, not_false_eq_true]
   have hstarc : star c = c := by
     dsimp [c]
-    simp
+    simp only [one_div, map_inv₀, Complex.conj_ofReal]
   let K : Fin r → Matrix (Fin D) (Fin D) ℂ := fun m a b => v m (a, b) / c
   let T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ :=
     { toFun := fun X => ∑ m : Fin r, K m * X * (K m)ᴴ
       map_add' := by
         intro X Y
-        simp [Matrix.add_mul, Matrix.mul_add, Finset.sum_add_distrib]
+        simp only [Matrix.mul_add, Matrix.add_mul, sum_add_distrib]
       map_smul' := by
         intro z X
         simp only [RingHom.id_apply, mul_smul_comm, smul_mul_assoc]
@@ -634,7 +634,7 @@ theorem exists_cpMap_of_choi_posSemidef [NeZero D]
 theorem choiMatrix_id :
     choiMatrix (LinearMap.id (M := Matrix (Fin D) (Fin D) ℂ)) = Matrix.omegaProj D := by
   ext ⟨i₁, i₂⟩ ⟨j₁, j₂⟩
-  simp [choiMatrix, Matrix.tensorMapId_apply, Matrix.bipartiteSlice]
+  simp only [choiMatrix, tensorMapId_apply, LinearMap.id_coe, id_eq, bipartiteSlice]
 
 /-! ### Normalization and trace -/
 
@@ -645,6 +645,6 @@ theorem trace_choiMatrix_of_tp (hd : 0 < D)
     (htp : IsTracePreservingMap T) :
     (choiMatrix T).trace = 1 := by
   rw [Matrix.trace_eq_trace_traceLeft, traceLeft_choiMatrix_of_tp (T := T) htp]
-  simp [Matrix.trace_smul, hd.ne']
+  simp only [one_div, trace_smul, trace_one, Fintype.card_fin, smul_eq_mul, ne_eq, Nat.cast_eq_zero, hd.ne', not_false_eq_true, inv_mul_cancel₀]
 
 end ChoiJamiolkowski

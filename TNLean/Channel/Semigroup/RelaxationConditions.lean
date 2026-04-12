@@ -63,10 +63,10 @@ private theorem lower_left_block_vanishes_on_lindbladSpan
       rcases hB with ⟨j, rfl⟩
       exact hblock j
   | zero =>
-      simp
+      simp only [mul_zero, zero_mul]
   | add A B _ _ hA hB =>
       rw [Matrix.mul_add, Matrix.add_mul, hA, hB]
-      simp
+      simp only [add_zero]
   | smul c A _ hA =>
       rw [mul_smul_comm, smul_mul_assoc, hA, smul_zero]
 
@@ -107,17 +107,17 @@ private theorem lower_left_block_vanishes_on_adjoin
     intro A B hA hB
     calc
       (1 - P) * (A * B) * P = (1 - P) * A * B * P := by
-        simp [Matrix.mul_assoc]
+        simp only [Matrix.mul_assoc]
       _ = (1 - P) * A * (P + (1 - P)) * B * P := by
         rw [show (1 : Mat) = P + (1 - P) by abel]
-        simp [Matrix.mul_assoc]
+        simp only [add_sub_cancel, Matrix.mul_assoc, mul_one]
       _ = (1 - P) * A * P * B * P + (1 - P) * A * (1 - P) * B * P := by
         noncomm_ring
       _ = (1 - P) * A * (1 - P) * B * P := by
-        simp [hA, Matrix.mul_assoc]
+        simp only [hA, zero_mul, Matrix.mul_assoc, zero_add]
       _ = (1 - P) * A * ((1 - P) * B * P) := by
-        simp [Matrix.mul_assoc]
-      _ = 0 := by simp [hB]
+        simp only [Matrix.mul_assoc]
+      _ = 0 := by simp only [hB, mul_zero]
   intro A hA
   induction hA using Algebra.adjoin_induction with
   | mem A hA =>
@@ -127,11 +127,11 @@ private theorem lower_left_block_vanishes_on_adjoin
         (1 - P) * algebraMap ℂ Mat c * P = (1 - P) * (c • (1 : Mat)) * P := by
           rw [Algebra.algebraMap_eq_smul_one]
         _ = c • ((1 - P) * (1 : Mat) * P) := by
-          simp
-        _ = 0 := by simp [hQP]
+          simp only [Algebra.mul_smul_comm, mul_one, Algebra.smul_mul_assoc]
+        _ = 0 := by simp only [mul_one, hQP, smul_zero]
   | add A B _ _ hA hB =>
       rw [Matrix.mul_add, Matrix.add_mul, hA, hB]
-      simp
+      simp only [add_zero]
   | mul A B _ _ hA hB =>
       exact hblock_mul A B hA hB
 
@@ -206,18 +206,18 @@ theorem hermitian_span_trivial_commutant_implies_no_blockUpperTriangular
       simpa [Matrix.mul_assoc] using hct
     have hleft : P * F.L j = P * F.L j * P := by
       calc
-        P * F.L j = P * F.L j * 1 := by simp
+        P * F.L j = P * F.L j * 1 := by simp only [mul_one]
         _ = P * F.L j * (P + (1 - P)) := by
           rw [hP_add_compl]
         _ = P * F.L j * P + P * F.L j * (1 - P) := by rw [Matrix.mul_add]
         _ = P * F.L j * P := by rw [hPAQ, add_zero]
     have hright : F.L j * P = P * F.L j * P := by
       calc
-        F.L j * P = 1 * (F.L j * P) := by simp
+        F.L j * P = 1 * (F.L j * P) := by simp only [one_mul]
         _ = (P + (1 - P)) * (F.L j * P) := by
           rw [hP_add_compl]
         _ = P * (F.L j * P) + (1 - P) * (F.L j * P) := by rw [Matrix.add_mul]
-        _ = P * F.L j * P + (1 - P) * F.L j * P := by simp [Matrix.mul_assoc]
+        _ = P * F.L j * P + (1 - P) * F.L j * P := by simp only [Matrix.mul_assoc]
         _ = P * F.L j * P := by rw [hblock j, add_zero]
     exact hleft.trans hright.symm
   obtain ⟨c, hP_scalar⟩ := hComm P hcommP
@@ -240,7 +240,7 @@ private lemma bilinear_sum_identity {r n : ℕ}
   rw [Finset.sum_comm]
   apply Finset.sum_congr rfl; intro l _
   rw [← Finset.sum_smul]; congr 1
-  simp [conjTranspose_apply, mul_apply, mul_comm]
+  simp only [mul_apply, conjTranspose_apply, RCLike.star_def, mul_comm]
 
 /-- Adjoint variant: `Σⱼ Lⱼ†Lⱼ = Σₗ Σₖ (A†A)_{lk} • (Fₗ†Fₖ)`. -/
 private lemma bilinear_adj_sum_identity {r n : ℕ}
@@ -278,7 +278,7 @@ private theorem exists_lindblad_form_rank_le_finrank
     have := e.sum_repr ⟨G.L j, hV j⟩
     have : (⟨G.L j, hV j⟩ : V) = ∑ k, (e.repr ⟨G.L j, hV j⟩) k • e k := by
       rw [← e.sum_equivFun ⟨G.L j, hV j⟩]
-      simp [Basis.equivFun_apply]
+      simp only [Basis.equivFun_apply, Basis.sum_repr]
     have hval := congrArg Subtype.val this
     simp only [Submodule.coe_sum, Submodule.coe_smul] at hval
     exact hval
@@ -351,7 +351,7 @@ private theorem ker_sup_traceless_eq_top_of_one_mem_ker
   have hI_in_ker : (1 : Mat) ∈ LinearMap.ker φ := LinearMap.mem_ker.mpr hφ_one
   have htrI : τ (1 : Mat) = (D : ℂ) := by
     change Matrix.trace (1 : Mat) = _
-    simp [Matrix.trace_one, Fintype.card_fin]
+    simp only [trace_one, Fintype.card_fin]
   rw [eq_top_iff]
   intro x _
   have hmem_trace :
@@ -375,11 +375,11 @@ private theorem finrank_traceless_submodule
   haveI : NeZero D := ⟨hD⟩
   let τ : Mat →ₗ[ℂ] ℂ := Matrix.traceLinearMap (Fin D) ℂ ℂ
   have hfin_mat : Module.finrank ℂ Mat = D * D := by
-    simp [Module.finrank_matrix, Fintype.card_fin]
+    simp only [finrank_matrix, Fintype.card_fin, finrank_self, mul_one]
   have hD_ne : (D : ℂ) ≠ 0 := Nat.cast_ne_zero.mpr hD
   have htrI : τ (1 : Mat) = (D : ℂ) := by
     change Matrix.trace (1 : Mat) = _
-    simp [Matrix.trace_one, Fintype.card_fin]
+    simp only [trace_one, Fintype.card_fin]
   have h_rn := τ.finrank_range_add_finrank_ker
   rw [hfin_mat] at h_rn
   have h_range : Module.finrank ℂ (LinearMap.range τ) = 1 := by
@@ -416,7 +416,7 @@ private theorem projection_one_eigenvalue_card_bounds
   set k := (Finset.univ.filter (fun i => eig i = 1)).card
   have heig_01 : ∀ i : Fin D, eig i = 0 ∨ eig i = 1 := by
     simpa [eig] using projection_eigenvalues_zero_or_one (D := D) hP
-  have hk_le : k ≤ D := Finset.card_filter_le _ _ |>.trans (by simp [Fintype.card_fin])
+  have hk_le : k ≤ D := Finset.card_filter_le _ _ |>.trans (by simp only [card_univ, Fintype.card_fin, Std.le_refl])
   have hk_pos : 1 ≤ k := by
     by_contra h
     push Not at h
@@ -428,10 +428,10 @@ private theorem projection_one_eigenvalue_card_bounds
       · exfalso
         have : i ∈ Finset.univ.filter (fun i => eig i = 1) :=
           Finset.mem_filter.mpr ⟨Finset.mem_univ _, hi⟩
-        simp [Finset.card_eq_zero.mp hk_zero] at this
+        simp only [Finset.card_eq_zero.mp hk_zero, notMem_empty] at this
     have htr : P.trace = 0 := by
       rw [hP.1.1.trace_eq_sum_eigenvalues]
-      simp [eig, hall_zero]
+      simp only [hall_zero, Complex.coe_algebraMap, Complex.ofReal_zero, sum_const_zero, eig]
     exact hP.2.1 ((isOrthogonalProjection_posSemidef hP.1).trace_eq_zero_iff.mp htr)
   have hk_lt_D : k < D := by
     by_contra h
@@ -457,9 +457,10 @@ private theorem projection_one_eigenvalue_card_bounds
     have : P = 1 := by
       conv_lhs => rw [hP.1.1.spectral_theorem]
       have hdiag : RCLike.ofReal ∘ eig = fun _ => (1 : ℂ) :=
-        funext (fun i => by simp [hall_one i])
+        funext (fun i => by simp only [Complex.coe_algebraMap, Function.comp_apply, hall_one i, Complex.ofReal_one])
       rw [hdiag, Matrix.diagonal_one]
-      simp [Unitary.conjStarAlgAut]
+      simp only [Unitary.conjStarAlgAut, MonoidHom.coe_mk, OneHom.coe_mk, StarAlgEquiv.coe_mk,
+        StarRingEquiv.coe_mk, MulSemiringAction.toRingEquiv_apply, smul_one]
     exact hP.2.2 this
   simpa [eig, k] using And.intro hk_pos hk_lt_D
 
@@ -471,7 +472,7 @@ private theorem one_eigenvalue_card_mul_sub_ge
   have hstep1 : k - 1 ≤ (k - 1) * (D - k) := Nat.le_mul_of_pos_right _ hDk
   have hstep2 : (k - 1) * (D - k) + (D - k) ≤ k * (D - k) := by
     rw [← Nat.succ_pred_eq_of_pos (Nat.pos_of_ne_zero (by omega : k ≠ 0))]
-    simp [Nat.succ_mul]
+    simp only [Nat.pred_eq_sub_one, Nat.succ_eq_add_one, add_tsub_cancel_right, Nat.succ_mul, Std.le_refl]
   have hstep3 : (k - 1) + (D - k) = D - 1 := by
     omega
   calc
@@ -525,19 +526,19 @@ private theorem finrank_range_block_compression_ge
           set E := Matrix.single a b (1 : ℂ)
           have hDE : (1 - D₁) * E * D₁ = E := by
             have hD₁_diag : D₁ = Matrix.diagonal (fun i => (eig i : ℂ)) := by
-              simp [D₁, Function.comp]
+              simp only [Complex.coe_algebraMap, diagonal_eq_diagonal_iff, Function.comp, implies_true, D₁]
             have h1D₁ : 1 - D₁ = Matrix.diagonal (fun i => 1 - (eig i : ℂ)) := by
               rw [hD₁_diag]
               ext i j
-              simp [Matrix.diagonal_apply, Matrix.one_apply]
+              simp only [sub_apply, one_apply, diagonal_apply]
               split_ifs <;> ring
             rw [h1D₁, hD₁_diag]
             ext i j
             simp only [Matrix.diagonal_mul, Matrix.mul_diagonal, E, Matrix.single_apply]
             split_ifs with hij
             · obtain ⟨rfl, rfl⟩ := hij
-              simp [ha, hb]
-            · simp
+              simp only [ha, Complex.ofReal_zero, sub_zero, mul_one, hb, Complex.ofReal_one]
+            · simp only [mul_zero, zero_mul]
           show (1 - P) * ((U : Mat) * E * star (U : Mat) * P) =
               (U : Mat) * E * star (U : Mat)
           have h1PU : (1 - P) * (U : Mat) = (U : Mat) * (1 - D₁) := by
@@ -618,7 +619,7 @@ private theorem finrank_range_block_compression_ge
           have hv_eq : (fun p : ↥S₀ × ↥S₁ => Matrix.single p.1.1 p.2.1 (1 : ℂ)) =
               (fun ij : Fin D × Fin D => Matrix.stdBasis ℂ (Fin D) (Fin D) ij) ∘ ι := by
             ext ⟨⟨a, _⟩, ⟨b, _⟩⟩
-            simp [ι, Matrix.stdBasis_eq_single]
+            simp only [Function.comp_apply, stdBasis_eq_single, ι]
           rw [hv_eq]
           exact ((Matrix.stdBasis ℂ (Fin D) (Fin D)).linearIndependent).comp ι hι_inj
         calc
@@ -645,7 +646,7 @@ private theorem finrank_traceless_blockUT_add_D_le
   haveI : NeZero D := ⟨hD⟩
   have hD_ne : (D : ℂ) ≠ 0 := Nat.cast_ne_zero.mpr hD
   have hfin_mat : Module.finrank ℂ Mat = D * D := by
-    simp [Module.finrank_matrix, Fintype.card_fin]
+    simp only [finrank_matrix, Fintype.card_fin, finrank_self, mul_one]
   have hφ_apply : ∀ M : Mat, φ M = (1 - P) * (M * P) := by
     intro M; rfl
   have hφ_one : φ (1 : Mat) = 0 := by
@@ -722,7 +723,7 @@ private theorem exists_traceless_blockUT_lindblad_form
     apply Matrix.IsHermitian.sub G.H_hermitian
     rw [Matrix.IsHermitian, conjTranspose_smul]
     have hstar_I2 : star (Complex.I / 2 : ℂ) = -(Complex.I / 2) := by
-      simp [Complex.conj_I]; ring
+      simp only [star_div₀, RCLike.star_def, Complex.conj_I, star_ofNat]; ring
     rw [hstar_I2, hΔ_def, conjTranspose_sum]
     simp_rw [conjTranspose_sub, conjTranspose_smul, conjTranspose_conjTranspose,
       RCLike.star_def, Complex.conj_conj]

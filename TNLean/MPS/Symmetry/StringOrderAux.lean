@@ -64,19 +64,18 @@ lemma transferMap_tpGauge_eq_similarityMap
     calc
       transferMap (tpGauge (d := d) (D := D) A σ) X
           = ∑ i : Fin d, (S * A i * S⁻¹) * X * (S * A i * S⁻¹)ᴴ := by
-              simp [transferMap_apply, tpGauge, S]
+              simp only [transferMap_apply, tpGauge, Matrix.conjTranspose_mul, S]
               rfl
       _ = ∑ i : Fin d, S * (A i * (S⁻¹ * X * S⁻¹ * (A i)ᴴ)) * S := by
             refine Finset.sum_congr rfl ?_
             intro x _
             rw [Matrix.conjTranspose_mul, Matrix.conjTranspose_mul,
               Matrix.conjTranspose_nonsing_inv]
-            simp [Matrix.mul_assoc, hS_herm]
+            simp only [Matrix.mul_assoc, hS_herm]
       _ = S * (∑ i : Fin d, A i * (S⁻¹ * X * S⁻¹ * (A i)ᴴ)) * S := by
             rw [Matrix.sum_mul_mul]
       _ = similarityMap (D := D) S⁻¹ (transferMap A) X := by
-            simp [similarityMap, transferMap_apply, S, hS_inv_inv, hS_inv_herm',
-              Matrix.mul_assoc]
+            simp only [Matrix.mul_assoc, similarityMap, hS_inv_inv, hS_inv_herm', transferMap_apply, LinearMap.coe_mk, AddHom.coe_mk, S]
   exact congrFun (congrFun hcalc i) j
 
 /-- TP gauging preserves irreducibility when the original transfer map is
@@ -120,14 +119,14 @@ lemma gaugePhaseEquiv_of_gaugeEquiv_left_right
   calc
     B i = Z⁻¹ * B' i * Z := by
       rw [hB']
-      simp [Matrix.mul_assoc]
+      simp only [Matrix.coe_units_inv, Matrix.mul_assoc, Matrix.inv_mul_cancel_left_of_invertible, Matrix.inv_mul_of_invertible, mul_one]
     _ = Z⁻¹ * (ζ • (Y * A' i * Y⁻¹)) * Z := by rw [hY i]
     _ = ζ • (Z⁻¹ * (Y * A' i * Y⁻¹) * Z) := by
-          simp [Matrix.mul_assoc]
+          simp only [Matrix.coe_units_inv, Matrix.mul_assoc, Algebra.mul_smul_comm, Algebra.smul_mul_assoc]
     _ = ζ • (Z⁻¹ * (Y * (X * A i * X⁻¹) * Y⁻¹) * Z) := by rw [hX i]
     _ = ζ • (((Z⁻¹ * Y * X : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * A i *
           (((((Z⁻¹ * Y * X : GL (Fin D) ℂ)⁻¹ : GL (Fin D) ℂ)) : Matrix (Fin D) (Fin D) ℂ))) := by
-          simp [Matrix.mul_assoc, mul_inv_rev]
+          simp only [Matrix.coe_units_inv, Matrix.mul_assoc, Units.val_mul, mul_inv_rev, inv_inv]
 
 /-- Bundled TP-gauge data for a twisted MPS tensor, used to reduce the spectral radius
 bound to the TP-normalized setting in the string-order proofs. -/
@@ -182,7 +181,7 @@ noncomputable def twistedTPGaugeSetup [NeZero D]
   have hAadjNorm : ∑ i : Fin d, (((fun i => (A i)ᴴ) i)ᴴ) * ((fun i => (A i)ᴴ) i) = 1 := by
     simpa using
       kraus_sum_mul_conjTranspose_of_unital A (transferMap A)
-        (fun X => by simp [transferMap_apply]) hNorm
+        (fun X => by simp only [transferMap_apply]) hNorm
   have hChAdj : IsChannel (transferMap (d := d) (D := D) fun i => (A i)ᴴ) :=
     transferMap_isChannel (A := fun i => (A i)ᴴ) hAadjNorm
   let hσ_exists :=
@@ -280,9 +279,9 @@ theorem twistedTPGaugeSetup_hasEigenvalue [NeZero D]
                   rw [setup.hB'_def, tpGauge, setup.hS_def]
                   rfl
           _ = (setup.S⁻¹)ᴴ * (setup.B i)ᴴ * setup.Sᴴ := by
-                simp [Matrix.conjTranspose_mul, Matrix.mul_assoc]
+                simp only [Matrix.mul_assoc, Matrix.conjTranspose_mul]
           _ = setup.S⁻¹ * (setup.B i)ᴴ * setup.S := by
-                simp [setup.hS_herm, setup.hS_inv_herm]
+                simp only [setup.hS_inv_herm, setup.hS_herm]
       calc
         setup.A' i * (setup.S * V * setup.Sᴴ) * (setup.B' i)ᴴ
             = (setup.S * A i * setup.S⁻¹) * (setup.S * V * setup.S) *
@@ -294,41 +293,41 @@ theorem twistedTPGaugeSetup_hasEigenvalue [NeZero D]
                     (setup.S⁻¹ * (setup.B i)ᴴ * setup.S)
                     = setup.S * A i * (setup.S⁻¹ * (setup.S * V * setup.S)) *
                         (setup.S⁻¹ * (setup.B i)ᴴ * setup.S) := by
-                        simp [Matrix.mul_assoc]
+                        simp only [Matrix.mul_assoc]
                 _ = setup.S * A i * (V * setup.S) *
                       (setup.S⁻¹ * (setup.B i)ᴴ * setup.S) := by
                       rw [show setup.S⁻¹ * (setup.S * V * setup.S) = V * setup.S by
                         calc
                           setup.S⁻¹ * (setup.S * V * setup.S)
                               = (setup.S⁻¹ * setup.S) * V * setup.S := by
-                            simp [Matrix.mul_assoc]
-                          _ = V * setup.S := by simp [setup.hS_inv_mul]]
+                            simp only [Matrix.mul_assoc]
+                          _ = V * setup.S := by simp only [setup.hS_inv_mul, one_mul]]
                 _ = setup.S * A i * (V * (setup.B i)ᴴ * setup.S) := by
                       calc
                         setup.S * A i * (V * setup.S) *
                             (setup.S⁻¹ * (setup.B i)ᴴ * setup.S)
                             = setup.S * A i *
                                 ((V * setup.S) * (setup.S⁻¹ * (setup.B i)ᴴ * setup.S)) := by
-                                simp [Matrix.mul_assoc]
+                                simp only [Matrix.mul_assoc]
                         _ = setup.S * A i * (V * (setup.B i)ᴴ * setup.S) := by
                               congr 1
                               calc
                                 (V * setup.S) * (setup.S⁻¹ * (setup.B i)ᴴ * setup.S)
                                     = V * (setup.S * setup.S⁻¹) * (setup.B i)ᴴ * setup.S := by
-                                        simp [Matrix.mul_assoc]
+                                        simp only [Matrix.mul_assoc]
                                 _ = V * (setup.B i)ᴴ * setup.S := by
-                                      simp [setup.hS_mul_inv, Matrix.mul_assoc]
+                                      simp only [setup.hS_mul_inv, mul_one, Matrix.mul_assoc]
                 _ = setup.S * (A i * V * (setup.B i)ᴴ) * setup.S := by
-                      simp [Matrix.mul_assoc]
+                      simp only [Matrix.mul_assoc]
         _ = setup.S * (A i * V * (setup.B i)ᴴ) * setup.Sᴴ := by
-              simp [setup.hS_herm]
+              simp only [setup.hS_herm]
     calc
       mixedTransferMap setup.A' setup.B' (setup.S * V * setup.Sᴴ)
           = ∑ i : Fin d,
               setup.A' i * (setup.S * V * setup.Sᴴ) * (setup.B' i)ᴴ := by
-                  simp [mixedTransferMap_apply]
+                  simp only [mixedTransferMap_apply]
       _ = ∑ i : Fin d, setup.S * (A i * V * (setup.B i)ᴴ) * setup.Sᴴ := by
-            simp [hTerm]
+            simp only [hTerm]
       _ = setup.S * (∑ i : Fin d, A i * V * (setup.B i)ᴴ) * setup.Sᴴ := by
             simpa using
               (Matrix.sum_mul_mul
@@ -340,7 +339,7 @@ theorem twistedTPGaugeSetup_hasEigenvalue [NeZero D]
     intro hZero
     apply hV
     have h' : setup.S⁻¹ * (setup.S * V * setup.Sᴴ) * (setup.Sᴴ)⁻¹ = 0 := by
-      simp [hZero]
+      simp only [hZero, mul_zero, zero_mul]
     have h'' : setup.S⁻¹ * (setup.S * V) = 0 := by
       simpa [Matrix.mul_assoc, setup.hS_hMul_inv] using h'
     have h''' : (setup.S⁻¹ * setup.S) * V = 0 := by
@@ -373,7 +372,7 @@ theorem virtualUnitary_of_gaugePhaseEquiv_twisted
   classical
   rcases eq_or_ne D 0 with hD | hD
   · subst hD
-    refine ⟨1, 1, by simp, by simp, by simp, ?_⟩
+    refine ⟨1, 1, by simp only [Matrix.conjTranspose_one, mul_one], by simp only [Matrix.conjTranspose_one, mul_one], by simp only [one_mem, CStarRing.norm_of_mem_unitary], ?_⟩
     intro i
     ext a
     exact Fin.elim0 a
@@ -383,9 +382,9 @@ theorem virtualUnitary_of_gaugePhaseEquiv_twisted
   let X : Matrix (Fin D) (Fin D) ℂ := (Xgl : Matrix (Fin D) (Fin D) ℂ)
   let Xin : Matrix (Fin D) (Fin D) ℂ := ((Xgl⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)
   have hX_mul_inv : X * Xin = 1 := by
-    simp [X, Xin]
+    simp only [Matrix.coe_units_inv, Matrix.mul_inv_of_invertible, X, Xin]
   have hX_inv_mul : Xin * X = 1 := by
-    simp [X, Xin]
+    simp only [Matrix.coe_units_inv, Matrix.inv_mul_of_invertible, Xin, X]
   have hB_eq : ∀ Y : Matrix (Fin D) (Fin D) ℂ, transferMap B Y = transferMap A Y := by
     intro Y
     simpa [B] using transferMap_twistedMixedCompanion_eq (A := A) (u := u) hu Y
@@ -399,34 +398,33 @@ theorem virtualUnitary_of_gaugePhaseEquiv_twisted
   have hXinQ : Xin * Q * Xinᴴ = 1 := by
     calc
       Xin * Q * Xinᴴ = (Xin * X) * Xᴴ * Xinᴴ := by
-        simp [Q, Matrix.mul_assoc]
+        simp only [Matrix.mul_assoc, Q]
       _ = Xᴴ * Xinᴴ := by
-        simp [hX_inv_mul]
+        simp only [hX_inv_mul, one_mul]
       _ = (Xin * X)ᴴ := by
-        simp [Matrix.conjTranspose_mul]
+        simp only [Matrix.conjTranspose_mul]
       _ = 1 := by
-        simp [hX_inv_mul]
+        simp only [hX_inv_mul, Matrix.conjTranspose_one]
   have hQ_eigC : transferMap C Q = Q := by
     calc
       transferMap C Q = X * transferMap A (Xin * Q * Xinᴴ) * Xᴴ := by
         simpa [C, X, Xin, Matrix.mul_assoc] using transferMap_gauge_conj A Xgl Q
       _ = X * transferMap A 1 * Xᴴ := by rw [hXinQ]
-      _ = Q := by simp [Q, hNorm]
+      _ = Q := by simp only [hNorm, mul_one, Q]
   have hQ_eigB : transferMap B Q = (Complex.normSq ζ : ℂ) • Q := by
     calc
       transferMap B Q = transferMap (fun i => ζ • C i) Q := by
-        simp [hB_C]
+        simp only [hB_C, transferMap_apply, Algebra.smul_mul_assoc, Matrix.conjTranspose_smul, RCLike.star_def, Algebra.mul_smul_comm]
       _ = ∑ i : Fin d, (ζ • C i) * Q * (ζ • C i)ᴴ := by
-            simp [transferMap_apply]
+            simp only [transferMap_apply, Algebra.smul_mul_assoc, Matrix.conjTranspose_smul, RCLike.star_def, Algebra.mul_smul_comm]
       _ = ∑ i : Fin d, (Complex.normSq ζ : ℂ) • (C i * Q * (C i)ᴴ) := by
             apply Finset.sum_congr rfl
             intro i _
-            simp [Matrix.conjTranspose_smul, smul_smul,
-              Complex.normSq_eq_conj_mul_self, mul_comm]
+            simp only [Algebra.smul_mul_assoc, Matrix.conjTranspose_smul, RCLike.star_def, Algebra.mul_smul_comm, smul_smul, mul_comm, Complex.normSq_eq_conj_mul_self]
       _ = (Complex.normSq ζ : ℂ) • ∑ i : Fin d, C i * Q * (C i)ᴴ := by
-            simp [Finset.smul_sum]
+            simp only [Complex.coe_smul, Finset.smul_sum]
       _ = (Complex.normSq ζ : ℂ) • transferMap C Q := by
-            simp [transferMap_apply]
+            simp only [Complex.coe_smul, transferMap_apply]
       _ = (Complex.normSq ζ : ℂ) • Q := by rw [hQ_eigC]
   have hQ_eigA : transferMap A Q = (Complex.normSq ζ : ℂ) • Q := by
     rw [← hB_eq Q]
@@ -436,19 +434,19 @@ theorem virtualUnitary_of_gaugePhaseEquiv_twisted
     have hXh_inv_mul : Xᴴ * Xinᴴ = 1 := by
       calc
         Xᴴ * Xinᴴ = (Xin * X)ᴴ := by
-          simp [Matrix.conjTranspose_mul]
+          simp only [Matrix.conjTranspose_mul]
         _ = 1 := by
-          simp [hX_inv_mul]
+          simp only [hX_inv_mul, Matrix.conjTranspose_one]
     have : X = 0 := by
       calc
-        X = X * 1 := by simp
+        X = X * 1 := by simp only [mul_one]
         _ = X * (Xᴴ * Xinᴴ) := by rw [hXh_inv_mul]
-        _ = (X * Xᴴ) * Xinᴴ := by simp [Matrix.mul_assoc]
-        _ = 0 := by simp [Q, hQ0]
+        _ = (X * Xᴴ) * Xinᴴ := by simp only [Matrix.mul_assoc]
+        _ = 0 := by simp only [hQ0, zero_mul, Q]
     have hX_ne : X ≠ 0 := by
       intro hX0
       have hbad := hX_mul_inv
-      simp [X, Xin, hX0] at hbad
+      simp only [hX0, Matrix.coe_units_inv, Matrix.inv_zero, mul_zero, zero_ne_one, X, Xin] at hbad
     exact hX_ne this
   have hζ_sq_eq_one : Complex.normSq ζ = 1 := by
     have hIrrA : IsIrreducibleMap (transferMap (d := d) (D := D) A) :=
@@ -477,7 +475,7 @@ theorem virtualUnitary_of_gaugePhaseEquiv_twisted
   have hc_ne0 : c ≠ 0 := by
     intro hc0
     apply hQ_ne
-    simp [hQ_scalar, hc0]
+    simp only [hQ_scalar, hc0, zero_smul]
   have hc_nonneg : 0 ≤ c := by
     have hscalar_psd : (c • (1 : Matrix (Fin D) (Fin D) ℂ)).PosSemidef := by
       simpa [hQ_scalar] using hQ_psd
@@ -493,7 +491,7 @@ theorem virtualUnitary_of_gaugePhaseEquiv_twisted
     apply hc_ne0
     calc
       c = (c.re : ℂ) := hc_eq_real
-      _ = 0 := by simp [h0]
+      _ = 0 := by simp only [h0, Complex.ofReal_zero]
   have hcre_pos : 0 < c.re := lt_of_le_of_ne hcre_nonneg (Ne.symm hcre_ne0)
   set a : ℂ := (Real.sqrt c.re : ℂ)
   have ha_ne0 : a ≠ 0 := by
@@ -502,33 +500,33 @@ theorem virtualUnitary_of_gaugePhaseEquiv_twisted
     calc
       c = (c.re : ℂ) := hc_eq_real
       _ = (((Real.sqrt c.re) ^ 2 : ℝ) : ℂ) := by
-            simp [Real.sq_sqrt hcre_nonneg]
+            simp only [Real.sq_sqrt hcre_nonneg]
       _ = a * a := by
             rw [pow_two]
-            simp [a]
+            simp only [Complex.ofReal_mul, a]
   have hstar_a : star a = a := by
-    simp [a]
+    simp only [RCLike.star_def, Complex.conj_ofReal, a]
   have hstar_a_inv : star a⁻¹ = a⁻¹ := by
-    simp [a]
+    simp only [star_inv₀, RCLike.star_def, Complex.conj_ofReal, a]
   let U : Matrix (Fin D) (Fin D) ℂ := a⁻¹ • X
   have hU_unitary_left : U * Uᴴ = 1 := by
     calc
       U * Uᴴ = (star a⁻¹ * a⁻¹) • (X * Xᴴ) := by
-            simp [U, Matrix.conjTranspose_smul, smul_smul]
+            simp only [Matrix.conjTranspose_smul, star_inv₀, RCLike.star_def, Algebra.mul_smul_comm, Algebra.smul_mul_assoc, smul_smul, U]
       _ = (a⁻¹ * a⁻¹) • Q := by
             rw [hstar_a_inv]
       _ = ((a⁻¹ * a⁻¹) * c) • (1 : Matrix (Fin D) (Fin D) ℂ) := by
             rw [hQ_scalar]
-            simp [smul_smul, mul_comm]
+            simp only [smul_smul, mul_comm]
       _ = 1 := by
             have hscalar : ((a⁻¹ * a⁻¹) * c : ℂ) = 1 := by
               calc
                 (a⁻¹ * a⁻¹) * c = (a⁻¹ * a⁻¹) * (a * a) := by rw [hc_eq_sq]
                 _ = 1 := by field_simp [ha_ne0]
-            simp [hscalar]
+            simp only [hscalar, one_smul]
   have hU_unitary_right : Uᴴ * U = 1 := mul_eq_one_comm.mp hU_unitary_left
   have hX_eq : X = a • U := by
-    simp [U, ha_ne0]
+    simp only [ne_eq, ha_ne0, not_false_eq_true, smul_inv_smul₀, U]
   have hXinv_eq : Xin = a⁻¹ • Uᴴ := by
     have hXin' : X⁻¹ = a⁻¹ • Uᴴ := by
       apply Matrix.inv_eq_right_inv
@@ -536,7 +534,7 @@ theorem virtualUnitary_of_gaugePhaseEquiv_twisted
         X * (a⁻¹ • Uᴴ) = (a • U) * (a⁻¹ • Uᴴ) := by rw [hX_eq]
         _ = (a * a⁻¹) • (U * Uᴴ) := by
               simpa [Matrix.mul_assoc] using smul_mul_smul_comm a U a⁻¹ Uᴴ
-        _ = 1 := by simp [ha_ne0, hU_unitary_left]
+        _ = 1 := by simp only [ne_eq, ha_ne0, not_false_eq_true, mul_inv_cancel₀, hU_unitary_left, one_smul]
     simpa [X, Xin] using hXin'
   refine ⟨Uᴴ, ζ⁻¹, ?_, ?_, ?_, ?_⟩
   · simpa using hU_unitary_right
@@ -545,7 +543,7 @@ theorem virtualUnitary_of_gaugePhaseEquiv_twisted
       have hsq : ‖ζ‖ ^ 2 = 1 := by
         simpa [Complex.normSq_eq_norm_sq] using hζ_sq_eq_one
       nlinarith [norm_nonneg ζ]
-    simp [norm_inv, hζ_norm]
+    simp only [norm_inv, hζ_norm, inv_one]
   · intro i
     have hBi : ∀ j : Fin d, B j = ζ • (U * A j * Uᴴ) := by
       intro j
@@ -557,13 +555,13 @@ theorem virtualUnitary_of_gaugePhaseEquiv_twisted
               calc
                 (a • U) * A j * (a⁻¹ • Uᴴ)
                     = (a • (U * A j)) * (a⁻¹ • Uᴴ) := by
-                        simp [Matrix.mul_assoc]
+                        simp only [Algebra.smul_mul_assoc, Algebra.mul_smul_comm, Matrix.mul_assoc]
                 _ = (a * a⁻¹) • ((U * A j) * Uᴴ) := by
                       simpa [Matrix.mul_assoc] using
                         smul_mul_smul_comm a (U * A j) a⁻¹ Uᴴ
                 _ = (a * a⁻¹) • (U * A j * Uᴴ) := by
-                      simp [Matrix.mul_assoc]
-                _ = U * A j * Uᴴ := by simp [ha_ne0]
+                      simp only [Matrix.mul_assoc]
+                _ = U * A j * Uᴴ := by simp only [ne_eq, ha_ne0, not_false_eq_true, mul_inv_cancel₀, one_smul]
     have hsum :
         ∑ j : Fin d, u i j • B j = A i := by
       have hcoeff :
@@ -579,7 +577,7 @@ theorem virtualUnitary_of_gaugePhaseEquiv_twisted
                 intro j _
                 rw [show u i j • B j =
                   u i j • ∑ n' : Fin d, (starRingEnd ℂ) (u n' j) • A n' by
-                    simp [B, twistedMixedCompanion]]
+                    simp only [twistedMixedCompanion, B]]
                 simpa [smul_smul, mul_assoc] using
                   (Finset.smul_sum (s := Finset.univ)
                     (f := fun n' : Fin d => (starRingEnd ℂ) (u n' j) • A n')
@@ -594,18 +592,17 @@ theorem virtualUnitary_of_gaugePhaseEquiv_twisted
                   (f := fun j : Fin d => u i j * (starRingEnd ℂ) (u n' j))
                   (x := A n')).symm
         _ = ∑ n' : Fin d, (if i = n' then 1 else 0) • A n' := by
-              simp [hcoeff]
+              simp only [hcoeff, ite_smul, one_smul, zero_smul, Finset.sum_ite_eq, Finset.mem_univ, ↓reduceIte, zero_nsmul]
         _ = A i := by
-              simp
+              simp only [ite_smul, one_smul, zero_nsmul, Finset.sum_ite_eq, Finset.mem_univ, ↓reduceIte]
     have htransport : Uᴴ * A i * U = ζ • (∑ j : Fin d, u i j • A j) := by
       have hsum_virtual : A i = ζ • (U * (∑ j : Fin d, u i j • A j) * Uᴴ) := by
         calc
           A i = ∑ j : Fin d, u i j • B j := hsum.symm
           _ = ∑ j : Fin d, u i j • (ζ • (U * A j * Uᴴ)) := by
-                simp [hBi]
+                simp only [hBi]
           _ = ζ • (U * (∑ j : Fin d, u i j • A j) * Uᴴ) := by
-                simp [Finset.smul_sum, Finset.mul_sum, Finset.sum_mul, mul_comm,
-                  smul_smul, Matrix.mul_assoc]
+                simp only [Matrix.mul_assoc, smul_smul, mul_comm, Finset.mul_sum, Algebra.mul_smul_comm, Finset.sum_mul, Algebra.smul_mul_assoc, Finset.smul_sum]
       have hconj := congrArg (fun M => Uᴴ * M * U) hsum_virtual
       calc
         Uᴴ * A i * U = Uᴴ * (ζ • (U * (∑ j : Fin d, u i j • A j) * Uᴴ)) * U := by
@@ -614,18 +611,18 @@ theorem virtualUnitary_of_gaugePhaseEquiv_twisted
               calc
                 Uᴴ * (ζ • (U * (∑ j : Fin d, u i j • A j) * Uᴴ)) * U
                     = ζ • (Uᴴ * ((U * (∑ j : Fin d, u i j • A j) * Uᴴ) * U)) := by
-                        simp [Matrix.mul_assoc]
+                        simp only [Matrix.mul_assoc, Algebra.mul_smul_comm, Algebra.smul_mul_assoc]
                 _ = ζ • ((Uᴴ * U) * (∑ j : Fin d, u i j • A j) * (Uᴴ * U)) := by
-                        simp [Matrix.mul_assoc]
+                        simp only [Matrix.mul_assoc]
                 _ = ζ • (∑ j : Fin d, u i j • A j) := by
-                        simp [hU_unitary_right]
+                        simp only [hU_unitary_right, one_mul, mul_one]
     calc
       ∑ j : Fin d, u i j • A j = ζ⁻¹ • (ζ • (∑ j : Fin d, u i j • A j)) := by
-            simp [hζ, smul_smul]
+            simp only [smul_smul, ne_eq, hζ, not_false_eq_true, inv_mul_cancel₀, one_smul]
       _ = ζ⁻¹ • (Uᴴ * A i * U) := by
             rw [htransport]
       _ = ζ⁻¹ • (Uᴴ * A i * Uᴴᴴ) := by
-            simp
+            simp only [Matrix.conjTranspose_conjTranspose]
 
 /-- A phased virtual symmetry immediately produces a peripheral eigenvector of the
 twisted transfer map. -/
@@ -647,7 +644,7 @@ theorem twistedTransfer_eigen_of_virtualUnitary
             rw [twistedTransferMap_apply, Finset.sum_comm]
             apply Finset.sum_congr rfl
             intro i _
-            simp [Finset.sum_mul, Matrix.mul_assoc]
+            simp only [Matrix.mul_assoc, Finset.sum_mul, Algebra.smul_mul_assoc]
     _ = ∑ i : Fin d, (μ • (V * A i * Vᴴ)) * V * (A i)ᴴ := by
           apply Finset.sum_congr rfl
           intro i _
@@ -659,19 +656,19 @@ theorem twistedTransfer_eigen_of_virtualUnitary
           calc
             (μ • (V * A i * Vᴴ)) * V * (A i)ᴴ
                 = μ • (((V * A i * Vᴴ) * V) * (A i)ᴴ) := by
-                    simp [Matrix.mul_assoc]
+                    simp only [Matrix.mul_assoc, Algebra.smul_mul_assoc]
             _ = μ • ((V * A i * (Vᴴ * V)) * (A i)ᴴ) := by
-                    simp [Matrix.mul_assoc]
+                    simp only [Matrix.mul_assoc]
             _ = μ • ((V * A i) * (A i)ᴴ) := by
-                    simp [hV', Matrix.mul_assoc]
+                    simp only [hV', mul_one, Matrix.mul_assoc]
             _ = μ • (V * A i * (A i)ᴴ) := by
-                    simp [Matrix.mul_assoc]
+                    simp only [Matrix.mul_assoc]
     _ = μ • (V * ∑ i : Fin d, A i * (A i)ᴴ) := by
-          simp [Matrix.mul_assoc, Matrix.mul_sum]
+          simp only [Matrix.mul_assoc, Matrix.mul_sum]
     _ = μ • (V * transferMap A 1) := by
-          simp [transferMap_apply]
+          simp only [transferMap_apply, mul_one]
     _ = μ • V := by
-          simp [hNorm]
+          simp only [hNorm, mul_one]
 
 /-- A phased virtual symmetry preserving the twisted transfer data also preserves
 the stationary boundary state `Λ`, provided `Λ` is the unique fixed point of the
@@ -693,12 +690,12 @@ theorem boundaryState_invariant_of_virtualUnitary
     Vᴴ * Λ * V = Λ := by
   rcases eq_or_ne D 0 with hD | hD
   · subst hD
-    simp at hΛtr
+    simp only [Matrix.trace_eq_zero_of_isEmpty, zero_ne_one] at hΛtr
   haveI : NeZero D := ⟨hD⟩
   let B : MPSTensor d D := twistedMixedCompanion A u
   have hμ_ne : μ ≠ 0 := by
     intro hμ0
-    have : ‖μ‖ = 0 := by simp [hμ0]
+    have : ‖μ‖ = 0 := by simp only [hμ0, norm_zero]
     rw [hμ] at this
     norm_num at this
   have hμ_sq : star μ * μ = 1 := by
@@ -721,9 +718,9 @@ theorem boundaryState_invariant_of_virtualUnitary
       ∀ k : Fin d, A k = μ • (V * B k * Vᴴ) := by
     intro k
     calc
-      A k = ∑ j : Fin d, (if k = j then 1 else 0) • A j := by simp
+      A k = ∑ j : Fin d, (if k = j then 1 else 0) • A j := by simp only [ite_smul, one_smul, zero_nsmul, Finset.sum_ite_eq, Finset.mem_univ, ↓reduceIte]
       _ = ∑ j : Fin d, (∑ i : Fin d, (starRingEnd ℂ) (u i k) * u i j) • A j := by
-            simp [hcoeff]
+            simp only [ite_smul, one_smul, zero_nsmul, Finset.sum_ite_eq, Finset.mem_univ, ↓reduceIte, hcoeff, zero_smul]
       _ = ∑ j : Fin d, ∑ i : Fin d, ((starRingEnd ℂ) (u i k) * u i j) • A j := by
             apply Finset.sum_congr rfl
             intro j _
@@ -736,14 +733,13 @@ theorem boundaryState_invariant_of_virtualUnitary
             rw [Finset.smul_sum]
             apply Finset.sum_congr rfl
             intro j _
-            simp [smul_smul]
+            simp only [smul_smul]
       _ = ∑ i : Fin d, (starRingEnd ℂ) (u i k) • (μ • (V * A i * Vᴴ)) := by
             apply Finset.sum_congr rfl
             intro i _
             rw [hC1μ i]
       _ = μ • (V * B k * Vᴴ) := by
-            simp [B, twistedMixedCompanion, smul_smul, mul_assoc,
-              Finset.smul_sum, Finset.mul_sum, Finset.sum_mul, mul_comm]
+            simp only [mul_assoc, smul_smul, mul_comm, twistedMixedCompanion, Finset.mul_sum, Algebra.mul_smul_comm, Finset.sum_mul, Algebra.smul_mul_assoc, Finset.smul_sum, B]
   have hB_eq :
       ∀ X : Matrix (Fin D) (Fin D) ℂ, transferMap B X = transferMap A X := by
     intro X
@@ -763,7 +759,7 @@ theorem boundaryState_invariant_of_virtualUnitary
     calc
       transferMap (fun i => (A i)ᴴ) ρ
           = ∑ i : Fin d, (A i)ᴴ * ρ * A i := by
-              simp [transferMap_apply]
+              simp only [transferMap_apply, Matrix.conjTranspose_conjTranspose]
       _ = ∑ i : Fin d, V * ((B i)ᴴ * Λ * B i) * Vᴴ := by
             apply Finset.sum_congr rfl
             intro i _
@@ -772,17 +768,17 @@ theorem boundaryState_invariant_of_virtualUnitary
                   = ((μ • (V * B i * Vᴴ))ᴴ) * ρ * (μ • (V * B i * Vᴴ)) := by
                       rw [hA_from_B i]
               _ = (star μ * μ) • (((V * B i * Vᴴ)ᴴ) * ρ * (V * B i * Vᴴ)) := by
-                    simp [Matrix.conjTranspose_smul, smul_smul, Matrix.mul_assoc, mul_comm]
+                    simp only [Matrix.mul_assoc, Matrix.conjTranspose_smul, RCLike.star_def, Matrix.conjTranspose_mul, Matrix.conjTranspose_conjTranspose, Algebra.smul_mul_assoc, Algebra.mul_smul_comm, smul_smul, mul_comm]
               _ = (star μ * μ) • (V * ((B i)ᴴ * Λ * B i) * Vᴴ) := by
                     congr 1
                     calc
                       ((V * B i * Vᴴ)ᴴ) * ρ * (V * B i * Vᴴ)
                           = (V * (B i)ᴴ * Vᴴ) * (V * Λ * Vᴴ) * (V * B i * Vᴴ) := by
-                              simp [ρ, Matrix.conjTranspose_mul, Matrix.mul_assoc]
+                              simp only [Matrix.mul_assoc, Matrix.conjTranspose_mul, Matrix.conjTranspose_conjTranspose, ρ]
                       _ = V * (B i)ᴴ * (Vᴴ * V) * Λ * (Vᴴ * V) * B i * Vᴴ := by
-                            simp [Matrix.mul_assoc]
-                      _ = V * (B i)ᴴ * Λ * B i * Vᴴ := by simp [hV', Matrix.mul_assoc]
-                      _ = V * ((B i)ᴴ * Λ * B i) * Vᴴ := by simp [Matrix.mul_assoc]
+                            simp only [Matrix.mul_assoc]
+                      _ = V * (B i)ᴴ * Λ * B i * Vᴴ := by simp only [hV', mul_one, Matrix.mul_assoc]
+                      _ = V * ((B i)ᴴ * Λ * B i) * Vᴴ := by simp only [Matrix.mul_assoc]
               _ = V * ((B i)ᴴ * Λ * B i) * Vᴴ := by
                     rw [hμ_sq, one_smul]
       _ = V * (∑ i : Fin d, (B i)ᴴ * Λ * B i) * Vᴴ := by
@@ -790,18 +786,18 @@ theorem boundaryState_invariant_of_virtualUnitary
               (Matrix.sum_mul_mul
                 (L := V) (M := fun i : Fin d => (B i)ᴴ * Λ * B i) (R := Vᴴ))
       _ = V * transferMap (fun i => (B i)ᴴ) Λ * Vᴴ := by
-            simp [transferMap_apply]
-      _ = ρ := by simp [ρ, hBfix, Matrix.mul_assoc]
+            simp only [transferMap_apply, Matrix.conjTranspose_conjTranspose]
+      _ = ρ := by simp only [hBfix, Matrix.mul_assoc, ρ]
   have hρ_tr : Matrix.trace ρ = 1 := by
     calc
       Matrix.trace ρ = Matrix.trace (V * Λ * Vᴴ) := rfl
       _ = Matrix.trace (Vᴴ * (V * Λ)) := by
             simpa [Matrix.mul_assoc] using Matrix.trace_mul_cycle V Λ Vᴴ
-      _ = Matrix.trace ((Vᴴ * V) * Λ) := by simp [Matrix.mul_assoc]
+      _ = Matrix.trace ((Vᴴ * V) * Λ) := by simp only [Matrix.mul_assoc]
       _ = 1 := by simpa [hV'] using hΛtr
   have hρ_ne : ρ ≠ 0 := by
     intro hρ0
-    simp [hρ0] at hρ_tr
+    simp only [hρ0, Matrix.trace_zero, zero_ne_one] at hρ_tr
   have hIrrA : IsIrreducibleMap (transferMap (d := d) (D := D) A) :=
     injective_implies_irreducibleCP A hA
   have hIrrTensor : IsIrreducibleTensor (d := d) (D := D) A :=
@@ -811,7 +807,7 @@ theorem boundaryState_invariant_of_virtualUnitary
     isIrreducibleCP_transferMap_conjTranspose_of_isIrreducibleTensor A hIrrTensor
   have hΛ_ne : Λ ≠ 0 := by
     intro hΛ0
-    simp [hΛ0] at hΛtr
+    simp only [hΛ0, Matrix.trace_zero, zero_ne_one] at hΛtr
   rcases posSemidef_fixedPoint_unique_of_irreducible (A := fun i => (A i)ᴴ) hIrrAdj
       Λ ρ hΛpos.posSemidef hΛ_ne hρ_psd hΛfix hρ_fix with ⟨c, hρ_scalar⟩
   have hc : c = 1 := by
@@ -821,9 +817,9 @@ theorem boundaryState_invariant_of_virtualUnitary
   calc
     Vᴴ * Λ * V = Vᴴ * ρ * V := by
       simpa [Matrix.mul_assoc] using congrArg (fun M => Vᴴ * M * V) hρ_eq.symm
-    _ = Vᴴ * (V * (Λ * (Vᴴ * V))) := by simp [ρ, Matrix.mul_assoc]
-    _ = Vᴴ * (V * Λ) := by simp [hV']
-    _ = (Vᴴ * V) * Λ := by simp [Matrix.mul_assoc]
-    _ = Λ := by simp [hV']
+    _ = Vᴴ * (V * (Λ * (Vᴴ * V))) := by simp only [Matrix.mul_assoc, ρ]
+    _ = Vᴴ * (V * Λ) := by simp only [hV', mul_one]
+    _ = (Vᴴ * V) * Λ := by simp only [Matrix.mul_assoc]
+    _ = Λ := by simp only [hV', one_mul]
 
 end MPSTensor

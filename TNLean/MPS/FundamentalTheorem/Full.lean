@@ -322,7 +322,7 @@ private lemma exists_nondecaying_overlap_of_sameMPV₂_CFBNT
       have h1 := tendsto_inner_zero _ _ (hall j)
       have h2 : (fun N => mpvInner (d := d) (B b0) (A j) N) =
           (fun N => star (mpvInner (d := d) (A j) (B b0) N)) := by
-        ext N; simp [mpvInner, inner_conj_symm]
+        ext N; simp only [mpvInner, RCLike.star_def, inner_conj_symm]
       rw [h2]; simpa using h1.star
     have h_eq := normalized_identity (B b0) (μB b0) hμB_ne
     have hLHS : Tendsto (fun N => ∑ j, (μA j / μB b0) ^ N *
@@ -579,7 +579,7 @@ private lemma exists_nondecaying_overlap_of_sameMPV₂_CFBNT
         have h1 := tendsto_inner_zero _ _ (huniq j hj)
         have h2 : (fun N => mpvInner (d := d) (B b0) (A j) N) =
             (fun N => star (mpvInner (d := d) (A j) (B b0) N)) := by
-          ext N; simp [mpvInner, inner_conj_symm]
+          ext N; simp only [mpvInner, RCLike.star_def, inner_conj_symm]
         rw [h2]; simpa using h1.star
       have h_eq := normalized_identity (B b0) (μB b0) hμB_ne
       have hRHS_one : Tendsto (fun N => ∑ k, (μB k / μB b0) ^ N *
@@ -622,7 +622,7 @@ private lemma exists_nondecaying_overlap_of_sameMPV₂_CFBNT
                   (mu0_norm_eq ▸ hμA_le j))
               (hInner_other j (Finset.ne_of_mem_erase hj)))
           simpa using this
-        convert h_j1_term.add h_rest using 1; simp
+        convert h_j1_term.add h_rest using 1; simp only [add_zero]
       exact zero_ne_one (tendsto_nhds_unique
         (hLHS_zero.congr (fun N => h_eq N)) hRHS_one)
   -- ── Similarly: A a0's match on the B-side is B b0 ──
@@ -752,12 +752,16 @@ private lemma exists_nondecaying_overlap_of_sameMPV₂_CFBNT
   -- succA/succB embed Fin (r - 1) into Fin r as the (j+1)-th element.
   let succA : Fin (rA - 1) → Fin rA := fun j => ⟨j.val + 1, by omega⟩
   let succB : Fin (rB - 1) → Fin rB := fun k => ⟨k.val + 1, by omega⟩
-  have succA_ne_a0 : ∀ j, succA j ≠ a0 := fun j => by simp [succA, a0]
-  have succB_ne_b0 : ∀ k, succB k ≠ b0 := fun k => by simp [succB, b0]
+  have succA_ne_a0 : ∀ j, succA j ≠ a0 := fun j => by
+    simp only [ne_eq, Fin.mk.injEq, Nat.add_eq_zero_iff, one_ne_zero, and_false,
+      not_false_eq_true, succA, a0]
+  have succB_ne_b0 : ∀ k, succB k ≠ b0 := fun k => by
+    simp only [ne_eq, Fin.mk.injEq, Nat.add_eq_zero_iff, one_ne_zero, and_false,
+      not_false_eq_true, succB, b0]
   have succA_inj : Function.Injective succA := fun j₁ j₂ h => by
-    simp [succA, Fin.ext_iff] at h; exact Fin.ext (by omega)
+    simp only [Fin.ext_iff, Nat.add_right_cancel_iff, succA] at h; exact Fin.ext (by omega)
   have succB_inj : Function.Injective succB := fun k₁ k₂ h => by
-    simp [succB, Fin.ext_iff] at h; exact Fin.ext (by omega)
+    simp only [Fin.ext_iff, Nat.add_right_cancel_iff, succB] at h; exact Fin.ext (by omega)
   -- ── Helper: reindex Finset sums from erase to Fin (r - 1) ──
   have hSumA_reindex : ∀ N,
       ∑ j ∈ Finset.univ.erase a0, μA j ^ N • (A j).mpvState N =
@@ -770,7 +774,7 @@ private lemma exists_nondecaying_overlap_of_sameMPV₂_CFBNT
         have hx_ne : x ≠ a0 := hx.1
         have hx_pos : 0 < x.val := Nat.pos_of_ne_zero (fun h => hx_ne (Fin.ext h))
         exact Finset.mem_image.mpr ⟨⟨x.val - 1, by omega⟩, Finset.mem_univ _,
-          Fin.ext (by simp [succA]; omega)⟩
+          Fin.ext (by simp only [succA]; omega)⟩
       · intro hx
         obtain ⟨j, _, rfl⟩ := Finset.mem_image.mp hx
         exact Finset.mem_erase.mpr ⟨succA_ne_a0 j, Finset.mem_univ _⟩
@@ -786,7 +790,7 @@ private lemma exists_nondecaying_overlap_of_sameMPV₂_CFBNT
         have hx_ne : x ≠ b0 := hx.1
         have hx_pos : 0 < x.val := Nat.pos_of_ne_zero (fun h => hx_ne (Fin.ext h))
         exact Finset.mem_image.mpr ⟨⟨x.val - 1, by omega⟩, Finset.mem_univ _,
-          Fin.ext (by simp [succB]; omega)⟩
+          Fin.ext (by simp only [succB]; omega)⟩
       · intro hx
         obtain ⟨k, _, rfl⟩ := Finset.mem_image.mp hx
         exact Finset.mem_erase.mpr ⟨succB_ne_b0 k, Finset.mem_univ _⟩
@@ -837,13 +841,13 @@ private lemma exists_nondecaying_overlap_of_sameMPV₂_CFBNT
       intro h; subst h; exact match_A0_is_B0 (hall b0)
     have hj0_pos : 0 < j₀.val := Nat.pos_of_ne_zero (fun h => hj0_ne (Fin.ext h))
     set j₀' : Fin (rA - 1) := ⟨j₀.val - 1, by omega⟩ with hj0'_def
-    have hj0_eq : succA j₀' = j₀ := Fin.ext (by simp [succA, hj0'_def]; omega)
+    have hj0_eq : succA j₀' = j₀ := Fin.ext (by simp only [hj0'_def, succA]; omega)
     by_cases hrB1 : rB = 1
     · -- rB = 1: B-tail empty → tail sum = 0 → LI contradiction.
       have hTailZero : ∀ N,
           ∑ j ∈ Finset.univ.erase a0, μA j ^ N • (A j).mpvState N = 0 := by
         intro N; rw [hTailState N, hSumB_reindex]
-        subst hrB1; simp [Finset.univ_eq_empty]
+        subst hrB1; simp only [Nat.add_one_sub_one, Finset.univ_eq_empty, Finset.sum_empty]
       obtain ⟨N₀, hLI⟩ := hA.isBNT.eventually_li
       specialize hLI (N₀ + 1) (by omega)
       rw [Fintype.linearIndependent_iff] at hLI
@@ -882,14 +886,14 @@ private lemma exists_nondecaying_overlap_of_sameMPV₂_CFBNT
       intro h; subst h; exact match_B0_is_A0 (hall a0)
     have hk0_pos : 0 < k₀.val := Nat.pos_of_ne_zero (fun h => hk0_ne (Fin.ext h))
     set k₀' : Fin (rB - 1) := ⟨k₀.val - 1, by omega⟩ with hk0'_def
-    have hk0_eq : succB k₀' = k₀ := Fin.ext (by simp [succB, hk0'_def]; omega)
+    have hk0_eq : succB k₀' = k₀ := Fin.ext (by simp only [hk0'_def, succB]; omega)
     -- Case split on rA.
     by_cases hrA1 : rA = 1
     · -- rA = 1: A-tail empty → tail sum = 0 → LI contradiction.
       have hTailZero : ∀ N,
           ∑ k ∈ Finset.univ.erase b0, μB k ^ N • (B k).mpvState N = 0 := by
         intro N; rw [← hTailState N, hSumA_reindex]
-        subst hrA1; simp [Finset.univ_eq_empty]
+        subst hrA1; simp only [Nat.add_one_sub_one, Finset.univ_eq_empty, Finset.sum_empty]
       obtain ⟨N₀, hLI⟩ := hB.isBNT.eventually_li
       specialize hLI (N₀ + 1) (by omega)
       rw [Fintype.linearIndependent_iff] at hLI
@@ -1031,7 +1035,7 @@ private lemma blocks_match_of_sameMPV₂_CFBNT
       have hzero :
           ∑ k : Fin rB, (μB k) ^ (N0B + 1) • mpvState (d := d) (B k) (N0B + 1) = 0 := by
         rw [← hSumState (N0B + 1)]
-        simp [Finset.sum_empty]
+        simp only [Finset.univ_eq_empty, Finset.sum_empty]
       exact absurd
         (Fintype.linearIndependent_iff.mp hN _ hzero ⟨0, hrB_pos⟩)
         (pow_ne_zero (N0B + 1) (hμB_ne ⟨0, hrB_pos⟩))
@@ -1044,7 +1048,7 @@ private lemma blocks_match_of_sameMPV₂_CFBNT
     have hN := hLIA (N0A + 1) (by omega)
     have hzero : ∑ j : Fin rA, (μA j) ^ (N0A + 1) • mpvState (d := d) (A j) (N0A + 1) = 0 := by
       rw [hSumState (N0A + 1)]
-      simp [Finset.sum_empty]
+      simp only [Finset.univ_eq_empty, Finset.sum_empty]
     exact pow_ne_zero (N0A + 1) (hμA_ne ⟨0, hrA_pos⟩)
       (Fintype.linearIndependent_iff.mp hN _ hzero ⟨0, hrA_pos⟩)
   -- Step 3: Main case rA, rB ≥ 1 (overlap dichotomy + bijection construction).
