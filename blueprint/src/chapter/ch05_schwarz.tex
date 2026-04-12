@@ -727,13 +727,14 @@ convenience.
 This section collects the operator convexity/concavity results, trace
 inequalities, the operator Jensen inequality for positive maps, and the
 Lieb concavity theorem. These are standard results in matrix analysis
-(Bhatia~Ch.~V, Wolf~Thm.~5.1, Hansen--Pedersen~2003, Lieb~1973) that are
-currently axiomatized pending upstream Mathlib support in
-\texttt{CFC.Rpow.Order} and \texttt{CFC.ExpLog.Order}.
+(Bhatia~Ch.~V, Wolf~Thm.~5.1, Hansen--Pedersen~2003, Lieb~1973). They are
+currently taken as assumptions pending upstream formalization of operator
+concavity and convexity for real powers $x\mapsto x^p$ on the Loewner
+order, together with operator concavity of the matrix logarithm.
 
 \subsection{Trace concavity and convexity of matrix powers}
 
-\begin{theorem}[Trace concavity of rpow]\label{thm:trace_rpow_concave_axiom}
+\begin{theorem}[Trace concavity of real powers]\label{thm:trace_rpow_concave_axiom}
     \lean{trace_rpow_concave_axiom}
     \notready
     For $p\in[0,1]$, PSD matrices $A_1,A_2$, and $t\in[0,1]$:
@@ -746,7 +747,7 @@ currently axiomatized pending upstream Mathlib support in
     monotonicity on the Loewner order.
 \end{theorem}
 
-\begin{theorem}[Trace concavity of rpow --- wrapper]\label{thm:trace_rpow_concave}
+\begin{theorem}[Trace concavity of real powers --- restatement]\label{thm:trace_rpow_concave}
     \lean{trace_rpow_concave}
     \leanok
     \uses{thm:trace_rpow_concave_axiom}
@@ -757,7 +758,7 @@ currently axiomatized pending upstream Mathlib support in
     Direct application of the axiom.
 \end{proof}
 
-\begin{theorem}[Trace convexity of rpow]\label{thm:trace_rpow_convex_axiom}
+\begin{theorem}[Trace convexity of real powers]\label{thm:trace_rpow_convex_axiom}
     \lean{trace_rpow_convex_axiom}
     \notready
     For $p\in[1,2]$, PSD matrices $A_1,A_2$, and $t\in[0,1]$:
@@ -770,7 +771,7 @@ currently axiomatized pending upstream Mathlib support in
     monotonicity on the Loewner order.
 \end{theorem}
 
-\begin{theorem}[Trace convexity of rpow --- wrapper]\label{thm:trace_rpow_convex}
+\begin{theorem}[Trace convexity of real powers --- restatement]\label{thm:trace_rpow_convex}
     \lean{trace_rpow_convex}
     \leanok
     \uses{thm:trace_rpow_convex_axiom}
@@ -783,7 +784,7 @@ currently axiomatized pending upstream Mathlib support in
 
 \subsection{Operator Jensen inequality for positive maps}
 
-\begin{theorem}[Jensen for concave rpow]\label{thm:posMap_rpow_concave_jensen}
+\begin{theorem}[Jensen for concave real powers]\label{thm:posMap_rpow_concave_jensen}
     \lean{posMap_rpow_concave_jensen}
     \notready
     \uses{def:positive_map}
@@ -794,19 +795,19 @@ currently axiomatized pending upstream Mathlib support in
     This is \cite[Thm.~5.1]{Wolf2012Quantum} for concave~$f(x)=x^p$.
 \end{theorem}
 
-\begin{theorem}[Jensen for concave rpow --- wrapper]\label{thm:rpow_concave_jensen}
+\begin{theorem}[Jensen for concave real powers --- restatement]\label{thm:rpow_concave_jensen}
     \lean{IsPositiveMap.rpow_concave_jensen}
     \leanok
     \uses{thm:posMap_rpow_concave_jensen}
-    Restates Theorem~\ref{thm:posMap_rpow_concave_jensen} in the
-    \texttt{IsPositiveMap} namespace.
+    Restates Theorem~\ref{thm:posMap_rpow_concave_jensen} for downstream
+    use as a property of a positive map.
 \end{theorem}
 
 \begin{proof}\leanok
     Direct application of the axiom.
 \end{proof}
 
-\begin{theorem}[Jensen for convex rpow]\label{thm:posMap_rpow_convex_jensen}
+\begin{theorem}[Jensen for convex real powers]\label{thm:posMap_rpow_convex_jensen}
     \lean{posMap_rpow_convex_jensen}
     \notready
     \uses{def:positive_map}
@@ -817,12 +818,12 @@ currently axiomatized pending upstream Mathlib support in
     This is \cite[Thm.~5.1]{Wolf2012Quantum} for convex~$f(x)=x^p$.
 \end{theorem}
 
-\begin{theorem}[Jensen for convex rpow --- wrapper]\label{thm:rpow_convex_jensen}
+\begin{theorem}[Jensen for convex real powers --- restatement]\label{thm:rpow_convex_jensen}
     \lean{IsPositiveMap.rpow_convex_jensen}
     \leanok
     \uses{thm:posMap_rpow_convex_jensen}
-    Restates Theorem~\ref{thm:posMap_rpow_convex_jensen} in the
-    \texttt{IsPositiveMap} namespace.
+    Restates Theorem~\ref{thm:posMap_rpow_convex_jensen} for downstream
+    use as a property of a positive map.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -841,12 +842,12 @@ currently axiomatized pending upstream Mathlib support in
     Requires unitality ($T(\Id)=\Id$), not merely subunitality.
 \end{theorem}
 
-\begin{theorem}[Jensen for concave log --- wrapper]\label{thm:log_concave_jensen}
+\begin{theorem}[Jensen for concave log --- restatement]\label{thm:log_concave_jensen}
     \lean{IsPositiveMap.log_concave_jensen}
     \leanok
     \uses{thm:posMap_log_concave_jensen}
-    Restates Theorem~\ref{thm:posMap_log_concave_jensen} in the
-    \texttt{IsPositiveMap} namespace.
+    Restates Theorem~\ref{thm:posMap_log_concave_jensen} for downstream
+    use as a property of a positive map.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -871,7 +872,7 @@ currently axiomatized pending upstream Mathlib support in
     See Lieb (1973) and Ando (1979).
 \end{theorem}
 
-\begin{theorem}[Lieb concavity --- wrapper]\label{thm:lieb_concavity}
+\begin{theorem}[Lieb concavity --- restatement]\label{thm:lieb_concavity}
     \lean{lieb_concavity}
     \leanok
     \uses{thm:lieb_concavity_axiom}
