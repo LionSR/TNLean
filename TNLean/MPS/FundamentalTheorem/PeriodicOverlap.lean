@@ -116,7 +116,8 @@ private theorem exists_cyclic_sector_decomp_after_blocking_of_isPeriodic
     ∃ (dim : Fin m → ℕ) (blocks : (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k)),
       (∀ k, ∑ i : Fin (blockPhysDim d m), (blocks k i)ᴴ * blocks k i = 1) ∧
       SameMPV₂ (blockTensor A m) (toTensorFromBlocks (μ := fun _ => 1) blocks) ∧
-      IsCyclicSectorDecomp A blocks := by
+      IsCyclicSectorDecomp A blocks ∧
+      (∀ k, dim k ≠ 0) := by
   obtain ⟨K, h_unitalK, hIrrK, ρ, hρ_pd, h_adjfix, rfl⟩ :=
     conjTranspose_kraus_setup A hP.leftCanonical hP.irreducible
   obtain ⟨ω, hωprim⟩ := hP.primitiveRoot
@@ -191,10 +192,10 @@ private theorem exists_cyclic_sector_decomp_after_blocking_of_isPeriodic
           _ = (ω ^ m) ^ (j : ℕ) := by rw [pow_mul]
           _ = 1 := by simp [hωprim.pow_eq_one]
       simpa [hperiph_roots] using hpow
-  obtain ⟨dim, blocks, P, hLC, hMPV, hPproj, hPsum, hCyclic, hComm, hTrace⟩ :=
+  obtain ⟨dim, blocks, P, hLC, hMPV, hPproj, hPsum, hCyclic, hComm, hTrace, hNondeg⟩ :=
     exists_cyclic_sector_decomp_after_blocking
       A hP.leftCanonical hP.irreducible ρ hρ_pd h_adjfix hIrrK hωprim hperiph_range
-  exact ⟨dim, blocks, hLC, hMPV, P, hPproj, hPsum, hCyclic, hComm, hTrace⟩
+  exact ⟨dim, blocks, hLC, hMPV, ⟨P, hPproj, hPsum, hCyclic, hComm, hTrace⟩, hNondeg⟩
 
 /-! ## Self-overlap (first paragraph of Appendix A) -/
 
@@ -621,6 +622,7 @@ theorem periodicOverlap_gaugeEquiv_of_sector_match
         (toTensorFromBlocks (μ := fun _ => 1) blocksB))
     (hA_cyclic : IsCyclicSectorDecomp A blocksA)
     (hB_cyclic : IsCyclicSectorDecomp B blocksB)
+    (hNondegA : ∀ u, dimA u ≠ 0)
     (hSomeMatch : ∃ (u₀ v₀ : Fin m) (hdim : dimA u₀ = dimB v₀),
       dimA u₀ ≠ 0 ∧ GaugePhaseEquiv
         (cast (congr_arg
@@ -628,9 +630,34 @@ theorem periodicOverlap_gaugeEquiv_of_sector_match
           (blocksA u₀))
         (blocksB v₀)) :
     RepeatedBlocks A B := by
-  -- Use translation propagation to get matching for all sectors,
-  -- then apply per-site proportionality extraction.
-  sorry
+  -- Step 1: Extract the matching witness
+  obtain ⟨u₀, v₀, hdim₀, hNondeg₀, hGPE₀⟩ := hSomeMatch
+  -- Step 2: Translation propagation (#4) → matching for all offsets
+  have hPropag := sectorMatch_propagation A B hA.leftCanonical hB.leftCanonical
+    blocksA blocksB hA_blocks_lc hB_blocks_lc hA_mpv hB_mpv
+    hA_cyclic hB_cyclic hdim₀ hNondeg₀ hGPE₀
+  -- Step 3: Reindex with q = v₀ - u₀ to get matching for all sector pairs
+  set q : Fin m := v₀ - u₀ with q_def
+  have hBlockMatch : ∀ u : Fin m,
+      ∃ (hdim : dimA u = dimB (u + q)),
+        GaugePhaseEquiv
+          (cast (congr_arg (MPSTensor (blockPhysDim d m)) hdim)
+            (blocksA u))
+          (blocksB (u + q)) := by
+    intro u
+    have hl := hPropag (u - u₀)
+    have h1 : u₀ + (u - u₀) = u := by abel
+    have h2 : v₀ + (u - u₀) = u + q := by rw [q_def]; abel
+    rw [h1, h2] at hl
+    exact hl
+  -- Step 4: Normality for all sectors from #2
+  have hNormal : ∀ u, IsNormal (blocksA u) :=
+    fun u => sectorBlocked_isNormal_of_isPeriodic A hA blocksA
+      hA_blocks_lc hA_mpv hA_cyclic u (hNondegA u)
+  -- Step 5: Per-site proportionality extraction (#5) → RepeatedBlocks
+  exact sectorTensor_proportional_of_blockedMatch A B hA.leftCanonical hB.leftCanonical
+    blocksA blocksB hA_blocks_lc hB_blocks_lc hA_mpv hB_mpv
+    hA_cyclic hB_cyclic q hBlockMatch hNondegA hNormal
 
 /-- When `D₁ ≠ D₂`, no `RepeatedBlocks` relation can hold (the types don't
 match), so the overlap must decay. This covers the `D₁ ≠ D₂` subcase of
@@ -679,36 +706,28 @@ theorem periodicOverlapDichotomy
     case pos =>
       subst hdim
       -- Same period, same bond dimension.
-      -- Extract compressed cyclic-sector blocks from IsPeriodic
-      -- (via exists_cyclic_sector_decomp_after_blocking_of_isPeriodic).
-      -- Case split on whether any compressed sector pair matches:
-      --   • No match → periodicOverlap_tendsto_zero_of_no_sector_match
-      --   • Some match → sectorMatch_propagation (using hA.leftCanonical,
-      --     hB.leftCanonical for unit-modulus phases), then
-      --     sectorTensor_proportional_of_blockedMatch → RepeatedBlocks
-      haveI : NeZero m_a := NeZero.of_pos hA.period_pos
-      obtain ⟨dimA, blocksA, hA_blocks_lc, hA_mpv, hA_cyclic⟩ :=
+      haveI : NeZero m_a := ⟨Nat.pos_iff_ne_zero.mp hA.period_pos⟩
+      -- Extract compressed cyclic-sector blocks from IsPeriodic.
+      obtain ⟨dimA, blocksA, hA_blocks_lc, hA_mpv, hA_cyclic, hA_nondeg⟩ :=
         exists_cyclic_sector_decomp_after_blocking_of_isPeriodic A hA
-      obtain ⟨dimB, blocksB, hB_blocks_lc, hB_mpv, hB_cyclic⟩ :=
+      obtain ⟨dimB, blocksB, hB_blocks_lc, hB_mpv, hB_cyclic, _⟩ :=
         exists_cyclic_sector_decomp_after_blocking_of_isPeriodic B hB
-      by_cases hSomeMatch :
-          ∃ (u₀ v₀ : Fin m_a) (hdim : dimA u₀ = dimB v₀),
-            dimA u₀ ≠ 0 ∧ GaugePhaseEquiv
-              (cast (congr_arg
-                (MPSTensor (blockPhysDim d m_a)) hdim)
-                (blocksA u₀))
-              (blocksB v₀)
-      · refine Or.inr ⟨rfl, ?_⟩
-        simpa using
+      -- Case split on whether any compressed sector pair matches.
+      by_cases hMatch : ∃ (u₀ v₀ : Fin m_a) (hdim : dimA u₀ = dimB v₀),
+          dimA u₀ ≠ 0 ∧ GaugePhaseEquiv
+            (cast (congr_arg (MPSTensor (blockPhysDim d m_a)) hdim)
+              (blocksA u₀))
+            (blocksB v₀)
+      · -- Some match → gauge-equivalent (Case 3).
+        exact Or.inr ⟨rfl,
           periodicOverlap_gaugeEquiv_of_sector_match A B hA hB
-            blocksA blocksB hA_blocks_lc hB_blocks_lc
-            hA_mpv hB_mpv hA_cyclic hB_cyclic hSomeMatch
-      · refine Or.inl ?_
-        refine periodicOverlap_tendsto_zero_of_no_sector_match A B hA hB
-          blocksA blocksB hA_blocks_lc hB_blocks_lc
-          hA_mpv hB_mpv hA_cyclic hB_cyclic ?_
-        intro u v hdim hNonzero hGauge
-        exact hSomeMatch ⟨u, v, hdim, hNonzero, hGauge⟩
+            blocksA blocksB hA_blocks_lc hB_blocks_lc hA_mpv hB_mpv
+            hA_cyclic hB_cyclic hA_nondeg hMatch⟩
+      · -- No match → orthogonal (Case 2).
+        push Not at hMatch
+        exact Or.inl (periodicOverlap_tendsto_zero_of_no_sector_match A B hA hB
+          blocksA blocksB hA_blocks_lc hB_blocks_lc hA_mpv hB_mpv
+          hA_cyclic hB_cyclic hMatch)
 
 /-- **Eventual linear independence** (Corollary of Proposition 3.3):
 Given a family of periodic tensors `{A_j}` whose periods all divide a common

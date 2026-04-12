@@ -868,7 +868,8 @@ theorem exists_cyclic_sector_decomp_after_blocking
       (∀ k (i : Fin (blockPhysDim d m)),
         P k * (blockTensor A m) i = (blockTensor A m) i * P k) ∧
       (∀ k (N : ℕ) (σ : Fin N → Fin (blockPhysDim d m)),
-        mpv (blocks k) σ = (P k * evalWord (blockTensor A m) (List.ofFn σ)).trace) := by
+        mpv (blocks k) σ = (P k * evalWord (blockTensor A m) (List.ofFn σ)).trace) ∧
+      (∀ k, dim k ≠ 0) := by
   -- Step 1: Get cyclic decomposition data
   let K : Fin d → MatrixAlg D := fun i => (A i)ᴴ
   have hUnital : IsUnitalKraus (d := d) (D := D) K := by
@@ -901,7 +902,48 @@ theorem exists_cyclic_sector_decomp_after_blocking
     intro k i
     exact commutes_letters_of_adjoint_fixed_projection
       (blockTensor A m) hTP_blocked (hP := hPproj k) (hFix := hFix k) i
-  exact ⟨dim, blocks, P, hLC, hMPV, hPproj, hPsum, hcyclic, hComm, hTrace⟩
+  -- Step 7: Nondegeneracy — all projections are nonzero, hence all sector dimensions > 0
+  have hNondeg : ∀ k, dim k ≠ 0 := by
+    -- First: all projections are nonzero (cyclic propagation from hcyclic + hPsum)
+    have hPne : ∀ k, P k ≠ 0 := by
+      by_contra! h
+      obtain ⟨k₀, hk₀⟩ := h
+      -- If P(j+1) = 0 then P(j) = E†(P(j+1)) = E†(0) = 0
+      have hback : ∀ j : Fin m, P (j + 1) = 0 → P j = 0 := fun j hj => by
+        rw [show P j = transferMap K (P (j + 1)) from (hcyclic j).symm, hj, map_zero]
+      -- Every j is zero: induct on backward distance (k₀ - j).val
+      have hall : ∀ j : Fin m, P j = 0 := by
+        suffices hs : ∀ n : ℕ, n < m → ∀ j : Fin m,
+            (k₀ - j).val = n → P j = 0 by
+          intro j; exact hs _ (k₀ - j).isLt j rfl
+        intro n
+        induction n with
+        | zero =>
+          intro _ j hj
+          have : k₀ - j = 0 := by
+            ext; simp only [Fin.coe_ofNat_eq_mod, Nat.zero_mod,
+              Fin.val_eq_zero_iff] at hj ⊢; exact hj
+          have : k₀ = j := sub_eq_zero.mp this
+          subst this; exact hk₀
+        | succ n ih =>
+          intro hd j hj
+          apply hback j
+          apply ih (by omega) (j + 1)
+          have h_eq : k₀ - (j + 1) = (k₀ - j) - 1 := by abel
+          rw [h_eq, Fin.val_sub_one_of_ne_zero (by intro h; simp [h] at hj)]
+          omega
+      -- Contradiction: ∑ P_k = 0 ≠ 1
+      exact absurd (show (∑ k, P k) = 0 from Finset.sum_eq_zero (fun k _ => hall k))
+        (by rw [hPsum]; exact one_ne_zero)
+    -- Second: dim k ≠ 0 follows from P k ≠ 0 via the trace relation
+    intro k hk
+    apply hPne k
+    have h0 := hTrace k 0 Fin.elim0
+    simp only [mpv, coeff, List.ofFn_zero, evalWord_nil, Matrix.mul_one] at h0
+    have htrace_zero : (P k).trace = 0 := by
+      rw [← h0, Matrix.trace_one, Fintype.card_fin, hk, Nat.cast_zero]
+    exact (isOrthogonalProjection_posSemidef (hPproj k)).trace_eq_zero_iff.mp htrace_zero
+  exact ⟨dim, blocks, P, hLC, hMPV, hPproj, hPsum, hcyclic, hComm, hTrace, hNondeg⟩
 
 end CyclicSectorBridge
 
