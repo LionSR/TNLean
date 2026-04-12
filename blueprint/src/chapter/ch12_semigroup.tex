@@ -233,6 +233,71 @@ and proves the GKSL theorem.
     (Lemma~\ref{lem:summable_dyson_factorial_ch12}).
 \end{proof}
 
+\begin{theorem}[Continuity of Dyson iterates]
+    \label{thm:dysonTerm_continuous_ch12}
+    \lean{dysonTerm_continuous}\leanok
+    \uses{def:exp_semigroup_ch12}
+    Each Dyson iterate $t \mapsto \widetilde{T}^{(n)}_t$ is continuous
+    in the time parameter.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:exp_semigroup_ch12}
+    By induction on $n$. The base case is continuity of the matrix
+    exponential. For the inductive step, the parametric integral
+    $t\mapsto \int_0^t e^{(t-s)L}\,\Delta\,\widetilde{T}^{(n)}_s\,ds$
+    is continuous by the continuous-parameter primitive theorem;
+    the pasting lemma extends this to all of $\mathbb{R}$ since
+    $\widetilde{T}^{(n+1)}_t = 0$ for $t \le 0$.
+\end{proof}
+
+\begin{theorem}[Factorial bound on the Dyson remainder]
+    \label{thm:norm_dysonRemainder_le_ch12}
+    \lean{norm_dysonRemainder_le}\leanok
+    \uses{thm:duhamel_formula_ch12, thm:norm_dysonTerm_le_ch12}
+    For $s \in [0,t]$, $M = \sup_{u \in [0,t]}\|e^{uL}\|$,
+    and $M' = \sup_{u \in [0,t]}\|e^{uL'}\|$:
+    \[
+      \bigl\|T'_s - \textstyle\sum_{n < N}\widetilde{T}^{(n)}_s\bigr\|
+      \le M'\,\frac{(s\,\|\Delta\|\,M)^N}{N!}.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:duhamel_formula_ch12, thm:norm_dysonTerm_le_ch12,
+          thm:dysonTerm_continuous_ch12}
+    Induction on $N$. The base case is the semigroup supremum bound.
+    The inductive step uses the telescoping remainder identity
+    $R_{N+1}(s) = \int_0^s e^{(s-u)L}\,\Delta\,R_N(u)\,du$
+    (derived from the Duhamel formula), bounds the integrand
+    pointwise, and integrates to recover the factorial.
+\end{proof}
+
+\begin{theorem}[Dyson series identity {\cite[Eq.~(7.13)]{Wolf2012Quantum}}]
+    \label{thm:dyson_series_eq_ch12}
+    \lean{dyson_series_eq}\leanok
+    \uses{thm:norm_dysonRemainder_le_ch12, cor:summable_dysonTerm_ch12}
+    For $t \ge 0$, the Dyson--Phillips series equals the perturbed
+    semigroup:
+    \[
+      \sum_{n=0}^{\infty} \widetilde{T}^{(n)}_t = e^{tL'}.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:norm_dysonRemainder_le_ch12, cor:summable_dysonTerm_ch12}
+    The partial-sum remainder
+    $\|e^{tL'} - \sum_{n<N}\widetilde{T}^{(n)}_t\|
+    \le M'\,(t\|\Delta\|M)^N/N!$
+    tends to zero as $N \to \infty$, since $c^N/N! \to 0$ for any
+    constant $c$. Together with the summability of the series
+    (Corollary~\ref{cor:summable_dysonTerm_ch12}), this identifies
+    the sum via uniqueness of limits.
+\end{proof}
+
 %% ---------------------------------------------------------
 \section{GKSL/Lindblad generators}
 \label{sec:gksl_generators}
