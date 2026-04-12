@@ -976,14 +976,44 @@ behind stationary states, following~\cite[\S6.4]{Wolf2012Quantum}.
     semisimple algebras over an algebraically closed field.
 \end{proof}
 
+\begin{lemma}[Wedderburn block decomposition for $*$-subalgebras]%
+    \label{lem:starSubalgebra_hasWedderburnBlockDecomp}
+    \lean{Kraus.starSubalgebra_hasWedderburnBlockDecomp}
+    \leanok
+    \uses{thm:fixedPointAlgebra_isSemisimpleRing}
+    Every finite-dimensional $*$-subalgebra of~$\MN{D}$ admits a Wedderburn
+    block decomposition: there exist block dimensions $d_1,\dots,d_n$ with
+    $\sum_k d_k \le D$ and a $\C$-algebra isomorphism to
+    $\prod_{k=1}^{n} M_{d_k}(\C)$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{thm:fixedPointAlgebra_isSemisimpleRing}
+    The subalgebra is semisimple and finite-dimensional, so the
+    Wedderburn--Artin theorem gives an isomorphism
+    $S \cong \prod_{k} M_{d_k}(\C)$. The dimension bound
+    $\sum_k d_k \le D$ follows by transporting the diagonal matrix units
+    from each factor into~$\MN{D}$: they form pairwise orthogonal nonzero
+    idempotents, whose column images are linearly independent.
+\end{proof}
+
 \begin{theorem}[Fixed-point algebra admits Wedderburn block decomposition]%
     \label{thm:adjointFixedPoints_wedderburnDecomp}
     \lean{Kraus.adjointFixedPoints_wedderburnDecomp}
-    \notready
-    \uses{thm:fixedPointAlgebra_wedderburnArtin}
+    \leanok
+    \uses{lem:starSubalgebra_hasWedderburnBlockDecomp}
     The adjoint-fixed-point $*$-subalgebra admits a concrete Wedderburn
     block decomposition inside the ambient matrix algebra (Wolf Eq.~1.39).
 \end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:starSubalgebra_hasWedderburnBlockDecomp}
+    Direct application of
+    Lemma~\ref{lem:starSubalgebra_hasWedderburnBlockDecomp} to the
+    adjoint-fixed-point $*$-subalgebra.
+\end{proof}
 
 \section{Additional Wolf Chapter~6 equivalences}
 
