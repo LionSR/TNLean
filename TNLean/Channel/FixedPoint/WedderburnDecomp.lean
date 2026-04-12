@@ -6,6 +6,7 @@ import TNLean.Channel.FixedPoint.Algebra
 import Mathlib.RingTheory.SimpleModule.IsAlgClosed
 import Mathlib.RingTheory.Artinian.Module
 import Mathlib.Analysis.CStarAlgebra.Matrix
+import Mathlib.Data.Matrix.Basis
 
 /-!
 # Wedderburn decomposition of fixed-point `*`-subalgebra (Wolf Theorem 6.14)
@@ -211,16 +212,116 @@ structure IsWedderburnBlockDecomp
 -- not specific to quantum channels or fixed-point algebras. It should
 -- eventually be moved to `TNLean/Algebra/WedderburnArtin.lean` or similar.
 
+/-- Pairwise orthogonal nonzero idempotents in `M_D(ℂ)` have count at most `D`.
+
+If `f : ι → M_D(ℂ)` is a family of nonzero idempotents with `f i * f j = 0`
+for `i ≠ j`, then the vectors `{f i *ᵥ v_i}` (chosen with `f i *ᵥ v_i ≠ 0`)
+are linearly independent, giving `|ι| ≤ D`. -/
+private theorem card_le_of_orthogonal_idempotents_ne_zero
+    {ι : Type*} [Fintype ι] [DecidableEq ι]
+    {f : ι → Mat}
+    (h_idem : ∀ i, f i * f i = f i)
+    (h_orth : ∀ i j, i ≠ j → f i * f j = 0)
+    (h_ne : ∀ i, f i ≠ 0) :
+    Fintype.card ι ≤ D := by
+  -- For each i, choose v_i with f i *ᵥ v_i ≠ 0
+  have hv : ∀ i, ∃ v : Fin D → ℂ, f i *ᵥ v ≠ 0 := by
+    intro i
+    by_contra hall
+    push Not at hall
+    exact h_ne i <| by
+      ext a b
+      have := congr_fun (hall (Pi.single b 1)) a
+      simp [Matrix.col_apply] at this
+      exact this
+  choose v hv using hv
+  -- The family is linearly independent
+  have hli : LinearIndependent ℂ (fun i => f i *ᵥ v i) := by
+    rw [Fintype.linearIndependent_iff]
+    intro g hg j
+    have key : f j *ᵥ (∑ i, g i • (f i *ᵥ v i)) = 0 := by rw [hg]; simp
+    rw [Matrix.mulVec_sum] at key
+    simp_rw [Matrix.mulVec_smul, Matrix.mulVec_mulVec] at key
+    rw [Finset.sum_eq_single j] at key
+    · rw [h_idem] at key
+      exact (smul_eq_zero.mp key).resolve_right (hv j)
+    · intro i _ hi
+      rw [h_orth j i (Ne.symm hi), Matrix.zero_mulVec, smul_zero]
+    · intro h; exact absurd (Finset.mem_univ j) h
+  calc Fintype.card ι ≤ Module.finrank ℂ (Fin D → ℂ) := hli.fintype_card_le_finrank
+    _ = D := Module.finrank_fin_fun ℂ
+
 /-- Every finite-dimensional `*`-subalgebra of `M_D(ℂ)` admits a Wedderburn
 block decomposition (Wolf Eq. 1.39).
 
-**Status**: sorry — requires bridging abstract Wedderburn--Artin to concrete
-block-diagonal embedding. See `fixedPointAlgebra_wedderburnArtin` for the
-abstract version. -/
+The proof combines the abstract Wedderburn--Artin theorem (every semisimple
+algebra over ℂ is a product of matrix algebras) with a dimension bound obtained
+from counting orthogonal idempotents. Specifically, the diagonal matrix units
+`Matrix.single k k 1` in each factor, transported to `M_D(ℂ)` via the
+subalgebra embedding, yield `∑ d_i` linearly independent vectors, giving
+`∑ d_i ≤ D`. -/
 theorem starSubalgebra_hasWedderburnBlockDecomp
     (S : StarSubalgebra ℂ Mat) :
-    Nonempty (IsWedderburnBlockDecomp S) :=
-  sorry
+    Nonempty (IsWedderburnBlockDecomp S) := by
+  haveI : IsSemisimpleRing S := starSubalgebra_isSemisimpleRing S
+  haveI : FiniteDimensional ℂ S :=
+    FiniteDimensional.finiteDimensional_subalgebra S.toSubalgebra
+  obtain ⟨n, d, hd, ⟨e⟩⟩ :=
+    IsSemisimpleRing.exists_algEquiv_pi_matrix_of_isAlgClosed ℂ ↥S
+  -- Build the injective ring hom φ : (Π i, M_{d_i}(ℂ)) →+* M_D(ℂ)
+  let φ : (Π i : Fin n, Matrix (Fin (d i)) (Fin (d i)) ℂ) →+* Mat :=
+    (S.toSubalgebra.val.toRingHom).comp e.symm.toRingHom
+  have hφ_inj : Function.Injective φ :=
+    Subtype.val_injective.comp e.symm.injective
+  -- For each (i, k), define the image of the matrix unit in M_D(ℂ)
+  let g : (Σ i : Fin n, Fin (d i)) → Mat := fun ⟨i, k⟩ =>
+    φ (Pi.single i (Matrix.single k k 1))
+  -- Verify idempotence
+  have h_idem : ∀ p, g p * g p = g p := by
+    intro ⟨i, k⟩
+    show φ _ * φ _ = φ _
+    rw [← map_mul, ← Pi.single_mul, Matrix.single_mul_single_same, mul_one]
+  -- Verify pairwise orthogonality
+  have h_orth : ∀ p q, p ≠ q → g p * g q = 0 := by
+    intro ⟨i, k⟩ ⟨j, l⟩ hne
+    show φ _ * φ _ = 0
+    rw [← map_mul]
+    by_cases hij : i = j
+    · subst hij
+      have hkl : k ≠ l := fun h => hne (Sigma.ext rfl (heq_of_eq h))
+      rw [← Pi.single_mul, Matrix.single_mul_single_of_ne (h := hkl), Pi.single_zero, map_zero]
+    · have hprod : Pi.single i (Matrix.single k k (1 : ℂ)) *
+            Pi.single j (Matrix.single l l (1 : ℂ)) =
+            (0 : ∀ t : Fin n, Matrix (Fin (d t)) (Fin (d t)) ℂ) := by
+        funext x
+        simp only [Pi.mul_apply, Pi.zero_apply]
+        rcases eq_or_ne x i with rfl | hxi
+        · rw [Pi.single_eq_same, Pi.single_eq_of_ne hij, mul_zero]
+        · rw [Pi.single_eq_of_ne hxi, zero_mul]
+      rw [hprod, map_zero]
+  -- Verify nonzero
+  have h_ne : ∀ p, g p ≠ 0 := by
+    intro ⟨i, k⟩ h
+    have h0 := hφ_inj (show φ (Pi.single i (Matrix.single k k (1 : ℂ))) = φ 0 by
+      rw [map_zero]; exact h)
+    have h1 := congr_fun h0 i
+    simp at h1
+    have h2 := congr_fun (congr_fun h1 k) k
+    simp at h2
+  -- Count: card (Σ i, Fin (d i)) = ∑ d_i ≤ D
+  have hsum_le : ∑ i : Fin n, d i ≤ D := by
+    have := card_le_of_orthogonal_idempotents_ne_zero h_idem h_orth h_ne
+    simp only [Fintype.card_sigma, Fintype.card_fin] at this
+    exact this
+  exact ⟨{
+    numBlocks := n
+    blockDim := d
+    multDim := fun _ => 1
+    blockDim_pos := fun i => Nat.pos_of_ne_zero (hd i).out
+    multDim_pos := fun _ => Nat.one_pos
+    dim_le := by simpa using hsum_le
+    algEquiv := e
+  }⟩
 
 /-- **Wolf Theorem 6.14** (Heisenberg picture, abstract form).
 
@@ -229,9 +330,7 @@ Wedderburn block decomposition.
 
 Combined with `fixedPointAlgebra_wedderburnArtin`, this gives:
 `Fix(T*) ≅ ⊕_k M_{d_k}(ℂ)` (abstract) and `Fix(T*) = U(⊕_k M_{d_k} ⊗ 1_{m_k})U†`
-(concrete).
-
-**Status**: sorry — follows from `starSubalgebra_hasWedderburnBlockDecomp`. -/
+(concrete). -/
 theorem adjointFixedPoints_wedderburnDecomp
     (K : Fin d → Mat) (h_tp : IsTP K) {ρ : Mat}
     (hρ : ρ.PosDef) (hρ_fix : map K ρ = ρ) :
