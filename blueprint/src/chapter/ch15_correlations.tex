@@ -336,11 +336,32 @@ and rates for the single-tensor transfer map $\E_A$.
     $\E_B(\Lambda) = \Lambda$.
 \end{proof}
 
+\begin{theorem}[Rank-one classification for RFP transfer maps]%
+    \label{thm:transferMap_eq_fixedPointProj_of_isRFP_injective}
+    \lean{MPSTensor.transferMap_eq_fixedPointProj_of_isRFP_injective}
+    \leanok
+    \uses{def:is_rfp, def:injective, def:fixed_point_proj,
+          thm:exponential_convergence_primitive}
+    Let $A$ be an injective left-canonical RFP tensor with positive-definite
+    fixed point $\rho$ of the transfer map $\E_A$. Then
+    $\E_A = P_\rho$, where $P_\rho(X) = \frac{\tr(X)}{\tr(\rho)}\,\rho$
+    is the rank-one fixed-point projection.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:exponential_convergence_primitive}
+    The exponential convergence bound gives
+    $\lVert \E_A^n(X) - P_\rho(X)\rVert \le C(1-\delta)^n\lVert X\rVert$.
+    Idempotence of $\E_A$ implies $\E_A^{n+1} = \E_A$ for all $n \ge 0$,
+    so $\lVert \E_A(X) - P_\rho(X)\rVert \le C(1-\delta)^{n+1}\lVert X\rVert$
+    for all $n$. Taking $n \to \infty$ gives $\E_A = P_\rho$.
+\end{proof}
+
 \begin{theorem}[Full structural form for RFP tensors]%
     \label{thm:rfp_nt_structural_full}
     \notready
     \uses{thm:rfp_nt_structural_of_left_canonical,
-          thm:rfp_nt_cfii_diagonal_fixed_point}
+          thm:rfp_nt_cfii_diagonal_fixed_point,
+          thm:transferMap_eq_fixedPointProj_of_isRFP_injective}
     A normal tensor $A$ in canonical form~II that is a renormalization fixed
     point admits the decomposition $A^i = X \Lambda U^i X^{-1}$, where
     $\Lambda$ is diagonal positive with $\tr(\Lambda) = 1$ and $U$ is an

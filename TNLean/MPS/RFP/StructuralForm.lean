@@ -7,7 +7,6 @@ import TNLean.MPS.Core.CPPrimitive
 import TNLean.MPS.BNT.Construction
 import TNLean.MPS.Irreducible.FormII
 import TNLean.Spectral.QuantitativeGap
-import TNLean.QPF.Assembly
 
 /-!
 # Structural form of RFP tensors
