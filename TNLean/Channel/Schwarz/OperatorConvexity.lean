@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Channel.Schwarz.PositiveMapProperties
+import TNLean.Axioms.OperatorConvexity
 import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.Analysis.Matrix.Order
 import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Order
@@ -37,14 +38,10 @@ subunitality, because `log` is unbounded below.
 
 ### Status
 
-The three Jensen instances below are `sorry` placeholders. Their proofs
-require:
-
-1. Operator concavity of `x ↦ x ^ p` for `p ∈ [0, 1]` — listed as a
-   Mathlib TODO in `CFC.Rpow.Order`.
-2. Operator convexity of `x ↦ x ^ p` for `p ∈ [1, 2]` — likewise a TODO.
-3. Operator concavity of `log` — listed as a TODO in `CFC.ExpLog.Order`.
-4. The general Jensen inequality for positive maps — absent from Mathlib.
+The three Jensen instances below are proved from the axioms in
+`TNLean.Axioms.OperatorConvexity`, which axiomatize the operator
+concavity/convexity results and the Jensen inequality pending upstream
+Mathlib work in `CFC.Rpow.Order` and `CFC.ExpLog.Order`.
 
 These are consumed by the Corollary 5.2 proofs in `OperatorMonotone.lean`.
 
@@ -88,14 +85,12 @@ This follows from operator concavity of `x ↦ x ^ p` on `[0, ∞)` for
 `p ∈ [0, 1]`, combined with the concave version of the operator Jensen
 inequality for positive subunital maps.
 
-**TODO**: prove operator concavity of `x ↦ x ^ p` for `p ∈ [0, 1]`
-(see Mathlib `CFC.Rpow.Order` TODO) and the general operator Jensen
-inequality for positive maps. -/
+Proved from `posMap_rpow_concave_jensen` in `TNLean.Axioms.OperatorConvexity`. -/
 theorem IsPositiveMap.rpow_concave_jensen
     {T : Mat →ₗ[ℂ] Mat} (hT : IsPositiveMap T) (hSub : T 1 ≤ (1 : Mat))
     {p : ℝ} (hp : p ∈ Set.Icc (0 : ℝ) 1) {A : Mat} (hA : 0 ≤ A) :
-    T (A ^ p) ≤ (T A) ^ p := by
-  sorry
+    T (A ^ p) ≤ (T A) ^ p :=
+  posMap_rpow_concave_jensen hT hSub hp hA
 
 /-- **Operator Jensen for convex `rpow`** (Wolf Thm. 5.1 applied to
 `x ↦ x ^ p` for `p ∈ [1, 2]`).
@@ -107,14 +102,12 @@ This follows from operator convexity of `x ↦ x ^ p` on `[0, ∞)` for
 `p ∈ [1, 2]`, combined with the convex version of the operator Jensen
 inequality for positive subunital maps.
 
-**TODO**: prove operator convexity of `x ↦ x ^ p` for `p ∈ [1, 2]`
-(see Mathlib `CFC.Rpow.Order` TODO) and the general operator Jensen
-inequality for positive maps. -/
+Proved from `posMap_rpow_convex_jensen` in `TNLean.Axioms.OperatorConvexity`. -/
 theorem IsPositiveMap.rpow_convex_jensen
     {T : Mat →ₗ[ℂ] Mat} (hT : IsPositiveMap T) (hSub : T 1 ≤ (1 : Mat))
     {p : ℝ} (hp : p ∈ Set.Icc (1 : ℝ) 2) {A : Mat} (hA : 0 ≤ A) :
-    (T A) ^ p ≤ T (A ^ p) := by
-  sorry
+    (T A) ^ p ≤ T (A ^ p) :=
+  posMap_rpow_convex_jensen hT hSub hp hA
 
 /-- **Operator Jensen for concave `log`** (Wolf Thm. 5.1 applied to `log`).
 
@@ -126,12 +119,11 @@ with the concave version of the operator Jensen inequality for positive
 unital maps. Note: unlike the `rpow` variants, the `log` Jensen inequality
 requires unitality (`T 1 = 1`), not merely subunitality (`T 1 ≤ 1`).
 
-**TODO**: prove operator concavity of `log` (see Mathlib `CFC.ExpLog.Order`
-TODO) and the general operator Jensen inequality for positive maps. -/
+Proved from `posMap_log_concave_jensen` in `TNLean.Axioms.OperatorConvexity`. -/
 theorem IsPositiveMap.log_concave_jensen
     {T : Mat →ₗ[ℂ] Mat} (hT : IsPositiveMap T) (hUnit : T 1 = (1 : Mat))
     {A : Mat} (hA : A.PosDef) :
-    T (CFC.log A) ≤ CFC.log (T A) := by
-  sorry
+    T (CFC.log A) ≤ CFC.log (T A) :=
+  posMap_log_concave_jensen hT hUnit hA
 
 end

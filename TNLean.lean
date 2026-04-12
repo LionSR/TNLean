@@ -62,6 +62,8 @@ import TNLean.Analysis.Entropy
 import TNLean.Axioms.BrouwerFixedPoint
 -- Layer 2a: Axiomatized entropy inequalities (strong subadditivity)
 import TNLean.Axioms.Entropy
+-- Layer 2a: Axiomatized operator convexity/concavity (pending Mathlib CFC.Rpow.Order)
+import TNLean.Axioms.OperatorConvexity
 
 -- Layer 2b: Quantum channels (general theory)
 import TNLean.Channel.Schwarz.KadisonSchwarz
