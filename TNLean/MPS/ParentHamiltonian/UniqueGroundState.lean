@@ -416,16 +416,13 @@ can be reduced from `2L₀` to `L₀ + 1`. The chain ground space with window
 
 **Proof sketch**: Rewrite via `chainGroundSpace_eq_mpvSubmodule_normal` (sorry'd),
 then use `mpv_ne_zero_of_isNBlkInjective` to show the MPV submodule is 1D. -/
--- TODO(parent-hamiltonian): remove sorry once `chainGroundSpace_eq_mpvSubmodule_normal`
--- is proved. The reduction is:
---   rw [HasUniqueGroundState,
---     chainGroundSpace_eq_mpvSubmodule_normal hA hInj (by omega) (by omega) hN]
---   have hmpv := mpv_ne_zero_of_isNBlkInjective hInj hL₀ hN
---   simpa [mpvSubmodule] using finrank_span_singleton (K := ℂ) hmpv
 theorem parentHamiltonian_unique_gs_normal {A : MPSTensor d D} [NeZero D]
     {L₀ : ℕ} (hA : IsNormal A) (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {N : ℕ} (hN : L₀ + 1 ≤ N) :
     HasUniqueGroundState (chainGroundSpace A (L₀ + 1) N) := by
-  sorry
+  rw [HasUniqueGroundState,
+    chainGroundSpace_eq_mpvSubmodule_normal hA hInj (by omega) (by omega) hN]
+  have hmpv := mpv_ne_zero_of_isNBlkInjective hInj hL₀ hN
+  simpa [mpvSubmodule] using finrank_span_singleton (K := ℂ) hmpv
 
 end MPSTensor
