@@ -258,14 +258,21 @@ private lemma gauge_sum_over_virtual (A : Tensor G d)
   simp only [gauge_sum_left_right_matrix_inv]
   rfl
 
+/-- Project a global virtual configuration to a local (vertex-wise) one by
+reading off the index assigned to each incident edge. -/
 private def localConfigOfGlobal (A : Tensor G d) (η : VirtualConfig A) : LocalConfig (G := G) A :=
   fun _ ie => η ie.1
 
+/-- A local configuration is *consistent* when the two endpoints of every edge
+agree on the virtual index assigned to that edge. -/
 private def IsConsistent (A : Tensor G d) (ξ : LocalConfig (G := G) A) : Prop :=
   ∀ e : Edge G,
     ξ e.1.1 (edgeLeftIncident (G := G) e) =
       ξ e.1.2 (edgeRightIncident (G := G) e)
 
+/-- A global virtual configuration is the same data as a consistent local one:
+the forward direction reads off per-vertex indices, and the inverse recovers
+the global assignment from the lower-endpoint index of each edge. -/
 private noncomputable def virtualConfigEquivConsistentLocal (A : Tensor G d) :
     VirtualConfig A ≃ {ξ : LocalConfig (G := G) A // IsConsistent A ξ} where
   toFun η := ⟨localConfigOfGlobal A η, by intro e; rfl⟩
