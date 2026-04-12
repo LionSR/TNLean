@@ -485,9 +485,6 @@ theorem norm_dysonRemainder_le (L L' : MatrixCLM (Fin D)) {t : ℝ} (ht : 0 ≤ 
     have hM_nn : 0 ≤ M :=
       le_trans (norm_nonneg _)
         (norm_expSemigroup_le_biSup L ht (Set.left_mem_Icc.mpr ht))
-    have hM'_nn : 0 ≤ M' :=
-      le_trans (norm_nonneg _)
-        (norm_expSemigroup_le_biSup L' ht (Set.left_mem_Icc.mpr ht))
     -- Pointwise bound on the integrand
     set C : ℝ := M * ‖L' - L‖ * M' * (‖L' - L‖ * M) ^ N / ↑(N.factorial) with hC_def
     have hpw : ∀ u ∈ Set.Icc 0 s,
