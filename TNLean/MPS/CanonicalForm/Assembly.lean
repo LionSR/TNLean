@@ -846,7 +846,8 @@ spectral projections. Returns:
 - cyclic shift: `transferMap (fun i => (A i)ᴴ) (P (k+1)) = P k`,
 - commutation: each `P k` commutes with every blocked letter,
 - trace relation: `mpv (blocks k) σ = (P k * evalWord (blockTensor A m) σ).trace`,
-- MPV equivalence: the direct-sum tensor is `SameMPV₂`-equivalent to the blocked tensor. -/
+- MPV equivalence: the direct-sum tensor is `SameMPV₂`-equivalent to the blocked tensor,
+- nondegeneracy: every sector dimension is positive (`∀ k, dim k ≠ 0`). -/
 theorem exists_cyclic_sector_decomp_after_blocking
     {d D m : ℕ} [NeZero D] [NeZero m]
     (A : MPSTensor d D)
