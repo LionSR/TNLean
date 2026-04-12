@@ -17,18 +17,10 @@ power and logarithm functions, the **operator Jensen inequality** for positive
 maps, and the **Lieb concavity theorem**. These results are deferred pending
 upstream Mathlib work in `CFC.Rpow.Order` and `CFC.ExpLog.Order`.
 
-## Core axioms
+## Axioms
 
-* `rpow_operator_concave` — operator concavity of `x ↦ x ^ p` for `p ∈ [0, 1]`.
-* `rpow_operator_convex` — operator convexity of `x ↦ x ^ p` for `p ∈ [1, 2]`.
-* `log_operator_concave` — operator concavity of `log`.
-
-## Derived axioms
-
-The following results follow mathematically from the core axioms combined with
-trace monotonicity, the operator Jensen inequality (Hansen--Pedersen), and
-Lieb's integral representation. They are axiomatized here because the
-connecting infrastructure is not available in Mathlib:
+The following results are standard in matrix analysis. They are axiomatized
+here because the connecting Mathlib infrastructure is not yet available:
 
 * `trace_rpow_concave_axiom` — trace concavity of `rpow` for `p ∈ [0, 1]`.
 * `trace_rpow_convex_axiom` — trace convexity of `rpow` for `p ∈ [1, 2]`.
@@ -98,43 +90,6 @@ private local instance instAxiomOCNonnegSpectrumClass : NonnegSpectrumClass ℝ 
 private local instance instAxiomOCCStarAlgebra : CStarAlgebra Mat :=
   CStarAlgebra.mk
 
-/-! ## Core operator concavity/convexity axioms -/
-
-/-- **Operator concavity of `rpow` for `p ∈ [0, 1]`** (Bhatia, Ch. V).
-
-For PSD matrices `A₁, A₂` and `t ∈ [0, 1]`:
-  `t • A₁ ^ p + (1 − t) • A₂ ^ p ≤ (t • A₁ + (1 − t) • A₂) ^ p`.
-
-This is listed as a Mathlib TODO in `CFC.Rpow.Order`. -/
-axiom rpow_operator_concave
-    {p : ℝ} (hp : p ∈ Set.Icc (0 : ℝ) 1)
-    {A₁ A₂ : Mat} (hA₁ : 0 ≤ A₁) (hA₂ : 0 ≤ A₂)
-    {t : ℝ} (ht : t ∈ Set.Icc (0 : ℝ) 1) :
-    t • (A₁ ^ p) + (1 - t) • (A₂ ^ p) ≤ (t • A₁ + (1 - t) • A₂) ^ p
-
-/-- **Operator convexity of `rpow` for `p ∈ [1, 2]`** (Bhatia, Ch. V).
-
-For PSD matrices `A₁, A₂` and `t ∈ [0, 1]`:
-  `(t • A₁ + (1 − t) • A₂) ^ p ≤ t • A₁ ^ p + (1 − t) • A₂ ^ p`.
-
-This is listed as a Mathlib TODO in `CFC.Rpow.Order`. -/
-axiom rpow_operator_convex
-    {p : ℝ} (hp : p ∈ Set.Icc (1 : ℝ) 2)
-    {A₁ A₂ : Mat} (hA₁ : 0 ≤ A₁) (hA₂ : 0 ≤ A₂)
-    {t : ℝ} (ht : t ∈ Set.Icc (0 : ℝ) 1) :
-    (t • A₁ + (1 - t) • A₂) ^ p ≤ t • (A₁ ^ p) + (1 - t) • (A₂ ^ p)
-
-/-- **Operator concavity of `log`** (Bhatia, Ch. V).
-
-For PD matrices `A₁, A₂` and `t ∈ [0, 1]`:
-  `t • log(A₁) + (1 − t) • log(A₂) ≤ log(t • A₁ + (1 − t) • A₂)`.
-
-This is listed as a Mathlib TODO in `CFC.ExpLog.Order`. -/
-axiom log_operator_concave
-    {A₁ A₂ : Mat} (hA₁ : A₁.PosDef) (hA₂ : A₂.PosDef)
-    {t : ℝ} (ht : t ∈ Set.Icc (0 : ℝ) 1) :
-    t • CFC.log A₁ + (1 - t) • CFC.log A₂ ≤ CFC.log (t • A₁ + (1 - t) • A₂)
-
 /-! ## Trace concavity/convexity axioms -/
 
 /-- **Trace concavity of `rpow`** for `p ∈ [0, 1]`.
@@ -143,8 +98,8 @@ For PSD matrices `A₁, A₂` and `t ∈ [0, 1]`:
   `t · Re Tr(A₁ ^ p) + (1 − t) · Re Tr(A₂ ^ p) ≤
      Re Tr((t • A₁ + (1 − t) • A₂) ^ p)`.
 
-Follows from `rpow_operator_concave` composed with trace monotonicity on
-the Loewner order. -/
+Follows from operator concavity of `rpow` (Bhatia, Ch. V) composed with
+trace monotonicity on the Loewner order. -/
 axiom trace_rpow_concave_axiom
     {p : ℝ} (hp : p ∈ Set.Icc (0 : ℝ) 1)
     {A₁ A₂ : Mat} (hA₁ : 0 ≤ A₁) (hA₂ : 0 ≤ A₂)
@@ -158,8 +113,8 @@ For PSD matrices `A₁, A₂` and `t ∈ [0, 1]`:
   `Re Tr((t • A₁ + (1 − t) • A₂) ^ p) ≤
      t · Re Tr(A₁ ^ p) + (1 − t) · Re Tr(A₂ ^ p)`.
 
-Follows from `rpow_operator_convex` composed with trace monotonicity on
-the Loewner order. -/
+Follows from operator convexity of `rpow` (Bhatia, Ch. V) composed with
+trace monotonicity on the Loewner order. -/
 axiom trace_rpow_convex_axiom
     {p : ℝ} (hp : p ∈ Set.Icc (1 : ℝ) 2)
     {A₁ A₂ : Mat} (hA₁ : 0 ≤ A₁) (hA₂ : 0 ≤ A₂)
@@ -174,9 +129,8 @@ axiom trace_rpow_convex_axiom
 For a positive subunital map `T` and `p ∈ [0, 1]`:
   `T(A ^ p) ≤ (T A) ^ p`.
 
-Follows from `rpow_operator_concave` combined with the Hansen--Pedersen
-operator Jensen inequality for positive subunital maps. The Jensen inequality
-is not in Mathlib, so this is axiomatized as well.
+Follows from operator concavity of `rpow` (Bhatia, Ch. V) combined with
+the Hansen--Pedersen operator Jensen inequality for positive subunital maps.
 
 References:
 * Wolf, Thm. 5.1
@@ -191,8 +145,8 @@ axiom posMap_rpow_concave_jensen
 For a positive subunital map `T` and `p ∈ [1, 2]`:
   `(T A) ^ p ≤ T(A ^ p)`.
 
-Follows from `rpow_operator_convex` combined with the Hansen--Pedersen
-operator Jensen inequality for positive subunital maps.
+Follows from operator convexity of `rpow` (Bhatia, Ch. V) combined with
+the Hansen--Pedersen operator Jensen inequality for positive subunital maps.
 
 References:
 * Wolf, Thm. 5.1
@@ -207,8 +161,9 @@ axiom posMap_rpow_convex_jensen
 For a positive **unital** map `T` and positive-definite `A`:
   `T(log A) ≤ log(T A)`.
 
-Follows from `log_operator_concave` combined with the operator Jensen
-inequality. Requires unitality (`T 1 = 1`), not merely subunitality.
+Follows from operator concavity of `log` (Bhatia, Ch. V) combined with
+the operator Jensen inequality. Requires unitality (`T 1 = 1`), not
+merely subunitality.
 
 References:
 * Wolf, Thm. 5.1
