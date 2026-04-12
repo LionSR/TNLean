@@ -31,7 +31,7 @@ theorem isCanonicalForm_of_primitive
     (hμne : ∀ k, μ k ≠ 0)
     (hPrim : ∀ k, MPSTensor.HasPrimitiveFixedPoint (A k)) :
     MPSTensor.IsCanonicalForm (d := d) (μ := μ) A := by
-  refine MPSTensor.IsCanonicalForm.ofSeparatedData ?_ ?_ ?_ ?_
+  refine MPSTensor.IsCanonicalForm.ofStrictSeparatedData ?_ ?_ ?_ ?_
   · exact ⟨hInj⟩
   · exact ⟨hDS⟩
   · exact ⟨hμanti, hμne⟩

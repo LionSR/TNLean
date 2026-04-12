@@ -70,15 +70,20 @@ abbrev BlocksNotGaugePhaseEquiv {r : ℕ} {dim : Fin r → ℕ}
 /-! ### `IsCanonicalFormBNT` predicate -/
 
 /-- **Canonical form with basis-of-normal-tensors (BNT) separation**: extends
-`IsCanonicalForm` with the requirement that distinct blocks are not gauge-phase equivalent.
-This means that the BNT grouping step (merging gauge-phase-equivalent CF blocks) has already
-been performed.
+`IsCanonicalForm` with the requirement that distinct blocks are not gauge-phase equivalent
+and that the block weight moduli are **strictly decreasing**.
+
+The strictly decreasing condition is justified by the BNT grouping step, which merges
+gauge-phase-equivalent blocks with equal moduli. The base `IsCanonicalForm` only requires
+non-increasing (`Antitone`) moduli, matching the paper definitions.
 
 In the language of arXiv:2011.12127 Def. 4.2, this corresponds to a canonical form where
 each block in the basis of normal tensors is represented by a single CF block. -/
 structure IsCanonicalFormBNT {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k)) : Prop extends
     IsCanonicalForm μ A where
+  /-- Strict ordering of the block weights by modulus (strengthened from `Antitone`). -/
+  mu_strict_anti : StrictAnti (fun k : Fin r => ‖μ k‖)
   /-- Distinct blocks are not gauge-phase equivalent (BNT separation). -/
   blocks_not_equiv : ∀ j k : Fin r, j ≠ k →
     ∀ (h : dim j = dim k),
@@ -98,10 +103,11 @@ def toIsLeftCanonicalBlockFamily (hCF : IsCanonicalFormBNT μ A) :
     IsLeftCanonicalBlockFamily (d := d) A :=
   hCF.toIsCanonicalForm.toIsLeftCanonicalBlockFamily
 
-/-- Project CF-BNT data to separated weight data. -/
+/-- Project CF-BNT data to strict weight data (available at the BNT level). -/
 def toHasStrictOrderedNonzeroWeights (hCF : IsCanonicalFormBNT μ A) :
-    HasStrictOrderedNonzeroWeights μ :=
-  hCF.toIsCanonicalForm.toHasStrictOrderedNonzeroWeights
+    HasStrictOrderedNonzeroWeights μ where
+  mu_strict_anti := hCF.mu_strict_anti
+  mu_ne_zero := hCF.toIsCanonicalForm.mu_ne_zero
 
 /-- Project CF-BNT data to self-overlap normalization. -/
 def toHasNormalizedSelfOverlap (hCF : IsCanonicalFormBNT μ A) :
@@ -116,38 +122,47 @@ def ofSeparatedData
     (hOverlap : HasNormalizedSelfOverlap (d := d) A)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A) :
     IsCanonicalFormBNT μ A where
-  toIsCanonicalForm := IsCanonicalForm.ofSeparatedData hInj hLeft hμ hOverlap
+  toIsCanonicalForm := IsCanonicalForm.ofStrictSeparatedData hInj hLeft hμ hOverlap
+  mu_strict_anti := hμ.mu_strict_anti
   blocks_not_equiv := hBlocks
 
 end IsCanonicalFormBNT
 
-/-- An `IsCanonicalForm` family with pairwise distinct block dimensions automatically satisfies
-`IsCanonicalFormBNT`, since the separation axiom is vacuous. -/
+/-- An `IsCanonicalForm` family with pairwise distinct block dimensions and strictly
+decreasing moduli automatically satisfies `IsCanonicalFormBNT`, since the separation axiom
+is vacuous. -/
 theorem IsCanonicalForm.toIsCanonicalFormBNT_of_distinct_dims
     {r : ℕ} {dim : Fin r → ℕ}
     {μ : Fin r → ℂ} {A : (k : Fin r) → MPSTensor d (dim k)}
     (hCF : IsCanonicalForm μ A)
+    (hStrict : StrictAnti (fun k : Fin r => ‖μ k‖))
     (hDistinct : Function.Injective dim) :
     IsCanonicalFormBNT μ A :=
   IsCanonicalFormBNT.ofSeparatedData
     hCF.toHasInjectiveBlocks
     hCF.toIsLeftCanonicalBlockFamily
-    hCF.toHasStrictOrderedNonzeroWeights
+    ⟨hStrict, hCF.mu_ne_zero⟩
     hCF.toHasNormalizedSelfOverlap
     (fun _ _ hjk h => absurd (hDistinct h) hjk)
 
 /-! ### `IsNormalCanonicalFormBNT` predicate -/
 
 /-- Normal canonical form with basis-of-normal-tensors (BNT) separation: extends
-`IsNormalCanonicalForm` with the requirement that distinct blocks are not gauge-phase equivalent.
+`IsNormalCanonicalForm` with the requirement that distinct blocks are not gauge-phase equivalent
+and that the block weight moduli are **strictly decreasing**.
 
 Here `IsNormalCanonicalForm` packages the spectral / primitive-transfer-map version of
-normality. The later `IsBNT` predicate instead asks for blockwise `IsNormal`, i.e. the
+normality with non-increasing moduli. The BNT level adds strict ordering (justified by the
+grouping step) and the BNT separation axiom.
+
+The later `IsBNT` predicate instead asks for blockwise `IsNormal`, i.e. the
 equivalent algebraic eventual-block-injectivity notion, so the primitive-to-normal bridge must be
 supplied explicitly when passing from this predicate to `IsBNT`. -/
 structure IsNormalCanonicalFormBNT {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k)) : Prop extends
     IsNormalCanonicalForm μ A where
+  /-- Strict ordering of the block weights by modulus (strengthened from `Antitone`). -/
+  mu_strict_anti : StrictAnti (fun k : Fin r => ‖μ k‖)
   /-- Distinct blocks are not gauge-phase equivalent (BNT separation). -/
   blocks_not_equiv : ∀ j k : Fin r, j ≠ k →
     ∀ (h : dim j = dim k),
@@ -173,10 +188,11 @@ def toHasPrimitiveBlocks (hNCF : IsNormalCanonicalFormBNT μ A) :
     HasPrimitiveBlocks (d := d) A :=
   hNCF.toIsNormalCanonicalForm.toHasPrimitiveBlocks
 
-/-- Project normal-CF-BNT data to separated weight data. -/
+/-- Project normal-CF-BNT data to strict weight data (available at the BNT level). -/
 def toHasStrictOrderedNonzeroWeights (hNCF : IsNormalCanonicalFormBNT μ A) :
-    HasStrictOrderedNonzeroWeights μ :=
-  hNCF.toIsNormalCanonicalForm.toHasStrictOrderedNonzeroWeights
+    HasStrictOrderedNonzeroWeights μ where
+  mu_strict_anti := hNCF.mu_strict_anti
+  mu_ne_zero := hNCF.toIsNormalCanonicalForm.mu_ne_zero
 
 /-- Project normal-CF-BNT data to self-overlap normalization. -/
 def toHasNormalizedSelfOverlap [∀ k, NeZero (dim k)]
@@ -194,7 +210,9 @@ def ofSeparatedData
     (hDim : ∀ k, 0 < dim k)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A) :
     IsNormalCanonicalFormBNT μ A where
-  toIsNormalCanonicalForm := IsNormalCanonicalForm.ofSeparatedData hIrr hLeft hPrim hμ hDim
+  toIsNormalCanonicalForm :=
+    IsNormalCanonicalForm.ofStrictSeparatedData hIrr hLeft hPrim hμ hDim
+  mu_strict_anti := hμ.mu_strict_anti
   blocks_not_equiv := hBlocks
 
 end IsNormalCanonicalFormBNT

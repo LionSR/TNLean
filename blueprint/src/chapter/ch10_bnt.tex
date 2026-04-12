@@ -38,8 +38,17 @@ The main references are
 	\uses{def:is_canonical_form, def:gauge_phase_equiv}
 	A family is in \emph{canonical form with BNT separation}
 	if it satisfies Definition~\ref{def:is_canonical_form} and,
-	in addition, distinct blocks of the same bond dimension are
-	\emph{not} gauge-phase equivalent.
+	in addition:
+	\begin{enumerate}
+		\item the moduli are \emph{strictly} decreasing:
+		      $|\mu_1| > |\mu_2| > \cdots > |\mu_r|$
+		      (strengthened from the non-increasing ordering
+		      of Definition~\ref{def:is_canonical_form}),
+		\item distinct blocks of the same bond dimension are
+		      \emph{not} gauge-phase equivalent.
+	\end{enumerate}
+	The strictly decreasing condition is justified by the BNT grouping
+	step, which merges gauge-phase-equivalent blocks with equal moduli.
 \end{definition}
 
 \begin{definition}[Normal canonical form with BNT separation]\label{def:normal_cf_bnt}
@@ -47,8 +56,13 @@ The main references are
 		\uses{def:is_normal_canonical_form, def:gauge_phase_equiv}
 		A family is in \emph{normal canonical form with BNT separation}
 		if it satisfies Definition~\ref{def:is_normal_canonical_form}
-		and, in addition, distinct blocks of the same bond dimension are
-		not gauge-phase equivalent.
+		and, in addition:
+		\begin{enumerate}
+			\item the moduli are strictly decreasing
+			      (strengthened from non-increasing),
+			\item distinct blocks of the same bond dimension are
+			      not gauge-phase equivalent.
+		\end{enumerate}
 \end{definition}
 
 \begin{theorem}[Cross-overlap decay for distinct blocks in canonical form with BNT separation]\label{thm:cross_overlap_zero}
