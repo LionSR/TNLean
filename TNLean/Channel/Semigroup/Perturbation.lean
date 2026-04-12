@@ -9,9 +9,11 @@ import Mathlib.MeasureTheory.Integral.IntervalIntegral.Basic
 import Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus
 import Mathlib.MeasureTheory.Integral.Bochner.Basic
 import Mathlib.MeasureTheory.Integral.Bochner.Set
+import Mathlib.MeasureTheory.Integral.DominatedConvergence
 import Mathlib.Analysis.ODE.Gronwall
 import Mathlib.Analysis.Calculus.Deriv.Shift
 import Mathlib.Analysis.SpecialFunctions.Integrals.Basic
+import Mathlib.Analysis.Normed.Group.InfiniteSum
 
 /-!
 # Perturbation bound for dynamical semigroups — Wolf Lemma 7.1 and Corollary 7.1
@@ -342,5 +344,260 @@ theorem summable_dysonTerm (L L' : MatrixCLM (Fin D)) {t : ℝ} (ht : 0 ≤ t) :
     Summable (fun n => dysonTerm L L' t n) :=
   summable_dysonTerm_of_factorial_bound L L'
     (fun n => norm_dysonTerm_le_at L L' ht n)
+
+/-! ## Continuity of Dyson iterates -/
+
+/-- The `(n+1)`-th Dyson term vanishes for non-positive time. -/
+private lemma dysonTerm_succ_nonpos (L L' : MatrixCLM (Fin D)) (n : ℕ) {t : ℝ}
+    (ht : t ≤ 0) : dysonTerm L L' t (n + 1) = 0 := by
+  rw [dysonTerm_succ]
+  apply setIntegral_measure_zero
+  rw [Real.volume_Icc, ENNReal.ofReal_eq_zero]
+  linarith
+
+/-- For `t ≥ 0`, the set integral `∫ s in Icc 0 t` equals the interval integral `∫ s in 0..t`. -/
+private lemma setIntegral_Icc_eq_intervalIntegral {E : Type*} [NormedAddCommGroup E]
+    [NormedSpace ℝ E] {f : ℝ → E} {t : ℝ} (ht : 0 ≤ t) :
+    ∫ s in Set.Icc 0 t, f s = ∫ s in (0 : ℝ)..t, f s := by
+  rw [integral_Icc_eq_integral_Ioc, ← intervalIntegral.integral_of_le ht]
+
+/-- Each Dyson iterate `t ↦ T̃ⁿ(t)` is continuous in the time parameter. -/
+theorem dysonTerm_continuous (L L' : MatrixCLM (Fin D)) (n : ℕ) :
+    Continuous (fun t => dysonTerm L L' t n) := by
+  induction n with
+  | zero => exact expSemigroupCLM_continuous L
+  | succ n ih =>
+    -- The interval integral version G(t) = ∫₀ᵗ T_{t-s} Δ T̃ⁿ(s) ds is globally continuous.
+    set g : ℝ → ℝ → MatrixCLM (Fin D) :=
+      fun t s => expSemigroupCLM L (t - s) * (L' - L) * dysonTerm L L' s n
+    have hg_cont : Continuous g.uncurry := by
+      apply Continuous.mul
+      · apply Continuous.mul
+        · exact (expSemigroupCLM_continuous L).comp (continuous_fst.sub continuous_snd)
+        · exact continuous_const
+      · exact ih.comp continuous_snd
+    have hG_cont : Continuous (fun t : ℝ => ∫ s in (0 : ℝ)..t, g t s) :=
+      intervalIntegral.continuous_parametric_intervalIntegral_of_continuous hg_cont continuous_id
+    -- On Ici 0: dysonTerm agrees with the interval integral (hence continuous there).
+    have h_Ici : ContinuousOn (fun t => dysonTerm L L' t (n + 1)) (Set.Ici 0) := by
+      apply ContinuousOn.congr hG_cont.continuousOn
+      intro t ht
+      dsimp only
+      rw [dysonTerm_succ, setIntegral_Icc_eq_intervalIntegral ht]
+    -- On Iic 0: dysonTerm is 0 (hence continuous there).
+    have h_Iic : ContinuousOn (fun t => dysonTerm L L' t (n + 1)) (Set.Iic 0) := by
+      apply ContinuousOn.congr continuousOn_const
+      intro t ht
+      exact dysonTerm_succ_nonpos L L' n ht
+    -- Paste: Ici 0 ∪ Iic 0 = univ, both are closed.
+    rw [← continuousOn_univ, ← Set.Ici_union_Iic (a := (0 : ℝ))]
+    exact h_Ici.union_of_isClosed h_Iic isClosed_Ici isClosed_Iic
+
+/-! ## Integrability of Dyson integrands -/
+
+/-- The integrand `s ↦ T_{t−s} Δ T̃ⁿ(s)` is integrable on `[0, t]`. -/
+private lemma integrableOn_dyson_integrand (L L' : MatrixCLM (Fin D)) (n : ℕ) {t : ℝ}
+    (ht : 0 ≤ t) :
+    IntegrableOn
+      (fun s => expSemigroupCLM L (t - s) * (L' - L) * dysonTerm L L' s n)
+      (Set.Icc 0 t) := by
+  apply ContinuousOn.integrableOn_Icc
+  apply ContinuousOn.mul
+  · apply ContinuousOn.mul
+    · exact ((expSemigroupCLM_continuous L).comp
+        (continuous_const.sub continuous_id)).continuousOn
+    · exact continuousOn_const
+  · exact (dysonTerm_continuous L L' n).continuousOn
+
+/-- The integrand from the Duhamel formula is integrable on `[0, t]`. -/
+private lemma integrableOn_duhamel_integrand (L L' : MatrixCLM (Fin D)) {t : ℝ}
+    (ht : 0 ≤ t) :
+    IntegrableOn
+      (fun s => expSemigroupCLM L (t - s) * (L' - L) * expSemigroupCLM L' s)
+      (Set.Icc 0 t) := by
+  apply ContinuousOn.integrableOn_Icc
+  apply ContinuousOn.mul
+  · apply ContinuousOn.mul
+    · exact ((expSemigroupCLM_continuous L).comp
+        (continuous_const.sub continuous_id)).continuousOn
+    · exact continuousOn_const
+  · exact (expSemigroupCLM_continuous L').continuousOn
+
+/-- The integrand for the remainder is integrable on `[0, t]`. -/
+private lemma integrableOn_remainder_integrand (L L' : MatrixCLM (Fin D)) (N : ℕ)
+    {t : ℝ} (ht : 0 ≤ t) :
+    IntegrableOn
+      (fun s => expSemigroupCLM L (t - s) * (L' - L) *
+        (expSemigroupCLM L' s - ∑ n ∈ Finset.range N, dysonTerm L L' s n))
+      (Set.Icc 0 t) := by
+  apply ContinuousOn.integrableOn_Icc
+  apply ContinuousOn.mul
+  · apply ContinuousOn.mul
+    · exact ((expSemigroupCLM_continuous L).comp
+        (continuous_const.sub continuous_id)).continuousOn
+    · exact continuousOn_const
+  · exact ((expSemigroupCLM_continuous L').sub
+      (continuous_finset_sum _ fun n _ => dysonTerm_continuous L L' n)).continuousOn
+
+/-! ## Dyson series identity (Wolf Eq. 7.13) -/
+
+/-- Integral representation of the Dyson series remainder:
+`T'_t − ∑_{n<N+1} T̃ⁿ(t) = ∫₀ᵗ T_{t−s} Δ (T'_s − ∑_{n<N} T̃ⁿ(s)) ds`. -/
+private theorem dysonRemainder_integral_eq (L L' : MatrixCLM (Fin D))
+    {t : ℝ} (ht : 0 ≤ t) (N : ℕ) :
+    expSemigroupCLM L' t - ∑ n ∈ Finset.range (N + 1), dysonTerm L L' t n =
+      ∫ s in Set.Icc 0 t, expSemigroupCLM L (t - s) * (L' - L) *
+        (expSemigroupCLM L' s - ∑ n ∈ Finset.range N, dysonTerm L L' s n) := by
+  induction N with
+  | zero =>
+    simp only [Finset.sum_range_succ, Finset.sum_range_zero, zero_add,
+      dysonTerm_zero, sub_zero]
+    exact duhamel_formula L L' t ht
+  | succ N ihN =>
+    -- Expand the partial sum: range(N+2) = range(N+1) ∪ {N+1}
+    rw [Finset.sum_range_succ]
+    -- T'_t - (∑_{n<N+1} + T̃^{N+1}) = (T'_t - ∑_{n<N+1}) - T̃^{N+1}
+    have hkey : expSemigroupCLM L' t -
+        (∑ n ∈ Finset.range (N + 1), dysonTerm L L' t n + dysonTerm L L' t (N + 1)) =
+        (expSemigroupCLM L' t - ∑ n ∈ Finset.range (N + 1), dysonTerm L L' t n) -
+        dysonTerm L L' t (N + 1) := by abel
+    rw [hkey, ihN]
+    -- RHS of IH is ∫ T Δ R_N, and T̃^{N+1} = ∫ T Δ T̃ᴺ
+    rw [dysonTerm_succ]
+    -- Need: ∫ T Δ R_N - ∫ T Δ T̃ᴺ = ∫ T Δ (R_N - T̃ᴺ)
+    -- where R_N(s) = T'_s - ∑_{n<N} T̃ⁿ(s)
+    -- and R_{N+1}(s) = T'_s - ∑_{n<N+1} T̃ⁿ(s) = R_N(s) - T̃ᴺ(s)
+    rw [← MeasureTheory.integral_sub
+      (integrableOn_remainder_integrand L L' N ht)
+      (integrableOn_dyson_integrand L L' N ht)]
+    congr 1; ext s
+    simp only [Finset.sum_range_succ, mul_sub, mul_add, sub_sub]
+
+/-- **Factorial norm bound on the Dyson series remainder.**
+For `s ∈ [0,t]`, `M = sup_{u ∈ [0,t]} ‖T_u‖`, `M' = sup_{u ∈ [0,t]} ‖T'_u‖`:
+`‖T'_s − ∑_{n<N} T̃ⁿ(s)‖ ≤ M' · (s · ‖Δ‖ · M)^N / N!`. -/
+theorem norm_dysonRemainder_le (L L' : MatrixCLM (Fin D)) {t : ℝ} (ht : 0 ≤ t) (N : ℕ)
+    {s : ℝ} (hs : s ∈ Set.Icc 0 t) :
+    ‖expSemigroupCLM L' s - ∑ n ∈ Finset.range N, dysonTerm L L' s n‖ ≤
+      (⨆ u ∈ Set.Icc 0 t, ‖expSemigroupCLM L' u‖) *
+      ((s * ‖L' - L‖ * (⨆ u ∈ Set.Icc 0 t, ‖expSemigroupCLM L u‖)) ^ N /
+        ↑(N.factorial)) := by
+  induction N generalizing s with
+  | zero =>
+    simp only [Finset.range_zero, Finset.sum_empty, sub_zero, pow_zero,
+      Nat.factorial_zero, Nat.cast_one, div_one, mul_one]
+    exact norm_expSemigroup_le_biSup L' ht hs
+  | succ N ihN =>
+    have hrep := dysonRemainder_integral_eq L L' hs.1 N
+    rw [hrep]
+    set M := ⨆ u ∈ Set.Icc 0 t, ‖expSemigroupCLM L u‖ with hM_def
+    set M' := ⨆ u ∈ Set.Icc 0 t, ‖expSemigroupCLM L' u‖ with hM'_def
+    have hs0 : (0 : ℝ) ≤ s := hs.1
+    have hst : s ≤ t := hs.2
+    have hM_nn : 0 ≤ M :=
+      le_trans (norm_nonneg _)
+        (norm_expSemigroup_le_biSup L ht (Set.left_mem_Icc.mpr ht))
+    have hM'_nn : 0 ≤ M' :=
+      le_trans (norm_nonneg _)
+        (norm_expSemigroup_le_biSup L' ht (Set.left_mem_Icc.mpr ht))
+    -- Pointwise bound on the integrand
+    set C : ℝ := M * ‖L' - L‖ * M' * (‖L' - L‖ * M) ^ N / ↑(N.factorial) with hC_def
+    have hpw : ∀ u ∈ Set.Icc 0 s,
+        ‖expSemigroupCLM L (s - u) * (L' - L) *
+          (expSemigroupCLM L' u - ∑ n ∈ Finset.range N, dysonTerm L L' u n)‖ ≤
+          C * u ^ N := by
+      intro u hu
+      have hu_t : u ∈ Set.Icc 0 t := ⟨hu.1, le_trans hu.2 hst⟩
+      have hsu_t : s - u ∈ Set.Icc 0 t :=
+        ⟨sub_nonneg.mpr hu.2, le_trans (sub_le_self s hu.1) hst⟩
+      calc ‖expSemigroupCLM L (s - u) * (L' - L) *
+              (expSemigroupCLM L' u - ∑ n ∈ Finset.range N, dysonTerm L L' u n)‖
+          ≤ ‖expSemigroupCLM L (s - u)‖ * ‖L' - L‖ *
+              ‖expSemigroupCLM L' u - ∑ n ∈ Finset.range N, dysonTerm L L' u n‖ := by
+            calc _ ≤ ‖expSemigroupCLM L (s - u) * (L' - L)‖ * ‖_‖ := norm_mul_le _ _
+              _ ≤ _ := mul_le_mul_of_nonneg_right (norm_mul_le _ _) (norm_nonneg _)
+        _ ≤ M * ‖L' - L‖ *
+              (M' * ((u * ‖L' - L‖ * M) ^ N / ↑(N.factorial))) := by
+            apply mul_le_mul
+            · exact mul_le_mul_of_nonneg_right
+                (norm_expSemigroup_le_biSup L ht hsu_t) (norm_nonneg _)
+            · exact ihN hu_t
+            · exact norm_nonneg _
+            · exact mul_nonneg hM_nn (norm_nonneg _)
+        _ = C * u ^ N := by simp only [hC_def, mul_pow]; ring
+    -- Convert set integral to interval integral
+    rw [setIntegral_Icc_eq_intervalIntegral hs0]
+    -- Integrability of the bound function
+    have hCu_int : IntervalIntegrable (fun u => C * u ^ N) volume 0 s :=
+      (continuous_const.mul (continuous_pow N)).intervalIntegrable 0 s
+    -- Bound the norm of the integral
+    calc ‖∫ u in (0 : ℝ)..s, expSemigroupCLM L (s - u) * (L' - L) *
+            (expSemigroupCLM L' u - ∑ n ∈ Finset.range N, dysonTerm L L' u n)‖
+        ≤ ∫ u in (0 : ℝ)..s, C * u ^ N :=
+          intervalIntegral.norm_integral_le_of_norm_le hs0
+            (ae_of_all _ fun u hu =>
+              hpw u (Set.Ioc_subset_Icc_self hu)) hCu_int
+      _ = C * (s ^ (N + 1) / ((N : ℝ) + 1)) := by
+          rw [intervalIntegral.integral_const_mul, integral_pow,
+              zero_pow (Nat.succ_ne_zero N), sub_zero]
+      _ = M' * ((s * ‖L' - L‖ * M) ^ (N + 1) / ↑((N + 1).factorial)) := by
+          rw [hC_def, Nat.factorial_succ, Nat.cast_mul, Nat.cast_succ]
+          have : (↑(N.factorial) : ℝ) ≠ 0 :=
+            Nat.cast_ne_zero.mpr (Nat.factorial_ne_zero N)
+          have : (↑N : ℝ) + 1 ≠ 0 := by positivity
+          field_simp
+          ring
+
+/-- **Dyson series identity** (Wolf Eq. 7.13):
+the Dyson–Phillips series `∑ₙ T̃⁽ⁿ⁾(t)` equals the perturbed semigroup `T'_t`.
+This completes the Dyson–Phillips expansion for matrix semigroups. -/
+theorem dyson_series_eq (L L' : MatrixCLM (Fin D)) {t : ℝ} (ht : 0 ≤ t) :
+    HasSum (fun n => dysonTerm L L' t n) (expSemigroupCLM L' t) := by
+  -- The partial sums converge to the tsum (by summability).
+  -- We show they also converge to T'_t, then use uniqueness of limits.
+  have hS := summable_dysonTerm L L' ht
+  -- Summable norms (for hasSum_iff_tendsto_nat)
+  have hSn : Summable (fun n => ‖dysonTerm L L' t n‖) :=
+    .of_nonneg_of_le (fun n => norm_nonneg _)
+      (fun n => norm_dysonTerm_le_at L L' ht n)
+      ((Real.summable_pow_div_factorial
+        (t * ‖L' - L‖ * (⨆ u ∈ Set.Icc 0 t, ‖expSemigroupCLM L u‖))).mul_left
+        (⨆ u ∈ Set.Icc 0 t, ‖expSemigroupCLM L u‖))
+  rw [hasSum_iff_tendsto_nat_of_summable_norm hSn]
+  -- Show partial sums converge to T'_t:
+  -- ‖T'_t - ∑_{n<N} T̃ⁿ(t)‖ ≤ M' · (t·‖Δ‖·M)^N / N! → 0
+  rw [Metric.tendsto_atTop]
+  intro ε hε
+  set c := t * ‖L' - L‖ * (⨆ u ∈ Set.Icc 0 t, ‖expSemigroupCLM L u‖) with hc_def
+  set M' := ⨆ u ∈ Set.Icc 0 t, ‖expSemigroupCLM L' u‖ with hM'_def
+  -- c^N / N! → 0
+  have h_tend : Filter.Tendsto (fun N => M' * (c ^ N / ↑(N.factorial)))
+      Filter.atTop (nhds 0) := by
+    rw [show (0 : ℝ) = M' * 0 from (mul_zero _).symm]
+    exact Filter.Tendsto.mul tendsto_const_nhds
+      (FloorSemiring.tendsto_pow_div_factorial_atTop c)
+  rw [Metric.tendsto_atTop] at h_tend
+  obtain ⟨N₀, hN₀⟩ := h_tend ε hε
+  refine ⟨N₀, fun N hN => ?_⟩
+  rw [dist_comm, dist_eq_norm]
+  calc ‖expSemigroupCLM L' t - ∑ n ∈ Finset.range N, dysonTerm L L' t n‖
+      ≤ M' * (c ^ N / ↑(N.factorial)) :=
+        norm_dysonRemainder_le L L' ht N (Set.right_mem_Icc.mpr ht)
+    _ = |M' * (c ^ N / ↑(N.factorial)) - 0| := by
+        rw [sub_zero, abs_of_nonneg]
+        have hc_nn : 0 ≤ c := mul_nonneg (mul_nonneg ht (norm_nonneg _))
+          (le_trans (norm_nonneg _)
+            (norm_expSemigroup_le_biSup L ht (Set.left_mem_Icc.mpr ht)))
+        exact mul_nonneg
+          (le_trans (norm_nonneg _)
+            (norm_expSemigroup_le_biSup L' ht (Set.left_mem_Icc.mpr ht)))
+          (div_nonneg (pow_nonneg hc_nn _) (Nat.cast_nonneg' _))
+    _ = dist (M' * (c ^ N / ↑(N.factorial))) 0 := (Real.dist_eq _ _).symm
+    _ < ε := hN₀ N hN
+
+/-- The tsum of the Dyson–Phillips series equals the perturbed semigroup. -/
+theorem tsum_dysonTerm_eq (L L' : MatrixCLM (Fin D)) {t : ℝ} (ht : 0 ≤ t) :
+    ∑' n, dysonTerm L L' t n = expSemigroupCLM L' t :=
+  (dyson_series_eq L L' ht).tsum_eq
 
 end -- noncomputable section
