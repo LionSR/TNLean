@@ -24,6 +24,12 @@ open Matrix
 
 variable {d : ℕ}
 
+/-- Local alias for the ambient matrix algebra `M_d(ℂ)`. -/
+private abbrev MatrixAlg (d : ℕ) := Matrix (Fin d) (Fin d) ℂ
+
+/-- Local alias for endomorphisms of `M_d(ℂ)`. -/
+private abbrev MatrixEnd (d : ℕ) := MatrixAlg d →ₗ[ℂ] MatrixAlg d
+
 section WolfStatements
 
 variable {T : MatrixEnd d}

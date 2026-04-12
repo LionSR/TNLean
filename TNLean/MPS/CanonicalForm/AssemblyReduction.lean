@@ -38,10 +38,6 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-namespace MPSTensor
-
-variable {d D : ℕ}
-
 /-!
 ## The main reduction theorem
 

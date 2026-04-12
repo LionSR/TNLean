@@ -34,7 +34,7 @@ variable {D : ℕ}
 
 /-- Multiplicativity of `Matrix.toEuclideanLin`: lifting matrix multiplication to the
 Euclidean linear map level. -/
-protected lemma toEuclideanLin_mul (A B : Matrix (Fin D) (Fin D) ℂ) :
+lemma toEuclideanLin_mul (A B : Matrix (Fin D) (Fin D) ℂ) :
     (Matrix.toEuclideanLin A : EuclideanSpace ℂ (Fin D) →ₗ[ℂ] EuclideanSpace ℂ (Fin D)) *
       Matrix.toEuclideanLin B = Matrix.toEuclideanLin (A * B) := by
   simp only [Matrix.toEuclideanLin_eq_toLin_orthonormal]
@@ -83,7 +83,7 @@ section NormalGenerators
 variable {A : Matrix (Fin D) (Fin D) ℂ}
 
 /-- A normal matrix commutes with its adjoint. -/
-private lemma commute_conjTranspose_of_normal
+lemma commute_conjTranspose_of_normal
     (hA : Aᴴ * A = A * Aᴴ) : Commute A Aᴴ := by
   simpa [Commute] using hA.symm
 

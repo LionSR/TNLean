@@ -70,7 +70,7 @@ Compose Layer 1 and Layer 2.
 section HeteroEqualCase
 
 /-- Overlap of two blocks with pointwise-equal MPVs equals the self-overlap of the first. -/
-protected lemma mpvOverlap_eq_selfOverlap_of_forall_mpv_eq
+lemma mpvOverlap_eq_selfOverlap_of_forall_mpv_eq
     {D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (h : ∀ (N : ℕ) (σ : Fin N → Fin d), mpv A σ = mpv B σ) :
     ∀ N, mpvOverlap (d := d) A B N = mpvOverlap (d := d) A A N := by
@@ -87,7 +87,7 @@ and with the first block's self-overlap tending to 1:
 3. Non-gauge-phase-equivalence would force overlap → 0
    (`mpvOverlap_tendsto_zero_of_not_gaugePhaseEquiv_cast_left`).
    Contradiction ⟹ gauge-phase equivalent. -/
-protected lemma gaugePhaseEquiv_of_block_sameMPV₂
+lemma gaugePhaseEquiv_of_block_sameMPV₂
     {D₁ D₂ : ℕ} [NeZero D₁] [NeZero D₂]
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (hA_inj : IsInjective A) (hB_inj : IsInjective B)
@@ -134,7 +134,7 @@ The proof proceeds by strong induction on `rA + rB`:
   `IsCanonicalFormBNT` (all per-block properties are inherited, and the strict weight
   ordering restricts to the sub-range).  The strong induction hypothesis then closes the
   remaining cases. -/
-protected lemma exists_nondecaying_overlap_of_sameMPV₂_CFBNT
+lemma exists_nondecaying_overlap_of_sameMPV₂_CFBNT
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]

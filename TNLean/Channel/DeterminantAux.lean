@@ -62,7 +62,7 @@ private noncomputable def matrixSpaceBasis (d : ℕ) :
   Module.Basis.matrix (Fin d) (Fin d) (Module.Basis.singleton Unit ℂ)
 
 /-- Column-stacking vectorization as a linear equivalence. -/
-private noncomputable def matrixVecLinearEquiv (d : ℕ) :
+noncomputable def matrixVecLinearEquiv (d : ℕ) :
     MatrixAlg d ≃ₗ[ℂ] (Fin d × Fin d → ℂ) :=
   LinearEquiv.ofBijective
     { toFun := Matrix.vec
@@ -977,7 +977,7 @@ private theorem extract_unitary_from_inner_form [NeZero d]
     inv_mul_cancel₀ hr_ne, one_smul]
 
 /-- **Wolf Thm 6.1(2), forward direction.** -/
-protected theorem forward_det_one_implies_unitaryChannel [NeZero d]
+theorem forward_det_one_implies_unitaryChannel [NeZero d]
     (hT : IsChannel T) (hdet : ‖channelDet T‖ = 1) :
     ∃ U : Matrix.unitaryGroup (Fin d) ℂ, T = unitaryChannel U := by
   classical
