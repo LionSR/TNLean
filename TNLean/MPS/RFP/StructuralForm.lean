@@ -6,6 +6,8 @@ import TNLean.MPS.RFP.Defs
 import TNLean.MPS.Core.CPPrimitive
 import TNLean.MPS.BNT.Construction
 import TNLean.MPS.Irreducible.FormII
+import TNLean.Spectral.QuantitativeGap
+import TNLean.QPF.Assembly
 
 /-!
 # Structural form of RFP tensors
@@ -203,6 +205,51 @@ theorem rfp_nt_cfii_diagonal_fixedPoint [DecidableEq (Fin D)] [NeZero D]
   have hD : 0 < D := Nat.pos_of_ne_zero (NeZero.ne D)
   exact exists_unitary_diag_posDef_fixedPoint_of_leftCanonical_of_isIrreducibleTensor
     (d := d) (D := D) A hLeft hIrrTensor hD
+
+/-- **Rank-one classification** (arXiv:1606.00608, Appendix B): for an injective
+left-canonical RFP tensor, the transfer map equals the rank-one fixed-point projection
+`X ↦ (tr X / tr ρ) • ρ`.
+
+The proof combines exponential convergence (`E^n → P`) with idempotence (`E^n = E`
+for `n ≥ 1`). Since `E` is both the limit and is equal to every iterate, `E = P`. -/
+theorem transferMap_eq_fixedPointProj_of_isRFP_injective [NeZero D]
+    (A : MPSTensor d D)
+    (hInj : IsInjective A) (hRFP : IsRFP A)
+    (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ_pd : ρ.PosDef)
+    (hρ_fix : transferMap A ρ = ρ) :
+    transferMap A = fixedPointProj ρ (ne_of_gt hρ_pd.trace_pos) := by
+  classical
+  obtain ⟨C, δ, hC, hδ, hδ1, hbound⟩ :=
+    exponential_convergence_of_primitive A hLeft hInj ρ hρ_pd hρ_fix
+  have hIdem : IsIdempotentElem (transferMap (d := d) (D := D) A) := hRFP
+  set E := transferMap (d := d) (D := D) A
+  set P := fixedPointProj ρ (ne_of_gt hρ_pd.trace_pos)
+  apply LinearMap.ext; intro X
+  -- For all n: E^[n+1] X = E X (idempotence), so ‖E X - P X‖ ≤ C(1-δ)^{n+1} ‖X‖
+  have h_bound_const : ∀ n : ℕ, ‖E X - P X‖ ≤
+      C * (1 - δ) ^ (n + 1) * ‖X‖ := by
+    intro n
+    have h_iter : E^[n + 1] X = E X := by
+      rw [← Module.End.pow_apply]; congr 1; exact hIdem.pow_succ_eq n
+    rw [← h_iter]; exact hbound (n + 1) X
+  -- C(1-δ)^{n+1} ‖X‖ → 0
+  have h_rate : Filter.Tendsto (fun n => C * (1 - δ) ^ (n + 1) * ‖X‖)
+      Filter.atTop (nhds 0) := by
+    have h_base := tendsto_pow_atTop_nhds_zero_of_lt_one
+      (show (0 : ℝ) ≤ 1 - δ by linarith) (show 1 - δ < 1 by linarith)
+    -- (1-δ)^(n+1) = (1-δ) * (1-δ)^n → (1-δ) * 0 = 0
+    have h_shift : Filter.Tendsto (fun n => (1 - δ) ^ (n + 1)) Filter.atTop (nhds 0) := by
+      have := h_base.const_mul (1 - δ)
+      simp only [mul_zero] at this
+      exact this.congr fun n => by ring
+    have h_mul := h_shift.const_mul (C * ‖X‖)
+    simp only [mul_zero] at h_mul
+    exact h_mul.congr fun n => by ring
+  -- Constant sequence E X - P X → 0 by squeeze, so E X - P X = 0
+  have h_tend : Filter.Tendsto (fun _ : ℕ => E X - P X) Filter.atTop (nhds 0) :=
+    squeeze_zero_norm h_bound_const h_rate
+  exact eq_of_sub_eq_zero (tendsto_nhds_unique tendsto_const_nhds h_tend)
 
 /-- Canonical-form blocks are already injective, so the structural precursor above is automatic. -/
 theorem rfp_cf_structural {r : ℕ} {dim : Fin r → ℕ}

@@ -21,12 +21,15 @@ The fully-proved stepping stones are:
 * `rfp_nt_structural_of_leftCanonical` — left-canonical normal RFP ⟹ injective
 * `rfp_nt_cfii_diagonal_fixedPoint` — after unitary conjugation, a diagonal
   positive-definite fixed point for the transfer map exists
+* `transferMap_eq_fixedPointProj_of_isRFP_injective` — rank-one classification:
+  for an injective left-canonical RFP tensor, the transfer map equals
+  `fixedPointProj ρ`, i.e. `X ↦ (tr X / tr ρ) • ρ`
 
 The remaining gap:
-1. Classify idempotent irreducible CP maps as rank-one projectors of the form
-   `X ↦ (trace X / trace Λ) • Λ` using `posSemidef_fixedPoint_unique_of_irreducible`
+1. ~~Classify idempotent irreducible CP maps as rank-one projectors~~ ✓ Done
 2. Extract the physical-index isometry family from the rank-one structure
-   via Kraus freedom
+   via Kraus freedom (construct canonical Kraus operators for `fixedPointProj`
+   with diagonal PosDef fixed point, then apply `kraus_rectangular_freedom'`)
 -/
 
 open scoped Matrix ComplexOrder
@@ -39,12 +42,13 @@ variable {d D : ℕ}
 form II that is an RFP should admit the decomposition `A i = X * Λ * U i * X⁻¹`
 with diagonal positive `Λ` and a physical-index isometry `U`.
 
-The current formalization isolates the missing step to the expected gap:
-classifying idempotent irreducible CP maps as rank-one projections and then
-identifying the resulting Kraus family with the canonical `Λ * U i` form via
-Kraus freedom. The injectivity and CFII diagonal-fixed-point reduction are
-already available as `rfp_nt_structural_of_leftCanonical` and
-`rfp_nt_cfii_diagonal_fixedPoint`. -/
+The rank-one classification step is now proved as
+`transferMap_eq_fixedPointProj_of_isRFP_injective` in `MPS/RFP/StructuralForm.lean`.
+The remaining gap is extracting the physical-index isometry family from the
+rank-one structure via `kraus_rectangular_freedom'`: construct the canonical
+Kraus operators for `fixedPointProj Λ_mat` with diagonal PosDef `Λ_mat`,
+verify they generate the same CPM, and assemble the `X * diag(Λ) * U_i * X⁻¹`
+witnesses. -/
 theorem rfp_nt_structural_full (A : MPSTensor d D) [NeZero D]
     (hNT : IsNormal A) (hRFP : IsRFP A)
     (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
@@ -54,9 +58,11 @@ theorem rfp_nt_structural_full (A : MPSTensor d D) [NeZero D]
       (∀ k, 0 < Λ k) ∧
       (∑ i : Fin d, (U i)ᴴ * U i = 1) ∧
       (∀ i, A i = X * Matrix.diagonal (fun k => (Λ k : ℂ)) * U i * X⁻¹) := by
-  -- TODO(#233): use `rfp_nt_cfii_diagonal_fixedPoint` to pass to CFII, prove that the
-  -- idempotent irreducible transfer map is a rank-one projector `X ↦ trace X • ρ`, and
-  -- then apply Kraus freedom in the forward direction to extract the physical-index isometry.
+  -- TODO(#233): The rank-one classification is now proved
+  -- (`transferMap_eq_fixedPointProj_of_isRFP_injective`). Remaining: show the
+  -- conjugated tensor B is injective+RFP, apply rank-one classification to B,
+  -- construct canonical Kraus operators for fixedPointProj with diagonal PosDef
+  -- fixed point, apply `kraus_rectangular_freedom'`, and assemble witnesses.
   sorry
 
 end MPSTensor
