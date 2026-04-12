@@ -231,7 +231,7 @@ theorem starSubalgebra_hasWedderburnBlockDecomp
     { numBlocks := n
       blockDim := blockDim
       multDim := fun _ => 1
-      blockDim_pos := fun i => Nat.pos_of_neZero (blockDim i)
+      blockDim_pos := fun i => haveI := hblockDim i; Nat.pos_of_neZero (blockDim i)
       multDim_pos := fun _ => by norm_num
       dim_le := ?_
       algEquiv := e }⟩
