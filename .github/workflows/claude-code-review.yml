@@ -93,7 +93,7 @@ jobs:
                strategy, or are they brute-forced with `simp` / `omega` / `ring` chains? Are `calc` blocks
                and `conv` rewrites correctly chained? Are hypotheses used or dangling?
                If a mathematical result looks wrong, too strong, or suspiciously general, **scout** the
-               LaTeX sources in `Papers/` and `WolfNotes/` where the original theorems and proofs are
+               LaTeX sources in `Papers/` and `Notes/` where the original theorems and proofs are
                stored. Read the relevant sections, compare hypotheses and conclusions, and cite the
                specific paper/section when flagging a discrepancy.
             3. 🟡 **Mathlib style**: Does the code follow Mathlib conventions? Check naming (`camelCase` for
