@@ -1,0 +1,3341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>
+  MathJax = { 
+    tex: {
+		    inlineMath: [['$','$'], ['\\(','\\)']]
+	} }
+</script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+<meta name="generator" content="plasTeX" />
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Matrix Product Vectors</title>
+<link rel="next" href="ch-mpdo.html" title="Matrix Product Operators and Density Operators" />
+<link rel="prev" href="ch-intro.html" title="Introduction" />
+<link rel="up" href="index.html" title="Fundamental Theorem of Matrix Product States" />
+<link rel="stylesheet" href="styles/theme-white.css" />
+<link rel="stylesheet" href="styles/amsthm.css" />
+<link rel="stylesheet" href="styles/showmore.css" />
+<link rel="stylesheet" href="styles/blueprint.css" />
+<link rel="stylesheet" href="styles/extra_styles.css" />
+</head>
+
+<body>
+<header>
+<svg  id="toc-toggle" class="icon icon-list-numbered "><use xlink:href="symbol-defs.svg#icon-list-numbered"></use></svg>
+<h1 id="doc_title"><a href="index.html">Fundamental Theorem of Matrix Product States</a></h1>
+</header>
+
+<div class="wrapper">
+<nav class="toc">
+<ul class="sub-toc-0">
+<li class="">
+  <a href="ch-intro.html"><span class="toc_ref">1</span> <span class="toc_entry">Introduction</span></a>
+ </li>
+<li class=" active current">
+  <a href="ch-mps.html"><span class="toc_ref">2</span> <span class="toc_entry">Matrix Product Vectors</span></a>
+  <span class="expand-toc">▼</span>
+  <ul class="sub-toc-1 active">
+     <li class="">
+  <a href="ch-mps.html#a0000000161"><span class="toc_ref">2.1</span> <span class="toc_entry">Basic definitions</span></a>
+ </li>
+<li class="">
+  <a href="ch-mps.html#a0000000611"><span class="toc_ref">2.2</span> <span class="toc_entry">Periodic-chain aliases</span></a>
+ </li>
+<li class="">
+  <a href="ch-mps.html#a0000000650"><span class="toc_ref">2.3</span> <span class="toc_entry">Gauge equivalence and same MPV</span></a>
+ </li>
+<li class="">
+  <a href="ch-mps.html#a0000000994"><span class="toc_ref">2.4</span> <span class="toc_entry">Injectivity and normality</span></a>
+ </li>
+<li class="">
+  <a href="ch-mps.html#a0000001084"><span class="toc_ref">2.5</span> <span class="toc_entry">Canonical form</span></a>
+ </li>
+<li class="">
+  <a href="ch-mps.html#a0000001284"><span class="toc_ref">2.6</span> <span class="toc_entry">Blocking</span></a>
+ </li>
+<li class="">
+  <a href="ch-mps.html#a0000001452"><span class="toc_ref">2.7</span> <span class="toc_entry">MPV overlap</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="ch-mpdo.html"><span class="toc_ref">3</span> <span class="toc_entry">Matrix Product Operators and Density Operators</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-1">
+     <li class="">
+  <a href="ch-mpdo.html#a0000001643"><span class="toc_ref">3.1</span> <span class="toc_entry">MPO tensors</span></a>
+ </li>
+<li class="">
+  <a href="ch-mpdo.html#a0000001902"><span class="toc_ref">3.2</span> <span class="toc_entry">Transfer maps</span></a>
+ </li>
+<li class="">
+  <a href="ch-mpdo.html#a0000001975"><span class="toc_ref">3.3</span> <span class="toc_entry">Zero correlation length</span></a>
+ </li>
+<li class="">
+  <a href="ch-mpdo.html#a0000002018"><span class="toc_ref">3.4</span> <span class="toc_entry">MPDOs and LPDOs</span></a>
+ </li>
+<li class="">
+  <a href="ch-mpdo.html#a0000002237"><span class="toc_ref">3.5</span> <span class="toc_entry">Purification RFP</span></a>
+ </li>
+<li class="">
+  <a href="ch-mpdo.html#a0000002288"><span class="toc_ref">3.6</span> <span class="toc_entry">Pure-state recovery inside the MPO formalism</span></a>
+ </li>
+<li class="">
+  <a href="ch-mpdo.html#a0000002442"><span class="toc_ref">3.7</span> <span class="toc_entry">Horizontal and Vertical Canonical Forms</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="ch-single.html"><span class="toc_ref">4</span> <span class="toc_entry">The Single-Block Fundamental Theorem</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-1">
+     <li class="">
+  <a href="ch-single.html#a0000002528"><span class="toc_ref">4.1</span> <span class="toc_entry">Trace pairing</span></a>
+ </li>
+<li class="">
+  <a href="ch-single.html#a0000002700"><span class="toc_ref">4.2</span> <span class="toc_entry">Linear extension</span></a>
+ </li>
+<li class="">
+  <a href="ch-single.html#a0000002967"><span class="toc_ref">4.3</span> <span class="toc_entry">Simplicity and Skolem–Noether</span></a>
+ </li>
+<li class="">
+  <a href="ch-single.html#a0000003110"><span class="toc_ref">4.4</span> <span class="toc_entry">Proof of the single-block theorem</span></a>
+ </li>
+<li class="">
+  <a href="ch-single.html#a0000003175"><span class="toc_ref">4.5</span> <span class="toc_entry">Alternative fixed-length non-TI setup</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="ch-channels.html"><span class="toc_ref">5</span> <span class="toc_entry">Quantum Channels and Positive Maps</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-1">
+     <li class="">
+  <a href="ch-channels.html#a0000003325"><span class="toc_ref">5.1</span> <span class="toc_entry">Positive maps and channels</span></a>
+ </li>
+<li class="">
+  <a href="ch-channels.html#a0000003573"><span class="toc_ref">5.2</span> <span class="toc_entry">Irreducibility</span></a>
+ </li>
+<li class="">
+  <a href="ch-channels.html#a0000003707"><span class="toc_ref">5.3</span> <span class="toc_entry">Cesàro fixed-point theorem</span></a>
+ </li>
+<li class="">
+  <a href="ch-channels.html#a0000003892"><span class="toc_ref">5.4</span> <span class="toc_entry">Fixed-point projection</span></a>
+ </li>
+<li class="">
+  <a href="ch-channels.html#a0000003966"><span class="toc_ref">5.5</span> <span class="toc_entry">Peripheral spectrum and primitivity</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-2">
+     <li class="">
+  <a href="ch-channels.html#subsec:periodicity_removal_power"><span class="toc_ref">5.5.1</span> <span class="toc_entry">Periodicity removal by powering</span></a>
+ </li>
+<li class="">
+  <a href="ch-channels.html#subsec:peripheral_closure_fixedpoint"><span class="toc_ref">5.5.2</span> <span class="toc_entry">Peripheral closure via adjoint fixed point</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="ch-channels.html#sec:representations_infrastructure"><span class="toc_ref">5.6</span> <span class="toc_entry">Representations</span></a>
+ </li>
+<li class="">
+  <a href="ch-channels.html#sec:choi_jamiolkowski"><span class="toc_ref">5.7</span> <span class="toc_entry">Choi–Jamiołkowski isomorphism (Wolf Prop.&#160;2.1)</span></a>
+ </li>
+<li class="">
+  <a href="ch-channels.html#sec:kraus_representation"><span class="toc_ref">5.8</span> <span class="toc_entry">Kraus representation theorem (Wolf Thm.&#160;2.1)</span></a>
+ </li>
+<li class="">
+  <a href="ch-channels.html#sec:stinespring"><span class="toc_ref">5.9</span> <span class="toc_entry">Stinespring dilation (Wolf Thm.&#160;2.2)</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-2">
+     <li class="">
+  <a href="ch-channels.html#subsec:trace_pairing_expansion"><span class="toc_ref">5.9.1</span> <span class="toc_entry">Trace-pairing expansion in transfer-matrix form</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="ch-channels.html#sec:channel_determinant"><span class="toc_ref">5.10</span> <span class="toc_entry">Determinant of a quantum channel (Wolf §6.1.1)</span></a>
+ </li>
+<li class="">
+  <a href="ch-channels.html#sec:fixed_point_algebra"><span class="toc_ref">5.11</span> <span class="toc_entry">Fixed-point algebra (Wolf Thms.&#160;6.12–6.13)</span></a>
+ </li>
+<li class="">
+  <a href="ch-channels.html#sec:quantum_dynamical_semigroups"><span class="toc_ref">5.12</span> <span class="toc_entry">Quantum dynamical semigroups</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="ch-entropy.html"><span class="toc_ref">6</span> <span class="toc_entry">Quantum Entropy</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-1">
+     <li class="">
+  <a href="ch-entropy.html#a0000006322"><span class="toc_ref">6.1</span> <span class="toc_entry">Von Neumann entropy</span></a>
+ </li>
+<li class="">
+  <a href="ch-entropy.html#a0000006438"><span class="toc_ref">6.2</span> <span class="toc_entry">Tripartite partial traces</span></a>
+ </li>
+<li class="">
+  <a href="ch-entropy.html#a0000006578"><span class="toc_ref">6.3</span> <span class="toc_entry">Strong subadditivity</span></a>
+ </li>
+<li class="">
+  <a href="ch-entropy.html#a0000006619"><span class="toc_ref">6.4</span> <span class="toc_entry">Mutual information</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="ch-schwarz.html"><span class="toc_ref">7</span> <span class="toc_entry">Schwarz Inequalities and Multiplicative Domains</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-1">
+     <li class="">
+  <a href="ch-schwarz.html#a0000006684"><span class="toc_ref">7.1</span> <span class="toc_entry">Kadison–Schwarz inequality</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-2">
+     <li class="">
+  <a href="ch-schwarz.html#a0000006940"><span class="toc_ref">7.1.1</span> <span class="toc_entry">Two-positive maps and the generalized Schwarz inequality</span></a>
+ </li>
+<li class="">
+  <a href="ch-schwarz.html#a0000007076"><span class="toc_ref">7.1.2</span> <span class="toc_entry">Douglas-type factorization lemmas</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="ch-schwarz.html#a0000007224"><span class="toc_ref">7.2</span> <span class="toc_entry">Multiplicative domain</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-2">
+     <li class="">
+  <a href="ch-schwarz.html#a0000007475"><span class="toc_ref">7.2.1</span> <span class="toc_entry">Full multiplicative-domain structure</span></a>
+ </li>
+<li class="">
+  <a href="ch-schwarz.html#a0000007704"><span class="toc_ref">7.2.2</span> <span class="toc_entry">Schwarz inequality for normal operators</span></a>
+ </li>
+<li class="">
+  <a href="ch-schwarz.html#a0000007852"><span class="toc_ref">7.2.3</span> <span class="toc_entry">Schwarz inequality for subnormal and commuting-dominant operators</span></a>
+ </li>
+<li class="">
+  <a href="ch-schwarz.html#a0000008046"><span class="toc_ref">7.2.4</span> <span class="toc_entry">Positive maps preserve order and spectral intervals</span></a>
+ </li>
+<li class="">
+  <a href="ch-schwarz.html#a0000008248"><span class="toc_ref">7.2.5</span> <span class="toc_entry">Wolf Example 5.3</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="ch-schwarz.html#a0000008345"><span class="toc_ref">7.3</span> <span class="toc_entry">Operator convexity and Jensen inequalities</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-2">
+     <li class="">
+  <a href="ch-schwarz.html#a0000008356"><span class="toc_ref">7.3.1</span> <span class="toc_entry">Trace concavity and convexity of matrix powers</span></a>
+ </li>
+<li class="">
+  <a href="ch-schwarz.html#a0000008455"><span class="toc_ref">7.3.2</span> <span class="toc_entry">Operator Jensen inequality for positive maps</span></a>
+ </li>
+<li class="">
+  <a href="ch-schwarz.html#a0000008558"><span class="toc_ref">7.3.3</span> <span class="toc_entry">Lieb concavity theorem</span></a>
+ </li>
+
+  </ul>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="ch-qpf.html"><span class="toc_ref">8</span> <span class="toc_entry">Perron–Frobenius Theory for Channels and Transfer Maps</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-1">
+     <li class="">
+  <a href="ch-qpf.html#a0000008633"><span class="toc_ref">8.1</span> <span class="toc_entry">Positive definiteness</span></a>
+ </li>
+<li class="">
+  <a href="ch-qpf.html#a0000008880"><span class="toc_ref">8.2</span> <span class="toc_entry">Uniqueness</span></a>
+ </li>
+<li class="">
+  <a href="ch-qpf.html#a0000009076"><span class="toc_ref">8.3</span> <span class="toc_entry">Existence and the Perron–Frobenius theorem</span></a>
+ </li>
+<li class="">
+  <a href="ch-qpf.html#a0000009163"><span class="toc_ref">8.4</span> <span class="toc_entry">Right- and left-canonical gauges</span></a>
+ </li>
+<li class="">
+  <a href="ch-qpf.html#a0000009335"><span class="toc_ref">8.5</span> <span class="toc_entry">Similarity preserves irreducibility</span></a>
+ </li>
+<li class="">
+  <a href="ch-qpf.html#sec:pf_eigenvector"><span class="toc_ref">8.6</span> <span class="toc_entry">Perron–Frobenius eigenvector existence</span></a>
+ </li>
+<li class="">
+  <a href="ch-qpf.html#a0000009773"><span class="toc_ref">8.7</span> <span class="toc_entry">Exponential positivity for irreducible CP maps</span></a>
+ </li>
+<li class="">
+  <a href="ch-qpf.html#a0000009853"><span class="toc_ref">8.8</span> <span class="toc_entry">Ergodicity of irreducible channels</span></a>
+ </li>
+<li class="">
+  <a href="ch-qpf.html#a0000009916"><span class="toc_ref">8.9</span> <span class="toc_entry">Spectral radius at the Perron eigenvalue</span></a>
+ </li>
+<li class="">
+  <a href="ch-qpf.html#a0000009972"><span class="toc_ref">8.10</span> <span class="toc_entry">Spectral characterization of irreducibility</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="ch-spectral.html"><span class="toc_ref">9</span> <span class="toc_entry">Spectral Gap and Block Separation</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-1">
+     <li class="">
+  <a href="ch-spectral.html#a0000010084"><span class="toc_ref">9.1</span> <span class="toc_entry">Mixed transfer operator</span></a>
+ </li>
+<li class="">
+  <a href="ch-spectral.html#a0000010318"><span class="toc_ref">9.2</span> <span class="toc_entry">MPV overlap as transfer trace</span></a>
+ </li>
+<li class="">
+  <a href="ch-spectral.html#a0000010500"><span class="toc_ref">9.3</span> <span class="toc_entry">Frobenius norm estimates</span></a>
+ </li>
+<li class="">
+  <a href="ch-spectral.html#a0000010606"><span class="toc_ref">9.4</span> <span class="toc_entry">Eigenvalue bound and spectral gap</span></a>
+ </li>
+<li class="">
+  <a href="ch-spectral.html#a0000011115"><span class="toc_ref">9.5</span> <span class="toc_entry">Spectral gap — rectangular case</span></a>
+ </li>
+<li class="">
+  <a href="ch-spectral.html#a0000011292"><span class="toc_ref">9.6</span> <span class="toc_entry">MPV overlap decay</span></a>
+ </li>
+<li class="">
+  <a href="ch-spectral.html#a0000011378"><span class="toc_ref">9.7</span> <span class="toc_entry">Block separation</span></a>
+ </li>
+<li class="">
+  <a href="ch-spectral.html#a0000011427"><span class="toc_ref">9.8</span> <span class="toc_entry">Spectral gap under irreducible-TP hypotheses</span></a>
+ </li>
+<li class="">
+  <a href="ch-spectral.html#a0000011646"><span class="toc_ref">9.9</span> <span class="toc_entry">Conditional expectation from a faithful fixed point (Wolf Thm.&#160;6.15)</span></a>
+ </li>
+<li class="">
+  <a href="ch-spectral.html#a0000011843"><span class="toc_ref">9.10</span> <span class="toc_entry">Stationary support (Wolf §6.4)</span></a>
+ </li>
+<li class="">
+  <a href="ch-spectral.html#a0000012045"><span class="toc_ref">9.11</span> <span class="toc_entry">Wedderburn decomposition of the fixed-point algebra (Wolf Thm.&#160;6.14)</span></a>
+ </li>
+<li class="">
+  <a href="ch-spectral.html#a0000012145"><span class="toc_ref">9.12</span> <span class="toc_entry">Additional Wolf Chapter&#160;6 equivalences</span></a>
+ </li>
+<li class="">
+  <a href="ch-spectral.html#a0000012202"><span class="toc_ref">9.13</span> <span class="toc_entry">Peripheral eigenvalue group structure (Wolf Thm.&#160;6.6)</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-2">
+     <li class="">
+  <a href="ch-spectral.html#a0000012394"><span class="toc_ref">9.13.1</span> <span class="toc_entry">Cyclic decomposition of irreducible Schwarz maps</span></a>
+ </li>
+<li class="">
+  <a href="ch-spectral.html#a0000012502"><span class="toc_ref">9.13.2</span> <span class="toc_entry">Group structure of the peripheral spectrum</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="ch-spectral.html#a0000012548"><span class="toc_ref">9.14</span> <span class="toc_entry">Primitive overlap convergence (spectral-gap form)</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="ch-wielandt.html"><span class="toc_ref">10</span> <span class="toc_entry">Wielandt Bound</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-1">
+     <li class="">
+  <a href="ch-wielandt.html#a0000012659"><span class="toc_ref">10.1</span> <span class="toc_entry">Cumulative span</span></a>
+ </li>
+<li class="">
+  <a href="ch-wielandt.html#a0000012850"><span class="toc_ref">10.2</span> <span class="toc_entry">Fitting decomposition</span></a>
+ </li>
+<li class="">
+  <a href="ch-wielandt.html#a0000012914"><span class="toc_ref">10.3</span> <span class="toc_entry">Nonzero trace product</span></a>
+ </li>
+<li class="">
+  <a href="ch-wielandt.html#a0000013243"><span class="toc_ref">10.4</span> <span class="toc_entry">Eigenvector extraction</span></a>
+ </li>
+<li class="">
+  <a href="ch-wielandt.html#a0000013333"><span class="toc_ref">10.5</span> <span class="toc_entry">Eigenvector spreading</span></a>
+ </li>
+<li class="">
+  <a href="ch-wielandt.html#a0000013504"><span class="toc_ref">10.6</span> <span class="toc_entry">Proof of the cumulative Wielandt bound</span></a>
+ </li>
+<li class="">
+  <a href="ch-wielandt.html#sec:lemma2b"><span class="toc_ref">10.7</span> <span class="toc_entry">Lemma&#160;2(b): fixed-length matrix spanning</span></a>
+ </li>
+<li class="">
+  <a href="ch-wielandt.html#sec:rectangular_span"><span class="toc_ref">10.8</span> <span class="toc_entry">Blocked tensor and rectangular span</span></a>
+ </li>
+<li class="">
+  <a href="ch-wielandt.html#a0000014631"><span class="toc_ref">10.9</span> <span class="toc_entry">Primitive MPS tensors</span></a>
+ </li>
+<li class="">
+  <a href="ch-wielandt.html#a0000014706"><span class="toc_ref">10.10</span> <span class="toc_entry">Primitivity and normality</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-2">
+     <li class="">
+  <a href="ch-wielandt.html#subsec:prim_to_normal"><span class="toc_ref">10.10.1</span> <span class="toc_entry">From primitivity to normality</span></a>
+ </li>
+<li class="">
+  <a href="ch-wielandt.html#subsec:prim_implies_irred"><span class="toc_ref">10.10.2</span> <span class="toc_entry">Primitive implies irreducible</span></a>
+ </li>
+<li class="">
+  <a href="ch-wielandt.html#subsec:prim_bridge_normality"><span class="toc_ref">10.10.3</span> <span class="toc_entry">From primitivity to strong irreducibility and normality</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="ch-wielandt.html#sec:cumspan_to_wordspan"><span class="toc_ref">10.11</span> <span class="toc_entry">Cumulative span to word span</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="ch-canonical.html"><span class="toc_ref">11</span> <span class="toc_entry">Canonical Form Reduction</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-1">
+     <li class="">
+  <a href="ch-canonical.html#a0000015523"><span class="toc_ref">11.1</span> <span class="toc_entry">Block-diagonal construction</span></a>
+ </li>
+<li class="">
+  <a href="ch-canonical.html#a0000015662"><span class="toc_ref">11.2</span> <span class="toc_entry">Transfer map normalization</span></a>
+ </li>
+<li class="">
+  <a href="ch-canonical.html#a0000015990"><span class="toc_ref">11.3</span> <span class="toc_entry">Invariant subspace decomposition</span></a>
+ </li>
+<li class="">
+  <a href="ch-canonical.html#a0000016215"><span class="toc_ref">11.4</span> <span class="toc_entry">Iterated reduction</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-2">
+     <li class="">
+  <a href="ch-canonical.html#subsec:burnside_bridge"><span class="toc_ref">11.4.1</span> <span class="toc_entry">From irreducibility to full spanning via Burnside’s theorem</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="ch-canonical.html#a0000016570"><span class="toc_ref">11.5</span> <span class="toc_entry">Proportional single-block theorem</span></a>
+ </li>
+<li class="">
+  <a href="ch-canonical.html#a0000016699"><span class="toc_ref">11.6</span> <span class="toc_entry">Canonical form from peripheral primitivity</span></a>
+ </li>
+<li class="">
+  <a href="ch-canonical.html#sec:normal_canonical_form"><span class="toc_ref">11.7</span> <span class="toc_entry">Normal canonical form</span></a>
+ </li>
+<li class="">
+  <a href="ch-canonical.html#sec:canonical_pipeline_1606"><span class="toc_ref">11.8</span> <span class="toc_entry">Steps toward canonical form existence</span></a>
+ </li>
+<li class="">
+  <a href="ch-canonical.html#sec:zero_block_separation"><span class="toc_ref">11.9</span> <span class="toc_entry">Zero-block separation</span></a>
+ </li>
+<li class="">
+  <a href="ch-canonical.html#sec:tp_gauge_arbitrary"><span class="toc_ref">11.10</span> <span class="toc_entry">Arbitrary-input TP-gauge reduction</span></a>
+ </li>
+<li class="">
+  <a href="ch-canonical.html#sec:blocking_infrastructure"><span class="toc_ref">11.11</span> <span class="toc_entry">Blocking and primitivity reduction</span></a>
+ </li>
+<li class="">
+  <a href="ch-canonical.html#sec:cyclic_sectors"><span class="toc_ref">11.12</span> <span class="toc_entry">Cyclic sector decomposition</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-2">
+     <li class="">
+  <a href="ch-canonical.html#sec:sector_irreducibility_helpers"><span class="toc_ref">11.12.1</span> <span class="toc_entry">Sector irreducibility helpers</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="ch-canonical.html#sec:reduction_to_normal_form"><span class="toc_ref">11.13</span> <span class="toc_entry">Reduction to primitive blocks</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-2">
+     <li class="">
+  <a href="ch-canonical.html#a0000018412"><span class="toc_ref">11.13.1</span> <span class="toc_entry">Basis of Normal Tensors</span></a>
+ </li>
+<li class="">
+  <a href="ch-canonical.html#a0000018467"><span class="toc_ref">11.13.2</span> <span class="toc_entry">Equal-Norm Blocks</span></a>
+ </li>
+<li class="">
+  <a href="ch-canonical.html#a0000018501"><span class="toc_ref">11.13.3</span> <span class="toc_entry">Cyclic Sectors</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="ch-canonical.html#sec:open_directions"><span class="toc_ref">11.14</span> <span class="toc_entry">Open directions</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="ch-block_perm.html"><span class="toc_ref">12</span> <span class="toc_entry">Block Permutation and Separation</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-1">
+     <li class="">
+  <a href="ch-block_perm.html#a0000018594"><span class="toc_ref">12.1</span> <span class="toc_entry">Block permutation algebra</span></a>
+ </li>
+<li class="">
+  <a href="ch-block_perm.html#a0000018807"><span class="toc_ref">12.2</span> <span class="toc_entry">Product algebra linear extension</span></a>
+ </li>
+<li class="">
+  <a href="ch-block_perm.html#a0000018979"><span class="toc_ref">12.3</span> <span class="toc_entry">Block separation</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="ch-bnt.html"><span class="toc_ref">13</span> <span class="toc_entry">Basis of Normal Tensors</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-1">
+     <li class="">
+  <a href="ch-bnt.html#a0000019474"><span class="toc_ref">13.1</span> <span class="toc_entry">Basis of normal tensors</span></a>
+ </li>
+<li class="">
+  <a href="ch-bnt.html#a0000019730"><span class="toc_ref">13.2</span> <span class="toc_entry">Permutation rigidity for bases of normal tensors</span></a>
+ </li>
+<li class="">
+  <a href="ch-bnt.html#a0000020082"><span class="toc_ref">13.3</span> <span class="toc_entry">Coefficient convergence</span></a>
+ </li>
+<li class="">
+  <a href="ch-bnt.html#a0000020150"><span class="toc_ref">13.4</span> <span class="toc_entry">Newton–Girard identities</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="ch-assembly.html"><span class="toc_ref">14</span> <span class="toc_entry">Proof of the Fundamental Theorem</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-1">
+     <li class="">
+  <a href="ch-assembly.html#sec:assembly_weak"><span class="toc_ref">14.1</span> <span class="toc_entry">Weak Fundamental Theorem</span></a>
+ </li>
+<li class="">
+  <a href="ch-assembly.html#sec:assembly_proportional"><span class="toc_ref">14.2</span> <span class="toc_entry">Proportional Fundamental Theorem</span></a>
+ </li>
+<li class="">
+  <a href="ch-assembly.html#sec:assembly_equal"><span class="toc_ref">14.3</span> <span class="toc_entry">Equal-MPV Fundamental Theorem</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-2">
+     <li class="">
+  <a href="ch-assembly.html#sec:route_b"><span class="toc_ref">14.3.1</span> <span class="toc_entry">Multiplicity structure for repeated blocks</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="ch-assembly.html#sec:periodic_ft"><span class="toc_ref">14.4</span> <span class="toc_entry">Periodic Fundamental Theorem (de las Cuevas–Cirac–Schuch–Pérez-García)</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-2">
+     <li class="">
+  <a href="ch-assembly.html#a0000021413"><span class="toc_ref">14.4.1</span> <span class="toc_entry">Irreducible form</span></a>
+ </li>
+<li class="">
+  <a href="ch-assembly.html#a0000021496"><span class="toc_ref">14.4.2</span> <span class="toc_entry">Common-period blocking lemmas</span></a>
+ </li>
+<li class="">
+  <a href="ch-assembly.html#a0000021540"><span class="toc_ref">14.4.3</span> <span class="toc_entry">The \(Z\)-gauge degree of freedom</span></a>
+ </li>
+<li class="">
+  <a href="ch-assembly.html#a0000021736"><span class="toc_ref">14.4.4</span> <span class="toc_entry">Statement of the periodic Fundamental Theorem</span></a>
+ </li>
+<li class="">
+  <a href="ch-assembly.html#a0000021904"><span class="toc_ref">14.4.5</span> <span class="toc_entry">Periodic overlap dichotomy (Proposition 3.3)</span></a>
+ </li>
+
+  </ul>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="ch-semigroup.html"><span class="toc_ref">15</span> <span class="toc_entry">Quantum Dynamical Semigroups</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-1">
+     <li class="">
+  <a href="ch-semigroup.html#sec:semigroup_defs"><span class="toc_ref">15.1</span> <span class="toc_entry">Dynamical semigroups and the exponential form</span></a>
+ </li>
+<li class="">
+  <a href="ch-semigroup.html#sec:perturbation"><span class="toc_ref">15.2</span> <span class="toc_entry">Perturbation theory</span></a>
+ </li>
+<li class="">
+  <a href="ch-semigroup.html#sec:gksl_generators"><span class="toc_ref">15.3</span> <span class="toc_entry">GKSL/Lindblad generators</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-2">
+     <li class="">
+  <a href="ch-semigroup.html#a0000022758"><span class="toc_ref">15.3.1</span> <span class="toc_entry">Generator decomposition and conditional complete positivity</span></a>
+ </li>
+<li class="">
+  <a href="ch-semigroup.html#a0000022938"><span class="toc_ref">15.3.2</span> <span class="toc_entry">The Lindblad form</span></a>
+ </li>
+<li class="">
+  <a href="ch-semigroup.html#a0000023204"><span class="toc_ref">15.3.3</span> <span class="toc_entry">Prop.&#160;7.2: Characterization of conditional complete positivity</span></a>
+ </li>
+<li class="">
+  <a href="ch-semigroup.html#a0000023309"><span class="toc_ref">15.3.4</span> <span class="toc_entry">Prop.&#160;7.3: CP semigroups and CCP generators</span></a>
+ </li>
+<li class="">
+  <a href="ch-semigroup.html#a0000023406"><span class="toc_ref">15.3.5</span> <span class="toc_entry">Prop.&#160;7.4: Freedom in generator representation</span></a>
+ </li>
+<li class="">
+  <a href="ch-semigroup.html#a0000023460"><span class="toc_ref">15.3.6</span> <span class="toc_entry">Prop.&#160;7.4 item 2: Uniqueness of the traceless Lindblad form</span></a>
+ </li>
+<li class="">
+  <a href="ch-semigroup.html#a0000023592"><span class="toc_ref">15.3.7</span> <span class="toc_entry">Trace-annihilation and trace preservation</span></a>
+ </li>
+<li class="">
+  <a href="ch-semigroup.html#a0000023643"><span class="toc_ref">15.3.8</span> <span class="toc_entry">Thm.&#160;7.1: The GKSL/Lindblad theorem</span></a>
+ </li>
+<li class="">
+  <a href="ch-semigroup.html#a0000023845"><span class="toc_ref">15.3.9</span> <span class="toc_entry">Kossakowski matrix form</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="ch-semigroup.html#sec:qds_primitivity"><span class="toc_ref">15.4</span> <span class="toc_entry">Primitivity and irreducibility of QDS</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-2">
+     <li class="">
+  <a href="ch-semigroup.html#a0000023921"><span class="toc_ref">15.4.1</span> <span class="toc_entry">Auxiliary spectral and semigroup lemmas</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="ch-semigroup.html#sec:liouvillian_kernel"><span class="toc_ref">15.5</span> <span class="toc_entry">Kernel of the adjoint Liouvillian</span></a>
+ </li>
+<li class="">
+  <a href="ch-semigroup.html#sec:qds_reducibility"><span class="toc_ref">15.6</span> <span class="toc_entry">Reducibility of quantum dynamical semigroups</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-2">
+     <li class="">
+  <a href="ch-semigroup.html#sec:cor_7_2_sufficient_conditions"><span class="toc_ref">15.6.1</span> <span class="toc_entry">Cor.&#160;7.2: Sufficient conditions for non-reducibility</span></a>
+ </li>
+
+  </ul>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="ch-algebraic_ft.html"><span class="toc_ref">16</span> <span class="toc_entry">The Algebraic Fundamental Theorem</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-1">
+     <li class="">
+  <a href="ch-algebraic_ft.html#sec:decomposition_map"><span class="toc_ref">16.1</span> <span class="toc_entry">One-sided inverse and decomposition</span></a>
+ </li>
+<li class="">
+  <a href="ch-algebraic_ft.html#sec:phys_realize"><span class="toc_ref">16.2</span> <span class="toc_entry">Physical realisation of virtual insertions</span></a>
+ </li>
+<li class="">
+  <a href="ch-algebraic_ft.html#sec:intermediate"><span class="toc_ref">16.3</span> <span class="toc_entry">Intermediate lemmas</span></a>
+ </li>
+<li class="">
+  <a href="ch-algebraic_ft.html#sec:virtual_bond_gauge"><span class="toc_ref">16.4</span> <span class="toc_entry">Same state forces a virtual bond gauge</span></a>
+ </li>
+<li class="">
+  <a href="ch-algebraic_ft.html#sec:tensor_proportional"><span class="toc_ref">16.5</span> <span class="toc_entry">Aligned gauges force proportionality</span></a>
+ </li>
+<li class="">
+  <a href="ch-algebraic_ft.html#sec:ft_chain"><span class="toc_ref">16.6</span> <span class="toc_entry">The Fundamental Theorem for injective chains</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-2">
+     <li class="">
+  <a href="ch-algebraic_ft.html#a0000026283"><span class="toc_ref">16.6.1</span> <span class="toc_entry">Finite-length MPV agreement</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="ch-algebraic_ft.html#sec:ft_corollaries"><span class="toc_ref">16.7</span> <span class="toc_entry">Corollaries</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-2">
+     <li class="">
+  <a href="ch-algebraic_ft.html#a0000026413"><span class="toc_ref">16.7.1</span> <span class="toc_entry">Translation-invariant chains</span></a>
+ </li>
+<li class="">
+  <a href="ch-algebraic_ft.html#a0000026536"><span class="toc_ref">16.7.2</span> <span class="toc_entry">Non-TI descriptions of TI states</span></a>
+ </li>
+<li class="">
+  <a href="ch-algebraic_ft.html#a0000026694"><span class="toc_ref">16.7.3</span> <span class="toc_entry">Normal MPS (blocked injectivity)</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="ch-algebraic_ft.html#sec:pi_algebra"><span class="toc_ref">16.8</span> <span class="toc_entry">Product algebra construction and per-block gauge</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-2">
+     <li class="">
+  <a href="ch-algebraic_ft.html#a0000026825"><span class="toc_ref">16.8.1</span> <span class="toc_entry">Per-block linear extension</span></a>
+ </li>
+<li class="">
+  <a href="ch-algebraic_ft.html#a0000026939"><span class="toc_ref">16.8.2</span> <span class="toc_entry">Product algebra automorphism</span></a>
+ </li>
+<li class="">
+  <a href="ch-algebraic_ft.html#a0000027049"><span class="toc_ref">16.8.3</span> <span class="toc_entry">Nondegeneracy of the product trace pairing</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="ch-algebraic_ft.html#sec:multi_block_ft"><span class="toc_ref">16.9</span> <span class="toc_entry">The multi-block Fundamental Theorem</span></a>
+ </li>
+<li class="">
+  <a href="ch-algebraic_ft.html#sec:block_separation"><span class="toc_ref">16.10</span> <span class="toc_entry">Block separation from canonical form</span></a>
+ </li>
+<li class="">
+  <a href="ch-algebraic_ft.html#sec:ti_reduction"><span class="toc_ref">16.11</span> <span class="toc_entry">TI reduction corollary</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-2">
+     <li class="">
+  <a href="ch-algebraic_ft.html#a0000027720"><span class="toc_ref">16.11.1</span> <span class="toc_entry">Global symmetry via gauge composition</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="ch-algebraic_ft.html#sec:peps_ft"><span class="toc_ref">16.12</span> <span class="toc_entry">Fundamental Theorem for injective PEPS</span></a>
+ </li>
+<li class="">
+  <a href="ch-algebraic_ft.html#sec:closing"><span class="toc_ref">16.13</span> <span class="toc_entry">Closing remarks</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="ch-symmetry.html"><span class="toc_ref">17</span> <span class="toc_entry">Symmetries and String Order</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-1">
+     <li class="">
+  <a href="ch-symmetry.html#a0000028322"><span class="toc_ref">17.1</span> <span class="toc_entry">Physical Symmetries Give Virtual Gauges</span></a>
+ </li>
+<li class="">
+  <a href="ch-symmetry.html#a0000028665"><span class="toc_ref">17.2</span> <span class="toc_entry">Virtual Representation Theorem</span></a>
+ </li>
+<li class="">
+  <a href="ch-symmetry.html#a0000029295"><span class="toc_ref">17.3</span> <span class="toc_entry">Cohomology Classes of Virtual Symmetry Data</span></a>
+ </li>
+<li class="">
+  <a href="ch-symmetry.html#a0000029657"><span class="toc_ref">17.4</span> <span class="toc_entry">Permutation-Based Physical Symmetry</span></a>
+ </li>
+<li class="">
+  <a href="ch-symmetry.html#a0000029928"><span class="toc_ref">17.5</span> <span class="toc_entry">String Order and Local Symmetry Equivalence</span></a>
+ </li>
+<li class="">
+  <a href="ch-symmetry.html#a0000031520"><span class="toc_ref">17.6</span> <span class="toc_entry">SPT Phase Classification</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="ch-parent_hamiltonian.html"><span class="toc_ref">18</span> <span class="toc_entry">Parent Hamiltonians</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-1">
+     <li class="">
+  <a href="ch-parent_hamiltonian.html#sec:ground_space_parent"><span class="toc_ref">18.1</span> <span class="toc_entry">Local ground space \(G_L(A)\)</span></a>
+ </li>
+<li class="">
+  <a href="ch-parent_hamiltonian.html#sec:parent_interaction_defs"><span class="toc_ref">18.2</span> <span class="toc_entry">Parent interaction and chain Hamiltonian</span></a>
+ </li>
+<li class="">
+  <a href="ch-parent_hamiltonian.html#sec:intersection_unique"><span class="toc_ref">18.3</span> <span class="toc_entry">Intersection property and unique ground state</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-2">
+     <li class="">
+  <a href="ch-parent_hamiltonian.html#a0000032185"><span class="toc_ref">18.3.1</span> <span class="toc_entry">Restriction maps</span></a>
+ </li>
+<li class="">
+  <a href="ch-parent_hamiltonian.html#a0000032254"><span class="toc_ref">18.3.2</span> <span class="toc_entry">Forward direction: ground space restricts</span></a>
+ </li>
+<li class="">
+  <a href="ch-parent_hamiltonian.html#a0000032507"><span class="toc_ref">18.3.3</span> <span class="toc_entry">Injectivity of the ground-space map</span></a>
+ </li>
+<li class="">
+  <a href="ch-parent_hamiltonian.html#a0000032581"><span class="toc_ref">18.3.4</span> <span class="toc_entry">The intersection property</span></a>
+ </li>
+<li class="">
+  <a href="ch-parent_hamiltonian.html#a0000032814"><span class="toc_ref">18.3.5</span> <span class="toc_entry">Unique ground state</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="ch-parent_hamiltonian.html#sec:commuting_parent_ham"><span class="toc_ref">18.4</span> <span class="toc_entry">Commuting parent Hamiltonians</span></a>
+ </li>
+<li class="">
+  <a href="ch-parent_hamiltonian.html#sec:decorrelation"><span class="toc_ref">18.5</span> <span class="toc_entry">Decorrelation and commuting parent Hamiltonians</span></a>
+ </li>
+<li class="">
+  <a href="ch-parent_hamiltonian.html#sec:spectral_gap"><span class="toc_ref">18.6</span> <span class="toc_entry">Spectral gap</span></a>
+ </li>
+<li class="">
+  <a href="ch-parent_hamiltonian.html#sec:degenerate_ground_space"><span class="toc_ref">18.7</span> <span class="toc_entry">Ground space of non-injective MPS</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="ch-correlations.html"><span class="toc_ref">19</span> <span class="toc_entry">Exponential Decay of Correlations</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-1">
+     <li class="">
+  <a href="ch-correlations.html#a0000034703"><span class="toc_ref">19.1</span> <span class="toc_entry">Connected correlators from the transfer map</span></a>
+ </li>
+<li class="">
+  <a href="ch-correlations.html#a0000034785"><span class="toc_ref">19.2</span> <span class="toc_entry">Spectral expansion and exponential decay</span></a>
+ </li>
+<li class="">
+  <a href="ch-correlations.html#a0000034919"><span class="toc_ref">19.3</span> <span class="toc_entry">Quantitative spectral gap bounds</span></a>
+ </li>
+<li class="">
+  <a href="ch-correlations.html#a0000035096"><span class="toc_ref">19.4</span> <span class="toc_entry">Relation to parent Hamiltonians</span></a>
+ </li>
+<li class="">
+  <a href="ch-correlations.html#a0000035112"><span class="toc_ref">19.5</span> <span class="toc_entry">Renormalization fixed points and zero correlation length</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="ch-examples.html"><span class="toc_ref">20</span> <span class="toc_entry">Concrete Examples</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-1">
+     <li class="">
+  <a href="ch-examples.html#sec:ghz"><span class="toc_ref">20.1</span> <span class="toc_entry">The GHZ state</span></a>
+ </li>
+<li class="">
+  <a href="ch-examples.html#sec:aklt"><span class="toc_ref">20.2</span> <span class="toc_entry">The AKLT state</span></a>
+ </li>
+<li class="">
+  <a href="ch-examples.html#sec:cluster"><span class="toc_ref">20.3</span> <span class="toc_entry">The cluster state</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="sect0001.html"><span class="toc_ref">21</span> <span class="toc_entry">Bibliography</span></a>
+ </li>
+<li ><a href="dep_graph_document.html">Dependency graph</a></li>
+</ul>
+</nav>
+
+<div class="content">
+<div class="content-wrapper">
+
+
+<div class="main-text">
+<h1 id="ch:mps">2 Matrix Product Vectors</h1>
+
+<p>Fix a physical dimension \(d\) and a bond dimension \(D\). This chapter studies the tensors that generate matrix product vector (MPV) families. All tensors here are translation-invariant with periodic boundary conditions (PBC). </p>
+<h1 id="a0000000161">2.1 Basic definitions</h1>
+<div class="definition_thmwrapper theorem-style-definition" id="def:mps_tensor">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">2.1</span>
+    <span class="definition_thmtitle">MPS tensor</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-mps.html#def:mps_tensor">#</a>
+    
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor" class="lean_decl">MPSTensor</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>  A (translation-invariant, PBC) <em>MPS tensor</em> with physical dimension&#160;\(d\) and bond dimension&#160;\(D\) is a collection of matrices </p>
+<div class="displaymath" id="a0000000173">
+  \[  \{ A^i\} _{i=0}^{d-1}, \qquad A^i \in M_{D}(\mathbb {C}),  \]
+</div>
+<p> indexed by a physical index \(i \in \{ 0, \ldots , d{-}1\} \). Such a tensor defines an MPV family. Diagrammatically, </p>
+<div class="displaymath" id="a0000000193">
+  \[  \begin{array}{c} i\\[-0.3ex] \vert \\[-0.4ex] \text{---}\, \bullet \, \text{---} \end{array}  \]
+</div>
+<p> The black node denotes the tensor \(A\), the horizontal legs are virtual, and the upper leg is the physical index \(i\). </p>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:eval_word">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">2.2</span>
+    <span class="definition_thmtitle">Word evaluation</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-mps.html#def:eval_word">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mps.html#def:mps_tensor">Definition 2.1</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.evalWord" class="lean_decl">MPSTensor.evalWord</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>   Given a word \(w = (i_1, \ldots , i_L) \in \{ 0,\ldots ,d{-}1\} ^L\), the <em>word evaluation</em> is the matrix product </p>
+<div class="displaymath" id="a0000000231">
+  \[  A^w \; :=\;  A^{i_1} A^{i_2} \cdots A^{i_L} \; \in \;  M_{D}(\mathbb {C}),  \]
+</div>
+<p> with the convention that the empty word evaluates to the identity: \(A^\varnothing = \mathbb {1}_D\). In tensor-network notation, </p>
+<div class="displaymath" id="a0000000256">
+  \[  \begin{array}{ccccccc} i_1 & & & & & &  i_L \\ \vert & &  \vert & &  \cdots & &  \vert \\ \bullet &  \text{---} &  \bullet &  \text{---} &  \cdots &  \text{---} &  \bullet \\ \multicolumn{7}{c}{L} \end{array}  \]
+</div>
+<p> in which each black node denotes the same local tensor \(A\), the virtual legs remain open, and the physical legs record the word \((i_1,\ldots ,i_L)\). </p>
+
+  </div>
+</div>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:eval_word_append">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">2.3</span>
+    <span class="lemma_thmtitle">Multiplicativity of word evaluation</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-mps.html#lem:eval_word_append">#</a>
+    
+    <a class="icon proof" href="ch-mps.html#a0000000338"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mps.html#def:eval_word">Definition 2.2</a></li>
+          
+          <li><a href="ch-mps.html#def:eval_word">Definition 2.2</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.evalWord_append" class="lean_decl">MPSTensor.evalWord_append</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>   For any words \(w_1, w_2\), \(A^{w_1 \cdot w_2} = A^{w_1} \,  A^{w_2}\). </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000338">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> Immediate from the definition of \(A^w\). </p>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:mpv">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">2.4</span>
+    <span class="definition_thmtitle">Matrix product vector</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-mps.html#def:mpv">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mps.html#def:eval_word">Definition 2.2</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.mpv" class="lean_decl">MPSTensor.mpv</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>   The <em>matrix product vector</em> (MPV) of a tensor&#160;\(A\) at system size&#160;\(N\) is the vector </p>
+<div class="displaymath" id="a0000000356">
+  \[  |V^{(N)}(A)\rangle  = \sum _{i_1, \ldots , i_N = 0}^{d-1} \operatorname{tr}\! (A^{i_1} A^{i_2} \cdots A^{i_N}) |i_1, \ldots , i_N\rangle  \in (\mathbb {C}^d)^{\otimes N}.  \]
+</div>
+<p> Equivalently, for a configuration \(\sigma = (i_1, \ldots , i_N) \in \{ 0,\ldots ,d{-}1\} ^N\), we write </p>
+<div class="displaymath" id="a0000000396">
+  \[  V^{(N)}(A)_\sigma := \operatorname{tr}\! (A^{i_1} A^{i_2} \cdots A^{i_N}).  \]
+</div>
+<p> The coefficient function \(\sigma \mapsto V^{(N)}(A)_\sigma \) gives the components; the displayed ket is the corresponding vector in \((\mathbb {C}^d)^{\otimes N}\). For a general word \(w\), we also write </p>
+<div class="displaymath" id="a0000000423">
+  \[  c_w(A) := \operatorname{tr}(A^w),  \]
+</div>
+<p> The <em>MPV family</em> generated by \(A\) is the collection \(\mathcal{V}(A) = \bigl\{ |V^{(N)}(A)\rangle \bigr\} _{N \ge 1}\). The coefficient \(V^{(N)}(A)_\sigma \) is the periodic contraction </p>
+<div class="displaymath" id="a0000000442">
+  \[  \begin{array}{ccccccc} i_1 & & & & & &  i_N \\ \vert & &  \vert & &  \cdots & &  \vert \\ \bullet &  \text{---} &  \bullet &  \text{---} &  \cdots &  \text{---} &  \bullet \\ \vert & & & & & &  \vert \\ \multicolumn{7}{c}{\text{---}\, \cdots \, \text{---}} \end{array}  \]
+</div>
+<p> of \(N\) copies of the local tensor \(A\), with the outer virtual legs closed by the trace. </p>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:transfer_map">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">2.5</span>
+    <span class="definition_thmtitle">Transfer map</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-mps.html#def:transfer_map">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mps.html#def:mps_tensor">Definition 2.1</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.transferMap" class="lean_decl">MPSTensor.transferMap</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>   The <em>transfer map</em> associated to a tensor&#160;\(A\) is the linear map \(\mathcal{E}_A : M_{D}(\mathbb {C}) \to M_{D}(\mathbb {C})\) defined by </p>
+<div class="displaymath" id="a0000000538">
+  \[  \mathcal{E}_A(X) \; =\;  \sum _{i=0}^{d-1} A^i \,  X \,  (A^i)^\dagger .  \]
+</div>
+<p> Diagrammatically, the transfer map is the double-layer contraction </p>
+<div class="displaymath" id="a0000000554">
+  \[  \begin{array}{ccc} X &  \text{---} &  \mathcal{E}_{A}(X) \\ &  \bullet & \\ &  \vert & \\ &  \bullet & \\ &  i & \end{array}  \]
+</div>
+<p> in which the upper node denotes \(A\), the lower node denotes \(A^\dagger \), and the physical index is summed over between them. </p>
+
+  </div>
+</div>
+<div class="remark_thmwrapper theorem-style-remark" id="a0000000595">
+  <div class="remark_thmheading">
+    <span class="remark_thmcaption">
+    Remark
+    </span>
+    <span class="remark_thmlabel">2.6</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-mps.html#a0000000595">#</a>
+    
+    
+    
+        </div>
+  </div>
+  <div class="remark_thmcontent">
+  <p>The transfer map is automatically positive: if \(X \ge 0\) then \(\mathcal{E}_A(X) \ge 0\), because each summand \(A^i X (A^i)^\dagger \) is positive semidefinite. The abstract positive-map framework appears in Chapter&#160;<a href="ch-channels.html">5</a>. </p>
+
+  </div>
+</div>
+<h1 id="a0000000611">2.2 Periodic-chain aliases</h1>
+<div class="definition_thmwrapper theorem-style-definition" id="def:periodic_mps_tensor">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">2.7</span>
+    <span class="definition_thmtitle">Periodic-chain tensor alias</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-mps.html#def:periodic_mps_tensor">#</a>
+    
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.PeriodicMPSTensor" class="lean_decl">MPSTensor.PeriodicMPSTensor</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>  For a fixed period \(m\), a <em>periodic-chain tensor</em> is a site-dependent tensor family indexed by \(\{ 0,\ldots ,m-1\} \), with local physical dimension&#160;\(d\) and bond dimension&#160;\(D\). </p>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:periodic_relations">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">2.8</span>
+    <span class="definition_thmtitle">Periodic same-state and gauge-equivalence relations</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-mps.html#def:periodic_relations">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mps.html#def:periodic_mps_tensor">Definition 2.7</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.PeriodicMPSTensor.SameState" class="lean_decl">MPSTensor.PeriodicMPSTensor.SameState</a></li>
+          
+          <li><a href="../docs/find/#doc/MPSTensor.PeriodicMPSTensor.GaugeEquiv" class="lean_decl">MPSTensor.PeriodicMPSTensor.GaugeEquiv</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>    For periodic-chain tensors \(A,B\) at fixed period&#160;\(m\): </p>
+<ul class="itemize">
+  <li><p>equality of the induced periodic-chain states; </p>
+</li>
+  <li><p>cyclic gauge equivalence. </p>
+</li>
+</ul>
+
+  </div>
+</div>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:periodic_relation_equivalences">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">2.9</span>
+    <span class="lemma_thmtitle">Equivalence structures for periodic relations</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-mps.html#lem:periodic_relation_equivalences">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mps.html#def:periodic_relations">Definition 2.8</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.PeriodicMPSTensor.instEquivalenceSameState" class="lean_decl">MPSTensor.PeriodicMPSTensor.instEquivalenceSameState</a></li>
+          
+          <li><a href="../docs/find/#doc/MPSTensor.PeriodicMPSTensor.instEquivalenceGaugeEquiv" class="lean_decl">MPSTensor.PeriodicMPSTensor.instEquivalenceGaugeEquiv</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>    Both periodic relations are equivalence relations (reflexive, symmetric, transitive). </p>
+
+  </div>
+</div>
+<h1 id="a0000000650">2.3 Gauge equivalence and same MPV</h1>
+<div class="definition_thmwrapper theorem-style-definition" id="def:gauge_equiv">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">2.10</span>
+    <span class="definition_thmtitle">Gauge equivalence</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-mps.html#def:gauge_equiv">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mps.html#def:mps_tensor">Definition 2.1</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.GaugeEquiv" class="lean_decl">MPSTensor.GaugeEquiv</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>   Two tensors \(A\) and \(B\) of the same bond dimension&#160;\(D\) are <em>gauge equivalent</em> if there exists an invertible matrix \(X \in \mathrm{GL}_D(\mathbb {C})\) such that </p>
+<div class="displaymath" id="a0000000669">
+  \[  B^i \; =\;  X \,  A^i \,  X^{-1} \qquad \text{for all } i \in \{ 0,\ldots ,d{-}1\} .  \]
+</div>
+<p> In tensor-network notation, </p>
+<div class="displaymath" id="a0000000686">
+  \[  \begin{array}{ccccc}& &  i & & \\ & &  \vert & & \\ \textcolor{red}{\bullet } &  \text{---} &  \bullet &  \text{---} &  \textcolor{red}{\bullet } \\ X & & & &  X^{-1} \end{array}  \]
+</div>
+<p> the black node denotes the tensor named in the surrounding formula, the upper leg is the physical index&#160;\(i\), and the two red side nodes denote the gauge matrices acting on the virtual legs. </p>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:same_mpv">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">2.11</span>
+    <span class="definition_thmtitle">Same MPV</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-mps.html#def:same_mpv">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mps.html#def:mpv">Definition 2.4</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.SameMPV" class="lean_decl">MPSTensor.SameMPV</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>   Two tensors \(A\) and \(B\) (of the same bond dimension) <em>generate the same MPV family</em> if \(|V^{(N)}(A)\rangle  = |V^{(N)}(B)\rangle \) for every system size&#160;\(N\). </p>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:same_mpv2">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">2.12</span>
+    <span class="definition_thmtitle">Same MPV — different bond dimensions</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-mps.html#def:same_mpv2">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mps.html#def:mpv">Definition 2.4</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.SameMPV₂" class="lean_decl">MPSTensor.SameMPV₂</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>   For tensors \(A\) and \(B\) of possibly different bond dimensions \(D_1\) and \(D_2\), we write \(\mathcal{V}(A) = \mathcal{V}(B)\) if \(|V^{(N)}(A)\rangle  = |V^{(N)}(B)\rangle \) for every \(N\). </p>
+
+  </div>
+</div>
+<div class="remark_thmwrapper theorem-style-remark" id="a0000000771">
+  <div class="remark_thmheading">
+    <span class="remark_thmcaption">
+    Remark
+    </span>
+    <span class="remark_thmlabel">2.13</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-mps.html#a0000000771">#</a>
+    
+    
+    
+        </div>
+  </div>
+  <div class="remark_thmcontent">
+  <p>Definition&#160;<a href="ch-mps.html#def:same_mpv">2.11</a> is the same-bond-dimension specialization of Definition&#160;<a href="ch-mps.html#def:same_mpv2">2.12</a>. We keep both because later results use both the same-dimension and different-dimension forms. </p>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:proportional_mpv">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">2.14</span>
+    <span class="definition_thmtitle">Proportional MPV</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-mps.html#def:proportional_mpv">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mps.html#def:mpv">Definition 2.4</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.ProportionalMPV₂" class="lean_decl">MPSTensor.ProportionalMPV₂</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>   Two tensors \(A\) and \(B\) (of possibly different bond dimensions) generate <em>proportional MPV families</em> if for every&#160;\(N\) there exists \(c_N \in \mathbb {C}\) such that \(|V^{(N)}(A)\rangle  = c_N \,  |V^{(N)}(B)\rangle \). </p>
+
+  </div>
+</div>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:eval_word_smul">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">2.15</span>
+    <span class="lemma_thmtitle">Scaling of word evaluation</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-mps.html#lem:eval_word_smul">#</a>
+    
+    <a class="icon proof" href="ch-mps.html#a0000000833"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mps.html#def:eval_word">Definition 2.2</a></li>
+          
+          <li><a href="ch-mps.html#def:eval_word">Definition 2.2</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.evalWord_smul" class="lean_decl">MPSTensor.evalWord_smul</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>   Let \(\zeta A\) denote the tensor with matrices \(\{ \zeta \,  A^i\} _{i=0}^{d-1}\). Then for any word \(w\), </p>
+<div class="displaymath" id="a0000000819">
+  \[  (\zeta A)^w \; =\;  \zeta ^{|w|} \,  A^w,  \]
+</div>
+<p> where \(|w|\) is the length of&#160;\(w\). </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000833">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> Induction on \(w\): the base case gives \(\zeta ^0 = 1\), and each step picks up one factor of \(\zeta \). </p>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:gauge_phase_equiv">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">2.16</span>
+    <span class="definition_thmtitle">Gauge-phase equivalence</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-mps.html#def:gauge_phase_equiv">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mps.html#def:mps_tensor">Definition 2.1</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.GaugePhaseEquiv" class="lean_decl">MPSTensor.GaugePhaseEquiv</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>   Two tensors \(A\) and \(B\) are <em>gauge-phase equivalent</em> if there exist \(X \in \mathrm{GL}_D(\mathbb {C})\) and \(\zeta \in \mathbb {C}\setminus \{ 0\} \) such that </p>
+<div class="displaymath" id="a0000000867">
+  \[  B^i \; =\;  \zeta \,  X \,  A^i \,  X^{-1} \qquad \text{for all } i.  \]
+</div>
+
+  </div>
+</div>
+<div class="remark_thmwrapper theorem-style-remark" id="a0000000880">
+  <div class="remark_thmheading">
+    <span class="remark_thmcaption">
+    Remark
+    </span>
+    <span class="remark_thmlabel">2.17</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-mps.html#a0000000880">#</a>
+    
+    
+    
+        </div>
+  </div>
+  <div class="remark_thmcontent">
+  <p>After spectral-radius normalization one may restrict \(\zeta \) to a unit-modulus phase \(e^{i\phi }\). We allow an arbitrary nonzero scalar because later canonical-form statements keep the block-scaling factors explicit. </p>
+
+  </div>
+</div>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:eval_word_gauge">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">2.18</span>
+    <span class="lemma_thmtitle">Gauge covariance of word evaluation</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-mps.html#lem:eval_word_gauge">#</a>
+    
+    <a class="icon proof" href="ch-mps.html#a0000000914"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mps.html#def:eval_word">Definition 2.2</a></li>
+          
+          <li><a href="ch-mps.html#def:eval_word">Definition 2.2</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.evalWord_gauge" class="lean_decl">MPSTensor.evalWord_gauge</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>   If \(B^i = X \,  A^i \,  X^{-1}\) for all&#160;\(i\), then for every word&#160;\(w\), </p>
+<div class="displaymath" id="a0000000905">
+  \[  B^w \; =\;  X \,  A^w \,  X^{-1}.  \]
+</div>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000914">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> Induction on the word length, using \(X X^{-1} = \mathbb {1}\). </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:gauge_invariance">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">2.19</span>
+    <span class="theorem_thmtitle">Gauge invariance of MPVs</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-mps.html#thm:gauge_invariance">#</a>
+    
+    <a class="icon proof" href="ch-mps.html#a0000000931"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mps.html#def:gauge_equiv">Definition 2.10</a></li>
+          
+          <li><a href="ch-mps.html#def:same_mpv">Definition 2.11</a></li>
+          
+          <li><a href="ch-mps.html#lem:eval_word_gauge">Lemma 2.18</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.GaugeEquiv.sameMPV" class="lean_decl">MPSTensor.GaugeEquiv.sameMPV</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   If \(A\) and \(B\) are gauge equivalent, then they generate the same MPV family. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000931">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> Let \(B^i = X A^i X^{-1}\). By Lemma&#160;<a href="ch-mps.html#lem:eval_word_gauge">2.18</a>, \(B^w = X \,  A^w \,  X^{-1}\) for every word&#160;\(w\). Then \(\operatorname{tr}(B^w) = \operatorname{tr}(X \,  A^w \,  X^{-1}) = \operatorname{tr}(A^w)\) by cyclicity of the trace. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:gauge_phase_mpv_scaling">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">2.20</span>
+    <span class="theorem_thmtitle">Gauge-phase scaling of MPVs</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-mps.html#thm:gauge_phase_mpv_scaling">#</a>
+    
+    <a class="icon proof" href="ch-mps.html#a0000000990"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mps.html#def:gauge_phase_equiv">Definition 2.16</a></li>
+          
+          <li><a href="ch-mps.html#def:mpv">Definition 2.4</a></li>
+          
+          <li><a href="ch-mps.html#lem:eval_word_smul">Lemma 2.15</a></li>
+          
+          <li><a href="ch-mps.html#lem:eval_word_gauge">Lemma 2.18</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.mpv_eq_pow_mul_of_gaugePhase" class="lean_decl">MPSTensor.mpv_eq_pow_mul_of_gaugePhase</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   If </p>
+<div class="displaymath" id="a0000000963">
+  \[  B^i = \zeta \,  X \,  A^i \,  X^{-1} \qquad \text{for all } i,  \]
+</div>
+<p> then for every system size&#160;\(N\) and configuration&#160;\(\sigma \) one has </p>
+<div class="displaymath" id="a0000000980">
+  \[  V^{(N)}(B)_\sigma = \zeta ^N V^{(N)}(A)_\sigma .  \]
+</div>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000990">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> Combine gauge covariance of word evaluation with scalar scaling, then take traces. </p>
+
+  </div>
+</div>
+<h1 id="a0000000994">2.4 Injectivity and normality</h1>
+<div class="definition_thmwrapper theorem-style-definition" id="def:injective">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">2.21</span>
+    <span class="definition_thmtitle">Injectivity</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-mps.html#def:injective">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mps.html#def:mps_tensor">Definition 2.1</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.IsInjective" class="lean_decl">MPSTensor.IsInjective</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>   A tensor&#160;\(A\) is <em>injective</em> if its matrices span the full matrix algebra: \(\operatorname{span}_{\mathbb {C}}\{ A^i : i = 0,\ldots ,d{-}1\}  = M_{D}(\mathbb {C})\). </p>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:l_blk_injective">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">2.22</span>
+    <span class="definition_thmtitle">\(L\)-block injectivity</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-mps.html#def:l_blk_injective">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mps.html#def:mps_tensor">Definition 2.1</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.IsNBlkInjective" class="lean_decl">MPSTensor.IsNBlkInjective</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>   A tensor&#160;\(A\) is <em>\(L\)-block injective</em> if \(\operatorname{span}_{\mathbb {C}}\{ A^{i_1} \cdots A^{i_L} : (i_1,\ldots ,i_L) \in \{ 0,\ldots ,d{-}1\} ^L\}  = M_{D}(\mathbb {C})\). An injective tensor is \(1\)-block injective. </p>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:normal">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">2.23</span>
+    <span class="definition_thmtitle">Normal tensor</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-mps.html#def:normal">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mps.html#def:l_blk_injective">Definition 2.22</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.IsNormal" class="lean_decl">MPSTensor.IsNormal</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>   A tensor&#160;\(A\) is <em>normal</em> <span class="cite">
+</span> if there exists a finite \(L_0\) such that \(A\) is \(L_0\)-block injective. </p>
+
+  </div>
+</div>
+<div class="remark_thmwrapper theorem-style-remark" id="a0000001066">
+  <div class="remark_thmheading">
+    <span class="remark_thmcaption">
+    Remark
+    </span>
+    <span class="remark_thmlabel">2.24</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-mps.html#a0000001066">#</a>
+    
+    
+    
+        </div>
+  </div>
+  <div class="remark_thmcontent">
+  <p>The algebraic characterization of normality in Definition&#160;<a href="ch-mps.html#def:normal">2.23</a> — eventual full matrix span, equivalently eventual block injectivity — is equivalent to the spectral characterization used in <span class="cite">
+	(
+	
+</span>: after TP normalization, the transfer map \(\mathcal{E}_A\) is a primitive channel, equivalently irreducible with trivial peripheral spectrum. This equivalence is proved in <span class="cite">
+	(
+	
+</span>. In what follows, the directions of the equivalence are supplied by Theorem&#160;<a href="ch-wielandt.html#thm:primitive_implies_irreducible">10.50</a>, Theorem&#160;<a href="ch-wielandt.html#thm:irred_tensor_aperiodic_normal">10.60</a>, and Theorem&#160;<a href="ch-canonical.html#thm:blocking_primitivity">11.29</a>. In particular, every subsequent use of “normal” here refers to this single notion; Definition&#160;<a href="ch-canonical.html#def:is_normal_canonical_form">11.31</a> employs the spectral formulation, but it describes the same class of tensors. </p>
+
+  </div>
+</div>
+<h1 id="a0000001084">2.5 Canonical form</h1>
+<div class="definition_thmwrapper theorem-style-definition" id="def:canonical_form">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">2.25</span>
+    <span class="definition_thmtitle">Block-injective canonical form</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-mps.html#def:canonical_form">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mps.html#def:mps_tensor">Definition 2.1</a></li>
+          
+          <li><a href="ch-mps.html#def:injective">Definition 2.21</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.CanonicalForm" class="lean_decl">MPSTensor.CanonicalForm</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>   Here, a <em>block-injective canonical form</em> for a tensor consists of: </p>
+<ol class="enumerate">
+  <li><p>a number of blocks \(r \ge 1\), </p>
+</li>
+  <li><p>bond dimensions \(D_1, \ldots , D_r\), </p>
+</li>
+  <li><p>injective tensors \(\{ A_k^i\} _{i=0}^{d-1}\) with \(A_k^i \in M_{D_k}(\mathbb {C})\) for each block \(k \in \{ 1,\ldots ,r\} \), </p>
+</li>
+  <li><p>scaling factors \(\mu _1, \ldots , \mu _r \in \mathbb {C}\). </p>
+</li>
+</ol>
+<p> The associated tensor is the block-diagonal tensor </p>
+<div class="displaymath" id="a0000001139">
+  \[  A^i \; =\;  \bigoplus _{k=1}^{r} \mu _k \,  A_k^i.  \]
+</div>
+<p> This is the block-injective version of the canonical-form data; see&#160;<span class="cite">
+</span> and&#160;<span class="cite">
+</span>. </p>
+
+  </div>
+</div>
+<div class="remark_thmwrapper theorem-style-remark" id="rem:cf_injective_vs_normal">
+  <div class="remark_thmheading">
+    <span class="remark_thmcaption">
+    Remark
+    </span>
+    <span class="remark_thmlabel">2.26</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-mps.html#rem:cf_injective_vs_normal">#</a>
+    
+    
+    
+        </div>
+  </div>
+  <div class="remark_thmcontent">
+  <p>Here we use the block-injective canonical form: each block is injective in the sense of Definition&#160;<a href="ch-mps.html#def:injective">2.21</a>. This is stronger than the NT-block canonical form of <span class="cite">
+</span>, where the blocks are only normal in the spectral sense. Chapter&#160;<a href="ch-canonical.html">11</a> treats the normal and periodic canonical forms needed for the general multi-block theory, whereas the present section isolates the stronger block-injective form used in the injective and block-injective arguments. </p>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:block_diagonal_tensor">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">2.27</span>
+    <span class="definition_thmtitle">Block-diagonal tensor from blocks</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-mps.html#def:block_diagonal_tensor">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mps.html#def:mps_tensor">Definition 2.1</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.toTensorFromBlocks" class="lean_decl">MPSTensor.toTensorFromBlocks</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>   Given \(r\) blocks with bond dimensions \((D_k)_{k=1}^r\), per-block tensors \(\{ A_k^i\} \), and scaling factors \((\mu _k)_{k=1}^r\), the associated <em>block-diagonal tensor</em> is the tensor of total bond dimension \(D = \sum _{k=1}^r D_k\) defined by </p>
+<div class="displaymath" id="a0000001193">
+  \[  A^i \; =\;  \bigoplus _{k=1}^{r} \mu _k \,  A_k^i.  \]
+</div>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:mpv_decomposition">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">2.28</span>
+    <span class="theorem_thmtitle">MPV decomposition</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-mps.html#thm:mpv_decomposition">#</a>
+    
+    <a class="icon proof" href="ch-mps.html#a0000001249"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mps.html#def:block_diagonal_tensor">Definition 2.27</a></li>
+          
+          <li><a href="ch-mps.html#def:mpv">Definition 2.4</a></li>
+          
+          <li><a href="ch-mps.html#def:block_diagonal_tensor">Definition 2.27</a></li>
+          
+          <li><a href="ch-mps.html#def:mpv">Definition 2.4</a></li>
+          
+          <li><a href="ch-mps.html#lem:eval_word_smul">Lemma 2.15</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.mpv_toTensorFromBlocks_eq_sum" class="lean_decl">MPSTensor.mpv_toTensorFromBlocks_eq_sum</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   The MPV of a block-diagonal tensor decomposes as </p>
+<div class="displaymath" id="a0000001212">
+  \[  |V^{(N)}(A)\rangle  \; =\;  \sum _{k=1}^{r} \mu _k^N \,  |V^{(N)}(A_k)\rangle .  \]
+</div>
+<p> Equivalently, for each configuration \(\sigma \) one has </p>
+<div class="displaymath" id="a0000001231">
+  \[  V^{(N)}(A)_\sigma \; =\;  \sum _{k=1}^{r} \mu _k^N \,  V^{(N)}(A_k)_\sigma .  \]
+</div>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000001249">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> For each physical index&#160;\(i\), the block-diagonal tensor \(A^i = \bigoplus _k \mu _k A_k^i\) is a block-diagonal matrix. By Lemma&#160;<a href="ch-mps.html#lem:eval_word_smul">2.15</a>, the word evaluation of each block picks up a factor \(\mu _k^{|w|}\), and the full word evaluation is block-diagonal with blocks \(\mu _k^N A_k^w\). Taking the trace of a block-diagonal matrix gives the sum of the block traces: \(\operatorname{tr}(A^w) = \sum _k \mu _k^N \operatorname{tr}(A_k^w)\). </p>
+
+  </div>
+</div>
+<h1 id="a0000001284">2.6 Blocking</h1>
+<div class="definition_thmwrapper theorem-style-definition" id="def:blocked_tensor">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">2.29</span>
+    <span class="definition_thmtitle">Blocked tensor</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-mps.html#def:blocked_tensor">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mps.html#def:mps_tensor">Definition 2.1</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.blockTensor" class="lean_decl">MPSTensor.blockTensor</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>   Given a tensor&#160;\(A\) and a blocking length \(L\), the <em>\(L\)-blocked tensor</em> is the tensor with physical index set \(\{ 0,\ldots ,d{-}1\} ^L\) (hence physical dimension \(d^L\)) and the same bond dimension&#160;\(D\), whose matrices are indexed by words \((i_1, \ldots , i_L) \in \{ 0,\ldots ,d{-}1\} ^L\): </p>
+<div class="displaymath" id="a0000001317">
+  \[  (A^{[L]})^{(i_1, \ldots , i_L)} \; =\;  A^{i_1} A^{i_2} \cdots A^{i_L}.  \]
+</div>
+
+  </div>
+</div>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:eval_word_block">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">2.30</span>
+    <span class="lemma_thmtitle">Blocked word evaluation</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-mps.html#lem:eval_word_block">#</a>
+    
+    <a class="icon proof" href="ch-mps.html#a0000001361"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mps.html#def:blocked_tensor">Definition 2.29</a></li>
+          
+          <li><a href="ch-mps.html#def:eval_word">Definition 2.2</a></li>
+          
+          <li><a href="ch-mps.html#lem:eval_word_append">Lemma 2.3</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.evalWord_blockTensor" class="lean_decl">MPSTensor.evalWord_blockTensor</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>   If \(w = (J_1, \ldots , J_m)\) is a word in the blocked alphabet, where each \(J_k\) is an \(L\)-tuple in \(\{ 0, \ldots , d{-}1\} ^L\), then concatenating the block words gives a word \(\widetilde{w}\) of length \(mL\) in the original alphabet and one has </p>
+<div class="displaymath" id="a0000001355">
+  \[  (A^{[L]})^w = A^{\widetilde{w}}.  \]
+</div>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000001361">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> Induct on the blocked word \(w\) and split off the first block word. Lemma&#160;<a href="ch-mps.html#lem:eval_word_append">2.3</a> turns concatenation of blocks into multiplication of the corresponding evaluations. </p>
+
+  </div>
+</div>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:mpv_block">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">2.31</span>
+    <span class="lemma_thmtitle">Blocking preserves MPV coefficients</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-mps.html#lem:mpv_block">#</a>
+    
+    <a class="icon proof" href="ch-mps.html#a0000001414"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mps.html#def:blocked_tensor">Definition 2.29</a></li>
+          
+          <li><a href="ch-mps.html#def:mpv">Definition 2.4</a></li>
+          
+          <li><a href="ch-mps.html#def:blocked_tensor">Definition 2.29</a></li>
+          
+          <li><a href="ch-mps.html#def:mpv">Definition 2.4</a></li>
+          
+          <li><a href="ch-mps.html#lem:eval_word_block">Lemma 2.30</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.mpv_blockTensor_eq_mpv" class="lean_decl">MPSTensor.mpv_blockTensor_eq_mpv</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>   For each basis state \(\sigma = (\sigma _1, \ldots , \sigma _N)\) of the blocked system, where each \(\sigma _k\) is an \(L\)-tuple in \(\{ 0, \ldots , d{-}1\} ^L\), there exists a basis state \(\widetilde{\sigma } = (\widetilde{\sigma }_1, \ldots , \widetilde{\sigma }_{NL})\) of the original system such that </p>
+<div class="displaymath" id="a0000001402">
+  \[  V^{(N)}(A^{[L]})_\sigma \; =\;  V^{(NL)}(A)_{\widetilde{\sigma }}.  \]
+</div>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000001414">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> Concatenate the block words and apply the blocked word evaluation lemma (Lemma&#160;<a href="ch-mps.html#lem:eval_word_block">2.30</a>). </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:blocking_same_mpv">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">2.32</span>
+    <span class="theorem_thmtitle">Blocking preserves same MPV</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-mps.html#thm:blocking_same_mpv">#</a>
+    
+    <a class="icon proof" href="ch-mps.html#a0000001435"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mps.html#def:same_mpv">Definition 2.11</a></li>
+          
+          <li><a href="ch-mps.html#def:blocked_tensor">Definition 2.29</a></li>
+          
+          <li><a href="ch-mps.html#lem:mpv_block">Lemma 2.31</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.SameMPV.blockTensor" class="lean_decl">MPSTensor.SameMPV.blockTensor</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   If \(A\) and \(B\) generate the same MPV family, then for any blocking length&#160;\(L\), the blocked tensors \(A^{[L]}\) and \(B^{[L]}\) also generate the same MPV family. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000001435">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> By Lemma&#160;<a href="ch-mps.html#lem:mpv_block">2.31</a>, each MPV coefficient of the blocked tensor \(A^{[L]}\) equals a coefficient of \(A\) at the corresponding concatenated configuration. The same holds for \(B^{[L]}\) (with the same concatenated configuration). Since \(A\) and \(B\) agree on all configurations, so do \(A^{[L]}\) and \(B^{[L]}\). </p>
+
+  </div>
+</div>
+<h1 id="a0000001452">2.7 MPV overlap</h1>
+<div class="definition_thmwrapper theorem-style-definition" id="def:mpv_state">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">2.33</span>
+    <span class="definition_thmtitle">MPV as Hilbert-space vector</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-mps.html#def:mpv_state">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mps.html#def:mpv">Definition 2.4</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.mpvState" class="lean_decl">MPSTensor.mpvState</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>   We regard \(|V^{(N)}(A)\rangle \) as an element of \(\mathbb {C}^{d^N}\) indexed by configurations \(\sigma \in \{ 0,\ldots ,d{-}1\} ^N\), with \(\sigma \)-component \(V^{(N)}(A)_\sigma \) as in Definition&#160;<a href="ch-mps.html#def:mpv">2.4</a>. This allows us to use the standard Euclidean inner product on \(\mathbb {C}^{d^N}\). </p>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:mpv_inner">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">2.34</span>
+    <span class="definition_thmtitle">MPV inner product</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-mps.html#def:mpv_inner">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mps.html#def:mpv_state">Definition 2.33</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.mpvInner" class="lean_decl">MPSTensor.mpvInner</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>   The <em>MPV inner product</em> between two tensors \(A\) and \(B\) at system size&#160;\(N\) is </p>
+<div class="displaymath" id="a0000001500">
+  \[  \langle V^{(N)}(A) | V^{(N)}(B) \rangle  \; :=\;  \sum _{\sigma \in \{ 0,\ldots ,d{-}1\} ^N} \overline{V^{(N)}(A)_\sigma } \;  V^{(N)}(B)_\sigma ,  \]
+</div>
+<p> i.e. the Euclidean inner product on \(\mathbb {C}^{d^N}\) (conjugate-linear in the first argument). </p>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:mpv_overlap">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">2.35</span>
+    <span class="definition_thmtitle">MPV overlap</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-mps.html#def:mpv_overlap">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mps.html#def:mpv">Definition 2.4</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.mpvOverlap" class="lean_decl">MPSTensor.mpvOverlap</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>   The <em>MPV overlap</em> between two tensors \(A\) (of bond dimension \(D_1\)) and \(B\) (of bond dimension \(D_2\)) at system size&#160;\(N\) is </p>
+<div class="displaymath" id="a0000001547">
+  \[  O_{AB}(N) \; :=\;  \sum _{\sigma \in \{ 0,\ldots ,d{-}1\} ^N} V^{(N)}(A)_\sigma \;  \overline{V^{(N)}(B)_\sigma }.  \]
+</div>
+<p> This is the bilinear overlap (without complex conjugation) used later. By Lemma&#160;<a href="ch-mps.html#lem:overlap_eq_inner">2.36</a>, it is the complex conjugate of the Hilbert-space inner product from Definition&#160;<a href="ch-mps.html#def:mpv_inner">2.34</a>. </p>
+
+  </div>
+</div>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:overlap_eq_inner">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">2.36</span>
+    <span class="lemma_thmtitle">Overlap equals conjugate inner product</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-mps.html#lem:overlap_eq_inner">#</a>
+    
+    <a class="icon proof" href="ch-mps.html#a0000001587"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mps.html#def:mpv_overlap">Definition 2.35</a></li>
+          
+          <li><a href="ch-mps.html#def:mpv_inner">Definition 2.34</a></li>
+          
+          <li><a href="ch-mps.html#def:mpv_overlap">Definition 2.35</a></li>
+          
+          <li><a href="ch-mps.html#def:mpv_inner">Definition 2.34</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.mpvOverlap_eq_star_mpvInner" class="lean_decl">MPSTensor.mpvOverlap_eq_star_mpvInner</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>   \(O_{AB}(N) = \overline{\langle V^{(N)}(A) | V^{(N)}(B) \rangle }\). </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000001587">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> The overlap sums \(V_\sigma \,  \overline{W_\sigma }\) while the inner product sums \(\overline{V_\sigma } \,  W_\sigma \). Complex conjugation swaps these. </p>
+
+  </div>
+</div>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:overlap_eq_of_pos_mpv">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">2.37</span>
+    <span class="lemma_thmtitle">Overlap determined by positive-length MPV</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-mps.html#lem:overlap_eq_of_pos_mpv">#</a>
+    
+    <a class="icon proof" href="ch-mps.html#a0000001634"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mps.html#def:mpv_overlap">Definition 2.35</a></li>
+          
+          <li><a href="ch-mps.html#def:mpv_overlap">Definition 2.35</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.mpvOverlap_eq_of_pos_mpv_eq" class="lean_decl">MPSTensor.mpvOverlap_eq_of_pos_mpv_eq</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>  If \(V^{(N)}(A)_\sigma = V^{(N)}(A')_\sigma \) and \(V^{(N)}(B)_\sigma = V^{(N)}(B')_\sigma \) for all \(N {\gt} 0\) and all \(\sigma \), then \(O_{AB}(N) = O_{A'B'}(N)\) for all positive&#160;\(N\). </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000001634">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> Direct pointwise rewriting: if the MPV coefficients agree for all positive chain lengths, the overlap sums are identical. </p>
+
+  </div>
+</div>
+
+</div> <!--main-text -->
+</div> <!-- content-wrapper -->
+</div> <!-- content -->
+</div> <!-- wrapper -->
+
+<nav class="prev_up_next">
+  <svg  id="showmore-minus" class="icon icon-eye-minus showmore"><use xlink:href="symbol-defs.svg#icon-eye-minus"></use></svg>
+
+  <svg  id="showmore-plus" class="icon icon-eye-plus showmore"><use xlink:href="symbol-defs.svg#icon-eye-plus"></use></svg>
+
+  <a href="ch-intro.html" title="Introduction"><svg  class="icon icon-arrow-left "><use xlink:href="symbol-defs.svg#icon-arrow-left"></use></svg>
+</a>
+  <a href="index.html" title="Fundamental Theorem of Matrix Product States"><svg  class="icon icon-arrow-up "><use xlink:href="symbol-defs.svg#icon-arrow-up"></use></svg>
+</a>
+  <a href="ch-mpdo.html" title="Matrix Product Operators and Density Operators"><svg  class="icon icon-arrow-right "><use xlink:href="symbol-defs.svg#icon-arrow-right"></use></svg>
+</a>
+</nav>
+
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/plastex.js"></script>
+<script type="text/javascript" src="js/svgxuse.js"></script>
+<script type="text/javascript" src="js/js.cookie.min.js"></script>
+<script type="text/javascript" src="js/showmore.js"></script>
+</body>
+</html>

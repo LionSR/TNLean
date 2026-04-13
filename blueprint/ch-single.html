@@ -12,8 +12,9 @@
 <meta name="generator" content="plasTeX" />
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Bibliography</title>
-<link rel="prev" href="ch-examples.html" title="Concrete Examples" />
+<title>The Single-Block Fundamental Theorem</title>
+<link rel="next" href="ch-channels.html" title="Quantum Channels and Positive Maps" />
+<link rel="prev" href="ch-mpdo.html" title="Matrix Product Operators and Density Operators" />
 <link rel="up" href="index.html" title="Fundamental Theorem of Matrix Product States" />
 <link rel="stylesheet" href="styles/theme-white.css" />
 <link rel="stylesheet" href="styles/amsthm.css" />
@@ -90,10 +91,10 @@
 
   </ul>
  </li>
-<li class="">
+<li class=" active current">
   <a href="ch-single.html"><span class="toc_ref">4</span> <span class="toc_entry">The Single-Block Fundamental Theorem</span></a>
-  <span class="expand-toc">▶</span>
-  <ul class="sub-toc-1">
+  <span class="expand-toc">▼</span>
+  <ul class="sub-toc-1 active">
      <li class="">
   <a href="ch-single.html#a0000002528"><span class="toc_ref">4.1</span> <span class="toc_entry">Trace pairing</span></a>
  </li>
@@ -820,7 +821,7 @@
 
   </ul>
  </li>
-<li class=" active current">
+<li class="">
   <a href="sect0001.html"><span class="toc_ref">21</span> <span class="toc_entry">Bibliography</span></a>
  </li>
 <li ><a href="dep_graph_document.html">Dependency graph</a></li>
@@ -832,10 +833,1009 @@
 
 
 <div class="main-text">
-<div class="bibliography">
-<h1>Bibliography</h1>
+<h1 id="ch:single">4 The Single-Block Fundamental Theorem</h1>
 
+<p>This chapter proves that if an injective MPS tensor&#160;\(A\) generates the same MPV family as another tensor&#160;\(B\) of the same bond dimension, then \(A\) and \(B\) are gauge equivalent. The proof is purely algebraic and does not use the later overlap or normal-form reductions. The trace-pairing maps introduced below are auxiliary devices attached to the chosen generating families \(\{ A^i\} \) and \(\{ B^i\} \); they serve only to construct the linear map that is later shown to be a gauge transform. </p>
+<h1 id="a0000002528">4.1 Trace pairing</h1>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:trace_nondeg">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">4.1</span>
+    <span class="theorem_thmtitle">Nondegeneracy of the trace pairing</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-single.html#thm:trace_nondeg">#</a>
+    
+    <a class="icon proof" href="ch-single.html#a0000002547"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/Matrix.trace_mul_right_eq_zero_iff" class="lean_decl">Matrix.trace_mul_right_eq_zero_iff</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>  For \(M \in M_{D}(\mathbb {C})\), \(\operatorname{tr}(M N) = 0\) for all \(N \in M_{D}(\mathbb {C})\) if and only if \(M = 0\). </p>
+
+  </div>
 </div>
+<div class="proof_wrapper" id="a0000002547">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Testing against the matrix units \(E_{ji}\) (the matrix with \(1\) in position \((j,i)\) and \(0\) elsewhere) gives \(\operatorname{tr}(E_{ji} M) = M_{ij}\). Hence if \(\operatorname{tr}(MN) = 0\) for all&#160;\(N\), then every entry of \(M\) vanishes. </p>
+
+  </div>
+</div>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:same_mpv_trace">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">4.2</span>
+    <span class="lemma_thmtitle">Same MPV implies trace agreement</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-single.html#lem:same_mpv_trace">#</a>
+    
+    <a class="icon proof" href="ch-single.html#a0000002576"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mps.html#def:same_mpv">Definition 2.11</a></li>
+          
+          <li><a href="ch-mps.html#def:eval_word">Definition 2.2</a></li>
+          
+          <li><a href="ch-mps.html#def:mpv">Definition 2.4</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.SameMPV.trace_evalWord" class="lean_decl">MPSTensor.SameMPV.trace_evalWord</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>   If \(A\) and \(B\) generate the same MPV family, then \(\operatorname{tr}(A^w) = \operatorname{tr}(B^w)\) for every word&#160;\(w\). </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000002576">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> Viewing the word \(w\) as a configuration of length&#160;\(|w|\), Definition&#160;<a href="ch-mps.html#def:mpv">2.4</a> gives the corresponding MPV coefficient as the trace coefficient \(c_w(A)=\operatorname{tr}(A^w)\). The same-MPV hypothesis gives equality at every system size. </p>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:trace_pairing_map">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">4.3</span>
+    <span class="definition_thmtitle">Trace pairing map</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-single.html#def:trace_pairing_map">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mps.html#def:mps_tensor">Definition 2.1</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.traceMulRightPi" class="lean_decl">MPSTensor.traceMulRightPi</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>   For a tensor&#160;\(A\), attach to the chosen family \(\{ A^i\} \) the auxiliary linear map \(\Phi _A : M_{D}(\mathbb {C}) \to \mathbb {C}^d\) defined by </p>
+<div class="displaymath" id="a0000002611">
+  \[  \Phi _A(M)_i = \operatorname{tr}(M \cdot A^i).  \]
+</div>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:trace_pairing_injective">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">4.4</span>
+    <span class="theorem_thmtitle">Injectivity of the trace pairing map</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-single.html#thm:trace_pairing_injective">#</a>
+    
+    <a class="icon proof" href="ch-single.html#a0000002631"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-single.html#def:trace_pairing_map">Definition 4.3</a></li>
+          
+          <li><a href="ch-mps.html#def:injective">Definition 2.21</a></li>
+          
+          <li><a href="ch-single.html#thm:trace_nondeg">Theorem 4.1</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.traceMulRightPi_ker_eq_bot" class="lean_decl">MPSTensor.traceMulRightPi_ker_eq_bot</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   If \(A\) is injective, then \(\ker \Phi _A = \{ 0\} \). </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000002631">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> If \(\Phi _A(M) = 0\), then \(\operatorname{tr}(M \cdot A^i) = 0\) for all&#160;\(i\). Since the \(\{ A^i\} \) span \(M_{D}(\mathbb {C})\), this gives \(\operatorname{tr}(M N) = 0\) for all&#160;\(N\), so \(M = 0\) by Theorem&#160;<a href="ch-single.html#thm:trace_nondeg">4.1</a>. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:trace_ne_zero">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">4.5</span>
+    <span class="theorem_thmtitle">Nonvanishing trace on injective tensors</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-single.html#thm:trace_ne_zero">#</a>
+    
+    <a class="icon proof" href="ch-single.html#a0000002673"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mps.html#def:injective">Definition 2.21</a></li>
+          
+          <li><a href="ch-mps.html#def:same_mpv">Definition 2.11</a></li>
+          
+          <li><a href="ch-single.html#lem:same_mpv_trace">Lemma 4.2</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.trace_ne_zero_of_injective" class="lean_decl">MPSTensor.trace_ne_zero_of_injective</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   If \(D \ge 1\), \(A\) is injective, \(A\) and \(B\) generate the same MPV family, and \(B^i = 0\) for all&#160;\(i\), then we have a contradiction. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000002673">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> If \(B^i = 0\) for all&#160;\(i\), then Lemma&#160;<a href="ch-single.html#lem:same_mpv_trace">4.2</a> gives \(\operatorname{tr}(A^w) = 0\) for every word&#160;\(w\), in particular for all length-1 words. Since the \(\{ A^i\} \) span \(M_{D}(\mathbb {C})\), the trace functional vanishes identically, contradicting \(\operatorname{tr}(\mathbb {1}_D) = D \neq 0\). </p>
+
+  </div>
+</div>
+<h1 id="a0000002700">4.2 Linear extension</h1>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:linear_ext">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">4.6</span>
+    <span class="theorem_thmtitle">Existence and uniqueness of the linear extension</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-single.html#thm:linear_ext">#</a>
+    
+    <a class="icon proof" href="ch-single.html#a0000002724"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mps.html#def:injective">Definition 2.21</a></li>
+          
+          <li><a href="ch-mps.html#def:same_mpv">Definition 2.11</a></li>
+          
+          <li><a href="ch-single.html#thm:trace_pairing_injective">Theorem 4.4</a></li>
+          
+          <li><a href="ch-single.html#lem:same_mpv_trace">Lemma 4.2</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.linearExtension_exists_unique" class="lean_decl">MPSTensor.linearExtension_exists_unique</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   If \(A\) is injective and \(A\), \(B\) generate the same MPV family, then there exists a unique linear map \(T : M_{D}(\mathbb {C}) \to M_{D}(\mathbb {C})\) satisfying \(T(A^i) = B^i\) for all&#160;\(i\). </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000002724">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> Write \(\ell _A : \mathbb {C}^d \to M_{D}(\mathbb {C})\) for the map that sends a coefficient vector \(c\) to \(\sum _i c_i A^i\) (linear combination with the \(A^i\)). Applying Lemma&#160;<a href="ch-single.html#lem:same_mpv_trace">4.2</a> to all words of length&#160;\(2\) shows \(\Phi _A \circ \ell _A = \Phi _B \circ \ell _B\). Since \(A\) is injective, \(\ell _A\) is surjective, giving \(\mathrm{range}(\Phi _A) \subseteq \mathrm{range}(\Phi _B)\). By Theorem&#160;<a href="ch-single.html#thm:trace_pairing_injective">4.4</a>, \(\ker \Phi _A = \{ 0\} \), so rank–nullity gives \(\dim (\mathrm{range}(\Phi _A)) = \dim (M_{D}(\mathbb {C}))\). Hence \(\dim (\mathrm{range}(\Phi _B)) \ge \dim (M_{D}(\mathbb {C}))\), and rank–nullity again gives \(\ker \Phi _B = \{ 0\} \). A left inverse \(g\) of \(\Phi _B\) gives \(T := g \circ \Phi _A\), and uniqueness follows because the \(\{ A^i\} \) span \(M_{D}(\mathbb {C})\). </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:linear_ext_mul">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">4.7</span>
+    <span class="theorem_thmtitle">Multiplicativity of the linear extension</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-single.html#thm:linear_ext_mul">#</a>
+    
+    <a class="icon proof" href="ch-single.html#a0000002851"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mps.html#def:injective">Definition 2.21</a></li>
+          
+          <li><a href="ch-mps.html#def:same_mpv">Definition 2.11</a></li>
+          
+          <li><a href="ch-single.html#thm:linear_ext">Theorem 4.6</a></li>
+          
+          <li><a href="ch-single.html#lem:same_mpv_trace">Lemma 4.2</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.linearExtension_mul" class="lean_decl">MPSTensor.linearExtension_mul</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   If \(A\) is injective and \(A\), \(B\) generate the same MPV family, and \(T : M_{D}(\mathbb {C}) \to M_{D}(\mathbb {C})\) is the unique linear map satisfying \(T(A^i) = B^i\) for all&#160;\(i\), then \(T(MN) = T(M) T(N)\) for all \(M, N \in M_{D}(\mathbb {C})\). </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000002851">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> <b class="bfseries">Step 1</b> (\(\Phi _B \circ T = \Phi _A\)). Applying Lemma&#160;<a href="ch-single.html#lem:same_mpv_trace">4.2</a> to words of length&#160;\(2\) gives \(\Phi _B(T(A^i)) = \Phi _B(B^i) = \Phi _A(A^i)\) for all&#160;\(i\). Since the \(\{ A^i\} \) span \(M_{D}(\mathbb {C})\), \(\Phi _B \circ T = \Phi _A\). </p>
+<p><b class="bfseries">Step 2</b> (\(T(A^i A^j) = B^i B^j\)). Lemma&#160;<a href="ch-single.html#lem:same_mpv_trace">4.2</a> applied to the word \((i,j,k)\) gives \(\operatorname{tr}(A^i A^j A^k) = \operatorname{tr}(B^i B^j B^k)\) for all \(i,j,k\). So \(\Phi _B(T(A^i A^j))_k = \Phi _A(A^i A^j)_k = \operatorname{tr}(A^i A^j A^k) = \operatorname{tr}(B^i B^j B^k) = \Phi _B(B^i B^j)_k\). The same rank–nullity argument used in the proof of Theorem&#160;<a href="ch-single.html#thm:linear_ext">4.6</a> gives \(\ker \Phi _B = \{ 0\} \). Hence \(T(A^i A^j) = B^i B^j\). </p>
+<p><b class="bfseries">Step 3</b> (bilinear extension). For fixed&#160;\(j\), the maps \(M \mapsto T(M \cdot A^j)\) and \(M \mapsto T(M) \cdot B^j\) agree on the spanning set \(\{ A^i\} \), hence on all of \(M_{D}(\mathbb {C})\). Applying this once more with&#160;\(j\) replaced by a general matrix gives full multiplicativity. </p>
+
+  </div>
+</div>
+<h1 id="a0000002967">4.3 Simplicity and Skolem–Noether</h1>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:simplicity">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">4.8</span>
+    <span class="theorem_thmtitle">Simplicity of \(M_{D}(\mathbb {C})\)</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-single.html#thm:simplicity">#</a>
+    
+    <a class="icon proof" href="ch-single.html#a0000002981"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.linear_mul_endomorphism_bijective" class="lean_decl">MPSTensor.linear_mul_endomorphism_bijective</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>  A nonzero multiplicative \(\mathbb {C}\)-linear endomorphism of \(M_{D}(\mathbb {C})\) is bijective. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000002981">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>The kernel of a multiplicative linear map is a two-sided ideal. Since \(M_{D}(\mathbb {C})\) is a simple ring (it has no nontrivial two-sided ideals), the kernel is either \(\{ 0\} \) or \(M_{D}(\mathbb {C})\). The latter would force the map to be zero, contradicting the hypothesis. Hence the map is injective, and surjectivity follows from finite-dimensionality. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:skolem_noether">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">4.9</span>
+    <span class="theorem_thmtitle">Skolem–Noether</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-single.html#thm:skolem_noether">#</a>
+    
+    <a class="icon proof" href="ch-single.html#a0000003027"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.skolemNoether_matrix" class="lean_decl">MPSTensor.skolemNoether_matrix</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>  Every \(\mathbb {C}\)-algebra automorphism of \(M_{D}(\mathbb {C})\) is inner: for any \(f \in \mathrm{Aut}_{\mathbb {C}\text{-alg}}(M_{D}(\mathbb {C}))\), there exists \(X \in \mathrm{GL}_D(\mathbb {C})\) such that \(f(M) = X M X^{-1}\) for all \(M\). </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000003027">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Via the canonical identification \(M_{D}(\mathbb {C}) \cong \mathrm{End}_{\mathbb {C}}(\mathbb {C}^D)\), the automorphism \(f\) induces an automorphism of \(\mathrm{End}_{\mathbb {C}}(\mathbb {C}^D)\). Every algebra automorphism of \(\mathrm{End}(V)\) is conjugation by an invertible linear map (this is a standard result in the theory of central simple algebras). Translating back to matrices gives the invertible&#160;\(X\). </p>
+
+  </div>
+</div>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:linear_map_to_alg">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">4.10</span>
+    <span class="lemma_thmtitle">Promotion to algebra homomorphism</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-single.html#lem:linear_map_to_alg">#</a>
+    
+    <a class="icon proof" href="ch-single.html#a0000003080"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.linearMapToAlgHom" class="lean_decl">MPSTensor.linearMapToAlgHom</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>  If \(T : M_{D}(\mathbb {C}) \to M_{D}(\mathbb {C})\) is a multiplicative surjective \(\mathbb {C}\)-linear map, then \(T(\mathbb {1}) = \mathbb {1}\). Equivalently, the same underlying function defines a \(\mathbb {C}\)-algebra homomorphism. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000003080">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>By surjectivity, there exists \(X\) with \(T(X) = \mathbb {1}\). Then \(T(\mathbb {1}) = T(X) \cdot T(\mathbb {1}) = T(X \cdot \mathbb {1}) = T(X) = \mathbb {1}\), using multiplicativity and \(T(X) = \mathbb {1}\). With \(T(\mathbb {1}) = \mathbb {1}\) established, \(T\) preserves the unit and hence is a \(\mathbb {C}\)-algebra homomorphism. </p>
+
+  </div>
+</div>
+<h1 id="a0000003110">4.4 Proof of the single-block theorem</h1>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:ft_single">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">4.11</span>
+    <span class="theorem_thmtitle">Single-block Fundamental Theorem</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-single.html#thm:ft_single">#</a>
+    
+    <a class="icon proof" href="ch-single.html#a0000003134"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mps.html#def:injective">Definition 2.21</a></li>
+          
+          <li><a href="ch-mps.html#def:same_mpv">Definition 2.11</a></li>
+          
+          <li><a href="ch-mps.html#def:gauge_equiv">Definition 2.10</a></li>
+          
+          <li><a href="ch-single.html#thm:linear_ext">Theorem 4.6</a></li>
+          
+          <li><a href="ch-single.html#thm:linear_ext_mul">Theorem 4.7</a></li>
+          
+          <li><a href="ch-single.html#thm:simplicity">Theorem 4.8</a></li>
+          
+          <li><a href="ch-single.html#thm:trace_ne_zero">Theorem 4.5</a></li>
+          
+          <li><a href="ch-single.html#lem:linear_map_to_alg">Lemma 4.10</a></li>
+          
+          <li><a href="ch-single.html#thm:skolem_noether">Theorem 4.9</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.fundamentalTheorem_singleBlock" class="lean_decl">MPSTensor.fundamentalTheorem_singleBlock</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   Let \(A\) be an injective MPV tensor and let \(B\) be an MPV tensor of the same bond dimension. If \(A\) and \(B\) generate the same MPV family, then they are gauge equivalent: there exists \(X \in \mathrm{GL}_D(\mathbb {C})\) such that \(B^i = X A^i X^{-1}\) for all&#160;\(i\). </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000003134">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> By Theorem&#160;<a href="ch-single.html#thm:linear_ext">4.6</a>, there is a unique linear \(T\) with \(T(A^i) = B^i\). By Theorem&#160;<a href="ch-single.html#thm:linear_ext_mul">4.7</a>, \(T\) is multiplicative. \(T\) is nonzero: if \(T = 0\) then \(B^i = 0\) for all&#160;\(i\), contradicting Theorem&#160;<a href="ch-single.html#thm:trace_ne_zero">4.5</a>. By Theorem&#160;<a href="ch-single.html#thm:simplicity">4.8</a>, \(T\) is bijective. By Lemma&#160;<a href="ch-single.html#lem:linear_map_to_alg">4.10</a>, \(T\) is a \(\mathbb {C}\)-algebra automorphism. Theorem&#160;<a href="ch-single.html#thm:skolem_noether">4.9</a> gives an invertible \(X\) with \(T(M) = X M X^{-1}\), and evaluating at \(M = A^i\) yields \(B^i = X A^i X^{-1}\). </p>
+
+  </div>
+</div>
+<h1 id="a0000003175">4.5 Alternative fixed-length non-TI setup</h1>
+<p>The proof above treats a single translation-invariant tensor and equality of the full MPV family for all system sizes. The alternative algebraic proof of <span class="cite">
+</span> instead keeps a fixed periodic chain length and allows the local tensors to vary from site to site. The first step is therefore a separate setup for finite non-translation-invariant chains. </p>
+<div class="definition_thmwrapper theorem-style-definition" id="def:non_ti_chain">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">4.12</span>
+    <span class="definition_thmtitle">Periodic non-TI chain data</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-single.html#def:non_ti_chain">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mps.html#def:mps_tensor">Definition 2.1</a></li>
+          
+          <li><a href="ch-mps.html#def:injective">Definition 2.21</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSChainTensor" class="lean_decl">MPSChainTensor</a></li>
+          
+          <li><a href="../docs/find/#doc/MPSChainTensor.coeff" class="lean_decl">MPSChainTensor.coeff</a></li>
+          
+          <li><a href="../docs/find/#doc/MPSChainTensor.SameState" class="lean_decl">MPSChainTensor.SameState</a></li>
+          
+          <li><a href="../docs/find/#doc/MPSChainTensor.IsInjective" class="lean_decl">MPSChainTensor.IsInjective</a></li>
+          
+          <li><a href="../docs/find/#doc/MPSChainTensor.GaugeEquiv" class="lean_decl">MPSChainTensor.GaugeEquiv</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>   Fix a chain length \(n\). A <em>non-translation-invariant periodic MPS chain</em> consists of sitewise tensors </p>
+<div class="displaymath" id="a0000003187">
+  \[  A_k = \{ A_k^i\} _{i=0}^{d-1}, \qquad k = 0, \dots , n-1,  \]
+</div>
+<p> where each \(A_k^i \in M_{D}(\mathbb {C})\). For a basis configuration \(\sigma = (\sigma _0,\dots ,\sigma _{n-1})\), its coefficient is </p>
+<div class="displaymath" id="a0000003213">
+  \[  c_{A,\sigma } := \operatorname{tr}\! \bigl(A_0^{\sigma _0} A_1^{\sigma _1} \cdots A_{n-1}^{\sigma _{n-1}}\bigr).  \]
+</div>
+<p> Two such chains generate the <em>same chain state</em> if these coefficients agree for every \(\sigma \). The chain is <em>injective</em> if each local tensor \(A_k\) is injective in the usual single-site sense. Finally, two chains are <em>cyclically gauge equivalent</em> if there are invertible bond matrices \(Z_0,\dots ,Z_{n-1}\) such that </p>
+<div class="displaymath" id="a0000003245">
+  \[  B_k^i = Z_k A_k^i Z_{k+1}^{-1}  \]
+</div>
+<p> for every site \(k\) and physical index \(i\), with indices understood modulo \(n\) so that \(Z_n = Z_0\). Locally, this gauge relation is represented by </p>
+<div class="displaymath" id="a0000003261">
+  \[  \begin{array}{ccccc}& &  i & & \\ & &  \vert & & \\ \textcolor{red}{\bullet } &  \text{---} &  \bullet &  \text{---} &  \textcolor{red}{\bullet } \\ Z_k & & & &  Z_{k+1}^{-1} \end{array}  \]
+</div>
+<p> where the black node denotes the site tensor named in the surrounding formula and the two red side nodes denote the bond gauges on the neighboring virtual legs. </p>
+
+  </div>
+</div>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:chain_gauge_equiv_equivalence">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">4.13</span>
+    <span class="lemma_thmtitle">Cyclic gauge equivalence is an equivalence relation</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-single.html#lem:chain_gauge_equiv_equivalence">#</a>
+    
+    <a class="icon proof" href="ch-single.html#a0000003317"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-single.html#def:non_ti_chain">Definition 4.12</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSChainTensor.GaugeEquiv.refl" class="lean_decl">MPSChainTensor.GaugeEquiv.refl</a></li>
+          
+          <li><a href="../docs/find/#doc/MPSChainTensor.GaugeEquiv.symm" class="lean_decl">MPSChainTensor.GaugeEquiv.symm</a></li>
+          
+          <li><a href="../docs/find/#doc/MPSChainTensor.GaugeEquiv.trans" class="lean_decl">MPSChainTensor.GaugeEquiv.trans</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>      On fixed-length periodic chains, cyclic gauge equivalence is reflexive, symmetric, and transitive. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000003317">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Reflexivity uses the identity gauge on every bond. Symmetry inverts each bond gauge, and transitivity multiplies the gauges pointwise along the chain. </p>
+
+  </div>
+</div>
+
 </div> <!--main-text -->
 </div> <!-- content-wrapper -->
 </div> <!-- content -->
@@ -846,9 +1846,11 @@
 
   <svg  id="showmore-plus" class="icon icon-eye-plus showmore"><use xlink:href="symbol-defs.svg#icon-eye-plus"></use></svg>
 
-  <a href="ch-examples.html" title="Concrete Examples"><svg  class="icon icon-arrow-left "><use xlink:href="symbol-defs.svg#icon-arrow-left"></use></svg>
+  <a href="ch-mpdo.html" title="Matrix Product Operators and Density Operators"><svg  class="icon icon-arrow-left "><use xlink:href="symbol-defs.svg#icon-arrow-left"></use></svg>
 </a>
   <a href="index.html" title="Fundamental Theorem of Matrix Product States"><svg  class="icon icon-arrow-up "><use xlink:href="symbol-defs.svg#icon-arrow-up"></use></svg>
+</a>
+  <a href="ch-channels.html" title="Quantum Channels and Positive Maps"><svg  class="icon icon-arrow-right "><use xlink:href="symbol-defs.svg#icon-arrow-right"></use></svg>
 </a>
 </nav>
 
