@@ -831,6 +831,48 @@ the Perron--Frobenius fixed point.
     $*$-subalgebra.
 \end{theorem}
 
+\begin{theorem}[Wolf Cor.~6.6 --- complete positivity of $E_\sigma$]
+    \label{thm:scalar_conditional_expectation_isCPMap}
+    \lean{Kraus.scalarConditionalExpectation_isCPMap}
+    \leanok
+    \uses{def:scalar_conditional_expectation}
+    For any positive semidefinite $\sigma$, the scalar conditional
+    expectation $E_\sigma$ is a completely positive map.
+\end{theorem}
+\begin{proof}\leanok
+    Write $S=\sqrt{\sigma}$ and define the Kraus family
+    $K_{j,i}=\ket{j}\bra{i}\,S$ indexed by $(j,i)\in\{1,\dots,D\}^2$.
+    Using $\ket{j}\bra{i}\,M\,\ket{i}\bra{j} = M_{ii}\,\ket{j}\bra{j}$ and
+    summing first over $i$ and then over $j$,
+    \[
+        \sum_{j,i} K_{j,i}\,X\,K_{j,i}^\dagger
+        = \sum_j \ket{j}\bra{j}\,\operatorname{tr}(SXS)
+        = \operatorname{tr}(\sigma X)\,\Id,
+    \]
+    where we used cyclicity of the trace and $S^2=\sigma$.  Hence
+    $E_\sigma = (\operatorname{tr}\sigma)^{-1}\cdot\bigl(X\mapsto\sum_{j,i}K_{j,i}XK_{j,i}^\dagger\bigr)$
+    is the Kraus map scaled by the nonnegative real number
+    $(\operatorname{tr}\sigma)^{-1}$, and therefore completely positive.
+\end{proof}
+
+\begin{theorem}[Wolf Cor.~6.6 --- $\sigma$-trace preservation of $E_\sigma$]
+    \label{thm:scalar_conditional_expectation_preserves_weighted_trace}
+    \lean{Kraus.scalarConditionalExpectation_preserves_weighted_trace}
+    \leanok
+    \uses{def:scalar_conditional_expectation}
+    If $\operatorname{tr}\sigma\neq 0$, then for every $X$
+    \[
+        \operatorname{tr}\bigl(\sigma\,E_\sigma(X)\bigr)
+        = \operatorname{tr}(\sigma X).
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    Direct computation:
+    $\operatorname{tr}\bigl(\sigma\cdot\tfrac{\operatorname{tr}(\sigma X)}{\operatorname{tr}\sigma}\Id\bigr)
+    = \tfrac{\operatorname{tr}(\sigma X)}{\operatorname{tr}\sigma}\operatorname{tr}\sigma
+    = \operatorname{tr}(\sigma X)$.
+\end{proof}
+
 \section{Stationary support (Wolf \S6.4)}
 
 This section records the support-projection theory
