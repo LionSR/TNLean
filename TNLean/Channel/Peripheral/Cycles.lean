@@ -74,9 +74,9 @@ permutation dynamics of `T` on the corresponding corners:
 This is the block-permutation data appearing in the asymptotic image of a
 general trace-preserving positive Schwarz map, after the Wedderburn /
 cyclic-sector decomposition has been carried out. -/
-structure CycleStructure (T : MatrixEnd D) where
+structure CycleStructure.{u} (T : MatrixEnd D) where
   /-- Finite index type for the blocks. -/
-  ι : Type*
+  ι : Type u
   /-- `ι` is finite. -/
   [fintype : Fintype ι]
   /-- `ι` has decidable equality. -/
