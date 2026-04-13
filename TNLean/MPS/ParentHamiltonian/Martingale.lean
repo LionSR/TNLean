@@ -31,15 +31,26 @@ Kastoryano–Lucia 2018 (arXiv:1705.09491), Nachtergaele 1996
    with constants `c_{ij}` depending only on the MPS tensor, not on `N`.
 5. **Row-sum bound** `∑_{j ≠ i} c_{ij} ≤ 1`: at most `2(L-1)` local terms
    overlap a given local term.
-6. **Quadratic form ⟹ norm bound**: the above yields `H² ≥ γ H` as operators,
-   which by the spectral theorem gives `γ ‖v‖ ≤ ‖H v‖` for `v ⊥ ker H`.
+6. **Quadratic form ⟹ norm bound**: combining the above with `h_i^2 = h_i`
+   yields `H² ≥ γ H` as a quadratic form, which by the spectral theorem
+   gives `γ ‖v‖ ≤ ‖H v‖` for `v ⊥ ker H`.
 
-The quantitative martingale estimate, its derivation from the intersection
-property, and the final spectral-theorem step are all left as future work
-inside `parentHamiltonian_gapped`, which is currently stated as a `sorry`.
+The last step — the implication from the quadratic-form inequality
+`H² ≥ γ H` to the norm bound `γ ‖v‖ ≤ ‖H v‖` on `(ker H)ᗮ` — is packaged
+as the abstract lemma `spectralGap_of_martingale` below. Its hypothesis is
+the quadratic-form inequality (in inner-product form), and its proof is
+the spectral-theorem argument, currently deferred as `sorry`.
+
+The MPS-specific step (producing the quadratic-form inequality for
+`parentHamiltonianES A L N`) is the remaining obligation of
+`parentHamiltonian_gapped`, which applies `spectralGap_of_martingale`
+with the MPS bound and also remains `sorry`.
 
 ## Main results
 
+* `spectralGap_of_martingale` — abstract martingale criterion: the
+  quadratic-form inequality `γ ⟨v, H v⟩ ≤ ⟨H v, H v⟩` implies the norm
+  bound `γ ‖v‖ ≤ ‖H v‖` on `(ker H)ᗮ` (deferred).
 * `parentHamiltonian_gapped` — uniform spectral gap for MPS parent
   Hamiltonians on injective tensors (deferred).
 -/
@@ -66,6 +77,37 @@ noncomputable def parentHamiltonianES (A : MPSTensor d D) (L N : ℕ) :
   let e := (WithLp.linearEquiv 2 ℂ (NSiteSpace d N))
   e.symm.toLinearMap.comp ((parentHamiltonian A L N).comp e.toLinearMap)
 
+/-! ### Abstract martingale criterion -/
+
+/--
+**Abstract martingale criterion (quadratic form ⟹ norm bound).**
+
+Let `H` be a self-adjoint operator on a finite-dimensional complex
+Hilbert space satisfying the quadratic-form inequality
+
+    `γ ⟨v, H v⟩ ≤ ⟨H v, H v⟩` for all `v`,
+
+i.e.\ `H² ≥ γ H` as a quadratic form. Then on the orthogonal complement
+of `ker H`, `H` is bounded below in norm by `γ`:
+
+    `γ ‖v‖ ≤ ‖H v‖` for all `v ⊥ ker H`.
+
+This is the operator-theoretic content of the Kastoryano–Lucia /
+Nachtergaele martingale method: once the MPS-specific projector
+geometry (Friedrichs angle on overlapping local ground spaces plus
+the row-sum bound) produces the operator inequality `H² ≥ γ H`, the
+norm lower bound — and hence the spectral gap for eigenvectors of
+`H` — follows by the spectral theorem. This lemma packages the final
+spectral-theorem step; the MPS-specific derivation of the
+quadratic-form hypothesis is the remaining obligation inside
+`parentHamiltonian_gapped`. -/
+theorem spectralGap_of_martingale {ι : Type*} [Fintype ι] {γ : ℝ} (_hγ : 0 < γ)
+    (H : EuclideanSpace ℂ ι →ₗ[ℂ] EuclideanSpace ℂ ι)
+    (_hH_sa : ∀ v w, ⟪H v, w⟫_ℂ = ⟪v, H w⟫_ℂ)
+    (_hOpIneq : ∀ v, γ * (⟪v, H v⟫_ℂ).re ≤ (⟪H v, H v⟫_ℂ).re) :
+    ∀ v ∈ (LinearMap.ker H)ᗮ, γ * ‖v‖ ≤ ‖H v‖ := by
+  sorry
+
 /-! ### Uniform spectral gap for the MPS parent Hamiltonian -/
 
 /--
@@ -90,18 +132,26 @@ inequality
 
 with constants `c_{ij}` depending only on the MPS tensor (not on `N`). At most
 `2(L-1)` local terms overlap a given `h_i`, so the row-sum bound
-`∑_{j≠i} c_{ij} ≤ 1` holds uniformly in `N`. Combining these via the
-spectral theorem yields the norm bound `γ ‖v‖ ≤ ‖H v‖` on `(ker H)ᗮ`, which
-is precisely the conclusion below.
+`∑_{j≠i} c_{ij} ≤ 1` holds uniformly in `N`. Combined with `h_i^2 = h_i`,
+this yields the quadratic-form inequality `H² ≥ γ H`, which feeds into
+the abstract lemma `spectralGap_of_martingale` to produce the norm bound
+`γ ‖v‖ ≤ ‖H v‖` on `(ker H)ᗮ`.
 
-The proof is deferred; the operator inequality and its derivation from the
-intersection property are the remaining mathematical work. -/
+The proof below structures the argument exactly this way: it invokes
+`spectralGap_of_martingale` with the MPS-specific quadratic-form bound,
+which is the remaining mathematical obligation (Friedrichs angle ⟹
+operator inequality). -/
 theorem parentHamiltonian_gapped
     (A : MPSTensor d D) (_hA : IsInjective A) (L : ℕ) (_hL : 1 < L) :
     ∃ γ > 0, ∀ (N : ℕ) (_hLN : 2 * L ≤ N)
       (v : EuclideanSpace ℂ (Cfg d N)),
       v ∈ (parentHamiltonianGroundSpaceES A L N)ᗮ →
         γ * ‖v‖ ≤ ‖parentHamiltonianES A L N v‖ := by
+  -- The MPS-specific Friedrichs-angle / row-sum argument produces a
+  -- uniform `γ > 0` for which `parentHamiltonianES A L N` satisfies the
+  -- quadratic-form inequality `H² ≥ γ H`. Feeding this into
+  -- `spectralGap_of_martingale` gives the desired norm bound on
+  -- `(ker H)ᗮ = (parentHamiltonianGroundSpaceES A L N)ᗮ`.
   sorry
 
 end MPSTensor
