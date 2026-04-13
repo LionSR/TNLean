@@ -843,6 +843,7 @@ For an irreducible TP tensor `A` of period `m`, after blocking by `m`, the block
 spectral projections. Returns:
 - `blocks k`: TP sector tensors (each left-canonical),
 - `P k`: orthogonal projections forming a partition of unity (`∑ P k = 1`),
+- cyclic shift: `transferMap (fun i => (A i)ᴴ) (P (k+1)) = P k`,
 - commutation: each `P k` commutes with every blocked letter,
 - trace relation: `mpv (blocks k) σ = (P k * evalWord (blockTensor A m) σ).trace`,
 - MPV equivalence: the direct-sum tensor is `SameMPV₂`-equivalent to the blocked tensor. -/
@@ -863,6 +864,7 @@ theorem exists_cyclic_sector_decomp_after_blocking
       SameMPV₂ (blockTensor A m) (toTensorFromBlocks (μ := fun _ => 1) blocks) ∧
       (∀ k, IsOrthogonalProjection (P k)) ∧
       (∑ k : Fin m, P k = 1) ∧
+      (∀ k, transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k) ∧
       (∀ k (i : Fin (blockPhysDim d m)),
         P k * (blockTensor A m) i = (blockTensor A m) i * P k) ∧
       (∀ k (N : ℕ) (σ : Fin N → Fin (blockPhysDim d m)),
@@ -899,7 +901,7 @@ theorem exists_cyclic_sector_decomp_after_blocking
     intro k i
     exact commutes_letters_of_adjoint_fixed_projection
       (blockTensor A m) hTP_blocked (hP := hPproj k) (hFix := hFix k) i
-  exact ⟨dim, blocks, P, hLC, hMPV, hPproj, hPsum, hComm, hTrace⟩
+  exact ⟨dim, blocks, P, hLC, hMPV, hPproj, hPsum, hcyclic, hComm, hTrace⟩
 
 end CyclicSectorBridge
 
@@ -952,7 +954,7 @@ theorem exists_cyclic_sector_decomp_of_TP_of_isIrreducibleTensor
     rw [hperiph_set]; ext x; simp [Set.mem_range, eq_comm]
   -- Apply exists_cyclic_sector_decomp_after_blocking.
   haveI : NeZero m := ⟨by omega⟩
-  obtain ⟨dim, blocks, _, hTP_blocks, hSame, _, _, _, _⟩ :=
+  obtain ⟨dim, blocks, _, hTP_blocks, hSame, _, _, _, _, _⟩ :=
     exists_cyclic_sector_decomp_after_blocking A hTP hIrr ρ hρ_pd h_adjfix hIrrK hγ_prim
       hperiph_range
   exact ⟨m, hm_pos, dim, blocks, hTP_blocks, hSame⟩
