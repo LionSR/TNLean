@@ -25,10 +25,19 @@ Z-gauge infrastructure used in its equal-case strengthening:
   The Z-gauge construction helpers (`zgauge_construction`, `perBlock_zgauge_of_power_eq`)
   compose the infrastructure from PR #94 into ready-to-use form.
 
-## Dependency on #81
+## Status of #81 (periodic overlap dichotomy)
 
-Theorem 3.4 depends on the periodic overlap dichotomy (Proposition 3.3, issue #81). Since
-#81 is not yet merged, the theorem is stated conditionally on `PeriodicOverlapHypothesis`.
+Theorem 3.4 is stated in two forms:
+
+* `fundamentalTheorem_periodic_proportional` takes a `PeriodicOverlapHypothesis` directly,
+  leaving callers free to supply the dichotomy from any source.
+* `fundamentalTheorem_periodic_proportional_of_isPeriodic` is unconditional in the
+  dichotomy: the `hetRepeatedBlocks_of_nondecaying` field is discharged inside
+  `PeriodicOverlapHypothesis.ofIsPeriodic` via `periodicOverlapDichotomy` (PR #573,
+  resolving #81). Callers only need to supply per-block `IsPeriodic` data plus the
+  existence of non-decaying cross-family overlaps (`exists_nondecaying_A/B`), which
+  encode the paper's proportional-MPV assumption.
+
 The Z-gauge construction (Theorem 3.8 steps 5–7) is fully proved.
 
 ## Key references
@@ -144,8 +153,8 @@ def PeriodicOverlapHypothesis.ofIsPeriodic
   exists_nondecaying_B := hExB
   hetRepeatedBlocks_of_nondecaying := by
     intro j k hnd
-    have hAj : NeZero (dimA j) := hneA j
-    have hBk : NeZero (dimB k) := hneB k
+    haveI : NeZero (dimA j) := hneA j
+    haveI : NeZero (dimB k) := hneB k
     rcases periodicOverlapDichotomy (A j) (B k) (hPerA j) (hPerB k) with hdecay | hrep
     · exact absurd hdecay hnd
     · exact hrep
