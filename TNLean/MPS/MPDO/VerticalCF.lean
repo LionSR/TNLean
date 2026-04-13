@@ -95,7 +95,8 @@ lemma verticalTransferMap_apply (M : MPOTensor d D)
 
 This is the fragment of the full canonical-form package needed for the MPDO
 vertical-canonical-form interface in this file: injective blocks, the
-left-canonical normalization, and nonzero block weights. -/
+left-canonical normalization, nonzero block weights, and block-injective
+canonical form (biCF). -/
 structure HorizontalCFData {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k)) : Prop where
   /-- Each block is algebraically injective. -/
@@ -104,6 +105,20 @@ structure HorizontalCFData {r : ℕ} {dim : Fin r → ℕ}
   left_canonical : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1
   /-- No block weight vanishes. -/
   weight_ne_zero : ∀ k, μ k ≠ 0
+  /-- **Block-injective canonical form** (biCF): there is a blocking length `L`
+  such that the trace pairing against length-`L` block products is faithful
+  across all blocks simultaneously. Concretely, if a tuple of block matrices
+  `Δ k : Matrix (Fin (dim k)) (Fin (dim k)) ℂ` pairs to zero against every
+  length-`L` block-diagonal product, then each `Δ k` vanishes individually.
+
+  This is the Lean-facing surrogate for [CPGSV17], Proposition IV.3
+  (arXiv:1606.00608, "`propblockinj`"): after blocking at most `3 D^5` spins
+  any tensor in CF is in biCF, which is what the paper's Lemma L invokes to
+  separate blockwise contributions. -/
+  biCF : ∃ L : ℕ, ∀ (Δ : (k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
+    (∀ w : Fin L → Fin d,
+        (∑ k : Fin r, Matrix.trace (Δ k * MPSTensor.evalWord (A k) (List.ofFn w))) = 0) →
+    ∀ k, Δ k = 0
 
 /-- Horizontal canonical form for an MPO tensor, expressed via a canonical-form
 decomposition of the doubled-index MPS tensor `M.toMPSTensor`. -/
@@ -178,7 +193,114 @@ theorem blockwise_insert_eq_of_mpv_agree
       MPSTensor.FirstSiteActionAgree
         (MPSTensor.toTensorFromBlocks (d := d) (μ := μ) A) Y Z) :
     ∀ k, MPSTensor.insertedTensor Y (A k) = MPSTensor.insertedTensor Z (A k) := by
-  sorry
+  classical
+  -- Obtain the biCF blocking length `L`.
+  obtain ⟨L, hL⟩ := hCF.biCF
+  intro k₀
+  funext s
+  -- Candidate witness for biCF: the blockwise difference weighted by `(μ k)^(L+1)`.
+  set Δ : (k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ := fun k =>
+    (μ k) ^ (L + 1) • (MPSTensor.insertedTensor Y (A k) s -
+      MPSTensor.insertedTensor Z (A k) s) with hΔdef
+  -- Show that `Δ` pairs to zero against every length-`L` block word, so biCF forces `Δ = 0`.
+  have hΔzero : ∀ k, Δ k = 0 := by
+    refine hL Δ (fun w => ?_)
+    -- Specialize `hAct` at `σ := Fin.cons s w` (which has length `L + 1`).
+    have hA := hAct L (Fin.cons s w)
+    -- Simplify `σ 0 = s` and `Fin.cons i (σ ∘ Fin.succ) = Fin.cons i w`.
+    have hsimp : ∀ i : Fin d,
+        (Fin.cons i ((Fin.cons s w : Fin (L + 1) → Fin d) ∘ Fin.succ) :
+            Fin (L + 1) → Fin d) = Fin.cons i w := by
+      intro i
+      funext j
+      refine Fin.cases ?_ (fun j => ?_) j
+      · simp
+      · simp
+    simp only [Fin.cons_zero, hsimp] at hA
+    -- Rewriter: for any `W`, expand the MPV pairing on the LHS of `hA` into a
+    -- blockwise trace pairing against `insertedTensor W (A k) s`.
+    have htrans : ∀ W : Matrix (Fin d) (Fin d) ℂ,
+        ∑ i : Fin d, W s i *
+            MPSTensor.mpv
+              (MPSTensor.toTensorFromBlocks (d := d) (μ := μ) A)
+              (Fin.cons i w : Fin (L + 1) → Fin d) =
+          ∑ k : Fin r, Matrix.trace
+            ((μ k) ^ (L + 1) • MPSTensor.insertedTensor W (A k) s *
+              MPSTensor.evalWord (A k) (List.ofFn w)) := by
+      intro W
+      -- Expand the assembled-tensor MPV block-by-block and fold
+      -- `mpv (A k) (Fin.cons i w)` into `trace (A k i * evalWord (A k) (List.ofFn w))`.
+      have hExp : ∀ i : Fin d,
+          MPSTensor.mpv
+              (MPSTensor.toTensorFromBlocks (d := d) (μ := μ) A)
+              (Fin.cons i w : Fin (L + 1) → Fin d) =
+            ∑ k : Fin r, (μ k) ^ (L + 1) *
+              Matrix.trace (A k i * MPSTensor.evalWord (A k) (List.ofFn w)) := by
+        intro i
+        rw [MPSTensor.mpv_toTensorFromBlocks_eq_sum]
+        refine Finset.sum_congr rfl fun k _ => ?_
+        have hof : List.ofFn (Fin.cons i w : Fin (L + 1) → Fin d)
+            = i :: List.ofFn w := by
+          simp [List.ofFn_succ, Fin.cons_zero, Fin.cons_succ]
+        simp only [smul_eq_mul, MPSTensor.mpv, MPSTensor.coeff, hof,
+          MPSTensor.evalWord_cons]
+      simp_rw [hExp, Finset.mul_sum]
+      rw [Finset.sum_comm]
+      refine Finset.sum_congr rfl fun k _ => ?_
+      calc ∑ i : Fin d, W s i *
+                ((μ k) ^ (L + 1) *
+                  Matrix.trace (A k i * MPSTensor.evalWord (A k) (List.ofFn w)))
+            = (μ k) ^ (L + 1) * ∑ i : Fin d, W s i *
+                Matrix.trace (A k i * MPSTensor.evalWord (A k) (List.ofFn w)) := by
+              rw [Finset.mul_sum]
+              refine Finset.sum_congr rfl fun i _ => by ring
+        _   = (μ k) ^ (L + 1) * ∑ i : Fin d, Matrix.trace
+                ((W s i • A k i) * MPSTensor.evalWord (A k) (List.ofFn w)) := by
+              congr 1
+              refine Finset.sum_congr rfl fun i _ => ?_
+              rw [Matrix.smul_mul, Matrix.trace_smul, smul_eq_mul]
+        _   = (μ k) ^ (L + 1) * Matrix.trace
+                (∑ i : Fin d, (W s i • A k i) *
+                    MPSTensor.evalWord (A k) (List.ofFn w)) := by
+              rw [Matrix.trace_sum]
+        _   = (μ k) ^ (L + 1) * Matrix.trace
+                ((∑ i : Fin d, W s i • A k i) *
+                  MPSTensor.evalWord (A k) (List.ofFn w)) := by
+              rw [Finset.sum_mul]
+        _   = (μ k) ^ (L + 1) * Matrix.trace
+                (MPSTensor.insertedTensor W (A k) s *
+                  MPSTensor.evalWord (A k) (List.ofFn w)) := rfl
+        _   = Matrix.trace ((μ k) ^ (L + 1) •
+                MPSTensor.insertedTensor W (A k) s *
+                MPSTensor.evalWord (A k) (List.ofFn w)) := by
+              rw [Matrix.smul_mul, Matrix.trace_smul, smul_eq_mul]
+    -- Apply `htrans` to both sides of `hA`.
+    rw [htrans Y, htrans Z] at hA
+    -- Rewrite each `Δ k * E_k` trace as the difference of the `Y` and `Z` versions.
+    have hsubtr : ∀ k : Fin r,
+        Matrix.trace (Δ k * MPSTensor.evalWord (A k) (List.ofFn w)) =
+          Matrix.trace ((μ k) ^ (L + 1) •
+              MPSTensor.insertedTensor Y (A k) s *
+              MPSTensor.evalWord (A k) (List.ofFn w)) -
+            Matrix.trace ((μ k) ^ (L + 1) •
+              MPSTensor.insertedTensor Z (A k) s *
+              MPSTensor.evalWord (A k) (List.ofFn w)) := by
+      intro k
+      change Matrix.trace
+          (((μ k) ^ (L + 1) • (MPSTensor.insertedTensor Y (A k) s -
+              MPSTensor.insertedTensor Z (A k) s)) *
+            MPSTensor.evalWord (A k) (List.ofFn w)) = _
+      rw [smul_sub, sub_mul, Matrix.trace_sub]
+    simp_rw [hsubtr]
+    rw [Finset.sum_sub_distrib, sub_eq_zero]
+    exact hA
+  -- From `Δ k₀ = 0` and `(μ k₀)^(L+1) ≠ 0`, conclude the pointwise equality.
+  have hk := hΔzero k₀
+  have hμne : (μ k₀) ^ (L + 1) ≠ 0 := pow_ne_zero _ (hCF.weight_ne_zero k₀)
+  have hdiff : MPSTensor.insertedTensor Y (A k₀) s -
+      MPSTensor.insertedTensor Z (A k₀) s = 0 :=
+    (smul_eq_zero.mp hk).resolve_left hμne
+  exact sub_eq_zero.mp hdiff
 
 /-- **Proposition IV.12 / Prop. 4.13** (arXiv:1606.00608): a horizontal
 canonical-form MPDO is also in vertical canonical form.
