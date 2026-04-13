@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.Periodic.Defs
 import TNLean.MPS.FundamentalTheorem.Full
+import TNLean.MPS.FundamentalTheorem.PeriodicOverlap
 import TNLean.MPS.FundamentalTheorem.SectorDecomposition
 
 open scoped Matrix BigOperators
@@ -24,10 +25,27 @@ Z-gauge infrastructure used in its equal-case strengthening:
   The Z-gauge construction helpers (`zgauge_construction`, `perBlock_zgauge_of_power_eq`)
   compose the infrastructure from PR #94 into ready-to-use form.
 
-## Dependency on #81
+## Status of #81 (periodic overlap dichotomy)
 
-Theorem 3.4 depends on the periodic overlap dichotomy (Proposition 3.3, issue #81). Since
-#81 is not yet merged, the theorem is stated conditionally on `PeriodicOverlapHypothesis`.
+Theorem 3.4 is stated in two forms:
+
+* `fundamentalTheorem_periodic_proportional` takes a `PeriodicOverlapHypothesis` directly,
+  leaving callers free to supply the dichotomy from any source.
+* `fundamentalTheorem_periodic_proportional_of_isPeriodic` is an API variant that no
+  longer takes `PeriodicOverlapHypothesis` as a parameter: the
+  `hetRepeatedBlocks_of_nondecaying` field is filled inside
+  `PeriodicOverlapHypothesis.ofIsPeriodic` via `periodicOverlapDichotomy` (PR #573,
+  partially addressing #81). Callers only need to supply per-block `IsPeriodic` data
+  plus the existence of non-decaying cross-family overlaps (`exists_nondecaying_A/B`),
+  which encode the paper's proportional-MPV assumption.
+
+  **Caveat**: `periodicOverlapDichotomy` is stated and callable, but its proof in
+  `TNLean/MPS/FundamentalTheorem/PeriodicOverlap.lean` still depends on several
+  admitted sub-lemmas (see that file's header: "should not yet be relied on as a
+  completed formalization of Proposition 3.3"). Downstream results using the
+  `_of_isPeriodic` variant therefore inherit those remaining proof obligations and
+  should not be treated as unconditional.
+
 The Z-gauge construction (Theorem 3.8 steps 5–7) is fully proved.
 
 ## Key references
@@ -85,11 +103,14 @@ abbrev PeriodicBlockMatchingWitness
     ∃ perm : Fin rA ≃ Fin rB,
       ∀ j : Fin rA, HetRepeatedBlocks (A j) (B (perm j))
 
-/-! ## Periodic overlap dichotomy hypothesis (conditional on #81) -/
+/-! ## Periodic overlap dichotomy hypothesis -/
 
 /-- Hypothesis packaging the periodic overlap dichotomy (Proposition 3.3 of 1708.00029).
 
-This will be discharged once #81 is merged. The fields capture the essential results:
+The `hetRepeatedBlocks_of_nondecaying` field can be filled via `periodicOverlapDichotomy`
+(see `PeriodicOverlapHypothesis.ofIsPeriodic`), though that dichotomy's proof in
+`PeriodicOverlap.lean` still relies on several admitted sub-lemmas. The fields capture
+the essential results:
 1. For each block in one family, a non-decaying overlap partner exists in the other.
 2. Non-decaying overlap forces `HetRepeatedBlocks`.
 
@@ -110,6 +131,52 @@ structure PeriodicOverlapHypothesis
   hetRepeatedBlocks_of_nondecaying : ∀ j k,
     ¬ Filter.Tendsto (fun N => mpvOverlap (d := d) (A j) (B k) N) Filter.atTop (nhds 0) →
     HetRepeatedBlocks (A j) (B k)
+
+/-- **Build `PeriodicOverlapHypothesis` from `IsPeriodic` data via the overlap dichotomy.**
+
+Given block families with `IsPeriodic` data on each block, the
+`hetRepeatedBlocks_of_nondecaying` field is filled by `periodicOverlapDichotomy`
+(PR #573): for any pair `A j, B k`, the dichotomy returns either overlap decay
+(contradicting non-decay) or `HetRepeatedBlocks (A j) (B k)`.
+
+The `exists_nondecaying_A/B` fields remain as explicit hypotheses — they encode the
+paper's content that proportional total MPVs force non-vanishing per-block overlaps.
+
+**Remaining proof obligations.** `periodicOverlapDichotomy` is stated and callable, but
+its proof in `TNLean/MPS/FundamentalTheorem/PeriodicOverlap.lean` transitively depends
+on several admitted sub-lemmas (`periodicSelfOverlap_tendsto`,
+`sectorBlocked_isNormal_of_isPeriodic`, `periodicOverlap_gaugeEquiv_of_sector_match`,
+`periodicOverlap_tendsto_zero_of_no_sector_match`,
+`exists_cyclic_sector_decomp_after_blocking`). The module header of `PeriodicOverlap.lean`
+states that file "should not yet be relied on as a completed formalization of
+Proposition 3.3". Downstream users of this constructor therefore inherit those
+obligations and should not treat the resulting `PeriodicOverlapHypothesis` as
+unconditionally proven. -/
+def PeriodicOverlapHypothesis.ofIsPeriodic
+    {rA rB : ℕ}
+    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    [hneA : ∀ j, NeZero (dimA j)] [hneB : ∀ k, NeZero (dimB k)]
+    (A : (j : Fin rA) → MPSTensor d (dimA j))
+    (B : (k : Fin rB) → MPSTensor d (dimB k))
+    (periodA : Fin rA → ℕ) (periodB : Fin rB → ℕ)
+    (hPerA : ∀ j, IsPeriodic (periodA j) (A j))
+    (hPerB : ∀ k, IsPeriodic (periodB k) (B k))
+    (hExA : ∀ j₀ : Fin rA, ∃ k₀ : Fin rB,
+      ¬ Filter.Tendsto (fun N => mpvOverlap (d := d) (A j₀) (B k₀) N)
+        Filter.atTop (nhds 0))
+    (hExB : ∀ k₀ : Fin rB, ∃ j₀ : Fin rA,
+      ¬ Filter.Tendsto (fun N => mpvOverlap (d := d) (A j₀) (B k₀) N)
+        Filter.atTop (nhds 0)) :
+    PeriodicOverlapHypothesis A B where
+  exists_nondecaying_A := hExA
+  exists_nondecaying_B := hExB
+  hetRepeatedBlocks_of_nondecaying := by
+    intro j k hnd
+    haveI : NeZero (dimA j) := hneA j
+    haveI : NeZero (dimB k) := hneB k
+    rcases periodicOverlapDichotomy (A j) (B k) (hPerA j) (hPerB k) with hdecay | hrep
+    · exact absurd hdecay hnd
+    · exact hrep
 
 /-! ## Theorem 3.4 — Proportional case -/
 
@@ -133,8 +200,12 @@ The proof mirrors `blocks_match_of_sameMPV₂_CFBNT` in `Full.lean`:
 3. Injective maps on finite types → equal cardinalities.
 4. Bijection construction.
 
-**Conditional on #81**: The `PeriodicOverlapHypothesis` parameter will be discharged once
-the periodic overlap dichotomy (Proposition 3.3) is formalized. -/
+The `PeriodicOverlapHypothesis` parameter can be supplied via
+`PeriodicOverlapHypothesis.ofIsPeriodic`, which uses `periodicOverlapDichotomy`
+(PR #573, partially addressing #81) to fill the `hetRepeatedBlocks_of_nondecaying`
+field; see `fundamentalTheorem_periodic_proportional_of_isPeriodic`. Note that
+`periodicOverlapDichotomy`'s proof in `PeriodicOverlap.lean` still relies on several
+admitted sub-lemmas, so callers going through that route inherit those obligations. -/
 theorem fundamentalTheorem_periodic_proportional
     (A : (j : Fin rA) → MPSTensor d (dimA j))
     (B : (k : Fin rB) → MPSTensor d (dimB k))
@@ -194,6 +265,43 @@ theorem fundamentalTheorem_periodic_proportional
     ⟨hfA_inj, Finite.injective_iff_surjective.mp hfA_inj⟩
   exact ⟨Equiv.ofBijective fA hfA_bij, fun j => by
     simpa [Equiv.ofBijective_apply] using hfA_rep j⟩
+
+/-- **Theorem 3.4 (Periodic FT, proportional case) from `IsPeriodic` data.**
+
+API variant of `fundamentalTheorem_periodic_proportional` that no longer takes
+`PeriodicOverlapHypothesis` as a parameter; instead, the dichotomy field is filled via
+`periodicOverlapDichotomy` (PR #573). The caller only needs to supply `IsPeriodic` data
+plus the existence of non-decaying cross-family overlaps (the content of proportional
+MPVs).
+
+This is the form intended by the paper: two families of periodic blocks whose cross
+overlaps do not all vanish must match up to bijection and per-block `HetRepeatedBlocks`
+equivalence.
+
+**Remaining proof obligations.** `periodicOverlapDichotomy` is stated and callable, but
+its proof in `TNLean/MPS/FundamentalTheorem/PeriodicOverlap.lean` still contains several
+admitted sub-lemmas. Downstream users of this theorem inherit those obligations — this
+variant is a convenience wrapper, not an unconditional strengthening. -/
+theorem fundamentalTheorem_periodic_proportional_of_isPeriodic
+    (A : (j : Fin rA) → MPSTensor d (dimA j))
+    (B : (k : Fin rB) → MPSTensor d (dimB k))
+    [∀ j, NeZero (dimA j)] [∀ k, NeZero (dimB k)]
+    (periodA : Fin rA → ℕ) (periodB : Fin rB → ℕ)
+    (hPerA : ∀ j, IsPeriodic (periodA j) (A j))
+    (hPerB : ∀ k, IsPeriodic (periodB k) (B k))
+    (hNonRepA : ∀ j₁ j₂ : Fin rA, j₁ ≠ j₂ →
+      ¬ HetRepeatedBlocks (A j₁) (A j₂))
+    (hNonRepB : ∀ k₁ k₂ : Fin rB, k₁ ≠ k₂ →
+      ¬ HetRepeatedBlocks (B k₁) (B k₂))
+    (hExA : ∀ j₀ : Fin rA, ∃ k₀ : Fin rB,
+      ¬ Filter.Tendsto (fun N => mpvOverlap (d := d) (A j₀) (B k₀) N)
+        Filter.atTop (nhds 0))
+    (hExB : ∀ k₀ : Fin rB, ∃ j₀ : Fin rA,
+      ¬ Filter.Tendsto (fun N => mpvOverlap (d := d) (A j₀) (B k₀) N)
+        Filter.atTop (nhds 0)) :
+    PeriodicBlockMatchingWitness (d := d) A B :=
+  fundamentalTheorem_periodic_proportional A B hNonRepA hNonRepB
+    (PeriodicOverlapHypothesis.ofIsPeriodic A B periodA periodB hPerA hPerB hExA hExB)
 
 end ProportionalCase
 
