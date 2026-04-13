@@ -942,8 +942,8 @@ Lucia~\cite{Kastoryano2018Martingale}.
 \begin{lemma}[Quadratic form to norm bound]\label{lem:quadratic_form_to_norm_bound}
     \lean{MPSTensor.spectralGap_of_martingale}
     \notready
-    Let $H$ be a self-adjoint operator on a finite-dimensional complex
-    Hilbert space, and suppose that
+    Let $H$ be a positive semidefinite self-adjoint operator on a
+    finite-dimensional complex Hilbert space, and suppose that
     \[
         \gamma\,\langle v, H v\rangle \le \langle H v, H v\rangle
         \qquad \text{for all } v,
@@ -954,6 +954,9 @@ Lucia~\cite{Kastoryano2018Martingale}.
         \gamma\,\|v\| \le \|H v\|.
     \]
     In particular, every positive eigenvalue of $H$ is at least $\gamma$.
+    The positive-semidefiniteness hypothesis is essential: without it,
+    $H = -\mathrm{Id}$ with $\gamma = 2$ satisfies the quadratic-form
+    inequality vacuously but violates the norm bound.
 \end{lemma}
 
 \begin{proof}

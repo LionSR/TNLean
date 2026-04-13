@@ -82,8 +82,9 @@ noncomputable def parentHamiltonianES (A : MPSTensor d D) (L N : ℕ) :
 /--
 **Abstract martingale criterion (quadratic form ⟹ norm bound).**
 
-Let `H` be a self-adjoint operator on a finite-dimensional complex
-Hilbert space satisfying the quadratic-form inequality
+Let `H` be a positive semidefinite self-adjoint operator on a
+finite-dimensional complex Hilbert space satisfying the quadratic-form
+inequality
 
     `γ ⟨v, H v⟩ ≤ ⟨H v, H v⟩` for all `v`,
 
@@ -92,18 +93,25 @@ of `ker H`, `H` is bounded below in norm by `γ`:
 
     `γ ‖v‖ ≤ ‖H v‖` for all `v ⊥ ker H`.
 
+The positive-semidefiniteness hypothesis `0 ≤ ⟨v, H v⟩` is essential: it
+rules out negative eigenvalues of small magnitude (such as `H = -Id`,
+which otherwise satisfies `γ ⟨v, H v⟩ ≤ ⟨H v, H v⟩` vacuously but fails
+the conclusion). For the MPS parent Hamiltonian this hypothesis is
+automatic because `H = ∑ᵢ hᵢ` is a sum of orthogonal projectors.
+
 This is the operator-theoretic content of the Kastoryano–Lucia /
 Nachtergaele martingale method: once the MPS-specific projector
 geometry (Friedrichs angle on overlapping local ground spaces plus
-the row-sum bound) produces the operator inequality `H² ≥ γ H`, the
-norm lower bound — and hence the spectral gap for eigenvectors of
-`H` — follows by the spectral theorem. This lemma packages the final
-spectral-theorem step; the MPS-specific derivation of the
-quadratic-form hypothesis is the remaining obligation inside
+the row-sum bound) produces the operator inequality `H² ≥ γ H` for the
+PSD operator `H`, the norm lower bound — and hence the spectral gap
+for eigenvectors of `H` — follows by the spectral theorem. This lemma
+packages the final spectral-theorem step; the MPS-specific derivation
+of the quadratic-form hypothesis is the remaining obligation inside
 `parentHamiltonian_gapped`. -/
 theorem spectralGap_of_martingale {ι : Type*} [Fintype ι] {γ : ℝ} (_hγ : 0 < γ)
     (H : EuclideanSpace ℂ ι →ₗ[ℂ] EuclideanSpace ℂ ι)
     (_hH_sa : ∀ v w, ⟪H v, w⟫_ℂ = ⟪v, H w⟫_ℂ)
+    (_hH_pos : ∀ v, 0 ≤ (⟪v, H v⟫_ℂ).re)
     (_hOpIneq : ∀ v, γ * (⟪v, H v⟫_ℂ).re ≤ (⟪H v, H v⟫_ℂ).re) :
     ∀ v ∈ (LinearMap.ker H)ᗮ, γ * ‖v‖ ≤ ‖H v‖ := by
   sorry
@@ -135,7 +143,9 @@ with constants `c_{ij}` depending only on the MPS tensor (not on `N`). At most
 `∑_{j≠i} c_{ij} ≤ 1` holds uniformly in `N`. Combined with `h_i^2 = h_i`,
 this yields the quadratic-form inequality `H² ≥ γ H`, which feeds into
 the abstract lemma `spectralGap_of_martingale` to produce the norm bound
-`γ ‖v‖ ≤ ‖H v‖` on `(ker H)ᗮ`.
+`γ ‖v‖ ≤ ‖H v‖` on `(ker H)ᗮ`. The positive-semidefiniteness hypothesis
+required by `spectralGap_of_martingale` is automatic here because
+`H_N = ∑ᵢ hᵢ` is a sum of orthogonal projectors.
 
 The proof below structures the argument exactly this way: it invokes
 `spectralGap_of_martingale` with the MPS-specific quadratic-form bound,
