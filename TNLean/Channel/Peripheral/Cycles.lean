@@ -76,7 +76,7 @@ general trace-preserving positive Schwarz map, after the Wedderburn /
 cyclic-sector decomposition has been carried out. -/
 structure CycleStructure (T : MatrixEnd D) where
   /-- Finite index type for the blocks. -/
-  ι : Type
+  ι : Type*
   /-- `ι` is finite. -/
   [fintype : Fintype ι]
   /-- `ι` has decidable equality. -/
@@ -148,7 +148,7 @@ theorem preserves_corner_pow_orderOf (C : CycleStructure T) (k : C.ι) :
 This exposes the hypotheses of `preserves_corner_pow_orderOf_of_perm_decomp`
 as a bundled `CycleStructure`. -/
 def ofPermDecomp
-    {T : MatrixEnd D} {ι : Type} [Fintype ι] [DecidableEq ι]
+    {T : MatrixEnd D} {ι : Type*} [Fintype ι] [DecidableEq ι]
     (σ : Equiv.Perm ι) (P : ι → MatrixAlg D)
     (hPproj : ∀ k : ι, IsOrthogonalProjection (P k))
     (hperm : ∀ k : ι, T (P (σ k)) = P k)
