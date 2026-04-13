@@ -388,8 +388,10 @@ identification), (iii) combine with this helper to discharge
 `sectorBlocked_isNormal_of_isPeriodic`.
 
 Kept as an explicit named sublemma so downstream consumers (`Case 2`,
-`Case 3`) and subsequent PRs can target its statement directly. -/
-private lemma primitive_and_irreducible_sectorBlocks_of_cyclicDecomp
+`Case 3`) and subsequent PRs can target its statement directly — the
+declaration is intentionally non-`private` so that follow-up modules
+(e.g. a dedicated `SectorIrreducibility` bridge) can reference it. -/
+lemma primitive_and_irreducible_sectorBlocks_of_cyclicDecomp
     [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
     (hP : IsPeriodic m A)
     {dim : Fin m → ℕ}
