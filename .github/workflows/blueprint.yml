@@ -34,8 +34,8 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Install graphviz headers
-        run: sudo apt-get update && sudo apt-get install -y graphviz libgraphviz-dev
+      - name: Install system dependencies
+        run: sudo apt-get update && sudo apt-get install -y graphviz libgraphviz-dev texlive-binaries
 
       - name: Install leanblueprint
         run: pip install leanblueprint
@@ -43,15 +43,11 @@ jobs:
       - name: Build blueprint
         run: |
           set -o pipefail
-          mkdir -p blueprint/web
-          cd blueprint/src
-          echo "=== Files in src ==="
-          ls -la chapter/ | head -5
-          ls -la macros/
-          echo "=== Running plastex ==="
-          plastex -c plastex.cfg web.tex 2>&1 | tee /tmp/blueprint-output.txt
-          echo "=== Output files ==="
-          ls ../web/ | head -10
+          leanblueprint web 2>&1 | tee /tmp/blueprint-output.txt
+          if grep -q "^ERROR:" /tmp/blueprint-output.txt; then
+            echo "::error::Blueprint has unresolved labels (see ERROR lines above)"
+            exit 1
+          fi
           if grep -q "WARNING: File not found:" /tmp/blueprint-output.txt; then
             echo "::error::Blueprint has missing files (see WARNING lines above)"
             exit 1
