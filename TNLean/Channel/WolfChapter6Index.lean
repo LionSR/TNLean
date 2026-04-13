@@ -284,12 +284,28 @@ The general irreducible case with period `h > 1` requires Wedderburn blocks
 
 ## §6.5 Cycles and recurrences
 
-### Wolf Theorem 6.16 (Structure of cycles)
+### Wolf Theorem 6.16 (Structure of cycles) — PARTIALLY FORMALIZED
 
-* Partially formalized in `TNLean.Channel.Peripheral.CyclicDecomposition`.
-* Reusable infrastructure for the multi-cycle direction:
-  `preserves_corner_pow_orderOf_of_perm_decomp` (permutation-of-blocks iterate
-  preserves each corner after `orderOf` steps).
+* Reusable infrastructure for the permutation-of-blocks direction lives in
+  `TNLean.Channel.Peripheral.CyclicDecomposition` and
+  `TNLean.Channel.Peripheral.Cycles`:
+  - `preserves_corner_pow_orderOf_of_perm_decomp` — permutation-of-blocks
+    iterate preserves each corner after `orderOf σ` steps.
+  - `CycleStructure T` — bundled block-permutation data: a finite family of
+    orthogonal projections `P : ι → M_D(ℂ)`, a permutation `σ : Equiv.Perm ι`,
+    the compatibility `T (P (σ k)) = P k`, and the multiplicative-domain
+    factorisations `T (P k * X) = T (P k) * T X` and `T (X * P k) = T X * T (P k)`.
+  - `CycleStructure.map_proj_pow` — `T^n (P (σ^n k)) = P k`.
+  - `CycleStructure.pow_orderOf_apply_proj` — `(T ^ orderOf σ) (P k) = P k`.
+  - `CycleStructure.preserves_corner_pow_orderOf` — `T ^ orderOf σ` preserves
+    each corner `P k · M_D(ℂ) · P k`, the corner-preservation half of
+    Thm. 6.16 in its permutation-of-blocks form.
+  - `CycleStructure.ofPermDecomp` — constructor from raw permutation data.
+
+* The remaining **existence direction** — that every trace-preserving positive
+  Schwarz map admits a `CycleStructure` on its asymptotic image, with the
+  blocks coming from the Wedderburn decomposition of the fixed-point algebra
+  — depends on Wolf Thm. 6.14 (issues #27 / #360) and is left to future work.
 
 ---
 
