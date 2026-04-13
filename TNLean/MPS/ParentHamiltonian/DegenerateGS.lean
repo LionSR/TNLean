@@ -132,22 +132,49 @@ equals the span of the individual BNT block MPV states.
 
 TODO(#195): prove by combining `bnt_mem_groundSpace` (⊇ direction) with
 blockwise decomposition / uniqueness for the assembled tensor (⊆ direction).
-At present the reverse inclusion still needs a periodic-chain theorem showing
-that a state whose cyclic windows lie in the block-diagonal local ground space
-decomposes globally into block components, together with the normal/blockwise
-unique-ground-state reduction from `UniqueGroundState`. -/
+
+The ⊆ direction requires *two* upstream dependencies, neither currently
+available:
+
+1. **Block-diagonal periodic-chain ground-space decomposition.** A structural
+   theorem of the form
+   `chainGroundSpace (toTensorFromBlocks μ A) L N = ⨆ j, (embed_j) (chainGroundSpace (A j) L N)`,
+   saying that a state whose cyclic windows all lie in the block-diagonal
+   local ground space decomposes (via projectors onto the virtual-space irrep
+   sectors) into a sum of block components. This is the "projectors commute
+   through the tensor" idea from the proof sketch. No periodic-chain block
+   decomposition infrastructure is available in `MPS/Chain/` or
+   `MPS/Structure/` at present.
+
+2. **Blockwise MPV uniqueness** via `chainGroundSpace_eq_mpvSubmodule_normal`
+   in `UniqueGroundState.lean`, which is itself still a `sorry` pending the
+   normal-form range reduction from `2 L₀` to `L₀ + 1`. Each block of a
+   CF-BNT decomposition is normal and `L₀`-block-injective, so this theorem
+   (once proved) identifies each block's chain ground space with its MPV
+   submodule, i.e. exactly one component of `bntSpan`.
+
+Given dependency (1) and (2), the ⊆ direction becomes:
+```
+chainGroundSpace (toTensorFromBlocks μ A) L N
+  = ⨆ j, (embed_j) (chainGroundSpace (A j) L N)         -- by (1)
+  = ⨆ j, (embed_j) (mpvSubmodule (A j) N)               -- by (2)
+  = Submodule.span ℂ (Set.range fun j => mpv (A j))     -- = bntSpan A N
+```
+where the final step uses that the embedding of a block's MPV into the
+assembled tensor is (up to the μ_j^N scalar) the corresponding BNT MPV. -/
 theorem parentHamiltonian_gs_eq_bnt_span
     (A : (j : Fin r) → MPSTensor d (dim j))
     (hCF : IsCanonicalFormBNT μ A) {L N : ℕ} (hL : 1 < L) (hN : N ≥ L + 1) :
     parentHamiltonianGroundSpace (μ := μ) A L N = bntSpan A N := by
   apply le_antisymm
   · -- TODO(#195): reverse inclusion.
-    -- The missing step is to decompose any
-    -- `ψ ∈ parentHamiltonianGroundSpace (μ := μ) A L N`
-    -- into block components coming from the local block-diagonal structure of
-    -- `toTensorFromBlocks μ A`, then apply injective uniqueness to each block.
-    -- This currently depends on periodic-chain block decomposition machinery
-    -- that is not yet available upstream.
+    -- Requires:
+    --  (1) a periodic-chain block-decomposition theorem identifying
+    --      `chainGroundSpace (toTensorFromBlocks μ A) L N` with the supremum
+    --      of embedded blockwise chain ground spaces (not yet formalized);
+    --  (2) `chainGroundSpace_eq_mpvSubmodule_normal` (currently `sorry`) to
+    --      reduce each block's chain ground space to its MPV submodule.
+    -- See the docstring above for the proof outline.
     sorry
   · rw [bntSpan, Submodule.span_le]
     intro ψ hψ
