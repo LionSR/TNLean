@@ -116,7 +116,13 @@ structure HorizontalCFData {r : ℕ} {dim : Fin r → ℕ}
   where `D` denotes the bond dimension in the paper (in this block-decomposed
   Lean setting one may take `D` to be a global bound such as `⨆ k, dim k`),
   any tensor in CF is in biCF, which is what the paper's Lemma L invokes to
-  separate blockwise contributions. -/
+  separate blockwise contributions.
+
+  *Interim status.* This is currently taken as a hypothesis rather than derived
+  from `block_injective` + `left_canonical`. The forward plan is to supply a
+  Lean proof of `propblockinj` (CPGSV17 Prop. IV.3) and then construct
+  `HorizontalCFData` without requiring `biCF` as an input; this is tracked by
+  the RFP/MPDO 3/5 milestone (issue #235). -/
   biCF : ∃ L : ℕ, ∀ (Δ : (k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
     (∀ w : Fin L → Fin d,
         (∑ k : Fin r, Matrix.trace (Δ k * MPSTensor.evalWord (A k) (List.ofFn w))) = 0) →
