@@ -685,7 +685,29 @@ theorem periodicOverlapDichotomy
       --   • Some match → sectorMatch_propagation (using hA.leftCanonical,
       --     hB.leftCanonical for unit-modulus phases), then
       --     sectorTensor_proportional_of_blockedMatch → RepeatedBlocks
-      sorry
+      haveI : NeZero m_a := NeZero.of_pos hA.period_pos
+      obtain ⟨dimA, blocksA, hA_blocks_lc, hA_mpv, hA_cyclic⟩ :=
+        exists_cyclic_sector_decomp_after_blocking_of_isPeriodic A hA
+      obtain ⟨dimB, blocksB, hB_blocks_lc, hB_mpv, hB_cyclic⟩ :=
+        exists_cyclic_sector_decomp_after_blocking_of_isPeriodic B hB
+      by_cases hSomeMatch :
+          ∃ (u₀ v₀ : Fin m_a) (hdim : dimA u₀ = dimB v₀),
+            dimA u₀ ≠ 0 ∧ GaugePhaseEquiv
+              (cast (congr_arg
+                (MPSTensor (blockPhysDim d m_a)) hdim)
+                (blocksA u₀))
+              (blocksB v₀)
+      · refine Or.inr ⟨rfl, ?_⟩
+        simpa using
+          periodicOverlap_gaugeEquiv_of_sector_match A B hA hB
+            blocksA blocksB hA_blocks_lc hB_blocks_lc
+            hA_mpv hB_mpv hA_cyclic hB_cyclic hSomeMatch
+      · refine Or.inl ?_
+        refine periodicOverlap_tendsto_zero_of_no_sector_match A B hA hB
+          blocksA blocksB hA_blocks_lc hB_blocks_lc
+          hA_mpv hB_mpv hA_cyclic hB_cyclic ?_
+        intro u v hdim hNonzero hGauge
+        exact hSomeMatch ⟨u, v, hdim, hNonzero, hGauge⟩
 
 /-- **Eventual linear independence** (Corollary of Proposition 3.3):
 Given a family of periodic tensors `{A_j}` whose periods all divide a common
