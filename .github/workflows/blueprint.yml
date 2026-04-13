@@ -40,10 +40,22 @@ jobs:
       - name: Install leanblueprint
         run: pip install leanblueprint
 
+      - name: Debug - list blueprint source files
+        run: |
+          echo "=== CWD: $(pwd) ==="
+          echo "=== blueprint/src/ ==="
+          ls blueprint/src/ | head -10
+          echo "=== blueprint/src/chapter/ ==="
+          ls blueprint/src/chapter/ | head -5
+          echo "=== blueprint/src/macros/ ==="
+          ls blueprint/src/macros/
+          echo "=== git root: $(git rev-parse --show-toplevel) ==="
+          python3 -c "import plasTeX; print('plasTeX:', plasTeX.__file__)"
+
       - name: Build blueprint
         run: |
           set -o pipefail
-          leanblueprint web 2>&1 | tee /tmp/blueprint-output.txt
+          leanblueprint web --debug 2>&1 | tee /tmp/blueprint-output.txt
           if grep -q "^ERROR:" /tmp/blueprint-output.txt; then
             echo "::error::Blueprint has unresolved labels (see ERROR lines above)"
             exit 1
