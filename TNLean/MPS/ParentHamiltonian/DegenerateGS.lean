@@ -158,7 +158,7 @@ Given dependency (1) and (2), the ⊆ direction becomes:
 chainGroundSpace (toTensorFromBlocks μ A) L N
   = ⨆ j, (embed_j) (chainGroundSpace (A j) L N)         -- by (1)
   = ⨆ j, (embed_j) (mpvSubmodule (A j) N)               -- by (2)
-  = Submodule.span ℂ (Set.range fun j => mpv (A j))     -- = bntSpan A N
+  = Submodule.span ℂ (Set.range fun j => (mpv (A j) : NSiteSpace d N))  -- = bntSpan A N
 ```
 where the final step uses that the embedding of a block's MPV into the
 assembled tensor is (up to the μ_j^N scalar) the corresponding BNT MPV. -/
