@@ -273,6 +273,7 @@ import TNLean.Wielandt.SpanGrowth.CumulativeToWordSpan
 import TNLean.Wielandt.QuantumWielandt
 
 import TNLean.Channel.Peripheral.CyclicDecomposition
+import TNLean.Channel.Peripheral.Cycles
 
 -- Public documentation index modules
 import TNLean.Channel.WolfChapter2Index
