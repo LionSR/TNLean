@@ -600,7 +600,7 @@ theorem exists_normalCanonicalForm_of_primitive_blockDecomp
     mu_ne_zero := hμne
   }
   exact
-    IsNormalCanonicalForm.ofSeparatedData
+    IsNormalCanonicalForm.ofStrictSeparatedData
       (d := blockPhysDim d p)
       (A := blocks)
       (μ := μ)

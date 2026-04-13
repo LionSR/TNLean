@@ -17,12 +17,12 @@ Fundamental Theorem (Thm 4.4) that derives the decomposition data from canonical
 
 ### `HasStrictOrderedNonzeroWeights.norm_div_mu_lt_one`
 For `k ≠ 0`, the norm ratio `‖μ k / μ 0‖ < 1` from the separated weight data.
-The legacy wrapper `IsCanonicalForm.norm_div_mu_lt_one` remains available.
+A BNT-level wrapper `IsCanonicalFormBNT.norm_div_mu_lt_one` is also available.
 
 ### `HasStrictOrderedNonzeroWeights.coeff_ratio_tendsto`
 The normalized coefficient `(μ k / μ ⟨0, hr⟩) ^ N` converges: to `1` for the dominant
-block `k = 0`, and to `0` for all other blocks. The legacy wrapper
-`IsCanonicalForm.coeff_ratio_tendsto` remains available.
+block `k = 0`, and to `0` for all other blocks. A BNT-level wrapper
+`IsCanonicalFormBNT.coeff_ratio_tendsto` is also available.
 
 ### `mpv_toTensorFromBlocks_eq_mu0_pow_mul_normalized`
 The original block-diagonal MPV factors as `μ₀^N` times the normalized block-diagonal MPV.
@@ -109,34 +109,31 @@ theorem norm_mu_lt_dominant (hμ : HasStrictOrderedNonzeroWeights μ) (hr : 0 < 
 
 end HasStrictOrderedNonzeroWeights
 
-namespace IsCanonicalForm
+namespace IsCanonicalFormBNT
 
 variable {r : ℕ} {dim : Fin r → ℕ}
 variable {μ : Fin r → ℂ} {A : (k : Fin r) → MPSTensor d (dim k)}
 
-/-- Backwards-compatible wrapper for
-`HasStrictOrderedNonzeroWeights.norm_div_mu_lt_one`. -/
-theorem norm_div_mu_lt_one (hCF : IsCanonicalForm μ A) (hr : 0 < r)
+/-- CF-BNT wrapper for `HasStrictOrderedNonzeroWeights.norm_div_mu_lt_one`. -/
+theorem norm_div_mu_lt_one (hCF : IsCanonicalFormBNT μ A) (hr : 0 < r)
     (k : Fin r) (hk : k ≠ ⟨0, hr⟩) :
     ‖μ k / μ ⟨0, hr⟩‖ < 1 :=
   hCF.toHasStrictOrderedNonzeroWeights.norm_div_mu_lt_one hr k hk
 
-/-- Backwards-compatible wrapper for
-`HasStrictOrderedNonzeroWeights.coeff_ratio_tendsto`. -/
-theorem coeff_ratio_tendsto (hCF : IsCanonicalForm μ A) (hr : 0 < r) :
+/-- CF-BNT wrapper for `HasStrictOrderedNonzeroWeights.coeff_ratio_tendsto`. -/
+theorem coeff_ratio_tendsto (hCF : IsCanonicalFormBNT μ A) (hr : 0 < r) :
     ∀ k : Fin r,
       Tendsto (fun N => (μ k / μ ⟨0, hr⟩) ^ N) atTop
         (nhds (if k = ⟨0, hr⟩ then 1 else 0)) :=
   hCF.toHasStrictOrderedNonzeroWeights.coeff_ratio_tendsto hr
 
-/-- Backwards-compatible wrapper for
-`HasStrictOrderedNonzeroWeights.norm_mu_lt_dominant`. -/
-theorem norm_mu_lt_dominant (hCF : IsCanonicalForm μ A) (hr : 0 < r)
+/-- CF-BNT wrapper for `HasStrictOrderedNonzeroWeights.norm_mu_lt_dominant`. -/
+theorem norm_mu_lt_dominant (hCF : IsCanonicalFormBNT μ A) (hr : 0 < r)
     (k : Fin r) (hk : k ≠ ⟨0, hr⟩) :
     ‖μ k‖ < ‖μ ⟨0, hr⟩‖ :=
   hCF.toHasStrictOrderedNonzeroWeights.norm_mu_lt_dominant hr k hk
 
-end IsCanonicalForm
+end IsCanonicalFormBNT
 
 /-! ## Normalized block-diagonal tensor -/
 
