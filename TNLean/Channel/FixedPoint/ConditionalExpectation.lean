@@ -196,32 +196,7 @@ times the identity. -/
 private lemma sum_single_diag_const {D : ℕ} (c : ℂ) :
     (∑ j : Fin D, Matrix.single j j c : Matrix (Fin D) (Fin D) ℂ) =
       c • (1 : Matrix (Fin D) (Fin D) ℂ) := by
-  classical
-  ext a b
-  simp only [Matrix.sum_apply, Matrix.smul_apply, Matrix.one_apply,
-    smul_eq_mul]
-  rcases eq_or_ne a b with hab | hab
-  · -- Diagonal entry: sum equals `c`, RHS equals `c * 1`.
-    subst hab
-    rw [if_pos rfl, mul_one]
-    have hsum : (∑ j : Fin D, (Matrix.single j j c : Matrix (Fin D) (Fin D) ℂ) a a) = c := by
-      rw [Finset.sum_eq_single a
-        (fun j _ hj => by
-          rw [Matrix.single_apply, if_neg]
-          rintro ⟨heq, _⟩
-          exact hj heq)
-        (fun hmem => (hmem (Finset.mem_univ _)).elim)]
-      rw [Matrix.single_apply, if_pos ⟨rfl, rfl⟩]
-    exact hsum
-  · -- Off-diagonal entry: sum is zero, RHS is `c * 0 = 0`.
-    rw [if_neg hab, mul_zero]
-    refine Finset.sum_eq_zero (fun j _ => ?_)
-    rw [Matrix.single_apply]
-    by_cases hja : j = a
-    · subst hja
-      have hjb : ¬(j = b) := fun h => hab (h ▸ rfl)
-      simp [hjb]
-    · simp [hja]
+  rw [Matrix.sum_single_eq_diagonal, Matrix.smul_one_eq_diagonal]
 
 /-- **Wolf Corollary 6.6, CP part.**
 
@@ -305,8 +280,7 @@ theorem scalarConditionalExpectation_isCPMap
   -- Rewrite `scalarConditionalExpectation σ` as `(σ.trace.re)⁻¹ • Kraus.mapLM K`.
   have htr_nn : (0 : ℂ) ≤ σ.trace := Matrix.PosSemidef.trace_nonneg hσ
   have htr_re_nn : (0 : ℝ) ≤ σ.trace.re := (Complex.nonneg_iff.mp htr_nn).1
-  have htr_im : σ.trace.im = 0 :=
-    ((Complex.nonneg_iff.mp htr_nn).2).symm
+  have htr_im : σ.trace.im = 0 := (Complex.nonneg_iff.mp htr_nn).2.symm
   have htr_eq : ((σ.trace.re : ℝ) : ℂ) = σ.trace := by
     apply Complex.ext
     · simp
