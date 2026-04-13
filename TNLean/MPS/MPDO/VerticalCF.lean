@@ -112,7 +112,9 @@ structure HorizontalCFData {r : ℕ} {dim : Fin r → ℕ}
   length-`L` block-diagonal product, then each `Δ k` vanishes individually.
 
   This is the Lean-facing surrogate for [CPGSV17], Proposition IV.3
-  (arXiv:1606.00608, "`propblockinj`"): after blocking at most `3 D^5` spins
+  (arXiv:1606.00608, "`propblockinj`"): after blocking at most `3 D^5` spins,
+  where `D` denotes the bond dimension in the paper (in this block-decomposed
+  Lean setting one may take `D` to be a global bound such as `⨆ k, dim k`),
   any tensor in CF is in biCF, which is what the paper's Lemma L invokes to
   separate blockwise contributions. -/
   biCF : ∃ L : ℕ, ∀ (Δ : (k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
@@ -201,7 +203,7 @@ theorem blockwise_insert_eq_of_mpv_agree
   -- Candidate witness for biCF: the blockwise difference weighted by `(μ k)^(L+1)`.
   set Δ : (k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ := fun k =>
     (μ k) ^ (L + 1) • (MPSTensor.insertedTensor Y (A k) s -
-      MPSTensor.insertedTensor Z (A k) s) with hΔdef
+      MPSTensor.insertedTensor Z (A k) s)
   -- Show that `Δ` pairs to zero against every length-`L` block word, so biCF forces `Δ = 0`.
   have hΔzero : ∀ k, Δ k = 0 := by
     refine hL Δ (fun w => ?_)
@@ -210,12 +212,8 @@ theorem blockwise_insert_eq_of_mpv_agree
     -- Simplify `σ 0 = s` and `Fin.cons i (σ ∘ Fin.succ) = Fin.cons i w`.
     have hsimp : ∀ i : Fin d,
         (Fin.cons i ((Fin.cons s w : Fin (L + 1) → Fin d) ∘ Fin.succ) :
-            Fin (L + 1) → Fin d) = Fin.cons i w := by
-      intro i
-      funext j
-      refine Fin.cases ?_ (fun j => ?_) j
-      · simp
-      · simp
+            Fin (L + 1) → Fin d) = Fin.cons i w :=
+      fun i => by simp [Function.comp_def, Fin.cons_succ]
     simp only [Fin.cons_zero, hsimp] at hA
     -- Rewriter: for any `W`, expand the MPV pairing on the LHS of `hA` into a
     -- blockwise trace pairing against `insertedTensor W (A k) s`.
