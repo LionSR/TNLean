@@ -31,21 +31,23 @@ Kastoryano–Lucia 2018 (arXiv:1705.09491), Nachtergaele 1996
    with constants `c_{ij}` depending only on the MPS tensor, not on `N`.
 5. **Row-sum bound** `∑_{j ≠ i} c_{ij} ≤ 1`: at most `2(L-1)` local terms
    overlap a given local term.
-6. **Abstract criterion → quadratic form**: the above yields `H² ≥ γ H` as
-   operators, which by the spectral theorem gives `γ ‖v‖ ≤ ‖H v‖` for
-   `v ⊥ ker H`.
+6. **Quadratic form ⟹ norm bound**: the above yields `H² ≥ γ H` as operators,
+   which by the spectral theorem gives `γ ‖v‖ ≤ ‖H v‖` for `v ⊥ ker H`.
 
-The abstract step `H² ≥ γ H ⟹ gap ≥ γ` is factored into
-`spectralGap_of_martingale`, so that the MPS-specific verification reduces to
-producing the operator inequality. Both the abstract criterion and its MPS
-instantiation are currently left as `sorry`; see the module docstring for
-references.
+The heavy lifting — deriving the norm bound `γ ‖v‖ ≤ ‖H v‖` on `(ker H)ᗮ`
+from the MPS-specific operator inequality — is all contained in
+`parentHamiltonian_gapped`, which is currently left as `sorry`. A small
+self-contained helper `spectralGap_norm_bound_to_eigenvalue` records the
+elementary final conversion from that norm bound to an eigenvalue-level gap
+statement; it is the only part of the chain that admits a short proof, and is
+proved here unconditionally.
 
 ## Main results
 
-* `spectralGap_of_martingale` — abstract martingale criterion packaging.
+* `spectralGap_norm_bound_to_eigenvalue` — elementary conversion from a
+  norm-bound on `(ker H)ᗮ` to an eigenvalue-level gap.
 * `parentHamiltonian_gapped` — uniform spectral gap for MPS parent
-  Hamiltonians on injective tensors.
+  Hamiltonians on injective tensors (deferred).
 -/
 
 namespace MPSTensor
@@ -70,47 +72,36 @@ noncomputable def parentHamiltonianES (A : MPSTensor d D) (L N : ℕ) :
   let e := (WithLp.linearEquiv 2 ℂ (NSiteSpace d N))
   e.symm.toLinearMap.comp ((parentHamiltonian A L N).comp e.toLinearMap)
 
-/-! ### Abstract martingale criterion
+/-! ### Norm bound ⟹ eigenvalue-level gap
 
-This section isolates the purely operator-theoretic content of the
-Kastoryano–Lucia martingale method from the MPS-specific verification.
+This is the elementary final step of the martingale method: given the
+martingale-derived norm bound `γ ‖v‖ ≤ ‖H v‖` for all `v ⊥ ker H`, convert
+it into an eigenvalue-level gap statement. In finite dimensions this is a
+one-line consequence of `norm_smul`.
 
-The final form used below is the "norm-bound" form of the gap statement:
-if `γ ‖v‖ ≤ ‖H v‖` holds for all `v` in the orthogonal complement of the
-kernel, then `H` is gapped by `γ`. The real mathematical content of the
-martingale method is producing this hypothesis from the operator inequality
-
-    `H² ≥ γ H`
-
-(see Kastoryano–Lucia 2018, Theorem 3.1 and Nachtergaele 1996, Lemma 4.1).
-The abstract operator inequality in turn follows from a family of projector
-bounds on overlapping pairs together with a row-sum bound on the overlap
-constants. -/
+The non-trivial mathematical content — producing the norm bound itself from
+the MPS-specific operator inequality `H² ≥ γ H` (which in turn comes from
+the Friedrichs-angle estimate on overlapping projector pairs plus a row-sum
+bound) — is *not* in this section. It is deferred to the `sorry` in
+`parentHamiltonian_gapped`. -/
 
 /--
-**Abstract martingale criterion (Kastoryano–Lucia / Nachtergaele).**
+**Norm bound ⟹ eigenvalue-level gap (elementary conversion step).**
 
-Let `H : E →ₗ[ℂ] E` be a linear endomorphism of a finite-dimensional complex
-inner product space, and let `γ > 0` be a real number. If `H` admits a
-"martingale decomposition" giving rise to the norm-bound
+Let `H : EuclideanSpace ℂ ι →ₗ[ℂ] EuclideanSpace ℂ ι` be a linear endomorphism
+of a finite-dimensional complex inner product space, and let `γ > 0`. Suppose
 
-    `γ ‖v‖ ≤ ‖H v‖    for all v ⊥ ker H`,
+    `γ ‖v‖ ≤ ‖H v‖    for all v ⊥ ker H`.
 
-then `H` is gapped with gap at least `γ` in the sense that every eigenvalue
-`μ` of `H` with an eigenvector `v ≠ 0` in `(ker H)ᗮ` satisfies `γ ≤ ‖μ‖`.
+Then every eigenvalue `μ` of `H` with an eigenvector `v ≠ 0` in `(ker H)ᗮ`
+satisfies `γ ≤ ‖μ‖`.
 
-The non-trivial content is entirely the martingale-norm bound `hBound` — the
-full derivation (frustration-free sum of projectors + operator inequality on
-overlapping pairs + row-sum bound ⟹ `H² ≥ γ H` ⟹ norm bound) is deferred.
-Once that bound is produced, this lemma converts it into a genuine
-eigenvalue-level spectral-gap statement.
-
-References:
-* Kastoryano–Lucia, arXiv:1705.09491, Sections 2–3 (clean modern treatment).
-* Nachtergaele, CMP 175 (1996), Lemma 4.1.
-* Fannes–Nachtergaele–Werner, CMP 144 (1992) (original gap proof).
+This is the elementary conversion `‖H v‖ = ‖μ‖ * ‖v‖` step — no "martingale"
+content is present here. The real work of the martingale method is producing
+the hypothesis `hBound`; see `parentHamiltonian_gapped` for where that is
+deferred.
 -/
-theorem spectralGap_of_martingale {ι : Type*} [Fintype ι]
+theorem spectralGap_norm_bound_to_eigenvalue {ι : Type*} [Fintype ι]
     (H : EuclideanSpace ℂ ι →ₗ[ℂ] EuclideanSpace ℂ ι) (γ : ℝ) (_hγ : 0 < γ)
     (hBound : ∀ v : EuclideanSpace ℂ ι,
       v ∈ (LinearMap.ker H)ᗮ → γ * ‖v‖ ≤ ‖H v‖) :
@@ -147,8 +138,9 @@ operator inequality
 
 with constants `c_{ij}` depending only on the MPS tensor (not on `N`). At most
 `2(L-1)` local terms overlap a given `h_i`, so the row-sum bound
-`∑_{j≠i} c_{ij} ≤ 1` holds uniformly in `N`. The abstract martingale criterion
-`spectralGap_of_martingale` then yields a uniform gap.
+`∑_{j≠i} c_{ij} ≤ 1` holds uniformly in `N`. Combining these via the
+spectral theorem yields the norm bound `γ ‖v‖ ≤ ‖H v‖` on `(ker H)ᗮ`, which
+is precisely the conclusion below.
 
 The proof is deferred; the operator inequality and its derivation from the
 intersection property are the remaining mathematical work. -/
