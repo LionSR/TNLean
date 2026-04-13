@@ -96,12 +96,14 @@ inner product space, and let `γ > 0` be a real number. If `H` admits a
 
     `γ ‖v‖ ≤ ‖H v‖    for all v ⊥ ker H`,
 
-then `H` is gapped with gap at least `γ`.
+then `H` is gapped with gap at least `γ` in the sense that every eigenvalue
+`μ` of `H` with an eigenvector `v ≠ 0` in `(ker H)ᗮ` satisfies `γ ≤ ‖μ‖`.
 
-This is a packaging statement: it names the conclusion of the full martingale
-method so that downstream theorems can cite a single hypothesis. The full
-derivation (frustration-free sum of projectors + operator inequality on
+The non-trivial content is entirely the martingale-norm bound `hBound` — the
+full derivation (frustration-free sum of projectors + operator inequality on
 overlapping pairs + row-sum bound ⟹ `H² ≥ γ H` ⟹ norm bound) is deferred.
+Once that bound is produced, this lemma converts it into a genuine
+eigenvalue-level spectral-gap statement.
 
 References:
 * Kastoryano–Lucia, arXiv:1705.09491, Sections 2–3 (clean modern treatment).
@@ -112,9 +114,14 @@ theorem spectralGap_of_martingale {ι : Type*} [Fintype ι]
     (H : EuclideanSpace ℂ ι →ₗ[ℂ] EuclideanSpace ℂ ι) (γ : ℝ) (_hγ : 0 < γ)
     (hBound : ∀ v : EuclideanSpace ℂ ι,
       v ∈ (LinearMap.ker H)ᗮ → γ * ‖v‖ ≤ ‖H v‖) :
-    ∀ v : EuclideanSpace ℂ ι,
-      v ∈ (LinearMap.ker H)ᗮ → γ * ‖v‖ ≤ ‖H v‖ :=
-  hBound
+    ∀ (μ : ℂ) (v : EuclideanSpace ℂ ι),
+      v ∈ (LinearMap.ker H)ᗮ → v ≠ 0 → H v = μ • v → γ ≤ ‖μ‖ := by
+  intro μ v hv hne heq
+  have hv_pos : (0 : ℝ) < ‖v‖ := norm_pos_iff.mpr hne
+  have h1 : γ * ‖v‖ ≤ ‖H v‖ := hBound v hv
+  have h2 : ‖H v‖ = ‖μ‖ * ‖v‖ := by rw [heq, norm_smul]
+  rw [h2] at h1
+  exact le_of_mul_le_mul_right h1 hv_pos
 
 /-! ### Specialization to the MPS parent Hamiltonian -/
 
