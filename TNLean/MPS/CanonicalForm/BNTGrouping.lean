@@ -13,7 +13,7 @@ open scoped Matrix BigOperators
 This file provides the **BNT grouping / sorting** step that bridges the output of the
 canonical form existence reduction (blocks with nonzero weights, not necessarily strictly
 ordered by norm) with the `IsNormalCanonicalForm` predicate (which requires
-`StrictAnti (fun k => ‖μ k‖)`).
+`Antitone (fun k => ‖μ k‖)`).
 
 ## Background: Gap 2 in the existence reduction
 
@@ -23,8 +23,8 @@ distinct norms `‖μ j‖ ≠ ‖μ k‖` for `j ≠ k`.  In particular, after 
 period `P` the weights become `(μ₀ k)^P`, and two distinct original weights `μ₀ j`,
 `μ₀ k` can satisfy `|(μ₀ j)^P| = |(μ₀ k)^P|` even when `|μ₀ j| ≠ |μ₀ k|`.
 
-`IsNormalCanonicalForm` requires `StrictAnti (fun k => ‖μ k‖)`, which in particular
-implies all norms are pairwise distinct.  Two resolutions are possible:
+`IsNormalCanonicalForm` requires `Antitone (fun k => ‖μ k‖)`, and
+`IsNormalCanonicalFormBNT` further requires `StrictAnti`.  Two resolutions are possible:
 
 * **(a)** Relax the predicate to match the paper's canonical form definition.
 * **(b)** Add a BNT grouping/sorting step.
@@ -212,7 +212,7 @@ theorem exists_sortedNCF_of_distinct_norms
     block_irreducible := fun k => hIrr (e k)
     leftCanonical     := fun k => hTP (e k)
     block_primitive   := fun k => hPrim (e k)
-    mu_strict_anti    := he_anti
+    mu_antitone       := he_anti.antitone
     mu_ne_zero        := fun k => hμne (e k)
     dim_pos           := fun k => hDim (e k)
   }⟩

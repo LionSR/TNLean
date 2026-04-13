@@ -260,7 +260,7 @@ theorem isNormalCanonicalForm_of_tp_primitive_irr_sorted
     (hIrr : ∀ k, IsIrreducibleTensor (blocks k))
     (hAnti : StrictAnti (fun k : Fin r => ‖μ k‖)) :
     IsNormalCanonicalForm (d := d') μ blocks :=
-  IsNormalCanonicalForm.ofSeparatedData
+  IsNormalCanonicalForm.ofStrictSeparatedData
     (HasIrreducibleBlocks.ofForall hIrr)
     (IsLeftCanonicalBlockFamily.ofForall hTP)
     (HasPrimitiveBlocks.ofForall hPrim)
