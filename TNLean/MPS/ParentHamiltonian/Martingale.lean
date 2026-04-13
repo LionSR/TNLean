@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.ParentHamiltonian.Defs
 import TNLean.MPS.ParentHamiltonian.Basic
+import Mathlib.Analysis.InnerProductSpace.Positive
 
 /-!
 # Martingale-method spectral-gap framework for parent Hamiltonians
@@ -37,27 +38,76 @@ Kastoryano–Lucia 2018 (arXiv:1705.09491), Nachtergaele 1996
 
 The last step — the implication from the quadratic-form inequality
 `H² ≥ γ H` to the norm bound `γ ‖v‖ ≤ ‖H v‖` on `(ker H)ᗮ` — is packaged
-as the abstract lemma `spectralGap_of_martingale` below. Its hypothesis is
-the quadratic-form inequality (in inner-product form), and its proof is
-the spectral-theorem argument, currently deferred as `sorry`.
+as the abstract lemma `FrustrationFree.spectralGap_of_martingale` below.
+Its hypothesis is the quadratic-form inequality (in inner-product form),
+and its proof is the spectral-theorem argument, currently deferred as
+`sorry`.
 
 The MPS-specific step (producing the quadratic-form inequality for
 `parentHamiltonianES A L N`) is the remaining obligation of
-`parentHamiltonian_gapped`, which applies `spectralGap_of_martingale`
-with the MPS bound and also remains `sorry`.
+`MPSTensor.parentHamiltonian_gapped`, which applies
+`FrustrationFree.spectralGap_of_martingale` with the MPS bound and also
+remains `sorry`.
 
 ## Main results
 
-* `spectralGap_of_martingale` — abstract martingale criterion: the
-  quadratic-form inequality `γ ⟨v, H v⟩ ≤ ⟨H v, H v⟩` implies the norm
-  bound `γ ‖v‖ ≤ ‖H v‖` on `(ker H)ᗮ` (deferred).
-* `parentHamiltonian_gapped` — uniform spectral gap for MPS parent
-  Hamiltonians on injective tensors (deferred).
+* `FrustrationFree.spectralGap_of_martingale` — abstract martingale
+  criterion: the quadratic-form inequality `γ ⟨H v, v⟩ ≤ ⟨H v, H v⟩`
+  for a `LinearMap.IsPositive` operator `H` implies the norm bound
+  `γ ‖v‖ ≤ ‖H v‖` on `(ker H)ᗮ` (deferred).
+* `MPSTensor.parentHamiltonian_gapped` — uniform spectral gap for MPS
+  parent Hamiltonians on injective tensors (deferred).
 -/
 
-namespace MPSTensor
-
 open scoped BigOperators InnerProductSpace
+
+/-! ### Abstract martingale criterion
+
+The quadratic-form ⟹ norm-bound step is purely operator-theoretic and has no
+MPS content in its signature, so it lives in its own `FrustrationFree`
+namespace. The MPS-specific wrapper `MPSTensor.parentHamiltonian_gapped` below
+instantiates it for the parent Hamiltonian. -/
+
+namespace FrustrationFree
+
+/--
+**Abstract martingale criterion (quadratic form ⟹ norm bound).**
+
+Let `H` be a positive linear operator (in the sense of `LinearMap.IsPositive`:
+symmetric with `0 ≤ re ⟪H v, v⟫`) on a finite-dimensional complex Hilbert
+space satisfying the quadratic-form inequality
+
+    `γ ⟨v, H v⟩ ≤ ⟨H v, H v⟩` for all `v`,
+
+i.e.\ `H² ≥ γ H` as a quadratic form. Then on the orthogonal complement
+of `ker H`, `H` is bounded below in norm by `γ`:
+
+    `γ ‖v‖ ≤ ‖H v‖` for all `v ⊥ ker H`.
+
+The positivity hypothesis is essential: it rules out negative eigenvalues of
+small magnitude (such as `H = -Id`, which otherwise satisfies
+`γ ⟨v, H v⟩ ≤ ⟨H v, H v⟩` vacuously but fails the conclusion). For the MPS
+parent Hamiltonian this hypothesis is automatic because `H = ∑ᵢ hᵢ` is a
+sum of orthogonal projectors.
+
+This is the operator-theoretic content of the Kastoryano–Lucia /
+Nachtergaele martingale method: once the MPS-specific projector
+geometry (Friedrichs angle on overlapping local ground spaces plus
+the row-sum bound) produces the operator inequality `H² ≥ γ H` for the
+PSD operator `H`, the norm lower bound — and hence the spectral gap
+for eigenvectors of `H` — follows by the spectral theorem. This lemma
+packages the final spectral-theorem step; the MPS-specific derivation
+of the quadratic-form hypothesis is the remaining obligation inside
+`MPSTensor.parentHamiltonian_gapped`. -/
+theorem spectralGap_of_martingale {ι : Type*} [Fintype ι] {γ : ℝ} (_hγ : 0 < γ)
+    {H : EuclideanSpace ℂ ι →ₗ[ℂ] EuclideanSpace ℂ ι} (_hH : H.IsPositive)
+    (_hOpIneq : ∀ v, γ * (⟪H v, v⟫_ℂ).re ≤ (⟪H v, H v⟫_ℂ).re) :
+    ∀ v ∈ (LinearMap.ker H)ᗮ, γ * ‖v‖ ≤ ‖H v‖ := by
+  sorry
+
+end FrustrationFree
+
+namespace MPSTensor
 
 variable {d D : ℕ}
 
@@ -76,45 +126,6 @@ noncomputable def parentHamiltonianES (A : MPSTensor d D) (L N : ℕ) :
     EuclideanSpace ℂ (Cfg d N) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d N) :=
   let e := (WithLp.linearEquiv 2 ℂ (NSiteSpace d N))
   e.symm.toLinearMap.comp ((parentHamiltonian A L N).comp e.toLinearMap)
-
-/-! ### Abstract martingale criterion -/
-
-/--
-**Abstract martingale criterion (quadratic form ⟹ norm bound).**
-
-Let `H` be a positive semidefinite self-adjoint operator on a
-finite-dimensional complex Hilbert space satisfying the quadratic-form
-inequality
-
-    `γ ⟨v, H v⟩ ≤ ⟨H v, H v⟩` for all `v`,
-
-i.e.\ `H² ≥ γ H` as a quadratic form. Then on the orthogonal complement
-of `ker H`, `H` is bounded below in norm by `γ`:
-
-    `γ ‖v‖ ≤ ‖H v‖` for all `v ⊥ ker H`.
-
-The positive-semidefiniteness hypothesis `0 ≤ ⟨v, H v⟩` is essential: it
-rules out negative eigenvalues of small magnitude (such as `H = -Id`,
-which otherwise satisfies `γ ⟨v, H v⟩ ≤ ⟨H v, H v⟩` vacuously but fails
-the conclusion). For the MPS parent Hamiltonian this hypothesis is
-automatic because `H = ∑ᵢ hᵢ` is a sum of orthogonal projectors.
-
-This is the operator-theoretic content of the Kastoryano–Lucia /
-Nachtergaele martingale method: once the MPS-specific projector
-geometry (Friedrichs angle on overlapping local ground spaces plus
-the row-sum bound) produces the operator inequality `H² ≥ γ H` for the
-PSD operator `H`, the norm lower bound — and hence the spectral gap
-for eigenvectors of `H` — follows by the spectral theorem. This lemma
-packages the final spectral-theorem step; the MPS-specific derivation
-of the quadratic-form hypothesis is the remaining obligation inside
-`parentHamiltonian_gapped`. -/
-theorem spectralGap_of_martingale {ι : Type*} [Fintype ι] {γ : ℝ} (_hγ : 0 < γ)
-    (H : EuclideanSpace ℂ ι →ₗ[ℂ] EuclideanSpace ℂ ι)
-    (_hH_sa : ∀ v w, ⟪H v, w⟫_ℂ = ⟪v, H w⟫_ℂ)
-    (_hH_pos : ∀ v, 0 ≤ (⟪v, H v⟫_ℂ).re)
-    (_hOpIneq : ∀ v, γ * (⟪v, H v⟫_ℂ).re ≤ (⟪H v, H v⟫_ℂ).re) :
-    ∀ v ∈ (LinearMap.ker H)ᗮ, γ * ‖v‖ ≤ ‖H v‖ := by
-  sorry
 
 /-! ### Uniform spectral gap for the MPS parent Hamiltonian -/
 
@@ -142,15 +153,15 @@ with constants `c_{ij}` depending only on the MPS tensor (not on `N`). At most
 `2(L-1)` local terms overlap a given `h_i`, so the row-sum bound
 `∑_{j≠i} c_{ij} ≤ 1` holds uniformly in `N`. Combined with `h_i^2 = h_i`,
 this yields the quadratic-form inequality `H² ≥ γ H`, which feeds into
-the abstract lemma `spectralGap_of_martingale` to produce the norm bound
-`γ ‖v‖ ≤ ‖H v‖` on `(ker H)ᗮ`. The positive-semidefiniteness hypothesis
-required by `spectralGap_of_martingale` is automatic here because
-`H_N = ∑ᵢ hᵢ` is a sum of orthogonal projectors.
+the abstract lemma `FrustrationFree.spectralGap_of_martingale` to produce
+the norm bound `γ ‖v‖ ≤ ‖H v‖` on `(ker H)ᗮ`. The `LinearMap.IsPositive`
+hypothesis required by `FrustrationFree.spectralGap_of_martingale` is
+automatic here because `H_N = ∑ᵢ hᵢ` is a sum of orthogonal projectors.
 
 The proof below structures the argument exactly this way: it invokes
-`spectralGap_of_martingale` with the MPS-specific quadratic-form bound,
-which is the remaining mathematical obligation (Friedrichs angle ⟹
-operator inequality). -/
+`FrustrationFree.spectralGap_of_martingale` with the MPS-specific
+quadratic-form bound, which is the remaining mathematical obligation
+(Friedrichs angle ⟹ operator inequality). -/
 theorem parentHamiltonian_gapped
     (A : MPSTensor d D) (_hA : IsInjective A) (L : ℕ) (_hL : 1 < L) :
     ∃ γ > 0, ∀ (N : ℕ) (_hLN : 2 * L ≤ N)
@@ -160,8 +171,8 @@ theorem parentHamiltonian_gapped
   -- The MPS-specific Friedrichs-angle / row-sum argument produces a
   -- uniform `γ > 0` for which `parentHamiltonianES A L N` satisfies the
   -- quadratic-form inequality `H² ≥ γ H`. Feeding this into
-  -- `spectralGap_of_martingale` gives the desired norm bound on
-  -- `(ker H)ᗮ = (parentHamiltonianGroundSpaceES A L N)ᗮ`.
+  -- `FrustrationFree.spectralGap_of_martingale` gives the desired norm
+  -- bound on `(ker H)ᗮ = (parentHamiltonianGroundSpaceES A L N)ᗮ`.
   sorry
 
 end MPSTensor
