@@ -515,34 +515,13 @@ theorem periodicOverlap_tendsto_zero_of_ne_period
 
 /-! ## Case 2: Same period, no sector match → orthogonal (Appendix A, second case) -/
 
-/-- **Structural bridge** for Case 3 of Proposition 3.3 (arXiv:1708.00029):
-each nonzero compressed sector block `blocks u` arising from a cyclic sector
-decomposition of a periodic irreducible tensor has both a primitive transfer
-map and is tensor-irreducible.
+/-- Converse of `isIrreducibleCP_transferMap_conjTranspose_of_isIrreducibleTensor`:
+if the adjoint transfer map `∑ᵢ Aᵢ† · Aᵢ` is irreducible, then the tensor `A` is
+tensor-irreducible. The proof swaps every invariant projection `P` for `1 - P` and
+delegates to the forward direction on the conjugate-transposed Kraus operators.
 
-This is the still-missing identification
-
-  `transferMap (blocks u) ≃ cornerRestriction (P u) ((transferMap Aᴴ)^m)`
-
-threaded through the compression spectral isometry produced by
-`exists_compressedTensor_of_supported_projection` in
-`TNLean/MPS/CanonicalForm/CyclicSectors.lean`. Once that identification is in
-place, primitivity follows from `isPrimitive_restriction_of_cyclic_decomp` in
-`TNLean/Channel/Peripheral/CyclicDecomposition.lean` (which is unconditional),
-and corner irreducibility transports to `IsIrreducibleTensor (blocks u)` via
-the adjoint-side identification together with
-`MPS/Irreducible/Adjoint.lean`.
-
-See issue #450 for the recommended split: (i) close the MPS-level `hLift`
-in `SectorIrreducibility.lean` to expose corner irreducibility of `(E†)^m`,
-(ii) prove `compressedTensor_transferMap_conj` (the compressed ↔ cornerRestriction
-identification), (iii) combine with this helper to discharge
-`sectorBlocked_isNormal_of_isPeriodic`.
-
-Kept as an explicit named sublemma so downstream consumers (`Case 2`,
-`Case 3`) and subsequent PRs can target its statement directly — the
-declaration is intentionally non-`private` so that follow-up modules
-(e.g. a dedicated `SectorIrreducibility` bridge) can reference it. -/
+TODO: This should be moved to `TNLean/MPS/Irreducible/Adjoint.lean` and exposed
+as an `Iff` together with its forward sibling. -/
 private lemma isIrreducibleTensor_of_isIrreducibleMap_conjTranspose
     (A : MPSTensor d D)
     (hIrr :
@@ -610,6 +589,34 @@ private lemma adjointTransferMap_primitive_and_irreducible_sectorBlock_of_cyclic
           (fun i => (blocks u i)ᴴ)) := by
   sorry
 
+/-- **Structural bridge** for Case 3 of Proposition 3.3 (arXiv:1708.00029):
+each nonzero compressed sector block `blocks u` arising from a cyclic sector
+decomposition of a periodic irreducible tensor has both a primitive transfer
+map and is tensor-irreducible.
+
+This is the still-missing identification
+
+  `transferMap (blocks u) ≃ cornerRestriction (P u) ((transferMap Aᴴ)^m)`
+
+threaded through the compression spectral isometry produced by
+`exists_compressedTensor_of_supported_projection` in
+`TNLean/MPS/CanonicalForm/CyclicSectors.lean`. Once that identification is in
+place, primitivity follows from `isPrimitive_restriction_of_cyclic_decomp` in
+`TNLean/Channel/Peripheral/CyclicDecomposition.lean` (which is unconditional),
+and corner irreducibility transports to `IsIrreducibleTensor (blocks u)` via
+the adjoint-side identification together with
+`MPS/Irreducible/Adjoint.lean`.
+
+See issue #450 for the recommended split: (i) close the MPS-level `hLift`
+in `SectorIrreducibility.lean` to expose corner irreducibility of `(E†)^m`,
+(ii) prove `compressedTensor_transferMap_conj` (the compressed ↔ cornerRestriction
+identification), (iii) combine with this helper to discharge
+`sectorBlocked_isNormal_of_isPeriodic`.
+
+Kept as an explicit named sublemma so downstream consumers (`Case 2`,
+`Case 3`) and subsequent PRs can target its statement directly — the
+declaration is intentionally non-`private` so that follow-up modules
+(e.g. a dedicated `SectorIrreducibility` bridge) can reference it. -/
 lemma primitive_and_irreducible_sectorBlocks_of_cyclicDecomp
     [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
     (hP : IsPeriodic m A)
