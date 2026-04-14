@@ -79,6 +79,7 @@ import TNLean.Channel.Schwarz.TwoPositive
 import TNLean.Channel.Schwarz.MultiplicativeDomain
 import TNLean.Channel.Schwarz.MultiplicativeDomainPowers
 import TNLean.Channel.Schwarz.MultiplicativeDomainFull
+import TNLean.Channel.Schwarz.TraceCFC
 import TNLean.Channel.FixedPoint.Algebra
 import TNLean.Channel.FixedPoint.Cesaro
 import TNLean.Channel.FixedPoint.StationarySupport
