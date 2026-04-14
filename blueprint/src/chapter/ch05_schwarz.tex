@@ -732,11 +732,41 @@ currently taken as assumptions pending upstream formalization of operator
 concavity and convexity for real powers $x\mapsto x^p$ on the Loewner
 order, together with operator concavity of the matrix logarithm.
 
+\subsection{Diagonal Jensen inequality}
+
+\begin{lemma}[Diagonal Jensen inequality]\label{lem:diagonal_jensen_of_convexOn}
+    \lean{Matrix.diagonal_jensen_of_convexOn}
+    \leanok
+    Let $f:\R\to\R$ be convex on $[0,\infty)$, let $A$ be a positive
+    semidefinite matrix indexed by a finite type $n$, and let $v\in\C^n$
+    satisfy $\langle v,v\rangle=1$. Then
+    \[
+        f\!\bigl(\Re\langle v, A v\rangle\bigr)
+        \;\le\;
+        \Re\langle v, f(A)\,v\rangle,
+    \]
+    where $f(A)$ is defined by the Hermitian continuous functional calculus.
+\end{lemma}
+
+\begin{proof}\leanok
+    Write $A=U\,\operatorname{diag}(\mu)\,U^{\ast}$ by the spectral
+    theorem and set $w=U^{\ast}v$. Since $U$ is unitary,
+    $p_i:=\lvert w_i\rvert^2$ satisfies $\sum_i p_i=\lVert v\rVert^2=1$,
+    so $(p_i)$ is a probability distribution on $n$. The eigenvalues
+    $\mu_i$ lie in $[0,\infty)$ because $A$ is positive semidefinite.
+    A direct computation yields
+    $\Re\langle v,Av\rangle=\sum_i p_i\mu_i$ and
+    $\Re\langle v,f(A)v\rangle=\sum_i p_i f(\mu_i)$, so the scalar Jensen
+    inequality applied to the weights $(p_i)$ and points $(\mu_i)$ gives
+    the conclusion. See Bhatia, \emph{Matrix Analysis}, Ch.~V.
+\end{proof}
+
 \subsection{Trace concavity and convexity of matrix powers}
 
 \begin{theorem}[Trace concavity of real powers]\label{thm:trace_rpow_concave_axiom}
     \lean{trace_rpow_concave_axiom}
     \notready
+    \uses{lem:diagonal_jensen_of_convexOn}
     For $p\in[0,1]$, PSD matrices $A_1,A_2$, and $t\in[0,1]$:
     \[
         t\,\Re\tr(A_1^p)+(1-t)\,\Re\tr(A_2^p)
@@ -763,6 +793,7 @@ order, together with operator concavity of the matrix logarithm.
 \begin{theorem}[Trace convexity of real powers]\label{thm:trace_rpow_convex_axiom}
     \lean{trace_rpow_convex_axiom}
     \notready
+    \uses{lem:diagonal_jensen_of_convexOn}
     For $p\in[1,2]$, PSD matrices $A_1,A_2$, and $t\in[0,1]$:
     \[
         \Re\tr\!\bigl((tA_1+(1-t)A_2)^p\bigr)
