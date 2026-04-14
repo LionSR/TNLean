@@ -44,6 +44,13 @@ canonical form is deferred to a follow-up PR: its blueprint entry
 Lean statement will be introduced together with its proof rather than as an
 axiomless scaffold.
 
+## Module location
+
+The MPO/MPDO/LPDO foundations introduced by issue #235 live under `TNLean/MPS/MPDO/`
+(imported as layer 3b in `TNLean.lean`) rather than as a top-level `TNLean/MPDO/`
+namespace: they sit on top of the `MPSTensor` infrastructure from `TNLean/MPS/`, so
+the MPS-scoped location matches the existing layering.
+
 ## References
 
 * [CPGSV17] arXiv:1606.00608, Proposition IV.12 and the auxiliary Lemma L in the appendix
