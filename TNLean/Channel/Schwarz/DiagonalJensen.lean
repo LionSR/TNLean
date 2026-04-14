@@ -98,10 +98,7 @@ theorem diagonal_jensen_of_convexOn
         (U * Matrix.diagonal g * Uᴴ) *ᵥ v
           = U *ᵥ (Matrix.diagonal g *ᵥ (Uᴴ *ᵥ v)) := by
       rw [mul_assoc, ← Matrix.mulVec_mulVec, ← Matrix.mulVec_mulVec]
-    rw [hmul]
-    rw [show (U *ᵥ (Matrix.diagonal g *ᵥ (Uᴴ *ᵥ v)))
-          = U *ᵥ (Matrix.diagonal g *ᵥ w) from rfl]
-    rw [Matrix.dotProduct_mulVec, hvU]
+    rw [hmul, Matrix.dotProduct_mulVec, hvU]
     -- `star w ⬝ᵥ (diagonal g *ᵥ w) = ∑ i, star (w i) * (g i * w i)`.
     simp only [dotProduct, Matrix.mulVec_diagonal, Pi.star_apply]
     refine Finset.sum_congr rfl (fun i _ => ?_)
@@ -135,17 +132,11 @@ theorem diagonal_jensen_of_convexOn
     rw [hfA_spec, hQ]
     refine Finset.sum_congr rfl (fun i _ => ?_)
     rw [h_normSq i]
-  -- Real parts: `(star v ⬝ᵥ (A *ᵥ v)).re = ∑ i, μ i * p i`.
-  have h_vAv_re : (star v ⬝ᵥ (A *ᵥ v)).re = ∑ i, μ i * p i := by
-    rw [h_vAv]
-    rw [show (∑ i, ((μ i : ℂ) * ((p i : ℝ) : ℂ)))
-          = (((∑ i, μ i * p i) : ℝ) : ℂ) by push_cast; rfl]
-    simp
-  have h_vfAv_re : (star v ⬝ᵥ (hH.cfc f *ᵥ v)).re = ∑ i, f (μ i) * p i := by
-    rw [h_vfAv]
-    rw [show (∑ i, (((f (μ i) : ℝ) : ℂ) * ((p i : ℝ) : ℂ)))
-          = (((∑ i, f (μ i) * p i) : ℝ) : ℂ) by push_cast; rfl]
-    simp
+  -- Real parts.
+  have h_vAv_re : (star v ⬝ᵥ (A *ᵥ v)).re = ∑ i, p i * μ i := by
+    rw [h_vAv]; simp [mul_comm]
+  have h_vfAv_re : (star v ⬝ᵥ (hH.cfc f *ᵥ v)).re = ∑ i, p i * f (μ i) := by
+    rw [h_vfAv]; simp [mul_comm]
   -- `∑ i, p i = 1` (unit vector + unitarity).
   have hp_sum : ∑ i, p i = 1 := by
     -- `∑ i, (p i : ℂ) = star w ⬝ᵥ w = star v ⬝ᵥ v = 1`.
@@ -176,12 +167,6 @@ theorem diagonal_jensen_of_convexOn
   have hjensen := hf.map_sum_le (t := Finset.univ) hp_nn hp_sum hmem
   simp only [smul_eq_mul] at hjensen
   rw [h_vAv_re, h_vfAv_re]
-  -- Match `∑ p i * μ i` with `∑ μ i * p i` (and similarly for `f`).
-  have eq1 : ∑ i, p i * μ i = ∑ i, μ i * p i :=
-    Finset.sum_congr rfl (fun i _ => mul_comm _ _)
-  have eq2 : ∑ i, p i * f (μ i) = ∑ i, f (μ i) * p i :=
-    Finset.sum_congr rfl (fun i _ => mul_comm _ _)
-  rw [← eq1, ← eq2]
   exact hjensen
 
 end Matrix
