@@ -192,9 +192,10 @@ private theorem exists_cyclic_sector_decomp_after_blocking_of_isPeriodic
           _ = (ω ^ m) ^ (j : ℕ) := by rw [pow_mul]
           _ = 1 := by simp [hωprim.pow_eq_one]
       simpa [hperiph_roots] using hpow
-  obtain ⟨dim, blocks, P, hLC, hMPV, hPproj, hPsum, hCyclic, hComm, hTrace, hNondeg⟩ :=
+  obtain ⟨dim, blocks, P, hLC, hMPV, hPproj, hPsum, hCyclic, hComm, hTraceNondeg⟩ :=
     exists_cyclic_sector_decomp_after_blocking
       A hP.leftCanonical hP.irreducible ρ hρ_pd h_adjfix hIrrK hωprim hperiph_range
+  obtain ⟨hTrace, hNondeg⟩ := hTraceNondeg
   exact ⟨dim, blocks, hLC, hMPV, ⟨P, hPproj, hPsum, hCyclic, hComm, hTrace⟩, hNondeg⟩
 
 /-! ## Self-overlap (first paragraph of Appendix A) -/
@@ -208,7 +209,14 @@ theorem periodicSelfOverlap_tendsto
     [NeZero D] (A : MPSTensor d D) {m : ℕ}
     (hP : IsPeriodic m A) :
     Tendsto (fun k => mpvOverlap A A (m * k)) atTop (nhds (m : ℂ)) := by
-  sorry
+  by_cases hm : m = 1
+  · subst hm
+    have hPrim : PeripheralSpectrum.IsPrimitive (transferMap (d := d) (D := D) A) := by
+      simpa using hP.peripheral_eq
+    simpa using
+      (overlap_tendsto_one_of_peripheralPrimitive_of_irreducible
+        (A := A) hP.irreducible hP.leftCanonical hPrim)
+  · sorry
 
 /-! ## Case 1: Different periods → orthogonal (Appendix A, first case) -/
 
@@ -639,6 +647,20 @@ lemma sectorTensor_proportional_of_blockedMatch
   -- Step 4: Extract per-site proportionality via injectivity
   -- Step 5: |κ_v| = 1 from left-canonical normalization
   -- Step 6: Telescope κ_v = e^{i(φ_v - φ_{v+1})} and assemble U
+  --
+  -- Missing bridge, not yet present in the current API:
+  -- 1. `IsCyclicSectorDecomp` must expose one-site sector transition tensors
+  --    `C_u i : H_u → H_{u+1}` whose `m`-fold cyclic products are the compressed
+  --    blocked tensors `blocksA u` (and similarly for `B`).
+  -- 2. Sectorwise `GaugePhaseEquiv` for those `m`-fold products, together with
+  --    `IsNormal`, must be converted via the decomposition map/one-sided inverse
+  --    into per-site proportionalities.
+  -- 3. The resulting phases must be telescoped into a single global gauge and
+  --    unit-modulus scalar, yielding `RepeatedBlocks A B`.
+  --
+  -- The existing imports contain the injective decomposition map and the 2-site
+  -- proportionality lemma (`tensor_proportional`), but not the sector-transition
+  -- construction or the final unblocking/telescoping theorem needed to apply them.
   sorry
 
 /-- **Case 3: a matching sector implies gauge equivalence**. If two periodic tensors have
