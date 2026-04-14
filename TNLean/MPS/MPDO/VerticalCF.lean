@@ -35,9 +35,14 @@ surrogate for the paper's vertical canonical form.
 * `IsVerticalCF`:
   a flattened positive-weight BNT decomposition for `diagonalTensor M`.
 * `blockwise_insert_eq_of_mpv_agree`:
-  a scaffold for Lemma L from the paper.
-* `verticalCF_of_horizontalCF`:
-  the Proposition IV.12 / Prop. 4.13 scaffold.
+  Lemma L from the paper's appendix, proved here using the block-injective
+  canonical-form (biCF) field of `HorizontalCFData`.
+
+The full Proposition IV.12 / Prop. 4.13 bridge from horizontal to vertical
+canonical form is deferred to a follow-up PR: its blueprint entry
+`thm:vertical_cf_of_horizontal_cf` is marked `\notready`, and the corresponding
+Lean statement will be introduced together with its proof rather than as an
+axiomless scaffold.
 
 ## References
 
@@ -306,16 +311,11 @@ theorem blockwise_insert_eq_of_mpv_agree
     (smul_eq_zero.mp hk).resolve_left hμne
   exact sub_eq_zero.mp hdiff
 
-/-- **Proposition IV.12 / Prop. 4.13** (arXiv:1606.00608): a horizontal
-canonical-form MPDO is also in vertical canonical form.
-
-In the current repository this is stated using the Lean-facing predicates
-`IsHorizontalCF` and `IsVerticalCF` defined above. The proof is expected to
-follow the paper's route through Lemma L and the positivity of the horizontal
-MPDO family. -/
-theorem verticalCF_of_horizontalCF (M : MPOTensor d D)
-    (hMPDO : IsMPDO M) (hHCF : IsHorizontalCF M) :
-    IsVerticalCF M := by
-  sorry
+-- The full bridge `verticalCF_of_horizontalCF` (Proposition IV.12 / Prop. 4.13
+-- of arXiv:1606.00608) — every MPDO in horizontal canonical form is in vertical
+-- canonical form — is tracked by the blueprint entry
+-- `thm:vertical_cf_of_horizontal_cf` (currently `\notready`) and will be added
+-- as a theorem in a follow-up PR together with its proof. See the RFP/MPDO 3/5
+-- milestone in issue #235 for the forward plan.
 
 end MPOTensor
