@@ -363,6 +363,53 @@ theorem periodicOverlap_tendsto_zero_of_ne_period
 
 /-! ## Case 2: Same period, no sector match → orthogonal (Appendix A, second case) -/
 
+/-- **Structural bridge** for Case 3 of Proposition 3.3 (arXiv:1708.00029):
+each nonzero compressed sector block `blocks u` arising from a cyclic sector
+decomposition of a periodic irreducible tensor has both a primitive transfer
+map and is tensor-irreducible.
+
+This is the still-missing identification
+
+  `transferMap (blocks u) ≃ cornerRestriction (P u) ((transferMap Aᴴ)^m)`
+
+threaded through the compression spectral isometry produced by
+`exists_compressedTensor_of_supported_projection` in
+`TNLean/MPS/CanonicalForm/CyclicSectors.lean`. Once that identification is in
+place, primitivity follows from `isPrimitive_restriction_of_cyclic_decomp` in
+`TNLean/Channel/Peripheral/CyclicDecomposition.lean` (which is unconditional),
+and corner irreducibility transports to `IsIrreducibleTensor (blocks u)` via
+the adjoint-side identification together with
+`MPS/Irreducible/Adjoint.lean`.
+
+See issue #450 for the recommended split: (i) close the MPS-level `hLift`
+in `SectorIrreducibility.lean` to expose corner irreducibility of `(E†)^m`,
+(ii) prove `compressedTensor_transferMap_conj` (the compressed ↔ cornerRestriction
+identification), (iii) combine with this helper to discharge
+`sectorBlocked_isNormal_of_isPeriodic`.
+
+Kept as an explicit named sublemma so downstream consumers (`Case 2`,
+`Case 3`) and subsequent PRs can target its statement directly — the
+declaration is intentionally non-`private` so that follow-up modules
+(e.g. a dedicated `SectorIrreducibility` bridge) can reference it. -/
+lemma primitive_and_irreducible_sectorBlocks_of_cyclicDecomp
+    [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
+    (hP : IsPeriodic m A)
+    {dim : Fin m → ℕ}
+    (blocks :
+      (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k))
+    (hBlocks_lc :
+      ∀ k, ∑ i : Fin (blockPhysDim d m),
+        (blocks k i)ᴴ * blocks k i = 1)
+    (hBlocks_mpv :
+      SameMPV₂ (blockTensor A m)
+        (toTensorFromBlocks (μ := fun _ => 1) blocks))
+    (hCyclic : IsCyclicSectorDecomp A blocks)
+    (u : Fin m) (hNonzero : dim u ≠ 0) :
+    _root_.IsPrimitive
+        (transferMap (d := blockPhysDim d m) (D := dim u) (blocks u))
+      ∧ IsIrreducibleTensor (blocks u) := by
+  sorry
+
 /-- Case-2 helper for the compressed blocked sector tensors.
 
 The intended mathematical content is Lemma 2.4: after blocking by the period,
@@ -394,7 +441,17 @@ lemma sectorBlocked_isNormal_of_isPeriodic
     (hCyclic : IsCyclicSectorDecomp A blocks)
     (u : Fin m) (hNonzero : dim u ≠ 0) :
     IsNormal (blocks u) := by
-  sorry
+  -- The compressed sector `blocks u` is TP (`hBlocks_lc u`). The structural
+  -- bridge `primitive_and_irreducible_sectorBlocks_of_cyclicDecomp` packages
+  -- primitivity of its transfer map together with tensor-irreducibility; once
+  -- both are in hand, `isNormal_of_tp_primitive_irreducible` concludes.
+  haveI : NeZero (dim u) := ⟨hNonzero⟩
+  obtain ⟨hPrim, hIrr⟩ :=
+    primitive_and_irreducible_sectorBlocks_of_cyclicDecomp
+      A hP blocks hBlocks_lc hBlocks_mpv hCyclic u hNonzero
+  exact
+    isNormal_of_tp_primitive_irreducible
+      (D := dim u) (blocks u) (hBlocks_lc u) hPrim hIrr
 
 /-- Same-period / no-match statement using compressed sector tensors.
 
