@@ -28,7 +28,7 @@ functional calculus.
 
 Write `A = U * diagonal (λ) * Uᴴ` by the spectral theorem, and set
 `w = Uᴴ *ᵥ v`. Since `U` is unitary, `∑ i, |w i|² = ‖v‖² = 1`, so the
-family `p i := |w i|²` is a probability distribution over `Fin D`. The
+family `p i := |w i|²` is a probability distribution over the index type. The
 eigenvalues `λ i` of the PSD matrix `A` lie in `[0, ∞)`. A direct
 computation gives
 
@@ -54,7 +54,7 @@ noncomputable section
 
 namespace Matrix
 
-variable {D : ℕ}
+variable {n : Type*} [Fintype n] [DecidableEq n]
 
 /-- **Diagonal Jensen inequality** for a convex function on a positive
 semidefinite matrix.
@@ -70,29 +70,25 @@ The proof reduces to the scalar Jensen inequality
 `ConvexOn.map_sum_le` applied to the eigenvalues of `A` with weights
 `|Uᴴ *ᵥ v i|²`. -/
 theorem diagonal_jensen_of_convexOn
-    [DecidableEq (Fin D)]
     {f : ℝ → ℝ} (hf : ConvexOn ℝ (Set.Ici (0 : ℝ)) f)
-    {A : Matrix (Fin D) (Fin D) ℂ} (hA : A.PosSemidef)
-    {v : Fin D → ℂ} (hv : star v ⬝ᵥ v = (1 : ℂ)) :
+    {A : Matrix n n ℂ} (hA : A.PosSemidef)
+    {v : n → ℂ} (hv : star v ⬝ᵥ v = (1 : ℂ)) :
     f ((star v ⬝ᵥ (A *ᵥ v)).re) ≤ (star v ⬝ᵥ (hA.1.cfc f *ᵥ v)).re := by
   classical
   -- Spectral data for `A`.
-  set hH : A.IsHermitian := hA.1 with hH_def
-  set U : Matrix (Fin D) (Fin D) ℂ := (↑hH.eigenvectorUnitary : Matrix (Fin D) (Fin D) ℂ)
+  set hH : A.IsHermitian := hA.1
+  set U : Matrix n n ℂ := (↑hH.eigenvectorUnitary : Matrix n n ℂ)
     with hU_def
-  set μ : Fin D → ℝ := hH.eigenvalues with hμ_def
-  set w : Fin D → ℂ := Uᴴ *ᵥ v with hw_def
-  set p : Fin D → ℝ := fun i => Complex.normSq (w i) with hp_def
-  -- Unitarity of `U`: `U * Uᴴ = 1` and `Uᴴ * U = 1`.
+  set μ : n → ℝ := hH.eigenvalues with hμ_def
+  set w : n → ℂ := Uᴴ *ᵥ v
+  set p : n → ℝ := fun i => Complex.normSq (w i) with hp_def
+  -- Unitarity of `U`: `U * Uᴴ = 1`.
   have hUUH : U * Uᴴ = 1 := by
     rw [← Matrix.star_eq_conjTranspose]
     exact Unitary.mul_star_self_of_mem hH.eigenvectorUnitary.prop
-  have hUHU : Uᴴ * U = 1 := by
-    rw [← Matrix.star_eq_conjTranspose]
-    exact Matrix.UnitaryGroup.star_mul_self hH.eigenvectorUnitary
-  -- Key computational lemma: for any `g : Fin D → ℂ`,
+  -- Key computational lemma: for any `g : n → ℂ`,
   --   `star v ⬝ᵥ ((U * diagonal g * Uᴴ) *ᵥ v) = ∑ i, g i * (star (w i) * w i)`.
-  have hQ : ∀ g : Fin D → ℂ,
+  have hQ : ∀ g : n → ℂ,
       star v ⬝ᵥ ((U * Matrix.diagonal g * Uᴴ) *ᵥ v)
         = ∑ i, g i * (star (w i) * w i) := by
     intro g
@@ -104,8 +100,6 @@ theorem diagonal_jensen_of_convexOn
           = U *ᵥ (Matrix.diagonal g *ᵥ (Uᴴ *ᵥ v)) := by
       rw [mul_assoc, ← Matrix.mulVec_mulVec, ← Matrix.mulVec_mulVec]
     rw [hmul]
-    rw [show (U *ᵥ (Matrix.diagonal g *ᵥ (Uᴴ *ᵥ v)))
-          = U *ᵥ (Matrix.diagonal g *ᵥ w) from rfl]
     rw [Matrix.dotProduct_mulVec, hvU]
     -- `star w ⬝ᵥ (diagonal g *ᵥ w) = ∑ i, star (w i) * (g i * w i)`.
     simp only [dotProduct, Matrix.mulVec_diagonal, Pi.star_apply]
@@ -130,26 +124,28 @@ theorem diagonal_jensen_of_convexOn
     rfl
   -- `⟨v, A v⟩` as a complex sum of `μ i * p i`.
   have h_vAv : star v ⬝ᵥ (A *ᵥ v)
-      = ∑ i, ((μ i : ℂ) * ((p i : ℝ) : ℂ)) := by
+      = ∑ i, ((p i : ℝ) : ℂ) * (μ i : ℂ) := by
     rw [hA_spec, hQ]
     refine Finset.sum_congr rfl (fun i _ => ?_)
     rw [h_normSq i]
+    ring
   -- `⟨v, f(A) v⟩` as a complex sum of `f(μ i) * p i`.
   have h_vfAv : star v ⬝ᵥ (hH.cfc f *ᵥ v)
-      = ∑ i, (((f (μ i) : ℝ) : ℂ) * ((p i : ℝ) : ℂ)) := by
+      = ∑ i, ((p i : ℝ) : ℂ) * ((f (μ i) : ℝ) : ℂ) := by
     rw [hfA_spec, hQ]
     refine Finset.sum_congr rfl (fun i _ => ?_)
     rw [h_normSq i]
-  -- Real parts: `(star v ⬝ᵥ (A *ᵥ v)).re = ∑ i, μ i * p i`.
-  have h_vAv_re : (star v ⬝ᵥ (A *ᵥ v)).re = ∑ i, μ i * p i := by
+    ring
+  -- Real parts: `(star v ⬝ᵥ (A *ᵥ v)).re = ∑ i, p i * μ i`.
+  have h_vAv_re : (star v ⬝ᵥ (A *ᵥ v)).re = ∑ i, p i * μ i := by
     rw [h_vAv]
-    rw [show (∑ i, ((μ i : ℂ) * ((p i : ℝ) : ℂ)))
-          = (((∑ i, μ i * p i) : ℝ) : ℂ) by push_cast; rfl]
+    rw [show (∑ i, ((p i : ℝ) : ℂ) * (μ i : ℂ))
+          = (((∑ i, p i * μ i) : ℝ) : ℂ) by push_cast; rfl]
     simp
-  have h_vfAv_re : (star v ⬝ᵥ (hH.cfc f *ᵥ v)).re = ∑ i, f (μ i) * p i := by
+  have h_vfAv_re : (star v ⬝ᵥ (hH.cfc f *ᵥ v)).re = ∑ i, p i * f (μ i) := by
     rw [h_vfAv]
-    rw [show (∑ i, (((f (μ i) : ℝ) : ℂ) * ((p i : ℝ) : ℂ)))
-          = (((∑ i, f (μ i) * p i) : ℝ) : ℂ) by push_cast; rfl]
+    rw [show (∑ i, ((p i : ℝ) : ℂ) * ((f (μ i) : ℝ) : ℂ))
+          = (((∑ i, p i * f (μ i)) : ℝ) : ℂ) by push_cast; rfl]
     simp
   -- `∑ i, p i = 1` (unit vector + unitarity).
   have hp_sum : ∑ i, p i = 1 := by
@@ -163,7 +159,7 @@ theorem diagonal_jensen_of_convexOn
           = star v ⬝ᵥ (U *ᵥ w) := by rw [← Matrix.dotProduct_mulVec]
         _ = star v ⬝ᵥ (U *ᵥ (Uᴴ *ᵥ v)) := rfl
         _ = star v ⬝ᵥ ((U * Uᴴ) *ᵥ v) := by rw [Matrix.mulVec_mulVec]
-        _ = star v ⬝ᵥ ((1 : Matrix (Fin D) (Fin D) ℂ) *ᵥ v) := by rw [hUUH]
+        _ = star v ⬝ᵥ ((1 : Matrix n n ℂ) *ᵥ v) := by rw [hUUH]
         _ = star v ⬝ᵥ v := by rw [Matrix.one_mulVec]
         _ = 1 := hv
     have hsum_c : (∑ i, ((p i : ℝ) : ℂ)) = (1 : ℂ) := by
@@ -174,19 +170,13 @@ theorem diagonal_jensen_of_convexOn
   -- Eigenvalues are nonneg: `μ i ∈ [0, ∞)`.
   have hμ_nonneg : ∀ i, μ i ∈ Set.Ici (0 : ℝ) := fun i => hA.eigenvalues_nonneg i
   -- Apply scalar Jensen.
-  have hp_nn : ∀ i ∈ (Finset.univ : Finset (Fin D)), 0 ≤ p i :=
+  have hp_nn : ∀ i ∈ (Finset.univ : Finset n), 0 ≤ p i :=
     fun i _ => Complex.normSq_nonneg _
-  have hmem : ∀ i ∈ (Finset.univ : Finset (Fin D)),
+  have hmem : ∀ i ∈ (Finset.univ : Finset n),
       μ i ∈ Set.Ici (0 : ℝ) := fun i _ => hμ_nonneg i
   have hjensen := hf.map_sum_le (t := Finset.univ) hp_nn hp_sum hmem
   simp only [smul_eq_mul] at hjensen
   rw [h_vAv_re, h_vfAv_re]
-  -- Match `∑ p i * μ i` with `∑ μ i * p i` (and similarly for `f`).
-  have eq1 : ∑ i, p i * μ i = ∑ i, μ i * p i :=
-    Finset.sum_congr rfl (fun i _ => mul_comm _ _)
-  have eq2 : ∑ i, p i * f (μ i) = ∑ i, f (μ i) * p i :=
-    Finset.sum_congr rfl (fun i _ => mul_comm _ _)
-  rw [← eq1, ← eq2]
   exact hjensen
 
 end Matrix

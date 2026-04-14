@@ -732,6 +732,25 @@ currently taken as assumptions pending upstream formalization of operator
 concavity and convexity for real powers $x\mapsto x^p$ on the Loewner
 order, together with operator concavity of the matrix logarithm.
 
+\begin{lemma}[Diagonal Jensen inequality]\label{lem:diagonal_jensen_of_convexOn}
+    \lean{Matrix.diagonal_jensen_of_convexOn}
+    \leanok
+    Let $A$ be a positive semidefinite matrix, let $v$ be a unit vector, and
+    let $f$ be convex on $[0,\infty)$. Then
+    \[
+        f\!\left(\langle v,Av\rangle\right)
+        \le \langle v,f(A)v\rangle .
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Diagonalize $A$ by the spectral theorem. The squared moduli of the
+    coordinates of $v$ in the eigenbasis form a probability distribution, and
+    the eigenvalues of $A$ lie in $[0,\infty)$. The claim is then the scalar
+    Jensen inequality applied to these weights and eigenvalues.
+\end{proof}
+
 \subsection{Trace concavity and convexity of matrix powers}
 
 \begin{theorem}[Trace concavity of real powers]\label{thm:trace_rpow_concave_axiom}
