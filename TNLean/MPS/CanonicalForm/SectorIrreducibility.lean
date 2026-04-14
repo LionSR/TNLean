@@ -395,9 +395,11 @@ The input `hFixUpgrade` reflects a genuine structural gap: for a general
 unital CP map `S`, `PreservesCorner Q S` does not imply `S Q = Q` — Kadison
 –Schwarz only yields `0 ≤ S Q ≤ Q` with `(S Q)(Q - S Q) ≥ 0`. Closing that
 upgrade requires domain-specific structure of the underlying Kraus operators
-that is not captured by the abstract sublemma signatures. The `hProjStep`
-input is similarly abstract and expected to be discharged from an upstream
-multiplicative-domain / KS-equality argument on the MPS transfer map. -/
+that is not captured by the abstract sublemma signatures; see the
+block-diagonal canonical-form argument in `Papers/1708.00029/main.tex`,
+Lemma `lem:bdcf`. The `hProjStep` input is similarly abstract and expected
+to be discharged from an upstream multiplicative-domain / KS-equality
+argument on the MPS transfer map (same reference). -/
 theorem hLift_cyclicDecomp_mps_of_fixUpgrade
     [NeZero m]
     {A : MPSTensor d D}
@@ -445,7 +447,6 @@ theorem hLift_cyclicDecomp_mps_of_fixUpgrade
   classical
   intro k Q hQproj hQP hPQ hQcorner
   set T : MatrixEnd D := transferMap (d := d) (D := D) (fun i => (A i)ᴴ)
-    with hT_def
   -- Upgrade corner preservation to a fixed-point
   have hQfix : (T ^ m) Q = Q := hFixUpgrade k Q hQproj hQP hPQ hQcorner
   -- Sublemma 1: sector support of orbit iterates
@@ -472,12 +473,14 @@ theorem hLift_cyclicDecomp_mps_of_fixUpgrade
         = ((T ^ (l : ℕ)) Q * P (k - l)) *
             (P (k - l') * (T ^ (l' : ℕ)) Q) := by rw [h1, h2]
       _ = ((T ^ (l : ℕ)) Q) * (P (k - l) * P (k - l')) *
-            ((T ^ (l' : ℕ)) Q) := by simp [Matrix.mul_assoc]
+            ((T ^ (l' : ℕ)) Q) := by simp only [mul_assoc]
       _ = ((T ^ (l : ℕ)) Q) * 0 * ((T ^ (l' : ℕ)) Q) := by rw [hP0]
       _ = 0 := by simp
-  -- The orbit-sum witness
-  refine ⟨orbitSumProjection (D := D) (m := m) T Q, ?_, ?_, ?_, ?_⟩
-  · -- R is a projection
+  -- The orbit-sum projection (shared Hermitian/idempotent proof, reused
+  -- both as the `hLift` projection conjunct and as the `hP` argument of
+  -- `preservesCorner_of_adjoint_fixed_projection`).
+  have hRproj : IsOrthogonalProjection
+      (orbitSumProjection (D := D) (m := m) T Q) := by
     refine ⟨?_, ?_⟩
     · -- Hermitian via conjTranspose_sum + each iterate Hermitian
       change (orbitSumProjection (D := D) (m := m) T Q)ᴴ =
@@ -499,31 +502,14 @@ theorem hLift_cyclicDecomp_mps_of_fixUpgrade
         exact horbPair l' l hne
       · intro hmem
         exact absurd (Finset.mem_univ l) hmem
+  -- The orbit-sum witness
+  refine ⟨orbitSumProjection (D := D) (m := m) T Q, hRproj, ?_, ?_, ?_⟩
   · -- Corner preservation under T: follows from T-fixedness + adjoint-TP
     have hRfix : T (orbitSumProjection (D := D) (m := m) T Q) =
         orbitSumProjection (D := D) (m := m) T Q :=
       orbitSumProjection_fixed_of_pow_fix (T := T) (Q := Q) (m := m) hQfix
-    refine preservesCorner_of_adjoint_fixed_projection (A := A) hTP
-      (P := orbitSumProjection (D := D) (m := m) T Q) ?_ (hFix := hRfix)
-    refine ⟨?_, ?_⟩
-    · change (orbitSumProjection (D := D) (m := m) T Q)ᴴ =
-        orbitSumProjection (D := D) (m := m) T Q
-      simp only [orbitSumProjection, Matrix.conjTranspose_sum]
-      refine Finset.sum_congr rfl ?_
-      intro l _
-      exact (hprojL l).1.eq
-    · change orbitSumProjection (D := D) (m := m) T Q *
-        orbitSumProjection (D := D) (m := m) T Q =
-        orbitSumProjection (D := D) (m := m) T Q
-      simp only [orbitSumProjection, Finset.sum_mul, Finset.mul_sum]
-      refine Finset.sum_congr rfl ?_
-      intro l _
-      rw [Finset.sum_eq_single l]
-      · exact (hprojL l).2
-      · intros l' _ hne
-        exact horbPair l' l hne
-      · intro hmem
-        exact absurd (Finset.mem_univ l) hmem
+    exact preservesCorner_of_adjoint_fixed_projection (A := A) hTP
+      (P := orbitSumProjection (D := D) (m := m) T Q) hRproj (hFix := hRfix)
   · -- Zero equivalence
     -- Forward: Q = 0 ⇒ R = 0
     -- Reverse: use R * Q = Q (diagonal picks out l = 0, others kill by horbPair)
@@ -566,7 +552,7 @@ theorem hLift_cyclicDecomp_mps_of_fixUpgrade
         calc P k * ((T ^ (l : ℕ)) Q) * P k
             = P k * (P (k - l) * (T ^ (l : ℕ)) Q) * P k := by rw [h_left]
           _ = (P k * P (k - l)) * ((T ^ (l : ℕ)) Q) * P k := by
-                simp [Matrix.mul_assoc]
+                rw [← mul_assoc (P k) (P (k - l)) ((T ^ (l : ℕ)) Q)]
           _ = 0 * ((T ^ (l : ℕ)) Q) * P k := by rw [hP0]
           _ = 0 := by simp
       · intro hmem
