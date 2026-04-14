@@ -28,7 +28,7 @@ functional calculus.
 
 Write `A = U * diagonal (λ) * Uᴴ` by the spectral theorem, and set
 `w = Uᴴ *ᵥ v`. Since `U` is unitary, `∑ i, |w i|² = ‖v‖² = 1`, so the
-family `p i := |w i|²` is a probability distribution over `Fin D`. The
+family `p i := |w i|²` is a probability distribution over `n`. The
 eigenvalues `λ i` of the PSD matrix `A` lie in `[0, ∞)`. A direct
 computation gives
 
@@ -54,7 +54,7 @@ noncomputable section
 
 namespace Matrix
 
-variable {D : ℕ}
+variable {n : Type*} [Fintype n] [DecidableEq n]
 
 /-- **Diagonal Jensen inequality** for a convex function on a positive
 semidefinite matrix.
@@ -70,29 +70,24 @@ The proof reduces to the scalar Jensen inequality
 `ConvexOn.map_sum_le` applied to the eigenvalues of `A` with weights
 `|Uᴴ *ᵥ v i|²`. -/
 theorem diagonal_jensen_of_convexOn
-    [DecidableEq (Fin D)]
     {f : ℝ → ℝ} (hf : ConvexOn ℝ (Set.Ici (0 : ℝ)) f)
-    {A : Matrix (Fin D) (Fin D) ℂ} (hA : A.PosSemidef)
-    {v : Fin D → ℂ} (hv : star v ⬝ᵥ v = (1 : ℂ)) :
+    {A : Matrix n n ℂ} (hA : A.PosSemidef)
+    {v : n → ℂ} (hv : star v ⬝ᵥ v = (1 : ℂ)) :
     f ((star v ⬝ᵥ (A *ᵥ v)).re) ≤ (star v ⬝ᵥ (hA.1.cfc f *ᵥ v)).re := by
   classical
   -- Spectral data for `A`.
-  set hH : A.IsHermitian := hA.1 with hH_def
-  set U : Matrix (Fin D) (Fin D) ℂ := (↑hH.eigenvectorUnitary : Matrix (Fin D) (Fin D) ℂ)
-    with hU_def
-  set μ : Fin D → ℝ := hH.eigenvalues with hμ_def
-  set w : Fin D → ℂ := Uᴴ *ᵥ v with hw_def
-  set p : Fin D → ℝ := fun i => Complex.normSq (w i) with hp_def
-  -- Unitarity of `U`: `U * Uᴴ = 1` and `Uᴴ * U = 1`.
+  set hH : A.IsHermitian := hA.1
+  set U : Matrix n n ℂ := (↑hH.eigenvectorUnitary : Matrix n n ℂ) with hU_def
+  set μ : n → ℝ := hH.eigenvalues with hμ_def
+  set w : n → ℂ := Uᴴ *ᵥ v
+  set p : n → ℝ := fun i => Complex.normSq (w i) with hp_def
+  -- Unitarity of `U`: `U * Uᴴ = 1`.
   have hUUH : U * Uᴴ = 1 := by
     rw [← Matrix.star_eq_conjTranspose]
     exact Unitary.mul_star_self_of_mem hH.eigenvectorUnitary.prop
-  have hUHU : Uᴴ * U = 1 := by
-    rw [← Matrix.star_eq_conjTranspose]
-    exact Matrix.UnitaryGroup.star_mul_self hH.eigenvectorUnitary
-  -- Key computational lemma: for any `g : Fin D → ℂ`,
+  -- Key computational lemma: for any `g : n → ℂ`,
   --   `star v ⬝ᵥ ((U * diagonal g * Uᴴ) *ᵥ v) = ∑ i, g i * (star (w i) * w i)`.
-  have hQ : ∀ g : Fin D → ℂ,
+  have hQ : ∀ g : n → ℂ,
       star v ⬝ᵥ ((U * Matrix.diagonal g * Uᴴ) *ᵥ v)
         = ∑ i, g i * (star (w i) * w i) := by
     intro g
@@ -163,7 +158,7 @@ theorem diagonal_jensen_of_convexOn
           = star v ⬝ᵥ (U *ᵥ w) := by rw [← Matrix.dotProduct_mulVec]
         _ = star v ⬝ᵥ (U *ᵥ (Uᴴ *ᵥ v)) := rfl
         _ = star v ⬝ᵥ ((U * Uᴴ) *ᵥ v) := by rw [Matrix.mulVec_mulVec]
-        _ = star v ⬝ᵥ ((1 : Matrix (Fin D) (Fin D) ℂ) *ᵥ v) := by rw [hUUH]
+        _ = star v ⬝ᵥ ((1 : Matrix n n ℂ) *ᵥ v) := by rw [hUUH]
         _ = star v ⬝ᵥ v := by rw [Matrix.one_mulVec]
         _ = 1 := hv
     have hsum_c : (∑ i, ((p i : ℝ) : ℂ)) = (1 : ℂ) := by
@@ -174,9 +169,9 @@ theorem diagonal_jensen_of_convexOn
   -- Eigenvalues are nonneg: `μ i ∈ [0, ∞)`.
   have hμ_nonneg : ∀ i, μ i ∈ Set.Ici (0 : ℝ) := fun i => hA.eigenvalues_nonneg i
   -- Apply scalar Jensen.
-  have hp_nn : ∀ i ∈ (Finset.univ : Finset (Fin D)), 0 ≤ p i :=
+  have hp_nn : ∀ i ∈ (Finset.univ : Finset n), 0 ≤ p i :=
     fun i _ => Complex.normSq_nonneg _
-  have hmem : ∀ i ∈ (Finset.univ : Finset (Fin D)),
+  have hmem : ∀ i ∈ (Finset.univ : Finset n),
       μ i ∈ Set.Ici (0 : ℝ) := fun i _ => hμ_nonneg i
   have hjensen := hf.map_sum_le (t := Finset.univ) hp_nn hp_sum hmem
   simp only [smul_eq_mul] at hjensen
