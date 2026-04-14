@@ -939,9 +939,44 @@ For MPS parent Hamiltonians, the spectral gap follows from a martingale
 criterion due to Kastoryano and
 Lucia~\cite{Kastoryano2018Martingale}.
 
+\begin{lemma}[Quadratic form to norm bound]\label{lem:quadratic_form_to_norm_bound}
+    \lean{FrustrationFree.spectralGap_of_martingale}
+    \notready
+    Let $H$ be a positive semidefinite self-adjoint operator on a
+    finite-dimensional complex Hilbert space, and suppose that
+    \[
+        \gamma\,\langle v, H v\rangle \le \langle H v, H v\rangle
+        \qquad \text{for all } v,
+    \]
+    i.e.\ $H^2 \ge \gamma H$ as a quadratic form, for some $\gamma > 0$.
+    Then for every $v$ in the orthogonal complement of $\ker H$,
+    \[
+        \gamma\,\|v\| \le \|H v\|.
+    \]
+    In particular, every positive eigenvalue of $H$ is at least $\gamma$.
+    The positive-semidefiniteness hypothesis is essential: without it,
+    $H = -\mathrm{Id}$ with $\gamma = 2$ satisfies the quadratic-form
+    inequality vacuously but violates the norm bound.
+\end{lemma}
+
+\begin{proof}
+    \notready
+    By the finite-dimensional spectral theorem, $H$ diagonalises in an
+    orthonormal eigenbasis with real eigenvalues $\lambda_k$. For a unit
+    eigenvector $\psi_k$ with eigenvalue $\lambda_k$ the hypothesis
+    gives $\gamma\,\lambda_k \le \lambda_k^2$, whence $\lambda_k \le 0$
+    or $\lambda_k \ge \gamma$. Since $H$ is positive semidefinite
+    (its quadratic form is $\ge 0$), the negative case is excluded and
+    every nonzero eigenvalue satisfies $\lambda_k \ge \gamma$. Writing
+    $v = \sum_k c_k \psi_k$ and projecting onto $(\ker H)^{\perp}$
+    keeps only terms with $\lambda_k \ge \gamma$, so
+    $\|H v\|^2 = \sum_k |c_k|^2 \lambda_k^2
+    \ge \gamma^2 \sum_k |c_k|^2 = \gamma^2 \|v\|^2$.
+\end{proof}
+
 \begin{theorem}[Martingale criterion for spectral gap]\label{thm:martingale_criterion}
     \notready
-    \uses{def:is_frustration_free}
+    \uses{def:is_frustration_free, lem:quadratic_form_to_norm_bound}
     Consider a frustration-free Hamiltonian
     \[
         H = \sum_{i=1}^n h_i

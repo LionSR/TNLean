@@ -259,16 +259,18 @@ The main references are
 \begin{theorem}[Coefficient ratio decay]\label{thm:coeff_ratio_decay}
 	\lean{MPSTensor.IsCanonicalFormBNT.coeff_ratio_tendsto}
 	\leanok
-	\uses{def:is_canonical_form}
-	Under the canonical form conditions of Definition~\ref{def:is_canonical_form},
-	indexed so that $\mu_0$ is the dominant weight, one has
+	\uses{def:cf_bnt}
+	Under the canonical form with BNT separation of
+	Definition~\ref{def:cf_bnt}, indexed so that $\mu_0$ is the
+	(strictly) dominant weight, one has
 	$(\mu_k / \mu_0)^N \to 0$
 	for every $k \ge 1$ as $N \to \infty$.
 \end{theorem}
 
 \begin{proof}\leanok
-	Since $|\mu_k| < |\mu_0|$ (strict ordering of moduli),
-	$|\mu_k / \mu_0| < 1$, so the geometric sequence
+	By the BNT separation condition in Definition~\ref{def:cf_bnt},
+	$|\mu_k| < |\mu_0|$ strictly, so
+	$|\mu_k / \mu_0| < 1$ and the geometric sequence
 	converges to~$0$.
 \end{proof}
 
