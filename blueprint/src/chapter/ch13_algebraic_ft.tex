@@ -1204,11 +1204,30 @@ Theorem~2 of~\cite{Molnar2018NormalPEPS}.
     This is multilinear in the components of $f$, not linear in the full tuple.
 \end{definition}
 
+\begin{definition}[Vertex injectivity]%
+    \label{def:IsVertexInjective}
+    \lean{TNLean.PEPS.IsVertexInjective}
+    \leanok
+    \uses{}
+    A PEPS tensor $A$ is \emph{vertex-injective} if, at every vertex $v$, the
+    family of physical vectors
+    \[
+        \bigl(A_v(\eta, \cdot) \in \C^d\bigr)_{\eta}
+    \]
+    indexed by virtual configurations $\eta$ on the edges incident to $v$ is
+    linearly independent in $\C^d$. Equivalently, extending $A_v$ by linearity
+    to a map from the free vector space on virtual configurations into the
+    physical space $\C^d$ gives a linear map with trivial kernel. This matches
+    the paper's formulation that "all tensors interpreted as maps from the
+    virtual space to the physical one are injective"
+    (\cite{Molnar2018NormalPEPS}, §3).
+\end{definition}
+
 \begin{theorem}[Local gauge extraction]%
     \label{thm:localGauge_exists}
     \lean{TNLean.PEPS.localGauge_exists}
     \notready
-    \uses{def:gaugeVertex, def:localTensorEval}
+    \uses{def:gaugeVertex, def:localTensorEval, def:IsVertexInjective}
     At a single vertex, vertex-injectivity of both tensors and the
     same-state condition force a local gauge relation.
     Schematically, injectivity on the star neighbourhood provides a left
@@ -1236,7 +1255,7 @@ Theorem~2 of~\cite{Molnar2018NormalPEPS}.
     \label{thm:fundamentalTheorem_PEPS}
     \lean{TNLean.PEPS.fundamentalTheorem_PEPS}
     \notready
-    \uses{thm:gaugeConsistency, def:GaugeEquivPEPS}
+    \uses{thm:gaugeConsistency, def:GaugeEquivPEPS, def:IsVertexInjective}
     If two PEPS tensors on a simple graph are both vertex-injective and
     generate the same state, then they are gauge-equivalent
     (Theorem~2 of~\cite{Molnar2018NormalPEPS}).
@@ -1246,7 +1265,7 @@ Theorem~2 of~\cite{Molnar2018NormalPEPS}.
     \label{thm:gauge_unique_up_to_scalar}
     \lean{TNLean.PEPS.gauge_unique_up_to_scalar}
     \notready
-    \uses{def:gaugeVertex}
+    \uses{def:gaugeVertex, def:IsVertexInjective}
     On a connected graph, the gauge family in the Fundamental Theorem is
     unique up to a global multiplicative scalar.
 \end{theorem}

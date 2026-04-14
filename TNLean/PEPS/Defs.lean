@@ -1,5 +1,6 @@
 import Mathlib.Combinatorics.SimpleGraph.Basic
 import Mathlib.Data.Complex.BigOperators
+import Mathlib.LinearAlgebra.LinearIndependent.Defs
 
 /-!
 # Exploratory PEPS definitions on finite simple graphs
@@ -64,10 +65,24 @@ noncomputable def stateCoeff (A : Tensor G d) (σ : V → Fin d) : ℂ :=
 def SameState (A B : Tensor G d) : Prop :=
   ∀ σ : V → Fin d, stateCoeff A σ = stateCoeff B σ
 
-/-- Vertex-wise injectivity: each local tensor map (virtual → physical data) is
-injective. This is a basic exploratory surrogate for PEPS injectivity. -/
+/-- Vertex-wise injectivity: at each vertex `v`, the family of physical vectors
+`η ↦ A.component v η` (indexed by virtual configurations on the incident edges)
+is linearly independent in `Fin d → ℂ`.
+
+This matches the paper's definition (arXiv:1804.04964 §3, line 979):
+> *"all tensors interpreted as maps from the virtual space to the physical one
+> are injective"*
+
+interpreted linear-algebraically: extending `A.component v` by linearity to a
+map from the free `ℂ`-vector space on virtual configurations into the physical
+space `ℂ^d`, that map has trivial kernel iff the family `A.component v` is
+linearly independent.
+
+Note: the earlier `Function.Injective (A.component v)` formulation is *strictly
+weaker* and admits counterexamples to `gauge_unique_up_to_scalar` (see issue
+#594). Linear independence is the correct notion here. -/
 def IsVertexInjective (A : Tensor G d) : Prop :=
-  ∀ v : V, Function.Injective (A.component v)
+  ∀ v : V, LinearIndependent ℂ (A.component v)
 
 end PEPS
 end TNLean
