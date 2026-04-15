@@ -346,6 +346,23 @@ theorem chainGroundSpace_eq_mpvSubmodule {A : MPSTensor d D} [NeZero D]
     obtain ⟨c, rfl⟩ := hψ
     exact Submodule.smul_mem _ c (mpv_mem_chainGroundSpace A L N hN0 hLN)
 
+/-- Range-reduction bridge for normal tensors.
+
+This is the missing hard direction of `chainGroundSpace_eq_mpvSubmodule_normal`:
+for a normal tensor with an `L₀`-block-injective presentation, the reduced
+periodic window constraints `L > L₀` already force a chain ground state to lie
+in the MPV line. -/
+theorem chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction
+    {A : MPSTensor d D} [NeZero D]
+    (_hA : IsNormal A) {L₀ : ℕ} (_hInj : IsNBlkInjective A L₀)
+    {L N : ℕ} (_hN : 2 ≤ N) (_hL : L₀ < L) (_hLN : L ≤ N) :
+    chainGroundSpace A L N ≤ mpvSubmodule A N := by
+  -- Missing bridge: the normal-form range-reduction theorem for periodic
+  -- windows. It should turn the `L₀ + 1` cyclic-window constraints into the
+  -- same boundary-matrix commutation conclusion used by
+  -- `chainGroundSpace_eq_mpvSubmodule`.
+  sorry
+
 /-- On a periodic chain, the normal parent-Hamiltonian ground space coincides
 with the span of the MPV with the reduced window `L > L₀` (instead of `2L₀`).
 
@@ -355,10 +372,16 @@ See [CPGSV21] arXiv:2011.12127 §IV.C. -/
 -- TODO(parent-hamiltonian): derive using the normal-form range reduction and
 -- the cyclic-window definition of `chainGroundSpace`.
 theorem chainGroundSpace_eq_mpvSubmodule_normal {A : MPSTensor d D} [NeZero D]
-    (_hA : IsNormal A) {L₀ : ℕ} (_hInj : IsNBlkInjective A L₀)
-    {L N : ℕ} (_hN : 2 ≤ N) (_hL : L₀ < L) (_hLN : L ≤ N) :
+    (hA : IsNormal A) {L₀ : ℕ} (hInj : IsNBlkInjective A L₀)
+    {L N : ℕ} (hN : 2 ≤ N) (hL : L₀ < L) (hLN : L ≤ N) :
     chainGroundSpace A L N = mpvSubmodule A N := by
-  sorry
+  apply le_antisymm
+  · exact chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction
+      hA hInj hN hL hLN
+  · intro ψ hψ
+    rw [mpvSubmodule, Submodule.mem_span_singleton] at hψ
+    obtain ⟨c, rfl⟩ := hψ
+    exact Submodule.smul_mem _ c (mpv_mem_chainGroundSpace A L N (by omega) hLN)
 
 /-- **Unique ground state on the periodic chain** for injective MPS.
 
