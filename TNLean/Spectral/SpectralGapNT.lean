@@ -463,8 +463,8 @@ private lemma exists_gram_fixedPoints_of_gauged_rectangular_intertwiner
     hσA_fix, hσB_fix⟩
 
 /-- Ungauging the Gram fixed points and using irreducible uniqueness makes both
-Gram matrices scalar. -/
-private lemma exists_scalar_grams_of_irreducible_TP
+Gram matrices scalar, forcing the two rectangular dimensions to agree. -/
+private lemma dim_eq_of_gram_fixedPoints_of_irreducible_TP
     [NeZero D₁] [NeZero D₂]
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (hA_irr : IsIrreducibleTensor (d := d) (D := D₁) A)
@@ -486,14 +486,10 @@ private lemma exists_scalar_grams_of_irreducible_TP
     (hSA_u : IsUnit SA.det) (hSB_u : IsUnit SB.det)
     (hSA_mul : SA * SAᴴ = ρA) (hSB_mul : SB * SBᴴ = ρB)
     (hσA_def : σA = X' * X'ᴴ) (hσB_def : σB = X'ᴴ * X')
-    (hσA_psd : σA.PosSemidef) (hσB_psd : σB.PosSemidef)
     (hσA_ne : σA ≠ 0) (hσB_ne : σB ≠ 0)
     (hσA_fix : transferMap (d := d) (D := D₁) A' σA = σA)
     (hσB_fix : transferMap (d := d) (D := D₂) B' σB = σB) :
-    ∃ cA cB : ℂ,
-      σA = cA • (1 : Matrix (Fin D₁) (Fin D₁) ℂ) ∧
-      σB = cB • (1 : Matrix (Fin D₂) (Fin D₂) ℂ) ∧
-      cA ≠ 0 ∧ cB ≠ 0 := by
+    D₁ = D₂ := by
   classical
   have hIrrA : IsIrreducibleMap (transferMap (d := d) (D := D₁) A) :=
     isIrreducibleCP_transferMap_of_isIrreducibleTensor A hA_irr
@@ -546,38 +542,34 @@ private lemma exists_scalar_grams_of_irreducible_TP
     intro hcB
     apply hσB_ne
     simp only [hσB_scalar, hcB, zero_smul]
-  exact ⟨cA, cB, hσA_scalar, hσB_scalar, hcA_ne, hcB_ne⟩
-
-/-- If both Gram matrices of a rectangular matrix are nonzero scalars, then the
-two index dimensions are equal. -/
-private lemma dim_eq_of_scalar_gram_matrices
-    (X : Matrix (Fin D₁) (Fin D₂) ℂ) (cA cB : ℂ)
-    (hXXh_scalar : X * Xᴴ = cA • (1 : Matrix (Fin D₁) (Fin D₁) ℂ))
-    (hXhX_scalar : Xᴴ * X = cB • (1 : Matrix (Fin D₂) (Fin D₂) ℂ))
-    (hcA_ne : cA ≠ 0) (hcB_ne : cB ≠ 0) :
-    D₁ = D₂ := by
-  have hXinj : ∀ v : Fin D₂ → ℂ, X *ᵥ v = 0 → v = 0 := by
+  have hXXh_scalar : X' * X'ᴴ = cA • (1 : Matrix (Fin D₁) (Fin D₁) ℂ) := by
+    rw [← hσA_def]
+    exact hσA_scalar
+  have hXhX_scalar : X'ᴴ * X' = cB • (1 : Matrix (Fin D₂) (Fin D₂) ℂ) := by
+    rw [← hσB_def]
+    exact hσB_scalar
+  have hXinj : ∀ v : Fin D₂ → ℂ, X' *ᵥ v = 0 → v = 0 := by
     intro v hv
-    have h0 : (Xᴴ * X) *ᵥ v = 0 := by
+    have h0 : (X'ᴴ * X') *ᵥ v = 0 := by
       simpa only [Matrix.mulVec_mulVec, Matrix.mulVec_zero] using
-        congrArg (fun w => Xᴴ *ᵥ w) hv
+        congrArg (fun w => X'ᴴ *ᵥ w) hv
     rw [hXhX_scalar] at h0
     have : cB • v = 0 := by
       simpa only [smul_eq_zero, Matrix.smul_mulVec, Matrix.one_mulVec] using h0
     exact (smul_eq_zero.mp this).resolve_left hcB_ne
-  have hXhinj : ∀ v : Fin D₁ → ℂ, Xᴴ *ᵥ v = 0 → v = 0 := by
+  have hXhinj : ∀ v : Fin D₁ → ℂ, X'ᴴ *ᵥ v = 0 → v = 0 := by
     intro v hv
-    have h0 : (X * Xᴴ) *ᵥ v = 0 := by
+    have h0 : (X' * X'ᴴ) *ᵥ v = 0 := by
       simpa only [Matrix.mulVec_mulVec, Matrix.mulVec_zero] using
-        congrArg (fun w => X *ᵥ w) hv
+        congrArg (fun w => X' *ᵥ w) hv
     rw [hXXh_scalar] at h0
     have : cA • v = 0 := by
       simpa only [smul_eq_zero, Matrix.smul_mulVec, Matrix.one_mulVec] using h0
     exact (smul_eq_zero.mp this).resolve_left hcA_ne
   have h_D₂_le : D₂ ≤ D₁ :=
-    Matrix.dim_le_of_mulVec_injective X hXinj
+    Matrix.dim_le_of_mulVec_injective X' hXinj
   have h_D₁_le : D₁ ≤ D₂ :=
-    Matrix.dim_le_of_mulVec_injective Xᴴ hXhinj
+    Matrix.dim_le_of_mulVec_injective X'ᴴ hXhinj
   exact le_antisymm h_D₁_le h_D₂_le
 
 private theorem dim_eq_of_modulus_one_eigenvector_of_irreducible_TP
@@ -592,166 +584,27 @@ private theorem dim_eq_of_modulus_one_eigenvector_of_irreducible_TP
     (hμ : ‖μ‖ = 1) (hX : X ≠ 0) :
     D₁ = D₂ := by
   classical
-  have hD₁pos : 0 < D₁ := Nat.pos_of_ne_zero (NeZero.ne D₁)
-  have hD₂pos : 0 < D₂ := Nat.pos_of_ne_zero (NeZero.ne D₂)
-  have hIrrA : IsIrreducibleMap (transferMap (d := d) (D := D₁) A) :=
-    isIrreducibleCP_transferMap_of_isIrreducibleTensor A hA_irr
-  have hIrrB : IsIrreducibleMap (transferMap (d := d) (D := D₂) B) :=
-    isIrreducibleCP_transferMap_of_isIrreducibleTensor B hB_irr
-  obtain ⟨ρA, hρA_psd, hρA_ne, hρA_fix⟩ :=
-    exists_posSemidef_fixedPoint A hA_left hD₁pos
-  obtain ⟨ρB, hρB_psd, hρB_ne, hρB_fix⟩ :=
-    exists_posSemidef_fixedPoint B hB_left hD₂pos
-  have hρA_pd : ρA.PosDef :=
-    posSemidef_fixedPoint_isPosDef_of_irreducible A hIrrA ρA hρA_psd hρA_ne hρA_fix
-  have hρB_pd : ρB.PosDef :=
-    posSemidef_fixedPoint_isPosDef_of_irreducible B hIrrB ρB hρB_psd hρB_ne hρB_fix
-  rcases CStarAlgebra.isStrictlyPositive_iff_eq_star_mul_self.1 hρA_pd.isStrictlyPositive with
-    ⟨S0A, hS0A_unit, hρA_eq⟩
-  let SA : Matrix (Fin D₁) (Fin D₁) ℂ := S0Aᴴ
-  have hSA_det : SA.det ≠ 0 :=
-    ((Matrix.isUnit_iff_isUnit_det (A := SA)).1
-      (by
-        simpa only [Matrix.isUnit_conjTranspose, Matrix.star_eq_conjTranspose, SA] using
-          IsUnit.star hS0A_unit)).ne_zero
-  rcases CStarAlgebra.isStrictlyPositive_iff_eq_star_mul_self.1 hρB_pd.isStrictlyPositive with
-    ⟨S0B, hS0B_unit, hρB_eq⟩
-  let SB : Matrix (Fin D₂) (Fin D₂) ℂ := S0Bᴴ
-  have hSB_det : SB.det ≠ 0 :=
-    ((Matrix.isUnit_iff_isUnit_det (A := SB)).1
-      (by
-        simpa only [Matrix.isUnit_conjTranspose, Matrix.star_eq_conjTranspose, SB] using
-          IsUnit.star hS0B_unit)).ne_zero
-  have hSA_u : IsUnit SA.det := Ne.isUnit hSA_det
-  have hSB_u : IsUnit SB.det := Ne.isUnit hSB_det
-  have hSA_mul : SA * SAᴴ = ρA := by
-    calc SA * SAᴴ = S0Aᴴ * S0A := by simp only [Matrix.conjTranspose_conjTranspose, SA]
-    _ = ρA := by simpa only using hρA_eq.symm
-  have hSB_mul : SB * SBᴴ = ρB := by
-    calc SB * SBᴴ = S0Bᴴ * S0B := by simp only [Matrix.conjTranspose_conjTranspose, SB]
-    _ = ρB := by simpa only using hρB_eq.symm
+  obtain ⟨ρA, SA, hρA_psd, hρA_ne, hρA_fix, hSA_det, hSA_u, hSA_mul⟩ :=
+    exists_posSemidef_fixedPoint_gauge_of_irreducible_TP A hA_irr hA_left
+  obtain ⟨ρB, SB, hρB_psd, hρB_ne, hρB_fix, hSB_det, hSB_u, hSB_mul⟩ :=
+    exists_posSemidef_fixedPoint_gauge_of_irreducible_TP B hB_irr hB_left
   let A' : MPSTensor d D₁ := gaugeTensor SA A
   let B' : MPSTensor d D₂ := gaugeTensor SB B
   let X' : Matrix (Fin D₁) (Fin D₂) ℂ := gaugeEigenvector SA SB X
-  have hcore := gauged_intertwining_core
-    (A := A) (B := B) (SA := SA) (SB := SB) (ρA := ρA) (ρB := ρB)
-    hSA_det hSB_det hSA_mul hSB_mul hρA_fix hρB_fix hA_left hB_left X μ hFX hμ hX
-  rcases hcore with ⟨hA'unital_raw, hB'unital_raw, hX'ne_raw, hInter1_raw, hInter2_raw⟩
-  have hA'unital : ∑ i : Fin d, A' i * (A' i)ᴴ = 1 := by
-    simpa only [gaugeTensor_apply, Matrix.conjTranspose_mul, gaugeTensor, A'] using
-      hA'unital_raw
-  have hB'unital : ∑ i : Fin d, B' i * (B' i)ᴴ = 1 := by
-    simpa only [gaugeTensor_apply, Matrix.conjTranspose_mul, gaugeTensor, B'] using
-      hB'unital_raw
-  have hX'ne : X' ≠ 0 := by
-    simpa only [gaugeEigenvector_eq, ne_eq, gaugeEigenvector] using hX'ne_raw
-  have hInter1 : ∀ i : Fin d, X' * (B' i)ᴴ = μ • ((A' i)ᴴ * X') := by
-    intro i
-    simpa only [gaugeEigenvector_eq, Matrix.mul_assoc, gaugeTensor_apply,
-      Matrix.conjTranspose_mul, Matrix.conjTranspose_nonsing_inv, gaugeEigenvector,
-      gaugeTensor, A', B', X'] using hInter1_raw i
-  have hInter2 : ∀ i : Fin d, A' i * X' = μ • X' * B' i := by
-    intro i
-    simpa only [gaugeTensor_apply, gaugeEigenvector_eq, Matrix.smul_mul, gaugeTensor,
-      gaugeEigenvector] using hInter2_raw i
-  have hμ_conj : ‖(starRingEnd ℂ) μ‖ = 1 := norm_starRingEnd_eq_one hμ
-  have hInter1c : ∀ i : Fin d, B' i * X'ᴴ = (starRingEnd ℂ μ) • X'ᴴ * A' i := by
-    intro i
-    have h22 := congrArg Matrix.conjTranspose (hInter1 i)
-    simp only [Matrix.conjTranspose_mul, Matrix.conjTranspose_conjTranspose,
-      Matrix.conjTranspose_smul] at h22
-    simpa only [Matrix.smul_mul, RCLike.star_def] using h22
-  let σA : Matrix (Fin D₁) (Fin D₁) ℂ := X' * X'ᴴ
-  let σB : Matrix (Fin D₂) (Fin D₂) ℂ := X'ᴴ * X'
-  have hσA_psd : σA.PosSemidef := by
-    simpa only using Matrix.posSemidef_self_mul_conjTranspose X'
-  have hσB_psd : σB.PosSemidef := by
-    simpa only using Matrix.posSemidef_conjTranspose_mul_self X'
-  have hσA_ne : σA ≠ 0 := by
-    intro h
-    apply hX'ne
-    exact Matrix.self_mul_conjTranspose_eq_zero.mp (by
-      simpa only [Matrix.self_mul_conjTranspose_eq_zero, σA] using h)
-  have hσB_ne : σB ≠ 0 := by
-    intro h
-    apply hX'ne
-    exact Matrix.conjTranspose_mul_self_eq_zero.mp (by
-      simpa only [Matrix.conjTranspose_mul_self_eq_zero, σB] using h)
-  have hσA_fix : transferMap (d := d) (D := D₁) A' σA = σA := by
-    simpa only [transferMap_apply] using
-      self_mul_conjTranspose_fixed_of_intertwining A' B' X' μ hB'unital hInter2 hμ
-  have hσB_fix : transferMap (d := d) (D := D₂) B' σB = σB := by
-    simpa only [transferMap_apply, Matrix.conjTranspose_conjTranspose] using
-      self_mul_conjTranspose_fixed_of_intertwining
-      B' A' X'ᴴ ((starRingEnd ℂ) μ) hA'unital hInter1c hμ_conj
-  let YA : Matrix (Fin D₁) (Fin D₁) ℂ := SA * σA * SAᴴ
-  let YB : Matrix (Fin D₂) (Fin D₂) ℂ := SB * σB * SBᴴ
-  have hYA_psd : YA.PosSemidef := by
-    simpa only [Matrix.mul_assoc, Matrix.conjTranspose_mul, YA, σA] using
-      Matrix.posSemidef_self_mul_conjTranspose (SA * X')
-  have hYB_psd : YB.PosSemidef := by
-    simpa only [Matrix.mul_assoc, Matrix.conjTranspose_mul,
-      Matrix.conjTranspose_conjTranspose, YB, σB] using
-      Matrix.posSemidef_self_mul_conjTranspose (SB * X'ᴴ)
-  have hYA_ne : YA ≠ 0 := by
-    simpa only [ne_eq] using
-      mul_mul_conjTranspose_ne_zero_of_ne_zero SA hSA_u (M := σA) hσA_ne
-  have hYB_ne : YB ≠ 0 := by
-    simpa only [ne_eq] using
-      mul_mul_conjTranspose_ne_zero_of_ne_zero SB hSB_u (M := σB) hσB_ne
-  have hYA_fix : transferMap (d := d) (D := D₁) A YA = YA := by
-    simpa only [transferMap_apply] using ungauge_transfer_fixedPoint A SA σA hSA_u hσA_fix
-  have hYB_fix : transferMap (d := d) (D := D₂) B YB = YB := by
-    simpa only [transferMap_apply] using ungauge_transfer_fixedPoint B SB σB hSB_u hσB_fix
-  obtain ⟨cA, hYA_eq⟩ :=
-    posSemidef_fixedPoint_unique_of_irreducible
-      (A := A) hIrrA ρA YA hρA_psd hρA_ne hYA_psd hρA_fix hYA_fix
-  obtain ⟨cB, hYB_eq⟩ :=
-    posSemidef_fixedPoint_unique_of_irreducible
-      (A := B) hIrrB ρB YB hρB_psd hρB_ne hYB_psd hρB_fix hYB_fix
-  have hσA_scalar : σA = cA • (1 : Matrix (Fin D₁) (Fin D₁) ℂ) := by
-    have hYA_scalar' : SA * σA * SAᴴ = cA • (SA * SAᴴ) := by
-      simpa only [hSA_mul] using hYA_eq
-    exact ungauge_scalar_of_conjugated_scalar SA σA cA hSA_u hYA_scalar'
-  have hσB_scalar : σB = cB • (1 : Matrix (Fin D₂) (Fin D₂) ℂ) := by
-    have hYB_scalar' : SB * σB * SBᴴ = cB • (SB * SBᴴ) := by
-      simpa only [hSB_mul] using hYB_eq
-    exact ungauge_scalar_of_conjugated_scalar SB σB cB hSB_u hYB_scalar'
-  have hcA_ne : cA ≠ 0 := by
-    intro hcA
-    apply hσA_ne
-    simp only [hσA_scalar, hcA, zero_smul]
-  have hcB_ne : cB ≠ 0 := by
-    intro hcB
-    apply hσB_ne
-    simp only [hσB_scalar, hcB, zero_smul]
-  have hX'inj : ∀ v : Fin D₂ → ℂ, X' *ᵥ v = 0 → v = 0 :=
-    by
-      intro v hv
-      have h0 : (X'ᴴ * X') *ᵥ v = 0 := by
-        simpa only [Matrix.mulVec_mulVec, Matrix.mulVec_zero] using
-          congrArg (fun w => X'ᴴ *ᵥ w) hv
-      change σB *ᵥ v = 0 at h0
-      rw [hσB_scalar] at h0
-      have : cB • v = 0 := by
-        simpa only [smul_eq_zero, Matrix.smul_mulVec, Matrix.one_mulVec] using h0
-      exact (smul_eq_zero.mp this).resolve_left hcB_ne
-  have hX'hinj : ∀ v : Fin D₁ → ℂ, X'ᴴ *ᵥ v = 0 → v = 0 :=
-    by
-      intro v hv
-      have h0 : (X' * X'ᴴ) *ᵥ v = 0 := by
-        simpa only [Matrix.mulVec_mulVec, Matrix.mulVec_zero] using
-          congrArg (fun w => X' *ᵥ w) hv
-      change σA *ᵥ v = 0 at h0
-      rw [hσA_scalar] at h0
-      have : cA • v = 0 := by
-        simpa only [smul_eq_zero, Matrix.smul_mulVec, Matrix.one_mulVec] using h0
-      exact (smul_eq_zero.mp this).resolve_left hcA_ne
-  have h_D₂_le : D₂ ≤ D₁ :=
-    Matrix.dim_le_of_mulVec_injective X' hX'inj
-  have h_D₁_le : D₁ ≤ D₂ :=
-    Matrix.dim_le_of_mulVec_injective X'ᴴ hX'hinj
-  exact le_antisymm h_D₁_le h_D₂_le
+  obtain ⟨hA'unital, hB'unital, hX'ne, hInter1, hInter2⟩ :=
+    gauged_rectangular_intertwiner_properties
+      A B ρA ρB SA SB X μ A' B' X' rfl rfl rfl
+      hSA_det hSB_det hSA_mul hSB_mul hρA_fix hρB_fix
+      hA_left hB_left hFX hμ hX
+  obtain ⟨σA, σB, hσA_def, hσB_def, _, _, hσA_ne, hσB_ne,
+      hσA_fix, hσB_fix⟩ :=
+    exists_gram_fixedPoints_of_gauged_rectangular_intertwiner
+      A' B' X' μ hA'unital hB'unital hX'ne hInter1 hInter2 hμ
+  exact
+    dim_eq_of_gram_fixedPoints_of_irreducible_TP
+      A B hA_irr hB_irr ρA ρB SA SB A' B' X' σA σB rfl rfl
+      hρA_psd hρB_psd hρA_ne hρB_ne hρA_fix hρB_fix hSA_u hSB_u
+      hSA_mul hSB_mul hσA_def hσB_def hσA_ne hσB_ne hσA_fix hσB_fix
 
 set_option synthInstance.maxHeartbeats 200000 in
 -- The rectangular spectral-radius extraction uses the same CLM instance search and needs
