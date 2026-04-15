@@ -211,6 +211,64 @@ private theorem mpvOverlap_blockTensor_self_eq
   rw [← trace_mixedTransferMap_pow_eq_mpvOverlap (A := A) (B := A) (N * L)]
   simp [mixedTransferMap_self, transferMap_blockTensor, pow_mul, Nat.mul_comm]
 
+/-- Distinct compressed sectors of a cyclic sector decomposition are not gauge-phase
+equivalent.
+
+Mathematically, a gauge-phase equivalence would identify the two compressed MPV traces.
+Through `IsCyclicSectorDecomp`, those traces are
+`tr(P u · evalWord(blockTensor A m) w)` and
+`tr(P v · evalWord(blockTensor A m) w)`.  The projections in a cyclic
+decomposition are orthogonal corners, so for `u ≠ v` these corner states cannot
+be related by an invertible gauge and nonzero scalar.
+
+The current cyclic-sector API exposes the trace formula and projection data but
+does not yet package this orthogonal-corner rigidity in a reusable theorem, so
+we isolate exactly that missing bridge here. -/
+private lemma sectorBlocks_not_gaugePhaseEquiv_of_ne
+    [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
+    (hP : IsPeriodic m A)
+    {dim : Fin m → ℕ}
+    (blocks :
+      (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k))
+    (hBlocks_lc :
+      ∀ k, ∑ i : Fin (blockPhysDim d m),
+        (blocks k i)ᴴ * blocks k i = 1)
+    (hBlocks_mpv :
+      SameMPV₂ (blockTensor A m)
+        (toTensorFromBlocks (μ := fun _ => 1) blocks))
+    (hCyclic : IsCyclicSectorDecomp A blocks)
+    (hNondeg : ∀ k, dim k ≠ 0)
+    {u v : Fin m} (huv : u ≠ v) (hdim : dim u = dim v) :
+    ¬ GaugePhaseEquiv
+      (cast (congr_arg (MPSTensor (blockPhysDim d m)) hdim) (blocks u))
+      (blocks v) := by
+  sorry
+
+/-- Early local form of the compressed-sector spectral bridge.
+
+The public version `primitive_and_irreducible_sectorBlocks_of_cyclicDecomp` is
+proved later in this file, after the self-overlap section.  This local bridge
+keeps the present asymptotic proof close to the decomposition statement without
+reordering the larger file. -/
+private lemma sectorBlock_primitive_and_irreducible_of_cyclicSectorDecomp
+    [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
+    (hP : IsPeriodic m A)
+    {dim : Fin m → ℕ}
+    (blocks :
+      (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k))
+    (hBlocks_lc :
+      ∀ k, ∑ i : Fin (blockPhysDim d m),
+        (blocks k i)ᴴ * blocks k i = 1)
+    (hBlocks_mpv :
+      SameMPV₂ (blockTensor A m)
+        (toTensorFromBlocks (μ := fun _ => 1) blocks))
+    (hCyclic : IsCyclicSectorDecomp A blocks)
+    (u : Fin m) (hNonzero : dim u ≠ 0) :
+    _root_.IsPrimitive
+        (transferMap (d := blockPhysDim d m) (D := dim u) (blocks u))
+      ∧ IsIrreducibleTensor (blocks u) := by
+  sorry
+
 /-- Sector-asymptotic bridge for the self-overlap proof.
 
 After blocking by the period, the cyclic sector decomposition should make each
@@ -237,7 +295,58 @@ private theorem sectorOverlap_tendsto_delta_of_cyclicSectorDecomp
     Tendsto
       (fun k => mpvOverlap (d := blockPhysDim d m) (blocks u) (blocks v) k)
       atTop (nhds (if u = v then (1 : ℂ) else 0)) := by
-  sorry
+  classical
+  by_cases huv : u = v
+  · subst v
+    haveI : NeZero (dim u) := ⟨hNondeg u⟩
+    obtain ⟨hPrim, hIrr⟩ :=
+      sectorBlock_primitive_and_irreducible_of_cyclicSectorDecomp
+        A hP blocks hBlocks_lc hBlocks_mpv hCyclic u (hNondeg u)
+    obtain ⟨ρ, hρ_psd, hρ_ne, hρ_fix, htr, hgap⟩ :=
+      spectralRadius_compl_lt_one_of_peripheralPrimitive_of_irreducible
+        (A := blocks u) hIrr (hBlocks_lc u) hPrim
+    have hSelf :
+        Tendsto
+          (fun k =>
+            mpvOverlap (d := blockPhysDim d m) (blocks u) (blocks u) k)
+          atTop (nhds (1 : ℂ)) :=
+      mpvOverlap_tendsto_one_of_transfer_spectralRadius_compl_lt_one
+        (blocks u) (hBlocks_lc u) ρ hρ_fix hρ_ne hρ_psd (by
+          simpa using hgap)
+    simpa using hSelf
+  · have hIrr_u : IsIrreducibleTensor (blocks u) :=
+      (sectorBlock_primitive_and_irreducible_of_cyclicSectorDecomp
+        A hP blocks hBlocks_lc hBlocks_mpv hCyclic u (hNondeg u)).2
+    have hIrr_v : IsIrreducibleTensor (blocks v) :=
+      (sectorBlock_primitive_and_irreducible_of_cyclicSectorDecomp
+        A hP blocks hBlocks_lc hBlocks_mpv hCyclic v (hNondeg v)).2
+    haveI : NeZero (dim u) := ⟨hNondeg u⟩
+    haveI : NeZero (dim v) := ⟨hNondeg v⟩
+    by_cases hdim : dim u = dim v
+    · have hNot :
+          ¬ GaugePhaseEquiv
+            (cast (congr_arg (MPSTensor (blockPhysDim d m)) hdim) (blocks u))
+            (blocks v) :=
+        sectorBlocks_not_gaugePhaseEquiv_of_ne
+          A hP blocks hBlocks_lc hBlocks_mpv hCyclic hNondeg huv hdim
+      have hZero :
+          Tendsto
+            (fun k =>
+              mpvOverlap (d := blockPhysDim d m) (blocks u) (blocks v) k)
+            atTop (nhds (0 : ℂ)) :=
+        mpvOverlap_tendsto_zero_of_not_gaugePhaseEquiv_cast_left_of_irreducible_TP
+          hdim (blocks u) (blocks v) hIrr_u hIrr_v
+          (hBlocks_lc u) (hBlocks_lc v) hNot
+      simpa [huv] using hZero
+    · have hZero :
+          Tendsto
+            (fun k =>
+              mpvOverlap (d := blockPhysDim d m) (blocks u) (blocks v) k)
+            atTop (nhds (0 : ℂ)) :=
+        mpvOverlap_tendsto_zero_of_dim_ne_of_irreducible_TP
+          (blocks u) (blocks v) hIrr_u hIrr_v
+          (hBlocks_lc u) (hBlocks_lc v) hdim
+      simpa [huv] using hZero
 
 private theorem blockTensor_selfOverlap_tendsto_of_cyclicSectorDecomp
     [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
@@ -567,6 +676,79 @@ conjugate to the corner restriction of `(E_A†)^m`. Once that identification is
 available, corner primitivity and corner irreducibility give the two conclusions
 below, and the target lemma only has to convert from the adjoint map back to the
 ordinary transfer map/tensor statement. -/
+private lemma cornerRestriction_primitive_and_irreducible_of_cyclicDecomp
+    [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
+    (hP : IsPeriodic m A)
+    {dim : Fin m → ℕ}
+    (blocks :
+      (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k))
+    (hBlocks_lc :
+      ∀ k, ∑ i : Fin (blockPhysDim d m),
+        (blocks k i)ᴴ * blocks k i = 1)
+    (hBlocks_mpv :
+      SameMPV₂ (blockTensor A m)
+        (toTensorFromBlocks (μ := fun _ => 1) blocks))
+    {P : Fin m → MatrixAlg D}
+    (hPproj : ∀ k, IsOrthogonalProjection (P k))
+    (hPsum : ∑ k : Fin m, P k = 1)
+    (hCyclic :
+      ∀ k, transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k)
+    (hComm :
+      ∀ k (i : Fin (blockPhysDim d m)),
+        P k * (blockTensor A m) i = (blockTensor A m) i * P k)
+    (hTrace :
+      ∀ k (N : ℕ) (σ : Fin N → Fin (blockPhysDim d m)),
+        mpv (blocks k) σ = (P k * evalWord (blockTensor A m) (List.ofFn σ)).trace)
+    (u : Fin m) (hNonzero : dim u ≠ 0) :
+    ∃ hInv :
+        PreservesCorner (P u)
+          ((transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ^ m),
+      _root_.IsPrimitive
+        (cornerRestriction (P u)
+          ((transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ^ m) hInv) ∧
+      IsIrreducibleOnCorner (P u)
+        ((transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ^ m) := by
+  sorry
+/-- The missing compressed-sector identification.
+
+For a cyclic sector decomposition, the adjoint transfer map of the compressed
+block `blocks u` should be linearly conjugate to the corner restriction of the
+ambient `m`-step adjoint transfer map on `P u · M_D(ℂ) · P u`. We only expose
+the transported primitive and irreducible consequences here; the explicit
+conjugating linear equivalence is not needed by the current callers and is
+expensive for Lean to elaborate as part of a `sorry` placeholder. -/
+private lemma compressedSector_adjointTransferMap_cornerBridge_of_cyclicDecomp
+    [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
+    {dim : Fin m → ℕ}
+    (blocks :
+      (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k))
+    {P : Fin m → MatrixAlg D}
+    (hPproj : ∀ k, IsOrthogonalProjection (P k))
+    (hComm :
+      ∀ k (i : Fin (blockPhysDim d m)),
+        P k * (blockTensor A m) i = (blockTensor A m) i * P k)
+    (hTrace :
+      ∀ k (N : ℕ) (σ : Fin N → Fin (blockPhysDim d m)),
+        mpv (blocks k) σ = (P k * evalWord (blockTensor A m) (List.ofFn σ)).trace)
+    (u : Fin m) (hNonzero : dim u ≠ 0)
+    (hInv :
+      PreservesCorner (P u)
+        ((transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ^ m))
+    (hCornerPrim :
+      _root_.IsPrimitive
+        (cornerRestriction (P u)
+          ((transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ^ m) hInv))
+    (hCornerIrr :
+      IsIrreducibleOnCorner (P u)
+        ((transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ^ m)) :
+    _root_.IsPrimitive
+      (transferMap (d := blockPhysDim d m) (D := dim u)
+        (fun i => (blocks u i)ᴴ)) ∧
+      IsIrreducibleMap
+        (transferMap (d := blockPhysDim d m) (D := dim u)
+          (fun i => (blocks u i)ᴴ)) := by
+  sorry
+
 private lemma adjointTransferMap_primitive_and_irreducible_sectorBlock_of_cyclicDecomp
     [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
     (hP : IsPeriodic m A)
@@ -587,7 +769,13 @@ private lemma adjointTransferMap_primitive_and_irreducible_sectorBlock_of_cyclic
       ∧ IsIrreducibleMap
         (transferMap (d := blockPhysDim d m) (D := dim u)
           (fun i => (blocks u i)ᴴ)) := by
-  sorry
+  obtain ⟨P, hPproj, hPsum, hCyclicP, hComm, hTrace⟩ := hCyclic
+  obtain ⟨hInv, hCornerPrim, hCornerIrr⟩ :=
+    cornerRestriction_primitive_and_irreducible_of_cyclicDecomp
+      A hP blocks hBlocks_lc hBlocks_mpv hPproj hPsum hCyclicP hComm hTrace u hNonzero
+  exact
+    compressedSector_adjointTransferMap_cornerBridge_of_cyclicDecomp
+      A blocks hPproj hComm hTrace u hNonzero hInv hCornerPrim hCornerIrr
 
 /-- **Structural bridge** for Case 3 of Proposition 3.3 (arXiv:1708.00029):
 each nonzero compressed sector block `blocks u` arising from a cyclic sector
@@ -715,6 +903,92 @@ lemma sectorBlocked_isNormal_of_isPeriodic
     isNormal_of_tp_primitive_irreducible
       (D := dim u) (blocks u) (hBlocks_lc u) hPrim hIrr
 
+/-- Gauge-phase equivalence is preserved by physical blocking.
+
+If `B i = ζ · X A i X⁻¹`, then every blocked letter is a word of length `L`,
+so `blockTensor B L` is related to `blockTensor A L` by the same gauge and
+phase `ζ ^ L`. -/
+private theorem gaugePhaseEquiv_blockTensor
+    (A B : MPSTensor d D) (L : ℕ)
+    (hGPE : GaugePhaseEquiv A B) :
+    GaugePhaseEquiv (blockTensor (d := d) (D := D) A L)
+      (blockTensor (d := d) (D := D) B L) := by
+  rcases hGPE with ⟨X, ζ, hζ, hX⟩
+  refine ⟨X, ζ ^ L, pow_ne_zero L hζ, ?_⟩
+  intro i
+  let C : MPSTensor d D := fun j =>
+    (X : Matrix (Fin D) (Fin D) ℂ) * A j *
+      ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)
+  have hB : B = fun j => ζ • C j := by
+    funext j
+    simpa [C] using hX j
+  have hGauge :
+      evalWord C (wordOfBlock d L i) =
+        (X : Matrix (Fin D) (Fin D) ℂ) *
+          evalWord A (wordOfBlock d L i) *
+          ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) := by
+    simpa [C] using
+      (evalWord_gauge (A := A) (B := C) X (by intro j; rfl)
+        (wordOfBlock d L i))
+  calc
+    blockTensor (d := d) (D := D) B L i
+        = evalWord B (wordOfBlock d L i) := rfl
+    _ = evalWord (fun j => ζ • C j) (wordOfBlock d L i) := by simp [hB]
+    _ = (ζ ^ (wordOfBlock d L i).length) •
+          evalWord C (wordOfBlock d L i) := by
+          simpa using
+            (evalWord_smul (ζ := ζ) (A := C) (wordOfBlock d L i))
+    _ = (ζ ^ L) •
+          ((X : Matrix (Fin D) (Fin D) ℂ) *
+            blockTensor (d := d) (D := D) A L i *
+            ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) := by
+          simp [hGauge, blockTensor]
+
+/-- Missing compressed-sector uniqueness bridge after blocking.
+
+Once global gauge-phase equivalence has been transported to the blocked
+tensors, the cyclic sector decompositions of the two blocked tensors should be
+unique up to relabeling of nonzero Wedderburn/cyclic sectors. This bridge is
+the precise remaining API needed for `exists_sector_match_of_gaugePhaseEquiv`:
+it extracts one nonzero compressed sector of `A` and a gauge-phase-equivalent
+compressed sector of `B`. -/
+private lemma exists_sector_match_of_blockedGaugePhaseEquiv_cyclicDecomp
+    [NeZero D] (A B : MPSTensor d D)
+    {m : ℕ} [NeZero m]
+    (hA : IsPeriodic m A) (hB : IsPeriodic m B)
+    {dimA dimB : Fin m → ℕ}
+    (blocksA :
+      (k : Fin m) → MPSTensor (blockPhysDim d m) (dimA k))
+    (blocksB :
+      (k : Fin m) → MPSTensor (blockPhysDim d m) (dimB k))
+    (hA_blocks_lc :
+      ∀ k, ∑ i : Fin (blockPhysDim d m),
+        (blocksA k i)ᴴ * blocksA k i = 1)
+    (hB_blocks_lc :
+      ∀ k, ∑ i : Fin (blockPhysDim d m),
+        (blocksB k i)ᴴ * blocksB k i = 1)
+    (hA_mpv :
+      SameMPV₂ (blockTensor A m)
+        (toTensorFromBlocks (μ := fun _ => 1) blocksA))
+    (hB_mpv :
+      SameMPV₂ (blockTensor B m)
+        (toTensorFromBlocks (μ := fun _ => 1) blocksB))
+    (hA_cyclic : IsCyclicSectorDecomp A blocksA)
+    (hB_cyclic : IsCyclicSectorDecomp B blocksB)
+    (hGPE_block :
+      GaugePhaseEquiv (blockTensor (d := d) (D := D) A m)
+        (blockTensor (d := d) (D := D) B m)) :
+    ∃ (u v : Fin m) (hdim : dimA u = dimB v),
+      dimA u ≠ 0 ∧
+      GaugePhaseEquiv
+        (cast (congr_arg
+          (MPSTensor (blockPhysDim d m)) hdim)
+          (blocksA u))
+        (blocksB v) := by
+  -- Missing bridge: uniqueness of the compressed cyclic/Wedderburn sector
+  -- decomposition for the two blocked tensors, with nonzero-sector bookkeeping.
+  sorry
+
 /-- A global gauge-phase equivalence between two periodic tensors forces at
 least one compatible nonzero pair of compressed cyclic sectors to be
 gauge-phase equivalent.
@@ -755,11 +1029,14 @@ lemma exists_sector_match_of_gaugePhaseEquiv
           (MPSTensor (blockPhysDim d m)) hdim)
           (blocksA u))
         (blocksB v) := by
-  -- Missing bridge: combine global gauge-phase equivalence with uniqueness of
-  -- the cyclic compressed sector decomposition after blocking by the common
-  -- period. The hypotheses above are exactly the data needed to invoke that
-  -- bridge once it is exposed by the sector-decomposition API.
-  sorry
+  have hGPE_block :
+      GaugePhaseEquiv (blockTensor (d := d) (D := D) A m)
+        (blockTensor (d := d) (D := D) B m) :=
+    gaugePhaseEquiv_blockTensor A B m hGPE
+  exact
+    exists_sector_match_of_blockedGaugePhaseEquiv_cyclicDecomp A B hA hB
+      blocksA blocksB hA_blocks_lc hB_blocks_lc hA_mpv hB_mpv
+      hA_cyclic hB_cyclic hGPE_block
 
 /-- If no nonzero compressed sector pair matches, then the original periodic
 tensors cannot be globally gauge-phase equivalent. -/
@@ -860,6 +1137,74 @@ theorem periodicOverlap_tendsto_zero_of_no_sector_match
 
 /-! ## Case 3: Same period, sector match → gauge-equivalent (Appendix A, main case) -/
 
+/-- Missing one-step cyclic transport bridge for sector matches.
+
+This is the formal one-step version of Eq. A.8 in arXiv:1708.00029. The cyclic
+projection relation `E†(P (k+1)) = P k`, together with the compressed-sector
+realization, should transport a gauge-phase equivalence between sector pair
+`(u, v)` to one between `(u + 1, v + 1)`. The conclusion also propagates
+nondegeneracy so the step can be iterated around the cycle. -/
+private lemma sectorMatch_succ_of_cyclicSectorDecomp
+    [NeZero D]
+    (A B : MPSTensor d D)
+    {m : ℕ} [NeZero m]
+    (hA_lc : IsLeftCanonical A) (hB_lc : IsLeftCanonical B)
+    {dimA dimB : Fin m → ℕ}
+    (blocksA :
+      (k : Fin m) → MPSTensor (blockPhysDim d m) (dimA k))
+    (blocksB :
+      (k : Fin m) → MPSTensor (blockPhysDim d m) (dimB k))
+    (hA_blocks_lc :
+      ∀ k, ∑ i : Fin (blockPhysDim d m),
+        (blocksA k i)ᴴ * blocksA k i = 1)
+    (hB_blocks_lc :
+      ∀ k, ∑ i : Fin (blockPhysDim d m),
+        (blocksB k i)ᴴ * blocksB k i = 1)
+    (hA_mpv :
+      SameMPV₂ (blockTensor A m)
+        (toTensorFromBlocks (μ := fun _ => 1) blocksA))
+    (hB_mpv :
+      SameMPV₂ (blockTensor B m)
+        (toTensorFromBlocks (μ := fun _ => 1) blocksB))
+    (hA_cyclic : IsCyclicSectorDecomp A blocksA)
+    (hB_cyclic : IsCyclicSectorDecomp B blocksB)
+    {u : Fin m} {v : Fin m}
+    (hdim : dimA u = dimB v)
+    (hNondeg : dimA u ≠ 0)
+    (hMatch : GaugePhaseEquiv
+      (cast (congr_arg
+        (MPSTensor (blockPhysDim d m)) hdim)
+        (blocksA u))
+      (blocksB v)) :
+    ∃ (hdim' : dimA (u + 1) = dimB (v + 1)),
+      dimA (u + 1) ≠ 0 ∧
+      GaugePhaseEquiv
+        (cast (congr_arg
+          (MPSTensor (blockPhysDim d m)) hdim')
+          (blocksA (u + 1)))
+        (blocksB (v + 1)) := by
+  -- Missing bridge: construct/transport the one-site cyclic sector maps between
+  -- consecutive projections and identify their `m`-step compressions with the
+  -- supplied blocked sector tensors.
+  sorry
+
+/-- Transport a sector `GaugePhaseEquiv` across equalities of both sector indices. -/
+private lemma gaugePhaseEquiv_cast_indices {d gA gB : ℕ}
+    {dimA : Fin gA → ℕ} {dimB : Fin gB → ℕ}
+    (A : (j : Fin gA) → MPSTensor d (dimA j))
+    (B : (k : Fin gB) → MPSTensor d (dimB k))
+    {i₁ i₂ : Fin gA} {j₁ j₂ : Fin gB}
+    (hi : i₁ = i₂) (hj : j₁ = j₂)
+    (hdim : dimA i₁ = dimB j₁)
+    (hg : GaugePhaseEquiv
+      (cast (congr_arg (MPSTensor d) hdim) (A i₁)) (B j₁)) :
+    GaugePhaseEquiv
+      (cast (congr_arg (MPSTensor d) (show dimA i₂ = dimB j₂ from hi ▸ hj ▸ hdim))
+        (A i₂)) (B j₂) := by
+  subst hi
+  subst hj
+  exact hg
+
 /-- **Translation propagation** (Eq. A.8 / blockedABprop of arXiv:1708.00029):
 Given one matching compressed sector pair at `(u₀, v₀)`, applying the
 translation operator `T^l` for `l = 1, …, m-1` yields matching for all
@@ -920,6 +1265,109 @@ lemma sectorMatch_propagation
             (MPSTensor (blockPhysDim d m)) hdim)
             (blocksA (u₀ + l)))
           (blocksB (v₀ + l)) := by
+  have hNat : ∀ n : ℕ,
+      ∃ (hdim : dimA (u₀ + Fin.ofNat m n) = dimB (v₀ + Fin.ofNat m n)),
+        dimA (u₀ + Fin.ofNat m n) ≠ 0 ∧
+        GaugePhaseEquiv
+          (cast (congr_arg
+            (MPSTensor (blockPhysDim d m)) hdim)
+            (blocksA (u₀ + Fin.ofNat m n)))
+          (blocksB (v₀ + Fin.ofNat m n)) := by
+    intro n
+    induction n with
+    | zero =>
+        have hu0 : u₀ + Fin.ofNat m 0 = u₀ := by
+          ext
+          simp
+        have hv0 : v₀ + Fin.ofNat m 0 = v₀ := by
+          ext
+          simp
+        refine ⟨(show dimA (u₀ + Fin.ofNat m 0) = dimB (v₀ + Fin.ofNat m 0) from
+          hu0.symm ▸ hv0.symm ▸ hdim₀), ?_, ?_⟩
+        · simpa [hu0] using hNondeg
+        · exact
+            gaugePhaseEquiv_cast_indices blocksA blocksB
+              hu0.symm hv0.symm hdim₀ hMatch
+    | succ n ih =>
+        obtain ⟨hdim, hNondeg_n, hMatch_n⟩ := ih
+        obtain ⟨hdim_succ, hNondeg_succ, hMatch_succ⟩ :=
+          sectorMatch_succ_of_cyclicSectorDecomp A B hA_lc hB_lc
+            blocksA blocksB hA_blocks_lc hB_blocks_lc hA_mpv hB_mpv
+            hA_cyclic hB_cyclic hdim hNondeg_n hMatch_n
+        have hu :
+            (u₀ + Fin.ofNat m n) + 1 = u₀ + Fin.ofNat m (n + 1) := by
+          ext
+          simp [Fin.val_add, Nat.add_mod_mod, Nat.mod_add_mod, Nat.add_assoc]
+        have hv :
+            (v₀ + Fin.ofNat m n) + 1 = v₀ + Fin.ofNat m (n + 1) := by
+          ext
+          simp [Fin.val_add, Nat.add_mod_mod, Nat.mod_add_mod, Nat.add_assoc]
+        refine ⟨(show
+          dimA (u₀ + Fin.ofNat m (n + 1)) =
+            dimB (v₀ + Fin.ofNat m (n + 1)) from
+          hu ▸ hv ▸ hdim_succ), ?_, ?_⟩
+        · intro hzero
+          apply hNondeg_succ
+          rw [hu]
+          exact hzero
+        · exact
+            gaugePhaseEquiv_cast_indices blocksA blocksB
+              hu hv hdim_succ hMatch_succ
+  intro l
+  obtain ⟨hdim, _hNondeg_l, hMatch_l⟩ := hNat l.val
+  have hl : Fin.ofNat m l.val = l := by
+    ext
+    simp
+  have hu : u₀ + Fin.ofNat m l.val = u₀ + l := by rw [hl]
+  have hv : v₀ + Fin.ofNat m l.val = v₀ + l := by rw [hl]
+  refine ⟨(show dimA (u₀ + l) = dimB (v₀ + l) from hu ▸ hv ▸ hdim), ?_⟩
+  exact
+    gaugePhaseEquiv_cast_indices blocksA blocksB
+      hu hv hdim hMatch_l
+
+/-- Missing blocked-to-unblocked gauge bridge for the periodic-overlap Case 3.
+
+This is the precise API gap in Eqs. A.14-A.18 of arXiv:1708.00029.  The
+available cyclic-sector decomposition only exposes the compressed blocked
+tensors through projection trace identities.  To finish the bridge, the API
+must also provide one-site transition tensors between consecutive cyclic
+sectors, identify their `m`-fold cyclic products with `blocksA` and `blocksB`,
+and then telescope the sector phases extracted by injectivity contraction into
+a single global gauge with a unit-modulus scalar. -/
+private lemma repeatedBlocks_of_blockedSectorGaugePhase
+    [NeZero D] (A B : MPSTensor d D)
+    {m : ℕ} [NeZero m]
+    (hA_lc : IsLeftCanonical A) (hB_lc : IsLeftCanonical B)
+    {dimA dimB : Fin m → ℕ}
+    (blocksA :
+      (k : Fin m) → MPSTensor (blockPhysDim d m) (dimA k))
+    (blocksB :
+      (k : Fin m) → MPSTensor (blockPhysDim d m) (dimB k))
+    (hA_blocks_lc :
+      ∀ k, ∑ i : Fin (blockPhysDim d m),
+        (blocksA k i)ᴴ * blocksA k i = 1)
+    (hB_blocks_lc :
+      ∀ k, ∑ i : Fin (blockPhysDim d m),
+        (blocksB k i)ᴴ * blocksB k i = 1)
+    (hA_mpv :
+      SameMPV₂ (blockTensor A m)
+        (toTensorFromBlocks (μ := fun _ => 1) blocksA))
+    (hB_mpv :
+      SameMPV₂ (blockTensor B m)
+        (toTensorFromBlocks (μ := fun _ => 1) blocksB))
+    (hA_cyclic : IsCyclicSectorDecomp A blocksA)
+    (hB_cyclic : IsCyclicSectorDecomp B blocksB)
+    (q : Fin m)
+    (hBlockMatch : ∀ u : Fin m,
+      ∃ (hdim : dimA u = dimB (u + q)),
+        GaugePhaseEquiv
+          (cast (congr_arg
+            (MPSTensor (blockPhysDim d m)) hdim)
+            (blocksA u))
+          (blocksB (u + q)))
+    (hNondeg : ∀ u, dimA u ≠ 0)
+    (hNormal : ∀ u, IsNormal (blocksA u)) :
+    RepeatedBlocks A B := by
   sorry
 
 /-- **Per-site proportionality** (Eq. A.14 of arXiv:1708.00029):
@@ -978,29 +1426,9 @@ lemma sectorTensor_proportional_of_blockedMatch
     (hNondeg : ∀ u, dimA u ≠ 0)
     (hNormal : ∀ u, IsNormal (blocksA u)) :
     RepeatedBlocks A B := by
-  -- Step 1: Each blocked sector product is normal, so after N₀
-  --   repetitions it becomes injective.
-  -- Step 2: The decomposition map Ω_u exists for each sector.
-  -- Step 3: Concatenate and apply Ω inverses to extract:
-  --   C_u ⊗ ... ⊗ C_{u+m-1} = e^{iη} C'_v ⊗ ... ⊗ C'_{v+m-1}
-  -- Step 4: Extract per-site proportionality via injectivity
-  -- Step 5: |κ_v| = 1 from left-canonical normalization
-  -- Step 6: Telescope κ_v = e^{i(φ_v - φ_{v+1})} and assemble U
-  --
-  -- Missing bridge, not yet present in the current API:
-  -- 1. `IsCyclicSectorDecomp` must expose one-site sector transition tensors
-  --    `C_u i : H_u → H_{u+1}` whose `m`-fold cyclic products are the compressed
-  --    blocked tensors `blocksA u` (and similarly for `B`).
-  -- 2. Sectorwise `GaugePhaseEquiv` for those `m`-fold products, together with
-  --    `IsNormal`, must be converted via the decomposition map/one-sided inverse
-  --    into per-site proportionalities.
-  -- 3. The resulting phases must be telescoped into a single global gauge and
-  --    unit-modulus scalar, yielding `RepeatedBlocks A B`.
-  --
-  -- The existing imports contain the injective decomposition map and the 2-site
-  -- proportionality lemma (`tensor_proportional`), but not the sector-transition
-  -- construction or the final unblocking/telescoping theorem needed to apply them.
-  sorry
+  exact repeatedBlocks_of_blockedSectorGaugePhase A B hA_lc hB_lc
+    blocksA blocksB hA_blocks_lc hB_blocks_lc hA_mpv hB_mpv
+    hA_cyclic hB_cyclic q hBlockMatch hNondeg hNormal
 
 /-- **Case 3: a matching sector implies gauge equivalence**. If two periodic tensors have
 the same period and a compressed sector match exists, then they are related by a gauge
