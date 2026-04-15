@@ -676,6 +676,64 @@ theorem periodicOverlap_tendsto_zero_of_ne_period
 
 /-! ## Case 2: Same period, no sector match → orthogonal (Appendix A, second case) -/
 
+private lemma hLift_cyclicDecomp_mps_of_fixUpgrade_missingBridge
+    [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
+    (hP : IsPeriodic m A)
+    {P : Fin m → MatrixAlg D}
+    (hPproj : ∀ k, IsOrthogonalProjection (P k))
+    (hPsum : ∑ k : Fin m, P k = 1)
+    (hCyclic :
+      ∀ k, transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k) :
+    ∀ k : Fin m, ∀ Q : MatrixAlg D,
+      IsOrthogonalProjection Q →
+      Q * P k = Q →
+      P k * Q = Q →
+      PreservesCorner Q ((transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ^ m) →
+      ∃ R : MatrixAlg D,
+        IsOrthogonalProjection R ∧
+        PreservesCorner R (transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ∧
+        (Q = 0 ↔ R = 0) ∧
+        (Q = P k ↔ R = 1) := by
+  sorry
+
+private lemma cyclic_projection_ne_zero_of_sum_one
+    {m D : ℕ} [NeZero m] [NeZero D]
+    {T : MatrixEnd D} {P : Fin m → MatrixAlg D}
+    (hPsum : ∑ k : Fin m, P k = 1)
+    (hCyclic : ∀ k, T (P (k + 1)) = P k) :
+    ∀ k, P k ≠ 0 := by
+  by_contra! hzero
+  obtain ⟨k₀, hk₀⟩ := hzero
+  have hback : ∀ j : Fin m, P (j + 1) = 0 → P j = 0 := by
+    intro j hj
+    rw [← hCyclic j, hj, map_zero]
+  have hall : ∀ j : Fin m, P j = 0 := by
+    suffices hs : ∀ n : ℕ, n < m → ∀ j : Fin m,
+        (k₀ - j).val = n → P j = 0 by
+      intro j
+      exact hs _ (k₀ - j).isLt j rfl
+    intro n
+    induction n with
+    | zero =>
+        intro _ j hj
+        have : k₀ - j = 0 := by
+          ext
+          simp only [Fin.coe_ofNat_eq_mod, Nat.zero_mod, Fin.val_eq_zero_iff] at hj ⊢
+          exact hj
+        have : k₀ = j := sub_eq_zero.mp this
+        subst this
+        exact hk₀
+    | succ n ih =>
+        intro hd j hj
+        apply hback j
+        apply ih (by omega) (j + 1)
+        have h_eq : k₀ - (j + 1) = (k₀ - j) - 1 := by abel
+        rw [h_eq, Fin.val_sub_one_of_ne_zero (by intro h; simp [h] at hj)]
+        omega
+  exact absurd
+    (show (∑ k : Fin m, P k) = 0 from Finset.sum_eq_zero (fun k _ => hall k))
+    (by rw [hPsum]; exact one_ne_zero)
+
 /-- Missing compressed-sector bridge.
 
 This is the precise remaining interface needed by
@@ -702,13 +760,13 @@ private lemma cornerRestriction_primitive_and_irreducible_of_cyclicDecomp
     (hPsum : ∑ k : Fin m, P k = 1)
     (hCyclic :
       ∀ k, transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k)
-    (hComm :
+    (_hComm :
       ∀ k (i : Fin (blockPhysDim d m)),
         P k * (blockTensor A m) i = (blockTensor A m) i * P k)
-    (hTrace :
+    (_hTrace :
       ∀ k (N : ℕ) (σ : Fin N → Fin (blockPhysDim d m)),
         mpv (blocks k) σ = (P k * evalWord (blockTensor A m) (List.ofFn σ)).trace)
-    (u : Fin m) (hNonzero : dim u ≠ 0) :
+    (u : Fin m) (_hNonzero : dim u ≠ 0) :
     ∃ hInv :
         PreservesCorner (P u)
           ((transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ^ m),
@@ -717,7 +775,144 @@ private lemma cornerRestriction_primitive_and_irreducible_of_cyclicDecomp
           ((transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ^ m) hInv) ∧
       IsIrreducibleOnCorner (P u)
         ((transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ^ m) := by
-  sorry
+  let T : MatrixEnd D := transferMap (d := d) (D := D) (fun i => (A i)ᴴ)
+  let K : Fin d → MatrixAlg D := fun i => (A i)ᴴ
+  have hUnital : KadisonSchwarz.IsUnitalKraus (d := d) (D := D) K := by
+    simpa [KadisonSchwarz.IsUnitalKraus, K] using hP.leftCanonical
+  have hK_apply : ∀ X : MatrixAlg D, T X = KadisonSchwarz.krausMap K X := by
+    intro X
+    simp [T, K, MPSTensor.transferMap_apply, KadisonSchwarz.krausMap]
+  have hMulDomain : ∀ k : Fin m, P k ∈ KadisonSchwarz.multiplicativeDomain K := by
+    intro k
+    have hPk_star : (P k)ᴴ = P k := (hPproj k).1.eq
+    have hTPk_eq : T (P k) = P (k - 1) := by
+      change transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k) = P (k - 1)
+      simpa [show k - 1 + 1 = k by abel] using hCyclic (k - 1)
+    have hTPk_proj : IsOrthogonalProjection (T (P k)) := by
+      simpa [hTPk_eq] using hPproj (k - 1)
+    have hRight :
+        KadisonSchwarz.krausMap K (P k * (P k)ᴴ) =
+          KadisonSchwarz.krausMap K (P k) * (KadisonSchwarz.krausMap K (P k))ᴴ := by
+      calc
+        KadisonSchwarz.krausMap K (P k * (P k)ᴴ)
+            = T (P k * (P k)ᴴ) := by rw [hK_apply]
+        _ = T (P k) := by rw [hPk_star, (hPproj k).2]
+        _ = T (P k) * (T (P k))ᴴ := by
+              rw [hTPk_proj.1.eq, hTPk_proj.2]
+        _ = KadisonSchwarz.krausMap K (P k) *
+              (KadisonSchwarz.krausMap K (P k))ᴴ := by rw [hK_apply]
+    have hLeft :
+        KadisonSchwarz.krausMap K ((P k)ᴴ * P k) =
+          (KadisonSchwarz.krausMap K (P k))ᴴ * KadisonSchwarz.krausMap K (P k) := by
+      calc
+        KadisonSchwarz.krausMap K ((P k)ᴴ * P k)
+            = T ((P k)ᴴ * P k) := by rw [hK_apply]
+        _ = T (P k) := by rw [hPk_star, (hPproj k).2]
+        _ = (T (P k))ᴴ * T (P k) := by
+              rw [hTPk_proj.1.eq, hTPk_proj.2]
+        _ = (KadisonSchwarz.krausMap K (P k))ᴴ *
+              KadisonSchwarz.krausMap K (P k) := by rw [hK_apply]
+    exact ⟨
+      (KadisonSchwarz.mem_rightMultiplicativeDomain_iff K hUnital (P k)).2 hRight,
+      (KadisonSchwarz.mem_leftMultiplicativeDomain_iff K hUnital (P k)).2 hLeft⟩
+  have hMulLeft : ∀ k : Fin m, ∀ X : MatrixAlg D, T (P k * X) = T (P k) * T X := by
+    intro k X
+    simpa [T, K, MPSTensor.transferMap_apply, KadisonSchwarz.krausMap] using
+      KadisonSchwarz.krausMap_mul_right_of_mem_multiplicativeDomain
+        (K := K) (hMulDomain k) X
+  have hMulRight : ∀ k : Fin m, ∀ X : MatrixAlg D, T (X * P k) = T X * T (P k) := by
+    intro k X
+    simpa [T, K, MPSTensor.transferMap_apply, KadisonSchwarz.krausMap] using
+      KadisonSchwarz.krausMap_mul_left_of_mem_multiplicativeDomain
+        (K := K) (hMulDomain k) X
+  obtain ⟨ω, hωprim⟩ := hP.primitiveRoot
+  have hM : (1 : MatrixAlg D).PosDef := by
+    classical
+    simpa using (Matrix.PosDef.one (n := Fin D) (R := ℂ))
+  letI : NormedAddCommGroup (MatrixAlg D) :=
+    Matrix.toMatrixNormedAddCommGroup (n := Fin D) (𝕜 := ℂ) 1 hM
+  letI : SeminormedAddCommGroup (MatrixAlg D) :=
+    Matrix.toMatrixSeminormedAddCommGroup (n := Fin D) (𝕜 := ℂ) 1 hM.posSemidef
+  letI : InnerProductSpace ℂ (MatrixAlg D) :=
+    Matrix.toMatrixInnerProductSpace (n := Fin D) (𝕜 := ℂ) 1 hM.posSemidef
+  have hAdj :
+      T = (transferMap (d := d) (D := D) A).adjoint := by
+    simpa [T] using transferMap_conjTranspose_eq_adjoint (d := d) (D := D) (A := A)
+  have hperiph_roots : peripheralEigenvalues T = {μ : ℂ | μ ^ m = 1} := by
+    ext μ
+    constructor
+    · intro hμ
+      have hEigAdj :
+          Module.End.HasEigenvalue ((transferMap (d := d) (D := D) A).adjoint) μ := by
+        simpa [hAdj] using hμ.1
+      have hEig :
+          Module.End.HasEigenvalue (transferMap (d := d) (D := D) A) (star μ) :=
+        (Module.End.hasEigenvalue_adjoint_iff
+          (E := transferMap (d := d) (D := D) A) (μ := star μ)).2 <| by
+            simpa [star_star] using hEigAdj
+      have hNorm : ‖star μ‖ = 1 := by
+        simpa [norm_star] using hμ.2
+      have hStarMem :
+          star μ ∈ peripheralEigenvalues (transferMap (d := d) (D := D) A) :=
+        ⟨hEig, hNorm⟩
+      have hpowStar : (star μ) ^ m = 1 := by
+        simpa [hP.peripheral_eq] using hStarMem
+      have hpow : μ ^ m = 1 := by
+        have := congrArg star hpowStar
+        simpa using this
+      exact hpow
+    · intro hμ
+      have hpowStar : (star μ) ^ m = 1 := by
+        have := congrArg star hμ
+        simpa using this
+      have hStarMem :
+          star μ ∈ peripheralEigenvalues (transferMap (d := d) (D := D) A) := by
+        simpa [hP.peripheral_eq] using hpowStar
+      have hEigAdj :
+          Module.End.HasEigenvalue ((transferMap (d := d) (D := D) A).adjoint) μ := by
+        simpa [star_star] using
+          (Module.End.hasEigenvalue_adjoint_iff
+            (E := transferMap (d := d) (D := D) A) (μ := star μ)).1 hStarMem.1
+      have hNorm : ‖μ‖ = 1 := by
+        simpa [norm_star] using hStarMem.2
+      exact ⟨by simpa [hAdj] using hEigAdj, hNorm⟩
+  have hperiph_range : peripheralEigenvalues T = Set.range (fun j : Fin m => ω ^ (j : ℕ)) := by
+    ext μ
+    constructor
+    · intro hμ
+      have hpow : μ ^ m = 1 := by
+        simpa [hperiph_roots] using hμ
+      obtain ⟨i, hi, hωi⟩ := hωprim.eq_pow_of_pow_eq_one hpow
+      exact ⟨⟨i, hi⟩, by simpa using hωi⟩
+    · rintro ⟨j, rfl⟩
+      have hpow : (ω ^ (j : ℕ)) ^ m = 1 := by
+        calc
+          (ω ^ (j : ℕ)) ^ m = ω ^ ((j : ℕ) * m) := by rw [pow_mul]
+          _ = ω ^ (m * (j : ℕ)) := by rw [Nat.mul_comm]
+          _ = (ω ^ m) ^ (j : ℕ) := by rw [pow_mul]
+          _ = 1 := by simp [hωprim.pow_eq_one]
+      simpa [hperiph_roots] using hpow
+  have hPne : ∀ k, P k ≠ 0 :=
+    cyclic_projection_ne_zero_of_sum_one (T := T) hPsum (by simpa [T] using hCyclic)
+  let hInv : PreservesCorner (P u) (T ^ m) :=
+    preserves_corner_pow_of_cyclic_decomp (T := T) P hPproj hPsum
+      (by simpa [T] using hCyclic) hMulLeft hMulRight u
+  have hCornerPrim :
+      _root_.IsPrimitive (cornerRestriction (P u) (T ^ m) hInv) :=
+    isPrimitive_restriction_of_cyclic_decomp (T := T)
+      hωprim hperiph_range P hPproj hPsum (by simpa [T] using hCyclic)
+      hMulLeft hMulRight hPne u
+  have hIrr : IsIrreducibleMap T := by
+    simpa [T] using
+      isIrreducibleCP_transferMap_conjTranspose_of_isIrreducibleTensor
+        (A := A) hP.irreducible
+  have hLift :=
+    hLift_cyclicDecomp_mps_of_fixUpgrade_missingBridge
+      A hP hPproj hPsum hCyclic
+  have hCornerIrr : IsIrreducibleOnCorner (P u) (T ^ m) :=
+    isIrreducible_restriction_of_cyclic_decomp (T := T)
+      hIrr P hPproj hPsum (by simpa [T] using hCyclic) (by simpa [T] using hLift) u
+  exact ⟨hInv, by simpa [T] using hCornerPrim, by simpa [T] using hCornerIrr⟩
 
 /-- **Missing compression-transfer bridge.**
 
