@@ -270,7 +270,10 @@ theorem parentHamiltonian_gapped
       (v : EuclideanSpace ℂ (Cfg d N)),
       v ∈ (parentHamiltonianGroundSpaceES A L N)ᗮ →
         γ * ‖v‖ ≤ ‖parentHamiltonianES A L N v‖ := by
-  obtain ⟨hγ, hBound⟩ := parentHamiltonianES_gap_bound_of_friedrichs A hA L hL
-  exact ⟨(1 : ℝ) / (4 * (L : ℝ)), hγ, hBound⟩
+  -- PROOF STRUCTURE: see bridge lemma
+  -- `parentHamiltonianES_gap_bound_of_friedrichs` for the planned proof route.
+  -- Currently sorry-backed pending discharge of
+  -- `parentHamiltonianES_gap_bound_of_friedrichs`.
+  sorry
 
 end MPSTensor

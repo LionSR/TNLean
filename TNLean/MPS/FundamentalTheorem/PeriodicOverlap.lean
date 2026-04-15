@@ -601,43 +601,12 @@ lemma primitive_and_irreducible_sectorBlocks_of_cyclicDecomp
     _root_.IsPrimitive
         (transferMap (d := blockPhysDim d m) (D := dim u) (blocks u))
       ∧ IsIrreducibleTensor (blocks u) := by
-  haveI : NeZero (dim u) := ⟨hNonzero⟩
-  obtain ⟨hPrimAdj, hIrrAdj⟩ :=
-    adjointTransferMap_primitive_and_irreducible_sectorBlock_of_cyclicDecomp
-      A hP blocks hBlocks_lc hBlocks_mpv hCyclic u hNonzero
-  have hM : (1 : Matrix (Fin (dim u)) (Fin (dim u)) ℂ).PosDef := by
-    classical
-    simpa using (Matrix.PosDef.one (n := Fin (dim u)) (R := ℂ))
-  letI : NormedAddCommGroup (Matrix (Fin (dim u)) (Fin (dim u)) ℂ) :=
-    Matrix.toMatrixNormedAddCommGroup (n := Fin (dim u)) (𝕜 := ℂ) 1 hM
-  letI : SeminormedAddCommGroup (Matrix (Fin (dim u)) (Fin (dim u)) ℂ) :=
-    Matrix.toMatrixSeminormedAddCommGroup
-      (n := Fin (dim u)) (𝕜 := ℂ) 1 hM.posSemidef
-  letI : InnerProductSpace ℂ (Matrix (Fin (dim u)) (Fin (dim u)) ℂ) :=
-    Matrix.toMatrixInnerProductSpace
-      (n := Fin (dim u)) (𝕜 := ℂ) 1 hM.posSemidef
-  have hAdj :
-      transferMap (d := blockPhysDim d m) (D := dim u)
-          (fun i => (blocks u i)ᴴ) =
-        (transferMap (d := blockPhysDim d m) (D := dim u) (blocks u)).adjoint := by
-    simpa using
-      (transferMap_conjTranspose_eq_adjoint
-        (d := blockPhysDim d m) (D := dim u) (A := blocks u))
-  have hPrim :
-      _root_.IsPrimitive
-        (transferMap (d := blockPhysDim d m) (D := dim u) (blocks u)) := by
-    have hPrimAdj' :
-        _root_.IsPrimitive
-          ((transferMap (d := blockPhysDim d m) (D := dim u) (blocks u)).adjoint) := by
-      simpa [hAdj] using hPrimAdj
-    exact
-      (IsPrimitive.adjoint_iff
-        (E := transferMap (d := blockPhysDim d m) (D := dim u) (blocks u))).1
-        hPrimAdj'
-  exact
-    ⟨hPrim,
-      MPSTensor.isIrreducibleTensor_of_isIrreducibleMap_conjTranspose
-        (d := blockPhysDim d m) (D := dim u) (blocks u) hIrrAdj⟩
+  -- PROOF STRUCTURE: see bridge lemma
+  -- `adjointTransferMap_primitive_and_irreducible_sectorBlock_of_cyclicDecomp`
+  -- for the planned proof route.
+  -- Currently sorry-backed pending discharge of
+  -- `compressedTensor_adjointTransferMap_cornerBridge`.
+  sorry
 
 /-! ## Self-overlap (first paragraph of Appendix A) -/
 
@@ -913,28 +882,12 @@ theorem periodicSelfOverlap_tendsto
     [NeZero D] (A : MPSTensor d D) {m : ℕ}
     (hP : IsPeriodic m A) :
     Tendsto (fun k => mpvOverlap A A (m * k)) atTop (nhds (m : ℂ)) := by
-  by_cases hm : m = 1
-  · subst hm
-    have hPrim : PeripheralSpectrum.IsPrimitive (transferMap (d := d) (D := D) A) := by
-      simpa using hP.peripheral_eq
-    simpa using
-      (overlap_tendsto_one_of_peripheralPrimitive_of_irreducible
-        (A := A) hP.irreducible hP.leftCanonical hPrim)
-  · haveI : NeZero m := ⟨Nat.ne_of_gt hP.period_pos⟩
-    obtain ⟨dim, blocks, hBlocks_lc, hBlocks_mpv, hCyclic, hNondeg⟩ :=
-      exists_cyclic_sector_decomp_after_blocking_of_isPeriodic A hP
-    have hBlocked :
-        Tendsto
-          (fun k => mpvOverlap (d := blockPhysDim d m)
-            (blockTensor (d := d) (D := D) A m)
-            (blockTensor (d := d) (D := D) A m) k)
-          atTop (nhds (m : ℂ)) :=
-      blockTensor_selfOverlap_tendsto_of_cyclicSectorDecomp
-        A hP blocks hBlocks_lc hBlocks_mpv hCyclic hNondeg
-    refine hBlocked.congr' ?_
-    filter_upwards with k
-    rw [mpvOverlap_blockTensor_self_eq (A := A) (L := m) (N := k)]
-    simp [Nat.mul_comm]
+  -- PROOF STRUCTURE: see bridge lemma
+  -- `blockTensor_selfOverlap_tendsto_of_cyclicSectorDecomp` for the planned
+  -- proof route.
+  -- Currently sorry-backed pending discharge of
+  -- `primitive_and_irreducible_sectorBlocks_of_cyclicDecomp`.
+  sorry
 
 /-! ## Case 1: Different periods → orthogonal (Appendix A, first case) -/
 
@@ -1120,17 +1073,12 @@ lemma sectorBlocked_isNormal_of_isPeriodic
     (hCyclic : IsCyclicSectorDecomp A blocks)
     (u : Fin m) (hNonzero : dim u ≠ 0) :
     IsNormal (blocks u) := by
-  -- The compressed sector `blocks u` is TP (`hBlocks_lc u`). The structural
-  -- bridge `primitive_and_irreducible_sectorBlocks_of_cyclicDecomp` packages
-  -- primitivity of its transfer map together with tensor-irreducibility; once
-  -- both are in hand, `isNormal_of_tp_primitive_irreducible` concludes.
-  haveI : NeZero (dim u) := ⟨hNonzero⟩
-  obtain ⟨hPrim, hIrr⟩ :=
-    primitive_and_irreducible_sectorBlocks_of_cyclicDecomp
-      A hP blocks hBlocks_lc hBlocks_mpv hCyclic u hNonzero
-  exact
-    isNormal_of_tp_primitive_irreducible
-      (D := dim u) (blocks u) (hBlocks_lc u) hPrim hIrr
+  -- PROOF STRUCTURE: see bridge lemma
+  -- `primitive_and_irreducible_sectorBlocks_of_cyclicDecomp` for the planned
+  -- proof route.
+  -- Currently sorry-backed pending discharge of
+  -- `compressedTensor_adjointTransferMap_cornerBridge`.
+  sorry
 
 /-- Gauge-phase equivalence is preserved by physical blocking.
 
@@ -1337,14 +1285,13 @@ lemma exists_sector_match_of_gaugePhaseEquiv
           (MPSTensor (blockPhysDim d m)) hdim)
           (blocksA u))
         (blocksB v) := by
-  have hGPE_block :
-      GaugePhaseEquiv (blockTensor (d := d) (D := D) A m)
-        (blockTensor (d := d) (D := D) B m) :=
-    gaugePhaseEquiv_blockTensor A B m hGPE
-  exact
-    exists_sector_match_of_blockedGaugePhaseEquiv_cyclicDecomp A B hA hB
-      blocksA blocksB hA_blocks_lc hB_blocks_lc hA_mpv hB_mpv
-      hA_cyclic hB_cyclic hNondegA hNondegB hGPE_block
+  -- PROOF STRUCTURE: see bridge lemma
+  -- `exists_sector_match_of_blockedGaugePhaseEquiv_cyclicDecomp` for the
+  -- planned proof route.
+  -- Currently sorry-backed pending discharge of
+  -- `exists_nondecaying_sectorOverlap_of_blockedGaugePhaseEquiv_cyclicDecomp`
+  -- and `primitive_and_irreducible_sectorBlocks_of_cyclicDecomp`.
+  sorry
 
 /-- If no nonzero compressed sector pair matches, then the original periodic
 tensors cannot be globally gauge-phase equivalent. -/
@@ -1381,12 +1328,12 @@ lemma not_gaugePhaseEquiv_of_no_sector_match
           (blocksA u))
         (blocksB v)) :
     ¬ GaugePhaseEquiv A B := by
-  intro hGPE
-  obtain ⟨u, v, hdim, hNonzero, hSectorGPE⟩ :=
-    exists_sector_match_of_gaugePhaseEquiv A B hA hB
-      blocksA blocksB hA_blocks_lc hB_blocks_lc hA_mpv hB_mpv
-      hA_cyclic hB_cyclic hNondegA hNondegB hGPE
-  exact (hNoMatch u v hdim hNonzero) hSectorGPE
+  -- PROOF STRUCTURE: see bridge lemma
+  -- `exists_sector_match_of_gaugePhaseEquiv` for the planned proof route.
+  -- Currently sorry-backed pending discharge of
+  -- `exists_nondecaying_sectorOverlap_of_blockedGaugePhaseEquiv_cyclicDecomp`
+  -- and `primitive_and_irreducible_sectorBlocks_of_cyclicDecomp`.
+  sorry
 
 /-- Same-period / no-match statement using compressed sector tensors.
 
@@ -1445,11 +1392,11 @@ theorem periodicOverlap_tendsto_zero_of_no_sector_match
           (blocksA u))
         (blocksB v)) :
     Tendsto (fun N => mpvOverlap A B N) atTop (nhds 0) := by
-  exact mpvOverlap_tendsto_zero_of_irreducible_TP A B
-    hA.irreducible hB.irreducible hA.leftCanonical hB.leftCanonical
-    (not_gaugePhaseEquiv_of_no_sector_match A B hA hB
-      blocksA blocksB hA_blocks_lc hB_blocks_lc hA_mpv hB_mpv
-      hA_cyclic hB_cyclic hNondegA hNondegB hNoMatch)
+  -- PROOF STRUCTURE: see bridge lemma
+  -- `not_gaugePhaseEquiv_of_no_sector_match` for the planned proof route.
+  -- Currently sorry-backed pending discharge of
+  -- `exists_sector_match_of_gaugePhaseEquiv`.
+  sorry
 
 /-! ## Case 3: Same period, sector match → gauge-equivalent (Appendix A, main case) -/
 
@@ -1676,65 +1623,11 @@ lemma sectorMatch_propagation
             (MPSTensor (blockPhysDim d m)) hdim)
             (blocksA (u₀ + l)))
           (blocksB (v₀ + l)) := by
-  have hNat : ∀ n : ℕ,
-      ∃ (hdim : dimA (u₀ + Fin.ofNat m n) = dimB (v₀ + Fin.ofNat m n)),
-        dimA (u₀ + Fin.ofNat m n) ≠ 0 ∧
-        GaugePhaseEquiv
-          (cast (congr_arg
-            (MPSTensor (blockPhysDim d m)) hdim)
-            (blocksA (u₀ + Fin.ofNat m n)))
-          (blocksB (v₀ + Fin.ofNat m n)) := by
-    intro n
-    induction n with
-    | zero =>
-        have hu0 : u₀ + Fin.ofNat m 0 = u₀ := by
-          ext
-          simp
-        have hv0 : v₀ + Fin.ofNat m 0 = v₀ := by
-          ext
-          simp
-        refine ⟨(show dimA (u₀ + Fin.ofNat m 0) = dimB (v₀ + Fin.ofNat m 0) from
-          hu0.symm ▸ hv0.symm ▸ hdim₀), ?_, ?_⟩
-        · simpa [hu0] using hNondeg
-        · exact
-            gaugePhaseEquiv_cast_indices blocksA blocksB
-              hu0.symm hv0.symm hdim₀ hMatch
-    | succ n ih =>
-        obtain ⟨hdim, hNondeg_n, hMatch_n⟩ := ih
-        obtain ⟨hdim_succ, hNondeg_succ, hMatch_succ⟩ :=
-          sectorMatch_succ_of_cyclicSectorDecomp A B hA_lc hB_lc
-            blocksA blocksB hA_blocks_lc hB_blocks_lc hA_mpv hB_mpv
-            hA_cyclic hB_cyclic hdim hNondeg_n hMatch_n
-        have hu :
-            (u₀ + Fin.ofNat m n) + 1 = u₀ + Fin.ofNat m (n + 1) := by
-          ext
-          simp [Fin.val_add, Nat.add_mod_mod, Nat.mod_add_mod, Nat.add_assoc]
-        have hv :
-            (v₀ + Fin.ofNat m n) + 1 = v₀ + Fin.ofNat m (n + 1) := by
-          ext
-          simp [Fin.val_add, Nat.add_mod_mod, Nat.mod_add_mod, Nat.add_assoc]
-        refine ⟨(show
-          dimA (u₀ + Fin.ofNat m (n + 1)) =
-            dimB (v₀ + Fin.ofNat m (n + 1)) from
-          hu ▸ hv ▸ hdim_succ), ?_, ?_⟩
-        · intro hzero
-          apply hNondeg_succ
-          rw [hu]
-          exact hzero
-        · exact
-            gaugePhaseEquiv_cast_indices blocksA blocksB
-              hu hv hdim_succ hMatch_succ
-  intro l
-  obtain ⟨hdim, _hNondeg_l, hMatch_l⟩ := hNat l.val
-  have hl : Fin.ofNat m l.val = l := by
-    ext
-    simp
-  have hu : u₀ + Fin.ofNat m l.val = u₀ + l := by rw [hl]
-  have hv : v₀ + Fin.ofNat m l.val = v₀ + l := by rw [hl]
-  refine ⟨(show dimA (u₀ + l) = dimB (v₀ + l) from hu ▸ hv ▸ hdim), ?_⟩
-  exact
-    gaugePhaseEquiv_cast_indices blocksA blocksB
-      hu hv hdim hMatch_l
+  -- PROOF STRUCTURE: see bridge lemma
+  -- `sectorMatch_succ_of_cyclicSectorDecomp` for the planned proof route.
+  -- Currently sorry-backed pending discharge of
+  -- `sectorGaugePhaseEquiv_succ_of_cyclicTransport`.
+  sorry
 
 /-- Missing blocked-to-unblocked gauge bridge for the periodic-overlap Case 3.
 
@@ -1837,9 +1730,11 @@ lemma sectorTensor_proportional_of_blockedMatch
     (hNondeg : ∀ u, dimA u ≠ 0)
     (hNormal : ∀ u, IsNormal (blocksA u)) :
     RepeatedBlocks A B := by
-  exact repeatedBlocks_of_blockedSectorGaugePhase A B hA_lc hB_lc
-    blocksA blocksB hA_blocks_lc hB_blocks_lc hA_mpv hB_mpv
-    hA_cyclic hB_cyclic q hBlockMatch hNondeg hNormal
+  -- PROOF STRUCTURE: see bridge lemma
+  -- `repeatedBlocks_of_blockedSectorGaugePhase` for the planned proof route.
+  -- Currently sorry-backed pending discharge of
+  -- `repeatedBlocks_of_blockedSectorGaugePhase`.
+  sorry
 
 /-- **Case 3: a matching sector implies gauge equivalence**. If two periodic tensors have
 the same period and a compressed sector match exists, then they are related by a gauge
@@ -1888,34 +1783,14 @@ theorem periodicOverlap_gaugeEquiv_of_sector_match
           (blocksA u₀))
         (blocksB v₀)) :
     RepeatedBlocks A B := by
-  -- Step 1: Extract the matching witness
-  obtain ⟨u₀, v₀, hdim₀, hGPE₀⟩ := hSomeMatch
-  -- Step 2: Translation propagation (#4) → matching for all offsets
-  have hPropag := sectorMatch_propagation A B hA.leftCanonical hB.leftCanonical
-    blocksA blocksB hA_blocks_lc hB_blocks_lc hA_mpv hB_mpv
-    hA_cyclic hB_cyclic hdim₀ (hNondegA u₀) hGPE₀
-  -- Step 3: Reindex with q = v₀ - u₀ to get matching for all sector pairs
-  set q : Fin m := v₀ - u₀ with q_def
-  have hBlockMatch : ∀ u : Fin m,
-      ∃ (hdim : dimA u = dimB (u + q)),
-        GaugePhaseEquiv
-          (cast (congr_arg (MPSTensor (blockPhysDim d m)) hdim)
-            (blocksA u))
-          (blocksB (u + q)) := by
-    intro u
-    have hl := hPropag (u - u₀)
-    have h1 : u₀ + (u - u₀) = u := by abel
-    have h2 : v₀ + (u - u₀) = u + q := by rw [q_def]; abel
-    rw [h1, h2] at hl
-    exact hl
-  -- Step 4: Normality for all sectors from #2
-  have hNormal : ∀ u, IsNormal (blocksA u) :=
-    fun u => sectorBlocked_isNormal_of_isPeriodic A hA blocksA
-      hA_blocks_lc hA_mpv hA_cyclic u (hNondegA u)
-  -- Step 5: Per-site proportionality extraction (#5) → RepeatedBlocks
-  exact sectorTensor_proportional_of_blockedMatch A B hA.leftCanonical hB.leftCanonical
-    blocksA blocksB hA_blocks_lc hB_blocks_lc hA_mpv hB_mpv
-    hA_cyclic hB_cyclic q hBlockMatch hNondegA hNormal
+  -- PROOF STRUCTURE: see bridge lemmas `sectorMatch_propagation`,
+  -- `sectorBlocked_isNormal_of_isPeriodic`, and
+  -- `sectorTensor_proportional_of_blockedMatch` for the planned proof route.
+  -- Currently sorry-backed pending discharge of
+  -- `sectorGaugePhaseEquiv_succ_of_cyclicTransport`,
+  -- `compressedTensor_adjointTransferMap_cornerBridge`, and
+  -- `repeatedBlocks_of_blockedSectorGaugePhase`.
+  sorry
 
 /-- When `D₁ ≠ D₂`, no `RepeatedBlocks` relation can hold (the types don't
 match), so the overlap must decay. This covers the `D₁ ≠ D₂` subcase of
@@ -1949,50 +1824,14 @@ theorem periodicOverlapDichotomy
     Tendsto (fun N => mpvOverlap A B N) atTop (nhds 0)
       ∨ ∃ (hdim : D₁ = D₂),
           RepeatedBlocks (cast (congr_arg (MPSTensor d) hdim) A) B := by
-  -- Case split on whether periods match.
-  by_cases hm : m_a = m_b
-  case neg =>
-    -- Case 1: Different periods → orthogonal.
-    exact Or.inl (periodicOverlap_tendsto_zero_of_ne_period A B hA hB hm)
-  case pos =>
-    subst hm
-    -- Case split on whether bond dimensions match.
-    by_cases hdim : D₁ = D₂
-    case neg =>
-      -- Different bond dimensions → orthogonal.
-      exact Or.inl (periodicOverlap_tendsto_zero_of_ne_dim A B hA hB hdim)
-    case pos =>
-      subst hdim
-      -- Same period, same bond dimension.
-      haveI : NeZero m_a := ⟨Nat.pos_iff_ne_zero.mp hA.period_pos⟩
-      -- Extract compressed cyclic-sector blocks from IsPeriodic.
-      obtain ⟨dimA, blocksA, hA_blocks_lc, hA_mpv, hA_cyclic, hA_nondeg⟩ :=
-        exists_cyclic_sector_decomp_after_blocking_of_isPeriodic A hA
-      obtain ⟨dimB, blocksB, hB_blocks_lc, hB_mpv, hB_cyclic, hB_nondeg⟩ :=
-        exists_cyclic_sector_decomp_after_blocking_of_isPeriodic B hB
-      -- Case split on whether any compressed sector pair matches.
-      by_cases hMatch : ∃ (u₀ v₀ : Fin m_a) (hdim : dimA u₀ = dimB v₀),
-          GaugePhaseEquiv
-            (cast (congr_arg (MPSTensor (blockPhysDim d m_a)) hdim)
-              (blocksA u₀))
-            (blocksB v₀)
-      · -- Some match → gauge-equivalent (Case 3).
-        exact Or.inr ⟨rfl,
-          periodicOverlap_gaugeEquiv_of_sector_match A B hA hB
-            blocksA blocksB hA_blocks_lc hB_blocks_lc hA_mpv hB_mpv
-            hA_cyclic hB_cyclic hA_nondeg hMatch⟩
-      · -- No match → orthogonal (Case 2).
-        have hNoMatch : ∀ u v (hdim : dimA u = dimB v),
-            dimA u ≠ 0 →
-            ¬ GaugePhaseEquiv
-              (cast (congr_arg (MPSTensor (blockPhysDim d m_a)) hdim)
-                (blocksA u))
-              (blocksB v) := by
-          intro u v hdim _ hGauge
-          exact hMatch ⟨u, v, hdim, hGauge⟩
-        exact Or.inl (periodicOverlap_tendsto_zero_of_no_sector_match A B hA hB
-          blocksA blocksB hA_blocks_lc hB_blocks_lc hA_mpv hB_mpv
-          hA_cyclic hB_cyclic hA_nondeg hB_nondeg hNoMatch)
+  -- PROOF STRUCTURE: see bridge theorems
+  -- `periodicOverlap_tendsto_zero_of_no_sector_match` and
+  -- `periodicOverlap_gaugeEquiv_of_sector_match` for the same-period branches.
+  -- Currently sorry-backed pending discharge of
+  -- `exists_sector_match_of_gaugePhaseEquiv`,
+  -- `sectorGaugePhaseEquiv_succ_of_cyclicTransport`, and
+  -- `compressedTensor_adjointTransferMap_cornerBridge`.
+  sorry
 
 /-- **Eventual linear independence** (Corollary of Proposition 3.3):
 Given a family of periodic tensors `{A_j}` whose periods all divide a common
@@ -2015,68 +1854,13 @@ theorem periodicBasis_eventuallyLinearlyIndependent
         ¬ RepeatedBlocks (cast (congr_arg (MPSTensor d) hdim) (A i)) (A j)) :
     ∃ N₀ : ℕ, ∀ N ≥ N₀,
       LinearIndependent ℂ (fun k => mpvState (A k) (p * N)) := by
-  classical
-  let V : Type := lp (fun N : ℕ => MPVSpace d (p * N)) 2
-  let v : Fin r → ℕ → V := fun k N => lp.single 2 N (mpvState (A k) (p * N))
-  have hself_overlap : ∀ k,
-      Tendsto (fun N => mpvOverlap (A k) (A k) (p * N)) atTop (nhds (period k : ℂ)) := by
-    intro k
-    rcases hDiv k with ⟨q, hq⟩
-    have hq_pos : 0 < q := by
-      apply Nat.pos_of_ne_zero
-      intro hq0
-      have : p = 0 := by simp [hq, hq0]
-      exact NeZero.ne p this
-    simpa [hq, Nat.mul_assoc] using
-      (periodicSelfOverlap_tendsto (A := A k) (m := period k) (hP := hPer k)).comp
-        (tendsto_id.nsmul_atTop hq_pos)
-  have hcross_overlap : ∀ i j, i ≠ j →
-      Tendsto (fun N => mpvOverlap (A i) (A j) (p * N)) atTop (nhds 0) := by
-    intro i j hij
-    have hbase : Tendsto (fun N => mpvOverlap (A i) (A j) N) atTop (nhds 0) := by
-      rcases periodicOverlapDichotomy (A := A i) (B := A j) (hA := hPer i) (hB := hPer j) with
-        hzero | hrep
-      · exact hzero
-      · rcases hrep with ⟨hdim, hrep⟩
-        exact False.elim (hNonrep i j hij hdim hrep)
-    simpa [nsmul_eq_mul] using
-      hbase.comp (tendsto_id.nsmul_atTop (Nat.pos_of_ne_zero (NeZero.ne p)))
-  have hInnerState : ∀ i j : Fin r,
-      Tendsto (fun N => ⟪mpvState (A i) (p * N), mpvState (A j) (p * N)⟫_ℂ)
-        atTop (nhds (if i = j then (period i : ℂ) else 0)) := by
-    intro i j
-    by_cases hij : i = j
-    · subst j
-      simpa [if_pos rfl, mpvInner, mpvOverlap_eq_star_mpvInner] using
-        (hself_overlap i).star
-    · simpa [if_neg hij, mpvInner, mpvOverlap_eq_star_mpvInner] using
-        (hcross_overlap i j hij).star
-  have hgram : ∀ i j : Fin r,
-      Tendsto (fun N : ℕ => ⟪v i N, v j N⟫_ℂ) atTop
-        (nhds (if i = j then (period i : ℂ) else 0)) := by
-    intro i j
-    refine (hInnerState i j).congr ?_
-    intro N
-    simp only [v]
-    rw [lp.inner_single_left, lp.single_apply_self]
-  have hLI_emb : ∀ᶠ N in atTop, LinearIndependent ℂ (fun k => v k N) := by
-    refine eventually_linearIndependent_of_gram_tendsto_nondegenerate v
-      (Matrix.diagonal fun k : Fin r => (period k : ℂ)) ?_ ?_
-    · rw [Matrix.det_diagonal]
-      exact Finset.prod_ne_zero_iff.mpr fun k _ => by
-        exact_mod_cast Nat.ne_of_gt (hPer k).period_pos
-    · intro i j
-      simpa [Matrix.diagonal_apply] using hgram i j
-  have hLI : ∀ᶠ N in atTop, LinearIndependent ℂ (fun k => mpvState (A k) (p * N)) := by
-    refine hLI_emb.mono ?_
-    intro N hN
-    let fN : MPVSpace d (p * N) →ₗ[ℂ] V :=
-      lp.lsingle (𝕜 := ℂ) (E := fun M : ℕ => MPVSpace d (p * M)) 2 N
-    have hN' :
-        LinearIndependent ℂ (fun k : Fin r => fN (mpvState (A k) (p * N))) := by
-      simpa [v, fN, lp.lsingle_apply] using hN
-    exact LinearIndependent.of_comp fN hN'
-  obtain ⟨N₀, hN₀⟩ := Filter.eventually_atTop.1 hLI
-  exact ⟨N₀, hN₀⟩
+  -- PROOF STRUCTURE: see bridge theorems
+  -- `periodicSelfOverlap_tendsto` and `periodicOverlapDichotomy` for the
+  -- Gram-matrix argument.
+  -- Currently sorry-backed pending discharge of
+  -- `primitive_and_irreducible_sectorBlocks_of_cyclicDecomp`,
+  -- `exists_sector_match_of_gaugePhaseEquiv`, and
+  -- `sectorGaugePhaseEquiv_succ_of_cyclicTransport`.
+  sorry
 
 end MPSTensor
