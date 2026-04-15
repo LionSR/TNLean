@@ -9,8 +9,8 @@ import TNLean.MPS.RFP.StructuralForm
 
 This file contains the **statement** of the full Appendix B structural decomposition
 for renormalization fixed-point tensors (arXiv:1606.00608, Lemma B.1). The proof
-is deferred (marked `sorry`) pending the rank-one classification of idempotent
-irreducible CP maps and the forward Kraus-to-isometry extraction step.
+is deferred (marked `sorry`) pending the forward Kraus-to-isometry extraction
+step after the rank-one classification of idempotent irreducible CP maps.
 
 This file lives in `Archive/` because `sorry` is a proof-integrity blocker
 for core modules (see `docs/PROOF_INTEGRITY.md`). Tracked by issue #233.
@@ -59,10 +59,15 @@ theorem rfp_nt_structural_full (A : MPSTensor d D) [NeZero D]
       (∑ i : Fin d, (U i)ᴴ * U i = 1) ∧
       (∀ i, A i = X * Matrix.diagonal (fun k => (Λ k : ℂ)) * U i * X⁻¹) := by
   -- TODO(#233): The rank-one classification is now proved
-  -- (`transferMap_eq_fixedPointProj_of_isRFP_injective`). Remaining: show the
-  -- conjugated tensor B is injective+RFP, apply rank-one classification to B,
-  -- construct canonical Kraus operators for fixedPointProj with diagonal PosDef
-  -- fixed point, apply `kraus_rectangular_freedom'`, and assemble witnesses.
+  -- (`transferMap_eq_fixedPointProj_of_isRFP_injective`). Remaining:
+  -- 1. prove that the unitary-conjugated tensor from
+  --    `rfp_nt_cfii_diagonal_fixedPoint` remains injective and RFP;
+  -- 2. apply the rank-one classification to that conjugated tensor;
+  -- 3. construct an explicit canonical Kraus family for
+  --    `fixedPointProj Λmat` with diagonal PosDef `Λmat`;
+  -- 4. apply `kraus_rectangular_freedom'` to extract the physical-index
+  --    isometry family;
+  -- 5. assemble the witnesses `X`, `Λ`, and `U`.
   sorry
 
 end MPSTensor

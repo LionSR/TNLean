@@ -81,7 +81,8 @@ theorem idPlusE_ne_zero
     have h3 : star v ⬝ᵥ ((A + E A) *ᵥ v) = 0 := by rw [heq]; simp
     rw [add_mulVec, dotProduct_add] at h3
     have h3_re : (star v ⬝ᵥ (A *ᵥ v)).re + (star v ⬝ᵥ ((E A) *ᵥ v)).re = 0 := by
-      have := congr_arg Complex.re h3; simpa using this
+      have := congr_arg Complex.re h3
+      simpa only [Complex.add_re, Complex.zero_re] using this
     -- Normalize RCLike.re to Complex.re for linarith
     change 0 ≤ (star v ⬝ᵥ (A *ᵥ v)).re at h1_re
     change 0 ≤ (star v ⬝ᵥ ((E A) *ᵥ v)).re at h2_re
@@ -252,7 +253,8 @@ theorem posDef_of_ker_subset_irreducible_cp
         hQ_herm.eq, Matrix.conjTranspose_zero] at this
       rwa [← Matrix.mul_assoc] at this
     suffices h_vec : ∀ v, (Q * (K i)ᴴ * (1 - Q)) *ᵥ v = 0 by
-      ext a b; simpa [Matrix.mulVec, dotProduct, Pi.single_apply, Finset.sum_ite_eq'] using
+      ext a b; simpa only [zero_apply, mulVec, dotProduct, Pi.single_apply, mul_ite, mul_one,
+        mul_zero, sum_ite_eq', mem_univ, ↓reduceIte, Pi.zero_apply] using
         congr_fun (h_vec (Pi.single b 1)) a
     intro v
     rw [show (Q * (K i)ᴴ * (1 - Q)) *ᵥ v = Q *ᵥ ((K i)ᴴ *ᵥ ((1 - Q) *ᵥ v)) from by
@@ -294,7 +296,7 @@ theorem posDef_of_ker_subset_irreducible_cp
         _ = Uᴴ * 1 * U := by rw [show U * Matrix.diagonal sgnEig * Uᴴ = Q from rfl, hQ_one]
         _ = 1 := by rw [Matrix.mul_one, hUU]
     have : sgnEig j₀ = 1 := by
-      simpa using congr_fun (Matrix.diagonal_injective
+      simpa only using congr_fun (Matrix.diagonal_injective
         (hdiag_one.trans Matrix.diagonal_one.symm)) j₀
     simp [sgnEig, hj₀_eq] at this
   rcases hQ_zero_or_one with h | h
@@ -427,7 +429,8 @@ theorem growth_posDef_of_irreducible_cp
       apply hij
       have h1 : A.mulVecLin (Pi.single j 1) = 0 := congr_arg Subtype.val h0
       have h2 := congr_fun h1 i
-      simpa [Matrix.mulVecLin_apply, mulVec, dotProduct, Pi.single_apply] using h2
+      simpa only [mulVecBilin_apply, mulVec, dotProduct, Pi.single_apply, mul_ite, mul_one,
+        mul_zero, sum_ite_eq', mem_univ, ↓reduceIte, Pi.zero_apply] using h2
     omega
   intro n
   induction n with
@@ -473,7 +476,7 @@ private theorem iterate_posSemidef
     {A : Matrix (Fin D) (Fin D) ℂ} (hA : A.PosSemidef) (n : ℕ) :
     ((E ^ n) A).PosSemidef := by
   induction n with
-  | zero => simpa
+  | zero => simpa only [pow_zero, Module.End.one_apply]
   | succ n ih =>
       rw [pow_succ', Module.End.mul_apply]
       exact hE _ ih
@@ -518,9 +521,10 @@ private theorem trace_mul_nonneg_of_posSemidef
   let U : Matrix (Fin D) (Fin D) ℂ := ↑hB.isHermitian.eigenvectorUnitary
   let Λ : Fin D → ℂ := fun i => ↑(hB.isHermitian.eigenvalues i)
   have hspec : B = U * Matrix.diagonal Λ * Uᴴ := by
-    simpa [U, Λ] using spectral_decomp_eq hB.isHermitian
+    simpa only using spectral_decomp_eq hB.isHermitian
   have hUAU_psd : (Uᴴ * A * U).PosSemidef := by
-    simpa [U, Matrix.mul_assoc] using hA.mul_mul_conjTranspose_same (B := Uᴴ)
+    simpa only [Matrix.mul_assoc, conjTranspose_conjTranspose] using
+      hA.mul_mul_conjTranspose_same (B := Uᴴ)
   have hΛ_nonneg : ∀ i, 0 ≤ Λ i := by
     intro i
     change (0 : ℂ) ≤ ↑(hB.isHermitian.eigenvalues i)
@@ -533,7 +537,7 @@ private theorem trace_mul_nonneg_of_posSemidef
           = Matrix.trace ((A * U) * Matrix.diagonal Λ * Uᴴ) := by
               simp [Matrix.mul_assoc]
       _ = Matrix.trace (Uᴴ * (A * U) * Matrix.diagonal Λ) := by
-              simpa using (Matrix.trace_mul_cycle (A * U) (Matrix.diagonal Λ) Uᴴ)
+              simpa only using (Matrix.trace_mul_cycle (A * U) (Matrix.diagonal Λ) Uᴴ)
       _ = Matrix.trace ((Uᴴ * A * U) * Matrix.diagonal Λ) := by
               simp [Matrix.mul_assoc]
   rw [htrace_eq, Matrix.trace]
@@ -561,7 +565,7 @@ private theorem trace_mul_pos_of_posDef_posSemidef_ne_zero
     exact hB_ne
       (Kraus.posSemidef_eq_zero_of_posDef_trace_mul_eq_zero
         (hM := hB) (hρ := hA) hzero')
-  exact lt_of_le_of_ne hnonneg (by simpa [eq_comm] using hne)
+  exact lt_of_le_of_ne hnonneg (by simpa only [ne_eq, eq_comm] using hne)
 
 /-- **Wolf Theorem 6.2, item 4**: if `E` is an irreducible completely positive map and
 `A`, `B` are nonzero PSD matrices with `trace (B * A) = 0`, then some iterate
@@ -581,12 +585,12 @@ theorem orthogonal_trace_pos_of_irreducible_cp
   let T : Module.End ℂ (Matrix (Fin D) (Fin D) ℂ) := LinearMap.id + E
   let n : ℕ := D - 1
   have h_growth : ((T ^ n) A).PosDef := by
-    simpa [T, n] using (growth_posDef_of_irreducible_cp E hCP hIrr A hA hA_ne)
+    simpa only using (growth_posDef_of_irreducible_cp E hCP hIrr A hA hA_ne)
   have htrace_growth : 0 < Matrix.trace (B * ((T ^ n) A)) :=
     trace_mul_pos_of_posDef_posSemidef_ne_zero h_growth hB hB_ne
   have h_expand :
       (T ^ n) A = ∑ k ∈ Finset.range (n + 1), n.choose k • ((E ^ k) A) := by
-    simpa [T] using idPlusE_pow_apply_eq_sum (E := E) (n := n) A
+    simpa only [nsmul_eq_mul] using idPlusE_pow_apply_eq_sum (E := E) (n := n) A
   let f : Matrix (Fin D) (Fin D) ℂ →+ ℂ :=
     (Matrix.traceAddMonoidHom (Fin D) ℂ).comp (Matrix.addMonoidHomMulLeft B)
   have hf_apply : ∀ X : Matrix (Fin D) (Fin D) ℂ, f X = Matrix.trace (B * X) := by
@@ -606,7 +610,7 @@ theorem orthogonal_trace_pos_of_irreducible_cp
       ∀ t ∈ Finset.range (n + 1), Matrix.trace (B * ((E ^ t) A)) = 0 := by
     intro t ht
     by_cases ht0 : t = 0
-    · simpa [ht0] using horth
+    · simpa only [ht0, pow_zero, Module.End.one_apply] using horth
     · have ht_pos : 0 < t := Nat.pos_iff_ne_zero.mpr ht0
       have ht_le : t ≤ n := Nat.lt_succ_iff.mp (Finset.mem_range.mp ht)
       have hterm_nonneg : 0 ≤ Matrix.trace (B * ((E ^ t) A)) :=
@@ -684,7 +688,7 @@ private theorem isPositiveMap_smul_nonneg
   intro X hX
   have hcC : 0 ≤ (c : ℂ) := by
     exact_mod_cast hc
-  simpa [smul_apply] using (hE X hX).smul hcC
+  simpa only [LinearMap.smul_apply, Complex.coe_smul] using (hE X hX).smul hcC
 
 private lemma inv_factorial_nonneg (n : ℕ) :
     0 ≤ ((n.factorial : ℂ)⁻¹) := by
@@ -737,7 +741,7 @@ theorem exp_truncation_posDef_of_irreducible_cp
     isPositiveMap_smul_nonneg hCP.isPositiveMap ht.le
   have hterm_psd : ∀ k : ℕ, (term k).PosSemidef := by
     intro k
-    simpa [term] using (iterate_posSemidef hF_pos hA k).smul (inv_factorial_nonneg k)
+    simpa only using (iterate_posSemidef hF_pos hA k).smul (inv_factorial_nonneg k)
   have hsum_psd : (∑ k ∈ Finset.range D, term k).PosSemidef := by
     refine Matrix.posSemidef_sum (s := Finset.range D) (x := term) ?_
     intro k hk
@@ -763,7 +767,7 @@ theorem exp_truncation_posDef_of_irreducible_cp
     have hqterm_zero : star v ⬝ᵥ ((term k) *ᵥ v) = 0 := by
       have hsum_q_zero : ∑ i ∈ Finset.range D, star v ⬝ᵥ ((term i) *ᵥ v) = 0 := by
         have := congrArg (fun w => star v ⬝ᵥ w) hsum_zero
-        simpa [Matrix.sum_mulVec, dotProduct_sum] using this
+        simpa only [sum_mulVec, dotProduct_sum, dotProduct_zero] using this
       exact (Finset.sum_eq_zero_iff_of_nonneg
           (fun i hi => (hterm_psd i).dotProduct_mulVec_nonneg v)).mp hsum_q_zero k hk
     have hterm_zero : (term k) *ᵥ v = 0 :=
@@ -784,10 +788,11 @@ theorem exp_truncation_posDef_of_irreducible_cp
   -- This is the same `(id + E)^(D - 1) A > 0` growth theorem used in
   -- `orthogonal_trace_pos_of_irreducible_cp`.
   have h_growth : ((T ^ (D - 1)) A).PosDef := by
-    simpa [T] using growth_posDef_of_irreducible_cp E hCP hIrr A hA hA_ne
+    simpa only using growth_posDef_of_irreducible_cp E hCP hIrr A hA hA_ne
   have h_expand :
       (T ^ (D - 1)) A = ∑ k ∈ Finset.range D, (D - 1).choose k • ((E ^ k) A) := by
-    simpa [T, Nat.sub_add_cancel hD] using idPlusE_pow_apply_eq_sum (E := E) (n := D - 1) A
+    simpa only [nsmul_eq_mul, Nat.sub_add_cancel hD] using
+      idPlusE_pow_apply_eq_sum (E := E) (n := D - 1) A
   have hv_growth_zero : ((T ^ (D - 1)) A) *ᵥ v = 0 := by
     rw [h_expand, Matrix.sum_mulVec]
     refine Finset.sum_eq_zero ?_
@@ -827,7 +832,8 @@ theorem exp_posDef_of_irreducible_cp
     rw [hpow_apply n]
     exact (iterate_posSemidef hF_pos hA n).smul (inv_factorial_nonneg n)
   have htrunc_pd : (∑ k ∈ Finset.range D, term k).PosDef := by
-    simpa [term, hpow_apply] using exp_truncation_posDef_of_irreducible_cp E hCP hIrr A hA hA_ne ht
+    simpa only [term, hpow_apply] using
+      exp_truncation_posDef_of_irreducible_cp E hCP hIrr A hA hA_ne ht
   have hseries_ops : Summable (fun n : ℕ => ((n.factorial : ℂ)⁻¹) • (Φ ^ n)) := by
     let hs :
         Summable (fun n : ℕ => ‖((n.factorial : ℂ)⁻¹) • (Φ ^ n)‖) :=
@@ -836,16 +842,18 @@ theorem exp_posDef_of_irreducible_cp
   let evA : ((Matrix (Fin D) (Fin D) ℂ) →L[ℂ] Matrix (Fin D) (Fin D) ℂ) →L[ℂ]
       Matrix (Fin D) (Fin D) ℂ := (ContinuousLinearMap.apply ℂ (Matrix (Fin D) (Fin D) ℂ)) A
   have hseries : Summable term := by
-    simpa [term, evA, ContinuousLinearMap.apply_apply, hpow_apply] using evA.summable hseries_ops
+    simpa only [hpow_apply, map_smul, ContinuousLinearMap.apply_apply] using
+      evA.summable hseries_ops
   letI : FiniteDimensional ℂ (CLM D) := instGrowthFiniteDimensionalCLM (D := D)
   letI : CompleteSpace (CLM D) := FiniteDimensional.complete ℂ (CLM D)
   have hexp_eq :
       (NormedSpace.exp Φ) A = ∑' n, term n := by
     have hExp :
         NormedSpace.exp Φ = ∑' n : ℕ, ((n.factorial : ℂ)⁻¹) • (Φ ^ n) := by
-      simpa using congrArg (fun f => f Φ) (NormedSpace.exp_eq_tsum (𝕂 := ℂ))
+      simpa only using congrArg (fun f => f Φ) (NormedSpace.exp_eq_tsum (𝕂 := ℂ))
     rw [hExp]
-    simpa [term, evA, ContinuousLinearMap.apply_apply, hpow_apply] using evA.map_tsum hseries_ops
+    simpa only [hpow_apply, ContinuousLinearMap.apply_apply, map_smul] using
+      evA.map_tsum hseries_ops
   have hpartial_psd :
       ∀ N : ℕ, (∑ k ∈ Finset.range N, term k).PosSemidef := by
     intro N
@@ -855,7 +863,7 @@ theorem exp_posDef_of_irreducible_cp
   have h_partial_tendsto :
       Filter.Tendsto (fun N : ℕ => ∑ k ∈ Finset.range N, term k) Filter.atTop
         (nhds ((NormedSpace.exp Φ) A)) := by
-    simpa [hexp_eq] using (Summable.hasSum_iff_tendsto_nat hseries).1 hseries.hasSum
+    simpa only [hexp_eq] using (Summable.hasSum_iff_tendsto_nat hseries).1 hseries.hasSum
   have h_exp_psd : ((NormedSpace.exp Φ) A).PosSemidef := by
     refine isClosed_posSemidef.mem_of_tendsto h_partial_tendsto ?_
     exact Filter.Eventually.of_forall hpartial_psd
@@ -868,12 +876,14 @@ theorem exp_posDef_of_irreducible_cp
     have hqseries : Summable qterm := qCLM.summable hseries
     have hqeq : star v ⬝ᵥ (((NormedSpace.exp Φ) A) *ᵥ v) = ∑' n, qterm n := by
       rw [hexp_eq]
-      simpa [qCLM, qterm, quadraticFormCLM] using qCLM.map_tsum hseries
+      simpa only [quadraticFormCLM, LinearMap.coe_toContinuousLinearMap',
+        LinearMap.coe_mk, AddHom.coe_mk] using qCLM.map_tsum hseries
     have hrqseries : Summable rqterm := Complex.reCLM.summable hqseries
     have hrq_nonneg : ∀ n, 0 ≤ rqterm n := by
       intro n
       exact (Complex.nonneg_iff.mp (by
-        simpa [qterm, qCLM, quadraticFormCLM] using
+        simpa only [quadraticFormCLM, LinearMap.coe_toContinuousLinearMap',
+          LinearMap.coe_mk, AddHom.coe_mk, qterm, qCLM] using
           (hterm_psd n).dotProduct_mulVec_nonneg v)).1
     by_contra hq_not_pos
     have hq_nonneg : 0 ≤ star v ⬝ᵥ (((NormedSpace.exp Φ) A) *ᵥ v) :=
@@ -893,7 +903,7 @@ theorem exp_posDef_of_irreducible_cp
       intro n
       by_contra hne
       have hpos : 0 < rqterm n :=
-        lt_of_le_of_ne (hrq_nonneg n) (by simpa [eq_comm] using hne)
+        lt_of_le_of_ne (hrq_nonneg n) (by simpa only [ne_eq, eq_comm] using hne)
       have htsum_pos : 0 < ∑' m, rqterm m :=
         Summable.tsum_pos hrqseries hrq_nonneg n hpos
       rw [hrq_tsum_zero] at htsum_pos
@@ -901,14 +911,17 @@ theorem exp_posDef_of_irreducible_cp
     have hqterm_zero : ∀ n, qterm n = 0 := by
       intro n
       have hnonneg : 0 ≤ qterm n := by
-        simpa [qterm, qCLM, quadraticFormCLM] using
+        simpa only [quadraticFormCLM, LinearMap.coe_toContinuousLinearMap',
+          LinearMap.coe_mk, AddHom.coe_mk] using
           (hterm_psd n).dotProduct_mulVec_nonneg v
       rcases Complex.nonneg_iff.mp hnonneg with ⟨hre, him⟩
-      exact Complex.ext (by simpa [rqterm, qterm] using hrq_zero n) him.symm
+      exact Complex.ext (by simpa only [Complex.zero_re, qterm, rqterm] using hrq_zero n)
+        him.symm
     have hterm_zero : ∀ k ∈ Finset.range D, (term k) *ᵥ v = 0 := by
       intro k hk
       apply (hterm_psd k).dotProduct_mulVec_zero_iff v |>.mp
-      simpa [qterm, qCLM, quadraticFormCLM] using hqterm_zero k
+      simpa only [quadraticFormCLM, LinearMap.coe_toContinuousLinearMap',
+        LinearMap.coe_mk, AddHom.coe_mk] using hqterm_zero k
     have hv_trunc_zero : (∑ k ∈ Finset.range D, term k) *ᵥ v = 0 := by
       rw [Matrix.sum_mulVec]
       refine Finset.sum_eq_zero ?_
@@ -920,7 +933,7 @@ theorem exp_posDef_of_irreducible_cp
   have hfinal : ((NormedSpace.exp Φ) A).PosDef := by
     rw [Matrix.posDef_iff_dotProduct_mulVec]
     exact ⟨h_exp_psd.isHermitian, hq_pos⟩
-  simpa [Φ] using hfinal
+  simpa only [map_smul, Complex.coe_smul] using hfinal
 
 /-- **Wolf Theorem 6.2, item 3 (equivalence form)**:
 for a completely positive map `E`, irreducibility is equivalent to strict
@@ -945,13 +958,13 @@ theorem irreducible_iff_exp_posDef_forall
           ∀ t : ℝ, 0 ≤ t → ∀ X : Matrix (Fin D) (Fin D) ℂ,
             P * expSemigroup E t (P * X * P) * P = expSemigroup E t (P * X * P) :=
         -- unfold `GeneratorPreservesCompression E P`
-        semigroup_preserves_compression_of_generator hP (by simpa using hP_inv)
+        semigroup_preserves_compression_of_generator hP (by simpa only using hP_inv)
       have hP_exp_pd : (expSemigroup E 1 P).PosDef := by
-        simpa [expSemigroup, expSemigroupCLM, one_smul] using
+        simpa only [expSemigroup, expSemigroupCLM, Complex.ofReal_one, one_smul] using
           hExp 1 zero_lt_one P hP_psd hP0
       have hcompress_at_one :
           P * expSemigroup E 1 P * P = expSemigroup E 1 P := by
-        simpa [hP.2] using hsemigroup_inv 1 zero_le_one 1
+        simpa only [mul_one, hP.2] using hsemigroup_inv 1 zero_le_one 1
       have h_exp_zero_on_compl :
           (1 - P) * expSemigroup E 1 P = 0 := by
         calc
@@ -962,10 +975,11 @@ theorem irreducible_iff_exp_posDef_forall
       have h_compl_eq_zero : 1 - P = 0 := by
         rcases Matrix.PosDef.isUnit hP_exp_pd with ⟨U, hU⟩
         have hzero : (1 - P) * (↑U : Matrix (Fin D) (Fin D) ℂ) = 0 := by
-          simpa [hU] using h_exp_zero_on_compl
+          simpa only [hU] using h_exp_zero_on_compl
         have hU_unit : IsUnit (↑U : Matrix (Fin D) (Fin D) ℂ) := ⟨U, rfl⟩
-        exact IsUnit.mul_right_cancel hU_unit (by simpa [zero_mul] using hzero)
-      exact Or.inr (by simpa [eq_comm] using sub_eq_zero.mp h_compl_eq_zero)
+        exact IsUnit.mul_right_cancel hU_unit
+          (by simpa only [zero_mul, Units.mul_left_eq_zero] using hzero)
+      exact Or.inr (by simpa only [eq_comm] using sub_eq_zero.mp h_compl_eq_zero)
 
 end Exponential
 

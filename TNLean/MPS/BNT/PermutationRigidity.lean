@@ -64,7 +64,7 @@ lemma mpvOverlap_eq_sum_of_decomp_left
           congr 1; ext σ; rw [Finset.sum_mul]; congr 1; ext j; ring
     _ = ∑ j : Fin g, ∑ σ : Cfg d N, c j * (mpv (A j) σ * star (mpv B σ)) := by
           -- Swap the two finite sums.
-          simpa using
+          simpa only [mpv_eq, coeff_eq, RCLike.star_def] using
             (Finset.sum_comm (s := (Finset.univ : Finset (Cfg d N)))
               (t := (Finset.univ : Finset (Fin g)))
               (f := fun σ j => c j * (mpv (A j) σ * star (mpv B σ))))
@@ -73,7 +73,7 @@ lemma mpvOverlap_eq_sum_of_decomp_left
           refine Finset.sum_congr rfl ?_
           intro j _
           -- `Finset.mul_sum` is stated with an explicit membership binder; `simp` removes it.
-          simpa [mul_assoc] using
+          simpa only [mpv_eq, coeff_eq, RCLike.star_def] using
             (Finset.mul_sum (s := (Finset.univ : Finset (Cfg d N)))
               (f := fun σ : Cfg d N => mpv (A j) σ * star (mpv B σ)) (a := c j)).symm
     _ = ∑ j : Fin g, c j * mpvOverlap (d := d) (A j) B N := by
@@ -149,7 +149,7 @@ theorem exists_nonzero_overlap_of_proportional_decomp
           ∑ j : Fin gA, (aCoeff N j) * mpvOverlap (d := d) (A j) (B k) N := by
       intro N
       -- apply the fixed-N overlap expansion lemma
-      simpa using (mpvOverlap_eq_sum_of_decomp_left (d := d)
+      simpa only using (mpvOverlap_eq_sum_of_decomp_left (d := d)
         (A_total := A_total) (A := A) (N := N) (c := aCoeff N)
         (hdecomp := hA_decomp N) (B := B k))
     -- Now take limits termwise.
@@ -158,12 +158,12 @@ theorem exists_nonzero_overlap_of_proportional_decomp
           atTop (nhds (0 : ℂ)) := by
       intro j
       have := (haCoeff j).mul (hall j)
-      simpa using this
+      simpa only [mul_zero] using this
     have hSum : Tendsto (fun N => ∑ j : Fin gA,
         (aCoeff N j) * mpvOverlap (d := d) (A j) (B k) N) atTop (nhds (0 : ℂ)) := by
-      simpa using (tendsto_finset_sum Finset.univ (fun j _ => hTerm j))
+      simpa only [sum_const_zero] using (tendsto_finset_sum Finset.univ (fun j _ => hTerm j))
     -- Conclude.
-    simpa [hEq] using hSum
+    simpa only [hEq] using hSum
   -- Step 2: compute the same overlap using proportionality + B-decomposition.
   have hEqProp : ∀ N,
       mpvOverlap (d := d) A_total (B k) N =
@@ -180,7 +180,7 @@ theorem exists_nonzero_overlap_of_proportional_decomp
         mpvOverlap (d := d) B_total (B k) N =
           ∑ k' : Fin gB, (bCoeff N k') * mpvOverlap (d := d) (B k') (B k) N := by
       intro N
-      simpa using (mpvOverlap_eq_sum_of_decomp_left (d := d)
+      simpa only using (mpvOverlap_eq_sum_of_decomp_left (d := d)
         (A_total := B_total) (A := B) (N := N) (c := bCoeff N)
         (hdecomp := hB_decomp N) (B := B k))
     -- Termwise limits.
@@ -191,17 +191,18 @@ theorem exists_nonzero_overlap_of_proportional_decomp
       by_cases hk' : k' = k
       · cases hk'
         have := (hbCoeff k).mul (hB_self k)
-        simpa using this
+        simpa only [↓reduceIte, mul_one] using this
       · have := (hbCoeff k').mul (hB_off k' k hk')
-        simpa [hk'] using this
+        simpa only [hk', ↓reduceIte, mul_zero] using this
     have hSum : Tendsto (fun N => ∑ k' : Fin gB,
         (bCoeff N k') * mpvOverlap (d := d) (B k') (B k) N)
         atTop (nhds (∑ k' : Fin gB, (if k' = k then bLim k else 0))) := by
-      simpa using (tendsto_finset_sum Finset.univ (fun k' _ => hTerm k'))
+      simpa only [sum_ite_eq', mem_univ, ↓reduceIte] using
+        (tendsto_finset_sum Finset.univ (fun k' _ => hTerm k'))
     -- Simplify the RHS sum.
     have hRhs : (∑ k' : Fin gB, (if k' = k then bLim k else 0)) = bLim k := by
       simp
-    simpa [hEq, hRhs] using hSum
+    simpa only [hEq, hRhs] using hSum
   have hAB_overlap_lim : Tendsto (fun N => mpvOverlap (d := d) A_total (B k) N)
       atTop (nhds (cLim * bLim k)) := by
     have := hc.mul hB_overlap_lim
@@ -277,17 +278,18 @@ theorem exists_nonzero_overlap_of_proportional_decomp_left
     intro k
     have hstar : Tendsto (fun N => star (mpvOverlap (d := d) (A j) (B k) N))
         atTop (nhds (0 : ℂ)) := by
-      simpa using (hall k).star
+      simpa only [RCLike.star_def, star_zero] using (hall k).star
     refine hstar.congr ?_
     intro N
-    simpa using (mpvOverlap_star_swap (d := d) (A := A j) (B := B k) N)
+    simpa only [RCLike.star_def] using
+      (mpvOverlap_star_swap (d := d) (A := A j) (B := B k) N)
   -- Step 1: show `mpvOverlap B_total (A j) → 0` using the B-decomposition.
   have hB0 : Tendsto (fun N => mpvOverlap (d := d) B_total (A j) N) atTop (nhds (0 : ℂ)) := by
     have hEq : ∀ N,
         mpvOverlap (d := d) B_total (A j) N =
           ∑ k : Fin gB, (bCoeff N k) * mpvOverlap (d := d) (B k) (A j) N := by
       intro N
-      simpa using (mpvOverlap_eq_sum_of_decomp_left (d := d)
+      simpa only using (mpvOverlap_eq_sum_of_decomp_left (d := d)
         (A_total := B_total) (A := B) (N := N) (c := bCoeff N)
         (hdecomp := hB_decomp N) (B := A j))
     have hTerm : ∀ k : Fin gB,
@@ -295,11 +297,11 @@ theorem exists_nonzero_overlap_of_proportional_decomp_left
           atTop (nhds (0 : ℂ)) := by
       intro k
       have := (hbCoeff k).mul (hall_swap k)
-      simpa using this
+      simpa only [mul_zero] using this
     have hSum : Tendsto (fun N => ∑ k : Fin gB,
         (bCoeff N k) * mpvOverlap (d := d) (B k) (A j) N) atTop (nhds (0 : ℂ)) := by
-      simpa using (tendsto_finset_sum Finset.univ (fun k _ => hTerm k))
-    simpa [hEq] using hSum
+      simpa only [sum_const_zero] using (tendsto_finset_sum Finset.univ (fun k _ => hTerm k))
+    simpa only [hEq] using hSum
   -- Step 2: use proportionality to show `mpvOverlap A_total (A j) → 0`.
   have hEqProp : ∀ N,
       mpvOverlap (d := d) A_total (A j) N =
@@ -311,7 +313,7 @@ theorem exists_nonzero_overlap_of_proportional_decomp_left
   have hA0 : Tendsto (fun N => mpvOverlap (d := d) A_total (A j) N) atTop (nhds (0 : ℂ)) := by
     have hmul : Tendsto (fun N => (c N) * mpvOverlap (d := d) B_total (A j) N)
         atTop (nhds (0 : ℂ)) := by
-      simpa using (hc.mul hB0)
+      simpa only [mul_zero] using (hc.mul hB0)
     refine hmul.congr ?_
     intro N
     simp [hEqProp N]
@@ -322,7 +324,7 @@ theorem exists_nonzero_overlap_of_proportional_decomp_left
         mpvOverlap (d := d) A_total (A j) N =
           ∑ i : Fin gA, (aCoeff N i) * mpvOverlap (d := d) (A i) (A j) N := by
       intro N
-      simpa using (mpvOverlap_eq_sum_of_decomp_left (d := d)
+      simpa only using (mpvOverlap_eq_sum_of_decomp_left (d := d)
         (A_total := A_total) (A := A) (N := N) (c := aCoeff N)
         (hdecomp := hA_decomp N) (B := A j))
     have hTerm : ∀ i : Fin gA,
@@ -332,16 +334,17 @@ theorem exists_nonzero_overlap_of_proportional_decomp_left
       by_cases hij : i = j
       · cases hij
         have := (haCoeff j).mul (hA_self j)
-        simpa using this
+        simpa only [↓reduceIte, mul_one] using this
       · have := (haCoeff i).mul (hA_off i j hij)
-        simpa [hij] using this
+        simpa only [hij, ↓reduceIte, mul_zero] using this
     have hSum : Tendsto (fun N => ∑ i : Fin gA,
         (aCoeff N i) * mpvOverlap (d := d) (A i) (A j) N)
         atTop (nhds (∑ i : Fin gA, (if i = j then aLim j else 0))) := by
-      simpa using (tendsto_finset_sum Finset.univ (fun i _ => hTerm i))
+      simpa only [sum_ite_eq', mem_univ, ↓reduceIte] using
+        (tendsto_finset_sum Finset.univ (fun i _ => hTerm i))
     have hRhs : (∑ i : Fin gA, (if i = j then aLim j else 0)) = aLim j := by
       simp
-    simpa [hEq, hRhs] using hSum
+    simpa only [hEq, hRhs] using hSum
   -- Contradiction: the overlap tends both to `0` and to `aLim j ≠ 0`.
   exact (hA_overlap_lim.ne_nhds (_haLim_ne j)) hA0
 
@@ -419,7 +422,7 @@ private lemma tendsto_norm_mpvOverlap_one_of_scaled_self
     ext N
     simp [hs_norm N]
   rw [heq']
-  simpa using hSelf
+  simpa only [one_mul] using hSelf
 
 private lemma ne_zero_of_norm_eq_one (ζ : ℂ) (hζ_norm : ‖ζ‖ = 1) : ζ ≠ 0 := by
   intro h0
@@ -452,7 +455,7 @@ private lemma rightMatching_injective_of_gaugePhaseEquiv
     hB_off k1 k2 hne
   have h_cross_norm_zero : Tendsto (fun N => ‖mpvOverlap (d := d) (B k1) (B k2) N‖)
       atTop (nhds 0) := by
-    simpa using h_cross.norm
+    simpa only [norm_zero] using h_cross.norm
   obtain ⟨X1, ζ1, _, hX1⟩ := hf_gauge k1
   obtain ⟨X2, ζ2, _, hX2⟩ := hf_gauge k2
   have hmpv1 : ∀ (N : ℕ) (σ : Fin N → Fin d),
@@ -549,7 +552,7 @@ private lemma leftMatching_injective_of_gaugePhaseEquiv
     hA_off j1 j2 hne
   have h_cross_norm_zero : Tendsto (fun N => ‖mpvOverlap (d := d) (A j1) (A j2) N‖)
       atTop (nhds 0) := by
-    simpa using h_cross.norm
+    simpa only [norm_zero] using h_cross.norm
   obtain ⟨X1, ζ1, _, hX1⟩ := hg_gauge j1
   obtain ⟨X2, ζ2, _, hX2⟩ := hg_gauge j2
   have hmpvB1 : ∀ (N : ℕ) (σ : Fin N → Fin d),
@@ -641,7 +644,7 @@ private theorem exists_eq_numBlocks_and_equiv_gaugePhase_of_rightMatching
               (cast (congr_arg (MPSTensor d) hdim) (A j))
               (B (perm j)) := by
   have hle_BA : gB ≤ gA := by
-    simpa using (Fintype.card_le_of_injective f hf_inj)
+    simpa only [Fintype.card_fin] using (Fintype.card_le_of_injective f hf_inj)
   have hg : gA = gB := Nat.le_antisymm hle_AB hle_BA
   have hcard : Fintype.card (Fin gB) = Fintype.card (Fin gA) := by
     simp [hg]
@@ -653,9 +656,9 @@ private theorem exists_eq_numBlocks_and_equiv_gaugePhase_of_rightMatching
   have hfe : f (e.symm j) = j :=
     Equiv.ofBijective_apply_symm_apply f hf_bij j
   have hdim : dimA j = dimB (e.symm j) := by
-    simpa [hfe] using hf_dim (e.symm j)
+    simpa only [hfe] using hf_dim (e.symm j)
   refine ⟨hdim, ?_⟩
-  simpa [hdim] using
+  simpa only using
     (gaugePhaseEquiv_cast_idx_left
       (A := A) (B := B) (i₁ := f (e.symm j)) (i₂ := j)
       (k := e.symm j) hfe (hf_dim (e.symm j)) (hf_gauge (e.symm j)))
@@ -778,7 +781,7 @@ private theorem exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp_
       (A := A) (B := B) (g := g) (hg_dim := hg_dim) (hg_gauge := hg_gauge)
       (hA_self := hA_self) (hA_off := hA_off) (hB_self := hB_self)
   have hle_AB : gA ≤ gB := by
-    simpa using (Fintype.card_le_of_injective g hg_inj)
+    simpa only [Fintype.card_fin] using (Fintype.card_le_of_injective g hg_inj)
   exact exists_eq_numBlocks_and_equiv_gaugePhase_of_rightMatching
     (A := A) (B := B) (f := f) hf_inj hle_AB hf_dim hf_gauge
 

@@ -289,6 +289,95 @@ References:
 section
 open scoped MatrixOrder
 
+/-- Extract the canonical fixed point and its invertible square-root gauge. -/
+private lemma canonical_gauge_data_of_injective [NeZero D]
+    (A : MPSTensor d D) (hA : IsInjective A)
+    (hA_norm : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
+    ∃ (ρ S : Matrix (Fin D) (Fin D) ℂ),
+      transferMap (d := d) (D := D) A ρ = ρ ∧ S.det ≠ 0 ∧ S * Sᴴ = ρ := by
+  classical
+  obtain ⟨ρ, hρ⟩ := injective_transfer_unique_fixed_point' (A := A) hA hA_norm
+  have hρ_pd : ρ.PosDef := hρ.pos_def
+  rcases (CStarAlgebra.isStrictlyPositive_iff_eq_star_mul_self).1 hρ_pd.isStrictlyPositive with
+    ⟨S0, hS0_unit, hρ_eq⟩
+  let S : Matrix (Fin D) (Fin D) ℂ := S0ᴴ
+  have hS_unit : IsUnit S := by
+    simpa [S, Matrix.star_eq_conjTranspose] using (IsUnit.star hS0_unit)
+  have hS_det : S.det ≠ 0 := by
+    have hdet_unit : IsUnit S.det := (Matrix.isUnit_iff_isUnit_det (A := S)).1 hS_unit
+    exact hdet_unit.ne_zero
+  have hS_mul : S * Sᴴ = ρ := by
+    calc
+      S * Sᴴ = S0ᴴ * (S0ᴴ)ᴴ := by rfl
+      _ = S0ᴴ * S0 := by simp
+      _ = ρ := by simpa [Matrix.star_eq_conjTranspose] using hρ_eq.symm
+  exact ⟨ρ, S, hρ.fixed, hS_det, hS_mul⟩
+
+/-- Transport a unit-modulus mixed-transfer eigenvector to canonical gauges. -/
+private lemma gauged_intertwining_of_eigenvector [NeZero D]
+    (A B : MPSTensor d D) (SA SB ρA ρB : Matrix (Fin D) (Fin D) ℂ)
+    (X : Matrix (Fin D) (Fin D) ℂ) (μ : ℂ)
+    (hSA_det : SA.det ≠ 0) (hSB_det : SB.det ≠ 0)
+    (hSA_mul : SA * SAᴴ = ρA) (hSB_mul : SB * SBᴴ = ρB)
+    (hρA_fix : transferMap (d := d) (D := D) A ρA = ρA)
+    (hρB_fix : transferMap (d := d) (D := D) B ρB = ρB)
+    (hA_norm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (hB_norm : ∑ i : Fin d, (B i)ᴴ * B i = 1)
+    (hFX : mixedTransferMap A B X = μ • X)
+    (hμ : ‖μ‖ = 1) (hX : X ≠ 0) :
+    gaugeEigenvector SA SB X ≠ 0 ∧
+      (∀ i : Fin d,
+        gaugeEigenvector SA SB X * (gaugeTensor SB B i)ᴴ =
+          μ • ((gaugeTensor SA A i)ᴴ * gaugeEigenvector SA SB X)) ∧
+      (∀ i : Fin d,
+        gaugeTensor SA A i * gaugeEigenvector SA SB X =
+          μ • gaugeEigenvector SA SB X * gaugeTensor SB B i) := by
+  classical
+  have hFX₂ : mixedTransferMap₂ A B X = μ • X := by
+    simpa [mixedTransferMap_apply, mixedTransferMap₂_apply] using hFX
+  have hcore := gauged_intertwining_core
+    (A := A) (B := B) (SA := SA) (SB := SB) (ρA := ρA) (ρB := ρB)
+    hSA_det hSB_det hSA_mul hSB_mul hρA_fix hρB_fix hA_norm hB_norm X μ hFX₂ hμ hX
+  exact ⟨hcore.2.2.1, hcore.2.2.2.1, hcore.2.2.2.2⟩
+
+/-- Kernel invariance from the first gauged intertwining relation makes the gauged eigenvector
+invertible. -/
+private lemma gauged_eigenvector_det_ne_zero [NeZero D]
+    (A B : MPSTensor d D) (SA SB X' : Matrix (Fin D) (Fin D) ℂ) (μ : ℂ)
+    (hB : IsInjective B) (hSB_det : SB.det ≠ 0) (hX'ne : X' ≠ 0)
+    (hInter1 : ∀ i : Fin d,
+      X' * (gaugeTensor SB B i)ᴴ = μ • ((gaugeTensor SA A i)ᴴ * X')) :
+    X'.det ≠ 0 := by
+  classical
+  let B' : MPSTensor d D := gaugeTensor SB B
+  have hB' : IsInjective B' := by
+    simpa [B'] using isInjective_conjugate (d := d) B hB SB hSB_det
+  have hker : ∀ k : Fin d, ∀ v, X' *ᵥ v = 0 → X' *ᵥ ((B' k)ᴴ *ᵥ v) = 0 := by
+    intro k v hv
+    have h1 : X' *ᵥ ((B' k)ᴴ *ᵥ v) = (X' * (B' k)ᴴ) *ᵥ v := by
+      simp [Matrix.mulVec_mulVec]
+    rw [h1]
+    rw [show X' * (B' k)ᴴ = μ • ((gaugeTensor SA A k)ᴴ * X') by
+      simpa [B'] using hInter1 k]
+    rw [Matrix.smul_mulVec, ← Matrix.mulVec_mulVec, hv, Matrix.mulVec_zero, smul_zero]
+  have h_all :
+      ∀ (M0 : Matrix (Fin D) (Fin D) ℂ) (v : Fin D → ℂ),
+        X' *ᵥ v = 0 → X' *ᵥ (M0 *ᵥ v) = 0 :=
+    ker_all_of_inj (B := B') hB' X' hker
+  exact det_ne_zero_of_ker_all (X := X') hX'ne h_all
+
+/-- The invertible gauged intertwiner upgrades the gauged relation to gauge-phase equivalence. -/
+private lemma gaugePhaseEquiv_of_gauged_det_intertwining [NeZero D]
+    (A B : MPSTensor d D) (SA SB X' : Matrix (Fin D) (Fin D) ℂ) (μ : ℂ)
+    (hSA_det : SA.det ≠ 0) (hSB_det : SB.det ≠ 0) (hX'_det : X'.det ≠ 0)
+    (hμ : ‖μ‖ = 1)
+    (hInter2 : ∀ i : Fin d,
+      gaugeTensor SA A i * X' = μ • X' * gaugeTensor SB B i) :
+    GaugePhaseEquiv A B :=
+  gaugePhaseEquiv_of_gauged_intertwining
+    (A := A) (B := B) (SA := SA) (SB := SB) (X' := X') (μ := μ)
+    hSA_det hSB_det (Ne.isUnit hX'_det) hμ hInter2
+
 /-- **Eigenvector implies gauge equivalence** (PGVWC 2007, Lemma 5; Wolf 2012, §6.2).
 
 If `F_{AB}(X) = μ • X` with `X ≠ 0` and `‖μ‖ = 1`, then injective normalized tensors
@@ -306,74 +395,18 @@ private lemma eigenvector_gives_gauge [NeZero D]
     (hμ : ‖μ‖ = 1) (hX : X ≠ 0) :
     GaugePhaseEquiv A B := by
   classical
-  obtain ⟨ρA, hρA⟩ := injective_transfer_unique_fixed_point' (A := A) hA hA_norm
-  obtain ⟨ρB, hρB⟩ := injective_transfer_unique_fixed_point' (A := B) hB hB_norm
-  have hρA_fix : transferMap (d := d) (D := D) A ρA = ρA := hρA.fixed
-  have hρB_fix : transferMap (d := d) (D := D) B ρB = ρB := hρB.fixed
-  have hρA_pd : ρA.PosDef := hρA.pos_def
-  have hρB_pd : ρB.PosDef := hρB.pos_def
-  rcases (CStarAlgebra.isStrictlyPositive_iff_eq_star_mul_self).1 hρA_pd.isStrictlyPositive with
-    ⟨S0A, hS0A_unit, hρA_eq⟩
-  let SA : Matrix (Fin D) (Fin D) ℂ := S0Aᴴ
-  have hSA_unit : IsUnit SA := by
-    simpa [SA, Matrix.star_eq_conjTranspose] using (IsUnit.star hS0A_unit)
-  have hSA_det : SA.det ≠ 0 := by
-    have hdet_unit : IsUnit SA.det := (Matrix.isUnit_iff_isUnit_det (A := SA)).1 hSA_unit
-    exact hdet_unit.ne_zero
-  have hSA_mul : SA * SAᴴ = ρA := by
-    calc
-      SA * SAᴴ = S0Aᴴ * (S0Aᴴ)ᴴ := by rfl
-      _ = S0Aᴴ * S0A := by simp
-      _ = ρA := by simpa [Matrix.star_eq_conjTranspose] using hρA_eq.symm
-  rcases (CStarAlgebra.isStrictlyPositive_iff_eq_star_mul_self).1 hρB_pd.isStrictlyPositive with
-    ⟨S0B, hS0B_unit, hρB_eq⟩
-  let SB : Matrix (Fin D) (Fin D) ℂ := S0Bᴴ
-  have hSB_unit : IsUnit SB := by
-    simpa [SB, Matrix.star_eq_conjTranspose] using (IsUnit.star hS0B_unit)
-  have hSB_det : SB.det ≠ 0 := by
-    have hdet_unit : IsUnit SB.det := (Matrix.isUnit_iff_isUnit_det (A := SB)).1 hSB_unit
-    exact hdet_unit.ne_zero
-  have hSB_mul : SB * SBᴴ = ρB := by
-    calc
-      SB * SBᴴ = S0Bᴴ * (S0Bᴴ)ᴴ := by rfl
-      _ = S0Bᴴ * S0B := by simp
-      _ = ρB := by simpa [Matrix.star_eq_conjTranspose] using hρB_eq.symm
-  let A' : MPSTensor d D := gaugeTensor SA A
-  let B' : MPSTensor d D := gaugeTensor SB B
+  obtain ⟨ρA, SA, hρA_fix, hSA_det, hSA_mul⟩ :=
+    canonical_gauge_data_of_injective A hA hA_norm
+  obtain ⟨ρB, SB, hρB_fix, hSB_det, hSB_mul⟩ :=
+    canonical_gauge_data_of_injective B hB hB_norm
   let X' : Matrix (Fin D) (Fin D) ℂ := gaugeEigenvector SA SB X
-  have hFX₂ : mixedTransferMap₂ A B X = μ • X := by
-    simpa [mixedTransferMap_apply, mixedTransferMap₂_apply] using hFX
-  have hcore := gauged_intertwining_core
-    (A := A) (B := B) (SA := SA) (SB := SB) (ρA := ρA) (ρB := ρB)
-    hSA_det hSB_det hSA_mul hSB_mul hρA_fix hρB_fix hA_norm hB_norm X μ hFX₂ hμ hX
-  rcases hcore with ⟨_, _, hX'ne_raw, hInter1_raw, hInter2_raw⟩
-  have hX'ne : X' ≠ 0 := by
-    simpa [X', gaugeEigenvector] using hX'ne_raw
-  have hInter1 : ∀ i : Fin d, X' * (B' i)ᴴ = μ • ((A' i)ᴴ * X') := by
-    intro i
-    simpa [A', B', X', gaugeTensor, gaugeEigenvector, Matrix.conjTranspose_mul,
-      Matrix.conjTranspose_nonsing_inv, Matrix.mul_assoc] using hInter1_raw i
-  have hInter2 : ∀ i : Fin d, A' i * X' = μ • X' * B' i := by
-    intro i
-    simpa [A', B', X', gaugeTensor, gaugeEigenvector] using hInter2_raw i
-  have hB' : IsInjective B' := by
-    simpa [B'] using isInjective_conjugate (d := d) B hB SB hSB_det
-  have hker : ∀ k : Fin d, ∀ v, X' *ᵥ v = 0 → X' *ᵥ ((B' k)ᴴ *ᵥ v) = 0 := by
-    intro k v hv
-    have h1 : X' *ᵥ ((B' k)ᴴ *ᵥ v) = (X' * (B' k)ᴴ) *ᵥ v := by
-      simp [Matrix.mulVec_mulVec]
-    rw [h1, hInter1 k, Matrix.smul_mulVec, ← Matrix.mulVec_mulVec,
-      hv, Matrix.mulVec_zero, smul_zero]
-  have h_all :
-      ∀ (M0 : Matrix (Fin D) (Fin D) ℂ) (v : Fin D → ℂ),
-        X' *ᵥ v = 0 → X' *ᵥ (M0 *ᵥ v) = 0 :=
-    ker_all_of_inj (B := B') hB' X' hker
-  have hdetX' : X'.det ≠ 0 := det_ne_zero_of_ker_all (X := X') hX'ne h_all
-  exact gaugePhaseEquiv_of_gauged_intertwining
-    (A := A) (B := B) (SA := SA) (SB := SB) (X' := X') (μ := μ)
-    hSA_det hSB_det (Ne.isUnit hdetX') hμ (by
-      intro i
-      simpa [A', B'] using hInter2 i)
+  obtain ⟨hX'ne, hInter1, hInter2⟩ :=
+    gauged_intertwining_of_eigenvector A B SA SB ρA ρB X μ
+      hSA_det hSB_det hSA_mul hSB_mul hρA_fix hρB_fix hA_norm hB_norm hFX hμ hX
+  have hdetX' : X'.det ≠ 0 := by
+    exact gauged_eigenvector_det_ne_zero A B SA SB X' μ hB hSB_det hX'ne hInter1
+  exact gaugePhaseEquiv_of_gauged_det_intertwining A B SA SB X' μ
+    hSA_det hSB_det hdetX' hμ hInter2
 
 end
 
