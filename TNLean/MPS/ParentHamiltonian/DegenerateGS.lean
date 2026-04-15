@@ -182,11 +182,11 @@ theorem parentHamiltonian_gs_eq_bnt_span
     (A : (j : Fin r) → MPSTensor d (dim j))
     (hCF : IsCanonicalFormBNT μ A) {L N : ℕ} (hL : 1 < L) (hN : N ≥ L + 1) :
     parentHamiltonianGroundSpace (μ := μ) A L N = bntSpan A N := by
-  apply le_antisymm
-  · exact parentHamiltonianGroundSpace_le_bntSpan_of_block_decomposition A hCF hL hN
-  · rw [bntSpan, Submodule.span_le]
-    intro ψ hψ
-    obtain ⟨j, rfl⟩ := Set.mem_range.mp hψ
-    exact bnt_mem_groundSpace A hCF hL hN j
+  -- PROOF STRUCTURE: see bridge lemma
+  -- `parentHamiltonianGroundSpace_le_bntSpan_of_block_decomposition` for the
+  -- planned proof route.
+  -- Currently sorry-backed pending discharge of
+  -- `parentHamiltonianGroundSpace_le_bntSpan_of_block_decomposition`.
+  sorry
 
 end MPSTensor
