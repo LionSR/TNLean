@@ -2,9 +2,17 @@ import TNLean.PEPS.Defs
 import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Defs
 import Mathlib.Combinatorics.SimpleGraph.Connectivity.Connected
 
--- This is a **scaffold** file: all theorem proofs are `sorry` placeholders
--- marking proof obligations to be filled in future PRs (see #128).
--- No `sorry` here hides an unprovable goal; each is a genuine proof task.
+-- This is a **scaffold** file: the forward direction and contraction algebra
+-- are formalized, while the converse PEPS fundamental theorem remains as
+-- `sorry` placeholders marking proof obligations for future PRs (see #128).
+--
+-- Provability note: the current `IsVertexInjective` in `PEPS.Defs` is a
+-- lightweight surrogate (`Function.Injective (A.component v)`).  The converse
+-- statements below need the stronger PEPS injectivity data used in the paper:
+-- local left inverses / virtual-insertion maps and the blocking reduction to
+-- the MPS fundamental theorem.  With only the lightweight surrogate, singleton
+-- virtual boundaries make zero local tensors "injective", so the local gauge
+-- extraction and uniqueness statements have small degenerate counterexamples.
 
 /-!
 # Fundamental Theorem for injective PEPS (scaffold)
@@ -480,6 +488,13 @@ to `v` are constrained; the rest are arbitrary. -/
 -- 1D Fundamental Theorem). A naïve single-vertex argument only yields a
 -- *general* invertible map on the full virtual space of v, not the per-edge
 -- factorisation. This will need substantial infrastructure not yet in TNLean.
+--
+-- Minimal missing bridge: replace or strengthen `IsVertexInjective` with a
+-- genuine local tensor map admitting a left inverse.  For example, on a
+-- two-vertex one-edge graph with bond dimension `1` and `d = 1`, the current
+-- definition treats every local singleton map as injective, even if the local
+-- tensor is zero.  Then `SameState` can hold because the contracted product is
+-- zero while no invertible scalar can send a zero local tensor to a nonzero one.
 theorem localGauge_exists (A B : Tensor G d)
     (hA : IsVertexInjective A) (hB : IsVertexInjective B)
     (hAB : SameState A B)
@@ -517,6 +532,9 @@ theorem gaugeConsistency (A B : Tensor G d)
   -- across shared edges. The key step is: for each edge e = (u,v),
   -- the gauge obtained from u's local extraction and v's local extraction
   -- must agree (because the SameState condition couples them).
+  -- Missing bridge: a virtual-insertion theorem showing that the local gauges
+  -- extracted from the two endpoint blockings act as inverse-transposes on the
+  -- shared edge, with the orientation convention in `edgeGaugeAt`.
   sorry
 
 /-! ### Main theorem -/
@@ -542,7 +560,10 @@ theorem fundamentalTheorem_PEPS (A B : Tensor G d)
     GaugeEquiv A B := by
   -- Step 1: Show bond dimensions must agree.
   -- TODO: derive hDim from injectivity + SameState.
-  -- For now, assume it as a hypothesis via sorry.
+  -- Missing bridge: the current `SameState` is one contracted state, not the
+  -- full family of boundary insertions used by the PEPS FT.  With the
+  -- lightweight injectivity definition, tensors with different bond dimensions
+  -- can have the same contracted scalar on a one-edge graph.
   have hDim : A.bondDim = B.bondDim := by
     sorry
   -- Step 2: Extract globally consistent gauges.
@@ -578,6 +599,10 @@ theorem gauge_unique_up_to_scalar (A B : Tensor G d)
   -- TODO: from hX and hY, gauge(X) = gauge(Y) at every vertex.
   -- Injectivity forces X_e · Y_e⁻¹ to be scalar at each edge,
   -- and connectivity of the graph forces the scalar to be uniform.
+  -- Missing bridge: a nondegenerate local injectivity theorem.  With singleton
+  -- virtual boundaries and zero local tensors, the current `hA` leaves every
+  -- gauge family unconstrained, so different edge scalars on a connected path
+  -- need not collapse to one global scalar.
   sorry
 
 end PEPS
