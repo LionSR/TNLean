@@ -84,7 +84,6 @@ theorem isCID_implies_isRFP
     (hρ_pd : ρR.PosDef)
     (hρ_fix : transferMap A ρR = ρR)
     (hCID : IsCID A) : IsRFP A := by
-  classical
   change transferMap A ∘ₗ transferMap A = transferMap A
   obtain ⟨u, rfl⟩ := hρ_pd.isUnit
   apply LinearMap.ext; intro Z
