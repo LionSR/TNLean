@@ -58,7 +58,6 @@ theorem rg_flow_converges_of_cf {r : ℕ} {dim : Fin r → ℕ}
           (fun n : ℕ => ((transferMap (A k) ^ (2 ^ n : ℕ) : _) ρ))
           Filter.atTop
           (nhds (E_infty ρ)) := by
-  classical
   have hInj := hCF.block_injective k
   have hNorm := hCF.leftCanonical k
   -- Obtain the unique positive-definite fixed point (quantum Perron-Frobenius).
@@ -83,7 +82,7 @@ theorem rg_flow_converges_of_cf {r : ℕ} {dim : Fin r → ℕ}
       -- Norm bound: ‖(E^n) X - P X‖ ≤ C · (1-δ)^n · ‖X‖.
       have h_norm_bound : ∀ n, ‖(transferMap (A k) ^ n) X - fixedPointProj ρ₀ htr X‖ ≤
           C * (1 - δ) ^ n * ‖X‖ := fun n => by
-        rw [Module.End.pow_apply]; exact hbound n X
+        simpa [Module.End.pow_apply] using hbound n X
       -- The bounding sequence C · (1-δ)^n · ‖X‖ → 0.
       have h_rate : Filter.Tendsto (fun n => C * (1 - δ) ^ n * ‖X‖)
           Filter.atTop (nhds 0) := by

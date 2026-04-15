@@ -101,7 +101,8 @@ noncomputable def verticalTransferMap (M : MPOTensor d D) :
 lemma verticalTransferMap_apply (M : MPOTensor d D)
     (X : Matrix (Fin D) (Fin D) ℂ) :
     verticalTransferMap M X = ∑ i : Fin d, M i i * X * (M i i)ᴴ := by
-  simp [verticalTransferMap, diagonalTensor, MPSTensor.transferMap_apply]
+  simpa [verticalTransferMap, diagonalTensor] using
+    MPSTensor.transferMap_apply (A := diagonalTensor M) X
 
 /-- Lightweight horizontal canonical-form data for a family of blocks.
 
