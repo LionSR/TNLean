@@ -210,6 +210,7 @@ import TNLean.PiAlgebra.GlobalSymmetry
 -- Layer 3b: MPO / MPDO / LPDO foundations
 import TNLean.MPS.MPDO.Defs
 import TNLean.MPS.MPDO.VerticalCF
+import TNLean.MPS.MPDO.BiCFDerivation
 import TNLean.MPS.MPDO.ZCL
 import TNLean.MPS.MPDO.PRFP
 import TNLean.MPS.MPDO.RFP
@@ -225,10 +226,11 @@ import TNLean.MPS.RFP.Defs
 import TNLean.MPS.RFP.ZeroCorrelationLength
 import TNLean.MPS.MPDO.PureRecovery
 import TNLean.MPS.RFP.StructuralForm
+import TNLean.MPS.RFP.StructuralFull
+import TNLean.MPS.RFP.CommutingBridge
 import TNLean.MPS.RFP.Convergence
 import TNLean.MPS.RFP.Assembly
 import TNLean.MPS.RFP.Decorrelation
-import TNLean.Archive.RFPStructuralFull
 
 -- Layer 6a: Quantum Wielandt backend / span-growth infrastructure
 import TNLean.Wielandt.SpanGrowth.CumulativeSpan

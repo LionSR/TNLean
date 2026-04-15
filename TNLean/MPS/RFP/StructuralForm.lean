@@ -28,9 +28,8 @@ that are renormalization fixed points, following arXiv:1606.00608 §3.4
 
 ## Proof strategy
 
-The full Appendix B decomposition `A i = X * Λ * U i * X⁻¹` is stated in
-`TNLean.Archive.RFPStructuralFull` with a deferred proof (tracked by issue #233).
-What *is* formalized here is the span-collapse step:
+The full Appendix B decomposition `A i = X * Λ * U i * X⁻¹` is now formalized in
+`TNLean.MPS.RFP.StructuralFull`. What *is* formalized here is the span-collapse step:
 `E² = E` implies every nonempty blocked word lies in the one-site Kraus span, so a nonzero normal
 RFP tensor is automatically injective.
 -/
