@@ -14,12 +14,11 @@ This file proves the full Appendix B structural decomposition for
 renormalization fixed-point tensors (arXiv:1606.00608, Lemma B.1). The main
 result is `rfp_nt_structural_full`, which shows that a normal tensor in
 canonical form II and at a renormalization fixed point admits a decomposition
-`A i = X * diagonal Λ * U i * X⁻¹`, where `Λ` is diagonal positive with trace
-`1` and the family `U` is isometric in the physical index.
+`A i = X * diagonal Λ * U i * X⁻¹`, where `Λ` has positive diagonal entries
+and the family `U` is isometric in the physical index.
 
-The module remains in `Archive/` because it packages a long, self-contained
-appendix proof whose implementation details are useful to keep opt-in, even
-though the theorem itself is now fully proved.
+The proof is self-contained and packages the full appendix argument in the main
+`MPS/RFP` development.
 
 ## Proof strategy
 
@@ -83,16 +82,15 @@ private lemma matrixUnits_map (X : Mat) :
           simpa using sum_single_diag_const (D := D) (c := Matrix.trace X)
 
 /-- **Lemma B.1** (arXiv:1606.00608, Appendix B): a normal tensor in canonical
-form II that is an RFP should admit the decomposition `A i = X * Λ * U i * X⁻¹`
+form II that is an RFP admits the decomposition `A i = X * Λ * U i * X⁻¹`
 with diagonal positive `Λ` and a physical-index isometry `U`.
 
-The rank-one classification step is now proved as
-`transferMap_eq_fixedPointProj_of_isRFP_injective` in `MPS/RFP/StructuralForm.lean`.
-The remaining gap is extracting the physical-index isometry family from the
-rank-one structure via `kraus_rectangular_freedom'`: construct the canonical
-Kraus operators for `fixedPointProj Λ_mat` with diagonal PosDef `Λ_mat`,
-verify they generate the same CPM, and assemble the `X * diag(Λ) * U_i * X⁻¹`
-witnesses. -/
+The proof combines the diagonal fixed-point reduction
+`rfp_nt_cfii_diagonal_fixedPoint`, the rank-one classification
+`transferMap_eq_fixedPointProj_of_isRFP_injective`, and an explicit Kraus
+realization of `fixedPointProj ρ`. Applying `kraus_rectangular_freedom'`
+identifies the physical-index family with an isometry and yields the witnesses
+`X * diag(Λ) * U i * X⁻¹`. -/
 theorem rfp_nt_structural_full (A : MPSTensor d D) [NeZero D]
     (hNT : IsNormal A) (hRFP : IsRFP A)
     (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
@@ -107,10 +105,8 @@ theorem rfp_nt_structural_full (A : MPSTensor d D) [NeZero D]
     rfp_nt_structural_of_leftCanonical A hNT hRFP hLeft
   obtain ⟨U₀, ρ, hρ_pd, hρ_diag, hB_left, hB_fix⟩ :=
     rfp_nt_cfii_diagonal_fixedPoint A hNT hRFP hLeft
-
   let X : Mat := ↑U₀
   let B : MPSTensor d D := fun i => Xᴴ * A i * X
-
   have hX_det : X.det ≠ 0 := (Matrix.UnitaryGroup.det_isUnit U₀).ne_zero
   have hXhX : Xᴴ * X = 1 := by
     simpa [X, Matrix.star_eq_conjTranspose] using Matrix.UnitaryGroup.star_mul_self U₀
@@ -119,14 +115,12 @@ theorem rfp_nt_structural_full (A : MPSTensor d D) [NeZero D]
   have hX_inv : X⁻¹ = Xᴴ := by
     exact Matrix.right_inv_eq_left_inv
       (Matrix.mul_nonsing_inv X (Ne.isUnit hX_det)) hXhX
-
   have hB_eq_gauge : B = gaugeTensor X A := by
     ext i
     simp [B, gaugeTensor, hX_inv]
   have hB_inj : IsInjective B := by
     rw [hB_eq_gauge]
     exact isInjective_conjugate (d := d) A hInjA X hX_det
-
   obtain ⟨V₀, hV₀_iso, hV₀_prod⟩ := (isRFP_iff_kraus_isometry A).1 hRFP
   have hB_prod : ∀ i₁ i₂ : Fin d,
       B i₁ * B i₂ = ∑ j : Fin d, V₀ (i₁, i₂) j • B j := by
@@ -144,13 +138,11 @@ theorem rfp_nt_structural_full (A : MPSTensor d D) [NeZero D]
         simp [B, Finset.mul_sum, Finset.sum_mul, Matrix.mul_assoc]
   have hB_rfp : IsRFP B :=
     (isRFP_iff_kraus_isometry B).2 ⟨V₀, hV₀_iso, hB_prod⟩
-
   have htr : Matrix.trace ρ ≠ 0 := ne_of_gt hρ_pd.trace_pos
   have hB_proj : transferMap B = fixedPointProj ρ htr := by
     simpa [htr] using
       transferMap_eq_fixedPointProj_of_isRFP_injective
         B hB_inj hB_rfp hB_left ρ hρ_pd hB_fix
-
   have hρ_eq_diag : ρ = Matrix.diagonal (fun k => ρ k k) := by
     ext i j
     by_cases hij : i = j
@@ -166,20 +158,17 @@ theorem rfp_nt_structural_full (A : MPSTensor d D) [NeZero D]
     ofReal_re_eq_self_of_pos hρ_pd.trace_pos
   have hρii_re_eq : ∀ k : Fin D, (((ρ k k).re : ℝ) : ℂ) = ρ k k :=
     fun k => ofReal_re_eq_self_of_pos (hρdiag_pos k)
-
   have hDpos_nat : 0 < D := Nat.pos_of_ne_zero (NeZero.ne D)
   have hDpos : 0 < (D : ℝ) := by
     exact_mod_cast hDpos_nat
   have hD_neC : (D : ℂ) ≠ 0 := by
     exact_mod_cast (NeZero.ne D)
-
   let Λ : Fin D → ℝ := fun k =>
     Real.sqrt (((D : ℝ) * (ρ k k).re) / (Matrix.trace ρ).re)
   let L : Mat := Matrix.diagonal (fun k => (Λ k : ℂ))
   let c : ℂ := ((1 / Real.sqrt (D : ℝ) : ℝ) : ℂ)
   let E : Fin D × Fin D → Mat := fun p => c • Matrix.single p.1 p.2 (1 : ℂ)
   let K : Fin D × Fin D → Mat := fun p => L * E p
-
   have hc_norm : c * star c = (1 : ℂ) / (D : ℂ) := by
     have hsqrt_ne : Real.sqrt (D : ℝ) ≠ 0 := Real.sqrt_ne_zero'.2 hDpos
     have hreal :
@@ -191,7 +180,6 @@ theorem rfp_nt_structural_full (A : MPSTensor d D) [NeZero D]
       nlinarith
     have hrealC := congrArg (fun r : ℝ => (r : ℂ)) hreal
     simpa [c, Complex.ofReal_mul, Complex.ofReal_div, hD_neC] using hrealC
-
   have hE_map : ∀ Y : Mat,
       ∑ p : Fin D × Fin D, E p * Y * (E p)ᴴ =
         (Matrix.trace Y / (D : ℂ)) • (1 : Mat) := by
@@ -227,13 +215,11 @@ theorem rfp_nt_structural_full (A : MPSTensor d D) [NeZero D]
       _ = (Matrix.trace Y / (D : ℂ)) • (1 : Mat) := by
             rw [hc_norm]
             simp [smul_smul, div_eq_mul_inv, mul_comm]
-
   let T : Mat →ₗ[ℂ] Mat :=
     fixedPointProj (1 : Mat) (by simpa [Matrix.trace_one] using hD_neC)
   have hT_tp : IsTracePreservingMap T := by
     intro Y
     simp [T, fixedPointProj, Matrix.trace_one]
-
   let e : Fin D × Fin D ≃ Fin (Fintype.card (Fin D × Fin D)) :=
     Fintype.equivFin (Fin D × Fin D)
   let Efin : Fin (Fintype.card (Fin D × Fin D)) → Mat := E ∘ e.symm
@@ -256,7 +242,6 @@ theorem rfp_nt_structural_full (A : MPSTensor d D) [NeZero D]
       change ∑ i, (E (e.symm i))ᴴ * E (e.symm i) = _
       rw [e.symm.sum_comp (fun p : Fin D × Fin D => (E p)ᴴ * E p)]
     rwa [hsum] at hE_left_fin
-
   have hL_herm : Lᴴ = L := by
     simp [L, Matrix.diagonal_conjTranspose]
   have hL_sq : L * L = ((D : ℂ) / Matrix.trace ρ) • ρ := by
@@ -295,7 +280,6 @@ theorem rfp_nt_structural_full (A : MPSTensor d D) [NeZero D]
       simpa [L, Matrix.diagonal_mul_diagonal] using hentry
     · have hρij : ρ i j = 0 := hρ_diag hij
       simp [L, hij, hρij]
-
   have hK_map : ∀ Y : Mat,
       ∑ p : Fin D × Fin D, K p * Y * (K p)ᴴ = fixedPointProj ρ htr Y := by
     intro Y
@@ -321,7 +305,6 @@ theorem rfp_nt_structural_full (A : MPSTensor d D) [NeZero D]
             rw [smul_smul, hs]
       _ = fixedPointProj ρ htr Y := by
             rfl
-
   have hRangeCard : D * D ≤ (Set.range B).toFinset.card := by
     have hspan_finrank : Module.finrank ℂ ↥(Submodule.span ℂ (Set.range B)) = D * D := by
       rw [hB_inj, finrank_top, Module.finrank_matrix]
@@ -340,7 +323,6 @@ theorem rfp_nt_structural_full (A : MPSTensor d D) [NeZero D]
   have hCard : Fintype.card (Fin D × Fin D) ≤ Fintype.card (Fin d) := by
     have hDD_le_d : D * D ≤ d := hRangeCard.trans hrange_card_le
     simpa [Fintype.card_prod, Fintype.card_fin] using hDD_le_d
-
   have hmapBK : ∀ Y : Mat,
       ∑ i : Fin d, B i * Y * (B i)ᴴ = ∑ p : Fin D × Fin D, K p * Y * (K p)ᴴ := by
     intro Y
@@ -354,7 +336,6 @@ theorem rfp_nt_structural_full (A : MPSTensor d D) [NeZero D]
         exact hK_map Y
   obtain ⟨V, hV_iso, hB_decomp⟩ :=
     kraus_rectangular_freedom' B K hmapBK hCard
-
   let U : MPSTensor d D := fun i => ∑ p : Fin D × Fin D, V i p • E p
   have hV_entry : ∀ p q : Fin D × Fin D,
       ∑ i : Fin d, star (V i p) * V i q = if p = q then 1 else 0 := by
@@ -390,7 +371,6 @@ theorem rfp_nt_structural_full (A : MPSTensor d D) [NeZero D]
       _ = ∑ p : Fin D × Fin D, (E p)ᴴ * E p := by
               simp
       _ = 1 := hE_left
-
   have hB_fact : ∀ i : Fin d, B i = L * U i := by
     intro i
     calc
@@ -401,7 +381,6 @@ theorem rfp_nt_structural_full (A : MPSTensor d D) [NeZero D]
             simp [Finset.mul_sum]
       _ = L * U i := by
             simp [U]
-
   refine ⟨X, Λ, U, hX_det, ?_, hU_left, ?_⟩
   · intro k
     apply Real.sqrt_pos.2
@@ -422,5 +401,4 @@ theorem rfp_nt_structural_full (A : MPSTensor d D) [NeZero D]
         rw [hB_fact i]
       _ = X * Matrix.diagonal (fun k => (Λ k : ℂ)) * U i * X⁻¹ := by
         simp [L, Matrix.mul_assoc]
-
 end MPSTensor
