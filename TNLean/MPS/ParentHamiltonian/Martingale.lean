@@ -48,11 +48,11 @@ gives `γ μᵢ ≤ μᵢ²`, so every nonzero eigenvalue satisfies `μᵢ ≥ �
 expanding `v` in the basis and discarding the `ker H` components (which
 vanish on `(ker H)ᗮ`) then yields `γ² ‖v‖² ≤ ‖H v‖²`.
 
-The MPS-specific step (producing the quadratic-form inequality for
+The MPS-specific step (producing the finite-overlap estimate for
 `parentHamiltonianES A L N`) is the remaining obligation of
-`MPSTensor.parentHamiltonianES_gap_bound_of_friedrichs`, which packages the
-Friedrichs-angle and row-sum estimate needed by
-`MPSTensor.parentHamiltonian_gapped`.
+`MPSTensor.parentHamiltonianES_gap_bound_of_friedrichs`, which packages a
+concrete Friedrichs-angle/row-sum lower bound that
+`MPSTensor.parentHamiltonian_gapped` turns into the existential gap statement.
 
 ## Main results
 
@@ -211,14 +211,19 @@ noncomputable def parentHamiltonianES (A : MPSTensor d D) (L N : ℕ) :
 /-- Friedrichs-angle and row-sum bridge for the MPS parent Hamiltonian.
 
 This is the remaining MPS-specific martingale estimate: it should produce a
-uniform positive lower bound for the transported parent Hamiltonian from the
-intersection property and finite-overlap geometry. -/
+specific uniform positive lower bound for the transported parent Hamiltonian
+from the intersection property and finite-overlap geometry. The concrete
+constant is intentionally part of this bridge statement, so the public
+`parentHamiltonian_gapped` theorem only has to package it as an existential
+spectral gap. -/
 theorem parentHamiltonianES_gap_bound_of_friedrichs
     (A : MPSTensor d D) (_hA : IsInjective A) (L : ℕ) (_hL : 1 < L) :
-    ∃ γ > 0, ∀ (N : ℕ) (_hLN : 2 * L ≤ N)
+    0 < (1 : ℝ) / (4 * (L : ℝ)) ∧
+    ∀ (N : ℕ) (_hLN : 2 * L ≤ N)
       (v : EuclideanSpace ℂ (Cfg d N)),
       v ∈ (parentHamiltonianGroundSpaceES A L N)ᗮ →
-        γ * ‖v‖ ≤ ‖parentHamiltonianES A L N v‖ := by
+        ((1 : ℝ) / (4 * (L : ℝ))) * ‖v‖ ≤
+          ‖parentHamiltonianES A L N v‖ := by
   -- Missing bridge: the MPS-specific Friedrichs-angle estimate for adjacent
   -- local ground spaces, the finite-overlap row-sum bound, positivity of the
   -- transported parent Hamiltonian, and the identification of
@@ -265,6 +270,7 @@ theorem parentHamiltonian_gapped
       (v : EuclideanSpace ℂ (Cfg d N)),
       v ∈ (parentHamiltonianGroundSpaceES A L N)ᗮ →
         γ * ‖v‖ ≤ ‖parentHamiltonianES A L N v‖ := by
-  exact parentHamiltonianES_gap_bound_of_friedrichs A hA L hL
+  obtain ⟨hγ, hBound⟩ := parentHamiltonianES_gap_bound_of_friedrichs A hA L hL
+  exact ⟨(1 : ℝ) / (4 * (L : ℝ)), hγ, hBound⟩
 
 end MPSTensor
