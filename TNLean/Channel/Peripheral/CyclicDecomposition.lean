@@ -637,15 +637,11 @@ private lemma coeff_sum_proj_of_primitiveRoot {γ : ℂ} (hγprim : IsPrimitiveR
       exact hj0 (Nat.eq_zero_of_dvd_of_lt hdvd hj)
     rw [if_neg hne, if_neg hj0]
 
-/-- The Fourier coefficients for the spectral expansion isolate the `oneIdx` mode. -/
-private lemma coeff_sum_spec_of_primitiveRoot {γ : ℂ} (hγprim : IsPrimitiveRoot γ m)
-    (j : ℕ) (hj : j < m) :
+/-- Convert the spectral reconstruction coefficients to a finite geometric sum. -/
+private lemma cyclic_projection_step1_coeff_sum_spec_geometric {γ : ℂ}
+    (hγprim : IsPrimitiveRoot γ m) (j : ℕ) :
     ∑ k : Fin m, (γ ^ (k : ℕ) * ((((star γ) ^ (k : ℕ)) ^ j : ℂ))) =
-      if j = cyclicOneIdx (m := m) then (m : ℂ) else 0 := by
-  have honeIdx_lt : cyclicOneIdx (m := m) < m := by
-    simpa [cyclicOneIdx] using ((1 : Fin m).is_lt)
-  have honeIdx_mem : cyclicOneIdx (m := m) ∈ Finset.range m := by
-    exact Finset.mem_range.mpr honeIdx_lt
+      if γ * (star γ) ^ j = 1 then (m : ℂ) else 0 := by
   have hpowm : (γ * (star γ) ^ j) ^ m = 1 := by
     calc
       (γ * (star γ) ^ j) ^ m = γ ^ m * ((((star γ) ^ j : ℂ)) ^ m) := by
@@ -682,6 +678,17 @@ private lemma coeff_sum_spec_of_primitiveRoot {γ : ℂ} (hγprim : IsPrimitiveR
       _ = (γ * (star γ) ^ j) ^ (k : ℕ) := by
         rw [mul_pow]
   rw [hrewrite, sum_powers_fin_of_pow_eq_one (m := m) (γ * (star γ) ^ j) hpowm]
+
+/-- The Fourier coefficients for the spectral expansion isolate the `oneIdx` mode. -/
+private lemma coeff_sum_spec_of_primitiveRoot {γ : ℂ} (hγprim : IsPrimitiveRoot γ m)
+    (j : ℕ) (hj : j < m) :
+    ∑ k : Fin m, (γ ^ (k : ℕ) * ((((star γ) ^ (k : ℕ)) ^ j : ℂ))) =
+      if j = cyclicOneIdx (m := m) then (m : ℂ) else 0 := by
+  have honeIdx_lt : cyclicOneIdx (m := m) < m := by
+    simpa [cyclicOneIdx] using ((1 : Fin m).is_lt)
+  have honeIdx_mem : cyclicOneIdx (m := m) ∈ Finset.range m := by
+    exact Finset.mem_range.mpr honeIdx_lt
+  rw [cyclic_projection_step1_coeff_sum_spec_geometric (m := m) hγprim j]
   by_cases hjeq : j = cyclicOneIdx (m := m)
   · subst hjeq
     have hx : γ * (star γ) ^ cyclicOneIdx (m := m) = 1 := by
@@ -822,40 +829,30 @@ private lemma coeff_last_of_primitiveRoot {γ : ℂ} (hγprim : IsPrimitiveRoot 
       rw [star_eq_inv_of_primitiveRoot (m := m) hγprim, inv_pow]
       simp
 
-/-- Left multiplication by `U` diagonalizes on the cyclic projections. -/
-private lemma left_mul_cyclicProjection_eq {γ : ℂ} (hγprim : IsPrimitiveRoot γ m)
-    (U : Matrix.unitaryGroup (Fin D) ℂ) (hUm : ((U : MatrixAlg D) ^ m) = 1) :
-    ∀ k : Fin m,
-      (U : MatrixAlg D) * cyclicProjection (m := m) (γ := γ) U k =
-        γ ^ (k : ℕ) • cyclicProjection (m := m) (γ := γ) U k := by
-  intro k
+/-- Move the unitary through the Fourier sum, leaving the cyclically shifted coefficients. -/
+private lemma cyclic_projection_step2_left_mul_shifted_sum {γ : ℂ}
+    (hγprim : IsPrimitiveRoot γ m)
+    (U : Matrix.unitaryGroup (Fin D) ℂ) (hUm : ((U : MatrixAlg D) ^ m) = 1)
+    (k : Fin m) :
+    (U : MatrixAlg D) * cyclicProjection (m := m) (γ := γ) U k =
+      (↑m : ℂ)⁻¹ •
+        (Finset.sum (Finset.range (m - 1))
+            (fun j => (γ ^ (k : ℕ) *
+              ((((star γ) ^ (k : ℕ)) ^ (j + 1) : ℂ))) •
+                ((U : MatrixAlg D) ^ (j + 1))) +
+          γ ^ (k : ℕ) • (1 : MatrixAlg D)) := by
   let a : ℕ → ℂ := fun j => ((((star γ) ^ (k : ℕ)) ^ j : ℂ))
   have hm0 : m ≠ 0 := NeZero.ne m
   have hm_pos : 0 < m := Nat.pos_of_ne_zero hm0
   have hm_pred_succ : (m - 1) + 1 = m := Nat.sub_add_cancel (Nat.succ_le_of_lt hm_pos)
-  have hdecomp :
-      Finset.sum (Finset.range (m - 1))
-          (fun j => a (j + 1) • ((U : MatrixAlg D) ^ (j + 1))) + 1 =
-        Finset.sum (Finset.range m) (fun j => a j • ((U : MatrixAlg D) ^ j)) := by
-    simpa [hm_pred_succ, a] using
-      (Finset.sum_range_succ' (fun j : ℕ => a j • ((U : MatrixAlg D) ^ j)) (m - 1)).symm
-  have hfactor :
-      Finset.sum (Finset.range (m - 1))
-          (fun j => (γ ^ (k : ℕ) * a (j + 1)) • ((U : MatrixAlg D) ^ (j + 1))) =
-        γ ^ (k : ℕ) • Finset.sum (Finset.range (m - 1))
-          (fun j => a (j + 1) • ((U : MatrixAlg D) ^ (j + 1))) := by
-    calc
-      Finset.sum (Finset.range (m - 1))
-          (fun j => (γ ^ (k : ℕ) * a (j + 1)) • ((U : MatrixAlg D) ^ (j + 1)))
-          = Finset.sum (Finset.range (m - 1))
-              (fun j => γ ^ (k : ℕ) • (a (j + 1) • ((U : MatrixAlg D) ^ (j + 1)))) := by
-                apply Finset.sum_congr rfl
-                intro j hj
-                rw [smul_smul]
-      _ = γ ^ (k : ℕ) • Finset.sum (Finset.range (m - 1))
-              (fun j => a (j + 1) • ((U : MatrixAlg D) ^ (j + 1))) := by
-                rw [Finset.smul_sum]
   dsimp [cyclicProjection]
+  change
+    (U : MatrixAlg D) *
+        ((↑m : ℂ)⁻¹ • Finset.sum (Finset.range m) (fun j => a j • ((U : MatrixAlg D) ^ j))) =
+      (↑m : ℂ)⁻¹ •
+        (Finset.sum (Finset.range (m - 1))
+            (fun j => (γ ^ (k : ℕ) * a (j + 1)) • ((U : MatrixAlg D) ^ (j + 1))) +
+          γ ^ (k : ℕ) • (1 : MatrixAlg D))
   calc
     (U : MatrixAlg D) *
         ((↑m : ℂ)⁻¹ • Finset.sum (Finset.range m) (fun j => a j • ((U : MatrixAlg D) ^ j)))
@@ -900,7 +897,57 @@ private lemma left_mul_cyclicProjection_eq {γ : ℂ} (hγprim : IsPrimitiveRoot
               ((((star γ) ^ (k : ℕ)) ^ (m - 1) : ℂ)) • ((U : MatrixAlg D) ^ m) =
                 γ ^ (k : ℕ) • (1 : MatrixAlg D)
             rw [coeff_last_of_primitiveRoot (m := m) hγprim k, hUm]
-    _ = (↑m : ℂ)⁻¹ •
+
+/-- Reassemble the shifted Fourier sum as scalar multiplication of the cyclic projection. -/
+private lemma cyclic_projection_step3_shifted_sum_eq_smul {γ : ℂ}
+    (U : Matrix.unitaryGroup (Fin D) ℂ) (k : Fin m) :
+    (↑m : ℂ)⁻¹ •
+      (Finset.sum (Finset.range (m - 1))
+          (fun j => (γ ^ (k : ℕ) *
+            ((((star γ) ^ (k : ℕ)) ^ (j + 1) : ℂ))) •
+              ((U : MatrixAlg D) ^ (j + 1))) +
+        γ ^ (k : ℕ) • (1 : MatrixAlg D)) =
+      γ ^ (k : ℕ) • cyclicProjection (m := m) (γ := γ) U k := by
+  let a : ℕ → ℂ := fun j => ((((star γ) ^ (k : ℕ)) ^ j : ℂ))
+  have hm0 : m ≠ 0 := NeZero.ne m
+  have hm_pos : 0 < m := Nat.pos_of_ne_zero hm0
+  have hm_pred_succ : (m - 1) + 1 = m := Nat.sub_add_cancel (Nat.succ_le_of_lt hm_pos)
+  have hdecomp :
+      Finset.sum (Finset.range (m - 1))
+          (fun j => a (j + 1) • ((U : MatrixAlg D) ^ (j + 1))) + 1 =
+        Finset.sum (Finset.range m) (fun j => a j • ((U : MatrixAlg D) ^ j)) := by
+    simpa [hm_pred_succ, a] using
+      (Finset.sum_range_succ' (fun j : ℕ => a j • ((U : MatrixAlg D) ^ j)) (m - 1)).symm
+  have hfactor :
+      Finset.sum (Finset.range (m - 1))
+          (fun j => (γ ^ (k : ℕ) * a (j + 1)) • ((U : MatrixAlg D) ^ (j + 1))) =
+        γ ^ (k : ℕ) • Finset.sum (Finset.range (m - 1))
+          (fun j => a (j + 1) • ((U : MatrixAlg D) ^ (j + 1))) := by
+    calc
+      Finset.sum (Finset.range (m - 1))
+          (fun j => (γ ^ (k : ℕ) * a (j + 1)) • ((U : MatrixAlg D) ^ (j + 1)))
+          = Finset.sum (Finset.range (m - 1))
+              (fun j => γ ^ (k : ℕ) • (a (j + 1) • ((U : MatrixAlg D) ^ (j + 1)))) := by
+                apply Finset.sum_congr rfl
+                intro j hj
+                rw [smul_smul]
+      _ = γ ^ (k : ℕ) • Finset.sum (Finset.range (m - 1))
+              (fun j => a (j + 1) • ((U : MatrixAlg D) ^ (j + 1))) := by
+                rw [Finset.smul_sum]
+  dsimp [cyclicProjection]
+  change
+    (↑m : ℂ)⁻¹ •
+      (Finset.sum (Finset.range (m - 1))
+          (fun j => (γ ^ (k : ℕ) * a (j + 1)) • ((U : MatrixAlg D) ^ (j + 1))) +
+        γ ^ (k : ℕ) • (1 : MatrixAlg D)) =
+      γ ^ (k : ℕ) •
+        ((↑m : ℂ)⁻¹ • Finset.sum (Finset.range m) (fun j => a j • ((U : MatrixAlg D) ^ j)))
+  calc
+    (↑m : ℂ)⁻¹ •
+        (Finset.sum (Finset.range (m - 1))
+            (fun j => (γ ^ (k : ℕ) * a (j + 1)) • ((U : MatrixAlg D) ^ (j + 1))) +
+          γ ^ (k : ℕ) • (1 : MatrixAlg D))
+        = (↑m : ℂ)⁻¹ •
           (γ ^ (k : ℕ) •
             (Finset.sum (Finset.range (m - 1))
                 (fun j => a (j + 1) • ((U : MatrixAlg D) ^ (j + 1))) +
@@ -915,6 +962,25 @@ private lemma left_mul_cyclicProjection_eq {γ : ℂ} (hγprim : IsPrimitiveRoot
           ((↑m : ℂ)⁻¹ •
             Finset.sum (Finset.range m) (fun j => a j • ((U : MatrixAlg D) ^ j))) := by
           simp [smul_smul, mul_comm]
+
+/-- Left multiplication by `U` diagonalizes on the cyclic projections. -/
+private lemma left_mul_cyclicProjection_eq {γ : ℂ} (hγprim : IsPrimitiveRoot γ m)
+    (U : Matrix.unitaryGroup (Fin D) ℂ) (hUm : ((U : MatrixAlg D) ^ m) = 1) :
+    ∀ k : Fin m,
+      (U : MatrixAlg D) * cyclicProjection (m := m) (γ := γ) U k =
+        γ ^ (k : ℕ) • cyclicProjection (m := m) (γ := γ) U k := by
+  intro k
+  calc
+    (U : MatrixAlg D) * cyclicProjection (m := m) (γ := γ) U k =
+        (↑m : ℂ)⁻¹ •
+          (Finset.sum (Finset.range (m - 1))
+              (fun j => (γ ^ (k : ℕ) *
+                ((((star γ) ^ (k : ℕ)) ^ (j + 1) : ℂ))) •
+                  ((U : MatrixAlg D) ^ (j + 1))) +
+            γ ^ (k : ℕ) • (1 : MatrixAlg D)) := by
+          exact cyclic_projection_step2_left_mul_shifted_sum (m := m) hγprim U hUm k
+    _ = γ ^ (k : ℕ) • cyclicProjection (m := m) (γ := γ) U k := by
+          exact cyclic_projection_step3_shifted_sum_eq_smul (m := m) (γ := γ) U k
 
 /-- Each cyclic projection commutes with the generating unitary. -/
 private lemma commute_unitary_cyclicProjection {γ : ℂ}
@@ -1073,17 +1139,25 @@ private lemma pow_inj_of_primitiveRoot {γ : ℂ} (hγprim : IsPrimitiveRoot γ 
   apply Fin.ext
   exact hγprim.injOn_pow (by simp [a.is_lt]) (by simp [b.is_lt]) hab
 
-/-- Distinct cyclic projections are orthogonal. -/
-private lemma mul_cyclicProjection_eq_zero_of_ne {γ : ℂ} (hγprim : IsPrimitiveRoot γ m)
+/-- The product of two cyclic projections is simultaneously a left eigenvector in both indices. -/
+private lemma cyclic_projection_step4_mul_projection_eigen_relations {γ : ℂ}
+    (hγprim : IsPrimitiveRoot γ m)
     (U : Matrix.unitaryGroup (Fin D) ℂ) (hUm : ((U : MatrixAlg D) ^ m) = 1)
-    {k l : Fin m} (hkl : k ≠ l) :
-    cyclicProjection (m := m) (γ := γ) U k * cyclicProjection (m := m) (γ := γ) U l = 0 := by
-  have hkEig :
-      (U : MatrixAlg D) *
-          (cyclicProjection (m := m) (γ := γ) U k * cyclicProjection (m := m) (γ := γ) U l) =
+    (k l : Fin m) :
+    (U : MatrixAlg D) *
+          (cyclicProjection (m := m) (γ := γ) U k *
+            cyclicProjection (m := m) (γ := γ) U l) =
         γ ^ (k : ℕ) •
-          (cyclicProjection (m := m) (γ := γ) U k * cyclicProjection (m := m) (γ := γ) U l) := by
-    calc
+          (cyclicProjection (m := m) (γ := γ) U k *
+            cyclicProjection (m := m) (γ := γ) U l) ∧
+      (U : MatrixAlg D) *
+          (cyclicProjection (m := m) (γ := γ) U k *
+            cyclicProjection (m := m) (γ := γ) U l) =
+        γ ^ (l : ℕ) •
+          (cyclicProjection (m := m) (γ := γ) U k *
+            cyclicProjection (m := m) (γ := γ) U l) := by
+  constructor
+  · calc
       (U : MatrixAlg D) *
           (cyclicProjection (m := m) (γ := γ) U k * cyclicProjection (m := m) (γ := γ) U l) =
         ((U : MatrixAlg D) * cyclicProjection (m := m) (γ := γ) U k) *
@@ -1095,12 +1169,7 @@ private lemma mul_cyclicProjection_eq_zero_of_ne {γ : ℂ} (hγprim : IsPrimiti
       _ = γ ^ (k : ℕ) •
             (cyclicProjection (m := m) (γ := γ) U k * cyclicProjection (m := m) (γ := γ) U l) := by
             simp
-  have hlEig :
-      (U : MatrixAlg D) *
-          (cyclicProjection (m := m) (γ := γ) U k * cyclicProjection (m := m) (γ := γ) U l) =
-        γ ^ (l : ℕ) •
-          (cyclicProjection (m := m) (γ := γ) U k * cyclicProjection (m := m) (γ := γ) U l) := by
-    calc
+  · calc
       (U : MatrixAlg D) *
           (cyclicProjection (m := m) (γ := γ) U k * cyclicProjection (m := m) (γ := γ) U l) =
         ((U : MatrixAlg D) * cyclicProjection (m := m) (γ := γ) U k) *
@@ -1119,6 +1188,14 @@ private lemma mul_cyclicProjection_eq_zero_of_ne {γ : ℂ} (hγprim : IsPrimiti
             (cyclicProjection (m := m) (γ := γ) U k *
               cyclicProjection (m := m) (γ := γ) U l) := by
             simp
+
+/-- Distinct cyclic projections are orthogonal. -/
+private lemma mul_cyclicProjection_eq_zero_of_ne {γ : ℂ} (hγprim : IsPrimitiveRoot γ m)
+    (U : Matrix.unitaryGroup (Fin D) ℂ) (hUm : ((U : MatrixAlg D) ^ m) = 1)
+    {k l : Fin m} (hkl : k ≠ l) :
+    cyclicProjection (m := m) (γ := γ) U k * cyclicProjection (m := m) (γ := γ) U l = 0 := by
+  obtain ⟨hkEig, hlEig⟩ :=
+    cyclic_projection_step4_mul_projection_eigen_relations (m := m) hγprim U hUm k l
   have hsub :
       (γ ^ (k : ℕ) - γ ^ (l : ℕ)) •
           (cyclicProjection (m := m) (γ := γ) U k *
