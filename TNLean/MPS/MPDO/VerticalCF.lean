@@ -101,8 +101,7 @@ noncomputable def verticalTransferMap (M : MPOTensor d D) :
 lemma verticalTransferMap_apply (M : MPOTensor d D)
     (X : Matrix (Fin D) (Fin D) ℂ) :
     verticalTransferMap M X = ∑ i : Fin d, M i i * X * (M i i)ᴴ := by
-  simpa [verticalTransferMap, diagonalTensor] using
-    MPSTensor.transferMap_apply (A := diagonalTensor M) X
+  simp [verticalTransferMap, diagonalTensor, MPSTensor.transferMap_apply]
 
 /-- Lightweight horizontal canonical-form data for a family of blocks.
 
@@ -214,7 +213,6 @@ theorem blockwise_insert_eq_of_mpv_agree
       MPSTensor.FirstSiteActionAgree
         (MPSTensor.toTensorFromBlocks (d := d) (μ := μ) A) Y Z) :
     ∀ k, MPSTensor.insertedTensor Y (A k) = MPSTensor.insertedTensor Z (A k) := by
-  classical
   -- Obtain the biCF blocking length `L`.
   obtain ⟨L, hL⟩ := hCF.biCF
   intro k₀
