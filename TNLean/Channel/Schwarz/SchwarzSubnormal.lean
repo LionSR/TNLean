@@ -68,14 +68,14 @@ The proof uses the C*-identity `‖x* x‖ = ‖x‖²`. -/
 private lemma contraction_conjTranspose
     (B : Mat) (h : Bᴴ * B ≤ 1) : B * Bᴴ ≤ 1 := by
   change B * star B ≤ 1
-  have h' : star B * B ≤ 1 := by simpa using h
+  have h' : star B * B ≤ 1 := by simpa only using h
   have h_norm_sq : ‖B‖₊ * ‖B‖₊ ≤ 1 := by
-    simpa [CStarRing.nnnorm_star_mul_self] using
+    simpa only [mul_self_le_one_iff, CStarRing.nnnorm_star_mul_self] using
       (CStarAlgebra.nnnorm_le_one_iff_of_nonneg _ (star_mul_self_nonneg B)).2 h'
   have h_norm_mul_star : ‖B * star B‖₊ ≤ 1 := by
     rw [show B * star B = star (star B) * star B from by rw [star_star],
       CStarRing.nnnorm_star_mul_self]
-    simpa [nnnorm_star] using h_norm_sq
+    simpa only [nnnorm_star, mul_self_le_one_iff] using h_norm_sq
   exact (CStarAlgebra.nnnorm_le_one_iff_of_nonneg _ (mul_star_self_nonneg B)).1 h_norm_mul_star
 
 /-! ### Positive definite case -/
@@ -92,22 +92,22 @@ private lemma commuting_dominant_right_bound_posDef
     A * Aᴴ ≤ Dom := by
   have hDom_nonneg : (0 : Mat) ≤ Dom := by
     rw [Matrix.le_iff]
-    simpa using hPD.posSemidef
+    simpa only [sub_zero] using hPD.posSemidef
   let S : Mat := CFC.sqrt Dom
   have hS_sq : S * S = Dom := by
-    simpa [S] using CFC.sqrt_mul_sqrt_self Dom hDom_nonneg
+    simpa only using CFC.sqrt_mul_sqrt_self Dom hDom_nonneg
   have hS_selfAdjoint : IsSelfAdjoint S := by
-    simpa [S] using (CFC.sqrt_nonneg (a := Dom)).isSelfAdjoint
+    simpa only using (CFC.sqrt_nonneg (a := Dom)).isSelfAdjoint
   have hSA : Commute S A := by
-    simpa [S] using hComm.cfcₙ_nnreal NNReal.sqrt
+    simpa only using hComm.cfcₙ_nnreal NNReal.sqrt
   obtain ⟨u, hu⟩ : ∃ u : Matˣ, (u : Mat) = S := by
     have hS_unit : IsUnit S := by
       dsimp [S]
       exact (CFC.isUnit_sqrt_iff Dom hDom_nonneg).2 hPD.isUnit
-    simpa using hS_unit
+    simpa only using hS_unit
   have hU_selfAdjoint : IsSelfAdjoint u := by
     refine Units.ext ?_
-    simpa [hu] using hS_selfAdjoint.star_eq
+    simpa only [Units.coe_star, hu] using hS_selfAdjoint.star_eq
   have hSi_selfAdjoint : IsSelfAdjoint (u⁻¹ : Matˣ) := hU_selfAdjoint.inv
   have hSi_star : star (↑u⁻¹ : Mat) = (↑u⁻¹ : Mat) :=
     congrArg (fun v : Matˣ => (v : Mat)) hSi_selfAdjoint.star_eq
@@ -132,18 +132,19 @@ private lemma commuting_dominant_right_bound_posDef
     dsimp [X]
     calc S * (A * (↑u⁻¹ : Mat)) = A * S * (↑u⁻¹ : Mat) := by
           rw [← mul_assoc, hSA.eq, mul_assoc]
-      _ = A := by simpa [mul_assoc] using congrArg (fun M : Mat => A * M) hSSi
-  have hS_conjTranspose : Sᴴ = S := by simpa using hS_selfAdjoint.star_eq
+      _ = A := by
+        simpa only [coe_units_inv, mul_assoc, mul_one] using congrArg (fun M : Mat => A * M) hSSi
+  have hS_conjTranspose : Sᴴ = S := by simpa only using hS_selfAdjoint.star_eq
   have hXstarS : Xᴴ * S = Aᴴ := by
     have hXstarS' : Xᴴ * Sᴴ = Aᴴ := by
-      simpa [conjTranspose_mul] using congrArg Matrix.conjTranspose hSX
-    simpa [hS_conjTranspose] using hXstarS'
+      simpa only [conjTranspose_mul] using congrArg Matrix.conjTranspose hSX
+    simpa only [hS_conjTranspose] using hXstarS'
   calc
     A * Aᴴ = S * (X * Xᴴ) * S := by
       calc A * Aᴴ = (S * X) * Aᴴ := by rw [hSX]
         _ = S * (X * Xᴴ) * S := by rw [← hXstarS]; simp only [mul_assoc]
     _ ≤ S * 1 * S := by
-      simpa [hS_selfAdjoint.star_eq] using
+      simpa only [mul_one, hS_selfAdjoint.star_eq] using
         star_left_conjugate_le_conjugate (contraction_conjTranspose X hX_contr) S
     _ = Dom := by rw [mul_one, hS_sq]
 
@@ -177,16 +178,19 @@ private lemma le_of_forall_le_add_pos_smul_one (B D : Mat)
         Filter.Tendsto
           (fun n : ℕ => ((((1 / ((n : ℝ) + 1)) : ℝ) : ℂ)) • (1 : Mat))
         Filter.atTop (nhds (0 : Mat)) := by
-      simpa using hε.smul_const (1 : Mat)
-    simpa [g, add_zero] using hzero.const_add (D - B)
+      simpa only [one_div, Complex.ofReal_inv, Complex.ofReal_add, Complex.ofReal_natCast,
+        Complex.ofReal_one, zero_smul] using hε.smul_const (1 : Mat)
+    simpa only [g, one_div, Complex.ofReal_inv, Complex.ofReal_add, Complex.ofReal_natCast,
+      Complex.ofReal_one, add_zero] using hzero.const_add (D - B)
   have hg_nonneg : ∀ n, 0 ≤ g n := by
     intro n
     have hg_eq : g n = (D + ((((1 / ((n : ℝ) + 1)) : ℝ) : ℂ)) • 1) - B := by
       change (D - B) + ((((1 / ((n : ℝ) + 1)) : ℝ) : ℂ)) • 1 = _
       abel
     rw [hg_eq, Matrix.le_iff]
-    simpa using h (1 / ((n : ℝ) + 1)) (by positivity)
-  simpa [Matrix.le_iff] using ge_of_tendsto' hg_tendsto hg_nonneg
+    simpa only [one_div, Complex.ofReal_inv, Complex.ofReal_add, Complex.ofReal_natCast,
+      Complex.ofReal_one, sub_zero] using h (1 / ((n : ℝ) + 1)) (by positivity)
+  simpa only [sub_nonneg, le_iff] using ge_of_tendsto' hg_tendsto hg_nonneg
 
 /-- An operator is subnormal if it is the north-west block of a normal operator
 on a larger space `H ⊕ H⊥`. -/
@@ -204,13 +208,15 @@ private noncomputable def nwExtendLinearMap (T : Mat →ₗ[ℂ] Mat) (E : ℕ) 
   map_add' := by
     intro M N
     have hAdd : T ((M + N).toBlocks₁₁) = T (M.toBlocks₁₁) + T (N.toBlocks₁₁) := by
-      simpa [Matrix.toBlocks₁₁] using T.map_add M.toBlocks₁₁ N.toBlocks₁₁
+      simpa only [toBlocks₁₁, add_apply, of_add_of] using
+        T.map_add M.toBlocks₁₁ N.toBlocks₁₁
     ext i j
     rcases i with i | i <;> rcases j with j | j <;> simp [hAdd]
   map_smul' := by
     intro c M
     have hSmul : T ((c • M).toBlocks₁₁) = c • T (M.toBlocks₁₁) := by
-      simpa [Matrix.toBlocks₁₁] using T.map_smul c M.toBlocks₁₁
+      simpa only [toBlocks₁₁, smul_apply, smul_eq_mul, smul_of] using
+        T.map_smul c M.toBlocks₁₁
     ext i j
     rcases i with i | i <;> rcases j with j | j <;> simp [hSmul]
 
@@ -219,7 +225,7 @@ private lemma nwExtendLinearMap_isPositiveMap (T : Mat →ₗ[ℂ] Mat)
     IsPositiveMap (nwExtendLinearMap (D := D) T E) := by
   intro M hM
   refine Matrix.PosSemidef.fromBlocks_diag ?_ Matrix.PosSemidef.zero
-  exact hPos _ (by simpa [Matrix.toBlocks₁₁, Matrix.submatrix_apply] using hM.submatrix Sum.inl)
+  exact hPos _ (by simpa only [toBlocks₁₁] using hM.submatrix Sum.inl)
 
 private lemma nwExtendLinearMap_subunital (T : Mat →ₗ[ℂ] Mat)
     (hSub : T 1 ≤ (1 : Mat)) (E : ℕ) :
@@ -227,7 +233,7 @@ private lemma nwExtendLinearMap_subunital (T : Mat →ₗ[ℂ] Mat)
       (1 : Matrix (Fin D ⊕ Fin E) (Fin D ⊕ Fin E) ℂ) := by
   rw [Matrix.le_iff]
   have hTop : (1 - T 1).PosSemidef := by
-    simpa [Matrix.le_iff] using hSub
+    simpa only [le_iff] using hSub
   have hDiag :
       (Matrix.fromBlocks (1 - T 1) 0 0 (1 : Matrix (Fin E) (Fin E) ℂ)).PosSemidef :=
     Matrix.PosSemidef.fromBlocks_diag hTop Matrix.PosSemidef.one
@@ -239,7 +245,7 @@ private lemma nwExtendLinearMap_subunital (T : Mat →ₗ[ℂ] Mat)
     ext i j
     rcases i with i | i <;> rcases j with j | j <;>
       simp [nwExtendLinearMap, hOne11, Matrix.one_apply]
-  simpa [hEq] using hDiag
+  simpa only [hEq] using hDiag
 
 /-- Wolf Thm. 5.5: Schwarz inequality for subnormal operators.
 
@@ -272,9 +278,11 @@ private theorem topLeft_schwarz_of_normal_extension
     intro M hM
     change (Matrix.reindex e e (S (Matrix.reindex e.symm e.symm M))).PosSemidef
     have hM' : (Matrix.reindex e.symm e.symm M).PosSemidef := by
-      simpa [Matrix.reindex_apply] using hM.submatrix e
+      simpa only [reindex_apply, Equiv.symm_symm, posSemidef_submatrix_equiv] using
+        hM.submatrix e
     have hSM : (S (Matrix.reindex e.symm e.symm M)).PosSemidef := hPosS _ hM'
-    simpa [Matrix.reindex_apply] using hSM.submatrix e.symm
+    simpa only [reindex_apply, Equiv.symm_symm, posSemidef_submatrix_equiv] using
+      hSM.submatrix e.symm
   have hSubSf : Sf 1 ≤ (1 : Matrix (Fin (D + E)) (Fin (D + E)) ℂ) := by
     rw [Matrix.le_iff] at hSubS ⊢
     have hEq :
@@ -282,7 +290,7 @@ private theorem topLeft_schwarz_of_normal_extension
           Matrix.reindex e e ((1 : Matrix (Fin D ⊕ Fin E) (Fin D ⊕ Fin E) ℂ) - S 1) := by
       ext i j
       simp [Sf, ρ, Matrix.reindexLinearEquiv_apply, Matrix.one_apply]
-    simpa [hEq, Matrix.reindex_apply] using hSubS.submatrix e.symm
+    simpa only [hEq, reindex_apply, posSemidef_submatrix_equiv] using hSubS.submatrix e.symm
   have hNormalf : Nfᴴ * Nf = Nf * Nfᴴ := by
     change (Matrix.reindex e e N)ᴴ * Matrix.reindex e e N =
       Matrix.reindex e e N * (Matrix.reindex e e N)ᴴ
@@ -303,31 +311,39 @@ private theorem topLeft_schwarz_of_normal_extension
     have h :
         ((S (Nᴴ * N)).submatrix e.symm e.symm -
           (S Nᴴ * S N).submatrix e.symm e.symm).PosSemidef := by
-      simpa [Sf, Nf, ρ, Matrix.conjTranspose_reindex e e N,
-        Matrix.reindexLinearEquiv_apply, Matrix.reindexLinearEquiv_mul,
-        Matrix.submatrix_sub] using hLeftf
-    simpa [Matrix.submatrix_submatrix, Matrix.submatrix_sub] using h.submatrix e
+      simpa only [Sf, Nf, ρ, Matrix.conjTranspose_reindex, reindexLinearEquiv_symm,
+        reindex_apply, conjTranspose_submatrix, submatrix_mul_equiv, LinearMap.coe_comp,
+        LinearEquiv.coe_coe, Function.comp_apply, reindexLinearEquiv_apply,
+        Matrix.reindexLinearEquiv_mul, Matrix.submatrix_sub, Equiv.symm_symm,
+        submatrix_submatrix, Equiv.symm_comp_self, submatrix_id_id] using hLeftf
+    simpa only [submatrix_sub, Pi.sub_apply, submatrix_submatrix, Equiv.symm_comp_self,
+      submatrix_id_id] using h.submatrix e
   have hRightf : (Sf ((Nfᴴ)ᴴ * Nfᴴ) - Sf (Nfᴴ)ᴴ * Sf Nfᴴ).PosSemidef := by
     have hNormalf' : (Nfᴴ)ᴴ * Nfᴴ = Nfᴴ * (Nfᴴ)ᴴ := by
-      simpa using hNormalf.symm
-    simpa using
+      simpa only [conjTranspose_conjTranspose] using hNormalf.symm
+    simpa only [conjTranspose_conjTranspose] using
       schwarz_inequality_normal_operator (D := D + E) Sf hPosSf hSubSf Nfᴴ hNormalf'
   have hRightSum : (S (N * Nᴴ) - S N * S Nᴴ).PosSemidef := by
     have h :
         ((S (N * Nᴴ)).submatrix e.symm e.symm -
           (S N * S Nᴴ).submatrix e.symm e.symm).PosSemidef := by
-      simpa [Sf, Nf, ρ, Matrix.conjTranspose_reindex e e N,
-        Matrix.reindexLinearEquiv_apply, Matrix.reindexLinearEquiv_mul,
-        conjTranspose_conjTranspose, Matrix.submatrix_sub] using hRightf
-    simpa [Matrix.submatrix_submatrix, Matrix.submatrix_sub] using h.submatrix e
+      simpa only [Sf, Nf, ρ, Matrix.conjTranspose_reindex, reindexLinearEquiv_symm,
+        reindex_apply, conjTranspose_submatrix, conjTranspose_conjTranspose,
+        submatrix_mul_equiv, LinearMap.coe_comp, LinearEquiv.coe_coe, Function.comp_apply,
+        reindexLinearEquiv_apply, Matrix.reindexLinearEquiv_mul, Matrix.submatrix_sub,
+        Equiv.symm_symm, submatrix_submatrix, Equiv.symm_comp_self, submatrix_id_id] using
+        hRightf
+    simpa only [submatrix_sub, Pi.sub_apply, submatrix_submatrix, Equiv.symm_comp_self,
+      submatrix_id_id] using h.submatrix e
   refine ⟨?_, ?_⟩
   · rw [Matrix.le_iff]
     have hTop := hLeftSum.submatrix Sum.inl
-    simpa [S, nwExtendLinearMap, Matrix.fromBlocks_multiply,
-      Matrix.toBlocks₁₁, Matrix.submatrix_apply, Matrix.submatrix_sub] using hTop
+    simpa only [S, toBlocks₁₁, conjTranspose_apply, RCLike.star_def, nwExtendLinearMap,
+      LinearMap.coe_mk, AddHom.coe_mk, fromBlocks_multiply, Matrix.mul_zero, add_zero,
+      Matrix.zero_mul, mul_zero, submatrix_apply, submatrix_sub, Pi.sub_apply] using hTop
   · rw [Matrix.le_iff]
     have hBlockEq : (N * Nᴴ).toBlocks₁₁ = (Nᴴ * N).toBlocks₁₁ := by
-      simpa using congrArg Matrix.toBlocks₁₁ hNormal.symm
+      simpa only using congrArg Matrix.toBlocks₁₁ hNormal.symm
     have hEqTop :
         (S (N * Nᴴ) - S N * S Nᴴ).submatrix Sum.inl Sum.inl =
           T ((N * Nᴴ).toBlocks₁₁) - T (N.toBlocks₁₁) * T (Nᴴ.toBlocks₁₁) := by
@@ -336,7 +352,7 @@ private theorem topLeft_schwarz_of_normal_extension
         Matrix.toBlocks₁₁, Matrix.submatrix_apply]
     have hTop' := hRightSum.submatrix Sum.inl
     rw [hEqTop] at hTop'
-    simpa [hBlockEq] using hTop'
+    simpa only [hBlockEq] using hTop'
 
 theorem schwarz_inequality_subnormal_operator
     (T : Mat →ₗ[ℂ] Mat)
@@ -346,8 +362,8 @@ theorem schwarz_inequality_subnormal_operator
     (hSubnormal : IsSubnormal A) :
     T (Aᴴ) * T A ≤ T (Aᴴ * A) ∧ T A * T (Aᴴ) ≤ T (Aᴴ * A) := by
   rcases hSubnormal with ⟨E, B, C, hNormal⟩
-  simpa [Matrix.fromBlocks_conjTranspose, Matrix.fromBlocks_multiply,
-    Matrix.toBlocks_fromBlocks₁₁] using
+  simpa only [fromBlocks_conjTranspose, conjTranspose_zero, toBlocks_fromBlocks₁₁,
+    fromBlocks_multiply, Matrix.mul_zero, add_zero, Matrix.zero_mul] using
     topLeft_schwarz_of_normal_extension (D := D) T hPos hSub
       (Matrix.fromBlocks A B 0 C) hNormal
 
@@ -377,10 +393,12 @@ private lemma krausAdjointMapLinear_isPositiveMap (K : Fin d → Mat) :
     IsPositiveMap (krausAdjointMapLinear (d := d) (D := D) K) := by
   intro X hX
   classical
-  simpa [krausAdjointMapLinear, krausAdjointMap, Matrix.mul_assoc] using
+  simpa only [krausAdjointMapLinear, LinearMap.coe_mk, AddHom.coe_mk, krausAdjointMap,
+    Matrix.mul_assoc] using
     Matrix.posSemidef_sum (s := Finset.univ) (x := fun i => (K i)ᴴ * X * K i)
       (fun i _ => by
-        simpa [Matrix.mul_assoc] using hX.mul_mul_conjTranspose_same (B := (K i)ᴴ))
+        simpa only [Matrix.mul_assoc, conjTranspose_conjTranspose] using
+          hX.mul_mul_conjTranspose_same (B := (K i)ᴴ))
 
 /-- The missing order-theoretic step in Wolf Thm. 5.6: if `D ≥ 0` commutes with
 `A` and dominates `Aᴴ * A`, then it also dominates `A * Aᴴ`.
@@ -409,7 +427,8 @@ theorem commuting_dominant_right_bound
   have hDom' : Aᴴ * A ≤ Dom + (ε : ℂ) • (1 : Mat) :=
     hDom.trans <| le_add_of_nonneg_right <| by
       rw [Matrix.le_iff]
-      simpa using (Matrix.PosSemidef.one (n := Fin D) (R := ℂ)).smul hε.le
+      simpa only [Complex.coe_smul, sub_zero] using
+        (Matrix.PosSemidef.one (n := Fin D) (R := ℂ)).smul hε.le
   exact commuting_dominant_right_bound_posDef A _ hPD hComm' hDom'
 
 /-- CP/Kraus version of Wolf Thm. 5.6 under both dominant bounds.
@@ -435,20 +454,20 @@ theorem kadison_schwarz_commuting_dominant_cp_of_two_sided_bound
     exact kadison_schwarz_adjoint K h_tp A
   have hKSLeft : krausAdjointMap K (Aᴴ) * krausAdjointMap K A ≤
       krausAdjointMap K (Aᴴ * A) := by
-    simpa [krausAdjointMap_conjTranspose] using hKSLeft'
+    simpa only [krausAdjointMap_conjTranspose] using hKSLeft'
   have hDomLeftMap : krausAdjointMap K (Aᴴ * A) ≤ krausAdjointMap K Dom := by
-    simpa [T] using hPosT.map_le_map hDomLeft
+    simpa only using hPosT.map_le_map hDomLeft
   have hKSRight' : (krausAdjointMap K (Aᴴ))ᴴ * krausAdjointMap K (Aᴴ) ≤
       krausAdjointMap K (A * Aᴴ) := by
-    simpa [conjTranspose_conjTranspose] using
+    simpa only [krausAdjointMap_conjTranspose, conjTranspose_conjTranspose] using
       (show (krausAdjointMap K (Aᴴ))ᴴ * krausAdjointMap K (Aᴴ) ≤
           krausAdjointMap K ((Aᴴ)ᴴ * Aᴴ) from by
         rw [Matrix.le_iff]; exact kadison_schwarz_adjoint K h_tp (Aᴴ))
   have hKSRight : krausAdjointMap K A * krausAdjointMap K (Aᴴ) ≤
       krausAdjointMap K (A * Aᴴ) := by
-    simpa [krausAdjointMap_conjTranspose] using hKSRight'
+    simpa only [krausAdjointMap_conjTranspose, conjTranspose_conjTranspose] using hKSRight'
   have hDomRightMap : krausAdjointMap K (A * Aᴴ) ≤ krausAdjointMap K Dom := by
-    simpa [T] using hPosT.map_le_map hDomRight
+    simpa only using hPosT.map_le_map hDomRight
   exact ⟨hKSLeft.trans hDomLeftMap, hKSRight.trans hDomRightMap⟩
 
 /-- Wolf Thm. 5.6 in the CP/Kraus setting.
@@ -504,40 +523,40 @@ private lemma intertwine_sqrt_of_mul_eq
   have h12 : (CFC.sqrt M).toBlocks₁₂ = 0 := by
     let S := CFC.sqrt M
     have h : (S * J).toBlocks₁₂ = (J * S).toBlocks₁₂ := by
-      simpa using congrArg Matrix.toBlocks₁₂ hSJ.eq
+      simpa only using congrArg Matrix.toBlocks₁₂ hSJ.eq
     rw [show S = Matrix.fromBlocks S.toBlocks₁₁ S.toBlocks₁₂ S.toBlocks₂₁ S.toBlocks₂₂ from
       (Matrix.fromBlocks_toBlocks S).symm] at h
     simp [J, Matrix.fromBlocks_multiply] at h
-    simpa using h.symm
+    simpa only using h.symm
   have h21 : (CFC.sqrt M).toBlocks₂₁ = 0 := by
     let S := CFC.sqrt M
     have h : (S * J).toBlocks₂₁ = (J * S).toBlocks₂₁ := by
-      simpa using congrArg Matrix.toBlocks₂₁ hSJ.eq
+      simpa only using congrArg Matrix.toBlocks₂₁ hSJ.eq
     rw [show S = Matrix.fromBlocks S.toBlocks₁₁ S.toBlocks₁₂ S.toBlocks₂₁ S.toBlocks₂₂ from
       (Matrix.fromBlocks_toBlocks S).symm] at h
     simp [J, Matrix.fromBlocks_multiply] at h
-    simpa using h
+    simpa only using h
   have hSdecomp : CFC.sqrt M =
       Matrix.fromBlocks (CFC.sqrt M).toBlocks₁₁ 0 0 (CFC.sqrt M).toBlocks₂₂ := by
-    simpa [h12, h21] using (Matrix.fromBlocks_toBlocks (CFC.sqrt M)).symm
+    simpa only [h12, h21] using (Matrix.fromBlocks_toBlocks (CFC.sqrt M)).symm
   have hS_nonneg : (0 : Matrix (Fin D ⊕ Fin D) (Fin D ⊕ Fin D) ℂ) ≤ CFC.sqrt M :=
     CFC.sqrt_nonneg (a := M)
   have hS_psd : (CFC.sqrt M).PosSemidef := (Matrix.nonneg_iff_posSemidef).mp hS_nonneg
   have hS11_nonneg : (0 : Mat) ≤ (CFC.sqrt M).toBlocks₁₁ := by
     rw [Matrix.nonneg_iff_posSemidef]
-    simpa [Matrix.toBlocks₁₁, Matrix.submatrix_apply] using hS_psd.submatrix Sum.inl
+    simpa only [toBlocks₁₁] using hS_psd.submatrix Sum.inl
   have hS22_nonneg : (0 : Mat) ≤ (CFC.sqrt M).toBlocks₂₂ := by
     rw [Matrix.nonneg_iff_posSemidef]
-    simpa [Matrix.submatrix_apply] using hS_psd.submatrix Sum.inr
+    simpa only using hS_psd.submatrix Sum.inr
   have hSq : CFC.sqrt M * CFC.sqrt M = M := CFC.sqrt_mul_sqrt_self M hM_nonneg
   have h11sq : (CFC.sqrt M).toBlocks₁₁ * (CFC.sqrt M).toBlocks₁₁ = P := by
     have h := congrArg Matrix.toBlocks₁₁ hSq
     rw [hSdecomp, Matrix.fromBlocks_multiply] at h
-    simpa [M] using h
+    simpa only [mul_zero, add_zero, zero_mul, zero_add, toBlocks_fromBlocks₁₁] using h
   have h22sq : (CFC.sqrt M).toBlocks₂₂ * (CFC.sqrt M).toBlocks₂₂ = Q := by
     have h := congrArg Matrix.toBlocks₂₂ hSq
     rw [hSdecomp, Matrix.fromBlocks_multiply] at h
-    simpa [M] using h
+    simpa only [mul_zero, add_zero, zero_mul, zero_add, toBlocks_fromBlocks₂₂] using h
   have h11eq : CFC.sqrt P = (CFC.sqrt M).toBlocks₁₁ :=
     (CFC.sqrt_eq_iff P _ hP hS11_nonneg).2 h11sq
   have h22eq : CFC.sqrt Q = (CFC.sqrt M).toBlocks₂₂ :=
@@ -547,7 +566,7 @@ private lemma intertwine_sqrt_of_mul_eq
   rw [show S = Matrix.fromBlocks S.toBlocks₁₁ S.toBlocks₁₂ S.toBlocks₂₁ S.toBlocks₂₂ from
     (Matrix.fromBlocks_toBlocks S).symm] at h
   simp [K, Matrix.fromBlocks_multiply] at h
-  simpa [S, h11eq, h22eq] using h.symm
+  simpa only [h22eq, h11eq] using h.symm
 
 /-- Helper: the PD Schwarz inequality for commuting dominant operators.
 
@@ -581,20 +600,21 @@ private lemma schwarz_commuting_dominant_posDef
   let DL : Mat := CFC.sqrt L
   let DR : Mat := CFC.sqrt R
   have hInter : A * DR = DL * A := by
-    simpa [DL, DR] using intertwine_sqrt_of_mul_eq L R A hL_nonneg hR_nonneg hAQ
+    simpa only using intertwine_sqrt_of_mul_eq L R A hL_nonneg hR_nonneg hAQ
   have hDL_self : DLᴴ = DL := by
-    simpa [DL, Matrix.star_eq_conjTranspose] using (CFC.sqrt_nonneg (a := L)).isSelfAdjoint.star_eq
+    simpa only [star_eq_conjTranspose] using (CFC.sqrt_nonneg (a := L)).isSelfAdjoint.star_eq
   have hDR_self : DRᴴ = DR := by
-    simpa [DR, Matrix.star_eq_conjTranspose] using (CFC.sqrt_nonneg (a := R)).isSelfAdjoint.star_eq
+    simpa only [star_eq_conjTranspose] using (CFC.sqrt_nonneg (a := R)).isSelfAdjoint.star_eq
   have hInterAdj : DR * Aᴴ = Aᴴ * DL := by
-    simpa [Matrix.conjTranspose_mul, hDL_self, hDR_self] using congrArg Matrix.conjTranspose hInter
+    simpa only [conjTranspose_mul, hDR_self, hDL_self] using congrArg Matrix.conjTranspose hInter
   have hDL_sq : DL * DL = L := by
-    simpa [DL] using CFC.sqrt_mul_sqrt_self L hL_nonneg
+    simpa only using CFC.sqrt_mul_sqrt_self L hL_nonneg
   have hDR_sq : DR * DR = R := by
-    simpa [DR] using CFC.sqrt_mul_sqrt_self R hR_nonneg
+    simpa only using CFC.sqrt_mul_sqrt_self R hR_nonneg
   let N : Matrix (Fin D ⊕ Fin D) (Fin D ⊕ Fin D) ℂ := Matrix.fromBlocks A DL DR (-Aᴴ)
   have hNstar : Nᴴ = Matrix.fromBlocks Aᴴ DR DL (-A) := by
-    simpa [N, hDL_self, hDR_self] using Matrix.fromBlocks_conjTranspose A DL DR (-Aᴴ)
+    simpa only [hDR_self, hDL_self, conjTranspose_neg, conjTranspose_conjTranspose] using
+      Matrix.fromBlocks_conjTranspose A DL DR (-Aᴴ)
   have hNstarN : Nᴴ * N = Matrix.fromBlocks Dom 0 0 Dom := by
     rw [hNstar]
     dsimp [N]
@@ -625,7 +645,7 @@ private lemma schwarz_commuting_dominant_posDef
   have hN11 : N.toBlocks₁₁ = A := by simp [N]
   have hNstar11 : Nᴴ.toBlocks₁₁ = Aᴴ := by rw [hNstar]; simp
   have hNstarN11 : (Nᴴ * N).toBlocks₁₁ = Dom := by rw [hNstarN]; simp
-  simpa [hN11, hNstar11, hNstarN11] using hBlock
+  simpa only [hNstar11, hN11, hNstarN11] using hBlock
 
 /-- Wolf Thm. 5.6: Schwarz inequality for commuting dominant operators.
 
@@ -649,7 +669,8 @@ theorem schwarz_inequality_commuting_dominant_operator
   have hDom_add (ε : ℝ) (hε : 0 ≤ ε) : Aᴴ * A ≤ Dom + (ε : ℂ) • 1 :=
     hDom.trans <| le_add_of_nonneg_right <| by
       rw [Matrix.le_iff]
-      simpa using (Matrix.PosSemidef.one (n := Fin D) (R := ℂ)).smul hε
+      simpa only [Complex.coe_smul, sub_zero] using
+        (Matrix.PosSemidef.one (n := Fin D) (R := ℂ)).smul hε
   have hApprox : ∀ ε : ℝ, 0 < ε →
       T Aᴴ * T A ≤ T Dom + (ε : ℂ) • 1 ∧
         T A * T Aᴴ ≤ T Dom + (ε : ℂ) • 1 := by
@@ -661,11 +682,15 @@ theorem schwarz_inequality_commuting_dominant_operator
     refine ⟨?_, ?_⟩
     · calc T Aᴴ * T A ≤ T (Dom + (ε : ℂ) • 1) := hPD_result.1
         _ = T Dom + (ε : ℂ) • T 1 := by
-            simpa using congrArg (fun X => T Dom + X) (T.map_smul (ε : ℂ) (1 : Mat))
+            simpa only [Complex.coe_smul, map_add, LinearMap.map_smul_of_tower,
+              add_right_inj] using
+              congrArg (fun X => T Dom + X) (T.map_smul (ε : ℂ) (1 : Mat))
         _ ≤ T Dom + (ε : ℂ) • 1 := by gcongr
     · calc T A * T Aᴴ ≤ T (Dom + (ε : ℂ) • 1) := hPD_result.2
         _ = T Dom + (ε : ℂ) • T 1 := by
-            simpa using congrArg (fun X => T Dom + X) (T.map_smul (ε : ℂ) (1 : Mat))
+            simpa only [Complex.coe_smul, map_add, LinearMap.map_smul_of_tower,
+              add_right_inj] using
+              congrArg (fun X => T Dom + X) (T.map_smul (ε : ℂ) (1 : Mat))
         _ ≤ T Dom + (ε : ℂ) • 1 := by gcongr
   exact ⟨le_of_forall_le_add_pos_smul_one _ _ fun ε hε => (hApprox ε hε).1,
          le_of_forall_le_add_pos_smul_one _ _ fun ε hε => (hApprox ε hε).2⟩

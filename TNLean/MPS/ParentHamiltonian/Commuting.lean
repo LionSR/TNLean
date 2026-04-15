@@ -5,6 +5,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.MPS.ParentHamiltonian.Defs
 import TNLean.MPS.Periodic.Defs
 import TNLean.MPS.RFP.Defs
+import TNLean.MPS.RFP.StructuralForm
 
 /-!
 # Commuting parent Hamiltonians
@@ -92,15 +93,37 @@ theorem rfp_implies_nncph (A : MPSTensor d D) [NeZero D]
     (hLeft : IsLeftCanonical A)
     (N : ℕ) (hN : 2 ≤ N) :
     IsNNCPH A N := by
+  classical
+  -- Missing bridge:
+  -- 1. Upgrade the injective rank-one transfer-map classification to the full
+  --    Appendix B product-of-entangled-pairs decomposition.
+  -- 2. Prove that tensors in that product-of-pairs form have commuting
+  --    nearest-neighbor parent projectors after transport through the formal
+  --    `groundSpace`/`parentInteraction`/`localTerm` definitions.
   sorry
 
 /-- **Theorem 3.10(iii)⟹(i)** (arXiv:1606.00608): NNCPH implies RFP.
 Gated on [Beigi–Shor–Whalen, CMP 2012] — ground-space characterization
-for commuting nearest-neighbor Hamiltonians in 1D. -/
+for commuting nearest-neighbor Hamiltonians in 1D.
+
+Note: with the present Lean definition, `IsRFP` is a normalization-sensitive
+idempotence equation for `transferMap A`, whereas `IsNNCPH` is invariant under
+nonzero scalar rescaling of the tensor. A final theorem should therefore include
+a normalization hypothesis, such as `IsLeftCanonical A`, before applying the
+commuting-Hamiltonian ground-space characterization. -/
 theorem nncph_implies_rfp (A : MPSTensor d D) [NeZero D]
     (hNNCPH : ∀ N, 2 ≤ N → IsNNCPH A N)
     (hNT : IsNormal A) :
     IsRFP A := by
+  have _hTwoSite : IsNNCPH A 2 := hNNCPH 2 le_rfl
+  -- Missing bridge:
+  -- 1. A formal Beigi--Shor--Whalen theorem for 1D nearest-neighbor commuting
+  --    Hamiltonians, stated for the concrete `localTerm`/`groundSpace` API.
+  -- 2. A derivation of zero correlation length or transfer-map idempotence from
+  --    that ground-space characterization.
+  -- 3. A normalization hypothesis or a normalized representative, since the
+  --    current statement is scale-invariant on the NNCPH side but not on the
+  --    RFP side.
   sorry
 
 end MPSTensor

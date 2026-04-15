@@ -124,6 +124,21 @@ theorem bnt_mem_groundSpace
   intro i τ
   exact groundSpace_block_le_assembled μ A j hμj L (hmem i τ)
 
+/-- Reverse inclusion bridge for the BNT ground-space theorem.
+
+This is the missing block-decomposition step: every periodic-chain ground state
+of the assembled BNT tensor should split into blockwise chain ground states, and
+blockwise normal uniqueness should place those components in the BNT span. -/
+theorem parentHamiltonianGroundSpace_le_bntSpan_of_block_decomposition
+    (A : (j : Fin r) → MPSTensor d (dim j))
+    (_hCF : IsCanonicalFormBNT μ A) {L N : ℕ} (_hL : 1 < L) (_hN : N ≥ L + 1) :
+    parentHamiltonianGroundSpace (μ := μ) A L N ≤ bntSpan A N := by
+  -- Missing bridge: periodic-chain block decomposition for
+  -- `toTensorFromBlocks μ A`, followed by blockwise normal uniqueness from
+  -- `chainGroundSpace_eq_mpvSubmodule_normal`. This is the reverse inclusion
+  -- described in the theorem docstring.
+  sorry
+
 /-- **Degenerate ground space = span of BNT states** for block-injective parent
 Hamiltonians.
 
@@ -147,11 +162,12 @@ available:
    `MPS/Structure/` at present.
 
 2. **Blockwise MPV uniqueness** via `chainGroundSpace_eq_mpvSubmodule_normal`
-   in `UniqueGroundState.lean`, which is itself still a `sorry` pending the
-   normal-form range reduction from `2 L₀` to `L₀ + 1`. Each block of a
-   CF-BNT decomposition is normal and `L₀`-block-injective, so this theorem
-   (once proved) identifies each block's chain ground space with its MPV
-   submodule, i.e. exactly one component of `bntSpan`.
+   in `UniqueGroundState.lean`. Its hard direction is isolated as the
+   range-reduction bridge
+   `chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction`. Each block of
+   a CF-BNT decomposition is normal and `L₀`-block-injective, so this theorem
+   identifies each block's chain ground space with its MPV submodule, i.e.
+   exactly one component of `bntSpan`.
 
 Given dependency (1) and (2), the ⊆ direction becomes:
 ```
@@ -166,19 +182,11 @@ theorem parentHamiltonian_gs_eq_bnt_span
     (A : (j : Fin r) → MPSTensor d (dim j))
     (hCF : IsCanonicalFormBNT μ A) {L N : ℕ} (hL : 1 < L) (hN : N ≥ L + 1) :
     parentHamiltonianGroundSpace (μ := μ) A L N = bntSpan A N := by
-  apply le_antisymm
-  · -- TODO(#195): reverse inclusion.
-    -- Requires:
-    --  (1) a periodic-chain block-decomposition theorem identifying
-    --      `chainGroundSpace (toTensorFromBlocks μ A) L N` with the supremum
-    --      of embedded blockwise chain ground spaces (not yet formalized);
-    --  (2) `chainGroundSpace_eq_mpvSubmodule_normal` (currently `sorry`) to
-    --      reduce each block's chain ground space to its MPV submodule.
-    -- See the docstring above for the proof outline.
-    sorry
-  · rw [bntSpan, Submodule.span_le]
-    intro ψ hψ
-    obtain ⟨j, rfl⟩ := Set.mem_range.mp hψ
-    exact bnt_mem_groundSpace A hCF hL hN j
+  -- PROOF STRUCTURE: see bridge lemma
+  -- `parentHamiltonianGroundSpace_le_bntSpan_of_block_decomposition` for the
+  -- planned proof route.
+  -- Currently sorry-backed pending discharge of
+  -- `parentHamiltonianGroundSpace_le_bntSpan_of_block_decomposition`.
+  sorry
 
 end MPSTensor
