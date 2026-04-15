@@ -952,6 +952,55 @@ private theorem gaugePhaseEquiv_blockTensor
             ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) := by
           simp [hGauge, blockTensor]
 
+/-- Missing mixed-overlap bridge after blocking.
+
+If two blocked tensors are globally gauge-phase equivalent and both are decomposed
+into cyclic compressed sectors, then some sector of the `A` decomposition has a
+non-decaying overlap with some sector of the `B` decomposition.
+
+This is the analytic core of the Wedderburn uniqueness step needed below.  The
+intended proof expands the total blocked overlap using `hA_mpv` and `hB_mpv` as a
+finite double sum of sector overlaps.  Global gauge-phase equivalence keeps the
+total blocked overlap nonzero asymptotically (after the usual unit-modulus
+normalization of the global phase), so not every mixed sector overlap can tend
+to zero. -/
+private lemma exists_nondecaying_sectorOverlap_of_blockedGaugePhaseEquiv_cyclicDecomp
+    [NeZero D] (A B : MPSTensor d D)
+    {m : ℕ} [NeZero m]
+    (hA : IsPeriodic m A) (hB : IsPeriodic m B)
+    {dimA dimB : Fin m → ℕ}
+    (blocksA :
+      (k : Fin m) → MPSTensor (blockPhysDim d m) (dimA k))
+    (blocksB :
+      (k : Fin m) → MPSTensor (blockPhysDim d m) (dimB k))
+    (hA_blocks_lc :
+      ∀ k, ∑ i : Fin (blockPhysDim d m),
+        (blocksA k i)ᴴ * blocksA k i = 1)
+    (hB_blocks_lc :
+      ∀ k, ∑ i : Fin (blockPhysDim d m),
+        (blocksB k i)ᴴ * blocksB k i = 1)
+    (hA_mpv :
+      SameMPV₂ (blockTensor A m)
+        (toTensorFromBlocks (μ := fun _ => 1) blocksA))
+    (hB_mpv :
+      SameMPV₂ (blockTensor B m)
+        (toTensorFromBlocks (μ := fun _ => 1) blocksB))
+    (hA_cyclic : IsCyclicSectorDecomp A blocksA)
+    (hB_cyclic : IsCyclicSectorDecomp B blocksB)
+    (hNondegA : ∀ u, dimA u ≠ 0)
+    (hNondegB : ∀ v, dimB v ≠ 0)
+    (hGPE_block :
+      GaugePhaseEquiv (blockTensor (d := d) (D := D) A m)
+        (blockTensor (d := d) (D := D) B m)) :
+    ∃ u v : Fin m,
+      ¬ Tendsto
+        (fun N => mpvOverlap (d := blockPhysDim d m)
+          (blocksA u) (blocksB v) N)
+        atTop (nhds (0 : ℂ)) := by
+  -- Missing bridge: expand the globally non-decaying blocked overlap as a
+  -- finite sum of mixed sector overlaps and use finite-sum convergence.
+  sorry
+
 /-- Missing compressed-sector uniqueness bridge after blocking.
 
 Once global gauge-phase equivalence has been transported to the blocked
@@ -995,9 +1044,30 @@ private lemma exists_sector_match_of_blockedGaugePhaseEquiv_cyclicDecomp
           (MPSTensor (blockPhysDim d m)) hdim)
           (blocksA u))
         (blocksB v) := by
-  -- Missing bridge: uniqueness of the compressed cyclic/Wedderburn sector
-  -- decomposition for the two blocked tensors, with nonzero-sector bookkeeping.
-  sorry
+  obtain ⟨u, v, hNondecay⟩ :=
+    exists_nondecaying_sectorOverlap_of_blockedGaugePhaseEquiv_cyclicDecomp
+      A B hA hB blocksA blocksB hA_blocks_lc hB_blocks_lc
+      hA_mpv hB_mpv hA_cyclic hB_cyclic hNondegA hNondegB hGPE_block
+  haveI : NeZero (dimA u) := ⟨hNondegA u⟩
+  haveI : NeZero (dimB v) := ⟨hNondegB v⟩
+  have hA_irr : IsIrreducibleTensor (blocksA u) :=
+    (primitive_and_irreducible_sectorBlocks_of_cyclicDecomp
+      A hA blocksA hA_blocks_lc hA_mpv hA_cyclic u (hNondegA u)).2
+  have hB_irr : IsIrreducibleTensor (blocksB v) :=
+    (primitive_and_irreducible_sectorBlocks_of_cyclicDecomp
+      B hB blocksB hB_blocks_lc hB_mpv hB_cyclic v (hNondegB v)).2
+  have hdim : dimA u = dimB v := by
+    by_contra hne
+    exact hNondecay
+      (mpvOverlap_tendsto_zero_of_dim_ne_of_irreducible_TP
+        (blocksA u) (blocksB v) hA_irr hB_irr
+        (hA_blocks_lc u) (hB_blocks_lc v) hne)
+  refine ⟨u, v, hdim, hNondegA u, ?_⟩
+  by_contra hNot
+  exact hNondecay
+    (mpvOverlap_tendsto_zero_of_not_gaugePhaseEquiv_cast_left_of_irreducible_TP
+      hdim (blocksA u) (blocksB v) hA_irr hB_irr
+      (hA_blocks_lc u) (hB_blocks_lc v) hNot)
 
 /-- A global gauge-phase equivalence between two periodic tensors forces at
 least one compatible nonzero pair of compressed cyclic sectors to be
@@ -1006,8 +1076,10 @@ gauge-phase equivalent.
 This is the structural bridge used by the no-sector-match case: the cyclic
 sector decomposition is unique up to relabeling, and a global gauge-phase
 equivalence carries a nonzero sector of `A` to a sector of `B`. The hypothesis
-`hNondegA` supplies the nonzero-sector bookkeeping from the periodic sector
-decomposition constructed by `exists_cyclic_sector_decomp_after_blocking_of_isPeriodic`.
+`hNondegA` supplies the nonzero-sector bookkeeping for the returned `A` sector, while
+`hNondegB` provides the typeclass needed to apply the mixed-sector overlap dichotomy.
+Both come from the periodic sector decomposition constructed by
+`exists_cyclic_sector_decomp_after_blocking_of_isPeriodic`.
 The current API does not yet expose that uniqueness theorem in this
 compressed-sector form, so the bridge is isolated here as the only missing
 ingredient. -/
@@ -1108,10 +1180,13 @@ equivalent. The nondegeneracy guard `dimA u ≠ 0` is essential: when
 `dimA u = 0`, `GaugePhaseEquiv` may hold vacuously for
 `MPSTensor _ 0`, and without this guard `hNoMatch` would be
 unsatisfiable whenever a zero-dimensional sector pair exists. With
-this guard and the separate hypothesis `hNondegA : ∀ u, dimA u ≠ 0`
-coming from the periodic sector decomposition, `hNoMatch` is exactly
+this guard and the separate nondegeneracy hypotheses
+`hNondegA : ∀ u, dimA u ≠ 0` and `hNondegB : ∀ v, dimB v ≠ 0`
+coming from the periodic sector decompositions, `hNoMatch` is exactly
 the negation of `hSomeMatch` in `periodicOverlap_gaugeEquiv_of_sector_match`,
-making the two conditions complementary for the dichotomy proof.
+making the two conditions complementary for the dichotomy proof.  The
+`hNondegB` hypothesis is also needed by the mixed-sector overlap dichotomy
+used to extract a sector match from global gauge-phase equivalence.
 
 This is the "first case" of the same-period argument in Appendix A:
 block by `m`, decompose into normal sectors, and observe that all
