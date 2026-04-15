@@ -1299,6 +1299,52 @@ The following results separate the zero blocks from the
 	theorem from spectral theory.
 \end{proof}
 
+\begin{lemma}[Orbit-sum construction of the sector lift]%
+	\label{lem:orbit_sum_hLift_construction}
+	\lean{MPSTensor.hLift_cyclicDecomp_mps_of_fixUpgrade}
+	\leanok
+	\uses{lem:orbit_sum_fixed, lem:orbit_sum_full_sector,
+	      thm:sector_irred_orbit_lift}
+	Let $A$ be a left-canonical MPS tensor, $(P_k)_{k=1}^m$ a cyclic family
+	of orthogonal sector projections with $\sum_k P_k = \Id$, and set
+	$T = \E_A^\dagger$. Assume two upstream inputs, both discharged from the
+	block-diagonal canonical-form analysis of
+	\cite[Lemma~\texttt{lem:bdcf}]{DeLasCuevas2017Irreducible}:
+	\begin{enumerate}
+		\item \emph{(Projection step.)} For each sector index $k$ and each
+			orthogonal projection $X$ supported on $P_k$, the image $T(X)$
+			is again an orthogonal projection.
+		\item \emph{(Fixed-point upgrade.)} For each sector index $k$ and
+			each orthogonal subprojection $Q \le P_k$, if $Q$ is a corner
+			fixed point of $T^m$ then $T^m(Q) = Q$.
+	\end{enumerate}
+	Then for every sector $k$ and every orthogonal subprojection $Q \le P_k$
+	which is a corner fixed point of $T^m$, the orbit sum
+	\[
+		R \;:=\; \sum_{l=0}^{m-1} T^l(Q)
+	\]
+	is an orthogonal projection, preserved by $T$, with
+	$Q = 0 \Leftrightarrow R = 0$ and $Q = P_k \Leftrightarrow R = \Id$.
+	In particular $R$ witnesses the orbit-sum lift hypothesis of
+	Theorem~\ref{thm:sector_irred_orbit_lift}.
+\end{lemma}
+
+\begin{proof}\leanok
+	\uses{lem:orbit_sum_fixed, lem:orbit_sum_full_sector,
+	      thm:sector_irred_orbit_lift}
+	The iterates $T^l(Q)$ are each orthogonal projections (repeatedly using
+	the projection-step hypothesis), supported on the shifted sector
+	$P_{k-l}$, and are therefore pairwise orthogonal because distinct
+	sectors are. This gives both the Hermitian and idempotent conjuncts for
+	$R$. Fixedness under $T$ follows from $T^m(Q) = Q$ and
+	Lemma~\ref{lem:orbit_sum_fixed}, and corner preservation from the
+	adjoint trace-preserving relation. The zero equivalence uses
+	$R\cdot Q = Q$ (the diagonal term $l=0$ is $Q$, off-diagonal terms
+	vanish by pairwise orthogonality); the full-sector equivalence uses
+	$P_k \cdot R \cdot P_k = Q$ and
+	Lemma~\ref{lem:orbit_sum_full_sector}.
+\end{proof}
+
 \section{Reduction to primitive blocks}%
 \label{sec:reduction_to_normal_form}
 

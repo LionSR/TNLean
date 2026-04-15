@@ -371,6 +371,202 @@ theorem orbitSumProjection_eq_one_of_full_sector
           simp [Equiv.subLeft_apply]
     _ = 1 := hPsum
 
+/-- Orbit-sum lift producing the `hLift` hypothesis required by
+`isIrreducible_restriction_of_cyclic_decomp`.
+
+Given the cyclic-sector setup, a one-step projection-preservation hypothesis
+`hProjStep` on sectors, and a fixed-point upgrade `hFixUpgrade` promoting
+`PreservesCorner Q (T^m)` to `(T^m) Q = Q`, the orbit sum
+`R := ∑ l, T^l Q` witnesses the `hLift` conclusion: it is an orthogonal
+projection that preserves the corner under `T`, and the zero/full-sector
+equivalences hold.
+
+This assembles the in-file sublemmas
+`orbit_iterate_supported_on_shifted_sector`,
+`orbit_iterate_isOrthogonalProjection`,
+`orbitSumProjection_fixed_of_pow_fix`,
+`orbitSumProjection_eq_one_of_full_sector`,
+`preservesCorner_of_adjoint_fixed_projection`, and
+`pairwise_mul_zero_of_orthogonalProjection_sum_one` into a single theorem
+matching the shape of the `hLift` argument of
+`isIrreducibleOnCorner_of_cyclic_decomp_mps_of_hLift`.
+
+The input `hFixUpgrade` reflects a genuine structural gap: for a general
+unital CP map `S`, `PreservesCorner Q S` does not imply `S Q = Q` — Kadison
+–Schwarz only yields `0 ≤ S Q ≤ Q` with `(S Q)(Q - S Q) ≥ 0`. Closing that
+upgrade requires domain-specific structure of the underlying Kraus operators
+that is not captured by the abstract sublemma signatures; see the
+block-diagonal canonical-form argument in `Papers/1708.00029/main.tex`,
+Lemma `lem:bdcf`. The `hProjStep` input is similarly abstract and expected
+to be discharged from an upstream multiplicative-domain / KS-equality
+argument on the MPS transfer map (same reference). -/
+theorem hLift_cyclicDecomp_mps_of_fixUpgrade
+    [NeZero m]
+    {A : MPSTensor d D}
+    (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (P : Fin m → MatrixAlg D)
+    (hPproj : ∀ k : Fin m, IsOrthogonalProjection (P k))
+    (hPsum : ∑ k : Fin m, P k = 1)
+    (hcyclic :
+      ∀ k : Fin m,
+        transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k)
+    (hMulLeft :
+      ∀ k : Fin m, ∀ X : MatrixAlg D,
+        transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k * X) =
+          transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k) *
+            transferMap (d := d) (D := D) (fun i => (A i)ᴴ) X)
+    (hMulRight :
+      ∀ k : Fin m, ∀ X : MatrixAlg D,
+        transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (X * P k) =
+          transferMap (d := d) (D := D) (fun i => (A i)ᴴ) X *
+            transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k))
+    (hProjStep :
+      ∀ k : Fin m, ∀ X : MatrixAlg D,
+        IsOrthogonalProjection X →
+        X * P k = X → P k * X = X →
+        IsOrthogonalProjection
+          (transferMap (d := d) (D := D) (fun i => (A i)ᴴ) X))
+    (hFixUpgrade :
+      ∀ (k : Fin m) (Q : MatrixAlg D),
+        IsOrthogonalProjection Q →
+        Q * P k = Q → P k * Q = Q →
+        PreservesCorner Q
+          ((transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ^ m) →
+        ((transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ^ m) Q = Q) :
+    ∀ k : Fin m, ∀ Q : MatrixAlg D,
+      IsOrthogonalProjection Q →
+      Q * P k = Q → P k * Q = Q →
+      PreservesCorner Q
+        ((transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ^ m) →
+      ∃ R : MatrixAlg D,
+        IsOrthogonalProjection R ∧
+        PreservesCorner R
+          (transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ∧
+        (Q = 0 ↔ R = 0) ∧
+        (Q = P k ↔ R = 1) := by
+  classical
+  intro k Q hQproj hQP hPQ hQcorner
+  set T : MatrixEnd D := transferMap (d := d) (D := D) (fun i => (A i)ᴴ)
+  -- Upgrade corner preservation to a fixed-point
+  have hQfix : (T ^ m) Q = Q := hFixUpgrade k Q hQproj hQP hPQ hQcorner
+  -- Sublemma 1: sector support of orbit iterates
+  have hsupp := orbit_iterate_supported_on_shifted_sector
+    (T := T) (P := P) hcyclic hMulLeft hMulRight (k := k) (Q := Q) hQP hPQ
+  -- Sublemma 2: orbit iterates are projections
+  have hprojL := orbit_iterate_isOrthogonalProjection
+    (T := T) (P := P) hcyclic hMulLeft hMulRight hProjStep
+    (k := k) (Q := Q) hQproj hQP hPQ
+  -- Sublemma 3: pairwise orthogonality of cyclic sectors
+  have hPPair := pairwise_mul_zero_of_orthogonalProjection_sum_one
+    (P := P) hPproj hPsum
+  -- Derived: pairwise orthogonality of orbit iterates (via shifted sectors)
+  have horbPair : ∀ l l' : Fin m, l ≠ l' →
+      ((T ^ (l : ℕ)) Q) * ((T ^ (l' : ℕ)) Q) = 0 := by
+    intro l l' hll
+    have h1 : (T ^ (l : ℕ)) Q * P (k - l) = (T ^ (l : ℕ)) Q := (hsupp l).1
+    have h2 : P (k - l') * (T ^ (l' : ℕ)) Q = (T ^ (l' : ℕ)) Q := (hsupp l').2
+    have hPneq : (k - l : Fin m) ≠ (k - l' : Fin m) := by
+      intro heq
+      exact hll (sub_right_injective heq)
+    have hP0 : P (k - l) * P (k - l') = 0 := hPPair hPneq
+    calc ((T ^ (l : ℕ)) Q) * ((T ^ (l' : ℕ)) Q)
+        = ((T ^ (l : ℕ)) Q * P (k - l)) *
+            (P (k - l') * (T ^ (l' : ℕ)) Q) := by rw [h1, h2]
+      _ = ((T ^ (l : ℕ)) Q) * (P (k - l) * P (k - l')) *
+            ((T ^ (l' : ℕ)) Q) := by simp only [mul_assoc]
+      _ = ((T ^ (l : ℕ)) Q) * 0 * ((T ^ (l' : ℕ)) Q) := by rw [hP0]
+      _ = 0 := by simp
+  -- The orbit-sum projection (shared Hermitian/idempotent proof, reused
+  -- both as the `hLift` projection conjunct and as the `hP` argument of
+  -- `preservesCorner_of_adjoint_fixed_projection`).
+  have hRproj : IsOrthogonalProjection
+      (orbitSumProjection (D := D) (m := m) T Q) := by
+    refine ⟨?_, ?_⟩
+    · -- Hermitian via conjTranspose_sum + each iterate Hermitian
+      change (orbitSumProjection (D := D) (m := m) T Q)ᴴ =
+        orbitSumProjection (D := D) (m := m) T Q
+      simp only [orbitSumProjection, Matrix.conjTranspose_sum]
+      refine Finset.sum_congr rfl ?_
+      intro l _
+      exact (hprojL l).1.eq
+    · -- Idempotent via diagonal/off-diagonal split
+      change orbitSumProjection (D := D) (m := m) T Q *
+        orbitSumProjection (D := D) (m := m) T Q =
+        orbitSumProjection (D := D) (m := m) T Q
+      simp only [orbitSumProjection, Finset.sum_mul, Finset.mul_sum]
+      refine Finset.sum_congr rfl ?_
+      intro l _
+      rw [Finset.sum_eq_single l]
+      · exact (hprojL l).2
+      · intros l' _ hne
+        exact horbPair l' l hne
+      · intro hmem
+        exact absurd (Finset.mem_univ l) hmem
+  -- The orbit-sum witness
+  refine ⟨orbitSumProjection (D := D) (m := m) T Q, hRproj, ?_, ?_, ?_⟩
+  · -- Corner preservation under T: follows from T-fixedness + adjoint-TP
+    have hRfix : T (orbitSumProjection (D := D) (m := m) T Q) =
+        orbitSumProjection (D := D) (m := m) T Q :=
+      orbitSumProjection_fixed_of_pow_fix (T := T) (Q := Q) (m := m) hQfix
+    exact preservesCorner_of_adjoint_fixed_projection (A := A) hTP
+      (P := orbitSumProjection (D := D) (m := m) T Q) hRproj (hFix := hRfix)
+  · -- Zero equivalence
+    -- Forward: Q = 0 ⇒ R = 0
+    -- Reverse: use R * Q = Q (diagonal picks out l = 0, others kill by horbPair)
+    have hRQ : (orbitSumProjection (D := D) (m := m) T Q) * Q = Q := by
+      simp only [orbitSumProjection, Finset.sum_mul]
+      rw [Finset.sum_eq_single (0 : Fin m)]
+      · simp only [Fin.val_zero, pow_zero, Module.End.one_apply]
+        exact hQproj.2
+      · intros l _ hne
+        have hzero := horbPair l 0 hne
+        simpa using hzero
+      · intro hmem
+        exact absurd (Finset.mem_univ (0 : Fin m)) hmem
+    refine ⟨?_, ?_⟩
+    · intro hQ0
+      simp only [orbitSumProjection, hQ0]
+      simp
+    · intro hR0
+      have := hRQ
+      rw [hR0] at this
+      simpa using this.symm
+  · -- Full-sector equivalence
+    -- Forward: Q = P k ⇒ R = orbitSumProjection T (P k) = 1 (by full_sector lemma)
+    -- Reverse: use P k * R * P k = Q, so R = 1 ⇒ P k = Q
+    have hPRP : P k * (orbitSumProjection (D := D) (m := m) T Q) * P k = Q := by
+      simp only [orbitSumProjection, Finset.mul_sum, Finset.sum_mul]
+      rw [Finset.sum_eq_single (0 : Fin m)]
+      · simp only [Fin.val_zero, pow_zero, Module.End.one_apply]
+        calc P k * Q * P k = Q * P k := by rw [hPQ]
+          _ = Q := hQP
+      · intros l _ hne
+        have hsupp_l := hsupp l
+        have h_left : P (k - l) * (T ^ (l : ℕ)) Q = (T ^ (l : ℕ)) Q := hsupp_l.2
+        have hPneq : (k - l : Fin m) ≠ k := by
+          intro heq
+          apply hne
+          have hk0 : k - l = k - 0 := by simpa using heq
+          exact sub_right_injective hk0
+        have hP0 : P k * P (k - l) = 0 := hPPair (Ne.symm hPneq)
+        calc P k * ((T ^ (l : ℕ)) Q) * P k
+            = P k * (P (k - l) * (T ^ (l : ℕ)) Q) * P k := by rw [h_left]
+          _ = (P k * P (k - l)) * ((T ^ (l : ℕ)) Q) * P k := by
+                rw [← mul_assoc (P k) (P (k - l)) ((T ^ (l : ℕ)) Q)]
+          _ = 0 * ((T ^ (l : ℕ)) Q) * P k := by rw [hP0]
+          _ = 0 := by simp
+      · intro hmem
+        exact absurd (Finset.mem_univ (0 : Fin m)) hmem
+    refine ⟨?_, ?_⟩
+    · intro hQ
+      rw [hQ]
+      exact orbitSumProjection_eq_one_of_full_sector
+        (T := T) (P := P) hPsum hcyclic k
+    · intro hR1
+      have := hPRP
+      rw [hR1] at this
+      simpa [(hPproj k).2] using this.symm
+
 /-- MPS-specialized wrapper: once the orbit-sum lift is constructed in the
 shape required by `isIrreducible_restriction_of_cyclic_decomp`, sector
 irreducibility follows immediately. -/
