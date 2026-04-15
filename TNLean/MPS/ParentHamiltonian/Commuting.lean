@@ -94,8 +94,6 @@ theorem rfp_implies_nncph (A : MPSTensor d D) [NeZero D]
     (N : ℕ) (hN : 2 ≤ N) :
     IsNNCPH A N := by
   classical
-  have _hInj : IsInjective A :=
-    rfp_nt_structural_of_leftCanonical A hNT hRFP hLeft
   -- Missing bridge:
   -- 1. Upgrade the injective rank-one transfer-map classification to the full
   --    Appendix B product-of-entangled-pairs decomposition.

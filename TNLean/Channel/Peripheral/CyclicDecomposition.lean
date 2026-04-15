@@ -237,8 +237,11 @@ theorem fixed_eq_scalar_of_irreducible_unital
   have hHerm_herm : (X + Xᴴ).IsHermitian := by
     simp only [IsHermitian, conjTranspose_add, conjTranspose_conjTranspose, add_comm]
   have hSkew_herm : (Complex.I • (X - Xᴴ)).IsHermitian := by
-    ext i j
-    simp [sub_eq_add_neg] -- TODO: squeeze
+    refine Matrix.IsHermitian.ext ?_
+    intro i j
+    change star (Complex.I * (X j i - star (X i j))) = Complex.I * (X i j - star (X j i))
+    simp only [Complex.star_def, StarMul.star_mul, star_sub, Complex.conj_I,
+      Complex.conj_conj]
     ring
   rcases hermitian_fixed_eq_scalar_of_irreducible_unital
       (K := K) hUnital hIrr (X + Xᴴ) hHerm_herm hHerm_fix with ⟨a, ha⟩
