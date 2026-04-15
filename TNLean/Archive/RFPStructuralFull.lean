@@ -8,31 +8,31 @@ import TNLean.Channel.KrausRepresentation
 import Mathlib.LinearAlgebra.Dimension.Constructions
 
 /-!
-# Scaffolding: full structural form for RFP tensors (Lemma B.1)
+# Full structural form for RFP tensors (Lemma B.1)
 
-This file contains the **statement** of the full Appendix B structural decomposition
-for renormalization fixed-point tensors (arXiv:1606.00608, Lemma B.1). The proof
-is deferred (marked `sorry`) pending the forward Kraus-to-isometry extraction
-step after the rank-one classification of idempotent irreducible CP maps.
+This file proves the full Appendix B structural decomposition for
+renormalization fixed-point tensors (arXiv:1606.00608, Lemma B.1). The main
+result is `rfp_nt_structural_full`, which shows that a normal tensor in
+canonical form II and at a renormalization fixed point admits a decomposition
+`A i = X * diagonal Λ * U i * X⁻¹`, where `Λ` is diagonal positive with trace
+`1` and the family `U` is isometric in the physical index.
 
-This file lives in `Archive/` because `sorry` is a proof-integrity blocker
-for core modules (see `docs/PROOF_INTEGRITY.md`). Tracked by issue #233.
+The module remains in `Archive/` because it packages a long, self-contained
+appendix proof whose implementation details are useful to keep opt-in, even
+though the theorem itself is now fully proved.
 
 ## Proof strategy
 
-The fully-proved stepping stones are:
+The proof assembles the following ingredients:
 * `rfp_nt_structural_of_leftCanonical` — left-canonical normal RFP ⟹ injective
 * `rfp_nt_cfii_diagonal_fixedPoint` — after unitary conjugation, a diagonal
   positive-definite fixed point for the transfer map exists
-* `transferMap_eq_fixedPointProj_of_isRFP_injective` — rank-one classification:
-  for an injective left-canonical RFP tensor, the transfer map equals
-  `fixedPointProj ρ`, i.e. `X ↦ (tr X / tr ρ) • ρ`
-
-The remaining gap:
-1. ~~Classify idempotent irreducible CP maps as rank-one projectors~~ ✓ Done
-2. Extract the physical-index isometry family from the rank-one structure
-   via Kraus freedom (construct canonical Kraus operators for `fixedPointProj`
-   with diagonal PosDef fixed point, then apply `kraus_rectangular_freedom'`)
+* `transferMap_eq_fixedPointProj_of_isRFP_injective` — for an injective
+  left-canonical RFP tensor, the transfer map equals `fixedPointProj ρ`, i.e.
+  `X ↦ (tr X / tr ρ) • ρ`
+* an explicit normalized matrix-unit Kraus family for `fixedPointProj ρ`,
+  followed by `kraus_rectangular_freedom'` to extract the physical-index
+  isometry family
 -/
 
 open scoped Matrix ComplexOrder BigOperators

@@ -26,12 +26,12 @@ def toMPOTensor (A : MPSTensor d D) : MPOTensor d D :=
 
 @[simp] lemma toMPOTensor_apply_same (A : MPSTensor d D) (i : Fin d) :
     A.toMPOTensor i i = A i := by
-  simpa [toMPOTensor]
+  simp [toMPOTensor]
 
 @[simp] lemma toMPOTensor_apply_ne (A : MPSTensor d D) {i j : Fin d}
     (hij : i ≠ j) :
     A.toMPOTensor i j = 0 := by
-  simpa [toMPOTensor, hij]
+  simp [toMPOTensor, hij]
 
 /-- The transfer map of the diagonal pure-state embedding is exactly the
 original MPS transfer map. -/
