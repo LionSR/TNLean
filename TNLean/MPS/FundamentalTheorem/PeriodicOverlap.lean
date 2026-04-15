@@ -15,6 +15,7 @@ import TNLean.MPS.Irreducible.Adjoint
 import TNLean.MPS.SharedInfra.KrausAdjointSetup
 import TNLean.Spectral.SpectralGapNT
 import TNLean.Channel.Irreducible.PerronFrobenius
+import TNLean.Channel.Schwarz.MultiplicativeDomainFull
 
 import TNLean.Algebra.GramMatrixLI
 import Mathlib.Analysis.InnerProductSpace.l2Space
@@ -690,10 +691,10 @@ private lemma cornerRestriction_primitive_and_irreducible_of_cyclicDecomp
     {dim : Fin m → ℕ}
     (blocks :
       (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k))
-    (hBlocks_lc :
+    (_hBlocks_lc :
       ∀ k, ∑ i : Fin (blockPhysDim d m),
         (blocks k i)ᴴ * blocks k i = 1)
-    (hBlocks_mpv :
+    (_hBlocks_mpv :
       SameMPV₂ (blockTensor A m)
         (toTensorFromBlocks (μ := fun _ => 1) blocks))
     {P : Fin m → MatrixAlg D}
@@ -717,6 +718,43 @@ private lemma cornerRestriction_primitive_and_irreducible_of_cyclicDecomp
       IsIrreducibleOnCorner (P u)
         ((transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ^ m) := by
   sorry
+
+/-- **Missing compression-transfer bridge.**
+
+This is the precise local API needed from
+`exists_compressedTensor_of_supported_projection`: if `C` is the sector tensor
+obtained by compressing a `P`-supported tensor `B`, then the adjoint transfer
+map of `C` is the matrix representative of the corner restriction of the
+ambient adjoint transfer map of `B`.
+
+The current compression theorem exposes only the trace identity
+`mpv C = tr(P · word(B))`.  The proof of this lemma should expose the
+spectral compression isometry used in `CyclicSectors.lean` and show that it
+intertwines the two adjoint transfer maps; irreducibility then follows because
+that isometry identifies orthogonal projections in `M_n(ℂ)` with orthogonal
+subprojections of `P`.
+-/
+private lemma compressedTensor_adjointTransferMap_cornerBridge
+    {r D n : ℕ} [NeZero n]
+    (B : MPSTensor r D) (C : MPSTensor r n) (P : MatrixAlg D)
+    (T : MatrixEnd D)
+    (hT :
+      transferMap (d := r) (D := D) (fun i => (B i)ᴴ) = T)
+    (hPproj : IsOrthogonalProjection P)
+    (hComm : ∀ i : Fin r, P * B i = B i * P)
+    (hTrace :
+      ∀ (N : ℕ) (σ : Fin N → Fin r),
+        mpv C σ = (P * evalWord B (List.ofFn σ)).trace)
+    (hInv : PreservesCorner P T)
+    (hCornerPrim :
+      _root_.IsPrimitive (cornerRestriction P T hInv))
+    (hCornerIrr : IsIrreducibleOnCorner P T) :
+    _root_.IsPrimitive
+      (transferMap (d := r) (D := n) (fun i => (C i)ᴴ)) ∧
+      IsIrreducibleMap
+        (transferMap (d := r) (D := n) (fun i => (C i)ᴴ)) := by
+  sorry
+
 /-- The missing compressed-sector identification.
 
 For a cyclic sector decomposition, the adjoint transfer map of the compressed
@@ -755,7 +793,19 @@ private lemma compressedSector_adjointTransferMap_cornerBridge_of_cyclicDecomp
       IsIrreducibleMap
         (transferMap (d := blockPhysDim d m) (D := dim u)
           (fun i => (blocks u i)ᴴ)) := by
-  sorry
+  haveI : NeZero (dim u) := ⟨hNonzero⟩
+  let T : MatrixEnd D :=
+    (transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ^ m
+  have hT :
+      transferMap (d := blockPhysDim d m) (D := D)
+          (fun i => (blockTensor A m i)ᴴ) =
+        T := by
+    ext X : 1
+    exact transferMap_adjoint_blocked_eq_pow A m X
+  exact
+    compressedTensor_adjointTransferMap_cornerBridge
+      (B := blockTensor A m) (C := blocks u) (P := P u) (T := T)
+      hT (hPproj u) (hComm u) (hTrace u) hInv hCornerPrim hCornerIrr
 
 private lemma adjointTransferMap_primitive_and_irreducible_sectorBlock_of_cyclicDecomp
     [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
