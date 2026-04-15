@@ -201,480 +201,6 @@ private theorem exists_cyclic_sector_decomp_after_blocking_of_isPeriodic
   obtain ⟨hTrace, hNondeg⟩ := hTraceNondeg
   exact ⟨dim, blocks, hLC, hMPV, ⟨P, hPproj, hPsum, hCyclic, hComm, hTrace⟩, hNondeg⟩
 
-/-! ## Self-overlap (first paragraph of Appendix A) -/
-
-private theorem mpvOverlap_blockTensor_self_eq
-    [NeZero D] (A : MPSTensor d D) (L N : ℕ) :
-    mpvOverlap (d := blockPhysDim d L) (blockTensor (d := d) (D := D) A L)
-        (blockTensor (d := d) (D := D) A L) N =
-      mpvOverlap (d := d) A A (N * L) := by
-  rw [← trace_mixedTransferMap_pow_eq_mpvOverlap
-      (A := blockTensor (d := d) (D := D) A L)
-      (B := blockTensor (d := d) (D := D) A L) N]
-  rw [← trace_mixedTransferMap_pow_eq_mpvOverlap (A := A) (B := A) (N * L)]
-  simp [mixedTransferMap_self, transferMap_blockTensor, pow_mul, Nat.mul_comm]
-
-/-- Orthogonal-corner rigidity for compressed cyclic sectors.
-
-This is the missing linear-algebra bridge behind the sector separation statement:
-if two compressed sectors come from orthogonal projections in the same cyclic
-decomposition, their trace functionals cannot be related by a nonzero
-gauge-phase transform.  The proof should use the trace identities
-`mpv(blocks k) = tr(P k · -)`, the cyclic corner structure, and
-`P u * P v = 0`.
-
-Keeping this as a narrow helper lets the main sector-separation lemma expose all
-currently available API facts instead of hiding the projection argument behind a
-top-level `sorry`. -/
-private lemma not_gaugePhaseEquiv_of_orthogonal_cyclicSector_traces
-    [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
-    {dim : Fin m → ℕ}
-    (blocks :
-      (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k))
-    {P : Fin m → MatrixAlg D}
-    (hPproj : ∀ k, IsOrthogonalProjection (P k))
-    (hPsum : ∑ k : Fin m, P k = 1)
-    (hCyclic :
-      ∀ k, transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k)
-    (hComm :
-      ∀ k (i : Fin (blockPhysDim d m)),
-        P k * (blockTensor A m) i = (blockTensor A m) i * P k)
-    (hTrace :
-      ∀ k (N : ℕ) (σ : Fin N → Fin (blockPhysDim d m)),
-        mpv (blocks k) σ = (P k * evalWord (blockTensor A m) (List.ofFn σ)).trace)
-    (hNondeg : ∀ k, dim k ≠ 0)
-    {u v : Fin m} (huv : u ≠ v) (hdim : dim u = dim v)
-    (hOrth : P u * P v = 0) :
-    ¬ GaugePhaseEquiv
-      (cast (congr_arg (MPSTensor (blockPhysDim d m)) hdim) (blocks u))
-      (blocks v) := by
-  sorry
-
-/-- Distinct compressed sectors of a cyclic sector decomposition are not gauge-phase
-equivalent.
-
-Mathematically, a gauge-phase equivalence would identify the two compressed MPV traces.
-Through `IsCyclicSectorDecomp`, those traces are
-`tr(P u · evalWord(blockTensor A m) w)` and
-`tr(P v · evalWord(blockTensor A m) w)`.  The projections in a cyclic
-decomposition are orthogonal corners, so for `u ≠ v` these corner states cannot
-be related by an invertible gauge and nonzero scalar.
-
-The current cyclic-sector API exposes the trace formula and projection data but
-does not yet package this orthogonal-corner rigidity in a reusable theorem, so
-we isolate exactly that missing bridge here. -/
-private lemma sectorBlocks_not_gaugePhaseEquiv_of_ne
-    [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
-    (_hP : IsPeriodic m A)
-    {dim : Fin m → ℕ}
-    (blocks :
-      (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k))
-    (_hBlocks_lc :
-      ∀ k, ∑ i : Fin (blockPhysDim d m),
-        (blocks k i)ᴴ * blocks k i = 1)
-    (_hBlocks_mpv :
-      SameMPV₂ (blockTensor A m)
-        (toTensorFromBlocks (μ := fun _ => 1) blocks))
-    (hCyclic : IsCyclicSectorDecomp A blocks)
-    (hNondeg : ∀ k, dim k ≠ 0)
-    {u v : Fin m} (huv : u ≠ v) (hdim : dim u = dim v) :
-    ¬ GaugePhaseEquiv
-      (cast (congr_arg (MPSTensor (blockPhysDim d m)) hdim) (blocks u))
-      (blocks v) := by
-  obtain ⟨P, hPproj, hPsum, hCyclicP, hComm, hTrace⟩ := hCyclic
-  have hPairwise : Pairwise fun i j : Fin m => P i * P j = 0 :=
-    pairwise_mul_zero_of_orthogonalProjection_sum_one P hPproj hPsum
-  have hOrth : P u * P v = 0 := hPairwise huv
-  exact
-    not_gaugePhaseEquiv_of_orthogonal_cyclicSector_traces
-      A blocks hPproj hPsum hCyclicP hComm hTrace hNondeg huv hdim hOrth
-
-/-- Early local form of the compressed-sector spectral bridge.
-
-The public version `primitive_and_irreducible_sectorBlocks_of_cyclicDecomp` is
-proved later in this file, after the self-overlap section.  This local bridge
-keeps the present asymptotic proof close to the decomposition statement without
-reordering the larger file. -/
-private lemma sectorBlock_primitive_and_irreducible_of_cyclicSectorDecomp
-    [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
-    (hP : IsPeriodic m A)
-    {dim : Fin m → ℕ}
-    (blocks :
-      (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k))
-    (hBlocks_lc :
-      ∀ k, ∑ i : Fin (blockPhysDim d m),
-        (blocks k i)ᴴ * blocks k i = 1)
-    (hBlocks_mpv :
-      SameMPV₂ (blockTensor A m)
-        (toTensorFromBlocks (μ := fun _ => 1) blocks))
-    (hCyclic : IsCyclicSectorDecomp A blocks)
-    (u : Fin m) (hNonzero : dim u ≠ 0) :
-    _root_.IsPrimitive
-        (transferMap (d := blockPhysDim d m) (D := dim u) (blocks u))
-      ∧ IsIrreducibleTensor (blocks u) := by
-  sorry
-
-/-- Sector-asymptotic bridge for the self-overlap proof.
-
-After blocking by the period, the cyclic sector decomposition should make each
-compressed sector a primitive normalized tensor, while distinct sectors are
-asymptotically orthogonal.
-
-This is the remaining bridge from the cyclic-sector decomposition API to the
-overlap-asymptotic API. -/
-private theorem sectorOverlap_tendsto_delta_of_cyclicSectorDecomp
-    [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
-    (hP : IsPeriodic m A)
-    {dim : Fin m → ℕ}
-    (blocks :
-      (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k))
-    (hBlocks_lc :
-      ∀ k, ∑ i : Fin (blockPhysDim d m),
-        (blocks k i)ᴴ * blocks k i = 1)
-    (hBlocks_mpv :
-      SameMPV₂ (blockTensor A m)
-        (toTensorFromBlocks (μ := fun _ => 1) blocks))
-    (hCyclic : IsCyclicSectorDecomp A blocks)
-    (hNondeg : ∀ k, dim k ≠ 0)
-    (u v : Fin m) :
-    Tendsto
-      (fun k => mpvOverlap (d := blockPhysDim d m) (blocks u) (blocks v) k)
-      atTop (nhds (if u = v then (1 : ℂ) else 0)) := by
-  classical
-  by_cases huv : u = v
-  · subst v
-    haveI : NeZero (dim u) := ⟨hNondeg u⟩
-    obtain ⟨hPrim, hIrr⟩ :=
-      sectorBlock_primitive_and_irreducible_of_cyclicSectorDecomp
-        A hP blocks hBlocks_lc hBlocks_mpv hCyclic u (hNondeg u)
-    obtain ⟨ρ, hρ_psd, hρ_ne, hρ_fix, htr, hgap⟩ :=
-      spectralRadius_compl_lt_one_of_peripheralPrimitive_of_irreducible
-        (A := blocks u) hIrr (hBlocks_lc u) hPrim
-    have hSelf :
-        Tendsto
-          (fun k =>
-            mpvOverlap (d := blockPhysDim d m) (blocks u) (blocks u) k)
-          atTop (nhds (1 : ℂ)) :=
-      mpvOverlap_tendsto_one_of_transfer_spectralRadius_compl_lt_one
-        (blocks u) (hBlocks_lc u) ρ hρ_fix hρ_ne hρ_psd (by
-          simpa using hgap)
-    simpa using hSelf
-  · have hIrr_u : IsIrreducibleTensor (blocks u) :=
-      (sectorBlock_primitive_and_irreducible_of_cyclicSectorDecomp
-        A hP blocks hBlocks_lc hBlocks_mpv hCyclic u (hNondeg u)).2
-    have hIrr_v : IsIrreducibleTensor (blocks v) :=
-      (sectorBlock_primitive_and_irreducible_of_cyclicSectorDecomp
-        A hP blocks hBlocks_lc hBlocks_mpv hCyclic v (hNondeg v)).2
-    haveI : NeZero (dim u) := ⟨hNondeg u⟩
-    haveI : NeZero (dim v) := ⟨hNondeg v⟩
-    by_cases hdim : dim u = dim v
-    · have hNot :
-          ¬ GaugePhaseEquiv
-            (cast (congr_arg (MPSTensor (blockPhysDim d m)) hdim) (blocks u))
-            (blocks v) :=
-        sectorBlocks_not_gaugePhaseEquiv_of_ne
-          A hP blocks hBlocks_lc hBlocks_mpv hCyclic hNondeg huv hdim
-      have hZero :
-          Tendsto
-            (fun k =>
-              mpvOverlap (d := blockPhysDim d m) (blocks u) (blocks v) k)
-            atTop (nhds (0 : ℂ)) :=
-        mpvOverlap_tendsto_zero_of_not_gaugePhaseEquiv_cast_left_of_irreducible_TP
-          hdim (blocks u) (blocks v) hIrr_u hIrr_v
-          (hBlocks_lc u) (hBlocks_lc v) hNot
-      simpa [huv] using hZero
-    · have hZero :
-          Tendsto
-            (fun k =>
-              mpvOverlap (d := blockPhysDim d m) (blocks u) (blocks v) k)
-            atTop (nhds (0 : ℂ)) :=
-        mpvOverlap_tendsto_zero_of_dim_ne_of_irreducible_TP
-          (blocks u) (blocks v) hIrr_u hIrr_v
-          (hBlocks_lc u) (hBlocks_lc v) hdim
-      simpa [huv] using hZero
-
-/-- Self-overlap limit for a blocked tensor from a cyclic sector decomposition.
-
-If `blockTensor A m` splits as the sum of compressed cyclic sector tensors
-`blocks u`, each sector is normalized to have self-overlap tending to `1`, and
-distinct sectors are asymptotically orthogonal. Expanding the blocked
-self-overlap as the finite double sum over sector overlaps therefore gives the
-limit `m`, one contribution from each sector. -/
-private theorem blockTensor_selfOverlap_tendsto_of_cyclicSectorDecomp
-    [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
-    (hP : IsPeriodic m A)
-    {dim : Fin m → ℕ}
-    (blocks :
-      (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k))
-    (hBlocks_lc :
-      ∀ k, ∑ i : Fin (blockPhysDim d m),
-        (blocks k i)ᴴ * blocks k i = 1)
-    (hBlocks_mpv :
-      SameMPV₂ (blockTensor A m)
-        (toTensorFromBlocks (μ := fun _ => 1) blocks))
-    (hCyclic : IsCyclicSectorDecomp A blocks)
-    (hNondeg : ∀ k, dim k ≠ 0) :
-    Tendsto
-      (fun k => mpvOverlap (d := blockPhysDim d m)
-        (blockTensor (d := d) (D := D) A m)
-        (blockTensor (d := d) (D := D) A m) k)
-      atTop (nhds (m : ℂ)) := by
-  classical
-  have hDecomp : ∀ N (σ : Fin N → Fin (blockPhysDim d m)),
-      mpv (blockTensor (d := d) (D := D) A m) σ =
-        ∑ u : Fin m, mpv (blocks u) σ := by
-    intro N σ
-    calc
-      mpv (blockTensor (d := d) (D := D) A m) σ =
-          mpv (toTensorFromBlocks (d := blockPhysDim d m)
-            (μ := fun _ : Fin m => (1 : ℂ)) blocks) σ := hBlocks_mpv N σ
-      _ = ∑ u : Fin m, ((1 : ℂ) ^ N) • mpv (blocks u) σ := by
-            rw [mpv_toTensorFromBlocks_eq_sum]
-      _ = ∑ u : Fin m, mpv (blocks u) σ := by simp
-  have hOverlap_eq : ∀ N,
-      mpvOverlap (d := blockPhysDim d m)
-          (blockTensor (d := d) (D := D) A m)
-          (blockTensor (d := d) (D := D) A m) N =
-        ∑ u : Fin m, ∑ v : Fin m,
-          mpvOverlap (d := blockPhysDim d m) (blocks u) (blocks v) N := by
-    intro N
-    calc
-      mpvOverlap (d := blockPhysDim d m)
-          (blockTensor (d := d) (D := D) A m)
-          (blockTensor (d := d) (D := D) A m) N
-        = ∑ σ : Cfg (blockPhysDim d m) N,
-          mpv (blockTensor (d := d) (D := D) A m) σ *
-            star (mpv (blockTensor (d := d) (D := D) A m) σ) := rfl
-      _ = ∑ σ : Cfg (blockPhysDim d m) N,
-            (∑ u : Fin m, mpv (blocks u) σ) *
-              star (∑ v : Fin m, mpv (blocks v) σ) := by
-              refine Finset.sum_congr rfl ?_
-              intro σ _
-              rw [hDecomp N σ]
-      _ = ∑ σ : Cfg (blockPhysDim d m) N,
-            ∑ u : Fin m, ∑ v : Fin m,
-              mpv (blocks u) σ * star (mpv (blocks v) σ) := by
-              refine Finset.sum_congr rfl ?_
-              intro σ _
-              rw [star_sum, Finset.sum_mul]
-              refine Finset.sum_congr rfl ?_
-              intro u _
-              rw [Finset.mul_sum]
-      _ = ∑ u : Fin m, ∑ σ : Cfg (blockPhysDim d m) N,
-            ∑ v : Fin m, mpv (blocks u) σ * star (mpv (blocks v) σ) := by
-              rw [Finset.sum_comm]
-      _ = ∑ u : Fin m, ∑ v : Fin m, ∑ σ : Cfg (blockPhysDim d m) N,
-            mpv (blocks u) σ * star (mpv (blocks v) σ) := by
-              refine Finset.sum_congr rfl ?_
-              intro u _
-              rw [Finset.sum_comm]
-      _ = ∑ u : Fin m, ∑ v : Fin m,
-            mpvOverlap (d := blockPhysDim d m) (blocks u) (blocks v) N := by
-              simp [mpvOverlap]
-  have hInner : ∀ u : Fin m,
-      Tendsto
-        (fun N => ∑ v : Fin m,
-          mpvOverlap (d := blockPhysDim d m) (blocks u) (blocks v) N)
-        atTop (nhds (∑ v : Fin m, if u = v then (1 : ℂ) else 0)) := by
-    intro u
-    exact tendsto_finset_sum (s := Finset.univ) fun v _ =>
-      sectorOverlap_tendsto_delta_of_cyclicSectorDecomp
-        A hP blocks hBlocks_lc hBlocks_mpv hCyclic hNondeg u v
-  have hSum :
-      Tendsto
-        (fun N => ∑ u : Fin m, ∑ v : Fin m,
-          mpvOverlap (d := blockPhysDim d m) (blocks u) (blocks v) N)
-        atTop (nhds (∑ u : Fin m, ∑ v : Fin m, if u = v then (1 : ℂ) else 0)) := by
-    exact tendsto_finset_sum (s := Finset.univ) fun u _ => hInner u
-  have hLimit :
-      (∑ u : Fin m, ∑ v : Fin m, if u = v then (1 : ℂ) else 0) = (m : ℂ) := by
-    simp
-  simpa [hLimit] using Filter.Tendsto.congr (fun N => (hOverlap_eq N).symm) hSum
-
-/-- Self-overlap of a periodic tensor: `⟨V_N(A)|V_N(A)⟩ = tr(E_A^N)`, and
-since the peripheral eigenvalues are `m`-th roots of unity, each contributing 1
-at multiples of `m`, the limit along `m·ℕ` equals `m`.
-
-This is the first displayed equation of Appendix A. -/
-theorem periodicSelfOverlap_tendsto
-    [NeZero D] (A : MPSTensor d D) {m : ℕ}
-    (hP : IsPeriodic m A) :
-    Tendsto (fun k => mpvOverlap A A (m * k)) atTop (nhds (m : ℂ)) := by
-  by_cases hm : m = 1
-  · subst hm
-    have hPrim : PeripheralSpectrum.IsPrimitive (transferMap (d := d) (D := D) A) := by
-      simpa using hP.peripheral_eq
-    simpa using
-      (overlap_tendsto_one_of_peripheralPrimitive_of_irreducible
-        (A := A) hP.irreducible hP.leftCanonical hPrim)
-  · haveI : NeZero m := ⟨Nat.ne_of_gt hP.period_pos⟩
-    obtain ⟨dim, blocks, hBlocks_lc, hBlocks_mpv, hCyclic, hNondeg⟩ :=
-      exists_cyclic_sector_decomp_after_blocking_of_isPeriodic A hP
-    have hBlocked :
-        Tendsto
-          (fun k => mpvOverlap (d := blockPhysDim d m)
-            (blockTensor (d := d) (D := D) A m)
-            (blockTensor (d := d) (D := D) A m) k)
-          atTop (nhds (m : ℂ)) :=
-      blockTensor_selfOverlap_tendsto_of_cyclicSectorDecomp
-        A hP blocks hBlocks_lc hBlocks_mpv hCyclic hNondeg
-    refine hBlocked.congr' ?_
-    filter_upwards with k
-    rw [mpvOverlap_blockTensor_self_eq (A := A) (L := m) (N := k)]
-    simp [Nat.mul_comm]
-
-/-! ## Case 1: Different periods → orthogonal (Appendix A, first case) -/
-
-/-- Cancellation: `X⁻¹ * (X * Y * Xᴴ) * (X⁻¹)ᴴ = Y`. -/
-private theorem gl_conj_cancel (X : GL (Fin D) ℂ)
-    (Y : Matrix (Fin D) (Fin D) ℂ) :
-    X⁻¹.val * (X.val * Y * X.valᴴ) * X⁻¹.valᴴ = Y := by
-  have h1 : X⁻¹.val * X.val = 1 := Units.inv_mul X
-  have h2 : X.valᴴ * X⁻¹.valᴴ = 1 := by
-    rw [← Matrix.conjTranspose_mul, Units.inv_mul]; simp
-  calc _ = X⁻¹.val * X.val * Y * (X.valᴴ * X⁻¹.valᴴ) := by
-          simp only [Matrix.mul_assoc]
-      _ = 1 * Y * 1 := by rw [h1, h2]
-      _ = Y := by simp
-
-/-- The conjugation `Y ↦ X Y Xᴴ` as a linear equivalence on matrices. -/
-private noncomputable def glConjEquiv (X : GL (Fin D) ℂ) :
-    Matrix (Fin D) (Fin D) ℂ ≃ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ :=
-  LinearEquiv.ofLinear
-    ((LinearMap.mulLeft ℂ X.val).comp (LinearMap.mulRight ℂ X.valᴴ))
-    ((LinearMap.mulLeft ℂ X⁻¹.val).comp (LinearMap.mulRight ℂ X⁻¹.valᴴ))
-    (LinearMap.ext fun Y => by
-      simp only [LinearMap.comp_apply, LinearMap.mulLeft_apply,
-        LinearMap.mulRight_apply, LinearMap.id_apply, ← Matrix.mul_assoc]
-      rw [Units.mul_inv, one_mul, Matrix.mul_assoc Y,
-        show X⁻¹.valᴴ * X.valᴴ = 1 from by
-          rw [← Matrix.conjTranspose_mul, Units.mul_inv]; simp,
-        mul_one])
-    (LinearMap.ext fun Y => by
-      simp only [LinearMap.comp_apply, LinearMap.mulLeft_apply,
-        LinearMap.mulRight_apply, LinearMap.id_apply, ← Matrix.mul_assoc]
-      rw [Units.inv_mul, one_mul, Matrix.mul_assoc Y,
-        show X.valᴴ * X⁻¹.valᴴ = 1 from by
-          rw [← Matrix.conjTranspose_mul, Units.inv_mul]; simp,
-        mul_one])
-
-/-- **GaugePhaseEquiv preserves periods.**
-
-If two periodic tensors (same bond dimension) are gauge-phase equivalent,
-they must have the same period.
-
-arXiv:0909.5347, via eigenvalue uniqueness (Wolf Thm 6.3). -/
-private theorem period_eq_of_gaugePhaseEquiv_of_isPeriodic
-    [NeZero D] {A B : MPSTensor d D}
-    {m_a m_b : ℕ} (hA : IsPeriodic m_a A) (hB : IsPeriodic m_b B)
-    (hGPE : GaugePhaseEquiv A B) : m_a = m_b := by
-  obtain ⟨X, ζ, hζ_ne, hBi⟩ := hGPE
-  -- PSD fixed points
-  obtain ⟨ρ, hρ_psd, hρ_ne, hρ_fix⟩ :=
-    exists_posSemidef_fixedPoint A hA.leftCanonical (NeZero.pos D)
-  obtain ⟨τ, hτ_psd, hτ_ne, hτ_fix⟩ :=
-    exists_posSemidef_fixedPoint B hB.leftCanonical (NeZero.pos D)
-  -- E_B is irreducible CP
-  have hB_irrMap : IsIrreducibleMap (transferMap (d := d) (D := D) B) :=
-    isIrreducibleCP_transferMap_of_isIrreducibleTensor B hB.irreducible
-  have hB_cp : IsCPMap (transferMap (d := d) (D := D) B) := transferMap_isCPMap B
-  -- Transfer map scaling: B = ζ • (X A X⁻¹) implies E_B = |ζ|² E_{XAX⁻¹}
-  have hEB_eq : ∀ Y, transferMap (d := d) (D := D) B Y =
-      (ζ * starRingEnd ℂ ζ) •
-        (X.val * transferMap (d := d) (D := D) A
-          (X⁻¹.val * Y * X⁻¹.valᴴ) * X.valᴴ) := by
-    intro Y
-    simp only [transferMap_apply]
-    simp_rw [hBi]
-    simp only [Matrix.conjTranspose_smul, smul_mul_assoc, mul_smul_comm,
-      smul_smul, ← Finset.smul_sum, Matrix.conjTranspose_mul,
-      Finset.mul_sum, Finset.sum_mul, Matrix.mul_assoc]
-    congr 1; exact mul_comm _ _
-  -- σ = X ρ Xᴴ is a PSD eigenvector of E_B with eigenvalue |ζ|²
-  set σ := X.val * ρ * X.valᴴ
-  have hσ_psd : σ.PosSemidef :=
-    hρ_psd.mul_mul_conjTranspose_same X.val
-  have hσ_ne : σ ≠ 0 := by
-    intro h
-    apply hρ_ne
-    have h1 := congr_arg (X⁻¹.val * · * X⁻¹.valᴴ) h
-    simp only [Matrix.mul_zero, Matrix.zero_mul] at h1
-    rwa [gl_conj_cancel] at h1
-  have hEB_σ : transferMap (d := d) (D := D) B σ = (ζ * starRingEnd ℂ ζ) • σ := by
-    simp only [σ, hEB_eq, gl_conj_cancel, hρ_fix]
-  -- ζ * star ζ = ‖ζ‖²
-  have hζζ_real : ζ * starRingEnd ℂ ζ = (↑(‖ζ‖ ^ 2) : ℂ) := by
-    rw [Complex.mul_conj, Complex.normSq_eq_norm_sq]
-  have hζζ_pos : (0 : ℝ) < ‖ζ‖ ^ 2 := by positivity
-  -- By eigenvalue uniqueness (Wolf 6.3): ‖ζ‖² = 1
-  have h_eig_eq : ‖ζ‖ ^ 2 = 1 :=
-    (eigenvalue_unique_of_irreducible_cp
-      (transferMap (d := d) (D := D) B) hB_cp hB_irrMap
-      τ σ 1 (‖ζ‖ ^ 2) hτ_psd hτ_ne one_pos hσ_psd hσ_ne hζζ_pos
-      (by simp [hτ_fix]) (by rw [hEB_σ, hζζ_real])).symm
-  have hζ_norm : ‖ζ‖ = 1 := by nlinarith [norm_nonneg ζ]
-  -- RepeatedBlocks A B with phase ζ⁻¹
-  have hRepeated : RepeatedBlocks A B := by
-    refine ⟨ζ⁻¹, X⁻¹, by rw [norm_inv, hζ_norm, inv_one], ?_⟩
-    intro i
-    -- Goal: A i = ζ⁻¹ • (↑(X⁻¹) * B i * ↑((X⁻¹)⁻¹))
-    -- Simplify (X⁻¹)⁻¹ = X
-    simp only [inv_inv]
-    -- Goal: A i = ζ⁻¹ • (X⁻¹.val * B i * X.val)
-    -- Show X⁻¹ * B i * X = ζ • A i
-    have hconj : X⁻¹.val * B i * X.val = ζ • A i := by
-      rw [hBi i, mul_smul_comm, smul_mul_assoc]
-      congr 1
-      calc X⁻¹.val * (X.val * A i * X⁻¹.val) * X.val
-          = X⁻¹.val * X.val * A i * (X⁻¹.val * X.val) := by
-            simp only [Matrix.mul_assoc]
-        _ = 1 * A i * 1 := by rw [Units.inv_mul]
-        _ = A i := by simp
-    rw [hconj, smul_smul, inv_mul_cancel₀ hζ_ne, one_smul]
-  -- Peripheral eigenvalue equality via conjugation
-  have hSpec : peripheralEigenvalues (transferMap (d := d) (D := D) A) =
-      peripheralEigenvalues (transferMap (d := d) (D := D) B) := by
-    have hEB_is_conj : transferMap (d := d) (D := D) B =
-        (glConjEquiv X).conj (transferMap (d := d) (D := D) A) := by
-      apply LinearMap.ext; intro Y
-      rw [hEB_eq, hζζ_real, show (↑(‖ζ‖ ^ 2) : ℂ) = (1 : ℂ) from by simp [h_eig_eq],
-        one_smul,
-        show (glConjEquiv X).conj (transferMap (d := d) (D := D) A) Y =
-          X.val * (transferMap (d := d) (D := D) A
-            (X⁻¹.val * (Y * X⁻¹.valᴴ)) * X.valᴴ) from rfl]
-      simp only [Matrix.mul_assoc]
-    rw [hEB_is_conj]
-    exact (peripheralEigenvalues_conj (glConjEquiv X)
-      (transferMap (d := d) (D := D) A)).symm
-  exact IsPeriodic.period_eq_of_repeatedBlocks hA hB hRepeated hSpec
-
-/-- If two periodic tensors have different periods `m_a ≠ m_b`, their overlap
-decays to zero.
-
-*Proof*: split on whether `D₁ = D₂`. If not, use dimension mismatch
-(`periodicOverlap_tendsto_zero_of_ne_dim`). If `D₁ = D₂`, assume for
-contradiction that `GaugePhaseEquiv A B`; then
-`period_eq_of_gaugePhaseEquiv_of_isPeriodic` gives `m_a = m_b`, contradicting
-`hne`. So `¬ GaugePhaseEquiv`, and `mpvOverlap_tendsto_zero_of_irreducible_TP`
-gives the result.
-
-This is the first substantial argument in Appendix A of arXiv:1708.00029. -/
-theorem periodicOverlap_tendsto_zero_of_ne_period
-    {D₁ D₂ : ℕ} [NeZero D₁] [NeZero D₂]
-    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
-    {m_a m_b : ℕ}
-    (hA : IsPeriodic m_a A) (hB : IsPeriodic m_b B)
-    (hne : m_a ≠ m_b) :
-    Tendsto (fun N => mpvOverlap A B N) atTop (nhds 0) := by
-  by_cases hD : D₁ = D₂
-  · subst hD
-    exact mpvOverlap_tendsto_zero_of_irreducible_TP A B
-      hA.irreducible hB.irreducible hA.leftCanonical hB.leftCanonical
-      (fun hGPE => hne (period_eq_of_gaugePhaseEquiv_of_isPeriodic hA hB hGPE))
-  · exact mpvOverlap_tendsto_zero_of_dim_ne_of_irreducible_TP A B
-      hA.irreducible hB.irreducible hA.leftCanonical hB.leftCanonical hD
-
-/-! ## Case 2: Same period, no sector match → orthogonal (Appendix A, second case) -/
 
 private lemma hLift_cyclicDecomp_mps_of_fixUpgrade_missingBridge
     [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
@@ -1112,6 +638,456 @@ lemma primitive_and_irreducible_sectorBlocks_of_cyclicDecomp
     ⟨hPrim,
       MPSTensor.isIrreducibleTensor_of_isIrreducibleMap_conjTranspose
         (d := blockPhysDim d m) (D := dim u) (blocks u) hIrrAdj⟩
+
+/-! ## Self-overlap (first paragraph of Appendix A) -/
+
+private theorem mpvOverlap_blockTensor_self_eq
+    [NeZero D] (A : MPSTensor d D) (L N : ℕ) :
+    mpvOverlap (d := blockPhysDim d L) (blockTensor (d := d) (D := D) A L)
+        (blockTensor (d := d) (D := D) A L) N =
+      mpvOverlap (d := d) A A (N * L) := by
+  rw [← trace_mixedTransferMap_pow_eq_mpvOverlap
+      (A := blockTensor (d := d) (D := D) A L)
+      (B := blockTensor (d := d) (D := D) A L) N]
+  rw [← trace_mixedTransferMap_pow_eq_mpvOverlap (A := A) (B := A) (N * L)]
+  simp [mixedTransferMap_self, transferMap_blockTensor, pow_mul, Nat.mul_comm]
+
+/-- Orthogonal-corner rigidity for compressed cyclic sectors.
+
+This is the missing linear-algebra bridge behind the sector separation statement:
+if two compressed sectors come from orthogonal projections in the same cyclic
+decomposition, their trace functionals cannot be related by a nonzero
+gauge-phase transform.  The proof should use the trace identities
+`mpv(blocks k) = tr(P k · -)`, the cyclic corner structure, and
+`P u * P v = 0`.
+
+Keeping this as a narrow helper lets the main sector-separation lemma expose all
+currently available API facts instead of hiding the projection argument behind a
+top-level `sorry`. -/
+private lemma not_gaugePhaseEquiv_of_orthogonal_cyclicSector_traces
+    [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
+    {dim : Fin m → ℕ}
+    (blocks :
+      (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k))
+    {P : Fin m → MatrixAlg D}
+    (hPproj : ∀ k, IsOrthogonalProjection (P k))
+    (hPsum : ∑ k : Fin m, P k = 1)
+    (hCyclic :
+      ∀ k, transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k)
+    (hComm :
+      ∀ k (i : Fin (blockPhysDim d m)),
+        P k * (blockTensor A m) i = (blockTensor A m) i * P k)
+    (hTrace :
+      ∀ k (N : ℕ) (σ : Fin N → Fin (blockPhysDim d m)),
+        mpv (blocks k) σ = (P k * evalWord (blockTensor A m) (List.ofFn σ)).trace)
+    (hNondeg : ∀ k, dim k ≠ 0)
+    {u v : Fin m} (huv : u ≠ v) (hdim : dim u = dim v)
+    (hOrth : P u * P v = 0) :
+    ¬ GaugePhaseEquiv
+      (cast (congr_arg (MPSTensor (blockPhysDim d m)) hdim) (blocks u))
+      (blocks v) := by
+  sorry
+
+/-- Distinct compressed sectors of a cyclic sector decomposition are not gauge-phase
+equivalent.
+
+Mathematically, a gauge-phase equivalence would identify the two compressed MPV traces.
+Through `IsCyclicSectorDecomp`, those traces are
+`tr(P u · evalWord(blockTensor A m) w)` and
+`tr(P v · evalWord(blockTensor A m) w)`.  The projections in a cyclic
+decomposition are orthogonal corners, so for `u ≠ v` these corner states cannot
+be related by an invertible gauge and nonzero scalar.
+
+The current cyclic-sector API exposes the trace formula and projection data but
+does not yet package this orthogonal-corner rigidity in a reusable theorem, so
+we isolate exactly that missing bridge here. -/
+private lemma sectorBlocks_not_gaugePhaseEquiv_of_ne
+    [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
+    (_hP : IsPeriodic m A)
+    {dim : Fin m → ℕ}
+    (blocks :
+      (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k))
+    (_hBlocks_lc :
+      ∀ k, ∑ i : Fin (blockPhysDim d m),
+        (blocks k i)ᴴ * blocks k i = 1)
+    (_hBlocks_mpv :
+      SameMPV₂ (blockTensor A m)
+        (toTensorFromBlocks (μ := fun _ => 1) blocks))
+    (hCyclic : IsCyclicSectorDecomp A blocks)
+    (hNondeg : ∀ k, dim k ≠ 0)
+    {u v : Fin m} (huv : u ≠ v) (hdim : dim u = dim v) :
+    ¬ GaugePhaseEquiv
+      (cast (congr_arg (MPSTensor (blockPhysDim d m)) hdim) (blocks u))
+      (blocks v) := by
+  obtain ⟨P, hPproj, hPsum, hCyclicP, hComm, hTrace⟩ := hCyclic
+  have hPairwise : Pairwise fun i j : Fin m => P i * P j = 0 :=
+    pairwise_mul_zero_of_orthogonalProjection_sum_one P hPproj hPsum
+  have hOrth : P u * P v = 0 := hPairwise huv
+  exact
+    not_gaugePhaseEquiv_of_orthogonal_cyclicSector_traces
+      A blocks hPproj hPsum hCyclicP hComm hTrace hNondeg huv hdim hOrth
+
+/-- Sector-asymptotic bridge for the self-overlap proof.
+
+After blocking by the period, the cyclic sector decomposition should make each
+compressed sector a primitive normalized tensor, while distinct sectors are
+asymptotically orthogonal.
+
+This is the remaining bridge from the cyclic-sector decomposition API to the
+overlap-asymptotic API. -/
+private theorem sectorOverlap_tendsto_delta_of_cyclicSectorDecomp
+    [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
+    (hP : IsPeriodic m A)
+    {dim : Fin m → ℕ}
+    (blocks :
+      (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k))
+    (hBlocks_lc :
+      ∀ k, ∑ i : Fin (blockPhysDim d m),
+        (blocks k i)ᴴ * blocks k i = 1)
+    (hBlocks_mpv :
+      SameMPV₂ (blockTensor A m)
+        (toTensorFromBlocks (μ := fun _ => 1) blocks))
+    (hCyclic : IsCyclicSectorDecomp A blocks)
+    (hNondeg : ∀ k, dim k ≠ 0)
+    (u v : Fin m) :
+    Tendsto
+      (fun k => mpvOverlap (d := blockPhysDim d m) (blocks u) (blocks v) k)
+      atTop (nhds (if u = v then (1 : ℂ) else 0)) := by
+  classical
+  by_cases huv : u = v
+  · subst v
+    haveI : NeZero (dim u) := ⟨hNondeg u⟩
+    obtain ⟨hPrim, hIrr⟩ :=
+      primitive_and_irreducible_sectorBlocks_of_cyclicDecomp
+        A hP blocks hBlocks_lc hBlocks_mpv hCyclic u (hNondeg u)
+    obtain ⟨ρ, hρ_psd, hρ_ne, hρ_fix, htr, hgap⟩ :=
+      spectralRadius_compl_lt_one_of_peripheralPrimitive_of_irreducible
+        (A := blocks u) hIrr (hBlocks_lc u) hPrim
+    have hSelf :
+        Tendsto
+          (fun k =>
+            mpvOverlap (d := blockPhysDim d m) (blocks u) (blocks u) k)
+          atTop (nhds (1 : ℂ)) :=
+      mpvOverlap_tendsto_one_of_transfer_spectralRadius_compl_lt_one
+        (blocks u) (hBlocks_lc u) ρ hρ_fix hρ_ne hρ_psd (by
+          simpa using hgap)
+    simpa using hSelf
+  · have hIrr_u : IsIrreducibleTensor (blocks u) :=
+      (primitive_and_irreducible_sectorBlocks_of_cyclicDecomp
+        A hP blocks hBlocks_lc hBlocks_mpv hCyclic u (hNondeg u)).2
+    have hIrr_v : IsIrreducibleTensor (blocks v) :=
+      (primitive_and_irreducible_sectorBlocks_of_cyclicDecomp
+        A hP blocks hBlocks_lc hBlocks_mpv hCyclic v (hNondeg v)).2
+    haveI : NeZero (dim u) := ⟨hNondeg u⟩
+    haveI : NeZero (dim v) := ⟨hNondeg v⟩
+    by_cases hdim : dim u = dim v
+    · have hNot :
+          ¬ GaugePhaseEquiv
+            (cast (congr_arg (MPSTensor (blockPhysDim d m)) hdim) (blocks u))
+            (blocks v) :=
+        sectorBlocks_not_gaugePhaseEquiv_of_ne
+          A hP blocks hBlocks_lc hBlocks_mpv hCyclic hNondeg huv hdim
+      have hZero :
+          Tendsto
+            (fun k =>
+              mpvOverlap (d := blockPhysDim d m) (blocks u) (blocks v) k)
+            atTop (nhds (0 : ℂ)) :=
+        mpvOverlap_tendsto_zero_of_not_gaugePhaseEquiv_cast_left_of_irreducible_TP
+          hdim (blocks u) (blocks v) hIrr_u hIrr_v
+          (hBlocks_lc u) (hBlocks_lc v) hNot
+      simpa [huv] using hZero
+    · have hZero :
+          Tendsto
+            (fun k =>
+              mpvOverlap (d := blockPhysDim d m) (blocks u) (blocks v) k)
+            atTop (nhds (0 : ℂ)) :=
+        mpvOverlap_tendsto_zero_of_dim_ne_of_irreducible_TP
+          (blocks u) (blocks v) hIrr_u hIrr_v
+          (hBlocks_lc u) (hBlocks_lc v) hdim
+      simpa [huv] using hZero
+
+/-- Self-overlap limit for a blocked tensor from a cyclic sector decomposition.
+
+If `blockTensor A m` splits as the sum of compressed cyclic sector tensors
+`blocks u`, each sector is normalized to have self-overlap tending to `1`, and
+distinct sectors are asymptotically orthogonal. Expanding the blocked
+self-overlap as the finite double sum over sector overlaps therefore gives the
+limit `m`, one contribution from each sector. -/
+private theorem blockTensor_selfOverlap_tendsto_of_cyclicSectorDecomp
+    [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
+    (hP : IsPeriodic m A)
+    {dim : Fin m → ℕ}
+    (blocks :
+      (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k))
+    (hBlocks_lc :
+      ∀ k, ∑ i : Fin (blockPhysDim d m),
+        (blocks k i)ᴴ * blocks k i = 1)
+    (hBlocks_mpv :
+      SameMPV₂ (blockTensor A m)
+        (toTensorFromBlocks (μ := fun _ => 1) blocks))
+    (hCyclic : IsCyclicSectorDecomp A blocks)
+    (hNondeg : ∀ k, dim k ≠ 0) :
+    Tendsto
+      (fun k => mpvOverlap (d := blockPhysDim d m)
+        (blockTensor (d := d) (D := D) A m)
+        (blockTensor (d := d) (D := D) A m) k)
+      atTop (nhds (m : ℂ)) := by
+  classical
+  have hDecomp : ∀ N (σ : Fin N → Fin (blockPhysDim d m)),
+      mpv (blockTensor (d := d) (D := D) A m) σ =
+        ∑ u : Fin m, mpv (blocks u) σ := by
+    intro N σ
+    calc
+      mpv (blockTensor (d := d) (D := D) A m) σ =
+          mpv (toTensorFromBlocks (d := blockPhysDim d m)
+            (μ := fun _ : Fin m => (1 : ℂ)) blocks) σ := hBlocks_mpv N σ
+      _ = ∑ u : Fin m, ((1 : ℂ) ^ N) • mpv (blocks u) σ := by
+            rw [mpv_toTensorFromBlocks_eq_sum]
+      _ = ∑ u : Fin m, mpv (blocks u) σ := by simp
+  have hOverlap_eq : ∀ N,
+      mpvOverlap (d := blockPhysDim d m)
+          (blockTensor (d := d) (D := D) A m)
+          (blockTensor (d := d) (D := D) A m) N =
+        ∑ u : Fin m, ∑ v : Fin m,
+          mpvOverlap (d := blockPhysDim d m) (blocks u) (blocks v) N := by
+    intro N
+    calc
+      mpvOverlap (d := blockPhysDim d m)
+          (blockTensor (d := d) (D := D) A m)
+          (blockTensor (d := d) (D := D) A m) N
+        = ∑ σ : Cfg (blockPhysDim d m) N,
+          mpv (blockTensor (d := d) (D := D) A m) σ *
+            star (mpv (blockTensor (d := d) (D := D) A m) σ) := rfl
+      _ = ∑ σ : Cfg (blockPhysDim d m) N,
+            (∑ u : Fin m, mpv (blocks u) σ) *
+              star (∑ v : Fin m, mpv (blocks v) σ) := by
+              refine Finset.sum_congr rfl ?_
+              intro σ _
+              rw [hDecomp N σ]
+      _ = ∑ σ : Cfg (blockPhysDim d m) N,
+            ∑ u : Fin m, ∑ v : Fin m,
+              mpv (blocks u) σ * star (mpv (blocks v) σ) := by
+              refine Finset.sum_congr rfl ?_
+              intro σ _
+              rw [star_sum, Finset.sum_mul]
+              refine Finset.sum_congr rfl ?_
+              intro u _
+              rw [Finset.mul_sum]
+      _ = ∑ u : Fin m, ∑ σ : Cfg (blockPhysDim d m) N,
+            ∑ v : Fin m, mpv (blocks u) σ * star (mpv (blocks v) σ) := by
+              rw [Finset.sum_comm]
+      _ = ∑ u : Fin m, ∑ v : Fin m, ∑ σ : Cfg (blockPhysDim d m) N,
+            mpv (blocks u) σ * star (mpv (blocks v) σ) := by
+              refine Finset.sum_congr rfl ?_
+              intro u _
+              rw [Finset.sum_comm]
+      _ = ∑ u : Fin m, ∑ v : Fin m,
+            mpvOverlap (d := blockPhysDim d m) (blocks u) (blocks v) N := by
+              simp [mpvOverlap]
+  have hInner : ∀ u : Fin m,
+      Tendsto
+        (fun N => ∑ v : Fin m,
+          mpvOverlap (d := blockPhysDim d m) (blocks u) (blocks v) N)
+        atTop (nhds (∑ v : Fin m, if u = v then (1 : ℂ) else 0)) := by
+    intro u
+    exact tendsto_finset_sum (s := Finset.univ) fun v _ =>
+      sectorOverlap_tendsto_delta_of_cyclicSectorDecomp
+        A hP blocks hBlocks_lc hBlocks_mpv hCyclic hNondeg u v
+  have hSum :
+      Tendsto
+        (fun N => ∑ u : Fin m, ∑ v : Fin m,
+          mpvOverlap (d := blockPhysDim d m) (blocks u) (blocks v) N)
+        atTop (nhds (∑ u : Fin m, ∑ v : Fin m, if u = v then (1 : ℂ) else 0)) := by
+    exact tendsto_finset_sum (s := Finset.univ) fun u _ => hInner u
+  have hLimit :
+      (∑ u : Fin m, ∑ v : Fin m, if u = v then (1 : ℂ) else 0) = (m : ℂ) := by
+    simp
+  simpa [hLimit] using Filter.Tendsto.congr (fun N => (hOverlap_eq N).symm) hSum
+
+/-- Self-overlap of a periodic tensor: `⟨V_N(A)|V_N(A)⟩ = tr(E_A^N)`, and
+since the peripheral eigenvalues are `m`-th roots of unity, each contributing 1
+at multiples of `m`, the limit along `m·ℕ` equals `m`.
+
+This is the first displayed equation of Appendix A. -/
+theorem periodicSelfOverlap_tendsto
+    [NeZero D] (A : MPSTensor d D) {m : ℕ}
+    (hP : IsPeriodic m A) :
+    Tendsto (fun k => mpvOverlap A A (m * k)) atTop (nhds (m : ℂ)) := by
+  by_cases hm : m = 1
+  · subst hm
+    have hPrim : PeripheralSpectrum.IsPrimitive (transferMap (d := d) (D := D) A) := by
+      simpa using hP.peripheral_eq
+    simpa using
+      (overlap_tendsto_one_of_peripheralPrimitive_of_irreducible
+        (A := A) hP.irreducible hP.leftCanonical hPrim)
+  · haveI : NeZero m := ⟨Nat.ne_of_gt hP.period_pos⟩
+    obtain ⟨dim, blocks, hBlocks_lc, hBlocks_mpv, hCyclic, hNondeg⟩ :=
+      exists_cyclic_sector_decomp_after_blocking_of_isPeriodic A hP
+    have hBlocked :
+        Tendsto
+          (fun k => mpvOverlap (d := blockPhysDim d m)
+            (blockTensor (d := d) (D := D) A m)
+            (blockTensor (d := d) (D := D) A m) k)
+          atTop (nhds (m : ℂ)) :=
+      blockTensor_selfOverlap_tendsto_of_cyclicSectorDecomp
+        A hP blocks hBlocks_lc hBlocks_mpv hCyclic hNondeg
+    refine hBlocked.congr' ?_
+    filter_upwards with k
+    rw [mpvOverlap_blockTensor_self_eq (A := A) (L := m) (N := k)]
+    simp [Nat.mul_comm]
+
+/-! ## Case 1: Different periods → orthogonal (Appendix A, first case) -/
+
+/-- Cancellation: `X⁻¹ * (X * Y * Xᴴ) * (X⁻¹)ᴴ = Y`. -/
+private theorem gl_conj_cancel (X : GL (Fin D) ℂ)
+    (Y : Matrix (Fin D) (Fin D) ℂ) :
+    X⁻¹.val * (X.val * Y * X.valᴴ) * X⁻¹.valᴴ = Y := by
+  have h1 : X⁻¹.val * X.val = 1 := Units.inv_mul X
+  have h2 : X.valᴴ * X⁻¹.valᴴ = 1 := by
+    rw [← Matrix.conjTranspose_mul, Units.inv_mul]; simp
+  calc _ = X⁻¹.val * X.val * Y * (X.valᴴ * X⁻¹.valᴴ) := by
+          simp only [Matrix.mul_assoc]
+      _ = 1 * Y * 1 := by rw [h1, h2]
+      _ = Y := by simp
+
+/-- The conjugation `Y ↦ X Y Xᴴ` as a linear equivalence on matrices. -/
+private noncomputable def glConjEquiv (X : GL (Fin D) ℂ) :
+    Matrix (Fin D) (Fin D) ℂ ≃ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ :=
+  LinearEquiv.ofLinear
+    ((LinearMap.mulLeft ℂ X.val).comp (LinearMap.mulRight ℂ X.valᴴ))
+    ((LinearMap.mulLeft ℂ X⁻¹.val).comp (LinearMap.mulRight ℂ X⁻¹.valᴴ))
+    (LinearMap.ext fun Y => by
+      simp only [LinearMap.comp_apply, LinearMap.mulLeft_apply,
+        LinearMap.mulRight_apply, LinearMap.id_apply, ← Matrix.mul_assoc]
+      rw [Units.mul_inv, one_mul, Matrix.mul_assoc Y,
+        show X⁻¹.valᴴ * X.valᴴ = 1 from by
+          rw [← Matrix.conjTranspose_mul, Units.mul_inv]; simp,
+        mul_one])
+    (LinearMap.ext fun Y => by
+      simp only [LinearMap.comp_apply, LinearMap.mulLeft_apply,
+        LinearMap.mulRight_apply, LinearMap.id_apply, ← Matrix.mul_assoc]
+      rw [Units.inv_mul, one_mul, Matrix.mul_assoc Y,
+        show X.valᴴ * X⁻¹.valᴴ = 1 from by
+          rw [← Matrix.conjTranspose_mul, Units.inv_mul]; simp,
+        mul_one])
+
+/-- **GaugePhaseEquiv preserves periods.**
+
+If two periodic tensors (same bond dimension) are gauge-phase equivalent,
+they must have the same period.
+
+arXiv:0909.5347, via eigenvalue uniqueness (Wolf Thm 6.3). -/
+private theorem period_eq_of_gaugePhaseEquiv_of_isPeriodic
+    [NeZero D] {A B : MPSTensor d D}
+    {m_a m_b : ℕ} (hA : IsPeriodic m_a A) (hB : IsPeriodic m_b B)
+    (hGPE : GaugePhaseEquiv A B) : m_a = m_b := by
+  obtain ⟨X, ζ, hζ_ne, hBi⟩ := hGPE
+  -- PSD fixed points
+  obtain ⟨ρ, hρ_psd, hρ_ne, hρ_fix⟩ :=
+    exists_posSemidef_fixedPoint A hA.leftCanonical (NeZero.pos D)
+  obtain ⟨τ, hτ_psd, hτ_ne, hτ_fix⟩ :=
+    exists_posSemidef_fixedPoint B hB.leftCanonical (NeZero.pos D)
+  -- E_B is irreducible CP
+  have hB_irrMap : IsIrreducibleMap (transferMap (d := d) (D := D) B) :=
+    isIrreducibleCP_transferMap_of_isIrreducibleTensor B hB.irreducible
+  have hB_cp : IsCPMap (transferMap (d := d) (D := D) B) := transferMap_isCPMap B
+  -- Transfer map scaling: B = ζ • (X A X⁻¹) implies E_B = |ζ|² E_{XAX⁻¹}
+  have hEB_eq : ∀ Y, transferMap (d := d) (D := D) B Y =
+      (ζ * starRingEnd ℂ ζ) •
+        (X.val * transferMap (d := d) (D := D) A
+          (X⁻¹.val * Y * X⁻¹.valᴴ) * X.valᴴ) := by
+    intro Y
+    simp only [transferMap_apply]
+    simp_rw [hBi]
+    simp only [Matrix.conjTranspose_smul, smul_mul_assoc, mul_smul_comm,
+      smul_smul, ← Finset.smul_sum, Matrix.conjTranspose_mul,
+      Finset.mul_sum, Finset.sum_mul, Matrix.mul_assoc]
+    congr 1; exact mul_comm _ _
+  -- σ = X ρ Xᴴ is a PSD eigenvector of E_B with eigenvalue |ζ|²
+  set σ := X.val * ρ * X.valᴴ
+  have hσ_psd : σ.PosSemidef :=
+    hρ_psd.mul_mul_conjTranspose_same X.val
+  have hσ_ne : σ ≠ 0 := by
+    intro h
+    apply hρ_ne
+    have h1 := congr_arg (X⁻¹.val * · * X⁻¹.valᴴ) h
+    simp only [Matrix.mul_zero, Matrix.zero_mul] at h1
+    rwa [gl_conj_cancel] at h1
+  have hEB_σ : transferMap (d := d) (D := D) B σ = (ζ * starRingEnd ℂ ζ) • σ := by
+    simp only [σ, hEB_eq, gl_conj_cancel, hρ_fix]
+  -- ζ * star ζ = ‖ζ‖²
+  have hζζ_real : ζ * starRingEnd ℂ ζ = (↑(‖ζ‖ ^ 2) : ℂ) := by
+    rw [Complex.mul_conj, Complex.normSq_eq_norm_sq]
+  have hζζ_pos : (0 : ℝ) < ‖ζ‖ ^ 2 := by positivity
+  -- By eigenvalue uniqueness (Wolf 6.3): ‖ζ‖² = 1
+  have h_eig_eq : ‖ζ‖ ^ 2 = 1 :=
+    (eigenvalue_unique_of_irreducible_cp
+      (transferMap (d := d) (D := D) B) hB_cp hB_irrMap
+      τ σ 1 (‖ζ‖ ^ 2) hτ_psd hτ_ne one_pos hσ_psd hσ_ne hζζ_pos
+      (by simp [hτ_fix]) (by rw [hEB_σ, hζζ_real])).symm
+  have hζ_norm : ‖ζ‖ = 1 := by nlinarith [norm_nonneg ζ]
+  -- RepeatedBlocks A B with phase ζ⁻¹
+  have hRepeated : RepeatedBlocks A B := by
+    refine ⟨ζ⁻¹, X⁻¹, by rw [norm_inv, hζ_norm, inv_one], ?_⟩
+    intro i
+    -- Goal: A i = ζ⁻¹ • (↑(X⁻¹) * B i * ↑((X⁻¹)⁻¹))
+    -- Simplify (X⁻¹)⁻¹ = X
+    simp only [inv_inv]
+    -- Goal: A i = ζ⁻¹ • (X⁻¹.val * B i * X.val)
+    -- Show X⁻¹ * B i * X = ζ • A i
+    have hconj : X⁻¹.val * B i * X.val = ζ • A i := by
+      rw [hBi i, mul_smul_comm, smul_mul_assoc]
+      congr 1
+      calc X⁻¹.val * (X.val * A i * X⁻¹.val) * X.val
+          = X⁻¹.val * X.val * A i * (X⁻¹.val * X.val) := by
+            simp only [Matrix.mul_assoc]
+        _ = 1 * A i * 1 := by rw [Units.inv_mul]
+        _ = A i := by simp
+    rw [hconj, smul_smul, inv_mul_cancel₀ hζ_ne, one_smul]
+  -- Peripheral eigenvalue equality via conjugation
+  have hSpec : peripheralEigenvalues (transferMap (d := d) (D := D) A) =
+      peripheralEigenvalues (transferMap (d := d) (D := D) B) := by
+    have hEB_is_conj : transferMap (d := d) (D := D) B =
+        (glConjEquiv X).conj (transferMap (d := d) (D := D) A) := by
+      apply LinearMap.ext; intro Y
+      rw [hEB_eq, hζζ_real, show (↑(‖ζ‖ ^ 2) : ℂ) = (1 : ℂ) from by simp [h_eig_eq],
+        one_smul,
+        show (glConjEquiv X).conj (transferMap (d := d) (D := D) A) Y =
+          X.val * (transferMap (d := d) (D := D) A
+            (X⁻¹.val * (Y * X⁻¹.valᴴ)) * X.valᴴ) from rfl]
+      simp only [Matrix.mul_assoc]
+    rw [hEB_is_conj]
+    exact (peripheralEigenvalues_conj (glConjEquiv X)
+      (transferMap (d := d) (D := D) A)).symm
+  exact IsPeriodic.period_eq_of_repeatedBlocks hA hB hRepeated hSpec
+
+/-- If two periodic tensors have different periods `m_a ≠ m_b`, their overlap
+decays to zero.
+
+*Proof*: split on whether `D₁ = D₂`. If not, use dimension mismatch
+(`periodicOverlap_tendsto_zero_of_ne_dim`). If `D₁ = D₂`, assume for
+contradiction that `GaugePhaseEquiv A B`; then
+`period_eq_of_gaugePhaseEquiv_of_isPeriodic` gives `m_a = m_b`, contradicting
+`hne`. So `¬ GaugePhaseEquiv`, and `mpvOverlap_tendsto_zero_of_irreducible_TP`
+gives the result.
+
+This is the first substantial argument in Appendix A of arXiv:1708.00029. -/
+theorem periodicOverlap_tendsto_zero_of_ne_period
+    {D₁ D₂ : ℕ} [NeZero D₁] [NeZero D₂]
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    {m_a m_b : ℕ}
+    (hA : IsPeriodic m_a A) (hB : IsPeriodic m_b B)
+    (hne : m_a ≠ m_b) :
+    Tendsto (fun N => mpvOverlap A B N) atTop (nhds 0) := by
+  by_cases hD : D₁ = D₂
+  · subst hD
+    exact mpvOverlap_tendsto_zero_of_irreducible_TP A B
+      hA.irreducible hB.irreducible hA.leftCanonical hB.leftCanonical
+      (fun hGPE => hne (period_eq_of_gaugePhaseEquiv_of_isPeriodic hA hB hGPE))
+  · exact mpvOverlap_tendsto_zero_of_dim_ne_of_irreducible_TP A B
+      hA.irreducible hB.irreducible hA.leftCanonical hB.leftCanonical hD
+
+/-! ## Case 2: Same period, no sector match → orthogonal (Appendix A, second case) -/
 
 /-- Case-2 helper for the compressed blocked sector tensors.
 
