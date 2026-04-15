@@ -86,7 +86,7 @@ variable {A : Matrix (Fin D) (Fin D) ℂ}
 /-- A normal matrix commutes with its adjoint. -/
 private lemma commute_conjTranspose_of_normal
     (hA : Aᴴ * A = A * Aᴴ) : Commute A Aᴴ := by
-  simpa [Commute] using hA.symm
+  simpa only [Commute] using hA.symm
 
 /-- For a normal matrix `A`, the generator `A` commutes with `Aᴴ * A`. -/
 private lemma commute_conjTranspose_mul_self_of_normal
@@ -138,15 +138,18 @@ private lemma rect_kadison_schwarz_le
   have hP : P.PosSemidef := by
     let A : Matrix (n ⊕ n) (n ⊕ Fin 0) ℂ :=
       Matrix.fromBlocks Xᴴ 0 1 0
-    simpa [A, P, Matrix.fromBlocks_multiply, Matrix.fromBlocks_conjTranspose] using
-      Matrix.posSemidef_self_mul_conjTranspose A
+    simpa only [A, P, Matrix.fromBlocks_conjTranspose, conjTranspose_conjTranspose,
+      conjTranspose_one, conjTranspose_zero, Matrix.fromBlocks_multiply, Matrix.mul_zero,
+      add_zero, mul_one, one_mul] using Matrix.posSemidef_self_mul_conjTranspose A
   let K₂ : ι → Matrix (m ⊕ m) (n ⊕ n) ℂ :=
     fun i => Matrix.fromBlocks (K i) 0 0 (K i)
   have h_term (i : ι) :
       K₂ i * P * (K₂ i)ᴴ =
         Matrix.fromBlocks (K i * (Xᴴ * X) * (K i)ᴴ) (K i * Xᴴ * (K i)ᴴ)
           (K i * X * (K i)ᴴ) (K i * (K i)ᴴ) := by
-    simp [K₂, P, Matrix.fromBlocks_multiply, Matrix.fromBlocks_conjTranspose, Matrix.mul_assoc]
+    simp only [Matrix.fromBlocks_multiply, Matrix.zero_mul, add_zero, Matrix.mul_one, zero_add,
+      Matrix.fromBlocks_conjTranspose, conjTranspose_zero, Matrix.mul_assoc, Matrix.mul_zero, K₂,
+      P]
   have h_sum_psd : (∑ i : ι, K₂ i * P * (K₂ i)ᴴ).PosSemidef :=
     Matrix.posSemidef_sum (s := Finset.univ) (x := fun i => K₂ i * P * (K₂ i)ᴴ)
       (fun i _ => hP.mul_mul_conjTranspose_same (B := K₂ i))
@@ -159,7 +162,8 @@ private lemma rect_kadison_schwarz_le
     intros A' B' C' D'
     ext i j
     rcases i with i' | i' <;> rcases j with j' | j' <;>
-      simp [Matrix.sum_apply]
+      simp only [Matrix.sum_apply, Matrix.fromBlocks_apply₁₁, Matrix.fromBlocks_apply₁₂,
+        Matrix.fromBlocks_apply₂₁, Matrix.fromBlocks_apply₂₂]
   have h_block_eq :
       (∑ i : ι, K₂ i * P * (K₂ i)ᴴ) =
         Matrix.fromBlocks (rectKrausMap K (Xᴴ * X)) ((rectKrausMap K X)ᴴ)
@@ -167,21 +171,22 @@ private lemma rect_kadison_schwarz_le
     simp_rw [h_term]
     rw [h_sfb]
     exact Matrix.fromBlocks_inj.mpr
-      ⟨by simp [rectKrausMap],
+      ⟨by simp only [rectKrausMap],
        by calc
-           (∑ i : ι, K i * Xᴴ * (K i)ᴴ) = rectKrausMap K Xᴴ := by simp [rectKrausMap]
+           (∑ i : ι, K i * Xᴴ * (K i)ᴴ) = rectKrausMap K Xᴴ := by
+             simp only [rectKrausMap]
            _ = (rectKrausMap K X)ᴴ := by
-               simp [rectKrausMap, Matrix.conjTranspose_sum,
-                 Matrix.conjTranspose_mul, Matrix.mul_assoc],
-       by simp [rectKrausMap, conjTranspose_conjTranspose],
-       by simpa using h_unital⟩
+               simp only [rectKrausMap, Matrix.mul_assoc, Matrix.conjTranspose_sum,
+                 Matrix.conjTranspose_mul, conjTranspose_conjTranspose],
+       by simp only [rectKrausMap, conjTranspose_conjTranspose],
+       by simpa only using h_unital⟩
   have h_block_psd :
       (Matrix.fromBlocks (rectKrausMap K (Xᴴ * X)) ((rectKrausMap K X)ᴴ)
         ((rectKrausMap K X)ᴴᴴ) (1 : Matrix m m ℂ)).PosSemidef := by
-    simpa [h_block_eq] using h_sum_psd
+    simpa only [conjTranspose_conjTranspose, h_block_eq] using h_sum_psd
   haveI : Invertible (1 : Matrix m m ℂ) := invertibleOne
   rw [Matrix.le_iff]
-  simpa [inv_one, Matrix.mul_assoc, conjTranspose_conjTranspose] using
+  simpa only [inv_one, mul_one, conjTranspose_conjTranspose] using
     (Matrix.PosDef.fromBlocks₂₂ (A := rectKrausMap K (Xᴴ * X))
       (B := (rectKrausMap K X)ᴴ) (D := (1 : Matrix m m ℂ)) Matrix.PosDef.one).1 h_block_psd
 
@@ -225,9 +230,10 @@ private lemma familyMain_outer_sum
   have hL :
       (∑ p : Fin D, familyMainKraus C (i, p) * (familyMainKraus C (i, p))ᴴ) r s =
         ∑ p : Fin D, C i r p * (starRingEnd ℂ) (C i s p) := by
-    simp [Matrix.sum_apply, familyMainKraus, Matrix.mul_apply]
+    simp only [Matrix.sum_apply, Matrix.mul_apply, familyMainKraus, conjTranspose_apply,
+      RCLike.star_def, ite_mul, zero_mul, sum_ite_eq', mem_univ, ↓reduceIte]
   rw [hL]
-  simp [Matrix.mul_apply]
+  simp only [Matrix.mul_apply, conjTranspose_apply, RCLike.star_def]
 
 private lemma familyDefect_outer_sum
     {ι : Type*} [Fintype ι] [DecidableEq ι]
@@ -239,9 +245,10 @@ private lemma familyDefect_outer_sum
       ((∑ p : Fin D,
           familyDefectKraus (ι := ι) S p * (familyDefectKraus (ι := ι) S p)ᴴ)) r s =
         ∑ p : Fin D, S r p * (starRingEnd ℂ) (S s p) := by
-    simp [Matrix.sum_apply, familyDefectKraus, Matrix.mul_apply]
+    simp only [Matrix.sum_apply, Matrix.mul_apply, familyDefectKraus, conjTranspose_apply,
+      RCLike.star_def, ite_mul, zero_mul, sum_ite_eq', mem_univ, ↓reduceIte]
   rw [hL]
-  simp [Matrix.mul_apply]
+  simp only [Matrix.mul_apply, conjTranspose_apply, RCLike.star_def]
 
 private lemma familyDefect_term_zero
     {ι : Type*} [Fintype ι] [DecidableEq ι]
@@ -249,7 +256,10 @@ private lemma familyDefect_term_zero
     rectKrausMap (fun _ : Unit => familyDefectKraus (ι := ι) S p)
       (Matrix.diagonal (fun o : Option ι => o.elim 0 z)) = 0 := by
   ext r s
-  simp [rectKrausMap, familyDefectKraus, Matrix.mul_apply, Matrix.diagonal_apply]
+  simp only [rectKrausMap, univ_unique, PUnit.default_eq_unit, sum_const, card_singleton,
+    smul_apply, Matrix.mul_apply, familyDefectKraus, Matrix.diagonal_apply, mul_ite, ite_mul,
+    zero_mul, mul_zero, sum_ite_eq', mem_univ, ↓reduceIte, conjTranspose_apply, RCLike.star_def,
+    Option.elim_none, nsmul_zero, zero_apply]
 
 /-- The diagonal / finite-spectrum Schwarz inequality for a positive family
 `{Bᵢ}` with `∑ᵢ Bᵢ ≤ 1`. This is the direct diagonal case needed for the
@@ -280,19 +290,21 @@ theorem diagonal_family_schwarz_le
     calc
       (∑ x, ∑ x_1, K (Sum.inl (x, x_1)) * (K (Sum.inl (x, x_1)))ᴴ) +
           ∑ x, K (Sum.inr x) * (K (Sum.inr x))ᴴ = (∑ x, C x * (C x)ᴴ) + S * Sᴴ := by
-              simp [K, familyKraus, familyMain_outer_sum, familyDefect_outer_sum]
+              simp only [familyKraus, familyMain_outer_sum, familyDefect_outer_sum, K]
       _ = (∑ x, B x) + (1 - ∑ i, B i) := by
             have hS' : S * Sᴴ = 1 - ∑ i, B i := by
-              simpa [Matrix.star_eq_conjTranspose] using hS.symm
-            simp [hC, hS']
-      _ = 1 := by simp [sub_eq_add_neg, add_comm]
+              simpa only [Matrix.star_eq_conjTranspose] using hS.symm
+            simp only [hS', hC, add_sub_cancel]
+      _ = 1 := by simp only [sub_eq_add_neg, add_comm, add_neg_cancel_left]
   have hMainTerm (i : ι) (p : Fin D) :
       familyMainKraus C (i, p) * X * (familyMainKraus C (i, p))ᴴ =
         z i • (familyMainKraus C (i, p) * (familyMainKraus C (i, p))ᴴ) := by
-    simpa [X, rectKrausMap] using familyMain_term_eq (C := C) (z := z) i p
+    simpa only [rectKrausMap, univ_unique, PUnit.default_eq_unit, sum_const, card_singleton,
+      one_smul] using familyMain_term_eq (C := C) (z := z) i p
   have hDefTerm (p : Fin D) :
       familyDefectKraus (ι := ι) S p * X * (familyDefectKraus (ι := ι) S p)ᴴ = 0 := by
-    simpa [X, rectKrausMap] using familyDefect_term_zero (ι := ι) (S := S) (z := z) p
+    simpa only [rectKrausMap, univ_unique, PUnit.default_eq_unit, sum_const, card_singleton,
+      one_smul] using familyDefect_term_zero (ι := ι) (S := S) (z := z) p
   have hmap : rectKrausMap K X = ∑ i, z i • B i := by
     rw [rectKrausMap, Fintype.sum_sum_type, Fintype.sum_prod_type]
     calc
@@ -300,27 +312,32 @@ theorem diagonal_family_schwarz_le
           ∑ x, K (Sum.inr x) * X * (K (Sum.inr x))ᴴ =
             (∑ x, z x • ∑ x_1, familyMainKraus C (x, x_1) * (familyMainKraus C (x, x_1))ᴴ) +
               ∑ x : Fin D, 0 := by
-              simp [K, familyKraus, hMainTerm, hDefTerm, Finset.smul_sum]
-      _ = ∑ x, z x • (C x * (C x)ᴴ) := by simp [familyMain_outer_sum]
-      _ = ∑ x, z x • B x := by simp [hC]
+              simp only [familyKraus, hMainTerm, hDefTerm, sum_const_zero, add_zero, smul_sum,
+                K]
+      _ = ∑ x, z x • (C x * (C x)ᴴ) := by
+        simp only [familyMain_outer_sum, sum_const_zero, add_zero]
+      _ = ∑ x, z x • B x := by simp only [hC]
   let zsq : ι → ℂ := fun i => (starRingEnd ℂ (z i)) * z i
   have hXsq_fun :
       (fun i : Option ι => (starRingEnd ℂ) (i.elim 0 z) * i.elim 0 z) =
         (fun i : Option ι => i.elim 0 zsq) := by
     funext i
-    cases i <;> simp [zsq]
+    cases i <;> simp only [Option.elim_none, map_zero, mul_zero, Option.elim_some, zsq]
   have hXsq : Xᴴ * X = Matrix.diagonal (fun o : Option ι => o.elim 0 zsq) := by
-    simp [X, Matrix.diagonal_conjTranspose, Matrix.diagonal_mul_diagonal, hXsq_fun]
+    simp only [Matrix.diagonal_conjTranspose, Matrix.diagonal_mul_diagonal, Pi.star_apply,
+      RCLike.star_def, hXsq_fun, X]
   have hMainTermSq (i : ι) (p : Fin D) :
       familyMainKraus C (i, p) * (Xᴴ * X) * (familyMainKraus C (i, p))ᴴ =
         zsq i • (familyMainKraus C (i, p) * (familyMainKraus C (i, p))ᴴ) := by
     rw [hXsq]
-    simpa [rectKrausMap, zsq] using familyMain_term_eq (C := C) (z := zsq) i p
+    simpa only [rectKrausMap, univ_unique, PUnit.default_eq_unit, sum_const, card_singleton,
+      one_smul] using familyMain_term_eq (C := C) (z := zsq) i p
   have hDefTermSq (p : Fin D) :
       familyDefectKraus (ι := ι) S p * (Xᴴ * X) *
         (familyDefectKraus (ι := ι) S p)ᴴ = 0 := by
     rw [hXsq]
-    simpa [rectKrausMap] using familyDefect_term_zero (ι := ι) (S := S) (z := zsq) p
+    simpa only [rectKrausMap, univ_unique, PUnit.default_eq_unit, sum_const, card_singleton,
+      one_smul] using familyDefect_term_zero (ι := ι) (S := S) (z := zsq) p
   have hmap_star : rectKrausMap K (Xᴴ * X) = ∑ i, zsq i • B i := by
     rw [rectKrausMap, Fintype.sum_sum_type, Fintype.sum_prod_type]
     calc
@@ -329,13 +346,15 @@ theorem diagonal_family_schwarz_le
             (∑ x, zsq x •
               ∑ x_1, familyMainKraus C (x, x_1) * (familyMainKraus C (x, x_1))ᴴ) +
               ∑ x : Fin D, 0 := by
-              simp [K, familyKraus, hMainTermSq, hDefTermSq, Finset.smul_sum]
-      _ = ∑ x, zsq x • (C x * (C x)ᴴ) := by simp [familyMain_outer_sum]
-      _ = ∑ x, zsq x • B x := by simp [hC]
+              simp only [familyKraus, hMainTermSq, hDefTermSq, sum_const_zero, add_zero,
+                smul_sum, K]
+      _ = ∑ x, zsq x • (C x * (C x)ᴴ) := by
+        simp only [familyMain_outer_sum, sum_const_zero, add_zero]
+      _ = ∑ x, zsq x • B x := by simp only [hC]
   have hks := rect_kadison_schwarz_le (K := K) hK_unital X
   have hBherm : ∀ i, (B i)ᴴ = B i := fun i => (hB i).isHermitian.eq
-  simpa [hmap, hmap_star, zsq, hBherm,
-    Matrix.conjTranspose_sum, Matrix.conjTranspose_smul] using hks
+  simpa only [ge_iff_le, hmap, Matrix.conjTranspose_sum, Matrix.conjTranspose_smul,
+    RCLike.star_def, hBherm, hmap_star] using hks
 
 end DiagonalFamily
 
@@ -366,7 +385,7 @@ private lemma blockHermitian_of_blockPositive {n D : ℕ}
         star (ψ i) ⬝ᵥ (a i j).mulVec (ψ j) := ha ψ
     have hq'' : 0 ≤ ∑ i : Fin n, ∑ j : Fin n, ∑ r : Fin D,
         (starRingEnd ℂ) (x.ofLp (i, r)) * ∑ s : Fin D, a i j r s * x.ofLp (j, s) := by
-      simpa [ψ, dotProduct, Matrix.mulVec, mul_assoc] using hq'
+      simpa only [dotProduct, Pi.star_apply, RCLike.star_def, Matrix.mulVec] using hq'
     have hinnerSum (i : Fin n) (r : Fin D) :
         (∑ x_2 : Fin n × Fin D, a i x_2.1 r x_2.2 * x.ofLp x_2) =
           ∑ j : Fin n, ∑ s : Fin D, a i j r s * x.ofLp (j, s) := by
@@ -386,26 +405,26 @@ private lemma blockHermitian_of_blockPositive {n D : ℕ}
     have hqreal : star q = q := by
       have hqim : q.im = 0 := (Complex.nonneg_iff.mp hq).2.symm
       apply Complex.ext
-      · simp
-      · simp [hqim]
+      · simp only [RCLike.star_def, conj_re]
+      · simp only [RCLike.star_def, conj_im, hqim, neg_zero]
     have hinner : inner ℂ (A.toEuclideanLin x) x = star q := by
       calc
         inner ℂ (A.toEuclideanLin x) x = x.ofLp ⬝ᵥ star (A.toEuclideanLin x).ofLp := by
           simp only [EuclideanSpace.inner_eq_star_dotProduct]
         _ = x.ofLp ⬝ᵥ star (A.mulVec x.ofLp) := by
-          simp [Matrix.ofLp_toLpLin (p := 2) (q := 2), Matrix.toLin'_apply]
+          simp only [Matrix.ofLp_toLpLin (p := 2) (q := 2), Matrix.toLin'_apply]
         _ = star (A.mulVec x.ofLp ⬝ᵥ star x.ofLp) := by rw [Matrix.dotProduct_star]
         _ = star (star x.ofLp ⬝ᵥ A.mulVec x.ofLp) := by rw [dotProduct_comm]
         _ = star q := by rfl
     calc
       star (inner ℂ (A.toEuclideanLin x) x) = star (star q) := by rw [hinner]
-      _ = q := by simp
+      _ = q := by simp only [RCLike.star_def, RingHomCompTriple.comp_apply, RingHom.id_apply]
       _ = star q := hqreal.symm
       _ = inner ℂ (A.toEuclideanLin x) x := by rw [hinner]
   have hAherm : A.IsHermitian := (Matrix.isHermitian_iff_isSymmetric (A := A)).2 hAsym
   intro i j
   ext r s
-  simpa [A] using congrArg
+  simpa only [conjTranspose_apply, RCLike.star_def] using congrArg
     (fun N : Matrix (Fin n × Fin D) (Fin n × Fin D) ℂ => N (i, r) (j, s)) hAherm.eq
 
 -- Weighted sum ∑ conj(w i) w j • a i j is PSD for block-positive a.
@@ -421,13 +440,15 @@ private lemma weighted_block_sum_posSemidef {n D : ℕ}
     change Bᴴ = B
     calc
       Bᴴ = ∑ i, ∑ j, star (starRingEnd ℂ (w i) * w j) • (a i j)ᴴ := by
-        simp [B, Matrix.conjTranspose_sum, Matrix.conjTranspose_smul]
+        simp only [Matrix.conjTranspose_sum, Matrix.conjTranspose_smul, star_mul',
+          RCLike.star_def, RingHomCompTriple.comp_apply, RingHom.id_apply, B]
       _ = ∑ i, ∑ j, star (starRingEnd ℂ (w i) * w j) • a j i := by
         apply Finset.sum_congr rfl
         intro i _
         apply Finset.sum_congr rfl
         intro j _
-        simpa using congrArg
+        simpa only [star_mul', RCLike.star_def, RingHomCompTriple.comp_apply,
+          RingHom.id_apply] using congrArg
           (fun N : Matrix (Fin D) (Fin D) ℂ => star (starRingEnd ℂ (w i) * w j) • N) (hBH j i)
       _ = ∑ i, ∑ j, (starRingEnd ℂ (w i) * w j) • a i j := by
         rw [Finset.sum_comm]
@@ -435,7 +456,8 @@ private lemma weighted_block_sum_posSemidef {n D : ℕ}
         intro j _
         apply Finset.sum_congr rfl
         intro i _
-        simp [mul_comm]
+        simp only [mul_comm, star_mul', RCLike.star_def, RingHomCompTriple.comp_apply,
+          RingHom.id_apply]
       _ = B := by rfl
   have hBnonneg : ∀ v : Fin D → ℂ, 0 ≤ star v ⬝ᵥ B.mulVec v := by
     intro v
@@ -443,11 +465,11 @@ private lemma weighted_block_sum_posSemidef {n D : ℕ}
     have hψ : 0 ≤ ∑ i : Fin n, ∑ j : Fin n, star (ψ i) ⬝ᵥ (a i j).mulVec (ψ j) := ha ψ
     have hψ' : 0 ≤ ∑ i : Fin n, ∑ j : Fin n,
         (starRingEnd ℂ (w i) * w j) * (star v ⬝ᵥ (a i j).mulVec v) := by
-      simpa [ψ, Matrix.mulVec_smul, smul_dotProduct, dotProduct_smul, smul_eq_mul,
-        mul_comm, mul_left_comm, mul_assoc] using hψ
+      simpa only [ψ, Matrix.mulVec_smul, smul_dotProduct, dotProduct_smul, smul_eq_mul,
+        mul_comm, mul_left_comm, mul_assoc, star_smul, RCLike.star_def] using hψ
     convert hψ' using 1
-    simp [B, Matrix.sum_mulVec, Matrix.smul_mulVec, dotProduct_sum, dotProduct_smul,
-      smul_eq_mul, mul_assoc]
+    simp only [Matrix.sum_mulVec, Matrix.smul_mulVec, dotProduct_sum, dotProduct_smul,
+      smul_eq_mul, mul_assoc, B]
   exact Matrix.PosSemidef.of_dotProduct_mulVec_nonneg hBherm hBnonneg
 
 -- Commuting images whose scalar matrices are all PSD give a nonneg block form.
@@ -479,7 +501,9 @@ private lemma blockForm_nonneg_of_scalarPSD_of_commuting {n D : ℕ}
   have hH : ∀ i j, (H i j).IsHermitian := by
     intro i j
     ext r s
-    simp [H, add_comm]
+    simp only [one_div, smul_add, conjTranspose_apply, add_apply, smul_apply, smul_eq_mul,
+      RCLike.star_def, star_add, star_mul', star_inv₀, star_ofNat,
+      RingHomCompTriple.comp_apply, RingHom.id_apply, add_comm, H]
   have hK : ∀ i j, (K i j).IsHermitian := by
     intro i j
     ext r s
@@ -492,10 +516,10 @@ private lemma blockForm_nonneg_of_scalarPSD_of_commuting {n D : ℕ}
     cases idx with
     | inl ij =>
         rcases ij with ⟨i, j⟩
-        simpa [T] using (Matrix.isHermitian_iff_isSymmetric (A := H i j)).mp (hH i j)
+        simpa only [T] using (Matrix.isHermitian_iff_isSymmetric (A := H i j)).mp (hH i j)
     | inr ij =>
         rcases ij with ⟨i, j⟩
-        simpa [T] using (Matrix.isHermitian_iff_isSymmetric (A := K i j)).mp (hK i j)
+        simpa only [T] using (Matrix.isHermitian_iff_isSymmetric (A := K i j)).mp (hK i j)
   have hEuclMul := toEuclideanLin_mul (D := D)
   have htoEuclComm {A B : Matrix (Fin D) (Fin D) ℂ} (hAB : Commute A B) :
       Commute (Matrix.toEuclideanLin A : EuclideanSpace ℂ (Fin D) →ₗ[ℂ] EuclideanSpace ℂ (Fin D))
@@ -503,13 +527,13 @@ private lemma blockForm_nonneg_of_scalarPSD_of_commuting {n D : ℕ}
     hEuclMul A B |>.trans (congrArg Matrix.toEuclideanLin hAB.eq) |>.trans (hEuclMul B A).symm
   have hcommAdjLeft : ∀ i j k l, Commute (M i j)ᴴ (M k l) := by
     intro i j k l
-    simpa [hMadj j i] using hcomm j i k l
+    simpa only [hMadj j i] using hcomm j i k l
   have hcommAdjRight : ∀ i j k l, Commute (M i j) (M k l)ᴴ := by
     intro i j k l
-    simpa [hMadj l k] using hcomm i j l k
+    simpa only [hMadj l k] using hcomm i j l k
   have hcommAdjAdj : ∀ i j k l, Commute (M i j)ᴴ (M k l)ᴴ := by
     intro i j k l
-    simpa [hMadj j i, hMadj l k] using hcomm j i l k
+    simpa only [hMadj j i, hMadj l k] using hcomm j i l k
   have hHH : ∀ i j k l, Commute (H i j) (H k l) := by
     intro i j k l
     have h1 : Commute (M i j + (M i j)ᴴ) (M k l) :=
@@ -517,7 +541,8 @@ private lemma blockForm_nonneg_of_scalarPSD_of_commuting {n D : ℕ}
     have h2 : Commute (M i j + (M i j)ᴴ) (M k l)ᴴ :=
       (hcommAdjRight i j k l).add_left (hcommAdjAdj i j k l)
     have hsum : Commute (M i j + (M i j)ᴴ) (M k l + (M k l)ᴴ) := h1.add_right h2
-    simpa [H, Matrix.smul_mul, Matrix.mul_smul, mul_comm, mul_left_comm, mul_assoc] using
+    simpa only [H, one_div, smul_add, Matrix.smul_mul, Matrix.mul_smul, mul_comm,
+      mul_left_comm, mul_assoc] using
       (hsum.smul_left (1 / 2 : ℂ)).smul_right (1 / 2 : ℂ)
   have hHK : ∀ i j k l, Commute (H i j) (K k l) := by
     intro i j k l
@@ -526,7 +551,9 @@ private lemma blockForm_nonneg_of_scalarPSD_of_commuting {n D : ℕ}
     have h2 : Commute (M i j + (M i j)ᴴ) (M k l)ᴴ :=
       (hcommAdjRight i j k l).add_left (hcommAdjAdj i j k l)
     have hsub : Commute (M i j + (M i j)ᴴ) ((M k l)ᴴ - M k l) := h2.sub_right h1
-    simpa [H, K, Matrix.smul_mul, Matrix.mul_smul, mul_comm, mul_left_comm, mul_assoc] using
+    simpa only [H, K, one_div, smul_add, Matrix.smul_mul, Matrix.mul_smul, mul_comm,
+      mul_left_comm, mul_assoc, ne_eq, div_eq_zero_iff, Complex.I_ne_zero,
+      OfNat.ofNat_ne_zero, or_self, not_false_eq_true, Commute.smul_right_iff₀] using
       (hsub.smul_left (1 / 2 : ℂ)).smul_right (Complex.I / 2 : ℂ)
   have hKK : ∀ i j k l, Commute (K i j) (K k l) := by
     intro i j k l
@@ -535,7 +562,9 @@ private lemma blockForm_nonneg_of_scalarPSD_of_commuting {n D : ℕ}
     have h2 : Commute ((M i j)ᴴ - M i j) (M k l)ᴴ :=
       (hcommAdjAdj i j k l).sub_left (hcommAdjRight i j k l)
     have hsub : Commute ((M i j)ᴴ - M i j) ((M k l)ᴴ - M k l) := h2.sub_right h1
-    simpa [K, Matrix.smul_mul, Matrix.mul_smul, mul_comm, mul_left_comm, mul_assoc] using
+    simpa only [K, Matrix.smul_mul, Matrix.mul_smul, mul_comm, mul_left_comm, mul_assoc, ne_eq,
+      div_eq_zero_iff, Complex.I_ne_zero, OfNat.ofNat_ne_zero, or_self, not_false_eq_true,
+      Commute.smul_right_iff₀, Commute.smul_left_iff₀] using
       (hsub.smul_left (Complex.I / 2 : ℂ)).smul_right (Complex.I / 2 : ℂ)
   have hTcomm : Pairwise (fun x y => Commute (T x) (T y)) := by
     intro x y _
@@ -545,26 +574,26 @@ private lemma blockForm_nonneg_of_scalarPSD_of_commuting {n D : ℕ}
         cases y with
         | inl y =>
             rcases y with ⟨k, l⟩
-            simpa [T] using htoEuclComm (hHH i j k l)
+            simpa only [T] using htoEuclComm (hHH i j k l)
         | inr y =>
             rcases y with ⟨k, l⟩
-            simpa [T] using htoEuclComm (hHK i j k l)
+            simpa only [T] using htoEuclComm (hHK i j k l)
     | inr x =>
         rcases x with ⟨i, j⟩
         cases y with
         | inl y =>
             rcases y with ⟨k, l⟩
-            simpa [T] using (htoEuclComm (hHK k l i j)).symm
+            simpa only [T] using (htoEuclComm (hHK k l i j)).symm
         | inr y =>
             rcases y with ⟨k, l⟩
-            simpa [T] using htoEuclComm (hKK i j k l)
+            simpa only [T] using htoEuclComm (hKK i j k l)
   let V : (ι → ℂ) → Submodule ℂ (EuclideanSpace ℂ (Fin D)) :=
     fun γ => ⨅ idx, Module.End.eigenspace (T idx) (γ idx)
   have hFullOrtho :
       OrthogonalFamily ℂ (fun γ : ι → ℂ => V γ) fun γ => (V γ).subtypeₗᵢ := by
-    simpa [V] using LinearMap.IsSymmetric.orthogonalFamily_iInf_eigenspaces (T := T) hTsymm
+    simpa only using LinearMap.IsSymmetric.orthogonalFamily_iInf_eigenspaces (T := T) hTsymm
   have hFullTop : (⨆ γ : ι → ℂ, V γ) = ⊤ := by
-    simpa [V] using LinearMap.IsSymmetric.iSup_iInf_eq_top_of_commute (T := T) hTsymm hTcomm
+    simpa only using LinearMap.IsSymmetric.iSup_iInf_eq_top_of_commute (T := T) hTsymm hTcomm
   let σ : Type := ∀ idx : ι, Eigenvalues (T idx)
   let W : σ → Submodule ℂ (EuclideanSpace ℂ (Fin D)) :=
     fun α => ⨅ idx, Module.End.eigenspace (T idx) ((α idx : Eigenvalues (T idx)) : ℂ)
@@ -576,17 +605,17 @@ private lemma blockForm_nonneg_of_scalarPSD_of_commuting {n D : ℕ}
       funext idx
       apply Subtype.ext
       exact congrFun h idx
-    simpa [W, V, f] using hFullOrtho.comp (f := f) hf
+    simpa only using hFullOrtho.comp (f := f) hf
   have hWleV : (⨆ α : σ, W α) ≤ ⨆ γ : ι → ℂ, V γ := by
     refine iSup_le ?_
     intro α
     exact le_iSup_of_le (fun idx => ((α idx : Eigenvalues (T idx)) : ℂ)) <| by
-      simp [W, V]
+      simp only [le_refl, W, V]
   have hVleW : (⨆ γ : ι → ℂ, V γ) ≤ ⨆ α : σ, W α := by
     refine iSup_le ?_
     intro γ
     by_cases hγ : V γ = ⊥
-    · simp [hγ]
+    · simp only [hγ, bot_le]
     · have hEig : ∀ idx, Module.End.HasEigenvalue (T idx) (γ idx) := by
         intro idx
         apply Module.End.hasEigenvalue_iff.mpr
@@ -595,11 +624,11 @@ private lemma blockForm_nonneg_of_scalarPSD_of_commuting {n D : ℕ}
         apply le_antisymm
         · have hle : V γ ≤ Module.End.eigenspace (T idx) (γ idx) := by
             exact iInf_le (fun j => Module.End.eigenspace (T j) (γ j)) idx
-          simpa [V, hbot] using hle
+          simpa only [le_bot_iff, hbot] using hle
         · exact bot_le
       let α : σ := fun idx => ⟨γ idx, hEig idx⟩
       exact le_iSup_of_le α <| by
-        simp [W, V, α]
+        simp only [UnifEigenvalues.val_mk, le_refl, V, W, α]
   have hWTop : (⨆ α : σ, W α) = ⊤ := by
     calc
       (⨆ α : σ, W α) = ⨆ γ : ι → ℂ, V γ := by exact le_antisymm hWleV hVleW
@@ -635,21 +664,22 @@ private lemma blockForm_nonneg_of_scalarPSD_of_commuting {n D : ℕ}
       Matrix.toEuclideanLin (M i j) (b a) = eig a i j • b a := by
     have hlin : Matrix.toEuclideanLin (M i j) =
         Matrix.toEuclideanLin (H i j) + Complex.I • Matrix.toEuclideanLin (K i j) := by
-      simpa [H, K] using congrArg Matrix.toEuclideanLin (hM_decomp i j)
+      simpa only [one_div, smul_add, map_add, map_smul, map_sub] using
+        congrArg Matrix.toEuclideanLin (hM_decomp i j)
     rw [hlin]
     calc
       Matrix.toEuclideanLin (H i j) (b a) + Complex.I • Matrix.toEuclideanLin (K i j) (b a)
           = χ a (Sum.inl (i, j)) • b a + Complex.I • (χ a (Sum.inr (i, j)) • b a) := by
               rw [hTb (Sum.inl (i, j)) a, hTb (Sum.inr (i, j)) a]
       _ = eig a i j • b a := by
-            simp [eig, add_smul, smul_smul]
+            simp only [smul_smul, add_smul, eig]
   let ψE : Fin n → EuclideanSpace ℂ (Fin D) := fun i => WithLp.toLp 2 (ψ i)
   let c : Fin n → s → ℂ := fun i a => inner ℂ (b a) (ψE i)
   have hcoeff (i j : Fin n) (v : EuclideanSpace ℂ (Fin D)) (a : s) :
       inner ℂ (b a) (Matrix.toEuclideanLin (M i j) v) = eig a i j * inner ℂ (b a) v := by
     let v' : EuclideanSpace ℂ (Fin D) := ∑ x, inner ℂ (b x) v • b x
     have hv' : v' = v := by
-      simpa [v'] using b.sum_repr' v
+      simpa only using b.sum_repr' v
     calc
       inner ℂ (b a) (Matrix.toEuclideanLin (M i j) v)
           = inner ℂ (b a) (Matrix.toEuclideanLin (M i j) v') := by rw [← hv']
@@ -660,13 +690,14 @@ private lemma blockForm_nonneg_of_scalarPSD_of_commuting {n D : ℕ}
             intro x _
             rw [map_smul, hMb x i j, smul_smul]
       _ = inner ℂ (b a) v * eig a i j := by
-            simpa using Orthonormal.inner_right_fintype (hv := b.orthonormal)
+            simpa only using Orthonormal.inner_right_fintype (hv := b.orthonormal)
               (l := fun x => inner ℂ (b x) v * eig x i j) a
       _ = eig a i j * inner ℂ (b a) v := by ring
   have hformTerm (i j : Fin n) :
       star (ψ i) ⬝ᵥ (M i j).mulVec (ψ j) =
         inner ℂ (ψE i) (Matrix.toEuclideanLin (M i j) (ψE j)) := by
-    simp [ψE, EuclideanSpace.inner_eq_star_dotProduct, Matrix.toLin'_apply, dotProduct_comm]
+    simp only [dotProduct_comm, Matrix.toLpLin_toLp, Matrix.toLin'_apply,
+      EuclideanSpace.inner_eq_star_dotProduct, ψE]
   have hterm (i j : Fin n) :
       inner ℂ (ψE i) (Matrix.toEuclideanLin (M i j) (ψE j)) =
         ∑ a : s, starRingEnd ℂ (c i a) * c j a * eig a i j := by
@@ -678,10 +709,10 @@ private lemma blockForm_nonneg_of_scalarPSD_of_commuting {n D : ℕ}
               exact b.sum_inner_mul_inner (ψE i) (Matrix.toEuclideanLin (M i j) (ψE j))
       _ = ∑ a : s, starRingEnd ℂ (c i a) * (eig a i j * c j a) := by
             have hleft (a : s) : inner ℂ (ψE i) (b a) = starRingEnd ℂ (c i a) := by
-              simp [c]
+              simp only [inner_conj_symm, c]
             have hright (a : s) :
                 inner ℂ (b a) (Matrix.toEuclideanLin (M i j) (ψE j)) = eig a i j * c j a := by
-              simpa [c] using hcoeff i j (ψE j) a
+              simpa only [c] using hcoeff i j (ψE j) a
             apply Finset.sum_congr rfl
             intro a _
             rw [hleft a, hright a]
@@ -706,9 +737,10 @@ private lemma blockForm_nonneg_of_scalarPSD_of_commuting {n D : ℕ}
       star (b a).ofLp ⬝ᵥ (M i j).mulVec (b a).ofLp = eig a i j := by
     have hinner : inner ℂ (b a) (Matrix.toEuclideanLin (M i j) (b a)) = eig a i j := by
       rw [hMb a i j]
-      simp [inner_smul_right]
-    simpa [EuclideanSpace.inner_eq_star_dotProduct, Matrix.toLin'_apply,
-      dotProduct_comm] using hinner
+      simp only [inner_smul_right, inner_self_eq_norm_sq_to_K, OrthonormalBasis.norm_eq_one,
+        coe_algebraMap, ofReal_one, one_pow, mul_one]
+    simpa only [dotProduct_comm, EuclideanSpace.inner_eq_star_dotProduct, Matrix.ofLp_toLpLin,
+      Matrix.toLin'_apply] using hinner
   have hnonneg :
       0 ≤ ∑ a : s, ∑ i : Fin n, ∑ j : Fin n, starRingEnd ℂ (c i a) * c j a * eig a i j := by
     apply Finset.sum_nonneg
@@ -752,7 +784,7 @@ theorem quadraticForm_nonneg_of_isPositiveMap_of_commuting_images
   have hTadj : ∀ i j, (T (a j i))ᴴ = T (a i j) := by
     intro i j
     conv_lhs => rw [(hBH j i).symm]
-    simp [hT.map_conjTranspose]
+    simp only [hT.map_conjTranspose, conjTranspose_conjTranspose]
   -- Step 3: Apply the core lemma with M i j = T(a i j)
   apply blockForm_nonneg_of_scalarPSD_of_commuting (fun i j => T (a i j))
   · -- Block Hermiticity of images
@@ -821,8 +853,8 @@ private lemma linearMap_eq_sum_rankOne_of_orthonormalBasis
   intro v
   calc
     L v = L (∑ i, inner ℂ (b i) v • b i) := by rw [b.sum_repr' v]
-    _ = ∑ i, inner ℂ (b i) v • L (b i) := by simp [map_sum]
-    _ = ∑ i, inner ℂ (b i) v • (μ i • b i) := by simp [hL]
+    _ = ∑ i, inner ℂ (b i) v • L (b i) := by simp only [map_sum, map_smul]
+    _ = ∑ i, inner ℂ (b i) v • (μ i • b i) := by simp only [hL]
     _ = ∑ i, μ i • (inner ℂ (b i) v • b i) := by
       apply Finset.sum_congr rfl
       intro i _
@@ -831,7 +863,8 @@ private lemma linearMap_eq_sum_rankOne_of_orthonormalBasis
     _ = (∑ i, μ i •
       (↑((((InnerProductSpace.rankOne ℂ) (b i)) (b i)) :
         E →L[ℂ] E) : E →ₗ[ℂ] E)) v := by
-      simp [InnerProductSpace.rankOne_apply, smul_smul]
+      simp only [smul_smul, LinearMap.coe_sum, LinearMap.coe_smul, ContinuousLinearMap.coe_coe,
+        Finset.sum_apply, Pi.smul_apply, InnerProductSpace.rankOne_apply]
 
 private lemma commute_parts_of_normal
     (A : Mat) (hA : Aᴴ * A = A * Aᴴ) :
@@ -840,7 +873,8 @@ private lemma commute_parts_of_normal
   -- Commute (A + Aᴴ) with (Aᴴ - A) by combining the individual commutators.
   have hsum_sub : Commute (A + Aᴴ) (Aᴴ - A) :=
     (hAA.add_left (Commute.refl Aᴴ)).sub_right ((Commute.refl A).add_left hAA.symm)
-  simpa [Matrix.smul_mul, Matrix.mul_smul, mul_comm, mul_left_comm, mul_assoc] using
+  simpa only [one_div, smul_add, ne_eq, div_eq_zero_iff, Complex.I_ne_zero,
+    OfNat.ofNat_ne_zero, or_self, not_false_eq_true, Commute.smul_right_iff₀] using
     (hsum_sub.smul_left (1 / 2 : ℂ)).smul_right (Complex.I / 2 : ℂ)
 
 set_option maxHeartbeats 800000 in
@@ -862,7 +896,9 @@ private lemma exists_diagonal_family_of_normal
   let K : Mat := (Complex.I / 2 : ℂ) • (Aᴴ - A)
   have hH : H.IsHermitian := by
     ext i j
-    simp [H, add_comm]
+    simp only [smul_add, one_div, conjTranspose_apply, add_apply, smul_apply, smul_eq_mul,
+      RCLike.star_def, star_add, star_mul', star_inv₀, star_ofNat,
+      RingHomCompTriple.comp_apply, RingHom.id_apply, add_comm, H]
   have hK : K.IsHermitian := by
     ext i j
     simp only [sub_eq_add_neg, smul_add, smul_neg, conjTranspose_apply, add_apply, smul_apply,
@@ -870,13 +906,16 @@ private lemma exists_diagonal_family_of_normal
       star_ofNat, RingHomCompTriple.comp_apply, RingHom.id_apply, star_neg, K]
     ring
   have hHKmat : Commute H K := by
-    simpa [H, K] using commute_parts_of_normal (A := A) hA
+    simpa only [H, K, smul_add, one_div, Matrix.smul_mul, Matrix.mul_smul, mul_comm,
+      mul_left_comm, mul_assoc, ne_eq, div_eq_zero_iff, Complex.I_ne_zero, OfNat.ofNat_ne_zero,
+      or_self, not_false_eq_true, Commute.smul_right_iff₀] using
+      commute_parts_of_normal (A := A) hA
   let Hlin : E →ₗ[ℂ] E := Matrix.toEuclideanLin H
   let Klin : E →ₗ[ℂ] E := Matrix.toEuclideanLin K
   have hHlin : Hlin.IsSymmetric := by
-    simpa [Hlin] using ((Matrix.isHermitian_iff_isSymmetric (A := H)).mp hH)
+    simpa only using ((Matrix.isHermitian_iff_isSymmetric (A := H)).mp hH)
   have hKlin : Klin.IsSymmetric := by
-    simpa [Klin] using ((Matrix.isHermitian_iff_isSymmetric (A := K)).mp hK)
+    simpa only using ((Matrix.isHermitian_iff_isSymmetric (A := K)).mp hK)
   have hEuclMul := toEuclideanLin_mul (D := D)
   have hHKlin : Commute Hlin Klin :=
     hEuclMul H K |>.trans (congrArg Matrix.toEuclideanLin hHKmat.eq) |>.trans (hEuclMul K H).symm
@@ -890,8 +929,11 @@ private lemma exists_diagonal_family_of_normal
   let Krestr : ∀ μ : Eigenvalues Hlin,
       Module.End ℂ (Module.End.eigenspace Hlin μ) :=
     fun μ => Klin.restrict (hKinv μ)
-  have hKrestr : ∀ μ : Eigenvalues Hlin, (Krestr μ).IsSymmetric :=
-    fun μ => hKlin.restrict_invariant (hKinv μ)
+  have hKrestr : ∀ μ : Eigenvalues Hlin,
+      @LinearMap.IsSymmetric ℂ (Module.End.eigenspace Hlin μ) _ _ _
+        (Klin.restrict (hKinv μ)) := by
+    intro μ
+    exact hKlin.restrict_invariant (hKinv μ)
   let bFamily : ∀ μ : Eigenvalues Hlin,
       OrthonormalBasis (Fin (Module.finrank ℂ (Module.End.eigenspace Hlin μ))) ℂ
         (Module.End.eigenspace Hlin μ) :=
@@ -910,7 +952,8 @@ private lemma exists_diagonal_family_of_normal
   let ν : s → ℂ := fun a => ↑((hKrestr a.1).eigenvalues rfl a.2)
   let eig : s → ℂ := fun a => (a.1 : ℂ) + Complex.I * ν a
   have hb_eq (a : s) : b a = (((bFamily a.1) a.2 : Module.End.eigenspace Hlin a.1) : E) := by
-    rw [show b a = cBasis a by simp [b]]
+    rw [show b a = cBasis a by
+      simp only [b, Module.Basis.coe_toOrthonormalBasis]]
     change cBasis a = (((bFamily a.1).toBasis a.2 : Module.End.eigenspace Hlin a.1) : E)
     exact congrFun
       (hHlin.direct_sum_isInternal.collectedBasis_coe (fun i => (bFamily i).toBasis)) a
@@ -924,7 +967,7 @@ private lemma exists_diagonal_family_of_normal
         (((hKrestr a.1).hasEigenvector_eigenvectorBasis rfl a.2).1)
     have hv' := congrArg (fun x : Module.End.eigenspace Hlin a.1 => (x : E)) hv_eq
     rw [hb_eq a]
-    simpa [ν, Krestr] using hv'
+    simpa only [ν, Krestr] using hv'
   have hA_decomp : A = H + Complex.I • K := by
     ext i j
     simp only [one_div, smul_add, sub_eq_add_neg, smul_neg, add_apply, smul_apply, smul_eq_mul,
@@ -933,16 +976,22 @@ private lemma exists_diagonal_family_of_normal
     norm_num [Complex.I_sq]
     ring
   have hA_lin_decomp : Matrix.toEuclideanLin A = Hlin + Complex.I • Klin := by
-    simpa [Hlin, Klin] using congrArg Matrix.toEuclideanLin hA_decomp
+    simpa only [one_div, smul_add, map_add, map_smul, map_sub] using
+      congrArg Matrix.toEuclideanLin hA_decomp
   have hAb (a : s) : Matrix.toEuclideanLin A (b a) = eig a • b a := by
     rw [hA_lin_decomp]
-    simp [eig, hHb, hKb, add_smul, smul_smul]
+    calc
+      (Hlin + Complex.I • Klin) (b a) =
+          (a.1 : ℂ) • b a + Complex.I • (ν a • b a) := by
+            rw [LinearMap.add_apply, LinearMap.smul_apply, hHb a, hKb a]
+      _ = eig a • b a := by
+            simp only [smul_smul, add_smul, eig]
   let P : s → Mat := fun i =>
     Matrix.toEuclideanLin.symm
       (↑((((InnerProductSpace.rankOne ℂ) (b i)) (b i)) : E →L[ℂ] E))
   have hA_matrix : A = ∑ i, eig i • P i := by
     apply Matrix.toEuclideanLin.injective
-    simpa [P] using
+    simpa only [P, map_sum, map_smul, LinearEquiv.apply_symm_apply] using
       (linearMap_eq_sum_rankOne_of_orthonormalBasis (b := b) (L := Matrix.toEuclideanLin A)
         (μ := eig) hAb)
   have hAstar_decomp : Aᴴ = H - Complex.I • K := by
@@ -953,24 +1002,29 @@ private lemma exists_diagonal_family_of_normal
     norm_num [Complex.I_sq]
     ring
   have hAstar_lin_decomp : Matrix.toEuclideanLin Aᴴ = Hlin - Complex.I • Klin := by
-    simpa [Hlin, Klin] using congrArg Matrix.toEuclideanLin hAstar_decomp
+    simpa only [one_div, smul_add, map_add, map_smul, map_sub] using
+      congrArg Matrix.toEuclideanLin hAstar_decomp
   have hAstarb (a : s) : Matrix.toEuclideanLin Aᴴ (b a) = star (eig a) • b a := by
     rw [hAstar_lin_decomp]
     have hμreal : star (a.1 : ℂ) = (a.1 : ℂ) := by
-      simpa using hHlin.conj_eigenvalue_eq_self a.1.property
-    have hνreal : star (ν a) = ν a := by simp [ν]
+      simpa only using hHlin.conj_eigenvalue_eq_self a.1.property
+    have hνreal : star (ν a) = ν a := by
+      simp only [ν, RCLike.star_def, Complex.conj_ofReal]
     calc
       Hlin (b a) - Complex.I • Klin (b a)
-          = (a.1 : ℂ) • b a - Complex.I • (ν a • b a) := by simp [hHb, hKb]
+          = (a.1 : ℂ) • b a - Complex.I • (ν a • b a) := by
+            simp only [hHb, hKb]
       _ = ((a.1 : ℂ) + -(Complex.I * ν a)) • b a := by
-          simp [sub_eq_add_neg, add_smul, smul_smul]
+          simp only [sub_eq_add_neg, add_smul, smul_smul, neg_smul]
       _ = star (eig a) • b a := by
-          simp [eig, hμreal, hνreal]
+          simp only [star_add, star_mul', RCLike.star_def, hνreal, hμreal, conj_I, neg_mul, eig]
   have hAb_ofLp (a : s) : A.mulVec (b a).ofLp = eig a • (b a).ofLp := by
-    simpa [Matrix.ofLp_toLpLin (p := 2) (q := 2), Matrix.toLin'_apply, WithLp.ofLp_smul]
+    simpa only [Matrix.ofLp_toLpLin (p := 2) (q := 2), Matrix.toLin'_apply,
+      WithLp.ofLp_smul]
       using congrArg WithLp.ofLp (hAb a)
   have hAstarb_ofLp (a : s) : Aᴴ.mulVec (b a).ofLp = star (eig a) • (b a).ofLp := by
-    simpa [Matrix.ofLp_toLpLin (p := 2) (q := 2), Matrix.toLin'_apply, WithLp.ofLp_smul]
+    simpa only [Matrix.ofLp_toLpLin (p := 2) (q := 2), Matrix.toLin'_apply,
+      WithLp.ofLp_smul]
       using congrArg WithLp.ofLp (hAstarb a)
   have hAstarAb (a : s) : Matrix.toEuclideanLin (Aᴴ * A) (b a) =
       (star (eig a) * eig a) • b a := by
@@ -982,23 +1036,25 @@ private lemma exists_diagonal_family_of_normal
           rw [Matrix.mulVec_smul]
         _ = eig a • (star (eig a) • (b a).ofLp) := by rw [hAstarb_ofLp a]
         _ = ((star (eig a) * eig a) • b a).ofLp := by
-            simp [WithLp.ofLp_smul, smul_smul, mul_comm]
-    simpa [Matrix.ofLp_toLpLin (p := 2) (q := 2), Matrix.toLin'_apply,
+            simp only [WithLp.ofLp_smul, smul_smul, mul_comm]
+    simpa only [Matrix.ofLp_toLpLin (p := 2) (q := 2), Matrix.toLin'_apply,
       Matrix.mulVec_mulVec, WithLp.ofLp_smul] using hmul
   have hAstarA_matrix : Aᴴ * A = ∑ i, (star (eig i) * eig i) • P i := by
     apply Matrix.toEuclideanLin.injective
-    simpa [P] using
+    simpa only [P, map_sum, map_smul, LinearEquiv.apply_symm_apply] using
       (linearMap_eq_sum_rankOne_of_orthonormalBasis
         (b := b) (L := Matrix.toEuclideanLin (Aᴴ * A))
         (μ := fun i => star (eig i) * eig i) hAstarAb)
   have hPpsd : ∀ i, (P i).PosSemidef := by
     intro i
     rw [show P i = Matrix.vecMulVec (b i).ofLp (star (b i).ofLp) by
-      simpa [P] using (InnerProductSpace.symm_toEuclideanLin_rankOne (x := b i) (y := b i))]
-    simpa using Matrix.posSemidef_vecMulVec_self_star ((b i).ofLp)
+      simpa only [P] using
+        (InnerProductSpace.symm_toEuclideanLin_rankOne (x := b i) (y := b i))]
+    simpa only using Matrix.posSemidef_vecMulVec_self_star ((b i).ofLp)
   have hPsum : ∑ i, P i = (1 : Mat) := by
     have hrank := b.sum_rankOne_eq_id
-    simpa [P] using
+    simpa only [ContinuousLinearMap.coe_sum, map_sum, ContinuousLinearMap.coe_id,
+      Matrix.toLpLin_symm_id] using
       congrArg (fun L : E →L[ℂ] E =>
         Matrix.toEuclideanLin.symm (L : E →ₗ[ℂ] E)) hrank
   refine ⟨s, inferInstance, inferInstance, b, eig, ?_⟩
@@ -1030,20 +1086,24 @@ theorem map_conjTranspose_mul_map_le_of_normal_of_subunital
   have hB : ∀ i, (B i).PosSemidef := fun i => hT (P i) (hPpsd i)
   have hsub : ∑ i, B i ≤ (1 : Matrix (Fin D) (Fin D) ℂ) := by
     calc
-      ∑ i, B i = T (∑ i, P i) := by simp [B, map_sum]
+      ∑ i, B i = T (∑ i, P i) := by simp only [map_sum, B]
       _ = T 1 := by rw [hPsum]
       _ ≤ 1 := h_subunital
   have hTA : T A = ∑ i, eig i • B i := by
-    rw [hA_decomp]; simp [B, P, map_sum]
+    rw [hA_decomp]
+    simp only [map_sum, map_smul, B, P]
   have hTAA : T (Aᴴ * A) = ∑ i, (star (eig i) * eig i) • B i := by
-    rw [hAstarA_decomp]; simp [B, P, map_sum]
+    rw [hAstarA_decomp]
+    simp only [RCLike.star_def, map_sum, map_smul, B, P]
   have hBherm : ∀ i, (B i)ᴴ = B i := fun i => (hB i).isHermitian.eq
   have hTAstar : T Aᴴ = ∑ i, star (eig i) • B i := by
     calc
-      T Aᴴ = (T A)ᴴ := by simpa using hT.map_conjTranspose A
+      T Aᴴ = (T A)ᴴ := by simpa only using hT.map_conjTranspose A
       _ = (∑ i, eig i • B i)ᴴ := by rw [hTA]
       _ = ∑ i, star (eig i) • B i := by
-          simp [hBherm, Matrix.conjTranspose_sum, Matrix.conjTranspose_smul]
-  simpa [hTAstar, hTA, hTAA] using diagonal_family_schwarz_le (B := B) hB hsub eig
+          simp only [Matrix.conjTranspose_sum, Matrix.conjTranspose_smul, RCLike.star_def,
+            hBherm]
+  simpa only [hTAstar, RCLike.star_def, hTA, hTAA, ge_iff_le] using
+    diagonal_family_schwarz_le (B := B) hB hsub eig
 
 end PositiveOnAbelian
