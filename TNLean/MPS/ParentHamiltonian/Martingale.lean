@@ -50,9 +50,9 @@ vanish on `(ker H)ᗮ`) then yields `γ² ‖v‖² ≤ ‖H v‖²`.
 
 The MPS-specific step (producing the quadratic-form inequality for
 `parentHamiltonianES A L N`) is the remaining obligation of
-`MPSTensor.parentHamiltonian_gapped`, which applies
-`FrustrationFree.spectralGap_of_martingale` with the MPS bound and
-remains `sorry`.
+`MPSTensor.parentHamiltonianES_gap_bound_of_friedrichs`, which packages the
+Friedrichs-angle and row-sum estimate needed by
+`MPSTensor.parentHamiltonian_gapped`.
 
 ## Main results
 
@@ -208,6 +208,25 @@ noncomputable def parentHamiltonianES (A : MPSTensor d D) (L N : ℕ) :
 
 /-! ### Uniform spectral gap for the MPS parent Hamiltonian -/
 
+/-- Friedrichs-angle and row-sum bridge for the MPS parent Hamiltonian.
+
+This is the remaining MPS-specific martingale estimate: it should produce a
+uniform positive lower bound for the transported parent Hamiltonian from the
+intersection property and finite-overlap geometry. -/
+theorem parentHamiltonianES_gap_bound_of_friedrichs
+    (A : MPSTensor d D) (_hA : IsInjective A) (L : ℕ) (_hL : 1 < L) :
+    ∃ γ > 0, ∀ (N : ℕ) (_hLN : 2 * L ≤ N)
+      (v : EuclideanSpace ℂ (Cfg d N)),
+      v ∈ (parentHamiltonianGroundSpaceES A L N)ᗮ →
+        γ * ‖v‖ ≤ ‖parentHamiltonianES A L N v‖ := by
+  -- Missing bridge: the MPS-specific Friedrichs-angle estimate for adjacent
+  -- local ground spaces, the finite-overlap row-sum bound, positivity of the
+  -- transported parent Hamiltonian, and the identification of
+  -- `parentHamiltonianGroundSpaceES` with `LinearMap.ker (parentHamiltonianES A L N)`.
+  -- Once formalized, this should feed the resulting quadratic-form inequality
+  -- into `FrustrationFree.spectralGap_of_martingale`.
+  sorry
+
 /--
 **Spectral gap for MPS parent Hamiltonians.**
 
@@ -237,21 +256,15 @@ the norm bound `γ ‖v‖ ≤ ‖H v‖` on `(ker H)ᗮ`. The `LinearMap.IsPosi
 hypothesis required by `FrustrationFree.spectralGap_of_martingale` is
 automatic here because `H_N = ∑ᵢ hᵢ` is a sum of orthogonal projectors.
 
-The proof below structures the argument exactly this way: it invokes
-`FrustrationFree.spectralGap_of_martingale` with the MPS-specific
-quadratic-form bound, which is the remaining mathematical obligation
-(Friedrichs angle ⟹ operator inequality). -/
+The proof below invokes the MPS-specific bridge
+`parentHamiltonianES_gap_bound_of_friedrichs`, whose proof is the remaining
+Friedrichs-angle and row-sum obligation. -/
 theorem parentHamiltonian_gapped
-    (A : MPSTensor d D) (_hA : IsInjective A) (L : ℕ) (_hL : 1 < L) :
+    (A : MPSTensor d D) (hA : IsInjective A) (L : ℕ) (hL : 1 < L) :
     ∃ γ > 0, ∀ (N : ℕ) (_hLN : 2 * L ≤ N)
       (v : EuclideanSpace ℂ (Cfg d N)),
       v ∈ (parentHamiltonianGroundSpaceES A L N)ᗮ →
         γ * ‖v‖ ≤ ‖parentHamiltonianES A L N v‖ := by
-  -- The MPS-specific Friedrichs-angle / row-sum argument produces a
-  -- uniform `γ > 0` for which `parentHamiltonianES A L N` satisfies the
-  -- quadratic-form inequality `H² ≥ γ H`. Feeding this into
-  -- `FrustrationFree.spectralGap_of_martingale` gives the desired norm
-  -- bound on `(ker H)ᗮ = (parentHamiltonianGroundSpaceES A L N)ᗮ`.
-  sorry
+  exact parentHamiltonianES_gap_bound_of_friedrichs A hA L hL
 
 end MPSTensor
