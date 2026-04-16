@@ -313,13 +313,9 @@ private lemma mul_mul_conjTranspose_ne_zero_of_ne_zero {D : ℕ}
       IsUnit.star hS_unit
   intro h0
   apply hM
-  have h1 : M * Sᴴ = 0 := by
-    apply IsUnit.mul_left_cancel hS_unit
-    simpa only [mul_zero, Matrix.mul_assoc] using h0
-  have h2 : M = 0 := by
-    apply IsUnit.mul_right_cancel hSstar_unit
-    simpa only [zero_mul] using h1
-  exact h2
+  apply IsUnit.mul_right_cancel hSstar_unit
+  apply IsUnit.mul_left_cancel hS_unit
+  simpa only [zero_mul, mul_zero, Matrix.mul_assoc] using h0
 
 /-- An irreducible trace-preserving tensor has a nonzero positive fixed point whose
 square-root gauge is invertible. -/

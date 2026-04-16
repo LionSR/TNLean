@@ -124,10 +124,16 @@ theorem aklt_transferMap_one :
   simp only [transferMap_apply, Fin.sum_univ_three, Matrix.add_apply,
     akltTensor_conjTranspose]
   fin_cases i <;> fin_cases j <;>
-    simp [akltTensor, Matrix.mul_apply, Fin.sum_univ_two, smul_eq_mul] <;> (
-    rw [div_mul_div_comm, ← _root_.mul_inv_rev, ofReal_sqrt3_mul_self,
-      ofReal_sqrt2_mul_self]
-    norm_num)
+    simp only [akltTensor, one_div, Complex.ofReal_inv, smul_of, smul_cons,
+      smul_eq_mul, mul_one, mul_zero, Matrix.smul_empty, mul_neg,
+      Fin.zero_eta, Fin.isValue, Fin.mk_one, mul_apply, of_apply, cons_val',
+      cons_val_fin_one, cons_val_zero, cons_val_one, Fin.sum_univ_two,
+      zero_mul, add_zero, zero_add, Complex.ofReal_div, neg_smul, neg_of,
+      neg_cons, neg_zero, Matrix.neg_empty, ne_eq, zero_ne_one, one_ne_zero,
+      not_false_eq_true, one_apply_eq, one_apply_ne, neg_mul, neg_neg] <;> (
+      rw [div_mul_div_comm, ← _root_.mul_inv_rev, ofReal_sqrt3_mul_self,
+        ofReal_sqrt2_mul_self]
+      norm_num)
 
 /-! ### Normality (2-block injectivity) -/
 
@@ -239,7 +245,8 @@ def akltZ2Action :
   map_one' := by simp [toAdd_one]
   map_mul' a b := by
     rcases zmod2_cases a with rfl | rfl <;> rcases zmod2_cases b with rfl | rfl <;>
-      simp [toAdd_ofAdd, zmod2_one_add_one]
+      simp only [one_mul, mul_one, toAdd_one, toAdd_ofAdd, toAdd_mul,
+        zmod2_one_add_one, one_ne_zero, ↓reduceIte]
     ext i j; fin_cases i <;> fin_cases j <;>
       simp [Matrix.mul_apply, Fin.sum_univ_three, Matrix.of_apply,
         Matrix.cons_val_zero, Matrix.cons_val_one]

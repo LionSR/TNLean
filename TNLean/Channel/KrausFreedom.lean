@@ -121,6 +121,8 @@ private abbrev KrausCoeffSpace (r : ℕ) := EuclideanSpace ℂ (Fin r)
 
 private abbrev KrausEntrySpace (D : ℕ) := EuclideanSpace ℂ (Fin D × Fin D)
 
+-- Needed because inferring this `InnerProductSpace` instance triggers a large
+-- typeclass search on `EuclideanSpace` in Lean 4.29.
 set_option synthInstance.maxHeartbeats 16000000 in
 /-- Cached `InnerProductSpace` instance for `EuclideanSpace` to avoid synthesis timeout. -/
 private noncomputable abbrev euclideanIPS (ι : Type*) [Fintype ι] :
@@ -242,8 +244,9 @@ theorem kraus_rectangular_freedom
   -- Key: L sends fA'(v) to fB(v)
   have hL_apply : ∀ v, L_lm ⟨fA' v, LinearMap.mem_range_self fA' v⟩ = fB v := by
     intro v
-    show ((LinearMap.ker fA').liftQ fB hker)
-      (fA'.quotKerEquivRange.symm ⟨fA' v, LinearMap.mem_range_self fA' v⟩) = fB v
+    change ((LinearMap.ker fA').liftQ fB hker)
+        (fA'.quotKerEquivRange.symm ⟨fA' v, LinearMap.mem_range_self fA' v⟩) =
+      fB v
     rw [fA'.quotKerEquivRange_symm_apply_image]
     exact Submodule.liftQ_apply _ _ _
   -- L preserves inner products
@@ -326,8 +329,8 @@ theorem kraus_rectangular_freedom'
       ∑ α : Fin (Fintype.card ι₁), B' α * X * (B' α)ᴴ =
       ∑ j : Fin (Fintype.card ι₂), A' j * X * (A' j)ᴴ := by
     intro X
-    show ∑ α, B (e₁.symm α) * X * (B (e₁.symm α))ᴴ =
-        ∑ j, A (e₂.symm j) * X * (A (e₂.symm j))ᴴ
+    change ∑ α, B (e₁.symm α) * X * (B (e₁.symm α))ᴴ =
+      ∑ j, A (e₂.symm j) * X * (A (e₂.symm j))ᴴ
     rw [e₁.symm.sum_comp (fun i => B i * X * (B i)ᴴ),
         e₂.symm.sum_comp (fun j => A j * X * (A j)ᴴ)]
     exact h X

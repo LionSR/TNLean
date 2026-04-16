@@ -48,12 +48,11 @@ private lemma sameMPV_of_mpvOverlap_tendsto_one_of_injective
       Filter.Tendsto (fun N => mpvOverlap (d := d) A B N)
         Filter.atTop (nhds (1 : ℂ))) :
     SameMPV A B := by
-  have hGaugePhase :=
-    gaugePhaseEquiv_of_mpvOverlap_tendsto_one
-      (A := A) (B := B) hA_inj hB_inj hA_lc hB_lc hCross
   exact
     sameMPV_of_gaugePhaseEquiv_of_mpvOverlap_tendsto_one
-      (A := A) (B := B) (hSelf := hSelf) (hCross := hCross) hGaugePhase
+      (A := A) (B := B) (hSelf := hSelf) (hCross := hCross)
+      (gaugePhaseEquiv_of_mpvOverlap_tendsto_one
+        (A := A) (B := B) hA_inj hB_inj hA_lc hB_lc hCross)
 
 private lemma sameMPV_of_mpvOverlap_tendsto_one_of_irreducible_TP
     {D : ℕ} [NeZero D] (A B : MPSTensor d D)
@@ -67,12 +66,11 @@ private lemma sameMPV_of_mpvOverlap_tendsto_one_of_irreducible_TP
       Filter.Tendsto (fun N => mpvOverlap (d := d) A B N)
         Filter.atTop (nhds (1 : ℂ))) :
     SameMPV A B := by
-  have hGaugePhase :=
-    gaugePhaseEquiv_of_mpvOverlap_tendsto_one_of_irreducible_TP
-      (A := A) (B := B) hA_irr hB_irr hA_lc hB_lc hCross
   exact
     sameMPV_of_gaugePhaseEquiv_of_mpvOverlap_tendsto_one
-      (A := A) (B := B) (hSelf := hSelf) (hCross := hCross) hGaugePhase
+      (A := A) (B := B) (hSelf := hSelf) (hCross := hCross)
+      (gaugePhaseEquiv_of_mpvOverlap_tendsto_one_of_irreducible_TP
+        (A := A) (B := B) hA_irr hB_irr hA_lc hB_lc hCross)
 
 private theorem leading_block_sameMPV_of_crossOverlap_tendsto_one
     {r : ℕ} {dim : Fin (Nat.succ (Nat.succ r)) → ℕ}
@@ -476,17 +474,7 @@ theorem summed_identity_for_word
     simpa [σ, hlen] using (List.ofFn_getElem (xs := (List.replicate L w).flatten))
   have hsummed := h_summed (M * L) σ
   simp only [mpv, coeff, hofFn, evalWord_flatten_replicate, mul_sub] at hsummed
-  rw [Finset.sum_sub_distrib, sub_eq_zero] at hsummed
-  conv_lhs =>
-    arg 2; ext k
-    rw [show ((μ k) ^ M) ^ L = (μ k) ^ (M * L) from (pow_mul _ _ _).symm]
-  rw [show (∑ k : Fin r, (μ k) ^ (M * L) *
-    (Matrix.trace ((evalWord (A k) w) ^ L) -
-     Matrix.trace ((evalWord (B k) w) ^ L))) =
-    ∑ k : Fin r, (μ k) ^ (M * L) * Matrix.trace ((evalWord (A k) w) ^ L) -
-    ∑ k : Fin r, (μ k) ^ (M * L) * Matrix.trace ((evalWord (B k) w) ^ L)
-    from by rw [← Finset.sum_sub_distrib]; congr 1; ext k; ring]
-  exact sub_eq_zero.mpr hsummed
+  simpa [M, pow_mul, mul_sub] using hsummed
 
 theorem sameMPV_of_charpoly_eq_all_words
     {D : ℕ} [NeZero D]

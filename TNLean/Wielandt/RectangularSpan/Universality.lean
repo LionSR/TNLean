@@ -179,10 +179,8 @@ theorem rectSpan_nilpIndex_eq_range_of_strict_growth
   -- Translate back
   refine ⟨C - a 0, by omega, ?_⟩
   apply rectSpan_eq_range_of_finrank_eq_range
-  -- finrank(rectSpan P A (C - a 0)) = C = finrank(range(mulLeft P))
-  change finrank ℂ (rectSpan P A (C - a 0)) =
+  change a (C - a 0) =
     finrank ℂ (LinearMap.range (LinearMap.mulLeft ℂ P))
-  rw [show finrank ℂ (rectSpan P A (C - a 0)) = a (C - a 0) from rfl]
   rw [hceiling, finrank_range_mulLeft, hrank_eq]
 
 /-! ### Part 3: Unconditional D²-D+1 from strict growth -/
@@ -698,8 +696,8 @@ theorem vecMulVec_eigenvector_pad_wordSpan_add
   induction k with
   | zero => simpa
   | succ k ih =>
-    rw [show n + (k + 1) = (n + k) + 1 from by omega]
-    exact vecMulVec_eigenvector_pad_wordSpan A i₀ hμ heig ih
+    simpa only [Nat.add_assoc] using
+      vecMulVec_eigenvector_pad_wordSpan A i₀ hμ heig ih
 
 /-- **Eigenvector padding monotonicity**: if `vecMulVec φ ψ ∈ wordSpan A n` and `n ≤ m`,
 then `vecMulVec φ ψ ∈ wordSpan A m`. -/

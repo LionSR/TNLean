@@ -70,9 +70,9 @@ theorem vecMulVec_mem_range_mulLeft_of_mem_range_toLin
     (P : Matrix (Fin D) (Fin D) ℂ) {φ : Fin D → ℂ}
     (hφ : φ ∈ LinearMap.range (Matrix.toLin' P)) (ψ : Fin D → ℂ) :
     vecMulVec φ ψ ∈ LinearMap.range (LinearMap.mulLeft ℂ P) := by
-  obtain ⟨v, hv⟩ := LinearMap.mem_range.mp hφ
-  rw [show φ = P *ᵥ v from by rw [← Matrix.toLin'_apply]; exact hv.symm]
-  exact ⟨vecMulVec v ψ, by simp [LinearMap.mulLeft_apply, mul_vecMulVec]⟩
+  obtain ⟨v, rfl⟩ := LinearMap.mem_range.mp hφ
+  refine ⟨vecMulVec v ψ, ?_⟩
+  simp only [Matrix.toLin'_apply, LinearMap.mulLeft_apply, mul_vecMulVec]
 
 /-- **Rank-one universality from stabilized rectangular span.**
 
@@ -888,7 +888,7 @@ theorem mulLeft_mem_rectSpan_nilpIndex_succ
   calc (A i₀ ^ r) * (M₀ * M)
       = ((A i₀ ^ r) * M₀) * M := by simp [Matrix.mul_assoc]
     _ = (M₀ * (A i₀ ^ r)) * M := by
-        rw [show (A i₀ ^ r) * M₀ = M₀ * (A i₀ ^ r) from hcomm.symm]
+        simpa [M₀] using congrArg (fun Z => Z * M) hcomm.symm
     _ = M₀ * ((A i₀ ^ r) * M) := by simp [Matrix.mul_assoc]
 
 /-- Every element of `rectSpan ((A i₀)^r) A n` lies in `range(mulLeft ((A i₀)^r))`. -/

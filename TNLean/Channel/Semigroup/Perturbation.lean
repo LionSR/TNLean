@@ -136,7 +136,7 @@ theorem duhamel_formula
   -- Simplify f(t) - f(0):
   -- f(t) = expSemigroupCLM L (t - t) * expSemigroupCLM L' t = 1 * T' t = T' t
   -- f(0) = expSemigroupCLM L (t - 0) * expSemigroupCLM L' 0 = T t * 1 = T t
-  simpa [sub_self, sub_zero, expSemigroupCLM_zero, one_mul, mul_one]
+  simp [sub_self, sub_zero, expSemigroupCLM_zero, one_mul, mul_one]
 
 /-! ## Helper for biSup bounds -/
 
