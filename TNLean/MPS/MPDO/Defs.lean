@@ -92,11 +92,12 @@ lemma evalWord_ofFn (M : MPOTensor d D) {N : ℕ} (σ τ : Fin N → Fin d) :
     evalWord M (List.ofFn σ) (List.ofFn τ) =
       (List.ofFn fun i : Fin N => M (σ i) (τ i)).prod := by
   induction N with
-  | zero => simp
+  | zero =>
+      simp only [List.ofFn_zero, evalWord_nil, List.prod_nil]
   | succ n ih =>
-    simp only [List.ofFn_succ, evalWord_cons, List.prod_cons]
-    congr 1
-    exact ih (σ ∘ Fin.succ) (τ ∘ Fin.succ)
+      simp only [List.ofFn_succ, evalWord_cons, List.prod_cons]
+      congr 1
+      exact ih (σ ∘ Fin.succ) (τ ∘ Fin.succ)
 
 /-! ### The MPO operator family -/
 
@@ -136,8 +137,8 @@ noncomputable def transferMap (M : MPOTensor d D) :
 
 lemma transferMap_apply (M : MPOTensor d D) (X : Matrix (Fin D) (Fin D) ℂ) :
     transferMap M X = ∑ i : Fin d, ∑ j : Fin d, M i j * X * (M i j)ᴴ := by
-  classical
-  simp [transferMap, Matrix.mul_assoc]
+  simp only [transferMap, LinearMap.sum_apply, LinearMap.comp_apply,
+    LinearMap.mulLeft_apply, LinearMap.mulRight_apply, Matrix.mul_assoc]
 
 /-- The MPO transfer map equals the MPS transfer map of the doubled-index tensor. -/
 @[simp] lemma transferMap_eq_toMPSTensor (M : MPOTensor d D) :
@@ -151,8 +152,8 @@ lemma transferMap_apply (M : MPOTensor d D) (X : Matrix (Fin D) (Fin D) ℂ) :
 theorem transferMap_pos (M : MPOTensor d D)
     {X : Matrix (Fin D) (Fin D) ℂ} (hX : X.PosSemidef) :
     (transferMap M X).PosSemidef := by
-  rw [transferMap_eq_toMPSTensor]
-  exact MPSTensor.transferMap_pos (toMPSTensor M) hX
+  simpa [transferMap_eq_toMPSTensor] using
+    MPSTensor.transferMap_pos (toMPSTensor M) hX
 
 /-! ### MPDO: global positivity -/
 

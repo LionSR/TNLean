@@ -631,6 +631,32 @@ interaction projectors commute with each other.
     projectors.
 \end{theorem}
 
+\begin{remark}[Product-pair bridge for future NNCPH proofs]%
+    \label{rem:product_pair_bridge}
+    \lean{MPSTensor.productPairWindow}
+    \lean{MPSTensor.productPairState}
+    \lean{MPSTensor.HasProductPairMPV}
+    \lean{MPSTensor.HasProductPairLocalProjectors}
+    \lean{MPSTensor.ProductPairBridge}
+    \lean{MPSTensor.ProductPairBridge.localTerm_idempotent}
+    \lean{MPSTensor.ProductPairBridge.commuting_twoSite_localTerms}
+    \leanok
+    For an even chain of length $2N$, \texttt{productPairWindow} extracts the
+    $p$-th adjacent two-site word from a configuration. Given a fixed two-site
+    amplitude $\psi_2$, \texttt{productPairState} is the chain amplitude
+    obtained by repeating $\psi_2$ on every bond.
+    A witness \texttt{ProductPairBridge A} packages two ingredients: first, the
+    statement that the MPV coefficients of $A$ agree with such a repeated
+    product-pair state on every even chain; second, a family of idempotent
+    chain-level projectors whose values are exactly the nearest-neighbor local
+    terms. The theorem
+    \texttt{ProductPairBridge.commuting\_twoSite\_localTerms} then shows that
+    these local terms commute for every chain length $N$, while
+    \texttt{ProductPairBridge.localTerm\_idempotent} records their idempotence.
+    This is the formal bridge needed between the Appendix~B product-of-pairs
+    structure and the future proof of Theorem~\ref{thm:rfp_implies_nncph}.
+\end{remark}
+
 \begin{theorem}[NNCPH implies RFP]\label{thm:nncph_implies_rfp}
     \lean{MPSTensor.nncph_implies_rfp}
     \notready

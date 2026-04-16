@@ -28,9 +28,8 @@ that are renormalization fixed points, following arXiv:1606.00608 §3.4
 
 ## Proof strategy
 
-The full Appendix B decomposition `A i = X * Λ * U i * X⁻¹` is stated in
-`TNLean.Archive.RFPStructuralFull` with a deferred proof (tracked by issue #233).
-What *is* formalized here is the span-collapse step:
+The full Appendix B decomposition `A i = X * Λ * U i * X⁻¹` is now formalized in
+`TNLean.MPS.RFP.StructuralFull`. What *is* formalized here is the span-collapse step:
 `E² = E` implies every nonempty blocked word lies in the one-site Kraus span, so a nonzero normal
 RFP tensor is automatically injective.
 -/
@@ -111,10 +110,11 @@ theorem rfp_nt_structural (A : MPSTensor d D)
       ext M
       constructor
       · rintro ⟨σ, rfl⟩
-        simp
+        simp only [List.ofFn_zero, evalWord_nil, Set.mem_singleton_iff]
       · intro hM
         rcases Set.mem_singleton_iff.mp hM with rfl
-        refine ⟨fun i => Fin.elim0 i, by simp⟩
+        refine ⟨fun i => Fin.elim0 i, ?_⟩
+        simp only [List.ofFn_zero, evalWord_nil]
     have hspan1 : Submodule.span ℂ ({(1 : Mat)} : Set Mat) = (⊤ : Submodule ℂ Mat) := by
       unfold IsNBlkInjective at hNinj
       rw [hN0] at hNinj
@@ -122,7 +122,7 @@ theorem rfp_nt_structural (A : MPSTensor d D)
     obtain ⟨i, hi⟩ := hA
     have hAi_span1 : A i ∈ Submodule.span ℂ ({(1 : Mat)} : Set Mat) := by
       rw [hspan1]
-      simp
+      simp only [Submodule.mem_top]
     rw [Submodule.mem_span_singleton] at hAi_span1
     obtain ⟨c, hc⟩ := hAi_span1
     have hc_ne : c ≠ 0 := by
@@ -179,8 +179,8 @@ theorem rfp_nt_structural_of_leftCanonical [DecidableEq (Fin D)] [NeZero D]
     (A : MPSTensor d D)
     (hNT : IsNormal A) (hRFP : IsRFP A)
     (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
-    IsInjective A := by
-  exact rfp_nt_structural A hNT hRFP (exists_nonzero_of_leftCanonical A hLeft)
+    IsInjective A :=
+  rfp_nt_structural A hNT hRFP (exists_nonzero_of_leftCanonical A hLeft)
 
 /-- Appendix B / CFII reduction step:
 after unitary conjugation, a left-canonical normal RFP tensor has a diagonal
@@ -218,7 +218,6 @@ theorem transferMap_eq_fixedPointProj_of_isRFP_injective [NeZero D]
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ_pd : ρ.PosDef)
     (hρ_fix : transferMap A ρ = ρ) :
     transferMap A = fixedPointProj ρ (ne_of_gt hρ_pd.trace_pos) := by
-  classical
   obtain ⟨C, δ, hC, hδ, hδ1, hbound⟩ :=
     exponential_convergence_of_primitive A hLeft hInj ρ hρ_pd hρ_fix
   have hIdem : IsIdempotentElem (transferMap (d := d) (D := D) A) := hRFP
@@ -254,16 +253,14 @@ theorem transferMap_eq_fixedPointProj_of_isRFP_injective [NeZero D]
 theorem rfp_cf_structural {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hCF : IsCanonicalForm μ A) :
-    ∀ k, IsInjective (A k) := by
-  intro k
-  exact hCF.block_injective k
+    ∀ k, IsInjective (A k) :=
+  hCF.block_injective
 
 /-- BNT blocks are already injective, so the same precursor applies blockwise. -/
 theorem rfp_bnt_structural {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hCF : IsCanonicalFormBNT μ A) :
-    ∀ k, IsInjective (A k) := by
-  intro k
-  exact hCF.toIsCanonicalForm.block_injective k
+    ∀ k, IsInjective (A k) :=
+  hCF.toIsCanonicalForm.block_injective
 
 end MPSTensor
