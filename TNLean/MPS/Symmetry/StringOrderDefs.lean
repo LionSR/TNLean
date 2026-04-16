@@ -97,11 +97,11 @@ lemma transferMap_twistedMixedCompanion_eq (A : MPSTensor d D)
     (hu : u * uᴴ = 1)
     (X : Matrix (Fin D) (Fin D) ℂ) :
     transferMap (twistedMixedCompanion A u) X = transferMap A X := by
-  simpa [transferMap_apply] using
+  simpa only [transferMap_apply] using
     kraus_same_map_of_unitary_combination (twistedMixedCompanion A u) A uᴴ
-      (by simpa using hu)
+      (by simpa only [Matrix.conjTranspose_conjTranspose] using hu)
       (fun j => by
-        simp [twistedMixedCompanion, Matrix.conjTranspose_apply])
+        simp only [twistedMixedCompanion, Matrix.conjTranspose_apply, starRingEnd_apply])
       X
 
 /-! ### Iterated twisted transfer map -/
@@ -150,7 +150,8 @@ private lemma stringOrderParam_eq_trace_mixedTransfer (A : MPSTensor d D)
     stringOrderParam A u Λ L =
       Matrix.trace
         (Λ * (((mixedTransferMap A (twistedMixedCompanion A u)) ^ L) 1)) := by
-  simp [stringOrderParam, twistedTransferIter, twistedTransferMap_eq_mixedTransfer]
+  simp only [stringOrderParam, twistedTransferIter,
+    twistedTransferMap_eq_mixedTransfer]
 
 /-- For a unital transfer map and trace-one boundary state, the untwisted string
 order parameter is constantly `1`. -/
@@ -164,12 +165,12 @@ private lemma stringOrderParam_one_eq_one
       ((transferMap A) ^ L) (1 : Matrix (Fin D) (Fin D) ℂ) = 1 := by
     induction L with
     | zero =>
-        simp
+        rfl
     | succ n ih =>
         calc
           ((transferMap A) ^ (n + 1)) (1 : Matrix (Fin D) (Fin D) ℂ)
               = transferMap A (((transferMap A) ^ n) 1) := by
-                  simp [pow_succ']
+                  simp only [pow_succ', Module.End.mul_apply]
           _ = transferMap A 1 := by rw [ih]
           _ = 1 := hNorm
   have htwisted_pow_one :
@@ -177,8 +178,9 @@ private lemma stringOrderParam_one_eq_one
     have htwisted_eq : twistedTransferMap A 1 = transferMap A := by
       ext X i j
       exact congrArg (fun M => M i j) (twistedTransferMap_one (A := A) X)
-    simpa [htwisted_eq] using hpow_one
-  simp [stringOrderParam, twistedTransferIter, htwisted_pow_one, hΛtr]
+    simpa only [htwisted_eq] using hpow_one
+  simp only [stringOrderParam, twistedTransferIter, htwisted_pow_one, hΛtr,
+    Matrix.mul_one]
 
 /-! ### Boundary string order and local symmetry -/
 
@@ -201,7 +203,7 @@ private lemma stringOrderBoundaryParam_one_one (A : MPSTensor d D)
     (u : Matrix (Fin d) (Fin d) ℂ)
     (Λ : Matrix (Fin D) (Fin D) ℂ) (L : ℕ) :
     stringOrderBoundaryParam A u Λ 1 1 L = stringOrderParam A u Λ L := by
-  simp [stringOrderBoundaryParam, stringOrderParam]
+  simp only [stringOrderBoundaryParam, stringOrderParam, Matrix.mul_one]
 
 /-- If the continuous linear operator underlying the twisted transfer map has
 spectral radius `< 1`, then every virtual-boundary string-order sequence tends
@@ -221,15 +223,14 @@ lemma stringOrderBoundaryParam_tendsto_zero_of_spectralRadius_lt_one
     (Module.End.toContinuousLinearMap V) (twistedTransferMap A u)
   haveI : FiniteDimensional ℂ (V →L[ℂ] V) :=
     (Module.End.toContinuousLinearMap V).toLinearEquiv.finiteDimensional
-  have hpow : Filter.Tendsto (fun L => F' ^ L) Filter.atTop (nhds 0) :=
-    by
-      let hFinite : FiniteDimensional ℂ (V →L[ℂ] V) :=
-        (Module.End.toContinuousLinearMap V).toLinearEquiv.finiteDimensional
-      letI : FiniteDimensional ℂ (V →L[ℂ] V) := hFinite
-      let hComplete : CompleteSpace (V →L[ℂ] V) := FiniteDimensional.complete ℂ (V →L[ℂ] V)
-      exact @pow_tendsto_zero_of_spectralRadius_lt_one (V →L[ℂ] V)
-        inferInstance hComplete inferInstance F' <| by
-          simpa [F'] using hsr
+  have hpow : Filter.Tendsto (fun L => F' ^ L) Filter.atTop (nhds 0) := by
+    let hFinite : FiniteDimensional ℂ (V →L[ℂ] V) :=
+      (Module.End.toContinuousLinearMap V).toLinearEquiv.finiteDimensional
+    letI : FiniteDimensional ℂ (V →L[ℂ] V) := hFinite
+    let hComplete : CompleteSpace (V →L[ℂ] V) := FiniteDimensional.complete ℂ (V →L[ℂ] V)
+    exact @pow_tendsto_zero_of_spectralRadius_lt_one (V →L[ℂ] V)
+      inferInstance hComplete inferInstance F' <| by
+        simpa only [F'] using hsr
   have hEval := (ContinuousLinearMap.apply ℂ V Y).continuous.tendsto (0 : V →L[ℂ] V)
   rw [map_zero] at hEval
   have hIter0 :
@@ -250,10 +251,10 @@ lemma stringOrderBoundaryParam_tendsto_zero_of_spectralRadius_lt_one
   have hφ_cont : Continuous φ := LinearMap.continuous_of_finiteDimensional φ
   have hφ0 :
       Filter.Tendsto (fun L => φ (((twistedTransferMap A u) ^ L) Y))
-        Filter.atTop (nhds 0) := by
-    rw [show (0 : ℂ) = φ 0 by simp]
-    exact hφ_cont.continuousAt.tendsto.comp hIter0
-  simpa [stringOrderBoundaryParam, twistedTransferIter, φ, Matrix.mul_assoc] using hφ0
+        Filter.atTop (nhds (φ 0)) :=
+    hφ_cont.continuousAt.tendsto.comp hIter0
+  simpa only [map_zero, stringOrderBoundaryParam, twistedTransferIter, φ,
+    Matrix.mul_assoc] using hφ0
 
 /-- Local symmetry in the virtual FCS language of the paper: there is a unitary
 virtual intertwiner satisfying the phased covariance relation and preserving the
@@ -292,7 +293,7 @@ lemma not_tendsto_zero_of_hasStringOrder
   intro hzero
   have hsmall :
       ∀ᶠ L in Filter.atTop, ‖stringOrderBoundaryParam A u Λ X Y L‖ < c :=
-    hzero.norm.eventually (Iio_mem_nhds (by simpa using hc))
+    hzero.norm.eventually (Iio_mem_nhds (by simpa only [norm_zero] using hc))
   rcases Filter.eventually_atTop.1 hsmall with ⟨L₀, hL₀⟩
   have hge := hbound L₀
   exact not_lt_of_ge hge (hL₀ L₀ le_rfl)
@@ -408,8 +409,9 @@ theorem condC1_imp_condC2
     simp_rw [hc]
   simp_rw [step1]
   -- Step 2: Use C1: V * A_i * V† = ∑_j u_{ij} • A_j
-  simp_rw [show ∀ i, V * A i * Vᴴ = ∑ j : Fin d, u i j • A j
-    from fun i => (hC1 i).symm]
+  have hC1' : ∀ i, V * A i * Vᴴ = ∑ j : Fin d, u i j • A j :=
+    fun i => (hC1 i).symm
+  simp_rw [hC1']
   -- Step 3: Apply unitary Kraus mixing
   exact unitary_kraus_mixing A u hu (V * X * Vᴴ)
 
@@ -440,18 +442,19 @@ theorem condC2_imp_condC1_of_injective
             have hVV : V * (Vᴴ * X * V) * Vᴴ = X := by
               calc
                 V * (Vᴴ * X * V) * Vᴴ = (V * Vᴴ) * X * (V * Vᴴ) := by
-                  simp [Matrix.mul_assoc]
-                _ = X := by simp [hV]
+                  simp only [Matrix.mul_assoc]
+                _ = X := by
+                  simp only [hV, Matrix.one_mul, Matrix.mul_one]
             have hC2' : transferMap A X =
                 V * transferMap A (Vᴴ * X * V) * Vᴴ := by
-              simpa [hVV] using hC2 (Vᴴ * X * V)
+              simpa only [hVV] using hC2 (Vᴴ * X * V)
             exact hC2'.symm
   rcases kraus_rectangular_freedom B A
-      (fun X => by simpa [transferMap_apply] using hB_eq X)
+      (fun X => by simpa only [transferMap_apply] using hB_eq X)
       (Nat.le_refl d) with ⟨u, hu, huK⟩
   refine ⟨u, mul_eq_one_comm.mp hu, ?_⟩
   intro i
-  simpa [B] using (huK i).symm
+  simpa only [B] using (huK i).symm
 
 end ConditionEquivalences
 

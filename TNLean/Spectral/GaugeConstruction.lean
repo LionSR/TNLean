@@ -127,7 +127,7 @@ theorem ker_all_of_inj {D₁ D₂ : ℕ}
       obtain ⟨k, rfl⟩ := hy
       exact h k v hv
   | zero =>
-      simp
+      simp only [Matrix.conjTranspose_zero, Matrix.zero_mulVec, Matrix.mulVec_zero]
   | add a b _ _ ha hb =>
       rw [Matrix.conjTranspose_add, Matrix.add_mulVec, Matrix.mulVec_add, ha, hb, add_zero]
   | smul c a _ ha =>
@@ -152,9 +152,9 @@ theorem injective_of_ker_all [NeZero D₂]
       simp only [Matrix.mulVec, Matrix.vecMulVec, Matrix.of_apply, dotProduct]
       conv_lhs => arg 2; ext j; rw [mul_assoc]
       rw [Finset.sum_eq_single k]
-      · simp [c, hk]
+      · simp only [c, if_true, inv_mul_cancel₀ hk, mul_one]
       · intro j _ hjk
-        simp [c, hjk]
+        simp only [c, if_neg hjk, zero_mul, mul_zero]
       · intro hk_abs
         exact absurd (Finset.mem_univ k) hk_abs
     rw [← hMv]
@@ -165,9 +165,9 @@ theorem injective_of_ker_all [NeZero D₂]
     have : (X *ᵥ (fun k => if k = j then 1 else 0)) i = X i j := by
       simp only [Matrix.mulVec, dotProduct]
       rw [Finset.sum_eq_single j]
-      · simp
+      · simp only [if_true, mul_one]
       · intro b _ hbj
-        simp [hbj]
+        simp only [if_neg hbj, mul_zero]
       · intro hj
         exact absurd (Finset.mem_univ j) hj
     rw [show (0 : Matrix (Fin D₁) (Fin D₂) ℂ) i j = 0 from rfl]
@@ -205,9 +205,13 @@ theorem isInjective_conjugate {D : ℕ}
       ext Y
       constructor
       · rintro ⟨X0, ⟨i, rfl⟩, rfl⟩
-        exact ⟨i, by simp [φ, gaugeTensor, Matrix.mul_assoc]⟩
+        refine ⟨i, ?_⟩
+        simp only [φ, gaugeTensor, LinearMap.comp_apply, LinearMap.mulRight_apply,
+          LinearMap.mulLeft_apply, Matrix.mul_assoc]
       · rintro ⟨i, rfl⟩
-        refine ⟨T i, ⟨i, rfl⟩, by simp [φ, gaugeTensor, Matrix.mul_assoc]⟩
+        refine ⟨T i, ⟨i, rfl⟩, ?_⟩
+        simp only [φ, gaugeTensor, LinearMap.comp_apply, LinearMap.mulRight_apply,
+          LinearMap.mulLeft_apply, Matrix.mul_assoc]
     calc
       Submodule.span ℂ (Set.range (gaugeTensor S T))
           = Submodule.map φ (Submodule.span ℂ (Set.range T)) := by
@@ -227,13 +231,13 @@ lemma smul_mul_conjTranspose_of_norm_eq_one {m n : ℕ}
     (μ • N) * (μ • N)ᴴ = N * Nᴴ := by
   have hμ_star_mul : star μ * μ = 1 := by
     rw [Complex.star_def, ← Complex.normSq_eq_conj_mul_self]
-    simp [Complex.normSq_eq_norm_sq, hμ]
-  have hμ_starRing_mul : ((starRingEnd ℂ) μ) * μ = 1 := by
-    simpa [Complex.star_def] using hμ_star_mul
+    simp only [Complex.normSq_eq_norm_sq, hμ, one_pow, Complex.ofReal_one]
   calc
-    (μ • N) * (μ • N)ᴴ = (((starRingEnd ℂ) μ) * μ) • (N * Nᴴ) := by
-      simp [Matrix.conjTranspose_smul, smul_smul, mul_comm]
-    _ = N * Nᴴ := by simp [hμ_starRing_mul]
+    (μ • N) * (μ • N)ᴴ = (star μ * μ) • (N * Nᴴ) := by
+      simp only [Matrix.conjTranspose_smul, Matrix.smul_mul, Matrix.mul_smul, smul_smul]
+    _ = N * Nᴴ := by
+      rw [hμ_star_mul]
+      simp only [one_smul]
 
 /-- Shared block-KS core: transporting a modulus-one mixed-transfer eigenvector to canonical
 gauges produces Kraus-level intertwining relations for the gauged tensors. -/
@@ -293,13 +297,14 @@ theorem gauged_intertwining_core
           A' i * X' * (B' i)ᴴ = SA⁻¹ * (A i * X * (B i)ᴴ) * (SBᴴ)⁻¹ := by
       intro i
       have hBstar : (B' i)ᴴ = SBᴴ * (B i)ᴴ * (SBᴴ)⁻¹ := by
-        simp [B', Matrix.conjTranspose_mul, Matrix.conjTranspose_nonsing_inv,
+        change (SB⁻¹ * B i * SB)ᴴ = SBᴴ * (B i)ᴴ * (SBᴴ)⁻¹
+        simp only [Matrix.conjTranspose_mul, Matrix.conjTranspose_nonsing_inv,
           Matrix.mul_assoc]
       calc
         A' i * X' * (B' i)ᴴ
             = (SA⁻¹ * A i * SA) * (SA⁻¹ * X * (SBᴴ)⁻¹) *
                 (SBᴴ * (B i)ᴴ * (SBᴴ)⁻¹) := by
-                simp [A', X', hBstar]
+                simp only [A', gaugeTensor, X', gaugeEigenvector, hBstar]
         _ = SA⁻¹ * (A i * X * (B i)ᴴ) * (SBᴴ)⁻¹ := by
             simp only [Matrix.mul_assoc]
             rw [Matrix.mul_nonsing_inv_cancel_left _ _ hSA_u,
@@ -311,12 +316,12 @@ theorem gauged_intertwining_core
       (f := fun i : Fin d => A i * X * (B i)ᴴ) (M := SA⁻¹)]
     rw [hFXsum]
     have h1 : SA⁻¹ * (μ • X) = μ • (SA⁻¹ * X) := by
-      simp [Matrix.mul_smul]
+      simp only [Matrix.mul_smul]
     rw [h1]
     have h2 : (μ • (SA⁻¹ * X)) * (SBᴴ)⁻¹ = μ • ((SA⁻¹ * X) * (SBᴴ)⁻¹) := by
-      simp [Matrix.smul_mul]
+      simp only [Matrix.smul_mul]
     rw [h2]
-    simp [X']
+    simp only [X', gaugeEigenvector]
   let K : Fin d → Matrix (Fin D₁ ⊕ Fin D₂) (Fin D₁ ⊕ Fin D₂) ℂ :=
     fun i => Matrix.fromBlocks (A' i) 0 0 (B' i)
   let M : Matrix (Fin D₁ ⊕ Fin D₂) (Fin D₁ ⊕ Fin D₂) ℂ :=
@@ -339,7 +344,11 @@ theorem gauged_intertwining_core
           Matrix.fromBlocks_conjTranspose]
     rw [hmap, hFX']
     change Matrix.fromBlocks 0 (μ • X') 0 0 = μ • Matrix.fromBlocks 0 X' 0 0
-    simp [Matrix.fromBlocks_smul]
+    simpa [zero_smul] using
+      (Matrix.fromBlocks_smul μ
+        (0 : Matrix (Fin D₁) (Fin D₁) ℂ) X'
+        (0 : Matrix (Fin D₂) (Fin D₁) ℂ)
+        (0 : Matrix (Fin D₂) (Fin D₂) ℂ)).symm
   let rhoT : Matrix (Fin D₁ ⊕ Fin D₂) (Fin D₁ ⊕ Fin D₂) ℂ :=
     Matrix.fromBlocks (SAᴴ * SA) 0 0 (SBᴴ * SB)
   have hrhoT_pd : rhoT.PosDef := by
@@ -365,7 +374,11 @@ theorem gauged_intertwining_core
         calc
           (A' i)ᴴ * (SAᴴ * SA) * (A' i)
               = (SAᴴ * (A i)ᴴ * (SAᴴ)⁻¹) * (SAᴴ * SA) * (SA⁻¹ * A i * SA) := by
-                  simp [A', Matrix.conjTranspose_nonsing_inv, Matrix.mul_assoc]
+                  change
+                    (SA⁻¹ * A i * SA)ᴴ * (SAᴴ * SA) * (SA⁻¹ * A i * SA) =
+                      (SAᴴ * (A i)ᴴ * (SAᴴ)⁻¹) * (SAᴴ * SA) * (SA⁻¹ * A i * SA)
+                  simp only [Matrix.conjTranspose_mul, Matrix.conjTranspose_nonsing_inv,
+                    Matrix.mul_assoc]
           _ = SAᴴ * ((A i)ᴴ * A i) * SA := by
               simp only [Matrix.mul_assoc]
               rw [Matrix.nonsing_inv_mul_cancel_left _ _ hSAh_u,
@@ -379,7 +392,11 @@ theorem gauged_intertwining_core
         calc
           (B' i)ᴴ * (SBᴴ * SB) * (B' i)
               = (SBᴴ * (B i)ᴴ * (SBᴴ)⁻¹) * (SBᴴ * SB) * (SB⁻¹ * B i * SB) := by
-                  simp [B', Matrix.conjTranspose_nonsing_inv, Matrix.mul_assoc]
+                  change
+                    (SB⁻¹ * B i * SB)ᴴ * (SBᴴ * SB) * (SB⁻¹ * B i * SB) =
+                      (SBᴴ * (B i)ᴴ * (SBᴴ)⁻¹) * (SBᴴ * SB) * (SB⁻¹ * B i * SB)
+                  simp only [Matrix.conjTranspose_mul, Matrix.conjTranspose_nonsing_inv,
+                    Matrix.mul_assoc]
           _ = SBᴴ * ((B i)ᴴ * B i) * SB := by
               simp only [Matrix.mul_assoc]
               rw [Matrix.nonsing_inv_mul_cancel_left _ _ hSBh_u,
@@ -416,7 +433,7 @@ theorem gauged_intertwining_core
         simpa using (Kraus.map_conjTranspose (K := K) M).symm
       _ = (μ • M)ᴴ := by rw [hEigM]
       _ = (starRingEnd ℂ μ) • Mᴴ := by
-        simp [Matrix.conjTranspose_smul]
+        simp only [Matrix.conjTranspose_smul, starRingEnd_apply]
   have hKS_Ms : Kraus.map K (Mᴴᴴ * Mᴴ) = (Kraus.map K Mᴴ)ᴴ * Kraus.map K Mᴴ :=
     Kraus.ks_equality_of_peripheral_eigenvector_of_fixedPoint
       K hK_unital hrhoT_pd hrhoT_fix Mᴴ (starRingEnd ℂ μ) hEigMstar hμ_conj
@@ -467,23 +484,23 @@ theorem self_mul_conjTranspose_fixed_of_intertwining
       simpa [smul_mul_assoc] using hInter i
     calc
       A i * (X * Xᴴ) * (A i)ᴴ = (A i * X) * (A i * X)ᴴ := by
-        simp [Matrix.mul_assoc, Matrix.conjTranspose_mul]
+        simp only [Matrix.mul_assoc, Matrix.conjTranspose_mul]
       _ = (μ • (X * B i)) * (μ • (X * B i))ᴴ := by
-        simp [hAX]
+        simp only [hAX]
       _ = (X * B i) * (X * B i)ᴴ := by
         simpa using smul_mul_conjTranspose_of_norm_eq_one μ hμ (X * B i)
       _ = X * (B i * (B i)ᴴ) * Xᴴ := by
-        simp [Matrix.conjTranspose_mul, Matrix.mul_assoc]
+        simp only [Matrix.conjTranspose_mul, Matrix.mul_assoc]
   calc
     transferMap A (X * Xᴴ) = ∑ i : Fin d, A i * (X * Xᴴ) * (A i)ᴴ := by
-      simp [transferMap_apply]
+      simp only [transferMap_apply]
     _ = ∑ i : Fin d, X * (B i * (B i)ᴴ) * Xᴴ := by
-      simp [hterm]
+      simp only [hterm]
     _ = X * (∑ i : Fin d, B i * (B i)ᴴ) * Xᴴ := by
       simpa using
         (Matrix.sum_mul_mul (L := X) (R := Xᴴ) (M := fun i : Fin d => B i * (B i)ᴴ))
     _ = X * Xᴴ := by
-      simp [hB_unital]
+      simp only [hB_unital, Matrix.mul_one]
 
 /-- Transport a fixed point of the gauged transfer map back to the original tensor. -/
 theorem ungauge_transfer_fixedPoint
@@ -503,29 +520,29 @@ theorem ungauge_transfer_fixedPoint
       (Matrix.mul_nonsing_inv_cancel_left (A := S) (B := A i * S) hS).symm
   have hShAiH : ∀ i : Fin d, Sᴴ * (A i)ᴴ = (A' i)ᴴ * Sᴴ := by
     intro i
-    simp [A', Matrix.conjTranspose_mul, Matrix.conjTranspose_nonsing_inv,
-      Matrix.mul_assoc, hSh_inv_mul]
+    simpa only [Matrix.conjTranspose_mul] using
+      congrArg Matrix.conjTranspose (hAiS i)
   have hterm :
       ∀ i : Fin d,
         A i * (S * σ * Sᴴ) * (A i)ᴴ = S * (A' i * σ * (A' i)ᴴ) * Sᴴ := by
     intro i
     calc
       A i * (S * σ * Sᴴ) * (A i)ᴴ = (A i * S) * σ * (Sᴴ * (A i)ᴴ) := by
-        simp [Matrix.mul_assoc]
+        simp only [Matrix.mul_assoc]
       _ = (S * A' i) * σ * ((A' i)ᴴ * Sᴴ) := by
         rw [hAiS i, hShAiH i]
       _ = S * (A' i * σ * (A' i)ᴴ) * Sᴴ := by
-        simp [Matrix.mul_assoc]
+        simp only [Matrix.mul_assoc]
   calc
     transferMap A (S * σ * Sᴴ) = ∑ i : Fin d, A i * (S * σ * Sᴴ) * (A i)ᴴ := by
-      simp [transferMap_apply]
+      simp only [transferMap_apply]
     _ = ∑ i : Fin d, S * (A' i * σ * (A' i)ᴴ) * Sᴴ := by
-      simp [hterm]
+      simp only [hterm]
     _ = S * (∑ i : Fin d, A' i * σ * (A' i)ᴴ) * Sᴴ := by
       simpa using
         (Matrix.sum_mul_mul (L := S) (R := Sᴴ) (M := fun i : Fin d => A' i * σ * (A' i)ᴴ))
     _ = S * transferMap A' σ * Sᴴ := by
-      simp [A', transferMap_apply]
+      simp only [A', transferMap_apply]
     _ = S * σ * Sᴴ := by rw [hσ]
 
 /-- Cancel an invertible gauge from a scalar identity `S * σ * Sᴴ = c • (S * Sᴴ)`. -/
@@ -543,15 +560,17 @@ theorem ungauge_scalar_of_conjugated_scalar
     Matrix.mul_nonsing_inv Sᴴ hSh_u
   have hcancel := congrArg (fun T => S⁻¹ * T * (Sᴴ)⁻¹) hσ
   calc
-    σ = (S⁻¹ * S) * σ := by simp [hS_inv_mul]
-    _ = S⁻¹ * (S * σ) := by simp [Matrix.mul_assoc]
+    σ = (S⁻¹ * S) * σ := by
+      simp only [hS_inv_mul, one_mul]
+    _ = S⁻¹ * (S * σ) := by
+      simp only [Matrix.mul_assoc]
     _ = S⁻¹ * (S * σ * Sᴴ) * (Sᴴ)⁻¹ := by
-      simp [Matrix.mul_assoc, hSh_mul_inv]
+      simp only [Matrix.mul_assoc, hSh_mul_inv, mul_one]
     _ = S⁻¹ * (c • (S * Sᴴ)) * (Sᴴ)⁻¹ := hcancel
     _ = c • (S⁻¹ * (S * Sᴴ) * (Sᴴ)⁻¹) := by
-      simp [Matrix.mul_assoc]
+      simp only [Matrix.mul_smul, Matrix.smul_mul, Matrix.mul_assoc]
     _ = c • (1 : Matrix (Fin D) (Fin D) ℂ) := by
-      simp [Matrix.mul_assoc, hS_inv_mul, hSh_mul_inv]
+      simp only [Matrix.mul_assoc, hS_inv_mul, hSh_mul_inv, mul_one]
 
 /-- A scalar identity `X * Xᴴ = c I` with `c ≠ 0` yields invertibility of `X`. -/
 theorem isUnit_det_of_self_mul_conjTranspose_scalar [NeZero D]
@@ -562,11 +581,11 @@ theorem isUnit_det_of_self_mul_conjTranspose_scalar [NeZero D]
   have hX_right_inv : X * (c⁻¹ • Xᴴ) = 1 := by
     calc
       X * (c⁻¹ • Xᴴ) = c⁻¹ • (X * Xᴴ) := by
-        simp
+        simp only [Matrix.mul_smul]
       _ = c⁻¹ • (c • (1 : Matrix (Fin D) (Fin D) ℂ)) := by
         rw [hXXh]
       _ = 1 := by
-        simp [hc]
+        simp only [smul_smul, inv_mul_cancel₀ hc, one_smul]
   exact Matrix.isUnit_det_of_right_inverse hX_right_inv
 
 /-- Generic square endgame: once the gauged intertwiner is invertible, it upgrades to
@@ -585,25 +604,26 @@ theorem gaugePhaseEquiv_of_gauged_intertwining [NeZero D]
   have hSB_u : IsUnit SB.det := Ne.isUnit hSB_det
   have hμ_ne0 : μ ≠ 0 := by
     intro h0
-    have : (‖μ‖ : ℝ) = 0 := by simp [h0]
+    have : (‖μ‖ : ℝ) = 0 := by
+      simp only [h0, norm_zero]
     linarith [hμ, this]
   have hper : ∀ i : Fin d, B' i = μ⁻¹ • (X'⁻¹ * A' i * X') := by
     intro i
     have hAX : A' i * X' = μ • X' * B' i := by
       simpa [A', B', gaugeTensor] using hInter i
     have : X'⁻¹ * (A' i * X') = X'⁻¹ * (μ • X' * B' i) := by
-      simp [hAX]
+      rw [hAX]
     have : X'⁻¹ * A' i * X' = μ • B' i := by
       rw [← Matrix.mul_assoc] at this
       rw [this, smul_mul_assoc, mul_smul_comm,
         Matrix.nonsing_inv_mul_cancel_left _ _ hX'_u]
     have hμinv : μ⁻¹ * μ = (1 : ℂ) := by
-      simp [hμ_ne0]
+      exact inv_mul_cancel₀ hμ_ne0
     calc
       B' i = μ⁻¹ • (μ • B' i) := by
-        simp [smul_smul, hμinv]
+        simp only [smul_smul, hμinv, one_smul]
       _ = μ⁻¹ • (X'⁻¹ * A' i * X') := by
-        simp [this]
+        rw [this]
   let Ymat : Matrix (Fin D) (Fin D) ℂ := SB * X'⁻¹ * SA⁻¹
   let Yinv : Matrix (Fin D) (Fin D) ℂ := SA * X' * SB⁻¹
   have hYmul : Ymat * Yinv = 1 := by
@@ -661,7 +681,7 @@ theorem dim_eq_of_gauged_intertwining [NeZero D₁] [NeZero D₂]
   have hker_X : ∀ k : Fin d, ∀ v, X *ᵥ v = 0 → X *ᵥ ((B k)ᴴ *ᵥ v) = 0 := by
     intro k v hv
     have : X *ᵥ ((B k)ᴴ *ᵥ v) = (X * (B k)ᴴ) *ᵥ v := by
-      simp [Matrix.mulVec_mulVec]
+      simp only [Matrix.mulVec_mulVec]
     rw [this, hInter1 k, Matrix.smul_mulVec, ← Matrix.mulVec_mulVec,
       hv, Matrix.mulVec_zero, smul_zero]
   have h_D₂_le : D₂ ≤ D₁ :=
@@ -680,7 +700,7 @@ theorem dim_eq_of_gauged_intertwining [NeZero D₁] [NeZero D₂]
   have hker_Xh : ∀ k : Fin d, ∀ v, Xᴴ *ᵥ v = 0 → Xᴴ *ᵥ ((A k)ᴴ *ᵥ v) = 0 := by
     intro k v hv
     have : Xᴴ *ᵥ ((A k)ᴴ *ᵥ v) = (Xᴴ * (A k)ᴴ) *ᵥ v := by
-      simp [Matrix.mulVec_mulVec]
+      simp only [Matrix.mulVec_mulVec]
     rw [this, hInter2h k, Matrix.smul_mulVec, ← Matrix.mulVec_mulVec,
       hv, Matrix.mulVec_zero, smul_zero]
   have h_D₁_le : D₁ ≤ D₂ :=

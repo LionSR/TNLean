@@ -167,7 +167,7 @@ lemma supportProj_mul (hρ_psd : ρ.PosSemidef) :
     ext i
     simp only [sgn, Pi.mul_apply]
     split
-    · simp
+    · simp only [one_mul]
     · rename_i hi
       push Not at hi
       -- PSD implies eigenvalues are nonnegative, so `¬(0 < λ)` forces `λ = 0`.
@@ -258,7 +258,7 @@ private lemma ker_invariant_under_adjoint
         ∑ j : Fin d,
             RCLike.re (star ((A j)ᴴ *ᵥ x) ⬝ᵥ (ρ *ᵥ ((A j)ᴴ *ᵥ x))) = 0 := by
       rw [← map_sum, ← hsum, hqf]
-      simp
+      exact Complex.zero_re
     have hre :=
         (Finset.sum_eq_zero_iff_of_nonneg (fun j _ => hρ_psd.re_dotProduct_nonneg _)).mp
           h_sum_zero i (Finset.mem_univ _)
@@ -299,7 +299,7 @@ theorem lowerZero_of_posSemidef_fixedPoint
             simp [Matrix.mulVec_mulVec, Matrix.mul_assoc]
       _ = 0 := by
             rw [hv]
-            simp
+            simp only [Matrix.mulVec_zero]
   -- Kernel inclusion: `ker ρ ⊆ ker P` (spectral argument).
   have ker_ρ_sub_ker_P : ∀ v, ρ *ᵥ v = 0 → P *ᵥ v = 0 := by
     intro v hv
@@ -321,7 +321,7 @@ theorem lowerZero_of_posSemidef_fixedPoint
         exact hρv
       have : Uᴴ *ᵥ (U *ᵥ (Λ *ᵥ w)) = 0 := by
         rw [hUΛw]
-        simp
+        simp only [Matrix.mulVec_zero]
       rwa [Matrix.mulVec_mulVec, hUU, Matrix.one_mulVec] at this
     have h_comp : ∀ j, (↑(hH.eigenvalues j) : ℂ) * w j = 0 := fun j => by
       have := congrFun hΛw j
@@ -346,7 +346,7 @@ theorem lowerZero_of_posSemidef_fixedPoint
     have : (U * Matrix.diagonal s * Uᴴ) *ᵥ v = U *ᵥ (Matrix.diagonal s *ᵥ w) := by
       rw [Matrix.mulVec_mulVec, Matrix.mulVec_mulVec]
     rw [this, hSw]
-    simp
+    simp only [Matrix.mulVec_zero]
   -- Complement-zero (invariance) statement.
   have h_complement_zero : ∀ i : Fin d, (1 - P) * A i * P = 0 := by
     intro i
@@ -450,18 +450,12 @@ theorem supportProj_ne_one_of_not_posDef
     have step1 : Uᴴ * (U * Matrix.diagonal sgn * Uᴴ) * U = Uᴴ * 1 * U := by
       -- Apply the congruence `M ↦ Uᴴ * M * U` to the equality `h`.
       simpa using congrArg (fun M => Uᴴ * M * U) h
-    -- Simplify using unitarity: `Uᴴ * U = 1` and `U * Uᴴ = 1`.
-    have hUU' : U * Uᴴ = 1 := by
-      -- `U` is unitary, so `U * Uᴴ = 1`.
-      simpa [U, Matrix.star_eq_conjTranspose] using
-        (Unitary.mul_star_self_of_mem (hH.eigenvectorUnitary).prop)
     -- Reassociate to expose the unitary cancellations.
     have step2 : (Uᴴ * U) * Matrix.diagonal sgn * (Uᴴ * U) = Uᴴ * U := by
       -- LHS: rewrite `Uᴴ * (U * diag(sgn) * Uᴴ) * U`.
       -- RHS: rewrite `Uᴴ * 1 * U`.
       simpa [Matrix.mul_assoc] using step1
     -- Now cancel `Uᴴ * U = 1`.
-    -- (Note: `hUU'` is not needed, but keeping it local avoids universe inference issues.)
     simpa [hUU] using step2
   -- Extract `sgn i = 1` from the diagonal-entry equality.
   have hSgn_i : sgn i = 1 := by

@@ -255,7 +255,8 @@ theorem exponential_convergence_of_primitive [NeZero D]
       (A := A) hNorm hPrim ρ hρ_pd.posSemidef
       (by
         intro hρ0
-        have htr0 : Matrix.trace ρ = 0 := by simp [hρ0]
+        have htr0 : Matrix.trace ρ = 0 := by
+          simp [hρ0]
         exact (ne_of_gt hρ_pd.trace_pos) htr0)
       hρ_fix huniq_fp
   rcases geometric_apply_bound_of_spectralRadius_lt_one (T := Φ N) hgap with
@@ -298,7 +299,7 @@ theorem exponential_convergence_of_primitive [NeZero D]
       _ = ‖(P + N ^ n) X - P X‖ := by rw [hpowEq]
       _ = ‖(N ^ n) X‖ := by
         change ‖P X + (N ^ n) X - P X‖ = ‖(N ^ n) X‖
-        simp
+        simp only [add_sub_cancel_left]
       _ ≤ C₀ * r ^ n * ‖X‖ := hgeomN n
       _ ≤ C * r ^ n * ‖X‖ := by
         gcongr
@@ -372,7 +373,7 @@ theorem correlation_length_bound [NeZero D]
   have hPX : P X = 0 := by
     change (Matrix.trace X / Matrix.trace ρ) • ρ = 0
     rw [htrX]
-    simp
+    simp only [zero_div, zero_smul]
   by_cases hn : n = 0
   · subst hn
     have hC_ge_one : 1 ≤ C := by

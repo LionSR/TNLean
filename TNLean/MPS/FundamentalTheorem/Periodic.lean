@@ -264,7 +264,7 @@ theorem fundamentalTheorem_periodic_proportional
   have hfA_bij : Function.Bijective fA :=
     ⟨hfA_inj, Finite.injective_iff_surjective.mp hfA_inj⟩
   exact ⟨Equiv.ofBijective fA hfA_bij, fun j => by
-    simpa [Equiv.ofBijective_apply] using hfA_rep j⟩
+    simpa only [Equiv.ofBijective_apply] using hfA_rep j⟩
 
 /-- **Theorem 3.4 (Periodic FT, proportional case) from `IsPeriodic` data.**
 
@@ -469,7 +469,7 @@ theorem fundamentalTheorem_periodic_equalCase
       (fun _ : Fin 1 => hA.μ j) (fun _ : Fin 1 => hB.μ (perm j))
       (fun _ => hμB_ne (perm j))
       (fun _ => hPow_period)
-      (fun k hk => by simp [hPowEqJ k hk])
+      (fun k hk => by simp only [Fin.sum_univ_one, hPowEqJ k hk])
   refine ⟨Z, hZpow, hZmul, ?_⟩
   -- Convert Finset.univ.val.map to multiset singleton equality.
   simp only [Finset.univ_unique] at hMultiset
