@@ -197,7 +197,7 @@ theorem EquivalentBlocks.to_repeatedBlocks {A B : MPSTensor d D}
   rcases h with ⟨Y, hY⟩
   refine ⟨1, Y, by simp, ?_⟩
   intro i
-  simpa [hY i]
+  simp [hY i]
 
 /-- `EquivalentBlocks` is equivalent to ordinary `GaugeEquiv`. -/
 theorem equivalentBlocks_iff_gaugeEquiv {A B : MPSTensor d D} :
@@ -228,9 +228,9 @@ theorem RepeatedBlocks.symm {A B : MPSTensor d D}
   rcases h with ⟨ξ, Y, hξ, hY⟩
   have hξ_ne : ξ ≠ 0 := by
     intro h0
-    have : ‖ξ‖ = 0 := by simpa [h0]
+    have : ‖ξ‖ = 0 := by simp [h0]
     linarith [hξ]
-  refine ⟨ξ⁻¹, Y⁻¹, by simpa [norm_inv] using hξ, ?_⟩
+  refine ⟨ξ⁻¹, Y⁻¹, by simp [norm_inv, hξ], ?_⟩
   intro i
   have hYi := hY i
   apply_fun fun M => (ξ⁻¹ : ℂ) •
@@ -245,7 +245,7 @@ theorem RepeatedBlocks.trans {A B C : MPSTensor d D}
     RepeatedBlocks A C := by
   rcases hAB with ⟨ξ, Y, hξ, hAB⟩
   rcases hBC with ⟨ζ, Z, hζ, hBC⟩
-  refine ⟨ξ * ζ, Y * Z, by simpa [norm_mul, hξ, hζ], ?_⟩
+  refine ⟨ξ * ζ, Y * Z, by simp [hξ, hζ], ?_⟩
   intro i
   rw [hAB i, hBC i]
   simp [Matrix.mul_assoc, smul_smul]

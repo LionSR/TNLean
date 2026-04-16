@@ -112,7 +112,9 @@ theorem matrixAbs_eq_self_of_posSemidef
 theorem matrixAbs_posSemidef
     (A : Matrix (Fin D) (Fin D) ℂ) :
     (matrixAbs A).PosSemidef := by
-  exact Matrix.nonneg_iff_posSemidef.mp (by simpa [matrixAbs] using (CFC.abs_nonneg A))
+  exact Matrix.nonneg_iff_posSemidef.mp (by
+    change 0 ≤ CFC.abs A
+    simp)
 
 theorem matrixAbs_add_self_posSemidef_of_isHermitian
     {B : Matrix (Fin D) (Fin D) ℂ} (hB : B.IsHermitian) :

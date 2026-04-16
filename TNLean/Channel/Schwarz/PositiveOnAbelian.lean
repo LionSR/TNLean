@@ -38,10 +38,10 @@ Euclidean linear map level. -/
 private lemma toEuclideanLin_mul (A B : Matrix (Fin D) (Fin D) ℂ) :
     (Matrix.toEuclideanLin A : EuclideanSpace ℂ (Fin D) →ₗ[ℂ] EuclideanSpace ℂ (Fin D)) *
       Matrix.toEuclideanLin B = Matrix.toEuclideanLin (A * B) := by
-  simp only [Matrix.toEuclideanLin_eq_toLin_orthonormal]
-  exact (Matrix.toLin_mul (EuclideanSpace.basisFun (Fin D) ℂ).toBasis
-    (EuclideanSpace.basisFun (Fin D) ℂ).toBasis
-    (EuclideanSpace.basisFun (Fin D) ℂ).toBasis A B).symm
+  simpa only [Matrix.toEuclideanLin_eq_toLin_orthonormal] using
+    (Matrix.toLin_mul (EuclideanSpace.basisFun (Fin D) ℂ).toBasis
+      (EuclideanSpace.basisFun (Fin D) ℂ).toBasis
+      (EuclideanSpace.basisFun (Fin D) ℂ).toBasis A B).symm
 
 /-- Quadratic-form positivity for a block matrix with matrix entries.
 
@@ -931,9 +931,8 @@ private lemma exists_diagonal_family_of_normal
     fun μ => Klin.restrict (hKinv μ)
   have hKrestr : ∀ μ : Eigenvalues Hlin,
       @LinearMap.IsSymmetric ℂ (Module.End.eigenspace Hlin μ) _ _ _
-        (Klin.restrict (hKinv μ)) := by
-    intro μ
-    exact hKlin.restrict_invariant (hKinv μ)
+        (Klin.restrict (hKinv μ)) :=
+    fun μ => hKlin.restrict_invariant (hKinv μ)
   let bFamily : ∀ μ : Eigenvalues Hlin,
       OrthonormalBasis (Fin (Module.finrank ℂ (Module.End.eigenspace Hlin μ))) ℂ
         (Module.End.eigenspace Hlin μ) :=

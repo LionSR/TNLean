@@ -27,11 +27,13 @@ The following are equivalent for an MPS tensor `A` with `∑ Aᵢ† Aᵢ = 1`:
 
 ## Directions proved
 
-| Dir | Theorem | File |
-|-----|---------|------|
-| **(b)→(a)** | `isPrimitivePaper_of_hasEventuallyFullKrausRank` | `EasyDirections` |
-| **(a)→(c)** | `isStronglyIrreduciblePaper_of_isPrimitivePaper` | `ImpliesStronglyIrreducibleAux` |
-| **(c)→(b)** | `hasEventuallyFullKrausRank_of_isStronglyIrreduciblePaper` | `StronglyIrreducibleToFullRank` |
+- **(b)→(a)**: `isPrimitivePaper_of_hasEventuallyFullKrausRank`
+  in `EasyDirections`
+- **(a)→(c)**: `isStronglyIrreduciblePaper_of_isPrimitivePaper`
+  in `ImpliesStronglyIrreducibleAux`
+- **(c)→(b)**:
+  `hasEventuallyFullKrausRank_of_isStronglyIrreduciblePaper`
+  in `StronglyIrreducibleToFullRank`
 
 Together these close the cycle **(a) → (c) → (b) → (a)**, establishing the
 full equivalence of all three conditions.

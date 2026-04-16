@@ -303,9 +303,8 @@ private lemma canonical_gauge_data_of_injective [NeZero D]
   let S : Matrix (Fin D) (Fin D) ℂ := S0ᴴ
   have hS_unit : IsUnit S := by
     simpa [S, Matrix.star_eq_conjTranspose] using (IsUnit.star hS0_unit)
-  have hS_det : S.det ≠ 0 := by
-    have hdet_unit : IsUnit S.det := (Matrix.isUnit_iff_isUnit_det (A := S)).1 hS_unit
-    exact hdet_unit.ne_zero
+  have hS_det : S.det ≠ 0 :=
+    ((Matrix.isUnit_iff_isUnit_det (A := S)).1 hS_unit).ne_zero
   have hS_mul : S * Sᴴ = ρ := by
     calc
       S * Sᴴ = S0ᴴ * (S0ᴴ)ᴴ := by rfl

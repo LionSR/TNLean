@@ -76,7 +76,7 @@ private lemma expSemigroupCLM_mul_comm_local
   unfold expSemigroupCLM
   have hc : Commute ((s : ℂ) • L_CLM) L_CLM := by
     ext X i j
-    simp [ContinuousLinearMap.mul_apply]
+    simp
   exact hc.exp_left.eq
 
 /-- `trace(Lⁿ(ρ)) = 0` for `n ≥ 1` when `L` is trace-annihilating.

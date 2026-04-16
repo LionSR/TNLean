@@ -133,7 +133,7 @@ private lemma stationaryState_ne_zero
   have htr : Matrix.trace (stationaryState E hE hIrr hD) = 1 :=
     (stationaryState_spec (E := E) hE hIrr hD).1.2
   have : Matrix.trace (stationaryState E hE hIrr hD) = 0 := by
-    simpa [hzero]
+    simp [hzero]
   have h10 : (1 : ℂ) = 0 := by
     calc
       (1 : ℂ) = Matrix.trace (stationaryState E hE hIrr hD) := htr.symm
