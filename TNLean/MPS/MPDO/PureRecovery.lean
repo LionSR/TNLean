@@ -37,7 +37,6 @@ def toMPOTensor (A : MPSTensor d D) : MPOTensor d D :=
 original MPS transfer map. -/
 @[simp] theorem toMPOTensor_transferMap (A : MPSTensor d D) :
     MPOTensor.transferMap A.toMPOTensor = transferMap A := by
-  classical
   ext X
   rw [MPOTensor.transferMap_apply, transferMap_apply]
   simp [toMPOTensor]
@@ -53,7 +52,6 @@ to the pure-state zero-correlation-length condition via
 `MPSTensor.zcl_iff_idempotent_transfer`. -/
 theorem toMPOTensor_isRFP_iff_isZCL (A : MPSTensor d D) :
     MPOTensor.IsRFP A.toMPOTensor ↔ IsZCL A := by
-  rw [toMPOTensor_isRFP_iff_isRFP]
-  exact (zcl_iff_idempotent_transfer A).symm
+  simpa [toMPOTensor_isRFP_iff_isRFP] using (zcl_iff_idempotent_transfer A).symm
 
 end MPSTensor

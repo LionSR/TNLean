@@ -249,6 +249,16 @@ legs cyclically and taking the resulting trace.
     This is \cite[Definition~4.3]{Cirac2021Matrix}.
 \end{definition}
 
+\begin{remark}[PRFP does not imply MPO ZCL]\label{rem:prfp_not_implies_zcl}
+    \lean{MPOTensor.exists_isPRFP_not_isZCL}
+    \leanok
+    \uses{def:is_prfp, def:mpo_is_zcl}
+    The current purification-RFP condition is strictly weaker than MPO zero
+    correlation length: there exists an MPO tensor with purification RFP whose
+    transfer map is not idempotent. Equivalently, the implication from the Lean
+    predicate \texttt{IsPRFP} to the predicate \texttt{IsZCL} fails.
+\end{remark}
+
 \begin{theorem}[Purification RFP implies LPDO]\label{thm:prfp_is_lpdo}
     \lean{MPOTensor.IsPRFP.isLPDO}
     \leanok
@@ -397,6 +407,35 @@ legs cyclically and taking the resulting trace.
     $\bigoplus_\alpha \mu_\alpha \otimes M_\alpha$
     from \cite[\S4.4]{Cirac2017MPDO_AnnPhys}.
 \end{definition}
+
+\begin{remark}[Finite-length span criterion for the abstract biCF hypothesis]%
+    \label{rem:word_tuple_span_top}
+    \lean{MPSTensor.WordTupleSpanTop}
+    \lean{MPSTensor.HasBiCF}
+    \lean{MPSTensor.hasBiCF_of_wordTupleSpanTop}
+    \lean{MPOTensor.horizontalCFData_of_wordTupleSpanTop}
+    \leanok
+    Let $(A_k)$ be a family of block tensors, and fix a length $L$.
+    Write $A_k^w$ for the length-$L$ word evaluation of $A_k$ along a word $w$.
+    The predicate \texttt{WordTupleSpanTop} says that the tuple-valued evaluations
+    \[
+        w \longmapsto (A_k^w)_k
+    \]
+    span the full product algebra of block matrices.
+    The predicate \texttt{HasBiCF} records the corresponding finite-length
+    separation property: there exists $L$ such that if
+    \[
+        \sum_k \tr(\Delta_k A_k^w) = 0
+        \qquad \text{for every word } w \text{ of length } L,
+    \]
+    then every block coefficient $\Delta_k$ vanishes.
+    The theorem \texttt{hasBiCF\_of\_wordTupleSpanTop} proves that the
+    spanning condition implies this separation property, by nondegeneracy of the
+    product trace pairing. The packaging theorem
+    \texttt{horizontalCFData\_of\_wordTupleSpanTop} then inserts the resulting
+    biCF witness into \texttt{HorizontalCFData} once injectivity,
+    left-canonicality, and nonzero weights are given.
+\end{remark}
 
 \begin{lemma}[Blockwise equality from agreement on the MPV family]
     \label{lem:blockwise_insert_eq_of_mpv_agree}

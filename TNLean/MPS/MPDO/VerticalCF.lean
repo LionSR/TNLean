@@ -213,7 +213,6 @@ theorem blockwise_insert_eq_of_mpv_agree
       MPSTensor.FirstSiteActionAgree
         (MPSTensor.toTensorFromBlocks (d := d) (μ := μ) A) Y Z) :
     ∀ k, MPSTensor.insertedTensor Y (A k) = MPSTensor.insertedTensor Z (A k) := by
-  classical
   -- Obtain the biCF blocking length `L`.
   obtain ⟨L, hL⟩ := hCF.biCF
   intro k₀
