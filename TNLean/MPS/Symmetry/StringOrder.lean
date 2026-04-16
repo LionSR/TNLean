@@ -454,10 +454,12 @@ private lemma twistedTransfer_virtual_rep_fixed
       ((ρ.X (g⁻¹) : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) := by
   let V := ((ρ.X (g⁻¹) : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)
   let Vinv := (((ρ.X (g⁻¹))⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)
-  have hVinvV : Vinv * V = 1 := by show
-    (((ρ.X g⁻¹)⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) *
-      ((ρ.X g⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) = 1; simp
-  show twistedTransferMap A (U g) V = V
+  have hVinvV : Vinv * V = 1 := by
+    change
+      (((ρ.X g⁻¹)⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) *
+        ((ρ.X g⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) = 1
+    simp
+  change twistedTransferMap A (U g) V = V
   rw [twistedTransferMap_apply]
   rw [Finset.sum_comm]
   -- Each inner sum simplifies via virtual rep

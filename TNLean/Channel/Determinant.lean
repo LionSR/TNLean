@@ -94,7 +94,7 @@ noncomputable def channelDet (T : MatrixEnd d) : ℂ :=
 /-- `channelDet` agrees with the basis-independent `LinearMap.det`. -/
 theorem channelDet_eq_linearMap_det (T : MatrixEnd d) :
     channelDet T = LinearMap.det T := by
-  unfold channelDet channelMatrix
+  rw [channelDet, channelMatrix]
   exact LinearMap.det_toMatrix (matrixSpaceBasis d) T
 
 /-- Nonzero channel determinant iff the map is a unit in `Module.End`. -/
@@ -209,8 +209,7 @@ private theorem trace_zero_hermitian_eq_smul_density_sub_density [NeZero d]
       simp only [hX_decomp, hQ₁_zero, hQ₂_zero, sub_self]
     let ρ : MatrixAlg d := c⁻¹ • Q₁
     let σ : MatrixAlg d := c⁻¹ • Q₂
-    have hc_inv_nonneg : 0 ≤ c⁻¹ := by
-      simpa only [inv_nonneg] using (inv_nonneg).2 hc_nonneg
+    have hc_inv_nonneg : 0 ≤ c⁻¹ := inv_nonneg.2 hc_nonneg
     have hρ_mem : ρ ∈ densityMatrices d := by
       refine ⟨hQ₁_psd.smul hc_inv_nonneg, ?_⟩
       simp only [trace_smul, smul_eq_mul, ne_eq, hc_ne, not_false_eq_true,
@@ -230,9 +229,8 @@ private theorem positiveTracePreserving_bounded_orbit_of_trace_zero_hermitian [N
     {X : MatrixAlg d} (hX : X.IsHermitian) (htrX : Matrix.trace X = 0) :
     ∃ C : ℝ, ∀ n : ℕ, ‖(T ^ n) X‖ ≤ C := by
   have hmap_density :
-      ∀ ρ : MatrixAlg d, ρ ∈ densityMatrices d → T ρ ∈ densityMatrices d := by
-    intro ρ hρ
-    exact ⟨hPos ρ hρ.1, by rw [hTP ρ, hρ.2]⟩
+      ∀ ρ : MatrixAlg d, ρ ∈ densityMatrices d → T ρ ∈ densityMatrices d :=
+    fun ρ hρ => ⟨hPos ρ hρ.1, by rw [hTP ρ, hρ.2]⟩
   have hiter_density : ∀ n : ℕ, ∀ ρ : MatrixAlg d, ρ ∈ densityMatrices d →
       (T ^ n) ρ ∈ densityMatrices d := by
     intro n

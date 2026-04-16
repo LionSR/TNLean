@@ -339,11 +339,10 @@ theorem IsPrimitiveMPS.transferMap_pow_apply_tendsto [NeZero D]
         = ((Pρ + N ^ (n + 1)) : Module.End ℂ _) X := by rw [← h]
       _ = Pρ X + (N ^ (n + 1)) X := LinearMap.add_apply Pρ (N ^ (n + 1)) X
   simp_rw [hdecomp]
-  rw [show Pρ X = (Matrix.trace X / Matrix.trace ρ) • ρ from rfl]
-  -- Need: N^(n+1)(X) → 0
+  change Tendsto (fun n => (Matrix.trace X / Matrix.trace ρ) • ρ + (N ^ (n + 1)) X)
+    atTop (nhds ((Matrix.trace X / Matrix.trace ρ) • ρ))
   suffices h : Tendsto (fun n => (N ^ (n + 1)) X) atTop (nhds 0) by
-    have := h.const_add ((Matrix.trace X / Matrix.trace ρ) • ρ)
-    simp only [add_zero] at this; exact this
+    simpa only [add_zero] using h.const_add ((Matrix.trace X / Matrix.trace ρ) • ρ)
   -- Use complement_pow_tendsto_zero
   have hN_clm : Tendsto (fun n =>
       (Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ) N) ^ n)
@@ -566,7 +565,7 @@ private theorem rep_eq_zero_iff [NeZero D]
     rw [phi_eq_trace_mul φ N, hrep, zero_mul,
       Matrix.trace_zero, LinearMap.zero_apply]
   · intro hφ; ext i j
-    simp [Matrix.of_apply, show φ = 0 from hφ]
+    simp [Matrix.of_apply, hφ]
 
 /-! #### Lemma A: trace-pairing positivity → full word span -/
 

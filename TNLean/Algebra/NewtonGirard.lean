@@ -66,8 +66,7 @@ private lemma derivative_det_eq_sum (A : Matrix n n R[X]) :
     calc
       derivative (Equiv.Perm.sign σ • ∏ i : n, A (σ i) i)
           = Equiv.Perm.sign σ • derivative (∏ i : n, A (σ i) i) := by
-            simpa using
-              (Polynomial.derivative_smul (Equiv.Perm.sign σ) (∏ i : n, A (σ i) i))
+            simp
       _ = Equiv.Perm.sign σ •
             ∑ j ∈ Finset.univ, (∏ k ∈ Finset.univ.erase j, A (σ k) k) *
               derivative (A (σ j) j) := by

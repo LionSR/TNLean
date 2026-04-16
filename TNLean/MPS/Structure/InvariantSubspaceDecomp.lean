@@ -96,6 +96,46 @@ lemma mul_self_eq_self_or_eq_one (z : ℂ) (hz : z * z = z) : z = 0 ∨ z = 1 :=
   · right
     exact sub_eq_zero.mp h1
 
+/-- The MPV of a two-block tensor is the sum of the MPVs of its two blocks. -/
+private lemma mpv_twoBlockTensor_eq {n m N : ℕ}
+    (A₁ : MPSTensor d n) (A₂ : MPSTensor d m) (σ : Fin N → Fin d) :
+    mpv (twoBlockTensor (d := d) (n := n) (m := m) A₁ A₂) σ =
+      mpv A₁ σ + mpv A₂ σ := by
+  classical
+  have h :=
+    mpv_toTensorFromBlocks_eq_sum (d := d) (r := 2) (dim := ![n, m])
+      (μ := fun _ => (1 : ℂ))
+      (A := twoBlockBlocks (d := d) (n := n) (m := m) A₁ A₂) (σ := σ)
+  have h' :
+      mpv (twoBlockTensor (d := d) (n := n) (m := m) A₁ A₂) σ =
+        ∑ k : Fin 2,
+          (1 : ℂ) ^ N •
+            mpv (twoBlockBlocks (d := d) (n := n) (m := m) A₁ A₂ k) σ := by
+    simpa [twoBlockTensor] using h
+  calc
+    mpv (twoBlockTensor (d := d) (n := n) (m := m) A₁ A₂) σ
+        = ∑ k : Fin 2,
+            (1 : ℂ) ^ N •
+              mpv (twoBlockBlocks (d := d) (n := n) (m := m) A₁ A₂ k) σ := h'
+    _ = ((1 : ℂ) ^ N •
+          mpv (twoBlockBlocks (d := d) (n := n) (m := m) A₁ A₂ 0) σ) +
+          ((1 : ℂ) ^ N •
+            mpv (twoBlockBlocks (d := d) (n := n) (m := m) A₁ A₂ (Fin.succ 0)) σ) := by
+          simp [Fin.sum_univ_succ]
+          rfl
+    _ = mpv A₁ σ + mpv A₂ σ := by
+        have h0 :
+            (1 : ℂ) ^ N •
+                mpv (twoBlockBlocks (d := d) (n := n) (m := m) A₁ A₂ 0) σ =
+              mpv A₁ σ := by
+          simp [twoBlockBlocks]
+        have h1 :
+            (1 : ℂ) ^ N •
+                mpv (twoBlockBlocks (d := d) (n := n) (m := m) A₁ A₂ (Fin.succ 0)) σ =
+              mpv A₂ σ := by
+          simp only [one_pow, one_smul, twoBlockBlocks, Fin.cases_succ, Fin.cases_zero]
+          rfl
+        simp only [h0, h1]
 
 /-! ## Block-diagonal evaluation / trace lemmas -/
 
@@ -532,43 +572,8 @@ theorem exists_twoBlock_decomp_of_lowerZero
       _ = mpv A₁ σ + mpv A₂ σ := by rw [← hmpv₁, ← hmpv₂]
   -- MPV of the explicit block-diagonal tensor is the sum of block MPVs.
   have hmpv_twoBlockTensor :
-      mpv (twoBlockTensor (d := d) (n := n) (m := m) A₁ A₂) σ = mpv A₁ σ + mpv A₂ σ := by
-    classical
-    -- Expand the MPV of a block tensor as a sum over blocks.
-    have h :=
-      (mpv_toTensorFromBlocks_eq_sum (d := d) (r := 2) (dim := ![n, m])
-        (μ := fun _ => (1 : ℂ))
-        (A := twoBlockBlocks (d := d) (n := n) (m := m) A₁ A₂) (σ := σ))
-    have h' :
-        mpv (twoBlockTensor (d := d) (n := n) (m := m) A₁ A₂) σ =
-          ∑ k : Fin 2,
-            (1 : ℂ) ^ N • mpv (twoBlockBlocks (d := d) (n := n) (m := m) A₁ A₂ k) σ := by
-      simpa [twoBlockTensor] using h
-    -- Compute the `Fin 2` sum using `Fin.sum_univ_succ` so the second term is at `Fin.succ 0`.
-    calc
-      mpv (twoBlockTensor (d := d) (n := n) (m := m) A₁ A₂) σ
-          = ∑ k : Fin 2,
-              (1 : ℂ) ^ N • mpv (twoBlockBlocks (d := d) (n := n) (m := m) A₁ A₂ k) σ := h'
-      _ = ((1 : ℂ) ^ N • mpv (twoBlockBlocks (d := d) (n := n) (m := m) A₁ A₂ 0) σ) +
-            ((1 : ℂ) ^ N •
-              mpv (twoBlockBlocks (d := d) (n := n) (m := m) A₁ A₂ (Fin.succ 0)) σ) := by
-          simp [Fin.sum_univ_succ]
-          rfl
-      _ = mpv A₁ σ + mpv A₂ σ := by
-          have h0 :
-              (1 : ℂ) ^ N • mpv (twoBlockBlocks (d := d) (n := n) (m := m) A₁ A₂ 0) σ =
-                mpv A₁ σ := by
-            -- Reduce the `Fin.cases` at `0` without rewriting `Fin.succ 0`.
-            simp [twoBlockBlocks]
-          have h1 :
-              (1 : ℂ) ^ N •
-                  mpv (twoBlockBlocks (d := d) (n := n) (m := m) A₁ A₂ (Fin.succ 0)) σ =
-                mpv A₂ σ := by
-            simp only [one_pow, one_smul, twoBlockBlocks, Fin.cases_succ, Fin.cases_zero]
-            rfl
-          -- Combine the two identities.
-          -- Avoid rewriting `Fin.succ 0` into `1` (which breaks dependent `Fin.cases` reductions).
-          simp only [h0, h1]
+      mpv (twoBlockTensor (d := d) (n := n) (m := m) A₁ A₂) σ = mpv A₁ σ + mpv A₂ σ :=
+    mpv_twoBlockTensor_eq (d := d) (n := n) (m := m) A₁ A₂ σ
   -- Now chain everything.
   calc
     mpv A σ = mpv Aconj σ := hA_Aconj
@@ -663,24 +668,27 @@ theorem exists_twoBlock_decomp_of_lowerZero_strict
     simpa [n, m] using hsum.symm.trans hST
   -- ═══ Strict bounds ═══
   -- `S` is nonempty from `P ≠ 0`.
-  have hn_pos : 0 < n := by
-    rw [show n = Fintype.card S from rfl, Fintype.card_pos_iff]
-    by_contra hempty; rw [not_nonempty_iff] at hempty
+  have hS_nonempty : Nonempty S := by
+    by_contra hempty
+    rw [not_nonempty_iff] at hempty
     apply hP0
     have hf_zero : ∀ j, f j = 0 := fun j =>
       (hf01 j).resolve_right (fun h1 => (IsEmpty.false (α := S) ⟨j, h1⟩).elim)
     rw [orthProj_spectral_eq' P hHerm]
-    have hdiag0 : Matrix.diagonal f = 0 := by ext i k; simp [Matrix.diagonal_apply, hf_zero]
+    have hdiag0 : Matrix.diagonal f = 0 := by
+      ext i k
+      simp [Matrix.diagonal_apply, hf_zero]
     rw [hdiag0, Matrix.mul_zero, Matrix.zero_mul]
+  have hn_pos : 0 < n := by
+    simpa [n] using Fintype.card_pos_iff.mpr hS_nonempty
   -- `T` is nonempty from `P ≠ 1`.
-  have hm_pos : 0 < m := by
-    rw [show m = Fintype.card T from rfl, Fintype.card_pos_iff]
-    by_contra hempty; rw [not_nonempty_iff] at hempty
+  have hT_nonempty : Nonempty T := by
+    by_contra hempty
+    rw [not_nonempty_iff] at hempty
     apply hP1
     have hf_one : ∀ j, f j = 1 := fun j =>
       (hf01 j).resolve_left
         (fun h0 =>
-          -- `f j = 0` implies `j ∈ T` (the 0-eigenspace), contradicting `IsEmpty T`.
           (IsEmpty.false (α := T)
             ⟨j, fun (h1 : f j = 1) => absurd (h0.symm.trans h1) zero_ne_one⟩).elim)
     rw [orthProj_spectral_eq' P hHerm]
@@ -688,10 +696,13 @@ theorem exists_twoBlock_decomp_of_lowerZero_strict
       ext i k
       simp only [Matrix.diagonal_apply, Matrix.one_apply]
       split_ifs with heq
-      · subst heq; exact hf_one i
+      · subst heq
+        exact hf_one i
       · rfl
     rw [hdiag1, Matrix.mul_one, ← Matrix.star_eq_conjTranspose]
     simp
+  have hm_pos : 0 < m := by
+    simpa [m] using Fintype.card_pos_iff.mpr hT_nonempty
   have hn_lt : n < D := by omega
   have hm_lt : m < D := by omega
   -- ═══ Block decomposition ═══
@@ -807,8 +818,11 @@ theorem exists_twoBlock_decomp_of_lowerZero_strict
       _root_.evalWord (fun i => Matrix.reindex eST eST
         ((diagPart Aconj Pdiag) i)) w =
         Matrix.fromBlocks (_root_.evalWord A11raw w) 0 0 (_root_.evalWord A22raw w) := by
-    rw [show (fun i => Matrix.reindex eST eST ((diagPart Aconj Pdiag) i)) =
-        fun i => Matrix.fromBlocks (A11raw i) 0 0 (A22raw i) from funext hLetter_block]
+    have hfun :
+        (fun i => Matrix.reindex eST eST ((diagPart Aconj Pdiag) i)) =
+          fun i => Matrix.fromBlocks (A11raw i) 0 0 (A22raw i) :=
+      funext hLetter_block
+    rw [hfun]
     simpa using evalWord_fromBlocks_diag A11raw A22raw w
   have hTrace_diagPart :
       mpv (diagPart Aconj Pdiag) σ = mpv A₁ σ + mpv A₂ σ := by
@@ -839,21 +853,8 @@ theorem exists_twoBlock_decomp_of_lowerZero_strict
             Matrix.trace (_root_.evalWord A22raw w) := htr_blocks
       _ = mpv A₁ σ + mpv A₂ σ := by rw [← hmpv₁, ← hmpv₂]
   have hmpv_twoBlockTensor :
-      mpv (twoBlockTensor A₁ A₂) σ = mpv A₁ σ + mpv A₂ σ := by
-    have h := mpv_toTensorFromBlocks_eq_sum (r := 2) (dim := ![n, m])
-        (μ := fun _ => (1 : ℂ)) (A := twoBlockBlocks A₁ A₂) (σ := σ)
-    have h' : mpv (twoBlockTensor A₁ A₂) σ =
-        ∑ k : Fin 2, (1 : ℂ) ^ N • mpv (twoBlockBlocks A₁ A₂ k) σ := by
-      simpa [twoBlockTensor] using h
-    calc mpv (twoBlockTensor A₁ A₂) σ
-        = ∑ k : Fin 2, (1 : ℂ) ^ N • mpv (twoBlockBlocks A₁ A₂ k) σ := h'
-      _ = ((1 : ℂ) ^ N • mpv (twoBlockBlocks A₁ A₂ 0) σ) +
-            ((1 : ℂ) ^ N • mpv (twoBlockBlocks A₁ A₂ (Fin.succ 0)) σ) := by
-          simp [Fin.sum_univ_succ]
-          rfl
-      _ = mpv A₁ σ + mpv A₂ σ := by
-          simp only [one_pow, one_smul, twoBlockBlocks, Fin.cases_zero, Fin.cases_succ]
-          rfl
+      mpv (twoBlockTensor A₁ A₂) σ = mpv A₁ σ + mpv A₂ σ :=
+    mpv_twoBlockTensor_eq A₁ A₂ σ
   -- Chain all steps.
   calc mpv A σ = mpv Aconj σ := hA_Aconj
     _ = mpv (diagPart Aconj Pdiag) σ := hAconj_diag

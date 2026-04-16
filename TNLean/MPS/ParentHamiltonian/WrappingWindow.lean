@@ -177,6 +177,8 @@ private theorem init_evalWord_split {A : MPSTensor d D}
 Use `tr(P * Q) = tr(Q * P)` to rotate the wrapping boundary,
 then extract a matrix equation via `groundSpaceMap_injective`. -/
 
+-- Expanding `cyclicCfg` and rotating the trace through the wrapping window produces
+-- large normalization goals, so this proof needs a larger heartbeat budget.
 set_option maxHeartbeats 800000 in
 private theorem wrapping_window_matEq {A : MPSTensor d D} [NeZero D]
     (hA : IsInjective A) {L : ℕ} (hL : 1 < L) {M : ℕ} (hM : 1 ≤ M) (hLN : L ≤ M + 1)
@@ -255,6 +257,8 @@ private theorem wrapping_window_matEq {A : MPSTensor d D} [NeZero D]
 
 Extend from the wrapping window equation to full commutation via spanning. -/
 
+-- The double spanning argument over window tails and complements creates large
+-- `LinearMap.ext_on_range` goals, so we raise the heartbeat budget here as well.
 set_option maxHeartbeats 800000 in
 /-- If `groundSpaceMap A N X` lies in every cyclic window's ground space,
 then `X` commutes with all generators `A_j`.

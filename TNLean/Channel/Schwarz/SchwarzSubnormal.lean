@@ -429,7 +429,7 @@ theorem commuting_dominant_right_bound
       rw [Matrix.le_iff]
       simpa only [Complex.coe_smul, sub_zero] using
         (Matrix.PosSemidef.one (n := Fin D) (R := ℂ)).smul hε.le
-  exact commuting_dominant_right_bound_posDef A _ hPD hComm' hDom'
+  simpa using commuting_dominant_right_bound_posDef A _ hPD hComm' hDom'
 
 /-- CP/Kraus version of Wolf Thm. 5.6 under both dominant bounds.
 
@@ -468,7 +468,7 @@ theorem kadison_schwarz_commuting_dominant_cp_of_two_sided_bound
     simpa only [krausAdjointMap_conjTranspose, conjTranspose_conjTranspose] using hKSRight'
   have hDomRightMap : krausAdjointMap K (A * Aᴴ) ≤ krausAdjointMap K Dom := by
     simpa only using hPosT.map_le_map hDomRight
-  exact ⟨hKSLeft.trans hDomLeftMap, hKSRight.trans hDomRightMap⟩
+  refine ⟨hKSLeft.trans hDomLeftMap, hKSRight.trans hDomRightMap⟩
 
 /-- Wolf Thm. 5.6 in the CP/Kraus setting.
 
@@ -485,8 +485,9 @@ theorem kadison_schwarz_commuting_dominant_cp
       krausAdjointMap K A * krausAdjointMap K (Aᴴ) ≤ krausAdjointMap K Dom := by
   have hDomRight : A * Aᴴ ≤ Dom :=
     commuting_dominant_right_bound (A := A) (Dom := Dom) hDomPos hComm hDom
-  exact kadison_schwarz_commuting_dominant_cp_of_two_sided_bound
-    (K := K) h_tp A Dom hDomPos hComm hDom hDomRight
+  simpa using
+    kadison_schwarz_commuting_dominant_cp_of_two_sided_bound
+      (K := K) h_tp A Dom hDomPos hComm hDom hDomRight
 
 private lemma intertwine_sqrt_of_mul_eq
     (P Q A : Mat)

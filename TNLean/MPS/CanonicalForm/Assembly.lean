@@ -711,6 +711,13 @@ private lemma cyclicShift_succ {m : ℕ} [NeZero m] (k : Fin m) (n : ℕ) :
   change ((↑k + n) + 1) % m = (((↑k + n) % m) + 1 % m) % m
   exact Nat.add_mod (↑k + n) 1 m
 
+private lemma cyclicShift_succ_left {m : ℕ} [NeZero m] (k : Fin m) (n : ℕ) :
+    cyclicShift k (n + 1) = cyclicShift (k + 1) n := by
+  ext
+  simp [cyclicShift, Fin.val_add]
+  congr 1
+  omega
+
 @[simp] private lemma cyclicShift_self {m : ℕ} [NeZero m] (k : Fin m) :
     cyclicShift k m = k := by
   ext
@@ -725,65 +732,24 @@ theorem adjointTransferMap_pow_fixes_cyclic_projection
     (P : Fin m → MatrixAlg D)
     (hcyclic : ∀ k : Fin m, transferMap (d := d) (D := D) K (P (k + 1)) = P k) :
     ∀ k : Fin m, ((transferMap (d := d) (D := D) K) ^ m) (P k) = P k := by
-  -- Strategy: prove (E†)^n (P (k + n)) = P k for Fin m addition, by induction on n.
-  -- For n = m, k + m = k in Fin m, so (E†)^m (P k) = P k.
-  -- The key is: (E†)^(n+1) (P (k + (n+1))) = E†((E†)^n (P (k + (n+1))))
-  -- = E†((E†)^n (P ((k+1) + n)))     [since k + (n+1) = (k+1) + n in Fin m]
-  -- = E†(P (k+1))                     [by IH with k' = k+1]
-  -- = P k                              [by hcyclic]
-  -- Prove: ∀ n, ∀ k, (E†)^n (P (k + n)) = P k  where n is a Fin m literal.
-  -- We use Nat.rec on n, carrying a proof that the Fin m literal n is (n % m).
-  -- But this is cleaner using hcyclic directly in a simple induction.
-  -- Base: (E†)^0 (P (k + 0)) = P k  ✓
-  -- Step: (E†)^(n+1) (P (k + (n+1)))
-  --     = E†((E†)^n (P (k + (n+1))))     [pow decomp]
-  --     = E†((E†)^n (P ((k+1) + n)))     [Fin m add assoc]
-  --     = E†(P (k+1))                    [IH with k' = k+1]
-  --     = P k                             [hcyclic]
-  -- At n = m: k + m = k in Fin m, so (E†)^m (P k) = P k.
   intro k
-  -- Direct approach: iterate hcyclic m times
-  suffices ∀ n : ℕ, n ≤ m →
-      ∀ (k : Fin m), ((transferMap (d := d) (D := D) K) ^ n)
-        (P ⟨((k : ℕ) + n) % m, Nat.mod_lt _ (Nat.pos_of_ne_zero (NeZero.ne m))⟩) = P k by
-    have h := this m le_rfl k
-    simpa [Nat.add_mod_right, Nat.mod_eq_of_lt k.is_lt] using h
-  intro n
-  induction n with
-  | zero =>
-    intro _ k
-    simp [Nat.mod_eq_of_lt k.is_lt]
-  | succ n ih =>
-    intro hn k
-    have hn' : n ≤ m := Nat.le_of_succ_le hn
-    have hlt : ((k : ℕ) + (n + 1)) % m < m :=
-      Nat.mod_lt _ (Nat.pos_of_ne_zero (NeZero.ne m))
-    -- Decompose the power
-    have hpow : ((transferMap (d := d) (D := D) K) ^ (n + 1))
-        (P ⟨((k : ℕ) + (n + 1)) % m, hlt⟩) =
-        (transferMap (d := d) (D := D) K)
-          (((transferMap (d := d) (D := D) K) ^ n)
-            (P ⟨((k : ℕ) + (n + 1)) % m, hlt⟩)) := by
-      rw [pow_succ']; rfl
-    rw [hpow]
-    -- (k + (n+1)) % m = ((k+1) + n) % m
-    have hmod : ((k : ℕ) + (n + 1)) % m = (((k : ℕ) + 1) + n) % m := by
-      congr 1; omega
-    -- Create the Fin m index for (k+1)
-    set k1 : Fin m := k + 1
-    -- Apply IH with k' = k+1
-    have := ih hn' k1
-    -- ih says: (E†)^n (P ⟨(↑k1 + n) % m, _⟩) = P k1
-    -- We need: (E†)^n (P ⟨((↑k + n + 1)) % m, _⟩) = P k1
-    -- Since (↑k + (n+1)) % m = (↑k1 + n) % m
-    have hval_eq : ((k : ℕ) + (n + 1)) % m = ((k1 : ℕ) + n) % m := by
-      simp [k1, Fin.val_add]; omega
-    have hfin_eq :
-        (⟨((k : ℕ) + (n + 1)) % m, Nat.mod_lt _ (Nat.pos_of_ne_zero (NeZero.ne m))⟩ : Fin m) =
-          ⟨((k1 : ℕ) + n) % m, Nat.mod_lt _ (Nat.pos_of_ne_zero (NeZero.ne m))⟩ := by
-      ext; exact hval_eq
-    rw [hfin_eq, this]
-    exact hcyclic k
+  have hiter :
+      ∀ n : ℕ, ∀ k : Fin m,
+        ((transferMap (d := d) (D := D) K) ^ n) (P (cyclicShift k n)) = P k := by
+    intro n
+    induction n with
+    | zero =>
+        intro k
+        simp
+    | succ n ih =>
+        intro k
+        rw [pow_succ', cyclicShift_succ_left]
+        change
+          transferMap (d := d) (D := D) K
+            (((transferMap (d := d) (D := D) K) ^ n) (P (cyclicShift (k + 1) n))) = P k
+        rw [ih (k + 1)]
+        exact hcyclic k
+  simpa using hiter m k
 
 /-- The adjoint of the blocked transfer map equals the `m`-th iterate of the
 adjoint transfer map:
@@ -911,7 +877,7 @@ theorem exists_cyclic_sector_decomp_after_blocking
       obtain ⟨k₀, hk₀⟩ := h
       -- If P(j+1) = 0 then P(j) = E†(P(j+1)) = E†(0) = 0
       have hback : ∀ j : Fin m, P (j + 1) = 0 → P j = 0 := fun j hj => by
-        rw [show P j = transferMap K (P (j + 1)) from (hcyclic j).symm, hj, map_zero]
+        simpa [hj] using (hcyclic j).symm
       -- Every j is zero: induct on backward distance (k₀ - j).val
       have hall : ∀ j : Fin m, P j = 0 := by
         suffices hs : ∀ n : ℕ, n < m → ∀ j : Fin m,
@@ -934,8 +900,8 @@ theorem exists_cyclic_sector_decomp_after_blocking
           rw [h_eq, Fin.val_sub_one_of_ne_zero (by intro h; simp [h] at hj)]
           omega
       -- Contradiction: ∑ P_k = 0 ≠ 1
-      exact absurd (show (∑ k, P k) = 0 from Finset.sum_eq_zero (fun k _ => hall k))
-        (by rw [hPsum]; exact one_ne_zero)
+      have hsum_zero : ∑ k, P k = 0 := Finset.sum_eq_zero fun k _ => hall k
+      exact absurd hsum_zero (by rw [hPsum]; exact one_ne_zero)
     -- Second: dim k ≠ 0 follows from P k ≠ 0 via the trace relation
     intro k hk
     apply hPne k

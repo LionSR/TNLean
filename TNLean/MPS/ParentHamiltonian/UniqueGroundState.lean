@@ -305,7 +305,8 @@ theorem chainGroundSpace_eq_mpvSubmodule {A : MPSTensor d D} [NeZero D]
     have hψGS : ψ ∈ groundSpace A N := by
       apply contiguous_mem_groundSpace hA hL hLN
       intro s hs τ
-      rw [← cyclicRestrictₗ_eq_contiguousRestrictₗ hN0 hLN (show (⟨s, by omega⟩ : Fin N).val + L ≤ N from hs)]
+      rw [← cyclicRestrictₗ_eq_contiguousRestrictₗ hN0 hLN
+        (show (⟨s, by omega⟩ : Fin N).val + L ≤ N from hs)]
       exact hψ ⟨s, by omega⟩ τ
     -- Step 2: ψ = groundSpaceMap A N X for some X
     rw [groundSpace, LinearMap.mem_range] at hψGS

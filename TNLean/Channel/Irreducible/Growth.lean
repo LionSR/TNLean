@@ -319,7 +319,6 @@ private lemma mulVecLin_ker_idPlusE_le
     (B + E B).mulVecLin.ker ≤ B.mulVecLin.ker := by
   intro v hv
   rw [LinearMap.mem_ker] at hv ⊢
-  -- hv : (B + E B).mulVecLin v = 0, which is (B + E B) *ᵥ v = 0
   exact Matrix.PosSemidef.mulVec_eq_zero_left hB (hE B hB) v hv
 
 /-- **Strict kernel decrease for irreducible CP maps**:
@@ -341,15 +340,9 @@ theorem mulVecLin_ker_idPlusE_lt_of_not_posDef
   -- From ker(B + E(B)) = ker(B), derive ker(B) ⊆ ker(E(B))
   have hker_sub : ∀ v : Fin D → ℂ, B *ᵥ v = 0 → (E B) *ᵥ v = 0 := by
     intro v hv
-    -- v ∈ ker(B) = ker(B + E(B)), so (B + E(B)) *ᵥ v = 0
     have hv_mem : v ∈ B.mulVecLin.ker := by rwa [LinearMap.mem_ker]
-    rw [← h_eq] at hv_mem
-    rw [LinearMap.mem_ker] at hv_mem
-    -- hv_mem : (B + E B).mulVecLin v = 0, i.e., (B + E B) *ᵥ v = 0
-    -- (B + E B) *ᵥ v = B *ᵥ v + (E B) *ᵥ v = 0 + (E B) *ᵥ v = (E B) *ᵥ v
-    have h_eq' : B *ᵥ v + (E B) *ᵥ v = 0 := by
-      rw [← add_mulVec]; exact hv_mem
-    rwa [hv, zero_add] at h_eq'
+    rw [← h_eq, LinearMap.mem_ker] at hv_mem
+    simpa [add_mulVec, hv] using hv_mem
   exact posDef_of_ker_subset_irreducible_cp E hCP hIrr B hB hBne hker_sub
 
 end KernelDecrease
@@ -378,11 +371,11 @@ private lemma ker_bot_of_posDef
   rw [Submodule.eq_bot_iff]
   intro v hv
   rw [LinearMap.mem_ker] at hv
-  -- hv : B.mulVecLin v = 0, i.e., B *ᵥ v = 0
+  change B *ᵥ v = 0 at hv
   by_contra hne
   obtain ⟨_, hpd⟩ := Matrix.posDef_iff_dotProduct_mulVec.mp hB
   have h_pos : (0 : ℂ) < star v ⬝ᵥ (B *ᵥ v) := hpd hne
-  have h_zero : star v ⬝ᵥ (B *ᵥ v) = 0 := by simp [show B *ᵥ v = 0 from hv]
+  have h_zero : star v ⬝ᵥ (B *ᵥ v) = 0 := by simp [hv]
   linarith
 
 /-- **Wolf Theorem 6.2, item 2 (Growth condition for irreducible CP maps)**:
@@ -404,10 +397,12 @@ theorem growth_posDef_of_irreducible_cp
   have hPos : IsPositiveMap E := hCP.isPositiveMap
   have hT_eq : ∀ X : Matrix (Fin D) (Fin D) ℂ, T X = X + E X :=
     fun X => by simp [T]
-  have hT_psd : ∀ {B : Matrix (Fin D) (Fin D) ℂ}, B.PosSemidef → (T B).PosSemidef :=
-    fun hB => by rw [hT_eq]; exact idPlusE_posSemidef hPos hB
-  have hT_ne : ∀ {B : Matrix (Fin D) (Fin D) ℂ}, B.PosSemidef → B ≠ 0 → T B ≠ 0 :=
-    fun hB hne => by rw [hT_eq]; exact idPlusE_ne_zero hPos hB hne
+  have hT_psd : ∀ {B : Matrix (Fin D) (Fin D) ℂ}, B.PosSemidef → (T B).PosSemidef := by
+    intro B hB
+    simpa [hT_eq B] using idPlusE_posSemidef hPos hB
+  have hT_ne : ∀ {B : Matrix (Fin D) (Fin D) ℂ}, B.PosSemidef → B ≠ 0 → T B ≠ 0 := by
+    intro B hB hne
+    simpa [hT_eq B] using idPlusE_ne_zero hPos hB hne
   -- Induction on n: for PSD nonzero B with finrank(ker B) ≤ n, (T^n)(B) is PD.
   suffices key : ∀ n : ℕ, ∀ B : Matrix (Fin D) (Fin D) ℂ,
       B.PosSemidef → B ≠ 0 →
@@ -435,34 +430,27 @@ theorem growth_posDef_of_irreducible_cp
   intro n
   induction n with
   | zero =>
-    intro B hB hBne hkd
-    -- finrank(ker B) ≤ 0, so = 0, so ker = ⊥, so B is PD
+    intro B hB _ hkd
     have hk0 : Module.finrank ℂ (LinearMap.ker B.mulVecLin) = 0 := Nat.le_zero.mp hkd
-    change ((T ^ 0) B).PosDef
-    simp only [pow_zero]
-    change B.PosDef
-    exact posDef_of_psd_ker_bot hB (Submodule.finrank_eq_zero.mp hk0)
+    simpa [pow_zero] using posDef_of_psd_ker_bot hB (Submodule.finrank_eq_zero.mp hk0)
   | succ n ih =>
     intro B hB hBne hkd
-    -- Use pow_succ to rewrite T^(n+1)(B) = T^n(T(B))
-    show ((T ^ (n + 1)) B).PosDef
     rw [pow_succ, Module.End.mul_apply]
-    -- Goal: ((T ^ n) (T B)).PosDef
     by_cases hBpd : B.PosDef
-    · -- B is PD → T(B) is PD → finrank(ker T(B)) = 0 ≤ n
-      apply ih (T B) (hT_psd hB) (hT_ne hB hBne)
-      have hTBpd : (T B).PosDef := by rw [hT_eq]; exact idPlusE_posDef hPos hBpd
+    · apply ih (T B) (hT_psd hB) (hT_ne hB hBne)
+      have hTBpd : (T B).PosDef := by
+        simpa [hT_eq B] using idPlusE_posDef hPos hBpd
       rw [ker_bot_of_posDef hTBpd]
       simp
-    · -- B is not PD → kernel strictly decreases
-      apply ih (T B) (hT_psd hB) (hT_ne hB hBne)
+    · apply ih (T B) (hT_psd hB) (hT_ne hB hBne)
       have h_lt : (B + E B).mulVecLin.ker < B.mulVecLin.ker :=
         mulVecLin_ker_idPlusE_lt_of_not_posDef E hCP hIrr hB hBne hBpd
       have h_finrank_lt : Module.finrank ℂ (LinearMap.ker (B + E B).mulVecLin) <
           Module.finrank ℂ (LinearMap.ker B.mulVecLin) :=
         Submodule.finrank_lt_finrank_of_lt h_lt
       have hTB : T B = B + E B := hT_eq B
-      rw [hTB]; omega
+      rw [hTB]
+      omega
 
 end Growth
 

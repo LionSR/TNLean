@@ -151,7 +151,7 @@ theorem generatorPreservesCompression_of_semigroupPreservesCompression
         simp [mul_add, add_mul, Matrix.mul_assoc]
       map_smul' := by
         intro r M
-        simp [Complex.real_smul, Matrix.mul_assoc] }
+        simp [Matrix.mul_assoc] }
   have hcompress_apply : ∀ M : Mat, compress M = P * M * P := fun M => by
     rfl
   -- Build a CLM from compress
