@@ -49,7 +49,7 @@ lemma biRectSpan_eq_map_comp
       Submodule.map ((LinearMap.mulLeft ℂ P).comp (LinearMap.mulRight ℂ Q))
         (wordSpan B n) := by
   -- `Submodule.map_comp` is stated for semilinear maps; specialize to linear maps.
-  simpa [biRectSpan, LinearMap.comp_apply] using
+  simpa only [biRectSpan, LinearMap.comp_apply] using
     (Submodule.map_comp (f := (LinearMap.mulRight ℂ Q)) (g := (LinearMap.mulLeft ℂ P))
       (p := wordSpan B n)).symm
 
@@ -72,13 +72,13 @@ private theorem mem_biRectSpan_iff
     rcases Submodule.mem_map.mp hM with ⟨X, hX, rfl⟩
     rcases Submodule.mem_map.mp hX with ⟨Y, hY, rfl⟩
     refine ⟨Y, hY, ?_⟩
-    simp [LinearMap.mulLeft_apply, LinearMap.mulRight_apply, Matrix.mul_assoc]
+    simp only [LinearMap.mulLeft_apply, LinearMap.mulRight_apply, Matrix.mul_assoc]
   · rintro ⟨X, hX, hM⟩
     rw [← hM]
     refine Submodule.mem_map.mpr ?_
     refine ⟨X * Q, ?_, ?_⟩
-    · exact Submodule.mem_map.mpr ⟨X, hX, by simp [LinearMap.mulRight_apply]⟩
-    · simp [LinearMap.mulLeft_apply, Matrix.mul_assoc]
+    · exact Submodule.mem_map.mpr ⟨X, hX, by simp only [LinearMap.mulRight_apply]⟩
+    · simp only [LinearMap.mulLeft_apply, Matrix.mul_assoc]
 
 /-- `biRectSpan` always lives in the range of the two-sided multiplication map. -/
 theorem biRectSpan_le_range
@@ -88,7 +88,7 @@ theorem biRectSpan_le_range
   intro M hM
   rcases (mem_biRectSpan_iff (d := d) (D := D) P Q B).mp hM with ⟨X, _, hX⟩
   exact ⟨X, by
-    simpa [LinearMap.comp_apply, LinearMap.mulLeft_apply, LinearMap.mulRight_apply,
+    simpa only [LinearMap.comp_apply, LinearMap.mulLeft_apply, LinearMap.mulRight_apply,
       Matrix.mul_assoc] using hX⟩
 
 /-- Converting a bi-rectangular span element back into a bounded word span,
@@ -106,7 +106,7 @@ theorem biRectSpan_le_wordSpan
   have hPYQ : (P * Y) * Q ∈ wordSpan B ((m₁ + n) + m₂) := by
     exact (wordSpan_mul_le B (m₁ + n) m₂) (Submodule.mul_mem_mul hPY hQ)
   rw [← hM]
-  simpa [Matrix.mul_assoc, Nat.add_assoc] using hPYQ
+  simpa only [Matrix.mul_assoc, Nat.add_assoc] using hPYQ
 
 /-- Two-sided cumulative bi-rectangular span: image of `cumulativeSpan B n` under
 right-multiplication by `Q` followed by left-multiplication by `P`. -/
@@ -122,7 +122,7 @@ lemma cumulativeBiRectSpan_eq_map_comp
     cumulativeBiRectSpan (d := d) (D := D) P Q B n =
       Submodule.map ((LinearMap.mulLeft ℂ P).comp (LinearMap.mulRight ℂ Q))
         (cumulativeSpan B n) := by
-  simpa [cumulativeBiRectSpan, LinearMap.comp_apply] using
+  simpa only [cumulativeBiRectSpan, LinearMap.comp_apply] using
     (Submodule.map_comp (f := (LinearMap.mulRight ℂ Q)) (g := (LinearMap.mulLeft ℂ P))
       (p := cumulativeSpan B n)).symm
 
@@ -172,7 +172,7 @@ theorem mul_mem_cumulativeSpan_of_mem_wordSpan_left
     have hprod : P * evalWord B w ∈ wordSpan B (m + w.length) := by
       exact (wordSpan_mul_le B m w.length) (Submodule.mul_mem_mul hP hw')
     exact (wordSpan_le_cumulativeSpan B (by omega)) hprod
-  exact hmap (Submodule.mem_map.mpr ⟨X, hX, by simp [LinearMap.mulLeft_apply]⟩)
+  exact hmap (Submodule.mem_map.mpr ⟨X, hX, by simp only [LinearMap.mulLeft_apply]⟩)
 
 /-- Right multiplication by an exact-length word-span element raises cumulative length
 by the corresponding offset. -/
@@ -280,7 +280,7 @@ theorem biRectSpan_finrank_le
     _ = Fintype.card (Fin D) * Fintype.card (Fin D) * Module.finrank ℂ ℂ :=
           Module.finrank_matrix ℂ ℂ _ _
     _ = D * D * 1 := by
-          simp [Fintype.card_fin, Module.finrank_self]
+          simp only [Fintype.card_fin, Module.finrank_self, mul_one]
     _ = D ^ 2 := by ring
 
 /-!
@@ -308,16 +308,16 @@ lemma vec_eq_zero_of_mulVec_eq_zero_of_mem_range_pow
     disjoint_ker_range_pow (D := D) (f := f)
   have hv' : v ∈ LinearMap.range (f ^ D) := by
     -- `Matrix.toLin' (M^D) = (Matrix.toLin' M)^D`.
-    simpa [f, Matrix.toLin'_pow] using hv
+    simpa only [f, Matrix.toLin'_pow] using hv
   have hker : v ∈ LinearMap.ker f := by
     -- `M *ᵥ v = 0` means `f v = 0`.
     refine LinearMap.mem_ker.mpr ?_
-    simpa [f, Matrix.toLin'_apply] using hMv
+    simpa only [f, Matrix.toLin'_apply] using hMv
   -- Use disjointness: `ker f ⊓ range (f^D) = ⊥`.
   have hinter : (LinearMap.ker f ⊓ LinearMap.range (f ^ D)) = ⊥ := hdisj.eq_bot
   have hvInf : v ∈ (LinearMap.ker f ⊓ LinearMap.range (f ^ D)) := ⟨hker, hv'⟩
   have : v ∈ (⊥ : Submodule ℂ (Fin D → ℂ)) := by
-    simpa [hinter] using hvInf
+    simpa only [hinter] using hvInf
   simpa using this
 
 /-- Matrix-level injectivity on the range of left multiplication by `M^D`.
@@ -365,7 +365,7 @@ lemma matrix_eq_zero_of_mul_eq_zero_of_mem_range_mulRight_pow
     refine (LinearMap.mem_range).2 ?_
     refine ⟨Yᵀ, ?_⟩
     -- `(Mᵀ)^D * Yᵀ = (Y * (M^D))ᵀ`.
-    simp [LinearMap.mulLeft_apply, Matrix.transpose_mul, Matrix.transpose_pow]
+    simp only [LinearMap.mulLeft_apply, Matrix.transpose_mul, Matrix.transpose_pow]
   have hMX' : (Mᵀ) * (Y * (M ^ D))ᵀ = 0 := by
     -- Transpose the equation `Y * (M^D) * M = 0`.
     have : ((Y * (M ^ D)) * M)ᵀ = 0 := by
@@ -376,7 +376,7 @@ lemma matrix_eq_zero_of_mul_eq_zero_of_mem_range_mulRight_pow
       (M := Mᵀ) (X := (Y * (M ^ D))ᵀ) hX' hMX'
   have hX0 : Y * (M ^ D) = 0 := by
     simpa using congrArg Matrix.transpose hXt
-  simp [hX0]
+  simpa only [hX0]
 
 end WielandtRankOne
 
@@ -410,24 +410,28 @@ theorem mulLeft_mem_biRectSpan_pow_succ
   set M0 : Matrix (Fin D) (Fin D) ℂ := B i₀
   have hcomm : M0 * (M0 ^ D) = (M0 ^ D) * M0 := by
     calc
-      M0 * (M0 ^ D) = M0 ^ (D + 1) := by simp [pow_succ']
-      _ = (M0 ^ D) * M0 := by simp [pow_succ]
+      M0 * (M0 ^ D) = M0 ^ (D + 1) := by rw [pow_succ']
+      _ = (M0 ^ D) * M0 := by rw [pow_succ]
   have hM0 : M0 ∈ wordSpan B 1 := by
-    simpa [M0, evalWord] using (evalWord_mem_wordSpan B ([i₀] : List (Fin d)))
+    simpa only [M0, evalWord, Matrix.mul_one] using
+      (evalWord_mem_wordSpan B ([i₀] : List (Fin d)))
   have hY' : M0 * Y ∈ wordSpan B (n + 1) := by
     have : M0 * Y ∈ (wordSpan B 1) * (wordSpan B n) :=
       Submodule.mul_mem_mul hM0 hY
-    simpa [Nat.add_comm, Nat.add_left_comm, Nat.add_assoc] using (wordSpan_mul_le B 1 n) this
+    simpa only [Nat.add_comm, Nat.add_left_comm, Nat.add_assoc] using
+      (wordSpan_mul_le B 1 n) this
   refine (mem_biRectSpan_iff (d := d) (D := D)
     (P0 (B := B) (i₀ := i₀)) (Q0 (B := B) (i₁ := i₁)) B).mpr ?_
   refine ⟨M0 * Y, hY', ?_⟩
   rw [← hX]
   calc
     (B i₀ ^ D) * (M0 * Y) * (B i₁ ^ D)
-        = ((B i₀ ^ D) * M0) * Y * (B i₁ ^ D) := by simp [Matrix.mul_assoc]
+        = ((B i₀ ^ D) * M0) * Y * (B i₁ ^ D) := by
+            simp only [Matrix.mul_assoc]
     _ = (M0 * (B i₀ ^ D)) * Y * (B i₁ ^ D) := by
-        simpa [M0] using congrArg (fun Z => Z * Y * (B i₁ ^ D)) hcomm.symm
-    _ = M0 * ((B i₀ ^ D) * Y * (B i₁ ^ D)) := by simp [Matrix.mul_assoc]
+        simpa only [M0] using congrArg (fun Z => Z * Y * (B i₁ ^ D)) hcomm.symm
+    _ = M0 * ((B i₀ ^ D) * Y * (B i₁ ^ D)) := by
+        simp only [Matrix.mul_assoc]
 
 /-- Linear map sending level `n` to level `n+1` by left multiplication with `B i₀`. -/
 noncomputable def biRectSpanLeftStep (n : ℕ) :
@@ -437,10 +441,12 @@ noncomputable def biRectSpanLeftStep (n : ℕ) :
     (i₀ := i₀) (i₁ := i₁) n x.2⟩
   map_add' x y := by
     ext i j
-    simp [Matrix.mul_add]
+    simpa using congrArg (fun M : Matrix (Fin D) (Fin D) ℂ => M i j)
+      (Matrix.mul_add (B i₀) x.1 y.1)
   map_smul' a x := by
     ext i j
-    simp
+    exact congrArg (fun M : Matrix (Fin D) (Fin D) ℂ => M i j)
+      (Matrix.mul_smul (B i₀) a x.1)
 
 /-- The left-step map is injective: multiplication by `B i₀` is injective on the range of
 left multiplication by `((B i₀)^D)`. -/
@@ -457,17 +463,17 @@ theorem biRectSpanLeftStep_injective (n : ℕ) :
       (P0 (B := B) (i₀ := i₀)) (Q0 (B := B) (i₁ := i₁)) B).mp hX with ⟨Z, _, hZ⟩
     refine (LinearMap.mem_range).2 ?_
     refine ⟨Z * Q0 (B := B) (i₁ := i₁), ?_⟩
-    simpa [P0, Q0, LinearMap.mulLeft_apply, Matrix.mul_assoc] using hZ
+    simpa only [P0, Q0, LinearMap.mulLeft_apply, Matrix.mul_assoc] using hZ
   intro x y hxy
   have hmat : (B i₀) * x.1 = (B i₀) * y.1 := congrArg Subtype.val hxy
   have hz : (B i₀) * (x.1 - y.1) = 0 := by
-    simpa [Matrix.mul_sub, sub_eq_zero] using hmat
+    simpa only [Matrix.mul_sub, sub_eq_zero] using hmat
   have hzRange : (x.1 - y.1) ∈ LinearMap.range (LinearMap.mulLeft ℂ ((B i₀) ^ D)) :=
     Submodule.sub_mem _ (hRange x.2) (hRange y.2)
   have hzero : x.1 - y.1 = 0 :=
     WielandtRankOne.matrix_eq_zero_of_mul_eq_zero_of_mem_range_mulLeft_pow (D := D)
       (M := B i₀) (X := x.1 - y.1) hzRange hz
-  exact Subtype.ext <| by simpa [sub_eq_zero] using hzero
+  exact Subtype.ext <| by simpa only [sub_eq_zero] using hzero
 
 /-- Finrank is nondecreasing along the sequence `n ↦ biRectSpan ((B i₀)^D) ((B i₁)^D) B n`. -/
 theorem biRectSpan_finrank_mono (n : ℕ) :

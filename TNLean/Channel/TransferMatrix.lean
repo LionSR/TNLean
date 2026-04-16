@@ -259,9 +259,8 @@ theorem transferMatrix_tp_iff
   constructor
   · intro htp k l
     simp only [transferMatrix_apply]
-    change ∑ i, (T (Matrix.single k l 1)) i i = _
-    rw [show ∑ i, (T (Matrix.single k l 1)) i i =
-        Matrix.trace (T (Matrix.single k l 1)) from rfl, htp]
+    change Matrix.trace (T (Matrix.single k l 1)) = _
+    rw [htp]
     by_cases hkl : k = l
     · subst hkl; rw [if_pos rfl]; exact Matrix.trace_single_eq_same k (1 : ℂ)
     · rw [Matrix.trace_single_eq_of_ne k l (1 : ℂ) hkl, if_neg hkl]
@@ -389,7 +388,8 @@ theorem transferMatrix_unitaryConj (U : Matrix (Fin D) (Fin D) ℂ) :
 theorem unitaryConjLM_isCPMap (U : Matrix (Fin D) (Fin D) ℂ) :
     IsCPMap (unitaryConjLM U) :=
   ⟨1, fun _ : Fin 1 => U, fun X => by
-    show unitaryConjLM U X = _; rw [unitaryConjLM_apply]; simp only [Fin.sum_univ_one]⟩
+    change U * X * Uᴴ = _
+    simp only [Fin.sum_univ_one]⟩
 
 /-- Unitary conjugation by a unitary matrix is trace-preserving. -/
 theorem unitaryConjLM_isTP_of_unitary (U : Matrix (Fin D) (Fin D) ℂ)

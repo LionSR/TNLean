@@ -350,7 +350,8 @@ private theorem common_blocking_primitive
         (∀ j k, j ≠ k → ‖μ2 j‖ ≠ ‖μ2 k‖) ∧
         (∀ k, μ2 k ≠ 0) ∧
         (∀ k, 0 < dim2 k) := by
-  refine ⟨1, by simp, r1, dim1, μ1, (fun k => blockTensor (d := d) (D := dim1 k) (blocks1 k) 1), ?_⟩
+  refine ⟨1, Nat.one_pos, r1, dim1, μ1,
+    (fun k => blockTensor (d := d) (D := dim1 k) (blocks1 k) 1), ?_⟩
   refine ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
   · intro N σ
     let σ' : Fin N → Fin d := fun n => singleBlockEquiv d (σ n)

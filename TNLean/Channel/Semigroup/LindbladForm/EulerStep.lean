@@ -231,7 +231,8 @@ private theorem eulerStep_apply (G : GeneratorDecomp D) (s : ℝ) (ρ : sgMat D)
     Fin.default_eq_zero, Fin.isValue, Finset.sum_const, Finset.card_singleton, one_smul,
     sub_eq_add_neg]
   have hconj : (1 + -(s • G.κ))ᴴ = 1 + -(s • G.κᴴ) := by
-    simp
+    simp only [Matrix.conjTranspose_add, Matrix.conjTranspose_neg,
+      Matrix.conjTranspose_smul, Matrix.conjTranspose_one, star_trivial]
   calc
     (1 + -(s • G.κ)) * ρ * (1 + -(s • G.κ))ᴴ + s • G.φ ρ =
         (1 + -(s • G.κ)) * ρ * (1 + -(s • G.κᴴ)) + s • G.φ ρ := by
@@ -240,9 +241,9 @@ private theorem eulerStep_apply (G : GeneratorDecomp D) (s : ℝ) (ρ : sgMat D)
           simp only [Matrix.mul_add, add_mul, Matrix.mul_one, Matrix.one_mul, smul_mul_assoc,
             mul_assoc, neg_mul, mul_neg]
           have hρκ : ρ * (s • G.κᴴ) = s • (ρ * G.κᴴ) := by
-            simp
+            simp only [mul_smul_comm]
           have hκρκ : G.κ * (s • (ρ * G.κᴴ)) = s • (G.κ * (ρ * G.κᴴ)) := by
-            simp
+            simp only [mul_smul_comm]
           rw [hρκ, hκρκ]
           have hrhs :
               ρ + s • (G.φ ρ + -(G.κ * ρ) + -(ρ * G.κᴴ)) + (s * s) • (G.κ * (ρ * G.κᴴ)) =
@@ -368,7 +369,9 @@ private theorem norm_eulerStep_toCLM_le [NeZero D]
 private theorem norm_pow_sub_pow_le [NeZero D]
     {A B : sgCLM D} {M : ℝ} (hM : 1 ≤ M) (hA : ‖A‖ ≤ M) (hB : ‖B‖ ≤ M) :
     ∀ m : ℕ, ‖A ^ m - B ^ m‖ ≤ (m : ℝ) * M ^ m * ‖A - B‖
-  | 0 => by simp
+  | 0 => by
+      simp only [pow_zero, sub_self, norm_zero, Nat.cast_zero, zero_mul]
+      exact le_rfl
   | m + 1 => by
       have hm := norm_pow_sub_pow_le hM hA hB m
       have hsplit : A ^ (m + 1) - B ^ (m + 1) = A ^ m * (A - B) + (A ^ m - B ^ m) * B := by

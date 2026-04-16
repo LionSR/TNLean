@@ -193,8 +193,7 @@ theorem exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho
       have hterm : ∀ k : Fin g,
           Tendsto (fun N => (GA N)⁻¹ i k * v N k) atTop (nhds (0 : ℂ)) := by
         intro k
-        have := (hGA_inv_entry i k).mul (hall_inner k)
-        simp only [mul_zero] at this; exact this
+        simpa only [mul_zero] using (hGA_inv_entry i k).mul (hall_inner k)
       have hsum : Tendsto (fun N => ∑ k : Fin g, (GA N)⁻¹ i k * v N k) atTop (nhds (0 : ℂ)) := by
         simpa only [Finset.sum_const_zero] using
           tendsto_finset_sum Finset.univ (fun k _ => hterm k)
@@ -218,8 +217,8 @@ theorem exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho
       have hprod : ∀ i : Fin g,
           Tendsto (fun N => starRingEnd ℂ (u N i) * v N i) atTop (nhds (0 : ℂ)) := by
         intro i
-        have := (hu_tendsto_zero i).star.mul (hall_inner i)
-        simp only [star_zero, zero_mul] at this; exact this
+        simpa only [star_zero, zero_mul] using
+          (hu_tendsto_zero i).star.mul (hall_inner i)
       have hsum : Tendsto (fun N => ∑ i : Fin g, starRingEnd ℂ (u N i) * v N i)
           atTop (nhds (0 : ℂ)) := by
         simpa only [Finset.sum_const_zero] using
@@ -295,15 +294,15 @@ theorem exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho
     -- Self-overlap of A(f j1) in norm → 1.
     have hAA_norm_tendsto :
         Tendsto (fun N => ‖mpvOverlap (d := d) (A (f j1)) (A (f j1)) N‖) atTop (nhds 1) := by
-      convert (hA_self (f j1)).norm using 1; simp only [norm_one]
+      simpa only [norm_one] using (hA_self (f j1)).norm
     --
     -- BB overlap norms → 1.
     have hBB1_norm :
         Tendsto (fun N => ‖mpvOverlap (d := d) (B j1) (B j1) N‖) atTop (nhds 1) := by
-      convert (hB_self j1).norm using 1; simp only [norm_one]
+      simpa only [norm_one] using (hB_self j1).norm
     have hBB2_norm :
         Tendsto (fun N => ‖mpvOverlap (d := d) (B j2) (B j2) N‖) atTop (nhds 1) := by
-      convert (hB_self j2).norm using 1; simp only [norm_one]
+      simpa only [norm_one] using (hB_self j2).norm
     --
     have hζ1_norm : ‖ζ1‖ = 1 :=
       norm_eq_one_of_selfOverlap_scale hAA_norm_tendsto hBB1_norm
@@ -347,7 +346,7 @@ theorem exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho
     --
     have hCross_norm_zero :
         Tendsto (fun N => ‖mpvOverlap (d := d) (B j1) (B j2) N‖) atTop (nhds 0) := by
-      convert h_cross.norm using 1; simp only [norm_zero]
+      simpa only [norm_zero] using h_cross.norm
     --
     exact zero_ne_one (tendsto_nhds_unique hCross_norm_zero hCross_norm_one)
   --
@@ -361,7 +360,7 @@ theorem exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho
   refine ⟨e.symm, fun j => ?_⟩
   have hfe : f (e.symm j) = j := Equiv.ofBijective_apply_symm_apply f hf_bij j
   have hdim : dimA j = dimB (e.symm j) := by
-    have := hf_dim (e.symm j); rw [hfe] at this; exact this
+    simpa [hfe] using hf_dim (e.symm j)
   exact ⟨hdim, gaugePhaseEquiv_cast_idx A B hfe (hf_dim (e.symm j)) (hf_gauge (e.symm j))⟩
 
 end MPSTensor

@@ -118,10 +118,10 @@ theorem exists_CFII_data_of_TP_of_isIrreducibleTensor
         (fun i =>
           (↑U : Matrix (Fin D) (Fin D) ℂ)ᴴ * A i * (↑U : Matrix (Fin D) (Fin D) ℂ)) := by
     -- Existing lemma is stated with `star` rather than `ᴴ`.
-    simpa [Matrix.star_eq_conjTranspose] using sameMPV_conj_unitary (d := d) (D := D) A U
+    simpa only [Matrix.star_eq_conjTranspose] using
+      sameMPV_conj_unitary (d := d) (D := D) A U
   -- Assemble the packaged data under the `let B := ...` binder.
-  -- The goal is definitionally a conjunction about the explicit conjugated tensor.
-  simpa using And.intro hSame (And.intro hΛ_pd (And.intro hΛ_diag (And.intro hTP_conj hΛ_fix)))
+  exact ⟨hSame, hΛ_pd, hΛ_diag, hTP_conj, hΛ_fix⟩
 
 
 /-!
@@ -202,7 +202,7 @@ theorem evalWord_eq_zero_of_all_zero (A : MPSTensor d D)
   | nil =>
       exact (hw rfl).elim
   | cons i w =>
-      simp [evalWord, hzero i]
+      simp only [evalWord, hzero i, zero_mul]
 
 /-- An all-zero tensor contributes zero to the MPV for every positive system size. -/
 theorem mpv_eq_zero_of_all_zero (A : MPSTensor d D)
@@ -212,11 +212,11 @@ theorem mpv_eq_zero_of_all_zero (A : MPSTensor d D)
   have hw : List.ofFn σ ≠ [] := by
     intro hnil
     have hlen : N = 0 := by
-      simpa using congrArg List.length hnil
+      simpa [List.length_ofFn] using congrArg List.length hnil
     exact (Nat.ne_of_gt hN) hlen
   unfold mpv coeff
   rw [evalWord_eq_zero_of_all_zero (A := A) hzero (w := List.ofFn σ) hw]
-  simp
+  simp only [Matrix.trace_zero]
 
 /-- If an irreducible tensor has bond dimension at least `2`, then some Kraus operator is
 nonzero. -/
@@ -493,12 +493,12 @@ theorem exists_irreducible_blockDecomp_liveBlocks (A : MPSTensor d D) :
     have hA : mpv A σ = ∑ k : Fin r₀, mpv (blocks₀ k) σ := by
       have h := hSame₀ N σ
       rw [h, mpv_toTensorFromBlocks_eq_sum]
-      simp
+      simp only [one_pow, one_smul]
     -- Expand the live-block toTensorFromBlocks.
     have hLive : mpv (toTensorFromBlocks (d := d) (μ := fun _ : Fin r => (1 : ℂ)) newBlocks) σ =
         ∑ j : Fin r, mpv (newBlocks j) σ := by
       rw [mpv_toTensorFromBlocks_eq_sum]
-      simp
+      simp only [one_pow, one_smul]
     -- Split the original sum into live and zero parts.
     have hDisj : Disjoint liveSet zeroSet := by
       simp only [liveSet_def, zeroSet_def]

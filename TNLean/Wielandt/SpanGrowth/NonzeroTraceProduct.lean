@@ -67,7 +67,11 @@ private theorem cumulativeSpan_dim_growth
         Module.finrank ℂ (cumulativeSpan A 0) + k := by
   intro k
   induction k with
-  | zero => right; simp
+  | zero =>
+      right
+      simpa only [Nat.add_zero, ge_iff_le] using
+        (le_rfl : Module.finrank ℂ (cumulativeSpan A 0) ≤
+          Module.finrank ℂ (cumulativeSpan A 0))
   | succ k ih =>
     rcases ih with ⟨j, hj, hstab⟩ | hgrow
     · left; exact ⟨j, by omega, hstab⟩
@@ -226,7 +230,11 @@ private theorem cumulativeSpan_dim_growth_from_one
         Module.finrank ℂ (cumulativeSpan A 1) + k := by
   intro k
   induction k with
-  | zero => right; simp
+  | zero =>
+      right
+      simpa only [Nat.add_zero, ge_iff_le] using
+        (le_rfl : Module.finrank ℂ (cumulativeSpan A 1) ≤
+          Module.finrank ℂ (cumulativeSpan A 1))
   | succ k ih =>
     rcases ih with ⟨j, hj1, hjk, hstab⟩ | hgrow
     · left; exact ⟨j, hj1, by omega, hstab⟩
@@ -237,9 +245,11 @@ private theorem cumulativeSpan_dim_growth_from_one
         have hlt : cumulativeSpan A (1 + k) <
             cumulativeSpan A (1 + k + 1) :=
           lt_of_le_of_ne (cumulativeSpan_mono A (1 + k)) hstab
-        have hstrict := cumulativeSpan_finrank_strict_mono A hlt
-        change Module.finrank ℂ (cumulativeSpan A (1 + (k + 1))) ≥ _
-        rw [show 1 + (k + 1) = 1 + k + 1 from by omega]
+        have hstrict :
+            Module.finrank ℂ (cumulativeSpan A (1 + k)) <
+              Module.finrank ℂ (cumulativeSpan A (1 + (k + 1))) := by
+          simpa only [Nat.add_assoc] using
+            cumulativeSpan_finrank_strict_mono A hlt
         omega
 
 /-- The key step helper for the sharp bound: if `IsNormal` and
@@ -264,7 +274,8 @@ theorem cumulativeSpan_eq_top_of_isNormal_sharp [NeZero D]
           Submodule.finrank_le _
       _ = Fintype.card (Fin D) * Fintype.card (Fin D) *
           Module.finrank ℂ ℂ := Module.finrank_matrix ℂ ℂ _ _
-      _ = D * D * 1 := by simp [Fintype.card_fin, Module.finrank_self]
+      _ = D * D * 1 := by
+            simp only [Fintype.card_fin, Module.finrank_self, mul_one]
       _ = D ^ 2 := by ring
   -- The bound n we aim for
   set n := D ^ 2 - r + 1 with hn_def
@@ -340,7 +351,8 @@ theorem cumulativeSpan_eq_top_of_isNormal_sharp [NeZero D]
         calc Module.finrank ℂ (cumulativeSpan A n) = D ^ 2 := h_eq
           _ = D * D * 1 := by ring
           _ = Fintype.card (Fin D) * Fintype.card (Fin D) *
-              Module.finrank ℂ ℂ := by simp [Fintype.card_fin, Module.finrank_self]
+              Module.finrank ℂ ℂ := by
+                simp only [Fintype.card_fin, Module.finrank_self, mul_one]
           _ = Module.finrank ℂ (Matrix (Fin D) (Fin D) ℂ) :=
               (Module.finrank_matrix ℂ ℂ _ _).symm
       exact hne this
@@ -386,8 +398,7 @@ private theorem wordSpan_zero_ne_top (A : MPSTensor d D)
   intro h
   -- wordSpan A 0 = ℂ ∙ 1 has finrank 1
   have h1 : Module.finrank ℂ (wordSpan A 0) = 1 := by
-    rw [wordSpan_zero, finrank_span_singleton
-      (show (1 : Matrix (Fin D) (Fin D) ℂ) ≠ 0 from one_ne_zero)]
+    rw [wordSpan_zero, finrank_span_singleton one_ne_zero]
   -- But wordSpan A 0 = ⊤ has finrank D² ≥ 4
   rw [h, finrank_top] at h1
   simp only [Module.finrank_matrix, Fintype.card_fin,
@@ -437,7 +448,10 @@ theorem exists_nonzero_trace_word_sharp_pos [NeZero D]
     apply Submodule.span_le.mpr
     rintro M ⟨σ, rfl⟩
     apply Submodule.subset_span
-    exact ⟨List.ofFn σ, by simp, by simp, rfl⟩
+    exact ⟨List.ofFn σ,
+      by simpa only [List.length_ofFn] using (le_rfl : 1 ≤ 1),
+      by simpa only [List.length_ofFn] using (le_rfl : 1 ≤ 1),
+      rfl⟩
   -- Step 2: V is monotone
   have hV_mono : ∀ {a b : ℕ}, a ≤ b → V a ≤ V b := by
     intro a b hab
@@ -455,8 +469,11 @@ theorem exists_nonzero_trace_word_sharp_pos [NeZero D]
             rintro M ⟨σ, rfl⟩
             apply Submodule.subset_span
             exact ⟨List.ofFn σ,
-              show 1 ≤ (List.ofFn σ).length by simp,
-              show (List.ofFn σ).length ≤ n + 1 by simp, rfl⟩
+              by
+                simpa only [List.length_ofFn] using
+                  Nat.succ_le_succ (Nat.zero_le n),
+              by simpa only [List.length_ofFn] using (le_rfl : n + 1 ≤ n + 1),
+              rfl⟩
           _ = V n := heq.symm
     -- Left multiplication by A_i sends V n into V n
     have hleft : ∀ (i : Fin d) (x : Matrix (Fin D) (Fin D) ℂ),
@@ -464,7 +481,7 @@ theorem exists_nonzero_trace_word_sharp_pos [NeZero D]
       intro i x hx
       -- suffices to check on generators
       suffices hmul : Submodule.map (LinearMap.mulLeft ℂ (A i)) (V n) ≤ V n by
-        exact hmul ⟨x, hx, by simp [LinearMap.mulLeft_apply]⟩
+        exact hmul ⟨x, hx, by simp only [LinearMap.mulLeft_apply]⟩
       rw [Submodule.map_le_iff_le_comap]
       apply Submodule.span_le.mpr
       rintro M ⟨w, hw1, hw2, rfl⟩
@@ -474,8 +491,11 @@ theorem exists_nonzero_trace_word_sharp_pos [NeZero D]
       change evalWord A (i :: w) ∈ V n
       by_cases hle : w.length + 1 ≤ n
       · exact Submodule.subset_span ⟨i :: w,
-          show 1 ≤ (i :: w).length by simp,
-          show (i :: w).length ≤ n by simp; omega, rfl⟩
+          by
+            simpa only [List.length_cons] using
+              Nat.succ_le_succ (Nat.zero_le w.length),
+          by simpa only [List.length_cons] using hle,
+          rfl⟩
       · -- |i :: w| = |w| + 1 > n, so |w| = n, |i :: w| = n + 1
         have : evalWord A (i :: w) ∈ wordSpan A (n + 1) := by
           have hlen : (i :: w).length = n + 1 := by simp [List.length_cons]; omega
@@ -497,18 +517,18 @@ theorem exists_nonzero_trace_word_sharp_pos [NeZero D]
           by_cases hw' : w = []
           · subst hw'; simp only [evalWord, mul_one]
             -- A i has length 1 ≤ n (since n ≥ 1)
-            have : A i ∈ V n := by
-              have := evalWord_mem_wordSpan A ([i] : List (Fin d))
-              simp [evalWord] at this
-              apply Submodule.subset_span
-              exact ⟨[i], by simp,
-                by simpa only [List.length_cons, List.length_nil, zero_add] using hn,
-                by simp [evalWord]⟩
-            exact this
+            exact Submodule.subset_span ⟨[i],
+              by
+                simpa only [List.length_cons, List.length_nil, zero_add] using
+                  (le_rfl : 1 ≤ 1),
+              by simpa only [List.length_cons, List.length_nil, zero_add] using hn,
+              by simp only [evalWord, Matrix.mul_one]⟩
           · have hw1' : 1 ≤ w.length := by
               cases w with
               | nil => contradiction
-              | cons _ _ => simp
+              | cons _ t =>
+                  simpa only [List.length_cons] using
+                    Nat.succ_le_succ (Nat.zero_le t.length)
             by_cases hw3 : w.length ≤ n
             · -- |w| ≤ n, so evalWord A w ∈ V n directly
               exact hleft i _ (Submodule.subset_span ⟨w, hw1', hw3, rfl⟩)
@@ -543,7 +563,8 @@ theorem exists_nonzero_trace_word_sharp_pos [NeZero D]
       calc r ≤ Module.finrank ℂ (Matrix (Fin D) (Fin D) ℂ) :=
             Submodule.finrank_le _
         _ = D * D * 1 := by
-            simp [Module.finrank_matrix, Fintype.card_fin, Module.finrank_self]
+            simp only [Module.finrank_matrix, Fintype.card_fin,
+              Module.finrank_self, mul_one]
         _ = D ^ 2 := by ring
     -- We need to show the dimension grows to D²
     -- If bound ≥ 1 (which it is when D ≥ 2 and r ≤ D²):
@@ -556,8 +577,9 @@ theorem exists_nonzero_trace_word_sharp_pos [NeZero D]
       rcases h (D ^ 2 - r) le_rfl with htop | hge
       · -- V (1 + (D²-r)) = ⊤, so V bound = ⊤
         have : V bound = ⊤ := hbn ▸ htop
-        rw [this]
-        simp [Module.finrank_matrix, Fintype.card_fin, Module.finrank_self]
+        rw [this, finrank_top]
+        simp only [Module.finrank_matrix, Fintype.card_fin,
+          Module.finrank_self, mul_one]
         ring_nf; omega
       · -- dim(V (1 + (D²-r))) ≥ r + (D²-r) = D²
         have : Module.finrank ℂ (V bound) ≥ D ^ 2 := by
@@ -579,13 +601,17 @@ theorem exists_nonzero_trace_word_sharp_pos [NeZero D]
       have hk' : k ≤ D ^ 2 - r := by omega
       rcases ih hk' with htop | hge
       · left
-        exact eq_top_iff.mpr (htop ▸ hV_mono (by omega))
+        exact eq_top_iff.mpr <| htop ▸
+          hV_mono (a := 1 + k) (b := 1 + (k + 1)) (by omega)
       · by_cases hne : V (1 + k) = ⊤
-        · left; exact eq_top_iff.mpr (hne ▸ hV_mono (by omega))
+        · left
+          exact eq_top_iff.mpr <| hne ▸
+            hV_mono (a := 1 + k) (b := 1 + (k + 1)) (by omega)
         · right
           have hgr := hV_growth (1 + k) (by omega) hne
-          have hle := Submodule.finrank_mono
-            (hV_mono (show 1 + k + 1 ≤ 1 + (k + 1) from by omega))
+          have hstep_le : V (1 + k + 1) ≤ V (1 + (k + 1)) :=
+            hV_mono (a := 1 + k + 1) (b := 1 + (k + 1)) (by omega)
+          have hle := Submodule.finrank_mono hstep_le
           omega
   -- Step 6: V bound = ⊤
   have hV_top : V bound = ⊤ := by
@@ -598,14 +624,16 @@ theorem exists_nonzero_trace_word_sharp_pos [NeZero D]
           ≤ Module.finrank ℂ (Matrix (Fin D) (Fin D) ℂ) :=
             Submodule.finrank_le _
         _ = D * D * 1 := by
-            simp [Module.finrank_matrix, Fintype.card_fin, Module.finrank_self]
+            simp only [Module.finrank_matrix, Fintype.card_fin,
+              Module.finrank_self, mul_one]
         _ = D ^ 2 := by ring
     have h_ge := hV_dim
     have h_eq : Module.finrank ℂ (V bound) = D ^ 2 := by omega
     calc Module.finrank ℂ (V bound) = D ^ 2 := h_eq
       _ = D * D * 1 := by ring
       _ = Fintype.card (Fin D) * Fintype.card (Fin D) *
-          Module.finrank ℂ ℂ := by simp [Fintype.card_fin, Module.finrank_self]
+          Module.finrank ℂ ℂ := by
+            simp only [Fintype.card_fin, Module.finrank_self, mul_one]
       _ = Module.finrank ℂ (Matrix (Fin D) (Fin D) ℂ) :=
           (Module.finrank_matrix ℂ ℂ _ _).symm
   -- Step 7: trace vanishes on V bound but tr(I) ≠ 0

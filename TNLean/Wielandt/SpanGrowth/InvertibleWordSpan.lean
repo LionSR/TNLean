@@ -67,7 +67,8 @@ theorem wordSpan_finrank_le (A : MPSTensor d D) (n : ℕ) :
         Submodule.finrank_le _
     _ = Fintype.card (Fin D) * Fintype.card (Fin D) *
         Module.finrank ℂ ℂ := Module.finrank_matrix ℂ ℂ _ _
-    _ = D * D * 1 := by simp [Fintype.card_fin, Module.finrank_self]
+    _ = D * D * 1 := by
+          simp only [Fintype.card_fin, Module.finrank_self, mul_one]
     _ = D ^ 2 := by ring
 
 /-! ## Left multiplication maps S_n into S_{n+1} -/
@@ -99,19 +100,23 @@ theorem mulLeft_pow_image_wordSpan_le (A : MPSTensor d D)
     Submodule.map (LinearMap.mulLeft ℂ (A i₀ ^ k)) (wordSpan A n) ≤
       wordSpan A (n + k) := by
   induction k with
-  | zero => simp [Submodule.map_id]
+  | zero =>
+      simpa only [pow_zero, LinearMap.mulLeft_one, Submodule.map_id, Nat.add_zero] using
+        (le_rfl : wordSpan A n ≤ wordSpan A n)
   | succ k ih =>
-    rw [show n + (k + 1) = (n + k) + 1 from by omega]
-    calc Submodule.map (LinearMap.mulLeft ℂ (A i₀ ^ (k + 1))) (wordSpan A n)
-        = Submodule.map (LinearMap.mulLeft ℂ (A i₀))
-            (Submodule.map (LinearMap.mulLeft ℂ (A i₀ ^ k)) (wordSpan A n)) := by
-          rw [← Submodule.map_comp]; congr 1; ext x
-          simp only [LinearMap.comp_apply, LinearMap.mulLeft_apply,
-            pow_succ', ← Matrix.mul_assoc]
-      _ ≤ Submodule.map (LinearMap.mulLeft ℂ (A i₀)) (wordSpan A (n + k)) :=
-          Submodule.map_mono ih
-      _ ≤ wordSpan A ((n + k) + 1) :=
-          mulLeft_image_wordSpan_le_succ A i₀ (n + k)
+      simpa [Nat.add_assoc] using
+        calc Submodule.map (LinearMap.mulLeft ℂ (A i₀ ^ (k + 1))) (wordSpan A n)
+            = Submodule.map (LinearMap.mulLeft ℂ (A i₀))
+                (Submodule.map (LinearMap.mulLeft ℂ (A i₀ ^ k)) (wordSpan A n)) := by
+              rw [← Submodule.map_comp]
+              congr 1
+              ext x
+              simp only [LinearMap.comp_apply, LinearMap.mulLeft_apply,
+                pow_succ', ← Matrix.mul_assoc]
+          _ ≤ Submodule.map (LinearMap.mulLeft ℂ (A i₀)) (wordSpan A (n + k)) :=
+              Submodule.map_mono ih
+          _ ≤ wordSpan A ((n + k) + 1) :=
+              mulLeft_image_wordSpan_le_succ A i₀ (n + k)
 
 /-! ## S_{n+1} = span{A_i} * S_n -/
 
@@ -131,7 +136,7 @@ theorem wordSpan_succ_eq_mul_left (A : MPSTensor d D) (n : ℕ) :
       apply Submodule.subset_span
       refine ⟨fun _ => j, ?_⟩
       simp only [List.ofFn, Fin.foldr_succ, Fin.foldr_zero]
-      simp [evalWord]
+      simp only [evalWord, Matrix.mul_one]
     calc (Submodule.span ℂ (Set.range A)) * wordSpan A n
         ≤ wordSpan A 1 * wordSpan A n :=
           mul_le_mul' hS1 (le_refl _)
@@ -187,13 +192,15 @@ theorem wordSpan_finrank_mono_of_isUnit' (A : MPSTensor d D)
     Module.finrank ℂ (wordSpan A n) := by
   obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le h
   induction k with
-  | zero => simp
+  | zero =>
+      simpa only [Nat.add_zero] using
+        (le_rfl : Module.finrank ℂ (wordSpan A m) ≤ Module.finrank ℂ (wordSpan A m))
   | succ k ih =>
-    calc Module.finrank ℂ (wordSpan A m)
-        ≤ Module.finrank ℂ (wordSpan A (m + k)) := ih (by omega)
-      _ ≤ Module.finrank ℂ (wordSpan A (m + (k + 1))) := by
-          rw [show m + (k + 1) = (m + k) + 1 from by omega]
-          exact wordSpan_finrank_mono_of_isUnit A i₀ hU (m + k)
+      calc Module.finrank ℂ (wordSpan A m)
+          ≤ Module.finrank ℂ (wordSpan A (m + k)) := ih (by omega)
+        _ ≤ Module.finrank ℂ (wordSpan A (m + (k + 1))) := by
+            simpa [Nat.add_assoc] using
+              wordSpan_finrank_mono_of_isUnit A i₀ hU (m + k)
 
 /-! ## Permanence of fullness -/
 
@@ -214,9 +221,7 @@ theorem wordSpan_eq_top_of_ge_of_isUnit (A : MPSTensor d D)
     obtain ⟨u, hu⟩ := hPow
     refine ⟨(↑u⁻¹ : Matrix (Fin D) (Fin D) ℂ) * y, ?_⟩
     simp only [LinearMap.mulLeft_apply, ← Matrix.mul_assoc]
-    rw [← hu, show (u : Matrix (Fin D) (Fin D) ℂ) * ↑u⁻¹ = 1 from
-      Units.mul_inv u]
-    simp
+    rw [← hu, Units.mul_inv, one_mul]
   calc ⊤ = Submodule.map (LinearMap.mulLeft ℂ (A i₀ ^ (m - N))) ⊤ := by
           rw [Submodule.map_top]
           exact (LinearMap.range_eq_top.mpr hSurj).symm
@@ -233,7 +238,7 @@ private theorem evalWord_ofFn_one (A : MPSTensor d D) (σ : Fin 1 → Fin d) :
   have h : List.ofFn σ = [σ 0] := by
     apply List.ext_getElem <;> simp
   rw [h]
-  simp [evalWord]
+  simp only [evalWord, Matrix.mul_one]
 
 private theorem gen_mem_wordSpan_one (A : MPSTensor d D) (j : Fin d) :
     A j ∈ wordSpan A 1 :=
@@ -247,7 +252,8 @@ private theorem finrank_top_matrix :
           simp
     _ = Fintype.card (Fin D) * Fintype.card (Fin D) *
         Module.finrank ℂ ℂ := Module.finrank_matrix ℂ ℂ _ _
-    _ = D * D * 1 := by simp [Fintype.card_fin, Module.finrank_self]
+    _ = D * D * 1 := by
+          simp only [Fintype.card_fin, Module.finrank_self, mul_one]
     _ = D ^ 2 := by ring
 
 private theorem finrank_eq_finrank_map_mulRight_of_isUnit
@@ -257,7 +263,7 @@ private theorem finrank_eq_finrank_map_mulRight_of_isUnit
       Module.finrank ℂ (Submodule.map (LinearMap.mulRight ℂ b) S) := by
   have hinj : Function.Injective (LinearMap.mulRight ℂ b) := by
     intro x y hxy
-    exact hU.mul_left_injective (by simpa [LinearMap.mulRight_apply] using hxy)
+    exact hU.mul_left_injective (by simpa only [LinearMap.mulRight_apply] using hxy)
   let e := Submodule.equivMapOfInjective (LinearMap.mulRight ℂ b) hinj S
   exact LinearEquiv.finrank_eq e
 
@@ -327,7 +333,7 @@ private theorem mul_map_mulRight_le_map_mulRight_mul
   · intro u hu y hy
     rcases Submodule.mem_map.mp hy with ⟨s, hs, rfl⟩
     exact Submodule.mem_map.mpr ⟨u * s, Submodule.mul_mem_mul hu hs, by
-      simp [LinearMap.mulRight_apply, Matrix.mul_assoc]⟩
+      simp only [LinearMap.mulRight_apply, Matrix.mul_assoc]⟩
   · intro x y hx hy
     exact Submodule.add_mem _ hx hy
 
@@ -340,7 +346,7 @@ private theorem map_mulRight_map_mulRight
   simp only [← Submodule.map_comp]
   congr 1
   ext x
-  simp [LinearMap.comp_apply, LinearMap.mulRight_apply, Matrix.mul_assoc]
+  simp only [LinearMap.comp_apply, LinearMap.mulRight_apply, Matrix.mul_assoc]
 
 /-- If `dim(S_r) = dim(S_{r+1})`, then every later word span is absorbed into
 the right-multiplication image of `S_r` by powers of the invertible generator.
@@ -359,31 +365,31 @@ theorem wordSpan_le_mulRight_pow_image (A : MPSTensor d D)
       intro X hX
       refine Submodule.mem_map.mpr ⟨X, ?_, ?_⟩
       · simpa using hX
-      · simp [pow_zero]
+      · simp only [pow_zero, LinearMap.mulRight_apply, Matrix.mul_one]
   | succ k ih =>
-      rw [show r + (k + 1) = (r + k) + 1 by omega]
-      calc
-        wordSpan A ((r + k) + 1)
-            = (Submodule.span ℂ (Set.range A)) * wordSpan A (r + k) := by
-                rw [wordSpan_succ_eq_mul_left A (r + k)]
-        _ ≤ (Submodule.span ℂ (Set.range A)) *
-              Submodule.map (LinearMap.mulRight ℂ (A i₀ ^ k)) (wordSpan A r) :=
-              mul_le_mul' le_rfl ih
-        _ ≤ Submodule.map (LinearMap.mulRight ℂ (A i₀ ^ k))
-              ((Submodule.span ℂ (Set.range A)) * wordSpan A r) :=
-              mul_map_mulRight_le_map_mulRight_mul
-                (U := Submodule.span ℂ (Set.range A))
-                (S := wordSpan A r) (b := A i₀ ^ k)
-        _ = Submodule.map (LinearMap.mulRight ℂ (A i₀ ^ k))
-              (wordSpan A (r + 1)) := by
-              rw [← wordSpan_succ_eq_mul_left A r]
-        _ = Submodule.map (LinearMap.mulRight ℂ (A i₀ ^ k))
-              (Submodule.map (LinearMap.mulRight ℂ (A i₀)) (wordSpan A r)) := by
-              rw [hbase]
-        _ = Submodule.map (LinearMap.mulRight ℂ (A i₀ ^ (k + 1)))
-              (wordSpan A r) := by
-              rw [map_mulRight_map_mulRight (A i₀) (A i₀ ^ k) (wordSpan A r)]
-              simp [pow_succ']
+      simpa [Nat.add_assoc] using
+        calc
+          wordSpan A ((r + k) + 1)
+              = (Submodule.span ℂ (Set.range A)) * wordSpan A (r + k) := by
+                  rw [wordSpan_succ_eq_mul_left A (r + k)]
+          _ ≤ (Submodule.span ℂ (Set.range A)) *
+                Submodule.map (LinearMap.mulRight ℂ (A i₀ ^ k)) (wordSpan A r) :=
+                mul_le_mul' le_rfl ih
+          _ ≤ Submodule.map (LinearMap.mulRight ℂ (A i₀ ^ k))
+                ((Submodule.span ℂ (Set.range A)) * wordSpan A r) :=
+                mul_map_mulRight_le_map_mulRight_mul
+                  (U := Submodule.span ℂ (Set.range A))
+                  (S := wordSpan A r) (b := A i₀ ^ k)
+          _ = Submodule.map (LinearMap.mulRight ℂ (A i₀ ^ k))
+                (wordSpan A (r + 1)) := by
+                rw [← wordSpan_succ_eq_mul_left A r]
+          _ = Submodule.map (LinearMap.mulRight ℂ (A i₀ ^ k))
+                (Submodule.map (LinearMap.mulRight ℂ (A i₀)) (wordSpan A r)) := by
+                rw [hbase]
+          _ = Submodule.map (LinearMap.mulRight ℂ (A i₀ ^ (k + 1)))
+                (wordSpan A r) := by
+                rw [map_mulRight_map_mulRight (A i₀) (A i₀ ^ k) (wordSpan A r)]
+                rw [pow_succ']
 
 private theorem wordSpan_finrank_constant_of_finrank_eq
     (A : MPSTensor d D) (i₀ : Fin d) (hU : IsUnit (A i₀))
@@ -471,7 +477,7 @@ theorem wordSpan_eq_top_of_isNormal_of_isUnit (A : MPSTensor d D)
   change wordSpan A k = ⊤
   by_contra htop
   have hkraus_le : krausRank A ≤ D ^ 2 := by
-    simpa [krausRank] using wordSpan_finrank_le A 1
+    simpa only [krausRank] using wordSpan_finrank_le A 1
   have hk_pos : 1 ≤ k := by
     dsimp [k]
     omega
@@ -486,7 +492,9 @@ theorem wordSpan_eq_top_of_isNormal_of_isUnit (A : MPSTensor d D)
     intro t ht
     induction t with
     | zero =>
-        simp [krausRank]
+        simpa only [krausRank, Nat.add_zero, Nat.zero_add] using
+          (le_rfl : Module.finrank ℂ (wordSpan A 1) ≤
+            Module.finrank ℂ (wordSpan A 1))
     | succ t ih =>
         have htle : t ≤ k - 1 := by omega
         have ih' := ih htle
@@ -526,8 +534,7 @@ theorem iIndex_le_of_isNormal_of_isUnit (A : MPSTensor d D)
     (i₀ : Fin d) (hU : IsUnit (A i₀)) (hN : IsNormal A) :
     iIndex A ≤ D ^ 2 - krausRank A + 1 := by
   rw [iIndex]
-  exact Nat.sInf_le (show D ^ 2 - krausRank A + 1 ∈
-      {n : ℕ | wordSpan A n = ⊤} from
-    wordSpan_eq_top_of_isNormal_of_isUnit A i₀ hU hN)
+  exact Nat.sInf_le <| by
+    exact wordSpan_eq_top_of_isNormal_of_isUnit A i₀ hU hN
 
 end MPSTensor
