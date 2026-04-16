@@ -238,5 +238,5 @@ jobs:
               ```
 
           claude_args: |
-            --model claude-opus-4-6
+            --model claude-opus-4-7
             --allowedTools "Read,Glob,Grep,Bash(gh pr:*),Bash(gh issue:*)"
