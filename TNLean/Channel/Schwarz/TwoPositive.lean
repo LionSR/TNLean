@@ -120,6 +120,83 @@ def IsNPositiveMap (k : ℕ) (E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ) : P
 def Is2PositiveMap (E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ) : Prop :=
   IsNPositiveMap 2 E
 
+private theorem posSemidef_fromBlocks_zero_zero
+    {m o : Type*} {A : Matrix m m ℂ} (hA : A.PosSemidef) :
+    (Matrix.fromBlocks A 0 0 (0 : Matrix o o ℂ)).PosSemidef := by
+  refine ⟨Matrix.IsHermitian.fromBlocks hA.1 (by simp) isHermitian_zero, ?_⟩
+  intro x
+  let fg := Finsupp.sumFinsuppEquivProdFinsupp x
+  let xL : m →₀ ℂ := fg.1
+  let xR : o →₀ ℂ := fg.2
+  have hx : x = Finsupp.sumElim xL xR := by
+    exact (Finsupp.sumFinsuppEquivProdFinsupp.symm_apply_apply x).symm
+  rw [hx, Finsupp.sumElim_eq_add, Finsupp.sum_add_index']
+  · have hRight :
+        (Finsupp.mapDomain Sum.inr xR).sum (fun i xi =>
+            (Finsupp.mapDomain Sum.inl xL + Finsupp.mapDomain Sum.inr xR).sum fun j xj =>
+              star xi * (Matrix.fromBlocks A 0 0 (0 : Matrix o o ℂ)) i j * xj) = 0 := by
+      rw [Finsupp.sum_mapDomain_index]
+      · have hInner (a : o) (x₁ : ℂ) :
+          (Finsupp.mapDomain Sum.inl xL + Finsupp.mapDomain Sum.inr xR).sum (fun j xj =>
+              star x₁ * (Matrix.fromBlocks A 0 0 (0 : Matrix o o ℂ)) (Sum.inr a) j * xj) = 0 := by
+          rw [Finsupp.sum_add_index']
+          · rw [Finsupp.sum_mapDomain_index, Finsupp.sum_mapDomain_index]
+            · simp
+            · intro i
+              simp
+            · intro i u v
+              simp [mul_assoc, mul_add]
+            · intro i
+              simp
+            · intro i u v
+              simp [mul_assoc, mul_add]
+          · intro i
+            simp
+          · intro i u v
+            simp [mul_assoc, mul_add]
+        rw [Finsupp.sum]
+        refine Finset.sum_eq_zero ?_
+        intro a ha
+        exact hInner a (xR a)
+      · intro i
+        simp
+      · intro i u v
+        simp [add_mul, mul_assoc]
+    have hLeft :
+        (Finsupp.mapDomain Sum.inl xL).sum (fun i xi =>
+            (Finsupp.mapDomain Sum.inl xL + Finsupp.mapDomain Sum.inr xR).sum fun j xj =>
+              star xi * (Matrix.fromBlocks A 0 0 (0 : Matrix o o ℂ)) i j * xj) =
+          xL.sum (fun i xi => xL.sum fun j xj => star xi * A i j * xj) := by
+      rw [Finsupp.sum_mapDomain_index]
+      · apply Finsupp.sum_congr
+        intro a x₁
+        rw [Finsupp.sum_add_index']
+        · rw [Finsupp.sum_mapDomain_index, Finsupp.sum_mapDomain_index]
+          · simp [mul_assoc]
+          · intro i
+            simp
+          · intro i u v
+            simp [mul_assoc, mul_add]
+          · intro i
+            simp
+          · intro i u v
+            simp [mul_assoc, mul_add]
+        · intro i
+          simp
+        · intro i u v
+          simp [mul_assoc, mul_add]
+      · intro i
+        simp
+      · intro i u v
+        simp [add_mul, mul_assoc]
+    rw [hLeft, hRight]
+    simpa using hA.2 xL
+  · intro i
+    simp
+  · intro i u v
+    simp [add_mul, mul_assoc]
+
+omit [DecidableEq n] in
 /-- A completely positive map is n-positive for every `n`.
 
 This follows immediately from the definition: CP maps have Kraus representations,
@@ -127,6 +204,7 @@ and `E ⊗ id_k` applied to a PSD matrix yields a PSD matrix (by the same
 Kraus-based argument as `IsCPMap.isPositiveMap`). -/
 theorem IsCPMap.isNPositiveMap {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ}
     (hCP : IsCPMap E) (k : ℕ) : IsNPositiveMap k E := by
+  classical
   intro X hX
   obtain ⟨r, K, hK⟩ := hCP
   let e : n × Fin k ≃ Fin k × n := Equiv.prodComm n (Fin k)
@@ -148,8 +226,7 @@ theorem IsCPMap.isNPositiveMap {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ}
     rfl
   have hYswap :
       (F Yblk).PosSemidef := by
-    rw [show F Yblk = ∑ a, F (D a * Xblk * (D a)ᴴ) by
-      simp [Yblk]]
+    rw [show F Yblk = ∑ a, F (D a * Xblk * (D a)ᴴ) by simp [Yblk]]
     refine Matrix.posSemidef_sum (s := Finset.univ)
       (x := fun a => F (D a * Xblk * (D a)ᴴ)) ?_
     intro a _
@@ -190,6 +267,7 @@ theorem IsCPMap.isNPositiveMap {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ}
       E (Xblk ip.2 jq.2) ip.1 jq.1
   rw [hXblk_apply ip.2 jq.2]
 
+omit [DecidableEq n] [Fintype n] in
 /-- **Monotonicity sanity check**: `(k+1)`-positive implies `k`-positive.
 
 This is a basic structural property of the n-positivity hierarchy. If this
@@ -213,21 +291,23 @@ theorem IsNPositiveMap.mono {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ} {k :
     rw [finSumFinEquiv_symm_apply_castSucc]
     simp
   have hX' : X'.PosSemidef := by
-    simpa [X', Matrix.reindex_apply] using
-      (Matrix.PosSemidef.fromBlocks_diag hX (Matrix.PosSemidef.zero (n := n) (R := ℂ))).submatrix e
-  -- Apply (k+1)-positivity
+    have hdiag : (Matrix.fromBlocks X 0 0 (0 : Matrix n n ℂ)).PosSemidef :=
+      posSemidef_fromBlocks_zero_zero hX
+    simpa [X', Matrix.reindex_apply] using hdiag.submatrix e
   have hY' := h X' hX'
-  -- Extract the k-block from the result
   let emb : n × Fin k → n × Fin (k + 1) := fun ip => (ip.1, Fin.castSucc ip.2)
   convert hY'.submatrix emb using 1
   ext ip jq
   simp [emb, X', Matrix.reindex_apply, he_castSucc]
 
+omit [DecidableEq n] in
 /-- CP maps are 2-positive. -/
 theorem IsCPMap.is2PositiveMap {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ}
-    (hCP : IsCPMap E) : Is2PositiveMap E :=
-  hCP.isNPositiveMap 2
+    (hCP : IsCPMap E) : Is2PositiveMap E := by
+  classical
+  exact hCP.isNPositiveMap 2
 
+omit [DecidableEq n] [Fintype n] in
 /-- 2-positive maps are positive.
 
 Apply the definition with `k = 1` embedded into `k = 2`: given PSD `X`,
@@ -236,16 +316,14 @@ output, then extract the (0,0)-block which equals `E(X)`. -/
 theorem Is2PositiveMap.isPositiveMap {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ}
     (h : Is2PositiveMap E) : IsPositiveMap E := by
   intro X hX
-  let e : n × Fin 2 ≃ n ⊕ n :=
-    finTwoSumEquiv n
+  let e : n × Fin 2 ≃ n ⊕ n := finTwoSumEquiv n
   let X' : Matrix (n × Fin 2) (n × Fin 2) ℂ :=
     Matrix.reindex e.symm e.symm (Matrix.fromBlocks X 0 0 (0 : Matrix n n ℂ))
   have hX' : X'.PosSemidef := by
-    simpa [X', Matrix.reindex_apply] using
-      (Matrix.PosSemidef.fromBlocks_diag hX (Matrix.PosSemidef.zero (n := n) (R := ℂ))).submatrix e
-  -- Apply 2-positivity to X'
+    have hdiag : (Matrix.fromBlocks X 0 0 (0 : Matrix n n ℂ)).PosSemidef :=
+      posSemidef_fromBlocks_zero_zero hX
+    simpa [X', Matrix.reindex_apply] using hdiag.submatrix e
   have hY' := h X' hX'
-  -- The (0,0)-block of the result is E(X), which is PSD as a principal submatrix
   let emb : n → n × Fin 2 := fun i => (i, 0)
   simpa [emb, X', Matrix.reindex_apply] using hY'.submatrix emb
 

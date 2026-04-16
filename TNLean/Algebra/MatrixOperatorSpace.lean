@@ -44,18 +44,21 @@ attribute [scoped instance]
   Matrix.linftyOpNormedRing
   Matrix.linftyOpNormedAlgebra
 
-instance (n : Type*) [Fintype n] [DecidableEq n] :
-    NormedSpace ℝ (Matrix n n ℂ) :=
+section MatrixInstances
+
+variable (n : Type*) [Fintype n] [DecidableEq n]
+
+instance : NormedSpace ℝ (Matrix n n ℂ) :=
   NormedSpace.restrictScalars ℝ ℂ (Matrix n n ℂ)
 
-instance (n : Type*) [Fintype n] [DecidableEq n] :
-    SMulCommClass ℂ ℝ (Matrix n n ℂ) where
+omit [DecidableEq n] [Fintype n] in
+instance : SMulCommClass ℂ ℝ (Matrix n n ℂ) where
   smul_comm z r A := by
     ext i j
     simp [Complex.real_smul, mul_left_comm, mul_comm]
 
-instance (n : Type*) [Fintype n] [DecidableEq n] :
-    IsScalarTower ℝ ℂ (Matrix n n ℂ) where
+omit [DecidableEq n] [Fintype n] in
+instance : IsScalarTower ℝ ℂ (Matrix n n ℂ) where
   smul_assoc r z A := by
     ext i j
     simp [Complex.real_smul, mul_assoc]
@@ -71,24 +74,24 @@ instance : ContinuousSMul ℝ ℂ :=
 
 abbrev complexContinuousSMulReal : ContinuousSMul ℝ ℂ := inferInstance
 
-instance (n : Type*) [Fintype n] [DecidableEq n] :
-    ContinuousSMul ℝ (Matrix n n ℂ) :=
+omit [DecidableEq n] [Fintype n] in
+instance : ContinuousSMul ℝ (Matrix n n ℂ) :=
   show ContinuousSMul ℝ (RestrictScalars ℝ ℂ (Matrix n n ℂ)) from inferInstance
 
-abbrev matrixContinuousSMulReal (n : Type*) [Fintype n] [DecidableEq n] :
-    ContinuousSMul ℝ (Matrix n n ℂ) := inferInstance
+abbrev matrixContinuousSMulReal : ContinuousSMul ℝ (Matrix n n ℂ) := inferInstance
 
-abbrev matrixScalarTowerRealComplex (n : Type*) [Fintype n] [DecidableEq n] :
-    IsScalarTower ℝ ℂ (Matrix n n ℂ) := inferInstance
+abbrev matrixScalarTowerRealComplex : IsScalarTower ℝ ℂ (Matrix n n ℂ) := inferInstance
 
-instance (n : Type*) [Fintype n] [DecidableEq n] :
-    LinearMap.CompatibleSMul (Matrix n n ℂ) (Matrix n n ℂ) ℝ ℂ :=
+omit [DecidableEq n] [Fintype n] in
+instance : LinearMap.CompatibleSMul (Matrix n n ℂ) (Matrix n n ℂ) ℝ ℂ :=
   LinearMap.IsScalarTower.compatibleSMul
 
-instance (n : Type*) [Fintype n] [DecidableEq n] :
-    LinearMap.CompatibleSMul (Matrix n n ℂ) ℂ ℝ ℂ where
-  map_smul f r A := by
-    exact f.map_smul ((r : ℂ)) A
+omit [DecidableEq n] [Fintype n] in
+instance : LinearMap.CompatibleSMul (Matrix n n ℂ) ℂ ℝ ℂ where
+  map_smul f r A :=
+    f.map_smul (r : ℂ) A
+
+end MatrixInstances
 
 instance (n : Type*) [Fintype n] [DecidableEq n] :
     NormedAddCommGroup (TNLean.MatrixCLM n) :=
@@ -140,16 +143,22 @@ instance (n : Type*) [Fintype n] [DecidableEq n] :
     CompleteSpace (TNLean.MatrixCLM n) :=
   FiniteDimensional.complete ℂ (TNLean.MatrixCLM n)
 
-instance
-    (n m : Type*) [Fintype n] [DecidableEq n] [Fintype m] [DecidableEq m] :
+section MatrixCLMCompatibleSmul
+
+variable (n m : Type*) [Fintype n] [DecidableEq n] [Fintype m] [DecidableEq m]
+
+omit [DecidableEq m] [Fintype m] in
+instance :
     LinearMap.CompatibleSMul (TNLean.MatrixCLM n) (Matrix m m ℂ) ℝ ℂ where
-  map_smul f r A := by
-    exact f.map_smul ((r : ℂ)) A
+  map_smul f r A :=
+    f.map_smul (r : ℂ) A
+
+end MatrixCLMCompatibleSmul
 
 instance (n : Type*) [Fintype n] [DecidableEq n] :
     LinearMap.CompatibleSMul (TNLean.MatrixCLM n) ℂ ℝ ℂ where
-  map_smul f r A := by
-    exact f.map_smul ((r : ℂ)) A
+  map_smul f r A :=
+    f.map_smul (r : ℂ) A
 
 end TNOperatorSpace
 

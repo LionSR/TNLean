@@ -53,8 +53,7 @@ theorem generator_shift_invariance
   have hmu : star (Complex.I * ↑mu) = (-Complex.I) * ↑mu := by
     simp only [star_mul', Complex.star_def, Complex.conj_I, Complex.conj_ofReal]
   simp only [hmu, RCLike.star_def, one_div, RingHomCompTriple.comp_apply,
-    RingHom.id_apply, star_mul', neg_mul, neg_smul, neg_neg, star_inv₀,
-    star_ofNat]
+    RingHom.id_apply, star_mul', neg_mul, neg_smul, star_inv₀, star_ofNat]
   have hnorm : ∀ i : Fin r, c i * starRingEnd ℂ (c i) = starRingEnd ℂ (c i) * c i := by
     intro i; ring
   simp_rw [hnorm]

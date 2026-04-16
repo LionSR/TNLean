@@ -182,7 +182,7 @@ theorem LindbladForm.toLinearMap_eq_generatorDecomp (F : LindbladForm D) :
   rw [add_mul, smul_mul_assoc, smul_mul_assoc]
   -- Expand ρκ† = ρ(-iH + ½S) = -iρH + ½ρS
   rw [mul_add, mul_smul_comm, mul_smul_comm, neg_smul]
-  simp only [sub_eq_add_neg, neg_add, neg_neg]
+  simp only [sub_eq_add_neg, neg_add]
   rw [smul_add (Complex.I) (ρ * F.H) (-(F.H * ρ)), smul_neg]
   abel
 

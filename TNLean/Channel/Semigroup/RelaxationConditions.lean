@@ -391,7 +391,7 @@ private theorem finrank_traceless_submodule
     rw [this, finrank_top]
     exact Module.finrank_self ℂ
   rw [h_range] at h_rn
-  show Module.finrank ℂ (LinearMap.ker τ) = D * D - 1
+  change Module.finrank ℂ (LinearMap.ker τ) = D * D - 1
   omega
 
 /-- The eigenvalues of an orthogonal projection are all `0` or `1`. -/
@@ -538,8 +538,8 @@ private theorem finrank_range_block_compression_ge
             · obtain ⟨rfl, rfl⟩ := hij
               simp [ha, hb]
             · simp
-          show (1 - P) * ((U : Mat) * E * star (U : Mat) * P) =
-              (U : Mat) * E * star (U : Mat)
+          change (1 - P) * ((U : Mat) * E * star (U : Mat) * P) =
+            (U : Mat) * E * star (U : Mat)
           have h1PU : (1 - P) * (U : Mat) = (U : Mat) * (1 - D₁) := by
             rw [Matrix.sub_mul, Matrix.one_mul, hPU, Matrix.mul_sub, Matrix.mul_one]
           calc
@@ -586,7 +586,7 @@ private theorem finrank_range_block_compression_ge
                (by simpa [S₀] using ha) (by simpa [S₁] using hb)⟩⟩
         have hfam_li : LinearIndependent ℂ fam := by
           apply LinearIndependent.of_comp (LinearMap.range φ).subtype
-          show LinearIndependent ℂ (fun p : ↥S₀ × ↥S₁ => (fam p : Mat))
+          change LinearIndependent ℂ (fun p : ↥S₀ × ↥S₁ => (fam p : Mat))
           have hfam_eq : (fun p : ↥S₀ × ↥S₁ => (fam p : Mat)) =
               (fun M : Mat => (U : Mat) * M * star (U : Mat)) ∘
                 (fun p : ↥S₀ × ↥S₁ => Matrix.single p.1.1 p.2.1 (1 : ℂ)) := by

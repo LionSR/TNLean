@@ -797,9 +797,8 @@ lemma gaugePhaseEquiv_of_mpvOverlap_tendsto_one
     (h : Filter.Tendsto (fun N => mpvOverlap (d := d) A B N) Filter.atTop (nhds (1 : ℂ))) :
     GaugePhaseEquiv A B := by
   by_contra hnot
-  have hto0 :=
+  exact (h.ne_nhds one_ne_zero) <|
     mpvOverlap_tendsto_zero (A := A) (B := B) hA_inj hB_inj hA_lc hB_lc hnot
-  exact (h.ne_nhds one_ne_zero) hto0
 
 /-- Irreducible TP analogue of `gaugePhaseEquiv_of_mpvOverlap_tendsto_one`.
 
@@ -816,10 +815,9 @@ lemma gaugePhaseEquiv_of_mpvOverlap_tendsto_one_of_irreducible_TP
     (h : Filter.Tendsto (fun N => mpvOverlap (d := d) A B N) Filter.atTop (nhds (1 : ℂ))) :
     GaugePhaseEquiv A B := by
   by_contra hnot
-  have hto0 :=
+  exact (h.ne_nhds one_ne_zero) <|
     mpvOverlap_tendsto_zero_of_irreducible_TP
       (A := A) (B := B) hA_irr hB_irr hA_lc hB_lc hnot
-  exact (h.ne_nhds one_ne_zero) hto0
 
 private lemma mpvOverlap_eq_pow_mul_self_of_mpv_eq_pow_mul
     {D : ℕ} (A B : MPSTensor d D) (ζ : ℂ)
@@ -886,11 +884,7 @@ lemma sameMPV_of_gaugePhaseEquiv_of_mpvOverlap_tendsto_one
   have hζ : ζ = 1 := by
     have := congrArg star hstarζ
     simpa using this
-  have hGauge : GaugeEquiv A B := by
-    refine ⟨X, ?_⟩
-    intro i
-    simp [hζ, hX i]
-  exact GaugeEquiv.sameMPV hGauge
+  exact GaugeEquiv.sameMPV ⟨X, fun i => by simp [hζ, hX i]⟩
 
 end BlockSeparationCoreHelpers
 

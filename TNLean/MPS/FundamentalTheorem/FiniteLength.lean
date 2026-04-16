@@ -229,7 +229,7 @@ theorem sameMPV_of_sameMPVFrom_of_injective [NeZero D]
       -- Both sides equal tr(evalWord A (List.ofFn σ))
       have h_SN : Matrix.trace (S * evalWord B (List.ofFn σ)) =
           Matrix.trace (evalWord A (List.ofFn σ)) := by
-        show Matrix.trace ((∑ i, c i • B i) * evalWord B (List.ofFn σ)) = _
+        change Matrix.trace ((∑ i, c i • B i) * evalWord B (List.ofFn σ)) = _
         rw [Finset.sum_mul]
         simp only [smul_mul_assoc, Matrix.trace_sum, Matrix.trace_smul,
           smul_eq_mul, ← evalWord_cons]

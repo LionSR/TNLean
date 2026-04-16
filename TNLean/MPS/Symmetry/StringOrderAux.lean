@@ -297,12 +297,14 @@ theorem twistedTPGaugeSetup_hasEigenvalue [NeZero D]
                         simp [Matrix.mul_assoc]
                 _ = setup.S * A i * (V * setup.S) *
                       (setup.S⁻¹ * (setup.B i)ᴴ * setup.S) := by
-                      rw [show setup.S⁻¹ * (setup.S * V * setup.S) = V * setup.S by
+                      have hSV :
+                          setup.S⁻¹ * (setup.S * V * setup.S) = V * setup.S := by
                         calc
                           setup.S⁻¹ * (setup.S * V * setup.S)
                               = (setup.S⁻¹ * setup.S) * V * setup.S := by
-                            simp [Matrix.mul_assoc]
-                          _ = V * setup.S := by simp [setup.hS_inv_mul]]
+                                  simp [Matrix.mul_assoc]
+                          _ = V * setup.S := by simp [setup.hS_inv_mul]
+                      rw [hSV]
                 _ = setup.S * A i * (V * (setup.B i)ᴴ * setup.S) := by
                       calc
                         setup.S * A i * (V * setup.S) *
@@ -577,9 +579,10 @@ theorem virtualUnitary_of_gaugePhaseEquiv_twisted
             = ∑ j : Fin d, ∑ n' : Fin d, (u i j * (starRingEnd ℂ) (u n' j)) • A n' := by
                 refine Finset.sum_congr rfl ?_
                 intro j _
-                rw [show u i j • B j =
-                  u i j • ∑ n' : Fin d, (starRingEnd ℂ) (u n' j) • A n' by
-                    simp [B, twistedMixedCompanion]]
+                have hBj :
+                    B j = ∑ n' : Fin d, (starRingEnd ℂ) (u n' j) • A n' := by
+                  simp [B, twistedMixedCompanion]
+                rw [hBj]
                 simpa [smul_smul, mul_assoc] using
                   (Finset.smul_sum (s := Finset.univ)
                     (f := fun n' : Fin d => (starRingEnd ℂ) (u n' j) • A n')

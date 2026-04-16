@@ -323,11 +323,8 @@ theorem perturbation_psd_upper_bound
     (v : Fin D → ℂ) :
     0 ≤ (star v ⬝ᵥ (ρ *ᵥ v)).re + t * (star v ⬝ᵥ (H *ᵥ v)).re := by
   have h := ht_psd.re_dotProduct_nonneg v
-  -- Expand (ρ + t•H) *ᵥ v = ρ *ᵥ v + t • (H *ᵥ v)
-  rw [Matrix.add_mulVec, dotProduct_add] at h
-  -- Need to relate (star v ⬝ᵥ ((↑t • H) *ᵥ v)).re to t * (star v ⬝ᵥ (H *ᵥ v)).re
-  rw [show ((t : ℂ) • H) *ᵥ v = (t : ℂ) • (H *ᵥ v) from Matrix.smul_mulVec _ _ _,
-    dotProduct_smul, smul_eq_mul] at h
+  rw [Matrix.add_mulVec, dotProduct_add, Matrix.smul_mulVec, dotProduct_smul,
+    smul_eq_mul] at h
   have : ((t : ℂ) * (star v ⬝ᵥ H *ᵥ v)).re = t * (star v ⬝ᵥ H *ᵥ v).re := by
     rw [Complex.mul_re, Complex.ofReal_re, Complex.ofReal_im]; ring
   -- h uses RCLike.re while goal uses Complex.re; convert

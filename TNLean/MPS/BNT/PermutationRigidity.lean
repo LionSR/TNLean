@@ -398,8 +398,7 @@ private lemma tendsto_norm_selfOverlap_one
     (hSelf :
       Tendsto (fun N => mpvOverlap (d := d) A A N) atTop (nhds (1 : ℂ))) :
     Tendsto (fun N => ‖mpvOverlap (d := d) A A N‖) atTop (nhds 1) := by
-  convert hSelf.norm using 1
-  simp
+  simpa using hSelf.norm
 
 private lemma tendsto_norm_mpvOverlap_one_of_scaled_self
     {d D₁ D₂ : ℕ}
@@ -410,25 +409,16 @@ private lemma tendsto_norm_mpvOverlap_one_of_scaled_self
     (hScale :
       ∀ N, mpvOverlap (d := d) A B N = s N * mpvOverlap (d := d) B B N) :
     Tendsto (fun N => ‖mpvOverlap (d := d) A B N‖) atTop (nhds 1) := by
-  have heq :
+  have hEq :
       (fun N => ‖mpvOverlap (d := d) A B N‖) =
-        fun N => ‖s N‖ * ‖mpvOverlap (d := d) B B N‖ := by
+        fun N => ‖mpvOverlap (d := d) B B N‖ := by
     ext N
-    rw [hScale N, norm_mul]
-  rw [heq]
-  have heq' :
-      (fun N => ‖s N‖ * ‖mpvOverlap (d := d) B B N‖) =
-        fun N => 1 * ‖mpvOverlap (d := d) B B N‖ := by
-    ext N
-    simp [hs_norm N]
-  rw [heq']
-  simpa only [one_mul] using hSelf
+    rw [hScale N, norm_mul, hs_norm N, one_mul]
+  simpa [hEq] using hSelf
 
 private lemma ne_zero_of_norm_eq_one (ζ : ℂ) (hζ_norm : ‖ζ‖ = 1) : ζ ≠ 0 := by
   intro h0
-  have hnorm : (‖ζ‖ : ℝ) = 0 := by simp [h0]
-  rw [hζ_norm] at hnorm
-  exact one_ne_zero hnorm
+  simp [h0] at hζ_norm
 
 private lemma rightMatching_injective_of_gaugePhaseEquiv
     {d gA gB : ℕ}
