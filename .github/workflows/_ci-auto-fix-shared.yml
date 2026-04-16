@@ -185,6 +185,6 @@ jobs:
             ${{ toJSON(fromJSON(steps.failure_details.outputs.result).errorLogs) }}
 
           claude_args: |
-            --model claude-opus-4-6
+            --model claude-opus-4-7
             --allowedTools "${{ inputs.claude_allowed_tools }}"
             --append-system-prompt "${{ inputs.claude_system_prompt }}"
