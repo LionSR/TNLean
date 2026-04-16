@@ -48,6 +48,6 @@ jobs:
             ${{ github.event.inputs.audit_type == 'mathlib-readiness' && 'Task: Review the TNLean/ directory for lemmas that could be upstreamed to Mathlib. Look for: (1) general-purpose lemmas not specific to the MPS/quantum channel domain, (2) lemmas that fill gaps in existing Mathlib files (check import paths), (3) well-documented, sorry-free results. For each candidate, note the file, lemma name, and which Mathlib module it could belong to. Output a markdown list.' || '' }}
 
           claude_args: |
-            --model claude-opus-4-6
+            --model claude-opus-4-7
             --allowedTools "Read,Glob,Grep,Bash(lake build),Bash(lake exe cache get),Bash(lake update),Bash(lake env),Bash(lean *),Bash(elan *),Bash(grep *),Bash(find *),Bash(wc *),Bash(leanblueprint *)"
             --append-system-prompt "This is a Lean 4 / Mathlib formalization project for quantum information theory. Be thorough and precise. Report findings in clean markdown format."
