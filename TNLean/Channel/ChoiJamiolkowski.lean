@@ -112,11 +112,8 @@ theorem choiMatrix_apply
 @[simp] theorem choiMatrix_neg
     (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) :
     choiMatrix (-T) = -choiMatrix T := by
-  rw [show -T = (-1 : ℂ) • T by
-    ext X i j
-    simp]
-  rw [choiMatrix_smul]
-  simp
+  rw [← neg_one_smul ℂ T, choiMatrix_smul]
+  exact neg_one_smul ℂ (choiMatrix T)
 
 theorem choiMatrix_sub
     (T S : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) :
@@ -137,11 +134,8 @@ theorem choiMatrix_sub
 @[simp] theorem projectedChoiMatrix_neg
     (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) :
     projectedChoiMatrix (-T) = -projectedChoiMatrix T := by
-  rw [show -T = (-1 : ℂ) • T by
-    ext X i j
-    simp]
-  rw [projectedChoiMatrix_smul]
-  simp
+  rw [← neg_one_smul ℂ T, projectedChoiMatrix_smul]
+  exact neg_one_smul ℂ (projectedChoiMatrix T)
 
 theorem projectedChoiMatrix_sub
     (T S : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) :
@@ -341,7 +335,7 @@ theorem cp_iff_choi_posSemidef [NeZero D] :
       have hsqrt : (((D : ℝ).sqrt : ℂ)) ≠ 0 :=
         Complex.ofReal_ne_zero.mpr <| Real.sqrt_ne_zero'.2 (by exact_mod_cast hDpos)
       simp [hsqrt]
-    have hstarc : star c = c := by dsimp [c]; simp
+    have hstarc : star c = c := by simp [c]
     have hαne : c * star c ≠ 0 := by simpa [hstarc] using mul_ne_zero hc hc
     let K : Fin r → Matrix (Fin D) (Fin D) ℂ := fun m a b => v m (a, b) / c
     let S : Matrix (Fin D) (Fin D) ℂ → Matrix (Fin D) (Fin D) ℂ :=
@@ -453,7 +447,7 @@ theorem choiMatrix_isHermitian_iff_hermiticityPreserving [NeZero D] :
   classical
   let c : ℂ := (1 : ℂ) / ((D : ℝ).sqrt : ℂ)
   have hDpos : 0 < D := Nat.pos_of_ne_zero (NeZero.ne D)
-  have hstarc : star c = c := by dsimp [c]; simp
+  have hstarc : star c = c := by simp [c]
   have hαne : c * star c ≠ 0 := by
     have hc : c ≠ 0 := by
       dsimp [c]
@@ -529,8 +523,7 @@ theorem choiMatrix_injective [NeZero D] :
   let c : ℂ := (1 : ℂ) / ((D : ℝ).sqrt : ℂ)
   have hDpos : 0 < D := Nat.pos_of_ne_zero (NeZero.ne D)
   have hstarc : star c = c := by
-    dsimp [c]
-    simp
+    simp [c]
   have hαne : c * star c ≠ 0 := by
     have hc : c ≠ 0 := by
       dsimp [c]
@@ -597,8 +590,7 @@ theorem exists_cpMap_of_choi_posSemidef [NeZero D]
       Complex.ofReal_ne_zero.mpr <| Real.sqrt_ne_zero'.2 (by exact_mod_cast hDpos)
     simp [hsqrt]
   have hstarc : star c = c := by
-    dsimp [c]
-    simp
+    simp [c]
   let K : Fin r → Matrix (Fin D) (Fin D) ℂ := fun m a b => v m (a, b) / c
   let T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ :=
     { toFun := fun X => ∑ m : Fin r, K m * X * (K m)ᴴ

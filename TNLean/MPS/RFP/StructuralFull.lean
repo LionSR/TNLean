@@ -49,7 +49,7 @@ private lemma ofReal_re_eq_self_of_pos {z : ℂ} (hz : 0 < z) :
   have hz_im : z.im = 0 := by
     simpa using h.2.symm
   refine Complex.ext ?_ ?_
-  · simp
+  · rfl
   · simp [hz_im]
 
 private lemma sum_single_diag_const (c : ℂ) :
@@ -67,7 +67,7 @@ private lemma matrixUnits_map (X : Mat) :
           refine Finset.sum_congr rfl ?_
           rintro ⟨j, i⟩ _
           rw [Matrix.conjTranspose_single, star_one, Matrix.single_mul_mul_single]
-          simp
+          simp only [one_mul, mul_one]
     _ = ∑ j : Fin D, ∑ i : Fin D, Matrix.single j j (X i i) := by
           rw [Fintype.sum_prod_type]
     _ = ∑ j : Fin D, Matrix.single j j (∑ i : Fin D, X i i) := by
@@ -147,7 +147,7 @@ theorem rfp_nt_structural_full (A : MPSTensor d D) [NeZero D]
     ext i j
     by_cases hij : i = j
     · subst hij
-      simp
+      rw [Matrix.diagonal_apply, if_pos rfl]
     · simpa [hij] using hρ_diag hij
   have hρdiag_pos : ∀ k : Fin D, 0 < ρ k k := by
     have hdiag_pd : (Matrix.diagonal (fun k => ρ k k) : Mat).PosDef := by
@@ -294,7 +294,7 @@ theorem rfp_nt_structural_full (A : MPSTensor d D) [NeZero D]
       _ = L * (((Matrix.trace Y) / (D : ℂ)) • (1 : Mat)) * L := by
             rw [hE_map Y]
       _ = (Matrix.trace Y / (D : ℂ)) • (L * L) := by
-            simp
+            rw [Matrix.mul_smul, Matrix.mul_one, smul_mul_assoc]
       _ = (Matrix.trace Y / (D : ℂ)) • ((((D : ℂ) / Matrix.trace ρ)) • ρ) := by
             rw [hL_sq]
       _ = (Matrix.trace Y / Matrix.trace ρ) • ρ := by
@@ -308,7 +308,7 @@ theorem rfp_nt_structural_full (A : MPSTensor d D) [NeZero D]
   have hRangeCard : D * D ≤ (Set.range B).toFinset.card := by
     have hspan_finrank : Module.finrank ℂ ↥(Submodule.span ℂ (Set.range B)) = D * D := by
       rw [hB_inj, finrank_top, Module.finrank_matrix]
-      simp
+      simp [Fintype.card_fin]
     have hspan_le :
         Module.finrank ℂ ↥(Submodule.span ℂ (Set.range B)) ≤
           (Set.range B).toFinset.card :=
@@ -316,8 +316,7 @@ theorem rfp_nt_structural_full (A : MPSTensor d D) [NeZero D]
     exact hspan_finrank.symm.le.trans hspan_le
   have hrange_card_le : (Set.range B).toFinset.card ≤ d := by
     have hs : Finset.univ.image B = (Set.range B).toFinset := by
-      ext M
-      simp
+      exact (Set.toFinset_range (f := B)).symm
     rw [← hs]
     simpa using (Finset.card_image_le (s := Finset.univ) (f := B))
   have hCard : Fintype.card (Fin D × Fin D) ≤ Fintype.card (Fin d) := by
@@ -367,9 +366,10 @@ theorem rfp_nt_structural_full (A : MPSTensor d D) [NeZero D]
               refine Finset.sum_congr rfl ?_
               intro q _
               rw [hV_entry]
-              simp
+              by_cases hpq : p = q <;> simp [hpq]
       _ = ∑ p : Fin D × Fin D, (E p)ᴴ * E p := by
-              simp
+              simp only [ite_smul, one_smul, zero_smul, Finset.sum_ite_eq,
+                Finset.mem_univ, ↓reduceIte]
       _ = 1 := hE_left
   have hB_fact : ∀ i : Fin d, B i = L * U i := by
     intro i

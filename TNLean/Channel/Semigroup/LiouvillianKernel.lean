@@ -187,7 +187,7 @@ theorem trace_mul_toAdjointLinearMap_eq_trace_toLinearMap_mul
     _ = (-Complex.I) • (Aᴴ * F.H - F.H * Aᴴ) := by
             rw [← neg_smul]
     _ = star Complex.I • (Aᴴ * F.H - F.H * Aᴴ) := by
-            simp
+            simp only [Complex.star_def, Complex.conj_I]
 
 /-- The commutant of the Hamiltonian, the Lindblad operators, and their adjoints. -/
 def commutant (F : LindbladForm D) : Set Mat :=
@@ -229,7 +229,8 @@ private theorem adjointDissipator_eq_zero_of_commute {Lop A : Mat}
   change M - (1 / 2 : ℂ) • M - (1 / 2 : ℂ) • M = 0
   calc
     M - (1 / 2 : ℂ) • M - (1 / 2 : ℂ) • M
-        = ((1 : ℂ) • M - (1 / 2 : ℂ) • M) - (1 / 2 : ℂ) • M := by simp
+        = ((1 : ℂ) • M - (1 / 2 : ℂ) • M) - (1 / 2 : ℂ) • M := by
+          simp only [one_smul]
     _ = (((1 : ℂ) - (1 / 2 : ℂ)) • M) - (1 / 2 : ℂ) • M := by
           rw [← sub_smul]
     _ = (((1 : ℂ) - (1 / 2 : ℂ) - (1 / 2 : ℂ)) • M) := by
@@ -246,13 +247,12 @@ theorem mem_adjointKernel_of_mem_commutant (F : LindbladForm D) {A : Mat}
   rw [adjointKernel, Set.mem_setOf_eq, toAdjointLinearMap_apply]
   have hHterm : Complex.I • (F.H * A - A * F.H) = 0 := by
     rw [← hH]
-    simp
+    simp only [sub_self, smul_zero]
   have hsum : ∑ j : Fin F.r, adjointDissipator (F.L j) A = 0 := by
     refine Finset.sum_eq_zero ?_
     intro j _hj
     exact adjointDissipator_eq_zero_of_commute (hL j).1 (hL j).2
-  rw [hHterm, hsum]
-  simp
+  simp only [hHterm, hsum, zero_add]
 
 /-- Wolf Theorem 7.2, easy direction as a set inclusion. -/
 theorem commutant_subset_adjointKernel (F : LindbladForm D) :

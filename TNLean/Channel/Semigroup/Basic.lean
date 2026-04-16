@@ -171,10 +171,8 @@ theorem expSemigroupCLM_zero
     expSemigroupCLM L 0 = 1 := by
   have hz : (0 : ℂ) • L = (0 : MatrixCLM (Fin D)) := by
     ext X i j
-    simp
-  rw [expSemigroupCLM, Complex.ofReal_zero]
-  rw [hz]
-  simp
+    simp only [zero_smul, ContinuousLinearMap.zero_apply, Matrix.zero_apply]
+  simp [expSemigroupCLM, hz]
 
 /-! ### Continuity of the exponential semigroup -/
 
@@ -244,7 +242,9 @@ theorem hasDerivAt_expSemigroup_apply
     hasDerivAt_expSemigroupCLM (endEquiv L) t
   let evalXₗ : MatrixCLM (Fin D) →ₗ[ℝ] Matrix (Fin D) (Fin D) ℂ :=
     { toFun := fun T => T X
-      map_add' := by intro T₁ T₂; simp
+      map_add' := by
+        intro T₁ T₂
+        simp only [ContinuousLinearMap.add_apply]
       map_smul' := by
         intro r T
         change ((r • T) X) = r • (T X)
@@ -304,9 +304,8 @@ theorem expSemigroup_isContinuousDynSemigroup
     IsContinuousDynSemigroup (expSemigroup L) where
   semigroup := expSemigroup_isDynSemigroup L
   continuous := by
-    show Continuous (fun t => endEquiv (expSemigroup L t))
-    simp only [expSemigroup_toCLM]
-    exact expSemigroupCLM_continuous (endEquiv L)
+    simpa only [expSemigroup_toCLM] using
+      expSemigroupCLM_continuous (endEquiv L)
 
 /-! ## Proposition 7.1: Continuous semigroup → exp(tL) -/
 
@@ -382,11 +381,10 @@ private theorem continuous_semigroup_hasDerivWithinAt_zero
           (x := (1 : MatrixCLM (Fin D)) - (δ / 2)⁻¹ • P (δ / 2))
           hnear)
     -- Step 6: (δ/2) • 1 is a unit (algebraMap of nonzero scalar)
-    have hu2 : IsUnit ((δ/2) • (1 : Matrix (Fin D) (Fin D) ℂ →L[ℂ]
+    have hu2 : IsUnit ((δ / 2) • (1 : Matrix (Fin D) (Fin D) ℂ →L[ℂ]
         Matrix (Fin D) (Fin D) ℂ)) := by
-      rw [show (δ/2) • (1 : Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) =
-          algebraMap ℝ _ (δ/2) from (Algebra.algebraMap_eq_smul_one _).symm]
-      exact (IsUnit.mk0 (δ/2) (ne_of_gt hε_pos)).map (algebraMap ℝ _)
+      change IsUnit (algebraMap ℝ (MatrixCLM (Fin D)) (δ / 2))
+      exact (IsUnit.mk0 (δ / 2) (ne_of_gt hε_pos)).map (algebraMap ℝ _)
     -- Step 7: P(δ/2) = (δ/2 • 1) * ((δ/2)⁻¹ • P(δ/2))
     have hfact : P (δ/2) = (δ/2) • (1 : Matrix (Fin D) (Fin D) ℂ →L[ℂ] _) *
         ((δ/2)⁻¹ • P (δ/2)) := by
@@ -510,11 +508,12 @@ theorem continuousDynSemigroup_eq_exp
     fun t => endEquiv (T t) with hS_def
   -- Properties of S
   have hS_zero : S 0 = 1 := by
-    change endEquiv (T 0) = 1; rw [hT.semigroup.zero]; exact map_one endEquiv
+    simpa [S] using congrArg endEquiv hT.semigroup.zero
   have hS_add : ∀ t s, 0 ≤ t → 0 ≤ s → S (t + s) = S t * S s := by
     intro t s ht hs
     change endEquiv (T (t + s)) = endEquiv (T t) * endEquiv (T s)
-    rw [hT.semigroup.comp t s ht hs]; exact map_mul endEquiv (T t) (T s)
+    rw [hT.semigroup.comp t s ht hs]
+    exact map_mul endEquiv (T t) (T s)
   have hS_cont : Continuous S := hT.continuous
   -- Key lemma: S is right-differentiable at 0 with some derivative L_CLM
   obtain ⟨L_CLM, hL_deriv⟩ := continuous_semigroup_hasDerivWithinAt_zero S hS_zero hS_add hS_cont
@@ -554,7 +553,7 @@ theorem continuousDynSemigroup_eq_exp
     fun v (hv : u ≤ v) => show 0 ≤ v - u from sub_nonneg.mpr hv
   have hcomp : HasDerivWithinAt (fun v => S (v - u)) L_CLM (Set.Ici u) u := by
     have hL_at : HasDerivWithinAt S L_CLM (Set.Ici 0) (u - u) := by
-      convert hL_deriv using 2; simp
+      simpa only [sub_self] using hL_deriv
     have := HasDerivWithinAt.scomp (h := fun v => v - u)
       (g₁ := S) (g₁' := L_CLM) (t' := Set.Ici 0)
       u hL_at h_sub h_maps
@@ -591,25 +590,13 @@ theorem generator_unique
   -- Both have derivatives at 0
   have hd1 : HasDerivWithinAt
       (fun t : ℝ => expSemigroupCLM (endEquiv L) t) (endEquiv L) (Set.Ici 0) 0 := by
-    have hd1' : HasDerivAt (fun t : ℝ => expSemigroupCLM (endEquiv L) t) (endEquiv L) 0 :=
-      hasDerivAt_expSemigroupCLM_zero (endEquiv L)
-    exact HasDerivAt.hasDerivWithinAt
-      (𝕜 := ℝ)
-      (s := Set.Ici (0 : ℝ))
-      (f := fun t : ℝ => expSemigroupCLM (endEquiv L) t)
-      (f' := endEquiv L) (x := 0) hd1'
+    simpa using (hasDerivAt_expSemigroupCLM_zero (endEquiv L)).hasDerivWithinAt
   -- Congr: since the functions agree on Ici 0, f₂ also has derivative L within Ici 0
   have hd2 : HasDerivWithinAt (fun t : ℝ => expSemigroupCLM (endEquiv L) t) (endEquiv L')
       (Set.Ici 0) 0 := by
     have hd2' : HasDerivWithinAt
         (fun t : ℝ => expSemigroupCLM (endEquiv L') t) (endEquiv L') (Set.Ici 0) 0 := by
-      have hd2'' : HasDerivAt (fun t : ℝ => expSemigroupCLM (endEquiv L') t) (endEquiv L') 0 :=
-        hasDerivAt_expSemigroupCLM_zero (endEquiv L')
-      exact HasDerivAt.hasDerivWithinAt
-        (𝕜 := ℝ)
-        (s := Set.Ici (0 : ℝ))
-        (f := fun t : ℝ => expSemigroupCLM (endEquiv L') t)
-        (f' := endEquiv L') (x := 0) hd2''
+      simpa using (hasDerivAt_expSemigroupCLM_zero (endEquiv L')).hasDerivWithinAt
     exact hd2'.congr (fun x hx => hCLM x hx) (by simpa using hCLM 0 (by simp))
   -- Ici 0 has unique differentials at 0
   exact (uniqueDiffWithinAt_Ici 0).eq_deriv _ hd1 hd2

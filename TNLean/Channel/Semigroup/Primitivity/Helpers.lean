@@ -127,7 +127,9 @@ theorem expSemigroup_apply_eigenvector
         c u • (μ • g u) + (-(c u * μ)) • g u
             = (c u * μ) • g u + (-(c u * μ)) • g u := by
                 simp [smul_smul]
-        _ = 0 := by simp
+        _ = 0 := by
+              rw [neg_smul]
+              exact add_neg_cancel ((c u * μ) • g u)
     simpa [hz, smul_smul, mul_assoc] using hf.deriv
   have hconst := is_const_of_deriv_eq_zero hdiff hderiv 0 t
   have hft0 : f 0 = X := by
@@ -141,14 +143,13 @@ theorem expSemigroup_apply_eigenvector
     exact Complex.exp_ne_zero _
   have hmain : c t • expSemigroup L t X = c t • (Complex.exp ((t : ℂ) * μ) • X) := by
     calc
-      c t • expSemigroup L t X = f t := by simp [f, g]
+      c t • expSemigroup L t X = f t := by rfl
       _ = X := hfteq
       _ = c t • (Complex.exp ((t : ℂ) * μ) • X) := by
         dsimp [c]
         rw [smul_smul]
         have : Complex.exp (-((t : ℂ) * μ)) * Complex.exp ((t : ℂ) * μ) = 1 := by
-          rw [← Complex.exp_add]
-          simp
+          rw [← Complex.exp_add, neg_add_cancel, Complex.exp_zero]
         rw [this, one_smul]
   have hcancel := congrArg ((c t)⁻¹ • ·) hmain
   simpa [c, smul_smul, inv_mul_cancel₀ hct_ne, one_smul,

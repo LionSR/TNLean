@@ -102,13 +102,12 @@ theorem ks_equality_of_mem_fixedPoints
     {ρ : Mat} (hρ : ρ.PosDef) (hρ_fix : adjointMap K ρ = ρ)
     {X : Mat} (hX : X ∈ fixedPoints K) :
     map K (Xᴴ * X) = Xᴴ * X := by
-  have hXeq : map K X = X := by
-    simpa [fixedPoints] using hX
+  have hXeq : map K X = X := hX
   have hX' : map K X = (1 : ℂ) • X := by
-    simpa using hXeq
+    simpa only [one_smul] using hXeq
   have hKS : map K (Xᴴ * X) = (map K X)ᴴ * map K X :=
     ks_equality_of_peripheral_eigenvector_of_fixedPoint K h_unital hρ hρ_fix X 1 hX'
-      (by simp)
+      (by simpa only using (norm_one : ‖(1 : ℂ)‖ = 1))
   rw [hXeq] at hKS
   exact hKS
 
@@ -182,8 +181,8 @@ noncomputable def fixedPointsStarSubalgebra
     simp [map]
   add_mem' := by
     intro X Y hX hY
-    have hXeq : map K X = X := by simpa [fixedPoints] using hX
-    have hYeq : map K Y = Y := by simpa [fixedPoints] using hY
+    have hXeq : map K X = X := hX
+    have hYeq : map K Y = Y := hY
     change map K (X + Y) = X + Y
     rw [map_add, hXeq, hYeq]
   one_mem' := by
@@ -286,9 +285,8 @@ noncomputable def fixedPoints_starSubalgebra
     (X : Mat) :
     X ∈ fixedPoints_starSubalgebra (K := K) h_tp hρ hρ_fix ↔
       X ∈ adjointFixedPoints K := by
-  change X ∈ adjointFixedPointsStarSubalgebra (K := K) h_tp hρ hρ_fix ↔
-    X ∈ adjointFixedPoints K
-  simp
+  simpa only using
+    (mem_adjointFixedPointsStarSubalgebra (K := K) h_tp hρ hρ_fix X)
 
 /-- **Wolf Thm 6.13** with the prompt's naming convention.
 
@@ -482,9 +480,8 @@ theorem adjointFixedPointsStarSubalgebra_eq_krausCommutantStarSubalgebra
   · exact le_krausCommutantStarSubalgebra_of_le_adjointFixedPoints (K := K) h_tp
       (fun {X} hX => by simpa using hX)
   · intro X hX
-    have hfix : X ∈ adjointFixedPoints K :=
-      mem_adjointFixedPoints_of_mem_krausCommutant (K := K) h_tp hX
-    simpa using hfix
+    exact (mem_adjointFixedPointsStarSubalgebra (K := K) h_tp hρ hρ_fix X).2
+      (mem_adjointFixedPoints_of_mem_krausCommutant (K := K) h_tp hX)
 
 end Commutant
 

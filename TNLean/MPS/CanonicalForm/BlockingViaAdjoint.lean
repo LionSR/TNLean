@@ -54,11 +54,11 @@ lemma charpoly_conjTranspose (M : Matrix n n ℂ) :
     --
     -- and `starRingEnd` acts as complex conjugation.
     change star (M j i) = starRingEnd ℂ (M j i)
-    simp
+    simp only [starRingEnd_apply]
   -- Use transpose- and map-compatibility of `charpoly`.
   calc
     (Mᴴ).charpoly = ((M.map (starRingEnd ℂ))ᵀ).charpoly := by
-      simp [h]
+      simp only [h]
     _ = (M.map (starRingEnd ℂ)).charpoly :=
       Matrix.charpoly_transpose (M := M.map (starRingEnd ℂ))
     _ = M.charpoly.map (starRingEnd ℂ) :=
@@ -86,10 +86,10 @@ theorem Module.End.hasEigenvalue_adjoint_iff (E : V →ₗ[ℂ] V) (μ : ℂ) :
     stdOrthonormalBasis ℂ V
   -- Rewrite both characteristic polynomials as matrix characteristic polynomials.
   have hE : (LinearMap.toMatrix v.toBasis v.toBasis E).charpoly = E.charpoly := by
-    simp
+    simpa only using (LinearMap.charpoly_toMatrix (f := E) v.toBasis)
   have hEadj :
       (LinearMap.toMatrix v.toBasis v.toBasis E.adjoint).charpoly = E.adjoint.charpoly := by
-    simp
+    simpa only using (LinearMap.charpoly_toMatrix (f := E.adjoint) v.toBasis)
   -- The matrix of the adjoint is the conjugate transpose of the matrix.
   have hMatAdj :
       LinearMap.toMatrix v.toBasis v.toBasis E.adjoint =
@@ -103,11 +103,14 @@ theorem Module.End.hasEigenvalue_adjoint_iff (E : V →ₗ[ℂ] V) (μ : ℂ) :
     -- We rewrite it symmetrically below.)
     calc
       E.adjoint.charpoly
-          = (LinearMap.toMatrix v.toBasis v.toBasis E.adjoint).charpoly := by simp [hEadj]
-        _ = ((LinearMap.toMatrix v.toBasis v.toBasis E)ᴴ).charpoly := by simp [hMatAdj]
-        _ = (LinearMap.toMatrix v.toBasis v.toBasis E).charpoly.map (starRingEnd ℂ) :=
-            Matrix.charpoly_conjTranspose (M := LinearMap.toMatrix v.toBasis v.toBasis E)
-        _ = E.charpoly.map (starRingEnd ℂ) := by simp [hE]
+          = (LinearMap.toMatrix v.toBasis v.toBasis E.adjoint).charpoly := by
+              exact hEadj.symm
+      _ = ((LinearMap.toMatrix v.toBasis v.toBasis E)ᴴ).charpoly := by
+            rw [hMatAdj]
+      _ = (LinearMap.toMatrix v.toBasis v.toBasis E).charpoly.map (starRingEnd ℂ) := by
+            exact Matrix.charpoly_conjTranspose (M := LinearMap.toMatrix v.toBasis v.toBasis E)
+      _ = E.charpoly.map (starRingEnd ℂ) := by
+            rw [hE]
   -- Now compare roots using `Polynomial.isRoot_map_iff`.
   -- `starRingEnd ℂ` is injective.
   simp [hchar]
