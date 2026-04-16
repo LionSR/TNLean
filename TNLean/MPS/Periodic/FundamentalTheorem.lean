@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.Periodic.Defs
 import TNLean.MPS.FundamentalTheorem.Full
-import TNLean.MPS.FundamentalTheorem.PeriodicOverlap
+import TNLean.MPS.Periodic.Overlap
 import TNLean.MPS.FundamentalTheorem.SectorDecomposition
 
 open scoped Matrix BigOperators
@@ -40,7 +40,7 @@ Theorem 3.4 is stated in two forms:
   which encode the paper's proportional-MPV assumption.
 
   **Caveat**: `periodicOverlapDichotomy` is stated and callable, but its proof in
-  `TNLean/MPS/FundamentalTheorem/PeriodicOverlap.lean` still depends on several
+  `TNLean/MPS/Periodic/Overlap.lean` still depends on several
   admitted sub-lemmas (see that file's header: "should not yet be relied on as a
   completed formalization of Proposition 3.3"). Downstream results using the
   `_of_isPeriodic` variant therefore inherit those remaining proof obligations and
@@ -143,7 +143,7 @@ The `exists_nondecaying_A/B` fields remain as explicit hypotheses — they encod
 paper's content that proportional total MPVs force non-vanishing per-block overlaps.
 
 **Remaining proof obligations.** `periodicOverlapDichotomy` is stated and callable, but
-its proof in `TNLean/MPS/FundamentalTheorem/PeriodicOverlap.lean` transitively depends
+its proof in `TNLean/MPS/Periodic/Overlap.lean` transitively depends
 on several admitted sub-lemmas (`periodicSelfOverlap_tendsto`,
 `sectorBlocked_isNormal_of_isPeriodic`, `periodicOverlap_gaugeEquiv_of_sector_match`,
 `periodicOverlap_tendsto_zero_of_no_sector_match`,
@@ -279,7 +279,7 @@ overlaps do not all vanish must match up to bijection and per-block `HetRepeated
 equivalence.
 
 **Remaining proof obligations.** `periodicOverlapDichotomy` is stated and callable, but
-its proof in `TNLean/MPS/FundamentalTheorem/PeriodicOverlap.lean` still contains several
+its proof in `TNLean/MPS/Periodic/Overlap.lean` still contains several
 admitted sub-lemmas. Downstream users of this theorem inherit those obligations — this
 variant is a convenience wrapper, not an unconditional strengthening. -/
 theorem fundamentalTheorem_periodic_proportional_of_isPeriodic

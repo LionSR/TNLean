@@ -184,7 +184,7 @@ import TNLean.MPS.FundamentalTheorem.OverlapConvergenceAux
 import TNLean.MPS.FundamentalTheorem.CoefficientConvergence
 import TNLean.MPS.FundamentalTheorem.Multi
 import TNLean.MPS.FundamentalTheorem.SectorDecomposition
-import TNLean.MPS.FundamentalTheorem.Periodic
+import TNLean.MPS.Periodic.FundamentalTheorem
 import TNLean.MPS.Structure.InvariantSubspaceDecomp
 import TNLean.MPS.CanonicalForm.Reduction
 import TNLean.MPS.CanonicalForm.Existence
@@ -197,7 +197,7 @@ import TNLean.MPS.CanonicalForm.EqualNormBridge
 import TNLean.MPS.Core.BlockingInfrastructure
 import TNLean.MPS.Irreducible.FormII
 import TNLean.MPS.Periodic.Defs
-import TNLean.MPS.FundamentalTheorem.PeriodicOverlap
+import TNLean.MPS.Periodic.Overlap
 import TNLean.MPS.Irreducible.Adjoint
 import TNLean.MPS.Core.TPGauge
 import TNLean.MPS.Structure.BlockPermutation
