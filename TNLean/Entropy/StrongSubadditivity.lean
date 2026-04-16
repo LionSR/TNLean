@@ -133,7 +133,7 @@ section FinOneEntropy
 von Neumann entropy.
 
 The single eigenvalue equals the trace (which is `1`), and
-`negMulLog 1 = 0`. -/
+`negMulLog 1 = -(1 * log 1) = 0`. -/
 theorem vonNeumannEntropy_eq_zero_of_fin_one
     (M : Matrix (Fin 1) (Fin 1) ℂ)
     (hM : M.IsHermitian) (hM_trace : M.trace = 1) :
@@ -146,7 +146,10 @@ theorem vonNeumannEntropy_eq_zero_of_fin_one
   have h_eig : hM.eigenvalues 0 = 1 := by
     simpa [Fin.sum_univ_one] using h_sum
   -- Entropy of a one-element sum reduces to `negMulLog` of the one eigenvalue.
-  simp [_root_.vonNeumannEntropy, Fin.sum_univ_one, h_eig, Real.negMulLog_one]
+  have h1 : Real.negMulLog (1 : ℝ) = 0 := by
+    simp [Real.negMulLog]
+  show ∑ i : Fin 1, Real.negMulLog (hM.eigenvalues i) = 0
+  rw [Fin.sum_univ_one, h_eig, h1]
 
 end FinOneEntropy
 
