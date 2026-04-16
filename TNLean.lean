@@ -62,6 +62,11 @@ import TNLean.Analysis.Entropy
 import TNLean.Axioms.BrouwerFixedPoint
 -- Layer 2a: Axiomatized entropy inequalities (strong subadditivity)
 import TNLean.Axioms.Entropy
+-- Layer 2a: `TNLean/Entropy/` bootstrap (issue #613) — stable entropy
+-- surface for the Simple MPDO RFP track (#236)
+import TNLean.Entropy.VonNeumann
+import TNLean.Entropy.StrongSubadditivity
+import TNLean.Entropy.MutualInformation
 -- Layer 2b: Axiomatized operator convexity/concavity results (pending upstream Mathlib)
 import TNLean.Axioms.OperatorConvexity
 -- Layer 2b: Quantum channels (general theory)
