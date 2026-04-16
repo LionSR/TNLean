@@ -343,7 +343,7 @@ theorem fundamentalTheorem_equalMPV_full
   have hProp : ∀ N (σ : Fin N → Fin d),
       mpv (toTensorFromBlocks μA A) σ = (1 : ℂ) * mpv (toTensorFromBlocks μB B) σ := by
     intro N σ
-    simpa using hEqual N σ
+    simpa only [one_mul] using hEqual N σ
   obtain ⟨_hcount, perm, hperm⟩ :=
     fundamentalTheorem_proportionalMPV_CFBNT A B hA hB
       (toTensorFromBlocks μA A) (toTensorFromBlocks μB B)
@@ -378,7 +378,8 @@ theorem fundamentalTheorem_equalMPV_full
         _ = ∑ k : Fin rB, (μB k) ^ N * mpv (B k) σ := by
               simpa only [smul_eq_mul] using mpv_toTensorFromBlocks_eq_sum μB B σ
         _ = ∑ j : Fin rA, (μB (perm j)) ^ N * mpv (B (perm j)) σ := by
-              simpa using (Equiv.sum_comp perm (fun k : Fin rB => (μB k) ^ N * mpv (B k) σ)).symm
+              exact
+                (Equiv.sum_comp perm (fun k : Fin rB => (μB k) ^ N * mpv (B k) σ)).symm
         _ = ∑ j : Fin rA, (μB (perm j) * ζ j) ^ N * mpv (A j) σ := by
               refine Finset.sum_congr rfl ?_
               intro j _
@@ -434,7 +435,7 @@ theorem fundamentalTheorem_equalMPV_full
                 Acast j i *
                 (((X j)⁻¹ : GL (Fin (dimB (perm j))) ℂ) :
                   Matrix (Fin (dimB (perm j))) (Fin (dimB (perm j))) ℂ)) := by
-            simp [Bweighted, Acast, hX j i, smul_smul, mul_comm, mul_assoc]
+            simpa only [Bweighted, Acast, hX j i, smul_smul, mul_comm, mul_assoc]
       _ = (μA j) •
             ((X j : Matrix (Fin (dimB (perm j))) (Fin (dimB (perm j))) ℂ) *
               Acast j i *
@@ -445,8 +446,8 @@ theorem fundamentalTheorem_equalMPV_full
             Aweighted j i *
             (((X j)⁻¹ : GL (Fin (dimB (perm j))) ℂ) :
               Matrix (Fin (dimB (perm j))) (Fin (dimB (perm j))) ℂ) := by
-            simp [Aweighted, Acast, Algebra.mul_smul_comm, Algebra.smul_mul_assoc,
-              Matrix.mul_assoc]
+            simpa only [Aweighted, Acast, Algebra.mul_smul_comm,
+              Algebra.smul_mul_assoc, Matrix.mul_assoc]
   refine ⟨perm, hdim, ?_⟩
   have hGaugeWeighted :=
     gaugeEquiv_toTensorFromBlocks_of_blockConj (d := d) (μ := fun _ : Fin rA => (1 : ℂ))
@@ -455,12 +456,12 @@ theorem fundamentalTheorem_equalMPV_full
       toTensorFromBlocks μA (fun j => cast (congr_arg (MPSTensor d) (hdim j)) (A j)) =
         toTensorFromBlocks (fun _ : Fin rA => (1 : ℂ)) Aweighted := by
     ext i
-    simp [toTensorFromBlocks, Aweighted, Acast]
+    simpa only [toTensorFromBlocks, Aweighted, Acast, one_smul]
   have hB_tot :
       toTensorFromBlocks (fun j => μB (perm j)) (fun j => B (perm j)) =
         toTensorFromBlocks (fun _ : Fin rA => (1 : ℂ)) Bweighted := by
     ext i
-    simp [toTensorFromBlocks, Bweighted]
+    simpa only [toTensorFromBlocks, Bweighted, one_smul]
   rw [hA_tot, hB_tot]
   exact hGaugeWeighted
 

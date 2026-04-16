@@ -337,8 +337,7 @@ theorem isIrreducibleMap_of_channel_posDef_fixedPoint_unique
   have hc_ne : c ≠ 0 := by
     intro hc
     apply hσ_ne
-    rw [hσ_eq, hc]
-    simp
+    simp [hσ_eq, hc]
   have hρ_corner_scaled : c • (P * ρ * P) = c • ρ := by
     simpa [hσ_eq, Matrix.mul_smul, Matrix.smul_mul, Matrix.mul_assoc] using hσ_corner
   have hρ_corner : P * ρ * P = ρ := by
@@ -399,7 +398,7 @@ theorem isIrreducibleMap_of_hasSpectralProperties
     simpa [hS_def] using (CFC.isUnit_sqrt_iff σ hσ_nonneg).2 (Matrix.PosDef.isUnit hσ_pd)
   have hS_inv_inv : S⁻¹⁻¹ = S := by
     letI := hS_unit.invertible
-    simp
+    exact Matrix.inv_inv_of_invertible S
   have hS_inv_herm : (S⁻¹)ᴴ = S⁻¹ := by
     simpa [hS_herm] using Matrix.conjTranspose_nonsing_inv S
   set A' : MPSTensor n D := fun i => d • K i with hA'_def

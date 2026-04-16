@@ -278,8 +278,7 @@ theorem exists_trivialSectorDecomp_of_sorted_distinct_norms
     intro i j hij
     change ‖P.sectors.weight j ⟨0, P.sectors.copies_pos j⟩‖ <
       ‖P.sectors.weight i ⟨0, P.sectors.copies_pos i⟩‖
-    simp only [P, sectors]
-    exact hAnti hij
+    simpa only [P, sectors] using hAnti hij
 
 /-! ### §5. BNT grouping for blocks with possibly equal norms -/
 

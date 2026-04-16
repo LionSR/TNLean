@@ -79,8 +79,7 @@ private lemma trace_transferMap_of_tp
     Matrix.trace (MPSTensor.transferMap (d := r) (D := D) K X) = Matrix.trace X := by
   simp only [MPSTensor.transferMap_apply, Matrix.trace_sum]
   conv_lhs => arg 2; ext i; rw [Matrix.trace_mul_cycle]
-  rw [← Matrix.trace_sum, ← Finset.sum_mul,
-    show ∑ i : Fin r, (K i)ᴴ * K i = 1 from hTP, one_mul]
+  rw [← Matrix.trace_sum, ← Finset.sum_mul, hTP, one_mul]
 
 /-- The trace of an orthogonal projection (Hermitian idempotent matrix) over `ℂ` is a natural
 number — it equals the number of unit eigenvalues. -/
@@ -417,9 +416,10 @@ theorem peripheral_eigenvalues_cyclic_structure
       have hg_eq : (⟨u, hu_mem⟩ : ↥periphSubgroup) = g ^ z := hz.symm
       have hg_mod : g ^ z = g ^ (z % ↑m).toNat := by
         have hm_ne : (m : ℤ) ≠ 0 := Int.natCast_ne_zero.mpr (by omega)
+        have hmod_cast : z % ↑m = ↑(z % ↑m).toNat := by
+          exact (Int.toNat_of_nonneg (Int.emod_nonneg z hm_ne)).symm
         conv_lhs => rw [← zpow_mod_orderOf g z, hg_order]
-        rw [show z % ↑m = ↑(z % ↑m).toNat from
-          (Int.toNat_of_nonneg (Int.emod_nonneg z hm_ne)).symm, zpow_natCast]
+        rw [hmod_cast, zpow_natCast]
         rfl
       have hz_val : u = g.val ^ (z % ↑m).toNat := by
         have : (⟨u, hu_mem⟩ : ↥periphSubgroup).val = (g ^ (z % ↑m).toNat).val := by

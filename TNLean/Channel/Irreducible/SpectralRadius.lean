@@ -268,7 +268,7 @@ theorem spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp
     simpa [hS_def] using (CFC.isUnit_sqrt_iff σ hσ_nonneg).2 (Matrix.PosDef.isUnit hσ_pd)
   have hS_inv_inv : S⁻¹⁻¹ = S := by
     letI := hS_unit.invertible
-    simp
+    exact Matrix.inv_inv_of_invertible S
   have hS_inv_herm : (S⁻¹)ᴴ = S⁻¹ := by
     simpa [hS_herm] using Matrix.conjTranspose_nonsing_inv S
   set A' : MPSTensor n D := fun i => d • K i with hA'_def
@@ -372,10 +372,10 @@ theorem spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp
     exact hHas.mem_spectrum
   have h1_le : (1 : ENNReal) ≤ spectralRadius ℂ
       ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)) E') := by
-    have h1 : (1 : ENNReal) = (‖(1 : ℂ)‖₊ : ENNReal) := by simp
-    rw [h1]
-    exact @le_iSup₂ ENNReal ℂ (· ∈ spectrum ℂ _) _
-      (fun k _ => (‖k‖₊ : ENNReal)) 1 h1_spec
+    rw [spectralRadius]
+    simpa using
+      (@le_iSup₂ ENNReal ℂ (· ∈ spectrum ℂ _) _
+        (fun k _ => (‖k‖₊ : ENNReal)) 1 h1_spec)
   have hrad'_eq : spectralRadius ℂ
       ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)) E') = 1 :=
     le_antisymm hrad'_le h1_le
@@ -436,8 +436,7 @@ theorem spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp
     have hr_nonpos : r ≤ 0 := by
       simpa [ENNReal.ofReal_eq_zero] using hzero
     exact (not_le_of_gt hr) hr_nonpos
-  have hr_enn_ne_top : ENNReal.ofReal r ≠ ∞ := by
-    simp
+  have hr_enn_ne_top : ENNReal.ofReal r ≠ ∞ := ENNReal.ofReal_ne_top
   calc
     spectralRadius ℂ
         ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)) E)
@@ -447,7 +446,7 @@ theorem spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp
                 symm
                 rw [← mul_assoc, ENNReal.mul_inv_cancel hr_enn_ne_zero hr_enn_ne_top, one_mul]
     _ = ENNReal.ofReal r * 1 := by rw [hscaled_one]
-    _ = ENNReal.ofReal r := by simp
+    _ = ENNReal.ofReal r := by rw [mul_one]
 
 /-- **Real-valued spectral-radius identity** (Wolf Thm 6.3(4), real form).
 

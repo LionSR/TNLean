@@ -138,20 +138,20 @@ theorem preservesCorner_of_adjoint_fixed_projection
   calc
     P * ((A i)ᴴ * (P * X * P) * A i) * P
         = (P * (A i)ᴴ) * (P * X * P) * (A i * P) := by
-            simp [Matrix.mul_assoc]
+            simp only [Matrix.mul_assoc]
     _ = ((A i)ᴴ * P) * (P * X * P) * (P * A i) := by
           rw [hCommAdj i, ← hComm i]
     _ = (A i)ᴴ * ((P * P) * X * P) * (P * A i) := by
-          simp [Matrix.mul_assoc]
+          simp only [Matrix.mul_assoc]
     _ = (A i)ᴴ * (P * X * P) * (P * A i) := by
-          simp [Matrix.mul_assoc, hP.2]
+          simp only [Matrix.mul_assoc, hP.2]
     _ = (A i)ᴴ * (P * X * P) * A i := by
           calc
             (A i)ᴴ * (P * X * P) * (P * A i)
                 = (A i)ᴴ * ((P * X * P) * P) * A i := by
-                    simp [Matrix.mul_assoc]
+                    simp only [Matrix.mul_assoc]
             _ = (A i)ᴴ * (P * X * P) * A i := by
-                    simp [Matrix.mul_assoc, hP.2]
+                    simp only [Matrix.mul_assoc, hP.2]
 
 namespace MPSTensor
 
@@ -475,7 +475,8 @@ theorem hLift_cyclicDecomp_mps_of_fixUpgrade
       _ = ((T ^ (l : ℕ)) Q) * (P (k - l) * P (k - l')) *
             ((T ^ (l' : ℕ)) Q) := by simp only [mul_assoc]
       _ = ((T ^ (l : ℕ)) Q) * 0 * ((T ^ (l' : ℕ)) Q) := by rw [hP0]
-      _ = 0 := by simp
+      _ = 0 := by
+            simp only [Matrix.mul_zero, Matrix.zero_mul]
   -- The orbit-sum projection (shared Hermitian/idempotent proof, reused
   -- both as the `hLift` projection conjunct and as the `hP` argument of
   -- `preservesCorner_of_adjoint_fixed_projection`).
@@ -525,8 +526,7 @@ theorem hLift_cyclicDecomp_mps_of_fixUpgrade
         exact absurd (Finset.mem_univ (0 : Fin m)) hmem
     refine ⟨?_, ?_⟩
     · intro hQ0
-      simp only [orbitSumProjection, hQ0]
-      simp
+      simp only [orbitSumProjection, hQ0, map_zero, Finset.sum_const_zero]
     · intro hR0
       have := hRQ
       rw [hR0] at this
@@ -554,7 +554,8 @@ theorem hLift_cyclicDecomp_mps_of_fixUpgrade
           _ = (P k * P (k - l)) * ((T ^ (l : ℕ)) Q) * P k := by
                 rw [← mul_assoc (P k) (P (k - l)) ((T ^ (l : ℕ)) Q)]
           _ = 0 * ((T ^ (l : ℕ)) Q) * P k := by rw [hP0]
-          _ = 0 := by simp
+          _ = 0 := by
+                simp only [Matrix.zero_mul]
       · intro hmem
         exact absurd (Finset.mem_univ (0 : Fin m)) hmem
     refine ⟨?_, ?_⟩

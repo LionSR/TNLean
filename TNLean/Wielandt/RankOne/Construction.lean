@@ -44,13 +44,13 @@ theorem ofFn_reverse {n : ℕ} {α : Type*} (f : Fin n → α) :
     (List.ofFn f).reverse = List.ofFn (f ∘ Fin.rev) := by
   calc
     (List.ofFn f).reverse = (List.map f (List.finRange n)).reverse := by
-      simp [List.ofFn_eq_map]
+      simp only [List.ofFn_eq_map]
     _ = List.map f (List.finRange n).reverse := by
-      simp [List.map_reverse]
+      simp only [List.map_reverse]
     _ = List.map f (List.map Fin.rev (List.finRange n)) := by
-      simp [List.finRange_reverse]
+      simp only [List.finRange_reverse]
     _ = List.map (f ∘ Fin.rev) (List.finRange n) := by
-      simp [List.map_map]
+      simp only [List.map_map]
     _ = List.ofFn (f ∘ Fin.rev) := by
       simp [List.ofFn_eq_map]
 
@@ -101,7 +101,7 @@ theorem IsNBlkInjective_transposeTensor
       -- Use `evalWord_transpose` with the reversed word.
       have hrev : ((σ ∘ Fin.rev) ∘ Fin.rev) = σ := by
         funext i
-        simp [Function.comp]
+        simpa only [Function.comp] using congrArg σ (Fin.rev_rev i)
       -- `(evalWord A (ofFn (σ ∘ rev)))ᵀ = evalWord (transposeTensor A) (ofFn σ)`
       -- by word reversal.
       have htrans :=
@@ -273,7 +273,7 @@ theorem rowSpreadSpan_eq_vectorSpreadSpan_transpose
       (A := A) (ψ := ψ) (σ := (σ ∘ Fin.rev))
     have hrev : ((σ ∘ Fin.rev) ∘ Fin.rev) = σ := by
       funext i
-      simp [Function.comp]
+      simpa only [Function.comp] using congrArg σ (Fin.rev_rev i)
     simpa [htrans, hrev] using h
 
 /-- Mapping `wordSpan` along `M ↦ ψ ᵥ* M` yields `rowSpreadSpan`. -/
