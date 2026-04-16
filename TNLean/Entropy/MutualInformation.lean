@@ -22,9 +22,8 @@ bootstrap entropy surface used by the Simple MPDO RFP track
 
 * `Entropy.mutualInformation` — the bipartite mutual information
   `I(A:B) = S(ρ_A) + S(ρ_B) − S(ρ_AB)`.
-* `Entropy.mutualInformation_symm` — `I(A:B) = I(B:A)` is a direct
-  algebraic identity (given the reduced-state entropies are the same
-  after swapping).
+* `Entropy.mutualInformation_def` — unfolding lemma expressing the
+  mutual information as marginal entropies minus the joint entropy.
 * `Entropy.mutualInformation_ssa_trivial_B_nonneg` — the nonnegativity
   of the tripartite mutual information in the trivial-middle form
   (a direct consequence of `subadditivity_ssa_trivial_B`).
