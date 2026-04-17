@@ -12,7 +12,7 @@ import TNLean.Channel.Peripheral.CyclicDecomposition
 /-!
 # Periodic MPS — physical symmetries and `p`-refinement (arXiv:1708.00029, §4)
 
-This file formalizes the two `§4` results of de las Cuevas–Schuch–Pérez-García–Cirac
+This file formalizes the §4 results of de las Cuevas–Schuch–Pérez-García–Cirac
 *Irreducible forms of matrix product states: theory and applications* (arXiv:1708.00029)
 for periodic MPS in irreducible form.
 
@@ -21,21 +21,25 @@ for periodic MPS in irreducible form.
 * `MPSTensor.cor_4_1_physical_symmetry_zgauge` — **Corollary 4.1**: a physical on-site
   symmetry `U : G →* Mat_d ℂ` (acting unitarily) on a tensor `A` in irreducible form II
   lifts, for every `g ∈ G`, to a `Z_m`-gauge equivalence between `A` and the rotated
-  tensor `twistedTensor A U g`. The diagonal `Z` satisfies `Z^m = 1` and commutes with
-  `A`; the bond-space `Y(g)` is the conjugating gauge.
+  tensor `twistedTensor A U g`. The matrix `Z` produced by the periodic equal-case
+  Fundamental Theorem satisfies `Z^m = 1` and commutes with each `A^i`; the bond-space
+  `Y(g)` is the conjugating gauge.
 
-* `MPSTensor.thm_4_1_p_refinement` — **Theorem 4.1**: for `B` in irreducible form II,
-  the matrix-product-vector family `V(B)` admits a `p`-refinement iff the transfer map
-  `E_B` is `p`-divisible.
+* `MPSTensor.IsPDivisibleChannel`, `MPSTensor.IsPRefinable` — definitions appearing in
+  Theorem 4.1 (`p`-divisibility of the transfer channel and `p`-refinement of an MPS
+  tensor). The full equivalence `IsPRefinable B p ↔ IsPDivisibleChannel (transferMap B) p`
+  is left to a follow-up PR: it relies on the channel-level identity
+  `E_{blockTensor A p} = (transferMap A)^p` (forward direction) and the Stinespring/Kraus
+  uniqueness lemma (reverse direction), neither of which is yet available in the repo.
 
 ## Status of the dependency on `periodicOverlapDichotomy` (#78 / #81)
 
-Both results invoke the **periodic equal-case Fundamental Theorem of MPS** (Theorem 3.8
+The corollary invokes the **periodic equal-case Fundamental Theorem of MPS** (Theorem 3.8
 in arXiv:1708.00029, formalized as `fundamentalTheorem_periodic_equalCase` in
 `MPS/Periodic/FundamentalTheorem.lean`). That theorem is in turn currently stated as a
 direct consumer of `PeriodicOverlapHypothesis`, which can be discharged by
-`periodicOverlapDichotomy` (PR #573, #607–#609 Tier-A bridges). The dichotomy's proof
-in `MPS/Periodic/Overlap.lean` still relies on several admitted sub-lemmas, so this file
+`periodicOverlapDichotomy` (PR #573, follow-ups #607–#609). The dichotomy's proof in
+`MPS/Periodic/Overlap.lean` still relies on several admitted sub-lemmas, so this file
 follows the established convention (see `Applications.lean`,
 `zGaugeEquiv_of_isIrreducibleForm_sameMPV_rotatePhysical`) of taking the equal-case FT
 as an explicit hypothesis named `hPeriodicEq`. Callers are free to discharge this
@@ -54,23 +58,27 @@ open scoped Matrix BigOperators
 
 namespace MPSTensor
 
-/-! ## Periodic equal-case Fundamental Theorem packaged as a hypothesis -/
+/-! ## Periodic equal-case Fundamental Theorem stated as a hypothesis -/
 
 section PeriodicEqualCaseFTHyp
 
 variable {d D : ℕ}
 
 /-- The **periodic equal-case Fundamental Theorem of MPS** (Theorem 3.8 of
-arXiv:1708.00029) packaged as a Prop, suitable for use as an explicit hypothesis.
+arXiv:1708.00029) stated as a Prop, suitable for use as an explicit hypothesis.
 
 Given two tensors of the same physical/bond dimensions in irreducible form II that
 generate the same matrix-product-vector family, this hypothesis asserts the existence
 of a positive period `m` and a `Z_m`-gauge equivalence between the two tensors.
 
-The full statement of Theorem 3.8 is currently formalized in
-`MPS/Periodic/FundamentalTheorem.lean` as `fundamentalTheorem_periodic_equalCase`,
-modulo the proof obligations carried by `periodicOverlapDichotomy` (#78/#81). See the
-file header for status. -/
+Note that the Lean theorem `fundamentalTheorem_periodic_equalCase` in
+`MPS/Periodic/FundamentalTheorem.lean` requires four extra hypotheses beyond
+irreducibility and `SameMPV` (non-repetition of blocks for both tensors, the periodic
+overlap dichotomy, and a per-block weight-power equality). The Prop introduced here
+asserts the *unconditional* equal-case FT, so it is strictly stronger than the current
+repo theorem; callers committing to it are committing to the missing analytic content
+of `periodicOverlapDichotomy` (#78 / #81). The convention follows the analogous
+hypothesis in `MPS/FundamentalTheorem/Applications.lean`. -/
 def PeriodicEqualCaseFT (d D : ℕ) : Prop :=
   ∀ {X Y : MPSTensor d D},
     IsIrreducibleForm X → IsIrreducibleForm Y →
@@ -85,8 +93,8 @@ section Corollary41
 
 variable {d D : ℕ} {G : Type*} [Group G]
 
-/-- Bridge: the symmetry-twisted tensor (with `U` acting on the physical leg) coincides
-with the physical-index rotation by `U g`. -/
+/-- The symmetry-twisted tensor (with `U` acting on the physical leg) coincides with the
+physical-index rotation by `U g`. -/
 lemma twistedTensor_eq_rotatePhysical
     (A : MPSTensor d D) (U : G →* Matrix (Fin d) (Fin d) ℂ) (g : G) :
     twistedTensor A U g = rotatePhysical (U g) A := rfl
@@ -103,7 +111,7 @@ In paper notation, for each `g` there exist matrices `Z_g, Y_g` with `Z_g^{m_g} 
 `[A^i, Z_g] = 0`, and
 `Z_g · A^i = Y_g · (twistedTensor A U g)^i · Y_g⁻¹`.
 
-This generalises the single-`u` corollary already wired through
+This generalises the single-`u` corollary obtained via
 `zGaugeEquiv_of_isIrreducibleForm_sameMPV_rotatePhysical` to a full group of symmetries.
 The projective-representation upgrade (joint factor system on the family `(Y_g)_{g∈G}`)
 is left to downstream SPT classification work; see
@@ -134,8 +142,8 @@ theorem cor_4_1_physical_symmetry_zgauge
   rcases hPeriodicEq hA hRot hSame with ⟨m, hm_pos, hZGauge⟩
   exact ⟨m, hm_pos, by rw [hRotEq]; exact hZGauge⟩
 
-/-- **Convenience repackaging of `cor_4_1_physical_symmetry_zgauge`** in the form most
-useful for downstream SPT arguments: extract the gauge `Y(g)` and diagonal `Z(g)`
+/-- **A convenient reformulation of `cor_4_1_physical_symmetry_zgauge`** in the form most
+useful for downstream SPT arguments: extract the gauge `Y(g)` and matrix `Z(g)`
 explicitly. -/
 theorem cor_4_1_physical_symmetry_zgauge_explicit
     (A : MPSTensor d D)
@@ -159,7 +167,7 @@ theorem cor_4_1_physical_symmetry_zgauge_explicit
 
 end Corollary41
 
-/-! ## Theorem 4.1 — `p`-refinement ⇔ `p`-divisibility -/
+/-! ## Theorem 4.1 — `p`-refinement and `p`-divisibility (definitions only) -/
 
 section Theorem41
 
@@ -193,67 +201,6 @@ def IsPRefinable (B : MPSTensor d D) (p : ℕ) : Prop :=
       coeff (blockTensor A p) (List.ofFn τ) =
         ∑ σ : Fin N → Fin d,
           (∏ k : Fin N, W (τ k) (σ k)) * coeff B (List.ofFn σ)
-
-/-- **Channel-level bridge for the `p`-refinement equivalence.**
-
-Both directions of arXiv:1708.00029, Theorem 4.1, factor through channel-theoretic
-auxiliaries that are themselves substantial:
-
-* the *forward* direction (refinable ⇒ divisible) follows from `p`-blocking commuting
-  with channel powers (`E_{block(A,p)} = E_A^p`) plus the equal-case Fundamental
-  Theorem of MPS, which reduces matching MPV families to gauge-equivalent transfer maps;
-* the *backward* direction (divisible ⇒ refinable) follows from Stinespring/Kraus
-  uniqueness up to isometry — the paper's "different Kraus representations of the same
-  channel are related by an isometry `W`" remark.
-
-We bundle these analytic ingredients into a single `Bridges` predicate so that the
-top-level statement remains free of `sorry`. The forward bridge consumes the periodic
-equal-case FT (`PeriodicEqualCaseFT`); the backward bridge uses Wolf Theorem 2.18 (Kraus
-unitary freedom), already partially formalized in `Channel/KrausRepresentation.lean`. -/
-structure PRefinementBridges (B : MPSTensor d D) (p : ℕ) : Prop where
-  forward : IsPRefinable B p → IsPDivisibleChannel (transferMap B) p
-  backward : IsPDivisibleChannel (transferMap B) p → IsPRefinable B p
-
-/-- **Theorem 4.1 (arXiv:1708.00029, §4.1): `p`-refinement ⇔ `p`-divisibility.**
-
-For `B` in irreducible form II with positive period `p`, the matrix-product-vector
-family `V(B)` admits a `p`-refinement iff the transfer map `E_B` is `p`-divisible.
-
-The proof of each direction uses substantial channel theory — equal-case Fundamental
-Theorem of MPS for `(⇒)`, Kraus unitary uniqueness for `(⇐)`. We bundle these as a
-`PRefinementBridges` parameter (see its docstring for the breakdown). The parameter can
-be discharged once both ingredients are available. -/
-theorem thm_4_1_p_refinement
-    (B : MPSTensor d D) (p : ℕ)
-    (_hp : 0 < p)
-    (_hB : IsIrreducibleForm B)
-    (hBridges : PRefinementBridges B p) :
-    IsPRefinable B p ↔ IsPDivisibleChannel (transferMap B) p :=
-  ⟨hBridges.forward, hBridges.backward⟩
-
-/-- **Forward direction of Theorem 4.1**: refinement implies divisibility.
-
-This is the implication that uses the equal-case Fundamental Theorem (Theorem 3.8 of
-arXiv:1708.00029) — `p`-refinement gives matching MPV families on each length, which
-forces the channel-level identity `E_{block(A,p)} = E_B`, hence `E_A^p = E_B`. -/
-theorem isPDivisibleChannel_of_isPRefinable
-    (B : MPSTensor d D) (p : ℕ)
-    (hBridges : PRefinementBridges B p)
-    (h : IsPRefinable B p) :
-    IsPDivisibleChannel (transferMap B) p :=
-  hBridges.forward h
-
-/-- **Backward direction of Theorem 4.1**: divisibility implies refinement.
-
-This is the implication that uses Stinespring/Kraus unitary uniqueness — given
-`E_B = E'^p`, choose any Kraus representation of `E'`, block it by `p` to obtain a
-candidate `A`, and apply Wolf Theorem 2.18 to recover the isometry `W`. -/
-theorem isPRefinable_of_isPDivisibleChannel
-    (B : MPSTensor d D) (p : ℕ)
-    (hBridges : PRefinementBridges B p)
-    (h : IsPDivisibleChannel (transferMap B) p) :
-    IsPRefinable B p :=
-  hBridges.backward h
 
 end Theorem41
 

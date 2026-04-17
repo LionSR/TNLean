@@ -24,6 +24,10 @@ matrix-product-vector family and $p$-divisibility of the transfer map.
     Let $A$ be an MPS tensor in irreducible form~II and let
     $U : G \to \GL_d(\C)$ be a representation of a group $G$ on the
     physical leg, acting unitarily ($U(g)\, U(g)^{\dagger} = \Id$).
+    Assume moreover the periodic equal-case Fundamental Theorem of MPS
+    (Theorem~\ref{thm:periodic_ft}) as an explicit hypothesis on the
+    pair $(d, D)$ — formalised in Lean as the proposition
+    \lean{MPSTensor.PeriodicEqualCaseFT}\,$d\,D$.
     If $A$ is on-site symmetric under~$U$ — that is, the twisted tensor
     $\widetilde{A}_g$ has the same MPV family as~$A$ for every $g \in G$
     — then for each $g \in G$ there exists a positive period $m_g$ and
@@ -67,8 +71,7 @@ matrix-product-vector family and $p$-divisibility of the transfer map.
 The next theorem characterises when the matrix-product-vector family of a
 periodic tensor admits a finer description in terms of a smaller-period
 tensor whose blocks have been merged.  This was the original motivation
-for the irreducible-form framework in \cite{DeLasCuevas2017Irreducible},
-following the continuum-limit programme of \cite{De16}.
+for the irreducible-form framework in \cite{DeLasCuevas2017Irreducible}.
 
 \begin{definition}[$p$-divisible CP map]
     \label{def:p_divisible_channel}
@@ -105,9 +108,7 @@ following the continuum-limit programme of \cite{De16}.
 \end{definition}
 
 \begin{theorem}[Thm.~4.1 — $p$-refinability $\iff$ $p$-divisibility]%
-    \label{thm:thm_4_1_p_refinement}
-    \lean{MPSTensor.thm_4_1_p_refinement}
-    \leanok
+    \label{thm:thm_4_1_p_refinement}\notready
     \uses{def:irreducible_form, def:p_refinable, def:p_divisible_channel,
           thm:periodic_ft}
     Let $B$ be an MPS tensor in irreducible form~II and let $p \ge 1$.
@@ -115,7 +116,7 @@ following the continuum-limit programme of \cite{De16}.
     $p$-divisible.
 \end{theorem}
 
-\begin{proof}\leanok
+\begin{proof}\notready
     \uses{thm:periodic_ft}
     The forward implication uses the periodic equal-case Fundamental
     Theorem (Theorem~\ref{thm:periodic_ft}): a $p$-refinement of $B$
@@ -131,19 +132,14 @@ following the continuum-limit programme of \cite{De16}.
     same channel as $B$, so Wolf Theorem~2.18 (unitary freedom of the
     Kraus representation) supplies an isometry $W$ realising the
     coefficient relation that defines $p$-refinability.
-
-    The two analytic ingredients are bundled into the
-    \texttt{PRefinementBridges} predicate that the Lean statement
-    consumes; the file header documents the dependency on the periodic
-    overlap dichotomy (Proposition~3.3 of~\cite{DeLasCuevas2017Irreducible}).
 \end{proof}
 
 \begin{remark}[Continuum-limit application]\notready
     \label{rem:thm_4_1_continuum_limit}
     The original motivation for Theorem~\ref{thm:thm_4_1_p_refinement}
-    is the continuum-limit construction of \cite{De16}: refinability
-    along arbitrarily large $p$ is equivalent to infinite divisibility
-    of the transfer map, which selects out continuum limits of
-    translationally invariant MPS.  The further consequences are
-    explored elsewhere (op.~cit.).
+    is a continuum-limit construction in the spirit of
+    \cite{DeLasCuevas2017Irreducible}: refinability along arbitrarily
+    large $p$ is equivalent to infinite divisibility of the transfer
+    map, which selects out continuum limits of translationally invariant
+    MPS.  The further consequences are explored elsewhere.
 \end{remark}
