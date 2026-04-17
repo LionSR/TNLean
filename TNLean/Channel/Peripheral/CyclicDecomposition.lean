@@ -89,7 +89,7 @@ def IsIrreducibleOnCorner {D : ℕ} (P : MatrixAlg D) (T : MatrixEnd D) : Prop :
     PreservesCorner Q T →
     Q = 0 ∨ Q = P
 
-/-- **Compression isometry for a projection.**
+/-- **Compression isometry for a projection (existence form).**
 
 Given an orthogonal projection `P : M_D(ℂ)` of rank `n = trace P`, there is a linear
 isomorphism between `M_n(ℂ)` and the corner submodule `P · M_D(ℂ) · P`, constructed
@@ -98,15 +98,16 @@ from the eigendecomposition of `P` via `Matrix.IsHermitian.eigenvectorUnitary`,
 
 This is the projector analog of the isometry `φ` already constructed inside
 `exists_compressedTensor_of_supported_projection` in `MPS/CanonicalForm/CyclicSectors`.
-Exposing it as a standalone linear equivalence unblocks the Tier-A bridges in
-`MPS/Periodic/Overlap.lean`. -/
-theorem exists_cornerSubmodule_matrixLinearEquiv {D : ℕ}
+The public API is exposed through the `noncomputable def`s `cornerRank` and
+`cornerSubmoduleMatrixLinearEquiv` together with the companion lemma
+`cornerRank_eq_trace`. -/
+private lemma exists_cornerSubmodule_matrixLinearEquiv_aux {D : ℕ}
     (P : MatrixAlg D) (hP : IsOrthogonalProjection P) :
     ∃ (n : ℕ) (_ : Matrix (Fin n) (Fin n) ℂ ≃ₗ[ℂ] cornerSubmodule P),
       (n : ℂ) = Matrix.trace P := by
   classical
   -- Spectral diagonalization of `P`.
-  let hHerm : P.IsHermitian := hP.1
+  have hHerm : P.IsHermitian := hP.1
   let U := hHerm.eigenvectorUnitary
   let Umat : MatrixAlg D := (U : MatrixAlg D)
   have hUU : Umat * Umatᴴ = 1 :=
@@ -338,18 +339,6 @@ theorem exists_cornerSubmodule_matrixLinearEquiv {D : ℕ}
         simp only [P0, Matrix.fromBlocks_multiply, Matrix.one_mul, Matrix.mul_one,
           Matrix.zero_mul, Matrix.mul_zero, add_zero] at hP0_YST
         exact hP0_YST
-      have h12 : Y_ST.toBlocks₁₂ = 0 := by
-        ext s t
-        have h := congrFun (congrFun hkey (Sum.inl s)) (Sum.inr t)
-        simpa [Matrix.fromBlocks_apply₁₂] using h.symm
-      have h21 : Y_ST.toBlocks₂₁ = 0 := by
-        ext t s
-        have h := congrFun (congrFun hkey (Sum.inr t)) (Sum.inl s)
-        simpa [Matrix.fromBlocks_apply₂₁] using h.symm
-      have h22 : Y_ST.toBlocks₂₂ = 0 := by
-        ext t t'
-        have h := congrFun (congrFun hkey (Sum.inr t)) (Sum.inr t')
-        simpa [Matrix.fromBlocks_apply₂₂] using h.symm
       exact (hkey.trans (Matrix.fromBlocks_toBlocks Y_ST)).symm
     change toFun (invFun X.1) = X.1
     simp only [invFun, toFun]
@@ -433,6 +422,30 @@ theorem exists_cornerSubmodule_matrixLinearEquiv {D : ℕ}
         (Matrix.fromBlocks (Matrix.reindexLinearEquiv ℂ ℂ eS.symm eS.symm M) 0 0 0) from
       (Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm).map_smul c _]
     rw [Matrix.mul_smul, Matrix.smul_mul]
+
+/-- The rank of an orthogonal projection `P : M_D(ℂ)`, defined so that
+`cornerSubmoduleMatrixLinearEquiv` produces an isometry `M_{cornerRank P hP}(ℂ) ≃ₗ
+cornerSubmodule P` and `cornerRank_eq_trace` witnesses `(cornerRank P hP : ℂ) = tr P`. -/
+noncomputable def cornerRank {D : ℕ} (P : MatrixAlg D)
+    (hP : IsOrthogonalProjection P) : ℕ :=
+  (exists_cornerSubmodule_matrixLinearEquiv_aux P hP).choose
+
+/-- **Compression isometry for a projection.**
+
+For an orthogonal projection `P : M_D(ℂ)`, the corner algebra `P · M_D(ℂ) · P` is
+linearly isomorphic to the matrix algebra `M_{cornerRank P hP}(ℂ)` via the
+spectral diagonalisation of `P`. This is the projector analog of the compression
+isometry used inside `exists_compressedTensor_of_supported_projection` in
+`MPS/CanonicalForm/CyclicSectors`. -/
+noncomputable def cornerSubmoduleMatrixLinearEquiv {D : ℕ}
+    (P : MatrixAlg D) (hP : IsOrthogonalProjection P) :
+    Matrix (Fin (cornerRank P hP)) (Fin (cornerRank P hP)) ℂ ≃ₗ[ℂ] cornerSubmodule P :=
+  (exists_cornerSubmodule_matrixLinearEquiv_aux P hP).choose_spec.choose
+
+/-- The rank of the corner submodule equals the trace of the projection. -/
+lemma cornerRank_eq_trace {D : ℕ} (P : MatrixAlg D) (hP : IsOrthogonalProjection P) :
+    (cornerRank P hP : ℂ) = Matrix.trace P :=
+  (exists_cornerSubmodule_matrixLinearEquiv_aux P hP).choose_spec.choose_spec
 
 namespace MPSTensor
 
