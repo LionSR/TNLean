@@ -222,6 +222,8 @@ import TNLean.MPS.MPDO.BiCFDerivation
 import TNLean.MPS.MPDO.ZCL
 import TNLean.MPS.MPDO.PRFP
 import TNLean.MPS.MPDO.RFP
+import TNLean.MPS.MPDO.FusionIsometries
+import TNLean.MPS.MPDO.AlgebraStructure
 
 -- MPS examples
 import TNLean.MPS.Examples.AKLT
