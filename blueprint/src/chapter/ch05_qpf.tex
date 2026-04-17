@@ -332,6 +332,47 @@ and~\cite{Evans1978Spectral}.
 	the scalar case ($C = \Id$) gives the scaling result stated next.
 \end{proof}
 
+\begin{lemma}[Similarity is an involution]%
+	\label{lem:similarity_involution}
+	\lean{similarityMap_similarityMap_inv}
+	\leanok
+	For any invertible $C \in \MN{D}$ and any linear map $E$ on $\MN{D}$,
+	the similarity transforms by $C$ and $C^{-1}$ compose to the identity:
+	\[
+		X \;\mapsto\; C\bigl(C^{-1}\, E(C\,X\,C^\dagger)\,(C^\dagger)^{-1}\bigr)\,C^\dagger
+			\;=\; E(X).
+	\]
+\end{lemma}
+
+\begin{proof}\leanok
+	Direct computation: the inner conjugation
+	$C \cdot (C^{-1} \, X \, (C^\dagger)^{-1}) \cdot C^\dagger$ collapses to $X$
+	using $C C^{-1} = \Id$ and $(C^\dagger)^{-1} C^\dagger = \Id$, and the
+	outer wrapping by $C \, (\cdot) \, C^\dagger$ then cancels the inner
+	$C^{-1} \, (\cdot) \, (C^\dagger)^{-1}$ on $E(X)$ for the same reason.
+\end{proof}
+
+\begin{lemma}[Irreducibility is invariant under similarity]%
+	\label{lem:similarity_irred_iff}
+	\lean{isIrreducibleMap_similarity_iff}
+	\leanok
+	\uses{def:irreducible_cp, lem:similarity_irred, lem:similarity_involution}
+	For any invertible $C \in \MN{D}$ and any linear map $E$ on $\MN{D}$,
+	the similarity transform
+	$X \mapsto C^{-1}\, E(C\,X\,C^\dagger)\,(C^\dagger)^{-1}$
+	is irreducible if and only if $E$ is.
+\end{lemma}
+
+\begin{proof}\leanok
+	\uses{lem:similarity_irred, lem:similarity_involution}
+	The forward direction follows from Lemma~\ref{lem:similarity_irred}
+	applied with the inverse $C^{-1}$ (whose determinant is also nonzero):
+	if the similarity transform of $E$ by $C$ is irreducible, then so is its
+	similarity transform by $C^{-1}$, which equals $E$ by
+	Lemma~\ref{lem:similarity_involution}.  The reverse direction is
+	Lemma~\ref{lem:similarity_irred} itself (with $c = 1$).
+\end{proof}
+
 \begin{theorem}[Scaling preserves irreducibility]%
 	\label{thm:irred_map_smul}
 	\lean{isIrreducibleMap_smul}

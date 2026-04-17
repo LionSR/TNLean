@@ -1219,6 +1219,31 @@ used later.
     Irreducibility of the corner-restricted map.
 \end{definition}
 
+\begin{definition}[Rank of an orthogonal projection]
+    \lean{cornerRank}
+    \leanok
+    The rank of an orthogonal projection $P \in \MN{D}$, i.e.\ the
+    dimension of the corner algebra $P\MN{D}P$.
+\end{definition}
+
+\begin{theorem}[Compression isometry for an orthogonal projection]%
+    \label{thm:compression_isometry_projection}
+    \lean{cornerSubmoduleMatrixLinearEquiv}
+    \leanok
+    Let $P \in \MN{D}$ be an orthogonal projection of rank $n$. The corner
+    algebra $P\MN{D}P$ is linearly isomorphic to the full matrix algebra
+    $\MN{n}$. The isomorphism is built from the spectral diagonalisation
+    of $P$ by conjugating the top-left $n\times n$ block by the unitary
+    diagonalising $P$.
+\end{theorem}
+
+\begin{theorem}[Rank equals trace for an orthogonal projection]%
+    \label{thm:corner_rank_eq_trace}
+    \lean{cornerRank_eq_trace}
+    \leanok
+    The rank of an orthogonal projection $P$ equals its trace: $n = \tr P$.
+\end{theorem}
+
 \begin{theorem}[Peripheral unitary eigenvector]
     \lean{MPSTensor.exists_peripheral_unitary_of_irreducible_schwarz}
     \leanok
