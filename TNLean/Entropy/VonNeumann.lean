@@ -7,37 +7,32 @@ import TNLean.Analysis.Entropy
 /-!
 # Von Neumann entropy (namespace bootstrap)
 
-This module provides the `Entropy` namespace wrappers for the von
-Neumann entropy defined in `TNLean.Analysis.Entropy`. It is the first
-of three files in the `TNLean/Entropy/` bootstrap that unblocks the
-Simple MPDO RFP track (see issue #236, infrastructure request #613,
-and the umbrella task #239).
+This module exposes the von Neumann entropy of `TNLean.Analysis.Entropy`
+under the `Entropy` namespace. It is the first of three files in the
+`TNLean/Entropy/` bootstrap that unblocks the Simple MPDO RFP track
+(see issue #236, infrastructure request #613, and the umbrella task
+#239).
 
 The underlying eigenvalue-based definition, the nonnegativity proof,
-and the `S(ρ) ≤ log D` bound are imported from
-`TNLean.Analysis.Entropy`; they are re-exported here under the
-`Entropy` namespace so that downstream MPDO/RFP modules can refer to a
-single stable surface for quantum entropy.
+and the `S(ρ) ≤ log D` bound live in `TNLean.Analysis.Entropy`. To
+avoid maintaining two parallel spellings of the same definition, this
+module re-exports them under the `Entropy` namespace via Mathlib-style
+`alias` declarations rather than wrapping them in `noncomputable def`s
+plus trivial unfolding `@[simp]` lemmas.
 
-## Main definitions
+## Main declarations (re-exports)
 
-* `Entropy.vonNeumannEntropy` — `S(ρ) = -tr(ρ log ρ)` for a Hermitian
-  matrix `ρ`, in terms of eigenvalues.
-
-## Main results
-
-* `Entropy.vonNeumannEntropy_nonneg` — `S(ρ) ≥ 0` for density
-  matrices.
-* `Entropy.vonNeumannEntropy_le_log_dim` — `S(ρ) ≤ log D` for density
+* `Entropy.vonNeumannEntropy` — alias of `_root_.vonNeumannEntropy`,
+  the entropy `S(ρ) = -tr(ρ log ρ)` of a Hermitian matrix.
+* `Entropy.vonNeumannEntropy_nonneg` — alias of
+  `_root_.vonNeumannEntropy_nonneg`: `S(ρ) ≥ 0` for density matrices.
+* `Entropy.vonNeumannEntropy_le_log_dim` — alias of
+  `_root_.vonNeumannEntropy_le_log_dim`: `S(ρ) ≤ log D` for density
   matrices on a `D`-dimensional system.
 
-## Implementation notes
-
-These are thin re-exports of the declarations in
-`TNLean.Analysis.Entropy`. The purpose of the dedicated
-`TNLean/Entropy/` directory is to give the entropy API a single import
-point so that the axiomatized strong-subadditivity inequality lives
-next to the provable results it combines with.
+The aliases are definitionally equal to their `_root_` targets, so the
+two spellings are interchangeable in tactics; in particular no
+`@[simp]` unfolding lemma is needed.
 
 ## References
 
@@ -45,58 +40,22 @@ next to the provable results it combines with.
 * arXiv:1606.00608 §4.4
 -/
 
-open scoped Matrix ComplexOrder
-open Matrix Finset Real
-
 namespace Entropy
 
-variable {n : Type*} [Fintype n] [DecidableEq n]
-
-/-- **Von Neumann entropy** of a Hermitian matrix.
+/-- **Von Neumann entropy** of a Hermitian matrix, namespaced alias.
 
 For a Hermitian matrix `ρ` with eigenvalues `λᵢ`, the von Neumann
-entropy is `S(ρ) = ∑ᵢ negMulLog(λᵢ) = -∑ᵢ λᵢ log(λᵢ)`.
+entropy is `S(ρ) = ∑ᵢ negMulLog(λᵢ) = -∑ᵢ λᵢ log(λᵢ)`. Definitionally
+equal to `_root_.vonNeumannEntropy`. -/
+noncomputable alias vonNeumannEntropy := _root_.vonNeumannEntropy
 
-When `ρ` is a density matrix (PSD with trace 1), this is the standard
-quantum entropy `S(ρ) = -tr(ρ log ρ)`.
+/-- **Von Neumann entropy is nonneg for density matrices**, namespaced
+alias of `_root_.vonNeumannEntropy_nonneg`. -/
+alias vonNeumannEntropy_nonneg := _root_.vonNeumannEntropy_nonneg
 
-This is a thin wrapper around `_root_.vonNeumannEntropy`. -/
-noncomputable def vonNeumannEntropy
-    (ρ : Matrix n n ℂ) (hρ : ρ.IsHermitian) : ℝ :=
-  _root_.vonNeumannEntropy ρ hρ
-
-/-- Unfolding lemma relating the namespaced wrapper to the underlying
-definition in `TNLean.Analysis.Entropy`. -/
-@[simp] theorem vonNeumannEntropy_eq
-    (ρ : Matrix n n ℂ) (hρ : ρ.IsHermitian) :
-    vonNeumannEntropy ρ hρ = _root_.vonNeumannEntropy ρ hρ := rfl
-
-section FinD
-
-variable {D : ℕ}
-
-/-- Von Neumann entropy is nonneg for density matrices.
-
-Each eigenvalue `λᵢ` of a density matrix satisfies `0 ≤ λᵢ ≤ 1`, and
-`negMulLog` is nonneg on `[0, 1]`.
-
-Proved from Mathlib via `Real.negMulLog_nonneg`; not axiomatized. -/
-theorem vonNeumannEntropy_nonneg
-    {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ ∈ densityMatrices D) :
-    0 ≤ vonNeumannEntropy ρ hρ.1.isHermitian :=
-  _root_.vonNeumannEntropy_nonneg hρ
-
-/-- Von Neumann entropy is bounded above by `log D`.
-
-Proved via Jensen's inequality applied to the concave function
-`Real.negMulLog`; the maximum is achieved at the maximally mixed state
-`ρ = I / D`, giving `S(ρ) ≤ log D`. Not axiomatized. -/
-theorem vonNeumannEntropy_le_log_dim
-    {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ ∈ densityMatrices D)
-    (hD : 0 < D) :
-    vonNeumannEntropy ρ hρ.1.isHermitian ≤ Real.log D :=
-  _root_.vonNeumannEntropy_le_log_dim hρ hD
-
-end FinD
+/-- **Von Neumann entropy is bounded above by `log D`** on a
+`D`-dimensional system, namespaced alias of
+`_root_.vonNeumannEntropy_le_log_dim`. -/
+alias vonNeumannEntropy_le_log_dim := _root_.vonNeumannEntropy_le_log_dim
 
 end Entropy

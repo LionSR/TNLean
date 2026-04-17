@@ -11,26 +11,23 @@ The quantum mutual information of a bipartite density matrix is
 `I(A:B) = S(ρ_A) + S(ρ_B) − S(ρ_AB)`. It measures the total
 correlations (classical + quantum) between the two subsystems.
 
-This module provides the `Entropy.mutualInformation` wrapper and a
-small collection of algebraic corollaries that follow from the
-axiomatized `Entropy.strongSubadditivity`. Together with
+This module exposes the bipartite mutual information of
+`TNLean.Analysis.Entropy` under the `Entropy` namespace via a
+Mathlib-style `alias` (rather than a `noncomputable def` wrapper), and
+adds a small algebraic corollary that follows from the sanctioned
+`Entropy.strongSubadditivity` wrapper. Together with
 `Entropy.VonNeumann` and `Entropy.StrongSubadditivity`, it forms the
 bootstrap entropy surface used by the Simple MPDO RFP track
 (see issue #613, #236, #239).
 
 ## Main declarations
 
-* `Entropy.mutualInformation` — the bipartite mutual information
+* `Entropy.mutualInformation` — alias of `_root_.mutualInformation`,
+  the bipartite mutual information
   `I(A:B) = S(ρ_A) + S(ρ_B) − S(ρ_AB)`.
-* `Entropy.mutualInformation_def` — unfolding lemma expressing the
-  mutual information as marginal entropies minus the joint entropy.
 * `Entropy.mutualInformation_ssa_trivial_B_nonneg` — the nonnegativity
   of the tripartite mutual information in the trivial-middle form
   (a direct consequence of `subadditivity_ssa_trivial_B`).
-
-Downstream: the Simple MPDO RFP track uses these declarations via
-`TNLean.Entropy` to state the MPDO monotonicity of `I_L` from Prop 4.5
-of arXiv:1606.00608.
 
 ## References
 
@@ -43,47 +40,12 @@ open Matrix Finset Real
 
 namespace Entropy
 
-/-! ## Mutual information -/
+/-- **Quantum mutual information** between subsystems A and B,
+namespaced alias.
 
-section MutualInformation
-
-variable {dA dB : ℕ}
-
-/-- **Quantum mutual information** between subsystems A and B.
-
-`I(A:B) = S(ρ_A) + S(ρ_B) − S(ρ_AB)`
-
-Measures the total correlations (classical + quantum) between A and B.
-Hermiticity of the reduced states `ρ_A = traceRight ρ_AB` and
-`ρ_B = traceLeft ρ_AB` is derived from `hρ_AB` via the partial-trace
-preservation lemmas in `TNLean.Analysis.Entropy`.
-
-This is a thin wrapper around `_root_.mutualInformation`. -/
-noncomputable def mutualInformation
-    (ρ_AB : Matrix (Fin dA × Fin dB) (Fin dA × Fin dB) ℂ)
-    (hρ_AB : ρ_AB.IsHermitian) : ℝ :=
-  _root_.mutualInformation ρ_AB hρ_AB
-
-/-- Unfolding lemma relating the namespaced wrapper to the underlying
-definition in `TNLean.Analysis.Entropy`. -/
-@[simp] theorem mutualInformation_eq
-    (ρ_AB : Matrix (Fin dA × Fin dB) (Fin dA × Fin dB) ℂ)
-    (hρ_AB : ρ_AB.IsHermitian) :
-    mutualInformation ρ_AB hρ_AB = _root_.mutualInformation ρ_AB hρ_AB := rfl
-
-/-- Explicit formula for the mutual information as the sum of the
-marginal entropies minus the joint entropy. -/
-theorem mutualInformation_def
-    (ρ_AB : Matrix (Fin dA × Fin dB) (Fin dA × Fin dB) ℂ)
-    (hρ_AB : ρ_AB.IsHermitian) :
-    mutualInformation ρ_AB hρ_AB
-      = _root_.vonNeumannEntropy (Matrix.traceRight ρ_AB)
-          (Matrix.traceRight_isHermitian hρ_AB)
-        + _root_.vonNeumannEntropy (Matrix.traceLeft ρ_AB)
-            (Matrix.traceLeft_isHermitian hρ_AB)
-        - _root_.vonNeumannEntropy ρ_AB hρ_AB := rfl
-
-end MutualInformation
+`I(A:B) = S(ρ_A) + S(ρ_B) − S(ρ_AB)` measures the total correlations
+between A and B. Definitionally equal to `_root_.mutualInformation`. -/
+noncomputable alias mutualInformation := _root_.mutualInformation
 
 /-! ## Nonnegativity via subadditivity (trivial-middle form)
 
