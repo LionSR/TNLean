@@ -12,9 +12,9 @@
 <meta name="generator" content="plasTeX" />
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Concrete Examples</title>
-<link rel="next" href="sect0001.html" title="Bibliography" />
-<link rel="prev" href="ch-correlations.html" title="Exponential Decay of Correlations" />
+<title>Periodic MPS: physical symmetries and refinement</title>
+<link rel="next" href="ch-semigroup.html" title="Quantum Dynamical Semigroups" />
+<link rel="prev" href="ch-assembly.html" title="Proof of the Fundamental Theorem" />
 <link rel="up" href="index.html" title="Fundamental Theorem of Matrix Product States" />
 <link rel="stylesheet" href="styles/theme-white.css" />
 <link rel="stylesheet" href="styles/amsthm.css" />
@@ -558,10 +558,10 @@
 
   </ul>
  </li>
-<li class="">
+<li class=" active current">
   <a href="ch-periodic_ft_apps.html"><span class="toc_ref">15</span> <span class="toc_entry">Periodic MPS: physical symmetries and refinement</span></a>
-  <span class="expand-toc">▶</span>
-  <ul class="sub-toc-1">
+  <span class="expand-toc">▼</span>
+  <ul class="sub-toc-1 active">
      <li class="">
   <a href="ch-periodic_ft_apps.html#sec:periodic_symmetry"><span class="toc_ref">15.1</span> <span class="toc_entry">Physical symmetries on periodic MPS</span></a>
  </li>
@@ -821,10 +821,10 @@
 
   </ul>
  </li>
-<li class=" active current">
+<li class="">
   <a href="ch-examples.html"><span class="toc_ref">21</span> <span class="toc_entry">Concrete Examples</span></a>
-  <span class="expand-toc">▼</span>
-  <ul class="sub-toc-1 active">
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-1">
      <li class="">
   <a href="ch-examples.html#sec:ghz"><span class="toc_ref">21.1</span> <span class="toc_entry">The GHZ state</span></a>
  </li>
@@ -849,92 +849,19 @@
 
 
 <div class="main-text">
-<h1 id="ch:examples">21 Concrete Examples</h1>
+<h1 id="ch:periodic_ft_apps">15 Periodic MPS: physical symmetries and refinement</h1>
 
-<p>This chapter collects concrete MPS tensors that illustrate the general theory developed in earlier chapters. Each example is specified by its physical dimension&#160;\(d\), bond dimension&#160;\(D\), and explicit matrix family&#160;\(\{ A^i\} \). Key structural properties (injectivity, RFP status, symmetry) are stated as propositions linking back to the general definitions. </p>
-<p>References follow&#160;<span class="cite">
-</span>, Section&#160;III. </p>
-<h1 id="sec:ghz">21.1 The GHZ state</h1>
+<p>This chapter records the two applications of the periodic equal-case Fundamental Theorem of MPS (Theorem&#160;<a href="ch-assembly.html#thm:periodic_ft">14.29</a>) developed in <span class="cite">
+</span>: the symmetry corollary lifting a physical on-site symmetry of a tensor in irreducible form to a virtual \(Z\)-gauge, and the equivalence between \(p\)-refinability of the matrix-product-vector family and \(p\)-divisibility of the transfer map. </p>
+<h1 id="sec:periodic_symmetry">15.1 Physical symmetries on periodic MPS</h1>
 
-<p>The Greenberger–Horne–Zeilinger (GHZ) state is the prototypical non-injective, renormalization-fixed-point MPS. </p>
-<div class="definition_thmwrapper theorem-style-definition" id="def:ghz_tensor">
-  <div class="definition_thmheading">
-    <span class="definition_thmcaption">
-    Definition
-    </span>
-    <span class="definition_thmlabel">21.1</span>
-    <span class="definition_thmtitle">GHZ tensor</span>
-    <div class="thm_header_extras">
-
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-examples.html#def:ghz_tensor">#</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-mps.html#def:mps_tensor">Definition 2.1</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.ghzTensor" class="lean_decl">MPSTensor.ghzTensor</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="definition_thmcontent">
-  <p>   Set \(d = D = 2\). The GHZ tensor is the family \(\{ A^0, A^1\}  \subset M_{2}(\mathbb {C})\) defined by </p>
-<div class="displaymath" id="a0000036609">
-  \[  A^0 = |0\rangle \! \langle 0| = \operatorname{diag}(1,0), \qquad A^1 = |1\rangle \! \langle 1| = \operatorname{diag}(0,1).  \]
-</div>
-<p> For a system of \(N\) sites the resulting MPV is the GHZ state </p>
-<div class="displaymath" id="a0000036622">
-  \[  |\mathrm{GHZ}_N\rangle  = |0\rangle ^{\otimes N} + |1\rangle ^{\otimes N}.  \]
-</div>
-
-  </div>
-</div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:ghz_transfer_idempotent">
+<div class="theorem_thmwrapper theorem-style-plain" id="cor:cor_4_1_physical_symmetry_zgauge">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">21.2</span>
-    <span class="theorem_thmtitle">GHZ transfer map is idempotent</span>
+    <span class="theorem_thmlabel">15.1</span>
+    <span class="theorem_thmtitle">Cor.&#160;4.1 — Physical symmetry yields a virtual \(Z\)-gauge</span>
     <div class="thm_header_extras">
 
     
@@ -942,9 +869,9 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-examples.html#thm:ghz_transfer_idempotent">#</a>
+    <a class="icon proof" href="ch-periodic_ft_apps.html#cor:cor_4_1_physical_symmetry_zgauge">#</a>
     
-    <a class="icon proof" href="ch-examples.html#a0000036645"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000022689"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -960,257 +887,22 @@
         
         <ul class="uses">
           
-          <li><a href="ch-examples.html#def:ghz_tensor">Definition 21.1</a></li>
+          <li><a href="ch-assembly.html#def:irreducible_form">Definition 14.16</a></li>
           
-          <li><a href="ch-mps.html#def:transfer_map">Definition 2.5</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.ghz_transferMap_idempotent" class="lean_decl">MPSTensor.ghz_transferMap_idempotent</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="theorem_thmcontent">
-  <p>   The transfer map of the GHZ tensor satisfies \(\mathcal{E}_A^2 = \mathcal{E}_A\). </p>
-
-  </div>
-</div>
-<div class="proof_wrapper" id="a0000036645">
-  <div class="proof_heading">
-    <span class="proof_caption">
-    Proof
-    </span>
-    <span class="expand-proof">▶</span>
-  </div>
-  <div class="proof_content">
-  <p>The transfer map acts by \(\mathcal{E}_A(X)_{ij} = \delta _{ij} X_{ij}\) (extraction of the diagonal). This operation is manifestly idempotent. </p>
-
-  </div>
-</div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:ghz_is_rfp">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
-    </span>
-    <span class="theorem_thmlabel">21.3</span>
-    <span class="theorem_thmtitle">GHZ tensor is an RFP</span>
-    <div class="thm_header_extras">
-
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-examples.html#thm:ghz_is_rfp">#</a>
-    
-    <a class="icon proof" href="ch-examples.html#a0000036662"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
-</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-examples.html#def:ghz_tensor">Definition 21.1</a></li>
-          
-          <li><a href="ch-correlations.html#def:is_rfp">Definition 20.13</a></li>
-          
-          <li><a href="ch-examples.html#thm:ghz_transfer_idempotent">Theorem 21.2</a></li>
-          
-          <li><a href="ch-examples.html#thm:ghz_transfer_idempotent">Theorem 21.2</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.ghz_isRFP" class="lean_decl">MPSTensor.ghz_isRFP</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="theorem_thmcontent">
-  <p>   The GHZ tensor is a renormalization fixed point. </p>
-
-  </div>
-</div>
-<div class="proof_wrapper" id="a0000036662">
-  <div class="proof_heading">
-    <span class="proof_caption">
-    Proof
-    </span>
-    <span class="expand-proof">▶</span>
-  </div>
-  <div class="proof_content">
-  <p> Immediate from Theorem&#160;<a href="ch-examples.html#thm:ghz_transfer_idempotent">21.2</a>. </p>
-
-  </div>
-</div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:ghz_not_injective">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
-    </span>
-    <span class="theorem_thmlabel">21.4</span>
-    <span class="theorem_thmtitle">GHZ tensor is not injective</span>
-    <div class="thm_header_extras">
-
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-examples.html#thm:ghz_not_injective">#</a>
-    
-    <a class="icon proof" href="ch-examples.html#a0000036693"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
-</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-examples.html#def:ghz_tensor">Definition 21.1</a></li>
-          
-          <li><a href="ch-mps.html#def:injective">Definition 2.21</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.ghz_not_isInjective" class="lean_decl">MPSTensor.ghz_not_isInjective</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="theorem_thmcontent">
-  <p>   The GHZ tensor is not injective: \(\operatorname{span}_{\mathbb {C}}\{ A^0, A^1\} \) is the two-dimensional space of diagonal matrices in&#160;\(M_{2}(\mathbb {C})\), which does not equal&#160;\(M_{2}(\mathbb {C})\). </p>
-
-  </div>
-</div>
-<div class="proof_wrapper" id="a0000036693">
-  <div class="proof_heading">
-    <span class="proof_caption">
-    Proof
-    </span>
-    <span class="expand-proof">▶</span>
-  </div>
-  <div class="proof_content">
-  <p>Every element of \(\operatorname{span}_{\mathbb {C}}\{ A^0, A^1\} \) has zero off-diagonal entries, so the matrix with all entries equal to&#160;\(1\) is not in the span. </p>
-
-  </div>
-</div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:ghz_z2_symmetric">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
-    </span>
-    <span class="theorem_thmlabel">21.5</span>
-    <span class="theorem_thmtitle">\(\mathbb {Z}_2\) on-site symmetry of the GHZ tensor</span>
-    <div class="thm_header_extras">
-
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-examples.html#thm:ghz_z2_symmetric">#</a>
-    
-    <a class="icon proof" href="ch-examples.html#a0000036745"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
-</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-examples.html#def:ghz_tensor">Definition 21.1</a></li>
+          <li><a href="ch-assembly.html#def:z_gauge_equiv">Definition 14.27</a></li>
           
           <li><a href="ch-symmetry.html#def:on_site_symmetric">Definition 18.12</a></li>
           
+          <li><a href="ch-symmetry.html#def:twisted_tensor">Definition 18.11</a></li>
+          
+          <li><a href="ch-assembly.html#thm:periodic_ft">Theorem 14.29</a></li>
+          
+          <li><a href="ch-assembly.html#thm:periodic_ft">Theorem 14.29</a></li>
+          
+          <li><a href="ch-symmetry.html#thm:irreducible_form_rotate_physical">Theorem 18.9</a></li>
+          
+          <li><a href="ch-symmetry.html#cor:symmetry_periodic_assembly">Corollary 18.10</a></li>
+          
         </ul>
     
       </div>
@@ -1229,7 +921,9 @@
         
         <ul class="uses">
           
-          <li><a href="../docs/find/#doc/MPSTensor.ghz_isOnSiteSymmetric_Z2" class="lean_decl">MPSTensor.ghz_isOnSiteSymmetric_Z2</a></li>
+          <li><a href="../docs/find/#doc/MPSTensor.cor_4_1_physical_symmetry_zgauge" class="lean_decl">MPSTensor.cor_4_1_physical_symmetry_zgauge</a></li>
+          
+          <li><a href="../docs/find/#doc/MPSTensor.PeriodicEqualCaseFT" class="lean_decl">MPSTensor.PeriodicEqualCaseFT</a></li>
           
         </ul>
     
@@ -1240,11 +934,15 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   Let \(\mathbb {Z}_2 = \{ 1, \sigma _x\} \) act on \(\mathbb {C}^2\) by the Pauli-\(X\) matrix&#160;\(\sigma _x\). The GHZ tensor is on-site symmetric under this action: for each \(g \in \mathbb {Z}_2\), the twisted tensor \(\widetilde A_g\) defines the same MPV family as \(A\), i.e. \(\mathcal{V}(A)=\mathcal{V}(\widetilde A_g)\). </p>
+  <p>   Let \(A\) be an MPS tensor in irreducible form&#160;II and let \(U : G \to \mathrm{GL}_d(\mathbb {C})\) be a representation of a group \(G\) on the physical leg, acting unitarily (\(U(g)\,  U(g)^{\dagger } = \mathbb {1}\)). Assume moreover the periodic equal-case Fundamental Theorem of MPS (Theorem&#160;<a href="ch-assembly.html#thm:periodic_ft">14.29</a>) as an explicit hypothesis on the pair \((d, D)\) — formalised in Lean as the proposition  \(d\, D\). If \(A\) is on-site symmetric under&#160;\(U\) — that is, the twisted tensor \(\widetilde{A}_g\) has the same MPV family as&#160;\(A\) for every \(g \in G\) — then for each \(g \in G\) there exists a positive period \(m_g\) and a \(\mathbb {Z}_{m_g}\)-gauge equivalence between&#160;\(A\) and&#160;\(\widetilde{A}_g\). </p>
+<p>Concretely there are matrices \(Z_g\) and&#160;\(Y_g\), with \(Z_g^{m_g} = \mathbb {1}\) and \([A^i, Z_g] = 0\), satisfying </p>
+<div class="displaymath" id="a0000022673">
+  \[  Z_g\,  A^i = Y_g\,  \widetilde{A}_g^{\, i}\,  Y_g^{-1} \quad \text{for every physical index } i.  \]
+</div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000036745">
+<div class="proof_wrapper" id="a0000022689">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1252,404 +950,96 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>The identity element is trivial. For the generator \(g = \sigma _x\), the twisted tensor satisfies \(\widetilde A_g^i = A^{1-i}\), i.e. the two matrices are swapped. Conjugation by \(\sigma _x\) implements the same swap, giving gauge equivalence and hence the same MPV family. </p>
+  <p> The twisted tensor \(\widetilde{A}_g\) coincides with the physical-index rotation \(A_{U(g)}\) of Definition&#160;<a href="ch-symmetry.html#def:rotate_physical">18.2</a>. By Theorem&#160;<a href="ch-symmetry.html#thm:irreducible_form_rotate_physical">18.9</a> the rotated tensor remains in irreducible form&#160;II, and the on-site symmetry hypothesis supplies the equality \(\mathcal{V}(A) = \mathcal{V}(A_{U(g)})\). Apply the periodic equal-case Fundamental Theorem (Theorem&#160;<a href="ch-assembly.html#thm:periodic_ft">14.29</a>) to obtain the asserted \(\mathbb {Z}_{m_g}\)-gauge equivalence. </p>
 
   </div>
 </div>
-<h1 id="sec:aklt">21.2 The AKLT state</h1>
-
-<p>The Affleck–Kennedy–Lieb–Tasaki (AKLT) state is the canonical example of a normal (block-injective) MPS with non-trivial symmetry-protected topological (SPT) order. </p>
-<div class="definition_thmwrapper theorem-style-definition" id="def:aklt_tensor">
-  <div class="definition_thmheading">
-    <span class="definition_thmcaption">
-    Definition
-    </span>
-    <span class="definition_thmlabel">21.6</span>
-    <span class="definition_thmtitle">AKLT tensor</span>
-    <div class="thm_header_extras">
-
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-examples.html#def:aklt_tensor">#</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-mps.html#def:mps_tensor">Definition 2.1</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-        </div>
-  </div>
-  <div class="definition_thmcontent">
-  <p>  Set \(d = 3\) (spin-1) and \(D = 2\). The AKLT tensor is the family \(\{ A^0, A^1, A^2\}  \subset M_{2}(\mathbb {C})\) defined via the Pauli matrices by </p>
-<div class="displaymath" id="a0000036781">
-  \[  A^0 = \frac{1}{\sqrt{3}}\, \sigma _z, \qquad A^1 = \frac{\sqrt{2}}{\sqrt{3}}\, |0\rangle \! \langle 1|, \qquad A^2 = -\frac{\sqrt{2}}{\sqrt{3}}\, |1\rangle \! \langle 0|,  \]
-</div>
-<p> where \(\sigma _z = |0\rangle \! \langle 0| - |1\rangle \! \langle 1|\), so equivalently \(A^1 = \frac{1}{\sqrt{3}}\, \sigma _+\) and \(A^2 = -\frac{1}{\sqrt{3}}\, \sigma _-\) for \(\sigma _+ = \sqrt{2}\, |0\rangle \! \langle 1|\) and \(\sigma _- = \sqrt{2}\, |1\rangle \! \langle 0|\). Equivalently, the matrices are the Clebsch–Gordan coefficients coupling spin-\(1\) and spin-\(\tfrac 12\) to spin-\(\tfrac 12\). </p>
-
-  </div>
-</div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:aklt_not_injective">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
-    </span>
-    <span class="theorem_thmlabel">21.7</span>
-    <span class="theorem_thmtitle">AKLT tensor is not injective</span>
-    <div class="thm_header_extras">
-
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-examples.html#thm:aklt_not_injective">#</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-examples.html#def:aklt_tensor">Definition 21.6</a></li>
-          
-          <li><a href="ch-mps.html#def:injective">Definition 2.21</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.aklt_not_isInjective" class="lean_decl">MPSTensor.aklt_not_isInjective</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="theorem_thmcontent">
-  <p>   The AKLT tensor is not injective at a single site: \(\operatorname{span}_{\mathbb {C}}\{ A^0, A^1, A^2\} \) is the three-dimensional space of traceless matrices \(\mathfrak {sl}(2,\mathbb {C})\), which is a proper subspace of&#160;\(M_{2}(\mathbb {C})\). </p>
-
-  </div>
-</div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:aklt_normal">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
-    </span>
-    <span class="theorem_thmlabel">21.8</span>
-    <span class="theorem_thmtitle">AKLT tensor is normal</span>
-    <div class="thm_header_extras">
-
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-examples.html#thm:aklt_normal">#</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-examples.html#def:aklt_tensor">Definition 21.6</a></li>
-          
-          <li><a href="ch-mps.html#def:transfer_map">Definition 2.5</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.aklt_isNormal" class="lean_decl">MPSTensor.aklt_isNormal</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="theorem_thmcontent">
-  <p>   The transfer map of the AKLT tensor has a unique eigenvalue of maximal modulus (a simple spectral-radius eigenvalue); in particular the AKLT tensor is normal. Concretely, the length-\(2\) blocked tensor is injective. </p>
-
-  </div>
-</div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:aklt_so3_symmetric">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
-    </span>
-    <span class="theorem_thmlabel">21.9</span>
-    <span class="theorem_thmtitle">\(\mathrm{SO}(3)\) on-site symmetry of the AKLT tensor</span>
-    <div class="thm_header_extras">
-
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-examples.html#thm:aklt_so3_symmetric">#</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-examples.html#def:aklt_tensor">Definition 21.6</a></li>
-          
-          <li><a href="ch-symmetry.html#def:on_site_symmetric">Definition 18.12</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-        </div>
-  </div>
-  <div class="theorem_thmcontent">
-  <p>  The AKLT tensor is on-site symmetric under the spin-\(1\) representation of \(\mathrm{SO}(3)\) (the spin-\(1\) representation of \(\mathrm{SU}(2)\) factors through \(\mathrm{SO}(3)\)), with the virtual representation being the projective spin-\(\tfrac 12\) representation. The projective phase is the non-trivial element of \(H^2(\mathrm{SO}(3),\mathrm{U}(1)) \cong \mathbb {Z}_2\), witnessing a non-trivial SPT phase. The \(\mathbb {Z}_2\) subgroup symmetry is proved below; the full \(\mathrm{SO}(3)\) projective representation is deferred. </p>
-
-  </div>
-</div>
-<h1 id="sec:cluster">21.3 The cluster state</h1>
-
-<p>The cluster state is a universal resource for measurement-based quantum computation and provides another example of a non-trivial SPT phase. </p>
-<div class="definition_thmwrapper theorem-style-definition" id="def:cluster_tensor">
-  <div class="definition_thmheading">
-    <span class="definition_thmcaption">
-    Definition
-    </span>
-    <span class="definition_thmlabel">21.10</span>
-    <span class="definition_thmtitle">Cluster-state tensor</span>
-    <div class="thm_header_extras">
-
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-examples.html#def:cluster_tensor">#</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-mps.html#def:mps_tensor">Definition 2.1</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-        </div>
-  </div>
-  <div class="definition_thmcontent">
-  <p>  Set \(d = D = 2\). The cluster-state tensor is the family \(\{ A^0, A^1\}  \subset M_{2}(\mathbb {C})\) defined by </p>
-<div class="displaymath" id="a0000036924">
-  \[  A^0 = |+\rangle \! \langle 0| = \frac{1}{\sqrt{2}} \begin{pmatrix}  1 
-
-&  0 
-
-\\ 1 
-
-&  0 
-
-\end{pmatrix}, \qquad A^1 = |-\rangle \! \langle 1| = \frac{1}{\sqrt{2}} \begin{pmatrix}  0 
-
-&  1 
-
-\\ 0 
-
-&  -1 
-
-\end{pmatrix},  \]
-</div>
-<p> where \(|\pm \rangle  = \tfrac {1}{\sqrt{2}}(|0\rangle  \pm |1\rangle )\). </p>
-
-  </div>
-</div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:cluster_not_injective">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
-    </span>
-    <span class="theorem_thmlabel">21.11</span>
-    <span class="theorem_thmtitle">Cluster-state tensor is not injective</span>
-    <div class="thm_header_extras">
-
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-examples.html#thm:cluster_not_injective">#</a>
-    
-    <a class="icon proof" href="ch-examples.html#a0000037001"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
-</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-examples.html#def:cluster_tensor">Definition 21.10</a></li>
-          
-          <li><a href="ch-mps.html#def:injective">Definition 2.21</a></li>
-          
-          <li><a href="ch-examples.html#def:cluster_tensor">Definition 21.10</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-        </div>
-  </div>
-  <div class="theorem_thmcontent">
-  <p>  The cluster-state tensor is not injective: \(\operatorname{span}_{\mathbb {C}}\{ A^0, A^1\}  = \operatorname{span}_{\mathbb {C}}\{ |+\rangle \! \langle 0|, |-\rangle \! \langle 1|\} \) has dimension&#160;\(2\), not \(\dim M_{2}(\mathbb {C}) = 4\). </p>
-
-  </div>
-</div>
-<div class="proof_wrapper" id="a0000037001">
-  <div class="proof_heading">
-    <span class="proof_caption">
-    Proof
-    </span>
-    <span class="expand-proof">▶</span>
-  </div>
-  <div class="proof_content">
-  <p> Both \(A^0\) and \(A^1\) are rank-one matrices with linearly independent column spaces, so they are linearly independent. Their span is two-dimensional, which is strictly less than \(\dim M_{2}(\mathbb {C}) = 4\). </p>
-
-  </div>
-</div>
-<div class="remark_thmwrapper theorem-style-remark" id="rem:cluster_injective_blocked">
+<div class="remark_thmwrapper theorem-style-remark" id="rem:cor_4_1_projective_rep">
   <div class="remark_thmheading">
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">21.12</span>
+    <span class="remark_thmlabel">15.2</span>
+    <span class="remark_thmtitle">Projective representation upgrade</span>
     <div class="thm_header_extras">
 
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-examples.html#rem:cluster_injective_blocked">#</a>
+    <a class="icon proof" href="ch-periodic_ft_apps.html#rem:cor_4_1_projective_rep">#</a>
     
     
     
         </div>
   </div>
   <div class="remark_thmcontent">
-  <p> Although the cluster-state tensor is not injective at length&#160;\(1\), the length-\(2\) blocked tensor is injective. Using \(\langle 0 | \pm  \rangle  = \tfrac {1}{\sqrt{2}}\), \(\langle 1 | + \rangle  = \tfrac {1}{\sqrt{2}}\), and \(\langle 1 | - \rangle  = -\tfrac {1}{\sqrt{2}}\), the four products \(A^{ij} = A^i A^j\) are </p>
-<div class="displaymath" id="a0000037046">
-  \[  A^{00} = \tfrac {1}{\sqrt{2}}|+\rangle \! \langle 0|,\quad A^{01} = \tfrac {1}{\sqrt{2}}|+\rangle \! \langle 1|,\quad A^{10} = \tfrac {1}{\sqrt{2}}|-\rangle \! \langle 0|,\quad A^{11} = -\tfrac {1}{\sqrt{2}}|-\rangle \! \langle 1|.  \]
-</div>
-<p> Since \(\{ |+\rangle ,|-\rangle \} \) and \(\{ \langle 0|,\langle 1|\} \) are bases, these four rank-one matrices are linearly independent and span&#160;\(M_{2}(\mathbb {C})\). </p>
+  <p> Picking the gauges \(Y_g\) for each \(g \in G\) defines a virtual representation of \(G\) on the bond space. As in the injective case (Theorem&#160;??), composition of two twists forces a projective multiplication law \(Y_g\,  Y_h = \omega (g, h)\,  Y_{gh}\) with \(\omega : G \times G \to \mathbb {C}^{\times }\) a \(2\)-cocycle. In the periodic setting the cocycle additionally couples to the diagonal phases \(Z_g\); the precise SPT classification is left to a downstream module. </p>
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:cluster_z2z2_symmetric">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
+<h1 id="sec:periodic_refinement">15.2 Refinement and divisibility</h1>
+
+<p>The next theorem characterises when the matrix-product-vector family of a periodic tensor admits a finer description in terms of a smaller-period tensor whose blocks have been merged. This was the original motivation for the irreducible-form framework in <span class="cite">
+</span>. </p>
+<div class="definition_thmwrapper theorem-style-definition" id="def:p_divisible_channel">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
     </span>
-    <span class="theorem_thmlabel">21.13</span>
-    <span class="theorem_thmtitle">\(\mathbb {Z}_2 \times \mathbb {Z}_2\) on-site symmetry of the blocked cluster-state tensor</span>
+    <span class="definition_thmlabel">15.3</span>
+    <span class="definition_thmtitle">\(p\)-divisible CP map</span>
     <div class="thm_header_extras">
 
+    
+    ✓
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-examples.html#thm:cluster_z2z2_symmetric">#</a>
+    <a class="icon proof" href="ch-periodic_ft_apps.html#def:p_divisible_channel">#</a>
+    
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.IsPDivisibleChannel" class="lean_decl">MPSTensor.IsPDivisibleChannel</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>   A linear endomorphism \(\mathcal{E}\) of \(M_D(\mathbb {C})\) is <em>\(p\)-divisible</em> if there exists a CPTP map \(\mathcal{E}'\) of \(M_D(\mathbb {C})\) such that \(\mathcal{E} = (\mathcal{E}')^p\). </p>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:p_refinable">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">15.4</span>
+    <span class="definition_thmtitle">\(p\)-refinable MPS tensor</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-periodic_ft_apps.html#def:p_refinable">#</a>
     
     
     <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
@@ -1664,9 +1054,87 @@
         
         <ul class="uses">
           
-          <li><a href="ch-examples.html#def:cluster_tensor">Definition 21.10</a></li>
+          <li><a href="ch-mps.html#def:mps_tensor">Definition 2.1</a></li>
           
-          <li><a href="ch-symmetry.html#def:on_site_symmetric">Definition 18.12</a></li>
+          <li><a href="ch-mps.html#def:blocked_tensor">Definition 2.29</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.IsPRefinable" class="lean_decl">MPSTensor.IsPRefinable</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>    An MPS tensor \(B : \mathrm{MPSTensor}\  d\  D\) is <em>\(p\)-refinable</em> if there exist another tensor \(A : \mathrm{MPSTensor}\  d\  D\) and an isometry \(W : \mathbb {C}^d \to (\mathbb {C}^d)^{\otimes p}\) (encoded as a matrix \(W \in M_{d^p \times d}(\mathbb {C})\) with \(W^{\dagger } W = \mathbb {1}\)) such that the \(p\)-blocked tensor \(A^{[p]}\) matches the \(W\)-image of \(B\) at the level of MPV coefficients: </p>
+<div class="displaymath" id="a0000022814">
+  \[  \mathrm{coeff}\big(A^{[p]}\big)\big(\mathrm{ofFn}\, \tau \big) \; =\;  \sum _{\sigma : \mathrm{Fin}\,  N \to \mathrm{Fin}\,  d} \Big(\prod _{k} W_{\tau (k),\, \sigma (k)}\Big)\,  \mathrm{coeff}\, B\, \big(\mathrm{ofFn}\, \sigma \big)  \]
+</div>
+<p> for every \(N \in \mathbb {N}\) and every \(\tau : \mathrm{Fin}\,  N \to \mathrm{Fin}\,  d^{p}\). </p>
+<p>In paper notation, this encodes \(|V_{pN}(A)\rangle  = W^{\otimes N}\,  |V_N(B)\rangle \) for all&#160;\(N\). </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:thm_4_1_p_refinement">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">15.5</span>
+    <span class="theorem_thmtitle">Thm.&#160;4.1 — \(p\)-refinability \(\iff \) \(p\)-divisibility</span>
+    <div class="thm_header_extras">
+
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-periodic_ft_apps.html#thm:thm_4_1_p_refinement">#</a>
+    
+    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000022891"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-assembly.html#def:irreducible_form">Definition 14.16</a></li>
+          
+          <li><a href="ch-periodic_ft_apps.html#def:p_refinable">Definition 15.4</a></li>
+          
+          <li><a href="ch-periodic_ft_apps.html#def:p_divisible_channel">Definition 15.3</a></li>
+          
+          <li><a href="ch-assembly.html#thm:periodic_ft">Theorem 14.29</a></li>
+          
+          <li><a href="ch-assembly.html#thm:periodic_ft">Theorem 14.29</a></li>
           
         </ul>
     
@@ -1678,11 +1146,47 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>  The length-\(2\) blocked cluster-state tensor is on-site symmetric under \(\mathbb {Z}_2 \times \mathbb {Z}_2\). The two generators act on the \(4\)-dimensional blocked physical space \((\mathbb {C}^2)^{\otimes 2}\) by \(\sigma _x \otimes I\) and \(I \otimes \sigma _x\), which commute and each square to the identity, defining a linear representation of \(\mathbb {Z}_2 \times \mathbb {Z}_2\). The corresponding virtual matrices are \(V_1 = \sigma _z\) and \(V_2 = \sigma _x\), which anticommute (\(V_1 V_2 = -V_2 V_1\)). This projective phase is the non-trivial element of \(H^2(\mathbb {Z}_2 \times \mathbb {Z}_2, \mathrm{U}(1)) \cong \mathbb {Z}_2\), witnessing a non-trivial SPT phase. </p>
+  <p> Let \(B\) be an MPS tensor in irreducible form&#160;II and let \(p \ge 1\). Then \(B\) is \(p\)-refinable iff its transfer map \(\mathcal{E}_B\) is \(p\)-divisible. </p>
 
   </div>
 </div>
+<div class="proof_wrapper" id="a0000022891">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> The forward implication uses the periodic equal-case Fundamental Theorem (Theorem&#160;<a href="ch-assembly.html#thm:periodic_ft">14.29</a>): a \(p\)-refinement of \(B\) yields matching MPV families on every length, which the equal-case FT promotes to \(\mathcal{E}_{A^{[p]}} = \mathcal{E}_B\), and this equals \((\mathcal{E}_A)^p\) by the standard blocking-commutes-with-powers identity, exhibiting \(\mathcal{E}_B\) as the \(p\)-th power of the CPTP map \(\mathcal{E}_A\). </p>
+<p>The reverse implication uses Stinespring/Kraus uniqueness: given \(\mathcal{E}_B = (\mathcal{E}')^p\), choose any Kraus representation \(A\) of \(\mathcal{E}'\), then the \(p\)-blocked tensor \(A^{[p]}\) has the same channel as \(B\), so Wolf Theorem&#160;2.18 (unitary freedom of the Kraus representation) supplies an isometry \(W\) realising the coefficient relation that defines \(p\)-refinability. </p>
 
+  </div>
+</div>
+<div class="remark_thmwrapper theorem-style-remark" id="rem:thm_4_1_continuum_limit">
+  <div class="remark_thmheading">
+    <span class="remark_thmcaption">
+    Remark
+    </span>
+    <span class="remark_thmlabel">15.6</span>
+    <span class="remark_thmtitle">Continuum-limit application</span>
+    <div class="thm_header_extras">
+
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-periodic_ft_apps.html#rem:thm_4_1_continuum_limit">#</a>
+    
+    
+    
+        </div>
+  </div>
+  <div class="remark_thmcontent">
+  <p> The original motivation for Theorem&#160;<a href="ch-periodic_ft_apps.html#thm:thm_4_1_p_refinement">15.5</a> is a continuum-limit construction in the spirit of <span class="cite">
+</span>: refinability along arbitrarily large \(p\) is equivalent to infinite divisibility of the transfer map, which selects out continuum limits of translationally invariant MPS. The further consequences are explored elsewhere. </p>
+
+  </div>
+</div>
 
 </div> <!--main-text -->
 </div> <!-- content-wrapper -->
@@ -1694,11 +1198,11 @@
 
   <svg  id="showmore-plus" class="icon icon-eye-plus showmore"><use xlink:href="symbol-defs.svg#icon-eye-plus"></use></svg>
 
-  <a href="ch-correlations.html" title="Exponential Decay of Correlations"><svg  class="icon icon-arrow-left "><use xlink:href="symbol-defs.svg#icon-arrow-left"></use></svg>
+  <a href="ch-assembly.html" title="Proof of the Fundamental Theorem"><svg  class="icon icon-arrow-left "><use xlink:href="symbol-defs.svg#icon-arrow-left"></use></svg>
 </a>
   <a href="index.html" title="Fundamental Theorem of Matrix Product States"><svg  class="icon icon-arrow-up "><use xlink:href="symbol-defs.svg#icon-arrow-up"></use></svg>
 </a>
-  <a href="sect0001.html" title="Bibliography"><svg  class="icon icon-arrow-right "><use xlink:href="symbol-defs.svg#icon-arrow-right"></use></svg>
+  <a href="ch-semigroup.html" title="Quantum Dynamical Semigroups"><svg  class="icon icon-arrow-right "><use xlink:href="symbol-defs.svg#icon-arrow-right"></use></svg>
 </a>
 </nav>
 
