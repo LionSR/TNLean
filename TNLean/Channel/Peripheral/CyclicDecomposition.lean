@@ -165,9 +165,8 @@ private lemma exists_cornerSubmodule_matrixLinearEquiv_aux {D : ℕ}
       by_cases hp : p j
       · simp [hp, show f j = 1 from hp]
       · simp [hp, show f j = 0 from (hf01 j).resolve_right hp]
-    rw [hfsum, ← Finset.sum_filter, Finset.sum_const, nsmul_eq_mul, mul_one]
-    have : n = (Finset.univ.filter p).card := Fintype.card_subtype p
-    exact_mod_cast this
+    rw [hfsum, Finset.sum_boole]
+    exact_mod_cast Fintype.card_subtype p
   refine ⟨n, ?_, htrace⟩
   -- `P0` in the `S ⊕ T` basis is the identity-plus-zero block.
   let P0 : Matrix (S ⊕ T) (S ⊕ T) ℂ :=
