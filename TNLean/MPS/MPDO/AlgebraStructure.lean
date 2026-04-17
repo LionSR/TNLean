@@ -33,8 +33,10 @@ reference.
   inclusion maps, as a scaffolding structure.
 * `AlgebraStructureData.CompatibleWith`: placeholder compatibility predicate
   linking the structure data to an MPO tensor.
-* `IsRFP_MPDO_via_algebra`: the alternative RFP predicate built from the
-  existence of algebra-structure data compatible with the tensor.
+* `IsRFP_MPDO_via_algebra_scaffold`: the scaffolded RFP predicate built from
+  the existence of algebra-structure data compatible with the tensor, flagged
+  by the `_scaffold` suffix because the `CompatibleWith` predicate is
+  currently the trivial `True`.
 
 ## References
 
@@ -117,8 +119,8 @@ def CompatibleWith (_data : AlgebraStructureData d D) (_M : MPOTensor d D) :
 
 end AlgebraStructureData
 
-/-- **Algebra-structure formulation of the MPDO renormalization fixed
-point.**
+/-- **Scaffolded algebra-structure formulation of the MPDO renormalization
+fixed point.**
 
 In the paper, an MPDO `M` is a renormalization fixed point whenever its
 operators `O_L(M_α)` span an algebra with positive structure coefficients
@@ -127,11 +129,20 @@ scaffolded version records the existence of algebra-structure data
 compatible with `M` through the named placeholder
 `AlgebraStructureData.CompatibleWith`.
 
+The name carries a `_scaffold` suffix because
+`AlgebraStructureData.CompatibleWith` is currently `True` and
+`AlgebraStructureData d D` is inhabited (e.g. by the zero multiplication,
+zero inclusion, and `coherence := True`). Consequently this predicate is
+**trivially provable for every `M`** and must not be used as a hypothesis or
+conclusion of any nontrivial result until the compatibility condition is
+tightened.
+
 -- TODO (#612): replace `AlgebraStructureData.CompatibleWith` with the
 concrete compatibility condition between `M` and the data, following
 Theorem IV.13 (ii): the structure coefficients `c_{αβγ}^{(L)}` of the algebra
-associated to `data` must match the BNT decomposition of `M`. -/
-def IsRFP_MPDO_via_algebra (M : MPOTensor d D) : Prop :=
+associated to `data` must match the BNT decomposition of `M`, and drop the
+`_scaffold` suffix once the predicate is no longer vacuous. -/
+def IsRFP_MPDO_via_algebra_scaffold (M : MPOTensor d D) : Prop :=
   ∃ data : AlgebraStructureData d D, data.CompatibleWith M
 
 end MPOTensor
