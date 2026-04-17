@@ -6,7 +6,7 @@ import TNLean.MPS.ParentHamiltonian.Defs
 import TNLean.MPS.Periodic.Defs
 import TNLean.MPS.RFP.Defs
 import TNLean.MPS.RFP.StructuralForm
-import TNLean.Axioms.BeigiShorWhalen
+import TNLean.Axioms.Beigi
 
 /-!
 # Commuting parent Hamiltonians
@@ -33,8 +33,9 @@ parent Hamiltonians (NNCPH).
 ## References
 
 * arXiv:1606.00608, §3.3 Definition 3.9, Theorem 3.10
-* [Beigi–Shor–Whalen, CMP 2012] — ground-space characterization for
-  commuting nearest-neighbor Hamiltonians in 1D
+* S. Beigi, *J. Phys. A: Math. Theor.* **45** (2012) 025306 —
+  ground-space characterization for commuting nearest-neighbor
+  Hamiltonians in 1D (consumed only in the `NNCPH ⟹ RFP` direction)
 -/
 
 open scoped Matrix BigOperators
@@ -81,30 +82,28 @@ theorem IsCommutingParentHam.ham_comm_localTerm {A : MPSTensor d D} {L N : ℕ}
   exact _h j i
 
 /-- **Theorem 3.10(i)⟹(iii)** (arXiv:1606.00608): RFP implies NNCPH.
-A renormalization fixed-point tensor in left-canonical form has a nearest-neighbor
-commuting parent Hamiltonian.
+A renormalization fixed-point tensor in left-canonical form has a
+nearest-neighbor commuting parent Hamiltonian.
 
-The proof uses the structural form (Lemma B.1): RFP tensors generate
-product-of-entangled-pair states, whose parent Hamiltonians have commuting
-local terms.
-
-Gated on: the full Appendix B structural decomposition (cf. `rfp_nt_structural`). -/
+Per arXiv:1606.00608 §3.3 (source line 1307), this direction is
+*"trivial from Theorem [charact-MPS]"*; it is therefore **not** gated
+on S. Beigi (2012). It is gated only on the product-of-entangled-pairs
+structural form (Appendix B), recorded here as
+`Axioms.rfp_to_nncph_commute`. -/
 theorem rfp_implies_nncph (A : MPSTensor d D) [NeZero D]
     (hRFP : IsRFP A) (hNT : IsNormal A)
     (hLeft : IsLeftCanonical A)
     (N : ℕ) (hN : 2 ≤ N) :
     IsNNCPH A N := by
   classical
-  -- Use the Beigi–Shor–Whalen characterization (CMP 2012): for normal,
-  -- left-canonical tensors, RFP is equivalent to NNCPH on every sufficiently
-  -- long chain.
   unfold IsNNCPH IsCommutingParentHam
   intro i j
-  exact (Axioms.beigi_shor_whalen A hNT hLeft).1 hRFP N hN i j
+  exact Axioms.rfp_to_nncph_commute A hNT hLeft hRFP N hN i j
 
 /-- **Theorem 3.10(iii)⟹(i)** (arXiv:1606.00608): NNCPH implies RFP.
-Gated on [Beigi–Shor–Whalen, CMP 2012] — ground-space characterization
-for commuting nearest-neighbor Hamiltonians in 1D.
+Gated on S. Beigi, *J. Phys. A: Math. Theor.* **45** (2012) 025306 —
+the ground-space characterization of commuting nearest-neighbor 1D
+Hamiltonians with finite degeneracy (`Axioms.beigi_nncph_to_rfp`).
 
 Note: with the present Lean definition, `IsRFP` is a normalization-sensitive
 idempotence equation for `transferMap A`, whereas `IsNNCPH` is invariant under
@@ -116,13 +115,8 @@ theorem nncph_implies_rfp (A : MPSTensor d D) [NeZero D]
     (hNT : IsNormal A)
     (hLeft : IsLeftCanonical A) :
     IsRFP A := by
-  -- Use the Beigi–Shor–Whalen characterization (CMP 2012): for normal,
-  -- left-canonical tensors, pairwise commutativity of the two-site `localTerm`
-  -- projectors on every long enough periodic chain implies transfer-map
-  -- idempotence.
-  refine (Axioms.beigi_shor_whalen A hNT hLeft).2 ?_
+  refine Axioms.beigi_nncph_to_rfp A hNT hLeft ?_
   intro N hN i j
-  have : IsNNCPH A N := hNNCPH N hN
-  exact this i j
+  exact hNNCPH N hN i j
 
 end MPSTensor

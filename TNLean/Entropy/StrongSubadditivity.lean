@@ -2,34 +2,39 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
+import TNLean.Axioms.Entropy
 import TNLean.Entropy.VonNeumann
 
 /-!
-# Strong subadditivity (axiom + basic corollaries)
+# Strong subadditivity (namespaced wrapper + basic corollaries)
 
-This module records **strong subadditivity** (SSA) of the von Neumann
-entropy as an axiom, following the roadmap of issue #613 for the
-Simple MPDO RFP bootstrap (issue #236, umbrella #239).
+This module exposes **strong subadditivity** (SSA) of the von Neumann
+entropy inside the `Entropy` namespace, following the roadmap of
+issue #613 for the Simple MPDO RFP bootstrap (issue #236, umbrella
+#239).
 
 SSA is the statement that for any tripartite density matrix
 `ρ_ABC` on `A ⊗ B ⊗ C`,
 `S(ρ_ABC) + S(ρ_B) ≤ S(ρ_AB) + S(ρ_BC)`.
 This is a deep theorem of Lieb–Ruskai (1973). Its full Lean proof is
-deferred; we accept it as `axiom Entropy.strongSubadditivity` so that
-downstream entropy results can proceed, and we record the proof plan in
-the TODO below.
+deferred to the sanctioned axiom `_root_.strong_subadditivity` in
+`TNLean.Axioms.Entropy`; the theorem `Entropy.strongSubadditivity`
+provided here is a thin *theorem* wrapper around that single
+axiom, so that the sanctioned axiom inventory under
+`TNLean/Axioms/` remains authoritative and no duplicate
+axiomatization of SSA is introduced.
 
 ## Main declarations
 
-* `Entropy.strongSubadditivity` — **axiom**. The Lieb–Ruskai
-  inequality on tripartite density matrices in the right-associated
-  product form `Fin dA × Fin dB × Fin dC`.
+* `Entropy.strongSubadditivity` — **theorem** (not a new axiom).
+  Forwards to `_root_.strong_subadditivity` from
+  `TNLean/Axioms/Entropy.lean`.
 * `Entropy.vonNeumannEntropy_eq_zero_of_fin_one` — a 1×1 density
   matrix (PSD with trace 1) has vanishing entropy; proved from
   Mathlib via `Real.negMulLog_one`.
 * `Entropy.strongSubadditivity_rearranged` — the algebraic
   rearrangement `S(ρ_ABC) − S(ρ_AB) ≤ S(ρ_BC) − S(ρ_B)` (the
-  conditional-entropy form), proved from the axiom alone.
+  conditional-entropy form), proved from SSA alone.
 * `Entropy.subadditivity_ssa_trivial_B` — subadditivity
   `S(ρ_ABC) ≤ S(ρ_AB) + S(ρ_BC)` in the tripartite form with
   trivial middle subsystem (`dB = 1`). The middle factor contributes
@@ -41,8 +46,8 @@ the TODO below.
 
 ## TODO
 
-Replace `Entropy.strongSubadditivity` with a proof along the classical
-route:
+Replace the sanctioned axiom `_root_.strong_subadditivity` (in
+`TNLean/Axioms/Entropy.lean`) with a proof along the classical route:
 1. Define quantum relative entropy `D(ρ‖σ) = tr(ρ(log ρ − log σ))`.
 2. Establish Klein's inequality: `D(ρ‖σ) ≥ 0` for density matrices.
 3. Lieb's joint concavity of `(A, B) ↦ tr(Kᴴ Aᵗ K B^{1-t})`.
@@ -66,13 +71,13 @@ open Matrix Finset Real
 
 namespace Entropy
 
-/-! ## The strong subadditivity axiom -/
+/-! ## The strong subadditivity wrapper -/
 
 section StrongSubadditivity
 
 variable {dA dB dC : ℕ}
 
-/-- **Strong subadditivity** (Lieb–Ruskai 1973), axiomatized.
+/-- **Strong subadditivity** (Lieb–Ruskai 1973), namespaced wrapper.
 
 For a tripartite density matrix `ρ_ABC` on `A ⊗ B ⊗ C`:
   `S(ρ_ABC) + S(ρ_B) ≤ S(ρ_AB) + S(ρ_BC)`
@@ -81,13 +86,14 @@ where the reduced states are obtained via the tripartite partial
 traces `traceAC_ABC`, `traceC_ABC`, `traceA_ABC` (see
 `TNLean.Analysis.Entropy`).
 
-This axiom is deliberately accepted as part of the entropy bootstrap
-for the Simple MPDO RFP track (issue #236). Its proof is deferred; see
-the module-level TODO for the roadmap.
+This is a thin theorem wrapper around the sanctioned axiom
+`_root_.strong_subadditivity` (in `TNLean/Axioms/Entropy.lean`); no
+new axiom is introduced by this module. See the module-level TODO for
+the roadmap replacing the underlying axiom with a proof.
 
 References:
 * Lieb, Ruskai, JMP 14, 1938 (1973). -/
-axiom strongSubadditivity
+theorem strongSubadditivity
     (ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)
       (Fin dA × Fin dB × Fin dC) ℂ)
     (hρ_dm : ρ_ABC.PosSemidef ∧ ρ_ABC.trace = 1) :
@@ -97,7 +103,8 @@ axiom strongSubadditivity
     ≤ _root_.vonNeumannEntropy (traceC_ABC ρ_ABC)
           (traceC_ABC_isHermitian hρ_dm.1.isHermitian)
       + _root_.vonNeumannEntropy (traceA_ABC ρ_ABC)
-          (traceA_ABC_isHermitian hρ_dm.1.isHermitian)
+          (traceA_ABC_isHermitian hρ_dm.1.isHermitian) :=
+  _root_.strong_subadditivity ρ_ABC hρ_dm
 
 /-- Algebraic rearrangement of `strongSubadditivity` in the
 "conditional entropy" form: `S(ρ_ABC) − S(ρ_AB) ≤ S(ρ_BC) − S(ρ_B)`.
@@ -148,7 +155,7 @@ theorem vonNeumannEntropy_eq_zero_of_fin_one
   -- Entropy of a one-element sum reduces to `negMulLog` of the one eigenvalue.
   have h1 : Real.negMulLog (1 : ℝ) = 0 := by
     simp [Real.negMulLog]
-  show ∑ i : Fin 1, Real.negMulLog (hM.eigenvalues i) = 0
+  change ∑ i : Fin 1, Real.negMulLog (hM.eigenvalues i) = 0
   rw [Fin.sum_univ_one, h_eig, h1]
 
 end FinOneEntropy
