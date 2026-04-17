@@ -1,0 +1,145 @@
+%% =========================================================
+%% Chapter: Periodic MPS — applications of the irreducible-form
+%% Fundamental Theorem.  Mirrors §4 of arXiv:1708.00029
+%% (de las Cuevas--Schuch--Pérez-García--Cirac).
+%% =========================================================
+
+\chapter{Periodic MPS: physical symmetries and refinement}\label{ch:periodic_ft_apps}
+
+This chapter records the two applications of the periodic equal-case
+Fundamental Theorem of MPS (Theorem~\ref{thm:periodic_ft}) developed in
+\cite{DeLasCuevas2017Irreducible}: the symmetry corollary lifting a
+physical on-site symmetry of a tensor in irreducible form to a virtual
+$Z$-gauge, and the equivalence between $p$-refinability of the
+matrix-product-vector family and $p$-divisibility of the transfer map.
+
+\section{Physical symmetries on periodic MPS}\label{sec:periodic_symmetry}
+
+\begin{theorem}[Cor.~4.1 — Physical symmetry yields a virtual $Z$-gauge]%
+    \label{cor:cor_4_1_physical_symmetry_zgauge}
+    \lean{MPSTensor.cor_4_1_physical_symmetry_zgauge}
+    \leanok
+    \uses{def:irreducible_form, def:z_gauge_equiv, def:on_site_symmetric,
+          def:twisted_tensor, thm:periodic_ft}
+    Let $A$ be an MPS tensor in irreducible form~II and let
+    $U : G \to \GL_d(\C)$ be a representation of a group $G$ on the
+    physical leg, acting unitarily ($U(g)\, U(g)^{\dagger} = \Id$).
+    Assume moreover the periodic equal-case Fundamental Theorem of MPS
+    (Theorem~\ref{thm:periodic_ft}) as an explicit hypothesis on the
+    pair $(d, D)$ — formalised in Lean as the proposition
+    \lean{MPSTensor.PeriodicEqualCaseFT}\,$d\,D$.
+    If $A$ is on-site symmetric under~$U$ — that is, the twisted tensor
+    $\widetilde{A}_g$ has the same MPV family as~$A$ for every $g \in G$
+    — then for each $g \in G$ there exists a positive period $m_g$ and
+    a $\Z_{m_g}$-gauge equivalence between~$A$ and~$\widetilde{A}_g$.
+
+    Concretely there are matrices $Z_g$ and~$Y_g$, with $Z_g^{m_g} = \Id$
+    and $[A^i, Z_g] = 0$, satisfying
+    \[
+        Z_g\, A^i = Y_g\, \widetilde{A}_g^{\,i}\, Y_g^{-1}
+        \quad\text{for every physical index } i.
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:periodic_ft, thm:irreducible_form_rotate_physical,
+          cor:symmetry_periodic_assembly}
+    The twisted tensor $\widetilde{A}_g$ coincides with the physical-index
+    rotation $A_{U(g)}$ of Definition~\ref{def:rotate_physical}.
+    By Theorem~\ref{thm:irreducible_form_rotate_physical} the rotated
+    tensor remains in irreducible form~II, and the on-site symmetry
+    hypothesis supplies the equality $\mathcal{V}(A) = \mathcal{V}(A_{U(g)})$.
+    Apply the periodic equal-case Fundamental Theorem
+    (Theorem~\ref{thm:periodic_ft}) to obtain the asserted
+    $\Z_{m_g}$-gauge equivalence.
+\end{proof}
+
+\begin{remark}[Projective representation upgrade]\notready
+    \label{rem:cor_4_1_projective_rep}
+    Picking the gauges $Y_g$ for each $g \in G$ defines a virtual
+    representation of $G$ on the bond space.  As in the injective case
+    (Theorem~\ref{thm:virtual_rep_of_symmetric_injective}),
+    composition of two twists forces a projective multiplication law
+    $Y_g\, Y_h = \omega(g, h)\, Y_{gh}$ with $\omega : G \times G \to \C^{\times}$
+    a $2$-cocycle.  In the periodic setting the cocycle additionally
+    couples to the diagonal phases $Z_g$; the precise SPT classification
+    is left to a downstream module.
+\end{remark}
+
+\section{Refinement and divisibility}\label{sec:periodic_refinement}
+
+The next theorem characterises when the matrix-product-vector family of a
+periodic tensor admits a finer description in terms of a smaller-period
+tensor whose blocks have been merged.  This was the original motivation
+for the irreducible-form framework in \cite{DeLasCuevas2017Irreducible}.
+
+\begin{definition}[$p$-divisible CP map]
+    \label{def:p_divisible_channel}
+    \lean{MPSTensor.IsPDivisibleChannel}
+    \leanok
+    A linear endomorphism $\mathcal{E}$ of $M_D(\C)$ is \emph{$p$-divisible}
+    if there exists a CPTP map $\mathcal{E}'$ of $M_D(\C)$ such that
+    $\mathcal{E} = (\mathcal{E}')^p$.
+\end{definition}
+
+\begin{definition}[$p$-refinable MPS tensor]
+    \label{def:p_refinable}
+    \lean{MPSTensor.IsPRefinable}
+    \leanok
+    \uses{def:mps_tensor, def:blocked_tensor}
+    An MPS tensor $B : \mathrm{MPSTensor}\ d\ D$ is \emph{$p$-refinable}
+    if there exist another tensor $A : \mathrm{MPSTensor}\ d\ D$ and an
+    isometry $W : \C^d \to (\C^d)^{\otimes p}$ (encoded as a matrix
+    $W \in M_{d^p \times d}(\C)$ with $W^{\dagger} W = \Id$) such that the
+    $p$-blocked tensor $A^{[p]}$ matches the $W$-image of $B$ at the level
+    of MPV coefficients:
+    \[
+        \mathrm{coeff}\big(A^{[p]}\big)\big(\mathrm{ofFn}\,\tau\big)
+        \;=\;
+        \sum_{\sigma : \mathrm{Fin}\, N \to \mathrm{Fin}\, d}
+            \Big(\prod_{k} W_{\tau(k),\,\sigma(k)}\Big)\,
+            \mathrm{coeff}\,B\,\big(\mathrm{ofFn}\,\sigma\big)
+    \]
+    for every $N \in \N$ and every
+    $\tau : \mathrm{Fin}\, N \to \mathrm{Fin}\, d^{p}$.
+
+    In paper notation, this encodes
+    $\ket{V_{pN}(A)} = W^{\otimes N}\, \ket{V_N(B)}$ for all~$N$.
+\end{definition}
+
+\begin{theorem}[Thm.~4.1 — $p$-refinability $\iff$ $p$-divisibility]%
+    \label{thm:thm_4_1_p_refinement}\notready
+    \uses{def:irreducible_form, def:p_refinable, def:p_divisible_channel,
+          thm:periodic_ft}
+    Let $B$ be an MPS tensor in irreducible form~II and let $p \ge 1$.
+    Then $B$ is $p$-refinable iff its transfer map $\mathcal{E}_B$ is
+    $p$-divisible.
+\end{theorem}
+
+\begin{proof}\notready
+    \uses{thm:periodic_ft}
+    The forward implication uses the periodic equal-case Fundamental
+    Theorem (Theorem~\ref{thm:periodic_ft}): a $p$-refinement of $B$
+    yields matching MPV families on every length, which the equal-case
+    FT promotes to $\mathcal{E}_{A^{[p]}} = \mathcal{E}_B$, and this
+    equals $(\mathcal{E}_A)^p$ by the standard blocking-commutes-with-powers
+    identity, exhibiting $\mathcal{E}_B$ as the $p$-th power of the CPTP
+    map $\mathcal{E}_A$.
+
+    The reverse implication uses Stinespring/Kraus uniqueness: given
+    $\mathcal{E}_B = (\mathcal{E}')^p$, choose any Kraus representation
+    $A$ of $\mathcal{E}'$, then the $p$-blocked tensor $A^{[p]}$ has the
+    same channel as $B$, so Wolf Theorem~2.18 (unitary freedom of the
+    Kraus representation) supplies an isometry $W$ realising the
+    coefficient relation that defines $p$-refinability.
+\end{proof}
+
+\begin{remark}[Continuum-limit application]\notready
+    \label{rem:thm_4_1_continuum_limit}
+    The original motivation for Theorem~\ref{thm:thm_4_1_p_refinement}
+    is a continuum-limit construction in the spirit of
+    \cite{DeLasCuevas2017Irreducible}: refinability along arbitrarily
+    large $p$ is equivalent to infinite divisibility of the transfer
+    map, which selects out continuum limits of translationally invariant
+    MPS.  The further consequences are explored elsewhere.
+\end{remark}
