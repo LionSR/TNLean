@@ -282,6 +282,63 @@ theorem isIrreducibleMap_similarity
     by_contra hQ1
     exact not_posDef_of_conj_projection_ne_one (D := D) hQ_proj hQ1 hC hR_pd
 
+/-- The similarity transform by `C⁻¹` inverts the similarity transform by `C`:
+`similarityMap C⁻¹ (similarityMap C E) = E`. This is the key involution used to
+obtain the iff-version `isIrreducibleMap_similarity_iff` from the one-directional
+`isIrreducibleMap_similarity`. -/
+theorem similarityMap_similarityMap_inv
+    {C : Matrix (Fin D) (Fin D) ℂ} (hC : C.det ≠ 0)
+    (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) :
+    similarityMap (D := D) C⁻¹ (similarityMap (D := D) C E) = E := by
+  have hC_unit : IsUnit C.det := Ne.isUnit hC
+  have hC_mul_inv : C * C⁻¹ = 1 := Matrix.mul_nonsing_inv C hC_unit
+  have hCstar : Cᴴ.det ≠ 0 := by
+    rw [Matrix.det_conjTranspose]; exact star_ne_zero.mpr hC
+  have hCstar_inv_mul : (Cᴴ)⁻¹ * Cᴴ = 1 := Matrix.nonsing_inv_mul Cᴴ (Ne.isUnit hCstar)
+  have hC_inv_inv : C⁻¹⁻¹ = C := Matrix.nonsing_inv_nonsing_inv C hC_unit
+  have hCinv_star : (C⁻¹)ᴴ = (Cᴴ)⁻¹ := Matrix.conjTranspose_nonsing_inv C
+  have hCstar_inv_inv : ((Cᴴ)⁻¹)⁻¹ = Cᴴ :=
+    Matrix.nonsing_inv_nonsing_inv Cᴴ (Ne.isUnit hCstar)
+  apply LinearMap.ext
+  intro X
+  change (C⁻¹)⁻¹ *
+      (C⁻¹ * E (C * (C⁻¹ * X * (C⁻¹)ᴴ) * Cᴴ) * (Cᴴ)⁻¹) * ((C⁻¹)ᴴ)⁻¹ = E X
+  rw [hC_inv_inv, hCinv_star, hCstar_inv_inv]
+  have hinner : C * (C⁻¹ * X * (Cᴴ)⁻¹) * Cᴴ = X := by
+    calc
+      C * (C⁻¹ * X * (Cᴴ)⁻¹) * Cᴴ
+          = (C * C⁻¹) * X * ((Cᴴ)⁻¹ * Cᴴ) := by simp [Matrix.mul_assoc]
+      _ = X := by rw [hC_mul_inv, hCstar_inv_mul]; simp
+  rw [hinner]
+  calc
+    C * (C⁻¹ * E X * (Cᴴ)⁻¹) * Cᴴ
+        = (C * C⁻¹) * E X * ((Cᴴ)⁻¹ * Cᴴ) := by simp [Matrix.mul_assoc]
+    _ = E X := by rw [hC_mul_inv, hCstar_inv_mul]; simp
+
+/-- Irreducibility is invariant under similarity: the similarity transform
+`X ↦ C⁻¹ * E (C * X * Cᴴ) * (Cᴴ)⁻¹` is irreducible iff `E` is.
+
+This is the iff-version of `isIrreducibleMap_similarity`; it is the matrix
+analog of `IsPrimitive.conj_iff` in `TNLean/Channel/Peripheral/Conjugation.lean`.
+The reverse direction is obtained by applying `isIrreducibleMap_similarity` with
+`C⁻¹` and using `similarityMap_similarityMap_inv`.
+
+The name `isIrreducibleMap_similarity_iff` follows the `isIrreducibleMap_similarity`
+family of lemmas in this file (`isIrreducibleMap_similarity_smul`,
+`isIrreducibleMap_full_similarity`) rather than the dot-notation
+`IsIrreducibleMap.conj_iff` pattern; the latter is reserved for the abstract
+`IsPrimitive.conj_iff` in `Channel/Peripheral/Conjugation.lean`. -/
+theorem isIrreducibleMap_similarity_iff
+    {C : Matrix (Fin D) (Fin D) ℂ} (hC : C.det ≠ 0)
+    {E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ} :
+    IsIrreducibleMap (similarityMap (D := D) C E) ↔ IsIrreducibleMap E := by
+  refine ⟨fun hSim => ?_, isIrreducibleMap_similarity (D := D) hC⟩
+  have hCinv_det : (C⁻¹).det ≠ 0 := by
+    rw [Matrix.det_nonsing_inv, Ring.inverse_eq_inv']
+    exact inv_ne_zero hC
+  rw [← similarityMap_similarityMap_inv (D := D) hC E]
+  exact isIrreducibleMap_similarity (D := D) hCinv_det hSim
+
 /-- Irreducibility is preserved by a nonzero scalar multiple of a similarity transform
 (corollary of `isIrreducibleMap_similarity` and `isIrreducibleMap_smul`). -/
 theorem isIrreducibleMap_similarity_smul
