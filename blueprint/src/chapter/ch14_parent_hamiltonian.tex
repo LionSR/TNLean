@@ -619,16 +619,19 @@ interaction projectors commute with each other.
 \end{definition}
 
 \begin{theorem}[RFP implies NNCPH]\label{thm:rfp_implies_nncph}
-    \notready
+    \lean{MPSTensor.rfp_implies_nncph}
+    \leanok
     \uses{def:is_rfp, def:is_nncph, def:normal}
     If $A$ is a normal renormalization fixed point in left-canonical form,
     then for every chain length $N \ge 2$ the parent Hamiltonian with
     $L = 2$ has commuting local terms.
-    \textbf{Status:} Scaffold; requires the structural theory of
-    renormalization fixed points (Appendix~B) needed for
-    \cite[Theorem~3.10]{Cirac2021Matrix}, plus the bridge from that
-    product-of-pairs structure to commutation of the formal local parent
-    projectors.
+    \textbf{Status:} Discharged via the sanctioned axiom
+    \texttt{Axioms.rfp\_to\_nncph\_commute} of
+    \texttt{TNLean/Axioms/Beigi.lean}, which records the content of
+    Theorem~3.10 of~\cite{Cirac2021Matrix} (Appendix~B
+    product-of-entangled-pairs structural form). Per
+    \cite[\S3.3]{Cirac2021Matrix}, this direction is *trivial from
+    Theorem~3.10* and is **not** gated on Beigi~(2012).
 \end{theorem}
 
 \begin{remark}[Product-pair bridge for future NNCPH proofs]%
@@ -659,16 +662,19 @@ interaction projectors commute with each other.
 
 \begin{theorem}[NNCPH implies RFP]\label{thm:nncph_implies_rfp}
     \lean{MPSTensor.nncph_implies_rfp}
-    \notready
+    \leanok
     \uses{def:is_rfp, def:is_nncph, def:normal}
-    If $A$ is normal and its parent Hamiltonian with $L = 2$ has
-    commuting local terms for every chain length $N \ge 2$, then $A$ is
-    a renormalization fixed point (RFP).
-    \textbf{Status:} Scaffold; requires the ground-space characterisation
-    of Beigi (J.~Phys.~A 45, 025306, 2012) needed for
-    \cite[Theorem~3.10]{Cirac2021Matrix}.  In the current formal
-    normalization, the statement must also include a normalization hypothesis:
-    the commuting-parent-Hamiltonian condition is invariant under nonzero
+    If $A$ is normal, in left-canonical form, and its parent Hamiltonian
+    with $L = 2$ has commuting local terms for every chain length
+    $N \ge 2$, then $A$ is a renormalization fixed point (RFP).
+    \textbf{Status:} Discharged via the sanctioned axiom
+    \texttt{Axioms.beigi\_nncph\_to\_rfp} of
+    \texttt{TNLean/Axioms/Beigi.lean}, which records the ground-space
+    characterisation of Beigi (J.~Phys.~A 45, 025306, 2012) needed for
+    the reverse direction of~\cite[Theorem~3.10]{Cirac2021Matrix}. In the
+    current formal normalization, the statement also includes an
+    \texttt{IsLeftCanonical} hypothesis: the
+    commuting-parent-Hamiltonian condition is invariant under nonzero
     scalar rescaling, while transfer-map idempotence is not.
 \end{theorem}
 
