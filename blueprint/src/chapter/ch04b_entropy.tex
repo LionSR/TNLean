@@ -195,7 +195,7 @@ Lieb--Ruskai 1973) is tracked separately in issue~\#239.
     Definition~\ref{def:von_neumann_entropy}.
 \end{definition}
 
-\begin{theorem}[Strong subadditivity, axiomatized]\label{thm:entropy_strong_subadditivity}
+\begin{theorem}[Strong subadditivity, namespaced wrapper]\label{thm:entropy_strong_subadditivity}
     \lean{Entropy.strongSubadditivity}
     \leanok
     \uses{def:entropy_von_neumann_entropy, def:traceA_ABC, def:traceC_ABC, def:traceAC_ABC}
@@ -204,10 +204,13 @@ Lieb--Ruskai 1973) is tracked separately in issue~\#239.
     \[
         S(\rho_{ABC}) + S(\rho_B) \le S(\rho_{AB}) + S(\rho_{BC}).
     \]
-    This statement is accepted as an \emph{axiom} in the current Lean
-    development; the proof (Lieb--Ruskai 1973) is deferred to the
-    umbrella entropy issue. The \leanok tag marks the axiom itself as
-    intentionally part of the Lean development surface.
+    In the Lean development, \texttt{Entropy.strongSubadditivity} is a
+    \emph{theorem} wrapper around the single sanctioned SSA axiom
+    \texttt{strong\_subadditivity} of
+    \texttt{TNLean/Axioms/Entropy.lean}; no new axiom is introduced by
+    the \texttt{TNLean.Entropy.*} bootstrap. The underlying axiom's
+    proof (Lieb--Ruskai 1973) is deferred to the umbrella entropy
+    issue.
 \end{theorem}
 
 \begin{definition}[Mutual information, namespaced]\label{def:entropy_mutual_information}
