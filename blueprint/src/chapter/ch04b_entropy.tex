@@ -174,3 +174,66 @@ finite-dimensional quantum systems.
     reduces to subadditivity $S(\rho_{AC}) \le S(\rho_A) + S(\rho_C)$,
     which gives $I(A{:}C) \ge 0$.
 \end{proof}
+
+\section{\texorpdfstring{\texttt{TNLean.Entropy}}{TNLean.Entropy} namespace bootstrap}
+
+The \texttt{TNLean/Entropy/} directory (issue~\#613) provides a stable
+namespace surface for the Simple MPDO RFP track (issue~\#236). It
+re-exports the von Neumann entropy and mutual information under the
+\texttt{Entropy} namespace, and records strong subadditivity as an
+axiom in the same namespace so that the axiom boundary is explicit to
+downstream modules. The axiom is accepted as given; its proof (from
+Lieb--Ruskai 1973) is tracked separately in issue~\#239.
+
+\begin{definition}[Von Neumann entropy, namespaced]\label{def:entropy_von_neumann_entropy}
+    \lean{Entropy.vonNeumannEntropy}
+    \leanok
+    \uses{def:von_neumann_entropy}
+    The namespaced wrapper
+    \(\texttt{Entropy.vonNeumannEntropy}(\rho, h_\rho)\)
+    unfolds to \(S(\rho) = -\sum_i \lambda_i \log \lambda_i\) as in
+    Definition~\ref{def:von_neumann_entropy}.
+\end{definition}
+
+\begin{theorem}[Strong subadditivity, namespaced wrapper]\label{thm:entropy_strong_subadditivity}
+    \lean{Entropy.strongSubadditivity}
+    \leanok
+    \uses{def:entropy_von_neumann_entropy, def:traceA_ABC, def:traceC_ABC, def:traceAC_ABC}
+    For any tripartite density matrix $\rho_{ABC}$ on
+    $A \otimes B \otimes C$,
+    \[
+        S(\rho_{ABC}) + S(\rho_B) \le S(\rho_{AB}) + S(\rho_{BC}).
+    \]
+    In the Lean development, \texttt{Entropy.strongSubadditivity} is a
+    \emph{theorem} wrapper around the single sanctioned SSA axiom
+    \texttt{strong\_subadditivity} of
+    \texttt{TNLean/Axioms/Entropy.lean}; no new axiom is introduced by
+    the \texttt{TNLean.Entropy.*} bootstrap. The underlying axiom's
+    proof (Lieb--Ruskai 1973) is deferred to the umbrella entropy
+    issue.
+\end{theorem}
+
+\begin{definition}[Mutual information, namespaced]\label{def:entropy_mutual_information}
+    \lean{Entropy.mutualInformation}
+    \leanok
+    \uses{def:entropy_von_neumann_entropy}
+    The namespaced wrapper
+    \(\texttt{Entropy.mutualInformation}(\rho_{AB}, h_{\rho_{AB}})\)
+    unfolds to
+    \(I(A{:}B) = S(\rho_A) + S(\rho_B) - S(\rho_{AB})\)
+    as in Definition~\ref{def:mutual_information}.
+\end{definition}
+
+\begin{theorem}[Subadditivity from trivial-middle SSA]\label{thm:entropy_subadditivity_trivial_B}
+    \notready
+    \uses{thm:entropy_strong_subadditivity}
+    For a tripartite density matrix $\rho_{ABC}$ with
+    $\dim B = 1$,
+    \[
+        S(\rho_{ABC}) \le S(\rho_{AB}) + S(\rho_{BC}).
+    \]
+    This follows from SSA because the $1$-dimensional middle subsystem
+    contributes zero entropy. The statement carries an implicit
+    dependence on the axiom of Theorem~\ref{thm:entropy_strong_subadditivity}
+    and is therefore not marked \leanok.
+\end{theorem}

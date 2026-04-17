@@ -486,3 +486,79 @@ legs cyclically and taking the resulting trace.
     Flattening those positive diagonal coefficients produces the required
     vertical canonical-form decomposition.
 \end{proof}
+
+\section{\S4.5 Fusion isometries}
+
+Following \cite[\S4.5]{Cirac2017MPDO_AnnPhys}, Theorem~IV.13 characterises
+renormalization-fixed-point MPDOs through two equivalent structures: a family
+of fusion isometries splitting the support algebra at every blocking size, and
+a tower of support algebras equipped with compatible blocking and inclusion
+maps. The next two sections record these structures and their compatibility
+predicates with an MPO tensor.
+
+\begin{definition}[Fusion isometry at blocked size]%
+    \label{def:mpdo_fusion_isometry}
+    \lean{MPOTensor.FusionIsometry}
+    \leanok
+    \uses{def:mpo_tensor}
+    A \emph{fusion isometry at blocked size $n$} for an MPO tensor consists
+    of a pair of linear maps $(T_n, S_n)$ between the physical space at $n$
+    blocked sites and the support algebra at that size, a predicate
+    $\operatorname{supp}$ cutting out the image subspace of the algebra, and
+    two compatibility conditions: $S_n \circ T_n$ is idempotent on the
+    physical space, and $T_n \circ S_n$ acts as the identity on every element
+    satisfying $\operatorname{supp}$.
+\end{definition}
+
+\begin{definition}[Fusion-isometry RFP predicate (scaffold)]%
+    \label{def:mpdo_rfp_via_fusion}
+    \lean{MPOTensor.IsRFP_MPDO_via_fusion_scaffold}
+    \uses{def:mpdo_fusion_isometry, def:mpo_tensor}
+    An MPO tensor $M$ satisfies the \emph{fusion-isometry formulation} of
+    the renormalization fixed-point condition when, for every blocked size
+    $n$, there exists a fusion isometry at size $n$ compatible with $M$.
+    The current Lean scaffold
+    (\texttt{MPOTensor.IsRFP\_MPDO\_via\_fusion\_scaffold}) uses a
+    placeholder compatibility predicate
+    \texttt{FusionIsometry.CompatibleWith} that is presently \texttt{True},
+    so the scaffold predicate is vacuously provable. The \texttt{\_scaffold}
+    suffix flags this: the genuine predicate will be introduced once the
+    compatibility condition of~\cite[\S4.5]{Cirac2017MPDO_AnnPhys} is
+    tightened, at which point the \texttt{\_scaffold} suffix will be
+    dropped and \texttt{\textbackslash leanok} restored here.
+\end{definition}
+
+\section{\S4.5 Algebra structure}
+
+\begin{definition}[Algebra-structure data for an MPDO]%
+    \label{def:mpdo_algebra_structure_data}
+    \lean{MPOTensor.AlgebraStructureData}
+    \leanok
+    \uses{def:mpo_tensor}
+    A family of support algebras $\{\mathcal{A}_n\}_{n \ge 0}$, one at every
+    blocking size, equipped with blocking maps
+    $m_n : \mathcal{A}_n \otimes \mathcal{A}_n \to \mathcal{A}_{2n}$ arising
+    from horizontal concatenation of blocks and unital inclusion maps
+    $\iota_n : \mathcal{A}_n \to \mathcal{A}_{n+1}$ arising from appending a
+    single site, together with a coherence condition relating $m_n$ and
+    $\iota_n$.
+\end{definition}
+
+\begin{definition}[Algebra-structure RFP predicate (scaffold)]%
+    \label{def:mpdo_rfp_via_algebra}
+    \lean{MPOTensor.IsRFP_MPDO_via_algebra_scaffold}
+    \uses{def:mpdo_algebra_structure_data, def:mpo_tensor}
+    An MPO tensor $M$ satisfies the \emph{algebra-structure formulation} of
+    the renormalization fixed-point condition when there exist
+    algebra-structure data compatible with $M$, in the sense of
+    \cite[Theorem~IV.13~(ii)]{Cirac2017MPDO_AnnPhys}. The current Lean
+    scaffold (\texttt{MPOTensor.IsRFP\_MPDO\_via\_algebra\_scaffold}) uses
+    a placeholder compatibility predicate
+    \texttt{AlgebraStructureData.CompatibleWith} that is presently
+    \texttt{True}, so the scaffold predicate is vacuously provable. The
+    \texttt{\_scaffold} suffix flags this: the genuine predicate will be
+    introduced once the compatibility condition of
+    \cite[Theorem~IV.13~(ii)]{Cirac2017MPDO_AnnPhys} is tightened, at which
+    point the \texttt{\_scaffold} suffix will be dropped and
+    \texttt{\textbackslash leanok} restored here.
+\end{definition}

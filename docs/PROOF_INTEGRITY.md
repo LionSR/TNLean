@@ -34,6 +34,20 @@ These patterns **must** be resolved before merging.
 |---------|------|
 | `axiom` declarations | Introduces unproven assumptions that could be inconsistent; must be explicitly justified |
 
+#### Sanctioned axioms
+
+The following axioms are explicitly sanctioned in this repository. Each is
+isolated in a dedicated module under `TNLean/Axioms/` with a citation to its
+primary source and a formalization TODO. New axioms outside this list are
+treated as blockers.
+
+| Axiom | Module | Citation |
+|-------|--------|----------|
+| `strong_subadditivity` | `TNLean/Axioms/Entropy.lean` | Lieb–Ruskai, JMP 14, 1938 (1973). The namespaced `Entropy.strongSubadditivity` in `TNLean/Entropy/StrongSubadditivity.lean` is a *theorem* wrapper around this axiom; there is only one SSA axiom in the library. |
+| `Axioms.rfp_to_nncph_commute` | `TNLean/Axioms/Beigi.lean` | arXiv:1606.00608 §3.3 Theorem 3.10 (product-of-entangled-pairs structural form from Appendix B — *not* gated on Beigi 2012); consumed by `MPSTensor.rfp_implies_nncph` in `TNLean/MPS/ParentHamiltonian/Commuting.lean`. |
+| `Axioms.beigi_nncph_to_rfp` | `TNLean/Axioms/Beigi.lean` | S. Beigi, *J. Phys. A: Math. Theor.* **45** (2012) 025306 — ground-space characterization of 1D commuting nearest-neighbor Hamiltonians with finite degeneracy; consumed by `MPSTensor.nncph_implies_rfp` in `TNLean/MPS/ParentHamiltonian/Commuting.lean` (arXiv:1606.00608 §3.3 Thm 3.10, reverse direction only). |
+| Operator-convexity axioms | `TNLean/Axioms/OperatorConvexity.lean` | Pending upstream Mathlib |
+
 ### Circular reasoning
 
 Lean's kernel forbids literal declaration cycles, so focus on **mathematical

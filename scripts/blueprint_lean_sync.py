@@ -34,7 +34,7 @@ from pathlib import Path
 _LEAN_DECL_RE = re.compile(
     r"^\s*(?:@\[.*?\]\s*)?"
     r"(?:(?:noncomputable|protected|private)\s+)*"
-    r"(def|theorem|lemma|abbrev|instance|class|structure|inductive|axiom|opaque)\s+"
+    r"(def|theorem|lemma|abbrev|instance|class|structure|inductive|axiom|opaque|alias)\s+"
     r"([\w.'+]+)",
     re.MULTILINE,
 )
