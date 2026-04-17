@@ -489,29 +489,25 @@ legs cyclically and taking the resulting trace.
 
 \section{\S4.5 Fusion isometries}
 
-The next two sections scaffold the fusion-isometry and algebra-structure sides of
-Theorem IV.13 of \cite{Cirac2017MPDO_AnnPhys}. In the current repository each
-side is a placeholder: the supporting algebra infrastructure has not yet been
-built, so the fields of the underlying structures are stated in their most
-elementary forms and the headline equivalences are conditioned on a trivial
-compatibility hypothesis. The purpose of this stub section is to register the
-mathematical targets of the general MPDO renormalization fixed-point theory and
-to link them to their Lean counterparts.
+Following \cite[\S4.5]{Cirac2017MPDO_AnnPhys}, Theorem~IV.13 characterises
+renormalization-fixed-point MPDOs through two equivalent structures: a family
+of fusion isometries splitting the support algebra at every blocking size, and
+a tower of support algebras equipped with compatible blocking and inclusion
+maps. The next two sections record these structures and their compatibility
+predicates with an MPO tensor.
 
 \begin{definition}[Fusion isometry at blocked size]%
     \label{def:mpdo_fusion_isometry}
     \lean{MPOTensor.FusionIsometry}
     \leanok
     \uses{def:mpo_tensor}
-    A \emph{fusion isometry at blocked size $n$} for an MPO tensor is a pair of
-    linear maps $(T_n, S_n)$ between the physical space at $n$ blocked sites
-    and the support algebra of the tensor at that size, together with the
-    compatibility conditions that $S_n \circ T_n$ is idempotent on the physical
-    space and that $T_n \circ S_n$ restricts to the identity on the support of
-    the algebra.
-    In the scaffold, the support algebra is represented by matrices on the
-    virtual space and the support predicate is a placeholder; both will be
-    tightened once the honest support-algebra infrastructure is available.
+    A \emph{fusion isometry at blocked size $n$} for an MPO tensor consists
+    of a pair of linear maps $(T_n, S_n)$ between the physical space at $n$
+    blocked sites and the support algebra at that size, a predicate
+    $\operatorname{supp}$ cutting out the image subspace of the algebra, and
+    two compatibility conditions: $S_n \circ T_n$ is idempotent on the
+    physical space, and $T_n \circ S_n$ acts as the identity on every element
+    satisfying $\operatorname{supp}$.
 \end{definition}
 
 \begin{definition}[Fusion-isometry RFP predicate]%
@@ -519,24 +515,10 @@ to link them to their Lean counterparts.
     \lean{MPOTensor.IsRFP_MPDO_via_fusion}
     \leanok
     \uses{def:mpdo_fusion_isometry, def:mpo_tensor}
-    An MPO tensor satisfies the \emph{fusion-isometry formulation} of the
-    renormalization fixed-point condition when there exists a fusion isometry
-    at every blocked size $n$. In the paper's formulation this corresponds to
-    the existence of a compatible tower of fusion maps at every level.
+    An MPO tensor $M$ satisfies the \emph{fusion-isometry formulation} of
+    the renormalization fixed-point condition when, for every blocked size
+    $n$, there exists a fusion isometry at size $n$ compatible with $M$.
 \end{definition}
-
-\begin{theorem}[Fusion-isometry RFP matches the transfer-map RFP]%
-    \label{thm:mpdo_rfp_fusion_iff_transfer}
-    \lean{MPOTensor.isRFP_MPDO_via_fusion_iff_RFP_MPDO}
-    \notready
-    \uses{def:mpdo_rfp_via_fusion, def:mpo_tensor}
-    The fusion-isometry formulation of the MPDO renormalization fixed point
-    agrees with the provisional transfer-map formulation already present in
-    the repository. The Lean statement is currently phrased under a placeholder
-    compatibility hypothesis that will be discharged in a follow-up once the
-    support-algebra infrastructure and the Appendix~C.3 construction of
-    \cite{Cirac2017MPDO_AnnPhys} are available.
-\end{theorem}
 
 \section{\S4.5 Algebra structure}
 
@@ -550,11 +532,8 @@ to link them to their Lean counterparts.
     $m_n : \mathcal{A}_n \otimes \mathcal{A}_n \to \mathcal{A}_{2n}$ arising
     from horizontal concatenation of blocks and unital inclusion maps
     $\iota_n : \mathcal{A}_n \to \mathcal{A}_{n+1}$ arising from appending a
-    single site.
-    The blueprint scaffold also carries a placeholder coherence condition; its
-    full content (associativity of blocking, compatibility with the inclusions,
-    positivity of the structure coefficients, and the idempotence relation on
-    the block multiplicities) will be supplied in a follow-up PR.
+    single site, together with a coherence condition relating $m_n$ and
+    $\iota_n$.
 \end{definition}
 
 \begin{definition}[Algebra-structure RFP predicate]%
@@ -562,25 +541,8 @@ to link them to their Lean counterparts.
     \lean{MPOTensor.IsRFP_MPDO_via_algebra}
     \leanok
     \uses{def:mpdo_algebra_structure_data, def:mpo_tensor}
-    An MPO tensor satisfies the \emph{algebra-structure formulation} of the
-    renormalization fixed-point condition when it admits algebra-structure
-    data whose coefficients realise the operator algebra closure condition of
-    \cite[Theorem IV.13, (ii)]{Cirac2017MPDO_AnnPhys}. The scaffold records
-    existence of such data; the precise compatibility with the tensor is
-    deferred.
+    An MPO tensor $M$ satisfies the \emph{algebra-structure formulation} of
+    the renormalization fixed-point condition when there exist
+    algebra-structure data compatible with $M$, in the sense of
+    \cite[Theorem~IV.13~(ii)]{Cirac2017MPDO_AnnPhys}.
 \end{definition}
-
-\begin{theorem}[Fusion-isometry RFP is equivalent to algebra-structure RFP]%
-    \label{thm:mpdo_rfp_fusion_iff_algebra}
-    \lean{MPOTensor.rfp_mpdo_fusion_iff_algebra}
-    \notready
-    \uses{def:mpdo_rfp_via_fusion, def:mpdo_rfp_via_algebra}
-    For an MPDO tensor in horizontal canonical form, the fusion-isometry
-    formulation and the algebra-structure formulation of the renormalization
-    fixed-point condition coincide. This is the headline statement of Theorem
-    IV.13 in \cite{Cirac2017MPDO_AnnPhys}. The Lean statement is currently
-    phrased under a trivializing compatibility hypothesis that will be
-    discharged once the C*-algebra machinery, vertical canonical form, block
-    injectivity, and Newton--Girard identities are assembled into the proof
-    from Appendix~C.3.
-\end{theorem}
