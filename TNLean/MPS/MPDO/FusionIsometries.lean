@@ -27,9 +27,12 @@ the scaffolding level:
 * the idempotence and compatibility conditions in `FusionIsometry` are stated
   as general linear-algebraic hypotheses so they compile today and can be
   specialised once the support-algebra API lands;
-* `IsRFP_MPDO_via_fusion` records the existence, at every blocking level, of a
-  fusion isometry compatible with the tensor `M` via the named placeholder
-  predicate `FusionIsometry.CompatibleWith`.
+* `IsRFP_MPDO_via_fusion_scaffold` records the existence, at every blocking
+  level, of a fusion isometry compatible with the tensor `M` via the named
+  placeholder predicate `FusionIsometry.CompatibleWith`. Because the
+  compatibility predicate is currently `True`, this scaffold predicate is
+  trivially provable for every `M`; the `_scaffold` suffix flags this so the
+  predicate is not mistaken for the genuine RFP characterisation.
 
 ## Main declarations
 
@@ -37,8 +40,10 @@ the scaffolding level:
   fixed blocking size with its idempotence / compatibility conditions.
 * `FusionIsometry.CompatibleWith`: placeholder compatibility predicate that
   names the condition linking a fusion isometry to the underlying MPO tensor.
-* `IsRFP_MPDO_via_fusion`: the alternative RFP predicate built from a family
-  of fusion isometries compatible with the tensor.
+* `IsRFP_MPDO_via_fusion_scaffold`: the scaffolded RFP predicate built from a
+  family of fusion isometries compatible with the tensor, flagged by the
+  `_scaffold` suffix because the `CompatibleWith` predicate is currently the
+  trivial `True`.
 
 ## References
 
@@ -122,7 +127,8 @@ def CompatibleWith (_F : FusionIsometry d D n) (_M : MPOTensor d D) : Prop :=
 
 end FusionIsometry
 
-/-- **Fusion-isometry formulation of the MPDO renormalization fixed point.**
+/-- **Scaffolded fusion-isometry formulation of the MPDO renormalization
+fixed point.**
 
 In the paper (arXiv:1606.00608 §4.5) an MPDO tensor `M` is declared to be a
 renormalization fixed point whenever the operators it generates at every
@@ -131,11 +137,18 @@ compatible with `M`. The following definition records the existence of such
 a family through the named placeholder `FusionIsometry.CompatibleWith`, at
 the level of detail supported by the current scaffolding.
 
+The name carries a `_scaffold` suffix because
+`FusionIsometry.CompatibleWith` is currently `True`: consequently this
+predicate is **trivially provable for every `M`** and must not be used as a
+hypothesis or conclusion of any nontrivial result until the compatibility
+condition is tightened.
+
 -- TODO (#611): tighten `FusionIsometry.CompatibleWith` to the exact
-compatibility condition between `M` and its fusion isometries, and add the
+compatibility condition between `M` and its fusion isometries, add the
 inter-level compatibility asking the level-`n+1` isometry to factor through
-the level-`n` one. -/
-def IsRFP_MPDO_via_fusion (M : MPOTensor d D) : Prop :=
+the level-`n` one, and drop the `_scaffold` suffix once the predicate is no
+longer vacuous. -/
+def IsRFP_MPDO_via_fusion_scaffold (M : MPOTensor d D) : Prop :=
   ∀ n : ℕ, ∃ F : FusionIsometry d D n, F.CompatibleWith M
 
 end MPOTensor
