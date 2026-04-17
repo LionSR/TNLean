@@ -372,56 +372,35 @@ private lemma exists_cornerSubmodule_matrixLinearEquiv_aux {D : ℕ}
       Umat * (Umatᴴ * X.1 * Umat) * Umatᴴ
           = (Umat * Umatᴴ) * X.1 * (Umat * Umatᴴ) := by simp [Matrix.mul_assoc]
       _ = X.1 := by rw [hUU]; simp
+  -- Structured linear-map version of `toFun` via composition of Mathlib linear
+  -- maps: `reindexLinearEquiv`, top-left embedding `fromBlocks · 0 0 0`, then
+  -- `reindexLinearEquiv`, then conjugation `X ↦ Umat * X * Umatᴴ`.  This lets
+  -- `map_add'` / `map_smul'` for the `LinearEquiv` reduce to its built-in
+  -- `LinearMap.map_add` / `LinearMap.map_smul`.
+  let fromBlocksTL : Matrix S S ℂ →ₗ[ℂ] Matrix (S ⊕ T) (S ⊕ T) ℂ :=
+    { toFun := fun M => Matrix.fromBlocks M 0 0 0
+      map_add' := fun A B => by
+        ext i j; cases i <;> cases j <;>
+          simp [Matrix.fromBlocks, Matrix.add_apply]
+      map_smul' := fun c A => by
+        ext i j; cases i <;> cases j <;>
+          simp [Matrix.fromBlocks, Matrix.smul_apply] }
+  let conjUnitary : MatrixAlg D →ₗ[ℂ] MatrixAlg D :=
+    { toFun := fun X => Umat * X * Umatᴴ
+      map_add' := fun X Y => by rw [Matrix.mul_add, Matrix.add_mul]
+      map_smul' := fun c X => by simp }
+  let toFunLM : Matrix (Fin n) (Fin n) ℂ →ₗ[ℂ] MatrixAlg D :=
+    conjUnitary ∘ₗ (Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm).toLinearMap
+      ∘ₗ fromBlocksTL
+        ∘ₗ (Matrix.reindexLinearEquiv ℂ ℂ eS.symm eS.symm).toLinearMap
   -- Package as `LinearEquiv`.
   refine
     { toFun := fun M => ⟨toFun M, hFwdMem M⟩,
-      map_add' := ?_
-      map_smul' := ?_
+      map_add' := fun M₁ M₂ => Subtype.ext (toFunLM.map_add M₁ M₂)
+      map_smul' := fun c M => Subtype.ext (toFunLM.map_smul c M)
       invFun := fun X => invFun X.1
       left_inv := hLeftInv
       right_inv := fun X => hRightInv X }
-  · intro M₁ M₂
-    apply Subtype.ext
-    change toFun (M₁ + M₂) = toFun M₁ + toFun M₂
-    simp only [toFun]
-    rw [show Matrix.reindexLinearEquiv ℂ ℂ eS.symm eS.symm (M₁ + M₂) =
-      Matrix.reindexLinearEquiv ℂ ℂ eS.symm eS.symm M₁ +
-        Matrix.reindexLinearEquiv ℂ ℂ eS.symm eS.symm M₂ from
-      (Matrix.reindexLinearEquiv ℂ ℂ eS.symm eS.symm).map_add M₁ M₂]
-    rw [show Matrix.fromBlocks (Matrix.reindexLinearEquiv ℂ ℂ eS.symm eS.symm M₁ +
-        Matrix.reindexLinearEquiv ℂ ℂ eS.symm eS.symm M₂) (0 : Matrix S T ℂ)
-          (0 : Matrix T S ℂ) (0 : Matrix T T ℂ) =
-      Matrix.fromBlocks (Matrix.reindexLinearEquiv ℂ ℂ eS.symm eS.symm M₁) 0 0 0 +
-      Matrix.fromBlocks (Matrix.reindexLinearEquiv ℂ ℂ eS.symm eS.symm M₂) 0 0 0 from by
-        ext i j; cases i <;> cases j <;>
-          simp [Matrix.fromBlocks, Matrix.add_apply]]
-    rw [show Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm
-        (Matrix.fromBlocks (Matrix.reindexLinearEquiv ℂ ℂ eS.symm eS.symm M₁) 0 0 0 +
-        Matrix.fromBlocks (Matrix.reindexLinearEquiv ℂ ℂ eS.symm eS.symm M₂) 0 0 0) =
-      Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm
-        (Matrix.fromBlocks (Matrix.reindexLinearEquiv ℂ ℂ eS.symm eS.symm M₁) 0 0 0) +
-      Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm
-        (Matrix.fromBlocks (Matrix.reindexLinearEquiv ℂ ℂ eS.symm eS.symm M₂) 0 0 0) from
-      (Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm).map_add _ _]
-    rw [Matrix.mul_add, Matrix.add_mul]
-  · intro c M
-    apply Subtype.ext
-    change toFun (c • M) = c • toFun M
-    simp only [toFun]
-    rw [show Matrix.reindexLinearEquiv ℂ ℂ eS.symm eS.symm (c • M) =
-      c • Matrix.reindexLinearEquiv ℂ ℂ eS.symm eS.symm M from
-      (Matrix.reindexLinearEquiv ℂ ℂ eS.symm eS.symm).map_smul c M]
-    rw [show Matrix.fromBlocks (c • Matrix.reindexLinearEquiv ℂ ℂ eS.symm eS.symm M)
-        (0 : Matrix S T ℂ) (0 : Matrix T S ℂ) (0 : Matrix T T ℂ) =
-      c • Matrix.fromBlocks (Matrix.reindexLinearEquiv ℂ ℂ eS.symm eS.symm M) 0 0 0 from by
-        ext i j; cases i <;> cases j <;>
-          simp [Matrix.fromBlocks, Matrix.smul_apply]]
-    rw [show Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm
-        (c • Matrix.fromBlocks (Matrix.reindexLinearEquiv ℂ ℂ eS.symm eS.symm M) 0 0 0) =
-      c • Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm
-        (Matrix.fromBlocks (Matrix.reindexLinearEquiv ℂ ℂ eS.symm eS.symm M) 0 0 0) from
-      (Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm).map_smul c _]
-    rw [Matrix.mul_smul, Matrix.smul_mul]
 
 /-- The rank of an orthogonal projection `P : M_D(ℂ)`, defined so that
 `cornerSubmoduleMatrixLinearEquiv` produces an isometry `M_{cornerRank P hP}(ℂ) ≃ₗ

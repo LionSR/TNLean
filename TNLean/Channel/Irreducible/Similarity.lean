@@ -284,7 +284,7 @@ theorem isIrreducibleMap_similarity
 
 /-- The similarity transform by `C⁻¹` inverts the similarity transform by `C`:
 `similarityMap C⁻¹ (similarityMap C E) = E`. This is the key involution used to
-obtain the iff-version `IsIrreducibleMap.conj_iff` from the one-directional
+obtain the iff-version `isIrreducibleMap_similarity_iff` from the one-directional
 `isIrreducibleMap_similarity`. -/
 theorem similarityMap_similarityMap_inv
     {C : Matrix (Fin D) (Fin D) ℂ} (hC : C.det ≠ 0)
@@ -321,8 +321,14 @@ theorem similarityMap_similarityMap_inv
 This is the iff-version of `isIrreducibleMap_similarity`; it is the matrix
 analog of `IsPrimitive.conj_iff` in `TNLean/Channel/Peripheral/Conjugation.lean`.
 The reverse direction is obtained by applying `isIrreducibleMap_similarity` with
-`C⁻¹` and using `similarityMap_similarityMap_inv`. -/
-theorem IsIrreducibleMap.conj_iff
+`C⁻¹` and using `similarityMap_similarityMap_inv`.
+
+The name `isIrreducibleMap_similarity_iff` follows the `isIrreducibleMap_similarity`
+family of lemmas in this file (`isIrreducibleMap_similarity_smul`,
+`isIrreducibleMap_full_similarity`) rather than the dot-notation
+`IsIrreducibleMap.conj_iff` pattern; the latter is reserved for the abstract
+`IsPrimitive.conj_iff` in `Channel/Peripheral/Conjugation.lean`. -/
+theorem isIrreducibleMap_similarity_iff
     {C : Matrix (Fin D) (Fin D) ℂ} (hC : C.det ≠ 0)
     {E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ} :
     IsIrreducibleMap (similarityMap (D := D) C E) ↔ IsIrreducibleMap E := by
