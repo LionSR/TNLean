@@ -95,11 +95,15 @@
 
 % Fix (#401): use a physical-leg operator insertion for general
 % linear twists, and reserve permutation twists for relabellings.
+% The operator dot sits in the tensor column (on the physical leg),
+% with #1 as a side-label, matching the \TNCondCOne convention and
+% the print version in tn_print.tex.
 \newcommand{\TNLinearTwist}[2]{%
   \begin{array}{ccc}
     && #2 \\
-    #1 && \vert \\
-    \textcolor{red}{\bullet} && \vert \\
+    && \vert \\
+    #1 && \textcolor{red}{\bullet} \\
+    && \vert \\
     && \bullet
   \end{array}%
 }
