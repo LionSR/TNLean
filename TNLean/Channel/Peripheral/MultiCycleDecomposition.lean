@@ -43,7 +43,7 @@ and is left to future work.
 
 ## Main results
 
-* `MultiCycleDecomposition.preserves_corner_pow_period` — single-cycle
+* `MultiCycleDecomposition.preserves_corner_pow_period` — per-cycle
   corner preservation: `T^(period c)` preserves each corner
   `P c k · M_D(ℂ) · P c k`.
 
@@ -306,7 +306,7 @@ index matches the per-cycle action on each `Fin (period c)`.
 This provides an assembly point: given a Wolf Thm. 6.16 Wedderburn-based
 existence result (currently blocked on issues #27/#360), the resulting
 `MultiCycleDecomposition` can be flattened to a `CycleStructure` for use
-with the existing single-cycle infrastructure in
+with the existing block-permutation infrastructure in
 `TNLean.Channel.Peripheral.Cycles`. -/
 noncomputable def toCycleStructure (M : MultiCycleDecomposition T) :
     CycleStructure T :=
