@@ -51,8 +51,11 @@ arXiv:1606.00608). The scaffolding in
 `TNLean/MPS/RFP/CommutingBridge.lean` (`ProductPairBridge`) already
 encodes the key combinatorial content; the missing piece is the
 extraction of a `ProductPairBridge A` witness from `IsRFP A` and
-normality, up to harmless rescaling to a normalized representative.
-This is internal to the library.
+normality. In that construction one may pass to a normalized
+representative only for building the witness / establishing the NNCPH
+conclusion, whose content is insensitive to this scaling; this is not
+a claim that `IsRFP` itself is preserved under rescaling. This is
+internal to the library.
 
 Replace `Axioms.beigi_nncph_to_rfp` with a Lean proof that internalizes
 S. Beigi's (2012) classification of ground spaces of nearest-neighbor
