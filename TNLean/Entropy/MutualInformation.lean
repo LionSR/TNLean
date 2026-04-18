@@ -70,11 +70,11 @@ theorem mutualInformation_ssa_trivial_B_nonneg
       (Fin dA × Fin 1 × Fin dC) ℂ)
     (hρ_dm : ρ_ABC.PosSemidef ∧ ρ_ABC.trace = 1)
     (h_mid_trace : (traceAC_ABC ρ_ABC).trace = 1) :
-    0 ≤ _root_.vonNeumannEntropy (traceC_ABC ρ_ABC)
+    0 ≤ Entropy.vonNeumannEntropy (traceC_ABC ρ_ABC)
           (traceC_ABC_isHermitian hρ_dm.1.isHermitian)
-        + _root_.vonNeumannEntropy (traceA_ABC ρ_ABC)
+        + Entropy.vonNeumannEntropy (traceA_ABC ρ_ABC)
             (traceA_ABC_isHermitian hρ_dm.1.isHermitian)
-        - _root_.vonNeumannEntropy ρ_ABC hρ_dm.1.isHermitian := by
+        - Entropy.vonNeumannEntropy ρ_ABC hρ_dm.1.isHermitian := by
   have h := subadditivity_ssa_trivial_B ρ_ABC hρ_dm h_mid_trace
   linarith
 
