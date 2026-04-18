@@ -35,7 +35,7 @@ _LEAN_DECL_RE = re.compile(
     r"^\s*(?:@\[.*?\]\s*)?"
     r"(?:(?:noncomputable|protected|private)\s+)*"
     r"(def|theorem|lemma|abbrev|instance|class|structure|inductive|axiom|opaque|alias)\s+"
-    r"([\w.'+]+)",
+    r"((?![\d.])[\w']+(?:\.(?![\d.])[\w']+)*)",
     re.MULTILINE,
 )
 _TRACKED_REVERSE_DECL_KINDS = {"def", "theorem", "lemma"}
