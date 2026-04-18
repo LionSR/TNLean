@@ -122,33 +122,50 @@ matrix-product-vector family and $p$-divisibility of the transfer map.
     produced by Theorem~\ref{thm:cor_4_1_projective_rep} satisfies the
     multiplicative $2$-cocycle identity
     $\omega(g, h)\, \omega(g h, k) = \omega(g, h k)\, \omega(h, k)$.
-    The associated class in $H^{2}(G, U(1))$ classifies the SPT phase
-    of the symmetric MPS.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:cor_4_1_projective_rep}
     Associativity of matrix multiplication applied to
     $X(g)\, X(h)\, X(k)$, combined with the projective multiplication
-    law, produces the cocycle identity at the level of $\C^{\times}$.
-    For $D > 0$ the matrix $X((g h) k)$ is invertible, so the scalar
-    identity descends to an identity in $\C^{\times}$, hence in
-    $\mathrm{Units}(\C)$.
+    law, gives
+    \[
+        \omega(g, h)\, \omega(g h, k)\, X((g h) k)
+        =
+        \omega(g, h k)\, \omega(h, k)\, X(g (h k)).
+    \]
+    Since $(g h) k = g (h k)$, both sides are scalar multiples of the
+    same matrix $X((g h) k)$.  The matrix lies in $\GL_D(\C)$ and is
+    therefore invertible, but the scalar cancellation leading from an
+    equality of scalar multiples of a matrix to equality of the scalar
+    coefficients additionally requires $D > 0$ so that the underlying
+    index set is inhabited.  Cancelling then yields
+    $\omega(g, h)\, \omega(g h, k) = \omega(g, h k)\, \omega(h, k)$
+    in $\C^{\times}$, hence in $\mathrm{Units}(\C)$.
 \end{proof}
+
+\begin{remark}[SPT classification]%
+    \label{rem:cor_4_1_projective_rep_spt}
+    \uses{thm:cor_4_1_projective_rep_cocycle}
+    The cohomology class of $\omega$ in $H^{2}(G, U(1))$ classifies the
+    SPT phase of the symmetric MPS (cf.~Chen--Gu--Wen and
+    P\'erez-Garc\'ia et al.).  This classification statement is not
+    formalised at present; only the underlying 2-cocycle identity of
+    Theorem~\ref{thm:cor_4_1_projective_rep_cocycle} is available in
+    the Lean development.
+\end{remark}
 
 \begin{theorem}[Bundled projective representation from symmetry]%
     \label{thm:projectiveRep_of_symmetry}
     \lean{MPSTensor.projectiveRep_of_symmetry}
     \leanok
-    \uses{thm:cor_4_1_projective_rep, thm:cor_4_1_projective_rep_cocycle,
-          cor:cor_4_1_physical_symmetry_zgauge}
-    The two statements above are packaged into a single high-level
-    theorem consuming the Corollary~4.1 symmetry data (irreducible
-    form~II, unitary on-site action, symmetry, the periodic equal-case
-    Fundamental Theorem) together with the projective-rigidity
-    hypothesis, producing a projective representation of $G$ on the
-    bond space whose factor system is a genuine $2$-cocycle whenever
-    $D > 0$.
+    \uses{thm:cor_4_1_projective_rep, thm:cor_4_1_projective_rep_cocycle}
+    Theorems~\ref{thm:cor_4_1_projective_rep}
+    and~\ref{thm:cor_4_1_projective_rep_cocycle} are packaged into a
+    single high-level statement: from the periodic projective-rigidity
+    hypothesis (Definition~\ref{def:periodic_projective_rigidity}), one
+    obtains a projective representation of $G$ on the bond space whose
+    factor system is a genuine $2$-cocycle whenever $D > 0$.
 \end{theorem}
 
 \section{Refinement and divisibility}\label{sec:periodic_refinement}

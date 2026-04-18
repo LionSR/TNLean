@@ -144,38 +144,25 @@ theorem cor_4_1_projective_rep_cocycle
     ∃ (ω : ScalarCocycle G) (_ρ : ProjectiveRepresentation (D := D) ω),
       ScalarCocycle.IsCocycle ω := by
   obtain ⟨ω, ρ, _⟩ := cor_4_1_projective_rep A U hRigidity
-  refine ⟨ω, ρ, ?_⟩
-  intro g h k
-  have hℂ :
-      (ω g h : ℂ) * (ω (g * h) k : ℂ) =
-        (ω g (h * k) : ℂ) * (ω h k : ℂ) :=
-    ρ.cocycle_of_assoc (D := D) hD g h k
-  have hUcoe :
-      ((ω g h * ω (g * h) k : Units ℂ) : ℂ) =
-        ((ω g (h * k) * ω h k : Units ℂ) : ℂ) := by
-    push_cast
-    exact hℂ
-  exact Units.ext hUcoe
+  exact ⟨ω, ρ, ScalarCocycle.isCocycle_of_projRep ρ hD⟩
 
-/-! ## Bundled constructor consuming the Corollary-4.1 symmetry data -/
+/-! ## Bundled constructor from the rigidity hypothesis -/
 
-/-- **Projective representation from a periodic on-site symmetry.**
+/-- **Projective representation from the periodic projective-rigidity hypothesis.**
 
-High-level packaging of `cor_4_1_projective_rep`: under the usual hypotheses of
-Corollary 4.1 (irreducible form II, unitary on-site action, symmetry, and the
-periodic equal-case FT) plus the rigidity hypothesis, the `Y_g` family of
-virtual gauges assembles into a projective representation of `G` on the bond
-space, with factor system satisfying the 2-cocycle identity when `D > 0`.
+High-level packaging of `cor_4_1_projective_rep` together with the cocycle
+condition of `cor_4_1_projective_rep_cocycle`: the rigidity hypothesis upgrades
+the bond-space symmetry data of Corollary 4.1 to a coherent projective
+representation of `G` on the bond space, with factor system satisfying the
+2-cocycle identity whenever `D > 0`.
 
-The associated cohomology class in `H²(G, U(1))` classifies the SPT phase of
-the symmetric MPS (cf. Chen–Gu–Wen, Pérez-García et al.). -/
+Callers that already have the Corollary 4.1 data (irreducible form II, unitary
+on-site action, symmetry, periodic equal-case FT) can produce
+`PeriodicProjectiveRigidity A U` in the presence of an additional analytic
+coherence hypothesis. -/
 theorem projectiveRep_of_symmetry
     (A : MPSTensor d D)
-    (hA : IsIrreducibleForm A)
     (U : G →* Matrix (Fin d) (Fin d) ℂ)
-    (hUnit : ∀ g : G, (U g) * (U g)ᴴ = 1)
-    (hSym : IsOnSiteSymmetric A U)
-    (hPeriodicEq : PeriodicEqualCaseFT d D)
     (hRigidity : PeriodicProjectiveRigidity A U) :
     ∃ (ω : ScalarCocycle G) (ρ : ProjectiveRepresentation (D := D) ω),
       (∀ g : G, ∃ (m : ℕ) (Z : Matrix (Fin D) (Fin D) ℂ),
@@ -186,22 +173,7 @@ theorem projectiveRep_of_symmetry
               twistedTensor A U g i *
               (((ρ.X (g⁻¹))⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ))) ∧
       (0 < D → ScalarCocycle.IsCocycle ω) := by
-  -- The Cor-4.1 conclusion (existence of `Y_g`, `Z_g` per `g`) is established in
-  -- `cor_4_1_physical_symmetry_zgauge_explicit`; the rigidity hypothesis
-  -- upgrades the pointwise family to a coherent projective representation.
-  have _ := cor_4_1_physical_symmetry_zgauge_explicit A hA U hUnit hSym hPeriodicEq
   obtain ⟨ω, ρ, hIntertwine⟩ := cor_4_1_projective_rep A U hRigidity
-  refine ⟨ω, ρ, hIntertwine, ?_⟩
-  intro hD g h k
-  have hℂ :
-      (ω g h : ℂ) * (ω (g * h) k : ℂ) =
-        (ω g (h * k) : ℂ) * (ω h k : ℂ) :=
-    ρ.cocycle_of_assoc (D := D) hD g h k
-  have hUcoe :
-      ((ω g h * ω (g * h) k : Units ℂ) : ℂ) =
-        ((ω g (h * k) * ω h k : Units ℂ) : ℂ) := by
-    push_cast
-    exact hℂ
-  exact Units.ext hUcoe
+  exact ⟨ω, ρ, hIntertwine, fun hD => ScalarCocycle.isCocycle_of_projRep ρ hD⟩
 
 end MPSTensor
