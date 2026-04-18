@@ -7,43 +7,43 @@ import TNLean.MPS.MPDO.RFP
 /-!
 # Fusion-isometry formulation of the MPDO renormalization fixed point
 
-This file scaffolds the **fusion-isometry** side of the equivalence stated in
+This file records the **fusion-isometry** side of the equivalence stated in
 arXiv:1606.00608 §4.5 (Cirac–Pérez-García–Schuch–Verstraete). In the notation
-of the paper, a fusion isometry at level `n` is a pair of linear maps
+of the paper, a fusion isometry at blocked size `n` is a pair of linear maps
 `T`, `S` between the physical space of `n` blocked sites and the corresponding
 support algebra of the tensor, whose composites are idempotents on the two
 sides. Iterated applications of `T` and `S` reproduce the doubled-tensor
-transfer-map dynamics that underlies the provisional `MPOTensor.IsRFP`
-predicate in `TNLean/MPS/MPDO/RFP.lean`.
+transfer-map dynamics underlying the provisional `MPOTensor.IsRFP` predicate
+in `TNLean/MPS/MPDO/RFP.lean`.
 
-The full formalization requires support-algebra, blocking, and tpCPM
-infrastructure that is not yet present in the repository, so this file stays at
-the scaffolding level:
+The development of the support-algebra API, blocked tensor powers, and
+trace-preserving completely positive blocking maps required for the full
+statement is deferred. In the present formulation:
 
-* the "physical space at size `n`" and the "support algebra at size `n`" are
-  represented by explicit `(Fin D × Fin D)`-indexed complex matrices of doubled
-  bond dimension, standing in for the exact support algebra that a later
-  ticket will introduce;
+* the physical space at blocked size `n` and the support algebra at blocked
+  size `n` are both represented by `Matrix (Fin D) (Fin D) ℂ`, a stand-in for
+  the genuine objects;
 * the idempotence and compatibility conditions in `FusionIsometry` are stated
-  as general linear-algebraic hypotheses so they compile today and can be
-  specialised once the support-algebra API lands;
-* `IsRFP_MPDO_via_fusion_scaffold` records the existence, at every blocking
-  level, of a fusion isometry compatible with the tensor `M` via the named
-  placeholder predicate `FusionIsometry.CompatibleWith`. Because the
-  compatibility predicate is currently `True`, this scaffold predicate is
-  trivially provable for every `M`; the `_scaffold` suffix flags this so the
-  predicate is not mistaken for the genuine RFP characterisation.
+  as general linear-algebraic hypotheses, weaker than the paper's identities
+  on a genuine support algebra;
+* `IsRFP_MPDO_via_fusion_scaffold` asserts the existence, at every blocked
+  size, of a fusion isometry related to the tensor `M` by the relation
+  `FusionIsometry.CompatibleWith`. The latter is currently the trivial
+  proposition `True`, so the predicate as a whole is satisfied by every
+  `M`. The `_scaffold` suffix marks the predicate to prevent its use in
+  nontrivial reasoning until the relation is tightened.
 
 ## Main declarations
 
-* `FusionIsometry`: structure packaging a fusion isometry pair `(T, S)` at a
-  fixed blocking size with its idempotence / compatibility conditions.
-* `FusionIsometry.CompatibleWith`: placeholder compatibility predicate that
-  names the condition linking a fusion isometry to the underlying MPO tensor.
-* `IsRFP_MPDO_via_fusion_scaffold`: the scaffolded RFP predicate built from a
-  family of fusion isometries compatible with the tensor, flagged by the
-  `_scaffold` suffix because the `CompatibleWith` predicate is currently the
-  trivial `True`.
+* `FusionIsometry`: a pair `(T, S)` of linear maps at a fixed blocked size,
+  together with an idempotence condition for `S ∘ₗ T` and a pointwise
+  identity-on-support condition for `T ∘ₗ S`.
+* `FusionIsometry.CompatibleWith`: relation between a fusion isometry and an
+  MPO tensor, currently the trivial proposition `True`.
+* `IsRFP_MPDO_via_fusion_scaffold`: the provisional RFP predicate built from a
+  family of fusion isometries related to the tensor by `CompatibleWith`. The
+  `_scaffold` suffix marks that the relation `CompatibleWith` is currently
+  `True` and the predicate consequently vacuous.
 
 ## References
 
@@ -57,97 +57,100 @@ namespace MPOTensor
 
 variable {d D : ℕ}
 
-/-- The *physical space at blocked size `n`* used in the scaffold.
+/-- The *physical space at blocked size `n`*.
 
 -- TODO (#611): replace with the exact `(Fin d → ℂ)^{⊗ n}` physical Hilbert
-space once the blocking infrastructure supports tensor powers. For now we use
-a stand-in space of matrices indexed by the pair of virtual indices. -/
+space, once tensor powers are available. The current definition uses
+`Matrix (Fin D) (Fin D) ℂ` as a stand-in. -/
 abbrev FusionPhysicalSpace (D : ℕ) : Type :=
   Matrix (Fin D) (Fin D) ℂ
 
-/-- The *support algebra at blocked size `n`* used in the scaffold.
+/-- The *support algebra at blocked size `n`*.
 
--- TODO (#611): replace with the genuine support algebra
-`span { ρ^{(n)}(M) | ... } ⊂ M_{D²}` once the support-algebra API lands. For
-now we use a stand-in space of matrices indexed by the pair of virtual
-indices. -/
+-- TODO (#611): replace with the support algebra
+`span { ρ^{(n)}(M) | ... } ⊂ M_{D²}`, once the support-algebra API is
+available. The current definition uses `Matrix (Fin D) (Fin D) ℂ` as a
+stand-in. -/
 abbrev FusionSupportAlgebra (D : ℕ) : Type :=
   Matrix (Fin D) (Fin D) ℂ
 
 /-- A **fusion isometry** at blocked size `n` for an MPO tensor of bond
 dimension `D`.
 
-In arXiv:1606.00608 §4.5 the paper formulates this object via the
-support-algebra identities `S_n ∘ T_n = id_{𝒜_n}` and `T_n ∘ S_n = id_{𝒜_n}`
-for a splitting `T_n : (ℂ^d)^{⊗ n} → 𝒜_n`, `S_n : 𝒜_n → (ℂ^d)^{⊗ n}` of the
-support algebra generated by the blocked tensor at level `n`.
+In arXiv:1606.00608 §4.5 the corresponding object is a pair of linear maps
+`T_n : (ℂ^d)^{⊗ n} → 𝒜_n` and `S_n : 𝒜_n → (ℂ^d)^{⊗ n}` realising a splitting
+of the support algebra `𝒜_n` generated by the blocked tensor at blocked size
+`n`, satisfying `S_n ∘ T_n = id_{𝒜_n}` and `T_n ∘ S_n = id_{𝒜_n}`.
 
-In the current scaffold the support algebra is represented by
-`FusionSupportAlgebra D` and the physical space by `FusionPhysicalSpace D`;
-the compatibility conditions are recorded as weaker placeholder predicates:
-`hST` asserts that `S ∘ T` is idempotent, and `hTSM` asserts pointwise that
-`T ∘ S` acts as the identity on elements satisfying the placeholder
-predicate `support`.
+The present formulation uses `Matrix (Fin D) (Fin D) ℂ` for both
+`FusionSupportAlgebra D` and `FusionPhysicalSpace D`, and weakens the
+identities of the paper as follows:
 
--- TODO (#611): tighten `support` to an actual `Submodule ℂ (Matrix …)`
-capturing the span of blocked operator matrix elements, and tighten the
-compatibility conditions to the support-algebra identities from the paper. -/
+* `support : FusionSupportAlgebra D → Prop` is a unary predicate standing in
+  for the subspace cut out by `𝒜_n` inside the matrix algebra;
+* `hST` asserts that `S ∘ₗ T` is idempotent, weaker than `S ∘ T = id`;
+* `hTSM` asserts pointwise that `(T ∘ₗ S) M = M` for every `M` satisfying the
+  predicate `support`, weaker than `T ∘ S = id` on a genuine subspace.
+
+-- TODO (#611): tighten `support` to a `Submodule ℂ (Matrix …)` capturing
+the span of blocked operator matrix elements, and tighten `hST`/`hTSM` to
+the support-algebra identities of the paper. -/
 structure FusionIsometry (d D n : ℕ) where
-  /-- Forward fusion map `T_n` at level `n`. -/
+  /-- Forward fusion map `T_n` at blocked size `n`. -/
   T : FusionPhysicalSpace D →ₗ[ℂ] FusionSupportAlgebra D
-  /-- Backward fusion map `S_n` at level `n`. -/
+  /-- Backward fusion map `S_n` at blocked size `n`. -/
   S : FusionSupportAlgebra D →ₗ[ℂ] FusionPhysicalSpace D
-  /-- Placeholder support-algebra predicate. -- TODO (#611): replace with an
-  actual predicate cutting out the subspace spanned by blocked operator
-  entries. -/
+  /-- Predicate standing in for membership in the support algebra `𝒜_n`.
+  -- TODO (#611): replace with a `Submodule ℂ (Matrix …)` cutting out the
+  span of blocked operator matrix elements. -/
   support : FusionSupportAlgebra D → Prop
-  /-- The composite `S ∘ T` is idempotent on the scaffolded physical space.
-  -- TODO (#611): in the paper this says `S ∘ T` is the identity on the
-  support algebra; here we only record the weaker idempotence condition. -/
+  /-- The composite `S ∘ₗ T` is idempotent. Weaker than the paper's identity
+  `S ∘ T = id` on the support algebra.
+  -- TODO (#611): strengthen to the support-algebra identity of the paper. -/
   hST : S ∘ₗ T ∘ₗ S ∘ₗ T = S ∘ₗ T
-  /-- On the support of the algebra the composite `T ∘ S` is the identity.
-  -- TODO (#611): the quantifier should range over a genuine subspace; for
-  now it is a pointwise statement over the placeholder predicate
-  `support`. -/
+  /-- On every element satisfying `support`, the composite `T ∘ₗ S` is the
+  identity. Weaker than the paper's identity `T ∘ S = id` on a genuine
+  subspace.
+  -- TODO (#611): replace the pointwise quantifier by an identity on a
+  `Submodule ℂ (Matrix …)`. -/
   hTSM : ∀ M : FusionSupportAlgebra D, support M → (T ∘ₗ S) M = M
 
 namespace FusionIsometry
 
 variable {d D n : ℕ}
 
-/-- Placeholder compatibility predicate between a fusion isometry at level
-`n` and an MPO tensor `M`. In the final formalization this will assert that
-`T` and `S` implement the splitting of the support algebra generated by the
-blocked tensor `M^{[n]}`. In the current scaffold there is no support
-algebra yet, so the predicate is trivially `True`. -- TODO (#611): replace
-by the compatibility condition from §4.5 of arXiv:1606.00608, expressed in
-terms of the blocked tensor generated by `M`. -/
+/-- Compatibility relation between a fusion isometry at blocked size `n` and
+an MPO tensor `M`. In the final formulation this asserts that `T` and `S`
+implement the splitting of the support algebra generated by the blocked
+tensor `M^{[n]}`. The present definition is the trivial proposition `True`,
+which is satisfied by every pair `(F, M)`.
+-- TODO (#611): replace by the compatibility condition from §4.5 of
+arXiv:1606.00608, expressed in terms of the blocked tensor generated by
+`M`. -/
 def CompatibleWith (_F : FusionIsometry d D n) (_M : MPOTensor d D) : Prop :=
   True
 
 end FusionIsometry
 
-/-- **Scaffolded fusion-isometry formulation of the MPDO renormalization
+/-- **Provisional fusion-isometry formulation of the MPDO renormalization
 fixed point.**
 
 In the paper (arXiv:1606.00608 §4.5) an MPDO tensor `M` is declared to be a
-renormalization fixed point whenever the operators it generates at every
-blocking level close under multiplication through a fusion-isometry system
-compatible with `M`. The following definition records the existence of such
-a family through the named placeholder `FusionIsometry.CompatibleWith`, at
-the level of detail supported by the current scaffolding.
+renormalization fixed point when the operators it generates at every blocked
+size close under multiplication via a system of fusion isometries
+compatible with `M`. The definition below asserts the existence of such a
+family using the relation `FusionIsometry.CompatibleWith`.
 
-The name carries a `_scaffold` suffix because
-`FusionIsometry.CompatibleWith` is currently `True`: consequently this
-predicate is **trivially provable for every `M`** and must not be used as a
-hypothesis or conclusion of any nontrivial result until the compatibility
-condition is tightened.
+The `_scaffold` suffix marks that `FusionIsometry.CompatibleWith` is
+currently `True`: the predicate is consequently satisfied by every `M`, and
+must not be used as a hypothesis or conclusion of any nontrivial result
+until the relation is tightened.
 
--- TODO (#611): tighten `FusionIsometry.CompatibleWith` to the exact
+-- TODO (#611): replace `FusionIsometry.CompatibleWith` with the
 compatibility condition between `M` and its fusion isometries, add the
-inter-level compatibility asking the level-`n+1` isometry to factor through
-the level-`n` one, and drop the `_scaffold` suffix once the predicate is no
-longer vacuous. -/
+inter-level compatibility asking the size-`n+1` isometry to factor through
+the size-`n` one, and drop the `_scaffold` suffix once the relation is no
+longer trivial. -/
 def IsRFP_MPDO_via_fusion_scaffold (M : MPOTensor d D) : Prop :=
   ∀ n : ℕ, ∃ F : FusionIsometry d D n, F.CompatibleWith M
 
