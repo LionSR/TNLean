@@ -159,22 +159,25 @@
  </li>
 <li class="">
   <a href="ch-channels.html#sec:stinespring"><span class="toc_ref">5.9</span> <span class="toc_entry">Stinespring dilation (Wolf Thm.&#160;2.2)</span></a>
+ </li>
+<li class="">
+  <a href="ch-channels.html#sec:povm_naimark"><span class="toc_ref">5.10</span> <span class="toc_entry">POVMs and Naimark dilation (Wolf Thm.&#160;2.6)</span></a>
   <span class="expand-toc">▶</span>
   <ul class="sub-toc-2">
      <li class="">
-  <a href="ch-channels.html#subsec:trace_pairing_expansion"><span class="toc_ref">5.9.1</span> <span class="toc_entry">Trace-pairing expansion in transfer-matrix form</span></a>
+  <a href="ch-channels.html#subsec:trace_pairing_expansion"><span class="toc_ref">5.10.1</span> <span class="toc_entry">Trace-pairing expansion in transfer-matrix form</span></a>
  </li>
 
   </ul>
  </li>
 <li class="">
-  <a href="ch-channels.html#sec:channel_determinant"><span class="toc_ref">5.10</span> <span class="toc_entry">Determinant of a quantum channel (Wolf §6.1.1)</span></a>
+  <a href="ch-channels.html#sec:channel_determinant"><span class="toc_ref">5.11</span> <span class="toc_entry">Determinant of a quantum channel (Wolf §6.1.1)</span></a>
  </li>
 <li class="">
-  <a href="ch-channels.html#sec:fixed_point_algebra"><span class="toc_ref">5.11</span> <span class="toc_entry">Fixed-point algebra (Wolf Thms.&#160;6.12–6.13)</span></a>
+  <a href="ch-channels.html#sec:fixed_point_algebra"><span class="toc_ref">5.12</span> <span class="toc_entry">Fixed-point algebra (Wolf Thms.&#160;6.12–6.13)</span></a>
  </li>
 <li class="">
-  <a href="ch-channels.html#sec:quantum_dynamical_semigroups"><span class="toc_ref">5.12</span> <span class="toc_entry">Quantum dynamical semigroups</span></a>
+  <a href="ch-channels.html#sec:quantum_dynamical_semigroups"><span class="toc_ref">5.13</span> <span class="toc_entry">Quantum dynamical semigroups</span></a>
  </li>
 
   </ul>
@@ -5315,14 +5318,931 @@
 
   </div>
 </div>
-<h2 id="subsec:trace_pairing_expansion">5.9.1 Trace-pairing expansion in transfer-matrix form</h2>
+<h1 id="sec:povm_naimark">5.10 POVMs and Naimark dilation (Wolf Thm.&#160;2.6)</h1>
+
+<div class="definition_thmwrapper theorem-style-definition" id="def:povm">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">5.64</span>
+    <span class="definition_thmtitle">Positive operator-valued measure</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-channels.html#def:povm">#</a>
+    
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/POVM" class="lean_decl">POVM</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>  A <em>positive operator-valued measure</em> with \(n\) outcomes on \(\mathbb {C}^D\) is a family \(\{ E_i\} _{i=1}^n\) of positive semidefinite operators on \(\mathbb {C}^D\) satisfying the resolution of identity </p>
+<div class="displaymath" id="a0000000283">
+  \[  \sum _{i=1}^n E_i = \one _D.  \]
+</div>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:naimark_kraus">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">5.65</span>
+    <span class="definition_thmtitle">Naimark Kraus square roots</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-channels.html#def:naimark_kraus">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-channels.html#def:povm">Definition 5.64</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/POVM.naimarkKraus" class="lean_decl">POVM.naimarkKraus</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>   For a POVM \(\{ E_i\} \), each effect \(E_i \ge 0\) admits a square-root factorisation \(E_i = M_i^\dagger M_i\) with \(M_i \in M_{D}(\mathbb {C})\). The operators \(M_i\) are the <em>Naimark Kraus square roots</em>. </p>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:naimark_isometry">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">5.66</span>
+    <span class="definition_thmtitle">Naimark isometry</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-channels.html#def:naimark_isometry">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-channels.html#def:naimark_kraus">Definition 5.65</a></li>
+          
+          <li><a href="ch-channels.html#def:stinespring_v">Definition 5.58</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/POVM.naimarkIsometry" class="lean_decl">POVM.naimarkIsometry</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>   The <em>Naimark isometry</em> \(V : \mathbb {C}^D \to \mathbb {C}^D \otimes \mathbb {C}^n\) of a POVM is the Stinespring-style assembly </p>
+<div class="displaymath" id="a0000000284">
+  \[  V = \sum _{i=1}^n M_i \otimes |i\rangle , \qquad V_{(a,i),\, k} = (M_i)_{a,k}.  \]
+</div>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:naimark_projection">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">5.67</span>
+    <span class="definition_thmtitle">Naimark projective measurement</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-channels.html#def:naimark_projection">#</a>
+    
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/POVM.naimarkProjection" class="lean_decl">POVM.naimarkProjection</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>  The <em>Naimark projectors</em> on \(\mathbb {C}^D \otimes \mathbb {C}^n\) are </p>
+<div class="displaymath" id="a0000000285">
+  \[  P_i = \one _D \otimes |i\rangle \langle i|, \qquad (P_i)_{(a,b),(c,d)} = \delta _{a,c}\, \delta _{b,i}\, \delta _{d,i}.  \]
+</div>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:naimark_isometry_isometry">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">5.68</span>
+    <span class="theorem_thmtitle">Naimark isometry condition</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-channels.html#thm:naimark_isometry_isometry">#</a>
+    
+    <a class="icon proof" href="ch-channels.html#a0000000286"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-channels.html#def:naimark_isometry">Definition 5.66</a></li>
+          
+          <li><a href="ch-channels.html#def:povm">Definition 5.64</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/POVM.naimarkIsometry_isometry" class="lean_decl">POVM.naimarkIsometry_isometry</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   The Naimark isometry satisfies \(V^\dagger V = \one _D\). </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000286">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>The Stinespring Gram identity gives \(V^\dagger V = \sum _i M_i^\dagger M_i = \sum _i E_i = \one _D\) by the resolution of identity. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:naimark_projection_axioms">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">5.69</span>
+    <span class="theorem_thmtitle">Naimark projectors form a projective measurement</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-channels.html#thm:naimark_projection_axioms">#</a>
+    
+    <a class="icon proof" href="ch-channels.html#a0000000287"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-channels.html#def:naimark_projection">Definition 5.67</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/POVM.naimarkProjection_mul_self" class="lean_decl">POVM.naimarkProjection_mul_self</a></li>
+          
+          <li><a href="../docs/find/#doc/POVM.naimarkProjection_hermitian" class="lean_decl">POVM.naimarkProjection_hermitian</a></li>
+          
+          <li><a href="../docs/find/#doc/POVM.naimarkProjection_orthogonal" class="lean_decl">POVM.naimarkProjection_orthogonal</a></li>
+          
+          <li><a href="../docs/find/#doc/POVM.naimarkProjection_sum_eq_one" class="lean_decl">POVM.naimarkProjection_sum_eq_one</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>    The Naimark projectors satisfy \(P_i^2 = P_i\), \(P_i^\dagger = P_i\), \(P_i P_j = 0\) for \(i \ne j\), and \(\sum _i P_i = \one _{\mathbb {C}^D \otimes \mathbb {C}^n}\). </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000287">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Each identity follows from direct entrywise computation using the delta-function form of \((P_i)_{(a,b),(c,d)}\). </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:naimark_recovers_povm">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">5.70</span>
+    <span class="theorem_thmtitle">Thm.&#160;2.6: Naimark dilation</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-channels.html#thm:naimark_recovers_povm">#</a>
+    
+    <a class="icon proof" href="ch-channels.html#a0000000288"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-channels.html#def:povm">Definition 5.64</a></li>
+          
+          <li><a href="ch-channels.html#def:naimark_isometry">Definition 5.66</a></li>
+          
+          <li><a href="ch-channels.html#def:naimark_projection">Definition 5.67</a></li>
+          
+          <li><a href="ch-channels.html#thm:naimark_isometry_isometry">Theorem 5.68</a></li>
+          
+          <li><a href="ch-channels.html#thm:naimark_projection_axioms">Theorem 5.69</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/POVM.naimark_recovers_povm" class="lean_decl">POVM.naimark_recovers_povm</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   Every POVM \(\{ E_i\} _{i=1}^n\) arises as a projective measurement on a dilation: for the isometry \(V\) and projectors \(P_i\) above, </p>
+<div class="displaymath" id="a0000000289">
+  \[  E_i = V^\dagger P_i V.  \]
+</div>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000288">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Computing entrywise, \((V^\dagger P_i V)_{k,\ell } = \sum _{a} \overline{(M_i)_{a,k}}\, (M_i)_{a,\ell } = (M_i^\dagger M_i)_{k,\ell } = (E_i)_{k,\ell }\). </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:exists_naimark_dilation">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">5.71</span>
+    <span class="theorem_thmtitle">Existential Naimark dilation</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-channels.html#thm:exists_naimark_dilation">#</a>
+    
+    <a class="icon proof" href="ch-channels.html#a0000000290"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-channels.html#thm:naimark_recovers_povm">Theorem 5.70</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/POVM.exists_naimark_dilation" class="lean_decl">POVM.exists_naimark_dilation</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   For every POVM \(\{ E_i\} \) on \(\mathbb {C}^D\) there exist a dilation dimension \(r\), an isometry \(V : \mathbb {C}^D \to \mathbb {C}^D \otimes \mathbb {C}^r\), and a projective measurement \(\{ P_i\} \) on the dilation satisfying \(E_i = V^\dagger P_i V\). </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000290">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Take \(r = n\) and the explicit witnesses \(V = \sum _i M_i \otimes |i\rangle \) and \(P_i = \one _D \otimes |i\rangle \langle i|\). </p>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:povm_of_psd_resolution_of_identity">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">5.72</span>
+    <span class="definition_thmtitle">POVM from a PSD resolution of identity on a dilation</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-channels.html#def:povm_of_psd_resolution_of_identity">#</a>
+    
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/POVM.ofPSDResolutionOfIdentity" class="lean_decl">POVM.ofPSDResolutionOfIdentity</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>   Given an isometry \(V : \mathbb {C}^D \to \mathbb {C}^{d'}\) with \(V^\dagger V = \one _D\) and a family \(\{ P_i\} _{i=1}^n\) of positive semidefinite operators on \(\mathbb {C}^{d'}\) summing to the identity, the pulled-back operators </p>
+<div class="displaymath" id="a0000000291">
+  \[  E_i := V^\dagger P_i V  \]
+</div>
+<p> form a POVM. In particular, any projective measurement on the dilation (a special case of a PSD resolution of identity) pulls back to a POVM. </p>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:instrument">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">5.73</span>
+    <span class="definition_thmtitle">Quantum instrument</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-channels.html#def:instrument">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-channels.html#def:cp_map">Definition 5.4</a></li>
+          
+          <li><a href="ch-channels.html#def:trace_preserving">Definition 5.3</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/Instrument" class="lean_decl">Instrument</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>   A <em>quantum instrument</em> with \(n\) outcomes is a family \(\{ \Phi _i\} _{i=1}^n\) of completely positive maps on \(M_{D}(\mathbb {C})\) whose sum \(\sum _i \Phi _i\) is trace-preserving. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:instrument_total_is_channel">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">5.74</span>
+    <span class="theorem_thmtitle">Instrument total map is a channel</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-channels.html#thm:instrument_total_is_channel">#</a>
+    
+    <a class="icon proof" href="ch-channels.html#a0000000292"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-channels.html#def:instrument">Definition 5.73</a></li>
+          
+          <li><a href="ch-channels.html#def:channel">Definition 5.6</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/Instrument.total_isChannel" class="lean_decl">Instrument.total_isChannel</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>    The total map \(\sum _i \Phi _i\) of an instrument is a quantum channel. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000292">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Complete positivity of the sum follows from closure of CP maps under finite addition; trace preservation is built into the definition. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:instrument_sum_probability">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">5.75</span>
+    <span class="theorem_thmtitle">Conservation of probability for instruments</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-channels.html#thm:instrument_sum_probability">#</a>
+    
+    <a class="icon proof" href="ch-channels.html#a0000000293"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-channels.html#def:instrument">Definition 5.73</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/Instrument.sum_probability" class="lean_decl">Instrument.sum_probability</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>    For every state \(\rho \in M_{D}(\mathbb {C})\), the outcome probabilities \(p_i(\rho ) := \operatorname {tr}(\Phi _i(\rho ))\) sum to \(\operatorname {tr}(\rho )\). </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000293">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Linearity of trace and trace preservation of \(\sum _i \Phi _i\) give \(\sum _i \operatorname {tr}(\Phi _i(\rho )) = \operatorname {tr}\bigl((\sum _i \Phi _i)(\rho )\bigr) = \operatorname {tr}(\rho )\). </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:instrument_probability_nonneg">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">5.76</span>
+    <span class="theorem_thmtitle">Non-negativity of instrument probabilities</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-channels.html#thm:instrument_probability_nonneg">#</a>
+    
+    <a class="icon proof" href="ch-channels.html#a0000000294"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-channels.html#def:instrument">Definition 5.73</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/Instrument.probability_nonneg" class="lean_decl">Instrument.probability_nonneg</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>    If \(\rho \in M_{D}(\mathbb {C})\) is positive semidefinite, then each outcome probability \(p_i(\rho ) = \operatorname {tr}(\Phi _i(\rho ))\) is a non-negative real number. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000294">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Each \(\Phi _i\) is completely positive, hence positive, so \(\Phi _i(\rho )\) is positive semidefinite and its trace is a non-negative real. </p>
+
+  </div>
+</div>
+<h2 id="subsec:trace_pairing_expansion">5.10.1 Trace-pairing expansion in transfer-matrix form</h2>
 
 <div class="definition_thmwrapper theorem-style-definition" id="def:trace_pairing_self_dual_basis">
   <div class="definition_thmheading">
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">5.64</span>
+    <span class="definition_thmlabel">5.77</span>
     <span class="definition_thmtitle">Trace-self-dual basis</span>
     <div class="thm_header_extras">
 
@@ -5358,7 +6278,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>  A basis \(\{ \sigma _i\} _i\) of \(M_{D}(\mathbb {C})\) is <em>trace-self-dual</em> when its coordinate functionals are given by trace pairing: </p>
-<div class="displaymath" id="a0000000283">
+<div class="displaymath" id="a0000000295">
   \[  X = \sum _i \operatorname {tr}(\sigma _i X)\, \sigma _i.  \]
 </div>
 
@@ -5369,7 +6289,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">5.65</span>
+    <span class="definition_thmlabel">5.78</span>
     <span class="definition_thmtitle">Trace-pairing coefficients</span>
     <div class="thm_header_extras">
 
@@ -5393,7 +6313,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-channels.html#def:trace_pairing_self_dual_basis">Definition 5.64</a></li>
+          <li><a href="ch-channels.html#def:trace_pairing_self_dual_basis">Definition 5.77</a></li>
           
         </ul>
     
@@ -5425,7 +6345,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   For a linear map \(T : M_{D}(\mathbb {C}) \to M_{D}(\mathbb {C})\) and a trace-self-dual basis \(\{ \sigma _i\} \), define coefficients </p>
-<div class="displaymath" id="a0000000284">
+<div class="displaymath" id="a0000000296">
   \[  t_{ij} := \operatorname {tr}(\sigma _i\, T(\sigma _j)).  \]
 </div>
 
@@ -5436,7 +6356,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">5.66</span>
+    <span class="theorem_thmlabel">5.79</span>
     <span class="theorem_thmtitle">Trace-pairing expansion of a linear map</span>
     <div class="thm_header_extras">
 
@@ -5447,7 +6367,7 @@
 
     <a class="icon proof" href="ch-channels.html#thm:linearMap_expand_tracePairing">#</a>
     
-    <a class="icon proof" href="ch-channels.html#a0000000285"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-channels.html#a0000000297"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5463,9 +6383,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-channels.html#def:trace_pairing_self_dual_basis">Definition 5.64</a></li>
+          <li><a href="ch-channels.html#def:trace_pairing_self_dual_basis">Definition 5.77</a></li>
           
-          <li><a href="ch-channels.html#def:trace_pairing_coeff">Definition 5.65</a></li>
+          <li><a href="ch-channels.html#def:trace_pairing_coeff">Definition 5.78</a></li>
           
         </ul>
     
@@ -5497,13 +6417,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   If \(\{ \sigma _i\} \) is trace-self-dual, then every linear map \(T : M_{D}(\mathbb {C}) \to M_{D}(\mathbb {C})\) admits the expansion </p>
-<div class="displaymath" id="a0000000286">
+<div class="displaymath" id="a0000000298">
   \[  T(\rho ) = \sum _i \sum _j t_{ij}\,  \operatorname {tr}(\sigma _j \rho )\, \sigma _i, \qquad t_{ij} = \operatorname {tr}(\sigma _i T(\sigma _j)).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000285">
+<div class="proof_wrapper" id="a0000000297">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5515,14 +6435,14 @@
 
   </div>
 </div>
-<h1 id="sec:channel_determinant">5.10 Determinant of a quantum channel (Wolf §6.1.1)</h1>
+<h1 id="sec:channel_determinant">5.11 Determinant of a quantum channel (Wolf §6.1.1)</h1>
 
 <div class="definition_thmwrapper theorem-style-definition" id="def:channel_det">
   <div class="definition_thmheading">
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">5.67</span>
+    <span class="definition_thmlabel">5.80</span>
     <span class="definition_thmtitle">Channel determinant</span>
     <div class="thm_header_extras">
 
@@ -5569,7 +6489,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">5.68</span>
+    <span class="definition_thmlabel">5.81</span>
     <span class="definition_thmtitle">Unitary channel</span>
     <div class="thm_header_extras">
 
@@ -5613,7 +6533,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">5.69</span>
+    <span class="theorem_thmlabel">5.82</span>
     <span class="theorem_thmtitle">Thm.&#160;6.1(1): Determinant bound for positive TP maps</span>
     <div class="thm_header_extras">
 
@@ -5624,7 +6544,7 @@
 
     <a class="icon proof" href="ch-channels.html#thm:channelDet_norm_le_one">#</a>
     
-    <a class="icon proof" href="ch-channels.html#a0000000287"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-channels.html#a0000000299"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5640,7 +6560,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-channels.html#def:channel_det">Definition 5.67</a></li>
+          <li><a href="ch-channels.html#def:channel_det">Definition 5.80</a></li>
           
           <li><a href="ch-channels.html#def:positive_map">Definition 5.1</a></li>
           
@@ -5682,7 +6602,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000287">
+<div class="proof_wrapper" id="a0000000299">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5699,7 +6619,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">5.70</span>
+    <span class="theorem_thmlabel">5.83</span>
     <span class="theorem_thmtitle">Thm.&#160;6.1(2): Determinant one iff unitary channel</span>
     <div class="thm_header_extras">
 
@@ -5710,7 +6630,7 @@
 
     <a class="icon proof" href="ch-channels.html#thm:channelDet_norm_eq_one_iff_unitary">#</a>
     
-    <a class="icon proof" href="ch-channels.html#a0000000288"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-channels.html#a0000000300"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5728,11 +6648,11 @@
           
           <li><a href="ch-channels.html#def:channel">Definition 5.6</a></li>
           
-          <li><a href="ch-channels.html#def:channel_det">Definition 5.67</a></li>
+          <li><a href="ch-channels.html#def:channel_det">Definition 5.80</a></li>
           
-          <li><a href="ch-channels.html#def:unitary_channel">Definition 5.68</a></li>
+          <li><a href="ch-channels.html#def:unitary_channel">Definition 5.81</a></li>
           
-          <li><a href="ch-channels.html#thm:channelDet_norm_le_one">Theorem 5.69</a></li>
+          <li><a href="ch-channels.html#thm:channelDet_norm_le_one">Theorem 5.82</a></li>
           
         </ul>
     
@@ -5764,7 +6684,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   For a CPTP map \(T : M_{D}(\mathbb {C}) \to M_{D}(\mathbb {C})\), </p>
-<div class="displaymath" id="a0000000289">
+<div class="displaymath" id="a0000000301">
   \[  |\det T| = 1 \; \iff \;  \exists \,  U \in \mathcal{U}(D),\quad T(\rho ) = U\rho U^\dagger .  \]
 </div>
 <p> This is <span class="cite">
@@ -5774,7 +6694,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000288">
+<div class="proof_wrapper" id="a0000000300">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5786,14 +6706,14 @@
 
   </div>
 </div>
-<h1 id="sec:fixed_point_algebra">5.11 Fixed-point algebra (Wolf Thms.&#160;6.12–6.13)</h1>
+<h1 id="sec:fixed_point_algebra">5.12 Fixed-point algebra (Wolf Thms.&#160;6.12–6.13)</h1>
 
 <div class="definition_thmwrapper theorem-style-definition" id="def:kraus_fixed_points">
   <div class="definition_thmheading">
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">5.71</span>
+    <span class="definition_thmlabel">5.84</span>
     <span class="definition_thmtitle">Kraus fixed points</span>
     <div class="thm_header_extras">
 
@@ -5857,7 +6777,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">5.72</span>
+    <span class="theorem_thmlabel">5.85</span>
     <span class="theorem_thmtitle">Thm.&#160;6.12: Fixed points form a \(*\)-subalgebra</span>
     <div class="thm_header_extras">
 
@@ -5868,7 +6788,7 @@
 
     <a class="icon proof" href="ch-channels.html#thm:fixedPointsStarSubalgebra">#</a>
     
-    <a class="icon proof" href="ch-channels.html#a0000000290"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-channels.html#a0000000302"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5884,7 +6804,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-channels.html#def:kraus_fixed_points">Definition 5.71</a></li>
+          <li><a href="ch-channels.html#def:kraus_fixed_points">Definition 5.84</a></li>
           
           <li><a href="ch-schwarz.html#def:unital_kraus">Definition 7.3</a></li>
           
@@ -5928,7 +6848,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000290">
+<div class="proof_wrapper" id="a0000000302">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5940,12 +6860,12 @@
 
   </div>
 </div>
-<div class="remark_thmwrapper theorem-style-remark" id="a0000000291">
+<div class="remark_thmwrapper theorem-style-remark" id="a0000000303">
   <div class="remark_thmheading">
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">5.73</span>
+    <span class="remark_thmlabel">5.86</span>
     <div class="thm_header_extras">
 
     
@@ -5953,14 +6873,14 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-channels.html#a0000000291">#</a>
+    <a class="icon proof" href="ch-channels.html#a0000000303">#</a>
     
     
     
         </div>
   </div>
   <div class="remark_thmcontent">
-  <p>The multiplicative-domain step in the proof above uses the left multiplicative identity (Theorem&#160;<a href="ch-schwarz.html#thm:left_multiplicative_identity">7.25</a>) from Chapter&#160;<a href="ch-schwarz.html">7</a>, which appears later in the document. The logical dependency is acyclic: Chapter&#160;<a href="ch-schwarz.html">7</a> does not use any result from&#160;§<a href="ch-channels.html#sec:fixed_point_algebra">5.11</a>. </p>
+  <p>The multiplicative-domain step in the proof above uses the left multiplicative identity (Theorem&#160;<a href="ch-schwarz.html#thm:left_multiplicative_identity">7.25</a>) from Chapter&#160;<a href="ch-schwarz.html">7</a>, which appears later in the document. The logical dependency is acyclic: Chapter&#160;<a href="ch-schwarz.html">7</a> does not use any result from&#160;§<a href="ch-channels.html#sec:fixed_point_algebra">5.12</a>. </p>
 
   </div>
 </div>
@@ -5969,7 +6889,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">5.74</span>
+    <span class="definition_thmlabel">5.87</span>
     <span class="definition_thmtitle">Adjoint fixed points</span>
     <div class="thm_header_extras">
 
@@ -6033,7 +6953,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">5.75</span>
+    <span class="theorem_thmlabel">5.88</span>
     <span class="theorem_thmtitle">Thm.&#160;6.12 in the Heisenberg picture</span>
     <div class="thm_header_extras">
 
@@ -6044,7 +6964,7 @@
 
     <a class="icon proof" href="ch-channels.html#thm:adjointFixedPointsStarSubalgebra">#</a>
     
-    <a class="icon proof" href="ch-channels.html#a0000000292"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-channels.html#a0000000304"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6060,11 +6980,11 @@
         
         <ul class="uses">
           
-          <li><a href="ch-channels.html#def:adjoint_fixed_points">Definition 5.74</a></li>
+          <li><a href="ch-channels.html#def:adjoint_fixed_points">Definition 5.87</a></li>
           
           <li><a href="ch-schwarz.html#def:tp_kraus">Definition 7.4</a></li>
           
-          <li><a href="ch-channels.html#thm:fixedPointsStarSubalgebra">Theorem 5.72</a></li>
+          <li><a href="ch-channels.html#thm:fixedPointsStarSubalgebra">Theorem 5.85</a></li>
           
         </ul>
     
@@ -6099,7 +7019,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000292">
+<div class="proof_wrapper" id="a0000000304">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6107,7 +7027,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Apply Theorem&#160;<a href="ch-channels.html#thm:fixedPointsStarSubalgebra">5.72</a> to the adjoint family \(\{ K_i^\dagger \} \). </p>
+  <p> Apply Theorem&#160;<a href="ch-channels.html#thm:fixedPointsStarSubalgebra">5.85</a> to the adjoint family \(\{ K_i^\dagger \} \). </p>
 
   </div>
 </div>
@@ -6116,7 +7036,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">5.76</span>
+    <span class="definition_thmlabel">5.89</span>
     <span class="definition_thmtitle">Kraus commutant</span>
     <div class="thm_header_extras">
 
@@ -6180,7 +7100,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">5.77</span>
+    <span class="theorem_thmlabel">5.90</span>
     <span class="theorem_thmtitle">Thm.&#160;6.13: Adjoint fixed points = Kraus commutant</span>
     <div class="thm_header_extras">
 
@@ -6191,7 +7111,7 @@
 
     <a class="icon proof" href="ch-channels.html#thm:adjointFixedPoints_eq_krausCommutant">#</a>
     
-    <a class="icon proof" href="ch-channels.html#a0000000293"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-channels.html#a0000000305"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6207,13 +7127,13 @@
         
         <ul class="uses">
           
-          <li><a href="ch-channels.html#def:adjoint_fixed_points">Definition 5.74</a></li>
+          <li><a href="ch-channels.html#def:adjoint_fixed_points">Definition 5.87</a></li>
           
-          <li><a href="ch-channels.html#def:kraus_commutant">Definition 5.76</a></li>
+          <li><a href="ch-channels.html#def:kraus_commutant">Definition 5.89</a></li>
           
           <li><a href="ch-schwarz.html#def:tp_kraus">Definition 7.4</a></li>
           
-          <li><a href="ch-channels.html#thm:adjointFixedPointsStarSubalgebra">Theorem 5.75</a></li>
+          <li><a href="ch-channels.html#thm:adjointFixedPointsStarSubalgebra">Theorem 5.88</a></li>
           
         </ul>
     
@@ -6244,8 +7164,8 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   Under the hypotheses of Theorem&#160;<a href="ch-channels.html#thm:adjointFixedPointsStarSubalgebra">5.75</a>, the adjoint fixed-point \(*\)-subalgebra equals the Kraus commutant: </p>
-<div class="displaymath" id="a0000000294">
+  <p>   Under the hypotheses of Theorem&#160;<a href="ch-channels.html#thm:adjointFixedPointsStarSubalgebra">5.88</a>, the adjoint fixed-point \(*\)-subalgebra equals the Kraus commutant: </p>
+<div class="displaymath" id="a0000000306">
   \[  \mathrm{Fix}(E^*) = \{ K_i, K_i^\dagger \} '.  \]
 </div>
 <p> This is <span class="cite">
@@ -6255,7 +7175,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000293">
+<div class="proof_wrapper" id="a0000000305">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6267,7 +7187,7 @@
 
   </div>
 </div>
-<h1 id="sec:quantum_dynamical_semigroups">5.12 Quantum dynamical semigroups</h1>
+<h1 id="sec:quantum_dynamical_semigroups">5.13 Quantum dynamical semigroups</h1>
 
 <p>The one-parameter semigroup theory of Wolf Chapter&#160;7 is treated in Chapter&#160;<a href="ch-semigroup.html">16</a>. That later chapter records the exponential representation of norm-continuous semigroups, perturbation bounds, and the GKSL/Lindblad description of generators. We do not duplicate that material here.  </p>
 
