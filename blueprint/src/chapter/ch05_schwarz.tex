@@ -763,9 +763,9 @@ order, together with operator concavity of the matrix logarithm.
 
 \subsection{Trace concavity and convexity of matrix powers}
 
-\begin{theorem}[Trace concavity of real powers]\label{thm:trace_rpow_concave_axiom}
-    \lean{trace_rpow_concave_axiom}
-    \notready
+\begin{theorem}[Trace concavity of real powers]\label{thm:trace_rpow_concave}
+    \lean{TNLean.trace_rpow_concave, trace_rpow_concave}
+    \leanok
     \uses{lem:diagonal_jensen_of_convexOn}
     For $p\in[0,1]$, PSD matrices $A_1,A_2$, and $t\in[0,1]$:
     \[
@@ -777,23 +777,27 @@ order, together with operator concavity of the matrix logarithm.
     monotonicity on the Loewner order.
 \end{theorem}
 
-\begin{theorem}[Trace concavity of real powers --- restatement]\label{thm:trace_rpow_concave}
-    \lean{trace_rpow_concave}
-    \notready
-    \uses{thm:trace_rpow_concave_axiom}
-    Restates Theorem~\ref{thm:trace_rpow_concave_axiom} for downstream use.
-    Axiom-dependent: not fully formalized until
-    Theorem~\ref{thm:trace_rpow_concave_axiom} is proved.
-\end{theorem}
-
-\begin{proof}
-    Direct application of the axiom.
+\begin{proof}\leanok
+    Let $A=tA_1+(1-t)A_2$ and let $\{\psi_j\}$ with eigenvalues
+    $\mu_j\ge 0$ be an orthonormal eigenbasis of $A$. A direct
+    computation gives $\Re\tr(A^p)=\sum_j \mu_j^p$ and
+    $\mu_j=t\,a_j+(1-t)\,b_j$ where
+    $a_j=\Re\langle\psi_j,A_1\psi_j\rangle$,
+    $b_j=\Re\langle\psi_j,A_2\psi_j\rangle$.
+    Scalar concavity of $x\mapsto x^p$ on $[0,\infty)$ yields
+    $\mu_j^p\ge t\,a_j^p+(1-t)\,b_j^p$, and the diagonal Jensen
+    inequality (Lemma~\ref{lem:diagonal_jensen_of_convexOn},
+    concave form) gives
+    $a_j^p\le\Re\langle\psi_j,A_1^p\psi_j\rangle$ (and similarly for
+    $b_j$). Summing over $j$ and using
+    $\sum_j\Re\langle\psi_j,M\psi_j\rangle=\Re\tr M$ yields the
+    conclusion. See Bhatia, \emph{Matrix Analysis}, Ch.~V.
 \end{proof}
 
-\begin{theorem}[Trace convexity of real powers]\label{thm:trace_rpow_convex_axiom}
-    \lean{trace_rpow_convex_axiom}
-    \notready
-    \uses{lem:diagonal_jensen_of_convexOn}
+\begin{theorem}[Trace convexity of real powers]\label{thm:trace_rpow_convex}
+    \lean{TNLean.trace_rpow_convex, trace_rpow_convex}
+    \leanok
+    \uses{lem:diagonal_jensen_of_convexOn, thm:trace_rpow_concave}
     For $p\in[1,2]$, PSD matrices $A_1,A_2$, and $t\in[0,1]$:
     \[
         \Re\tr\!\bigl((tA_1+(1-t)A_2)^p\bigr)
@@ -804,17 +808,11 @@ order, together with operator concavity of the matrix logarithm.
     monotonicity on the Loewner order.
 \end{theorem}
 
-\begin{theorem}[Trace convexity of real powers --- restatement]\label{thm:trace_rpow_convex}
-    \lean{trace_rpow_convex}
-    \notready
-    \uses{thm:trace_rpow_convex_axiom}
-    Restates Theorem~\ref{thm:trace_rpow_convex_axiom} for downstream use.
-    Axiom-dependent: not fully formalized until
-    Theorem~\ref{thm:trace_rpow_convex_axiom} is proved.
-\end{theorem}
-
-\begin{proof}
-    Direct application of the axiom.
+\begin{proof}\leanok
+    Identical eigenbasis reduction as in
+    Theorem~\ref{thm:trace_rpow_concave}, with scalar convexity
+    (rather than concavity) of $x\mapsto x^p$ on $[0,\infty)$ for
+    $p\ge 1$ and the convex form of the diagonal Jensen inequality.
 \end{proof}
 
 \subsection{Operator Jensen inequality for positive maps}
