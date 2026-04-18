@@ -28,8 +28,8 @@ convexity/concavity consequences for matrix power functions.
 
 * `trace_rpow_concave`, `trace_rpow_convex` are proved in
   `TNLean.Analysis.OperatorConvexity` using the spectral theorem and the
-  scalar Jensen inequality. This file restates them in the present
-  namespace for downstream use.
+  scalar Jensen inequality. This file restates them in the present file,
+  for downstream use.
 * `lieb_concavity` is still derived from `lieb_concavity_axiom` in
   `TNLean.Axioms.OperatorConvexity`, pending the integral-representation
   infrastructure in Mathlib.
