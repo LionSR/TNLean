@@ -1036,12 +1036,16 @@ The following results separate the zero blocks from the
 	Let $A$ be an MPS tensor satisfying
 	$\sum_i (A^i)^\dagger A^i = P$ for an orthogonal projection $P$,
 	and suppose $P A^i P = A^i$ for every~$i$.
-	Then there exists a left-canonical tensor $C$ of bond dimension
-	$n = \tr(P)$ with
+	Then there exist a left-canonical tensor $C$ of bond dimension
+	$n = \tr(P)$ and a linear map
+	$\varphi : M_n(\mathbb{C}) \to P \cdot M_D(\mathbb{C}) \cdot P$ with
 	\[
-		V^{(N)}(C)_\sigma = \tr\!\bigl(P \cdot A^\sigma\bigr)
+		V^{(N)}(C)_\sigma = \tr\!\bigl(P \cdot A^\sigma\bigr),
+		\qquad
+		\varphi\!\bigl(\E_{C^\dagger}(X)\bigr)
+			= \E_{A^\dagger}\!\bigl(\varphi(X)\bigr)
 	\]
-	for every~$\sigma$.
+	for every~$\sigma$ and every $X \in M_n(\mathbb{C})$.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -1084,7 +1088,10 @@ The following results separate the zero blocks from the
 	as $\bigoplus_{k=1}^m C_k$.
 	Moreover, each sector satisfies the per-sector trace relation
 	$V^{(N)}(C_k)(\sigma) = \operatorname{tr}(P_k \cdot A^{i_1} \cdots A^{i_N})$
-	for every word $\sigma = (i_1, \dots, i_N)$.
+	for every word $\sigma = (i_1, \dots, i_N)$, and each block carries a
+	compression isometry $\varphi_k$ into the corner $P_k \cdot M_D(\mathbb{C}) \cdot P_k$
+	intertwining the compressed adjoint transfer map with the sector adjoint
+	transfer map.
 \end{theorem}
 
 \begin{proof}\leanok

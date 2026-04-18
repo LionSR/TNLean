@@ -694,8 +694,12 @@ The following is Theorem~3.8 (``equal case'') of \cite{DeLasCuevas2017Irreducibl
 	projections $P_0,\dotsc,P_{m-1}$ on the ambient bond space such that
 	$\sum_k P_k = \Id$, the projections satisfy the cyclic-shift relation
 	$E^\dagger(P_{k+1}) = P_k$, each $P_k$ commutes with every blocked letter
-	$P_k A^{(m)}_i = A^{(m)}_i P_k$, and
-	$V^{(N)}(C_k)_\sigma = \tr(P_k (A^{(m)})^\sigma)$ for every word~$\sigma$.
+	$P_k A^{(m)}_i = A^{(m)}_i P_k$,
+	$V^{(N)}(C_k)_\sigma = \tr(P_k (A^{(m)})^\sigma)$ for every word~$\sigma$,
+	and each block carries a compression isometry
+	$\varphi_k : M_{\dim C_k}(\mathbb{C}) \to P_k \cdot M_D(\mathbb{C}) \cdot P_k$
+	intertwining the compressed adjoint transfer map with the sector adjoint
+	transfer map on the corner of~$P_k$.
 \end{definition}
 
 \begin{theorem}[Self-overlap along period multiples]\label{thm:periodic_self_overlap_tendsto}
