@@ -95,6 +95,15 @@ section Compression
 
 variable {P : MatrixAlg D}
 
+/-- Conjugate transpose commutes with `Matrix.reindexLinearEquiv` on square matrices when both
+index equivalences agree. -/
+private lemma reindexLinearEquiv_conjTranspose
+    {α β : Type*} (e : α ≃ β) (M : Matrix α α ℂ) :
+    Matrix.reindexLinearEquiv ℂ ℂ e e Mᴴ =
+      (Matrix.reindexLinearEquiv ℂ ℂ e e M)ᴴ := by
+  change Matrix.reindex e e Mᴴ = (Matrix.reindex e e M)ᴴ
+  rw [Matrix.conjTranspose_reindex]
+
 /-- Word evaluation of the unitary-conjugated tensor. -/
 private lemma evalWord_conj_unitary
     (A : MPSTensor d D) (U : Matrix.unitaryGroup (Fin D) ℂ) :
@@ -567,10 +576,7 @@ theorem exists_compressedTensor_of_supported_projection
             eS.symm eS.symm eS.symm ((C i)ᴴ) Z]
       have hCt_reindex :
           Matrix.reindexLinearEquiv ℂ ℂ eS.symm eS.symm ((C i)ᴴ) = (B11 i)ᴴ := by
-        change Matrix.reindex eS.symm eS.symm ((C i)ᴴ) = (B11 i)ᴴ
-        rw [← Matrix.conjTranspose_reindex]
-        change (Matrix.reindexLinearEquiv ℂ ℂ eS.symm eS.symm (C i))ᴴ = (B11 i)ᴴ
-        rw [hExM_C]
+        rw [reindexLinearEquiv_conjTranspose, hExM_C]
       rw [hCt_reindex, hExM_C]
     -- Block identity: fromBlocks ((B11 i)ᴴ * M' * B11 i) 0 0 0 = (X i)ᴴ * F * X i.
     have hF_letter :
@@ -597,10 +603,7 @@ theorem exists_compressedTensor_of_supported_projection
             eST.symm eST.symm eST.symm ((X i)ᴴ) F]
       have hXct_reindex :
           Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm ((X i)ᴴ) = (B i)ᴴ := by
-        change Matrix.reindex eST.symm eST.symm ((X i)ᴴ) = (B i)ᴴ
-        rw [← Matrix.conjTranspose_reindex]
-        change (Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm (X i))ᴴ = (B i)ᴴ
-        rw [hExST_X]
+        rw [reindexLinearEquiv_conjTranspose, hExST_X]
       rw [hXct_reindex, hExST_X]
     -- Compute RHS = Umat * ((B i)ᴴ * G * B i) * Umatᴴ.
     have hRHS :
