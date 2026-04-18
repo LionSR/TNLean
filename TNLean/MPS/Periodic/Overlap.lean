@@ -127,7 +127,11 @@ def IsCyclicSectorDecomp [NeZero D] [NeZero m] (A : MPSTensor d D)
       (φ k (transferMap (d := blockPhysDim d m) (D := dim k)
           (fun i => (blocks k i)ᴴ) X)).1 =
         transferMap (d := blockPhysDim d m) (D := D)
-          (fun i => (P k * blockTensor A m i)ᴴ) ((φ k X).1))
+          (fun i => (P k * blockTensor A m i)ᴴ) ((φ k X).1)) ∧
+    (∀ k (X Y : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
+      (φ k (X * Y)).1 = (φ k X).1 * (φ k Y).1) ∧
+    (∀ k (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
+      (φ k Xᴴ).1 = ((φ k X).1)ᴴ)
 
 private theorem exists_cyclic_sector_decomp_after_blocking_of_isPeriodic
     [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
@@ -214,9 +218,9 @@ private theorem exists_cyclic_sector_decomp_after_blocking_of_isPeriodic
   obtain ⟨dim, blocks, P, φ, hLC, hMPV, hPproj, hPsum, hCyclic, hComm, hTraceNondeg⟩ :=
     exists_cyclic_sector_decomp_after_blocking
       A hP.leftCanonical hP.irreducible ρ hρ_pd h_adjfix hIrrK hωprim hperiph_range
-  obtain ⟨hTrace, hIntertwine, hNondeg⟩ := hTraceNondeg
+  obtain ⟨hTrace, hIntertwine, hMul, hStar, hNondeg⟩ := hTraceNondeg
   exact ⟨dim, blocks, hLC, hMPV,
-    ⟨P, φ, hPproj, hPsum, hCyclic, hComm, hTrace, hIntertwine⟩, hNondeg⟩
+    ⟨P, φ, hPproj, hPsum, hCyclic, hComm, hTrace, hIntertwine, hMul, hStar⟩, hNondeg⟩
 
 
 private lemma hLift_cyclicDecomp_mps_of_fixUpgrade_missingBridge
@@ -476,13 +480,21 @@ private lemma compressedTensor_adjointTransferMap_cornerBridge
     {r D n : ℕ} [NeZero n]
     (B : MPSTensor r D) (C : MPSTensor r n) (P : MatrixAlg D)
     (T : MatrixEnd D)
+    (φ : Matrix (Fin n) (Fin n) ℂ ≃ₗ[ℂ] cornerSubmodule P)
     (hT :
       transferMap (d := r) (D := D) (fun i => (B i)ᴴ) = T)
     (hPproj : IsOrthogonalProjection P)
-    (hComm : ∀ i : Fin r, P * B i = B i * P)
-    (hTrace :
+    (_hComm : ∀ i : Fin r, P * B i = B i * P)
+    (_hTrace :
       ∀ (N : ℕ) (σ : Fin N → Fin r),
         mpv C σ = (P * evalWord B (List.ofFn σ)).trace)
+    (hIntertwine : ∀ X : Matrix (Fin n) (Fin n) ℂ,
+      (φ (transferMap (d := r) (D := n) (fun i => (C i)ᴴ) X)).1 =
+        transferMap (d := r) (D := D) (fun i => (P * B i)ᴴ) ((φ X).1))
+    (hMul : ∀ X Y : Matrix (Fin n) (Fin n) ℂ,
+      (φ (X * Y)).1 = (φ X).1 * (φ Y).1)
+    (hStar : ∀ X : Matrix (Fin n) (Fin n) ℂ,
+      (φ Xᴴ).1 = ((φ X).1)ᴴ)
     (hInv : PreservesCorner P T)
     (hCornerPrim :
       _root_.IsPrimitive (cornerRestriction P T hInv))
@@ -491,7 +503,150 @@ private lemma compressedTensor_adjointTransferMap_cornerBridge
       (transferMap (d := r) (D := n) (fun i => (C i)ᴴ)) ∧
       IsIrreducibleMap
         (transferMap (d := r) (D := n) (fun i => (C i)ᴴ)) := by
-  sorry
+  classical
+  set F_C : Matrix (Fin n) (Fin n) ℂ →ₗ[ℂ] Matrix (Fin n) (Fin n) ℂ :=
+    transferMap (d := r) (D := n) (fun i => (C i)ᴴ) with hF_C_def
+  have hPherm : Pᴴ = P := hPproj.1.eq
+  -- On the corner, the ambient `T` and the `P*B`-adjoint transfer map agree.
+  have hTeq :
+      ∀ Y : MatrixAlg D, P * Y * P = Y →
+        transferMap (d := r) (D := D) (fun i => (P * B i)ᴴ) Y = T Y := by
+    intro Y hY
+    have hstep :
+        transferMap (d := r) (D := D) (fun i => (P * B i)ᴴ) Y =
+          transferMap (d := r) (D := D) (fun i => (B i)ᴴ) Y := by
+      simp only [transferMap_apply]
+      refine Finset.sum_congr rfl ?_
+      intro i _
+      have hPBi : ((P * B i)ᴴ) = (B i)ᴴ * P := by
+        rw [Matrix.conjTranspose_mul, hPherm]
+      rw [hPBi, Matrix.conjTranspose_mul, Matrix.conjTranspose_conjTranspose, hPherm]
+      calc
+        (B i)ᴴ * P * Y * (P * B i)
+            = (B i)ᴴ * (P * Y * P) * B i := by
+              simp [Matrix.mul_assoc]
+        _ = (B i)ᴴ * Y * B i := by rw [hY]
+    rw [hstep, hT]
+  -- `cornerRestriction P T hInv = φ.conj F_C`.
+  have hConj :
+      cornerRestriction P T hInv = φ.conj F_C := by
+    refine LinearMap.ext ?_
+    intro Y
+    refine Subtype.ext ?_
+    change T Y.1 = (φ.conj F_C Y).1
+    rw [LinearEquiv.conj_apply_apply]
+    have hkey := hIntertwine (φ.symm Y)
+    have hφsy : (φ (φ.symm Y)).1 = Y.1 :=
+      congrArg Subtype.val (LinearEquiv.apply_symm_apply φ Y)
+    rw [hφsy] at hkey
+    rw [hkey]
+    exact (hTeq Y.1 Y.2).symm
+  -- Primitivity: transport from the corner via cross-space conjugation.
+  have hPrim_F_C : _root_.IsPrimitive F_C :=
+    (IsPrimitive.conj_iff_cross (e := φ) (f := F_C)).mp (hConj ▸ hCornerPrim)
+  -- Irreducibility: map orthogonal projections `Q'` in `M_n(ℂ)` to corner projections.
+  -- `(φ 1).1 = P` since `(φ 1).1` is the identity of `cornerSubmodule P`.
+  have hφ1_eq_P : (φ 1).1 = P := by
+    have hPcorn : P * P * P = P := by rw [hPproj.2, hPproj.2]
+    set Yinv : Matrix (Fin n) (Fin n) ℂ := φ.symm ⟨P, hPcorn⟩
+    have hφYinv : (φ Yinv).1 = P :=
+      congrArg Subtype.val (LinearEquiv.apply_symm_apply φ ⟨P, hPcorn⟩)
+    have hPleft : (φ 1).1 * P = P := by
+      have hmul := hMul 1 Yinv
+      rw [one_mul, hφYinv] at hmul
+      exact hmul.symm
+    calc
+      (φ 1).1 = P * (φ 1).1 * P := ((φ 1).2).symm
+      _ = P * ((φ 1).1 * P) := by simp [Matrix.mul_assoc]
+      _ = P * P := by rw [hPleft]
+      _ = P := hPproj.2
+  have hIrr : IsIrreducibleMap F_C := by
+    intro Q' hQ'proj hQ'preserves
+    set Q : MatrixAlg D := (φ Q').1 with hQ_def
+    have hQ_corner : P * Q * P = Q := (φ Q').2
+    have hQherm : Qᴴ = Q := by
+      have hstar := hStar Q'
+      rw [hQ'proj.1.eq] at hstar
+      exact hstar.symm
+    have hQidem : Q * Q = Q := by
+      have h1 := hMul Q' Q'
+      rw [hQ'proj.2] at h1
+      exact h1.symm
+    have hQP : Q * P = Q := by
+      calc Q * P = P * Q * P * P := by rw [hQ_corner]
+        _ = P * Q * (P * P) := by simp [Matrix.mul_assoc]
+        _ = P * Q * P := by rw [hPproj.2]
+        _ = Q := hQ_corner
+    have hPQ : P * Q = Q := by
+      calc P * Q = P * (P * Q * P) := by rw [hQ_corner]
+        _ = (P * P) * Q * P := by simp [Matrix.mul_assoc]
+        _ = P * Q * P := by rw [hPproj.2]
+        _ = Q := hQ_corner
+    have hQproj : IsOrthogonalProjection Q := ⟨hQherm, hQidem⟩
+    -- PreservesCorner Q T: use `hIntertwine`, `hMul`, and Q'-invariance of F_C.
+    have hQinv : PreservesCorner Q T := by
+      intro Y
+      set W : MatrixAlg D := P * Y * P with hW_def
+      have hW_corner : P * W * P = W := by
+        change P * (P * Y * P) * P = P * Y * P
+        calc
+          P * (P * Y * P) * P = (P * P) * Y * (P * P) := by simp [Matrix.mul_assoc]
+          _ = P * Y * P := by rw [hPproj.2]
+      have hQYQ_eq : Q * Y * Q = Q * W * Q := by
+        calc Q * Y * Q
+            = (Q * P) * Y * (P * Q) := by rw [hQP, hPQ]
+          _ = Q * (P * Y * P) * Q := by simp [Matrix.mul_assoc]
+          _ = Q * W * Q := rfl
+      set W' : Matrix (Fin n) (Fin n) ℂ := φ.symm ⟨W, hW_corner⟩
+      have hφW' : (φ W').1 = W :=
+        congrArg Subtype.val (LinearEquiv.apply_symm_apply φ ⟨W, hW_corner⟩)
+      set Z' : Matrix (Fin n) (Fin n) ℂ := Q' * W' * Q' with hZ'_def
+      have hQWQ_φZ' : Q * W * Q = (φ Z').1 := by
+        have hZ'assoc : Z' = Q' * (W' * Q') := by
+          simp [hZ'_def, Matrix.mul_assoc]
+        calc
+          Q * W * Q = (φ Q').1 * W * (φ Q').1 := rfl
+          _ = (φ Q').1 * (φ W').1 * (φ Q').1 := by rw [hφW']
+          _ = (φ Q').1 * ((φ W').1 * (φ Q').1) := by simp [Matrix.mul_assoc]
+          _ = (φ Q').1 * (φ (W' * Q')).1 := by rw [hMul W' Q']
+          _ = (φ (Q' * (W' * Q'))).1 := by rw [hMul Q' (W' * Q')]
+          _ = (φ Z').1 := by rw [← hZ'assoc]
+      have hQYQ_φZ' : Q * Y * Q = (φ Z').1 := hQYQ_eq.trans hQWQ_φZ'
+      -- F_C Z' ∈ corner(Q') by Q'-invariance of F_C.
+      have hF_C_fix : Q' * F_C Z' * Q' = F_C Z' := by
+        have := hQ'preserves W'
+        simpa [hZ'_def, hF_C_def] using this
+      -- Transport Q'-invariance of F_C via φ.
+      have hφF_C_fix : (φ (F_C Z')).1 = Q * (φ (F_C Z')).1 * Q := by
+        have key : (φ (Q' * F_C Z' * Q')).1 = Q * (φ (F_C Z')).1 * Q := by
+          calc
+            (φ (Q' * F_C Z' * Q')).1
+                = (φ (Q' * (F_C Z' * Q'))).1 := by rw [Matrix.mul_assoc]
+              _ = (φ Q').1 * (φ (F_C Z' * Q')).1 := hMul _ _
+              _ = (φ Q').1 * ((φ (F_C Z')).1 * (φ Q').1) := by rw [hMul (F_C Z') Q']
+              _ = Q * (φ (F_C Z')).1 * Q := by simp [hQ_def, Matrix.mul_assoc]
+        rw [hF_C_fix] at key
+        exact key
+      -- `T ((φ Z').1) = (φ (F_C Z')).1`.
+      have hTφZ' : T ((φ Z').1) = (φ (F_C Z')).1 := by
+        have hZ'corner : P * (φ Z').1 * P = (φ Z').1 := (φ Z').2
+        have hIw := (hIntertwine Z').symm
+        rw [hTeq _ hZ'corner] at hIw
+        exact hIw
+      rw [hQYQ_φZ', hTφZ']
+      exact hφF_C_fix.symm
+    rcases hCornerIrr Q hQproj hQP hPQ hQinv with hQ0 | hQP_eq
+    · left
+      apply φ.injective
+      apply Subtype.ext
+      simp only [map_zero, Submodule.coe_zero]
+      exact hQ0
+    · right
+      apply φ.injective
+      apply Subtype.ext
+      rw [hφ1_eq_P]
+      exact hQP_eq
+  exact ⟨hPrim_F_C, hIrr⟩
 
 /-- The missing compressed-sector identification.
 
@@ -507,6 +662,8 @@ private lemma compressedSector_adjointTransferMap_cornerBridge_of_cyclicDecomp
     (blocks :
       (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k))
     {P : Fin m → MatrixAlg D}
+    {φ : (k : Fin m) →
+      Matrix (Fin (dim k)) (Fin (dim k)) ℂ ≃ₗ[ℂ] cornerSubmodule (P k)}
     (hPproj : ∀ k, IsOrthogonalProjection (P k))
     (hComm :
       ∀ k (i : Fin (blockPhysDim d m)),
@@ -514,6 +671,18 @@ private lemma compressedSector_adjointTransferMap_cornerBridge_of_cyclicDecomp
     (hTrace :
       ∀ k (N : ℕ) (σ : Fin N → Fin (blockPhysDim d m)),
         mpv (blocks k) σ = (P k * evalWord (blockTensor A m) (List.ofFn σ)).trace)
+    (hIntertwine :
+      ∀ k (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
+        (φ k (transferMap (d := blockPhysDim d m) (D := dim k)
+            (fun i => (blocks k i)ᴴ) X)).1 =
+          transferMap (d := blockPhysDim d m) (D := D)
+            (fun i => (P k * blockTensor A m i)ᴴ) ((φ k X).1))
+    (hMul :
+      ∀ k (X Y : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
+        (φ k (X * Y)).1 = (φ k X).1 * (φ k Y).1)
+    (hStar :
+      ∀ k (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
+        (φ k Xᴴ).1 = ((φ k X).1)ᴴ)
     (u : Fin m) (hNonzero : dim u ≠ 0)
     (hInv :
       PreservesCorner (P u)
@@ -542,8 +711,9 @@ private lemma compressedSector_adjointTransferMap_cornerBridge_of_cyclicDecomp
     exact transferMap_adjoint_blocked_eq_pow A m X
   exact
     compressedTensor_adjointTransferMap_cornerBridge
-      (B := blockTensor A m) (C := blocks u) (P := P u) (T := T)
-      hT (hPproj u) (hComm u) (hTrace u) hInv hCornerPrim hCornerIrr
+      (B := blockTensor A m) (C := blocks u) (P := P u) (T := T) (φ := φ u)
+      hT (hPproj u) (hComm u) (hTrace u) (hIntertwine u) (hMul u) (hStar u)
+      hInv hCornerPrim hCornerIrr
 
 private lemma adjointTransferMap_primitive_and_irreducible_sectorBlock_of_cyclicDecomp
     [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
@@ -565,13 +735,14 @@ private lemma adjointTransferMap_primitive_and_irreducible_sectorBlock_of_cyclic
       ∧ IsIrreducibleMap
         (transferMap (d := blockPhysDim d m) (D := dim u)
           (fun i => (blocks u i)ᴴ)) := by
-  obtain ⟨P, _φ, hPproj, hPsum, hCyclicP, hComm, hTrace, _hIntertwine⟩ := hCyclic
+  obtain ⟨P, φ, hPproj, hPsum, hCyclicP, hComm, hTrace, hIntertwine, hMul, hStar⟩ := hCyclic
   obtain ⟨hInv, hCornerPrim, hCornerIrr⟩ :=
     cornerRestriction_primitive_and_irreducible_of_cyclicDecomp
       A hP blocks hBlocks_lc hBlocks_mpv hPproj hPsum hCyclicP hComm hTrace u hNonzero
   exact
     compressedSector_adjointTransferMap_cornerBridge_of_cyclicDecomp
-      A blocks hPproj hComm hTrace u hNonzero hInv hCornerPrim hCornerIrr
+      A blocks (φ := φ) hPproj hComm hTrace hIntertwine hMul hStar u hNonzero
+      hInv hCornerPrim hCornerIrr
 
 /-- **Structural bridge** for Case 3 of Proposition 3.3 (arXiv:1708.00029):
 each nonzero compressed sector block `blocks u` arising from a cyclic sector
@@ -705,7 +876,8 @@ private lemma sectorBlocks_not_gaugePhaseEquiv_of_ne
     ¬ GaugePhaseEquiv
       (cast (congr_arg (MPSTensor (blockPhysDim d m)) hdim) (blocks u))
       (blocks v) := by
-  obtain ⟨P, _φ, hPproj, hPsum, hCyclicP, hComm, hTrace, _hIntertwine⟩ := hCyclic
+  obtain ⟨P, _φ, hPproj, hPsum, hCyclicP, hComm, hTrace, _hIntertwine, _hMul, _hStar⟩ :=
+    hCyclic
   have hPairwise : Pairwise fun i j : Fin m => P i * P j = 0 :=
     pairwise_mul_zero_of_orthogonalProjection_sum_one P hPproj hPsum
   have hOrth : P u * P v = 0 := hPairwise huv
@@ -1431,7 +1603,8 @@ private lemma sectorDim_ne_zero_succ_of_cyclicSectorDecomp
     {u : Fin m} (hNondeg : dim u ≠ 0) :
     dim (u + 1) ≠ 0 := by
   classical
-  obtain ⟨P, _φ, hPproj, _hPsum, hShift, _hComm, hTrace, _hIntertwine⟩ := hCyclic
+  obtain ⟨P, _φ, hPproj, _hPsum, hShift, _hComm, hTrace, _hIntertwine, _hMul, _hStar⟩ :=
+    hCyclic
   intro hzero
   have htrace_succ :
       Matrix.trace (P (u + 1)) = 0 := by
