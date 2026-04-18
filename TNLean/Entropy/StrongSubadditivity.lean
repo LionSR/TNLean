@@ -97,12 +97,12 @@ theorem strongSubadditivity
     (ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)
       (Fin dA × Fin dB × Fin dC) ℂ)
     (hρ_dm : ρ_ABC.PosSemidef ∧ ρ_ABC.trace = 1) :
-    _root_.vonNeumannEntropy ρ_ABC hρ_dm.1.isHermitian
-      + _root_.vonNeumannEntropy (traceAC_ABC ρ_ABC)
+    Entropy.vonNeumannEntropy ρ_ABC hρ_dm.1.isHermitian
+      + Entropy.vonNeumannEntropy (traceAC_ABC ρ_ABC)
           (traceAC_ABC_isHermitian hρ_dm.1.isHermitian)
-    ≤ _root_.vonNeumannEntropy (traceC_ABC ρ_ABC)
+    ≤ Entropy.vonNeumannEntropy (traceC_ABC ρ_ABC)
           (traceC_ABC_isHermitian hρ_dm.1.isHermitian)
-      + _root_.vonNeumannEntropy (traceA_ABC ρ_ABC)
+      + Entropy.vonNeumannEntropy (traceA_ABC ρ_ABC)
           (traceA_ABC_isHermitian hρ_dm.1.isHermitian) :=
   _root_.strong_subadditivity ρ_ABC hρ_dm
 
@@ -122,7 +122,15 @@ theorem strongSubadditivity_rearranged
           (traceA_ABC_isHermitian hρ_dm.1.isHermitian)
       - _root_.vonNeumannEntropy (traceAC_ABC ρ_ABC)
           (traceAC_ABC_isHermitian hρ_dm.1.isHermitian) := by
-  have h := strongSubadditivity ρ_ABC hρ_dm
+  have h :
+      _root_.vonNeumannEntropy ρ_ABC hρ_dm.1.isHermitian
+        + _root_.vonNeumannEntropy (traceAC_ABC ρ_ABC)
+            (traceAC_ABC_isHermitian hρ_dm.1.isHermitian)
+      ≤ _root_.vonNeumannEntropy (traceC_ABC ρ_ABC)
+            (traceC_ABC_isHermitian hρ_dm.1.isHermitian)
+        + _root_.vonNeumannEntropy (traceA_ABC ρ_ABC)
+            (traceA_ABC_isHermitian hρ_dm.1.isHermitian) := by
+    simpa [Entropy.vonNeumannEntropy] using strongSubadditivity ρ_ABC hρ_dm
   linarith
 
 end StrongSubadditivity
@@ -196,7 +204,15 @@ theorem subadditivity_ssa_trivial_B
           (traceC_ABC_isHermitian hρ_dm.1.isHermitian)
       + _root_.vonNeumannEntropy (traceA_ABC ρ_ABC)
           (traceA_ABC_isHermitian hρ_dm.1.isHermitian) := by
-  have hSSA := strongSubadditivity ρ_ABC hρ_dm
+  have hSSA :
+      _root_.vonNeumannEntropy ρ_ABC hρ_dm.1.isHermitian
+        + _root_.vonNeumannEntropy (traceAC_ABC ρ_ABC)
+            (traceAC_ABC_isHermitian hρ_dm.1.isHermitian)
+      ≤ _root_.vonNeumannEntropy (traceC_ABC ρ_ABC)
+            (traceC_ABC_isHermitian hρ_dm.1.isHermitian)
+        + _root_.vonNeumannEntropy (traceA_ABC ρ_ABC)
+            (traceA_ABC_isHermitian hρ_dm.1.isHermitian) := by
+    simpa [Entropy.vonNeumannEntropy] using strongSubadditivity ρ_ABC hρ_dm
   have h_mid_zero :
       _root_.vonNeumannEntropy (traceAC_ABC ρ_ABC)
           (traceAC_ABC_isHermitian hρ_dm.1.isHermitian) = 0 :=
