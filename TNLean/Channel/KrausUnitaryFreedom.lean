@@ -45,7 +45,7 @@ theorem kraus_isometry_freedom_iff
         ∀ α, B α = ∑ j, V α j • A j := by
   refine ⟨fun h => kraus_rectangular_freedom' B A h hCard, ?_⟩
   rintro ⟨V, hV, hBA⟩
-  exact kraus_same_map_of_isometry_combination B A V hV hBA
+  exact kraus_same_map_of_isometry_combination (K := B) (K' := A) (W := V) hV hBA
 
 /-- **Wolf Thm. 2.18 (unitary form)**: if two Kraus families have the same
 finite index type, then they define the same completely positive map if and only
