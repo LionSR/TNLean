@@ -82,8 +82,8 @@ theorem IsCommutingParentHam.ham_comm_localTerm {A : MPSTensor d D} {L N : ℕ}
   exact _h j i
 
 /-- **Theorem 3.10(i)⟹(iii)** (arXiv:1606.00608): RFP implies NNCPH.
-A renormalization fixed-point tensor in left-canonical form has a
-nearest-neighbor commuting parent Hamiltonian.
+A normal renormalization fixed-point tensor has a nearest-neighbor
+commuting parent Hamiltonian.
 
 Per arXiv:1606.00608 §3.3 (source line 1307), this direction is
 *"trivial from Theorem [charact-MPS]"*; it is therefore **not** gated
@@ -92,13 +92,12 @@ structural form (Appendix B), recorded here as
 `Axioms.rfp_to_nncph_commute`. -/
 theorem rfp_implies_nncph (A : MPSTensor d D) [NeZero D]
     (hRFP : IsRFP A) (hNT : IsNormal A)
-    (hLeft : IsLeftCanonical A)
     (N : ℕ) (hN : 2 ≤ N) :
     IsNNCPH A N := by
   classical
   unfold IsNNCPH IsCommutingParentHam
   intro i j
-  exact Axioms.rfp_to_nncph_commute A hNT hLeft hRFP N hN i j
+  exact Axioms.rfp_to_nncph_commute A hNT hRFP N hN i j
 
 /-- **Theorem 3.10(iii)⟹(i)** (arXiv:1606.00608): NNCPH implies RFP.
 Gated on S. Beigi, *J. Phys. A: Math. Theor.* **45** (2012) 025306 —
