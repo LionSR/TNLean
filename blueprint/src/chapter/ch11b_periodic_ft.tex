@@ -134,6 +134,31 @@ for the irreducible-form framework in \cite{DeLasCuevas2017Irreducible}.
     coefficient relation that defines $p$-refinability.
 \end{proof}
 
+\begin{theorem}[Thm.~4.1 forward direction, conditional form]%
+    \label{thm:thm_4_1_p_refinement_forward}
+    \lean{MPSTensor.thm_4_1_p_refinement_forward}
+    \leanok
+    \uses{def:irreducible_form, def:p_refinable, def:p_divisible_channel,
+          thm:periodic_ft}
+    Let $B$ be an MPS tensor in irreducible form~II, $p \ge 1$. Assume the
+    periodic equal-case Fundamental Theorem (Theorem~\ref{thm:periodic_ft})
+    at bond dimension $D$ and blocked physical dimension $d^p$, and a
+    \emph{canonicalization} hypothesis packaging the remaining analytic
+    content (left-canonical witness with matching transfer map). Then
+    $p$-refinability of $B$ implies $p$-divisibility of $\mathcal{E}_B$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:periodic_ft}
+    The canonicalization hypothesis supplies a witness $A$ with
+    $\sum_i (A^i)^\dagger A^i = \Id$ (left-canonical) and
+    $\mathcal{E}_B = \mathcal{E}_{A^{[p]}}$. The left-canonical property
+    makes $\mathcal{E}_A$ a CPTP channel, and the blocking identity
+    $\mathcal{E}_{A^{[p]}} = (\mathcal{E}_A)^p$ (formalised as
+    \lean{MPSTensor.transferMap_blockTensor}) then identifies
+    $\mathcal{E}_B$ with the $p$-th power of the channel $\mathcal{E}_A$.
+\end{proof}
+
 \begin{remark}[Continuum-limit application]\notready
     \label{rem:thm_4_1_continuum_limit}
     The original motivation for Theorem~\ref{thm:thm_4_1_p_refinement}
