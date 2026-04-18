@@ -89,6 +89,108 @@ def IsIrreducibleOnCorner {D : ℕ} (P : MatrixAlg D) (T : MatrixEnd D) : Prop :
     PreservesCorner Q T →
     Q = 0 ∨ Q = P
 
+/-- Shared ambient compression map used to represent `M_n(ℂ)` inside a projection corner. -/
+noncomputable def cornerCompressionExpand
+    {D n : ℕ} (Umat : MatrixAlg D)
+    {S T : Type*} [Fintype S] [DecidableEq S] [Fintype T] [DecidableEq T]
+    (eST : Fin D ≃ S ⊕ T) (eS : S ≃ Fin n) :
+    Matrix (Fin n) (Fin n) ℂ →ₗ[ℂ] MatrixAlg D :=
+  let fromBlocksTL : Matrix S S ℂ →ₗ[ℂ] Matrix (S ⊕ T) (S ⊕ T) ℂ :=
+    { toFun := fun M => Matrix.fromBlocks M 0 0 0
+      map_add' := fun M₁ M₂ => by
+        ext i j; cases i <;> cases j <;> simp [Matrix.fromBlocks, Matrix.add_apply]
+      map_smul' := fun c M => by
+        ext i j; cases i <;> cases j <;> simp [Matrix.fromBlocks, Matrix.smul_apply] }
+  let conjUmat : MatrixAlg D →ₗ[ℂ] MatrixAlg D :=
+    { toFun := fun Y => Umat * Y * Umatᴴ
+      map_add' := fun Y₁ Y₂ => by simp [Matrix.mul_add, Matrix.add_mul]
+      map_smul' := fun c Y => by simp }
+  conjUmat ∘ₗ
+    (Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm).toLinearMap ∘ₗ
+    fromBlocksTL ∘ₗ
+    (Matrix.reindexLinearEquiv ℂ ℂ eS.symm eS.symm).toLinearMap
+
+lemma cornerCompressionExpand_apply
+    {D n : ℕ} (Umat : MatrixAlg D)
+    {S T : Type*} [Fintype S] [DecidableEq S] [Fintype T] [DecidableEq T]
+    (eST : Fin D ≃ S ⊕ T) (eS : S ≃ Fin n)
+    (M : Matrix (Fin n) (Fin n) ℂ) :
+    cornerCompressionExpand Umat eST eS M =
+      Umat *
+        Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm
+          (Matrix.fromBlocks (Matrix.reindexLinearEquiv ℂ ℂ eS.symm eS.symm M)
+            (0 : Matrix S T ℂ) (0 : Matrix T S ℂ) (0 : Matrix T T ℂ)) * Umatᴴ := rfl
+
+lemma cornerCompressionExpand_mem
+    {D n : ℕ} (P Pdiag Umat : MatrixAlg D)
+    {S T : Type*} [Fintype S] [DecidableEq S] [Fintype T] [DecidableEq T]
+    (eST : Fin D ≃ S ⊕ T) (eS : S ≃ Fin n)
+    (P0 : Matrix (S ⊕ T) (S ⊕ T) ℂ)
+    (hP0 : P0 = Matrix.fromBlocks (1 : Matrix S S ℂ) 0 0 (0 : Matrix T T ℂ))
+    (hP_decomp : P = Umat * Pdiag * Umatᴴ)
+    (hPdiag_back : Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm P0 = Pdiag)
+    (hU'U : Umatᴴ * Umat = 1) :
+    ∀ M : Matrix (Fin n) (Fin n) ℂ,
+      P * cornerCompressionExpand Umat eST eS M * P =
+        cornerCompressionExpand Umat eST eS M := by
+  intro M
+  rw [cornerCompressionExpand_apply Umat eST eS M]
+  set Y_ST : Matrix (S ⊕ T) (S ⊕ T) ℂ :=
+    Matrix.fromBlocks (Matrix.reindexLinearEquiv ℂ ℂ eS.symm eS.symm M)
+      (0 : Matrix S T ℂ) (0 : Matrix T S ℂ) (0 : Matrix T T ℂ)
+  set Y_D : MatrixAlg D := Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm Y_ST
+  have hP0_Y : P0 * Y_ST * P0 = Y_ST := by
+    rw [hP0]
+    simp [Y_ST, Matrix.fromBlocks_multiply]
+  have hPdiag_Y : Pdiag * Y_D * Pdiag = Y_D := by
+    calc
+      Pdiag * Y_D * Pdiag
+          = Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm P0 *
+              Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm Y_ST *
+              Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm P0 := by
+            rw [hPdiag_back]
+      _ = Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm (P0 * Y_ST) *
+              Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm P0 := by
+            rw [Matrix.reindexLinearEquiv_mul (R := ℂ) (A := ℂ)
+              eST.symm eST.symm eST.symm P0 Y_ST]
+      _ = Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm (P0 * Y_ST * P0) := by
+            rw [Matrix.reindexLinearEquiv_mul (R := ℂ) (A := ℂ)
+              eST.symm eST.symm eST.symm (P0 * Y_ST) P0]
+      _ = Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm Y_ST := by rw [hP0_Y]
+      _ = Y_D := rfl
+  change P * (Umat * Y_D * Umatᴴ) * P = Umat * Y_D * Umatᴴ
+  calc
+    P * (Umat * Y_D * Umatᴴ) * P
+        = (Umat * Pdiag * Umatᴴ) * (Umat * Y_D * Umatᴴ) *
+            (Umat * Pdiag * Umatᴴ) := by rw [← hP_decomp]
+    _ = Umat * (Pdiag * (Umatᴴ * Umat) * Y_D * (Umatᴴ * Umat) * Pdiag) * Umatᴴ := by
+          simp [Matrix.mul_assoc]
+    _ = Umat * (Pdiag * Y_D * Pdiag) * Umatᴴ := by rw [hU'U]; simp
+    _ = Umat * Y_D * Umatᴴ := by rw [hPdiag_Y]
+
+/-- Shared corner-compression builder landing in `cornerSubmodule P`. -/
+noncomputable def cornerCompressionLinearMap
+    {D n : ℕ} (P Pdiag Umat : MatrixAlg D)
+    {S T : Type*} [Fintype S] [DecidableEq S] [Fintype T] [DecidableEq T]
+    (eST : Fin D ≃ S ⊕ T) (eS : S ≃ Fin n)
+    (P0 : Matrix (S ⊕ T) (S ⊕ T) ℂ)
+    (hP0 : P0 = Matrix.fromBlocks (1 : Matrix S S ℂ) 0 0 (0 : Matrix T T ℂ))
+    (_hn : (n : ℂ) = Matrix.trace P)
+    (hP_decomp : P = Umat * Pdiag * Umatᴴ)
+    (hPdiag_back : Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm P0 = Pdiag)
+    (hU'U : Umatᴴ * Umat = 1) :
+    Matrix (Fin n) (Fin n) ℂ →ₗ[ℂ] cornerSubmodule P :=
+  { toFun := fun M =>
+      ⟨cornerCompressionExpand Umat eST eS M,
+        cornerCompressionExpand_mem (P := P) (Pdiag := Pdiag) Umat eST eS P0
+          hP0 hP_decomp hPdiag_back hU'U M⟩
+    map_add' := fun M₁ M₂ => by
+      apply Subtype.ext
+      exact (cornerCompressionExpand Umat eST eS).map_add M₁ M₂
+    map_smul' := fun c M => by
+      apply Subtype.ext
+      exact (cornerCompressionExpand Umat eST eS).map_smul c M }
+
 /-- **Compression isometry for a projection (existence form).**
 
 Given an orthogonal projection `P : M_D(ℂ)` of rank `n = trace P`, there is a linear
@@ -194,66 +296,31 @@ private lemma exists_cornerSubmodule_matrixLinearEquiv_aux {D : ℕ}
             · subst h; simpa [p, P0] using hfT t
             · simp [P0, Matrix.fromBlocks_apply₂₂, h]
   -- Forward and inverse maps for the compression equiv.
-  let toFun : Matrix (Fin n) (Fin n) ℂ → MatrixAlg D := fun M =>
-    Umat *
-      Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm
-        (Matrix.fromBlocks (Matrix.reindexLinearEquiv ℂ ℂ eS.symm eS.symm M)
-          (0 : Matrix S T ℂ) (0 : Matrix T S ℂ) (0 : Matrix T T ℂ)) * Umatᴴ
+  have hP_decomp : P = Umat * Pdiag * Umatᴴ := by
+    change P = Umat * (Umatᴴ * P * Umat) * Umatᴴ
+    calc
+      P = (Umat * Umatᴴ) * P * (Umat * Umatᴴ) := by rw [hUU]; simp
+      _ = Umat * (Umatᴴ * P * Umat) * Umatᴴ := by simp [Matrix.mul_assoc]
+  have hPdiag_back :
+      Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm P0 = Pdiag := by
+    have h := congrArg
+      (Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm) hPdiag_std
+    have hid := (Matrix.reindexLinearEquiv_comp_apply (R := ℂ) (A := ℂ)
+      eST eST eST.symm eST.symm Pdiag)
+    rw [Equiv.self_trans_symm, Matrix.reindexLinearEquiv_refl_refl,
+      LinearEquiv.refl_apply] at hid
+    exact h.symm.trans hid
+  have hP0_def : P0 = Matrix.fromBlocks (1 : Matrix S S ℂ) 0 0 (0 : Matrix T T ℂ) := rfl
+  let toFun : Matrix (Fin n) (Fin n) ℂ → MatrixAlg D :=
+    cornerCompressionExpand Umat eST eS
   let invFun : MatrixAlg D → Matrix (Fin n) (Fin n) ℂ := fun X =>
     Matrix.reindexLinearEquiv ℂ ℂ eS eS
       ((Matrix.reindexLinearEquiv ℂ ℂ eST eST (Umatᴴ * X * Umat)).toBlocks₁₁)
   -- `toFun` lands in the corner submodule.
   have hFwdMem : ∀ M, P * toFun M * P = toFun M := by
     intro M
-    -- Write `P = Umat * Pdiag * Umatᴴ`.
-    have hP_decomp : P = Umat * Pdiag * Umatᴴ := by
-      change P = Umat * (Umatᴴ * P * Umat) * Umatᴴ
-      calc
-        P = (Umat * Umatᴴ) * P * (Umat * Umatᴴ) := by rw [hUU]; simp
-        _ = Umat * (Umatᴴ * P * Umat) * Umatᴴ := by simp [Matrix.mul_assoc]
-    -- Let `Y_D` be the reindexed block matrix (before conjugation by `Umat`).
-    set Y_ST : Matrix (S ⊕ T) (S ⊕ T) ℂ :=
-      Matrix.fromBlocks (Matrix.reindexLinearEquiv ℂ ℂ eS.symm eS.symm M)
-        (0 : Matrix S T ℂ) (0 : Matrix T S ℂ) (0 : Matrix T T ℂ) with hY_ST_def
-    set Y_D : MatrixAlg D := Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm Y_ST with hY_D_def
-    have hP0_Y : P0 * Y_ST * P0 = Y_ST := by
-      simp [P0, Y_ST, Matrix.fromBlocks_multiply]
-    -- Transport the corner relation back through the reindex.
-    have hPdiag_Y : Pdiag * Y_D * Pdiag = Y_D := by
-      have hPdiag_back :
-          Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm P0 = Pdiag := by
-        have h := congrArg
-          (Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm) hPdiag_std
-        have hid := (Matrix.reindexLinearEquiv_comp_apply (R := ℂ) (A := ℂ)
-          eST eST eST.symm eST.symm Pdiag)
-        rw [Equiv.self_trans_symm, Matrix.reindexLinearEquiv_refl_refl,
-          LinearEquiv.refl_apply] at hid
-        exact h.symm.trans hid
-      calc
-        Pdiag * Y_D * Pdiag
-            = Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm P0 *
-                Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm Y_ST *
-                Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm P0 := by
-              rw [hPdiag_back]
-        _ = Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm (P0 * Y_ST) *
-                Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm P0 := by
-              rw [Matrix.reindexLinearEquiv_mul (R := ℂ) (A := ℂ)
-                eST.symm eST.symm eST.symm P0 Y_ST]
-        _ = Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm (P0 * Y_ST * P0) := by
-              rw [Matrix.reindexLinearEquiv_mul (R := ℂ) (A := ℂ)
-                eST.symm eST.symm eST.symm (P0 * Y_ST) P0]
-        _ = Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm Y_ST := by rw [hP0_Y]
-        _ = Y_D := rfl
-    -- Lift to `P * (Umat * Y_D * Umatᴴ) * P = Umat * Y_D * Umatᴴ`.
-    change P * (Umat * Y_D * Umatᴴ) * P = Umat * Y_D * Umatᴴ
-    calc
-      P * (Umat * Y_D * Umatᴴ) * P
-          = (Umat * Pdiag * Umatᴴ) * (Umat * Y_D * Umatᴴ) *
-              (Umat * Pdiag * Umatᴴ) := by rw [← hP_decomp]
-      _ = Umat * (Pdiag * (Umatᴴ * Umat) * Y_D * (Umatᴴ * Umat) * Pdiag) * Umatᴴ := by
-            simp [Matrix.mul_assoc]
-      _ = Umat * (Pdiag * Y_D * Pdiag) * Umatᴴ := by rw [hU'U]; simp
-      _ = Umat * Y_D * Umatᴴ := by rw [hPdiag_Y]
+    exact cornerCompressionExpand_mem (P := P) (Pdiag := Pdiag) Umat eST eS P0
+      hP0_def hP_decomp hPdiag_back hU'U M
   -- Compute `invFun (toFun M) = M`.
   have hLeftInv : ∀ M, invFun (toFun M) = M := by
     intro M
@@ -277,6 +344,7 @@ private lemma exists_cornerSubmodule_matrixLinearEquiv_aux {D : ℕ}
       rfl
     change invFun (toFun M) = M
     simp only [invFun, toFun]
+    rw [cornerCompressionExpand_apply Umat eST eS M]
     rw [show Umatᴴ * (Umat *
         Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm Y_ST * Umatᴴ) * Umat = Y_D from by
           simpa [hY_D_def] using hcollapse]
@@ -342,6 +410,7 @@ private lemma exists_cornerSubmodule_matrixLinearEquiv_aux {D : ℕ}
       exact (hkey.trans (Matrix.fromBlocks_toBlocks Y_ST)).symm
     change toFun (invFun X.1) = X.1
     simp only [invFun, toFun]
+    rw [cornerCompressionExpand_apply Umat eST eS (invFun X.1)]
     -- invFun X.1 = reindex eS eS Y_ST.toBlocks₁₁
     -- toFun (reindex eS eS Y_ST.toBlocks₁₁) = Umat * reindex eST.symm eST.symm
     --   (fromBlocks (reindex eS.symm eS.symm (reindex eS eS Y_ST.toBlocks₁₁)) 0 0 0) * Umatᴴ
