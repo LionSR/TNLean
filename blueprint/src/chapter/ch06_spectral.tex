@@ -1089,6 +1089,92 @@ used later.
     expectation onto the adjoint fixed-point $*$-subalgebra.
 \end{theorem}
 
+\section{Multi-cycle block-permutation data (Wolf Thm.~6.16)}
+
+\begin{definition}[Single-cycle block-permutation data]
+    \label{def:cycle_structure}
+    \lean{CycleStructure}
+    \leanok
+    Let $T : \MN{D} \to \MN{D}$.  A \emph{single-cycle block-permutation
+    structure} for $T$ consists of a finite index set $\iota$, a family of
+    orthogonal projections $P_k \in \MN{D}$ for $k \in \iota$, and a
+    permutation $\sigma \in \mathrm{Sym}(\iota)$, such that
+    \[
+        T(P_{\sigma(k)}) = P_k,\quad
+        T(P_k X) = T(P_k)\,T(X),\quad
+        T(X P_k) = T(X)\,T(P_k)
+    \]
+    for every $k \in \iota$ and $X \in \MN{D}$.
+\end{definition}
+
+\begin{definition}[Multi-cycle block-permutation data]
+    \label{def:multi_cycle_decomposition}
+    \lean{MultiCycleDecomposition}
+    \leanok
+    A \emph{multi-cycle decomposition} of $T : \MN{D} \to \MN{D}$ records a
+    finite cycle index $\iota$, a per-cycle period
+    $m : \iota \to \mathbb{N}_{>0}$, a projection family
+    $P_{c,k} \in \MN{D}$ for $c \in \iota$ and $k \in \Fin{m(c)}$
+    consisting of orthogonal projections, together with the per-cycle
+    cyclic action
+    \[
+        T(P_{c,k+1}) = P_{c,k}\qquad (k \in \Fin{m(c)},\ c \in \iota)
+    \]
+    and the multiplicative-domain factorisations
+    $T(P_{c,k}\,X) = T(P_{c,k})\,T(X)$ and
+    $T(X\,P_{c,k}) = T(X)\,T(P_{c,k})$.
+\end{definition}
+
+\begin{theorem}[Per-cycle corner preservation]
+    \label{thm:multi_cycle_preserves_corner_pow_period}
+    \lean{MultiCycleDecomposition.preserves_corner_pow_period}
+    \leanok
+    \uses{def:multi_cycle_decomposition}
+    For every cycle $c \in \iota$ and index $k \in \Fin{m(c)}$, the
+    iterate $T^{m(c)}$ preserves the corner $P_{c,k}\,\MN{D}\,P_{c,k}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:multi_cycle_decomposition}
+    By induction on $n$, the $n$-th iterate $T^n$ sends
+    $P_{c,k+n}\,X\,P_{c,k+n}$ to $P_{c,k}\,T^n(X)\,P_{c,k}$, using the
+    multiplicative-domain factorisations and the cyclic action
+    $T(P_{c,j+1}) = P_{c,j}$ at each induction step.  Specialising to
+    $n = m(c)$ and using that the indices $k + m(c) = k$ in $\Fin{m(c)}$
+    yields corner preservation of $T^{m(c)}$.
+\end{proof}
+
+\begin{theorem}[Common-period corner preservation]
+    \label{thm:multi_cycle_preserves_corner_pow_of_dvd}
+    \lean{MultiCycleDecomposition.preserves_corner_pow_of_dvd}
+    \leanok
+    \uses{thm:multi_cycle_preserves_corner_pow_period}
+    If $N \in \mathbb{N}$ is divisible by every per-cycle period $m(c)$,
+    then $T^N$ preserves every corner $P_{c,k}\,\MN{D}\,P_{c,k}$ of the
+    decomposition.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:multi_cycle_preserves_corner_pow_period}
+    Write $N = m(c)\,q$.  Corner preservation is stable under taking
+    powers, so $T^N = (T^{m(c)})^q$ preserves each corner by
+    Theorem~\ref{thm:multi_cycle_preserves_corner_pow_period}.
+\end{proof}
+
+\begin{definition}[Flattening to single-cycle data]
+    \label{def:multi_cycle_to_cycle_structure}
+    \lean{MultiCycleDecomposition.toCycleStructure}
+    \leanok
+    \uses{def:multi_cycle_decomposition, def:cycle_structure}
+    A multi-cycle decomposition gives a single-cycle block-permutation
+    structure on the sigma index $\Sigma_{c \in \iota}\,\Fin{m(c)}$: the
+    permutation is the sigma-product of per-cycle cyclic shifts
+    $k \mapsto k+1$, the projections are $(c, k) \mapsto P_{c,k}$, and
+    the multiplicative-domain factorisations descend componentwise.
+\end{definition}
+
 \section{Peripheral eigenvalue group structure (Wolf Thm.~6.6)}
 
 \begin{lemma}[Peripheral eigenvectors are invertible]%

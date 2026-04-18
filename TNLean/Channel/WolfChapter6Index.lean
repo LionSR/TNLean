@@ -302,9 +302,25 @@ The general irreducible case with period `h > 1` requires Wedderburn blocks
     Thm. 6.16 in its permutation-of-blocks form.
   - `CycleStructure.ofPermDecomp` — constructor from raw permutation data.
 
+* Multi-cycle block-permutation data (disjoint union of cycles with possibly
+  distinct periods) is packaged in `TNLean.Channel.Peripheral.MultiCycleDecomposition`:
+  - `MultiCycleDecomposition T` — bundled data: a finite cycle index `ι`, a
+    per-cycle period `period : ι → ℕ` (each nonzero), a projection family
+    `P : (c : ι) → Fin (period c) → M_D(ℂ)`, the per-cycle cyclic action
+    `T (P c (k + 1)) = P c k`, and the multiplicative-domain factorisations.
+  - `MultiCycleDecomposition.preserves_corner_pow_period` — per-cycle corner
+    preservation: `T ^ (period c)` preserves each corner `P c k · M_D(ℂ) · P c k`.
+  - `MultiCycleDecomposition.preserves_corner_pow_of_dvd` — common-period
+    corner preservation: whenever every `period c` divides `N`, `T ^ N`
+    preserves every corner.
+  - `MultiCycleDecomposition.toCycleStructure` — flattens a multi-cycle
+    decomposition to a single `CycleStructure` on the sigma index
+    `Σ c : ι, Fin (period c)`, using `Equiv.Perm.sigmaCongrRight` of
+    per-cycle cyclic shifts.
+
 * The remaining **existence direction** — that every trace-preserving positive
-  Schwarz map admits a `CycleStructure` on its asymptotic image, with the
-  blocks coming from the Wedderburn decomposition of the fixed-point algebra
+  Schwarz map admits a `MultiCycleDecomposition` on its asymptotic image, with
+  the cycles coming from the Wedderburn decomposition of the fixed-point algebra
   — depends on Wolf Thm. 6.14 (issues #27 / #360) and is left to future work.
 
 ---
