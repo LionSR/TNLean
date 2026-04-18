@@ -52,7 +52,7 @@ import TNLean.Channel.MaximallyEntangled
 import TNLean.Channel.TensorMap
 import TNLean.Channel.ChoiJamiolkowski
 import TNLean.Channel.KrausRepresentation
-import TNLean.Channel.Kraus.UnitaryFreedom
+import TNLean.Channel.KrausUnitaryFreedom
 import TNLean.Channel.Stinespring
 import TNLean.Channel.TransferMatrix
 

@@ -100,59 +100,62 @@ If `W` is an isometry (`Wᴴ W = 1`) and `Kⱼ = ∑ₗ Wⱼₗ K̃ₗ`, then `{
 `{K̃ₗ}` define the same map: `∑ⱼ Kⱼ X Kⱼ† = ∑ₗ K̃ₗ X K̃ₗ†`.
 
 This rectangular form specializes to the usual unitary-freedom statement when
-the output and input Kraus index sets have the same cardinality. -/
+the output and input Kraus index sets have the same cardinality. The index
+types are arbitrary finite types (with decidable equality on the inner one),
+so callers with `Fin`-indexed or general `Fintype`-indexed Kraus families can
+reuse the same lemma. -/
 theorem kraus_same_map_of_isometry_combination
-    {m r : ℕ}
-    (K : Fin m → Matrix (Fin D) (Fin D) ℂ)
-    (K' : Fin r → Matrix (Fin D) (Fin D) ℂ)
-    (W : Matrix (Fin m) (Fin r) ℂ)
+    {ι₁ ι₂ : Type*} [Fintype ι₁] [Fintype ι₂] [DecidableEq ι₂]
+    (K : ι₁ → Matrix (Fin D) (Fin D) ℂ)
+    (K' : ι₂ → Matrix (Fin D) (Fin D) ℂ)
+    (W : Matrix ι₁ ι₂ ℂ)
     (hW : Wᴴ * W = 1)
     (hK : ∀ j, K j = ∑ l, W j l • K' l) :
     ∀ X : Matrix (Fin D) (Fin D) ℂ,
-      ∑ j : Fin m, K j * X * (K j)ᴴ =
-      ∑ l : Fin r, K' l * X * (K' l)ᴴ := by
+      ∑ j, K j * X * (K j)ᴴ =
+      ∑ l, K' l * X * (K' l)ᴴ := by
   intro X
   -- Extract the orthogonality relation `∑ⱼ conj(Wⱼₗ') * Wⱼₗ = δ_{l,l'}` from `Wᴴ W = 1`.
-  have hW_entry : ∀ l l' : Fin r,
-      ∑ j : Fin m, (starRingEnd ℂ) (W j l) * W j l' = if l = l' then 1 else 0 := by
+  have hW_entry : ∀ l l' : ι₂,
+      ∑ j : ι₁, (starRingEnd ℂ) (W j l) * W j l' = if l = l' then 1 else 0 := by
     intro l l'
-    have h := congrArg (fun M : Matrix (Fin r) (Fin r) ℂ => M l l') hW
+    have h := congrArg (fun M : Matrix ι₂ ι₂ ℂ => M l l') hW
     simpa [Matrix.mul_apply, Matrix.one_apply] using h
   calc
-    ∑ j : Fin m, K j * X * (K j)ᴴ
-        = ∑ j : Fin m,
-            (∑ l : Fin r, W j l • K' l) * X *
-            ((∑ l : Fin r, W j l • K' l)ᴴ) := by simp [hK]
-    _ = ∑ j : Fin m, ∑ l : Fin r, ∑ l' : Fin r,
+    ∑ j, K j * X * (K j)ᴴ
+        = ∑ j : ι₁,
+            (∑ l, W j l • K' l) * X *
+            ((∑ l, W j l • K' l)ᴴ) := by simp [hK]
+    _ = ∑ j : ι₁, ∑ l : ι₂, ∑ l' : ι₂,
           (((starRingEnd ℂ) (W j l')) * W j l) • (K' l * X * (K' l')ᴴ) := by
           simp_rw [Matrix.sum_mul, Matrix.conjTranspose_sum, Matrix.conjTranspose_smul,
             Matrix.mul_sum, smul_mul_assoc, mul_smul_comm, Matrix.mul_assoc, smul_smul]
           simp [mul_comm]
-    _ = ∑ l : Fin r, ∑ l' : Fin r,
-          (∑ j : Fin m, ((starRingEnd ℂ) (W j l')) * W j l) • (K' l * X * (K' l')ᴴ) := by
+    _ = ∑ l : ι₂, ∑ l' : ι₂,
+          (∑ j : ι₁, ((starRingEnd ℂ) (W j l')) * W j l) • (K' l * X * (K' l')ᴴ) := by
           rw [Finset.sum_comm]
           apply Finset.sum_congr rfl
           intro l _
           rw [Finset.sum_comm]
           simp_rw [← Finset.sum_smul]
-    _ = ∑ l : Fin r, ∑ l' : Fin r,
+    _ = ∑ l : ι₂, ∑ l' : ι₂,
           (if l' = l then 1 else 0) • (K' l * X * (K' l')ᴴ) := by
           simp_rw [hW_entry]; simp
-    _ = ∑ l : Fin r, K' l * X * (K' l)ᴴ := by simp
+    _ = ∑ l, K' l * X * (K' l)ᴴ := by simp
 
 /-- **Thm 2.1 item 4 (unitary freedom, sufficient direction)**:
 If `U` is unitary (`Uᴴ U = 1`) and `Kⱼ = ∑ₗ Uⱼₗ K̃ₗ`, then `{Kⱼ}` and
 `{K̃ₗ}` define the same map: `∑ⱼ Kⱼ X Kⱼ† = ∑ₗ K̃ₗ X K̃ₗ†`. -/
 theorem kraus_same_map_of_unitary_combination
-    {r : ℕ}
-    (K : Fin r → Matrix (Fin D) (Fin D) ℂ)
-    (K' : Fin r → Matrix (Fin D) (Fin D) ℂ)
-    (U : Matrix (Fin r) (Fin r) ℂ)
+    {ι : Type*} [Fintype ι] [DecidableEq ι]
+    (K : ι → Matrix (Fin D) (Fin D) ℂ)
+    (K' : ι → Matrix (Fin D) (Fin D) ℂ)
+    (U : Matrix ι ι ℂ)
     (hU : Uᴴ * U = 1)
     (hK : ∀ j, K j = ∑ l, U j l • K' l) :
     ∀ X : Matrix (Fin D) (Fin D) ℂ,
-      ∑ j : Fin r, K j * X * (K j)ᴴ =
-      ∑ l : Fin r, K' l * X * (K' l)ᴴ := by
+      ∑ j, K j * X * (K j)ᴴ =
+      ∑ l, K' l * X * (K' l)ᴴ := by
   simpa using kraus_same_map_of_isometry_combination K K' U hU hK
 
 /-- Convenience wrapper of `kraus_same_map_of_unitary_combination` with a bundled
