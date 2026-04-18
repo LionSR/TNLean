@@ -1037,8 +1037,8 @@ The following results separate the zero blocks from the
 	$\sum_i (A^i)^\dagger A^i = P$ for an orthogonal projection $P$,
 	and suppose $P A^i P = A^i$ for every~$i$.
 	Then there exist a left-canonical tensor $C$ of bond dimension
-	$n = \tr(P)$ and a linear map
-	$\varphi : M_n(\mathbb{C}) \to P \cdot M_D(\mathbb{C}) \cdot P$ with
+	$n = \tr(P)$ and a linear equivalence
+	$\varphi : M_n(\mathbb{C}) \xrightarrow{\sim} P \cdot M_D(\mathbb{C}) \cdot P$ with
 	\[
 		V^{(N)}(C)_\sigma = \tr\!\bigl(P \cdot A^\sigma\bigr),
 		\qquad
@@ -1089,7 +1089,9 @@ The following results separate the zero blocks from the
 	Moreover, each sector satisfies the per-sector trace relation
 	$V^{(N)}(C_k)(\sigma) = \operatorname{tr}(P_k \cdot A^{i_1} \cdots A^{i_N})$
 	for every word $\sigma = (i_1, \dots, i_N)$, and each block carries a
-	compression isometry $\varphi_k$ into the corner $P_k \cdot M_D(\mathbb{C}) \cdot P_k$
+	compression linear equivalence
+	$\varphi_k : M_{\dim C_k}(\mathbb{C}) \xrightarrow{\sim}
+		P_k \cdot M_D(\mathbb{C}) \cdot P_k$
 	intertwining the compressed adjoint transfer map with the sector adjoint
 	transfer map.
 \end{theorem}

@@ -312,7 +312,7 @@ theorem exists_compressedTensor_of_supported_projection
   have hPdiag_std_lin : Matrix.reindexLinearEquiv ℂ ℂ eST eST Pdiag = P0 := hPdiag_std
   let cornerEmbed : Matrix (Fin n) (Fin n) ℂ ≃ₗ[ℂ] cornerSubmodule P :=
     cornerCompressionLinearEquiv (P := P) (Pdiag := Pdiag) Umat eST eS P0 hP0_def
-      htrace hP_decomp hPdiag_UPU hPdiag_std_lin hPdiag_back hU'U hUU
+      hP_decomp hPdiag_UPU hPdiag_std_lin hPdiag_back hU'U hUU
   refine ⟨n, C, cornerEmbed, ?_, ?_, ?_, ?_⟩
   -- (1) Trace identity: n = tr P
   · exact htrace
