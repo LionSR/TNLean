@@ -347,23 +347,6 @@ noncomputable def cornerCompressionLinearEquiv
       exact cornerCompressionExpand_invFun (P := P) (Pdiag := Pdiag) Umat eST eS P0
         hP0 hPdiag_UPU hPdiag_std hU'U hUU X }
 
-lemma cornerCompressionLinearEquiv_apply_coe
-    {D n : ℕ} (P Pdiag Umat : MatrixAlg D)
-    {S T : Type*} [Fintype S] [DecidableEq S] [Fintype T] [DecidableEq T]
-    (eST : Fin D ≃ S ⊕ T) (eS : S ≃ Fin n)
-    (P0 : Matrix (S ⊕ T) (S ⊕ T) ℂ)
-    (hP0 : P0 = Matrix.fromBlocks (1 : Matrix S S ℂ) 0 0 (0 : Matrix T T ℂ))
-    (hP_decomp : P = Umat * Pdiag * Umatᴴ)
-    (hPdiag_UPU : Pdiag = Umatᴴ * P * Umat)
-    (hPdiag_std : Matrix.reindexLinearEquiv ℂ ℂ eST eST Pdiag = P0)
-    (hPdiag_back : Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm P0 = Pdiag)
-    (hU'U : Umatᴴ * Umat = 1) (hUU : Umat * Umatᴴ = 1)
-    (M : Matrix (Fin n) (Fin n) ℂ) :
-    ((cornerCompressionLinearEquiv (P := P) (Pdiag := Pdiag) Umat eST eS P0 hP0
-        hP_decomp hPdiag_UPU hPdiag_std hPdiag_back hU'U hUU M : cornerSubmodule P) :
-      MatrixAlg D) =
-      cornerCompressionExpand Umat eST eS M := rfl
-
 /-- **Compression isometry for a projection (existence form).**
 
 Given an orthogonal projection `P : M_D(ℂ)` of rank `n = trace P`, there is a linear
