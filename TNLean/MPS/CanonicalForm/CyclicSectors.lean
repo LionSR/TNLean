@@ -260,33 +260,6 @@ theorem exists_compressedTensor_of_supported_projection
     rw [h12, h21, h22]
   -- Compressed tensor
   let C : MPSTensor d n := fun i => Matrix.reindex eS eS (B11 i)
-  -- Spectral compression isometry `φ : M_n(ℂ) →ₗ cornerSubmodule P`. Constructed from the
-  -- spectral diagonalization by reindexing `M_n(ℂ) → M_S(ℂ)`, embedding as the top-left
-  -- block `fromBlocks · 0 0 0`, reindexing back to `M_D(ℂ)` via `eST.symm`, and finally
-  -- conjugating by `Umat`.
-  let fromBlocksTL : Matrix S S ℂ →ₗ[ℂ] Matrix (S ⊕ T) (S ⊕ T) ℂ :=
-    { toFun := fun M => Matrix.fromBlocks M 0 0 0
-      map_add' := fun M₁ M₂ => by
-        ext i j; cases i <;> cases j <;>
-          simp [Matrix.fromBlocks, Matrix.add_apply]
-      map_smul' := fun c M => by
-        ext i j; cases i <;> cases j <;>
-          simp [Matrix.fromBlocks, Matrix.smul_apply] }
-  let conjUmat : MatrixAlg D →ₗ[ℂ] MatrixAlg D :=
-    { toFun := fun Y => Umat * Y * Umatᴴ
-      map_add' := fun Y₁ Y₂ => by simp [Matrix.mul_add, Matrix.add_mul]
-      map_smul' := fun c Y => by simp }
-  let expand : Matrix (Fin n) (Fin n) ℂ →ₗ[ℂ] MatrixAlg D :=
-    conjUmat ∘ₗ
-      (Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm).toLinearMap ∘ₗ
-      fromBlocksTL ∘ₗ
-      (Matrix.reindexLinearEquiv ℂ ℂ eS.symm eS.symm).toLinearMap
-  have hexpand_def : ∀ M : Matrix (Fin n) (Fin n) ℂ,
-      expand M = Umat *
-        Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm
-          (Matrix.fromBlocks (Matrix.reindexLinearEquiv ℂ ℂ eS.symm eS.symm M)
-            (0 : Matrix S T ℂ) (0 : Matrix T S ℂ) (0 : Matrix T T ℂ)) * Umatᴴ :=
-    fun _ => rfl
   -- `P = Umat * Pdiag * Umatᴴ`.
   have hP_decomp : P = Umat * Pdiag * Umatᴴ := by
     change P = Umat * (Umatᴴ * P * Umat) * Umatᴴ
@@ -304,55 +277,10 @@ theorem exists_compressedTensor_of_supported_projection
     rw [Equiv.self_trans_symm, Matrix.reindexLinearEquiv_refl_refl,
       LinearEquiv.refl_apply] at hid
     exact h.symm.trans hid
-  -- `expand M ∈ cornerSubmodule P`, i.e. `P * expand M * P = expand M`.
-  have hexpand_mem : ∀ M : Matrix (Fin n) (Fin n) ℂ, P * expand M * P = expand M := by
-    intro M
-    rw [hexpand_def]
-    set Y_ST : Matrix (S ⊕ T) (S ⊕ T) ℂ :=
-      Matrix.fromBlocks (Matrix.reindexLinearEquiv ℂ ℂ eS.symm eS.symm M)
-        (0 : Matrix S T ℂ) (0 : Matrix T S ℂ) (0 : Matrix T T ℂ) with hY_ST_def
-    set Y_D : MatrixAlg D :=
-      Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm Y_ST with hY_D_def
-    have hP0_Y : P0 * Y_ST * P0 = Y_ST := by
-      simp [P0, Y_ST, Matrix.fromBlocks_multiply]
-    have hPdiag_Y : Pdiag * Y_D * Pdiag = Y_D := by
-      calc
-        Pdiag * Y_D * Pdiag
-            = Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm P0 *
-                Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm Y_ST *
-                Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm P0 := by
-              rw [hPdiag_back]
-        _ = Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm (P0 * Y_ST) *
-                Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm P0 := by
-              rw [Matrix.reindexLinearEquiv_mul (R := ℂ) (A := ℂ)
-                eST.symm eST.symm eST.symm P0 Y_ST]
-        _ = Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm (P0 * Y_ST * P0) := by
-              rw [Matrix.reindexLinearEquiv_mul (R := ℂ) (A := ℂ)
-                eST.symm eST.symm eST.symm (P0 * Y_ST) P0]
-        _ = Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm Y_ST := by rw [hP0_Y]
-    change P * (Umat * Y_D * Umatᴴ) * P = Umat * Y_D * Umatᴴ
-    calc
-      P * (Umat * Y_D * Umatᴴ) * P
-          = (Umat * Pdiag * Umatᴴ) * (Umat * Y_D * Umatᴴ) *
-              (Umat * Pdiag * Umatᴴ) := by rw [← hP_decomp]
-      _ = Umat * (Pdiag * (Umatᴴ * Umat) * Y_D * (Umatᴴ * Umat) * Pdiag) * Umatᴴ := by
-            simp [Matrix.mul_assoc]
-      _ = Umat * (Pdiag * Y_D * Pdiag) * Umatᴴ := by rw [hU'U]; simp
-      _ = Umat * Y_D * Umatᴴ := by rw [hPdiag_Y]
-  -- Package `expand` as a linear map into the corner submodule.
-  let cornerEmbed : Matrix (Fin n) (Fin n) ℂ →ₗ[ℂ] cornerSubmodule P :=
-    { toFun := fun M => ⟨expand M, hexpand_mem M⟩
-      map_add' := fun M₁ M₂ => by
-        apply Subtype.ext
-        change expand (M₁ + M₂) = expand M₁ + expand M₂
-        exact expand.map_add M₁ M₂
-      map_smul' := fun c M => by
-        apply Subtype.ext
-        change expand (c • M) = c • expand M
-        exact expand.map_smul c M }
-  refine ⟨n, C, cornerEmbed, ?_, ?_, ?_, ?_⟩
-  -- (1) Trace identity: n = tr P
-  · show (n : ℂ) = Matrix.trace P
+  let expand : Matrix (Fin n) (Fin n) ℂ →ₗ[ℂ] MatrixAlg D :=
+    cornerCompressionExpand Umat eST eS
+  have hP0_def : P0 = Matrix.fromBlocks (1 : Matrix S S ℂ) 0 0 (0 : Matrix T T ℂ) := rfl
+  have htrace : (n : ℂ) = Matrix.trace P := by
     have : Matrix.trace P = Matrix.trace Pdiag := by
       change Matrix.trace P = Matrix.trace (Umatᴴ * P * Umat)
       rw [trace_conj]
@@ -368,6 +296,19 @@ theorem exists_compressedTensor_of_supported_projection
     congr 1
     change n = (Finset.univ.filter p).card
     exact Fintype.card_subtype p
+  have hexpand_def : ∀ M : Matrix (Fin n) (Fin n) ℂ,
+      expand M = Umat *
+        Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm
+          (Matrix.fromBlocks (Matrix.reindexLinearEquiv ℂ ℂ eS.symm eS.symm M)
+            (0 : Matrix S T ℂ) (0 : Matrix T S ℂ) (0 : Matrix T T ℂ)) * Umatᴴ := by
+    intro M
+    exact cornerCompressionExpand_apply Umat eST eS M
+  let cornerEmbed : Matrix (Fin n) (Fin n) ℂ →ₗ[ℂ] cornerSubmodule P :=
+    cornerCompressionLinearMap (P := P) (Pdiag := Pdiag) Umat eST eS P0 hP0_def
+      htrace hP_decomp hPdiag_back hU'U
+  refine ⟨n, C, cornerEmbed, ?_, ?_, ?_, ?_⟩
+  -- (1) Trace identity: n = tr P
+  · exact htrace
   -- (2) TP condition: ∑ C_i† C_i = 1
   · show ∑ i : Fin d, (C i)ᴴ * C i = 1
     -- First: ∑ B_i† B_i = Pdiag
@@ -584,10 +525,10 @@ theorem exists_compressedTensor_of_supported_projection
     intro i _
     -- Per-letter: expand ((C i)ᴴ * Z * C i) = (A i)ᴴ * expand Z * A i.
     -- Abbreviations for readability.
-    set M' : Matrix S S ℂ := Matrix.reindexLinearEquiv ℂ ℂ eS.symm eS.symm Z with hM'_def
+    set M' : Matrix S S ℂ := Matrix.reindexLinearEquiv ℂ ℂ eS.symm eS.symm Z
     set F : Matrix (S ⊕ T) (S ⊕ T) ℂ :=
       Matrix.fromBlocks M' (0 : Matrix S T ℂ) (0 : Matrix T S ℂ) (0 : Matrix T T ℂ) with hF_def
-    set G : MatrixAlg D := Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm F with hG_def
+    set G : MatrixAlg D := Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm F
     -- `expand Z = Umat * G * Umatᴴ`.
     have hexpand_Z : expand Z = Umat * G * Umatᴴ := hexpand_def Z
     -- `A i = Umat * B i * Umatᴴ` and `(A i)ᴴ = Umat * (B i)ᴴ * Umatᴴ`.
