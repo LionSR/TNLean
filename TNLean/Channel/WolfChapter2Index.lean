@@ -9,6 +9,7 @@ import TNLean.Channel.ChoiJamiolkowski
 import TNLean.Channel.KrausRepresentation
 import TNLean.Channel.KrausFreedom
 import TNLean.Channel.Stinespring
+import TNLean.Channel.POVM
 import TNLean.Channel.TransferMatrix
 
 /-!
@@ -50,6 +51,17 @@ representations of quantum channels.
   - `stinespringV_isometry_iff_kraus_normalized` — `V†V = 𝟙` ↔ TP ✅
   - `stinespring_schrodinger_representation` — `T(ρ) = tr_r(VρV†)` ✅
 
+* **Thm 2.3** (Naimark / Neumark dilation for POVMs):
+  - `POVM` — positive operator-valued measure structure ✅
+  - `POVM.naimarkIsometry_isometry` — `V†V = 𝟙` ✅
+  - `POVM.naimarkProjection_mul_self` / `_hermitian` / `_orthogonal` /
+    `_sum_eq_one` — projective-measurement axioms on the dilation ✅
+  - `POVM.naimark_recovers_povm` — `V† P_i V = E_i` ✅
+  - `POVM.exists_naimark_dilation` — existential Naimark dilation ✅
+  - `POVM.ofProjectiveMeasurement` — converse construction from dilations ✅
+  - `Instrument` — quantum-instrument structure + `total_isChannel`,
+    `sum_probability`, `posteriorState` API ✅
+
 ### §2.2 Transfer matrix
 
 * `transferMatrix` — the `D² × D²` matrix representing `T` in the
@@ -86,6 +98,10 @@ representations of quantum channels.
 | Tensor product of maps | `TensorMap.lean` | `Matrix.tensorMapId` |
 | Choi matrix | `ChoiJamiolkowski.lean` | `ChoiJamiolkowski.choiMatrix` |
 | Stinespring isometry | `Stinespring.lean` | `stinespringV` |
+| POVM | `POVM.lean` | `POVM` |
+| Naimark isometry | `POVM.lean` | `POVM.naimarkIsometry` |
+| Naimark projector | `POVM.lean` | `POVM.naimarkProjection` |
+| Quantum instrument | `POVM.lean` | `Instrument` |
 | Transfer matrix | `TransferMatrix.lean` | `transferMatrix` |
 | Unitary conjugation | `TransferMatrix.lean` | `unitaryConjLM` |
 | Vectorization | `Mathlib.LinearAlgebra.Matrix.Vec` | `Matrix.vec` |
@@ -101,7 +117,6 @@ representations of quantum channels.
 | Thm 2.3 (ordered CP-maps) | Needs Stinespring + contraction |
 | Thm 2.4 (Radon-Nikodym) | Follows from Thm 2.3 |
 | Thm 2.5 (open-system representation) | Embedding into unitary |
-| Thm 2.6 (Neumark's theorem) | POVM embedding |
 | §2.3 Lorentz normal form (existence) | Needs SVD of transfer matrix |
 | §2.3 SVD representation (existence) | Needs Mathlib SVD |
 
