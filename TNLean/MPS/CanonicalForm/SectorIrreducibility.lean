@@ -601,4 +601,52 @@ theorem isIrreducibleOnCorner_of_cyclic_decomp_mps_of_hLift
       (T := transferMap (d := d) (D := D) (fun i => (A i)ᴴ))
       hIrr P hPproj hPsum hcyclic hLift
 
+/-- MPS-specialized sector irreducibility, with the `hLift` input discharged by
+`hLift_cyclicDecomp_mps_of_fixUpgrade`. -/
+theorem isIrreducibleOnCorner_of_cyclic_decomp_mps_of_fixUpgrade
+    {A : MPSTensor d D}
+    [NeZero m]
+    (hIrr :
+      IsIrreducibleMap (transferMap (d := d) (D := D) (fun i => (A i)ᴴ)))
+    (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (P : Fin m → MatrixAlg D)
+    (hPproj : ∀ k : Fin m, IsOrthogonalProjection (P k))
+    (hPsum : ∑ k : Fin m, P k = 1)
+    (hcyclic :
+      ∀ k : Fin m,
+        transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k)
+    (hMulLeft :
+      ∀ k : Fin m, ∀ X : MatrixAlg D,
+        transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k * X) =
+          transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k) *
+            transferMap (d := d) (D := D) (fun i => (A i)ᴴ) X)
+    (hMulRight :
+      ∀ k : Fin m, ∀ X : MatrixAlg D,
+        transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (X * P k) =
+          transferMap (d := d) (D := D) (fun i => (A i)ᴴ) X *
+            transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k))
+    (hProjStep :
+      ∀ k : Fin m, ∀ X : MatrixAlg D,
+        IsOrthogonalProjection X →
+        X * P k = X →
+        P k * X = X →
+        IsOrthogonalProjection
+          (transferMap (d := d) (D := D) (fun i => (A i)ᴴ) X))
+    (hFixUpgrade :
+      ∀ (k : Fin m) (Q : MatrixAlg D),
+        IsOrthogonalProjection Q →
+        Q * P k = Q → P k * Q = Q →
+        PreservesCorner Q
+          ((transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ^ m) →
+        ((transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ^ m) Q = Q) :
+    ∀ k : Fin m,
+      IsIrreducibleOnCorner
+        (P k) ((transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ^ m) := by
+  exact
+    isIrreducibleOnCorner_of_cyclic_decomp_mps_of_hLift
+      (A := A) (m := m) hIrr P hPproj hPsum hcyclic
+      (hLift_cyclicDecomp_mps_of_fixUpgrade
+        (A := A) (m := m) hTP P hPproj hPsum hcyclic
+        hMulLeft hMulRight hProjStep hFixUpgrade)
+
 end MPSTensor
