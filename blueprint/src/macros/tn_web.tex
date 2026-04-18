@@ -93,12 +93,29 @@
   \end{array}%
 }
 
-\newcommand{\TNPermutationTwist}[2]{%
+% Fix (#401): use a physical-leg operator insertion for general
+% linear twists, and reserve permutation twists for relabellings.
+\newcommand{\TNLinearTwist}[2]{%
+  \begin{array}{ccc}
+    && #2 \\
+    #1 && \vert \\
+    \textcolor{red}{\bullet} && \vert \\
+    && \bullet
+  \end{array}%
+}
+
+% Fix (#401): make the relabelling arrow explicit so multi-step
+% permutation diagrams can distinguish \sigma_h from \sigma_g.
+\newcommand{\TNPermutationTwistLabeled}[3]{%
   \begin{array}{ccccc}
     #1 &&&& #2 \\
     \vert &&&& \vert \\
-    \bullet && \xrightarrow{\ \sigma_g\ } && \bullet
+    \bullet && \xrightarrow{\ #3\ } && \bullet
   \end{array}%
+}
+
+\newcommand{\TNPermutationTwist}[2]{%
+  \TNPermutationTwistLabeled{#1}{#2}{\sigma_g}%
 }
 
 \newcommand{\TNTwistedTransfer}[1]{%
