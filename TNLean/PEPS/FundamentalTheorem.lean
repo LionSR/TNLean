@@ -532,7 +532,7 @@ theorem gaugeConsistency (A B : Tensor G d)
   -- across shared edges. The key step is: for each edge e = (u,v),
   -- the gauge obtained from u's local extraction and v's local extraction
   -- must agree (because the SameState condition couples them).
-  -- Missing bridge: a virtual-insertion theorem showing that the local gauges
+  -- Missing lemma: a virtual-insertion theorem showing that the local gauges
   -- extracted from the two endpoint blockings act as inverse-transposes on the
   -- shared edge, with the orientation convention in `edgeGaugeAt`.
   sorry
@@ -560,7 +560,7 @@ theorem fundamentalTheorem_PEPS (A B : Tensor G d)
     GaugeEquiv A B := by
   -- Step 1: Show bond dimensions must agree.
   -- TODO: derive hDim from injectivity + SameState.
-  -- Missing bridge: `SameState` captures only the fully-contracted scalar,
+  -- Missing lemma: `SameState` captures only the fully-contracted scalar,
   -- whereas the PEPS FT derivation of bond-dimension equality uses the full
   -- family of boundary insertions.  Linear independence at each vertex
   -- (`IsVertexInjective`) gives the right local data, but the global argument
@@ -602,7 +602,7 @@ theorem gauge_unique_up_to_scalar (A B : Tensor G d)
   -- Linear independence (`IsVertexInjective`, issue #633) forces
   -- `X_e · Y_e⁻¹` to be a scalar at each edge, and connectivity of the graph
   -- forces the per-edge scalars to agree globally.
-  -- Missing bridge: the per-edge "scalar factor" extraction from equality of
+  -- Missing lemma: the per-edge "scalar factor" extraction from equality of
   -- gauged vertex tensors, and the connectivity propagation.  Both are
   -- downstream of the paper's §3 virtual-insertion / blocking argument and
   -- do not require further strengthening of the injectivity hypothesis.
