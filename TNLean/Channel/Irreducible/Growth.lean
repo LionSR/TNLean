@@ -21,7 +21,7 @@ Theorem 6.2:
   $A$, $B$ with $\operatorname{tr}(BA) = 0$ admits an iterate $E^t(A)$ with
   $1 \leq t \leq D - 1$ and $\operatorname{tr}(B \cdot E^t(A)) > 0$.
 
-The proof is split across four supporting sub-modules for readability:
+The proof is split across five supporting sub-modules for readability:
 
 * `TNLean.Channel.Irreducible.Growth.Preservation` — preservation lemmas for
   `id + E` and `E^n` under positivity, plus the binomial expansion of

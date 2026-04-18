@@ -106,7 +106,6 @@ theorem posDef_of_ker_subset_irreducible_cp
   set sgnEig : Fin D → ℂ := fun i => if 0 < hH.eigenvalues i then 1 else 0
   set Q := U * Matrix.diagonal sgnEig * Uᴴ with hQ_def
   have hUU : Uᴴ * U = 1 := eig_conj_mul hH
-  have hUU' : U * Uᴴ = 1 := eig_mul_conj hH
   have hsgnEig_star : star sgnEig = sgnEig := by
     ext i; simp only [sgnEig, Pi.star_apply]; split <;> simp
   have hsgnEig_sq : ∀ i, sgnEig i * sgnEig i = sgnEig i := by

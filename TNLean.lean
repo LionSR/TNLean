@@ -98,11 +98,6 @@ import TNLean.Channel.FixedPoint.WedderburnDecomp
 import TNLean.Channel.Irreducible.Ergodicity
 import TNLean.Channel.Irreducible.Basic
 import TNLean.Channel.Irreducible.Growth
-import TNLean.Channel.Irreducible.Growth.Preservation
-import TNLean.Channel.Irreducible.Growth.OneStep
-import TNLean.Channel.Irreducible.Growth.KernelDescent
-import TNLean.Channel.Irreducible.Growth.OrthogonalTrace
-import TNLean.Channel.Irreducible.Growth.Exponential
 import TNLean.Channel.PerronFrobenius.Normalization
 import TNLean.Channel.PerronFrobenius.Existence
 import TNLean.Channel.Irreducible.Similarity
