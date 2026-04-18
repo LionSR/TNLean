@@ -66,6 +66,21 @@ def ScalarCocycle.CohomologousTo (ω₁ ω₂ : ScalarCocycle G) : Prop :=
 def ScalarCocycle.IsCocycle (ω : ScalarCocycle G) : Prop :=
   ∀ g h k : G, ω g h * ω (g * h) k = ω g (h * k) * ω h k
 
+/-- Every projective representation of positive bond dimension has a genuine 2-cocycle
+as factor system.  This is the `Units ℂ`-level lift of
+`ProjectiveRepresentation.cocycle_of_assoc`: associativity of matrix multiplication
+forces the multiplicative 2-cocycle identity on `ω`. -/
+theorem ScalarCocycle.isCocycle_of_projRep
+    {ω : ScalarCocycle G} (ρ : ProjectiveRepresentation (D := D) ω) (hD : 0 < D) :
+    ScalarCocycle.IsCocycle ω := by
+  intro g h k
+  have hℂ : (ω g h : ℂ) * (ω (g * h) k : ℂ) = (ω g (h * k) : ℂ) * (ω h k : ℂ) :=
+    ρ.cocycle_of_assoc (D := D) hD g h k
+  have hUcoe : ((ω g h * ω (g * h) k : Units ℂ) : ℂ) =
+      ((ω g (h * k) * ω h k : Units ℂ) : ℂ) := by
+    push_cast; exact hℂ
+  exact Units.ext hUcoe
+
 /-! ### Equivalence relation -/
 
 namespace ScalarCocycle.CohomologousTo
