@@ -285,6 +285,14 @@ on the bond space.
 \begin{proof}\leanok\uses{lem:gauge_equiv_twisted}
     The physical action is transferred to the virtual level by the same
     local move that replaces the twisted tensor by a gauge-conjugated one:
+    % TODO(maintainer): \TNPermutationTwist is designed for physical-index
+    % relabellings (where the arrow label $\sigma_g$ is a permutation acting
+    % on indices). Here the physical action is a general linear combination
+    % $\widetilde{A}_g^{\,i} = \sum_j U(g)_{ij}\, A^j$, so labelling the
+    % left leg "U(g)" is a convention mismatch with the macro's intent.
+    % Consider adding a dedicated \TNLinearTwist macro (tensor with a red
+    % operator dot on the physical leg, analogous to the LHS of
+    % \TNCondCOne) to replace the use below.
     \[
         \TNPermutationTwist{U(g)}{i}
         \qquad\leadsto\qquad
