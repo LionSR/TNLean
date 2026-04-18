@@ -15,13 +15,13 @@ This module collects small helper lemmas used by the two core lemmas
 that together prove the self-contained equal-case fundamental theorem
 `fundamentalTheorem_equalMPV_CFBNT_hetero` in `TNLean.MPS.FundamentalTheorem.Full`.
 
-## Main public statements
+## Main statements
 
 * `tendsto_norm_selfOverlap_one`: normed form of a self-overlap tending to `1`.
 * `tendsto_inner_zero_swap`: swapping a decaying overlap conjugates the inner product.
 
-Additional internal helper lemmas in this file support the private proof architecture
-used by the full heterogeneous equal-case theorem, but are not exported by this module.
+This file currently consists of these two public helper lemmas used by the full
+heterogeneous equal-case theorem.
 
 ## References
 
