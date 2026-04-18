@@ -210,30 +210,25 @@ for the irreducible-form framework in \cite{DeLasCuevas2017Irreducible}.
 \end{definition}
 
 \begin{theorem}[Thm.~4.1 — $p$-refinability $\iff$ $p$-divisibility]%
-    \label{thm:thm_4_1_p_refinement}\notready
+    \label{thm:thm_4_1_p_refinement}
+    \lean{MPSTensor.thm_4_1_p_refinement}
+    \leanok
     \uses{def:irreducible_form, def:p_refinable, def:p_divisible_channel,
-          thm:periodic_ft}
+          thm:periodic_ft, thm:thm_4_1_p_refinement_forward,
+          thm:thm_4_1_p_refinement_reverse}
     Let $B$ be an MPS tensor in irreducible form~II and let $p \ge 1$.
     Then $B$ is $p$-refinable iff its transfer map $\mathcal{E}_B$ is
     $p$-divisible.
 \end{theorem}
 
-\begin{proof}\notready
-    \uses{thm:periodic_ft}
-    The forward implication uses the periodic equal-case Fundamental
-    Theorem (Theorem~\ref{thm:periodic_ft}): a $p$-refinement of $B$
-    yields matching MPV families on every length, which the equal-case
-    FT promotes to $\mathcal{E}_{A^{[p]}} = \mathcal{E}_B$, and this
-    equals $(\mathcal{E}_A)^p$ by the standard blocking-commutes-with-powers
-    identity, exhibiting $\mathcal{E}_B$ as the $p$-th power of the CPTP
-    map $\mathcal{E}_A$.
-
-    The reverse implication uses Stinespring/Kraus uniqueness: given
-    $\mathcal{E}_B = (\mathcal{E}')^p$, choose any Kraus representation
-    $A$ of $\mathcal{E}'$, then the $p$-blocked tensor $A^{[p]}$ has the
-    same channel as $B$, so Wolf Theorem~2.18 (unitary freedom of the
-    Kraus representation) supplies an isometry $W$ realising the
-    coefficient relation that defines $p$-refinability.
+\begin{proof}\leanok
+    \uses{thm:thm_4_1_p_refinement_forward, thm:thm_4_1_p_refinement_reverse}
+    Bundle the forward implication
+    (Theorem~\ref{thm:thm_4_1_p_refinement_forward}) with the reverse
+    implication (Theorem~\ref{thm:thm_4_1_p_refinement_reverse}) into a
+    single biconditional.  Both directions are formalised conditionally
+    on their respective canonicalization hypotheses, whose combination
+    yields the full equivalence.
 \end{proof}
 
 \begin{theorem}[Thm.~4.1 forward direction, conditional form]%
@@ -255,6 +250,37 @@ for the irreducible-form framework in \cite{DeLasCuevas2017Irreducible}.
     $\mathcal{E}_{A^{[p]}} = (\mathcal{E}_A)^p$ (formalised as
     \lean{MPSTensor.transferMap_blockTensor}) then identifies
     $\mathcal{E}_B$ with the $p$-th power of the channel $\mathcal{E}_A$.
+\end{proof}
+
+\begin{theorem}[Thm.~4.1 reverse direction, conditional form]%
+    \label{thm:thm_4_1_p_refinement_reverse}
+    \lean{MPSTensor.thm_4_1_p_refinement_reverse}
+    \leanok
+    \uses{def:irreducible_form, def:p_refinable, def:p_divisible_channel}
+    Let $B$ be an MPS tensor in irreducible form~II and let $p \ge 1$.
+    Assume an \emph{inverse canonicalization} hypothesis providing a
+    witness $A : \mathrm{MPSTensor}\ d\ D$ with
+    $\mathcal{E}_B = \mathcal{E}_{A^{[p]}}$ whenever $\mathcal{E}_B$ is
+    $p$-divisible.  Then $p$-divisibility of $\mathcal{E}_B$ implies
+    $p$-refinability of $B$.
+\end{theorem}
+
+\begin{proof}\leanok
+    From the inverse canonicalization hypothesis, extract
+    $A$ with $\mathcal{E}_B = \mathcal{E}_{A^{[p]}}$.  This matches two
+    finite Kraus families of the same completely positive map: the
+    blocked family $A^{[p]}$ with $d^{p}$ operators and the original
+    family $B$ with $d$ operators.  The cardinality comparison
+    $d \le d^{p}$ holds whenever $p \ge 1$, so Wolf
+    Theorem~2.18 (isometric freedom of Kraus representations,
+    formalised as \lean{kraus_isometry_freedom_iff}) supplies an
+    isometry $V \in M_{d^p \times d}(\C)$ with $V^{\dagger} V = \Id$ and
+    $(A^{[p]})^{\alpha} = \sum_{j} V_{\alpha,j}\, B^{j}$.  Expanding
+    $\mathrm{coeff}\,(A^{[p]})\,(\mathrm{ofFn}\,\tau)$ by linearity of
+    matrix multiplication and of the trace, the contributions
+    reorganise into the $V$-weighted sum over length-$N$ words of $B$
+    required by Definition~\ref{def:p_refinable}, exhibiting $V$ as the
+    isometry $W$ in the statement of $p$-refinability.
 \end{proof}
 
 \begin{remark}[Continuum-limit application]\notready
