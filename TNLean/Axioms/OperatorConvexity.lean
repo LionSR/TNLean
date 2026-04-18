@@ -78,6 +78,9 @@ variable {D : ℕ}
 
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
+-- TODO(upstream-mathlib): this local C⋆-algebra / order-instance bridge is
+-- duplicated in `TNLean.Analysis.OperatorConvexity`; once Mathlib exposes the
+-- needed `Matrix (Fin D) (Fin D) ℂ` instance chain directly, delete both blocks.
 private local instance instAxiomOCNormedRing : NormedRing Mat :=
   Matrix.instL2OpNormedRing
 private local instance instAxiomOCNormedAlgebra : NormedAlgebra ℂ Mat :=

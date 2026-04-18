@@ -154,6 +154,9 @@ variable {D : ℕ}
 
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
+-- TODO(upstream-mathlib): this local C⋆-algebra / order-instance bridge is
+-- duplicated in `TNLean.Axioms.OperatorConvexity`; once Mathlib exposes the
+-- needed `Matrix (Fin D) (Fin D) ℂ` instance chain directly, delete both blocks.
 private local instance instTROCNormedRing : NormedRing Mat :=
   Matrix.instL2OpNormedRing
 private local instance instTROCNormedAlgebra : NormedAlgebra ℂ Mat :=
@@ -178,8 +181,12 @@ private lemma rpow_eq_cfc_power {A : Mat} (hA : 0 ≤ A) (hH : A.IsHermitian) (p
   exact hH.cfc_eq _
 
 /-- Expand `(t • A) *ᵥ v` to `(t : ℂ) • (A *ᵥ v)` without relying on
-`Matrix.smul_mulVec`, which fails to unify due to an elaboration quirk in
-the real-scalar instance chain on `Matrix _ _ ℂ`. -/
+`Matrix.smul_mulVec`, which currently fails to unify due to an elaboration
+quirk in the real-scalar instance chain on `Matrix _ _ ℂ`.
+
+TODO(upstream-mathlib): replace this bridge by `Matrix.smul_mulVec` once the
+underlying real-scalar elaboration issue is fixed; the local `instTROC*` block
+above is kept only to work around the same gap. -/
 private lemma mulVec_smul_eq (t : ℝ) (A : Mat) (v : Fin D → ℂ) :
     (t • A : Mat) *ᵥ v = ((t : ℝ) : ℂ) • (A *ᵥ v) := by
   funext i
