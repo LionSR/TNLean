@@ -50,8 +50,12 @@ product-of-entangled-pairs structural form (Appendix B of
 arXiv:1606.00608). The scaffolding in
 `TNLean/MPS/RFP/CommutingBridge.lean` (`ProductPairBridge`) already
 encodes the key combinatorial content; the missing piece is the
-extraction of a `ProductPairBridge A` witness from `IsRFP A` plus
-normality and left-canonicity. This is internal to the library.
+extraction of a `ProductPairBridge A` witness from `IsRFP A` and
+normality. In that construction one may pass to a normalized
+representative only for building the witness / establishing the NNCPH
+conclusion, whose content is insensitive to this scaling; this is not
+a claim that `IsRFP` itself is preserved under rescaling. This is
+internal to the library.
 
 Replace `Axioms.beigi_nncph_to_rfp` with a Lean proof that internalizes
 S. Beigi's (2012) classification of ground spaces of nearest-neighbor
@@ -83,9 +87,9 @@ namespace Axioms
 
 /-- **RFP ⟹ NNCPH** direction of arXiv:1606.00608 §3.3 Theorem 3.10.
 
-For a normal, left-canonical MPS tensor `A` in RFP, the two-site
-parent-Hamiltonian `localTerm` projectors pairwise commute on every
-finite periodic chain of length at least `2`.
+For a normal MPS tensor `A` in RFP, the two-site parent-Hamiltonian
+`localTerm` projectors pairwise commute on every finite periodic chain
+of length at least `2`.
 
 Unfolded on the NNCPH side, the commutativity condition is exactly
 `MPSTensor.IsNNCPH A N` (as defined in
@@ -104,7 +108,7 @@ lives in `TNLean/MPS/RFP/CommutingBridge.lean` as
 See the module docstring for the formalization plan. -/
 axiom rfp_to_nncph_commute {d D : ℕ} [NeZero D]
     (A : MPSTensor d D) (_hNT : MPSTensor.IsNormal A)
-    (_hLeft : MPSTensor.IsLeftCanonical A) (_hRFP : MPSTensor.IsRFP A) :
+    (_hRFP : MPSTensor.IsRFP A) :
     ∀ N : ℕ, 2 ≤ N → ∀ i j : Fin N,
       MPSTensor.localTerm A 2 N i * MPSTensor.localTerm A 2 N j =
         MPSTensor.localTerm A 2 N j * MPSTensor.localTerm A 2 N i
