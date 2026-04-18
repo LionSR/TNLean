@@ -220,14 +220,14 @@
   \begin{tikzpicture}[tn picture]
     \TN@tensordot{tnA1}{(0,0)}
     \draw[tn leg] (tnA1.west) -- ++(-0.65,0);
-    \draw[tn leg] (tnA1.east) -- ++(0.65,0);
     \TN@upleg{tnA1}{\TN@physleglen}
     \TN@opdotabove{tnX}{(0.78,0)}{#1}
+    \draw[tn leg] (tnA1.east) -- (tnX.west);
+    \draw[tn leg] (tnX.east) -- ++(0.22,0);
     \node at (1.78,0) {$=$};
     \TN@tensordot{tnA2}{(2.65,0)}
     \draw[tn leg] (tnA2.west) -- ++(-0.65,0);
     \draw[tn leg] (tnA2.east) -- ++(0.65,0);
-    \TN@upleg{tnA2}{\TN@physleglen}
     \TN@opdotleft{tnO}{(2.65,0.74)}{#2}
     \draw[tn phys leg] (tnA2.north) -- (tnO.south);
   \end{tikzpicture}%
