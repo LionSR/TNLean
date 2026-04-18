@@ -224,7 +224,7 @@ lemma blockedCornerTransitionTensor_proj_left
     (u : Fin m) (i : Fin (blockPhysDim d m)) :
     P u * blockedCornerTransitionTensor A P u i =
       blockedCornerTransitionTensor A P u i := by
-  simpa [blockedCornerTransitionTensor]
+  simpa only [blockedCornerTransitionTensor]
     using cornerEvalWord_proj_left (A := A) (P := P) hProj u (wordOfBlock d m i)
 
 end MPSTensor
