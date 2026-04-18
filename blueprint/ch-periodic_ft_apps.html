@@ -883,7 +883,7 @@
 
     <a class="icon proof" href="ch-periodic_ft_apps.html#cor:cor_4_1_physical_symmetry_zgauge">#</a>
     
-    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000000697"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000000700"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -948,13 +948,13 @@
   <div class="theorem_thmcontent">
   <p>   Let \(A\) be an MPS tensor in irreducible form&#160;II and let \(U : G \to \mathrm{GL}_d(\mathbb {C})\) be a representation of a group \(G\) on the physical leg, acting unitarily (\(U(g)\,  U(g)^{\dagger } = \mathbb {1}\)). Assume moreover the periodic equal-case Fundamental Theorem of MPS (Theorem&#160;<a href="ch-assembly.html#thm:periodic_ft">14.29</a>) as an explicit hypothesis on the pair \((d, D)\) — formalised in Lean as the proposition  \(d\, D\). If \(A\) is on-site symmetric under&#160;\(U\) — that is, the twisted tensor \(\widetilde{A}_g\) has the same MPV family as&#160;\(A\) for every \(g \in G\) — then for each \(g \in G\) there exists a positive period \(m_g\) and a \(\mathbb {Z}_{m_g}\)-gauge equivalence between&#160;\(A\) and&#160;\(\widetilde{A}_g\). </p>
 <p>Concretely there are matrices \(Z_g\) and&#160;\(Y_g\), with \(Z_g^{m_g} = \mathbb {1}\) and \([A^i, Z_g] = 0\), satisfying </p>
-<div class="displaymath" id="a0000000698">
+<div class="displaymath" id="a0000000701">
   \[  Z_g\,  A^i = Y_g\,  \widetilde{A}_g^{\, i}\,  Y_g^{-1} \quad \text{for every physical index } i.  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000697">
+<div class="proof_wrapper" id="a0000000700">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1055,7 +1055,7 @@
 
     <a class="icon proof" href="ch-periodic_ft_apps.html#thm:cor_4_1_projective_rep">#</a>
     
-    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000000699"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000000702"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1109,14 +1109,14 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Under the hypotheses of Corollary&#160;<a href="ch-periodic_ft_apps.html#cor:cor_4_1_physical_symmetry_zgauge">15.1</a> together with the periodic projective-rigidity hypothesis (Definition&#160;<a href="ch-periodic_ft_apps.html#def:periodic_projective_rigidity">15.2</a>), the \(Y_g\) family assembles into a projective representation of \(G\) on the bond space: there exist a scalar \(2\)-cochain \(\omega : G \times G \to \mathbb {C}^{\times }\) and virtual gauges \(X : G \to \mathrm{GL}_D(\mathbb {C})\) satisfying </p>
-<div class="displaymath" id="a0000000700">
+<div class="displaymath" id="a0000000703">
   \[  X(g)\,  X(h) \; =\;  \omega (g, h)\,  X(g h),  \]
 </div>
 <p> while for each \(g\) the matrix \(X(g^{-1})\) still realises the Corollary&#160;4.1 \(\mathbb {Z}_{m_g}\)-intertwining between \(A\) and the twisted tensor \(\widetilde{A}_g\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000699">
+<div class="proof_wrapper" id="a0000000702">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1144,7 +1144,7 @@
 
     <a class="icon proof" href="ch-periodic_ft_apps.html#thm:cor_4_1_projective_rep_cocycle">#</a>
     
-    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000000701"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000000704"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1197,7 +1197,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000701">
+<div class="proof_wrapper" id="a0000000704">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1206,7 +1206,7 @@
   </div>
   <div class="proof_content">
   <p> Associativity of matrix multiplication applied to \(X(g)\,  X(h)\,  X(k)\), combined with the projective multiplication law, gives </p>
-<div class="displaymath" id="a0000000702">
+<div class="displaymath" id="a0000000705">
   \[  \omega (g, h)\,  \omega (g h, k)\,  X((g h) k) = \omega (g, h k)\,  \omega (h, k)\,  X(g (h k)).  \]
 </div>
 <p> Since \((g h) k = g (h k)\), both sides are scalar multiples of the same matrix \(X((g h) k)\). The matrix lies in \(\mathrm{GL}_D(\mathbb {C})\) and is therefore invertible, but the scalar cancellation leading from an equality of scalar multiples of a matrix to equality of the scalar coefficients additionally requires \(D {\gt} 0\) so that the underlying index set is inhabited. Cancelling then yields \(\omega (g, h)\,  \omega (g h, k) = \omega (g, h k)\,  \omega (h, k)\) in \(\mathbb {C}^{\times }\), hence in \(\mathrm{Units}(\mathbb {C})\). </p>
@@ -1433,7 +1433,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>    An MPS tensor \(B : \mathrm{MPSTensor}\  d\  D\) is <em>\(p\)-refinable</em> if there exist another tensor \(A : \mathrm{MPSTensor}\  d\  D\) and an isometry \(W : \mathbb {C}^d \to (\mathbb {C}^d)^{\otimes p}\) (encoded as a matrix \(W \in M_{d^p \times d}(\mathbb {C})\) with \(W^{\dagger } W = \mathbb {1}\)) such that the \(p\)-blocked tensor \(A^{[p]}\) matches the \(W\)-image of \(B\) at the level of MPV coefficients: </p>
-<div class="displaymath" id="a0000000703">
+<div class="displaymath" id="a0000000706">
   \[  \mathrm{coeff}\big(A^{[p]}\big)\big(\mathrm{ofFn}\, \tau \big) \; =\;  \sum _{\sigma : \mathrm{Fin}\,  N \to \mathrm{Fin}\,  d} \Big(\prod _{k} W_{\tau (k),\, \sigma (k)}\Big)\,  \mathrm{coeff}\, B\, \big(\mathrm{ofFn}\, \sigma \big)  \]
 </div>
 <p> for every \(N \in \mathbb {N}\) and every \(\tau : \mathrm{Fin}\,  N \to \mathrm{Fin}\,  d^{p}\). </p>
@@ -1455,7 +1455,7 @@
 
     <a class="icon proof" href="ch-periodic_ft_apps.html#thm:thm_4_1_p_refinement">#</a>
     
-    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000000704"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000000707"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1495,7 +1495,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000704">
+<div class="proof_wrapper" id="a0000000707">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1524,7 +1524,7 @@
 
     <a class="icon proof" href="ch-periodic_ft_apps.html#thm:thm_4_1_p_refinement_forward">#</a>
     
-    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000000705"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000000708"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1579,7 +1579,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000705">
+<div class="proof_wrapper" id="a0000000708">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
