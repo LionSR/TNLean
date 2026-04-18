@@ -100,18 +100,34 @@ commutation with the blocked letters.
 
 The per-sector trace relation ties each compressed block `blocks k` back to the
 projection `P k` via `mpv (blocks k) σ = tr(P k · evalWord(blockTensor A m)(σ))`,
-which is the defining property of `exists_compressedTensor_of_supported_projection`. -/
+which is the defining property of `exists_compressedTensor_of_supported_projection`.
+
+Also carries per-sector compression linear equivalences
+`φ k : M_{dim k}(ℂ) ≃ₗ[ℂ] cornerSubmodule (P k)` and the intertwining identity relating
+the compressed adjoint transfer map to the sector adjoint transfer map on the corner
+of `P k`. Returning each `φ k` as a `LinearEquiv` lets downstream consumers
+(see `compressedTensor_adjointTransferMap_cornerBridge`) transport corner-level
+irreducibility / primitivity results back to the compressed matrix algebra via
+conjugation.  The underlying linear map is an isometry for the canonical inner products;
+that property is witnessed separately where needed. -/
 def IsCyclicSectorDecomp [NeZero D] [NeZero m] (A : MPSTensor d D)
     {dim : Fin m → ℕ}
     (blocks : (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k)) : Prop :=
-  ∃ (P : Fin m → Matrix (Fin D) (Fin D) ℂ),
+  ∃ (P : Fin m → Matrix (Fin D) (Fin D) ℂ)
+    (φ : (k : Fin m) →
+      Matrix (Fin (dim k)) (Fin (dim k)) ℂ ≃ₗ[ℂ] cornerSubmodule (P k)),
     (∀ k, IsOrthogonalProjection (P k)) ∧
     (∑ k : Fin m, P k = 1) ∧
     (∀ k, transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k) ∧
     (∀ k (i : Fin (blockPhysDim d m)),
       P k * (blockTensor A m) i = (blockTensor A m) i * P k) ∧
     (∀ k (N : ℕ) (σ : Fin N → Fin (blockPhysDim d m)),
-      mpv (blocks k) σ = (P k * evalWord (blockTensor A m) (List.ofFn σ)).trace)
+      mpv (blocks k) σ = (P k * evalWord (blockTensor A m) (List.ofFn σ)).trace) ∧
+    (∀ k (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
+      (φ k (transferMap (d := blockPhysDim d m) (D := dim k)
+          (fun i => (blocks k i)ᴴ) X)).1 =
+        transferMap (d := blockPhysDim d m) (D := D)
+          (fun i => (P k * blockTensor A m i)ᴴ) ((φ k X).1))
 
 private theorem exists_cyclic_sector_decomp_after_blocking_of_isPeriodic
     [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
@@ -195,11 +211,12 @@ private theorem exists_cyclic_sector_decomp_after_blocking_of_isPeriodic
           _ = (ω ^ m) ^ (j : ℕ) := by rw [pow_mul]
           _ = 1 := by simp [hωprim.pow_eq_one]
       simpa [hperiph_roots] using hpow
-  obtain ⟨dim, blocks, P, hLC, hMPV, hPproj, hPsum, hCyclic, hComm, hTraceNondeg⟩ :=
+  obtain ⟨dim, blocks, P, φ, hLC, hMPV, hPproj, hPsum, hCyclic, hComm, hTraceNondeg⟩ :=
     exists_cyclic_sector_decomp_after_blocking
       A hP.leftCanonical hP.irreducible ρ hρ_pd h_adjfix hIrrK hωprim hperiph_range
-  obtain ⟨hTrace, hNondeg⟩ := hTraceNondeg
-  exact ⟨dim, blocks, hLC, hMPV, ⟨P, hPproj, hPsum, hCyclic, hComm, hTrace⟩, hNondeg⟩
+  obtain ⟨hTrace, hIntertwine, hNondeg⟩ := hTraceNondeg
+  exact ⟨dim, blocks, hLC, hMPV,
+    ⟨P, φ, hPproj, hPsum, hCyclic, hComm, hTrace, hIntertwine⟩, hNondeg⟩
 
 
 private lemma hLift_cyclicDecomp_mps_of_fixUpgrade_missingBridge
@@ -548,7 +565,7 @@ private lemma adjointTransferMap_primitive_and_irreducible_sectorBlock_of_cyclic
       ∧ IsIrreducibleMap
         (transferMap (d := blockPhysDim d m) (D := dim u)
           (fun i => (blocks u i)ᴴ)) := by
-  obtain ⟨P, hPproj, hPsum, hCyclicP, hComm, hTrace⟩ := hCyclic
+  obtain ⟨P, _φ, hPproj, hPsum, hCyclicP, hComm, hTrace, _hIntertwine⟩ := hCyclic
   obtain ⟨hInv, hCornerPrim, hCornerIrr⟩ :=
     cornerRestriction_primitive_and_irreducible_of_cyclicDecomp
       A hP blocks hBlocks_lc hBlocks_mpv hPproj hPsum hCyclicP hComm hTrace u hNonzero
@@ -688,7 +705,7 @@ private lemma sectorBlocks_not_gaugePhaseEquiv_of_ne
     ¬ GaugePhaseEquiv
       (cast (congr_arg (MPSTensor (blockPhysDim d m)) hdim) (blocks u))
       (blocks v) := by
-  obtain ⟨P, hPproj, hPsum, hCyclicP, hComm, hTrace⟩ := hCyclic
+  obtain ⟨P, _φ, hPproj, hPsum, hCyclicP, hComm, hTrace, _hIntertwine⟩ := hCyclic
   have hPairwise : Pairwise fun i j : Fin m => P i * P j = 0 :=
     pairwise_mul_zero_of_orthogonalProjection_sum_one P hPproj hPsum
   have hOrth : P u * P v = 0 := hPairwise huv
@@ -1414,7 +1431,7 @@ private lemma sectorDim_ne_zero_succ_of_cyclicSectorDecomp
     {u : Fin m} (hNondeg : dim u ≠ 0) :
     dim (u + 1) ≠ 0 := by
   classical
-  obtain ⟨P, hPproj, _hPsum, hShift, _hComm, hTrace⟩ := hCyclic
+  obtain ⟨P, _φ, hPproj, _hPsum, hShift, _hComm, hTrace, _hIntertwine⟩ := hCyclic
   intro hzero
   have htrace_succ :
       Matrix.trace (P (u + 1)) = 0 := by
