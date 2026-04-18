@@ -1094,6 +1094,192 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
 \end{proof}
 
 %% =========================================================
+\section{POVMs and Naimark dilation (Wolf Thm.~2.6)}
+\label{sec:povm_naimark}
+%% =========================================================
+
+\begin{definition}[Positive operator-valued measure]\label{def:povm}
+    \lean{POVM}
+    \leanok
+    A \emph{positive operator-valued measure} with $n$ outcomes on $\C^D$
+    is a family $\{E_i\}_{i=1}^n$ of positive semidefinite
+    operators on $\C^D$ satisfying the resolution of identity
+    \[
+        \sum_{i=1}^n E_i = \one_D.
+    \]
+\end{definition}
+
+\begin{definition}[Naimark Kraus square roots]\label{def:naimark_kraus}
+    \lean{POVM.naimarkKraus}
+    \leanok
+    \uses{def:povm}
+    For a POVM $\{E_i\}$, each effect $E_i \ge 0$ admits a square-root
+    factorisation $E_i = M_i^\dagger M_i$ with $M_i \in \MN{D}$. The
+    operators $M_i$ are the \emph{Naimark Kraus square roots}.
+\end{definition}
+
+\begin{definition}[Naimark isometry]\label{def:naimark_isometry}
+    \lean{POVM.naimarkIsometry}
+    \leanok
+    \uses{def:naimark_kraus, def:stinespring_v}
+    The \emph{Naimark isometry} $V : \C^D \to \C^D \otimes \C^n$ of a POVM
+    is the Stinespring-style assembly
+    \[
+        V = \sum_{i=1}^n M_i \otimes |i\rangle,
+        \qquad V_{(a,i),\,k} = (M_i)_{a,k}.
+    \]
+\end{definition}
+
+\begin{definition}[Naimark projective measurement]\label{def:naimark_projection}
+    \lean{POVM.naimarkProjection}
+    \leanok
+    The \emph{Naimark projectors} on $\C^D \otimes \C^n$ are
+    \[
+        P_i = \one_D \otimes |i\rangle\langle i|,
+        \qquad (P_i)_{(a,b),(c,d)} = \delta_{a,c}\,\delta_{b,i}\,\delta_{d,i}.
+    \]
+\end{definition}
+
+\begin{theorem}[Naimark isometry condition]\label{thm:naimark_isometry_isometry}
+    \lean{POVM.naimarkIsometry_isometry}
+    \leanok
+    \uses{def:naimark_isometry, def:povm}
+    The Naimark isometry satisfies $V^\dagger V = \one_D$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The Stinespring Gram identity gives
+    $V^\dagger V = \sum_i M_i^\dagger M_i = \sum_i E_i = \one_D$
+    by the resolution of identity.
+\end{proof}
+
+\begin{theorem}[Naimark projectors form a projective measurement]
+    \label{thm:naimark_projection_axioms}
+    \lean{POVM.naimarkProjection_mul_self,
+          POVM.naimarkProjection_hermitian,
+          POVM.naimarkProjection_orthogonal,
+          POVM.naimarkProjection_sum_eq_one}
+    \leanok
+    \uses{def:naimark_projection}
+    The Naimark projectors satisfy $P_i^2 = P_i$, $P_i^\dagger = P_i$,
+    $P_i P_j = 0$ for $i \ne j$, and $\sum_i P_i = \one_{\C^D \otimes \C^n}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Each identity follows from direct entrywise computation using the
+    delta-function form of $(P_i)_{(a,b),(c,d)}$.
+\end{proof}
+
+\begin{theorem}[Thm.~2.6: Naimark dilation]\label{thm:naimark_recovers_povm}
+    \lean{POVM.naimark_recovers_povm}
+    \leanok
+    \uses{def:povm, def:naimark_isometry, def:naimark_projection,
+          thm:naimark_isometry_isometry, thm:naimark_projection_axioms}
+    Every POVM $\{E_i\}_{i=1}^n$ arises as a projective measurement on a
+    dilation: for the isometry $V$ and projectors $P_i$ above,
+    \[
+        E_i = V^\dagger P_i V.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Computing entrywise,
+    $(V^\dagger P_i V)_{k,\ell}
+      = \sum_{a} \overline{(M_i)_{a,k}}\,(M_i)_{a,\ell}
+      = (M_i^\dagger M_i)_{k,\ell}
+      = (E_i)_{k,\ell}$.
+\end{proof}
+
+\begin{theorem}[Existential Naimark dilation]\label{thm:exists_naimark_dilation}
+    \lean{POVM.exists_naimark_dilation}
+    \leanok
+    \uses{thm:naimark_recovers_povm}
+    For every POVM $\{E_i\}$ on $\C^D$ there exist a dilation dimension $r$,
+    an isometry $V : \C^D \to \C^D \otimes \C^r$, and a projective
+    measurement $\{P_i\}$ on the dilation satisfying $E_i = V^\dagger P_i V$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Take $r = n$ and the explicit witnesses $V = \sum_i M_i \otimes |i\rangle$
+    and $P_i = \one_D \otimes |i\rangle\langle i|$.
+\end{proof}
+
+\begin{definition}[POVM from a PSD resolution of identity on a dilation]
+    \label{def:povm_of_psd_resolution_of_identity}
+    \lean{POVM.ofPSDResolutionOfIdentity}
+    \leanok
+    Given an isometry $V : \C^D \to \C^{d'}$ with $V^\dagger V = \one_D$
+    and a family $\{P_i\}_{i=1}^n$ of positive semidefinite operators on
+    $\C^{d'}$ summing to the identity, the pulled-back operators
+    \[
+        E_i := V^\dagger P_i V
+    \]
+    form a POVM. In particular, any projective measurement on the
+    dilation (a special case of a PSD resolution of identity) pulls back
+    to a POVM.
+\end{definition}
+
+\begin{definition}[Quantum instrument]\label{def:instrument}
+    \lean{Instrument}
+    \leanok
+    \uses{def:cp_map, def:trace_preserving}
+    A \emph{quantum instrument} with $n$ outcomes is a family
+    $\{\Phi_i\}_{i=1}^n$ of completely positive maps on $\MN{D}$ whose
+    sum $\sum_i \Phi_i$ is trace-preserving.
+\end{definition}
+
+\begin{theorem}[Instrument total map is a channel]
+    \label{thm:instrument_total_is_channel}
+    \lean{Instrument.total_isChannel}
+    \leanok
+    \uses{def:instrument, def:channel}
+    The total map $\sum_i \Phi_i$ of an instrument is a quantum channel.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Complete positivity of the sum follows from closure of CP maps under
+    finite addition; trace preservation is built into the definition.
+\end{proof}
+
+\begin{theorem}[Conservation of probability for instruments]
+    \label{thm:instrument_sum_probability}
+    \lean{Instrument.sum_probability}
+    \leanok
+    \uses{def:instrument}
+    For every state $\rho \in \MN{D}$, the outcome probabilities
+    $p_i(\rho) := \operatorname{tr}(\Phi_i(\rho))$ sum to $\operatorname{tr}(\rho)$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Linearity of trace and trace preservation of $\sum_i \Phi_i$ give
+    $\sum_i \operatorname{tr}(\Phi_i(\rho)) = \operatorname{tr}\bigl((\sum_i \Phi_i)(\rho)\bigr)
+      = \operatorname{tr}(\rho)$.
+\end{proof}
+
+\begin{theorem}[Non-negativity of instrument probabilities]
+    \label{thm:instrument_probability_nonneg}
+    \lean{Instrument.probability_nonneg}
+    \leanok
+    \uses{def:instrument}
+    If $\rho \in \MN{D}$ is positive semidefinite, then each outcome
+    probability $p_i(\rho) = \operatorname{tr}(\Phi_i(\rho))$ is a
+    non-negative real number.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Each $\Phi_i$ is completely positive, hence positive, so
+    $\Phi_i(\rho)$ is positive semidefinite and its trace is a
+    non-negative real.
+\end{proof}
+
+%% =========================================================
 \subsection{Trace-pairing expansion in transfer-matrix form}
 \label{subsec:trace_pairing_expansion}
 %% =========================================================

@@ -55,6 +55,7 @@ import TNLean.Channel.KrausRepresentation
 import TNLean.Channel.KrausUnitaryFreedom
 import TNLean.Channel.Stinespring
 import TNLean.Channel.TransferMatrix
+import TNLean.Channel.POVM
 
 -- Layer 2: Quantum entropy infrastructure (depends on Channel.Basic, Channel.PartialTrace)
 import TNLean.Analysis.Entropy
