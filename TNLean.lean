@@ -188,6 +188,9 @@ import TNLean.MPS.Overlap.PeripheralToSpectralGap
 import TNLean.MPS.CanonicalForm.FromPrimitive
 import TNLean.MPS.FundamentalTheorem.EqualProportional
 import TNLean.MPS.FundamentalTheorem.Full
+import TNLean.MPS.FundamentalTheorem.Full.Helpers
+import TNLean.MPS.FundamentalTheorem.Full.NondecayingOverlap
+import TNLean.MPS.FundamentalTheorem.Full.BlocksMatch
 import TNLean.MPS.FundamentalTheorem.OverlapConvergenceAux
 import TNLean.MPS.FundamentalTheorem.CoefficientConvergence
 import TNLean.MPS.FundamentalTheorem.Multi
