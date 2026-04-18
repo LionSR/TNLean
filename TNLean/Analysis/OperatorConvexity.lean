@@ -271,13 +271,27 @@ private lemma trace_cfc_convex_bound
       rw [hμ_decomp j]; simp [smul_eq_mul]
     rw [hsum] at hjen
     simpa [smul_eq_mul] using hjen
-  -- Diagonal Jensen (convex) at each ψⱼ for `A₁` and `A₂`.
+  -- Diagonal Jensen (convex) at each `ψⱼ`, routed through the public
+  -- concave companion applied to `-f` so both wrappers stay exercised.
+  have hdiag_of_convex :
+      ∀ {A : Mat} (hA : A.PosSemidef) (j : Fin D),
+        f ((star (ψ j) ⬝ᵥ A *ᵥ ψ j).re) ≤ (star (ψ j) ⬝ᵥ hA.1.cfc f *ᵥ ψ j).re := by
+    intro A hA j
+    have hdiag_neg := Matrix.diagonal_jensen_of_concaveOn
+      (f := fun x => -f x) (hconvex.neg) hA (hψ_unit j)
+    rw [IsHermitian.cfc_neg hA.1 f] at hdiag_neg
+    have hdiag_neg' :
+        -(star (ψ j) ⬝ᵥ hA.1.cfc f *ᵥ ψ j).re ≤ -f ((star (ψ j) ⬝ᵥ A *ᵥ ψ j).re) := by
+      simpa [Matrix.neg_mulVec, dotProduct_neg, Complex.neg_re] using hdiag_neg
+    linarith
   have hdiagA₁ : ∀ j,
-      f (a j) ≤ (star (ψ j) ⬝ᵥ hA₁.1.cfc f *ᵥ ψ j).re := fun j =>
-    Matrix.diagonal_jensen_of_convexOn hconvex hA₁ (hψ_unit j)
+      f (a j) ≤ (star (ψ j) ⬝ᵥ hA₁.1.cfc f *ᵥ ψ j).re := fun j => by
+    rw [ha_def]
+    exact hdiag_of_convex hA₁ j
   have hdiagA₂ : ∀ j,
-      f (b j) ≤ (star (ψ j) ⬝ᵥ hA₂.1.cfc f *ᵥ ψ j).re := fun j =>
-    Matrix.diagonal_jensen_of_convexOn hconvex hA₂ (hψ_unit j)
+      f (b j) ≤ (star (ψ j) ⬝ᵥ hA₂.1.cfc f *ᵥ ψ j).re := fun j => by
+    rw [hb_def]
+    exact hdiag_of_convex hA₂ j
   have hpt : ∀ j,
       f (μ j) ≤ t * (star (ψ j) ⬝ᵥ hA₁.1.cfc f *ᵥ ψ j).re
         + (1 - t) * (star (ψ j) ⬝ᵥ hA₂.1.cfc f *ᵥ ψ j).re := fun j => by
