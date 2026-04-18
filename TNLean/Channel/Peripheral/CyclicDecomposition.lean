@@ -175,7 +175,6 @@ noncomputable def cornerCompressionLinearMap
     (eST : Fin D ≃ S ⊕ T) (eS : S ≃ Fin n)
     (P0 : Matrix (S ⊕ T) (S ⊕ T) ℂ)
     (hP0 : P0 = Matrix.fromBlocks (1 : Matrix S S ℂ) 0 0 (0 : Matrix T T ℂ))
-    (_hn : (n : ℂ) = Matrix.trace P)
     (hP_decomp : P = Umat * Pdiag * Umatᴴ)
     (hPdiag_back : Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm P0 = Pdiag)
     (hU'U : Umatᴴ * Umat = 1) :
@@ -326,7 +325,6 @@ noncomputable def cornerCompressionLinearEquiv
     (eST : Fin D ≃ S ⊕ T) (eS : S ≃ Fin n)
     (P0 : Matrix (S ⊕ T) (S ⊕ T) ℂ)
     (hP0 : P0 = Matrix.fromBlocks (1 : Matrix S S ℂ) 0 0 (0 : Matrix T T ℂ))
-    (hn : (n : ℂ) = Matrix.trace P)
     (hP_decomp : P = Umat * Pdiag * Umatᴴ)
     (hPdiag_UPU : Pdiag = Umatᴴ * P * Umat)
     (hPdiag_std : Matrix.reindexLinearEquiv ℂ ℂ eST eST Pdiag = P0)
@@ -334,7 +332,7 @@ noncomputable def cornerCompressionLinearEquiv
     (hU'U : Umatᴴ * Umat = 1) (hUU : Umat * Umatᴴ = 1) :
     Matrix (Fin n) (Fin n) ℂ ≃ₗ[ℂ] cornerSubmodule P :=
   let toLM :=
-    cornerCompressionLinearMap (P := P) (Pdiag := Pdiag) Umat eST eS P0 hP0 hn
+    cornerCompressionLinearMap (P := P) (Pdiag := Pdiag) Umat eST eS P0 hP0
       hP_decomp hPdiag_back hU'U
   { toLM with
     invFun := fun X => cornerCompressionInvFun Umat eST eS X.1
@@ -349,20 +347,19 @@ noncomputable def cornerCompressionLinearEquiv
       exact cornerCompressionExpand_invFun (P := P) (Pdiag := Pdiag) Umat eST eS P0
         hP0 hPdiag_UPU hPdiag_std hU'U hUU X }
 
-@[simp] lemma cornerCompressionLinearEquiv_apply_coe
+lemma cornerCompressionLinearEquiv_apply_coe
     {D n : ℕ} (P Pdiag Umat : MatrixAlg D)
     {S T : Type*} [Fintype S] [DecidableEq S] [Fintype T] [DecidableEq T]
     (eST : Fin D ≃ S ⊕ T) (eS : S ≃ Fin n)
     (P0 : Matrix (S ⊕ T) (S ⊕ T) ℂ)
     (hP0 : P0 = Matrix.fromBlocks (1 : Matrix S S ℂ) 0 0 (0 : Matrix T T ℂ))
-    (hn : (n : ℂ) = Matrix.trace P)
     (hP_decomp : P = Umat * Pdiag * Umatᴴ)
     (hPdiag_UPU : Pdiag = Umatᴴ * P * Umat)
     (hPdiag_std : Matrix.reindexLinearEquiv ℂ ℂ eST eST Pdiag = P0)
     (hPdiag_back : Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm P0 = Pdiag)
     (hU'U : Umatᴴ * Umat = 1) (hUU : Umat * Umatᴴ = 1)
     (M : Matrix (Fin n) (Fin n) ℂ) :
-    ((cornerCompressionLinearEquiv (P := P) (Pdiag := Pdiag) Umat eST eS P0 hP0 hn
+    ((cornerCompressionLinearEquiv (P := P) (Pdiag := Pdiag) Umat eST eS P0 hP0
         hP_decomp hPdiag_UPU hPdiag_std hPdiag_back hU'U hUU M : cornerSubmodule P) :
       MatrixAlg D) =
       cornerCompressionExpand Umat eST eS M := rfl
@@ -489,7 +486,7 @@ private lemma exists_cornerSubmodule_matrixLinearEquiv_aux {D : ℕ}
   -- Package the compression as a `LinearEquiv` using the shared
   -- `cornerCompressionLinearEquiv` builder.
   exact cornerCompressionLinearEquiv (P := P) (Pdiag := Pdiag) Umat eST eS P0
-    rfl htrace hP_decomp rfl hPdiag_std hPdiag_back hU'U hUU
+    rfl hP_decomp rfl hPdiag_std hPdiag_back hU'U hUU
 
 /-- The rank of an orthogonal projection `P : M_D(ℂ)`, defined so that
 `cornerSubmoduleMatrixLinearEquiv` produces an isometry `M_{cornerRank P hP}(ℂ) ≃ₗ
