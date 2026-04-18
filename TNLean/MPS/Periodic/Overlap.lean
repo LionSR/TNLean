@@ -102,18 +102,20 @@ The per-sector trace relation ties each compressed block `blocks k` back to the
 projection `P k` via `mpv (blocks k) σ = tr(P k · evalWord(blockTensor A m)(σ))`,
 which is the defining property of `exists_compressedTensor_of_supported_projection`.
 
-Also carries per-sector compression isometries
-`φ k : M_{dim k}(ℂ) →ₗ cornerSubmodule (P k)` and the intertwining identity relating
+Also carries per-sector compression linear equivalences
+`φ k : M_{dim k}(ℂ) ≃ₗ[ℂ] cornerSubmodule (P k)` and the intertwining identity relating
 the compressed adjoint transfer map to the sector adjoint transfer map on the corner
-of `P k`. These witnesses are exposed so downstream consumers (see
-`compressedTensor_adjointTransferMap_cornerBridge`) can transport corner-level
-irreducibility results to the compressed matrix algebra. -/
+of `P k`. Returning each `φ k` as a `LinearEquiv` lets downstream consumers
+(see `compressedTensor_adjointTransferMap_cornerBridge`) transport corner-level
+irreducibility / primitivity results back to the compressed matrix algebra via
+conjugation.  The underlying linear map is an isometry for the canonical inner products;
+that property is witnessed separately where needed. -/
 def IsCyclicSectorDecomp [NeZero D] [NeZero m] (A : MPSTensor d D)
     {dim : Fin m → ℕ}
     (blocks : (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k)) : Prop :=
   ∃ (P : Fin m → Matrix (Fin D) (Fin D) ℂ)
     (φ : (k : Fin m) →
-      Matrix (Fin (dim k)) (Fin (dim k)) ℂ →ₗ[ℂ] cornerSubmodule (P k)),
+      Matrix (Fin (dim k)) (Fin (dim k)) ℂ ≃ₗ[ℂ] cornerSubmodule (P k)),
     (∀ k, IsOrthogonalProjection (P k)) ∧
     (∑ k : Fin m, P k = 1) ∧
     (∀ k, transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k) ∧

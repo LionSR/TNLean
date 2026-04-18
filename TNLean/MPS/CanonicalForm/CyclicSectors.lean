@@ -122,17 +122,21 @@ private lemma evalWord_conj_unitary
 /-- Compress a tensor supported on an orthogonal projection to the corresponding sector bond
 space.  The compressed tensor has the same sector MPVs and inherits the left-canonical equation.
 
-Exposes the **compression isometry** `φ : M_n(ℂ) →ₗ cornerSubmodule P` together with the
-**intertwining identity** `(φ (transferMap Cᴴ X)).1 = transferMap Aᴴ ((φ X).1)`. This packages
-the spectral compression used in the proof so downstream callers can transport the corner
-restriction of the adjoint transfer map into the compressed matrix algebra. -/
+Exposes the **compression linear equivalence** `φ : M_n(ℂ) ≃ₗ[ℂ] cornerSubmodule P`
+together with the **intertwining identity**
+`(φ (transferMap Cᴴ X)).1 = transferMap Aᴴ ((φ X).1)`.  The underlying linear map is the
+spectral corner-compression built from `Matrix.IsHermitian.eigenvectorUnitary`; exposing it
+as a `LinearEquiv` lets downstream callers transport the corner restriction of the adjoint
+transfer map into the compressed matrix algebra (and transport corner-level irreducibility
+back via conjugation).  The linear map is an isometry for the canonical inner products; the
+isometry property is witnessed separately where needed. -/
 theorem exists_compressedTensor_of_supported_projection
     (A : MPSTensor d D) (P : MatrixAlg D)
     (hP : IsOrthogonalProjection P)
     (hSupp : ∀ i : Fin d, P * A i * P = A i)
     (hTP : ∑ i : Fin d, (A i)ᴴ * A i = P) :
     ∃ (n : ℕ) (C : MPSTensor d n)
-      (φ : Matrix (Fin n) (Fin n) ℂ →ₗ[ℂ] cornerSubmodule P),
+      (φ : Matrix (Fin n) (Fin n) ℂ ≃ₗ[ℂ] cornerSubmodule P),
       ((n : ℂ) = Matrix.trace P) ∧
       (∑ i : Fin d, (C i)ᴴ * C i = 1) ∧
       (∀ (N : ℕ) (σ : Fin N → Fin d),
@@ -185,12 +189,13 @@ theorem exists_compressedTensor_of_supported_projection
   let eS : S ≃ Fin n := Fintype.equivFin S
   -- Conjugated tensor
   let B : MPSTensor d D := fun i => Umatᴴ * A i * Umat
-  -- Algebra isomorphism for reindexing
-  let φ : MatrixAlg D ≃ₐ[ℂ] Matrix (S ⊕ T) (S ⊕ T) ℂ := Matrix.reindexAlgEquiv ℂ ℂ eST
+  -- Algebra isomorphism for reindexing (renamed to avoid clashing with the
+  -- returned `φ` below).
+  let rAlg : MatrixAlg D ≃ₐ[ℂ] Matrix (S ⊕ T) (S ⊕ T) ℂ := Matrix.reindexAlgEquiv ℂ ℂ eST
   let P0 : Matrix (S ⊕ T) (S ⊕ T) ℂ :=
     Matrix.fromBlocks (1 : Matrix S S ℂ) 0 0 (0 : Matrix T T ℂ)
   -- Pdiag in S⊕T basis
-  have hPdiag_std : φ Pdiag = P0 := by
+  have hPdiag_std : rAlg Pdiag = P0 := by
     change Matrix.reindex eST eST Pdiag = P0
     rw [hPdiag_eq, show Matrix.reindex eST eST (Matrix.diagonal f) =
         Matrix.diagonal (f ∘ eST.symm) from by simp [Matrix.reindex_apply]]
@@ -227,13 +232,13 @@ theorem exists_compressedTensor_of_supported_projection
         _ = Umatᴴ * (P * A i * P) * Umat := by rw [hUU, Matrix.mul_one, Matrix.mul_one]
     rw [hkey, hSupp i]
   -- Block structure
-  let X : Fin d → Matrix (S ⊕ T) (S ⊕ T) ℂ := fun i => φ (B i)
+  let X : Fin d → Matrix (S ⊕ T) (S ⊕ T) ℂ := fun i => rAlg (B i)
   let B11 : Fin d → Matrix S S ℂ := fun i => (X i).toBlocks₁₁
   have hX_block : ∀ i : Fin d,
       X i = Matrix.fromBlocks (B11 i) 0 0 (0 : Matrix T T ℂ) := by
     intro i
     have hsupp_block : P0 * X i * P0 = X i := by
-      have := congrArg φ (hBsupp i)
+      have := congrArg rAlg (hBsupp i)
       simp only [map_mul, hPdiag_std] at this
       exact this
     rw [(Matrix.fromBlocks_toBlocks (X i)).symm]
@@ -303,9 +308,11 @@ theorem exists_compressedTensor_of_supported_projection
             (0 : Matrix S T ℂ) (0 : Matrix T S ℂ) (0 : Matrix T T ℂ)) * Umatᴴ := by
     intro M
     exact cornerCompressionExpand_apply Umat eST eS M
-  let cornerEmbed : Matrix (Fin n) (Fin n) ℂ →ₗ[ℂ] cornerSubmodule P :=
-    cornerCompressionLinearMap (P := P) (Pdiag := Pdiag) Umat eST eS P0 hP0_def
-      htrace hP_decomp hPdiag_back hU'U
+  have hPdiag_UPU : Pdiag = Umatᴴ * P * Umat := rfl
+  have hPdiag_std_lin : Matrix.reindexLinearEquiv ℂ ℂ eST eST Pdiag = P0 := hPdiag_std
+  let cornerEmbed : Matrix (Fin n) (Fin n) ℂ ≃ₗ[ℂ] cornerSubmodule P :=
+    cornerCompressionLinearEquiv (P := P) (Pdiag := Pdiag) Umat eST eS P0 hP0_def
+      htrace hP_decomp hPdiag_UPU hPdiag_std_lin hPdiag_back hU'U hUU
   refine ⟨n, C, cornerEmbed, ?_, ?_, ?_, ?_⟩
   -- (1) Trace identity: n = tr P
   · exact htrace
@@ -338,22 +345,19 @@ theorem exists_compressedTensor_of_supported_projection
     have hTPblock : ∑ i : Fin d, (B11 i)ᴴ * B11 i = (1 : Matrix S S ℂ) := by
       -- φ(∑ B_i† B_i) = ∑ φ(B_i† * B_i) = ∑ (X_i)† (X_i) = P0
       -- But we also need φ(B_i†) = (X_i)†
-      have hφ_ct : ∀ i, φ ((B i)ᴴ) = (X i)ᴴ := by
+      have hφ_ct : ∀ i, rAlg ((B i)ᴴ) = (X i)ᴴ := by
         intro i; ext a b
-        simp [φ, X, Matrix.reindex_apply, Matrix.conjTranspose_apply,
+        simp [rAlg, X, Matrix.reindex_apply, Matrix.conjTranspose_apply,
           Matrix.submatrix_apply, Matrix.reindexAlgEquiv]
       -- h : ∑ (X_i)† * X_i = P0
       have h : ∑ i : Fin d, (X i)ᴴ * X i = P0 := by
-        have h0 := congrArg φ hTPB
+        have h0 := congrArg rAlg hTPB
         rw [map_sum] at h0
         simp only [map_mul] at h0
-        -- h0 : ∑ φ (B i)ᴴ * φ (B i) = φ Pdiag
-        -- φ (B i)ᴴ is actually φ((B i)ᴴ) after map_mul, which equals (X i)ᴴ by hφ_ct
-        -- Actually hφ_ct says φ (B i)ᴴ = (X i)ᴴ where φ (B i) = X i
-        -- So φ (B i)ᴴ = (X i)ᴴ, and φ (B i) = X i
-        simp only [show ∀ i, φ (B i) = X i from fun i => rfl] at h0
-        -- Now need: φ (B i)ᴴ = (X i)ᴴ... but after map_mul, what does h0 look like?
-        -- Let me just use the fact that φ preserves star/conjTranspose
+        -- h0 : ∑ rAlg (B i)ᴴ * rAlg (B i) = rAlg Pdiag
+        -- rAlg (B i)ᴴ is actually rAlg((B i)ᴴ) after map_mul, which equals (X i)ᴴ by hφ_ct
+        simp only [show ∀ i, rAlg (B i) = X i from fun i => rfl] at h0
+        -- Now use the fact that rAlg preserves star/conjTranspose
         rw [hPdiag_std] at h0
         convert h0 using 1
       -- Substitute block form X_i = fromBlocks(B11_i, 0, 0, 0)
@@ -414,18 +418,18 @@ theorem exists_compressedTensor_of_supported_projection
       -- Reindex RHS to S⊕T
       have htrace_reindex :
           Matrix.trace (Pdiag * evalWord B w) =
-            Matrix.trace (φ (Pdiag * evalWord B w)) := by
+            Matrix.trace (rAlg (Pdiag * evalWord B w)) := by
         change Matrix.trace (Pdiag * evalWord B w) =
           Matrix.trace (Matrix.reindex eST eST (Pdiag * evalWord B w))
         rw [Matrix.trace_reindex]
       rw [htrace_reindex]
       rw [map_mul, hPdiag_std]
-      -- φ(evalWord B w) = evalWord X w
-      have hφ_eval : φ (evalWord B w) = _root_.evalWord X w := by
+      -- rAlg(evalWord B w) = evalWord X w
+      have hφ_eval : rAlg (evalWord B w) = _root_.evalWord X w := by
         change Matrix.reindex eST eST (evalWord B w) = _root_.evalWord X w
         have h := evalWord_reindex_fin (e := eST) (A := B) w
         rw [show (fun i => Matrix.reindex eST eST (B i)) = X from by
-          ext i; simp [φ, X]] at h
+          ext i; simp [rAlg, X]] at h
         exact h.symm
       rw [hφ_eval]
       -- Now: tr(P0 * evalWord X w) = tr(evalWord B11 w)
@@ -677,9 +681,11 @@ variable {m : ℕ}
 then it decomposes into compressed sectors whose direct-sum tensor is `SameMPV₂`-equivalent to the
 original tensor.
 
-Exposes per-sector compression isometries `φ k : M_{dim k}(ℂ) →ₗ cornerSubmodule (P k)` and the
-intertwining identity tying the compressed adjoint transfer map to the sector adjoint transfer
-map on the corner of `P k`. -/
+Exposes per-sector compression linear equivalences
+`φ k : M_{dim k}(ℂ) ≃ₗ[ℂ] cornerSubmodule (P k)` and the intertwining identity tying the
+compressed adjoint transfer map to the sector adjoint transfer map on the corner of `P k`.
+Returning a `LinearEquiv` lets downstream consumers transport corner-level irreducibility /
+primitivity structure across the compression. -/
 theorem exists_blockDecomp_of_commuting_projections
     (A : MPSTensor d D)
     (P : Fin m → MatrixAlg D)
@@ -689,7 +695,7 @@ theorem exists_blockDecomp_of_commuting_projections
     (hComm : ∀ k : Fin m, ∀ i : Fin d, P k * A i = A i * P k) :
     ∃ (dim : Fin m → ℕ) (blocks : (k : Fin m) → MPSTensor d (dim k))
       (φ : (k : Fin m) →
-        Matrix (Fin (dim k)) (Fin (dim k)) ℂ →ₗ[ℂ] cornerSubmodule (P k)),
+        Matrix (Fin (dim k)) (Fin (dim k)) ℂ ≃ₗ[ℂ] cornerSubmodule (P k)),
       (∀ k, ∑ i : Fin d, (blocks k i)ᴴ * blocks k i = 1) ∧
       SameMPV₂ A (toTensorFromBlocks (d := d) (μ := fun _ : Fin m => (1 : ℂ)) blocks) ∧
       (∀ k (N : ℕ) (σ : Fin N → Fin d),
@@ -777,7 +783,7 @@ theorem exists_blockDecomp_of_adjoint_fixed_projections
     (hFix : ∀ k : Fin m, transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k) = P k) :
     ∃ (dim : Fin m → ℕ) (blocks : (k : Fin m) → MPSTensor d (dim k))
       (φ : (k : Fin m) →
-        Matrix (Fin (dim k)) (Fin (dim k)) ℂ →ₗ[ℂ] cornerSubmodule (P k)),
+        Matrix (Fin (dim k)) (Fin (dim k)) ℂ ≃ₗ[ℂ] cornerSubmodule (P k)),
       (∀ k, ∑ i : Fin d, (blocks k i)ᴴ * blocks k i = 1) ∧
       SameMPV₂ A (toTensorFromBlocks (d := d) (μ := fun _ : Fin m => (1 : ℂ)) blocks) ∧
       (∀ k (N : ℕ) (σ : Fin N → Fin d),
