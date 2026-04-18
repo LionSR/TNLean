@@ -73,8 +73,8 @@ Needed beyond MPS chain machinery:
 ### B. Injectivity notions (stronger than current exploratory predicate)
 
 5. **Paper-faithful vertex injectivity map**
-   - Current `IsVertexInjective` is syntactic injectivity of `component v` as function into `Fin d → ℂ` data.
-   - Need a linear-map formulation from virtual boundary space to physical space (or dual map with one-sided inverse).
+   - `IsVertexInjective` is now the linear-independence formulation `∀ v, LinearIndependent ℂ (A.component v)` (issue #633); the earlier function-level `Function.Injective` surrogate was strictly weaker and admitted counterexamples to `gauge_unique_up_to_scalar`.
+   - Still open: packaging the resulting left inverse as a `LinearMap` from the free space on virtual configurations into `Fin d → ℂ` (with an explicit one-sided inverse), so that the PEPS FT derivation can consume it as a linear-algebraic object rather than as a linear-independence hypothesis.
 
 6. **Blocking closure of injectivity**
    - Formal theorem: contraction of injective tensors over internal edges remains injective on exposed boundary.
