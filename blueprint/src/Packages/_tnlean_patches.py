@@ -9,9 +9,14 @@ upstream methods that TNLean still needs without shadowing the full ``natbib``,
 The remaining local fixes are:
 
 * ``plasTeX.Packages.natbib.bibliography.loadBibliographyFile``:
-  skip the spurious missing-``web.aux`` warning during HTML builds, while still
-  exposing natbib's ``bibitem`` globally so generated ``web.bbl`` entries parse
-  reliably when present.
+  skip the spurious missing-``web.aux`` warning during HTML builds, while also
+  re-exposing natbib's ``bibitem`` as a module-level macro on *this* patches
+  module so ``\bibitem`` is registered in the global plasTeX context.  When
+  ``\usepackage{_tnlean_patches}`` is processed, plasTeX scans
+  ``vars(package_module)`` for classes with a ``macroName`` attribute and
+  installs them on the document context; assigning ``bibitem`` onto the
+  already-imported ``plasTeX.Packages.natbib`` module would be a no-op because
+  that scan has already run.
 * ``leanblueprint.Packages.blueprint.lean.digest``:
   coerce plasTeX list items to plain strings, merge multiple ``\lean`` tags on
   one parent node, and deduplicate ``lean_decls`` output.
@@ -22,8 +27,9 @@ The remaining local fixes are:
 
 from __future__ import annotations
 
-from pathlib import Path
+import io
 import pickle
+from pathlib import Path
 from typing import Any
 
 from leanblueprint.Packages import blueprint as _blueprint
@@ -69,7 +75,14 @@ def _patched_load_bibliography_file(self, tex):
 
 
 _natbib.bibliography.loadBibliographyFile = _patched_load_bibliography_file
-_natbib.bibitem = _natbib.thebibliography.bibitem
+
+# Re-expose natbib's nested ``thebibliography.bibitem`` class at module level
+# so plasTeX's ``loadPythonPackage`` hook (which imports macros via
+# ``importMacros(vars(imported))``) registers ``\bibitem`` in the global
+# document context when this patches package is loaded. Assigning onto
+# ``_natbib`` directly is ineffective because plasTeX has already scanned
+# ``natbib`` by the time this file executes.
+bibitem = _natbib.thebibliography.bibitem
 
 
 # --- leanblueprint patch --------------------------------------------------
@@ -187,6 +200,47 @@ class _LabelProxy:
 
 
 
+# Class allowlist for deserializing plasTeX ``.paux`` files.  plasTeX's
+# ``Context.persist`` / ``Node.persist`` writes a dict-of-dicts of string-coerced
+# ``refAttributes`` (``macroName``, ``ref``, ``title``, ``captionName``, ``id``,
+# ``url``).  The built-in container and scalar types never go through
+# ``Unpickler.find_class``; the only custom class we expect is the
+# ``plasTeX.Renderers.URL`` wrapper, which is a thin ``str`` subclass used to
+# store node URLs.  Everything else is rejected.
+_SAFE_PAUX_CLASSES: frozenset[tuple[str, str]] = frozenset({
+    ("plasTeX.Renderers", "URL"),
+})
+
+
+class _SafePauxUnpickler(pickle.Unpickler):
+    """Restricted unpickler for plasTeX ``*.paux`` files.
+
+    Denies every ``find_class`` lookup except for an explicit allowlist of
+    plasTeX value-object classes.  This prevents arbitrary-code execution
+    from a stale or tampered ``web.paux`` left in the working directory.
+    """
+
+    def find_class(self, module: str, name: str):  # type: ignore[override]
+        if (module, name) in _SAFE_PAUX_CLASSES:
+            return super().find_class(module, name)
+        raise pickle.UnpicklingError(
+            f"Refusing to deserialize class {module}.{name} from .paux file; "
+            "only plain built-in containers, strings, and safelisted plasTeX "
+            "value classes are permitted."
+        )
+
+
+def _safe_paux_loads(raw: bytes) -> dict:
+    """Safely unpickle a ``.paux`` payload, returning ``{}`` on any failure."""
+
+    try:
+        obj = _SafePauxUnpickler(io.BytesIO(raw)).load()
+    except (pickle.UnpicklingError, EOFError, AttributeError, ImportError,
+            IndexError, KeyError, TypeError, ValueError):
+        return {}
+    return obj if isinstance(obj, dict) else {}
+
+
 def _load_paux_labels(doc):
     cache = doc.userdata.get("_tnlean_paux_labels")
     if cache is not None:
@@ -194,13 +248,17 @@ def _load_paux_labels(doc):
 
     working_dir = Path(doc.userdata.get("working-dir", "."))
     paux_path = working_dir / f"{doc.userdata.get('jobname', 'web')}.paux"
-    labels = {}
+    labels: dict = {}
     if paux_path.exists():
         try:
-            data = pickle.loads(paux_path.read_bytes())
-            labels = data.get("HTML5", {})
-        except Exception:
-            labels = {}
+            raw = paux_path.read_bytes()
+        except OSError:
+            raw = b""
+        if raw:
+            data = _safe_paux_loads(raw)
+            entry = data.get("HTML5", {})
+            if isinstance(entry, dict):
+                labels = entry
 
     doc.userdata["_tnlean_paux_labels"] = labels
     return labels
@@ -218,8 +276,12 @@ def _label_status_from_source(doc, label: str):
 
     for tex_path in working_dir.rglob("*.tex"):
         try:
-            text = tex_path.read_text()
-        except Exception:
+            # plasTeX sources are UTF-8 by convention; pinning the encoding
+            # keeps this scan stable across locales and avoids silently
+            # disabling \leanok / \notready detection on systems with a
+            # non-UTF-8 default encoding.
+            text = tex_path.read_text(encoding="utf-8", errors="replace")
+        except OSError:
             continue
 
         idx = text.find(needle)
