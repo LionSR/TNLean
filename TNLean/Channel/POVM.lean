@@ -357,6 +357,12 @@ theorem sum_probability (rho : Matrix (Fin D) (Fin D) ℂ) :
     simp [Finset.sum_apply]
   rw [← this, I.tp rho]
 
+/-- Outcome probabilities are non-negative real numbers (in `ℂ` with
+`ComplexOrder`): for any PSD state `ρ`, `0 ≤ I.probability i rho`. -/
+theorem probability_nonneg (i : Fin n) {rho : Matrix (Fin D) (Fin D) ℂ}
+    (hrho : rho.PosSemidef) : 0 ≤ I.probability i rho :=
+  ((I.cp i).isPositiveMap rho hrho).trace_nonneg
+
 /-- The physical **post-measurement state** after outcome `i`: the component
 update normalised by the outcome probability. Only meaningful when the
 probability is nonzero. -/
