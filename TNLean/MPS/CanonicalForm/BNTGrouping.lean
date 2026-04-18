@@ -61,10 +61,13 @@ for the equal-norm case.
 ### §4 BNT grouping for possibly-equal norms (proved via norm-class enumeration)
 
 * `exists_bnt_grouping` — For blocks with possibly equal norms, given that equal-norm
-  blocks have the same dimension and the same MPV function (consequences of BNT
-  uniqueness, not yet fully formalized), there exists a `SectorDecomposition` whose
-  assembled tensor is `SameMPV₂`-equivalent to the original and whose BNT-level norms
-  are strictly decreasing.  The proof constructs a SectorDecomposition from norm-class enumeration.
+  blocks have the same MPV function (a consequence of BNT uniqueness), there exists a
+  `SectorDecomposition` whose assembled tensor is `SameMPV₂`-equivalent to the original
+  and whose BNT-level norms are strictly decreasing.  The proof constructs a
+  `SectorDecomposition` from norm-class enumeration and uses the representative block's
+  dimension for the sector `basisDim`.  A same-dimension hypothesis is not needed: the
+  choice of representative fixes the sector's bond dimension regardless of other
+  equal-norm blocks.
 
 ## References
 
@@ -369,27 +372,30 @@ noncomputable def normClassGroupingData {r : ℕ} (μ : Fin r → ℂ) :
 /-- **BNT grouping step (equal-norm case, proved via norm-class enumeration).**
 
 Given a weighted block family `(μ, blocks)` where some blocks may share the same norm
-`‖μ j‖ = ‖μ k‖`, and given that equal-norm blocks share the same dimension and the
-same MPV function (hypotheses that follow from BNT uniqueness in the full
-formalization), there exists a `SectorDecomposition P` with:
+`‖μ j‖ = ‖μ k‖`, and given that equal-norm blocks share the same MPV function
+(a hypothesis that follows from BNT uniqueness in the full formalization), there exists
+a `SectorDecomposition P` with:
 
 1. `SameMPV₂ P.toTensor (toTensorFromBlocks μ blocks)`.
 2. `StrictAnti` on the BNT-level norms (one norm value per group).
 
 **Hypotheses**:
 - `hμne`: all weights are nonzero.
-- `hDimEq`: equal-norm blocks have the same bond dimension (so that `P.basisDim j`
-  is well-defined as `dim (repr j)` for any representative of norm class `j`).
 - `hMPVEq`: equal-norm blocks have the same MPV function, i.e., `SameMPV₂ (blocks j) (blocks k)`.
   This is needed so `P.basis j` (a single tensor) can stand in for all blocks in
   norm class `j`.
 
-**Why these hypotheses arise in the full theory**:
+Note that no equal-dimension hypothesis is needed: the sector's bond dimension is
+fixed by the chosen representative `reprFn j`, and other members of the same norm
+class may have different dimensions — their MPV values are matched via `hMPVEq`,
+which uses the heterogeneous `SameMPV₂` to accommodate different bond dimensions.
+
+**Why `hMPVEq` arises in the full theory**:
 In the BNT theory (CPGSV17, §2.3), two blocks with the same weight norm are
-gauge-phase equivalent, hence have the same MPV and the same bond dimension.  In the
-existence reduction, these properties would be derived after applying the BNT uniqueness
-theorem.  Since BNT uniqueness is not yet fully formalized, the hypotheses are stated
-explicitly.
+gauge-phase equivalent, hence have the same MPV.  In the existence reduction, this
+property would be derived after applying the BNT uniqueness theorem.  The derivation
+of `hMPVEq` from blocked `SameMPV₂` data is the subject of `EqualNormBridge.lean`
+and downstream theorems (see `exists_sectorDecomp_of_tp_primitive_irr_blocks`).
 
 **Proof:**
 1. Let `S = Finset.univ.image (‖μ ·‖)`, `g = S.card`.
@@ -398,8 +404,7 @@ explicitly.
    - `repr j ∈ Fin r`: pick any block with `‖μ (repr j)‖ = v_j`.
    - `classOf j = {k | ‖μ k‖ = v_j}`, `copies j = #classOf j ≥ 1`.
    - Enumerate class: `enum j : Fin (copies j) → Fin r`.
-   - `P.basis j = blocks (repr j)`, `P.basisDim j = dim (repr j) = dim k` for all
-     `k ∈ classOf j` (well-defined by `hDimEq`).
+   - `P.basis j = blocks (repr j)`, `P.basisDim j = dim (repr j)`.
    - `P.weight j q = μ (enum j q)`.
 4. **SameMPV₂**:
    `mpv P.toTensor σ = ∑ j ∑ q, (weight j q)^N · mpv (basis j) σ`
@@ -414,8 +419,6 @@ theorem exists_bnt_grouping
     (μ : Fin r → ℂ)
     (blocks : (k : Fin r) → MPSTensor d (dim k))
     (hμne : ∀ k, μ k ≠ 0)
-    -- Equal-norm blocks have the same bond dimension.
-    (_hDimEq : ∀ j k : Fin r, ‖μ j‖ = ‖μ k‖ → dim j = dim k)
     -- Equal-norm blocks have the same MPV function (use SameMPV₂ to allow different dims).
     (hMPVEq : ∀ j k : Fin r, ‖μ j‖ = ‖μ k‖ → SameMPV₂ (blocks j) (blocks k)) :
     ∃ P : SectorDecomposition d,
