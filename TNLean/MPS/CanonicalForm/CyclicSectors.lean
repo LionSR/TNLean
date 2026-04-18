@@ -609,10 +609,9 @@ theorem exists_compressedTensor_of_supported_projection
       calc
         (Umat * (B i)ᴴ * Umatᴴ) * (Umat * G * Umatᴴ) * (Umat * B i * Umatᴴ)
             = Umat * (B i)ᴴ * (Umatᴴ * Umat) * G * (Umatᴴ * Umat) * B i * Umatᴴ := by
-              simp [Matrix.mul_assoc]
-        _ = Umat * (B i)ᴴ * G * B i * Umatᴴ := by
-              rw [hU'U]; simp [Matrix.mul_assoc]
-        _ = Umat * ((B i)ᴴ * G * B i) * Umatᴴ := by simp [Matrix.mul_assoc]
+              noncomm_ring
+        _ = Umat * ((B i)ᴴ * G * B i) * Umatᴴ := by
+              rw [hU'U]; noncomm_ring
     rw [hLHS, hRHS]
 
 end Compression
