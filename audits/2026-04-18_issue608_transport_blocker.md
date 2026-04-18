@@ -44,15 +44,29 @@ API; it is derivable.
 
 ## Remaining obstruction
 
-The real gap is the next step: turning the given blocked-sector gauge-phase match
+The real gap is the next step: turning the given blocked-sector gauge-phase match at
+`(u, v)` into one at the shifted pair `(u + 1, v + 1)`. Concretely, the hypothesis
+`hMatch` of `sectorGaugePhaseEquiv_succ_of_cyclicTransport`
+(`TNLean/MPS/Periodic/Overlap.lean`, around line 1480) has the exact shape
 
 ```lean
-GaugePhaseEquiv
-  (cast ... (blocksA u))
+hMatch : GaugePhaseEquiv
+  (cast (congr_arg (MPSTensor (blockPhysDim d m)) hdim) (blocksA u))
   (blocksB v)
 ```
 
-into a blocked-sector gauge-phase match at the shifted pair `(u + 1, v + 1)`.
+where `hdim : dimA u = dimB v` and the `cast` runs along
+`congr_arg (MPSTensor (blockPhysDim d m)) hdim`, rewriting
+`MPSTensor (blockPhysDim d m) (dimA u)` to `MPSTensor (blockPhysDim d m) (dimB v)` so that
+both arguments of `GaugePhaseEquiv` live in the same tensor type. The required conclusion
+is the analogous statement at `(u + 1, v + 1)`:
+
+```lean
+∃ (hdim' : dimA (u + 1) = dimB (v + 1)),
+  GaugePhaseEquiv
+    (cast (congr_arg (MPSTensor (blockPhysDim d m)) hdim') (blocksA (u + 1)))
+    (blocksB (v + 1))
+```
 
 The one-site support identities above let one define the ambient corner transitions
 `P (k + 1) * A i = A i * P k`, and they strongly suggest an MPV/state-level translation
@@ -90,4 +104,7 @@ The most promising route now seems to be:
 3. prove the fixed-length translation identity on the corresponding chain/state coefficients;
 4. use a dedicated chain/block gauge theorem to recover the successor `GaugePhaseEquiv`.
 
-This note is intended for a draft PR / handoff, not as a merged-code change.
+This note is merged to `audits/` as a durable handoff record (the documented location for
+such artifacts); it introduces no Lean source changes and does not touch any proof. The
+draft PR itself carries only this file so that the analysis is version-controlled alongside
+the branch that discovered it.
