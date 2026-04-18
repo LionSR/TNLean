@@ -939,6 +939,57 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
     Theorem~\ref{thm:kraus_rectangular_freedom}.
 \end{proof}
 
+\begin{theorem}[Wolf Thm.~2.18: Isometric freedom of Kraus representations]
+    \label{thm:kraus_isometry_freedom_iff}
+    \lean{kraus_isometry_freedom_iff}
+    \leanok
+    \uses{thm:kraus_rectangular_freedom'}
+    Let $\{B_\alpha\}_{\alpha \in \iota_1}$ and $\{A_j\}_{j \in \iota_2}$
+    be finite Kraus families with $|\iota_2| \le |\iota_1|$.
+    Then the following are equivalent:
+    \begin{enumerate}
+        \item $\sum_\alpha B_\alpha X B_\alpha^\dagger
+              = \sum_j A_j X A_j^\dagger$ for all $X \in \MN{D}$.
+        \item There exists a matrix $V = (V_{\alpha j})$ with
+              $V^\dagger V = \Id$ such that
+              $B_\alpha = \sum_j V_{\alpha j} A_j$ for every $\alpha$.
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The implication $(1) \Rightarrow (2)$ is
+    Theorem~\ref{thm:kraus_rectangular_freedom'}.
+    Conversely, expand $\sum_\alpha B_\alpha X B_\alpha^\dagger$ using
+    $B_\alpha = \sum_j V_{\alpha j} A_j$, interchange the finite sums,
+    and use $V^\dagger V = \Id$ to collapse the coefficient matrix to the
+    diagonal.
+\end{proof}
+
+\begin{theorem}[Wolf Thm.~2.18: Unitary freedom of Kraus representations]
+    \label{thm:kraus_unitary_freedom_iff}
+    \lean{kraus_unitary_freedom_iff}
+    \leanok
+    \uses{thm:kraus_isometry_freedom_iff}
+    Let $\{B_\alpha\}_{\alpha \in \iota}$ and $\{A_j\}_{j \in \iota}$
+    be two Kraus families with the same finite index set.
+    Then the following are equivalent:
+    \begin{enumerate}
+        \item $\sum_\alpha B_\alpha X B_\alpha^\dagger
+              = \sum_j A_j X A_j^\dagger$ for all $X \in \MN{D}$.
+        \item There exists a unitary matrix $U = (U_{\alpha j})$ such that
+              $B_\alpha = \sum_j U_{\alpha j} A_j$ for every $\alpha$.
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Apply Theorem~\ref{thm:kraus_isometry_freedom_iff} with
+    $|\iota| = |\iota|$.
+    In the square case an isometry matrix is unitary, and the converse is
+    immediate.
+\end{proof}
+
 %% =========================================================
 \section{Stinespring dilation (Wolf Thm.~2.2)}
 \label{sec:stinespring}
