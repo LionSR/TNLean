@@ -7,23 +7,30 @@ import TNLean.Channel.Peripheral.Cycles
 /-!
 # Multi-cycle block-permutation decompositions
 
-This file lifts the single-cycle block-permutation data packaged by
-`TNLean.Channel.Peripheral.Cycles` to the general multi-cycle form that
-underlies the asymptotic-image side of
+This file packages an explicit multi-cycle refinement of the
+block-permutation infrastructure developed in
+`TNLean.Channel.Peripheral.Cycles`, in the form needed for the
+asymptotic-image side of
 Wolf, *Quantum Channels & Operations*, Theorem 6.16.
 
 Concretely, Wolf Thm. 6.16 describes the asymptotic dynamics of a general
 trace-preserving positive Schwarz map `T` as a permutation of Wedderburn
-blocks, with each block transported by a unitary.  The permutation need not
-be a single cycle: in general it is a disjoint union of cycles with
-(possibly) distinct periods, one cycle per Wedderburn block-size class.
+blocks, with each block transported by a unitary.  Such a permutation may
+already be represented abstractly by the `CycleStructure` bundled data of
+`TNLean.Channel.Peripheral.Cycles`, whose underlying permutation `σ` is
+allowed to have multiple disjoint cycles.  The present file refines that
+view by choosing an *explicit* cycle-index type `ι`, a per-cycle period
+`period : ι → ℕ`, and the corresponding projection families, recording the
+disjoint-union-of-cycles structure as separate data.
 
-The present file isolates the *multi-cycle* algebraic infrastructure, on top
-of the single-cycle corner-preservation proof pattern from
-`preserves_corner_pow_of_cyclic_decomp`.  The *existence direction* —
-that every TP positive Schwarz map admits such a decomposition on its
-asymptotic image — depends on Wolf Thm. 6.14 (Wedderburn decomposition of
-the fixed-point algebra, issues #27/#360) and is left to future work.
+The corner-preservation proofs reuse the per-orbit proof pattern of
+`preserves_corner_pow_of_cyclic_decomp` from
+`TNLean.Channel.Peripheral.CyclicDecomposition`, adapted to the setting
+where the per-cycle projections do not sum to the identity.  The
+*existence direction* — that every TP positive Schwarz map admits such a
+decomposition on its asymptotic image — depends on Wolf Thm. 6.14
+(Wedderburn decomposition of the fixed-point algebra, issues #27/#360)
+and is left to future work.
 
 ## Main definitions
 
@@ -67,10 +74,12 @@ element of the cycle-index type `ι` — together with:
 * the multiplicative-domain factorisations `T (P c k * X) = T (P c k) * T X`
   and `T (X * P c k) = T X * T (P c k)`.
 
-This generalises the single-cycle bundled data of
-`TNLean.Channel.Peripheral.Cycles.CycleStructure`: a `CycleStructure`
-corresponds to the special case `ι = Unit` (single cycle, period equal to
-`orderOf σ`).
+This refines the bundled permutation data of
+`TNLean.Channel.Peripheral.Cycles.CycleStructure`: a
+`MultiCycleDecomposition` chooses an explicit cycle-index type together
+with per-cycle periods and projection families for the underlying
+permutation structure, while `toCycleStructure` forgets that extra
+organisation.
 
 In Wolf's Thm. 6.16, the cycle-index `ι` runs over the equivalence classes
 of Wedderburn blocks that share both a common multiplicity and a common
@@ -143,7 +152,7 @@ end CyclicShift
 section PreservesCornerHelper
 
 /-- Corner preservation is stable under taking powers. -/
-private lemma preservesCorner_pow {S : MatrixEnd D} {P : MatrixAlg D}
+private lemma preserves_corner_pow {S : MatrixEnd D} {P : MatrixAlg D}
     (hP : IsOrthogonalProjection P) (hPS : PreservesCorner P S) (n : ℕ) :
     PreservesCorner P (S ^ n) := by
   induction n with
@@ -160,14 +169,6 @@ private lemma preservesCorner_pow {S : MatrixEnd D} {P : MatrixAlg D}
       intro X
       have hSform : S (P * X * P) = P * S (P * X * P) * P := (hPS X).symm
       have : P * ((S ^ n) (S (P * X * P))) * P = (S ^ n) (S (P * X * P)) := by
-        have hS_corner_form :
-            S (P * X * P) = P * (P * S (P * X * P) * P) * P := by
-          calc
-            S (P * X * P) = P * S (P * X * P) * P := hSform
-            _ = (P * P) * S (P * X * P) * (P * P) := by
-                simp only [hP.2]
-            _ = P * (P * S (P * X * P) * P) * P := by
-                simp only [Matrix.mul_assoc]
         calc
           P * ((S ^ n) (S (P * X * P))) * P
               = P * ((S ^ n) (P * S (P * X * P) * P)) * P := by rw [← hSform]
@@ -183,14 +184,14 @@ end PreservesCornerHelper
 
 section PerCycle
 
-/-- **Single-cycle corner preservation.**
+/-- **Per-cycle corner preservation.**
 
 In cycle `c`, the channel's `period c`-th iterate preserves each corner
-`P c k · M_D(ℂ) · P c k`.  The proof follows the single-cycle proof
-pattern from `preserves_corner_pow_of_cyclic_decomp`, *without* the
-sum-to-one hypothesis on the sector projections (which is not available
-in the multi-cycle setting, where the per-cycle projections typically do
-not sum to the identity).
+`P c k · M_D(ℂ) · P c k`.  The proof follows the per-orbit proof pattern
+from `preserves_corner_pow_of_cyclic_decomp`, *without* the sum-to-one
+hypothesis on the sector projections (which is not available in the
+multi-cycle setting, where the per-cycle projections typically do not
+sum to the identity).
 
 Per Wolf Thm. 6.16 §6.5, this is the per-cycle restriction of the block
 permutation back to its own orbit: after `period c` applications of `T`,
@@ -265,7 +266,7 @@ theorem preserves_corner_pow_of_dvd (M : MultiCycleDecomposition T)
   have hPowEq : (T ^ N) = (T ^ M.period c) ^ q := by
     rw [← pow_mul, ← hq]
   rw [hPowEq]
-  exact preservesCorner_pow (M.isProj c k)
+  exact preserves_corner_pow (M.isProj c k)
     (M.preserves_corner_pow_period c k) q
 
 end PerCycle
