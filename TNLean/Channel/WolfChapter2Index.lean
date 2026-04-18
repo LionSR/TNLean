@@ -51,14 +51,15 @@ representations of quantum channels.
   - `stinespringV_isometry_iff_kraus_normalized` — `V†V = 𝟙` ↔ TP ✅
   - `stinespring_schrodinger_representation` — `T(ρ) = tr_r(VρV†)` ✅
 
-* **Thm 2.3** (Naimark / Neumark dilation for POVMs):
+* **Thm 2.6** (Naimark / Neumark dilation for POVMs):
   - `POVM` — positive operator-valued measure structure ✅
   - `POVM.naimarkIsometry_isometry` — `V†V = 𝟙` ✅
   - `POVM.naimarkProjection_mul_self` / `_hermitian` / `_orthogonal` /
     `_sum_eq_one` — projective-measurement axioms on the dilation ✅
   - `POVM.naimark_recovers_povm` — `V† P_i V = E_i` ✅
   - `POVM.exists_naimark_dilation` — existential Naimark dilation ✅
-  - `POVM.ofProjectiveMeasurement` — converse construction from dilations ✅
+  - `POVM.ofPSDResolutionOfIdentity` — converse construction: PSD resolution
+    of identity on a dilation pulls back to a POVM ✅
   - `Instrument` — quantum-instrument structure + `total_isChannel`,
     `sum_probability`, `posteriorState` API ✅
 

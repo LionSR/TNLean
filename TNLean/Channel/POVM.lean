@@ -7,10 +7,9 @@ import TNLean.Channel.Stinespring
 import TNLean.Channel.Semigroup.CPClosure
 import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.Analysis.Matrix.Order
-import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Basic
 
 /-!
-# POVMs, instruments, and the Naimark dilation (Wolf Ch. 2, Thm 2.3 / Neumark)
+# POVMs, instruments, and the Naimark dilation (Wolf Ch. 2, Thm 2.6 / Neumark)
 
 This file defines positive operator-valued measures (POVMs) on `M_D(ℂ)`,
 quantum instruments, and proves the **Naimark extension theorem**: every
@@ -37,14 +36,15 @@ larger (dilated) Hilbert space via an isometry.
 * `POVM.naimarkProjection_hermitian` — `P_iᴴ = P_i`.
 * `POVM.naimarkProjection_orthogonal` — `P_i * P_j = 0` for `i ≠ j`.
 * `POVM.naimark_recovers_povm` — `Vᴴ * P_i * V = E_i` (main Naimark identity).
-* `POVM.exists_naimark_dilation` — the existential form of Wolf Thm 2.3.
-* `POVM.ofProjectiveMeasurement` — converse direction: every isometry + projective
-  measurement yields a POVM via `E_i := Vᴴ P_i V`.
+* `POVM.exists_naimark_dilation` — the existential form of Wolf Thm 2.6.
+* `POVM.ofPSDResolutionOfIdentity` — converse direction: every isometry together
+  with a PSD resolution of identity on the dilated space yields a POVM via
+  `E_i := Vᴴ P_i V`.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Thm 2.3][Wolf2012QChannels]
-  (listed as **Neumark's theorem** / Thm 2.6 in the Wolf Ch.2 index).
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Thm 2.6
+  (Neumark's theorem)][Wolf2012QChannels]
 -/
 
 open scoped Matrix MatrixOrder ComplexOrder TNMatrixCFC
@@ -223,7 +223,7 @@ theorem naimarkProjection_sum_eq_one :
 
 /-! ### Naimark theorem: `Vᴴ * P_i * V = E_i` -/
 
-/-- **Wolf Theorem 2.3 (Naimark / Neumark)**: every POVM `{E_i}` on `ℂ^D` arises
+/-- **Wolf Theorem 2.6 (Naimark / Neumark)**: every POVM `{E_i}` on `ℂ^D` arises
 as `E_i = Vᴴ * P_i * V` for an isometry `V : ℂ^D → ℂ^D ⊗ ℂ^n` and a projective
 measurement `{P_i}` on the dilated space. -/
 theorem naimark_recovers_povm (i : Fin n) :
@@ -262,29 +262,37 @@ theorem naimark_recovers_povm (i : Fin n) :
     rw [hinner, zero_mul]
   · intro h; exact absurd (Finset.mem_univ i) h
 
-/-- **Existential form of Wolf Theorem 2.3**: Naimark dilation exists for every POVM. -/
+/-- **Existential form of Wolf Theorem 2.6**: Naimark dilation exists for every POVM.
+The witnesses `(P i)` form a full projective measurement on the dilation: each is
+self-adjoint and idempotent, pairwise orthogonal, and they sum to the identity. -/
 theorem exists_naimark_dilation :
     ∃ (r : ℕ) (V : Matrix (Fin D × Fin r) (Fin D) ℂ)
       (P : Fin n → Matrix (Fin D × Fin r) (Fin D × Fin r) ℂ),
       Vᴴ * V = 1 ∧
       (∀ i, P i * P i = P i) ∧
       (∀ i, (P i)ᴴ = P i) ∧
+      (∀ i j, i ≠ j → P i * P j = 0) ∧
       (∑ i, P i = 1) ∧
       (∀ i, Vᴴ * P i * V = E.ops i) :=
   ⟨n, E.naimarkIsometry, naimarkProjection, E.naimarkIsometry_isometry,
     naimarkProjection_mul_self, naimarkProjection_hermitian,
+    naimarkProjection_orthogonal,
     naimarkProjection_sum_eq_one, E.naimark_recovers_povm⟩
 
 end POVM
 
-/-! ### Converse: projective measurements on a dilation give POVMs -/
+/-! ### Converse: PSD resolutions of identity on a dilation give POVMs -/
 
 namespace POVM
 
-/-- **Converse of Naimark**: given an isometry `V : ℂ^D → ℂ^d'` and a projective
-measurement `{P_i}` on the dilated space (Hermitian idempotents summing to the
-identity), the pulled-back operators `E_i := Vᴴ * P_i * V` form a POVM. -/
-noncomputable def ofProjectiveMeasurement {D n d' : ℕ}
+/-- **Converse of Naimark (PSD resolution of identity)**: given an isometry
+`V : ℂ^D → ℂ^d'` and a family of positive semidefinite operators `{P_i}` on the
+dilated space summing to the identity, the pulled-back operators
+`E_i := Vᴴ * P_i * V` form a POVM. A projective measurement on the dilation is
+a special case (see `POVM.naimark_recovers_povm` for the canonical Naimark
+instance); the statement here requires only the PSD/sum-to-one structure that
+the proof actually uses. -/
+noncomputable def ofPSDResolutionOfIdentity {D n d' : ℕ}
     (V : Matrix (Fin d') (Fin D) ℂ) (hV : Vᴴ * V = 1)
     (P : Fin n → Matrix (Fin d') (Fin d') ℂ)
     (hPsum : ∑ i, P i = 1)
