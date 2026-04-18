@@ -22,12 +22,15 @@ upstream Mathlib work in `CFC.Rpow.Order` and `CFC.ExpLog.Order`.
 The following results are standard in matrix analysis. They are axiomatized
 here because the connecting Mathlib infrastructure is not yet available:
 
-* `trace_rpow_concave_axiom` — trace concavity of `rpow` for `p ∈ [0, 1]`.
-* `trace_rpow_convex_axiom` — trace convexity of `rpow` for `p ∈ [1, 2]`.
 * `posMap_rpow_concave_jensen` — Jensen inequality for concave `rpow`.
 * `posMap_rpow_convex_jensen` — Jensen inequality for convex `rpow`.
 * `posMap_log_concave_jensen` — Jensen inequality for concave `log`.
 * `lieb_concavity_axiom` — Lieb concavity theorem.
+
+The trace concavity/convexity statements for `A ↦ Re Tr(A^p)` that used to
+live here (`trace_rpow_concave_axiom`, `trace_rpow_convex_axiom`) have been
+discharged: see `TNLean.Analysis.OperatorConvexity` for the genuine proofs
+via the spectral theorem and the scalar Jensen inequality.
 
 ## Status
 
@@ -89,38 +92,6 @@ private local instance instAxiomOCNonnegSpectrumClass : NonnegSpectrumClass ℝ 
   Matrix.instNonnegSpectrumClass
 private local instance instAxiomOCCStarAlgebra : CStarAlgebra Mat :=
   CStarAlgebra.mk
-
-/-! ## Trace concavity/convexity axioms -/
-
-/-- **Trace concavity of `rpow`** for `p ∈ [0, 1]`.
-
-For PSD matrices `A₁, A₂` and `t ∈ [0, 1]`:
-  `t · Re Tr(A₁ ^ p) + (1 − t) · Re Tr(A₂ ^ p) ≤
-     Re Tr((t • A₁ + (1 − t) • A₂) ^ p)`.
-
-Follows from operator concavity of `rpow` (Bhatia, Ch. V) composed with
-trace monotonicity on the Loewner order. -/
-axiom trace_rpow_concave_axiom
-    {p : ℝ} (hp : p ∈ Set.Icc (0 : ℝ) 1)
-    {A₁ A₂ : Mat} (hA₁ : 0 ≤ A₁) (hA₂ : 0 ≤ A₂)
-    {t : ℝ} (ht : t ∈ Set.Icc (0 : ℝ) 1) :
-    t * (trace (A₁ ^ p)).re + (1 - t) * (trace (A₂ ^ p)).re ≤
-      (trace ((t • A₁ + (1 - t) • A₂) ^ p)).re
-
-/-- **Trace convexity of `rpow`** for `p ∈ [1, 2]`.
-
-For PSD matrices `A₁, A₂` and `t ∈ [0, 1]`:
-  `Re Tr((t • A₁ + (1 − t) • A₂) ^ p) ≤
-     t · Re Tr(A₁ ^ p) + (1 − t) · Re Tr(A₂ ^ p)`.
-
-Follows from operator convexity of `rpow` (Bhatia, Ch. V) composed with
-trace monotonicity on the Loewner order. -/
-axiom trace_rpow_convex_axiom
-    {p : ℝ} (hp : p ∈ Set.Icc (1 : ℝ) 2)
-    {A₁ A₂ : Mat} (hA₁ : 0 ≤ A₁) (hA₂ : 0 ≤ A₂)
-    {t : ℝ} (ht : t ∈ Set.Icc (0 : ℝ) 1) :
-    (trace ((t • A₁ + (1 - t) • A₂) ^ p)).re ≤
-      t * (trace (A₁ ^ p)).re + (1 - t) * (trace (A₂ ^ p)).re
 
 /-! ## Jensen inequality axioms for positive maps -/
 

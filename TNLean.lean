@@ -71,6 +71,8 @@ import TNLean.Entropy.StrongSubadditivity
 import TNLean.Entropy.MutualInformation
 -- Layer 2b: Axiomatized operator convexity/concavity results (pending upstream Mathlib)
 import TNLean.Axioms.OperatorConvexity
+-- Layer 2b: Trace convexity/concavity of matrix real powers (proved)
+import TNLean.Analysis.OperatorConvexity
 -- Layer 2b: Quantum channels (general theory)
 import TNLean.Channel.Schwarz.KadisonSchwarz
 import TNLean.Channel.Schwarz.PositiveMapProperties
