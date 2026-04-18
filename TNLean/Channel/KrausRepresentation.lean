@@ -95,6 +95,51 @@ theorem kraus_sum_mul_conjTranspose_of_unital
 
 /-! ### Unitary freedom in Kraus operators (Thm 2.1, item 4) -/
 
+/-- **Thm 2.1 item 4 (isometry freedom, sufficient direction)**:
+If `W` is an isometry (`Wᴴ W = 1`) and `Kⱼ = ∑ₗ Wⱼₗ K̃ₗ`, then `{Kⱼ}` and
+`{K̃ₗ}` define the same map: `∑ⱼ Kⱼ X Kⱼ† = ∑ₗ K̃ₗ X K̃ₗ†`.
+
+This rectangular form specializes to the usual unitary-freedom statement when
+the output and input Kraus index sets have the same cardinality. -/
+theorem kraus_same_map_of_isometry_combination
+    {m r : ℕ}
+    (K : Fin m → Matrix (Fin D) (Fin D) ℂ)
+    (K' : Fin r → Matrix (Fin D) (Fin D) ℂ)
+    (W : Matrix (Fin m) (Fin r) ℂ)
+    (hW : Wᴴ * W = 1)
+    (hK : ∀ j, K j = ∑ l, W j l • K' l) :
+    ∀ X : Matrix (Fin D) (Fin D) ℂ,
+      ∑ j : Fin m, K j * X * (K j)ᴴ =
+      ∑ l : Fin r, K' l * X * (K' l)ᴴ := by
+  intro X
+  -- Extract the orthogonality relation `∑ⱼ conj(Wⱼₗ') * Wⱼₗ = δ_{l,l'}` from `Wᴴ W = 1`.
+  have hW_entry : ∀ l l' : Fin r,
+      ∑ j : Fin m, (starRingEnd ℂ) (W j l) * W j l' = if l = l' then 1 else 0 := by
+    intro l l'
+    have h := congrArg (fun M : Matrix (Fin r) (Fin r) ℂ => M l l') hW
+    simpa [Matrix.mul_apply, Matrix.one_apply] using h
+  calc
+    ∑ j : Fin m, K j * X * (K j)ᴴ
+        = ∑ j : Fin m,
+            (∑ l : Fin r, W j l • K' l) * X *
+            ((∑ l : Fin r, W j l • K' l)ᴴ) := by simp [hK]
+    _ = ∑ j : Fin m, ∑ l : Fin r, ∑ l' : Fin r,
+          (((starRingEnd ℂ) (W j l')) * W j l) • (K' l * X * (K' l')ᴴ) := by
+          simp_rw [Matrix.sum_mul, Matrix.conjTranspose_sum, Matrix.conjTranspose_smul,
+            Matrix.mul_sum, smul_mul_assoc, mul_smul_comm, Matrix.mul_assoc, smul_smul]
+          simp [mul_comm]
+    _ = ∑ l : Fin r, ∑ l' : Fin r,
+          (∑ j : Fin m, ((starRingEnd ℂ) (W j l')) * W j l) • (K' l * X * (K' l')ᴴ) := by
+          rw [Finset.sum_comm]
+          apply Finset.sum_congr rfl
+          intro l _
+          rw [Finset.sum_comm]
+          simp_rw [← Finset.sum_smul]
+    _ = ∑ l : Fin r, ∑ l' : Fin r,
+          (if l' = l then 1 else 0) • (K' l * X * (K' l')ᴴ) := by
+          simp_rw [hW_entry]; simp
+    _ = ∑ l : Fin r, K' l * X * (K' l)ᴴ := by simp
+
 /-- **Thm 2.1 item 4 (unitary freedom, sufficient direction)**:
 If `U` is unitary (`Uᴴ U = 1`) and `Kⱼ = ∑ₗ Uⱼₗ K̃ₗ`, then `{Kⱼ}` and
 `{K̃ₗ}` define the same map: `∑ⱼ Kⱼ X Kⱼ† = ∑ₗ K̃ₗ X K̃ₗ†`. -/
@@ -108,34 +153,7 @@ theorem kraus_same_map_of_unitary_combination
     ∀ X : Matrix (Fin D) (Fin D) ℂ,
       ∑ j : Fin r, K j * X * (K j)ᴴ =
       ∑ l : Fin r, K' l * X * (K' l)ᴴ := by
-  intro X
-  -- Extract the orthogonality relation `∑ⱼ conj(Uⱼₗ') * Uⱼₗ = δ_{l,l'}` from `Uᴴ U = 1`.
-  have hU_entry : ∀ l l' : Fin r,
-      ∑ j : Fin r, (starRingEnd ℂ) (U j l) * U j l' = if l = l' then 1 else 0 := by
-    intro l l'
-    have h := congrArg (fun M : Matrix (Fin r) (Fin r) ℂ => M l l') hU
-    simpa [Matrix.mul_apply, Matrix.one_apply] using h
-  calc
-    ∑ j : Fin r, K j * X * (K j)ᴴ
-        = ∑ j : Fin r,
-            (∑ l : Fin r, U j l • K' l) * X *
-            ((∑ l : Fin r, U j l • K' l)ᴴ) := by simp [hK]
-    _ = ∑ j : Fin r, ∑ l : Fin r, ∑ l' : Fin r,
-          (((starRingEnd ℂ) (U j l')) * U j l) • (K' l * X * (K' l')ᴴ) := by
-          simp_rw [Matrix.sum_mul, Matrix.conjTranspose_sum, Matrix.conjTranspose_smul,
-            Matrix.mul_sum, smul_mul_assoc, mul_smul_comm, Matrix.mul_assoc, smul_smul]
-          simp [mul_comm]
-    _ = ∑ l : Fin r, ∑ l' : Fin r,
-          (∑ j : Fin r, ((starRingEnd ℂ) (U j l')) * U j l) • (K' l * X * (K' l')ᴴ) := by
-          rw [Finset.sum_comm]
-          apply Finset.sum_congr rfl
-          intro l _
-          rw [Finset.sum_comm]
-          simp_rw [← Finset.sum_smul]
-    _ = ∑ l : Fin r, ∑ l' : Fin r,
-          (if l' = l then 1 else 0) • (K' l * X * (K' l')ᴴ) := by
-          simp_rw [hU_entry]; simp
-    _ = ∑ l : Fin r, K' l * X * (K' l)ᴴ := by simp
+  simpa using kraus_same_map_of_isometry_combination K K' U hU hK
 
 /-- Convenience wrapper of `kraus_same_map_of_unitary_combination` with a bundled
 unitary witness. This formulation is intended for use by the future converse direction:
