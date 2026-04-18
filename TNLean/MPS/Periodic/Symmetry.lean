@@ -6,7 +6,10 @@ import TNLean.MPS.Periodic.FundamentalTheorem
 import TNLean.MPS.FundamentalTheorem.Applications
 import TNLean.MPS.Symmetry.Defs
 import TNLean.MPS.Core.Blocking
+import TNLean.MPS.Core.BlockingTransfer
+import TNLean.MPS.Core.CPPrimitive
 import TNLean.Channel.Basic
+import TNLean.Channel.KrausRepresentation
 import TNLean.Channel.Peripheral.CyclicDecomposition
 
 /-!
@@ -203,5 +206,98 @@ def IsPRefinable (B : MPSTensor d D) (p : ℕ) : Prop :=
           (∏ k : Fin N, W (τ k) (σ k)) * coeff B (List.ofFn σ)
 
 end Theorem41
+
+/-! ## Theorem 4.1 — forward direction (`p`-refinability ⇒ `p`-divisibility) -/
+
+section Theorem41Forward
+
+variable {d D : ℕ}
+
+/-- **Rectangular Kraus isometry mixing.**
+
+For a (possibly rectangular) isometry `W : Fin m → Fin d` with `Wᴴ · W = 1`,
+the `W`-pullback family `C τ := ∑_σ W(τ, σ) · B σ` has the same transfer map
+as `B`. This is an adapter from
+`kraus_same_map_of_isometry_combination` to the `MPSTensor.transferMap` API. -/
+theorem transferMap_kraus_isometry
+    {m : ℕ} (B : MPSTensor d D)
+    (W : Matrix (Fin m) (Fin d) ℂ) (hW : Wᴴ * W = 1) :
+    transferMap (fun τ : Fin m => ∑ σ : Fin d, W τ σ • B σ) = transferMap B := by
+  ext X : 1
+  simpa [transferMap_apply] using
+    kraus_same_map_of_isometry_combination
+      (K := fun τ : Fin m => ∑ σ : Fin d, W τ σ • B σ)
+      (K' := B) W hW (fun _ => rfl) X
+
+/-- **Theorem 4.1, forward direction (witness-based form).**
+
+If we can produce a witness `A : MPSTensor d D` for the `p`-refinement of `B`
+satisfying *both* left-canonical normalization (`∑ᵢ Aᵢᴴ · Aᵢ = 1`, so that the
+transfer map `E_A` is a CPTP channel) *and* the channel-level matching
+`E_B = E_{A^{[p]}}`, then `E_B` is `p`-divisible: concretely, it equals
+`(E_A)^p`.
+
+The proof combines the channel-level blocking identity `E_{A^{[p]}} = (E_A)^p`
+(`MPSTensor.transferMap_blockTensor`) with the left-canonical channel property
+`MPSTensor.transferMap_isChannel`. The bridging from the raw coefficient-level
+`IsPRefinable B p` hypothesis to this witness is handled in
+`thm_4_1_p_refinement_forward` below. -/
+theorem thm_4_1_p_refinement_forward_witness
+    (B : MPSTensor d D) (p : ℕ)
+    (A : MPSTensor d D)
+    (hA_norm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (hTransferEq : transferMap B = transferMap (blockTensor A p)) :
+    IsPDivisibleChannel (transferMap B) p :=
+  ⟨transferMap A, transferMap_isChannel A hA_norm, by
+    rw [hTransferEq, transferMap_blockTensor]⟩
+
+/-- **Canonicalization hypothesis for the forward direction of Theorem 4.1.**
+
+This Prop states the analytic content that remains between the
+coefficient-level `IsPRefinable B p` (a trace-level MPV identity) and the
+channel-level conclusion needed to exhibit `E_B` as a `p`-th power: any
+`p`-refinement of `B` can be *canonicalized* to a witness that is both
+left-canonical and produces a matching transfer map under `p`-blocking.
+
+Morally, the canonicalization is produced as follows. Given a witness
+`(A, W)` from `IsPRefinable B p`, form the `W`-pullback tensor
+`C τ := ∑_σ W(τ, σ) · B σ`; the rectangular Kraus identity
+(`transferMap_kraus_isometry`) gives `E_C = E_B`, while the MPV hypothesis
+gives `SameMPV C (blockTensor A p)`. The periodic equal-case Fundamental
+Theorem (Theorem 3.8 of arXiv:1708.00029, available here as the hypothesis
+`PeriodicEqualCaseFT`) then supplies a `Z`-gauge equivalence between `C` and
+`blockTensor A p`, which — combined with a unitary canonical-form reduction
+for irreducible form II and Wolf Theorem 2.18 — produces the sought
+left-canonical witness. Formalizing this full chain in Lean requires
+infrastructure (canonical unitary gauge, Kraus uniqueness) that is tracked as
+follow-up work, so we expose the end-result predicate as a hypothesis. -/
+def PRefinementCanonicalization (d D p : ℕ) : Prop :=
+  ∀ {B : MPSTensor d D}, IsIrreducibleForm B → IsPRefinable B p →
+    ∃ A : MPSTensor d D,
+      (∑ i : Fin d, (A i)ᴴ * A i = 1) ∧
+      transferMap B = transferMap (blockTensor A p)
+
+/-- **Forward direction of Theorem 4.1 (conditional form).**
+
+Let `B` be an MPS tensor in irreducible form II. Assume
+`PRefinementCanonicalization`, which records the remaining analytic bridge from
+`IsPRefinable B p` to a left-canonical witness with matching transfer map. Then
+`IsPRefinable B p` implies `IsPDivisibleChannel (transferMap B) p`.
+
+This follows the same conditional pattern as
+`MPSTensor.cor_4_1_physical_symmetry_zgauge`: analytic inputs beyond the
+repository's current reach are exposed as explicit hypotheses, while the
+algebraic structure — the blocking-commutes-with-power identity and the
+left-canonical-channel lemma — is formalized here. -/
+theorem thm_4_1_p_refinement_forward
+    (B : MPSTensor d D) (hB : IsIrreducibleForm B)
+    (p : ℕ)
+    (hCanonical : PRefinementCanonicalization d D p)
+    (hRefine : IsPRefinable B p) :
+    IsPDivisibleChannel (transferMap B) p := by
+  obtain ⟨A, hA_norm, hTransferEq⟩ := hCanonical hB hRefine
+  exact thm_4_1_p_refinement_forward_witness B p A hA_norm hTransferEq
+
+end Theorem41Forward
 
 end MPSTensor
