@@ -1091,14 +1091,15 @@ used later.
 
 \section{Multi-cycle block-permutation data (Wolf Thm.~6.16)}
 
-\begin{definition}[Single-cycle block-permutation data]
+\begin{definition}[Block-permutation data]
     \label{def:cycle_structure}
     \lean{CycleStructure}
     \leanok
-    Let $T : \MN{D} \to \MN{D}$.  A \emph{single-cycle block-permutation
-    structure} for $T$ consists of a finite index set $\iota$, a family of
-    orthogonal projections $P_k \in \MN{D}$ for $k \in \iota$, and a
-    permutation $\sigma \in \mathrm{Sym}(\iota)$, such that
+    Let $T : \MN{D} \to \MN{D}$.  A \emph{block-permutation structure} for
+    $T$ consists of a finite index set $\iota$, a family of orthogonal
+    projections $P_k \in \MN{D}$ for $k \in \iota$, and a permutation
+    $\sigma \in \mathrm{Sym}(\iota)$ (not necessarily a single cycle — in
+    general $\sigma$ may have multiple disjoint cycles), such that
     \[
         T(P_{\sigma(k)}) = P_k,\quad
         T(P_k X) = T(P_k)\,T(X),\quad
@@ -1163,16 +1164,18 @@ used later.
     Theorem~\ref{thm:multi_cycle_preserves_corner_pow_period}.
 \end{proof}
 
-\begin{definition}[Flattening to single-cycle data]
+\begin{definition}[Flattening to single-index block-permutation data]
     \label{def:multi_cycle_to_cycle_structure}
     \lean{MultiCycleDecomposition.toCycleStructure}
     \leanok
     \uses{def:multi_cycle_decomposition, def:cycle_structure}
-    A multi-cycle decomposition gives a single-cycle block-permutation
+    A multi-cycle decomposition gives a single-index block-permutation
     structure on the sigma index $\Sigma_{c \in \iota}\,\Fin{m(c)}$: the
     permutation is the sigma-product of per-cycle cyclic shifts
-    $k \mapsto k+1$, the projections are $(c, k) \mapsto P_{c,k}$, and
-    the multiplicative-domain factorisations descend componentwise.
+    $k \mapsto k+1$ (whose cycle decomposition has one cycle per
+    $c \in \iota$), the projections are $(c, k) \mapsto P_{c,k}$, and the
+    multiplicative-domain factorisations descend componentwise.  The
+    resulting map forgets the explicit cycle-indexing.
 \end{definition}
 
 \section{Peripheral eigenvalue group structure (Wolf Thm.~6.6)}
