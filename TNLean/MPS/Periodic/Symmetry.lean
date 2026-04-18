@@ -9,6 +9,7 @@ import TNLean.MPS.Core.Blocking
 import TNLean.MPS.Core.BlockingTransfer
 import TNLean.MPS.Core.CPPrimitive
 import TNLean.Channel.Basic
+import TNLean.Channel.KrausRepresentation
 import TNLean.Channel.Peripheral.CyclicDecomposition
 
 /-!
@@ -216,41 +217,17 @@ variable {d D : ℕ}
 
 For a (possibly rectangular) isometry `W : Fin m → Fin d` with `Wᴴ · W = 1`,
 the `W`-pullback family `C τ := ∑_σ W(τ, σ) · B σ` has the same transfer map
-as `B`. This is the rectangular analogue of the Kraus unitary-freedom identity
-`kraus_same_map_of_unitary_combination` (Wolf, *Quantum Channels & Operations*,
-Theorem 2.1 item 4 / Theorem 2.18). It is the `∑_τ C_τ · X · C_τᴴ = ∑_σ B_σ · X · B_σᴴ`
-identity specialised to our `MPSTensor` API. -/
+as `B`. This is an adapter from
+`kraus_same_map_of_isometry_combination` to the `MPSTensor.transferMap` API. -/
 theorem transferMap_kraus_isometry
     {m : ℕ} (B : MPSTensor d D)
     (W : Matrix (Fin m) (Fin d) ℂ) (hW : Wᴴ * W = 1) :
     transferMap (fun τ : Fin m => ∑ σ : Fin d, W τ σ • B σ) = transferMap B := by
   ext X : 1
-  simp only [transferMap_apply]
-  -- Extract the orthogonality relation `∑_τ conj(W τ σ') · W τ σ = δ_{σ σ'}` from `Wᴴ · W = 1`.
-  have hW_entry : ∀ σ σ' : Fin d,
-      ∑ τ : Fin m, (starRingEnd ℂ) (W τ σ') * W τ σ =
-        if σ' = σ then 1 else 0 := by
-    intro σ σ'
-    have h := congrArg (fun M : Matrix (Fin d) (Fin d) ℂ => M σ' σ) hW
-    simpa [Matrix.mul_apply, Matrix.one_apply, Matrix.conjTranspose_apply] using h
-  calc ∑ τ : Fin m,
-      (∑ σ : Fin d, W τ σ • B σ) * X * (∑ σ : Fin d, W τ σ • B σ)ᴴ
-      = ∑ τ : Fin m, ∑ σ : Fin d, ∑ σ' : Fin d,
-            ((starRingEnd ℂ) (W τ σ') * W τ σ) • (B σ * X * (B σ')ᴴ) := by
-        simp_rw [Matrix.sum_mul, Matrix.conjTranspose_sum, Matrix.conjTranspose_smul,
-          Matrix.mul_sum, smul_mul_assoc, mul_smul_comm, Matrix.mul_assoc, smul_smul]
-        simp [mul_comm]
-    _ = ∑ σ : Fin d, ∑ σ' : Fin d,
-            (∑ τ : Fin m, (starRingEnd ℂ) (W τ σ') * W τ σ) •
-              (B σ * X * (B σ')ᴴ) := by
-        rw [Finset.sum_comm]
-        apply Finset.sum_congr rfl; intro σ _
-        rw [Finset.sum_comm]
-        simp_rw [← Finset.sum_smul]
-    _ = ∑ σ : Fin d, ∑ σ' : Fin d,
-            (if σ' = σ then (1 : ℂ) else 0) • (B σ * X * (B σ')ᴴ) := by
-        simp_rw [hW_entry]
-    _ = ∑ σ : Fin d, B σ * X * (B σ)ᴴ := by simp
+  simpa [transferMap_apply] using
+    kraus_same_map_of_isometry_combination
+      (K := fun τ : Fin m => ∑ σ : Fin d, W τ σ • B σ)
+      (K' := B) W hW (fun _ => rfl) X
 
 /-- **Theorem 4.1, forward direction (witness-based form).**
 
@@ -276,7 +253,7 @@ theorem thm_4_1_p_refinement_forward_witness
 
 /-- **Canonicalization hypothesis for the forward direction of Theorem 4.1.**
 
-This Prop packages the analytic content that remains between the
+This Prop states the analytic content that remains between the
 coefficient-level `IsPRefinable B p` (a trace-level MPV identity) and the
 channel-level conclusion needed to exhibit `E_B` as a `p`-th power: any
 `p`-refinement of `B` can be *canonicalized* to a witness that is both
@@ -291,22 +268,21 @@ Theorem (Theorem 3.8 of arXiv:1708.00029, available here as the hypothesis
 `PeriodicEqualCaseFT`) then supplies a `Z`-gauge equivalence between `C` and
 `blockTensor A p`, which — combined with a unitary canonical-form reduction
 for irreducible form II and Wolf Theorem 2.18 — produces the sought
-left-canonical witness. Packaging this full chain in Lean requires
+left-canonical witness. Formalizing this full chain in Lean requires
 infrastructure (canonical unitary gauge, Kraus uniqueness) that is tracked as
 follow-up work, so we expose the end-result predicate as a hypothesis. -/
 def PRefinementCanonicalization (d D p : ℕ) : Prop :=
-  ∀ {B : MPSTensor d D}, IsPRefinable B p →
+  ∀ {B : MPSTensor d D}, IsIrreducibleForm B → IsPRefinable B p →
     ∃ A : MPSTensor d D,
       (∑ i : Fin d, (A i)ᴴ * A i = 1) ∧
       transferMap B = transferMap (blockTensor A p)
 
 /-- **Forward direction of Theorem 4.1 (conditional form).**
 
-Let `B` be an MPS tensor in irreducible form II and `p ≥ 1`. Assume the
-periodic equal-case Fundamental Theorem (`PeriodicEqualCaseFT`) at the blocked
-dimension and the `PRefinementCanonicalization` hypothesis supplying a
-left-canonical witness with matching transfer map. Then `IsPRefinable B p`
-implies `IsPDivisibleChannel (transferMap B) p`.
+Let `B` be an MPS tensor in irreducible form II. Assume
+`PRefinementCanonicalization`, which records the remaining analytic bridge from
+`IsPRefinable B p` to a left-canonical witness with matching transfer map. Then
+`IsPRefinable B p` implies `IsPDivisibleChannel (transferMap B) p`.
 
 This follows the same conditional pattern as
 `MPSTensor.cor_4_1_physical_symmetry_zgauge`: analytic inputs beyond the
@@ -314,13 +290,12 @@ repository's current reach are exposed as explicit hypotheses, while the
 algebraic structure — the blocking-commutes-with-power identity and the
 left-canonical-channel lemma — is formalized here. -/
 theorem thm_4_1_p_refinement_forward
-    (B : MPSTensor d D) (_hB : IsIrreducibleForm B)
-    (p : ℕ) (_hp : 0 < p)
-    (_hPeriodicEq : PeriodicEqualCaseFT (blockPhysDim d p) D)
+    (B : MPSTensor d D) (hB : IsIrreducibleForm B)
+    (p : ℕ)
     (hCanonical : PRefinementCanonicalization d D p)
     (hRefine : IsPRefinable B p) :
     IsPDivisibleChannel (transferMap B) p := by
-  obtain ⟨A, hA_norm, hTransferEq⟩ := hCanonical hRefine
+  obtain ⟨A, hA_norm, hTransferEq⟩ := hCanonical hB hRefine
   exact thm_4_1_p_refinement_forward_witness B p A hA_norm hTransferEq
 
 end Theorem41Forward
