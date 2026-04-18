@@ -293,6 +293,7 @@ import TNLean.Wielandt.QuantumWielandt
 
 import TNLean.Channel.Peripheral.CyclicDecomposition
 import TNLean.Channel.Peripheral.Cycles
+import TNLean.Channel.Peripheral.MultiCycleDecomposition
 
 -- Public documentation index modules
 import TNLean.Channel.WolfChapter2Index
