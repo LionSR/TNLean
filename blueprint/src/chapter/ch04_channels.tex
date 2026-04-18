@@ -1043,7 +1043,7 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
 \end{proof}
 
 %% =========================================================
-\section{POVMs and Naimark dilation (Wolf Thm.~2.3)}
+\section{POVMs and Naimark dilation (Wolf Thm.~2.6)}
 \label{sec:povm_naimark}
 %% =========================================================
 
@@ -1121,7 +1121,7 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
     delta-function form of $(P_i)_{(a,b),(c,d)}$.
 \end{proof}
 
-\begin{theorem}[Thm.~2.3: Naimark dilation]\label{thm:naimark_recovers_povm}
+\begin{theorem}[Thm.~2.6: Naimark dilation]\label{thm:naimark_recovers_povm}
     \lean{POVM.naimark_recovers_povm}
     \leanok
     \uses{def:povm, def:naimark_isometry, def:naimark_projection,
@@ -1157,18 +1157,19 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
     and $P_i = \one_D \otimes |i\rangle\langle i|$.
 \end{proof}
 
-\begin{definition}[POVM from a projective measurement on a dilation]
-    \label{def:povm_of_projective_measurement}
-    \lean{POVM.ofProjectiveMeasurement}
+\begin{definition}[POVM from a PSD resolution of identity on a dilation]
+    \label{def:povm_of_psd_resolution_of_identity}
+    \lean{POVM.ofPSDResolutionOfIdentity}
     \leanok
     Given an isometry $V : \C^D \to \C^{d'}$ with $V^\dagger V = \one_D$
-    and a projective measurement $\{P_i\}_{i=1}^n$ on $\C^{d'}$
-    (positive semidefinite operators summing to the identity), the
-    operators
+    and a family $\{P_i\}_{i=1}^n$ of positive semidefinite operators on
+    $\C^{d'}$ summing to the identity, the pulled-back operators
     \[
         E_i := V^\dagger P_i V
     \]
-    form a POVM.
+    form a POVM. In particular, any projective measurement on the
+    dilation (a special case of a PSD resolution of identity) pulls back
+    to a POVM.
 \end{definition}
 
 \begin{definition}[Quantum instrument]\label{def:instrument}
