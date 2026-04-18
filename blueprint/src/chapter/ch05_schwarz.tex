@@ -763,8 +763,8 @@ order, together with operator concavity of the matrix logarithm.
 
 \subsection{Trace concavity and convexity of matrix powers}
 
-\begin{theorem}[Trace concavity of real powers]\label{thm:trace_rpow_concave_axiom}
-    \lean{TNLean.trace_rpow_concave}
+\begin{theorem}[Trace concavity of real powers]\label{thm:trace_rpow_concave}
+    \lean{TNLean.trace_rpow_concave, trace_rpow_concave}
     \leanok
     \uses{lem:diagonal_jensen_of_convexOn}
     For $p\in[0,1]$, PSD matrices $A_1,A_2$, and $t\in[0,1]$:
@@ -794,21 +794,10 @@ order, together with operator concavity of the matrix logarithm.
     conclusion. See Bhatia, \emph{Matrix Analysis}, Ch.~V.
 \end{proof}
 
-\begin{theorem}[Trace concavity of real powers --- restatement]\label{thm:trace_rpow_concave}
-    \lean{trace_rpow_concave}
+\begin{theorem}[Trace convexity of real powers]\label{thm:trace_rpow_convex}
+    \lean{TNLean.trace_rpow_convex, trace_rpow_convex}
     \leanok
-    \uses{thm:trace_rpow_concave_axiom}
-    Restates Theorem~\ref{thm:trace_rpow_concave_axiom} for downstream use.
-\end{theorem}
-
-\begin{proof}\leanok
-    Direct application of Theorem~\ref{thm:trace_rpow_concave_axiom}.
-\end{proof}
-
-\begin{theorem}[Trace convexity of real powers]\label{thm:trace_rpow_convex_axiom}
-    \lean{TNLean.trace_rpow_convex}
-    \leanok
-    \uses{lem:diagonal_jensen_of_convexOn}
+    \uses{lem:diagonal_jensen_of_convexOn, thm:trace_rpow_concave}
     For $p\in[1,2]$, PSD matrices $A_1,A_2$, and $t\in[0,1]$:
     \[
         \Re\tr\!\bigl((tA_1+(1-t)A_2)^p\bigr)
@@ -821,20 +810,9 @@ order, together with operator concavity of the matrix logarithm.
 
 \begin{proof}\leanok
     Identical eigenbasis reduction as in
-    Theorem~\ref{thm:trace_rpow_concave_axiom}, with scalar convexity
+    Theorem~\ref{thm:trace_rpow_concave}, with scalar convexity
     (rather than concavity) of $x\mapsto x^p$ on $[0,\infty)$ for
     $p\ge 1$ and the convex form of the diagonal Jensen inequality.
-\end{proof}
-
-\begin{theorem}[Trace convexity of real powers --- restatement]\label{thm:trace_rpow_convex}
-    \lean{trace_rpow_convex}
-    \leanok
-    \uses{thm:trace_rpow_convex_axiom}
-    Restates Theorem~\ref{thm:trace_rpow_convex_axiom} for downstream use.
-\end{theorem}
-
-\begin{proof}\leanok
-    Direct application of Theorem~\ref{thm:trace_rpow_convex_axiom}.
 \end{proof}
 
 \subsection{Operator Jensen inequality for positive maps}
