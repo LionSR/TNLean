@@ -809,8 +809,9 @@ For an irreducible TP tensor `A` of period `m`, after blocking by `m`, the block
 spectral projections. Returns:
 - `blocks k`: TP sector tensors (each left-canonical),
 - `P k`: orthogonal projections forming a partition of unity (`∑ P k = 1`),
-- compression isometries `φ k : M_{dim k}(ℂ) →ₗ cornerSubmodule (P k)` and the intertwining
-  identity bridging the compressed adjoint transfer map and the sector adjoint transfer map,
+- compression linear equivalences `φ k : M_{dim k}(ℂ) ≃ₗ[ℂ] cornerSubmodule (P k)` together
+  with the intertwining identity bridging the compressed adjoint transfer map and the sector
+  adjoint transfer map,
 - cyclic shift: `transferMap (fun i => (A i)ᴴ) (P (k+1)) = P k`,
 - commutation: each `P k` commutes with every blocked letter,
 - trace relation: `mpv (blocks k) σ = (P k * evalWord (blockTensor A m) σ).trace`,
@@ -830,7 +831,7 @@ theorem exists_cyclic_sector_decomp_after_blocking
     ∃ (dim : Fin m → ℕ) (blocks : (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k))
       (P : Fin m → MatrixAlg D)
       (φ : (k : Fin m) →
-        Matrix (Fin (dim k)) (Fin (dim k)) ℂ →ₗ[ℂ] cornerSubmodule (P k)),
+        Matrix (Fin (dim k)) (Fin (dim k)) ℂ ≃ₗ[ℂ] cornerSubmodule (P k)),
       (∀ k, ∑ i : Fin (blockPhysDim d m), (blocks k i)ᴴ * blocks k i = 1) ∧
       SameMPV₂ (blockTensor A m) (toTensorFromBlocks (μ := fun _ => 1) blocks) ∧
       (∀ k, IsOrthogonalProjection (P k)) ∧
