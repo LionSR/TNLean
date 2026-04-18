@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Axioms.OperatorConvexity
+import TNLean.Analysis.OperatorConvexity
 import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.Analysis.Matrix.Order
 import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Order
@@ -25,13 +26,13 @@ convexity/concavity consequences for matrix power functions.
 
 ### Status
 
-All results are proved from axioms in `TNLean.Axioms.OperatorConvexity`:
-* `trace_rpow_concave` from `trace_rpow_concave_axiom`
-* `trace_rpow_convex` from `trace_rpow_convex_axiom`
-* `lieb_concavity` from `lieb_concavity_axiom`
-
-The axioms will be replaced with proofs when Mathlib lands the CFC
-operator convexity/concavity infrastructure.
+* `trace_rpow_concave`, `trace_rpow_convex` are proved in
+  `TNLean.Analysis.OperatorConvexity` using the spectral theorem and the
+  scalar Jensen inequality. This file restates them in the present
+  namespace for downstream use.
+* `lieb_concavity` is still derived from `lieb_concavity_axiom` in
+  `TNLean.Axioms.OperatorConvexity`, pending the integral-representation
+  infrastructure in Mathlib.
 
 ## References
 
@@ -73,14 +74,15 @@ For PSD matrices `A₁, A₂` and `t ∈ [0, 1]`:
   `t · Re Tr(A₁ ^ p) + (1 − t) · Re Tr(A₂ ^ p) ≤
      Re Tr((t • A₁ + (1 − t) • A₂) ^ p)`.
 
-Proved from `trace_rpow_concave_axiom` in `TNLean.Axioms.OperatorConvexity`. -/
+Proved in `TNLean.Analysis.OperatorConvexity` via the spectral theorem
+and the scalar Jensen inequality. -/
 theorem trace_rpow_concave
     {p : ℝ} (hp : p ∈ Set.Icc (0 : ℝ) 1)
     {A₁ A₂ : Mat} (hA₁ : 0 ≤ A₁) (hA₂ : 0 ≤ A₂)
     {t : ℝ} (ht : t ∈ Set.Icc (0 : ℝ) 1) :
     t * (trace (A₁ ^ p)).re + (1 - t) * (trace (A₂ ^ p)).re ≤
       (trace ((t • A₁ + (1 - t) • A₂) ^ p)).re :=
-  trace_rpow_concave_axiom hp hA₁ hA₂ ht
+  TNLean.trace_rpow_concave hp hA₁ hA₂ ht
 
 /-- **Trace convexity of `rpow`** for `p ∈ [1, 2]`.
 
@@ -88,14 +90,15 @@ For PSD matrices `A₁, A₂` and `t ∈ [0, 1]`:
   `Re Tr((t • A₁ + (1 − t) • A₂) ^ p) ≤
      t · Re Tr(A₁ ^ p) + (1 − t) · Re Tr(A₂ ^ p)`.
 
-Proved from `trace_rpow_convex_axiom` in `TNLean.Axioms.OperatorConvexity`. -/
+Proved in `TNLean.Analysis.OperatorConvexity` via the spectral theorem
+and the scalar Jensen inequality. -/
 theorem trace_rpow_convex
     {p : ℝ} (hp : p ∈ Set.Icc (1 : ℝ) 2)
     {A₁ A₂ : Mat} (hA₁ : 0 ≤ A₁) (hA₂ : 0 ≤ A₂)
     {t : ℝ} (ht : t ∈ Set.Icc (0 : ℝ) 1) :
     (trace ((t • A₁ + (1 - t) • A₂) ^ p)).re ≤
       t * (trace (A₁ ^ p)).re + (1 - t) * (trace (A₂ ^ p)).re :=
-  trace_rpow_convex_axiom hp hA₁ hA₂ ht
+  TNLean.trace_rpow_convex hp hA₁ hA₂ ht
 
 /-! ## Lieb concavity theorem -/
 
