@@ -1211,6 +1211,23 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
       = \operatorname{tr}(\rho)$.
 \end{proof}
 
+\begin{theorem}[Non-negativity of instrument probabilities]
+    \label{thm:instrument_probability_nonneg}
+    \lean{Instrument.probability_nonneg}
+    \leanok
+    \uses{def:instrument}
+    If $\rho \in \MN{D}$ is positive semidefinite, then each outcome
+    probability $p_i(\rho) = \operatorname{tr}(\Phi_i(\rho))$ is a
+    non-negative real number.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Each $\Phi_i$ is completely positive, hence positive, so
+    $\Phi_i(\rho)$ is positive semidefinite and its trace is a
+    non-negative real.
+\end{proof}
+
 %% =========================================================
 \subsection{Trace-pairing expansion in transfer-matrix form}
 \label{subsec:trace_pairing_expansion}
