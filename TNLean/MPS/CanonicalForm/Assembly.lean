@@ -1037,6 +1037,87 @@ section FundamentalTheorem1606
 -- sector decomposition to produce the final canonical form.
 -- (Already proved above as `exists_tp_primitive_blockDecomp_after_blocking`.)
 
+/-- **Bilateral common-period assembly for two tensors.**
+
+Given two tensors with (possibly different) primitive blocking periods `pA` and `pB`,
+set the common period to `p = lcm(pA, pB)` (implemented via `lcmPeriod` on `Fin 2`).
+Then both `blockTensor A p` and `blockTensor B p` have primitive transfer maps.
+
+If `A` and `B` are left-canonical (TP), then TP is preserved under the common blocking.
+If `A` and `B` are normal, normality is also preserved under common blocking. -/
+theorem bilateral_commonPeriod_blocking_tp_primitive_normal
+    {d D₁ D₂ : ℕ}
+    [NeZero D₁] [NeZero D₂]
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (pA pB : ℕ) (hpA : 0 < pA) (hpB : 0 < pB)
+    (hTPA : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (hTPB : ∑ i : Fin d, (B i)ᴴ * B i = 1)
+    (hPrimA : _root_.IsPrimitive
+      (transferMap (d := blockPhysDim d pA) (D := D₁)
+        (blockTensor (d := d) (D := D₁) A pA)))
+    (hPrimB : _root_.IsPrimitive
+      (transferMap (d := blockPhysDim d pB) (D := D₂)
+        (blockTensor (d := d) (D := D₂) B pB)))
+    (hNormalA : IsNormal A) (hNormalB : IsNormal B) :
+    ∃ p, 0 < p ∧
+      _root_.IsPrimitive
+        (transferMap (d := blockPhysDim d p) (D := D₁)
+          (blockTensor (d := d) (D := D₁) A p)) ∧
+      _root_.IsPrimitive
+        (transferMap (d := blockPhysDim d p) (D := D₂)
+          (blockTensor (d := d) (D := D₂) B p)) ∧
+      (∑ i : Fin (blockPhysDim d p),
+        (blockTensor (d := d) (D := D₁) A p i)ᴴ *
+          blockTensor (d := d) (D := D₁) A p i = 1) ∧
+      (∑ i : Fin (blockPhysDim d p),
+        (blockTensor (d := d) (D := D₂) B p i)ᴴ *
+          blockTensor (d := d) (D := D₂) B p i = 1) ∧
+      IsNormal (d := blockPhysDim d p) (D := D₁)
+        (blockTensor (d := d) (D := D₁) A p) ∧
+      IsNormal (d := blockPhysDim d p) (D := D₂)
+        (blockTensor (d := d) (D := D₂) B p) := by
+  let periods : Fin 2 → ℕ := fun i =>
+    match i.1 with
+    | 0 => pA
+    | _ => pB
+  let p := lcmPeriod periods
+  have hp : 0 < p := by
+    have hne : p ≠ 0 := by
+      refine Finset.lcm_ne_zero_iff.2 ?_
+      intro i _
+      cases i using Fin.cases with
+      | zero => simpa [p, lcmPeriod, periods] using Nat.ne_of_gt hpA
+      | succ i =>
+          have : i = 0 := by fin_cases i; rfl
+          simpa [p, lcmPeriod, periods, this] using Nat.ne_of_gt hpB
+    exact Nat.pos_of_ne_zero hne
+  have hA_dvd' : periods ⟨0, by decide⟩ ∣ p := by
+    simpa [p, lcmPeriod] using
+      (Finset.dvd_lcm (s := Finset.univ) (f := periods) (b := ⟨0, by decide⟩) (by simp))
+  have hA_dvd : pA ∣ p := by simpa [periods] using hA_dvd'
+  have hB_dvd' : periods ⟨1, by decide⟩ ∣ p := by
+    simpa [p, lcmPeriod] using
+      (Finset.dvd_lcm (s := Finset.univ) (f := periods) (b := ⟨1, by decide⟩) (by simp))
+  have hB_dvd : pB ∣ p := by simpa [periods] using hB_dvd'
+  have hPrimA' : _root_.IsPrimitive
+      (transferMap (d := blockPhysDim d p) (D := D₁)
+        (blockTensor (d := d) (D := D₁) A p)) :=
+    isPrimitive_transferMap_blockTensor_of_dvd
+      (d := d) (D := D₁) A pA p hA_dvd hp hPrimA
+  have hPrimB' : _root_.IsPrimitive
+      (transferMap (d := blockPhysDim d p) (D := D₂)
+        (blockTensor (d := d) (D := D₂) B p)) :=
+    isPrimitive_transferMap_blockTensor_of_dvd
+      (d := d) (D := D₂) B pB p hB_dvd hp hPrimB
+  refine ⟨p, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
+  · exact hp
+  · exact hPrimA'
+  · exact hPrimB'
+  · simpa [p] using leftCanonical_blockTensor (d := d) (D := D₁) (A := A) p hTPA
+  · simpa [p] using leftCanonical_blockTensor (d := d) (D := D₂) (A := B) p hTPB
+  · exact isNormal_blockTensor_of_isNormal (d := d) (D := D₁) A hp hNormalA
+  · exact isNormal_blockTensor_of_isNormal (d := d) (D := D₂) B hp hNormalB
+
 /-- **Fundamental Theorem of MPS (1606.00608, after blocking): structural version.**
 
 For any two MPS tensors `A, B` with `SameMPV₂ A B`, after a common blocking period,
