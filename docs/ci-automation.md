@@ -332,7 +332,7 @@ The review-fix loop is gated on the `auto-fix-claude` label. To change the label
 
 ### Model
 
-All workflows use `claude-opus-4-7`, configured via `--model` in the `claude_args` parameter of each workflow file.
+All Claude-based workflows use `claude-opus-4-7`, configured via `--model` in the `claude_args` parameter of the relevant workflow file. Codex-based workflows run via `openai/codex-action` and use their own model/configuration mechanism rather than Claude `--model` flags.
 
 ### Lean plugins
 
