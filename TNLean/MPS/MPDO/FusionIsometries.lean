@@ -191,7 +191,7 @@ noncomputable def blockedTransferMap (M : MPOTensor d D) (n : ℕ) :
 map to the corresponding power. -/
 @[simp] theorem blockedTransferMap_eq_pow (M : MPOTensor d D) (n : ℕ) :
     blockedTransferMap M n = (transferMap M) ^ n := by
-  simpa [blockedTransferMap] using
+  simpa only [blockedTransferMap, transferMap_eq_toMPSTensor] using
     (MPSTensor.transferMap_blockTensor (A := M.toMPSTensor) (L := n))
 
 /-- At blocked size `1`, the blocked transfer map is the original transfer map. -/
@@ -232,7 +232,8 @@ theorem blockedTransferMap_idempotent (F : FusionIsometryData M n) :
         = (F.S ∘ₗ F.T) ∘ₗ (F.S ∘ₗ F.T) := by rw [F.hST]
     _ = F.S ∘ₗ (F.T ∘ₗ F.S) ∘ₗ F.T := by simp [LinearMap.comp_assoc]
     _ = F.S ∘ₗ LinearMap.id ∘ₗ F.T := by rw [F.hTS]
-    _ = F.S ∘ₗ F.T := by simp
+    _ = F.S ∘ₗ F.T := by
+      simp only [LinearMap.id_comp]
     _ = blockedTransferMap M n := F.hST
 
 /-- An idempotent blocked transfer map yields a canonical fusion-isometry datum
@@ -242,7 +243,7 @@ noncomputable def ofBlockedTransferMapIdempotent
     FusionIsometryData M n where
   supportAlgebra := (blockedTransferMap M n).range
   T := LinearMap.codRestrict (blockedTransferMap M n).range (blockedTransferMap M n)
-    (fun x => by exact ⟨x, rfl⟩)
+    (fun x => ⟨x, rfl⟩)
   S := (blockedTransferMap M n).range.subtype
   hTS := by
     apply LinearMap.ext
@@ -251,17 +252,17 @@ noncomputable def ofBlockedTransferMapIdempotent
     rcases hx with ⟨y, rfl⟩
     apply Subtype.ext
     change blockedTransferMap M n (blockedTransferMap M n y) = blockedTransferMap M n y
-    simpa [LinearMap.comp_apply] using congrArg (fun f => f y) hE
+    simpa only [LinearMap.comp_apply] using congrArg (fun f => f y) hE
   hST := by
     exact LinearMap.subtype_comp_codRestrict
       (blockedTransferMap M n)
       (blockedTransferMap M n).range
-      (fun x => by exact ⟨x, rfl⟩)
+      (fun x => ⟨x, rfl⟩)
 
 /-- A level-`1` fusion-isometry datum implies the provisional MPDO RFP
 condition. -/
 theorem isRFP (F : FusionIsometryData M 1) : IsRFP M := by
-  simpa [IsRFP] using F.blockedTransferMap_idempotent
+  simpa only [IsRFP, blockedTransferMap_one] using F.blockedTransferMap_idempotent
 
 end FusionIsometryData
 
@@ -269,7 +270,7 @@ private theorem pow_succ_eq_self_of_idempotent
     {V : Type*} [AddCommMonoid V] [Module ℂ V] (E : V →ₗ[ℂ] V)
     (hE : E * E = E) :
     ∀ n : ℕ, E ^ (n + 1) = E
-  | 0 => by simp
+  | 0 => by simp only [Nat.zero_add, pow_one]
   | k + 1 => by
       calc
         E ^ ((k + 1) + 1) = E ^ (k + 1) * E := by rw [pow_succ]
@@ -287,7 +288,7 @@ theorem blockedTransferMap_eq_transferMap_of_isRFP {M : MPOTensor d D}
   have hIdem : transferMap M * transferMap M = transferMap M := by
     apply LinearMap.ext
     intro X
-    simpa [LinearMap.comp_apply] using congrArg (fun f => f X) hM'
+    simpa only [LinearMap.comp_apply] using congrArg (fun f => f X) hM'
   exact pow_succ_eq_self_of_idempotent (transferMap M) hIdem k
 
 /-- Under the provisional MPDO RFP condition, every positive blocked transfer
@@ -299,7 +300,7 @@ theorem blockedTransferMap_idempotent_of_isRFP {M : MPOTensor d D}
     blockedTransferMap_eq_transferMap_of_isRFP hM hn
   have hComp : blockedTransferMap M n ∘ₗ blockedTransferMap M n =
       transferMap M ∘ₗ transferMap M := by
-    simpa using congrArg (fun f => f ∘ₗ f) hEq
+    exact congrArg (fun f => f ∘ₗ f) hEq
   calc
     blockedTransferMap M n ∘ₗ blockedTransferMap M n = transferMap M ∘ₗ transferMap M := hComp
     _ = transferMap M := hM
