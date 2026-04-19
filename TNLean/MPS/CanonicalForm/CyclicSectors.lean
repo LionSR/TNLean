@@ -152,7 +152,10 @@ theorem exists_compressedTensor_of_supported_projection
         mpv C σ = Matrix.trace (P * evalWord A (List.ofFn σ))) ∧
       (∀ X : Matrix (Fin n) (Fin n) ℂ,
         (φ (transferMap (d := d) (D := n) (fun i => (C i)ᴴ) X)).1 =
-          transferMap (d := d) (D := D) (fun i => (A i)ᴴ) ((φ X).1)) := by
+          transferMap (d := d) (D := D) (fun i => (A i)ᴴ) ((φ X).1)) ∧
+      (∀ X Y : Matrix (Fin n) (Fin n) ℂ,
+        (φ (X * Y)).1 = (φ X).1 * (φ Y).1) ∧
+      (∀ X : Matrix (Fin n) (Fin n) ℂ, (φ Xᴴ).1 = ((φ X).1)ᴴ) := by
   classical
   -- Spectral diagonalization of P
   let hHerm : P.IsHermitian := hP.1
@@ -322,7 +325,7 @@ theorem exists_compressedTensor_of_supported_projection
   let cornerEmbed : Matrix (Fin n) (Fin n) ℂ ≃ₗ[ℂ] cornerSubmodule P :=
     cornerCompressionLinearEquiv (P := P) (Pdiag := Pdiag) Umat eST eS P0 hP0_def
       hP_decomp hPdiag_UPU hPdiag_std_lin hPdiag_back hU'U hUU
-  refine ⟨n, C, cornerEmbed, ?_, ?_, ?_, ?_⟩
+  refine ⟨n, C, cornerEmbed, ?_, ?_, ?_, ?_, ?_, ?_⟩
   -- (1) Trace identity: n = tr P
   · exact htrace
   -- (2) TP condition: ∑ C_i† C_i = 1
@@ -616,6 +619,14 @@ theorem exists_compressedTensor_of_supported_projection
         _ = Umat * ((B i)ᴴ * G * B i) * Umatᴴ := by
               rw [hU'U]; noncomm_ring
     rw [hLHS, hRHS]
+  -- (5) Multiplicativity: (φ (X * Y)).1 = (φ X).1 * (φ Y).1.
+  · intro X Y
+    change expand (X * Y) = expand X * expand Y
+    exact cornerCompressionExpand_mul Umat eST eS hU'U X Y
+  -- (6) Star-preservation: (φ Xᴴ).1 = ((φ X).1)ᴴ.
+  · intro X
+    change expand Xᴴ = (expand X)ᴴ
+    exact (cornerCompressionExpand_conjTranspose Umat eST eS X).symm
 
 end Compression
 
@@ -635,7 +646,7 @@ theorem exists_compressedTensor_of_supported_projection_pos_mpv
       ((n : ℂ) = Matrix.trace P) ∧
       (∑ i : Fin d, (C i)ᴴ * C i = 1) ∧
       (∀ {N : ℕ}, 0 < N → ∀ σ : Fin N → Fin d, mpv A σ = mpv C σ) := by
-  obtain ⟨dim, C, _φ, hdim, hCtp, hCmpv, _hIntertwine⟩ :=
+  obtain ⟨dim, C, _φ, hdim, hCtp, hCmpv, _hIntertwine, _hMul, _hStar⟩ :=
     exists_compressedTensor_of_supported_projection A P hP hSupp hTP
   refine ⟨dim, C, hdim, hCtp, ?_⟩
   have hleft : ∀ i : Fin d, P * A i = A i := by
@@ -706,7 +717,11 @@ theorem exists_blockDecomp_of_commuting_projections
         (φ k (transferMap (d := d) (D := dim k)
             (fun i => (blocks k i)ᴴ) X)).1 =
           transferMap (d := d) (D := D)
-            (fun i => (P k * A i)ᴴ) ((φ k X).1)) := by
+            (fun i => (P k * A i)ᴴ) ((φ k X).1)) ∧
+      (∀ k (X Y : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
+        (φ k (X * Y)).1 = (φ k X).1 * (φ k Y).1) ∧
+      (∀ k (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
+        (φ k Xᴴ).1 = ((φ k X).1)ᴴ) := by
   -- For each k, sector tensor P_k * A_i is P_k-supported
   have hSectorSupp : ∀ k i, P k * (P k * A i) * P k = P k * A i := by
     intro k i
@@ -722,7 +737,7 @@ theorem exists_blockDecomp_of_commuting_projections
       rw [hComm k i, ← Matrix.mul_assoc]
     simp_rw [hterm, ← Finset.sum_mul, hLeft, Matrix.one_mul]
   -- Apply compression to each sector
-  choose dim blocks φ hDim hTPblocks hMPVblocks hIntertwine using fun k =>
+  choose dim blocks φ hDim hTPblocks hMPVblocks hIntertwine hMul hStar using fun k =>
     exists_compressedTensor_of_supported_projection
       (fun i => P k * A i) (P k) (hPproj k) (hSectorSupp k) (hSectorTP k)
   -- Per-sector trace relation: mpv(blocks k) σ = tr(P_k · evalWord A σ)
@@ -732,7 +747,7 @@ theorem exists_blockDecomp_of_commuting_projections
     rw [hMPVblocks k N σ]
     congr 1
     exact left_mul_evalWord_leftSectorTensor_of_commutes (P k) A (hPproj k).2 (hComm k) _
-  refine ⟨dim, blocks, φ, hTPblocks, ?_, hSectorTrace, hIntertwine⟩
+  refine ⟨dim, blocks, φ, hTPblocks, ?_, hSectorTrace, hIntertwine, hMul, hStar⟩
   -- SameMPV₂ follows from summing per-sector traces over the projection partition
   intro N σ
   rw [mpv_toTensorFromBlocks_eq_sum]; simp only [one_pow, one_smul]
@@ -794,7 +809,11 @@ theorem exists_blockDecomp_of_adjoint_fixed_projections
         (φ k (transferMap (d := d) (D := dim k)
             (fun i => (blocks k i)ᴴ) X)).1 =
           transferMap (d := d) (D := D)
-            (fun i => (P k * A i)ᴴ) ((φ k X).1)) := by
+            (fun i => (P k * A i)ᴴ) ((φ k X).1)) ∧
+      (∀ k (X Y : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
+        (φ k (X * Y)).1 = (φ k X).1 * (φ k Y).1) ∧
+      (∀ k (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
+        (φ k Xᴴ).1 = ((φ k X).1)ᴴ) := by
   have hComm : ∀ k : Fin m, ∀ i : Fin d, P k * A i = A i * P k := by
     intro k i
     exact commutes_letters_of_adjoint_fixed_projection

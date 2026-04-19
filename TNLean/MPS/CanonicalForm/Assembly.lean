@@ -846,6 +846,10 @@ theorem exists_cyclic_sector_decomp_after_blocking
             (fun i => (blocks k i)ᴴ) X)).1 =
           transferMap (d := blockPhysDim d m) (D := D)
             (fun i => (P k * blockTensor A m i)ᴴ) ((φ k X).1)) ∧
+      (∀ k (X Y : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
+        (φ k (X * Y)).1 = (φ k X).1 * (φ k Y).1) ∧
+      (∀ k (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
+        (φ k Xᴴ).1 = ((φ k X).1)ᴴ) ∧
       (∀ k, dim k ≠ 0) := by
   -- Step 1: Get cyclic decomposition data
   let K : Fin d → MatrixAlg D := fun i => (A i)ᴴ
@@ -872,7 +876,7 @@ theorem exists_cyclic_sector_decomp_after_blocking
   -- Step 5: Apply the CyclicSectors decomposition
   obtain ⟨dim, blocks, φ, hLC, hMPV_hTrace⟩ := exists_blockDecomp_of_adjoint_fixed_projections
     (blockTensor A m) P hPproj hPsum hTP_blocked hFix
-  obtain ⟨hMPV, hTrace, hIntertwine⟩ := hMPV_hTrace
+  obtain ⟨hMPV, hTrace, hIntertwine, hMul, hStar⟩ := hMPV_hTrace
   -- Step 6: Derive commutation from the adjoint fix property
   have hComm : ∀ k (i : Fin (blockPhysDim d m)),
       P k * (blockTensor A m) i = (blockTensor A m) i * P k := by
@@ -921,7 +925,7 @@ theorem exists_cyclic_sector_decomp_after_blocking
       rw [← h0, Matrix.trace_one, Fintype.card_fin, hk, Nat.cast_zero]
     exact (isOrthogonalProjection_posSemidef (hPproj k)).trace_eq_zero_iff.mp htrace_zero
   exact ⟨dim, blocks, P, φ, hLC, hMPV, hPproj, hPsum, hcyclic, hComm, hTrace, hIntertwine,
-    hNondeg⟩
+    hMul, hStar, hNondeg⟩
 
 end CyclicSectorBridge
 
