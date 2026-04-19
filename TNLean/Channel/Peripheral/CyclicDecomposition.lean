@@ -168,6 +168,94 @@ lemma cornerCompressionExpand_mem
     _ = Umat * (Pdiag * Y_D * Pdiag) * Umatᴴ := by rw [hU'U]; simp
     _ = Umat * Y_D * Umatᴴ := by rw [hPdiag_Y]
 
+/-- Conjugate-transpose intertwining for the shared corner-compression map:
+`(expand M)ᴴ = expand Mᴴ`. This is the star-preservation identity of the
+compression isometry; together with `cornerCompressionExpand_mul` it makes the
+image of the compression a ∗-subalgebra of the ambient corner. -/
+lemma cornerCompressionExpand_conjTranspose
+    {D n : ℕ} (Umat : MatrixAlg D)
+    {S T : Type*} [Fintype S] [DecidableEq S] [Fintype T] [DecidableEq T]
+    (eST : Fin D ≃ S ⊕ T) (eS : S ≃ Fin n)
+    (M : Matrix (Fin n) (Fin n) ℂ) :
+    (cornerCompressionExpand Umat eST eS M)ᴴ =
+      cornerCompressionExpand Umat eST eS Mᴴ := by
+  rw [cornerCompressionExpand_apply Umat eST eS M,
+    cornerCompressionExpand_apply Umat eST eS Mᴴ]
+  simp only [Matrix.reindexLinearEquiv_apply]
+  rw [Matrix.conjTranspose_mul, Matrix.conjTranspose_mul,
+    Matrix.conjTranspose_conjTranspose, Matrix.mul_assoc]
+  congr 1
+  rw [Matrix.conjTranspose_reindex, Matrix.fromBlocks_conjTranspose,
+    Matrix.conjTranspose_zero, Matrix.conjTranspose_zero,
+    Matrix.conjTranspose_zero, Matrix.conjTranspose_reindex]
+
+/-- Multiplicativity of the shared corner-compression map:
+`expand (M₁ * M₂) = expand M₁ * expand M₂`.  Uses the isometry identity
+`Umatᴴ * Umat = 1` to collapse the middle factor of the product. -/
+lemma cornerCompressionExpand_mul
+    {D n : ℕ} (Umat : MatrixAlg D)
+    {S T : Type*} [Fintype S] [DecidableEq S] [Fintype T] [DecidableEq T]
+    (eST : Fin D ≃ S ⊕ T) (eS : S ≃ Fin n)
+    (hU'U : Umatᴴ * Umat = 1)
+    (M₁ M₂ : Matrix (Fin n) (Fin n) ℂ) :
+    cornerCompressionExpand Umat eST eS (M₁ * M₂) =
+      cornerCompressionExpand Umat eST eS M₁ *
+        cornerCompressionExpand Umat eST eS M₂ := by
+  rw [cornerCompressionExpand_apply Umat eST eS (M₁ * M₂),
+    cornerCompressionExpand_apply Umat eST eS M₁,
+    cornerCompressionExpand_apply Umat eST eS M₂]
+  simp only [Matrix.reindexLinearEquiv_apply]
+  set Y₁ : MatrixAlg D :=
+    Matrix.reindex eST.symm eST.symm
+      (Matrix.fromBlocks (Matrix.reindex eS.symm eS.symm M₁)
+        (0 : Matrix S T ℂ) (0 : Matrix T S ℂ) (0 : Matrix T T ℂ))
+  set Y₂ : MatrixAlg D :=
+    Matrix.reindex eST.symm eST.symm
+      (Matrix.fromBlocks (Matrix.reindex eS.symm eS.symm M₂)
+        (0 : Matrix S T ℂ) (0 : Matrix T S ℂ) (0 : Matrix T T ℂ))
+  have hY₁Y₂ :
+      Matrix.reindex eST.symm eST.symm
+          (Matrix.fromBlocks
+            (Matrix.reindex eS.symm eS.symm (M₁ * M₂))
+            (0 : Matrix S T ℂ) (0 : Matrix T S ℂ) (0 : Matrix T T ℂ)) =
+        Y₁ * Y₂ := by
+    have hReindexMul :
+        Matrix.reindex eS.symm eS.symm M₁ *
+            Matrix.reindex eS.symm eS.symm M₂ =
+          Matrix.reindex eS.symm eS.symm (M₁ * M₂) := by
+      simpa using
+        Matrix.reindexLinearEquiv_mul (R := ℂ) (A := ℂ)
+          eS.symm eS.symm eS.symm M₁ M₂
+    have hFromBlocksMul :
+        Matrix.fromBlocks (Matrix.reindex eS.symm eS.symm M₁)
+            (0 : Matrix S T ℂ) (0 : Matrix T S ℂ) (0 : Matrix T T ℂ) *
+          Matrix.fromBlocks (Matrix.reindex eS.symm eS.symm M₂)
+            (0 : Matrix S T ℂ) (0 : Matrix T S ℂ) (0 : Matrix T T ℂ) =
+          Matrix.fromBlocks
+            (Matrix.reindex eS.symm eS.symm M₁ *
+              Matrix.reindex eS.symm eS.symm M₂)
+            (0 : Matrix S T ℂ) (0 : Matrix T S ℂ) (0 : Matrix T T ℂ) := by
+      simp [Matrix.fromBlocks_multiply]
+    have hReindexMul2 :
+        Y₁ * Y₂ =
+          Matrix.reindex eST.symm eST.symm
+            (Matrix.fromBlocks (Matrix.reindex eS.symm eS.symm M₁)
+              (0 : Matrix S T ℂ) (0 : Matrix T S ℂ) (0 : Matrix T T ℂ) *
+            Matrix.fromBlocks (Matrix.reindex eS.symm eS.symm M₂)
+              (0 : Matrix S T ℂ) (0 : Matrix T S ℂ) (0 : Matrix T T ℂ)) := by
+      simpa [Y₁, Y₂] using
+        (Matrix.reindexLinearEquiv_mul (R := ℂ) (A := ℂ)
+          eST.symm eST.symm eST.symm _ _).symm
+    rw [hReindexMul2, hFromBlocksMul, hReindexMul]
+  rw [hY₁Y₂]
+  calc
+    Umat * (Y₁ * Y₂) * Umatᴴ
+        = Umat * Y₁ * (Umatᴴ * Umat) * Y₂ * Umatᴴ := by
+          rw [hU'U]
+          simp [Matrix.mul_assoc]
+    _ = Umat * Y₁ * Umatᴴ * (Umat * Y₂ * Umatᴴ) := by
+          simp [Matrix.mul_assoc]
+
 /-- Shared corner-compression builder landing in `cornerSubmodule P`. -/
 noncomputable def cornerCompressionLinearMap
     {D n : ℕ} (P Pdiag Umat : MatrixAlg D)
