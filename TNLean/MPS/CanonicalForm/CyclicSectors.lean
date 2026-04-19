@@ -203,7 +203,8 @@ theorem exists_compressedTensor_of_supported_projection
   let B : MPSTensor d D := fun i => Umatᴴ * A i * Umat
   -- Algebra isomorphism for reindexing (renamed to avoid clashing with the
   -- returned `φ` below).
-  let rAlg : MatrixAlg D ≃ₐ[ℂ] Matrix (S ⊕ T) (S ⊕ T) ℂ := Matrix.reindexAlgEquiv ℂ ℂ eST
+  let rAlg : MatrixAlg D ≃ₐ[ℂ] Matrix (S ⊕ T) (S ⊕ T) ℂ :=
+    Matrix.reindexAlgEquiv ℂ ℂ eST
   let P0 : Matrix (S ⊕ T) (S ⊕ T) ℂ :=
     Matrix.fromBlocks (1 : Matrix S S ℂ) 0 0 (0 : Matrix T T ℂ)
   -- Pdiag in S⊕T basis
@@ -386,12 +387,13 @@ theorem exists_compressedTensor_of_supported_projection
       -- RHS of h1: P0 (inl s) (inl s') = 1 s s'
       -- h1 : (∑ x, fromBlocks((B11 x)† * B11 x, 0, 0, 0))(inl s)(inl s') = 1 s s'
       -- goal : (∑ i, (B11 i)† * B11 i) s s' = 1 s s'
-      exact congrFun (congrFun (show ∑ i : Fin d, (B11 i)ᴴ * B11 i = (1 : Matrix S S ℂ) from by
+      have hsumB11 : ∑ i : Fin d, (B11 i)ᴴ * B11 i = (1 : Matrix S S ℂ) := by
         ext s1 s2
         have h2 := congrFun (congrFun h (Sum.inl s1)) (Sum.inl s2)
         simp only [P0, Matrix.fromBlocks_apply₁₁, Matrix.sum_apply,
           Matrix.fromBlocks_apply₁₁] at h2
-        rwa [Matrix.sum_apply]) s) s'
+        rwa [Matrix.sum_apply]
+      exact congrFun (congrFun hsumB11 s) s'
     -- Transport to Fin n
     have hterm : ∀ i, (C i)ᴴ * C i = Matrix.reindex eS eS ((B11 i)ᴴ * B11 i) := by
       intro i
@@ -512,7 +514,7 @@ theorem exists_compressedTensor_of_supported_projection
     have htr_conj : Matrix.trace (Pdiag * evalWord B w) =
         Matrix.trace (P * evalWord A (List.ofFn σ)) := by
       have hEvalB := evalWord_conj_unitary A U (List.ofFn σ)
-      rw [show (fun i => (↑U : MatrixAlg D)ᴴ * A i * (↑U : MatrixAlg D)) = B from rfl] at hEvalB
+      change evalWord B (List.ofFn σ) = _ at hEvalB
       rw [hEvalB]
       change
         Matrix.trace (Umatᴴ * P * Umat * (Umatᴴ * evalWord A (List.ofFn σ) * Umat)) =
@@ -543,7 +545,8 @@ theorem exists_compressedTensor_of_supported_projection
     -- Abbreviations for readability.
     set M' : Matrix S S ℂ := Matrix.reindexLinearEquiv ℂ ℂ eS.symm eS.symm Z
     set F : Matrix (S ⊕ T) (S ⊕ T) ℂ :=
-      Matrix.fromBlocks M' (0 : Matrix S T ℂ) (0 : Matrix T S ℂ) (0 : Matrix T T ℂ) with hF_def
+      Matrix.fromBlocks M'
+        (0 : Matrix S T ℂ) (0 : Matrix T S ℂ) (0 : Matrix T T ℂ) with hF_def
     set G : MatrixAlg D := Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm F
     -- `expand Z = Umat * G * Umatᴴ`.
     have hexpand_Z : expand Z = Umat * G * Umatᴴ := hexpand_def Z

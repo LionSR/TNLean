@@ -162,7 +162,9 @@ theorem exists_tp_primitive_blockDecomp_after_blocking (A : MPSTensor d D) :
             mpv (toTensorFromBlocks (d := blockPhysDim d p) (μ := μ) blocks) σ) := by
   classical
   -- Step A: Get TP-gauged irreducible blocks from arbitrary input.
-  obtain ⟨zeroTailDim, r₀, dim₀, μ₀, blocks₀, hIrr₀, hTP₀, hμNe₀, hDim₀, hMPV₀⟩ :=
+  obtain
+      ⟨zeroTailDim, r₀, dim₀, μ₀, blocks₀, hIrr₀, hTP₀, hμNe₀,
+        hDim₀, hMPV₀⟩ :=
     exists_tp_gauge_from_arbitrary_with_zeroTail (d := d) (D := D) A
   -- Step B: Find a common blocking period making all transfer maps primitive.
   obtain ⟨P, hP, hPrim⟩ :=
@@ -457,7 +459,8 @@ with the PSD fixed point `ρ` of the original transfer map:
 1. From TP + IsPrimitive + IsIrreducibleTensor → `IsPrimitiveMPS A ρ` with `ρ.PosDef`
    (via `hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible` +
     `posDef_of_isIrreducibleTensor_of_isPrimitiveMPS`)
-2. `ρ` is also fixed by `transferMap (blockTensor A P)` (since `transferMap (blockTensor A P) = E^P`
+2. `ρ` is also fixed by `transferMap (blockTensor A P)`
+   (since `transferMap (blockTensor A P) = E^P`
    and `E ρ = ρ` implies `E^P ρ = ρ`)
 3. Uniqueness of PSD fixed points of `E^P`: if `E^P σ = σ`, set `σ' = σ - c•ρ`.
    From the spectral gap of `IsPrimitiveMPS A ρ`, `E^n → Pρ` exponentially.
