@@ -516,7 +516,8 @@ private lemma compressedTensor_adjointTransferMap_cornerBridge
       intro i _
       have hPBi : ((P * B i)ᴴ) = (B i)ᴴ * P := by
         rw [Matrix.conjTranspose_mul, hPherm]
-      rw [hPBi, Matrix.conjTranspose_mul, Matrix.conjTranspose_conjTranspose, hPherm]
+      simp only [Matrix.conjTranspose_conjTranspose]
+      rw [hPBi]
       calc
         (B i)ᴴ * P * Y * (P * B i)
             = (B i)ᴴ * (P * Y * P) * B i := by
