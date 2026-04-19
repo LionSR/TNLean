@@ -1354,6 +1354,24 @@ The following results separate the zero blocks from the
 	Lemma~\ref{lem:orbit_sum_full_sector}.
 \end{proof}
 
+\begin{theorem}[Sector irreducibility from the orbit-sum construction]%
+	\label{thm:sector_irred_fix_upgrade}
+	\lean{MPSTensor.isIrreducibleOnCorner_of_cyclic_decomp_mps_of_fixUpgrade}
+	\leanok
+	\uses{thm:sector_irred_orbit_lift, lem:orbit_sum_hLift_construction}
+	Let $A$ be a left-canonical MPS tensor with irreducible adjoint transfer
+	map, and let $(P_k)_{k=1}^m$ be cyclic orthogonal sector projections.
+	Assume the projection-step and fixed-point-upgrade hypotheses of
+	Lemma~\ref{lem:orbit_sum_hLift_construction}. Then $(\E_A^\dagger)^m$
+	is irreducible on each corner $P_k$.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:sector_irred_orbit_lift, lem:orbit_sum_hLift_construction}
+	Apply Lemma~\ref{lem:orbit_sum_hLift_construction} to obtain the orbit-sum
+	lift, then apply Theorem~\ref{thm:sector_irred_orbit_lift}.
+\end{proof}
+
 \section{Reduction to primitive blocks}%
 \label{sec:reduction_to_normal_form}
 
