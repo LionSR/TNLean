@@ -11,10 +11,11 @@ This file records the **fusion-isometry** side of the equivalence stated in
 arXiv:1606.00608 §4.5 (Cirac–Pérez-García–Schuch–Verstraete). In the notation
 of the paper, a fusion isometry at blocked size `n` is a pair of linear maps
 `T`, `S` between the physical space of `n` blocked sites and the corresponding
-support algebra of the tensor, whose composites are idempotents on the two
-sides. Iterated applications of `T` and `S` reproduce the doubled-tensor
-transfer-map dynamics underlying the provisional `MPOTensor.IsRFP` predicate
-in `TNLean/MPS/MPDO/RFP.lean`.
+support algebra of the tensor, with `T ∘ S = id` on the support algebra and
+`S ∘ T` the orthogonal projection onto its image in the physical space.
+Iterated applications of `T` and `S` reproduce the doubled-tensor transfer-map
+dynamics underlying the provisional `MPOTensor.IsRFP` predicate in
+`TNLean/MPS/MPDO/RFP.lean`.
 
 The development of the support-algebra API, blocked tensor powers, and
 trace-preserving completely positive blocking maps required for the full
@@ -101,8 +102,9 @@ identities of the paper as follows:
   on a genuine subspace.
 
 TODO (#611): tighten `support` to a `Submodule ℂ (Matrix …)` capturing
-the span of blocked operator matrix elements, and tighten `hST`/`hTSM` to
-the support-algebra identities of the paper. -/
+the span of blocked operator matrix elements, strengthen `hST` to the
+physical-space projection identity of the paper, and replace `hTSM` by the
+support-algebra identity `T ∘ S = id_{𝒜_n}`. -/
 structure FusionIsometry (d D n : ℕ) where
   /-- Forward fusion map `T_n` at blocked size `n`. -/
   T : FusionPhysicalSpace D →ₗ[ℂ] FusionSupportAlgebra D
@@ -115,7 +117,8 @@ structure FusionIsometry (d D n : ℕ) where
   /-- The composite `S ∘ₗ T` is idempotent on the physical space. Weaker
   than the paper's identity stating that `S ∘ T` is the orthogonal
   projection onto the image of `𝒜_n` in the physical space.
-  TODO (#611): strengthen to the support-algebra identity of the paper. -/
+  TODO (#611): strengthen to the physical-space projection identity of the
+  paper. -/
   hST : S ∘ₗ T ∘ₗ S ∘ₗ T = S ∘ₗ T
   /-- On every element satisfying `support`, the composite `T ∘ₗ S` is the
   identity. Weaker than the paper's identity `T ∘ S = id_{𝒜_n}` on a
