@@ -2,10 +2,13 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
+import Mathlib.Algebra.Module.Submodule.LinearMap
+import TNLean.MPS.Core.BlockingTransfer
+import TNLean.MPS.MPDO.PureRecovery
 import TNLean.MPS.MPDO.RFP
 
 /-!
-# Fusion-isometry formulation of the MPDO renormalization fixed point
+# Fusion-isometry formulations of the MPDO renormalization fixed point
 
 This file records the **fusion-isometry** side of the equivalence stated in
 arXiv:1606.00608 §4.5 (Cirac–Pérez-García–Schuch–Verstraete). In the notation
@@ -17,38 +20,47 @@ Iterated applications of `T` and `S` reproduce the doubled-tensor transfer-map
 dynamics underlying the provisional `MPOTensor.IsRFP` predicate in
 `TNLean/MPS/MPDO/RFP.lean`.
 
-The development of the support-algebra API, blocked tensor powers, and
-trace-preserving completely positive blocking maps required for the full
-statement is deferred. In the present formulation:
+Two layers coexist in this file.
 
-* the physical space at blocked size `n` and the support algebra at blocked
-  size `n` are both represented by `Matrix (Fin D) (Fin D) ℂ`, a stand-in for
-  the genuine objects;
-* the idempotence and compatibility conditions in `FusionIsometry` are stated
-  as general linear-algebraic hypotheses, weaker than the paper's identities
-  on a genuine support algebra;
-* `IsRFP_MPDO_via_fusion_scaffold` asserts the existence, at every blocked
-  size, of a fusion isometry related to the tensor `M` by the relation
-  `FusionIsometry.CompatibleWith`. The latter is currently the trivial
-  proposition `True`, so the predicate as a whole is satisfied by every
-  `M`. The `_scaffold` suffix marks the predicate to prevent its use in
-  nontrivial reasoning until the relation is tightened.
+1. **Provisional shell layer** (`FusionIsometry`, `FusionIsometry.CompatibleWith`,
+   `IsRFP_MPDO_via_fusion_scaffold`): kept for downstream compatibility. The
+   physical space at blocked size `n` and the support algebra at blocked size
+   `n` are both represented by `Matrix (Fin D) (Fin D) ℂ`, a stand-in for the
+   genuine objects; the compatibility predicate is currently the trivial
+   proposition `True`, so `IsRFP_MPDO_via_fusion_scaffold` as a whole is
+   satisfied by every `M`. The `_scaffold` suffix marks the predicate to
+   prevent its use in nontrivial reasoning until the relation is tightened.
+2. **Transfer-map-level layer** (`blockedTransferMap`, `FusionIsometryData`,
+   `IsRFP_MPDO_via_fusion`): formalizes the transfer-map content already
+   supported by the current repository. Here a fusion-isometry datum at
+   blocked size `n` is a retract factorization of the blocked transfer map
+   through a support subspace of bond-space matrices. Concretely, if `Eₙ`
+   denotes the blocked transfer map of `M`, then `FusionIsometryData M n`
+   packages a support subspace `𝒜ₙ`, a forward map `Tₙ : phys → 𝒜ₙ`, and a
+   backward map `Sₙ : 𝒜ₙ → phys` with `Tₙ ∘ Sₙ = id_{𝒜ₙ}` and `Sₙ ∘ Tₙ = Eₙ`.
+   The retract identity forces `Eₙ^2 = Eₙ`; conversely any idempotent blocked
+   transfer map factors through its range. This yields an honest equivalence
+   between the current provisional predicate `MPOTensor.IsRFP` and the
+   transfer-map-level fusion formulation.
 
 ## Main declarations
 
-* `FusionIsometry`: a pair `(T, S)` of linear maps at a fixed blocked size,
-  together with an idempotence condition for `S ∘ₗ T` and a pointwise
-  identity-on-support condition for `T ∘ₗ S`.
-* `FusionIsometry.CompatibleWith`: relation between a fusion isometry and an
-  MPO tensor, currently the trivial proposition `True`.
-* `IsRFP_MPDO_via_fusion_scaffold`: the provisional RFP predicate built from a
-  family of fusion isometries related to the tensor by `CompatibleWith`. The
-  `_scaffold` suffix marks that the relation `CompatibleWith` is currently
-  `True` and the predicate consequently vacuous.
+* Provisional shell declarations: `FusionIsometry`, `FusionIsometry.CompatibleWith`,
+  `IsRFP_MPDO_via_fusion_scaffold`.
+* `blockedTransferMap`: the transfer map of the `n`-site blocked doubled-index
+  MPS tensor.
+* `FusionIsometryData`: retract data whose characteristic identity is the
+  blocked transfer map.
+* `IsRFP_MPDO_via_fusion`: existence of such data for every positive blocked
+  size.
+* `isRFP_MPDO_via_fusion_iff_isRFP`: equivalence with the current provisional
+  MPDO RFP predicate.
+* `MPSTensor.toMPOTensor_isRFP_MPDO_via_fusion_iff_isRFP`: pure-state recovery
+  for the diagonal MPO embedding.
 
 ## References
 
-* [CPGSV17] arXiv:1606.00608, §4.5 and Appendix C.3
+* [CPGSV17] arXiv:1606.00608, §4.5 and Appendix C.4
   (Cirac–Pérez-García–Schuch–Verstraete, Ann. Phys. 378, 100–149).
 -/
 
@@ -75,8 +87,7 @@ stand-in. -/
 abbrev FusionSupportAlgebra (D : ℕ) : Type :=
   Matrix (Fin D) (Fin D) ℂ
 
-/-- A **fusion isometry** at blocked size `n` for an MPO tensor of bond
-dimension `D`.
+/-- A provisional fusion-isometry package at blocked size `n`.
 
 In arXiv:1606.00608 §4.5 the corresponding object is a pair of linear maps
 `T_n : (ℂ^d)^{⊗ n} → 𝒜_n` and `S_n : 𝒜_n → (ℂ^d)^{⊗ n}` realising a splitting
@@ -166,4 +177,185 @@ longer trivial. -/
 def IsRFP_MPDO_via_fusion_scaffold (M : MPOTensor d D) : Prop :=
   ∀ n : ℕ, ∃ F : FusionIsometry d D n, F.CompatibleWith M
 
+/-! ## Transfer-map-level fusion data -/
+
+/-- The blocked transfer map of an MPO tensor, obtained by viewing `M` as a
+Doubled-index MPS tensor and blocking `n` physical sites. -/
+noncomputable def blockedTransferMap (M : MPOTensor d D) (n : ℕ) :
+    FusionPhysicalSpace D →ₗ[ℂ] FusionPhysicalSpace D :=
+  MPSTensor.transferMap
+    (d := MPSTensor.blockPhysDim (d * d) n) (D := D)
+    (MPSTensor.blockTensor (d := d * d) (D := D) M.toMPSTensor n)
+
+/-- Blocking an MPO tensor in the doubled-index MPS picture raises the transfer
+map to the corresponding power. -/
+@[simp] theorem blockedTransferMap_eq_pow (M : MPOTensor d D) (n : ℕ) :
+    blockedTransferMap M n = (transferMap M) ^ n := by
+  simpa [blockedTransferMap] using
+    (MPSTensor.transferMap_blockTensor (A := M.toMPSTensor) (L := n))
+
+/-- At blocked size `1`, the blocked transfer map is the original transfer map. -/
+@[simp] theorem blockedTransferMap_one (M : MPOTensor d D) :
+    blockedTransferMap M 1 = transferMap M := by
+  rw [blockedTransferMap_eq_pow (M := M), pow_one]
+
+/-- Transfer-map-level fusion-isometry data at blocked size `n`.
+
+This is the part of the paper's fusion-isometry picture that can already be
+expressed with the current infrastructure: a support subspace of bond-space
+matrices together with a retract whose characteristic map is the blocked
+transfer map. The actual Hilbert-space isometry statement is deferred until the
+support-algebra API is available. -/
+structure FusionIsometryData (M : MPOTensor d D) (n : ℕ) where
+  /-- The support subspace through which the blocked transfer map factors. -/
+  supportAlgebra : Submodule ℂ (FusionPhysicalSpace D)
+  /-- Forward map `T_n : phys → 𝒜_n`. -/
+  T : FusionPhysicalSpace D →ₗ[ℂ] supportAlgebra
+  /-- Backward map `S_n : 𝒜_n → phys`. -/
+  S : supportAlgebra →ₗ[ℂ] FusionPhysicalSpace D
+  /-- The retract identity `T_n ∘ S_n = id_{𝒜_n}`. -/
+  hTS : T ∘ₗ S = LinearMap.id
+  /-- The characteristic identity `S_n ∘ T_n = E_n` for the blocked transfer
+  map `E_n`. -/
+  hST : S ∘ₗ T = blockedTransferMap M n
+
+namespace FusionIsometryData
+
+variable {M : MPOTensor d D} {n : ℕ}
+
+/-- Any transfer-map-level fusion-isometry datum forces the blocked transfer map
+at the same size to be idempotent. -/
+theorem blockedTransferMap_idempotent (F : FusionIsometryData M n) :
+    blockedTransferMap M n ∘ₗ blockedTransferMap M n = blockedTransferMap M n := by
+  calc
+    blockedTransferMap M n ∘ₗ blockedTransferMap M n
+        = (F.S ∘ₗ F.T) ∘ₗ (F.S ∘ₗ F.T) := by rw [F.hST]
+    _ = F.S ∘ₗ (F.T ∘ₗ F.S) ∘ₗ F.T := by simp [LinearMap.comp_assoc]
+    _ = F.S ∘ₗ LinearMap.id ∘ₗ F.T := by rw [F.hTS]
+    _ = F.S ∘ₗ F.T := by simp
+    _ = blockedTransferMap M n := F.hST
+
+/-- An idempotent blocked transfer map yields a canonical fusion-isometry datum
+by factoring through its range. -/
+noncomputable def ofBlockedTransferMapIdempotent
+    (hE : blockedTransferMap M n ∘ₗ blockedTransferMap M n = blockedTransferMap M n) :
+    FusionIsometryData M n where
+  supportAlgebra := (blockedTransferMap M n).range
+  T := LinearMap.codRestrict (blockedTransferMap M n).range (blockedTransferMap M n)
+    (fun x => by exact ⟨x, rfl⟩)
+  S := (blockedTransferMap M n).range.subtype
+  hTS := by
+    apply LinearMap.ext
+    intro x
+    rcases x with ⟨x, hx⟩
+    rcases hx with ⟨y, rfl⟩
+    apply Subtype.ext
+    change blockedTransferMap M n (blockedTransferMap M n y) = blockedTransferMap M n y
+    simpa [LinearMap.comp_apply] using congrArg (fun f => f y) hE
+  hST := by
+    exact LinearMap.subtype_comp_codRestrict
+      (blockedTransferMap M n)
+      (blockedTransferMap M n).range
+      (fun x => by exact ⟨x, rfl⟩)
+
+/-- A level-`1` fusion-isometry datum implies the provisional MPDO RFP
+condition. -/
+theorem isRFP (F : FusionIsometryData M 1) : IsRFP M := by
+  simpa [IsRFP] using F.blockedTransferMap_idempotent
+
+end FusionIsometryData
+
+private theorem pow_succ_eq_self_of_idempotent
+    {V : Type*} [AddCommMonoid V] [Module ℂ V] (E : V →ₗ[ℂ] V)
+    (hE : E * E = E) :
+    ∀ n : ℕ, E ^ (n + 1) = E
+  | 0 => by simp
+  | k + 1 => by
+      calc
+        E ^ ((k + 1) + 1) = E ^ (k + 1) * E := by rw [pow_succ]
+        _ = E * E := by rw [pow_succ_eq_self_of_idempotent E hE k]
+        _ = E := hE
+
+/-- If `M` is already an MPDO renormalization fixed point, then every positive
+blocked transfer map coincides with the original transfer map. -/
+theorem blockedTransferMap_eq_transferMap_of_isRFP {M : MPOTensor d D}
+    (hM : IsRFP M) {n : ℕ} (hn : 0 < n) :
+    blockedTransferMap M n = transferMap M := by
+  rcases Nat.exists_eq_succ_of_ne_zero (Nat.ne_of_gt hn) with ⟨k, rfl⟩
+  rw [blockedTransferMap_eq_pow]
+  have hM' : transferMap M ∘ₗ transferMap M = transferMap M := hM
+  have hIdem : transferMap M * transferMap M = transferMap M := by
+    apply LinearMap.ext
+    intro X
+    simpa [LinearMap.comp_apply] using congrArg (fun f => f X) hM'
+  exact pow_succ_eq_self_of_idempotent (transferMap M) hIdem k
+
+/-- Under the provisional MPDO RFP condition, every positive blocked transfer
+map is idempotent. -/
+theorem blockedTransferMap_idempotent_of_isRFP {M : MPOTensor d D}
+    (hM : IsRFP M) {n : ℕ} (hn : 0 < n) :
+    blockedTransferMap M n ∘ₗ blockedTransferMap M n = blockedTransferMap M n := by
+  have hEq : blockedTransferMap M n = transferMap M :=
+    blockedTransferMap_eq_transferMap_of_isRFP hM hn
+  have hComp : blockedTransferMap M n ∘ₗ blockedTransferMap M n =
+      transferMap M ∘ₗ transferMap M := by
+    simpa using congrArg (fun f => f ∘ₗ f) hEq
+  calc
+    blockedTransferMap M n ∘ₗ blockedTransferMap M n = transferMap M ∘ₗ transferMap M := hComp
+    _ = transferMap M := hM
+    _ = blockedTransferMap M n := hEq.symm
+
+/-- Transfer-map-level fusion-isometry formulation of the provisional MPDO RFP
+condition.
+
+For every positive blocked size `n`, the blocked transfer map of `M` factors as
+`S_n ∘ T_n` through some support subspace `𝒜_n`, with `T_n ∘ S_n = id_{𝒜_n}`. -/
+def IsRFP_MPDO_via_fusion (M : MPOTensor d D) : Prop :=
+  ∀ n : ℕ, 0 < n → Nonempty (FusionIsometryData M n)
+
+/-- The transfer-map-level fusion formulation implies the provisional MPDO RFP
+condition. -/
+theorem isRFP_of_isRFP_MPDO_via_fusion {M : MPOTensor d D}
+    (hM : IsRFP_MPDO_via_fusion M) : IsRFP M := by
+  obtain ⟨F⟩ := hM 1 Nat.one_pos
+  exact F.isRFP
+
+/-- An MPDO renormalization fixed point admits transfer-map-level fusion data
+at every positive blocking size. -/
+theorem isRFP_MPDO_via_fusion_of_isRFP {M : MPOTensor d D}
+    (hM : IsRFP M) : IsRFP_MPDO_via_fusion M := by
+  intro n hn
+  exact ⟨FusionIsometryData.ofBlockedTransferMapIdempotent
+    (M := M)
+    (n := n)
+    (blockedTransferMap_idempotent_of_isRFP hM hn)⟩
+
+/-- Transfer-map-level fusion data is equivalent to the current provisional
+mixed-state RFP predicate. -/
+theorem isRFP_MPDO_via_fusion_iff_isRFP (M : MPOTensor d D) :
+    IsRFP_MPDO_via_fusion M ↔ IsRFP M := by
+  constructor
+  · exact isRFP_of_isRFP_MPDO_via_fusion
+  · exact isRFP_MPDO_via_fusion_of_isRFP
+
+/-- The transfer-map-level fusion formulation agrees with the pure-state RFP
+condition for the doubled-index MPS tensor. -/
+theorem isRFP_MPDO_via_fusion_iff_toMPSTensor_isRFP (M : MPOTensor d D) :
+    IsRFP_MPDO_via_fusion M ↔ MPSTensor.IsRFP M.toMPSTensor := by
+  rw [isRFP_MPDO_via_fusion_iff_isRFP, isRFP_iff_toMPSTensor_isRFP]
+
 end MPOTensor
+
+namespace MPSTensor
+
+open MPOTensor
+
+variable {d D : ℕ}
+
+/-- For a pure MPS embedded diagonally as an MPO, the transfer-map-level
+fusion formulation recovers the original pure-state RFP condition. -/
+theorem toMPOTensor_isRFP_MPDO_via_fusion_iff_isRFP (A : MPSTensor d D) :
+    MPOTensor.IsRFP_MPDO_via_fusion A.toMPOTensor ↔ IsRFP A := by
+  rw [MPOTensor.isRFP_MPDO_via_fusion_iff_isRFP, toMPOTensor_isRFP_iff_isRFP]
+
+end MPSTensor

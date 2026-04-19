@@ -489,41 +489,83 @@ legs cyclically and taking the resulting trace.
 
 \section{\S4.5 Fusion isometries}
 
-Following \cite[\S4.5]{Cirac2017MPDO_AnnPhys}, Theorem~IV.13 characterises
-renormalization-fixed-point MPDOs through two equivalent structures: a family
-of fusion isometries splitting the support algebra at every blocking size, and
-a tower of support algebras equipped with compatible blocking and inclusion
-maps. The next two sections record these structures and their compatibility
-predicates with an MPO tensor.
+Following \cite[\S4.5]{Cirac2017MPDO_AnnPhys}, the current Lean development
+formalizes the transfer-map content of the fusion-isometry picture.
+For each blocked size $n \ge 1$, the doubled-index blocked tensor of an MPO
+has a blocked transfer map $E_n$ acting on bond-space matrices, and the
+support algebra is modeled by a subspace through which $E_n$ factors as a
+retract.
 
-\begin{definition}[Fusion isometry at blocked size]%
+\begin{definition}[Transfer-map fusion-isometry datum]%
     \label{def:mpdo_fusion_isometry}
-    \lean{MPOTensor.FusionIsometry}
+    \lean{MPOTensor.FusionIsometryData}
     \leanok
     \uses{def:mpo_tensor}
-    A \emph{fusion isometry at blocked size $n$} for an MPO tensor consists
-    of a pair of linear maps $(T_n, S_n)$ between the physical space at $n$
-    blocked sites and the support algebra at that size, a predicate
-    $\operatorname{supp}$ cutting out the image subspace of the algebra, and
-    two compatibility conditions: $S_n \circ T_n$ is idempotent on the
-    physical space, and $T_n \circ S_n$ acts as the identity on every element
-    satisfying $\operatorname{supp}$.
+    A \emph{transfer-map fusion-isometry datum} at blocked size $n$ for an
+    MPO tensor consists of a subspace $\mathcal{A}_n \subseteq M_D(\mathbb{C})$
+    together with linear maps
+    $$T_n : M_D(\mathbb{C}) \to \mathcal{A}_n, \qquad
+      S_n : \mathcal{A}_n \to M_D(\mathbb{C})$$
+    such that
+    $$T_n \circ S_n = \operatorname{id}_{\mathcal{A}_n},
+      \qquad S_n \circ T_n = E_n,$$
+    where $E_n$ denotes the blocked transfer map.
 \end{definition}
 
-\begin{definition}[Fusion-isometry RFP predicate (provisional)]%
+\begin{definition}[Fusion-isometry RFP predicate]%
     \label{def:mpdo_rfp_via_fusion}
-    \lean{MPOTensor.IsRFP_MPDO_via_fusion_scaffold}
+    \lean{MPOTensor.IsRFP_MPDO_via_fusion}
+    \leanok
     \uses{def:mpdo_fusion_isometry, def:mpo_tensor}
-    An MPO tensor $M$ satisfies the \emph{fusion-isometry formulation} of
-    the renormalization fixed-point condition when, for every blocked size
-    $n$, there exists a fusion isometry at size $n$ compatible with $M$.
-    The compatibility relation between a fusion isometry and~$M$ is, in this
-    provisional formulation, the trivial relation that holds for every
-    pair; consequently the predicate above holds vacuously of every MPO
-    tensor. The exact compatibility condition of
-    \cite[\S4.5]{Cirac2017MPDO_AnnPhys} is to be substituted in place of
-    the trivial relation in subsequent work.
+    An MPO tensor $M$ satisfies the \emph{fusion-isometry formulation} of the
+    renormalization fixed-point condition when for every blocked size $n \ge 1$
+    there exists transfer-map fusion-isometry data for the blocked transfer
+    map $E_n$.
 \end{definition}
+
+\begin{theorem}[Fusion-isometry data imply the provisional MPDO RFP condition]%
+    \label{thm:mpdo_rfp_of_fusion}
+    \lean{MPOTensor.isRFP_of_isRFP_MPDO_via_fusion}
+    \leanok
+    \uses{def:mpdo_rfp_via_fusion}
+    The fusion-isometry formulation implies the current predicate
+    \lean{MPOTensor.IsRFP}.
+\end{theorem}
+\begin{proof}\leanok
+Apply the definition at blocked size $n = 1$.
+If $E_1 = S_1 \circ T_1$ and $T_1 \circ S_1 = \operatorname{id}$, then
+$$E_1^2 = S_1 T_1 S_1 T_1 = S_1 (T_1 S_1) T_1 = S_1 T_1 = E_1.$$
+Since $E_1$ is the original transfer map, this is exactly
+\lean{MPOTensor.IsRFP}.
+\end{proof}
+
+\begin{theorem}[Transfer-map fusion criterion for MPDO RFP]%
+    \label{thm:mpdo_rfp_via_fusion_iff}
+    \lean{MPOTensor.isRFP_MPDO_via_fusion_iff_isRFP}
+    \leanok
+    \uses{def:mpdo_rfp_via_fusion}
+    The fusion-isometry formulation is equivalent to
+    \lean{MPOTensor.IsRFP}.
+\end{theorem}
+\begin{proof}\leanok
+The forward implication is Theorem~\ref{thm:mpdo_rfp_of_fusion}.
+Conversely, if the transfer map $E$ is idempotent, then every positive blocked
+transfer map equals $E$ and therefore factors through its range.
+This range-factorization gives the required fusion-isometry data.
+\end{proof}
+
+\begin{corollary}[Pure-state recovery]%
+    \label{cor:mpdo_fusion_pure_recovery}
+    \lean{MPSTensor.toMPOTensor_isRFP_MPDO_via_fusion_iff_isRFP}
+    \leanok
+    \uses{thm:mpdo_rfp_via_fusion_iff}
+    For the diagonal MPO associated to a pure MPS tensor, the fusion-isometry
+    formulation reduces to the usual pure-state RFP condition.
+\end{corollary}
+\begin{proof}\leanok
+Combine Theorem~\ref{thm:mpdo_rfp_via_fusion_iff} with the diagonal pure-state
+recovery theorem for the provisional MPO predicate.
+\end{proof}
 
 \section{\S4.5 Algebra structure}
 
