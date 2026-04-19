@@ -52,7 +52,7 @@ private lemma IsChannel.iter_mem_densityMatrices
     (hE : IsChannel E) {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hρ : ρ ∈ densityMatrices D) (n : ℕ) : (E ^ n) ρ ∈ densityMatrices D := by
   induction n with
-  | zero => simpa [pow_zero] using hρ
+  | zero => simpa only [pow_zero] using hρ
   | succ n ih =>
       change (E ^ (n + 1)) ρ ∈ densityMatrices D
       rw [pow_succ']
@@ -141,7 +141,7 @@ theorem IsChannel.exists_unique_density_fixedPoint_of_irreducible
     densityMatrices_isCompact.tendsto_subseq hces_mem
   have hσ_lim : σ ∈ densityMatrices D ∧ E σ = σ :=
     IsChannel.cesaroMean_subseq_limit_fixedPoint (E := E) hE hρ₀
-      hφ_mono.tendsto_atTop (by simpa [Function.comp] using hφ_tendsto)
+      hφ_mono.tendsto_atTop (by simpa only [Function.comp] using hφ_tendsto)
   have hσ_mem : σ ∈ densityMatrices D := hσ_lim.1
   have hσ_fix : E σ = σ := hσ_lim.2
   have hσ_ne : σ ≠ 0 := ne_zero_of_mem_densityMatrices (D := D) hσ_mem
@@ -186,7 +186,7 @@ theorem IsChannel.cesaroMean_tendsto_of_irreducible
       hns.comp hφ_mono.tendsto_atTop
     have ha_lim : a ∈ densityMatrices D ∧ E a = a :=
       IsChannel.cesaroMean_subseq_limit_fixedPoint (E := E) hE hρ hψ_tendsto
-        (by simpa [Function.comp] using hφ_tendsto)
+        (by simpa only [Function.comp] using hφ_tendsto)
     have ha_eq : a = σ := hσ_unique a ha_lim.1 ha_lim.2
     exact ⟨φ, by simpa [Function.comp, ha_eq] using hφ_tendsto⟩
   exact ⟨σ, hσ_mem, hσ_pd, hσ_fix, hσ_unique, h_tendsto⟩

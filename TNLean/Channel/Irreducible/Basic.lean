@@ -43,11 +43,11 @@ def IsOrthogonalProjection (P : Matrix (Fin D) (Fin D) ℂ) : Prop :=
 
 /-- The zero matrix is an orthogonal projection. -/
 lemma isOrthogonalProjection_zero : IsOrthogonalProjection (0 : Matrix (Fin D) (Fin D) ℂ) :=
-  ⟨Matrix.isHermitian_zero, by simp⟩
+  ⟨Matrix.isHermitian_zero, by simp only [Matrix.zero_mul]⟩
 
 /-- The identity matrix is an orthogonal projection. -/
 lemma isOrthogonalProjection_one : IsOrthogonalProjection (1 : Matrix (Fin D) (Fin D) ℂ) :=
-  ⟨Matrix.isHermitian_one, by simp⟩
+  ⟨Matrix.isHermitian_one, by simp only [Matrix.one_mul]⟩
 
 /-- An orthogonal projection is positive semidefinite. -/
 theorem isOrthogonalProjection_posSemidef {P : Matrix (Fin D) (Fin D) ℂ}
@@ -152,7 +152,7 @@ lemma eq_zero_of_sum_mul_conjTranspose_eq_zero {ι : Type*} [Fintype ι]
     intro k c
     have h_diag_eq : ∑ k' : ι, (B k' * (B k')ᴴ) c c = 0 := by
       have := congr_fun (congr_fun h c) c
-      simpa [Matrix.sum_apply, Matrix.zero_apply] using this
+      simpa only [Matrix.sum_apply, Matrix.zero_apply] using this
     simp_rw [diagonal_mul_conjTranspose_eq_normSq_sum] at h_diag_eq ⊢
     have h_nonneg : ∀ k', (0 : ℝ) ≤ ∑ x, Complex.normSq (B k' c x) :=
       fun k' => Finset.sum_nonneg (fun x _ => Complex.normSq_nonneg _)
