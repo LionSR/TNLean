@@ -16,17 +16,19 @@ open Filter
 # Equal-norm connection: from BNT properties to BNT grouping hypotheses
 
 This file relates the BNT overlap/spectral theory to the
-BNT grouping theorem (`exists_bnt_grouping`), which requires `hDimEq` and `hMPVEq`
+BNT grouping theorem (`exists_bnt_grouping`), which requires `hMPVEq`
 for equal-norm blocks.
 
 ## Background (Issue #243)
 
 The existence reduction chain (`Assembly.lean`) produces TP + primitive blocks with
 nonzero weights.  The BNT grouping theorem groups blocks by weight norm into a
-`SectorDecomposition`, but requires two hypotheses for equal-norm blocks:
+`SectorDecomposition`, and requires one hypothesis for equal-norm blocks:
 
-* `hDimEq`: equal-norm blocks have the same bond dimension.
 * `hMPVEq`: equal-norm blocks have `SameMPV₂`.
+
+The grouped sector's bond dimension is fixed by the chosen representative of each
+norm class, so no separate equal-dimension hypothesis is needed.
 
 ## Strategy: gauge-phase-aware BNT grouping
 
