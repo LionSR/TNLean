@@ -23,7 +23,7 @@ The development of the C*-algebraic API required for the full statement is
 deferred. This file records the **shape** of the data as a plain Lean
 structure, uses `Prop`-valued provisional conditions, and names the
 relation to a given MPO tensor through `AlgebraStructureData.CompatibleWith`.
-Each provisional choice is flagged with a `-- TODO (#612)` comment citing
+Each provisional choice is flagged with a `TODO (#612)` comment citing
 the corresponding paper reference.
 
 ## Main declarations
@@ -52,7 +52,7 @@ variable {d D : ℕ}
 
 /-- The *support algebra at size `n`*.
 
--- TODO (#612): replace with a `Subalgebra ℂ (Matrix (Fin D^n) (Fin D^n) ℂ)`
+TODO (#612): replace with a `Subalgebra ℂ (Matrix (Fin D^n) (Fin D^n) ℂ)`
 cut out by the span of operator matrix elements at size `n`, matching `𝒜_n`
 from Theorem IV.13. The current definition uses `Matrix (Fin D) (Fin D) ℂ` as
 a stand-in for every `n`. -/
@@ -76,23 +76,23 @@ In the present formulation the support algebra at every size is represented
 by `SupportAlgebra D n = Matrix (Fin D) (Fin D) ℂ`; the multiplication and
 inclusion fields are typed against this stand-in.
 
--- TODO (#612): tighten fields to `Subalgebra`/`AlgHom` types and install
+TODO (#612): tighten fields to `Subalgebra`/`AlgHom` types and install
 the coherence hypotheses of Theorem IV.13. -/
 structure AlgebraStructureData (d D : ℕ) where
   /-- Multiplication / blocking map at each size `n`.
 
-  -- TODO (#612): upgrade to a linear map `A n ⊗ A n →ₗ[ℂ] A (2 * n)` once
+  TODO (#612): upgrade to a linear map `A n ⊗ A n →ₗ[ℂ] A (2 * n)` once
   the support algebras are genuine subalgebras. -/
   m : ∀ n : ℕ,
     SupportAlgebra D n →ₗ[ℂ] SupportAlgebra D n →ₗ[ℂ] SupportAlgebra D (2 * n)
   /-- Unital inclusion at each size `n`.
 
-  -- TODO (#612): upgrade to an `AlgHom` once the support algebras are
+  TODO (#612): upgrade to an `AlgHom` once the support algebras are
   genuine subalgebras. -/
   iota : ∀ n : ℕ, SupportAlgebra D n →ₗ[ℂ] SupportAlgebra D (n + 1)
   /-- Coherence relation between blocking at consecutive sizes.
 
-  -- TODO (#612): replace by the associativity/compatibility condition of
+  TODO (#612): replace by the associativity/compatibility condition of
   §4.5, in particular the condition that `m_n` and `iota_n` satisfy the
   diagram implicit in equation (29) of the paper. -/
   coherence : Prop
@@ -108,7 +108,7 @@ variable {d D : ℕ}
 carried by `data` match the BNT decomposition of `M`, following
 Theorem IV.13 (ii) of arXiv:1606.00608. The present definition is the trivial
 proposition `True`, which is satisfied by every pair `(data, M)`.
--- TODO (#612): replace by the compatibility condition relating
+TODO (#612): replace by the compatibility condition relating
 `c_{αβγ}^{(L)}` to the BNT decomposition of `M`. -/
 def CompatibleWith (_data : AlgebraStructureData d D) (_M : MPOTensor d D) :
     Prop :=
@@ -131,7 +131,7 @@ zero multiplication, zero inclusion, and `coherence := True`). The predicate
 is consequently satisfied by every `M`, and must not be used as a hypothesis
 or conclusion of any nontrivial result until the relation is tightened.
 
--- TODO (#612): replace `AlgebraStructureData.CompatibleWith` with the
+TODO (#612): replace `AlgebraStructureData.CompatibleWith` with the
 compatibility condition between `M` and the data, following
 Theorem IV.13 (ii): the structure coefficients `c_{αβγ}^{(L)}` of the algebra
 associated to `data` must match the BNT decomposition of `M`. Drop the
