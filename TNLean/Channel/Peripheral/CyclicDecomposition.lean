@@ -169,7 +169,7 @@ lemma cornerCompressionExpand_mem
     _ = Umat * Y_D * Umatᴴ := by rw [hPdiag_Y]
 
 /-- Conjugate-transpose intertwining for the shared corner-compression map:
-`expand Mᴴ = (expand M)ᴴ`. This is the star-preservation identity of the
+`(expand M)ᴴ = expand Mᴴ`. This is the star-preservation identity of the
 compression isometry; together with `cornerCompressionExpand_mul` it makes the
 image of the compression a ∗-subalgebra of the ambient corner. -/
 lemma cornerCompressionExpand_conjTranspose

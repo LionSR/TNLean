@@ -461,20 +461,20 @@ private lemma cornerRestriction_primitive_and_irreducible_of_cyclicDecomp
       hIrr P hPproj hPsum (by simpa [T] using hCyclic) (by simpa [T] using hLift) u
   exact ⟨hInv, by simpa [T] using hCornerPrim, by simpa [T] using hCornerIrr⟩
 
-/-- **Missing compression-transfer bridge.**
+/-- **Compression-transfer bridge.**
 
-This is the precise local API needed from
-`exists_compressedTensor_of_supported_projection`: if `C` is the sector tensor
-obtained by compressing a `P`-supported tensor `B`, then the adjoint transfer
-map of `C` is the matrix representative of the corner restriction of the
-ambient adjoint transfer map of `B`.
+Given a `∗`-algebra compression equivalence `φ : M_n(ℂ) ≃ₗ[ℂ] cornerSubmodule P`
+intertwining the compressed adjoint transfer map (of `C`) with the
+`P·B`-adjoint transfer map on the corner (`hIntertwine`), and preserving both
+multiplication (`hMul`) and the adjoint (`hStar`), primitivity and
+irreducibility of the corner restriction of the ambient `T = transferMap Bᴴ`
+transport to primitivity and irreducibility of `transferMap Cᴴ`.
 
-The current compression theorem exposes only the trace identity
-`mpv C = tr(P · word(B))`.  The proof of this lemma should expose the
-spectral compression isometry used in `CyclicSectors.lean` and show that it
-intertwines the two adjoint transfer maps; irreducibility then follows because
-that isometry identifies orthogonal projections in `M_n(ℂ)` with orthogonal
-subprojections of `P`.
+The proof uses `hMul` / `hStar` to lift orthogonal projections on
+`M_n(ℂ)` to corner projections `Q = (φ Q').1 ≤ P`, transports
+`PreservesCorner` across `φ` via the intertwining identity, and applies
+`IsPrimitive.conj_iff_cross` to move primitivity across the cross-space
+conjugation `cornerRestriction P T = φ.conj (transferMap Cᴴ)`.
 -/
 private lemma compressedTensor_adjointTransferMap_cornerBridge
     {r D n : ℕ} [NeZero n]
@@ -484,10 +484,6 @@ private lemma compressedTensor_adjointTransferMap_cornerBridge
     (hT :
       transferMap (d := r) (D := D) (fun i => (B i)ᴴ) = T)
     (hPproj : IsOrthogonalProjection P)
-    (_hComm : ∀ i : Fin r, P * B i = B i * P)
-    (_hTrace :
-      ∀ (N : ℕ) (σ : Fin N → Fin r),
-        mpv C σ = (P * evalWord B (List.ofFn σ)).trace)
     (hIntertwine : ∀ X : Matrix (Fin n) (Fin n) ℂ,
       (φ (transferMap (d := r) (D := n) (fun i => (C i)ᴴ) X)).1 =
         transferMap (d := r) (D := D) (fun i => (P * B i)ᴴ) ((φ X).1))
@@ -648,14 +644,16 @@ private lemma compressedTensor_adjointTransferMap_cornerBridge
       exact hQP_eq
   exact ⟨hPrim_F_C, hIrr⟩
 
-/-- The missing compressed-sector identification.
+/-- **Per-sector compressed-block bridge.**
 
-For a cyclic sector decomposition, the adjoint transfer map of the compressed
-block `blocks u` should be linearly conjugate to the corner restriction of the
-ambient `m`-step adjoint transfer map on `P u · M_D(ℂ) · P u`. We only expose
-the transported primitive and irreducible consequences here; the explicit
-conjugating linear equivalence is not needed by the current callers and is
-expensive for Lean to elaborate as part of a `sorry` placeholder. -/
+For a cyclic sector decomposition with per-sector `∗`-algebra compression
+equivalences `φ k : M_{dim k}(ℂ) ≃ₗ[ℂ] cornerSubmodule (P k)` that are
+multiplicative (`hMul`), `∗`-preserving (`hStar`), and intertwine the
+compressed adjoint transfer map with the `P k · blockTensor`-adjoint transfer
+map on the corner (`hIntertwine`): primitivity and irreducibility on the
+corner of `P u` (for the ambient `m`-step adjoint transfer map
+`(transferMap Aᴴ) ^ m`) transport along `φ u` to primitivity and
+irreducibility of the compressed block `blocks u`. -/
 private lemma compressedSector_adjointTransferMap_cornerBridge_of_cyclicDecomp
     [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
     {dim : Fin m → ℕ}
@@ -665,12 +663,6 @@ private lemma compressedSector_adjointTransferMap_cornerBridge_of_cyclicDecomp
     {φ : (k : Fin m) →
       Matrix (Fin (dim k)) (Fin (dim k)) ℂ ≃ₗ[ℂ] cornerSubmodule (P k)}
     (hPproj : ∀ k, IsOrthogonalProjection (P k))
-    (hComm :
-      ∀ k (i : Fin (blockPhysDim d m)),
-        P k * (blockTensor A m) i = (blockTensor A m) i * P k)
-    (hTrace :
-      ∀ k (N : ℕ) (σ : Fin N → Fin (blockPhysDim d m)),
-        mpv (blocks k) σ = (P k * evalWord (blockTensor A m) (List.ofFn σ)).trace)
     (hIntertwine :
       ∀ k (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
         (φ k (transferMap (d := blockPhysDim d m) (D := dim k)
@@ -712,7 +704,7 @@ private lemma compressedSector_adjointTransferMap_cornerBridge_of_cyclicDecomp
   exact
     compressedTensor_adjointTransferMap_cornerBridge
       (B := blockTensor A m) (C := blocks u) (P := P u) (T := T) (φ := φ u)
-      hT (hPproj u) (hComm u) (hTrace u) (hIntertwine u) (hMul u) (hStar u)
+      hT (hPproj u) (hIntertwine u) (hMul u) (hStar u)
       hInv hCornerPrim hCornerIrr
 
 private lemma adjointTransferMap_primitive_and_irreducible_sectorBlock_of_cyclicDecomp
@@ -741,7 +733,7 @@ private lemma adjointTransferMap_primitive_and_irreducible_sectorBlock_of_cyclic
       A hP blocks hBlocks_lc hBlocks_mpv hPproj hPsum hCyclicP hComm hTrace u hNonzero
   exact
     compressedSector_adjointTransferMap_cornerBridge_of_cyclicDecomp
-      A blocks (φ := φ) hPproj hComm hTrace hIntertwine hMul hStar u hNonzero
+      A blocks (φ := φ) hPproj hIntertwine hMul hStar u hNonzero
       hInv hCornerPrim hCornerIrr
 
 /-- **Structural bridge** for Case 3 of Proposition 3.3 (arXiv:1708.00029):

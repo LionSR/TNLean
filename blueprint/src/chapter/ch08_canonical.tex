@@ -1037,15 +1037,18 @@ The following results separate the zero blocks from the
 	$\sum_i (A^i)^\dagger A^i = P$ for an orthogonal projection $P$,
 	and suppose $P A^i P = A^i$ for every~$i$.
 	Then there exist a left-canonical tensor $C$ of bond dimension
-	$n = \tr(P)$ and a linear equivalence
-	$\varphi : M_n(\mathbb{C}) \xrightarrow{\sim} P \cdot M_D(\mathbb{C}) \cdot P$ with
+	$n = \tr(P)$ and a $\ast$-algebra isomorphism
+	$\varphi : M_n(\mathbb{C}) \xrightarrow{\sim} P \cdot M_D(\mathbb{C}) \cdot P$
+	(preserving both multiplication and adjoint) with
 	\[
 		V^{(N)}(C)_\sigma = \tr\!\bigl(P \cdot A^\sigma\bigr),
 		\qquad
 		\varphi\!\bigl(\E_{C^\dagger}(X)\bigr)
 			= \E_{A^\dagger}\!\bigl(\varphi(X)\bigr)
 	\]
-	for every~$\sigma$ and every $X \in M_n(\mathbb{C})$.
+	for every~$\sigma$ and every $X \in M_n(\mathbb{C})$, together with
+	$\varphi(XY) = \varphi(X)\varphi(Y)$ and
+	$\varphi(X^\dagger) = \varphi(X)^\dagger$.
 \end{theorem}
 
 \begin{proof}\leanok
