@@ -240,7 +240,7 @@ theorem preserves_corner_pow_period (M : MultiCycleDecomposition T)
   intro X
   have hmk : (T ^ M.period c) (M.P c k * X * M.P c k) =
       M.P c k * ((T ^ M.period c) X) * M.P c k := by
-    simpa using hstep (M.period c) k X
+    simpa only [shiftIndex_period] using hstep (M.period c) k X
   calc
     M.P c k * (T ^ M.period c) (M.P c k * X * M.P c k) * M.P c k
         = M.P c k * (M.P c k * ((T ^ M.period c) X) * M.P c k) * M.P c k := by rw [hmk]
