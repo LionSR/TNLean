@@ -232,7 +232,7 @@ lemma exists_nondecaying_overlap_of_sameMPV₂_CFBNT
     have hall_inner : ∀ j, Tendsto (fun N => mpvInner (d := d) (B b0) (A j) N)
         atTop (nhds 0) := by
       intro j
-      simpa using tendsto_inner_zero_swap (d := d) (A j) (B b0) (hall j)
+      exact tendsto_inner_zero_swap (d := d) (A j) (B b0) (hall j)
     have h_eq := normalized_identity (B b0) (μB b0) hμB_ne
     have hLHS : Tendsto (fun N => ∑ j, (μA j / μB b0) ^ N *
         mpvInner (d := d) (B b0) (A j) N) atTop (nhds 0) := by
@@ -331,8 +331,7 @@ lemma exists_nondecaying_overlap_of_sameMPV₂_CFBNT
           star ((starRingEnd ℂ ζ2) ^ N * mpv (B k) σ) := by
         intro σ; rw [hA1_eq σ, ← hmpv1 N σ, hA2_eq σ, ← hmpv2 N σ]
       simp_rw [hStep]; simp only [star_mul, star_pow, RCLike.star_def, starRingEnd_self_apply]
-      rw [show ((starRingEnd ℂ) ζ1 * ζ2) ^ N =
-          (starRingEnd ℂ) ζ1 ^ N * ζ2 ^ N from mul_pow _ _ _]
+      rw [mul_pow]
       rw [Finset.mul_sum]; congr 1; ext σ; ring
     have hNormζ : ‖starRingEnd ℂ ζ1 * ζ2‖ = 1 := by
       rw [norm_mul, RCLike.norm_conj, hζ1_norm, hζ2_norm, mul_one]
@@ -347,7 +346,8 @@ lemma exists_nondecaying_overlap_of_sameMPV₂_CFBNT
           ‖mpvOverlap (d := d) (B k) (B k) N‖) =
           fun N => 1 * ‖mpvOverlap (d := d) (B k) (B k) N‖ := by
         ext N; rw [norm_pow, hNormζ, one_pow]
-      rw [this]; simpa using hBB_norm
+      rw [this]
+      simpa only [one_mul] using hBB_norm
     have hCross_norm_zero :
         Tendsto (fun N => ‖mpvOverlap (d := d) (A j₁) (A j₂) N‖) atTop (nhds 0) := by
       convert (hA_cross j₁ j₂ hne).norm using 1; simp only [norm_zero]
@@ -419,7 +419,8 @@ lemma exists_nondecaying_overlap_of_sameMPV₂_CFBNT
           ‖mpvOverlap (d := d) (A j) (A j) N‖) =
           fun N => 1 * ‖mpvOverlap (d := d) (A j) (A j) N‖ := by
         ext N; rw [norm_pow, hNormω, one_pow]
-      rw [this]; simpa using hAA_norm
+      rw [this]
+      simpa only [one_mul] using hAA_norm
     have hCross_norm_zero :
         Tendsto (fun N => ‖mpvOverlap (d := d) (B k₁) (B k₂) N‖) atTop (nhds 0) := by
       convert (hB_cross k₁ k₂ hne).norm using 1; simp only [norm_zero]
@@ -485,7 +486,7 @@ lemma exists_nondecaying_overlap_of_sameMPV₂_CFBNT
       have hInner_other : ∀ j, j ≠ j₁ →
           Tendsto (fun N => mpvInner (d := d) (B b0) (A j) N) atTop (nhds 0) := by
         intro j hj
-        simpa using tendsto_inner_zero_swap (d := d) (A j) (B b0) (huniq j hj)
+        exact tendsto_inner_zero_swap (d := d) (A j) (B b0) (huniq j hj)
       have h_eq := normalized_identity (B b0) (μB b0) hμB_ne
       have hRHS_one : Tendsto (fun N => ∑ k, (μB k / μB b0) ^ N *
           mpvInner (d := d) (B b0) (B k) N) atTop (nhds 1) :=

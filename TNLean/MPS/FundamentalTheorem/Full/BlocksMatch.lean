@@ -233,7 +233,7 @@ lemma blocks_match_of_sameMPV₂_CFBNT
     have hmpv2 : ∀ (N : ℕ) (σ : Fin N → Fin d),
         mpv (B (fA j1)) σ = ζ2 ^ N * mpv (A j2) σ := by
       intro N σ
-      rw [show fA j1 = fA j2 from hfj]
+      rw [hfj]
       rw [mpv_eq_pow_mul_of_gaugePhase _ _ X2 ζ2 hX2 N σ,
           mpv_cast_dim (hfA_dim j2)]
     have hBB_norm_tendsto :
@@ -278,8 +278,7 @@ lemma blocks_match_of_sameMPV₂_CFBNT
         intro σ; rw [hA1_eq σ, ← hmpv1 N σ, hA2_eq σ, ← hmpv2 N σ]
       simp_rw [hStep1]
       simp only [star_mul, star_pow, RCLike.star_def, starRingEnd_self_apply]
-      rw [show ((starRingEnd ℂ) ζ1 * ζ2) ^ N =
-          (starRingEnd ℂ) ζ1 ^ N * ζ2 ^ N from mul_pow _ _ _]
+      rw [mul_pow]
       rw [Finset.mul_sum]
       congr 1; ext σ; ring
     -- Norm of phase factor is 1.
@@ -297,7 +296,8 @@ lemma blocks_match_of_sameMPV₂_CFBNT
           ‖mpvOverlap (d := d) (B (fA j1)) (B (fA j1)) N‖) =
           fun N => 1 * ‖mpvOverlap (d := d) (B (fA j1)) (B (fA j1)) N‖ := by
         ext N; rw [norm_pow, hNormζ, one_pow]
-      rw [this]; simpa using hBB_norm_tendsto
+      rw [this]
+      simpa only [one_mul] using hBB_norm_tendsto
     have hCross_norm_zero :
         Tendsto (fun N => ‖mpvOverlap (d := d) (A j1) (A j2) N‖) atTop (nhds 0) := by
       convert (hA_cross j1 j2 hne).norm using 1; simp only [norm_zero]
@@ -336,7 +336,7 @@ lemma blocks_match_of_sameMPV₂_CFBNT
     have hmpv2 : ∀ (N : ℕ) (σ : Fin N → Fin d),
         mpv (B k2) σ = ω2 ^ N * mpv (A (gB k1)) σ := by
       intro N σ
-      rw [show gB k1 = gB k2 from hgk] at hmpv1 ⊢
+      rw [hgk] at hmpv1 ⊢
       rw [mpv_eq_pow_mul_of_gaugePhase _ _ Y2 ω2 hY2 N σ,
           mpv_cast_dim (hgB_dim k2)]
     have hAA_norm :
@@ -385,7 +385,8 @@ lemma blocks_match_of_sameMPV₂_CFBNT
           ‖mpvOverlap (d := d) (A (gB k1)) (A (gB k1)) N‖) =
           fun N => 1 * ‖mpvOverlap (d := d) (A (gB k1)) (A (gB k1)) N‖ := by
         ext N; rw [norm_pow, hNormω, one_pow]
-      rw [this]; simpa using hAA_norm
+      rw [this]
+      simpa only [one_mul] using hAA_norm
     have hCross_norm_zero :
         Tendsto (fun N => ‖mpvOverlap (d := d) (B k1) (B k2) N‖) atTop (nhds 0) := by
       convert (hB_cross k1 k2 hne).norm using 1; simp only [norm_zero]
