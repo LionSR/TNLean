@@ -1,4 +1,4 @@
-/-  
+/-
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
@@ -32,7 +32,7 @@ lemma trace_mul_transferMap_adjoint
     Matrix.trace (ρ * E X)
         = Matrix.trace (ρ * MPSTensor.transferMap (d := n) (D := D) K X) := by rw [hE_eq]
     _ = Matrix.trace (Kraus.adjointMap K ρ * X) := by
-          simpa [Kraus.map, MPSTensor.transferMap_apply] using
+          simpa only [Kraus.map, MPSTensor.transferMap_apply] using
             (Kraus.trace_mul_map_eq_trace_adjointMap_mul (K := K) ρ X)
     _ = Matrix.trace
           (MPSTensor.transferMap (d := n) (D := D) (fun i => (K i)ᴴ) ρ * X) := by

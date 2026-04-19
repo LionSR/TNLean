@@ -1,4 +1,4 @@
-/- 
+/-
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
@@ -47,10 +47,10 @@ noncomputable def irreducibleCPKrausSetup
   have hK : ∀ X, E X = ∑ i : Fin n, K i * X * (K i)ᴴ := Classical.choose_spec hCP'
   have hE_eq : E = MPSTensor.transferMap (d := n) (D := D) K :=
     LinearMap.ext fun X => by
-      simpa [MPSTensor.transferMap_apply] using hK X
+      simpa only [MPSTensor.transferMap_apply] using hK X
   have hIrrK_map :
       IsIrreducibleMap (MPSTensor.transferMap (d := n) (D := D) K) := by
-    simpa [hE_eq] using hIrr
+    simpa only [hE_eq] using hIrr
   exact
     { n := n
       K := K
@@ -70,7 +70,7 @@ theorem exists_nonzero_kraus
       MPSTensor.transferMap (d := hSetup.n) (D := D) hSetup.K = 0 :=
     LinearMap.ext fun X => by
       simp [MPSTensor.transferMap_apply, hK_zero]
-  exact hE (by simpa [hSetup.map_eq] using htransfer_zero)
+  exact hE (by simpa only [hSetup.map_eq] using htransfer_zero)
 
 /-- Shared adjoint Perron--Frobenius data extracted from an irreducible CP map. -/
 theorem exists_posDef_adjoint_eigenvector
