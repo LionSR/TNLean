@@ -106,19 +106,20 @@ theorem exists_sorted_reindexing
     exact hDistinct j k hjk hfjk
   let s : Finset ℝ := Finset.univ.image f
   have hs : s.card = r := by
-    simpa [s] using
+    simpa only [s, Finset.card_univ, Fintype.card_fin] using
       (Finset.card_image_of_injective (s := (Finset.univ : Finset (Fin r))) hf_inj)
   -- Target values: strictly decreasing listing of the elements of s.
   let vals : Fin r → ℝ := fun i => s.orderEmbOfFin hs (Fin.rev i)
   have hvals_strict : StrictAnti vals := by
     have hsmono : StrictMono (s.orderEmbOfFin hs) := (s.orderEmbOfFin hs).strictMono
-    simpa [vals] using hsmono.comp_strictAnti (Fin.rev_strictAnti : StrictAnti (@Fin.rev r))
+    simpa only [vals] using
+      hsmono.comp_strictAnti (Fin.rev_strictAnti : StrictAnti (@Fin.rev r))
   have hvals_mem : ∀ i, vals i ∈ s := fun i =>
     Finset.orderEmbOfFin_mem s hs (Fin.rev i)
   -- For each target value, there is a block index with that norm.
   have hex : ∀ i : Fin r, ∃ k : Fin r, f k = vals i := by
     intro i
-    have hmem : vals i ∈ Finset.univ.image f := by simpa [s] using hvals_mem i
+    have hmem : vals i ∈ Finset.univ.image f := by simpa only [s] using hvals_mem i
     rcases Finset.mem_image.mp hmem with ⟨k, _, hk⟩
     exact ⟨k, hk⟩
   -- Choose the preimage injectively.
@@ -134,8 +135,8 @@ theorem exists_sorted_reindexing
   let e : Fin r ≃ Fin r :=
     Equiv.ofBijective e₀ ⟨he₀_inj, Finite.surjective_of_injective he₀_inj⟩
   refine ⟨e, fun i j hij => ?_⟩
-  have hi : ‖μ (e i)‖ = vals i := by simpa [f, e] using he₀_spec i
-  have hj : ‖μ (e j)‖ = vals j := by simpa [f, e] using he₀_spec j
+  have hi : ‖μ (e i)‖ = vals i := by simpa only [f, e] using he₀_spec i
+  have hj : ‖μ (e j)‖ = vals j := by simpa only [f, e] using he₀_spec j
   calc ‖μ (e j)‖ = vals j     := hj
     _ < vals i               := hvals_strict hij
     _ = ‖μ (e i)‖             := hi.symm
@@ -272,10 +273,11 @@ theorem exists_trivialSectorDecomp_of_sorted_distinct_norms
             -- P.coeff N j = ∑ q : Fin (sectors.copies j), (sectors.weight j q)^N
             --             = ∑ q : Fin 1, (μ j)^N = (μ j)^N.
             refine Finset.sum_congr rfl fun j _ => congr_arg₂ _ ?_ rfl
-            simp [SectorDecomposition.coeff, SectorWeightData.coeff, P, sectors]
+            simp only [SectorDecomposition.coeff, SectorWeightData.coeff, P, sectors,
+              Fin.sum_univ_one]
       _ = mpv (toTensorFromBlocks (d := d) (μ := μ) blocks) σ := by
             symm
-            simpa [smul_eq_mul] using mpv_toTensorFromBlocks_eq_sum μ blocks σ
+            simpa only [smul_eq_mul] using mpv_toTensorFromBlocks_eq_sum μ blocks σ
   · -- StrictAnti on BNT-level norms.
     -- sectors.weight j 0 = μ j by definition, so the condition is exactly hAnti.
     intro i j hij
@@ -472,7 +474,7 @@ theorem exists_bnt_grouping
       -- Recognize as mpv of toTensorFromBlocks.
       _ = mpv (toTensorFromBlocks (d := d) (μ := μ) blocks) σ := by
               symm
-              simpa [smul_eq_mul] using mpv_toTensorFromBlocks_eq_sum μ blocks σ
+              simpa only [smul_eq_mul] using mpv_toTensorFromBlocks_eq_sum μ blocks σ
   · -- ── StrictAnti proof ────────────────────────────────────────────────────
     -- P.sectors.weight j ⟨0, _⟩ = μ (enumFn j ⟨0, _⟩) (definitional), with norm vals j.
     intro i j hij

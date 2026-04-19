@@ -221,7 +221,7 @@ theorem exists_bnt_grouping_of_gaugePhaseEquiv
             classes.regroup (fun k => (μ k) ^ N * mpv (blocks k) σ)
       _ = mpv (toTensorFromBlocks (d := d) (μ := μ) blocks) σ := by
               symm
-              simpa [smul_eq_mul] using mpv_toTensorFromBlocks_eq_sum μ blocks σ
+              simpa only [smul_eq_mul] using mpv_toTensorFromBlocks_eq_sum μ blocks σ
   · -- ── StrictAnti proof ────────────────────────────────────────────────────
     intro i j hij
     change ‖ζFn j ⟨0, classes.copies_pos j⟩ * μ (classes.enum j ⟨0, classes.copies_pos j⟩)‖ <
@@ -281,7 +281,9 @@ theorem exists_sectorDecomp_of_tp_primitive_irr_blocks
     by_cases hjk : j = k
     · -- Self-case: ζ = 1.
       subst hjk
-      exact ⟨1, one_ne_zero, norm_one, fun N σ => by simp⟩
+      refine ⟨1, one_ne_zero, norm_one, ?_⟩
+      intro N σ
+      simp only [one_pow, one_mul]
     · -- Different blocks: use gauge-phase equivalence data.
       obtain ⟨hdim, X, ζ, hζne, hX⟩ := hGPE_raw j k hjk hNorm
       have hmpv : ∀ (N : ℕ) (σ : Fin N → Fin d),
