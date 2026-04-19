@@ -3067,7 +3067,7 @@
     Definition
     </span>
     <span class="definition_thmlabel">3.31</span>
-    <span class="definition_thmtitle">Fusion-isometry RFP predicate (scaffold)</span>
+    <span class="definition_thmtitle">Fusion-isometry RFP predicate (provisional)</span>
     <div class="thm_header_extras">
 
         </div>
@@ -3121,10 +3121,10 @@
         </div>
   </div>
   <div class="definition_thmcontent">
-  <p>   An MPO tensor \(M\) satisfies the <em>fusion-isometry formulation</em> of the renormalization fixed-point condition when, for every blocked size \(n\), there exists a fusion isometry at size \(n\) compatible with \(M\). The current Lean scaffold (<span class="ttfamily">MPOTensor.IsRFP_MPDO_via_fusion_scaffold</span>) uses a placeholder compatibility predicate <span class="ttfamily">FusionIsometry.CompatibleWith</span> that is presently <span class="ttfamily">True</span>, so the scaffold predicate is vacuously provable. The <span class="ttfamily">_scaffold</span> suffix flags this: the genuine predicate will be introduced once the compatibility condition of&#160;<span class="cite">
+  <p>   An MPO tensor \(M\) satisfies the <em>fusion-isometry formulation</em> of the renormalization fixed-point condition when, for every blocked size \(n\), there exists a fusion isometry at size \(n\) compatible with \(M\). The compatibility relation between a fusion isometry and&#160;\(M\) is, in this provisional formulation, the trivial relation that holds for every pair; consequently the predicate above holds vacuously of every MPO tensor. The exact compatibility condition of <span class="cite">
 	(
 	
-</span> is tightened, at which point the <span class="ttfamily">_scaffold</span> suffix will be dropped and <span class="ttfamily">\leanok</span> restored here. </p>
+</span> is to be substituted in place of the trivial relation in subsequent work. </p>
 
   </div>
 </div>
@@ -3199,7 +3199,7 @@
     Definition
     </span>
     <span class="definition_thmlabel">3.33</span>
-    <span class="definition_thmtitle">Algebra-structure RFP predicate (scaffold)</span>
+    <span class="definition_thmtitle">Algebra-structure RFP predicate (provisional)</span>
     <div class="thm_header_extras">
 
         </div>
@@ -3256,10 +3256,10 @@
   <p>   An MPO tensor \(M\) satisfies the <em>algebra-structure formulation</em> of the renormalization fixed-point condition when there exist algebra-structure data compatible with \(M\), in the sense of <span class="cite">
 	(
 	
-</span>. The current Lean scaffold (<span class="ttfamily">MPOTensor.IsRFP_MPDO_via_algebra_scaffold</span>) uses a placeholder compatibility predicate <span class="ttfamily">AlgebraStructureData.CompatibleWith</span> that is presently <span class="ttfamily">True</span>, so the scaffold predicate is vacuously provable. The <span class="ttfamily">_scaffold</span> suffix flags this: the genuine predicate will be introduced once the compatibility condition of <span class="cite">
+</span>. The compatibility relation between algebra-structure data and&#160;\(M\) is, in this provisional formulation, the trivial relation that holds for every pair; consequently the predicate above holds vacuously of every MPO tensor. The exact compatibility condition of <span class="cite">
 	(
 	
-</span> is tightened, at which point the <span class="ttfamily">_scaffold</span> suffix will be dropped and <span class="ttfamily">\leanok</span> restored here. </p>
+</span> is to be substituted in place of the trivial relation in subsequent work. </p>
 
   </div>
 </div>
