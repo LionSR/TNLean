@@ -10,6 +10,7 @@ import TNLean.MPS.Core.BlockingTransfer
 import TNLean.MPS.Core.CPPrimitive
 import TNLean.Channel.Basic
 import TNLean.Channel.KrausRepresentation
+import TNLean.Channel.KrausUnitaryFreedom
 import TNLean.Channel.Peripheral.CyclicDecomposition
 
 /-!
@@ -30,10 +31,20 @@ for periodic MPS in irreducible form.
 
 * `MPSTensor.IsPDivisibleChannel`, `MPSTensor.IsPRefinable` — definitions appearing in
   Theorem 4.1 (`p`-divisibility of the transfer channel and `p`-refinement of an MPS
-  tensor). The full equivalence `IsPRefinable B p ↔ IsPDivisibleChannel (transferMap B) p`
-  is left to a follow-up PR: it relies on the channel-level identity
-  `E_{blockTensor A p} = (transferMap A)^p` (forward direction) and the Stinespring/Kraus
-  uniqueness lemma (reverse direction), neither of which is yet available in the repo.
+  tensor).
+
+* `MPSTensor.thm_4_1_p_refinement_forward` — **Theorem 4.1, forward direction**:
+  `p`-refinability of `B` implies `p`-divisibility of its transfer map, conditional on a
+  canonicalization hypothesis `PRefinementCanonicalization`.
+
+* `MPSTensor.thm_4_1_p_refinement_reverse` — **Theorem 4.1, reverse direction**:
+  `p`-divisibility of the transfer map implies `p`-refinability of `B`, conditional on an
+  inverse canonicalization hypothesis `PRefinementInverseCanonicalization`. The algebraic
+  heart is Wolf Theorem 2.18 (`kraus_isometry_freedom_iff`) applied to the `p`-blocked
+  Kraus family.
+
+* `MPSTensor.thm_4_1_p_refinement` — the bidirectional equivalence, bundling the forward
+  and reverse directions under both conditional hypotheses.
 
 ## Status of the dependency on `periodicOverlapDichotomy` (#78 / #81)
 
@@ -299,5 +310,167 @@ theorem thm_4_1_p_refinement_forward
   exact thm_4_1_p_refinement_forward_witness B p A hA_norm hTransferEq
 
 end Theorem41Forward
+
+/-! ## Theorem 4.1 — reverse direction (`p`-divisibility ⇒ `p`-refinability) -/
+
+section Theorem41Reverse
+
+variable {d D : ℕ}
+
+/-- Evaluation of a `W`-pulled-back tensor on a blocked word is a `W`-weighted sum
+of evaluations of the original tensor.
+
+If `C τ = ∑_σ W(τ, σ) • B σ` is the isometric mixing of an MPS tensor `B : MPSTensor d D`
+by `W : Matrix (Fin m) (Fin d) ℂ`, then for every `N` and every `τ : Fin N → Fin m`,
+`evalWord C (List.ofFn τ) = ∑_σ (∏_k W(τ k, σ k)) • evalWord B (List.ofFn σ)`.
+
+This is the key algebraic step behind `thm_4_1_p_refinement_reverse`: after identifying
+`blockTensor A p` as a `W`-mixing of `B` via Wolf Theorem 2.18, the blocked MPV
+coefficients of `A^{[p]}` expand to the `W`-weighted sum over length-`N` words required
+by the `IsPRefinable` predicate. -/
+private lemma evalWord_sum_smul_ofFn
+    {d D m : ℕ} (B : MPSTensor d D) (W : Matrix (Fin m) (Fin d) ℂ) :
+    ∀ (N : ℕ) (τ : Fin N → Fin m),
+      evalWord (fun τ' : Fin m => ∑ σ' : Fin d, W τ' σ' • B σ') (List.ofFn τ) =
+        ∑ σ : Fin N → Fin d,
+          (∏ k : Fin N, W (τ k) (σ k)) • evalWord B (List.ofFn σ) := by
+  intro N
+  induction N with
+  | zero =>
+      intro τ
+      classical
+      simp
+  | succ N ih =>
+      intro τ
+      classical
+      rw [List.ofFn_succ, evalWord_cons]
+      rw [ih (fun i : Fin N => τ i.succ)]
+      rw [Finset.sum_mul_sum]
+      -- Reindex the RHS over `Fin (N+1) → Fin d` via the `Fin.consEquiv` bijection.
+      let eqv : (Fin d × (Fin N → Fin d)) ≃ (Fin (N + 1) → Fin d) :=
+        Fin.consEquiv (fun _ => Fin d)
+      have hreindex :
+          (∑ σ : Fin (N + 1) → Fin d,
+              (∏ k : Fin (N + 1), W (τ k) (σ k)) • evalWord B (List.ofFn σ)) =
+            ∑ p : Fin d × (Fin N → Fin d),
+              (∏ k : Fin (N + 1), W (τ k) ((eqv p) k)) • evalWord B (List.ofFn (eqv p)) :=
+        (Fintype.sum_equiv eqv
+          (f := fun p : Fin d × (Fin N → Fin d) =>
+            (∏ k : Fin (N + 1), W (τ k) ((eqv p) k)) • evalWord B (List.ofFn (eqv p)))
+          (g := fun σ : Fin (N + 1) → Fin d =>
+            (∏ k : Fin (N + 1), W (τ k) (σ k)) • evalWord B (List.ofFn σ))
+          (by intro p; rfl)).symm
+      rw [hreindex, ← Fintype.sum_prod_type']
+      refine Finset.sum_congr rfl ?_
+      rintro ⟨i, σt⟩ _
+      -- The head factor of `Fin.prod_univ_succ` separates out the `τ 0 / i` pair.
+      have hprod :
+          (∏ k : Fin (N + 1), W (τ k) ((eqv (i, σt)) k)) =
+            W (τ 0) i * ∏ k : Fin N, W (τ k.succ) (σt k) := by
+        rw [Fin.prod_univ_succ]
+        simp [eqv, Fin.consEquiv]
+      -- `List.ofFn` on a `Fin.cons` unfolds to a `cons` on the list level.
+      have hList :
+          List.ofFn (eqv (i, σt)) = i :: List.ofFn σt := by
+        simp [eqv, Fin.consEquiv]
+      rw [hprod, hList, evalWord_cons, smul_mul_smul_comm]
+
+/-- **Inverse canonicalization hypothesis for the reverse direction of Theorem 4.1.**
+
+This Prop packages the analytic content that bridges `IsPDivisibleChannel (transferMap B) p`
+(a channel-level `p`-th-root statement) to the existence of a witness tensor
+`A : MPSTensor d D` whose `p`-blocked transfer map matches that of `B`.
+
+Morally, if `transferMap B = (E')^p` for a CPTP map `E'`, one would like to choose a Kraus
+representation `A` of `E'` with exactly `d` Kraus operators. In general the minimum Kraus
+rank of `E'` may exceed `d`, so formalising this step requires a Kraus-rank reduction /
+canonical-form argument (the analogue of left-canonical reduction used for the forward
+direction). We expose the end-result as a hypothesis in the same style as
+`PRefinementCanonicalization`. -/
+def PRefinementInverseCanonicalization (d D p : ℕ) : Prop :=
+  ∀ {B : MPSTensor d D}, IsIrreducibleForm B →
+    IsPDivisibleChannel (transferMap B) p →
+    ∃ A : MPSTensor d D, transferMap B = transferMap (blockTensor A p)
+
+/-- **Reverse direction of Theorem 4.1 (conditional form).**
+
+Let `B` be an MPS tensor in irreducible form II and let `p ≥ 1`. Assume the inverse
+canonicalization hypothesis `PRefinementInverseCanonicalization` (which records the
+remaining analytic bridge from `p`-divisibility of `transferMap B` to a compatible
+Kraus-reducible witness). Then `IsPDivisibleChannel (transferMap B) p` implies
+`IsPRefinable B p`.
+
+The proof follows the paper (arXiv:1708.00029 §4.1, converse paragraph): from the inverse
+canonicalization we obtain `A : MPSTensor d D` with
+`transferMap B = transferMap (blockTensor A p)`; this matches two Kraus representations of
+the same CP map (`blockTensor A p` with `d^p` operators and `B` with `d` operators), so
+Wolf Theorem 2.18 (`kraus_isometry_freedom_iff`) supplies an isometry
+`V : Matrix (Fin (d^p)) (Fin d) ℂ` with `Vᴴ V = 1` and
+`blockTensor A p α = ∑_j V α j • B j`. Expanding `coeff (blockTensor A p) (ofFn τ)` with
+the helper `evalWord_sum_smul_ofFn` and linearity of `trace` produces exactly the
+`W`-weighted coefficient identity defining `IsPRefinable B p`. -/
+theorem thm_4_1_p_refinement_reverse
+    (B : MPSTensor d D) (hB : IsIrreducibleForm B)
+    (p : ℕ) (hp : 0 < p)
+    (hInverse : PRefinementInverseCanonicalization d D p)
+    (hDivisible : IsPDivisibleChannel (transferMap B) p) :
+    IsPRefinable B p := by
+  obtain ⟨A, hTransferEq⟩ := hInverse hB hDivisible
+  classical
+  -- `d ≤ d^p = blockPhysDim d p` whenever `p ≥ 1`: the Kraus-rank comparison needed by
+  -- Wolf Theorem 2.18.
+  have hCard : Fintype.card (Fin d) ≤ Fintype.card (Fin (blockPhysDim d p)) := by
+    simp only [Fintype.card_fin, blockPhysDim_eq_pow]
+    exact Nat.le_self_pow hp.ne' d
+  -- Translate the linear-map equality into the Kraus-family equality needed by the freedom
+  -- lemma.
+  have hKraus :
+      ∀ X : Matrix (Fin D) (Fin D) ℂ,
+        ∑ α : Fin (blockPhysDim d p), blockTensor A p α * X * (blockTensor A p α)ᴴ =
+          ∑ j : Fin d, B j * X * (B j)ᴴ := by
+    intro X
+    have hEq : transferMap (blockTensor A p) X = transferMap B X := by
+      rw [← hTransferEq]
+    simpa [transferMap_apply] using hEq
+  -- Extract the isometric mixing matrix `V` from Wolf Thm 2.18.
+  obtain ⟨V, hV, hBA⟩ :=
+    (kraus_isometry_freedom_iff (blockTensor A p) B hCard).mp hKraus
+  refine ⟨A, V, hV, ?_⟩
+  intro N τ
+  simp only [coeff_eq]
+  -- Pointwise rewrite `blockTensor A p` as the `V`-mixing of `B`.
+  have hAeq : (blockTensor A p : MPSTensor (blockPhysDim d p) D) =
+      fun α => ∑ j : Fin d, V α j • B j := funext hBA
+  rw [hAeq, evalWord_sum_smul_ofFn B V N τ, Matrix.trace_sum]
+  refine Finset.sum_congr rfl ?_
+  intro σ _
+  rw [Matrix.trace_smul]
+  rfl
+
+end Theorem41Reverse
+
+/-! ## Theorem 4.1 — bidirectional equivalence -/
+
+section Theorem41Bundle
+
+variable {d D : ℕ}
+
+/-- **Theorem 4.1 (bidirectional, conditional form).**
+
+Let `B` be an MPS tensor in irreducible form II and let `p ≥ 1`. Under both the forward
+canonicalization hypothesis `PRefinementCanonicalization` and the inverse canonicalization
+hypothesis `PRefinementInverseCanonicalization`, `p`-refinability of `B` is equivalent to
+`p`-divisibility of its transfer map. This bundles
+`thm_4_1_p_refinement_forward` and `thm_4_1_p_refinement_reverse` into a single iff. -/
+theorem thm_4_1_p_refinement
+    (B : MPSTensor d D) (hB : IsIrreducibleForm B)
+    (p : ℕ) (hp : 0 < p)
+    (hCanonical : PRefinementCanonicalization d D p)
+    (hInverse : PRefinementInverseCanonicalization d D p) :
+    IsPRefinable B p ↔ IsPDivisibleChannel (transferMap B) p :=
+  ⟨thm_4_1_p_refinement_forward B hB p hCanonical,
+   thm_4_1_p_refinement_reverse B hB p hp hInverse⟩
+
+end Theorem41Bundle
 
 end MPSTensor
