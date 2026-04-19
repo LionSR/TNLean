@@ -62,45 +62,13 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Attach to PR branch
-        run: |
-          # Checkout put us in detached HEAD at the exact failing SHA.
-          # Fetch the remote branch ref (not available after SHA checkout)
-          # and create a local branch tracking it so pushes work.
-          BRANCH="${{ inputs.head_branch }}"
-          git fetch origin "$BRANCH"
-          git checkout -B "$BRANCH" "origin/$BRANCH"
-          git branch --set-upstream-to="origin/$BRANCH" "$BRANCH"
+        uses: ./.github/actions/attach-pr-branch
+        with:
+          head-branch: ${{ inputs.head_branch }}
 
       - name: Check for previous auto-fix attempts
         id: loop_guard
-        env:
-          # IMPORTANT: This cap is shared with pr-review-auto-fix.yml.
-          # If you change the value or counting regex here, update it there too.
-          MAX_BOT_FIX_ITERATIONS: 5
-        run: |
-          # Count consecutive bot-fix commits (either [claude-*-fix] or
-          # [codex-*-fix]) to cap the combined iteration loop.
-          # Both CI-fix and review-fix workflows share a single budget across
-          # Claude AND Codex so interleaved commits cannot reset each other.
-          # See also: auto-fix.yml, _codex-auto-fix-shared.yml, auto-fix-codex.yml
-          COUNT=0
-          while IFS= read -r MSG; do
-            if echo "$MSG" | grep -qE '\[(claude|codex)-(auto|review)-fix\]'; then
-              COUNT=$((COUNT + 1))
-            else
-              break
-            fi
-          done < <(git log --pretty=%s -n "$MAX_BOT_FIX_ITERATIONS")
-          echo "iteration=$COUNT" >> "$GITHUB_OUTPUT"
-          echo "next_iteration=$((COUNT + 1))" >> "$GITHUB_OUTPUT"
-          echo "max_iterations=$MAX_BOT_FIX_ITERATIONS" >> "$GITHUB_OUTPUT"
-          if [ "$COUNT" -ge "$MAX_BOT_FIX_ITERATIONS" ]; then
-            echo "skip=true" >> "$GITHUB_OUTPUT"
-            echo "::warning::Reached max combined bot-fix iterations ($MAX_BOT_FIX_ITERATIONS). Stopping."
-          else
-            echo "skip=false" >> "$GITHUB_OUTPUT"
-            echo "::notice::Bot-fix iteration $((COUNT + 1)) of $MAX_BOT_FIX_ITERATIONS"
-          fi
+        uses: ./.github/actions/bot-fix-guard
 
       - name: Setup git identity
         if: steps.loop_guard.outputs.skip != 'true'
@@ -115,52 +83,9 @@ jobs:
       - name: Get CI failure details
         if: steps.loop_guard.outputs.skip != 'true'
         id: failure_details
-        uses: actions/github-script@v8
+        uses: ./.github/actions/fetch-failure-logs
         with:
-          script: |
-            const run = await github.rest.actions.getWorkflowRun({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              run_id: ${{ inputs.workflow_run_id }}
-            });
-
-            const jobs = await github.rest.actions.listJobsForWorkflowRun({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              run_id: ${{ inputs.workflow_run_id }}
-            });
-
-            const failedJobs = jobs.data.jobs.filter(job => job.conclusion === 'failure');
-
-            let errorLogs = [];
-            for (const job of failedJobs) {
-              const logs = await github.rest.actions.downloadJobLogsForWorkflowRun({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                job_id: job.id
-              });
-              // Take the LAST 10000 chars — build errors appear at the end of logs,
-              // not the beginning (which is setup/checkout noise).
-              const rawLog = logs.data;
-              let trimmedLog = rawLog.length > 10000
-                ? rawLog.substring(rawLog.length - 10000)
-                : rawLog;
-              // Sanitize: strip characters that could be used for prompt injection
-              // and collapse any instruction-like patterns from untrusted log output.
-              trimmedLog = trimmedLog
-                .replace(/[^\x20-\x7E\n\r\t]/g, '') // strip non-printable/non-ASCII
-                .replace(/```/g, '​`​`​`'); // break fenced code markers
-              errorLogs.push({
-                jobName: job.name,
-                logs: trimmedLog
-              });
-            }
-
-            return {
-              runUrl: run.data.html_url,
-              failedJobs: failedJobs.map(j => j.name),
-              errorLogs: errorLogs
-            };
+          workflow-run-id: ${{ inputs.workflow_run_id }}
 
       - name: Fix failures with Claude
         if: steps.loop_guard.outputs.skip != 'true'

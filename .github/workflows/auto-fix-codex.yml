@@ -72,19 +72,28 @@ jobs:
               core.setOutput('head_branch', wr.head_branch);
               core.setOutput('pr_number', String(prNumber));
 
+              // Classify the event before calling the label API, to avoid an
+              // extra REST call on uninteresting runs.
+              // NB: review-fix piggybacks on Claude's reviewer workflow —
+              //     there is no separate Codex reviewer.
+              const isCiFail = wr.name === 'Lean Action CI' && wr.conclusion === 'failure';
+              const isBlueprintFail = wr.name === 'Lint blueprint' && wr.conclusion === 'failure';
+              const isReviewOk = wr.name === 'Claude Code Review (Lean)' && wr.conclusion === 'success';
+              if (!(isCiFail || isBlueprintFail || isReviewOk)) return;
+
               // ALL fix paths require the auto-fix-codex label.
               if (!(await prHasLabel(prNumber))) {
                 core.notice(`PR #${prNumber} does not have the '${LABEL}' label. Skipping.`);
                 return;
               }
 
-              if (wr.name === 'Lean Action CI' && wr.conclusion === 'failure') {
+              if (isCiFail) {
                 core.setOutput('run_ci_fix', 'true');
                 core.setOutput('ci_run_id', String(wr.id));
-              } else if (wr.name === 'Lint blueprint' && wr.conclusion === 'failure') {
+              } else if (isBlueprintFail) {
                 core.setOutput('run_blueprint_fix', 'true');
                 core.setOutput('blueprint_run_id', String(wr.id));
-              } else if (wr.name === 'Claude Code Review (Lean)' && wr.conclusion === 'success') {
+              } else {
                 core.setOutput('run_review_fix', 'true');
               }
             } else if (context.eventName === 'pull_request') {
@@ -267,39 +276,13 @@ jobs:
           token: ${{ secrets.BOT_PAT || secrets.GITHUB_TOKEN }}
 
       - name: Attach to PR branch
-        run: |
-          BRANCH="${{ needs.setup.outputs.head_branch }}"
-          git fetch origin "$BRANCH"
-          git checkout -B "$BRANCH" "origin/$BRANCH"
-          git branch --set-upstream-to="origin/$BRANCH" "$BRANCH"
+        uses: ./.github/actions/attach-pr-branch
+        with:
+          head-branch: ${{ needs.setup.outputs.head_branch }}
 
       - name: Check iteration count
         id: guard
-        env:
-          # Combined cap shared with auto-fix.yml / _ci-auto-fix-shared.yml /
-          # _codex-auto-fix-shared.yml. Counts BOTH [claude-*-fix] and
-          # [codex-*-fix] commits.
-          MAX_BOT_FIX_ITERATIONS: 5
-        run: |
-          COUNT=0
-          while IFS= read -r MSG; do
-            if echo "$MSG" | grep -qE '\[(claude|codex)-(auto|review)-fix\]'; then
-              COUNT=$((COUNT + 1))
-            else
-              break
-            fi
-          done < <(git log --pretty=%s -n "$MAX_BOT_FIX_ITERATIONS")
-          echo "iteration=$COUNT" >> "$GITHUB_OUTPUT"
-          echo "next_iteration=$((COUNT + 1))" >> "$GITHUB_OUTPUT"
-          echo "max_iterations=$MAX_BOT_FIX_ITERATIONS" >> "$GITHUB_OUTPUT"
-
-          if [ "$COUNT" -ge "$MAX_BOT_FIX_ITERATIONS" ]; then
-            echo "skip=true" >> "$GITHUB_OUTPUT"
-            echo "::warning::Reached max combined bot-fix iterations ($MAX_BOT_FIX_ITERATIONS). Stopping."
-          else
-            echo "skip=false" >> "$GITHUB_OUTPUT"
-            echo "::notice::Bot-fix iteration $((COUNT + 1)) of $MAX_BOT_FIX_ITERATIONS"
-          fi
+        uses: ./.github/actions/bot-fix-guard
 
       - name: Setup git identity
         if: steps.guard.outputs.skip != 'true'
@@ -307,96 +290,18 @@ jobs:
           git config --global user.email "codex[bot]@users.noreply.github.com"
           git config --global user.name "codex[bot]"
 
-      - name: Set up Lean toolchain and cache
-        if: steps.guard.outputs.skip != 'true'
-        uses: leanprover/lean-action@v1
-        with:
-          use-mathlib-cache: true
-          build: false
-
       - name: Fetch review comments
         if: steps.guard.outputs.skip != 'true'
         id: review_comments
-        uses: actions/github-script@v8
+        uses: ./.github/actions/fetch-review-comments
         with:
-          script: |
-            const prNumber = ${{ needs.setup.outputs.pr_number }};
-            const query = `query($owner: String!, $repo: String!, $pr: Int!, $cursor: String) {
-              repository(owner: $owner, name: $repo) {
-                pullRequest(number: $pr) {
-                  reviewThreads(first: 100, after: $cursor) {
-                    pageInfo { hasNextPage endCursor }
-                    nodes {
-                      isResolved
-                      isOutdated
-                      comments(first: 20) {
-                        nodes {
-                          author { login }
-                          body
-                          path
-                          line
-                          originalLine
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }`;
+          pr-number: ${{ needs.setup.outputs.pr_number }}
 
-            const threads = [];
-            let cursor = null;
-            do {
-              const result = await github.graphql(query, {
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                pr: prNumber,
-                cursor
-              });
-              const page = result.repository.pullRequest.reviewThreads;
-              threads.push(...page.nodes);
-              cursor = page.pageInfo.hasNextPage ? page.pageInfo.endCursor : null;
-            } while (cursor);
-
-            const unresolvedThreads = threads.filter(t =>
-              !t.isResolved && !t.isOutdated && t.comments.nodes.length > 0
-            );
-
-            if (unresolvedThreads.length === 0) {
-              core.notice('No unresolved review threads. Fixed point reached!');
-              return { skip: true, threads: [], reviewSummary: null, reviewState: null };
-            }
-
-            core.notice(`Found ${unresolvedThreads.length} unresolved review threads to address`);
-
-            const allReviews = await github.paginate(github.rest.pulls.listReviews, {
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: prNumber,
-              per_page: 100
-            });
-
-            const latestReview = allReviews.at(-1) ?? null;
-
-            const sanitize = (s) => (s || '')
-              .replace(/[^\x20-\x7E\n\r\t]/g, '')
-              .replace(/```/g, '\u200B`\u200B`\u200B`');
-
-            return {
-              skip: false,
-              threads: unresolvedThreads.slice(0, 20).map(t => ({
-                path: t.comments.nodes[0].path,
-                line: t.comments.nodes[0].originalLine || t.comments.nodes[0].line,
-                conversation: t.comments.nodes.map(c => ({
-                  author: c.author?.login ?? 'ghost',
-                  body: sanitize(c.body).substring(0, 1000)
-                }))
-              })),
-              reviewSummary: latestReview
-                ? sanitize(latestReview.body || '').substring(0, 2000)
-                : null,
-              reviewState: latestReview ? latestReview.state : null
-            };
+      - name: Set up Lean toolchain and cache
+        if: |
+          steps.guard.outputs.skip != 'true' &&
+          fromJSON(steps.review_comments.outputs.result).skip != true
+        uses: ./.github/actions/setup-lean
 
       - name: Fix review comments with Codex
         if: |
