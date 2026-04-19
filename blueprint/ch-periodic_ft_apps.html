@@ -1453,6 +1453,8 @@
     <span class="theorem_thmtitle">Thm.&#160;4.1 — \(p\)-refinability \(\iff \) \(p\)-divisibility</span>
     <div class="thm_header_extras">
 
+    
+    ✓
         </div>
     <div class="thm_header_hidden_extras">
 
@@ -1482,7 +1484,13 @@
           
           <li><a href="ch-assembly.html#thm:periodic_ft">Theorem 14.29</a></li>
           
-          <li><a href="ch-assembly.html#thm:periodic_ft">Theorem 14.29</a></li>
+          <li><a href="ch-periodic_ft_apps.html#thm:thm_4_1_p_refinement_forward">Theorem 15.10</a></li>
+          
+          <li><a href="ch-periodic_ft_apps.html#thm:thm_4_1_p_refinement_reverse">Theorem 15.11</a></li>
+          
+          <li><a href="ch-periodic_ft_apps.html#thm:thm_4_1_p_refinement_forward">Theorem 15.10</a></li>
+          
+          <li><a href="ch-periodic_ft_apps.html#thm:thm_4_1_p_refinement_reverse">Theorem 15.11</a></li>
           
         </ul>
     
@@ -1491,10 +1499,29 @@
 
     
     
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.thm_4_1_p_refinement" class="lean_decl">MPSTensor.thm_4_1_p_refinement</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p> Let \(B\) be an MPS tensor in irreducible form&#160;II and let \(p \ge 1\). Then \(B\) is \(p\)-refinable iff its transfer map \(\mathcal{E}_B\) is \(p\)-divisible. </p>
+  <p>   Let \(B\) be an MPS tensor in irreducible form&#160;II and let \(p \ge 1\). Assume both canonicalization hypotheses used in the one-way statements: one for refinability \(\Rightarrow \) divisibility and one for divisibility \(\Rightarrow \) refinability. Then \(B\) is \(p\)-refinable iff its transfer map \(\mathcal{E}_B\) is \(p\)-divisible. </p>
 
   </div>
 </div>
@@ -1506,8 +1533,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> The forward implication uses the periodic equal-case Fundamental Theorem (Theorem&#160;<a href="ch-assembly.html#thm:periodic_ft">14.29</a>): a \(p\)-refinement of \(B\) yields matching MPV families on every length, which the equal-case FT promotes to \(\mathcal{E}_{A^{[p]}} = \mathcal{E}_B\), and this equals \((\mathcal{E}_A)^p\) by the standard blocking-commutes-with-powers identity, exhibiting \(\mathcal{E}_B\) as the \(p\)-th power of the CPTP map \(\mathcal{E}_A\). </p>
-<p>The reverse implication uses Stinespring/Kraus uniqueness: given \(\mathcal{E}_B = (\mathcal{E}')^p\), choose any Kraus representation \(A\) of \(\mathcal{E}'\), then the \(p\)-blocked tensor \(A^{[p]}\) has the same channel as \(B\), so Wolf Theorem&#160;2.18 (unitary freedom of the Kraus representation) supplies an isometry \(W\) realising the coefficient relation that defines \(p\)-refinability. </p>
+  <p> Bundle the forward implication (Theorem&#160;<a href="ch-periodic_ft_apps.html#thm:thm_4_1_p_refinement_forward">15.10</a>) with the reverse implication (Theorem&#160;<a href="ch-periodic_ft_apps.html#thm:thm_4_1_p_refinement_reverse">15.11</a>) into a single biconditional. Both directions are formalised conditionally on their respective canonicalization hypotheses, whose combination yields the full equivalence. </p>
 
   </div>
 </div>
@@ -1594,12 +1620,95 @@
 
   </div>
 </div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:thm_4_1_p_refinement_reverse">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">15.11</span>
+    <span class="theorem_thmtitle">Thm.&#160;4.1 reverse direction, conditional form</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-periodic_ft_apps.html#thm:thm_4_1_p_refinement_reverse">#</a>
+    
+    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000000721"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-assembly.html#def:irreducible_form">Definition 14.16</a></li>
+          
+          <li><a href="ch-periodic_ft_apps.html#def:p_refinable">Definition 15.8</a></li>
+          
+          <li><a href="ch-periodic_ft_apps.html#def:p_divisible_channel">Definition 15.7</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.thm_4_1_p_refinement_reverse" class="lean_decl">MPSTensor.thm_4_1_p_refinement_reverse</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   Let \(B\) be an MPS tensor in irreducible form&#160;II and let \(p \ge 1\). Assume an <em>inverse canonicalization</em> hypothesis providing a witness \(A : \mathrm{MPSTensor}\  d\  D\) with \(\mathcal{E}_B = \mathcal{E}_{A^{[p]}}\) whenever \(\mathcal{E}_B\) is \(p\)-divisible. Then \(p\)-divisibility of \(\mathcal{E}_B\) implies \(p\)-refinability of \(B\). </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000721">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>From the inverse canonicalization hypothesis, extract \(A\) with \(\mathcal{E}_B = \mathcal{E}_{A^{[p]}}\). This matches two finite Kraus families of the same completely positive map: the blocked family \(A^{[p]}\) with \(d^{p}\) operators and the original family \(B\) with \(d\) operators. The cardinality comparison \(d \le d^{p}\) holds whenever \(p \ge 1\), so Wolf Theorem&#160;2.18 (isometric freedom of Kraus representations, formalised as ) supplies an isometry \(V \in M_{d^p \times d}(\mathbb {C})\) with \(V^{\dagger } V = \mathbb {1}\) and \((A^{[p]})^{\alpha } = \sum _{j} V_{\alpha ,j}\,  B^{j}\). Expanding \(\mathrm{coeff}\, (A^{[p]})\, (\mathrm{ofFn}\, \tau )\) by linearity of matrix multiplication and of the trace, the contributions reorganise into the \(V\)-weighted sum over length-\(N\) words of \(B\) required by Definition&#160;<a href="ch-periodic_ft_apps.html#def:p_refinable">15.8</a>, exhibiting \(V\) as the isometry \(W\) in the statement of \(p\)-refinability. </p>
+
+  </div>
+</div>
 <div class="remark_thmwrapper theorem-style-remark" id="rem:thm_4_1_continuum_limit">
   <div class="remark_thmheading">
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">15.11</span>
+    <span class="remark_thmlabel">15.12</span>
     <span class="remark_thmtitle">Continuum-limit application</span>
     <div class="thm_header_extras">
 
