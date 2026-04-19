@@ -266,30 +266,13 @@ theorem isRFP (F : FusionIsometryData M 1) : IsRFP M := by
 
 end FusionIsometryData
 
-private theorem pow_succ_eq_self_of_idempotent
-    {V : Type*} [AddCommMonoid V] [Module ℂ V] (E : V →ₗ[ℂ] V)
-    (hE : E * E = E) :
-    ∀ n : ℕ, E ^ (n + 1) = E
-  | 0 => by simp only [Nat.zero_add, pow_one]
-  | k + 1 => by
-      calc
-        E ^ ((k + 1) + 1) = E ^ (k + 1) * E := by rw [pow_succ]
-        _ = E * E := by rw [pow_succ_eq_self_of_idempotent E hE k]
-        _ = E := hE
-
 /-- If `M` is already an MPDO renormalization fixed point, then every positive
 blocked transfer map coincides with the original transfer map. -/
 theorem blockedTransferMap_eq_transferMap_of_isRFP {M : MPOTensor d D}
     (hM : IsRFP M) {n : ℕ} (hn : 0 < n) :
     blockedTransferMap M n = transferMap M := by
-  rcases Nat.exists_eq_succ_of_ne_zero (Nat.ne_of_gt hn) with ⟨k, rfl⟩
-  rw [blockedTransferMap_eq_pow]
-  have hM' : transferMap M ∘ₗ transferMap M = transferMap M := hM
-  have hIdem : transferMap M * transferMap M = transferMap M := by
-    apply LinearMap.ext
-    intro X
-    simpa only [LinearMap.comp_apply] using congrArg (fun f => f X) hM'
-  exact pow_succ_eq_self_of_idempotent (transferMap M) hIdem k
+  have hIdem : IsIdempotentElem (transferMap M) := hM
+  simpa only [blockedTransferMap_eq_pow] using hIdem.pow_eq (Nat.ne_of_gt hn)
 
 /-- Under the provisional MPDO RFP condition, every positive blocked transfer
 map is idempotent. -/
