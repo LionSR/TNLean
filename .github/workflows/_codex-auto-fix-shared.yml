@@ -82,7 +82,12 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           openai-api-key: ${{ secrets.OPENAI_API_KEY }}
-          sandbox: workspace-write
+          # Need outbound network so the agent can `git push` the fix commit
+          # and `gh pr comment` the summary. workspace-write blocks network.
+          sandbox: danger-full-access
+          # Allow iterations triggered by prior bot-authored fix commits
+          # (head of branch is authored by codex[bot] / claude[bot]).
+          allow-bots: true
           prompt: |
             ${{ inputs.codex_prompt }}
 
