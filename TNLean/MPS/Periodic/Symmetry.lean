@@ -235,7 +235,7 @@ theorem transferMap_kraus_isometry
     (W : Matrix (Fin m) (Fin d) ℂ) (hW : Wᴴ * W = 1) :
     transferMap (fun τ : Fin m => ∑ σ : Fin d, W τ σ • B σ) = transferMap B := by
   ext X : 1
-  simpa [transferMap_apply] using
+  simpa only [transferMap_apply] using
     kraus_same_map_of_isometry_combination
       (K := fun τ : Fin m => ∑ σ : Fin d, W τ σ • B σ)
       (K' := B) W hW (fun _ => rfl) X
@@ -431,7 +431,7 @@ theorem thm_4_1_p_refinement_reverse
     intro X
     have hEq : transferMap (blockTensor A p) X = transferMap B X := by
       rw [← hTransferEq]
-    simpa [transferMap_apply] using hEq
+    simpa only [transferMap_apply] using hEq
   -- Extract the isometric mixing matrix `V` from Wolf Thm 2.18.
   obtain ⟨V, hV, hBA⟩ :=
     (kraus_isometry_freedom_iff (blockTensor A p) B hCard).mp hKraus
