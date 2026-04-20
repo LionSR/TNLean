@@ -40,7 +40,20 @@ open Matrix
 
 variable {d : ℕ}
 
-open TNLean.Channel.Determinant.Internal
+/-- The ambient matrix algebra `M_d(ℂ)`. -/
+private abbrev MatrixAlg (d : ℕ) := Matrix (Fin d) (Fin d) ℂ
+
+/-- Endomorphisms of `M_d(ℂ)`. -/
+private abbrev MatrixEnd (d : ℕ) := MatrixAlg d →ₗ[ℂ] MatrixAlg d
+
+/-- Column-stacking vectorization as a linear equivalence. -/
+private noncomputable def matrixVecLinearEquiv (d : ℕ) :
+    MatrixAlg d ≃ₗ[ℂ] (Fin d × Fin d → ℂ) :=
+  LinearEquiv.ofBijective
+    { toFun := Matrix.vec
+      map_add' := Matrix.vec_add
+      map_smul' := Matrix.vec_smul }
+    Matrix.vec_bijective
 
 section WolfStatements
 

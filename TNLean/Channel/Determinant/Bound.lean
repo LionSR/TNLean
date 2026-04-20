@@ -36,7 +36,21 @@ open Matrix
 
 variable {d : ℕ}
 
-open TNLean.Channel.Determinant.Internal
+/-- The ambient matrix algebra `M_d(ℂ)`. -/
+private abbrev MatrixAlg (d : ℕ) := Matrix (Fin d) (Fin d) ℂ
+
+/-- Endomorphisms of `M_d(ℂ)`. -/
+private abbrev MatrixEnd (d : ℕ) := MatrixAlg d →ₗ[ℂ] MatrixAlg d
+
+/-- Index type for the standard basis of `M_d(ℂ)`.
+
+We use `Fin d × Fin d × Unit`, which has cardinality $d^2$. -/
+private abbrev MatrixBasisIndex (d : ℕ) := Fin d × Fin d × Unit
+
+/-- The standard basis of `M_d(ℂ)` coming from matrix units. -/
+private noncomputable def matrixSpaceBasis (d : ℕ) :
+    Module.Basis (MatrixBasisIndex d) ℂ (MatrixAlg d) :=
+  Module.Basis.matrix (Fin d) (Fin d) (Module.Basis.singleton Unit ℂ)
 
 section WolfStatements
 
