@@ -1,10 +1,9 @@
 /-
-Copyright (c) 2025 TNLean contributors. All rights reserved.
+Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import TNLean.Algebra.ScalarPowerSumIdentity
-
-import Mathlib.Data.Fintype.BigOperators
+import Mathlib.Data.Complex.Basic
+import Mathlib.Data.Matrix.Basic
 
 /-!
 # Periodic Z-gauge helpers
@@ -16,7 +15,7 @@ the Gemma split between the general fundamental-theorem stack and the periodic
 §3–§4 infrastructure.
 -/
 
-open scoped Matrix BigOperators
+open scoped Matrix
 
 namespace MPSTensor
 
@@ -35,7 +34,7 @@ theorem zGaugeEntry_pow_eq_one_of_pow_eq
 theorem zGaugeEntry_mul_right {μ ν : ℂ} (hν : ν ≠ 0) :
     zGaugeEntry μ ν * ν = μ := by
   dsimp [zGaugeEntry]
-  field_simp [hν]
+  rw [div_eq_mul_inv, mul_assoc, inv_mul_cancel₀ hν, mul_one]
 
 section ZGaugeDiagonal
 
