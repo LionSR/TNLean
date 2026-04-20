@@ -6,9 +6,10 @@ import TNLean.Channel.KrausRepresentation
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 
-# Applications of the fundamental theorem
+# Periodic applications of the fundamental theorem
 
-This module contains:
+This module houses the Gemma/arXiv:1708.00029 §4 content that depends on the
+periodic fundamental theorem. It contains:
 
 1. A lightweight **single-block** symmetry wrapper (`rotatePhysical` +
    `gaugeEquiv_of_sameMPV_rotatePhysical`).

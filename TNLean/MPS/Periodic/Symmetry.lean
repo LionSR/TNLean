@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.Periodic.FundamentalTheorem
-import TNLean.MPS.FundamentalTheorem.Applications
+import TNLean.MPS.Periodic.Applications
 import TNLean.MPS.Symmetry.Defs
 import TNLean.MPS.Core.Blocking
 import TNLean.MPS.Core.BlockingTransfer
@@ -54,7 +54,7 @@ in arXiv:1708.00029, formalized as `fundamentalTheorem_periodic_equalCase` in
 direct consumer of `PeriodicOverlapHypothesis`, which can be discharged by
 `periodicOverlapDichotomy` (PR #573, follow-ups #607–#609). The dichotomy's proof in
 `MPS/Periodic/Overlap.lean` still relies on several admitted sub-lemmas, so this file
-follows the established convention (see `Applications.lean`,
+follows the established convention (see `Periodic/Applications.lean`,
 `zGaugeEquiv_of_isIrreducibleForm_sameMPV_rotatePhysical`) of taking the equal-case FT
 as an explicit hypothesis named `hPeriodicEq`. Callers are free to discharge this
 hypothesis by whatever means become available.
@@ -92,7 +92,7 @@ overlap dichotomy, and a per-block weight-power equality). The Prop introduced h
 asserts the *unconditional* equal-case FT, so it is strictly stronger than the current
 repo theorem; callers committing to it are committing to the missing analytic content
 of `periodicOverlapDichotomy` (#78 / #81). The convention follows the analogous
-hypothesis in `MPS/FundamentalTheorem/Applications.lean`. -/
+hypothesis in `MPS/Periodic/Applications.lean`. -/
 def PeriodicEqualCaseFT (d D : ℕ) : Prop :=
   ∀ {X Y : MPSTensor d D},
     IsIrreducibleForm X → IsIrreducibleForm Y →
