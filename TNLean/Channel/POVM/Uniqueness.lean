@@ -35,29 +35,6 @@ variable {D n : ℕ}
 
 namespace POVM
 
--- Needed because inferring this `InnerProductSpace` instance triggers a large
--- typeclass search on `EuclideanSpace` in Lean 4.29.
-set_option synthInstance.maxHeartbeats 16000000 in
--- Reason: the `EuclideanSpace` instance search times out without a larger budget here.
-/-- Cached `InnerProductSpace` instance for `EuclideanSpace` to avoid synthesis timeout. -/
-private noncomputable abbrev euclideanIPS (ι : Type*) [Fintype ι] :
-    InnerProductSpace ℂ (EuclideanSpace ℂ ι) :=
-  inferInstance
-
-/-- `EuclideanSpace` is finite-dimensional via its standard basis. -/
-private noncomputable abbrev euclideanFiniteDimensional (ι : Type*) [Fintype ι] :
-    FiniteDimensional ℂ (EuclideanSpace ℂ ι) :=
-  Module.Basis.finiteDimensional_of_finite
-    ((Pi.basisFun ℂ ι).map (EuclideanSpace.equiv ι ℂ).symm.toLinearEquiv)
-
-/-- Rewrite a `toEuclideanLin` composition as matrix multiplication. -/
-private lemma toEuclideanLin_conjTranspose_mul_apply
-    {m n : Type*} [Fintype m] [Fintype n] [DecidableEq m] [DecidableEq n]
-    (M : Matrix m n ℂ) (w : EuclideanSpace ℂ n) :
-    Mᴴ.toEuclideanLin (M.toEuclideanLin w) = (Mᴴ * M).toEuclideanLin w := by
-  change (Mᴴ.toEuclideanLin.comp M.toEuclideanLin) w = _
-  rw [← toLpLin_mul_same]
-
 set_option maxHeartbeats 1600000 in
 -- The partial-isometry extension proof drives higher-order typeclass search in Lean 4.29.
 /-- If two square matrices have the same Gram matrix, then they differ by left
@@ -67,9 +44,10 @@ private theorem exists_unitary_mul_eq_of_conjTranspose_mul_eq
     (hGram : Bᴴ * B = Aᴴ * A) :
     ∃ U : Matrix.unitaryGroup (Fin D) ℂ,
       B = (U : Matrix (Fin D) (Fin D) ℂ) * A := by
-  letI : InnerProductSpace ℂ (EuclideanSpace ℂ (Fin D)) := euclideanIPS (Fin D)
+  letI : InnerProductSpace ℂ (EuclideanSpace ℂ (Fin D)) :=
+    PiLp.innerProductSpace (fun _ : Fin D => ℂ)
   letI : FiniteDimensional ℂ (EuclideanSpace ℂ (Fin D)) :=
-    euclideanFiniteDimensional (Fin D)
+    (EuclideanSpace.basisFun (Fin D) ℂ).toBasis.finiteDimensional_of_finite
   let fB : EuclideanSpace ℂ (Fin D) →ₗ[ℂ] EuclideanSpace ℂ (Fin D) :=
     Matrix.toEuclideanLin B
   let fA : EuclideanSpace ℂ (Fin D) →ₗ[ℂ] EuclideanSpace ℂ (Fin D) :=
@@ -83,8 +61,9 @@ private theorem exists_unitary_mul_eq_of_conjTranspose_mul_eq
     show fB.adjoint (fB w) = fA.adjoint (fA w)
     rw [← Matrix.toEuclideanLin_conjTranspose_eq_adjoint B,
         ← Matrix.toEuclideanLin_conjTranspose_eq_adjoint A]
-    rw [toEuclideanLin_conjTranspose_mul_apply B,
-      toEuclideanLin_conjTranspose_mul_apply A, hGram]
+    change (Bᴴ.toEuclideanLin.comp B.toEuclideanLin) w =
+      (Aᴴ.toEuclideanLin.comp A.toEuclideanLin) w
+    rw [← toLpLin_mul_same, ← toLpLin_mul_same, hGram]
   have hker : LinearMap.ker fA ≤ LinearMap.ker fB := by
     intro v hv
     rw [LinearMap.mem_ker] at hv ⊢
@@ -107,8 +86,8 @@ private theorem exists_unitary_mul_eq_of_conjTranspose_mul_eq
     obtain ⟨v, rfl⟩ := hx
     obtain ⟨w, rfl⟩ := hy
     rw [hL_apply, hL_apply, hinner, Submodule.coe_inner]
-  let L_iso : LinearMap.range fA →ₗᵢ[ℂ] EuclideanSpace ℂ (Fin D) := by
-    exact LinearMap.isometryOfInner L_lm hL_inner
+  let L_iso : LinearMap.range fA →ₗᵢ[ℂ] EuclideanSpace ℂ (Fin D) :=
+    LinearMap.isometryOfInner L_lm hL_inner
   let U := L_iso.extend
   have hU_eq : ∀ v, U (fA v) = fB v := by
     intro v
