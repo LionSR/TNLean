@@ -240,6 +240,95 @@ theorem transferMap_kraus_isometry
       (K := fun τ : Fin m => ∑ σ : Fin d, W τ σ • B σ)
       (K' := B) W hW (fun _ => rfl) X
 
+/-- Evaluation of a `W`-pulled-back tensor on a blocked word is a `W`-weighted sum
+of evaluations of the original tensor.
+
+If `C τ = ∑_σ W(τ, σ) • B σ` is the isometric mixing of an MPS tensor
+`B : MPSTensor d D` by `W : Matrix (Fin m) (Fin d) ℂ`, then for every `N` and
+every `τ : Fin N → Fin m`,
+`evalWord C (List.ofFn τ) = ∑_σ (∏_k W (τ k) (σ k)) • evalWord B (List.ofFn σ)`.
+
+This is the coefficient-expansion identity used in both directions of Theorem 4.1:
+in the forward direction it rewrites a refinement witness as `SameMPV` for the
+`W`-pullback tensor, and in the reverse direction it expands the blocked witness
+produced by Wolf Theorem 2.18. -/
+theorem evalWord_sum_smul_ofFn
+    {m : ℕ} (B : MPSTensor d D) (W : Matrix (Fin m) (Fin d) ℂ) :
+    ∀ (N : ℕ) (τ : Fin N → Fin m),
+      evalWord (fun τ' : Fin m => ∑ σ' : Fin d, W τ' σ' • B σ') (List.ofFn τ) =
+        ∑ σ : Fin N → Fin d,
+          (∏ k : Fin N, W (τ k) (σ k)) • evalWord B (List.ofFn σ) := by
+  intro N
+  induction N with
+  | zero =>
+      intro τ
+      classical
+      simp
+  | succ N ih =>
+      intro τ
+      classical
+      rw [List.ofFn_succ, evalWord_cons]
+      rw [ih (fun i : Fin N => τ i.succ)]
+      rw [Finset.sum_mul_sum]
+      let eqv : (Fin d × (Fin N → Fin d)) ≃ (Fin (N + 1) → Fin d) :=
+        Fin.consEquiv (fun _ => Fin d)
+      have hreindex :
+          (∑ σ : Fin (N + 1) → Fin d,
+              (∏ k : Fin (N + 1), W (τ k) (σ k)) • evalWord B (List.ofFn σ)) =
+            ∑ p : Fin d × (Fin N → Fin d),
+              (∏ k : Fin (N + 1), W (τ k) ((eqv p) k)) • evalWord B (List.ofFn (eqv p)) :=
+        (Fintype.sum_equiv eqv
+          (f := fun p : Fin d × (Fin N → Fin d) =>
+            (∏ k : Fin (N + 1), W (τ k) ((eqv p) k)) • evalWord B (List.ofFn (eqv p)))
+          (g := fun σ : Fin (N + 1) → Fin d =>
+            (∏ k : Fin (N + 1), W (τ k) (σ k)) • evalWord B (List.ofFn σ))
+          (by intro p; rfl)).symm
+      rw [hreindex, ← Fintype.sum_prod_type']
+      refine Finset.sum_congr rfl ?_
+      rintro ⟨i, σt⟩ _
+      have hprod :
+          (∏ k : Fin (N + 1), W (τ k) ((eqv (i, σt)) k)) =
+            W (τ 0) i * ∏ k : Fin N, W (τ k.succ) (σt k) := by
+        rw [Fin.prod_univ_succ]
+        simp [eqv, Fin.consEquiv]
+      have hList :
+          List.ofFn (eqv (i, σt)) = i :: List.ofFn σt := by
+        simp [eqv, Fin.consEquiv]
+      rw [hprod, hList, evalWord_cons, smul_mul_smul_comm]
+
+/-- **Pullback stage of the forward canonicalization roadmap for Theorem 4.1.**
+
+From a `p`-refinement witness `(A, W)` for `B`, the `W`-pullback tensor
+`C τ := ∑_σ W(τ, σ) • B σ` has the same transfer map as `B` and the same MPV
+family as `blockTensor A p`.
+
+This packages the first three steps of the forward-direction plan recorded in
+`PRefinementCanonicalization`: construct the pullback, identify its transfer map
+using `transferMap_kraus_isometry`, and rewrite the coefficient-level refinement
+identity as a `SameMPV` statement. The remaining gap is therefore exactly the
+periodic equal-case / canonical-gauge reduction from this `SameMPV` statement to
+a left-canonical root witness. -/
+theorem pRefinementCanonicalization_pullback
+    (B : MPSTensor d D) (p : ℕ)
+    (hRefine : IsPRefinable B p) :
+    ∃ (A : MPSTensor d D)
+      (W : Matrix (Fin (blockPhysDim d p)) (Fin d) ℂ),
+      Wᴴ * W = 1 ∧
+      transferMap (fun τ : Fin (blockPhysDim d p) => ∑ σ : Fin d, W τ σ • B σ) =
+        transferMap B ∧
+      SameMPV (fun τ : Fin (blockPhysDim d p) => ∑ σ : Fin d, W τ σ • B σ)
+        (blockTensor A p) := by
+  rcases hRefine with ⟨A, W, hW, hCoeff⟩
+  refine ⟨A, W, hW, transferMap_kraus_isometry B W hW, ?_⟩
+  intro N τ
+  calc
+    mpv (fun τ' : Fin (blockPhysDim d p) => ∑ σ' : Fin d, W τ' σ' • B σ') τ =
+        ∑ σ : Fin N → Fin d,
+          (∏ k : Fin N, W (τ k) (σ k)) * coeff B (List.ofFn σ) := by
+          simp [mpv_eq, coeff_eq, evalWord_sum_smul_ofFn, Matrix.trace_sum, Matrix.trace_smul]
+    _ = mpv (blockTensor A p) τ := by
+          simpa [mpv_eq] using (hCoeff N τ).symm
+
 /-- **Theorem 4.1, forward direction (witness-based form).**
 
 If we can produce a witness `A : MPSTensor d D` for the `p`-refinement of `B`
@@ -272,16 +361,16 @@ left-canonical and produces a matching transfer map under `p`-blocking.
 
 Morally, the canonicalization is produced as follows. Given a witness
 `(A, W)` from `IsPRefinable B p`, form the `W`-pullback tensor
-`C τ := ∑_σ W(τ, σ) · B σ`; the rectangular Kraus identity
-(`transferMap_kraus_isometry`) gives `E_C = E_B`, while the MPV hypothesis
-gives `SameMPV C (blockTensor A p)`. The periodic equal-case Fundamental
-Theorem (Theorem 3.8 of arXiv:1708.00029, available here as the hypothesis
-`PeriodicEqualCaseFT`) then supplies a `Z`-gauge equivalence between `C` and
-`blockTensor A p`, which — combined with a unitary canonical-form reduction
-for irreducible form II and Wolf Theorem 2.18 — produces the sought
-left-canonical witness. Formalizing this full chain in Lean requires
-infrastructure (canonical unitary gauge, Kraus uniqueness) that is tracked as
-follow-up work, so we expose the end-result predicate as a hypothesis. -/
+`C τ := ∑_σ W(τ, σ) · B σ`; the theorem
+`pRefinementCanonicalization_pullback` now packages this first stage, giving
+`E_C = E_B` together with `SameMPV C (blockTensor A p)`. The periodic
+equal-case Fundamental Theorem (Theorem 3.8 of arXiv:1708.00029, available here
+as the hypothesis `PeriodicEqualCaseFT`) then supplies a `Z`-gauge equivalence
+between `C` and `blockTensor A p`, which — combined with a unitary
+canonical-form reduction for irreducible form II and Wolf Theorem 2.18 —
+produces the sought left-canonical witness. Formalizing this remaining second
+stage in Lean still requires infrastructure (canonical unitary gauge, Kraus
+uniqueness), so we expose the end-result predicate as a hypothesis. -/
 def PRefinementCanonicalization (d D p : ℕ) : Prop :=
   ∀ {B : MPSTensor d D}, IsIrreducibleForm B → IsPRefinable B p →
     ∃ A : MPSTensor d D,
@@ -317,63 +406,6 @@ section Theorem41Reverse
 
 variable {d D : ℕ}
 
-/-- Evaluation of a `W`-pulled-back tensor on a blocked word is a `W`-weighted sum
-of evaluations of the original tensor.
-
-If `C τ = ∑_σ W(τ, σ) • B σ` is the isometric mixing of an MPS tensor `B : MPSTensor d D`
-by `W : Matrix (Fin m) (Fin d) ℂ`, then for every `N` and every `τ : Fin N → Fin m`,
-`evalWord C (List.ofFn τ) = ∑_σ (∏_k W(τ k, σ k)) • evalWord B (List.ofFn σ)`.
-
-This is the key algebraic step behind `thm_4_1_p_refinement_reverse`: after identifying
-`blockTensor A p` as a `W`-mixing of `B` via Wolf Theorem 2.18, the blocked MPV
-coefficients of `A^{[p]}` expand to the `W`-weighted sum over length-`N` words required
-by the `IsPRefinable` predicate. -/
-private lemma evalWord_sum_smul_ofFn
-    {d D m : ℕ} (B : MPSTensor d D) (W : Matrix (Fin m) (Fin d) ℂ) :
-    ∀ (N : ℕ) (τ : Fin N → Fin m),
-      evalWord (fun τ' : Fin m => ∑ σ' : Fin d, W τ' σ' • B σ') (List.ofFn τ) =
-        ∑ σ : Fin N → Fin d,
-          (∏ k : Fin N, W (τ k) (σ k)) • evalWord B (List.ofFn σ) := by
-  intro N
-  induction N with
-  | zero =>
-      intro τ
-      classical
-      simp
-  | succ N ih =>
-      intro τ
-      classical
-      rw [List.ofFn_succ, evalWord_cons]
-      rw [ih (fun i : Fin N => τ i.succ)]
-      rw [Finset.sum_mul_sum]
-      -- Reindex the RHS over `Fin (N+1) → Fin d` via the `Fin.consEquiv` bijection.
-      let eqv : (Fin d × (Fin N → Fin d)) ≃ (Fin (N + 1) → Fin d) :=
-        Fin.consEquiv (fun _ => Fin d)
-      have hreindex :
-          (∑ σ : Fin (N + 1) → Fin d,
-              (∏ k : Fin (N + 1), W (τ k) (σ k)) • evalWord B (List.ofFn σ)) =
-            ∑ p : Fin d × (Fin N → Fin d),
-              (∏ k : Fin (N + 1), W (τ k) ((eqv p) k)) • evalWord B (List.ofFn (eqv p)) :=
-        (Fintype.sum_equiv eqv
-          (f := fun p : Fin d × (Fin N → Fin d) =>
-            (∏ k : Fin (N + 1), W (τ k) ((eqv p) k)) • evalWord B (List.ofFn (eqv p)))
-          (g := fun σ : Fin (N + 1) → Fin d =>
-            (∏ k : Fin (N + 1), W (τ k) (σ k)) • evalWord B (List.ofFn σ))
-          (by intro p; rfl)).symm
-      rw [hreindex, ← Fintype.sum_prod_type']
-      refine Finset.sum_congr rfl ?_
-      rintro ⟨i, σt⟩ _
-      -- The head factor of `Fin.prod_univ_succ` separates out the `τ 0 / i` pair.
-      have hprod :
-          (∏ k : Fin (N + 1), W (τ k) ((eqv (i, σt)) k)) =
-            W (τ 0) i * ∏ k : Fin N, W (τ k.succ) (σt k) := by
-        rw [Fin.prod_univ_succ]
-        simp [eqv, Fin.consEquiv]
-      -- `List.ofFn` on a `Fin.cons` unfolds to a `cons` on the list level.
-      have hList :
-          List.ofFn (eqv (i, σt)) = i :: List.ofFn σt := by
-        simp [eqv, Fin.consEquiv]
-      rw [hprod, hList, evalWord_cons, smul_mul_smul_comm]
 
 /-- **Inverse canonicalization hypothesis for the reverse direction of Theorem 4.1.**
 
