@@ -208,6 +208,25 @@ noncomputable def parentHamiltonianES (A : MPSTensor d D) (L N : ℕ) :
 
 /-! ### Uniform spectral gap for the MPS parent Hamiltonian -/
 
+/- Scout report (2026-04-19, Layer 4 KL martingale).
+
+1. **Friedrichs-angle surface:** TNLean currently has no dedicated
+`FriedrichsAngle`/principal-angle API in `TNLean/Analysis`. Mathlib provides
+orthogonal-projection infrastructure (for example
+`Mathlib.Analysis.InnerProductSpace.Projection.Basic` and
+`Mathlib.Analysis.InnerProductSpace.Projection.FiniteDimensional`, exposing
+`Submodule.starProjection` and `orthogonalProjection`) but not a packaged
+Kastoryano–Lucia-style angle-to-anticommutator bound. This is a real blocker
+for quantitative overlap constants.
+2. **Row-sum bound mapping:** the combinatorial part is already available from
+locality (`localTerm`, `parentHamiltonian`) and finite range: each window
+overlaps at most `2 * (L - 1)` neighbors. Missing is the analytic bridge from
+overlap-angle constants to operator-inequality coefficients `cᵢⱼ`.
+3. **Sorry dependency split:** `parentHamiltonian_gapped` is downstream-only and
+dischargeable immediately once the bridge theorem below is proved. The bridge
+`parentHamiltonianES_gap_bound_of_friedrichs` still depends on missing
+Friedrichs-angle infrastructure; this is the blocker and should not be replaced
+with axioms or unrelated sorrys. -/
 /-- Friedrichs-angle and row-sum bridge for the MPS parent Hamiltonian.
 
 This is the remaining MPS-specific martingale estimate: it should produce a
