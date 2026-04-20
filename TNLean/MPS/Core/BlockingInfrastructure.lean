@@ -28,6 +28,8 @@ primitive simultaneously.
   in the blocking period (for multiples).
 
 ### Part C: Common period via LCM
+* `lcmPeriod`, `lcmPeriod_pos`, `dvd_lcmPeriod` — lightweight LCM helpers on `Fin k → ℕ`
+  families used throughout common-period blocking.
 * `exists_common_blocking_all_primitive` — given a family of blocks each admitting some
   primitivity period, there exists a single common period.
 * `exists_common_blocking_all_primitive_of_TP_irr` — convenience entry point from TP +
@@ -195,6 +197,23 @@ the individual periods.
 
 section CommonPeriod
 
+/-- LCM of a finite family of periods indexed by `Fin k`. -/
+noncomputable def lcmPeriod {k : ℕ} (periods : Fin k → ℕ) : ℕ :=
+  Finset.univ.lcm periods
+
+/-- The LCM of a positive family of periods is positive. -/
+theorem lcmPeriod_pos {k : ℕ} {periods : Fin k → ℕ} (h : ∀ i, 0 < periods i) :
+    0 < lcmPeriod periods := by
+  refine Nat.pos_of_ne_zero ?_
+  refine Finset.lcm_ne_zero_iff.2 ?_
+  intro i _
+  exact Nat.ne_of_gt (h i)
+
+/-- Each member of the family divides the LCM of the family. -/
+theorem dvd_lcmPeriod {k : ℕ} (periods : Fin k → ℕ) (i : Fin k) :
+    periods i ∣ lcmPeriod periods :=
+  Finset.dvd_lcm (Finset.mem_univ i)
+
 /-- There exists a common blocking period making all block transfer maps primitive.
 
 Given a family of blocks indexed by `Fin r`, where each block `k` has some period `p_k`
@@ -221,14 +240,10 @@ theorem exists_common_blocking_all_primitive
         (blockTensor (d := d) (D := dim k) (blocks k) (pk k))) :=
     fun k => (hPer k).choose_spec.2
   -- Take the LCM of all periods.
-  let P := Finset.univ.lcm pk
-  have hP_pos : 0 < P := by
-    have hne : Finset.univ.lcm pk ≠ 0 := by
-      refine Finset.lcm_ne_zero_iff.2 ?_
-      intro k _; exact Nat.ne_of_gt (pk_pos k)
-    exact Nat.pos_of_ne_zero hne
+  let P := lcmPeriod pk
+  have hP_pos : 0 < P := lcmPeriod_pos pk_pos
   refine ⟨P, hP_pos, fun k => ?_⟩
-  have hk_dvd : pk k ∣ P := Finset.dvd_lcm (Finset.mem_univ k)
+  have hk_dvd : pk k ∣ P := dvd_lcmPeriod pk k
   haveI : NeZero (dim k) := ⟨Nat.ne_of_gt (hDim k)⟩
   exact isPrimitive_transferMap_blockTensor_of_dvd (blocks k) (pk k) P hk_dvd hP_pos (pk_prim k)
 
