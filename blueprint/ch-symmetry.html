@@ -3097,12 +3097,82 @@
 
   </div>
 </div>
-<div class="definition_thmwrapper theorem-style-definition" id="def:local_symmetry">
+<div class="definition_thmwrapper theorem-style-definition" id="def:string_order_boundary_param">
   <div class="definition_thmheading">
     <span class="definition_thmcaption">
     Definition
     </span>
     <span class="definition_thmlabel">18.30</span>
+    <span class="definition_thmtitle">Boundary string order parameter</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-symmetry.html#def:string_order_boundary_param">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-symmetry.html#def:twisted_transfer_map">Definition 18.28</a></li>
+          
+          <li><a href="ch-symmetry.html#def:string_order_param">Definition 18.29</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.stringOrderBoundaryParam" class="lean_decl">MPSTensor.stringOrderBoundaryParam</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>   For a boundary state \(\Lambda \) and boundary matrices \(X,Y \in M_{D}(\mathbb {C})\), the <em>boundary string order parameter</em> is </p>
+<div class="displaymath" id="a0000000939">
+  \[  R_L(u;X,Y) := \operatorname{tr}\! \bigl(\Lambda X \,  \mathcal{E}_u^L(Y)\bigr).  \]
+</div>
+<p> The ordinary string order parameter is the special case \(X=Y=\mathbb {1}\). </p>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:local_symmetry">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">18.31</span>
     <span class="definition_thmtitle">Local symmetry</span>
     <div class="thm_header_extras">
 
@@ -3158,7 +3228,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   An MPS tensor \(A\) has <em>local symmetry</em> under a unitary \(u\) with respect to a boundary state \(\Lambda \) if there exist a unitary matrix \(V\) and a phase \(\mu \) with \(|\mu | = 1\) such that \(V^\dagger \Lambda V = \Lambda \) and </p>
-<div class="displaymath" id="a0000000939">
+<div class="displaymath" id="a0000000940">
   \[  \sum _j u_{ij}\,  A^j = \mu \,  V\,  A^i\,  V^\dagger \quad \text{for all } i.  \]
 </div>
 <p> Informally, this means \(\| R_L(u)\|  = \| R_L(\mathbb {1})\| \) for all \(L\). </p>
@@ -3170,7 +3240,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">18.31</span>
+    <span class="definition_thmlabel">18.32</span>
     <span class="definition_thmtitle">String order</span>
     <div class="thm_header_extras">
 
@@ -3194,7 +3264,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mps.html#def:mps_tensor">Definition 2.1</a></li>
+          <li><a href="ch-symmetry.html#def:string_order_boundary_param">Definition 18.30</a></li>
           
         </ul>
     
@@ -3234,7 +3304,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">18.32</span>
+    <span class="definition_thmlabel">18.33</span>
     <span class="definition_thmtitle">Local physical intertwining</span>
     <div class="thm_header_extras">
 
@@ -3290,7 +3360,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   The local physical intertwining relation is \(\sum _j u_{ij}\,  A^j = V\,  A^i\,  V^\dagger \). Locally, the physical action of \(u\) can therefore be pushed to the virtual legs: </p>
-<div class="displaymath" id="a0000000940">
+<div class="displaymath" id="a0000000941">
   \[  \begin{array}{ccccccc}& &  i & & & &  i \\ & &  \vert & & & &  \vert \\ u & &  \textcolor{red}{\bullet } & & & &  \bullet \\ & &  \vert & &  = & & \\ \bullet &  \text{---} &  \bullet & &  \textcolor{red}{\bullet } &  \text{---} &  \textcolor{red}{\bullet } \\ & & & &  V & &  V^\dagger \end{array}  \]
 </div>
 
@@ -3301,7 +3371,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">18.33</span>
+    <span class="definition_thmlabel">18.34</span>
     <span class="definition_thmtitle">Transfer-map covariance</span>
     <div class="thm_header_extras">
 
@@ -3357,7 +3427,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   Transfer-map covariance is the identity that the transfer map commutes with virtual conjugation: \(\mathcal{E}(V X V^\dagger ) = V\,  \mathcal{E}(X)\,  V^\dagger \). In doubled-layer notation, the virtual operators slide through the local transfer cell: </p>
-<div class="displaymath" id="a0000000941">
+<div class="displaymath" id="a0000000942">
   \[  \begin{array}{ccccccccc} V & & & & & & & &  V \\ \textcolor{red}{\bullet } &  \text{---} &  \bullet & &  = & &  \bullet &  \text{---} &  \textcolor{red}{\bullet } \\ & &  \vert & & & &  \vert & & \\ \textcolor{red}{\bullet } &  \text{---} &  \bullet & &  = & &  \bullet &  \text{---} &  \textcolor{red}{\bullet } \\ V^\dagger & & & & & & & &  V^\dagger \end{array}  \]
 </div>
 
@@ -3368,7 +3438,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">18.34</span>
+    <span class="definition_thmlabel">18.35</span>
     <span class="definition_thmtitle">Commutation in the doubled transfer picture</span>
     <div class="thm_header_extras">
 
@@ -3432,7 +3502,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">18.35</span>
+    <span class="theorem_thmlabel">18.36</span>
     <span class="theorem_thmtitle">Transfer-map covariance and doubled commutation are equivalent</span>
     <div class="thm_header_extras">
 
@@ -3443,7 +3513,7 @@
 
     <a class="icon proof" href="ch-symmetry.html#thm:condC2_iff_condC3">#</a>
     
-    <a class="icon proof" href="ch-symmetry.html#a0000000942"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-symmetry.html#a0000000943"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3459,9 +3529,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-symmetry.html#def:condC2">Definition 18.33</a></li>
+          <li><a href="ch-symmetry.html#def:condC2">Definition 18.34</a></li>
           
-          <li><a href="ch-symmetry.html#def:condC3">Definition 18.34</a></li>
+          <li><a href="ch-symmetry.html#def:condC3">Definition 18.35</a></li>
           
         </ul>
     
@@ -3496,7 +3566,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000942">
+<div class="proof_wrapper" id="a0000000943">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3505,7 +3575,7 @@
   </div>
   <div class="proof_content">
   <p>Both sides express the same local picture with opposite orientation: </p>
-<div class="displaymath" id="a0000000943">
+<div class="displaymath" id="a0000000944">
   \[  \begin{array}{ccccccccc} V & & & & & & & &  V \\ \textcolor{red}{\bullet } &  \text{---} &  \bullet & &  = & &  \bullet &  \text{---} &  \textcolor{red}{\bullet } \\ & &  \vert & & & &  \vert & & \\ \textcolor{red}{\bullet } &  \text{---} &  \bullet & &  = & &  \bullet &  \text{---} &  \textcolor{red}{\bullet } \\ V^\dagger & & & & & & & &  V^\dagger \end{array}  \]
 </div>
 <p> The two formulas are literally the same identity read from opposite sides. </p>
@@ -3517,7 +3587,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">18.36</span>
+    <span class="lemma_thmlabel">18.37</span>
     <span class="lemma_thmtitle">Unitary Kraus mixing</span>
     <div class="thm_header_extras">
 
@@ -3528,7 +3598,7 @@
 
     <a class="icon proof" href="ch-symmetry.html#lem:unitary_kraus_mixing">#</a>
     
-    <a class="icon proof" href="ch-symmetry.html#a0000000944"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-symmetry.html#a0000000945"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3559,7 +3629,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000944">
+<div class="proof_wrapper" id="a0000000945">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3576,7 +3646,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">18.37</span>
+    <span class="theorem_thmlabel">18.38</span>
     <span class="theorem_thmtitle">Local physical intertwining implies transfer-map covariance</span>
     <div class="thm_header_extras">
 
@@ -3587,7 +3657,7 @@
 
     <a class="icon proof" href="ch-symmetry.html#thm:condC1_imp_condC2">#</a>
     
-    <a class="icon proof" href="ch-symmetry.html#a0000000945"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-symmetry.html#a0000000946"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3603,13 +3673,13 @@
         
         <ul class="uses">
           
-          <li><a href="ch-symmetry.html#def:condC1">Definition 18.32</a></li>
+          <li><a href="ch-symmetry.html#def:condC1">Definition 18.33</a></li>
           
-          <li><a href="ch-symmetry.html#def:condC2">Definition 18.33</a></li>
+          <li><a href="ch-symmetry.html#def:condC2">Definition 18.34</a></li>
           
-          <li><a href="ch-symmetry.html#lem:unitary_kraus_mixing">Lemma 18.36</a></li>
+          <li><a href="ch-symmetry.html#lem:unitary_kraus_mixing">Lemma 18.37</a></li>
           
-          <li><a href="ch-symmetry.html#lem:unitary_kraus_mixing">Lemma 18.36</a></li>
+          <li><a href="ch-symmetry.html#lem:unitary_kraus_mixing">Lemma 18.37</a></li>
           
         </ul>
     
@@ -3644,7 +3714,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000945">
+<div class="proof_wrapper" id="a0000000946">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3653,7 +3723,7 @@
   </div>
   <div class="proof_content">
   <p> Starting from </p>
-<div class="displaymath" id="a0000000946">
+<div class="displaymath" id="a0000000947">
   \[  \begin{array}{ccccccc}& &  i & & & &  i \\ & &  \vert & & & &  \vert \\ u & &  \textcolor{red}{\bullet } & & & &  \bullet \\ & &  \vert & &  = & & \\ \bullet &  \text{---} &  \bullet & &  \textcolor{red}{\bullet } &  \text{---} &  \textcolor{red}{\bullet } \\ & & & &  V & &  V^\dagger \end{array}  \]
 </div>
 <p> one inserts \(V^\dagger V = \mathbb {1}\) so that each local transfer cell is written in terms of conjugated Kraus operators, then replaces those operators using the intertwining relation. After that, the physical \(u\)-boxes disappear by the unitary Kraus-mixing identity. </p>
@@ -3665,7 +3735,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">18.38</span>
+    <span class="theorem_thmlabel">18.39</span>
     <span class="theorem_thmtitle">Transfer-map covariance implies local physical intertwining</span>
     <div class="thm_header_extras">
 
@@ -3676,7 +3746,7 @@
 
     <a class="icon proof" href="ch-symmetry.html#thm:condC2_imp_condC1_of_injective">#</a>
     
-    <a class="icon proof" href="ch-symmetry.html#a0000000947"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-symmetry.html#a0000000948"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3692,15 +3762,15 @@
         
         <ul class="uses">
           
-          <li><a href="ch-symmetry.html#def:condC2">Definition 18.33</a></li>
+          <li><a href="ch-symmetry.html#def:condC2">Definition 18.34</a></li>
           
-          <li><a href="ch-symmetry.html#def:condC1">Definition 18.32</a></li>
+          <li><a href="ch-symmetry.html#def:condC1">Definition 18.33</a></li>
           
           <li><a href="ch-mps.html#def:injective">Definition 2.21</a></li>
           
-          <li><a href="ch-symmetry.html#thm:condC2_iff_condC3">Theorem 18.35</a></li>
+          <li><a href="ch-symmetry.html#thm:condC2_iff_condC3">Theorem 18.36</a></li>
           
-          <li><a href="ch-symmetry.html#thm:condC1_imp_condC2">Theorem 18.37</a></li>
+          <li><a href="ch-symmetry.html#thm:condC1_imp_condC2">Theorem 18.38</a></li>
           
         </ul>
     
@@ -3735,7 +3805,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000947">
+<div class="proof_wrapper" id="a0000000948">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3744,10 +3814,163 @@
   </div>
   <div class="proof_content">
   <p> Set \(B^i := V\,  A^i\,  V^\dagger \). The transfer-map covariance relation </p>
-<div class="displaymath" id="a0000000948">
+<div class="displaymath" id="a0000000949">
   \[  \begin{array}{ccccccccc} V & & & & & & & &  V \\ \textcolor{red}{\bullet } &  \text{---} &  \bullet & &  = & &  \bullet &  \text{---} &  \textcolor{red}{\bullet } \\ & &  \vert & & & &  \vert & & \\ \textcolor{red}{\bullet } &  \text{---} &  \bullet & &  = & &  \bullet &  \text{---} &  \textcolor{red}{\bullet } \\ V^\dagger & & & & & & & &  V^\dagger \end{array}  \]
 </div>
 <p> implies that the two Kraus families \(B\) and \(A\) define the same transfer map. The missing step — supplied by Kraus freedom for equal channels — converts equality of transfer maps \(\mathcal{E}_B = \mathcal{E}_A\) into a unitary Kraus mixing matrix \(u\) with \(B^i = \sum _j u_{ij} A^j\). </p>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:twisted_mixed_companion">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">18.40</span>
+    <span class="definition_thmtitle">Twisted companion tensor</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-symmetry.html#def:twisted_mixed_companion">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mps.html#def:mps_tensor">Definition 2.1</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.twistedMixedCompanion" class="lean_decl">MPSTensor.twistedMixedCompanion</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>   For an MPS tensor \(A\) and a physical-index matrix \(u\), define the companion tensor \(B_u\) by </p>
+<div class="displaymath" id="a0000000950">
+  \[  B_u^n := \sum _{n'=0}^{d-1} \overline{u_{n'n}}\,  A^{n'}.  \]
+</div>
+
+  </div>
+</div>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:twisted_transfer_eq_mixed_transfer">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">18.41</span>
+    <span class="lemma_thmtitle">Twisted transfer as a mixed transfer operator</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-symmetry.html#lem:twisted_transfer_eq_mixed_transfer">#</a>
+    
+    <a class="icon proof" href="ch-symmetry.html#a0000000951"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-symmetry.html#def:twisted_transfer_map">Definition 18.28</a></li>
+          
+          <li><a href="ch-symmetry.html#def:twisted_mixed_companion">Definition 18.40</a></li>
+          
+          <li><a href="ch-spectral.html#def:mixed_transfer">Definition 9.1</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.twistedTransferMap_eq_mixedTransfer" class="lean_decl">MPSTensor.twistedTransferMap_eq_mixedTransfer</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>   The twisted transfer map of \(A\) is the mixed transfer operator of the pair \((A,B_u)\): </p>
+<div class="displaymath" id="a0000000952">
+  \[  \mathcal{E}_u = F_{A,B_u}.  \]
+</div>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000951">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Expand both definitions and rearrange the double sum. </p>
 
   </div>
 </div>
@@ -3756,8 +3979,8 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">18.39</span>
-    <span class="theorem_thmtitle">Spectral radius bound</span>
+    <span class="theorem_thmlabel">18.42</span>
+    <span class="theorem_thmtitle">Twisted-transfer eigenvalues have modulus at most one</span>
     <div class="thm_header_extras">
 
     
@@ -3767,7 +3990,7 @@
 
     <a class="icon proof" href="ch-symmetry.html#thm:twisted_transfer_spectral_radius_le_one">#</a>
     
-    <a class="icon proof" href="ch-symmetry.html#a0000000949"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-symmetry.html#a0000000953"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3787,9 +4010,13 @@
           
           <li><a href="ch-mps.html#def:injective">Definition 2.21</a></li>
           
-          <li><a href="ch-symmetry.html#thm:condC2_iff_condC3">Theorem 18.35</a></li>
+          <li><a href="ch-symmetry.html#lem:unitary_kraus_mixing">Lemma 18.37</a></li>
           
-          <li><a href="ch-symmetry.html#thm:condC1_imp_condC2">Theorem 18.37</a></li>
+          <li><a href="ch-symmetry.html#lem:twisted_transfer_eq_mixed_transfer">Lemma 18.41</a></li>
+          
+          <li><a href="ch-qpf.html#thm:left_canonical_gauge">Theorem 8.11</a></li>
+          
+          <li><a href="ch-spectral.html#thm:eigenvalue_bound">Theorem 9.14</a></li>
           
         </ul>
     
@@ -3820,11 +4047,15 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   For an injective MPS, assume \(u u^\dagger = \mathbb {1}\), \(\mathcal{E}_A(\mathbb {1})=\mathbb {1}\), \(\Lambda \) is positive definite, \(\operatorname{tr}(\Lambda )=1\), and \(\mathcal{E}_A^\dagger (\Lambda )=\Lambda \). Then every eigenvalue \(\lambda \) of \(\mathcal{E}_u\) satisfies \(|\lambda | \le 1\). </p>
+  <p>   Let \(A\) be an injective MPS tensor with \(\mathcal{E}_A(\mathbb {1})=\mathbb {1}\), and let \(u\) satisfy \(u u^\dagger = \mathbb {1}\). If </p>
+<div class="displaymath" id="a0000000954">
+  \[  \mathcal{E}_u(X) = \lambda X  \]
+</div>
+<p> for some nonzero \(X \in M_{D}(\mathbb {C})\), then \(|\lambda | \le 1\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000949">
+<div class="proof_wrapper" id="a0000000953">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3832,17 +4063,17 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Requires Cauchy–Schwarz for CP maps and the unique fixed-point property of the transfer map (Perron–Frobenius for CP maps). </p>
+  <p> By Lemma&#160;<a href="ch-symmetry.html#lem:twisted_transfer_eq_mixed_transfer">18.41</a>, the twisted transfer map is the mixed transfer operator \(F_{A,B_u}\). Because \(B_u\) is obtained from \(A\) by unitary mixing of the Kraus operators, the transfer maps of \(A\) and \(B_u\) coincide, so the two adjoint channels share a common positive definite fixed point. Gauging both families by that fixed point puts them in a common TP gauge. Theorem&#160;<a href="ch-spectral.html#thm:eigenvalue_bound">9.14</a> then applies to the mixed transfer operator in that gauge, and similarity preserves the eigenvalue \(\lambda \). </p>
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:local_symmetry_iff_spectral_radius">
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:twisted_transfer_modulus_one_gauge_phase">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">18.40</span>
-    <span class="theorem_thmtitle">Local symmetry \(\Leftrightarrow \) spectral radius one</span>
+    <span class="theorem_thmlabel">18.43</span>
+    <span class="theorem_thmtitle">Modulus-one twisted eigenvalue implies gauge-phase equivalence</span>
     <div class="thm_header_extras">
 
     
@@ -3850,9 +4081,9 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-symmetry.html#thm:local_symmetry_iff_spectral_radius">#</a>
+    <a class="icon proof" href="ch-symmetry.html#thm:twisted_transfer_modulus_one_gauge_phase">#</a>
     
-    <a class="icon proof" href="ch-symmetry.html#a0000000950"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-symmetry.html#a0000000955"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3868,13 +4099,642 @@
         
         <ul class="uses">
           
-          <li><a href="ch-symmetry.html#def:local_symmetry">Definition 18.30</a></li>
+          <li><a href="ch-symmetry.html#def:twisted_transfer_map">Definition 18.28</a></li>
+          
+          <li><a href="ch-symmetry.html#def:twisted_mixed_companion">Definition 18.40</a></li>
+          
+          <li><a href="ch-mps.html#def:gauge_phase_equiv">Definition 2.16</a></li>
+          
+          <li><a href="ch-mps.html#def:injective">Definition 2.21</a></li>
+          
+          <li><a href="ch-symmetry.html#lem:unitary_kraus_mixing">Lemma 18.37</a></li>
+          
+          <li><a href="ch-symmetry.html#lem:twisted_transfer_eq_mixed_transfer">Lemma 18.41</a></li>
+          
+          <li><a href="ch-qpf.html#thm:left_canonical_gauge">Theorem 8.11</a></li>
+          
+          <li><a href="ch-spectral.html#thm:modulus_one_gauge_irr_tp">Theorem 9.28</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.twistedTransfer_modulus_one_implies_gaugePhase" class="lean_decl">MPSTensor.twistedTransfer_modulus_one_implies_gaugePhase</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   Let \(A\) be an injective MPS tensor with \(\mathcal{E}_A(\mathbb {1})=\mathbb {1}\), and let \(u\) satisfy \(u u^\dagger = \mathbb {1}\). If </p>
+<div class="displaymath" id="a0000000956">
+  \[  \mathcal{E}_u(X) = \lambda X  \]
+</div>
+<p> for some nonzero \(X \in M_{D}(\mathbb {C})\) with \(|\lambda |=1\), then \(A\) is gauge-phase equivalent to the companion tensor \(B_u\). </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000955">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> By Lemma&#160;<a href="ch-symmetry.html#lem:twisted_transfer_eq_mixed_transfer">18.41</a>, the twisted transfer map is the mixed transfer operator \(F_{A,B_u}\). Because \(B_u\) is obtained from \(A\) by unitary mixing of the Kraus operators, the transfer maps of \(A\) and \(B_u\) coincide, so the two adjoint channels share a common positive definite fixed point. Gauging both families by that fixed point puts them in a common TP gauge. In that gauge the eigenvalue equation becomes a modulus-one peripheral eigenvalue for an irreducible mixed transfer operator, so Theorem&#160;<a href="ch-spectral.html#thm:modulus_one_gauge_irr_tp">9.28</a> yields gauge-phase equivalence. Undoing the common TP gauge gives the claim for \(A\) and \(B_u\). </p>
+
+  </div>
+</div>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:boundary_string_order_tendsto_zero">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">18.44</span>
+    <span class="lemma_thmtitle">Spectral radius \({\lt}1\) forces boundary-string decay</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-symmetry.html#lem:boundary_string_order_tendsto_zero">#</a>
+    
+    <a class="icon proof" href="ch-symmetry.html#a0000000957"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-symmetry.html#def:string_order_boundary_param">Definition 18.30</a></li>
+          
+          <li><a href="ch-symmetry.html#def:twisted_transfer_map">Definition 18.28</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.stringOrderBoundaryParam_tendsto_zero_of_spectralRadius_lt_one" class="lean_decl">MPSTensor.stringOrderBoundaryParam_tendsto_zero_of_spectralRadius_lt_one</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>   If \(\rho (\mathcal{E}_u) {\lt} 1\), then for all boundary matrices \(X,Y,\Lambda \in M_{D}(\mathbb {C})\) one has </p>
+<div class="displaymath" id="a0000000958">
+  \[  R_L(u;X,Y) \longrightarrow 0 \qquad \text{as } L \to \infty .  \]
+</div>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000957">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>In finite dimension, \(\rho (\mathcal{E}_u) {\lt} 1\) implies \(\mathcal{E}_u^L \to 0\) in operator norm. Composing with the fixed trace pairing \(Z \mapsto \operatorname{tr}(\Lambda X Z)\) gives the stated scalar convergence. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:string_order_implies_twisted_gauge_phase">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">18.45</span>
+    <span class="theorem_thmtitle">String order implies gauge-phase equivalence with the companion tensor</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-symmetry.html#thm:string_order_implies_twisted_gauge_phase">#</a>
+    
+    <a class="icon proof" href="ch-symmetry.html#a0000000959"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-symmetry.html#def:has_string_order">Definition 18.32</a></li>
+          
+          <li><a href="ch-symmetry.html#def:twisted_mixed_companion">Definition 18.40</a></li>
+          
+          <li><a href="ch-mps.html#def:gauge_phase_equiv">Definition 2.16</a></li>
+          
+          <li><a href="ch-mps.html#def:injective">Definition 2.21</a></li>
+          
+          <li><a href="ch-symmetry.html#lem:boundary_string_order_tendsto_zero">Lemma 18.44</a></li>
+          
+          <li><a href="ch-symmetry.html#thm:twisted_transfer_spectral_radius_le_one">Theorem 18.42</a></li>
+          
+          <li><a href="ch-symmetry.html#thm:twisted_transfer_modulus_one_gauge_phase">Theorem 18.43</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.gaugePhaseEquiv_twisted_of_hasStringOrder" class="lean_decl">MPSTensor.gaugePhaseEquiv_twisted_of_hasStringOrder</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   Let \(A\) be injective, let \(\Lambda \in M_{D}(\mathbb {C})\), and assume \(u u^\dagger = \mathbb {1}\) and \(\mathcal{E}_A(\mathbb {1})=\mathbb {1}\). If string order exists for \(u\) with boundary parameter \(\Lambda \), then \(A\) is gauge-phase equivalent to the companion tensor \(B_u\). </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000959">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> If \(\rho (\mathcal{E}_u) {\lt} 1\), Lemma&#160;<a href="ch-symmetry.html#lem:boundary_string_order_tendsto_zero">18.44</a> forces every boundary string-order sequence to decay to zero, contradicting Definition&#160;<a href="ch-symmetry.html#def:has_string_order">18.32</a>. Hence \(\rho (\mathcal{E}_u) \ge 1\). Theorem&#160;<a href="ch-symmetry.html#thm:twisted_transfer_spectral_radius_le_one">18.42</a> shows that every eigenvalue has modulus at most \(1\), so some peripheral eigenvalue has modulus exactly \(1\). Applying Theorem&#160;<a href="ch-symmetry.html#thm:twisted_transfer_modulus_one_gauge_phase">18.43</a> then gives the gauge-phase equivalence. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:virtual_unitary_of_twisted_gauge_phase">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">18.46</span>
+    <span class="theorem_thmtitle">Gauge-phase equivalence with the companion tensor yields a virtual unitary</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-symmetry.html#thm:virtual_unitary_of_twisted_gauge_phase">#</a>
+    
+    <a class="icon proof" href="ch-symmetry.html#a0000000960"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mps.html#def:gauge_phase_equiv">Definition 2.16</a></li>
+          
+          <li><a href="ch-symmetry.html#def:twisted_mixed_companion">Definition 18.40</a></li>
+          
+          <li><a href="ch-mps.html#def:injective">Definition 2.21</a></li>
+          
+          <li><a href="ch-qpf.html#thm:psd_fp_unique">Theorem 8.5</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.virtualUnitary_of_gaugePhaseEquiv_twisted" class="lean_decl">MPSTensor.virtualUnitary_of_gaugePhaseEquiv_twisted</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   Let \(A\) be injective, assume \(u u^\dagger = \mathbb {1}\) and \(\mathcal{E}_A(\mathbb {1})=\mathbb {1}\). If \(A\) is gauge-phase equivalent to the companion tensor \(B_u\), then there exist a unitary \(V\) and a phase \(\mu \) with \(|\mu |=1\) such that </p>
+<div class="displaymath" id="a0000000961">
+  \[  \sum _j u_{ij} A^j = \mu \,  V A^i V^\dagger \qquad \text{for all } i.  \]
+</div>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000960">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> Start from an invertible intertwiner \(X\) between \(A\) and \(B_u\). The positive matrix \(Q := X X^\dagger \) is a positive fixed point of \(\mathcal{E}_A\). By uniqueness of positive fixed points for an injective normalized tensor, \(Q\) is a positive scalar multiple of the identity. Rescaling \(X\) by the square root of that scalar produces a unitary \(V\), and the original intertwining relation becomes the phased covariance equation above, with \(|\mu |=1\). </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:twisted_transfer_eigen_of_virtual_unitary">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">18.47</span>
+    <span class="theorem_thmtitle">Virtual unitary gives a twisted-transfer eigenmatrix</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-symmetry.html#thm:twisted_transfer_eigen_of_virtual_unitary">#</a>
+    
+    <a class="icon proof" href="ch-symmetry.html#a0000000962"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-symmetry.html#def:twisted_transfer_map">Definition 18.28</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.twistedTransfer_eigen_of_virtualUnitary" class="lean_decl">MPSTensor.twistedTransfer_eigen_of_virtualUnitary</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   Assume \(\mathcal{E}_A(\mathbb {1})=\mathbb {1}\) and </p>
+<div class="displaymath" id="a0000000963">
+  \[  \sum _j u_{ij} A^j = \mu \,  V A^i V^\dagger \qquad \text{for all } i,  \]
+</div>
+<p> with \(V\) unitary. Then \(V\) is an eigenmatrix of the twisted transfer map: </p>
+<div class="displaymath" id="a0000000964">
+  \[  \mathcal{E}_u(V) = \mu V.  \]
+</div>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000962">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Expand \(\mathcal{E}_u(V)\), insert the intertwining relation into each local term, and use \(V^\dagger V = \mathbb {1}\) together with \(\mathcal{E}_A(\mathbb {1})=\mathbb {1}\). </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:boundary_state_invariant_of_virtual_unitary">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">18.48</span>
+    <span class="theorem_thmtitle">Boundary-state invariance of the virtual unitary</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-symmetry.html#thm:boundary_state_invariant_of_virtual_unitary">#</a>
+    
+    <a class="icon proof" href="ch-symmetry.html#a0000000965"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mps.html#def:injective">Definition 2.21</a></li>
+          
+          <li><a href="ch-qpf.html#thm:psd_fp_unique">Theorem 8.5</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.boundaryState_invariant_of_virtualUnitary" class="lean_decl">MPSTensor.boundaryState_invariant_of_virtualUnitary</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   Let \(A\) be injective, assume \(u u^\dagger = \mathbb {1}\), and let \(\Lambda \) be a positive definite boundary state with \(\operatorname{tr}(\Lambda )=1\) and \(\mathcal{E}_A^\dagger (\Lambda )=\Lambda \). If \(V\) is a unitary and \(\mu \) a phase satisfying </p>
+<div class="displaymath" id="a0000000966">
+  \[  \sum _j u_{ij} A^j = \mu \,  V A^i V^\dagger \qquad \text{for all } i,  \]
+</div>
+<p> then </p>
+<div class="displaymath" id="a0000000967">
+  \[  V^\dagger \Lambda V = \Lambda .  \]
+</div>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000965">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> The covariance relation shows that \(V^\dagger \Lambda V\) is another positive fixed point of the adjoint transfer map. Since \(\Lambda \) is the normalized positive fixed point, uniqueness forces \(V^\dagger \Lambda V = \Lambda \). </p>
+
+  </div>
+</div>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:has_string_order_of_local_symmetry">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">18.49</span>
+    <span class="lemma_thmtitle">Local symmetry implies string order</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-symmetry.html#lem:has_string_order_of_local_symmetry">#</a>
+    
+    <a class="icon proof" href="ch-symmetry.html#a0000000968"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-symmetry.html#def:local_symmetry">Definition 18.31</a></li>
+          
+          <li><a href="ch-symmetry.html#def:has_string_order">Definition 18.32</a></li>
+          
+          <li><a href="ch-symmetry.html#thm:twisted_transfer_eigen_of_virtual_unitary">Theorem 18.47</a></li>
+          
+          <li><a href="ch-symmetry.html#def:string_order_boundary_param">Definition 18.30</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.hasStringOrder_of_localSymmetry" class="lean_decl">MPSTensor.hasStringOrder_of_localSymmetry</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>   Assume \(\operatorname{tr}(\Lambda )=1\) and \(\mathcal{E}_A(\mathbb {1})=\mathbb {1}\). If \(u\) is a local symmetry of \(A\) with respect to \(\Lambda \), then string order exists for \(u\). </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000968">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> Choose the boundary matrices \(X = V^\dagger \) and \(Y = V\), where \(V\) is the unitary from the local-symmetry datum. By Theorem&#160;<a href="ch-symmetry.html#thm:twisted_transfer_eigen_of_virtual_unitary">18.47</a>, one has \(\mathcal{E}_u^L(V)=\mu ^L V\). Therefore </p>
+<div class="displaymath" id="a0000000969">
+  \[  R_L(u;V^\dagger ,V)=\mu ^L \operatorname{tr}(\Lambda )=\mu ^L,  \]
+</div>
+<p> whose norm is constantly \(1\). </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:local_symmetry_iff_spectral_radius">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">18.50</span>
+    <span class="theorem_thmtitle">Local symmetry iff a unitary peripheral eigenmatrix exists</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-symmetry.html#thm:local_symmetry_iff_spectral_radius">#</a>
+    
+    <a class="icon proof" href="ch-symmetry.html#a0000000970"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-symmetry.html#def:local_symmetry">Definition 18.31</a></li>
           
           <li><a href="ch-symmetry.html#def:twisted_transfer_map">Definition 18.28</a></li>
           
           <li><a href="ch-mps.html#def:injective">Definition 2.21</a></li>
           
-          <li><a href="ch-symmetry.html#thm:twisted_transfer_spectral_radius_le_one">Theorem 18.39</a></li>
+          <li><a href="ch-symmetry.html#thm:twisted_transfer_eigen_of_virtual_unitary">Theorem 18.47</a></li>
+          
+          <li><a href="ch-symmetry.html#thm:twisted_transfer_modulus_one_gauge_phase">Theorem 18.43</a></li>
+          
+          <li><a href="ch-symmetry.html#thm:virtual_unitary_of_twisted_gauge_phase">Theorem 18.46</a></li>
+          
+          <li><a href="ch-symmetry.html#thm:boundary_state_invariant_of_virtual_unitary">Theorem 18.48</a></li>
           
         </ul>
     
@@ -3905,11 +4765,15 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   For a pure FCS, assume \(u u^\dagger = \mathbb {1}\), \(\mathcal{E}_A(\mathbb {1})=\mathbb {1}\), \(\Lambda \) is positive definite, \(\operatorname{tr}(\Lambda )=1\), and \(\mathcal{E}_A^\dagger (\Lambda )=\Lambda \). Then \(u\) is a local symmetry iff \(\rho (\mathcal{E}_u) = 1\). </p>
+  <p>   Let \(A\) be injective, and assume \(u u^\dagger = \mathbb {1}\), \(\mathcal{E}_A(\mathbb {1})=\mathbb {1}\), \(\Lambda \) is positive definite, \(\operatorname{tr}(\Lambda )=1\), and \(\mathcal{E}_A^\dagger (\Lambda )=\Lambda \). Then \(u\) is a local symmetry if and only if there exist a unitary \(V \in M_{D}(\mathbb {C})\) and a phase \(\mu \) with \(|\mu |=1\) such that </p>
+<div class="displaymath" id="a0000000971">
+  \[  \mathcal{E}_u(V) = \mu V.  \]
+</div>
+<p> By Theorem&#160;<a href="ch-symmetry.html#thm:twisted_transfer_spectral_radius_le_one">18.42</a>, this witness form is equivalent to the peripheral-spectrum condition \(\rho (\mathcal{E}_u)=1\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000950">
+<div class="proof_wrapper" id="a0000000970">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3917,11 +4781,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Requires spectral theory of completely positive maps (Perron–Frobenius for CP maps). Diagrammatically one is studying the asymptotics of the doubled string-order chain </p>
-<div class="displaymath" id="a0000000951">
-  \[  \begin{array}{ccc} X &  \text{---} &  \mathcal{E}_{u}(X) \\ &  \bullet & \\ &  \vert & \\ u &  \textcolor{red}{\bullet } & \\ &  \vert & \\ &  \bullet & \\ &  n,\; n’ & \end{array} \qquad \rightsquigarrow \qquad \begin{array}{ccccccccc} \multicolumn{9}{c}{\operatorname {tr}} \\ \bullet &  \text{---} & \begin{array}{c}\bullet \\ \vert \\ \textcolor{red}{\bullet }\\ \vert \\ \bullet \end{array}&  \text{---} & \begin{array}{c}\bullet \\ \vert \\ \textcolor{red}{\bullet }\\ \vert \\ \bullet \end{array}&  \text{---} &  \cdots &  \text{---} & \begin{array}{c}\bullet \\ \vert \\ \textcolor{red}{\bullet }\\ \vert \\ \bullet \end{array}\\ \Lambda & & & & & & & & \\ \multicolumn{9}{c}{u} \\ \multicolumn{9}{c}{L} \end{array}  \]
-</div>
-<p> by iterating the local twisted transfer cell. </p>
+  <p> The forward direction is Theorem&#160;<a href="ch-symmetry.html#thm:twisted_transfer_eigen_of_virtual_unitary">18.47</a>. For the reverse direction, start from a unitary peripheral eigenmatrix. Theorem&#160;<a href="ch-symmetry.html#thm:twisted_transfer_modulus_one_gauge_phase">18.43</a> turns it into a gauge-phase equivalence with the companion tensor; then Theorem&#160;<a href="ch-symmetry.html#thm:virtual_unitary_of_twisted_gauge_phase">18.46</a> yields a virtual unitary and phase satisfying the local covariance relation, and Theorem&#160;<a href="ch-symmetry.html#thm:boundary_state_invariant_of_virtual_unitary">18.48</a> gives the boundary-state invariance needed to assemble the local-symmetry data. </p>
 
   </div>
 </div>
@@ -3930,7 +4790,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">18.41</span>
+    <span class="theorem_thmlabel">18.51</span>
     <span class="theorem_thmtitle">String order \(\Leftrightarrow \) local symmetry</span>
     <div class="thm_header_extras">
 
@@ -3941,7 +4801,7 @@
 
     <a class="icon proof" href="ch-symmetry.html#thm:string_order_iff_local_symmetry">#</a>
     
-    <a class="icon proof" href="ch-symmetry.html#a0000000952"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-symmetry.html#a0000000972"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3957,13 +4817,19 @@
         
         <ul class="uses">
           
-          <li><a href="ch-symmetry.html#def:has_string_order">Definition 18.31</a></li>
+          <li><a href="ch-symmetry.html#def:has_string_order">Definition 18.32</a></li>
           
-          <li><a href="ch-symmetry.html#def:local_symmetry">Definition 18.30</a></li>
+          <li><a href="ch-symmetry.html#def:local_symmetry">Definition 18.31</a></li>
           
           <li><a href="ch-mps.html#def:injective">Definition 2.21</a></li>
           
-          <li><a href="ch-symmetry.html#thm:local_symmetry_iff_spectral_radius">Theorem 18.40</a></li>
+          <li><a href="ch-symmetry.html#thm:string_order_implies_twisted_gauge_phase">Theorem 18.45</a></li>
+          
+          <li><a href="ch-symmetry.html#thm:virtual_unitary_of_twisted_gauge_phase">Theorem 18.46</a></li>
+          
+          <li><a href="ch-symmetry.html#thm:boundary_state_invariant_of_virtual_unitary">Theorem 18.48</a></li>
+          
+          <li><a href="ch-symmetry.html#lem:has_string_order_of_local_symmetry">Lemma 18.49</a></li>
           
         </ul>
     
@@ -3998,7 +4864,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000952">
+<div class="proof_wrapper" id="a0000000972">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4006,11 +4872,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Requires spectral theory of completely positive maps (Perron–Frobenius for CP maps). The quantity </p>
-<div class="displaymath" id="a0000000953">
-  \[  \begin{array}{ccccccccc} \multicolumn{9}{c}{\operatorname {tr}} \\ \bullet &  \text{---} & \begin{array}{c}\bullet \\ \vert \\ \textcolor{red}{\bullet }\\ \vert \\ \bullet \end{array}&  \text{---} & \begin{array}{c}\bullet \\ \vert \\ \textcolor{red}{\bullet }\\ \vert \\ \bullet \end{array}&  \text{---} &  \cdots &  \text{---} & \begin{array}{c}\bullet \\ \vert \\ \textcolor{red}{\bullet }\\ \vert \\ \bullet \end{array}\\ \Lambda & & & & & & & & \\ \multicolumn{9}{c}{u} \\ \multicolumn{9}{c}{L} \end{array}  \]
-</div>
-<p> is the tensor-network expression whose non-decay is equivalent to spectral radius one. </p>
+  <p> If string order exists, Theorem&#160;<a href="ch-symmetry.html#thm:string_order_implies_twisted_gauge_phase">18.45</a> gives a gauge-phase equivalence with the companion tensor. Theorem&#160;<a href="ch-symmetry.html#thm:virtual_unitary_of_twisted_gauge_phase">18.46</a> extracts a virtual unitary and phase from that equivalence, and Theorem&#160;<a href="ch-symmetry.html#thm:boundary_state_invariant_of_virtual_unitary">18.48</a> shows that the same unitary preserves the boundary state, so one obtains local symmetry. Conversely, Lemma&#160;<a href="ch-symmetry.html#lem:has_string_order_of_local_symmetry">18.49</a> turns local symmetry into a non-decaying boundary string-order sequence. </p>
 
   </div>
 </div>
@@ -4019,7 +4881,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">18.42</span>
+    <span class="theorem_thmlabel">18.52</span>
     <span class="theorem_thmtitle">Virtual unitary from string order</span>
     <div class="thm_header_extras">
 
@@ -4030,7 +4892,7 @@
 
     <a class="icon proof" href="ch-symmetry.html#thm:virtual_unitary_of_string_order">#</a>
     
-    <a class="icon proof" href="ch-symmetry.html#a0000000954"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-symmetry.html#a0000000973"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4046,15 +4908,13 @@
         
         <ul class="uses">
           
-          <li><a href="ch-symmetry.html#def:has_string_order">Definition 18.31</a></li>
-          
-          <li><a href="ch-symmetry.html#def:condC1">Definition 18.32</a></li>
+          <li><a href="ch-symmetry.html#def:has_string_order">Definition 18.32</a></li>
           
           <li><a href="ch-mps.html#def:injective">Definition 2.21</a></li>
           
-          <li><a href="ch-symmetry.html#thm:string_order_iff_local_symmetry">Theorem 18.41</a></li>
+          <li><a href="ch-symmetry.html#thm:string_order_implies_twisted_gauge_phase">Theorem 18.45</a></li>
           
-          <li><a href="ch-symmetry.html#thm:local_symmetry_iff_spectral_radius">Theorem 18.40</a></li>
+          <li><a href="ch-symmetry.html#thm:virtual_unitary_of_twisted_gauge_phase">Theorem 18.46</a></li>
           
         </ul>
     
@@ -4085,14 +4945,14 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   For an injective MPS, assume \(u u^\dagger = \mathbb {1}\), \(\mathcal{E}_A(\mathbb {1})=\mathbb {1}\), \(\Lambda \) is positive definite, \(\operatorname{tr}(\Lambda )=1\), and \(\mathcal{E}_A^\dagger (\Lambda )=\Lambda \). If string order exists for \(u\), then there exists a virtual unitary \(V\) and a unit-modulus scalar \(\mu \) such that \(\sum _j u_{ij} A^j = \mu \,  V A^i V^\dagger \) for all&#160;\(i\). Diagrammatically this is the same local intertwining relation, but only up to an overall unit scalar on the virtual side: </p>
-<div class="displaymath" id="a0000000955">
+  <p>   For an injective MPS, let \(\Lambda \in M_{D}(\mathbb {C})\), and assume \(u u^\dagger = \mathbb {1}\) and \(\mathcal{E}_A(\mathbb {1})=\mathbb {1}\). If string order exists for \(u\) with boundary parameter \(\Lambda \), then there exists a virtual unitary \(V\) and a unit-modulus scalar \(\mu \) such that \(\sum _j u_{ij} A^j = \mu \,  V A^i V^\dagger \) for all&#160;\(i\). Diagrammatically this is the same local intertwining relation, but only up to an overall unit scalar on the virtual side: </p>
+<div class="displaymath" id="a0000000974">
   \[  \begin{array}{ccccccc}& &  i & & & &  i \\ & &  \vert & & & &  \vert \\ u & &  \textcolor{red}{\bullet } & & & &  \bullet \\ & &  \vert & &  = & & \\ \bullet &  \text{---} &  \bullet & &  \textcolor{red}{\bullet } &  \text{---} &  \textcolor{red}{\bullet } \\ & & & &  V & &  V^\dagger \end{array}  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000954">
+<div class="proof_wrapper" id="a0000000973">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4100,11 +4960,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Requires spectral theory of completely positive maps (Perron–Frobenius for CP maps). The tensor-network input is the non-decaying string-order chain </p>
-<div class="displaymath" id="a0000000956">
-  \[  \begin{array}{ccccccccc} \multicolumn{9}{c}{\operatorname {tr}} \\ \bullet &  \text{---} & \begin{array}{c}\bullet \\ \vert \\ \textcolor{red}{\bullet }\\ \vert \\ \bullet \end{array}&  \text{---} & \begin{array}{c}\bullet \\ \vert \\ \textcolor{red}{\bullet }\\ \vert \\ \bullet \end{array}&  \text{---} &  \cdots &  \text{---} & \begin{array}{c}\bullet \\ \vert \\ \textcolor{red}{\bullet }\\ \vert \\ \bullet \end{array}\\ \Lambda & & & & & & & & \\ \multicolumn{9}{c}{u} \\ \multicolumn{9}{c}{L} \end{array}  \]
-</div>
-<p> and the output is the phased local intertwiner shown above. </p>
+  <p> String order first gives gauge-phase equivalence with the companion tensor by Theorem&#160;<a href="ch-symmetry.html#thm:string_order_implies_twisted_gauge_phase">18.45</a>. Theorem&#160;<a href="ch-symmetry.html#thm:virtual_unitary_of_twisted_gauge_phase">18.46</a> then normalizes the resulting intertwiner to a unitary and produces the phase \(\mu \). </p>
 
   </div>
 </div>
@@ -4116,7 +4972,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">18.43</span>
+    <span class="definition_thmlabel">18.53</span>
     <span class="definition_thmtitle">Same SPT phase</span>
     <div class="thm_header_extras">
 
@@ -4182,7 +5038,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">18.44</span>
+    <span class="theorem_thmlabel">18.54</span>
     <span class="theorem_thmtitle">String order holds for injective symmetric MPS</span>
     <div class="thm_header_extras">
 
@@ -4193,7 +5049,7 @@
 
     <a class="icon proof" href="ch-symmetry.html#thm:has_string_order_of_symmetric_injective">#</a>
     
-    <a class="icon proof" href="ch-symmetry.html#a0000000957"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-symmetry.html#a0000000975"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4209,15 +5065,19 @@
         
         <ul class="uses">
           
-          <li><a href="ch-symmetry.html#thm:virtual_rep_injective">Theorem 18.13</a></li>
-          
-          <li><a href="ch-spectral.html#thm:modulus_one_gauge">Theorem 9.16</a></li>
+          <li><a href="ch-symmetry.html#def:has_string_order">Definition 18.32</a></li>
           
           <li><a href="ch-symmetry.html#thm:virtual_rep_injective">Theorem 18.13</a></li>
           
-          <li><a href="ch-spectral.html#thm:modulus_one_gauge">Theorem 9.16</a></li>
+          <li><a href="ch-symmetry.html#thm:virtual_rep_injective">Theorem 18.13</a></li>
           
-          <li><a href="ch-symmetry.html#thm:string_order_iff_local_symmetry">Theorem 18.41</a></li>
+          <li><a href="ch-symmetry.html#thm:twisted_transfer_modulus_one_gauge_phase">Theorem 18.43</a></li>
+          
+          <li><a href="ch-symmetry.html#thm:virtual_unitary_of_twisted_gauge_phase">Theorem 18.46</a></li>
+          
+          <li><a href="ch-symmetry.html#thm:boundary_state_invariant_of_virtual_unitary">Theorem 18.48</a></li>
+          
+          <li><a href="ch-symmetry.html#lem:has_string_order_of_local_symmetry">Lemma 18.49</a></li>
           
         </ul>
     
@@ -4248,11 +5108,11 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   Let \(A\) be an injective tensor, symmetric under a unitary representation \(U\). Assume \(\mathcal{E}_A(\mathbb {1})=\mathbb {1}\), \(\Lambda \) is positive definite, \(\operatorname{tr}(\Lambda )=1\), and \(\mathcal{E}_A^\dagger (\Lambda )=\Lambda \). Then string order exists for every group element \(g\): the twisted transfer map \(\mathcal{E}_{U(g)}\) has the virtual gauge matrix as a fixed point with eigenvalue&#160;\(1\). </p>
+  <p>   Let \(A\) be an injective tensor, symmetric under a unitary representation \(U\). Assume \(\mathcal{E}_A(\mathbb {1})=\mathbb {1}\), \(\Lambda \) is positive definite, \(\operatorname{tr}(\Lambda )=1\), and \(\mathcal{E}_A^\dagger (\Lambda )=\Lambda \). Then string order exists for every group element \(g\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000957">
+<div class="proof_wrapper" id="a0000000975">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4260,7 +5120,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> The virtual representation theorem produces \(\rho (g^{-1})\in \mathrm{GL}_D(\mathbb {C})\) satisfying \(\sum _j U(g)_{ij}\, A^j = \rho (g^{-1})\, A^i\, \rho (g^{-1})^{-1}\). A direct computation using \(\mathcal{E}_A(\mathbb {1})=\mathbb {1}\) shows that \(\mathcal{E}_{U(g)}(\rho (g^{-1})) = \rho (g^{-1})\), so \(\rho (g^{-1})\) is a nonzero eigenvector with eigenvalue&#160;\(1\). Since \(|1|=1\), the modulus-one rigidity theorem yields gauge-phase equivalence, from which one extracts a virtual unitary \(W\) and a unit-modulus phase \(\mu \) satisfying the local symmetry conditions. The boundary-state invariance \(W^\dagger \Lambda W=\Lambda \) then gives local symmetry, which implies string order. </p>
+  <p> The virtual representation theorem produces \(\rho (g^{-1})\in \mathrm{GL}_D(\mathbb {C})\) satisfying \(\sum _j U(g)_{ij}\, A^j = \rho (g^{-1})\, A^i\, \rho (g^{-1})^{-1}\). A direct computation using \(\mathcal{E}_A(\mathbb {1})=\mathbb {1}\) shows that \(\mathcal{E}_{U(g)}(\rho (g^{-1})) = \rho (g^{-1})\), so \(\rho (g^{-1})\) is a nonzero eigenvector with eigenvalue&#160;\(1\). Theorem&#160;<a href="ch-symmetry.html#thm:twisted_transfer_modulus_one_gauge_phase">18.43</a> upgrades this to gauge-phase equivalence with the companion tensor, and Theorem&#160;<a href="ch-symmetry.html#thm:virtual_unitary_of_twisted_gauge_phase">18.46</a> extracts a virtual unitary and phase. By Theorem&#160;<a href="ch-symmetry.html#thm:boundary_state_invariant_of_virtual_unitary">18.48</a>, this unitary preserves the boundary state, so Lemma&#160;<a href="ch-symmetry.html#lem:has_string_order_of_local_symmetry">18.49</a> gives string order. </p>
 
   </div>
 </div>
@@ -4269,7 +5129,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">18.45</span>
+    <span class="theorem_thmlabel">18.55</span>
     <span class="theorem_thmtitle">String order is an SPT invariant</span>
     <div class="thm_header_extras">
 
@@ -4280,7 +5140,7 @@
 
     <a class="icon proof" href="ch-symmetry.html#thm:string_order_invariant_of_same_phase">#</a>
     
-    <a class="icon proof" href="ch-symmetry.html#a0000000958"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-symmetry.html#a0000000976"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4296,9 +5156,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-symmetry.html#thm:has_string_order_of_symmetric_injective">Theorem 18.44</a></li>
+          <li><a href="ch-symmetry.html#thm:has_string_order_of_symmetric_injective">Theorem 18.54</a></li>
           
-          <li><a href="ch-symmetry.html#thm:has_string_order_of_symmetric_injective">Theorem 18.44</a></li>
+          <li><a href="ch-symmetry.html#thm:has_string_order_of_symmetric_injective">Theorem 18.54</a></li>
           
         </ul>
     
@@ -4329,11 +5189,11 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   If \(A\) and \(B\) are injective, both on-site symmetric under a unitary representation \(U\), and if \(\mathcal{E}_A(\mathbb {1})=\mathbb {1}\), \(\mathcal{E}_B(\mathbb {1})=\mathbb {1}\), \(\Lambda _A\) and \(\Lambda _B\) are positive definite, \(\operatorname{tr}(\Lambda _A)=1\), \(\operatorname{tr}(\Lambda _B)=1\), \(\mathcal{E}_A^\dagger (\Lambda _A)=\Lambda _A\), and \(\mathcal{E}_B^\dagger (\Lambda _B)=\Lambda _B\), then for every \(g \in G\), string order exists for \(A\) with twist \(U(g)\) if and only if it exists for&#160;\(B\). In particular, since Definition&#160;<a href="ch-symmetry.html#def:is_same_spt_phase">18.43</a> implies on-site symmetry for both tensors, this theorem applies to tensors in the same SPT phase. </p>
+  <p>   If \(A\) and \(B\) are injective, both on-site symmetric under a unitary representation \(U\), and if \(\mathcal{E}_A(\mathbb {1})=\mathbb {1}\), \(\mathcal{E}_B(\mathbb {1})=\mathbb {1}\), \(\Lambda _A\) and \(\Lambda _B\) are positive definite, \(\operatorname{tr}(\Lambda _A)=1\), \(\operatorname{tr}(\Lambda _B)=1\), \(\mathcal{E}_A^\dagger (\Lambda _A)=\Lambda _A\), and \(\mathcal{E}_B^\dagger (\Lambda _B)=\Lambda _B\), then for every \(g \in G\), string order exists for \(A\) with twist \(U(g)\) if and only if it exists for&#160;\(B\). In particular, since Definition&#160;<a href="ch-symmetry.html#def:is_same_spt_phase">18.53</a> implies on-site symmetry for both tensors, this theorem applies to tensors in the same SPT phase. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000958">
+<div class="proof_wrapper" id="a0000000976">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4341,7 +5201,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Both directions follow from Theorem&#160;<a href="ch-symmetry.html#thm:has_string_order_of_symmetric_injective">18.44</a>, which shows that string order holds universally for injective symmetric tensors with canonical normalisations. </p>
+  <p> Both directions follow from Theorem&#160;<a href="ch-symmetry.html#thm:has_string_order_of_symmetric_injective">18.54</a>, which shows that string order holds universally for injective symmetric tensors with canonical normalisations. </p>
 
   </div>
 </div>

@@ -2798,7 +2798,7 @@
     Remark
     </span>
     <span class="remark_thmlabel">3.27</span>
-    <span class="remark_thmtitle">Finite-length span criterion for the abstract biCF hypothesis</span>
+    <span class="remark_thmtitle">Finite-length span and selector criteria for the abstract biCF hypothesis</span>
     <div class="thm_header_extras">
 
     
@@ -2830,7 +2830,7 @@
         </div>
   </div>
   <div class="remark_thmcontent">
-  <p>     Let \((A_k)\) be a family of block tensors, and fix a length \(L\). Write \(A_k^w\) for the length-\(L\) word evaluation of \(A_k\) along a word \(w\). The predicate <span class="ttfamily">WordTupleSpanTop</span> says that the tuple-valued evaluations </p>
+  <p>          Let \((A_k)\) be a family of block tensors, and fix a length \(L\). Write \(A_k^w\) for the length-\(L\) word evaluation of \(A_k\) along a word \(w\). The predicate <span class="ttfamily">WordTupleSpanTop</span> says that the tuple-valued evaluations </p>
 <div class="displaymath" id="a0000000205">
   \[  w \longmapsto (A_k^w)_k  \]
 </div>
@@ -2839,6 +2839,7 @@
   \[  \sum _k \operatorname{tr}(\Delta _k A_k^w) = 0 \qquad \text{for every word } w \text{ of length } L,  \]
 </div>
 <p> then every block coefficient \(\Delta _k\) vanishes. The theorem <span class="ttfamily">hasBiCF_of_wordTupleSpanTop</span> proves that the spanning condition implies this separation property, by nondegeneracy of the product trace pairing. The packaging theorem <span class="ttfamily">horizontalCFData_of_wordTupleSpanTop</span> then inserts the resulting biCF witness into <span class="ttfamily">HorizontalCFData</span> once injectivity, left-canonicality, and nonzero weights are given. </p>
+<p>The predicate <span class="ttfamily">PropBlockInjective</span> isolates the finite-length content of Proposition&#160;IV.3: after some common blocking length, each block is block-injective, and after a second finite blocking length one can form word combinations which equal the identity on one chosen block and vanish on all others. Concatenating an injective prefix with such a selector suffix yields the product-algebra span condition above. This is formalized by <span class="ttfamily">wordTupleSpanTop_of_propBlockInjective</span>, and the resulting biCF witness is packaged into horizontal canonical-form data by <span class="ttfamily">horizontalCFData_of_propBlockInjective</span>. </p>
 
   </div>
 </div>
