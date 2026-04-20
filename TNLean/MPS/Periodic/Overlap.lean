@@ -1276,12 +1276,11 @@ lemma sectorBlocked_isNormal_of_isPeriodic
     (hCyclic : IsCyclicSectorDecomp A blocks)
     (u : Fin m) (hNonzero : dim u ≠ 0) :
     IsNormal (blocks u) := by
-  -- PROOF STRUCTURE: see bridge lemma
-  -- `primitive_and_irreducible_sectorBlocks_of_cyclicDecomp` for the planned
-  -- proof route.
-  -- Currently sorry-backed pending discharge of
-  -- `compressedTensor_adjointTransferMap_cornerBridge`.
-  sorry
+  haveI : NeZero (dim u) := ⟨hNonzero⟩
+  obtain ⟨hPrim, hIrr⟩ :=
+    primitive_and_irreducible_sectorBlocks_of_cyclicDecomp
+      A hP blocks hBlocks_lc hBlocks_mpv hCyclic u hNonzero
+  exact isNormal_of_tp_primitive_irreducible (blocks u) (hBlocks_lc u) hPrim hIrr
 
 /-- Gauge-phase equivalence is preserved by physical blocking.
 
