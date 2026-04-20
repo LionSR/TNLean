@@ -206,6 +206,33 @@ noncomputable def parentHamiltonianES (A : MPSTensor d D) (L N : ℕ) :
   let e := (WithLp.linearEquiv 2 ℂ (NSiteSpace d N))
   e.symm.toLinearMap.comp ((parentHamiltonian A L N).comp e.toLinearMap)
 
+/-- The transported parent-Hamiltonian ground space is exactly the kernel of the
+transported parent Hamiltonian. -/
+theorem parentHamiltonianGroundSpaceES_eq_ker_parentHamiltonianES
+    (A : MPSTensor d D) (L N : ℕ) :
+    parentHamiltonianGroundSpaceES A L N =
+      LinearMap.ker (parentHamiltonianES A L N) := by
+  let e := WithLp.linearEquiv 2 ℂ (NSiteSpace d N)
+  ext v
+  constructor
+  · intro hv
+    rw [parentHamiltonianGroundSpaceES, Submodule.mem_map] at hv
+    obtain ⟨w, hw, rfl⟩ := hv
+    rw [LinearMap.mem_ker] at hw ⊢
+    simpa [parentHamiltonianES, e] using congrArg e.symm hw
+  · intro hv
+    rw [LinearMap.mem_ker] at hv
+    rw [parentHamiltonianGroundSpaceES, Submodule.mem_map]
+    refine ⟨e v, ?_, by simp [e]⟩
+    rw [LinearMap.mem_ker]
+    have hv' := congrArg e hv
+    simpa [parentHamiltonianES, e] using hv'
+
+@[simp] theorem mem_parentHamiltonianGroundSpaceES_iff
+    (A : MPSTensor d D) (L N : ℕ) (v : EuclideanSpace ℂ (Cfg d N)) :
+    v ∈ parentHamiltonianGroundSpaceES A L N ↔ parentHamiltonianES A L N v = 0 := by
+  rw [parentHamiltonianGroundSpaceES_eq_ker_parentHamiltonianES, LinearMap.mem_ker]
+
 /-! ### Uniform spectral gap for the MPS parent Hamiltonian -/
 
 /- Scout report (2026-04-19, Layer 4 KL martingale).
@@ -244,11 +271,13 @@ theorem parentHamiltonianES_gap_bound_of_friedrichs
         ((1 : ℝ) / (4 * (L : ℝ))) * ‖v‖ ≤
           ‖parentHamiltonianES A L N v‖ := by
   -- Missing bridge: the MPS-specific Friedrichs-angle estimate for adjacent
-  -- local ground spaces, the finite-overlap row-sum bound, positivity of the
-  -- transported parent Hamiltonian, and the identification of
-  -- `parentHamiltonianGroundSpaceES` with `LinearMap.ker (parentHamiltonianES A L N)`.
-  -- Once formalized, this should feed the resulting quadratic-form inequality
-  -- into `FrustrationFree.spectralGap_of_martingale`.
+  -- local ground spaces, the finite-overlap row-sum bound, and positivity of
+  -- the transported parent Hamiltonian. The kernel identification needed for
+  -- the final martingale application is now available as
+  -- `parentHamiltonianGroundSpaceES_eq_ker_parentHamiltonianES`.
+  -- Once the remaining analytic inputs are formalized, this should feed the
+  -- resulting quadratic-form inequality into
+  -- `FrustrationFree.spectralGap_of_martingale`.
   sorry
 
 /--
