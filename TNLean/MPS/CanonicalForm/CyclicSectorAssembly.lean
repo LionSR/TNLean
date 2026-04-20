@@ -22,6 +22,19 @@ variable {d k : ℕ}
 noncomputable def lcmPeriod (periods : Fin k → ℕ) : ℕ :=
   Finset.univ.lcm periods
 
+/-- The LCM of a positive family of periods is positive. -/
+theorem lcmPeriod_pos {periods : Fin k → ℕ} (h : ∀ i, 0 < periods i) :
+    0 < lcmPeriod periods := by
+  refine Nat.pos_of_ne_zero ?_
+  refine Finset.lcm_ne_zero_iff.2 ?_
+  intro i _
+  exact Nat.ne_of_gt (h i)
+
+/-- Each member of the family divides the LCM of the family. -/
+theorem dvd_lcmPeriod (periods : Fin k → ℕ) (i : Fin k) :
+    periods i ∣ lcmPeriod periods :=
+  Finset.dvd_lcm (Finset.mem_univ i)
+
 /-- Block each family member to the common `lcmPeriod`.
 
 This keeps a uniform physical dimension across the assembled family while
@@ -51,19 +64,12 @@ theorem isPrimitive_transferMap_commonPeriodBlocking
           (commonPeriodBlocking (d := d) blocks periods i)) := by
   intro i
   letI : NeZero (dim i) := ⟨Nat.ne_of_gt (hDim i)⟩
-  have hlcmPos : 0 < lcmPeriod periods := by
-    have hne : lcmPeriod periods ≠ 0 := by
-      refine Finset.lcm_ne_zero_iff.2 ?_
-      intro j _
-      exact Nat.ne_of_gt (hPeriodsPos j)
-    exact Nat.pos_of_ne_zero hne
-  have hi_dvd : periods i ∣ lcmPeriod periods := Finset.dvd_lcm (Finset.mem_univ i)
   simpa [commonPeriodBlocking] using
     isPrimitive_transferMap_blockTensor_of_dvd
       (d := d) (D := dim i)
       (A := blocks i)
       (p := periods i) (q := lcmPeriod periods)
-      hi_dvd hlcmPos (hPrim i)
+      (dvd_lcmPeriod periods i) (lcmPeriod_pos hPeriodsPos) (hPrim i)
 
 /-- The common-period blocked family has the expected physical dimension. -/
 theorem commonPeriodBlocking_apply
