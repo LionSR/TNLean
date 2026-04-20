@@ -3,11 +3,13 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Channel.Determinant.HilbertSchmidt
+import TNLean.Channel.KrausRepresentation
+import TNLean.Channel.Schwarz.MultiplicativeDomainFull
 
 /-!
 # Heisenberg-dual multiplicativity from determinant saturation
 
-This file packages the Kadison--Schwarz trace-summing argument in the Heisenberg
+This file presents the Kadison--Schwarz trace-summing argument in the Heisenberg
 picture used in the forward direction of Wolf Theorem 6.1(2).
 
 Starting from a Kraus representation of a CPTP map `T` with `‖channelDet T‖ = 1`,
@@ -18,8 +20,8 @@ that the Heisenberg dual is multiplicative.
 
 ## Main statements
 
-* `heisenberg_dual_multiplicative` — determinant saturation forces the
-  Heisenberg dual to be multiplicative on all matrices.
+* `ChannelDeterminant.heisenberg_dual_multiplicative` — determinant
+  saturation forces the Heisenberg dual to be multiplicative on all matrices.
 
 ## References
 
@@ -53,6 +55,8 @@ private noncomputable def matrixSpaceBasis (d : ℕ) :
 section WolfStatements
 
 variable {T : MatrixEnd d}
+
+namespace ChannelDeterminant
 
 private theorem heisenberg_dual_det_eq_one [NeZero d]
     {T : MatrixEnd d} (hdet : ‖channelDet T‖ = 1)
@@ -300,5 +304,7 @@ theorem heisenberg_dual_multiplicative [NeZero d]
     _ = (K a)ᴴ * M * K a * Td N := by simp only [Matrix.mul_assoc]
     _ = (K a)ᴴ * M * K a * ∑ b : Fin r, (K b)ᴴ * N * K b := by
         rw [show Td N = ∑ b : Fin r, (K b)ᴴ * N * K b from hTd N]
+
+end ChannelDeterminant
 
 end WolfStatements

@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Channel.Determinant.Bound
+import TNLean.Channel.Peripheral.IrreducibleChannel
 
 /-!
 # Hilbert--Schmidt helper lemmas for determinant saturation
@@ -17,16 +18,16 @@ Hilbert--Schmidt norm computations; and an AM--GM argument upgrades
 
 ## Main statements
 
-* `channel_all_eigenvalues_norm_one` — determinant saturation forces every
-  eigenvalue of a CPTP map to lie on the unit circle.
-* `stdBasis_conjTranspose_eq_swap` — conjugate transpose swaps the indices of a
-  matrix-unit basis element.
-* `sum_stdBasis_mul_conjTranspose` — the standard basis satisfies
-  `∑_{ij} E_{ij} E_{ij}^† = d • 1`.
-* `eq_zero_of_nonneg_of_sum_le_zero` — a finite nonnegative family with total
-  sum at most `0` vanishes termwise.
-* `channelDet_norm_one_hs_norm_ge` — determinant saturation gives the AM--GM
-  lower bound on the Hilbert--Schmidt norm.
+* `ChannelDeterminant.channel_all_eigenvalues_norm_one` — determinant
+  saturation forces every eigenvalue of a CPTP map to lie on the unit circle.
+* `ChannelDeterminant.stdBasis_conjTranspose_eq_swap` — conjugate transpose
+  swaps the indices of a matrix-unit basis element.
+* `ChannelDeterminant.sum_stdBasis_mul_conjTranspose` — the standard basis
+  satisfies `∑_{ij} E_{ij} E_{ij}^† = d • 1`.
+* `ChannelDeterminant.eq_zero_of_nonneg_of_sum_le_zero` — a finite nonnegative
+  family with total sum at most `0` vanishes termwise.
+* `ChannelDeterminant.channelDet_norm_one_hs_norm_ge` — determinant
+  saturation gives the AM--GM lower bound on the Hilbert--Schmidt norm.
 
 ## References
 
@@ -62,6 +63,8 @@ section WolfStatements
 variable {T : MatrixEnd d}
 
 /-! ### Helper lemmas for the forward direction of Wolf Thm 6.1(2) -/
+
+namespace ChannelDeterminant
 
 /-- Product of norms = 1 with each factor ≤ 1 implies each factor = 1. -/
 private lemma norm_eq_one_of_prod_norm_eq_one
@@ -319,5 +322,7 @@ lemma channelDet_norm_one_hs_norm_ge [NeZero d]
           (Matrix.trace ((Φ (Matrix.stdBasis ℂ (Fin d) (Fin d) ij))ᴴ *
             Φ (Matrix.stdBasis ℂ (Fin d) (Fin d) ij))).re := hA_hs
 
+
+end ChannelDeterminant
 
 end WolfStatements

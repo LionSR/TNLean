@@ -11,8 +11,8 @@ import TNLean.Channel.Determinant.UnitaryCharacterization
 /-!
 # Determinants of quantum channels
 
-Thin re-export module assembling the determinant formalization for quantum
-channels from five focused sub-modules.
+Thin module assembling the determinant development for quantum channels from
+five focused sub-modules.
 
 The split follows the same review-oriented pattern as the earlier `Full/` and
 `Growth/` refactors:

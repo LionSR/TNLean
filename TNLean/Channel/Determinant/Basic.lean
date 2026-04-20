@@ -3,10 +3,6 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Channel.Basic
-import TNLean.Channel.Peripheral.IrreducibleChannel
-import TNLean.Channel.KrausRepresentation
-import TNLean.Channel.Schwarz.MultiplicativeDomainFull
-import TNLean.Algebra.SkolemNoether
 import Mathlib.Algebra.Central.Matrix
 import Mathlib.Analysis.Complex.Polynomial.Basic
 import Mathlib.Analysis.InnerProductSpace.Adjoint

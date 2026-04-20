@@ -3,6 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Channel.Determinant.HeisenbergDual
+import TNLean.Algebra.SkolemNoether
+import TNLean.Channel.KrausRepresentation
 
 /-!
 # Unitary characterization of determinant saturation
@@ -62,8 +64,8 @@ variable {T : MatrixEnd d}
 
 Given `T(A) = P⁻¹AP` where `P ∈ GL_d(ℂ)`, and `T` preserves `*` (i.e. `Tᴴ = T†`),
 `P†P` commutes with all matrices and is therefore scalar. Since `P†P` is PSD
-and invertible, the scalar is positive real, and `V = (√c)⁻¹ · P†` is unitary
-with `T = unitaryChannel V`. -/
+and invertible, the scalar is positive real; defining `V = (√c)⁻¹ • P` makes
+`V` unitary, and setting `U := Vᴴ` yields `T = unitaryChannel U`. -/
 private theorem extract_unitary_from_inner_form [NeZero d]
     {T : MatrixEnd d} (_hT : IsChannel T)
     (P : GL (Fin d) ℂ)
@@ -175,7 +177,7 @@ private theorem forward_det_one_implies_unitaryChannel [NeZero d]
     (hT : IsChannel T) (hdet : ‖channelDet T‖ = 1) :
     ∃ U : Matrix.unitaryGroup (Fin d) ℂ, T = unitaryChannel U := by
   classical
-  have hall := channel_all_eigenvalues_norm_one (d := d) hT hdet
+  have hall := ChannelDeterminant.channel_all_eigenvalues_norm_one (d := d) hT hdet
   obtain ⟨r, K, hK⟩ := hT.cp
   have hK_tp : ∑ i : Fin r, (K i)ᴴ * K i = 1 :=
     kraus_sum_conjTranspose_mul_of_tp K T hK hT.tp
@@ -196,7 +198,8 @@ private theorem forward_det_one_implies_unitaryChannel [NeZero d]
     simp only [Matrix.mul_assoc, conjTranspose_sum, conjTranspose_mul,
       conjTranspose_conjTranspose]
   -- Td is multiplicative
-  have hMul := heisenberg_dual_multiplicative hT hdet hall K hK hK_tp Td hTd_def
+  have hMul :=
+    ChannelDeterminant.heisenberg_dual_multiplicative hT hdet hall K hK hK_tp Td hTd_def
   have hTd_ne : Td ≠ 0 := by
     intro h
     have := congr_fun (congr_arg DFunLike.coe h) 1
