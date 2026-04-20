@@ -1208,6 +1208,56 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
     and $P_i = \one_D \otimes |i\rangle\langle i|$.
 \end{proof}
 
+\begin{definition}[Packaged Naimark dilation]
+    \label{def:is_naimark_dilation}
+    \lean{POVM.IsNaimarkDilation}
+    \leanok
+    \uses{thm:naimark_isometry_isometry, thm:naimark_projection_axioms,
+          thm:naimark_recovers_povm}
+    A \emph{Naimark dilation} of a POVM $\{E_i\}$ consists of an isometry
+    $V$ into a larger Hilbert space together with a projective measurement
+    $\{P_i\}$ there such that $E_i = V^\dagger P_i V$ for all $i$.
+\end{definition}
+
+\begin{theorem}[Canonical dilation as a packaged Naimark dilation]
+    \label{thm:is_naimark_dilation_naimark}
+    \lean{POVM.isNaimarkDilation_naimark}
+    \leanok
+    \uses{def:is_naimark_dilation, thm:naimark_recovers_povm}
+    The explicit isometry $V = \sum_i M_i \otimes |i\rangle$ and projectors
+    $P_i = \one_D \otimes |i\rangle\langle i|$ satisfy the packaged axioms
+    of a Naimark dilation.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Combine the previously proved identities $V^\dagger V = \one_D$,
+    $P_i^2 = P_i$, $P_i^\dagger = P_i$, $P_i P_j = 0$ for $i \ne j$,
+    $\sum_i P_i = \one$, and $V^\dagger P_i V = E_i$.
+\end{proof}
+
+\begin{theorem}[Concrete uniqueness for canonical projectors]
+    \label{thm:naimark_concrete_uniqueness}
+    \lean{POVM.exists_isometry_mul_naimarkIsometry_of_recovery}
+    \leanok
+    \uses{def:naimark_isometry, def:naimark_projection, thm:naimark_recovers_povm}
+    Let $V : \C^D \to \C^D \otimes \C^n$ satisfy
+    $V^\dagger P_i V = E_i$ for the canonical projectors
+    $P_i = \one_D \otimes |i\rangle\langle i|$.
+    Then there exists an isometry $W$ on the dilated space such that
+    $V = W V_0$, where $V_0$ is the canonical Naimark isometry of $\{E_i\}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    For each outcome $i$, the $i$-th block of $V$ has Gram matrix $E_i$.
+    Comparing with the canonical square root $M_i$ gives
+    $V_i^\dagger V_i = M_i^\dagger M_i$, hence $V_i = U_i M_i$ for a unitary
+    $U_i$ on $\C^D$. Assemble the $U_i$ block-diagonally to obtain an
+    isometry $W = \bigoplus_i U_i$ on $\C^D \otimes \C^n$, and then
+    $V = W \sum_i M_i \otimes |i\rangle = W V_0$.
+\end{proof}
+
 \begin{definition}[POVM from a PSD resolution of identity on a dilation]
     \label{def:povm_of_psd_resolution_of_identity}
     \lean{POVM.ofPSDResolutionOfIdentity}

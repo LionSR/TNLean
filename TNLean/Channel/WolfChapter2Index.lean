@@ -10,6 +10,7 @@ import TNLean.Channel.KrausRepresentation
 import TNLean.Channel.KrausUnitaryFreedom
 import TNLean.Channel.Stinespring
 import TNLean.Channel.POVM
+import TNLean.Channel.POVM.Uniqueness
 import TNLean.Channel.TransferMatrix
 
 /-!
@@ -62,6 +63,11 @@ representations of quantum channels.
     `_sum_eq_one` — projective-measurement axioms on the dilation ✅
   - `POVM.naimark_recovers_povm` — `V† P_i V = E_i` ✅
   - `POVM.exists_naimark_dilation` — existential Naimark dilation ✅
+  - `POVM.IsNaimarkDilation` / `POVM.isNaimarkDilation_naimark`
+    — packaged Naimark-dilation predicate and canonical witness ✅
+  - `POVM.exists_isometry_mul_naimarkIsometry_of_recovery`
+    — concrete uniqueness: any dilation using the canonical projectors factors
+      through the canonical Naimark isometry via a dilation isometry ✅
   - `POVM.ofPSDResolutionOfIdentity` — converse construction: PSD resolution
     of identity on a dilation pulls back to a POVM ✅
   - `Instrument` — quantum-instrument structure + `total_isChannel`,
