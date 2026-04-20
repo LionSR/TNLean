@@ -783,12 +783,32 @@ lemma primitive_and_irreducible_sectorBlocks_of_cyclicDecomp
     _root_.IsPrimitive
         (transferMap (d := blockPhysDim d m) (D := dim u) (blocks u))
       ∧ IsIrreducibleTensor (blocks u) := by
-  -- PROOF STRUCTURE: see bridge lemma
-  -- `adjointTransferMap_primitive_and_irreducible_sectorBlock_of_cyclicDecomp`
-  -- for the planned proof route.
-  -- Currently sorry-backed pending discharge of
-  -- `compressedTensor_adjointTransferMap_cornerBridge`.
-  sorry
+  obtain ⟨hPrimAdj, hIrrAdj⟩ :=
+    adjointTransferMap_primitive_and_irreducible_sectorBlock_of_cyclicDecomp
+      A hP blocks hBlocks_lc hBlocks_mpv hCyclic u hNonzero
+  haveI : NeZero (dim u) := ⟨hNonzero⟩
+  have hM : (1 : Matrix (Fin (dim u)) (Fin (dim u)) ℂ).PosDef := by
+    classical
+    simpa only using (Matrix.PosDef.one (n := Fin (dim u)) (R := ℂ))
+  letI : NormedAddCommGroup (Matrix (Fin (dim u)) (Fin (dim u)) ℂ) :=
+    Matrix.toMatrixNormedAddCommGroup (n := Fin (dim u)) (𝕜 := ℂ) 1 hM
+  letI : SeminormedAddCommGroup (Matrix (Fin (dim u)) (Fin (dim u)) ℂ) :=
+    Matrix.toMatrixSeminormedAddCommGroup (n := Fin (dim u)) (𝕜 := ℂ) 1 hM.posSemidef
+  letI : InnerProductSpace ℂ (Matrix (Fin (dim u)) (Fin (dim u)) ℂ) :=
+    Matrix.toMatrixInnerProductSpace (n := Fin (dim u)) (𝕜 := ℂ) 1 hM.posSemidef
+  have hAdj :
+      transferMap (d := blockPhysDim d m) (D := dim u) (fun i => (blocks u i)ᴴ) =
+        (transferMap (d := blockPhysDim d m) (D := dim u) (blocks u)).adjoint := by
+    simpa only using
+      (transferMap_conjTranspose_eq_adjoint
+        (d := blockPhysDim d m) (D := dim u) (A := blocks u))
+  have hPrimAdj' :
+      _root_.IsPrimitive
+        ((transferMap (d := blockPhysDim d m) (D := dim u) (blocks u)).adjoint) := by
+    simpa only [hAdj] using hPrimAdj
+  refine ⟨(IsPrimitive.adjoint_iff
+    (E := transferMap (d := blockPhysDim d m) (D := dim u) (blocks u))).1 hPrimAdj', ?_⟩
+  exact isIrreducibleTensor_of_isIrreducibleMap_conjTranspose (blocks u) hIrrAdj
 
 /-! ## Self-overlap (first paragraph of Appendix A) -/
 
