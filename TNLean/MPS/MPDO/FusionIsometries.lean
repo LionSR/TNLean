@@ -188,8 +188,10 @@ noncomputable def blockedTransferMap (M : MPOTensor d D) (n : ℕ) :
     (MPSTensor.blockTensor (d := d * d) (D := D) M.toMPSTensor n)
 
 /-- Blocking an MPO tensor in the doubled-index MPS picture raises the transfer
-map to the corresponding power. -/
-@[simp] theorem blockedTransferMap_eq_pow (M : MPOTensor d D) (n : ℕ) :
+map to the corresponding power. Not marked `@[simp]`: downstream callers should
+invoke it via explicit `rw`/`simpa only` to keep `blockedTransferMap` as a
+primary object. -/
+theorem blockedTransferMap_eq_pow (M : MPOTensor d D) (n : ℕ) :
     blockedTransferMap M n = (transferMap M) ^ n := by
   simpa only [blockedTransferMap, transferMap_eq_toMPSTensor] using
     (MPSTensor.transferMap_blockTensor (A := M.toMPSTensor) (L := n))
@@ -279,15 +281,8 @@ map is idempotent. -/
 theorem blockedTransferMap_idempotent_of_isRFP {M : MPOTensor d D}
     (hM : IsRFP M) {n : ℕ} (hn : 0 < n) :
     blockedTransferMap M n ∘ₗ blockedTransferMap M n = blockedTransferMap M n := by
-  have hEq : blockedTransferMap M n = transferMap M :=
-    blockedTransferMap_eq_transferMap_of_isRFP hM hn
-  have hComp : blockedTransferMap M n ∘ₗ blockedTransferMap M n =
-      transferMap M ∘ₗ transferMap M := by
-    exact congrArg (fun f => f ∘ₗ f) hEq
-  calc
-    blockedTransferMap M n ∘ₗ blockedTransferMap M n = transferMap M ∘ₗ transferMap M := hComp
-    _ = transferMap M := hM
-    _ = blockedTransferMap M n := hEq.symm
+  rw [blockedTransferMap_eq_transferMap_of_isRFP hM hn]
+  exact hM
 
 /-- Transfer-map-level fusion-isometry formulation of the provisional MPDO RFP
 condition.
