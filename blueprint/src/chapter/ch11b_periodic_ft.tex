@@ -13,6 +13,266 @@ physical on-site symmetry of a tensor in irreducible form to a virtual
 $Z$-gauge, and the equivalence between $p$-refinability of the
 matrix-product-vector family and $p$-divisibility of the transfer map.
 
+\section{Periodic irreducible form and physical-index rotation}%
+\label{sec:periodic_irreducible_rotation}
+
+\begin{definition}[Periodic tensor]
+    \label{def:periodic_tensor}
+    \lean{MPSTensor.IsPeriodic}
+    \leanok
+    An irreducible MPS tensor $A$ of bond dimension $D$ is
+    \emph{$m$-periodic} (for some $m \ge 1$) if the peripheral spectrum
+    of its transfer map $\E_A$ is exactly the $m$-th roots of unity
+    $\{e^{2\pi i k/m} : 0 \le k < m\}$.
+    A $1$-periodic tensor is exactly an irreducible tensor with
+    primitive transfer map (Definition~\ref{def:primitive_channel}).
+\end{definition}
+
+\begin{definition}[Irreducible form]
+    \label{def:irreducible_form}
+    \lean{MPSTensor.IsIrreducibleForm}
+    \leanok
+    A tensor $A$ is in \emph{irreducible form} if it is block-diagonal
+    \[
+        A^i = \bigoplus_{j \in J} \mu_j\, A_j^i,
+    \]
+    where each block $A_j$ is an $m_j$-periodic tensor,
+    each weight $\mu_j \neq 0$, and the blocks are pairwise
+    non-repeated (no two distinct $j, j'$ have $A_j$ gauge-equivalent
+    to $A_{j'}$).
+    This is the standard form introduced in \cite[\S II]{DeLasCuevas2017Irreducible}.
+    It extends the normal canonical form
+    (Definition~\ref{def:is_normal_canonical_form}),
+    which requires the stronger condition that every block is $1$-periodic.
+\end{definition}
+
+\begin{definition}[Physical-index rotation]%
+    \label{def:rotate_physical}
+    \lean{MPSTensor.rotatePhysical}
+    \leanok
+    \uses{def:mps_tensor}
+    Given a matrix $u \in M_d(\C)$ and an MPS tensor~$A$,
+    the \emph{physical-index rotation} is the tensor
+    $(A_u)^i := \sum_j u_{ij}\, A^j$.
+\end{definition}
+
+\begin{theorem}[Transfer map preserved by physical rotation]%
+    \label{thm:transfer_map_rotate_physical}
+    \lean{MPSTensor.transferMap_rotatePhysical}
+    \leanok
+    \uses{def:rotate_physical, def:transfer_map}
+    If $u u^\dagger = I$, then the transfer map is invariant under
+    physical-index rotation:
+    $\mathcal{E}_{A_u} = \mathcal{E}_A$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:unitary_kraus_mixing}
+    Unitary freedom of the Kraus representation (Theorem~2.18,
+    Wolf \emph{Quantum Channels \& Operations}).
+\end{proof}
+
+\begin{theorem}[Left-canonical preserved by physical rotation]%
+    \label{thm:left_canonical_rotate_physical}
+    \lean{MPSTensor.isLeftCanonical_rotatePhysical}
+    \leanok
+    \uses{def:rotate_physical}
+    If $u u^\dagger = I$ and $A$ is left-canonical, then
+    $A_u$ is left-canonical.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:rotate_physical}
+    Expand $\sum_i B_i^\dagger B_i$ where $B_i = \sum_j u_{ij} A_j$,
+    swap sums, apply orthogonality $u^\dagger u = I$, and collapse to
+    $\sum_j A_j^\dagger A_j = I$.
+\end{proof}
+
+\begin{theorem}[Irreducibility preserved by physical rotation]%
+    \label{thm:irreducible_tensor_rotate_physical}
+    \lean{MPSTensor.isIrreducibleTensor_rotatePhysical}
+    \leanok
+    \uses{def:rotate_physical}
+    If $u u^\dagger = I$ and $A$ is irreducible, then
+    $A_u$ is irreducible.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:rotate_physical}
+    Contrapositive: any nontrivial invariant projection~$P$ for the
+    rotated tensor yields $(1-P)\, A_k\, P = 0$ for all~$k$ via the
+    orthogonality of~$u$, contradicting irreducibility of~$A$.
+\end{proof}
+
+\begin{theorem}[Periodicity preserved by physical rotation]%
+    \label{thm:periodic_rotate_physical}
+    \lean{MPSTensor.isPeriodic_rotatePhysical}
+    \leanok
+    \uses{def:rotate_physical, thm:transfer_map_rotate_physical,
+        thm:left_canonical_rotate_physical,
+        thm:irreducible_tensor_rotate_physical}
+    If $u u^\dagger = I$ and $A$ is periodic with period~$m$, then
+    $A_u$ is periodic with the same period.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:transfer_map_rotate_physical,
+        thm:left_canonical_rotate_physical,
+        thm:irreducible_tensor_rotate_physical}
+    Assembles transfer-map invariance, left-canonical preservation, and
+    irreducibility preservation.
+\end{proof}
+
+\begin{theorem}[SameMPV preserved by physical rotation]%
+    \label{thm:same_mpv_rotate_physical}
+    \lean{MPSTensor.sameMPV₂_rotatePhysical}
+    \leanok
+    \uses{def:rotate_physical, def:same_mpv}
+    If $\mathcal{V}(A) = \mathcal{V}(B)$, then
+    $\mathcal{V}(A_u) = \mathcal{V}(B_u)$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:rotate_physical, def:same_mpv}
+    Induction on the word length with a strengthened hypothesis
+    carrying an arbitrary prefix matrix, reducing each step to the
+    hypothesis via word concatenation.
+\end{proof}
+
+\begin{theorem}[Physical rotation distributes over block assembly]%
+    \label{thm:rotate_physical_blocks}
+    \lean{MPSTensor.rotatePhysical_toTensorFromBlocks}
+    \leanok
+    \uses{def:rotate_physical}
+    The rotated block-diagonal tensor satisfies
+    $(\bigoplus_k \mu_k A_k)_u
+        = \bigoplus_k \mu_k (A_k)_u$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:rotate_physical}
+    Pointwise matrix-entry computation using linearity of
+    the block-diagonal embedding and reindexing.
+\end{proof}
+
+\begin{theorem}[Irreducible form preserved by physical rotation]%
+    \label{thm:irreducible_form_rotate_physical}
+    \lean{MPSTensor.isIrreducibleForm_rotatePhysical}
+    \leanok
+    \uses{def:rotate_physical, def:irreducible_form,
+        thm:periodic_rotate_physical,
+        thm:same_mpv_rotate_physical,
+        thm:rotate_physical_blocks}
+    If $u u^\dagger = I$ and $A$ is in irreducible form~II, then
+    $A_u$ is in irreducible form~II with the same block structure and
+    rotated blocks.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:periodic_rotate_physical,
+        thm:same_mpv_rotate_physical,
+        thm:rotate_physical_blocks}
+    Each block remains periodic by
+    Theorem~\ref{thm:periodic_rotate_physical}, the SameMPV condition
+    transfers via Theorem~\ref{thm:same_mpv_rotate_physical}, and
+    block-assembly compatibility follows from
+    Theorem~\ref{thm:rotate_physical_blocks}.
+\end{proof}
+
+\subsection{The \texorpdfstring{$Z$}{Z}-gauge degree of freedom}
+
+\begin{definition}[Entrywise periodic \(Z\)-gauge ratio]\label{def:z_gauge_entry}
+    \lean{MPSTensor.zGaugeEntry}
+    \leanok
+    Given complex weights $\mu,\nu$, define the entrywise
+    \(Z\)-gauge ratio by
+    \[
+        z(\mu,\nu) := \mu/\nu.
+    \]
+\end{definition}
+
+\begin{lemma}[Matched powers imply root-of-unity ratio]\label{lem:z_gauge_entry_pow}
+    \lean{MPSTensor.zGaugeEntry_pow_eq_one_of_pow_eq}
+    \leanok
+    \uses{def:z_gauge_entry}
+    If $\mu^m=\nu^m$ and $\nu\neq 0$, then
+    \[
+        z(\mu,\nu)^m = 1.
+    \]
+\end{lemma}
+
+\begin{lemma}[Ratio rescales denominator back to numerator]\label{lem:z_gauge_entry_mul}
+    \lean{MPSTensor.zGaugeEntry_mul_right}
+    \leanok
+    \uses{def:z_gauge_entry}
+    If $\nu\neq 0$, then
+    \[
+        z(\mu,\nu)\,\nu=\mu.
+    \]
+\end{lemma}
+
+\begin{definition}[Diagonal periodic \(Z\)-gauge matrix]\label{def:z_gauge_diagonal}
+    \lean{MPSTensor.zGaugeDiagonal}
+    \leanok
+    \uses{def:z_gauge_entry}
+    For matched weight families $(\mu_i)_i$ and $(\nu_i)_i$ on a finite
+    index type, define the diagonal matrix
+    \[
+        Z := \diag\!\bigl(z(\mu_i,\nu_i)\bigr)_i.
+    \]
+\end{definition}
+
+\begin{lemma}[Diagonal \(Z\)-gauge has finite order under matched powers]\label{lem:z_gauge_diagonal_pow}
+    \lean{MPSTensor.zGaugeDiagonal_pow_eq_one}
+    \leanok
+    \uses{def:z_gauge_diagonal, lem:z_gauge_entry_pow}
+    If $\mu_i^m=\nu_i^m$ and $\nu_i\neq 0$ for all~$i$, then
+    \[
+        Z^m=\Id.
+    \]
+\end{lemma}
+
+\begin{lemma}[Diagonal \(Z\)-gauge transports diagonal weights]\label{lem:z_gauge_diagonal_mul}
+    \lean{MPSTensor.zGaugeDiagonal_mul_diagonal}
+    \leanok
+    \uses{def:z_gauge_diagonal, lem:z_gauge_entry_mul}
+    Under $\nu_i\neq 0$ for all~$i$,
+    \[
+        Z\,\diag(\nu)=\diag(\mu).
+    \]
+\end{lemma}
+
+\begin{definition}[$Z$-gauge equivalence]
+    \label{def:z_gauge_equiv}
+    \lean{MPSTensor.ZGaugeEquiv}
+    \leanok
+    Let $A$ be an $m$-periodic irreducible tensor of bond dimension $D$.
+    A \emph{$Z$-gauge transformation} of $A$ is a diagonal unitary
+    matrix $Z \in \MN{D}$ satisfying:
+    \begin{enumerate}
+        \item $Z$ commutes with every Kraus operator: $[A^i, Z] = 0$
+              for all physical indices $i$, and
+        \item $Z^m = \Id_D$ (all diagonal entries are $m$-th roots of unity).
+    \end{enumerate}
+    Replacing $A$ by $ZA$ (i.e.\ $A^i \mapsto Z A^i$) leaves the
+    MPV family invariant for lengths $N$ that are multiples of $m$,
+    because the factor $\tr(Z^N) = \tr(\Id) = D$ for $N \equiv 0 \pmod{m}$.
+    Two tensors $A, B$ are \emph{$Z$-gauge equivalent} if there exists
+    an invertible $Y$ and a $Z$-gauge transformation $Z$ for $A$ such that
+    $Z A^i = Y B^i Y^{-1}$ for all~$i$.
+\end{definition}
+
+\begin{remark}[$Z$-gauge is trivial for period-$1$ blocks]
+    \label{rem:z_gauge_trivial_period1}
+    \lean{MPSTensor.ZGaugeEquiv.of_period_one}
+    \leanok
+    When $m = 1$ the condition $Z^1 = \Id$ forces $Z = \Id$,
+    so $Z$-gauge equivalence reduces to ordinary gauge equivalence
+    (Definition~\ref{def:gauge_equiv}).
+    The $Z$-gauge is therefore a genuine new degree of freedom
+    that appears only for $m > 1$.
+\end{remark}
+
 \section{Physical symmetries on periodic MPS}\label{sec:periodic_symmetry}
 
 \begin{theorem}[Cor.~4.1 — Physical symmetry yields a virtual $Z$-gauge]%
