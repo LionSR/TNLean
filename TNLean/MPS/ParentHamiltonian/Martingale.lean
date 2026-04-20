@@ -212,8 +212,10 @@ noncomputable def parentHamiltonianES (A : MPSTensor d D) (L N : ℕ) :
 
 1. **Friedrichs-angle surface:** TNLean currently has no dedicated
 `FriedrichsAngle`/principal-angle API in `TNLean/Analysis`. Mathlib provides
-orthogonal-projection infrastructure (`Projection.Basic/FiniteDimensional`,
-`Submodule.starProjection`, `orthogonalProjection`) but not a packaged
+orthogonal-projection infrastructure (for example
+`Mathlib.Analysis.InnerProductSpace.Projection.Basic` and
+`Mathlib.Analysis.InnerProductSpace.Projection.FiniteDimensional`, exposing
+`Submodule.starProjection` and `orthogonalProjection`) but not a packaged
 Kastoryano–Lucia-style angle-to-anticommutator bound. This is a real blocker
 for quantitative overlap constants.
 2. **Row-sum bound mapping:** the combinatorial part is already available from
