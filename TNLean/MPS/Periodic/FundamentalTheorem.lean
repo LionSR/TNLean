@@ -5,7 +5,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.MPS.Periodic.Defs
 import TNLean.MPS.FundamentalTheorem.Full
 import TNLean.MPS.Periodic.Overlap
-import TNLean.MPS.FundamentalTheorem.SectorDecomposition
+import TNLean.MPS.Periodic.ZGauge
 
 open scoped Matrix BigOperators
 
@@ -52,7 +52,7 @@ The Z-gauge construction (Theorem 3.8 steps 5–7) is fully proved.
 
 * arXiv:1708.00029 (De las Cuevas–Schuch–Pérez-García–Cirac, 2017)
 * `blocks_match_of_sameMPV₂_CFBNT` in `Full.lean` — structural template for Thm 3.4
-* Z-gauge construction lemmas in `SectorDecomposition.lean` (PR #94)
+* Z-gauge construction lemmas in `ZGauge.lean` (PR #94)
 -/
 
 namespace MPSTensor
