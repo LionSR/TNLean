@@ -66,10 +66,11 @@ import TNLean.Axioms.BrouwerFixedPoint
 import TNLean.Axioms.Entropy
 -- Layer 2a: `TNLean/Entropy/` bootstrap (issue #613) — stable entropy
 -- surface for the Simple MPDO RFP track (#236). SSA itself is sourced
--- from `TNLean.Axioms.Entropy` (the only SSA axiom in the repo); the
--- `TNLean.Entropy.*` modules only re-export / wrap that axiom.
+-- from `TNLean.Axioms.Entropy`; the `TNLean.Entropy.*` modules only
+-- re-export / wrap the sanctioned entropy axioms.
 import TNLean.Entropy.VonNeumann
 import TNLean.Entropy.StrongSubadditivity
+import TNLean.Entropy.MarkovChain
 import TNLean.Entropy.MutualInformation
 -- Layer 2b: Axiomatized operator convexity/concavity results (pending upstream Mathlib)
 import TNLean.Axioms.OperatorConvexity
