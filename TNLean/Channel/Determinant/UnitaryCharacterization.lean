@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Channel.Determinant.HeisenbergDual
 import TNLean.Algebra.SkolemNoether
-import TNLean.Channel.KrausRepresentation
 
 /-!
 # Unitary characterization of determinant saturation
