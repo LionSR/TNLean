@@ -408,12 +408,17 @@ legs cyclically and taking the resulting trace.
     from \cite[\S4.4]{Cirac2017MPDO_AnnPhys}.
 \end{definition}
 
-\begin{remark}[Finite-length span criterion for the abstract biCF hypothesis]%
+\begin{remark}[Finite-length span and selector criteria for the abstract biCF hypothesis]%
     \label{rem:word_tuple_span_top}
     \lean{MPSTensor.WordTupleSpanTop}
     \lean{MPSTensor.HasBiCF}
     \lean{MPSTensor.hasBiCF_of_wordTupleSpanTop}
+    \lean{MPSTensor.HasBlockSelectorWords}
+    \lean{MPSTensor.PropBlockInjective}
+    \lean{MPSTensor.wordTupleSpanTop_of_propBlockInjective}
+    \lean{MPSTensor.hasBiCF_of_propBlockInjective}
     \lean{MPOTensor.horizontalCFData_of_wordTupleSpanTop}
+    \lean{MPOTensor.horizontalCFData_of_propBlockInjective}
     \leanok
     Let $(A_k)$ be a family of block tensors, and fix a length $L$.
     Write $A_k^w$ for the length-$L$ word evaluation of $A_k$ along a word $w$.
@@ -435,6 +440,16 @@ legs cyclically and taking the resulting trace.
     \texttt{horizontalCFData\_of\_wordTupleSpanTop} then inserts the resulting
     biCF witness into \texttt{HorizontalCFData} once injectivity,
     left-canonicality, and nonzero weights are given.
+
+    The predicate \texttt{PropBlockInjective} isolates the finite-length content
+    of Proposition~IV.3: after some common blocking length, each block is
+    block-injective, and after a second finite blocking length one can form word
+    combinations which equal the identity on one chosen block and vanish on all
+    others. Concatenating an injective prefix with such a selector suffix yields
+    the product-algebra span condition above. This is formalized by
+    \texttt{wordTupleSpanTop\_of\_propBlockInjective}, and the resulting biCF
+    witness is packaged into horizontal canonical-form data by
+    \texttt{horizontalCFData\_of\_propBlockInjective}.
 \end{remark}
 
 \begin{lemma}[Blockwise equality from agreement on the MPV family]
