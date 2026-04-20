@@ -1311,6 +1311,32 @@ The following results separate the zero blocks from the
 	theorem from spectral theory.
 \end{proof}
 
+\begin{lemma}[Fixed-point upgrade from irreducibility and trace preservation]%
+	\label{lem:fix_upgrade_peripheral}
+	\lean{MPSTensor.hFixUpgrade_of_peripheral}
+	\leanok
+	\uses{thm:psd_fp_exists, thm:psd_fp_pd_irred,
+	      lem:trace_mul_map_eq_trace_adjointMap_mul,
+	      lem:posSemidef_eq_zero_of_posDef_trace_mul_eq_zero}
+	Let $A$ be a left-canonical MPS tensor whose transfer map $\E_A$ is
+	irreducible, and let $Q$ be an orthogonal projection such that the corner
+	$Q \mathcal M_D Q$ is preserved by $((\E_A^\dagger)^m)$. Then
+	$((\E_A^\dagger)^m)(Q) = Q$.
+\end{lemma}
+
+\begin{proof}\leanok
+	\uses{thm:psd_fp_exists, thm:psd_fp_pd_irred,
+	      lem:trace_mul_map_eq_trace_adjointMap_mul,
+	      lem:posSemidef_eq_zero_of_posDef_trace_mul_eq_zero}
+	Let $\rho > 0$ be the distinguished fixed point of $\E_A$. Since
+	$Q \mathcal M_D Q$ is preserved, the difference
+	$Q - (\E_A^\dagger)^m(Q)$ can be rewritten as
+	$Q\,(\E_A^\dagger)^m(\Id - Q)\,Q$, hence it is positive semidefinite.
+	The weighted trace pairing with $\rho$ is invariant under $(\E_A^\dagger)^m$,
+	so this positive semidefinite matrix has weighted trace zero. Faithfulness of
+	the $\rho$-weighted trace therefore forces it to vanish, giving the claim.
+\end{proof}
+
 \begin{lemma}[Orbit-sum construction of the sector lift]%
 	\label{lem:orbit_sum_hLift_construction}
 	\lean{MPSTensor.hLift_cyclicDecomp_mps_of_fixUpgrade}
@@ -1357,6 +1383,27 @@ The following results separate the zero blocks from the
 	Lemma~\ref{lem:orbit_sum_full_sector}.
 \end{proof}
 
+\begin{lemma}[Orbit-sum construction, projection-step variant]%
+	\label{lem:orbit_sum_hLift_proj_step}
+	\lean{MPSTensor.hLift_cyclicDecomp_mps_of_projStep}
+	\leanok
+	\uses{lem:fix_upgrade_peripheral, lem:orbit_sum_hLift_construction}
+	Let $A$ be a left-canonical MPS tensor with irreducible adjoint transfer
+	map, and let $(P_k)_{k=1}^m$ be cyclic orthogonal sector projections.
+	Assume the projection-step hypothesis of
+	Lemma~\ref{lem:orbit_sum_hLift_construction}. Then the orbit-sum lift holds:
+	for every orthogonal subprojection $Q \le P_k$ whose corner is preserved by
+	$(\E_A^\dagger)^m$, there is a global projection $R$ invariant under
+	$\E_A^\dagger$ with the same zero/full-sector tests.
+\end{lemma}
+
+\begin{proof}\leanok
+	\uses{lem:fix_upgrade_peripheral, lem:orbit_sum_hLift_construction}
+	Combine the original orbit-sum construction with
+	Lemma~\ref{lem:fix_upgrade_peripheral}, which supplies the fixed-point
+	upgrade from irreducibility and trace preservation.
+\end{proof}
+
 \begin{theorem}[Sector irreducibility from the orbit-sum construction]%
 	\label{thm:sector_irred_fix_upgrade}
 	\lean{MPSTensor.isIrreducibleOnCorner_of_cyclic_decomp_mps_of_fixUpgrade}
@@ -1373,6 +1420,24 @@ The following results separate the zero blocks from the
 	\uses{thm:sector_irred_orbit_lift, lem:orbit_sum_hLift_construction}
 	Apply Lemma~\ref{lem:orbit_sum_hLift_construction} to obtain the orbit-sum
 	lift, then apply Theorem~\ref{thm:sector_irred_orbit_lift}.
+\end{proof}
+
+\begin{theorem}[Sector irreducibility from the projection-step hypothesis]%
+	\label{thm:sector_irred_proj_step}
+	\lean{MPSTensor.isIrreducibleOnCorner_of_cyclic_decomp_mps_of_projStep}
+	\leanok
+	\uses{thm:sector_irred_orbit_lift, lem:orbit_sum_hLift_proj_step}
+	Let $A$ be a left-canonical MPS tensor with irreducible adjoint transfer
+	map, and let $(P_k)_{k=1}^m$ be cyclic orthogonal sector projections.
+	Assume only the projection-step hypothesis from
+	Lemma~\ref{lem:orbit_sum_hLift_construction}. Then $(\E_A^\dagger)^m$
+	is irreducible on each corner $P_k$.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:sector_irred_orbit_lift, lem:orbit_sum_hLift_proj_step}
+	Apply Lemma~\ref{lem:orbit_sum_hLift_proj_step} and then
+	Theorem~\ref{thm:sector_irred_orbit_lift}.
 \end{proof}
 
 \section{Reduction to primitive blocks}%

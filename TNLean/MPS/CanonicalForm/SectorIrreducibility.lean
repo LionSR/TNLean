@@ -499,15 +499,16 @@ This assembles the in-file sublemmas
 matching the shape of the `hLift` argument of
 `isIrreducibleOnCorner_of_cyclic_decomp_mps_of_hLift`.
 
-The input `hFixUpgrade` reflects a genuine structural gap: for a general
-unital CP map `S`, `PreservesCorner Q S` does not imply `S Q = Q` — Kadison
-–Schwarz only yields `0 ≤ S Q ≤ Q` with `(S Q)(Q - S Q) ≥ 0`. Closing that
-upgrade requires domain-specific structure of the underlying Kraus operators
-that is not captured by the abstract sublemma signatures; see the
-block-diagonal canonical-form argument in `Papers/1708.00029/main.tex`,
-Lemma `lem:bdcf`. The `hProjStep` input is similarly abstract and expected
-to be discharged from an upstream multiplicative-domain / KS-equality
-argument on the MPS transfer map (same reference). -/
+The input `hFixUpgrade` is abstract only for the theorem signature: in the
+irreducible trace-preserving case it is discharged by
+`hFixUpgrade_of_peripheral`, using a positive definite fixed point of
+`transferMap A` and a weighted-trace argument. The remaining genuine
+structural gap is `hProjStep`: for a general unital CP map, sector support
+`X * P k = X = P k * X` does not imply that `T X` is again an orthogonal
+projection. Closing that step still appears to require the block-diagonal
+canonical-form argument in `Papers/1708.00029/main.tex`, Lemma `lem:bdcf`,
+or an equivalent multiplicative-domain bridge for sector-supported
+projections. -/
 theorem hLift_cyclicDecomp_mps_of_fixUpgrade
     [NeZero m]
     {A : MPSTensor d D}
