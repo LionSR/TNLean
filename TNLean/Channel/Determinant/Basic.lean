@@ -3,17 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Channel.Basic
-import Mathlib.Algebra.Central.Matrix
-import Mathlib.Analysis.Complex.Polynomial.Basic
-import Mathlib.Analysis.InnerProductSpace.Adjoint
-import Mathlib.Analysis.InnerProductSpace.Positive
-import Mathlib.Analysis.InnerProductSpace.Trace
-import Mathlib.Analysis.MeanInequalities
 import Mathlib.LinearAlgebra.Determinant
-import Mathlib.LinearAlgebra.FiniteDimensional.Basic
-import Mathlib.LinearAlgebra.Matrix.Charpoly.Eigs
 import Mathlib.LinearAlgebra.Matrix.Determinant.Basic
-import Mathlib.LinearAlgebra.Matrix.StdBasis
 import Mathlib.LinearAlgebra.Matrix.ToLin
 import Mathlib.LinearAlgebra.Matrix.Trace
 import Mathlib.LinearAlgebra.Matrix.Vec
@@ -28,8 +19,12 @@ API used in Wolf's determinant-rigidity argument.
 
 ## Main definitions
 
-* `MatrixAlg`, `MatrixEnd` — the ambient matrix algebra and its endomorphisms.
-* `MatrixBasisIndex`, `matrixSpaceBasis`, `matrixVecLinearEquiv` — linear-algebra
+* `TNLean.Channel.Determinant.Internal.MatrixAlg`,
+  `TNLean.Channel.Determinant.Internal.MatrixEnd` — the ambient matrix algebra
+  and its endomorphisms.
+* `TNLean.Channel.Determinant.Internal.MatrixBasisIndex`,
+  `TNLean.Channel.Determinant.Internal.matrixSpaceBasis`,
+  `TNLean.Channel.Determinant.Internal.matrixVecLinearEquiv` — linear-algebra
   models for the standard matrix basis and vectorization.
 * `channelMatrix`, `channelDet` — the matrix representation of a channel and its
   determinant.
@@ -58,30 +53,37 @@ open scoped Matrix ComplexOrder MatrixOrder BigOperators Kronecker Matrix.Norms.
 open Matrix
 
 variable {d : ℕ}
+
+namespace TNLean.Channel.Determinant.Internal
+
 /-- The ambient matrix algebra `M_d(ℂ)`. -/
-private abbrev MatrixAlg (d : ℕ) := Matrix (Fin d) (Fin d) ℂ
+abbrev MatrixAlg (d : ℕ) := Matrix (Fin d) (Fin d) ℂ
 
 /-- Endomorphisms of `M_d(ℂ)`. -/
-private abbrev MatrixEnd (d : ℕ) := MatrixAlg d →ₗ[ℂ] MatrixAlg d
+abbrev MatrixEnd (d : ℕ) := MatrixAlg d →ₗ[ℂ] MatrixAlg d
 
 /-- Index type for the standard basis of `M_d(ℂ)`.
 
 We use `Fin d × Fin d × Unit`, which has cardinality $d^2$. -/
-private abbrev MatrixBasisIndex (d : ℕ) := Fin d × Fin d × Unit
+abbrev MatrixBasisIndex (d : ℕ) := Fin d × Fin d × Unit
 
 /-- The standard basis of `M_d(ℂ)` coming from matrix units. -/
-private noncomputable def matrixSpaceBasis (d : ℕ) :
+noncomputable def matrixSpaceBasis (d : ℕ) :
     Module.Basis (MatrixBasisIndex d) ℂ (MatrixAlg d) :=
   Module.Basis.matrix (Fin d) (Fin d) (Module.Basis.singleton Unit ℂ)
 
 /-- Column-stacking vectorization as a linear equivalence. -/
-private noncomputable def matrixVecLinearEquiv (d : ℕ) :
+noncomputable def matrixVecLinearEquiv (d : ℕ) :
     MatrixAlg d ≃ₗ[ℂ] (Fin d × Fin d → ℂ) :=
   LinearEquiv.ofBijective
     { toFun := Matrix.vec
       map_add' := Matrix.vec_add
       map_smul' := Matrix.vec_smul }
     Matrix.vec_bijective
+
+end TNLean.Channel.Determinant.Internal
+
+open TNLean.Channel.Determinant.Internal
 
 section Determinant
 
