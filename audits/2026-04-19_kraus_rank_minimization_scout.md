@@ -38,7 +38,7 @@ These are strong once two Kraus families already exist, but they do not create a
 
 ### 1.3 CanonicalGauge interaction
 
-- `FixedPoint/CanonicalGauge.gauged_leftCanonical` / `gauged_unital` provide similarity gauges preserving transfer-map structure and canonical normalization constraints.
+- In `TNLean/Channel/FixedPoint/CanonicalGauge.lean`, the lemmas `gauged_leftCanonical` and `gauged_unital` provide similarity gauges preserving transfer-map structure and canonical normalization constraints.
 - These gauge lemmas do not change Kraus index cardinality by themselves; they are gauge-normalization tools, not rank-minimization tools.
 
 ## 2) Mathlib surface (closest available)
