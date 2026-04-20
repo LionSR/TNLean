@@ -2996,14 +2996,14 @@
 <p>Following <span class="cite">
 	(
 	
-</span>, Theorem&#160;IV.13 characterises renormalization-fixed-point MPDOs through two equivalent structures: a family of fusion isometries splitting the support algebra at every blocking size, and a tower of support algebras equipped with compatible blocking and inclusion maps. The next two sections record these structures and their compatibility predicates with an MPO tensor. </p>
+</span>, the current Lean development formalizes the transfer-map content of the fusion-isometry picture. For each blocked size \(n \ge 1\), the doubled-index blocked tensor of an MPO has a blocked transfer map \(E_n\) acting on bond-space matrices, and the support algebra is modeled by a subspace through which \(E_n\) factors as a retract. </p>
 <div class="definition_thmwrapper theorem-style-definition" id="def:mpdo_fusion_isometry">
   <div class="definition_thmheading">
     <span class="definition_thmcaption">
     Definition
     </span>
     <span class="definition_thmlabel">3.30</span>
-    <span class="definition_thmtitle">Fusion isometry at blocked size</span>
+    <span class="definition_thmtitle">Transfer-map fusion-isometry datum</span>
     <div class="thm_header_extras">
 
     
@@ -3046,7 +3046,7 @@
         
         <ul class="uses">
           
-          <li><a href="../docs/find/#doc/MPOTensor.FusionIsometry" class="lean_decl">MPOTensor.FusionIsometry</a></li>
+          <li><a href="../docs/find/#doc/MPOTensor.FusionIsometryData" class="lean_decl">MPOTensor.FusionIsometryData</a></li>
           
         </ul>
     
@@ -3057,7 +3057,15 @@
         </div>
   </div>
   <div class="definition_thmcontent">
-  <p>   A <em>fusion isometry at blocked size \(n\)</em> for an MPO tensor consists of a pair of linear maps \((T_n, S_n)\) between the physical space at \(n\) blocked sites and the support algebra at that size, a predicate \(\operatorname {supp}\) cutting out the image subspace of the algebra, and two compatibility conditions: \(S_n \circ T_n\) is idempotent on the physical space, and \(T_n \circ S_n\) acts as the identity on every element satisfying \(\operatorname {supp}\). </p>
+  <p>   A <em>transfer-map fusion-isometry datum</em> at blocked size \(n\) for an MPO tensor consists of a subspace \(\mathcal{A}_n \subseteq M_D(\mathbb {C})\) together with linear maps </p>
+<div class="displaymath" id="a0000000208">
+  \[ T_n : M_D(\mathbb {C}) \to \mathcal{A}_n, \qquad S_n : \mathcal{A}_n \to M_D(\mathbb {C}) \]
+</div>
+<p> such that </p>
+<div class="displaymath" id="a0000000209">
+  \[ T_n \circ S_n = \operatorname {id}_{\mathcal{A}_n}, \qquad S_n \circ T_n = E_n, \]
+</div>
+<p> where \(E_n\) denotes the blocked transfer map. </p>
 
   </div>
 </div>
@@ -3067,9 +3075,11 @@
     Definition
     </span>
     <span class="definition_thmlabel">3.31</span>
-    <span class="definition_thmtitle">Fusion-isometry RFP predicate (provisional)</span>
+    <span class="definition_thmtitle">Fusion-isometry RFP predicate</span>
     <div class="thm_header_extras">
 
+    
+    ✓
         </div>
     <div class="thm_header_hidden_extras">
 
@@ -3110,7 +3120,7 @@
         
         <ul class="uses">
           
-          <li><a href="../docs/find/#doc/MPOTensor.IsRFP_MPDO_via_fusion_scaffold" class="lean_decl">MPOTensor.IsRFP_MPDO_via_fusion_scaffold</a></li>
+          <li><a href="../docs/find/#doc/MPOTensor.IsRFP_MPDO_via_fusion" class="lean_decl">MPOTensor.IsRFP_MPDO_via_fusion</a></li>
           
         </ul>
     
@@ -3121,10 +3131,252 @@
         </div>
   </div>
   <div class="definition_thmcontent">
-  <p>   An MPO tensor \(M\) satisfies the <em>fusion-isometry formulation</em> of the renormalization fixed-point condition when, for every blocked size \(n\), there exists a fusion isometry at size \(n\) compatible with \(M\). The compatibility relation between a fusion isometry and&#160;\(M\) is, in this provisional formulation, the trivial relation that holds for every pair; consequently the predicate above holds vacuously of every MPO tensor. The exact compatibility condition of <span class="cite">
-	(
-	
-</span> is to be substituted in place of the trivial relation in subsequent work. </p>
+  <p>   An MPO tensor \(M\) satisfies the <em>fusion-isometry formulation</em> of the renormalization fixed-point condition when for every blocked size \(n \ge 1\) there exists transfer-map fusion-isometry data for the blocked transfer map \(E_n\). </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:mpdo_rfp_of_fusion">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">3.32</span>
+    <span class="theorem_thmtitle">Fusion-isometry data imply the provisional MPDO RFP condition</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-mpdo.html#thm:mpdo_rfp_of_fusion">#</a>
+    
+    <a class="icon proof" href="ch-mpdo.html#a0000000210"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mpdo.html#def:mpdo_rfp_via_fusion">Definition 3.31</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPOTensor.isRFP_of_isRFP_MPDO_via_fusion" class="lean_decl">MPOTensor.isRFP_of_isRFP_MPDO_via_fusion</a></li>
+          
+          <li><a href="../docs/find/#doc/MPOTensor.IsRFP" class="lean_decl">MPOTensor.IsRFP</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   The fusion-isometry formulation implies the current predicate . </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000210">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Apply the definition at blocked size \(n = 1\). If \(E_1 = S_1 \circ T_1\) and \(T_1 \circ S_1 = \operatorname {id}\), then </p>
+<div class="displaymath" id="a0000000211">
+  \[ E_1^2 = S_1 T_1 S_1 T_1 = S_1 (T_1 S_1) T_1 = S_1 T_1 = E_1. \]
+</div>
+<p> Since \(E_1\) is the original transfer map, this is exactly . </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:mpdo_rfp_via_fusion_iff">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">3.33</span>
+    <span class="theorem_thmtitle">Transfer-map fusion criterion for MPDO RFP</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-mpdo.html#thm:mpdo_rfp_via_fusion_iff">#</a>
+    
+    <a class="icon proof" href="ch-mpdo.html#a0000000212"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mpdo.html#def:mpdo_rfp_via_fusion">Definition 3.31</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPOTensor.isRFP_MPDO_via_fusion_iff_isRFP" class="lean_decl">MPOTensor.isRFP_MPDO_via_fusion_iff_isRFP</a></li>
+          
+          <li><a href="../docs/find/#doc/MPOTensor.IsRFP" class="lean_decl">MPOTensor.IsRFP</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   The fusion-isometry formulation is equivalent to . </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000212">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>The forward implication is Theorem&#160;<a href="ch-mpdo.html#thm:mpdo_rfp_of_fusion">3.32</a>. Conversely, if the transfer map \(E\) is idempotent, then every positive blocked transfer map equals \(E\) and therefore factors through its range. This range-factorization gives the required fusion-isometry data. </p>
+
+  </div>
+</div>
+<div class="corollary_thmwrapper theorem-style-plain" id="cor:mpdo_fusion_pure_recovery">
+  <div class="corollary_thmheading">
+    <span class="corollary_thmcaption">
+    Corollary
+    </span>
+    <span class="corollary_thmlabel">3.34</span>
+    <span class="corollary_thmtitle">Pure-state recovery</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-mpdo.html#cor:mpdo_fusion_pure_recovery">#</a>
+    
+    <a class="icon proof" href="ch-mpdo.html#a0000000213"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mpdo.html#thm:mpdo_rfp_via_fusion_iff">Theorem 3.33</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.toMPOTensor_isRFP_MPDO_via_fusion_iff_isRFP" class="lean_decl">MPSTensor.toMPOTensor_isRFP_MPDO_via_fusion_iff_isRFP</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="corollary_thmcontent">
+  <p>   For the diagonal MPO associated to a pure MPS tensor, the fusion-isometry formulation reduces to the usual pure-state RFP condition. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000213">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Combine Theorem&#160;<a href="ch-mpdo.html#thm:mpdo_rfp_via_fusion_iff">3.33</a> with the diagonal pure-state recovery theorem for the provisional MPO predicate. </p>
 
   </div>
 </div>
@@ -3134,7 +3386,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">3.32</span>
+    <span class="definition_thmlabel">3.35</span>
     <span class="definition_thmtitle">Algebra-structure data for an MPDO</span>
     <div class="thm_header_extras">
 
@@ -3198,7 +3450,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">3.33</span>
+    <span class="definition_thmlabel">3.36</span>
     <span class="definition_thmtitle">Algebra-structure RFP predicate (provisional)</span>
     <div class="thm_header_extras">
 
@@ -3220,7 +3472,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_algebra_structure_data">Definition 3.32</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_algebra_structure_data">Definition 3.35</a></li>
           
           <li><a href="ch-mpdo.html#def:mpo_tensor">Definition 3.1</a></li>
           
