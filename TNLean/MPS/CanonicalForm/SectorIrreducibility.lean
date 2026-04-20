@@ -6,6 +6,9 @@ import TNLean.MPS.CanonicalForm.CyclicSectors
 import TNLean.MPS.Irreducible.FormII
 import TNLean.MPS.Irreducible.Adjoint
 import TNLean.MPS.Irreducible.PeriodicBlocking
+import TNLean.QPF.Primitive
+import TNLean.Channel.Schwarz.Basic
+import TNLean.Channel.Semigroup.CPClosure
 
 /-!
 # Sector irreducibility helpers
@@ -371,6 +374,111 @@ theorem orbitSumProjection_eq_one_of_full_sector
           simp [Equiv.subLeft_apply]
     _ = 1 := hPsum
 
+/-- The fixed-point upgrade in `hLift_cyclicDecomp_mps_of_fixUpgrade` is automatic for the
+adjoint transfer map of an irreducible trace-preserving tensor.
+
+If an orthogonal projection `Q` satisfies `PreservesCorner Q ((transferMap A†)^m)`, then
+`((transferMap A†)^m) Q = Q`. The proof uses a positive definite fixed point `ρ` of
+`transferMap A`, the weighted trace identity `tr(ρ E†(X)) = tr(ρ X)`, and the PSD gap
+`Q - E†^[m](Q) = Q * E†^[m](1 - Q) * Q`. -/
+theorem hFixUpgrade_of_peripheral
+    [NeZero D]
+    {A : MPSTensor d D} {m : ℕ}
+    (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (hIrr : IsIrreducibleMap (transferMap (d := d) (D := D) A))
+    {Q : MatrixAlg D}
+    (hQproj : IsOrthogonalProjection Q)
+    (hQinv : PreservesCorner Q
+      ((transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ^ m)) :
+    ((transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ^ m) Q = Q := by
+  classical
+  let E : MatrixEnd D := transferMap (d := d) (D := D) A
+  let T : MatrixEnd D := transferMap (d := d) (D := D) (fun i => (A i)ᴴ)
+  let F : MatrixEnd D := T ^ m
+  have hDpos : 0 < D := Nat.pos_of_ne_zero (NeZero.ne D)
+  obtain ⟨ρ, hρ_psd, hρ_ne, hρ_fix⟩ :=
+    exists_posSemidef_fixedPoint A hTP hDpos
+  have hρ_pd : ρ.PosDef :=
+    posSemidef_fixedPoint_isPosDef_of_irreducible A hIrr ρ hρ_psd hρ_ne hρ_fix
+  have hT_cp : IsCPMap T := by
+    simpa [T, MPSTensor.transferMap_apply, Kraus.map] using
+      transferMap_isCPMap (A := fun i => (A i)ᴴ)
+  have hF_cp : IsCPMap F := by
+    simpa [F] using (IsCPMap.pow (E := T) hT_cp m)
+  have hpow_one : ∀ n : ℕ, (T ^ n) (1 : MatrixAlg D) = 1 := by
+    intro n
+    induction n with
+    | zero =>
+        simp
+    | succ n ih =>
+        rw [pow_succ', Module.End.mul_apply, ih]
+        simpa [T, MPSTensor.transferMap_apply] using hTP
+  have hF_one : F (1 : MatrixAlg D) = 1 := by
+    simpa [F] using hpow_one m
+  have htrace_step :
+      ∀ X : MatrixAlg D, Matrix.trace (ρ * T X) = Matrix.trace (ρ * X) := by
+    intro X
+    calc
+      Matrix.trace (ρ * T X)
+          = Matrix.trace (Kraus.adjointMap (fun i => (A i)ᴴ) ρ * X) := by
+              simpa [T, MPSTensor.transferMap_apply, Kraus.map, Kraus.adjointMap] using
+                (Kraus.trace_mul_map_eq_trace_adjointMap_mul (K := fun i => (A i)ᴴ) ρ X)
+      _ = Matrix.trace (E ρ * X) := by
+            simp [E, MPSTensor.transferMap_apply, Kraus.adjointMap]
+      _ = Matrix.trace (ρ * X) := by rw [hρ_fix]
+  have htrace_pow :
+      ∀ n : ℕ, ∀ X : MatrixAlg D,
+        Matrix.trace (ρ * ((T ^ n) X)) = Matrix.trace (ρ * X) := by
+    intro n
+    induction n with
+    | zero =>
+        intro X
+        simp
+    | succ n ih =>
+        intro X
+        rw [pow_succ', Module.End.mul_apply]
+        calc
+          Matrix.trace (ρ * T ((T ^ n) X)) = Matrix.trace (ρ * ((T ^ n) X)) :=
+            htrace_step ((T ^ n) X)
+          _ = Matrix.trace (ρ * X) := ih X
+  have hFQ_corner : Q * F Q * Q = F Q := by
+    have h := hQinv (1 : MatrixAlg D)
+    simpa [F, Matrix.mul_assoc, hQproj.2] using h
+  have hOneSubQ_proj : IsOrthogonalProjection (1 - Q) :=
+    isOrthogonalProjection_one_sub Q hQproj
+  have hOneSubQ_psd : (1 - Q).PosSemidef := by
+    have hpsd : ((1 - Q) * (1 - Q)ᴴ).PosSemidef :=
+      Matrix.posSemidef_self_mul_conjTranspose (1 - Q)
+    have hEq : (1 - Q) * (1 - Q)ᴴ = 1 - Q := by
+      rw [hOneSubQ_proj.1.eq, hOneSubQ_proj.2]
+    rwa [hEq] at hpsd
+  have hFOneSubQ_psd : (F (1 - Q)).PosSemidef :=
+    hF_cp.isPositiveMap (1 - Q) hOneSubQ_psd
+  have hgap_eq : Q * F (1 - Q) * Q = Q - F Q := by
+    rw [map_sub, hF_one]
+    calc
+      Q * (1 - F Q) * Q = Q * Q - Q * F Q * Q := by
+        simp [Matrix.mul_assoc, mul_sub, sub_mul]
+      _ = Q - F Q := by
+        rw [hQproj.2, hFQ_corner]
+  have hGap_psd : (Q - F Q).PosSemidef := by
+    rw [← hgap_eq]
+    simpa [hQproj.1.eq, Matrix.mul_assoc] using
+      hFOneSubQ_psd.mul_mul_conjTranspose_same (B := Q)
+  have htr_FQ : Matrix.trace (ρ * F Q) = Matrix.trace (ρ * Q) := by
+    simpa [F] using htrace_pow m Q
+  have htr_gap : Matrix.trace (ρ * (Q - F Q)) = 0 := by
+    calc
+      Matrix.trace (ρ * (Q - F Q))
+          = Matrix.trace (ρ * Q) - Matrix.trace (ρ * F Q) := by
+              rw [Matrix.mul_sub, Matrix.trace_sub]
+      _ = 0 := by
+            rw [htr_FQ]
+            simp
+  have hGap_zero : Q - F Q = 0 :=
+    Kraus.posSemidef_eq_zero_of_posDef_trace_mul_eq_zero hGap_psd hρ_pd htr_gap
+  exact (sub_eq_zero.mp hGap_zero).symm
+
 /-- Orbit-sum lift producing the `hLift` hypothesis required by
 `isIrreducible_restriction_of_cyclic_decomp`.
 
@@ -568,6 +676,62 @@ theorem hLift_cyclicDecomp_mps_of_fixUpgrade
       rw [hR1] at this
       simpa [(hPproj k).2] using this.symm
 
+/-- The orbit-sum lift with the `hFixUpgrade` input discharged by
+`hFixUpgrade_of_peripheral`.
+
+This reduces the remaining abstract input to the one-step projection
+preservation statement `hProjStep`. -/
+theorem hLift_cyclicDecomp_mps_of_projStep
+    [NeZero D] [NeZero m]
+    {A : MPSTensor d D}
+    (hIrrAdj :
+      IsIrreducibleMap (transferMap (d := d) (D := D) (fun i => (A i)ᴴ)))
+    (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (P : Fin m → MatrixAlg D)
+    (hPproj : ∀ k : Fin m, IsOrthogonalProjection (P k))
+    (hPsum : ∑ k : Fin m, P k = 1)
+    (hcyclic :
+      ∀ k : Fin m,
+        transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k)
+    (hMulLeft :
+      ∀ k : Fin m, ∀ X : MatrixAlg D,
+        transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k * X) =
+          transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k) *
+            transferMap (d := d) (D := D) (fun i => (A i)ᴴ) X)
+    (hMulRight :
+      ∀ k : Fin m, ∀ X : MatrixAlg D,
+        transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (X * P k) =
+          transferMap (d := d) (D := D) (fun i => (A i)ᴴ) X *
+            transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k))
+    (hProjStep :
+      ∀ k : Fin m, ∀ X : MatrixAlg D,
+        IsOrthogonalProjection X →
+        X * P k = X → P k * X = X →
+        IsOrthogonalProjection
+          (transferMap (d := d) (D := D) (fun i => (A i)ᴴ) X)) :
+    ∀ k : Fin m, ∀ Q : MatrixAlg D,
+      IsOrthogonalProjection Q →
+      Q * P k = Q → P k * Q = Q →
+      PreservesCorner Q
+        ((transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ^ m) →
+      ∃ R : MatrixAlg D,
+        IsOrthogonalProjection R ∧
+        PreservesCorner R
+          (transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ∧
+        (Q = 0 ↔ R = 0) ∧
+        (Q = P k ↔ R = 1) := by
+  have hIrrTensor : IsIrreducibleTensor (d := d) (D := D) A :=
+    isIrreducibleTensor_of_isIrreducibleMap_conjTranspose (A := A) hIrrAdj
+  have hIrr : IsIrreducibleMap (transferMap (d := d) (D := D) A) :=
+    isIrreducibleCP_transferMap_of_isIrreducibleTensor A hIrrTensor
+  intro k Q hQproj hQP hPQ hQcorner
+  exact
+    hLift_cyclicDecomp_mps_of_fixUpgrade
+      (A := A) (m := m) hTP P hPproj hPsum hcyclic hMulLeft hMulRight hProjStep
+      (fun (_k : Fin m) (Q : MatrixAlg D) hQproj _hQP _hPQ hQinv =>
+        hFixUpgrade_of_peripheral (A := A) (m := m) hTP hIrr hQproj hQinv)
+      k Q hQproj hQP hPQ hQcorner
+
 /-- MPS-specialized wrapper: once the orbit-sum lift is constructed in the
 shape required by `isIrreducible_restriction_of_cyclic_decomp`, sector
 irreducibility follows immediately. -/
@@ -600,6 +764,46 @@ theorem isIrreducibleOnCorner_of_cyclic_decomp_mps_of_hLift
     isIrreducible_restriction_of_cyclic_decomp
       (T := transferMap (d := d) (D := D) (fun i => (A i)ᴴ))
       hIrr P hPproj hPsum hcyclic hLift
+
+/-- MPS-specialized sector irreducibility, with only the one-step projection-preservation
+input `hProjStep` remaining abstract. -/
+theorem isIrreducibleOnCorner_of_cyclic_decomp_mps_of_projStep
+    [NeZero D] {A : MPSTensor d D}
+    [NeZero m]
+    (hIrr :
+      IsIrreducibleMap (transferMap (d := d) (D := D) (fun i => (A i)ᴴ)))
+    (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (P : Fin m → MatrixAlg D)
+    (hPproj : ∀ k : Fin m, IsOrthogonalProjection (P k))
+    (hPsum : ∑ k : Fin m, P k = 1)
+    (hcyclic :
+      ∀ k : Fin m,
+        transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k)
+    (hMulLeft :
+      ∀ k : Fin m, ∀ X : MatrixAlg D,
+        transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k * X) =
+          transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k) *
+            transferMap (d := d) (D := D) (fun i => (A i)ᴴ) X)
+    (hMulRight :
+      ∀ k : Fin m, ∀ X : MatrixAlg D,
+        transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (X * P k) =
+          transferMap (d := d) (D := D) (fun i => (A i)ᴴ) X *
+            transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k))
+    (hProjStep :
+      ∀ k : Fin m, ∀ X : MatrixAlg D,
+        IsOrthogonalProjection X →
+        X * P k = X → P k * X = X →
+        IsOrthogonalProjection
+          (transferMap (d := d) (D := D) (fun i => (A i)ᴴ) X)) :
+    ∀ k : Fin m,
+      IsIrreducibleOnCorner
+        (P k) ((transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ^ m) := by
+  exact
+    isIrreducibleOnCorner_of_cyclic_decomp_mps_of_hLift
+      (A := A) (m := m) hIrr P hPproj hPsum hcyclic
+      (hLift_cyclicDecomp_mps_of_projStep
+        (A := A) (m := m) hIrr hTP P hPproj hPsum hcyclic
+        hMulLeft hMulRight hProjStep)
 
 /-- MPS-specialized sector irreducibility, with the `hLift` input discharged by
 `hLift_cyclicDecomp_mps_of_fixUpgrade`. -/
