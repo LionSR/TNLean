@@ -1601,13 +1601,153 @@
 
   </div>
 </div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:hayashi_markov_decomposition">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">6.12</span>
+    <span class="definition_thmtitle">Quantum Markov decomposition</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-entropy.html#def:hayashi_markov_decomposition">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-entropy.html#def:ssa_equality">Definition 6.11</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/HayashiMarkovDecomposition" class="lean_decl">HayashiMarkovDecomposition</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>   A <em>Hayashi Markov decomposition</em> of a tripartite state \(\rho _{ABC}\) consists of a finite direct-sum decomposition </p>
+<div class="displaymath" id="a0000000326">
+  \[  H_B \cong \bigoplus _j H_{B_j^L} \otimes H_{B_j^R},  \]
+</div>
+<p> together with a unitary change of basis on \(B\), a probability vector \((p_j)_j\), and density matrices \(\rho _{A B_j^L}\) and \(\rho _{B_j^R C}\) such that, in the adapted basis, the state becomes </p>
+<div class="displaymath" id="a0000000327">
+  \[  \bigoplus _j p_j\,  \rho _{A B_j^L} \otimes \rho _{B_j^R C}.  \]
+</div>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:hayashi_ssa_equality_characterization">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">6.13</span>
+    <span class="theorem_thmtitle">Hayashi SSA-equality characterization</span>
+    <div class="thm_header_extras">
+
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-entropy.html#thm:hayashi_ssa_equality_characterization">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-entropy.html#def:ssa_equality">Definition 6.11</a></li>
+          
+          <li><a href="ch-entropy.html#def:hayashi_markov_decomposition">Definition 6.12</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/hayashi_ssa_equality_characterization" class="lean_decl">hayashi_ssa_equality_characterization</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>    For a tripartite density matrix \(\rho _{ABC}\), </p>
+<div class="displaymath" id="a0000000328">
+  \[  S(\rho _{ABC}) + S(\rho _B) = S(\rho _{AB}) + S(\rho _{BC})  \]
+</div>
+<p> holds if and only if \(\rho _{ABC}\) admits a quantum Markov decomposition on the middle subsystem \(B\). </p>
+<p><b class="bfseries">Status:</b> Recorded in Lean as a sanctioned external-input axiom in <span class="ttfamily">TNLean/Axioms/Entropy.lean</span>. This is the equality criterion needed by Appendix&#160;C of arXiv:1606.00608. We cite Hayashi, <em>J. Phys. A</em> 37 (2004) L205–L208, and Ruskai, <em>J. Math. Phys.</em> 43 (2002) 4358; the structural block-decomposition formulation used in the MPDO paper also appears in Hayden–Jozsa–Petz– Winter, <em>Commun. Math. Phys.</em> 246 (2004) 359–374. </p>
+
+  </div>
+</div>
 <h1 id="a0000000032">6.4 Mutual information</h1>
 <div class="definition_thmwrapper theorem-style-definition" id="def:mutual_information">
   <div class="definition_thmheading">
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">6.12</span>
+    <span class="definition_thmlabel">6.14</span>
     <span class="definition_thmtitle">Mutual information</span>
     <div class="thm_header_extras">
 
@@ -1663,7 +1803,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   The <em>quantum mutual information</em> of a bipartite state \(\rho _{AB}\) is </p>
-<div class="displaymath" id="a0000000326">
+<div class="displaymath" id="a0000000329">
   \[  I(A{:}B) = S(\rho _A) + S(\rho _B) - S(\rho _{AB}).  \]
 </div>
 
@@ -1674,7 +1814,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">6.13</span>
+    <span class="theorem_thmlabel">6.15</span>
     <span class="theorem_thmtitle">Mutual information is non-negative</span>
     <div class="thm_header_extras">
 
@@ -1683,7 +1823,7 @@
 
     <a class="icon proof" href="ch-entropy.html#thm:mutual_information_nonneg">#</a>
     
-    <a class="icon proof" href="ch-entropy.html#a0000000327"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-entropy.html#a0000000330"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1699,7 +1839,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-entropy.html#def:mutual_information">Definition 6.12</a></li>
+          <li><a href="ch-entropy.html#def:mutual_information">Definition 6.14</a></li>
           
           <li><a href="ch-entropy.html#thm:strong_subadditivity">Theorem 6.10</a></li>
           
@@ -1719,7 +1859,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000327">
+<div class="proof_wrapper" id="a0000000330">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1732,13 +1872,13 @@
   </div>
 </div>
 <h1 id="a0000000033">6.5 <span class="ttfamily">TNLean.Entropy</span> namespace bootstrap</h1>
-<p>The <span class="ttfamily">TNLean/Entropy/</span> directory (issue&#160;#613) provides a stable namespace surface for the Simple MPDO RFP track (issue&#160;#236). It re-exports the von Neumann entropy and mutual information under the <span class="ttfamily">Entropy</span> namespace, and records strong subadditivity as an axiom in the same namespace so that the axiom boundary is explicit to downstream modules. The axiom is accepted as given; its proof (from Lieb–Ruskai 1973) is tracked separately in issue&#160;#239. </p>
+<p>The <span class="ttfamily">TNLean/Entropy/</span> directory (issue&#160;#613) provides a stable namespace surface for the Simple MPDO RFP track (issue&#160;#236). It re-exports the von Neumann entropy and mutual information under the <span class="ttfamily">Entropy</span> namespace, wraps the sanctioned strong-subadditivity axiom, and also packages the sanctioned Hayashi SSA-equality characterization into a consumer-facing quantum-Markov-decomposition API. The external inputs are accepted as given; their full proofs are tracked separately in the entropy umbrella issues. </p>
 <div class="definition_thmwrapper theorem-style-definition" id="def:entropy_von_neumann_entropy">
   <div class="definition_thmheading">
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">6.14</span>
+    <span class="definition_thmlabel">6.16</span>
     <span class="definition_thmtitle">Von Neumann entropy, namespaced</span>
     <div class="thm_header_extras">
 
@@ -1802,7 +1942,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">6.15</span>
+    <span class="theorem_thmlabel">6.17</span>
     <span class="theorem_thmtitle">Strong subadditivity, namespaced wrapper</span>
     <div class="thm_header_extras">
 
@@ -1826,7 +1966,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-entropy.html#def:entropy_von_neumann_entropy">Definition 6.14</a></li>
+          <li><a href="ch-entropy.html#def:entropy_von_neumann_entropy">Definition 6.16</a></li>
           
           <li><a href="ch-entropy.html#def:traceA_ABC">Definition 6.6</a></li>
           
@@ -1864,10 +2004,143 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   For any tripartite density matrix \(\rho _{ABC}\) on \(A \otimes B \otimes C\), </p>
-<div class="displaymath" id="a0000000328">
+<div class="displaymath" id="a0000000331">
   \[  S(\rho _{ABC}) + S(\rho _B) \le S(\rho _{AB}) + S(\rho _{BC}).  \]
 </div>
 <p> In the Lean development, <span class="ttfamily">Entropy.strongSubadditivity</span> is a <em>theorem</em> wrapper around the single sanctioned SSA axiom <span class="ttfamily">strong_subadditivity</span> of <span class="ttfamily">TNLean/Axioms/Entropy.lean</span>; no new axiom is introduced by the <span class="ttfamily">TNLean.Entropy.*</span> bootstrap. The underlying axiom’s proof (Lieb–Ruskai 1973) is deferred to the umbrella entropy issue. </p>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:entropy_quantum_markov_decomposition">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">6.18</span>
+    <span class="definition_thmtitle">Quantum Markov decomposition, namespaced</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-entropy.html#def:entropy_quantum_markov_decomposition">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-entropy.html#def:hayashi_markov_decomposition">Definition 6.12</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/Entropy.QuantumMarkovDecomposition" class="lean_decl">Entropy.QuantumMarkovDecomposition</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>    The namespaced alias <span class="ttfamily">Entropy.QuantumMarkovDecomposition</span> is the stable consumer-facing name for the decomposition record of Definition&#160;<a href="ch-entropy.html#def:hayashi_markov_decomposition">6.12</a>. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:entropy_ssa_equality_quantum_markov">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">6.19</span>
+    <span class="theorem_thmtitle">SSA equality iff quantum Markov decomposition</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-entropy.html#thm:entropy_ssa_equality_quantum_markov">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-entropy.html#def:ssa_equality">Definition 6.11</a></li>
+          
+          <li><a href="ch-entropy.html#def:entropy_quantum_markov_decomposition">Definition 6.18</a></li>
+          
+          <li><a href="ch-entropy.html#thm:hayashi_ssa_equality_characterization">Theorem 6.13</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/Entropy.ssaEquality_iff_exists_quantumMarkovDecomposition" class="lean_decl">Entropy.ssaEquality_iff_exists_quantumMarkovDecomposition</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>    For any tripartite density matrix \(\rho _{ABC}\), equality in strong subadditivity holds if and only if \(\rho _{ABC}\) admits a quantum Markov decomposition on the middle subsystem \(B\). </p>
+<p>In the Lean development, this is a <em>theorem</em> wrapper around the sanctioned axiom <span class="ttfamily">hayashi_ssa_equality_characterization</span> of <span class="ttfamily">TNLean/Axioms/Entropy.lean</span>; no new axiom is introduced by <span class="ttfamily">TNLean/Entropy/MarkovChain.lean</span>. </p>
 
   </div>
 </div>
@@ -1876,7 +2149,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">6.16</span>
+    <span class="definition_thmlabel">6.20</span>
     <span class="definition_thmtitle">Mutual information, namespaced</span>
     <div class="thm_header_extras">
 
@@ -1900,7 +2173,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-entropy.html#def:entropy_von_neumann_entropy">Definition 6.14</a></li>
+          <li><a href="ch-entropy.html#def:entropy_von_neumann_entropy">Definition 6.16</a></li>
           
         </ul>
     
@@ -1931,7 +2204,7 @@
         </div>
   </div>
   <div class="definition_thmcontent">
-  <p>   The namespaced wrapper \(\texttt{Entropy.mutualInformation}(\rho _{AB}, h_{\rho _{AB}})\) unfolds to \(I(A{:}B) = S(\rho _A) + S(\rho _B) - S(\rho _{AB})\) as in Definition&#160;<a href="ch-entropy.html#def:mutual_information">6.12</a>. </p>
+  <p>   The namespaced wrapper \(\texttt{Entropy.mutualInformation}(\rho _{AB}, h_{\rho _{AB}})\) unfolds to \(I(A{:}B) = S(\rho _A) + S(\rho _B) - S(\rho _{AB})\) as in Definition&#160;<a href="ch-entropy.html#def:mutual_information">6.14</a>. </p>
 
   </div>
 </div>
@@ -1940,7 +2213,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">6.17</span>
+    <span class="theorem_thmlabel">6.21</span>
     <span class="theorem_thmtitle">Subadditivity from trivial-middle SSA</span>
     <div class="thm_header_extras">
 
@@ -1964,7 +2237,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-entropy.html#thm:entropy_strong_subadditivity">Theorem 6.15</a></li>
+          <li><a href="ch-entropy.html#thm:entropy_strong_subadditivity">Theorem 6.17</a></li>
           
         </ul>
     
@@ -1977,10 +2250,10 @@
   </div>
   <div class="theorem_thmcontent">
   <p>  For a tripartite density matrix \(\rho _{ABC}\) with \(\dim B = 1\), </p>
-<div class="displaymath" id="a0000000329">
+<div class="displaymath" id="a0000000332">
   \[  S(\rho _{ABC}) \le S(\rho _{AB}) + S(\rho _{BC}).  \]
 </div>
-<p> This follows from SSA because the \(1\)-dimensional middle subsystem contributes zero entropy. The statement carries an implicit dependence on the axiom of Theorem&#160;<a href="ch-entropy.html#thm:entropy_strong_subadditivity">6.15</a> and is therefore not marked . </p>
+<p> This follows from SSA because the \(1\)-dimensional middle subsystem contributes zero entropy. The statement carries an implicit dependence on the axiom of Theorem&#160;<a href="ch-entropy.html#thm:entropy_strong_subadditivity">6.17</a> and is therefore not marked . </p>
 
   </div>
 </div>
