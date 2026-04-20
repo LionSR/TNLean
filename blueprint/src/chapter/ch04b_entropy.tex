@@ -146,6 +146,44 @@ finite-dimensional quantum systems.
     \]
 \end{definition}
 
+\begin{definition}[Quantum Markov decomposition]\label{def:hayashi_markov_decomposition}
+    \lean{HayashiMarkovDecomposition}
+    \leanok
+    \uses{def:ssa_equality}
+    A \emph{Hayashi Markov decomposition} of a tripartite state $\rho_{ABC}$
+    consists of a finite direct-sum decomposition
+    \[
+        H_B \cong \bigoplus_j H_{B_j^L} \otimes H_{B_j^R},
+    \]
+    together with a unitary change of basis on $B$, a probability vector
+    $(p_j)_j$, and density matrices $\rho_{A B_j^L}$ and $\rho_{B_j^R C}$ such
+    that, in the adapted basis, the state becomes
+    \[
+        \bigoplus_j p_j\, \rho_{A B_j^L} \otimes \rho_{B_j^R C}.
+    \]
+\end{definition}
+
+\begin{theorem}[Hayashi SSA-equality characterization]
+    \label{thm:hayashi_ssa_equality_characterization}
+    \lean{hayashi_ssa_equality_characterization}
+    \notready
+    \uses{def:ssa_equality, def:hayashi_markov_decomposition}
+    For a tripartite density matrix $\rho_{ABC}$,
+    \[
+        S(\rho_{ABC}) + S(\rho_B) = S(\rho_{AB}) + S(\rho_{BC})
+    \]
+    holds if and only if $\rho_{ABC}$ admits a quantum Markov decomposition on
+    the middle subsystem $B$.
+
+    \textbf{Status:} Recorded in Lean as a sanctioned external-input axiom in
+    \texttt{TNLean/Axioms/Entropy.lean}. This is the equality criterion needed
+    by Appendix~C of arXiv:1606.00608. We cite Hayashi,
+    \emph{J. Phys. A} 37 (2004) L205--L208, and Ruskai,
+    \emph{J. Math. Phys.} 43 (2002) 4358; the structural block-decomposition
+    formulation used in the MPDO paper also appears in Hayden--Jozsa--Petz--
+    Winter, \emph{Commun. Math. Phys.} 246 (2004) 359--374.
+\end{theorem}
+
 \section{Mutual information}
 
 \begin{definition}[Mutual information]\label{def:mutual_information}
@@ -180,10 +218,11 @@ finite-dimensional quantum systems.
 The \texttt{TNLean/Entropy/} directory (issue~\#613) provides a stable
 namespace surface for the Simple MPDO RFP track (issue~\#236). It
 re-exports the von Neumann entropy and mutual information under the
-\texttt{Entropy} namespace, and records strong subadditivity as an
-axiom in the same namespace so that the axiom boundary is explicit to
-downstream modules. The axiom is accepted as given; its proof (from
-Lieb--Ruskai 1973) is tracked separately in issue~\#239.
+\texttt{Entropy} namespace, wraps the sanctioned strong-subadditivity
+axiom, and also packages the sanctioned Hayashi SSA-equality
+characterization into a consumer-facing quantum-Markov-decomposition
+API. The external inputs are accepted as given; their full proofs are
+tracked separately in the entropy umbrella issues.
 
 \begin{definition}[Von Neumann entropy, namespaced]\label{def:entropy_von_neumann_entropy}
     \lean{Entropy.vonNeumannEntropy}
@@ -211,6 +250,34 @@ Lieb--Ruskai 1973) is tracked separately in issue~\#239.
     the \texttt{TNLean.Entropy.*} bootstrap. The underlying axiom's
     proof (Lieb--Ruskai 1973) is deferred to the umbrella entropy
     issue.
+\end{theorem}
+
+\begin{definition}[Quantum Markov decomposition, namespaced]
+    \label{def:entropy_quantum_markov_decomposition}
+    \lean{Entropy.QuantumMarkovDecomposition}
+    \leanok
+    \uses{def:hayashi_markov_decomposition}
+    The namespaced alias
+    \texttt{Entropy.QuantumMarkovDecomposition} is the stable
+    consumer-facing name for the decomposition record of
+    Definition~\ref{def:hayashi_markov_decomposition}.
+\end{definition}
+
+\begin{theorem}[SSA equality iff quantum Markov decomposition]
+    \label{thm:entropy_ssa_equality_quantum_markov}
+    \lean{Entropy.ssaEquality_iff_exists_quantumMarkovDecomposition}
+    \leanok
+    \uses{def:ssa_equality, def:entropy_quantum_markov_decomposition,
+          thm:hayashi_ssa_equality_characterization}
+    For any tripartite density matrix $\rho_{ABC}$, equality in strong
+    subadditivity holds if and only if $\rho_{ABC}$ admits a quantum
+    Markov decomposition on the middle subsystem $B$.
+
+    In the Lean development, this is a \emph{theorem} wrapper around the
+    sanctioned axiom
+    \texttt{hayashi\_ssa\_equality\_characterization} of
+    \texttt{TNLean/Axioms/Entropy.lean}; no new axiom is introduced by
+    \texttt{TNLean/Entropy/MarkovChain.lean}.
 \end{theorem}
 
 \begin{definition}[Mutual information, namespaced]\label{def:entropy_mutual_information}
