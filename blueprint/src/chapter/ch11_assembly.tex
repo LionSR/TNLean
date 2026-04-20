@@ -453,35 +453,9 @@ directly to periodic tensors.
 
 \subsection{Irreducible form}
 
-\begin{definition}[Periodic tensor]
-	\label{def:periodic_tensor}
-	\lean{MPSTensor.IsPeriodic}
-	\leanok
-	An irreducible MPS tensor $A$ of bond dimension $D$ is
-	\emph{$m$-periodic} (for some $m \ge 1$) if the peripheral spectrum
-	of its transfer map $\E_A$ is exactly the $m$-th roots of unity
-	$\{e^{2\pi i k/m} : 0 \le k < m\}$.
-	A $1$-periodic tensor is exactly an irreducible tensor with
-	primitive transfer map (Definition~\ref{def:primitive_channel}).
-\end{definition}
-
-\begin{definition}[Irreducible form]
-	\label{def:irreducible_form}
-	\lean{MPSTensor.IsIrreducibleForm}
-	\leanok
-	A tensor $A$ is in \emph{irreducible form} if it is block-diagonal
-	\[
-		A^i = \bigoplus_{j \in J} \mu_j\, A_j^i,
-	\]
-	where each block $A_j$ is an $m_j$-periodic tensor,
-	each weight $\mu_j \neq 0$, and the blocks are pairwise
-	non-repeated (no two distinct $j, j'$ have $A_j$ gauge-equivalent
-	to $A_{j'}$).
-	This is the standard form introduced in \cite[\S II]{DeLasCuevas2017Irreducible}.
-	It extends the normal canonical form
-	(Definition~\ref{def:is_normal_canonical_form}),
-	which requires the stronger condition that every block is $1$-periodic.
-\end{definition}
+The periodic-tensor and irreducible-form definitions are stated in
+Chapter~\ref{ch:periodic_ft_apps}
+(Definitions~\ref{def:periodic_tensor} and~\ref{def:irreducible_form}).
 
 \begin{remark}[Relation to normal canonical form]\notready
 	\label{rem:irr_form_vs_ncf}
@@ -542,97 +516,13 @@ directly to periodic tensors.
 
 \subsection{The \texorpdfstring{$Z$}{Z}-gauge degree of freedom}
 
-\begin{definition}[Entrywise periodic \(Z\)-gauge ratio]\label{def:z_gauge_entry}
-	\lean{MPSTensor.zGaugeEntry}
-	\leanok
-	Given complex weights $\mu,\nu$, define the entrywise
-	\(Z\)-gauge ratio by
-	\[
-		z(\mu,\nu) := \mu/\nu.
-	\]
-\end{definition}
-
-\begin{lemma}[Matched powers imply root-of-unity ratio]\label{lem:z_gauge_entry_pow}
-	\lean{MPSTensor.zGaugeEntry_pow_eq_one_of_pow_eq}
-	\leanok
-	\uses{def:z_gauge_entry}
-	If $\mu^m=\nu^m$ and $\nu\neq 0$, then
-	\[
-		z(\mu,\nu)^m = 1.
-	\]
-\end{lemma}
-
-\begin{lemma}[Ratio rescales denominator back to numerator]\label{lem:z_gauge_entry_mul}
-	\lean{MPSTensor.zGaugeEntry_mul_right}
-	\leanok
-	\uses{def:z_gauge_entry}
-	If $\nu\neq 0$, then
-	\[
-		z(\mu,\nu)\,\nu=\mu.
-	\]
-\end{lemma}
-
-\begin{definition}[Diagonal periodic \(Z\)-gauge matrix]\label{def:z_gauge_diagonal}
-	\lean{MPSTensor.zGaugeDiagonal}
-	\leanok
-	\uses{def:z_gauge_entry}
-	For matched weight families $(\mu_i)_i$ and $(\nu_i)_i$ on a finite
-	index type, define the diagonal matrix
-	\[
-		Z := \diag\!\bigl(z(\mu_i,\nu_i)\bigr)_i.
-	\]
-\end{definition}
-
-\begin{lemma}[Diagonal \(Z\)-gauge has finite order under matched powers]\label{lem:z_gauge_diagonal_pow}
-	\lean{MPSTensor.zGaugeDiagonal_pow_eq_one}
-	\leanok
-	\uses{def:z_gauge_diagonal, lem:z_gauge_entry_pow}
-	If $\mu_i^m=\nu_i^m$ and $\nu_i\neq 0$ for all~$i$, then
-	\[
-		Z^m=\Id.
-	\]
-\end{lemma}
-
-\begin{lemma}[Diagonal \(Z\)-gauge transports diagonal weights]\label{lem:z_gauge_diagonal_mul}
-	\lean{MPSTensor.zGaugeDiagonal_mul_diagonal}
-	\leanok
-	\uses{def:z_gauge_diagonal, lem:z_gauge_entry_mul}
-	Under $\nu_i\neq 0$ for all~$i$,
-	\[
-		Z\,\diag(\nu)=\diag(\mu).
-	\]
-\end{lemma}
-
-\begin{definition}[$Z$-gauge equivalence]
-	\label{def:z_gauge_equiv}
-	\lean{MPSTensor.ZGaugeEquiv}
-	\leanok
-	Let $A$ be an $m$-periodic irreducible tensor of bond dimension $D$.
-	A \emph{$Z$-gauge transformation} of $A$ is a diagonal unitary
-	matrix $Z \in \MN{D}$ satisfying:
-	\begin{enumerate}
-		\item $Z$ commutes with every Kraus operator: $[A^i, Z] = 0$
-		      for all physical indices $i$, and
-		\item $Z^m = \Id_D$ (all diagonal entries are $m$-th roots of unity).
-	\end{enumerate}
-	Replacing $A$ by $ZA$ (i.e.\ $A^i \mapsto Z A^i$) leaves the
-	MPV family invariant for lengths $N$ that are multiples of $m$,
-	because the factor $\tr(Z^N) = \tr(\Id) = D$ for $N \equiv 0 \pmod{m}$.
-	Two tensors $A, B$ are \emph{$Z$-gauge equivalent} if there exists
-	an invertible $Y$ and a $Z$-gauge transformation $Z$ for $A$ such that
-	$Z A^i = Y B^i Y^{-1}$ for all~$i$.
-\end{definition}
-
-\begin{remark}[$Z$-gauge is trivial for period-$1$ blocks]
-	\label{rem:z_gauge_trivial_period1}
-	\lean{MPSTensor.ZGaugeEquiv.of_period_one}
-	\leanok
-	When $m = 1$ the condition $Z^1 = \Id$ forces $Z = \Id$,
-	so $Z$-gauge equivalence reduces to ordinary gauge equivalence
-	(Definition~\ref{def:gauge_equiv}).
-	The $Z$-gauge is therefore a genuine new degree of freedom
-	that appears only for $m > 1$.
-\end{remark}
+The \(Z\)-gauge definitions and lemmas are stated in
+Chapter~\ref{ch:periodic_ft_apps}
+(Definitions~\ref{def:z_gauge_entry}, \ref{def:z_gauge_diagonal},
+\ref{def:z_gauge_equiv}; Lemmas~\ref{lem:z_gauge_entry_pow},
+\ref{lem:z_gauge_entry_mul}, \ref{lem:z_gauge_diagonal_pow},
+\ref{lem:z_gauge_diagonal_mul}; and
+Remark~\ref{rem:z_gauge_trivial_period1}).
 
 \subsection{Statement of the periodic Fundamental Theorem}
 
