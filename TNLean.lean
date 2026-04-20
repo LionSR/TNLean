@@ -328,6 +328,11 @@ import TNLean.Channel.Semigroup.Primitivity
 import TNLean.Channel.Semigroup.LiouvillianKernel
 import TNLean.Channel.Semigroup.ReducibleQDS
 import TNLean.Channel.Determinant
+import TNLean.Channel.Determinant.Basic
+import TNLean.Channel.Determinant.Bound
+import TNLean.Channel.Determinant.HilbertSchmidt
+import TNLean.Channel.Determinant.HeisenbergDual
+import TNLean.Channel.Determinant.UnitaryCharacterization
 
 -- PEPS (exploratory)
 import TNLean.PEPS.Defs
