@@ -11,29 +11,13 @@ import TNLean.MPS.Core.BlockingInfrastructure
 
 This file provides lightweight helpers used to align periodic blocks to a
 single global period and to transport per-block primitivity witnesses to that
-common blocking level.
+common blocking level. The underlying `lcmPeriod` abbreviation and its basic
+positivity / divisibility facts live in `TNLean.MPS.Core.BlockingInfrastructure`.
 -/
 
 namespace MPSTensor
 
 variable {d k : ℕ}
-
-/-- LCM of a finite family of periods indexed by `Fin k`. -/
-noncomputable def lcmPeriod (periods : Fin k → ℕ) : ℕ :=
-  Finset.univ.lcm periods
-
-/-- The LCM of a positive family of periods is positive. -/
-theorem lcmPeriod_pos {periods : Fin k → ℕ} (h : ∀ i, 0 < periods i) :
-    0 < lcmPeriod periods := by
-  refine Nat.pos_of_ne_zero ?_
-  refine Finset.lcm_ne_zero_iff.2 ?_
-  intro i _
-  exact Nat.ne_of_gt (h i)
-
-/-- Each member of the family divides the LCM of the family. -/
-theorem dvd_lcmPeriod (periods : Fin k → ℕ) (i : Fin k) :
-    periods i ∣ lcmPeriod periods :=
-  Finset.dvd_lcm (Finset.mem_univ i)
 
 /-- Block each family member to the common `lcmPeriod`.
 
