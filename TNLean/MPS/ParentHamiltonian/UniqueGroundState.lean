@@ -376,12 +376,13 @@ theorem chainGroundSpace_eq_mpvSubmodule_normal {A : MPSTensor d D} [NeZero D]
     (hA : IsNormal A) {L₀ : ℕ} (hInj : IsNBlkInjective A L₀)
     {L N : ℕ} (hN : 2 ≤ N) (hL : L₀ < L) (hLN : L ≤ N) :
     chainGroundSpace A L N = mpvSubmodule A N := by
-  -- PROOF STRUCTURE: see bridge lemma
-  -- `chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction` for the
-  -- planned proof route.
-  -- Currently sorry-backed pending discharge of
-  -- `chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction`.
-  sorry
+  apply le_antisymm
+  · exact chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction
+      hA hInj hN hL hLN
+  · intro ψ hψ
+    rw [mpvSubmodule, Submodule.mem_span_singleton] at hψ
+    obtain ⟨c, rfl⟩ := hψ
+    exact Submodule.smul_mem _ c (mpv_mem_chainGroundSpace A L N (by omega) hLN)
 
 /-- **Unique ground state on the periodic chain** for injective MPS.
 
