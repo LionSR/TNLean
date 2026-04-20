@@ -172,7 +172,6 @@ import TNLean.MPS.Structure.LinearExtension
 import TNLean.MPS.FundamentalTheorem.Basic
 import TNLean.MPS.FundamentalTheorem.Proportional
 import TNLean.MPS.FundamentalTheorem.ProportionalPrimitive
-import TNLean.MPS.FundamentalTheorem.Applications
 import TNLean.MPS.FundamentalTheorem.FiniteLength
 -- Symmetry
 import TNLean.MPS.Symmetry.Defs
@@ -204,7 +203,9 @@ import TNLean.MPS.FundamentalTheorem.OverlapConvergenceAux
 import TNLean.MPS.FundamentalTheorem.CoefficientConvergence
 import TNLean.MPS.FundamentalTheorem.Multi
 import TNLean.MPS.FundamentalTheorem.SectorDecomposition
+import TNLean.MPS.Periodic.ZGauge
 import TNLean.MPS.Periodic.FundamentalTheorem
+import TNLean.MPS.Periodic.Applications
 import TNLean.MPS.Periodic.Symmetry
 import TNLean.MPS.Periodic.ProjectiveRep
 import TNLean.MPS.Structure.InvariantSubspaceDecomp
