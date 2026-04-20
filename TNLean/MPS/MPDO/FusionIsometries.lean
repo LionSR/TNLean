@@ -39,7 +39,7 @@ Two layers coexist in this file.
    packages a support subspace `𝒜ₙ`, a forward map `Tₙ : phys → 𝒜ₙ`, and a
    backward map `Sₙ : 𝒜ₙ → phys` with `Tₙ ∘ Sₙ = id_{𝒜ₙ}` and `Sₙ ∘ Tₙ = Eₙ`.
    The retract identity forces `Eₙ^2 = Eₙ`; conversely any idempotent blocked
-   transfer map factors through its range. This yields an honest equivalence
+   transfer map factors through its range. This yields an equivalence
    between the current provisional predicate `MPOTensor.IsRFP` and the
    transfer-map-level fusion formulation.
 
