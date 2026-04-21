@@ -162,15 +162,6 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     $P = P^\dagger$ and $P^2 = P$.
 \end{definition}
 
-\begin{definition}[Unique positive fixed point]
-    \label{def:unique_positive_fixed_point}
-    \lean{HasUniqueFixedPoint}
-    \leanok
-    A linear map $E : \MN{D} \to \MN{D}$ has a \emph{unique positive fixed point}
-    $\rho$ if $E(\rho) = \rho$, the matrix $\rho$ is positive definite,
-    and every positive semidefinite fixed point of $E$ is a scalar multiple of $\rho$.
-\end{definition}
-
 \begin{definition}[Irreducible map]\label{def:irreducible_cp}
     \lean{IsIrreducibleMap}
     \leanok
@@ -1818,20 +1809,23 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:fixedPoints_in_multiplicativeDomain}
+    \uses{thm:kadison_schwarz_channels, thm:left_multiplicative_identity_channels}
     Closure under addition and scalar multiplication is immediate from
     linearity.
     Closure under $\dagger$: if $E(X) = X$ then $E(X^\dagger) = X^\dagger$
     because fixed points are stable under adjoint.
-    Closure under multiplication: if $E(X) = X$ and $E(Y) = Y$, then
-    Theorem~\ref{thm:fixedPoints_in_multiplicativeDomain} places $X$ in the
-    multiplicative domain, so $E(XY) = E(X) E(Y) = XY$.
+    Closure under multiplication: if $E(X) = X$ and $E(Y) = Y$, the weighted
+    Kadison--Schwarz argument gives
+    $E(X^\dagger X) = E(X)^\dagger E(X)$ and, applied to $X^\dagger$,
+    also $E(X X^\dagger) = E(X) E(X)^\dagger$. Thus $X$ lies in the
+    multiplicative domain, and Theorem~\ref{thm:left_multiplicative_identity_channels}
+    yields $E(XY) = E(X) E(Y) = XY$.
 \end{proof}
 
 \begin{remark}\leanok
-    The multiplicative-domain step used here is recorded explicitly in
-    Theorem~\ref{thm:fixedPoints_in_multiplicativeDomain}, so the fixed-point
-    algebra statement no longer relies on a later chapter for its formulation.
+    Theorem~\ref{thm:fixedPoints_in_multiplicativeDomain} records the
+    trace-preserving / Heisenberg-picture counterpart of the same
+    multiplicative-domain argument.
 \end{remark}
 
 \begin{definition}[Adjoint fixed points]\label{def:adjoint_fixed_points}
