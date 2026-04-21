@@ -1492,6 +1492,71 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
     result from~\S\ref{sec:fixed_point_algebra}.
 \end{remark}
 
+\begin{theorem}[Projected elements lie in the multiplicative domain]
+    \label{thm:map_mem_multiplicativeDomain_of_idempotent}
+    \lean{Kraus.map_mem_multiplicativeDomain_of_idempotent}\leanok
+    \uses{def:kraus_fixed_points, def:unital_kraus}
+    Let $E$ be a unital Kraus map whose adjoint map has a positive definite
+    fixed point, and suppose $E^2 = E$. Then $E(X)$ lies in the multiplicative
+    domain of $E$ for every $X \in \MN{D}$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:fixedPointsStarSubalgebra, thm:md_characterization}
+    Idempotence gives $E(E(X)) = E(X)$, so $E(X)$ is a fixed point.
+    The argument in Theorem~\ref{thm:fixedPointsStarSubalgebra} shows that
+    every fixed point satisfies the Kadison--Schwarz equality, hence lies in
+    the multiplicative domain by Theorem~\ref{thm:md_characterization}.
+\end{proof}
+
+\begin{theorem}[Choi--Effros left absorption]
+    \label{thm:choi_effros_left}
+    \lean{Kraus.choi_effros_left}\leanok
+    \uses{def:kraus_fixed_points, def:unital_kraus}
+    Under the same hypotheses, for all $X, Y \in \MN{D}$,
+    \[
+        E(E(X) Y) = E(E(X) E(Y)).
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:map_mem_multiplicativeDomain_of_idempotent}
+    The previous theorem places $E(X)$ in the multiplicative domain, so
+    $E(E(X) Y) = E(X) E(Y)$. Applying the same multiplicativity to
+    $E(X)$ and $E(Y)$ gives $E(E(X) E(Y)) = E(X) E(Y)$.
+\end{proof}
+
+\begin{theorem}[Choi--Effros right absorption]
+    \label{thm:choi_effros_right}
+    \lean{Kraus.choi_effros_right}\leanok
+    \uses{def:kraus_fixed_points, def:unital_kraus}
+    Under the same hypotheses, for all $X, Y \in \MN{D}$,
+    \[
+        E(X E(Y)) = E(E(X) E(Y)).
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:map_mem_multiplicativeDomain_of_idempotent}
+    Apply the previous theorem to $E(Y)$ on the right.
+\end{proof}
+
+\begin{theorem}[Choi--Effros projected product]
+    \label{thm:choi_effros_sandwich}
+    \lean{Kraus.choi_effros_sandwich}\leanok
+    \uses{def:kraus_fixed_points, def:unital_kraus}
+    Under the same hypotheses, for all $X, Y \in \MN{D}$,
+    \[
+        E(E(X) E(Y)) = E(X) E(Y).
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:map_mem_multiplicativeDomain_of_idempotent}
+    The previous theorem places $E(X)$ and $E(Y)$ in the multiplicative domain.
+    Multiplicativity of $E$ on $E(X)$ then gives the claim.
+\end{proof}
+
 \begin{definition}[Adjoint fixed points]\label{def:adjoint_fixed_points}
     \lean{Kraus.adjointFixedPoints}\leanok
     \uses{def:kraus_adjoint_map}
