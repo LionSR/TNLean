@@ -35,14 +35,17 @@ axiomatization of SSA is introduced.
 * `Entropy.strongSubadditivity_rearranged` — the algebraic
   rearrangement `S(ρ_ABC) − S(ρ_AB) ≤ S(ρ_BC) − S(ρ_B)` (the
   conditional-entropy form), proved from SSA alone.
+* `Matrix.traceA_ABC_trace`, `Matrix.traceC_ABC_trace`,
+  `Matrix.traceAC_ABC_trace` — total-trace preservation for the
+  tripartite partial traces. These are used below to derive the trace
+  of a reduced state from `ρ_ABC.trace = 1` without an auxiliary
+  caller-supplied hypothesis.
 * `Entropy.subadditivity_ssa_trivial_B` — subadditivity
   `S(ρ_ABC) ≤ S(ρ_AB) + S(ρ_BC)` in the tripartite form with
   trivial middle subsystem (`dB = 1`). The middle factor contributes
   zero entropy (by the `Fin 1` lemma above), so SSA specializes to
-  this inequality once we know `(ρ_B) = (traceAC ρ_ABC)` has trace 1.
-  We state it with the trace assumption as an explicit hypothesis to
-  keep the derivation elementary. Downstream code supplies that
-  hypothesis from the full-system trace condition.
+  this inequality; the trace of `(traceAC_ABC ρ_ABC)` equals
+  `ρ_ABC.trace = 1` by `Matrix.traceAC_ABC_trace`.
 
 ## TODO
 
@@ -68,6 +71,65 @@ A review with conditions for equality", JMP 43, 4358 (2002).
 
 open scoped Matrix ComplexOrder
 open Matrix Finset Real
+
+/-! ## Trace preservation for the tripartite partial traces
+
+The following three lemmas record that the tripartite partial traces
+`traceA_ABC`, `traceC_ABC`, `traceAC_ABC` (defined in
+`TNLean.Analysis.Entropy`) preserve the total trace of the underlying
+state. They let downstream SSA corollaries derive the auxiliary
+`trace = 1` hypothesis on a reduced state from the full-system
+`ρ.trace = 1` hypothesis, without the caller needing to re-prove it. -/
+
+namespace Matrix
+
+variable {dA dB dC : ℕ}
+
+/-- Total-trace preservation for the tripartite partial trace `traceA_ABC`:
+`tr(tr_A ρ) = tr ρ`. -/
+theorem traceA_ABC_trace
+    (ρ : Matrix (Fin dA × Fin dB × Fin dC)
+      (Fin dA × Fin dB × Fin dC) ℂ) :
+    (Matrix.traceA_ABC ρ).trace = ρ.trace := by
+  simp only [Matrix.trace, Matrix.diag, Matrix.traceA_ABC]
+  rw [Finset.sum_comm]
+  exact (Fintype.sum_prod_type
+    (fun x : Fin dA × (Fin dB × Fin dC) => ρ x x)).symm
+
+/-- Total-trace preservation for the tripartite partial trace `traceC_ABC`:
+`tr(tr_C ρ) = tr ρ`. -/
+theorem traceC_ABC_trace
+    (ρ : Matrix (Fin dA × Fin dB × Fin dC)
+      (Fin dA × Fin dB × Fin dC) ℂ) :
+    (Matrix.traceC_ABC ρ).trace = ρ.trace := by
+  simp only [Matrix.trace, Matrix.diag, Matrix.traceC_ABC]
+  rw [Fintype.sum_prod_type
+    (fun ab : Fin dA × Fin dB => ∑ c, ρ (ab.1, ab.2, c) (ab.1, ab.2, c))]
+  rw [show (∑ x : Fin dA × Fin dB × Fin dC, ρ x x)
+        = ∑ a : Fin dA, ∑ bc : Fin dB × Fin dC, ρ (a, bc) (a, bc) from
+      Fintype.sum_prod_type
+        (fun x : Fin dA × (Fin dB × Fin dC) => ρ x x)]
+  refine Finset.sum_congr rfl fun a _ => ?_
+  exact (Fintype.sum_prod_type
+    (fun bc : Fin dB × Fin dC => ρ (a, bc) (a, bc))).symm
+
+/-- Total-trace preservation for the tripartite partial trace `traceAC_ABC`:
+`tr(tr_{AC} ρ) = tr ρ`. -/
+theorem traceAC_ABC_trace
+    (ρ : Matrix (Fin dA × Fin dB × Fin dC)
+      (Fin dA × Fin dB × Fin dC) ℂ) :
+    (Matrix.traceAC_ABC ρ).trace = ρ.trace := by
+  simp only [Matrix.trace, Matrix.diag, Matrix.traceAC_ABC]
+  rw [Finset.sum_comm]
+  rw [show (∑ x : Fin dA × Fin dB × Fin dC, ρ x x)
+        = ∑ a : Fin dA, ∑ bc : Fin dB × Fin dC, ρ (a, bc) (a, bc) from
+      Fintype.sum_prod_type
+        (fun x : Fin dA × (Fin dB × Fin dC) => ρ x x)]
+  refine Finset.sum_congr rfl fun a _ => ?_
+  exact (Fintype.sum_prod_type
+    (fun bc : Fin dB × Fin dC => ρ (a, bc) (a, bc))).symm
+
+end Matrix
 
 namespace Entropy
 
@@ -167,9 +229,9 @@ middle subsystem contributes zero entropy, so SSA reduces to the
 classical subadditivity `S(ρ_AC) ≤ S(ρ_A) + S(ρ_C)` on bipartite
 states lifted through the trivial middle factor.
 
-To keep the derivation elementary, we require the trace of the
-partial-trace `ρ_B = traceAC_ABC ρ_ABC` explicitly as a hypothesis;
-this is always satisfied when `ρ_ABC` has trace 1. -/
+The trace of `ρ_B = traceAC_ABC ρ_ABC` is derived internally from
+`ρ_ABC.trace = 1` via the trace-preservation lemma
+`Matrix.traceAC_ABC_trace`; no auxiliary hypothesis is required. -/
 
 section Subadditivity
 
@@ -181,22 +243,20 @@ trivial middle subsystem).
 For a density matrix `ρ_ABC` on `A ⊗ 1 ⊗ C`, SSA reduces to
 `S(ρ_ABC) ≤ S(ρ_AB) + S(ρ_BC)` because the `Fin 1`-indexed middle
 reduced state contributes zero entropy (see
-`vonNeumannEntropy_eq_zero_of_fin_one`).
-
-The second hypothesis `h_mid_trace` records that `(ρ_B)` has unit
-trace; this follows from `trace ρ_ABC = 1` by a short direct
-computation left to the caller. -/
+`vonNeumannEntropy_eq_zero_of_fin_one`). The middle reduced state
+has unit trace by `Matrix.traceAC_ABC_trace`. -/
 theorem subadditivity_ssa_trivial_B
     (ρ_ABC : Matrix (Fin dA × Fin 1 × Fin dC)
       (Fin dA × Fin 1 × Fin dC) ℂ)
-    (hρ_dm : ρ_ABC.PosSemidef ∧ ρ_ABC.trace = 1)
-    (h_mid_trace : (traceAC_ABC ρ_ABC).trace = 1) :
+    (hρ_dm : ρ_ABC.PosSemidef ∧ ρ_ABC.trace = 1) :
     Entropy.vonNeumannEntropy ρ_ABC hρ_dm.1.isHermitian
     ≤ Entropy.vonNeumannEntropy (traceC_ABC ρ_ABC)
           (traceC_ABC_isHermitian hρ_dm.1.isHermitian)
       + Entropy.vonNeumannEntropy (traceA_ABC ρ_ABC)
           (traceA_ABC_isHermitian hρ_dm.1.isHermitian) := by
   have hSSA := strongSubadditivity ρ_ABC hρ_dm
+  have h_mid_trace : (traceAC_ABC ρ_ABC).trace = 1 := by
+    rw [Matrix.traceAC_ABC_trace]; exact hρ_dm.2
   have h_mid_zero :
       Entropy.vonNeumannEntropy (traceAC_ABC ρ_ABC)
           (traceAC_ABC_isHermitian hρ_dm.1.isHermitian) = 0 :=
