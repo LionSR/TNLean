@@ -676,7 +676,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \lean{MPSTensor.boundary_matrix_commutes}
     \leanok
     \uses{def:ground_space_map, def:ground_space_parent, thm:ground_space_map_injective}
-    Let $A$ be injective and let $\psi = \Gamma_{N}(X)$ for some boundary matrix
+    Let $A$ be injective with $D \ge 1$, and let $\psi = \Gamma_{N}(X)$ for some boundary matrix
     $X \in \MN{D}$. If every cyclic restriction of length $L$ of $\psi$ lies in $G_{L}(A)$,
     with $N \ge 2$ and $1 < L \le N$, then
     \[
@@ -1709,8 +1709,9 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     \notready
     \uses{def:parent_hamiltonian_ground_space_bnt, def:bnt_span,
         thm:chain_ground_space_eq_mpv_normal}
-    If $1 < L$ and $N \ge L + 1$, every vector in the assembled parent ground space should
-    decompose into blockwise chain ground states, and therefore lie in the BNT span.
+    If $A$ is in canonical-form/BNT and $1 < L$ and $N \ge L + 1$, every vector in the
+    assembled parent ground space should decompose into blockwise chain ground states, and
+    therefore lie in the BNT span.
 \end{theorem}
 
 \begin{proof}
