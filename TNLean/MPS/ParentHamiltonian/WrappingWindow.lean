@@ -3,6 +3,7 @@ Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.ParentHamiltonian.Basic
+import TNLean.MPS.ParentHamiltonian.BlockStrip
 import TNLean.MPS.ParentHamiltonian.CyclicWindow
 import TNLean.MPS.FundamentalTheorem.FiniteLength
 
@@ -41,6 +42,8 @@ proceeds as follows:
 
 ## Main results
 
+* `MPSTensor.boundary_matrix_commutes_of_isNBlkInjective_of_long_word_commutes`
+  — block injectivity turns long-word commutation into generator commutation
 * `MPSTensor.boundary_matrix_commutes` — if `groundSpaceMap A N X` lies in
   every cyclic window's ground space, then `X` commutes with all `A_j`.
 
@@ -177,9 +180,9 @@ private theorem init_evalWord_split {A : MPSTensor d D}
 Use `tr(P * Q) = tr(Q * P)` to rotate the wrapping boundary,
 then extract a matrix equation via `groundSpaceMap_injective`. -/
 
+set_option maxHeartbeats 800000 in
 -- Expanding `cyclicCfg` and rotating the trace through the wrapping window produces
 -- large normalization goals, so this proof needs a larger heartbeat budget.
-set_option maxHeartbeats 800000 in
 private theorem wrapping_window_matEq {A : MPSTensor d D} [NeZero D]
     (hA : IsInjective A) {L : ℕ} (hL : 1 < L) {M : ℕ} (hM : 1 ≤ M) (hLN : L ≤ M + 1)
     {X : Matrix (Fin D) (Fin D) ℂ}
@@ -257,9 +260,21 @@ private theorem wrapping_window_matEq {A : MPSTensor d D} [NeZero D]
 
 Extend from the wrapping window equation to full commutation via spanning. -/
 
+/-- If a boundary matrix commutes with all words of some length `m ≥ L₀`, then
+block injectivity forces it to commute with every generator. -/
+theorem boundary_matrix_commutes_of_isNBlkInjective_of_long_word_commutes
+    {A : MPSTensor d D} {L₀ m : ℕ} (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
+    (hm : L₀ ≤ m) {X : Matrix (Fin D) (Fin D) ℂ}
+    (hComm : ∀ ω : Fin m → Fin d,
+      X * evalWord A (List.ofFn ω) = evalWord A (List.ofFn ω) * X) :
+    ∀ j : Fin d, X * A j = A j * X := by
+  intro j
+  exact commutes_all_of_commutes_long_words_of_isNBlkInjective
+    (A := A) hInj hL₀ hm hComm (A j)
+
+set_option maxHeartbeats 800000 in
 -- The double spanning argument over window tails and complements creates large
 -- `LinearMap.ext_on_range` goals, so we raise the heartbeat budget here as well.
-set_option maxHeartbeats 800000 in
 /-- If `groundSpaceMap A N X` lies in every cyclic window's ground space,
 then `X` commutes with all generators `A_j`.
 
