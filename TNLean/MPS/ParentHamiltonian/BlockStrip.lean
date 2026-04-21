@@ -25,7 +25,7 @@ parent-Hamiltonian closure argument for block-injective tensors.
 ## Mathematical content
 
 If words of a fixed length `L` span the full matrix algebra, then the trace map
-`groundSpaceMap A L` is injective.  We use this to package a block-word
+`groundSpaceMap A L` is injective. We use this to formulate a block-word
 compatibility argument: if a family indexed by length-`L₀` words satisfies a
 common right-factor relation after multiplying by every length-`K` suffix, then
 block injectivity at length `L₀` strips the suffix and produces a common right
