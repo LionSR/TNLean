@@ -202,7 +202,7 @@
   <a href="ch-entropy.html#a0000000032"><span class="toc_ref">6.4</span> <span class="toc_entry">Mutual information</span></a>
  </li>
 <li class="">
-  <a href="ch-entropy.html#a0000000033"><span class="toc_ref">6.5</span> <span class="toc_entry"><span class="ttfamily">TNLean.Entropy</span> namespace bootstrap</span></a>
+  <a href="ch-entropy.html#a0000000033"><span class="toc_ref">6.5</span> <span class="toc_entry"><span class="ttfamily">TNLean.Entropy</span> namespace</span></a>
  </li>
 
   </ul>
@@ -536,7 +536,7 @@
   <span class="expand-toc">▶</span>
   <ul class="sub-toc-1">
      <li class="">
-  <a href="ch-assembly.html#sec:assembly_weak"><span class="toc_ref">14.1</span> <span class="toc_entry">Weak Fundamental Theorem</span></a>
+  <a href="ch-assembly.html#sec:assembly_weak"><span class="toc_ref">14.1</span> <span class="toc_entry">Conditional Fundamental Theorem</span></a>
  </li>
 <li class="">
   <a href="ch-assembly.html#sec:assembly_proportional"><span class="toc_ref">14.2</span> <span class="toc_entry">Proportional Fundamental Theorem</span></a>
@@ -1871,8 +1871,8 @@
 
   </div>
 </div>
-<h1 id="a0000000033">6.5 <span class="ttfamily">TNLean.Entropy</span> namespace bootstrap</h1>
-<p>The <span class="ttfamily">TNLean/Entropy/</span> directory (issue&#160;#613) provides a stable namespace surface for the Simple MPDO RFP track (issue&#160;#236). It re-exports the von Neumann entropy and mutual information under the <span class="ttfamily">Entropy</span> namespace, wraps the sanctioned strong-subadditivity axiom, and also packages the sanctioned Hayashi SSA-equality characterization into a consumer-facing quantum-Markov-decomposition API. The external inputs are accepted as given; their full proofs are tracked separately in the entropy umbrella issues. </p>
+<h1 id="a0000000033">6.5 <span class="ttfamily">TNLean.Entropy</span> namespace</h1>
+<p>The modules in <span class="ttfamily">TNLean.Entropy</span> (issue&#160;#613) place the von Neumann entropy and mutual information in the <span class="ttfamily">Entropy</span> namespace, restate the sanctioned strong-subadditivity axiom there, and introduce the name <span class="ttfamily">QuantumMarkovDecomposition</span> for the Hayashi SSA-equality decomposition. The external inputs are accepted as given; their full proofs are tracked separately in the entropy umbrella issues. </p>
 <div class="definition_thmwrapper theorem-style-definition" id="def:entropy_von_neumann_entropy">
   <div class="definition_thmheading">
     <span class="definition_thmcaption">
@@ -2007,7 +2007,7 @@
 <div class="displaymath" id="a0000000374">
   \[  S(\rho _{ABC}) + S(\rho _B) \le S(\rho _{AB}) + S(\rho _{BC}).  \]
 </div>
-<p> In the Lean development, <span class="ttfamily">Entropy.strongSubadditivity</span> is a <em>theorem</em> wrapper around the single sanctioned SSA axiom <span class="ttfamily">strong_subadditivity</span> of <span class="ttfamily">TNLean/Axioms/Entropy.lean</span>; no new axiom is introduced by the <span class="ttfamily">TNLean.Entropy.*</span> bootstrap. The underlying axiom’s proof (Lieb–Ruskai 1973) is deferred to the umbrella entropy issue. </p>
+<p> In the Lean development, <span class="ttfamily">Entropy.strongSubadditivity</span> is a <em>theorem</em> wrapper around the single sanctioned SSA axiom <span class="ttfamily">strong_subadditivity</span> of <span class="ttfamily">TNLean/Axioms/Entropy.lean</span>; no new axiom is introduced by the <span class="ttfamily">TNLean.Entropy.*</span> declarations. The underlying axiom’s proof (Lieb–Ruskai 1973) is deferred to the umbrella entropy issue. </p>
 
   </div>
 </div>
@@ -2071,7 +2071,7 @@
         </div>
   </div>
   <div class="definition_thmcontent">
-  <p>    The namespaced alias <span class="ttfamily">Entropy.QuantumMarkovDecomposition</span> is the stable consumer-facing name for the decomposition record of Definition&#160;<a href="ch-entropy.html#def:hayashi_markov_decomposition">6.12</a>. </p>
+  <p>    The namespaced alias <span class="ttfamily">Entropy.QuantumMarkovDecomposition</span> is the name used in the <span class="ttfamily">Entropy</span> namespace for the decomposition record of Definition&#160;<a href="ch-entropy.html#def:hayashi_markov_decomposition">6.12</a>. </p>
 
   </div>
 </div>
