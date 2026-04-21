@@ -1152,7 +1152,7 @@ The following results separate the zero blocks from the
 \end{proof}
 
 \begin{definition}[Common-period blocking of a block family]%
-	\label{def:common_period_blocking}
+	\label{def:common_period_blocking_ch8}
 	\lean{MPSTensor.commonPeriodBlocking}
 	\leanok
 	\uses{def:blocked_tensor}
@@ -1162,10 +1162,10 @@ The following results separate the zero blocks from the
 \end{definition}
 
 \begin{theorem}[Primitivity of the common-period blocking]%
-	\label{thm:common_period_blocking_primitive}
+	\label{thm:common_period_blocking_primitive_ch8}
 	\lean{MPSTensor.isPrimitive_transferMap_commonPeriodBlocking}
 	\leanok
-	\uses{def:common_period_blocking, thm:primitive_blocking_divisible}
+	\uses{def:common_period_blocking_ch8, thm:primitive_blocking_divisible}
 	Suppose each $B_k$ has positive bond dimension and each blocked transfer map
 	$\E_{B_k^{[p_k]}}$ is primitive.
 	Then every member of the common-period blocked family also has primitive
@@ -1182,13 +1182,13 @@ The following results separate the zero blocks from the
 	\label{thm:common_period_blocking_apply}
 	\lean{MPSTensor.commonPeriodBlocking_apply}
 	\leanok
-	\uses{def:common_period_blocking}
+	\uses{def:common_period_blocking_ch8}
 	Each block of the common-period blocking is exactly the corresponding tensor
 	blocked at the common least common multiple.
 \end{theorem}
 
 \begin{proof}\leanok
-	\uses{def:common_period_blocking}
+	\uses{def:common_period_blocking_ch8}
 	This is the definition of the common-period blocking.
 \end{proof}
 
@@ -1986,7 +1986,7 @@ The following results separate the zero blocks from the
 \end{proof}
 
 \begin{theorem}[Conditional block matching after blocking]%
-	\label{thm:weak_ft_conditional}
+	\label{thm:weak_ft_conditional_ch8}
 	\lean{MPSTensor.weakFundamentalTheorem_conditional}
 	\leanok
 	\uses{def:is_normal_canonical_form}
