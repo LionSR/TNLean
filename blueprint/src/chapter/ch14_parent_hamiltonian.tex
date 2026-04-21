@@ -429,6 +429,24 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     fixed prefix $u$ gives a suffix state in $G_L(A)$.
 \end{definition}
 
+\begin{lemma}[Ground-space suffix restriction]\label{lem:ground_space_in_tail_ground}
+    \lean{MPSTensor.groundSpace_inTailGround}
+    \leanok
+    \uses{def:in_tail_ground, def:ground_space_parent}
+    If $\psi \in G_{K+L}(A)$, then every fixed-prefix suffix restriction of
+    $\psi$ lies in $G_L(A)$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Write $\psi(\rho) = \tr(A^\rho X)$ for a boundary matrix $X$. Fixing a
+    prefix $u$ gives
+    \[
+        \psi(u,\sigma) = \tr(A^u A^\sigma X) = \tr(A^\sigma X A^u),
+    \]
+    so the suffix restriction again has the form of a ground-space vector.
+\end{proof}
+
 \begin{lemma}[Left-tail compatibility]\label{lem:left_tail_compatibility}
     \lean{MPSTensor.exists_left_tail_compatibility}
     \leanok
