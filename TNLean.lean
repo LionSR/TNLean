@@ -95,9 +95,11 @@ import TNLean.Channel.Schwarz.MultiplicativeDomainPowers
 import TNLean.Channel.Schwarz.MultiplicativeDomainFull
 import TNLean.Channel.Schwarz.TraceCFC
 import TNLean.Channel.FixedPoint.Algebra
+import TNLean.Channel.FixedPoint.ChoiEffros
 import TNLean.Channel.FixedPoint.Cesaro
 import TNLean.Channel.FixedPoint.StationarySupport
 import TNLean.Channel.FixedPoint.WedderburnDecomp
+import TNLean.Channel.FixedPoint.Corollaries
 import TNLean.Channel.Irreducible.Ergodicity
 import TNLean.Channel.Irreducible.Basic
 import TNLean.Channel.Irreducible.Growth
@@ -161,6 +163,8 @@ import TNLean.MPS.ParentHamiltonian.Defs
 import TNLean.MPS.ParentHamiltonian.Basic
 import TNLean.MPS.ParentHamiltonian.IntersectionProperty
 import TNLean.MPS.ParentHamiltonian.CyclicWindow
+import TNLean.MPS.ParentHamiltonian.SuffixWindow
+import TNLean.MPS.ParentHamiltonian.ExtendRight
 import TNLean.MPS.ParentHamiltonian.WrappingWindow
 import TNLean.MPS.ParentHamiltonian.SuffixWindow
 import TNLean.MPS.ParentHamiltonian.OpenChainRangeReduction

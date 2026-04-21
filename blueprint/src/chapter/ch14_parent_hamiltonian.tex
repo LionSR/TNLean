@@ -11,7 +11,8 @@ coefficient functions
 \]
 rather than as an explicit tensor product.
 
-\section{\texorpdfstring{Local ground space $G_L(A)$}{Local ground space G\_L(A)}}\label{sec:ground_space_parent}
+\section{\texorpdfstring{Local ground space $G_L(A)$}{Local ground space G\_L(A)}}%
+\label{sec:ground_space_parent}
 
 Fix an MPS tensor $A = \{A^i\}_{i=0}^{d-1}$ with $A^i \in \MN{D}$ and a block
 length $L \ge 1$.
@@ -118,7 +119,8 @@ onto $G_L(A)^\perp$ in the $L$-site Euclidean space.
     on the local $L$-site space.
 \end{definition}
 
-\begin{lemma}[Parent interaction kills ground-space elements]\label{lem:parent_interaction_apply_mem_ground_space}
+\begin{lemma}[Parent interaction kills ground-space elements]%
+    \label{lem:parent_interaction_apply_mem_ground_space}
     \lean{MPSTensor.parentInteraction_apply_mem_groundSpace}
     \leanok
     \uses{def:parent_interaction, def:ground_space_parent}
@@ -183,7 +185,8 @@ translated copies of the local interaction.
 \begin{lemma}[Local term annihilates the MPV]\label{lem:local_term_annihilates_mpv}
     \lean{MPSTensor.localTerm_annihilates_mpv}
     \leanok
-    \uses{def:local_term_parent, def:mpv, lem:mpv_window_mem_ground_space, lem:parent_interaction_apply_mem_ground_space}
+    \uses{def:local_term_parent, def:mpv, lem:mpv_window_mem_ground_space,
+        lem:parent_interaction_apply_mem_ground_space}
     For each site $i$, $h_i\,V^{(N)}(A) = 0$.
 \end{lemma}
 
@@ -320,6 +323,37 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     $\MN{D}$, so the trace pairing gives $X = 0$.
 \end{proof}
 
+\begin{theorem}[Ground-space map injectivity from word span]
+    \label{thm:ground_space_map_injective_word_span}
+    \lean{MPSTensor.groundSpaceMap_injective_of_wordSpan_eq_top}
+    \leanok
+    \uses{def:ground_space_map}
+    If the length-$L$ products $\{A^\sigma : |\sigma| = L\}$ span $\MN{D}$, then
+    $\Gamma_L$ is injective.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    If $\Gamma_L(X) = 0$, then $\tr(A^\sigma X) = 0$ for every word $\sigma$ of
+    length $L$. The spanning hypothesis turns this into $\tr(MX) = 0$ for every
+    $M \in \MN{D}$, and the trace pairing gives $X = 0$.
+\end{proof}
+
+\begin{lemma}[Ground-space map injectivity for block-injective tensors]
+    \label{lem:ground_space_map_injective_blk}
+    \lean{MPSTensor.groundSpaceMap_injective_of_isNBlkInjective}
+    \leanok
+    \uses{thm:ground_space_map_injective_word_span, def:l_blk_injective}
+    If $A$ is $L_0$-block-injective, then $\Gamma_{L_0}$ is injective.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    By definition, $L_0$-block injectivity says precisely that the length-$L_0$
+    products span $\MN{D}$. Apply
+    Theorem~\ref{thm:ground_space_map_injective_word_span}.
+\end{proof}
+
 \begin{theorem}[Ground-space dimension]\label{thm:ground_space_finrank_eq}
     \lean{MPSTensor.groundSpace_finrank_eq}
     \leanok
@@ -411,6 +445,121 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     Theorem~\ref{thm:ground_space_intersection} at each step.
 \end{proof}
 
+\begin{definition}[Suffix restriction]\label{def:tail_restrict_parent}
+    \lean{MPSTensor.tailRestrictₗ}
+    \leanok
+    Fix a prefix $u : \Fin K \to \Fin d$. The suffix restriction of an
+    $(K+L)$-site state $\psi$ is the $L$-site state given by
+    \[
+        (\operatorname{tailRestrict}_u \psi)(\sigma) = \psi(u,\sigma).
+    \]
+\end{definition}
+
+\begin{definition}[Suffix ground membership]\label{def:in_tail_ground}
+    \lean{MPSTensor.InTailGround}
+    \leanok
+    \uses{def:tail_restrict_parent, def:ground_space_parent}
+    A state $\psi$ on $K+L$ sites lies in the suffix ground condition if every
+    fixed prefix $u$ gives a suffix state in $G_L(A)$.
+\end{definition}
+
+\begin{lemma}[Ground-space suffix restriction]\label{lem:ground_space_in_tail_ground}
+    \lean{MPSTensor.groundSpace_inTailGround}
+    \leanok
+    \uses{def:in_tail_ground, def:ground_space_parent}
+    If $\psi \in G_{K+L}(A)$, then every fixed-prefix suffix restriction of
+    $\psi$ lies in $G_L(A)$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Write $\psi(\rho) = \tr(A^\rho X)$ for a boundary matrix $X$. Fixing a
+    prefix $u$ gives
+    \[
+        \psi(u,\sigma) = \tr(A^u A^\sigma X) = \tr(A^\sigma X A^u),
+    \]
+    so the suffix restriction again has the form of a ground-space vector.
+\end{proof}
+
+\begin{lemma}[Left-tail compatibility]\label{lem:left_tail_compatibility}
+    \lean{MPSTensor.exists_left_tail_compatibility}
+    \leanok
+    \uses{def:in_left_ground, def:in_tail_ground, def:ground_space_parent}
+    Assume $\psi$ on $K+L_0+1$ sites satisfies the left ground condition on the
+    first $K+L_0$ sites and the suffix ground condition on every fixed prefix of
+    length $K$. Then there exist matrices $(Z_j)_j$ and $(Y_u)_u$ such that
+    \[
+        \psi(\sigma,j) = \tr(A^\sigma Z_j), \qquad
+        \psi(u,\tau) = \tr(A^\tau Y_u),
+    \]
+    and for all $j$ and $u$,
+    \[
+        Z_j A^u = A_j Y_u.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Choose $Z_j$ from the long left-window condition and $Y_u$ from the suffix
+    ground condition. Restricting the suffix state at its last site gives the
+    boundary matrix $A_j Y_u$, while first fixing the last site and then taking
+    the suffix gives $Z_j A^u$. The two restrictions are the same because
+    appending the fixed prefix and then the last letter gives the same
+    configuration as appending the last letter to the suffix and then placing
+    the prefix in front. Injectivity of $\Gamma_{L_0}$, obtained from
+    $L_0$-block injectivity, yields $Z_j A^u = A_j Y_u$.
+\end{proof}
+
+\begin{theorem}[Common right factor from word compatibility]%
+    \label{thm:right_factor_word_compatibility}
+    \lean{MPSTensor.exists_right_factor_of_evalWord_compatibility}
+    \leanok
+    \uses{def:l_blk_injective}
+    Assume $A$ is $L_0$-block injective with $L_0 > 0$. If matrices $(Z_j)_j$
+    satisfy
+    \[
+        Z_j A^\sigma = A_j Y_\sigma
+    \]
+    for every word $\sigma$ of length $K$, then there exists a matrix $X$ such
+    that $Z_j = A_j X$ for all $j$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    For $K = 1$, the hypothesis gives $Z_j A_i = A_j Y_i$ for every letter $i$.
+    Every blocked word of length $L_0$ is nonempty, so this identity extends to
+    the coefficients of the blocked tensor $A^{[L_0]}$. Since $A^{[L_0]}$ is
+    injective, the identity matrix is a linear combination of those blocked
+    coefficients, and substituting this decomposition yields $Z_j = A_j X$ for a
+    common matrix $X$. For larger $K$, strip the first letter: for each $i$, the
+    matrices $Z_j A_i$ satisfy the same compatibility hypothesis with words of
+    length $K - 1$, so the induction hypothesis reduces the problem to the case
+    $K = 1$.
+\end{proof}
+
+\begin{theorem}[Open-chain right extension at the injectivity length]%
+    \label{thm:ground_space_extend_right_block_injective}
+    \lean{MPSTensor.groundSpace_extend_right_of_isNBlkInjective}
+    \leanok
+    \uses{def:in_left_ground, def:in_tail_ground, def:ground_space_parent}
+    Assume $A$ is $L_0$-block injective with $L_0 > 0$. If an element $\psi$
+    on $K + L_0 + 1$ sites satisfies the left ground condition on
+    the first $K + L_0$ sites and the suffix ground condition on every prefix of
+    length $K$, then $\psi \in G_{K + L_0 + 1}(A)$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Lemma~\ref{lem:left_tail_compatibility} produces matrices $(Z_j)_j$ and
+    $(Y_u)_u$ with $Z_j A^u = A_j Y_u$ for every prefix word $u$ of length $K$.
+    Theorem~\ref{thm:right_factor_word_compatibility} gives a common right factor
+    $X$ such that $Z_j = A_j X$ for all $j$. Therefore each last-site restriction
+    of $\psi$ agrees with the corresponding last-site restriction of the ground-
+    space vector determined by $X$. Since every configuration is obtained by
+    adjoining its final letter to its initial $(K + L_0)$-tuple, the two states
+    coincide, so $\psi$ lies in $G_{K + L_0 + 1}(A)$.
+\end{proof}
+
 \begin{definition}[MPV submodule]\label{def:mpv_submodule}
     \lean{MPSTensor.mpvSubmodule}
     \leanok
@@ -491,6 +640,88 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     $N - L_0$, so $A^{w'} A^{u_1} = 0$ by the previous step) and iterating,
     we eventually reach $\tr(A^u) = 0$ for $|u| = L_0$, which gives
     $I = 0$, a contradiction.
+\end{proof}
+
+\subsection{Block-word stripping}
+
+\begin{theorem}[Common right factor from block-word compatibility]
+    \label{thm:block_word_strip_right_factor}
+    \lean{MPSTensor.exists_right_factor_of_block_word_compatibility}
+    \leanok
+    \uses{def:l_blk_injective}
+    Assume $A$ is $L_0$-block-injective with $L_0 > 0$. Let $\{Z_u\}_{|u|=L_0}$
+    be a family indexed by words of length $L_0$. If for some $K \ge 0$ and every
+    suffix word $w$ of length $K$ there exists $Y_w \in \MN{D}$ such that
+    \[
+        Z_u A^w = A^u Y_w
+        \qquad\text{for every word }u\text{ of length }L_0,
+    \]
+    then there exists $X \in \MN{D}$ with $Z_u = A^u X$ for every word $u$ of
+    length $L_0$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Induct on $K$. For $K = 0$ the empty suffix gives $Z_u = A^u Y_{\emptyset}$.
+    For the successor step, fix the first physical index and apply the induction
+    hypothesis to the shortened suffix. This reduces the statement to letter
+    compatibility on the right. Extending that letter compatibility to all
+    length-$L_0$ words and decomposing $\Id$ in the spanning family
+    $\{A^u : |u| = L_0\}$ yields a common factor $X$.
+\end{proof}
+
+\begin{theorem}[Block-word commutation from long-word commutation]
+    \label{thm:block_word_strip_commutes}
+    \lean{MPSTensor.commutes_block_words_of_commutes_long_words_of_isNBlkInjective}
+    \leanok
+    \uses{thm:block_word_strip_right_factor, def:l_blk_injective}
+    If $A$ is $L_0$-block-injective with $L_0 > 0$, $m \ge L_0$, and
+    $X \in \MN{D}$ commutes with every length-$m$ product $A^\omega$, then $X$
+    already commutes with every length-$L_0$ product $A^u$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Write each length-$m$ word as a concatenation $uw$ with $|u| = L_0$ and
+    $|w| = m - L_0$. The hypothesis gives
+    \[
+        X A^u A^w = A^u A^w X = A^u (A^w X).
+    \]
+    Thus the family $Z_u := X A^u$ satisfies the hypothesis of
+    Theorem~\ref{thm:block_word_strip_right_factor}. One obtains
+    $X A^u = A^u R$ for all $|u| = L_0$. Decomposing $\Id$ in the span of the
+    length-$L_0$ words shows $R = X$, hence $X A^u = A^u X$.
+\end{proof}
+
+\begin{theorem}[Centrality from long-word commutation]
+    \label{thm:block_word_strip_central}
+    \lean{MPSTensor.commutes_all_of_commutes_long_words_of_isNBlkInjective}
+    \leanok
+    \uses{thm:block_word_strip_commutes, def:l_blk_injective}
+    If $A$ is $L_0$-block-injective with $L_0 > 0$, $m \ge L_0$, and
+    $X \in \MN{D}$ commutes with every length-$m$ word product, then $X$
+    commutes with every matrix in $\MN{D}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    By Theorem~\ref{thm:block_word_strip_commutes}, $X$ commutes with every
+    length-$L_0$ word product. These products span $\MN{D}$ by block
+    injectivity, so linearity gives $XM = MX$ for every $M \in \MN{D}$.
+\end{proof}
+
+\begin{lemma}[Generator commutation from long-word commutation]
+    \label{lem:boundary_matrix_commutes_long_words}
+    \lean{MPSTensor.boundary_matrix_commutes_of_isNBlkInjective_of_long_word_commutes}
+    \leanok
+    \uses{thm:block_word_strip_central}
+    Under the hypotheses of Theorem~\ref{thm:block_word_strip_central}, one has
+    $X A^i = A^i X$ for every physical index $i$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Apply Theorem~\ref{thm:block_word_strip_central} with $M = A^i$.
 \end{proof}
 
 \begin{theorem}[Chain ground space for block-injective tensors]%
