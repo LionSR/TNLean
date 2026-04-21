@@ -29,6 +29,10 @@ axiomatization of SSA is introduced.
 * `Entropy.strongSubadditivity` — **theorem** (not a new axiom).
   Forwards to `_root_.strong_subadditivity` from
   `TNLean/Axioms/Entropy.lean`.
+* `Matrix.trace_eq_trace_traceA_ABC`,
+  `Matrix.trace_eq_trace_traceC_ABC`,
+  `Matrix.trace_eq_trace_traceAC_ABC` — tripartite partial traces
+  preserve the full trace.
 * `Entropy.vonNeumannEntropy_eq_zero_of_fin_one` — a 1×1 density
   matrix (PSD with trace 1) has vanishing entropy; proved from
   Mathlib via `Real.negMulLog_one`.
@@ -38,11 +42,8 @@ axiomatization of SSA is introduced.
 * `Entropy.subadditivity_ssa_trivial_B` — subadditivity
   `S(ρ_ABC) ≤ S(ρ_AB) + S(ρ_BC)` in the tripartite form with
   trivial middle subsystem (`dB = 1`). The middle factor contributes
-  zero entropy (by the `Fin 1` lemma above), so SSA specializes to
-  this inequality once we know `(ρ_B) = (traceAC ρ_ABC)` has trace 1.
-  We state it with the trace assumption as an explicit hypothesis to
-  keep the derivation elementary. Downstream code supplies that
-  hypothesis from the full-system trace condition.
+  zero entropy, and `Matrix.trace_eq_trace_traceAC_ABC` supplies the
+  trace-one hypothesis for the reduced middle state.
 
 ## TODO
 
@@ -68,6 +69,58 @@ A review with conditions for equality", JMP 43, 4358 (2002).
 
 open scoped Matrix ComplexOrder
 open Matrix Finset Real
+
+/-! ## Tripartite partial traces preserve the full trace -/
+
+section TripartiteTrace
+
+variable {dA dB dC : ℕ}
+
+namespace Matrix
+
+/-- The full trace equals the trace of the `A`-partial trace:
+`tr(ρ_ABC) = tr(tr_A(ρ_ABC))`. -/
+theorem trace_eq_trace_traceA_ABC
+    (ρ : Matrix (Fin dA × Fin dB × Fin dC)
+      (Fin dA × Fin dB × Fin dC) ℂ) :
+    ρ.trace = (traceA_ABC ρ).trace := by
+  simp only [Matrix.trace, Matrix.diag, traceA_ABC]
+  rw [show ∑ i : Fin dA × Fin dB × Fin dC, ρ i i =
+      ∑ a : Fin dA, ∑ bc : Fin dB × Fin dC, ρ (a, bc) (a, bc) from
+      Fintype.sum_prod_type
+        (fun i : Fin dA × (Fin dB × Fin dC) => ρ i i)]
+  exact Finset.sum_comm
+
+/-- The full trace equals the trace of the `C`-partial trace:
+`tr(ρ_ABC) = tr(tr_C(ρ_ABC))`. -/
+theorem trace_eq_trace_traceC_ABC
+    (ρ : Matrix (Fin dA × Fin dB × Fin dC)
+      (Fin dA × Fin dB × Fin dC) ℂ) :
+    ρ.trace = (traceC_ABC ρ).trace := by
+  simp only [Matrix.trace, Matrix.diag, traceC_ABC]
+  rw [show ∑ i : Fin dA × Fin dB × Fin dC, ρ i i =
+      ∑ a : Fin dA, ∑ bc : Fin dB × Fin dC, ρ (a, bc) (a, bc) from
+      Fintype.sum_prod_type
+        (fun i : Fin dA × (Fin dB × Fin dC) => ρ i i)]
+  simp_rw [Fintype.sum_prod_type]
+
+/-- The full trace equals the trace of the `AC`-partial trace:
+`tr(ρ_ABC) = tr(tr_AC(ρ_ABC))`. -/
+theorem trace_eq_trace_traceAC_ABC
+    (ρ : Matrix (Fin dA × Fin dB × Fin dC)
+      (Fin dA × Fin dB × Fin dC) ℂ) :
+    ρ.trace = (traceAC_ABC ρ).trace := by
+  simp only [Matrix.trace, Matrix.diag, traceAC_ABC]
+  rw [show ∑ i : Fin dA × Fin dB × Fin dC, ρ i i =
+      ∑ a : Fin dA, ∑ bc : Fin dB × Fin dC, ρ (a, bc) (a, bc) from
+      Fintype.sum_prod_type
+        (fun i : Fin dA × (Fin dB × Fin dC) => ρ i i)]
+  simp_rw [Fintype.sum_prod_type]
+  rw [Finset.sum_comm]
+
+end Matrix
+
+end TripartiteTrace
 
 namespace Entropy
 
@@ -145,14 +198,12 @@ theorem vonNeumannEntropy_eq_zero_of_fin_one
     (M : Matrix (Fin 1) (Fin 1) ℂ)
     (hM : M.IsHermitian) (hM_trace : M.trace = 1) :
     _root_.vonNeumannEntropy M hM = 0 := by
-  -- The sum of eigenvalues equals the (real cast of the) trace.
   have h_sum : ∑ i : Fin 1, hM.eigenvalues i = 1 := by
     have h := hM.trace_eq_sum_eigenvalues
     have h_cast : (∑ i : Fin 1, (hM.eigenvalues i : ℂ)) = 1 := h ▸ hM_trace
     exact_mod_cast h_cast
   have h_eig : hM.eigenvalues 0 = 1 := by
     simpa [Fin.sum_univ_one] using h_sum
-  -- Entropy of a one-element sum reduces to `negMulLog` of the one eigenvalue.
   have h1 : Real.negMulLog (1 : ℝ) = 0 := by
     simp [Real.negMulLog]
   change ∑ i : Fin 1, Real.negMulLog (hM.eigenvalues i) = 0
@@ -165,11 +216,9 @@ end FinOneEntropy
 We state subadditivity in the tripartite form with `dB = 1`: the
 middle subsystem contributes zero entropy, so SSA reduces to the
 classical subadditivity `S(ρ_AC) ≤ S(ρ_A) + S(ρ_C)` on bipartite
-states lifted through the trivial middle factor.
-
-To keep the derivation elementary, we require the trace of the
-partial-trace `ρ_B = traceAC_ABC ρ_ABC` explicitly as a hypothesis;
-this is always satisfied when `ρ_ABC` has trace 1. -/
+states lifted through the trivial middle factor. The reduced middle
+state has trace `1` because `Matrix.trace_eq_trace_traceAC_ABC` carries
+trace `ρ_ABC = 1` to the `AC`-partial trace. -/
 
 section Subadditivity
 
@@ -180,23 +229,22 @@ trivial middle subsystem).
 
 For a density matrix `ρ_ABC` on `A ⊗ 1 ⊗ C`, SSA reduces to
 `S(ρ_ABC) ≤ S(ρ_AB) + S(ρ_BC)` because the `Fin 1`-indexed middle
-reduced state contributes zero entropy (see
-`vonNeumannEntropy_eq_zero_of_fin_one`).
-
-The second hypothesis `h_mid_trace` records that `(ρ_B)` has unit
-trace; this follows from `trace ρ_ABC = 1` by a short direct
-computation left to the caller. -/
+reduced state contributes zero entropy, and
+`Matrix.trace_eq_trace_traceAC_ABC` supplies the unit-trace condition
+needed by `vonNeumannEntropy_eq_zero_of_fin_one`. -/
 theorem subadditivity_ssa_trivial_B
     (ρ_ABC : Matrix (Fin dA × Fin 1 × Fin dC)
       (Fin dA × Fin 1 × Fin dC) ℂ)
-    (hρ_dm : ρ_ABC.PosSemidef ∧ ρ_ABC.trace = 1)
-    (h_mid_trace : (traceAC_ABC ρ_ABC).trace = 1) :
+    (hρ_dm : ρ_ABC.PosSemidef ∧ ρ_ABC.trace = 1) :
     Entropy.vonNeumannEntropy ρ_ABC hρ_dm.1.isHermitian
     ≤ Entropy.vonNeumannEntropy (traceC_ABC ρ_ABC)
           (traceC_ABC_isHermitian hρ_dm.1.isHermitian)
       + Entropy.vonNeumannEntropy (traceA_ABC ρ_ABC)
           (traceA_ABC_isHermitian hρ_dm.1.isHermitian) := by
   have hSSA := strongSubadditivity ρ_ABC hρ_dm
+  have h_mid_trace : (traceAC_ABC ρ_ABC).trace = 1 := by
+    rw [← Matrix.trace_eq_trace_traceAC_ABC ρ_ABC]
+    exact hρ_dm.2
   have h_mid_zero :
       Entropy.vonNeumannEntropy (traceAC_ABC ρ_ABC)
           (traceAC_ABC_isHermitian hρ_dm.1.isHermitian) = 0 :=

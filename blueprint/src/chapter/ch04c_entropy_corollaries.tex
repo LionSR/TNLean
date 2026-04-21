@@ -1,0 +1,101 @@
+%% =========================================================
+%% Supplement: entropy corollaries in the trivial-middle case
+%% =========================================================
+
+\section{Trivial-factor corollaries}
+
+\begin{theorem}[Partial trace over $A$ preserves the full trace]
+    \label{thm:trace_tracea_abc}
+    \lean{Matrix.trace_eq_trace_traceA_ABC}
+    \leanok
+    \uses{def:traceA_ABC}
+    For any tripartite matrix $\rho_{ABC}$,
+    \[
+        \tr(\rho_{ABC}) = \tr(\tr_A(\rho_{ABC})).
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    Unfold the definition of $\tr_A$ and reorder the finite sums.
+\end{proof}
+
+\begin{theorem}[Partial trace over $C$ preserves the full trace]
+    \label{thm:trace_tracec_abc}
+    \lean{Matrix.trace_eq_trace_traceC_ABC}
+    \leanok
+    \uses{def:traceC_ABC}
+    For any tripartite matrix $\rho_{ABC}$,
+    \[
+        \tr(\rho_{ABC}) = \tr(\tr_C(\rho_{ABC})).
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    Unfold the definition of $\tr_C$ and rewrite the trace as the same triple sum.
+\end{proof}
+
+\begin{theorem}[Partial trace over $AC$ preserves the full trace]
+    \label{thm:trace_traceac_abc}
+    \lean{Matrix.trace_eq_trace_traceAC_ABC}
+    \leanok
+    \uses{def:traceAC_ABC}
+    For any tripartite matrix $\rho_{ABC}$,
+    \[
+        \tr(\rho_{ABC}) = \tr(\tr_{AC}(\rho_{ABC})).
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    Unfold the definition of $\tr_{AC}$ and interchange the outer two finite sums.
+\end{proof}
+
+\begin{theorem}[Entropy vanishes in dimension $1$]
+    \label{thm:entropy_fin_one_zero}
+    \lean{Entropy.vonNeumannEntropy_eq_zero_of_fin_one}
+    \leanok
+    \uses{def:entropy_von_neumann_entropy}
+    If $\rho \in \MN{1}$ is Hermitian and $\tr(\rho) = 1$, then
+    \[
+        S(\rho) = 0.
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    The unique eigenvalue equals the trace, hence equals $1$, and $-1 \cdot \log 1 = 0$.
+\end{proof}
+
+\begin{theorem}[Subadditivity with trivial middle factor]
+    \label{thm:entropy_subadditivity_trivial_middle}
+    \lean{Entropy.subadditivity_ssa_trivial_B}
+    \leanok
+    \uses{def:entropy_von_neumann_entropy, def:traceA_ABC, def:traceC_ABC}
+    Let $\rho_{A1C}$ be a density matrix on $A \otimes \C \otimes C$, where the middle factor
+    is one-dimensional. Then
+    \[
+        S(\rho_{A1C}) \le S(\rho_{A1}) + S(\rho_{1C}).
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    Apply strong subadditivity with one-dimensional middle factor.
+    By Theorem~\ref{thm:trace_traceac_abc}, the reduced middle state has trace $1$,
+    and Theorem~\ref{thm:entropy_fin_one_zero} gives its entropy $0$.
+    \uses{thm:entropy_strong_subadditivity, thm:trace_traceac_abc, thm:entropy_fin_one_zero}
+\end{proof}
+
+\begin{theorem}[Trivial-middle mutual information is non-negative]
+    \label{thm:entropy_mi_trivial_middle_nonneg}
+    \lean{Entropy.mutualInformation_ssa_trivial_B_nonneg}
+    \leanok
+    \uses{def:entropy_von_neumann_entropy, def:traceA_ABC, def:traceC_ABC}
+    For a density matrix $\rho_{A1C}$ on $A \otimes \C \otimes C$ with one-dimensional middle
+    factor,
+    \[
+        0 \le S(\rho_{A1}) + S(\rho_{1C}) - S(\rho_{A1C}).
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    Rewrite the desired inequality as the subadditivity statement of the previous theorem.
+    \uses{thm:entropy_subadditivity_trivial_middle}
+\end{proof}
