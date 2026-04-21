@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.IntersectionProperty
+import TNLean.MPS.Chain.BlockedChainFT
 import Mathlib.Data.Fin.Tuple.Basic
 
 /-!
@@ -79,8 +80,7 @@ produces the expected boundary matrix `A j * X`. -/
     (j : Fin d) (X : Matrix (Fin D) (Fin D) ℂ) :
     restrictLast (groundSpaceMap A (L + 1) X) j = groundSpaceMap A L (A j * X) := by
   ext σ
-  change Matrix.trace (evalWord A (List.ofFn (Fin.snoc σ j)) * X) =
-    Matrix.trace (evalWord A (List.ofFn σ) * (A j * X))
+  simp only [restrictLast_apply, groundSpaceMap_apply]
   rw [evalWord_ofFn_snoc]
   simp [Matrix.mul_assoc]
 
@@ -89,24 +89,14 @@ injective. -/
 theorem groundSpaceMap_injective_of_wordSpan_eq_top {A : MPSTensor d D} {L : ℕ}
     (hwordL : wordSpan A L = ⊤) :
     Function.Injective (groundSpaceMap A L) := by
-  have hker : (groundSpaceMap A L).ker = ⊥ := by
-    apply (LinearMap.ker_eq_bot').2
-    intro X hX
-    have hφ :
-        (Matrix.traceLinearMap (Fin D) ℂ ℂ).comp (LinearMap.mulRight ℂ X) = 0 := by
-      apply LinearMap.ext_on_range
-        (v := fun σ : Fin L → Fin d => evalWord A (List.ofFn σ))
-      · simpa [wordSpan] using hwordL
-      · intro σ
-        simpa [groundSpaceMap_apply, Matrix.traceLinearMap_apply] using
-          congrArg (fun ψ => ψ σ) hX
-    exact trace_mul_right_eq_zero fun N => by
-      have hNX : Matrix.trace (N * X) = 0 := by
-        simpa [Matrix.traceLinearMap_apply] using congrArg (fun f => f N) hφ
-      calc
-        Matrix.trace (X * N) = Matrix.trace (N * X) := Matrix.trace_mul_comm X N
-        _ = 0 := hNX
-  exact LinearMap.ker_eq_bot.mp hker
+  have hBlkInj : IsInjective (blockTensor A L) := by
+    exact (isNBlkInjective_iff_blockTensor_isInjective A L).mp
+      ((wordSpan_eq_top_iff_isNBlkInjective A L).mp hwordL)
+  intro X Y hXY
+  apply groundSpaceMap_injective hBlkInj (show 0 < 1 by omega)
+  ext σ
+  have hXY' := congrArg (fun ψ => ψ (decodeBlock d L (σ 0))) hXY
+  simpa [groundSpaceMap_apply, blockTensor, wordOfBlock, decodeBlock] using hXY'
 
 /-- Block injectivity at length `L` implies injectivity of `groundSpaceMap A L`. -/
 theorem groundSpaceMap_injective_of_isNBlkInjective {A : MPSTensor d D} {L : ℕ}
