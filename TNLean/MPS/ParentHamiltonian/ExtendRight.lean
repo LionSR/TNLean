@@ -161,12 +161,10 @@ injectivity length `L₀ + 1`, then the full `(K + L₀ + 1)`-site state is itse
 in the open-chain ground space. -/
 theorem groundSpace_extend_right_of_isNBlkInjective
     [NeZero D] {A : MPSTensor d D} {K L₀ : ℕ} (hInj : IsNBlkInjective A L₀)
-    (hL₀ : 0 < L₀) (hK : 0 < K) {ψ : NSiteSpace d (K + L₀ + 1)}
+    (hL₀ : 0 < L₀) {ψ : NSiteSpace d (K + L₀ + 1)}
     (hLeft : InLeftGround A (K + L₀) ψ)
     (hTail : InTailGround A K (L₀ + 1) ψ) :
     ψ ∈ groundSpace A (K + L₀ + 1) := by
-  have hKL₀ : 0 < K + L₀ := by
-    omega
   obtain ⟨Z, Y, hZ, _hY, hCompat⟩ :=
     exists_left_tail_compatibility (A := A) hInj hLeft hTail
   obtain ⟨X, hX⟩ :=
