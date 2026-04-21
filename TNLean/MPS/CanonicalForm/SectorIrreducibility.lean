@@ -6,7 +6,6 @@ import TNLean.MPS.CanonicalForm.CyclicSectors
 import TNLean.MPS.Irreducible.FormII
 import TNLean.MPS.Irreducible.Adjoint
 import TNLean.MPS.Irreducible.PeriodicBlocking
-import TNLean.QPF.Primitive
 import TNLean.Channel.Schwarz.Basic
 import TNLean.Channel.Semigroup.CPClosure
 

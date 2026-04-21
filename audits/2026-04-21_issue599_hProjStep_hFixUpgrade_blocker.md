@@ -1,4 +1,4 @@
-# Issue #599 blocker report — April 20, 2026
+# Issue #599 blocker report — April 21, 2026
 
 > File name kept as `2026-04-21_...` to match the explicitly requested audit path for this task.
 
