@@ -9,11 +9,17 @@ import Mathlib.Combinatorics.SimpleGraph.Connectivity.Connected
 -- Provability note: `IsVertexInjective` in `PEPS.Defs` is the
 -- linear-independence formulation `∀ v, LinearIndependent ℂ (A.component v)`
 -- (see issue #633 for the switch away from function-level injectivity, which
--- is strictly weaker).  Linear independence gives each vertex tensor a left
--- inverse on its image and is the correct hypothesis for `gauge_unique_up_to_scalar`.
--- The remaining `sorry`s below still require the virtual-insertion /
--- blocking argument from arXiv:1804.04964 §3 that reduces each star
--- neighbourhood to a 3-site MPS chain; the definition no longer blocks them.
+-- is strictly weaker). Linear independence gives each vertex tensor a left
+-- inverse on its image and removes the old definitional blocker.
+--
+-- The remaining `sorry`s split into two groups:
+-- * `localGauge_exists`, `gaugeConsistency`, and the `hDim` step in
+--   `fundamentalTheorem_PEPS` still require the virtual-insertion / blocking
+--   argument from arXiv:1804.04964 §3 that reduces each star neighbourhood to a
+--   3-site MPS chain.
+-- * `gauge_unique_up_to_scalar` additionally needs statement repair: the
+--   current global-scalar conclusion fails on a connected triangle with bond
+--   dimension `1`.
 
 /-!
 # Fundamental Theorem for injective PEPS (scaffold)
@@ -574,15 +580,13 @@ theorem fundamentalTheorem_PEPS (A B : Tensor G d)
 
 /-! ### Uniqueness (up to scalar) -/
 
-/-- The gauge in the Fundamental Theorem is unique up to a global multiplicative
-scalar. If `X` and `Y` are two gauge families relating the same pair of
-injective PEPS on a connected graph, then `X_e = c · Y_e` for some nonzero
-`c : ℂ` independent of `e`.
+/-- Placeholder uniqueness endpoint for the PEPS Fundamental Theorem.
 
-This is the PEPS analogue of the MPS result that the gauge matrix is unique
-up to scalar (arXiv:1804.04964, Theorem 2, uniqueness clause). The
-connectedness hypothesis is essential: on a disconnected graph, gauges on
-different components can be rescaled independently. -/
+The current statement asks for a single nonzero scalar `c : ℂ` with
+`X_e = c · Y_e` on every edge. The issue-#503 discussion records a connected
+triangle counterexample with bond dimension `1`, so this conclusion is too
+strong as stated. The eventual replacement will need an explicit normalization
+for the edge gauges before one can ask for uniqueness. -/
 theorem gauge_unique_up_to_scalar (A B : Tensor G d)
     (hConn : G.Connected)
     (hA : IsVertexInjective A)
@@ -598,14 +602,16 @@ theorem gauge_unique_up_to_scalar (A B : Tensor G d)
         gaugeVertex A Y v η σ) :
     ∃ (c : ℂ), c ≠ 0 ∧ ∀ (e : Edge G),
       (X e).val = c • (Y e).val := by
-  -- TODO: from hX and hY, gauge(X) = gauge(Y) at every vertex.
-  -- Linear independence (`IsVertexInjective`, issue #633) forces
-  -- `X_e · Y_e⁻¹` to be a scalar at each edge, and connectivity of the graph
-  -- forces the per-edge scalars to agree globally.
-  -- Missing lemma: the per-edge "scalar factor" extraction from equality of
-  -- gauged vertex tensors, and the connectivity propagation.  Both are
-  -- downstream of the paper's §3 virtual-insertion / blocking argument and
-  -- do not require further strengthening of the injectivity hypothesis.
+  -- TODO: the current statement is too strong. The issue-#503 discussion gives
+  -- a connected triangle counterexample with bond dimension `1`, where two
+  -- nontrivial gauge families act trivially on every vertex but are not related
+  -- by one global scalar.
+  --
+  -- The eventual replacement needs two ingredients:
+  -- 1. statement repair, adding the right normalization or cocycle data for the
+  --    edge gauges;
+  -- 2. a uniqueness proof for that corrected statement, downstream of the
+  --    virtual-insertion / blocking argument from arXiv:1804.04964 §3.
   sorry
 
 end PEPS
