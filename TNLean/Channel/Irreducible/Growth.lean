@@ -8,7 +8,7 @@ import TNLean.Channel.Irreducible.Growth.OrthogonalTrace
 /-!
 # Growth condition for irreducible CP maps (Wolf Theorem 6.2, items 2–4)
 
-Thin re-export module assembling the three positivity characterizations of an
+This module collects the three positivity characterizations of an
 irreducible completely positive map $E$ on $M_D(\mathbb{C})$ from Wolf's
 Theorem 6.2:
 
