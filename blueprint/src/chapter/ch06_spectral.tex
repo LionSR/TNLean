@@ -1018,19 +1018,68 @@ behind stationary states, following~\cite[\S6.4]{Wolf2012Quantum}.
     semisimple algebras over an algebraically closed field.
 \end{proof}
 
-\begin{theorem}[Fixed-point algebra admits Wedderburn block decomposition]%
+\begin{theorem}[Wedderburn data with ambient dimension bound]%
     \label{thm:adjointFixedPoints_wedderburnDecomp}
     \lean{Kraus.adjointFixedPoints_wedderburnDecomp}
-    \notready
+    \leanok
     \uses{thm:fixedPointAlgebra_wedderburnArtin}
-    The adjoint-fixed-point $*$-subalgebra admits a concrete Wedderburn
-    block decomposition inside the ambient matrix algebra (Wolf Eq.~1.39).
+    There exist integers $n$, block sizes $d_1,\dots,d_n \ge 1$,
+    multiplicities $m_1,\dots,m_n \ge 1$, and a $\C$-algebra isomorphism from
+    the adjoint-fixed-point $*$-subalgebra to
+    \[
+        \prod_{k=1}^{n} M_{d_k}(\C)
+    \]
+    such that
+    \[
+        \sum_{k=1}^{n} d_k m_k \le D.
+    \]
 \end{theorem}
 \begin{proof}
-    \notready
-    Follows immediately from the general result that every
-    $*$-subalgebra of $M_D(\mathbb{C})$ admits a Wedderburn block
-    decomposition, applied to the adjoint-fixed-point algebra.
+    \leanok
+    \uses{thm:fixedPointAlgebra_wedderburnArtin}
+    Apply the abstract Wedderburn decomposition
+    (Theorem~\ref{thm:fixedPointAlgebra_wedderburnArtin}).
+    The remaining integers $m_k$ and the dimension bound are recorded in the
+    bundled decomposition data attached to the fixed-point algebra.
+\end{proof}
+
+\begin{remark}[Pending part of Wolf Thm.~6.14]
+    The stronger ambient statement that the adjoint-fixed-point algebra is
+    unitarily conjugate to
+    \[
+        0 \oplus \bigoplus_k M_{d_k}(\C) \otimes \Id_{m_k}
+    \]
+    together with the density-block form $M_{d_k}(\C) \otimes \rho_k$ is not
+    yet formalized.
+\end{remark}
+
+\begin{theorem}[Wolf Cor.~6.7]%
+    \label{thm:weightedFixedPointsStarSubalgebra}
+    \lean{Kraus.weightedFixedPointsStarSubalgebra}
+    \leanok
+    \uses{def:tp_kraus, thm:fixedPointsStarSubalgebra}
+    Let $T(X) = \sum_i K_i X K_i^\dagger$ be trace-preserving, and let
+    $\rho > 0$ satisfy $T(\rho) = \rho$. If
+    \[
+        F_T := \{X \in \MN{D} \mid T(X) = X\},
+    \]
+    then $\rho^{-1/2} F_T \rho^{-1/2}$ is a $*$-subalgebra of $\MN{D}$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:fixedPointsStarSubalgebra}
+    Set $B_i = \rho^{-1/2} K_i \rho^{1/2}$. The equation $T(\rho) = \rho$
+    implies that the family $\{B_i\}$ is unital, and trace preservation of $T$
+    implies that $\rho$ is a positive-definite fixed point of the adjoint map
+    of the gauged family. Apply Theorem~\ref{thm:fixedPointsStarSubalgebra}
+    to $B$. The identity
+    \[
+        \sum_i B_i X B_i^\dagger = X
+        \iff
+        T(\rho^{1/2} X \rho^{1/2}) = \rho^{1/2} X \rho^{1/2}
+    \]
+    identifies the fixed points of the gauged map with
+    $\rho^{-1/2} F_T \rho^{-1/2}$.
 \end{proof}
 
 \section{Additional Wolf Chapter~6 equivalences}

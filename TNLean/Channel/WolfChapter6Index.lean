@@ -6,6 +6,8 @@ import TNLean.Channel.FixedPoint.Algebra
 import TNLean.Channel.FixedPoint.Cesaro
 import TNLean.Channel.FixedPoint.ConditionalExpectation
 import TNLean.Channel.FixedPoint.StationarySupport
+import TNLean.Channel.FixedPoint.WedderburnDecomp
+import TNLean.Channel.FixedPoint.Corollaries
 import TNLean.Channel.Irreducible.Ergodicity
 import TNLean.Channel.Irreducible.Basic
 import TNLean.Channel.Irreducible.Growth
@@ -238,25 +240,46 @@ In `TNLean.Channel.FixedPoint.Algebra`:
 * `IsChannel.posSemidef_parts_of_hermitian_fixedPoint` — `TNLean.Channel.FixedPoint.Cesaro`
 * Numbered wrapper: `IsChannel.wolf_prop_6_8` — `TNLean.Channel.WolfChapter6Wrappers`
 
+### Wolf Corollary 6.6 (projected support corner) — NOT YET FORMALIZED
+
+The intended statement is that the corner
+`{Y ∈ Q M_D(ℂ) Q | Q T*(Y) Q = Y}` forms a `*`-algebra.
+
+Current blocker: the repository exposes the corner only as the `Submodule`
+`cornerSubmodule Q`, not yet as a unital `*`-algebra with unit `Q`, so the
+corner-fixed-point statement is not yet packaged at the right algebraic level.
+
 ### Wolf Theorem 6.14 (Wedderburn decomposition of fixed-point algebra) — PARTIALLY FORMALIZED
 
 In `TNLean.Channel.FixedPoint.WedderburnDecomp`:
 
+* `Kraus.starSubalgebra_isSemisimpleRing` — every finite-dimensional
+  `*`-subalgebra of `M_D(ℂ)` is semisimple.
 * `Kraus.FixedPointAlgebra` — type alias for the carrier of the
   adjoint-fixed-point `StarSubalgebra`.
-* `Kraus.fixedPointAlgebra_isSemisimpleRing` — the fixed-point algebra is
-  semisimple (sorry — needs Jacobson radical argument for `*`-algebras).
+* `Kraus.fixedPointAlgebra_isSemisimpleRing` — the adjoint-fixed-point
+  algebra is semisimple.
 * `Kraus.fixedPointAlgebra_wedderburnArtin` — abstract Wedderburn--Artin:
-  `Fix(T*) ≃ₐ[ℂ] Π i, M_{d_i}(ℂ)` (sorry — depends on semisimplicity).
-* `Kraus.IsWedderburnBlockDecomp` — bundled data for the concrete
-  block-diagonal form `U(⊕_k M_{d_k} ⊗ 1_{m_k})U†` (Wolf Eq. 1.39).
-* `Kraus.adjointFixedPoints_wedderburnDecomp` — the fixed-point algebra
-  admits a Wedderburn block decomposition (sorry — depends on concrete
-  embedding construction).
+  `Fix(T*) ≃ₐ[ℂ] Π i, M_{d_i}(ℂ)`.
+* `Kraus.IsWedderburnBlockDecomp` — bundled decomposition data consisting of
+  block sizes, multiplicities, an ambient-dimension bound, and an algebra
+  isomorphism to a product of full matrix algebras.
+* `Kraus.adjointFixedPoints_wedderburnDecomp` — existence of this
+  decomposition data for the adjoint-fixed-point algebra.
 
-The concrete unitary embedding (Wolf Eq. 1.39) and the conditional
-expectation with density operators ρ_k (Wolf Eq. 1.40, full Thm 6.14)
-are deferred to future work.
+What is still missing for the full Wolf statement is the concrete unitary
+realization `Fix(T*) = U (0 ⊕ ⊕_k M_{d_k} ⊗ 1_{m_k}) U†` and the density-block
+refinement with matrices `ρ_k`.
+
+### Wolf Corollary 6.7 (faithful fixed-point conjugation) — FORMALIZED
+
+In `TNLean.Channel.FixedPoint.Corollaries`:
+
+* `Kraus.rightCanonicalGauge` — the gauged family `ρ^{-1/2} K_i ρ^{1/2}`.
+* `Kraus.weightedFixedPointsStarSubalgebra` — if `T(ρ) = ρ` with `ρ > 0`,
+  then `ρ^{-1/2} Fix(T) ρ^{-1/2}` is a `StarSubalgebra`.
+* `Kraus.mem_weightedFixedPointsStarSubalgebra_iff` — membership is
+  equivalent to saying that `ρ^{1/2} X ρ^{1/2}` is fixed by the original map.
 
 ### Wolf Theorem 6.15 (Conditional expectation onto fixed-point algebra) — PARTIALLY FORMALIZED
 
