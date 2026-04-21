@@ -1,4 +1,4 @@
-# Issues #608 / #609 blocker note — Tier-A periodic bridges after a fresh re-scout
+# Issues #608 / #609 blocker note — Tier-A periodic transport/contraction steps after a fresh re-scout
 
 ## Scope
 
@@ -36,9 +36,9 @@ with an extra **pointwise compression field** of the form
 `(φ k (blocks k i)).1 = P k * blockTensor A m i`).
 
 Those local edits to `CyclicSectors.lean` and `Assembly.lean` compiled cleanly.
-So the compressed-letter part of the Eq. A.8 bridge is not fundamentally
-mysterious: it really is present in the construction, just not exposed by the
-current API.
+So the compressed-letter part of the Eq. A.8 identification is not
+fundamentally mysterious: it really is present in the construction, just not
+exposed by the current API.
 
 ### 2. The real remaining gap is now the **one-site cyclic transition identity in the right form**
 
@@ -74,8 +74,8 @@ reusable way.
 
 ### 3. #609 remains blocked even after that by a separate contraction lemma gap
 
-Suppose the Eq. A.8 pointwise staircase bridge were added. The proof of
-`repeatedBlocks_of_blockedSectorGaugePhase` still needs the paper’s
+Suppose the Eq. A.8 pointwise staircase identification were added. The proof
+of `repeatedBlocks_of_blockedSectorGaugePhase` still needs the paper’s
 `Ω_u`-contraction argument from Eq. A.14–A.18. The current chain API provides
 
 - `decompositionMap` / right inverses in `MPS/Chain/OneSidedInverse.lean`, and
@@ -85,13 +85,14 @@ Suppose the Eq. A.8 pointwise staircase bridge were added. The proof of
 What is still missing is a reusable **m-factor / cyclic repeated-block
 contraction theorem** (or an equivalent generalized tensor-proportionality
 lemma) that packages the paper’s repeated blocked product cancellation around
-the full cycle. Without that, #609 is still not honestly dischargeable in a
+the full cycle. Without that, #609 is still not cleanly dischargeable in a
 small local patch.
 
 ## Bottom line
 
-I do **not** see an honest path to closing both target `sorry`s within the
-requested file-local scope and without introducing fresh admitted helpers.
+I do **not** see a complete file-local path to closing both target `sorry`s
+within the requested file-local scope and without introducing fresh admitted
+helpers.
 
 The blocker has become more precise than in the older audit notes:
 
@@ -104,8 +105,7 @@ The blocker has become more precise than in the older audit notes:
 3. **Add an m-cycle contraction / phase-telescoping lemma** packaging the
    `Ω_u` argument needed for #609.
 
-Only after (1)–(3) land do #608 and #609 become routine downstream bridge
-proofs.
+Only after (1)–(3) land do #608 and #609 become routine downstream proofs.
 
 ## Files touched in the abandoned local experiment
 
@@ -120,7 +120,7 @@ The temporary experiment touched:
 
 The reverted experiment is still useful conceptually: it shows that the
 pointwise compression field is feasible, but it is not enough by itself to
-finish the two Tier-A bridge theorems.
+finish the two Tier-A target theorems.
 
 ## Recommended next issue split
 
