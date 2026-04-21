@@ -34,16 +34,6 @@ namespace PositiveOnAbelian
 
 variable {D : ℕ}
 
-/-- Multiplicativity of `Matrix.toEuclideanLin`: lifting matrix multiplication to the
-Euclidean linear map level. -/
-private lemma toEuclideanLin_mul (A B : Matrix (Fin D) (Fin D) ℂ) :
-    (Matrix.toEuclideanLin A : EuclideanSpace ℂ (Fin D) →ₗ[ℂ] EuclideanSpace ℂ (Fin D)) *
-      Matrix.toEuclideanLin B = Matrix.toEuclideanLin (A * B) := by
-  simpa only [Matrix.toEuclideanLin_eq_toLin_orthonormal] using
-    (Matrix.toLin_mul (EuclideanSpace.basisFun (Fin D) ℂ).toBasis
-      (EuclideanSpace.basisFun (Fin D) ℂ).toBasis
-      (EuclideanSpace.basisFun (Fin D) ℂ).toBasis A B).symm
-
 /-- Wolf Proposition 1.6 in the block-quadratic-form form used later in the
 construction: positivity upgrades to positivity of every finite amplification once
 all block images commute pairwise.
@@ -205,7 +195,7 @@ private lemma blockForm_nonneg_of_scalarPSD_of_commuting {n D : ℕ}
     | inr ij =>
         rcases ij with ⟨i, j⟩
         simpa only [T] using (Matrix.isHermitian_iff_isSymmetric (A := K i j)).mp (hK i j)
-  have hEuclMul := toEuclideanLin_mul (D := D)
+  have hEuclMul := Internal.toEuclideanLin_mul (D := D)
   have htoEuclComm {A B : Matrix (Fin D) (Fin D) ℂ} (hAB : Commute A B) :
       Commute (Matrix.toEuclideanLin A : EuclideanSpace ℂ (Fin D) →ₗ[ℂ] EuclideanSpace ℂ (Fin D))
         (Matrix.toEuclideanLin B) :=

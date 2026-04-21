@@ -34,16 +34,6 @@ namespace PositiveOnAbelian
 
 variable {D : ℕ}
 
-/-- Multiplicativity of `Matrix.toEuclideanLin`: lifting matrix multiplication to the
-Euclidean linear map level. -/
-private lemma toEuclideanLin_mul (A B : Matrix (Fin D) (Fin D) ℂ) :
-    (Matrix.toEuclideanLin A : EuclideanSpace ℂ (Fin D) →ₗ[ℂ] EuclideanSpace ℂ (Fin D)) *
-      Matrix.toEuclideanLin B = Matrix.toEuclideanLin (A * B) := by
-  simpa only [Matrix.toEuclideanLin_eq_toLin_orthonormal] using
-    (Matrix.toLin_mul (EuclideanSpace.basisFun (Fin D) ℂ).toBasis
-      (EuclideanSpace.basisFun (Fin D) ℂ).toBasis
-      (EuclideanSpace.basisFun (Fin D) ℂ).toBasis A B).symm
-
 section NormalGenerators
 
 variable {A : Matrix (Fin D) (Fin D) ℂ}
@@ -161,7 +151,7 @@ private lemma exists_diagonal_family_of_normal
     simpa only using ((Matrix.isHermitian_iff_isSymmetric (A := H)).mp hH)
   have hKlin : Klin.IsSymmetric := by
     simpa only using ((Matrix.isHermitian_iff_isSymmetric (A := K)).mp hK)
-  have hEuclMul := toEuclideanLin_mul (D := D)
+  have hEuclMul := Internal.toEuclideanLin_mul (D := D)
   have hHKlin : Commute Hlin Klin :=
     hEuclMul H K |>.trans (congrArg Matrix.toEuclideanLin hHKmat.eq) |>.trans (hEuclMul K H).symm
   -- Factor out the eigenspace-invariance proof for Klin once, then use it for

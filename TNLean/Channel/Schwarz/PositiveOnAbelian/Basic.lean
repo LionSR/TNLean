@@ -46,6 +46,20 @@ namespace PositiveOnAbelian
 
 variable {D : ℕ}
 
+namespace Internal
+
+/-- Multiplicativity of `Matrix.toEuclideanLin`: lifting matrix multiplication to
+the Euclidean linear map level. -/
+lemma toEuclideanLin_mul (A B : Matrix (Fin D) (Fin D) ℂ) :
+    (Matrix.toEuclideanLin A : EuclideanSpace ℂ (Fin D) →ₗ[ℂ] EuclideanSpace ℂ (Fin D)) *
+      Matrix.toEuclideanLin B = Matrix.toEuclideanLin (A * B) := by
+  simpa only [Matrix.toEuclideanLin_eq_toLin_orthonormal] using
+    (Matrix.toLin_mul (EuclideanSpace.basisFun (Fin D) ℂ).toBasis
+      (EuclideanSpace.basisFun (Fin D) ℂ).toBasis
+      (EuclideanSpace.basisFun (Fin D) ℂ).toBasis A B).symm
+
+end Internal
+
 /-- Quadratic-form positivity for a block matrix with matrix entries.
 
 This is the concrete finite-dimensional formulation of positivity used in the
@@ -155,7 +169,7 @@ private lemma rect_kadison_schwarz_le
     (Matrix.PosDef.fromBlocks₂₂ (A := rectKrausMap K (Xᴴ * X))
       (B := (rectKrausMap K X)ᴴ) (D := (1 : Matrix m m ℂ)) Matrix.PosDef.one).1 h_block_psd
 
-/-- The single-column Kraus operators used to package a finite positive family as a
+/-- The single-column Kraus operators used to form a finite positive family into a
 unital rectangular Kraus map after adjoining one zero coordinate. -/
 private noncomputable def familyMainKraus {ι : Type*} [Fintype ι] [DecidableEq ι]
     (C : ι → Matrix (Fin D) (Fin D) ℂ) (ip : ι × Fin D) :
