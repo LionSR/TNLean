@@ -217,6 +217,11 @@ import TNLean.MPS.CanonicalForm.NormalReduction
 import TNLean.MPS.CanonicalForm.CyclicSectors
 import TNLean.MPS.CanonicalForm.SectorIrreducibility
 import TNLean.MPS.CanonicalForm.Assembly
+import TNLean.MPS.CanonicalForm.Assembly.TPPrimitiveReduction
+import TNLean.MPS.CanonicalForm.Assembly.NormalityChain
+import TNLean.MPS.CanonicalForm.Assembly.PrimitiveBlocks
+import TNLean.MPS.CanonicalForm.Assembly.CyclicSectorDecomposition
+import TNLean.MPS.CanonicalForm.Assembly.StructuralTheorem
 import TNLean.MPS.CanonicalForm.BNTGrouping
 import TNLean.MPS.CanonicalForm.EqualNormBridge
 import TNLean.MPS.Core.BlockingInfrastructure
