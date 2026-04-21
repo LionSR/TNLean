@@ -411,6 +411,53 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     Theorem~\ref{thm:ground_space_intersection} at each step.
 \end{proof}
 
+\begin{definition}[Suffix restriction]\label{def:tail_restrict_parent}
+    \lean{MPSTensor.tailRestrictₗ}
+    \leanok
+    Fix a prefix $u : \Fin K \to \Fin d$. The suffix restriction of an
+    $(K+L)$-site state $\psi$ is the $L$-site state given by
+    \[
+        (\operatorname{tailRestrict}_u \psi)(\sigma) = \psi(u,\sigma).
+    \]
+\end{definition}
+
+\begin{definition}[Suffix ground membership]\label{def:in_tail_ground}
+    \lean{MPSTensor.InTailGround}
+    \leanok
+    \uses{def:tail_restrict_parent, def:ground_space_parent}
+    A state $\psi$ on $K+L$ sites lies in the suffix ground condition if every
+    fixed prefix $u$ gives a suffix state in $G_L(A)$.
+\end{definition}
+
+\begin{lemma}[Left-tail compatibility]\label{lem:left_tail_compatibility}
+    \lean{MPSTensor.exists_left_tail_compatibility}
+    \leanok
+    \uses{def:in_left_ground, def:in_tail_ground, def:ground_space_parent}
+    Assume $\psi$ on $K+L_0+1$ sites satisfies the left ground condition on the
+    first $K+L_0$ sites and the suffix ground condition on every fixed prefix of
+    length $K$. Then there exist matrices $(Z_j)_j$ and $(Y_u)_u$ such that
+    \[
+        \psi(\sigma,j) = \tr(A^\sigma Z_j), \qquad
+        \psi(u,\tau) = \tr(A^\tau Y_u),
+    \]
+    and for all $j$ and $u$,
+    \[
+        Z_j A^u = A_j Y_u.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Choose $Z_j$ from the long left-window condition and $Y_u$ from the suffix
+    ground condition. Restricting the suffix state at its last site gives the
+    boundary matrix $A_j Y_u$, while first fixing the last site and then taking
+    the suffix gives $Z_j A^u$. The two restrictions are the same because
+    appending the fixed prefix and then the last letter gives the same
+    configuration as appending the last letter to the suffix and then placing
+    the prefix in front. Injectivity of $\Gamma_{L_0}$, obtained from
+    $L_0$-block injectivity, yields $Z_j A^u = A_j Y_u$.
+\end{proof}
+
 \begin{definition}[MPV submodule]\label{def:mpv_submodule}
     \lean{MPSTensor.mpvSubmodule}
     \leanok
