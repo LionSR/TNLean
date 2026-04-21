@@ -809,6 +809,34 @@ for the irreducible-form framework in \cite{DeLasCuevas2017Irreducible}.
     $\ket{V_{pN}(A)} = W^{\otimes N}\, \ket{V_N(B)}$ for all~$N$.
 \end{definition}
 
+\begin{theorem}[Pullback of a refinement witness]
+    \label{thm:p_refinement_pullback_irreducible_form}
+    \lean{MPSTensor.pRefinementCanonicalization_pullback_of_irreducibleForm}
+    \leanok
+    \uses{def:irreducible_form, def:p_refinable}
+    Let $B$ be an MPS tensor in irreducible form~II. If $B$ is
+    $p$-refinable, then there exist a tensor $A$, an isometry
+    $W : \C^d \to (\C^d)^{\otimes p}$, and the pullback tensor
+    $$
+        C^{\alpha} := \sum_{i=0}^{d-1} W_{\alpha,i} B^i
+        \qquad (\alpha \in \{0,\ldots,d^p-1\})
+    $$
+    such that $C$ is again in irreducible form~II, $\mathcal E_C = \mathcal E_B$,
+    and $C$ has the same MPV family as $A^{[p]}$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Choose $(A,W)$ from the refinement data. The pullback construction gives
+    $\mathcal E_C = \mathcal E_B$ and equality of MPV families between $C$
+    and $A^{[p]}$. To see that $C$ is still in irreducible form~II, transport
+    each periodic block $B_j$ of $B$ through the same physical isometry $W$.
+    The left-canonical normalization is preserved because $W^{\dagger}W = \Id$,
+    while irreducibility and the peripheral spectrum are preserved because the
+    transfer map of each transported block agrees with that of $B_j$.
+    Reassembling these transported blocks with the same weights gives an
+    irreducible-form decomposition of $C$.
+\end{proof}
+
 \begin{theorem}[Thm.~4.1 — $p$-refinability $\iff$ $p$-divisibility]%
     \label{thm:thm_4_1_p_refinement}
     \lean{MPSTensor.thm_4_1_p_refinement}
