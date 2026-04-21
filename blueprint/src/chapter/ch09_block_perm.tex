@@ -60,15 +60,16 @@ results of~\cite{Cirac2021Matrix}.
 \begin{remark}[Ring level versus algebra level]\label{rem:ring_vs_alg}
     Theorem~\ref{thm:ring_perm} is a ring-level statement: it only uses the
     ideal structure of $\prod_k R_k$.
-    Theorems~\ref{thm:dim_preserved},
-    \ref{thm:component_map_bijective},
+    Theorem~\ref{thm:component_map_bijective} stays at this ring level: once the
+    block ideals are permuted, one can extract the corresponding single-block
+    maps without using scalar multiplication.
+    Theorems~\ref{thm:dim_preserved}
     and~\ref{thm:pi_auto_decomp} require an upgrade to $\C$-algebra
     automorphisms. The reason is threefold: dimension preservation compares
     the blocks as $\C$-vector spaces; Skolem--Noether applies to the resulting
-    central simple $\C$-algebras; and the per-block maps extracted from $T$
-    must commute with scalar multiplication. Thus the argument separates
-    the ring-level permutation step from the later algebra-level
-    decomposition.
+    central simple $\C$-algebras; and the final per-block maps must commute
+    with scalar multiplication. Thus the argument separates the ring-level
+    permutation step from the later algebra-level decomposition.
 \end{remark}
 
 \begin{theorem}[Dimension preservation]\label{thm:dim_preserved}
@@ -93,11 +94,12 @@ results of~\cite{Cirac2021Matrix}.
     \lean{MPSTensor.componentMap_bijective}
     \leanok
     \uses{thm:ring_perm}
+    Assume $D_k \ge 1$ for all~$k$.
     Let $T$ be a ring automorphism of $\prod_{k=1}^r \MN{D_k}$, and let $\pi$
     be the induced permutation from Theorem~\ref{thm:ring_perm}.
     For each block index $k$, the map
     \[
-        M \mapsto T(0,\ldots,0,M,0,\ldots,0)_{\pi(k)}
+        M \mapsto (T(0,\ldots,0,M,0,\ldots,0))_{\pi(k)}
     \]
     from $\MN{D_k}$ to $\MN{D_{\pi(k)}}$ is bijective.
 \end{theorem}
