@@ -11,7 +11,8 @@ coefficient functions
 \]
 rather than as an explicit tensor product.
 
-\section{\texorpdfstring{Local ground space $G_L(A)$}{Local ground space G\_L(A)}}\label{sec:ground_space_parent}
+\section{\texorpdfstring{Local ground space $G_L(A)$}{Local ground space G\_L(A)}}%
+\label{sec:ground_space_parent}
 
 Fix an MPS tensor $A = \{A^i\}_{i=0}^{d-1}$ with $A^i \in \MN{D}$ and a block
 length $L \ge 1$.
@@ -118,7 +119,8 @@ onto $G_L(A)^\perp$ in the $L$-site Euclidean space.
     on the local $L$-site space.
 \end{definition}
 
-\begin{lemma}[Parent interaction kills ground-space elements]\label{lem:parent_interaction_apply_mem_ground_space}
+\begin{lemma}[Parent interaction kills ground-space elements]%
+    \label{lem:parent_interaction_apply_mem_ground_space}
     \lean{MPSTensor.parentInteraction_apply_mem_groundSpace}
     \leanok
     \uses{def:parent_interaction, def:ground_space_parent}
@@ -183,7 +185,8 @@ translated copies of the local interaction.
 \begin{lemma}[Local term annihilates the MPV]\label{lem:local_term_annihilates_mpv}
     \lean{MPSTensor.localTerm_annihilates_mpv}
     \leanok
-    \uses{def:local_term_parent, def:mpv, lem:mpv_window_mem_ground_space, lem:parent_interaction_apply_mem_ground_space}
+    \uses{def:local_term_parent, def:mpv, lem:mpv_window_mem_ground_space,
+        lem:parent_interaction_apply_mem_ground_space}
     For each site $i$, $h_i\,V^{(N)}(A) = 0$.
 \end{lemma}
 
@@ -318,6 +321,37 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     If $\Gamma_L(X) = 0$ then $\tr(A^\sigma X) = 0$ for every length-$L$ word
     $\sigma$. Since $A$ is injective, the products $\{A^\sigma\}_\sigma$ span
     $\MN{D}$, so the trace pairing gives $X = 0$.
+\end{proof}
+
+\begin{theorem}[Ground-space map injectivity from word span]
+    \label{thm:ground_space_map_injective_word_span}
+    \lean{MPSTensor.groundSpaceMap_injective_of_wordSpan_eq_top}
+    \leanok
+    \uses{def:ground_space_map}
+    If the length-$L$ products $\{A^\sigma : |\sigma| = L\}$ span $\MN{D}$, then
+    $\Gamma_L$ is injective.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    If $\Gamma_L(X) = 0$, then $\tr(A^\sigma X) = 0$ for every word $\sigma$ of
+    length $L$. The spanning hypothesis turns this into $\tr(MX) = 0$ for every
+    $M \in \MN{D}$, and the trace pairing gives $X = 0$.
+\end{proof}
+
+\begin{lemma}[Ground-space map injectivity for block-injective tensors]
+    \label{lem:ground_space_map_injective_blk}
+    \lean{MPSTensor.groundSpaceMap_injective_of_isNBlkInjective}
+    \leanok
+    \uses{thm:ground_space_map_injective_word_span, def:l_blk_injective}
+    If $A$ is $L_0$-block-injective, then $\Gamma_{L_0}$ is injective.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    By definition, $L_0$-block injectivity says precisely that the length-$L_0$
+    products span $\MN{D}$. Apply
+    Theorem~\ref{thm:ground_space_map_injective_word_span}.
 \end{proof}
 
 \begin{theorem}[Ground-space dimension]\label{thm:ground_space_finrank_eq}
@@ -491,6 +525,88 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     $N - L_0$, so $A^{w'} A^{u_1} = 0$ by the previous step) and iterating,
     we eventually reach $\tr(A^u) = 0$ for $|u| = L_0$, which gives
     $I = 0$, a contradiction.
+\end{proof}
+
+\subsection{Block-word stripping}
+
+\begin{theorem}[Common right factor from block-word compatibility]
+    \label{thm:block_word_strip_right_factor}
+    \lean{MPSTensor.exists_right_factor_of_block_word_compatibility}
+    \leanok
+    \uses{def:l_blk_injective}
+    Assume $A$ is $L_0$-block-injective with $L_0 > 0$. Let $\{Z_u\}_{|u|=L_0}$
+    be a family indexed by words of length $L_0$. If for some $K \ge 0$ and every
+    suffix word $w$ of length $K$ there exists $Y_w \in \MN{D}$ such that
+    \[
+        Z_u A^w = A^u Y_w
+        \qquad\text{for every word }u\text{ of length }L_0,
+    \]
+    then there exists $X \in \MN{D}$ with $Z_u = A^u X$ for every word $u$ of
+    length $L_0$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Induct on $K$. For $K = 0$ the empty suffix gives $Z_u = A^u Y_{\emptyset}$.
+    For the successor step, fix the first physical index and apply the induction
+    hypothesis to the shortened suffix. This reduces the statement to letter
+    compatibility on the right. Extending that letter compatibility to all
+    length-$L_0$ words and decomposing $\Id$ in the spanning family
+    $\{A^u : |u| = L_0\}$ yields a common factor $X$.
+\end{proof}
+
+\begin{theorem}[Block-word commutation from long-word commutation]
+    \label{thm:block_word_strip_commutes}
+    \lean{MPSTensor.commutes_block_words_of_commutes_long_words_of_isNBlkInjective}
+    \leanok
+    \uses{thm:block_word_strip_right_factor, def:l_blk_injective}
+    If $A$ is $L_0$-block-injective with $L_0 > 0$, $m \ge L_0$, and
+    $X \in \MN{D}$ commutes with every length-$m$ product $A^\omega$, then $X$
+    already commutes with every length-$L_0$ product $A^u$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Write each length-$m$ word as a concatenation $uw$ with $|u| = L_0$ and
+    $|w| = m - L_0$. The hypothesis gives
+    \[
+        X A^u A^w = A^u A^w X = A^u (A^w X).
+    \]
+    Thus the family $Z_u := X A^u$ satisfies the hypothesis of
+    Theorem~\ref{thm:block_word_strip_right_factor}. One obtains
+    $X A^u = A^u R$ for all $|u| = L_0$. Decomposing $\Id$ in the span of the
+    length-$L_0$ words shows $R = X$, hence $X A^u = A^u X$.
+\end{proof}
+
+\begin{theorem}[Centrality from long-word commutation]
+    \label{thm:block_word_strip_central}
+    \lean{MPSTensor.commutes_all_of_commutes_long_words_of_isNBlkInjective}
+    \leanok
+    \uses{thm:block_word_strip_commutes, def:l_blk_injective}
+    If $A$ is $L_0$-block-injective with $L_0 > 0$, $m \ge L_0$, and
+    $X \in \MN{D}$ commutes with every length-$m$ word product, then $X$
+    commutes with every matrix in $\MN{D}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    By Theorem~\ref{thm:block_word_strip_commutes}, $X$ commutes with every
+    length-$L_0$ word product. These products span $\MN{D}$ by block
+    injectivity, so linearity gives $XM = MX$ for every $M \in \MN{D}$.
+\end{proof}
+
+\begin{lemma}[Generator commutation from long-word commutation]
+    \label{lem:boundary_matrix_commutes_long_words}
+    \lean{MPSTensor.boundary_matrix_commutes_of_isNBlkInjective_of_long_word_commutes}
+    \leanok
+    \uses{thm:block_word_strip_central}
+    Under the hypotheses of Theorem~\ref{thm:block_word_strip_central}, one has
+    $X A^i = A^i X$ for every physical index $i$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Apply Theorem~\ref{thm:block_word_strip_central} with $M = A^i$.
 \end{proof}
 
 \begin{theorem}[Chain ground space for block-injective tensors]%
