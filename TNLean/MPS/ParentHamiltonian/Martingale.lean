@@ -206,6 +206,33 @@ noncomputable def parentHamiltonianES (A : MPSTensor d D) (L N : ℕ) :
   let e := (WithLp.linearEquiv 2 ℂ (NSiteSpace d N))
   e.symm.toLinearMap.comp ((parentHamiltonian A L N).comp e.toLinearMap)
 
+/-- The transported parent-Hamiltonian ground space is exactly the kernel of the
+transported parent Hamiltonian. -/
+theorem parentHamiltonianGroundSpaceES_eq_ker_parentHamiltonianES
+    (A : MPSTensor d D) (L N : ℕ) :
+    parentHamiltonianGroundSpaceES A L N =
+      LinearMap.ker (parentHamiltonianES A L N) := by
+  let e := WithLp.linearEquiv 2 ℂ (NSiteSpace d N)
+  ext v
+  constructor
+  · intro hv
+    rw [parentHamiltonianGroundSpaceES, Submodule.mem_map] at hv
+    obtain ⟨w, hw, rfl⟩ := hv
+    rw [LinearMap.mem_ker] at hw ⊢
+    simpa [parentHamiltonianES, e] using congrArg e.symm hw
+  · intro hv
+    rw [LinearMap.mem_ker] at hv
+    rw [parentHamiltonianGroundSpaceES, Submodule.mem_map]
+    refine ⟨e v, ?_, by simp [e]⟩
+    rw [LinearMap.mem_ker]
+    have hv' := congrArg e hv
+    simpa [parentHamiltonianES, e] using hv'
+
+@[simp] theorem mem_parentHamiltonianGroundSpaceES_iff
+    (A : MPSTensor d D) (L N : ℕ) (v : EuclideanSpace ℂ (Cfg d N)) :
+    v ∈ parentHamiltonianGroundSpaceES A L N ↔ parentHamiltonianES A L N v = 0 := by
+  rw [parentHamiltonianGroundSpaceES_eq_ker_parentHamiltonianES, LinearMap.mem_ker]
+
 /-! ### Uniform spectral gap for the MPS parent Hamiltonian -/
 
 /- Scout report (2026-04-19, Layer 4 KL martingale).
@@ -220,19 +247,19 @@ Kastoryano–Lucia-style angle-to-anticommutator bound. This is a real blocker
 for quantitative overlap constants.
 2. **Row-sum bound mapping:** the combinatorial part is already available from
 locality (`localTerm`, `parentHamiltonian`) and finite range: each window
-overlaps at most `2 * (L - 1)` neighbors. Missing is the analytic bridge from
-overlap-angle constants to operator-inequality coefficients `cᵢⱼ`.
+overlaps at most `2 * (L - 1)` neighbors. Missing is the analytic implication
+from overlap-angle constants to operator-inequality coefficients `cᵢⱼ`.
 3. **Sorry dependency split:** `parentHamiltonian_gapped` is downstream-only and
-dischargeable immediately once the bridge theorem below is proved. The bridge
-`parentHamiltonianES_gap_bound_of_friedrichs` still depends on missing
-Friedrichs-angle infrastructure; this is the blocker and should not be replaced
-with axioms or unrelated sorrys. -/
-/-- Friedrichs-angle and row-sum bridge for the MPS parent Hamiltonian.
+dischargeable immediately once the Friedrichs-angle theorem below is proved.
+The theorem `parentHamiltonianES_gap_bound_of_friedrichs` still depends on
+missing Friedrichs-angle infrastructure; this is the blocker and should not be
+replaced with axioms or unrelated sorrys. -/
+/-- Friedrichs-angle and row-sum estimate for the MPS parent Hamiltonian.
 
 This is the remaining MPS-specific martingale estimate: it should produce a
 specific uniform positive lower bound for the transported parent Hamiltonian
 from the intersection property and finite-overlap geometry. The concrete
-constant is intentionally part of this bridge statement, so the public
+constant is intentionally part of this theorem statement, so the public
 `parentHamiltonian_gapped` theorem only has to package it as an existential
 spectral gap. -/
 theorem parentHamiltonianES_gap_bound_of_friedrichs
@@ -243,12 +270,14 @@ theorem parentHamiltonianES_gap_bound_of_friedrichs
       v ∈ (parentHamiltonianGroundSpaceES A L N)ᗮ →
         ((1 : ℝ) / (4 * (L : ℝ))) * ‖v‖ ≤
           ‖parentHamiltonianES A L N v‖ := by
-  -- Missing bridge: the MPS-specific Friedrichs-angle estimate for adjacent
-  -- local ground spaces, the finite-overlap row-sum bound, positivity of the
-  -- transported parent Hamiltonian, and the identification of
-  -- `parentHamiltonianGroundSpaceES` with `LinearMap.ker (parentHamiltonianES A L N)`.
-  -- Once formalized, this should feed the resulting quadratic-form inequality
-  -- into `FrustrationFree.spectralGap_of_martingale`.
+  -- Remaining obligations: the MPS-specific Friedrichs-angle estimate for
+  -- adjacent local ground spaces, the finite-overlap row-sum bound, and
+  -- positivity of the transported parent Hamiltonian. The kernel
+  -- identification needed for the final martingale application is now
+  -- available as `parentHamiltonianGroundSpaceES_eq_ker_parentHamiltonianES`.
+  -- Once the remaining analytic inputs are formalized, this should feed the
+  -- resulting quadratic-form inequality into
+  -- `FrustrationFree.spectralGap_of_martingale`.
   sorry
 
 /--
@@ -280,7 +309,7 @@ the norm bound `γ ‖v‖ ≤ ‖H v‖` on `(ker H)ᗮ`. The `LinearMap.IsPosi
 hypothesis required by `FrustrationFree.spectralGap_of_martingale` is
 automatic here because `H_N = ∑ᵢ hᵢ` is a sum of orthogonal projectors.
 
-The proof below invokes the MPS-specific bridge
+The proof below invokes the MPS-specific Friedrichs-angle theorem
 `parentHamiltonianES_gap_bound_of_friedrichs`, whose proof is the remaining
 Friedrichs-angle and row-sum obligation. -/
 theorem parentHamiltonian_gapped
@@ -289,7 +318,7 @@ theorem parentHamiltonian_gapped
       (v : EuclideanSpace ℂ (Cfg d N)),
       v ∈ (parentHamiltonianGroundSpaceES A L N)ᗮ →
         γ * ‖v‖ ≤ ‖parentHamiltonianES A L N v‖ := by
-  -- PROOF STRUCTURE: see bridge lemma
+  -- PROOF STRUCTURE: see the Friedrichs-angle theorem
   -- `parentHamiltonianES_gap_bound_of_friedrichs` for the planned proof route.
   -- Currently sorry-backed pending discharge of
   -- `parentHamiltonianES_gap_bound_of_friedrichs`.
