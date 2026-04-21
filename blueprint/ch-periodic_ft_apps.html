@@ -4018,12 +4018,97 @@
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:thm_4_1_p_refinement">
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:p_refinement_pullback_irreducible_form">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
     Theorem
     </span>
     <span class="theorem_thmlabel">15.48</span>
+    <span class="theorem_thmtitle">Pullback of a refinement witness</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-periodic_ft_apps.html#thm:p_refinement_pullback_irreducible_form">#</a>
+    
+    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000000790"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-periodic_ft_apps.html#def:irreducible_form">Definition 15.2</a></li>
+          
+          <li><a href="ch-periodic_ft_apps.html#def:p_refinable">Definition 15.47</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.pRefinementCanonicalization_pullback_of_irreducibleForm" class="lean_decl">MPSTensor.pRefinementCanonicalization_pullback_of_irreducibleForm</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>    Let \(B\) be an MPS tensor in irreducible form&#160;II. If \(B\) is \(p\)-refinable, then there exist a tensor \(A\), an isometry \(W : \mathbb {C}^d \to (\mathbb {C}^d)^{\otimes p}\), and the pullback tensor </p>
+<div class="displaymath" id="a0000000791">
+  \[  C^{\alpha } := \sum _{i=0}^{d-1} W_{\alpha ,i} B^i \qquad (\alpha \in \{ 0,\ldots ,d^p-1\} )  \]
+</div>
+<p> such that \(C\) is again in irreducible form&#160;II, \(\mathcal E_C = \mathcal E_B\), and \(C\) has the same MPV family as \(A^{[p]}\). </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000790">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Choose \((A,W)\) from the refinement data. The pullback construction gives \(\mathcal E_C = \mathcal E_B\) and equality of MPV families between \(C\) and \(A^{[p]}\). To see that \(C\) is still in irreducible form&#160;II, transport each periodic block \(B_j\) of \(B\) through the same physical isometry \(W\). The left-canonical normalization is preserved because \(W^{\dagger }W = \mathbb {1}\), while irreducibility and the peripheral spectrum are preserved because the transfer map of each transported block agrees with that of \(B_j\). Reassembling these transported blocks with the same weights gives an irreducible-form decomposition of \(C\). </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:thm_4_1_p_refinement">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">15.49</span>
     <span class="theorem_thmtitle">Thm.&#160;4.1 — \(p\)-refinability \(\iff \) \(p\)-divisibility</span>
     <div class="thm_header_extras">
 
@@ -4034,7 +4119,7 @@
 
     <a class="icon proof" href="ch-periodic_ft_apps.html#thm:thm_4_1_p_refinement">#</a>
     
-    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000000790"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000000792"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4058,13 +4143,13 @@
           
           <li><a href="ch-periodic_ft_apps.html#thm:periodic_ft">Theorem 15.23</a></li>
           
-          <li><a href="ch-periodic_ft_apps.html#thm:thm_4_1_p_refinement_forward">Theorem 15.49</a></li>
+          <li><a href="ch-periodic_ft_apps.html#thm:thm_4_1_p_refinement_forward">Theorem 15.50</a></li>
           
-          <li><a href="ch-periodic_ft_apps.html#thm:thm_4_1_p_refinement_reverse">Theorem 15.50</a></li>
+          <li><a href="ch-periodic_ft_apps.html#thm:thm_4_1_p_refinement_reverse">Theorem 15.51</a></li>
           
-          <li><a href="ch-periodic_ft_apps.html#thm:thm_4_1_p_refinement_forward">Theorem 15.49</a></li>
+          <li><a href="ch-periodic_ft_apps.html#thm:thm_4_1_p_refinement_forward">Theorem 15.50</a></li>
           
-          <li><a href="ch-periodic_ft_apps.html#thm:thm_4_1_p_refinement_reverse">Theorem 15.50</a></li>
+          <li><a href="ch-periodic_ft_apps.html#thm:thm_4_1_p_refinement_reverse">Theorem 15.51</a></li>
           
         </ul>
     
@@ -4099,7 +4184,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000790">
+<div class="proof_wrapper" id="a0000000792">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4107,7 +4192,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Bundle the forward implication (Theorem&#160;<a href="ch-periodic_ft_apps.html#thm:thm_4_1_p_refinement_forward">15.49</a>) with the reverse implication (Theorem&#160;<a href="ch-periodic_ft_apps.html#thm:thm_4_1_p_refinement_reverse">15.50</a>) into a single biconditional. Both directions are formalised conditionally on their respective canonicalization hypotheses, whose combination yields the full equivalence. </p>
+  <p> Bundle the forward implication (Theorem&#160;<a href="ch-periodic_ft_apps.html#thm:thm_4_1_p_refinement_forward">15.50</a>) with the reverse implication (Theorem&#160;<a href="ch-periodic_ft_apps.html#thm:thm_4_1_p_refinement_reverse">15.51</a>) into a single biconditional. Both directions are formalised conditionally on their respective canonicalization hypotheses, whose combination yields the full equivalence. </p>
 
   </div>
 </div>
@@ -4116,7 +4201,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">15.49</span>
+    <span class="theorem_thmlabel">15.50</span>
     <span class="theorem_thmtitle">Thm.&#160;4.1 forward direction, conditional form</span>
     <div class="thm_header_extras">
 
@@ -4127,7 +4212,7 @@
 
     <a class="icon proof" href="ch-periodic_ft_apps.html#thm:thm_4_1_p_refinement_forward">#</a>
     
-    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000000791"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000000793"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4182,7 +4267,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000791">
+<div class="proof_wrapper" id="a0000000793">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4199,7 +4284,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">15.50</span>
+    <span class="theorem_thmlabel">15.51</span>
     <span class="theorem_thmtitle">Thm.&#160;4.1 reverse direction, conditional form</span>
     <div class="thm_header_extras">
 
@@ -4210,7 +4295,7 @@
 
     <a class="icon proof" href="ch-periodic_ft_apps.html#thm:thm_4_1_p_refinement_reverse">#</a>
     
-    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000000792"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000000794"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4265,7 +4350,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000792">
+<div class="proof_wrapper" id="a0000000794">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4282,7 +4367,7 @@
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">15.51</span>
+    <span class="remark_thmlabel">15.52</span>
     <span class="remark_thmtitle">Continuum-limit application</span>
     <div class="thm_header_extras">
 
@@ -4296,7 +4381,7 @@
         </div>
   </div>
   <div class="remark_thmcontent">
-  <p> The original motivation for Theorem&#160;<a href="ch-periodic_ft_apps.html#thm:thm_4_1_p_refinement">15.48</a> is a continuum-limit construction in the spirit of <span class="cite">
+  <p> The original motivation for Theorem&#160;<a href="ch-periodic_ft_apps.html#thm:thm_4_1_p_refinement">15.49</a> is a continuum-limit construction in the spirit of <span class="cite">
 </span>: refinability along arbitrarily large \(p\) is equivalent to infinite divisibility of the transfer map, which selects out continuum limits of translationally invariant MPS. The further consequences are explored elsewhere. </p>
 
   </div>
