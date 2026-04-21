@@ -8,14 +8,16 @@
 \chapter{The Algebraic Fundamental Theorem}%
 \label{ch:algebraic_ft}
 
-This chapter develops the one-dimensional MPS results of~\cite{Molnar2018NormalPEPS}: the Fundamental Theorem for injective
+This chapter develops the one-dimensional MPS results
+of~\cite{Molnar2018NormalPEPS}: the Fundamental Theorem for injective
 and normal MPS on a finite periodic chain of fixed length.
 The argument is purely algebraic, working directly with $\MN{D}$.
 Two preparatory lemmas---the virtual bond gauge
 (Lemma~\ref{lem:virtual_bond_gauge}) and the proportionality lemma
 (Lemma~\ref{lem:tensor_proportional})---carry the entire argument,
 yielding the main theorem and its corollaries for translation-invariant
-chains, non-TI descriptions of TI states, and normal MPS.
+chains, non-translation-invariant descriptions of translation-invariant states,
+and blocked chains.
 
 Throughout, $D$ is the bond dimension and $d$ is the physical dimension
 with $d \ge D^2$.
@@ -219,10 +221,10 @@ operation on the physical indices.
 \label{sec:virtual_bond_gauge}
 %% ---------------------------------------------------------
 
-This section proves Lemma~1 of~\cite{Molnar2018NormalPEPS}: if two
-injective chains of length $n \ge 3$ generate the same state,
-then on each bond the virtual insertion algebras are related by an
-inner automorphism.
+This section records the 3-site virtual-bond statement used later in the
+paper proof. In the current Lean development the hypothesis is already the
+all-length MPV equality of the combined tensors, and the conclusion is the
+conjugacy of the middle-bond insertion data.
 
 \begin{lemma}[Virtual bond gauge -- 3-site case]%
     \label{lem:virtual_bond_gauge}
@@ -279,7 +281,8 @@ virtual-insertion operations agree on every bond.
 Lemma~2 of~\cite{Molnar2018NormalPEPS} shows that this agreement
 forces the local tensors to be proportional.
 
-\begin{lemma}[Aligned gauges force proportionality -- Lemma~2 of \protect\cite{Molnar2018NormalPEPS}]%
+\begin{lemma}[Aligned gauges force proportionality --
+    Lemma~2 of \protect\cite{Molnar2018NormalPEPS}]%
     \label{lem:tensor_proportional}
     \lean{MPSTensor.tensor_proportional}
     \leanok
@@ -357,84 +360,112 @@ forces the local tensors to be proportional.
 \label{sec:ft_chain}
 %% ---------------------------------------------------------
 
-Combining Lemma~\ref{lem:virtual_bond_gauge} with
-Lemma~\ref{lem:tensor_proportional} yields the main theorem of~\cite{Molnar2018NormalPEPS} for non-translation-invariant injective MPS.
+The current Lean endpoint for chains is obtained by bundling the site
+index into the physical index and applying the single-block Fundamental
+Theorem to the resulting tensor. The paper-style fixed-length
+same-state statement is recovered only after adding a separate same-state
+reduction hypothesis.
 
-\begin{theorem}[Fundamental Theorem for injective chains -- Theorem~1 of \protect\cite{Molnar2018NormalPEPS}]%
+\begin{theorem}[Fundamental Theorem for injective chains (combined-tensor MPV version)]%
     \label{thm:fundamentalTheorem_injective_chain}
     \lean{MPSChainTensor.fundamentalTheorem_injective_chain}
     \leanok
-    \uses{lem:virtual_bond_gauge, lem:tensor_proportional,
-        def:non_ti_chain}
+    \uses{def:non_ti_chain, def:same_mpv}
     Let $\mathbf{A} = (A_0, \ldots, A_{n-1})$ and
-    $\mathbf{B} = (B_0, \ldots, B_{n-1})$ be two injective non-TI periodic
-    chains of length $n \ge 3$ that generate the same chain state.
-    Then $\mathbf{A}$ and $\mathbf{B}$ are cyclically gauge equivalent:
-    there exist invertible matrices $Z_0, \ldots, Z_{n-1} \in \GL_D(\C)$,
-    unique up to a common nonzero scalar factor, such that
-    \[
-        B_k^i = Z_k^{-1}\, A_k^i\, Z_{k+1}
-    \]
-    for every site $k \in \{0, \ldots, n-1\}$ and every physical index
-    $i$, with $Z_n = Z_0$.
+    $\mathbf{B} = (B_0, \ldots, B_{n-1})$ be two $n$-site chains with
+    common bond dimension $D$, and assume that $\mathbf{A}$ is injective.
+    Suppose that, after bundling the site index and physical index into a
+    single MPS tensor, the resulting two tensors generate the same MPV
+    family. Then $\mathbf{A}$ and $\mathbf{B}$ are cyclically gauge
+    equivalent.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    \uses{lem:virtual_bond_gauge, lem:tensor_proportional,
-        lem:blocking_preserves_injectivity}
-    Apply Lemma~\ref{lem:virtual_bond_gauge} at each bond to obtain
-    $Z_k \in \GL_D(\C)$ with $O_{A,k}(X) = O_{B,k}(Z_k^{-1} X Z_k)$.
-    Redefine $\widetilde{B}_k^i := Z_k B_k^i Z_{k+1}^{-1}$; the
-    virtual insertion operations of $\mathbf{A}$ and
-    $\widetilde{\mathbf{B}}$ then agree on every bond.
-    After the bond gauges have been aligned, the argument reduces to the
-    same local replacement step repeated around the chain:
-    \[
-        \TNLocalEqualityStep{\lambda_k}{\Id}{\sigma_k}
-    \]
-    For each adjacent pair $(k, k{+}1)$, block the remaining sites into
-    a two-site chain; the agreement on both bonds gives exactly the
-    hypotheses of Eqs.~\eqref{eq:internal_bond}--\eqref{eq:external_bond}
-    in Lemma~\ref{lem:tensor_proportional}, yielding
-    $A_k^i = \lambda_k \widetilde{B}_k^i$ for some
-    $\lambda_k \in \C^{\times}$.
-    Choosing a configuration $\sigma$ with nonzero trace and
-    substituting $A_k^{\sigma_k} = \lambda_k \widetilde{B}_k^{\sigma_k}$
-    into the chain-state identity forces $\prod_k \lambda_k = 1$.
-    Set $\mu_k = \prod_{j < k} \lambda_j$ and replace $Z_k$ by
-    $\mu_k Z_k$; then $B_k^i = Z_k^{-1} A_k^i Z_{k+1}$ for all $k$
-    and $i$, with $Z_n = Z_0$.
-    Uniqueness up to a common scalar follows because any two inner
-    automorphisms $\operatorname{Ad}(Z)$ and $\operatorname{Ad}(Z')$
-    agreeing on $\MN{D}$ differ by a central scalar
-    (Lemma~\ref{lem:center_scalar}).
+    \uses{lem:blocking_preserves_injectivity, thm:ft_single}
+    Choose one site of $\mathbf{A}$; its injectivity implies injectivity of
+    the bundled tensor by Lemma~\ref{lem:blocking_preserves_injectivity}.
+    Apply the single-block Fundamental Theorem
+    (Theorem~\ref{thm:ft_single}) to the two bundled tensors.
+    This yields one invertible matrix $X$ such that every bundled matrix of
+    $\mathbf{B}$ equals the corresponding bundled matrix of
+    $\mathbf{A}$ conjugated by $X$.
+    Reading this identity back at each site gives
+    $B_k^i = X A_k^i X^{-1}$ for all $k$ and $i$, so the constant choice
+    $Z_k = X$ is a cyclic gauge.
 \end{proof}
 
-\begin{remark}[A stronger equal-MPV variant]
-    \label{rem:ft_chain_sameMPV}
-    \uses{thm:fundamentalTheorem_injective_chain}
-    A stronger variant of the chain theorem assumes equality of all MPV
-    coefficients for the combined tensor, rather than equality of the chain
-    state at one fixed length.
-    Reference~\cite{Molnar2018NormalPEPS} closes this gap by a blocking
-    argument when $n \ge 3$.
-    That reduction is stated separately from the main chain theorem.
-\end{remark}
+\subsection{From fixed-length chain states to bundled-tensor MPV agreement}
+
+\begin{definition}[Same-state reduction hypothesis]
+    \label{def:same_state_reduction_hyp}
+    \lean{MPSChainTensor.SameStateBridgeHyp}
+    \leanok
+    \uses{def:non_ti_chain, def:same_mpv}
+    A \emph{same-state reduction hypothesis} for dimensions $(d,D)$ is the
+    assertion that whenever $\mathbf{A}$ is an injective $n$-site chain with
+    $n \ge 3$ and $\mathbf{A},\mathbf{B}$ generate the same chain state,
+    then the bundled tensors of $\mathbf{A}$ and $\mathbf{B}$ generate the
+    same MPV family.
+\end{definition}
+
+\begin{lemma}[Same state gives bundled-tensor MPV agreement]
+    \label{lem:sameMPV_chainCombined_of_sameState}
+    \lean{MPSChainTensor.sameMPV_chainCombined_of_sameState}
+    \leanok
+    \uses{def:same_state_reduction_hyp, def:non_ti_chain, def:same_mpv}
+    Assume a same-state reduction hypothesis for $(d,D)$.
+    Let $\mathbf{A}$ and $\mathbf{B}$ be $n$-site chains with common bond
+    dimension $D$, with $n \ge 3$, and assume that $\mathbf{A}$ is
+    injective.
+    If $\mathbf{A}$ and $\mathbf{B}$ generate the same chain state, then the
+    bundled tensors of $\mathbf{A}$ and $\mathbf{B}$ generate the same MPV
+    family.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:same_state_reduction_hyp}
+    This is exactly the defining property of the same-state reduction
+    hypothesis.
+\end{proof}
+
+\begin{theorem}[Fundamental Theorem for injective chains from same state]
+    \label{thm:fundamentalTheorem_injective_chain_of_sameState}
+    \lean{MPSChainTensor.fundamentalTheorem_injective_chain_of_sameState}
+    \leanok
+    \uses{def:same_state_reduction_hyp, def:non_ti_chain}
+    Assume a same-state reduction hypothesis for $(d,D)$.
+    Let $\mathbf{A}$ and $\mathbf{B}$ be $n$-site chains with common bond
+    dimension $D$, with $n \ge 3$, and assume that $\mathbf{A}$ is
+    injective.
+    If $\mathbf{A}$ and $\mathbf{B}$ generate the same chain state, then
+    $\mathbf{A}$ and $\mathbf{B}$ are cyclically gauge equivalent.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:sameMPV_chainCombined_of_sameState,
+        thm:fundamentalTheorem_injective_chain}
+    Apply Lemma~\ref{lem:sameMPV_chainCombined_of_sameState} to convert the
+    fixed-length chain-state hypothesis into equality of the bundled-tensor
+    MPV families, then invoke
+    Theorem~\ref{thm:fundamentalTheorem_injective_chain}.
+\end{proof}
 
 \begin{remark}[Relationship to the translation-invariant all-sizes theorem]
     \label{rem:ft_vs_singleBlock}
     \uses{thm:fundamentalTheorem_injective_chain, def:injective}
-    Theorem~\ref{thm:fundamentalTheorem_injective_chain} handles non-TI
-    chains at fixed length $n \ge 3$, concluding gauge equivalence up to
-    a common scalar.
+    Theorem~\ref{thm:fundamentalTheorem_injective_chain} treats a fixed chain
+    length and assumes equality of the bundled-tensor MPV families.
     The single-block Fundamental Theorem
-    (Theorem~\ref{thm:ft_single}) instead assumes agreement for every
-    system size; the additional hypothesis eliminates the phase
-    ambiguity, yielding exact gauge equivalence
+    (Theorem~\ref{thm:ft_single}) instead studies one tensor at all system
+    sizes and concludes exact gauge equivalence
     $B^i = X A^i X^{-1}$.
-    The two results are complementary and neither implies the other in
-    full generality.
+    The chain theorem is recovered by converting the chain into one bundled
+    tensor; the price is that the hypothesis is all-length MPV equality for
+    that bundled tensor rather than equality of the chain state at one fixed
+    length.
 \end{remark}
 
 \subsection{Finite-length MPV agreement}
@@ -509,129 +540,173 @@ Lemma~\ref{lem:tensor_proportional} yields the main theorem of~\cite{Molnar2018N
 
 \subsection{Translation-invariant chains}
 
-\begin{corollary}[TI case]\label{cor:ft_ti_chain}
+\begin{theorem}[Single gauge for translation-invariant chains]
+    \label{thm:ti_tensors_single_gauge}
+    \lean{MPSChainTensor.ti_tensors_single_gauge}
+    \leanok
+    \uses{def:injective, def:same_mpv}
+    Let $A$ and $B$ be MPS tensors of bond dimension $D$, and fix a chain
+    length $n \ge 1$.
+    Assume that $A$ is injective and that the bundled tensors of the two
+    constant chains $(A, \ldots, A)$ and $(B, \ldots, B)$ generate the same
+    MPV family.
+    Then there exists an invertible matrix $X \in \GL_D(\C)$ such that
+    \[
+        B^i = X\, A^i\, X^{-1}
+    \]
+    for every physical index~$i$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:blocking_preserves_injectivity, thm:ft_single}
+    Bundle the constant chains into one tensor.
+    Injectivity of $A$ implies injectivity of the bundled tensor by
+    Lemma~\ref{lem:blocking_preserves_injectivity}, and the bundled MPV
+    equality is exactly the hypothesis needed for the single-block
+    Fundamental Theorem.
+    The resulting gauge matrix is independent of the site because every site
+    carries the same local tensor.
+\end{proof}
+
+\begin{corollary}[Translation-invariant collapse to one gauge]\label{cor:ft_ti_chain}
     \lean{MPSChainTensor.ti_tensors_collapse_to_single_gauge}
     \leanok
-    \uses{thm:fundamentalTheorem_injective_chain, def:non_ti_chain}
-    Let $A$ and $B$ be injective MPS tensors of bond dimension $D$.
-    Suppose the two translation-invariant chains
-    $(A, A, \ldots, A)$ and $(B, B, \ldots, B)$ of length $n \ge 3$
-    generate the same chain state.
-    Then there exists an invertible $Z \in \GL_D(\C)$, unique up to a
-    scalar, and a scalar $\lambda \in \C^{\times}$ with $\lambda^n = 1$,
-    such that
+    \uses{def:injective, def:same_mpv}
+    Let $A$ and $B$ be MPS tensors of bond dimension $D$, and fix a chain
+    length $n \ge 1$.
+    Assume that $A$ is injective and that the bundled tensors of the two
+    constant chains $(A, \ldots, A)$ and $(B, \ldots, B)$ generate the same
+    MPV family.
+    Then there exist an invertible matrix $Z \in \GL_D(\C)$ and a scalar
+    $\lambda \in \C^{\times}$ with $\lambda^n = 1$ such that
     \[
         B^i = \lambda\, Z^{-1}\, A^i\, Z
     \]
     for every physical index~$i$.
+    In the current Lean theorem one can take $\lambda = 1$.
 \end{corollary}
 
 \begin{proof}
     \leanok
-    Apply Theorem~\ref{thm:fundamentalTheorem_injective_chain} to the
-    two constant chains to obtain $Z_0, \ldots, Z_{n-1}$ with
-    $B^i = Z_k^{-1} A^i Z_{k+1}$ for all $k$ and $i$.
-    Setting $G_k = Z_k Z_0^{-1}$, the relation
-    $Z_k^{-1} A^i Z_{k+1} = Z_{k+1}^{-1} A^i Z_{k+2}$ shows
-    $A^i = G_k^{-1} A^i G_k$ for each $k$.
-    Since $\{A^i\}$ spans $\MN{D}$, each $G_k$ commutes with all of
-    $\MN{D}$, so $G_k = \mu_k \Id$ by Lemma~\ref{lem:center_scalar}.
-    Hence $Z_k = \mu_k Z_0$, and the cyclic condition $Z_n = Z_0$ forces
-    $(\mu_1)^n = 1$.
-    Setting $Z = Z_0$ and $\lambda = \mu_1$ yields the result.
+    \uses{thm:ti_tensors_single_gauge}
+    Apply Theorem~\ref{thm:ti_tensors_single_gauge} to obtain
+    $B^i = X A^i X^{-1}$.
+    Set $Z = X^{-1}$ and $\lambda = 1$.
+    Then $\lambda^n = 1$ and the displayed identity is exactly the same
+    gauge relation rewritten in the form used by the corollary.
 \end{proof}
 
-\subsection{Non-TI descriptions of TI states}
+\subsection{Non-translation-invariant descriptions of translation-invariant states}
 
-\begin{corollary}[Non-TI realisation of a TI state]%
+\begin{corollary}[Non-translation-invariant realisation of a translation-invariant state]%
     \label{cor:non_ti_to_ti}
     \notready
-    \uses{thm:fundamentalTheorem_injective_chain, def:non_ti_chain}
-    Let $\mathbf{A} = (A_0, \ldots, A_{n-1})$ be an injective non-TI
-    chain of length $n \ge 3$.
+    \uses{def:same_state_reduction_hyp, def:non_ti_chain}
+    Assume a same-state reduction hypothesis for $(d,D)$.
+    Let $\mathbf{A} = (A_0, \ldots, A_{n-1})$ be an injective
+    non-translation-invariant chain of length $n \ge 3$.
     Suppose the state generated by $\mathbf{A}$ is translation-invariant,
     i.e.\ it equals the state generated by the cyclically shifted chain
     $(A_1, \ldots, A_{n-1}, A_0)$.
     Then $\mathbf{A}$ admits a translation-invariant description with the
-    same bond dimension: there exist an injective tensor $B$ such that
-    the TI chain $(B, \ldots, B)$ generates the same state as $\mathbf{A}$.
+    same bond dimension: there exists an injective tensor $B$ such that
+    the constant chain $(B, \ldots, B)$ generates the same state as
+    $\mathbf{A}$.
     Explicitly, $B^i = A_0^i\, Z_0^{-1}$ (right multiplication,
-    \emph{not} conjugation), where $Z_0$ is defined below.
+    \emph{not} conjugation), where $Z_0$ is extracted from the cyclic shift.
 \end{corollary}
 
 \begin{proof}
-    \uses{thm:fundamentalTheorem_injective_chain}
-    The cyclic shift $\sigma(\mathbf{A}) = (A_1, \ldots, A_{n-1}, A_0)$
-    generates the same state by hypothesis.
-    Apply Theorem~\ref{thm:fundamentalTheorem_injective_chain}:
-    there exist invertible $Z_0, \ldots, Z_{n-1}$ with
-    $A_{k+1}^i = Z_k^{-1}\, A_k^i\, Z_{k+1}$ for all $k$ and $i$
-    (indices mod~$n$).
-    Define $L_k = Z_0 Z_1 \cdots Z_{k-1}$ and
-    $R_k = Z_1 Z_2 \cdots Z_k$ for $k \ge 1$, with $L_0 = R_0 = \Id$.
-    Iterating the gauge relation gives $A_k^i = L_k^{-1}\, A_0^i\, R_k$.
-    Since $R_k\, L_{k+1}^{-1} = Z_0^{-1}$ for every $k$, substituting
-    into the trace yields
-    \[
-        \tr(A_0^{\sigma_0} \cdots A_{n-1}^{\sigma_{n-1}})
-        = \tr\bigl(A_0^{\sigma_0}\, Z_0^{-1}\, A_0^{\sigma_1}
-        Z_0^{-1} \cdots A_0^{\sigma_{n-1}}\, Z_0^{-1}\bigr).
-    \]
-    Hence the state is generated by the TI chain with tensor
-    $B^i := A_0^i\, Z_0^{-1}$.
+    \uses{thm:fundamentalTheorem_injective_chain_of_sameState}
+    Apply Theorem~\ref{thm:fundamentalTheorem_injective_chain_of_sameState}
+    to $\mathbf{A}$ and its cyclic shift.
+    This gives invertible gauges $Z_0, \ldots, Z_{n-1}$ with
+    $A_{k+1}^i = Z_k^{-1} A_k^i Z_{k+1}$.
+    Iterating these identities yields
+    $A_k^i = L_k^{-1} A_0^i R_k$, where the products $L_k, R_k$ satisfy
+    $R_k L_{k+1}^{-1} = Z_0^{-1}$.
+    Substituting into the chain trace shows that the same state is generated
+    by the constant tensor $B^i := A_0^i Z_0^{-1}$.
     Since $A_0$ is injective and $Z_0$ is invertible, $B$ is injective.
 \end{proof}
 
 \noindent Symmetry-theoretic consequences of the Fundamental Theorem,
 including virtual representations and string order, are developed in
 Chapter~\ref{ch:symmetry}.
-\subsection{Normal MPS (blocked injectivity)}
+\subsection{Blocked chains}
 
-\begin{corollary}[Normal MPS Fundamental Theorem]%
-    \label{cor:normal_mps_ft}
-    \notready
-    \lean{MPSChainTensor.fundamentalTheorem_blockedChain}
-    \uses{thm:fundamentalTheorem_injective_chain, def:injective,
-        def:blocked_tensor, def:normal,
-        lem:blocking_preserves_injectivity}
-    Let $\{A_k\}_{k=0}^{n-1}$ and $\{B_k\}_{k=0}^{n-1}$ be two
-    non-TI periodic MPS on $n$ sites.
-    Suppose that blocking any $L$ consecutive sites in either chain
-    yields an injective tensor, and that $n \ge 3L$.
-    If both chains generate the same state, then there exist invertible
-    matrices $Z_0, \ldots, Z_{n-1} \in \GL_D(\C)$, unique up to a
-    common scalar, such that for every site $k$ and physical index $i$,
-    \[
-        B_k^i = Z_k^{-1}\, A_k^i\, Z_{k+1},
-    \]
-    with $Z_n = Z_0$.
-    That is, gauge equivalence holds for the \emph{original} (unblocked)
-    tensors.
-    The reduction to the injective case proceeds by grouping the chain
-    into consecutive length-$L$ blocks and then applying the injective-chain theorem to the blocked local
-    tensors. The remaining passage from blocked gauges back to the original
-    site tensors is the reason this corollary remains marked \notready.
-\end{corollary}
+\begin{lemma}[Block injectivity and blocked-tensor injectivity]
+    \label{lem:isNBlkInjective_iff_blockTensor_isInjective}
+    \lean{MPSTensor.isNBlkInjective_iff_blockTensor_isInjective}
+    \leanok
+    \uses{def:blocked_tensor, def:injective}
+    A tensor $A$ is $L$-block injective if and only if its $L$-blocked
+    tensor $A^{[L]}$ is injective.
+\end{lemma}
 
 \begin{proof}
-    \uses{thm:fundamentalTheorem_injective_chain,
-        lem:blocking_preserves_injectivity}
-    Block every $L$ consecutive sites to form a chain of length
-    $m = \lfloor n/L \rfloor \ge 3$ with injective local tensors
-    $A^{[L]}$ and $B^{[L]}$ (injective by hypothesis).
-    The blocked chains generate the same state, so
-    Theorem~\ref{thm:fundamentalTheorem_injective_chain} gives
-    invertible gauges $\widehat{Z}_0, \ldots, \widehat{Z}_{m-1}$ with
-    $(B^{[L]})_k = \widehat{Z}_k^{-1}\, (A^{[L]})_k\, \widehat{Z}_{k+1}$.
-    Applying Lemma~\ref{lem:tensor_proportional} within each $L$-block
-    then decomposes the blocked gauge equivalence into site-by-site
-    gauges, yielding $Z_0, \ldots, Z_{n-1}$ for the original tensors.
+    \leanok
+    The blocked physical alphabet is just a reindexing of words of length $L$.
+    Decoding blocked indices therefore identifies the two spanning families,
+    so the two injectivity conditions are equivalent.
+\end{proof}
+
+\begin{definition}[Constant blocked chain]
+    \label{def:blocked_chain}
+    \lean{MPSChainTensor.blockedChain}
+    \leanok
+    \uses{def:blocked_tensor}
+    For an MPS tensor $A$, a blocking length $L$, and a chain length $n$, the
+    \emph{blocked chain} is the constant $n$-site chain whose local tensor is
+    the blocked tensor $A^{[L]}$.
+\end{definition}
+
+\begin{lemma}[Blocked chains are injective]
+    \label{lem:blocked_chain_isInjective}
+    \lean{MPSChainTensor.blockedChain_isInjective}
+    \leanok
+    \uses{def:blocked_chain, lem:isNBlkInjective_iff_blockTensor_isInjective}
+    If $A$ is $L$-block injective, then the constant blocked chain built from
+    $A^{[L]}$ is injective at every site.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:isNBlkInjective_iff_blockTensor_isInjective}
+    By Lemma~\ref{lem:isNBlkInjective_iff_blockTensor_isInjective}, the local
+    blocked tensor $A^{[L]}$ is injective, and therefore every site of the
+    constant blocked chain is injective.
+\end{proof}
+
+\begin{theorem}[Fundamental Theorem for blocked chains]
+    \label{thm:fundamentalTheorem_blockedChain}
+    \lean{MPSChainTensor.fundamentalTheorem_blockedChain}
+    \leanok
+    \uses{def:blocked_chain, def:same_mpv}
+    Let $A$ and $B$ be MPS tensors of bond dimension $D$, let $L$ be a
+    blocking length, and let $n$ be a chain length.
+    Assume that $A$ is $L$-block injective and that the bundled tensors of the
+    two constant blocked chains built from $A^{[L]}$ and $B^{[L]}$ generate the
+    same MPV family.
+    Then the two blocked chains are gauge equivalent.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:blocked_chain_isInjective,
+        thm:fundamentalTheorem_injective_chain}
+    By Lemma~\ref{lem:blocked_chain_isInjective}, the blocked chain built from
+    $A^{[L]}$ is injective.
+    Apply Theorem~\ref{thm:fundamentalTheorem_injective_chain} to the two
+    constant blocked chains.
 \end{proof}
 
 \begin{remark}
-    The result above establishes gauge equivalence of blocked constant
-    chains; recovering gauges for the original unblocked site tensors
-    is future work.
+    The theorem above is the exact blocked-chain endpoint presently formalized
+    in Lean.
+    Recovering sitewise gauges for the original unblocked tensors, and hence
+    the paper's normal-MPS corollary, remains future work.
 \end{remark}
 
 %% ---------------------------------------------------------
@@ -640,7 +715,7 @@ Chapter~\ref{ch:symmetry}.
 %% ---------------------------------------------------------
 
 The chain Fundamental Theorem (Theorem~\ref{thm:fundamentalTheorem_injective_chain})
-handles non-TI periodic chains.
+handles non-translation-invariant periodic chains.
 A parallel line of argument addresses block-diagonal tensors:
 given a family of injective block tensors $\{A_k^i\}_{k=0}^{r-1}$
 with block dimensions $D_k$ and a second family $\{B_k^i\}$ with
@@ -825,6 +900,50 @@ decomposition.
     the block-diagonal structure.
 \end{proof}
 
+\begin{theorem}[Explicit per-block gauges]%
+    \label{thm:fundamentalTheorem_multiBlock_explicit}
+    \lean{MPSTensor.fundamentalTheorem_multiBlock_explicit}
+    \leanok
+    \uses{thm:fundamentalTheorem_multiBlock_full}
+    Under the hypotheses of
+    Theorem~\ref{thm:fundamentalTheorem_multiBlock_full}, there exist
+    invertible matrices $X_k \in \GL_{D_k}(\C)$ such that
+    \[
+        B_k^i = X_k\, A_k^i\, X_k^{-1}
+    \]
+    for every block $k$ and every physical index $i$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:fundamentalTheorem_multiBlock_full}
+    Extract the gauge matrix from the per-block part of
+    Theorem~\ref{thm:fundamentalTheorem_multiBlock_full} for each block.
+\end{proof}
+
+\begin{theorem}[Product-algebra decomposition of the multi-block theorem]%
+    \label{thm:fundamentalTheorem_multiBlock_decomposition}
+    \lean{MPSTensor.fundamentalTheorem_multiBlock_decomposition}
+    \leanok
+    \uses{thm:fundamentalTheorem_multiBlock_full}
+    Assume that every block dimension is nonzero.
+    Under the hypotheses of
+    Theorem~\ref{thm:fundamentalTheorem_multiBlock_full}, the product-algebra
+    automorphism determined by the per-block linear extensions decomposes into
+    a block permutation together with inner conjugation on each block: there
+    exist a permutation $\sigma$ of the blocks, compatible block-dimension
+    equalities, and invertible matrices $X_k$ such that, after reindexing the
+    target block $\sigma(k)$ back to block $k$, the action on the $k$th matrix
+    block is $M \mapsto X_k M X_k^{-1}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:piAlgEquiv_decomposition}
+    Apply Theorem~\ref{thm:piAlgEquiv_decomposition} to the product-algebra
+    automorphism built from the per-block linear extensions.
+\end{proof}
+
 \begin{theorem}[Per-block equality of MPV families and per-block gauge equivalence]%
     \label{thm:perBlock_sameMPV_iff_gaugeEquiv}
     \lean{MPSTensor.perBlock_sameMPV_iff_gaugeEquiv}
@@ -890,6 +1009,30 @@ which is then combined with overlap estimates and the leading-block peel.
     \emph{primitive} (the transfer map has spectral gap).
 \end{definition}
 
+\begin{theorem}[Block separation from weighted word identities]%
+    \label{thm:block_separation_all_words}
+    \lean{MPSTensor.block_separation_all_words}
+    \leanok
+    \uses{def:same_mpv}
+    Let $\{A_k\}$ and $\{B_k\}$ be block families with strictly ordered,
+    nonzero weights $\mu_k$.
+    Assume that every $A_k$ and $B_k$ is injective and left-canonical, that
+    each self-overlap $O_{A_kA_k}(N)$ tends to $1$, and that for every system
+    size $N$ and every word $\sigma$ one has the weighted identity
+    \[
+        \sum_k \mu_k^N \bigl(V^{(N)}(A_k)_\sigma - V^{(N)}(B_k)_\sigma\bigr)=0.
+    \]
+    Then $\mc{V}(A_k)=\mc{V}(B_k)$ for every block $k$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The proof is the peeling argument described below for canonical form.
+    The strict weight ordering isolates the leading block, the overlap bounds
+    show that the tail decays geometrically after dividing by the dominant
+    weight, and one then iterates on the remaining blocks.
+\end{proof}
+
 \begin{theorem}[Block separation from canonical form]%
     \label{thm:per_block_sameMPV_of_canonical_form}
     \lean{MPSTensor.per_block_sameMPV_of_canonical_form}
@@ -941,6 +1084,72 @@ which is then combined with overlap estimates and the leading-block peel.
     yields $\mc{V}(A_k) = \mc{V}(B_k)$ for all remaining $k$.
 \end{proof}
 
+\begin{theorem}[Block separation from separated canonical data]%
+    \label{thm:per_block_sameMPV_of_separated_canonical_data}
+    \lean{MPSTensor.per_block_sameMPV_of_separated_canonical_data}
+    \leanok
+    \uses{def:same_mpv}
+    Suppose the weights are nonzero with strictly decreasing norms, the
+    $A$-blocks are injective and left-canonical with normalized self-overlaps,
+    the $B$-blocks are injective and left-canonical, and the assembled
+    block-diagonal tensors generate the same MPV family.
+    Then $\mc{V}(A_k)=\mc{V}(B_k)$ for every block $k$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:block_separation_all_words}
+    Equality of the assembled MPV families gives the weighted word identity
+    required by Theorem~\ref{thm:block_separation_all_words}.
+    The separated hypotheses supply exactly the injectivity,
+    left-canonicality, strict-weight, and self-overlap assumptions needed
+    there.
+\end{proof}
+
+\begin{theorem}[Fundamental Theorem from separated canonical data]%
+    \label{thm:fundamentalTheorem_of_separated_canonical_data}
+    \lean{MPSTensor.fundamentalTheorem_of_separated_canonical_data}
+    \leanok
+    \uses{thm:per_block_sameMPV_of_separated_canonical_data}
+    Under the hypotheses of
+    Theorem~\ref{thm:per_block_sameMPV_of_separated_canonical_data}, every
+    block pair $A_k,B_k$ is gauge equivalent, and the assembled block-diagonal
+    tensors are globally gauge equivalent.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:per_block_sameMPV_of_separated_canonical_data,
+        thm:fundamentalTheorem_multiBlock_full}
+    First apply
+    Theorem~\ref{thm:per_block_sameMPV_of_separated_canonical_data} to get
+    $\mc{V}(A_k)=\mc{V}(B_k)$ blockwise.
+    Then apply
+    Theorem~\ref{thm:fundamentalTheorem_multiBlock_full}.
+\end{proof}
+
+\begin{theorem}[Explicit gauge from separated canonical data]%
+    \label{thm:fundamentalTheorem_of_separated_canonical_data_explicit}
+    \lean{MPSTensor.fundamentalTheorem_of_separated_canonical_data_explicit}
+    \leanok
+    \uses{thm:fundamentalTheorem_of_separated_canonical_data}
+    Under the same hypotheses, there exist invertible matrices
+    $X_k \in \GL_{D_k}(\C)$ such that
+    \[
+        B_k^i = X_k\, A_k^i\, X_k^{-1}
+    \]
+    for every block $k$ and physical index $i$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:per_block_sameMPV_of_separated_canonical_data,
+        thm:fundamentalTheorem_multiBlock_explicit}
+    Combine blockwise MPV equality from
+    Theorem~\ref{thm:per_block_sameMPV_of_separated_canonical_data} with the
+    explicit-gauge form of the multi-block Fundamental Theorem.
+\end{proof}
+
 \begin{theorem}[Fundamental Theorem from canonical form]%
     \label{thm:fundamentalTheorem_canonicalForm}
     \lean{MPSTensor.fundamentalTheorem_canonicalForm}
@@ -980,20 +1189,49 @@ which is then combined with overlap estimates and the leading-block peel.
 \end{proof}
 
 %% ---------------------------------------------------------
-\section{TI reduction corollary}%
+\section{Heterogeneous equal-case endpoint}%
+\label{sec:hetero_equal_case_ft}
+%% ---------------------------------------------------------
+
+\begin{theorem}[Heterogeneous equal-case Fundamental Theorem]%
+    \label{thm:fundamentalTheorem_equalMPV_CFBNT_hetero}
+    \lean{MPSTensor.fundamentalTheorem_equalMPV_CFBNT_hetero}
+    \leanok
+    \uses{def:same_mpv}
+    Let $\{\mu_j A_j\}_{j=0}^{r_A-1}$ and $\{\nu_k B_k\}_{k=0}^{r_B-1}$ be
+    two canonical-form BNT families, possibly with different block counts and
+    different bond dimensions in corresponding blocks.
+    If the assembled block-diagonal tensors generate the same MPV family, then
+    the two families have the same number of blocks, the blocks can be matched
+    by a permutation preserving the bond dimensions, and each matched pair is
+    gauge-phase equivalent.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The proof is the block-matching argument carried out in the supporting
+    modules for the heterogeneous equal case: one first produces a
+    non-decaying cross-overlap for each block, applies the overlap dichotomy to
+    show that the matched blocks must have equal dimension and differ only by a
+    phase gauge, and finally upgrades the resulting matching to a permutation of
+    all blocks.
+\end{proof}
+
+%% ---------------------------------------------------------
+\section{Translation-invariant reduction}%
 \label{sec:ti_reduction}
 %% ---------------------------------------------------------
 
-\begin{theorem}[TI reduction corollary]%
+\begin{theorem}[Translation-invariant reduction corollary]%
     \label{thm:ti_reduction_corollary}
     \lean{MPSChainTensor.ti_reduction_corollary}
     \leanok
-    \uses{def:injective, def:same_mpv, cor:ft_ti_chain}
+    \uses{def:injective, def:same_mpv}
     Let $A$ and $B$ be MPS tensors of bond dimension $D$ with $A$
     injective.
-    Consider the two constant (translation-invariant) chains
+    Consider the two constant translation-invariant chains
     $(A, \ldots, A)$ and $(B, \ldots, B)$ of length $n \ge 1$.
-    If the combined tensors of the two chains generate the same MPV
+    If the bundled tensors of the two chains generate the same MPV
     family, then:
     \begin{enumerate}
         \item $B$ is gauge equivalent to $A$: there exists
@@ -1003,34 +1241,30 @@ which is then combined with overlap estimates and the leading-block peel.
     \end{enumerate}
 \end{theorem}
 
-\begin{proof}\leanok\uses{cor:ft_ti_chain}
-    Block the constant chain into a combined tensor and apply
-    Corollary~\ref{cor:ft_ti_chain} to obtain a single uniform gauge.
-    On the combined-site index $(k,i)$ this is the local relation
-    \[
-        \TNGaugeConjugation{X}{(k,i)}{X^{-1}}
-    \]
-    and reading this back on each site gives $B^i = X A^i X^{-1}$.
-    Injectivity of $B$ then follows from gauge equivalence to the injective
-    tensor $A$.
+\begin{proof}\leanok\uses{thm:ti_tensors_single_gauge}
+    Theorem~\ref{thm:ti_tensors_single_gauge} gives a single gauge matrix
+    $X$ with $B^i = X A^i X^{-1}$ for all $i$.
+    Since gauge equivalence preserves injectivity, $B$ is injective as well.
 \end{proof}
 
-\begin{theorem}[TI reduction from same state]%
+\begin{theorem}[Translation-invariant reduction from same state]%
     \label{thm:ti_reduction_of_sameState}
     \lean{MPSChainTensor.ti_reduction_of_sameState}
     \leanok
-    \uses{thm:ti_reduction_corollary, thm:fundamentalTheorem_injective_chain}
-    Under the same setup, if $n \ge 3$ and the two constant chains
-    generate the same chain state (rather than the same MPV family on the
-    combined tensor), the same conclusion holds, provided one can pass
-    from equality of chain states to equality of MPV families on the
-    combined tensor.
+    \uses{def:same_state_reduction_hyp, thm:ti_reduction_corollary}
+    Assume a same-state reduction hypothesis for $(d,D)$.
+    Let $A$ and $B$ be MPS tensors of bond dimension $D$, and let $n \ge 3$.
+    If the two constant chains $(A,\ldots,A)$ and $(B,\ldots,B)$ generate the
+    same chain state, with $A$ injective, then the same conclusion as in
+    Theorem~\ref{thm:ti_reduction_corollary} holds: $B$ is gauge equivalent to
+    $A$, and $B$ is injective.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:ti_reduction_corollary}
-    The additional hypothesis converts equality of chain states at
-    length $n \ge 3$ to equality of MPV families on the combined tensor.
+    \uses{lem:sameMPV_chainCombined_of_sameState,
+        thm:ti_reduction_corollary}
+    The same-state reduction hypothesis upgrades equality of the two constant
+    chain states to equality of their bundled-tensor MPV families.
     Then Theorem~\ref{thm:ti_reduction_corollary} applies.
 \end{proof}
 
@@ -1124,6 +1358,65 @@ scalar factor.
 The following definitions and results extend the Fundamental Theorem to
 injective PEPS on simple graphs, following
 Theorem~2 of~\cite{Molnar2018NormalPEPS}.
+
+\begin{definition}[Graph edge for PEPS]
+    \label{def:peps_edge}
+    \lean{TNLean.PEPS.Edge}
+    \leanok
+    \uses{}
+    For a finite simple graph $G$, an \emph{edge} is an ordered pair
+    $(u,v)$ with $u < v$ and $u$ adjacent to $v$.
+    The ordering is only used to avoid double counting.
+\end{definition}
+
+\begin{definition}[Incident edges at a vertex]
+    \label{def:peps_incident_edge}
+    \lean{TNLean.PEPS.IncidentEdge}
+    \leanok
+    \uses{def:peps_edge}
+    For a vertex $v$, an \emph{incident edge} is an edge of $G$ having $v$
+    as one of its endpoints.
+\end{definition}
+
+\begin{definition}[PEPS tensor on a graph]
+    \label{def:peps_tensor}
+    \lean{TNLean.PEPS.Tensor}
+    \leanok
+    \uses{def:peps_edge, def:peps_incident_edge}
+    A PEPS tensor on $G$ with physical dimension $d$ consists of a bond
+    dimension $D_e$ for every edge $e$, together with a local tensor at each
+    vertex $v$ whose virtual indices are indexed by the edges incident to $v$
+    and whose physical index lies in $\{0,\ldots,d-1\}$.
+\end{definition}
+
+\begin{definition}[Virtual configuration]
+    \label{def:peps_virtual_config}
+    \lean{TNLean.PEPS.VirtualConfig}
+    \leanok
+    \uses{def:peps_tensor, def:peps_edge}
+    A \emph{virtual configuration} assigns to every edge $e$ one basis index in
+    the corresponding bond space of dimension $D_e$.
+\end{definition}
+
+\begin{definition}[PEPS state coefficient]
+    \label{def:peps_stateCoeff}
+    \lean{TNLean.PEPS.stateCoeff}
+    \leanok
+    \uses{def:peps_tensor, def:peps_virtual_config}
+    For a physical configuration $\sigma$ on the vertices, the PEPS state
+    coefficient is obtained by summing over all virtual configurations and,
+    for each such configuration, multiplying the local tensor entries over all
+    vertices.
+\end{definition}
+
+\begin{definition}[Equality of PEPS states]
+    \label{def:peps_same_state}
+    \lean{TNLean.PEPS.SameState}
+    \leanok
+    \uses{def:peps_stateCoeff}
+    Two PEPS tensors represent the same state if all their state coefficients
+    agree for every physical configuration.
+\end{definition}
 
 \begin{definition}[Edge gauge at a vertex]%
     \label{def:edgeGaugeAt}
@@ -1261,14 +1554,16 @@ Theorem~2 of~\cite{Molnar2018NormalPEPS}.
     (Theorem~2 of~\cite{Molnar2018NormalPEPS}).
 \end{theorem}
 
-\begin{theorem}[Gauge uniqueness up to scalar]%
-    \label{thm:gauge_unique_up_to_scalar}
+\begin{remark}[Current scalar-uniqueness placeholder]
     \lean{TNLean.PEPS.gauge_unique_up_to_scalar}
-    \notready
-    \uses{def:gaugeVertex, def:IsVertexInjective}
-    On a connected graph, the gauge family in the Fundamental Theorem is
-    unique up to a global multiplicative scalar.
-\end{theorem}
+    The present Lean declaration records a global-scalar uniqueness claim, but
+    this conclusion is known to be too strong.
+    On a triangle with all bond dimensions equal to $1$, edge scalars
+    $(a,a^{-1},a)$ preserve every local tensor yet are not all multiples of
+    $(1,1,1)$ when $a \neq \pm 1$.
+    The expected uniqueness statement must therefore quotient the residual
+    edge-gauge freedom by a cocycle-type normalization on the graph.
+\end{remark}
 
 %% ---------------------------------------------------------
 \section{Closing remarks}%
