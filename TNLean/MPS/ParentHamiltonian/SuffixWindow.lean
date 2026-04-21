@@ -18,7 +18,6 @@ identities needed for the open-chain range-reduction argument in
 ## Main results
 
 - `MPSTensor.tailRestrictₗ` — fix a prefix and restrict to the suffix window
-- `Fin.snoc_append` — compatibility of `Fin.snoc` with `Fin.append`
 - `MPSTensor.tailRestrictₗ_groundSpaceMap` — suffix restriction preserves the
   ground-space form
 - `MPSTensor.groundSpace_inTailGround` — a ground-space state restricts to
@@ -32,18 +31,6 @@ identities needed for the open-chain range-reduction argument in
 -/
 
 open scoped Matrix
-
-namespace Fin
-
-variable {d K L : ℕ}
-
-/-- Appending a prefix commutes with adding a final site by `Fin.snoc`. -/
-theorem snoc_append (u : Fin K → Fin d) (σ : Fin L → Fin d) (j : Fin d) :
-    (Fin.snoc (Fin.append u σ) j : Fin (K + L + 1) → Fin d) =
-      Fin.append u (Fin.snoc σ j) := by
-  simpa using (Fin.append_snoc u σ j).symm
-
-end Fin
 
 namespace MPSTensor
 
@@ -72,7 +59,8 @@ restricting the last site and then fixing the prefix. -/
     (ψ : NSiteSpace d (K + L + 1)) (j : Fin d) :
     restrictLast (tailRestrictₗ u ψ) j = tailRestrictₗ u (restrictLast ψ j) := by
   ext σ
-  simp [Fin.snoc_append]
+  simp only [restrictLast_apply, tailRestrictₗ_apply]
+  rw [Fin.append_snoc]
 
 /-- Restricting a ground-space vector of length `L + 1` by fixing the last site
 produces the expected boundary matrix `A j * X`. -/
