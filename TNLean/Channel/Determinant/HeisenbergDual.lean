@@ -20,7 +20,7 @@ that the Heisenberg dual is multiplicative.
 
 ## Main statements
 
-* `ChannelDeterminant.heisenberg_dual_multiplicative` — determinant
+* `ChannelDeterminant.Internal.heisenberg_dual_multiplicative` — determinant
   saturation forces the Heisenberg dual to be multiplicative on all matrices.
 
 ## References
@@ -36,27 +36,25 @@ open Matrix
 
 variable {d : ℕ}
 
-/-- The ambient matrix algebra `M_d(ℂ)`. -/
-private abbrev MatrixAlg (d : ℕ) := Matrix (Fin d) (Fin d) ℂ
+/-- File-local alias for the shared internal matrix-algebra model. -/
+private abbrev MatrixAlg (d : ℕ) := ChannelDeterminant.Internal.MatrixAlg d
 
-/-- Endomorphisms of `M_d(ℂ)`. -/
-private abbrev MatrixEnd (d : ℕ) := MatrixAlg d →ₗ[ℂ] MatrixAlg d
+/-- File-local alias for endomorphisms of `M_d(ℂ)`. -/
+private abbrev MatrixEnd (d : ℕ) := ChannelDeterminant.Internal.MatrixEnd d
 
-/-- Index type for the standard basis of `M_d(ℂ)`.
+/-- File-local alias for the shared basis index type. -/
+private abbrev MatrixBasisIndex (d : ℕ) := ChannelDeterminant.Internal.MatrixBasisIndex d
 
-We use `Fin d × Fin d × Unit`, which has cardinality $d^2$. -/
-private abbrev MatrixBasisIndex (d : ℕ) := Fin d × Fin d × Unit
-
-/-- The standard basis of `M_d(ℂ)` coming from matrix units. -/
-private noncomputable def matrixSpaceBasis (d : ℕ) :
-    Module.Basis (MatrixBasisIndex d) ℂ (MatrixAlg d) :=
-  Module.Basis.matrix (Fin d) (Fin d) (Module.Basis.singleton Unit ℂ)
+/-- File-local alias for the shared standard basis of `M_d(ℂ)`. -/
+private noncomputable abbrev matrixSpaceBasis (d : ℕ) :=
+  ChannelDeterminant.Internal.matrixSpaceBasis d
 
 section WolfStatements
 
 variable {T : MatrixEnd d}
 
 namespace ChannelDeterminant
+namespace Internal
 
 private theorem heisenberg_dual_det_eq_one [NeZero d]
     {T : MatrixEnd d} (hdet : ‖channelDet T‖ = 1)
@@ -305,6 +303,7 @@ theorem heisenberg_dual_multiplicative [NeZero d]
     _ = (K a)ᴴ * M * K a * ∑ b : Fin r, (K b)ᴴ * N * K b := by
         rw [show Td N = ∑ b : Fin r, (K b)ᴴ * N * K b from hTd N]
 
+end Internal
 end ChannelDeterminant
 
 end WolfStatements

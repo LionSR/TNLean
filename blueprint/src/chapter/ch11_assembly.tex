@@ -18,7 +18,7 @@ they first block the tensor to remove non-trivial periodicity, then
 apply the aperiodic fundamental theorem.
 Chapter~\ref{ch:periodic_ft_apps} develops the stronger
 ``irreducible form'' framework of \cite{DeLasCuevas2017Irreducible},
-which gives a fundamental theorem valid for periodic tensors directly,
+which gives a Fundamental Theorem valid for periodic tensors directly,
 with an extra $Z$-gauge degree of freedom.
 
 \section{Weak Fundamental Theorem}%
@@ -142,7 +142,8 @@ distinct weight norms).
 	Theorem~\ref{thm:bnt_perm_prop} is formulated in that abstract form.
 \end{remark}
 
-\begin{theorem}[Fundamental Theorem for normal canonical form in the proportional case]\label{thm:ft_proportional_nt}
+\begin{theorem}[Fundamental Theorem for normal canonical form in the proportional case]%
+\label{thm:ft_proportional_nt}
 		\lean{MPSTensor.fundamentalTheorem_proportionalMPV_normalCFBNT}\leanok
 		\uses{def:normal_cf_bnt, def:gauge_phase_equiv}
 		Let $A_{\mathrm{tot}}$ and $B_{\mathrm{tot}}$ be MPS tensors
@@ -219,7 +220,8 @@ distinct weight norms).
 	a global gauge equivalence.
 \end{proof}
 
-\begin{theorem}[Fundamental Theorem --- equal MPV case with explicit coefficients]\label{thm:ft_equal_explicit}
+\begin{theorem}[Fundamental Theorem --- equal MPV case with explicit coefficients]%
+\label{thm:ft_equal_explicit}
 	\lean{MPSTensor.fundamentalTheorem_equalMPV_full}
 	\leanok
 	\uses{def:cf_bnt, def:gauge_equiv}
@@ -302,7 +304,8 @@ distinct weight norms).
 	Definition~\ref{def:bnt}) directly.
 \end{remark}
 
-\begin{theorem}[Fundamental Theorem --- equal MPV case, common block structure]\label{thm:ft_equal_same_structure}
+\begin{theorem}[Fundamental Theorem --- equal MPV case, common block structure]%
+\label{thm:ft_equal_same_structure}
 	\lean{MPSTensor.fundamentalTheorem_equalMPV_CFBNT}
 	\leanok
 	\uses{def:cf_bnt, def:gauge_equiv}
@@ -394,7 +397,8 @@ single weighted block.
 \label{thm:route_b_equal}
 	\lean{MPSTensor.SectorWeightData.weight_multiset_eq_of_sameMPV_bnt}
 	\leanok
-	\uses{thm:coeff_eventually_eq, thm:geom_extrapolation, thm:power_sum_multiset, def:paper_sector_data, def:bnt}
+	\uses{thm:coeff_eventually_eq, thm:geom_extrapolation,
+			thm:power_sum_multiset, def:paper_sector_data, def:bnt}
 	Let $S$ and $T$ be two sector data over the same basis with
 	the same multiplicities ($r_j^S = r_j^T$ for all~$j$).
 	If the basis is eventually linearly independent and the total MPVs

@@ -1,10 +1,11 @@
 %% =========================================================
-%% Chapter: Periodic MPS — applications of the irreducible-form
-%% Fundamental Theorem.  Mirrors §4 of arXiv:1708.00029
+%% Chapter: Periodic MPS — irreducible form and the periodic
+%% Fundamental Theorem.  Mirrors §3--4 of arXiv:1708.00029
 %% (de las Cuevas--Schuch--Pérez-García--Cirac).
 %% =========================================================
 
-\chapter{Periodic MPS: physical symmetries and refinement}\label{ch:periodic_ft_apps}
+\chapter{Periodic MPS: irreducible form and the periodic Fundamental Theorem}%
+\label{ch:periodic_ft_apps}
 
 This chapter develops the periodic equal-case Fundamental Theorem of MPS
 (Theorem~\ref{thm:periodic_ft}) following
@@ -232,7 +233,8 @@ $p$-divisibility of the transfer map.
     \]
 \end{definition}
 
-\begin{lemma}[Diagonal \(Z\)-gauge has finite order under matched powers]\label{lem:z_gauge_diagonal_pow}
+\begin{lemma}[Diagonal \(Z\)-gauge has finite order under matched powers]%
+    \label{lem:z_gauge_diagonal_pow}
     \lean{MPSTensor.zGaugeDiagonal_pow_eq_one}
     \leanok
     \uses{def:z_gauge_diagonal, lem:z_gauge_entry_pow}
@@ -286,7 +288,7 @@ $p$-divisibility of the transfer map.
 \section{Periodic Fundamental Theorem (de las Cuevas--Cirac--Schuch--Pérez-García)}%
 \label{sec:periodic_ft}
 
-The theorems of Chapter~\ref{ch:assembly} all require that each block has a
+The theorems in Chapter~\ref{ch:assembly} all require that each block has a
 \emph{primitive} transfer map, i.e.\ peripheral spectrum exactly $\{1\}$.
 This is achieved by blocking the original tensor by a common period.
 The paper \cite{DeLasCuevas2017Irreducible} develops a framework that
@@ -317,7 +319,8 @@ directly to periodic tensors.
     \label{thm:common_period_blocking_primitive}
     \lean{MPSTensor.isPrimitive_transferMap_commonPeriodBlocking}
     \leanok
-    \uses{def:common_period_blocking, thm:iterated_blocking_transfer, thm:primitive_blocking_divisible}
+    \uses{def:common_period_blocking, thm:iterated_blocking_transfer,
+          thm:primitive_blocking_divisible}
     If each tensor $B_i$ has a primitive transfer map after blocking by its own
     positive period $p_i$, then blocking the entire family to the common
     LCM period preserves primitivity of each member's transfer map.
@@ -335,7 +338,9 @@ The following is Theorem~3.8 (``equal case'') of \cite{DeLasCuevas2017Irreducibl
 
 \begin{theorem}[Periodic Fundamental Theorem]\notready
     \label{thm:periodic_ft}
-    \lean{MPSTensor.zgauge_construction, MPSTensor.equalCase_zgauge_pipeline, MPSTensor.fundamentalTheorem_periodic_equalCase_matching, MPSTensor.fundamentalTheorem_periodic_equalCase}
+    \lean{MPSTensor.zgauge_construction, MPSTensor.equalCase_zgauge_pipeline,
+          MPSTensor.fundamentalTheorem_periodic_equalCase_matching,
+          MPSTensor.fundamentalTheorem_periodic_equalCase}
     \uses{def:irreducible_form, def:z_gauge_equiv}
     Let $A$ and $B$ be MPS tensors in irreducible form,
     with bases of periodic blocks
@@ -459,7 +464,8 @@ The following is Theorem~3.8 (``equal case'') of \cite{DeLasCuevas2017Irreducibl
     converges to $m$ (the period, viewed as a scalar).
 \end{theorem}
 
-\begin{theorem}[Different periods imply asymptotic orthogonality]\label{thm:periodic_overlap_zero_ne_period}
+\begin{theorem}[Different periods imply asymptotic orthogonality]%
+    \label{thm:periodic_overlap_zero_ne_period}
     \lean{MPSTensor.periodicOverlap_tendsto_zero_of_ne_period}
     \leanok
     \uses{def:periodic_tensor}
@@ -467,11 +473,13 @@ The following is Theorem~3.8 (``equal case'') of \cite{DeLasCuevas2017Irreducibl
     $\braket{V^{(N)}(A)}{V^{(N)}(B)} \to 0$ as $N\to\infty$.
 \end{theorem}
 \begin{proof}\leanok
-    Split on whether the bond dimensions agree. If not, dimension mismatch
-    gives decay. If $D_1 = D_2$, suppose for contradiction that $A$ and $B$
-    are gauge-phase equivalent; Perron--Frobenius eigenvalue uniqueness
-    (Wolf Theorem~6.3) then forces equal periods, contradicting the hypothesis.
-    Hence the tensors are not gauge-phase equivalent, and the overlap decays.
+    \uses{thm:periodic_overlap_zero_ne_dim}
+    Split on whether the bond dimensions agree. If not, the claim follows
+    from Theorem~\ref{thm:periodic_overlap_zero_ne_dim}. If $D_1 = D_2$,
+    suppose for contradiction that $A$ and $B$ are gauge-phase equivalent;
+    Perron--Frobenius eigenvalue uniqueness (Wolf Theorem~6.3) then forces
+    equal periods, contradicting the hypothesis. Hence the tensors are not
+    gauge-phase equivalent, and the overlap decays.
 \end{proof}
 
 \begin{lemma}[Sector-block normality for periodic tensors]\label{lem:sector_blocked_normal_periodic}
@@ -482,7 +490,8 @@ The following is Theorem~3.8 (``equal case'') of \cite{DeLasCuevas2017Irreducibl
     each nonzero blocked sector tensor is normal.
 \end{lemma}
 
-\begin{theorem}[No sector match implies asymptotic orthogonality]\label{thm:periodic_overlap_zero_no_sector_match}
+\begin{theorem}[No sector match implies asymptotic orthogonality]%
+    \label{thm:periodic_overlap_zero_no_sector_match}
     \lean{MPSTensor.periodicOverlap_tendsto_zero_of_no_sector_match}
     \notready
     \uses{def:periodic_tensor, lem:sector_blocked_normal_periodic}
@@ -498,7 +507,8 @@ The following is Theorem~3.8 (``equal case'') of \cite{DeLasCuevas2017Irreducibl
     cyclic translates of that sector pair.
 \end{lemma}
 
-\begin{lemma}[Per-site proportionality from blocked sector match]\label{lem:sector_tensor_proportional_blocked_match}
+\begin{lemma}[Per-site proportionality from blocked sector match]%
+    \label{lem:sector_tensor_proportional_blocked_match}
     \lean{MPSTensor.sectorTensor_proportional_of_blockedMatch}
     \notready
     \uses{lem:sector_match_propagation}
@@ -506,7 +516,8 @@ The following is Theorem~3.8 (``equal case'') of \cite{DeLasCuevas2017Irreducibl
     original tensors are related by repeated-block proportionality.
 \end{lemma}
 
-\begin{theorem}[Sector match yields repeated-block equivalence]\label{thm:periodic_overlap_gauge_equiv_sector_match}
+\begin{theorem}[Sector match yields repeated-block equivalence]%
+    \label{thm:periodic_overlap_gauge_equiv_sector_match}
     \lean{MPSTensor.periodicOverlap_gaugeEquiv_of_sector_match}
     \notready
     \uses{lem:sector_match_propagation, lem:sector_tensor_proportional_blocked_match}
@@ -514,7 +525,8 @@ The following is Theorem~3.8 (``equal case'') of \cite{DeLasCuevas2017Irreducibl
     sector pair implies repeated-block equivalence.
 \end{theorem}
 
-\begin{theorem}[Different bond dimensions imply asymptotic orthogonality]\label{thm:periodic_overlap_zero_ne_dim}
+\begin{theorem}[Different bond dimensions imply asymptotic orthogonality]%
+    \label{thm:periodic_overlap_zero_ne_dim}
     \lean{MPSTensor.periodicOverlap_tendsto_zero_of_ne_dim}
     \leanok
     \uses{def:periodic_tensor}
@@ -525,7 +537,10 @@ The following is Theorem~3.8 (``equal case'') of \cite{DeLasCuevas2017Irreducibl
 \begin{theorem}[Periodic overlap dichotomy]\label{thm:periodic_overlap_dichotomy}
     \lean{MPSTensor.periodicOverlapDichotomy}
     \notready
-    \uses{thm:periodic_overlap_zero_ne_period, thm:periodic_overlap_zero_no_sector_match, thm:periodic_overlap_zero_ne_dim, thm:periodic_overlap_gauge_equiv_sector_match}
+    \uses{thm:periodic_overlap_zero_ne_period,
+          thm:periodic_overlap_zero_no_sector_match,
+          thm:periodic_overlap_zero_ne_dim,
+          thm:periodic_overlap_gauge_equiv_sector_match}
     Let $A$ and $B$ be periodic tensors. Then at least one of the following
     alternatives holds:
     \begin{enumerate}
@@ -534,7 +549,8 @@ The following is Theorem~3.8 (``equal case'') of \cite{DeLasCuevas2017Irreducibl
     \end{enumerate}
 \end{theorem}
 
-\begin{theorem}[Eventual linear independence of a periodic basis]\label{thm:periodic_basis_eventually_li}
+\begin{theorem}[Eventual linear independence of a periodic basis]%
+    \label{thm:periodic_basis_eventually_li}
     \lean{MPSTensor.periodicBasis_eventuallyLinearlyIndependent}
     \notready
     \uses{thm:periodic_overlap_dichotomy, thm:periodic_self_overlap_tendsto}

@@ -4,6 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Channel.Determinant.HeisenbergDual
 import TNLean.Algebra.SkolemNoether
+import Mathlib.Algebra.Central.Matrix
+import Mathlib.LinearAlgebra.Matrix.Vec
 
 /-!
 # Unitary characterization of determinant saturation
@@ -40,11 +42,11 @@ open Matrix
 
 variable {d : ℕ}
 
-/-- The ambient matrix algebra `M_d(ℂ)`. -/
-private abbrev MatrixAlg (d : ℕ) := Matrix (Fin d) (Fin d) ℂ
+/-- File-local alias for the shared internal matrix-algebra model. -/
+private abbrev MatrixAlg (d : ℕ) := ChannelDeterminant.Internal.MatrixAlg d
 
-/-- Endomorphisms of `M_d(ℂ)`. -/
-private abbrev MatrixEnd (d : ℕ) := MatrixAlg d →ₗ[ℂ] MatrixAlg d
+/-- File-local alias for endomorphisms of `M_d(ℂ)`. -/
+private abbrev MatrixEnd (d : ℕ) := ChannelDeterminant.Internal.MatrixEnd d
 
 /-- Column-stacking vectorization as a linear equivalence. -/
 private noncomputable def matrixVecLinearEquiv (d : ℕ) :
@@ -176,7 +178,7 @@ private theorem forward_det_one_implies_unitaryChannel [NeZero d]
     (hT : IsChannel T) (hdet : ‖channelDet T‖ = 1) :
     ∃ U : Matrix.unitaryGroup (Fin d) ℂ, T = unitaryChannel U := by
   classical
-  have hall := ChannelDeterminant.channel_all_eigenvalues_norm_one (d := d) hT hdet
+  have hall := ChannelDeterminant.Internal.channel_all_eigenvalues_norm_one (d := d) hT hdet
   obtain ⟨r, K, hK⟩ := hT.cp
   have hK_tp : ∑ i : Fin r, (K i)ᴴ * K i = 1 :=
     kraus_sum_conjTranspose_mul_of_tp K T hK hT.tp
@@ -198,7 +200,7 @@ private theorem forward_det_one_implies_unitaryChannel [NeZero d]
       conjTranspose_conjTranspose]
   -- Td is multiplicative
   have hMul :=
-    ChannelDeterminant.heisenberg_dual_multiplicative hT hdet hall K hK hK_tp Td hTd_def
+    ChannelDeterminant.Internal.heisenberg_dual_multiplicative hT hdet hall K hK hK_tp Td hTd_def
   have hTd_ne : Td ≠ 0 := by
     intro h
     have := congr_fun (congr_arg DFunLike.coe h) 1
