@@ -3,6 +3,11 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Channel.Determinant.Bound
+import Mathlib.Analysis.Complex.Polynomial.Basic
+import Mathlib.Analysis.InnerProductSpace.Positive
+import Mathlib.Analysis.InnerProductSpace.Trace
+import Mathlib.Analysis.MeanInequalities
+import Mathlib.LinearAlgebra.Matrix.Charpoly.Eigs
 
 /-!
 # Hilbert--Schmidt helper lemmas for determinant saturation
@@ -17,15 +22,15 @@ Hilbert--Schmidt norm computations; and an AM--GM argument upgrades
 
 ## Main statements
 
-* `ChannelDeterminant.channel_all_eigenvalues_norm_one` — determinant
+* `ChannelDeterminant.Internal.channel_all_eigenvalues_norm_one` — determinant
   saturation forces every eigenvalue of a CPTP map to lie on the unit circle.
-* `ChannelDeterminant.stdBasis_conjTranspose_eq_swap` — conjugate transpose
-  swaps the indices of a matrix-unit basis element.
-* `ChannelDeterminant.sum_stdBasis_mul_conjTranspose` — the standard basis
-  satisfies `∑_{ij} E_{ij} E_{ij}^† = d • 1`.
-* `ChannelDeterminant.eq_zero_of_nonneg_of_sum_le_zero` — a finite nonnegative
-  family with total sum at most `0` vanishes termwise.
-* `ChannelDeterminant.channelDet_norm_one_hs_norm_ge` — determinant
+* `ChannelDeterminant.Internal.stdBasis_conjTranspose_eq_swap` — conjugate
+  transpose swaps the indices of a matrix-unit basis element.
+* `ChannelDeterminant.Internal.sum_stdBasis_mul_conjTranspose` — the standard
+  basis satisfies `∑_{ij} E_{ij} E_{ij}^† = d • 1`.
+* `ChannelDeterminant.Internal.eq_zero_of_nonneg_of_sum_le_zero` — a finite
+  nonnegative family with total sum at most `0` vanishes termwise.
+* `ChannelDeterminant.Internal.channelDet_norm_one_hs_norm_ge` — determinant
   saturation gives the AM--GM lower bound on the Hilbert--Schmidt norm.
 
 ## References
@@ -41,21 +46,18 @@ open Matrix
 
 variable {d : ℕ}
 
-/-- The ambient matrix algebra `M_d(ℂ)`. -/
-private abbrev MatrixAlg (d : ℕ) := Matrix (Fin d) (Fin d) ℂ
+/-- File-local alias for the shared internal matrix-algebra model. -/
+private abbrev MatrixAlg (d : ℕ) := ChannelDeterminant.Internal.MatrixAlg d
 
-/-- Endomorphisms of `M_d(ℂ)`. -/
-private abbrev MatrixEnd (d : ℕ) := MatrixAlg d →ₗ[ℂ] MatrixAlg d
+/-- File-local alias for endomorphisms of `M_d(ℂ)`. -/
+private abbrev MatrixEnd (d : ℕ) := ChannelDeterminant.Internal.MatrixEnd d
 
-/-- Index type for the standard basis of `M_d(ℂ)`.
+/-- File-local alias for the shared basis index type. -/
+private abbrev MatrixBasisIndex (d : ℕ) := ChannelDeterminant.Internal.MatrixBasisIndex d
 
-We use `Fin d × Fin d × Unit`, which has cardinality $d^2$. -/
-private abbrev MatrixBasisIndex (d : ℕ) := Fin d × Fin d × Unit
-
-/-- The standard basis of `M_d(ℂ)` coming from matrix units. -/
-private noncomputable def matrixSpaceBasis (d : ℕ) :
-    Module.Basis (MatrixBasisIndex d) ℂ (MatrixAlg d) :=
-  Module.Basis.matrix (Fin d) (Fin d) (Module.Basis.singleton Unit ℂ)
+/-- File-local alias for the shared standard basis of `M_d(ℂ)`. -/
+private noncomputable abbrev matrixSpaceBasis (d : ℕ) :=
+  ChannelDeterminant.Internal.matrixSpaceBasis d
 
 section WolfStatements
 
@@ -64,6 +66,7 @@ variable {T : MatrixEnd d}
 /-! ### Helper lemmas for the forward direction of Wolf Thm 6.1(2) -/
 
 namespace ChannelDeterminant
+namespace Internal
 
 /-- Product of norms = 1 with each factor ≤ 1 implies each factor = 1. -/
 private lemma norm_eq_one_of_prod_norm_eq_one
@@ -322,6 +325,7 @@ lemma channelDet_norm_one_hs_norm_ge [NeZero d]
             Φ (Matrix.stdBasis ℂ (Fin d) (Fin d) ij))).re := hA_hs
 
 
+end Internal
 end ChannelDeterminant
 
 end WolfStatements

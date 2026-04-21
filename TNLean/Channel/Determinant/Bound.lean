@@ -4,6 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Channel.Determinant.Basic
 import TNLean.Channel.Peripheral.IrreducibleChannel
+import Mathlib.Analysis.Complex.Polynomial.Basic
+import Mathlib.LinearAlgebra.Matrix.Charpoly.Eigs
 
 /-!
 # Determinant bounds for positive trace-preserving maps
@@ -36,21 +38,18 @@ open Matrix
 
 variable {d : ℕ}
 
-/-- The ambient matrix algebra `M_d(ℂ)`. -/
-private abbrev MatrixAlg (d : ℕ) := Matrix (Fin d) (Fin d) ℂ
+/-- File-local alias for the shared internal matrix-algebra model. -/
+private abbrev MatrixAlg (d : ℕ) := ChannelDeterminant.Internal.MatrixAlg d
 
-/-- Endomorphisms of `M_d(ℂ)`. -/
-private abbrev MatrixEnd (d : ℕ) := MatrixAlg d →ₗ[ℂ] MatrixAlg d
+/-- File-local alias for endomorphisms of `M_d(ℂ)`. -/
+private abbrev MatrixEnd (d : ℕ) := ChannelDeterminant.Internal.MatrixEnd d
 
-/-- Index type for the standard basis of `M_d(ℂ)`.
+/-- File-local alias for the shared basis index type. -/
+private abbrev MatrixBasisIndex (d : ℕ) := ChannelDeterminant.Internal.MatrixBasisIndex d
 
-We use `Fin d × Fin d × Unit`, which has cardinality $d^2$. -/
-private abbrev MatrixBasisIndex (d : ℕ) := Fin d × Fin d × Unit
-
-/-- The standard basis of `M_d(ℂ)` coming from matrix units. -/
-private noncomputable def matrixSpaceBasis (d : ℕ) :
-    Module.Basis (MatrixBasisIndex d) ℂ (MatrixAlg d) :=
-  Module.Basis.matrix (Fin d) (Fin d) (Module.Basis.singleton Unit ℂ)
+/-- File-local alias for the shared standard basis of `M_d(ℂ)`. -/
+private noncomputable abbrev matrixSpaceBasis (d : ℕ) :=
+  ChannelDeterminant.Internal.matrixSpaceBasis d
 
 section WolfStatements
 
@@ -248,6 +247,7 @@ private theorem positiveTracePreserving_eigenvalue_norm_le_one [NeZero d]
     simp only [hμ_eq, one_mem, CStarRing.norm_of_mem_unitary, Std.le_refl]
 
 namespace ChannelDeterminant
+namespace Internal
 
 /-- If every factor in a finite product has norm at most `1`, then the product also has norm at
 most `1`. -/
@@ -267,6 +267,7 @@ lemma norm_prod_le_one_of_forall_mem'
         _ ≤ 1 * 1 := by gcongr; exact ih hs'
         _ = 1 := by norm_num
 
+end Internal
 end ChannelDeterminant
 
 /-- Eigenvalues of a positive trace-preserving map on `M_d(ℂ)` determine roots of the
@@ -276,7 +277,7 @@ private lemma channelDet_norm_le_one_of_eigenvalues_bounded
     ‖channelDet T‖ ≤ 1 := by
   calc ‖channelDet T‖ = ‖(channelMatrix T).det‖ := rfl
     _ = ‖(channelMatrix T).charpoly.roots.prod‖ := by rw [Matrix.det_eq_prod_roots_charpoly]
-    _ ≤ 1 := ChannelDeterminant.norm_prod_le_one_of_forall_mem' _ hroot_le
+    _ ≤ 1 := ChannelDeterminant.Internal.norm_prod_le_one_of_forall_mem' _ hroot_le
 
 /-- Wolf Thm. 6.1(1): for a positive trace-preserving map on `M_d(ℂ)`, the channel
 determinant satisfies `|det T| ≤ 1`. -/
