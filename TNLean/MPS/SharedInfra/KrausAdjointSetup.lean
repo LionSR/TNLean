@@ -10,7 +10,7 @@ import TNLean.Channel.Schwarz.Basic
 /-!
 # Shared Kraus-adjoint setup for cyclic-sector arguments
 
-This file packages the common conversion from an irreducible TP MPS tensor to
+This file collects the common conversion from an irreducible TP MPS tensor to
 the conjugate-transposed Kraus family used in cyclic-sector decompositions.
 -/
 

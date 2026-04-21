@@ -87,7 +87,7 @@ end PeriodicMPSTensor
 def IsLeftCanonical (A : MPSTensor d D) : Prop :=
   ∑ i : Fin d, (A i)ᴴ * A i = 1
 
-/-- `IsPeriodic m A` packages irreducibility, left-canonical normalization,
+/-- `IsPeriodic m A` bundles irreducibility, left-canonical normalization,
 peripheral spectrum equal to the `m`-th roots of unity, positivity of `m`,
 and existence of a primitive `m`-th root.
 

@@ -3,10 +3,10 @@
 
 Stable import surface for the maintained TNLean library.
 
-This file re-exports the modules intended for downstream users. Most
+This file imports the modules intended for downstream users. Most
 specialized helper modules are still omitted from the root import list, but the
 public chapter-index modules and the chapter-facing semigroup modules are
-re-exported so that blueprint links and the generated documentation can see
+included so that blueprint links and the generated documentation can see
 them.
 
 The following legacy archival modules are intentionally excluded
@@ -65,10 +65,10 @@ import TNLean.Analysis.Entropy
 import TNLean.Axioms.BrouwerFixedPoint
 -- Layer 2a: Axiomatized entropy inequalities (strong subadditivity)
 import TNLean.Axioms.Entropy
--- Layer 2a: `TNLean/Entropy/` bootstrap (issue #613) — stable entropy
--- surface for the Simple MPDO RFP track (#236). SSA itself is sourced
--- from `TNLean.Axioms.Entropy`; the `TNLean.Entropy.*` modules only
--- re-export / wrap the sanctioned entropy axioms.
+-- Layer 2a: `TNLean/Entropy/` namespace (issue #613) — entropy
+-- declarations for the Simple MPDO RFP track (#236). SSA itself is sourced
+-- from `TNLean.Axioms.Entropy`; the `TNLean.Entropy.*` modules
+-- re-state the sanctioned entropy axioms under the Entropy namespace.
 import TNLean.Entropy.VonNeumann
 import TNLean.Entropy.StrongSubadditivity
 import TNLean.Entropy.MarkovChain

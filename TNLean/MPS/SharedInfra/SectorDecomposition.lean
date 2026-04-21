@@ -9,7 +9,7 @@ import Mathlib.Data.Fintype.BigOperators
 /-!
 # Shared sector decomposition infrastructure
 
-This file packages the multiplicity layer that both the canonical-form
+This file collects the multiplicity layer that both the canonical-form
 construction and the equal-case fundamental theorem use:
 
 * `SectorWeightData`

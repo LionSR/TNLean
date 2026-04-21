@@ -473,7 +473,7 @@ end SupportProjNontriviality
 /-!
 ## Fixed point → 2-block decomposition
 
-This section packages the canonical-form reduction step
+This section covers the canonical-form reduction step
 
 > PSD fixed point → invariant support projection → two-block direct sum.
 

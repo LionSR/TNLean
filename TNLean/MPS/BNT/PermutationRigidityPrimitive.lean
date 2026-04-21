@@ -368,7 +368,7 @@ end MPSTensor
 /-!
 ## Fundamental Theorem — Thm 4.4, span-equality formulation (variable block count)
 
-This section packages the permutation-rigidity lemma for BNT decompositions
+This section applies the permutation-rigidity lemma for BNT decompositions
 (`MPSTensor.exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho` above) into a more
 general **paper-style** statement where the two BNT families may have **different**
 numbers of blocks (`gA ≠ gB`).

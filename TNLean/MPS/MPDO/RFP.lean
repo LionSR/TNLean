@@ -13,7 +13,7 @@ Definition 4.1.
 
 The full definition in the paper is phrased using trace-preserving completely
 positive blocking and unblocking maps. In this first pass `MPOTensor.IsRFP`
-packages the transfer-map idempotence condition, which is the part already
+records the transfer-map idempotence condition, which is the part already
 supported by the current infrastructure.
 
 ## Main results

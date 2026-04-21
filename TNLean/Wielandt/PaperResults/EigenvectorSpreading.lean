@@ -9,7 +9,7 @@ import TNLean.Wielandt.SpanGrowth.EigenvectorSpreading
 /-!
 # Lemma 2(a) — paper-facing eigenvector spreading wrapper (arXiv:0909.5347)
 
-This file packages the current formal version of **Lemma 2(a)** from
+This file states the current formal version of **Lemma 2(a)** from
 Sanz–Pérez-García–Wolf–Cirac, *A quantum version of Wielandt's inequality*
 (arXiv:0909.5347), and the parallel statement used in Wolf's Chapter 6.
 

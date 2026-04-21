@@ -12,9 +12,9 @@ import TNLean.PiAlgebra.CanonicalFormSep
 open scoped Matrix BigOperators ComplexOrder MatrixOrder TNMatrixCFC
 
 /-!
-# Normal canonical form packaging for primitive block decompositions
+# Normal canonical form construction for primitive block decompositions
 
-This file packages already-primitive block decompositions into normal canonical form.
+This file constructs normal canonical form from already-primitive block decompositions.
 
 The main output is `MPSTensor.exists_normalCanonicalForm_of_primitive_blockDecomp`, which starts
 from a weighted family of irreducible, left-canonical, primitive blocks with pairwise distinct
@@ -680,7 +680,7 @@ theorem exists_tp_gauge_from_arbitrary_with_zeroTail (A : MPSTensor d D) :
 /-!
 ## Scope of this file
 
-This file packages primitive weighted block decompositions into normal canonical form and provides
+This file collects the construction of normal canonical form from primitive weighted block decompositions and provides
 the unconditional arbitrary-input TP-gauge reduction (with zero-block separation).
 
 A full wrapper to the endpoint canonical form would still require:

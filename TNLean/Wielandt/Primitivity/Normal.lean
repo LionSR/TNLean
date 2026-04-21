@@ -31,7 +31,7 @@ with extra `ρ.PosDef` and aperiodicity hypotheses is assembled in
 
 ### From normality
 
-* `wielandt_full_analysis`: packages the four standard Wielandt-chain outputs
+* `wielandt_full_analysis`: collects the four standard Wielandt-chain outputs
 
 ## References
 

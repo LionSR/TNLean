@@ -12,7 +12,7 @@ import TNLean.Algebra.MatrixOperatorSpace
 /-!
 # Irreducibility from spectral properties (Wolf Theorem 6.4)
 
-This file packages Wolf's spectral characterization of irreducibility for
+This file collects Wolf's spectral characterization of irreducibility for
 completely positive maps on `M_D(ℂ)`.
 
 ## Main declarations

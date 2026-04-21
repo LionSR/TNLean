@@ -17,7 +17,7 @@ Mathlib-style `alias` (rather than a `noncomputable def` wrapper), and
 adds a small algebraic corollary that follows from the sanctioned
 `Entropy.strongSubadditivity` wrapper. Together with
 `Entropy.VonNeumann` and `Entropy.StrongSubadditivity`, it forms the
-bootstrap entropy surface used by the Simple MPDO RFP track
+entropy namespace used by the Simple MPDO RFP track
 (see issue #613, #236, #239).
 
 ## Main declarations

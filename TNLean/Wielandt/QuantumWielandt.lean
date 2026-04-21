@@ -10,9 +10,9 @@ import TNLean.Wielandt.Primitivity.ImpliesIrreducible
 import TNLean.Wielandt.Primitivity.StronglyIrreducibleToFullRank
 
 /-!
-# Quantum Wielandt primitive-to-normal packaging under `PosDef`
+# Quantum Wielandt: primitivity implies normality under `PosDef`
 
-This file packages the primitive-to-normal bridge
+This file collects results on the primitive-to-normal implication:
 `isNormal_of_isPrimitiveMPS_of_posDef`, together with an exact-word-span
 witness theorem that additionally requires aperiodicity.
 
@@ -32,7 +32,7 @@ The `(a)→(c)` part is provided by `ImpliesStronglyIrreducible.lean`, while the
 
 The main theorem `isNormal_of_isPrimitiveMPS_of_posDef` requires only
 `IsPrimitiveMPS A ρ` and `ρ.PosDef` — no aperiodicity assumption. Strong
-irreducibility already packages peripheral spectrum `{1}`.
+irreducibility already yields peripheral spectrum `{1}`.
 
 The witness theorem
 `wordSpan_eq_top_eventually_of_isPrimitiveMPS_of_posDef_of_aperiodic` takes an

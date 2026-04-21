@@ -70,7 +70,7 @@ tensors are in irreducible form II and generate the same MPV family, they are
 Z-gauge equivalent. Then the symmetry corollary follows immediately for
 `B := rotatePhysical u A` once `B` is known to be in irreducible form II.
 
-This theorem intentionally packages the current dependency boundary: no
+This theorem explicitly records the current dependency boundary: no
 additional overlap arguments are needed *here* beyond the periodic equal-case
 FT input. -/
 theorem zGaugeEquiv_of_isIrreducibleForm_sameMPV_rotatePhysical
