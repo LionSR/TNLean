@@ -680,8 +680,9 @@ theorem exists_tp_gauge_from_arbitrary_with_zeroTail (A : MPSTensor d D) :
 /-!
 ## Scope of this file
 
-This file collects the construction of normal canonical form from primitive weighted block decompositions and provides
-the unconditional arbitrary-input TP-gauge reduction (with zero-block separation).
+This file collects the construction of normal canonical form from primitive weighted
+block decompositions and provides the unconditional arbitrary-input TP-gauge reduction
+(with zero-block separation).
 
 A full wrapper to the endpoint canonical form would still require:
 * periodicity removal by blocking (applying the irreducible-to-primitive blocking theorem to each
