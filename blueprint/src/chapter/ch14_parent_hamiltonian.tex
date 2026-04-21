@@ -476,6 +476,56 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     $L_0$-block injectivity, yields $Z_j A^u = A_j Y_u$.
 \end{proof}
 
+\begin{theorem}[Common right factor from word compatibility]%
+    \label{thm:right_factor_word_compatibility}
+    \lean{MPSTensor.exists_right_factor_of_evalWord_compatibility}
+    \leanok
+    \uses{def:l_blk_injective}
+    Assume $A$ is $L_0$-block injective with $L_0 > 0$. If matrices $(Z_j)_j$
+    satisfy
+    \[
+        Z_j A^\sigma = A_j Y_\sigma
+    \]
+    for every word $\sigma$ of length $K$, then there exists a matrix $X$ such
+    that $Z_j = A_j X$ for all $j$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    For $K = 1$, the hypothesis gives $Z_j A_i = A_j Y_i$ for every letter $i$.
+    Every blocked word of length $L_0$ is nonempty, so this identity extends to
+    the coefficients of the blocked tensor $A^{[L_0]}$. Since $A^{[L_0]}$ is
+    injective, the identity matrix is a linear combination of those blocked
+    coefficients, and substituting this decomposition yields $Z_j = A_j X$ for a
+    common matrix $X$. For larger $K$, strip the first letter: for each $i$, the
+    matrices $Z_j A_i$ satisfy the same compatibility hypothesis with words of
+    length $K - 1$, so the induction hypothesis reduces the problem to the case
+    $K = 1$.
+\end{proof}
+
+\begin{theorem}[Open-chain right extension at the injectivity length]%
+    \label{thm:ground_space_extend_right_block_injective}
+    \lean{MPSTensor.groundSpace_extend_right_of_isNBlkInjective}
+    \leanok
+    \uses{def:in_left_ground, def:in_tail_ground, def:ground_space_parent}
+    Assume $A$ is $L_0$-block injective with $L_0 > 0$ and $K > 0$. If an
+    element $\psi$ on $K + L_0 + 1$ sites satisfies the left ground condition on
+    the first $K + L_0$ sites and the suffix ground condition on every prefix of
+    length $K$, then $\psi \in G_{K + L_0 + 1}(A)$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Lemma~\ref{lem:left_tail_compatibility} produces matrices $(Z_j)_j$ and
+    $(Y_u)_u$ with $Z_j A^u = A_j Y_u$ for every prefix word $u$ of length $K$.
+    Theorem~\ref{thm:right_factor_word_compatibility} gives a common right factor
+    $X$ such that $Z_j = A_j X$ for all $j$. Therefore each last-site restriction
+    of $\psi$ agrees with the corresponding last-site restriction of the ground-
+    space vector determined by $X$. Since every configuration is obtained by
+    adjoining its final letter to its initial $(K + L_0)$-tuple, the two states
+    coincide, so $\psi$ lies in $G_{K + L_0 + 1}(A)$.
+\end{proof}
+
 \begin{definition}[MPV submodule]\label{def:mpv_submodule}
     \lean{MPSTensor.mpvSubmodule}
     \leanok
