@@ -59,6 +59,23 @@ theorem map_mem_multiplicativeDomain_of_idempotent
   have hEX_mem : map K X ∈ fixedPoints K := hEX_fix
   exact mem_multiplicativeDomain_of_mem_fixedPoints (K := K) h_unital hρ hρ_fix hEX_mem
 
+/-- The product of two projected factors is itself fixed. -/
+theorem choi_effros_sandwich
+    (K : Fin d → Mat) (h_unital : IsUnital K)
+    {ρ : Mat} (hρ : ρ.PosDef) (hρ_fix : adjointMap K ρ = ρ)
+    (hIdem : mapLM K ∘ₗ mapLM K = mapLM K)
+    (X Y : Mat) :
+    map K (map K X * map K Y) = map K X * map K Y := by
+  have hEX_md : map K X ∈ KadisonSchwarz.multiplicativeDomain K :=
+    map_mem_multiplicativeDomain_of_idempotent (K := K) h_unital hρ hρ_fix hIdem X
+  rw [show map K (map K X * map K Y) =
+      map K (map K X) * map K (map K Y) by
+    simpa only [map, KadisonSchwarz.krausMap] using
+      (KadisonSchwarz.krausMap_mul_right_of_mem_multiplicativeDomain
+        (K := K) hEX_md (map K Y))]
+  rw [map_fixes_range_of_idempotent (K := K) hIdem X,
+    map_fixes_range_of_idempotent (K := K) hIdem Y]
+
 /-- Left absorption for the projected product attached to an idempotent Kraus map. -/
 theorem choi_effros_left
     (K : Fin d → Mat) (h_unital : IsUnital K)
@@ -76,15 +93,8 @@ theorem choi_effros_left
               (K := K) hEX_md Y)
     _ = map K X * map K Y := by
           rw [map_fixes_range_of_idempotent (K := K) hIdem X]
-    _ = map K (map K X * map K Y) := by
-          symm
-          rw [show map K (map K X * map K Y) =
-              map K (map K X) * map K (map K Y) by
-            simpa only [map, KadisonSchwarz.krausMap] using
-              (KadisonSchwarz.krausMap_mul_right_of_mem_multiplicativeDomain
-                (K := K) hEX_md (map K Y))]
-          rw [map_fixes_range_of_idempotent (K := K) hIdem X,
-            map_fixes_range_of_idempotent (K := K) hIdem Y]
+    _ = map K (map K X * map K Y) :=
+          (choi_effros_sandwich (K := K) h_unital hρ hρ_fix hIdem X Y).symm
 
 /-- Right absorption for the projected product attached to an idempotent Kraus map. -/
 theorem choi_effros_right
@@ -103,32 +113,8 @@ theorem choi_effros_right
               (K := K) hEY_md X)
     _ = map K X * map K Y := by
           rw [map_fixes_range_of_idempotent (K := K) hIdem Y]
-    _ = map K (map K X * map K Y) := by
-          symm
-          rw [show map K (map K X * map K Y) =
-              map K (map K X) * map K (map K Y) by
-            simpa only [map, KadisonSchwarz.krausMap] using
-              (KadisonSchwarz.krausMap_mul_left_of_mem_multiplicativeDomain
-                (K := K) hEY_md (map K X))]
-          rw [map_fixes_range_of_idempotent (K := K) hIdem X,
-            map_fixes_range_of_idempotent (K := K) hIdem Y]
-
-/-- The product of two projected factors is itself fixed. -/
-theorem choi_effros_sandwich
-    (K : Fin d → Mat) (h_unital : IsUnital K)
-    {ρ : Mat} (hρ : ρ.PosDef) (hρ_fix : adjointMap K ρ = ρ)
-    (hIdem : mapLM K ∘ₗ mapLM K = mapLM K)
-    (X Y : Mat) :
-    map K (map K X * map K Y) = map K X * map K Y := by
-  have hEX_md : map K X ∈ KadisonSchwarz.multiplicativeDomain K :=
-    map_mem_multiplicativeDomain_of_idempotent (K := K) h_unital hρ hρ_fix hIdem X
-  rw [show map K (map K X * map K Y) =
-      map K (map K X) * map K (map K Y) by
-    simpa only [map, KadisonSchwarz.krausMap] using
-      (KadisonSchwarz.krausMap_mul_right_of_mem_multiplicativeDomain
-        (K := K) hEX_md (map K Y))]
-  rw [map_fixes_range_of_idempotent (K := K) hIdem X,
-    map_fixes_range_of_idempotent (K := K) hIdem Y]
+    _ = map K (map K X * map K Y) :=
+          (choi_effros_sandwich (K := K) h_unital hρ hρ_fix hIdem X Y).symm
 
 /-- The left and right projected-product identities agree. -/
 theorem choi_effros_left_eq_right
