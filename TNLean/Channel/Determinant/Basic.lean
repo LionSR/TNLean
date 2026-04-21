@@ -29,8 +29,8 @@ API used in Wolf's determinant-rigidity argument.
 ## Main definitions
 
 * `MatrixAlg`, `MatrixEnd` — the ambient matrix algebra and its endomorphisms.
-* `MatrixBasisIndex`, `matrixSpaceBasis`, `matrixVecLinearEquiv` — linear-algebra
-  models for the standard matrix basis and vectorization.
+* `MatrixBasisIndex`, `matrixSpaceBasis` — linear-algebra models for the
+  standard matrix basis.
 * `channelMatrix`, `channelDet` — the matrix representation of a channel and its
   determinant.
 * `unitaryChannel` — conjugation by a unitary matrix.
@@ -73,15 +73,6 @@ private abbrev MatrixBasisIndex (d : ℕ) := Fin d × Fin d × Unit
 private noncomputable def matrixSpaceBasis (d : ℕ) :
     Module.Basis (MatrixBasisIndex d) ℂ (MatrixAlg d) :=
   Module.Basis.matrix (Fin d) (Fin d) (Module.Basis.singleton Unit ℂ)
-
-/-- Column-stacking vectorization as a linear equivalence. -/
-private noncomputable def matrixVecLinearEquiv (d : ℕ) :
-    MatrixAlg d ≃ₗ[ℂ] (Fin d × Fin d → ℂ) :=
-  LinearEquiv.ofBijective
-    { toFun := Matrix.vec
-      map_add' := Matrix.vec_add
-      map_smul' := Matrix.vec_smul }
-    Matrix.vec_bijective
 
 section Determinant
 
