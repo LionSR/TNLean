@@ -98,8 +98,10 @@ Current repo status:
   channel with an arbitrary finite Kraus family `K : Fin r → Matrix ...`.
 
 What is still missing is a theorem producing a **`d`-indexed** Kraus family for
-that root, so that the witness fits the current definition
-`IsPRefinable B p : ∃ A : MPSTensor d D, ...`.
+that root, so that the witness fits the current definition of
+`IsPRefinable B p`, whose witness includes both a tensor
+`A : MPSTensor d D` and an isometry `W : Matrix ...`, together with the
+required coefficient identity.
 
 I found no theorem in the current channel/Kraus API that supplies this
 cardinality reduction. The missing statement is exactly the one currently
