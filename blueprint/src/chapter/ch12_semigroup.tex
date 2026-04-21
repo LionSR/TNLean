@@ -271,7 +271,8 @@ and proves the GKSL theorem.
     \label{cor:perturbation_bound_unit_norm_ch12}
     \lean{perturbation_bound_unit_norm}\leanok
     \uses{thm:perturbation_bound_ch12}
-    If $\|e^{sL}\| \le 1$ and $\|e^{sL'}\| \le 1$ for every $s \in [0,t]$, then
+    For $t \ge 0$, if $\|e^{sL}\| \le 1$ and $\|e^{sL'}\| \le 1$ for every
+    $s \in [0,t]$, then
     \[
         \|e^{tL'} - e^{tL}\| \le t\,\|L' - L\|.
     \]
@@ -340,7 +341,8 @@ and proves the GKSL theorem.
     \label{cor:norm_dysonTerm_le_at_ch12}
     \lean{norm_dysonTerm_le_at}\leanok
     \uses{thm:norm_dysonTerm_le_ch12}
-    Setting $s=t$ in Theorem~\ref{thm:norm_dysonTerm_le_ch12} gives
+    For $t \ge 0$, setting $s=t$ in Theorem~\ref{thm:norm_dysonTerm_le_ch12}
+    gives
     \[
       \|\widetilde{T}^{(n)}_t\|
       \le M\,\frac{(t\,\|\Delta\|\,M)^n}{n!},
@@ -1183,7 +1185,7 @@ which shows that such generators have the standard Lindblad form.
     \label{thm:fixedPoint_eq_trace_smul_at_irreducible_time_ch12}
     \lean{fixedPoint_eq_trace_smul_at_irreducible_time}\leanok
     If $T_{t_0}$ is irreducible with faithful fixed density $\sigma$, then every fixed point
-    of $T_{t_0}$ is of the form $\tr(X)\,\sigma$.
+    $V$ of $T_{t_0}$ satisfies $V = \tr(V)\,\sigma$.
 \end{theorem}
 
 \begin{proof}
@@ -1228,7 +1230,8 @@ which shows that such generators have the standard Lindblad form.
     \label{thm:exists_residual_time_eq_zero_ch12}
     \lean{exists_residual_time_eq_zero_of_fixedPoint}\leanok
     \uses{def:residual_slice_time_ch12, thm:residual_slice_decomp_ch12}
-    Suppose $T_s(\delta)=\delta$ and $T_{nu}(\delta) \to 0$ as $n \to \infty$.
+    Suppose $u \ge 0$ and $s > 0$, and that $T_s(\delta)=\delta$ and
+    $T_{nu}(\delta) \to 0$ as $n \to \infty$.
     Then there exists $a \in [0,s]$ such that $T_a(\delta)=0$.
 \end{theorem}
 
