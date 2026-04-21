@@ -247,7 +247,7 @@ private theorem positiveTracePreserving_eigenvalue_norm_le_one [NeZero d]
         _ = 1 * Matrix.trace z := by simp only [one_mul]
     simp only [hμ_eq, one_mem, CStarRing.norm_of_mem_unitary, Std.le_refl]
 
-namespace ChannelDeterminant
+namespace ChannelDeterminant.Internal
 
 /-- If every factor in a finite product has norm at most `1`, then the product also has norm at
 most `1`. -/
@@ -267,7 +267,7 @@ lemma norm_prod_le_one_of_forall_mem'
         _ ≤ 1 * 1 := by gcongr; exact ih hs'
         _ = 1 := by norm_num
 
-end ChannelDeterminant
+end ChannelDeterminant.Internal
 
 /-- Eigenvalues of a positive trace-preserving map on `M_d(ℂ)` determine roots of the
 characteristic polynomial with norm ≤ 1, so the determinant (= product of roots) has norm ≤ 1. -/
@@ -276,7 +276,7 @@ private lemma channelDet_norm_le_one_of_eigenvalues_bounded
     ‖channelDet T‖ ≤ 1 := by
   calc ‖channelDet T‖ = ‖(channelMatrix T).det‖ := rfl
     _ = ‖(channelMatrix T).charpoly.roots.prod‖ := by rw [Matrix.det_eq_prod_roots_charpoly]
-    _ ≤ 1 := ChannelDeterminant.norm_prod_le_one_of_forall_mem' _ hroot_le
+    _ ≤ 1 := ChannelDeterminant.Internal.norm_prod_le_one_of_forall_mem' _ hroot_le
 
 /-- Wolf Thm. 6.1(1): for a positive trace-preserving map on `M_d(ℂ)`, the channel
 determinant satisfies `|det T| ≤ 1`. -/

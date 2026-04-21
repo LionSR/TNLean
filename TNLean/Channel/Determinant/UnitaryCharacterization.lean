@@ -176,7 +176,7 @@ private theorem forward_det_one_implies_unitaryChannel [NeZero d]
     (hT : IsChannel T) (hdet : ‖channelDet T‖ = 1) :
     ∃ U : Matrix.unitaryGroup (Fin d) ℂ, T = unitaryChannel U := by
   classical
-  have hall := ChannelDeterminant.channel_all_eigenvalues_norm_one (d := d) hT hdet
+  have hall := ChannelDeterminant.Internal.channel_all_eigenvalues_norm_one (d := d) hT hdet
   obtain ⟨r, K, hK⟩ := hT.cp
   have hK_tp : ∑ i : Fin r, (K i)ᴴ * K i = 1 :=
     kraus_sum_conjTranspose_mul_of_tp K T hK hT.tp
@@ -198,7 +198,7 @@ private theorem forward_det_one_implies_unitaryChannel [NeZero d]
       conjTranspose_conjTranspose]
   -- Td is multiplicative
   have hMul :=
-    ChannelDeterminant.heisenberg_dual_multiplicative hT hdet hall K hK hK_tp Td hTd_def
+    ChannelDeterminant.Internal.heisenberg_dual_multiplicative hT hdet hall K hK hK_tp Td hTd_def
   have hTd_ne : Td ≠ 0 := by
     intro h
     have := congr_fun (congr_arg DFunLike.coe h) 1

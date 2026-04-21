@@ -17,15 +17,15 @@ Hilbert--Schmidt norm computations; and an AM--GM argument upgrades
 
 ## Main statements
 
-* `ChannelDeterminant.channel_all_eigenvalues_norm_one` — determinant
+* `ChannelDeterminant.Internal.channel_all_eigenvalues_norm_one` — determinant
   saturation forces every eigenvalue of a CPTP map to lie on the unit circle.
-* `ChannelDeterminant.stdBasis_conjTranspose_eq_swap` — conjugate transpose
-  swaps the indices of a matrix-unit basis element.
-* `ChannelDeterminant.sum_stdBasis_mul_conjTranspose` — the standard basis
-  satisfies `∑_{ij} E_{ij} E_{ij}^† = d • 1`.
-* `ChannelDeterminant.eq_zero_of_nonneg_of_sum_le_zero` — a finite nonnegative
-  family with total sum at most `0` vanishes termwise.
-* `ChannelDeterminant.channelDet_norm_one_hs_norm_ge` — determinant
+* `ChannelDeterminant.Internal.stdBasis_conjTranspose_eq_swap` — conjugate
+  transpose swaps the indices of a matrix-unit basis element.
+* `ChannelDeterminant.Internal.sum_stdBasis_mul_conjTranspose` — the standard
+  basis satisfies `∑_{ij} E_{ij} E_{ij}^† = d • 1`.
+* `ChannelDeterminant.Internal.eq_zero_of_nonneg_of_sum_le_zero` — a finite
+  nonnegative family with total sum at most `0` vanishes termwise.
+* `ChannelDeterminant.Internal.channelDet_norm_one_hs_norm_ge` — determinant
   saturation gives the AM--GM lower bound on the Hilbert--Schmidt norm.
 
 ## References
@@ -63,7 +63,7 @@ variable {T : MatrixEnd d}
 
 /-! ### Helper lemmas for the forward direction of Wolf Thm 6.1(2) -/
 
-namespace ChannelDeterminant
+namespace ChannelDeterminant.Internal
 
 /-- Product of norms = 1 with each factor ≤ 1 implies each factor = 1. -/
 private lemma norm_eq_one_of_prod_norm_eq_one
@@ -322,6 +322,6 @@ lemma channelDet_norm_one_hs_norm_ge [NeZero d]
             Φ (Matrix.stdBasis ℂ (Fin d) (Fin d) ij))).re := hA_hs
 
 
-end ChannelDeterminant
+end ChannelDeterminant.Internal
 
 end WolfStatements

@@ -20,7 +20,7 @@ that the Heisenberg dual is multiplicative.
 
 ## Main statements
 
-* `ChannelDeterminant.heisenberg_dual_multiplicative` — determinant
+* `ChannelDeterminant.Internal.heisenberg_dual_multiplicative` — determinant
   saturation forces the Heisenberg dual to be multiplicative on all matrices.
 
 ## References
@@ -56,7 +56,7 @@ section WolfStatements
 
 variable {T : MatrixEnd d}
 
-namespace ChannelDeterminant
+namespace ChannelDeterminant.Internal
 
 private theorem heisenberg_dual_det_eq_one [NeZero d]
     {T : MatrixEnd d} (hdet : ‖channelDet T‖ = 1)
@@ -305,6 +305,6 @@ theorem heisenberg_dual_multiplicative [NeZero d]
     _ = (K a)ᴴ * M * K a * ∑ b : Fin r, (K b)ᴴ * N * K b := by
         rw [show Td N = ∑ b : Fin r, (K b)ᴴ * N * K b from hTd N]
 
-end ChannelDeterminant
+end ChannelDeterminant.Internal
 
 end WolfStatements
