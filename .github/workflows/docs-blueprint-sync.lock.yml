@@ -22,7 +22,7 @@
 #
 # Daily workflow to detect repository documentation and blueprint files that are out of sync with recent code changes and open a PR with updates.
 #
-# gh-aw-metadata: {"schema_version":"v3","frontmatter_hash":"e596595d337862d95dcb07a297d72b536c68ef6707940d5d459d1fe066f4fbc4","compiler_version":"v0.62.5","strict":true,"agent_id":"copilot"}
+# gh-aw-metadata: {"schema_version":"v3","frontmatter_hash":"cc5cc8448adbf388781bc46a7a1b2e3306fa48fa85d5f426b8ec322b59343770","compiler_version":"v0.62.5","strict":true,"agent_id":"copilot"}
 
 name: "Docs & Blueprint Sync"
 "on":
@@ -51,7 +51,7 @@ jobs:
       secret_verification_result: ${{ steps.validate-secret.outputs.verification_result }}
     steps:
       - name: Setup Scripts
-        uses: github/gh-aw-actions/setup@v0.62.5
+        uses: github/gh-aw-actions/setup@dc50be57c94373431b49d3d0927f318ac2bb5c4c # v0.62.5
         with:
           destination: ${{ runner.temp }}/gh-aw/actions
       - name: Generate agentic run info
@@ -129,10 +129,6 @@ jobs:
           cat << 'GH_AW_PROMPT_EOF'
           <safe-output-tools>
           Tools: create_pull_request, missing_tool, missing_data, noop
-          In GitHub Copilot CLI, these safe-output tools may be exposed with a `safeoutputs-` prefix
-          (for example `safeoutputs-create_pull_request`, `safeoutputs-missing_tool`,
-          `safeoutputs-missing_data`, or `safeoutputs-noop`). Use the exact runtime tool name if the
-          unprefixed name is unavailable, and do not emit raw JSON as plain text.
           GH_AW_PROMPT_EOF
           cat "${RUNNER_TEMP}/gh-aw/prompts/safe_outputs_create_pull_request.md"
           cat << 'GH_AW_PROMPT_EOF'
@@ -163,6 +159,9 @@ jobs:
           {{#if __GH_AW_GITHUB_RUN_ID__ }}
           - **workflow-run-id**: __GH_AW_GITHUB_RUN_ID__
           {{/if}}
+          - **checkouts**: The following repositories have been checked out and are available in the workspace:
+            - `$GITHUB_WORKSPACE` → `__GH_AW_GITHUB_REPOSITORY__` (cwd) [shallow clone, fetch-depth=50]
+            - **Note**: If a branch you need is not in the list above and is not listed as an additional fetched ref, it has NOT been checked out. For private repositories you cannot fetch it without proper authentication. If the branch is required and not available, exit with an error and ask the user to add it to the `fetch:` option of the `checkout:` configuration (e.g., `fetch: ["refs/pulls/open/*"]` for all open PR refs, or `fetch: ["main", "feature/my-branch"]` for specific branches).
           </github-context>
           
           GH_AW_PROMPT_EOF
@@ -262,7 +261,7 @@ jobs:
       output_types: ${{ steps.collect_output.outputs.output_types }}
     steps:
       - name: Setup Scripts
-        uses: github/gh-aw-actions/setup@v0.62.5
+        uses: github/gh-aw-actions/setup@dc50be57c94373431b49d3d0927f318ac2bb5c4c # v0.62.5
         with:
           destination: ${{ runner.temp }}/gh-aw/actions
       - name: Set runtime paths
@@ -901,7 +900,7 @@ jobs:
       total_count: ${{ steps.missing_tool.outputs.total_count }}
     steps:
       - name: Setup Scripts
-        uses: github/gh-aw-actions/setup@v0.62.5
+        uses: github/gh-aw-actions/setup@dc50be57c94373431b49d3d0927f318ac2bb5c4c # v0.62.5
         with:
           destination: ${{ runner.temp }}/gh-aw/actions
       - name: Download agent output artifact
@@ -1029,7 +1028,7 @@ jobs:
       process_safe_outputs_temporary_id_map: ${{ steps.process_safe_outputs.outputs.temporary_id_map }}
     steps:
       - name: Setup Scripts
-        uses: github/gh-aw-actions/setup@v0.62.5
+        uses: github/gh-aw-actions/setup@dc50be57c94373431b49d3d0927f318ac2bb5c4c # v0.62.5
         with:
           destination: ${{ runner.temp }}/gh-aw/actions
       - name: Download agent output artifact
