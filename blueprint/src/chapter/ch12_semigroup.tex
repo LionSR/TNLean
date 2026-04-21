@@ -1172,8 +1172,8 @@ which shows that such generators have the standard Lindblad form.
 \begin{theorem}[The stationary density is fixed for all times]
     \label{thm:fixed_density_fixed_for_all_times_ch12}
     \lean{fixed_density_fixed_for_all_times_of_irreducible_time}\leanok
-    If $T_{t_0}$ is irreducible and $\sigma$ is its unique fixed density matrix, then
-    $T_u(\sigma)=\sigma$ for every $u \ge 0$.
+    If $t_0 > 0$, $T_{t_0}$ is irreducible, and $\sigma$ is its unique fixed density
+    matrix, then $T_u(\sigma)=\sigma$ for every $u \ge 0$.
 \end{theorem}
 
 \begin{proof}
@@ -1281,7 +1281,7 @@ which shows that such generators have the standard Lindblad form.
     \label{thm:exists_irreducible_fraction_slice_ch12}
     \lean{exists_irreducible_fraction_slice}\leanok
     If $T_{t_0}$ is irreducible and $\sigma$ is fixed for all times, then there exists
-    $u \in (0,t_0]$ such that
+    a positive time step $u$ such that
     \[
       T_{t_0} = (T_u)^{(\dim \MN{D})!},
     \]
@@ -1307,7 +1307,7 @@ which shows that such generators have the standard Lindblad form.
     \label{thm:exists_primitive_fraction_slice_ch12}
     \lean{exists_primitive_fraction_slice}\leanok
     If $T_{t_0}$ is irreducible for some $t_0>0$, then there exists a
-    reduced time step $u \in (0,t_0]$ such that $T_u$ is primitive.
+    positive reduced time step $u$ such that $T_u$ is primitive.
 \end{theorem}
 
 
