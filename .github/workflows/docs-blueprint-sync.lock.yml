@@ -129,6 +129,10 @@ jobs:
           cat << 'GH_AW_PROMPT_EOF'
           <safe-output-tools>
           Tools: create_pull_request, missing_tool, missing_data, noop
+          In GitHub Copilot CLI, these safe-output tools may be exposed with a `safeoutputs-` prefix
+          (for example `safeoutputs-create_pull_request`, `safeoutputs-missing_tool`,
+          `safeoutputs-missing_data`, or `safeoutputs-noop`). Use the exact runtime tool name if the
+          unprefixed name is unavailable, and do not emit raw JSON as plain text.
           GH_AW_PROMPT_EOF
           cat "${RUNNER_TEMP}/gh-aw/prompts/safe_outputs_create_pull_request.md"
           cat << 'GH_AW_PROMPT_EOF'
@@ -270,6 +274,7 @@ jobs:
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           persist-credentials: false
+          fetch-depth: 50
       - name: Create gh-aw temp directory
         run: bash ${RUNNER_TEMP}/gh-aw/actions/create_gh_aw_tmp_dir.sh
       - name: Configure gh CLI for GitHub Enterprise
