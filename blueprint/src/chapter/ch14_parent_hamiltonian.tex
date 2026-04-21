@@ -976,6 +976,23 @@ For MPS parent Hamiltonians, the spectral gap follows from a martingale
 criterion due to Kastoryano and
 Lucia~\cite{Kastoryano2018Martingale}.
 
+\begin{theorem}[Euclidean transport of the parent ground space]
+    \label{thm:parent_ground_space_es_kernel}
+    \lean{MPSTensor.parentHamiltonianGroundSpaceES_eq_ker_parentHamiltonianES}
+    \leanok
+    Under the canonical $\ell^2$ transport of the $N$-site state space, the
+    transported parent ground space is exactly the kernel of the transported
+    parent Hamiltonian.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    This is an immediate unraveling of the definitions: both constructions are
+    obtained from the same parent Hamiltonian by conjugating with the canonical
+    identification between the site space and its Euclidean-space avatar, so the
+    transported ground space is precisely the transported kernel.
+\end{proof}
+
 \begin{lemma}[Quadratic form to norm bound]\label{lem:quadratic_form_to_norm_bound}
     \lean{FrustrationFree.spectralGap_of_martingale}
     \leanok
