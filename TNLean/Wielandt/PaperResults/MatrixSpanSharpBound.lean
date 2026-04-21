@@ -9,7 +9,7 @@ import TNLean.Wielandt.RectangularSpan.Universality
 /-!
 # Lemma 2(b) — exact D²−D+1 paper-facing wrapper (arXiv:0909.5347)
 
-This file packages the **exact paper-level** version of **Lemma 2(b)** from
+This file states the **exact paper-level** version of **Lemma 2(b)** from
 Sanz–Pérez-García–Wolf–Cirac, *A quantum version of Wielandt's inequality*
 (arXiv:0909.5347), in the paper-facing `IsPrimitivePaper` language.
 

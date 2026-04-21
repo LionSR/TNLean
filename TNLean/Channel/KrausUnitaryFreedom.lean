@@ -8,8 +8,8 @@ import TNLean.Channel.KrausFreedom
 /-!
 # Unitary freedom of Kraus representations
 
-This file packages the directional Kraus-freedom lemmas already proved in
-`TNLean.Channel.KrausRepresentation` and `TNLean.Channel.KrausFreedom` into
+This file restates the directional Kraus-freedom lemmas already proved in
+`TNLean.Channel.KrausRepresentation` and `TNLean.Channel.KrausFreedom` as
 iff statements matching Wolf Theorem 2.18.
 
 ## Main results

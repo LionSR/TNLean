@@ -37,7 +37,7 @@ The proof (from the paper) generalises the 1D MPS Fundamental Theorem
    giving a global gauge equivalence.
 
 This parallels the MPS proof's linear-extension → multiplicativity →
-Skolem–Noether pipeline, but replaces chain algebra with graph-local reasoning.
+Skolem–Noether proof chain, but replaces chain algebra with graph-local reasoning.
 
 ## References
 

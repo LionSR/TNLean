@@ -23,7 +23,7 @@ variable {n 𝕜 : Type*} [RCLike 𝕜] [Fintype n] [DecidableEq n]
 
 /-- The trace of `hA.cfc f` is the sum of `f` over the eigenvalues of `A`.
 
-This packages the standard calculation
+This is the standard calculation
 `trace (U * diagonal (f ∘ λ) * U†) = ∑ i, f (λ i)` obtained from the spectral
 theorem and `trace_mul_cycle`. -/
 theorem trace_cfc_eq_sum {A : Matrix n n 𝕜} (hA : A.IsHermitian) (f : ℝ → ℝ) :

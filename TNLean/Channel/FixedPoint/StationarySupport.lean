@@ -10,7 +10,7 @@ import TNLean.MPS.Irreducible.FixedPointProjection
 /-!
 # Stationary support for irreducible channels
 
-This file packages the channel-side support-projection infrastructure behind
+This file collects the channel-side support-projection results for
 stationary states, in the spirit of Wolf §6.4 (Lemmas 6.4--6.5 and
 Propositions 6.9--6.11).
 

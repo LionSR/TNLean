@@ -8,7 +8,7 @@ import TNLean.MPS.Structure.PrimitivityBridge
 /-!
 # Canonical form from primitive blocks
 
-This file is a downstream builder: it packages blockwise injectivity, left-canonical
+This file is a downstream builder: it combines blockwise injectivity, left-canonical
 normalization, strict weight ordering, and blockwise primitivity into `IsCanonicalForm`.
 It does not prove such data from arbitrary input tensors.
 -/

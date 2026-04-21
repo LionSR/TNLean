@@ -350,7 +350,7 @@ theorem weight_multisets_eq_of_power_sums_eq
     Finset.univ.val.map μ = Finset.univ.val.map ν :=
   power_sum_eq_implies_multiset_eq r μ ν h
 
-/-- **Full Z-gauge pipeline (Theorem 3.8, steps 5–7 composed).**
+/-- **Full Z-gauge construction (Theorem 3.8, steps 5–7 composed).**
 
 Given two sector weight families where:
 1. The `m`-th powers agree pointwise,
@@ -381,7 +381,7 @@ end ZGaugeAssembly
 The equal-case Fundamental Theorem of MPS in irreducible form composes:
 
 1. **Theorem 3.4** (`fundamentalTheorem_periodic_proportional`): block matching.
-2. **Z-gauge pipeline** (`equalCase_zgauge_pipeline`): Newton–Girard + Z-gauge diagonal.
+2. **Z-gauge construction** (`equalCase_zgauge_pipeline`): Newton–Girard + Z-gauge diagonal.
 
 **Conditional on #81**: The `PeriodicOverlapHypothesis` and per-block weight power
 equality hypotheses will be discharged once the periodic overlap dichotomy (Proposition
@@ -426,7 +426,7 @@ overlap dichotomy and per-block weight power equality, then:
    `Z_j` with `Z_j^{m_j} = 1` and `Z_j * diag(μB_{perm j}) = diag(μA_j)`.
 3. **Weight multiset equality**: `μA_j` and `μB_{perm j}` determine the same multiset.
 
-This composes Theorem 3.4 with the Z-gauge pipeline from PR #94.
+This composes Theorem 3.4 with the Z-gauge construction from PR #94.
 
 **Conditional on #81**: The `PeriodicOverlapHypothesis` and `hPowEq` hypotheses will be
 discharged once the periodic overlap dichotomy and coefficient extraction infrastructure

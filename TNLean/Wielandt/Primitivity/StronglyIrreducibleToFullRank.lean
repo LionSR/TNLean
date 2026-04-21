@@ -23,8 +23,8 @@ import Mathlib.Analysis.Normed.Module.RCLike.Real
 
 This file proves the $(c) \to (b)$ direction of Proposition 3 from
 Sanz--Pérez-García--Wolf--Cirac (arXiv:0909.5347): strong irreducibility of the
-transfer map forces eventual full word span / Kraus rank. It packages the
-primitivity bridge, convergence of transfer powers, and the final full-rank
+transfer map forces eventual full word span / Kraus rank. It collects the
+results connecting strong irreducibility, convergence of transfer powers, and the final full-rank
 conclusion used by the public equivalence API.
 -/
 
@@ -296,7 +296,7 @@ theorem isIrreducibleMap_of_isPrimitiveMPS_of_posDef [NeZero D]
   exact isIrreducibleMap_of_channel_posDef_fixedPoint_unique E hP.transferMap_isChannel ρ
     hρ_pd (by simpa [E] using hP.fixedPoint_is_fixed) huniq
 
-/-- Primitive spectral-gap data plus a positive-definite fixed point packages to
+/-- Primitive spectral-gap data plus a positive-definite fixed point imply
 paper strong irreducibility. -/
 theorem isStronglyIrreduciblePaper_of_isPrimitiveMPS_of_posDef [NeZero D]
     {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}

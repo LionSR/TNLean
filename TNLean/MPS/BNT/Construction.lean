@@ -151,7 +151,7 @@ theorem IsCanonicalForm.toIsCanonicalFormBNT_of_distinct_dims
 `IsNormalCanonicalForm` with the requirement that distinct blocks are not gauge-phase equivalent
 and that the block weight moduli are **strictly decreasing**.
 
-Here `IsNormalCanonicalForm` packages the spectral / primitive-transfer-map version of
+Here `IsNormalCanonicalForm` encodes the spectral / primitive-transfer-map version of
 normality with non-increasing moduli. The BNT level adds strict ordering (justified by the
 grouping step) and the BNT separation axiom.
 

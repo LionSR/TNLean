@@ -7,7 +7,7 @@ import TNLean.Channel.Peripheral.CyclicDecomposition
 /-!
 # Wolf Theorem 6.16 — block-permutation cycle structure
 
-This file packages the *block-permutation* side of
+This file formalizes the *block-permutation* side of
 Wolf, *Quantum Channels & Operations*, Theorem 6.16, on top of the existing
 cyclic-decomposition infrastructure.
 

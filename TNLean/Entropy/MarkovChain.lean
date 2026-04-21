@@ -7,9 +7,9 @@ import TNLean.Entropy.StrongSubadditivity
 /-!
 # SSA equality and quantum Markov-chain structure
 
-This module packages the sanctioned axiom
+This module records the sanctioned axiom
 `_root_.hayashi_ssa_equality_characterization` from
-`TNLean/Axioms/Entropy.lean` into the stable `Entropy` namespace.
+`TNLean/Axioms/Entropy.lean` in the `Entropy` namespace.
 
 For a tripartite density matrix `ρ_ABC`, equality in strong subadditivity,
 
@@ -21,12 +21,12 @@ subsystem `B`: after a unitary change of basis on `B`, the Hilbert space of
 block-diagonal direct sum `⊕_j p_j (ρ_{A B_jᴸ} ⊗ ρ_{B_jᴿ C})`.
 
 The actual proof is intentionally deferred to the sanctioned axiom in
-`TNLean.Axioms.Entropy`; this file provides only theorem wrappers and a
-consumer-facing alias for the decomposition record.
+`TNLean.Axioms.Entropy`; this file provides only theorem wrappers and the
+abbreviation used for the decomposition record in the `Entropy` namespace.
 
 ## Main declarations
 
-* `Entropy.QuantumMarkovDecomposition` — consumer-facing alias of
+* `Entropy.QuantumMarkovDecomposition` — abbreviation for
   `_root_.HayashiMarkovDecomposition`.
 * `Entropy.ssaEquality_iff_exists_quantumMarkovDecomposition` — theorem wrapper
   around `_root_.hayashi_ssa_equality_characterization`.
@@ -40,7 +40,7 @@ consumer-facing alias for the decomposition record.
 * Ruskai, "Inequalities for quantum entropy: A review with conditions for
   equality", JMP 43, 4358 (2002)
 * Hayden, Jozsa, Petz, Winter, Commun. Math. Phys. 246, 359--374 (2004)
-* arXiv:1606.00608 Appendix C (the consumer targeted by issue #632 / #236)
+* arXiv:1606.00608 Appendix C (the downstream target of issue #632 / #236)
 -/
 
 open scoped Matrix ComplexOrder
@@ -52,7 +52,7 @@ section MarkovChain
 
 variable {dA dB dC : ℕ}
 
-/-- Consumer-facing alias for the quantum-Markov-chain decomposition witness
+/-- Namespaced abbreviation for the quantum-Markov-chain decomposition witness
 associated to equality in strong subadditivity. -/
 abbrev QuantumMarkovDecomposition
     (ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)

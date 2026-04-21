@@ -198,18 +198,18 @@ theorem isIrreducibleTensor_blockTensor_of_tp_primitive_irr [NeZero D]
   exact isIrreducibleTensor_of_isIrreducibleMap (blockTensor A P) hIrrMap
 
 /-!
-## Weak FT: proportional MPVs → block matching (for TP-primitive blocks)
+## Conditional Fundamental Theorem: proportional MPVs → block matching
 
 This combines the full reduction output with the block-matching conclusions
 of the fundamental theorem.
 
 For two arbitrary tensors A, B with proportional MPVs, the reduction produces
 blocked TP-primitive decompositions. Under the additional hypotheses needed
-for `IsNormalCanonicalForm` (irreducibility + distinct weight norms), one obtains
+for `IsNormalCanonicalForm` (irreducibility and distinct weight norms), one obtains
 permutation + gauge-phase matching of blocks.
 -/
 
-/-- **Weak Fundamental Theorem (conditional on irreducibility + distinct weights).**
+/-- **Conditional Fundamental Theorem (irreducibility and distinct weights).**
 
 For two tensor families in TP-primitive normal canonical form with BNT separation,
 if their blocked versions have proportional MPVs (with convergent coefficients), then

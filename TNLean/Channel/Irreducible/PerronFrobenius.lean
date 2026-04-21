@@ -10,7 +10,7 @@ import TNLean.QPF.Uniqueness
 /-!
 # Irreducible CP Perron–Frobenius theory (Wolf Theorem 6.3, items 2–3)
 
-This module packages the Perron–Frobenius theory for irreducible completely
+This module collects the Perron–Frobenius theory for irreducible completely
 positive maps on `M_D(ℂ)` needed for Wolf's Theorem 6.3, items 2 and 3.
 
 ## Main results

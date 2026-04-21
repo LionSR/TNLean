@@ -3,7 +3,7 @@ import TNLean.MPS.Chain.FundamentalTheorem
 /-!
 # Translation-invariance corollaries for injective MPS chains
 
-This file packages the translation-invariant specialization of the chain
+This file contains the translation-invariant specialization of the chain
 fundamental theorem as a corollary.
 
 Because `fundamentalTheorem_injective_chain` currently yields a uniform gauge,

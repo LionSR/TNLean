@@ -7,7 +7,7 @@ import TNLean.Channel.Peripheral.Cycles
 /-!
 # Multi-cycle block-permutation decompositions
 
-This file packages an explicit multi-cycle refinement of the
+This file develops an explicit multi-cycle refinement of the
 block-permutation infrastructure developed in
 `TNLean.Channel.Peripheral.Cycles`, in the form needed for the
 asymptotic-image side of

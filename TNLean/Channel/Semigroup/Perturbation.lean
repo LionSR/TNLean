@@ -253,7 +253,7 @@ noncomputable def dysonTerm
         expSemigroupCLM L (t - s) * (L' - L) * dysonTerm L L' s n := rfl
 
 /-- Summability criterion for Dyson terms from a factorial majorant.
-This packages the M-test step independently of the inductive norm proof. -/
+This records the M-test step independently of the inductive norm proof. -/
 lemma summable_dysonTerm_of_factorial_bound
     (L L' : MatrixCLM (Fin D)) {t M : ℝ}
     (hbound : ∀ n, ‖dysonTerm L L' t n‖ ≤ M * ((t * ‖L' - L‖ * M) ^ n / ↑(n.factorial))) :

@@ -13,7 +13,7 @@ import TNLean.Spectral.SpectralGap
 /-!
 # Channel-level wrappers for peripheral spectrum and primitivity
 
-This file packages the general channel-level consequences of the MPS-specific
+This file collects the general channel-level consequences of the MPS-specific
 peripheral-spectrum machinery from Wolf Chapter 6.
 
 ## Main results

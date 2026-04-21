@@ -9,7 +9,7 @@ import TNLean.MPS.RFP.Defs
 /-!
 # Purification RFP for LPDO tensors
 
-This file packages the local purification data used by `MPOTensor.IsLPDO` and
+This file collects the local purification data used by `MPOTensor.IsLPDO` and
 defines the mixed-state purification RFP condition from arXiv:1606.00608,
 Definition 4.3.
 

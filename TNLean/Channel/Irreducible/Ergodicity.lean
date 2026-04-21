@@ -8,7 +8,7 @@ import TNLean.Channel.Irreducible.PerronFrobenius
 /-!
 # Ergodicity of irreducible channels via Cesàro means
 
-This file packages the time-average / ergodicity statement corresponding to
+This file collects the time-average / ergodicity statement corresponding to
 **Wolf Corollary 6.3** for irreducible trace-preserving CP maps.
 
 For a quantum channel `E : M_D(ℂ) → M_D(ℂ)`, we prove:

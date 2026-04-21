@@ -10,9 +10,9 @@ import TNLean.Wielandt.Primitivity.StronglyIrreducibleToFullRank
 /-!
 # Proposition 3 — Full Equivalence (arXiv:0909.5347)
 
-This file assembles the paper-facing development of **Proposition 3** from
+This file contains the paper-facing development of **Proposition 3** from
 Sanz–Pérez-García–Wolf–Cirac, *A quantum version of Wielandt's inequality*
-(arXiv:0909.5347, Section II), and packages the full circular equivalence.
+(arXiv:0909.5347, Section II), and establishes the full circular equivalence.
 
 ## Proposition 3 (paper statement)
 
@@ -134,7 +134,7 @@ theorem prop3_cb [NeZero D] (A : MPSTensor d D)
 /-- **Proposition 3 (b)→(c)**: eventually full Kraus rank implies strong
 irreducibility.
 
-This packages the composite implication `(b) → (a) → (c)` from Proposition 3.
+This establishes the composite implication `(b) → (a) → (c)` from Proposition 3.
 Paper: arXiv:0909.5347, Proposition 3; Wolf, Chapter 6.
 -/
 theorem isStronglyIrreduciblePaper_of_hasEventuallyFullKrausRank [NeZero D]

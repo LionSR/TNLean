@@ -41,7 +41,7 @@ Theorem 4.4 of arXiv:2011.12127 (Cirac–Pérez-García–Schuch–Verstraete, R
 
 ### MPS application
 
-* `MPSTensor.bntFamilies_eventually_linearIndependent`: packages the BNT Gram-matrix criterion
+* `MPSTensor.bntFamilies_eventually_linearIndependent`: states the BNT Gram-matrix criterion
   in a form suited to families with per-block bond dimension.
 
 * `MPSTensor.eventually_exists_invertible_changeBasis`: If two BNT-like families produce MPV

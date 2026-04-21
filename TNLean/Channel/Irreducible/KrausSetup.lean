@@ -15,7 +15,7 @@ paired with the adjoint Perron--Frobenius eigenvector of that family.
 ## Main declarations
 
 - `IrreducibleCPKrausSetup`: shared Kraus witness for an irreducible CP map
-- `irreducibleCPKrausSetup`: packages the standard Kraus witness attached to an
+- `irreducibleCPKrausSetup`: records the standard Kraus witness attached to an
   irreducible CP map
 - `IrreducibleCPKrausSetup.exists_nonzero_kraus`: a nonzero map in a Kraus
   setup has a nonzero Kraus operator

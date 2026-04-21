@@ -13,7 +13,7 @@ import TNLean.Wielandt.RankOne.Products
 /-!
 # Theorem 1 — Quantum Wielandt's inequality (arXiv:0909.5347 / Wolf §6.9)
 
-This file packages the public paper-facing wrappers for the currently
+This file contains the public paper-facing wrappers for the currently
 formalized parts of **Theorem 1** from Sanz–Pérez-García–Wolf–Cirac,
 *A quantum version of Wielandt's inequality* (arXiv:0909.5347), equivalently
 Wolf's Theorem 6.9 in *Quantum Channels & Operations: Guided Tour*.

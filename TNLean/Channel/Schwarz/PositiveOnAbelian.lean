@@ -828,7 +828,7 @@ theorem quadraticForm_nonneg_of_isPositiveMap_of_commuting_images
 
 /-- A positive map is positive on commuting block families.
 
-This packages `quadraticForm_nonneg_of_isPositiveMap_of_commuting_images` into a
+This collects `quadraticForm_nonneg_of_isPositiveMap_of_commuting_images` into a
 single reusable predicate. -/
 private lemma isPositiveOnCommuting_of_isPositiveMap
     {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}

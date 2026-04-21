@@ -9,7 +9,7 @@ import TNLean.Wielandt.SpanGrowth.NonzeroTraceProduct
 /-!
 # Lemma 1 — paper-facing nonzero-trace wrapper (arXiv:0909.5347)
 
-This file packages the formal version of **Lemma 1** from
+This file states the formal version of **Lemma 1** from
 Sanz–Pérez-García–Wolf–Cirac, *A quantum version of Wielandt's inequality*
 (arXiv:0909.5347), and the corresponding discussion in Wolf's Chapter 6, in the
 paper-facing `IsPrimitivePaper` language.

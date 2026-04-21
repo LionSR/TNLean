@@ -479,7 +479,7 @@ From a `p`-refinement witness `(A, W)` for `B`, the `W`-pullback tensor
 `C τ := ∑_σ W(τ, σ) • B σ` has the same transfer map as `B` and the same MPV
 family as `blockTensor A p`.
 
-This packages the first three steps of the forward-direction plan recorded in
+This records the first three steps of the forward-direction plan recorded in
 `PRefinementCanonicalization`: construct the pullback, identify its transfer map
 using `transferMap_kraus_isometry`, and rewrite the coefficient-level refinement
 identity as a `SameMPV` statement. The remaining gap is therefore exactly the
@@ -565,7 +565,7 @@ Morally, the canonicalization is produced as follows. Given a witness
 `(A, W)` from `IsPRefinable B p`, form the `W`-pullback tensor
 `C τ := ∑_σ W(τ, σ) · B σ`; the theorems
 `pRefinementCanonicalization_pullback` and
-`pRefinementCanonicalization_pullback_of_irreducibleForm` now package this
+`pRefinementCanonicalization_pullback_of_irreducibleForm` now cover this
 first stage, giving `E_C = E_B`, `SameMPV C (blockTensor A p)`, and preserving
 irreducible form II when `B` already has it. The periodic equal-case
 Fundamental Theorem (Theorem 3.8 of arXiv:1708.00029, available here as the
@@ -613,7 +613,7 @@ variable {d D : ℕ}
 
 /-- **Inverse canonicalization hypothesis for the reverse direction of Theorem 4.1.**
 
-This Prop packages the analytic content that bridges `IsPDivisibleChannel (transferMap B) p`
+This Prop records the analytic content that connects `IsPDivisibleChannel (transferMap B) p`
 (a channel-level `p`-th-root statement) to the existence of a witness tensor
 `A : MPSTensor d D` whose `p`-blocked transfer map matches that of `B`.
 
