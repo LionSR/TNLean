@@ -68,6 +68,18 @@ and proves the GKSL theorem.
     Banach algebra.
 \end{proof}
 
+\begin{theorem}[Exponential semigroup at time $0$]
+    \label{thm:expSemigroupCLM_zero_ch12}
+    \lean{expSemigroupCLM_zero}\leanok
+    \uses{def:exp_semigroup_ch12}
+    The continuous-linear-map exponential satisfies $e^{0L} = \Id$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The exponential of the zero endomorphism is the identity.
+\end{proof}
+
 \begin{theorem}[Continuity of the exponential semigroup]\label{thm:expSemigroupCLM_continuous_ch12}
     \lean{expSemigroupCLM_continuous, expSemigroup_isContinuousDynSemigroup}\leanok
     \uses{def:exp_semigroup_ch12}
@@ -97,6 +109,22 @@ and proves the GKSL theorem.
      \xrightarrow{\exp} \mathrm{End}(\MN{D})$.
 \end{proof}
 
+\begin{theorem}[Derivative at the origin]
+    \label{thm:hasDerivAt_expSemigroupCLM_zero_ch12}
+    \lean{hasDerivAt_expSemigroupCLM_zero}\leanok
+    \uses{thm:hasDerivAt_expSemigroupCLM_ch12, thm:expSemigroupCLM_zero_ch12}
+    One has
+    \[
+        \left.\frac{d}{dt} e^{tL}\right|_{t=0} = L.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    This is Theorem~\ref{thm:hasDerivAt_expSemigroupCLM_ch12} at $t=0$ together with
+    Theorem~\ref{thm:expSemigroupCLM_zero_ch12}.
+\end{proof}
+
 \begin{theorem}[Generator uniqueness]\label{thm:generator_unique_ch12}
     \lean{generator_unique}\leanok
     \uses{def:exp_semigroup_ch12}
@@ -108,6 +136,66 @@ and proves the GKSL theorem.
     Both semigroups agree on $[0,\infty)$, so their derivatives within
     $[0,\infty)$ at $t=0$ agree.
     Since $[0,\infty)$ has unique differentials at~$0$, $L = L'$.
+\end{proof}
+
+\begin{theorem}[CLM and linear-map forms coincide]
+    \label{thm:expSemigroup_toCLM_ch12}
+    \lean{expSemigroup_toCLM}\leanok
+    \uses{def:exp_semigroup_ch12}
+    The linear-map exponential semigroup and the continuous-linear-map exponential
+    semigroup agree under the canonical identification of endomorphisms with continuous
+    linear endomorphisms.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    This is a direct unpacking of the definition of the linear-map exponential semigroup.
+\end{proof}
+
+\begin{theorem}[Pointwise derivative formula]
+    \label{thm:hasDerivAt_expSemigroup_apply_ch12}
+    \lean{hasDerivAt_expSemigroup_apply}\leanok
+    \uses{thm:hasDerivAt_expSemigroupCLM_ch12, thm:expSemigroup_toCLM_ch12}
+    For every $X \in \MN{D}$ and every $t \in \R$,
+    \[
+        \frac{d}{dt}\bigl(e^{tL}(X)\bigr) = e^{tL}(L(X)).
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Evaluate the derivative of the continuous-linear-map semigroup at $X$ and transport the
+    statement through Theorem~\ref{thm:expSemigroup_toCLM_ch12}.
+\end{proof}
+
+\begin{theorem}[Linear-map exponential semigroup at time $0$]
+    \label{thm:expSemigroup_zero_ch12}
+    \lean{expSemigroup_zero}\leanok
+    \uses{thm:expSemigroup_toCLM_ch12, thm:expSemigroupCLM_zero_ch12}
+    The linear-map exponential semigroup satisfies $e^{0L} = \Id$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Transport Theorem~\ref{thm:expSemigroupCLM_zero_ch12} through
+    Theorem~\ref{thm:expSemigroup_toCLM_ch12}.
+\end{proof}
+
+\begin{theorem}[Exponential semigroup as a dynamical semigroup]
+    \label{thm:expSemigroup_isDynSemigroup_ch12}
+    \lean{expSemigroup_isDynSemigroup}\leanok
+    \uses{def:dyn_semigroup_ch12, thm:expSemigroup_toCLM_ch12,
+          thm:expSemigroup_zero_ch12, thm:expSemigroupCLM_add_ch12}
+    The family $t \mapsto e^{tL}$ satisfies the semigroup law and the initial
+    condition, hence is a dynamical semigroup.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Transport the continuous-linear-map semigroup law from
+    Theorem~\ref{thm:expSemigroupCLM_add_ch12} through
+    Theorem~\ref{thm:expSemigroup_toCLM_ch12}; the initial condition is
+    Theorem~\ref{thm:expSemigroup_zero_ch12}.
 \end{proof}
 
 \begin{theorem}[Prop.~7.1: Every continuous semigroup is exponential]
@@ -179,6 +267,22 @@ and proves the GKSL theorem.
     (Theorem~\ref{thm:duhamel_formula_ch12}).
 \end{proof}
 
+\begin{corollary}[Perturbation bound under unit-norm control]
+    \label{cor:perturbation_bound_unit_norm_ch12}
+    \lean{perturbation_bound_unit_norm}\leanok
+    \uses{thm:perturbation_bound_ch12}
+    For $t \ge 0$, if $\|e^{sL}\| \le 1$ and $\|e^{sL'}\| \le 1$ for every
+    $s \in [0,t]$, then
+    \[
+        \|e^{tL'} - e^{tL}\| \le t\,\|L' - L\|.
+    \]
+\end{corollary}
+
+\begin{proof}
+    \leanok
+    Apply Theorem~\ref{thm:perturbation_bound_ch12} and bound both suprema by $1$.
+\end{proof}
+
 \begin{lemma}[Dyson-series summability from factorial majorant]
     \label{lem:summable_dyson_factorial_ch12}
     \lean{summable_dysonTerm_of_factorial_bound}\leanok
@@ -231,6 +335,24 @@ and proves the GKSL theorem.
     (Theorem~\ref{thm:norm_dysonTerm_le_ch12}) with the
     Weierstrass M-test step
     (Lemma~\ref{lem:summable_dyson_factorial_ch12}).
+\end{proof}
+
+\begin{corollary}[Factorial norm bound at the final time]
+    \label{cor:norm_dysonTerm_le_at_ch12}
+    \lean{norm_dysonTerm_le_at}\leanok
+    \uses{thm:norm_dysonTerm_le_ch12}
+    For $t \ge 0$, setting $s=t$ in Theorem~\ref{thm:norm_dysonTerm_le_ch12}
+    gives
+    \[
+      \|\widetilde{T}^{(n)}_t\|
+      \le M\,\frac{(t\,\|\Delta\|\,M)^n}{n!},
+    \]
+    where $M = \sup_{u \in [0,t]} \|e^{uL}\|$.
+\end{corollary}
+
+\begin{proof}
+    \leanok
+    This is the special case $s=t$ of Theorem~\ref{thm:norm_dysonTerm_le_ch12}.
 \end{proof}
 
 \begin{theorem}[Continuity of Dyson iterates]
@@ -814,7 +936,8 @@ which shows that such generators have the standard Lindblad form.
     \[
         L(\rho)
         = i[\rho, H]
-        + \tfrac{1}{2}\sum_{k,l} C_{lk}\bigl(        [F_k, \rho F_l^\dagger] + [F_k\rho, F_l^\dagger]
+        + \tfrac{1}{2}\sum_{k,l} C_{lk}\bigl(
+            [F_k, \rho F_l^\dagger] + [F_k\rho, F_l^\dagger]
           \bigr).
     \]
     In Wolf's formula one takes $\{F_k\}$ to be a basis of traceless matrices;
@@ -844,6 +967,14 @@ which shows that such generators have the standard Lindblad form.
 
 %% Wolf §7.1, Prop 7.5
 \subsection{Auxiliary spectral and semigroup lemmas}
+
+\begin{definition}[Quantum dynamical semigroup]
+    \label{def:is_quantum_dyn_semigroup_ch12}
+    \lean{IsQuantumDynSemigroup}\leanok
+    \uses{def:continuous_dyn_semigroup_ch12, def:channel}
+    A quantum dynamical semigroup is a norm-continuous dynamical semigroup whose
+    time slices are quantum channels for every $t \ge 0$.
+\end{definition}
 
 \begin{theorem}[Semigroup power identity]
     \lean{semigroup_pow}\leanok
@@ -918,6 +1049,111 @@ which shows that such generators have the standard Lindblad form.
     If all eigenvalues satisfy $|\lambda|<1$, then the spectral radius is $<1$.
 \end{theorem}
 
+\begin{theorem}[Primitive powers annihilate trace-zero matrices]
+    \label{thm:primitive_channel_pow_tendsto_zero_ch12}
+    \lean{primitive_channel_pow_tendsto_zero_of_trace_zero}\leanok
+    If $E$ is an irreducible primitive channel with faithful fixed density $\sigma$,
+    then $E^n(X) \to 0$ for every matrix $X$ with $\tr(X)=0$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Decompose $E^n$ into the fixed-point projection and its complementary part.
+    On the complement, every eigenvalue has modulus $<1$, so the complementary powers
+    tend to $0$; the trace-zero hypothesis removes the fixed-point component.
+\end{proof}
+
+\begin{theorem}[Fixed points of an irreducible channel are trace multiples]
+    \label{thm:fixedPoint_eq_trace_smul_irreducible_channel_ch12}
+    \lean{fixedPoint_eq_trace_smul_of_irreducible_channel}\leanok
+    If $E$ is an irreducible channel with faithful fixed density $\sigma$, then every
+    nonzero fixed point $V$ of $E$ satisfies $V = \tr(V)\,\sigma$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Subtract the trace multiple $\tr(V)\,\sigma$ and apply the vanishing theorem for
+    trace-zero fixed points of an irreducible channel.
+\end{proof}
+
+\begin{corollary}[Nonzero fixed points have nonzero trace]
+    \label{cor:trace_ne_zero_fixedpoint_irreducible_channel_ch12}
+    \lean{trace_ne_zero_of_nonzero_fixedPoint_of_irreducible_channel}\leanok
+    Every nonzero fixed point of an irreducible channel has nonzero trace.
+\end{corollary}
+
+\begin{proof}
+    \leanok
+    Otherwise the preceding theorem would force the fixed point to vanish.
+\end{proof}
+
+\begin{theorem}[Peripheral eigenvectors become periodic fixed points]
+    \label{thm:peripheral_power_fixed_eigenvector_ch12}
+    \lean{exists_power_fixed_eigenvector_of_peripheral}\leanok
+    For every positive time $t$, a quantum dynamical semigroup irreducible at every
+    positive time has the following property: every peripheral eigenvalue $\mu$ of $T_t$
+    admits a nonzero eigenvector $V$ and a positive integer $p$ such that
+    $T_t(V)=\mu V$ and $T_{pt}(V)=V$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Peripheral powers remain peripheral for an irreducible channel with faithful fixed point.
+    The bounded-order lemma then gives $\mu^p=1$, and the semigroup power identity turns the
+    eigenvector equation for $T_t$ into a fixed-point equation for $T_{pt}$.
+\end{proof}
+
+\begin{theorem}[Peripheral eigenvectors with nonzero trace]
+    \label{thm:peripheral_trace_ne_zero_eigenvector_ch12}
+    \lean{exists_trace_ne_zero_eigenvector_of_peripheral}\leanok
+    For every positive time $t$, under the same hypotheses every peripheral eigenvalue
+    of $T_t$ has a nonzero eigenvector with nonzero trace.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Apply Theorem~\ref{thm:peripheral_power_fixed_eigenvector_ch12} and then use the previous
+    corollary at the irreducible time $pt$.
+\end{proof}
+
+\begin{theorem}[Trace-preserving eigenvectors force eigenvalue $1$]
+    \label{thm:eigenvalue_eq_one_trace_preserving_eigenvector_ch12}
+    \lean{eigenvalue_eq_one_of_trace_preserving_eigenvector}\leanok
+    If $E$ is trace-preserving, $E(V)=\mu V$, and $\tr(V) \ne 0$, then $\mu = 1$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Take traces in $E(V)=\mu V$ and use trace preservation.
+\end{proof}
+
+\begin{theorem}[Peripheral collapse under irreducibility at all times]
+    \label{thm:peripheral_eq_one_irreducible_all_ch12}
+    \lean{peripheral_eq_one_of_irreducible_all}\leanok
+    If a quantum dynamical semigroup is irreducible at every positive time, then every
+    peripheral eigenvalue of every positive-time slice equals $1$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Combine Theorem~\ref{thm:peripheral_trace_ne_zero_eigenvector_ch12} with
+    Theorem~\ref{thm:eigenvalue_eq_one_trace_preserving_eigenvector_ch12}.
+\end{proof}
+
+\begin{theorem}[Primitivity from irreducibility at all times]
+    \label{thm:primitive_of_irreducible_all_ch12}
+    \lean{primitive_of_irreducible_all}\leanok
+    If a quantum dynamical semigroup is irreducible at every positive time, then every
+    positive-time slice is primitive.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The unique faithful fixed density gives the one-dimensional peripheral spectrum criterion,
+    and Theorem~\ref{thm:peripheral_eq_one_irreducible_all_ch12} collapses the peripheral set
+    to $\{1\}$.
+\end{proof}
+
 \begin{remark}[Semigroup irreducible/primitive equivalence]\leanok
     The semigroup analogue of the irreducible/primitive equivalence
     starts from one irreducible time slice, constructs a primitive
@@ -933,7 +1169,82 @@ which shows that such generators have the standard Lindblad form.
     and deduce primitivity of $T_u$.
 \end{remark}
 
+\begin{theorem}[The stationary density is fixed for all times]
+    \label{thm:fixed_density_fixed_for_all_times_ch12}
+    \lean{fixed_density_fixed_for_all_times_of_irreducible_time}\leanok
+    If $t_0 > 0$, $T_{t_0}$ is irreducible, and $\sigma$ is its unique fixed density
+    matrix, then $T_u(\sigma)=\sigma$ for every $u \ge 0$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    By semigroup commutativity, $T_{t_0}(T_u(\sigma)) = T_u(T_{t_0}(\sigma)) = T_u(\sigma)$,
+    and uniqueness of the fixed density at time $t_0$ identifies $T_u(\sigma)$ with $\sigma$.
+\end{proof}
+
+\begin{theorem}[Fixed points at the irreducible time are trace multiples]
+    \label{thm:fixedPoint_eq_trace_smul_at_irreducible_time_ch12}
+    \lean{fixedPoint_eq_trace_smul_at_irreducible_time}\leanok
+    If $T_{t_0}$ is irreducible with faithful fixed density $\sigma$, then every fixed point
+    $V$ of $T_{t_0}$ satisfies $V = \tr(V)\,\sigma$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    This is the fixed-point trace-scalar theorem for the irreducible channel $T_{t_0}$.
+\end{proof}
+
+\begin{definition}[Residual slice index]
+    \label{def:residual_slice_index_ch12}
+    \lean{residualSliceIndex}\leanok
+    For $u \ge 0$ and $s > 0$, the residual slice index is
+    \[
+      m_n = \left\lfloor \frac{nu}{s} \right\rfloor.
+    \]
+\end{definition}
+
+\begin{definition}[Residual slice time]
+    \label{def:residual_slice_time_ch12}
+    \lean{residualSliceTime}\leanok
+    For $u \ge 0$ and $s > 0$, the residual slice time is the remainder
+    \[
+      r_n = s\,\mathrm{fract}\!\left(\frac{nu}{s}\right).
+    \]
+\end{definition}
+
+\begin{theorem}[Residual slice decomposition]
+    \label{thm:residual_slice_decomp_ch12}
+    \lean{residualSliceTime_mem_Icc, residualSlice_decomp}\leanok
+    \uses{def:residual_slice_index_ch12, def:residual_slice_time_ch12}
+    For $u \ge 0$ and $s > 0$, one has $r_n \in [0,s]$ and
+    \[
+      nu = m_n s + r_n.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    This is the floor-plus-fraction decomposition of $nu/s$, multiplied by $s$.
+\end{proof}
+
+\begin{theorem}[A residual slice can vanish]
+    \label{thm:exists_residual_time_eq_zero_ch12}
+    \lean{exists_residual_time_eq_zero_of_fixedPoint}\leanok
+    \uses{def:residual_slice_time_ch12, thm:residual_slice_decomp_ch12}
+    Suppose $u \ge 0$ and $s > 0$, and that $T_s(\delta)=\delta$ and
+    $T_{nu}(\delta) \to 0$ as $n \to \infty$.
+    Then there exists $a \in [0,s]$ such that $T_a(\delta)=0$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The residual slice times lie in the compact interval $[0,s]$, so a subsequence converges
+    to some $a \in [0,s]$. The residual decomposition rewrites $T_{nu}(\delta)$ in terms of
+    $T_{r_n}(\delta)$, and continuity of the semigroup identifies the limit with $T_a(\delta)$.
+\end{proof}
+
 \begin{theorem}[Reduced-time eigenvector has nonzero trace]
+    \label{thm:exists_trace_ne_zero_eigenvector_of_fraction_slice_ch12}
     \lean{exists_trace_ne_zero_eigenvector_of_fraction_slice}\leanok
     Under the reduced-time hypotheses
     $T_{t_0} = (T_u)^{(\dim \MN{D})!}$, if
@@ -942,17 +1253,50 @@ which shows that such generators have the standard Lindblad form.
 \end{theorem}
 
 \begin{theorem}[Peripheral collapse at the reduced time step]
+    \label{thm:peripheral_eq_one_of_fraction_slice_ch12}
     \lean{peripheral_eq_one_of_fraction_slice}\leanok
     Under the same hypotheses, every peripheral eigenvalue of $T_u$
     equals $1$.
 \end{theorem}
 
 \begin{theorem}[Primitivity at the reduced time step]
+    \label{thm:primitive_of_fraction_slice_ch12}
     \lean{primitive_of_fraction_slice}\leanok
     Under the same hypotheses, $T_u$ is primitive.
 \end{theorem}
 
+\begin{theorem}[Irreducibility descends to a reduced time step]
+    \label{thm:irreducible_of_fraction_slice_ch12}
+    \lean{irreducible_of_fraction_slice}\leanok
+    If $T_{t_0} = (T_u)^N$ and $T_{t_0}$ is irreducible, then $T_u$ is irreducible.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Any invariant compression for $T_u$ remains invariant under powers, hence also for
+    $T_{t_0}$; irreducibility of $T_{t_0}$ rules this out.
+\end{proof}
+
+\begin{theorem}[Existence of an irreducible reduced time step]
+    \label{thm:exists_irreducible_fraction_slice_ch12}
+    \lean{exists_irreducible_fraction_slice}\leanok
+    If $t_0 > 0$, $T_{t_0}$ is irreducible, and $\sigma$ is fixed for all times,
+    then there exists a positive time step $u$ such that
+    \[
+      T_{t_0} = (T_u)^{(\dim \MN{D})!},
+    \]
+    the slice $T_u$ is a channel, $T_u$ is irreducible, and $T_u(\sigma)=\sigma$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Take $u = t_0 / N$ with $N = (\dim \MN{D})!$. The semigroup power identity gives the
+    factorization of $T_{t_0}$, channelity comes from the semigroup hypotheses, and
+    Theorem~\ref{thm:irreducible_of_fraction_slice_ch12} gives irreducibility of $T_u$.
+\end{proof}
+
 \begin{theorem}[Fixed points of the primitive reduced time step are trace-scalars]
+    \label{thm:fixedPoint_eq_trace_smul_of_primitive_slice_ch12}
     \lean{fixedPoint_eq_trace_smul_of_primitive_slice}\leanok
     If $T_u$ is primitive and $\sigma$ is the common fixed density, then
     every fixed point of any positive-time slice $T_s$ has the form
@@ -960,16 +1304,42 @@ which shows that such generators have the standard Lindblad form.
 \end{theorem}
 
 \begin{theorem}[Existence of a primitive reduced time step]
+    \label{thm:exists_primitive_fraction_slice_ch12}
     \lean{exists_primitive_fraction_slice}\leanok
     If $T_{t_0}$ is irreducible for some $t_0>0$, then there exists a
-    reduced time step $u \in (0,t_0]$ such that $T_u$ is primitive.
+    positive reduced time step $u$ such that $T_u$ is primitive.
 \end{theorem}
 
+
+\begin{theorem}[Irreducibility propagates to all positive times]
+    \label{thm:irreducible_all_of_irreducible_time_ch12}
+    \lean{irreducible_all_of_irreducible_time}\leanok
+    \uses{def:is_quantum_dyn_semigroup_ch12,
+          thm:fixed_density_fixed_for_all_times_ch12,
+          thm:fixedPoint_eq_trace_smul_at_irreducible_time_ch12,
+          thm:exists_primitive_fraction_slice_ch12,
+          thm:fixedPoint_eq_trace_smul_of_primitive_slice_ch12}
+    If $T_{t_0}$ is irreducible for some $t_0 > 0$, then every positive-time slice $T_s$ is
+    irreducible.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Let $\sigma$ be the unique faithful fixed density of $T_{t_0}$. By
+    Theorem~\ref{thm:fixed_density_fixed_for_all_times_ch12}, it is fixed for all times, and
+    Theorem~\ref{thm:fixedPoint_eq_trace_smul_at_irreducible_time_ch12} makes the fixed-point
+    space of $T_{t_0}$ one-dimensional. Choose a primitive reduced time step by
+    Theorem~\ref{thm:exists_primitive_fraction_slice_ch12}; then the trace-scalar description
+    of fixed points from Theorem~\ref{thm:fixedPoint_eq_trace_smul_of_primitive_slice_ch12}
+    gives the uniqueness criterion for irreducibility at every positive time.
+\end{proof}
 
 \begin{theorem}[Prop.~7.5: Irreducible semigroup implies primitive]
     \label{thm:irreducible_semigroup_implies_primitive}
     \lean{irreducible_semigroup_implies_primitive}\leanok
-    \uses{def:exp_semigroup_ch12}
+    \uses{def:is_quantum_dyn_semigroup_ch12,
+          thm:irreducible_all_of_irreducible_time_ch12,
+          thm:primitive_of_irreducible_all_ch12}
     Let $T_t = e^{tL}$ be a quantum dynamical semigroup.
     If $T_{t_0}$ is irreducible for some $t_0 > 0$, then
     $T_t$ is primitive (and irreducible) for every $t > 0$.
@@ -977,15 +1347,10 @@ which shows that such generators have the standard Lindblad form.
 \end{theorem}
 
 \begin{proof}\leanok
-    The unique faithful density fixed point $\sigma$ of $T_{t_0}$
-    is also fixed by all $T_u$ (semigroup commutativity), so by
-    uniqueness it is the common fixed point.
-    Irreducibility of each $T_t$ then follows from uniqueness of the
-    positive definite fixed point and the spectral-gap argument.
-    Primitivity is then the one-dimensional peripheral-eigenvalue
-    characterisation, using that $T_t$ irreducible implies
-    all peripheral eigenvalues are roots of unity, and the
-    faithful fixed point forces those eigenvalues to equal~$1$.
+    First apply Theorem~\ref{thm:irreducible_all_of_irreducible_time_ch12} to propagate
+    irreducibility from the single time $t_0$ to every positive time. Then apply
+    Theorem~\ref{thm:primitive_of_irreducible_all_ch12} to conclude primitivity of every
+    positive-time slice.
 \end{proof}
 
 \begin{theorem}[Prop.~7.5: Irreducibility iff primitivity for QDS]
@@ -1015,10 +1380,86 @@ which shows that such generators have the standard Lindblad form.
 
 %% Wolf §7.1, Thm 7.2
 
+\begin{definition}[Faithful stationary state]
+    \label{def:has_faithful_stationary_state_ch12}
+    \lean{HasFaithfulStationaryState}\leanok
+    A generator $L$ has a faithful stationary state if there exists a positive definite
+    density matrix $\rho_0$ with $L(\rho_0)=0$.
+\end{definition}
+
+\begin{definition}[Adjoint dissipator]
+    \label{def:adjoint_dissipator_ch12}
+    \lean{LindbladForm.adjointDissipator}\leanok
+    \uses{def:lindblad_form}
+    For a Lindblad operator $L_j$, the adjoint dissipator on observables is
+    \[
+      \mathcal{D}_{L_j}^*(A)
+        = L_j^\dagger A L_j
+          - \tfrac12 L_j^\dagger L_j A
+          - \tfrac12 A L_j^\dagger L_j.
+    \]
+\end{definition}
+
+\begin{definition}[Adjoint generator]
+    \label{def:adjoint_generator_ch12}
+    \lean{LindbladForm.toAdjointLinearMap}\leanok
+    \uses{def:lindblad_form, def:adjoint_dissipator_ch12}
+    The adjoint generator of a Lindblad form is
+    \[
+      L^*(A) = i[H,A] + \sum_j \mathcal{D}_{L_j}^*(A).
+    \]
+\end{definition}
+
+\begin{theorem}[Trace-pairing characterization of the adjoint generator]
+    \label{thm:trace_pairing_adjoint_generator_ch12}
+    \lean{LindbladForm.trace_mul_toAdjointLinearMap_eq_trace_toLinearMap_mul}\leanok
+    \uses{def:adjoint_generator_ch12, def:lindblad_form}
+    For every density matrix $\rho$ and every observable $A$,
+    \[
+      \tr(\rho\,L^*(A)) = \tr(L(\rho)\,A).
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Expand the Schr\"odinger and Heisenberg formulas and apply cyclicity of the trace term by term.
+\end{proof}
+
+\begin{definition}[Commutant of the Lindblad data]
+    \label{def:commutant_ch12}
+    \lean{LindbladForm.commutant}\leanok
+    \uses{def:lindblad_form}
+    The commutant of a Lindblad form is the set of matrices commuting with $H$,
+    with every Lindblad operator $L_j$, and with every adjoint $L_j^\dagger$.
+\end{definition}
+
+\begin{definition}[Adjoint kernel]
+    \label{def:adjoint_kernel_ch12}
+    \lean{LindbladForm.adjointKernel}\leanok
+    \uses{def:adjoint_generator_ch12}
+    The adjoint kernel is the set of observables $A$ satisfying $L^*(A)=0$.
+\end{definition}
+
+\begin{theorem}[Commutant lies in the adjoint kernel]
+    \label{thm:commutant_subset_adjointKernel_ch12}
+    \lean{LindbladForm.mem_adjointKernel_of_mem_commutant,
+          LindbladForm.commutant_subset_adjointKernel}\leanok
+    \uses{def:adjoint_generator_ch12, def:commutant_ch12, def:adjoint_kernel_ch12}
+    If an observable commutes with $H$, with every $L_j$, and with every
+    $L_j^\dagger$, then it lies in $\ker(L^*)$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The Hamiltonian commutator term vanishes, and each adjoint dissipator
+    $\mathcal{D}_{L_j}^*(A)$ is zero under the commutation hypotheses.
+\end{proof}
+
 \begin{theorem}[Thm.~7.2: Adjoint kernel equals commutant (faithful state)]
     \label{thm:adjointKernel_eq_commutant}
     \lean{LindbladForm.mem_commutant_of_mem_adjointKernel_of_hasFaithfulStationaryState}\leanok
-    \uses{def:lindblad_form, def:is_gksl_generator}
+    \uses{def:lindblad_form, def:has_faithful_stationary_state_ch12,
+          def:commutant_ch12, def:adjoint_kernel_ch12}
     Let $L$ be a GKSL generator in Lindblad form with Hamiltonian $H$
     and Lindblad operators $\{L_j\}$.
     Define the adjoint generator $L^*$ by
@@ -1047,7 +1488,7 @@ which shows that such generators have the standard Lindblad form.
 \begin{theorem}[Thm.~7.2: Adjoint kernel equals commutant (full equivalence)]
     \label{thm:adjointKernel_eq_commutant_full}
     \lean{LindbladForm.adjointKernel_eq_commutant_of_hasFaithfulStationaryState}\leanok
-    \uses{thm:adjointKernel_eq_commutant, def:lindblad_form}
+    \uses{thm:adjointKernel_eq_commutant, def:commutant_ch12, def:adjoint_kernel_ch12}
     Under the same hypotheses as
     Theorem~\ref{thm:adjointKernel_eq_commutant},
     \[
@@ -1076,35 +1517,101 @@ which shows that such generators have the standard Lindblad form.
 The four equivalent reducibility conditions of
 \cite[Prop.~7.6]{Wolf2012Quantum} are as follows.
 
+\begin{definition}[Nontrivial projection]
+    \label{def:is_nontrivial_projection_ch12}
+    \lean{IsNontrivialProjection}\leanok
+    A projection is nontrivial if it is orthogonal and neither $0$ nor $\Id$.
+\end{definition}
+
 \begin{definition}[Rank-deficient fixed density]\label{def:has_rank_deficient_fixed_density}
     \lean{HasRankDeficientFixedDensity}\leanok
-    \uses{def:is_gksl_generator, def:exp_semigroup_ch12}
+    \uses{def:is_nontrivial_projection_ch12, def:exp_semigroup_ch12}
     Condition~(1): there exists a density matrix $\rho_0$ with nontrivial
     kernel such that $e^{tL}(\rho_0) = \rho_0$ for all $t \ge 0$.
 \end{definition}
 
 \begin{definition}[Rank-deficient kernel element]\label{def:has_rank_deficient_kernel_element}
     \lean{HasRankDeficientKernelElement}\leanok
-    \uses{def:is_gksl_generator}
+    \uses{def:is_nontrivial_projection_ch12}
     Condition~(2): there exists a density matrix $\rho_0$ with nontrivial
     kernel satisfying $L(\rho_0) = 0$.
 \end{definition}
 
 \begin{definition}[Invariant compression]\label{def:has_invariant_compression}
     \lean{HasInvariantCompression}\leanok
-    \uses{def:is_gksl_generator, def:exp_semigroup_ch12}
+    \uses{def:is_nontrivial_projection_ch12, def:exp_semigroup_ch12}
     Condition~(3): there exists a nontrivial orthogonal projector $P$ such
     that $e^{tL}(P \MN{D} P) \subseteq P \MN{D} P$ for all $t \ge 0$.
 \end{definition}
 
-\begin{definition}[Block-upper-triangular Lindblad form]\label{def:has_block_upper_triangular_lindblad}
+\begin{definition}[Block-upper-triangular Lindblad form]
+    \label{def:has_block_upper_triangular_lindblad}
     \lean{HasBlockUpperTriangularLindblad}\leanok
-    \uses{def:lindblad_form}
+    \uses{def:is_nontrivial_projection_ch12, def:lindblad_form}
     Condition~(4): there exists a nontrivial projector $P$ and a Lindblad form
     $(H, \{L_j\})$ for $L$ such that $(1-P)L_j P = 0$ and
     $(1-P)\kappa P = 0$ for all $j$, where
     $\kappa = iH + \frac{1}{2}\sum_j L_j^\dagger L_j$.
 \end{definition}
+
+\begin{definition}[Generator-preserved compression]
+    \label{def:generator_preserves_compression_ch12}
+    \lean{GeneratorPreservesCompression}\leanok
+    \uses{def:has_invariant_compression}
+    For a projection $P$, the generator preserves the compression $P M_d(\C) P$ if
+    \[
+      P\,L(PXP)\,P = L(PXP)
+    \]
+    for every $X \in M_d(\C)$.
+\end{definition}
+
+\begin{definition}[Reducible quantum dynamical semigroup]
+    \label{def:is_reducible_qds_ch12}
+    \lean{IsReducibleQDS}\leanok
+    \uses{def:has_invariant_compression}
+    A quantum dynamical semigroup is reducible if it has a nontrivial invariant compression.
+\end{definition}
+
+\begin{theorem}[Semigroup invariance implies generator invariance]
+    \label{thm:generator_preserves_compression_from_semigroup_ch12}
+    \lean{generatorPreservesCompression_of_semigroupPreservesCompression}\leanok
+    \uses{def:generator_preserves_compression_ch12, def:has_invariant_compression}
+    If the semigroup preserves $P M_d(\C) P$ for all nonnegative times, then the generator
+    preserves the same compression.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Differentiate the identity $P e^{tL}(PXP) P = e^{tL}(PXP)$ at $t=0$.
+\end{proof}
+
+\begin{theorem}[Generator invariance implies semigroup invariance]
+    \label{thm:semigroup_preserves_compression_from_generator_ch12}
+    \lean{semigroup_preserves_compression_of_generator}\leanok
+    \uses{def:generator_preserves_compression_ch12, def:has_invariant_compression}
+    If the generator preserves $P M_d(\C) P$, then so does the exponential semigroup
+    $e^{tL}$ for every $t \ge 0$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Apply the compression map termwise to the exponential series. Every iterate of $L$
+    preserves the compression, so the whole series does as well.
+\end{proof}
+
+\begin{theorem}[Reducibility as a generator-level criterion]
+    \label{thm:isReducibleQDS_iff_generator_preserves_compression_ch12}
+    \lean{isReducibleQDS_iff_generator_preserves_compression}\leanok
+    \uses{def:is_reducible_qds_ch12, def:generator_preserves_compression_ch12}
+    A quantum dynamical semigroup is reducible if and only if its generator preserves some
+    nontrivial compression.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Combine Theorems~\ref{thm:generator_preserves_compression_from_semigroup_ch12}
+    and~\ref{thm:semigroup_preserves_compression_from_generator_ch12}.
+\end{proof}
 
 \begin{theorem}[Prop.~7.6, (1)$\leftrightarrow$(2)]
     \label{thm:wolf_prop_7_6_one_iff_two}
@@ -1141,6 +1648,38 @@ The four equivalent reducibility conditions of
     preserve $P \MN{D} P$.
 \end{proof}
 
+\begin{theorem}[Invariant compression yields block-upper-triangular Lindblad data]
+    \label{thm:hasBlockUpperTriangularLindblad_of_hasInvariantCompression_ch12}
+    \lean{hasBlockUpperTriangularLindblad_of_hasInvariantCompression}\leanok
+    \uses{def:has_invariant_compression, def:has_block_upper_triangular_lindblad,
+          def:is_gksl_generator, def:generator_preserves_compression_ch12}
+    If a GKSL generator preserves a nontrivial compression, then its Lindblad data can be chosen
+    block-upper-triangular with respect to that compression.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    First pass from semigroup invariance to generator invariance by
+    Theorem~\ref{thm:generator_preserves_compression_from_semigroup_ch12}. The generator-level
+    vanishing condition forces $(1-P)L_jP = 0$ and $(1-P)\kappa P = 0$ through the sum-of-squares
+    identity.
+\end{proof}
+
+\begin{theorem}[Block-upper-triangular Lindblad data yield invariant compression]
+    \label{thm:hasInvariantCompression_of_hasBlockUpperTriangularLindblad_ch12}
+    \lean{hasInvariantCompression_of_hasBlockUpperTriangularLindblad}\leanok
+    \uses{def:has_invariant_compression, def:has_block_upper_triangular_lindblad,
+          def:generator_preserves_compression_ch12}
+    If the Lindblad data are block-upper-triangular with respect to a nontrivial projection,
+    then the associated semigroup preserves that compression.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The block-upper-triangular relations imply generator-level compression invariance; then apply
+    Theorem~\ref{thm:semigroup_preserves_compression_from_generator_ch12}.
+\end{proof}
+
 \begin{theorem}[Prop.~7.6, (3)$\leftrightarrow$(4)]
     \label{thm:wolf_prop_7_6_three_iff_four}
     \lean{wolf_prop_7_6_three_implies_four, wolf_prop_7_6_four_implies_three}\leanok
@@ -1153,13 +1692,8 @@ The four equivalent reducibility conditions of
 \end{theorem}
 
 \begin{proof}\leanok
-    (4)$\to$(3): block-upper-triangular Lindblad operators immediately
-    imply that $L$ preserves the compression $P \MN{D} P$, and hence
-    so does $e^{tL}$.
-    (3)$\to$(4): the semigroup preserving $P \MN{D} P$ implies
-    (by differentiation) that $L$ preserves $P \MN{D} P$; the vanishing of
-    $(1-P) L(P X P)$ for all $X$ forces $(1-P)L_j P = 0$ and
-    $(1-P)\kappa P = 0$ via the sum-of-squares identity.
+    Combine Theorems~\ref{thm:hasInvariantCompression_of_hasBlockUpperTriangularLindblad_ch12}
+    and~\ref{thm:hasBlockUpperTriangularLindblad_of_hasInvariantCompression_ch12}.
 \end{proof}
 
 \begin{theorem}[Prop.~7.6, (4)$\to$(2)]
@@ -1306,22 +1840,55 @@ The four equivalent reducibility conditions of
     commutant of the Lindblad span, contradicting triviality.
 \end{proof}
 
+\begin{theorem}[Large Kossakowski rank forbids block-upper-triangular form]
+    \label{thm:large_kossakowski_rank_no_block_ut_ch12}
+    \lean{large_kossakowski_rank_implies_no_blockUpperTriangular}\leanok
+    \uses{def:kossakowski_rank, def:has_block_upper_triangular_lindblad}
+    If the Kossakowski rank satisfies
+    \[
+      \operatorname{rank}(C) + d \ge d^2 + 1,
+    \]
+    then no block-upper-triangular Lindblad form exists.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    A block-upper-triangular traceless Lindblad family lies in a proper subspace whose dimension is
+    at most $d^2-d$. The formal rank minimization argument then contradicts the large-rank bound.
+\end{proof}
+
+\begin{theorem}[No block-upper-triangular Lindblad form implies non-reducibility]
+    \label{thm:not_isReducibleQDS_of_no_blockUpperTriangular_ch12}
+    \lean{not_isReducibleQDS_of_no_blockUpperTriangular_lindblad}\leanok
+    \uses{def:is_reducible_qds_ch12, def:has_block_upper_triangular_lindblad,
+          thm:hasBlockUpperTriangularLindblad_of_hasInvariantCompression_ch12}
+    If a GKSL generator admits no block-upper-triangular Lindblad form, then the associated
+    quantum dynamical semigroup is not reducible.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    A reducible semigroup would have an invariant compression, and
+    Theorem~\ref{thm:hasBlockUpperTriangularLindblad_of_hasInvariantCompression_ch12}
+    would then produce a block-upper-triangular Lindblad form.
+\end{proof}
+
 \begin{theorem}[Cor.~7.2(1): full algebra generation implies non-reducibility]
     \label{thm:not_isReducible_of_generates_full_algebra}
     \lean{not_isReducible_of_generates_full_algebra}\leanok
     \uses{def:is_gksl_generator, def:lindblad_form,
           thm:full_algebra_gen_no_block_ut,
-          thm:wolf_prop_7_6_three_iff_four}
+          thm:not_isReducibleQDS_of_no_blockUpperTriangular_ch12}
     If the algebra generated by $\{L_j\}$ and $\kappa$ is the entire
     matrix algebra $M_d(\C)$, then the QDS is not reducible.
     This is \cite[Cor.~7.2, condition~1]{Wolf2012Quantum}.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:full_algebra_gen_no_block_ut, thm:wolf_prop_7_6_three_iff_four}
+    \uses{thm:full_algebra_gen_no_block_ut,
+          thm:not_isReducibleQDS_of_no_blockUpperTriangular_ch12}
     By Theorem~\ref{thm:full_algebra_gen_no_block_ut}, no block-upper-triangular
-    decomposition exists.  By the equivalence of
-    Theorem~\ref{thm:wolf_prop_7_6_three_iff_four}, this rules out
-    reducibility.
+    decomposition exists. Then apply
+    Theorem~\ref{thm:not_isReducibleQDS_of_no_blockUpperTriangular_ch12}.
 \end{proof}
 
 \begin{theorem}[Cor.~7.2(2): Hermitian span + trivial commutant implies non-reducibility]
@@ -1330,32 +1897,30 @@ The four equivalent reducibility conditions of
     \uses{def:is_gksl_generator, def:is_lindblad_span_hermitian_closed,
           def:has_lindblad_span_trivial_commutant,
           thm:herm_span_trivial_commutant_no_block_ut,
-          thm:wolf_prop_7_6_three_iff_four}
+          thm:not_isReducibleQDS_of_no_blockUpperTriangular_ch12}
     If the Lindblad span is Hermitian-closed and its commutant is trivial,
     then the QDS is not reducible.
     This is \cite[Cor.~7.2, condition~2]{Wolf2012Quantum}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:herm_span_trivial_commutant_no_block_ut,
-          thm:wolf_prop_7_6_three_iff_four}
+          thm:not_isReducibleQDS_of_no_blockUpperTriangular_ch12}
     By Theorem~\ref{thm:herm_span_trivial_commutant_no_block_ut}, no
-    block-upper-triangular decomposition exists.  The equivalence of
-    Theorem~\ref{thm:wolf_prop_7_6_three_iff_four} then rules out
-    reducibility.
+    block-upper-triangular decomposition exists. Then apply
+    Theorem~\ref{thm:not_isReducibleQDS_of_no_blockUpperTriangular_ch12}.
 \end{proof}
 
 \begin{theorem}[Cor.~7.2(3): large Kossakowski rank implies non-reducibility]
     \label{thm:not_isReducible_of_kossakowski_rank_ge}
     \lean{not_isReducible_of_kossakowski_rank_ge}\leanok
     \uses{def:is_gksl_generator, def:kossakowski_rank,
-          def:has_block_upper_triangular_lindblad,
-          thm:wolf_prop_7_6_three_iff_four}
+          thm:large_kossakowski_rank_no_block_ut_ch12,
+          thm:not_isReducibleQDS_of_no_blockUpperTriangular_ch12}
     If $\rank(C) > d^2 - d$, then the QDS is not reducible.
     This is \cite[Cor.~7.2, condition~3]{Wolf2012Quantum}.
 \end{theorem}
 \begin{proof}\leanok
-    Rewrite the hypothesis as $\rank(C) + d \ge d^2 + 1$ and apply the
-    formal result that this large-rank condition rules out any nontrivial
-    block-upper-triangular Lindblad form.  Hence the generator is not
-    reducible.
+    The rank hypothesis rules out block-upper-triangular Lindblad data by
+    Theorem~\ref{thm:large_kossakowski_rank_no_block_ut_ch12}. Then apply
+    Theorem~\ref{thm:not_isReducibleQDS_of_no_blockUpperTriangular_ch12}.
 \end{proof}
