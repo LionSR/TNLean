@@ -17,7 +17,7 @@ canonical form II and at a renormalization fixed point admits a decomposition
 `A i = X * diagonal Λ * U i * X⁻¹`, where `Λ` has positive diagonal entries
 and the family `U` is isometric in the physical index.
 
-The proof is self-contained and packages the full appendix argument in the main
+The proof is self-contained and contains the full appendix argument in the main
 `MPS/RFP` development.
 
 ## Proof strategy

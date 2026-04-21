@@ -13,7 +13,7 @@ import Mathlib.LinearAlgebra.Matrix.ToLin
 /-!
 # Rectangular ranges for matrix multiplication
 
-This file packages basic linear-algebra facts about the range of the linear map
+This file collects basic linear-algebra facts about the range of the linear map
 `X ↦ P * X` on the matrix algebra `Matrix (Fin D) (Fin D) ℂ`.
 
 The key point is that left multiplication acts independently on columns:

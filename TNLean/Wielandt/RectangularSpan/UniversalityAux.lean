@@ -235,7 +235,7 @@ theorem eigenvector_mem_range_toLin_pow'
 
 /-- **Eigenvector rank-one matrices land in `wordSpan` via stabilized `rectSpan`.**
 
-This packages the two ingredients (`pow_mem_wordSpan` and `eigenvector_mem_range_toLin_pow`)
+This combines the two ingredients (`pow_mem_wordSpan` and `eigenvector_mem_range_toLin_pow`)
 together with the `rectSpan` universality:
 
 Given:

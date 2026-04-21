@@ -15,7 +15,7 @@ import Mathlib.Data.Real.Sqrt
 # Shared gauge-phase lemmas for MPS tensors
 
 This module collects the generic gauge-phase identities used by both the
-single-block proportional FT and the canonical-form equal-norm bridge.
+single-block proportional FT and the canonical-form equal-norm argument.
 -/
 
 open scoped Matrix BigOperators

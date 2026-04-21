@@ -5,22 +5,22 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.Analysis.Entropy
 
 /-!
-# Von Neumann entropy (namespace bootstrap)
+# Von Neumann entropy in the `Entropy` namespace
 
-This module exposes the von Neumann entropy of `TNLean.Analysis.Entropy`
-under the `Entropy` namespace. It is the first of three files in the
-`TNLean/Entropy/` bootstrap that unblocks the Simple MPDO RFP track
+This module places the von Neumann entropy of `TNLean.Analysis.Entropy`
+in the `Entropy` namespace. It is the first of three files in
+`TNLean/Entropy/` supporting the Simple MPDO RFP track
 (see issue #236, infrastructure request #613, and the umbrella task
 #239).
 
 The underlying eigenvalue-based definition, the nonnegativity proof,
 and the `S(ρ) ≤ log D` bound live in `TNLean.Analysis.Entropy`. To
 avoid maintaining two parallel spellings of the same definition, this
-module re-exports them under the `Entropy` namespace via Mathlib-style
+module introduces `Entropy`-namespace aliases for them via Mathlib-style
 `alias` declarations rather than wrapping them in `noncomputable def`s
 plus trivial unfolding `@[simp]` lemmas.
 
-## Main declarations (re-exports)
+## Main declarations
 
 * `Entropy.vonNeumannEntropy` — alias of `_root_.vonNeumannEntropy`,
   the entropy `S(ρ) = -tr(ρ log ρ)` of a Hermitian matrix.
