@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.ParentHamiltonian.Defs
 import TNLean.MPS.Periodic.Defs
+import TNLean.MPS.RFP.CommutingBridge
 import TNLean.MPS.RFP.Defs
 import TNLean.MPS.RFP.StructuralForm
 import TNLean.Axioms.Beigi
@@ -25,6 +26,8 @@ parent Hamiltonians (NNCPH).
 
 * `MPSTensor.IsCommutingParentHam.ham_comm_localTerm` — if local terms commute,
   the full Hamiltonian commutes with each local term.
+* `MPSTensor.ProductPairBridge.isNNCPH` — the product-pair witness packages
+  the NNCPH conclusion once the local-projector family is available.
 * `MPSTensor.rfp_implies_nncph` — scaffold for the RFP `⟹` NNCPH direction of
   Theorem 3.10.
 * `MPSTensor.nncph_implies_rfp` — scaffold for the NNCPH `⟹` RFP direction of
@@ -63,6 +66,18 @@ def IsNNCPH (A : MPSTensor d D) (N : ℕ) : Prop :=
 theorem IsNNCPH.isCommutingParentHam {A : MPSTensor d D} {N : ℕ} (h : IsNNCPH A N) :
     IsCommutingParentHam A 2 N :=
   h
+
+/-- A product-pair local-projector witness yields NNCPH on the same finite chain. -/
+theorem HasProductPairLocalProjectors.isNNCPH {A : MPSTensor d D} {N : ℕ}
+    (hPair : HasProductPairLocalProjectors A N) :
+    IsNNCPH A N :=
+  hPair.commuting_twoSite_localTerms
+
+/-- A product-pair witness on all finite chains yields NNCPH on each chain. -/
+theorem ProductPairBridge.isNNCPH {A : MPSTensor d D} (hBridge : ProductPairBridge A)
+    (N : ℕ) :
+    IsNNCPH A N :=
+  (hBridge.localProjectors N).isNNCPH
 
 /-- The commuting condition is symmetric: if `h i j` holds, then `h j i` holds. -/
 theorem IsCommutingParentHam.symm {A : MPSTensor d D} {L N : ℕ}

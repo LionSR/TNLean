@@ -871,9 +871,11 @@ interaction projectors commute with each other.
     \lean{MPSTensor.productPairState}
     \lean{MPSTensor.HasProductPairMPV}
     \lean{MPSTensor.HasProductPairLocalProjectors}
+    \lean{MPSTensor.HasProductPairLocalProjectors.isNNCPH}
     \lean{MPSTensor.ProductPairBridge}
     \lean{MPSTensor.ProductPairBridge.localTerm_idempotent}
     \lean{MPSTensor.ProductPairBridge.commuting_twoSite_localTerms}
+    \lean{MPSTensor.ProductPairBridge.isNNCPH}
     \leanok
     For an even chain of length $2N$, \texttt{productPairWindow} extracts the
     $p$-th adjacent two-site word from a configuration. Given a fixed two-site
@@ -887,8 +889,10 @@ interaction projectors commute with each other.
     \texttt{ProductPairBridge.commuting\_twoSite\_localTerms} then shows that
     these local terms commute for every chain length $N$, while
     \texttt{ProductPairBridge.localTerm\_idempotent} records their idempotence.
-    This is the formal bridge needed between the Appendix~B product-of-pairs
-    structure and the future proof of Theorem~\ref{thm:rfp_implies_nncph}.
+    Consequently the same data yields the nearest-neighbor commuting condition
+    on every finite chain. This isolates the remaining proof of
+    Theorem~\ref{thm:rfp_implies_nncph} to the extraction of such data from the
+    Appendix~B structural form.
 \end{remark}
 
 \begin{theorem}[NNCPH implies RFP]\label{thm:nncph_implies_rfp}
