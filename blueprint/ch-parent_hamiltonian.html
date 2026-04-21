@@ -5037,12 +5037,71 @@
 
 <p>A frustration-free Hamiltonian is <em>gapped</em> if the first excited eigenvalue is bounded away from zero uniformly in the chain length \(N\). For MPS parent Hamiltonians, the spectral gap follows from a martingale criterion due to Kastoryano and Lucia&#160;<span class="cite">
 </span>. </p>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:parent_ground_space_es_kernel">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">19.57</span>
+    <span class="theorem_thmtitle">Euclidean transport of the parent ground space</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-parent_hamiltonian.html#thm:parent_ground_space_es_kernel">#</a>
+    
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001044"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.parentHamiltonianGroundSpaceES_eq_ker_parentHamiltonianES" class="lean_decl">MPSTensor.parentHamiltonianGroundSpaceES_eq_ker_parentHamiltonianES</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   Under the canonical \(\ell ^2\) transport of the \(N\)-site state space, the transported parent ground space is exactly the kernel of the transported parent Hamiltonian. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000001044">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>This is an immediate unraveling of the definitions: both constructions are obtained from the same parent Hamiltonian by conjugating with the canonical identification between the site space and its Euclidean-space avatar, so the transported ground space is precisely the transported kernel. </p>
+
+  </div>
+</div>
 <div class="lemma_thmwrapper theorem-style-plain" id="lem:quadratic_form_to_norm_bound">
   <div class="lemma_thmheading">
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">19.57</span>
+    <span class="lemma_thmlabel">19.58</span>
     <span class="lemma_thmtitle">Quadratic form to norm bound</span>
     <div class="thm_header_extras">
 
@@ -5053,7 +5112,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:quadratic_form_to_norm_bound">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001044"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001045"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5081,18 +5140,18 @@
   </div>
   <div class="lemma_thmcontent">
   <p>  Let \(H\) be a positive semidefinite self-adjoint operator on a finite-dimensional complex Hilbert space, and suppose that </p>
-<div class="displaymath" id="a0000001045">
+<div class="displaymath" id="a0000001046">
   \[  \gamma \, \langle v, H v\rangle \le \langle H v, H v\rangle \qquad \text{for all } v,  \]
 </div>
 <p> i.e. \(H^2 \ge \gamma H\) as a quadratic form, for some \(\gamma {\gt} 0\). Then for every \(v\) in the orthogonal complement of \(\ker H\), </p>
-<div class="displaymath" id="a0000001046">
+<div class="displaymath" id="a0000001047">
   \[  \gamma \, \| v\|  \le \| H v\| .  \]
 </div>
 <p> In particular, every positive eigenvalue of \(H\) is at least \(\gamma \). The positive-semidefiniteness hypothesis is essential: without it, \(H = -\mathrm{Id}\) with \(\gamma = 2\) satisfies the quadratic-form inequality vacuously but violates the norm bound. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001044">
+<div class="proof_wrapper" id="a0000001045">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5109,7 +5168,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">19.58</span>
+    <span class="theorem_thmlabel">19.59</span>
     <span class="theorem_thmtitle">Martingale criterion for spectral gap</span>
     <div class="thm_header_extras">
 
@@ -5118,7 +5177,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#thm:martingale_criterion">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001047"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001048"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5136,7 +5195,7 @@
           
           <li><a href="ch-parent_hamiltonian.html#def:is_frustration_free">Definition 19.10</a></li>
           
-          <li><a href="ch-parent_hamiltonian.html#lem:quadratic_form_to_norm_bound">Lemma 19.57</a></li>
+          <li><a href="ch-parent_hamiltonian.html#lem:quadratic_form_to_norm_bound">Lemma 19.58</a></li>
           
         </ul>
     
@@ -5149,18 +5208,18 @@
   </div>
   <div class="theorem_thmcontent">
   <p>  Consider a frustration-free Hamiltonian </p>
-<div class="displaymath" id="a0000001048">
+<div class="displaymath" id="a0000001049">
   \[  H = \sum _{i=1}^n h_i  \]
 </div>
 <p> with projector interaction terms (\(h_i^2 = h_i\)). Suppose that for every pair of overlapping terms \(h_i, h_j\) there exist constants \(c_{ij} \ge 0\) and \(\gamma {\gt} 0\) satisfying </p>
-<div class="displaymath" id="a0000001049">
+<div class="displaymath" id="a0000001050">
   \[  h_i h_j + h_j h_i \ge -c_{ij}(1-\gamma )(h_i + h_j),  \]
 </div>
 <p> and suppose further that \(c_{ij} = c_{ji}\) for every overlapping pair \((i,j)\) and that \(\sum _{j:\, j \ne i} c_{ij} \le 1\) for every \(i\). Then the smallest positive eigenvalue of \(H\) satisfies \(\lambda _{\min }^+(H) \ge \gamma \). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001047">
+<div class="proof_wrapper" id="a0000001048">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5169,15 +5228,15 @@
   </div>
   <div class="proof_content">
   <p>The relevant geometry is a family of translated length-\(L\) projector windows on the ring; two terms \(h_i\) and \(h_j\) interact only when their supports overlap, equivalently when the cyclic distance \(d_N(i,j)\) is smaller than \(L\). From \(h_i^2 = h_i\), </p>
-<div class="displaymath" id="a0000001050">
+<div class="displaymath" id="a0000001051">
   \[  H^2 = \sum _i h_i + \sum _{\substack {i {\lt} j \\ \text{overlapping}}} (h_i h_j + h_j h_i) + \sum _{\substack {i {\lt} j \\ \text{non-overlapping}}} (h_i h_j + h_j h_i).  \]
 </div>
 <p> Non-overlapping projectors commute (\(h_i h_j = h_j h_i\)), so their product \(h_i h_j\) is itself a projector and hence PSD; thus the last sum is \(\ge 0\). For the overlapping sum, the martingale condition gives \(h_i h_j + h_j h_i \ge -c_{ij}(1-\gamma )(h_i + h_j)\). Summing over unordered pairs \(\{ i,j\} \): </p>
-<div class="displaymath" id="a0000001051">
+<div class="displaymath" id="a0000001052">
   \[  \sum _{\{ i,j\} , \text{overlap}} (h_i h_j + h_j h_i) \ge -(1-\gamma ) \sum _{\{ i,j\} , \text{overlap}} c_{ij}(h_i + h_j).  \]
 </div>
 <p> Collecting terms for each \(h_i\) and using the symmetry assumption \(c_{ij} = c_{ji}\): </p>
-<div class="displaymath" id="a0000001052">
+<div class="displaymath" id="a0000001053">
   \[  \sum _{\{ i,j\} , \text{overlap}} c_{ij}(h_i + h_j) = \sum _i \Bigl(\sum _{\substack {j \ne i \\ \text{overlap}}} c_{ij}\Bigr) h_i \le H,  \]
 </div>
 <p> where the last inequality uses the row-sum hypothesis \(\sum _{j \ne i} c_{ij} \le 1\). Combining, \(H^2 \ge H - (1-\gamma )H = \gamma H\). For any eigenvector with \(H\psi = \lambda \psi \) and \(\lambda {\gt} 0\), this gives \(\lambda ^2 \ge \gamma \lambda \), hence \(\lambda \ge \gamma \)&#160;<span class="cite">
@@ -5190,7 +5249,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">19.59</span>
+    <span class="lemma_thmlabel">19.60</span>
     <span class="lemma_thmtitle">Martingale condition for MPS</span>
     <div class="thm_header_extras">
 
@@ -5199,7 +5258,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:martingale_mps">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001053"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001054"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5215,7 +5274,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-parent_hamiltonian.html#thm:martingale_criterion">Theorem 19.58</a></li>
+          <li><a href="ch-parent_hamiltonian.html#thm:martingale_criterion">Theorem 19.59</a></li>
           
           <li><a href="ch-parent_hamiltonian.html#def:parent_interaction">Definition 19.6</a></li>
           
@@ -5239,11 +5298,11 @@
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>  Let \(A\) be injective and fix an interaction range \(L \ge 2\) as in Definition&#160;<a href="ch-parent_hamiltonian.html#def:parent_interaction">19.6</a>. Let \(h_L(A) := \Pi _{G_L(A)^\perp }\) be the \(L\)-site parent interaction, and for each chain length and site \(i\) let \(h_i\) denote its translate as in Definition&#160;<a href="ch-parent_hamiltonian.html#def:local_term_parent">19.8</a>. Then for every pair of overlapping terms \(h_i\) and \(h_j\) with \(0 {\lt} d_N(i,j) {\lt} L\), where \(d_N(i,j) := \min (|i-j|,\,  N-|i-j|)\) is the cyclic distance on the ring (i.e. whose \(L\)-site supports share at least one site under periodic boundary conditions), the martingale condition of Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:martingale_criterion">19.58</a> holds with constants \(c_{ij}\) and \(\gamma {\gt} 0\) depending only on \(A\) (not on \(N\)). <em>Note:</em> The proof below fully establishes the martingale constants only for \(L = 2\); for \(L {\gt} 2\) the existence of suitable constants is asserted without complete proof (see the remark at the end of the proof). Only the \(L = 2\) case is used in this chapter (Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:parent_hamiltonian_gapped">19.60</a>). (When \(L = 1\) the interaction terms have disjoint supports, so there are no overlapping pairs and the spectral gap follows directly without the martingale machinery.) </p>
+  <p>  Let \(A\) be injective and fix an interaction range \(L \ge 2\) as in Definition&#160;<a href="ch-parent_hamiltonian.html#def:parent_interaction">19.6</a>. Let \(h_L(A) := \Pi _{G_L(A)^\perp }\) be the \(L\)-site parent interaction, and for each chain length and site \(i\) let \(h_i\) denote its translate as in Definition&#160;<a href="ch-parent_hamiltonian.html#def:local_term_parent">19.8</a>. Then for every pair of overlapping terms \(h_i\) and \(h_j\) with \(0 {\lt} d_N(i,j) {\lt} L\), where \(d_N(i,j) := \min (|i-j|,\,  N-|i-j|)\) is the cyclic distance on the ring (i.e. whose \(L\)-site supports share at least one site under periodic boundary conditions), the martingale condition of Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:martingale_criterion">19.59</a> holds with constants \(c_{ij}\) and \(\gamma {\gt} 0\) depending only on \(A\) (not on \(N\)). <em>Note:</em> The proof below fully establishes the martingale constants only for \(L = 2\); for \(L {\gt} 2\) the existence of suitable constants is asserted without complete proof (see the remark at the end of the proof). Only the \(L = 2\) case is used in this chapter (Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:parent_hamiltonian_gapped">19.61</a>). (When \(L = 1\) the interaction terms have disjoint supports, so there are no overlapping pairs and the spectral gap follows directly without the martingale machinery.) </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001053">
+<div class="proof_wrapper" id="a0000001054">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5252,9 +5311,9 @@
   </div>
   <div class="proof_content">
   <p> Two terms \(h_i, h_j\) with \(0 {\lt} d_N(i,j) {\lt} L\) have supports overlapping in \(L - d_N(i,j)\) sites (where \(d_N\) is the cyclic distance on the \(N\)-site ring). Since \(A\) is injective, the intersection property (Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:ground_space_intersection">19.23</a>) gives the qualitative identity \(\ker (h_i) \cap \ker (h_j) = G_{[i,j+L-1]}(A)\). Because the local Hilbert space is finite-dimensional, the subspaces \(\ker (h_i)\) and \(\ker (h_j)\) live in a fixed finite-dimensional space. The intersection identity shows that \(\ker (h_i) \cap \ker (h_j)\) is exactly \(G_{[i,j+L-1]}(A)\); in particular there is no non-trivial vector in one kernel that is orthogonal to the other yet lies in both. Hence the Friedrichs angle \(\theta _{d_N(i,j)}\) between \(\ker (h_i)\) and \(\ker (h_j)\) is strictly positive (for the fixed injective tensor \(A\)). Because the angle depends only on the overlap pattern \(d_N(i,j) \in \{ 1,\ldots ,L-1\} \) and not on the absolute position, the number of distinct angles is at most \(L-1\). Let \(\alpha := \max _{1 \le s {\lt} L} \cos \theta _s {\lt} 1\) be the worst-case cosine of the Friedrichs angles. </p>
-<p><em>Row-sum bound.</em> Since \(L \ge 2\), each site \(i\) overlaps with at most \(2(L-1)\) neighbours (those \(j\) with \(0 {\lt} d_N(i,j) {\lt} L\)). Set \(c_{ij} := \tfrac {1}{2(L-1)}\) for every overlapping pair and \(c_{ij} := 0\) otherwise. These constants depend only on the cyclic distance \(d_N(i,j)\) and therefore satisfy \(c_{ij} = c_{ji}\). Then \(\sum _{j \ne i} c_{ij} \le 2(L-1)\cdot \tfrac {1}{2(L-1)} = 1\), satisfying the row-sum hypothesis of Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:martingale_criterion">19.58</a>. </p>
-<p><em>Positivity of \(\gamma \).</em> The Friedrichs angle bound gives, for each overlapping pair, \(h_i h_j + h_j h_i \ge -\alpha \, (h_i + h_j)\). The martingale inequality holds with \(\gamma = 1 - 2(L-1)\alpha \), which requires \(c_{ij}(1-\gamma ) = \tfrac {1}{2(L-1)} \cdot 2(L-1)\alpha = \alpha \) (matching the Friedrichs bound exactly). Since \(\alpha {\lt} 1\) (the Friedrichs angle is strictly positive), it remains to show \(\gamma {\gt} 0\), i.e. \(\alpha {\lt} \tfrac {1}{2(L-1)}\). In the blocked picture of Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:parent_hamiltonian_gapped">19.60</a>, \(L = 2\) and each site overlaps with at most \(2\) neighbours, so the condition reduces to \(\alpha {\lt} \tfrac {1}{2}\). For \(L = 2\) with an injective tensor, the two projectors \(h_i\) and \(h_{i+1}\) act on a finite-dimensional space, and the intersection property (Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:ground_space_intersection">19.23</a>) guarantees that \(\ker (h_i) \cap \ker (h_{i+1})\) is exactly \(G_{[i,i+2]}(A)\); hence \(\| P_i P_{i+1}\|  {\lt} 1\) (the Friedrichs cosine is strictly less than&#160;1). On a finite-dimensional space with two projectors, the Friedrichs cosine satisfies the quantitative bound \(\alpha \le 1 - c_{\min }\) where \(c_{\min } {\gt} 0\) depends on the minimal principal angle between the two kernels. The bound \(\alpha {\lt} \tfrac {1}{2}\) then follows from the Nachtergaele finite-size criterion&#160;<span class="cite">
-</span>, which establishes that the overlap \(\| P_i P_{i+1}\| \) for injective MPS is bounded away from \(1\) by a constant depending only on the tensor&#160;\(A\). For general \(L {\gt} 2\), the uniform constants \(c_{ij} = \tfrac {1}{2(L-1)}\) make the condition \(\alpha {\lt} \tfrac {1}{2(L-1)}\) increasingly restrictive as \(L\) grows. A more refined choice of separation-dependent constants \(c_{ij} = c_{d_N(i,j)}\) that weight small-separation (large-overlap) pairs more heavily can exploit the exponential decay of the Friedrichs cosine \(\alpha _s\) in \(s\) to satisfy the row-sum constraint. However, this refinement is not needed for the main result: in Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:parent_hamiltonian_gapped">19.60</a> below, the argument is applied only with \(L = 2\) in the blocked picture. In all cases, the constants depend only on \(A\) and are independent of&#160;\(N\)&#160;<span class="cite">
+<p><em>Row-sum bound.</em> Since \(L \ge 2\), each site \(i\) overlaps with at most \(2(L-1)\) neighbours (those \(j\) with \(0 {\lt} d_N(i,j) {\lt} L\)). Set \(c_{ij} := \tfrac {1}{2(L-1)}\) for every overlapping pair and \(c_{ij} := 0\) otherwise. These constants depend only on the cyclic distance \(d_N(i,j)\) and therefore satisfy \(c_{ij} = c_{ji}\). Then \(\sum _{j \ne i} c_{ij} \le 2(L-1)\cdot \tfrac {1}{2(L-1)} = 1\), satisfying the row-sum hypothesis of Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:martingale_criterion">19.59</a>. </p>
+<p><em>Positivity of \(\gamma \).</em> The Friedrichs angle bound gives, for each overlapping pair, \(h_i h_j + h_j h_i \ge -\alpha \, (h_i + h_j)\). The martingale inequality holds with \(\gamma = 1 - 2(L-1)\alpha \), which requires \(c_{ij}(1-\gamma ) = \tfrac {1}{2(L-1)} \cdot 2(L-1)\alpha = \alpha \) (matching the Friedrichs bound exactly). Since \(\alpha {\lt} 1\) (the Friedrichs angle is strictly positive), it remains to show \(\gamma {\gt} 0\), i.e. \(\alpha {\lt} \tfrac {1}{2(L-1)}\). In the blocked picture of Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:parent_hamiltonian_gapped">19.61</a>, \(L = 2\) and each site overlaps with at most \(2\) neighbours, so the condition reduces to \(\alpha {\lt} \tfrac {1}{2}\). For \(L = 2\) with an injective tensor, the two projectors \(h_i\) and \(h_{i+1}\) act on a finite-dimensional space, and the intersection property (Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:ground_space_intersection">19.23</a>) guarantees that \(\ker (h_i) \cap \ker (h_{i+1})\) is exactly \(G_{[i,i+2]}(A)\); hence \(\| P_i P_{i+1}\|  {\lt} 1\) (the Friedrichs cosine is strictly less than&#160;1). On a finite-dimensional space with two projectors, the Friedrichs cosine satisfies the quantitative bound \(\alpha \le 1 - c_{\min }\) where \(c_{\min } {\gt} 0\) depends on the minimal principal angle between the two kernels. The bound \(\alpha {\lt} \tfrac {1}{2}\) then follows from the Nachtergaele finite-size criterion&#160;<span class="cite">
+</span>, which establishes that the overlap \(\| P_i P_{i+1}\| \) for injective MPS is bounded away from \(1\) by a constant depending only on the tensor&#160;\(A\). For general \(L {\gt} 2\), the uniform constants \(c_{ij} = \tfrac {1}{2(L-1)}\) make the condition \(\alpha {\lt} \tfrac {1}{2(L-1)}\) increasingly restrictive as \(L\) grows. A more refined choice of separation-dependent constants \(c_{ij} = c_{d_N(i,j)}\) that weight small-separation (large-overlap) pairs more heavily can exploit the exponential decay of the Friedrichs cosine \(\alpha _s\) in \(s\) to satisfy the row-sum constraint. However, this refinement is not needed for the main result: in Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:parent_hamiltonian_gapped">19.61</a> below, the argument is applied only with \(L = 2\) in the blocked picture. In all cases, the constants depend only on \(A\) and are independent of&#160;\(N\)&#160;<span class="cite">
 </span>. </p>
 
   </div>
@@ -5264,7 +5323,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">19.60</span>
+    <span class="theorem_thmlabel">19.61</span>
     <span class="theorem_thmtitle">Spectral gap for MPS parent Hamiltonians</span>
     <div class="thm_header_extras">
 
@@ -5273,7 +5332,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#thm:parent_hamiltonian_gapped">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001054"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001055"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5289,15 +5348,15 @@
         
         <ul class="uses">
           
-          <li><a href="ch-parent_hamiltonian.html#thm:martingale_criterion">Theorem 19.58</a></li>
+          <li><a href="ch-parent_hamiltonian.html#thm:martingale_criterion">Theorem 19.59</a></li>
           
-          <li><a href="ch-parent_hamiltonian.html#lem:martingale_mps">Lemma 19.59</a></li>
+          <li><a href="ch-parent_hamiltonian.html#lem:martingale_mps">Lemma 19.60</a></li>
           
           <li><a href="ch-parent_hamiltonian.html#def:parent_hamiltonian">Definition 19.9</a></li>
           
-          <li><a href="ch-parent_hamiltonian.html#thm:martingale_criterion">Theorem 19.58</a></li>
+          <li><a href="ch-parent_hamiltonian.html#thm:martingale_criterion">Theorem 19.59</a></li>
           
-          <li><a href="ch-parent_hamiltonian.html#lem:martingale_mps">Lemma 19.59</a></li>
+          <li><a href="ch-parent_hamiltonian.html#lem:martingale_mps">Lemma 19.60</a></li>
           
         </ul>
     
@@ -5329,14 +5388,14 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   For an \(L_0\)-block injective MPS tensor \(A\), let \(L := 2L_0\) be the interaction range (two blocked sites in the \(L_0\)-blocked picture). There exists \(\gamma {\gt} 0\) such that for all \(N \ge 2L\) with \(L_0 \mid N\), </p>
-<div class="displaymath" id="a0000001055">
+<div class="displaymath" id="a0000001056">
   \[  \lambda _{\min }^+(H_N(A,L)) \ge \gamma ,  \]
 </div>
 <p> i.e. the parent Hamiltonian is uniformly gapped. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001054">
+<div class="proof_wrapper" id="a0000001055">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5344,7 +5403,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Since \(A\) is \(L_0\)-block injective, the blocked tensor \(A^{[L_0]}\) is injective with physical dimension \(d^{L_0}\) and bond dimension \(D\). Each blocked site represents \(L_0\) original sites, so the range-\(L = 2L_0\) interaction on the original chain corresponds exactly to a range-\(2\) interaction on the blocked chain (two blocked sites). Thus one passes to the blocked chain and applies the martingale estimate there with interaction range&#160;\(2\). <em>Remark on interaction range:</em> Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:unique_gs_injective">19.35</a> establishes ground-state uniqueness at range \(L_0{+}1\), whereas here we use range \(2L_0\). The ground spaces are nested: increasing the interaction range can only shrink (or preserve) the ground space, so uniqueness at range \(L_0{+}1\) implies uniqueness at range \(2L_0\). The larger range is needed here so that, after \(L_0\)-blocking, each blocked interaction term spans exactly \(2\) blocked sites, enabling the martingale machinery with \(L = 2\). The divisibility condition \(L_0 \mid N\) ensures the blocking is compatible with the periodic chain. Apply Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:martingale_mps">19.59</a> to the injective tensor \(A^{[L_0]}\) with range \(2\) to obtain the martingale constants \(c_{ij}\) and \(\gamma {\gt} 0\). These constants depend only on \(A^{[L_0]}\) (hence only on \(A\) and \(L_0\)), not on \(N\). Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:martingale_criterion">19.58</a> then gives the uniform gap \(\lambda _{\min }^+(H_N) \ge \gamma \)&#160;<span class="cite">
+  <p> Since \(A\) is \(L_0\)-block injective, the blocked tensor \(A^{[L_0]}\) is injective with physical dimension \(d^{L_0}\) and bond dimension \(D\). Each blocked site represents \(L_0\) original sites, so the range-\(L = 2L_0\) interaction on the original chain corresponds exactly to a range-\(2\) interaction on the blocked chain (two blocked sites). Thus one passes to the blocked chain and applies the martingale estimate there with interaction range&#160;\(2\). <em>Remark on interaction range:</em> Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:unique_gs_injective">19.35</a> establishes ground-state uniqueness at range \(L_0{+}1\), whereas here we use range \(2L_0\). The ground spaces are nested: increasing the interaction range can only shrink (or preserve) the ground space, so uniqueness at range \(L_0{+}1\) implies uniqueness at range \(2L_0\). The larger range is needed here so that, after \(L_0\)-blocking, each blocked interaction term spans exactly \(2\) blocked sites, enabling the martingale machinery with \(L = 2\). The divisibility condition \(L_0 \mid N\) ensures the blocking is compatible with the periodic chain. Apply Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:martingale_mps">19.60</a> to the injective tensor \(A^{[L_0]}\) with range \(2\) to obtain the martingale constants \(c_{ij}\) and \(\gamma {\gt} 0\). These constants depend only on \(A^{[L_0]}\) (hence only on \(A\) and \(L_0\)), not on \(N\). Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:martingale_criterion">19.59</a> then gives the uniform gap \(\lambda _{\min }^+(H_N) \ge \gamma \)&#160;<span class="cite">
 </span>. </p>
 
   </div>
@@ -5358,7 +5417,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">19.61</span>
+    <span class="lemma_thmlabel">19.62</span>
     <span class="lemma_thmtitle">Each BNT MPV lies in the Hamiltonian kernel</span>
     <div class="thm_header_extras">
 
@@ -5367,7 +5426,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:bnt_mpv_mem_ground_space">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001056"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001057"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5423,13 +5482,13 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   Let \(A = \bigoplus _{k=1}^g \mu _k A_k\) be in canonical form with BNT separation (Definition&#160;<a href="ch-bnt.html#def:normal_cf_bnt">13.3</a>), where \(\{ A_1,\ldots ,A_g\} \) is a basis of normal tensors (Definition&#160;<a href="ch-bnt.html#def:bnt">13.1</a>). For \(N \ge 2(L_0 + 1)\) (where \(L_0\) is the maximum injectivity length of the blocks) and each \(k = 1,\ldots ,g\), </p>
-<div class="displaymath" id="a0000001057">
+<div class="displaymath" id="a0000001058">
   \[  V^{(N)}(A_k) \in \ker (H_N(A,L_0{+}1)).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001056">
+<div class="proof_wrapper" id="a0000001057">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5438,7 +5497,7 @@
   </div>
   <div class="proof_content">
   <p> Each \(A_k\) is normal, so Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_annihilates">19.13</a> (applied to the block-diagonal structure) gives </p>
-<div class="displaymath" id="a0000001058">
+<div class="displaymath" id="a0000001059">
   \[  H_N(A,L_0{+}1)\, V^{(N)}(A_k) = 0  \]
 </div>
 <p> for every \(k = 1,\ldots ,g\). Hence \(V^{(N)}(A_k) \in \ker (H_N(A,L_0{+}1))\). </p>
@@ -5450,7 +5509,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">19.62</span>
+    <span class="theorem_thmlabel">19.63</span>
     <span class="theorem_thmtitle">Ground space equals span of BNT</span>
     <div class="thm_header_extras">
 
@@ -5459,7 +5518,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#thm:gs_eq_bnt_span">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001059"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001060"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5485,9 +5544,9 @@
           
           <li><a href="ch-parent_hamiltonian.html#def:ground_space_parent">Definition 19.2</a></li>
           
-          <li><a href="ch-parent_hamiltonian.html#lem:bnt_mpv_mem_ground_space">Lemma 19.61</a></li>
+          <li><a href="ch-parent_hamiltonian.html#lem:bnt_mpv_mem_ground_space">Lemma 19.62</a></li>
           
-          <li><a href="ch-parent_hamiltonian.html#lem:bnt_mpv_mem_ground_space">Lemma 19.61</a></li>
+          <li><a href="ch-parent_hamiltonian.html#lem:bnt_mpv_mem_ground_space">Lemma 19.62</a></li>
           
           <li><a href="ch-parent_hamiltonian.html#thm:unique_gs_normal">Theorem 19.36</a></li>
           
@@ -5525,13 +5584,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Let \(A = \bigoplus _{k=1}^g \mu _k A_k\) be in canonical form with BNT separation (Definition&#160;<a href="ch-bnt.html#def:normal_cf_bnt">13.3</a>), where \(\{ A_1,\ldots ,A_g\} \) is a basis of normal tensors (Definition&#160;<a href="ch-bnt.html#def:bnt">13.1</a>). For \(N \ge 2(L_0 + 1)\) (where \(L_0\) is the maximum injectivity length of the blocks), the ground space of the parent Hamiltonian satisfies </p>
-<div class="displaymath" id="a0000001060">
+<div class="displaymath" id="a0000001061">
   \[  \ker (H_N(A,L_0{+}1)) = \operatorname{span}\bigl\{ V^{(N)}(A_k) : k = 1,\ldots ,g\bigr\} .  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001059">
+<div class="proof_wrapper" id="a0000001060">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5539,8 +5598,8 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> By Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:bnt_mpv_mem_ground_space">19.61</a> and linearity of the kernel, we have </p>
-<div class="displaymath" id="a0000001061">
+  <p> By Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:bnt_mpv_mem_ground_space">19.62</a> and linearity of the kernel, we have </p>
+<div class="displaymath" id="a0000001062">
   \[  \operatorname{span}\bigl\{ V^{(N)}(A_k) : k = 1,\ldots ,g\bigr\}  \subseteq \ker (H_N(A,L_0{+}1)).  \]
 </div>
 <p>For the reverse inclusion, take \(\psi \in \ker (H_N(A,L_0{+}1))\). The block-diagonal structure of \(A\) gives, at the interaction range \(L_0{+}1\) used in the Hamiltonian, the containment \(G_{L_0+1}(A) \subseteq \sum _k G_{L_0+1}(A_k)\): any local ground state of \(A\) on \(L_0{+}1\) sites is a sum of local ground states of the individual blocks, because the off-diagonal blocks vanish in the transfer map (the canonical form and block separation (Theorem&#160;<a href="ch-block_perm.html#thm:block_sep">12.16</a>, Chapter&#160;<a href="ch-block_perm.html">12</a>) ensure that distinct blocks have orthogonal images under \(\Gamma _{L_0+1}\) for \(L_0{+}1 \ge L_0\), so the sum is in fact direct). Each normal block \(A_k\) has injectivity length \(L_k \le L_0\), so the \(L_k\)-blocked tensor \(A_k^{[L_k]}\) is injective. Applying Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:ground_space_intersection">19.23</a> to this injective blocked tensor (in unblocked coordinates, as in Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:unique_gs_injective">19.35</a>) and iterating across the chain for each block independently, and using Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:unique_gs_normal">19.36</a> for each normal block, the component of \(\psi \) associated with block \(A_k\) must be proportional to \(V^{(N)}(A_k)\). This gives the reverse inclusion&#160;<span class="cite">
