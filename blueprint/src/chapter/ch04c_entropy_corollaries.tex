@@ -64,24 +64,10 @@
     The unique eigenvalue equals the trace, hence equals $1$, and $-1 \cdot \log 1 = 0$.
 \end{proof}
 
-\begin{theorem}[Subadditivity with trivial middle factor]
-    \label{thm:entropy_subadditivity_trivial_middle}
-    \lean{Entropy.subadditivity_ssa_trivial_B}
-    \leanok
-    \uses{def:entropy_von_neumann_entropy, def:traceA_ABC, def:traceC_ABC}
-    Let $\rho_{A1C}$ be a density matrix on $A \otimes \C \otimes C$, where the middle factor
-    is one-dimensional. Then
-    \[
-        S(\rho_{A1C}) \le S(\rho_{A1}) + S(\rho_{1C}).
-    \]
-\end{theorem}
-
-\begin{proof}\leanok
-    Apply strong subadditivity with one-dimensional middle factor.
-    By Theorem~\ref{thm:trace_traceac_abc}, the reduced middle state has trace $1$,
-    and Theorem~\ref{thm:entropy_fin_one_zero} gives its entropy $0$.
-    \uses{thm:entropy_strong_subadditivity, thm:trace_traceac_abc, thm:entropy_fin_one_zero}
-\end{proof}
+The already-stated trivial-middle subadditivity theorem
+Theorem~\ref{thm:entropy_subadditivity_trivial_B} is now proved in Lean by deriving the
+middle-state trace-one condition from Theorem~\ref{thm:trace_traceac_abc} and then applying
+Theorem~\ref{thm:entropy_fin_one_zero}.
 
 \begin{theorem}[Trivial-middle mutual information is non-negative]
     \label{thm:entropy_mi_trivial_middle_nonneg}
@@ -96,6 +82,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    Rewrite the desired inequality as the subadditivity statement of the previous theorem.
-    \uses{thm:entropy_subadditivity_trivial_middle}
+    Rewrite the desired inequality as the already-stated trivial-middle
+    subadditivity theorem.
+    \uses{thm:entropy_subadditivity_trivial_B}
 \end{proof}
