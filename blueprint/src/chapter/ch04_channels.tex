@@ -53,6 +53,32 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     so the sum is PSD.
 \end{proof}
 
+\begin{theorem}[Channels are positive]\label{thm:channel_positive}
+    \lean{IsChannel.pos}
+    \leanok
+    \uses{def:channel, def:positive_map}
+    Every quantum channel is positive.
+\end{theorem}
+
+\begin{proof}\leanok\uses{thm:cp_is_positive}
+    A quantum channel is completely positive by definition, so
+    Theorem~\ref{thm:cp_is_positive} applies.
+\end{proof}
+
+\begin{theorem}[Positive maps preserve Hermiticity]
+    \label{thm:positive_map_preserves_hermitian}
+    \lean{IsPositiveMap.map_isHermitian}
+    \leanok
+    \uses{def:positive_map}
+    If $E$ is positive and $X = X^\dagger$, then $E(X) = E(X)^\dagger$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Decompose $X = X_+ - X_-$ into its positive and negative parts.
+    Positivity makes $E(X_+)$ and $E(X_-)$ positive semidefinite, hence Hermitian,
+    so their difference $E(X)$ is Hermitian.
+\end{proof}
+
 \begin{definition}[Quantum channel]\label{def:channel}
     \lean{IsChannel}
     \leanok
@@ -63,7 +89,7 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
 \end{definition}
 
 \begin{definition}[Density matrices]\label{def:density_matrices}
-    \lean{densityMatrices}
+    \lean{densityMatrices, mem_densityMatrices}
     \leanok
     The set of \emph{density matrices} in $\MN{D}$ is
     \[
@@ -128,9 +154,18 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
 
 \section{Irreducibility}
 
+\begin{definition}[Orthogonal projection]
+    \label{def:orthogonal_projection_channel}
+    \lean{IsOrthogonalProjection}
+    \leanok
+    A matrix $P \in \MN{D}$ is an \emph{orthogonal projection} if
+    $P = P^\dagger$ and $P^2 = P$.
+\end{definition}
+
 \begin{definition}[Irreducible map]\label{def:irreducible_cp}
     \lean{IsIrreducibleMap}
     \leanok
+    \uses{def:orthogonal_projection_channel}
     A linear map
     $E : \MN{D} \to \MN{D}$ is \emph{irreducible}
     if whenever $P$ is an orthogonal projection satisfying
@@ -453,13 +488,165 @@ both unital and trace-preserving.
 \begin{remark}[Bi-canonical special case]\label{rem:bicanonical_special_case}\leanok
     When a Kraus map happens to be both unital and trace-preserving
     (the ``bi-canonical'' case), the Kadison--Schwarz equality at peripheral
-    eigenvectors (Theorem~\ref{thm:ks_peripheral}) shows directly that the
+    eigenvectors (Theorem~\ref{thm:ks_peripheral_channels}) shows directly that the
     peripheral eigenvalues are closed under powers, and hence are roots of unity
     by Theorem~\ref{thm:peripheral_powers}. This is the simplest argument, but
     it requires both normalizations simultaneously. The more general adjoint-fixed-point
     formulation below covers the case where only unitality and a positive definite
     adjoint fixed point are available.
 \end{remark}
+
+\subsection{Kadison--Schwarz input for peripheral and fixed-point arguments}
+\label{subsec:ks_input_channels}
+
+\begin{definition}[Kraus maps, adjoints, and normalizations]
+    \label{def:kraus_map_channels}
+    \lean{KadisonSchwarz.krausMap, KadisonSchwarz.krausAdjointMap,
+          KadisonSchwarz.IsUnitalKraus, KadisonSchwarz.IsTPKraus}
+    \leanok
+    For operators $\{K_i\}_{i=0}^{d-1} \subseteq \MN{D}$, the associated
+    \emph{Kraus map} and \emph{adjoint Kraus map} are
+    \[
+        E(X) = \sum_i K_i X K_i^\dagger,
+        \qquad
+        E^*(X) = \sum_i K_i^\dagger X K_i.
+    \]
+    The Kraus family is \emph{unital} when $\sum_i K_i K_i^\dagger = \Id$ and
+    \emph{trace-preserving} when $\sum_i K_i^\dagger K_i = \Id$.
+\end{definition}
+
+\begin{theorem}[Kadison--Schwarz inequality]
+    \label{thm:kadison_schwarz_channels}
+    \lean{KadisonSchwarz.kadison_schwarz}
+    \leanok
+    \uses{def:kraus_map_channels}
+    Let $E(X) = \sum_i K_i X K_i^\dagger$ be a unital Kraus map.
+    Then for every $X \in \MN{D}$,
+    \[
+        E(X^\dagger X) \ge E(X)^\dagger E(X).
+    \]
+    This is \cite[Eq.~(5.2)]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Apply the unital completely positive map entrywise to the positive
+    $2 \times 2$ block matrix
+    $\bigl(\begin{smallmatrix} X^\dagger X & X^\dagger \\ X & \Id
+    \end{smallmatrix}\bigr)$ and take the Schur complement of the lower-right block.
+\end{proof}
+
+\begin{theorem}[Hilbert--Schmidt contraction]
+    \label{thm:hs_contraction_channels}
+    \lean{KadisonSchwarz.hilbertSchmidt_contraction}
+    \leanok
+    \uses{def:kraus_map_channels, thm:kadison_schwarz_channels}
+    If a Kraus map is both unital and trace-preserving, then
+    \[
+        \tr(E(X)^\dagger E(X)) \le \tr(X^\dagger X)
+    \]
+    for all $X \in \MN{D}$.
+\end{theorem}
+
+\begin{proof}\leanok\uses{thm:kadison_schwarz_channels}
+    The Kadison--Schwarz gap is positive semidefinite by
+    Theorem~\ref{thm:kadison_schwarz_channels}. Trace preservation then identifies
+    the traces of its two terms.
+\end{proof}
+
+\begin{theorem}[KS gap decomposition]
+    \label{thm:ks_gap_decomp_channels}
+    \lean{KadisonSchwarz.ks_gap_eq_sum_squares}
+    \leanok
+    \uses{def:kraus_map_channels}
+    For a unital Kraus map,
+    \[
+        E(X^\dagger X) - E(X)^\dagger E(X)
+        = \sum_i R_i^\dagger R_i,
+        \qquad
+        R_i := X K_i^\dagger - K_i^\dagger E(X).
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    Expand the right-hand side, distribute the products, and use
+    $\sum_i K_i K_i^\dagger = \Id$ to recover the Kadison--Schwarz gap.
+\end{proof}
+
+\begin{theorem}[KS equality implies Kraus commutation]
+    \label{thm:kraus_commute_channels}
+    \lean{KadisonSchwarz.kraus_commute_of_ks_equality}
+    \leanok
+    \uses{thm:ks_gap_decomp_channels}
+    Let $E$ be a unital Kraus map.
+    If $E(X^\dagger X) = E(X)^\dagger E(X)$, then
+    \[
+        X K_i^\dagger = K_i^\dagger E(X)
+        \qquad \text{for all } i.
+    \]
+\end{theorem}
+
+\begin{proof}\leanok\uses{thm:ks_gap_decomp_channels}
+    The Kadison--Schwarz gap is a sum of positive semidefinite terms
+    $\sum_i R_i^\dagger R_i$. If the gap vanishes, each $R_i$ must vanish.
+\end{proof}
+
+\begin{theorem}[KS equality for peripheral eigenvectors]
+    \label{thm:ks_peripheral_channels}
+    \lean{KadisonSchwarz.ks_equality_of_peripheral_eigenvector}
+    \leanok
+    \uses{def:kraus_map_channels, thm:kadison_schwarz_channels}
+    Let $E$ be a Kraus map that is both unital and trace-preserving.
+    If $E(X) = \mu X$ with $|\mu| = 1$, then
+    \[
+        E(X^\dagger X) = E(X)^\dagger E(X).
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    The Kadison--Schwarz gap is positive semidefinite by
+    Theorem~\ref{thm:kadison_schwarz_channels}. Trace preservation and the relation
+    $E(X)=\mu X$ with $|\mu|=1$ show that its trace is zero, hence the gap vanishes.
+\end{proof}
+
+\begin{theorem}[Left multiplicative identity from KS equality]
+    \label{thm:left_multiplicative_identity_channels}
+    \lean{KadisonSchwarz.multiplicative_domain_left}
+    \leanok
+    \uses{thm:kraus_commute_channels}
+    Let $E$ be a unital Kraus map.
+    If $E(X^\dagger X) = E(X)^\dagger E(X)$, then for every $Y \in \MN{D}$,
+    \[
+        E(X^\dagger Y) = E(X)^\dagger E(Y).
+    \]
+\end{theorem}
+
+\begin{proof}\leanok\uses{thm:kraus_commute_channels}
+    The commutation relation of Theorem~\ref{thm:kraus_commute_channels}
+    lets one move $X^\dagger$ past each Kraus operator inside the sum.
+\end{proof}
+
+\begin{definition}[Multiplicative domain]
+    \label{def:multiplicative_domain_channels}
+    \lean{KadisonSchwarz.multiplicativeDomain}
+    \leanok
+    \uses{def:kraus_map_channels}
+    The \emph{multiplicative domain} of a Kraus map $E$ is the set of matrices
+    that are simultaneously left- and right-multiplicative for $E$.
+\end{definition}
+
+\begin{theorem}[Multiplicative domain is a $*$-subalgebra]
+    \label{thm:md_star_subalgebra_channels}
+    \lean{KadisonSchwarz.multiplicativeDomainStarSubalgebra}
+    \leanok
+    \uses{def:multiplicative_domain_channels, def:kraus_map_channels}
+    For a unital Kraus map, the multiplicative domain is a $*$-subalgebra of
+    $\MN{D}$.
+\end{theorem}
+
+\begin{proof}\leanok
+    The multiplicative identities are stable under addition, multiplication,
+    and adjoint, and they contain the identity matrix.
+\end{proof}
 
 \subsection{Peripheral closure via adjoint fixed point}%
 \label{subsec:peripheral_closure_fixedpoint}
@@ -473,7 +660,7 @@ matching the weighted-trace argument in
     \label{lem:peripheral_closed_powers_irred_fp}
     \lean{MPSTensor.peripheralEigenvalues_pow_mem_of_irreducible_unital_of_adjoint_fixedPoint}
     \leanok
-    \uses{def:unital_kraus, def:kraus_adjoint_map, def:irreducible_cp}
+    \uses{def:kraus_map_channels, def:irreducible_cp}
     Let $E(X) = \sum_i K_i X K_i^\dagger$ be a Kraus map that is
     unital ($\sum_i K_i K_i^\dagger = \Id$), and assume:
     \begin{enumerate}
@@ -487,7 +674,8 @@ matching the weighted-trace argument in
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:kadison_schwarz, thm:psd_fp_pd_irred}
+    \uses{thm:kadison_schwarz_channels, thm:psd_fp_pd_irred,
+          thm:kraus_commute_channels, thm:left_multiplicative_identity_channels}
     Let $E(X) = \mu X$ with $|\mu| = 1$, and set
     $G := E(X^\dagger X) - E(X)^\dagger E(X)$.
     By Kadison--Schwarz, $G \ge 0$.
@@ -506,9 +694,9 @@ matching the weighted-trace argument in
     positive definite by irreducibility
     (Theorem~\ref{thm:psd_fp_pd_irred}).
     So $X$ is invertible.
-    By Theorem~\ref{thm:kraus_commute} (KS equality implies Kraus commutation),
+    By Theorem~\ref{thm:kraus_commute_channels} (KS equality implies Kraus commutation),
     $X$ commutes with each Kraus operator; iterating via the left
-    multiplicative identity (Theorem~\ref{thm:left_multiplicative_identity})
+    multiplicative identity (Theorem~\ref{thm:left_multiplicative_identity_channels})
     gives $E(X^n) = \mu^n X^n$, so $\mu^n$ is peripheral.
 \end{proof}
 
@@ -516,8 +704,7 @@ matching the weighted-trace argument in
     \label{thm:peripheral_roots_irred_fp}
     \lean{MPSTensor.peripheral_isRootOfUnity_of_irreducible_unital_of_adjoint_fixedPoint}
     \leanok
-    \uses{def:unital_kraus, def:kraus_adjoint_map, def:irreducible_cp,
-          def:peripheral_eigenvalues}
+    \uses{def:kraus_map_channels, def:irreducible_cp, def:peripheral_eigenvalues}
     Let $E(X) = \sum_i K_i X K_i^\dagger$ be a Kraus map that is
     unital, and assume that the adjoint Kraus map
     $E^*(X) = \sum_i K_i^\dagger X K_i$ has a positive definite fixed
@@ -706,6 +893,18 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
     \cite[Prop.~2.1]{Wolf2012Quantum}.
 \end{definition}
 
+\begin{theorem}[Choi matrix of the identity map]\label{thm:choi_matrix_id}
+    \lean{ChoiJamiolkowski.choiMatrix_id}
+    \leanok
+    \uses{def:choi_matrix, def:maximally_entangled}
+    The identity channel has Choi matrix
+    $\lvert\Omega\rangle\!\langle\Omega\rvert$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Apply the identity map in the definition of the Choi matrix.
+\end{proof}
+
 \begin{theorem}[Prop.~2.1: CP iff Choi matrix is PSD]\label{thm:cp_iff_choi_posSemidef}
     \lean{ChoiJamiolkowski.cp_iff_choi_posSemidef}
     \leanok
@@ -828,6 +1027,21 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
        = \operatorname{tr}(X)$.
 \end{proof}
 
+\begin{theorem}[Thm.~2.1: Unitality implies Kraus unital normalization]
+    \label{thm:kraus_sum_mul_conjTranspose_of_unital}
+    \lean{kraus_sum_mul_conjTranspose_of_unital}
+    \leanok
+    \uses{def:cp_map}
+    If $T(X) = \sum_i K_i X K_i^\dagger$ satisfies $T(\Id) = \Id$, then
+    \[
+        \sum_i K_i K_i^\dagger = \Id.
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    Evaluate the Kraus formula at the identity matrix.
+\end{proof}
+
 \begin{theorem}[Thm.~2.1: Unitary freedom in Kraus operators]\label{thm:kraus_same_map_of_unitary_combination}
     \lean{kraus_same_map_of_unitary_combination}
     \leanok
@@ -847,6 +1061,25 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
     Substitute the combination formula, expand the triple sum over
     $j,\ell,\ell'$, swap summation order, and use the entry-wise form
     of $U^\dagger U = \Id$ to collapse to $\ell = \ell'$ diagonal terms.
+\end{proof}
+
+\begin{theorem}[Isometric mixing preserves the Kraus map]
+    \label{thm:kraus_same_map_of_isometry_combination}
+    \lean{kraus_same_map_of_isometry_combination}
+    \leanok
+    \uses{def:cp_map}
+    Let $W$ be an isometry between two Kraus index spaces, so $W^\dagger W = \Id$.
+    If
+    \[
+        K_j = \sum_\ell W_{j\ell}\,\widetilde K_\ell,
+    \]
+    then the Kraus families $\{K_j\}$ and $\{\widetilde K_\ell\}$ define the
+    same completely positive map.
+\end{theorem}
+
+\begin{proof}\leanok
+    Expand the Kraus sums, interchange the finite summations, and use
+    $W^\dagger W = \Id$ to collapse the coefficient matrix.
 \end{proof}
 
 \begin{theorem}[Thm.~2.1: Orthonormal Kraus transition is unitary]\label{thm:kraus_transition_unitary_of_hs_orthonormal}
@@ -1093,6 +1326,38 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
     and sum over $k$ to recover $\sum_k K_k \rho K_k^\dagger$.
 \end{proof}
 
+\begin{theorem}[Existence of a Stinespring dilation]
+    \label{thm:exists_stinespring_dilation}
+    \lean{exists_stinespring_dilation}
+    \leanok
+    \uses{def:cp_map, def:stinespring_v}
+    Every completely positive map admits an ancilla dimension $r$, Kraus operators
+    $\{K_j\}_{j=0}^{r-1}$, and the concrete representation
+    $\pi(A) = A \otimes \Id_r$ such that
+    \[
+        E(A) = V^\dagger \pi(A) V.
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    Choose a Kraus representation of $E$ and apply the explicit Heisenberg-picture
+    Stinespring formula.
+\end{proof}
+
+\begin{theorem}[CPTP maps admit isometric Stinespring dilations]
+    \label{thm:exists_stinespring_isometry_of_cptp}
+    \lean{exists_stinespring_isometry_of_cptp}
+    \leanok
+    \uses{def:channel, def:stinespring_v}
+    Every quantum channel admits a Stinespring dilation whose matrix $V$ is an
+    isometry, equivalently $V^\dagger V = \Id$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Choose Kraus operators for the channel and use trace preservation to obtain
+    the Stinespring isometry condition $V^\dagger V = \Id$.
+\end{proof}
+
 %% =========================================================
 \section{POVMs and Naimark dilation (Wolf Thm.~2.6)}
 \label{sec:povm_naimark}
@@ -1110,13 +1375,30 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
 \end{definition}
 
 \begin{definition}[Naimark Kraus square roots]\label{def:naimark_kraus}
-    \lean{POVM.naimarkKraus}
+    \lean{POVM.naimarkKraus, POVM.naimarkKraus_spec}
     \leanok
     \uses{def:povm}
     For a POVM $\{E_i\}$, each effect $E_i \ge 0$ admits a square-root
     factorisation $E_i = M_i^\dagger M_i$ with $M_i \in \MN{D}$. The
     operators $M_i$ are the \emph{Naimark Kraus square roots}.
 \end{definition}
+
+\begin{theorem}[Naimark square roots satisfy the Kraus normalization]
+    \label{lem:naimark_square_root_normalization}
+    \lean{POVM.sum_naimarkKraus_conjTranspose_mul}
+    \leanok
+    \uses{def:naimark_kraus, def:povm}
+    For a POVM $\{E_i\}$ with square roots $E_i = M_i^\dagger M_i$,
+    one has
+    \[
+        \sum_i M_i^\dagger M_i = \Id.
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    Sum the identities $E_i = M_i^\dagger M_i$ and use the defining
+    resolution of the identity for the POVM.
+\end{proof}
 
 \begin{definition}[Naimark isometry]\label{def:naimark_isometry}
     \lean{POVM.naimarkIsometry}
@@ -1131,7 +1413,7 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
 \end{definition}
 
 \begin{definition}[Naimark projective measurement]\label{def:naimark_projection}
-    \lean{POVM.naimarkProjection}
+    \lean{POVM.naimarkProjection, POVM.naimarkProjection_apply}
     \leanok
     The \emph{Naimark projectors} on $\C^D \otimes \C^n$ are
     \[
@@ -1282,6 +1564,17 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
     sum $\sum_i \Phi_i$ is trace-preserving.
 \end{definition}
 
+\begin{definition}[Instrument operations]\label{def:instrument_operations}
+    \lean{Instrument.total, Instrument.update, Instrument.probability,
+          Instrument.posteriorState}
+    \leanok
+    \uses{def:instrument}
+    Associated to an instrument are the total channel $\sum_i \Phi_i$, the
+    unnormalized update $\rho \mapsto \Phi_i(\rho)$ for each outcome $i$, the
+    outcome probability $p_i(\rho) = \tr(\Phi_i(\rho))$, and the normalized
+    posterior state $\Phi_i(\rho) / p_i(\rho)$ whenever $p_i(\rho) \neq 0$.
+\end{definition}
+
 \begin{theorem}[Instrument total map is a channel]
     \label{thm:instrument_total_is_channel}
     \lean{Instrument.total_isChannel}
@@ -1395,15 +1688,40 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
     This is the quantity studied in \cite[§6.1.1]{Wolf2012Quantum}.
 \end{definition}
 
+\begin{remark}[Channel determinant as an operator determinant]
+    \label{rem:channel_det_linearMap_det}
+    \lean{channelDet_eq_linearMap_det}
+    \leanok
+    The channel determinant agrees with the ordinary determinant of the linear
+    endomorphism $T : \MN{D} \to \MN{D}$.
+\end{remark}
+
 \begin{definition}[Unitary channel]\label{def:unitary_channel}
-    \lean{unitaryChannel}\leanok
+    \lean{unitaryChannel, unitaryChannel_isChannel}\leanok
     For a unitary matrix $U \in \mathcal{U}(D)$, the
     \emph{unitary channel} is $T(\rho) = U\rho U^\dagger$.
+    It is automatically a quantum channel.
 \end{definition}
+
+\begin{theorem}[Unitary channels have determinant one]
+    \label{thm:channel_det_unitary_eq_one}
+    \lean{channelDet_unitary_eq_one, channelDet_norm_eq_one_of_unitaryChannel}
+    \leanok
+    \uses{def:channel_det, def:unitary_channel}
+    If $T(\rho) = U\rho U^\dagger$ is a unitary channel, then
+    $\det T = 1$ and hence $|\det T| = 1$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Vectorization identifies $T$ with a Kronecker product
+    $\overline U \otimes U$, whose determinant is
+    $\overline{\det U}^{\,D}(\det U)^D = 1$.
+\end{proof}
 
 \begin{theorem}[Thm.~6.1(1): Determinant bound for positive TP maps]
     \label{thm:channelDet_norm_le_one}
-    \lean{channelDet_norm_le_one_of_positive_tracePreserving}\leanok
+    \lean{channelDet_norm_le_one_of_positive_tracePreserving,
+          channelDet_norm_le_one_of_channel}\leanok
     \uses{def:channel_det, def:positive_map, def:trace_preserving}
     For any positive trace-preserving map $T : \MN{D} \to \MN{D}$,
     $|\det T| \le 1$.
@@ -1420,7 +1738,8 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
 
 \begin{theorem}[Thm.~6.1(2): Determinant one iff unitary channel]
     \label{thm:channelDet_norm_eq_one_iff_unitary}
-    \lean{channelDet_norm_eq_one_iff_exists_unitaryChannel}\leanok
+    \lean{channelDet_norm_eq_one_iff_exists_unitaryChannel,
+          channelDet_norm_eq_one_iff_exists_unitaryChannel_of_channel}\leanok
     \uses{def:channel, def:channel_det, def:unitary_channel}
     For a CPTP map $T : \MN{D} \to \MN{D}$,
     \[
@@ -1433,8 +1752,8 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
 
 \begin{proof}
     \leanok
-    \uses{thm:channelDet_norm_le_one}
-    Reverse direction: $|\det(U\,\cdot\, U^\dagger)| = |\det U|^{2D} = 1$.
+    \uses{thm:channelDet_norm_le_one, thm:channel_det_unitary_eq_one}
+    Reverse direction is Theorem~\ref{thm:channel_det_unitary_eq_one}.
     Forward direction: $|\det T| = 1$ together with $|\mu| \le 1$ for every
     eigenvalue $\mu$ (from trace preservation and positivity) forces every
     eigenvalue to satisfy $|\mu| = 1$. Hence $T$ is bijective. A bijective
@@ -1455,16 +1774,34 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
 
 \begin{definition}[Kraus fixed points]\label{def:kraus_fixed_points}
     \lean{Kraus.fixedPoints}\leanok
-    \uses{def:kraus_map}
+    \uses{def:kraus_map_channels}
     The \emph{fixed-point set} of a Kraus map
     $E(X) = \sum_i K_i X K_i^\dagger$ is
     $\mathrm{Fix}(E) = \{X \in \MN{D} : E(X) = X\}$.
 \end{definition}
 
+\begin{theorem}[Fixed points lie in the multiplicative domain]
+    \label{thm:fixedPoints_in_multiplicativeDomain}
+    \lean{Kraus.fixedPoints_in_multiplicativeDomain}
+    \leanok
+    \uses{def:kraus_fixed_points, def:multiplicative_domain_channels,
+          def:kraus_map_channels}
+    Let $E$ be a trace-preserving Kraus map whose Schrödinger-picture map has a
+    positive definite fixed point $\rho > 0$.
+    Then every adjoint fixed point belongs to the multiplicative domain of the
+    adjoint Kraus family.
+\end{theorem}
+
+\begin{proof}\leanok
+    The Kadison--Schwarz equality for fixed points forces both one-sided
+    multiplicative identities, so the fixed point lies in the full
+    multiplicative domain.
+\end{proof}
+
 \begin{theorem}[Thm.~6.12: Fixed points form a $*$-subalgebra]
     \label{thm:fixedPointsStarSubalgebra}
     \lean{Kraus.fixedPointsStarSubalgebra}\leanok
-    \uses{def:kraus_fixed_points, def:unital_kraus}
+    \uses{def:kraus_fixed_points, def:kraus_map_channels}
     Let $E$ be a unital Kraus map whose adjoint map $E^*$ has a positive
     definite fixed point $\rho > 0$.
     Then $\mathrm{Fix}(E)$ is a $*$-subalgebra of $\MN{D}$.
@@ -1472,24 +1809,23 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:kraus_commute, thm:kadison_schwarz}
+    \uses{thm:kadison_schwarz_channels, thm:left_multiplicative_identity_channels}
     Closure under addition and scalar multiplication is immediate from
     linearity.
     Closure under $\dagger$: if $E(X) = X$ then $E(X^\dagger) = X^\dagger$
-    because $E$ preserves Hermitian and skew-Hermitian parts.
-    Closure under multiplication: if $E(X) = X$ and $E(Y) = Y$, the
-    Kadison--Schwarz gap $E(X^\dagger X) - X^\dagger X$ is PSD and has
-    zero weighted trace against $\rho > 0$, so it vanishes.
-    This places $X$ in the multiplicative domain, and then
-    $E(XY) = E(X) E(Y) = XY$.
+    because fixed points are stable under adjoint.
+    Closure under multiplication: if $E(X) = X$ and $E(Y) = Y$, the weighted
+    Kadison--Schwarz argument gives
+    $E(X^\dagger X) = E(X)^\dagger E(X)$ and, applied to $X^\dagger$,
+    also $E(X X^\dagger) = E(X) E(X)^\dagger$. Thus $X$ lies in the
+    multiplicative domain, and Theorem~\ref{thm:left_multiplicative_identity_channels}
+    yields $E(XY) = E(X) E(Y) = XY$.
 \end{proof}
 
 \begin{remark}\leanok
-    The multiplicative-domain step in the proof above uses the left
-    multiplicative identity (Theorem~\ref{thm:left_multiplicative_identity})
-    from Chapter~\ref{ch:schwarz}, which appears later in the document. The
-    logical dependency is acyclic: Chapter~\ref{ch:schwarz} does not use any
-    result from~\S\ref{sec:fixed_point_algebra}.
+    Theorem~\ref{thm:fixedPoints_in_multiplicativeDomain} records the
+    trace-preserving / Heisenberg-picture counterpart of the same
+    multiplicative-domain argument.
 \end{remark}
 
 \begin{theorem}[Projected elements lie in the multiplicative domain]
@@ -1597,7 +1933,7 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
 
 \begin{definition}[Adjoint fixed points]\label{def:adjoint_fixed_points}
     \lean{Kraus.adjointFixedPoints}\leanok
-    \uses{def:kraus_adjoint_map}
+    \uses{def:kraus_map_channels}
     The \emph{adjoint fixed-point set}
     $\mathrm{Fix}(E^*) = \{X \in \MN{D} : E^*(X) = X\}$,
     where $E^*(X) = \sum_i K_i^\dagger X K_i$.
@@ -1605,8 +1941,8 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
 
 \begin{theorem}[Thm.~6.12 in the Heisenberg picture]
     \label{thm:adjointFixedPointsStarSubalgebra}
-    \lean{Kraus.adjointFixedPointsStarSubalgebra}\leanok
-    \uses{def:adjoint_fixed_points, def:tp_kraus}
+    \lean{Kraus.adjointFixedPointsStarSubalgebra, Kraus.fixedPoints_starSubalgebra}\leanok
+    \uses{def:adjoint_fixed_points, def:kraus_map_channels}
     If the Kraus map is trace-preserving and has a positive definite
     fixed point $\rho > 0$ with $E(\rho) = \rho$,
     then $\mathrm{Fix}(E^*)$ is a $*$-subalgebra of $\MN{D}$.
@@ -1619,8 +1955,8 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
 \end{proof}
 
 \begin{definition}[Kraus commutant]\label{def:kraus_commutant}
-    \lean{Kraus.krausCommutantStarSubalgebra}\leanok
-    \uses{def:kraus_map}
+    \lean{Kraus.krausCommutant, Kraus.krausCommutantStarSubalgebra}\leanok
+    \uses{def:kraus_map_channels}
     The \emph{Kraus commutant} is
     $\{K_i, K_i^\dagger\}' = \{X \in \MN{D} :
     [X, K_i] = [X, K_i^\dagger] = 0 \;\forall i\}$.
@@ -1630,7 +1966,7 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
 \begin{theorem}[Thm.~6.13: Adjoint fixed points = Kraus commutant]
     \label{thm:adjointFixedPoints_eq_krausCommutant}
     \lean{Kraus.adjointFixedPointsStarSubalgebra_eq_krausCommutantStarSubalgebra}\leanok
-    \uses{def:adjoint_fixed_points, def:kraus_commutant, def:tp_kraus}
+    \uses{def:adjoint_fixed_points, def:kraus_commutant, def:kraus_map_channels}
     Under the hypotheses of Theorem~\ref{thm:adjointFixedPointsStarSubalgebra},
     the adjoint fixed-point $*$-subalgebra equals the Kraus commutant:
     \[
@@ -1649,6 +1985,22 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
     with $X^\dagger X \in \mathrm{Fix}(E^*)$ the Kadison--Schwarz
     gap vanishes, which forces $X K_i = K_i X$ and
     $X K_i^\dagger = K_i^\dagger X$.
+\end{proof}
+
+\begin{theorem}[The Kraus commutant is the largest $*$-subalgebra inside the adjoint fixed points]
+    \label{thm:kraus_commutant_greatest}
+    \lean{Kraus.krausCommutantStarSubalgebra_isGreatest_adjointFixedPointStarSubalgebras}
+    \leanok
+    \uses{thm:adjointFixedPoints_eq_krausCommutant}
+    Under the hypotheses above, the Kraus commutant is the largest
+    $*$-subalgebra contained in the adjoint fixed-point set.
+\end{theorem}
+
+\begin{proof}\leanok
+    By Theorem~\ref{thm:adjointFixedPoints_eq_krausCommutant}, every
+    $*$-subalgebra inside the adjoint fixed points is automatically contained in
+    the Kraus commutant, while the Kraus commutant itself is such a
+    $*$-subalgebra.
 \end{proof}
 
 %% =========================================================
