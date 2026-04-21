@@ -247,7 +247,7 @@ The intended statement is that the corner
 
 Current blocker: the repository exposes the corner only as the `Submodule`
 `cornerSubmodule Q`, not yet as a unital `*`-algebra with unit `Q`, so the
-corner-fixed-point statement is not yet packaged at the right algebraic level.
+corner-fixed-point statement is not yet formulated at the right algebraic level.
 
 ### Wolf Theorem 6.14 (Wedderburn decomposition of fixed-point algebra) — PARTIALLY FORMALIZED
 
