@@ -213,16 +213,15 @@ finite-dimensional quantum systems.
     which gives $I(A{:}C) \ge 0$.
 \end{proof}
 
-\section{\texorpdfstring{\texttt{TNLean.Entropy}}{TNLean.Entropy} namespace bootstrap}
+\section{\texorpdfstring{\texttt{TNLean.Entropy}}{TNLean.Entropy} namespace}
 
-The \texttt{TNLean/Entropy/} directory (issue~\#613) provides a stable
-namespace surface for the Simple MPDO RFP track (issue~\#236). It
-re-exports the von Neumann entropy and mutual information under the
-\texttt{Entropy} namespace, wraps the sanctioned strong-subadditivity
-axiom, and also packages the sanctioned Hayashi SSA-equality
-characterization into a consumer-facing quantum-Markov-decomposition
-API. The external inputs are accepted as given; their full proofs are
-tracked separately in the entropy umbrella issues.
+The modules in \texttt{TNLean.Entropy} (issue~\#613) place the von
+Neumann entropy and mutual information in the \texttt{Entropy}
+namespace, restate the sanctioned strong-subadditivity axiom there,
+and introduce the name \texttt{QuantumMarkovDecomposition} for the
+Hayashi SSA-equality decomposition. The external inputs are accepted
+as given; their full proofs are tracked separately in the entropy
+umbrella issues.
 
 \begin{definition}[Von Neumann entropy, namespaced]\label{def:entropy_von_neumann_entropy}
     \lean{Entropy.vonNeumannEntropy}
@@ -247,7 +246,7 @@ tracked separately in the entropy umbrella issues.
     \emph{theorem} wrapper around the single sanctioned SSA axiom
     \texttt{strong\_subadditivity} of
     \texttt{TNLean/Axioms/Entropy.lean}; no new axiom is introduced by
-    the \texttt{TNLean.Entropy.*} bootstrap. The underlying axiom's
+    the \texttt{TNLean.Entropy.*} declarations. The underlying axiom's
     proof (Lieb--Ruskai 1973) is deferred to the umbrella entropy
     issue.
 \end{theorem}
@@ -258,8 +257,8 @@ tracked separately in the entropy umbrella issues.
     \leanok
     \uses{def:hayashi_markov_decomposition}
     The namespaced alias
-    \texttt{Entropy.QuantumMarkovDecomposition} is the stable
-    consumer-facing name for the decomposition record of
+    \texttt{Entropy.QuantumMarkovDecomposition} is the name used in the
+    \texttt{Entropy} namespace for the decomposition record of
     Definition~\ref{def:hayashi_markov_decomposition}.
 \end{definition}
 

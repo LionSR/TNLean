@@ -9,7 +9,7 @@ import TNLean.Channel.KrausFreedom
 /-!
 # Uniqueness properties of concrete Naimark dilations
 
-This file packages additional API around `TNLean.Channel.POVM`.
+This file provides additional API around `TNLean.Channel.POVM`.
 
 ## Main definitions
 

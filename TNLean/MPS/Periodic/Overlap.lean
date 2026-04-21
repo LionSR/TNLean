@@ -1832,15 +1832,23 @@ lemma sectorMatch_propagation
   -- `sectorGaugePhaseEquiv_succ_of_cyclicTransport`.
   sorry
 
-/-- Missing blocked-to-unblocked gauge bridge for the periodic-overlap Case 3.
+/-- Missing full-cycle contraction step for periodic-overlap Case 3.
 
-This is the precise API gap in Eqs. A.14-A.18 of arXiv:1708.00029.  The
-available cyclic-sector decomposition only exposes the compressed blocked
-tensors through projection trace identities.  To finish the bridge, the API
-must also provide one-site transition tensors between consecutive cyclic
-sectors, identify their `m`-fold cyclic products with `blocksA` and `blocksB`,
-and then telescope the sector phases extracted by injectivity contraction into
-a single global gauge with a unit-modulus scalar. -/
+At this point the sector transport has already been abstracted into
+`hBlockMatch`, so the remaining gap is no longer the Eq. A.8 staircase
+identification.  What is still needed from Eqs. A.14-A.18 of
+arXiv:1708.00029 is the contraction argument around the whole cycle:
+for each sector `u`, normality gives a repetition length after which
+`blocksA u` is injective, and one should use a right inverse from
+`decompositionMap` to contract the repeated blocked products and recover
+per-site proportionality with a single telescoped phase.
+
+The current chain library provides `decompositionMap` /
+`exists_rightInverse` in `MPS/Chain/OneSidedInverse.lean` and the two-site
+proportionality theorem `tensor_proportional` in
+`MPS/Chain/TensorEquality.lean`, but it does not yet provide the `m`-factor
+cyclic contraction theorem needed to pass from `hBlockMatch` to a global
+`RepeatedBlocks` witness. -/
 private lemma repeatedBlocks_of_blockedSectorGaugePhase
     [NeZero D] (A B : MPSTensor d D)
     {m : ℕ} [NeZero m]
@@ -1875,6 +1883,12 @@ private lemma repeatedBlocks_of_blockedSectorGaugePhase
     (hNondeg : ∀ u, dimA u ≠ 0)
     (hNormal : ∀ u, IsNormal (blocksA u)) :
     RepeatedBlocks A B := by
+  -- Missing ingredient: a reusable `m`-factor cyclic contraction theorem,
+  -- built from `decompositionMap`, that upgrades the per-sector blocked
+  -- gauge data in `hBlockMatch` to one global phase and one global gauge.
+  -- The current library only provides the two-site theorem
+  -- `tensor_proportional`, so the full-cycle step from Eqs. A.14-A.18 of
+  -- arXiv:1708.00029 still has to be formalized separately.
   sorry
 
 /-- **Per-site proportionality** (Eq. A.14 of arXiv:1708.00029):

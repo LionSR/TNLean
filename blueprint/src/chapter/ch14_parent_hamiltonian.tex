@@ -11,8 +11,17 @@ coefficient functions
 \]
 rather than as an explicit tensor product.
 
-\section{\texorpdfstring{Local ground space $G_L(A)$}{Local ground space G\_L(A)}}%
-\label{sec:ground_space_parent}
+\begin{definition}[$N$-site coefficient space]\label{def:nsite_space_parent}
+    \lean{MPSTensor.NSiteSpace}
+    \leanok
+    For local dimension $d$ and chain length $N$, the ambient coefficient space is
+    \[
+        \mathcal H_{N}^{(d)} := \{0,\ldots,d{-}1\}^{N} \to \C.
+    \]
+    This is the concrete model used throughout the chapter for periodic-chain states.
+\end{definition}
+
+\section{\texorpdfstring{Local ground space $G_L(A)$}{Local ground space G\_L(A)}}\label{sec:ground_space_parent}
 
 Fix an MPS tensor $A = \{A^i\}_{i=0}^{d-1}$ with $A^i \in \MN{D}$ and a block
 length $L \ge 1$.
@@ -45,6 +54,16 @@ $A^{\sigma(0)}\cdots A^{\sigma(L-1)}$.
     The chain length~$L$ is fixed by the surrounding formula, not by an extra
     label inside the diagram.
 \end{definition}
+
+\begin{lemma}[Evaluation formula]\label{lem:ground_space_map_apply}
+    \lean{MPSTensor.groundSpaceMap_apply}
+    \leanok
+    \uses{def:ground_space_map}
+    For every boundary matrix $X \in \MN{D}$ and every length-$L$ word $\sigma$,
+    \[
+        \Gamma_{L}(X)(\sigma) = \tr(A^{\sigma} X).
+    \]
+\end{lemma}
 
 \begin{definition}[Local ground space]\label{def:ground_space_parent}
     \lean{MPSTensor.groundSpace}
@@ -108,6 +127,18 @@ $A^{\sigma(0)}\cdots A^{\sigma(L-1)}$.
 The parent interaction at range $L$ is the orthogonal projector
 onto $G_L(A)^\perp$ in the $L$-site Euclidean space.
 
+\begin{definition}[Euclidean transport of the local ground space]\label{def:ground_space_es}
+    \lean{MPSTensor.groundSpaceES}
+    \leanok
+    \uses{def:nsite_space_parent, def:ground_space_parent}
+    Via the canonical identification between coefficient functions and the
+    Euclidean space \(\ell^{2}(\{0,\ldots,d{-}1\}^{L})\), one transports the local
+    ground space to a Hilbert-space subspace
+    \[
+        G_{L}^{\mathrm{ES}}(A) \subseteq \ell^{2}(\{0,\ldots,d{-}1\}^{L}).
+    \]
+\end{definition}
+
 \begin{definition}[Parent interaction]\label{def:parent_interaction}
     \lean{MPSTensor.parentInteraction}
     \leanok
@@ -132,6 +163,41 @@ onto $G_L(A)^\perp$ in the $L$-site Euclidean space.
     Since $h_L(A)$ is the orthogonal projector onto $G_L(A)^\perp$, it
     annihilates every element of $G_L(A)$.
 \end{proof}
+
+\begin{definition}[Periodic window extraction]\label{def:extract_window}
+    \lean{MPSTensor.extractWindow}
+    \leanok
+    \uses{def:nsite_space_parent}
+    For a configuration $\sigma \in \{0,\ldots,d{-}1\}^{N}$ on the periodic chain and a
+    starting site $i$, the extracted word
+    \[
+        \operatorname{extractWindow}_{L,i}(\sigma) \in \{0,\ldots,d{-}1\}^{L}
+    \]
+    records the entries of $\sigma$ on the cyclic interval $i,i+1,\ldots,i+L-1$ modulo $N$.
+\end{definition}
+
+\begin{definition}[Periodic window replacement]\label{def:replace_window}
+    \lean{MPSTensor.replaceWindow}
+    \leanok
+    \uses{def:extract_window}
+    If $L \le N$, the configuration
+    \[
+        \operatorname{replaceWindow}_{L,i}(\sigma,\tau)
+    \]
+    is obtained from $\sigma$ by replacing the cyclic window starting at $i$ by the
+    length-$L$ word $\tau$.
+\end{definition}
+
+\begin{lemma}[Extracting a replaced window]\label{lem:extract_window_replace_window}
+    \lean{MPSTensor.extractWindow_replaceWindow}
+    \leanok
+    \uses{def:extract_window, def:replace_window}
+    If $L \le N$, then extracting the same cyclic window after replacement recovers the
+    inserted word:
+    \[
+        \operatorname{extractWindow}_{L,i}(\operatorname{replaceWindow}_{L,i}(\sigma,\tau)) = \tau.
+    \]
+\end{lemma}
 
 For a periodic chain of length $N$, the parent Hamiltonian is the sum of
 translated copies of the local interaction.
@@ -232,6 +298,22 @@ chain.
 \subsection{Restriction maps}
 
 Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
+
+\begin{remark}[Word and restriction helper formulas]
+    \lean{List.ofFn_snoc}
+    \lean{MPSTensor.evalWord_ofFn_snoc}
+    \lean{MPSTensor.evalWord_ofFn_cons}
+    \lean{MPSTensor.restrictLastₗ}
+    \lean{MPSTensor.restrictFirstₗ}
+    \lean{MPSTensor.restrictLast_apply}
+    \lean{MPSTensor.restrictFirst_apply}
+    \leanok
+    Appending a last letter to a word corresponds to right multiplication by the
+    corresponding tensor letter, while prepending a first letter corresponds to left
+    multiplication. The restriction operators are the associated linear maps on
+    coefficient spaces, together with their pointwise formulas.
+\end{remark}
+
 \begin{definition}[Left restriction]\label{def:restrict_last}
     \lean{MPSTensor.restrictLast}
     \leanok
@@ -427,6 +509,36 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 
 \subsection{Unique ground state}
 
+\subsubsection{Contiguous and cyclic window operators}
+
+\begin{remark}[Contiguous window operators]
+    \lean{MPSTensor.contiguousCfg}
+    \lean{MPSTensor.contiguousRestrictₗ}
+    \lean{MPSTensor.contiguousRestrictₗ_apply}
+    \lean{MPSTensor.contiguousCfg_zero_full}
+    \lean{MPSTensor.contiguousRestrictₗ_restrictLast}
+    \lean{MPSTensor.contiguousRestrictₗ_restrictFirst}
+    \leanok
+    For a non-wrapping interval $[s,s+M-1] \subseteq \{0,\ldots,N-1\}$, one can insert a
+    length-$M$ word into that interval and keep the complementary sites fixed. The
+    associated restriction map evaluates an $N$-site state on those configurations.
+    The auxiliary lemmas record the full-window case $s=0$, $M=N$, and the
+    compatibility of this restriction with deleting the last or first site.
+\end{remark}
+
+\begin{remark}[Cyclic window operators]
+    \lean{MPSTensor.cyclicCfg}
+    \lean{MPSTensor.cyclicRestrictₗ}
+    \lean{MPSTensor.cyclicRestrictₗ_apply}
+    \lean{MPSTensor.cyclicCfg_eq_contiguousCfg}
+    \lean{MPSTensor.cyclicRestrictₗ_eq_contiguousRestrictₗ}
+    \leanok
+    On the periodic chain, a cyclic window starting at $i$ reads the sites
+    $i,i+1,\ldots,i+L-1$ modulo $N$. When this window does not wrap around the ring,
+    the cyclic construction agrees with the contiguous one, and so do the two
+    restriction maps.
+\end{remark}
+
 \begin{lemma}[Iterated contiguous-window intersection]\label{lem:contiguous_mem_ground_space}
     \lean{MPSTensor.contiguous_mem_groundSpace}
     \leanok
@@ -560,6 +672,28 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     coincide, so $\psi$ lies in $G_{K + L_0 + 1}(A)$.
 \end{proof}
 
+\begin{theorem}[Boundary matrix commutation from the wrapping window]\label{thm:boundary_matrix_commutes}
+    \lean{MPSTensor.boundary_matrix_commutes}
+    \leanok
+    \uses{def:ground_space_map, def:ground_space_parent, thm:ground_space_map_injective}
+    Let $A$ be injective with $D \ge 1$, and let $\psi = \Gamma_{N}(X)$ for some boundary matrix
+    $X \in \MN{D}$. If every cyclic restriction of length $L$ of $\psi$ lies in $G_{L}(A)$,
+    with $N \ge 2$ and $1 < L \le N$, then
+    \[
+        X A^{j} = A^{j} X
+        \qquad \text{for every } j = 0,\ldots,d-1.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The wrapping window across the boundary produces matrix identities of the form
+    $X M W = M Y$ for arbitrary test matrices $M$ and complementary words $W$.
+    Spanning first over the length-$(L-1)$ tails and then over the complementary words,
+    injectivity forces $(XM-MX)W = 0$ for every $W$, hence $XM = MX$ for every matrix
+    $M$. In particular, $X$ commutes with each letter $A^{j}$.
+\end{proof}
+
 \begin{definition}[MPV submodule]\label{def:mpv_submodule}
     \lean{MPSTensor.mpvSubmodule}
     \leanok
@@ -567,6 +701,17 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     The subspace spanned by the MPV state
     $V^{(N)}(A)(\sigma) = \tr(A^{\sigma_0}\cdots A^{\sigma_{N-1}})$.
 \end{definition}
+
+\begin{lemma}[The MPV is the ground-space map at the identity]
+    \label{lem:mpv_eq_ground_space_map_one}
+    \lean{MPSTensor.mpv_eq_groundSpaceMap_one}
+    \leanok
+    \uses{def:ground_space_map, def:mpv}
+    For every chain length $N$,
+    \[
+        V^{(N)}(A) = \Gamma_{N}(\Id).
+    \]
+\end{lemma}
 
 \begin{lemma}[MPV lies in the ground space]\label{lem:mpv_mem_ground_space}
     \lean{MPSTensor.mpv_mem_groundSpace}
@@ -616,6 +761,17 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     to that window lies in $G_L(A)$.
     When $N = 0$ or $L > N$, set $\mathcal{G}_{N,L}(A) := \top$ by convention.
 \end{definition}
+
+\begin{lemma}[The MPV satisfies every cyclic window constraint]
+    \label{lem:mpv_mem_chain_ground_space}
+    \lean{MPSTensor.mpv_mem_chainGroundSpace}
+    \leanok
+    \uses{def:chain_ground_space, lem:mpv_window_mem_ground_space}
+    If $0 < N$ and $L \le N$, then
+    \[
+        V^{(N)}(A) \in \mathcal G_{N,L}(A).
+    \]
+\end{lemma}
 
 \begin{theorem}[MPV nonvanishing for block-injective tensors]%
     \label{thm:mpv_ne_zero_blk_injective}
@@ -724,87 +880,86 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     Apply Theorem~\ref{thm:block_word_strip_central} with $M = A^i$.
 \end{proof}
 
-\begin{theorem}[Chain ground space for block-injective tensors]%
+\begin{theorem}[Chain ground space equals the MPV line in the injective case]%
     \label{thm:chain_ground_space_eq_mpv_blk}
     \lean{MPSTensor.chainGroundSpace_eq_mpvSubmodule}
-    \notready
-    \uses{def:chain_ground_space, def:mpv_submodule, def:l_blk_injective}
-    If $A$ is $L_0$-block-injective, $D \ge 1$, and the window size satisfies
-    $L \ge 2L_0$, then on the periodic chain with $N \ge 2$ sites,
-    the chain ground space equals the MPV submodule:
-    $\mathcal{G}_{N,L}(A) = \spn\bigl\{V^{(N)}(A)\bigr\}$.
+    \leanok
+    \uses{def:chain_ground_space, def:mpv_submodule, def:injective}
+    If $A$ is injective, $D \ge 1$, $N \ge 2$, and $1 < L \le N$, then
+    \[
+        \mathcal G_{N,L}(A) = \spn\bigl\{V^{(N)}(A)\bigr\}.
+    \]
 \end{theorem}
 
-\noindent\emph{Remark.} The injective special case ($L_0 = 1$) is proved;
-the block-injective generalization is future work.
+\begin{proof}
+    \leanok
+    \uses{lem:contiguous_mem_ground_space, thm:boundary_matrix_commutes,
+        thm:ground_space_map_injective, lem:mpv_mem_chain_ground_space}
+    Let $\psi \in \mathcal G_{N,L}(A)$. The non-wrapping window conditions and
+    Lemma~\ref{lem:contiguous_mem_ground_space} imply $\psi \in G_{N}(A)$, so
+    $\psi = \Gamma_{N}(X)$ for some boundary matrix $X$. The wrapping window condition now
+    applies Theorem~\ref{thm:boundary_matrix_commutes} and forces $X$ to commute with
+    every letter $A^{j}$. Since $A$ is injective, the letters generate the full matrix
+    algebra, hence $X$ is scalar. Therefore $\psi$ is proportional to $V^{(N)}(A)$, while
+    the reverse inclusion is Lemma~\ref{lem:mpv_mem_chain_ground_space}.
+\end{proof}
 
-\begin{theorem}[Chain ground space for normal tensors]%
+% TODO(#703,#704): current main still lacks the suffix-window / extend-right API
+% from the recent blocked-intersection audits, so the open-boundary regrowth layer
+% is not yet documented here as separate \lean{...} entries.
+\begin{theorem}[Normal-range reduction: containment in the MPV line]
+    \label{thm:normal_range_reduction_containment}
+    \lean{MPSTensor.chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction}
+    \notready
+    \uses{def:chain_ground_space, def:mpv_submodule, def:normal, def:l_blk_injective}
+    If $A$ is normal, $D \ge 1$, $L_0$-block-injective, with $N \ge 2$ and $L_0 < L \le N$, then
+    \[
+        \mathcal G_{N,L}(A) \subseteq \spn\bigl\{V^{(N)}(A)\bigr\}.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \notready
+    The remaining step is the periodic range-reduction theorem from
+    \cite[\S~IV.C]{Cirac2021Matrix}: one must show that the reduced cyclic window constraints
+    still force the same boundary-matrix commutation relation as in
+    Theorem~\ref{thm:boundary_matrix_commutes}.
+\end{proof}
+
+\begin{theorem}[Chain ground space equals the MPV line in the normal case]%
     \label{thm:chain_ground_space_eq_mpv_normal}
     \lean{MPSTensor.chainGroundSpace_eq_mpvSubmodule_normal}
     \notready
-    \uses{def:chain_ground_space, def:mpv_submodule, def:l_blk_injective,
-        def:normal}
-    If $A$ is normal, $L_0$-block-injective, and $D \ge 1$, the window requirement
-    is reduced from $2L_0$ to $L_0 < L$. The normality hypothesis enables this
-    reduction via the structure theory of normal MPS (peripheral spectrum,
-    canonical form); see Ref.~\cite[\S IV.C]{Cirac2021Matrix}. Concretely, the
-    window range can be reduced from $2L_0$ to $L_0 + 1$ via the
-    peripheral-spectrum structure of the transfer map
-    (Theorem~\ref{thm:ncf_overlap_tendsto_one}) and the block-separation
-    argument (Theorem~\ref{thm:block_sep}).
+    \uses{thm:normal_range_reduction_containment, lem:mpv_mem_chain_ground_space,
+        def:normal, def:l_blk_injective}
+    If $A$ is normal, $D \ge 1$, $L_0$-block-injective, with $N \ge 2$ and $L_0 < L \le N$, then
+    \[
+        \mathcal G_{N,L}(A) = \spn\bigl\{V^{(N)}(A)\bigr\}.
+    \]
 \end{theorem}
 
 \begin{theorem}[Unique ground state on the periodic chain]%
     \label{thm:ground_space_unique_periodic}
     \lean{MPSTensor.groundSpace_unique_periodic}
     \leanok
-    \uses{thm:ground_space_intersection, def:has_unique_ground_state,
-        lem:mpv_mem_ground_space, thm:mpv_ne_zero_blk_injective}
-    For an injective tensor~$A$ with $D \ge 1$ on a periodic chain of $N \ge L$ sites with
-    interaction range $L \ge 2$, the chain ground space is one-dimensional,
-    spanned by the MPV.
+    \uses{thm:chain_ground_space_eq_mpv_blk, def:has_unique_ground_state,
+        lem:mpv_eq_ground_space_map_one, thm:ground_space_map_injective}
+    For an injective tensor $A$ with $D \ge 1$, if $N \ge 2$ and $1 < L \le N$, then the periodic chain
+    ground space is one-dimensional.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    \uses{thm:ground_space_intersection, lem:contiguous_mem_ground_space,
-        lem:mpv_mem_ground_space, thm:ground_space_map_injective,
-        thm:mpv_ne_zero_blk_injective}
-    \textbf{Step 1 (iterate intersection).}
-    By Lemma~\ref{lem:contiguous_mem_ground_space}, any state $\psi$ in
-    the chain ground space lies in $G_N(A)$, so there exists
-    $X \in \MN{D}$ with
+    \uses{thm:chain_ground_space_eq_mpv_blk, lem:mpv_eq_ground_space_map_one,
+        thm:ground_space_map_injective}
+    By Theorem~\ref{thm:chain_ground_space_eq_mpv_blk}, the ground space is the line
+    \(\spn\bigl\{V^{(N)}(A)\bigr\}\). It remains to show that the MPV is nonzero. If
+    $V^{(N)}(A)=0$, then Lemma~\ref{lem:mpv_eq_ground_space_map_one} gives
     \[
-        \psi(\sigma_1,\ldots,\sigma_N) = \tr(A^{\sigma_1}\cdots A^{\sigma_N} X).
+        \Gamma_{N}(\Id) = \Gamma_{N}(0).
     \]
-    In tensor-network form, the boundary operator sits on the closing
-    virtual bond:
-    \[
-        \TNPeriodicGauge{N}{X}{1}
-    \]
-
-    \textbf{Step 2 (wrapping window forces $X$ scalar).}
-    The chain ground space condition from
-    Definition~\ref{def:chain_ground_space} requires $\psi|_W \in G_L(A)$
-    for every cyclic window $W$, including those that wrap around the
-    boundary. In particular, the window starting at site $N-1$ gives
-    \[
-        (\psi|_W)(i_N, i_1, \ldots, i_{L-1})
-        = \tr(A^{i_1} \cdots A^{i_{L-1}} \cdot X A^{i_N}),
-    \]
-    for some boundary matrix depending on $X$. Comparing this with the
-    representation $\psi = \Gamma_N(X)$ from Step~1 and using trace
-    cyclicity gives $A^j X = X A^j$ for every $j$. Since $A$ is injective,
-    the matrices $\{A^j : 0 \le j \le d-1\}$ span $\MN{D}$
-    (Definition~\ref{def:injective}), so $X$ commutes with every element of
-    $\MN{D}$. By Schur's lemma for the full matrix algebra, $X = \lambda I$
-    for some $\lambda \in \C$.
-
-    \textbf{Step 3 (conclude).}
-    $\psi(\sigma) = \lambda\,\tr(A^\sigma) = \lambda\,V^{(N)}(A)(\sigma)$,
-    so every ground state is proportional to the MPV. Since the MPV is
-    nonzero by Theorem~\ref{thm:mpv_ne_zero_blk_injective} applied with
-    $L_0 = 1$, the ground space is one-dimensional.
+    Since $A$ is injective and $N > 0$, Theorem~\ref{thm:ground_space_map_injective}
+    forces $\Id = 0$, a contradiction. Therefore the spanning line is one-dimensional.
 \end{proof}
 
 \begin{theorem}[Unique ground state for block-injective tensors]%
@@ -849,64 +1004,60 @@ interaction projectors commute with each other.
     See Ref.~\cite[Definition~3.9]{Cirac2021Matrix}.
 \end{definition}
 
+\begin{remark}[Elementary consequences of the commuting definition]
+    \lean{MPSTensor.IsNNCPH.isCommutingParentHam}
+    \lean{MPSTensor.IsCommutingParentHam.symm}
+    \lean{MPSTensor.IsCommutingParentHam.ham_comm_localTerm}
+    \leanok
+    The nearest-neighbor condition is simply the length-$2$ specialization of the general
+    commuting condition; the latter is symmetric in the two sites, and it implies that the
+    full parent Hamiltonian commutes with each local interaction term.
+\end{remark}
+
 \begin{theorem}[RFP implies NNCPH]\label{thm:rfp_implies_nncph}
     \lean{MPSTensor.rfp_implies_nncph}
     \leanok
     \uses{def:is_rfp, def:is_nncph, def:normal}
-    If $A$ is a normal renormalization fixed point,
-    then for every chain length $N \ge 2$ the parent Hamiltonian with
-    $L = 2$ has commuting local terms.
-    \textbf{Status:} Discharged via the sanctioned axiom
-    \texttt{Axioms.rfp\_to\_nncph\_commute} of
-    \texttt{TNLean/Axioms/Beigi.lean}, which records the content of
-    Theorem~3.10 of~\cite{Cirac2021Matrix} (Appendix~B
-    product-of-entangled-pairs structural form). Per
-    \cite[\S3.3]{Cirac2021Matrix}, this direction is *trivial from
-    Theorem~3.10* and is **not** gated on Beigi~(2012).
+    If $A$ is a normal renormalization fixed point, then for every chain length
+    $N \ge 2$ the parent Hamiltonian with $L = 2$ has commuting local terms.
+    In the current formal development, this implication is supplied by the sanctioned
+    axiom recording the product-of-entangled-pairs description from Appendix~B of
+    Theorem~3.10 in~\cite{Cirac2021Matrix}.
 \end{theorem}
 
-\begin{remark}[Product-pair bridge for future NNCPH proofs]%
+\begin{remark}[Product-pair data for future NNCPH proofs]%
     \label{rem:product_pair_bridge}
     \lean{MPSTensor.productPairWindow}
     \lean{MPSTensor.productPairState}
     \lean{MPSTensor.HasProductPairMPV}
     \lean{MPSTensor.HasProductPairLocalProjectors}
+    \lean{MPSTensor.HasProductPairLocalProjectors.isNNCPH}
     \lean{MPSTensor.ProductPairBridge}
     \lean{MPSTensor.ProductPairBridge.localTerm_idempotent}
     \lean{MPSTensor.ProductPairBridge.commuting_twoSite_localTerms}
+    \lean{MPSTensor.ProductPairBridge.isNNCPH}
     \leanok
-    For an even chain of length $2N$, \texttt{productPairWindow} extracts the
-    $p$-th adjacent two-site word from a configuration. Given a fixed two-site
-    amplitude $\psi_2$, \texttt{productPairState} is the chain amplitude
-    obtained by repeating $\psi_2$ on every bond.
-    A witness \texttt{ProductPairBridge A} packages two ingredients: first, the
-    statement that the MPV coefficients of $A$ agree with such a repeated
-    product-pair state on every even chain; second, a family of idempotent
-    chain-level projectors whose values are exactly the nearest-neighbor local
-    terms. The theorem
-    \texttt{ProductPairBridge.commuting\_twoSite\_localTerms} then shows that
-    these local terms commute for every chain length $N$, while
-    \texttt{ProductPairBridge.localTerm\_idempotent} records their idempotence.
-    This is the formal bridge needed between the Appendix~B product-of-pairs
-    structure and the future proof of Theorem~\ref{thm:rfp_implies_nncph}.
+    On an even chain, one can extract the $p$-th adjacent two-site word of a
+    configuration and compare the MPS coefficients with a repeated two-site pair state.
+    The corresponding data record both that coefficient identity and a
+    family of idempotent chain-level projectors whose values are the nearest-neighbor
+    local terms. The final theorem in these data shows that these local terms commute.
+    Consequently the same data yields the nearest-neighbor commuting condition
+    on every finite chain. This isolates the remaining proof of
+    Theorem~\ref{thm:rfp_implies_nncph} to the extraction of such data from the
+    Appendix~B structural form.
 \end{remark}
 
 \begin{theorem}[NNCPH implies RFP]\label{thm:nncph_implies_rfp}
     \lean{MPSTensor.nncph_implies_rfp}
     \leanok
     \uses{def:is_rfp, def:is_nncph, def:normal}
-    If $A$ is normal, in left-canonical form, and its parent Hamiltonian
-    with $L = 2$ has commuting local terms for every chain length
-    $N \ge 2$, then $A$ is a renormalization fixed point (RFP).
-    \textbf{Status:} Discharged via the sanctioned axiom
-    \texttt{Axioms.beigi\_nncph\_to\_rfp} of
-    \texttt{TNLean/Axioms/Beigi.lean}, which records the ground-space
-    characterisation of Beigi (J.~Phys.~A 45, 025306, 2012) needed for
-    the reverse direction of~\cite[Theorem~3.10]{Cirac2021Matrix}. In the
-    current formal normalization, the statement also includes an
-    \texttt{IsLeftCanonical} hypothesis: the
-    commuting-parent-Hamiltonian condition is invariant under nonzero
-    scalar rescaling, while transfer-map idempotence is not.
+    If $A$ is normal, in left-canonical form, and its parent Hamiltonian with
+    $L = 2$ has commuting local terms for every chain length $N \ge 2$, then $A$
+    is a renormalization fixed point. In the current formal development, this
+    implication is supplied by the sanctioned axiom recording Beigi's ground-space
+    characterization of one-dimensional commuting nearest-neighbor Hamiltonians; the
+    left-canonical hypothesis fixes the normalization of the transfer map.
 \end{theorem}
 
 \section{Decorrelation and commuting parent Hamiltonians}%
@@ -952,6 +1103,22 @@ Appendix~D, \S D.2 of~\cite{Cirac2021Matrix}.
     \uses{def:has_commuting_parent_ham}
     Take $P_{AX} = P_{XB} = P_K$. Their commutativity is immediate, and the
     product identity is exactly the assumed idempotence of $P_K$.
+\end{proof}
+
+\begin{lemma}[Cancellation for commuting idempotents]
+    \label{lem:comp_complement_comm_zero}
+    \lean{LinearMap.comp_complement_comm_zero}
+    \leanok
+    If $P$ and $Q$ are commuting idempotents, then
+    \[
+        Q \circ (1 - P \circ Q) \circ P = 0.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Expand the middle factor, use commutativity to rewrite $QPQP$ as $QPPQ$, and
+    then apply idempotence of $P$ and $Q$.
 \end{proof}
 
 \begin{theorem}[Idempotence of the product projector]%
@@ -1110,7 +1277,8 @@ Appendix~D, \S D.2 of~\cite{Cirac2021Matrix}.
     \label{thm:commuting_ham_is_decorrelated}
     \lean{Decorrelation.commutingHam_isDecorrelated}
     \leanok
-    \uses{def:is_decorrelated, def:has_commuting_parent_ham}
+    \uses{def:is_decorrelated, def:has_commuting_parent_ham,
+        lem:comp_complement_comm_zero}
     If a subspace $K$ has a commuting parent Hamiltonian decomposition
     $P_K = P_{AX} \circ P_{XB}$ with $[P_{AX}, P_{XB}] = 0$, and
     $A$-observables commute with $P_{XB}$ while $B$-observables commute
@@ -1207,6 +1375,22 @@ For MPS parent Hamiltonians, the spectral gap follows from a martingale
 criterion due to Kastoryano and
 Lucia~\cite{Kastoryano2018Martingale}.
 
+\begin{definition}[Transported parent ground space]\label{def:parent_ground_space_es}
+    \lean{MPSTensor.parentHamiltonianGroundSpaceES}
+    \leanok
+    \uses{def:parent_hamiltonian, def:nsite_space_parent}
+    Denote by $\mathcal G_{N,L}^{\mathrm{ES}}(A)$ the parent ground space after
+    identifying the coefficient space with its Euclidean $\ell^{2}$-model.
+\end{definition}
+
+\begin{definition}[Transported parent Hamiltonian]\label{def:parent_hamiltonian_es}
+    \lean{MPSTensor.parentHamiltonianES}
+    \leanok
+    \uses{def:parent_hamiltonian, def:nsite_space_parent}
+    Denote by $H_{N,L}^{\mathrm{ES}}(A)$ the conjugate of $H_{N}(A,L)$ by the
+    canonical identification between the coefficient space and its Euclidean avatar.
+\end{definition}
+
 \begin{theorem}[Euclidean transport of the parent ground space]
     \label{thm:parent_ground_space_es_kernel}
     \lean{MPSTensor.parentHamiltonianGroundSpaceES_eq_ker_parentHamiltonianES}
@@ -1223,6 +1407,15 @@ Lucia~\cite{Kastoryano2018Martingale}.
     identification between the site space and its Euclidean-space avatar, so the
     transported ground space is precisely the transported kernel.
 \end{proof}
+
+\begin{lemma}[Membership in the transported parent ground space]
+    \label{lem:mem_parent_ground_space_es}
+    \lean{MPSTensor.mem_parentHamiltonianGroundSpaceES_iff}
+    \leanok
+    \uses{thm:parent_ground_space_es_kernel}
+    A vector belongs to the transported parent ground space exactly when the transported
+    parent Hamiltonian annihilates it.
+\end{lemma}
 
 \begin{lemma}[Quadratic form to norm bound]\label{lem:quadratic_form_to_norm_bound}
     \lean{FrustrationFree.spectralGap_of_martingale}
@@ -1415,49 +1608,50 @@ Lucia~\cite{Kastoryano2018Martingale}.
     of~$N$~\cite{Fannes1992Finitely, Kastoryano2018Martingale}.
 \end{proof}
 
-\begin{theorem}[Spectral gap for MPS parent Hamiltonians]\label{thm:parent_hamiltonian_gapped}
-    \lean{MPSTensor.parentHamiltonian_gapped}
+\begin{theorem}[Explicit Friedrichs-angle gap bound]
+    \label{thm:friedrichs_gap_bound}
+    \lean{MPSTensor.parentHamiltonianES_gap_bound_of_friedrichs}
     \notready
-    \uses{thm:martingale_criterion, lem:martingale_mps,
-        def:parent_hamiltonian}
-    For an $L_0$-block injective MPS tensor $A$, let
-    $L := 2L_0$ be the interaction range (two blocked sites in the
-    $L_0$-blocked picture).
-    There exists $\gamma > 0$ such that for all $N \ge 2L$ with
-    $L_0 \mid N$,
+    \uses{def:parent_ground_space_es, def:parent_hamiltonian_es,
+        thm:parent_ground_space_es_kernel}
+    For an injective tensor $A$ and a range $L > 1$, the current Lean statement gives
+    the missing analytic estimate with the explicit constant
     \[
-        \lambda_{\min}^+(H_N(A,L)) \ge \gamma,
+        \gamma_{L} := \frac{1}{4L} > 0.
     \]
-    i.e.\ the parent Hamiltonian is uniformly gapped.
+    Concretely, it asserts that if $N \ge 2L$ and
+    $v \in (\mathcal G_{N,L}^{\mathrm{ES}}(A))^{\perp}$, then
+    \[
+        \gamma_{L} \, \|v\| \le \|H_{N,L}^{\mathrm{ES}}(A) v\|.
+    \]
 \end{theorem}
 
 \begin{proof}
-    \uses{thm:martingale_criterion, lem:martingale_mps}
     \notready
-    Since $A$ is $L_0$-block injective, the blocked tensor
-    $A^{[L_0]}$ is injective with physical dimension $d^{L_0}$ and bond
-    dimension $D$. Each blocked site represents $L_0$ original sites,
-    so the range-$L = 2L_0$ interaction on the original chain corresponds
-    exactly to a range-$2$ interaction on the blocked chain (two blocked
-    sites). Thus one passes to the blocked chain and applies the martingale
-    estimate there with interaction range~$2$.
-    \emph{Remark on interaction range:}
-    Theorem~\ref{thm:unique_gs_injective} establishes ground-state
-    uniqueness at range $L_0{+}1$, whereas here we use range $2L_0$.
-    The ground spaces are nested: increasing the interaction range can
-    only shrink (or preserve) the ground space, so uniqueness at range
-    $L_0{+}1$ implies uniqueness at range $2L_0$. The larger range is
-    needed here so that, after $L_0$-blocking, each blocked interaction
-    term spans exactly $2$ blocked sites, enabling the martingale
-    machinery with $L = 2$. The divisibility condition $L_0 \mid N$ ensures the blocking
-    is compatible with the periodic chain.
-    Apply Lemma~\ref{lem:martingale_mps} to the
-    injective tensor $A^{[L_0]}$ with range $2$ to obtain the martingale
-    constants $c_{ij}$ and $\gamma > 0$. These constants depend only on
-    $A^{[L_0]}$ (hence only on $A$ and $L_0$), not on $N$.
-    Theorem~\ref{thm:martingale_criterion} then gives the uniform gap
-    $\lambda_{\min}^+(H_N) \ge \gamma$~\cite{Fannes1992Finitely,
-        Nachtergaele1996Spectral}.
+    This is exactly the missing MPS-specific Friedrichs-angle estimate together with the
+    row-sum bound. Once those analytic inputs are formalized, the result feeds directly into
+    the abstract martingale criterion.
+\end{proof}
+
+\begin{theorem}[Spectral gap for MPS parent Hamiltonians]\label{thm:parent_hamiltonian_gapped}
+    \lean{MPSTensor.parentHamiltonian_gapped}
+    \notready
+    \uses{thm:friedrichs_gap_bound}
+    For an injective tensor $A$ and a range $L > 1$, there exists $\gamma > 0$ such that
+    for every $N \ge 2L$ and every vector
+    $v \in (\mathcal G_{N,L}^{\mathrm{ES}}(A))^{\perp}$ one has
+    \[
+        \gamma \, \|v\| \le \|H_{N,L}^{\mathrm{ES}}(A) v\|.
+    \]
+    By Lemma~\ref{lem:quadratic_form_to_norm_bound}, this implies the usual uniform lower
+    bound on every nonzero eigenvalue of the parent Hamiltonian.
+\end{theorem}
+
+\begin{proof}
+    \notready
+    This follows immediately from Theorem~\ref{thm:friedrichs_gap_bound} by taking as
+    $\gamma$ the explicit constant produced there, which yields the required existential
+    spectral-gap constant.
 \end{proof}
 
 \section{Ground space of non-injective MPS}\label{sec:degenerate_ground_space}
@@ -1468,88 +1662,94 @@ Instead, it is spanned by the MPVs of the individual normal blocks ---
 the basis of normal tensors (BNT) from
 Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
 
-\begin{lemma}[Each BNT MPV lies in the Hamiltonian kernel]\label{lem:bnt_mpv_mem_ground_space}
-    \lean{MPSTensor.bnt_mem_groundSpace}
-    \notready
-    \uses{def:parent_hamiltonian, def:bnt, def:normal_cf_bnt,
-        lem:parent_hamiltonian_annihilates}
-    Let $A = \bigoplus_{k=1}^g \mu_k A_k$ be in canonical form with BNT
-    separation (Definition~\ref{def:normal_cf_bnt}), where
-    $\{A_1,\ldots,A_g\}$ is a basis of normal tensors
-    (Definition~\ref{def:bnt}).
-    For $N \ge 2(L_0 + 1)$ (where $L_0$ is the maximum injectivity length of
-    the blocks) and each $k = 1,\ldots,g$,
+\begin{definition}[Assembled parent ground space]\label{def:parent_hamiltonian_ground_space_bnt}
+    \lean{MPSTensor.parentHamiltonianGroundSpace}
+    \leanok
+    \uses{def:chain_ground_space}
+    For a family of blocks $A = (A_{j})_{j=1}^{r}$ and weights $\mu$, write
+    $\operatorname{ParentGround}_{N,L}(A)$ for the periodic chain ground space of the
+    block-diagonal tensor assembled from the blocks.
+\end{definition}
+
+\begin{lemma}[Definition by assembled chain ground space]
+    \label{lem:parent_hamiltonian_ground_space_eq}
+    \lean{MPSTensor.parentHamiltonianGroundSpace_eq}
+    \leanok
+    \uses{def:parent_hamiltonian_ground_space_bnt}
+    By definition, this subspace is exactly the chain ground space of the assembled tensor.
+\end{lemma}
+
+\begin{definition}[Span of BNT block states]\label{def:bnt_span}
+    \lean{MPSTensor.bntSpan}
+    \leanok
+    The BNT span is the linear span of the periodic MPV states of the individual blocks:
     \[
-        V^{(N)}(A_k) \in \ker(H_N(A,L_0{+}1)).
+        \operatorname{BNTSpan}_{N}(A) := \spn\{V^{(N)}(A_{j}) : j = 1,\ldots,r\}.
     \]
+\end{definition}
+
+\begin{lemma}[Each BNT MPV lies in the assembled parent ground space]\label{lem:bnt_mpv_mem_ground_space}
+    \lean{MPSTensor.bnt_mem_groundSpace}
+    \leanok
+    \uses{def:parent_hamiltonian_ground_space_bnt, lem:mpv_mem_chain_ground_space}
+    If $1 < L$ and $N \ge L + 1$, then for each block $A_{j}$ of a canonical-form/BNT
+    decomposition, the corresponding MPV state lies in the assembled parent ground space.
 \end{lemma}
 
 \begin{proof}
-    \uses{lem:parent_hamiltonian_annihilates}
+    \leanok
+    One first applies Lemma~\ref{lem:mpv_mem_chain_ground_space} to the individual block.
+    The proof then inserts the resulting boundary matrix into the $j$-th diagonal block of the
+    assembled tensor, with the compensating scalar factor coming from the nonzero weight $\mu_{j}$.
+\end{proof}
+
+\begin{theorem}[Containment in the BNT span by block decomposition]
+    \label{thm:parent_ground_space_le_bnt_span}
+    \lean{MPSTensor.parentHamiltonianGroundSpace_le_bntSpan_of_block_decomposition}
     \notready
-    Each $A_k$ is normal, so
-    Lemma~\ref{lem:parent_hamiltonian_annihilates} (applied to the
-    block-diagonal structure) gives
-    \[
-        H_N(A,L_0{+}1)\,V^{(N)}(A_k) = 0
-    \]
-    for every $k = 1,\ldots,g$. Hence
-    $V^{(N)}(A_k) \in \ker(H_N(A,L_0{+}1))$.
+    \uses{def:parent_hamiltonian_ground_space_bnt, def:bnt_span,
+        thm:chain_ground_space_eq_mpv_normal}
+    If $A$ is in canonical-form/BNT and $1 < L$ and $N \ge L + 1$, every vector in the
+    assembled parent ground space should decompose into blockwise chain ground states, and
+    therefore lie in the BNT span.
+\end{theorem}
+
+\begin{proof}
+    \notready
+    The missing step is the periodic block decomposition of the assembled chain ground space.
+    Once such a decomposition is available, one applies the normal uniqueness theorem to each
+    block separately and recovers the BNT span.
 \end{proof}
 
 \begin{theorem}[Ground space equals span of BNT]\label{thm:gs_eq_bnt_span}
     \notready
     \lean{MPSTensor.parentHamiltonian_gs_eq_bnt_span}
-    \uses{def:parent_hamiltonian, def:bnt, def:normal_cf_bnt,
-        thm:unique_gs_normal, def:ground_space_parent,
-        lem:bnt_mpv_mem_ground_space}
-    Let $A = \bigoplus_{k=1}^g \mu_k A_k$ be in canonical form with BNT
-    separation (Definition~\ref{def:normal_cf_bnt}), where
-    $\{A_1,\ldots,A_g\}$ is a basis of normal tensors
-    (Definition~\ref{def:bnt}).
-    For $N \ge 2(L_0 + 1)$ (where $L_0$ is the maximum injectivity length of
-    the blocks), the ground space of the parent Hamiltonian satisfies
+    \uses{thm:parent_ground_space_le_bnt_span, lem:bnt_mpv_mem_ground_space,
+        def:parent_hamiltonian_ground_space_bnt, def:bnt_span}
+    If $1 < L$ and $N \ge L + 1$, then for a canonical-form/BNT family the assembled
+    parent ground space equals the BNT span:
     \[
-        \ker(H_N(A,L_0{+}1))
-        = \spn\bigl\{V^{(N)}(A_k) : k = 1,\ldots,g\bigr\}.
+        \operatorname{ParentGround}_{N,L}(A) = \operatorname{BNTSpan}_{N}(A).
     \]
 \end{theorem}
 
 \begin{proof}
-    \uses{lem:bnt_mpv_mem_ground_space, thm:unique_gs_normal,
-        thm:ground_space_intersection, def:bnt}
     \notready
-    By Lemma~\ref{lem:bnt_mpv_mem_ground_space} and linearity of the
-    kernel, we have
+    We prove the two inclusions separately. The inclusion
     \[
-        \spn\bigl\{V^{(N)}(A_k) : k = 1,\ldots,g\bigr\}
-        \subseteq \ker(H_N(A,L_0{+}1)).
+        \operatorname{ParentGround}_{N,L}(A) \subseteq \operatorname{BNTSpan}_{N}(A)
     \]
-
-    For the reverse inclusion, take
-    $\psi \in \ker(H_N(A,L_0{+}1))$.
-    The block-diagonal structure of $A$ gives, at the interaction
-    range $L_0{+}1$ used in the Hamiltonian, the containment
-    $G_{L_0+1}(A) \subseteq \sum_k G_{L_0+1}(A_k)$: any local ground
-    state of $A$ on $L_0{+}1$ sites is a sum of local ground states of
-    the individual blocks, because the off-diagonal blocks vanish in
-    the transfer map (the canonical form and block separation
-    (Theorem~\ref{thm:block_sep}, Chapter~\ref{ch:block_perm}) ensure that distinct blocks
-    have orthogonal images under $\Gamma_{L_0+1}$ for
-    $L_0{+}1 \ge L_0$, so the sum is in fact direct).
-    Each normal block $A_k$ has injectivity length $L_k \le L_0$, so
-    the $L_k$-blocked tensor $A_k^{[L_k]}$ is injective.
-    Applying Theorem~\ref{thm:ground_space_intersection} to this injective
-    blocked tensor (in unblocked coordinates, as in
-    Theorem~\ref{thm:unique_gs_injective}) and iterating across the
-    chain for each block independently, and using
-    Theorem~\ref{thm:unique_gs_normal} for each normal block, the
-    component of $\psi$ associated with block $A_k$ must be proportional
-    to $V^{(N)}(A_k)$.
-    This gives the reverse inclusion~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
+    is exactly Theorem~\ref{thm:parent_ground_space_le_bnt_span}. For the reverse inclusion,
+    Lemma~\ref{lem:bnt_mpv_mem_ground_space} shows that each BNT MPV lies in
+    $\operatorname{ParentGround}_{N,L}(A)$. Since the parent ground space is a linear subspace,
+    it therefore contains every linear combination of such vectors, and hence contains
+    $\operatorname{BNTSpan}_{N}(A)$. Thus
+    \[
+        \operatorname{BNTSpan}_{N}(A) \subseteq \operatorname{ParentGround}_{N,L}(A),
+    \]
+    and the two spaces are equal.
 \end{proof}
 
-\noindent\emph{Remark.} The previous lemma and theorem are stated in terms
-of $\ker(H_N(A,L_0{+}1))$. An equivalent formulation uses the chain
-ground space (Definition~\ref{def:chain_ground_space}); establishing the
-equivalence of these two objects is future work.
+\noindent\emph{Remark.} A separate kernel-identification statement for these assembled
+block families is still to be recorded; at present, the formal results are stated in the
+chain-ground-space model rather than directly as $\ker(H_{N})$.

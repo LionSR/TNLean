@@ -9,7 +9,7 @@ import TNLean.Wielandt.RankOne.ExtractionFull
 /-!
 # Lemma 2(b) — coarse existential wrapper (arXiv:0909.5347)
 
-This file packages a **coarse existential** version of **Lemma 2(b)** from
+This file states a **coarse existential** version of **Lemma 2(b)** from
 Sanz–Pérez-García–Wolf–Cirac, *A quantum version of Wielandt's inequality*
 (arXiv:0909.5347), in the paper-facing `IsPrimitivePaper` language.
 
@@ -71,7 +71,7 @@ theorem exists_wordSpan_eq_top_of_isPrimitivePaper [NeZero D]
 If `A` is normalized and primitive in the paper sense, then there exists `N`
 such that every rank-one matrix `|φ⟩⟨ψ|` belongs to `S_N(A)`.
 
-This packages the same existential consequence of Lemma 2(b) as
+This states the same existential consequence of Lemma 2(b) as
 `exists_wordSpan_eq_top_of_isPrimitivePaper`, but stated for rank-one matrices.
 Paper: arXiv:0909.5347, Lemma 2(b); Wolf, Chapter 6.
 -/

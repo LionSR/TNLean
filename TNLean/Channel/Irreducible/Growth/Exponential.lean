@@ -11,7 +11,7 @@ import Mathlib.Analysis.Normed.Algebra.Exponential
 
 Wolf Theorem 6.2, item 3: if $E$ is an irreducible completely positive map on
 $M_D(\mathbb{C})$, $A \geq 0$ is nonzero, and $t > 0$, then $\exp(tE)(A)$ is
-positive definite. This file also packages item 3 as a logical equivalence with
+positive definite. This file also states item 3 as a logical equivalence with
 irreducibility, assuming CP.
 
 The proof strategy is:

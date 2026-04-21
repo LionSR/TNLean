@@ -10,7 +10,7 @@ import TNLean.Wielandt.SpanGrowth.EigenvectorSpreading
 /-!
 # Quantum Wielandt Bound — proof roadmap
 
-This file packages the main results of the quantum Wielandt bound
+This file collects the main results of the quantum Wielandt bound
 from arXiv:0909.5347 (Sanz, Pérez-García, Wolf, Cirac).
 
 ## Main theorem (paper)
@@ -67,7 +67,7 @@ Given `IsNormal A`, the chain is:
 3. `∃ μ ≠ 0, ∃ φ ≠ 0, evalWord A w₀ *ᵥ φ = μ • φ` (from RankOneProducts)
 4. `cumulativeVectorSpan A φ (D-1) = ⊤` (from EigenvectorSpreading)
 
-We package these into a single "analysis" structure. -/
+These are combined into a single "analysis" structure. -/
 
 /-- **Wielandt Analysis**: the complete chain of facts about a normal MPS tensor.
 Given `IsNormal A`, we extract:
@@ -75,7 +75,7 @@ Given `IsNormal A`, we extract:
 - A nonzero eigenvalue `μ` and eigenvector `φ`
 - Vector spanning in D-1 steps
 
-This packages Lemma 1 + eigenvalue extraction + Lemma 2(a) from
+This collects Lemma 1 + eigenvalue extraction + Lemma 2(a) from
 arXiv:0909.5347. -/
 structure WielandtAnalysis [NeZero D] (A : MPSTensor d D) where
   /-- The word with nonzero trace. -/
@@ -208,7 +208,7 @@ Here we document the full chain of results. -/
 5. (Needs Lemma 2(b)) All matrices are reachable using word products of
    a single fixed length ≤ D⁴
 
-This theorem packages steps 1-4. -/
+This theorem covers steps 1-4. -/
 theorem wielandt_chain [NeZero D]
     (A : MPSTensor d D) (hN : IsNormal A) :
     -- Step 1: Cumulative span = ⊤

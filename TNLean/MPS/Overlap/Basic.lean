@@ -15,7 +15,7 @@ open scoped BigOperators InnerProductSpace
 For an MPS tensor `A`, the Matrix Product Vector (MPV) coefficient at system size `N` and physical
 configuration `σ : Fin N → Fin d` is `mpv A σ : ℂ`.
 
-This file packages the family `σ ↦ mpv A σ` as a vector `mpvState A N` in the Hilbert space
+This file organizes the family `σ ↦ mpv A σ` as a vector `mpvState A N` in the Hilbert space
 `MPVSpace d N := EuclideanSpace ℂ (Fin N → Fin d)`.
 
 **Orientation convention.** Lean's inner product on complex Hilbert spaces is conjugate-linear in

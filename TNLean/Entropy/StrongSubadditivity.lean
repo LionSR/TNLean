@@ -10,7 +10,7 @@ import TNLean.Entropy.VonNeumann
 
 This module exposes **strong subadditivity** (SSA) of the von Neumann
 entropy inside the `Entropy` namespace, following the roadmap of
-issue #613 for the Simple MPDO RFP bootstrap (issue #236, umbrella
+issue #613 for the Simple MPDO RFP track (issue #236, umbrella
 #239).
 
 SSA is the statement that for any tripartite density matrix

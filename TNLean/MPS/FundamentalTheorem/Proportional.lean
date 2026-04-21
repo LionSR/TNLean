@@ -11,7 +11,7 @@ namespace MPSTensor
 /-!
 # Proportional single-block Fundamental Theorem (primitive case)
 
-This file packages a lightweight “proportional” variant of the single-block Fundamental Theorem,
+This file contains a lightweight “proportional” variant of the single-block Fundamental Theorem,
 aligned with the **primitive/aperiodic** branch of Cirac et al., Rev. Mod. Phys. 93 (2021),
 Theorem 4.4 (arXiv:2011.12127).
 

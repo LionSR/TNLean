@@ -8,7 +8,7 @@ import TNLean.MPS.Core.Transfer
 # Shared scaling lemmas for MPS tensors
 
 This module collects the tensor-scaling identities that are used both by the
-canonical-form pipeline and by transfer-normalization arguments.
+canonical-form construction and by transfer-normalization arguments.
 -/
 
 open scoped Matrix ComplexOrder BigOperators

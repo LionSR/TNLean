@@ -8,10 +8,10 @@ import Mathlib.Analysis.Calculus.MeanValue
 import Mathlib.Topology.Algebra.Module.StrongTopology
 
 /-!
-# Kernel / fixed-point bridges for semigroup generators
+# Kernel / fixed-point connections for semigroup generators
 
-This file packages witness-based notions for the mixing theory of quantum
-semigroups and proves the basic bridge between the generator kernel and fixed
+This file develops witness-based notions for the mixing theory of quantum
+semigroups and proves the basic connection between the generator kernel and fixed
 points of the exponential semigroup.
 
 ## Main definitions
@@ -30,9 +30,9 @@ points of the exponential semigroup.
 * `generator_apply_eq_zero_iff_expSemigroup_fixed_nonneg`:
   `L X = 0` iff `expSemigroup L t X = X` for all `t ≥ 0`.
 * `generator_apply_eq_zero_iff_fixed_nonneg`:
-  the same bridge for any semigroup identified with `expSemigroup`.
+  the same connection for any semigroup identified with `expSemigroup`.
 
-These statements are the semigroup-side kernel/fixed-point bridges needed for
+These statements are the semigroup-side kernel/fixed-point connections needed for
 Wolf Chapter 7.
 -/
 
