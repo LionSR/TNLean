@@ -1504,9 +1504,18 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
 \begin{proof}\leanok
     \uses{thm:fixedPointsStarSubalgebra, thm:md_characterization}
     Idempotence gives $E(E(X)) = E(X)$, so $E(X)$ is a fixed point.
-    The argument in Theorem~\ref{thm:fixedPointsStarSubalgebra} shows that
-    every fixed point satisfies the Kadison--Schwarz equality, hence lies in
-    the multiplicative domain by Theorem~\ref{thm:md_characterization}.
+    By the argument in Theorem~\ref{thm:fixedPointsStarSubalgebra}, the
+    Kadison--Schwarz gap for the fixed point $E(X)$ vanishes, hence
+    \[
+        E(E(X)^\dagger E(X)) = E(X)^\dagger E(X).
+    \]
+    Fixed points are closed under $\dagger$, so the same argument applied to
+    $E(X)^\dagger$ gives
+    \[
+        E(E(X) E(X)^\dagger) = E(X) E(X)^\dagger.
+    \]
+    Therefore Theorem~\ref{thm:md_characterization} places $E(X)$ in the
+    multiplicative domain.
 \end{proof}
 
 \begin{theorem}[Choi--Effros left absorption]
@@ -1522,8 +1531,10 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
 \begin{proof}\leanok
     \uses{thm:map_mem_multiplicativeDomain_of_idempotent}
     The previous theorem places $E(X)$ in the multiplicative domain, so
-    $E(E(X) Y) = E(X) E(Y)$. Applying the same multiplicativity to
-    $E(X)$ and $E(Y)$ gives $E(E(X) E(Y)) = E(X) E(Y)$.
+    $E(E(X) Y) = E(E(X)) E(Y) = E(X) E(Y)$.
+    Applying the same multiplicativity to $E(X)$ and $E(Y)$ gives
+    $E(E(X) E(Y)) = E(E(X)) E(E(Y))$, and idempotence rewrites this as
+    $E(X) E(Y)$.
 \end{proof}
 
 \begin{theorem}[Choi--Effros right absorption]
@@ -1538,7 +1549,26 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
 
 \begin{proof}\leanok
     \uses{thm:map_mem_multiplicativeDomain_of_idempotent}
-    Apply the previous theorem to $E(Y)$ on the right.
+    The previous theorem places $E(Y)$ in the multiplicative domain, so
+    $E(X E(Y)) = E(X) E(E(Y)) = E(X) E(Y)$.
+    Applying the same multiplicativity to $E(X)$ and $E(Y)$ gives
+    $E(E(X) E(Y)) = E(E(X)) E(E(Y))$, and idempotence rewrites this as
+    $E(X) E(Y)$.
+\end{proof}
+
+\begin{theorem}[Choi--Effros symmetric absorption]
+    \label{thm:choi_effros_left_eq_right}
+    \lean{Kraus.choi_effros_left_eq_right}\leanok
+    \uses{def:kraus_fixed_points, def:unital_kraus}
+    Under the same hypotheses, for all $X, Y \in \MN{D}$,
+    \[
+        E(E(X) Y) = E(X E(Y)).
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:choi_effros_left, thm:choi_effros_right}
+    Both sides equal $E(E(X) E(Y))$ by the two preceding theorems.
 \end{proof}
 
 \begin{theorem}[Choi--Effros projected product]
@@ -1554,7 +1584,15 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
 \begin{proof}\leanok
     \uses{thm:map_mem_multiplicativeDomain_of_idempotent}
     The previous theorem places $E(X)$ and $E(Y)$ in the multiplicative domain.
-    Multiplicativity of $E$ on $E(X)$ then gives the claim.
+    Therefore multiplicativity gives
+    \[
+        E(E(X) E(Y)) = E(E(X)) E(E(Y)).
+    \]
+    Since $E$ is idempotent under the standing hypotheses, $E(E(X)) = E(X)$
+    and $E(E(Y)) = E(Y)$, so
+    \[
+        E(E(X) E(Y)) = E(X) E(Y).
+    \]
 \end{proof}
 
 \begin{definition}[Adjoint fixed points]\label{def:adjoint_fixed_points}
