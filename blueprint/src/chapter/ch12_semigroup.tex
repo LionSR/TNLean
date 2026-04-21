@@ -1067,7 +1067,7 @@ which shows that such generators have the standard Lindblad form.
     \label{thm:fixedPoint_eq_trace_smul_irreducible_channel_ch12}
     \lean{fixedPoint_eq_trace_smul_of_irreducible_channel}\leanok
     If $E$ is an irreducible channel with faithful fixed density $\sigma$, then every
-    fixed point $V$ of $E$ satisfies $V = \tr(V)\,\sigma$.
+    nonzero fixed point $V$ of $E$ satisfies $V = \tr(V)\,\sigma$.
 \end{theorem}
 
 \begin{proof}
@@ -1090,9 +1090,10 @@ which shows that such generators have the standard Lindblad form.
 \begin{theorem}[Peripheral eigenvectors become periodic fixed points]
     \label{thm:peripheral_power_fixed_eigenvector_ch12}
     \lean{exists_power_fixed_eigenvector_of_peripheral}\leanok
-    For a quantum dynamical semigroup irreducible at every positive time, every peripheral
-    eigenvalue $\mu$ of a time slice $T_t$ admits a nonzero eigenvector $V$ and a positive
-    integer $p$ such that $T_t(V)=\mu V$ and $T_{pt}(V)=V$.
+    For every positive time $t$, a quantum dynamical semigroup irreducible at every
+    positive time has the following property: every peripheral eigenvalue $\mu$ of $T_t$
+    admits a nonzero eigenvector $V$ and a positive integer $p$ such that
+    $T_t(V)=\mu V$ and $T_{pt}(V)=V$.
 \end{theorem}
 
 \begin{proof}
@@ -1105,8 +1106,8 @@ which shows that such generators have the standard Lindblad form.
 \begin{theorem}[Peripheral eigenvectors with nonzero trace]
     \label{thm:peripheral_trace_ne_zero_eigenvector_ch12}
     \lean{exists_trace_ne_zero_eigenvector_of_peripheral}\leanok
-    Under the same hypotheses, every peripheral eigenvalue of $T_t$ has a nonzero eigenvector
-    with nonzero trace.
+    For every positive time $t$, under the same hypotheses every peripheral eigenvalue
+    of $T_t$ has a nonzero eigenvector with nonzero trace.
 \end{theorem}
 
 \begin{proof}
