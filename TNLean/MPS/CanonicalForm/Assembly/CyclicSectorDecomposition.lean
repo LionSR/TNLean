@@ -52,7 +52,7 @@ The cyclic decomposition from `CyclicDecomposition.lean` produces projections `P
 - `∀ k, IsOrthogonalProjection (P k)` and `∑ k, P k = 1`
 - `E†(P(k+1)) = P k` (cyclic), hence `(E†)^m (P k) = P k`
 
-The key bridge: `(E†)^m = transferMap (fun j => (blockTensor A m j)ᴴ)` because the
+The key connection: `(E†)^m = transferMap (fun j => (blockTensor A m j)ᴴ)` because the
 adjoint of the blocked transfer map equals the m-th iterate of the adjoint transfer map.
 This is proved by a tuple-reversal bijection: summing `A_w†·X·A_w` over all length-`m`
 words `w` gives the same result regardless of whether `A_w` or `A_{rev(w)}` is used.
@@ -66,7 +66,7 @@ words `w` gives the same result regardless of whether `A_w` or `A_{rev(w)}` is u
 5. Apply `exists_blockDecomp_of_adjoint_fixed_projections` from `CyclicSectors.lean`
 -/
 
-section CyclicSectorBridge
+section CyclicSectorRelation
 
 
 open KadisonSchwarz
@@ -184,8 +184,8 @@ spectral projections. Returns:
 - `blocks k`: TP sector tensors (each left-canonical),
 - `P k`: orthogonal projections forming a partition of unity (`∑ P k = 1`),
 - compression linear equivalences `φ k : M_{dim k}(ℂ) ≃ₗ[ℂ] cornerSubmodule (P k)` together
-  with the intertwining identity bridging the compressed adjoint transfer map and the sector
-  adjoint transfer map,
+  with the intertwining identity connecting the compressed adjoint transfer map and the
+  sector adjoint transfer map,
 - cyclic shift: `transferMap (fun i => (A i)ᴴ) (P (k+1)) = P k`,
 - commutation: each `P k` commutes with every blocked letter,
 - trace relation: `mpv (blocks k) σ = (P k * evalWord (blockTensor A m) σ).trace`,
@@ -301,10 +301,10 @@ theorem exists_cyclic_sector_decomp_after_blocking
   exact ⟨dim, blocks, P, φ, hLC, hMPV, hPproj, hPsum, hcyclic, hComm, hTrace, hIntertwine,
     hMul, hStar, hNondeg⟩
 
-end CyclicSectorBridge
+end CyclicSectorRelation
 
 /-!
-## Bridge: MPS hypotheses → cyclic sector decomposition
+## Derivation from MPS hypotheses
 
 For an irreducible TP tensor, all channel-level hypotheses needed by
 `exists_cyclic_sector_decomp_after_blocking` can be derived automatically:
@@ -319,16 +319,17 @@ section CyclicSectorFromMPS
 
 open KadisonSchwarz
 
-/-- **Bridge: irreducible TP tensor → cyclic sector decomposition.**
+/-- **Derivation of cyclic sector decomposition from an irreducible TP tensor.**
 
 For an irreducible TP tensor `A` with `0 < D`, there exists a period `m > 0`
 such that after blocking by `m`, the blocked tensor admits a decomposition
 into `m` left-canonical (TP) blocks via cyclic spectral projections.
 
-This bridges the MPS-level hypotheses (`IsIrreducibleTensor` + TP) to the
-channel-level cyclic decomposition, deriving all intermediate hypotheses
-(`ρ.PosDef`, `Kraus.adjointMap` fixed point, `IsIrreducibleMap`, peripheral
-spectrum structure) automatically via `conjTranspose_kraus_setup`. -/
+This establishes the connection from the MPS-level hypotheses
+(`IsIrreducibleTensor` + TP) to the channel-level cyclic decomposition,
+deriving all intermediate hypotheses (`ρ.PosDef`, `Kraus.adjointMap` fixed
+point, `IsIrreducibleMap`, peripheral spectrum structure) automatically via
+`conjTranspose_kraus_setup`. -/
 theorem exists_cyclic_sector_decomp_of_TP_of_isIrreducibleTensor
     {d D : ℕ} [NeZero D]
     (A : MPSTensor d D)

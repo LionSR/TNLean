@@ -56,7 +56,7 @@ For a single block that is TP, has a primitive transfer map, AND is irreducible
 3. `IsPrimitiveMPS A ρ` + `ρ.PosDef`
    → `isNormal_of_isPrimitiveMPS_with_posDef` → `IsNormal A`
 
-We package this chain as a single theorem.
+We state this chain as a single theorem.
 -/
 
 /-- **TP + primitive + irreducible → IsNormal** (per-block chain).

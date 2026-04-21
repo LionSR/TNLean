@@ -25,7 +25,7 @@ open Filter
 # TP-primitive reduction after blocking
 
 This file begins the end-to-end canonical-form reduction for arbitrary MPS
-families. It packages the output of the zero-block separation, TP gauge, and
+families. It combines the output of the zero-block separation, TP gauge, and
 common blocking steps into a blocked decomposition whose nontrivial blocks are
 left-canonical and have primitive transfer maps.
 
@@ -183,8 +183,8 @@ theorem exists_tp_primitive_blockDecomp_after_blocking (A : MPSTensor d D) :
 ## Conditional normal canonical form
 
 If the blocked weights happen to have pairwise distinct norms, and the blocked
-blocks are irreducible, then the data can be packaged as `IsNormalCanonicalForm`
-after sorting by weight norm.
+blocks are irreducible, then the data can be shown to satisfy
+`IsNormalCanonicalForm` after sorting by weight norm.
 
 This is a conditional theorem: the two extra hypotheses are genuine conditions
 that the reduction does not produce automatically (see gap documentation above).

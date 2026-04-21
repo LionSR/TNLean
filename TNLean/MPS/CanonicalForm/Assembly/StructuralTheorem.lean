@@ -11,7 +11,7 @@ open Filter
 # Structural after-blocking theorem for canonical-form reduction
 
 This file collects the final structural statements in the current
-arXiv:1606.00608 reduction chain. It packages a common-period blocking theorem
+arXiv:1606.00608 reduction chain. It gives a common-period blocking theorem
 for two tensors and the resulting structural after-blocking statement that both
 sides admit TP-primitive decompositions.
 
@@ -89,7 +89,7 @@ section FundamentalTheorem1606
 -- sector decomposition to produce the final canonical form.
 -- (Already proved above as `exists_tp_primitive_blockDecomp_after_blocking`.)
 
-/-- **Bilateral common-period assembly for two tensors.**
+/-- **Bilateral common-period theorem for two tensors.**
 
 The proof chooses a common blocking period via `lcmPeriod` (on `Fin 2`), i.e. a
 common multiple of `pA` and `pB`. The theorem statement itself only asserts the
@@ -171,7 +171,7 @@ additionally satisfy:
 
 then the block structures match up to permutation and gauge-phase equivalence.
 
-This theorem packages the structural content of arXiv:1606.00608, Theorem 1,
+This theorem states the structural content of arXiv:1606.00608, Theorem 1,
 connecting the reduction output to the fundamental theorem conclusion. -/
 theorem fundamentalTheorem_after_blocking_1606_structural
     {d D₁ D₂ : ℕ}
