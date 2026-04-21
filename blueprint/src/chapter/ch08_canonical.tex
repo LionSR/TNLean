@@ -532,16 +532,42 @@ For Burnside-style arguments it is more natural to work with invariant
 	Apply Theorem~\ref{thm:proportional_ft}.
 \end{proof}
 
-\section{Canonical form from peripheral primitivity}
+\section{Canonical form from primitivity}
 
 The canonical form conditions
 (Definition~\ref{def:is_canonical_form})
-includes an explicit hypothesis
+include an explicit hypothesis
 that the self-overlap $O_{A_k A_k}(N) \to 1$
 for each block.
-The following theorem derives this from
-per-block peripheral-spectrum primitivity,
-removing it as an independent assumption.
+The first theorem below derives this from
+blockwise primitive fixed-point data.
+The second derives the same conclusion from
+per-block peripheral-spectrum primitivity.
+
+\begin{theorem}[Canonical form from primitive fixed-point data]%
+	\label{thm:canonical_from_primitive_fixedpoint}
+	\lean{MPSTensor.isCanonicalForm_of_primitive}
+	\leanok
+	\uses{def:is_canonical_form}
+	Let $(\mu_k, A_k)_{k=1}^r$ be a collection of block tensors and
+	scaling factors satisfying:
+	\begin{enumerate}
+		\item each $A_k$ is injective,
+		\item each $A_k$ satisfies the TP normalization
+		      $\sum_i (A_k^i)^\dagger A_k^i = \Id$,
+		\item $|\mu_1| > \cdots > |\mu_r|$ (strictly decreasing),
+		\item all $\mu_k \neq 0$,
+		\item each block admits a primitive fixed point.
+	\end{enumerate}
+	Then $(\mu_k, A_k)$ satisfies the canonical form conditions.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:primitive_overlap}
+	All canonical-form clauses except the overlap condition are already
+	assumptions. For each block, the primitive fixed-point hypothesis gives
+	$O_{A_kA_k}(N) \to 1$.
+\end{proof}
 
 \begin{theorem}[Canonical form from peripheral primitivity]%
 	\label{thm:canonical_from_primitive}
@@ -642,9 +668,107 @@ removing it as an independent assumption.
 \begin{remark}\label{rem:blocking_primitivity_appendixA}\leanok
 	Theorem~\ref{thm:blocking_primitivity} is the ``periodicity removal by blocking''
 	step in \cite[Appendix~A]{Cirac2017MPDO_AnnPhys} for an irreducible block
-	already placed in TP gauge. The later existence theorems simply reuse
+	already placed in TP gauge. The later existence theorems then reuse
 	this step.
 \end{remark}
+
+\subsection{Adjoint transport for blocking}
+
+\begin{lemma}[Characteristic polynomial under conjugate transpose]%
+	\label{lem:charpoly_conjtranspose}
+	\lean{MPSTensor.Matrix.charpoly_conjTranspose}
+	\leanok
+	For a complex matrix $M$, the characteristic polynomial of $M^\dagger$
+	is obtained from the characteristic polynomial of $M$ by coefficientwise
+	complex conjugation.
+\end{lemma}
+
+\begin{proof}\leanok
+	Write $M^\dagger$ as the transpose of the coefficientwise conjugate matrix.
+	The characteristic polynomial is invariant under transpose and commutes with
+	coefficientwise conjugation.
+\end{proof}
+
+\begin{theorem}[Eigenvalues of the adjoint are conjugated]%
+	\label{thm:eigenvalue_adjoint_conjugate}
+	\lean{MPSTensor.Module.End.hasEigenvalue_adjoint_iff}
+	\leanok
+	\uses{lem:charpoly_conjtranspose}
+	Let $E$ be a linear endomorphism of a finite-dimensional complex inner-product
+	space, and let $\mu \in \C$.
+	Then $\mu$ is an eigenvalue of $E$ if and only if $\overline{\mu}$ is an
+	eigenvalue of the adjoint $E^\dagger$.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{lem:charpoly_conjtranspose}
+	Express eigenvalues as roots of the characteristic polynomial, convert the
+	adjoint to the conjugate-transposed matrix in an orthonormal basis, and apply
+	Lemma~\ref{lem:charpoly_conjtranspose}.
+\end{proof}
+
+\begin{theorem}[Primitivity is invariant under adjoint]%
+	\label{thm:primitive_adjoint_equiv}
+	\lean{MPSTensor.IsPrimitive.adjoint_iff}
+	\leanok
+	\uses{def:primitive_channel, thm:eigenvalue_adjoint_conjugate}
+	A linear endomorphism is primitive if and only if its adjoint is primitive.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:eigenvalue_adjoint_conjugate}
+	The peripheral eigenvalues of the adjoint are the complex conjugates of those
+	of the original map, so both maps have the same peripheral spectrum on the
+	unit circle.
+\end{proof}
+
+\begin{lemma}[Transfer map of the conjugate-transposed Kraus family]%
+	\label{lem:transfer_conjtranspose_adjoint}
+	\lean{MPSTensor.transferMap_conjTranspose_eq_adjoint}
+	\leanok
+	For an MPS tensor $A$, the transfer map of the conjugate-transposed Kraus
+	family $\{(A^i)^\dagger\}$ is the adjoint of $\E_A$ with respect to the
+	Frobenius inner product.
+\end{lemma}
+
+\begin{proof}\leanok
+	Compare both sides against the Frobenius pairing
+	$\langle X,Y\rangle = \tr(YX^\dagger)$ and rewrite the Kraus sums.
+\end{proof}
+
+\begin{theorem}[Blocking primitivity with a positive-dimension hypothesis]%
+	\label{thm:blocking_primitivity_nezero}
+	\lean{MPSTensor.exists_blockTensor_isPrimitive}
+	\leanok
+	\uses{def:blocked_tensor, def:primitive_channel, def:irreducible_tensor}
+	Let $A$ be an irreducible MPS tensor with positive bond dimension and
+	TP normalization $\sum_i (A^i)^\dagger A^i = \Id$.
+	Then there exists a blocking length $p > 0$ such that $\E_{A^{[p]}}$ is
+	primitive.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:blocking_primitivity}
+	This is Theorem~\ref{thm:blocking_primitivity} with the positive-dimension
+	assumption expressed as a typeclass hypothesis.
+\end{proof}
+
+\begin{theorem}[Blocking primitivity in left-canonical gauge]%
+	\label{thm:blocking_primitivity_leftcanonical}
+	\lean{MPSTensor.exists_blockTensor_isPrimitive_of_leftCanonical_of_isIrreducibleTensor}
+	\leanok
+	\uses{def:blocked_tensor, def:primitive_channel, def:irreducible_tensor}
+	Let $A$ be a left-canonical irreducible MPS tensor with positive bond
+	dimension.
+	Then there exists a blocking length $p > 0$ such that $\E_{A^{[p]}}$ is
+	primitive.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:blocking_primitivity}
+	This is the left-canonical reformulation of
+	Theorem~\ref{thm:blocking_primitivity}.
+\end{proof}
 
 \section{Normal canonical form}\label{sec:normal_canonical_form}
 
@@ -729,9 +853,9 @@ removing it as an independent assumption.
 This section combines the components of the canonical-form
 construction following \cite[\S2.3 and Appendix~A]{Cirac2017MPDO_AnnPhys}.
 The approach here requires blocking to remove non-trivial periodicity.
-An alternative framework that handles periodic blocks without blocking
+A separate reduction for periodic blocks without blocking
 is developed in \cite{DeLasCuevas2017Irreducible}; see Chapter~\ref{ch:assembly}
-for a discussion of that extension.
+for a discussion of that result.
 
 \begin{theorem}[Irreducible block decomposition]%
 	\label{thm:irred_decomp_reduction}
@@ -1026,6 +1150,47 @@ The following results separate the zero blocks from the
 	so Theorem~\ref{thm:primitive_blocking_divisible} applies.
 \end{proof}
 
+\begin{definition}[Common-period blocking of a block family]%
+	\label{def:common_period_blocking}
+	\lean{MPSTensor.commonPeriodBlocking}
+	\leanok
+	\uses{def:blocked_tensor}
+	Given a finite family of tensors $(B_k)$ and positive integers $(p_k)$,
+	the common-period blocking is the family obtained by blocking every $B_k$
+	at the least common multiple of the periods $p_k$.
+\end{definition}
+
+\begin{theorem}[Primitivity of the common-period blocking]%
+	\label{thm:common_period_blocking_primitive}
+	\lean{MPSTensor.isPrimitive_transferMap_commonPeriodBlocking}
+	\leanok
+	\uses{def:common_period_blocking, thm:primitive_blocking_divisible}
+	Suppose each $B_k$ has positive bond dimension and each blocked transfer map
+	$\E_{B_k^{[p_k]}}$ is primitive.
+	Then every member of the common-period blocked family also has primitive
+	transfer map.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:primitive_blocking_divisible}
+	Each $p_k$ divides the common blocking length, so
+	Theorem~\ref{thm:primitive_blocking_divisible} applies to every block.
+\end{proof}
+
+\begin{theorem}[Formula for common-period blocking]%
+	\label{thm:common_period_blocking_apply}
+	\lean{MPSTensor.commonPeriodBlocking_apply}
+	\leanok
+	\uses{def:common_period_blocking}
+	Each block of the common-period blocking is exactly the corresponding tensor
+	blocked at the common least common multiple.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{def:common_period_blocking}
+	This is the definition of the common-period blocking.
+\end{proof}
+
 \section{Cyclic sector decomposition}%
 \label{sec:cyclic_sectors}
 
@@ -1038,7 +1203,7 @@ The following results separate the zero blocks from the
 	and suppose $P A^i P = A^i$ for every~$i$.
 	Then there exist a left-canonical tensor $C$ of bond dimension
 	$n = \tr(P)$ and a $\ast$-algebra isomorphism
-	$\varphi : M_n(\mathbb{C}) \xrightarrow{\sim} P \cdot M_D(\mathbb{C}) \cdot P$
+	$\varphi : \MN{n} \xrightarrow{\sim} P \MN{D} P$
 	(preserving both multiplication and adjoint) with
 	\[
 		V^{(N)}(C)_\sigma = \tr\!\bigl(P \cdot A^\sigma\bigr),
@@ -1046,7 +1211,7 @@ The following results separate the zero blocks from the
 		\varphi\!\bigl(\E_{C^\dagger}(X)\bigr)
 			= \E_{A^\dagger}\!\bigl(\varphi(X)\bigr)
 	\]
-	for every~$\sigma$ and every $X \in M_n(\mathbb{C})$, together with
+	for every~$\sigma$ and every $X \in \MN{n}$, together with
 	$\varphi(XY) = \varphi(X)\varphi(Y)$ and
 	$\varphi(X^\dagger) = \varphi(X)^\dagger$.
 \end{theorem}
@@ -1090,11 +1255,11 @@ The following results separate the zero blocks from the
 	with unit weights such that $A$ generates the same MPV family
 	as $\bigoplus_{k=1}^m C_k$.
 	Moreover, each sector satisfies the per-sector trace relation
-	$V^{(N)}(C_k)(\sigma) = \operatorname{tr}(P_k \cdot A^{i_1} \cdots A^{i_N})$
+	$V^{(N)}(C_k)_\sigma = \tr(P_k \cdot A^{i_1} \cdots A^{i_N})$
 	for every word $\sigma = (i_1, \dots, i_N)$, and each block carries a
 	compression linear equivalence
-	$\varphi_k : M_{\dim C_k}(\mathbb{C}) \xrightarrow{\sim}
-		P_k \cdot M_D(\mathbb{C}) \cdot P_k$
+	$\varphi_k : \MN{\dim C_k} \xrightarrow{\sim}
+		P_k \MN{D} P_k$
 	intertwining the compressed adjoint transfer map with the sector adjoint
 	transfer map.
 \end{theorem}
@@ -1135,8 +1300,8 @@ The following results separate the zero blocks from the
 	\label{thm:conjtranspose_kraus_setup}
 	\lean{MPSTensor.conjTranspose_kraus_setup}
 	\leanok
-	\uses{def:irreducible_tensor, thm:qpf}
-	Let $A$ be a left-canonical MPS tensor with irreducible transfer map.
+	\uses{def:irreducible_tensor}
+	Let $A$ be a left-canonical irreducible tensor.
 	Then the conjugate-transposed family $K_i := (A^i)^\dagger$ is unital
 	and irreducible, and there exists a positive-definite matrix $\rho$
 	fixed by the adjoint map associated to~$K$.
@@ -1146,36 +1311,93 @@ The following results separate the zero blocks from the
 	\uses{def:irreducible_tensor, thm:qpf}
 	Left-canonicality gives $\sum_i (A^i)^\dagger A^i = \Id$, so the
 	conjugate-transposed family is unital.
-	Irreducibility of the transfer map passes to the adjoint map,
-	and the quantum Perron--Frobenius theorem provides the required
-	positive-definite fixed point.
+	Irreducibility passes to the adjoint map, and the quantum
+	Perron--Frobenius theorem provides the required positive-definite fixed
+	point.
+\end{proof}
+
+\begin{theorem}[One full cyclic turn fixes the sector projections]%
+	\label{thm:cyclic_projection_periodic_fixed}
+	\lean{MPSTensor.adjointTransferMap_pow_fixes_cyclic_projection}
+	\leanok
+	If a family of projections $(P_k)_{k=1}^m$ satisfies
+	$\E^\dagger(P_{k+1}) = P_k$, then the $m$-th iterate of $\E^\dagger$
+	fixes each projection $P_k$.
+\end{theorem}
+
+\begin{proof}\leanok
+	Iterate the cyclic relation $m$ times.
+	Because the indices are taken modulo $m$, the projection returns to its
+	starting position.
+\end{proof}
+
+\begin{theorem}[Blocked adjoint transfer map as an iterate]%
+	\label{thm:blocked_adjoint_transfer_pow}
+	\lean{MPSTensor.transferMap_adjoint_blocked_eq_pow}
+	\leanok
+	\uses{def:blocked_tensor, lem:transfer_conjtranspose_adjoint,
+	      thm:iterated_blocking_transfer}
+	For every tensor $A$, blocking length $m$, and matrix $X$,
+	\[
+		\E_{(A^{[m]})^\dagger}(X) = (\E_{A^\dagger})^m(X).
+	\]
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{lem:transfer_conjtranspose_adjoint, thm:iterated_blocking_transfer}
+	Write both transfer maps as Frobenius adjoints of ordinary blocked transfer
+	maps. Then use Theorem~\ref{thm:iterated_blocking_transfer}.
+\end{proof}
+
+\begin{theorem}[Cyclic sector decomposition after blocking]%
+	\label{thm:cyclic_sector_decomp_after_blocking}
+	\lean{MPSTensor.exists_cyclic_sector_decomp_after_blocking}
+	\leanok
+	\uses{def:blocked_tensor, thm:blockdecomp_adjoint_fixed}
+	Let $A$ be a left-canonical irreducible tensor of period $m$.
+	Then the blocked tensor $A^{[m]}$ admits:
+	\begin{enumerate}
+		\item left-canonical sector tensors $(C_k)_{k=1}^m$,
+		\item orthogonal projections $(P_k)_{k=1}^m$ summing to $\Id$ and satisfying
+		      $\E_{A^\dagger}(P_{k+1}) = P_k$,
+		\item compression linear equivalences
+		      $\varphi_k : \MN{\dim C_k} \xrightarrow{\sim} P_k \MN{D} P_k$,
+		\item a direct-sum MPV decomposition
+		      $A^{[m]} \sim \bigoplus_{k=1}^m C_k$.
+	\end{enumerate}
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:cyclic_projection_periodic_fixed, thm:blocked_adjoint_transfer_pow,
+	      thm:blockdecomp_adjoint_fixed}
+	The cyclic decomposition of the adjoint transfer map gives projections
+	$(P_k)$ with $\E_{A^\dagger}(P_{k+1}) = P_k$.
+	Theorem~\ref{thm:cyclic_projection_periodic_fixed} upgrades this to
+	$(\E_{A^\dagger})^m(P_k) = P_k$, and
+	Theorem~\ref{thm:blocked_adjoint_transfer_pow} identifies
+	$(\E_{A^\dagger})^m$ with the adjoint transfer map of the blocked tensor.
+	Apply Theorem~\ref{thm:blockdecomp_adjoint_fixed}.
 \end{proof}
 
 \begin{theorem}[Cyclic sector decomposition for irreducible TP tensors]%
 	\label{thm:cyclic_sector_decomp_irr_tp}
 	\lean{MPSTensor.exists_cyclic_sector_decomp_of_TP_of_isIrreducibleTensor}
 	\leanok
-	\uses{def:irreducible_tensor, thm:blockdecomp_adjoint_fixed}
-	Let $A$ be a left-canonical MPS tensor with irreducible transfer map.
+	\uses{def:blocked_tensor, def:irreducible_tensor}
+	Let $A$ be a left-canonical irreducible tensor.
 	Then there exist $m \ge 1$ and left-canonical blocks
 	$(C_k)_{k=1}^m$ such that the $m$-blocked tensor $A^{[m]}$
 	decomposes as $\bigoplus_{k=1}^m C_k$ (with unit weights).
 \end{theorem}
 
 \begin{proof}\leanok
-	\uses{thm:conjtranspose_kraus_setup, thm:blockdecomp_adjoint_fixed}
-	Apply Theorem~\ref{thm:conjtranspose_kraus_setup} to the
-	conjugate-transposed Kraus family $K_i = (A^i)^\dagger$ to obtain
-	unitality, irreducibility, and a positive-definite fixed point $\rho$.
-	Apply the cyclic structure theorem
-	(peripheral eigenvalues form a cyclic group of order~$m$)
-	to obtain $m$ cyclic spectral projections:
-	\[
-		\TNPeriodicGauge{m}{Z}{m}.
-	\]
-	Here the operator $Z$ is inserted on the closing virtual bond, while the
-	order-$m$ periodicity is part of the accompanying algebraic statement.
-	Apply Theorem~\ref{thm:blockdecomp_adjoint_fixed}.
+	\uses{thm:conjtranspose_kraus_setup, thm:cyclic_sector_decomp_after_blocking}
+	Apply Theorem~\ref{thm:conjtranspose_kraus_setup} to obtain the
+	conjugate-transposed Kraus family, an irreducible adjoint transfer map,
+	and a positive-definite fixed point.
+	The cyclic peripheral-spectrum theorem then provides a period $m$ and the
+	required cyclic spectral data.
+	Apply Theorem~\ref{thm:cyclic_sector_decomp_after_blocking}.
 \end{proof}
 
 \subsection{Sector irreducibility helpers}%
@@ -1207,7 +1429,7 @@ The following results separate the zero blocks from the
 	Let $A$ be a left-canonical MPS tensor and let $P$ be an orthogonal
 	projection fixed by $\E_A^\dagger$.
 	Then $\E_A^\dagger$ preserves the corner algebra
-	$P \cdot M_D(\mathbb{C}) \cdot P$.
+	$P \MN{D} P$.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -1672,6 +1894,148 @@ The following results separate the zero blocks from the
 	\uses{thm:allzero_irred_dim_le_one}
 	After removing a trivial block, one obtains a block decomposition into irreducible blocks with a trace-preserving gauge.
 \end{theorem}
+
+\subsection{Reduction and structural after-blocking results}
+
+\begin{theorem}[Blockwise TP-gauge normalization of irreducible blocks]%
+	\label{thm:blockwise_tp_gauge}
+	\lean{MPSTensor.exists_tp_gauge_blockwise}
+	\leanok
+	\uses{def:irreducible_tensor}
+	Suppose $A$ generates the same MPV family as a block-diagonal tensor
+	$\bigoplus_{k=1}^r B_k$ with each block $B_k$ irreducible and containing at
+	least one nonzero Kraus operator.
+	Then, after rescaling the sector weights, one obtains blocks $(C_k)$ such that
+	$A \sim \bigoplus_k \mu_k C_k$, each $C_k$ is irreducible, each $C_k$ is
+	left-canonical, all $\mu_k \neq 0$, and all bond dimensions are positive.
+\end{theorem}
+
+\begin{proof}\leanok
+	The Perron--Frobenius TP-gauge construction is applied separately to each
+	irreducible block.
+	Gauge equivalence preserves irreducibility and the MPV family, and the
+	positive scaling factors are absorbed into the new weights.
+\end{proof}
+
+\begin{theorem}[Primitive live blocks are normal]%
+	\label{thm:normal_live_block_primitive}
+	\lean{MPSTensor.isNormal_live_block_of_primitive}
+	\leanok
+	\uses{def:normal, def:irreducible_tensor}
+	A left-canonical irreducible tensor with primitive transfer map and positive
+	bond dimension is normal.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:normal_tp_primitive_irred}
+	Apply Theorem~\ref{thm:normal_tp_primitive_irred}.
+\end{proof}
+
+\begin{theorem}[Blocking preserves irreducibility for primitive irreducible blocks]%
+	\label{thm:blocked_irreducible_tp_primitive}
+	\lean{MPSTensor.isIrreducibleTensor_blockTensor_of_tp_primitive_irr}
+	\leanok
+	\uses{def:blocked_tensor, def:irreducible_tensor}
+	If $A$ is left-canonical, irreducible, primitive, and has positive bond
+	dimension, then every positive blocking length $P$ preserves irreducibility:
+	$A^{[P]}$ is again irreducible.
+\end{theorem}
+
+\begin{proof}\leanok
+	A positive-definite fixed point of $\E_A$ remains fixed by the blocked transfer
+	map.
+	Primitivity gives uniqueness of positive semidefinite fixed points for the
+	blocked map, hence the blocked transfer map is irreducible; this is exactly
+	the irreducibility criterion for the blocked tensor.
+\end{proof}
+
+\begin{theorem}[Sorted TP-primitive irreducible data already forms a normal canonical form]%
+	\label{thm:ncf_sorted_tp_primitive_irred}
+	\lean{MPSTensor.isNormalCanonicalForm_of_tp_primitive_irr_sorted}
+	\leanok
+	\uses{def:is_normal_canonical_form}
+	Let $(\mu_k, A_k)$ be a finite block family with strictly decreasing norms
+	$|\mu_1| > \cdots > |\mu_r|$.
+	If every block $A_k$ is left-canonical, primitive, irreducible, has positive
+	bond dimension, and every $\mu_k \neq 0$, then $(\mu_k,A_k)$ is a normal
+	canonical form.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{def:is_normal_canonical_form}
+	This is the defining constructor for normal canonical form with all required
+	data supplied by the hypotheses.
+\end{proof}
+
+\begin{theorem}[Normal canonical form from already primitive input]%
+	\label{thm:ncf_from_primitive_input}
+	\lean{MPSTensor.exists_normalCanonicalForm_of_primitive_input}
+	\leanok
+	\uses{def:is_normal_canonical_form}
+	If $A$ already admits a block decomposition into irreducible left-canonical
+	primitive blocks with pairwise distinct weight norms, nonzero weights, and
+	positive bond dimensions, then some blocked tensor $A^{[p]}$ is MPV-equivalent
+	to a normal canonical form.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:exists_normal_canonical_form}
+	Apply Theorem~\ref{thm:exists_normal_canonical_form} to the given primitive
+	block decomposition.
+\end{proof}
+
+\begin{theorem}[Conditional block matching after blocking]%
+	\label{thm:weak_ft_conditional}
+	\lean{MPSTensor.weakFundamentalTheorem_conditional}
+	\leanok
+	\uses{def:is_normal_canonical_form}
+	Consider two block families in normal canonical form, with no two distinct
+	blocks of the same dimension related by gauge-phase equivalence.
+	If two tensors decompose into these families with coefficient sequences having
+	nonzero limits, and the two tensors are asymptotically proportional
+	coefficientwise, then the numbers of blocks agree and the blocks match up to
+	permutation and gauge-phase equivalence.
+\end{theorem}
+
+\begin{proof}\leanok
+	This is the block-matching statement from the multi-block fundamental theorem
+	applied to two decompositions that already satisfy the normal-canonical-form
+	and BNT-separation hypotheses.
+\end{proof}
+
+\begin{theorem}[Common blocking period for two primitive normal tensors]%
+	\label{thm:common_period_two_tensors}
+	\lean{MPSTensor.bilateral_commonPeriod_blocking_tp_primitive_normal}
+	\leanok
+	\uses{def:blocked_tensor, def:normal}
+	Let $A$ and $B$ be left-canonical normal tensors of positive bond dimensions.
+	Suppose $A^{[p_A]}$ and $B^{[p_B]}$ already have primitive transfer maps for
+	some positive periods $p_A,p_B$.
+	Then there exists a common positive period $p$ such that both
+	$A^{[p]}$ and $B^{[p]}$ are left-canonical, primitive, and normal.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:primitive_blocking_divisible, thm:normal_blocking_preserved}
+	Take $p$ to be the least common multiple of $p_A$ and $p_B$.
+	Primitivity follows from divisibility, and left-canonical normalization and
+	normality are both preserved under blocking.
+\end{proof}
+
+\begin{theorem}[Structural after-blocking form of the fundamental theorem]%
+	\label{thm:ft_after_blocking_structural}
+	\lean{MPSTensor.fundamentalTheorem_after_blocking_1606_structural}
+	\leanok
+	\uses{def:blocked_tensor}
+	If two tensors generate the same MPV family, then each tensor admits some
+	blocking after which it decomposes into nonzero left-canonical blocks with
+	primitive transfer maps and positive bond dimensions.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:tp_primitive_blockdecomp}
+	Apply Theorem~\ref{thm:tp_primitive_blockdecomp} separately to the two tensors.
+\end{proof}
 
 \section{Open directions}\label{sec:open_directions}
 
