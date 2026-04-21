@@ -1,6 +1,6 @@
 %% =========================================================
 %% Chapter: Periodic MPS — irreducible form and the periodic
-%% Fundamental Theorem.  Mirrors §4 of arXiv:1708.00029
+%% Fundamental Theorem.  Mirrors §3--4 of arXiv:1708.00029
 %% (de las Cuevas--Schuch--Pérez-García--Cirac).
 %% =========================================================
 
@@ -483,11 +483,13 @@ The following is Theorem~3.8 (``equal case'') of
     $\braket{V^{(N)}(A)}{V^{(N)}(B)} \to 0$ as $N\to\infty$.
 \end{theorem}
 \begin{proof}\leanok
-    Split on whether the bond dimensions agree. If not, dimension mismatch
-    gives decay. If $D_1 = D_2$, suppose for contradiction that $A$ and $B$
-    are gauge-phase equivalent; Perron--Frobenius eigenvalue uniqueness
-    (Wolf Theorem~6.3) then forces equal periods, contradicting the hypothesis.
-    Hence the tensors are not gauge-phase equivalent, and the overlap decays.
+    \uses{thm:periodic_overlap_zero_ne_dim}
+    Split on whether the bond dimensions agree. If not, the claim follows
+    from Theorem~\ref{thm:periodic_overlap_zero_ne_dim}. If $D_1 = D_2$,
+    suppose for contradiction that $A$ and $B$ are gauge-phase equivalent;
+    Perron--Frobenius eigenvalue uniqueness (Wolf Theorem~6.3) then forces
+    equal periods, contradicting the hypothesis. Hence the tensors are not
+    gauge-phase equivalent, and the overlap decays.
 \end{proof}
 
 \begin{lemma}[Sector-block normality for periodic tensors]\label{lem:sector_blocked_normal_periodic}
