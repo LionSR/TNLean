@@ -1692,8 +1692,8 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     \lean{MPSTensor.bnt_mem_groundSpace}
     \leanok
     \uses{def:parent_hamiltonian_ground_space_bnt, lem:mpv_mem_chain_ground_space}
-    For each block $A_{j}$ of a canonical-form/BNT decomposition, the corresponding MPV
-    state lies in the assembled parent ground space.
+    If $1 < L$ and $N \ge L + 1$, then for each block $A_{j}$ of a canonical-form/BNT
+    decomposition, the corresponding MPV state lies in the assembled parent ground space.
 \end{lemma}
 
 \begin{proof}
@@ -1709,8 +1709,8 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     \notready
     \uses{def:parent_hamiltonian_ground_space_bnt, def:bnt_span,
         thm:chain_ground_space_eq_mpv_normal}
-    Every vector in the assembled parent ground space should decompose into blockwise chain
-    ground states, and therefore lie in the BNT span.
+    If $1 < L$ and $N \ge L + 1$, every vector in the assembled parent ground space should
+    decompose into blockwise chain ground states, and therefore lie in the BNT span.
 \end{theorem}
 
 \begin{proof}
@@ -1725,7 +1725,8 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     \lean{MPSTensor.parentHamiltonian_gs_eq_bnt_span}
     \uses{thm:parent_ground_space_le_bnt_span, lem:bnt_mpv_mem_ground_space,
         def:parent_hamiltonian_ground_space_bnt, def:bnt_span}
-    For a canonical-form/BNT family, the assembled parent ground space equals the BNT span:
+    If $1 < L$ and $N \ge L + 1$, then for a canonical-form/BNT family the assembled
+    parent ground space equals the BNT span:
     \[
         \operatorname{ParentGround}_{N,L}(A) = \operatorname{BNTSpan}_{N}(A).
     \]
