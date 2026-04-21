@@ -306,6 +306,21 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 
 \subsection{Injectivity of the ground-space map}
 
+\begin{lemma}[Ground-space map injectivity from full word span]%
+    \label{lem:ground_space_map_injective_word_span}
+    \lean{MPSTensor.groundSpaceMap_injective_of_wordSpan_eq_top}
+    \leanok
+    \uses{def:ground_space_map, def:word_span}
+    If $S_L(A) = \MN{D}$, then $\Gamma_L$ is injective.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    If $\Gamma_L(X) = 0$, then $\tr(A^\sigma X) = 0$ for every length-$L$ word
+    $\sigma$. Since the products $\{A^\sigma\}_\sigma$ span $\MN{D}$,
+    nondegeneracy of the trace pairing gives $X = 0$.
+\end{proof}
+
 \begin{theorem}[Ground-space map injectivity]\label{thm:ground_space_map_injective}
     \lean{MPSTensor.groundSpaceMap_injective}
     \leanok
@@ -315,9 +330,10 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 
 \begin{proof}
     \leanok
-    If $\Gamma_L(X) = 0$ then $\tr(A^\sigma X) = 0$ for every length-$L$ word
-    $\sigma$. Since $A$ is injective, the products $\{A^\sigma\}_\sigma$ span
-    $\MN{D}$, so the trace pairing gives $X = 0$.
+    Injectivity gives $S_1(A) = \MN{D}$. Hence $\Id \in S_1(A)$, so the word
+    spans remain equal to $\MN{D}$ for all lengths $L \ge 1$. Lemma~
+    \ref{lem:ground_space_map_injective_word_span} then gives injectivity of
+    $\Gamma_L$.
 \end{proof}
 
 \begin{theorem}[Ground-space dimension]\label{thm:ground_space_finrank_eq}

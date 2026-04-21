@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.IntersectionProperty
-import TNLean.MPS.Chain.BlockedChainFT
 import Mathlib.Data.Fin.Tuple.Basic
 
 /-!
@@ -83,20 +82,6 @@ produces the expected boundary matrix `A j * X`. -/
   simp only [restrictLast_apply, groundSpaceMap_apply]
   rw [evalWord_ofFn_snoc]
   simp [Matrix.mul_assoc]
-
-/-- If the length-`L` word span is all of `M_D`, then `groundSpaceMap A L` is
-injective. -/
-theorem groundSpaceMap_injective_of_wordSpan_eq_top {A : MPSTensor d D} {L : ℕ}
-    (hwordL : wordSpan A L = ⊤) :
-    Function.Injective (groundSpaceMap A L) := by
-  have hBlkInj : IsInjective (blockTensor A L) := by
-    exact (isNBlkInjective_iff_blockTensor_isInjective A L).mp
-      ((wordSpan_eq_top_iff_isNBlkInjective A L).mp hwordL)
-  intro X Y hXY
-  apply groundSpaceMap_injective hBlkInj (show 0 < 1 by omega)
-  ext σ
-  have hXY' := congrArg (fun ψ => ψ (decodeBlock d L (σ 0))) hXY
-  simpa [groundSpaceMap_apply, blockTensor, wordOfBlock, decodeBlock] using hXY'
 
 /-- Block injectivity at length `L` implies injectivity of `groundSpaceMap A L`. -/
 theorem groundSpaceMap_injective_of_isNBlkInjective {A : MPSTensor d D} {L : ℕ}

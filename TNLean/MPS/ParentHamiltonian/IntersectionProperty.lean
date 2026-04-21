@@ -29,6 +29,8 @@ of the parent Hamiltonian (see `UniqueGroundState.lean`).
 
 * `MPSTensor.groundSpace_inLeftGround` — forward direction, left window
 * `MPSTensor.groundSpace_inRightGround` — forward direction, right window
+* `MPSTensor.groundSpaceMap_injective_of_wordSpan_eq_top` — injectivity from
+  full word span at length `L`
 * `MPSTensor.groundSpaceMap_injective` — injectivity for injective tensors
 * `MPSTensor.groundSpace_finrank_eq` — dimension equals `D²`
 * `MPSTensor.groundSpace_intersection` — the intersection property
@@ -166,37 +168,14 @@ theorem groundSpace_inRightGround (A : MPSTensor d D) (L : ℕ)
 
 /-! ### Injectivity of the ground-space map -/
 
-/-- For an injective tensor, `groundSpaceMap A L` is injective for any `L ≥ 1`.
-
-**Proof sketch**: It suffices to show `groundSpaceMap A L X = 0 → X = 0`.
-If `tr(A^σ · X) = 0` for all words `σ` of length `L`, and the set `{A^σ}`
-spans `M_D(ℂ)` (which holds for `L ≥ 1` by the injectivity hypothesis),
-then nondegeneracy of the trace pairing gives `X = 0`. -/
-theorem groundSpaceMap_injective {A : MPSTensor d D} (hA : IsInjective A)
-    {L : ℕ} (hL : 0 < L) :
+/-- If the length-`L` word span is all of `M_D(ℂ)`, then `groundSpaceMap A L`
+is injective. -/
+theorem groundSpaceMap_injective_of_wordSpan_eq_top {A : MPSTensor d D} {L : ℕ}
+    (hwordL : wordSpan A L = ⊤) :
     Function.Injective (groundSpaceMap A L) := by
   have hker : (groundSpaceMap A L).ker = ⊥ := by
     apply (LinearMap.ker_eq_bot').2
     intro X hX
-    have hword1 : wordSpan A 1 = ⊤ := by
-      have hRange :
-          Set.range (fun σ : Fin 1 → Fin d => evalWord A (List.ofFn σ)) = Set.range A := by
-        ext M
-        constructor
-        · rintro ⟨σ, rfl⟩
-          exact ⟨σ 0, by simp [evalWord]⟩
-        · rintro ⟨i, rfl⟩
-          exact ⟨fun _ => i, by simp [evalWord]⟩
-      change Submodule.span ℂ (Set.range fun σ : Fin 1 → Fin d => evalWord A (List.ofFn σ)) = ⊤
-      rw [hRange]
-      exact hA
-    have hone : (1 : Matrix (Fin D) (Fin D) ℂ) ∈ wordSpan A 1 := by
-      rw [hword1]
-      exact Submodule.mem_top
-    have hwordL : wordSpan A L = ⊤ := by
-      have hmono : wordSpan A 1 ≤ wordSpan A L :=
-        wordSpan_mono'_of_one_mem_wordSpan_one A hone (by omega)
-      exact eq_top_iff.mpr (by simpa [hword1] using hmono)
     have hφ :
         (Matrix.traceLinearMap (Fin D) ℂ ℂ).comp (LinearMap.mulRight ℂ X) = 0 := by
       apply LinearMap.ext_on_range
@@ -212,6 +191,35 @@ theorem groundSpaceMap_injective {A : MPSTensor d D} (hA : IsInjective A)
         Matrix.trace (X * N) = Matrix.trace (N * X) := Matrix.trace_mul_comm X N
         _ = 0 := hNX
   exact LinearMap.ker_eq_bot.mp hker
+
+/-- For an injective tensor, `groundSpaceMap A L` is injective for any `L ≥ 1`.
+
+**Proof sketch**: injectivity gives `wordSpan A 1 = ⊤`; since `1 ∈ wordSpan A 1`,
+monotonicity of word spans yields `wordSpan A L = ⊤` for all `L ≥ 1`, and the
+previous theorem applies. -/
+theorem groundSpaceMap_injective {A : MPSTensor d D} (hA : IsInjective A)
+    {L : ℕ} (hL : 0 < L) :
+    Function.Injective (groundSpaceMap A L) := by
+  have hword1 : wordSpan A 1 = ⊤ := by
+    have hRange :
+        Set.range (fun σ : Fin 1 → Fin d => evalWord A (List.ofFn σ)) = Set.range A := by
+      ext M
+      constructor
+      · rintro ⟨σ, rfl⟩
+        exact ⟨σ 0, by simp [evalWord]⟩
+      · rintro ⟨i, rfl⟩
+        exact ⟨fun _ => i, by simp [evalWord]⟩
+    change Submodule.span ℂ (Set.range fun σ : Fin 1 → Fin d => evalWord A (List.ofFn σ)) = ⊤
+    rw [hRange]
+    exact hA
+  have hone : (1 : Matrix (Fin D) (Fin D) ℂ) ∈ wordSpan A 1 := by
+    rw [hword1]
+    exact Submodule.mem_top
+  have hwordL : wordSpan A L = ⊤ := by
+    have hmono : wordSpan A 1 ≤ wordSpan A L :=
+      wordSpan_mono'_of_one_mem_wordSpan_one A hone (by omega)
+    exact eq_top_iff.mpr (by simpa [hword1] using hmono)
+  exact groundSpaceMap_injective_of_wordSpan_eq_top hwordL
 
 /-- For an injective tensor, the ground space has dimension exactly `D²` for `L ≥ 1`.
 
