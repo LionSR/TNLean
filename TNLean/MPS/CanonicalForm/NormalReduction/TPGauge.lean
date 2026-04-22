@@ -132,16 +132,18 @@ private theorem isIrreducibleTensor_tpGauge_of_isIrreducibleTensor
     isIrreducibleTensor_of_isIrreducibleAction
       (d := d) (D := D) (tpGauge (d := d) (D := D) A σ) hActionGauge
 
-/-- Documentary blockwise Perron--Frobenius / TP-gauge stage for an irreducible block
-decomposition.
+/-- Blockwise Perron--Frobenius / TP-gauge stage for an irreducible block decomposition.
 
-This theorem is currently unused by the public endpoint below, which starts later from blocks that
-are already primitive and left-canonical. We keep it as a public record of the earlier TP
-normalization route: its extra nonzero-block hypothesis lives on a chosen decomposition, so it
-still does not by itself give an unconditional arbitrary-input endpoint under the current `SameMPV₂`
-interface. Concretely, every input block is assumed to have some nonzero Kraus operator, excluding
-the all-zero scalar counterexample and matching the hypotheses of the
-corresponding irreducible-to-TP wrapper from `Existence.lean`. -/
+This theorem is the blockwise TP-normalization step used by
+`exists_tp_gauge_from_arbitrary_with_zeroTail`, and it also records the earlier
+TP-normalization route on a fixed irreducible decomposition. Its extra
+nonzero-block hypothesis lives on a chosen decomposition, so it still does not
+by itself give an unconditional arbitrary-input endpoint under the current
+`SameMPV₂` interface. Concretely, every input block is assumed to have some
+nonzero Kraus operator, excluding the all-zero scalar counterexample and
+matching the hypotheses of the corresponding irreducible-to-TP wrapper from
+`Existence.lean`. It remains separate from the later normal-canonical-form
+endpoint in `NormalReduction/Main.lean`. -/
 theorem exists_tp_gauge_blockwise
     (A : MPSTensor d D)
     {r0 : ℕ} {dim0 : Fin r0 → ℕ}
