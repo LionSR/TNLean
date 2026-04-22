@@ -35,13 +35,17 @@ jobs:
           python-version: '3.12'
 
       - name: Install system dependencies
-        run: sudo apt-get update && sudo apt-get install -y graphviz libgraphviz-dev texlive-binaries
+        run: sudo apt-get update && sudo apt-get install -y texlive-latex-extra texlive-fonts-recommended texlive-science latexmk graphviz libgraphviz-dev
 
       - name: Install leanblueprint
-        run: pip install leanblueprint
+        run: |
+          pipx install leanblueprint
+          pipx inject --include-apps --force leanblueprint plastex
 
       - name: Build blueprint
+        working-directory: blueprint
         run: |
+          leanblueprint pdf
           set -o pipefail
           leanblueprint web 2>&1 | tee /tmp/blueprint-output.txt
           if grep -q "^ERROR:" /tmp/blueprint-output.txt; then
