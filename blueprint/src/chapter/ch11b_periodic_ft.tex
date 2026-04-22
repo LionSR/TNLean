@@ -608,7 +608,7 @@ The following is Theorem~3.8 (``equal case'') of \cite{DeLasCuevas2017Irreducibl
 
 \section{Physical symmetries on periodic MPS}\label{sec:periodic_symmetry}
 
-\begin{theorem}[Cor.~4.1 — Physical symmetry yields a virtual $Z$-gauge]%
+\begin{theorem}[Physical symmetry yields a virtual $Z$-gauge]%
     \label{cor:cor_4_1_physical_symmetry_zgauge}
     \lean{MPSTensor.cor_4_1_physical_symmetry_zgauge}
     \leanok
@@ -619,7 +619,7 @@ The following is Theorem~3.8 (``equal case'') of \cite{DeLasCuevas2017Irreducibl
     physical leg, acting unitarily ($U(g)\, U(g)^{\dagger} = \Id$).
     Assume moreover the periodic equal-case Fundamental Theorem of MPS
     (Theorem~\ref{thm:periodic_ft}) as an explicit hypothesis on the
-    pair $(d, D)$ — formalised in Lean as the proposition
+    pair $(d, D)$, represented by the proposition
     \lean{MPSTensor.PeriodicEqualCaseFT}\,$d\,D$.
     If $A$ is on-site symmetric under~$U$ — that is, the twisted tensor
     $\widetilde{A}_g$ has the same MPV family as~$A$ for every $g \in G$
@@ -673,7 +673,7 @@ The following is Theorem~3.8 (``equal case'') of \cite{DeLasCuevas2017Irreducibl
     $u$ is an independent analytic input.
 \end{definition}
 
-\begin{theorem}[Cor.~4.1 projective-representation upgrade]%
+\begin{theorem}[Projective-representation upgrade]%
     \label{thm:cor_4_1_projective_rep}
     \lean{MPSTensor.cor_4_1_projective_rep}
     \leanok
@@ -743,9 +743,8 @@ The following is Theorem~3.8 (``equal case'') of \cite{DeLasCuevas2017Irreducibl
     The cohomology class of $\omega$ in $H^{2}(G, U(1))$ classifies the
     SPT phase of the symmetric MPS (cf.~Chen--Gu--Wen and
     P\'erez-Garc\'ia et al.).  This classification statement is not
-    formalised at present; only the underlying 2-cocycle identity of
-    Theorem~\ref{thm:cor_4_1_projective_rep_cocycle} is available in
-    the Lean development.
+    formalised at present; here only the underlying 2-cocycle identity of
+    Theorem~\ref{thm:cor_4_1_projective_rep_cocycle} is available.
 \end{remark}
 
 \begin{theorem}[Projective representation and cocycle from symmetry]%
@@ -830,7 +829,7 @@ for the irreducible-form framework in \cite{DeLasCuevas2017Irreducible}.
     irreducible-form decomposition of $C$.
 \end{proof}
 
-\begin{theorem}[Thm.~4.1 — $p$-refinability $\iff$ $p$-divisibility]%
+\begin{theorem}[$p$-refinability iff $p$-divisibility]%
     \label{thm:thm_4_1_p_refinement}
     \lean{MPSTensor.thm_4_1_p_refinement}
     \leanok
@@ -854,7 +853,7 @@ for the irreducible-form framework in \cite{DeLasCuevas2017Irreducible}.
     yields the full equivalence.
 \end{proof}
 
-\begin{theorem}[Thm.~4.1 forward direction, conditional form]%
+\begin{theorem}[$p$-refinability implies $p$-divisibility under the canonicalization hypothesis]%
     \label{thm:thm_4_1_p_refinement_forward}
     \lean{MPSTensor.thm_4_1_p_refinement_forward}
     \leanok
@@ -875,7 +874,7 @@ for the irreducible-form framework in \cite{DeLasCuevas2017Irreducible}.
     $\mathcal{E}_B$ with the $p$-th power of the channel $\mathcal{E}_A$.
 \end{proof}
 
-\begin{theorem}[Thm.~4.1 reverse direction, conditional form]%
+\begin{theorem}[$p$-divisibility implies $p$-refinability under the inverse canonicalization hypothesis]%
     \label{thm:thm_4_1_p_refinement_reverse}
     \lean{MPSTensor.thm_4_1_p_refinement_reverse}
     \leanok

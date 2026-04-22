@@ -175,7 +175,7 @@ finite-dimensional quantum systems.
     holds if and only if $\rho_{ABC}$ admits a quantum Markov decomposition on
     the middle subsystem $B$.
 
-    \textbf{Status:} Recorded in Lean as a sanctioned external-input axiom.
+    \textbf{Status:} Taken here as an external input.
     This is the equality criterion needed
     by Appendix~C of arXiv:1606.00608. We cite Hayashi,
     \emph{J. Phys. A} 37 (2004) L205--L208, and Ruskai,
@@ -214,15 +214,15 @@ finite-dimensional quantum systems.
     which gives $I(A{:}C) \ge 0$.
 \end{proof}
 
-\section{Entropy-namespace restatements}
+\section{Entropy restatements}
 
-This section records the restated entropy declarations used later in the
+This section records the entropy restatements used later in the
 development: von Neumann entropy, strong subadditivity, quantum Markov
 decomposition, and mutual information. The external inputs are accepted
 as given, while their full proofs are tracked separately in the entropy
 formalization project.
 
-\begin{definition}[Von Neumann entropy in the entropy namespace]\label{def:entropy_von_neumann_entropy}
+\begin{definition}[Restated von Neumann entropy]\label{def:entropy_von_neumann_entropy}
     \lean{Entropy.vonNeumannEntropy}
     \leanok
     \uses{def:von_neumann_entropy}
@@ -231,7 +231,7 @@ formalization project.
     Definition~\ref{def:von_neumann_entropy}.
 \end{definition}
 
-\begin{theorem}[Strong subadditivity in the entropy namespace]\label{thm:entropy_strong_subadditivity}
+\begin{theorem}[Restated strong subadditivity]\label{thm:entropy_strong_subadditivity}
     \lean{Entropy.strongSubadditivity}
     \leanok
     \uses{def:entropy_von_neumann_entropy, def:traceA_ABC, def:traceC_ABC, def:traceAC_ABC}
@@ -241,18 +241,18 @@ formalization project.
         S(\rho_{ABC}) + S(\rho_B) \le S(\rho_{AB}) + S(\rho_{BC}).
     \]
     This restatement introduces no new axiom: it records the same
-    sanctioned strong-subadditivity input already used above. The underlying
+    strong-subadditivity input already used above. The underlying
     axiom's
     proof (Lieb--Ruskai 1973) is deferred to the umbrella entropy
     issue.
 \end{theorem}
 
-\begin{definition}[Quantum Markov decomposition in the entropy namespace]
+\begin{definition}[Restated quantum Markov decomposition]
     \label{def:entropy_quantum_markov_decomposition}
     \lean{Entropy.QuantumMarkovDecomposition}
     \leanok
     \uses{def:hayashi_markov_decomposition}
-    This is the entropy-namespace version of the Hayashi Markov
+    This is the entropy restatement of the Hayashi Markov
     decomposition from Definition~\ref{def:hayashi_markov_decomposition}.
 \end{definition}
 
@@ -267,11 +267,11 @@ formalization project.
     Markov decomposition on the middle subsystem $B$.
 
     This restatement introduces no new axiom: it records the same
-    sanctioned equality criterion as
+    equality criterion as
     Theorem~\ref{thm:hayashi_ssa_equality_characterization}.
 \end{theorem}
 
-\begin{definition}[Mutual information in the entropy namespace]\label{def:entropy_mutual_information}
+\begin{definition}[Restated mutual information]\label{def:entropy_mutual_information}
     \lean{Entropy.mutualInformation}
     \leanok
     \uses{def:entropy_von_neumann_entropy}

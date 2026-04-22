@@ -905,7 +905,7 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
     Apply the identity map in the definition of the Choi matrix.
 \end{proof}
 
-\begin{theorem}[Prop.~2.1: CP iff Choi matrix is PSD]\label{thm:cp_iff_choi_posSemidef}
+\begin{theorem}[Complete positivity iff the Choi matrix is positive semidefinite]\label{thm:cp_iff_choi_posSemidef}
     \lean{ChoiJamiolkowski.cp_iff_choi_posSemidef}
     \leanok
     \uses{def:choi_matrix, def:cp_map}
@@ -928,7 +928,7 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
     matrix units.
 \end{proof}
 
-\begin{theorem}[Prop.~2.1: TP implies partial trace condition]\label{thm:traceLeft_choiMatrix_of_tp}
+\begin{theorem}[Trace preservation implies the partial-trace condition]\label{thm:traceLeft_choiMatrix_of_tp}
     \lean{ChoiJamiolkowski.traceLeft_choiMatrix_of_tp}
     \leanok
     \uses{def:choi_matrix, def:partial_trace, def:trace_preserving}
@@ -948,7 +948,7 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
     Taking the trace gives $\frac{1}{D}\delta_{ij}$.
 \end{proof}
 
-\begin{theorem}[Prop.~2.1: Hermiticity correspondence]\label{thm:choiMatrix_isHermitian_iff_hermiticityPreserving}
+\begin{theorem}[Hermiticity preservation and the Choi matrix]\label{thm:choiMatrix_isHermitian_iff_hermiticityPreserving}
     \lean{ChoiJamiolkowski.choiMatrix_isHermitian_iff_hermiticityPreserving}
     \leanok
     \uses{def:choi_matrix}
@@ -968,7 +968,7 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
     By linearity this extends to all $B$.
 \end{proof}
 
-\begin{theorem}[Prop.~2.1: Trace of Choi matrix for TP map]\label{thm:trace_choiMatrix_of_tp}
+\begin{theorem}[Trace of the Choi matrix of a trace-preserving map]\label{thm:trace_choiMatrix_of_tp}
     \lean{ChoiJamiolkowski.trace_choiMatrix_of_tp}
     \leanok
     \uses{def:choi_matrix, def:trace_preserving, thm:traceLeft_choiMatrix_of_tp}
@@ -989,7 +989,7 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
 \label{sec:kraus_representation}
 %% =========================================================
 
-\begin{theorem}[Thm.~2.1: TP implies Kraus normalization]\label{thm:kraus_sum_conjTranspose_mul_of_tp}
+\begin{theorem}[Trace preservation implies Kraus normalization]\label{thm:kraus_sum_conjTranspose_mul_of_tp}
     \lean{kraus_sum_conjTranspose_mul_of_tp}
     \leanok
     \uses{def:cp_map, def:trace_preserving}
@@ -1010,7 +1010,7 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
     $\sum_i K_i^\dagger K_i = \Id$.
 \end{proof}
 
-\begin{theorem}[Thm.~2.1: Kraus normalization implies TP]\label{thm:kraus_tp_of_sum_conjTranspose_mul}
+\begin{theorem}[Kraus normalization implies trace preservation]\label{thm:kraus_tp_of_sum_conjTranspose_mul}
     \lean{kraus_tp_of_sum_conjTranspose_mul}
     \leanok
     \uses{def:cp_map, def:trace_preserving}
@@ -1027,7 +1027,7 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
        = \operatorname{tr}(X)$.
 \end{proof}
 
-\begin{theorem}[Thm.~2.1: Unitality implies Kraus unital normalization]
+\begin{theorem}[Unitality implies Kraus unital normalization]
     \label{thm:kraus_sum_mul_conjTranspose_of_unital}
     \lean{kraus_sum_mul_conjTranspose_of_unital}
     \leanok
@@ -1042,7 +1042,7 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
     Evaluate the Kraus formula at the identity matrix.
 \end{proof}
 
-\begin{theorem}[Thm.~2.1: Unitary freedom in Kraus operators]\label{thm:kraus_same_map_of_unitary_combination}
+\begin{theorem}[Unitary freedom in Kraus operators]\label{thm:kraus_same_map_of_unitary_combination}
     \lean{kraus_same_map_of_unitary_combination}
     \leanok
     \uses{def:cp_map}
@@ -1082,7 +1082,7 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
     $W^\dagger W = \Id$ to collapse the coefficient matrix.
 \end{proof}
 
-\begin{theorem}[Thm.~2.1: Orthonormal Kraus transition is unitary]\label{thm:kraus_transition_unitary_of_hs_orthonormal}
+\begin{theorem}[The transition matrix of orthonormal Kraus families is unitary]\label{thm:kraus_transition_unitary_of_hs_orthonormal}
     \lean{kraus_transition_unitary_of_hs_orthonormal}
     \leanok
     \uses{def:cp_map}
@@ -1103,7 +1103,7 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
     $U U^\dagger = \Id_r$, hence also $U^\dagger U = \Id_r$.
 \end{proof}
 
-\begin{theorem}[Thm.~2.1: Dual map equality from primal map equality]\label{thm:kraus_dual_eq_of_map_eq}
+\begin{theorem}[Dual map equality from primal map equality]\label{thm:kraus_dual_eq_of_map_eq}
     \lean{kraus_dual_eq_of_map_eq}
     \leanok
     \uses{def:cp_map}
@@ -1124,7 +1124,7 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
     Nondegeneracy of the trace pairing gives the result.
 \end{proof}
 
-\begin{theorem}[Thm.~2.1: Equal Stinespring Gramians]\label{thm:kraus_conjTranspose_mul_eq_of_map_eq}
+\begin{theorem}[Equal Stinespring Gramians]\label{thm:kraus_conjTranspose_mul_eq_of_map_eq}
     \lean{kraus_conjTranspose_mul_eq_of_map_eq}
     \leanok
     \uses{thm:kraus_dual_eq_of_map_eq}
@@ -1137,7 +1137,7 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
     Specialise Theorem~\ref{thm:kraus_dual_eq_of_map_eq} at $Y = \Id$.
 \end{proof}
 
-\begin{theorem}[Thm.~2.1 item 4: Rectangular Kraus freedom (necessary direction)]\label{thm:kraus_rectangular_freedom}
+\begin{theorem}[Rectangular Kraus freedom]\label{thm:kraus_rectangular_freedom}
     \lean{kraus_rectangular_freedom}
     \leanok
     \uses{thm:kraus_dual_eq_of_map_eq, thm:kraus_conjTranspose_mul_eq_of_map_eq}
@@ -1157,7 +1157,7 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
     range, and extend to a full isometry $V$ with $V^\dagger V = \Id_{r_2}$.
 \end{proof}
 
-\begin{theorem}[Thm.~2.1 item 4: Rectangular Kraus freedom (general index variant)]\label{thm:kraus_rectangular_freedom'}
+\begin{theorem}[Rectangular Kraus freedom with general finite index types]\label{thm:kraus_rectangular_freedom'}
     \lean{kraus_rectangular_freedom'}
     \leanok
     \uses{thm:kraus_rectangular_freedom}
@@ -1172,7 +1172,7 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
     Theorem~\ref{thm:kraus_rectangular_freedom}.
 \end{proof}
 
-\begin{theorem}[Wolf Thm.~2.18: Isometric freedom of Kraus representations]
+\begin{theorem}[Isometric freedom of Kraus representations]
     \label{thm:kraus_isometry_freedom_iff}
     \lean{kraus_isometry_freedom_iff}
     \leanok
@@ -1199,7 +1199,7 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
     diagonal.
 \end{proof}
 
-\begin{theorem}[Wolf Thm.~2.18: Unitary freedom of Kraus representations]
+\begin{theorem}[Unitary freedom of Kraus representations]
     \label{thm:kraus_unitary_freedom_iff}
     \lean{kraus_unitary_freedom_iff}
     \leanok
@@ -1287,7 +1287,7 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
     \]
 \end{theorem}
 
-\begin{theorem}[Thm.~2.2: Stinespring dual representation]\label{thm:stinespring_dual_representation}
+\begin{theorem}[Stinespring dual representation]\label{thm:stinespring_dual_representation}
     \lean{stinespring_dual_representation}
     \leanok
     \uses{def:stinespring_v, def:cp_map, thm:stinespring_v_conjTranspose_mul}
@@ -1310,7 +1310,7 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
     $\sum_j K_j^\dagger A K_j$.
 \end{proof}
 
-\begin{theorem}[Thm.~2.2: Isometry condition iff TP]\label{thm:stinespringV_isometry_iff_kraus_normalized}
+\begin{theorem}[The Stinespring isometry condition iff trace preservation]\label{thm:stinespringV_isometry_iff_kraus_normalized}
     \lean{stinespringV_isometry_iff_kraus_normalized}
     \leanok
     \uses{def:stinespring_v, def:trace_preserving}
@@ -1329,7 +1329,7 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
        = (\sum_j K_j^\dagger K_j)_{ab}$.
 \end{proof}
 
-\begin{theorem}[Thm.~2.2: Stinespring Schr\"odinger representation]\label{thm:stinespring_schrodinger_representation}
+\begin{theorem}[Stinespring Schr\"odinger representation]\label{thm:stinespring_schrodinger_representation}
     \lean{stinespring_schrodinger_representation}
     \leanok
     \uses{def:stinespring_v, def:cp_map, def:partial_trace}
@@ -1479,7 +1479,7 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
     delta-function form of $(P_i)_{(a,b),(c,d)}$.
 \end{proof}
 
-\begin{theorem}[Thm.~2.6: Naimark dilation]\label{thm:naimark_recovers_povm}
+\begin{theorem}[Naimark dilation]\label{thm:naimark_recovers_povm}
     \lean{POVM.naimark_recovers_povm}
     \leanok
     \uses{def:povm, def:naimark_isometry, def:naimark_projection,
@@ -1743,7 +1743,7 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
     $\overline{\det U}^{\,D}(\det U)^D = 1$.
 \end{proof}
 
-\begin{theorem}[Thm.~6.1(1): Determinant bound for positive TP maps]
+\begin{theorem}[Determinant bound for positive trace-preserving maps]
     \label{thm:channelDet_norm_le_one}
     \lean{channelDet_norm_le_one_of_positive_tracePreserving,
           channelDet_norm_le_one_of_channel}\leanok
@@ -1761,7 +1761,7 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
     $|\det T| = \prod_i |\mu_i| \le 1$ follows by induction.
 \end{proof}
 
-\begin{theorem}[Thm.~6.1(2): Determinant one iff unitary channel]
+\begin{theorem}[Determinant one iff the channel is unitary]
     \label{thm:channelDet_norm_eq_one_iff_unitary}
     \lean{channelDet_norm_eq_one_iff_exists_unitaryChannel,
           channelDet_norm_eq_one_iff_exists_unitaryChannel_of_channel}\leanok
@@ -1823,7 +1823,7 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
     multiplicative domain.
 \end{proof}
 
-\begin{theorem}[Thm.~6.12: Fixed points form a $*$-subalgebra]
+\begin{theorem}[Fixed points form a $*$-subalgebra]
     \label{thm:fixedPointsStarSubalgebra}
     \lean{Kraus.fixedPointsStarSubalgebra}\leanok
     \uses{def:kraus_fixed_points, def:kraus_map_channels}
@@ -1964,7 +1964,7 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
     where $E^*(X) = \sum_i K_i^\dagger X K_i$.
 \end{definition}
 
-\begin{theorem}[Thm.~6.12 in the Heisenberg picture]
+\begin{theorem}[Fixed points form a $*$-subalgebra in the Heisenberg picture]
     \label{thm:adjointFixedPointsStarSubalgebra}
     \lean{Kraus.adjointFixedPointsStarSubalgebra, Kraus.fixedPoints_starSubalgebra}\leanok
     \uses{def:adjoint_fixed_points, def:kraus_map_channels}
@@ -1988,7 +1988,7 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
     It is a $*$-subalgebra of $\MN{D}$.
 \end{definition}
 
-\begin{theorem}[Thm.~6.13: Adjoint fixed points = Kraus commutant]
+\begin{theorem}[Adjoint fixed points equal the Kraus commutant]
     \label{thm:adjointFixedPoints_eq_krausCommutant}
     \lean{Kraus.adjointFixedPointsStarSubalgebra_eq_krausCommutantStarSubalgebra}\leanok
     \uses{def:adjoint_fixed_points, def:kraus_commutant, def:kraus_map_channels}
