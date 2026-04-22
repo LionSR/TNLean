@@ -1,19 +1,18 @@
-name: Auto Fix (Lean)
+name: Auto Fix (Lean, Codex)
 
-# Unified auto-fix workflow. Triggers on:
-# 1. CI failure (Lean Action CI)        → fix build errors
-# 2. Blueprint failure (Lint blueprint) → fix blueprint compilation
-# 3. Review completion (Claude Code Review) with "auto-fix-claude" label → fix review comments
-# 4. Label addition ("auto-fix-claude") → retroactively fix any of the above
+# Codex variant of auto-fix.yml. ALL fix paths (CI, blueprint, review) are
+# gated on the "auto-fix-codex" label so users explicitly opt in per PR.
+# Triggers on:
+# 1. CI failure (Lean Action CI)        → fix build errors        (label-gated)
+# 2. Blueprint failure (Lint blueprint) → fix blueprint           (label-gated)
+# 3. Review completion (Claude Code Review) → fix review comments (label-gated)
+# 4. Label addition ("auto-fix-codex")  → retroactively fix any of the above
 
 on:
   workflow_run:
     workflows: ["Lean Action CI", "Lint blueprint", "Claude Code Review (Lean)"]
     types:
       - completed
-  # GitHub Actions cannot filter pull_request:labeled by label name here.
-  # We intentionally accept all label events and gate on auto-fix-claude
-  # (and open PR state) in jobs.setup.if below.
   pull_request:
     types: [labeled]
 
@@ -24,22 +23,13 @@ permissions:
   issues: write
   id-token: write
 
-# Concurrency is set per-job (not workflow-level) to avoid a problem where
-# adding any unrelated label to a PR would start a no-op run that cancels
-# an in-progress auto-fix via cancel-in-progress.
-
 jobs:
-  # ──────────────────────────────────────────────────────────────
-  # Setup: determine which fixes to run based on the trigger event
-  # ──────────────────────────────────────────────────────────────
   setup:
-    # For pull_request:labeled, this is the real trigger filter: only the
-    # auto-fix-claude label on an open same-repo PR should proceed.
     if: |
       (github.event_name == 'workflow_run' &&
        github.event.workflow_run.pull_requests[0] &&
        github.event.workflow_run.head_repository.full_name == github.repository) ||
-      (github.event_name == 'pull_request' && github.event.label.name == 'auto-fix-claude' &&
+      (github.event_name == 'pull_request' && github.event.label.name == 'auto-fix-codex' &&
        github.event.pull_request.state == 'open' &&
        github.event.pull_request.head.repo.full_name == github.repository)
     runs-on: ubuntu-latest
@@ -58,15 +48,22 @@ jobs:
         uses: actions/github-script@v8
         with:
           script: |
-            // Defaults
             core.setOutput('run_ci_fix', 'false');
             core.setOutput('run_blueprint_fix', 'false');
             core.setOutput('run_review_fix', 'false');
-            // NB: ci_run_id / blueprint_run_id are only consumed when the
-            // corresponding run_*_fix flag is 'true', so the default is unused.
-            // We still set it so fromJSON doesn't choke on undefined.
             core.setOutput('ci_run_id', '0');
             core.setOutput('blueprint_run_id', '0');
+
+            const LABEL = 'auto-fix-codex';
+
+            async function prHasLabel(prNumber) {
+              const { data: pr } = await github.rest.pulls.get({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: prNumber
+              });
+              return pr.labels.some(l => l.name === LABEL);
+            }
 
             if (context.eventName === 'workflow_run') {
               const wr = context.payload.workflow_run;
@@ -75,40 +72,37 @@ jobs:
               core.setOutput('head_branch', wr.head_branch);
               core.setOutput('pr_number', String(prNumber));
 
-              if (wr.name === 'Lean Action CI' && wr.conclusion === 'failure') {
+              // Classify the event before calling the label API, to avoid an
+              // extra REST call on uninteresting runs.
+              // NB: review-fix piggybacks on Claude's reviewer workflow —
+              //     there is no separate Codex reviewer.
+              const isCiFail = wr.name === 'Lean Action CI' && wr.conclusion === 'failure';
+              const isBlueprintFail = wr.name === 'Lint blueprint' && wr.conclusion === 'failure';
+              const isReviewOk = wr.name === 'Claude Code Review (Lean)' && wr.conclusion === 'success';
+              if (!(isCiFail || isBlueprintFail || isReviewOk)) return;
+
+              // ALL fix paths require the auto-fix-codex label.
+              if (!(await prHasLabel(prNumber))) {
+                core.notice(`PR #${prNumber} does not have the '${LABEL}' label. Skipping.`);
+                return;
+              }
+
+              if (isCiFail) {
                 core.setOutput('run_ci_fix', 'true');
                 core.setOutput('ci_run_id', String(wr.id));
-              } else if (wr.name === 'Lint blueprint' && wr.conclusion === 'failure') {
+              } else if (isBlueprintFail) {
                 core.setOutput('run_blueprint_fix', 'true');
                 core.setOutput('blueprint_run_id', String(wr.id));
-              } else if (wr.name === 'Claude Code Review (Lean)' && wr.conclusion === 'success') {
-                // Review fix requires the "auto-fix-claude" label
-                const { data: pr } = await github.rest.pulls.get({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  pull_number: prNumber
-                });
-                if (pr.labels.some(l => l.name === 'auto-fix-claude')) {
-                  core.setOutput('run_review_fix', 'true');
-                } else {
-                  core.notice(`PR #${prNumber} does not have the 'auto-fix-claude' label. Skipping review fix.`);
-                }
+              } else {
+                core.setOutput('run_review_fix', 'true');
               }
             } else if (context.eventName === 'pull_request') {
-              // Label was added — look up latest failed runs for this PR
               const pr = context.payload.pull_request;
               const headSha = pr.head.sha;
               core.setOutput('head_sha', headSha);
               core.setOutput('head_branch', pr.head.ref);
               core.setOutput('pr_number', String(pr.number));
 
-              // NB: workflow_run triggers match by workflow *name* (line 11),
-              // but this API queries by *filename*. If a workflow file is renamed,
-              // update both places.
-              // We query the *latest completed* PR run for this exact head SHA
-              // (event:'pull_request' + head_sha + per_page:1). That way a
-              // successful re-run supersedes an earlier failure on the same
-              // commit, and workflow_dispatch runs are ignored entirely.
               async function findFailedRun(workflowFile) {
                 try {
                   const runs = await github.rest.actions.listWorkflowRuns({
@@ -142,10 +136,6 @@ jobs:
                 core.setOutput('blueprint_run_id', String(blueprintRunId));
               }
 
-              // Check for unresolved review threads. We intentionally cap this at
-              // first:100 in setup to keep the label-trigger probe cheap; that is
-              // a reasonable bound for this repo, and any GraphQL failure here
-              // should not block CI/blueprint fixes.
               let hasUnresolvedReviews = false;
               try {
                 const query = `query($owner: String!, $repo: String!, $pr: Int!) {
@@ -175,26 +165,27 @@ jobs:
             }
 
   # ──────────────────────────────────────────────────────
-  # CI failure auto-fix (Lean build errors)
+  # CI failure auto-fix (Lean build errors) — Codex
   # ──────────────────────────────────────────────────────
+  # Shares the bot-fix-<branch> concurrency group with auto-fix.yml so Claude
+  # and Codex never push to the same branch simultaneously.
   auto-fix-ci:
     needs: setup
     if: needs.setup.outputs.run_ci_fix == 'true'
     concurrency:
       group: bot-fix-${{ needs.setup.outputs.head_branch }}
       cancel-in-progress: true
-    uses: ./.github/workflows/_ci-auto-fix-shared.yml
+    uses: ./.github/workflows/_codex-auto-fix-shared.yml
     secrets:
-      CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      BOT_PAT: ${{ secrets.BOT_PAT }}
     with:
       head_sha: ${{ needs.setup.outputs.head_sha }}
       head_branch: ${{ needs.setup.outputs.head_branch }}
       workflow_run_id: ${{ fromJSON(needs.setup.outputs.ci_run_id) }}
       pr_number: ${{ fromJSON(needs.setup.outputs.pr_number) }}
       setup_lean: true
-      plugin_marketplaces: 'https://github.com/leanprover/skills.git'
-      plugins: 'lean@leanprover'
-      claude_prompt: |
+      codex_prompt: |
         The Lean CI build failed. Your task is to fix the build errors.
 
         Instructions:
@@ -212,10 +203,10 @@ jobs:
         3. Your goal is to fully close every incomplete lemma/theorem, not just silence errors. Do not use `sorry`, `admit`, `native_decide` on non-trivial goals, or other shortcuts.
         4. Run `lake build` to verify your fix compiles with zero errors and zero `sorry`s.
         5. Make minimal, targeted fixes. Do not refactor unrelated code.
-        6. Commit and push your fix to the current branch. Prefix commit messages with `[claude-auto-fix]`.
-        7. After pushing, use the GitHub MCP tools to post a comment on the PR summarizing what was fixed.
+        6. Commit and push your fix to the current branch. Prefix commit messages with `[codex-auto-fix]`.
+        7. After pushing, use `gh pr comment ${{ needs.setup.outputs.pr_number }} --body "..."` to post a summary of what was fixed.
 
-        Quality bar (same rubric as Claude Code Review — your fix MUST satisfy ALL of these before committing):
+        Quality bar (your fix MUST satisfy ALL of these before committing):
         - Proof integrity (BLOCKER): no sorry, admit, native_decide on non-trivial goals, unsafeCast, or new axioms. See docs/PROOF_INTEGRITY.md for the full list.
         - Proof correctness (BLOCKER): structured proofs, not brute-force simp/omega/ring chains. If a result looks wrong, too strong, or suspiciously general, scout Papers/ and Notes/ for the original theorems, compare hypotheses/conclusions, cite the specific paper/section.
         - Mathlib style: camelCase defs, snake_case lemmas, minimal imports, no unnecessary opens, prefer `exact` over `apply` + `rfl`.
@@ -225,64 +216,55 @@ jobs:
         - Documentation: new definitions and key theorems get docstrings that explain mathematical meaning, not Lean syntax.
         - Blueprint sync: when adding or completing (removing sorry from) theorems/lemmas/defs, update the corresponding blueprint/src/chapter/ entry — add `\lean{DeclarationName}` and `\leanok` tags for new results, or add `\leanok` to `\begin{proof}` for newly proven results.
         If you cannot satisfy a BLOCKER category, STOP and post a PR comment explaining the obstacle instead of pushing a half-fix.
-      claude_allowed_tools: "Edit,Write,Read,Glob,Grep,Bash(lake build),Bash(lake exe cache get),Bash(lake update),Bash(lake env),Bash(lean *),Bash(elan *),Bash(git add *),Bash(git commit *),Bash(git push *),Bash(git diff *),Bash(git status),mcp__github__*"
-      claude_system_prompt: "This is a Lean 4 / Mathlib repository. Prefer minimal diffs. You MUST fully close every lemma and theorem — never leave sorry, admit, native_decide on non-trivial goals, or any placeholder. Hold your fix to the same 8-category quality bar used by Claude Code Review (proof integrity, proof correctness, Mathlib style, type safety, performance, modularity, documentation, blueprint sync). See docs/PROOF_INTEGRITY.md for the full integrity ruleset. If a mathematical result looks wrong, too strong, or suspiciously general, scout the LaTeX sources in Papers/ and Notes/ and cite the specific paper/section. Validate all changes with lake build before committing. Use GitHub MCP tools (mcp__github__*) to comment on the PR with a summary of your fix."
 
   # ──────────────────────────────────────────────────────
-  # Blueprint compilation auto-fix
+  # Blueprint compilation auto-fix — Codex
   # ──────────────────────────────────────────────────────
-  # Serialized after CI fix to avoid parallel pushes to the same branch.
-  # !cancelled() still allows this job to run after skipped/successful needs,
-  # including when auto-fix-ci is skipped, but does not run after cancellation.
   auto-fix-blueprint:
     needs: [setup, auto-fix-ci]
     if: "!cancelled() && needs.setup.result == 'success' && needs.setup.outputs.run_blueprint_fix == 'true'"
     concurrency:
       group: bot-fix-${{ needs.setup.outputs.head_branch }}
       cancel-in-progress: true
-    uses: ./.github/workflows/_ci-auto-fix-shared.yml
+    uses: ./.github/workflows/_codex-auto-fix-shared.yml
     secrets:
-      CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      BOT_PAT: ${{ secrets.BOT_PAT }}
     with:
       head_sha: ${{ needs.setup.outputs.head_sha }}
       head_branch: ${{ needs.setup.outputs.head_branch }}
       workflow_run_id: ${{ fromJSON(needs.setup.outputs.blueprint_run_id) }}
       pr_number: ${{ fromJSON(needs.setup.outputs.pr_number) }}
       setup_lean: false
-      claude_prompt: |
+      codex_prompt: |
         The blueprint compilation (leanblueprint web) failed. Your task is to fix the blueprint errors.
 
         Instructions:
         1. Read the error logs carefully to identify the failing .tex files and error messages.
         2. Common blueprint compilation failures and how to fix them:
-           - Unresolved \ref or \label: Check for typos in label names (e.g. \uses{def:foo} where the label is actually def:bar). Search the .tex files for the correct label.
+           - Unresolved \ref or \label: Check for typos in label names. Search the .tex files for the correct label.
            - Duplicate labels: Two environments share the same \label{...}. Rename one to be unique.
            - Mismatched \begin/\end environments: Ensure every \begin{theorem} has a matching \end{theorem}, etc.
-           - Invalid \lean{DeclName}: The declaration name in \lean{} must match a real Lean declaration. Check TNLean/ source files for the correct name.
+           - Invalid \lean{DeclName}: The declaration name in \lean{} must match a real Lean declaration. Check TNLean/ source files.
            - Malformed LaTeX: Missing closing braces, unescaped special characters, etc.
            - plasTeX parse errors: These often point to unsupported LaTeX commands. Simplify or wrap in \ifplastex guards.
-           - ERROR lines about unresolved references: Find the \uses{} or \ref{} that references a non-existent label and fix the label name.
         3. The blueprint .tex files are in blueprint/src/chapter/. The blueprint config is in blueprint/src/.
         4. You can test your fix locally by running:
            pip install leanblueprint plastex
            cd blueprint && leanblueprint web
            Check that no ERROR lines appear in the output.
         5. Make minimal, targeted fixes. Do not refactor unrelated LaTeX.
-        6. Commit and push your fix to the current branch. Prefix commit messages with `[claude-auto-fix]`.
-        7. After pushing, use the GitHub MCP tools to post a comment on the PR summarizing what was fixed.
-      claude_allowed_tools: "Edit,Write,Read,Glob,Grep,Bash(pip install leanblueprint plastex),Bash(cd blueprint && leanblueprint *),Bash(leanblueprint *),Bash(python3 scripts/*),Bash(git add *),Bash(git commit *),Bash(git push *),Bash(git diff *),Bash(git status),mcp__github__*"
-      claude_system_prompt: "This is a Lean 4 math formalization project with a leanblueprint documentation system. The blueprint uses LaTeX files in blueprint/src/chapter/ with special commands: \\lean{DeclName}, \\leanok, \\uses{label}, \\label{...}. Fix only the blueprint compilation errors. Prefer minimal diffs. Validate with leanblueprint web before committing. Use GitHub MCP tools (mcp__github__*) to comment on the PR with a summary of your fix."
+        6. Commit and push your fix to the current branch. Prefix commit messages with `[codex-auto-fix]`.
+        7. After pushing, use `gh pr comment ${{ needs.setup.outputs.pr_number }} --body "..."` to post a summary of what was fixed.
 
   # ──────────────────────────────────────────────────────
-  # Review comments auto-fix
+  # Review comments auto-fix — Codex
   # ──────────────────────────────────────────────────────
-  # Serialized after blueprint fix to avoid parallel pushes to the same branch.
-  # !cancelled() keeps this runnable after skipped/successful predecessors
-  # without continuing a workflow that the user explicitly cancelled.
   auto-fix-review:
     needs: [setup, auto-fix-blueprint]
     if: "!cancelled() && needs.setup.result == 'success' && needs.setup.outputs.run_review_fix == 'true'"
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     concurrency:
       group: bot-fix-${{ needs.setup.outputs.head_branch }}
       cancel-in-progress: true
@@ -307,8 +289,8 @@ jobs:
       - name: Setup git identity
         if: steps.guard.outputs.skip != 'true'
         run: |
-          git config --global user.email "claude[bot]@users.noreply.github.com"
-          git config --global user.name "claude[bot]"
+          git config --global user.email "codex[bot]@users.noreply.github.com"
+          git config --global user.name "codex[bot]"
 
       - name: Fetch review comments
         if: steps.guard.outputs.skip != 'true'
@@ -323,16 +305,21 @@ jobs:
           fromJSON(steps.review_comments.outputs.result).skip != true
         uses: ./.github/actions/setup-lean
 
-      - name: Fix review comments with Claude
+      - name: Fix review comments with Codex
         if: |
           steps.guard.outputs.skip != 'true' &&
           fromJSON(steps.review_comments.outputs.result).skip != true
-        uses: anthropics/claude-code-action@v1
+        uses: openai/codex-action@v1
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
-          allowed_bots: 'claude,chatgpt-codex-connector,cursor[bot],cursor,copilot-pull-request-reviewer'
-          plugin_marketplaces: 'https://github.com/leanprover/skills.git'
-          plugins: 'lean@leanprover'
+          openai-api-key: ${{ secrets.OPENAI_API_KEY }}
+          # Need outbound network so the agent can `git push` the fix commit
+          # and `gh pr comment` the summary. workspace-write blocks network.
+          sandbox: danger-full-access
+          # Allow iterations triggered by prior bot-authored fix commits
+          # (head of branch is authored by codex[bot] / claude[bot]).
+          allow-bots: true
           prompt: |
             The automated code review found issues in this PR. Your task is to fix them.
 
@@ -350,43 +337,31 @@ jobs:
             ${{ toJSON(fromJSON(steps.review_comments.outputs.result).threads) }}
 
             Instructions:
-            0. First, use the GitHub MCP tools to read the full PR diff and all review threads yourself. The thread summaries above are seeds — read the actual threads for complete context including any human replies or follow-up discussion.
-            1. Use your judgment on whether Mathlib scouting is needed for this fix. For review
-               comments about proofs (sorry removal, tactic suggestions, proof restructuring), read
-               PR/issue comments for existing **Mathlib Scouting Reports** and use them to inform
-               your fix. For cosmetic comments (naming, docstrings, style), skip scouting and fix directly.
-            2. Read each review thread conversation and understand the issue being raised, including any follow-up replies that may refine or clarify the original comment.
+            0. First, use `gh pr view ${{ needs.setup.outputs.pr_number }} --json ...` and `gh api repos/${{ github.repository }}/pulls/${{ needs.setup.outputs.pr_number }}/comments` to read the full PR diff and all review threads yourself. The thread summaries above are seeds — read the actual threads for complete context.
+            1. Use your judgment on whether Mathlib scouting is needed. For proof-level review comments, read PR/issue comments for existing **Mathlib Scouting Reports**. For cosmetic comments (naming, docstrings, style), skip scouting.
+            2. Read each review thread conversation and understand the issue raised, including any follow-up replies.
             3. Fix each issue in the relevant file at the indicated line.
             4. If the review state is "APPROVED" with no actionable comments, do nothing.
             5. Common fixes:
-               - Remove `sorry` and fully close the lemma/theorem with a complete proof. Do NOT leave `sorry` behind or replace it with another shortcut.
+               - Remove `sorry` and fully close the lemma/theorem.
                - Fix naming to match Mathlib conventions.
                - Add missing docstrings where requested.
                - Fix type mismatches or tactic failures.
                - Improve proof structure as suggested.
-            6. Your goal is to fully close every incomplete lemma/theorem, not just address surface-level comments. Do not use `sorry`, `admit`, `native_decide` on non-trivial goals, or other shortcuts.
+            6. Your goal is to fully close every incomplete lemma/theorem. Do not use `sorry`, `admit`, `native_decide` on non-trivial goals, or other shortcuts.
             7. Run `lake build` to verify your fixes compile with zero errors and zero `sorry`s.
-            8. When your fixes add or complete (remove sorry from) theorems, lemmas, or definitions, update the corresponding blueprint entry in `blueprint/src/chapter/` — add `\lean{DeclarationName}` and `\leanok` tags for new results, or add `\leanok` to `\begin{proof}` for newly proven results.
+            8. When fixes add or complete (remove sorry from) theorems, update the corresponding blueprint entry in `blueprint/src/chapter/`.
             9. Make minimal, targeted fixes. Do not refactor unrelated code.
-            10. Commit and push your fix to the current branch. Prefix commit messages with `[claude-review-fix]`.
-            11. After pushing, use the GitHub MCP tools to post a comment on the PR with:
-               - A summary of which review items were addressed.
-               - If you used or discovered Mathlib lemmas during the fix, include a **Mathlib Audit**
-                 section (name, module path, and how it was used). Skip this section for trivial fixes
-                 that didn't involve Mathlib.
+            10. Commit and push your fix to the current branch. Prefix commit messages with `[codex-review-fix]`.
+            11. After pushing, use `gh pr comment ${{ needs.setup.outputs.pr_number }} --body "..."` to post a summary of which review items were addressed.
 
-            Quality bar (same rubric as Claude Code Review — your fix MUST satisfy ALL of these before committing):
-            - Proof integrity (BLOCKER): no sorry, admit, native_decide on non-trivial goals, unsafeCast, or new axioms. See docs/PROOF_INTEGRITY.md for the full list.
-            - Proof correctness (BLOCKER): structured proofs, not brute-force simp/omega/ring chains. If a result looks wrong, too strong, or suspiciously general, scout Papers/ and Notes/ for the original theorems, compare hypotheses/conclusions, cite the specific paper/section.
-            - Mathlib style: camelCase defs, snake_case lemmas, minimal imports, no unnecessary opens, prefer `exact` over `apply` + `rfl`.
-            - Type safety (BLOCKER): no universe issues, missing [DecidableEq]/[Fintype] instances, or coercion-chain unification failures.
-            - Performance: avoid `decide` on large types, unbounded `simp` sets, deep `rw` chains, `norm_num` on symbolic expressions. Prefer `omega`, `positivity`, explicit `calc`.
-            - Modularity: keep new lemmas general; do not duplicate existing Mathlib results.
-            - Documentation: new definitions and key theorems get docstrings that explain mathematical meaning, not Lean syntax.
-            - Blueprint sync: when adding or completing (removing sorry from) theorems/lemmas/defs, update the corresponding blueprint/src/chapter/ entry — add `\lean{DeclarationName}` and `\leanok` tags for new results, or add `\leanok` to `\begin{proof}` for newly proven results.
+            Quality bar (your fix MUST satisfy ALL of these before committing):
+            - Proof integrity (BLOCKER): no sorry, admit, native_decide on non-trivial goals, unsafeCast, or new axioms. See docs/PROOF_INTEGRITY.md.
+            - Proof correctness (BLOCKER): structured proofs, not brute-force tactic chains. If a result looks wrong, scout Papers/ and Notes/ and cite the specific paper/section.
+            - Mathlib style: camelCase defs, snake_case lemmas, minimal imports, no unnecessary opens.
+            - Type safety (BLOCKER): no universe issues, missing instances, or coercion failures.
+            - Performance: avoid `decide` on large types, unbounded `simp`, deep `rw` chains.
+            - Modularity: keep new lemmas general; do not duplicate Mathlib results.
+            - Documentation: new definitions and key theorems get docstrings explaining mathematical meaning.
+            - Blueprint sync: update blueprint entries when proofs are added/completed.
             If you cannot satisfy a BLOCKER category, STOP and post a PR comment explaining the obstacle instead of pushing a half-fix.
-
-          claude_args: |
-            --model claude-opus-4-7
-            --allowedTools "Edit,Write,Read,Glob,Grep,Bash(lake build),Bash(lake exe cache get),Bash(lake update),Bash(lake env),Bash(lean *),Bash(elan *),Bash(git add *),Bash(git commit *),Bash(git push *),Bash(git diff *),Bash(git status),Bash(gh pr *),Bash(gh api *),mcp__github__*"
-            --append-system-prompt "This is a Lean 4 / Mathlib repository. Fix only the issues raised in the review. Prefer minimal diffs. Hold your fix to the same 8-category quality bar used by Claude Code Review (proof integrity, proof correctness, Mathlib style, type safety, performance, modularity, documentation, blueprint sync). See docs/PROOF_INTEGRITY.md for the full integrity ruleset. Use your judgment on when Mathlib scouting is warranted — it is essential when closing sorrys or rewriting proofs, but unnecessary for naming fixes, docstrings, or style changes. When scouting IS needed, use exact?, apply?, rw?, simp?, and grep Mathlib source files. Reuse Mathlib lemmas rather than reproving from scratch. If a mathematical result looks wrong, too strong, or suspiciously general, scout the LaTeX sources in Papers/ and Notes/ where the original theorems and proofs are stored — read the relevant sections, compare hypotheses and conclusions, and cite the specific paper/section when flagging a discrepancy. You MUST fully close every lemma and theorem — never leave sorry, admit, native_decide on non-trivial goals, or any placeholder. Validate all changes with lake build before committing. Use GitHub MCP tools (mcp__github__*) to comment on the PR."
