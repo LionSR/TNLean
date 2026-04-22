@@ -355,7 +355,7 @@ left-canonical and produces a matching transfer map under `p`-blocking.
 
 Morally, the canonicalization is produced as follows. Given a witness
 `(A, W)` from `IsPRefinable B p`, form the `W`-pullback tensor
-`C τ := ∑_σ W(τ, σ) · B σ`; the theorems
+`C τ := ∑_σ W(τ, σ) · B σ`. The theorems
 `pRefinementCanonicalization_pullback` and
 `pRefinementCanonicalization_pullback_of_irreducibleForm` now cover this
 first stage, giving `E_C = E_B`, `SameMPV C (blockTensor A p)`, and preserving
