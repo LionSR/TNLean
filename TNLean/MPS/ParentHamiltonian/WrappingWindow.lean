@@ -175,6 +175,122 @@ private theorem init_evalWord_split {A : MPSTensor d D}
       rw [dif_neg (by rw [hoffset]; omega)]
       congr 1; ext; simp; omega
 
+/-! ### Mirror factorization at the opposite wrapped position
+
+At the wrapped position `N - L + 1`, the cyclic word starts with the last window
+site, then runs through the complement, then finishes with the remaining
+`L - 1` window sites.  This yields the factorization needed for the mirror
+block-injective extraction. -/
+
+/-- At the opposite wrapped position `N - L + 1`, site `0` carries the final
+window entry `σ_w(L-1)`. -/
+private theorem cyclicCfg_mirror_zero_eq {N L : ℕ} (hN : 2 ≤ N) (hLN : L ≤ N) (hL : 1 < L)
+    (σ_w : Fin L → Fin d) (τ : Fin N → Fin d) :
+    cyclicCfg (by omega : 0 < N) L ⟨N - L + 1, by omega⟩ σ_w τ ⟨0, by omega⟩ =
+      σ_w ⟨L - 1, by omega⟩ := by
+  simp only [cyclicCfg]
+  have hoffset : (0 + N - (N - L + 1)) % N = L - 1 := by
+    have : 0 + N - (N - L + 1) = L - 1 := by omega
+    rw [this, Nat.mod_eq_of_lt (by omega)]
+  have hoffset_lt : (0 + N - (N - L + 1)) % N < L := by
+    rw [hoffset]
+    omega
+  rw [dif_pos hoffset_lt]
+  apply congrArg σ_w
+  ext
+  exact hoffset
+
+/-- At the opposite wrapped position `N - L + 1`, the complement sites
+`1, ..., N - L` keep their `τ` values. -/
+private theorem cyclicCfg_mirror_complement_site {N L : ℕ}
+    (hN : 2 ≤ N) (_hLN : L ≤ N) (hL : 1 < L)
+    (σ_w : Fin L → Fin d) (τ : Fin N → Fin d)
+    {k : ℕ} (hk1 : 1 ≤ k) (hk2 : k < N - L + 1) :
+    cyclicCfg (by omega : 0 < N) L ⟨N - L + 1, by omega⟩ σ_w τ ⟨k, by omega⟩ =
+      τ ⟨k, by omega⟩ := by
+  simp only [cyclicCfg]
+  have hoffset : (k + N - (N - L + 1)) % N = k + L - 1 := by
+    have : k + N - (N - L + 1) = k + L - 1 := by omega
+    rw [this, Nat.mod_eq_of_lt (by omega)]
+  rw [dif_neg (show ¬((k + N - (N - L + 1)) % N < L) by rw [hoffset]; omega)]
+
+/-- At the opposite wrapped position `N - L + 1`, the final `L - 1` physical
+sites carry the first `L - 1` entries of the window. -/
+private theorem cyclicCfg_mirror_window_site {N L : ℕ}
+    (hN : 2 ≤ N) (_hLN : L ≤ N) (hL : 1 < L)
+    (σ_w : Fin L → Fin d) (τ : Fin N → Fin d)
+    {k : ℕ} (hk : k < L - 1) :
+    cyclicCfg (by omega : 0 < N) L ⟨N - L + 1, by omega⟩ σ_w τ
+        ⟨N - L + 1 + k, by omega⟩ =
+      σ_w ⟨k, by omega⟩ := by
+  simp only [cyclicCfg]
+  have hoffset : (N - L + 1 + k + N - (N - L + 1)) % N = k := by
+    have : N - L + 1 + k + N - (N - L + 1) = N + k := by omega
+    rw [this, Nat.add_mod_left]
+    exact Nat.mod_eq_of_lt (by omega)
+  rw [dif_pos (show (N - L + 1 + k + N - (N - L + 1)) % N < L by rw [hoffset]; omega)]
+  congr 1; ext; simp [hoffset]
+
+/-- At the opposite wrapped position `N - L + 1`, the cyclic word factors as
+the final window letter, then the complement word, then the remaining
+`L - 1`-site window head. -/
+private theorem evalWord_cyclicCfg_cons {A : MPSTensor d D}
+    {M L : ℕ} (hM : 1 ≤ M) (hLN : L ≤ M + 1) (hL : 1 < L)
+    (σ_w : Fin L → Fin d) (τ : Fin (M + 1) → Fin d) :
+    evalWord A (List.ofFn (cyclicCfg (by omega : 0 < M + 1) L
+      ⟨M + 1 - L + 1, by omega⟩ σ_w τ)) =
+    A (σ_w ⟨L - 1, by omega⟩) *
+      evalWord A (List.ofFn (fun k : Fin (M + 1 - L) => τ ⟨k.val + 1, by omega⟩)) *
+      evalWord A (List.ofFn (fun k : Fin (L - 1) =>
+        σ_w ⟨k.val, Nat.lt_trans k.isLt (by omega)⟩)) := by
+  let cfg : Fin (M + 1) → Fin d :=
+    cyclicCfg (by omega : 0 < M + 1) L ⟨M + 1 - L + 1, by omega⟩ σ_w τ
+  let comp : Fin (M + 1 - L) → Fin d := fun k => τ ⟨k.val + 1, by omega⟩
+  let head : Fin (L - 1) → Fin d := fun k => σ_w ⟨k.val, Nat.lt_trans k.isLt (by omega)⟩
+  let tail : Fin M → Fin d := fun k =>
+    if h : k.val < M + 1 - L
+    then comp ⟨k.val, h⟩
+    else head ⟨k.val - (M + 1 - L), by omega⟩
+  have hcons : cfg = Fin.cons (σ_w ⟨L - 1, by omega⟩) tail := by
+    funext x
+    refine Fin.cases ?_ ?_ x
+    · simpa [cfg] using cyclicCfg_mirror_zero_eq (by omega : 2 ≤ M + 1) hLN hL σ_w τ
+    · intro k
+      rw [Fin.cons_succ]
+      by_cases hkC : k.val < M + 1 - L
+      · have hcomp := cyclicCfg_mirror_complement_site (by omega : 2 ≤ M + 1) hLN hL σ_w τ
+          (show 1 ≤ k.val + 1 from by omega) (show k.val + 1 < M + 1 - L + 1 from by omega)
+        have hsucc : (Fin.succ k : Fin (M + 1)) = ⟨k.val + 1, by omega⟩ := by
+          ext
+          simp [Fin.succ]
+        simpa [cfg, tail, comp, hkC, hsucc] using hcomp
+      · have hwin := cyclicCfg_mirror_window_site (by omega : 2 ≤ M + 1) hLN hL σ_w τ
+          (k := k.val - (M + 1 - L)) (show k.val - (M + 1 - L) < L - 1 from by omega)
+        have hsucc : (Fin.succ k : Fin (M + 1)) =
+            ⟨M + 1 - L + 1 + (k.val - (M + 1 - L)), by omega⟩ := by
+          ext
+          simp [Fin.succ]
+          omega
+        simpa [cfg, tail, head, comp, hkC, hsucc] using hwin
+  have htail : List.ofFn tail = List.ofFn comp ++ List.ofFn head := by
+    apply List.ext_getElem
+    · simp only [List.length_ofFn, List.length_append]
+      omega
+    · intro k hk1 hk2
+      simp only [List.length_ofFn] at hk1
+      simp only [List.getElem_ofFn]
+      by_cases hkC : k < M + 1 - L
+      · rw [List.getElem_append_left (by simpa using hkC)]
+        rw [List.getElem_ofFn]
+        simp [tail, comp, head, hkC]
+      · rw [List.getElem_append_right (by simpa [List.length_ofFn] using hkC)]
+        rw [List.getElem_ofFn]
+        simp only [List.length_ofFn]
+        simp [tail, comp, head, hkC]
+  rw [show List.ofFn cfg = List.ofFn (Fin.cons (σ_w ⟨L - 1, by omega⟩) tail) by rw [hcons]]
+  rw [evalWord_ofFn_cons, htail, evalWord_append]
+  simp [comp, head, Matrix.mul_assoc]
+
 /-! ### Trace rotation and matrix equation extraction
 
 Use `tr(P * Q) = tr(Q * P)` to rotate the wrapping boundary,
@@ -303,6 +419,89 @@ private theorem wrapping_window_compatibility_of_isNBlkInjective
     _ = Matrix.trace
         (evalWord A (List.ofFn σ_tail) * (Y τ * A j)) := by
           simp [Matrix.mul_assoc]
+
+/-- The opposite wrapped position `N - L₀` exposes the mirror compatibility
+`X * A j * C_τ = A j * Y_τ` after block-injective stripping of the trailing
+`L₀`-site block.  This is the missing second wrapped-window extraction needed
+for the block-injective periodic argument. -/
+private theorem wrapping_window_mirror_compatibility_of_isNBlkInjective
+    {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
+    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
+    {X : Matrix (Fin D) (Fin D) ℂ}
+    (Y : (Fin (M + 1) → Fin d) → Matrix (Fin D) (Fin D) ℂ)
+    (hY : ∀ τ σ_w, Matrix.trace (evalWord A (List.ofFn
+          (cyclicCfg (by omega : 0 < M + 1) (L₀ + 1) ⟨M + 1 - L₀, by omega⟩ σ_w τ)) * X) =
+        Matrix.trace (evalWord A (List.ofFn σ_w) * Y τ)) :
+    ∀ (j : Fin d) (τ : Fin (M + 1) → Fin d),
+      X * A j * evalWord A (List.ofFn (fun k : Fin (M + 1 - (L₀ + 1)) =>
+        τ ⟨k.val + 1, by omega⟩)) =
+      A j * Y τ := by
+  intro j τ
+  apply groundSpaceMap_injective_of_isNBlkInjective hInj
+  ext σ_head
+  simp only [groundSpaceMap_apply]
+  have key := hY τ (Fin.snoc σ_head j)
+  have hfactor := evalWord_cyclicCfg_cons (A := A) (show 1 ≤ M by omega) (by omega) (by omega)
+    (Fin.snoc σ_head j) τ
+  have hfactor' :
+      evalWord A (List.ofFn (cyclicCfg (by omega : 0 < M + 1) (L₀ + 1)
+          ⟨M + 1 - L₀, by omega⟩ (Fin.snoc σ_head j) τ)) =
+        A j *
+          evalWord A (List.ofFn (fun k : Fin (M + 1 - (L₀ + 1)) =>
+            τ ⟨k.val + 1, by omega⟩)) *
+          evalWord A (List.ofFn σ_head) := by
+    convert hfactor using 2
+    · have hstart : (⟨M + 1 - L₀, by omega⟩ : Fin (M + 1)) =
+          ⟨M - L₀ + 1, by omega⟩ := by
+            ext
+            simp
+            omega
+      simpa using congrArg List.ofFn
+        (congrArg
+          (fun s => cyclicCfg (by omega : 0 < M + 1) (L₀ + 1) s (Fin.snoc σ_head j) τ)
+          hstart)
+    · congr 1
+      change A j = A ((@Fin.snoc L₀ (fun _ => Fin d) σ_head j) (Fin.last L₀))
+      rw [Fin.snoc_last]
+    · congr 1
+      apply List.ext_getElem
+      · simp [List.length_ofFn]
+      · intro k hk1 hk2
+        simp only [List.length_ofFn] at hk1
+        simp only [List.getElem_ofFn]
+        have hcast : (⟨k, Nat.lt_trans hk1 (Nat.lt_succ_self L₀)⟩ : Fin (L₀ + 1)) =
+            Fin.castSucc ⟨k, hk1⟩ := by
+              ext
+              simp [Fin.castSucc]
+        rw [hcast, Fin.snoc_castSucc]
+  rw [hfactor'] at key
+  rw [evalWord_ofFn_snoc] at key
+  have key' :
+      Matrix.trace
+          ((A j *
+              evalWord A (List.ofFn (fun k : Fin (M + 1 - (L₀ + 1)) =>
+                τ ⟨k.val + 1, by omega⟩)) *
+              evalWord A (List.ofFn σ_head)) * X) =
+        Matrix.trace (evalWord A (List.ofFn σ_head) * (A j * Y τ)) := by
+    simpa [Fin.init, Fin.init_snoc, Matrix.mul_assoc] using key
+  calc
+    Matrix.trace
+        (evalWord A (List.ofFn σ_head) *
+          (X * A j * evalWord A (List.ofFn (fun k : Fin (M + 1 - (L₀ + 1)) =>
+            τ ⟨k.val + 1, by omega⟩))))
+      = Matrix.trace
+          ((A j *
+              evalWord A (List.ofFn (fun k : Fin (M + 1 - (L₀ + 1)) =>
+                τ ⟨k.val + 1, by omega⟩)) *
+              evalWord A (List.ofFn σ_head)) * X) := by
+            simpa [Matrix.mul_assoc] using
+              (Matrix.trace_mul_cycle'
+                (evalWord A (List.ofFn σ_head))
+                X
+                (A j * evalWord A (List.ofFn (fun k : Fin (M + 1 - (L₀ + 1)) =>
+                  τ ⟨k.val + 1, by omega⟩))))
+    _ = Matrix.trace (evalWord A (List.ofFn σ_head) * (A j * Y τ)) := by
+          simpa [Matrix.mul_assoc] using key'
 
 /-! ### Main commutation result
 
