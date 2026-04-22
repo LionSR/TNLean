@@ -2049,12 +2049,25 @@ The following results separate the zero blocks from the
 	(Theorem~\ref{thm:tp_primitive_blockdecomp}), the blocked blocks
 	have primitive transfer maps.
 
-	To conclude full normal canonical form, two further ingredients are
-	still needed: tensor irreducibility for each blocked block
-	(blocking does not in general preserve tensor irreducibility), and
-	pairwise distinct weight norms.
-	The cyclic-sector decomposition
-	(Theorems~\ref{thm:blockdecomp_commuting_projs}
-	and~\ref{thm:blockdecomp_adjoint_fixed}) provides the infrastructure
-	for the periodic-to-aperiodic splitting.
+	To conclude the blocking-based normal-canonical-form reduction of this
+	chapter, two further inputs are still needed.
+	First, one must isolate irreducible TP-primitive sectors inside each
+	blocked block, because blocking does not in general preserve tensor
+	irreducibility. Theorems~\ref{thm:blockdecomp_commuting_projs}
+	and~\ref{thm:blockdecomp_adjoint_fixed} supply the relevant
+	sector-decomposition mechanism: commuting or adjoint-fixed projections
+	produce a direct-sum decomposition of the blocked tensor. What remains
+	is to show that the sectors arising in the canonical-form reduction are
+	themselves irreducible, so that the primitive-sector normality results
+	apply to them.
+
+	Second, one must control the weights attached to those sectors. In
+	particular, the present reduction does not yet produce the pairwise
+	distinct nonzero weight norms needed before the sorted normal form of
+	Theorem~\ref{thm:bnt_sorted_ncf} can be applied.
+
+	The periodic irreducible-form approach, which studies periodic blocks
+	directly rather than removing periodicity by blocking, belongs to
+	Chapter~\ref{ch:periodic_ft_apps}; it is not part of the Chapter~8
+	reduction except as a forward reference.
 \end{remark}
