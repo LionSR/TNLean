@@ -828,6 +828,31 @@ for the irreducible-form framework in \cite{DeLasCuevas2017Irreducible}.
     irreducible-form decomposition of $C$.
 \end{proof}
 
+\begin{theorem}[Reduction of forward canonicalization to the blocked equal-case stage]
+    \label{thm:p_refinement_forward_equalcase_reduction}
+    \lean{MPSTensor.pRefinementCanonicalization_of_peripheralEqualCase_periodicFT_of_sameMPV}
+    \leanok
+    \uses{def:irreducible_form, def:p_refinable,
+          thm:p_refinement_pullback_irreducible_form}
+    Assume the following continuation statement: whenever a blocked tensor $C$
+    in irreducible form~II has the same MPV family as a blocked tensor $A^{[p]}$,
+    there exists a tensor $A'$ with
+    $\sum_i (A'^i)^\dagger A'^i = \Id$ and
+    $\mathcal E_C = \mathcal E_{A'^{[p]}}$.
+    Then every $p$-refinable tensor $B$ in irreducible form~II admits such a
+    left-canonical root $A'$ with $\mathcal E_B = \mathcal E_{A'^{[p]}}$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Apply Theorem~\ref{thm:p_refinement_pullback_irreducible_form} to the
+    refinement witness of $B$. This produces a blocked tensor $C$ in
+    irreducible form~II with $\mathcal E_C = \mathcal E_B$ and the same MPV
+    family as $A^{[p]}$. The continuation statement then gives a
+    left-canonical tensor $A'$ with
+    $\mathcal E_C = \mathcal E_{A'^{[p]}}$. Combining the two transfer-map
+    identities yields $\mathcal E_B = \mathcal E_{A'^{[p]}}$.
+\end{proof}
+
 \begin{theorem}[Thm.~4.1 — $p$-refinability $\iff$ $p$-divisibility]%
     \label{thm:thm_4_1_p_refinement}
     \lean{MPSTensor.thm_4_1_p_refinement}

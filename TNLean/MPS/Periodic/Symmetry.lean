@@ -34,6 +34,9 @@ The imported modules provide the original public declarations at the same
 names, including `PeriodicEqualCaseFT`,
 `cor_4_1_physical_symmetry_zgauge`,
 `pRefinementCanonicalization_pullback_of_irreducibleForm`,
+`PeripheralEqualCasePeriodicFTOfSameMPV`,
+`pRefinementCanonicalization_of_peripheralEqualCase_periodicFT_of_sameMPV`,
+`thm_4_1_p_refinement_forward_of_peripheralEqualCase_periodicFT_of_sameMPV`,
 `IsPDivisibleChannel`, `IsPRefinable`,
 `thm_4_1_p_refinement_forward`,
 `thm_4_1_p_refinement_reverse`, and `thm_4_1_p_refinement`.
