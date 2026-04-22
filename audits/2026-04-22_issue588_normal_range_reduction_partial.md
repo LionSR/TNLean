@@ -26,9 +26,11 @@ new `sorry`s.
 
 So this pass leaves **no new Lean theorem landed** in `UniqueGroundState.lean`.
 The branch now contains only this updated audit note together with a tiny import
-cleanup in `TNLean.lean` (dropping a duplicated/obsolete parent-Hamiltonian
-import combination that caused a duplicate-declaration build error on this
-branch).
+cleanup in `TNLean.lean` (dropping `TNLean.MPS.ParentHamiltonian.OpenChainRangeReduction`
+from the top-level imports). The concrete duplicate-declaration failure was
+`MPSTensor.groundSpace_extend_right_of_isNBlkInjective`, defined in both
+`TNLean.MPS.ParentHamiltonian.ExtendRight` and
+`TNLean.MPS.ParentHamiltonian.OpenChainRangeReduction`.
 
 ## Exact remaining blocker
 
@@ -74,7 +76,7 @@ should complete the periodic step.
 - Parent issue: #588
 - Paper reference: CPGSV21, §IV.C
 
-## Files changed on the final compileable branch state
+## Files changed on the final compilable branch state
 
 - `audits/2026-04-22_issue588_normal_range_reduction_partial.md`
 - `TNLean.lean` (import cleanup)
