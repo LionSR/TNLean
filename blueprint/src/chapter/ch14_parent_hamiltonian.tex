@@ -904,36 +904,14 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     the reverse inclusion is Lemma~\ref{lem:mpv_mem_chain_ground_space}.
 \end{proof}
 
-\begin{theorem}[Open-chain normal-range reduction]
-    \label{thm:chain_ground_space_le_ground_space_blk}
-    \lean{MPSTensor.chainGroundSpace_le_groundSpace_of_isNBlkInjective}
-    \leanok
-    \uses{def:chain_ground_space, def:ground_space_parent,
-        thm:ground_space_extend_right_block_injective}
-    Assume $A$ is $L_0$-block-injective with $L_0 > 0$ and $L_0 < L \le N$. Then
-    \[
-        \mathcal G_{N,L}(A) \subseteq G_N(A).
-    \]
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    First reduce the cyclic window size from $L$ to $L_0 + 1$ by peeling the last
-    site off each local condition. For non-wrapping windows this identifies the
-    cyclic restriction with the corresponding contiguous restriction. Then iterate
-    Theorem~\ref{thm:ground_space_extend_right_block_injective}: if a contiguous
-    block of size $K + L_0$ is already in the open-chain ground space and every
-    fixed-prefix suffix slice of length $L_0 + 1$ is also in the ground space,
-    then the whole block of size $K + L_0 + 1$ lies in the ground space. Induction
-    on $K$ yields the full-chain inclusion $\mathcal G_{N,L}(A) \subseteq G_N(A)$.
-\end{proof}
-
+% TODO(#703,#704): current main still lacks the suffix-window / extend-right API
+% from the recent blocked-intersection audits, so the open-boundary regrowth layer
+% is not yet documented here as separate \lean{...} entries.
 \begin{theorem}[Normal-range reduction: containment in the MPV line]
     \label{thm:normal_range_reduction_containment}
     \lean{MPSTensor.chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction}
     \notready
-    \uses{thm:chain_ground_space_le_ground_space_blk, def:mpv_submodule,
-        def:normal, def:l_blk_injective}
+    \uses{def:chain_ground_space, def:mpv_submodule, def:normal, def:l_blk_injective}
     If $A$ is normal, $D \ge 1$, $L_0$-block-injective, with $N \ge 2$ and $L_0 < L \le N$, then
     \[
         \mathcal G_{N,L}(A) \subseteq \spn\bigl\{V^{(N)}(A)\bigr\}.
@@ -942,12 +920,10 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 
 \begin{proof}
     \notready
-    The open-chain part is now formalized in
-    Theorem~\ref{thm:chain_ground_space_le_ground_space_blk}. The remaining step is
-    purely periodic: for $\psi = \Gamma_N(X)$ one still needs a block-injective
-    wrapped-window comparison theorem producing the second one-sided compatibility
-    (or an equivalent common middle matrix), so that the reduced cyclic constraints
-    force the boundary matrix $X$ into the scalar line.
+    The remaining step is the periodic range-reduction theorem from
+    \cite[\S~IV.C]{Cirac2021Matrix}: one must show that the reduced cyclic window constraints
+    still force the same boundary-matrix commutation relation as in
+    Theorem~\ref{thm:boundary_matrix_commutes}.
 \end{proof}
 
 \begin{theorem}[Chain ground space equals the MPV line in the normal case]%

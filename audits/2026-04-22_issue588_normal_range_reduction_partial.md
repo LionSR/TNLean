@@ -1,32 +1,34 @@
-# Issue #588 partial progress audit — open-chain normal-range reduction landed, periodic closure still blocked
+# Issue #588 audit update — open-chain route identified, but no Lean theorem landed yet
 
 Date: 2026-04-22
 Branch: `feat/588-chainGroundSpace-normal`
 Target theorem: `MPSTensor.chainGroundSpace_eq_mpvSubmodule_normal`
 
-## What this pass completed
+## Outcome of this pass
 
-The **open-chain** half of the normal-range reduction is now formalized in
-`TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean`.
+I explored the **open-chain** half of the normal-range reduction and found a
+credible proof route through the recently landed suffix-window / regrowth API.
+In particular, the intended argument is:
 
-New proved theorem:
+1. shrink cyclic windows from length $L$ down to $L_0 + 1$ by peeling the last
+   site;
+2. identify non-wrapping cyclic windows with contiguous windows;
+3. iterate `MPSTensor.groundSpace_extend_right_of_isNBlkInjective` to regrow
+   from contiguous `(L_0 + 1)`-window conditions to full open-chain membership.
 
-```lean
-theorem MPSTensor.chainGroundSpace_le_groundSpace_of_isNBlkInjective
-    {A : MPSTensor d D} [NeZero D] {L₀ L N : ℕ}
-    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
-    (hL : L₀ < L) (hLN : L ≤ N) :
-    chainGroundSpace A L N ≤ groundSpace A N
-```
+I attempted to formalize this directly in
+`TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean`, but the resulting Lean
+partial did **not** survive honest `lake build` / CI: the dependent arithmetic
+reindexing around `contiguousRestrictₗ` produced nontrivial type mismatches and
+proof-argument transport failures. To keep the branch compiling, I reverted that
+non-compiling Lean partial instead of forcing it through with brittle casts or
+new `sorry`s.
 
-Lean ingredients added locally in `UniqueGroundState.lean`:
-- cyclic-window shrinking by peeling the last site;
-- reduction from window length `L` to `L₀ + 1`;
-- a contiguous suffix-restriction identity;
-- induction with `groundSpace_extend_right_of_isNBlkInjective` to regrow from
-  `(L₀ + 1)`-windows to the full open chain.
-
-So the remaining `sorry` is now *purely periodic*.
+So this pass leaves **no new Lean theorem landed** in `UniqueGroundState.lean`.
+The branch now contains only this updated audit note together with a tiny import
+cleanup in `TNLean.lean` (dropping a duplicated/obsolete parent-Hamiltonian
+import combination that caused a duplicate-declaration build error on this
+branch).
 
 ## Exact remaining blocker
 
@@ -39,8 +41,7 @@ chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction
 one still needs the block-injective wrapped-window theorem from follow-up issue
 #730.
 
-The precise missing ingredient is **not** the open-chain grow-back step anymore.
-It is a wrapped-window comparison theorem which, for
+The precise missing ingredient is a wrapped-window comparison theorem which, for
 `ψ = groundSpaceMap A N X` satisfying all cyclic `(L₀ + 1)`-window constraints,
 produces the missing second one-sided compatibility (or an equivalent common
 middle matrix) needed to force boundary commutation.
@@ -57,8 +58,8 @@ A representative missing statement is:
 with `Cτ τ` the complement word determined by `τ`.
 
 Current `WrappingWindow` methods give the **first** compatibility after replacing
-one-site injectivity by `groundSpaceMap_injective_of_isNBlkInjective`, but not the
-second from the same witness. Once that missing comparison theorem exists,
+one-site injectivity by `groundSpaceMap_injective_of_isNBlkInjective`, but not
+the second from the same witness. Once that missing comparison theorem exists,
 chunking plus
 
 ```lean
@@ -73,14 +74,16 @@ should complete the periodic step.
 - Parent issue: #588
 - Paper reference: CPGSV21, §IV.C
 
-## Files changed in this partial branch
+## Files changed on the final compileable branch state
 
-- `TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean`
-- `blueprint/src/chapter/ch14_parent_hamiltonian.tex`
+- `audits/2026-04-22_issue588_normal_range_reduction_partial.md`
+- `TNLean.lean` (import cleanup)
 
 ## Honest status
 
 This pass does **not** discharge the final `sorry` in
 `chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction`.
-It does isolate the remainder to the periodic wrapped-window comparison theorem,
-with the open-chain side now formalized and reusable.
+It sharpens the roadmap for the open-chain side, but the actual Lean
+formalization was reverted after CI showed it was not yet robust. The true
+remaining blocker is still the periodic wrapped-window comparison theorem from
+#730.
