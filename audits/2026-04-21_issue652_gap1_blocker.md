@@ -84,10 +84,10 @@ classes**, not a theorem about arbitrary primitive block decompositions.
 
 ## Second blocker: the current BNT grouping theorem is the wrong target for the full FT
 
-Even after step 1a from PR #654, `exists_bnt_grouping` still produces a
-`SectorDecomposition`, not a strict CF-BNT family. This is mathematically
-necessary: a norm class may contain several distinct sector weights over the
-same basis tensor.
+Even after relaxing `exists_bnt_grouping` to remove the equal-norm same-MPV
+assumption `hMPVEq`, it still produces a `SectorDecomposition`, not a strict
+CF-BNT family. This is mathematically necessary: a norm class may contain
+several distinct sector weights over the same basis tensor.
 
 That means the natural output of the grouping step is
 
