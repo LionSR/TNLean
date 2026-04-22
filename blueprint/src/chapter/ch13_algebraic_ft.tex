@@ -1646,15 +1646,43 @@ Theorem~2 of~\cite{Molnar2018NormalPEPS}.
     (Theorem~2 of~\cite{Molnar2018NormalPEPS}).
 \end{theorem}
 
-\begin{remark}[Scalar-uniqueness caveat]
-    \lean{TNLean.PEPS.gauge_unique_up_to_scalar}
-    The stated global-scalar uniqueness claim is too strong.
-    On a triangle with all bond dimensions equal to $1$, edge scalars
-    $(a,a^{-1},a)$ preserve every local tensor yet are not all multiples of
-    $(1,1,1)$ when $a \neq \pm 1$.
-    The expected uniqueness statement must therefore quotient the residual
-    edge-gauge freedom by a cocycle-type normalization on the graph.
-\end{remark}
+\begin{definition}[Gauge equivalence modulo balanced edge scalars]%
+    \label{def:GaugeEquivalentModEdgeScalars}
+    \lean{TNLean.PEPS.GaugeEquivalentModEdgeScalars}
+    \leanok
+    \uses{def:edgeGaugeAt}
+    Two gauge families are equivalent modulo balanced edge scalars if there is
+    a nonzero scalar $c_e$ on each edge such that the corresponding endpoint
+    actions rescale the oriented edge gauges, and the oriented product of those
+    endpoint scalars is $1$ at every vertex.
+\end{definition}
+
+\begin{theorem}[Balanced edge scalars preserve the local gauge action]%
+    \label{thm:GaugeEquivalentModEdgeScalars_gaugeVertex_eq}
+    \lean{TNLean.PEPS.GaugeEquivalentModEdgeScalars.gaugeVertex_eq}
+    \leanok
+    \uses{def:GaugeEquivalentModEdgeScalars, def:gaugeVertex}
+    If two gauge families differ by a balanced edge-scalar reweighting, then
+    they produce the same gauged tensor at every vertex.
+\end{theorem}
+
+\begin{proof}\leanok\uses{def:GaugeEquivalentModEdgeScalars, def:gaugeVertex}
+    In the defining sum for the gauged tensor, each incident edge contributes
+    its endpoint scalar factor in addition to the original gauge entry.
+    The product of these endpoint scalars is $1$ by the balancing condition,
+    so every summand is unchanged.
+\end{proof}
+
+\begin{theorem}[Gauge uniqueness modulo balanced edge scalars]%
+    \label{thm:gauge_unique_mod_edge_scalars}
+    \lean{TNLean.PEPS.gauge_unique_mod_edge_scalars}
+    \notready
+    \uses{def:GaugeEquivalentModEdgeScalars, def:IsVertexInjective}
+    If two gauge families relate the same injective PEPS tensor to the same
+    target tensor, then they should define the same class modulo balanced edge
+    scalars. This replaces the earlier global-scalar claim, which is false on
+    a triangle with bond dimension $1$.
+\end{theorem}
 
 \begin{remark}
     The local left inverse $\Psi_v$, the realization map $T \mapsto O_T$,
@@ -1663,11 +1691,10 @@ Theorem~2 of~\cite{Molnar2018NormalPEPS}.
     data needed for the edge-centered reduction of
     ~\cite{Molnar2018NormalPEPS}, §3. The remaining three PEPS theorems still
     require the blocked tensor on the middle region and the comparison with the
-    corresponding three-site injective chain. For the uniqueness endpoint, the
-    current global-scalar conclusion is too strong: a connected triangle with
-    bond dimension $1$ admits nontrivial edge rescalings whose vertex products
-    are all $1$. A corrected statement will need an explicit normalization of
-    the edge gauges.
+    corresponding three-site injective chain. The uniqueness endpoint has now
+    been repaired to a quotient by balanced edge scalars, but its proof still
+    requires the same blocking machinery together with the corresponding
+    tensor-factor uniqueness statement at a single vertex.
 \end{remark}
 
 %% ---------------------------------------------------------

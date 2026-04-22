@@ -1,7 +1,6 @@
 import TNLean.PEPS.Blocking
 import TNLean.PEPS.LocalGauge
 import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Defs
-import Mathlib.Combinatorics.SimpleGraph.Connectivity.Connected
 
 -- This is a **scaffold** file: the forward direction and contraction algebra
 -- are formalized, while the converse PEPS fundamental theorem remains as
@@ -11,7 +10,9 @@ import Mathlib.Combinatorics.SimpleGraph.Connectivity.Connected
 -- linear-independence formulation `∀ v, LinearIndependent ℂ (A.component v)`
 -- (see issue #633 for the switch away from function-level injectivity, which
 -- is strictly weaker). Linear independence gives each vertex tensor a left
--- inverse on its image and removes the old definitional blocker.
+-- inverse on its image, removes the old definitional blocker, and is the
+-- correct hypothesis for the repaired uniqueness endpoint
+-- `gauge_unique_mod_edge_scalars`.
 --
 -- The remaining `sorry`s split into two groups:
 -- * `gaugeConsistency` and the `hDim` step in `fundamentalTheorem_PEPS` still
@@ -21,9 +22,9 @@ import Mathlib.Combinatorics.SimpleGraph.Connectivity.Connected
 --   been reduced to the sharper local hypothesis `HasLocalGaugeLift`, but the
 --   blocked middle tensor and the comparison with the 3-site MPS theorem are
 --   still missing.
--- * `gauge_unique_up_to_scalar` additionally needs statement repair: the
---   current global-scalar conclusion fails on a connected triangle with bond
---   dimension `1`.
+-- * `gauge_unique_mod_edge_scalars` is the repaired endpoint, but its proof
+--   still needs the same blocking infrastructure together with a local
+--   tensor-factor uniqueness lemma for the balanced edge-scalar quotient.
 
 /-!
 # Fundamental Theorem for injective PEPS (scaffold)
@@ -33,7 +34,7 @@ This file scaffolds the Fundamental Theorem for injective PEPS on simple graphs
 
 > Two injective PEPS defined on a graph (no double edges/self-loops) generate
 > the same state iff the generating tensors are related by local gauges on each
-> edge, unique up to a multiplicative constant.
+> edge, with uniqueness understood modulo balanced edge scalars on the graph.
 
 ## Strategy
 
@@ -568,17 +569,75 @@ theorem fundamentalTheorem_PEPS (A B : Tensor G d)
   rcases gaugeConsistency A B hA hB hAB hDim with ⟨X, hX⟩
   exact ⟨hDim, X, hX⟩
 
-/-! ### Uniqueness (up to scalar) -/
+/-! ### Balanced edge scalars -/
 
-/-- Placeholder uniqueness endpoint for the PEPS Fundamental Theorem.
+/-- The scalar contributed by an edge-scalar family at a chosen endpoint.
 
-The current statement asks for a single nonzero scalar `c : ℂ` with
-`X_e = c · Y_e` on every edge. The issue-#503 discussion records a connected
-triangle counterexample with bond dimension `1`, so this conclusion is too
-strong as stated. The eventual replacement will need an explicit normalization
-for the edge gauges before one can ask for uniqueness. -/
-theorem gauge_unique_up_to_scalar (A B : Tensor G d)
-    (hConn : G.Connected)
+For an edge `(u, w)` with `u < w` and scalar `c_e`, the lower endpoint carries
+`c_e` and the upper endpoint carries `c_e⁻¹`, mirroring `edgeGaugeAt`. -/
+def edgeScalarAt (c : (e : Edge G) → Units ℂ)
+    (v : V) (ie : IncidentEdge G v) : ℂ :=
+  if ie.1.1.1 = v then (c ie.1 : ℂ) else ↑((c ie.1)⁻¹)
+
+/-- A scalar edge family is vertex-balanced if the oriented product of its
+endpoint scalars is `1` at every vertex. -/
+def IsVertexBalanced (c : (e : Edge G) → Units ℂ) : Prop :=
+  ∀ v : V, ∏ ie : IncidentEdge G v, edgeScalarAt (G := G) c v ie = 1
+
+/-- Two PEPS gauge families are equivalent modulo balanced edge scalars if,
+after inserting the corresponding endpoint scalars, they induce the same
+oriented edge action on every incident half-edge. -/
+def GaugeEquivalentModEdgeScalars (A : Tensor G d)
+    (X Y : (e : Edge G) → GL (Fin (A.bondDim e)) ℂ) : Prop :=
+  ∃ c : (e : Edge G) → Units ℂ,
+    IsVertexBalanced (G := G) c ∧
+      ∀ (v : V) (ie : IncidentEdge G v),
+        edgeGaugeAt A X v ie =
+          edgeScalarAt (G := G) c v ie • edgeGaugeAt A Y v ie
+
+/-- Balanced edge-scalar reweightings do not change the gauged tensor at a
+vertex. -/
+theorem GaugeEquivalentModEdgeScalars.gaugeVertex_eq
+    {A : Tensor G d}
+    {X Y : (e : Edge G) → GL (Fin (A.bondDim e)) ℂ}
+    (hXY : GaugeEquivalentModEdgeScalars (G := G) A X Y)
+    (v : V) (η : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1))
+    (σ : Fin d) :
+    gaugeVertex A X v η σ = gaugeVertex A Y v η σ := by
+  rcases hXY with ⟨c, hc, hedge⟩
+  unfold gaugeVertex
+  refine Finset.sum_congr rfl ?_
+  intro η' _
+  have hprod :
+      ∏ ie : IncidentEdge G v, edgeGaugeAt A X v ie (η ie) (η' ie) =
+        ∏ ie : IncidentEdge G v, edgeGaugeAt A Y v ie (η ie) (η' ie) := by
+    calc
+      ∏ ie : IncidentEdge G v, edgeGaugeAt A X v ie (η ie) (η' ie) =
+          ∏ ie : IncidentEdge G v,
+            edgeScalarAt (G := G) c v ie *
+              edgeGaugeAt A Y v ie (η ie) (η' ie) := by
+            refine Finset.prod_congr rfl ?_
+            intro ie _
+            have hEntry := congrArg (fun M => M (η ie) (η' ie)) (hedge v ie)
+            simpa [Matrix.smul_apply, smul_eq_mul] using hEntry
+      _ = (∏ ie : IncidentEdge G v, edgeScalarAt (G := G) c v ie) *
+            ∏ ie : IncidentEdge G v, edgeGaugeAt A Y v ie (η ie) (η' ie) := by
+            rw [Finset.prod_mul_distrib]
+      _ = ∏ ie : IncidentEdge G v, edgeGaugeAt A Y v ie (η ie) (η' ie) := by
+            rw [hc v, one_mul]
+  rw [hprod]
+
+/-! ### Uniqueness modulo balanced edge scalars -/
+
+/-- **Gauge uniqueness modulo balanced edge scalars** (arXiv:1804.04964,
+Theorem 2, uniqueness clause, repaired form).
+
+If `X` and `Y` are two gauge families relating the same pair of injective PEPS,
+then they should represent the same gauge class modulo edge-wise nonzero
+scalars whose oriented product is `1` at every vertex. This replaces the
+earlier global-scalar conclusion, which is refuted by the connected-triangle,
+bond-dimension-`1` counterexample discussed in issue #762. -/
+theorem gauge_unique_mod_edge_scalars (A B : Tensor G d)
     (hA : IsVertexInjective A)
     (hDim : A.bondDim = B.bondDim)
     (X Y : (e : Edge G) → GL (Fin (A.bondDim e)) ℂ)
@@ -590,18 +649,16 @@ theorem gauge_unique_up_to_scalar (A B : Tensor G d)
         (σ : Fin d),
       B.component v (fun ie => Fin.cast (congr_fun hDim ie.1) (η ie)) σ =
         gaugeVertex A Y v η σ) :
-    ∃ (c : ℂ), c ≠ 0 ∧ ∀ (e : Edge G),
-      (X e).val = c • (Y e).val := by
-  -- TODO: the current statement is too strong. The issue-#503 discussion gives
-  -- a connected triangle counterexample with bond dimension `1`, where two
-  -- nontrivial gauge families act trivially on every vertex but are not related
-  -- by one global scalar.
-  --
-  -- The eventual replacement needs two ingredients:
-  -- 1. statement repair, adding the right normalization or cocycle data for the
-  --    edge gauges;
-  -- 2. a uniqueness proof for that corrected statement, downstream of the
-  --    virtual-insertion / blocking argument from arXiv:1804.04964 §3.
+    GaugeEquivalentModEdgeScalars (G := G) A X Y := by
+  -- TODO: compare `hX` and `hY` vertexwise and use linear independence of
+  -- `A.component v` to extract scalar ratios on each incident edge.
+  -- The remaining missing ingredient is the tensor-factor uniqueness lemma:
+  -- if two products of oriented edge gauges act identically on an injective
+  -- vertex tensor, then the factors differ by nonzero scalars whose product
+  -- is `1` at that vertex. Assembling these local scalar relations into a
+  -- single edge family gives the desired balanced quotient relation.
+  -- This is the repaired uniqueness endpoint for PEPS gauges; the former
+  -- global-scalar statement was false on the triangle counterexample.
   sorry
 
 end PEPS
