@@ -728,9 +728,9 @@ This section collects the operator convexity/concavity results, trace
 inequalities, the operator Jensen inequality for positive maps, and the
 Lieb concavity theorem. These are standard results in matrix analysis
 (Bhatia~Ch.~V, Wolf~Thm.~5.1, Hansen--Pedersen~2003, Lieb~1973). They are
-currently taken as assumptions pending upstream formalization of operator
-concavity and convexity for real powers $x\mapsto x^p$ on the Loewner
-order, together with operator concavity of the matrix logarithm.
+used here as cited inputs, since the corresponding matrix-analysis proofs
+for real powers $x\mapsto x^p$ on the Loewner order and for the matrix
+logarithm are not developed in this chapter.
 
 \subsection{Diagonal Jensen inequality}
 
@@ -828,13 +828,13 @@ order, together with operator concavity of the matrix logarithm.
     This is \cite[Thm.~5.1]{Wolf2012Quantum} for concave~$f(x)=x^p$.
 \end{theorem}
 
-\begin{theorem}[Jensen for concave real powers --- restatement]\label{thm:rpow_concave_jensen}
+\begin{theorem}[Map form of Jensen for concave real powers]\label{thm:rpow_concave_jensen}
     \lean{IsPositiveMap.rpow_concave_jensen}
     \notready
     \uses{thm:posMap_rpow_concave_jensen}
-    Restates Theorem~\ref{thm:posMap_rpow_concave_jensen} for downstream
-    use as a property of a positive map.
-    Axiom-dependent: not fully formalized until
+    This is the corresponding map-form statement of
+    Theorem~\ref{thm:posMap_rpow_concave_jensen}.
+    Its proof is deferred until
     Theorem~\ref{thm:posMap_rpow_concave_jensen} is proved.
 \end{theorem}
 
@@ -853,13 +853,13 @@ order, together with operator concavity of the matrix logarithm.
     This is \cite[Thm.~5.1]{Wolf2012Quantum} for convex~$f(x)=x^p$.
 \end{theorem}
 
-\begin{theorem}[Jensen for convex real powers --- restatement]\label{thm:rpow_convex_jensen}
+\begin{theorem}[Map form of Jensen for convex real powers]\label{thm:rpow_convex_jensen}
     \lean{IsPositiveMap.rpow_convex_jensen}
     \notready
     \uses{thm:posMap_rpow_convex_jensen}
-    Restates Theorem~\ref{thm:posMap_rpow_convex_jensen} for downstream
-    use as a property of a positive map.
-    Axiom-dependent: not fully formalized until
+    This is the corresponding map-form statement of
+    Theorem~\ref{thm:posMap_rpow_convex_jensen}.
+    Its proof is deferred until
     Theorem~\ref{thm:posMap_rpow_convex_jensen} is proved.
 \end{theorem}
 
@@ -879,13 +879,13 @@ order, together with operator concavity of the matrix logarithm.
     Requires unitality ($T(\Id)=\Id$), not merely subunitality.
 \end{theorem}
 
-\begin{theorem}[Jensen for concave log --- restatement]\label{thm:log_concave_jensen}
+\begin{theorem}[Map form of Jensen for the concave logarithm]\label{thm:log_concave_jensen}
     \lean{IsPositiveMap.log_concave_jensen}
     \notready
     \uses{thm:posMap_log_concave_jensen}
-    Restates Theorem~\ref{thm:posMap_log_concave_jensen} for downstream
-    use as a property of a positive map.
-    Axiom-dependent: not fully formalized until
+    This is the corresponding map-form statement of
+    Theorem~\ref{thm:posMap_log_concave_jensen}.
+    Its proof is deferred until
     Theorem~\ref{thm:posMap_log_concave_jensen} is proved.
 \end{theorem}
 
@@ -911,12 +911,13 @@ order, together with operator concavity of the matrix logarithm.
     See Lieb (1973) and Ando (1979).
 \end{theorem}
 
-\begin{theorem}[Lieb concavity --- restatement]\label{thm:lieb_concavity}
+\begin{theorem}[Map form of Lieb concavity]\label{thm:lieb_concavity}
     \lean{lieb_concavity}
     \notready
     \uses{thm:lieb_concavity_axiom}
-    Restates Theorem~\ref{thm:lieb_concavity_axiom} for downstream use.
-    Axiom-dependent: not fully formalized until
+    This is the corresponding map-form statement of
+    Theorem~\ref{thm:lieb_concavity_axiom}.
+    Its proof is deferred until
     Theorem~\ref{thm:lieb_concavity_axiom} is proved.
 \end{theorem}
 

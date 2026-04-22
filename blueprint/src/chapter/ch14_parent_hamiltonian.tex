@@ -1024,12 +1024,12 @@ interaction projectors commute with each other.
     \uses{def:is_rfp, def:is_nncph, def:normal}
     If $A$ is a normal renormalization fixed point, then for every chain length
     $N \ge 2$ the parent Hamiltonian with $L = 2$ has commuting local terms.
-    Here this implication is supplied by the external input
-    recording the product-of-entangled-pairs description from Appendix~B of
+    This implication is cited here from the product-of-entangled-pairs
+    description in Appendix~B of
     Theorem~3.10 in~\cite{Cirac2021Matrix}.
 \end{theorem}
 
-\begin{remark}[Product-pair data for future NNCPH proofs]%
+\begin{remark}[Product-pair data for NNCPH]%
     \label{rem:product_pair_bridge}
     \lean{MPSTensor.productPairWindow}
     \lean{MPSTensor.productPairState}
@@ -1058,8 +1058,8 @@ interaction projectors commute with each other.
     \uses{def:is_rfp, def:is_nncph, def:normal}
     If $A$ is normal, in left-canonical form, and its parent Hamiltonian with
     $L = 2$ has commuting local terms for every chain length $N \ge 2$, then $A$
-    is a renormalization fixed point. Here this
-    implication is supplied by the external input recording Beigi's ground-space
+    is a renormalization fixed point. This implication is cited here from Beigi's
+    ground-space
     characterization of one-dimensional commuting nearest-neighbor Hamiltonians; the
     left-canonical hypothesis fixes the normalization of the transfer map.
 \end{theorem}
@@ -1617,8 +1617,8 @@ Lucia~\cite{Kastoryano2018Martingale}.
     \notready
     \uses{def:parent_ground_space_es, def:parent_hamiltonian_es,
         thm:parent_ground_space_es_kernel}
-    For an injective tensor $A$ and a range $L > 1$, the current Lean statement gives
-    the missing analytic estimate with the explicit constant
+    For an injective tensor $A$ and a range $L > 1$, the theorem asserts
+    the analytic estimate with the explicit constant
     \[
         \gamma_{L} := \frac{1}{4L} > 0.
     \]
@@ -1631,8 +1631,8 @@ Lucia~\cite{Kastoryano2018Martingale}.
 
 \begin{proof}
     \notready
-    This is exactly the missing MPS-specific Friedrichs-angle estimate together with the
-    row-sum bound. Once those analytic inputs are formalized, the result feeds directly into
+    This is exactly the MPS-specific Friedrichs-angle estimate together with the
+    row-sum bound. These two analytic inputs feed directly into
     the abstract martingale criterion.
 \end{proof}
 

@@ -288,7 +288,7 @@ legs cyclically and taking the resulting trace.
     \lean{MPOTensor.isRFP_iff_isZCL}
     \leanok
     \uses{def:is_rfp_mpdo, def:mpo_is_zcl}
-    The provisional MPDO renormalization fixed-point condition is equivalent to
+    The MPDO renormalization fixed-point condition is equivalent to
     the zero-correlation-length condition for MPO tensors.
 \end{theorem}
 
@@ -303,7 +303,7 @@ legs cyclically and taking the resulting trace.
     \leanok
     \uses{def:is_rfp_mpdo, def:mpo_to_mps, def:is_rfp, def:mpo_is_zcl,
         thm:mpo_is_zcl_iff_to_mps_rfp}
-    The provisional MPDO RFP condition is equivalent to the pure-state RFP
+    The MPDO renormalization fixed-point condition is equivalent to the pure-state RFP
     condition for the doubled-index MPS tensor.
 \end{theorem}
 
@@ -621,13 +621,12 @@ retract.
     map $E_n$.
 \end{definition}
 
-\begin{theorem}[Fusion-isometry data imply the provisional MPDO RFP condition]%
+\begin{theorem}[Fusion-isometry data imply MPDO RFP]%
     \label{thm:mpdo_rfp_of_fusion}
     \lean{MPOTensor.isRFP_of_isRFP_MPDO_via_fusion}
     \leanok
     \uses{def:mpdo_rfp_via_fusion}
-    The fusion-isometry formulation implies the current predicate
-    \lean{MPOTensor.IsRFP}.
+    The fusion-isometry formulation implies \lean{MPOTensor.IsRFP}.
 \end{theorem}
 \begin{proof}\leanok
 Apply the definition at blocked size $n = 1$.
@@ -662,10 +661,10 @@ This range-factorization gives the required fusion-isometry data.
 \end{corollary}
 \begin{proof}\leanok
 Combine Theorem~\ref{thm:mpdo_rfp_via_fusion_iff} with the diagonal pure-state
-recovery theorem for the provisional MPO predicate.
+recovery theorem for the MPDO renormalization fixed-point condition.
 \end{proof}
 
-\section{Algebra structure}
+\section{Support-algebra structure}
 
 \begin{definition}[Algebra-structure data for an MPDO]%
     \label{def:mpdo_algebra_structure_data}
@@ -681,18 +680,16 @@ recovery theorem for the provisional MPO predicate.
     $\iota_n$.
 \end{definition}
 
-\begin{definition}[Algebra-structure RFP predicate (provisional)]%
+\begin{definition}[Algebra-structure formulation of MPDO RFP]%
     \label{def:mpdo_rfp_via_algebra}
     \lean{MPOTensor.IsRFP_MPDO_via_algebra_scaffold}
     \uses{def:mpdo_algebra_structure_data, def:mpo_tensor}
     An MPO tensor $M$ satisfies the \emph{algebra-structure formulation} of
     the renormalization fixed-point condition when there exist
     algebra-structure data compatible with $M$, in the sense of
-    \cite[Theorem~IV.13~(ii)]{Cirac2017MPDO_AnnPhys}. The compatibility
-    relation between algebra-structure data and~$M$ is, in this provisional
-    formulation, the trivial relation that holds for every pair;
-    consequently the predicate above holds vacuously of every MPO tensor.
-    The exact compatibility condition of
-    \cite[Theorem~IV.13~(ii)]{Cirac2017MPDO_AnnPhys} is to be substituted
-    in place of the trivial relation in subsequent work.
+    \cite[Theorem~IV.13~(ii)]{Cirac2017MPDO_AnnPhys}. Here compatibility is
+    taken to be the trivial relation that holds for every pair, so this
+    formulation is satisfied by every MPO tensor. The intended compatibility
+    condition is the one appearing in
+    \cite[Theorem~IV.13~(ii)]{Cirac2017MPDO_AnnPhys}.
 \end{definition}

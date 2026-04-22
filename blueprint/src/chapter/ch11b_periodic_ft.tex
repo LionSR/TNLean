@@ -150,7 +150,7 @@ $p$-divisibility of the transfer map.
     hypothesis via word concatenation.
 \end{proof}
 
-\begin{theorem}[Physical rotation distributes over block assembly]%
+\begin{theorem}[Physical rotation distributes over block-diagonal composition]%
     \label{thm:rotate_physical_blocks}
     \lean{MPSTensor.rotatePhysical_toTensorFromBlocks}
     \leanok
@@ -186,7 +186,7 @@ $p$-divisibility of the transfer map.
     Each block remains periodic by
     Theorem~\ref{thm:periodic_rotate_physical}, the SameMPV condition
     transfers via Theorem~\ref{thm:same_mpv_rotate_physical}, and
-    block-assembly compatibility follows from
+    block-diagonal compatibility follows from
     Theorem~\ref{thm:rotate_physical_blocks}.
 \end{proof}
 
@@ -378,7 +378,7 @@ The following is Theorem~3.8 (``equal case'') of \cite{DeLasCuevas2017Irreducibl
     \noindent\emph{Remark.}
     The proof is conditional on the periodic-overlap dichotomy
     (Proposition~3.3 of~\cite{DeLasCuevas2017Irreducible}),
-    which remains to be proved.
+    which is left here as a separate hypothesis.
 \end{theorem}
 
 \subsection{Periodic overlap dichotomy}
@@ -619,7 +619,7 @@ The following is Theorem~3.8 (``equal case'') of \cite{DeLasCuevas2017Irreducibl
     physical leg, acting unitarily ($U(g)\, U(g)^{\dagger} = \Id$).
     Assume moreover the periodic equal-case Fundamental Theorem of MPS
     (Theorem~\ref{thm:periodic_ft}) as an explicit hypothesis on the
-    pair $(d, D)$, represented by the proposition
+    pair $(d, D)$, expressed by the hypothesis
     \lean{MPSTensor.PeriodicEqualCaseFT}\,$d\,D$.
     If $A$ is on-site symmetric under~$U$ — that is, the twisted tensor
     $\widetilde{A}_g$ has the same MPV family as~$A$ for every $g \in G$
@@ -743,7 +743,7 @@ The following is Theorem~3.8 (``equal case'') of \cite{DeLasCuevas2017Irreducibl
     The cohomology class of $\omega$ in $H^{2}(G, U(1))$ classifies the
     SPT phase of the symmetric MPS (cf.~Chen--Gu--Wen and
     P\'erez-Garc\'ia et al.).  This classification statement is not
-    formalised at present; here only the underlying 2-cocycle identity of
+    established here; only the underlying 2-cocycle identity of
     Theorem~\ref{thm:cor_4_1_projective_rep_cocycle} is available.
 \end{remark}
 
@@ -845,10 +845,10 @@ for the irreducible-form framework in \cite{DeLasCuevas2017Irreducible}.
 
 \begin{proof}\leanok
     \uses{thm:thm_4_1_p_refinement_forward, thm:thm_4_1_p_refinement_reverse}
-    Bundle the forward implication
+    Combine the forward implication
     (Theorem~\ref{thm:thm_4_1_p_refinement_forward}) with the reverse
     implication (Theorem~\ref{thm:thm_4_1_p_refinement_reverse}) into a
-    single biconditional.  Both directions are formalised conditionally
+    single biconditional.  Both directions are stated conditionally
     on their respective canonicalization hypotheses, whose combination
     yields the full equivalence.
 \end{proof}
@@ -869,7 +869,7 @@ for the irreducible-form framework in \cite{DeLasCuevas2017Irreducible}.
     $\sum_i (A^i)^\dagger A^i = \Id$ (left-canonical) and
     $\mathcal{E}_B = \mathcal{E}_{A^{[p]}}$. The left-canonical property
     makes $\mathcal{E}_A$ a CPTP channel, and the blocking identity
-    $\mathcal{E}_{A^{[p]}} = (\mathcal{E}_A)^p$ (formalised as
+    $\mathcal{E}_{A^{[p]}} = (\mathcal{E}_A)^p$ given by
     \lean{MPSTensor.transferMap_blockTensor}) then identifies
     $\mathcal{E}_B$ with the $p$-th power of the channel $\mathcal{E}_A$.
 \end{proof}
@@ -893,9 +893,8 @@ for the irreducible-form framework in \cite{DeLasCuevas2017Irreducible}.
     finite Kraus families of the same completely positive map: the
     blocked family $A^{[p]}$ with $d^{p}$ operators and the original
     family $B$ with $d$ operators.  The cardinality comparison
-    $d \le d^{p}$ holds whenever $p \ge 1$, so Wolf
-    Theorem~2.18 (isometric freedom of Kraus representations,
-    formalised as \lean{kraus_isometry_freedom_iff}) supplies an
+    $d \le d^{p}$ holds whenever $p \ge 1$, so the isometric freedom of
+    Kraus representations (\lean{kraus_isometry_freedom_iff}) supplies an
     isometry $V \in M_{d^p \times d}(\C)$ with $V^{\dagger} V = \Id$ and
     $(A^{[p]})^{\alpha} = \sum_{j} V_{\alpha,j}\, B^{j}$.  Expanding
     $\mathrm{coeff}\,(A^{[p]})\,(\mathrm{ofFn}\,\tau)$ by linearity of
