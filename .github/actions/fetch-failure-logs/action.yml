@@ -1,0 +1,64 @@
+name: 'Fetch Failure Logs'
+description: 'Download logs for failed jobs of a workflow run and return sanitized JSON (runUrl, failedJobs, errorLogs)'
+
+inputs:
+  workflow-run-id:
+    description: 'The ID of the failed workflow run'
+    required: true
+  github-token:
+    description: 'GitHub token for API access'
+    required: false
+    default: ${{ github.token }}
+
+outputs:
+  result:
+    description: 'JSON with { runUrl, failedJobs[], errorLogs[] }'
+    value: ${{ steps.fetch.outputs.result }}
+
+runs:
+  using: 'composite'
+  steps:
+    - id: fetch
+      uses: actions/github-script@v8
+      with:
+        github-token: ${{ inputs.github-token }}
+        script: |
+          const runId = Number('${{ inputs.workflow-run-id }}');
+          const run = await github.rest.actions.getWorkflowRun({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            run_id: runId
+          });
+          const failedJobs = [];
+          let page = 1;
+          while (true) {
+            const jobs = await github.rest.actions.listJobsForWorkflowRun({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              run_id: runId,
+              per_page: 100,
+              page
+            });
+            failedJobs.push(...jobs.data.jobs.filter(j => j.conclusion === 'failure'));
+            if (jobs.data.jobs.length < 100) break;
+            page += 1;
+          }
+          const errorLogs = [];
+          for (const job of failedJobs) {
+            const logs = await github.rest.actions.downloadJobLogsForWorkflowRun({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              job_id: job.id
+            });
+            // Last 10000 chars — build errors appear at the tail, not in setup/checkout noise.
+            const raw = logs.data;
+            const trimmed = (raw.length > 10000 ? raw.substring(raw.length - 10000) : raw)
+              .replace(/[^\x20-\x7E\n\r\t]/g, '')
+              .replace(/```/g, '\u200B`\u200B`\u200B`');
+            errorLogs.push({ jobName: job.name, logs: trimmed });
+          }
+          return {
+            runUrl: run.data.html_url,
+            failedJobs: failedJobs.map(j => j.name),
+            errorLogs
+          };

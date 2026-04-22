@@ -1,0 +1,49 @@
+name: 'Bot Fix Iteration Guard'
+description: 'Count consecutive [claude-*-fix]/[codex-*-fix] commits and stop if the combined cap is reached'
+
+inputs:
+  max-iterations:
+    description: 'Maximum consecutive bot-fix commits allowed'
+    required: false
+    default: '5'
+
+outputs:
+  skip:
+    description: 'true when the cap has been reached'
+    value: ${{ steps.count.outputs.skip }}
+  iteration:
+    description: 'Current consecutive bot-fix commit count'
+    value: ${{ steps.count.outputs.iteration }}
+  next_iteration:
+    description: 'Count + 1 (for display)'
+    value: ${{ steps.count.outputs.next_iteration }}
+  max_iterations:
+    description: 'The cap value echoed back'
+    value: ${{ steps.count.outputs.max_iterations }}
+
+runs:
+  using: 'composite'
+  steps:
+    - id: count
+      shell: bash
+      env:
+        MAX_BOT_FIX_ITERATIONS: ${{ inputs.max-iterations }}
+      run: |
+        COUNT=0
+        while IFS= read -r MSG; do
+          if echo "$MSG" | grep -qE '\[(claude|codex)-(auto|review)-fix\]'; then
+            COUNT=$((COUNT + 1))
+          else
+            break
+          fi
+        done < <(git log --pretty=%s -n "$MAX_BOT_FIX_ITERATIONS")
+        echo "iteration=$COUNT" >> "$GITHUB_OUTPUT"
+        echo "next_iteration=$((COUNT + 1))" >> "$GITHUB_OUTPUT"
+        echo "max_iterations=$MAX_BOT_FIX_ITERATIONS" >> "$GITHUB_OUTPUT"
+        if [ "$COUNT" -ge "$MAX_BOT_FIX_ITERATIONS" ]; then
+          echo "skip=true" >> "$GITHUB_OUTPUT"
+          echo "::warning::Reached max combined bot-fix iterations ($MAX_BOT_FIX_ITERATIONS). Stopping."
+        else
+          echo "skip=false" >> "$GITHUB_OUTPUT"
+          echo "::notice::Bot-fix iteration $((COUNT + 1)) of $MAX_BOT_FIX_ITERATIONS"
+        fi

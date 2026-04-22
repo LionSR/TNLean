@@ -1,0 +1,102 @@
+name: 'Fetch Unresolved Review Comments'
+description: 'Paginate review threads on a PR and return sanitized unresolved non-outdated conversations plus the latest review summary'
+
+inputs:
+  pr-number:
+    description: 'Pull request number'
+    required: true
+  github-token:
+    description: 'GitHub token for API access'
+    required: false
+    default: ${{ github.token }}
+
+outputs:
+  result:
+    description: 'JSON with { skip, threads[], reviewSummary, reviewState }'
+    value: ${{ steps.fetch.outputs.result }}
+
+runs:
+  using: 'composite'
+  steps:
+    - id: fetch
+      uses: actions/github-script@v8
+      with:
+        github-token: ${{ inputs.github-token }}
+        script: |
+          const prNumber = Number('${{ inputs.pr-number }}');
+          const query = `query($owner: String!, $repo: String!, $pr: Int!, $cursor: String) {
+            repository(owner: $owner, name: $repo) {
+              pullRequest(number: $pr) {
+                reviewThreads(first: 100, after: $cursor) {
+                  pageInfo { hasNextPage endCursor }
+                  nodes {
+                    isResolved
+                    isOutdated
+                    comments(first: 20) {
+                      nodes {
+                        author { login }
+                        body
+                        path
+                        line
+                        originalLine
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }`;
+
+          const threads = [];
+          let cursor = null;
+          do {
+            const result = await github.graphql(query, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pr: prNumber,
+              cursor
+            });
+            const page = result.repository.pullRequest.reviewThreads;
+            threads.push(...page.nodes);
+            cursor = page.pageInfo.hasNextPage ? page.pageInfo.endCursor : null;
+          } while (cursor);
+
+          const unresolvedThreads = threads.filter(t =>
+            !t.isResolved && !t.isOutdated && t.comments.nodes.length > 0
+          );
+
+          if (unresolvedThreads.length === 0) {
+            core.notice('No unresolved review threads. Fixed point reached!');
+            return { skip: true, threads: [], reviewSummary: null, reviewState: null };
+          }
+
+          core.notice(`Found ${unresolvedThreads.length} unresolved review threads to address`);
+
+          const allReviews = await github.paginate(github.rest.pulls.listReviews, {
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            pull_number: prNumber,
+            per_page: 100
+          });
+
+          const latestReview = allReviews.at(-1) ?? null;
+
+          const sanitize = (s) => (s || '')
+            .replace(/[^\x20-\x7E\n\r\t]/g, '')
+            .replace(/```/g, '\u200B`\u200B`\u200B`');
+
+          return {
+            skip: false,
+            threads: unresolvedThreads.slice(0, 20).map(t => ({
+              path: t.comments.nodes[0].path,
+              line: t.comments.nodes[0].originalLine || t.comments.nodes[0].line,
+              conversation: t.comments.nodes.map(c => ({
+                author: c.author?.login ?? 'ghost',
+                body: sanitize(c.body).substring(0, 1000)
+              }))
+            })),
+            reviewSummary: latestReview
+              ? sanitize(latestReview.body || '').substring(0, 2000)
+              : null,
+            reviewState: latestReview ? latestReview.state : null
+          };
