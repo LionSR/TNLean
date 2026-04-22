@@ -828,6 +828,29 @@ for the irreducible-form framework in \cite{DeLasCuevas2017Irreducible}.
     irreducible-form decomposition of $C$.
 \end{proof}
 
+\begin{theorem}[Blocked equal-case continuation from Z-gauge extraction]
+    \label{thm:peripheral_equalcase_sameMPV_zgauge_reduction}
+    \lean{MPSTensor.peripheralEqualCase_periodicFT_of_sameMPV}
+    \leanok
+    \uses{def:irreducible_form, def:blocked_tensor, def:z_gauge_equiv}
+    Assume the following two statements.
+    First, whenever a blocked tensor $C$ in irreducible form~II has the same
+    MPV family as a blocked tensor $A^{[p]}$, there exist an integer $m \ge 1$
+    and a $\mathbb Z_m$-gauge equivalence between $C$ and $A^{[p]}$.
+    Second, whenever a blocked tensor $C$ in irreducible form~II is
+    $\mathbb Z_m$-gauge equivalent to $A^{[p]}$, there exists a tensor $A'$
+    with $\sum_i (A'^i)^\dagger A'^i = \Id$ and
+    $\mathcal E_C = \mathcal E_{A'^{[p]}}$.
+    Then whenever $C$ in irreducible form~II has the same MPV family as
+    $A^{[p]}$, there exists such a tensor $A'$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Apply the first assumed statement to obtain a blocked $\mathbb Z_m$-gauge
+    witness between $C$ and $A^{[p]}$. Then apply the second assumed statement
+    to that witness.
+\end{proof}
+
 \begin{theorem}[Reduction of forward canonicalization to the blocked equal-case stage]
     \label{thm:p_refinement_forward_equalcase_reduction}
     \lean{MPSTensor.pRefinementCanonicalization_of_peripheralEqualCase_periodicFT_of_sameMPV}
