@@ -64,11 +64,6 @@
     The unique eigenvalue equals the trace, hence equals $1$, and $-1 \cdot \log 1 = 0$.
 \end{proof}
 
-The already-stated trivial-middle subadditivity theorem
-Theorem~\ref{thm:entropy_subadditivity_trivial_B} is now proved in Lean by deriving the
-middle-state trace-one condition from Theorem~\ref{thm:trace_traceac_abc} and then applying
-Theorem~\ref{thm:entropy_fin_one_zero}.
-
 \begin{theorem}[Trivial-middle mutual information is non-negative]
     \label{thm:entropy_mi_trivial_middle_nonneg}
     \lean{Entropy.mutualInformation_ssa_trivial_B_nonneg}

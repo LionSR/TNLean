@@ -282,15 +282,19 @@ later MPDO arguments.
 
 \begin{theorem}[Subadditivity from trivial-middle SSA]\label{thm:entropy_subadditivity_trivial_B}
     \lean{Entropy.subadditivity_ssa_trivial_B}
-    \notready
-    \uses{thm:entropy_strong_subadditivity}
+    \leanok
+    \uses{def:entropy_von_neumann_entropy, def:traceA_ABC, def:traceC_ABC}
     For a tripartite density matrix $\rho_{ABC}$ with
     $\dim B = 1$,
     \[
         S(\rho_{ABC}) \le S(\rho_{AB}) + S(\rho_{BC}).
     \]
-    This follows from SSA because the $1$-dimensional middle subsystem
-    contributes zero entropy. The statement carries an implicit
-    dependence on the axiom of Theorem~\ref{thm:entropy_strong_subadditivity}
-    and is therefore not marked \leanok.
 \end{theorem}
+
+\begin{proof}\leanok
+    Apply Theorem~\ref{thm:entropy_strong_subadditivity} with
+    one-dimensional middle subsystem. The reduced middle state has
+    trace $1$ by Theorem~\ref{thm:trace_traceac_abc}, hence its entropy
+    vanishes by Theorem~\ref{thm:entropy_fin_one_zero}.
+    \uses{thm:entropy_strong_subadditivity, thm:trace_traceac_abc, thm:entropy_fin_one_zero}
+\end{proof}
