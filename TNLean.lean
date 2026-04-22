@@ -167,7 +167,6 @@ import TNLean.MPS.ParentHamiltonian.SuffixWindow
 import TNLean.MPS.ParentHamiltonian.ExtendRight
 import TNLean.MPS.ParentHamiltonian.WrappingWindow
 import TNLean.MPS.ParentHamiltonian.SuffixWindow
-import TNLean.MPS.ParentHamiltonian.OpenChainRangeReduction
 import TNLean.MPS.ParentHamiltonian.UniqueGroundState
 import TNLean.MPS.ParentHamiltonian.DegenerateGS
 import TNLean.Axioms.Beigi
