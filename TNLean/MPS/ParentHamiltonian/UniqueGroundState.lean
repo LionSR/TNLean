@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.ParentHamiltonian.Basic
 import TNLean.MPS.ParentHamiltonian.CyclicWindow
+import TNLean.MPS.ParentHamiltonian.ExtendRight
 import TNLean.MPS.ParentHamiltonian.WrappingWindow
 import TNLean.MPS.FundamentalTheorem.FiniteLength
 import TNLean.Algebra.TracePairing
@@ -117,6 +118,181 @@ theorem mpv_mem_chainGroundSpace (A : MPSTensor d D) (L N : ℕ)
   intro i τ
   simpa [cyclicRestrictₗ_apply, cyclicCfg, replaceWindow] using
     mpv_window_mem_groundSpace A L N hLN i τ
+
+/-- Fixing the last site of a cyclic `(L + 1)`-window recovers the shorter
+`L`-window with the same outside configuration. -/
+private theorem cyclicRestrictₗ_restrictLast {N L : ℕ} (hN : 0 < N)
+    (hLN : L + 1 ≤ N) (i : Fin N) (τ : Fin N → Fin d) (ψ : NSiteSpace d N) :
+    restrictLast (cyclicRestrictₗ hN (L + 1) i τ ψ)
+      (τ ⟨(i.val + L) % N, Nat.mod_lt _ hN⟩) =
+    cyclicRestrictₗ hN L i τ ψ := by
+  ext σ
+  simp only [restrictLast_apply, cyclicRestrictₗ_apply]
+  congr 1
+  ext ⟨k, hk⟩
+  simp only [cyclicCfg]
+  let off : ℕ := (k + N - i.val) % N
+  by_cases hOff : off < L
+  · have hOff' : off < L + 1 := by omega
+    rw [dif_pos hOff', dif_pos hOff]
+    have hcast :
+        (⟨off, hOff'⟩ : Fin (L + 1)) = Fin.castSucc (⟨off, hOff⟩ : Fin L) := by
+      ext
+      simp [Fin.castSucc, off]
+    rw [hcast, Fin.snoc_castSucc]
+  · have hOff_le : L ≤ off := by omega
+    by_cases hEq : off = L
+    · have hOff' : off < L + 1 := by omega
+      rw [dif_pos hOff', dif_neg hOff]
+      have hlast : (⟨off, hOff'⟩ : Fin (L + 1)) = Fin.last L := by
+        ext
+        simp [Fin.last, hEq]
+      rw [hlast, Fin.snoc_last]
+      have hkEq : k = (i.val + L) % N := by
+        have hmod : (k + N - i.val) % N = L := by
+          simpa [off] using hEq
+        by_cases hik : i.val ≤ k
+        · have hklt : k - i.val < N := by omega
+          have hmod' : (k + N - i.val) % N = k - i.val := by
+            have hsum : k + N - i.val = (k - i.val) + N := by omega
+            rw [hsum, Nat.add_mod_right, Nat.mod_eq_of_lt hklt]
+          rw [hmod'] at hmod
+          have hiLlt : i.val + L < N := by omega
+          rw [Nat.mod_eq_of_lt hiLlt]
+          omega
+        · have hik' : k < i.val := by omega
+          have hlt : k + N - i.val < N := by omega
+          have hmod' : (k + N - i.val) % N = k + N - i.val := Nat.mod_eq_of_lt hlt
+          rw [hmod'] at hmod
+          have hiLge : N ≤ i.val + L := by omega
+          rw [Nat.mod_eq_sub_mod hiLge, Nat.mod_eq_of_lt (by omega : i.val + L - N < N)]
+          omega
+      simp [hkEq]
+    · rw [dif_neg (by omega), dif_neg hOff]
+
+/-- Shrinking the cyclic window size by one weakens the chain-ground-space
+constraints. -/
+private theorem chainGroundSpace_antitone_step {A : MPSTensor d D} {N L : ℕ}
+    (hN : 0 < N) (hLN : L + 1 ≤ N) :
+    chainGroundSpace A (L + 1) N ≤ chainGroundSpace A L N := by
+  intro ψ hψ
+  rw [chainGroundSpace, dif_pos ⟨hN, by omega⟩] at hψ
+  rw [chainGroundSpace, dif_pos ⟨hN, by omega⟩]
+  simp only [Submodule.mem_iInf, Submodule.mem_comap] at hψ ⊢
+  intro i τ
+  have hbig : cyclicRestrictₗ hN (L + 1) i τ ψ ∈ groundSpace A (L + 1) := hψ i τ
+  have hleft := groundSpace_inLeftGround A L hbig
+  simpa [cyclicRestrictₗ_restrictLast (hN := hN) (hLN := hLN) (i := i) (τ := τ) (ψ := ψ)] using
+    hleft (τ ⟨(i.val + L) % N, Nat.mod_lt _ hN⟩)
+
+/-- Any chain-ground-space condition with window `L > L₀` implies the reduced
+normal-range condition with window `L₀ + 1`. -/
+private theorem chainGroundSpace_le_reduced_window {A : MPSTensor d D}
+    {L₀ L N : ℕ} (hN : 0 < N) (hL : L₀ < L) (hLN : L ≤ N) :
+    chainGroundSpace A L N ≤ chainGroundSpace A (L₀ + 1) N := by
+  let m := L - (L₀ + 1)
+  have hm : L = (L₀ + 1) + m := by
+    dsimp [m]
+    omega
+  subst hm
+  induction m with
+  | zero => simpa using (show chainGroundSpace A (L₀ + 1) N ≤ chainGroundSpace A (L₀ + 1) N from le_rfl)
+  | succ m ih =>
+      exact (chainGroundSpace_antitone_step (A := A) (L := L₀ + 1 + m) hN (by omega)).trans ih
+
+/-- Positive-length block injectivity forces the physical dimension to be nonzero. -/
+private theorem neZero_d_of_isNBlkInjective {A : MPSTensor d D} [NeZero D]
+    {L₀ : ℕ} (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) : NeZero d := by
+  by_contra hd
+  simp only [not_neZero] at hd
+  subst hd
+  have hempty :
+      Set.range (fun σ : Fin L₀ → Fin 0 => evalWord A (List.ofFn σ)) = ∅ := by
+    exact Set.range_eq_empty_iff.mpr inferInstance
+  rw [IsNBlkInjective, hempty, Submodule.span_empty] at hInj
+  exact bot_ne_top hInj
+
+/-- Fixing a prefix of a contiguous window recovers its rightmost suffix window. -/
+private theorem tailRestrictₗ_contiguousRestrictₗ {N K L : ℕ} (s : ℕ)
+    (hsKL : s + (K + L) ≤ N) (τ : Fin N → Fin d) (ψ : NSiteSpace d N)
+    (u : Fin K → Fin d) :
+    tailRestrictₗ u (contiguousRestrictₗ s (K + L) hsKL τ ψ) =
+      contiguousRestrictₗ (s + K) L (by omega)
+        (fun k : Fin N => if h : s ≤ k.val ∧ k.val < s + K
+          then u ⟨k.val - s, by omega⟩ else τ k) ψ := by
+  ext σ
+  simp only [tailRestrictₗ_apply, contiguousRestrictₗ_apply]
+  congr 1
+  ext ⟨k, hk⟩
+  simp only [contiguousCfg]
+  by_cases hLeft : s ≤ k ∧ k < s + K
+  · rw [dif_pos (by omega), dif_neg (by omega), dif_pos hLeft]
+    have hcast :
+        (⟨k - s, by omega⟩ : Fin (K + L)) = Fin.castAdd L (⟨k - s, by omega⟩ : Fin K) := by
+      ext
+      simp [Fin.castAdd]
+      omega
+    rw [hcast, Fin.append_left]
+  · by_cases hRight : s + K ≤ k ∧ k < s + K + L
+    · rw [dif_pos (by omega), dif_pos hRight, dif_neg hLeft]
+      have hcast :
+          (⟨k - s, by omega⟩ : Fin (K + L)) =
+            Fin.natAdd K (⟨k - (s + K), by omega⟩ : Fin L) := by
+        ext
+        simp [Fin.natAdd]
+        omega
+      rw [hcast, Fin.append_right]
+    · rw [dif_neg (by omega), dif_neg hRight, dif_neg hLeft]
+
+/-- Non-wrapping contiguous `(L₀ + 1)`-window conditions imply full open-chain
+membership for an `L₀`-block-injective tensor. -/
+private theorem contiguous_mem_groundSpace_of_isNBlkInjective
+    {A : MPSTensor d D} [NeZero D] {L₀ N : ℕ}
+    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hLN : L₀ + 1 ≤ N)
+    {ψ : NSiteSpace d N}
+    (hwindow : ∀ (s : ℕ) (hs : s + (L₀ + 1) ≤ N) (τ : Fin N → Fin d),
+      contiguousRestrictₗ s (L₀ + 1) hs τ ψ ∈ groundSpace A (L₀ + 1)) :
+    ψ ∈ groundSpace A N := by
+  haveI : NeZero d := neZero_d_of_isNBlkInjective hInj hL₀
+  suffices claim :
+      ∀ K : ℕ, ∀ (hK : K + (L₀ + 1) ≤ N) (s : ℕ)
+        (hs : s + (K + (L₀ + 1)) ≤ N) (τ : Fin N → Fin d),
+        contiguousRestrictₗ s (K + (L₀ + 1)) hs τ ψ ∈ groundSpace A (K + (L₀ + 1)) by
+    have h0 := claim (N - (L₀ + 1)) (by omega) 0 (by omega)
+      (fun _ => ⟨0, Fin.pos'⟩)
+    rwa [show (contiguousRestrictₗ 0 N (by omega) (fun _ => ⟨0, Fin.pos'⟩) ψ) = ψ from by
+      ext σ
+      simp [contiguousRestrictₗ_apply, contiguousCfg_zero_full]] at h0
+  intro K
+  induction K with
+  | zero =>
+      intro hK s hs τ
+      simpa [Nat.zero_add] using hwindow s hs τ
+  | succ K ih =>
+      intro hK s hs τ
+      apply groundSpace_extend_right_of_isNBlkInjective (A := A) (K := K + 1) hInj hL₀
+      · intro j
+        rw [contiguousRestrictₗ_restrictLast]
+        simpa [Nat.add_assoc, Nat.add_left_comm, Nat.add_comm] using ih (by omega) s (by omega) _
+      · intro u
+        rw [tailRestrictₗ_contiguousRestrictₗ (s := s) (K := K + 1) (L := L₀ + 1) (hsKL := hs)]
+        exact hwindow (s + (K + 1)) (by omega) _
+
+/-- At the reduced normal range `L₀ + 1`, the cyclic window conditions already
+force an element of the chain ground space into the open-chain ground space. -/
+private theorem chainGroundSpace_le_groundSpace_reduced_window
+    {A : MPSTensor d D} [NeZero D] {L₀ N : ℕ}
+    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hN : L₀ + 1 ≤ N) :
+    chainGroundSpace A (L₀ + 1) N ≤ groundSpace A N := by
+  intro ψ hψ
+  have hN0 : 0 < N := by omega
+  rw [chainGroundSpace, dif_pos ⟨hN0, hN⟩] at hψ
+  simp only [Submodule.mem_iInf, Submodule.mem_comap] at hψ
+  apply contiguous_mem_groundSpace_of_isNBlkInjective (A := A) hInj hL₀ hN
+  intro s hs τ
+  rw [← cyclicRestrictₗ_eq_contiguousRestrictₗ hN0 hN
+    (i := ⟨s, by omega⟩) (hi := hs) (τ := τ) (ψ := ψ)]
+  exact hψ ⟨s, by omega⟩ τ
 
 /-! ### Unique ground state -/
 
@@ -346,6 +522,17 @@ theorem chainGroundSpace_eq_mpvSubmodule {A : MPSTensor d D} [NeZero D]
     rw [mpvSubmodule, Submodule.mem_span_singleton] at hψ
     obtain ⟨c, rfl⟩ := hψ
     exact Submodule.smul_mem _ c (mpv_mem_chainGroundSpace A L N hN0 hLN)
+
+/-- For an `L₀`-block-injective tensor, cyclic window constraints of any length
+`L > L₀` already imply membership in the open-chain ground space. -/
+theorem chainGroundSpace_le_groundSpace_of_isNBlkInjective
+    {A : MPSTensor d D} [NeZero D] {L₀ L N : ℕ}
+    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
+    (hL : L₀ < L) (hLN : L ≤ N) :
+    chainGroundSpace A L N ≤ groundSpace A N := by
+  have hN0 : 0 < N := by omega
+  exact (chainGroundSpace_le_reduced_window (A := A) hN0 hL hLN).trans
+    (chainGroundSpace_le_groundSpace_reduced_window (A := A) hInj hL₀ (by omega))
 
 /-- Range-reduction bridge for normal tensors.
 
