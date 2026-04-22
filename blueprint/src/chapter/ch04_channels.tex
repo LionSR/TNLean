@@ -1515,7 +1515,7 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
     and $P_i = \Id_D \otimes |i\rangle\langle i|$.
 \end{proof}
 
-\begin{definition}[Packaged Naimark dilation]
+\begin{definition}[Naimark dilation as a structure]
     \label{def:is_naimark_dilation}
     \lean{POVM.IsNaimarkDilation}
     \leanok
@@ -1526,13 +1526,13 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
     $\{P_i\}$ there such that $E_i = V^\dagger P_i V$ for all $i$.
 \end{definition}
 
-\begin{theorem}[Canonical dilation as a packaged Naimark dilation]
+\begin{theorem}[Canonical dilation satisfies the Naimark dilation axioms]
     \label{thm:is_naimark_dilation_naimark}
     \lean{POVM.isNaimarkDilation_naimark}
     \leanok
     \uses{def:is_naimark_dilation, thm:naimark_recovers_povm}
     The explicit isometry $V = \sum_i M_i \otimes |i\rangle$ and projectors
-    $P_i = \Id_D \otimes |i\rangle\langle i|$ satisfy the packaged axioms
+    $P_i = \Id_D \otimes |i\rangle\langle i|$ satisfy the defining axioms
     of a Naimark dilation.
 \end{theorem}
 
