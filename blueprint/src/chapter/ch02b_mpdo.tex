@@ -493,7 +493,7 @@ strong subadditivity for a normalized three-site reduced state.
     from \cite[\S4.4]{Cirac2017MPDO_AnnPhys}.
 \end{definition}
 
-\begin{remark}[Finite-length span and selector criteria for the abstract biCF hypothesis]%
+\begin{remark}[Finite-length span and selector criteria for the horizontal canonical-form hypothesis]%
     \label{rem:word_tuple_span_top}
     \lean{MPSTensor.WordTupleSpanTop}
     \lean{MPSTensor.HasBiCF}
@@ -507,34 +507,32 @@ strong subadditivity for a normalized three-site reduced state.
     \leanok
     Let $(A_k)$ be a family of block tensors, and fix a length $L$.
     Write $A_k^w$ for the length-$L$ word evaluation of $A_k$ along a word $w$.
-    The predicate \texttt{WordTupleSpanTop} says that the tuple-valued evaluations
+    Consider the tuple-valued evaluations
     \[
         w \longmapsto (A_k^w)_k
     \]
-    span the full product algebra of block matrices.
-    The predicate \texttt{HasBiCF} records the corresponding finite-length
-    separation property: there exists $L$ such that if
+    in the direct product of the block matrix algebras.
+    The finite-length spanning hypothesis says that these tuples span the
+    whole product algebra.
+    Equivalently, if matrices $\Delta_k$ satisfy
     \[
         \sum_k \tr(\Delta_k A_k^w) = 0
         \qquad \text{for every word } w \text{ of length } L,
     \]
-    then every block coefficient $\Delta_k$ vanishes.
-    The theorem \texttt{hasBiCF\_of\_wordTupleSpanTop} proves that the
-    spanning condition implies this separation property, by nondegeneracy of the
-    product trace pairing. The packaging theorem
-    \texttt{horizontalCFData\_of\_wordTupleSpanTop} then inserts the resulting
-    biCF witness into \texttt{HorizontalCFData} once injectivity,
-    left-canonicality, and nonzero weights are given.
+    then every $\Delta_k$ vanishes. This is the nondegeneracy statement for
+    the product trace pairing, so a single finite blocking length already
+    separates the blocks by their word evaluations.
 
-    The predicate \texttt{PropBlockInjective} isolates the finite-length content
-    of Proposition~IV.3: after some common blocking length, each block is
-    block-injective, and after a second finite blocking length one can form word
-    combinations which equal the identity on one chosen block and vanish on all
-    others. Concatenating an injective prefix with such a selector suffix yields
-    the product-algebra span condition above. This is formalized by
-    \texttt{wordTupleSpanTop\_of\_propBlockInjective}, and the resulting biCF
-    witness is packaged into horizontal canonical-form data by
-    \texttt{horizontalCFData\_of\_propBlockInjective}.
+    Proposition~IV.3 gives a concrete sufficient criterion for this
+    finite-length separation. After one common blocking length, each block is
+    block-injective; after a further finite blocking length, one can choose
+    linear combinations of words which act as the identity on one selected
+    block and vanish on all the others. Combining an injective prefix with
+    such a selector suffix yields the spanning condition above.
+
+    Once this finite-length separation is available, together with
+    injectivity, left-canonicality, and nonzero weights, one obtains the
+    horizontal canonical-form structure for the MPO.
 \end{remark}
 
 \begin{lemma}[Blockwise equality from agreement on the MPV family]
