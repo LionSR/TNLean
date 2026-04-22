@@ -8,15 +8,6 @@ import TNLean.MPS.Irreducible.FormII
 import TNLean.MPS.Structure.InvariantSubspaceDecomp
 import TNLean.MPS.Core.BlockingInfrastructure
 
-import Mathlib.Analysis.Matrix.Spectrum
-import Mathlib.Data.Fintype.EquivFin
-import Mathlib.Data.Fintype.Sum
-import Mathlib.Data.Matrix.Block
-import Mathlib.Data.Matrix.Diagonal
-import Mathlib.LinearAlgebra.Matrix.Reindex
-import Mathlib.Logic.Equiv.Sum
-import Mathlib.Tactic.NoncommRing
-
 /-!
 # Basic projection word lemmas for cyclic-sector decompositions
 
@@ -36,7 +27,7 @@ cyclic-sector normalization pipeline.
 -/
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
-open Matrix Finset Complex KadisonSchwarz
+open Matrix Finset Complex
 
 namespace MPSTensor
 

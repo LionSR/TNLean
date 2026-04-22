@@ -20,7 +20,7 @@ compression theorem.
 -/
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
-open Matrix Finset Complex KadisonSchwarz
+open Matrix Finset Complex
 
 namespace MPSTensor
 
