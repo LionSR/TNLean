@@ -45,18 +45,18 @@ If an orthogonal projection `Q` satisfies `PreservesCorner Q ((transferMap A†)
 `Q - E†^[m](Q) = Q * E†^[m](1 - Q) * Q`. -/
 theorem hFixUpgrade_of_peripheral
     [NeZero D]
-    {A : MPSTensor d D} {m : ℕ}
+    {A : MPSTensor d D} {period : ℕ}
     (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hIrr : IsIrreducibleMap (transferMap (d := d) (D := D) A))
     {Q : MatrixAlg D}
     (hQproj : IsOrthogonalProjection Q)
     (hQinv : PreservesCorner Q
-      ((transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ^ m)) :
-    ((transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ^ m) Q = Q := by
+      ((transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ^ period)) :
+    ((transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ^ period) Q = Q := by
   classical
   let E : MatrixEnd D := transferMap (d := d) (D := D) A
   let T : MatrixEnd D := transferMap (d := d) (D := D) (fun i => (A i)ᴴ)
-  let F : MatrixEnd D := T ^ m
+  let F : MatrixEnd D := T ^ period
   have hDpos : 0 < D := Nat.pos_of_ne_zero (NeZero.ne D)
   obtain ⟨ρ, hρ_psd, hρ_ne, hρ_fix⟩ :=
     exists_posSemidef_fixedPoint A hTP hDpos
@@ -66,7 +66,7 @@ theorem hFixUpgrade_of_peripheral
     simpa [T, MPSTensor.transferMap_apply, Kraus.map] using
       transferMap_isCPMap (A := fun i => (A i)ᴴ)
   have hF_cp : IsCPMap F := by
-    simpa [F] using (IsCPMap.pow (E := T) hT_cp m)
+    simpa [F] using (IsCPMap.pow (E := T) hT_cp period)
   have hpow_one : ∀ n : ℕ, (T ^ n) (1 : MatrixAlg D) = 1 := by
     intro n
     induction n with
@@ -76,7 +76,7 @@ theorem hFixUpgrade_of_peripheral
         rw [pow_succ', Module.End.mul_apply, ih]
         simpa [T, MPSTensor.transferMap_apply] using hTP
   have hF_one : F (1 : MatrixAlg D) = 1 := by
-    simpa [F] using hpow_one m
+    simpa [F] using hpow_one period
   have htrace_step :
       ∀ X : MatrixAlg D, Matrix.trace (ρ * T X) = Matrix.trace (ρ * X) := by
     intro X
@@ -128,7 +128,7 @@ theorem hFixUpgrade_of_peripheral
     simpa [hQproj.1.eq, Matrix.mul_assoc] using
       hFOneSubQ_psd.mul_mul_conjTranspose_same (B := Q)
   have htr_FQ : Matrix.trace (ρ * F Q) = Matrix.trace (ρ * Q) := by
-    simpa [F] using htrace_pow m Q
+    simpa [F] using htrace_pow period Q
   have htr_gap : Matrix.trace (ρ * (Q - F Q)) = 0 := by
     calc
       Matrix.trace (ρ * (Q - F Q))
@@ -262,16 +262,16 @@ theorem hLift_cyclicDecomp_mps_of_fixUpgrade
       intro l _
       exact (hprojL l).1.eq
     · -- Idempotent via diagonal/off-diagonal split
-      change orbitSumProjection (D := D) (m := m) T Q *
-        orbitSumProjection (D := D) (m := m) T Q =
-        orbitSumProjection (D := D) (m := m) T Q
-      simp only [orbitSumProjection, Finset.sum_mul, Finset.mul_sum]
+      change (∑ l : Fin m, (T ^ (l : ℕ)) Q) * (∑ l : Fin m, (T ^ (l : ℕ)) Q) =
+        ∑ l : Fin m, (T ^ (l : ℕ)) Q
+      rw [Finset.sum_mul]
       refine Finset.sum_congr rfl ?_
       intro l _
+      rw [Finset.mul_sum]
       rw [Finset.sum_eq_single l]
       · exact (hprojL l).2
-      · intros l' _ hne
-        exact horbPair l' l hne
+      · intro l' _ hne
+        exact horbPair l l' (Ne.symm hne)
       · intro hmem
         exact absurd (Finset.mem_univ l) hmem
   -- The orbit-sum witness
@@ -392,7 +392,7 @@ theorem hLift_cyclicDecomp_mps_of_projStep
     hLift_cyclicDecomp_mps_of_fixUpgrade
       (A := A) (m := m) hTP P hPproj hPsum hcyclic hMulLeft hMulRight hProjStep
       (fun (_k : Fin m) (Q : MatrixAlg D) hQproj _hQP _hPQ hQinv =>
-        hFixUpgrade_of_peripheral (A := A) (m := m) hTP hIrr hQproj hQinv)
+        hFixUpgrade_of_peripheral (A := A) (period := m) hTP hIrr hQproj hQinv)
       k Q hQproj hQP hPQ hQcorner
 
 /-- MPS-specialized wrapper: once the orbit-sum lift is constructed in the
