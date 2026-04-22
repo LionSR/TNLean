@@ -576,7 +576,9 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 \end{definition}
 
 \begin{lemma}[Ground-space suffix restriction]\label{lem:ground_space_in_tail_ground}
-    \lean{MPSTensor.groundSpace_inTailGround}
+    \lean{MPSTensor.restrictLast_groundSpaceMap,
+          MPSTensor.tailRestrictₗ_groundSpaceMap,
+          MPSTensor.groundSpace_inTailGround}
     \leanok
     \uses{def:in_tail_ground, def:ground_space_parent}
     If $\psi \in G_{K+L}(A)$, then every fixed-prefix suffix restriction of
