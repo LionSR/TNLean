@@ -12,9 +12,11 @@ This repository uses [Claude Code](https://docs.anthropic.com/en/docs/claude-cod
   - [Claude Code Review](#claude-code-review-claude-code-reviewyml)
   - [CI Failure Auto-Fix](#ci-failure-auto-fix-ci-failure-auto-fixyml)
   - [Blueprint Auto-Fix](#blueprint-auto-fix-blueprint-auto-fixyml)
+  - [Codex Auto-Fix (CI/Blueprint/Review)](#codex-auto-fix-ciblueprintreview-auto-fix-codexyml)
   - [Review Comment Auto-Fix](#review-comment-auto-fix-pr-review-auto-fixyml)
   - [Claude Mention Handler](#claude-mention-handler-claudeyml)
   - [Shared CI Auto-Fix Template](#shared-ci-auto-fix-template-_ci-auto-fix-sharedyml)
+  - [Shared CI Auto-Fix Template (Codex)](#shared-ci-auto-fix-template-codex-_codex-auto-fix-sharedyml)
 - [Safety Mechanisms](#safety-mechanisms)
 - [How to Use](#how-to-use)
 - [Commit Message Conventions](#commit-message-conventions)
@@ -186,6 +188,28 @@ Here is exactly what happens:
 
 ---
 
+### Codex Auto-Fix (CI/Blueprint/Review) (`auto-fix-codex.yml`)
+
+**What it does**: Provides a Codex-based auto-fix path for CI failures, blueprint failures, and review
+comment fixes.
+
+**When it runs**:
+- On failed "Lean Action CI" runs for PRs
+- On failed "Lint blueprint" runs for PRs
+- On successful "Claude Code Review (Lean)" runs for PRs (to process unresolved review threads)
+- When the `auto-fix-codex` label is added to a PR (retroactive trigger)
+
+**Label gate**: Unlike the Claude CI/blueprint auto-fix flows, **all Codex fix paths are opt-in** and
+require the `auto-fix-codex` label.
+
+**Auth and iteration behavior**:
+- Requires `OPENAI_API_KEY` secret
+- Optionally uses `BOT_PAT` (preferred) for checkout/push so bot-authored commits retrigger workflows
+- Uses `sandbox: danger-full-access` plus `allow-bots: true` in `openai/codex-action`
+- Shares the same `bot-fix-<branch>` concurrency group and combined 5-iteration budget with Claude
+
+---
+
 ### Review Comment Auto-Fix (`pr-review-auto-fix.yml`)
 
 **What it does**: After a Claude Code Review completes, this workflow reads the review comments and asks Claude to fix each issue. This creates the fixed-point loop described above.
@@ -230,15 +254,29 @@ This is not triggered directly — it is called via `workflow_call` by the two C
 
 ---
 
+### Shared CI Auto-Fix Template (Codex) (`_codex-auto-fix-shared.yml`)
+
+**What it does**: Reusable Codex template used by the Codex CI and blueprint fix jobs in
+`auto-fix-codex.yml`.
+
+This is not triggered directly — it is called via `workflow_call` and encapsulates checkout, branch
+attach, shared iteration guarding, failed-job log collection, and `openai/codex-action` execution.
+
+---
+
 ## Safety Mechanisms
 
 These workflows have several safeguards to prevent runaway automation:
 
 ### Iteration Cap (Max 5 Consecutive Bot Commits)
 
-Before making a fix, each workflow counts the most recent consecutive commits with `[claude-auto-fix]` or `[claude-review-fix]` in their message. If 5 or more consecutive bot-fix commits exist, the workflow stops. This prevents infinite loops where Claude keeps pushing broken fixes.
+Before making a fix, each workflow counts the most recent consecutive commits with bot-fix prefixes
+(`claude` or `codex`, `auto` or `review`). If 5 or more consecutive bot-fix commits exist, the
+workflow stops. This prevents infinite loops where automation keeps pushing broken fixes.
 
-Both CI-fix and review-fix commits count toward **the same shared budget of 5**. This means a sequence like `[claude-auto-fix]`, `[claude-review-fix]`, `[claude-auto-fix]` counts as 3, not 1. A human commit resets the counter.
+CI-fix and review-fix commits from both bots count toward **the same shared budget of 5**. This means
+a sequence like `[claude-auto-fix]`, `[codex-review-fix]`, `[claude-auto-fix]` counts as 3, not 1.
+A human commit resets the counter.
 
 ### Concurrency Groups
 
@@ -270,6 +308,15 @@ CI logs and review comments are untrusted input — they could contain text desi
 
 CI-failure and blueprint auto-fix workflows run automatically on every PR. No setup needed. When CI fails, Claude will attempt a fix and push it.
 
+### To enable Codex auto-fix
+
+1. Add repository secret `OPENAI_API_KEY` (required)
+2. (Recommended) Add repository secret `BOT_PAT` so bot pushes can retrigger follow-up workflows
+3. Add the `auto-fix-codex` label to your PR
+4. Push code (or add the label to an already-failing PR to trigger retroactive checks)
+5. Codex will run only for labeled PRs and only on failure/review events described above
+6. Remove the label at any time to stop Codex auto-fix on that PR
+
 ### To enable the review-fix loop
 
 1. Add the `auto-fix-claude` label to your PR
@@ -295,8 +342,11 @@ Auto-fix workflows prefix their commit messages so you can identify them:
 |---|---|---|
 | `[claude-auto-fix]` | CI failure fix or blueprint fix | Claude fixed a build/compilation error |
 | `[claude-review-fix]` | Review comment fix | Claude addressed code review comments |
+| `[codex-auto-fix]` | Codex CI failure or blueprint fix | Codex fixed a build/compilation error |
+| `[codex-review-fix]` | Codex review comment fix | Codex addressed review comments |
 
-Both prefixes count toward the shared 5-iteration cap. If you see 5 consecutive commits with these prefixes, the automation has stopped and needs human intervention.
+All four prefixes count toward the shared 5-iteration cap. If you see 5 consecutive commits with these
+prefixes, the automation has stopped and needs human intervention.
 
 ---
 
@@ -320,11 +370,14 @@ The code review workflow only needs `contents: read` because it does not push co
 
 ### Iteration cap
 
-The maximum consecutive bot-fix commits is set to `5` via the `MAX_BOT_FIX_ITERATIONS` environment variable in two files:
+The maximum consecutive bot-fix commits is set to `5` via the `MAX_BOT_FIX_ITERATIONS` environment
+variable in four files:
 - `.github/workflows/_ci-auto-fix-shared.yml`
 - `.github/workflows/pr-review-auto-fix.yml`
+- `.github/workflows/_codex-auto-fix-shared.yml`
+- `.github/workflows/auto-fix-codex.yml`
 
-If you change this value, **update both files**. They are cross-referenced via comments to remind you.
+If you change this value, **update all four files**. They are cross-referenced via comments to remind you.
 
 ### Label name
 
