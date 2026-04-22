@@ -592,6 +592,25 @@ The following is Theorem~3.8 (``equal case'') of \cite{DeLasCuevas2017Irreducibl
     periodic approach is the subject of the present chapter.
 \end{remark}
 
+\begin{theorem}[Peripheral proportional case from exact MPV equality]
+    \label{thm:peripheral_periodic_ft_proportional_same}
+    \lean{MPSTensor.peripheralProportionalCase_periodicFT_of_sameMPV}
+    \notready
+    \uses{def:periodic_tensor, thm:periodic_overlap_dichotomy,
+          thm:periodic_self_overlap_tendsto}
+    Let $A$ and $B$ be periodic tensors with the same matrix product vectors.
+    Then $A$ and $B$ are equivalent up to repeated blocks.
+\end{theorem}
+\begin{proof}\notready
+    By Theorem~\ref{thm:periodic_overlap_dichotomy}, either the overlap
+    $\braket{V^{(N)}(A)}{V^{(N)}(B)}$ tends to $0$ or $A$ and $B$ are
+    equivalent up to repeated blocks. In the decay case, equality of the MPV
+    families identifies the cross-overlap with the self-overlap of $A$ for every
+    $N$. But Theorem~\ref{thm:periodic_self_overlap_tendsto} gives
+    $\braket{V^{(m_a N)}(A)}{V^{(m_a N)}(A)} \to m_a$ along multiples of the
+    period $m_a$, contradiction.
+\end{proof}
+
 \begin{remark}[Proportional periodic FT]\notready
     \label{rem:periodic_ft_proportional}
     \lean{MPSTensor.fundamentalTheorem_periodic_proportional}

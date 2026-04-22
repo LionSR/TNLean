@@ -185,6 +185,48 @@ section ProportionalCase
 variable {rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
 
+/-- **Peripheral proportional case from exact MPV equality.**
+
+If two periodic tensors generate the same MPV family, then they are repeated
+blocks. This is the single-block uniqueness direction behind Theorem 3.4 once the
+proportionality scalar has been absorbed into one side.
+
+The proof combines `periodicOverlapDichotomy` with `periodicSelfOverlap_tendsto`:
+the decay branch would force the self-overlap of `A` to tend to `0`, contradicting
+its periodic self-overlap limit `m_a` along the subsequence `m_a * ℕ`.
+
+As with `periodicOverlapDichotomy`, this theorem currently inherits the admitted
+sub-lemmas in `Periodic/Overlap`. -/
+theorem peripheralProportionalCase_periodicFT_of_sameMPV
+    {D : ℕ} [NeZero D]
+    (A B : MPSTensor d D) {m_a m_b : ℕ}
+    (hA : IsPeriodic m_a A) (hB : IsPeriodic m_b B)
+    (hSame : SameMPV A B) :
+    RepeatedBlocks A B := by
+  rcases periodicOverlapDichotomy A B hA hB with hDecay | ⟨hdim, hRep⟩
+  · have hSameOverlap : ∀ N : ℕ, mpvOverlap (d := d) A B N = mpvOverlap A A N := by
+      intro N
+      unfold mpvOverlap
+      refine Finset.sum_congr rfl ?_
+      intro σ _
+      rw [hSame N σ]
+    have hSelfZero : Filter.Tendsto (fun N => mpvOverlap A A N) Filter.atTop (nhds 0) :=
+      Filter.Tendsto.congr' (Filter.Eventually.of_forall hSameOverlap) hDecay
+    have hMulAtTop : Filter.Tendsto (fun k : ℕ => m_a * k) Filter.atTop Filter.atTop := by
+      rw [Filter.tendsto_atTop]
+      intro n
+      exact Filter.eventually_atTop.2 ⟨n, fun k hk => by
+        have hm_a : 1 ≤ m_a := Nat.succ_le_of_lt hA.period_pos
+        exact le_trans hk <| by simpa using Nat.mul_le_mul_right k hm_a⟩
+    have hSelfZeroMul :
+        Filter.Tendsto (fun k : ℕ => mpvOverlap A A (m_a * k)) Filter.atTop (nhds 0) :=
+      hSelfZero.comp hMulAtTop
+    have hm_ne : (m_a : ℂ) ≠ 0 := by
+      exact_mod_cast Nat.ne_of_gt hA.period_pos
+    exact False.elim <| hm_ne <| tendsto_nhds_unique (periodicSelfOverlap_tendsto A hA) hSelfZeroMul
+  · cases hdim
+    simpa using hRep
+
 /-- **Theorem 3.4 (Proportional case, arXiv:1708.00029).**
 
 If two non-repeating block families satisfy the periodic overlap dichotomy, then
@@ -199,6 +241,13 @@ The proof mirrors `blocks_match_of_sameMPV₂_CFBNT` in `Full.lean`:
 2. Injectivity from `HetRepeatedBlocks.trans` + non-repetition.
 3. Injective maps on finite types → equal cardinalities.
 4. Bijection construction.
+
+The single-block exact-MPV reduction is packaged separately as
+`peripheralProportionalCase_periodicFT_of_sameMPV`: once the proportionality
+scalar has been absorbed, the overlap dichotomy already gives the repeated-block
+conclusion. Thus the remaining paper-level gap is the multi-block existence step
+that turns proportionality of the assembled tensors into the non-decaying
+cross-overlap hypotheses `exists_nondecaying_A/B`.
 
 The `PeriodicOverlapHypothesis` parameter can be supplied via
 `PeriodicOverlapHypothesis.ofIsPeriodic`, which uses `periodicOverlapDichotomy`
