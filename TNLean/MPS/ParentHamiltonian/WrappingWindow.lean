@@ -256,6 +256,54 @@ private theorem wrapping_window_matEq {A : MPSTensor d D} [NeZero D]
       Matrix.mul_assoc (A (σ₁ 0))] at key
   exact key
 
+/-- Block injectivity strips the wrapped tail block and yields the one-sided
+compatibility `C_τ * A j * X = Y_τ * A j`.  This is the valid local
+replacement identified by the #730 audit; issue #761 asks for the missing mirror
+comparison on top of this step. -/
+private theorem wrapping_window_compatibility_of_isNBlkInjective
+    {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
+    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
+    {X : Matrix (Fin D) (Fin D) ℂ}
+    (Y : (Fin (M + 1) → Fin d) → Matrix (Fin D) (Fin D) ℂ)
+    (hY : ∀ τ σ_w, Matrix.trace (evalWord A (List.ofFn
+          (cyclicCfg (by omega : 0 < M + 1) (L₀ + 1) ⟨M, by omega⟩ σ_w τ)) * X) =
+        Matrix.trace (evalWord A (List.ofFn σ_w) * Y τ)) :
+    ∀ (j : Fin d) (τ : Fin (M + 1) → Fin d),
+      evalWord A (List.ofFn (fun k : Fin (M + 1 - (L₀ + 1)) =>
+        τ ⟨k.val + L₀, by omega⟩)) * A j * X =
+      Y τ * A j := by
+  have hM1 : 1 ≤ M := by omega
+  have hL : 1 < L₀ + 1 := by omega
+  intro j τ
+  apply groundSpaceMap_injective_of_isNBlkInjective hInj
+  ext σ_tail
+  have key := hY τ (Fin.cons j σ_tail)
+  rw [evalWord_cyclicCfg_snoc hM1 (by omega) hL (Fin.cons j σ_tail) τ] at key
+  rw [init_evalWord_split hM1 (by omega) hL (Fin.cons j σ_tail) τ] at key
+  rw [evalWord_ofFn_cons] at key
+  have key' :
+      Matrix.trace
+          (evalWord A (List.ofFn σ_tail) *
+            (evalWord A (List.ofFn (fun k : Fin (M + 1 - (L₀ + 1)) =>
+              τ ⟨k.val + L₀, by omega⟩)) *
+              A j * X)) =
+        Matrix.trace (A j * evalWord A (List.ofFn σ_tail) * Y τ) := by
+    simpa [Matrix.mul_assoc] using key
+  simp only [groundSpaceMap_apply] at *
+  calc
+    Matrix.trace
+        (evalWord A (List.ofFn σ_tail) *
+          (evalWord A (List.ofFn (fun k : Fin (M + 1 - (L₀ + 1)) =>
+            τ ⟨k.val + L₀, by omega⟩)) *
+            A j * X))
+      = Matrix.trace (A j * evalWord A (List.ofFn σ_tail) * Y τ) := key'
+    _ = Matrix.trace ((evalWord A (List.ofFn σ_tail) * Y τ) * A j) := by
+          simpa [Matrix.mul_assoc] using
+            (Matrix.trace_mul_comm (A j) (evalWord A (List.ofFn σ_tail) * Y τ))
+    _ = Matrix.trace
+        (evalWord A (List.ofFn σ_tail) * (Y τ * A j)) := by
+          simp [Matrix.mul_assoc]
+
 /-! ### Main commutation result
 
 Extend from the wrapping window equation to full commutation via spanning. -/
