@@ -38,7 +38,7 @@ Kastoryano–Lucia 2018 (arXiv:1705.09491), Nachtergaele 1996
    gives `γ ‖v‖ ≤ ‖H v‖` for `v ⊥ ker H`.
 
 The last step — the implication from the quadratic-form inequality
-`H² ≥ γ H` to the norm bound `γ ‖v‖ ≤ ‖H v‖` on `(ker H)ᗮ` — is packaged
+`H² ≥ γ H` to the norm bound `γ ‖v‖ ≤ ‖H v‖` on `(ker H)ᗮ` — is recorded
 as the abstract lemma `FrustrationFree.spectralGap_of_martingale` below.
 Its hypothesis is the quadratic-form inequality (in inner-product form),
 and its proof is the spectral-theorem argument: diagonalising the
@@ -50,7 +50,7 @@ vanish on `(ker H)ᗮ`) then yields `γ² ‖v‖² ≤ ‖H v‖²`.
 
 The MPS-specific step (producing the finite-overlap estimate for
 `parentHamiltonianES A L N`) is the remaining obligation of
-`MPSTensor.parentHamiltonianES_gap_bound_of_friedrichs`, which packages a
+`MPSTensor.parentHamiltonianES_gap_bound_of_friedrichs`, which records a
 concrete Friedrichs-angle/row-sum lower bound that
 `MPSTensor.parentHamiltonian_gapped` turns into the existential gap statement.
 
@@ -61,7 +61,9 @@ concrete Friedrichs-angle/row-sum lower bound that
   for a `LinearMap.IsPositive` operator `H` implies the norm bound
   `γ ‖v‖ ≤ ‖H v‖` on `(ker H)ᗮ`.
 * `MPSTensor.parentHamiltonian_gapped` — uniform spectral gap for MPS
-  parent Hamiltonians on injective tensors (deferred).
+  parent Hamiltonians on injective tensors, obtained from the
+  Friedrichs-angle bound recorded in
+  `parentHamiltonianES_gap_bound_of_friedrichs`.
 -/
 
 open scoped BigOperators InnerProductSpace
@@ -101,9 +103,9 @@ geometry (Friedrichs angle on overlapping local ground spaces plus
 the row-sum bound) produces the operator inequality `H² ≥ γ H` for the
 PSD operator `H`, the norm lower bound — and hence the spectral gap
 for eigenvectors of `H` — follows by the spectral theorem. This lemma
-packages the final spectral-theorem step; the MPS-specific derivation
-of the quadratic-form hypothesis is the remaining obligation inside
-`MPSTensor.parentHamiltonian_gapped`. -/
+provides the final spectral-theorem step; the remaining MPS-specific
+quadratic-form input is recorded separately in
+`MPSTensor.parentHamiltonianES_gap_bound_of_friedrichs`. -/
 theorem spectralGap_of_martingale {ι : Type*} [Fintype ι] {γ : ℝ} (hγ : 0 < γ)
     {H : EuclideanSpace ℂ ι →ₗ[ℂ] EuclideanSpace ℂ ι} (hH : H.IsPositive)
     (hOpIneq : ∀ v, γ * (⟪H v, v⟫_ℂ).re ≤ (⟪H v, H v⟫_ℂ).re) :
@@ -242,25 +244,25 @@ theorem parentHamiltonianGroundSpaceES_eq_ker_parentHamiltonianES
 orthogonal-projection infrastructure (for example
 `Mathlib.Analysis.InnerProductSpace.Projection.Basic` and
 `Mathlib.Analysis.InnerProductSpace.Projection.FiniteDimensional`, exposing
-`Submodule.starProjection` and `orthogonalProjection`) but not a packaged
+`Submodule.starProjection` and `orthogonalProjection`) but not a ready-made
 Kastoryano–Lucia-style angle-to-anticommutator bound. This is a real blocker
 for quantitative overlap constants.
 2. **Row-sum bound mapping:** the combinatorial part is already available from
 locality (`localTerm`, `parentHamiltonian`) and finite range: each window
 overlaps at most `2 * (L - 1)` neighbors. Missing is the analytic implication
 from overlap-angle constants to operator-inequality coefficients `cᵢⱼ`.
-3. **Sorry dependency split:** `parentHamiltonian_gapped` is downstream-only and
-dischargeable immediately once the Friedrichs-angle theorem below is proved.
-The theorem `parentHamiltonianES_gap_bound_of_friedrichs` still depends on
-missing Friedrichs-angle infrastructure; this is the blocker and should not be
-replaced with axioms or unrelated sorrys. -/
+3. **Sorry dependency split:** `parentHamiltonian_gapped` is the downstream
+existential wrapper, now proved by applying the Friedrichs-angle theorem
+below. The theorem `parentHamiltonianES_gap_bound_of_friedrichs` still depends
+on missing Friedrichs-angle infrastructure; this is the blocker and should not
+be replaced with axioms or unrelated sorrys. -/
 /-- Friedrichs-angle and row-sum estimate for the MPS parent Hamiltonian.
 
 This is the remaining MPS-specific martingale estimate: it should produce a
 specific uniform positive lower bound for the transported parent Hamiltonian
 from the intersection property and finite-overlap geometry. The concrete
 constant is intentionally part of this theorem statement, so the public
-`parentHamiltonian_gapped` theorem only has to package it as an existential
+`parentHamiltonian_gapped` theorem only has to re-express it as an existential
 spectral gap. -/
 theorem parentHamiltonianES_gap_bound_of_friedrichs
     (A : MPSTensor d D) (_hA : IsInjective A) (L : ℕ) (_hL : 1 < L) :
@@ -318,10 +320,7 @@ theorem parentHamiltonian_gapped
       (v : EuclideanSpace ℂ (Cfg d N)),
       v ∈ (parentHamiltonianGroundSpaceES A L N)ᗮ →
         γ * ‖v‖ ≤ ‖parentHamiltonianES A L N v‖ := by
-  -- PROOF STRUCTURE: see the Friedrichs-angle theorem
-  -- `parentHamiltonianES_gap_bound_of_friedrichs` for the planned proof route.
-  -- Currently sorry-backed pending discharge of
-  -- `parentHamiltonianES_gap_bound_of_friedrichs`.
-  sorry
+  obtain ⟨hγ, hgap⟩ := parentHamiltonianES_gap_bound_of_friedrichs A hA L hL
+  exact ⟨(1 : ℝ) / (4 * (L : ℝ)), hγ, hgap⟩
 
 end MPSTensor
