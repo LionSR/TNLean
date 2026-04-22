@@ -156,7 +156,8 @@ legs cyclically and taking the resulting trace.
     By Lemma~\ref{lem:mpo_transfer_eq_mps}, the transfer map of $M$ agrees with
     the transfer map of its doubled-index MPS view. Thus
     $\E_M \circ \E_M = \E_M$ holds exactly when the transfer map of
-    $M.\mathrm{toMPSTensor}$ is idempotent, which is the RFP condition.
+    the doubled-index MPS view is idempotent, which is precisely the
+    renormalization fixed-point condition.
 \end{proof}
 
 \section{MPDOs and LPDOs}
@@ -556,7 +557,7 @@ strong subadditivity for a normalized three-site reduced state.
     This is Lemma~L from \cite[Appendix~A]{Cirac2017MPDO_AnnPhys}.
     Expanding the hypothesis over a word of length~$L+1$ beginning with the
     fixed site and folding each block contribution into a trace pairing
-    against $\mathrm{insertedTensor}\,W\,A_k$ yields, upon taking the
+    against the corresponding first-site insertion tensor yields, upon taking the
     $Y$\!-$Z$ difference, a tuple of block matrices whose trace pairings
     against every length-$L$ block word vanish. The biCF hypothesis then
     forces each block difference to be zero, and dividing by the nonzero

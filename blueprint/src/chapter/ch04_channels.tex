@@ -826,7 +826,9 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
     \lean{Matrix.traceLeft, Matrix.traceRight}
     \leanok
     Let $X \in \MN{d \cdot d'}$ be a bipartite matrix indexed by
-    $(\mathrm{Fin}\,d \times \mathrm{Fin}\,d')^2$.
+    \[
+        (\{0,\ldots,d-1\} \times \{0,\ldots,d'-1\})^2.
+    \]
     The \emph{left partial trace} $\operatorname{tr}_A(X)$ and
     \emph{right partial trace} $\operatorname{tr}_B(X)$ are the
     $d' \times d'$ and $d \times d$ matrices defined by
@@ -1162,13 +1164,13 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
     \leanok
     \uses{thm:kraus_rectangular_freedom}
     Variant of Theorem~\ref{thm:kraus_rectangular_freedom} with general
-    finite index types $\iota_1, \iota_2$ in place of $\mathrm{Fin}\,r_1,
-    \mathrm{Fin}\,r_2$.
+    finite index sets $\iota_1, \iota_2$ in place of standard index sets of
+    cardinalities $r_1$ and $r_2$.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    Reindex via equivalences to $\mathrm{Fin}$ and apply
+    Reindex by choosing enumerations of those finite index sets and apply
     Theorem~\ref{thm:kraus_rectangular_freedom}.
 \end{proof}
 
