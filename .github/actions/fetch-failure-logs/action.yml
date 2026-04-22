@@ -29,12 +29,20 @@ runs:
             repo: context.repo.repo,
             run_id: runId
           });
-          const jobs = await github.rest.actions.listJobsForWorkflowRun({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            run_id: runId
-          });
-          const failedJobs = jobs.data.jobs.filter(j => j.conclusion === 'failure');
+          const failedJobs = [];
+          let page = 1;
+          while (true) {
+            const jobs = await github.rest.actions.listJobsForWorkflowRun({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              run_id: runId,
+              per_page: 100,
+              page
+            });
+            failedJobs.push(...jobs.data.jobs.filter(j => j.conclusion === 'failure'));
+            if (jobs.data.jobs.length < 100) break;
+            page += 1;
+          }
           const errorLogs = [];
           for (const job of failedJobs) {
             const logs = await github.rest.actions.downloadJobLogsForWorkflowRun({

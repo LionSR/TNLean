@@ -178,6 +178,7 @@ jobs:
     uses: ./.github/workflows/_codex-auto-fix-shared.yml
     secrets:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      BOT_PAT: ${{ secrets.BOT_PAT }}
     with:
       head_sha: ${{ needs.setup.outputs.head_sha }}
       head_branch: ${{ needs.setup.outputs.head_branch }}
@@ -228,6 +229,7 @@ jobs:
     uses: ./.github/workflows/_codex-auto-fix-shared.yml
     secrets:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      BOT_PAT: ${{ secrets.BOT_PAT }}
     with:
       head_sha: ${{ needs.setup.outputs.head_sha }}
       head_branch: ${{ needs.setup.outputs.head_branch }}

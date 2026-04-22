@@ -35,6 +35,8 @@ on:
     secrets:
       OPENAI_API_KEY:
         required: true
+      BOT_PAT:
+        required: false
 
 jobs:
   auto-fix:
@@ -46,7 +48,9 @@ jobs:
         with:
           ref: ${{ inputs.head_sha }}
           fetch-depth: 10
-          token: ${{ secrets.GITHUB_TOKEN }}
+          # Use a non-GITHUB_TOKEN credential when available so bot-pushed
+          # commits retrigger pull_request/workflow_run workflows.
+          token: ${{ secrets.BOT_PAT || secrets.GITHUB_TOKEN }}
 
       - name: Attach to PR branch
         uses: ./.github/actions/attach-pr-branch
