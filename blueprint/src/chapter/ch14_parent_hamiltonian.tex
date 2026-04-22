@@ -319,7 +319,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \leanok
     Fix the last physical index $j$:
     \[
-        (\mathrm{restrictLast} \psi j)(\sigma) := \psi(\sigma_1,\ldots,\sigma_L,j).
+        \sigma \longmapsto \psi(\sigma_1,\ldots,\sigma_L,j).
     \]
 \end{definition}
 
@@ -328,7 +328,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \leanok
     Fix the first physical index $i$:
     \[
-        (\mathrm{restrictFirst} \psi i)(\sigma) := \psi(i,\sigma_1,\ldots,\sigma_L).
+        \sigma \longmapsto \psi(i,\sigma_1,\ldots,\sigma_L).
     \]
 \end{definition}
 
@@ -337,7 +337,8 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \leanok
     \uses{def:restrict_last, def:ground_space_parent}
     A state $\psi$ on $L+1$ sites satisfies the left ground condition if
-    $\mathrm{restrictLast} \psi j \in G_L(A)$ for every $j$.
+    for every $j$, the state obtained by fixing the last index to $j$ lies in
+    $G_L(A)$.
 \end{definition}
 
 \begin{definition}[Right ground membership]\label{def:in_right_ground}
@@ -345,7 +346,8 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \leanok
     \uses{def:restrict_first, def:ground_space_parent}
     A state $\psi$ on $L+1$ sites satisfies the right ground condition if
-    $\mathrm{restrictFirst} \psi i \in G_L(A)$ for every $i$.
+    for every $i$, the state obtained by fixing the first index to $i$ lies in
+    $G_L(A)$.
 \end{definition}
 
 \subsection{Forward direction: ground space restricts}
@@ -355,7 +357,8 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \leanok
     \uses{def:ground_space_parent, def:in_left_ground}
     If $\psi \in G_{L+1}(A)$, i.e.\ $\psi(\sigma) = \tr(A^\sigma X)$ for some~$X$,
-    then $\mathrm{restrictLast} \psi j \in G_L(A)$ with witness $A^j X$.
+    then for each $j$, the state obtained by fixing the last index to $j$
+    lies in $G_L(A)$ with witness $A^j X$.
 \end{lemma}
 
 \begin{proof}
@@ -374,7 +377,8 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \leanok
     \uses{def:ground_space_parent, def:in_right_ground}
     If $\psi \in G_{L+1}(A)$ with $\psi(\sigma) = \tr(A^\sigma X)$, then
-    $\mathrm{restrictFirst} \psi i \in G_L(A)$ with witness $X A^i$.
+    for each $i$, the state obtained by fixing the first index to $i$
+    lies in $G_L(A)$ with witness $X A^i$.
 \end{lemma}
 
 \begin{proof}
