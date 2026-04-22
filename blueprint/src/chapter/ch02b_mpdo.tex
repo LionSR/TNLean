@@ -255,8 +255,8 @@ legs cyclically and taking the resulting trace.
     \uses{def:is_prfp, def:mpo_is_zcl}
     The current purification-RFP condition is strictly weaker than MPO zero
     correlation length: there exists an MPO tensor with purification RFP whose
-    transfer map is not idempotent. Equivalently, the implication from the Lean
-    predicate \texttt{IsPRFP} to the predicate \texttt{IsZCL} fails.
+    transfer map is not idempotent. Thus purification RFP does not imply MPO
+    zero correlation length.
 \end{remark}
 
 \begin{theorem}[Purification RFP implies LPDO]\label{thm:prfp_is_lpdo}
@@ -470,7 +470,7 @@ legs cyclically and taking the resulting trace.
     This is Lemma~L from \cite[Appendix~A]{Cirac2017MPDO_AnnPhys}.
     Expanding the hypothesis over a word of length~$L+1$ beginning with the
     fixed site and folding each block contribution into a trace pairing
-    against $\mathrm{insertedTensor}\,W\,A_k$ yields, upon taking the
+    against the corresponding first-site insertion tensor yields, upon taking the
     $Y$\!-$Z$ difference, a tuple of block matrices whose trace pairings
     against every length-$L$ block word vanish. The biCF hypothesis then
     forces each block difference to be zero, and dividing by the nonzero
