@@ -1370,7 +1370,7 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
     is a family $\{E_i\}_{i=1}^n$ of positive semidefinite
     operators on $\C^D$ satisfying the resolution of identity
     \[
-        \sum_{i=1}^n E_i = \one_D.
+        \sum_{i=1}^n E_i = \Id_D.
     \]
 \end{definition}
 
@@ -1417,7 +1417,7 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
     \leanok
     The \emph{Naimark projectors} on $\C^D \otimes \C^n$ are
     \[
-        P_i = \one_D \otimes |i\rangle\langle i|,
+        P_i = \Id_D \otimes |i\rangle\langle i|,
         \qquad (P_i)_{(a,b),(c,d)} = \delta_{a,c}\,\delta_{b,i}\,\delta_{d,i}.
     \]
 \end{definition}
@@ -1426,13 +1426,13 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
     \lean{POVM.naimarkIsometry_isometry}
     \leanok
     \uses{def:naimark_isometry, def:povm}
-    The Naimark isometry satisfies $V^\dagger V = \one_D$.
+    The Naimark isometry satisfies $V^\dagger V = \Id_D$.
 \end{theorem}
 
 \begin{proof}
     \leanok
     The Stinespring Gram identity gives
-    $V^\dagger V = \sum_i M_i^\dagger M_i = \sum_i E_i = \one_D$
+    $V^\dagger V = \sum_i M_i^\dagger M_i = \sum_i E_i = \Id_D$
     by the resolution of identity.
 \end{proof}
 
@@ -1445,7 +1445,7 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
     \leanok
     \uses{def:naimark_projection}
     The Naimark projectors satisfy $P_i^2 = P_i$, $P_i^\dagger = P_i$,
-    $P_i P_j = 0$ for $i \ne j$, and $\sum_i P_i = \one_{\C^D \otimes \C^n}$.
+    $P_i P_j = 0$ for $i \ne j$, and $\sum_i P_i = \Id_{\C^D \otimes \C^n}$.
 \end{theorem}
 
 \begin{proof}
@@ -1487,7 +1487,7 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
 \begin{proof}
     \leanok
     Take $r = n$ and the explicit witnesses $V = \sum_i M_i \otimes |i\rangle$
-    and $P_i = \one_D \otimes |i\rangle\langle i|$.
+    and $P_i = \Id_D \otimes |i\rangle\langle i|$.
 \end{proof}
 
 \begin{definition}[Packaged Naimark dilation]
@@ -1507,15 +1507,15 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
     \leanok
     \uses{def:is_naimark_dilation, thm:naimark_recovers_povm}
     The explicit isometry $V = \sum_i M_i \otimes |i\rangle$ and projectors
-    $P_i = \one_D \otimes |i\rangle\langle i|$ satisfy the packaged axioms
+    $P_i = \Id_D \otimes |i\rangle\langle i|$ satisfy the packaged axioms
     of a Naimark dilation.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    Combine the previously proved identities $V^\dagger V = \one_D$,
+    Combine the previously proved identities $V^\dagger V = \Id_D$,
     $P_i^2 = P_i$, $P_i^\dagger = P_i$, $P_i P_j = 0$ for $i \ne j$,
-    $\sum_i P_i = \one$, and $V^\dagger P_i V = E_i$.
+    $\sum_i P_i = \Id$, and $V^\dagger P_i V = E_i$.
 \end{proof}
 
 \begin{theorem}[Concrete uniqueness for canonical projectors]
@@ -1525,7 +1525,7 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
     \uses{def:naimark_isometry, def:naimark_projection, thm:naimark_recovers_povm}
     Let $V : \C^D \to \C^D \otimes \C^n$ satisfy
     $V^\dagger P_i V = E_i$ for the canonical projectors
-    $P_i = \one_D \otimes |i\rangle\langle i|$.
+    $P_i = \Id_D \otimes |i\rangle\langle i|$.
     Then there exists an isometry $W$ on the dilated space such that
     $V = W V_0$, where $V_0$ is the canonical Naimark isometry of $\{E_i\}$.
 \end{theorem}
@@ -1544,7 +1544,7 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
     \label{def:povm_of_psd_resolution_of_identity}
     \lean{POVM.ofPSDResolutionOfIdentity}
     \leanok
-    Given an isometry $V : \C^D \to \C^{d'}$ with $V^\dagger V = \one_D$
+    Given an isometry $V : \C^D \to \C^{d'}$ with $V^\dagger V = \Id_D$
     and a family $\{P_i\}_{i=1}^n$ of positive semidefinite operators on
     $\C^{d'}$ summing to the identity, the pulled-back operators
     \[
