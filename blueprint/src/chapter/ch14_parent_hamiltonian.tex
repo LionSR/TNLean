@@ -530,7 +530,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     compatibility of this restriction with deleting the last or first site.
 \end{remark}
 
-\begin{remark}[Cyclic window operators]
+\begin{remark}[Cyclic window operators]\label{rem:cyclic_window_operators}
     \lean{MPSTensor.cyclicCfg}
     \lean{MPSTensor.cyclicRestrictₗ}
     \lean{MPSTensor.cyclicRestrictₗ_apply}
@@ -1425,6 +1425,39 @@ Lucia~\cite{Kastoryano2018Martingale}.
     parent Hamiltonian annihilates it.
 \end{lemma}
 
+\begin{remark}[Euclidean local projector ingredients]
+    \label{rem:euclidean_local_projector_ingredients}
+    \lean{MPSTensor.parentInteractionES}
+    \lean{MPSTensor.cyclicRestrictES}
+    \lean{MPSTensor.localTermESSummand}
+    \leanok
+    \uses{def:ground_space_es, rem:cyclic_window_operators}
+    Let $P_L^{\mathrm{ES}}(A)$ denote the orthogonal projector onto
+    $(G_L^{\mathrm{ES}}(A))^\perp$ on the Euclidean $L$-site space. For a cyclic
+    window starting at $i$ and an outside configuration $\tau$, the transported
+    restriction map $R_{i,\tau}$ evaluates an $N$-site Euclidean vector on that
+    window. The operator $R_{i,\tau}^{\dagger} P_L^{\mathrm{ES}}(A) R_{i,\tau}$ is the
+    basic local summand in the expected averaging formula for the transported local term.
+\end{remark}
+
+\begin{lemma}[Positivity of the Euclidean local summands]
+    \label{lem:euclidean_local_projector_positive}
+    \lean{MPSTensor.parentInteractionES_isPositive}
+    \lean{MPSTensor.localTermESSummand_isPositive}
+    \lean{MPSTensor.localTermESSummand_sum_isPositive}
+    \leanok
+    \uses{rem:euclidean_local_projector_ingredients}
+    The Euclidean local projector $P_L^{\mathrm{ES}}(A)$ is positive. Consequently,
+    every summand $R_{i,\tau}^{\dagger} P_L^{\mathrm{ES}}(A) R_{i,\tau}$ is positive, and so
+    is the finite sum over $\tau$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Orthogonal projectors are positive. Conjugation by $R_{i,\tau}$ preserves
+    positivity, and finite sums of positive operators remain positive.
+\end{proof}
+
 \begin{lemma}[Quadratic form to norm bound]\label{lem:quadratic_form_to_norm_bound}
     \lean{FrustrationFree.spectralGap_of_martingale}
     \leanok
@@ -1620,7 +1653,9 @@ Lucia~\cite{Kastoryano2018Martingale}.
     \lean{MPSTensor.parentHamiltonianES_gap_bound_of_friedrichs}
     \notready
     \uses{def:parent_ground_space_es, def:parent_hamiltonian_es,
-        thm:parent_ground_space_es_kernel}
+        thm:parent_ground_space_es_kernel,
+        rem:euclidean_local_projector_ingredients,
+        lem:euclidean_local_projector_positive}
     For an injective tensor $A$ and a range $L > 1$, the theorem asserts
     the analytic estimate with the explicit constant
     \[
@@ -1635,9 +1670,13 @@ Lucia~\cite{Kastoryano2018Martingale}.
 
 \begin{proof}
     \notready
-    This is exactly the MPS-specific Friedrichs-angle estimate together with the
-    row-sum bound. These two analytic inputs feed directly into
-    the abstract martingale criterion.
+    The missing argument has two parts. First, one identifies each transported
+    local term with a finite average of the conjugate summands from
+    Remark~\ref{rem:euclidean_local_projector_ingredients};
+    Lemma~\ref{lem:euclidean_local_projector_positive} then supplies positivity
+    of the local Euclidean operators. Second, the MPS-specific Friedrichs-angle
+    estimate together with the row-sum bound feeds into the abstract martingale
+    criterion.
 \end{proof}
 
 \begin{theorem}[Spectral gap for MPS parent Hamiltonians]\label{thm:parent_hamiltonian_gapped}

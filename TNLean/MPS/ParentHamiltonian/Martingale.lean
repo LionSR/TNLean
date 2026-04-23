@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.ParentHamiltonian.Defs
 import TNLean.MPS.ParentHamiltonian.Basic
+import TNLean.MPS.ParentHamiltonian.CyclicWindow
 import Mathlib.Analysis.InnerProductSpace.Positive
 import Mathlib.Analysis.InnerProductSpace.Spectrum
 
@@ -60,6 +61,9 @@ concrete Friedrichs-angle/row-sum lower bound that
   criterion: the quadratic-form inequality `γ ⟨H v, v⟩ ≤ ⟨H v, H v⟩`
   for a `LinearMap.IsPositive` operator `H` implies the norm bound
   `γ ‖v‖ ≤ ‖H v‖` on `(ker H)ᗮ`.
+* `MPSTensor.localTermESSummand_isPositive` — positivity of the conjugated
+  cyclic-window summands expected to appear in the averaged
+  `EuclideanSpace` formula for local terms.
 * `MPSTensor.parentHamiltonian_gapped` — uniform spectral gap for MPS
   parent Hamiltonians on injective tensors, obtained from the
   Friedrichs-angle bound recorded in
@@ -192,6 +196,57 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
+/-! ### Euclidean local projector ingredients -/
+
+/-- The `L`-site parent interaction viewed directly on the Hilbert-space model
+`EuclideanSpace ℂ (Cfg d L)`. Equivalently, this is the orthogonal projector
+onto `(groundSpaceES A L)ᗮ`. -/
+noncomputable def parentInteractionES (A : MPSTensor d D) (L : ℕ) :
+    EuclideanSpace ℂ (Cfg d L) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d L) :=
+  ((groundSpaceES A L)ᗮ.starProjection.toLinearMap)
+
+/-- The `EuclideanSpace` parent interaction is positive because it is an
+orthogonal projection. -/
+theorem parentInteractionES_isPositive (A : MPSTensor d D) (L : ℕ) :
+    (parentInteractionES A L).IsPositive := by
+  exact (Submodule.isSymmetricProjection_starProjection ((groundSpaceES A L)ᗮ)).isPositive
+
+/-- The cyclic window restriction map transported from `NSiteSpace` to the
+Hilbert-space model `EuclideanSpace`. -/
+noncomputable def cyclicRestrictES {N : ℕ} (hN : 0 < N) (L : ℕ) (i : Fin N)
+    (τ : Fin N → Fin d) :
+    EuclideanSpace ℂ (Cfg d N) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d L) :=
+  LinearMap.withLpMap 2 (cyclicRestrictₗ (d := d) hN L i τ)
+
+/-- One positive summand in the future averaged `EuclideanSpace` formula for a
+local parent-Hamiltonian term.
+
+This is the conjugate `Rᵢ,τ† P_L Rᵢ,τ` of the local orthogonal projector
+`P_L = parentInteractionES A L` by the transported cyclic restriction map
+`Rᵢ,τ = cyclicRestrictES hN L i τ`. -/
+noncomputable def localTermESSummand {N : ℕ} (A : MPSTensor d D) (hN : 0 < N)
+    (L : ℕ) (i : Fin N) (τ : Fin N → Fin d) :
+    EuclideanSpace ℂ (Cfg d N) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d N) :=
+  (cyclicRestrictES (d := d) hN L i τ).adjoint ∘ₗ
+    parentInteractionES A L ∘ₗ
+    cyclicRestrictES (d := d) hN L i τ
+
+/-- Each conjugated cyclic-restriction summand `Rᵢ,τ† P_L Rᵢ,τ` is positive. -/
+theorem localTermESSummand_isPositive {N : ℕ} (A : MPSTensor d D) (hN : 0 < N)
+    (L : ℕ) (i : Fin N) (τ : Fin N → Fin d) :
+    (localTermESSummand A hN L i τ).IsPositive := by
+  simpa [localTermESSummand, LinearMap.adjoint_adjoint] using
+    (LinearMap.IsPositive.conj_adjoint
+      (hT := parentInteractionES_isPositive A L)
+      ((cyclicRestrictES (d := d) hN L i τ).adjoint))
+
+/-- The unnormalised finite sum of the future averaging summands is positive. -/
+theorem localTermESSummand_sum_isPositive {N : ℕ} (A : MPSTensor d D) (hN : 0 < N)
+    (L : ℕ) (i : Fin N) :
+    (∑ τ : Cfg d N, localTermESSummand A hN L i τ).IsPositive := by
+  exact LinearMap.isPositive_sum _ fun τ _ =>
+    localTermESSummand_isPositive A hN L i τ
+
 /-! ### Ground-space and Hamiltonian transport to `EuclideanSpace` -/
 
 /-- Ground-space submodule for the finite-size parent Hamiltonian,
@@ -247,11 +302,16 @@ orthogonal-projection infrastructure (for example
 `Submodule.starProjection` and `orthogonalProjection`) but not a ready-made
 Kastoryano–Lucia-style angle-to-anticommutator bound. This is a real blocker
 for quantitative overlap constants.
-2. **Row-sum bound mapping:** the combinatorial part is already available from
+2. **Positivity formulation:** the local `EuclideanSpace` projector
+`parentInteractionES A L` is positive, and each conjugated cyclic-restriction
+summand `localTermESSummand A hN L i τ = Rᵢ,τ† P_L Rᵢ,τ` is positive by
+`LinearMap.IsPositive.conj_adjoint`. Missing is the exact averaging identity
+relating these positive summands to the transported local terms.
+3. **Row-sum bound mapping:** the combinatorial part is already available from
 locality (`localTerm`, `parentHamiltonian`) and finite range: each window
 overlaps at most `2 * (L - 1)` neighbors. Missing is the analytic implication
 from overlap-angle constants to operator-inequality coefficients `cᵢⱼ`.
-3. **Sorry dependency split:** `parentHamiltonian_gapped` is the downstream
+4. **Sorry dependency split:** `parentHamiltonian_gapped` is the downstream
 existential wrapper, now proved by applying the Friedrichs-angle theorem
 below. The theorem `parentHamiltonianES_gap_bound_of_friedrichs` still depends
 on missing Friedrichs-angle infrastructure; this is the blocker and should not
@@ -272,14 +332,14 @@ theorem parentHamiltonianES_gap_bound_of_friedrichs
       v ∈ (parentHamiltonianGroundSpaceES A L N)ᗮ →
         ((1 : ℝ) / (4 * (L : ℝ))) * ‖v‖ ≤
           ‖parentHamiltonianES A L N v‖ := by
-  -- Remaining obligations: the MPS-specific Friedrichs-angle estimate for
-  -- adjacent local ground spaces, the finite-overlap row-sum bound, and
-  -- positivity of the transported parent Hamiltonian. The kernel
-  -- identification needed for the final martingale application is now
-  -- available as `parentHamiltonianGroundSpaceES_eq_ker_parentHamiltonianES`.
-  -- Once the remaining analytic inputs are formalized, this should feed the
-  -- resulting quadratic-form inequality into
-  -- `FrustrationFree.spectralGap_of_martingale`.
+  -- Remaining obligations: the averaging identity expressing transported local
+  -- terms as finite averages of `localTermESSummand`, the MPS-specific
+  -- Friedrichs-angle estimate for adjacent local ground spaces, and the
+  -- finite-overlap row-sum bound. The kernel identification needed for the
+  -- final martingale application is now available as
+  -- `parentHamiltonianGroundSpaceES_eq_ker_parentHamiltonianES`. Once the
+  -- remaining analytic inputs are formalized, this should feed the resulting
+  -- quadratic-form inequality into `FrustrationFree.spectralGap_of_martingale`.
   sorry
 
 /--
