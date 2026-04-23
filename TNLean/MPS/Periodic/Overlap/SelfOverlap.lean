@@ -210,7 +210,9 @@ private theorem sectorFixedPointAlgebraRigidity_cyclic_sector_supported
 /-- One-step projection transport for `((E_A^†)^m)`-fixed cyclic-sector projections.
 
 This packages the exact `hProjStep`-style consequence needed by the overlap
-pipeline, assuming the fixed-point-algebra rigidity input on cyclic sectors. -/
+pipeline, assuming the fixed-point-algebra rigidity input on cyclic sectors.
+It is kept as a named wrapper for follow-up PRs even though the present file
+still routes more directly through `SectorFixedPointAlgebraRigidity`. -/
 theorem hProjStep_cyclic_sector_supported
     [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
     {P : Fin m → MatrixAlg D}
