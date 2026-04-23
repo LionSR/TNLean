@@ -559,13 +559,19 @@ strong subadditivity for a normalized three-site reduced state.
 \begin{remark}[Finite-length span and selector criteria for the abstract biCF hypothesis]%
     \label{rem:word_tuple_span_top}
     \lean{MPSTensor.WordTupleSpanTop}
+    \lean{MPSTensor.BlockEntryIndex}
+    \lean{MPSTensor.wordEntryFamily}
+    \lean{MPSTensor.wordTupleSpanTop_of_wordEntryFamily_linearIndependent}
+    \lean{MPSTensor.hasBlockSelectorWords_of_wordEntryFamily_linearIndependent}
     \lean{MPSTensor.HasBiCF}
     \lean{MPSTensor.hasBiCF_of_wordTupleSpanTop}
+    \lean{MPSTensor.hasBiCF_of_wordEntryFamily_linearIndependent}
     \lean{MPSTensor.HasBlockSelectorWords}
     \lean{MPSTensor.PropBlockInjective}
     \lean{MPSTensor.wordTupleSpanTop_of_propBlockInjective}
     \lean{MPSTensor.hasBiCF_of_propBlockInjective}
     \lean{MPOTensor.horizontalCFData_of_wordTupleSpanTop}
+    \lean{MPOTensor.horizontalCFData_of_wordEntryFamily_linearIndependent}
     \lean{MPOTensor.horizontalCFData_of_propBlockInjective}
     \leanok
     Let $(A_k)$ be a family of block tensors, and fix a length $L$.
@@ -588,6 +594,12 @@ strong subadditivity for a normalized three-site reduced state.
     by their word evaluations. Combined with injectivity, left-canonicality, and
     nonzero block weights, this finite-length separation yields the horizontal
     canonical-form data of the block-diagonal tensor.
+
+    The entrywise scalar family formalized in Lean repackages the same
+    finite-length data. Linear independence of that scalar family upgrades to
+    the product-algebra spanning statement, hence to block selectors and a
+    biCF witness. The corresponding constructor packages this endpoint
+    directly into horizontal canonical-form data.
 
     Proposition~IV.3 gives a concrete sufficient criterion for the spanning
     condition: after a common blocking length each block is block-injective,

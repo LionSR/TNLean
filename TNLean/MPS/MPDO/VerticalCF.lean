@@ -42,7 +42,7 @@ The full Proposition IV.12 / Prop. 4.13 bridge from horizontal to vertical
 canonical form is deferred to a follow-up PR: its blueprint entry
 `thm:vertical_cf_of_horizontal_cf` is marked `\notready`, and the corresponding
 Lean statement will be introduced together with its proof rather than as an
-axiomless scaffold.
+empty placeholder.
 
 ## Module location
 
@@ -130,11 +130,13 @@ structure HorizontalCFData {r : ℕ} {dim : Fin r → ℕ}
   any tensor in CF is in biCF, which is what the paper's Lemma L invokes to
   separate blockwise contributions.
 
-  *Interim status.* This is currently taken as a hypothesis rather than derived
-  from `block_injective` + `left_canonical`. The forward plan is to supply a
-  Lean proof of `propblockinj` (CPGSV17 Prop. IV.3) and then construct
-  `HorizontalCFData` without requiring `biCF` as an input; this is tracked by
-  the RFP/MPDO 3/5 milestone (issue #235). -/
+  *Current repository status.* `TNLean/MPS/MPDO/BiCFDerivation.lean` now provides
+  several honest constructors for this field: from a full finite-length tuple-span
+  witness (`WordTupleSpanTop`), from the abstract selector package
+  (`PropBlockInjective`), and from the more concrete linear-independence endpoint
+  `wordEntryFamily`. What is still open is to derive one of those finite-length
+  witnesses from the remaining canonical-form/BNT data alone, i.e. the actual
+  Proposition-IV.3 theorem from [CPGSV17]. -/
   biCF : ∃ L : ℕ, ∀ (Δ : (k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
     (∀ w : Fin L → Fin d,
         (∑ k : Fin r, Matrix.trace (Δ k * MPSTensor.evalWord (A k) (List.ofFn w))) = 0) →
