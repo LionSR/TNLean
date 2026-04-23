@@ -275,8 +275,8 @@ private lemma evalWord_leftMul_of_commute
   | i :: w => by
       have hCommZi : Commute Z (A i) := by
         simpa [Commute] using hcomm i
-      have hCommPow : A i * Z ^ w.length = Z ^ w.length * A i := by
-        exact (hCommZi.symm.pow_right w.length).eq
+      have hCommPow : A i * Z ^ w.length = Z ^ w.length * A i :=
+        (hCommZi.symm.pow_right w.length).eq
       calc
         evalWord (fun j => Z * A j) (i :: w)
             = (Z * A i) * evalWord (fun j => Z * A j) w := by
