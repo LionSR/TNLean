@@ -1,4 +1,5 @@
-# Issue #448 blocker refresh — Cases 1–2 are still gated upstream by cyclic-sector `hLift` and orthogonal-corner rigidity
+# Issue #448 blocker refresh — Cases 1–2 are still gated upstream by
+cyclic-sector `hLift` and orthogonal-corner rigidity
 
 ## Scope
 
@@ -16,7 +17,8 @@ Worktree / branch used:
 
 ## What I confirmed this session
 
-### 1. Case 1 is already done; the remaining Case 1–2 frontier is smaller than the issue title suggests
+### 1. Case 1 is already done; the remaining Case 1–2 frontier is smaller
+than the issue title suggests
 
 On current `main`:
 - `TNLean/MPS/Periodic/Overlap/Case1.lean` has **no** `sorry`
@@ -29,37 +31,38 @@ So the remaining work inside issue #448 is now concentrated in:
 
 ### 2. Remaining `sorry`-backed declarations in the Case 1–2 split files
 
+Use declaration-name search (for example, `rg`) rather than absolute line
+numbers here, since these files are still moving on current `main`.
+
 #### `TNLean/MPS/Periodic/Overlap/SelfOverlap.lean`
-- `hLift_cyclicDecomp_mps_of_fixUpgrade_missingBridge` (line 187)
-- `not_gaugePhaseEquiv_of_orthogonal_cyclicSector_traces` (line 798)
-- `periodicSelfOverlap_tendsto` (line 1044)
+- `sectorFixedPointAlgebraRigidity_cyclic_sector_supported` (private theorem)
+- `not_gaugePhaseEquiv_of_orthogonal_cyclicSector_traces`
+- `periodicSelfOverlap_tendsto`
 
 #### `TNLean/MPS/Periodic/Overlap/Case1.lean`
 - none
 
 #### `TNLean/MPS/Periodic/Overlap/Case2.lean`
-- `exists_nondecaying_sectorOverlap_of_blockedGaugePhaseEquiv_cyclicDecomp` (line 126)
-- `exists_sector_match_of_gaugePhaseEquiv` (line 245)
-- `not_gaugePhaseEquiv_of_no_sector_match` (line 288)
-- `periodicOverlap_tendsto_zero_of_no_sector_match` (line 352)
+- `exists_nondecaying_sectorOverlap_of_blockedGaugePhaseEquiv_cyclicDecomp`
+- `exists_sector_match_of_gaugePhaseEquiv`
+- `not_gaugePhaseEquiv_of_no_sector_match`
+- `periodicOverlap_tendsto_zero_of_no_sector_match`
 
 #### `TNLean/MPS/Periodic/Overlap/Dichotomy.lean`
-- `periodicOverlapDichotomy` (line 43)
-- `periodicBasis_eventuallyLinearlyIndependent` (line 69)
+- `periodicOverlapDichotomy`
+- `periodicBasis_eventuallyLinearlyIndependent`
 
 ### 3. One older blocker note is now stale
 
 The April 17 issue comment said Cases 1–2 were still routed through the old
 `compressedTensor_adjointTransferMap_cornerBridge` gap.
 
-That is no longer the first missing step on current `main`: in the split file
-`SelfOverlap.lean`, the theorem
-
-```lean
-private lemma compressedTensor_adjointTransferMap_cornerBridge
-```
-
-is now present and fully written.
+That is no longer the first missing step on current `main`:
+`compressedTensor_adjointTransferMap_cornerBridge` is already available as a
+public theorem in
+`TNLean/MPS/CanonicalForm/CyclicSectors/CornerBridge.lean`, and
+`TNLean/MPS/Periodic/Overlap/SelfOverlap.lean` now uses that result rather
+than defining its own local bridge lemma.
 
 The honest frontier has moved **earlier** in the argument.
 
@@ -70,8 +73,8 @@ wrappers.
 
 ### Target A. `not_gaugePhaseEquiv_of_orthogonal_cyclicSector_traces`
 
-This is the finite-dimensional-looking rigidity statement in
-`SelfOverlap.lean:798`.
+This is the finite-dimensional-looking rigidity statement
+`not_gaugePhaseEquiv_of_orthogonal_cyclicSector_traces` in `SelfOverlap.lean`.
 
 Available input in the current API:
 - orthogonal projections `P u`, `P v`
@@ -113,7 +116,9 @@ rigidity** theorem, not on a local tactic search failure.
 
 ### Target B. `exists_nondecaying_sectorOverlap_of_blockedGaugePhaseEquiv_cyclicDecomp`
 
-This is the finite-sum / asymptotic extraction step in `Case2.lean:126`.
+This is the finite-sum / asymptotic extraction step
+`exists_nondecaying_sectorOverlap_of_blockedGaugePhaseEquiv_cyclicDecomp`
+in `Case2.lean`.
 
 The purely algebraic part is straightforward: exactly as in the self-overlap
 proof, `hA_mpv` and `hB_mpv` expand the blocked mixed overlap into the finite
@@ -152,8 +157,9 @@ So this Case-2 finite-sum lemma is **not independent**: it sits strictly
 After re-reading `TNLean/MPS/CanonicalForm/SectorIrreducibility/HLift.lean`,
 the real load-bearing missing statement is now clearer.
 
-`SelfOverlap.lean:187` is a local placeholder for an `hLift` statement, but the
-generic orbit-sum machinery already exists in
+`hLift_cyclicDecomp_mps_of_fixUpgrade_missingBridge` was the original local
+placeholder for an `hLift` statement, but the generic orbit-sum machinery
+already exists in
 
 ```lean
 TNLean/MPS/CanonicalForm/SectorIrreducibility/HLift.lean
@@ -209,21 +215,28 @@ following reusable results:
 The first item is the more upstream blocker: it makes the sector blocks honestly
 primitive/irreducible, after which the Case-2 wrappers should collapse quickly.
 
-No Lean proof code is committed in this branch at the time of writing this note.
+No Lean proof code closing a `sorry` outright is committed in this first audit
+snapshot; the later PR follow-up below records the subsequent structural Lean
+changes on this branch.
 
 ## April 23 follow-up on `feat/448-overlap-cases-1-2`
 
-A small proof-structure refinement is now committed in this branch:
+Subsequent branch updates turned the old local `hLift` gap into a sharper,
+more explicit dependency:
 
 - `SelfOverlap.hLift_cyclicDecomp_mps_of_fixUpgrade_missingBridge` is no longer
   `sorry`-backed.
-- New public theorem `SelfOverlap.hProjStep_cyclic_sector_supported` packages
-  the fixed-point version of the one-step projection-transport step used by the
-  orbit-sum infrastructure.
-- The actual remaining typed hole has been sharpened further to
-  `SelfOverlap.sectorFixedPointAlgebraRigidity_cyclic_sector_supported`, a
-  `SectorFixedPointAlgebraRigidity` theorem for cyclic sectors. This is now the
-  explicit upstream blocker in the self-overlap → Case-2 normality pipeline.
-- `Case2.sectorBlocked_isNormal_of_isPeriodic` now points explicitly to
-  `SelfOverlap.hProjStep_cyclic_sector_supported` as the named downstream
-  dependency.
+- `SelfOverlap.hProjStep_cyclic_sector_supported` is now a public wrapper that,
+  **assuming** a `SectorFixedPointAlgebraRigidity` hypothesis, derives the
+  one-step projection-transport consequence needed by the orbit-sum
+  infrastructure.
+- The actual remaining upstream typed hole now lives in the private theorem
+  `sectorFixedPointAlgebraRigidity_cyclic_sector_supported` in
+  `SelfOverlap.lean`.
+- `Case2.sectorBlocked_isNormal_of_isPeriodic` now depends on that route only
+  indirectly, via `hLift_cyclicDecomp_mps_of_fixUpgrade_missingBridge`.
+- The three duplicated cyclic-projection helper proofs were removed from
+  `SelfOverlap.lean` and replaced by the shared declarations
+  `cyclic_projection_mem_multiplicativeDomain`,
+  `cyclic_projection_mul_left`, and `cyclic_projection_mul_right` exported from
+  `TNLean/MPS/CanonicalForm/Assembly/CyclicSectorDecomposition.lean`.

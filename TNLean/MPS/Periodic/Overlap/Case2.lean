@@ -50,9 +50,10 @@ the original blocked tensor, and `hCyclic` ensures the block indexing
 follows the cyclic orbit structure of the transfer map's peripheral
 spectrum (see `IsCyclicSectorDecomp`).
 
-Downstream this route now factors through
-`SelfOverlap.hProjStep_cyclic_sector_supported`, the named one-step sector
-transport consequence extracted from the orbit-sum infrastructure. -/
+Downstream this route is now routed indirectly through
+`SelfOverlap.hProjStep_cyclic_sector_supported`, via
+`hLift_cyclicDecomp_mps_of_fixUpgrade_missingBridge`; the remaining upstream
+gap lives in the private rigidity placeholder in `SelfOverlap.lean`. -/
 lemma sectorBlocked_isNormal_of_isPeriodic
     [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
     (hP : IsPeriodic m A)
