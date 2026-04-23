@@ -210,3 +210,20 @@ The first item is the more upstream blocker: it makes the sector blocks honestly
 primitive/irreducible, after which the Case-2 wrappers should collapse quickly.
 
 No Lean proof code is committed in this branch at the time of writing this note.
+
+## April 23 follow-up on `feat/448-overlap-cases-1-2`
+
+A small proof-structure refinement is now committed in this branch:
+
+- `SelfOverlap.hLift_cyclicDecomp_mps_of_fixUpgrade_missingBridge` is no longer
+  `sorry`-backed.
+- New public theorem `SelfOverlap.hProjStep_cyclic_sector_supported` packages
+  the fixed-point version of the one-step projection-transport step used by the
+  orbit-sum infrastructure.
+- The actual remaining typed hole has been sharpened further to
+  `SelfOverlap.sectorFixedPointAlgebraRigidity_cyclic_sector_supported`, a
+  `SectorFixedPointAlgebraRigidity` theorem for cyclic sectors. This is now the
+  explicit upstream blocker in the self-overlap → Case-2 normality pipeline.
+- `Case2.sectorBlocked_isNormal_of_isPeriodic` now points explicitly to
+  `SelfOverlap.hProjStep_cyclic_sector_supported` as the named downstream
+  dependency.

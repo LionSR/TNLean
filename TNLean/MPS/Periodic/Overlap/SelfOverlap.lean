@@ -185,6 +185,158 @@ private theorem exists_cyclic_sector_decomp_after_blocking_of_isPeriodic
     ⟨P, φ, hPproj, hPsum, hCyclic, hComm, hTrace, hIntertwine, hMul, hStar⟩, hNondeg⟩
 
 
+private theorem cyclic_projection_mem_multiplicativeDomain
+    [NeZero D] {A : MPSTensor d D} {m : ℕ} [NeZero m]
+    (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (P : Fin m → MatrixAlg D)
+    (hPproj : ∀ k : Fin m, IsOrthogonalProjection (P k))
+    (hCyclic :
+      ∀ k : Fin m,
+        transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k) :
+    ∀ k : Fin m,
+      P k ∈ KadisonSchwarz.multiplicativeDomain (fun i : Fin d => (A i)ᴴ) := by
+  let K : Fin d → MatrixAlg D := fun i => (A i)ᴴ
+  have hUnital : KadisonSchwarz.IsUnitalKraus (d := d) (D := D) K := by
+    simpa [KadisonSchwarz.IsUnitalKraus, K] using hTP
+  have hK_apply :
+      ∀ X : MatrixAlg D,
+        transferMap (d := d) (D := D) (fun i => (A i)ᴴ) X =
+          KadisonSchwarz.krausMap K X := by
+    intro X
+    simp [K, MPSTensor.transferMap_apply, KadisonSchwarz.krausMap]
+  intro k
+  have hPk_star : (P k)ᴴ = P k := (hPproj k).1.eq
+  have hTPk_eq : transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k) = P (k - 1) := by
+    change transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k) = P (k - 1)
+    simpa [show k - 1 + 1 = k by abel] using hCyclic (k - 1)
+  have hTPk_proj :
+      IsOrthogonalProjection
+        (transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k)) := by
+    simpa [hTPk_eq] using hPproj (k - 1)
+  have hRight :
+      KadisonSchwarz.krausMap K (P k * (P k)ᴴ) =
+        KadisonSchwarz.krausMap K (P k) * (KadisonSchwarz.krausMap K (P k))ᴴ := by
+    calc
+      KadisonSchwarz.krausMap K (P k * (P k)ᴴ)
+          = transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k * (P k)ᴴ) := by
+              rw [hK_apply]
+      _ = transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k) := by
+            rw [hPk_star, (hPproj k).2]
+      _ = transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k) *
+            (transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k))ᴴ := by
+              rw [hTPk_proj.1.eq, hTPk_proj.2]
+      _ = KadisonSchwarz.krausMap K (P k) * (KadisonSchwarz.krausMap K (P k))ᴴ := by
+            rw [hK_apply]
+  have hLeft :
+      KadisonSchwarz.krausMap K ((P k)ᴴ * P k) =
+        (KadisonSchwarz.krausMap K (P k))ᴴ * KadisonSchwarz.krausMap K (P k) := by
+    calc
+      KadisonSchwarz.krausMap K ((P k)ᴴ * P k)
+          = transferMap (d := d) (D := D) (fun i => (A i)ᴴ) ((P k)ᴴ * P k) := by
+              rw [hK_apply]
+      _ = transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k) := by
+            rw [hPk_star, (hPproj k).2]
+      _ = (transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k))ᴴ *
+            transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k) := by
+              rw [hTPk_proj.1.eq, hTPk_proj.2]
+      _ = (KadisonSchwarz.krausMap K (P k))ᴴ * KadisonSchwarz.krausMap K (P k) := by
+            rw [hK_apply]
+  exact ⟨
+    (KadisonSchwarz.mem_rightMultiplicativeDomain_iff K hUnital (P k)).2 hRight,
+    (KadisonSchwarz.mem_leftMultiplicativeDomain_iff K hUnital (P k)).2 hLeft⟩
+
+private theorem cyclic_projection_mul_left
+    [NeZero D] {A : MPSTensor d D} {m : ℕ} [NeZero m]
+    (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (P : Fin m → MatrixAlg D)
+    (hPproj : ∀ k : Fin m, IsOrthogonalProjection (P k))
+    (hCyclic :
+      ∀ k : Fin m,
+        transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k) :
+    ∀ k : Fin m, ∀ X : MatrixAlg D,
+      transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k * X) =
+        transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k) *
+          transferMap (d := d) (D := D) (fun i => (A i)ᴴ) X := by
+  let K : Fin d → MatrixAlg D := fun i => (A i)ᴴ
+  have hMulDomain :=
+    cyclic_projection_mem_multiplicativeDomain (A := A) hTP P hPproj hCyclic
+  intro k X
+  simpa [K, MPSTensor.transferMap_apply, KadisonSchwarz.krausMap] using
+    KadisonSchwarz.krausMap_mul_right_of_mem_multiplicativeDomain (K := K) (hMulDomain k) X
+
+private theorem cyclic_projection_mul_right
+    [NeZero D] {A : MPSTensor d D} {m : ℕ} [NeZero m]
+    (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (P : Fin m → MatrixAlg D)
+    (hPproj : ∀ k : Fin m, IsOrthogonalProjection (P k))
+    (hCyclic :
+      ∀ k : Fin m,
+        transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k) :
+    ∀ k : Fin m, ∀ X : MatrixAlg D,
+      transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (X * P k) =
+        transferMap (d := d) (D := D) (fun i => (A i)ᴴ) X *
+          transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k) := by
+  let K : Fin d → MatrixAlg D := fun i => (A i)ᴴ
+  have hMulDomain :=
+    cyclic_projection_mem_multiplicativeDomain (A := A) hTP P hPproj hCyclic
+  intro k X
+  simpa [K, MPSTensor.transferMap_apply, KadisonSchwarz.krausMap] using
+    KadisonSchwarz.krausMap_mul_left_of_mem_multiplicativeDomain (K := K) (hMulDomain k) X
+
+/-- Fixed-point-algebra rigidity on cyclic sectors.
+
+This is the structured remaining input behind the SelfOverlap / Case-2 normality
+pipeline: on each cyclic sector, the one-step adjoint transfer map should be
+multiplicative on the `((E_A^†)^m)`-fixed corner algebra. Once this is available,
+`hProjStep_cyclic_sector_supported` and the orbit-sum lift follow from the
+abstract infrastructure in `SectorIrreducibility.HLift`. -/
+theorem sectorFixedPointAlgebraRigidity_cyclic_sector_supported
+    [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
+    {P : Fin m → MatrixAlg D}
+    (_hP : IsPeriodic m A)
+    (_hPproj : ∀ k, IsOrthogonalProjection (P k))
+    (_hCyclic :
+      ∀ k, transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k) :
+    SectorFixedPointAlgebraRigidity
+      (D := D) (m := m)
+      (transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) P := by
+  /- Remaining blocker: identify the fixed-point algebra of
+  `((E_A^†)^m)|_{P_k}` and show that one step of `E_A^†` acts multiplicatively
+  on that algebra. -/
+  sorry
+
+/-- One-step projection transport for `((E_A^†)^m)`-fixed cyclic-sector projections.
+
+This packages the exact `hProjStep`-style consequence needed by the overlap
+pipeline from the sharper fixed-point-algebra rigidity statement above. -/
+theorem hProjStep_cyclic_sector_supported
+    [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
+    (hP : IsPeriodic m A)
+    {P : Fin m → MatrixAlg D}
+    (hPproj : ∀ k, IsOrthogonalProjection (P k))
+    (hCyclic :
+      ∀ k, transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k)
+    {k : Fin m} {X : MatrixAlg D}
+    (hXproj : IsOrthogonalProjection X)
+    (hXP : X * P k = X)
+    (hPX : P k * X = X)
+    (hXfix :
+      ((transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ^ m) X = X) :
+    IsOrthogonalProjection
+      (transferMap (d := d) (D := D) (fun i => (A i)ᴴ) X) := by
+  let T : MatrixEnd D := transferMap (d := d) (D := D) (fun i => (A i)ᴴ)
+  have hStarT : ∀ Y : MatrixAlg D, T Yᴴ = (T Y)ᴴ := by
+    intro Y
+    simpa [T, MPSTensor.transferMap_apply, Kraus.map] using
+      (Kraus.map_conjTranspose (K := fun i => (A i)ᴴ) Y).symm
+  have hRigidity : SectorFixedPointAlgebraRigidity (D := D) (m := m) T P :=
+    sectorFixedPointAlgebraRigidity_cyclic_sector_supported
+      (A := A) (m := m) (P := P) hP hPproj hCyclic
+  simpa [T] using
+    hProjStep_of_sectorFixedPointAlgebraRigidity
+      (D := D) (m := m) (T := T) (P := P) hStarT hRigidity
+      (k := k) (X := X) hXproj hXP hPX hXfix
+
 private lemma hLift_cyclicDecomp_mps_of_fixUpgrade_missingBridge
     [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
     (hP : IsPeriodic m A)
@@ -203,7 +355,33 @@ private lemma hLift_cyclicDecomp_mps_of_fixUpgrade_missingBridge
         PreservesCorner R (transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ∧
         (Q = 0 ↔ R = 0) ∧
         (Q = P k ↔ R = 1) := by
-  sorry
+  have hIrrAdj :
+      IsIrreducibleMap (transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) := by
+    simpa using
+      isIrreducibleCP_transferMap_conjTranspose_of_isIrreducibleTensor
+        (A := A) hP.irreducible
+  have hMulLeft :
+      ∀ k : Fin m, ∀ X : MatrixAlg D,
+        transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k * X) =
+          transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k) *
+            transferMap (d := d) (D := D) (fun i => (A i)ᴴ) X :=
+    cyclic_projection_mul_left (A := A) hP.leftCanonical P hPproj hCyclic
+  have hMulRight :
+      ∀ k : Fin m, ∀ X : MatrixAlg D,
+        transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (X * P k) =
+          transferMap (d := d) (D := D) (fun i => (A i)ᴴ) X *
+            transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k) :=
+    cyclic_projection_mul_right (A := A) hP.leftCanonical P hPproj hCyclic
+  have hRigidity :
+      SectorFixedPointAlgebraRigidity
+        (D := D) (m := m)
+        (transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) P :=
+    sectorFixedPointAlgebraRigidity_cyclic_sector_supported
+      (A := A) (m := m) (P := P) hP hPproj hCyclic
+  exact
+    hLift_cyclicDecomp_mps_of_sectorFixedPointAlgebraRigidity
+      (A := A) (m := m) hIrrAdj hP.leftCanonical P hPproj hPsum hCyclic
+      hMulLeft hMulRight hRigidity
 
 /-- Missing compressed-sector statement.
 
