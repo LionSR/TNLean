@@ -302,7 +302,7 @@ orthogonal-projection infrastructure (for example
 `Submodule.starProjection` and `orthogonalProjection`) but not a ready-made
 Kastoryano–Lucia-style angle-to-anticommutator bound. This is a real blocker
 for quantitative overlap constants.
-2. **Positivity packaging:** the local `EuclideanSpace` projector
+2. **Positivity formulation:** the local `EuclideanSpace` projector
 `parentInteractionES A L` is positive, and each conjugated cyclic-restriction
 summand `localTermESSummand A hN L i τ = Rᵢ,τ† P_L Rᵢ,τ` is positive by
 `LinearMap.IsPositive.conj_adjoint`. Missing is the exact averaging identity
