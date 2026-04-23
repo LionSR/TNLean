@@ -71,6 +71,7 @@ import TNLean.Axioms.Entropy
 -- from `TNLean.Axioms.Entropy`; the `TNLean.Entropy.*` modules
 -- re-state the sanctioned entropy axioms under the Entropy namespace.
 import TNLean.Entropy.VonNeumann
+import TNLean.Entropy.TripartiteTrace
 import TNLean.Entropy.StrongSubadditivity
 import TNLean.Entropy.MarkovChain
 import TNLean.Entropy.MutualInformation
