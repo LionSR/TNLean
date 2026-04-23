@@ -51,6 +51,7 @@ import TNLean.Channel.PartialTrace
 import TNLean.Channel.MaximallyEntangled
 import TNLean.Channel.TensorMap
 import TNLean.Channel.ChoiJamiolkowski
+import TNLean.Channel.KrausRank
 import TNLean.Channel.KrausRepresentation
 import TNLean.Channel.KrausUnitaryFreedom
 import TNLean.Channel.Stinespring
