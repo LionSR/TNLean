@@ -1225,11 +1225,14 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
     immediate.
 \end{proof}
 
-\begin{remark}[Choi rank is bounded by Kraus rank]
+\begin{remark}[Choi rank and minimal Kraus cardinality]
     \label{rem:choi_rank_le_kraus_rank}
     \lean{Channel.HasKrausCard, Channel.HasKrausRankLE, Channel.choiRank,
            Channel.choiRank_le_of_hasKrausCard,
-           Channel.choiRank_le_of_hasKrausRankLE}
+           Channel.choiRank_le_of_hasKrausRankLE,
+           Channel.hasKrausCard_choiRank_of_cp,
+           Channel.hasKrausRankLE_choiRank_of_cp,
+           Channel.hasKrausRankLE_choiRank_of_cptp}
     \leanok
     \uses{def:choi_matrix, def:cp_map}
     If a completely positive map admits a Kraus representation with exactly $r$
@@ -1238,16 +1241,21 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
     \[
         \operatorname{rank}(\tau_E) \le r.
     \]
-    More generally, any witness with at most $r$ Kraus operators yields the same
-    upper bound.
+    Conversely, diagonalizing the positive semidefinite Choi matrix and keeping
+    only the nonzero eigenvalue summands produces a Kraus family with exactly
+    $\operatorname{rank}(\tau_E)$ operators. Hence the Choi rank is precisely
+    the minimal Kraus cardinality.
 \end{remark}
 
 \begin{proof}
     \leanok
-    Expand the Choi matrix using the Kraus formula and
-    $\tau_E = \sum_j v_j v_j^\dagger$ with one vector $v_j$ for each Kraus
-    operator. The column space of this sum lies in the span of the $r$ vectors
-    $\{v_j\}$, so the rank is at most $r$.
+    For the forward implication, expand the Choi matrix using the Kraus formula
+    and write $\tau_E = \sum_j v_j v_j^\dagger$ with one vector $v_j$ for each
+    Kraus operator. The column space of this sum lies in the span of the $r$
+    vectors $\{v_j\}$, so the rank is at most $r$. For the converse, use the
+    spectral decomposition of the positive semidefinite Choi matrix,
+    discard the zero-eigenvalue terms, and rescale the remaining eigenvectors
+    into Kraus operators.
 \end{proof}
 
 %% =========================================================

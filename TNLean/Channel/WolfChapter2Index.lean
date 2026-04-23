@@ -36,6 +36,10 @@ representations of quantum channels.
   - `Channel.choiRank` — rank of the Choi matrix ✅
   - `Channel.choiRank_le_of_hasKrausCard` / `Channel.choiRank_le_of_hasKrausRankLE`
     — Choi-rank upper bounds from exact / bounded Kraus families ✅
+  - `Channel.hasKrausCard_choiRank_of_cp` /
+    `Channel.hasKrausRankLE_choiRank_of_cp` /
+    `Channel.hasKrausRankLE_choiRank_of_cptp`
+    — minimal Kraus constructions from the Choi spectral decomposition ✅
 
 * **Thm 2.1** (Kraus representation):
   - `kraus_tp_of_sum_conjTranspose_mul` — `∑Kᵢ†Kᵢ = 𝟙` ⟹ TP ✅

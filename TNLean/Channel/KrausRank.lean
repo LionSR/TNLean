@@ -2,14 +2,16 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
+import Mathlib.Analysis.Matrix.PosDef
+import Mathlib.Analysis.Matrix.Spectrum
 import Mathlib.Data.Fintype.Card
 import TNLean.Channel.ChoiJamiolkowski
 
 /-!
-# Kraus-cardinality and Choi-rank bounds
+# Kraus-cardinality and Choi-rank correspondence
 
-This file packages the basic channel-side infrastructure needed for future
-minimal-Kraus arguments.
+This file packages the channel-side infrastructure relating Kraus families to the
+rank of the Choi matrix.
 
 ## Main definitions
 
@@ -27,12 +29,16 @@ minimal-Kraus arguments.
   the upper bound `choiRank E ≤ r`.
 * `Channel.choiRank_le_of_hasKrausRankLE` — the same upper bound for bounded
   Kraus-rank witnesses.
+* `Channel.hasKrausCard_choiRank_of_cp` — a completely positive map has a Kraus
+  family with exactly `choiRank E` operators.
+* `Channel.hasKrausRankLE_choiRank_of_cp` /
+  `Channel.hasKrausRankLE_choiRank_of_cptp` — the bounded converse witnesses.
 
 ## Design note
 
-This file does **not** yet prove the converse direction
-`HasKrausRankLE E (choiRank E)`. That is the genuine minimal-Kraus / Choi-rank
-identity still needed for Theorem 4.1 reverse.
+The converse direction is proved by diagonalizing the positive semidefinite Choi
+matrix, discarding the zero-eigenvalue summands, and reconstructing Kraus
+operators from the remaining rank-one terms.
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder BigOperators
@@ -147,6 +153,23 @@ theorem rank_le_card_of_eq_sum_vecMulVec {r : ℕ}
 
 end RankBounds
 
+/-- Multiplying a matrix by a scalar matrix unit and its adjoint produces a
+rank-one outer product of the corresponding columns. -/
+private theorem mul_single_mul_conjTranspose_eq_vecMulVec
+    {n : Type*} [Fintype n] [DecidableEq n]
+    (K : Matrix n n ℂ) (c : ℂ) (i j : n) :
+    K * Matrix.single i j (c * star c) * Kᴴ =
+      Matrix.vecMulVec (fun a : n => c * K a i)
+        (fun b : n => star (c * K b j)) := by
+  rw [show Matrix.single i j (c * star c) =
+      (c * star c) • Matrix.vecMulVec (Pi.single i (1 : ℂ)) (Pi.single j 1) by
+    rw [← Matrix.single_eq_single_vecMulVec_single i j]
+    simp]
+  rw [Matrix.mul_smul, Matrix.smul_mul, Matrix.mul_vecMulVec, Matrix.vecMulVec_mul]
+  ext a b
+  simp [Matrix.vecMulVec_apply, Matrix.conjTranspose_apply, Matrix.col, Matrix.row]
+  ring_nf
+
 /-- The Choi matrix of a Kraus map is a sum of rank-one outer products. -/
 theorem choiMatrix_eq_sum_vecMulVec_of_kraus {r : ℕ}
     (K : Fin r → Mat) (E : Mat →ₗ[ℂ] Mat)
@@ -173,6 +196,177 @@ theorem choiMatrix_eq_sum_vecMulVec_of_kraus {r : ℕ}
       (ChoiJamiolkowski.Internal.mul_single_mul_conjTranspose_eq_vecMulVec
         (K := K x) (c := c) i₂ j₂)
 
+/-- A Choi-matrix decomposition into rank-one outer products yields a Kraus
+family indexed by the same finite type. -/
+private theorem hasKrausCard_of_choiMatrix_eq_sum_vecMulVec [NeZero D]
+    {ι : Type*} [Fintype ι] {E : Mat →ₗ[ℂ] Mat}
+    (v : ι → (Fin D × Fin D) → ℂ)
+    (hchoi : ChoiJamiolkowski.choiMatrix E =
+      ∑ m : ι, Matrix.vecMulVec (v m) (star (v m))) :
+    HasKrausCard E (Fintype.card ι) := by
+  classical
+  let c : ℂ := (1 : ℂ) / ((D : ℝ).sqrt : ℂ)
+  have hDpos : 0 < D := Nat.pos_of_ne_zero (NeZero.ne D)
+  have hc : c ≠ 0 := by
+    dsimp [c]
+    have hsqrt : (((D : ℝ).sqrt : ℂ)) ≠ 0 :=
+      Complex.ofReal_ne_zero.mpr <| Real.sqrt_ne_zero'.2 (by exact_mod_cast hDpos)
+    simp [hsqrt]
+  have hstarc : star c = c := by simp [c]
+  have hαne : c * star c ≠ 0 := by
+    simpa [hstarc] using mul_ne_zero hc hc
+  let K : ι → Mat := fun m a b => v m (a, b) / c
+  have hK : ∀ X, E X = ∑ m : ι, K m * X * (K m)ᴴ := by
+    intro X
+    let S : Mat → Mat := fun Y => ∑ m : ι, K m * Y * (K m)ᴴ
+    let P : Mat → Prop := fun Y => E Y = S Y
+    change P X
+    refine Matrix.induction_on X ?_ ?_
+    · intro p q hp hq
+      dsimp [P, S] at *
+      simp [map_add, Matrix.add_mul, Matrix.mul_add, hp, hq, Finset.sum_add_distrib]
+    · intro i j z
+      dsimp [P, S]
+      have hbase : E (Matrix.single i j (1 : ℂ)) = S (Matrix.single i j 1) := by
+        ext a b
+        have hentry : E (Matrix.single i j (c * star c)) a b =
+            (∑ m : ι, Matrix.vecMulVec (v m) (star (v m))) (a, i) (b, j) := by
+          simpa [c, ChoiJamiolkowski.choiMatrix_apply,
+            ChoiJamiolkowski.omegaSlice_eq_single (D := D) i j] using
+              congrArg (fun M => M (a, i) (b, j)) hchoi
+        have hsmul : E (Matrix.single i j (c * star c)) a b =
+            (c * star c) * E (Matrix.single i j (1 : ℂ)) a b := by
+          simpa [Matrix.smul_single] using congrArg (fun M => M a b)
+            (E.map_smul (c * star c) (Matrix.single i j (1 : ℂ)))
+        have h1 : (c * star c) * E (Matrix.single i j (1 : ℂ)) a b =
+            ∑ m : ι, v m (a, i) * star (v m (b, j)) := by
+          exact hsmul.symm.trans <|
+            by simpa [Matrix.sum_apply, Matrix.vecMulVec_apply] using hentry
+        have h2 : (c * star c) * S (Matrix.single i j (1 : ℂ)) a b =
+            ∑ m : ι, v m (a, i) * star (v m (b, j)) := by
+          calc
+            (c * star c) * S (Matrix.single i j (1 : ℂ)) a b
+                = (c * star c) *
+                    ((∑ m : ι, K m * Matrix.single i j (1 : ℂ) * (K m)ᴴ) a b) := rfl
+            _ = (c * star c) *
+                  ∑ m : ι, (K m * Matrix.single i j (1 : ℂ) * (K m)ᴴ) a b := by
+                  rw [Matrix.sum_apply]
+            _ = ∑ m : ι,
+                  (c * star c) * ((K m * Matrix.single i j (1 : ℂ) * (K m)ᴴ) a b) := by
+                  rw [Finset.mul_sum]
+            _ = ∑ m : ι, v m (a, i) * star (v m (b, j)) := by
+                  refine Finset.sum_congr rfl ?_
+                  intro m _
+                  have hterm : (K m * Matrix.single i j (1 : ℂ) * (K m)ᴴ) a b =
+                      (v m (a, i) / c) * star (v m (b, j) / c) := by
+                    simpa [K, Matrix.vecMulVec_apply] using
+                      congrArg (fun M => M a b)
+                        (ChoiJamiolkowski.Internal.mul_single_mul_conjTranspose_eq_vecMulVec
+                          (K := K m) (c := (1 : ℂ)) i j)
+                  rw [hterm]
+                  simp [div_eq_mul_inv, hstarc, hc, mul_assoc, mul_left_comm, mul_comm]
+        exact (mul_left_cancel₀ hαne) (h1.trans h2.symm)
+      have hSsmul (Y : Mat) : S (z • Y) = z • S Y := by
+        dsimp [S]
+        simp [Finset.smul_sum]
+      calc
+        E (Matrix.single i j z) = z • E (Matrix.single i j (1 : ℂ)) := by
+          simpa [Matrix.smul_single] using E.map_smul z (Matrix.single i j (1 : ℂ))
+        _ = z • S (Matrix.single i j 1) := by rw [hbase]
+        _ = S (z • Matrix.single i j (1 : ℂ)) := by rw [hSsmul]
+        _ = S (Matrix.single i j z) := by simp [Matrix.smul_single]
+  refine ⟨fun α => K ((Fintype.equivFin ι).symm α), ?_⟩
+  intro X
+  calc
+    E X = ∑ m : ι, K m * X * (K m)ᴴ := hK X
+    _ = ∑ α : Fin (Fintype.card ι),
+          K ((Fintype.equivFin ι).symm α) * X * (K ((Fintype.equivFin ι).symm α))ᴴ := by
+            refine Fintype.sum_equiv (Fintype.equivFin ι) _ _ ?_
+            intro m
+            simp
+
+/-- A positive semidefinite matrix equals the sum of the rank-one outer
+products coming from its nonzero eigenvalues and eigenvectors. -/
+private theorem posSemidef_eq_sum_vecMulVec_nonzero_eigs
+    {n : Type*} [Fintype n] [DecidableEq n] {A : Matrix n n ℂ}
+    (hApsd : A.PosSemidef) :
+    A =
+      ∑ i : {j // hApsd.1.eigenvalues j ≠ 0},
+        Matrix.vecMulVec
+          (fun p : n =>
+            ((Real.sqrt (hApsd.1.eigenvalues i.1) : ℂ)) *
+              hApsd.1.eigenvectorUnitary p i.1)
+          (fun p : n =>
+            star (((Real.sqrt (hApsd.1.eigenvalues i.1) : ℂ)) *
+              hApsd.1.eigenvectorUnitary p i.1)) := by
+  let hA : A.IsHermitian := hApsd.1
+  let c : n → ℂ := fun i => (Real.sqrt (hA.eigenvalues i) : ℂ)
+  let term : n → Matrix n n ℂ := fun i =>
+    Matrix.vecMulVec (fun p : n => c i * hA.eigenvectorUnitary p i)
+      (fun p : n => star (c i * hA.eigenvectorUnitary p i))
+  have hsum_all : A = ∑ i : n, term i := by
+    calc
+      A =
+          hA.eigenvectorUnitary *
+            Matrix.diagonal (fun i => (hA.eigenvalues i : ℂ)) *
+            star hA.eigenvectorUnitary := by
+              simpa [Unitary.conjStarAlgAut_apply, Function.comp_def, hA] using
+                hA.spectral_theorem
+      _ =
+          hA.eigenvectorUnitary *
+            (∑ i : n, Matrix.single i i ((hA.eigenvalues i : ℂ))) *
+            star hA.eigenvectorUnitary := by
+              rw [Matrix.sum_single_eq_diagonal]
+      _ =
+          ∑ i : n,
+            hA.eigenvectorUnitary * Matrix.single i i ((hA.eigenvalues i : ℂ)) *
+              star hA.eigenvectorUnitary := by
+              rw [Matrix.mul_sum, Matrix.sum_mul]
+      _ = ∑ i : n, term i := by
+            refine Finset.sum_congr rfl ?_
+            intro i _
+            have hEig : (hA.eigenvalues i : ℂ) = c i * star (c i) := by
+              calc
+                (hA.eigenvalues i : ℂ)
+                    = (((Real.sqrt (hA.eigenvalues i)) ^ 2 : ℝ) : ℂ) := by
+                        rw [Real.sq_sqrt (hApsd.eigenvalues_nonneg i)]
+                _ = c i * star (c i) := by
+                        simp [c, pow_two]
+            rw [hEig]
+            simpa [term, c] using
+              (mul_single_mul_conjTranspose_eq_vecMulVec
+                (K := (hA.eigenvectorUnitary : Matrix n n ℂ)) (c := c i) i i)
+  have hsplit :
+      (∑ i : {j // hA.eigenvalues j ≠ 0}, term i.1) +
+      ∑ i : {j // ¬ hA.eigenvalues j ≠ 0}, term i.1 =
+        ∑ i : n, term i := by
+    simpa using
+      (Fintype.sum_subtype_add_sum_subtype (p := fun j => hA.eigenvalues j ≠ 0) term)
+  have hzero :
+      ∑ i : {j // ¬ hA.eigenvalues j ≠ 0}, term i.1 = 0 := by
+    exact Fintype.sum_eq_zero (fun i : {j // ¬ hA.eigenvalues j ≠ 0} => term i.1) <| by
+      intro i
+      have hi : hA.eigenvalues i.1 = 0 := by simpa using i.2
+      ext a b
+      dsimp [term, c]
+      simp [Matrix.vecMulVec_apply, hi]
+  have hsubtype :
+      ∑ i : {j // hA.eigenvalues j ≠ 0}, term i.1 = ∑ i : n, term i := by
+    simpa [hzero] using hsplit
+  calc
+    A = ∑ i : n, term i := hsum_all
+    _ = ∑ i : {j // hA.eigenvalues j ≠ 0}, term i.1 := hsubtype.symm
+    _ =
+        ∑ i : {j // hApsd.1.eigenvalues j ≠ 0},
+          Matrix.vecMulVec
+            (fun p : n =>
+              ((Real.sqrt (hApsd.1.eigenvalues i.1) : ℂ)) *
+                hApsd.1.eigenvectorUnitary p i.1)
+            (fun p : n =>
+              star (((Real.sqrt (hApsd.1.eigenvalues i.1) : ℂ)) *
+                hApsd.1.eigenvectorUnitary p i.1)) := by
+          simp [term, c]
+
 /-- Any `r`-operator Kraus representation bounds the Choi rank by `r`. -/
 theorem choiRank_le_of_hasKrausCard {E : Mat →ₗ[ℂ] Mat} {r : ℕ}
     (hE : HasKrausCard E r) :
@@ -188,5 +382,47 @@ theorem choiRank_le_of_hasKrausRankLE {E : Mat →ₗ[ℂ] Mat} {r : ℕ}
     choiRank E ≤ r := by
   rcases hE with ⟨s, hs, hE⟩
   exact (choiRank_le_of_hasKrausCard hE).trans hs
+
+/-- A completely positive map admits a Kraus representation whose cardinality is
+exactly the rank of its Choi matrix. -/
+theorem hasKrausCard_choiRank_of_cp [NeZero D] {E : Mat →ₗ[ℂ] Mat}
+    (hE : IsCPMap E) :
+    HasKrausCard E (choiRank E) := by
+  classical
+  have hτpsd : (ChoiJamiolkowski.choiMatrix E).PosSemidef :=
+    (ChoiJamiolkowski.cp_iff_choi_posSemidef (T := E)).mp hE
+  let hτ : (ChoiJamiolkowski.choiMatrix E).IsHermitian := hτpsd.1
+  let v : {j : Fin D × Fin D // hτ.eigenvalues j ≠ 0} → (Fin D × Fin D) → ℂ :=
+    fun i p => ((Real.sqrt (hτ.eigenvalues i.1) : ℂ)) * hτ.eigenvectorUnitary p i.1
+  have hchoi' : ChoiJamiolkowski.choiMatrix E =
+      ∑ i : {j : Fin D × Fin D // hτ.eigenvalues j ≠ 0},
+        Matrix.vecMulVec (v i) (fun p => star (v i p)) := by
+    simpa [hτ, v] using
+      posSemidef_eq_sum_vecMulVec_nonzero_eigs
+        (A := ChoiJamiolkowski.choiMatrix E) hτpsd
+  have hchoi : ChoiJamiolkowski.choiMatrix E =
+      ∑ i : {j : Fin D × Fin D // hτ.eigenvalues j ≠ 0},
+        Matrix.vecMulVec (v i) (star (v i)) := by
+    simpa using hchoi'
+  have hcard : Fintype.card {j : Fin D × Fin D // hτ.eigenvalues j ≠ 0} = choiRank E := by
+    unfold choiRank
+    simpa [hτ] using (hτ.rank_eq_card_non_zero_eigs).symm
+  have hK : HasKrausCard E (Fintype.card {j : Fin D × Fin D // hτ.eigenvalues j ≠ 0}) :=
+    hasKrausCard_of_choiMatrix_eq_sum_vecMulVec
+      (E := E) (ι := {j : Fin D × Fin D // hτ.eigenvalues j ≠ 0}) v hchoi
+  rwa [hcard] at hK
+
+/-- In particular, a completely positive map has Kraus rank at most its Choi
+rank. -/
+theorem hasKrausRankLE_choiRank_of_cp [NeZero D] {E : Mat →ₗ[ℂ] Mat}
+    (hE : IsCPMap E) :
+    HasKrausRankLE E (choiRank E) :=
+  hasKrausRankLE_of_hasKrausCard (hasKrausCard_choiRank_of_cp hE)
+
+/-- A CPTP map has Kraus rank at most its Choi rank. -/
+theorem hasKrausRankLE_choiRank_of_cptp [NeZero D] {E : Mat →ₗ[ℂ] Mat}
+    (hE : IsChannel E) :
+    HasKrausRankLE E (choiRank E) :=
+  hasKrausRankLE_choiRank_of_cp hE.cp
 
 end Channel
