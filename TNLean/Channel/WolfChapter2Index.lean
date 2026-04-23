@@ -13,6 +13,7 @@ import TNLean.Channel.Stinespring
 import TNLean.Channel.POVM
 import TNLean.Channel.POVM.Uniqueness
 import TNLean.Channel.TransferMatrix
+import TNLean.Channel.NormalForm
 
 /-!
 # Wolf Lecture Notes — Chapter 2: Representations
@@ -101,6 +102,20 @@ representations of quantum channels.
 * `transferMatrix_unitaryConj_sandwich` — **Props 2.7-2.8 key identity**:
   `(Ad_{U₁} ∘ T ∘ Ad_{U₂})^ = (Ū₁⊗U₁) T̂ (Ū₂⊗U₂)` ✅
 
+### §2.3 Normal forms — SVD and Lorentz (existence)
+
+* `Matrix.svd_of_posSemidef` — **SVD for PSD matrices** (spectral theorem
+  packaged): `M = U * diagonal σ * Uᴴ` with `σ ≥ 0` ✅
+* `Matrix.svd_of_isUnit` — **SVD existence for invertible complex matrices**:
+  `M = U * diagonal σ * Vᴴ` with `U, V` unitary and `σ > 0` ✅
+* `transferMatrix_svd_of_isUnit` — **SVD representation of a transfer
+  matrix** (Wolf §2.3): every invertible transfer matrix admits an SVD ✅
+* `IsDoublyStochasticChoi` — Choi-matrix doubly-stochastic predicate (both
+  partial traces proportional to identity) ✅
+* `lorentz_normal_form_trivial` — **Lorentz normal form, trivial witness**
+  (Wolf Prop 2.11 base case): identity `SL(2, ℂ)` filtering on a
+  doubly-stochastic qubit Choi matrix ✅
+
 ### Infrastructure
 
 | Definition | File | Lean name |
@@ -131,8 +146,7 @@ representations of quantum channels.
 | Thm 2.3 (ordered CP-maps) | Needs Stinespring + contraction |
 | Thm 2.4 (Radon-Nikodym) | Follows from Thm 2.3 |
 | Thm 2.5 (open-system representation) | Embedding into unitary |
-| §2.3 Lorentz normal form (existence) | Needs SVD of transfer matrix |
-| §2.3 SVD representation (existence) | Needs Mathlib SVD |
+| §2.3 Lorentz normal form (full iterative existence) | Needs compactness / minimisation; `lorentz_normal_form_trivial` gives the base case |
 
 ## References
 

@@ -1697,6 +1697,105 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
     stated double-sum formula.
 \end{proof}
 
+%% =========================================================
+\subsection{Normal forms: SVD and Lorentz (existence)}
+\label{subsec:svd_lorentz_normal_form}
+%% =========================================================
+
+Wolf \S2.3 discusses two families of normal forms for the transfer-matrix
+representation of a quantum channel: the \emph{singular value decomposition}
+(SVD) and, for qubit channels, the \emph{Lorentz normal form} obtained by
+$\mathrm{SL}(2,\mathbb{C})$ filtering operations.
+
+\begin{theorem}[SVD for positive semi-definite matrices]
+    \label{thm:svd_posSemidef}
+    \lean{Matrix.svd_of_posSemidef}\leanok
+    Every positive semi-definite matrix $M \in \MN{D}$ admits a decomposition
+    \[
+        M = U \operatorname{diag}(\sigma) U^{\dagger},
+    \]
+    where $U \in \mathrm{U}(D)$ is unitary and $\sigma : \{1, \dots, D\} \to
+    \mathbb{R}_{\ge 0}$ has non-negative entries.
+\end{theorem}
+
+\begin{proof}\leanok
+    The spectral theorem for Hermitian matrices provides an orthonormal
+    eigenbasis with real eigenvalues. Positive semi-definiteness forces those
+    eigenvalues to be non-negative, and the decomposition is packaged in SVD
+    form with $U$ the eigenvector unitary and $\sigma$ the eigenvalue sequence.
+\end{proof}
+
+\begin{theorem}[SVD existence for invertible matrices]
+    \label{thm:svd_of_isUnit}
+    \lean{Matrix.svd_of_isUnit}\leanok
+    Every invertible complex square matrix $M \in \MN{D}$ admits a singular
+    value decomposition
+    \[
+        M = U \operatorname{diag}(\sigma) V^{\dagger},
+    \]
+    with $U, V \in \mathrm{U}(D)$ unitary and $\sigma_i > 0$ for all $i$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Apply the spectral theorem to the positive definite matrix
+    $M^{\dagger} M$ to obtain $M^{\dagger} M = V \operatorname{diag}(\lambda)
+    V^{\dagger}$ with $\lambda_i > 0$. Set $\sigma_i := \sqrt{\lambda_i}$ and
+    $\Sigma := \operatorname{diag}(\sigma)$; since $\Sigma$ is a real positive
+    diagonal, it is self-adjoint and invertible. Define $U := M V \Sigma^{-1}$.
+    Then $U^{\dagger} U = \Sigma^{-1} V^{\dagger} (M^{\dagger} M) V \Sigma^{-1}
+    = \Sigma^{-1} \operatorname{diag}(\lambda) \Sigma^{-1} = I$, so $U$ is
+    unitary, and $U \Sigma V^{\dagger} = M V (\Sigma^{-1} \Sigma) V^{\dagger} =
+    M V V^{\dagger} = M$.
+\end{proof}
+
+\begin{theorem}[SVD representation of a transfer matrix]
+    \label{thm:transferMatrix_svd_of_isUnit}
+    \lean{transferMatrix_svd_of_isUnit}\leanok
+    \uses{thm:svd_of_isUnit}
+    Every invertible transfer matrix $\widehat{T}$ of a linear super-operator
+    $T : \MN{D} \to \MN{D}$ admits a singular value decomposition
+    $\widehat{T} = U \operatorname{diag}(\sigma) V^{\dagger}$ with $U, V$
+    unitary on $\mathbb{C}^{D} \otimes \mathbb{C}^{D}$ and $\sigma_i > 0$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Direct specialisation of Theorem~\ref{thm:svd_of_isUnit} to the index type
+    $\{1,\dots,D\} \times \{1,\dots,D\}$ used by the transfer-matrix
+    representation.
+\end{proof}
+
+\begin{definition}[Doubly-stochastic Choi matrix]
+    \label{def:doubly_stochastic_choi}
+    \lean{IsDoublyStochasticChoi}\leanok
+    A Choi-like matrix $\tau \in \mathcal{M}_{2} \otimes \mathcal{M}_{2}$ is
+    \emph{doubly-stochastic} if both of its partial traces are proportional to
+    the $2 \times 2$ identity matrix.
+\end{definition}
+
+\begin{theorem}[Lorentz normal form — trivial-filtering witness]
+    \label{thm:lorentz_normal_form_trivial}
+    \lean{lorentz_normal_form_trivial}\leanok
+    \uses{def:doubly_stochastic_choi}
+    If a qubit Choi matrix $\tau$ is already doubly-stochastic, then the
+    trivial $\mathrm{SL}(2,\mathbb{C})$ filtering pair
+    $(X_{1}, X_{2}) = (\mathbf{1}, \mathbf{1})$ witnesses the Lorentz normal
+    form: both determinants are $1$ and conjugation by $X_{2} \otimes X_{1}
+    = \mathbf{1}$ returns $\tau$ unchanged and therefore preserves
+    double-stochasticity.
+
+    This is the base case of the iterative optimisation argument sketched in
+    Wolf \S2.3 (Prop 2.9 / Prop 2.11). The full existence result additionally
+    requires a compactness / minimisation step that remains open in this
+    formalisation.
+\end{theorem}
+
+\begin{proof}\leanok
+    Take $X_{1} = X_{2} = \mathbf{1}$. Then $\det X_{i} = 1$ and
+    $X_{2} \otimes X_{1} = \mathbf{1}$, so $(X_{2} \otimes X_{1}) \tau
+    (X_{2} \otimes X_{1})^{\dagger} = \tau$, which is doubly-stochastic by
+    assumption.
+\end{proof}
+
 %% The following sections will not be needed for the fundamental theorem of the matrix product states.
 
 %% =========================================================
