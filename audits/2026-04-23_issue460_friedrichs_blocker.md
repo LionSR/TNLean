@@ -73,7 +73,7 @@ The current sorry surface relevant to this issue is:
 
 ## Result of the analytic attempt (A)
 
-### 1. Negative scouting result: no packaged Friedrichs-angle / principal-angle API
+### 1. Negative scouting result: no Friedrichs-angle / principal-angle API
 
 I explicitly searched Mathlib for a subspace-angle / Friedrichs-angle layer.
 The result is still negative.
@@ -99,7 +99,7 @@ projection-geometry layer.
 
 ### 2. Positive scouting result: the operator-theoretic base is present
 
-Mathlib *does* provide the operator API needed for a future positivity package:
+Mathlib *does* provide the operator API needed for a future positivity formulation:
 
 - `Submodule.starProjection`
 - `Submodule.isSymmetricProjection_starProjection`
@@ -113,7 +113,7 @@ So the obstruction is not the absence of positivity infrastructure *per se*.
 The missing part is the exact connection from the current `localTerm`
 definition to a positive operator on `EuclideanSpace`.
 
-### 3. New candidate route for positivity packaging
+### 3. New candidate route for positivity formulation
 
 While re-reading `Defs.lean` and `CyclicWindow.lean`, I found a concrete route
 that seems mathematically correct, but it is **not yet formalized** in current
@@ -202,7 +202,7 @@ This confirms two important facts:
 
 1. the lifted cyclic restriction maps `Rᵢ,τ` exist as linear maps between the
    relevant Euclidean spaces and have adjoints; and
-2. the local projector `P_L` is already packaged as a positive operator.
+2. the local projector `P_L` is already available as a positive operator.
 
 ### 5. Why I am not claiming a proof
 
@@ -211,7 +211,7 @@ configuration-wise definition of `localTerm` to the averaged positive-conjugate
 formula above. That equality is combinatorial and nontrivial; it is not a one-
 line theorem search exercise.
 
-Even if that positivity package were landed, the **quantitative** part of
+Even if that positivity formulation were landed, the **quantitative** part of
 `parentHamiltonianES_gap_bound_of_friedrichs` would still remain:
 
 - the Friedrichs-angle / anti-commutator estimate for overlapping local ground
@@ -219,7 +219,7 @@ Even if that positivity package were landed, the **quantitative** part of
 - the finite-overlap row-sum bound in the exact coefficient form expected by the
   martingale inequality.
 
-So sub-goal (A) is still honestly blocked on current `main`.
+So sub-goal (A) is still blocked on current `main`.
 
 ## Result of the fallback attempt (B)
 
@@ -257,11 +257,11 @@ Without such a theorem, there is still no sound route from
 `ψ ∈ chainGroundSpace (toTensorFromBlocks μ A) L N` to membership in the span of
 block MPVs.
 
-So sub-goal (B) is also still honestly blocked on current `main`.
+So sub-goal (B) is also still blocked on current `main`.
 
 ## Recommended next PR targets
 
-### A. Positivity-packaging infrastructure PR (local to `ParentHamiltonian`)
+### A. Positivity formulation infrastructure PR (local to `ParentHamiltonian`)
 
 The most actionable next step on the martingale side is:
 
