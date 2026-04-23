@@ -33,6 +33,7 @@ original names, including
 `isNormal_of_tp_primitive_irreducible`,
 `isIrreducibleTensor_blockTensor_of_tp_primitive_irr`,
 `exists_cyclic_sector_decomp_of_TP_of_isIrreducibleTensor`,
+`primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking_of_projStep`,
 `bilateral_commonPeriod_blocking_tp_primitive_normal`, and
 `fundamentalTheorem_after_blocking_1606_structural`.
 
