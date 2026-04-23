@@ -615,14 +615,18 @@ The following is Theorem~3.8 (``equal case'') of \cite{DeLasCuevas2017Irreducibl
 
 \begin{remark}[Proportional periodic FT]\notready
     \label{rem:periodic_ft_proportional}
-    \lean{MPSTensor.fundamentalTheorem_periodic_proportional}
+    \lean{MPSTensor.fundamentalTheorem_periodic_proportional_ofProportionalDecomp}
     There is also a proportional-case version of the periodic Fundamental Theorem
-    (Theorem~3.4, ``proportional case'', in \cite{DeLasCuevas2017Irreducible}):
-    if $\mathcal{V}(A) = \lambda_N \mathcal{V}(B)$ for scalars $\lambda_N$ with
-    $\lambda_N \to \lambda \neq 0$, then the bases of periodic tensors of $A$
-    and $B$ are equivalent (up to the same gauge and $Z$ freedom as above).
-    This extends Theorems~\ref{thm:ft_proportional}
-    and~\ref{thm:ft_proportional_nt} to the periodic setting.
+    (Theorem~3.4, ``proportional case'', in \cite{DeLasCuevas2017Irreducible}).
+    The current Lean endpoint is a \emph{split-data} theorem: if one has periodic
+    block families together with explicit decompositions of two total MPV families
+    into those blocks, coefficient arrays converging to nonzero limits, and
+    proportionality $\mathcal{V}(A_{\mathrm{tot}}) = \lambda_N
+    \mathcal{V}(B_{\mathrm{tot}})$ with $\lambda_N \to \lambda \neq 0$, then the
+    bases of periodic tensors match up to the same repeated-block/gauge freedom as
+    above.  This extends Theorems~\ref{thm:ft_proportional}
+    and~\ref{thm:ft_proportional_nt} to the periodic setting while isolating the
+    remaining coefficient-extraction input from irreducible-form assembly.
 \end{remark}
 
 \section{Physical symmetries on periodic MPS}\label{sec:periodic_symmetry}
