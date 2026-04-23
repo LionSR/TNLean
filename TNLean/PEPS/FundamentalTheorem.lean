@@ -1,4 +1,5 @@
-import TNLean.PEPS.Defs
+import TNLean.PEPS.Blocking
+import TNLean.PEPS.LocalGauge
 import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Defs
 import Mathlib.Combinatorics.SimpleGraph.Connectivity.Connected
 
@@ -13,10 +14,13 @@ import Mathlib.Combinatorics.SimpleGraph.Connectivity.Connected
 -- inverse on its image and removes the old definitional blocker.
 --
 -- The remaining `sorry`s split into two groups:
--- * `localGauge_exists`, `gaugeConsistency`, and the `hDim` step in
---   `fundamentalTheorem_PEPS` still require the virtual-insertion / blocking
---   argument from arXiv:1804.04964 §3 that reduces each star neighbourhood to a
---   3-site MPS chain.
+-- * `gaugeConsistency` and the `hDim` step in `fundamentalTheorem_PEPS` still
+--   require the full edge-centred reduction from arXiv:1804.04964 §3. The
+--   local left inverse and the elementary blocking data now live in
+--   `PEPS/VirtualInsertion` and `PEPS/Blocking`, and `localGauge_exists` has
+--   been reduced to the sharper local hypothesis `HasLocalGaugeLift`, but the
+--   blocked middle tensor and the comparison with the 3-site MPS theorem are
+--   still missing.
 -- * `gauge_unique_up_to_scalar` additionally needs statement repair: the
 --   current global-scalar conclusion fails on a connected triangle with bond
 --   dimension `1`.
@@ -114,14 +118,6 @@ def GaugeEquiv (A B : Tensor G d) : Prop :=
         gaugeVertex A X v η σ
 
 /-! ### Gauge invariance of PEPS state -/
-
-/-- The lower endpoint incidence of an ordered edge. -/
-private def edgeLeftIncident (e : Edge G) : IncidentEdge G e.1.1 :=
-  ⟨e, Or.inl rfl⟩
-
-/-- The upper endpoint incidence of an ordered edge. -/
-private def edgeRightIncident (e : Edge G) : IncidentEdge G e.1.2 :=
-  ⟨e, Or.inr rfl⟩
 
 /-- Incidences of vertices with edges are the same as choosing an edge and one
 of its two ordered endpoints. -/
@@ -347,7 +343,21 @@ private lemma sum_local_with_edge_deltas (A : Tensor G d) (σ : V → Fin d) :
                   if ξ e.1.1 (edgeLeftIncident (G := G) e) =
                       ξ e.1.2 (edgeRightIncident (G := G) e) then (1 : ℂ) else 0) =
                   if IsConsistent A ξ then 1 else 0 := by
-              simp [IsConsistent, Finset.prod_boole]
+              simpa [IsConsistent] using
+                (Fintype.prod_boole
+                  (p := fun e : Edge G =>
+                    ξ e.1.1 (edgeLeftIncident (G := G) e) =
+                      ξ e.1.2 (edgeRightIncident (G := G) e)) :
+                  (∏ e : Edge G,
+                    ite
+                      (ξ e.1.1 (edgeLeftIncident (G := G) e) =
+                        ξ e.1.2 (edgeRightIncident (G := G) e))
+                      (1 : ℂ) 0) =
+                    ite
+                      (∀ e : Edge G,
+                        ξ e.1.1 (edgeLeftIncident (G := G) e) =
+                          ξ e.1.2 (edgeRightIncident (G := G) e))
+                      (1 : ℂ) 0)
             rw [hprod]
             by_cases h : IsConsistent A ξ <;> simp [h]
       _ = ∑ ξ : {ξ : LocalConfig (G := G) A // IsConsistent A ξ}, F ξ.1 := by
@@ -478,44 +488,25 @@ noncomputable def localTensorEval (A : Tensor G d) (v : V)
   ∑ η : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1),
     (∏ ie : IncidentEdge G v, f ie (η ie)) * A.component v η σ
 
-/-- At a single vertex, `SameState` plus injectivity forces a local gauge
-relation between the two tensors.
+/-- Under the sharper local hypothesis `HasLocalGaugeLift`, one obtains a
+factorized local gauge relation at `v`.
 
-This is the PEPS analogue of the MPS linear-extension step: injectivity at `v`
-provides a left inverse, and `SameState` (contracted over all other vertices)
-constrains the relationship to a linear isomorphism on the virtual indices of
-`v`.
-
-The conclusion gives one `GL` per edge (indexed by `Edge G`), consistent with
-the global gauge type in `gaugeConsistency`. Only the values at edges incident
-to `v` are constrained; the rest are arbitrary. -/
--- TODO (provability): The factorised per-edge form (independent GL per edge)
--- requires the virtual-insertion / blocking argument from arXiv:1804.04964 §3
--- (reducing each star neighbourhood to a 3-site MPS chain and applying the
--- 1D Fundamental Theorem). A naïve single-vertex argument only yields a
--- *general* invertible map on the full virtual space of v, not the per-edge
--- factorisation. This will need substantial infrastructure not yet in TNLean.
---
--- Note: the hypothesis `IsVertexInjective` is now the linear-independence
--- formulation (issue #633), which gives each `A.component v` a left inverse
--- on its image — the same data used by the paper's local extraction step.
--- The remaining obstruction is purely the per-edge factorisation, not the
--- injectivity notion itself.
+The local left inverse and the canonical candidate operator now live in
+`PEPS/LocalGauge`. The remaining PEPS-Fundamental-Theorem gap is to derive
+`HasLocalGaugeLift` from `SameState` via the blocked-middle / three-site-MPS
+reduction from arXiv:1804.04964 §3. -/
 theorem localGauge_exists (A B : Tensor G d)
-    (hA : IsVertexInjective A) (hB : IsVertexInjective B)
-    (hAB : SameState A B)
-    (hDim : A.bondDim = B.bondDim) (v : V) :
+    (hA : IsVertexInjective A)
+    (hDim : A.bondDim = B.bondDim) (v : V)
+    (hLift : HasLocalGaugeLift A B hA hDim v) :
     ∃ (Xv : (e : Edge G) → GL (Fin (A.bondDim e)) ℂ),
       ∀ (η : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1)) (σ : Fin d),
         B.component v (fun ie => Fin.cast (congr_fun hDim ie.1) (η ie)) σ =
           ∑ η' : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1),
             (∏ ie : IncidentEdge G v,
               (↑(Xv ie.1) : Matrix _ _ ℂ) (η ie) (η' ie)) *
-              A.component v η' σ := by
-  -- TODO: use injectivity of A at v to define a left inverse,
-  -- then extract the gauge matrix from the SameState condition.
-  -- This requires the virtual-insertion argument (see TODO above).
-  sorry
+              A.component v η' σ :=
+  localGauge_exists_of_liftData A B hA hDim v hLift
 
 /-! ### Gauge consistency across edges -/
 
@@ -534,13 +525,12 @@ theorem gaugeConsistency (A B : Tensor G d)
       ∀ (v : V) (η : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1)) (σ : Fin d),
         B.component v (fun ie => Fin.cast (congr_fun hDim ie.1) (η ie)) σ =
           gaugeVertex A X v η σ := by
-  -- TODO: combine localGauge_exists at each vertex with consistency
-  -- across shared edges. The key step is: for each edge e = (u,v),
-  -- the gauge obtained from u's local extraction and v's local extraction
-  -- must agree (because the SameState condition couples them).
-  -- Missing lemma: a virtual-insertion theorem showing that the local gauges
-  -- extracted from the two endpoint blockings act as inverse-transposes on the
-  -- shared edge, with the orientation convention in `edgeGaugeAt`.
+  -- TODO: first derive `HasLocalGaugeLift A B hA hDim v` from `SameState`
+  -- at each vertex via the blocked-middle / three-site-MPS reduction, then
+  -- combine the resulting local gauges across shared edges. The key remaining
+  -- consistency step is: for each edge e = (u,v), the gauges extracted from u
+  -- and v must agree as inverse-transposes, with the orientation convention in
+  -- `edgeGaugeAt`.
   sorry
 
 /-! ### Main theorem -/
@@ -552,9 +542,9 @@ the same state, then they are gauge-equivalent: there exist invertible matrices
 `X_e` on each edge such that `B` is the gauge transform of `A`.
 
 The proof proceeds in two stages:
-1. **Local extraction** (`localGauge_exists`): at each vertex, injectivity
-   provides a left inverse that converts the SameState condition into a
-   local gauge relation.
+1. **Local extraction** (`localGauge_exists`): after proving the sharper local
+   hypothesis `HasLocalGaugeLift`, injectivity and the chosen left inverse
+   produce a factorized local gauge relation.
 2. **Global consistency** (`gaugeConsistency`): local gauges along shared
    edges are shown to be compatible, yielding a single coherent family of
    edge gauges.
