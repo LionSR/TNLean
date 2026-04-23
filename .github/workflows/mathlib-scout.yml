@@ -96,6 +96,6 @@ jobs:
             5. Do NOT create any files, branches, or PRs. Only post the scouting comment.
 
           claude_args: |
-            --model claude-opus-4-7
+            --model claude-sonnet-4-6
             --allowedTools "Read,Glob,Grep,Bash(lean *),Bash(lake env),mcp__github__add_issue_comment,mcp__github__issue_read"
             --append-system-prompt "This is a Lean 4 / Mathlib repository for quantum information theory (MPS tensors, quantum channels, Wielandt theorem). Your ONLY task is to scout Mathlib and the existing codebase for relevant lemmas and post a scouting report. Do NOT write code or create files. Be thorough — search multiple keywords and naming conventions. Mathlib sources are under .lake/packages/mathlib/Mathlib/."
