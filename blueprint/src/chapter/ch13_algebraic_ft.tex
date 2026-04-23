@@ -1594,15 +1594,30 @@ Theorem~2 of~\cite{Molnar2018NormalPEPS}.
     Every vertex is either $u$, $v$, or different from both.
 \end{proof}
 
+\begin{definition}[Sharpened local gauge lift datum]%
+    \label{def:peps_hasLocalGaugeLift}
+    \lean{TNLean.PEPS.HasLocalGaugeLift}
+    \leanok
+    \uses{def:peps_localTensorMap, def:peps_localLeftInverse}
+    For fixed $A$, $B$, a bond-dimension equality, and a vertex $v$, this
+    packages the two local conclusions still needed from the blocked-middle
+    reduction in~\cite{Molnar2018NormalPEPS}, §3:
+    (i) each local component of $B$ lies in the image of the local tensor map
+    of $A$, and (ii) the canonical pullback through the chosen left inverse of
+    $A$ factorizes as one invertible matrix on each incident edge.
+\end{definition}
+
 \begin{theorem}[Local gauge extraction]%
     \label{thm:localGauge_exists}
     \lean{TNLean.PEPS.localGauge_exists}
     \notready
-    \uses{def:gaugeVertex, def:localTensorEval, def:IsVertexInjective}
-    At a single vertex, vertex-injectivity of both tensors and the
-    same-state condition force a local gauge relation.
-    Schematically, injectivity on the star neighbourhood provides a left
-    inverse that isolates the local edge gauges:
+    \uses{def:peps_hasLocalGaugeLift, def:localTensorEval}
+    Lean now proves the local gauge formula from the sharper hypothesis
+    \lean{TNLean.PEPS.HasLocalGaugeLift}. What remains open is to derive this
+    local lift datum from the global same-state hypothesis via the blocked
+    middle tensor and the corresponding three-site injective-chain argument.
+    Under that hypothesis, injectivity on the star neighbourhood provides a
+    left inverse that isolates the local edge gauges:
     \[
         \TNPEPSLocalGaugeExtraction
     \]
