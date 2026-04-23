@@ -116,6 +116,37 @@ theorem sameMPV₂_blockTensor_of_sameMPV₂_toTensorFromBlocks
             (fun k => (μ k) ^ p)
             (fun k => blockTensor (d := d) (D := dim k) (blocks k) p) σ).symm
 
+/-- Blocking preserves `SameMPV₂` directly. -/
+theorem sameMPV₂_blockTensor
+    {D₁ D₂ : ℕ}
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (hSame : SameMPV₂ A B) (p : ℕ) :
+    SameMPV₂
+      (blockTensor (d := d) (D := D₁) A p)
+      (blockTensor (d := d) (D := D₂) B p) := by
+  intro N σ
+  classical
+  set flat : List (Fin d) := flattenBlockedWord d p (List.ofFn σ) with flat_def
+  have hlen : flat.length = N * p := by
+    simpa [flat_def] using (length_flattenBlockedWord (d := d) (L := p) (List.ofFn σ))
+  set σflat : Fin (N * p) → Fin d :=
+    fun i => flat.get (Fin.cast hlen.symm i) with σflat_def
+  have hofFn : List.ofFn σflat = flat := by
+    rw [σflat_def]
+    conv_rhs => rw [← List.ofFn_get flat]
+    have hcongr :=
+      (List.ofFn_congr (m := N * p) (n := flat.length) hlen.symm
+        (fun i : Fin (N * p) => flat.get (Fin.cast hlen.symm i)))
+    simpa [Function.comp, Fin.cast_cast] using hcongr
+  have hblock (D' : ℕ) (T : MPSTensor d D') :
+      mpv (blockTensor (d := d) (D := D') T p) σ = mpv T σflat := by
+    simp [mpv, coeff, hofFn, flat_def, evalWord_blockTensor]
+  calc
+    mpv (blockTensor (d := d) (D := D₁) A p) σ
+        = mpv A σflat := hblock D₁ A
+    _ = mpv B σflat := hSame (N * p) σflat
+    _ = mpv (blockTensor (d := d) (D := D₂) B p) σ := (hblock D₂ B).symm
+
 end SameMPV₂Blocking
 
 /-!
