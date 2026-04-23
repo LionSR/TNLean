@@ -10,6 +10,8 @@ import TNLean.Channel.KrausRank
 import TNLean.Channel.KrausRepresentation
 import TNLean.Channel.KrausUnitaryFreedom
 import TNLean.Channel.Stinespring
+import TNLean.Channel.OrderedCP
+import TNLean.Channel.RadonNikodym
 import TNLean.Channel.POVM
 import TNLean.Channel.POVM.Uniqueness
 import TNLean.Channel.TransferMatrix
@@ -59,6 +61,31 @@ representations of quantum channels.
   - `stinespring_dual_representation` — `T*(A) = V†(A ⊗ 𝟙)V` ✅
   - `stinespringV_isometry_iff_kraus_normalized` — `V†V = 𝟙` ↔ TP ✅
   - `stinespring_schrodinger_representation` — `T(ρ) = tr_r(VρV†)` ✅
+
+* **Thm 2.3** (Ordered CP-maps, canonical form):
+  - `CPDominates` — CP partial order (`S - T` is CP) ✅
+  - `Matrix.blockTopRows` — block-top rectangular co-isometry
+    `C : ℂ^{r+s} → ℂ^r` ✅
+  - `Matrix.blockTopRows_conjTranspose_mul_le_one` — `Cᴴ C ≤ 𝟙` (contraction) ✅
+  - `stinespringV_eq_kronecker_blockTopRows_mul_append` — intertwining
+    `V₁ = (𝟙 ⊗ C) * V₂` on concatenated Kraus families ✅
+  - `CPDominates.exists_stinespring_contraction` — existential: `T₁ ≤ T₂`
+    gives Stinespring isometries related by a contraction on the dilation
+    space ✅
+
+* **Thm 2.4** (Radon–Nikodym for CP maps, binary form):
+  - `Matrix.blockDiagTopProj`, `Matrix.blockDiagBotProj` — orthogonal block
+    projectors on the dilation space ✅
+  - `Matrix.blockDiagTopProj_add_blockDiagBotProj` — `P_top + P_bot = 𝟙` ✅
+  - `IsCPMap.exists_radon_nikodym` — `T = T₁ + T₂` CP gives PSD `P₁ + P₂ = 𝟙`
+    and `Tᵢ(A) = V† (A ⊗ Pᵢ) V` ✅
+
+* **Thm 2.5** (Open-system representation, reduced form):
+  - `IsChannel.exists_stinespring_open_system` — every CPTP map is the
+    reduced dynamics `T(ρ)_{ij} = ∑ₖ (V ρ V†)_{(i,k),(j,k)}` of an
+    isometry `V` ✅
+  - `IsChannel.exists_stinespring_open_system_traceRight` — same identity
+    expressed as `T(ρ) = (V ρ V†).traceRight` ✅
 
 * **Thm 2.6** (Naimark / Neumark dilation for POVMs):
   - `POVM` — positive operator-valued measure structure ✅
@@ -128,9 +155,7 @@ representations of quantum channels.
 | Prop 2.2 (decomp into CP) | Straightforward from CJ |
 | Prop 2.3 (no info w/o disturbance) | Needs pure state uniqueness |
 | Prop 2.4 (equiv of ensembles) | Needs purification/Schmidt decomp |
-| Thm 2.3 (ordered CP-maps) | Needs Stinespring + contraction |
-| Thm 2.4 (Radon-Nikodym) | Follows from Thm 2.3 |
-| Thm 2.5 (open-system representation) | Embedding into unitary |
+| Thm 2.5 (unitary open-system form) | Needs isometry → unitary extension |
 | §2.3 Lorentz normal form (existence) | Needs SVD of transfer matrix |
 | §2.3 SVD representation (existence) | Needs Mathlib SVD |
 
