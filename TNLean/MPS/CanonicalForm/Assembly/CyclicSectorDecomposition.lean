@@ -664,8 +664,9 @@ transfer map to the compressed cyclic-sector tensors.
 
 The only remaining input beyond the cyclic-sector decomposition data is the
 corner irreducibility theorem for `((transferMap A†)^m)` on each projection
-`P k`. In particular, this theorem isolates the orbit-sum / `hLift` part of the
-non-periodic Gap §1 pipeline from the downstream compression-transport step. -/
+`P k`. In particular, this theorem isolates the orbit-sum / `hProjStep` part of
+the non-periodic Gap §1 proof chain from the downstream compression-transport
+step. -/
 theorem primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking_of_cornerIrreducible
     {d D m : ℕ} [NeZero D] [NeZero m]
     (A : MPSTensor d D)
@@ -751,7 +752,7 @@ theorem primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking_o
 /-- Under the one-step projection-preservation hypothesis `hProjStep`, the cyclic
 sector blocks produced after blocking are primitive and tensor-irreducible.
 
-This packages the orbit-sum part of the argument through
+This combines the orbit-sum part of the argument via
 `isIrreducibleOnCorner_of_cyclic_decomp_mps_of_projStep` and then applies the
 compression transport theorem above. The residual non-periodic Gap §1 blocker is
 therefore isolated exactly to the one-step `hProjStep` input. -/
