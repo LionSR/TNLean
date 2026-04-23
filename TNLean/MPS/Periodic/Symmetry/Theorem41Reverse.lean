@@ -2,6 +2,7 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
+import TNLean.Channel.KrausRank
 import TNLean.MPS.Periodic.Symmetry.Theorem41Forward
 
 /-!
@@ -32,12 +33,46 @@ Morally, if `transferMap B = (E')^p` for a CPTP map `E'`, one would like to choo
 representation `A` of `E'` with exactly `d` Kraus operators. In general the minimum Kraus
 rank of `E'` may exceed `d`, so formalising this step requires a Kraus-rank reduction /
 canonical-form argument (the analogue of left-canonical reduction used for the forward
-direction). We expose the end-result as a hypothesis in the same style as
-`PRefinementCanonicalization`. -/
+direction). The theorem `pRefinementInverseCanonicalization_of_rootKrausRankBound` below
+shows that it is enough to prove a bounded-Kraus-rank statement for the root channel. -/
 def PRefinementInverseCanonicalization (d D p : ℕ) : Prop :=
   ∀ {B : MPSTensor d D}, IsIrreducibleForm B →
     IsPDivisibleChannel (transferMap B) p →
     ∃ A : MPSTensor d D, transferMap B = transferMap (blockTensor A p)
+
+/-- A bounded Kraus-rank witness for a channel root can be re-packaged as an
+`MPSTensor` with the ambient physical dimension by zero-padding the Kraus family. -/
+theorem exists_tensor_of_hasKrausRankLE
+    {E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
+    (hE : Channel.HasKrausRankLE (D := D) E d) :
+    ∃ A : MPSTensor d D, transferMap A = E := by
+  rcases hE with ⟨s, hs, hE⟩
+  obtain ⟨K, hK⟩ := Channel.hasKrausCard_mono (D := D) hE hs
+  refine ⟨K, ?_⟩
+  ext X i j
+  simpa [transferMap_apply] using congrArg (fun M => M i j) (hK X).symm
+
+/-- A clean root-cardinality hypothesis that isolates the remaining Kraus-rank
+step in the reverse direction of Theorem 4.1. -/
+def PRefinementInverseRootKrausRankBound (d D p : ℕ) : Prop :=
+  ∀ {B : MPSTensor d D}, IsIrreducibleForm B →
+    ∀ {E' : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ},
+      IsChannel E' → transferMap B = E' ^ p → Channel.HasKrausRankLE (D := D) E' d
+
+/-- A bounded-Kraus-rank root hypothesis is enough to recover the existing
+inverse canonicalization hypothesis. -/
+theorem pRefinementInverseCanonicalization_of_rootKrausRankBound
+    (hRoot : PRefinementInverseRootKrausRankBound d D p) :
+    PRefinementInverseCanonicalization d D p := by
+  intro B hB hDivisible
+  rcases hDivisible with ⟨E', hE'chan, hpow⟩
+  have hRank : Channel.HasKrausRankLE (D := D) E' d := hRoot hB hE'chan hpow
+  obtain ⟨A, hA⟩ := exists_tensor_of_hasKrausRankLE (d := d) (D := D) hRank
+  refine ⟨A, ?_⟩
+  calc
+    transferMap B = E' ^ p := hpow
+    _ = (transferMap A) ^ p := by rw [← hA]
+    _ = transferMap (blockTensor A p) := by rw [transferMap_blockTensor]
 
 /-- **Reverse direction of Theorem 4.1 (conditional form).**
 

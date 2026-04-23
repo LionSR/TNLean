@@ -162,8 +162,10 @@ theorem omegaSlice_eq_single (i₂ j₂ : Fin D) :
   · subst hb; simp [ha, show ¬(i₂ = a) from Ne.symm ha]
   · simp [ha, hb, show ¬(i₂ = a) from Ne.symm ha, show ¬(j₂ = b) from Ne.symm hb]
 
+namespace Internal
+
 /-- `K * (c * c̄ · E_{i,j}) * K† = c · K_col(i) ⊗ c̄ · K_col(j)†` as an outer product. -/
-private theorem mul_single_mul_conjTranspose_eq_vecMulVec
+theorem mul_single_mul_conjTranspose_eq_vecMulVec
     (K : Matrix (Fin D) (Fin D) ℂ)
     (c : ℂ)
     (i₂ j₂ : Fin D) :
@@ -178,6 +180,8 @@ private theorem mul_single_mul_conjTranspose_eq_vecMulVec
   ext i₁ j₁
   simp [Matrix.vecMulVec_apply, Matrix.conjTranspose_apply, Matrix.col, Matrix.row]
   ring_nf
+
+end Internal
 
 /-- The omega coefficient `(1/√D)·(1/√D) = 1/D`. -/
 private theorem omegaCoeff_eq_inv (hd : 0 < D) :
@@ -272,7 +276,7 @@ theorem choiMatrix_of_kraus_posSemidef
     refine Finset.sum_congr rfl ?_
     intro x _
     simpa [Matrix.vecMulVec_apply] using congrArg (fun M => M i₁ j₁)
-      (mul_single_mul_conjTranspose_eq_vecMulVec (K := K x) (c := c) i₂ j₂)
+      (Internal.mul_single_mul_conjTranspose_eq_vecMulVec (K := K x) (c := c) i₂ j₂)
   rw [hchoi]
   refine Matrix.posSemidef_sum (s := Finset.univ)
     (x := fun i =>
@@ -384,7 +388,7 @@ theorem cp_iff_choi_posSemidef [NeZero D] :
                       (v m (a, i) / c) * star (v m (b, j) / c) := by
                     simpa [K, Matrix.vecMulVec_apply] using
                       congrArg (fun M => M a b)
-                        (mul_single_mul_conjTranspose_eq_vecMulVec
+                        (Internal.mul_single_mul_conjTranspose_eq_vecMulVec
                           (K := K m) (c := (1 : ℂ)) i j)
                   rw [hterm]
                   simp [div_eq_mul_inv, hstarc, hc, mul_assoc, mul_left_comm, mul_comm]
@@ -615,7 +619,7 @@ theorem exists_cpMap_of_choi_posSemidef [NeZero D]
       refine Finset.sum_congr rfl ?_
       intro x _
       simpa [Matrix.vecMulVec_apply] using congrArg (fun M => M i₁ j₁)
-        (mul_single_mul_conjTranspose_eq_vecMulVec (K := K x) (c := c) i₂ j₂)
+        (Internal.mul_single_mul_conjTranspose_eq_vecMulVec (K := K x) (c := c) i₂ j₂)
     simpa [T, K, div_eq_mul_inv, hstarc, hc, mul_assoc, mul_left_comm, mul_comm] using hchoi'
   refine ⟨T, ⟨r, K, fun X => rfl⟩, ?_⟩
   exact hchoi.trans hτeq.symm
