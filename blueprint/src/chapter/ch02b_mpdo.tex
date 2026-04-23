@@ -437,9 +437,37 @@ strong subadditivity for a normalized three-site reduced state.
     The auxiliary predicates record three matrix-theoretic ingredients used in
     the rank-one step of Appendix~C.2, Lemma~C.4: constant traces of all
     positive powers, existence of a rank-one factorization $T = a b^\top$, and
-    the Perron--Frobenius implication from primitivity together with constant
-    trace powers to such a factorization.
+    an additional rank-one hypothesis imposed at this stage of the argument.
+    The formal development shows that primitivity together with constant trace
+    powers does not by itself force rank one for arbitrary nonnegative
+    matrices, so the final input must come from stronger local structure.
 \end{definition}
+
+\begin{proposition}[Primitive matrices with constant trace powers need not be rank one]
+    \label{prop:primitive_trace_powers_not_rank_one}
+    \lean{Matrix.primitiveTraceCounterexample}
+    \lean{Matrix.primitiveTraceCounterexample_isPrimitive}
+    \lean{Matrix.primitiveTraceCounterexample_tracePowersConstant}
+    \lean{Matrix.primitiveTraceCounterexample_not_hasRankOneFactorization}
+    \leanok
+    There exists a primitive nonnegative $3 \times 3$ matrix whose positive
+    powers all have the same trace, but which is not of the form $a b^\top$.
+\end{proposition}
+
+\begin{proof}
+    \leanok
+    The formal counterexample is
+    \[
+        \begin{pmatrix}
+            0 & 0 & 1/2 \\
+            1/2 & 1/2 & 0 \\
+            1/2 & 1/2 & 1/2
+        \end{pmatrix}.
+    \]
+    Its square is strictly positive, so it is primitive; its cube equals its
+    square, so all positive powers have trace $1$; and its first two rows are
+    not proportional, so it is not rank one.
+\end{proof}
 
 \begin{theorem}[SAL and ZCL imply rank-one $T$ (scoped form)]
     \label{thm:sal_zcl_implies_rank_one_t}
@@ -448,9 +476,9 @@ strong subadditivity for a normalized three-site reduced state.
     \uses{def:matrix_trace_rankone_predicates}
     Let $T$ be the nonnegative matrix extracted from the local $\eta$-data.
     Assume that $T$ is primitive, that $\tr(T) = 1$, and that every positive
-    power of $T$ has the same trace as $T$. If one further supplies the single
-    Perron--Frobenius input asserting that every primitive nonnegative matrix
-    with constant trace powers is rank one, then
+    power of $T$ has the same trace as $T$. If one further supplies the
+    additional rank-one input packaged in
+    Definition~\ref{def:matrix_trace_rankone_predicates}, then
     \[
         T = a b^\top
     \]
@@ -463,7 +491,7 @@ strong subadditivity for a normalized three-site reduced state.
 \begin{proof}
     \leanok
     \uses{def:matrix_trace_rankone_predicates}
-    The Perron--Frobenius input gives the factorization $T = a b^\top$.
+    The auxiliary rank-one input gives the factorization $T = a b^\top$.
     Taking traces and using $\tr(a b^\top) = a \cdot b$ converts the
     normalization $\tr(T) = 1$ into $a \cdot b = 1$.
 \end{proof}
