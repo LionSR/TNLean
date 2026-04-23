@@ -51,7 +51,6 @@ import TNLean.Channel.PartialTrace
 import TNLean.Channel.MaximallyEntangled
 import TNLean.Channel.TensorMap
 import TNLean.Channel.ChoiJamiolkowski
-import TNLean.Channel.KrausRank
 import TNLean.Channel.KrausRepresentation
 import TNLean.Channel.KrausUnitaryFreedom
 import TNLean.Channel.Stinespring
@@ -71,7 +70,6 @@ import TNLean.Axioms.Entropy
 -- from `TNLean.Axioms.Entropy`; the `TNLean.Entropy.*` modules
 -- re-state the sanctioned entropy axioms under the Entropy namespace.
 import TNLean.Entropy.VonNeumann
-import TNLean.Entropy.TripartiteTrace
 import TNLean.Entropy.StrongSubadditivity
 import TNLean.Entropy.MarkovChain
 import TNLean.Entropy.MutualInformation
@@ -255,6 +253,7 @@ import TNLean.MPS.MPDO.SimpleLocalStructure
 import TNLean.MPS.MPDO.FusionIsometries
 import TNLean.MPS.MPDO.AlgebraStructure
 import TNLean.MPS.MPDO.CommutingForm
+import TNLean.MPS.MPDO.BlockedRFPAssembly
 
 -- MPS examples
 import TNLean.MPS.Examples.AKLT
@@ -339,7 +338,4 @@ import TNLean.Channel.Determinant
 
 -- PEPS (exploratory)
 import TNLean.PEPS.Defs
-import TNLean.PEPS.VirtualInsertion
-import TNLean.PEPS.Blocking
-import TNLean.PEPS.LocalGauge
 import TNLean.PEPS.FundamentalTheorem
