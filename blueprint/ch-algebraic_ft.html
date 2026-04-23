@@ -1787,7 +1787,7 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   Let \(A_1, A_2\) and \(B_1, B_2\) be injective MPS tensors with the same bond dimension \(D\). Suppose that for all \(X \in M_{D}(\mathbb {C})\) (on the internal bond) and all \(Y \in M_{D}(\mathbb {C})\) (on the external bond), </p>
-<div class="displaymath" id="<plasTeX.TeXFragment object at 0x7f533d5ffb90>">
+<div class="displaymath" id="<plasTeX.TeXFragment object at 0x7f376cb71190>">
   \begin{align}  \operatorname{tr}(A_1^{i}\,  X\,  A_2^{j}) & = \operatorname{tr}(B_1^{i}\,  X\,  B_2^{j}) \qquad \text{for all } i, j, \label{eq:internal_bond}\\ \operatorname{tr}(A_2^{j}\,  Y\,  A_1^{i}) & = \operatorname{tr}(B_2^{j}\,  Y\,  B_1^{i}) \qquad \text{for all } i, j. \label{eq:external_bond} \end{align}
 </div>
 <p> Diagrammatically, Eq.&#160;?? is the equality obtained by inserting \(X\) on the bond between the two sites, </p>
@@ -6773,20 +6773,42 @@
 
   </div>
 </div>
-<div class="remark_thmwrapper theorem-style-remark" id="a0000001080">
-  <div class="remark_thmheading">
-    <span class="remark_thmcaption">
-    Remark
+<div class="definition_thmwrapper theorem-style-definition" id="def:GaugeEquivModEdgeScalars">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
     </span>
-    <span class="remark_thmlabel">17.80</span>
-    <span class="remark_thmtitle">Scalar-uniqueness caveat</span>
+    <span class="definition_thmlabel">17.80</span>
+    <span class="definition_thmtitle">Gauge equivalence modulo balanced edge scalars</span>
     <div class="thm_header_extras">
 
+    
+    ✓
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-algebraic_ft.html#a0000001080">#</a>
+    <a class="icon proof" href="ch-algebraic_ft.html#def:GaugeEquivModEdgeScalars">#</a>
     
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-algebraic_ft.html#def:edgeGaugeAt">Definition 17.61</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
     
     
     <button class="modal lean">L∃∀N</button>
@@ -6800,6 +6822,8 @@
         
         <ul class="uses">
           
+          <li><a href="../docs/find/#doc/TNLean.PEPS.GaugeEquivModEdgeScalars" class="lean_decl">TNLean.PEPS.GaugeEquivModEdgeScalars</a></li>
+          
         </ul>
     
       </div>
@@ -6808,8 +6832,157 @@
     
         </div>
   </div>
-  <div class="remark_thmcontent">
-  <p>  The stated global-scalar uniqueness claim is too strong. On a triangle with all bond dimensions equal to \(1\), edge scalars \((a,a^{-1},a)\) preserve every local tensor yet are not all multiples of \((1,1,1)\) when \(a \neq \pm 1\). The expected uniqueness statement must therefore quotient the residual edge-gauge freedom by a cocycle-type normalization on the graph. </p>
+  <div class="definition_thmcontent">
+  <p>   Two gauge families are equivalent modulo balanced edge scalars if there is a nonzero scalar \(c_e\) on each edge such that the corresponding endpoint actions rescale the oriented edge gauges, and the oriented product of those endpoint scalars is \(1\) at every vertex. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:GaugeEquivModEdgeScalars_gaugeVertex_eq">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">17.81</span>
+    <span class="theorem_thmtitle">Balanced edge scalars preserve the local gauge action</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-algebraic_ft.html#thm:GaugeEquivModEdgeScalars_gaugeVertex_eq">#</a>
+    
+    <a class="icon proof" href="ch-algebraic_ft.html#a0000001080"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-algebraic_ft.html#def:GaugeEquivModEdgeScalars">Definition 17.80</a></li>
+          
+          <li><a href="ch-algebraic_ft.html#def:gaugeVertex">Definition 17.62</a></li>
+          
+          <li><a href="ch-algebraic_ft.html#def:GaugeEquivModEdgeScalars">Definition 17.80</a></li>
+          
+          <li><a href="ch-algebraic_ft.html#def:gaugeVertex">Definition 17.62</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.GaugeEquivModEdgeScalars.gaugeVertex_eq" class="lean_decl">TNLean.PEPS.GaugeEquivModEdgeScalars.gaugeVertex_eq</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   If two gauge families differ by a balanced edge-scalar reweighting, then they produce the same gauged tensor at every vertex. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000001080">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> In the defining sum for the gauged tensor, each incident edge contributes its endpoint scalar factor in addition to the original gauge entry. The product of these endpoint scalars is \(1\) by the balancing condition, so every summand is unchanged. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:gauge_unique_mod_edge_scalars">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">17.82</span>
+    <span class="theorem_thmtitle">Gauge uniqueness modulo balanced edge scalars</span>
+    <div class="thm_header_extras">
+
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-algebraic_ft.html#thm:gauge_unique_mod_edge_scalars">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-algebraic_ft.html#def:GaugeEquivModEdgeScalars">Definition 17.80</a></li>
+          
+          <li><a href="ch-algebraic_ft.html#def:IsVertexInjective">Definition 17.68</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.gauge_unique_mod_edge_scalars" class="lean_decl">TNLean.PEPS.gauge_unique_mod_edge_scalars</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   If two gauge families relate the same injective PEPS tensor to the same target tensor, then they define the same class modulo balanced edge scalars. This replaces the earlier global-scalar claim, which is false on a triangle with bond dimension \(1\). </p>
 
   </div>
 </div>
@@ -6818,7 +6991,7 @@
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">17.81</span>
+    <span class="remark_thmlabel">17.83</span>
     <div class="thm_header_extras">
 
         </div>
@@ -6832,7 +7005,7 @@
   </div>
   <div class="remark_thmcontent">
   <p>The local left inverse \(\Psi _v\), the realization map \(T \mapsto O_T\), the split at one incident edge, and the partition \(V = \{ u\}  \sqcup (V \setminus \{ u,v\} ) \sqcup \{ v\} \) isolate the local data needed for the edge-centered reduction of &#160;<span class="cite">
-</span>, §3. The remaining three PEPS theorems still require the blocked tensor on the middle region and the comparison with the corresponding three-site injective chain. For the uniqueness endpoint, the current global-scalar conclusion is too strong: a connected triangle with bond dimension \(1\) admits nontrivial edge rescalings whose vertex products are all \(1\). A corrected statement will need an explicit normalization of the edge gauges. </p>
+</span>, §3. The remaining three PEPS theorems still require the blocked tensor on the middle region and the comparison with the corresponding three-site injective chain. The uniqueness endpoint has now been repaired to a quotient by balanced edge scalars, but its proof still requires the same blocking machinery together with the corresponding tensor-factor uniqueness statement at a single vertex. </p>
 
   </div>
 </div>
@@ -6843,7 +7016,7 @@
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">17.82</span>
+    <span class="remark_thmlabel">17.84</span>
     <div class="thm_header_extras">
 
         </div>
