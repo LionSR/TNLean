@@ -60,6 +60,43 @@ section SameMPV₂Blocking
 
 variable {D : ℕ} {r : ℕ} {dim : Fin r → ℕ}
 
+private noncomputable def blockedFlatWord (p : ℕ) {N : ℕ}
+    (σ : Fin N → Fin (blockPhysDim d p)) : List (Fin d) :=
+  flattenBlockedWord d p (List.ofFn σ)
+
+private theorem length_blockedFlatWord (p : ℕ) {N : ℕ}
+    (σ : Fin N → Fin (blockPhysDim d p)) :
+    (blockedFlatWord (d := d) p σ).length = N * p := by
+  simpa [blockedFlatWord] using
+    (length_flattenBlockedWord (d := d) (L := p) (List.ofFn σ))
+
+private noncomputable def blockedFlatConfig (p : ℕ) {N : ℕ}
+    (σ : Fin N → Fin (blockPhysDim d p)) : Fin (N * p) → Fin d :=
+  fun i =>
+    (blockedFlatWord (d := d) p σ).get
+      (Fin.cast (length_blockedFlatWord (d := d) p σ).symm i)
+
+private theorem ofFn_blockedFlatConfig (p : ℕ) {N : ℕ}
+    (σ : Fin N → Fin (blockPhysDim d p)) :
+    List.ofFn (blockedFlatConfig (d := d) p σ) = blockedFlatWord (d := d) p σ := by
+  unfold blockedFlatConfig
+  conv_rhs => rw [← List.ofFn_get (blockedFlatWord (d := d) p σ)]
+  have hcongr :=
+    (List.ofFn_congr (m := N * p) (n := (blockedFlatWord (d := d) p σ).length)
+      (length_blockedFlatWord (d := d) p σ).symm
+      (fun i : Fin (N * p) =>
+        (blockedFlatWord (d := d) p σ).get
+          (Fin.cast (length_blockedFlatWord (d := d) p σ).symm i)))
+  simpa [Function.comp, Fin.cast_cast] using hcongr
+
+private theorem mpv_blockTensor_eq_mpv_blockedFlatConfig
+    {D' : ℕ} (T : MPSTensor d D') (p : ℕ) {N : ℕ}
+    (σ : Fin N → Fin (blockPhysDim d p)) :
+    mpv (blockTensor (d := d) (D := D') T p) σ =
+      mpv T (blockedFlatConfig (d := d) p σ) := by
+  simp [mpv, coeff, ofFn_blockedFlatConfig (d := d) p σ,
+    blockedFlatWord, evalWord_blockTensor]
+
 /-- Blocking distributes over `toTensorFromBlocks`: if
 `SameMPV₂ A (toTensorFromBlocks μ blocks)`, then blocking by `p` on both sides gives
 `SameMPV₂ (blockTensor A p) (toTensorFromBlocks (μ^p) (blockTensor blocks p))`.
@@ -78,29 +115,10 @@ theorem sameMPV₂_blockTensor_of_sameMPV₂_toTensorFromBlocks
       (toTensorFromBlocks (d := blockPhysDim d p)
         (fun k => (μ k) ^ p) (fun k => blockTensor (d := d) (D := dim k) (blocks k) p)) := by
   intro N σ
-  classical
-  -- Build the flattened configuration σflat : Fin (N * p) → Fin d.
-  -- This depends only on σ and p, not on any particular tensor.
-  set flat : List (Fin d) := flattenBlockedWord d p (List.ofFn σ) with flat_def
-  have hlen : flat.length = N * p := by
-    simpa [flat_def] using (length_flattenBlockedWord (d := d) (L := p) (List.ofFn σ))
-  set σflat : Fin (N * p) → Fin d :=
-    fun i => flat.get (Fin.cast hlen.symm i) with σflat_def
-  have hofFn : List.ofFn σflat = flat := by
-    rw [σflat_def]
-    conv_rhs => rw [← List.ofFn_get flat]
-    have hcongr :=
-      (List.ofFn_congr (m := N * p) (n := flat.length) hlen.symm
-        (fun i : Fin (N * p) => flat.get (Fin.cast hlen.symm i)))
-    simpa [Function.comp, Fin.cast_cast] using hcongr
-  -- Key: for ANY tensor T with physical dimension d, mpv (blockTensor T p) σ = mpv T σflat.
-  -- This is because the flattening σ ↦ σflat is independent of the tensor.
-  have hblock (D' : ℕ) (T : MPSTensor d D') :
-      mpv (blockTensor (d := d) (D := D') T p) σ = mpv T σflat := by
-    simp [mpv, coeff, hofFn, flat_def, evalWord_blockTensor]
+  let σflat := blockedFlatConfig (d := d) p σ
   calc
     mpv (blockTensor (d := d) (D := D) A p) σ
-        = mpv A σflat := hblock D A
+        = mpv A σflat := mpv_blockTensor_eq_mpv_blockedFlatConfig (d := d) A p σ
     _ = mpv (toTensorFromBlocks μ blocks) σflat := hSame (N * p) σflat
     _ = ∑ k : Fin r, (μ k) ^ (N * p) • mpv (blocks k) σflat := by
           exact mpv_toTensorFromBlocks_eq_sum μ blocks σflat
@@ -109,12 +127,29 @@ theorem sameMPV₂_blockTensor_of_sameMPV₂_toTensorFromBlocks
           refine Finset.sum_congr rfl fun k _ => ?_
           have hpow : (μ k) ^ (N * p) = ((μ k) ^ p) ^ N := by
             rw [Nat.mul_comm, pow_mul]
-          rw [hpow, (hblock (dim k) (blocks k)).symm]
+          rw [hpow, (mpv_blockTensor_eq_mpv_blockedFlatConfig (d := d) (blocks k) p σ).symm]
     _ = mpv (toTensorFromBlocks (d := blockPhysDim d p)
           (fun k => (μ k) ^ p) (fun k => blockTensor (d := d) (D := dim k) (blocks k) p)) σ := by
           exact (mpv_toTensorFromBlocks_eq_sum
             (fun k => (μ k) ^ p)
             (fun k => blockTensor (d := d) (D := dim k) (blocks k) p) σ).symm
+
+/-- Blocking preserves `SameMPV₂` directly. -/
+theorem sameMPV₂_blockTensor
+    {D₁ D₂ : ℕ}
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (hSame : SameMPV₂ A B) (p : ℕ) :
+    SameMPV₂
+      (blockTensor (d := d) (D := D₁) A p)
+      (blockTensor (d := d) (D := D₂) B p) := by
+  intro N σ
+  let σflat := blockedFlatConfig (d := d) p σ
+  calc
+    mpv (blockTensor (d := d) (D := D₁) A p) σ
+        = mpv A σflat := mpv_blockTensor_eq_mpv_blockedFlatConfig (d := d) A p σ
+    _ = mpv B σflat := hSame (N * p) σflat
+    _ = mpv (blockTensor (d := d) (D := D₂) B p) σ :=
+          (mpv_blockTensor_eq_mpv_blockedFlatConfig (d := d) B p σ).symm
 
 end SameMPV₂Blocking
 
