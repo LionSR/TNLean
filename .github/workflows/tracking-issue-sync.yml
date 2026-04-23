@@ -48,7 +48,7 @@ jobs:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           allowed_bots: '*'
           claude_args: |
-            --model claude-opus-4-7
+            --model claude-sonnet-4-6
             --allowedTools "mcp__github__*,Bash(git diff *),Bash(git log *),Bash(git show *)"
 
           prompt: |
