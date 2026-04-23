@@ -336,4 +336,7 @@ import TNLean.Channel.Determinant
 
 -- PEPS (exploratory)
 import TNLean.PEPS.Defs
+import TNLean.PEPS.VirtualInsertion
+import TNLean.PEPS.Blocking
+import TNLean.PEPS.LocalGauge
 import TNLean.PEPS.FundamentalTheorem
