@@ -64,20 +64,3 @@
     The unique eigenvalue equals the trace, hence equals $1$, and $-1 \cdot \log 1 = 0$.
 \end{proof}
 
-\begin{theorem}[Trivial-middle mutual information is non-negative]
-    \label{thm:entropy_mi_trivial_middle_nonneg}
-    \lean{Entropy.mutualInformation_ssa_trivial_B_nonneg}
-    \leanok
-    \uses{def:entropy_von_neumann_entropy, def:traceA_ABC, def:traceC_ABC}
-    For a density matrix $\rho_{A1C}$ on $A \otimes \C \otimes C$ with one-dimensional middle
-    factor,
-    \[
-        0 \le S(\rho_{A1}) + S(\rho_{1C}) - S(\rho_{A1C}).
-    \]
-\end{theorem}
-
-\begin{proof}\leanok
-    Rewrite the desired inequality as the already-stated trivial-middle
-    subadditivity theorem.
-    \uses{thm:entropy_subadditivity_trivial_B}
-\end{proof}

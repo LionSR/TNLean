@@ -199,13 +199,13 @@ finite-dimensional quantum systems.
 
 \begin{theorem}[Mutual information is non-negative]\label{thm:mutual_information_nonneg}
     \lean{Entropy.mutualInformation_ssa_trivial_B_nonneg}
-    \notready
+    \leanok
     \uses{def:mutual_information, thm:strong_subadditivity}
     For any bipartite density matrix $\rho_{AB}$,
     $I(A{:}B) \ge 0$.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:strong_subadditivity}
     Apply strong subadditivity (Theorem~\ref{thm:strong_subadditivity})
     with trivial $B$ (one-dimensional middle system).
