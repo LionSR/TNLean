@@ -204,7 +204,8 @@ distinct weight norms).
 \end{theorem}
 
 \begin{proof}
-	\uses{thm:ft_proportional, thm:ft_equal_explicit, thm:mpv_decomposition}
+	\uses{thm:ft_proportional, thm:ft_equal_explicit, thm:mpv_decomposition,
+	      rem:cf_coeff_arrays, thm:route_b_equal}
 	Begin by applying Theorem~\ref{thm:ft_proportional} with $c_N = 1$,
 	which yields a
 	permutation of the matched blocks and blockwise gauge-phase equivalences.
@@ -213,8 +214,8 @@ distinct weight norms).
 	(Theorem~\ref{thm:ft_equal_explicit}) proves gauge equivalence of the
 	reindexed weighted block-diagonal tensors using BNT linear independence.
 	The remaining step combines this with the coefficient-array construction
-	of Remark~\ref{rem:cf_coeff_arrays} and the weight-recovery machinery
-	of \S\ref{sec:route_b}. After the weights are identified, the phase
+	of Remark~\ref{rem:cf_coeff_arrays} and the weight-recovery theorem
+	(Theorem~\ref{thm:route_b_equal}). After the weights are identified, the phase
 	factors are absorbed into them and the blockwise conjugacies combine to
 	a global gauge equivalence.
 \end{proof}

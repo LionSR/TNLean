@@ -259,14 +259,14 @@ The results follow~\cite{Sanz2010Quantum}.
     \label{thm:nonzero_trace_word_sharp_pos}
     \lean{MPSTensor.exists_nonzero_trace_word_sharp_pos}
     \leanok
-    \uses{def:normal}
+    \uses{def:normal, thm:nonzero_trace_word_sharp}
     If $A$ is normal and $D \ge 2$, then there exists a word~$w$
     of \emph{positive} length $1 \le |w| \le D^2 - \krausrk(A) + 1$
     such that $\tr(A^w) \neq 0$.
     This strengthens
     Theorem~\ref{thm:nonzero_trace_word_sharp} by requiring
-    $|w| \ge 1$, which is needed for the blocking argument in
-    Theorem~\ref{thm:wielandt_general}.
+    $|w| \ge 1$, a feature needed for the blocking argument in the
+    general Wielandt bound below.
 \end{theorem}
 
 \begin{proof}
@@ -468,8 +468,8 @@ The results follow~\cite{Sanz2010Quantum}.
     at most $D^2$.
     This is the cumulative-span part of \cite[Theorem~1]{Sanz2010Quantum}.
     The paper's theorem is stronger: via Lemma~2(b) it upgrades this to a
-    fixed-length conclusion $S_N(A) = \MN{D}$, proved below in
-    Theorem~\ref{thm:wielandt_lemma2b}.
+    fixed-length conclusion $S_N(A) = \MN{D}$, recorded below as a
+    separate statement.
 \end{theorem}
 
 \begin{proof}
@@ -507,7 +507,8 @@ The results follow~\cite{Sanz2010Quantum}.
 
 \begin{proof}
     \leanok
-    \uses{thm:nonzero_trace_word_sharp_pos, thm:isNormal_blockTensor}
+    \uses{thm:nonzero_trace_word_sharp_pos, thm:eigenvector_from_trace,
+          thm:isNormal_blockTensor}
     \begin{enumerate}
     \item \emph{$D = 1$:} In this case $\iota(A) = 0$, so the bound
           holds trivially.
@@ -539,9 +540,9 @@ The results follow~\cite{Sanz2010Quantum}.
         $k_B = \krausrk(B)$.
         In the non-invertible case, the bound $S_{D^2}(B) = \MN{D}$ follows
         from tracking indices through the rank-one extraction argument of
-        \cite[Lemma~2(b)]{Sanz2010Quantum};
-        Theorem~\ref{thm:wielandt_lemma2b} only gives the qualitative
-        conclusion $\exists N : S_N(B) = \MN{D}$ without this explicit bound.
+        \cite[Lemma~2(b)]{Sanz2010Quantum}; the separate qualitative
+        fixed-length conclusion recorded below does not supply this
+        explicit bound.
         In both cases $\iota(A) \le D^2 \cdot n \le D^2 \cdot (D^2 - d' + 1)$.
     \end{enumerate}
 \end{proof}
@@ -1136,8 +1137,8 @@ projection onto the fixed-point subspace.
 
     This is the key connection between the spectral-gap
     primitivity of Definition~\ref{def:primitive_mps} and
-    normality, filling the gap that the aperiodicity-based argument
-    in \S\ref{sec:cumspan_to_wordspan} leaves open.
+    normality, filling the gap left by the earlier
+    aperiodicity-based argument.
 \end{theorem}
 
 \begin{proof}
@@ -1269,8 +1270,8 @@ The gap is closed by an aperiodicity hypothesis.
     \cite[Proposition~3]{Sanz2010Quantum}.
     For the Burnside step, we appeal forward to
     Theorems~\ref{thm:irreducible_tensor_to_action}
-    and~\ref{thm:burnside_matrix} in Chapter~\ref{ch:canonical};
-    this is a presentation-level forward dependency,
+    and~\ref{thm:burnside_matrix}; this is a
+    presentation-level forward dependency,
     but the mathematical dependency is acyclic.
 \end{theorem}
 

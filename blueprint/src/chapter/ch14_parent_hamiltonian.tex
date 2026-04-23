@@ -455,7 +455,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \lean{MPSTensor.groundSpace_intersection}
     \leanok
     \uses{thm:ground_space_map_injective, def:in_left_ground, def:in_right_ground,
-        def:ground_space_parent}
+        def:ground_space_parent, def:injective}
     If $A$ is injective and $L \ge 2$, then a state $\psi$ on $L+1$ sites
     satisfying both the left and right ground conditions lies in $G_{L+1}(A)$:
     \[
@@ -664,6 +664,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 
 \begin{proof}
     \leanok
+    \uses{lem:left_tail_compatibility, thm:right_factor_word_compatibility}
     Lemma~\ref{lem:left_tail_compatibility} produces matrices $(Z_j)_j$ and
     $(Y_u)_u$ with $Z_j A^u = A_j Y_u$ for every prefix word $u$ of length $K$.
     Theorem~\ref{thm:right_factor_word_compatibility} gives a common right factor
@@ -922,6 +923,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 
 \begin{proof}
     \notready
+    \uses{thm:boundary_matrix_commutes}
     The remaining step is the periodic range-reduction theorem from
     \cite[\S~IV.C]{Cirac2021Matrix}: one must show that the reduced cyclic window constraints
     still force the same boundary-matrix commutation relation as in
@@ -1530,8 +1532,7 @@ Lucia~\cite{Kastoryano2018Martingale}.
     \emph{Note:} The proof below fully establishes the martingale constants
     only for $L = 2$; for $L > 2$ the existence of suitable constants is
     asserted without complete proof (see the remark at the end of the proof).
-    Only the $L = 2$ case is used in this chapter
-    (Theorem~\ref{thm:parent_hamiltonian_gapped}).
+    Only the $L = 2$ case is used in the spectral-gap theorem below.
     (When $L = 1$ the interaction terms have disjoint supports, so there are no
     overlapping pairs and the spectral gap follows directly without the
     martingale machinery.)
@@ -1579,8 +1580,8 @@ Lucia~\cite{Kastoryano2018Martingale}.
     (matching the Friedrichs bound exactly).
     Since $\alpha < 1$ (the Friedrichs angle is strictly positive),
     it remains to show $\gamma > 0$, i.e.\ $\alpha < \tfrac{1}{2(L-1)}$.
-    In the blocked picture of
-    Theorem~\ref{thm:parent_hamiltonian_gapped}, $L = 2$ and each site
+    In the blocked picture used in the spectral-gap theorem below,
+    $L = 2$ and each site
     overlaps with at most $2$ neighbours, so the condition reduces to
     $\alpha < \tfrac{1}{2}$. For $L = 2$ with an injective tensor,
     the two projectors $h_i$ and $h_{i+1}$ act on a finite-dimensional
@@ -1603,9 +1604,9 @@ Lucia~\cite{Kastoryano2018Martingale}.
     $c_{ij} = c_{d_N(i,j)}$ that weight small-separation (large-overlap) pairs
     more heavily can exploit the exponential decay of the Friedrichs cosine
     $\alpha_s$ in $s$ to satisfy the row-sum constraint.
-    However, this refinement is not needed for the main result: in
-    Theorem~\ref{thm:parent_hamiltonian_gapped} below, the argument is
-    applied only with $L = 2$ in the blocked picture.
+    However, this refinement is not needed for the main result: the
+    spectral-gap argument below is applied only with $L = 2$ in the
+    blocked picture.
     In all cases, the constants depend only on $A$ and are independent
     of~$N$~\cite{Fannes1992Finitely, Kastoryano2018Martingale}.
 \end{proof}
@@ -1638,7 +1639,7 @@ Lucia~\cite{Kastoryano2018Martingale}.
 \begin{theorem}[Spectral gap for MPS parent Hamiltonians]\label{thm:parent_hamiltonian_gapped}
     \lean{MPSTensor.parentHamiltonian_gapped}
     \leanok
-    \uses{thm:friedrichs_gap_bound}
+    \uses{thm:friedrichs_gap_bound, lem:quadratic_form_to_norm_bound}
     For an injective tensor $A$ and a range $L > 1$, there exists $\gamma > 0$ such that
     for every $N \ge 2L$ and every vector
     $v \in (\mathcal G_{N,L}^{\mathrm{ES}}(A))^{\perp}$ one has

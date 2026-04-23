@@ -1112,6 +1112,7 @@ which shows that such generators have the standard Lindblad form.
 
 \begin{proof}
     \leanok
+    \uses{thm:peripheral_power_fixed_eigenvector_ch12}
     Apply Theorem~\ref{thm:peripheral_power_fixed_eigenvector_ch12} and then use the previous
     corollary at the irreducible time $pt$.
 \end{proof}
@@ -1136,6 +1137,8 @@ which shows that such generators have the standard Lindblad form.
 
 \begin{proof}
     \leanok
+    \uses{thm:eigenvalue_eq_one_trace_preserving_eigenvector_ch12,
+          thm:peripheral_trace_ne_zero_eigenvector_ch12}
     Combine Theorem~\ref{thm:peripheral_trace_ne_zero_eigenvector_ch12} with
     Theorem~\ref{thm:eigenvalue_eq_one_trace_preserving_eigenvector_ch12}.
 \end{proof}
@@ -1149,6 +1152,7 @@ which shows that such generators have the standard Lindblad form.
 
 \begin{proof}
     \leanok
+    \uses{thm:peripheral_eq_one_irreducible_all_ch12}
     The unique faithful fixed density gives the one-dimensional peripheral spectrum criterion,
     and Theorem~\ref{thm:peripheral_eq_one_irreducible_all_ch12} collapses the peripheral set
     to $\{1\}$.
@@ -1290,6 +1294,7 @@ which shows that such generators have the standard Lindblad form.
 
 \begin{proof}
     \leanok
+    \uses{thm:irreducible_of_fraction_slice_ch12}
     Take $u = t_0 / N$ with $N = (\dim \MN{D})!$. The semigroup power identity gives the
     factorization of $T_{t_0}$, channelity comes from the semigroup hypotheses, and
     Theorem~\ref{thm:irreducible_of_fraction_slice_ch12} gives irreducibility of $T_u$.
@@ -1609,6 +1614,8 @@ The four equivalent reducibility conditions of
 
 \begin{proof}
     \leanok
+    \uses{thm:generator_preserves_compression_from_semigroup_ch12,
+          thm:semigroup_preserves_compression_from_generator_ch12}
     Combine Theorems~\ref{thm:generator_preserves_compression_from_semigroup_ch12}
     and~\ref{thm:semigroup_preserves_compression_from_generator_ch12}.
 \end{proof}
@@ -1659,6 +1666,7 @@ The four equivalent reducibility conditions of
 
 \begin{proof}
     \leanok
+    \uses{thm:generator_preserves_compression_from_semigroup_ch12}
     First pass from semigroup invariance to generator invariance by
     Theorem~\ref{thm:generator_preserves_compression_from_semigroup_ch12}. The generator-level
     vanishing condition forces $(1-P)L_jP = 0$ and $(1-P)\kappa P = 0$ through the sum-of-squares
@@ -1676,6 +1684,7 @@ The four equivalent reducibility conditions of
 
 \begin{proof}
     \leanok
+    \uses{thm:semigroup_preserves_compression_from_generator_ch12}
     The block-upper-triangular relations imply generator-level compression invariance; then apply
     Theorem~\ref{thm:semigroup_preserves_compression_from_generator_ch12}.
 \end{proof}
@@ -1692,6 +1701,8 @@ The four equivalent reducibility conditions of
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:hasBlockUpperTriangularLindblad_of_hasInvariantCompression_ch12,
+          thm:hasInvariantCompression_of_hasBlockUpperTriangularLindblad_ch12}
     Combine Theorems~\ref{thm:hasInvariantCompression_of_hasBlockUpperTriangularLindblad_ch12}
     and~\ref{thm:hasBlockUpperTriangularLindblad_of_hasInvariantCompression_ch12}.
 \end{proof}
