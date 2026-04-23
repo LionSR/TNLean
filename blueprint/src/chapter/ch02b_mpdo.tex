@@ -156,7 +156,8 @@ legs cyclically and taking the resulting trace.
     By Lemma~\ref{lem:mpo_transfer_eq_mps}, the transfer map of $M$ agrees with
     the transfer map of its doubled-index MPS view. Thus
     $\E_M \circ \E_M = \E_M$ holds exactly when the transfer map of
-    $M.\mathrm{toMPSTensor}$ is idempotent, which is the RFP condition.
+    the doubled-index MPS view is idempotent, which is precisely the
+    renormalization fixed-point condition.
 \end{proof}
 
 \section{MPDOs and LPDOs}
@@ -255,8 +256,8 @@ legs cyclically and taking the resulting trace.
     \uses{def:is_prfp, def:mpo_is_zcl}
     The current purification-RFP condition is strictly weaker than MPO zero
     correlation length: there exists an MPO tensor with purification RFP whose
-    transfer map is not idempotent. Equivalently, the implication from the Lean
-    predicate \texttt{IsPRFP} to the predicate \texttt{IsZCL} fails.
+    transfer map is not idempotent. Equivalently, purification RFP does not
+    imply MPO zero correlation length.
 \end{remark}
 
 \begin{theorem}[Purification RFP implies LPDO]\label{thm:prfp_is_lpdo}
@@ -288,7 +289,7 @@ legs cyclically and taking the resulting trace.
     \lean{MPOTensor.isRFP_iff_isZCL}
     \leanok
     \uses{def:is_rfp_mpdo, def:mpo_is_zcl}
-    The provisional MPDO renormalization fixed-point condition is equivalent to
+    The MPDO renormalization fixed-point condition is equivalent to
     the zero-correlation-length condition for MPO tensors.
 \end{theorem}
 
@@ -303,7 +304,7 @@ legs cyclically and taking the resulting trace.
     \leanok
     \uses{def:is_rfp_mpdo, def:mpo_to_mps, def:is_rfp, def:mpo_is_zcl,
         thm:mpo_is_zcl_iff_to_mps_rfp}
-    The provisional MPDO RFP condition is equivalent to the pure-state RFP
+    The MPDO renormalization fixed-point condition is equivalent to the pure-state RFP
     condition for the doubled-index MPS tensor.
 \end{theorem}
 
@@ -493,7 +494,7 @@ strong subadditivity for a normalized three-site reduced state.
     from \cite[\S4.4]{Cirac2017MPDO_AnnPhys}.
 \end{definition}
 
-\begin{remark}[Finite-length span and selector criteria for the abstract biCF hypothesis]%
+\begin{remark}[Finite-length span and selector criteria for the horizontal canonical-form hypothesis]%
     \label{rem:word_tuple_span_top}
     \lean{MPSTensor.WordTupleSpanTop}
     \lean{MPSTensor.HasBiCF}
@@ -507,34 +508,32 @@ strong subadditivity for a normalized three-site reduced state.
     \leanok
     Let $(A_k)$ be a family of block tensors, and fix a length $L$.
     Write $A_k^w$ for the length-$L$ word evaluation of $A_k$ along a word $w$.
-    The predicate \texttt{WordTupleSpanTop} says that the tuple-valued evaluations
+    Consider the tuple-valued evaluations
     \[
         w \longmapsto (A_k^w)_k
     \]
-    span the full product algebra of block matrices.
-    The predicate \texttt{HasBiCF} records the corresponding finite-length
-    separation property: there exists $L$ such that if
+    in the direct product of the block matrix algebras.
+    The finite-length spanning hypothesis says that these tuples span the
+    whole product algebra.
+    Equivalently, if matrices $\Delta_k$ satisfy
     \[
         \sum_k \tr(\Delta_k A_k^w) = 0
         \qquad \text{for every word } w \text{ of length } L,
     \]
-    then every block coefficient $\Delta_k$ vanishes.
-    The theorem \texttt{hasBiCF\_of\_wordTupleSpanTop} proves that the
-    spanning condition implies this separation property, by nondegeneracy of the
-    product trace pairing. The packaging theorem
-    \texttt{horizontalCFData\_of\_wordTupleSpanTop} then inserts the resulting
-    biCF witness into \texttt{HorizontalCFData} once injectivity,
-    left-canonicality, and nonzero weights are given.
+    then every $\Delta_k$ vanishes. This is the nondegeneracy statement for
+    the product trace pairing, so a single finite blocking length already
+    separates the blocks by their word evaluations.
 
-    The predicate \texttt{PropBlockInjective} isolates the finite-length content
-    of Proposition~IV.3: after some common blocking length, each block is
-    block-injective, and after a second finite blocking length one can form word
-    combinations which equal the identity on one chosen block and vanish on all
-    others. Concatenating an injective prefix with such a selector suffix yields
-    the product-algebra span condition above. This is formalized by
-    \texttt{wordTupleSpanTop\_of\_propBlockInjective}, and the resulting biCF
-    witness is packaged into horizontal canonical-form data by
-    \texttt{horizontalCFData\_of\_propBlockInjective}.
+    Proposition~IV.3 gives a concrete sufficient criterion for this
+    finite-length separation. After one common blocking length, each block is
+    block-injective; after a further finite blocking length, one can choose
+    linear combinations of words which act as the identity on one selected
+    block and vanish on all the others. Combining an injective prefix with
+    such a selector suffix yields the spanning condition above.
+
+    Once this finite-length separation is available, together with
+    injectivity, left-canonicality, and nonzero weights, one obtains the
+    horizontal canonical-form structure for the MPO.
 \end{remark}
 
 \begin{lemma}[Blockwise equality from agreement on the MPV family]
@@ -558,7 +557,7 @@ strong subadditivity for a normalized three-site reduced state.
     This is Lemma~L from \cite[Appendix~A]{Cirac2017MPDO_AnnPhys}.
     Expanding the hypothesis over a word of length~$L+1$ beginning with the
     fixed site and folding each block contribution into a trace pairing
-    against $\mathrm{insertedTensor}\,W\,A_k$ yields, upon taking the
+    against the corresponding first-site insertion tensor yields, upon taking the
     $Y$\!-$Z$ difference, a tuple of block matrices whose trace pairings
     against every length-$L$ block word vanish. The biCF hypothesis then
     forces each block difference to be zero, and dividing by the nonzero
@@ -589,8 +588,8 @@ strong subadditivity for a normalized three-site reduced state.
 
 \section{Fusion isometries}
 
-Following \cite[\S4.5]{Cirac2017MPDO_AnnPhys}, the current Lean development
-formalizes the transfer-map content of the fusion-isometry picture.
+Following \cite[\S4.5]{Cirac2017MPDO_AnnPhys}, this section records the
+transfer-map content of the fusion-isometry picture.
 For each blocked size $n \ge 1$, the doubled-index blocked tensor of an MPO
 has a blocked transfer map $E_n$ acting on bond-space matrices, and the
 support algebra is modeled by a subspace through which $E_n$ factors as a
@@ -623,13 +622,12 @@ retract.
     map $E_n$.
 \end{definition}
 
-\begin{theorem}[Fusion-isometry data imply the provisional MPDO RFP condition]%
+\begin{theorem}[Fusion-isometry data imply MPDO RFP]%
     \label{thm:mpdo_rfp_of_fusion}
     \lean{MPOTensor.isRFP_of_isRFP_MPDO_via_fusion}
     \leanok
     \uses{def:mpdo_rfp_via_fusion}
-    The fusion-isometry formulation implies the current predicate
-    \lean{MPOTensor.IsRFP}.
+    The fusion-isometry formulation implies \lean{MPOTensor.IsRFP}.
 \end{theorem}
 \begin{proof}\leanok
 Apply the definition at blocked size $n = 1$.
@@ -664,10 +662,10 @@ This range-factorization gives the required fusion-isometry data.
 \end{corollary}
 \begin{proof}\leanok
 Combine Theorem~\ref{thm:mpdo_rfp_via_fusion_iff} with the diagonal pure-state
-recovery theorem for the provisional MPO predicate.
+recovery theorem for the MPDO renormalization fixed-point condition.
 \end{proof}
 
-\section{Algebra structure}
+\section{Support-algebra structure}
 
 \begin{definition}[Algebra-structure data for an MPDO]%
     \label{def:mpdo_algebra_structure_data}
@@ -683,20 +681,18 @@ recovery theorem for the provisional MPO predicate.
     $\iota_n$.
 \end{definition}
 
-\begin{definition}[Algebra-structure RFP predicate (provisional)]%
+\begin{definition}[Algebra-structure formulation of MPDO RFP]%
     \label{def:mpdo_rfp_via_algebra}
     \lean{MPOTensor.IsRFP_MPDO_via_algebra_scaffold}
     \uses{def:mpdo_algebra_structure_data, def:mpo_tensor}
     An MPO tensor $M$ satisfies the \emph{algebra-structure formulation} of
     the renormalization fixed-point condition when there exist
     algebra-structure data compatible with $M$, in the sense of
-    \cite[Theorem~IV.13~(ii)]{Cirac2017MPDO_AnnPhys}. The compatibility
-    relation between algebra-structure data and~$M$ is, in this provisional
-    formulation, the trivial relation that holds for every pair;
-    consequently the predicate above holds vacuously of every MPO tensor.
-    The exact compatibility condition of
-    \cite[Theorem~IV.13~(ii)]{Cirac2017MPDO_AnnPhys} is to be substituted
-    in place of the trivial relation in subsequent work.
+    \cite[Theorem~IV.13~(ii)]{Cirac2017MPDO_AnnPhys}. Here compatibility is
+    taken to be the trivial relation that holds for every pair, so this
+    formulation is satisfied by every MPO tensor. The intended compatibility
+    condition is the one appearing in
+    \cite[Theorem~IV.13~(ii)]{Cirac2017MPDO_AnnPhys}.
 \end{definition}
 
 \section{Commuting form and GSNNCH}

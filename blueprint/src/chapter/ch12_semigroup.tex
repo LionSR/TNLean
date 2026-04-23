@@ -198,7 +198,7 @@ and proves the GKSL theorem.
     Theorem~\ref{thm:expSemigroup_zero_ch12}.
 \end{proof}
 
-\begin{theorem}[Prop.~7.1: Every continuous semigroup is exponential]
+\begin{theorem}[Every continuous semigroup is exponential]
     \label{thm:continuousDynSemigroup_eq_exp_ch12}
     \lean{continuousDynSemigroup_eq_exp}\leanok
     \uses{def:continuous_dyn_semigroup_ch12, def:exp_semigroup_ch12}
@@ -227,7 +227,7 @@ and proves the GKSL theorem.
 \label{sec:perturbation}
 %% ---------------------------------------------------------
 
-\begin{theorem}[Lem.~7.1: Duhamel formula]\label{thm:duhamel_formula_ch12}
+\begin{theorem}[Duhamel formula]\label{thm:duhamel_formula_ch12}
     \lean{duhamel_formula}\leanok
     \uses{def:exp_semigroup_ch12, thm:hasDerivAt_expSemigroupCLM_ch12}
     Let $\Delta = L' - L$. For $t \ge 0$,
@@ -246,7 +246,7 @@ and proves the GKSL theorem.
     and $e^{tL'} - e^{tL} = f(t) - f(0) = \int_0^t f'(s)\,ds$.
 \end{proof}
 
-\begin{theorem}[Cor.~7.1: Perturbation bound]\label{thm:perturbation_bound_ch12}
+\begin{theorem}[Perturbation bound]\label{thm:perturbation_bound_ch12}
     \lean{perturbation_bound}\leanok
     \uses{thm:duhamel_formula_ch12}
     For $t \ge 0$,
@@ -611,7 +611,7 @@ which shows that such generators have the standard Lindblad form.
 
 \subsection{Characterization of conditional complete positivity}
 
-\begin{theorem}[Prop.~7.2, direction 1$\to$2]
+\begin{theorem}[Conditional complete positivity implies projected Choi positivity]
     \label{thm:ccp_implies_choi_projected}
     \lean{ccp_implies_choi_projected_posSemidef}\leanok
     \uses{def:is_ccp}
@@ -630,7 +630,7 @@ which shows that such generators have the standard Lindblad form.
     is positive.
 \end{proof}
 
-\begin{theorem}[Prop.~7.2, direction 2$\to$1]
+\begin{theorem}[Projected Choi positivity implies conditional complete positivity]
     \label{thm:choi_projected_implies_ccp}
     \lean{choi_projected_posSemidef_implies_ccp}\leanok
     \uses{def:is_ccp}
@@ -651,9 +651,9 @@ which shows that such generators have the standard Lindblad form.
     $(\kappa \otimes \Id)\ket{\Omega} = \ket{\psi}$ defines $\kappa$.
 \end{proof}
 
-\subsection{CP semigroups and CCP generators}
+\subsection{Completely positive semigroups and conditionally completely positive generators}
 
-\begin{theorem}[Prop.~7.3: CP semigroup implies CCP generator]
+\begin{theorem}[A completely positive semigroup has a conditionally completely positive generator]
     \label{thm:cp_semigroup_implies_ccp}
     \lean{cp_semigroup_implies_ccp_generator}\leanok
     \uses{def:cp_map, def:is_ccp, def:exp_semigroup_ch12}
@@ -670,7 +670,7 @@ which shows that such generators have the standard Lindblad form.
     Then Theorem~\ref{thm:choi_projected_implies_ccp} gives CCP.
 \end{proof}
 
-\begin{theorem}[Prop.~7.3: CCP generator implies CP semigroup]
+\begin{theorem}[A conditionally completely positive generator yields a completely positive semigroup]
     \label{thm:ccp_implies_cp_semigroup}
     \lean{ccp_generator_implies_cp_semigroup}\leanok
     \uses{def:cp_map, def:is_ccp, def:exp_semigroup_ch12}
@@ -689,7 +689,7 @@ which shows that such generators have the standard Lindblad form.
     norm to $e^{tL}$, and the cone of CP maps is closed.
 \end{proof}
 
-\begin{theorem}[Prop.~7.3: CP semigroup iff CCP generator]
+\begin{theorem}[A semigroup is completely positive iff its generator is conditionally completely positive]
     \label{thm:cp_semigroup_iff_ccp}
     \lean{cp_semigroup_iff_ccp_generator}\leanok
     \uses{def:cp_map, def:is_ccp, def:exp_semigroup_ch12}
@@ -740,7 +740,7 @@ which shows that such generators have the standard Lindblad form.
     $\tr(L_j) = 0$ for every $j$.
 \end{definition}
 
-\begin{theorem}[Prop.~7.4, item 2: CP-part uniqueness]
+\begin{theorem}[Uniqueness of the completely positive part]
     \label{thm:generatorDecomp_traceless_unique_phi}
     \lean{generatorDecomp_traceless_unique_phi}\leanok
     \uses{def:lindblad_form, def:has_traceless_kraus, def:generator_decomp}
@@ -754,7 +754,7 @@ which shows that such generators have the standard Lindblad form.
     Compare projected Choi matrices and use Choi injectivity.
 \end{proof}
 
-\begin{theorem}[Prop.~7.4, item 2: drift uniqueness modulo phase]
+\begin{theorem}[Uniqueness of the drift term modulo phase]
     \label{thm:generatorDecomp_traceless_unique_kappa}
     \lean{generatorDecomp_traceless_unique_kappa_modPhase}\leanok
     \uses{def:lindblad_form, def:has_traceless_kraus, def:generator_decomp,
@@ -779,7 +779,7 @@ which shows that such generators have the standard Lindblad form.
     and skew-Hermiticity forces $c = i\lambda$ for some $\lambda \in \R$.
 \end{proof}
 
-\begin{theorem}[Prop.~7.4, item 2: combined uniqueness]
+\begin{theorem}[Combined uniqueness of the traceless Lindblad form]
     \label{thm:generatorDecomp_traceless_unique}
     \lean{generatorDecomp_traceless_unique}\leanok
     \uses{thm:generatorDecomp_traceless_unique_phi,
@@ -827,7 +827,7 @@ which shows that such generators have the standard Lindblad form.
     from the right.
 \end{proof}
 
-\subsection{GKSL/Lindblad theorem}
+\subsection{The GKSL/Lindblad theorem}
 
 \begin{definition}[GKSL generator]\label{def:is_gksl_generator}
     \lean{IsGKSLGenerator}\leanok
@@ -836,7 +836,7 @@ which shows that such generators have the standard Lindblad form.
     if $e^{tL}$ is a quantum channel (CPTP) for all $t \ge 0$.
 \end{definition}
 
-\begin{theorem}[Thm.~7.1, Form~(i)]
+\begin{theorem}[A trace-constrained generator decomposition gives a GKSL generator]
     \label{thm:gksl_of_generatorDecomp}
     \lean{gksl_of_generatorDecomp_with_traceConstraint}\leanok
     \uses{def:cp_map, def:is_gksl_generator, def:generator_decomp,
@@ -857,7 +857,7 @@ which shows that such generators have the standard Lindblad form.
     Theorem~\ref{thm:ta_implies_tp_semigroup} gives trace preservation.
 \end{proof}
 
-\begin{theorem}[Thm.~7.1, Form~(i) conversely]
+\begin{theorem}[GKSL generators admit a trace-constrained generator decomposition]
     \label{thm:generatorDecomp_of_gksl}
     \lean{generatorDecomp_of_gksl}\leanok
     \uses{def:cp_map, def:is_gksl_generator, def:generator_decomp, def:is_trace_constraint}
@@ -877,7 +877,7 @@ which shows that such generators have the standard Lindblad form.
     trace-annihilation condition as $\phi^*(\Id) = \kappa + \kappa^\dagger$.
 \end{proof}
 
-\begin{theorem}[Thm.~7.1: GKSL iff CCP + trace-annihilating]
+\begin{theorem}[GKSL iff conditional complete positivity and trace annihilation]
     \label{thm:gksl_iff_ccp_ta}
     \lean{gksl_iff_ccp_and_traceAnnihilating}\leanok
     \uses{def:is_gksl_generator, def:is_ccp, def:is_trace_annihilating}
@@ -894,7 +894,7 @@ which shows that such generators have the standard Lindblad form.
     Theorem~\ref{thm:ta_implies_tp_semigroup}.
 \end{proof}
 
-\begin{theorem}[Thm.~7.1: GKSL iff Lindblad form]
+\begin{theorem}[GKSL iff Lindblad form]
     \label{thm:gksl_iff_lindblad}
     \lean{gksl_iff_lindbladForm}\leanok
     \uses{def:is_gksl_generator, def:lindblad_form}
@@ -1339,7 +1339,7 @@ which shows that such generators have the standard Lindblad form.
     gives the uniqueness criterion for irreducibility at every positive time.
 \end{proof}
 
-\begin{theorem}[Prop.~7.5: Irreducible semigroup implies primitive]
+\begin{theorem}[An irreducible semigroup is primitive]
     \label{thm:irreducible_semigroup_implies_primitive}
     \lean{irreducible_semigroup_implies_primitive}\leanok
     \uses{def:is_quantum_dyn_semigroup_ch12,
@@ -1358,7 +1358,7 @@ which shows that such generators have the standard Lindblad form.
     positive-time slice.
 \end{proof}
 
-\begin{theorem}[Prop.~7.5: Irreducibility iff primitivity for QDS]
+\begin{theorem}[Irreducibility iff primitivity for a quantum dynamical semigroup]
     \label{thm:qds_irreducible_iff_primitive}
     \lean{qds_irreducible_iff_primitive}\leanok
     \uses{thm:irreducible_semigroup_implies_primitive}
@@ -1460,7 +1460,7 @@ which shows that such generators have the standard Lindblad form.
     $\mathcal{D}_{L_j}^*(A)$ is zero under the commutation hypotheses.
 \end{proof}
 
-\begin{theorem}[Thm.~7.2: Adjoint kernel equals commutant (faithful state)]
+\begin{theorem}[The adjoint kernel is contained in the commutant under a faithful stationary state]
     \label{thm:adjointKernel_eq_commutant}
     \lean{LindbladForm.mem_commutant_of_mem_adjointKernel_of_hasFaithfulStationaryState}\leanok
     \uses{def:lindblad_form, def:has_faithful_stationary_state_ch12,
@@ -1490,7 +1490,7 @@ which shows that such generators have the standard Lindblad form.
     $[A, H] = 0$.
 \end{proof}
 
-\begin{theorem}[Thm.~7.2: Adjoint kernel equals commutant (full equivalence)]
+\begin{theorem}[The adjoint kernel equals the commutant under a faithful stationary state]
     \label{thm:adjointKernel_eq_commutant_full}
     \lean{LindbladForm.adjointKernel_eq_commutant_of_hasFaithfulStationaryState}\leanok
     \uses{thm:adjointKernel_eq_commutant, def:commutant_ch12, def:adjoint_kernel_ch12}
@@ -1620,7 +1620,7 @@ The four equivalent reducibility conditions of
     and~\ref{thm:semigroup_preserves_compression_from_generator_ch12}.
 \end{proof}
 
-\begin{theorem}[Prop.~7.6, (1)$\leftrightarrow$(2)]
+\begin{theorem}[Rank-deficient fixed densities are equivalent to rank-deficient kernel elements]
     \label{thm:wolf_prop_7_6_one_iff_two}
     \lean{wolf_prop_7_6_one_iff_two}\leanok
     \uses{def:has_rank_deficient_fixed_density,
@@ -1636,7 +1636,7 @@ The four equivalent reducibility conditions of
     at $t=0$ for the forward direction, and exponentiate for the reverse.
 \end{proof}
 
-\begin{theorem}[Prop.~7.6, (1)$\to$(3)]
+\begin{theorem}[A rank-deficient fixed density yields an invariant compression]
     \label{thm:wolf_prop_7_6_one_implies_three}
     \lean{wolf_prop_7_6_one_implies_three}\leanok
     \uses{def:has_rank_deficient_fixed_density,
@@ -1689,7 +1689,7 @@ The four equivalent reducibility conditions of
     Theorem~\ref{thm:semigroup_preserves_compression_from_generator_ch12}.
 \end{proof}
 
-\begin{theorem}[Prop.~7.6, (3)$\leftrightarrow$(4)]
+\begin{theorem}[Invariant compression is equivalent to block-upper-triangular Lindblad data]
     \label{thm:wolf_prop_7_6_three_iff_four}
     \lean{wolf_prop_7_6_three_implies_four, wolf_prop_7_6_four_implies_three}\leanok
     \uses{def:has_invariant_compression,
@@ -1707,7 +1707,7 @@ The four equivalent reducibility conditions of
     and~\ref{thm:hasBlockUpperTriangularLindblad_of_hasInvariantCompression_ch12}.
 \end{proof}
 
-\begin{theorem}[Prop.~7.6, (4)$\to$(2)]
+\begin{theorem}[Block-upper-triangular Lindblad data yield a rank-deficient kernel element]
     \label{thm:blockUpperTriangular_implies_rankDeficient}
     \lean{hasRankDeficientKernelElement_of_hasBlockUpperTriangularLindblad}\leanok
     \uses{def:has_block_upper_triangular_lindblad,
@@ -1732,7 +1732,7 @@ The four equivalent reducibility conditions of
     Since $P \neq \Id$, the matrix $\rho_0$ has nontrivial kernel.
 \end{proof}
 
-\begin{theorem}[Prop.~7.6: Full equivalence]
+\begin{theorem}[Equivalent formulations of reducibility]
     \label{thm:wolf_prop_7_6_full}
     \lean{wolf_prop_7_6_full_equivalence}\leanok
     \uses{def:is_gksl_generator, def:has_rank_deficient_fixed_density,
@@ -1884,7 +1884,7 @@ The four equivalent reducibility conditions of
     would then produce a block-upper-triangular Lindblad form.
 \end{proof}
 
-\begin{theorem}[Cor.~7.2(1): full algebra generation implies non-reducibility]
+\begin{theorem}[Full algebra generation implies non-reducibility]
     \label{thm:not_isReducible_of_generates_full_algebra}
     \lean{not_isReducible_of_generates_full_algebra}\leanok
     \uses{def:is_gksl_generator, def:lindblad_form,
@@ -1902,7 +1902,7 @@ The four equivalent reducibility conditions of
     Theorem~\ref{thm:not_isReducibleQDS_of_no_blockUpperTriangular_ch12}.
 \end{proof}
 
-\begin{theorem}[Cor.~7.2(2): Hermitian span + trivial commutant implies non-reducibility]
+\begin{theorem}[Hermitian span and trivial commutant imply non-reducibility]
     \label{thm:not_isReducible_of_hermitian_span_trivial_commutant}
     \lean{not_isReducible_of_hermitian_span_trivial_commutant}\leanok
     \uses{def:is_gksl_generator, def:is_lindblad_span_hermitian_closed,
@@ -1921,7 +1921,7 @@ The four equivalent reducibility conditions of
     Theorem~\ref{thm:not_isReducibleQDS_of_no_blockUpperTriangular_ch12}.
 \end{proof}
 
-\begin{theorem}[Cor.~7.2(3): large Kossakowski rank implies non-reducibility]
+\begin{theorem}[Large Kossakowski rank implies non-reducibility]
     \label{thm:not_isReducible_of_kossakowski_rank_ge}
     \lean{not_isReducible_of_kossakowski_rank_ge}\leanok
     \uses{def:is_gksl_generator, def:kossakowski_rank,

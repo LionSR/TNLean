@@ -831,7 +831,7 @@ the Perron--Frobenius fixed point.
     $*$-subalgebra.
 \end{theorem}
 
-\begin{theorem}[Wolf Cor.~6.6 --- complete positivity of $E_\sigma$]
+\begin{theorem}[Complete positivity of the scalar conditional expectation]
     \label{thm:scalar_conditional_expectation_isCPMap}
     \lean{Kraus.scalarConditionalExpectation_isCPMap}
     \leanok
@@ -855,7 +855,7 @@ the Perron--Frobenius fixed point.
     $(\operatorname{tr}\sigma)^{-1}$, and therefore completely positive.
 \end{proof}
 
-\begin{theorem}[Wolf Cor.~6.6 --- $\sigma$-trace preservation of $E_\sigma$]
+\begin{theorem}[$\sigma$-trace preservation of the scalar conditional expectation]
     \label{thm:scalar_conditional_expectation_preserves_weighted_trace}
     \lean{Kraus.scalarConditionalExpectation_preserves_weighted_trace}
     \leanok
@@ -900,7 +900,7 @@ behind stationary states, following~\cite[\S6.4]{Wolf2012Quantum}.
     each Kraus term to the $P$-corner.
 \end{proof}
 
-\begin{theorem}[Support projection invariance (Wolf Lemma~6.4)]%
+\begin{theorem}[Support projection invariance]%
     \label{thm:support_proj_fixed}
     \lean{Channel.support_proj_fixed}
     \leanok
@@ -945,7 +945,7 @@ behind stationary states, following~\cite[\S6.4]{Wolf2012Quantum}.
     (Definition~\ref{def:stationaryState}).
 \end{definition}
 
-\begin{theorem}[Prop.~6.9: stationary support is full]%
+\begin{theorem}[Stationary support is full]%
     \label{thm:stationarySupport_eq_one}
     \lean{Channel.stationarySupport_eq_one}
     \leanok
@@ -964,7 +964,7 @@ behind stationary states, following~\cite[\S6.4]{Wolf2012Quantum}.
     Since $\rho_\infty \neq 0$, we have $P \neq 0$, so $P = \Id$.
 \end{proof}
 
-\begin{remark}[Props.~6.10--6.11: non-trivial formulations]%
+\begin{remark}[Remaining stationary-support formulations]%
     \label{rem:stationary_support_todo}
     The non-trivial formulations needed here are:
     \begin{itemize}
@@ -1000,7 +1000,7 @@ behind stationary states, following~\cite[\S6.4]{Wolf2012Quantum}.
     hence $x^*x = 0$, and the C$^*$-identity gives $x = 0$.
 \end{proof}
 
-\begin{theorem}[Abstract Wedderburn--Artin decomposition (Wolf Thm.~6.14)]%
+\begin{theorem}[Abstract Wedderburn--Artin decomposition]%
     \label{thm:fixedPointAlgebra_wedderburnArtin}
     \lean{Kraus.fixedPointAlgebra_wedderburnArtin}
     \leanok
@@ -1044,17 +1044,17 @@ behind stationary states, following~\cite[\S6.4]{Wolf2012Quantum}.
     multiplicities $m_k$ and the bound $\sum_k d_k m_k \le D$.
 \end{proof}
 
-\begin{remark}[Pending part of Wolf Thm.~6.14]
+\begin{remark}[Remaining Wedderburn statement]
     The stronger ambient statement that the adjoint-fixed-point algebra is
     unitarily conjugate to
     \[
         0 \oplus \bigoplus_k M_{d_k}(\C) \otimes \Id_{m_k}
     \]
     together with the density-block form $M_{d_k}(\C) \otimes \rho_k$ is not
-    yet formalized.
+    yet included here.
 \end{remark}
 
-\begin{theorem}[Wolf Cor.~6.7]%
+\begin{theorem}[Weighted fixed points form a $*$-subalgebra]%
     \label{thm:weightedFixedPointsStarSubalgebra}
     \lean{Kraus.weightedFixedPointsStarSubalgebra}
     \leanok
@@ -1083,12 +1083,12 @@ behind stationary states, following~\cite[\S6.4]{Wolf2012Quantum}.
     $\rho^{-1/2} F_T \rho^{-1/2}$.
 \end{proof}
 
-\section{Further irreducibility, primitivity, and fixed-point criteria}
+\section{Further irreducibility and primitivity equivalences}
 
 This section records several criteria and equivalences from Wolf's Chapter~6 that are
 used later.
 
-\begin{theorem}[Wolf Thm.~6.2(3): exponential positivity condition]%
+\begin{theorem}[Exponential positivity condition]%
     \label{thm:wolf_6_2_item_3}
     \lean{exp_posDef_of_irreducible_cp}
     \lean{irreducible_iff_exp_posDef_forall}
@@ -1100,7 +1100,7 @@ used later.
     then $E$ is irreducible (full equivalence \lean{irreducible_iff_exp_posDef_forall}).
 \end{theorem}
 
-\begin{theorem}[Wolf Thm.~6.8: Kraus-span equivalence]%
+\begin{theorem}[Kraus-span equivalence]%
     \label{thm:wolf_6_8_kraus_span}
     \lean{MPSTensor.wolf_theorem_6_8_kraus_span}
     \leanok
@@ -1109,7 +1109,7 @@ used later.
     full Kraus rank.
 \end{theorem}
 
-\begin{theorem}[Wolf Thm.~6.8: combined equivalence]%
+\begin{theorem}[Combined primitivity equivalence]%
     \label{thm:wolf_6_8_conjunction}
     \lean{MPSTensor.wolf_theorem_6_8_conjunction}
     \leanok
@@ -1118,7 +1118,7 @@ used later.
     of eventual full Kraus rank, normality, and strong irreducibility.
 \end{theorem}
 
-\begin{remark}[Wolf Thm.~6.8: pairwise equivalences]
+\begin{remark}[Pairwise primitivity equivalences]
     \label{rem:wolf_6_8_pairwise}
     \lean{MPSTensor.primitivePaper_iff_hasEventuallyFullKrausRank}
     \lean{MPSTensor.primitivePaper_iff_stronglyIrreducible}
@@ -1129,7 +1129,7 @@ used later.
     Theorem~6.8.
 \end{remark}
 
-\begin{theorem}[Wolf Thm.~6.15 (scalar fixed-point algebra case)]
+\begin{theorem}[Scalar fixed-point algebra case]
     \label{thm:wolf_6_15_scalar_conditional_expectation}
     \lean{Kraus.scalarConditionalExpectation_isConditionalExpectation}
     \leanok

@@ -175,8 +175,8 @@ finite-dimensional quantum systems.
     holds if and only if $\rho_{ABC}$ admits a quantum Markov decomposition on
     the middle subsystem $B$.
 
-    \textbf{Status:} Recorded in Lean as a sanctioned external-input axiom in
-    \texttt{TNLean/Axioms/Entropy.lean}. This is the equality criterion needed
+    This equality criterion is cited here as an input for the later MPDO arguments.
+    It is the equality criterion needed
     by Appendix~C of arXiv:1606.00608. We cite Hayashi,
     \emph{J. Phys. A} 37 (2004) L205--L208, and Ruskai,
     \emph{J. Math. Phys.} 43 (2002) 4358; the structural block-decomposition
@@ -214,27 +214,24 @@ finite-dimensional quantum systems.
     which gives $I(A{:}C) \ge 0$.
 \end{proof}
 
-\section{\texorpdfstring{\texttt{TNLean.Entropy}}{TNLean.Entropy} namespace}
+\section{Entropy formulations}
 
-The modules in \texttt{TNLean.Entropy} (issue~\#613) place the von
-Neumann entropy and mutual information in the \texttt{Entropy}
-namespace, restate the sanctioned strong-subadditivity axiom there,
-and introduce the name \texttt{QuantumMarkovDecomposition} for the
-Hayashi SSA-equality decomposition. The external inputs are accepted
-as given; their full proofs are tracked separately in the entropy
-umbrella issues.
+This section records the entropy formulations used later in the
+development: von Neumann entropy, strong subadditivity, quantum Markov
+decomposition, and mutual information. These statements are cited from the
+standard entropy literature and supply the entropy-theoretic input for the
+later MPDO arguments.
 
-\begin{definition}[Von Neumann entropy, namespaced]\label{def:entropy_von_neumann_entropy}
+\begin{definition}[Entropy formulation of von Neumann entropy]\label{def:entropy_von_neumann_entropy}
     \lean{Entropy.vonNeumannEntropy}
     \leanok
     \uses{def:von_neumann_entropy}
-    The namespaced wrapper
-    \(\texttt{Entropy.vonNeumannEntropy}(\rho, h_\rho)\)
-    unfolds to \(S(\rho) = -\sum_i \lambda_i \log \lambda_i\) as in
+    This formulation has the same value
+    \(S(\rho) = -\sum_i \lambda_i \log \lambda_i\) as in
     Definition~\ref{def:von_neumann_entropy}.
 \end{definition}
 
-\begin{theorem}[Strong subadditivity, namespaced wrapper]\label{thm:entropy_strong_subadditivity}
+\begin{theorem}[Entropy formulation of strong subadditivity]\label{thm:entropy_strong_subadditivity}
     \lean{Entropy.strongSubadditivity}
     \leanok
     \uses{def:entropy_von_neumann_entropy, def:traceA_ABC, def:traceC_ABC, def:traceAC_ABC}
@@ -243,24 +240,20 @@ umbrella issues.
     \[
         S(\rho_{ABC}) + S(\rho_B) \le S(\rho_{AB}) + S(\rho_{BC}).
     \]
-    In the Lean development, \texttt{Entropy.strongSubadditivity} is a
-    \emph{theorem} wrapper around the single sanctioned SSA axiom
-    \texttt{strong\_subadditivity} of
-    \texttt{TNLean/Axioms/Entropy.lean}; no new axiom is introduced by
-    the \texttt{TNLean.Entropy.*} declarations. The underlying axiom's
+    This formulation introduces no new axiom: it records the same
+    strong-subadditivity input already used above. The underlying
+    axiom's
     proof (Lieb--Ruskai 1973) is deferred to the umbrella entropy
     issue.
 \end{theorem}
 
-\begin{definition}[Quantum Markov decomposition, namespaced]
+\begin{definition}[Entropy formulation of quantum Markov decomposition]
     \label{def:entropy_quantum_markov_decomposition}
     \lean{Entropy.QuantumMarkovDecomposition}
     \leanok
     \uses{def:hayashi_markov_decomposition}
-    The namespaced alias
-    \texttt{Entropy.QuantumMarkovDecomposition} is the name used in the
-    \texttt{Entropy} namespace for the decomposition record of
-    Definition~\ref{def:hayashi_markov_decomposition}.
+    This is the entropy formulation of the Hayashi Markov
+    decomposition from Definition~\ref{def:hayashi_markov_decomposition}.
 \end{definition}
 
 \begin{theorem}[SSA equality iff quantum Markov decomposition]
@@ -273,20 +266,16 @@ umbrella issues.
     subadditivity holds if and only if $\rho_{ABC}$ admits a quantum
     Markov decomposition on the middle subsystem $B$.
 
-    In the Lean development, this is a \emph{theorem} wrapper around the
-    sanctioned axiom
-    \texttt{hayashi\_ssa\_equality\_characterization} of
-    \texttt{TNLean/Axioms/Entropy.lean}; no new axiom is introduced by
-    \texttt{TNLean/Entropy/MarkovChain.lean}.
+    This formulation introduces no new axiom: it records the same
+    equality criterion as
+    Theorem~\ref{thm:hayashi_ssa_equality_characterization}.
 \end{theorem}
 
-\begin{definition}[Mutual information, namespaced]\label{def:entropy_mutual_information}
+\begin{definition}[Entropy formulation of mutual information]\label{def:entropy_mutual_information}
     \lean{Entropy.mutualInformation}
     \leanok
     \uses{def:entropy_von_neumann_entropy}
-    The namespaced wrapper
-    \(\texttt{Entropy.mutualInformation}(\rho_{AB}, h_{\rho_{AB}})\)
-    unfolds to
+    This formulation has the same value
     \(I(A{:}B) = S(\rho_A) + S(\rho_B) - S(\rho_{AB})\)
     as in Definition~\ref{def:mutual_information}.
 \end{definition}
