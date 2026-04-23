@@ -18,7 +18,7 @@ resulting MPS irreducibility statements.
 * `hFixUpgrade_of_peripheral` — corner preservation under the `m`-th adjoint
   iterate implies fixedness in the irreducible trace-preserving case.
 * `SectorFixedPointAlgebraRigidity` — a single fixed-point-algebra hypothesis
-  packaging the remaining one-step sector rigidity.
+  expressing the remaining one-step sector rigidity.
 * `hProjStep_of_sectorFixedPointAlgebraRigidity` — fixed `T^m`-sector
   projections are sent to projections under the one-step dynamics.
 * `hLift_cyclicDecomp_mps_of_fixUpgrade` — the orbit-sum construction supplies

@@ -2,7 +2,7 @@
 
 ## Outcome
 
-I did **not** fully discharge the remaining `hProjStep` hypothesis on current `main`, but I did land a sharper single replacement hypothesis that packages the fixed-point route suggested by the issue discussion.
+I did **not** fully discharge the remaining `hProjStep` hypothesis on current `main`, but I did land a sharper single replacement hypothesis that captures the fixed-point route suggested by the issue discussion.
 
 ### Option picked
 
@@ -39,7 +39,7 @@ X = X P_k = P_k X,\quad Y = Y P_k = P_k Y,\quad T^m(X)=X,\quad T^m(Y)=Y
 \implies T(XY)=T(X)T(Y).
 $$
 
-This is the exact fixed-point-algebra package that the old `hProjStep` proof sketch was trying to access through the false multiplicative-domain shortcut.
+This is the exact fixed-point-algebra hypothesis that the old `hProjStep` proof sketch was trying to access through the false multiplicative-domain shortcut.
 
 ### What is now proved from it
 
@@ -61,7 +61,7 @@ This is the exact fixed-point-algebra package that the old `hProjStep` proof ske
 
 ## Residual gap
 
-The remaining honest gap is now sharply localized:
+The remaining gap is now sharply localized:
 
 > derive `SectorFixedPointAlgebraRigidity` from the paper-level fixed-point description of a periodic block (arXiv:1708.00029, Lemma `lem:bdcf`).
 
