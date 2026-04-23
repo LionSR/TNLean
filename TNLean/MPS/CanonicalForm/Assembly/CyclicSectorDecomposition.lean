@@ -380,7 +380,9 @@ private theorem cyclic_projection_nonzero_of_sum_one
     ∀ k, P k ≠ 0 :=
   cyclic_projection_ne_zero_of_sum_one hPsum hCyclic
 
-private theorem cyclic_projection_mem_multiplicativeDomain
+/-- Each cyclic projection lies in the multiplicative domain of the one-step
+adjoint transfer map. -/
+theorem cyclic_projection_mem_multiplicativeDomain
     {d D m : ℕ} [NeZero D] [NeZero m]
     {A : MPSTensor d D}
     (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
@@ -438,7 +440,9 @@ private theorem cyclic_projection_mem_multiplicativeDomain
     (KadisonSchwarz.mem_rightMultiplicativeDomain_iff K hUnital (P k)).2 hRight,
     (KadisonSchwarz.mem_leftMultiplicativeDomain_iff K hUnital (P k)).2 hLeft⟩
 
-private theorem cyclic_projection_mul_left
+/-- The adjoint transfer map is multiplicative on the left of a cyclic
+projection. -/
+theorem cyclic_projection_mul_left
     {d D m : ℕ} [NeZero D] [NeZero m]
     {A : MPSTensor d D}
     (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
@@ -457,7 +461,9 @@ private theorem cyclic_projection_mul_left
   simpa [K, MPSTensor.transferMap_apply, KadisonSchwarz.krausMap] using
     KadisonSchwarz.krausMap_mul_right_of_mem_multiplicativeDomain (K := K) (hMulDomain k) X
 
-private theorem cyclic_projection_mul_right
+/-- The adjoint transfer map is multiplicative on the right of a cyclic
+projection. -/
+theorem cyclic_projection_mul_right
     {d D m : ℕ} [NeZero D] [NeZero m]
     {A : MPSTensor d D}
     (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)

@@ -48,7 +48,13 @@ assumption is used to focus on genuine nonempty sectors.
 The `hBlocks_mpv` hypothesis ties the compressed block decomposition back to
 the original blocked tensor, and `hCyclic` ensures the block indexing
 follows the cyclic orbit structure of the transfer map's peripheral
-spectrum (see `IsCyclicSectorDecomp`). -/
+spectrum (see `IsCyclicSectorDecomp`).
+
+The current proof-structure refactor isolates the remaining upstream gap in the
+private rigidity placeholder `sectorFixedPointAlgebraRigidity_cyclic_sector_supported`
+in `SelfOverlap.lean`; the public theorem
+`SelfOverlap.hProjStep_cyclic_sector_supported` packages the corresponding
+fixed-point projection step for follow-up use. -/
 lemma sectorBlocked_isNormal_of_isPeriodic
     [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
     (hP : IsPeriodic m A)
