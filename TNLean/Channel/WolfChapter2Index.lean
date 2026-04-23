@@ -6,6 +6,7 @@ import TNLean.Channel.PartialTrace
 import TNLean.Channel.MaximallyEntangled
 import TNLean.Channel.TensorMap
 import TNLean.Channel.ChoiJamiolkowski
+import TNLean.Channel.KrausRank
 import TNLean.Channel.KrausRepresentation
 import TNLean.Channel.KrausUnitaryFreedom
 import TNLean.Channel.Stinespring
@@ -32,6 +33,9 @@ representations of quantum channels.
     Hermiticity-preserving ↔ `τ` is Hermitian ✅
   - `ChoiJamiolkowski.trace_choiMatrix_of_tp` — `tr(τ) = 1` for TP ✅
   - `ChoiJamiolkowski.choiMatrix_id` — `τ` of identity = `|Ω⟩⟨Ω|` ✅
+  - `Channel.choiRank` — rank of the Choi matrix ✅
+  - `Channel.choiRank_le_of_hasKrausCard` / `Channel.choiRank_le_of_hasKrausRankLE`
+    — Choi-rank upper bounds from exact / bounded Kraus families ✅
 
 * **Thm 2.1** (Kraus representation):
   - `kraus_tp_of_sum_conjTranspose_mul` — `∑Kᵢ†Kᵢ = 𝟙` ⟹ TP ✅
