@@ -203,6 +203,39 @@ theorem fundamentalTheorem_after_blocking_1606_structural
   exact ⟨pA, hpA, rA, dimA, μA, blocksA, pB, hpB, rB, dimB, μB, blocksB,
     hTPA, hTPB, hPrimA, hPrimB, hμA, hμB, hDimA, hDimB⟩
 
+/-- A strengthened after-blocking structural interface that keeps the blocked `SameMPV₂`
+relations at the reduction periods. This is a small but genuine step toward Gap §1 because the
+common-equality input is no longer discarded by the public structural wrapper. -/
+theorem fundamentalTheorem_after_blocking_1606_structural_with_blockedSameMPV₂
+    {d D₁ D₂ : ℕ}
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (hSame : SameMPV₂ A B) :
+    ∃ (pA : ℕ) (_ : 0 < pA)
+      (rA : ℕ) (dimA : Fin rA → ℕ) (μA : Fin rA → ℂ)
+      (blocksA : (k : Fin rA) → MPSTensor (blockPhysDim d pA) (dimA k)),
+    ∃ (pB : ℕ) (_ : 0 < pB)
+      (rB : ℕ) (dimB : Fin rB → ℕ) (μB : Fin rB → ℂ)
+      (blocksB : (k : Fin rB) → MPSTensor (blockPhysDim d pB) (dimB k)),
+      SameMPV₂ (blockTensor (d := d) (D := D₁) A pA)
+        (blockTensor (d := d) (D := D₂) B pA) ∧
+      SameMPV₂ (blockTensor (d := d) (D := D₁) A pB)
+        (blockTensor (d := d) (D := D₂) B pB) ∧
+      (∀ k, ∑ i, (blocksA k i)ᴴ * blocksA k i = 1) ∧
+      (∀ k, ∑ i, (blocksB k i)ᴴ * blocksB k i = 1) ∧
+      (∀ k, _root_.IsPrimitive (transferMap (blocksA k))) ∧
+      (∀ k, _root_.IsPrimitive (transferMap (blocksB k))) ∧
+      (∀ k, μA k ≠ 0) ∧
+      (∀ k, μB k ≠ 0) ∧
+      (∀ k, 0 < dimA k) ∧
+      (∀ k, 0 < dimB k) := by
+  obtain ⟨pA, hpA, rA, dimA, μA, blocksA, pB, hpB, rB, dimB, μB, blocksB,
+    hTPA, hTPB, hPrimA, hPrimB, hμA, hμB, hDimA, hDimB⟩ :=
+    fundamentalTheorem_after_blocking_1606_structural A B hSame
+  refine ⟨pA, hpA, rA, dimA, μA, blocksA, pB, hpB, rB, dimB, μB, blocksB,
+    ?_, ?_, hTPA, hTPB, hPrimA, hPrimB, hμA, hμB, hDimA, hDimB⟩
+  · exact sameMPV₂_blockTensor A B hSame pA
+  · exact sameMPV₂_blockTensor A B hSame pB
+
 /-!
 ### What remains for the full 1606.00608 Fundamental Theorem
 

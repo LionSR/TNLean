@@ -308,4 +308,58 @@ theorem exists_sectorDecomp_of_tp_primitive_irr_blocks
   -- Step 3: Apply the gauge-phase-aware BNT grouping theorem.
   exact exists_bnt_grouping_of_gaugePhaseEquiv μ blocks hμne hGPEζ
 
+/-- One-sector specialization of the TP + primitive + irreducible grouping route.
+
+This is a genuine restricted endpoint toward Gap §1: if all weights lie in a single norm class
+and every block has non-decaying overlap with a chosen representative, then the whole family
+collapses to a one-basis `SectorDecomposition`. -/
+theorem bnt_grouping_single_norm_class_of_tp_primitive_irr_blocks
+    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ)
+    (blocks : (k : Fin r) → MPSTensor d (dim k))
+    (k0 : Fin r)
+    (hTP : ∀ k, ∑ i : Fin d, (blocks k i)ᴴ * blocks k i = 1)
+    (hIrr : ∀ k, IsIrreducibleTensor (blocks k))
+    (hPrim : ∀ k, _root_.IsPrimitive (transferMap (d := d) (D := dim k) (blocks k)))
+    (hμne : ∀ k, μ k ≠ 0)
+    (hNorm : ∀ k : Fin r, ‖μ k‖ = ‖μ k0‖)
+    (hNonDecay : ∀ k : Fin r, k ≠ k0 →
+      ¬ Tendsto (fun N => mpvOverlap (d := d) (blocks k0) (blocks k) N) atTop (nhds 0)) :
+    ∃ P : SectorDecomposition d,
+      P.basisCount = 1 ∧
+      P.totalCopies = r ∧
+      SameMPV₂ P.toTensor (toTensorFromBlocks (d := d) (μ := μ) blocks) ∧
+      (∀ s : Fin P.totalCopies, ‖P.flatWeight s‖ = ‖μ k0‖) := by
+  have hPhase : ∀ k : Fin r,
+      ∃ ζ : ℂ, ζ ≠ 0 ∧ ‖ζ‖ = 1 ∧
+        ∀ (N : ℕ) (σ : Fin N → Fin d),
+          mpv (blocks k) σ = ζ ^ N * mpv (blocks k0) σ := by
+    intro k
+    by_cases hk : k = k0
+    · subst hk
+      exact ⟨1, one_ne_zero, norm_one, fun N σ => by simp⟩
+    · obtain ⟨hdim, X, ζ, hζne, hX⟩ := gaugePhaseEquiv_of_nonDecaying_overlap
+        (blocks k0) (blocks k) (hIrr k0) (hIrr k) (hTP k0) (hTP k)
+        (hNonDecay k hk)
+      have hmpv : ∀ (N : ℕ) (σ : Fin N → Fin d),
+          mpv (blocks k) σ = ζ ^ N * mpv (blocks k0) σ := by
+        intro N σ
+        rw [mpv_eq_pow_mul_of_gaugePhase
+          (A := cast (congr_arg (MPSTensor d) hdim) (blocks k0))
+          (B := blocks k) X ζ hX N σ,
+          mpv_cast_dim hdim (blocks k0) N σ]
+      have hζ_norm : ‖ζ‖ = 1 := by
+        exact norm_gaugePhase_eq_one_of_irr_TP_primitive
+          (cast (congr_arg (MPSTensor d) hdim) (blocks k0))
+          (blocks k)
+          ((isIrreducibleTensor_cast_dim hdim (blocks k0)).mpr (hIrr k0))
+          (hIrr k)
+          ((leftCanonical_cast_dim hdim (blocks k0)).mpr (hTP k0))
+          (hTP k)
+          ((isPrimitive_transferMap_cast_dim hdim (blocks k0)).mpr (hPrim k0))
+          (hPrim k)
+          X ζ hX
+      exact ⟨ζ, hζne, hζ_norm, hmpv⟩
+  exact bnt_grouping_single_norm_class μ blocks k0 hμne hNorm hPhase
+
 end MPSTensor
