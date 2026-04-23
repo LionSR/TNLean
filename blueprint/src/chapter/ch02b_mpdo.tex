@@ -737,6 +737,76 @@ Idempotence identifies every positive blocked transfer map with the original
 one, so the same fixed-point algebra works at every blocking size.
 \end{proof}
 
+The current Lean layer still does not recover the paper's special diagonal
+matrices $\chi_{\alpha,\beta,\gamma}$ from Theorem~IV.13(ii). What it does
+provide is the first explicit coefficient package attached to the algebra tower:
+a chosen basis of each support algebra, coordinate maps into a finite scalar
+family, and the corresponding multiplication / inclusion coefficient arrays.
+
+\begin{definition}[Blocked coefficients for the algebra tower]%
+    \label{def:mpdo_blocked_coefficients}
+    \lean{MPOTensor.AlgebraStructureData.toBlockedCoefficients}
+    \leanok
+    \uses{def:mpdo_algebra_structure_data}
+    For each blocked size $n$, once a basis of $\mathcal{A}_n$ is chosen,
+    every element of $\mathcal{A}_n$ is identified with a finite coefficient
+    family on that basis.
+\end{definition}
+
+\begin{theorem}[Reconstruction from blocked coefficients]%
+    \label{thm:mpdo_reconstruct_blocked_coefficients}
+    \lean{MPOTensor.AlgebraStructureData.reconstructFromBlockedCoefficients_apply}
+    \leanok
+    \uses{def:mpdo_blocked_coefficients}
+    Reconstructing a coefficient family gives the corresponding basis
+    expansion $\sum_i a_i b_i$ in $\mathcal{A}_n$.
+\end{theorem}
+\begin{proof}\leanok
+This is exactly the finite-basis reconstruction formula for the chosen basis of
+$\mathcal{A}_n$.
+\end{proof}
+
+\begin{definition}[Blocked multiplication coefficients]%
+    \label{def:mpdo_blocked_structure_coefficients}
+    \lean{MPOTensor.AlgebraStructureData.blockedStructureCoefficients}
+    \leanok
+    \uses{def:mpdo_blocked_coefficients}
+    The blocking multiplication map $m_n$ determines a coefficient family for
+    the product of any two chosen basis elements of $\mathcal{A}_n$, now viewed
+    in the basis of $\mathcal{A}_{2n}$.
+\end{definition}
+
+\begin{theorem}[Blocked multiplication reconstructs from its coefficients]%
+    \label{thm:mpdo_mul_coefficients_reconstruct}
+    \lean{MPOTensor.AlgebraStructureData.coe_mul_eq_sum_blockedStructureCoefficients}
+    \leanok
+    \uses{def:mpdo_blocked_structure_coefficients}
+    In the ambient bond-space matrix algebra, the product of two chosen basis
+    elements of $\mathcal{A}_n$ is the sum of the basis elements of
+    $\mathcal{A}_{2n}$ weighted by these extracted coefficients.
+\end{theorem}
+\begin{proof}\leanok
+Apply the reconstruction formula of
+Theorem~\ref{thm:mpdo_reconstruct_blocked_coefficients} to the element
+$m_n(b_i,b_j) \in \mathcal{A}_{2n}$.
+\end{proof}
+
+\begin{theorem}[Compatible adjoint fixed points reconstruct from blocked coefficients]%
+    \label{thm:mpdo_fixedpoint_coefficients_reconstruct}
+    \lean{MPOTensor.AlgebraStructureData.reconstructFromBlockedCoefficients_of_fixedPoint}
+    \leanok
+    \uses{def:mpdo_rfp_via_algebra, def:mpdo_blocked_coefficients}
+    If the algebra tower is compatible with an MPO tensor $M$, then every adjoint
+    blocked fixed point of $E_n = \operatorname{blockedTransferMap}(M,n)$ belongs
+    to $\mathcal{A}_n$ and is recovered exactly from its extracted coefficient
+    family.
+\end{theorem}
+\begin{proof}\leanok
+Compatibility identifies $\mathcal{A}_n$ with the adjoint fixed-point algebra of
+$E_n$, so the fixed point first becomes an element of $\mathcal{A}_n$ and then
+Theorem~\ref{thm:mpdo_reconstruct_blocked_coefficients} reconstructs it.
+\end{proof}
+
 \section{Commuting form and GSNNCH}
 
 \begin{definition}[Commuting-form data for an MPDO]

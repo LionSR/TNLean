@@ -4,6 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.Algebra.Algebra.Bilinear
+import Mathlib.LinearAlgebra.Basis.VectorSpace
+import Mathlib.LinearAlgebra.FiniteDimensional.Defs
 import TNLean.Algebra.MatrixFrobenius
 import TNLean.Channel.FixedPoint.Algebra
 import TNLean.MPS.CanonicalForm.BlockingViaAdjoint
@@ -18,9 +20,10 @@ arXiv:1606.00608, §4.5.
 The paper's full statement uses coefficient systems
 $c_{\alpha,\beta,\gamma}^{(L)} =
   \operatorname{tr}(\chi_{\alpha,\beta,\gamma}^L)$
-and BNT data. That coefficient layer is not yet formalized here. What we do
+and BNT data. That full coefficient layer is not yet formalized here. What we do
 formalize is the stationary C$^*$-algebra package naturally attached to an MPO
-whose blocked transfer maps are idempotent.
+whose blocked transfer maps are idempotent, together with a first explicit
+coordinate layer obtained by choosing bases of the blocked support algebras.
 
 More precisely, `AlgebraStructureData` now records a genuine tower of support
 `StarSubalgebra`s together with multiplication and inclusion maps realized by the
@@ -85,6 +88,10 @@ namespace MPOTensor
 variable {d D : ℕ}
 
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
+
+local instance instFiniteDimensionalStarSubalgebra (S : StarSubalgebra ℂ Mat) :
+    FiniteDimensional ℂ S :=
+  FiniteDimensional.of_subalgebra_toSubmodule (S := S.toSubalgebra) inferInstance
 
 /-- Algebra-structure data for the stationary support-algebra picture of an MPO.
 
@@ -245,6 +252,159 @@ theorem isRFP_MPDO_via_algebra_of_isRFP_MPDO_via_fusion_of_isTP_of_posDef_fixed
     IsRFP_MPDO_via_algebra M := by
   exact isRFP_MPDO_via_algebra_of_isRFP_of_isTP_of_posDef_fixed
     (M := M) (isRFP_of_isRFP_MPDO_via_fusion hFusion) h_tp hρ hρ_fix
+
+namespace AlgebraStructureData
+
+/-- A chosen finite index set for coordinates on the blocked support algebra `A n`. -/
+abbrev BlockedIndex (data : AlgebraStructureData d D) (n : ℕ) :=
+  Module.Basis.ofVectorSpaceIndex ℂ (data.A n)
+
+/-- The coordinate space attached to the blocked support algebra `A n`. -/
+abbrev BlockedCoefficients (data : AlgebraStructureData d D) (n : ℕ) :=
+  BlockedIndex data n → ℂ
+
+/-- A chosen basis for the blocked support algebra `A n`. -/
+noncomputable def blockedBasis (data : AlgebraStructureData d D) (n : ℕ) :
+    Module.Basis (BlockedIndex data n) ℂ (data.A n) :=
+  Module.Basis.ofVectorSpace ℂ (data.A n)
+
+/-- Coordinates of a blocked algebra element in the chosen basis of `A n`. -/
+noncomputable def toBlockedCoefficients (data : AlgebraStructureData d D) (n : ℕ) :
+    data.A n ≃ₗ[ℂ] BlockedCoefficients data n :=
+  (data.blockedBasis n).equivFun
+
+/-- Reconstruct a blocked algebra element from its coefficient family. -/
+noncomputable def reconstructFromBlockedCoefficients
+    (data : AlgebraStructureData d D) (n : ℕ) :
+    BlockedCoefficients data n →ₗ[ℂ] data.A n :=
+  (data.toBlockedCoefficients n).symm.toLinearMap
+
+@[simp] theorem toBlockedCoefficients_reconstructFromBlockedCoefficients
+    (data : AlgebraStructureData d D) (n : ℕ) (a : BlockedCoefficients data n) :
+    data.toBlockedCoefficients n (data.reconstructFromBlockedCoefficients n a) = a := by
+  exact (data.toBlockedCoefficients n).apply_symm_apply a
+
+@[simp] theorem reconstructFromBlockedCoefficients_toBlockedCoefficients
+    (data : AlgebraStructureData d D) (n : ℕ) (x : data.A n) :
+    data.reconstructFromBlockedCoefficients n (data.toBlockedCoefficients n x) = x := by
+  exact (data.toBlockedCoefficients n).symm_apply_apply x
+
+/-- The chosen basis reconstructs every blocked coefficient family by a finite sum. -/
+theorem reconstructFromBlockedCoefficients_apply
+    (data : AlgebraStructureData d D) (n : ℕ) (a : BlockedCoefficients data n) :
+    data.reconstructFromBlockedCoefficients n a =
+      ∑ i, a i • data.blockedBasis n i := by
+  rw [reconstructFromBlockedCoefficients, toBlockedCoefficients]
+  exact (data.blockedBasis n).equivFun_symm_apply a
+
+/-- Ambient-matrix version of `reconstructFromBlockedCoefficients_apply`. -/
+theorem coe_reconstructFromBlockedCoefficients_apply
+    (data : AlgebraStructureData d D) (n : ℕ) (a : BlockedCoefficients data n) :
+    ((data.reconstructFromBlockedCoefficients n a : data.A n) : Mat) =
+      ∑ i, a i • ((data.blockedBasis n i : data.A n) : Mat) := by
+  rw [reconstructFromBlockedCoefficients_apply (data := data) (n := n) (a := a)]
+  simp
+
+/-- Coordinates of an ambient matrix already known to lie in `A n`. -/
+noncomputable def toBlockedCoefficientsOfMem
+    (data : AlgebraStructureData d D) (n : ℕ) (X : Mat) (hX : X ∈ data.A n) :
+    BlockedCoefficients data n :=
+  data.toBlockedCoefficients n ⟨X, hX⟩
+
+/-- Reconstructing the coefficients of a matrix in `A n` recovers that matrix. -/
+@[simp] theorem reconstructFromBlockedCoefficients_of_mem
+    (data : AlgebraStructureData d D) (n : ℕ) (X : Mat) (hX : X ∈ data.A n) :
+    ((data.reconstructFromBlockedCoefficients n
+      (data.toBlockedCoefficientsOfMem n X hX) : data.A n) : Mat) = X := by
+  exact congrArg (fun x : data.A n => (x : Mat))
+    (reconstructFromBlockedCoefficients_toBlockedCoefficients
+      (data := data) (n := n) (x := ⟨X, hX⟩))
+
+/-- Coordinates of an adjoint blocked fixed point, extracted through a compatible
+algebra tower. -/
+noncomputable def toBlockedCoefficientsOfFixedPoint
+    (data : AlgebraStructureData d D) {M : MPOTensor d D}
+    (hCompat : data.CompatibleWith M) {n : ℕ} (hn : 0 < n) (X : Mat)
+    (hX : (blockedTransferMap M n).adjoint X = X) :
+    BlockedCoefficients data n :=
+  data.toBlockedCoefficientsOfMem n X ((hCompat n hn X).2 hX)
+
+/-- Reconstructing the extracted coefficients of an adjoint blocked fixed point
+recovers the original matrix. -/
+@[simp] theorem reconstructFromBlockedCoefficients_of_fixedPoint
+    (data : AlgebraStructureData d D) {M : MPOTensor d D}
+    (hCompat : data.CompatibleWith M) {n : ℕ} (hn : 0 < n) (X : Mat)
+    (hX : (blockedTransferMap M n).adjoint X = X) :
+    ((data.reconstructFromBlockedCoefficients n
+      (data.toBlockedCoefficientsOfFixedPoint hCompat hn X hX) : data.A n) : Mat) = X := by
+  rw [toBlockedCoefficientsOfFixedPoint]
+  exact reconstructFromBlockedCoefficients_of_mem
+    (data := data) (n := n) (X := X) ((hCompat n hn X).2 hX)
+
+/-- Any coefficient family reconstructed inside a compatible algebra tower is fixed by the
+adjoint blocked transfer map. -/
+theorem adjoint_blockedTransferMap_reconstructFromBlockedCoefficients_eq
+    (data : AlgebraStructureData d D) {M : MPOTensor d D}
+    (hCompat : data.CompatibleWith M) {n : ℕ} (hn : 0 < n)
+    (a : BlockedCoefficients data n) :
+    (blockedTransferMap M n).adjoint
+        (((data.reconstructFromBlockedCoefficients n a : data.A n) : Mat)) =
+      (((data.reconstructFromBlockedCoefficients n a : data.A n) : Mat)) := by
+  exact (hCompat n hn _).1 (data.reconstructFromBlockedCoefficients n a).property
+
+/-- The coefficient family of the blocked product of two chosen basis elements. -/
+noncomputable def blockedStructureCoefficients
+    (data : AlgebraStructureData d D) (n : ℕ)
+    (i j : BlockedIndex data n) :
+    BlockedCoefficients data (2 * n) :=
+  data.toBlockedCoefficients (2 * n) (data.m n (data.blockedBasis n i) (data.blockedBasis n j))
+
+/-- The multiplication coefficients reconstruct the product of two basis elements
+in `A (2 * n)`. -/
+@[simp] theorem reconstructFromBlockedStructureCoefficients
+    (data : AlgebraStructureData d D) (n : ℕ)
+    (i j : BlockedIndex data n) :
+    data.reconstructFromBlockedCoefficients (2 * n)
+        (data.blockedStructureCoefficients n i j) =
+      data.m n (data.blockedBasis n i) (data.blockedBasis n j) := by
+  simp [blockedStructureCoefficients]
+
+/-- Ambient-matrix form of the blocked multiplication reconstruction formula. -/
+theorem coe_mul_eq_sum_blockedStructureCoefficients
+    (data : AlgebraStructureData d D) (n : ℕ)
+    (i j : BlockedIndex data n) :
+    ((data.m n (data.blockedBasis n i) (data.blockedBasis n j) : data.A (2 * n)) : Mat) =
+      ∑ k, data.blockedStructureCoefficients n i j k •
+        ((data.blockedBasis (2 * n) k : data.A (2 * n)) : Mat) := by
+  simpa [reconstructFromBlockedStructureCoefficients] using
+    coe_reconstructFromBlockedCoefficients_apply
+      (data := data) (n := 2 * n) (a := data.blockedStructureCoefficients n i j)
+
+/-- The coefficient family of the inclusion image of a chosen basis element. -/
+noncomputable def blockedInclusionCoefficients
+    (data : AlgebraStructureData d D) (n : ℕ) (i : BlockedIndex data n) :
+    BlockedCoefficients data (n + 1) :=
+  data.toBlockedCoefficients (n + 1) (data.iota n (data.blockedBasis n i))
+
+/-- The inclusion coefficients reconstruct the ambient inclusion of a basis element. -/
+@[simp] theorem reconstructFromBlockedInclusionCoefficients
+    (data : AlgebraStructureData d D) (n : ℕ) (i : BlockedIndex data n) :
+    data.reconstructFromBlockedCoefficients (n + 1)
+        (data.blockedInclusionCoefficients n i) =
+      data.iota n (data.blockedBasis n i) := by
+  simp [blockedInclusionCoefficients]
+
+/-- Ambient-matrix form of the blocked inclusion reconstruction formula. -/
+theorem coe_iota_eq_sum_blockedInclusionCoefficients
+    (data : AlgebraStructureData d D) (n : ℕ) (i : BlockedIndex data n) :
+    ((data.iota n (data.blockedBasis n i) : data.A (n + 1)) : Mat) =
+      ∑ k, data.blockedInclusionCoefficients n i k •
+        ((data.blockedBasis (n + 1) k : data.A (n + 1)) : Mat) := by
+  simpa [reconstructFromBlockedInclusionCoefficients] using
+    coe_reconstructFromBlockedCoefficients_apply
+      (data := data) (n := n + 1) (a := data.blockedInclusionCoefficients n i)
+
+end AlgebraStructureData
 
 end MPOTensor
 
