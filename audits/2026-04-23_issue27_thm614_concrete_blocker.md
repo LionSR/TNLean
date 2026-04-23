@@ -9,7 +9,6 @@ I worked in the isolated worktree `.worktrees/issue-27-cor66` on branch
 - `docs/PROOF_INTEGRITY.md`
 - `docs/style.md`
 - `docs/blueprint_style_guide.md`
-- `/memories/issue_27_fixedpoint_corollary_20260421.md`
 - issue #27
 - the current fixed-point / stationary-support / cyclic-decomposition files
 - the Chapter 6 index and blueprint section
@@ -69,7 +68,7 @@ Let `ρ ≥ 0` satisfy `map K ρ = ρ`, and let
 Then:
 
 1. `lowerZero_of_posSemidef_fixedPoint` gives
-   `∀ i, (1 - P) * K i * P = 0`.
+   `∀ i, (1 - P) * K_i * P = 0`.
 2. Hence the supported Kraus family
    `A_i := K_i * P`
    lands in the corner and satisfies
@@ -109,7 +108,7 @@ compression lemma plus the corner `ℂ`/`*`-algebra instances.
 ## Thm. 6.14 concrete-realization blocker
 
 The harder remaining part of Wolf Thm. 6.14 is still exactly the one already
-noted in issue #27 and in `/memories/issue_27_fixedpoint_corollary_20260421.md`:
+noted in issue #27 and in the earlier Chapter 6 fixed-point follow-up work:
 
 - the current file `TNLean/Channel/FixedPoint/WedderburnDecomp.lean` gives
   semisimplicity and an abstract product decomposition;
