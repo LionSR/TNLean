@@ -5,7 +5,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.MPS.MPDO.Defs
 import TNLean.Entropy.MarkovChain
 import Mathlib.LinearAlgebra.Matrix.Irreducible.Defs
-import Mathlib.Tactic
+import Mathlib.Tactic.FinCases
+import Mathlib.Tactic.NormNum
 
 /-!
 # Simple MPDO local structure
@@ -104,7 +105,7 @@ noncomputable def primitiveTraceCounterexample : Matrix (Fin 3) (Fin 3) ℝ :=
     | 2, 2 => 1 / 2
     | _, _ => 0
 
-@[simp] theorem primitiveTraceCounterexample_sq :
+theorem primitiveTraceCounterexample_sq :
     primitiveTraceCounterexample ^ 2 =
       Matrix.of fun i _ : Fin 3 => if i = 2 then (1 / 2 : ℝ) else (1 / 4 : ℝ) := by
   ext i j
@@ -112,7 +113,7 @@ noncomputable def primitiveTraceCounterexample : Matrix (Fin 3) (Fin 3) ℝ :=
     simp [primitiveTraceCounterexample, Matrix.of_apply, Matrix.mul_apply,
       Fin.sum_univ_three, pow_two] <;> norm_num
 
-@[simp] theorem primitiveTraceCounterexample_sq_mul :
+theorem primitiveTraceCounterexample_sq_mul :
     primitiveTraceCounterexample ^ 2 * primitiveTraceCounterexample =
       primitiveTraceCounterexample ^ 2 := by
   ext i j
@@ -120,11 +121,7 @@ noncomputable def primitiveTraceCounterexample : Matrix (Fin 3) (Fin 3) ℝ :=
     simp [primitiveTraceCounterexample, Matrix.of_apply, Matrix.mul_apply,
       Fin.sum_univ_three, pow_two] <;> norm_num
 
-@[simp] theorem primitiveTraceCounterexample_cube :
-    primitiveTraceCounterexample ^ 3 = primitiveTraceCounterexample ^ 2 := by
-  simpa [pow_succ] using primitiveTraceCounterexample_sq_mul
-
-@[simp] theorem primitiveTraceCounterexample_pow_add_two (m : ℕ) :
+theorem primitiveTraceCounterexample_pow_add_two (m : ℕ) :
     primitiveTraceCounterexample ^ (m + 2) = primitiveTraceCounterexample ^ 2 := by
   induction m with
   | zero =>
@@ -137,16 +134,12 @@ noncomputable def primitiveTraceCounterexample : Matrix (Fin 3) (Fin 3) ℝ :=
         _ = primitiveTraceCounterexample ^ 2 * primitiveTraceCounterexample := by rw [hm]
         _ = primitiveTraceCounterexample ^ 2 := primitiveTraceCounterexample_sq_mul
 
-private theorem primitiveTraceCounterexample_pow_succ_succ (m : ℕ) :
-    primitiveTraceCounterexample ^ Nat.succ (Nat.succ m) = primitiveTraceCounterexample ^ 2 :=
-  primitiveTraceCounterexample_pow_add_two m
-
-@[simp] theorem trace_primitiveTraceCounterexample :
+theorem trace_primitiveTraceCounterexample :
     Matrix.trace primitiveTraceCounterexample = 1 := by
   simp [primitiveTraceCounterexample, Matrix.of_apply, Matrix.trace, Fin.sum_univ_three]
   norm_num
 
-@[simp] theorem trace_primitiveTraceCounterexample_sq :
+theorem trace_primitiveTraceCounterexample_sq :
     Matrix.trace (primitiveTraceCounterexample ^ 2) = 1 := by
   simp [primitiveTraceCounterexample_sq, Matrix.of_apply, Matrix.trace, Fin.sum_univ_three]
   norm_num
@@ -169,7 +162,7 @@ theorem primitiveTraceCounterexample_tracePowersConstant :
   intro k hk
   cases k with
   | zero =>
-      cases (Nat.lt_asymm hk hk)
+      exact absurd hk (lt_irrefl 0)
   | succ k =>
       cases k with
       | zero =>
@@ -177,10 +170,13 @@ theorem primitiveTraceCounterexample_tracePowersConstant :
       | succ k =>
           calc
             Matrix.trace (primitiveTraceCounterexample ^ Nat.succ (Nat.succ k)) =
-                Matrix.trace (primitiveTraceCounterexample ^ 2) := by
-                  rw [primitiveTraceCounterexample_pow_succ_succ]
+                Matrix.trace (primitiveTraceCounterexample ^ (k + 2)) := by
+                  rfl
+            _ = Matrix.trace (primitiveTraceCounterexample ^ 2) := by
+                  rw [primitiveTraceCounterexample_pow_add_two]
             _ = 1 := trace_primitiveTraceCounterexample_sq
-            _ = Matrix.trace primitiveTraceCounterexample := by simp
+            _ = Matrix.trace primitiveTraceCounterexample :=
+                  trace_primitiveTraceCounterexample.symm
 
 /-- The explicit counterexample is not rank one. -/
 theorem primitiveTraceCounterexample_not_hasRankOneFactorization :

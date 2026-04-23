@@ -40,9 +40,10 @@ T =
 3. `T` is not rank one. For example, the first row `(0, 0, 1/2)` and the second row
    `(1/2, 1/2, 0)` are not proportional.
 
-Equivalently, the spectrum is `{1, 0, 0}`, so the trace-power identities only force the
-non-Perron eigenvalues to vanish; they do **not** force the matrix itself to be the Perron
-rank-one projector.
+The spectrum is `{1, 0, 0}`, so the trace-power identities only force the
+non-Perron eigenvalues to vanish. What fails is that `T` is not the rank-one
+Perron projector: indeed `T^2 ≠ T`, while `T^2` is the idempotent rank-one
+limit picked out by the Perron–Frobenius dynamics.
 
 ## Consequence for the MPDO development
 
@@ -59,7 +60,7 @@ So the real remaining gap after PR #807 is slightly different:
 
 - either extract a **stronger matrix hypothesis** from the full ZCL relation than mere trace-power
   constancy,
-- or formalize the local `η_{k,h}` / `r_k,l_h` layer first (issue #833) and prove rank one from
+- or formalize the local `η_{k,h}` / `r_k` / `l_h` layer first (issue #833) and prove rank one from
   that richer structure.
 
 In particular, the paper sentence “primitive + constant trace powers implies `T_{k,h} = a_k b_h`”
