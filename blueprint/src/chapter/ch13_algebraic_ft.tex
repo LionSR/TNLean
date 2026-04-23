@@ -1516,6 +1516,84 @@ Theorem~2 of~\cite{Molnar2018NormalPEPS}.
     (\cite{Molnar2018NormalPEPS}, §3).
 \end{definition}
 
+\begin{definition}[Local tensor map]%
+    \label{def:peps_localTensorMap}
+    \lean{TNLean.PEPS.localTensorMap}
+    \leanok
+    \uses{def:peps_tensor, def:peps_incident_edge}
+    For a fixed vertex $v$, the family of local physical vectors
+    $\eta \mapsto A_v(\eta, \cdot)$ extends by linearity to a map from the
+    coefficient space on local virtual configurations at $v$ into $\C^d$.
+\end{definition}
+
+\begin{definition}[Local left inverse]%
+    \label{def:peps_localLeftInverse}
+    \lean{TNLean.PEPS.localLeftInverse}
+    \leanok
+    \uses{def:peps_localTensorMap, def:IsVertexInjective}
+    If $A$ is vertex-injective, one may choose a linear map $\Psi_v$ from
+    $\C^d$ to the coefficient space on local virtual configurations at $v$
+    such that $\Psi_v \circ \Phi_v = \Id$.
+\end{definition}
+
+\begin{definition}[Physical realization of a local virtual operator]%
+    \label{def:peps_physRealizeLocalOp}
+    \lean{TNLean.PEPS.physRealizeLocalOp}
+    \leanok
+    \uses{def:peps_localTensorMap, def:peps_localLeftInverse}
+    For an endomorphism $T$ of the coefficient space on local virtual
+    configurations at $v$, define the local physical operator
+    \[
+        O_T = \Phi_v \circ T \circ \Psi_v .
+    \]
+\end{definition}
+
+\begin{theorem}[Local virtual operations on the image]%
+    \label{thm:peps_physRealizeLocalOp_spec}
+    \lean{TNLean.PEPS.physRealizeLocalOp_spec}
+    \leanok
+    \uses{def:peps_physRealizeLocalOp}
+    For every coefficient function $c$ on the local virtual configurations at
+    $v$,
+    \[
+        O_T\bigl(\Phi_v(c)\bigr) = \Phi_v(Tc).
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    This is immediate from $\Psi_v \circ \Phi_v = \Id$.
+\end{proof}
+
+\begin{definition}[Split at one incident edge]%
+    \label{def:peps_localVirtualConfigSplitAt}
+    \lean{TNLean.PEPS.localVirtualConfigSplitAt}
+    \leanok
+    \uses{def:peps_tensor, def:peps_incident_edge}
+    Choosing one incident edge at $v$ identifies the set of local virtual
+    configurations with the product of the bond index on that edge and the
+    residual indices on the remaining incident edges.
+\end{definition}
+
+\begin{definition}[Middle region of an edge]%
+    \label{def:peps_edgeMiddleVertices}
+    \lean{TNLean.PEPS.edgeMiddleVertices}
+    \leanok
+    \uses{def:peps_edge}
+    For an edge $e = (u,v)$, the middle region is the complement
+    $V \setminus \{u,v\}$.
+\end{definition}
+
+\begin{theorem}[Edge-centered vertex partition]%
+    \label{thm:peps_edgeVertices_union}
+    \lean{TNLean.PEPS.edgeVertices_union}
+    \leanok
+    \uses{def:peps_edgeMiddleVertices}
+    For an edge $e = (u,v)$, the three regions $\{u\}$,
+    $V \setminus \{u,v\}$, and $\{v\}$ cover the whole vertex set.
+\end{theorem}
+\begin{proof}\leanok
+    Every vertex is either $u$, $v$, or different from both.
+\end{proof}
+
 \begin{theorem}[Local gauge extraction]%
     \label{thm:localGauge_exists}
     \lean{TNLean.PEPS.localGauge_exists}
@@ -1566,12 +1644,17 @@ Theorem~2 of~\cite{Molnar2018NormalPEPS}.
 \end{remark}
 
 \begin{remark}
-    The first three PEPS results above still wait for the graph-blocking /
-    virtual-insertion argument of~\cite{Molnar2018NormalPEPS}, §3. For the
-    uniqueness endpoint, the current global-scalar conclusion is too strong:
-    a connected triangle with bond dimension $1$ admits nontrivial edge
-    rescalings whose vertex products are all $1$. A corrected statement will
-    need an explicit normalization of the edge gauges.
+    The local left inverse $\Psi_v$, the realization map $T \mapsto O_T$,
+    the split at one incident edge, and the partition
+    $V = \{u\} \sqcup (V \setminus \{u,v\}) \sqcup \{v\}$ isolate the local
+    data needed for the edge-centered reduction of
+    ~\cite{Molnar2018NormalPEPS}, §3. The remaining three PEPS theorems still
+    require the blocked tensor on the middle region and the comparison with the
+    corresponding three-site injective chain. For the uniqueness endpoint, the
+    current global-scalar conclusion is too strong: a connected triangle with
+    bond dimension $1$ admits nontrivial edge rescalings whose vertex products
+    are all $1$. A corrected statement will need an explicit normalization of
+    the edge gauges.
 \end{remark}
 
 %% ---------------------------------------------------------

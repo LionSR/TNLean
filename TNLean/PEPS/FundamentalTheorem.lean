@@ -1,4 +1,4 @@
-import TNLean.PEPS.Defs
+import TNLean.PEPS.Blocking
 import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Defs
 import Mathlib.Combinatorics.SimpleGraph.Connectivity.Connected
 
@@ -14,9 +14,11 @@ import Mathlib.Combinatorics.SimpleGraph.Connectivity.Connected
 --
 -- The remaining `sorry`s split into two groups:
 -- * `localGauge_exists`, `gaugeConsistency`, and the `hDim` step in
---   `fundamentalTheorem_PEPS` still require the virtual-insertion / blocking
---   argument from arXiv:1804.04964 §3 that reduces each star neighbourhood to a
---   3-site MPS chain.
+--   `fundamentalTheorem_PEPS` still require the full edge-centred reduction
+--   from arXiv:1804.04964 §3. The local left inverse and the elementary
+--   blocking data now live in `PEPS/VirtualInsertion` and `PEPS/Blocking`, but
+--   the blocked middle tensor and the comparison with the 3-site MPS theorem
+--   are still missing.
 -- * `gauge_unique_up_to_scalar` additionally needs statement repair: the
 --   current global-scalar conclusion fails on a connected triangle with bond
 --   dimension `1`.
@@ -114,14 +116,6 @@ def GaugeEquiv (A B : Tensor G d) : Prop :=
         gaugeVertex A X v η σ
 
 /-! ### Gauge invariance of PEPS state -/
-
-/-- The lower endpoint incidence of an ordered edge. -/
-private def edgeLeftIncident (e : Edge G) : IncidentEdge G e.1.1 :=
-  ⟨e, Or.inl rfl⟩
-
-/-- The upper endpoint incidence of an ordered edge. -/
-private def edgeRightIncident (e : Edge G) : IncidentEdge G e.1.2 :=
-  ⟨e, Or.inr rfl⟩
 
 /-- Incidences of vertices with edges are the same as choosing an edge and one
 of its two ordered endpoints. -/
@@ -347,7 +341,21 @@ private lemma sum_local_with_edge_deltas (A : Tensor G d) (σ : V → Fin d) :
                   if ξ e.1.1 (edgeLeftIncident (G := G) e) =
                       ξ e.1.2 (edgeRightIncident (G := G) e) then (1 : ℂ) else 0) =
                   if IsConsistent A ξ then 1 else 0 := by
-              simp [IsConsistent, Finset.prod_boole]
+              simpa [IsConsistent] using
+                (Fintype.prod_boole
+                  (p := fun e : Edge G =>
+                    ξ e.1.1 (edgeLeftIncident (G := G) e) =
+                      ξ e.1.2 (edgeRightIncident (G := G) e)) :
+                  (∏ e : Edge G,
+                    ite
+                      (ξ e.1.1 (edgeLeftIncident (G := G) e) =
+                        ξ e.1.2 (edgeRightIncident (G := G) e))
+                      (1 : ℂ) 0) =
+                    ite
+                      (∀ e : Edge G,
+                        ξ e.1.1 (edgeLeftIncident (G := G) e) =
+                          ξ e.1.2 (edgeRightIncident (G := G) e))
+                      (1 : ℂ) 0)
             rw [hprod]
             by_cases h : IsConsistent A ξ <;> simp [h]
       _ = ∑ ξ : {ξ : LocalConfig (G := G) A // IsConsistent A ξ}, F ξ.1 := by
@@ -490,17 +498,17 @@ The conclusion gives one `GL` per edge (indexed by `Edge G`), consistent with
 the global gauge type in `gaugeConsistency`. Only the values at edges incident
 to `v` are constrained; the rest are arbitrary. -/
 -- TODO (provability): The factorised per-edge form (independent GL per edge)
--- requires the virtual-insertion / blocking argument from arXiv:1804.04964 §3
--- (reducing each star neighbourhood to a 3-site MPS chain and applying the
--- 1D Fundamental Theorem). A naïve single-vertex argument only yields a
--- *general* invertible map on the full virtual space of v, not the per-edge
--- factorisation. This will need substantial infrastructure not yet in TNLean.
+-- requires the full virtual-insertion / blocking argument from
+-- arXiv:1804.04964 §3. A naïve single-vertex argument only yields a *general*
+-- invertible map on the full virtual space of `v`, not the per-edge
+-- factorisation.
 --
--- Note: the hypothesis `IsVertexInjective` is now the linear-independence
--- formulation (issue #633), which gives each `A.component v` a left inverse
--- on its image — the same data used by the paper's local extraction step.
--- The remaining obstruction is purely the per-edge factorisation, not the
--- injectivity notion itself.
+-- The supporting local ingredients are now present in `PEPS/VirtualInsertion`
+-- and `PEPS/Blocking`: injectivity provides `localLeftInverse`, local virtual
+-- operators can be realized on the physical space via `physRealizeLocalOp`,
+-- and one can split a star at a distinguished incident edge. What still
+-- remains is the blocked middle tensor and the comparison with the 3-site MPS
+-- Fundamental Theorem.
 theorem localGauge_exists (A B : Tensor G d)
     (hA : IsVertexInjective A) (hB : IsVertexInjective B)
     (hAB : SameState A B)
@@ -512,9 +520,8 @@ theorem localGauge_exists (A B : Tensor G d)
             (∏ ie : IncidentEdge G v,
               (↑(Xv ie.1) : Matrix _ _ ℂ) (η ie) (η' ie)) *
               A.component v η' σ := by
-  -- TODO: use injectivity of A at v to define a left inverse,
-  -- then extract the gauge matrix from the SameState condition.
-  -- This requires the virtual-insertion argument (see TODO above).
+  -- TODO: use `localLeftInverse` at `v` together with the blocked-edge
+  -- reduction from the surrounding TODO note to extract the factorised gauge.
   sorry
 
 /-! ### Gauge consistency across edges -/
