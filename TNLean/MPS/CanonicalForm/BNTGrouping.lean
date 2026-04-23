@@ -34,7 +34,7 @@ blocks on one side are already known to collapse to a single basis tensor. It is
 therefore a useful **special-case norm-class collapse** module, not the full
 basis-of-normal-tensors construction from [CPGSV17, Proposition A.6 /
 `prop:char-BNT`]. The general one-sided BNT construction remains open and is part
-of the remaining Gap §1 work for issue #652.
+of the remaining Gap 2 work for issue #652 (labeled "Gap §1" in that issue).
 
 ## Main results
 
