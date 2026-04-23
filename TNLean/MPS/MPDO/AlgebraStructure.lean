@@ -120,7 +120,10 @@ local instance instMatrixInnerProductSpace (D : ℕ) :
 
 namespace MPSTensor
 
-private theorem transferMap_adjoint_apply_eq_adjointMap {d D : ℕ}
+/-- The Frobenius adjoint of `transferMap A` acts by the Kraus adjoint map of
+`A`. This is the pointwise form of
+`MPSTensor.transferMap_conjTranspose_eq_adjoint`. -/
+theorem transferMap_adjoint_apply_eq_adjointMap {d D : ℕ}
     (A : MPSTensor d D) (X : Matrix (Fin D) (Fin D) ℂ) :
     (transferMap A).adjoint X = Kraus.adjointMap A X := by
   have h := congrArg (fun F => F X)
@@ -146,7 +149,10 @@ At blocked size `n`, the support object is a `StarSubalgebra` of bond-space
 matrices. The map `m n` is the blocking multiplication, landing in the
 size-`2n` support algebra, while `iota n` is the inclusion into the size-`n+1`
 support algebra. The fields `m_apply` and `iota_apply` require that these maps
-are realized by the ambient matrix product and ambient inclusion. -/
+are realized by the ambient matrix product and ambient inclusion.
+
+This structure records only this realization data. It does **not** yet package
+the full §4.5 coherence / coefficient / BNT layer from the paper. -/
 structure AlgebraStructureData (d D : ℕ) where
   /-- Support algebra at blocked size `n`. -/
   A : ℕ → StarSubalgebra ℂ (Matrix (Fin D) (Fin D) ℂ)
@@ -273,8 +279,9 @@ def IsRFP_MPDO_via_algebra (M : MPOTensor d D) : Prop :=
 
 /-- Backwards-compatible alias for the previous scaffold name.
 
-The old definition was vacuous. The new alias points to the non-vacuous algebra
-predicate above. -/
+The old definition was vacuous. The alias points to the non-vacuous algebra
+predicate above, but that predicate is still weaker than the full paper
+converse: it only records the current support-algebra layer. -/
 @[deprecated (since := "2026-04-24")] alias IsRFP_MPDO_via_algebra_scaffold :=
   IsRFP_MPDO_via_algebra
 
