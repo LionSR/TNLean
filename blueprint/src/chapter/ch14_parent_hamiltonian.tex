@@ -1637,7 +1637,7 @@ Lucia~\cite{Kastoryano2018Martingale}.
 
 \begin{theorem}[Spectral gap for MPS parent Hamiltonians]\label{thm:parent_hamiltonian_gapped}
     \lean{MPSTensor.parentHamiltonian_gapped}
-    \leanok
+    \notready
     \uses{thm:friedrichs_gap_bound}
     For an injective tensor $A$ and a range $L > 1$, there exists $\gamma > 0$ such that
     for every $N \ge 2L$ and every vector
@@ -1650,10 +1650,10 @@ Lucia~\cite{Kastoryano2018Martingale}.
 \end{theorem}
 
 \begin{proof}
-    \leanok
-    This follows immediately from Theorem~\ref{thm:friedrichs_gap_bound} by taking as
-    $\gamma$ the explicit constant produced there, which yields the required existential
-    spectral-gap constant.
+    \notready
+    Once Theorem~\ref{thm:friedrichs_gap_bound} is formalized without the remaining
+    Friedrichs-angle blocker, this wrapper proof is immediate by taking $\gamma$ to be the
+    explicit constant produced there.
 \end{proof}
 
 \section{Ground space of non-injective MPS}\label{sec:degenerate_ground_space}
