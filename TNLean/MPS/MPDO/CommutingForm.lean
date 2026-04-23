@@ -6,9 +6,9 @@ import TNLean.MPS.MPDO.RFP
 import TNLean.MPS.ParentHamiltonian.Defs
 
 /-!
-# Commuting-form and GSNNCH packaging for simple MPDOs
+# Commuting-form and GSNNCH data for simple MPDOs
 
-This file packages the commuting-form side of the simple MPDO story from
+This file records the commuting-form side of the simple MPDO story from
 arXiv:1606.00608 §4.4 and Appendix C.2.
 
 For an `N`-site operator `ρ`, a commuting-form witness consists of a positive
@@ -142,7 +142,7 @@ def HasCommutingForm (M : MPOTensor d D) : Prop :=
 /-- A GSNNCH witness at chain length `N`: a commuting-form datum together with
 its positive normalization constant.
 
-This packages Definition 4.8 in the equivalent positive-operator form
+This records Definition 4.8 in the equivalent positive-operator form
 `ρ⁽ᴺ⁾ = c ∏ᵢ B_{i,i+1}`, where `c > 0` and the translated bond operators
 commute pairwise. The paper's exponential form is recovered by taking
 `B_{i,i+1} = e^{-h_{i,i+1}}` or, more generally, by the projector-limit
@@ -185,7 +185,7 @@ namespace CommutingFormData
 variable {N : ℕ}
 
 /-- A commuting-form witness together with a positive normalization constant
-packages into GSNNCH data. -/
+induces GSNNCH data. -/
 def toGSNNCHData (data : CommutingFormData d N) (c : ℝ) (hc : 0 < c) :
     GSNNCHData d N where
   form := data
