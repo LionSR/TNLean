@@ -138,18 +138,8 @@ noncomputable def primitiveTraceCounterexample : Matrix (Fin 3) (Fin 3) ℝ :=
         _ = primitiveTraceCounterexample ^ 2 := primitiveTraceCounterexample_sq_mul
 
 private theorem primitiveTraceCounterexample_pow_succ_succ (m : ℕ) :
-    primitiveTraceCounterexample ^ Nat.succ (Nat.succ m) = primitiveTraceCounterexample ^ 2 := by
-  induction m with
-  | zero =>
-      simp
-  | succ m hm =>
-      calc
-        primitiveTraceCounterexample ^ Nat.succ (Nat.succ (Nat.succ m)) =
-            primitiveTraceCounterexample ^ Nat.succ (Nat.succ m) *
-              primitiveTraceCounterexample := by
-              simp [pow_succ]
-        _ = primitiveTraceCounterexample ^ 2 * primitiveTraceCounterexample := by rw [hm]
-        _ = primitiveTraceCounterexample ^ 2 := primitiveTraceCounterexample_sq_mul
+    primitiveTraceCounterexample ^ Nat.succ (Nat.succ m) = primitiveTraceCounterexample ^ 2 :=
+  primitiveTraceCounterexample_pow_add_two m
 
 @[simp] theorem trace_primitiveTraceCounterexample :
     Matrix.trace primitiveTraceCounterexample = 1 := by
