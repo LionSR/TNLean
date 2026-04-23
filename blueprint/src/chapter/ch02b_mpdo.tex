@@ -384,6 +384,89 @@ legs cyclically and taking the resulting trace.
     (Theorem~\ref{thm:zcl_iff_idempotent_transfer}).
 \end{proof}
 
+\section{Simple local structure from SAL and ZCL}
+
+For the simple MPDO case in Appendix~C.2 of \cite{Cirac2017MPDO_AnnPhys},
+the strong-area-law hypothesis is used locally through the equality case of
+strong subadditivity for a normalized three-site reduced state.
+
+\begin{definition}[Local $\eta$-structure for a three-site reduced state]
+    \label{def:mpdo_eta_structure}
+    \lean{MPOTensor.EtaStructure}
+    \leanok
+    \uses{def:entropy_quantum_markov_decomposition}
+    For a three-site density operator $\rho_{ABC}$, the local $\eta$-structure
+    is the quantum Markov decomposition on the middle subsystem $B$ produced by
+    equality in strong subadditivity. Concretely, after a unitary change of
+    basis on $B$, one has a finite direct-sum decomposition
+    \[
+        B = \bigoplus_k \bigl(b_1^{(k)} \otimes b_2^{(k)}\bigr)
+    \]
+    such that
+    \[
+        \rho_{ABC} = \bigoplus_k \rho_{A b_1}^{(k)} \otimes \rho_{b_2 C}^{(k)}.
+    \]
+\end{definition}
+
+\begin{theorem}[SAL implies local $\eta$-structure]
+    \label{thm:sal_implies_eta_structure}
+    \lean{MPOTensor.sal_implies_eta_structure}
+    \leanok
+    \uses{def:ssa_equality, def:mpdo_eta_structure}
+    If a normalized three-site reduced state satisfies the equality case of
+    strong subadditivity --- the local entropy form of the simple-MPDO strong
+    area law --- then it admits the local $\eta$-structure of
+    Definition~\ref{def:mpdo_eta_structure}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:entropy_ssa_equality_quantum_markov}
+    This is exactly the forward implication of the Hayashi equality
+    characterization: equality in strong subadditivity yields a quantum Markov
+    decomposition on the middle subsystem.
+\end{proof}
+
+\begin{definition}[Auxiliary matrix predicates for the rank-one step]
+    \label{def:matrix_trace_rankone_predicates}
+    \lean{Matrix.TracePowersConstant}
+    \lean{Matrix.HasRankOneFactorization}
+    \lean{Matrix.PrimitiveTracePowersConstantImpliesRankOne}
+    \leanok
+    The auxiliary predicates record three matrix-theoretic ingredients used in
+    the rank-one step of Appendix~C.2, Lemma~C.4: constant traces of all
+    positive powers, existence of a rank-one factorization $T = a b^\top$, and
+    the Perron--Frobenius implication from primitivity together with constant
+    trace powers to such a factorization.
+\end{definition}
+
+\begin{theorem}[SAL and ZCL imply rank-one $T$ (scoped form)]
+    \label{thm:sal_zcl_implies_rank_one_t}
+    \lean{MPOTensor.sal_zcl_implies_rank_one_T}
+    \leanok
+    \uses{def:matrix_trace_rankone_predicates}
+    Let $T$ be the nonnegative matrix extracted from the local $\eta$-data.
+    Assume that $T$ is primitive, that $\tr(T) = 1$, and that every positive
+    power of $T$ has the same trace as $T$. If one further supplies the single
+    Perron--Frobenius input asserting that every primitive nonnegative matrix
+    with constant trace powers is rank one, then
+    \[
+        T = a b^\top
+    \]
+    for some vectors $a$ and $b$, with normalization
+    \[
+        a \cdot b = 1.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:matrix_trace_rankone_predicates}
+    The Perron--Frobenius input gives the factorization $T = a b^\top$.
+    Taking traces and using $\tr(a b^\top) = a \cdot b$ converts the
+    normalization $\tr(T) = 1$ into $a \cdot b = 1$.
+\end{proof}
+
 \section{Horizontal and Vertical Canonical Forms}
 
 \begin{definition}[Horizontal canonical form for an MPO]\label{def:horizontal_cf_mpdo}
