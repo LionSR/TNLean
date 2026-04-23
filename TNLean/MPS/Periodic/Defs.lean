@@ -1,5 +1,6 @@
 import TNLean.MPS.Irreducible.FormII
 import TNLean.MPS.Irreducible.PeriodicBlocking
+import TNLean.MPS.Core.Blocking
 import TNLean.MPS.Chain.Defs
 import TNLean.Channel.Peripheral.Spectrum
 import TNLean.Channel.Peripheral.CyclicDecomposition
@@ -308,9 +309,8 @@ theorem ZGaugeEquiv.blockTensor_gaugeEquiv {m : ℕ} {A B : MPSTensor d D}
       evalWord A (wordOfBlock d m i)
           = Z ^ (wordOfBlock d m i).length * evalWord A (wordOfBlock d m i) := by
               simp [length_wordOfBlock, hpow]
-      _ = evalWord (fun j => Z * A j) (wordOfBlock d m i) := by
-            symm
-            exact evalWord_leftMul_of_commute hcomm (wordOfBlock d m i)
+      _ = evalWord (fun j => Z * A j) (wordOfBlock d m i) :=
+            (evalWord_leftMul_of_commute hcomm (wordOfBlock d m i)).symm
       _ = (Y : Matrix (Fin D) (Fin D) ℂ) * evalWord B (wordOfBlock d m i) *
             (((Y⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) := by
             simpa using
@@ -319,7 +319,7 @@ theorem ZGaugeEquiv.blockTensor_gaugeEquiv {m : ℕ} {A B : MPSTensor d D}
   have := congrArg (fun M =>
     (((Y⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * M *
       (Y : Matrix (Fin D) (Fin D) ℂ))) hWord
-  simpa [blockTensor, Matrix.mul_assoc] using this
+  simpa [blockTensor, Matrix.mul_assoc] using this.symm
 
 /-- Full-period blocking turns a `ℤ_m`-gauge equivalence into MPV equality. -/
 theorem ZGaugeEquiv.blockTensor_sameMPV {m : ℕ} {A B : MPSTensor d D}

@@ -285,6 +285,37 @@ $p$-divisibility of the transfer map.
     that appears only for $m > 1$.
 \end{remark}
 
+\begin{theorem}[Blocking a $\mathbb Z_m$-gauge gives an ordinary gauge]
+    \label{thm:z_gauge_blockTensor_gauge_equiv}
+    \lean{MPSTensor.ZGaugeEquiv.blockTensor_gaugeEquiv}
+    \leanok
+    \uses{def:z_gauge_equiv, def:blocked_tensor, def:gauge_equiv}
+    If $A$ and $B$ are $\mathbb Z_m$-gauge equivalent, then their $m$-blocked
+    tensors $A^{[m]}$ and $B^{[m]}$ are gauge equivalent in the ordinary sense.
+\end{theorem}
+
+\begin{proof}\leanok
+    Write the $\mathbb Z_m$-gauge relation as
+    $Z A^i = Y B^i Y^{-1}$ with $Z^m = \Id$ and $[A^i, Z] = 0$.
+    For a blocked letter, commute one factor of $Z$ past each physical letter in
+    the associated length-$m$ word. The total prefactor becomes $Z^m = \Id$,
+    so the entire blocked word is related by the same ordinary gauge $Y$.
+\end{proof}
+
+\begin{corollary}[Blocking a $\mathbb Z_m$-gauge preserves the MPV family]
+    \label{cor:z_gauge_blockTensor_same_mpv}
+    \lean{MPSTensor.ZGaugeEquiv.blockTensor_sameMPV}
+    \leanok
+    \uses{thm:z_gauge_blockTensor_gauge_equiv, thm:gauge_invariance}
+    If $A$ and $B$ are $\mathbb Z_m$-gauge equivalent, then the blocked tensors
+    $A^{[m]}$ and $B^{[m]}$ have the same MPV family.
+\end{corollary}
+
+\begin{proof}\leanok
+    Apply Theorem~\ref{thm:z_gauge_blockTensor_gauge_equiv} and then the gauge
+    invariance of MPV families.
+\end{proof}
+
 \section{Periodic Fundamental Theorem}%
 \label{sec:periodic_ft}
 
@@ -849,7 +880,100 @@ for the irreducible-form framework in \cite{DeLasCuevas2017Irreducible}.
     irreducible-form decomposition of $C$.
 \end{proof}
 
-\begin{theorem}[$p$-refinability iff $p$-divisibility]%
+\begin{definition}[Blocked equal-case Z-gauge extraction hypothesis]
+    \label{def:peripheral_equalcase_zgauge_sameMPV}
+    \lean{MPSTensor.PeripheralEqualCaseZGaugeOfSameMPV}
+    \leanok
+    \uses{def:irreducible_form, def:blocked_tensor, def:same_mpv, def:z_gauge_equiv}
+    Fix $(d,D,p)$. This hypothesis says that whenever a blocked tensor $C$ in
+    irreducible form~II has the same MPV family as a blocked root $A^{[p]}$,
+    there exists an integer $m \ge 1$ and a $\mathbb Z_m$-gauge equivalence
+    between $C$ and $A^{[p]}$.
+\end{definition}
+
+\begin{definition}[Blocked-to-root reconstruction hypothesis from Z-gauge]
+    \label{def:peripheral_equalcase_root_from_zgauge}
+    \lean{MPSTensor.PeripheralEqualCaseRootFromZGauge}
+    \leanok
+    \uses{def:irreducible_form, def:blocked_tensor, def:z_gauge_equiv}
+    Fix $(d,D,p)$. This hypothesis says that if $m \ge 1$ and a blocked tensor
+    $C$ in irreducible form~II is $\mathbb Z_m$-gauge equivalent to $A^{[p]}$,
+    then there exists a tensor $A'$ with
+    $\sum_i (A'^i)^\dagger A'^i = \Id$ and
+    $\mathcal E_C = \mathcal E_{A'^{[p]}}$.
+\end{definition}
+
+\begin{definition}[Blocked equal-case continuation hypothesis]
+    \label{def:peripheral_equalcase_periodicFT_sameMPV}
+    \lean{MPSTensor.PeripheralEqualCasePeriodicFTOfSameMPV}
+    \leanok
+    \uses{def:irreducible_form, def:blocked_tensor, def:same_mpv}
+    Fix $(d,D,p)$. This packages the combined continuation statement: whenever a
+    blocked tensor $C$ in irreducible form~II has the same MPV family as a
+    blocked root $A^{[p]}$, one can replace $A$ by a left-canonical tensor $A'$
+    with $\mathcal E_C = \mathcal E_{A'^{[p]}}$.
+\end{definition}
+
+\begin{theorem}[Blocked equal-case continuation from Z-gauge extraction]
+    \label{thm:peripheral_equalcase_sameMPV_zgauge_reduction}
+    \lean{MPSTensor.peripheralEqualCase_periodicFT_of_sameMPV}
+    \leanok
+    \uses{def:peripheral_equalcase_zgauge_sameMPV,
+          def:peripheral_equalcase_root_from_zgauge,
+          def:peripheral_equalcase_periodicFT_sameMPV}
+    If the blocked equal-case Z-gauge extraction hypothesis and the
+    blocked-to-root reconstruction hypothesis both hold, then the combined
+    blocked equal-case continuation hypothesis holds.
+\end{theorem}
+
+\begin{proof}\leanok
+    Apply the Z-gauge extraction hypothesis to obtain a blocked
+    $\mathbb Z_m$-gauge witness between $C$ and $A^{[p]}$, and then apply the
+    reconstruction hypothesis to that witness.
+\end{proof}
+
+\begin{theorem}[Reduction of forward canonicalization to the blocked equal-case stage]
+    \label{thm:p_refinement_forward_equalcase_reduction}
+    \lean{MPSTensor.pRefinementCanonicalization_of_peripheralEqualCase_periodicFT_of_sameMPV}
+    \leanok
+    \uses{def:peripheral_equalcase_periodicFT_sameMPV,
+          def:irreducible_form, def:p_refinable,
+          thm:p_refinement_pullback_irreducible_form}
+    Assume the blocked equal-case continuation hypothesis. Then every
+    $p$-refinable tensor $B$ in irreducible form~II admits a left-canonical root
+    $A'$ with $\mathcal E_B = \mathcal E_{A'^{[p]}}$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Apply Theorem~\ref{thm:p_refinement_pullback_irreducible_form} to the
+    refinement witness of $B$. This produces a blocked tensor $C$ in
+    irreducible form~II with $\mathcal E_C = \mathcal E_B$ and the same MPV
+    family as $A^{[p]}$. The blocked equal-case continuation hypothesis then
+    gives a left-canonical tensor $A'$ with
+    $\mathcal E_C = \mathcal E_{A'^{[p]}}$. Combining the two transfer-map
+    identities yields $\mathcal E_B = \mathcal E_{A'^{[p]}}$.
+\end{proof}
+
+\begin{theorem}[Forward direction from the blocked equal-case continuation]
+    \label{thm:thm_4_1_p_refinement_forward_blocked_equalcase}
+    \lean{MPSTensor.thm_4_1_p_refinement_forward_of_peripheralEqualCase_periodicFT_of_sameMPV}
+    \leanok
+    \uses{def:peripheral_equalcase_periodicFT_sameMPV,
+          def:irreducible_form, def:p_refinable, def:p_divisible_channel,
+          thm:p_refinement_forward_equalcase_reduction}
+    Assume the blocked equal-case continuation hypothesis. Then for every tensor
+    $B$ in irreducible form~II, $p$-refinability of $B$ implies
+    $p$-divisibility of $\mathcal E_B$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Combine Theorem~\ref{thm:p_refinement_forward_equalcase_reduction} with the
+    witness-level forward implication: once $\mathcal E_B$ is identified with
+    $\mathcal E_{A'^{[p]}}$ for a left-canonical $A'$, the blocking identity
+    gives $\mathcal E_B = (\mathcal E_{A'})^p$.
+\end{proof}
+
+\begin{theorem}[Thm.~4.1 — $p$-refinability $\iff$ $p$-divisibility]%
     \label{thm:thm_4_1_p_refinement}
     \lean{MPSTensor.thm_4_1_p_refinement}
     \leanok
@@ -865,15 +989,15 @@ for the irreducible-form framework in \cite{DeLasCuevas2017Irreducible}.
 
 \begin{proof}\leanok
     \uses{thm:thm_4_1_p_refinement_forward, thm:thm_4_1_p_refinement_reverse}
-    Combine the forward implication
+    Bundle the forward implication
     (Theorem~\ref{thm:thm_4_1_p_refinement_forward}) with the reverse
     implication (Theorem~\ref{thm:thm_4_1_p_refinement_reverse}) into a
-    single biconditional.  Both directions are stated conditionally
-    on their respective canonicalization hypotheses, whose combination
-    yields the full equivalence.
+    single biconditional. Both directions are formalised conditionally on their
+    respective canonicalization hypotheses, whose combination yields the full
+    equivalence.
 \end{proof}
 
-\begin{theorem}[$p$-refinability implies $p$-divisibility under the canonicalization hypothesis]%
+\begin{theorem}[Thm.~4.1 forward direction, conditional form]%
     \label{thm:thm_4_1_p_refinement_forward}
     \lean{MPSTensor.thm_4_1_p_refinement_forward}
     \leanok
@@ -887,41 +1011,72 @@ for the irreducible-form framework in \cite{DeLasCuevas2017Irreducible}.
 \begin{proof}\leanok
     The canonicalization hypothesis supplies a witness $A$ with
     $\sum_i (A^i)^\dagger A^i = \Id$ (left-canonical) and
-    $\mathcal{E}_B = \mathcal{E}_{A^{[p]}}$. The left-canonical property
-    makes $\mathcal{E}_A$ a CPTP channel, and the blocking identity
-    $\mathcal{E}_{A^{[p]}} = (\mathcal{E}_A)^p$ given by
+    $\mathcal{E}_B = \mathcal{E}_{A^{[p]}}$. The left-canonical property makes
+    $\mathcal{E}_A$ a CPTP channel, and the blocking identity
+    $\mathcal{E}_{A^{[p]}} = (\mathcal{E}_A)^p$ (formalised as
     \lean{MPSTensor.transferMap_blockTensor}) then identifies
     $\mathcal{E}_B$ with the $p$-th power of the channel $\mathcal{E}_A$.
 \end{proof}
 
-\begin{theorem}[$p$-divisibility implies $p$-refinability under the inverse canonicalization hypothesis]%
+\begin{definition}[Blocked-to-root channel-root hypothesis from Z-gauge]
+    \label{def:peripheral_equalcase_root_channel_from_zgauge}
+    \lean{MPSTensor.PeripheralEqualCaseRootChannelOfZGauge}
+    \leanok
+    \uses{def:peripheral_equalcase_root_from_zgauge, def:z_gauge_equiv,
+          def:p_divisible_channel}
+    Fix $(d,D,p)$. This sharpened reconstruction hypothesis asks for a CPTP map
+    $\mathcal E'$ such that
+    $\mathcal E_C = (\mathcal E')^p$ and the Choi/Kraus rank of
+    $\mathcal E'$ is at most $d$, whenever $C$ is related to $A^{[p]}$ by a
+    blocked $\mathbb Z_m$-gauge witness.
+\end{definition}
+
+\begin{theorem}[Channel-root criterion for blocked-to-root reconstruction]
+    \label{thm:peripheral_equalcase_root_from_root_channel}
+    \lean{MPSTensor.peripheralEqualCaseRootFromZGauge_of_rootChannel}
+    \leanok
+    \uses{def:peripheral_equalcase_root_channel_from_zgauge,
+          def:peripheral_equalcase_root_from_zgauge}
+    If the blocked-to-root channel-root hypothesis holds, then the tensor-level
+    blocked-to-root reconstruction hypothesis holds as well.
+\end{theorem}
+
+\begin{proof}\leanok
+    Choose a tensor $A'$ realizing the bounded Kraus family of the root channel.
+    Because the channel is trace-preserving, the Kraus operators of $A'$ satisfy
+    $\sum_i (A'^i)^\dagger A'^i = \Id$. The identity
+    $\mathcal E_C = (\mathcal E_{A'})^p$ is then equivalent to
+    $\mathcal E_C = \mathcal E_{A'^{[p]}}$ by the blocking formula.
+\end{proof}
+
+\begin{theorem}[Thm.~4.1 reverse direction, conditional form]%
     \label{thm:thm_4_1_p_refinement_reverse}
     \lean{MPSTensor.thm_4_1_p_refinement_reverse}
     \leanok
     \uses{def:irreducible_form, def:p_refinable, def:p_divisible_channel}
     Let $B$ be an MPS tensor in irreducible form~II and let $p \ge 1$.
-    Assume an \emph{inverse canonicalization} hypothesis providing a
-    witness tensor $A$ with the same physical and bond dimensions as $B$ and
+    Assume an \emph{inverse canonicalization} hypothesis providing a witness
+    $A : \mathrm{MPSTensor}\ d\ D$ with
     $\mathcal{E}_B = \mathcal{E}_{A^{[p]}}$ whenever $\mathcal{E}_B$ is
-    $p$-divisible.  Then $p$-divisibility of $\mathcal{E}_B$ implies
+    $p$-divisible. Then $p$-divisibility of $\mathcal{E}_B$ implies
     $p$-refinability of $B$.
 \end{theorem}
 
 \begin{proof}\leanok
-    From the inverse canonicalization hypothesis, extract
-    $A$ with $\mathcal{E}_B = \mathcal{E}_{A^{[p]}}$.  This matches two
-    finite Kraus families of the same completely positive map: the
-    blocked family $A^{[p]}$ with $d^{p}$ operators and the original
-    family $B$ with $d$ operators.  The cardinality comparison
-    $d \le d^{p}$ holds whenever $p \ge 1$, so the isometric freedom of
-    Kraus representations (\lean{kraus_isometry_freedom_iff}) supplies an
-    isometry $V \in M_{d^p \times d}(\C)$ with $V^{\dagger} V = \Id$ and
-    $(A^{[p]})^{\alpha} = \sum_{j} V_{\alpha,j}\, B^{j}$.  Expanding
-    the blocked MPV coefficient $V^{(N)}(A^{[p]})_\tau$ by linearity of
-    matrix multiplication and of the trace, the contributions
-    reorganise into the $V$-weighted sum over length-$N$ words of $B$
-    required by Definition~\ref{def:p_refinable}, exhibiting $V$ as the
-    isometry $W$ in the statement of $p$-refinability.
+    From the inverse canonicalization hypothesis, extract $A$ with
+    $\mathcal{E}_B = \mathcal{E}_{A^{[p]}}$. This matches two finite Kraus
+    families of the same completely positive map: the blocked family $A^{[p]}$
+    with $d^{p}$ operators and the original family $B$ with $d$ operators.
+    The cardinality comparison $d \le d^{p}$ holds whenever $p \ge 1$, so Wolf
+    Theorem~2.18 (isometric freedom of Kraus representations, formalised as
+    \lean{kraus_isometry_freedom_iff}) supplies an isometry
+    $V \in M_{d^p \times d}(\C)$ with $V^{\dagger} V = \Id$ and
+    $(A^{[p]})^{\alpha} = \sum_{j} V_{\alpha,j}\, B^{j}$. Expanding
+    $\mathrm{coeff}\,(A^{[p]})\,(\mathrm{ofFn}\,\tau)$ by linearity of matrix
+    multiplication and of the trace, the contributions reorganise into the
+    $V$-weighted sum over length-$N$ words of $B$ required by
+    Definition~\ref{def:p_refinable}, exhibiting $V$ as the isometry $W$ in the
+    statement of $p$-refinability.
 \end{proof}
 
 \begin{remark}[Continuum-limit application]\notready
