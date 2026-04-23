@@ -107,8 +107,8 @@ theorem localTensorMap_castLocalCoeffMap_single (A B : Tensor G d)
       B.component v (castLocalVirtualConfig A B hDim v η) := by
   rw [castLocalCoeffMap_single, localTensorMap_apply_single]
 
-/-- The canonical local gauge candidate reconstructs the orthogonal projection of
-`B`'s local tensor into the image of `localTensorMap A v`. -/
+/-- The canonical local gauge candidate reconstructs the projection of `B`'s
+local tensor into the image of `localTensorMap A v`. -/
 theorem localGaugeCandidate_apply_single (A B : Tensor G d)
     (hA : IsVertexInjective A) (hDim : A.bondDim = B.bondDim) (v : V)
     (η : LocalVirtualConfig A v) :
