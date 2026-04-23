@@ -134,7 +134,7 @@ $p$-divisibility of the transfer map.
     irreducibility preservation.
 \end{proof}
 
-\begin{theorem}[SameMPV preserved by physical rotation]%
+\begin{theorem}[Equality of MPV families preserved by physical rotation]%
     \label{thm:same_mpv_rotate_physical}
     \lean{MPSTensor.sameMPV₂_rotatePhysical}
     \leanok
@@ -150,7 +150,7 @@ $p$-divisibility of the transfer map.
     hypothesis via word concatenation.
 \end{proof}
 
-\begin{theorem}[Physical rotation distributes over block assembly]%
+\begin{theorem}[Physical rotation distributes over block-diagonal composition]%
     \label{thm:rotate_physical_blocks}
     \lean{MPSTensor.rotatePhysical_toTensorFromBlocks}
     \leanok
@@ -184,9 +184,9 @@ $p$-divisibility of the transfer map.
         thm:same_mpv_rotate_physical,
         thm:rotate_physical_blocks}
     Each block remains periodic by
-    Theorem~\ref{thm:periodic_rotate_physical}, the SameMPV condition
+    Theorem~\ref{thm:periodic_rotate_physical}, equality of MPV families
     transfers via Theorem~\ref{thm:same_mpv_rotate_physical}, and
-    block-assembly compatibility follows from
+    block-diagonal compatibility follows from
     Theorem~\ref{thm:rotate_physical_blocks}.
 \end{proof}
 
@@ -378,7 +378,7 @@ The following is Theorem~3.8 (``equal case'') of \cite{DeLasCuevas2017Irreducibl
     \noindent\emph{Remark.}
     The proof is conditional on the periodic-overlap dichotomy
     (Proposition~3.3 of~\cite{DeLasCuevas2017Irreducible}),
-    which remains to be proved.
+    which is left here as a separate hypothesis.
 \end{theorem}
 
 \subsection{Periodic overlap dichotomy}
@@ -409,13 +409,13 @@ The following is Theorem~3.8 (``equal case'') of \cite{DeLasCuevas2017Irreducibl
     \lean{MPSTensor.cornerTransition}
     \leanok
     \uses{def:cyclic_sector_decomp}
-    For a cyclic projection family $(P_k)_{k \in \mathrm{Fin}\,m}$ on the
+    For a cyclic projection family $(P_k)_{k=0}^{m-1}$ on the
     ambient bond algebra of an MPS tensor $A$, the \emph{one-site corner
     transition} at sector $k$ is the family of per-site matrices
     \[
-        \tau_k(A)^i := P_k \cdot A^i \cdot P_{k+1}, \qquad i \in \mathrm{Fin}\,d,
+        \tau_k(A)^i := P_k \cdot A^i \cdot P_{k+1}, \qquad i = 0,\ldots,d-1,
     \]
-    where the index $k+1$ is taken cyclically in $\mathrm{Fin}\,m$.
+    where the index $k+1$ is taken cyclically modulo~$m$.
 \end{definition}
 
 \begin{definition}[Staircase evaluation]%
@@ -424,16 +424,14 @@ The following is Theorem~3.8 (``equal case'') of \cite{DeLasCuevas2017Irreducibl
     \leanok
     \uses{def:corner_transition}
     For a word $w = (w_0,\dotsc,w_{L-1})$ on the physical index alphabet and
-    a starting sector $u$, the \emph{staircase evaluation} at $u$ is
+    a starting sector $u$, the \emph{staircase evaluation} at $u$ is the matrix
     \[
-        \mathrm{cornerEvalWord}(A, P, u, w)
-        := P_u \cdot A^{w_0} \cdot P_{u+1} \cdot A^{w_1} \cdot P_{u+2}
+        P_u \cdot A^{w_0} \cdot P_{u+1} \cdot A^{w_1} \cdot P_{u+2}
             \cdots A^{w_{L-1}} \cdot P_{u+L},
     \]
-    defined recursively by
-    $\mathrm{cornerEvalWord}(A, P, u, \varepsilon) = P_u$ and
-    $\mathrm{cornerEvalWord}(A, P, u, i \cdot w) =
-     P_u \cdot A^i \cdot \mathrm{cornerEvalWord}(A, P, u+1, w)$.
+    characterized recursively by the empty-word value $P_u$ and the rule that
+    prepending a letter $i$ inserts the factor $P_u \cdot A^i$ and advances the
+    starting sector from $u$ to $u+1$.
 \end{definition}
 
 \begin{definition}[Cyclic staircase product on blocked indices (Eq. A.8)]%
@@ -443,8 +441,8 @@ The following is Theorem~3.8 (``equal case'') of \cite{DeLasCuevas2017Irreducibl
     \uses{def:corner_eval_word}
     The \emph{blocked corner transition tensor} at sector $u$ is the
     MPS tensor on blocked physical indices defined by
-    $i \mapsto \mathrm{cornerEvalWord}(A, P, u, w_i)$, where $w_i$ is the
-    length-$m$ physical word associated to the blocked index $i$. For a
+    sending a blocked index $i$ to the staircase evaluation along the
+    associated length-$m$ physical word $w_i$. For a
     blocked index $i$ with word $(i_0,\dotsc,i_{m-1})$ this returns the
     ambient-algebra matrix
     \[
@@ -629,7 +627,7 @@ The following is Theorem~3.8 (``equal case'') of \cite{DeLasCuevas2017Irreducibl
 
 \section{Physical symmetries on periodic MPS}\label{sec:periodic_symmetry}
 
-\begin{theorem}[Cor.~4.1 — Physical symmetry yields a virtual $Z$-gauge]%
+\begin{theorem}[Physical symmetry yields a virtual $Z$-gauge]%
     \label{cor:cor_4_1_physical_symmetry_zgauge}
     \lean{MPSTensor.cor_4_1_physical_symmetry_zgauge}
     \leanok
@@ -640,7 +638,7 @@ The following is Theorem~3.8 (``equal case'') of \cite{DeLasCuevas2017Irreducibl
     physical leg, acting unitarily ($U(g)\, U(g)^{\dagger} = \Id$).
     Assume moreover the periodic equal-case Fundamental Theorem of MPS
     (Theorem~\ref{thm:periodic_ft}) as an explicit hypothesis on the
-    pair $(d, D)$ — formalised in Lean as the proposition
+    pair $(d, D)$, expressed by the hypothesis
     \lean{MPSTensor.PeriodicEqualCaseFT}\,$d\,D$.
     If $A$ is on-site symmetric under~$U$ — that is, the twisted tensor
     $\widetilde{A}_g$ has the same MPV family as~$A$ for every $g \in G$
@@ -673,8 +671,9 @@ The following is Theorem~3.8 (``equal case'') of \cite{DeLasCuevas2017Irreducibl
     \lean{MPSTensor.PeriodicProjectiveRigidity}
     \leanok
     \uses{def:twisted_tensor, def:on_site_symmetric}
-    Let $A : \mathrm{MPSTensor}\ d\ D$ be on-site symmetric under a group
-    action $U : G \to \GL_d(\C)$.  The tensor $A$ satisfies the
+    Let $A$ be an MPS tensor with physical dimension $d$ and bond dimension $D$,
+    and assume it is on-site symmetric under a group action
+    $U : G \to \GL_d(\C)$.  The tensor $A$ satisfies the
     \emph{periodic projective-rigidity hypothesis} if one may choose a
     family of virtual gauges $Y : G \to \GL_D(\C)$ and a scalar
     $2$-cochain $u : G \times G \to \C^{\times}$ such that
@@ -694,7 +693,7 @@ The following is Theorem~3.8 (``equal case'') of \cite{DeLasCuevas2017Irreducibl
     $u$ is an independent analytic input.
 \end{definition}
 
-\begin{theorem}[Cor.~4.1 projective-representation upgrade]%
+\begin{theorem}[Projective-representation upgrade]%
     \label{thm:cor_4_1_projective_rep}
     \lean{MPSTensor.cor_4_1_projective_rep}
     \leanok
@@ -764,19 +763,18 @@ The following is Theorem~3.8 (``equal case'') of \cite{DeLasCuevas2017Irreducibl
     The cohomology class of $\omega$ in $H^{2}(G, U(1))$ classifies the
     SPT phase of the symmetric MPS (cf.~Chen--Gu--Wen and
     P\'erez-Garc\'ia et al.).  This classification statement is not
-    formalised at present; only the underlying 2-cocycle identity of
-    Theorem~\ref{thm:cor_4_1_projective_rep_cocycle} is available in
-    the Lean development.
+    established here; only the underlying 2-cocycle identity of
+    Theorem~\ref{thm:cor_4_1_projective_rep_cocycle} is available.
 \end{remark}
 
-\begin{theorem}[Bundled projective representation from symmetry]%
+\begin{theorem}[Projective representation and cocycle from symmetry]%
     \label{thm:projectiveRep_of_symmetry}
     \lean{MPSTensor.projectiveRep_of_symmetry}
     \leanok
     \uses{thm:cor_4_1_projective_rep, thm:cor_4_1_projective_rep_cocycle}
     Theorems~\ref{thm:cor_4_1_projective_rep}
-    and~\ref{thm:cor_4_1_projective_rep_cocycle} are packaged into a
-    single high-level statement: from the periodic projective-rigidity
+    and~\ref{thm:cor_4_1_projective_rep_cocycle} combine into a
+    single statement: from the periodic projective-rigidity
     hypothesis (Definition~\ref{def:periodic_projective_rigidity}), one
     obtains a projective representation of $G$ on the bond space whose
     factor system is a genuine $2$-cocycle whenever $D > 0$.
@@ -803,21 +801,21 @@ for the irreducible-form framework in \cite{DeLasCuevas2017Irreducible}.
     \lean{MPSTensor.IsPRefinable}
     \leanok
     \uses{def:mps_tensor, def:blocked_tensor}
-    An MPS tensor $B : \mathrm{MPSTensor}\ d\ D$ is \emph{$p$-refinable}
-    if there exist another tensor $A : \mathrm{MPSTensor}\ d\ D$ and an
+    An MPS tensor $B$ with physical dimension $d$ and bond dimension $D$ is
+    \emph{$p$-refinable} if there exist another such tensor $A$ and an
     isometry $W : \C^d \to (\C^d)^{\otimes p}$ (encoded as a matrix
     $W \in M_{d^p \times d}(\C)$ with $W^{\dagger} W = \Id$) such that the
     $p$-blocked tensor $A^{[p]}$ matches the $W$-image of $B$ at the level
     of MPV coefficients:
     \[
-        \mathrm{coeff}\big(A^{[p]}\big)\big(\mathrm{ofFn}\,\tau\big)
+        V^{(N)}(A^{[p]})_\tau
         \;=\;
-        \sum_{\sigma : \mathrm{Fin}\, N \to \mathrm{Fin}\, d}
+        \sum_{\sigma \in \{0,\ldots,d-1\}^N}
             \Big(\prod_{k} W_{\tau(k),\,\sigma(k)}\Big)\,
-            \mathrm{coeff}\,B\,\big(\mathrm{ofFn}\,\sigma\big)
+            V^{(N)}(B)_\sigma
     \]
     for every $N \in \N$ and every
-    $\tau : \mathrm{Fin}\, N \to \mathrm{Fin}\, d^{p}$.
+    $\tau \in \{0,\ldots,d^p-1\}^N$.
 
     In paper notation, this encodes
     $\ket{V_{pN}(A)} = W^{\otimes N}\, \ket{V_N(B)}$ for all~$N$.
@@ -851,7 +849,7 @@ for the irreducible-form framework in \cite{DeLasCuevas2017Irreducible}.
     irreducible-form decomposition of $C$.
 \end{proof}
 
-\begin{theorem}[Thm.~4.1 — $p$-refinability $\iff$ $p$-divisibility]%
+\begin{theorem}[$p$-refinability iff $p$-divisibility]%
     \label{thm:thm_4_1_p_refinement}
     \lean{MPSTensor.thm_4_1_p_refinement}
     \leanok
@@ -867,15 +865,15 @@ for the irreducible-form framework in \cite{DeLasCuevas2017Irreducible}.
 
 \begin{proof}\leanok
     \uses{thm:thm_4_1_p_refinement_forward, thm:thm_4_1_p_refinement_reverse}
-    Bundle the forward implication
+    Combine the forward implication
     (Theorem~\ref{thm:thm_4_1_p_refinement_forward}) with the reverse
     implication (Theorem~\ref{thm:thm_4_1_p_refinement_reverse}) into a
-    single biconditional.  Both directions are formalised conditionally
+    single biconditional.  Both directions are stated conditionally
     on their respective canonicalization hypotheses, whose combination
     yields the full equivalence.
 \end{proof}
 
-\begin{theorem}[Thm.~4.1 forward direction, conditional form]%
+\begin{theorem}[$p$-refinability implies $p$-divisibility under the canonicalization hypothesis]%
     \label{thm:thm_4_1_p_refinement_forward}
     \lean{MPSTensor.thm_4_1_p_refinement_forward}
     \leanok
@@ -891,19 +889,19 @@ for the irreducible-form framework in \cite{DeLasCuevas2017Irreducible}.
     $\sum_i (A^i)^\dagger A^i = \Id$ (left-canonical) and
     $\mathcal{E}_B = \mathcal{E}_{A^{[p]}}$. The left-canonical property
     makes $\mathcal{E}_A$ a CPTP channel, and the blocking identity
-    $\mathcal{E}_{A^{[p]}} = (\mathcal{E}_A)^p$ (formalised as
+    $\mathcal{E}_{A^{[p]}} = (\mathcal{E}_A)^p$ given by
     \lean{MPSTensor.transferMap_blockTensor}) then identifies
     $\mathcal{E}_B$ with the $p$-th power of the channel $\mathcal{E}_A$.
 \end{proof}
 
-\begin{theorem}[Thm.~4.1 reverse direction, conditional form]%
+\begin{theorem}[$p$-divisibility implies $p$-refinability under the inverse canonicalization hypothesis]%
     \label{thm:thm_4_1_p_refinement_reverse}
     \lean{MPSTensor.thm_4_1_p_refinement_reverse}
     \leanok
     \uses{def:irreducible_form, def:p_refinable, def:p_divisible_channel}
     Let $B$ be an MPS tensor in irreducible form~II and let $p \ge 1$.
     Assume an \emph{inverse canonicalization} hypothesis providing a
-    witness $A : \mathrm{MPSTensor}\ d\ D$ with
+    witness tensor $A$ with the same physical and bond dimensions as $B$ and
     $\mathcal{E}_B = \mathcal{E}_{A^{[p]}}$ whenever $\mathcal{E}_B$ is
     $p$-divisible.  Then $p$-divisibility of $\mathcal{E}_B$ implies
     $p$-refinability of $B$.
@@ -915,12 +913,11 @@ for the irreducible-form framework in \cite{DeLasCuevas2017Irreducible}.
     finite Kraus families of the same completely positive map: the
     blocked family $A^{[p]}$ with $d^{p}$ operators and the original
     family $B$ with $d$ operators.  The cardinality comparison
-    $d \le d^{p}$ holds whenever $p \ge 1$, so Wolf
-    Theorem~2.18 (isometric freedom of Kraus representations,
-    formalised as \lean{kraus_isometry_freedom_iff}) supplies an
+    $d \le d^{p}$ holds whenever $p \ge 1$, so the isometric freedom of
+    Kraus representations (\lean{kraus_isometry_freedom_iff}) supplies an
     isometry $V \in M_{d^p \times d}(\C)$ with $V^{\dagger} V = \Id$ and
     $(A^{[p]})^{\alpha} = \sum_{j} V_{\alpha,j}\, B^{j}$.  Expanding
-    $\mathrm{coeff}\,(A^{[p]})\,(\mathrm{ofFn}\,\tau)$ by linearity of
+    the blocked MPV coefficient $V^{(N)}(A^{[p]})_\tau$ by linearity of
     matrix multiplication and of the trace, the contributions
     reorganise into the $V$-weighted sum over length-$N$ words of $B$
     required by Definition~\ref{def:p_refinable}, exhibiting $V$ as the

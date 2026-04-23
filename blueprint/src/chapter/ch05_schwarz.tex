@@ -474,7 +474,7 @@ convenience.
     The second formulation is just the corresponding Loewner-order reformulation.
 \end{proof}
 
-\begin{theorem}[Prop.~5.1: Schwarz inequality for normal operators]\label{thm:schwarz_normal_operator}
+\begin{theorem}[Schwarz inequality for normal operators]\label{thm:schwarz_normal_operator}
     \lean{KadisonSchwarz.schwarz_inequality_normal_operator}
     \leanok
     \uses{def:positive_map}
@@ -514,7 +514,7 @@ convenience.
 
 \subsection{Schwarz inequality for subnormal and commuting-dominant operators}
 
-\begin{theorem}[Thm.~5.5: Schwarz inequality for subnormal operators]\label{thm:schwarz_subnormal}
+\begin{theorem}[Schwarz inequality for subnormal operators]\label{thm:schwarz_subnormal}
     \lean{KadisonSchwarz.schwarz_inequality_subnormal_operator}
     \leanok
     \uses{def:positive_map}
@@ -539,7 +539,7 @@ convenience.
     $N$, then compress the resulting inequality back to $\C^D$.
 \end{proof}
 
-\begin{theorem}[Thm.~5.6: Schwarz inequality for commuting-dominant operators]\label{thm:schwarz_commuting_dominant}
+\begin{theorem}[Schwarz inequality for commuting-dominant operators]\label{thm:schwarz_commuting_dominant}
     \lean{KadisonSchwarz.schwarz_inequality_commuting_dominant_operator}
     \leanok
     \uses{def:positive_map}
@@ -663,7 +663,7 @@ convenience.
 
 \subsection{A positive Schwarz map that is not completely positive}
 
-\begin{example}[Wolf Example 5.3 map]\label{def:wolf_example53}
+\begin{example}[Transpose-trace map on $M_2(\C)$]\label{def:wolf_example53}
     \lean{wolfExample53}
     \leanok
     Consider the linear map $T : M_2(\C) \to M_2(\C)$ defined by
@@ -673,7 +673,7 @@ convenience.
     This is the map from \cite[Ex.~5.3]{Wolf2012Quantum}.
 \end{example}
 
-\begin{theorem}[Wolf Example 5.3 is positive]\label{thm:wolf_example53_positive}
+\begin{theorem}[The transpose-trace map is positive]\label{thm:wolf_example53_positive}
     \lean{wolfExample53_isPositive}
     \leanok
     \uses{def:wolf_example53, def:positive_map}
@@ -687,7 +687,7 @@ convenience.
     semidefinite matrices to positive semidefinite matrices.
 \end{proof}
 
-\begin{theorem}[Wolf Example 5.3 satisfies the Schwarz inequality]\label{thm:wolf_example53_schwarz}
+\begin{theorem}[The transpose-trace map satisfies the Schwarz inequality]\label{thm:wolf_example53_schwarz}
     \lean{wolfExample53_satisfies_schwarz}
     \leanok
     \uses{def:wolf_example53}
@@ -707,7 +707,7 @@ convenience.
     $F(A)$ dominates $\frac12 (A^\dagger A)^T$, hence is positive semidefinite.
 \end{proof}
 
-\begin{theorem}[Wolf Example 5.3 is not completely positive]\label{thm:wolf_example53_not_cp}
+\begin{theorem}[The transpose-trace map is not completely positive]\label{thm:wolf_example53_not_cp}
     \lean{wolfExample53_not_cp}
     \leanok
     \uses{def:wolf_example53, def:cp_map}
@@ -728,9 +728,9 @@ This section collects the operator convexity/concavity results, trace
 inequalities, the operator Jensen inequality for positive maps, and the
 Lieb concavity theorem. These are standard results in matrix analysis
 (Bhatia~Ch.~V, Wolf~Thm.~5.1, Hansen--Pedersen~2003, Lieb~1973). They are
-currently taken as assumptions pending upstream formalization of operator
-concavity and convexity for real powers $x\mapsto x^p$ on the Loewner
-order, together with operator concavity of the matrix logarithm.
+used here as cited inputs, since the corresponding matrix-analysis proofs
+for real powers $x\mapsto x^p$ on the Loewner order and for the matrix
+logarithm are not developed in this chapter.
 
 \subsection{Diagonal Jensen inequality}
 
@@ -828,13 +828,13 @@ order, together with operator concavity of the matrix logarithm.
     This is \cite[Thm.~5.1]{Wolf2012Quantum} for concave~$f(x)=x^p$.
 \end{theorem}
 
-\begin{theorem}[Jensen for concave real powers --- restatement]\label{thm:rpow_concave_jensen}
+\begin{theorem}[Map form of Jensen for concave real powers]\label{thm:rpow_concave_jensen}
     \lean{IsPositiveMap.rpow_concave_jensen}
     \notready
     \uses{thm:posMap_rpow_concave_jensen}
-    Restates Theorem~\ref{thm:posMap_rpow_concave_jensen} for downstream
-    use as a property of a positive map.
-    Axiom-dependent: not fully formalized until
+    This is the corresponding map-form statement of
+    Theorem~\ref{thm:posMap_rpow_concave_jensen}.
+    Its proof is deferred until
     Theorem~\ref{thm:posMap_rpow_concave_jensen} is proved.
 \end{theorem}
 
@@ -853,13 +853,13 @@ order, together with operator concavity of the matrix logarithm.
     This is \cite[Thm.~5.1]{Wolf2012Quantum} for convex~$f(x)=x^p$.
 \end{theorem}
 
-\begin{theorem}[Jensen for convex real powers --- restatement]\label{thm:rpow_convex_jensen}
+\begin{theorem}[Map form of Jensen for convex real powers]\label{thm:rpow_convex_jensen}
     \lean{IsPositiveMap.rpow_convex_jensen}
     \notready
     \uses{thm:posMap_rpow_convex_jensen}
-    Restates Theorem~\ref{thm:posMap_rpow_convex_jensen} for downstream
-    use as a property of a positive map.
-    Axiom-dependent: not fully formalized until
+    This is the corresponding map-form statement of
+    Theorem~\ref{thm:posMap_rpow_convex_jensen}.
+    Its proof is deferred until
     Theorem~\ref{thm:posMap_rpow_convex_jensen} is proved.
 \end{theorem}
 
@@ -879,13 +879,13 @@ order, together with operator concavity of the matrix logarithm.
     Requires unitality ($T(\Id)=\Id$), not merely subunitality.
 \end{theorem}
 
-\begin{theorem}[Jensen for concave log --- restatement]\label{thm:log_concave_jensen}
+\begin{theorem}[Map form of Jensen for the concave logarithm]\label{thm:log_concave_jensen}
     \lean{IsPositiveMap.log_concave_jensen}
     \notready
     \uses{thm:posMap_log_concave_jensen}
-    Restates Theorem~\ref{thm:posMap_log_concave_jensen} for downstream
-    use as a property of a positive map.
-    Axiom-dependent: not fully formalized until
+    This is the corresponding map-form statement of
+    Theorem~\ref{thm:posMap_log_concave_jensen}.
+    Its proof is deferred until
     Theorem~\ref{thm:posMap_log_concave_jensen} is proved.
 \end{theorem}
 
@@ -911,12 +911,13 @@ order, together with operator concavity of the matrix logarithm.
     See Lieb (1973) and Ando (1979).
 \end{theorem}
 
-\begin{theorem}[Lieb concavity --- restatement]\label{thm:lieb_concavity}
+\begin{theorem}[Map form of Lieb concavity]\label{thm:lieb_concavity}
     \lean{lieb_concavity}
     \notready
     \uses{thm:lieb_concavity_axiom}
-    Restates Theorem~\ref{thm:lieb_concavity_axiom} for downstream use.
-    Axiom-dependent: not fully formalized until
+    This is the corresponding map-form statement of
+    Theorem~\ref{thm:lieb_concavity_axiom}.
+    Its proof is deferred until
     Theorem~\ref{thm:lieb_concavity_axiom} is proved.
 \end{theorem}
 

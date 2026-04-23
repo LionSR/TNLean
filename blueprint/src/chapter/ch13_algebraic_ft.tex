@@ -22,8 +22,8 @@ and blocked chains.
 Throughout, $D$ is the bond dimension and $d$ is the physical dimension
 with $d \ge D^2$.
 The extensions to injective and normal PEPS on arbitrary graphs and the
-improved system-size bound ($2L+1$ in place of $3L$) are left for
-future work.
+improved system-size bound ($2L+1$ in place of $3L$) are not pursued in
+this chapter.
 The chain data (Definition~\ref{def:non_ti_chain}),
 including same chain state, injectivity, and cyclic gauge equivalence,
 was introduced in Chapter~\ref{ch:single}.
@@ -222,7 +222,7 @@ operation on the physical indices.
 %% ---------------------------------------------------------
 
 This section records the 3-site virtual-bond statement used later in the
-paper proof. In the current Lean development the hypothesis is already the
+paper proof. Here the hypothesis is already the
 all-length MPV equality of the combined tensors, and the conclusion is the
 conjugacy of the middle-bond insertion data.
 
@@ -247,7 +247,7 @@ conjugacy of the middle-bond insertion data.
     arbitrary chain length $n \ge 3$ and any bond position, with
     uniqueness of $Z$ up to scalar.
     The chain-level generalization to arbitrary $n \ge 3$
-    and any bond position is future work.
+    and any bond position is not pursued here.
 \end{lemma}
 
 \begin{proof}
@@ -384,18 +384,18 @@ reduction hypothesis.
     \leanok
     \uses{lem:blocking_preserves_injectivity, thm:ft_single}
     Choose one site of $\mathbf{A}$; its injectivity implies injectivity of
-    the bundled tensor by Lemma~\ref{lem:blocking_preserves_injectivity}.
+    the combined tensor by Lemma~\ref{lem:blocking_preserves_injectivity}.
     Apply the single-block Fundamental Theorem
-    (Theorem~\ref{thm:ft_single}) to the two bundled tensors.
-    This yields one invertible matrix $X$ such that every bundled matrix of
-    $\mathbf{B}$ equals the corresponding bundled matrix of
+    (Theorem~\ref{thm:ft_single}) to the two combined tensors.
+    This yields one invertible matrix $X$ such that every combined matrix of
+    $\mathbf{B}$ equals the corresponding combined matrix of
     $\mathbf{A}$ conjugated by $X$.
     Reading this identity back at each site gives
     $B_k^i = X A_k^i X^{-1}$ for all $k$ and $i$, so the constant choice
     $Z_k = X$ is a cyclic gauge.
 \end{proof}
 
-\subsection{From fixed-length chain states to bundled-tensor MPV agreement}
+\subsection{From fixed-length chain states to combined-tensor MPV agreement}
 
 \begin{definition}[Same-state reduction hypothesis]
     \label{def:same_state_reduction_hyp}
@@ -405,11 +405,11 @@ reduction hypothesis.
     A \emph{same-state reduction hypothesis} for dimensions $(d,D)$ is the
     assertion that whenever $\mathbf{A}$ is an injective $n$-site chain with
     $n \ge 3$ and $\mathbf{A},\mathbf{B}$ generate the same chain state,
-    then the bundled tensors of $\mathbf{A}$ and $\mathbf{B}$ generate the
+    then the combined tensors of $\mathbf{A}$ and $\mathbf{B}$ generate the
     same MPV family.
 \end{definition}
 
-\begin{lemma}[Same state gives bundled-tensor MPV agreement]
+\begin{lemma}[Same state gives combined-tensor MPV agreement]
     \label{lem:sameMPV_chainCombined_of_sameState}
     \lean{MPSChainTensor.sameMPV_chainCombined_of_sameState}
     \leanok
@@ -419,7 +419,7 @@ reduction hypothesis.
     dimension $D$, with $n \ge 3$, and assume that $\mathbf{A}$ is
     injective.
     If $\mathbf{A}$ and $\mathbf{B}$ generate the same chain state, then the
-    bundled tensors of $\mathbf{A}$ and $\mathbf{B}$ generate the same MPV
+    combined tensors of $\mathbf{A}$ and $\mathbf{B}$ generate the same MPV
     family.
 \end{lemma}
 
@@ -448,7 +448,7 @@ reduction hypothesis.
     \uses{lem:sameMPV_chainCombined_of_sameState,
         thm:fundamentalTheorem_injective_chain}
     Apply Lemma~\ref{lem:sameMPV_chainCombined_of_sameState} to convert the
-    fixed-length chain-state hypothesis into equality of the bundled-tensor
+    fixed-length chain-state hypothesis into equality of the combined-tensor
     MPV families, then invoke
     Theorem~\ref{thm:fundamentalTheorem_injective_chain}.
 \end{proof}
@@ -457,14 +457,14 @@ reduction hypothesis.
     \label{rem:ft_vs_singleBlock}
     \uses{thm:fundamentalTheorem_injective_chain, def:injective}
     Theorem~\ref{thm:fundamentalTheorem_injective_chain} treats a fixed chain
-    length and assumes equality of the bundled-tensor MPV families.
+    length and assumes equality of the combined-tensor MPV families.
     The single-block Fundamental Theorem
     (Theorem~\ref{thm:ft_single}) instead studies one tensor at all system
     sizes and concludes exact gauge equivalence
     $B^i = X A^i X^{-1}$.
-    The chain theorem is recovered by converting the chain into one bundled
+    The chain theorem is recovered by converting the chain into one combined
     tensor; the price is that the hypothesis is all-length MPV equality for
-    that bundled tensor rather than equality of the chain state at one fixed
+    that combined tensor rather than equality of the chain state at one fixed
     length.
 \end{remark}
 
@@ -547,7 +547,7 @@ reduction hypothesis.
     \uses{def:injective, def:same_mpv}
     Let $A$ and $B$ be MPS tensors of bond dimension $D$, and fix a chain
     length $n \ge 1$.
-    Assume that $A$ is injective and that the bundled tensors of the two
+    Assume that $A$ is injective and that the combined tensors of the two
     constant chains $(A, \ldots, A)$ and $(B, \ldots, B)$ generate the same
     MPV family.
     Then there exists an invertible matrix $X \in \GL_D(\C)$ such that
@@ -561,8 +561,8 @@ reduction hypothesis.
     \leanok
     \uses{lem:blocking_preserves_injectivity, thm:ft_single}
     Bundle the constant chains into one tensor.
-    Injectivity of $A$ implies injectivity of the bundled tensor by
-    Lemma~\ref{lem:blocking_preserves_injectivity}, and the bundled MPV
+    Injectivity of $A$ implies injectivity of the combined tensor by
+    Lemma~\ref{lem:blocking_preserves_injectivity}, and the combined-tensor MPV
     equality is exactly the hypothesis needed for the single-block
     Fundamental Theorem.
     The resulting gauge matrix is independent of the site because every site
@@ -575,7 +575,7 @@ reduction hypothesis.
     \uses{def:injective, def:same_mpv}
     Let $A$ and $B$ be MPS tensors of bond dimension $D$, and fix a chain
     length $n \ge 1$.
-    Assume that $A$ is injective and that the bundled tensors of the two
+    Assume that $A$ is injective and that the combined tensors of the two
     constant chains $(A, \ldots, A)$ and $(B, \ldots, B)$ generate the same
     MPV family.
     Then there exist an invertible matrix $Z \in \GL_D(\C)$ and a scalar
@@ -686,7 +686,7 @@ Chapter~\ref{ch:symmetry}.
     \uses{def:blocked_chain, def:same_mpv}
     Let $A$ and $B$ be MPS tensors of bond dimension $D$, let $L$ be a
     blocking length, and let $n$ be a chain length.
-    Assume that $A$ is $L$-block injective and that the bundled tensors of the
+    Assume that $A$ is $L$-block injective and that the combined tensors of the
     two constant blocked chains built from $A^{[L]}$ and $B^{[L]}$ generate the
     same MPV family.
     Then the two blocked chains are gauge equivalent.
@@ -703,10 +703,9 @@ Chapter~\ref{ch:symmetry}.
 \end{proof}
 
 \begin{remark}
-    The theorem above is the exact blocked-chain endpoint presently formalized
-    in Lean.
+    The theorem above is the exact blocked-chain endpoint established here.
     Recovering sitewise gauges for the original unblocked tensors, and hence
-    the paper's normal-MPS corollary, remains future work.
+    the paper's normal-MPS corollary, is not established here.
 \end{remark}
 
 %% ---------------------------------------------------------
@@ -1231,7 +1230,7 @@ which is then combined with overlap estimates and the leading-block peel.
     injective.
     Consider the two constant translation-invariant chains
     $(A, \ldots, A)$ and $(B, \ldots, B)$ of length $n \ge 1$.
-    If the bundled tensors of the two chains generate the same MPV
+    If the combined tensors of the two chains generate the same MPV
     family, then:
     \begin{enumerate}
         \item $B$ is gauge equivalent to $A$: there exists
@@ -1264,7 +1263,7 @@ which is then combined with overlap estimates and the leading-block peel.
     \uses{lem:sameMPV_chainCombined_of_sameState,
         thm:ti_reduction_corollary}
     The same-state reduction hypothesis upgrades equality of the two constant
-    chain states to equality of their bundled-tensor MPV families.
+    chain states to equality of their combined-tensor MPV families.
     Then Theorem~\ref{thm:ti_reduction_corollary} applies.
 \end{proof}
 
@@ -1647,10 +1646,9 @@ Theorem~2 of~\cite{Molnar2018NormalPEPS}.
     (Theorem~2 of~\cite{Molnar2018NormalPEPS}).
 \end{theorem}
 
-\begin{remark}[Current scalar-uniqueness placeholder]
+\begin{remark}[Scalar-uniqueness caveat]
     \lean{TNLean.PEPS.gauge_unique_up_to_scalar}
-    The present Lean declaration records a global-scalar uniqueness claim, but
-    this conclusion is known to be too strong.
+    The stated global-scalar uniqueness claim is too strong.
     On a triangle with all bond dimensions equal to $1$, edge scalars
     $(a,a^{-1},a)$ preserve every local tensor yet are not all multiples of
     $(1,1,1)$ when $a \neq \pm 1$.
