@@ -52,6 +52,49 @@ theorem exists_tensor_of_hasKrausRankLE
   ext X i j
   simpa [transferMap_apply] using congrArg (fun M => M i j) (hK X).symm
 
+/-- **Channel-root formulation of blocked-to-root reconstruction.**
+
+This Prop isolates the channel-theoretic core of
+`PeripheralEqualCaseRootFromZGauge`: from a blocked `Z`-gauge witness between
+`C` and `blockTensor A p`, extract a CPTP root `E'` of `transferMap C` whose
+Kraus rank is at most the ambient physical dimension `d`. Once such a root is
+available, the tensor-level reconstruction follows by choosing a Kraus family
+with `d` operators. -/
+def PeripheralEqualCaseRootChannelOfZGauge (d D p : ℕ) : Prop :=
+  ∀ {A : MPSTensor d D} {C : MPSTensor (blockPhysDim d p) D} {m : ℕ},
+    IsIrreducibleForm C →
+    0 < m →
+    ZGaugeEquiv m C (blockTensor A p) →
+      ∃ E' : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ,
+        IsChannel E' ∧
+        transferMap C = E' ^ p ∧
+        Channel.HasKrausRankLE (D := D) E' d
+
+/-- **Tensor-level blocked-to-root reconstruction from a bounded channel root.**
+
+If a blocked `Z`-gauge witness yields a CPTP root channel of `transferMap C`
+with Kraus rank at most `d`, then one can choose a tensor `A' : MPSTensor d D`
+realizing that root. The channel property forces `A'` to be left-canonical,
+and blocking recovers the transfer map of `C`. -/
+theorem peripheralEqualCaseRootFromZGauge_of_rootChannel
+    (hRoot : PeripheralEqualCaseRootChannelOfZGauge d D p) :
+    PeripheralEqualCaseRootFromZGauge d D p := by
+  intro A C m hC hm hZ
+  obtain ⟨E', hE'chan, hpow, hRank⟩ :=
+    hRoot (A := A) (C := C) (m := m) hC hm hZ
+  obtain ⟨A', hA'⟩ := exists_tensor_of_hasKrausRankLE (d := d) (D := D) hRank
+  refine ⟨A', ?_, ?_⟩
+  · have hK :
+        ∀ X : Matrix (Fin D) (Fin D) ℂ,
+          E' X = ∑ i : Fin d, A' i * X * (A' i)ᴴ := by
+        intro X
+        simpa [transferMap_apply] using (congrArg (fun T => T X) hA').symm
+    simpa using kraus_sum_conjTranspose_mul_of_tp A' E' hK hE'chan.tp
+  · calc
+      transferMap C = E' ^ p := hpow
+      _ = (transferMap A') ^ p := by rw [← hA']
+      _ = transferMap (blockTensor A' p) := by rw [transferMap_blockTensor]
+
 /-- A clean root-cardinality hypothesis that isolates the remaining Kraus-rank
 step in the reverse direction of Theorem 4.1. -/
 def PRefinementInverseRootKrausRankBound (d D p : ℕ) : Prop :=

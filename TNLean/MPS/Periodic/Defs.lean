@@ -265,6 +265,68 @@ theorem ZGaugeEquiv.of_period_one {A B : MPSTensor d D}
       (Y : Matrix (Fin D) (Fin D) ℂ))) hAi
   simpa [Matrix.mul_assoc] using this.symm
 
+private lemma evalWord_leftMul_of_commute
+    {A : MPSTensor d D} {Z : Matrix (Fin D) (Fin D) ℂ}
+    (hcomm : ∀ i : Fin d, Z * A i = A i * Z) :
+    ∀ w : List (Fin d),
+      evalWord (fun i => Z * A i) w = Z ^ w.length * evalWord A w
+  | [] => by simp [evalWord]
+  | i :: w => by
+      have hCommZi : Commute Z (A i) := by
+        simpa [Commute] using hcomm i
+      have hCommPow : A i * Z ^ w.length = Z ^ w.length * A i := by
+        exact (hCommZi.symm.pow_right w.length).eq
+      calc
+        evalWord (fun j => Z * A j) (i :: w)
+            = (Z * A i) * evalWord (fun j => Z * A j) w := by
+                simp [evalWord]
+        _ = (Z * A i) * (Z ^ w.length * evalWord A w) := by
+              rw [evalWord_leftMul_of_commute hcomm w]
+        _ = Z * (A i * Z ^ w.length) * evalWord A w := by
+              simp [Matrix.mul_assoc]
+        _ = Z * (Z ^ w.length * A i) * evalWord A w := by
+              rw [hCommPow]
+        _ = (Z * Z ^ w.length) * (A i * evalWord A w) := by
+              simp [Matrix.mul_assoc]
+        _ = Z ^ (w.length + 1) * evalWord A (i :: w) := by
+              simp [evalWord, pow_succ', Matrix.mul_assoc]
+
+/-- Blocking a `ℤ_m`-gauge equivalence by a full period kills the `Z`-phase and
+produces an ordinary gauge equivalence. -/
+theorem ZGaugeEquiv.blockTensor_gaugeEquiv {m : ℕ} {A B : MPSTensor d D}
+    (h : ZGaugeEquiv m A B) :
+    GaugeEquiv (blockTensor A m) (blockTensor B m) := by
+  classical
+  rcases h with ⟨Y, Z, hpow, hcomm, hrel⟩
+  refine ⟨Y⁻¹, ?_⟩
+  intro i
+  have hWord :
+      evalWord A (wordOfBlock d m i) =
+        (Y : Matrix (Fin D) (Fin D) ℂ) * evalWord B (wordOfBlock d m i) *
+          (((Y⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) := by
+    calc
+      evalWord A (wordOfBlock d m i)
+          = Z ^ (wordOfBlock d m i).length * evalWord A (wordOfBlock d m i) := by
+              simp [length_wordOfBlock, hpow]
+      _ = evalWord (fun j => Z * A j) (wordOfBlock d m i) := by
+            symm
+            exact evalWord_leftMul_of_commute hcomm (wordOfBlock d m i)
+      _ = (Y : Matrix (Fin D) (Fin D) ℂ) * evalWord B (wordOfBlock d m i) *
+            (((Y⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) := by
+            simpa using
+              (evalWord_gauge (A := B) (B := fun j => Z * A j) Y
+                (by intro j; simpa using hrel j) (wordOfBlock d m i))
+  have := congrArg (fun M =>
+    (((Y⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * M *
+      (Y : Matrix (Fin D) (Fin D) ℂ))) hWord
+  simpa [blockTensor, Matrix.mul_assoc] using this
+
+/-- Full-period blocking turns a `ℤ_m`-gauge equivalence into MPV equality. -/
+theorem ZGaugeEquiv.blockTensor_sameMPV {m : ℕ} {A B : MPSTensor d D}
+    (h : ZGaugeEquiv m A B) :
+    SameMPV (blockTensor A m) (blockTensor B m) :=
+  GaugeEquiv.sameMPV (ZGaugeEquiv.blockTensor_gaugeEquiv h)
+
 /-- Repeated periodic blocks have equal periods, provided they share peripheral spectrum. -/
 theorem IsPeriodic.period_eq_of_repeatedBlocks
     {m n : ℕ} {A B : MPSTensor d D}
