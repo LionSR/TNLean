@@ -192,7 +192,7 @@ pipeline: on each cyclic sector, the one-step adjoint transfer map should be
 multiplicative on the `((E_A^†)^m)`-fixed corner algebra. Once this is available,
 `hProjStep_cyclic_sector_supported` and the orbit-sum lift follow from the
 abstract infrastructure in `SectorIrreducibility.HLift`. -/
-theorem sectorFixedPointAlgebraRigidity_cyclic_sector_supported
+private theorem sectorFixedPointAlgebraRigidity_cyclic_sector_supported
     [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
     {P : Fin m → MatrixAlg D}
     (_hP : IsPeriodic m A)
@@ -210,14 +210,14 @@ theorem sectorFixedPointAlgebraRigidity_cyclic_sector_supported
 /-- One-step projection transport for `((E_A^†)^m)`-fixed cyclic-sector projections.
 
 This packages the exact `hProjStep`-style consequence needed by the overlap
-pipeline from the sharper fixed-point-algebra rigidity statement above. -/
+pipeline, assuming the fixed-point-algebra rigidity input on cyclic sectors. -/
 theorem hProjStep_cyclic_sector_supported
     [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
-    (hP : IsPeriodic m A)
     {P : Fin m → MatrixAlg D}
-    (hPproj : ∀ k, IsOrthogonalProjection (P k))
-    (hCyclic :
-      ∀ k, transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k)
+    (hRigidity :
+      SectorFixedPointAlgebraRigidity
+        (D := D) (m := m)
+        (transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) P)
     {k : Fin m} {X : MatrixAlg D}
     (hXproj : IsOrthogonalProjection X)
     (hXP : X * P k = X)
@@ -231,12 +231,9 @@ theorem hProjStep_cyclic_sector_supported
     intro Y
     simpa [T, MPSTensor.transferMap_apply, Kraus.map] using
       (Kraus.map_conjTranspose (K := fun i => (A i)ᴴ) Y).symm
-  have hRigidity : SectorFixedPointAlgebraRigidity (D := D) (m := m) T P :=
-    sectorFixedPointAlgebraRigidity_cyclic_sector_supported
-      (A := A) (m := m) (P := P) hP hPproj hCyclic
   simpa [T] using
     hProjStep_of_sectorFixedPointAlgebraRigidity
-      (D := D) (m := m) (T := T) (P := P) hStarT hRigidity
+      (D := D) (m := m) (T := T) (P := P) hStarT (by simpa [T] using hRigidity)
       (k := k) (X := X) hXproj hXP hPX hXfix
 
 private lemma hLift_cyclicDecomp_mps_of_fixUpgrade_missingBridge
