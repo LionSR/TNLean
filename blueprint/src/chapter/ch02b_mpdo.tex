@@ -980,9 +980,31 @@ Combine Theorem~\ref{thm:mpdo_rfp_of_fusion} with
 Theorem~\ref{thm:mpdo_rfp_via_algebra_from_rfp}.
 \end{proof}
 
-The current formal layer still does not recover the paper's special diagonal
-matrices $\chi_{\alpha,\beta,\gamma}$ from Theorem~IV.13(ii). What it does
-provide is the first explicit coefficient data attached to the algebra tower:
+\begin{theorem}[Stabilized blocked adjoint fixed points yield algebra data]%
+    \label{thm:mpdo_algebra_from_stabilized_adjoint_fixedpoints}
+    \lean{MPOTensor.isRFP_MPDO_via_algebra_of_adjointFixedPoints_eq_of_isTP_of_posDef_fixed}
+    \leanok
+    \uses{def:mpdo_rfp_via_algebra}
+    Assume the doubled tensor is trace-preserving and the transfer map admits a
+    positive-definite fixed point. If, for every positive blocked size $n$, the
+    adjoint fixed-point space of the blocked transfer map agrees with the
+    adjoint fixed-point space of the original transfer map, then the current
+    algebra predicate holds.
+\end{theorem}
+\begin{proof}\leanok
+Use the adjoint fixed-point algebra of the original transfer map as a constant
+support-algebra tower. The stabilization hypothesis identifies that same
+algebra with the adjoint fixed-point space of every positive blocked transfer
+map, so the stationary family is compatible with the present definition.
+\end{proof}
+
+This still falls short of the full converse direction of
+\cite[Theorem~IV.13]{Cirac2017MPDO_AnnPhys}: the present compatibility
+predicate only sees stabilized adjoint fixed-point algebras, not yet the
+paper's coefficient/BNT data. The current formal layer still does not recover
+the special diagonal matrices $\chi_{\alpha,\beta,\gamma}$ from
+Theorem~IV.13(ii). What it does provide is the first explicit coefficient data
+attached to the algebra tower:
 a chosen basis of each support algebra, coordinate maps into a finite scalar
 family, and the corresponding multiplication / inclusion coefficient arrays.
 

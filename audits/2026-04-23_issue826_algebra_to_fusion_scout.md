@@ -74,9 +74,23 @@ for the current Lean predicate, and the honest next step is either:
    why the full converse still requires the coefficient/BNT layer from
    Appendix C.3–C.4.
 
-## Current assessment
+## Outcome of this pass
 
-The issue may still allow a **strong honest forward step**, but the likely
-outcome is not a proof of the requested converse theorem. The first thing to
-settle is whether the current algebra predicate is already too weak; the
-candidate dephasing example suggests that it is.
+The explicit dephasing counterexample was **not** formalized in Lean during this
+pass, so I am not claiming a machine-checked disproof of the converse.
+
+What did land is the strongest clean intermediate result I could verify on top
+of the imported non-vacuous algebra layer:
+
+- `MPOTensor.AlgebraStructureData.stationaryOfFaithfulFixedPoint_compatible_of_adjointFixedPoints_eq`
+- `MPOTensor.isRFP_MPDO_via_algebra_of_adjointFixedPoints_eq_of_isTP_of_posDef_fixed`
+
+These isolate the exact extra hypothesis that the current Lean compatibility
+predicate can genuinely see: stabilization of the adjoint fixed-point algebras
+of the blocked transfer maps.
+
+So the branch now gives an honest forward theorem and updated blueprint text,
+but it does **not** prove the requested converse
+`IsRFP_MPDO_via_algebra → IsRFP_MPDO_via_fusion`.
+The remaining gap is still the stronger coefficient/BNT layer from
+Appendix C.3–C.4.

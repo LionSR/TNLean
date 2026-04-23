@@ -244,6 +244,24 @@ theorem stationaryOfFaithfulFixedPoint_compatible
         (blockedTransferMap_eq_transferMap_of_isRFP (M := M) hRFP hn)
   simp [blockedTransferMap_eq_pow, transferMap_eq_toMPSTensor, hAdj]
 
+/-- The same stationary tower is compatible whenever the adjoint fixed points of
+all positive blocked transfer maps agree with the adjoint fixed points of the
+original transfer map. This criterion does not assume `IsRFP M`; it isolates
+exactly the stabilization property needed by the current compatibility
+predicate. -/
+theorem stationaryOfFaithfulFixedPoint_compatible_of_adjointFixedPoints_eq
+    (M : MPOTensor d D) (h_tp : Kraus.IsTP M.toMPSTensor)
+    {ρ : Mat} (hρ : ρ.PosDef) (hρ_fix : transferMap M ρ = ρ)
+    (hEq : ∀ n : ℕ, 0 < n → ∀ X : Mat,
+      (transferMap M).adjoint X = X ↔ (blockedTransferMap M n).adjoint X = X) :
+    (stationaryOfFaithfulFixedPoint M h_tp hρ hρ_fix).CompatibleWith M := by
+  simp only [AlgebraStructureData.CompatibleWith]
+  intro n hn X
+  change X ∈ faithfulFixedPointSupportAlgebra M h_tp hρ hρ_fix ↔
+    (blockedTransferMap M n).adjoint X = X
+  rw [mem_faithfulFixedPointSupportAlgebra_iff (M := M) h_tp hρ hρ_fix X]
+  exact hEq n hn X
+
 end AlgebraStructureData
 
 /-- The algebra-structure formulation of MPDO RFP used in this file.
@@ -279,6 +297,21 @@ theorem isRFP_MPDO_via_algebra_of_isRFP_MPDO_via_fusion_of_isTP_of_posDef_fixed
     IsRFP_MPDO_via_algebra M := by
   exact isRFP_MPDO_via_algebra_of_isRFP_of_isTP_of_posDef_fixed
     (M := M) (isRFP_of_isRFP_MPDO_via_fusion hFusion) h_tp hρ hρ_fix
+
+/-- The current algebra-side predicate also holds whenever the blocked adjoint
+fixed-point spaces stabilize across all positive powers. This extracts exactly
+what the present compatibility relation can see, without asserting the fusion /
+idempotence conclusion. -/
+theorem isRFP_MPDO_via_algebra_of_adjointFixedPoints_eq_of_isTP_of_posDef_fixed
+    {M : MPOTensor d D} (h_tp : Kraus.IsTP M.toMPSTensor)
+    {ρ : Mat} (hρ : ρ.PosDef) (hρ_fix : transferMap M ρ = ρ)
+    (hEq : ∀ n : ℕ, 0 < n → ∀ X : Mat,
+      (transferMap M).adjoint X = X ↔ (blockedTransferMap M n).adjoint X = X) :
+    IsRFP_MPDO_via_algebra M := by
+  refine ⟨AlgebraStructureData.stationaryOfFaithfulFixedPoint M h_tp hρ hρ_fix, ?_⟩
+  exact
+    AlgebraStructureData.stationaryOfFaithfulFixedPoint_compatible_of_adjointFixedPoints_eq
+      (M := M) (h_tp := h_tp) hρ hρ_fix hEq
 
 namespace AlgebraStructureData
 
