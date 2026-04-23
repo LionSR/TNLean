@@ -665,8 +665,7 @@ hypothesis, uses
 `isIrreducibleOnCorner_of_cyclic_decomp_mps_of_sectorFixedPointAlgebraRigidity`
 to obtain corner irreducibility of `((transferMap A†)^m)|_{P_k}`, and then
 applies the compression transport theorem above. -/
-theorem
-    primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking_of_fixedAlgebraRigidity
+theorem primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking_of_fixedAlgebraRigidity
     {d D m : ℕ} [NeZero D] [NeZero m]
     (A : MPSTensor d D)
     (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
