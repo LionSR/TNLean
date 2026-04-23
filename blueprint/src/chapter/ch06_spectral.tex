@@ -977,6 +977,83 @@ behind stationary states, following~\cite[\S6.4]{Wolf2012Quantum}.
     These statements are deferred in the present chapter.
 \end{remark}
 
+\subsection{Faithful compression onto the support sector}
+
+The statements in this subsection package the support-projection machinery
+needed for~\cite[Cor.~6.6]{Wolf2012Quantum}: the corner carries a
+$\C$-algebra and $*$-structure, the repository's corner submodule is
+identified with Mathlib's idempotent corner, and the compression of a PSD
+fixed point onto its support sector is positive definite.
+
+\begin{lemma}[Support projection annihilates the kernel]%
+    \label{lem:supportProj_mulVec_eq_zero_of_mulVec_eq_zero}
+    \lean{MPSTensor.supportProj_mulVec_eq_zero_of_mulVec_eq_zero}
+    \leanok
+    Let $\rho \succeq 0$ on $\C^D$ with support projection
+    $P = \mathrm{supp}(\rho)$. For every $v \in \C^D$, if $\rho\, v = 0$,
+    then $P\, v = 0$.
+\end{lemma}
+\begin{proof}\leanok
+    Diagonalize $\rho = U\,\mathrm{diag}(\lambda)\,U^\dagger$ with
+    $\lambda_j \ge 0$. Writing $w := U^\dagger v$, the hypothesis
+    $\rho v = 0$ gives $\lambda_j\, w_j = 0$ for every $j$; hence $w_j = 0$
+    whenever $\lambda_j > 0$. The support projection acts as
+    $\mathrm{diag}(\chi_{\lambda_j > 0})$ in the eigenbasis, so
+    $P\,v = U\,\mathrm{diag}(\chi_{\lambda_j > 0})\,w = 0$.
+\end{proof}
+
+\begin{definition}[Corner submodule / idempotent-corner bridge]%
+    \label{def:cornerSubmoduleCornerEquiv}
+    \lean{MatrixCorner.cornerSubmoduleCornerEquiv}
+    \leanok
+    For an idempotent $P \in \MN{D}$, the repository's corner submodule
+    $\{X \mid P X P = X\}$ and Mathlib's idempotent corner
+    $\{P\,X\,P \mid X \in \MN{D}\}$ are $\C$-linearly isomorphic via the
+    identity on underlying matrices.
+\end{definition}
+
+\begin{remark}[$\C$-algebra and $*$-structure on the corner]%
+    \label{rem:corner_algebra_star_instances}
+    \lean{MatrixCorner.instAlgebraComplexCorner}
+    \lean{MatrixCorner.cornerStar}
+    \lean{MatrixCorner.cornerStarRing}
+    \lean{MatrixCorner.cornerStarModuleComplex}
+    \leanok
+    Mathlib's \texttt{IsIdempotentElem.Corner} already carries a ring
+    structure with unit~$P$. For the matrix case we supply
+    $\C$-linear packaging (module and algebra structure) and, under the
+    additional assumption $P^\dagger = P$, star packaging (star, star ring,
+    and star module over~$\C$).
+\end{remark}
+
+\begin{theorem}[Faithful compression onto the support]%
+    \label{thm:compression_on_support_posDef}
+    \lean{Matrix.PosSemidef.compression_on_support_posDef}
+    \leanok
+    \uses{lem:supportProj_mulVec_eq_zero_of_mulVec_eq_zero}
+    Let $\rho \succeq 0$ on $\C^D$ with support projection
+    $P = \mathrm{supp}(\rho)$, and let
+    $V : \C^D \to \C^k$ be a compression isometry satisfying
+    $V\,V^\dagger = \Id_k$ and $V^\dagger\,V = P$. Then the compression
+    \[
+        V\,\rho\,V^\dagger \in \MN{k}
+    \]
+    is positive definite.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:supportProj_mulVec_eq_zero_of_mulVec_eq_zero}
+    Hermiticity follows from Hermiticity of $\rho$ and the product-star
+    identity. For strict positivity, let $w \neq 0$, set
+    $u := V^\dagger w$, and note that $V V^\dagger = \Id_k$ forces
+    $u \neq 0$, while $V^\dagger V = P$ forces $P u = u$. The quadratic
+    form computes as
+    $w^\dagger (V\rho V^\dagger) w = u^\dagger \rho u$,
+    which is nonnegative by positive semidefiniteness. If it vanishes, then
+    $\rho u = 0$, and by
+    Lemma~\ref{lem:supportProj_mulVec_eq_zero_of_mulVec_eq_zero} also
+    $P u = 0$, contradicting $P u = u \neq 0$.
+\end{proof}
+
 \section{Wedderburn decomposition of the fixed-point algebra}
 
 \begin{theorem}[Fixed-point algebra is semisimple]%

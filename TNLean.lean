@@ -99,9 +99,11 @@ import TNLean.Channel.Schwarz.TraceCFC
 import TNLean.Channel.FixedPoint.Algebra
 import TNLean.Channel.FixedPoint.ChoiEffros
 import TNLean.Channel.FixedPoint.Cesaro
+import TNLean.Channel.FixedPoint.CornerAlgebra
 import TNLean.Channel.FixedPoint.StationarySupport
 import TNLean.Channel.FixedPoint.WedderburnDecomp
 import TNLean.Channel.FixedPoint.Corollaries
+import TNLean.Channel.Spectral.Support
 import TNLean.Channel.Irreducible.Ergodicity
 import TNLean.Channel.Irreducible.Basic
 import TNLean.Channel.Irreducible.Growth

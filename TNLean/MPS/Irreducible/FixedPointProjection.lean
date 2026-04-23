@@ -199,6 +199,49 @@ lemma mul_supportProj (hρ_psd : ρ.PosSemidef) :
   -- Rewrite.
   simpa [Matrix.conjTranspose_mul, hHermP.eq, hHermρ.eq] using this
 
+/-- Kernel inclusion `ker ρ ≤ ker (supportProj ρ)`: if `ρ *ᵥ v = 0`, then the support
+projection also annihilates `v`. -/
+theorem supportProj_mulVec_eq_zero_of_mulVec_eq_zero
+    (v : Fin D → ℂ) (hv : ρ *ᵥ v = 0) :
+    supportProj (D := D) ρ hρ *ᵥ v = 0 := by
+  classical
+  let hH : ρ.IsHermitian := hρ.isHermitian
+  set U : Matrix (Fin D) (Fin D) ℂ := ↑hH.eigenvectorUnitary
+  set s : Fin D → ℂ := fun i => if 0 < hH.eigenvalues i then 1 else 0
+  have hUU : Uᴴ * U = 1 := by
+    rw [← Matrix.star_eq_conjTranspose]
+    simp [U]
+  set w : Fin D → ℂ := Uᴴ *ᵥ v
+  have hρ_spec : ρ = U * Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ)) * Uᴴ := by
+    simpa [U] using (spectral_decomp_eq (D := D) ρ hH)
+  have hΛw : Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ)) *ᵥ w = 0 := by
+    have hρv : (U * Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ)) * Uᴴ) *ᵥ v = 0 := by
+      rw [← hρ_spec]; exact hv
+    have hUΛw : U *ᵥ (Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ)) *ᵥ w) = 0 := by
+      simpa [w, Matrix.mulVec_mulVec, Matrix.mul_assoc] using hρv
+    have hUΛw' : Uᴴ *ᵥ (U *ᵥ (Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ)) *ᵥ w)) = 0 := by
+      simp [hUΛw]
+    have : (Uᴴ * U) *ᵥ (Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ)) *ᵥ w) = 0 := by
+      simpa [Matrix.mulVec_mulVec, Matrix.mul_assoc] using hUΛw'
+    simpa [Matrix.mulVec_mulVec, hUU] using this
+  have h_comp : ∀ j, (↑(hH.eigenvalues j) : ℂ) * w j = 0 := fun j => by
+    have := congrFun hΛw j
+    simpa [Matrix.mulVec, dotProduct, Matrix.diagonal_apply] using this
+  have hSw : Matrix.diagonal s *ᵥ w = 0 := by
+    ext j
+    rw [Matrix.mulVec_diagonal]
+    by_cases hjpos : 0 < hH.eigenvalues j
+    · have hwj : w j = 0 := by
+        have hEig_ne : (↑(hH.eigenvalues j) : ℂ) ≠ 0 := by
+          exact_mod_cast (ne_of_gt hjpos)
+        exact (mul_eq_zero.mp (h_comp j)).resolve_left hEig_ne
+      simp [s, hjpos, hwj]
+    · simp [s, hjpos]
+  have hP_def : supportProj (D := D) ρ hρ = U * Matrix.diagonal s * Uᴴ := by rfl
+  have hPeval : (U * Matrix.diagonal s * Uᴴ) *ᵥ v = U *ᵥ (Matrix.diagonal s *ᵥ w) := by
+    simp [w, U, Matrix.mulVec_mulVec, Matrix.mul_assoc]
+  simp [hP_def, hPeval, hSw]
+
 end SupportProjLemmas
 
 
