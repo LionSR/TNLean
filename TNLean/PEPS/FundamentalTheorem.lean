@@ -20,7 +20,7 @@ import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Defs
 --   local left inverse and the elementary blocking data now live in
 --   `PEPS/VirtualInsertion` and `PEPS/Blocking`, and `localGauge_exists` has
 --   been reduced to the sharper local hypothesis `HasLocalGaugeLift`. The new
---   wrapper `BlockedMiddleGaugeHyp` isolates the exact remaining bridge: build
+--   wrapper `BlockedMiddleGaugeHyp` isolates the exact remaining step: build
 --   the blocked middle tensor, compare it with the 3-site MPS theorem, and
 --   derive that explicit local gauge formula from `SameState`.
 -- * `gauge_unique_mod_edge_scalars` is the repaired endpoint, but its proof
@@ -497,7 +497,7 @@ The local left inverse and the canonical candidate operator now live in
 `PEPS/LocalGauge`. The remaining PEPS-Fundamental-Theorem gap is to prove
 `BlockedMiddleGaugeHyp` from `SameState` via the blocked-middle / three-site-MPS
 reduction, then convert it to `HasLocalGaugeLift` by
-`HasLocalGaugeLift_of_blockedMiddleGaugeHyp`. -/
+`hasLocalGaugeLift_of_blockedMiddleGaugeHyp`. -/
 theorem localGauge_exists (A B : Tensor G d)
     (hA : IsVertexInjective A)
     (hDim : A.bondDim = B.bondDim) (v : V)
@@ -530,7 +530,7 @@ theorem gaugeConsistency (A B : Tensor G d)
           gaugeVertex A X v η σ := by
   -- TODO: first derive `BlockedMiddleGaugeHyp A B hA hDim v` from `SameState`
   -- at each vertex via the blocked-middle / three-site-MPS reduction, then use
-  -- `HasLocalGaugeLift_of_blockedMiddleGaugeHyp` to obtain the local gauges.
+  -- `hasLocalGaugeLift_of_blockedMiddleGaugeHyp` to obtain the local gauges.
   -- The key remaining consistency step is: for each edge e = (u,v), the gauges
   -- extracted from u and v must agree as inverse-transposes, with the
   -- orientation convention in `edgeGaugeAt`.

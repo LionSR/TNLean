@@ -17,9 +17,9 @@ be shown to
    `B` lies in the image of `localTensorMap A v`, and
 2. factor into independent edge gauges.
 
-We package those two requirements as `HasLocalGaugeLift`. This isolates the exact
+We record those two requirements as `HasLocalGaugeLift`. This isolates the exact
 output still needed from the blocked-middle / three-site-MPS reduction in
-arXiv:1804.04964 §3, and `HasLocalGaugeLift_of_localGaugeFormula` records the
+arXiv:1804.04964 §3, and `hasLocalGaugeLift_of_localGaugeFormula` records the
 final bookkeeping step that turns an explicit local gauge formula into that
 sharper datum.
 -/
@@ -122,7 +122,7 @@ theorem localGaugeCandidate_apply_single (A B : Tensor G d)
 
 /-- Sharper local hypothesis for PEPS gauge extraction.
 
-This packages exactly the two local outputs still needed from the blocked-middle
+This records exactly the two local outputs still needed from the blocked-middle
 reduction in arXiv:1804.04964 §3:
 
 1. the local components of `B` lie in the image of `localTensorMap A v`, and
@@ -149,7 +149,7 @@ This is the final bookkeeping step after the blocked-middle / three-site-MPS
 reduction: once that reduction produces invertible incident-edge gauges
 realizing the local tensors of `B`, the canonical candidate pulled back through
 `localLeftInverse` is forced to be the same factorized operator. -/
-theorem HasLocalGaugeLift_of_localGaugeFormula (A B : Tensor G d)
+theorem hasLocalGaugeLift_of_localGaugeFormula (A B : Tensor G d)
     (hA : IsVertexInjective A) (hDim : A.bondDim = B.bondDim) (v : V)
     (hLocal :
       ∃ Xv : (e : Edge G) → GL (Fin (A.bondDim e)) ℂ,
@@ -201,40 +201,39 @@ theorem HasLocalGaugeLift_of_localGaugeFormula (A B : Tensor G d)
         _ = c ξ := by simp
     simpa [c] using congrArg (fun f : LocalVirtualConfig A v → ℂ => f η') hcand
 
-/-- Abstract output expected from the edge-centered blocked-middle / three-site-
-MPS reduction at a vertex.
+/-- Abbreviated proposition for the output expected from the edge-centered
+blocked-middle / three-site-MPS reduction at a vertex.
 
-The remaining open PEPS bridge step should construct this object from
-`SameState`: an incident-edge family of invertible matrices whose local gauge
-formula already reconstructs the local tensors of `B` from those of `A`. The
-next theorem then turns this explicit local formula into `HasLocalGaugeLift`. -/
-structure BlockedMiddleGaugeHyp (A B : Tensor G d) (hA : IsVertexInjective A)
-    (hDim : A.bondDim = B.bondDim) (v : V) : Prop where
-  localGauge_formula :
-    ∃ Xv : (e : Edge G) → GL (Fin (A.bondDim e)) ℂ,
-      ∀ (η : LocalVirtualConfig A v) (σ : Fin d),
-        B.component v (castLocalVirtualConfig A B hDim v η) σ =
-          ∑ η' : LocalVirtualConfig A v,
-            (∏ ie : IncidentEdge G v,
-              (↑(Xv ie.1) : Matrix (Fin (A.bondDim ie.1))
-                  (Fin (A.bondDim ie.1)) ℂ) (η ie) (η' ie)) *
-              A.component v η' σ
+The remaining open PEPS step should prove this proposition from `SameState`:
+an incident-edge family of invertible matrices whose local gauge formula
+already reconstructs the local tensors of `B` from those of `A`. The next
+theorem then turns this explicit local formula into `HasLocalGaugeLift`. -/
+abbrev BlockedMiddleGaugeHyp (A B : Tensor G d) (_hA : IsVertexInjective A)
+    (hDim : A.bondDim = B.bondDim) (v : V) : Prop :=
+  ∃ Xv : (e : Edge G) → GL (Fin (A.bondDim e)) ℂ,
+    ∀ (η : LocalVirtualConfig A v) (σ : Fin d),
+      B.component v (castLocalVirtualConfig A B hDim v η) σ =
+        ∑ η' : LocalVirtualConfig A v,
+          (∏ ie : IncidentEdge G v,
+            (↑(Xv ie.1) : Matrix (Fin (A.bondDim ie.1))
+                (Fin (A.bondDim ie.1)) ℂ) (η ie) (η' ie)) *
+            A.component v η' σ
 
 /-- The blocked-middle / three-site-MPS output immediately yields
 `HasLocalGaugeLift`. -/
-theorem HasLocalGaugeLift_of_blockedMiddleGaugeHyp (A B : Tensor G d)
+theorem hasLocalGaugeLift_of_blockedMiddleGaugeHyp (A B : Tensor G d)
     (hA : IsVertexInjective A) (hDim : A.bondDim = B.bondDim) (v : V)
     (hBlocked : BlockedMiddleGaugeHyp A B hA hDim v) :
     HasLocalGaugeLift A B hA hDim v :=
-  HasLocalGaugeLift_of_localGaugeFormula A B hA hDim v hBlocked.localGauge_formula
+  hasLocalGaugeLift_of_localGaugeFormula A B hA hDim v hBlocked
 
 /-- Under `HasLocalGaugeLift`, one obtains the factorized local-gauge formula at
 vertex `v`.
 
-This is the honest local endpoint currently available in Lean: the remaining PEPS
+This is the current local endpoint available in Lean: the remaining PEPS
 Fundamental-Theorem gap is to prove `BlockedMiddleGaugeHyp` from `SameState` via
 the blocked-middle / three-site-MPS reduction and then apply
-`HasLocalGaugeLift_of_blockedMiddleGaugeHyp`. -/
+`hasLocalGaugeLift_of_blockedMiddleGaugeHyp`. -/
 theorem localGauge_exists_of_liftData (A B : Tensor G d)
     (hA : IsVertexInjective A) (hDim : A.bondDim = B.bondDim) (v : V)
     (hLift : HasLocalGaugeLift A B hA hDim v) :

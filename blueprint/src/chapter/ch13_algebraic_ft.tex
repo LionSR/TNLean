@@ -1599,7 +1599,7 @@ Theorem~2 of~\cite{Molnar2018NormalPEPS}.
     \leanok
     \uses{def:peps_localTensorMap, def:peps_localLeftInverse}
     For fixed $A$, $B$, a bond-dimension equality, and a vertex $v$, this
-    packages the two local conclusions still needed from the blocked-middle
+    records the two local conclusions still needed from the blocked-middle
     reduction in~\cite{Molnar2018NormalPEPS}, §3:
     (i) each local component of $B$ lies in the image of the local tensor map
     of $A$, and (ii) the canonical pullback through the chosen left inverse of
@@ -1611,15 +1611,15 @@ Theorem~2 of~\cite{Molnar2018NormalPEPS}.
     \lean{TNLean.PEPS.BlockedMiddleGaugeHyp}
     \leanok
     \uses{def:peps_hasLocalGaugeLift}
-    This packages the explicit local gauge formula that the edge-centered
+    This states the explicit local gauge formula that the edge-centered
     blocked-middle reduction is expected to produce: a family of invertible
     matrices on the incident edges of $v$ whose product kernel reconstructs each
     local component of $B$ from those of $A$.
 \end{definition}
 
 \begin{theorem}[Blocked-middle output implies sharpened lift]%
-    \label{thm:peps_HasLocalGaugeLift_of_blockedMiddleGaugeHyp}
-    \lean{TNLean.PEPS.HasLocalGaugeLift_of_blockedMiddleGaugeHyp}
+    \label{thm:peps_hasLocalGaugeLift_of_blockedMiddleGaugeHyp}
+    \lean{TNLean.PEPS.hasLocalGaugeLift_of_blockedMiddleGaugeHyp}
     \leanok
     \uses{def:peps_blockedMiddleGaugeHyp, def:peps_hasLocalGaugeLift}
     Any explicit local gauge formula from the blocked-middle reduction yields
@@ -1646,7 +1646,7 @@ Theorem~2 of~\cite{Molnar2018NormalPEPS}.
     \lean{TNLean.PEPS.BlockedMiddleGaugeHyp} from the global same-state
     hypothesis via the blocked middle tensor and the corresponding three-site
     injective-chain argument, then invoke
-    \lean{TNLean.PEPS.HasLocalGaugeLift_of_blockedMiddleGaugeHyp}.
+    \lean{TNLean.PEPS.hasLocalGaugeLift_of_blockedMiddleGaugeHyp}.
     Under that hypothesis, injectivity on the star neighbourhood provides a
     left inverse that isolates the local edge gauges:
     \[
