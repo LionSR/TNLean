@@ -18,24 +18,31 @@ arXiv:1606.00608 (Cirac–Pérez-García–Schuch–Verstraete).
 
 - `MPOTensor.IsInjective`: injectivity of a simple MPO tensor, expressed via the
   doubled-index MPS tensor.
-- `MPOTensor.inverseTensor`: a concrete right inverse `K⁻¹` for an injective
-  simple MPO tensor.
-- `MPOTensor.physRealize` / `MPOTensor.physRealizeLeft`: the physical
-  realization maps for virtual insertions on an injective simple MPO tensor.
+- `MPOTensor.inverseTensor` / `MPOTensor.inverseTensor_spec`: the concrete
+  inverse tensor `K⁻¹` and its matrix-unit contraction identity.
+- `MPOTensor.physRealize` / `MPOTensor.physRealize_spec` /
+  `MPOTensor.physRealize_mul`: the physical realization of right virtual
+  insertions and its multiplicativity.
+- `MPOTensor.physRealizeLeft` / `MPOTensor.physRealizeLeft_spec`: the left-bond
+  analogue of the physical realization map.
 - `MPOTensor.EtaStructure`: the quantum-Markov decomposition on the middle
   subsystem supplied by equality in strong subadditivity.
+- `MPOTensor.sal_implies_eta_structure`: the Lean form of the entropy step in
+  Lemma C.3. We formalize the strong-area-law input locally as equality in
+  strong subadditivity for a normalized three-site reduced state.
+- `MPOTensor.etaOperators`: the dependent type of explicit neighboring operator
+  families over a fixed Hayashi decomposition.
 - `MPOTensor.ExplicitEtaOperators`: the explicit neighboring operators
-  `η_{k,h}` over a fixed Hayashi decomposition.
-- `MPOTensor.etaOperators`: the underlying family of operators in an
-  `ExplicitEtaOperators` witness.
+  `η_{k,h}` together with positivity.
+- `MPOTensor.ExplicitEtaOperators.traceMatrix` /
+  `MPOTensor.ExplicitEtaOperators.traceMatrixRe`: the complex trace matrix of an
+  explicit `η`-family and its real-part interface to the downstream
+  Perron–Frobenius step.
 - `Matrix.HasRankOneFactorization`: a finite matrix factors as `vecMulVec a b`.
 - `Matrix.TracePowersConstant`: all positive powers of a matrix have the same
   trace as the matrix itself.
 - `Matrix.PrimitiveTracePowersConstantImpliesRankOne`: the single missing
   Perron–Frobenius input isolated by Lemma C.4.
-- `MPOTensor.sal_implies_eta_structure`: the Lean form of the entropy step in
-  Lemma C.3. We formalize the strong-area-law input locally as equality in
-  strong subadditivity for a normalized three-site reduced state.
 - `MPOTensor.sal_zcl_implies_rank_one_T`: the scoped Lemma C.4 consequence,
   proved relative to that Perron–Frobenius input.
 
@@ -131,9 +138,13 @@ theorem inverseTensor_spec (K : MPOTensor d D) (hK : K.IsInjective)
     (α β : Fin D) :
     ∑ p : Fin (d * d), inverseTensor K hK p α β • K.toMPSTensor p =
       Matrix.single α β (1 : ℂ) := by
-  simpa [inverseTensor] using
-    (MPSTensor.decompositionMap_sum (A := K.toMPSTensor) hK
-      (Matrix.single α β (1 : ℂ)))
+  change
+    ∑ p : Fin (d * d),
+      MPSTensor.decompositionMap (A := K.toMPSTensor) hK
+          (Matrix.single α β (1 : ℂ)) p • K.toMPSTensor p
+        = Matrix.single α β (1 : ℂ)
+  exact MPSTensor.decompositionMap_sum (A := K.toMPSTensor) hK
+    (Matrix.single α β (1 : ℂ))
 
 /-- The physical realization map for a right virtual insertion on an injective
 simple MPO tensor. This is the MPO wrapper around
@@ -200,29 +211,30 @@ theorem sal_implies_eta_structure
     Nonempty (EtaStructure ρ_ABC) :=
   Entropy.exists_quantumMarkovDecomposition_of_ssaEquality ρ_ABC hρ_dm hSAL
 
-/-- Explicit neighboring operators `η_{k,h}` over a fixed Hayashi decomposition.
+/-- The type of explicit neighboring operator families `η_{k,h}` over a fixed
+Hayashi decomposition.
 
-For each pair of sectors `(k, h)`, the operator `eta k h` acts on the
+For each pair of sectors `(k, h)`, the operator `η_{k,h}` acts on the
 neighboring bond space `B_kᴿ ⊗ B_hᴸ`, represented in Lean as the matrix algebra
-on `Fin (hη.dR k) × Fin (hη.dL h)`. Positivity matches the paper's
-`η_{k,h} ≥ 0`. -/
+on `Fin (hη.dR k) × Fin (hη.dL h)`. -/
+abbrev etaOperators
+    {ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)
+      (Fin dA × Fin dB × Fin dC) ℂ}
+    (hη : EtaStructure ρ_ABC) : Type :=
+  (k h : Fin hη.m) →
+    Matrix (Fin (hη.dR k) × Fin (hη.dL h))
+      (Fin (hη.dR k) × Fin (hη.dL h)) ℂ
+
+/-- Explicit neighboring operators `η_{k,h}` together with their positivity.
+
+This packages the operator family from `MPOTensor.etaOperators` with the
+positivity condition `η_{k,h} ≥ 0` from Appendix C.2. -/
 structure ExplicitEtaOperators
     {ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)
       (Fin dA × Fin dB × Fin dC) ℂ}
     (hη : EtaStructure ρ_ABC) where
-  eta : (k h : Fin hη.m) →
-    Matrix (Fin (hη.dR k) × Fin (hη.dL h))
-      (Fin (hη.dR k) × Fin (hη.dL h)) ℂ
+  eta : etaOperators hη
   eta_pos : ∀ k h, (eta k h).PosSemidef
-
-/-- The underlying family of explicit neighboring operators in an
-`ExplicitEtaOperators` witness. -/
-abbrev etaOperators
-    {ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)
-      (Fin dA × Fin dB × Fin dC) ℂ}
-    {hη : EtaStructure ρ_ABC}
-    (data : ExplicitEtaOperators hη) :=
-  data.eta
 
 namespace ExplicitEtaOperators
 
@@ -239,6 +251,18 @@ noncomputable def traceMatrix (data : ExplicitEtaOperators hη) :
 @[simp] theorem traceMatrix_apply (data : ExplicitEtaOperators hη)
     (k h : Fin hη.m) :
     data.traceMatrix k h = Matrix.trace (data.eta k h) := rfl
+
+/-- The real-part trace matrix attached to an explicit `η_{k,h}` family.
+
+This is the direct real-valued interface to the Perron–Frobenius matrix `T`
+used later in Appendix C.2, Lemma C.4. -/
+noncomputable def traceMatrixRe (data : ExplicitEtaOperators hη) :
+    Matrix (Fin hη.m) (Fin hη.m) ℝ :=
+  fun k h => (Matrix.trace (data.eta k h)).re
+
+@[simp] theorem traceMatrixRe_apply (data : ExplicitEtaOperators hη)
+    (k h : Fin hη.m) :
+    data.traceMatrixRe k h = (Matrix.trace (data.eta k h)).re := rfl
 
 end ExplicitEtaOperators
 

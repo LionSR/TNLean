@@ -428,6 +428,62 @@ strong subadditivity for a normalized three-site reduced state.
     decomposition on the middle subsystem.
 \end{proof}
 
+\begin{definition}[Injective inverse-map layer for a simple MPO tensor]
+    \label{def:mpdo_injective_inverse_layer}
+    \lean{MPOTensor.IsInjective}
+    \lean{MPOTensor.inverseTensor}
+    \lean{MPOTensor.physRealize}
+    \lean{MPOTensor.physRealizeLeft}
+    \leanok
+    \uses{def:mpo_tensor, def:mpo_to_mps, def:injective, def:decomposition_map, def:phys_realize}
+    A simple MPO tensor $K$ is called injective if its doubled-index MPS tensor
+    is injective. For such a tensor, the chosen decomposition map of the
+    doubled-index MPS furnishes a concrete inverse tensor $K^{-1}$ together
+    with right- and left-physical realization maps that turn virtual bond
+    insertions back into local physical operators.
+\end{definition}
+
+\begin{theorem}[Inverse-map identities for an injective simple MPO tensor]
+    \label{thm:mpdo_injective_inverse_layer_spec}
+    \lean{MPOTensor.inverseTensor_spec}
+    \lean{MPOTensor.physRealize_spec}
+    \lean{MPOTensor.physRealize_mul}
+    \lean{MPOTensor.physRealizeLeft_spec}
+    \leanok
+    \uses{def:mpdo_injective_inverse_layer}
+    For an injective simple MPO tensor, contracting $K^{-1}$ with $K$ recovers
+    the matrix units on the virtual bond space. Likewise, every right virtual
+    insertion admits a physical realization, this realization is multiplicative,
+    and the analogous left-insertion statement also holds.
+\end{theorem}
+
+\begin{definition}[Explicit neighboring $\eta$-operator data]
+    \label{def:mpdo_explicit_eta_operators}
+    \lean{MPOTensor.etaOperators}
+    \lean{MPOTensor.ExplicitEtaOperators}
+    \leanok
+    \uses{def:mpdo_eta_structure}
+    Fix a Hayashi decomposition witness $h_\eta$. An explicit neighboring
+    $\eta$-family is a dependent family $(\eta_{k,h})$ indexed by sector pairs,
+    where $\eta_{k,h}$ acts on the neighboring bond space
+    $B_k^{R} \otimes B_h^{L}$. Bundling positivity for each pair gives the
+    structure \lean{MPOTensor.ExplicitEtaOperators}.
+\end{definition}
+
+\begin{definition}[Trace matrices of explicit $\eta$-data]
+    \label{def:mpdo_explicit_eta_trace_matrix}
+    \lean{MPOTensor.ExplicitEtaOperators.traceMatrix}
+    \lean{MPOTensor.ExplicitEtaOperators.traceMatrix_apply}
+    \lean{MPOTensor.ExplicitEtaOperators.traceMatrixRe}
+    \lean{MPOTensor.ExplicitEtaOperators.traceMatrixRe_apply}
+    \leanok
+    \uses{def:mpdo_explicit_eta_operators}
+    Every explicit neighboring $\eta$-family determines a sector-by-sector trace
+    matrix. We record both its complex-valued form and the real-part version,
+    which is the direct interface to the real Perron--Frobenius matrix $T$ used
+    in the rank-one step.
+\end{definition}
+
 \begin{definition}[Auxiliary matrix predicates for the rank-one step]
     \label{def:matrix_trace_rankone_predicates}
     \lean{Matrix.TracePowersConstant}
