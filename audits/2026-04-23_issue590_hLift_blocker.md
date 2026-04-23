@@ -1,5 +1,18 @@
 # Issue #590 blocker report — April 23, 2026
 
+> **Status after rebasing onto current `origin/main` (later on April 23).**
+> The detailed blocker analysis below is now partly historical: current `main`
+> already contains `SectorFixedPointAlgebraRigidity`,
+> `hProjStep_of_sectorFixedPointAlgebraRigidity`, and
+> `hLift_cyclicDecomp_mps_of_sectorFixedPointAlgebraRigidity`, which package the
+> former `hProjStep`/`hFixUpgrade` obstruction as a single named hypothesis.
+> The forward step added on top of that packaging is the downstream consumer
+> theorem
+> `primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking_of_fixedAlgebraRigidity`
+> in `Assembly/CyclicSectorDecomposition.lean`. The remaining mathematical gap is
+> now to derive `SectorFixedPointAlgebraRigidity` from the cyclic-sector fixed-point
+> algebra / projection-word machinery.
+
 ## Outcome
 
 I could **not** honestly close issue #590 on current `origin/main`.
