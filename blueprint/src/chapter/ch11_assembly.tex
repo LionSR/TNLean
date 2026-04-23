@@ -436,12 +436,24 @@ single weighted block.
 		      recovers the sector weight multisets without requiring
 		      explicit coefficient convergence hypotheses.
 	\end{enumerate}
-	The unconditional equal-case theorem
-	(Theorem~\ref{thm:ft_equal}, \cite[Corollary~IV.5]{Cirac2021Matrix})
-	still requires one final global gauge-construction step: combining the
-	weight-recovery result above with
-	(a)~the proportional FT for block matching and gauge-phase equivalences,
-	(b)~phase absorption into weights, and
-	(c)~global gauge construction via permutation and cast transport.
+	What is still missing for the unconditional equal-case theorem
+	(Theorem~\ref{thm:ft_equal}, \cite[Corollary~IV.5]{Cirac2021Matrix}) is
+	not merely a final gauge-construction step.  Two paper-level ingredients
+	remain to be formalized:
+	\begin{enumerate}
+		\item a general basis-of-normal-tensors construction for the
+		      after-blocking output, beyond the current special case where
+		      equal-modulus blocks on one side are already known to collapse
+		      to a single basis tensor; and
+		\item a heterogeneous sector-decomposition comparison theorem:
+		      given two such basis-of-normal-tensors decompositions with the
+		      same total MPV family, first match the basis tensors up to
+		      permutation and gauge phase, and only then compare the sector
+		      weight multisets after absorbing those phases.
+	\end{enumerate}
+	The theorem proved above supplies only the shared-basis part of the second
+	item.  Once these two ingredients are in place, the final global gauge matrix
+	of Corollary~IV.5 is obtained by the same phase-absorption and blockwise
+	assembly argument already formalized in the strict single-weight setting.
 \end{remark}
 

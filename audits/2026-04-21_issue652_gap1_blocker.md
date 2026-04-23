@@ -1,5 +1,10 @@
 # Issue #652 blocker audit — Gap §1 / unconditional structural FT after blocking
 
+> **Superseded on 2026-04-23.** See
+> `audits/2026-04-23_issue652_gap1_followup.md` for the sharper theorem-shape
+> audit. The April 21 file remains useful as the first counterexample-based
+> obstruction note, but the follow-up audit is now the authoritative roadmap.
+
 Date: 2026-04-21
 Branch: `feat/652-bnt-grouping-unconditional`
 Target files:
