@@ -147,24 +147,6 @@ theorem rank_le_card_of_eq_sum_vecMulVec {r : ℕ}
 
 end RankBounds
 
-/-- `K * (c * c̄ · E_{i,j}) * K†` is the rank-one matrix formed from the
-`i`-th and `j`-th columns of `K`, scaled by `c`. This duplicates the tiny
-file-local helper used inside `ChoiJamiolkowski.lean` so the Choi-rank bounds
-here can stay self-contained. -/
-private theorem mul_single_mul_conjTranspose_eq_vecMulVec
-    (K : Mat) (c : ℂ) (i₂ j₂ : Fin D) :
-    K * Matrix.single i₂ j₂ (c * star c) * Kᴴ =
-      Matrix.vecMulVec (fun i₁ : Fin D => c * K i₁ i₂)
-        (fun j₁ : Fin D => star (c * K j₁ j₂)) := by
-  rw [show Matrix.single i₂ j₂ (c * star c) =
-      (c * star c) • Matrix.vecMulVec (Pi.single i₂ (1 : ℂ)) (Pi.single j₂ 1) by
-    rw [← Matrix.single_eq_single_vecMulVec_single i₂ j₂]
-    simp]
-  rw [Matrix.mul_smul, Matrix.smul_mul, Matrix.mul_vecMulVec, Matrix.vecMulVec_mul]
-  ext i₁ j₁
-  simp [Matrix.vecMulVec_apply, Matrix.conjTranspose_apply, Matrix.col, Matrix.row]
-  ring_nf
-
 /-- The Choi matrix of a Kraus map is a sum of rank-one outer products. -/
 theorem choiMatrix_eq_sum_vecMulVec_of_kraus {r : ℕ}
     (K : Fin r → Mat) (E : Mat →ₗ[ℂ] Mat)
@@ -188,7 +170,8 @@ theorem choiMatrix_eq_sum_vecMulVec_of_kraus {r : ℕ}
   intro x _
   simpa [Matrix.vecMulVec_apply] using
     congrArg (fun M => M i₁ j₁)
-      (mul_single_mul_conjTranspose_eq_vecMulVec (K := K x) (c := c) i₂ j₂)
+      (ChoiJamiolkowski.Internal.mul_single_mul_conjTranspose_eq_vecMulVec
+        (K := K x) (c := c) i₂ j₂)
 
 /-- Any `r`-operator Kraus representation bounds the Choi rank by `r`. -/
 theorem choiRank_le_of_hasKrausCard {E : Mat →ₗ[ℂ] Mat} {r : ℕ}
