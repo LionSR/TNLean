@@ -698,3 +698,81 @@ recovery theorem for the provisional MPO predicate.
     \cite[Theorem~IV.13~(ii)]{Cirac2017MPDO_AnnPhys} is to be substituted
     in place of the trivial relation in subsequent work.
 \end{definition}
+
+\section{Commuting form and GSNNCH}
+
+\begin{definition}[Commuting-form data for an MPDO]
+    \label{def:mpdo_commuting_form_data}
+    \lean{MPOTensor.CommutingFormData}
+    \leanok
+    \uses{def:mpo_tensor}
+    For a fixed chain length $N \ge 2$, this consists of a positive
+    semidefinite two-site operator $B$ such that its translated copies on the
+    periodic chain commute pairwise.
+\end{definition}
+
+\begin{definition}[Commuting-form property]
+    \label{def:mpdo_has_commuting_form}
+    \lean{MPOTensor.HasCommutingForm}
+    \leanok
+    \uses{def:mpdo_commuting_form_data, def:mpo_tensor}
+    An MPO tensor has the commuting-form property if for every $N \ge 2$ its
+    $N$-site operator is a positive scalar multiple of the product of the
+    translated copies of some commuting two-site operator $B$.
+\end{definition}
+
+\begin{definition}[GSNNCH]
+    \label{def:mpdo_is_gsnnch}
+    \lean{MPOTensor.IsGSNNCH}
+    \leanok
+    \uses{def:mpdo_has_commuting_form}
+    An MPO tensor is a Gibbs state of a nearest-neighbor commuting Hamiltonian
+    if every finite-chain operator admits the equivalent positive-operator
+    presentation $\rho^{(N)} = c \prod_i B_{i,i+1}$ with $c > 0$ and
+    commuting nearest-neighbor factors. The projector-limit convention after
+    Definition~4.8 of \cite{Cirac2017MPDO_AnnPhys} identifies this with the
+    exponential Gibbs form.
+\end{definition}
+
+\begin{theorem}[GSNNCH iff commuting form]
+    \label{thm:mpdo_is_gsnnch_iff_has_commuting_form}
+    \lean{MPOTensor.isGSNNCH_iff_hasCommutingForm}
+    \leanok
+    \uses{def:mpdo_is_gsnnch, def:mpdo_has_commuting_form}
+    For an MPO tensor, the GSNNCH condition is equivalent to the existence of
+    commuting-form data on every finite chain.
+\end{theorem}
+
+\begin{proof}\leanok
+A positive normalization constant converts commuting-form data into a GSNNCH
+witness, and every GSNNCH witness remembers its underlying commuting-form data.
+\end{proof}
+
+\begin{definition}[GSNNCH with zero correlation length]
+    \label{def:mpdo_is_gsnnch_zcl}
+    \lean{MPOTensor.IsGSNNCHWithZCL}
+    \leanok
+    \uses{def:mpdo_is_gsnnch, def:mpo_is_zcl}
+    This is the conjunction of the GSNNCH condition with MPO zero correlation
+    length, i.e. the content of item~(iii) in the simple-MPDO theorem.
+\end{definition}
+
+\begin{theorem}[GSNNCH with zero correlation length iff commuting form with zero correlation length]
+    \label{thm:mpdo_is_gsnnch_zcl_iff_has_commuting_form_and_is_zcl}
+    \lean{MPOTensor.isGSNNCHWithZCL_iff_hasCommutingForm_and_isZCL}
+    \leanok
+    \uses{def:mpdo_is_gsnnch_zcl, thm:mpdo_is_gsnnch_iff_has_commuting_form}
+    The GSNNCH--ZCL branch is equivalent to the conjunction of the
+    commuting-form property with MPO zero correlation length.
+\end{theorem}
+
+\begin{proof}\leanok
+Unfold the definition of GSNNCH with zero correlation length and apply
+Theorem~\ref{thm:mpdo_is_gsnnch_iff_has_commuting_form}.
+\end{proof}
+
+\begin{remark}[Remaining step toward Proposition~C.6]
+The remaining entropy-side theorem is to derive the commuting-form property
+from the strong-area-law hypotheses of Appendix~C.2. The present file isolates
+its GSNNCH target once that step is available.
+\end{remark}
