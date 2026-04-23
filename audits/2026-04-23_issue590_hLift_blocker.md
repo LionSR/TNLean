@@ -19,7 +19,7 @@ I could **not yet** close issue #590 on current `origin/main`.
 
 The reason is subtle but important: the orbit-sum **combination theorem requested by the
 original issue is already present** on current `main`, after the recent
-`SectorIrreducibility` split. The remaining missing step is **not** the orbit-sum assembly
+`SectorIrreducibility` split. The remaining missing step is **not** the orbit-sum construction
 itself, but the still-abstract one-step projection-preservation hypothesis `hProjStep`.
 
 Concretely, current `main` already contains the theorem
@@ -116,7 +116,7 @@ So the new modular structure helps readability, but the mathematical gap is unch
 
 ## Search / audit evidence
 
-I checked the surrounding API in the current repository for a theorem that would bridge sector
+I checked the surrounding API in the current repository for a theorem that would connect sector
 support to one-step projection preservation.
 
 ### 1. Multiplicative-domain API
