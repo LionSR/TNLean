@@ -41,7 +41,7 @@ Lemma C.4 is further isolated to the finite-dimensional Perron–Frobenius step:
 for a primitive nonnegative matrix `T`, constant traces of positive powers are
 *claimed* (in the paper) to force `T` to have rank one. We expose that step as
 the single hypothesis `Matrix.PrimitiveTracePowersConstantImpliesRankOne`, so
-the remaining gap is honestly localized and matches the paper one-to-one.
+the remaining gap is exactly localized and matches the paper one-to-one.
 
 The universally quantified form of that claim is in fact false — see
 `TNLean/Archive/PerronFrobeniusRankOneCounterexample.lean` for an explicit

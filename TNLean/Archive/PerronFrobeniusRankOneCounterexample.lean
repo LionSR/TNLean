@@ -49,7 +49,7 @@ This file is deliberately excluded from the root `TNLean.lean` import list.
   implication.
 -/
 
-namespace TNLeanArchive.PerronFrobeniusRankOne
+namespace TNLean.Archive.PerronFrobeniusRankOneCounterexample
 
 open Matrix
 
@@ -146,4 +146,4 @@ theorem counterexample :
       ¬ ∃ a b : Fin 3 → ℝ, T = Matrix.vecMulVec a b :=
   ⟨T_isPrimitive, T_tracePowersConstant, T_not_rankOne⟩
 
-end TNLeanArchive.PerronFrobeniusRankOne
+end TNLean.Archive.PerronFrobeniusRankOneCounterexample
