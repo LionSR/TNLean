@@ -376,7 +376,7 @@ private theorem wrapping_window_matEq {A : MPSTensor d D} [NeZero D]
 compatibility `C_τ * A j * X = Y_τ * A j`.  This is the valid local
 replacement identified by the #730 audit; issue #761 asks for the missing mirror
 comparison on top of this step. -/
-private theorem wrapping_window_compatibility_of_isNBlkInjective
+theorem wrapping_window_compatibility_of_isNBlkInjective
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
     {X : Matrix (Fin D) (Fin D) ℂ}
@@ -424,7 +424,7 @@ private theorem wrapping_window_compatibility_of_isNBlkInjective
 `X * A j * C_τ = A j * Y_τ` after block-injective stripping of the trailing
 `L₀`-site block.  This is the missing second wrapped-window extraction needed
 for the block-injective periodic argument. -/
-private theorem wrapping_window_mirror_compatibility_of_isNBlkInjective
+theorem wrapping_window_mirror_compatibility_of_isNBlkInjective
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
     {X : Matrix (Fin D) (Fin D) ℂ}
