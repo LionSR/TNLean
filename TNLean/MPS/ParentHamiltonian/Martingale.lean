@@ -249,6 +249,13 @@ theorem localTermESSummand_sum_isPositive {N : ℕ} (A : MPSTensor d D) (hN : 0 
 
 /-! ### Ground-space and Hamiltonian transport to `EuclideanSpace` -/
 
+/-- The translated local parent-Hamiltonian term transported to the
+`EuclideanSpace` model. -/
+noncomputable def localTermES {N : ℕ} (A : MPSTensor d D) (L : ℕ) (i : Fin N) :
+    EuclideanSpace ℂ (Cfg d N) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d N) :=
+  let e := (WithLp.linearEquiv 2 ℂ (NSiteSpace d N))
+  e.symm.toLinearMap.comp ((localTerm A L N i).comp e.toLinearMap)
+
 /-- Ground-space submodule for the finite-size parent Hamiltonian,
 transported to the `EuclideanSpace` (inner-product) setting so that
 orthogonal complements are available. -/
@@ -262,6 +269,14 @@ noncomputable def parentHamiltonianES (A : MPSTensor d D) (L N : ℕ) :
     EuclideanSpace ℂ (Cfg d N) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d N) :=
   let e := (WithLp.linearEquiv 2 ℂ (NSiteSpace d N))
   e.symm.toLinearMap.comp ((parentHamiltonian A L N).comp e.toLinearMap)
+
+/-- The transported parent Hamiltonian is the sum of the transported local
+terms. -/
+theorem parentHamiltonianES_eq_sum_localTermES (A : MPSTensor d D) (L N : ℕ) :
+    parentHamiltonianES A L N = ∑ i : Fin N, localTermES A L i := by
+  let e := WithLp.linearEquiv 2 ℂ (NSiteSpace d N)
+  ext v σ
+  simp [parentHamiltonianES, parentHamiltonian, localTermES, e]
 
 /-- The transported parent-Hamiltonian ground space is exactly the kernel of the
 transported parent Hamiltonian. -/

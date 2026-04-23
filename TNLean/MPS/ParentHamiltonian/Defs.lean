@@ -101,6 +101,19 @@ private lemma offset_mod_eq {a b N : ℕ} (ha : a < N) (hb : b < N) :
   · rw [Nat.mod_eq_sub_mod hab, Nat.mod_eq_of_lt (by omega : a + b - N < N),
       show a + b - N + N - a = b from by omega, Nat.mod_eq_of_lt hb]
 
+private lemma add_offset_mod_eq {a b N : ℕ} (ha : a < N) (hb : b < N) :
+    (a + ((b + N - a) % N)) % N = b := by
+  rcases le_or_lt a b with hab | hab
+  · have hmod : (b + N - a) % N = b - a := by
+      have : b + N - a = N + (b - a) := by omega
+      rw [this, Nat.add_mod_left_left, Nat.mod_eq_of_lt (by omega)]
+    rw [hmod, Nat.mod_eq_of_lt (by omega)]
+    omega
+  · have hmod : (b + N - a) % N = b + N - a := by
+      rw [Nat.mod_eq_of_lt (by omega)]
+    rw [hmod, show a + (b + N - a) = b + N from by omega,
+      Nat.add_mod_right, Nat.mod_eq_of_lt hb]
+
 /-- Extracting a window after replacing it recovers the replacement values. -/
 @[simp] lemma extractWindow_replaceWindow (L : ℕ) (hLN : L ≤ N) {α : Type*}
     (i : Fin N) (σ : Fin N → α) (τ : Fin L → α) :
@@ -111,6 +124,24 @@ private lemma offset_mod_eq {a b N : ℕ} (ha : a < N) (hb : b < N) :
     offset_mod_eq i.isLt (Nat.lt_of_lt_of_le hj hLN)
   rw [dif_pos (show ((i.val + j) % N + N - i.val) % N < L by rw [key]; exact hj)]
   exact congr_arg τ (Fin.ext key)
+
+/-- Replacing a window by the values extracted from the same configuration leaves
+that configuration unchanged. -/
+@[simp] lemma replaceWindow_extractWindow (L : ℕ) (hLN : L ≤ N) {α : Type*}
+    (i : Fin N) (σ : Fin N → α) :
+    replaceWindow L hLN i σ (extractWindow L i σ) = σ := by
+  funext ⟨k, hk⟩
+  unfold replaceWindow extractWindow
+  set offset := (k + N - i.val) % N with hoff
+  have hN : 0 < N := Fin.pos i
+  have hoffN : offset < N := by
+    rw [hoff]
+    exact Nat.mod_lt _ hN
+  by_cases hoffset : offset < L
+  · rw [dif_pos hoffset]
+    have key : (i.val + offset) % N = k := add_offset_mod_eq i.isLt hk
+    exact congr_arg σ (Fin.ext key)
+  · rw [dif_neg hoffset]
 
 /-! ### Local term (site embedding) -/
 
