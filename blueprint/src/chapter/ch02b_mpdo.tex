@@ -439,6 +439,15 @@ strong subadditivity for a normalized three-site reduced state.
     positive powers, existence of a rank-one factorization $T = a b^\top$, and
     the Perron--Frobenius implication from primitivity together with constant
     trace powers to such a factorization.
+
+    The last predicate is used as a scoped hypothesis, not a globally provable
+    theorem. As a universal statement over primitive nonnegative matrices it is
+    false; a concrete $3 \times 3$ counterexample is recorded in the Lean
+    archive module
+    \texttt{TNLean.Archive.PerronFrobeniusRankOneCounterexample}. Discharging
+    the hypothesis in the simple-MPDO setting therefore requires the extra
+    structure carried by the specific $T$ arising from the positive
+    semidefinite $\eta$-operators.
 \end{definition}
 
 \begin{theorem}[SAL and ZCL imply rank-one $T$ (scoped form)]
