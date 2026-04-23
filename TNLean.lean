@@ -251,6 +251,7 @@ import TNLean.MPS.MPDO.PRFP
 import TNLean.MPS.MPDO.RFP
 import TNLean.MPS.MPDO.FusionIsometries
 import TNLean.MPS.MPDO.AlgebraStructure
+import TNLean.MPS.MPDO.CommutingForm
 
 -- MPS examples
 import TNLean.MPS.Examples.AKLT
