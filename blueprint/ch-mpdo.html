@@ -95,7 +95,7 @@
   <a href="ch-mpdo.html#a0000000018"><span class="toc_ref">3.9</span> <span class="toc_entry">Fusion isometries</span></a>
  </li>
 <li class="">
-  <a href="ch-mpdo.html#a0000000019"><span class="toc_ref">3.10</span> <span class="toc_entry">Algebra structure</span></a>
+  <a href="ch-mpdo.html#a0000000019"><span class="toc_ref">3.10</span> <span class="toc_entry">Support-algebra structure</span></a>
  </li>
 <li class="">
   <a href="ch-mpdo.html#a0000000020"><span class="toc_ref">3.11</span> <span class="toc_entry">Commuting form and GSNNCH</span></a>
@@ -208,7 +208,7 @@
   <a href="ch-entropy.html#a0000000034"><span class="toc_ref">6.4</span> <span class="toc_entry">Mutual information</span></a>
  </li>
 <li class="">
-  <a href="ch-entropy.html#a0000000035"><span class="toc_ref">6.5</span> <span class="toc_entry"><span class="ttfamily">TNLean.Entropy</span> namespace</span></a>
+  <a href="ch-entropy.html#a0000000035"><span class="toc_ref">6.5</span> <span class="toc_entry">Entropy formulations</span></a>
  </li>
 
   </ul>
@@ -349,7 +349,7 @@
   <a href="ch-spectral.html#a0000000069"><span class="toc_ref">9.11</span> <span class="toc_entry">Wedderburn decomposition of the fixed-point algebra</span></a>
  </li>
 <li class="">
-  <a href="ch-spectral.html#a0000000070"><span class="toc_ref">9.12</span> <span class="toc_entry">Further irreducibility, primitivity, and fixed-point criteria</span></a>
+  <a href="ch-spectral.html#a0000000070"><span class="toc_ref">9.12</span> <span class="toc_entry">Further irreducibility and primitivity equivalences</span></a>
  </li>
 <li class="">
   <a href="ch-spectral.html#a0000000071"><span class="toc_ref">9.13</span> <span class="toc_entry">Multi-cycle block-permutation data</span></a>
@@ -643,7 +643,7 @@
   <a href="ch-semigroup.html#a0000000110"><span class="toc_ref">16.3.3</span> <span class="toc_entry">Characterization of conditional complete positivity</span></a>
  </li>
 <li class="">
-  <a href="ch-semigroup.html#a0000000111"><span class="toc_ref">16.3.4</span> <span class="toc_entry">CP semigroups and CCP generators</span></a>
+  <a href="ch-semigroup.html#a0000000111"><span class="toc_ref">16.3.4</span> <span class="toc_entry">Completely positive semigroups and conditionally completely positive generators</span></a>
  </li>
 <li class="">
   <a href="ch-semigroup.html#a0000000112"><span class="toc_ref">16.3.5</span> <span class="toc_entry">Freedom in generator representation</span></a>
@@ -655,7 +655,7 @@
   <a href="ch-semigroup.html#a0000000114"><span class="toc_ref">16.3.7</span> <span class="toc_entry">Trace-annihilation and trace preservation</span></a>
  </li>
 <li class="">
-  <a href="ch-semigroup.html#a0000000115"><span class="toc_ref">16.3.8</span> <span class="toc_entry">GKSL/Lindblad theorem</span></a>
+  <a href="ch-semigroup.html#a0000000115"><span class="toc_ref">16.3.8</span> <span class="toc_entry">The GKSL/Lindblad theorem</span></a>
  </li>
 <li class="">
   <a href="ch-semigroup.html#a0000000116"><span class="toc_ref">16.3.9</span> <span class="toc_entry">Kossakowski matrix form</span></a>
@@ -713,7 +713,7 @@
   <span class="expand-toc">▶</span>
   <ul class="sub-toc-2">
      <li class="">
-  <a href="ch-algebraic_ft.html#a0000000118"><span class="toc_ref">17.6.1</span> <span class="toc_entry">From fixed-length chain states to bundled-tensor MPV agreement</span></a>
+  <a href="ch-algebraic_ft.html#a0000000118"><span class="toc_ref">17.6.1</span> <span class="toc_entry">From fixed-length chain states to combined-tensor MPV agreement</span></a>
  </li>
 <li class="">
   <a href="ch-algebraic_ft.html#a0000000119"><span class="toc_ref">17.6.2</span> <span class="toc_entry">Finite-length MPV agreement</span></a>
@@ -1624,7 +1624,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>By Lemma&#160;<a href="ch-mpdo.html#lem:mpo_transfer_eq_mps">3.7</a>, the transfer map of \(M\) agrees with the transfer map of its doubled-index MPS view. Thus \(\mathcal{E}_M \circ \mathcal{E}_M = \mathcal{E}_M\) holds exactly when the transfer map of \(M.\mathrm{toMPSTensor}\) is idempotent, which is the RFP condition. </p>
+  <p>By Lemma&#160;<a href="ch-mpdo.html#lem:mpo_transfer_eq_mps">3.7</a>, the transfer map of \(M\) agrees with the transfer map of its doubled-index MPS view. Thus \(\mathcal{E}_M \circ \mathcal{E}_M = \mathcal{E}_M\) holds exactly when the transfer map of the doubled-index MPS view is idempotent, which is precisely the renormalization fixed-point condition. </p>
 
   </div>
 </div>
@@ -2060,7 +2060,7 @@
         </div>
   </div>
   <div class="remark_thmcontent">
-  <p>   The current purification-RFP condition is strictly weaker than MPO zero correlation length: there exists an MPO tensor with purification RFP whose transfer map is not idempotent. Equivalently, the implication from the Lean predicate <span class="ttfamily">IsPRFP</span> to the predicate <span class="ttfamily">IsZCL</span> fails. </p>
+  <p>   The current purification-RFP condition is strictly weaker than MPO zero correlation length: there exists an MPO tensor with purification RFP whose transfer map is not idempotent. Equivalently, purification RFP does not imply MPO zero correlation length. </p>
 
   </div>
 </div>
@@ -2278,7 +2278,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   The provisional MPDO renormalization fixed-point condition is equivalent to the zero-correlation-length condition for MPO tensors. </p>
+  <p>   The MPDO renormalization fixed-point condition is equivalent to the zero-correlation-length condition for MPO tensors. </p>
 
   </div>
 </div>
@@ -2367,7 +2367,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   The provisional MPDO RFP condition is equivalent to the pure-state RFP condition for the doubled-index MPS tensor. </p>
+  <p>   The MPDO renormalization fixed-point condition is equivalent to the pure-state RFP condition for the doubled-index MPS tensor. </p>
 
   </div>
 </div>
@@ -3161,7 +3161,7 @@
     Remark
     </span>
     <span class="remark_thmlabel">3.31</span>
-    <span class="remark_thmtitle">Finite-length span and selector criteria for the abstract biCF hypothesis</span>
+    <span class="remark_thmtitle">Finite-length span and selector criteria for the horizontal canonical-form hypothesis</span>
     <div class="thm_header_extras">
 
     
@@ -3193,16 +3193,17 @@
         </div>
   </div>
   <div class="remark_thmcontent">
-  <p>          Let \((A_k)\) be a family of block tensors, and fix a length \(L\). Write \(A_k^w\) for the length-\(L\) word evaluation of \(A_k\) along a word \(w\). The predicate <span class="ttfamily">WordTupleSpanTop</span> says that the tuple-valued evaluations </p>
+  <p>          Let \((A_k)\) be a family of block tensors, and fix a length \(L\). Write \(A_k^w\) for the length-\(L\) word evaluation of \(A_k\) along a word \(w\). Consider the tuple-valued evaluations </p>
 <div class="displaymath" id="a0000000216">
   \[  w \longmapsto (A_k^w)_k  \]
 </div>
-<p> span the full product algebra of block matrices. The predicate <span class="ttfamily">HasBiCF</span> records the corresponding finite-length separation property: there exists \(L\) such that if </p>
+<p> in the direct product of the block matrix algebras. The finite-length spanning hypothesis says that these tuples span the whole product algebra. Equivalently, if matrices \(\Delta _k\) satisfy </p>
 <div class="displaymath" id="a0000000217">
   \[  \sum _k \operatorname{tr}(\Delta _k A_k^w) = 0 \qquad \text{for every word } w \text{ of length } L,  \]
 </div>
-<p> then every block coefficient \(\Delta _k\) vanishes. The theorem <span class="ttfamily">hasBiCF_of_wordTupleSpanTop</span> proves that the spanning condition implies this separation property, by nondegeneracy of the product trace pairing. The packaging theorem <span class="ttfamily">horizontalCFData_of_wordTupleSpanTop</span> then inserts the resulting biCF witness into <span class="ttfamily">HorizontalCFData</span> once injectivity, left-canonicality, and nonzero weights are given. </p>
-<p>The predicate <span class="ttfamily">PropBlockInjective</span> isolates the finite-length content of Proposition&#160;IV.3: after some common blocking length, each block is block-injective, and after a second finite blocking length one can form word combinations which equal the identity on one chosen block and vanish on all others. Concatenating an injective prefix with such a selector suffix yields the product-algebra span condition above. This is formalized by <span class="ttfamily">wordTupleSpanTop_of_propBlockInjective</span>, and the resulting biCF witness is packaged into horizontal canonical-form data by <span class="ttfamily">horizontalCFData_of_propBlockInjective</span>. </p>
+<p> then every \(\Delta _k\) vanishes. This is the nondegeneracy statement for the product trace pairing, so a single finite blocking length already separates the blocks by their word evaluations. </p>
+<p>Proposition&#160;IV.3 gives a concrete sufficient criterion for this finite-length separation. After one common blocking length, each block is block-injective; after a further finite blocking length, one can choose linear combinations of words which act as the identity on one selected block and vanish on all the others. Combining an injective prefix with such a selector suffix yields the spanning condition above. </p>
+<p>Once this finite-length separation is available, together with injectivity, left-canonicality, and nonzero weights, one obtains the horizontal canonical-form structure for the MPO. </p>
 
   </div>
 </div>
@@ -3290,7 +3291,7 @@
   <p> This is Lemma&#160;L from <span class="cite">
 	(
 	
-</span>. Expanding the hypothesis over a word of length&#160;\(L+1\) beginning with the fixed site and folding each block contribution into a trace pairing against \(\mathrm{insertedTensor}\, W\, A_k\) yields, upon taking the \(Y\)-\(Z\) difference, a tuple of block matrices whose trace pairings against every length-\(L\) block word vanish. The biCF hypothesis then forces each block difference to be zero, and dividing by the nonzero weight \(\mu _k^{L+1}\) concludes the blockwise equality of the two first-site insertions. </p>
+</span>. Expanding the hypothesis over a word of length&#160;\(L+1\) beginning with the fixed site and folding each block contribution into a trace pairing against the corresponding first-site insertion tensor yields, upon taking the \(Y\)-\(Z\) difference, a tuple of block matrices whose trace pairings against every length-\(L\) block word vanish. The biCF hypothesis then forces each block difference to be zero, and dividing by the nonzero weight \(\mu _k^{L+1}\) concludes the blockwise equality of the two first-site insertions. </p>
 
   </div>
 </div>
@@ -3370,7 +3371,7 @@
 <p>Following <span class="cite">
 	(
 	
-</span>, the current Lean development formalizes the transfer-map content of the fusion-isometry picture. For each blocked size \(n \ge 1\), the doubled-index blocked tensor of an MPO has a blocked transfer map \(E_n\) acting on bond-space matrices, and the support algebra is modeled by a subspace through which \(E_n\) factors as a retract. </p>
+</span>, this section records the transfer-map content of the fusion-isometry picture. For each blocked size \(n \ge 1\), the doubled-index blocked tensor of an MPO has a blocked transfer map \(E_n\) acting on bond-space matrices, and the support algebra is modeled by a subspace through which \(E_n\) factors as a retract. </p>
 <div class="definition_thmwrapper theorem-style-definition" id="def:mpdo_fusion_isometry">
   <div class="definition_thmheading">
     <span class="definition_thmcaption">
@@ -3515,7 +3516,7 @@
     Theorem
     </span>
     <span class="theorem_thmlabel">3.36</span>
-    <span class="theorem_thmtitle">Fusion-isometry data imply the provisional MPDO RFP condition</span>
+    <span class="theorem_thmtitle">Fusion-isometry data imply MPDO RFP</span>
     <div class="thm_header_extras">
 
     
@@ -3574,7 +3575,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   The fusion-isometry formulation implies the current predicate . </p>
+  <p>   The fusion-isometry formulation implies . </p>
 
   </div>
 </div>
@@ -3752,11 +3753,11 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>Combine Theorem&#160;<a href="ch-mpdo.html#thm:mpdo_rfp_via_fusion_iff">3.37</a> with the diagonal pure-state recovery theorem for the provisional MPO predicate. </p>
+  <p>Combine Theorem&#160;<a href="ch-mpdo.html#thm:mpdo_rfp_via_fusion_iff">3.37</a> with the diagonal pure-state recovery theorem for the MPDO renormalization fixed-point condition. </p>
 
   </div>
 </div>
-<h1 id="a0000000019">3.10 Algebra structure</h1>
+<h1 id="a0000000019">3.10 Support-algebra structure</h1>
 <div class="definition_thmwrapper theorem-style-definition" id="def:mpdo_algebra_structure_data">
   <div class="definition_thmheading">
     <span class="definition_thmcaption">
@@ -3827,7 +3828,7 @@
     Definition
     </span>
     <span class="definition_thmlabel">3.40</span>
-    <span class="definition_thmtitle">Algebra-structure RFP predicate (provisional)</span>
+    <span class="definition_thmtitle">Algebra-structure formulation of MPDO RFP</span>
     <div class="thm_header_extras">
 
         </div>
@@ -3884,10 +3885,10 @@
   <p>   An MPO tensor \(M\) satisfies the <em>algebra-structure formulation</em> of the renormalization fixed-point condition when there exist algebra-structure data compatible with \(M\), in the sense of <span class="cite">
 	(
 	
-</span>. The compatibility relation between algebra-structure data and&#160;\(M\) is, in this provisional formulation, the trivial relation that holds for every pair; consequently the predicate above holds vacuously of every MPO tensor. The exact compatibility condition of <span class="cite">
+</span>. Here compatibility is taken to be the trivial relation that holds for every pair, so this formulation is satisfied by every MPO tensor. The intended compatibility condition is the one appearing in <span class="cite">
 	(
 	
-</span> is to be substituted in place of the trivial relation in subsequent work. </p>
+</span>. </p>
 
   </div>
 </div>
