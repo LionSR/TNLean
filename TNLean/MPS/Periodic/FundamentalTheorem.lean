@@ -186,22 +186,6 @@ section ProportionalCase
 variable {rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
 
-private theorem isIrreducibleTensor_smul
-    {D : ℕ} {c : ℂ} (hc : c ≠ 0)
-    (A : MPSTensor d D) (hIrr : IsIrreducibleTensor (d := d) (D := D) A) :
-    IsIrreducibleTensor (d := d) (D := D) (fun i => c • A i) := by
-  intro hHas
-  apply hIrr
-  rcases hHas with ⟨P, hPproj, hP0, hP1, hLower⟩
-  refine ⟨P, hPproj, hP0, hP1, ?_⟩
-  intro i
-  have h : c • ((1 - P) * A i * P) = 0 := by
-    calc
-      c • ((1 - P) * A i * P) = (1 - P) * (c • A i) * P := by
-        simp [Matrix.mul_assoc]
-      _ = 0 := hLower i
-  exact (smul_eq_zero.mp h).resolve_left hc
-
 private theorem isPeriodic_smul_of_norm_one
     {D m : ℕ} {c : ℂ} (hc_norm : ‖c‖ = 1)
     (A : MPSTensor d D) (hA : IsPeriodic m A) :
