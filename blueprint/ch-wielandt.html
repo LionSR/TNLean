@@ -2106,6 +2106,8 @@
           
           <li><a href="ch-mps.html#def:normal">Definition 2.23</a></li>
           
+          <li><a href="ch-wielandt.html#thm:nonzero_trace_word_sharp">Theorem 10.15</a></li>
+          
           <li><a href="ch-wielandt.html#thm:cumulative_span_sharp">Theorem 10.14</a></li>
           
         </ul>
@@ -2137,7 +2139,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   If \(A\) is normal and \(D \ge 2\), then there exists a word&#160;\(w\) of <em>positive</em> length \(1 \le |w| \le D^2 - \operatorname{kr}(A) + 1\) such that \(\operatorname{tr}(A^w) \neq 0\). This strengthens Theorem&#160;<a href="ch-wielandt.html#thm:nonzero_trace_word_sharp">10.15</a> by requiring \(|w| \ge 1\), which is needed for the blocking argument in Theorem&#160;<a href="ch-wielandt.html#thm:wielandt_general">10.28</a>. </p>
+  <p>   If \(A\) is normal and \(D \ge 2\), then there exists a word&#160;\(w\) of <em>positive</em> length \(1 \le |w| \le D^2 - \operatorname{kr}(A) + 1\) such that \(\operatorname{tr}(A^w) \neq 0\). This strengthens Theorem&#160;<a href="ch-wielandt.html#thm:nonzero_trace_word_sharp">10.15</a> by requiring \(|w| \ge 1\), a feature needed for the blocking argument in the general Wielandt bound below. </p>
 
   </div>
 </div>
@@ -2941,7 +2943,7 @@
   <p>   If \(A\) is a normal MPS tensor with bond dimension&#160;\(D\), then \(T_{D^2}(A) = M_{D}(\mathbb {C})\). In particular, the cumulative span stabilises at index at most \(D^2\). This is the cumulative-span part of <span class="cite">
 	(
 	
-</span>. The paper’s theorem is stronger: via Lemma&#160;2(b) it upgrades this to a fixed-length conclusion \(S_N(A) = M_{D}(\mathbb {C})\), proved below in Theorem&#160;<a href="ch-wielandt.html#thm:wielandt_lemma2b">10.41</a>. </p>
+</span>. The paper’s theorem is stronger: via Lemma&#160;2(b) it upgrades this to a fixed-length conclusion \(S_N(A) = M_{D}(\mathbb {C})\), recorded below as a separate statement. </p>
 
   </div>
 </div>
@@ -3020,6 +3022,8 @@
           
           <li><a href="ch-wielandt.html#thm:nonzero_trace_word_sharp_pos">Theorem 10.16</a></li>
           
+          <li><a href="ch-wielandt.html#thm:eigenvector_from_trace">Theorem 10.17</a></li>
+          
           <li><a href="ch-wielandt.html#thm:isNormal_blockTensor">Theorem 10.36</a></li>
           
         </ul>
@@ -3084,7 +3088,7 @@
 <p> In the invertible case, the invertible Kraus operator \(B^{i_0}\) allows direct dimension growth, giving \(S_{D^2-k_B+1}(B) = M_{D}(\mathbb {C})\) where \(k_B = \operatorname{kr}(B)\). In the non-invertible case, the bound \(S_{D^2}(B) = M_{D}(\mathbb {C})\) follows from tracking indices through the rank-one extraction argument of <span class="cite">
 	(
 	
-</span>; Theorem&#160;<a href="ch-wielandt.html#thm:wielandt_lemma2b">10.41</a> only gives the qualitative conclusion \(\exists N : S_N(B) = M_{D}(\mathbb {C})\) without this explicit bound. In both cases \(\iota (A) \le D^2 \cdot n \le D^2 \cdot (D^2 - d' + 1)\). </p>
+</span>; the separate qualitative fixed-length conclusion recorded below does not supply this explicit bound. In both cases \(\iota (A) \le D^2 \cdot n \le D^2 \cdot (D^2 - d' + 1)\). </p>
 </li>
 </ol>
 
@@ -4988,7 +4992,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   If \(A\) is a primitive MPS tensor with positive-definite fixed point&#160;\(\rho \), then \(A\) is normal (has eventually full Kraus rank). No aperiodicity assumption is needed. </p>
-<p>This is the key connection between the spectral-gap primitivity of Definition&#160;<a href="ch-wielandt.html#def:primitive_mps">10.43</a> and normality, filling the gap that the aperiodicity-based argument in §<a href="ch-wielandt.html#sec:cumspan_to_wordspan">10.11</a> leaves open. </p>
+<p>This is the key connection between the spectral-gap primitivity of Definition&#160;<a href="ch-wielandt.html#def:primitive_mps">10.43</a> and normality, filling the gap left by the earlier aperiodicity-based argument. </p>
 
   </div>
 </div>
@@ -5471,7 +5475,7 @@
 <p> This corresponds to the irreducibility-to-normality direction of <span class="cite">
 	(
 	
-</span>. For the Burnside step, we appeal forward to Theorems&#160;<a href="ch-canonical.html#thm:irreducible_tensor_to_action">11.21</a> and&#160;<a href="ch-canonical.html#thm:burnside_matrix">11.22</a> in Chapter&#160;<a href="ch-canonical.html">11</a>; this is a presentation-level forward dependency, but the mathematical dependency is acyclic. </p>
+</span>. For the Burnside step, we appeal forward to Theorems&#160;<a href="ch-canonical.html#thm:irreducible_tensor_to_action">11.21</a> and&#160;<a href="ch-canonical.html#thm:burnside_matrix">11.22</a>; this is a presentation-level forward dependency, but the mathematical dependency is acyclic. </p>
 
   </div>
 </div>

@@ -3153,6 +3153,8 @@
           
           <li><a href="ch-parent_hamiltonian.html#def:ground_space_parent">Definition 19.4</a></li>
           
+          <li><a href="ch-mps.html#def:injective">Definition 2.21</a></li>
+          
         </ul>
     
       </div>
@@ -3877,6 +3879,10 @@
           
           <li><a href="ch-parent_hamiltonian.html#def:ground_space_parent">Definition 19.4</a></li>
           
+          <li><a href="ch-parent_hamiltonian.html#lem:left_tail_compatibility">Lemma 19.40</a></li>
+          
+          <li><a href="ch-parent_hamiltonian.html#thm:right_factor_word_compatibility">Theorem 19.41</a></li>
+          
         </ul>
     
       </div>
@@ -3918,7 +3924,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:left_tail_compatibility">19.40</a> produces matrices \((Z_j)_j\) and \((Y_u)_u\) with \(Z_j A^u = A_j Y_u\) for every prefix word \(u\) of length \(K\). Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:right_factor_word_compatibility">19.41</a> gives a common right factor \(X\) such that \(Z_j = A_j X\) for all \(j\). Therefore each last-site restriction of \(\psi \) agrees with the corresponding last-site restriction of the ground- space vector determined by \(X\). Since every configuration is obtained by adjoining its final letter to its initial \((K + L_0)\)-tuple, the two states coincide, so \(\psi \) lies in \(G_{K + L_0 + 1}(A)\). </p>
+  <p> Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:left_tail_compatibility">19.40</a> produces matrices \((Z_j)_j\) and \((Y_u)_u\) with \(Z_j A^u = A_j Y_u\) for every prefix word \(u\) of length \(K\). Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:right_factor_word_compatibility">19.41</a> gives a common right factor \(X\) such that \(Z_j = A_j X\) for all \(j\). Therefore each last-site restriction of \(\psi \) agrees with the corresponding last-site restriction of the ground- space vector determined by \(X\). Since every configuration is obtained by adjoining its final letter to its initial \((K + L_0)\)-tuple, the two states coincide, so \(\psi \) lies in \(G_{K + L_0 + 1}(A)\). </p>
 
   </div>
 </div>
@@ -5024,6 +5030,8 @@
           
           <li><a href="ch-mps.html#def:l_blk_injective">Definition 2.22</a></li>
           
+          <li><a href="ch-parent_hamiltonian.html#thm:boundary_matrix_commutes">Theorem 19.43</a></li>
+          
         </ul>
     
       </div>
@@ -5068,7 +5076,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>The remaining step is the periodic range-reduction theorem from <span class="cite">
+  <p> The remaining step is the periodic range-reduction theorem from <span class="cite">
 	(
 	
 </span>: one must show that the reduced cyclic window constraints still force the same boundary-matrix commutation relation as in Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:boundary_matrix_commutes">19.43</a>. </p>
@@ -7410,7 +7418,7 @@
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>  Let \(A\) be injective and fix an interaction range \(L \ge 2\) as in Definition&#160;<a href="ch-parent_hamiltonian.html#def:parent_interaction">19.9</a>. Let \(h_L(A) := \Pi _{G_L(A)^\perp }\) be the \(L\)-site parent interaction, and for each chain length and site \(i\) let \(h_i\) denote its translate as in Definition&#160;<a href="ch-parent_hamiltonian.html#def:local_term_parent">19.14</a>. Then for every pair of overlapping terms \(h_i\) and \(h_j\) with \(0 {\lt} d_N(i,j) {\lt} L\), where \(d_N(i,j) := \min (|i-j|,\,  N-|i-j|)\) is the cyclic distance on the ring (i.e. whose \(L\)-site supports share at least one site under periodic boundary conditions), the martingale condition of Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:martingale_criterion">19.89</a> holds with constants \(c_{ij}\) and \(\gamma {\gt} 0\) depending only on \(A\) (not on \(N\)). <em>Note:</em> The proof below fully establishes the martingale constants only for \(L = 2\); for \(L {\gt} 2\) the existence of suitable constants is asserted without complete proof (see the remark at the end of the proof). Only the \(L = 2\) case is used in this chapter (Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:parent_hamiltonian_gapped">19.92</a>). (When \(L = 1\) the interaction terms have disjoint supports, so there are no overlapping pairs and the spectral gap follows directly without the martingale machinery.) </p>
+  <p>  Let \(A\) be injective and fix an interaction range \(L \ge 2\) as in Definition&#160;<a href="ch-parent_hamiltonian.html#def:parent_interaction">19.9</a>. Let \(h_L(A) := \Pi _{G_L(A)^\perp }\) be the \(L\)-site parent interaction, and for each chain length and site \(i\) let \(h_i\) denote its translate as in Definition&#160;<a href="ch-parent_hamiltonian.html#def:local_term_parent">19.14</a>. Then for every pair of overlapping terms \(h_i\) and \(h_j\) with \(0 {\lt} d_N(i,j) {\lt} L\), where \(d_N(i,j) := \min (|i-j|,\,  N-|i-j|)\) is the cyclic distance on the ring (i.e. whose \(L\)-site supports share at least one site under periodic boundary conditions), the martingale condition of Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:martingale_criterion">19.89</a> holds with constants \(c_{ij}\) and \(\gamma {\gt} 0\) depending only on \(A\) (not on \(N\)). <em>Note:</em> The proof below fully establishes the martingale constants only for \(L = 2\); for \(L {\gt} 2\) the existence of suitable constants is asserted without complete proof (see the remark at the end of the proof). Only the \(L = 2\) case is used in the spectral-gap theorem below. (When \(L = 1\) the interaction terms have disjoint supports, so there are no overlapping pairs and the spectral gap follows directly without the martingale machinery.) </p>
 
   </div>
 </div>
@@ -7424,8 +7432,8 @@
   <div class="proof_content">
   <p> Two terms \(h_i, h_j\) with \(0 {\lt} d_N(i,j) {\lt} L\) have supports overlapping in \(L - d_N(i,j)\) sites (where \(d_N\) is the cyclic distance on the \(N\)-site ring). Since \(A\) is injective, the intersection property (Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:ground_space_intersection">19.32</a>) gives the qualitative identity \(\ker (h_i) \cap \ker (h_j) = G_{[i,j+L-1]}(A)\). Because the local Hilbert space is finite-dimensional, the subspaces \(\ker (h_i)\) and \(\ker (h_j)\) live in a fixed finite-dimensional space. The intersection identity shows that \(\ker (h_i) \cap \ker (h_j)\) is exactly \(G_{[i,j+L-1]}(A)\); in particular there is no non-trivial vector in one kernel that is orthogonal to the other yet lies in both. Hence the Friedrichs angle \(\theta _{d_N(i,j)}\) between \(\ker (h_i)\) and \(\ker (h_j)\) is strictly positive (for the fixed injective tensor \(A\)). Because the angle depends only on the overlap pattern \(d_N(i,j) \in \{ 1,\ldots ,L-1\} \) and not on the absolute position, the number of distinct angles is at most \(L-1\). Let \(\alpha := \max _{1 \le s {\lt} L} \cos \theta _s {\lt} 1\) be the worst-case cosine of the Friedrichs angles. </p>
 <p><em>Row-sum bound.</em> Since \(L \ge 2\), each site \(i\) overlaps with at most \(2(L-1)\) neighbours (those \(j\) with \(0 {\lt} d_N(i,j) {\lt} L\)). Set \(c_{ij} := \tfrac {1}{2(L-1)}\) for every overlapping pair and \(c_{ij} := 0\) otherwise. These constants depend only on the cyclic distance \(d_N(i,j)\) and therefore satisfy \(c_{ij} = c_{ji}\). Then \(\sum _{j \ne i} c_{ij} \le 2(L-1)\cdot \tfrac {1}{2(L-1)} = 1\), satisfying the row-sum hypothesis of Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:martingale_criterion">19.89</a>. </p>
-<p><em>Positivity of \(\gamma \).</em> The Friedrichs angle bound gives, for each overlapping pair, \(h_i h_j + h_j h_i \ge -\alpha \, (h_i + h_j)\). The martingale inequality holds with \(\gamma = 1 - 2(L-1)\alpha \), which requires \(c_{ij}(1-\gamma ) = \tfrac {1}{2(L-1)} \cdot 2(L-1)\alpha = \alpha \) (matching the Friedrichs bound exactly). Since \(\alpha {\lt} 1\) (the Friedrichs angle is strictly positive), it remains to show \(\gamma {\gt} 0\), i.e. \(\alpha {\lt} \tfrac {1}{2(L-1)}\). In the blocked picture of Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:parent_hamiltonian_gapped">19.92</a>, \(L = 2\) and each site overlaps with at most \(2\) neighbours, so the condition reduces to \(\alpha {\lt} \tfrac {1}{2}\). For \(L = 2\) with an injective tensor, the two projectors \(h_i\) and \(h_{i+1}\) act on a finite-dimensional space, and the intersection property (Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:ground_space_intersection">19.32</a>) guarantees that \(\ker (h_i) \cap \ker (h_{i+1})\) is exactly \(G_{[i,i+2]}(A)\); hence \(\| P_i P_{i+1}\|  {\lt} 1\) (the Friedrichs cosine is strictly less than&#160;1). On a finite-dimensional space with two projectors, the Friedrichs cosine satisfies the quantitative bound \(\alpha \le 1 - c_{\min }\) where \(c_{\min } {\gt} 0\) depends on the minimal principal angle between the two kernels. The bound \(\alpha {\lt} \tfrac {1}{2}\) then follows from the Nachtergaele finite-size criterion&#160;<span class="cite">
-</span>, which establishes that the overlap \(\| P_i P_{i+1}\| \) for injective MPS is bounded away from \(1\) by a constant depending only on the tensor&#160;\(A\). For general \(L {\gt} 2\), the uniform constants \(c_{ij} = \tfrac {1}{2(L-1)}\) make the condition \(\alpha {\lt} \tfrac {1}{2(L-1)}\) increasingly restrictive as \(L\) grows. A more refined choice of separation-dependent constants \(c_{ij} = c_{d_N(i,j)}\) that weight small-separation (large-overlap) pairs more heavily can exploit the exponential decay of the Friedrichs cosine \(\alpha _s\) in \(s\) to satisfy the row-sum constraint. However, this refinement is not needed for the main result: in Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:parent_hamiltonian_gapped">19.92</a> below, the argument is applied only with \(L = 2\) in the blocked picture. In all cases, the constants depend only on \(A\) and are independent of&#160;\(N\)&#160;<span class="cite">
+<p><em>Positivity of \(\gamma \).</em> The Friedrichs angle bound gives, for each overlapping pair, \(h_i h_j + h_j h_i \ge -\alpha \, (h_i + h_j)\). The martingale inequality holds with \(\gamma = 1 - 2(L-1)\alpha \), which requires \(c_{ij}(1-\gamma ) = \tfrac {1}{2(L-1)} \cdot 2(L-1)\alpha = \alpha \) (matching the Friedrichs bound exactly). Since \(\alpha {\lt} 1\) (the Friedrichs angle is strictly positive), it remains to show \(\gamma {\gt} 0\), i.e. \(\alpha {\lt} \tfrac {1}{2(L-1)}\). In the blocked picture used in the spectral-gap theorem below, \(L = 2\) and each site overlaps with at most \(2\) neighbours, so the condition reduces to \(\alpha {\lt} \tfrac {1}{2}\). For \(L = 2\) with an injective tensor, the two projectors \(h_i\) and \(h_{i+1}\) act on a finite-dimensional space, and the intersection property (Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:ground_space_intersection">19.32</a>) guarantees that \(\ker (h_i) \cap \ker (h_{i+1})\) is exactly \(G_{[i,i+2]}(A)\); hence \(\| P_i P_{i+1}\|  {\lt} 1\) (the Friedrichs cosine is strictly less than&#160;1). On a finite-dimensional space with two projectors, the Friedrichs cosine satisfies the quantitative bound \(\alpha \le 1 - c_{\min }\) where \(c_{\min } {\gt} 0\) depends on the minimal principal angle between the two kernels. The bound \(\alpha {\lt} \tfrac {1}{2}\) then follows from the Nachtergaele finite-size criterion&#160;<span class="cite">
+</span>, which establishes that the overlap \(\| P_i P_{i+1}\| \) for injective MPS is bounded away from \(1\) by a constant depending only on the tensor&#160;\(A\). For general \(L {\gt} 2\), the uniform constants \(c_{ij} = \tfrac {1}{2(L-1)}\) make the condition \(\alpha {\lt} \tfrac {1}{2(L-1)}\) increasingly restrictive as \(L\) grows. A more refined choice of separation-dependent constants \(c_{ij} = c_{d_N(i,j)}\) that weight small-separation (large-overlap) pairs more heavily can exploit the exponential decay of the Friedrichs cosine \(\alpha _s\) in \(s\) to satisfy the row-sum constraint. However, this refinement is not needed for the main result: the spectral-gap argument below is applied only with \(L = 2\) in the blocked picture. In all cases, the constants depend only on \(A\) and are independent of&#160;\(N\)&#160;<span class="cite">
 </span>. </p>
 
   </div>
@@ -7551,6 +7559,8 @@
         <ul class="uses">
           
           <li><a href="ch-parent_hamiltonian.html#thm:friedrichs_gap_bound">Theorem 19.91</a></li>
+          
+          <li><a href="ch-parent_hamiltonian.html#lem:quadratic_form_to_norm_bound">Lemma 19.88</a></li>
           
         </ul>
     

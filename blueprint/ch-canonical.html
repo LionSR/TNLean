@@ -2713,7 +2713,7 @@
   <div class="proof_content">
   <p> By contradiction. If \(A\) and \(B\) are not gauge-phase equivalent, then \(O_{AB}(N) \to 0\) (Theorem&#160;<a href="ch-spectral.html#thm:overlap_decay">9.25</a>). From the proportionality hypothesis, \(O_{AB}(N) = c_N O_{BB}(N)\). Since \(O_{BB}(N) \to 1\), it follows that \(c_N \to 0\). But \(O_{AA}(N) = |c_N|^2 O_{BB}(N) \to 0\), contradicting \(O_{AA}(N) \to 1\). </p>
 <p>In&#160;<span class="cite">
-</span>, the proportional case is handled as part of the canonical form argument. Thus the proportional case is obtained directly from the spectral gap in Chapter&#160;<a href="ch-spectral.html">9</a>. </p>
+</span>, the proportional case is handled as part of the canonical form argument. Here it is obtained directly from the overlap-decay theorem. </p>
 
   </div>
 </div>
@@ -3008,7 +3008,7 @@
 </li>
   <li><p>every eigenvalue of \(E\) has modulus at most&#160;\(1\), because \(E = F_{A_k A_k}\) is a normalized mixed transfer operator and Theorem&#160;<a href="ch-spectral.html#thm:eigenvalue_bound">9.14</a> applies; </p>
 </li>
-  <li><p>any trace-zero fixed point of \(E\) is zero; this is the trace-zero uniqueness consequence extracted in Chapter&#160;<a href="ch-qpf.html">8</a> from the uniqueness of the PSD fixed point (Theorem&#160;<a href="ch-qpf.html#thm:psd_fp_unique">8.5</a>). </p>
+  <li><p>any trace-zero fixed point of \(E\) is zero; this is the trace-zero uniqueness consequence of the PSD fixed-point uniqueness theorem (Theorem&#160;<a href="ch-qpf.html#thm:psd_fp_unique">8.5</a>). </p>
 </li>
 </ol>
 <p> Hence \(E\) has a spectral gap on the complement of its fixed-point projection. Theorem&#160;<a href="ch-spectral.html#thm:primitive_overlap">9.94</a> then gives \(O_{A_k A_k}(N) \to 1\). Since this holds for every block, the overlap clause required in Definition&#160;<a href="ch-block_perm.html#def:is_canonical_form">12.16</a> follows from the other hypotheses. </p>
@@ -4130,7 +4130,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   For any MPS tensor&#160;\(A\), there exist irreducible blocks \((A_k)_{k=1}^r\) that generate the same MPV family as&#160;\(A\). Moreover, for each block&#160;\(k\), if that block has already been placed in TP gauge and \(D_k {\gt} 0\), one obtains a left-canonical normalization (unitary, diagonal PD fixed point, MPV preservation). This yields the left-canonical normalization; further reduction to normal canonical form is carried out in Chapter&#160;<a href="ch-spectral.html">9</a>. </p>
+  <p>   For any MPS tensor&#160;\(A\), there exist irreducible blocks \((A_k)_{k=1}^r\) that generate the same MPV family as&#160;\(A\). Moreover, for each block&#160;\(k\), if that block has already been placed in TP gauge and \(D_k {\gt} 0\), one obtains a left-canonical normalization (unitary, diagonal PD fixed point, MPV preservation). This yields the left-canonical normalization; the further reduction to normal canonical form is carried out in the subsequent spectral analysis. </p>
 
   </div>
 </div>
@@ -6845,7 +6845,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   Let \(A\) be a left-canonical MPS tensor with irreducible adjoint transfer map, and let \((P_k)_{k=1}^m\) be cyclic orthogonal sector projections. Assume only the projection-step hypothesis from Lemma&#160;<a href="ch-canonical.html#lem:orbit_sum_hLift_construction">11.74</a>. Then \((\mathcal{E}_A^\dagger )^m\) is irreducible on each corner \(P_k\). </p>
+  <p>   Let \(A\) be a left-canonical MPS tensor with irreducible adjoint transfer map, and let \((P_k)_{k=1}^m\) be cyclic orthogonal sector projections. Assume only the projection-step hypothesis from Lemma&#160;<a href="ch-canonical.html#lem:orbit_sum_hLift_proj_step">11.75</a>. Then \((\mathcal{E}_A^\dagger )^m\) is irreducible on each corner \(P_k\). </p>
 
   </div>
 </div>
