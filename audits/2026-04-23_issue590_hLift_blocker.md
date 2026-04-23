@@ -4,9 +4,9 @@
 > The detailed blocker analysis below is now partly historical: current `main`
 > already contains `SectorFixedPointAlgebraRigidity`,
 > `hProjStep_of_sectorFixedPointAlgebraRigidity`, and
-> `hLift_cyclicDecomp_mps_of_sectorFixedPointAlgebraRigidity`, which package the
-> former `hProjStep`/`hFixUpgrade` obstruction as a single named hypothesis.
-> The forward step added on top of that packaging is the downstream consumer
+> `hLift_cyclicDecomp_mps_of_sectorFixedPointAlgebraRigidity`, which combine the
+> former `hProjStep`/`hFixUpgrade` obstruction into a single named hypothesis.
+> The forward step built on top of that reformulation is the downstream consumer
 > theorem
 > `primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking_of_fixedAlgebraRigidity`
 > in `Assembly/CyclicSectorDecomposition.lean`. The remaining mathematical gap is
@@ -15,7 +15,7 @@
 
 ## Outcome
 
-I could **not** honestly close issue #590 on current `origin/main`.
+I could **not yet** close issue #590 on current `origin/main`.
 
 The reason is subtle but important: the orbit-sum **combination theorem requested by the
 original issue is already present** on current `main`, after the recent
@@ -199,7 +199,7 @@ In Lean terms, the missing ingredient appears to be one of the following stronge
 3. A direct formalization of the `lem:bdcf` fixed-point / blocked-sector argument that implies the
    needed one-step projection-preservation statement.
 
-Without one of these stronger ingredients, I do not see an honest way to discharge `hProjStep`.
+Without one of these stronger ingredients, I do not currently see a way to discharge `hProjStep`.
 
 ## Practical downstream consequence
 

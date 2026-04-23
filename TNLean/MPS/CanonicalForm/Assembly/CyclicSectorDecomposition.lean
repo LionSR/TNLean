@@ -660,8 +660,8 @@ theorem primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking_o
 `SectorFixedPointAlgebraRigidity`, the cyclic sector blocks produced after
 blocking are primitive and tensor-irreducible.
 
-This packages the remaining orbit-sum obstruction as a single named hypothesis,
-uses
+This reformulates the remaining orbit-sum obstruction as a single named
+hypothesis, uses
 `isIrreducibleOnCorner_of_cyclic_decomp_mps_of_sectorFixedPointAlgebraRigidity`
 to obtain corner irreducibility of `((transferMap A†)^m)|_{P_k}`, and then
 applies the compression transport theorem above. -/
