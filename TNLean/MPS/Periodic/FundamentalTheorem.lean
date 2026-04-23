@@ -187,8 +187,9 @@ variable {rA rB : ℕ}
 
 /-- **Peripheral proportional case from exact MPV equality.**
 
-If two periodic tensors generate the same MPV family, then they are repeated
-blocks. This is the single-block uniqueness direction behind Theorem 3.4 once the
+If two periodic tensors generate the same MPV family, then their bond dimensions
+agree and they are repeated blocks after identifying those bond spaces. This is
+the single-block uniqueness direction behind Theorem 3.4 once the
 proportionality scalar has been absorbed into one side.
 
 The proof combines `periodicOverlapDichotomy` with `periodicSelfOverlap_tendsto`:
@@ -198,11 +199,11 @@ its periodic self-overlap limit `m_a` along the subsequence `m_a * ℕ`.
 As with `periodicOverlapDichotomy`, this theorem currently inherits the admitted
 sub-lemmas in `Periodic/Overlap`. -/
 theorem peripheralProportionalCase_periodicFT_of_sameMPV
-    {D : ℕ} [NeZero D]
-    (A B : MPSTensor d D) {m_a m_b : ℕ}
+    {D₁ D₂ : ℕ} [NeZero D₁] [NeZero D₂]
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂) {m_a m_b : ℕ}
     (hA : IsPeriodic m_a A) (hB : IsPeriodic m_b B)
-    (hSame : SameMPV A B) :
-    RepeatedBlocks A B := by
+    (hSame : SameMPV₂ A B) :
+    HetRepeatedBlocks A B := by
   rcases periodicOverlapDichotomy A B hA hB with hDecay | ⟨hdim, hRep⟩
   · have hSameOverlap : ∀ N : ℕ, mpvOverlap (d := d) A B N = mpvOverlap A A N := by
       intro N
@@ -223,9 +224,9 @@ theorem peripheralProportionalCase_periodicFT_of_sameMPV
       hSelfZero.comp hMulAtTop
     have hm_ne : (m_a : ℂ) ≠ 0 := by
       exact_mod_cast Nat.ne_of_gt hA.period_pos
-    exact False.elim <| hm_ne <| tendsto_nhds_unique (periodicSelfOverlap_tendsto A hA) hSelfZeroMul
-  · cases hdim
-    simpa using hRep
+    exact False.elim <| hm_ne <|
+      tendsto_nhds_unique (periodicSelfOverlap_tendsto A hA) hSelfZeroMul
+  · exact ⟨hdim, hRep⟩
 
 /-- **Theorem 3.4 (Proportional case, arXiv:1708.00029).**
 
@@ -244,10 +245,10 @@ The proof mirrors `blocks_match_of_sameMPV₂_CFBNT` in `Full.lean`:
 
 The single-block exact-MPV reduction is packaged separately as
 `peripheralProportionalCase_periodicFT_of_sameMPV`: once the proportionality
-scalar has been absorbed, the overlap dichotomy already gives the repeated-block
-conclusion. Thus the remaining paper-level gap is the multi-block existence step
-that turns proportionality of the assembled tensors into the non-decaying
-cross-overlap hypotheses `exists_nondecaying_A/B`.
+scalar has been absorbed, the overlap dichotomy already gives the heterogeneous
+repeated-block conclusion. Thus the remaining paper-level gap is the multi-block
+existence step that turns proportionality of the assembled tensors into the
+non-decaying cross-overlap hypotheses `exists_nondecaying_A/B`.
 
 The `PeriodicOverlapHypothesis` parameter can be supplied via
 `PeriodicOverlapHypothesis.ofIsPeriodic`, which uses `periodicOverlapDichotomy`
