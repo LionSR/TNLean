@@ -1647,8 +1647,8 @@ Theorem~2 of~\cite{Molnar2018NormalPEPS}.
 \end{theorem}
 
 \begin{definition}[Gauge equivalence modulo balanced edge scalars]%
-    \label{def:GaugeEquivalentModEdgeScalars}
-    \lean{TNLean.PEPS.GaugeEquivalentModEdgeScalars}
+    \label{def:GaugeEquivModEdgeScalars}
+    \lean{TNLean.PEPS.GaugeEquivModEdgeScalars}
     \leanok
     \uses{def:edgeGaugeAt}
     Two gauge families are equivalent modulo balanced edge scalars if there is
@@ -1658,15 +1658,15 @@ Theorem~2 of~\cite{Molnar2018NormalPEPS}.
 \end{definition}
 
 \begin{theorem}[Balanced edge scalars preserve the local gauge action]%
-    \label{thm:GaugeEquivalentModEdgeScalars_gaugeVertex_eq}
-    \lean{TNLean.PEPS.GaugeEquivalentModEdgeScalars.gaugeVertex_eq}
+    \label{thm:GaugeEquivModEdgeScalars_gaugeVertex_eq}
+    \lean{TNLean.PEPS.GaugeEquivModEdgeScalars.gaugeVertex_eq}
     \leanok
-    \uses{def:GaugeEquivalentModEdgeScalars, def:gaugeVertex}
+    \uses{def:GaugeEquivModEdgeScalars, def:gaugeVertex}
     If two gauge families differ by a balanced edge-scalar reweighting, then
     they produce the same gauged tensor at every vertex.
 \end{theorem}
 
-\begin{proof}\leanok\uses{def:GaugeEquivalentModEdgeScalars, def:gaugeVertex}
+\begin{proof}\leanok\uses{def:GaugeEquivModEdgeScalars, def:gaugeVertex}
     In the defining sum for the gauged tensor, each incident edge contributes
     its endpoint scalar factor in addition to the original gauge entry.
     The product of these endpoint scalars is $1$ by the balancing condition,
@@ -1677,9 +1677,9 @@ Theorem~2 of~\cite{Molnar2018NormalPEPS}.
     \label{thm:gauge_unique_mod_edge_scalars}
     \lean{TNLean.PEPS.gauge_unique_mod_edge_scalars}
     \notready
-    \uses{def:GaugeEquivalentModEdgeScalars, def:IsVertexInjective}
+    \uses{def:GaugeEquivModEdgeScalars, def:IsVertexInjective}
     If two gauge families relate the same injective PEPS tensor to the same
-    target tensor, then they should define the same class modulo balanced edge
+    target tensor, then they define the same class modulo balanced edge
     scalars. This replaces the earlier global-scalar claim, which is false on
     a triangle with bond dimension $1$.
 \end{theorem}

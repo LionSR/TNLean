@@ -587,7 +587,7 @@ def IsVertexBalanced (c : (e : Edge G) → Units ℂ) : Prop :=
 /-- Two PEPS gauge families are equivalent modulo balanced edge scalars if,
 after inserting the corresponding endpoint scalars, they induce the same
 oriented edge action on every incident half-edge. -/
-def GaugeEquivalentModEdgeScalars (A : Tensor G d)
+def GaugeEquivModEdgeScalars (A : Tensor G d)
     (X Y : (e : Edge G) → GL (Fin (A.bondDim e)) ℂ) : Prop :=
   ∃ c : (e : Edge G) → Units ℂ,
     IsVertexBalanced (G := G) c ∧
@@ -597,10 +597,10 @@ def GaugeEquivalentModEdgeScalars (A : Tensor G d)
 
 /-- Balanced edge-scalar reweightings do not change the gauged tensor at a
 vertex. -/
-theorem GaugeEquivalentModEdgeScalars.gaugeVertex_eq
+theorem GaugeEquivModEdgeScalars.gaugeVertex_eq
     {A : Tensor G d}
     {X Y : (e : Edge G) → GL (Fin (A.bondDim e)) ℂ}
-    (hXY : GaugeEquivalentModEdgeScalars (G := G) A X Y)
+    (hXY : GaugeEquivModEdgeScalars (G := G) A X Y)
     (v : V) (η : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1))
     (σ : Fin d) :
     gaugeVertex A X v η σ = gaugeVertex A Y v η σ := by
@@ -633,7 +633,7 @@ theorem GaugeEquivalentModEdgeScalars.gaugeVertex_eq
 Theorem 2, uniqueness clause, repaired form).
 
 If `X` and `Y` are two gauge families relating the same pair of injective PEPS,
-then they should represent the same gauge class modulo edge-wise nonzero
+then they represent the same gauge class modulo edge-wise nonzero
 scalars whose oriented product is `1` at every vertex. This replaces the
 earlier global-scalar conclusion, which is refuted by the connected-triangle,
 bond-dimension-`1` counterexample discussed in issue #762. -/
@@ -649,7 +649,7 @@ theorem gauge_unique_mod_edge_scalars (A B : Tensor G d)
         (σ : Fin d),
       B.component v (fun ie => Fin.cast (congr_fun hDim ie.1) (η ie)) σ =
         gaugeVertex A Y v η σ) :
-    GaugeEquivalentModEdgeScalars (G := G) A X Y := by
+    GaugeEquivModEdgeScalars (G := G) A X Y := by
   -- TODO: compare `hX` and `hY` vertexwise and use linear independence of
   -- `A.component v` to extract scalar ratios on each incident edge.
   -- The remaining missing ingredient is the tensor-factor uniqueness lemma:
