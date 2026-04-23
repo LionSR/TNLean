@@ -34,11 +34,15 @@ including `pairwise_mul_zero_of_orthogonalProjection_sum_one`,
 `orbit_iterate_isOrthogonalProjection`,
 `orbitSumProjection_eq_one_of_full_sector`,
 `hFixUpgrade_of_peripheral`,
+`SectorFixedPointAlgebraRigidity`,
+`hProjStep_of_sectorFixedPointAlgebraRigidity`,
 `hLift_cyclicDecomp_mps_of_fixUpgrade`,
 `hLift_cyclicDecomp_mps_of_projStep`,
+`hLift_cyclicDecomp_mps_of_sectorFixedPointAlgebraRigidity`,
 `isIrreducibleOnCorner_of_cyclic_decomp_mps_of_hLift`,
-`isIrreducibleOnCorner_of_cyclic_decomp_mps_of_projStep`, and
-`isIrreducibleOnCorner_of_cyclic_decomp_mps_of_fixUpgrade`.
+`isIrreducibleOnCorner_of_cyclic_decomp_mps_of_projStep`,
+`isIrreducibleOnCorner_of_cyclic_decomp_mps_of_fixUpgrade`, and
+`isIrreducibleOnCorner_of_cyclic_decomp_mps_of_sectorFixedPointAlgebraRigidity`.
 
 ## Tags
 

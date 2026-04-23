@@ -1559,6 +1559,56 @@ The following results separate the zero blocks from the
 	the $\rho$-weighted trace therefore forces it to vanish, giving the claim.
 \end{proof}
 
+\begin{definition}[Sector fixed-point-algebra rigidity]%
+	\label{def:sector_fixed_point_algebra_rigidity}
+	\lean{MPSTensor.SectorFixedPointAlgebraRigidity}
+	\leanok
+	Let $T$ be the adjoint transfer map and $(P_k)_{k=1}^m$ a cyclic family of
+	orthogonal sector projections. We say that the sector dynamics satisfies
+	fixed-point-algebra rigidity if, for each $k$, the one-step map $T$ is
+	multiplicative on the $T^m$-fixed operators supported on the corner
+	$P_k \mathcal M_D P_k$: whenever
+	\[
+		X = X P_k = P_k X,
+		\qquad
+		Y = Y P_k = P_k Y,
+		\qquad
+		T^m(X) = X,
+		\qquad
+		T^m(Y) = Y,
+	\]
+	one has
+	\[
+		T(XY) = T(X) T(Y).
+	\]
+\end{definition}
+
+\begin{proof}\leanok
+	This is the formal statement of the missing Wolf-style fixed-point-algebra
+	rigidity statement suggested by Lemma~\texttt{lem:bdcf}.
+\end{proof}
+
+\begin{lemma}[Projection step from sector fixed-point-algebra rigidity]%
+	\label{lem:sector_fixed_algebra_proj_step}
+	\lean{MPSTensor.hProjStep_of_sectorFixedPointAlgebraRigidity}
+	\leanok
+	\uses{def:sector_fixed_point_algebra_rigidity}
+	Assume sector fixed-point-algebra rigidity. If $X$ is an orthogonal
+	projection supported on $P_k$ and fixed by $T^m$, then $T(X)$ is again an
+	orthogonal projection.
+\end{lemma}
+
+\begin{proof}\leanok
+	\uses{def:sector_fixed_point_algebra_rigidity}
+	Kraus maps preserve conjugate transpose, so $T(X)$ is Hermitian. The
+	rigidity hypothesis gives
+	\[
+		T(X)^2 = T(X^2) = T(X),
+	\]
+	since $X^2 = X$ for an orthogonal projection. Therefore $T(X)$ is again an
+	orthogonal projection.
+\end{proof}
+
 \begin{lemma}[Orbit-sum construction of the sector lift]%
 	\label{lem:orbit_sum_hLift_construction}
 	\lean{MPSTensor.hLift_cyclicDecomp_mps_of_fixUpgrade}
@@ -1628,6 +1678,37 @@ The following results separate the zero blocks from the
 	adjoint transfer map to the tensor and then back to the primal transfer map.
 \end{proof}
 
+\begin{lemma}[Orbit-sum construction, fixed-point-algebra variant]%
+	\label{lem:orbit_sum_hLift_fixed_algebra}
+	\lean{MPSTensor.hLift_cyclicDecomp_mps_of_sectorFixedPointAlgebraRigidity}
+	\leanok
+	\uses{def:sector_fixed_point_algebra_rigidity,
+	      lem:fix_upgrade_peripheral,
+	      lem:sector_fixed_algebra_proj_step,
+	      lem:orbit_sum_hLift_construction}
+	Let $A$ be a left-canonical MPS tensor with irreducible adjoint transfer map,
+	and let $(P_k)_{k=1}^m$ be cyclic orthogonal sector projections. Assume the
+	single fixed-point-algebra rigidity hypothesis from
+	Definition~\ref{def:sector_fixed_point_algebra_rigidity}. Then the orbit-sum
+	lift holds: for every orthogonal subprojection $Q \le P_k$ whose corner is
+	preserved by $(\E_A^\dagger)^m$, there is a global projection $R$ invariant
+	under $\E_A^\dagger$ with the same zero/full-sector tests.
+\end{lemma}
+
+\begin{proof}\leanok
+	\uses{def:sector_fixed_point_algebra_rigidity,
+	      lem:fix_upgrade_peripheral,
+	      lem:sector_fixed_algebra_proj_step,
+	      lem:orbit_sum_hLift_construction}
+	First apply Lemma~\ref{lem:fix_upgrade_peripheral} to upgrade corner
+	preservation of $Q$ under $(\E_A^\dagger)^m$ to an actual fixed-point
+	relation. The rigidity hypothesis then yields the one-step projection
+	preservation needed along the orbit of $Q$, via
+	Lemma~\ref{lem:sector_fixed_algebra_proj_step}. With those two inputs in hand,
+	the original orbit-sum construction from
+	Lemma~\ref{lem:orbit_sum_hLift_construction} applies verbatim.
+\end{proof}
+
 \begin{theorem}[Sector irreducibility from the orbit-sum construction]%
 	\label{thm:sector_irred_fix_upgrade}
 	\lean{MPSTensor.isIrreducibleOnCorner_of_cyclic_decomp_mps_of_fixUpgrade}
@@ -1661,6 +1742,24 @@ The following results separate the zero blocks from the
 \begin{proof}\leanok
 	\uses{thm:sector_irred_orbit_lift, lem:orbit_sum_hLift_proj_step}
 	Apply Lemma~\ref{lem:orbit_sum_hLift_proj_step} and then
+	Theorem~\ref{thm:sector_irred_orbit_lift}.
+\end{proof}
+
+\begin{theorem}[Sector irreducibility from fixed-point-algebra rigidity]%
+	\label{thm:sector_irred_fixed_algebra}
+	\lean{MPSTensor.isIrreducibleOnCorner_of_cyclic_decomp_mps_of_sectorFixedPointAlgebraRigidity}
+	\leanok
+	\uses{thm:sector_irred_orbit_lift, lem:orbit_sum_hLift_fixed_algebra}
+	Let $A$ be a left-canonical MPS tensor with irreducible adjoint transfer map,
+	and let $(P_k)_{k=1}^m$ be cyclic orthogonal sector projections. Assume only
+	the fixed-point-algebra rigidity hypothesis from
+	Definition~\ref{def:sector_fixed_point_algebra_rigidity}. Then
+	$(\E_A^\dagger)^m$ is irreducible on each corner $P_k$.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:sector_irred_orbit_lift, lem:orbit_sum_hLift_fixed_algebra}
+	Apply Lemma~\ref{lem:orbit_sum_hLift_fixed_algebra} and then
 	Theorem~\ref{thm:sector_irred_orbit_lift}.
 \end{proof}
 
