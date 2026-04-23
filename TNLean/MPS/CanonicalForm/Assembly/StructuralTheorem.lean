@@ -64,12 +64,17 @@ The theorem `exists_tp_sector_decomp_after_blocking` below provides:
 - The MPV relationship: `blockTensor A p` is `SameMPV₂`-equivalent to
   `zeroMPSTensor + toTensorFromBlocks μ sectors` for some weights `μ`
 
-The full FT also requires showing each sector is:
-- **Irreducible** (from `isIrreducible_restriction_of_cyclic_decomp` + orbit-sum lift)
-- **Normal** (from irreducibility + primitivity of sector transfer maps)
-- **Gauge-phase unique** (from the BNT permutation rigidity theorem)
+The current library already settles the common-period blocking step and the
+primitive / irreducible / normal bridges needed after blocking. The remaining
+Gap §1 content is now more specific:
+- a **general BNT sector construction** for the blocked output, matching the
+  paper's basis-of-normal-tensors decomposition rather than only the restricted
+  norm-class-collapse theorem `exists_bnt_grouping`, and
+- a **heterogeneous sector comparison theorem** matching two such BNT sector
+  decompositions up to permutation, gauge phase, and sector-weight multisets.
 
-These additional properties are documented but not yet fully formalized.
+Those sector-level endpoint theorems are documented below but are not yet
+formalized.
 -/
 
 section FundamentalTheorem1606
@@ -160,19 +165,21 @@ theorem bilateral_commonPeriod_blocking_tp_primitive_normal
   · exact isNormal_blockTensor_of_isNormal (d := d) (D := D₁) A hp hNormalA
   · exact isNormal_blockTensor_of_isNormal (d := d) (D := D₂) B hp hNormalB
 
-/-- **Fundamental Theorem of MPS (1606.00608, after blocking): structural version.**
+/-- **Fundamental Theorem of MPS (1606.00608, after blocking): current structural shell.**
 
-For any two MPS tensors `A, B` with `SameMPV₂ A B`, after a common blocking period,
-both blocked tensors admit TP-primitive decompositions. If the blocked decompositions
-additionally satisfy:
-- Tensor irreducibility of each block
-- Distinct weight norms (pairwise)
-- BNT separation (no gauge-phase equivalent pairs with same dimension)
+For any two MPS tensors `A, B` with `SameMPV₂ A B`, this theorem packages the
+currently formalized one-sided reduction output on both sides: after blocking,
+each tensor admits a decomposition into TP blocks with primitive transfer maps,
+nonzero weights, and positive bond dimensions.
 
-then the block structures match up to permutation and gauge-phase equivalence.
+The theorem does **not yet** use `SameMPV₂ A B` to compare the two blocked
+outputs. The remaining missing content is the sector-level endpoint described in
+the file documentation below: a general BNT sector construction for each side,
+followed by a heterogeneous equal-case comparison theorem for those sector
+decompositions.
 
-This theorem states the structural content of arXiv:1606.00608, Theorem 1,
-connecting the reduction output to the fundamental theorem conclusion. -/
+This theorem therefore records the structural shell currently available on the
+way to arXiv:1606.00608, Theorem 1. -/
 theorem fundamentalTheorem_after_blocking_1606_structural
     {d D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
@@ -239,27 +246,30 @@ theorem fundamentalTheorem_after_blocking_1606_structural_with_blockedSameMPV₂
 /-!
 ### What remains for the full 1606.00608 Fundamental Theorem
 
-The complete end-to-end FT would take two tensors `A, B` with `SameMPV₂ A B` and
-produce a common blocking period `p` and matching block structures. The remaining
-formalizations are:
+The complete end-to-end FT should take two tensors `A, B` with `SameMPV₂ A B`
+and pass from the blocked reduction output to the paper's basis-of-normal-tensors
+endpoint. The remaining formalizations are now:
 
-1. **Common blocking period**: Re-block both decompositions to `p = lcm(pA, pB)`.
-   This requires the relation between `blockTensor (blockTensor A pA) q`
-   and `blockTensor A (pA * q)`.
+1. **General one-sided BNT construction**: starting from the blocked TP-primitive
+   decomposition, construct a sector decomposition in the paper's general BNT
+   sense. This is stronger than the current special-case theorem
+   `exists_bnt_grouping`, which only collapses norm classes already known to
+   represent one MPV family.
 
-2. **Sector irreducibility**: Each cyclic sector of a blocked periodic block should be
-   irreducible. The orbit-sum lift hypothesis from `isIrreducible_restriction_of_cyclic_decomp`
-   in `CyclicDecomposition.lean` provides this conditionally; the concrete orbit-sum
-   construction from MPS Kraus operators remains to be formalized.
+2. **Heterogeneous sector comparison**: if two such BNT sector decompositions
+   have equal total MPVs, first match their basis tensors up to permutation and
+   gauge phase, and then compare the sector-weight multisets after absorbing the
+   phases. The current theorem
+   `fundamentalTheorem_equalMPV_sectorDecomposition` only handles the shared-basis
+   subcase after this matching has already been done.
 
-3. **Normal canonical form per sector**: Each irreducible TP-primitive sector becomes
-   `IsNormal` via `isNormal_of_tp_primitive_irreducible` (already proved in this file).
+3. **Final global assembly**: once steps 1–2 are available, combine them with the
+   already-formalized common-period blocking, blocked irreducibility,
+   `isNormal_of_tp_primitive_irreducible`, and the global gauge construction of
+   the equal-case FT.
 
-4. **BNT separation + weight ordering + gauge-phase matching**: Apply
-   `weakFundamentalTheorem_conditional` to obtain permutation and gauge-phase matching.
-
-Steps 1–2 are the main remaining formalizations; steps 3–4 are already formalized
-and just need to be combined once steps 1–2 are complete.
+So the common-period blocking step is no longer the blocker; the missing content
+is specifically the paper-level sector endpoint.
 -/
 
 end FundamentalTheorem1606

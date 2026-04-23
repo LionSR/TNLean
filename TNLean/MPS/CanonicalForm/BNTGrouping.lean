@@ -29,8 +29,12 @@ period `P` the weights become `(μ₀ k)^P`, and two distinct original weights `
 * **(a)** Relax the predicate to match the paper's canonical form definition.
 * **(b)** Add a BNT grouping/sorting step.
 
-This file implements strategy **(b)** for the common case and states the full result
-for the equal-norm case.
+This file implements strategy **(b)** only in the restricted case where equal-modulus
+blocks on one side are already known to collapse to a single basis tensor. It is
+therefore a useful **special-case norm-class collapse** module, not the full
+basis-of-normal-tensors construction from [CPGSV17, Proposition A.6 /
+`prop:char-BNT`]. The general one-sided BNT construction remains open and is part
+of the remaining Gap 2 work for issue #652 (labeled "Gap §1" in that issue).
 
 ## Main results
 
@@ -369,12 +373,11 @@ noncomputable def normClassGroupingData {r : ℕ} (μ : Fin r → ℂ) :
     regroup := hRegroup
   }
 
-/-- **BNT grouping step (equal-norm case, proved via norm-class enumeration).**
+/-- **Restricted BNT grouping step (equal-norm collapse via norm-class enumeration).**
 
 Given a weighted block family `(μ, blocks)` where some blocks may share the same norm
-`‖μ j‖ = ‖μ k‖`, and given that equal-norm blocks share the same MPV function
-(a hypothesis that follows from BNT uniqueness in the full formalization), there exists
-a `SectorDecomposition P` with:
+`‖μ j‖ = ‖μ k‖`, and given that equal-norm blocks already share the same MPV function,
+there exists a `SectorDecomposition P` with:
 
 1. `SameMPV₂ P.toTensor (toTensorFromBlocks μ blocks)`.
 2. `StrictAnti` on the BNT-level norms (one norm value per group).
@@ -389,6 +392,11 @@ Note that no equal-dimension hypothesis is needed: the sector's bond dimension i
 fixed by the chosen representative `reprFn j`, and other members of the same norm
 class may have different dimensions — their MPV values are matched via `hMPVEq`,
 which uses the heterogeneous `SameMPV₂` to accommodate different bond dimensions.
+
+This theorem is intentionally a **restricted collapse theorem**. It is not the
+paper's full basis-of-normal-tensors construction: if two distinct basis tensors
+occur at the same modulus, they should survive as different basis elements rather
+than being forced into one norm class.
 
 **Why `hMPVEq` arises in the full theory**:
 In the BNT theory (CPGSV17, §2.3), two blocks with the same weight norm are
