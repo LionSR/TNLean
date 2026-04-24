@@ -41,7 +41,9 @@ one-way bridge
 * `isRFP_MPDO_via_algebra_of_isRFP_MPDO_via_fusion_of_isTP_of_posDef_fixed`
 
 from the current fusion formulation to the algebra formulation, under the same
-side hypotheses.
+side hypotheses. The `IsRFP` assumption is essential here: without idempotence,
+the adjoint fixed-point algebras of the blocked transfer maps need not stabilize
+with the blocking length.
 
 ## Remaining gap to the paper
 
@@ -138,7 +140,7 @@ one of its positive-definite fixed points.
 Concretely, this is the fixed-point `StarSubalgebra` of the adjoint transfer map
 `(transferMap M).adjoint`, packaged through Wolf Theorem 6.12 for the doubled
 MPS tensor `M.toMPSTensor`. -/
-noncomputable def faithfulFixedPointSupportAlgebra
+def faithfulFixedPointSupportAlgebra
     (M : MPOTensor d D) (h_tp : Kraus.IsTP M.toMPSTensor)
     {ρ : Mat} (hρ : ρ.PosDef) (hρ_fix : transferMap M ρ = ρ) :
     StarSubalgebra ℂ Mat :=
@@ -158,13 +160,7 @@ theorem mem_faithfulFixedPointSupportAlgebra_iff
   have hAdj : Kraus.adjointMap M.toMPSTensor X = (transferMap M).adjoint X := by
     simpa [transferMap_eq_toMPSTensor] using
       (MPSTensor.transferMap_adjoint_apply_eq_adjointMap (A := M.toMPSTensor) X).symm
-  constructor
-  · intro h
-    rw [hAdj] at h
-    exact h
-  · intro h
-    rw [hAdj]
-    exact h
+  rw [hAdj]
 
 namespace AlgebraStructureData
 
@@ -173,21 +169,16 @@ transfer map.
 
 All support algebras are the same `StarSubalgebra`, multiplication is ordinary
 matrix multiplication, and the inclusion maps are identities. -/
-noncomputable def stationaryOfFaithfulFixedPoint
+def stationaryOfFaithfulFixedPoint
     (M : MPOTensor d D) (h_tp : Kraus.IsTP M.toMPSTensor)
     {ρ : Mat} (hρ : ρ.PosDef) (hρ_fix : transferMap M ρ = ρ) :
-    AlgebraStructureData d D := by
+    AlgebraStructureData d D :=
   let S : StarSubalgebra ℂ Mat := faithfulFixedPointSupportAlgebra M h_tp hρ hρ_fix
-  refine
-    { A := fun _ => S
-      m := fun _ => LinearMap.mul ℂ ↥S
-      iota := fun _ => LinearMap.id
-      m_apply := ?_
-      iota_apply := ?_ }
-  · intro n x y
-    rfl
-  · intro n x
-    rfl
+  { A := fun _ => S
+    m := fun _ => LinearMap.mul ℂ ↥S
+    iota := fun _ => LinearMap.id
+    m_apply := fun _ _ _ => rfl
+    iota_apply := fun _ _ => rfl }
 
 /-- The stationary tower from a faithful fixed point is compatible with any RFP
 MPO tensor, because all positive blocked transfer maps agree with `transferMap M`. -/
@@ -216,6 +207,13 @@ An MPO tensor satisfies `IsRFP_MPDO_via_algebra` when it admits algebra-structur
 support data compatible with its blocked adjoint transfer maps. -/
 def IsRFP_MPDO_via_algebra (M : MPOTensor d D) : Prop :=
   ∃ data : AlgebraStructureData d D, data.CompatibleWith M
+
+/-- Backwards-compatible alias for the previous scaffold name.
+
+The old definition was vacuous. The new alias points to the non-vacuous algebra
+predicate above. -/
+@[deprecated (since := "2026-04-24")] alias IsRFP_MPDO_via_algebra_scaffold :=
+  IsRFP_MPDO_via_algebra
 
 /-- A trace-preserving MPO with a positive-definite fixed point admits a
 stationary algebra tower as soon as it is an RFP. -/
