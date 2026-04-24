@@ -14,18 +14,24 @@ import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Defs
 -- correct hypothesis for the repaired uniqueness endpoint
 -- `gauge_unique_mod_edge_scalars`.
 --
--- The remaining `sorry`s split into two groups:
--- * `gaugeConsistency` and the `hDim` step in `fundamentalTheorem_PEPS` still
---   require the full edge-centred reduction from arXiv:1804.04964 §3. The
---   local left inverse and the elementary blocking data now live in
---   `PEPS/VirtualInsertion` and `PEPS/Blocking`, and `localGauge_exists` has
---   been reduced to the sharper local hypothesis `HasLocalGaugeLift`. The new
---   wrapper `BlockedMiddleGaugeHyp` isolates the exact remaining step: build
---   the blocked middle tensor, compare it with the 3-site MPS theorem, and
---   derive that explicit local gauge formula from `SameState`.
--- * `gauge_unique_mod_edge_scalars` is the repaired endpoint, but its proof
---   still needs the same blocking infrastructure together with a local
---   tensor-factor uniqueness lemma for the balanced edge-scalar quotient.
+-- The remaining `sorry`s split into three independently tracked groups:
+-- * `gaugeConsistency` (issue #820) still requires the full edge-centred
+--   reduction from arXiv:1804.04964 §3. The local left inverse and the
+--   elementary blocking data now live in `PEPS/VirtualInsertion` and
+--   `PEPS/Blocking`, and `localGauge_exists` has been reduced to the sharper
+--   local hypothesis `HasLocalGaugeLift`. The wrapper `BlockedMiddleGaugeHyp`
+--   isolates the exact remaining step: build the blocked middle tensor,
+--   compare it with the 3-site MPS theorem, and derive that explicit local
+--   gauge formula from `SameState`.
+-- * The `hDim` step inside `fundamentalTheorem_PEPS` (issue #874) is now
+--   factored out as the conditional theorem `fundamentalTheorem_PEPS_of_bondDim`
+--   so that the bond-dimension obligation is orthogonal to `gaugeConsistency`.
+--   Its derivation from `SameState` plus vertex injectivity still needs a
+--   boundary-insertion / blocking lemma.
+-- * `gauge_unique_mod_edge_scalars` (issue #842) is the repaired uniqueness
+--   endpoint, but its proof still needs the same blocking infrastructure
+--   together with a local tensor-factor uniqueness lemma for the balanced
+--   edge-scalar quotient.
 
 /-!
 # Fundamental Theorem for injective PEPS (scaffold)
@@ -538,6 +544,27 @@ theorem gaugeConsistency (A B : Tensor G d)
 
 /-! ### Main theorem -/
 
+/-- **Fundamental Theorem for injective PEPS, conditional on bond-dimension
+equality** (arXiv:1804.04964, Theorem 2).
+
+Given matching bond dimensions, two vertex-injective PEPS that generate the
+same state are gauge-equivalent. This isolates the two remaining blockers of
+`fundamentalTheorem_PEPS` into orthogonal hypotheses:
+
+* the bond-dimension equality `hDim` (tracked in issue #874), and
+* the globally consistent edge gauges produced by `gaugeConsistency`
+  (tracked in issue #820).
+
+Downstream consumers that already have a specific bond-dimension witness can
+call this conditional form directly, without waiting for the boundary-insertion
+argument that derives `hDim` from `SameState` alone. -/
+theorem fundamentalTheorem_PEPS_of_bondDim (A B : Tensor G d)
+    (hA : IsVertexInjective A) (hB : IsVertexInjective B)
+    (hAB : SameState A B) (hDim : A.bondDim = B.bondDim) :
+    GaugeEquiv A B := by
+  rcases gaugeConsistency A B hA hB hAB hDim with ⟨X, hX⟩
+  exact ⟨hDim, X, hX⟩
+
 /-- **Fundamental Theorem for injective PEPS** (arXiv:1804.04964, Theorem 2).
 
 If two PEPS tensors on a simple graph are both vertex-injective and generate
@@ -557,19 +584,18 @@ theorem fundamentalTheorem_PEPS (A B : Tensor G d)
     (hA : IsVertexInjective A) (hB : IsVertexInjective B)
     (hAB : SameState A B) :
     GaugeEquiv A B := by
-  -- Step 1: Show bond dimensions must agree.
-  -- TODO: derive hDim from injectivity + SameState.
-  -- Missing lemma: `SameState` captures only the fully-contracted scalar,
-  -- whereas the PEPS FT derivation of bond-dimension equality uses the full
-  -- family of boundary insertions.  Linear independence at each vertex
-  -- (`IsVertexInjective`) gives the right local data, but the global argument
-  -- that different bond dimensions cannot yield the same state family still
-  -- requires a boundary-insertion / blocking lemma.
+  -- Step 1: Show bond dimensions must agree.  Tracked in issue #874.
+  -- `SameState` captures only the fully-contracted scalar, whereas the PEPS FT
+  -- derivation of bond-dimension equality uses the full family of boundary
+  -- insertions. Linear independence at each vertex (`IsVertexInjective`) gives
+  -- the right local data, but the global argument that different bond
+  -- dimensions cannot yield the same state family still requires a
+  -- boundary-insertion / blocking lemma.
   have hDim : A.bondDim = B.bondDim := by
     sorry
-  -- Step 2: Extract globally consistent gauges.
-  rcases gaugeConsistency A B hA hB hAB hDim with ⟨X, hX⟩
-  exact ⟨hDim, X, hX⟩
+  -- Step 2: Extract globally consistent gauges via `gaugeConsistency`
+  -- (tracked in issue #820).
+  exact fundamentalTheorem_PEPS_of_bondDim A B hA hB hAB hDim
 
 /-! ### Balanced edge scalars -/
 
