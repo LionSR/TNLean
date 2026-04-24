@@ -62,12 +62,8 @@ def reindexSites {d : ℕ} {M N : ℕ} (h : M = N) :
   invFun ψ σ := ψ (σ ∘ Fin.cast h.symm)
   map_add' _ _ := rfl
   map_smul' _ _ := rfl
-  left_inv ψ := funext fun σ => by
-    change ψ (σ ∘ Fin.cast h.symm ∘ Fin.cast h) = ψ σ
-    congr 1
-  right_inv ψ := funext fun σ => by
-    change ψ (σ ∘ Fin.cast h ∘ Fin.cast h.symm) = ψ σ
-    congr 1
+  left_inv ψ := by subst h; rfl
+  right_inv ψ := by subst h; rfl
 
 @[simp] theorem reindexSites_apply {M N : ℕ} (h : M = N)
     (ψ : NSiteSpace d M) (σ : Fin N → Fin d) :
@@ -118,7 +114,8 @@ theorem tailRestrictₗ_snoc {K L : ℕ} (u : Fin K → Fin d) (j : Fin d)
     tailRestrictₗ (Fin.snoc u j) ψ =
       restrictFirst
         (tailRestrictₗ u
-          (reindexSites (show K + 1 + L = K + (L + 1) from by omega) ψ)) j := by
+          (reindexSites (show K + 1 + L = K + (L + 1) by
+            rw [Nat.add_assoc, Nat.add_comm 1 L]) ψ)) j := by
   ext σ
   simp only [tailRestrictₗ_apply, restrictFirst_apply, reindexSites_apply]
   rw [Fin.append_right_cons]
@@ -132,7 +129,7 @@ theorem tailRestrictₗ_reindex_prefix {K K' L : ℕ} (hK : K = K')
     (u : Fin K → Fin d) (ψ : NSiteSpace d (K + L)) :
     tailRestrictₗ u ψ =
       tailRestrictₗ (u ∘ Fin.cast hK.symm)
-        (reindexSites (show K + L = K' + L from by omega) ψ) := by
+        (reindexSites (congrArg (· + L) hK) ψ) := by
   subst hK; rfl
 
 /-- Transport `tailRestrictₗ` across an equality of tail lengths `L = L'`:
@@ -141,7 +138,7 @@ theorem tailRestrictₗ_reindex_tail {K L L' : ℕ} (hL : L = L')
     (u : Fin K → Fin d) (ψ : NSiteSpace d (K + L)) :
     reindexSites hL (tailRestrictₗ u ψ) =
       tailRestrictₗ u
-        (reindexSites (show K + L = K + L' from by omega) ψ) := by
+        (reindexSites (congrArg (K + ·) hL) ψ) := by
   subst hL; rfl
 
 /-- Tail restriction of a state on `N` sites through the identification
