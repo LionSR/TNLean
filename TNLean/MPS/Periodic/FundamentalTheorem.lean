@@ -186,27 +186,6 @@ section ProportionalCase
 variable {rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
 
-private theorem isPeriodic_smul_of_norm_one
-    {D m : ℕ} {c : ℂ} (hc_norm : ‖c‖ = 1)
-    (A : MPSTensor d D) (hA : IsPeriodic m A) :
-    IsPeriodic m (fun i => c • A i) := by
-  have hc_ne : c ≠ 0 := by
-    intro hc0
-    have hc_norm' := hc_norm
-    simp [hc0] at hc_norm'
-  have hTransfer : transferMap (fun i => c • A i) = transferMap A := by
-    ext X : 1
-    rw [transferMap_smul]
-    have hsc : c * starRingEnd ℂ c = 1 := by
-      have h1 : c * starRingEnd ℂ c = ↑(Complex.normSq c) := by
-        rw [Complex.mul_conj]
-      rw [h1, Complex.normSq_eq_norm_sq, hc_norm, one_pow, Complex.ofReal_one]
-    simp [hsc]
-  refine ⟨isIrreducibleTensor_smul hc_ne A hA.irreducible,
-    leftCanonical_smul_of_norm_one c hc_norm A hA.leftCanonical,
-    hA.period_pos, ?_, hA.primitiveRoot⟩
-  simpa [hTransfer] using hA.peripheral_eq
-
 /-- **Peripheral proportional case from exact MPV equality.**
 
 If two periodic tensors generate the same MPV family, then their bond dimensions
@@ -253,13 +232,12 @@ theorem peripheralProportionalCase_periodicFT_of_sameMPV
 /-- **Phase-rescaling reduction for the peripheral proportional case.**
 
 This Prop isolates the remaining scalar-absorption step behind
-`peripheralProportionalCase_periodicFT_of_sameMPV`: whenever two periodic tensors
-have proportional MPV families, one can rescale one side by a unit-modulus phase
-so that the MPV families agree exactly. -/
+`peripheralProportionalCase_periodicFT_of_sameMPV`: whenever a periodic tensor
+has an MPV family proportional to that of another tensor, one can rescale the
+periodic side by a unit-modulus phase so that the MPV families agree exactly. -/
 def PeripheralProportionalCaseRootFromRescaling (d D₁ D₂ : ℕ) : Prop :=
-  ∀ {A : MPSTensor d D₁} {B : MPSTensor d D₂} {m_a m_b : ℕ},
+  ∀ {A : MPSTensor d D₁} {B : MPSTensor d D₂} {m_a : ℕ},
     IsPeriodic m_a A →
-    IsPeriodic m_b B →
     ProportionalMPV₂ A B →
       ∃ ξ : ℂ, ‖ξ‖ = 1 ∧ SameMPV₂ (fun i => ξ • A i) B
 
@@ -276,7 +254,7 @@ theorem peripheralProportionalCase_periodicFT_of_rootFromRescaling
     (hA : IsPeriodic m_a A) (hB : IsPeriodic m_b B)
     (hProp : ProportionalMPV₂ A B) :
     HetRepeatedBlocks A B := by
-  obtain ⟨ξ, hξ, hSame⟩ := hRescale hA hB hProp
+  obtain ⟨ξ, hξ, hSame⟩ := hRescale hA hProp
   let A' : MPSTensor d D₁ := fun i => ξ • A i
   have hA' : IsPeriodic m_a A' := by
     simpa [A'] using isPeriodic_smul_of_norm_one (c := ξ) hξ A hA
