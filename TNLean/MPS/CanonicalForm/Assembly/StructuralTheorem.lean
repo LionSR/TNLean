@@ -70,11 +70,13 @@ Gap §1 content is now more specific:
 - a **general BNT sector construction** for the blocked output, matching the
   paper's basis-of-normal-tensors decomposition rather than only the restricted
   norm-class-collapse theorem `exists_bnt_grouping`, and
-- a **heterogeneous sector comparison theorem** matching two such BNT sector
-  decompositions up to permutation, gauge phase, and sector-weight multisets.
+- a **witness-producing heterogeneous sector comparison theorem** deriving the
+  basis permutation, gauge-phase data, and copy alignment for two such BNT
+  sector decompositions from arbitrary `SameMPV₂`.
 
-Those sector-level endpoint theorems are documented below but are not yet
-formalized.
+The downstream algebraic reduction after a matched basis is now formalized by
+`fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_matched_basis`, but
+the full witness-producing sector endpoint is still missing.
 -/
 
 section FundamentalTheorem1606
@@ -256,14 +258,17 @@ endpoint. The remaining formalizations are now:
    `exists_bnt_grouping`, which only collapses norm classes already known to
    represent one MPV family.
 
-2. **Heterogeneous sector comparison**: if two such BNT sector decompositions
-   have equal total MPVs, first match their basis tensors up to permutation and
-   gauge phase, and then compare the sector-weight multisets after absorbing the
-   phases. The current theorem
-   `fundamentalTheorem_equalMPV_sectorDecomposition` only handles the shared-basis
-   subcase after this matching has already been done.
+2. **Witness-producing heterogeneous sector comparison**: the algebraic
+   reduction from a matched basis to per-sector weight multiset equality is now
+   formalized by
+   `fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_matched_basis`
+   (with phase-match core
+   `fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_phaseMatch`).
+   What is still missing is the theorem that derives the needed basis
+   permutation, gauge-phase data, and copy alignment from arbitrary equal total
+   MPVs of two sector decompositions.
 
-3. **Final global assembly**: once steps 1–2 are available, combine them with the
+3. **Final global construction**: once steps 1–2 are available, combine them with the
    already-formalized common-period blocking, blocked irreducibility,
    `isNormal_of_tp_primitive_irreducible`, and the global gauge construction of
    the equal-case FT.

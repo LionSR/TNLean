@@ -4,6 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.SharedInfra.SectorDecomposition
 import TNLean.MPS.BNT.Basic
+import TNLean.MPS.Overlap.CastLemmas
+import TNLean.MPS.SharedInfra.GaugePhase
 import TNLean.Algebra.ScalarPowerSumIdentity
 
 import Mathlib.Data.Fintype.BigOperators
@@ -329,5 +331,179 @@ theorem fundamentalTheorem_equalMPV_sectorDecomposition
       = mpv (SectorDecomposition.mk g dim basis S).toTensor σ := hExpandS.symm
     _ = mpv (SectorDecomposition.mk g dim basis T).toTensor σ := hEqual N σ
     _ = ∑ j, T.coeff N j * mpv (basis j) σ := hExpandT
+
+/-- **Heterogeneous sector comparison reduces to the shared-basis case after phase matching.**
+
+Assume two sector decompositions `P` and `Q` have basis blocks matched by a permutation `perm`,
+matching copy counts, and per-basis MPV relations
+`mpv (Q.basis (perm j)) σ = ζ_j^N * mpv (P.basis j) σ`. If the total tensors are
+`SameMPV₂`, then after absorbing the phases `ζ_j` into the sector weights on the `Q` side,
+the per-basis sector weight multisets agree.
+
+This is the algebraic core of the heterogeneous BNT-sector endpoint: once a future theorem
+supplies the basis matching and the phase factors, the remaining comparison is exactly the
+shared-basis theorem above. -/
+theorem fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_phaseMatch
+    (P Q : SectorDecomposition d)
+    (perm : Fin P.basisCount ≃ Fin Q.basisCount)
+    (hCopies : ∀ j : Fin P.basisCount, P.copies j = Q.copies (perm j))
+    (hPhase : ∀ j : Fin P.basisCount,
+      ∃ ζ : ℂ, ζ ≠ 0 ∧
+        ∀ (N : ℕ) (σ : Fin N → Fin d),
+          mpv (Q.basis (perm j)) σ = ζ ^ N * mpv (P.basis j) σ)
+    (hLI : ∃ N0 : ℕ, ∀ N > N0,
+      LinearIndependent ℂ (fun j : Fin P.basisCount => mpvState (P.basis j) N))
+    (hEqual : SameMPV₂ P.toTensor Q.toTensor) :
+    ∃ ζ : Fin P.basisCount → ℂ,
+      (∀ j, ζ j ≠ 0) ∧
+      ∀ j : Fin P.basisCount,
+        Finset.univ.val.map (P.weight j) =
+          Finset.univ.val.map
+            (fun q => ζ j * Q.weight (perm j) (Fin.cast (hCopies j) q)) := by
+  classical
+  let ζFn : Fin P.basisCount → ℂ := fun j => (hPhase j).choose
+  have hζ_ne : ∀ j : Fin P.basisCount, ζFn j ≠ 0 :=
+    fun j => (hPhase j).choose_spec.1
+  have hζ_mpv : ∀ (j : Fin P.basisCount) (N : ℕ) (σ : Fin N → Fin d),
+      mpv (Q.basis (perm j)) σ = (ζFn j) ^ N * mpv (P.basis j) σ :=
+    fun j N σ => (hPhase j).choose_spec.2 N σ
+  let T : SectorWeightData P.basisCount := {
+    copies := fun j => Q.copies (perm j)
+    copies_pos := fun j => Q.copies_pos (perm j)
+    weight := fun j q => ζFn j * Q.weight (perm j) q
+    weight_ne_zero := fun j q => mul_ne_zero (hζ_ne j) (Q.weight_ne_zero (perm j) q)
+  }
+  let Q' : SectorDecomposition d := {
+    basisCount := P.basisCount
+    basisDim := P.basisDim
+    basis := P.basis
+    sectors := T
+  }
+  have hTransport : SameMPV₂ Q'.toTensor Q.toTensor := by
+    intro N σ
+    calc
+      mpv Q'.toTensor σ
+          = ∑ j : Fin P.basisCount,
+              ∑ q : Fin (Q.copies (perm j)),
+                (ζFn j * Q.weight (perm j) q) ^ N * mpv (P.basis j) σ := by
+              simpa [Q', T] using Q'.mpv_toTensor_eq_sum_sectors (N := N) σ
+      _ = ∑ j : Fin P.basisCount,
+            ∑ q : Fin (Q.copies (perm j)),
+              (Q.weight (perm j) q) ^ N * mpv (Q.basis (perm j)) σ := by
+            refine Finset.sum_congr rfl fun j _ => ?_
+            refine Finset.sum_congr rfl fun q _ => ?_
+            calc
+              (ζFn j * Q.weight (perm j) q) ^ N * mpv (P.basis j) σ
+                  = (Q.weight (perm j) q) ^ N * ((ζFn j) ^ N * mpv (P.basis j) σ) := by
+                      rw [mul_pow]
+                      ring
+              _ = (Q.weight (perm j) q) ^ N * mpv (Q.basis (perm j)) σ := by
+                      rw [hζ_mpv j N σ]
+      _ = ∑ k : Fin Q.basisCount,
+            ∑ q : Fin (Q.copies k),
+              (Q.weight k q) ^ N * mpv (Q.basis k) σ := by
+            let f : Fin P.basisCount → ℂ := fun j =>
+              ∑ q : Fin (Q.copies (perm j)),
+                (Q.weight (perm j) q) ^ N * mpv (Q.basis (perm j)) σ
+            let g : Fin Q.basisCount → ℂ := fun k =>
+              ∑ q : Fin (Q.copies k),
+                (Q.weight k q) ^ N * mpv (Q.basis k) σ
+            have hfg : ∀ j, f j = g (perm j) := by
+              intro j
+              rfl
+            simpa [f, g] using (Fintype.sum_equiv perm f g hfg)
+      _ = mpv Q.toTensor σ := by
+            simpa using (Q.mpv_toTensor_eq_sum_sectors (N := N) σ).symm
+  have hEqual' : SameMPV₂ P.toTensor Q'.toTensor := by
+    intro N σ
+    exact (hEqual N σ).trans (hTransport N σ).symm
+  have hCopies' : ∀ j : Fin P.basisCount, P.sectors.copies j = T.copies j := by
+    intro j
+    simpa [T] using hCopies j
+  have hMultiset :
+      ∀ j : Fin P.basisCount,
+        Finset.univ.val.map (P.weight j) =
+          Finset.univ.val.map (fun q => T.weight j (Fin.cast (hCopies' j) q)) :=
+      fundamentalTheorem_equalMPV_sectorDecomposition
+        (basis := P.basis) (S := P.sectors) (T := T) hCopies' hLI hEqual'
+  refine ⟨ζFn, hζ_ne, ?_⟩
+  intro j
+  simpa [T] using hMultiset j
+
+/-- **Cast-compatible MPV scaling implies the phase-matched heterogeneous sector comparison.**
+
+This intermediate wrapper isolates the weaker data actually consumed by the
+phase-absorption argument: after matching basis dimensions, each block pair only needs a nonzero
+phase `ζ` relating the MPVs of the matched basis tensors. -/
+theorem fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_mpvScaling_matched_basis
+    (P Q : SectorDecomposition d)
+    (perm : Fin P.basisCount ≃ Fin Q.basisCount)
+    (hCopies : ∀ j : Fin P.basisCount, P.copies j = Q.copies (perm j))
+    (hBasis : ∀ j : Fin P.basisCount,
+      ∃ hdim : P.basisDim j = Q.basisDim (perm j),
+        ∃ ζ : ℂ, ζ ≠ 0 ∧
+          ∀ (N : ℕ) (σ : Fin N → Fin d),
+            mpv (Q.basis (perm j)) σ =
+              ζ ^ N * mpv (cast (congr_arg (MPSTensor d) hdim) (P.basis j)) σ)
+    (hLI : ∃ N0 : ℕ, ∀ N > N0,
+      LinearIndependent ℂ (fun j : Fin P.basisCount => mpvState (P.basis j) N))
+    (hEqual : SameMPV₂ P.toTensor Q.toTensor) :
+    ∃ ζ : Fin P.basisCount → ℂ,
+      (∀ j, ζ j ≠ 0) ∧
+      ∀ j : Fin P.basisCount,
+        Finset.univ.val.map (P.weight j) =
+          Finset.univ.val.map
+            (fun q => ζ j * Q.weight (perm j) (Fin.cast (hCopies j) q)) := by
+  have hPhase : ∀ j : Fin P.basisCount,
+      ∃ ζ : ℂ, ζ ≠ 0 ∧
+        ∀ (N : ℕ) (σ : Fin N → Fin d),
+          mpv (Q.basis (perm j)) σ = ζ ^ N * mpv (P.basis j) σ := by
+    intro j
+    obtain ⟨hdim, ζ, hζne, hmpv⟩ := hBasis j
+    refine ⟨ζ, hζne, ?_⟩
+    intro N σ
+    rw [hmpv N σ, mpv_cast_dim hdim (P.basis j) N σ]
+  exact fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_phaseMatch
+    P Q perm hCopies hPhase hLI hEqual
+
+/-- **Gauge-phase matched sector bases imply the phase-matched heterogeneous sector comparison.**
+
+This packages the MPV scaling relation obtained from blockwise `GaugePhaseEquiv` and feeds it
+into `fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_mpvScaling_matched_basis`.
+Thus the remaining missing ingredients for the full heterogeneous BNT-sector endpoint are not
+the algebraic phase-absorption step below, but the derivation of the basis/copy matching data
+from arbitrary `SameMPV₂` sector decompositions. -/
+theorem fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_matched_basis
+    (P Q : SectorDecomposition d)
+    (perm : Fin P.basisCount ≃ Fin Q.basisCount)
+    (hCopies : ∀ j : Fin P.basisCount, P.copies j = Q.copies (perm j))
+    (hBasis : ∀ j : Fin P.basisCount,
+      ∃ hdim : P.basisDim j = Q.basisDim (perm j),
+        GaugePhaseEquiv (d := d)
+          (cast (congr_arg (MPSTensor d) hdim) (P.basis j))
+          (Q.basis (perm j)))
+    (hLI : ∃ N0 : ℕ, ∀ N > N0,
+      LinearIndependent ℂ (fun j : Fin P.basisCount => mpvState (P.basis j) N))
+    (hEqual : SameMPV₂ P.toTensor Q.toTensor) :
+    ∃ ζ : Fin P.basisCount → ℂ,
+      (∀ j, ζ j ≠ 0) ∧
+      ∀ j : Fin P.basisCount,
+        Finset.univ.val.map (P.weight j) =
+          Finset.univ.val.map
+            (fun q => ζ j * Q.weight (perm j) (Fin.cast (hCopies j) q)) := by
+  have hScaling : ∀ j : Fin P.basisCount,
+      ∃ hdim : P.basisDim j = Q.basisDim (perm j),
+        ∃ ζ : ℂ, ζ ≠ 0 ∧
+        ∀ (N : ℕ) (σ : Fin N → Fin d),
+          mpv (Q.basis (perm j)) σ =
+            ζ ^ N * mpv (cast (congr_arg (MPSTensor d) hdim) (P.basis j)) σ := by
+    intro j
+    obtain ⟨hdim, hGPE⟩ := hBasis j
+    obtain ⟨X, ζ, hζne, hX⟩ := hGPE
+    refine ⟨hdim, ζ, hζne, ?_⟩
+    intro N σ
+    exact mpv_eq_pow_mul_of_gaugePhase _ _ X ζ hX N σ
+  exact fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_mpvScaling_matched_basis
+    P Q perm hCopies hScaling hLI hEqual
 
 end MPSTensor
