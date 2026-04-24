@@ -482,7 +482,8 @@ single weighted block.
 	A \emph{sector basis matching} between two sector decompositions $P$ and $Q$
 	is a bundle of
 	\begin{enumerate}
-		\item a basis permutation $\pi : \{1,\dots,g_P\} \to \{1,\dots,g_Q\}$,
+		\item a basis permutation (bijection)
+		      $\pi : \{1,\dots,g_P\} \simeq \{1,\dots,g_Q\}$,
 		\item per-block multiplicity equalities $r_j^P = r_{\pi(j)}^Q$,
 		\item per-block bond-dimension equalities $D_j^P = D_{\pi(j)}^Q$, and
 		\item per-block gauge-phase equivalences $P_j \simeq_{\mathrm{gp}} Q_{\pi(j)}$
@@ -571,8 +572,9 @@ single weighted block.
 		      sector decompositions: the algebraic reduction after a basis
 		      matching is formalized in
 		      Theorems~\ref{thm:route_b_hetero_phase_match},~\ref{thm:route_b_hetero_matched_basis},
-		      and~\ref{thm:route_b_hetero_sector_matching} (the bundled-witness
-		      API endpoint consuming Definition~\ref{def:sector_basis_matching}),
+		      and~\ref{thm:route_b_hetero_sector_matching} (the latter
+		      consuming a bundled matching witness,
+		      Definition~\ref{def:sector_basis_matching}),
 		      but one still needs a theorem that constructs a sector basis
 		      matching witness directly from equality of the total MPV
 		      families.

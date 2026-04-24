@@ -508,19 +508,20 @@ theorem fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_matched_basis
 
 /-! ## Witness bundle for the heterogeneous sector comparison
 
-The matched-basis endpoints above consume the matching data as a loose bag of
+The matched-basis theorems above consume the matching data as four separate
 hypotheses (permutation, copy alignment, per-block dimension equality, and
 per-block gauge-phase equivalence). The `SectorBasisMatching` structure
-bundles these into a single witness so that any future theorem producing the
+records these as a single witness, so that any future theorem producing the
 matching from `SameMPV₂` — the remaining step for the unconditional equal-case
-Fundamental Theorem, fed by the general basis-of-normal-tensors construction —
-can be slotted in as a single argument, and so that downstream consumers
-(e.g. the final global Corollary IV.5 construction) depend only on this type.
+Fundamental Theorem, following from the general basis-of-normal-tensors
+construction — can be supplied as a single argument, and downstream results
+(such as the final global Corollary IV.5 construction) depend only on this
+structure.
 -/
 
 /-- Bundled witness data matching two sector decompositions block-by-block.
 
-This packages the four pieces of data consumed by
+This structure records the four pieces of data consumed by
 `fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_matched_basis`:
 
 * a basis permutation,
@@ -532,7 +533,7 @@ Producing a `SectorBasisMatching P Q` from an arbitrary `SameMPV₂ P.toTensor
 Q.toTensor` is the remaining combinatorial step in the Gap §1 closure
 (see the remark in `blueprint/src/chapter/ch11_assembly.tex` and
 arXiv:2011.12127 §IV.B–IV.C). Once that extraction is available, the
-algebraic endpoint runs purely through
+algebraic reduction runs purely through
 `fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_sectorMatching`. -/
 structure SectorBasisMatching (P Q : SectorDecomposition d) where
   /-- Permutation matching basis indices of `P` and `Q`. -/
@@ -587,12 +588,12 @@ end SectorBasisMatching
 
 /-- **Heterogeneous sector comparison via a bundled basis matching witness.**
 
-API wrapper that routes a `SectorBasisMatching` directly into the algebraic endpoint
-`fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_matched_basis`. Once a future
-theorem extracts a `SectorBasisMatching P Q` from arbitrary `SameMPV₂ P.toTensor Q.toTensor`
-(the remaining combinatorial step fed by the general basis-of-normal-tensors construction
-in #876), this endpoint closes the Gap §1 heterogeneous sector comparison without taking
-the matching data as loose hypotheses. -/
+Corollary of `fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_matched_basis`
+obtained by supplying the matching data in bundled form as a `SectorBasisMatching`. Once a
+future theorem constructs a `SectorBasisMatching P Q` from arbitrary `SameMPV₂ P.toTensor
+Q.toTensor` (the remaining combinatorial step, following from the general
+basis-of-normal-tensors construction in #876), this result completes the Gap §1
+heterogeneous sector comparison with the matching data gathered into a single argument. -/
 theorem fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_sectorMatching
     {P Q : SectorDecomposition d}
     (M : SectorBasisMatching P Q)
