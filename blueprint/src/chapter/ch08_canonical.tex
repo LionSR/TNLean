@@ -1640,6 +1640,34 @@ The following results separate the zero blocks from the
 	using the cyclic relation $\E_A^\dagger(P_k)=P_{k-1}$.
 \end{proof}
 
+\begin{theorem}[Sector fixed-point-algebra rigidity from scalar blocked fixed points]%
+	\label{thm:sector_fixed_algebra_scalar_blocked}
+	\lean{MPSTensor.sectorFixedPointAlgebraRigidity_of_cyclic_decomp_after_blocking_of_scalarBlockedFixedPoints}
+	\leanok
+	\uses{def:sector_fixed_point_algebra_rigidity}
+	Let $A$ be a left-canonical MPS tensor and let $(P_k)_{k=1}^m$ be cyclic
+	orthogonal sector projections with $\sum_k P_k = \Id$.
+	Suppose that for each $k$ and each element $X \in P_k \MN{D} P_k$ satisfying
+	$\E_{C_k}^\dagger(X) = X$ (where $C_k$ is the blocked sector tensor), there
+	exists $c \in \mathbb{C}$ with $X = c \cdot \Id$.
+	Then the sector fixed-point-algebra rigidity property holds for
+	$\E_A^\dagger$.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{def:sector_fixed_point_algebra_rigidity}
+	Fix $k$ and let $X, Y$ be operators supported on $P_k$ and fixed by
+	$(\E_A^\dagger)^m$. Lift each to the corresponding compressed sector via the
+	intertwining equivalence $\varphi_k$; the scalar fixed-point hypothesis yields
+	$X = c_X P_k$ and $Y = c_Y P_k$. Then
+	\[
+		\E_A^\dagger(XY) = \E_A^\dagger((c_X c_Y) P_k) = (c_X c_Y) P_{k-1}
+		= \E_A^\dagger(X)\E_A^\dagger(Y),
+	\]
+	using the cyclic relation $\E_A^\dagger(P_k) = P_{k-1}$ and the linearity of
+	$\E_A^\dagger$.
+\end{proof}
+
 \begin{lemma}[Orbit-sum construction of the sector lift]%
 	\label{lem:orbit_sum_hLift_construction}
 	\lean{MPSTensor.hLift_cyclicDecomp_mps_of_fixUpgrade}
@@ -1867,6 +1895,33 @@ The following results separate the zero blocks from the
 	Transport primitivity and irreducibility across $\varphi_u$, then use
 	Theorem~\ref{thm:primitive_adjoint_equiv} to pass from the adjoint blocked
 	map to the primal transfer map of $C_u$.
+\end{proof}
+
+\begin{theorem}[Scalar blocked fixed points yield primitive blocked sectors]%
+	\label{thm:blocked_sector_scalar_fixed}
+	\lean{MPSTensor.primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking_of_scalarBlockedFixedPoints}
+	\leanok
+	\uses{def:sector_fixed_point_algebra_rigidity,
+	      thm:sector_fixed_algebra_scalar_blocked,
+	      thm:blocked_sector_fixed_algebra,
+	      thm:cyclic_sector_decomp_after_blocking,
+	      thm:primitive_adjoint_equiv}
+	Let $A$ be a left-canonical irreducible tensor whose adjoint transfer map has
+	peripheral spectrum $\{\gamma^j : 0 \le j < m\}$ for a primitive $m$-th root
+	of unity $\gamma$. Let $(C_u)_{u=1}^m$, $(P_u)_{u=1}^m$, and
+	$\varphi_u : \MN{\dim C_u} \xrightarrow{\sim} P_u \MN{D} P_u$
+	be the blocked cyclic-sector data. If every $(\E_{C_u}^\dagger)$-fixed element
+	in the compressed sector $P_u \MN{D} P_u$ is a scalar multiple of the identity,
+	then every blocked sector tensor $C_u$ has primitive transfer map and is
+	irreducible.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:sector_fixed_algebra_scalar_blocked,
+	      thm:blocked_sector_fixed_algebra}
+	Apply Theorem~\ref{thm:sector_fixed_algebra_scalar_blocked} to obtain
+	sector fixed-point-algebra rigidity from the scalar fixed-point hypothesis,
+	then apply Theorem~\ref{thm:blocked_sector_fixed_algebra}.
 \end{proof}
 
 \begin{theorem}[Unconditional primitive blocked sectors]%
