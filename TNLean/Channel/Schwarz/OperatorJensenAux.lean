@@ -26,13 +26,19 @@ Wolf Corollary 5.2, but the final Löwner-integral packaging is still absent.
 - `povm_sum_add_defect`: the POVM family plus defect block sums to the identity.
 - `povmDiagonal_posDef`: positivity of the scalar block-diagonal matrix used in
   the resolvent step.
+- `povmDiagonal_inv`: the inverse of the scalar block-diagonal matrix is again
+  block-diagonal with pointwise-inverted entries.
+- `povm_resolvent_compression_le`: the resolvent Hansen-compression bound
+  combining the dilation isometry with `inverse_compression_le`.
 
 ## Status
 
 These lemmas formalize the compression / finite-POVM half of the direct proof
-route for the concave real-power Jensen inequality. The remaining unfinished
-step is the explicit diagonal-inverse rewrite together with the final algebraic
-rearrangement to the resolvent inequality.
+route for the concave real-power Jensen inequality, up to the resolvent
+Hansen-compression endpoint. The remaining unfinished step is the Löwner
+integral representation of `rpow` (blocked on Mathlib
+`CFC.Rpow.IntegralRepresentation`), which is required to lift the resolvent
+bound to the concave real-power Jensen inequality.
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder
@@ -234,6 +240,78 @@ lemma povmDiagonal_posDef (w : ι → ℝ) {t : ℝ}
     | inr p =>
         simpa [d, Complex.lt_def] using ht
   simpa [povmDiagonal, d] using hdiag
+
+/-- Under strict positivity of every weight, the inverse of the scalar
+block-diagonal matrix `povmDiagonal w t` is obtained by inverting each scalar
+entry pointwise. -/
+lemma povmDiagonal_inv (w : ι → ℝ) {t : ℝ}
+    (ht : 0 < t) (hw : ∀ i, 0 < w i) :
+    (povmDiagonal (D := D) w t)⁻¹ =
+      povmDiagonal (D := D) (fun i => (w i)⁻¹) t⁻¹ := by
+  refine Matrix.inv_eq_right_inv ?_
+  rw [povmDiagonal, povmDiagonal, Matrix.diagonal_mul_diagonal,
+      show (1 : AuxMat) = Matrix.diagonal (fun _ : AuxIx => (1 : ℂ)) from
+        Matrix.diagonal_one.symm]
+  congr 1
+  funext a
+  cases a with
+  | inl ip =>
+      change ((w ip.1 : ℝ) : ℂ) * (((w ip.1)⁻¹ : ℝ) : ℂ) = 1
+      rw [← Complex.ofReal_mul, mul_inv_cancel₀ (ne_of_gt (hw ip.1)),
+          Complex.ofReal_one]
+  | inr _ =>
+      change ((t : ℝ) : ℂ) * ((t⁻¹ : ℝ) : ℂ) = 1
+      rw [← Complex.ofReal_mul, mul_inv_cancel₀ (ne_of_gt ht),
+          Complex.ofReal_one]
+
+omit [DecidableEq ι] in
+/-- **Resolvent Hansen-compression bound.** For a finite PSD family
+`C i * (C i)ᴴ` that, together with the defect block `S * Sᴴ`, sums to the
+identity, any choice of strictly positive weights `w i` and `t` yields the
+Loewner inequality
+
+  `(∑ i, w i • (C i * (C i)ᴴ) + t • (S * Sᴴ))⁻¹ ≤`
+  `  ∑ i, (w i)⁻¹ • (C i * (C i)ᴴ) + t⁻¹ • (S * Sᴴ)`.
+
+This is the explicit resolvent form of the POVM compression inequality used as
+an intermediate step toward the Hansen--Pedersen operator Jensen inequality.
+
+It combines four ingredients:
+
+* `povmIsometry_star_mul` — the POVM dilation is an isometry;
+* `povmIsometry_compress_diagonal` — compression of `povmDiagonal w t` by the
+  dilation recovers the weighted POVM sum on both sides;
+* `povmDiagonal_inv` — the inverse of `povmDiagonal w t` is
+  `povmDiagonal w⁻¹ t⁻¹`;
+* `Matrix.PosDef.inverse_compression_le` — inverse-of-compression is
+  pointwise below compression-of-inverse. -/
+lemma povm_resolvent_compression_le
+    {C : ι → MatD} {S : MatD}
+    (hdef : S * Sᴴ = 1 - ∑ i, C i * (C i)ᴴ)
+    {w : ι → ℝ} {t : ℝ} (ht : 0 < t) (hw : ∀ i, 0 < w i) :
+    ((∑ i, w i • (C i * (C i)ᴴ)) + t • (S * Sᴴ))⁻¹ ≤
+      (∑ i, (w i)⁻¹ • (C i * (C i)ᴴ)) + t⁻¹ • (S * Sᴴ) := by
+  classical
+  set W : IsoMat := povmIsometry C S with hW
+  have hWiso : Wᴴ * W = (1 : MatD) := povmIsometry_star_mul (C := C) (S := S) hdef
+  have hYpd : Matrix.PosDef (povmDiagonal (D := D) w t) :=
+    povmDiagonal_posDef (ι := ι) (D := D) w ht hw
+  have hcompress :
+      Wᴴ * povmDiagonal (D := D) w t * W =
+        (∑ i, w i • (C i * (C i)ᴴ)) + t • (S * Sᴴ) := by
+    simpa [hW] using povmIsometry_compress_diagonal (C := C) (S := S) w t
+  have hcompress_inv :
+      Wᴴ * povmDiagonal (D := D) (fun i => (w i)⁻¹) t⁻¹ * W =
+        (∑ i, (w i)⁻¹ • (C i * (C i)ᴴ)) + t⁻¹ • (S * Sᴴ) := by
+    simpa [hW] using
+      povmIsometry_compress_diagonal (C := C) (S := S) (fun i => (w i)⁻¹) t⁻¹
+  have hbound :
+      (Wᴴ * povmDiagonal (D := D) w t * W)⁻¹ ≤
+        Wᴴ * (povmDiagonal (D := D) w t)⁻¹ * W :=
+    Matrix.PosDef.inverse_compression_le hYpd hWiso
+  rw [povmDiagonal_inv (ι := ι) (D := D) w ht hw] at hbound
+  rw [hcompress, hcompress_inv] at hbound
+  exact hbound
 
 end POVM
 

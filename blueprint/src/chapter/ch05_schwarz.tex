@@ -874,6 +874,53 @@ logarithm are not developed in this chapter.
     is immediate from positivity of its diagonal entries.
 \end{proof}
 
+\begin{lemma}[Inverse of the finite-POVM scalar block diagonal]\label{lem:operator_jensen_povm_diagonal_inv}
+    \lean{TNLean.OperatorJensen.povmDiagonal_inv}
+    \leanok
+    If every weight on the $\iota$-blocks and the defect scalar are strictly
+    positive, then the inverse of the scalar block-diagonal matrix is the
+    scalar block-diagonal matrix built from the pointwise-inverted weights
+    and defect scalar.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Multiply the two scalar block-diagonal matrices and use the fact that
+    diagonal matrices multiply entrywise. Strict positivity implies each
+    scalar entry is nonzero, so the pointwise product is identically one.
+    Conclude by uniqueness of the right inverse of a square matrix.
+\end{proof}
+
+\begin{lemma}[Resolvent Hansen-compression bound]\label{lem:operator_jensen_povm_resolvent_compression}
+    \lean{TNLean.OperatorJensen.povm_resolvent_compression_le}
+    \leanok
+    \uses{lem:operator_jensen_inverse_compression, lem:operator_jensen_povm_compression, lem:operator_jensen_povm_diagonal_inv}
+    Suppose that
+    \[
+        S S^\ast = \Id - \sum_{i \in \iota} C_i C_i^\ast,
+    \]
+    and that the weights $w_i$ and the defect scalar $t$ are strictly
+    positive. Then
+    \[
+        \Bigl(\sum_{i \in \iota} w_i\, C_i C_i^\ast + t\, S S^\ast\Bigr)^{-1}
+        \le
+        \sum_{i \in \iota} w_i^{-1}\, C_i C_i^\ast + t^{-1}\, S S^\ast.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:operator_jensen_inverse_compression, lem:operator_jensen_povm_compression, lem:operator_jensen_povm_diagonal_inv}
+    Apply the compression auxiliary
+    (Lemma~\ref{lem:operator_jensen_inverse_compression}) to the scalar
+    block-diagonal matrix with weights $w_i$ and defect $t$ and to the
+    finite-POVM dilation, which is an isometry by
+    Lemma~\ref{lem:operator_jensen_povm_compression}. Rewrite the inverse
+    using Lemma~\ref{lem:operator_jensen_povm_diagonal_inv} and identify both
+    compressions via
+    Lemma~\ref{lem:operator_jensen_povm_compression}.
+\end{proof}
+
 \begin{theorem}[Jensen for concave real powers]\label{thm:posMap_rpow_concave_jensen}
     \lean{posMap_rpow_concave_jensen}
     \notready
