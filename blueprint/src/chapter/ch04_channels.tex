@@ -1497,6 +1497,206 @@ representations already developed above. They correspond to
 \end{proof}
 
 %% =========================================================
+\section{Ordered CP maps, Radon--Nikodym, and open-system representation}
+\label{sec:ordered_cp}
+%% =========================================================
+
+The next three results form the structural package of~\cite[Thms.~2.3--2.5]{Wolf2012Quantum}:
+the ordered CP-map theorem, the Radon--Nikodym theorem for completely positive
+maps, and the open-system representation. They refine the Stinespring dilation
+by tracking how two CP maps related by domination or decomposition sit inside
+a common dilation space.
+
+\begin{definition}[CP partial order]\label{def:cp_dominates}
+    \lean{CPDominates}
+    \leanok
+    \uses{def:cp_map}
+    For linear maps $S, T : \MN{D} \to \MN{D}$, write $T \le S$ (in the CP
+    order) when $S - T$ is completely positive.
+\end{definition}
+
+\begin{definition}[Block-top contraction]\label{def:block_top_rows}
+    \lean{Matrix.blockTopRows}
+    \leanok
+    For natural numbers $r, s$, let $C = C_{r,s} \in \MN{}(\C)$ be the
+    rectangular $r \times (r+s)$ matrix whose rows are the first $r$ rows
+    of the identity on $\C^{r+s}$: $C_{ij} = 1$ if $j = i < r$ and $0$
+    otherwise.
+\end{definition}
+
+\begin{lemma}[$C$ is a co-isometry]\label{lem:block_top_rows_co_isometry}
+    \lean{Matrix.blockTopRows_mul_conjTranspose}
+    \leanok
+    \uses{def:block_top_rows}
+    The block-top matrix satisfies $C C^\dagger = \Id_r$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Direct entrywise computation: $(C C^\dagger)_{ii'} = \sum_j C_{ij}\overline{C_{i'j}}$
+    collapses to $\delta_{ii'}$.
+\end{proof}
+
+\begin{lemma}[$C$ is a contraction]\label{lem:block_top_rows_contraction}
+    \lean{Matrix.blockTopRows_conjTranspose_mul_le_one}
+    \leanok
+    \uses{def:block_top_rows}
+    The block-top matrix satisfies $C^\dagger C \le \Id_{r+s}$.
+\end{lemma}
+
+\begin{proof}\leanok
+    The matrix $C^\dagger C$ is diagonal with a $1$ on the first $r$
+    coordinates and a $0$ on the last $s$, so $\Id - C^\dagger C$ is
+    positive semidefinite.
+\end{proof}
+
+\begin{lemma}[Intertwining of Stinespring isometries]\label{lem:stinespring_intertwine_append}
+    \lean{stinespringV_eq_kronecker_blockTopRows_mul_append}
+    \leanok
+    \uses{def:stinespring_v, def:block_top_rows}
+    Let $K : \{0,\ldots,r-1\} \to \MN{D}$ and $L : \{0,\ldots,s-1\} \to \MN{D}$
+    be two Kraus families. Write $K\mathbin{+\!+}L$ for their concatenation
+    as a family indexed by $\{0,\ldots,r+s-1\}$. Then
+    \[
+        V_K = (\Id_D \otimes C_{r,s}) V_{K + \! + L}.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    Entrywise expansion of both sides: the Kronecker product with $C_{r,s}$
+    picks out the first $r$ coordinates of the dilation space, matching the
+    action of $V_{K + \! + L}$ on those coordinates, which is precisely $V_K$.
+\end{proof}
+
+\begin{theorem}[Ordered CP maps, Wolf Thm.~2.3]\label{thm:cp_dominates_stinespring_contraction}
+    \lean{CPDominates.exists_stinespring_contraction}
+    \leanok
+    \uses{def:cp_dominates, def:stinespring_v, def:block_top_rows,
+          lem:block_top_rows_contraction, lem:stinespring_intertwine_append}
+    Let $T_1, T_2 : \MN{D} \to \MN{D}$ be CP maps with $T_1 \le T_2$.
+    Then there exist an ancilla dimension $m$, Heisenberg-form Stinespring
+    matrices $V_1, V_2$ realizing $T_1, T_2$ via
+    $T_i(A) = V_i^\dagger (A \otimes \Id) V_i$, and a contraction
+    $\widetilde C$ on the dilation space with $\widetilde C^\dagger
+    \widetilde C \le \Id$ such that
+    \[
+        V_1 = (\Id_D \otimes \widetilde C)\, V_2.
+    \]
+    This is~\cite[Thm.~2.3]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:exists_stinespring_dilation, lem:block_top_rows_contraction,
+          lem:stinespring_intertwine_append}
+    Choose a Heisenberg-form Kraus family $K_1$ of $T_1$ with Stinespring
+    matrix $V_1 = V_{K_1}$, and Kraus operators $L$ of the CP map
+    $T_2 - T_1$ in Schr\"odinger orientation. Let $L^\dagger$ denote the
+    conjugate-transposed family. Set $m = r_1 + s$ and let
+    $K_2 = K_1 \mathbin{+\!+} L^\dagger$. Then
+    $T_2(A) = T_1(A) + (T_2 - T_1)(A)
+           = \sum_i (K_1^i)^\dagger A K_1^i + \sum_j L_j A L_j^\dagger$,
+    and the latter equals
+    $\sum_i (K_1^i)^\dagger A K_1^i + \sum_j (L_j^\dagger)^\dagger A L_j^\dagger$
+    which is the Heisenberg form for $K_2$, yielding
+    $T_2(A) = V_{K_2}^\dagger (A \otimes \Id) V_{K_2}$. Taking
+    $\widetilde C = C_{r_1, s}$ the intertwining
+    $V_{K_1} = (\Id_D \otimes \widetilde C) V_{K_2}$ is
+    Lemma~\ref{lem:stinespring_intertwine_append}, and
+    $\widetilde C^\dagger \widetilde C \le \Id$ is
+    Lemma~\ref{lem:block_top_rows_contraction}.
+\end{proof}
+
+\begin{definition}[Block-diagonal projectors on the dilation space]
+    \label{def:block_diag_projectors}
+    \lean{Matrix.blockDiagTopProj, Matrix.blockDiagBotProj}
+    \leanok
+    \uses{def:block_top_rows, lem:block_top_rows_contraction}
+    For $r, s$, let $P_{\mathrm{top}} = C_{r,s}^\dagger C_{r,s}$ and
+    $P_{\mathrm{bot}} = \Id - P_{\mathrm{top}}$. Both are PSD
+    (for $P_{\mathrm{bot}}$, by Lemma~\ref{lem:block_top_rows_contraction})
+    and $P_{\mathrm{top}} + P_{\mathrm{bot}} = \Id$.
+\end{definition}
+
+\begin{theorem}[Radon--Nikodym for CP maps, Wolf Thm.~2.4]
+    \label{thm:cp_exists_radon_nikodym}
+    \lean{IsCPMap.exists_radon_nikodym}
+    \leanok
+    \uses{def:cp_map, def:stinespring_v, def:block_diag_projectors}
+    Let $T_1, T_2 : \MN{D} \to \MN{D}$ be completely positive. There exist
+    an ancilla dimension $m$, a Kraus family $K$ with Stinespring matrix
+    $V = V_K$, and positive semidefinite operators
+    $P_1, P_2 : \C^m \to \C^m$ with $P_1 + P_2 = \Id_m$ such that, for
+    every $A \in \MN{D}$,
+    \[
+        T_i(A) = V^\dagger (A \otimes P_i) V, \qquad i = 1, 2.
+    \]
+    This is~\cite[Thm.~2.4]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:cp_dominates_stinespring_contraction, thm:exists_stinespring_dilation,
+          def:block_diag_projectors}
+    Take Heisenberg-form Kraus families $K_1$ for $T_1$ and
+    Schr\"odinger-form $L$ for $T_2$, and form $K = K_1 \mathbin{+\!+} L^\dagger$
+    on $\C^{r_1 + s}$. Choose $P_1 = P_{\mathrm{top}}$, $P_2 = P_{\mathrm{bot}}$
+    as in Definition~\ref{def:block_diag_projectors}. The Kronecker
+    identity $A \otimes (C^\dagger C) = (\Id \otimes C)^\dagger (A \otimes \Id)
+    (\Id \otimes C)$ rewrites $V^\dagger (A \otimes P_{\mathrm{top}}) V$ as
+    $((\Id \otimes C) V)^\dagger (A \otimes \Id) ((\Id \otimes C) V)$,
+    which equals $V_{K_1}^\dagger (A \otimes \Id) V_{K_1} = T_1(A)$ by
+    the intertwining Lemma~\ref{lem:stinespring_intertwine_append}. For the
+    complementary block, $A \otimes P_{\mathrm{bot}} = A \otimes \Id -
+    A \otimes P_{\mathrm{top}}$ and sandwiching by $V$ yields
+    $(T_1 + T_2)(A) - T_1(A) = T_2(A)$.
+\end{proof}
+
+\begin{theorem}[Open-system representation, Wolf Thm.~2.5 (isometric form)]
+    \label{thm:channel_exists_stinespring_open_system}
+    \lean{IsChannel.exists_stinespring_open_system}
+    \leanok
+    \uses{def:channel, def:stinespring_v, def:partial_trace}
+    Every quantum channel $T : \MN{D} \to \MN{D}$ admits a Stinespring
+    isometry $V$ on an ancilla space $\C^r$ such that
+    \[
+        T(\rho)_{ij} = \sum_{k=0}^{r-1} (V \rho V^\dagger)_{(i,k),(j,k)}
+        = \operatorname{tr}_r(V \rho V^\dagger).
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:exists_stinespring_isometry_of_cptp,
+          thm:stinespring_schrodinger_representation}
+    Apply the existence of an isometric Stinespring dilation
+    (Theorem~\ref{thm:exists_stinespring_isometry_of_cptp}) and the
+    Schr\"odinger-picture identity
+    (Theorem~\ref{thm:stinespring_schrodinger_representation}).
+\end{proof}
+
+\begin{theorem}[Open-system representation, partial-trace form]
+    \label{thm:channel_exists_stinespring_open_system_traceRight}
+    \lean{IsChannel.exists_stinespring_open_system_traceRight}
+    \leanok
+    \uses{def:channel, def:stinespring_v, def:partial_trace}
+    Every quantum channel $T$ admits an isometric Stinespring dilation
+    $V$ such that $T(\rho) = \operatorname{tr}_E(V \rho V^\dagger)$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:channel_exists_stinespring_open_system}
+    Rewrite the componentwise identity of
+    Theorem~\ref{thm:channel_exists_stinespring_open_system} as a partial
+    trace over the ancilla factor.
+\end{proof}
+
+\begin{remark}[Unitary form]
+    The fully unitary open-system form
+    $T(\rho) = \operatorname{tr}_E(U (\rho \otimes \ketbra{\phi}{\phi})
+    U^\dagger)$ of~\cite[Thm.~2.5]{Wolf2012Quantum} follows from the
+    isometric form by extending the Stinespring isometry $V$ to a unitary
+    $U$ on $\C^D \otimes \C^r$; this uses orthonormal basis extension and
+    is recorded as an outstanding formalization item.
+\end{remark}
+
+%% =========================================================
 \section{POVMs and Naimark dilation}
 \label{sec:povm_naimark}
 %% =========================================================

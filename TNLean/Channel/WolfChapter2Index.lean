@@ -10,6 +10,8 @@ import TNLean.Channel.KrausRank
 import TNLean.Channel.KrausRepresentation
 import TNLean.Channel.KrausUnitaryFreedom
 import TNLean.Channel.Stinespring
+import TNLean.Channel.OrderedCP
+import TNLean.Channel.RadonNikodym
 import TNLean.Channel.POVM
 import TNLean.Channel.POVM.Uniqueness
 import TNLean.Channel.TransferMatrix
@@ -61,6 +63,31 @@ representations of quantum channels.
   - `stinespring_dual_representation` — `T*(A) = V†(A ⊗ 𝟙)V` ✅
   - `stinespringV_isometry_iff_kraus_normalized` — `V†V = 𝟙` ↔ TP ✅
   - `stinespring_schrodinger_representation` — `T(ρ) = tr_r(VρV†)` ✅
+
+* **Thm 2.3** (ordered CP-maps):
+  - `CPDominates` — CP partial order: `S - T` is completely positive ✅
+  - `Matrix.blockTopRows` / `Matrix.blockTopRows_mul_conjTranspose` /
+    `Matrix.blockTopRows_conjTranspose_mul_le_one` — explicit block-top
+    contraction on the dilation space ✅
+  - `stinespringV_eq_kronecker_blockTopRows_mul_append` — intertwining
+    `V_{K} = (𝟙_D ⊗ C) · V_{K ++ L}` for the block-top projector ✅
+  - `CPDominates.exists_stinespring_contraction` — existential form of
+    Wolf Thm 2.3: `T₁ ≤ T₂` gives Stinespring realizations and a contraction ✅
+
+* **Thm 2.4** (Radon–Nikodym for CP maps):
+  - `Matrix.blockDiagTopProj` / `Matrix.blockDiagBotProj` — orthogonal
+    block projectors on the dilation space, PSD and summing to `𝟙` ✅
+  - `Matrix.kroneckerMap_conjTranspose_mul_kroneckerMap` — Kronecker
+    identity `A ⊗ (CᴴC) = (𝟙 ⊗ C)ᴴ (A ⊗ 𝟙) (𝟙 ⊗ C)` ✅
+  - `IsCPMap.exists_radon_nikodym` — Wolf Thm 2.4 binary form:
+    for CP `T₁, T₂`, a Stinespring matrix for `T₁ + T₂` yields
+    PSD `P₁ + P₂ = 𝟙` with `Tᵢ(A) = V†(A ⊗ Pᵢ)V` ✅
+
+* **Thm 2.5** (open-system representation, reduced form):
+  - `IsChannel.exists_stinespring_open_system` — every CPTP map is
+    `T(ρ)_{ij} = ∑ₖ (V ρ V†)_{(i,k),(j,k)}` for an isometric `V` ✅
+  - `IsChannel.exists_stinespring_open_system_traceRight` — equivalent
+    form via `Matrix.traceRight`: `T(ρ) = tr_E[V ρ V†]` ✅
 
 * **Thm 2.6** (Naimark / Neumark dilation for POVMs):
   - `POVM` — positive operator-valued measure structure ✅
@@ -159,11 +186,9 @@ representations of quantum channels.
 | Result | Notes |
 |--------|-------|
 | Prop 2.4 (equiv of ensembles, necessity) | Needs purification/Schmidt decomp |
-| Thm 2.3 (ordered CP-maps) | Needs Stinespring + contraction |
-| Thm 2.4 (Radon-Nikodym) | Follows from Thm 2.3 |
-| Thm 2.5 (open-system representation) | Embedding into unitary |
-| §2.3 Lorentz normal form (existence) | Needs compactness / minimisation over `SL(2, ℂ)` filterings (Wolf Prop 2.9 / Prop 2.11) |
-| §2.3 Sorted / unique singular values | `svd_of_isUnit` is unsorted; downstream normal-form uses will want the sorted variant |
+| Thm 2.5 (unitary form) | Isometric form formalized; unitary form needs basis extension |
+| §2.3 Lorentz normal form | Needs compactness over `SL(2, ℂ)` filterings |
+| §2.3 Sorted singular values | Current SVD is unsorted; later uses want sorted values |
 
 ## References
 
