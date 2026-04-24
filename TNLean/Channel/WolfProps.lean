@@ -196,7 +196,6 @@ private theorem T_fixes_vecMulVec_star_of_fixes_self
 
 section Prop23
 
-variable [NeZero D]
 variable (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
 
 /-- **Prop 2.3 (Wolf), linear-algebra form**: a linear map fixing every
@@ -209,10 +208,12 @@ theorem linearMap_eq_id_of_fixes_rankOne
     (hT : ∀ v : Fin D → ℂ, T (Matrix.vecMulVec v (star v)) =
                                     Matrix.vecMulVec v (star v)) :
     T = LinearMap.id := by
-  -- It suffices to agree on every matrix; use `Matrix.induction_on`.
+  -- It suffices to agree on every matrix; use `Matrix.induction_on'`
+  -- (which covers the `D = 0` case via `h_zero`).
   refine LinearMap.ext fun M => ?_
   change T M = M
-  refine Matrix.induction_on M ?_ ?_
+  refine Matrix.induction_on' M ?_ ?_ ?_
+  · exact map_zero T
   · intro p q hp hq
     rw [map_add, hp, hq]
   · intro i j c
