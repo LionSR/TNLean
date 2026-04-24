@@ -976,10 +976,12 @@ diagonal matrices.
     \lean{MPOTensor.DiagonalChiFamily.trace_matrix_pow}
     \leanok
     \uses{def:mpdo_diagonal_chi_family}
-    For every triple $(\alpha, \beta, \gamma)$ and every $L \ge 0$,
+    For every triple $(\alpha, \beta, \gamma)$, if $\chi_{\alpha,\beta,\gamma}$
+    has size $r_{\alpha,\beta,\gamma}$, then for every $L \ge 0$,
     \[
         \operatorname{tr}\bigl(\chi_{\alpha,\beta,\gamma}^{L}\bigr)
-            = \sum_{k} \chi_{\alpha,\beta,\gamma,k}^{L},
+            = \sum_{k=1}^{r_{\alpha,\beta,\gamma}}
+                \chi_{\alpha,\beta,\gamma,k}^{L},
     \]
     where $\chi_{\alpha,\beta,\gamma,k}$ are the diagonal entries.
 \end{theorem}
@@ -993,12 +995,21 @@ is the sum of its entries.
     \lean{MPOTensor.HasChiTracePowerForm}
     \leanok
     \uses{def:mpdo_diagonal_chi_family}
-    An abstract structure-coefficient family $c^{(L)}_{\alpha,\beta,\gamma}$ has
-    \emph{trace-power form} when there is a diagonal $\chi$ family with
-    $c^{(L)}_{\alpha,\beta,\gamma} = \operatorname{tr}\bigl(\chi_{\alpha,\beta,\gamma}^{L}\bigr)$
-    for every $L$ and every triple $(\alpha, \beta, \gamma)$. This is the
-    Lean-level form of the target identity of
-    \cite[Theorem~IV.13~(ii)]{Cirac2017MPDO_AnnPhys}.
+    A binary compatibility predicate between an abstract structure-coefficient
+    family $c^{(L)}_{\alpha,\beta,\gamma}$ and a diagonal $\chi$ family: the
+    pair $(c, \chi)$ is said to be in \emph{trace-power form} when
+    \[
+        c^{(L)}_{\alpha,\beta,\gamma}
+            = \operatorname{tr}\bigl(\chi_{\alpha,\beta,\gamma}^{L}\bigr)
+            = \sum_{k=1}^{r_{\alpha,\beta,\gamma}}
+                \chi_{\alpha,\beta,\gamma,k}^{L}
+    \]
+    for every $L \ge 0$ and every triple $(\alpha, \beta, \gamma)$, where
+    $r_{\alpha,\beta,\gamma}$ is the size of $\chi_{\alpha,\beta,\gamma}$. This
+    is the Lean-level form of the target identity of
+    \cite[Theorem~IV.13~(ii)]{Cirac2017MPDO_AnnPhys}; the existential
+    version---``there exists $\chi$ for which $(c,\chi)$ has trace-power
+    form''---is obtained by quantifying over $\chi$.
 \end{definition}
 
 \section{Commuting form and GSNNCH}

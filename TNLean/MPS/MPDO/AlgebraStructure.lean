@@ -550,23 +550,31 @@ theorem trace_matrix_pow (α β γ : I) (L : ℕ) :
   simp [matrix_pow, Matrix.trace_diagonal, tracePowerCoeff]
 
 /-- Predicate asserting that every entry of `χ_{α,β,γ}` is a positive real
-number, matching the positivity hypothesis of [CPGSV17, Thm IV.13(ii)]. -/
+number, matching the positivity hypothesis of [CPGSV17, Thm IV.13(ii)].
+Under the scoped `ComplexOrder` instance (opened at the top of the file), a
+strict inequality `0 < z` on `ℂ` is equivalent to `0 < z.re ∧ z.im = 0`. -/
 def PosEntries : Prop :=
-  ∀ α β γ : I, ∀ k : Fin (χ.rank α β γ), 0 < (χ.entry α β γ k).re ∧ (χ.entry α β γ k).im = 0
+  ∀ α β γ : I, ∀ k : Fin (χ.rank α β γ), 0 < χ.entry α β γ k
 
 end DiagonalChiFamily
 
 /-- *Trace-power compatibility* between an abstract structure-coefficient family
 `c L α β γ` and a diagonal `χ` family: for every blocking size `L` and every
-triple `(α, β, γ)`, the structure coefficient `c L α β γ` equals
-`tr(χ_{α,β,γ}^L)`.
+triple `(α, β, γ)`, the structure coefficient `c L α β γ` equals the trace-power
+coefficient `χ.tracePowerCoeff α β γ L = ∑_k (χ_{α,β,γ,k})^L` of `χ`.
+
+The trace-power coefficient is equal to the trace of the `L`-th matrix power
+`tr(χ_{α,β,γ}^L)` via `DiagonalChiFamily.trace_matrix_pow`, but that identity is
+not definitional; the predicate is stated in terms of `tracePowerCoeff` to keep
+the right-hand side a plain finite sum. The trace formulation
+`c L α β γ = (χ.matrix α β γ ^ L).trace` is then available through
+`HasChiTracePowerForm.eq_trace_matrix_pow`.
 
 This is the Lean-level form of the target identity of
 [CPGSV17, Thm IV.13(ii)] for the blocked MPDO structure coefficients. It is a
-predicate on abstract coefficient data rather than on any specific
-`AlgebraStructureData`, so that it can be reused both for the blocked
-multiplication coefficients of the algebra-side formulation and for the length-`L`
-operator algebra appearing in the paper. -/
+*binary* predicate on the pair `(c, χ)` rather than an existential in `χ`, so
+that callers can carry a specific witness `χ` around explicitly; an
+existential version `∃ χ, HasChiTracePowerForm c χ` is available on demand. -/
 def HasChiTracePowerForm {I : Type*}
     (c : ℕ → I → I → I → ℂ) (χ : DiagonalChiFamily I) : Prop :=
   ∀ L : ℕ, ∀ α β γ : I, c L α β γ = χ.tracePowerCoeff α β γ L
