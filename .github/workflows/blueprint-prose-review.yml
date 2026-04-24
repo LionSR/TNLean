@@ -1,0 +1,182 @@
+name: Blueprint Sync & Prose Review
+
+on:
+  pull_request:
+    types: [opened, synchronize, ready_for_review, reopened]
+    paths:
+      - "TNLean/**/*.lean"
+      - "TNLean.lean"
+      - "blueprint/src/**/*.tex"
+      - "docs/blueprint_style_guide.md"
+      - ".github/workflows/blueprint-prose-review.yml"
+
+concurrency:
+  group: blueprint-prose-review-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  blueprint-and-prose:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      actions: read
+      issues: write
+      id-token: write
+
+    steps:
+      - name: Check if head commit is a bot auto-fix
+        id: bot-check
+        uses: actions/github-script@v8
+        with:
+          script: |
+            // Skip review for auto-fix bot commits to avoid the
+            // review → auto-fix → review ping-pong cascade.
+            const { data: commit } = await github.rest.repos.getCommit({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: context.payload.pull_request.head.sha
+            });
+            const msg = commit.commit.message;
+            const isBot = /^\[claude-(auto|review|prose)-fix\]/.test(msg);
+            core.setOutput('skip', isBot ? 'true' : 'false');
+            if (isBot) core.notice(`Skipping prose review for bot-fix commit: ${msg.split('\n')[0]}`);
+
+      - name: Checkout repository
+        if: steps.bot-check.outputs.skip != 'true'
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+
+      - name: Run Blueprint Sync & Prose Review
+        if: steps.bot-check.outputs.skip != 'true'
+        id: blueprint-prose-review
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          allowed_bots: 'claude,chatgpt-codex-connector,cursor[bot],cursor,copilot-pull-request-reviewer'
+          prompt: |
+            Review this pull request for TWO categories ONLY:
+              (A) blueprint ↔ Lean sync, and
+              (B) prose quality / banned AI-software language.
+
+            All other concerns (proof integrity, proof correctness, Mathlib style,
+            type safety, performance, modularity, documentation) are handled by the
+            main `Claude Code Review (Lean)` workflow — do NOT comment on them here.
+
+            PR: ${{ github.repository }}/pull/${{ github.event.pull_request.number }}
+            Trigger: ${{ github.event.action }}
+
+            Use `gh pr diff ${{ github.event.pull_request.number }}` to see the changes.
+
+            ---
+
+            ## Category A — 🟡 Blueprint sync
+
+            When new theorems, lemmas, or definitions are added to Lean or a previous
+            `sorry` is closed, the corresponding blueprint entry in
+            `blueprint/src/chapter/*.tex` MUST be updated in the SAME PR. Specifically:
+
+            - **New Lean declaration** → blueprint must add `\lean{Namespace.Name}` and
+              `\leanok` to the corresponding `\begin{definition}` / `\begin{theorem}` /
+              `\begin{lemma}` block, plus `\uses{...}` for dependencies.
+            - **Newly proven Lean theorem** (replacing `sorry`) → blueprint
+              `\begin{proof}` gets a `\leanok`.
+            - **Removed or renamed Lean declaration** → the blueprint must drop or
+              rename the corresponding `\lean{...}` tag. Stale tags break
+              `leanblueprint checkdecls`.
+
+            Flag any PR that adds or completes Lean declarations without updating the
+            blueprint, and identify the specific .tex file/line that needs editing.
+
+            ## Category B — 🟡 Prose quality / banned language
+
+            The blueprint is a mathematical document, not software documentation, and
+            must not read as AI-generated prose. Read
+            `docs/blueprint_style_guide.md` §"Banned AI/Software Language" for the
+            authoritative tables — TWO tables:
+
+            1. **Banned software-engineering terms** (e.g. "pipeline", "assembly" as an
+               organizational label, "boilerplate", "orchestrate", "workflow",
+               "scaffolding", "refactor" in prose, "deploy a lemma", "wrapper",
+               "hook", "toolchain", "first-class", "plug-and-play", "out of the box",
+               "under the hood", "API"/"endpoint" in blueprint prose,
+               "utility"/"helper" as nouns).
+            2. **Banned LLM writing patterns** (e.g. "leverage", "delve into", "dive
+               deep", "crucial"/"pivotal"/"vital" as vague filler, "seamlessly",
+               "robust"/"comprehensive" as vague adjectives, "tapestry", "journey",
+               "foster", "streamline", "synergy", "meticulous", "in the realm of",
+               "at the heart of", "it's important to note", filler "moreover" /
+               "furthermore" / "in essence" / "ultimately", "testament to",
+               "elegant"/"beautiful"/"profound" as vague praise, "shed light on",
+               "showcase", "unveil", "cutting-edge", "paradigm", hortative "let us"
+               / "we shall see").
+
+            **Scope.** This rule covers ALL reader-facing text:
+            - blueprint `.tex` files (section titles, theorem names, proof sketches,
+              remarks, chapter preambles, `references.bib` annotations);
+            - Lean **docstrings**, **comments**, and `section`/`namespace` names.
+
+            It does NOT cover developer-facing markdown in `docs/` or workflow YAML —
+            ignore those directories.
+
+            **Apply judgment.** A few entries are context-sensitive: "crucial",
+            "pivotal", "moreover", "furthermore", "let us" appear in legitimate
+            mathematical writing and are banned ONLY as vague filler. Don't flag a
+            genuine mathematical use; flag the empty-calorie ones.
+
+            For each finding, cite the exact phrase, link to the line, and propose a
+            concrete replacement from the table (or say "drop").
+
+            ---
+
+            **Verdict rules:**
+            - If category A or B has unresolved issues, submit **REQUEST_CHANGES**.
+            - Otherwise **APPROVE**.
+            - Do NOT comment on anything outside categories A and B.
+
+            For each issue, post an inline comment on the relevant line. End with a
+            short summary comment listing the counts (e.g. "2 sync issues, 5 prose
+            issues") so the author can triage at a glance.
+
+            **Reading existing feedback.** Before posting new comments, read all
+            existing PR feedback:
+            1. Inline review threads via `mcp__github__get_review_comments`.
+            2. PR conversation comments via `mcp__github__get_comments`.
+            Skip issues already raised, acknowledged, or fixed.
+
+            **Resolving previous review comments.** On a `synchronize` event:
+            1. Fetch review-thread GraphQL IDs via `gh api graphql` (the MCP method
+               does not return thread IDs).
+            2. For each unresolved thread authored by `claude`,
+               `copilot-pull-request-reviewer`, or `chatgpt-codex-connector` whose
+               issue is now fixed, resolve it via
+               `mcp__github__resolve_review_thread`.
+            3. Never resolve threads from human reviewers or from `cursor`/Bugbot.
+
+            Example GraphQL query for thread IDs:
+            ```bash
+            gh api graphql -f query='
+            {
+              repository(owner: "${{ github.repository_owner }}", name: "${{ github.event.repository.name }}") {
+                pullRequest(number: ${{ github.event.pull_request.number }}) {
+                  reviewThreads(first: 100) {
+                    nodes {
+                      id
+                      isResolved
+                      isOutdated
+                      comments(first: 1) {
+                        nodes { author { login } body }
+                      }
+                    }
+                    pageInfo { hasNextPage endCursor }
+                  }
+                }
+              }
+            }'
+            ```
+
+          claude_args: |
+            --model claude-sonnet-4-6
+            --allowedTools "Read,Glob,Grep,Bash(gh pr diff:*),Bash(gh pr view:*),Bash(gh pr comment:*),Bash(gh api graphql:*),Bash(grep *),mcp__github__*"
+            --append-system-prompt "This is a Lean 4 / Mathlib formalization project for quantum information theory. You are a focused reviewer scoped to TWO concerns ONLY: (A) blueprint ↔ Lean sync (\\lean{...}/\\leanok/\\uses{...} tags must track Lean declarations), and (B) prose quality / banned AI-software language in blueprint .tex and Lean docstrings/comments/section names. Authoritative banned-words tables live in docs/blueprint_style_guide.md. Do NOT comment on proof integrity, Mathlib style, performance, modularity, documentation completeness, or any other concern — those are reviewed by the main Claude Code Review workflow and duplicate comments create review noise. Apply judgment for context-sensitive entries (\\\"crucial\\\", \\\"moreover\\\", \\\"let us\\\" — fine in genuine mathematical use, banned only as vague filler)."
