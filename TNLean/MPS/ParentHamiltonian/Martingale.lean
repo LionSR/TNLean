@@ -274,9 +274,262 @@ noncomputable def parentHamiltonianES (A : MPSTensor d D) (L N : ℕ) :
 terms. -/
 theorem parentHamiltonianES_eq_sum_localTermES (A : MPSTensor d D) (L N : ℕ) :
     parentHamiltonianES A L N = ∑ i : Fin N, localTermES A L i := by
-  let e := WithLp.linearEquiv 2 ℂ (NSiteSpace d N)
   ext v σ
-  simp [parentHamiltonianES, parentHamiltonian, localTermES, e]
+  simp [parentHamiltonianES, parentHamiltonian, localTermES]
+
+attribute [local instance] Classical.propDecidable
+
+private theorem cyclicCfg_eq_replaceWindow {N : ℕ} (hN : 0 < N) (L : ℕ)
+    (hLN : L ≤ N) (i : Fin N) (σ : Cfg d L) (τ : Cfg d N) :
+    cyclicCfg hN L i σ τ = replaceWindow L hLN i τ σ := by
+  rfl
+
+@[simp] private theorem cyclicRestrictES_apply {N : ℕ} (hN : 0 < N) (L : ℕ)
+    (i : Fin N) (τ : Cfg d N) (v : EuclideanSpace ℂ (Cfg d N)) (ω : Cfg d L) :
+    cyclicRestrictES (d := d) hN L i τ v ω = v (cyclicCfg hN L i ω τ) := rfl
+
+private def SameOutsideWindow {N : ℕ} (L : ℕ) (i : Fin N) (σ τ : Cfg d N) : Prop :=
+  ∀ k : Fin N, ¬ ((k.val + N - i.val) % N < L) → τ k = σ k
+
+private theorem cyclicRestrictES_eq_of_sameOutsideWindow {N : ℕ} (hN : 0 < N)
+    {L : ℕ} (i : Fin N) {σ τ : Cfg d N}
+    (hστ : SameOutsideWindow (L := L) i σ τ) :
+    cyclicRestrictES (d := d) hN L i τ = cyclicRestrictES hN L i σ := by
+  ext v ω
+  change v.ofLp (cyclicCfg hN L i ω τ) = v.ofLp (cyclicCfg hN L i ω σ)
+  exact congrArg v.ofLp <| by
+    ext k
+    by_cases hk : ((k.val + N - i.val) % N) < L
+    · simp [cyclicCfg, hk]
+    · simp [cyclicCfg, hk, hστ k hk]
+
+private theorem sameOutsideWindow_of_cyclicCfg_eq {N : ℕ} (hN : 0 < N) {L : ℕ}
+    (i : Fin N) {σ τ : Cfg d N} {ω : Cfg d L}
+    (hEq : cyclicCfg hN L i ω τ = σ) :
+    SameOutsideWindow (L := L) i σ τ := by
+  intro k hk
+  have hEqk := congrFun hEq k
+  simpa [cyclicCfg, hk] using hEqk
+
+private theorem cyclicRestrictES_single_of_sameOutsideWindow {N : ℕ} (hN : 0 < N) {L : ℕ}
+    (hLN : L ≤ N) (i : Fin N) (σ τ : Cfg d N)
+    (hστ : SameOutsideWindow (L := L) i σ τ) :
+    cyclicRestrictES (d := d) hN L i τ (EuclideanSpace.single σ (1 : ℂ)) =
+      EuclideanSpace.single (extractWindow L i σ) (1 : ℂ) := by
+  ext ω
+  by_cases hω : ω = extractWindow L i σ
+  · subst hω
+    have hreplace : replaceWindow L hLN i τ (extractWindow L i σ) =
+        replaceWindow L hLN i σ (extractWindow L i σ) := by
+      ext k
+      by_cases hk : ((k.val + N - i.val) % N) < L
+      · simp [replaceWindow, hk]
+      · simp [replaceWindow, hk, hστ k hk]
+    have hEq : cyclicCfg hN L i (extractWindow L i σ) τ = σ := by
+      rw [cyclicCfg_eq_replaceWindow hN L hLN]
+      simpa using hreplace.trans (replaceWindow_extractWindow L hLN i σ)
+    rw [PiLp.single_apply]
+    simp [hEq]
+  · have hneq : cyclicCfg hN L i ω τ ≠ σ := by
+      intro hEq
+      apply hω
+      have hextract := congrArg (extractWindow L i) hEq
+      simpa [cyclicCfg_eq_replaceWindow, hLN] using hextract
+    simp [cyclicRestrictES, hneq, hω]
+
+private theorem cyclicRestrictES_single_of_not_sameOutsideWindow {N : ℕ} (hN : 0 < N) {L : ℕ}
+    (i : Fin N) (σ τ : Cfg d N)
+    (hστ : ¬ SameOutsideWindow (L := L) i σ τ) :
+    cyclicRestrictES (d := d) hN L i τ (EuclideanSpace.single σ (1 : ℂ)) = 0 := by
+  ext ω
+  have hneq : cyclicCfg hN L i ω τ ≠ σ := by
+    intro hEq
+    exact hστ (sameOutsideWindow_of_cyclicCfg_eq hN i hEq)
+  simp [cyclicRestrictES, hneq]
+
+private theorem cyclicRestrictES_adjoint_apply {N : ℕ} (hN : 0 < N) {L : ℕ}
+    (hLN : L ≤ N) (i : Fin N) (σ τ : Cfg d N)
+    (v : EuclideanSpace ℂ (Cfg d L)) :
+    ((cyclicRestrictES (d := d) hN L i τ).adjoint v) σ =
+      if SameOutsideWindow (L := L) i σ τ then v (extractWindow L i σ) else 0 := by
+  classical
+  by_cases hστ : SameOutsideWindow (L := L) i σ τ
+  · calc
+      ((cyclicRestrictES (d := d) hN L i τ).adjoint v) σ
+          = ⟪EuclideanSpace.single σ (1 : ℂ),
+              (cyclicRestrictES (d := d) hN L i τ).adjoint v⟫_ℂ := by
+              simpa using (EuclideanSpace.inner_single_left σ (1 : ℂ)
+                ((cyclicRestrictES (d := d) hN L i τ).adjoint v)).symm
+      _ = ⟪cyclicRestrictES (d := d) hN L i τ (EuclideanSpace.single σ (1 : ℂ)), v⟫_ℂ := by
+            rw [LinearMap.adjoint_inner_right]
+      _ = ⟪EuclideanSpace.single (extractWindow L i σ) (1 : ℂ), v⟫_ℂ := by
+            rw [cyclicRestrictES_single_of_sameOutsideWindow hN hLN i σ τ hστ]
+      _ = if SameOutsideWindow (L := L) i σ τ then v (extractWindow L i σ) else 0 := by
+            simpa [hστ] using (EuclideanSpace.inner_single_left (extractWindow L i σ) (1 : ℂ) v)
+  · calc
+      ((cyclicRestrictES (d := d) hN L i τ).adjoint v) σ
+          = ⟪EuclideanSpace.single σ (1 : ℂ),
+              (cyclicRestrictES (d := d) hN L i τ).adjoint v⟫_ℂ := by
+              simpa using (EuclideanSpace.inner_single_left σ (1 : ℂ)
+                ((cyclicRestrictES (d := d) hN L i τ).adjoint v)).symm
+      _ = ⟪cyclicRestrictES (d := d) hN L i τ (EuclideanSpace.single σ (1 : ℂ)), v⟫_ℂ := by
+            rw [LinearMap.adjoint_inner_right]
+      _ = ⟪0, v⟫_ℂ := by
+            rw [cyclicRestrictES_single_of_not_sameOutsideWindow hN i σ τ hστ]
+      _ = if SameOutsideWindow (L := L) i σ τ then v (extractWindow L i σ) else 0 := by
+            simp [hστ]
+
+@[simp] private theorem localTermES_apply {N : ℕ} (A : MPSTensor d D) (L : ℕ) (i : Fin N)
+    (hLN : L ≤ N) (v : EuclideanSpace ℂ (Cfg d N)) (σ : Cfg d N) :
+    localTermES A L i v σ =
+      parentInteractionES A L ((cyclicRestrictES (d := d) (Fin.pos i) L i σ) v)
+        (extractWindow L i σ) := by
+  have hcfg :
+      WithLp.toLp 2 ((LinearMap.pi fun τ =>
+        (LinearMap.proj (replaceWindow L hLN i σ τ) : NSiteSpace d N →ₗ[ℂ] ℂ)) v.ofLp) =
+      (cyclicRestrictES (d := d) (Fin.pos i) L i σ) v := by
+    ext τ
+    simp [cyclicRestrictES, cyclicCfg_eq_replaceWindow, hLN]
+  have hself : cyclicCfg (d := d) (Fin.pos i) L i (extractWindow L i σ) σ = σ := by
+    rw [cyclicCfg_eq_replaceWindow (d := d) (Fin.pos i) L hLN]
+    exact replaceWindow_extractWindow L hLN i σ
+  simp [localTermES, localTerm, hLN, parentInteraction, parentInteractionES]
+  simp [hcfg, hself]
+
+@[simp] private theorem localTermESSummand_apply {N : ℕ} (A : MPSTensor d D) (hN : 0 < N)
+    {L : ℕ} (hLN : L ≤ N) (i : Fin N) (τ v σ) :
+    localTermESSummand A hN L i τ v σ =
+      if SameOutsideWindow (L := L) i σ τ then localTermES A L i v σ else 0 := by
+  classical
+  rw [localTermESSummand]
+  simp only [LinearMap.comp_apply]
+  by_cases hστ : SameOutsideWindow (L := L) i σ τ
+  · rw [cyclicRestrictES_adjoint_apply hN hLN i σ τ]
+    rw [if_pos hστ, localTermES_apply A L i hLN v σ]
+    simp [hστ, cyclicRestrictES_eq_of_sameOutsideWindow hN i hστ]
+  · rw [cyclicRestrictES_adjoint_apply hN hLN i σ τ, if_neg hστ]
+    simp [hστ]
+
+private theorem sameOutsideWindow_card {N : ℕ} {L : ℕ} (hLN : L ≤ N)
+    (i : Fin N) (σ : Cfg d N) :
+    Fintype.card {τ : Cfg d N // SameOutsideWindow (L := L) i σ τ} = d ^ L := by
+  let f : Cfg d L → {τ : Cfg d N // SameOutsideWindow (L := L) i σ τ} :=
+    fun ω => ⟨replaceWindow L hLN i σ ω, by
+      intro k hk
+      simp [replaceWindow, hk]⟩
+  have hf : Function.Bijective f := by
+    constructor
+    · intro ω₁ ω₂ h
+      have h' := congrArg (fun τ : {τ : Cfg d N // SameOutsideWindow (L := L) i σ τ} =>
+        extractWindow L i τ.1) h
+      simpa [f] using h'
+    · intro τ
+      refine ⟨extractWindow L i τ.1, ?_⟩
+      apply Subtype.ext
+      have hreplace : replaceWindow L hLN i σ (extractWindow L i τ.1) =
+          replaceWindow L hLN i τ.1 (extractWindow L i τ.1) := by
+        ext k
+        by_cases hk : ((k.val + N - i.val) % N) < L
+        · simp [replaceWindow, hk]
+        · simp [replaceWindow, hk, τ.2 k hk]
+      simpa [f] using hreplace.trans (replaceWindow_extractWindow L hLN i τ.1)
+  calc
+    Fintype.card {τ : Cfg d N // SameOutsideWindow (L := L) i σ τ}
+        = Fintype.card (Cfg d L) := (Fintype.card_of_bijective (f := f) hf).symm
+    _ = d ^ L := by simp [Cfg]
+
+/-- The transported local term is the cyclic average of the positive Euclidean
+summands `Rᵢ,τ† P_L Rᵢ,τ`. -/
+theorem localTermES_eq_average_localTermESSummand {N : ℕ} (A : MPSTensor d D)
+    {L : ℕ} (hLN : L ≤ N) (i : Fin N) :
+    localTermES A L i =
+      ((((d ^ L : ℕ) : ℂ)⁻¹) • (∑ τ : Cfg d N, localTermESSummand A (Fin.pos i) L i τ)) := by
+  classical
+  ext v σ
+  let q : Cfg d N → Prop := SameOutsideWindow (L := L) i σ
+  let sq : Finset (Cfg d N) := Finset.univ.filter q
+  have hfilter :
+      (∑ τ : Cfg d N, if q τ then localTermES A L i v σ else 0) =
+        sq.sum (fun _ => localTermES A L i v σ) := by
+    dsimp [sq]
+    symm
+    simpa using (Finset.sum_filter (s := Finset.univ) (p := q)
+      (f := fun _ => localTermES A L i v σ))
+  have hsconst :
+      sq.sum (fun _ => localTermES A L i v σ) =
+        sq.card • localTermES A L i v σ := by
+    exact Finset.sum_const (s := sq) (b := localTermES A L i v σ)
+  have hcard_filter : sq.card = Fintype.card {τ : Cfg d N // q τ} := by
+    dsimp [sq]
+    symm
+    simpa using (Fintype.card_subtype q)
+  have hne_nat : (d ^ L : ℕ) ≠ 0 := by
+    have hcard : Fintype.card (Cfg d L) = d ^ L := by
+      simp [Cfg]
+    have : Fintype.card (Cfg d L) ≠ 0 := by
+      let _ : Nonempty (Cfg d L) := ⟨extractWindow L i σ⟩
+      exact Fintype.card_ne_zero
+    rwa [hcard] at this
+  have hne : (((d ^ L : ℕ) : ℂ)) ≠ 0 := by
+    exact_mod_cast hne_nat
+  calc
+    localTermES A L i v σ
+        = (((d ^ L : ℕ) : ℂ)⁻¹) * ((d ^ L) • localTermES A L i v σ) := by
+            symm
+            rw [nsmul_eq_mul, ← mul_assoc, inv_mul_cancel₀ hne, one_mul]
+    _ = (((d ^ L : ℕ) : ℂ)⁻¹) *
+          (Fintype.card {τ : Cfg d N // q τ} • localTermES A L i v σ) := by
+            rw [sameOutsideWindow_card hLN i σ]
+    _ = (((d ^ L : ℕ) : ℂ)⁻¹) *
+          (sq.card • localTermES A L i v σ) := by rw [hcard_filter]
+    _ = (((d ^ L : ℕ) : ℂ)⁻¹) *
+          (sq.sum (fun _ => localTermES A L i v σ)) := by rw [hsconst]
+    _ = (((d ^ L : ℕ) : ℂ)⁻¹) *
+          (∑ τ : Cfg d N, if q τ then localTermES A L i v σ else 0) := by rw [hfilter]
+    _ = (((d ^ L : ℕ) : ℂ)⁻¹) *
+          (∑ τ : Cfg d N, localTermESSummand A (Fin.pos i) L i τ v σ) := by
+            simp [q, localTermESSummand_apply, hLN]
+    _ = ((((d ^ L : ℕ) : ℂ)⁻¹) • (∑ τ : Cfg d N,
+          localTermESSummand A (Fin.pos i) L i τ)) v σ := by
+            simp
+
+private theorem isPositive_smul_of_real_re_nonneg {ι : Type*} [Fintype ι]
+    {T : EuclideanSpace ℂ ι →ₗ[ℂ] EuclideanSpace ℂ ι} (hT : T.IsPositive) {c : ℂ}
+    (hc_star : star c = c) (hc_re : 0 ≤ c.re) :
+    (c • T).IsPositive := by
+  refine ⟨hT.left.smul hc_star, fun x => ?_⟩
+  have him : c.im = 0 := by
+    have him' := congrArg Complex.im hc_star
+    simp at him'
+    linarith
+  have himstar : RCLike.im ((starRingEnd ℂ) c) = 0 := by
+    simp [him]
+  have hre : RCLike.re ((starRingEnd ℂ) c) = c.re := by
+    simp
+  change 0 ≤ RCLike.re ⟪c • T x, x⟫_ℂ
+  rw [inner_smul_left, RCLike.mul_re, himstar, zero_mul, sub_zero, hre]
+  exact mul_nonneg hc_re (hT.re_inner_nonneg_left x)
+
+/-- The transported local term is positive because it is a finite cyclic average
+of the positive summands `Rᵢ,τ† P_L Rᵢ,τ`. -/
+theorem localTermES_isPositive {N : ℕ} (A : MPSTensor d D) (L : ℕ) (i : Fin N) :
+    (localTermES A L i).IsPositive := by
+  by_cases hLN : L ≤ N
+  · rw [localTermES_eq_average_localTermESSummand A hLN i]
+    refine isPositive_smul_of_real_re_nonneg
+      (localTermESSummand_sum_isPositive A (Fin.pos i) L i) ?_ ?_
+    · simp
+    · rw [Complex.inv_re, Complex.normSq_natCast]
+      have hnonneg : 0 ≤ ((d ^ L : ℕ) : ℝ) := by exact_mod_cast Nat.zero_le (d ^ L)
+      exact div_nonneg hnonneg (mul_nonneg hnonneg hnonneg)
+  · simp [localTermES, localTerm, hLN]
+
+/-- The full transported parent Hamiltonian is positive because it is a finite
+sum of positive transported local terms. -/
+theorem parentHamiltonianES_isPositive (A : MPSTensor d D) (L N : ℕ) :
+    (parentHamiltonianES A L N).IsPositive := by
+  rw [parentHamiltonianES_eq_sum_localTermES]
+  exact LinearMap.isPositive_sum _ fun i _ => localTermES_isPositive A L i
 
 /-- The transported parent-Hamiltonian ground space is exactly the kernel of the
 transported parent Hamiltonian. -/

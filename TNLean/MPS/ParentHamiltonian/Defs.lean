@@ -103,16 +103,17 @@ private lemma offset_mod_eq {a b N : ℕ} (ha : a < N) (hb : b < N) :
 
 private lemma add_offset_mod_eq {a b N : ℕ} (ha : a < N) (hb : b < N) :
     (a + ((b + N - a) % N)) % N = b := by
-  rcases le_or_lt a b with hab | hab
-  · have hmod : (b + N - a) % N = b - a := by
-      have : b + N - a = N + (b - a) := by omega
-      rw [this, Nat.add_mod_left_left, Nat.mod_eq_of_lt (by omega)]
-    rw [hmod, Nat.mod_eq_of_lt (by omega)]
-    omega
+  rcases lt_or_ge b a with hab | hab
   · have hmod : (b + N - a) % N = b + N - a := by
       rw [Nat.mod_eq_of_lt (by omega)]
     rw [hmod, show a + (b + N - a) = b + N from by omega,
       Nat.add_mod_right, Nat.mod_eq_of_lt hb]
+  · have hsub : b - a < N := lt_of_le_of_lt (Nat.sub_le _ _) hb
+    have hmod : (b + N - a) % N = b - a := by
+      have : b + N - a = N + (b - a) := by omega
+      rw [this, Nat.add_mod, Nat.mod_self]
+      simpa using Nat.mod_eq_of_lt hsub
+    rw [hmod, Nat.add_sub_of_le hab, Nat.mod_eq_of_lt hb]
 
 /-- Extracting a window after replacing it recovers the replacement values. -/
 @[simp] lemma extractWindow_replaceWindow (L : ℕ) (hLN : L ≤ N) {α : Type*}
