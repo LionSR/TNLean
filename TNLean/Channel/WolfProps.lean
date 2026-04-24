@@ -356,39 +356,52 @@ theorem exists_isometric_mixing_of_pureEnsembleDensity_eq
   -- off column `0` of the resulting rectangular isometry.
   have hD_of : Fin D → 0 < D :=
     fun a => Nat.pos_of_ne_zero (fun hDeq => (hDeq ▸ a).elim0)
-  -- Embed each vector as the `0`-th column of a `D × D` matrix.
+  -- Embed each vector as the `0`-th column of a `D × D` matrix. Pattern-match
+  -- on the underlying `Nat` of `Fin D` so no `0 < D` hypothesis is needed to
+  -- form the column index, and the match reduces definitionally at `⟨0, _⟩`.
   let K : ι₁ → Matrix (Fin D) (Fin D) ℂ :=
-    fun i => Matrix.of (fun a c => if c.val = 0 then ψ i a else 0)
+    fun i => Matrix.of
+      (fun a c => match c with | ⟨0, _⟩ => ψ i a | ⟨_ + 1, _⟩ => 0)
   let L : ι₂ → Matrix (Fin D) (Fin D) ℂ :=
-    fun j => Matrix.of (fun a c => if c.val = 0 then φ j a else 0)
-  have hK_apply : ∀ i a c, K i a c = if c.val = 0 then ψ i a else 0 := fun _ _ _ => rfl
-  have hL_apply : ∀ j a c, L j a c = if c.val = 0 then φ j a else 0 := fun _ _ _ => rfl
+    fun j => Matrix.of
+      (fun a c => match c with | ⟨0, _⟩ => φ j a | ⟨_ + 1, _⟩ => 0)
+  have hK_apply : ∀ i a c,
+      K i a c = match c with | ⟨0, _⟩ => ψ i a | ⟨_ + 1, _⟩ => 0 :=
+    fun _ _ _ => rfl
+  have hL_apply : ∀ j a c,
+      L j a c = match c with | ⟨0, _⟩ => φ j a | ⟨_ + 1, _⟩ => 0 :=
+    fun _ _ _ => rfl
   -- Helper: collapse a single-column Kraus sandwich `(M * X * Mᴴ)` at
   -- entry `(a, b)` for any single vector `v` with column-`0` encoding.
   -- Applied to each summand below for both the `ψ` and `φ` families.
   have sandwich_entry : ∀ (v : Fin D → ℂ) (M : Matrix (Fin D) (Fin D) ℂ)
-      (hM : ∀ a c, M a c = if c.val = 0 then v a else 0)
+      (hM : ∀ a c, M a c = match c with | ⟨0, _⟩ => v a | ⟨_ + 1, _⟩ => 0)
       (X : Matrix (Fin D) (Fin D) ℂ) (a b : Fin D) (hD : 0 < D),
       (M * X * Mᴴ) a b = v a * X ⟨0, hD⟩ ⟨0, hD⟩ * star (v b) := by
-    intros v M hM X a b hD
-    set c₀ : Fin D := ⟨0, hD⟩ with hc₀
-    have hc₀_val : c₀.val = 0 := rfl
+    intro v M hM X a b hD
+    set c₀ : Fin D := ⟨0, hD⟩
     simp only [Matrix.mul_apply, Matrix.conjTranspose_apply, hM]
     have inner_c : ∀ d,
-        (∑ c, (if c.val = 0 then v a else 0) * X c d) = v a * X c₀ d := by
+        (∑ c, (match c with | ⟨0, _⟩ => v a | ⟨_ + 1, _⟩ => (0 : ℂ)) * X c d) =
+          v a * X c₀ d := by
       intro d
+      -- `rw` closes the main equality via its `rfl` finisher: at `c₀ = ⟨0, _⟩`
+      -- the `match` reduces definitionally. Only the two side conditions of
+      -- `Finset.sum_eq_single` remain.
       rw [Finset.sum_eq_single c₀]
-      · simp [hc₀_val]
-      · intros c _ hcne
-        have hc_val_ne : c.val ≠ 0 := fun h => hcne (Fin.ext h)
-        simp [hc_val_ne]
+      · intro c _ hcne
+        obtain ⟨c, hc⟩ := c
+        cases c with
+        | zero => exact absurd rfl hcne
+        | succ _ => simp
       · intro h; exact absurd (Finset.mem_univ _) h
     simp_rw [inner_c]
     rw [Finset.sum_eq_single c₀]
-    · simp [hc₀_val]
-    · intros d _ hdne
-      have hd_val_ne : d.val ≠ 0 := fun h => hdne (Fin.ext h)
-      simp [hd_val_ne]
+    · intro d _ hdne
+      obtain ⟨d, hd⟩ := d
+      cases d with
+      | zero => exact absurd rfl hdne
+      | succ _ => simp
     · intro h; exact absurd (Finset.mem_univ _) h
   -- The two embedded Kraus families define the same CP sandwich map.
   have hKraus : ∀ X : Matrix (Fin D) (Fin D) ℂ,
@@ -428,15 +441,16 @@ theorem exists_isometric_mixing_of_pureEnsembleDensity_eq
   intro i
   funext a
   have hD : 0 < D := hD_of a
-  set c₀ : Fin D := ⟨0, hD⟩ with hc₀
-  have hc₀_val : c₀.val = 0 := rfl
-  -- Read off the `(a, c₀)` entry of `K i = ∑ j, V i j • L j`; by
-  -- construction `K i a c₀ = ψ i a` and `L j a c₀ = φ j a`.
+  set c₀ : Fin D := ⟨0, hD⟩
+  -- At `c₀ = ⟨0, _⟩` both match branches reduce definitionally, so
+  -- `K i a c₀ = ψ i a` and `L j a c₀ = φ j a` hold by `rfl`.
+  have hKic₀ : K i a c₀ = ψ i a := rfl
+  have hLjc₀ : ∀ j, L j a c₀ = φ j a := fun _ => rfl
+  -- Read off the `(a, c₀)` entry of `K i = ∑ j, V i j • L j`.
   have h_entry := congr_fun (congr_fun (hV_decomp i) a) c₀
-  rw [hK_apply i a c₀] at h_entry
-  simp only [Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul, hL_apply,
-    hc₀_val, if_true] at h_entry
-  simpa using h_entry
+  rw [hKic₀] at h_entry
+  simp only [Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul, hLjc₀] at h_entry
+  exact h_entry
 
 /-- **Prop 2.4 (Wolf), Hughston–Jozsa–Wootters equivalence**. Two
 pure-state ensembles `{ψᵢ}_{i ∈ ι₁}` and `{φⱼ}_{j ∈ ι₂}` with
