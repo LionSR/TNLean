@@ -118,21 +118,6 @@ local instance instMatrixInnerProductSpace (D : ℕ) :
   Matrix.toMatrixInnerProductSpace (n := Fin D) (𝕜 := ℂ) 1
     (Matrix.frobenius_posDef_one (D := D)).posSemidef
 
-namespace MPSTensor
-
-/-- The Frobenius adjoint of `transferMap A` acts by the Kraus adjoint map of
-`A`. This is the pointwise form of
-`MPSTensor.transferMap_conjTranspose_eq_adjoint`. -/
-theorem transferMap_adjoint_apply_eq_adjointMap {d D : ℕ}
-    (A : MPSTensor d D) (X : Matrix (Fin D) (Fin D) ℂ) :
-    (transferMap A).adjoint X = Kraus.adjointMap A X := by
-  have h := congrArg (fun F => F X)
-    (transferMap_conjTranspose_eq_adjoint (A := A)).symm
-  simpa [transferMap_apply, Kraus.adjointMap, Matrix.conjTranspose_conjTranspose,
-    Matrix.mul_assoc] using h
-
-end MPSTensor
-
 namespace MPOTensor
 
 variable {d D : ℕ}
@@ -209,8 +194,8 @@ theorem mem_faithfulFixedPointSupportAlgebra_iff
   unfold faithfulFixedPointSupportAlgebra
   rw [Kraus.mem_fixedPoints_starSubalgebra, Kraus.mem_adjointFixedPoints]
   have hAdj : Kraus.adjointMap M.toMPSTensor X = (transferMap M).adjoint X := by
-    simpa [transferMap_eq_toMPSTensor] using
-      (MPSTensor.transferMap_adjoint_apply_eq_adjointMap (A := M.toMPSTensor) X).symm
+    rw [transferMap_eq_toMPSTensor]
+    exact (MPSTensor.transferMap_adjoint_apply_eq_adjointMap (A := M.toMPSTensor) X).symm
   rw [hAdj]
 
 namespace AlgebraStructureData
@@ -348,13 +333,13 @@ noncomputable def reconstructFromBlockedCoefficients
 
 @[simp] theorem toBlockedCoefficients_reconstructFromBlockedCoefficients
     (data : AlgebraStructureData d D) (n : ℕ) (a : BlockedCoefficients data n) :
-    data.toBlockedCoefficients n (data.reconstructFromBlockedCoefficients n a) = a := by
-  exact (data.toBlockedCoefficients n).apply_symm_apply a
+    data.toBlockedCoefficients n (data.reconstructFromBlockedCoefficients n a) = a :=
+  (data.toBlockedCoefficients n).apply_symm_apply a
 
 @[simp] theorem reconstructFromBlockedCoefficients_toBlockedCoefficients
     (data : AlgebraStructureData d D) (n : ℕ) (x : data.A n) :
-    data.reconstructFromBlockedCoefficients n (data.toBlockedCoefficients n x) = x := by
-  exact (data.toBlockedCoefficients n).symm_apply_apply x
+    data.reconstructFromBlockedCoefficients n (data.toBlockedCoefficients n x) = x :=
+  (data.toBlockedCoefficients n).symm_apply_apply x
 
 /-- The chosen basis reconstructs every blocked coefficient family by a finite sum. -/
 theorem reconstructFromBlockedCoefficients_apply
@@ -382,11 +367,10 @@ noncomputable def toBlockedCoefficientsOfMem
 @[simp] theorem reconstructFromBlockedCoefficients_of_mem
     (data : AlgebraStructureData d D) (n : ℕ) (X : Mat) (hX : X ∈ data.A n) :
     ((data.reconstructFromBlockedCoefficients n
-      (data.toBlockedCoefficientsOfMem n X hX) : data.A n) : Mat) = X := by
-  exact congrArg (fun x : data.A n => (x : Mat))
+      (data.toBlockedCoefficientsOfMem n X hX) : data.A n) : Mat) = X :=
+  congrArg (fun x : data.A n => (x : Mat))
     (reconstructFromBlockedCoefficients_toBlockedCoefficients
       (data := data) (n := n) (x := ⟨X, hX⟩))
-
 /-- Coordinates of an adjoint blocked fixed point, extracted through a compatible
 algebra tower. -/
 noncomputable def toBlockedCoefficientsOfFixedPoint
@@ -416,9 +400,8 @@ theorem adjoint_blockedTransferMap_reconstructFromBlockedCoefficients_eq
     (a : BlockedCoefficients data n) :
     (blockedTransferMap M n).adjoint
         (((data.reconstructFromBlockedCoefficients n a : data.A n) : Mat)) =
-      (((data.reconstructFromBlockedCoefficients n a : data.A n) : Mat)) := by
-  exact (hCompat n hn _).1 (data.reconstructFromBlockedCoefficients n a).property
-
+      (((data.reconstructFromBlockedCoefficients n a : data.A n) : Mat)) :=
+  (hCompat n hn _).1 (data.reconstructFromBlockedCoefficients n a).property
 /-- The coefficient family of the blocked product of two chosen basis elements. -/
 noncomputable def blockedStructureCoefficients
     (data : AlgebraStructureData d D) (n : ℕ)
