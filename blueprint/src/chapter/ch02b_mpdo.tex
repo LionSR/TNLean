@@ -156,7 +156,7 @@ legs cyclically and taking the resulting trace.
     By Lemma~\ref{lem:mpo_transfer_eq_mps}, the transfer map of $M$ agrees with
     the transfer map of its doubled-index MPS view. Thus
     $\E_M \circ \E_M = \E_M$ holds exactly when the transfer map of
-    $M.\mathrm{toMPSTensor}$ is idempotent, which is the RFP condition.
+    that doubled-index MPS tensor is idempotent, which is the RFP condition.
 \end{proof}
 
 \section{MPDOs and LPDOs}
@@ -634,7 +634,7 @@ strong subadditivity for a normalized three-site reduced state.
     abstract Proposition~IV.3 package from Theorem~\ref{thm:propblockinj_abstract}.
     Expanding the hypothesis over a word of length~$L+1$ beginning with the
     fixed site and folding each block contribution into a trace pairing
-    against $\mathrm{insertedTensor}\,W\,A_k$ yields, upon taking the
+    against the corresponding first-site insertion tensor yields, upon taking the
     $Y$\!-$Z$ difference, a tuple of block matrices whose trace pairings
     against every length-$L$ block word vanish. The biCF hypothesis then
     forces each block difference to be zero, and dividing by the nonzero
@@ -971,7 +971,8 @@ its GSNNCH target once that step is available.
     \label{thm:structural_implies_rfp_blocked}
     \lean{MPOTensor.structural_implies_rfp_blocked}
     \leanok
-    \uses{def:mpo_is_zcl, def:mpdo_rfp_via_fusion}
+    \uses{def:mpo_is_zcl, def:mpdo_fusion_isometry, def:mpdo_rfp_via_fusion,
+        thm:mpdo_rfp_via_fusion_iff}
     If an MPO tensor $K$ has zero correlation length, then it has a blocked
     fusion-isometry witness at size $2$ in the sense of
     Definition~\ref{def:mpdo_fusion_isometry}.
@@ -979,9 +980,10 @@ its GSNNCH target once that step is available.
 
 \begin{proof}\leanok
 Zero correlation length is the current provisional MPDO RFP predicate.
-Applying the fusion criterion from Definition~\ref{def:mpdo_rfp_via_fusion} to
-that RFP witness yields fusion-isometry data at every positive blocked size;
-evaluating it at size $2$ produces the blocked witness.
+Applying the converse direction of
+Theorem~\ref{thm:mpdo_rfp_via_fusion_iff} to that RFP witness yields
+fusion-isometry data at every positive blocked size; evaluating it at size $2$
+produces the blocked witness.
 \end{proof}
 
 \begin{theorem}[Simple-MPDO RFP chain from commuting form and ZCL]
@@ -990,7 +992,8 @@ evaluating it at size $2$ produces the blocked witness.
     \leanok
     \uses{def:mpdo_has_commuting_form, def:mpo_is_zcl,
         thm:mpdo_is_gsnnch_zcl_iff_has_commuting_form_and_is_zcl,
-        thm:structural_implies_rfp_blocked, def:mpdo_rfp_via_fusion}
+        thm:structural_implies_rfp_blocked, def:mpdo_rfp_via_fusion,
+        thm:mpdo_rfp_via_fusion_iff}
     From the commuting-form property and zero correlation length one
     simultaneously recovers the GSNNCH-with-ZCL branch of Theorem~4.9, the
     blocked fusion-isometry witness at size $2$, and the transfer-map fusion
@@ -1001,8 +1004,9 @@ evaluating it at size $2$ produces the blocked witness.
 The commuting-form and zero-correlation-length hypotheses give the GSNNCH--ZCL
 branch via Theorem~\ref{thm:mpdo_is_gsnnch_zcl_iff_has_commuting_form_and_is_zcl}.
 The blocked witness is Theorem~\ref{thm:structural_implies_rfp_blocked}. The
-full transfer-map fusion formulation again follows from zero correlation length,
-which is the current RFP predicate.
+full transfer-map fusion formulation follows by applying the converse direction
+of Theorem~\ref{thm:mpdo_rfp_via_fusion_iff} to zero correlation length, which
+is the current RFP predicate.
 \end{proof}
 
 \begin{remark}[Remaining paper-level gap for Theorem~4.9]
