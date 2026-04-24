@@ -6,15 +6,16 @@ import TNLean.Channel.Peripheral.CyclicDecomposition.Basic
 import Mathlib.RingTheory.Idempotents
 
 /-!
-# Complex-algebra and star packaging on the idempotent corner
+# Complex-algebra and star structures on the idempotent corner
 
 Mathlib's `IsIdempotentElem.Corner` already provides the `Semiring` / `Ring` structure on the
 subsemigroup `Set.range (P * · * P)` for an idempotent `P`, with unit `P`. For the matrix
 corners appearing in the support-projection route for Wolf Cor. 6.6 we additionally need:
 
-* `ℂ`-linear packaging on the corner;
-* star packaging when `P` is self-adjoint;
-* a bridge with the repository's `cornerSubmodule P = {X | P * X * P = X}`.
+* a `ℂ`-module and `ℂ`-algebra structure on the corner;
+* star, `StarRing`, and `StarModule ℂ` structures when `P` is self-adjoint;
+* a `ℂ`-linear equivalence with the repository's
+  `cornerSubmodule P = {X | P * X * P = X}`.
 
 This file supplies those instances for `P : Matrix (Fin D) (Fin D) ℂ` and the linear
 equivalence `cornerSubmodule P ≃ₗ[ℂ] IsIdempotentElem.Corner hP`.
@@ -94,8 +95,9 @@ noncomputable instance instAlgebraComplexCorner (hP : IsIdempotentElem P) :
 /-! ### Star structure for a self-adjoint idempotent
 
 The `Star`, `InvolutiveStar`, `StarMul`, `StarAddMonoid`, `StarRing`, and `StarModule ℂ` instances
-on `hP.Corner` require the self-adjointness hypothesis `Pᴴ = P`. We package them as `def`s that
-produce the instance, rather than `instance`s, because the hypothesis is data-level.
+on `hP.Corner` require the self-adjointness hypothesis `Pᴴ = P`. Because this hypothesis is
+data-level, the structures below are given as `def`s rather than global `instance`s; callers
+should introduce them locally with `letI` at each use site.
 -/
 
 section Star
@@ -157,9 +159,9 @@ variable (hP : IsIdempotentElem P) (hPstar : Pᴴ = P)
 
 end Star
 
-/-! ### Bridge with the repository's `cornerSubmodule` -/
+/-! ### Identification with the repository's `cornerSubmodule` -/
 
-section Bridge
+section CornerSubmoduleIdentification
 
 /-- For an idempotent `P`, `cornerSubmodule P = {X | P * X * P = X}` has the same underlying set
 as `Subsemigroup.corner P = Set.range (P * · * P)`. -/
@@ -175,7 +177,8 @@ lemma cornerSubmodule_mem_iff_mem_corner
     change P * X * P = X
     rw [Matrix.mul_assoc, hR, hL]
 
-/-- The bridge `cornerSubmodule P ≃ₗ[ℂ] IsIdempotentElem.Corner hP`. -/
+/-- The `ℂ`-linear equivalence `cornerSubmodule P ≃ₗ[ℂ] IsIdempotentElem.Corner hP` for an
+idempotent matrix `P`, given by the identity on underlying matrices. -/
 def cornerSubmoduleCornerEquiv (hP : IsIdempotentElem P) :
     cornerSubmodule P ≃ₗ[ℂ] hP.Corner where
   toFun X := ⟨X.1, (cornerSubmodule_mem_iff_mem_corner hP X.1).mp X.2⟩
@@ -193,6 +196,6 @@ def cornerSubmoduleCornerEquiv (hP : IsIdempotentElem P) :
     (hP : IsIdempotentElem P) (X : hP.Corner) :
     ((cornerSubmoduleCornerEquiv hP).symm X).1 = X.1 := rfl
 
-end Bridge
+end CornerSubmoduleIdentification
 
 end MatrixCorner

@@ -9,7 +9,7 @@ import TNLean.MPS.Irreducible.FixedPointProjection
 
 For a positive semi-definite matrix `ρ` on `ℂ^D`, let `P := supportProj ρ` be its support
 projection. Although `ρ` is generally not positive definite on the whole space, it becomes
-positive definite when restricted to its support. This file packages that fact.
+positive definite when restricted to its support. This file records that fact.
 
 ## Main results
 

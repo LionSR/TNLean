@@ -979,7 +979,8 @@ behind stationary states, following~\cite[\S6.4]{Wolf2012Quantum}.
 
 \subsection{Faithful compression onto the support sector}
 
-The statements in this subsection package the support-projection machinery
+This subsection establishes the results on the corner algebra,
+$*$-structure, and compression of a PSD fixed point onto its support sector
 needed for~\cite[Cor.~6.6]{Wolf2012Quantum}: the corner carries a
 $\C$-algebra and $*$-structure, the repository's corner submodule is
 identified with Mathlib's idempotent corner, and the compression of a PSD
@@ -1002,14 +1003,14 @@ fixed point onto its support sector is positive definite.
     $P\,v = U\,\mathrm{diag}(\chi_{\lambda_j > 0})\,w = 0$.
 \end{proof}
 
-\begin{definition}[Corner submodule / idempotent-corner bridge]%
+\begin{definition}[Corner submodule / idempotent-corner identification]%
     \label{def:cornerSubmoduleCornerEquiv}
     \lean{MatrixCorner.cornerSubmoduleCornerEquiv}
     \leanok
     For an idempotent $P \in \MN{D}$, the repository's corner submodule
     $\{X \mid P X P = X\}$ and Mathlib's idempotent corner
-    $\{P\,X\,P \mid X \in \MN{D}\}$ are $\C$-linearly isomorphic via the
-    identity on underlying matrices.
+    $\{P\,X\,P \mid X \in \MN{D}\}$ are identified as $\C$-linear spaces
+    by the identity on underlying matrices.
 \end{definition}
 
 \begin{remark}[$\C$-algebra and $*$-structure on the corner]%
@@ -1020,10 +1021,10 @@ fixed point onto its support sector is positive definite.
     \lean{MatrixCorner.cornerStarModuleComplex}
     \leanok
     Mathlib's \texttt{IsIdempotentElem.Corner} already carries a ring
-    structure with unit~$P$. For the matrix case we supply
-    $\C$-linear packaging (module and algebra structure) and, under the
-    additional assumption $P^\dagger = P$, star packaging (star, star ring,
-    and star module over~$\C$).
+    structure with unit~$P$. For the matrix case we provide
+    $\C$-module and $\C$-algebra structures and, under the additional
+    assumption $P^\dagger = P$, star, star ring, and star module
+    structures over~$\C$.
 \end{remark}
 
 \begin{theorem}[Faithful compression onto the support]%
