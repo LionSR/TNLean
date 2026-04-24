@@ -138,7 +138,7 @@ theorem hasBlockSelectorWords_of_wordTupleSpanTop
   classical
   intro k
   let target : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ :=
-    fun j => if h : j = k then 1 else 0
+    fun j => if j = k then 1 else 0
   have htarget : target ∈ Submodule.span ℂ (Set.range (wordTuple A S)) := by
     rw [hSpan]
     exact Submodule.mem_top
