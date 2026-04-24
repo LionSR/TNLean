@@ -351,6 +351,11 @@ theorem exists_isometric_mixing_of_pureEnsembleDensity_eq
     (hCard : Fintype.card ι₂ ≤ Fintype.card ι₁) :
     ∃ V : Matrix ι₁ ι₂ ℂ, Vᴴ * V = 1 ∧
       ∀ i, ψ i = fun a => ∑ j, V i j * φ j a := by
+  -- Any inhabitant of `Fin D` witnesses `0 < D`; factored out once since it
+  -- is needed both when forming the CP-sandwich equality and when reading
+  -- off column `0` of the resulting rectangular isometry.
+  have hD_of : Fin D → 0 < D :=
+    fun a => Nat.pos_of_ne_zero (fun hDeq => (hDeq ▸ a).elim0)
   -- Embed each vector as the `0`-th column of a `D × D` matrix.
   let K : ι₁ → Matrix (Fin D) (Fin D) ℂ :=
     fun i => Matrix.of (fun a c => if c.val = 0 then ψ i a else 0)
@@ -391,8 +396,7 @@ theorem exists_isometric_mixing_of_pureEnsembleDensity_eq
     intro X
     ext a b
     -- `a : Fin D` forces `0 < D`.
-    have hD : 0 < D :=
-      Nat.pos_of_ne_zero (fun hDeq => (hDeq ▸ a).elim0)
+    have hD : 0 < D := hD_of a
     set c₀ : Fin D := ⟨0, hD⟩ with hc₀
     -- Compute each side as `X c₀ c₀ * ρ_v a b`, then use `hρ`.
     have lhs_eq : (∑ i, K i * X * (K i)ᴴ) a b =
@@ -423,8 +427,7 @@ theorem exists_isometric_mixing_of_pureEnsembleDensity_eq
   refine ⟨V, hV_iso, ?_⟩
   intro i
   funext a
-  have hD : 0 < D :=
-    Nat.pos_of_ne_zero (fun hDeq => (hDeq ▸ a).elim0)
+  have hD : 0 < D := hD_of a
   set c₀ : Fin D := ⟨0, hD⟩ with hc₀
   have hc₀_val : c₀.val = 0 := rfl
   -- Read off the `(a, c₀)` entry of `K i = ∑ j, V i j • L j`; by
