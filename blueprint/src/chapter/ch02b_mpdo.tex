@@ -878,6 +878,79 @@ $E_n$, so the fixed point first becomes an element of $\mathcal{A}_n$ and then
 Theorem~\ref{thm:mpdo_reconstruct_blocked_coefficients} reconstructs it.
 \end{proof}
 
+\begin{theorem}[Adjoint fixed points descend through the algebra tower]%
+    \label{thm:mpdo_adjoint_fix_descent}
+    \lean{MPOTensor.adjoint_transferMap_apply_of_isRFP_MPDO_via_algebra}
+    \leanok
+    \uses{def:mpdo_rfp_via_algebra}
+    If an MPO tensor satisfies the algebra-structure formulation, then every
+    adjoint fixed point of the blocked transfer map $E_n$ at a positive
+    blocking size $n$ is already an adjoint fixed point of the unblocked
+    transfer map $E_1$.
+\end{theorem}
+\begin{proof}\leanok
+Compatibility at size $n$ places $X$ in $\mathcal{A}_n$. The inclusion map
+$\iota_n$ lifts $X$ into $\mathcal{A}_{n+1}$, and since $\iota_n$ is just an
+inclusion it does not change the underlying operator, so we continue to
+denote the lifted element by $X$. Thus compatibility at size $n + 1$ yields
+$E_{n+1}^{\dagger} X = X$. Rewriting $E_{n+1} = E_n \circ E_1$ and applying
+$(A \circ B)^{\dagger} = B^{\dagger} \circ A^{\dagger}$ together with the
+hypothesis $E_n^{\dagger} X = X$ extracts $E_1^{\dagger} X = X$.
+\end{proof}
+
+\begin{lemma}[Reverse inclusion of adjoint fixed points]%
+    \label{lem:mpdo_adjoint_fix_reverse}
+    \lean{MPOTensor.adjoint_blockedTransferMap_apply_of_adjoint_transferMap_apply}
+    \leanok
+    Every adjoint fixed point of the unblocked transfer map $E_1$ is an
+    adjoint fixed point of every blocked transfer map $E_n$.
+\end{lemma}
+\begin{proof}\leanok
+Induction on $n$ using $E_{n+1} = E_n \circ E_1$ and
+$(A \circ B)^{\dagger} = B^{\dagger} \circ A^{\dagger}$; the base case is
+$E_0 = \mathrm{id}$. This step does not require the algebra-structure data.
+Combined with Theorem~\ref{thm:mpdo_adjoint_fix_descent} this yields the
+fixed-point equality
+$\mathrm{Fix}(E_n^{\dagger}) = \mathrm{Fix}(E_1^{\dagger})$ at every positive
+blocking size under the algebra-structure predicate.
+\end{proof}
+
+\begin{remark}[Converse algebra-to-fusion gap]%
+    \label{rem:mpdo_algebra_to_fusion_gap}
+    \uses{def:mpdo_rfp_via_algebra, def:mpdo_rfp_via_fusion, thm:newton_girard}
+    The converse implication
+    $\ref{def:mpdo_rfp_via_algebra} \Rightarrow \ref{def:mpdo_rfp_via_fusion}$
+    is not provable against the present predicate. Theorem
+    \ref{thm:mpdo_adjoint_fix_descent} already gives the strongest available
+    consequence of the algebra-structure data -- exclusion of \emph{finite
+    order} (root-of-unity) peripheral eigenvalues of the adjoint transfer
+    map, since any such eigenvalue would produce a new adjoint fixed point
+    at some positive blocking size. This does \emph{not}, however, exclude
+    unit-modulus eigenvalues of irrational phase, nor force idempotence of
+    the transfer map, so ergodic quantum channels with a strict spectral gap
+    on the $1$-complement still satisfy the predicate without being RFPs.
+    For instance, on $M_D(\mathbb{C})$ with $0 < \varepsilon < 1$ take
+    \[
+        E(X)
+            = \varepsilon\, X
+              + (1 - \varepsilon)\, \Pi_{\mathrm{diag}}(X),
+    \]
+    where $\Pi_{\mathrm{diag}}$ is the projection that zeroes the
+    off-diagonal entries of $X$; then $\Pi_{\mathrm{diag}} \circ
+    \Pi_{\mathrm{diag}} = \Pi_{\mathrm{diag}}$, the channel $E$ has
+    peripheral spectrum $\{1\}$ and diagonal fixed-point algebra at every
+    blocking size, yet $E \circ E \neq E$. Closing the converse therefore
+    requires strengthening the predicate to the coefficient formulation of
+    \cite[Theorem~IV.13~(ii)]{Cirac2017MPDO_AnnPhys}: the positive diagonal
+    matrices $\chi_{\alpha,\beta,\gamma}$ of Appendix~C.3 and the
+    coefficient identity
+    $c^{(L)}_{\alpha,\beta,\gamma}
+      = \mathrm{tr}(\chi_{\alpha,\beta,\gamma}^{L})$
+    of Appendix~C.4. The scalar Newton--Girard power-sum identity needed
+    for the latter step is already available as
+    Theorem~\ref{thm:newton_girard}.
+\end{remark}
+
 \section{Commuting form and GSNNCH}
 
 \begin{definition}[Commuting-form data for an MPDO]
