@@ -121,6 +121,26 @@ jobs:
                `\uses{...}` dependencies) for new results, or adding `\leanok` to the `\begin{proof}`
                when a previously `sorry`-d result is now fully proven. Flag any PR that adds or completes
                Lean declarations without updating the blueprint. Blueprint sync must be done before approval.
+            9. 🟡 **Prose quality / banned language**: The blueprint is a mathematical document, not
+               software documentation, and must not read as AI-generated prose. Read
+               `docs/blueprint_style_guide.md` §"Banned AI/Software Language" for the full tables. This
+               rule applies to ALL reader-facing text: blueprint `.tex` files (section titles, theorem
+               names, proof sketches, remarks, chapter preambles) AND Lean docstrings, comments, and
+               section names. Flag any occurrence of:
+               - banned software-engineering terms (e.g., "pipeline", "assembly" as an organizational
+                 label, "boilerplate", "orchestrate", "workflow", "scaffolding", "refactor" in prose,
+                 "deploy a lemma", "wrapper", "hook", "toolchain", "first-class", "plug-and-play",
+                 "out of the box", "under the hood", "API" / "endpoint" in prose, "utility" / "helper"
+                 as nouns);
+               - banned LLM writing patterns (e.g., "leverage", "delve into", "dive deep", "crucial" /
+                 "pivotal" / "vital", "seamlessly", "robust" / "comprehensive" as vague adjectives,
+                 "tapestry", "journey", "foster", "streamline", "synergy", "meticulous", "in the realm
+                 of", "at the heart of", "it's important to note", "moreover" / "furthermore" as
+                 filler, "in essence", "ultimately" as filler, "testament to", "elegant" / "beautiful"
+                 / "profound" as vague praise, "shed light on", "showcase", "unveil", "cutting-edge",
+                 "paradigm", "let us" / "we shall see" hortative filler).
+               For each finding, cite the exact phrase and propose a concrete replacement from the
+               table (or "drop"). Prose cleanups must be done before approval.
 
             ---
 

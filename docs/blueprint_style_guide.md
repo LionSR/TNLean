@@ -51,7 +51,7 @@ Notation must be **internally consistent** across the entire blueprint and **clo
 ## Banned AI/Software Language (enforced in both blueprint AND Lean code)
 The blueprint reads as a **mathematical document**, not software documentation. The following patterns are banned in ALL reader-facing text (section titles, theorem names, proof sketches, remarks, chapter preambles) and in ALL Lean docstrings, comments, and section names:
 
-### Banned terms → replacements:
+### Banned software-engineering terms → replacements:
 | Banned | Use instead |
 |--------|------------|
 | "Assembly" (as section/chapter title) | "Proof of [theorem]", "Construction", "Composition" |
@@ -60,7 +60,7 @@ The blueprint reads as a **mathematical document**, not software documentation. 
 | "Handoff" / "hand off" | "transition", "continuation", or drop entirely |
 | "In this blueprint" / "Within this blueprint" | "here", "in what follows", or omit |
 | "Honest" (as adjective for rigorous) | "exact", "faithful", "unconditional", "complete" |
-| "Glue layer" | "intermediate construction", "connecting results" |
+| "Glue layer" / "glue code" | "intermediate construction", "connecting results" |
 | "Re-export" / "reexport" | "provides", "re-states" |
 | "Wiring" / "wire up" | "connecting", "composing", "combining" |
 | "Package" (as noun for a data bundle) | "form", "data", "structure" |
@@ -68,6 +68,80 @@ The blueprint reads as a **mathematical document**, not software documentation. 
 | "Sorry-free" | acceptable only in Lean-specific technical context |
 | "Physics-oriented" | describe the mathematical property instead |
 | "[X] respects [Y]" (for equivariance) | "Multiplicativity of [X]", "[X] is equivariant under [Y]" |
+| "Boilerplate" | "routine setup", "standard prelude", or drop |
+| "Orchestrate" / "orchestration" | "combine", "compose", "arrange" |
+| "Workflow" (for a proof procedure) | "procedure", "construction", or omit |
+| "Plumbing" | "connecting results", "intermediate construction" |
+| "Scaffolding" (for a proof skeleton) | name by mathematical content, "preliminary framework" |
+| "Refactor" / "refactoring" (in prose) | "reorganize", "restate", "reformulate" |
+| "Deploy" / "deployed" (a lemma) | "apply", "use", "invoke" |
+| "Backend" / "frontend" | avoid entirely; name the mathematical object |
+| "API" (in blueprint prose) | avoid; describe the interface mathematically |
+| "Endpoint" (as software term) | avoid in blueprint prose |
+| "Wrapper" / "thin wrapper" | "equivalent formulation", "reformulation" |
+| "Hook" (as extension point) | "point of extension", or drop |
+| "Toolchain" | never in blueprint prose |
+| "Deprecate" / "deprecated" (in prose) | "supersede", "replace"; `@[deprecated]` tag is fine |
+| "First-class" / "first-class citizen" | "directly representable", or drop |
+| "Plug-and-play" / "drop-in" | "substitute", "replacement" |
+| "Out of the box" | "directly", "immediately" |
+| "Off-the-shelf" | drop or name the specific lemma |
+| "Stack" (as in tech stack) | avoid; name the specific structure |
+| "Harness" (as software harness) | "framework", or name by mathematical content |
+| "Utility" (as noun) | "auxiliary lemma", "supporting result" |
+| "Helper" (as noun) | "auxiliary lemma" |
+| "Stub" / "stubbed out" | "placeholder", or remove |
+| "Fixture" | never in blueprint prose |
+| "Dependency injection" | avoid; describe the mathematical dependency |
+| "Under the hood" | "internally", or drop |
+| "End-to-end" (as software metaphor) | describe the mathematical chain |
+
+### Banned LLM writing patterns → replacements:
+These are overused phrases typical of LLM output; they add no mathematical content and must not appear in the blueprint, Lean docstrings, or commit/PR prose:
+
+| Banned | Use instead |
+|--------|------------|
+| "Leverage" / "leverages" | "use", "apply" |
+| "Delve" / "delve into" | "examine", "study" |
+| "Dive into" / "dive deep" | "examine", "analyze" |
+| "Crucial" / "pivotal" / "vital" | "essential" or state the specific role |
+| "Seamlessly" | drop |
+| "Robust" (as vague adjective) | specify the property (e.g., "uniformly bounded") |
+| "Comprehensive" / "thorough" (vague) | drop or be specific |
+| "Navigate" (as metaphor) | use a plain verb |
+| "Underscore" / "underscores the importance" | "emphasize", "highlight", or drop |
+| "Tapestry" / "landscape" (as metaphor) | drop |
+| "Journey" / "embark on" | drop |
+| "Foster" (as metaphor) | "produce", "yield" |
+| "Elevate" (as metaphor) | "generalize", "lift" |
+| "Empower" | drop |
+| "Game-changer" / "revolutionize" | drop |
+| "Holistic" | drop or be specific |
+| "Streamline" | "simplify" |
+| "Synergy" / "synergies" | drop |
+| "Actionable" / "actionable insights" | drop |
+| "Meticulous" / "meticulously" | drop |
+| "In the realm of" | "in", or name the field |
+| "At the heart of" | "central to", "underlying" |
+| "It's important to note that" | drop (pure filler) |
+| "It is worth noting" / "worth mentioning" | drop |
+| "Moreover" / "furthermore" (as filler) | "also", or drop |
+| "In essence" / "essentially" (as filler) | drop |
+| "Ultimately" (as filler) | drop |
+| "Testament to" / "stands as a testament" | drop |
+| "Rich" (as vague adjective) | specify the structure |
+| "Powerful" (as vague adjective) | specify what it proves |
+| "Elegant" / "beautiful" / "profound" | drop; let the math speak |
+| "Insightful" / "provides insight" | drop |
+| "Shed light on" | "explain", "clarify" |
+| "Showcase" | "show", "present", "demonstrate" |
+| "Unveil" / "reveal" (as narration) | "show", "prove" |
+| "In summary" / "To conclude" / "In conclusion" (opening filler) | drop |
+| "Cutting-edge" / "state-of-the-art" | drop |
+| "Paradigm" / "paradigm shift" | drop |
+| "This document" / "this note" (self-reference) | drop, or replace with the mathematical context |
+| "We will see that" / "as we shall see" | drop; state the result directly |
+| "Let us" / "let's" (as hortative filler) | drop or use imperative |
 
 ### Additional rules:
 - **"Assembly" in Lean identifiers**: acceptable ONLY for `wielandt_blocked_assembly` and similar mathematical theorem names where "assembly" describes the mathematical step (assembling rank-one elements). NOT acceptable for file-organizational names.
