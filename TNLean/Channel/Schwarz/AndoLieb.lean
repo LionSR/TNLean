@@ -22,7 +22,7 @@ convexity/concavity consequences for matrix power functions.
 * `trace_rpow_convex` — `A ↦ Re Tr(A ^ p)` is convex on PSD
   matrices for `p ∈ [1, 2]`.
 * `lieb_concavity` — For `s ∈ [0, 1]` and fixed `K`, the map
-  `(A, B) ↦ Tr(K† A^s K B^{1−s})` is jointly concave on PD matrices.
+  `(A, B) ↦ Re Tr(K† A^s K B^{1−s})` is jointly concave on PD matrices.
 * `lieb_concavity_id` — the `K = 1` specialization: `(A, B) ↦ Re Tr(A^s B^{1−s})`
   is jointly concave on PD matrices.
 * `lieb_concavity_in_fst`, `lieb_concavity_in_snd` — separate concavity in
@@ -113,9 +113,9 @@ theorem trace_rpow_convex
 
 For `s ∈ [0, 1]`, any matrix `K`, and PD matrices `A₁, A₂, B₁, B₂`:
   `t · Re Tr(K† A₁^s K B₁^{1−s}) + (1 − t) · Re Tr(K† A₂^s K B₂^{1−s}) ≤
-     Re Tr(K† (t A₁ + (1−t) A₂)^s K (t B₁ + (1−t) B₂)^{1−s})`.
+     Re Tr(K† (t • A₁ + (1−t) • A₂)^s K (t • B₁ + (1−t) • B₂)^{1−s})`.
 
-This is equivalent to joint concavity of `(A, B) ↦ Tr(K† A^s K B^{1−s})`.
+This is equivalent to joint concavity of `(A, B) ↦ Re Tr(K† A^s K B^{1−s})`.
 
 Proved from `lieb_concavity_axiom` in `TNLean.Axioms.OperatorConvexity`. -/
 theorem lieb_concavity
