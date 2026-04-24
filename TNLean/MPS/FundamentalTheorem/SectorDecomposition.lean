@@ -40,20 +40,21 @@ namespace MPSTensor
 
 variable {d : ℕ}
 
-/-- **BNT basis data packaged with a sector decomposition.**
+/-- **Predicate asserting a sector decomposition's basis satisfies the BNT
+linear-independence condition.**
 
-`HasBNTSectorData P` says that the basis of the sector decomposition `P` is a
-basis of normal tensors in the sense of Def. 4.2 of arXiv:2011.12127: for all
+`HasBNTSectorData P` asserts that the basis of the sector decomposition `P` is
+a basis of normal tensors in the sense of Def. 4.2 of arXiv:2011.12127: for all
 sufficiently large system sizes `N`, the MPV states `mpvState (P.basis j) N`
-are linearly independent.
+are linearly independent.  It is a `Prop`; no data is bundled.
 
 This is exactly the linear-independence hypothesis consumed by the equal-case
 sector comparison theorems in this file, i.e.
 `fundamentalTheorem_equalMPV_sectorDecomposition` and the heterogeneous variants
 introduced in PR #844.  It is the predicate tracked by issue #876 as the output
 of a general BNT sector construction for the after-blocking canonical-form
-reduction, and is the BNT payload expected by the after-blocking sector
-endpoint of issue #877. -/
+reduction, and is the linear-independence hypothesis expected by the
+after-blocking sector endpoint of issue #877. -/
 def HasBNTSectorData (P : SectorDecomposition d) : Prop :=
   ∃ N0 : ℕ, ∀ N > N0,
     LinearIndependent ℂ (fun j : Fin P.basisCount => mpvState (P.basis j) N)
