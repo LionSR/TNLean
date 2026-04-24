@@ -38,10 +38,17 @@ exactly as the Hayashi / Ruskai / Hayden–Jozsa–Petz–Winter decomposition a
 available through `Entropy.QuantumMarkovDecomposition`.
 
 Lemma C.4 is further isolated to the finite-dimensional Perron–Frobenius step:
-for a primitive nonnegative matrix `T`, constant traces of positive powers force
-`T` to have rank one. We expose that step as the single hypothesis
-`Matrix.PrimitiveTracePowersConstantImpliesRankOne`, so the remaining gap is
-honestly localized and matches the paper one-to-one.
+for a primitive nonnegative matrix `T`, constant traces of positive powers are
+*claimed* (in the paper) to force `T` to have rank one. We expose that step as
+the single hypothesis `Matrix.PrimitiveTracePowersConstantImpliesRankOne`, so
+the remaining gap is exactly localized and matches the paper one-to-one.
+
+The universally quantified form of that claim is in fact false — see
+`TNLean/Archive/PerronFrobeniusRankOneCounterexample.lean` for an explicit
+3 × 3 witness. Callers of `MPOTensor.sal_zcl_implies_rank_one_T` must therefore
+discharge the hypothesis using additional structure on the specific `T` coming
+from the MPDO context (the η-operators are positive semidefinite in the paper's
+construction, which supplies the missing diagonalizability).
 
 ## References
 
@@ -76,7 +83,16 @@ rank-one factorization.
 This is intentionally packaged as a local hypothesis rather than a new global
 assumption. Once a genuine proof is formalized, downstream callers can simply
 supply that theorem here and the scoped result `MPOTensor.sal_zcl_implies_rank_one_T`
-will become unconditional. -/
+will become unconditional.
+
+**Note.** As a universally quantified statement over primitive nonnegative real
+matrices this implication is *false*: there exist primitive nonnegative
+matrices with `trace (T ^ k) = trace T` for all `k ≥ 1` but rank greater than
+one. An explicit machine-checked `3 × 3` witness is recorded in
+`TNLean/Archive/PerronFrobeniusRankOneCounterexample.lean`. Discharging the
+hypothesis in a specific MPDO context therefore requires additional structure
+on `T` (for instance positive semidefiniteness or diagonalizability over `ℂ`)
+that the caller must supply. -/
 def PrimitiveTracePowersConstantImpliesRankOne
     (T : Matrix (Fin n) (Fin n) ℝ) : Prop :=
   Matrix.IsPrimitive T → TracePowersConstant T → HasRankOneFactorization T
