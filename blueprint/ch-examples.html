@@ -173,26 +173,29 @@
   <a href="ch-channels.html#sec:stinespring"><span class="toc_ref">5.10</span> <span class="toc_entry">Stinespring dilation</span></a>
  </li>
 <li class="">
-  <a href="ch-channels.html#sec:povm_naimark"><span class="toc_ref">5.11</span> <span class="toc_entry">POVMs and Naimark dilation</span></a>
+  <a href="ch-channels.html#sec:ordered_cp"><span class="toc_ref">5.11</span> <span class="toc_entry">Ordered CP maps, Radon–Nikodym, and open-system representation</span></a>
+ </li>
+<li class="">
+  <a href="ch-channels.html#sec:povm_naimark"><span class="toc_ref">5.12</span> <span class="toc_entry">POVMs and Naimark dilation</span></a>
   <span class="expand-toc">▶</span>
   <ul class="sub-toc-2">
      <li class="">
-  <a href="ch-channels.html#subsec:trace_pairing_expansion"><span class="toc_ref">5.11.1</span> <span class="toc_entry">Trace-pairing expansion in transfer-matrix form</span></a>
+  <a href="ch-channels.html#subsec:trace_pairing_expansion"><span class="toc_ref">5.12.1</span> <span class="toc_entry">Trace-pairing expansion in transfer-matrix form</span></a>
  </li>
 <li class="">
-  <a href="ch-channels.html#subsec:svd_normal_form"><span class="toc_ref">5.11.2</span> <span class="toc_entry">SVD normal form (existence)</span></a>
+  <a href="ch-channels.html#subsec:svd_normal_form"><span class="toc_ref">5.12.2</span> <span class="toc_entry">SVD normal form (existence)</span></a>
  </li>
 
   </ul>
  </li>
 <li class="">
-  <a href="ch-channels.html#sec:channel_determinant"><span class="toc_ref">5.12</span> <span class="toc_entry">Determinant of a quantum channel</span></a>
+  <a href="ch-channels.html#sec:channel_determinant"><span class="toc_ref">5.13</span> <span class="toc_entry">Determinant of a quantum channel</span></a>
  </li>
 <li class="">
-  <a href="ch-channels.html#sec:fixed_point_algebra"><span class="toc_ref">5.13</span> <span class="toc_entry">Fixed-point algebra</span></a>
+  <a href="ch-channels.html#sec:fixed_point_algebra"><span class="toc_ref">5.14</span> <span class="toc_entry">Fixed-point algebra</span></a>
  </li>
 <li class="">
-  <a href="ch-channels.html#sec:quantum_dynamical_semigroups"><span class="toc_ref">5.14</span> <span class="toc_entry">Quantum dynamical semigroups</span></a>
+  <a href="ch-channels.html#sec:quantum_dynamical_semigroups"><span class="toc_ref">5.15</span> <span class="toc_entry">Quantum dynamical semigroups</span></a>
  </li>
 
   </ul>
@@ -991,11 +994,11 @@
   </div>
   <div class="definition_thmcontent">
   <p>   Set \(d = D = 2\). The GHZ tensor is the family \(\{ A^0, A^1\}  \subset M_{2}(\mathbb {C})\) defined by </p>
-<div class="displaymath" id="a0000001375">
+<div class="displaymath" id="a0000001387">
   \[  A^0 = |0\rangle \! \langle 0| = \operatorname{diag}(1,0), \qquad A^1 = |1\rangle \! \langle 1| = \operatorname{diag}(0,1).  \]
 </div>
 <p> For a system of \(N\) sites the resulting MPV is the GHZ state </p>
-<div class="displaymath" id="a0000001376">
+<div class="displaymath" id="a0000001388">
   \[  |\mathrm{GHZ}_N\rangle  = |0\rangle ^{\otimes N} + |1\rangle ^{\otimes N}.  \]
 </div>
 
@@ -1017,7 +1020,7 @@
 
     <a class="icon proof" href="ch-examples.html#thm:ghz_transfer_idempotent">#</a>
     
-    <a class="icon proof" href="ch-examples.html#a0000001377"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-examples.html#a0000001389"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1070,7 +1073,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001377">
+<div class="proof_wrapper" id="a0000001389">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1098,7 +1101,7 @@
 
     <a class="icon proof" href="ch-examples.html#thm:ghz_is_rfp">#</a>
     
-    <a class="icon proof" href="ch-examples.html#a0000001378"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-examples.html#a0000001390"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1155,7 +1158,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001378">
+<div class="proof_wrapper" id="a0000001390">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1183,7 +1186,7 @@
 
     <a class="icon proof" href="ch-examples.html#thm:ghz_not_injective">#</a>
     
-    <a class="icon proof" href="ch-examples.html#a0000001379"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-examples.html#a0000001391"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1236,7 +1239,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001379">
+<div class="proof_wrapper" id="a0000001391">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1264,7 +1267,7 @@
 
     <a class="icon proof" href="ch-examples.html#thm:ghz_z2_symmetric">#</a>
     
-    <a class="icon proof" href="ch-examples.html#a0000001380"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-examples.html#a0000001392"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1317,7 +1320,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001380">
+<div class="proof_wrapper" id="a0000001392">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1391,7 +1394,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   Set \(d = 3\) (spin-1) and \(D = 2\). The AKLT tensor is the family \(\{ A^0, A^1, A^2\}  \subset M_{2}(\mathbb {C})\) defined via the Pauli matrices by </p>
-<div class="displaymath" id="a0000001381">
+<div class="displaymath" id="a0000001393">
   \[  A^0 = \frac{1}{\sqrt{3}}\, \sigma _z, \qquad A^1 = \frac{\sqrt{2}}{\sqrt{3}}\, |0\rangle \! \langle 1|, \qquad A^2 = -\frac{\sqrt{2}}{\sqrt{3}}\, |1\rangle \! \langle 0|,  \]
 </div>
 <p> where \(\sigma _z = |0\rangle \! \langle 0| - |1\rangle \! \langle 1|\), so equivalently \(A^1 = \frac{1}{\sqrt{3}}\, \sigma _+\) and \(A^2 = -\frac{1}{\sqrt{3}}\, \sigma _-\) for \(\sigma _+ = \sqrt{2}\, |0\rangle \! \langle 1|\) and \(\sigma _- = \sqrt{2}\, |1\rangle \! \langle 0|\). Equivalently, the matrices are the Clebsch–Gordan coefficients coupling spin-\(1\) and spin-\(\tfrac 12\) to spin-\(\tfrac 12\). </p>
@@ -1618,7 +1621,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>  Set \(d = D = 2\). The cluster-state tensor is the family \(\{ A^0, A^1\}  \subset M_{2}(\mathbb {C})\) defined by </p>
-<div class="displaymath" id="a0000001382">
+<div class="displaymath" id="a0000001394">
   \[  A^0 = |+\rangle \! \langle 0| = \frac{1}{\sqrt{2}} \begin{pmatrix}  1 
 
 &  0 
@@ -1655,7 +1658,7 @@
 
     <a class="icon proof" href="ch-examples.html#thm:cluster_not_injective">#</a>
     
-    <a class="icon proof" href="ch-examples.html#a0000001383"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-examples.html#a0000001395"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1691,7 +1694,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001383">
+<div class="proof_wrapper" id="a0000001395">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1722,7 +1725,7 @@
   </div>
   <div class="remark_thmcontent">
   <p> Although the cluster-state tensor is not injective at length&#160;\(1\), the length-\(2\) blocked tensor is injective. Using \(\langle 0 | \pm  \rangle  = \tfrac {1}{\sqrt{2}}\), \(\langle 1 | + \rangle  = \tfrac {1}{\sqrt{2}}\), and \(\langle 1 | - \rangle  = -\tfrac {1}{\sqrt{2}}\), the four products \(A^{ij} = A^i A^j\) are </p>
-<div class="displaymath" id="a0000001384">
+<div class="displaymath" id="a0000001396">
   \[  A^{00} = \tfrac {1}{\sqrt{2}}|+\rangle \! \langle 0|,\quad A^{01} = \tfrac {1}{\sqrt{2}}|+\rangle \! \langle 1|,\quad A^{10} = \tfrac {1}{\sqrt{2}}|-\rangle \! \langle 0|,\quad A^{11} = -\tfrac {1}{\sqrt{2}}|-\rangle \! \langle 1|.  \]
 </div>
 <p> Since \(\{ |+\rangle ,|-\rangle \} \) and \(\{ \langle 0|,\langle 1|\} \) are bases, these four rank-one matrices are linearly independent and span&#160;\(M_{2}(\mathbb {C})\). </p>
