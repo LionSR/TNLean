@@ -1668,11 +1668,24 @@ Theorem~2 of~\cite{Molnar2018NormalPEPS}.
     \]
 \end{theorem}
 
+\begin{theorem}[Fundamental Theorem for injective PEPS, conditional on
+    bond-dimension equality]%
+    \label{thm:fundamentalTheorem_PEPS_of_bondDim}
+    \lean{TNLean.PEPS.fundamentalTheorem_PEPS_of_bondDim}
+    \notready
+    \uses{thm:gaugeConsistency, def:GaugeEquivPEPS, def:IsVertexInjective}
+    Given matching bond dimensions, two vertex-injective PEPS that generate the
+    same state are gauge-equivalent. This conditional form isolates the
+    bond-dimension obligation from the edge-centred consistency obligation of
+    \lean{TNLean.PEPS.gaugeConsistency}.
+\end{theorem}
+
 \begin{theorem}[Fundamental Theorem for injective PEPS]%
     \label{thm:fundamentalTheorem_PEPS}
     \lean{TNLean.PEPS.fundamentalTheorem_PEPS}
     \notready
-    \uses{thm:gaugeConsistency, def:GaugeEquivPEPS, def:IsVertexInjective}
+    \uses{thm:fundamentalTheorem_PEPS_of_bondDim, def:GaugeEquivPEPS,
+        def:IsVertexInjective}
     If two PEPS tensors on a simple graph are both vertex-injective and
     generate the same state, then they are gauge-equivalent
     (Theorem~2 of~\cite{Molnar2018NormalPEPS}).
