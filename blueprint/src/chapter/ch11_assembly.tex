@@ -421,6 +421,59 @@ single weighted block.
 	now aggregated over the multiplicity layers.
 \end{theorem}
 
+\begin{theorem}[Heterogeneous sector comparison after phase matching]%
+\label{thm:route_b_hetero_phase_match}
+	\lean{MPSTensor.fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_phaseMatch}
+	\leanok
+	\uses{def:paper_sector_data}
+	Let $P$ and $Q$ be sector decompositions. Assume there is a permutation
+	$\pi$ matching the basis blocks, the multiplicities satisfy
+	$r_j^P = r_{\pi(j)}^Q$, and for each $j$ there is a nonzero complex number
+	$\zeta_j$ such that
+	\[
+		V^{(N)}(Q_{\pi(j)})_\sigma = \zeta_j^N V^{(N)}(P_j)_\sigma
+	\]
+	for every $N$ and $\sigma$. If the total MPV families of $P$ and $Q$
+	agree and the basis blocks of $P$ are eventually linearly independent,
+	then for each $j$ the sector weight multiset of $P_j$ equals the
+	multiset obtained from that of $Q_{\pi(j)}$ by multiplication by~$\zeta_j$.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{thm:paper_decomp_formula, thm:route_b_equal}
+	Absorb the factors $\zeta_j$ into the sector weights of $Q$ and keep the
+	basis blocks of $P$. The phase-matching hypothesis and the sector
+	decomposition formula show that the resulting decomposition has the same
+	total MPV family as~$Q$, hence also as~$P$. One is then in the
+	shared-basis situation of Theorem~\ref{thm:route_b_equal}, which yields
+	the claimed equality of multisets.
+\end{proof}
+
+\begin{theorem}[Gauge-phase matched bases imply phase-matched sector comparison]%
+\label{thm:route_b_hetero_matched_basis}
+	\lean{MPSTensor.fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_matched_basis}
+	\leanok
+	\uses{def:paper_sector_data, def:gauge_phase_equiv}
+	Let $P$ and $Q$ be sector decompositions. Assume there is a permutation
+	$\pi$ matching the basis blocks, the multiplicities satisfy
+	$r_j^P = r_{\pi(j)}^Q$, and each matched pair of basis blocks is
+	gauge-phase equivalent. If the total MPV families of $P$ and $Q$ agree
+	and the basis blocks of $P$ are eventually linearly independent, then
+	for each $j$ the sector weight multiset of $P_j$ equals the multiset
+	obtained from that of $Q_{\pi(j)}$ after multiplication by the
+	corresponding gauge phase.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{thm:gauge_phase_mpv_scaling, thm:route_b_hetero_phase_match}
+	Gauge-phase equivalence gives the required phase-scaling identity for the
+	MPVs by Theorem~\ref{thm:gauge_phase_mpv_scaling}. The conclusion then
+	follows immediately from
+	Theorem~\ref{thm:route_b_hetero_phase_match}.
+\end{proof}
+
 \begin{remark}[Remaining step in the unconditional equal-case theorem]\notready
 	This chapter provides three complementary equal-case results:
 	\begin{enumerate}
@@ -445,15 +498,16 @@ single weighted block.
 		      after-blocking output, beyond the current special case where
 		      equal-modulus blocks on one side are already known to collapse
 		      to a single basis tensor; and
-		\item a heterogeneous sector-decomposition comparison theorem:
-		      given two such basis-of-normal-tensors decompositions with the
-		      same total MPV family, first match the basis tensors up to
-		      permutation and gauge phase, and only then compare the sector
-		      weight multisets after absorbing those phases.
+		\item a witness-producing matched-basis theorem for heterogeneous
+		      sector decompositions: the algebraic reduction after a basis
+		      matching is now formalized in
+		      Theorems~\ref{thm:route_b_hetero_phase_match}
+		      and~\ref{thm:route_b_hetero_matched_basis}, but one still needs
+		      a theorem that derives the permutation, multiplicity matching,
+		      and gauge-phase data directly from equality of the total MPV
+		      families.
 	\end{enumerate}
-	The theorem proved above supplies only the shared-basis part of the second
-	item.  Once these two ingredients are in place, the final global gauge matrix
+	Once these two ingredients are in place, the final global gauge matrix
 	of Corollary~IV.5 is obtained by the same phase-absorption and blockwise
-	assembly argument already formalized in the strict single-weight setting.
+	composition argument already formalized in the strict single-weight setting.
 \end{remark}
-

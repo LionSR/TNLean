@@ -268,7 +268,7 @@ endpoint. The remaining formalizations are now:
    permutation, gauge-phase data, and copy alignment from arbitrary equal total
    MPVs of two sector decompositions.
 
-3. **Final global assembly**: once steps 1–2 are available, combine them with the
+3. **Final global construction**: once steps 1–2 are available, combine them with the
    already-formalized common-period blocking, blocked irreducibility,
    `isNormal_of_tp_primitive_irreducible`, and the global gauge construction of
    the equal-case FT.

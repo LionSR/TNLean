@@ -416,17 +416,16 @@ theorem fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_phaseMatch
             simpa using (Q.mpv_toTensor_eq_sum_sectors (N := N) σ).symm
   have hEqual' : SameMPV₂ P.toTensor Q'.toTensor := by
     intro N σ
-    rw [hEqual N σ, (hTransport N σ).symm]
+    exact (hEqual N σ).trans (hTransport N σ).symm
   have hCopies' : ∀ j : Fin P.basisCount, P.sectors.copies j = T.copies j := by
     intro j
     simpa [T] using hCopies j
   have hMultiset :
       ∀ j : Fin P.basisCount,
         Finset.univ.val.map (P.weight j) =
-          Finset.univ.val.map (fun q => T.weight j (Fin.cast (hCopies' j) q)) := by
-    apply fundamentalTheorem_equalMPV_sectorDecomposition (basis := P.basis)
-      P.sectors T hCopies' hLI
-    simpa [Q', T] using hEqual'
+          Finset.univ.val.map (fun q => T.weight j (Fin.cast (hCopies' j) q)) :=
+      fundamentalTheorem_equalMPV_sectorDecomposition
+        (basis := P.basis) (S := P.sectors) (T := T) hCopies' hLI hEqual'
   refine ⟨ζFn, hζ_ne, ?_⟩
   intro j
   simpa [T] using hMultiset j
