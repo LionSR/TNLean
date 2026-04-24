@@ -60,6 +60,10 @@ omit [Fintype V] [DecidableRel G.Adj] in
     (edgeRightIncident (G := G) e).1 = e :=
   rfl
 
+omit [Fintype V] [DecidableRel G.Adj] in
+theorem edgeLeft_ne_edgeRight (e : Edge G) : e.1.1 ≠ e.1.2 :=
+  ne_of_lt e.2.1
+
 /-- The incident edges at `v` other than a chosen distinguished edge. -/
 abbrev OtherIncidentEdge (v : V) (ie : IncidentEdge G v) : Type _ :=
   { je : IncidentEdge G v // je ≠ ie }
@@ -169,8 +173,7 @@ theorem edgeLeftVertices_disjoint_edgeRightVertices (e : Edge G) :
   intro v hvLeft hvRight
   have hv₁ : v = e.1.1 := (mem_edgeLeftVertices e v).mp hvLeft
   have hv₂ : v = e.1.2 := (mem_edgeRightVertices e v).mp hvRight
-  have hne : e.1.1 ≠ e.1.2 := ne_of_lt e.2.1
-  exact hne <| hv₁.symm.trans hv₂
+  exact edgeLeft_ne_edgeRight e <| hv₁.symm.trans hv₂
 
 omit [DecidableRel G.Adj] in
 theorem edgeVertices_union (e : Edge G) :
@@ -203,14 +206,29 @@ omit [Fintype V] [DecidableRel G.Adj] in
   Finset.card_singleton _
 
 omit [DecidableRel G.Adj] in
+private theorem card_erase_erase_univ (a b : V) (hab : a ≠ b) :
+    (((Finset.univ : Finset V).erase a).erase b).card = Fintype.card V - 2 := by
+  have ha : a ∈ (Finset.univ : Finset V) := Finset.mem_univ _
+  have hb : b ∈ ((Finset.univ : Finset V).erase a) :=
+    Finset.mem_erase.mpr ⟨hab.symm, Finset.mem_univ _⟩
+  rw [Finset.card_erase_of_mem hb, Finset.card_erase_of_mem ha, Finset.card_univ]
+  rw [Nat.sub_sub]
+
+omit [DecidableRel G.Adj] in
+private theorem prod_univ_erase_erase {M : Type*} [CommMonoid M]
+    (a b : V) (hab : a ≠ b) (f : V → M) :
+    ∏ v : V, f v = f a * (∏ v ∈ (((Finset.univ : Finset V).erase a).erase b), f v) * f b := by
+  have ha : a ∈ (Finset.univ : Finset V) := Finset.mem_univ _
+  have hb : b ∈ ((Finset.univ : Finset V).erase a) :=
+    Finset.mem_erase.mpr ⟨hab.symm, Finset.mem_univ _⟩
+  rw [(Finset.mul_prod_erase _ f ha).symm, (Finset.mul_prod_erase _ f hb).symm]
+  simp [mul_left_comm, mul_comm]
+
+omit [DecidableRel G.Adj] in
 theorem edgeMiddleVertices_card (e : Edge G) :
     (edgeMiddleVertices e).card = Fintype.card V - 2 := by
-  have h1 : e.1.1 ∈ (Finset.univ : Finset V) := Finset.mem_univ _
-  have h2 : e.1.2 ∈ ((Finset.univ : Finset V).erase e.1.1) :=
-    Finset.mem_erase.mpr ⟨(ne_of_lt e.2.1).symm, Finset.mem_univ _⟩
-  change (((Finset.univ : Finset V).erase e.1.1).erase e.1.2).card = Fintype.card V - 2
-  rw [Finset.card_erase_of_mem h2, Finset.card_erase_of_mem h1, Finset.card_univ]
-  omega
+  simpa [edgeMiddleVertices] using
+    card_erase_erase_univ (V := V) e.1.1 e.1.2 (edgeLeft_ne_edgeRight e)
 
 omit [DecidableRel G.Adj] in
 /-- Products over the vertex set factor through the three-region partition at
@@ -218,16 +236,8 @@ any edge: the distinguished endpoints appear separately from the middle-region
 product. -/
 theorem prod_univ_splitAtEdge {M : Type*} [CommMonoid M] (e : Edge G) (f : V → M) :
     ∏ v : V, f v = f e.1.1 * (∏ v ∈ edgeMiddleVertices e, f v) * f e.1.2 := by
-  have h1 : e.1.1 ∈ (Finset.univ : Finset V) := Finset.mem_univ _
-  have h2 : e.1.2 ∈ ((Finset.univ : Finset V).erase e.1.1) :=
-    Finset.mem_erase.mpr ⟨(ne_of_lt e.2.1).symm, Finset.mem_univ _⟩
-  have hstep1 : ∏ v : V, f v =
-      f e.1.1 * ∏ v ∈ (Finset.univ : Finset V).erase e.1.1, f v :=
-    (Finset.mul_prod_erase _ f h1).symm
-  have hstep2 : ∏ v ∈ (Finset.univ : Finset V).erase e.1.1, f v =
-      f e.1.2 * ∏ v ∈ edgeMiddleVertices e, f v :=
-    (Finset.mul_prod_erase _ f h2).symm
-  rw [hstep1, hstep2, mul_comm (f e.1.2) _, ← mul_assoc]
+  simpa [edgeMiddleVertices] using
+    prod_univ_erase_erase (V := V) e.1.1 e.1.2 (edgeLeft_ne_edgeRight e) f
 
 /-- `stateCoeff` evaluates the two endpoint tensors against an independent
 product over the middle region. This isolates the two endpoints of an edge in
