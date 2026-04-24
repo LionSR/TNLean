@@ -561,6 +561,7 @@ strong subadditivity for a normalized three-site reduced state.
     \lean{MPSTensor.WordTupleSpanTop}
     \lean{MPSTensor.BlockEntryIndex}
     \lean{MPSTensor.wordEntryFamily}
+    \lean{MPSTensor.duplicateScalarBlocks_counterexample}
     \lean{MPSTensor.wordTupleSpanTop_of_wordEntryFamily_linearIndependent}
     \lean{MPSTensor.hasBlockSelectorWords_of_wordEntryFamily_linearIndependent}
     \lean{MPSTensor.HasBiCF}
@@ -600,6 +601,10 @@ strong subadditivity for a normalized three-site reduced state.
     the product-algebra spanning statement, hence to block selectors and a
     biCF witness. The corresponding constructor packages this endpoint
     directly into horizontal canonical-form data.
+    The duplicate-scalar counterexample shows that this finite-length witness
+    is genuinely stronger than blockwise injectivity, left-canonicality, and
+    nonzero weights alone: two identical scalar blocks satisfy those hypotheses
+    while no blocking length makes the entrywise family linearly independent.
 
     Proposition~IV.3 gives a concrete sufficient criterion for the spanning
     condition: after a common blocking length each block is block-injective,
