@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Channel.Basic
 import TNLean.Channel.KrausRepresentation
+import TNLean.Channel.KrausFreedom
 import Mathlib.Data.Matrix.Basis
 import Mathlib.Tactic.LinearCombination
 import Mathlib.Algebra.BigOperators.Ring.Finset
@@ -21,11 +22,9 @@ Wolf's *Quantum Channels & Operations: Guided Tour*:
 * **Prop 2.3** — no information without disturbance: any linear map fixing
   every rank-one self-outer-product is the identity. In particular, a
   quantum channel that leaves every pure state invariant is the identity.
-* **Prop 2.4** (sufficient direction) — equivalence of ensembles: two
-  pure-state ensembles related by an isometric mixing matrix yield the same
-  density operator, matching the Hughston–Jozsa–Wootters characterization.
-  The converse (necessity) requires Schmidt/purification machinery not yet
-  available in the repository.
+* **Prop 2.4** — equivalence of ensembles (Hughston–Jozsa–Wootters): two
+  pure-state ensembles are related by an isometric mixing matrix iff they
+  induce the same density operator. Both directions are formalised.
 
 ## Main results
 
@@ -40,6 +39,11 @@ Wolf's *Quantum Channels & Operations: Guided Tour*:
   a quantum channel fixing every pure-state projector is the identity.
 * `WolfProps.pureEnsembleDensity_eq_of_isometric_mixing` — Prop 2.4
   (sufficient direction): isometric mixing preserves the density operator.
+* `WolfProps.exists_isometric_mixing_of_pureEnsembleDensity_eq` — Prop 2.4
+  (necessary direction, HJW converse): equal densities force an isometric
+  mixing matrix between the two ensembles.
+* `WolfProps.pureEnsembleDensity_eq_iff_exists_isometric_mixing` — Prop 2.4
+  packaged as an iff.
 
 ## Design notes
 
@@ -47,9 +51,15 @@ The Prop 2.2 polarization is proved at the entry level by reducing to a
 scalar polarization identity in `ℂ` (which is closed by
 `linear_combination`). The Prop 2.3 reduction chain exploits the fact that
 rank-one outer products span `M_D(ℂ)` over `ℂ`, obtained by specializing
-the rank-one polarization to standard-basis vectors. The Prop 2.4 proof
-is a direct algebraic computation matching the abstract Kraus-freedom
-sufficient-direction lemma `kraus_same_map_of_isometry_combination`.
+the rank-one polarization to standard-basis vectors. The Prop 2.4
+sufficient direction is a direct algebraic computation matching the
+abstract Kraus-freedom sufficient-direction lemma
+`kraus_same_map_of_isometry_combination`; the HJW converse reduces to
+`kraus_rectangular_freedom'` by embedding each state vector as the `0`-th
+column of a `D × D` matrix (with zeros elsewhere). The density equality
+`ρ_ψ = ρ_φ` then forces the embedded Kraus families to define the same
+CP sandwich `X ↦ X_{0 0} · ρ`, and reading column `0` of the resulting
+rectangular isometry recovers the vector relation `ψᵢ = ∑ⱼ Vᵢⱼ · φⱼ`.
 
 ## References
 
@@ -264,9 +274,9 @@ If two pure-state ensembles `{ψᵢ}_{i ∈ ι₁}` and `{φⱼ}_{j ∈ ι₂}` 
 by an isometric mixing matrix `V : Matrix ι₁ ι₂ ℂ` (that is, `Vᴴ V = 1` and
 `ψᵢ = ∑ⱼ Vᵢⱼ • φⱼ`), then they induce the same density operator.
 
-The converse (necessity) — extracting such an isometry from equal density
-operators — requires Schmidt-decomposition machinery currently absent from
-the repository; see `TNLean/Channel/WolfChapter2Index.lean`. -/
+The converse (necessity) is
+`exists_isometric_mixing_of_pureEnsembleDensity_eq`, and both directions
+are packaged as `pureEnsembleDensity_eq_iff_exists_isometric_mixing`. -/
 theorem pureEnsembleDensity_eq_of_isometric_mixing
     {ι₁ ι₂ : Type*} [Fintype ι₁] [Fintype ι₂] [DecidableEq ι₂]
     (ψ : ι₁ → (Fin D → ℂ)) (φ : ι₂ → (Fin D → ℂ))
@@ -314,5 +324,149 @@ theorem pureEnsembleDensity_eq_of_isometric_mixing
           · simp
           · intro j' _ hj; simp [show j' ≠ j from hj]
           · simp
+
+/-- **Prop 2.4 (Wolf), necessary direction** (Hughston–Jozsa–Wootters
+converse). If two pure-state ensembles `{ψᵢ}_{i ∈ ι₁}` and
+`{φⱼ}_{j ∈ ι₂}` induce the same pure-ensemble density operator and
+`card ι₂ ≤ card ι₁`, then there exists a tall isometric mixing matrix
+`V : Matrix ι₁ ι₂ ℂ` with `Vᴴ V = 1` satisfying
+`ψᵢ = ∑ⱼ Vᵢⱼ • φⱼ`.
+
+The cardinality hypothesis is what makes `V` a tall isometry
+(`Vᴴ V = 1`, i.e. orthonormal columns). The symmetric case
+`card ι₁ ≤ card ι₂` is obtained by swapping the roles of `ψ` and `φ`.
+
+The proof reduces to rectangular Kraus freedom
+`kraus_rectangular_freedom'`. Embed each vector `ψᵢ`, `φⱼ` as the
+`0`-th column of a `D × D` matrix (zeros elsewhere). For any square
+input `X`, the embedded Kraus sandwiches evaluate entry-wise to
+`X_{0 0} • ρ`; the density equality therefore forces the two Kraus
+families to define the same CP map. Rectangular Kraus freedom supplies
+an isometry `V` relating them, and reading off column `0` of
+`Kᵢ = ∑ⱼ Vᵢⱼ • Lⱼ` recovers the vector relation. -/
+theorem exists_isometric_mixing_of_pureEnsembleDensity_eq
+    {ι₁ ι₂ : Type*} [Fintype ι₁] [Fintype ι₂] [DecidableEq ι₂]
+    (ψ : ι₁ → (Fin D → ℂ)) (φ : ι₂ → (Fin D → ℂ))
+    (hρ : pureEnsembleDensity ψ = pureEnsembleDensity φ)
+    (hCard : Fintype.card ι₂ ≤ Fintype.card ι₁) :
+    ∃ V : Matrix ι₁ ι₂ ℂ, Vᴴ * V = 1 ∧
+      ∀ i, ψ i = fun a => ∑ j, V i j * φ j a := by
+  -- Any inhabitant of `Fin D` yields the canonical column-`0` index. Factored
+  -- out once since the same `⟨0, _⟩` witness is needed both when forming the
+  -- CP-sandwich equality and when reading off column `0` of the resulting
+  -- rectangular isometry; bundling the `0 < D` derivation into a single `Fin D`
+  -- helper avoids rebuilding `Nat.pos_of_ne_zero` at each call site.
+  let c₀_of : Fin D → Fin D :=
+    fun a => ⟨0, Nat.pos_of_ne_zero (fun hDeq => (hDeq ▸ a).elim0)⟩
+  -- Embed each vector as the `0`-th column of a `D × D` matrix. Pattern-match
+  -- on the underlying `Nat` of `Fin D` so no `0 < D` hypothesis is needed to
+  -- form the column index, and the match reduces definitionally at `⟨0, _⟩`.
+  let K : ι₁ → Matrix (Fin D) (Fin D) ℂ :=
+    fun i => Matrix.of
+      (fun a c => match c with | ⟨0, _⟩ => ψ i a | ⟨_ + 1, _⟩ => 0)
+  let L : ι₂ → Matrix (Fin D) (Fin D) ℂ :=
+    fun j => Matrix.of
+      (fun a c => match c with | ⟨0, _⟩ => φ j a | ⟨_ + 1, _⟩ => 0)
+  have hK_apply : ∀ i a c,
+      K i a c = match c with | ⟨0, _⟩ => ψ i a | ⟨_ + 1, _⟩ => 0 :=
+    fun _ _ _ => rfl
+  have hL_apply : ∀ j a c,
+      L j a c = match c with | ⟨0, _⟩ => φ j a | ⟨_ + 1, _⟩ => 0 :=
+    fun _ _ _ => rfl
+  -- Helper: collapse a single-column Kraus sandwich `(M * X * Mᴴ)` at
+  -- entry `(a, b)` for any single vector `v` with column-`0` encoding.
+  -- Applied to each summand below for both the `ψ` and `φ` families.
+  have sandwich_entry : ∀ (v : Fin D → ℂ) (M : Matrix (Fin D) (Fin D) ℂ)
+      (hM : ∀ a c, M a c = match c with | ⟨0, _⟩ => v a | ⟨_ + 1, _⟩ => 0)
+      (X : Matrix (Fin D) (Fin D) ℂ) (a b : Fin D) (hD : 0 < D),
+      (M * X * Mᴴ) a b = v a * X ⟨0, hD⟩ ⟨0, hD⟩ * star (v b) := by
+    intro v M hM X a b hD
+    set c₀ : Fin D := ⟨0, hD⟩
+    simp only [Matrix.mul_apply, Matrix.conjTranspose_apply, hM]
+    have inner_c : ∀ d,
+        (∑ c, (match c with | ⟨0, _⟩ => v a | ⟨_ + 1, _⟩ => (0 : ℂ)) * X c d) =
+          v a * X c₀ d := by
+      intro d
+      -- `rw` closes the main equality via its `rfl` finisher: at `c₀ = ⟨0, _⟩`
+      -- the `match` reduces definitionally. Only the two side conditions of
+      -- `Finset.sum_eq_single` remain.
+      rw [Finset.sum_eq_single c₀]
+      · intro c _ hcne
+        obtain ⟨c, hc⟩ := c
+        cases c with
+        | zero => exact absurd rfl hcne
+        | succ _ => simp
+      · intro h; exact absurd (Finset.mem_univ _) h
+    simp_rw [inner_c]
+    rw [Finset.sum_eq_single c₀]
+    · intro d _ hdne
+      obtain ⟨d, hd⟩ := d
+      cases d with
+      | zero => exact absurd rfl hdne
+      | succ _ => simp
+    · intro h; exact absurd (Finset.mem_univ _) h
+  -- The two embedded Kraus families define the same CP sandwich map.
+  have hKraus : ∀ X : Matrix (Fin D) (Fin D) ℂ,
+      ∑ i, K i * X * (K i)ᴴ = ∑ j, L j * X * (L j)ᴴ := by
+    intro X
+    ext a b
+    -- `a : Fin D` produces the column-`0` witness via `c₀_of`.
+    let c₀ : Fin D := c₀_of a
+    -- Compute each side as `X c₀ c₀ * ρ_v a b`, then use `hρ`.
+    have lhs_eq : (∑ i, K i * X * (K i)ᴴ) a b =
+        X c₀ c₀ * (pureEnsembleDensity ψ) a b := by
+      rw [Matrix.sum_apply]
+      have each_i : ∀ i, (K i * X * (K i)ᴴ) a b =
+          ψ i a * X c₀ c₀ * star (ψ i b) :=
+        fun i => sandwich_entry (ψ i) (K i) (hK_apply i) X a b c₀.isLt
+      simp_rw [each_i]
+      simp only [pureEnsembleDensity, Matrix.sum_apply, Matrix.vecMulVec_apply,
+        Pi.star_apply, Finset.mul_sum]
+      refine Finset.sum_congr rfl (fun i _ => ?_)
+      ring
+    have rhs_eq : (∑ j, L j * X * (L j)ᴴ) a b =
+        X c₀ c₀ * (pureEnsembleDensity φ) a b := by
+      rw [Matrix.sum_apply]
+      have each_j : ∀ j, (L j * X * (L j)ᴴ) a b =
+          φ j a * X c₀ c₀ * star (φ j b) :=
+        fun j => sandwich_entry (φ j) (L j) (hL_apply j) X a b c₀.isLt
+      simp_rw [each_j]
+      simp only [pureEnsembleDensity, Matrix.sum_apply, Matrix.vecMulVec_apply,
+        Pi.star_apply, Finset.mul_sum]
+      refine Finset.sum_congr rfl (fun j _ => ?_)
+      ring
+    rw [lhs_eq, rhs_eq, hρ]
+  -- Apply rectangular Kraus freedom to extract the isometry `V`.
+  obtain ⟨V, hV_iso, hV_decomp⟩ := kraus_rectangular_freedom' K L hKraus hCard
+  refine ⟨V, hV_iso, ?_⟩
+  intro i
+  funext a
+  let c₀ : Fin D := c₀_of a
+  -- At `c₀ = ⟨0, _⟩` both match branches reduce definitionally, so
+  -- `K i a c₀ = ψ i a` and `L j a c₀ = φ j a` hold by `rfl`.
+  have hKic₀ : K i a c₀ = ψ i a := rfl
+  have hLjc₀ : ∀ j, L j a c₀ = φ j a := fun _ => rfl
+  -- Read off the `(a, c₀)` entry of `K i = ∑ j, V i j • L j`.
+  have h_entry := congr_fun (congr_fun (hV_decomp i) a) c₀
+  rw [hKic₀] at h_entry
+  simp only [Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul, hLjc₀] at h_entry
+  exact h_entry
+
+/-- **Prop 2.4 (Wolf), Hughston–Jozsa–Wootters equivalence**. Two
+pure-state ensembles `{ψᵢ}_{i ∈ ι₁}` and `{φⱼ}_{j ∈ ι₂}` with
+`card ι₂ ≤ card ι₁` induce the same pure-ensemble density operator iff
+they are related by a tall isometric mixing matrix
+`V : Matrix ι₁ ι₂ ℂ` with `Vᴴ V = 1` and `ψᵢ = ∑ⱼ Vᵢⱼ • φⱼ`. -/
+theorem pureEnsembleDensity_eq_iff_exists_isometric_mixing
+    {ι₁ ι₂ : Type*} [Fintype ι₁] [Fintype ι₂] [DecidableEq ι₂]
+    (ψ : ι₁ → (Fin D → ℂ)) (φ : ι₂ → (Fin D → ℂ))
+    (hCard : Fintype.card ι₂ ≤ Fintype.card ι₁) :
+    pureEnsembleDensity ψ = pureEnsembleDensity φ ↔
+      ∃ V : Matrix ι₁ ι₂ ℂ, Vᴴ * V = 1 ∧
+        ∀ i, ψ i = fun a => ∑ j, V i j * φ j a :=
+  ⟨fun hρ =>
+    exists_isometric_mixing_of_pureEnsembleDensity_eq ψ φ hρ hCard,
+   fun ⟨V, hV, hψ⟩ =>
+    pureEnsembleDensity_eq_of_isometric_mixing ψ φ V hV hψ⟩
 
 end WolfProps
