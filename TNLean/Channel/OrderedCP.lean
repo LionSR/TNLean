@@ -80,22 +80,6 @@ theorem Matrix.blockTopRows_apply (r s : ℕ) (i : Fin r) (j : Fin (r + s)) :
     blockTopRows r s i (Fin.castAdd s i) = 1 := by
   simp [Matrix.blockTopRows]
 
-theorem Matrix.castAdd_injective (r s : ℕ) :
-    Function.Injective (Fin.castAdd s : Fin r → Fin (r + s)) := by
-  intro k i h
-  have hval := Fin.val_eq_of_eq h
-  simp only [Fin.val_castAdd] at hval
-  exact Fin.ext hval
-
-theorem Matrix.blockTopRows_apply_natAdd (r s : ℕ) (i : Fin r) (k : Fin s) :
-    blockTopRows r s i (Fin.natAdd r k) = 0 := by
-  simp only [Matrix.blockTopRows]
-  refine if_neg ?_
-  intro h
-  have := Fin.val_eq_of_eq h
-  simp [Fin.natAdd, Fin.castAdd] at this
-  omega
-
 /-- `C * Cᴴ = 𝟙_r` for the block-top projector. -/
 theorem Matrix.blockTopRows_mul_conjTranspose (r s : ℕ) :
     (blockTopRows r s) * (blockTopRows r s)ᴴ = (1 : Matrix (Fin r) (Fin r) ℂ) := by
@@ -118,7 +102,7 @@ theorem Matrix.blockTopRows_mul_conjTranspose (r s : ℕ) :
       simp [hb]
     · intro hj; exact absurd (Finset.mem_univ (Fin.castAdd s i)) hj
   · have hcast : Fin.castAdd s i ≠ Fin.castAdd s i' := by
-      intro h; exact hii (Matrix.castAdd_injective r s h)
+      intro h; exact hii (Fin.castAdd_injective r s h)
     have hsum : ∑ j : Fin (r + s),
         (if j = Fin.castAdd s i ∧ j = Fin.castAdd s i' then (1 : ℂ) else 0) = 0 := by
       apply Finset.sum_eq_zero
@@ -156,7 +140,7 @@ theorem Matrix.blockTopRows_conjTranspose_mul_apply (r s : ℕ)
         by_cases hk : j = Fin.castAdd s k
         · have hkF : k = jFin := by
             have : Fin.castAdd s k = Fin.castAdd s jFin := hk.symm.trans hj
-            exact Matrix.castAdd_injective r s this
+            exact Fin.castAdd_injective r s this
           simp [hk, hkF]
         · have hkF : k ≠ jFin := by
             intro he; apply hk; rw [he]; exact hj

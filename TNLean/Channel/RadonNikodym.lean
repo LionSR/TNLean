@@ -84,35 +84,12 @@ theorem Matrix.blockDiagBotProj_posSemidef (r s : ℕ) :
   rw [Matrix.le_iff] at this
   exact this
 
-/-- `P_top` is Hermitian, needed when forming Kronecker products. -/
-theorem Matrix.blockDiagTopProj_isHermitian (r s : ℕ) :
-    (Matrix.blockDiagTopProj r s).IsHermitian :=
-  (Matrix.blockDiagTopProj_posSemidef r s).isHermitian
-
-/-- `P_bot` is Hermitian. -/
-theorem Matrix.blockDiagBotProj_isHermitian (r s : ℕ) :
-    (Matrix.blockDiagBotProj r s).IsHermitian :=
-  (Matrix.blockDiagBotProj_posSemidef r s).isHermitian
-
-/-! ### Entrywise formulas for the block projectors -/
+/-! ### Entrywise formula for the top-block projector -/
 
 theorem Matrix.blockDiagTopProj_apply (r s : ℕ) (j j' : Fin (r + s)) :
     Matrix.blockDiagTopProj r s j j' =
       if j = j' ∧ (j : ℕ) < r then 1 else 0 :=
   Matrix.blockTopRows_conjTranspose_mul_apply r s j j'
-
-theorem Matrix.blockDiagBotProj_apply (r s : ℕ) (j j' : Fin (r + s)) :
-    Matrix.blockDiagBotProj r s j j' =
-      if j = j' ∧ ¬ (j : ℕ) < r then 1 else 0 := by
-  simp only [Matrix.blockDiagBotProj, Matrix.sub_apply, Matrix.one_apply,
-    Matrix.blockDiagTopProj_apply]
-  by_cases hjj : j = j'
-  · subst hjj
-    by_cases hjr : (j : ℕ) < r
-    · simp [hjr]
-    · simp [hjr]
-  · have hne : j' ≠ j := fun h => hjj h.symm
-    simp [hjj]
 
 /-! ### The key Kronecker identity: `A ⊗ (CᴴC) = (𝟙 ⊗ C)ᴴ (A ⊗ 𝟙)(𝟙 ⊗ C)` -/
 
