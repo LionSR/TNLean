@@ -51,6 +51,29 @@ extract the coefficient family `c_{\alpha,\beta,\gamma}^{(L)}` of
 Theorem IV.13(ii), nor prove the converse algebra-to-fusion implication. Those
 steps still require the BNT / coefficient-comparison layer from Appendix C.3--C.4.
 
+### Why the converse algebra-to-fusion implication is blocked
+
+The lemma `adjoint_transferMap_apply_of_isRFP_MPDO_via_algebra` below extracts
+the strongest direct consequence of `IsRFP_MPDO_via_algebra M`: the inclusion
+maps `iota n` force every adjoint fixed point of the blocked transfer map to
+be an adjoint fixed point of the unblocked transfer map, and hence
+`Fix((blockedTransferMap M n).adjoint)` coincides with
+`Fix((transferMap M).adjoint)` for every `n ≥ 1`. This rules out nontrivial
+peripheral eigenvalues of `(transferMap M).adjoint`, but stops short of
+forcing `transferMap M` itself to be idempotent. Ergodic channels with a
+strict spectral gap on the `1`-complement therefore satisfy
+`IsRFP_MPDO_via_algebra M` without being MPDO RFPs: for example,
+`E(X) = ε · X + (1 - ε) · avgDiag(X)` on `M_D(ℂ)` with `0 < ε < 1` has
+peripheral spectrum `{1}` and diagonal fixed-point algebra at every blocking
+size, yet `E ∘ E ≠ E`.
+
+Closing the converse algebra-to-fusion implication therefore requires
+strengthening the predicate to the paper's full coefficient formulation -- the
+positive diagonal matrices `χ_{α,β,γ}` from Appendix C.3 and the coefficient
+identity `c^{(L)}_{α,β,γ} = tr(χ_{α,β,γ}^L)` from Appendix C.4. The scalar
+Newton--Girard layer needed for the latter step is already available at
+`TNLean.Algebra.ScalarPowerSumIdentity`.
+
 ## References
 
 * [CPGSV17] arXiv:1606.00608, §4.5 and Appendix C.3--C.4
@@ -389,6 +412,45 @@ theorem coe_iota_eq_sum_blockedInclusionCoefficients
       (data := data) (n := n + 1) (a := data.blockedInclusionCoefficients n i)
 
 end AlgebraStructureData
+
+/-- The algebra-structure RFP predicate forces every adjoint fixed point of the
+blocked transfer map to be an adjoint fixed point of the unblocked transfer
+map.
+
+Concretely, compatibility at size `n` places `X` in `data.A n`; the inclusion
+`data.iota n` lifts `X` into `data.A (n + 1)`, whence compatibility at size
+`n + 1` yields `(blockedTransferMap M (n + 1)).adjoint X = X`. Rewriting
+`blockedTransferMap M (n + 1) = blockedTransferMap M n ∘ₗ transferMap M`
+through `pow_succ` and applying `LinearMap.adjoint_comp` then extracts
+`(transferMap M).adjoint X = X`.
+
+This is the strongest consequence available from the current
+`IsRFP_MPDO_via_algebra` predicate: it rules out nontrivial peripheral
+eigenvalues of `(transferMap M).adjoint`, but is still not enough to force
+`transferMap M` to be idempotent. See the module docstring for the blocker
+on the converse algebra-to-fusion implication. -/
+theorem adjoint_transferMap_apply_of_isRFP_MPDO_via_algebra
+    {M : MPOTensor d D} (hAlg : IsRFP_MPDO_via_algebra M)
+    {n : ℕ} (hn : 0 < n) {X : Mat}
+    (hX : (blockedTransferMap M n).adjoint X = X) :
+    (transferMap M).adjoint X = X := by
+  obtain ⟨data, hCompat⟩ := hAlg
+  have hXn : X ∈ data.A n := (hCompat n hn X).2 hX
+  have hXsuc : X ∈ data.A (n + 1) := by
+    have hι : ((data.iota n ⟨X, hXn⟩ : data.A (n + 1)) : Mat) = X := by
+      simpa using data.iota_apply n ⟨X, hXn⟩
+    rw [← hι]
+    exact (data.iota n ⟨X, hXn⟩).property
+  have hXsucFix : (blockedTransferMap M (n + 1)).adjoint X = X :=
+    (hCompat (n + 1) (Nat.succ_pos n) X).1 hXsuc
+  have hPow : blockedTransferMap M (n + 1) =
+      blockedTransferMap M n ∘ₗ transferMap M := by
+    simp only [blockedTransferMap_eq_pow, pow_succ, Module.End.mul_eq_comp]
+  have hAdj : (blockedTransferMap M (n + 1)).adjoint X =
+      (transferMap M).adjoint X := by
+    rw [hPow, LinearMap.adjoint_comp, LinearMap.comp_apply, hX]
+  rw [hAdj] at hXsucFix
+  exact hXsucFix
 
 end MPOTensor
 
