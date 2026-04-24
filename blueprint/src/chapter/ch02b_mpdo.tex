@@ -576,24 +576,27 @@ strong subadditivity for a normalized three-site reduced state.
         w \longmapsto (A_k^w)_k
     \]
     in the direct product of the block matrix algebras.
-    The finite-length spanning hypothesis says that these tuples span the
-    whole product algebra.
+    The finite-length spanning condition asks that these tuples span the full
+    product algebra.
     Equivalently, if matrices $\Delta_k$ satisfy
     \[
         \sum_k \tr(\Delta_k A_k^w) = 0
         \qquad \text{for every word } w \text{ of length } L,
     \]
-    then every $\Delta_k$ vanishes. This is the nondegeneracy statement for
-    the product trace pairing, so a single finite blocking length already
-    separates the blocks by their word evaluations.
+    then every $\Delta_k$ vanishes, by nondegeneracy of the product trace
+    pairing; a single finite blocking length already separates the blocks by
+    their word evaluations. Combined with injectivity, left-canonicality, and
+    nonzero block weights, this finite-length separation yields the horizontal
+    canonical-form data of the block-diagonal tensor.
 
-    Proposition~IV.3 gives a concrete sufficient criterion for this
-    finite-length separation: after some common blocking length, each block is
-    block-injective, and after a second finite blocking length one can form
-    word combinations which equal the identity on one chosen block and vanish
+    Proposition~IV.3 gives a concrete sufficient criterion for the spanning
+    condition: after a common blocking length each block is block-injective,
+    and after a further finite blocking length one can form linear combinations
+    of word evaluations which equal the identity on one chosen block and vanish
     on all others. Concatenating an injective prefix with such a selector
-    suffix yields the product-algebra span condition above, and therefore the
-    horizontal canonical-form conclusion.
+    suffix produces the product-algebra spanning condition above, so the
+    selector-word hypotheses of Proposition~IV.3 also deliver the horizontal
+    canonical-form data.
 \end{remark}
 
 \begin{theorem}[Abstract Proposition~IV.3 package]
