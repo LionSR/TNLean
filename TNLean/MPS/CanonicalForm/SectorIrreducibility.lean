@@ -36,13 +36,16 @@ including `pairwise_mul_zero_of_orthogonalProjection_sum_one`,
 `hFixUpgrade_of_peripheral`,
 `SectorFixedPointAlgebraRigidity`,
 `hProjStep_of_sectorFixedPointAlgebraRigidity`,
+`sectorFixedPointAlgebraRigidity_of_irreducible_cyclicDecomp`,
 `hLift_cyclicDecomp_mps_of_fixUpgrade`,
 `hLift_cyclicDecomp_mps_of_projStep`,
 `hLift_cyclicDecomp_mps_of_sectorFixedPointAlgebraRigidity`,
+`hLift_cyclicDecomp_mps`,
 `isIrreducibleOnCorner_of_cyclic_decomp_mps_of_hLift`,
 `isIrreducibleOnCorner_of_cyclic_decomp_mps_of_projStep`,
-`isIrreducibleOnCorner_of_cyclic_decomp_mps_of_fixUpgrade`, and
-`isIrreducibleOnCorner_of_cyclic_decomp_mps_of_sectorFixedPointAlgebraRigidity`.
+`isIrreducibleOnCorner_of_cyclic_decomp_mps_of_fixUpgrade`,
+`isIrreducibleOnCorner_of_cyclic_decomp_mps_of_sectorFixedPointAlgebraRigidity`, and
+`isIrreducibleOnCorner_of_cyclic_decomp_mps`.
 
 ## Tags
 
