@@ -22,7 +22,7 @@ functions in the Schwarz chapter namespace.
   matrices for `p ∈ [1, 2]`.
 * `lieb_concavity` — For `s ∈ [0, 1]` and fixed `K`, the map
   `(A, B) ↦ Tr(K† A^s K B^{1−s})` is jointly concave on PD matrices.
-* `lieb_concavity_id` — the `K = 1` specialization: `(A, B) ↦ Tr(A^s B^{1−s})`
+* `lieb_concavity_id` — the `K = 1` specialization: `(A, B) ↦ Re Tr(A^s B^{1−s})`
   is jointly concave on PD matrices.
 * `lieb_concavity_in_fst`, `lieb_concavity_in_snd` — separate concavity in
   each of the two positive-definite arguments with the other fixed.
@@ -131,7 +131,7 @@ theorem lieb_concavity
 For `s ∈ [0, 1]` and PD matrices `A₁, A₂, B₁, B₂`, the map
 `(A, B) ↦ Re Tr(A^s B^{1−s})` is jointly concave:
   `t · Re Tr(A₁^s B₁^{1−s}) + (1 − t) · Re Tr(A₂^s B₂^{1−s}) ≤
-     Re Tr((t A₁ + (1 − t) A₂)^s (t B₁ + (1 − t) B₂)^{1−s})`.
+     Re Tr((t • A₁ + (1 − t) • A₂)^s (t • B₁ + (1 − t) • B₂)^{1−s})`.
 
 Obtained from `lieb_concavity` by setting `K = 1`. -/
 theorem lieb_concavity_id
@@ -151,7 +151,7 @@ theorem lieb_concavity_id
 
 With `B, K` fixed, `A ↦ Re Tr(Kᴴ A^s K B^{1−s})` is concave on PD matrices:
   `t · Re Tr(Kᴴ A₁^s K B^{1−s}) + (1 − t) · Re Tr(Kᴴ A₂^s K B^{1−s}) ≤
-     Re Tr(Kᴴ (t A₁ + (1 − t) A₂)^s K B^{1−s})`.
+     Re Tr(Kᴴ (t • A₁ + (1 − t) • A₂)^s K B^{1−s})`.
 
 Obtained from `lieb_concavity` by setting `B₁ = B₂ = B`. -/
 theorem lieb_concavity_in_fst
@@ -163,16 +163,14 @@ theorem lieb_concavity_in_fst
       (1 - t) * (trace (Kᴴ * A₂ ^ s * K * B ^ (1 - s))).re ≤
     (trace (Kᴴ * (t • A₁ + (1 - t) • A₂) ^ s * K * B ^ (1 - s))).re := by
   have h := lieb_concavity hs hA₁ hA₂ hB hB (K := K) ht
-  have hB_eq : t • B + (1 - t) • B = B := by
-    exact smul_add_one_sub_smul
-  rw [hB_eq] at h
-  exact h
+  have hB_eq : t • B + (1 - t) • B = B := smul_add_one_sub_smul
+  rwa [hB_eq] at h
 
 /-- **Lieb concavity in the second argument.**
 
 With `A, K` fixed, `B ↦ Re Tr(Kᴴ A^s K B^{1−s})` is concave on PD matrices:
   `t · Re Tr(Kᴴ A^s K B₁^{1−s}) + (1 − t) · Re Tr(Kᴴ A^s K B₂^{1−s}) ≤
-     Re Tr(Kᴴ A^s K (t B₁ + (1 − t) B₂)^{1−s})`.
+     Re Tr(Kᴴ A^s K (t • B₁ + (1 − t) • B₂)^{1−s})`.
 
 Obtained from `lieb_concavity` by setting `A₁ = A₂ = A`. -/
 theorem lieb_concavity_in_snd
@@ -184,9 +182,7 @@ theorem lieb_concavity_in_snd
       (1 - t) * (trace (Kᴴ * A ^ s * K * B₂ ^ (1 - s))).re ≤
     (trace (Kᴴ * A ^ s * K * (t • B₁ + (1 - t) • B₂) ^ (1 - s))).re := by
   have h := lieb_concavity hs hA hA hB₁ hB₂ (K := K) ht
-  have hA_eq : t • A + (1 - t) • A = A := by
-    exact smul_add_one_sub_smul
-  rw [hA_eq] at h
-  exact h
+  have hA_eq : t • A + (1 - t) • A = A := smul_add_one_sub_smul
+  rwa [hA_eq] at h
 
 end
