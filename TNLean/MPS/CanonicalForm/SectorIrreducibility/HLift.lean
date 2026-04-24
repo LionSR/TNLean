@@ -152,6 +152,50 @@ theorem hFixUpgrade_of_peripheral
     Kraus.posSemidef_eq_zero_of_posDef_trace_mul_eq_zero hGap_psd hρ_pd htr_gap
   exact (sub_eq_zero.mp hGap_zero).symm
 
+/-- Recover a sector-supported operator from its orbit sum by compressing the orbit sum back to
+its original sector. -/
+private theorem recover_supported_from_orbitSumProjection
+    [NeZero m]
+    {T : MatrixEnd D}
+    (P : Fin m → MatrixAlg D)
+    (hPproj : ∀ k : Fin m, IsOrthogonalProjection (P k))
+    (hPsum : ∑ k : Fin m, P k = 1)
+    (hcyclic : ∀ k : Fin m, T (P (k + 1)) = P k)
+    (hMulLeft : ∀ k : Fin m, ∀ X : MatrixAlg D, T (P k * X) = T (P k) * T X)
+    (hMulRight : ∀ k : Fin m, ∀ X : MatrixAlg D, T (X * P k) = T X * T (P k))
+    {k : Fin m} {X : MatrixAlg D}
+    (hXP : X * P k = X)
+    (hPX : P k * X = X) :
+    P k * orbitSumProjection (D := D) (m := m) T X * P k = X := by
+  have hsupp :=
+    orbit_iterate_supported_on_shifted_sector
+      (T := T) (P := P) hcyclic hMulLeft hMulRight (k := k) (Q := X) hXP hPX
+  have hPPair := pairwise_mul_zero_of_orthogonalProjection_sum_one (P := P) hPproj hPsum
+  simp only [orbitSumProjection, Finset.mul_sum, Finset.sum_mul]
+  rw [Finset.sum_eq_single (0 : Fin m)]
+  · simp only [Fin.val_zero, pow_zero, Module.End.one_apply]
+    calc
+      P k * X * P k = X * P k := by rw [hPX]
+      _ = X := hXP
+  · intro l _ hne
+    have hsupp_l := hsupp l
+    have h_left : P (k - l) * (T ^ (l : ℕ)) X = (T ^ (l : ℕ)) X := hsupp_l.2
+    have hPneq : (k - l : Fin m) ≠ k := by
+      intro heq
+      apply hne
+      have hk0 : k - l = k - 0 := by simpa using heq
+      exact sub_right_injective hk0
+    have hP0 : P k * P (k - l) = 0 := hPPair (Ne.symm hPneq)
+    calc
+      P k * ((T ^ (l : ℕ)) X) * P k = P k * (P (k - l) * (T ^ (l : ℕ)) X) * P k := by
+        rw [h_left]
+      _ = (P k * P (k - l)) * ((T ^ (l : ℕ)) X) * P k := by
+            rw [← mul_assoc (P k) (P (k - l)) ((T ^ (l : ℕ)) X)]
+      _ = 0 * ((T ^ (l : ℕ)) X) * P k := by rw [hP0]
+      _ = 0 := by simp
+  · intro hmem
+    exact absurd (Finset.mem_univ (0 : Fin m)) hmem
+
 /-- Orbit-sum lift producing the `hLift` hypothesis required by
 `isIrreducible_restriction_of_cyclic_decomp`.
 
@@ -313,30 +357,9 @@ theorem hLift_cyclicDecomp_mps_of_fixUpgrade
   · -- Full-sector equivalence
     -- Forward: Q = P k ⇒ R = orbitSumProjection T (P k) = 1 (by full_sector lemma)
     -- Reverse: use P k * R * P k = Q, so R = 1 ⇒ P k = Q
-    have hPRP : P k * (orbitSumProjection (D := D) (m := m) T Q) * P k = Q := by
-      simp only [orbitSumProjection, Finset.mul_sum, Finset.sum_mul]
-      rw [Finset.sum_eq_single (0 : Fin m)]
-      · simp only [Fin.val_zero, pow_zero, Module.End.one_apply]
-        calc P k * Q * P k = Q * P k := by rw [hPQ]
-          _ = Q := hQP
-      · intros l _ hne
-        have hsupp_l := hsupp l
-        have h_left : P (k - l) * (T ^ (l : ℕ)) Q = (T ^ (l : ℕ)) Q := hsupp_l.2
-        have hPneq : (k - l : Fin m) ≠ k := by
-          intro heq
-          apply hne
-          have hk0 : k - l = k - 0 := by simpa using heq
-          exact sub_right_injective hk0
-        have hP0 : P k * P (k - l) = 0 := hPPair (Ne.symm hPneq)
-        calc P k * ((T ^ (l : ℕ)) Q) * P k
-            = P k * (P (k - l) * (T ^ (l : ℕ)) Q) * P k := by rw [h_left]
-          _ = (P k * P (k - l)) * ((T ^ (l : ℕ)) Q) * P k := by
-                rw [← mul_assoc (P k) (P (k - l)) ((T ^ (l : ℕ)) Q)]
-          _ = 0 * ((T ^ (l : ℕ)) Q) * P k := by rw [hP0]
-          _ = 0 := by
-                simp only [Matrix.zero_mul]
-      · intro hmem
-        exact absurd (Finset.mem_univ (0 : Fin m)) hmem
+    have hPRP : P k * (orbitSumProjection (D := D) (m := m) T Q) * P k = Q :=
+      recover_supported_from_orbitSumProjection
+        (D := D) (m := m) (T := T) P hPproj hPsum hcyclic hMulLeft hMulRight hQP hPQ
     refine ⟨?_, ?_⟩
     · intro hQ
       rw [hQ]
@@ -569,50 +592,6 @@ theorem hProjStep_of_sectorFixedPointAlgebraRigidity
       T X * T X = T (X * X) := hmul.symm
       _ = T X := by rw [hXproj.2]
 
-/-- Recover a sector-supported operator from its orbit sum by compressing the orbit sum back to
-its original sector. -/
-private theorem recover_supported_from_orbitSumProjection
-    [NeZero m]
-    {T : MatrixEnd D}
-    (P : Fin m → MatrixAlg D)
-    (hPproj : ∀ k : Fin m, IsOrthogonalProjection (P k))
-    (hPsum : ∑ k : Fin m, P k = 1)
-    (hcyclic : ∀ k : Fin m, T (P (k + 1)) = P k)
-    (hMulLeft : ∀ k : Fin m, ∀ X : MatrixAlg D, T (P k * X) = T (P k) * T X)
-    (hMulRight : ∀ k : Fin m, ∀ X : MatrixAlg D, T (X * P k) = T X * T (P k))
-    {k : Fin m} {X : MatrixAlg D}
-    (hXP : X * P k = X)
-    (hPX : P k * X = X) :
-    P k * orbitSumProjection (D := D) (m := m) T X * P k = X := by
-  have hsupp :=
-    orbit_iterate_supported_on_shifted_sector
-      (T := T) (P := P) hcyclic hMulLeft hMulRight (k := k) (Q := X) hXP hPX
-  have hPPair := pairwise_mul_zero_of_orthogonalProjection_sum_one (P := P) hPproj hPsum
-  simp only [orbitSumProjection, Finset.mul_sum, Finset.sum_mul]
-  rw [Finset.sum_eq_single (0 : Fin m)]
-  · simp only [Fin.val_zero, pow_zero, Module.End.one_apply]
-    calc
-      P k * X * P k = X * P k := by rw [hPX]
-      _ = X := hXP
-  · intro l _ hne
-    have hsupp_l := hsupp l
-    have h_left : P (k - l) * (T ^ (l : ℕ)) X = (T ^ (l : ℕ)) X := hsupp_l.2
-    have hPneq : (k - l : Fin m) ≠ k := by
-      intro heq
-      apply hne
-      have hk0 : k - l = k - 0 := by simpa using heq
-      exact sub_right_injective hk0
-    have hP0 : P k * P (k - l) = 0 := hPPair (Ne.symm hPneq)
-    calc
-      P k * ((T ^ (l : ℕ)) X) * P k = P k * (P (k - l) * (T ^ (l : ℕ)) X) * P k := by
-        rw [h_left]
-      _ = (P k * P (k - l)) * ((T ^ (l : ℕ)) X) * P k := by
-            rw [← mul_assoc (P k) (P (k - l)) ((T ^ (l : ℕ)) X)]
-      _ = 0 * ((T ^ (l : ℕ)) X) * P k := by rw [hP0]
-      _ = 0 := by simp
-  · intro hmem
-    exact absurd (Finset.mem_univ (0 : Fin m)) hmem
-
 /-- In an irreducible unital cyclic decomposition, any `T^m`-fixed element supported on one
 sector is a scalar multiple of the corresponding sector projection.
 
@@ -712,7 +691,7 @@ theorem sectorFixedPointAlgebraRigidity_of_irreducible_cyclicDecomp
     sector_supported_pow_fixed_eq_smul_projection
       (A := A) (m := m) hIrrAdj hTP P hPproj hPsum hcyclic hMulLeft hMulRight hXP hPX
       (by simpa [T] using hXfix)
-  obtain ⟨d, hcY⟩ :=
+  obtain ⟨cY, hcY⟩ :=
     sector_supported_pow_fixed_eq_smul_projection
       (A := A) (m := m) hIrrAdj hTP P hPproj hPsum hcyclic hMulLeft hMulRight hYP hPY
       (by simpa [T] using hYfix)
@@ -720,13 +699,13 @@ theorem sectorFixedPointAlgebraRigidity_of_irreducible_cyclicDecomp
     simpa [T, show k - 1 + 1 = k by abel] using hcyclic (k - 1)
   rw [hcX, hcY]
   calc
-    T ((c • P k) * (d • P k)) = T ((d * c) • P k) := by
-          simp [smul_smul, (hPproj k).2, mul_comm]
-    _ = (d * c) • P (k - 1) := by simp [hTPk, T]
-    _ = (c • P (k - 1)) * (d • P (k - 1)) := by
-          simp [smul_smul, (hPproj (k - 1)).2, mul_comm]
-    _ = T (c • P k) * T (d • P k) := by
-          simp [hTPk, T, smul_smul, mul_comm]
+    T ((c • P k) * (cY • P k)) = T ((cY * c) • P k) := by
+          simp [smul_smul, (hPproj k).2]
+    _ = (cY * c) • P (k - 1) := by simp [hTPk, T]
+    _ = (c • P (k - 1)) * (cY • P (k - 1)) := by
+          simp [smul_smul, (hPproj (k - 1)).2]
+    _ = T (c • P k) * T (cY • P k) := by
+          simp [hTPk, T, smul_smul]
 
 private theorem orbit_iterate_fixed_of_pow_fix
     [NeZero m]
@@ -886,32 +865,9 @@ theorem hLift_cyclicDecomp_mps_of_sectorFixedPointAlgebraRigidity
       have := hRQ
       rw [hR0] at this
       simpa using this.symm
-  · have hPRP : P k * (orbitSumProjection (D := D) (m := m) T Q) * P k = Q := by
-      simp only [orbitSumProjection, Finset.mul_sum, Finset.sum_mul]
-      rw [Finset.sum_eq_single (0 : Fin m)]
-      · simp only [Fin.val_zero, pow_zero, Module.End.one_apply]
-        calc
-          P k * Q * P k = Q * P k := by rw [hPQ]
-          _ = Q := hQP
-      · intros l _ hne
-        have hsupp_l := hsupp l
-        have h_left : P (k - l) * (T ^ (l : ℕ)) Q = (T ^ (l : ℕ)) Q := hsupp_l.2
-        have hPneq : (k - l : Fin m) ≠ k := by
-          intro heq
-          apply hne
-          have hk0 : k - l = k - 0 := by simpa using heq
-          exact sub_right_injective hk0
-        have hP0 : P k * P (k - l) = 0 := hPPair (Ne.symm hPneq)
-        calc
-          P k * ((T ^ (l : ℕ)) Q) * P k = P k * (P (k - l) * (T ^ (l : ℕ)) Q) * P k := by
-            rw [h_left]
-          _ = (P k * P (k - l)) * ((T ^ (l : ℕ)) Q) * P k := by
-                rw [← mul_assoc (P k) (P (k - l)) ((T ^ (l : ℕ)) Q)]
-          _ = 0 * ((T ^ (l : ℕ)) Q) * P k := by rw [hP0]
-          _ = 0 := by
-                simp only [Matrix.zero_mul]
-      · intro hmem
-        exact absurd (Finset.mem_univ (0 : Fin m)) hmem
+  · have hPRP : P k * (orbitSumProjection (D := D) (m := m) T Q) * P k = Q :=
+      recover_supported_from_orbitSumProjection
+        (D := D) (m := m) (T := T) P hPproj hPsum hcyclic hMulLeft hMulRight hQP hPQ
     refine ⟨?_, ?_⟩
     · intro hQ
       rw [hQ]
