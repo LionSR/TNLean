@@ -69,6 +69,7 @@ gh workflow run "Full documentation" --repo LionSR/TNLean --ref main
 /blueprint/          ← leanblueprint web output
 /blueprint.pdf       ← leanblueprint PDF
 /docs/               ← doc-gen4 API documentation
+/badges/             ← Shields.io endpoint JSON for README status badges
 ```
 
 ## Setup

@@ -1584,8 +1584,9 @@ The following results separate the zero blocks from the
 \end{definition}
 
 \begin{proof}\leanok
-	This is the formal statement of the missing Wolf-style fixed-point-algebra
-	rigidity statement suggested by Lemma~\texttt{lem:bdcf}.
+	This is the abstract multiplicativity property used in the orbit-sum
+	construction. Theorem~\ref{thm:sector_fixed_algebra_irred_cyclic} shows
+	that it is automatic in the irreducible trace-preserving cyclic setting.
 \end{proof}
 
 \begin{lemma}[Projection step from sector fixed-point-algebra rigidity]%
@@ -1607,6 +1608,36 @@ The following results separate the zero blocks from the
 	\]
 	since $X^2 = X$ for an orthogonal projection. Therefore $T(X)$ is again an
 	orthogonal projection.
+\end{proof}
+
+\begin{theorem}[Sector fixed-point-algebra rigidity from irreducibility]%
+	\label{thm:sector_fixed_algebra_irred_cyclic}
+	\lean{MPSTensor.sectorFixedPointAlgebraRigidity_of_irreducible_cyclicDecomp}
+	\leanok
+	\uses{def:sector_fixed_point_algebra_rigidity, lem:orbit_sum_fixed}
+	Let $A$ be a left-canonical MPS tensor with irreducible adjoint transfer map,
+	and let $(P_k)_{k=1}^m$ be cyclic orthogonal sector projections with
+	$\sum_k P_k = \Id$. Then the sector fixed-point-algebra rigidity property
+	holds automatically for $\E_A^\dagger$.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{def:sector_fixed_point_algebra_rigidity, lem:orbit_sum_fixed}
+	Fix $k$ and let $X,Y$ be operators supported on $P_k$ and fixed by
+	$(\E_A^\dagger)^m$. For such an $X$, the orbit sum
+	\[
+		R_X := \sum_{l=0}^{m-1} (\E_A^\dagger)^l(X)
+	\]
+	is fixed by $\E_A^\dagger$ by Lemma~\ref{lem:orbit_sum_fixed}. Since the
+	trace-preserving hypothesis makes $\E_A^\dagger$ unital, the irreducible
+	unital fixed-point theorem implies that $R_X$ is a scalar multiple of
+	$\Id$. Compressing by $P_k$ recovers $X$, so $X = c P_k$; the same argument
+	gives $Y = c' P_k$. Therefore
+	\[
+		\E_A^\dagger(XY) = \E_A^\dagger((cc') P_k) = (cc') P_{k-1}
+		= \E_A^\dagger(X)\E_A^\dagger(Y),
+	\]
+	using the cyclic relation $\E_A^\dagger(P_k)=P_{k-1}$.
 \end{proof}
 
 \begin{lemma}[Orbit-sum construction of the sector lift]%
@@ -1706,7 +1737,28 @@ The following results separate the zero blocks from the
 	preservation needed along the orbit of $Q$, via
 	Lemma~\ref{lem:sector_fixed_algebra_proj_step}. With those two inputs in hand,
 	the original orbit-sum construction from
-	Lemma~\ref{lem:orbit_sum_hLift_construction} applies verbatim.
+	Lemma~\ref{lem:orbit_sum_hLift_construction} applies verbatim. In the
+	irreducible trace-preserving cyclic case, the rigidity hypothesis here is
+	discharged by Theorem~\ref{thm:sector_fixed_algebra_irred_cyclic}.
+\end{proof}
+
+\begin{theorem}[Orbit-sum construction, unconditional variant]%
+	\label{thm:orbit_sum_hLift_unconditional}
+	\lean{MPSTensor.hLift_cyclicDecomp_mps}
+	\leanok
+	\uses{lem:orbit_sum_hLift_fixed_algebra, thm:sector_fixed_algebra_irred_cyclic}
+	Let $A$ be a left-canonical MPS tensor with irreducible adjoint transfer map,
+	and let $(P_k)_{k=1}^m$ be cyclic orthogonal sector projections. Then for
+	every orthogonal subprojection $Q \le P_k$ whose corner is preserved by
+	$(\E_A^\dagger)^m$, there is a global projection $R$ invariant under
+	$\E_A^\dagger$ with the same zero/full-sector tests.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{lem:orbit_sum_hLift_fixed_algebra, thm:sector_fixed_algebra_irred_cyclic}
+	Apply Lemma~\ref{lem:orbit_sum_hLift_fixed_algebra} with the rigidity
+	hypothesis supplied by
+	Theorem~\ref{thm:sector_fixed_algebra_irred_cyclic}.
 \end{proof}
 
 \begin{theorem}[Sector irreducibility from the orbit-sum construction]%
@@ -1763,8 +1815,59 @@ The following results separate the zero blocks from the
 	Theorem~\ref{thm:sector_irred_orbit_lift}.
 \end{proof}
 
+\begin{theorem}[Unconditional sector irreducibility]%
+	\label{thm:sector_irred_unconditional}
+	\lean{MPSTensor.isIrreducibleOnCorner_of_cyclic_decomp_mps}
+	\leanok
+	\uses{thm:sector_irred_fixed_algebra, thm:sector_fixed_algebra_irred_cyclic}
+	Let $A$ be a left-canonical MPS tensor with irreducible adjoint transfer map,
+	and let $(P_k)_{k=1}^m$ be cyclic orthogonal sector projections. Then
+	$(\E_A^\dagger)^m$ is irreducible on each corner $P_k$.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:sector_irred_fixed_algebra, thm:sector_fixed_algebra_irred_cyclic}
+	Apply Theorem~\ref{thm:sector_irred_fixed_algebra} with the rigidity
+	hypothesis supplied by
+	Theorem~\ref{thm:sector_fixed_algebra_irred_cyclic}.
+\end{proof}
+
 \section{Reduction to primitive blocks}%
 \label{sec:reduction_to_normal_form}
+
+\begin{theorem}[Fixed-point-algebra rigidity yields primitive blocked sectors]%
+	\label{thm:blocked_sector_fixed_algebra}
+	\lean{MPSTensor.primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking_of_fixedAlgebraRigidity}
+	\leanok
+	\uses{def:sector_fixed_point_algebra_rigidity,
+	      thm:cyclic_sector_decomp_after_blocking,
+	      thm:sector_irred_fixed_algebra,
+	      thm:primitive_adjoint_equiv}
+	Let $A$ be a left-canonical irreducible tensor whose adjoint transfer map has
+	peripheral spectrum $\{\gamma^j : 0 \le j < m\}$ for a primitive $m$-th root
+	of unity $\gamma$. Let $(C_u)_{u=1}^m$, $(P_u)_{u=1}^m$, and
+	$\varphi_u : \MN{\dim C_u} \xrightarrow{\sim} P_u \MN{D} P_u$
+	be the blocked cyclic-sector data. If the fixed-point-algebra rigidity
+	hypothesis from Definition~\ref{def:sector_fixed_point_algebra_rigidity}
+	holds, then every blocked sector tensor $C_u$ has primitive transfer map and
+	is irreducible.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{def:sector_fixed_point_algebra_rigidity,
+	      thm:sector_irred_fixed_algebra,
+	      thm:primitive_adjoint_equiv}
+	Theorem~\ref{thm:sector_irred_fixed_algebra} gives irreducibility of
+	$(\E_A^\dagger)^m$ on each corner $P_u$.
+	The blocked cyclic-sector data provide compression equivalences
+	$\varphi_u$ intertwining the adjoint transfer map of $C_u$ with the
+	corresponding corner restriction of $(\E_A^\dagger)^m$.
+	The same cyclic peripheral-spectrum argument that produces the sector
+	decomposition shows that each corner restriction is primitive.
+	Transport primitivity and irreducibility across $\varphi_u$, then use
+	Theorem~\ref{thm:primitive_adjoint_equiv} to pass from the adjoint blocked
+	map to the primal transfer map of $C_u$.
+\end{proof}
 
 \begin{theorem}[Arbitrary tensor to primitive block decomposition]%
 	\label{thm:tp_primitive_blockdecomp}

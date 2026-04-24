@@ -121,9 +121,9 @@ private abbrev KrausCoeffSpace (r : ℕ) := EuclideanSpace ℂ (Fin r)
 
 private abbrev KrausEntrySpace (D : ℕ) := EuclideanSpace ℂ (Fin D × Fin D)
 
+set_option synthInstance.maxHeartbeats 16000000 in
 -- Needed because inferring this `InnerProductSpace` instance triggers a large
 -- typeclass search on `EuclideanSpace` in Lean 4.29.
-set_option synthInstance.maxHeartbeats 16000000 in
 /-- Cached `InnerProductSpace` instance for `EuclideanSpace` to avoid synthesis timeout. -/
 private noncomputable abbrev euclideanIPS (ι : Type*) [Fintype ι] :
     InnerProductSpace ℂ (EuclideanSpace ℂ ι) := inferInstance

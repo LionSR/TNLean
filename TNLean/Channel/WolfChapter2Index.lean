@@ -13,6 +13,7 @@ import TNLean.Channel.Stinespring
 import TNLean.Channel.POVM
 import TNLean.Channel.POVM.Uniqueness
 import TNLean.Channel.TransferMatrix
+import TNLean.Channel.WolfProps
 import TNLean.Channel.NormalForm
 
 /-!
@@ -78,6 +79,28 @@ representations of quantum channels.
   - `Instrument` — quantum-instrument structure + `total_isChannel`,
     `sum_probability`, `posteriorState` API ✅
 
+### §2.1 Representation corollaries (Props 2.2–2.4)
+
+* **Prop 2.2** (CP decomposition):
+  - `WolfProps.polarization_sandwich` — `4 • (A X Bᴴ) = (A+B) X (A+B)ᴴ
+    − (A−B) X (A−B)ᴴ + I•(A+I·B) X (A+I·B)ᴴ − I•(A−I·B) X (A−I·B)ᴴ` ✅
+  - `WolfProps.cp_decomposition_of_sandwich_sum` — every
+    `∑ᵢ Aᵢ X Bᵢᴴ` is a signed ℂ-linear combination of four CP maps ✅
+
+* **Prop 2.3** (no information without disturbance):
+  - `WolfProps.vecMulVec_star_eq_polarization` — rank-one outer products
+    polarize into rank-one self-outer-products ✅
+  - `WolfProps.linearMap_eq_id_of_fixes_rankOne` — a linear map fixing
+    every `vecMulVec v (star v)` is the identity ✅
+  - `WolfProps.channel_eq_id_of_fixes_pureStates` — a channel fixing
+    every pure-state projector is the identity channel ✅
+
+* **Prop 2.4** (equivalence of ensembles, sufficient direction):
+  - `WolfProps.pureEnsembleDensity` — density operator of a pure-state
+    ensemble `∑ᵢ |ψᵢ⟩⟨ψᵢ|` ✅
+  - `WolfProps.pureEnsembleDensity_eq_of_isometric_mixing` — ensembles
+    related by an isometric mixing matrix share the same density ✅
+
 ### §2.2 Transfer matrix
 
 * `transferMatrix` — the `D² × D²` matrix representing `T` in the
@@ -135,9 +158,7 @@ representations of quantum channels.
 
 | Result | Notes |
 |--------|-------|
-| Prop 2.2 (decomp into CP) | Straightforward from CJ |
-| Prop 2.3 (no info w/o disturbance) | Needs pure state uniqueness |
-| Prop 2.4 (equiv of ensembles) | Needs purification/Schmidt decomp |
+| Prop 2.4 (equiv of ensembles, necessity) | Needs purification/Schmidt decomp |
 | Thm 2.3 (ordered CP-maps) | Needs Stinespring + contraction |
 | Thm 2.4 (Radon-Nikodym) | Follows from Thm 2.3 |
 | Thm 2.5 (open-system representation) | Embedding into unitary |
