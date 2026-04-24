@@ -509,7 +509,7 @@ entries. This subsection packages those diagonal matrices as explicit Lean data
 and states the trace-power identity. -/
 
 /-- A family of diagonal matrices `χ_{α,β,γ}` indexed by ordered triples drawn
-from a common index type `I`. The diagonal size `rank α β γ` is allowed to
+from a common index type `I`. The diagonal size `dim α β γ` is allowed to
 depend on the triple, and `entry α β γ` gives the diagonal entries as complex
 numbers.
 
@@ -519,18 +519,19 @@ with positive real entries. Positivity is *not* part of this structure: it is
 supplied separately through `PosEntries` so that the bare data can be used in
 intermediate constructions. -/
 structure DiagonalChiFamily (I : Type*) where
-  /-- Size of the diagonal matrix `χ_{α,β,γ}`. -/
-  rank : I → I → I → ℕ
+  /-- Size of the diagonal matrix `χ_{α,β,γ}` — the cardinality of its index
+  set `Fin _`, not the linear-algebraic rank. -/
+  dim : I → I → I → ℕ
   /-- Diagonal entries of `χ_{α,β,γ}`, in order. -/
-  entry : ∀ α β γ : I, Fin (rank α β γ) → ℂ
+  entry : ∀ α β γ : I, Fin (dim α β γ) → ℂ
 
 namespace DiagonalChiFamily
 
 variable {I : Type*} (χ : DiagonalChiFamily I)
 
-/-- The underlying diagonal matrix `χ_{α,β,γ}` on the index set `Fin (rank α β γ)`. -/
+/-- The underlying diagonal matrix `χ_{α,β,γ}` on the index set `Fin (dim α β γ)`. -/
 noncomputable def matrix (α β γ : I) :
-    Matrix (Fin (χ.rank α β γ)) (Fin (χ.rank α β γ)) ℂ :=
+    Matrix (Fin (χ.dim α β γ)) (Fin (χ.dim α β γ)) ℂ :=
   Matrix.diagonal (χ.entry α β γ)
 
 /-- The trace-power coefficient `∑_k (χ_{α,β,γ,k})^L`. -/
@@ -554,7 +555,7 @@ number, matching the positivity hypothesis of [CPGSV17, Thm IV.13(ii)].
 Under the scoped `ComplexOrder` instance (opened at the top of the file), a
 strict inequality `0 < z` on `ℂ` is equivalent to `0 < z.re ∧ z.im = 0`. -/
 def PosEntries : Prop :=
-  ∀ α β γ : I, ∀ k : Fin (χ.rank α β γ), 0 < χ.entry α β γ k
+  ∀ α β γ : I, ∀ k : Fin (χ.dim α β γ), 0 < χ.entry α β γ k
 
 end DiagonalChiFamily
 
