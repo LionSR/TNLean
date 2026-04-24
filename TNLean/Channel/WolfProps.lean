@@ -83,10 +83,11 @@ private theorem scalar_polarization (α β γ δ : ℂ) :
   have hI : Complex.I * Complex.I = -1 := Complex.I_mul_I
   linear_combination (2 * α * star δ - 2 * β * star γ) * hI
 
-/-- Scalar lemma: `star Complex.I = -Complex.I`. -/
-private theorem star_I_eq_neg_I : (star Complex.I : ℂ) = -Complex.I := by
-  change (starRingEnd ℂ) Complex.I = -Complex.I
-  exact Complex.conj_I
+/-- Scalar lemma: `star Complex.I = -Complex.I`. Thin alias around
+`Complex.conj_I` (star on `ℂ` coincides with `conj`) supplied so it can
+be used inside `simp only` calls that operate on `star` syntactically. -/
+private theorem star_I_eq_neg_I : (star Complex.I : ℂ) = -Complex.I :=
+  Complex.conj_I
 
 /-! ### Sandwich polarization (Prop 2.2 core identity) -/
 
@@ -248,7 +249,10 @@ end Prop23
 /-- The density operator associated to a pure-state (unnormalized) ensemble
 `{ψᵢ}`: the sum of rank-one projectors `∑ᵢ |ψᵢ⟩⟨ψᵢ|`. The weights `pᵢ`
 can be absorbed into `ψᵢ` by replacing `ψᵢ` with `√pᵢ · ψᵢ`, so this
-definition captures the general weighted pure-state ensemble. -/
+definition captures the general weighted pure-state ensemble.
+
+The `noncomputable` marker is forced by `star` on `ℂ`, which reduces
+through `instCommCStarAlgebraComplex` — itself noncomputable. -/
 noncomputable def pureEnsembleDensity
     {ι : Type*} [Fintype ι] (ψ : ι → (Fin D → ℂ)) :
     Matrix (Fin D) (Fin D) ℂ :=
