@@ -6448,13 +6448,13 @@
 
   </div>
 </div>
-<div class="remark_thmwrapper theorem-style-remark" id="rem:choi_rank_le_kraus_rank">
+<div class="remark_thmwrapper theorem-style-remark" id="rem:choi_rank_eq_min_kraus_cardinality">
   <div class="remark_thmheading">
     <span class="remark_thmcaption">
     Remark
     </span>
     <span class="remark_thmlabel">5.78</span>
-    <span class="remark_thmtitle">Choi rank is bounded by Kraus rank</span>
+    <span class="remark_thmtitle">Choi rank and minimal Kraus cardinality</span>
     <div class="thm_header_extras">
 
     
@@ -6462,7 +6462,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-channels.html#rem:choi_rank_le_kraus_rank">#</a>
+    <a class="icon proof" href="ch-channels.html#rem:choi_rank_eq_min_kraus_cardinality">#</a>
     
     <a class="icon proof" href="ch-channels.html#a0000000335"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
@@ -6515,7 +6515,7 @@
 <div class="displaymath" id="a0000000336">
   \[  \operatorname {rank}(\tau _E) \le r.  \]
 </div>
-<p> More generally, any witness with at most \(r\) Kraus operators yields the same upper bound. </p>
+<p> Conversely, diagonalizing the positive semidefinite Choi matrix and keeping only the nonzero eigenvalue summands produces a Kraus family with exactly \(\operatorname {rank}(\tau _E)\) operators. Hence the Choi rank is precisely the minimal Kraus cardinality. </p>
 
   </div>
 </div>
@@ -6527,7 +6527,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>Expand the Choi matrix using the Kraus formula and \(\tau _E = \sum _j v_j v_j^\dagger \) with one vector \(v_j\) for each Kraus operator. The column space of this sum lies in the span of the \(r\) vectors \(\{ v_j\} \), so the rank is at most \(r\). </p>
+  <p>For the forward implication, expand the Choi matrix using the Kraus formula and write \(\tau _E = \sum _j v_j v_j^\dagger \) with one vector \(v_j\) for each Kraus operator. The column space of this sum lies in the span of the \(r\) vectors \(\{ v_j\} \), so the rank is at most \(r\). For the converse, use the spectral decomposition of the positive semidefinite Choi matrix, discard the zero-eigenvalue terms, and rescale the remaining eigenvectors into Kraus operators. </p>
 
   </div>
 </div>
