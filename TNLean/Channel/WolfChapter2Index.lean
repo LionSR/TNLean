@@ -191,7 +191,7 @@ representations of quantum channels.
 
 | Result | Notes |
 |--------|-------|
-| Thm 2.5 (unitary form) | Reduced isometric form is formalized; unitary form needs basis extension |
+| Thm 2.5 (unitary form) | Reduced isometric form formalized; unitary form needs basis extension |
 | §2.3 Lorentz normal form (existence) | Needs compactness over `SL(2, ℂ)` filterings |
 | §2.3 Sorted singular values | Current SVD is unsorted; later uses want sorted values |
 
