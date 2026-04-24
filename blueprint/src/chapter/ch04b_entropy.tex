@@ -300,3 +300,88 @@ later MPDO arguments.
     vanishes by Theorem~\ref{thm:entropy_fin_one_zero}.
     \uses{thm:entropy_strong_subadditivity, thm:trace_traceac_abc, thm:entropy_fin_one_zero}
 \end{proof}
+
+\section{Mutual information: monotonicity and area-law bound}
+
+The two inequalities below are the downstream MPDO-facing consequences
+of the entropy inequalities in this chapter. The monotonicity inequality
+is the strong-subadditivity content underlying the MPDO mutual-information
+monotonicity $I_L \le I_{L+1}$
+(arXiv:1606.00608, Proposition~C.1); the elementary area-law bound is
+the single-site entropy bound underlying the MPDO area-law bound
+$I_L \le 4\log D$ (arXiv:1606.00608, cited from the Wolf area-law
+bound). Both inequalities follow directly from strong subadditivity
+(taken as an axiom) and the single-system $S(\rho) \le \log D$ bound; neither
+introduces a new axiom.
+
+\begin{theorem}[Entropy nonnegativity for finite index sets]
+    \label{thm:entropy_nonneg_finite_index}
+    \lean{Entropy.vonNeumannEntropy_nonneg_of_posSemidef_trace_one}
+    \leanok
+    \uses{def:entropy_von_neumann_entropy}
+    For any PSD Hermitian matrix $\rho$ with $\tr(\rho) = 1$ on an
+    arbitrary finite index set, $S(\rho) \ge 0$. This is the
+    analogue of Theorem~\ref{thm:entropy_nonneg} for arbitrary finite
+    index sets: it does
+    not require the index set to be $\Fin{D}$, so it applies to
+    bipartite density matrices on
+    $\mathbb{C}^{d_A} \otimes \mathbb{C}^{d_B}$.
+\end{theorem}
+
+\begin{proof}\leanok
+    The eigenvalues of a PSD matrix are non-negative, and eigenvalues
+    of a trace-$1$ Hermitian matrix with non-negative eigenvalues are
+    bounded above by $1$ (each single eigenvalue is at most the total
+    sum). Apply $x\log x \le 0$ on $[0, 1]$ pointwise and sum.
+\end{proof}
+
+\begin{theorem}[Mutual information is monotone under enlargement]
+    \label{thm:mutual_information_monotone_tripartite}
+    \lean{Entropy.mutualInformation_monotone_tripartite}
+    \leanok
+    \uses{def:entropy_mutual_information, def:entropy_von_neumann_entropy,
+          def:traceA_ABC, def:traceC_ABC, def:traceAC_ABC,
+          thm:entropy_strong_subadditivity}
+    For any tripartite density matrix $\rho_{ABC}$ on
+    $A \otimes B \otimes C$,
+    \[
+        I(A{:}B)_{\tr_C \rho_{ABC}} \;\le\; I(A{:}BC)_{\rho_{ABC}},
+    \]
+    where the left-hand side is the bipartite mutual information of
+    the reduced state $\rho_{AB} = \tr_C(\rho_{ABC})$ and the
+    right-hand side is evaluated by expanding
+    $I(A{:}BC) = S(\rho_A) + S(\rho_{BC}) - S(\rho_{ABC})$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:entropy_strong_subadditivity}
+    Expanding both sides in entropy form and cancelling the common
+    $S(\rho_A)$ term, the inequality reduces to strong subadditivity
+    $S(\rho_{ABC}) + S(\rho_B) \le S(\rho_{AB}) + S(\rho_{BC})$. The
+    bipartite $B$-reduced state of $\rho_{AB}$ matches the tripartite
+    $B$-reduced state $\tr_{AC}(\rho_{ABC})$, ensuring the $S(\rho_B)$
+    term is the one supplied by Theorem~\ref{thm:entropy_strong_subadditivity}.
+\end{proof}
+
+\begin{theorem}[Elementary area-law bound on mutual information]
+    \label{thm:mutual_information_le_log_dim_add_log_dim}
+    \lean{Entropy.mutualInformation_le_log_dim_add_log_dim}
+    \leanok
+    \uses{def:entropy_mutual_information, thm:entropy_le_log_dim,
+          thm:entropy_nonneg_finite_index}
+    For a bipartite density matrix $\rho_{AB}$ on
+    $\mathbb{C}^{d_A} \otimes \mathbb{C}^{d_B}$ with $d_A, d_B \ge 1$
+    whose single-system reduced states are obtained by partial trace,
+    \[
+        I(A{:}B) \;\le\; \log d_A + \log d_B.
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:entropy_le_log_dim, thm:entropy_nonneg_finite_index}
+    The reduced states are density matrices because partial trace preserves
+    positivity and trace. Combine $S(\rho_A) \le \log d_A$ and
+    $S(\rho_B) \le \log d_B$ (Theorem~\ref{thm:entropy_le_log_dim})
+    with $S(\rho_{AB}) \ge 0$
+    (Theorem~\ref{thm:entropy_nonneg_finite_index}).
+\end{proof}
