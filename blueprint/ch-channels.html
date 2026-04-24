@@ -179,6 +179,9 @@
      <li class="">
   <a href="ch-channels.html#subsec:trace_pairing_expansion"><span class="toc_ref">5.11.1</span> <span class="toc_entry">Trace-pairing expansion in transfer-matrix form</span></a>
  </li>
+<li class="">
+  <a href="ch-channels.html#subsec:svd_normal_form"><span class="toc_ref">5.11.2</span> <span class="toc_entry">SVD normal form (existence)</span></a>
+ </li>
 
   </ul>
  </li>
@@ -8659,6 +8662,237 @@
 
   </div>
 </div>
+<h2 id="subsec:svd_normal_form">5.11.2 SVD normal form (existence)</h2>
+
+<p>Wolf §2.3 discusses two families of normal forms for the transfer-matrix representation of a quantum channel: the <em>singular value decomposition</em> (SVD) and, for qubit channels, the <em>Lorentz normal form</em> obtained by \(\mathrm{SL}(2,\mathbb {C})\) filtering operations. In this blueprint, the full existence statement formalized below is the SVD normal form; the Lorentz normal form existence requires a compactness / minimisation argument over \(\mathrm{SL}(2,\mathbb {C})\) filterings (Wolf Prop 2.9 / Prop 2.11) that remains open in this formalisation. </p>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:svd_posSemidef">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">5.108</span>
+    <span class="theorem_thmtitle">SVD for positive semi-definite matrices</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-channels.html#thm:svd_posSemidef">#</a>
+    
+    <a class="icon proof" href="ch-channels.html#a0000000364"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/Matrix.svd_of_posSemidef" class="lean_decl">Matrix.svd_of_posSemidef</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>  Every positive semi-definite matrix \(M \in M_{D}(\mathbb {C})\) admits a decomposition </p>
+<div class="displaymath" id="a0000000365">
+  \[  M = U \operatorname {diag}(\sigma ) U^{\dagger },  \]
+</div>
+<p> where \(U \in \mathrm{U}(D)\) is unitary and \(\sigma : \{ 1, \dots , D\}  \to \mathbb {R}_{\ge 0}\) has non-negative entries. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000364">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>The spectral theorem for Hermitian matrices provides an orthonormal eigenbasis with real eigenvalues. Positive semi-definiteness forces those eigenvalues to be non-negative, and the decomposition is packaged in SVD form with \(U\) the eigenvector unitary and \(\sigma \) the eigenvalue sequence. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:svd_of_isUnit">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">5.109</span>
+    <span class="theorem_thmtitle">SVD existence for invertible matrices</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-channels.html#thm:svd_of_isUnit">#</a>
+    
+    <a class="icon proof" href="ch-channels.html#a0000000366"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/Matrix.svd_of_isUnit" class="lean_decl">Matrix.svd_of_isUnit</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>  Every invertible complex square matrix \(M \in M_{D}(\mathbb {C})\) admits a singular value decomposition </p>
+<div class="displaymath" id="a0000000367">
+  \[  M = U \operatorname {diag}(\sigma ) V^{\dagger },  \]
+</div>
+<p> with \(U, V \in \mathrm{U}(D)\) unitary and \(\sigma _i {\gt} 0\) for all \(i\). </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000366">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Apply the spectral theorem to the positive definite matrix \(M^{\dagger } M\) to obtain \(M^{\dagger } M = V \operatorname {diag}(\lambda ) V^{\dagger }\) with \(\lambda _i {\gt} 0\). Set \(\sigma _i := \sqrt{\lambda _i}\) and \(\Sigma := \operatorname {diag}(\sigma )\); since \(\Sigma \) is a real positive diagonal, it is self-adjoint and invertible. Define \(U := M V \Sigma ^{-1}\). Then \(U^{\dagger } U = \Sigma ^{-1} V^{\dagger } (M^{\dagger } M) V \Sigma ^{-1} = \Sigma ^{-1} \operatorname {diag}(\lambda ) \Sigma ^{-1} = I\), so \(U\) is unitary, and \(U \Sigma V^{\dagger } = M V (\Sigma ^{-1} \Sigma ) V^{\dagger } = M V V^{\dagger } = M\). </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:transferMatrix_svd_of_isUnit">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">5.110</span>
+    <span class="theorem_thmtitle">SVD representation of a transfer matrix</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-channels.html#thm:transferMatrix_svd_of_isUnit">#</a>
+    
+    <a class="icon proof" href="ch-channels.html#a0000000368"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-channels.html#thm:svd_of_isUnit">Theorem 5.109</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/transferMatrix_svd_of_isUnit" class="lean_decl">transferMatrix_svd_of_isUnit</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   Every invertible transfer matrix \(\widehat{T}\) of a linear super-operator \(T : M_{D}(\mathbb {C}) \to M_{D}(\mathbb {C})\) admits a singular value decomposition \(\widehat{T} = U \operatorname {diag}(\sigma ) V^{\dagger }\) with \(U, V\) unitary on \(\mathbb {C}^{D} \otimes \mathbb {C}^{D}\) and \(\sigma _i {\gt} 0\). </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000368">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Direct specialisation of Theorem&#160;<a href="ch-channels.html#thm:svd_of_isUnit">5.109</a> to the index type \(\{ 1,\dots ,D\}  \times \{ 1,\dots ,D\} \) used by the transfer-matrix representation. </p>
+
+  </div>
+</div>
+<div class="remark_thmwrapper theorem-style-remark" id="a0000000369">
+  <div class="remark_thmheading">
+    <span class="remark_thmcaption">
+    Remark
+    </span>
+    <span class="remark_thmlabel">5.111</span>
+    <span class="remark_thmtitle">Sorted / unique singular values</span>
+    <div class="thm_header_extras">
+
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-channels.html#a0000000369">#</a>
+    
+    
+    
+        </div>
+  </div>
+  <div class="remark_thmcontent">
+  <p> Theorem&#160;<a href="ch-channels.html#thm:svd_of_isUnit">5.109</a> produces the singular values as an unordered family, without the usual convention that \(\sigma _{i}\) are sorted in non-increasing order or the statement that they are uniquely determined by \(M\). Downstream applications in Wolf §2.3 (trace-norm identities, polar decomposition, Lorentz normal form) will typically require the sorted / unique variant; that refinement is future work. </p>
+
+  </div>
+</div>
 <h1 id="sec:channel_determinant">5.12 Determinant of a quantum channel</h1>
 
 <div class="definition_thmwrapper theorem-style-definition" id="def:channel_det">
@@ -8666,7 +8900,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">5.108</span>
+    <span class="definition_thmlabel">5.112</span>
     <span class="definition_thmtitle">Channel determinant</span>
     <div class="thm_header_extras">
 
@@ -8713,7 +8947,7 @@
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">5.109</span>
+    <span class="remark_thmlabel">5.113</span>
     <span class="remark_thmtitle">Channel determinant as an operator determinant</span>
     <div class="thm_header_extras">
 
@@ -8755,7 +8989,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">5.110</span>
+    <span class="definition_thmlabel">5.114</span>
     <span class="definition_thmtitle">Unitary channel</span>
     <div class="thm_header_extras">
 
@@ -8801,7 +9035,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">5.111</span>
+    <span class="theorem_thmlabel">5.115</span>
     <span class="theorem_thmtitle">Unitary channels have determinant one</span>
     <div class="thm_header_extras">
 
@@ -8812,7 +9046,7 @@
 
     <a class="icon proof" href="ch-channels.html#thm:channel_det_unitary_eq_one">#</a>
     
-    <a class="icon proof" href="ch-channels.html#a0000000364"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-channels.html#a0000000370"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -8828,9 +9062,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-channels.html#def:channel_det">Definition 5.108</a></li>
+          <li><a href="ch-channels.html#def:channel_det">Definition 5.112</a></li>
           
-          <li><a href="ch-channels.html#def:unitary_channel">Definition 5.110</a></li>
+          <li><a href="ch-channels.html#def:unitary_channel">Definition 5.114</a></li>
           
         </ul>
     
@@ -8867,7 +9101,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000364">
+<div class="proof_wrapper" id="a0000000370">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -8884,7 +9118,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">5.112</span>
+    <span class="theorem_thmlabel">5.116</span>
     <span class="theorem_thmtitle">Determinant bound for positive trace-preserving maps</span>
     <div class="thm_header_extras">
 
@@ -8895,7 +9129,7 @@
 
     <a class="icon proof" href="ch-channels.html#thm:channelDet_norm_le_one">#</a>
     
-    <a class="icon proof" href="ch-channels.html#a0000000365"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-channels.html#a0000000371"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -8911,7 +9145,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-channels.html#def:channel_det">Definition 5.108</a></li>
+          <li><a href="ch-channels.html#def:channel_det">Definition 5.112</a></li>
           
           <li><a href="ch-channels.html#def:positive_map">Definition 5.1</a></li>
           
@@ -8955,7 +9189,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000365">
+<div class="proof_wrapper" id="a0000000371">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -8972,7 +9206,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">5.113</span>
+    <span class="theorem_thmlabel">5.117</span>
     <span class="theorem_thmtitle">Determinant one iff the channel is unitary</span>
     <div class="thm_header_extras">
 
@@ -8983,7 +9217,7 @@
 
     <a class="icon proof" href="ch-channels.html#thm:channelDet_norm_eq_one_iff_unitary">#</a>
     
-    <a class="icon proof" href="ch-channels.html#a0000000366"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-channels.html#a0000000372"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9001,13 +9235,13 @@
           
           <li><a href="ch-channels.html#def:channel">Definition 5.8</a></li>
           
-          <li><a href="ch-channels.html#def:channel_det">Definition 5.108</a></li>
+          <li><a href="ch-channels.html#def:channel_det">Definition 5.112</a></li>
           
-          <li><a href="ch-channels.html#def:unitary_channel">Definition 5.110</a></li>
+          <li><a href="ch-channels.html#def:unitary_channel">Definition 5.114</a></li>
           
-          <li><a href="ch-channels.html#thm:channelDet_norm_le_one">Theorem 5.112</a></li>
+          <li><a href="ch-channels.html#thm:channelDet_norm_le_one">Theorem 5.116</a></li>
           
-          <li><a href="ch-channels.html#thm:channel_det_unitary_eq_one">Theorem 5.111</a></li>
+          <li><a href="ch-channels.html#thm:channel_det_unitary_eq_one">Theorem 5.115</a></li>
           
         </ul>
     
@@ -9041,7 +9275,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   For a CPTP map \(T : M_{D}(\mathbb {C}) \to M_{D}(\mathbb {C})\), </p>
-<div class="displaymath" id="a0000000367">
+<div class="displaymath" id="a0000000373">
   \[  |\det T| = 1 \; \iff \;  \exists \,  U \in \mathcal{U}(D),\quad T(\rho ) = U\rho U^\dagger .  \]
 </div>
 <p> This is <span class="cite">
@@ -9051,7 +9285,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000366">
+<div class="proof_wrapper" id="a0000000372">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9059,7 +9293,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Reverse direction is Theorem&#160;<a href="ch-channels.html#thm:channel_det_unitary_eq_one">5.111</a>. Forward direction: \(|\det T| = 1\) together with \(|\mu | \le 1\) for every eigenvalue \(\mu \) (from trace preservation and positivity) forces every eigenvalue to satisfy \(|\mu | = 1\). Hence \(T\) is bijective. A bijective CPTP map is a \(*\)-automorphism: the Heisenberg dual \(T^*(Y) = \sum _i K_i^\dagger Y K_i\) is unital (since \(T\) is TP), so the Kadison–Schwarz inequality \(T^*(Y^\dagger Y) \ge T^*(Y)^\dagger T^*(Y)\) becomes an equality for every \(Y\). Hence \(T^*\), and therefore \(T\), preserves products. By the Skolem–Noether theorem, every \(*\)-automorphism of \(M_{D}(\mathbb {C})\) has the form \(T(\rho ) = U \rho U^\dagger \) for some unitary \(U\). Kraus freedom then gives \(K_i = c_i U\) with \(\sum _i |c_i|^2 = 1\). </p>
+  <p> Reverse direction is Theorem&#160;<a href="ch-channels.html#thm:channel_det_unitary_eq_one">5.115</a>. Forward direction: \(|\det T| = 1\) together with \(|\mu | \le 1\) for every eigenvalue \(\mu \) (from trace preservation and positivity) forces every eigenvalue to satisfy \(|\mu | = 1\). Hence \(T\) is bijective. A bijective CPTP map is a \(*\)-automorphism: the Heisenberg dual \(T^*(Y) = \sum _i K_i^\dagger Y K_i\) is unital (since \(T\) is TP), so the Kadison–Schwarz inequality \(T^*(Y^\dagger Y) \ge T^*(Y)^\dagger T^*(Y)\) becomes an equality for every \(Y\). Hence \(T^*\), and therefore \(T\), preserves products. By the Skolem–Noether theorem, every \(*\)-automorphism of \(M_{D}(\mathbb {C})\) has the form \(T(\rho ) = U \rho U^\dagger \) for some unitary \(U\). Kraus freedom then gives \(K_i = c_i U\) with \(\sum _i |c_i|^2 = 1\). </p>
 
   </div>
 </div>
@@ -9070,7 +9304,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">5.114</span>
+    <span class="definition_thmlabel">5.118</span>
     <span class="definition_thmtitle">Kraus fixed points</span>
     <div class="thm_header_extras">
 
@@ -9134,7 +9368,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">5.115</span>
+    <span class="theorem_thmlabel">5.119</span>
     <span class="theorem_thmtitle">Fixed points lie in the multiplicative domain</span>
     <div class="thm_header_extras">
 
@@ -9145,7 +9379,7 @@
 
     <a class="icon proof" href="ch-channels.html#thm:fixedPoints_in_multiplicativeDomain">#</a>
     
-    <a class="icon proof" href="ch-channels.html#a0000000368"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-channels.html#a0000000374"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9161,7 +9395,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-channels.html#def:kraus_fixed_points">Definition 5.114</a></li>
+          <li><a href="ch-channels.html#def:kraus_fixed_points">Definition 5.118</a></li>
           
           <li><a href="ch-channels.html#def:multiplicative_domain_channels">Definition 5.43</a></li>
           
@@ -9200,7 +9434,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000368">
+<div class="proof_wrapper" id="a0000000374">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9217,7 +9451,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">5.116</span>
+    <span class="theorem_thmlabel">5.120</span>
     <span class="theorem_thmtitle">Fixed points form a \(*\)-subalgebra</span>
     <div class="thm_header_extras">
 
@@ -9228,7 +9462,7 @@
 
     <a class="icon proof" href="ch-channels.html#thm:fixedPointsStarSubalgebra">#</a>
     
-    <a class="icon proof" href="ch-channels.html#a0000000369"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-channels.html#a0000000375"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9244,7 +9478,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-channels.html#def:kraus_fixed_points">Definition 5.114</a></li>
+          <li><a href="ch-channels.html#def:kraus_fixed_points">Definition 5.118</a></li>
           
           <li><a href="ch-channels.html#def:kraus_map_channels">Definition 5.36</a></li>
           
@@ -9288,7 +9522,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000369">
+<div class="proof_wrapper" id="a0000000375">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9300,12 +9534,12 @@
 
   </div>
 </div>
-<div class="remark_thmwrapper theorem-style-remark" id="a0000000370">
+<div class="remark_thmwrapper theorem-style-remark" id="a0000000376">
   <div class="remark_thmheading">
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">5.117</span>
+    <span class="remark_thmlabel">5.121</span>
     <div class="thm_header_extras">
 
     
@@ -9313,14 +9547,14 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-channels.html#a0000000370">#</a>
+    <a class="icon proof" href="ch-channels.html#a0000000376">#</a>
     
     
     
         </div>
   </div>
   <div class="remark_thmcontent">
-  <p>Theorem&#160;<a href="ch-channels.html#thm:fixedPoints_in_multiplicativeDomain">5.115</a> records the trace-preserving / Heisenberg-picture counterpart of the same multiplicative-domain argument. </p>
+  <p>Theorem&#160;<a href="ch-channels.html#thm:fixedPoints_in_multiplicativeDomain">5.119</a> records the trace-preserving / Heisenberg-picture counterpart of the same multiplicative-domain argument. </p>
 
   </div>
 </div>
@@ -9329,7 +9563,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">5.118</span>
+    <span class="theorem_thmlabel">5.122</span>
     <span class="theorem_thmtitle">Projected elements lie in the multiplicative domain</span>
     <div class="thm_header_extras">
 
@@ -9340,7 +9574,7 @@
 
     <a class="icon proof" href="ch-channels.html#thm:map_mem_multiplicativeDomain_of_idempotent">#</a>
     
-    <a class="icon proof" href="ch-channels.html#a0000000371"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-channels.html#a0000000377"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9356,11 +9590,11 @@
         
         <ul class="uses">
           
-          <li><a href="ch-channels.html#def:kraus_fixed_points">Definition 5.114</a></li>
+          <li><a href="ch-channels.html#def:kraus_fixed_points">Definition 5.118</a></li>
           
           <li><a href="ch-schwarz.html#def:unital_kraus">Definition 7.3</a></li>
           
-          <li><a href="ch-channels.html#thm:fixedPointsStarSubalgebra">Theorem 5.116</a></li>
+          <li><a href="ch-channels.html#thm:fixedPointsStarSubalgebra">Theorem 5.120</a></li>
           
           <li><a href="ch-schwarz.html#thm:md_characterization">Theorem 7.28</a></li>
           
@@ -9397,7 +9631,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000371">
+<div class="proof_wrapper" id="a0000000377">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9405,12 +9639,12 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Idempotence gives \(E(E(X)) = E(X)\), so \(E(X)\) is a fixed point. By the argument in Theorem&#160;<a href="ch-channels.html#thm:fixedPointsStarSubalgebra">5.116</a>, the Kadison–Schwarz gap for the fixed point \(E(X)\) vanishes, hence </p>
-<div class="displaymath" id="a0000000372">
+  <p> Idempotence gives \(E(E(X)) = E(X)\), so \(E(X)\) is a fixed point. By the argument in Theorem&#160;<a href="ch-channels.html#thm:fixedPointsStarSubalgebra">5.120</a>, the Kadison–Schwarz gap for the fixed point \(E(X)\) vanishes, hence </p>
+<div class="displaymath" id="a0000000378">
   \[  E(E(X)^\dagger E(X)) = E(X)^\dagger E(X).  \]
 </div>
 <p> Fixed points are closed under \(\dagger \), so the same argument applied to \(E(X)^\dagger \) gives </p>
-<div class="displaymath" id="a0000000373">
+<div class="displaymath" id="a0000000379">
   \[  E(E(X) E(X)^\dagger ) = E(X) E(X)^\dagger .  \]
 </div>
 <p> Therefore Theorem&#160;<a href="ch-schwarz.html#thm:md_characterization">7.28</a> places \(E(X)\) in the multiplicative domain. </p>
@@ -9422,7 +9656,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">5.119</span>
+    <span class="theorem_thmlabel">5.123</span>
     <span class="theorem_thmtitle">Choi–Effros left absorption</span>
     <div class="thm_header_extras">
 
@@ -9433,7 +9667,7 @@
 
     <a class="icon proof" href="ch-channels.html#thm:choi_effros_left">#</a>
     
-    <a class="icon proof" href="ch-channels.html#a0000000374"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-channels.html#a0000000380"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9449,11 +9683,11 @@
         
         <ul class="uses">
           
-          <li><a href="ch-channels.html#def:kraus_fixed_points">Definition 5.114</a></li>
+          <li><a href="ch-channels.html#def:kraus_fixed_points">Definition 5.118</a></li>
           
           <li><a href="ch-schwarz.html#def:unital_kraus">Definition 7.3</a></li>
           
-          <li><a href="ch-channels.html#thm:map_mem_multiplicativeDomain_of_idempotent">Theorem 5.118</a></li>
+          <li><a href="ch-channels.html#thm:map_mem_multiplicativeDomain_of_idempotent">Theorem 5.122</a></li>
           
         </ul>
     
@@ -9485,13 +9719,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Under the same hypotheses, for all \(X, Y \in M_{D}(\mathbb {C})\), </p>
-<div class="displaymath" id="a0000000375">
+<div class="displaymath" id="a0000000381">
   \[  E(E(X) Y) = E(E(X) E(Y)).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000374">
+<div class="proof_wrapper" id="a0000000380">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9508,7 +9742,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">5.120</span>
+    <span class="theorem_thmlabel">5.124</span>
     <span class="theorem_thmtitle">Choi–Effros right absorption</span>
     <div class="thm_header_extras">
 
@@ -9519,7 +9753,7 @@
 
     <a class="icon proof" href="ch-channels.html#thm:choi_effros_right">#</a>
     
-    <a class="icon proof" href="ch-channels.html#a0000000376"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-channels.html#a0000000382"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9535,11 +9769,11 @@
         
         <ul class="uses">
           
-          <li><a href="ch-channels.html#def:kraus_fixed_points">Definition 5.114</a></li>
+          <li><a href="ch-channels.html#def:kraus_fixed_points">Definition 5.118</a></li>
           
           <li><a href="ch-schwarz.html#def:unital_kraus">Definition 7.3</a></li>
           
-          <li><a href="ch-channels.html#thm:map_mem_multiplicativeDomain_of_idempotent">Theorem 5.118</a></li>
+          <li><a href="ch-channels.html#thm:map_mem_multiplicativeDomain_of_idempotent">Theorem 5.122</a></li>
           
         </ul>
     
@@ -9571,13 +9805,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Under the same hypotheses, for all \(X, Y \in M_{D}(\mathbb {C})\), </p>
-<div class="displaymath" id="a0000000377">
+<div class="displaymath" id="a0000000383">
   \[  E(X E(Y)) = E(E(X) E(Y)).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000376">
+<div class="proof_wrapper" id="a0000000382">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9594,7 +9828,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">5.121</span>
+    <span class="theorem_thmlabel">5.125</span>
     <span class="theorem_thmtitle">Choi–Effros symmetric absorption</span>
     <div class="thm_header_extras">
 
@@ -9605,7 +9839,7 @@
 
     <a class="icon proof" href="ch-channels.html#thm:choi_effros_left_eq_right">#</a>
     
-    <a class="icon proof" href="ch-channels.html#a0000000378"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-channels.html#a0000000384"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9621,13 +9855,13 @@
         
         <ul class="uses">
           
-          <li><a href="ch-channels.html#def:kraus_fixed_points">Definition 5.114</a></li>
+          <li><a href="ch-channels.html#def:kraus_fixed_points">Definition 5.118</a></li>
           
           <li><a href="ch-schwarz.html#def:unital_kraus">Definition 7.3</a></li>
           
-          <li><a href="ch-channels.html#thm:choi_effros_left">Theorem 5.119</a></li>
+          <li><a href="ch-channels.html#thm:choi_effros_left">Theorem 5.123</a></li>
           
-          <li><a href="ch-channels.html#thm:choi_effros_right">Theorem 5.120</a></li>
+          <li><a href="ch-channels.html#thm:choi_effros_right">Theorem 5.124</a></li>
           
         </ul>
     
@@ -9659,13 +9893,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Under the same hypotheses, for all \(X, Y \in M_{D}(\mathbb {C})\), </p>
-<div class="displaymath" id="a0000000379">
+<div class="displaymath" id="a0000000385">
   \[  E(E(X) Y) = E(X E(Y)).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000378">
+<div class="proof_wrapper" id="a0000000384">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9682,7 +9916,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">5.122</span>
+    <span class="theorem_thmlabel">5.126</span>
     <span class="theorem_thmtitle">Choi–Effros projected product</span>
     <div class="thm_header_extras">
 
@@ -9693,7 +9927,7 @@
 
     <a class="icon proof" href="ch-channels.html#thm:choi_effros_sandwich">#</a>
     
-    <a class="icon proof" href="ch-channels.html#a0000000380"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-channels.html#a0000000386"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9709,11 +9943,11 @@
         
         <ul class="uses">
           
-          <li><a href="ch-channels.html#def:kraus_fixed_points">Definition 5.114</a></li>
+          <li><a href="ch-channels.html#def:kraus_fixed_points">Definition 5.118</a></li>
           
           <li><a href="ch-schwarz.html#def:unital_kraus">Definition 7.3</a></li>
           
-          <li><a href="ch-channels.html#thm:map_mem_multiplicativeDomain_of_idempotent">Theorem 5.118</a></li>
+          <li><a href="ch-channels.html#thm:map_mem_multiplicativeDomain_of_idempotent">Theorem 5.122</a></li>
           
         </ul>
     
@@ -9745,13 +9979,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Under the same hypotheses, for all \(X, Y \in M_{D}(\mathbb {C})\), </p>
-<div class="displaymath" id="a0000000381">
+<div class="displaymath" id="a0000000387">
   \[  E(E(X) E(Y)) = E(X) E(Y).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000380">
+<div class="proof_wrapper" id="a0000000386">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9760,11 +9994,11 @@
   </div>
   <div class="proof_content">
   <p> The previous theorem places \(E(X)\) and \(E(Y)\) in the multiplicative domain. Therefore multiplicativity gives </p>
-<div class="displaymath" id="a0000000382">
+<div class="displaymath" id="a0000000388">
   \[  E(E(X) E(Y)) = E(E(X)) E(E(Y)).  \]
 </div>
 <p> Since \(E\) is idempotent under the standing hypotheses, \(E(E(X)) = E(X)\) and \(E(E(Y)) = E(Y)\), so </p>
-<div class="displaymath" id="a0000000383">
+<div class="displaymath" id="a0000000389">
   \[  E(E(X) E(Y)) = E(X) E(Y).  \]
 </div>
 
@@ -9775,7 +10009,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">5.123</span>
+    <span class="definition_thmlabel">5.127</span>
     <span class="definition_thmtitle">Adjoint fixed points</span>
     <div class="thm_header_extras">
 
@@ -9839,7 +10073,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">5.124</span>
+    <span class="theorem_thmlabel">5.128</span>
     <span class="theorem_thmtitle">Fixed points form a \(*\)-subalgebra in the Heisenberg picture</span>
     <div class="thm_header_extras">
 
@@ -9850,7 +10084,7 @@
 
     <a class="icon proof" href="ch-channels.html#thm:adjointFixedPointsStarSubalgebra">#</a>
     
-    <a class="icon proof" href="ch-channels.html#a0000000384"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-channels.html#a0000000390"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9866,11 +10100,11 @@
         
         <ul class="uses">
           
-          <li><a href="ch-channels.html#def:adjoint_fixed_points">Definition 5.123</a></li>
+          <li><a href="ch-channels.html#def:adjoint_fixed_points">Definition 5.127</a></li>
           
           <li><a href="ch-channels.html#def:kraus_map_channels">Definition 5.36</a></li>
           
-          <li><a href="ch-channels.html#thm:fixedPointsStarSubalgebra">Theorem 5.116</a></li>
+          <li><a href="ch-channels.html#thm:fixedPointsStarSubalgebra">Theorem 5.120</a></li>
           
         </ul>
     
@@ -9907,7 +10141,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000384">
+<div class="proof_wrapper" id="a0000000390">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9915,7 +10149,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Apply Theorem&#160;<a href="ch-channels.html#thm:fixedPointsStarSubalgebra">5.116</a> to the adjoint family \(\{ K_i^\dagger \} \). </p>
+  <p> Apply Theorem&#160;<a href="ch-channels.html#thm:fixedPointsStarSubalgebra">5.120</a> to the adjoint family \(\{ K_i^\dagger \} \). </p>
 
   </div>
 </div>
@@ -9924,7 +10158,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">5.125</span>
+    <span class="definition_thmlabel">5.129</span>
     <span class="definition_thmtitle">Kraus commutant</span>
     <div class="thm_header_extras">
 
@@ -9990,7 +10224,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">5.126</span>
+    <span class="theorem_thmlabel">5.130</span>
     <span class="theorem_thmtitle">Adjoint fixed points equal the Kraus commutant</span>
     <div class="thm_header_extras">
 
@@ -10001,7 +10235,7 @@
 
     <a class="icon proof" href="ch-channels.html#thm:adjointFixedPoints_eq_krausCommutant">#</a>
     
-    <a class="icon proof" href="ch-channels.html#a0000000385"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-channels.html#a0000000391"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -10017,13 +10251,13 @@
         
         <ul class="uses">
           
-          <li><a href="ch-channels.html#def:adjoint_fixed_points">Definition 5.123</a></li>
+          <li><a href="ch-channels.html#def:adjoint_fixed_points">Definition 5.127</a></li>
           
-          <li><a href="ch-channels.html#def:kraus_commutant">Definition 5.125</a></li>
+          <li><a href="ch-channels.html#def:kraus_commutant">Definition 5.129</a></li>
           
           <li><a href="ch-channels.html#def:kraus_map_channels">Definition 5.36</a></li>
           
-          <li><a href="ch-channels.html#thm:adjointFixedPointsStarSubalgebra">Theorem 5.124</a></li>
+          <li><a href="ch-channels.html#thm:adjointFixedPointsStarSubalgebra">Theorem 5.128</a></li>
           
         </ul>
     
@@ -10054,8 +10288,8 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   Under the hypotheses of Theorem&#160;<a href="ch-channels.html#thm:adjointFixedPointsStarSubalgebra">5.124</a>, the adjoint fixed-point \(*\)-subalgebra equals the Kraus commutant: </p>
-<div class="displaymath" id="a0000000386">
+  <p>   Under the hypotheses of Theorem&#160;<a href="ch-channels.html#thm:adjointFixedPointsStarSubalgebra">5.128</a>, the adjoint fixed-point \(*\)-subalgebra equals the Kraus commutant: </p>
+<div class="displaymath" id="a0000000392">
   \[  \mathrm{Fix}(E^*) = \{ K_i, K_i^\dagger \} '.  \]
 </div>
 <p> This is <span class="cite">
@@ -10065,7 +10299,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000385">
+<div class="proof_wrapper" id="a0000000391">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -10082,7 +10316,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">5.127</span>
+    <span class="theorem_thmlabel">5.131</span>
     <span class="theorem_thmtitle">The Kraus commutant is the largest \(*\)-subalgebra inside the adjoint fixed points</span>
     <div class="thm_header_extras">
 
@@ -10093,7 +10327,7 @@
 
     <a class="icon proof" href="ch-channels.html#thm:kraus_commutant_greatest">#</a>
     
-    <a class="icon proof" href="ch-channels.html#a0000000387"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-channels.html#a0000000393"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -10109,7 +10343,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-channels.html#thm:adjointFixedPoints_eq_krausCommutant">Theorem 5.126</a></li>
+          <li><a href="ch-channels.html#thm:adjointFixedPoints_eq_krausCommutant">Theorem 5.130</a></li>
           
         </ul>
     
@@ -10144,7 +10378,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000387">
+<div class="proof_wrapper" id="a0000000393">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -10152,7 +10386,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>By Theorem&#160;<a href="ch-channels.html#thm:adjointFixedPoints_eq_krausCommutant">5.126</a>, every \(*\)-subalgebra inside the adjoint fixed points is automatically contained in the Kraus commutant, while the Kraus commutant itself is such a \(*\)-subalgebra. </p>
+  <p>By Theorem&#160;<a href="ch-channels.html#thm:adjointFixedPoints_eq_krausCommutant">5.130</a>, every \(*\)-subalgebra inside the adjoint fixed points is automatically contained in the Kraus commutant, while the Kraus commutant itself is such a \(*\)-subalgebra. </p>
 
   </div>
 </div>
