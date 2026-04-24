@@ -5,6 +5,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.MPS.MPDO.Defs
 import TNLean.Entropy.MarkovChain
 import Mathlib.LinearAlgebra.Matrix.Irreducible.Defs
+import Mathlib.LinearAlgebra.Matrix.Notation
 import Mathlib.Tactic.FinCases
 import Mathlib.Tactic.NormNum
 
@@ -92,18 +93,9 @@ rank-one factorization. This shows that
 `PrimitiveTracePowersConstantImpliesRankOne` is not a valid global theorem for
 arbitrary primitive real matrices. -/
 noncomputable def primitiveTraceCounterexample : Matrix (Fin 3) (Fin 3) ℝ :=
-  Matrix.of fun i j =>
-    match i.1, j.1 with
-    | 0, 0 => 0
-    | 0, 1 => 0
-    | 0, 2 => 1 / 2
-    | 1, 0 => 1 / 2
-    | 1, 1 => 1 / 2
-    | 1, 2 => 0
-    | 2, 0 => 1 / 2
-    | 2, 1 => 1 / 2
-    | 2, 2 => 1 / 2
-    | _, _ => 0
+  !![(0 : ℝ), 0, 1 / 2;
+    1 / 2, 1 / 2, 0;
+    1 / 2, 1 / 2, 1 / 2]
 
 theorem primitiveTraceCounterexample_sq :
     primitiveTraceCounterexample ^ 2 =
