@@ -578,11 +578,15 @@ noncomputable def ofBijective
     SectorBasisMatching P Q where
   perm := Equiv.ofBijective f hf
   copies_eq := fun j => by
-    simpa [Equiv.ofBijective_apply] using hCopies j
+    change P.copies j = Q.copies (f j)
+    exact hCopies j
   dim_eq := fun j => by
-    simpa [Equiv.ofBijective_apply] using hDim j
+    change P.basisDim j = Q.basisDim (f j)
+    exact hDim j
   basis_equiv := fun j => by
-    simpa [Equiv.ofBijective_apply] using hEquiv j
+    change GaugePhaseEquiv (d := d)
+      (cast (congr_arg (MPSTensor d) (hDim j)) (P.basis j)) (Q.basis (f j))
+    exact hEquiv j
 
 end SectorBasisMatching
 
