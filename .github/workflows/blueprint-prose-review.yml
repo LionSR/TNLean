@@ -115,10 +115,18 @@ jobs:
             **Scope.** This rule covers ALL reader-facing text:
             - blueprint `.tex` files (section titles, theorem names, proof sketches,
               remarks, chapter preambles, `references.bib` annotations);
-            - Lean **docstrings**, **comments**, and `section`/`namespace` names.
+            - Lean **docstrings** (`/-- ... -/`), **module docs** (`/-! ... -/`),
+              inline **comments** (`/- ... -/`, `--`), and `section`/`namespace` names.
 
-            It does NOT cover developer-facing markdown in `docs/` or workflow YAML —
-            ignore those directories.
+            Lean docstrings must convey the **mathematical meaning** of the
+            declaration; software-engineering jargon and LLM filler are equally
+            banned in `.lean` files as in `.tex`. The docstring requirement is
+            anchored in `docs/doc.md` §"Doc strings" and `docs/style.md` §"Comments",
+            which both cross-reference the banned-language tables.
+
+            Out-of-scope (do NOT flag): developer-facing markdown in `docs/`,
+            workflow YAML, `lakefile.toml`, `lean-toolchain`, `Papers/`, `Notes/`,
+            and `Archive/` (legacy).
 
             **Apply judgment.** A few entries are context-sensitive: "crucial",
             "pivotal", "moreover", "furthermore", "let us" appear in legitimate

@@ -78,9 +78,9 @@ Detailed conventions live in `docs/`. Read the relevant file before working in t
 
 | File | Covers |
 |------|--------|
-| [`docs/style.md`](docs/style.md) | Code formatting, line length (100 chars), declarations, tactic style, whitespace, transparency |
+| [`docs/style.md`](docs/style.md) | Code formatting, line length (100 chars), declarations, tactic style, whitespace, transparency, mathematical comments |
 | [`docs/naming.md`](docs/naming.md) | Capitalization rules, symbol-to-name dictionary, variable conventions |
-| [`docs/doc.md`](docs/doc.md) | Module docstrings, definition docstrings, sectioning comments, BibTeX citations |
+| [`docs/doc.md`](docs/doc.md) | Module docstrings, definition docstrings, sectioning comments, BibTeX citations, mathematical-tone requirement for docstrings |
 | [`docs/CONTRIBUTING.md`](docs/CONTRIBUTING.md) | PR title format (`type(scope): description`), issue conventions, label taxonomy, review checklist |
 | [`docs/pr-review.md`](docs/pr-review.md) | Review criteria: style, documentation, location, improvements, library integration |
 | [`docs/pr_review_management.md`](docs/pr_review_management.md) | PR triage process, comment API mapping, merge decisions |

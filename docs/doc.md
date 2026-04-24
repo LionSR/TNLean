@@ -93,6 +93,30 @@ two asterisks before and after).
 Doc strings should convey the mathematical meaning of the definition. They are allowed to lie
 slightly about the actual implementation. The following is a doc string example:
 
+**Mathematical tone — required.** Doc strings, sectioning comments, `section`/`namespace` names,
+and inline comments are reader-facing and must read as **mathematics, not software documentation
+or AI-generated prose**. The same banned-language tables that govern the blueprint apply here:
+see [`blueprint_style_guide.md`](blueprint_style_guide.md) §"Banned AI/Software Language" for the
+full lists. In particular:
+
+- Do not use software-engineering jargon ("pipeline", "boilerplate", "orchestrate", "workflow",
+  "scaffolding", "wrapper", "hook", "toolchain", "first-class", "plug-and-play", "out of the
+  box", "under the hood", "API"/"endpoint" as prose, "utility"/"helper" as nouns, "refactor"
+  in prose). Describe the mathematical object instead.
+- Do not use LLM filler ("leverage", "delve into", "dive deep", vague "crucial"/"pivotal"/
+  "vital"/"robust"/"comprehensive", "seamlessly", "tapestry", "journey", "foster",
+  "streamline", "synergy", "meticulous", "in the realm of", "at the heart of", "it's important
+  to note", filler "moreover"/"furthermore"/"in essence"/"ultimately", "testament to", vague
+  "elegant"/"beautiful"/"profound", "shed light on", "showcase", "unveil", "cutting-edge",
+  "paradigm", hortative "let us"/"we shall see"). State the mathematics directly.
+- A few entries are context-sensitive: "crucial", "moreover", "let us" are fine in genuine
+  mathematical writing and banned only as empty filler.
+
+The dedicated `Blueprint Sync & Prose Review` CI workflow enforces these rules on changed Lean
+docstrings/comments/section names alongside blueprint `.tex` files.
+
+
+
 ```lean
 /-- If `q ≠ 0`, the `p`-adic norm of a rational `q` is `p ^ (-padicValRat p q)`.
 If `q = 0`, the `p`-adic norm of `q` is `0`. -/
