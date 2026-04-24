@@ -2,14 +2,17 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
+import Mathlib.Analysis.Matrix.PosDef
+import Mathlib.Analysis.Matrix.Spectrum
 import Mathlib.Data.Fintype.Card
+import TNLean.Algebra.MatrixSpectralDecomp
 import TNLean.Channel.ChoiJamiolkowski
 
 /-!
-# Kraus-cardinality and Choi-rank bounds
+# Kraus-cardinality and Choi-rank correspondence
 
-This file packages the basic channel-side infrastructure needed for future
-minimal-Kraus arguments.
+This file packages the channel-side infrastructure relating Kraus families to the
+rank of the Choi matrix.
 
 ## Main definitions
 
@@ -27,12 +30,16 @@ minimal-Kraus arguments.
   the upper bound `choiRank E ≤ r`.
 * `Channel.choiRank_le_of_hasKrausRankLE` — the same upper bound for bounded
   Kraus-rank witnesses.
+* `Channel.hasKrausCard_choiRank_of_cp` — a completely positive map has a Kraus
+  family with exactly `choiRank E` operators.
+* `Channel.hasKrausRankLE_choiRank_of_cp` /
+  `Channel.hasKrausRankLE_choiRank_of_cptp` — the bounded converse witnesses.
 
 ## Design note
 
-This file does **not** yet prove the converse direction
-`HasKrausRankLE E (choiRank E)`. That is the genuine minimal-Kraus / Choi-rank
-identity still needed for Theorem 4.1 reverse.
+The converse direction is proved by diagonalizing the positive semidefinite Choi
+matrix, discarding the zero-eigenvalue summands, and reconstructing Kraus
+operators from the remaining rank-one terms.
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder BigOperators
@@ -170,8 +177,30 @@ theorem choiMatrix_eq_sum_vecMulVec_of_kraus {r : ℕ}
   intro x _
   simpa [Matrix.vecMulVec_apply] using
     congrArg (fun M => M i₁ j₁)
-      (ChoiJamiolkowski.Internal.mul_single_mul_conjTranspose_eq_vecMulVec
+      (Matrix.mul_single_mul_conjTranspose_eq_vecMulVec
         (K := K x) (c := c) i₂ j₂)
+
+/-- A Choi-matrix decomposition into rank-one outer products yields a Kraus
+family indexed by the same finite type. -/
+private theorem hasKrausCard_of_choiMatrix_eq_sum_vecMulVec [NeZero D]
+    {ι : Type*} [Fintype ι] {E : Mat →ₗ[ℂ] Mat}
+    (v : ι → (Fin D × Fin D) → ℂ)
+    (hchoi : ChoiJamiolkowski.choiMatrix E =
+      ∑ m : ι, Matrix.vecMulVec (v m) (star (v m))) :
+    HasKrausCard E (Fintype.card ι) := by
+  classical
+  obtain ⟨K, hK⟩ :=
+    ChoiJamiolkowski.exists_kraus_of_choiMatrix_eq_sum_vecMulVec
+      (T := E) (ι := ι) v hchoi
+  refine ⟨fun α => K ((Fintype.equivFin ι).symm α), ?_⟩
+  intro X
+  calc
+    E X = ∑ m : ι, K m * X * (K m)ᴴ := hK X
+    _ = ∑ α : Fin (Fintype.card ι),
+          K ((Fintype.equivFin ι).symm α) * X * (K ((Fintype.equivFin ι).symm α))ᴴ := by
+            refine Fintype.sum_equiv (Fintype.equivFin ι) _ _ ?_
+            intro m
+            simp
 
 /-- Any `r`-operator Kraus representation bounds the Choi rank by `r`. -/
 theorem choiRank_le_of_hasKrausCard {E : Mat →ₗ[ℂ] Mat} {r : ℕ}
@@ -188,5 +217,59 @@ theorem choiRank_le_of_hasKrausRankLE {E : Mat →ₗ[ℂ] Mat} {r : ℕ}
     choiRank E ≤ r := by
   rcases hE with ⟨s, hs, hE⟩
   exact (choiRank_le_of_hasKrausCard hE).trans hs
+
+/-- A completely positive map admits a Kraus representation whose cardinality is
+exactly the rank of its Choi matrix. -/
+theorem hasKrausCard_choiRank_of_cp {E : Mat →ₗ[ℂ] Mat}
+    (hE : IsCPMap E) :
+    HasKrausCard E (choiRank E) := by
+  classical
+  by_cases hD : D = 0
+  · -- When `D = 0` the ambient matrix algebra is a subsingleton, so `E = 0`
+    -- and the Kraus family indexed by `Fin 0` is a trivial witness.
+    subst hD
+    have hzero : ∀ X : Matrix (Fin 0) (Fin 0) ℂ, X = 0 := fun X => by
+      ext i _; exact i.elim0
+    have h0 : HasKrausCard E 0 :=
+      ⟨Fin.elim0, fun X => by rw [hzero X, map_zero]; simp⟩
+    have hrank : choiRank E = 0 :=
+      Nat.le_zero.mp (choiRank_le_of_hasKrausCard h0)
+    rw [hrank]; exact h0
+  · haveI : NeZero D := ⟨hD⟩
+    have hτpsd : (ChoiJamiolkowski.choiMatrix E).PosSemidef :=
+      (ChoiJamiolkowski.cp_iff_choi_posSemidef (T := E)).mp hE
+    let hτ : (ChoiJamiolkowski.choiMatrix E).IsHermitian := hτpsd.1
+    let v : {j : Fin D × Fin D // hτ.eigenvalues j ≠ 0} → (Fin D × Fin D) → ℂ :=
+      fun i p => ((Real.sqrt (hτ.eigenvalues i.1) : ℂ)) * hτ.eigenvectorUnitary p i.1
+    have hchoi' : ChoiJamiolkowski.choiMatrix E =
+        ∑ i : {j : Fin D × Fin D // hτ.eigenvalues j ≠ 0},
+          Matrix.vecMulVec (v i) (fun p => star (v i p)) := by
+      simpa [hτ, v] using
+        Matrix.PosSemidef.eq_sum_vecMulVec_nonzero_eigs
+          (A := ChoiJamiolkowski.choiMatrix E) hτpsd
+    have hchoi : ChoiJamiolkowski.choiMatrix E =
+        ∑ i : {j : Fin D × Fin D // hτ.eigenvalues j ≠ 0},
+          Matrix.vecMulVec (v i) (star (v i)) := by
+      simpa using hchoi'
+    have hcard : Fintype.card {j : Fin D × Fin D // hτ.eigenvalues j ≠ 0} = choiRank E := by
+      unfold choiRank
+      simpa [hτ] using (hτ.rank_eq_card_non_zero_eigs).symm
+    have hK : HasKrausCard E (Fintype.card {j : Fin D × Fin D // hτ.eigenvalues j ≠ 0}) :=
+      hasKrausCard_of_choiMatrix_eq_sum_vecMulVec
+        (E := E) (ι := {j : Fin D × Fin D // hτ.eigenvalues j ≠ 0}) v hchoi
+    rwa [hcard] at hK
+
+/-- In particular, a completely positive map has Kraus rank at most its Choi
+rank. -/
+theorem hasKrausRankLE_choiRank_of_cp {E : Mat →ₗ[ℂ] Mat}
+    (hE : IsCPMap E) :
+    HasKrausRankLE E (choiRank E) :=
+  hasKrausRankLE_of_hasKrausCard (hasKrausCard_choiRank_of_cp hE)
+
+/-- A CPTP map has Kraus rank at most its Choi rank. -/
+theorem hasKrausRankLE_choiRank_of_cptp {E : Mat →ₗ[ℂ] Mat}
+    (hE : IsChannel E) :
+    HasKrausRankLE E (choiRank E) :=
+  hasKrausRankLE_choiRank_of_cp hE.cp
 
 end Channel
