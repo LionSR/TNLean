@@ -1079,8 +1079,7 @@ representations already developed above. They correspond to
     $V^\dagger V = \Id$ and $\psi_i = \sum_j V_{ij}\,\phi_j$, then
     they induce the same pure-ensemble density operator. This is the
     sufficient direction of the Hughston--Jozsa--Wootters theorem; the
-    converse (necessity) requires Schmidt-decomposition machinery not
-    yet in the repository.
+    converse is~\ref{thm:exists_isometric_mixing_of_pureEnsembleDensity_eq}.
 \end{theorem}
 
 \begin{proof}
@@ -1095,6 +1094,60 @@ representations already developed above. They correspond to
            |\phi_j\rangle\!\langle \phi_{j'}|
         = \sum_j |\phi_j\rangle\!\langle \phi_j|.
     \]
+\end{proof}
+
+\begin{theorem}[Prop.~2.4, Hughston--Jozsa--Wootters converse]
+    \label{thm:exists_isometric_mixing_of_pureEnsembleDensity_eq}
+    \lean{WolfProps.exists_isometric_mixing_of_pureEnsembleDensity_eq}
+    \leanok
+    \uses{def:pureEnsembleDensity, thm:kraus_rectangular_freedom'}
+    If two pure-state ensembles $\{\psi_i\}_{i \in \iota_1}$ and
+    $\{\phi_j\}_{j \in \iota_2}$ induce the same pure-ensemble density
+    operator and $|\iota_2| \le |\iota_1|$, then there exists a tall
+    isometric mixing matrix
+    $V \in M_{\iota_1 \times \iota_2}(\mathbb{C})$ with
+    $V^\dagger V = \Id$ and $\psi_i = \sum_j V_{ij}\,\phi_j$. The
+    cardinality hypothesis is what makes $V$ a tall isometry; the
+    symmetric case $|\iota_1| \le |\iota_2|$ follows by swapping the
+    roles of the ensembles.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:pureEnsembleDensity, thm:kraus_rectangular_freedom',
+      thm:pureEnsembleDensity_eq_of_isometric_mixing}
+    Embed each vector $\psi_i$, $\phi_j$ as the $0$-th column of a
+    $D \times D$ matrix with zeros elsewhere; call these
+    $K_i$, $L_j \in M_D(\mathbb{C})$. A direct entry-wise computation
+    shows that for any $X \in M_D(\mathbb{C})$ both
+    $\sum_i K_i X K_i^\dagger$ and $\sum_j L_j X L_j^\dagger$ collapse
+    to $X_{00} \cdot \rho$, so the density equality
+    $\rho_\psi = \rho_\phi$ forces the two Kraus families to define the
+    same CP map. The rectangular Kraus
+    freedom~\ref{thm:kraus_rectangular_freedom'} then supplies an
+    isometry $V$ with $V^\dagger V = \Id$ and
+    $K_i = \sum_j V_{ij}\,L_j$; reading the equation off at column $0$
+    recovers the vector relation
+    $\psi_i = \sum_j V_{ij}\,\phi_j$.
+\end{proof}
+
+\begin{theorem}[Prop.~2.4, Hughston--Jozsa--Wootters equivalence]
+    \label{thm:pureEnsembleDensity_eq_iff_exists_isometric_mixing}
+    \lean{WolfProps.pureEnsembleDensity_eq_iff_exists_isometric_mixing}
+    \leanok
+    \uses{def:pureEnsembleDensity,
+      thm:pureEnsembleDensity_eq_of_isometric_mixing,
+      thm:exists_isometric_mixing_of_pureEnsembleDensity_eq}
+    Under the cardinality hypothesis $|\iota_2| \le |\iota_1|$, two
+    pure-state ensembles induce the same density operator iff they are
+    related by a tall isometric mixing matrix.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:pureEnsembleDensity_eq_of_isometric_mixing,
+      thm:exists_isometric_mixing_of_pureEnsembleDensity_eq}
+    Combine the two directions above.
 \end{proof}
 
 %% =========================================================

@@ -122,11 +122,17 @@ representations of quantum channels.
   - `WolfProps.channel_eq_id_of_fixes_pureStates` — a channel fixing
     every pure-state projector is the identity channel ✅
 
-* **Prop 2.4** (equivalence of ensembles, sufficient direction):
+* **Prop 2.4** (equivalence of ensembles, Hughston–Jozsa–Wootters):
   - `WolfProps.pureEnsembleDensity` — density operator of a pure-state
     ensemble `∑ᵢ |ψᵢ⟩⟨ψᵢ|` ✅
-  - `WolfProps.pureEnsembleDensity_eq_of_isometric_mixing` — ensembles
-    related by an isometric mixing matrix share the same density ✅
+  - `WolfProps.pureEnsembleDensity_eq_of_isometric_mixing` — sufficient
+    direction: ensembles related by an isometric mixing matrix share
+    the same density ✅
+  - `WolfProps.exists_isometric_mixing_of_pureEnsembleDensity_eq` —
+    necessary direction (HJW converse): equal densities force an
+    isometric mixing matrix between the two ensembles ✅
+  - `WolfProps.pureEnsembleDensity_eq_iff_exists_isometric_mixing` —
+    both directions packaged as an iff ✅
 
 ### §2.2 Transfer matrix
 
@@ -185,9 +191,8 @@ representations of quantum channels.
 
 | Result | Notes |
 |--------|-------|
-| Prop 2.4 (equiv of ensembles, necessity) | Needs purification/Schmidt decomp |
-| Thm 2.5 (unitary form) | Isometric form formalized; unitary form needs basis extension |
-| §2.3 Lorentz normal form | Needs compactness over `SL(2, ℂ)` filterings |
+| Thm 2.5 (unitary form) | Reduced isometric form is formalized; unitary form needs basis extension |
+| §2.3 Lorentz normal form (existence) | Needs compactness over `SL(2, ℂ)` filterings |
 | §2.3 Sorted singular values | Current SVD is unsorted; later uses want sorted values |
 
 ## References
