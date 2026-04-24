@@ -156,8 +156,7 @@ legs cyclically and taking the resulting trace.
     By Lemma~\ref{lem:mpo_transfer_eq_mps}, the transfer map of $M$ agrees with
     the transfer map of its doubled-index MPS view. Thus
     $\E_M \circ \E_M = \E_M$ holds exactly when the transfer map of
-    the doubled-index MPS view is idempotent, which is precisely the
-    renormalization fixed-point condition.
+    that doubled-index MPS tensor is idempotent, which is the RFP condition.
 \end{proof}
 
 \section{MPDOs and LPDOs}
@@ -289,7 +288,7 @@ legs cyclically and taking the resulting trace.
     \lean{MPOTensor.isRFP_iff_isZCL}
     \leanok
     \uses{def:is_rfp_mpdo, def:mpo_is_zcl}
-    The MPDO renormalization fixed-point condition is equivalent to
+    The provisional MPDO renormalization fixed-point condition is equivalent to
     the zero-correlation-length condition for MPO tensors.
 \end{theorem}
 
@@ -304,7 +303,7 @@ legs cyclically and taking the resulting trace.
     \leanok
     \uses{def:is_rfp_mpdo, def:mpo_to_mps, def:is_rfp, def:mpo_is_zcl,
         thm:mpo_is_zcl_iff_to_mps_rfp}
-    The MPDO renormalization fixed-point condition is equivalent to the pure-state RFP
+    The provisional MPDO RFP condition is equivalent to the pure-state RFP
     condition for the doubled-index MPS tensor.
 \end{theorem}
 
@@ -557,7 +556,7 @@ strong subadditivity for a normalized three-site reduced state.
     from \cite[\S4.4]{Cirac2017MPDO_AnnPhys}.
 \end{definition}
 
-\begin{remark}[Finite-length span and selector criteria for the horizontal canonical-form hypothesis]%
+\begin{remark}[Finite-length span and selector criteria for the abstract biCF hypothesis]%
     \label{rem:word_tuple_span_top}
     \lean{MPSTensor.WordTupleSpanTop}
     \lean{MPSTensor.HasBiCF}
@@ -571,29 +570,30 @@ strong subadditivity for a normalized three-site reduced state.
     \leanok
     Let $(A_k)$ be a family of block tensors, and fix a length $L$.
     Write $A_k^w$ for the length-$L$ word evaluation of $A_k$ along a word $w$.
-    Consider the tuple-valued evaluations
+    The finite-length spanning hypothesis says that the tuple-valued evaluations
     \[
         w \longmapsto (A_k^w)_k
     \]
-    in the direct product of the block matrix algebras.
-    The finite-length spanning hypothesis says that these tuples span the
-    whole product algebra.
-    Equivalently, if matrices $\Delta_k$ satisfy
+    span the full product algebra of block matrices.
+    The corresponding finite-length separation property asserts that there
+    exists a length $L$ such that if
     \[
         \sum_k \tr(\Delta_k A_k^w) = 0
         \qquad \text{for every word } w \text{ of length } L,
     \]
-    then every $\Delta_k$ vanishes. This is the nondegeneracy statement for
-    the product trace pairing, so a single finite blocking length already
-    separates the blocks by their word evaluations.
+    then every block coefficient $\Delta_k$ vanishes.
+    One theorem proves that the spanning condition implies this separation
+    property by nondegeneracy of the product trace pairing. A second theorem
+    then inserts the resulting biCF witness into horizontal canonical-form data
+    once injectivity, left-canonicality, and nonzero weights are given.
 
-    Proposition~IV.3 gives a concrete sufficient criterion for this
-    finite-length separation: after some common blocking length, each block is
-    block-injective, and after a second finite blocking length one can form
-    word combinations which equal the identity on one chosen block and vanish
-    on all others. Concatenating an injective prefix with such a selector
-    suffix yields the product-algebra span condition above, and therefore the
-    horizontal canonical-form conclusion.
+    The Proposition~IV.3 block-injectivity hypothesis isolates the
+    finite-length content needed here: after some common blocking length, each
+    block is block-injective, and after a second finite blocking length one can
+    form word combinations which equal the identity on one chosen block and
+    vanish on all others. Concatenating an injective prefix with such a selector
+    suffix yields the product-algebra span condition above, and hence again a
+    biCF witness and horizontal canonical-form data.
 \end{remark}
 
 \begin{theorem}[Abstract Proposition~IV.3 package]
@@ -667,8 +667,8 @@ strong subadditivity for a normalized three-site reduced state.
 
 \section{Fusion isometries}
 
-Following \cite[\S4.5]{Cirac2017MPDO_AnnPhys}, this section records the
-transfer-map content of the fusion-isometry picture.
+Following \cite[\S4.5]{Cirac2017MPDO_AnnPhys}, the current Lean development
+formalizes the transfer-map content of the fusion-isometry picture.
 For each blocked size $n \ge 1$, the doubled-index blocked tensor of an MPO
 has a blocked transfer map $E_n$ acting on bond-space matrices, and the
 support algebra is modeled by a subspace through which $E_n$ factors as a
@@ -701,12 +701,13 @@ retract.
     map $E_n$.
 \end{definition}
 
-\begin{theorem}[Fusion-isometry data imply MPDO RFP]%
+\begin{theorem}[Fusion-isometry data imply the provisional MPDO RFP condition]%
     \label{thm:mpdo_rfp_of_fusion}
     \lean{MPOTensor.isRFP_of_isRFP_MPDO_via_fusion}
     \leanok
     \uses{def:mpdo_rfp_via_fusion}
-    The fusion-isometry formulation implies \lean{MPOTensor.IsRFP}.
+    The fusion-isometry formulation implies the current predicate
+    \lean{MPOTensor.IsRFP}.
 \end{theorem}
 \begin{proof}\leanok
 Apply the definition at blocked size $n = 1$.
@@ -741,10 +742,10 @@ This range-factorization gives the required fusion-isometry data.
 \end{corollary}
 \begin{proof}\leanok
 Combine Theorem~\ref{thm:mpdo_rfp_via_fusion_iff} with the diagonal pure-state
-recovery theorem for the MPDO renormalization fixed-point condition.
+recovery theorem for the provisional MPO predicate.
 \end{proof}
 
-\section{Support-algebra structure}
+\section{Algebra structure}
 
 \begin{definition}[Algebra-structure data for an MPDO]%
     \label{def:mpdo_algebra_structure_data}
@@ -954,4 +955,86 @@ Theorem~\ref{thm:mpdo_is_gsnnch_iff_has_commuting_form}.
 The remaining entropy-side theorem is to derive the commuting-form property
 from the strong-area-law hypotheses of Appendix~C.2. The present file isolates
 its GSNNCH target once that step is available.
+\end{remark}
+
+\section{Blocked-RFP construction for simple MPDOs}
+
+\begin{definition}[Local simple-MPDO structure data]
+    \label{def:simple_mpdo_local_structure_data}
+    \lean{MPOTensor.SimpleMPDOLocalStructureData}
+    \leanok
+    \uses{thm:sal_implies_eta_structure, thm:sal_zcl_implies_rank_one_t}
+    This data record collects the current local Appendix~C.2 input: a normalized
+    three-site reduced state with equality in strong subadditivity, the
+    resulting local $\eta$-structure, and the rank-one conclusion for the
+    auxiliary primitive matrix $T$.
+\end{definition}
+
+\begin{definition}[Simple-MPDO blocked-RFP data]
+    \label{def:simple_mpdo_blocked_rfp_data}
+    \lean{MPOTensor.SimpleMPDOBlockedRFPData}
+    \leanok
+    \uses{def:simple_mpdo_local_structure_data, def:mpdo_has_commuting_form,
+        def:mpo_is_zcl}
+    For an MPO tensor $K$, this consists of the local Appendix~C.2 data together
+    with a provisional compatibility relation attaching those local data to
+    $K$, the commuting-form property, and zero correlation length. The local
+    component is retained so that the still-missing implication from the
+    entropy-side hypotheses to commuting form has an explicit target, even
+    though the current blocked-RFP consequences below use only the
+    commuting-form and zero-correlation-length entries.
+\end{definition}
+
+\begin{theorem}[Zero correlation length gives a blocked fusion-isometry witness]
+    \label{thm:structural_implies_rfp_blocked}
+    \lean{MPOTensor.structural_implies_rfp_blocked}
+    \leanok
+    \uses{def:mpo_is_zcl, def:mpdo_fusion_isometry, def:mpdo_rfp_via_fusion,
+        thm:mpdo_rfp_via_fusion_iff}
+    If an MPO tensor $K$ has zero correlation length, then it has a blocked
+    fusion-isometry witness at size $2$ in the sense of
+    Definition~\ref{def:mpdo_fusion_isometry}.
+\end{theorem}
+
+\begin{proof}\leanok
+Zero correlation length is the current provisional MPDO RFP predicate.
+Applying the converse direction of
+Theorem~\ref{thm:mpdo_rfp_via_fusion_iff} to that RFP witness yields
+fusion-isometry data at every positive blocked size; evaluating it at size $2$
+produces the blocked witness.
+\end{proof}
+
+\begin{theorem}[Simple-MPDO RFP chain from commuting form and ZCL]
+    \label{thm:simple_mpdo_rfp_chain}
+    \lean{MPOTensor.simple_mpdo_rfp_chain}
+    \leanok
+    \uses{def:mpdo_has_commuting_form, def:mpo_is_zcl,
+        thm:mpdo_is_gsnnch_zcl_iff_has_commuting_form_and_is_zcl,
+        thm:structural_implies_rfp_blocked, def:mpdo_rfp_via_fusion,
+        thm:mpdo_rfp_via_fusion_iff}
+    From the commuting-form property and zero correlation length one
+    simultaneously recovers the GSNNCH-with-ZCL branch of Theorem~4.9, the
+    blocked fusion-isometry witness at size $2$, and the transfer-map fusion
+    formulation of MPDO RFP.
+\end{theorem}
+
+\begin{proof}\leanok
+The commuting-form and zero-correlation-length hypotheses give the GSNNCH--ZCL
+branch via Theorem~\ref{thm:mpdo_is_gsnnch_zcl_iff_has_commuting_form_and_is_zcl}.
+The blocked witness is Theorem~\ref{thm:structural_implies_rfp_blocked}. The
+full transfer-map fusion formulation follows by applying the converse direction
+of Theorem~\ref{thm:mpdo_rfp_via_fusion_iff} to zero correlation length, which
+is the current RFP predicate.
+\end{proof}
+
+\begin{remark}[Remaining paper-level gap for Theorem~4.9]
+    \label{rem:simple_mpdo_rfp_chain_gap}
+    \notready
+    \uses{def:simple_mpdo_local_structure_data,
+        def:simple_mpdo_blocked_rfp_data, thm:simple_mpdo_rfp_chain}
+    Theorem~\ref{thm:simple_mpdo_rfp_chain} is fully formalized, but to recover
+    the original Appendix~C.2 implication from SAL and ZCL alone one still
+    needs a theorem deriving the commuting-form property from the local
+    simple-MPDO structure of Lemmas~C.3--C.4. The record above is included so
+    that this future implication has an explicit target.
 \end{remark}

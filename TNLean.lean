@@ -73,8 +73,8 @@ import TNLean.Axioms.Entropy
 -- from `TNLean.Axioms.Entropy`; the `TNLean.Entropy.*` modules
 -- re-state the sanctioned entropy axioms under the Entropy namespace.
 import TNLean.Entropy.VonNeumann
-import TNLean.Entropy.TripartiteTrace
 import TNLean.Entropy.StrongSubadditivity
+import TNLean.Entropy.TripartiteTrace
 import TNLean.Entropy.MarkovChain
 import TNLean.Entropy.MutualInformation
 -- Layer 2b: Axiomatized operator convexity/concavity results (pending upstream Mathlib)
@@ -260,6 +260,7 @@ import TNLean.MPS.MPDO.SimpleLocalStructure
 import TNLean.MPS.MPDO.FusionIsometries
 import TNLean.MPS.MPDO.AlgebraStructure
 import TNLean.MPS.MPDO.CommutingForm
+import TNLean.MPS.MPDO.BlockedRFPConstruction
 
 -- MPS examples
 import TNLean.MPS.Examples.AKLT
