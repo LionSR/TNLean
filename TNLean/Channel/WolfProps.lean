@@ -142,27 +142,16 @@ theorem polarization_sandwich (A B X : Matrix (Fin D) (Fin D) ℂ) :
 
 where each of the four sums is a completely positive map. -/
 theorem cp_decomposition_of_sandwich_sum
-    {n : ℕ} (A B : Fin n → Matrix (Fin D) (Fin D) ℂ)
+    {ι : Type*} [Fintype ι] (A B : ι → Matrix (Fin D) (Fin D) ℂ)
     (X : Matrix (Fin D) (Fin D) ℂ) :
-    (4 : ℂ) • (∑ i : Fin n, A i * X * (B i)ᴴ) =
-      (∑ i : Fin n, (A i + B i) * X * (A i + B i)ᴴ)
-        - (∑ i : Fin n, (A i - B i) * X * (A i - B i)ᴴ)
+    (4 : ℂ) • (∑ i, A i * X * (B i)ᴴ) =
+      (∑ i, (A i + B i) * X * (A i + B i)ᴴ)
+        - (∑ i, (A i - B i) * X * (A i - B i)ᴴ)
         + Complex.I •
-            (∑ i : Fin n, (A i + Complex.I • B i) * X * (A i + Complex.I • B i)ᴴ)
+            (∑ i, (A i + Complex.I • B i) * X * (A i + Complex.I • B i)ᴴ)
         - Complex.I •
-            (∑ i : Fin n, (A i - Complex.I • B i) * X * (A i - Complex.I • B i)ᴴ) := by
-  rw [Finset.smul_sum]
-  rw [show Complex.I •
-      ∑ i : Fin n, (A i + Complex.I • B i) * X * (A i + Complex.I • B i)ᴴ =
-      ∑ i : Fin n, Complex.I •
-        ((A i + Complex.I • B i) * X * (A i + Complex.I • B i)ᴴ)
-      from Finset.smul_sum]
-  rw [show Complex.I •
-      ∑ i : Fin n, (A i - Complex.I • B i) * X * (A i - Complex.I • B i)ᴴ =
-      ∑ i : Fin n, Complex.I •
-        ((A i - Complex.I • B i) * X * (A i - Complex.I • B i)ᴴ)
-      from Finset.smul_sum]
-  simp only [← Finset.sum_sub_distrib, ← Finset.sum_add_distrib]
+            (∑ i, (A i - Complex.I • B i) * X * (A i - Complex.I • B i)ᴴ) := by
+  simp only [Finset.smul_sum, ← Finset.sum_sub_distrib, ← Finset.sum_add_distrib]
   exact Finset.sum_congr rfl fun i _ => polarization_sandwich (A i) (B i) X
 
 /-! ### Prop 2.3: no information without disturbance -/
@@ -241,12 +230,12 @@ theorem linearMap_eq_id_of_fixes_rankOne
         T_fixes_vecMulVec_star_of_fixes_self (D := D) T hT (Pi.single i (1 : ℂ))
           (Pi.single j (1 : ℂ))]
 
-/-- **Prop 2.3 (Wolf), channel form**: a quantum channel leaving every
-pure-state projector `vecMulVec v (star v)` invariant is the identity
-channel. This is the standard "no information without disturbance"
-statement in quantum information theory. -/
+/-- **Prop 2.3 (Wolf), pure-state form**: any linear map (in particular any
+quantum channel) leaving every pure-state projector `vecMulVec v (star v)`
+invariant is the identity. This is the standard "no information without
+disturbance" statement in quantum information theory, phrased directly in
+terms of pure-state projectors. -/
 theorem channel_eq_id_of_fixes_pureStates
-    (_hch : IsChannel T)
     (hT : ∀ v : Fin D → ℂ, T (Matrix.vecMulVec v (star v)) =
                                     Matrix.vecMulVec v (star v)) :
     T = LinearMap.id :=
@@ -267,7 +256,7 @@ noncomputable def pureEnsembleDensity
 
 /-- **Prop 2.4 (Wolf), sufficient direction** (Hughston–Jozsa–Wootters).
 If two pure-state ensembles `{ψᵢ}_{i ∈ ι₁}` and `{φⱼ}_{j ∈ ι₂}` are related
-by an isometric mixing matrix `V : ι₁ → ι₂` (that is, `Vᴴ V = 1` and
+by an isometric mixing matrix `V : Matrix ι₁ ι₂ ℂ` (that is, `Vᴴ V = 1` and
 `ψᵢ = ∑ⱼ Vᵢⱼ • φⱼ`), then they induce the same density operator.
 
 The converse (necessity) — extracting such an isometry from equal density
@@ -304,27 +293,16 @@ theorem pureEnsembleDensity_eq_of_isometric_mixing
           refine Finset.sum_congr rfl fun j _ => ?_
           rw [Finset.sum_comm]
           refine Finset.sum_congr rfl fun j' _ => ?_
-          rw [show
-            (∑ i : ι₁, V i j * star (V i j')) * (φ j a * star (φ j' b)) =
-              ∑ i : ι₁, (V i j * star (V i j')) * (φ j a * star (φ j' b))
-            from Finset.sum_mul ..]
-          refine Finset.sum_congr rfl fun i _ => ?_
-          rw [StarMul.star_mul]
-          ring
+          simp_rw [Finset.sum_mul, StarMul.star_mul]
+          exact Finset.sum_congr rfl fun _ _ => by ring
     _ = ∑ j : ι₂, ∑ j' : ι₂,
           (if j' = j then 1 else 0) * (φ j a * star (φ j' b)) := by
           refine Finset.sum_congr rfl fun j _ => Finset.sum_congr rfl fun j' _ => ?_
           congr 1
           have h := hV_entry j' j
           -- `h : ∑ i, conj(V i j') * V i j = if j' = j then 1 else 0`
-          -- We want `∑ i, V i j * star (V i j') = if j' = j then 1 else 0`.
-          -- Use `star (V i j') = conj (V i j')` and commutativity.
-          rw [show
-            ∑ i : ι₁, V i j * star (V i j') =
-              ∑ i : ι₁, (starRingEnd ℂ) (V i j') * V i j from by
-                refine Finset.sum_congr rfl fun i _ => ?_
-                rw [mul_comm]; rfl]
-          exact h
+          -- Rewrite `star (V i j') = conj (V i j')` and commute the product.
+          simpa [mul_comm] using h
     _ = ∑ j : ι₂, (φ j a * star (φ j b)) := by
           refine Finset.sum_congr rfl fun j _ => ?_
           rw [Finset.sum_eq_single j]
