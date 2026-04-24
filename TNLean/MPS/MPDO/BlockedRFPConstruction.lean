@@ -24,7 +24,8 @@ side live in separate modules:
 What is still missing upstream is the theorem turning the local simple-MPDO data
 into the global commuting-form property. Because of that gap, the present file
 is formulated around the explicit record `SimpleMPDOBlockedRFPData`. The local
-Appendix C.2 data are retained there so that the eventual local-to-global
+Appendix C.2 data are retained there, together with a provisional compatibility
+relation to the ambient MPO tensor, so that the eventual local-to-global
 implication has a canonical target.
 
 The current consequences recorded here are:
@@ -123,20 +124,35 @@ def ofSALZCL
 
 end SimpleMPDOLocalStructureData
 
+/-- Provisional relation expressing that local simple-MPDO structure data are
+attached to a specific MPO tensor.
+
+The current development does not yet formalize the local-to-global map from the
+Appendix-C.2 entropy input to a commuting-form witness for `K`, so this
+compatibility relation is temporarily the trivial proposition. It is included
+already so that `SimpleMPDOBlockedRFPData` carries a type-level field linking
+its local data to the ambient tensor. -/
+def SimpleMPDOLocalStructureData.CompatibleWith
+    (_data : SimpleMPDOLocalStructureData) (_K : MPOTensor d D) : Prop :=
+  True
+
 /-- Auxiliary record for the simple-MPDO blocked-RFP argument.
 
 The field `localData` records the Appendix C.2 local structure from issue #781,
-while `commutingForm` and `zcl` record the issue-#782 target side and the MPO
+the field `compatible` records its provisional attachment to `K`, and the
+fields `commutingForm` and `zcl` record the issue-#782 target side and the MPO
 zero-correlation-length input. This is the current point where the two sibling
 branches meet: the missing theorem is the derivation of `commutingForm` from
-`localData` and the original simple-MPDO SAL hypotheses.
+the entropy-side hypotheses attached to `K`.
 
 The present blocked-RFP consequences only use `commutingForm` and `zcl`; the
-`localData` field is retained so that the eventual local-to-global implication
-has a canonical target. -/
+pair `localData` / `compatible` is retained so that the eventual local-to-global
+implication already has a type-level target. -/
 structure SimpleMPDOBlockedRFPData (K : MPOTensor d D) where
   /-- Local SAL/SSA/rank-one data from Appendix C.2. -/
   localData : SimpleMPDOLocalStructureData
+  /-- Provisional attachment of the local data to the ambient MPO tensor. -/
+  compatible : localData.CompatibleWith K
   /-- Global commuting-form / GSNNCH data. -/
   commutingForm : HasCommutingForm K
   /-- Zero correlation length, hence the current provisional RFP predicate. -/
@@ -162,6 +178,7 @@ def ofSALZCLAndCommutingForm
     SimpleMPDOBlockedRFPData K where
   localData := SimpleMPDOLocalStructureData.ofSALZCL
     rhoABC hRhoDM hSSA T hPrimitive hTrace hTraceConst hPF
+  compatible := trivial
   commutingForm := hCommuting
   zcl := hZCL
 
@@ -183,7 +200,8 @@ theorem isRFPViaFusion (data : SimpleMPDOBlockedRFPData K) :
 
 end SimpleMPDOBlockedRFPData
 
-/-- Zero correlation length yields a blocked fusion-isometry witness at size `2`. -/
+/-- Under the current convention `IsRFP = IsZCL`, zero correlation length yields
+a blocked fusion-isometry witness at size `2`. -/
 theorem structural_implies_rfp_blocked {K : MPOTensor d D}
     (hZCL : IsZCL K) :
     Nonempty (FusionIsometryData K 2) :=
@@ -191,13 +209,12 @@ theorem structural_implies_rfp_blocked {K : MPOTensor d D}
     (M := K)
     (show IsRFP K from hZCL)) 2 (show 0 < 2 by decide)
 
-/-- **Proposition C.5, data-parameterized form**: if the simple-MPDO inputs are
-recorded in `SimpleMPDOBlockedRFPData`, then the blocked fusion-isometry
-witness follows from the zero-correlation-length field.
+/-- Data-parameterized blocked fusion-isometry witness.
 
-The fields `localData` and `commutingForm` are retained for the larger
-simple-MPDO interface, even though the present blocked-fusion consequence only
-uses `data.zcl`. -/
+Relative to the current convention `IsRFP = IsZCL`, the present conclusion uses
+only `data.zcl`. The fields `localData`, `compatible`, and `commutingForm` are
+retained for the larger simple-MPDO interface and for the future local-to-global
+implication. -/
 theorem structural_implies_rfp_blocked_of_data {K : MPOTensor d D}
     (data : SimpleMPDOBlockedRFPData K) :
     Nonempty (FusionIsometryData K 2) :=

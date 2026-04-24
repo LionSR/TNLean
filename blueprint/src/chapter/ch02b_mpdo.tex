@@ -255,8 +255,8 @@ legs cyclically and taking the resulting trace.
     \uses{def:is_prfp, def:mpo_is_zcl}
     The current purification-RFP condition is strictly weaker than MPO zero
     correlation length: there exists an MPO tensor with purification RFP whose
-    transfer map is not idempotent. Equivalently, the implication from the Lean
-    predicate \texttt{IsPRFP} to the predicate \texttt{IsZCL} fails.
+    transfer map is not idempotent. Equivalently, purification RFP does not
+    imply MPO zero correlation length.
 \end{remark}
 
 \begin{theorem}[Purification RFP implies LPDO]\label{thm:prfp_is_lpdo}
@@ -568,34 +568,30 @@ strong subadditivity for a normalized three-site reduced state.
     \leanok
     Let $(A_k)$ be a family of block tensors, and fix a length $L$.
     Write $A_k^w$ for the length-$L$ word evaluation of $A_k$ along a word $w$.
-    The predicate \texttt{WordTupleSpanTop} says that the tuple-valued evaluations
+    The finite-length spanning hypothesis says that the tuple-valued evaluations
     \[
         w \longmapsto (A_k^w)_k
     \]
     span the full product algebra of block matrices.
-    The predicate \texttt{HasBiCF} records the corresponding finite-length
-    separation property: there exists $L$ such that if
+    The corresponding finite-length separation property asserts that there
+    exists a length $L$ such that if
     \[
         \sum_k \tr(\Delta_k A_k^w) = 0
         \qquad \text{for every word } w \text{ of length } L,
     \]
     then every block coefficient $\Delta_k$ vanishes.
-    The theorem \texttt{hasBiCF\_of\_wordTupleSpanTop} proves that the
-    spanning condition implies this separation property, by nondegeneracy of the
-    product trace pairing. The theorem
-    \texttt{horizontalCFData\_of\_wordTupleSpanTop} then inserts the resulting
-    biCF witness into \texttt{HorizontalCFData} once injectivity,
-    left-canonicality, and nonzero weights are given.
+    One theorem proves that the spanning condition implies this separation
+    property by nondegeneracy of the product trace pairing. A second theorem
+    then inserts the resulting biCF witness into horizontal canonical-form data
+    once injectivity, left-canonicality, and nonzero weights are given.
 
-    The predicate \texttt{PropBlockInjective} isolates the finite-length content
-    of Proposition~IV.3: after some common blocking length, each block is
-    block-injective, and after a second finite blocking length one can form word
-    combinations which equal the identity on one chosen block and vanish on all
-    others. Concatenating an injective prefix with such a selector suffix yields
-    the product-algebra span condition above. This is formalized by
-    \texttt{wordTupleSpanTop\_of\_propBlockInjective}, and the resulting biCF
-    witness is inserted into horizontal canonical-form data by
-    \texttt{horizontalCFData\_of\_propBlockInjective}.
+    The Proposition~IV.3 block-injectivity hypothesis isolates the
+    finite-length content needed here: after some common blocking length, each
+    block is block-injective, and after a second finite blocking length one can
+    form word combinations which equal the identity on one chosen block and
+    vanish on all others. Concatenating an injective prefix with such a selector
+    suffix yields the product-algebra span condition above, and hence again a
+    biCF witness and horizontal canonical-form data.
 \end{remark}
 
 \begin{theorem}[Abstract Proposition~IV.3 package]
@@ -963,7 +959,8 @@ its GSNNCH target once that step is available.
     \uses{def:simple_mpdo_local_structure_data, def:mpdo_has_commuting_form,
         def:mpo_is_zcl}
     For an MPO tensor $K$, this consists of the local Appendix~C.2 data together
-    with the commuting-form property and zero correlation length. The local
+    with a provisional compatibility relation attaching those local data to
+    $K$, the commuting-form property, and zero correlation length. The local
     component is retained so that the still-missing implication from the
     entropy-side hypotheses to commuting form has an explicit target, even
     though the current blocked-RFP consequences below use only the
@@ -976,8 +973,8 @@ its GSNNCH target once that step is available.
     \leanok
     \uses{def:mpo_is_zcl, def:mpdo_rfp_via_fusion}
     If an MPO tensor $K$ has zero correlation length, then it has a blocked
-    fusion-isometry witness at size $2$, i.e. a term of type
-    \texttt{Nonempty (MPOTensor.FusionIsometryData K 2)}.
+    fusion-isometry witness at size $2$ in the sense of
+    Definition~\ref{def:mpdo_fusion_isometry}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -1015,8 +1012,7 @@ which is the current RFP predicate.
         def:simple_mpdo_blocked_rfp_data, thm:simple_mpdo_rfp_chain}
     Theorem~\ref{thm:simple_mpdo_rfp_chain} is fully formalized, but to recover
     the original Appendix~C.2 implication from SAL and ZCL alone one still
-    needs a theorem deriving \lean{MPOTensor.HasCommutingForm} from the local
-    simple-MPDO structure of Lemmas~C.3--C.4. The record
-    \lean{MPOTensor.SimpleMPDOBlockedRFPData} is included so that this future
-    implication has an explicit target.
+    needs a theorem deriving the commuting-form property from the local
+    simple-MPDO structure of Lemmas~C.3--C.4. The record above is included so
+    that this future implication has an explicit target.
 \end{remark}
