@@ -79,10 +79,6 @@ def wordEntryFamily
     (L : ℕ) : BlockEntryIndex dim → (Fin L → Fin d) → ℂ :=
   fun x w => blockEntryValue (wordTuple A L w) x
 
-/-- The delta function at a chosen index in a finite function space. -/
-private def deltaFun {ι : Type*} [DecidableEq ι] (i : ι) : ι → ℂ :=
-  fun j => if j = i then 1 else 0
-
 /-- The block-injective canonical-form property used by `HorizontalCFData`. -/
 def HasBiCF
     (A : (k : Fin r) → MPSTensor d (dim k)) : Prop :=
@@ -167,30 +163,48 @@ private theorem exists_dualCoeffs_of_wordEntryFamily_linearIndependent
     exact funext (Fintype.linearIndependent_iff.mp hLI c (by simpa [lc] using hc))
   obtain ⟨Ψ, hΨ⟩ := lc.exists_leftInverse_of_injective hlcKer
   let coeff : BlockEntryIndex dim → (Fin L → Fin d) → ℂ :=
-    fun x w => Ψ (deltaFun w) x
+    fun x w => Ψ ((Pi.single w (1 : ℂ) : (Fin L → Fin d) → ℂ)) x
   have hΨ_apply :
       ∀ (f : (Fin L → Fin d) → ℂ) (x : BlockEntryIndex dim),
         Ψ f x = ∑ w : Fin L → Fin d, f w * coeff x w := by
     intro f x
-    have hdecomp : f = ∑ w : Fin L → Fin d, f w • deltaFun w := by
-      ext w
-      simp [deltaFun]
-    rw [hdecomp, map_sum]
-    simp [coeff, deltaFun]
+    calc
+      Ψ f x = Ψ (∑ w : Fin L → Fin d, (Pi.single w (f w) : (Fin L → Fin d) → ℂ)) x := by
+        simpa using
+          congrArg (fun g : ((Fin L → Fin d) → ℂ) => Ψ g x) (Finset.univ_sum_single f).symm
+      _ = ∑ w : Fin L → Fin d, Ψ ((Pi.single w (f w) : (Fin L → Fin d) → ℂ)) x := by
+        rw [map_sum]
+        simp
+      _ = ∑ w : Fin L → Fin d, f w * coeff x w := by
+        refine Finset.sum_congr rfl ?_
+        intro w _
+        have hsingle_smul :
+            ((Pi.single w (f w) : (Fin L → Fin d) → ℂ)) =
+              f w • ((Pi.single w (1 : ℂ) : (Fin L → Fin d) → ℂ)) := by
+          ext z
+          by_cases hzw : z = w
+          · subst hzw
+            simp
+          · simp [Pi.single_eq_of_ne hzw]
+        rw [hsingle_smul]
+        simp [coeff]
   refine ⟨coeff, ?_⟩
   intro x y
-  have hsingle : lc (deltaFun y) = wordEntryFamily A L y := by
+  have hsingle :
+      lc ((Pi.single y (1 : ℂ) : BlockEntryIndex dim → ℂ)) = wordEntryFamily A L y := by
     ext w
     rw [Fintype.linearCombination_apply, Finset.sum_eq_single y]
-    · simp [deltaFun]
+    · simp
     · intro z _ hzy
-      simp [deltaFun, hzy]
+      simp [Pi.single_eq_of_ne hzy]
     · intro hy
       exact False.elim (hy (Finset.mem_univ y))
   have hy : Ψ (wordEntryFamily A L y) x = if x = y then 1 else 0 := by
-    have hleft : Ψ (lc (deltaFun y)) = deltaFun y := by
-      simpa using congrArg (fun f => f (deltaFun y)) hΨ
-    simpa [hsingle, deltaFun] using congrFun hleft x
+    have hleft :
+        Ψ (lc ((Pi.single y (1 : ℂ) : BlockEntryIndex dim → ℂ))) =
+          ((Pi.single y (1 : ℂ) : BlockEntryIndex dim → ℂ)) := by
+      simpa using congrArg (fun f => f ((Pi.single y (1 : ℂ) : BlockEntryIndex dim → ℂ))) hΨ
+    simpa [hsingle, Pi.single_apply] using congrFun hleft x
   simpa [hΨ_apply (wordEntryFamily A L y) x, mul_comm] using hy
 
 /-- Linear independence of the scalar word-entry family forces the tuple-valued
