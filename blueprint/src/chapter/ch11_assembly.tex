@@ -503,31 +503,34 @@ single weighted block.
 	the same multiset equality.
 \end{proof}
 
-\begin{definition}[BNT-quality sector data]%
+\begin{definition}[Basis-level BNT sector data]%
 \label{def:has_bnt_sector_data}
 	\lean{MPSTensor.HasBNTSectorData}
 	\leanok
 	\uses{def:paper_sector_data}
-	A sector decomposition $P$ has \emph{BNT-quality sector data} when each
-	basis tensor is left-canonical (TP), irreducible, has a primitive
-	transfer map, and positive auxiliary dimension.  These are the
-	basis-level conditions shared with the normal canonical form, lifted to
-	the sector-decomposition interface; they are sufficient for calling the
+	A sector decomposition $P$ has \emph{basis-level BNT data} when each
+	basis tensor is left-canonical, irreducible, has a primitive transfer
+	map, and positive auxiliary dimension.  These are the basis-level
+	conditions shared with the normal canonical form, lifted to the
+	sector-decomposition interface; they are sufficient for calling the
 	heterogeneous sector comparison theorems after supplying basis matching
-	and gauge-phase data.
+	and gauge-phase data, but do not by themselves enforce the BNT
+	separation axiom of the basis-of-normal-tensors canonical form.
 \end{definition}
 
-\begin{theorem}[General BNT sector decomposition from TP + primitive + irreducible blocks]%
-\label{thm:exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks}
-	\lean{MPSTensor.exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks}
+\begin{theorem}[Trivial sector decomposition with basis-level BNT data from TP + primitive + irreducible blocks]%
+\label{thm:exists_trivialSectorDecomp_with_bntBasisData_of_tp_primitive_irr_blocks}
+	\lean{MPSTensor.exists_trivialSectorDecomp_with_bntBasisData_of_tp_primitive_irr_blocks}
 	\leanok
 	\uses{def:has_bnt_sector_data, def:paper_sector_data}
 	Let $(\mu_k, A_k)_{k=1}^{r}$ be a block family with positive auxiliary
-	dimensions, where each block is left-canonical (TP), irreducible, has a
-	primitive transfer map, and carries a nonzero weight.  Then there exists
-	a sector decomposition $P$ with total MPV family equal to
-	$\sum_k \mu_k^N V^{(N)}(A_k)$ at every system size and basis indexed so
-	that $P$ has BNT-quality sector data.
+	dimensions, where each block is left-canonical, irreducible, has a
+	primitive transfer map, and carries a nonzero weight.  Then there
+	exists a sector decomposition $P$ with total MPV family equal to
+	$\sum_k \mu_k^N V^{(N)}(A_k)$ at every system size and basis indexed
+	so that $P$ has basis-level BNT data; concretely, $P$ is the granular
+	decomposition where each block is its own basis tensor with copy
+	multiplicity one.
 \end{theorem}
 
 \begin{proof}
@@ -536,7 +539,7 @@ single weighted block.
 	Take $P$ with basis tensors $(A_k)_{k=1}^{r}$, basis dimension $d_k$,
 	single copy per basis, and sector weight $\mu_k$.  The MPV expansion
 	formula from Theorem~\ref{thm:paper_decomp_formula} gives the claimed
-	total MPV identity, and the BNT-quality sector data is inherited
+	total MPV identity, and the basis-level BNT data are inherited
 	directly from the hypotheses on the input blocks.
 \end{proof}
 
@@ -555,19 +558,23 @@ single weighted block.
 		      recovers the sector weight multisets without requiring
 		      explicit coefficient convergence hypotheses.
 	\end{enumerate}
-	The general basis-of-normal-tensors sector construction for the
-	after-blocking output is now formalized by
-	Theorem~\ref{thm:exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks}
-	without the single-norm-class restriction; what is still missing for
-	the unconditional equal-case theorem
-	(Theorem~\ref{thm:ft_equal}, \cite[Corollary~IV.5]{Cirac2021Matrix}) is
-	a witness-producing matched-basis theorem for heterogeneous sector
-	decompositions: the algebraic reduction after a basis matching is now
-	formalized in Theorems~\ref{thm:route_b_hetero_phase_match}
+	The basis-level BNT sector construction for the after-blocking output
+	is now formalized by
+	Theorem~\ref{thm:exists_trivialSectorDecomp_with_bntBasisData_of_tp_primitive_irr_blocks}
+	without the single-norm-class restriction.  This supplies the
+	basis-level input needed by the matched-basis theorem; the remaining
+	paper-level ingredients for the unconditional equal-case theorem
+	(Theorem~\ref{thm:ft_equal}, \cite[Corollary~IV.5]{Cirac2021Matrix})
+	are (i) a collapse step identifying gauge-phase-equivalent basis
+	tensors (needed for the BNT separation axiom of the
+	basis-of-normal-tensors canonical form), and (ii) a witness-producing
+	matched-basis theorem for heterogeneous sector decompositions: the
+	algebraic reduction after a basis matching is now formalized in
+	Theorems~\ref{thm:route_b_hetero_phase_match}
 	and~\ref{thm:route_b_hetero_matched_basis}, but one still needs a
 	theorem that derives the permutation, multiplicity matching, and
 	gauge-phase data directly from equality of the total MPV families.
-	Once this ingredient is in place, the final global gauge matrix of
+	Once these ingredients are in place, the final global gauge matrix of
 	Corollary~IV.5 is obtained by the same phase-absorption and blockwise
 	composition argument already formalized in the strict single-weight
 	setting.

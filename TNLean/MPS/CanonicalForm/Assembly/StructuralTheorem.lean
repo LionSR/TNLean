@@ -67,22 +67,27 @@ The theorem `exists_tp_sector_decomp_after_blocking` below provides:
 The current library already settles the common-period blocking step and the
 primitive / irreducible / normal bridges needed after blocking. The remaining
 Gap §1 content is now more specific:
-- the **general BNT sector construction** for the blocked output is now
-  provided by `exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks`
-  (`TNLean.MPS.CanonicalForm.EqualNormBridge`), which produces a
-  `SectorDecomposition` with `HasBNTSectorData` from arbitrary TP +
-  primitive + irreducible block families with nonzero weights, no longer
-  restricted to the single-norm-class collapse of `exists_bnt_grouping`;
-- what still remains is the **witness-producing heterogeneous sector
-  comparison theorem** deriving the basis permutation, gauge-phase data, and
-  copy alignment for two such BNT sector decompositions from arbitrary
-  `SameMPV₂`.
+- the **basis-level BNT sector construction** for the blocked output is
+  supplied by
+  `exists_trivialSectorDecomp_with_bntBasisData_of_tp_primitive_irr_blocks`
+  (`TNLean.MPS.CanonicalForm.EqualNormBridge`), which packages arbitrary TP +
+  primitive + irreducible block families with nonzero weights as the granular
+  sector decomposition carrying `HasBNTSectorData`. This supplies the
+  basis-level input consumed by the matched-basis theorem, but is not the
+  paper's full basis-of-normal-tensors construction: distinct basis tensors
+  may still be gauge-phase-equivalent, so the BNT separation axiom is not
+  enforced here. The collapsing step that identifies gauge-phase-equivalent
+  basis tensors is tracked separately; and
+- the **witness-producing heterogeneous sector comparison theorem** deriving
+  the basis permutation, gauge-phase data, and copy alignment for two such
+  sector decompositions from arbitrary `SameMPV₂` is still missing.
 
 The downstream algebraic reduction after a matched basis is formalized by
 `fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_matched_basis`,
-and the general sector-level input it expects is now supplied by
-`exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks`. The remaining missing
-ingredient is therefore only the witness-producing matched-basis step.
+and the basis-level sector input it expects is now supplied by
+`exists_trivialSectorDecomp_with_bntBasisData_of_tp_primitive_irr_blocks`.
+The remaining missing ingredients are therefore the gauge-phase-equivalent
+collapsing step and the witness-producing matched-basis step.
 -/
 
 section FundamentalTheorem1606
@@ -258,12 +263,15 @@ The complete end-to-end FT should take two tensors `A, B` with `SameMPV₂ A B`
 and pass from the blocked reduction output to the paper's basis-of-normal-tensors
 endpoint. The remaining formalizations are now:
 
-1. **General one-sided BNT construction**: now provided by
-   `exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks`
-   (`TNLean.MPS.CanonicalForm.EqualNormBridge`), which produces a
-   `SectorDecomposition` carrying `HasBNTSectorData` for arbitrary TP +
-   primitive + irreducible block families with nonzero weights. This is no
-   longer restricted to the single-norm-class case
+1. **Basis-level BNT sector construction**: now provided by
+   `exists_trivialSectorDecomp_with_bntBasisData_of_tp_primitive_irr_blocks`
+   (`TNLean.MPS.CanonicalForm.EqualNormBridge`), which packages arbitrary TP
+   + primitive + irreducible block families with nonzero weights as a
+   granular `SectorDecomposition` carrying `HasBNTSectorData`. This supplies
+   the basis-level input consumed by the matched-basis theorem but does not
+   collapse gauge-phase-equivalent blocks; the collapsing step needed for
+   the paper's basis-of-normal-tensors separation axiom remains, and is
+   currently available only in the single-norm-class special case
    `bnt_grouping_single_norm_class_of_tp_primitive_irr_blocks`.
 
 2. **Witness-producing heterogeneous sector comparison**: the algebraic
@@ -276,14 +284,16 @@ endpoint. The remaining formalizations are now:
    permutation, gauge-phase data, and copy alignment from arbitrary equal total
    MPVs of two sector decompositions.
 
-3. **Final global construction**: once step 2 is available, combine it with the
-   already-formalized common-period blocking, blocked irreducibility,
+3. **Final global construction**: once step 2 and the gauge-phase-equivalent
+   collapsing step are available, combine them with the already-formalized
+   common-period blocking, blocked irreducibility,
    `isNormal_of_tp_primitive_irreducible`, and the global gauge construction of
    the equal-case FT.
 
-So both the common-period blocking step and the general one-sided BNT sector
-construction are in place; the remaining paper-level ingredient is the
-witness-producing matched-basis step.
+So the common-period blocking step and the basis-level BNT sector
+construction are in place; the remaining paper-level ingredients are the
+gauge-phase-equivalent collapsing step and the witness-producing
+matched-basis step.
 -/
 
 end FundamentalTheorem1606
