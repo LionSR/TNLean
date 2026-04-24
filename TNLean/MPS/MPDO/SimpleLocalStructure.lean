@@ -51,7 +51,7 @@ arXiv:1606.00608 (Cirac–Pérez-García–Schuch–Verstraete).
 In the paper, Lemma C.3 continues from equality in strong subadditivity to the
 explicit operators `η_{k,h}` by applying local inverse maps coming from the
 injectivity of the simple tensor. The present file now contains that
-inverse-map layer for an injective simple MPO tensor, packaged by
+inverse-map layer for an injective simple MPO tensor, given by
 `MPOTensor.inverseTensor`, `MPOTensor.physRealize`, and
 `MPOTensor.physRealizeLeft`.
 
@@ -97,7 +97,7 @@ def TracePowersConstant (T : Matrix (Fin n) (Fin n) ℝ) : Prop :=
 for a primitive nonnegative matrix, constant traces of positive powers imply a
 rank-one factorization.
 
-This is intentionally packaged as a local hypothesis rather than a new global
+This is intentionally stated as a local hypothesis rather than a new global
 assumption. Once a genuine proof is formalized, downstream callers can simply
 supply that theorem here and the scoped result `MPOTensor.sal_zcl_implies_rank_one_T`
 will become unconditional. -/
@@ -227,8 +227,8 @@ abbrev etaOperators
 
 /-- Explicit neighboring operators `η_{k,h}` together with their positivity.
 
-This packages the operator family from `MPOTensor.etaOperators` with the
-positivity condition `η_{k,h} ≥ 0` from Appendix C.2. -/
+This structure consists of the operator family from `MPOTensor.etaOperators`
+together with the positivity condition `η_{k,h} ≥ 0` from Appendix C.2. -/
 structure ExplicitEtaOperators
     {ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)
       (Fin dA × Fin dB × Fin dC) ℂ}
