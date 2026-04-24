@@ -266,6 +266,86 @@ theorem choiMatrix_of_kraus_posSemidef
   simpa using Matrix.posSemidef_vecMulVec_self_star
     (fun p : Fin D × Fin D => c * K i p.1 p.2)
 
+/-- A Choi-matrix decomposition into rank-one outer products reconstructs a
+Kraus family indexed by the same finite type. -/
+theorem exists_kraus_of_choiMatrix_eq_sum_vecMulVec [NeZero D]
+    {ι : Type*} [Fintype ι]
+    {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
+    (v : ι → (Fin D × Fin D) → ℂ)
+    (hchoi : choiMatrix T = ∑ m : ι, Matrix.vecMulVec (v m) (star (v m))) :
+    ∃ K : ι → Matrix (Fin D) (Fin D) ℂ, ∀ X, T X = ∑ m : ι, K m * X * (K m)ᴴ := by
+  classical
+  let c : ℂ := (1 : ℂ) / ((D : ℝ).sqrt : ℂ)
+  have hDpos : 0 < D := Nat.pos_of_ne_zero (NeZero.ne D)
+  have hc : c ≠ 0 := by
+    dsimp [c]
+    have hsqrt : (((D : ℝ).sqrt : ℂ)) ≠ 0 :=
+      Complex.ofReal_ne_zero.mpr <| Real.sqrt_ne_zero'.2 (by exact_mod_cast hDpos)
+    simp [hsqrt]
+  have hstarc : star c = c := by simp [c]
+  have hαne : c * star c ≠ 0 := by
+    simpa [hstarc] using mul_ne_zero hc hc
+  let K : ι → Matrix (Fin D) (Fin D) ℂ := fun m a b => v m (a, b) / c
+  refine ⟨K, ?_⟩
+  intro X
+  let S : Matrix (Fin D) (Fin D) ℂ → Matrix (Fin D) (Fin D) ℂ :=
+    fun Y => ∑ m : ι, K m * Y * (K m)ᴴ
+  let P : Matrix (Fin D) (Fin D) ℂ → Prop := fun Y => T Y = S Y
+  change P X
+  refine Matrix.induction_on X ?_ ?_
+  · intro p q hp hq
+    dsimp [P, S] at *
+    simp [map_add, Matrix.add_mul, Matrix.mul_add, hp, hq, Finset.sum_add_distrib]
+  · intro i j z
+    dsimp [P, S]
+    have hbase : T (Matrix.single i j (1 : ℂ)) = S (Matrix.single i j (1 : ℂ)) := by
+      ext a b
+      have hentry : T (Matrix.single i j (c * star c)) a b =
+          (∑ m : ι, Matrix.vecMulVec (v m) (star (v m))) (a, i) (b, j) := by
+        simpa [c, choiMatrix_apply, omegaSlice_eq_single (D := D) i j] using
+          congrArg (fun M => M (a, i) (b, j)) hchoi
+      have hsmul : T (Matrix.single i j (c * star c)) a b =
+          (c * star c) * T (Matrix.single i j (1 : ℂ)) a b := by
+        simpa [Matrix.smul_single] using congrArg (fun M => M a b)
+          (T.map_smul (c * star c) (Matrix.single i j (1 : ℂ)))
+      have h1 : (c * star c) * T (Matrix.single i j (1 : ℂ)) a b =
+          ∑ m : ι, v m (a, i) * star (v m (b, j)) := by
+        exact hsmul.symm.trans <|
+          by simpa [Matrix.sum_apply, Matrix.vecMulVec_apply] using hentry
+      have h2 : (c * star c) * S (Matrix.single i j (1 : ℂ)) a b =
+          ∑ m : ι, v m (a, i) * star (v m (b, j)) := by
+        calc
+          (c * star c) * S (Matrix.single i j (1 : ℂ)) a b
+              = (c * star c) *
+                  ((∑ m : ι, K m * Matrix.single i j (1 : ℂ) * (K m)ᴴ) a b) := rfl
+          _ = (c * star c) *
+                ∑ m : ι, (K m * Matrix.single i j (1 : ℂ) * (K m)ᴴ) a b := by
+                rw [Matrix.sum_apply]
+          _ = ∑ m : ι,
+                (c * star c) * ((K m * Matrix.single i j (1 : ℂ) * (K m)ᴴ) a b) := by
+                rw [Finset.mul_sum]
+          _ = ∑ m : ι, v m (a, i) * star (v m (b, j)) := by
+                refine Finset.sum_congr rfl ?_
+                intro m _
+                have hterm : (K m * Matrix.single i j (1 : ℂ) * (K m)ᴴ) a b =
+                    (v m (a, i) / c) * star (v m (b, j) / c) := by
+                  simpa [K, Matrix.vecMulVec_apply] using
+                    congrArg (fun M => M a b)
+                      (Matrix.mul_single_mul_conjTranspose_eq_vecMulVec
+                        (K := K m) (c := (1 : ℂ)) i j)
+                rw [hterm]
+                simp [div_eq_mul_inv, hstarc, hc, mul_assoc, mul_left_comm, mul_comm]
+      exact (mul_left_cancel₀ hαne) (h1.trans h2.symm)
+    have hSsmul (Y : Matrix (Fin D) (Fin D) ℂ) : S (z • Y) = z • S Y := by
+      dsimp [S]
+      simp [Finset.smul_sum]
+    calc
+      T (Matrix.single i j z) = z • T (Matrix.single i j (1 : ℂ)) := by
+        simpa [Matrix.smul_single] using T.map_smul z (Matrix.single i j (1 : ℂ))
+      _ = z • S (Matrix.single i j (1 : ℂ)) := by rw [hbase]
+      _ = S (z • Matrix.single i j (1 : ℂ)) := by rw [hSsmul]
+      _ = S (Matrix.single i j z) := by simp [Matrix.smul_single]
+
 theorem projectedChoiPosSemidef_of_cp
     {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
     (hT : IsCPMap T) :
@@ -312,75 +392,9 @@ theorem cp_iff_choi_posSemidef [NeZero D] :
     intro hτ
     classical
     obtain ⟨r, v, hchoi⟩ := (Matrix.posSemidef_iff_eq_sum_vecMulVec).mp hτ
-    let c : ℂ := (1 : ℂ) / ((D : ℝ).sqrt : ℂ)
-    have hDpos : 0 < D := Nat.pos_of_ne_zero (NeZero.ne D)
-    have hc : c ≠ 0 := by
-      dsimp [c]
-      have hsqrt : (((D : ℝ).sqrt : ℂ)) ≠ 0 :=
-        Complex.ofReal_ne_zero.mpr <| Real.sqrt_ne_zero'.2 (by exact_mod_cast hDpos)
-      simp [hsqrt]
-    have hstarc : star c = c := by simp [c]
-    have hαne : c * star c ≠ 0 := by simpa [hstarc] using mul_ne_zero hc hc
-    let K : Fin r → Matrix (Fin D) (Fin D) ℂ := fun m a b => v m (a, b) / c
-    let S : Matrix (Fin D) (Fin D) ℂ → Matrix (Fin D) (Fin D) ℂ :=
-      fun X => ∑ m : Fin r, K m * X * (K m)ᴴ
-    refine ⟨r, K, ?_⟩
-    intro X
-    -- Use linearity to reduce to matrix unit basis
-    let P : Matrix (Fin D) (Fin D) ℂ → Prop := fun Y => T Y = S Y
-    change P X
-    refine Matrix.induction_on X ?_ ?_
-    · intro p q hp hq
-      dsimp [P, S] at *
-      simp [map_add, Matrix.add_mul, Matrix.mul_add, hp, hq, Finset.sum_add_distrib]
-    · intro i j z
-      dsimp [P, S]
-      have hbase : T (Matrix.single i j (1 : ℂ)) = S (Matrix.single i j 1) := by
-        ext a b
-        have hentry : T (Matrix.single i j (c * star c)) a b =
-            (∑ m : Fin r, Matrix.vecMulVec (v m) (star (v m))) (a, i) (b, j) := by
-          simpa [c, choiMatrix_apply, omegaSlice_eq_single (D := D) i j] using
-            (congrArg (fun M => M (a, i) (b, j)) hchoi)
-        have hsmul : T (Matrix.single i j (c * star c)) a b =
-            (c * star c) * T (Matrix.single i j (1 : ℂ)) a b := by
-          simpa [Matrix.smul_single] using congrArg (fun M => M a b)
-            (T.map_smul (c * star c) (Matrix.single i j (1 : ℂ)))
-        have h1 : (c * star c) * T (Matrix.single i j (1 : ℂ)) a b =
-            ∑ m : Fin r, v m (a, i) * star (v m (b, j)) :=
-          hsmul.symm.trans <|
-            by simpa [Matrix.sum_apply, Matrix.vecMulVec_apply] using hentry
-        have h2 : (c * star c) * S (Matrix.single i j (1 : ℂ)) a b =
-            ∑ m : Fin r, v m (a, i) * star (v m (b, j)) := by
-          calc
-            (c * star c) * S (Matrix.single i j (1 : ℂ)) a b
-                = (c * star c) *
-                    ((∑ m : Fin r, K m * Matrix.single i j (1 : ℂ) * (K m)ᴴ) a b) := rfl
-            _ = (c * star c) *
-                  ∑ m : Fin r, (K m * Matrix.single i j (1 : ℂ) * (K m)ᴴ) a b := by
-                  rw [Matrix.sum_apply]
-            _ = ∑ m : Fin r,
-                  (c * star c) * ((K m * Matrix.single i j (1 : ℂ) * (K m)ᴴ) a b) := by
-                  rw [Finset.mul_sum]
-            _ = ∑ m : Fin r, v m (a, i) * star (v m (b, j)) := by
-                  refine Finset.sum_congr rfl ?_
-                  intro m _
-                  have hterm : (K m * Matrix.single i j (1 : ℂ) * (K m)ᴴ) a b =
-                      (v m (a, i) / c) * star (v m (b, j) / c) := by
-                    simpa [K, Matrix.vecMulVec_apply] using
-                      congrArg (fun M => M a b)
-                        (Matrix.mul_single_mul_conjTranspose_eq_vecMulVec
-                          (K := K m) (c := (1 : ℂ)) i j)
-                  rw [hterm]
-                  simp [div_eq_mul_inv, hstarc, hc, mul_assoc, mul_left_comm, mul_comm]
-        exact (mul_left_cancel₀ hαne) (h1.trans h2.symm)
-      have hSsmul (Y : Matrix (Fin D) (Fin D) ℂ) : S (z • Y) = z • S Y := by
-        dsimp [S]; simp [Finset.smul_sum]
-      calc
-        T (Matrix.single i j z) = z • T (Matrix.single i j (1 : ℂ)) := by
-          simpa [Matrix.smul_single] using T.map_smul z (Matrix.single i j (1 : ℂ))
-        _ = z • S (Matrix.single i j 1) := by rw [hbase]
-        _ = S (z • Matrix.single i j (1 : ℂ)) := by rw [hSsmul]
-        _ = S (Matrix.single i j z) := by simp [Matrix.smul_single]
+    obtain ⟨K, hK⟩ :=
+      exists_kraus_of_choiMatrix_eq_sum_vecMulVec (T := T) (ι := Fin r) v hchoi
+    exact ⟨r, K, hK⟩
 
 /-- **Prop 2.1, trace-preserving correspondence** (Wolf):
 If `T` is trace-preserving, then `tr_A(τ) = (1/D) · 𝟙_D`.

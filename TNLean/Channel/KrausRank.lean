@@ -189,76 +189,9 @@ private theorem hasKrausCard_of_choiMatrix_eq_sum_vecMulVec [NeZero D]
       ∑ m : ι, Matrix.vecMulVec (v m) (star (v m))) :
     HasKrausCard E (Fintype.card ι) := by
   classical
-  let c : ℂ := (1 : ℂ) / ((D : ℝ).sqrt : ℂ)
-  have hDpos : 0 < D := Nat.pos_of_ne_zero (NeZero.ne D)
-  have hc : c ≠ 0 := by
-    dsimp [c]
-    have hsqrt : (((D : ℝ).sqrt : ℂ)) ≠ 0 :=
-      Complex.ofReal_ne_zero.mpr <| Real.sqrt_ne_zero'.2 (by exact_mod_cast hDpos)
-    simp [hsqrt]
-  have hstarc : star c = c := by simp [c]
-  have hαne : c * star c ≠ 0 := by
-    simpa [hstarc] using mul_ne_zero hc hc
-  let K : ι → Mat := fun m a b => v m (a, b) / c
-  have hK : ∀ X, E X = ∑ m : ι, K m * X * (K m)ᴴ := by
-    intro X
-    let S : Mat → Mat := fun Y => ∑ m : ι, K m * Y * (K m)ᴴ
-    let P : Mat → Prop := fun Y => E Y = S Y
-    change P X
-    refine Matrix.induction_on X ?_ ?_
-    · intro p q hp hq
-      dsimp [P, S] at *
-      simp [map_add, Matrix.add_mul, Matrix.mul_add, hp, hq, Finset.sum_add_distrib]
-    · intro i j z
-      dsimp [P, S]
-      have hbase : E (Matrix.single i j (1 : ℂ)) = S (Matrix.single i j (1 : ℂ)) := by
-        ext a b
-        have hentry : E (Matrix.single i j (c * star c)) a b =
-            (∑ m : ι, Matrix.vecMulVec (v m) (star (v m))) (a, i) (b, j) := by
-          simpa [c, ChoiJamiolkowski.choiMatrix_apply,
-            ChoiJamiolkowski.omegaSlice_eq_single (D := D) i j] using
-              congrArg (fun M => M (a, i) (b, j)) hchoi
-        have hsmul : E (Matrix.single i j (c * star c)) a b =
-            (c * star c) * E (Matrix.single i j (1 : ℂ)) a b := by
-          simpa [Matrix.smul_single] using congrArg (fun M => M a b)
-            (E.map_smul (c * star c) (Matrix.single i j (1 : ℂ)))
-        have h1 : (c * star c) * E (Matrix.single i j (1 : ℂ)) a b =
-            ∑ m : ι, v m (a, i) * star (v m (b, j)) := by
-          exact hsmul.symm.trans <|
-            by simpa [Matrix.sum_apply, Matrix.vecMulVec_apply] using hentry
-        have h2 : (c * star c) * S (Matrix.single i j (1 : ℂ)) a b =
-            ∑ m : ι, v m (a, i) * star (v m (b, j)) := by
-          calc
-            (c * star c) * S (Matrix.single i j (1 : ℂ)) a b
-                = (c * star c) *
-                    ((∑ m : ι, K m * Matrix.single i j (1 : ℂ) * (K m)ᴴ) a b) := rfl
-            _ = (c * star c) *
-                  ∑ m : ι, (K m * Matrix.single i j (1 : ℂ) * (K m)ᴴ) a b := by
-                  rw [Matrix.sum_apply]
-            _ = ∑ m : ι,
-                  (c * star c) * ((K m * Matrix.single i j (1 : ℂ) * (K m)ᴴ) a b) := by
-                  rw [Finset.mul_sum]
-            _ = ∑ m : ι, v m (a, i) * star (v m (b, j)) := by
-                  refine Finset.sum_congr rfl ?_
-                  intro m _
-                  have hterm : (K m * Matrix.single i j (1 : ℂ) * (K m)ᴴ) a b =
-                      (v m (a, i) / c) * star (v m (b, j) / c) := by
-                    simpa [K, Matrix.vecMulVec_apply] using
-                      congrArg (fun M => M a b)
-                        (Matrix.mul_single_mul_conjTranspose_eq_vecMulVec
-                          (K := K m) (c := (1 : ℂ)) i j)
-                  rw [hterm]
-                  simp [div_eq_mul_inv, hstarc, hc, mul_assoc, mul_left_comm, mul_comm]
-        exact (mul_left_cancel₀ hαne) (h1.trans h2.symm)
-      have hSsmul (Y : Mat) : S (z • Y) = z • S Y := by
-        dsimp [S]
-        simp [Finset.smul_sum]
-      calc
-        E (Matrix.single i j z) = z • E (Matrix.single i j (1 : ℂ)) := by
-          simpa [Matrix.smul_single] using E.map_smul z (Matrix.single i j (1 : ℂ))
-        _ = z • S (Matrix.single i j (1 : ℂ)) := by rw [hbase]
-        _ = S (z • Matrix.single i j (1 : ℂ)) := by rw [hSsmul]
-        _ = S (Matrix.single i j z) := by simp [Matrix.smul_single]
+  obtain ⟨K, hK⟩ :=
+    ChoiJamiolkowski.exists_kraus_of_choiMatrix_eq_sum_vecMulVec
+      (T := E) (ι := ι) v hchoi
   refine ⟨fun α => K ((Fintype.equivFin ι).symm α), ?_⟩
   intro X
   calc
