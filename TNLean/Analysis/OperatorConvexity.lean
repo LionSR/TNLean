@@ -122,28 +122,6 @@ theorem IsHermitian.cfc_neg {A : Matrix n n 𝕜} (hA : A.IsHermitian) (f : ℝ 
     hA.cfc (fun x => -f x) = -(hA.cfc f) := by
   rw [← hA.cfc_eq, ← hA.cfc_eq, _root_.cfc_neg f A]
 
-/-- **Diagonal Jensen for a concave function.**
-
-The concave companion of `Matrix.diagonal_jensen_of_convexOn`:
-for a concave `f : ℝ → ℝ` on `[0, ∞)`, PSD `A`, and unit vector `v`,
-`(star v ⬝ᵥ hA.1.cfc f *ᵥ v).re ≤ f ((star v ⬝ᵥ A *ᵥ v).re)`. -/
-theorem diagonal_jensen_of_concaveOn
-    {f : ℝ → ℝ} (hf : ConcaveOn ℝ (Set.Ici (0 : ℝ)) f)
-    {A : Matrix n n ℂ} (hA : A.PosSemidef)
-    {v : n → ℂ} (hv : star v ⬝ᵥ v = (1 : ℂ)) :
-    (star v ⬝ᵥ (hA.1.cfc f *ᵥ v)).re ≤ f ((star v ⬝ᵥ (A *ᵥ v)).re) := by
-  -- Apply convex Jensen to `-f` and unpack via `IsHermitian.cfc_neg`.
-  have hnegf : ConvexOn ℝ (Set.Ici (0 : ℝ)) (fun x => -f x) := hf.neg
-  have hconv := diagonal_jensen_of_convexOn (f := fun x => -f x) hnegf hA hv
-  rw [IsHermitian.cfc_neg hA.1 f] at hconv
-  -- `(star v ⬝ᵥ (-X) *ᵥ v).re = -(star v ⬝ᵥ X *ᵥ v).re`
-  have hnegmul : ∀ X : Matrix n n ℂ,
-      (star v ⬝ᵥ ((-X) *ᵥ v)).re = -(star v ⬝ᵥ X *ᵥ v).re := by
-    intro X
-    rw [Matrix.neg_mulVec, dotProduct_neg, Complex.neg_re]
-  rw [hnegmul] at hconv
-  linarith
-
 end Matrix
 
 namespace TNLean
