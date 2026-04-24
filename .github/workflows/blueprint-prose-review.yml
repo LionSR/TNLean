@@ -116,13 +116,15 @@ jobs:
             - blueprint `.tex` files (section titles, theorem names, proof sketches,
               remarks, chapter preambles, `references.bib` annotations);
             - Lean **docstrings** (`/-- ... -/`), **module docs** (`/-! ... -/`),
-              inline **comments** (`/- ... -/`, `--`), and `section`/`namespace` names.
+              inline **comments** (`/- ... -/`, `--`), and `section`/`namespace`
+              names.
 
             Lean docstrings must convey the **mathematical meaning** of the
-            declaration; software-engineering jargon and LLM filler are equally
-            banned in `.lean` files as in `.tex`. The docstring requirement is
-            anchored in `docs/doc.md` §"Doc strings" and `docs/style.md` §"Comments",
-            which both cross-reference the banned-language tables.
+            declaration (general baseline in mathlib-style `docs/doc.md` and
+            `docs/style.md`, which are NOT modified). The project-specific
+            banned-language extension lives in `docs/blueprint_style_guide.md` —
+            that file is the single authoritative source for the lists below, and
+            applies to `.lean` and `.tex` files equally.
 
             Out-of-scope (do NOT flag): developer-facing markdown in `docs/`,
             workflow YAML, `lakefile.toml`, `lean-toolchain`, `Papers/`, `Notes/`,

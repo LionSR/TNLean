@@ -687,13 +687,6 @@ Documentation strings for declarations are delimited with `/-- -/`.
 When a documentation string for a declaration spans multiple lines, do not indent
 subsequent lines.
 
-Doc strings, sectioning comments, `section`/`namespace` names, and inline comments must read as
-**mathematics, not software documentation or AI-generated prose**. The banned-language tables in
-[`blueprint_style_guide.md`](blueprint_style_guide.md) §"Banned AI/Software Language" apply
-verbatim to Lean comments and docstrings (no "pipeline" / "boilerplate" / "wrapper" / "leverage"
-/ "delve into" / "tapestry" / "shed light on" / etc.). The dedicated `Blueprint Sync & Prose
-Review` CI workflow enforces these rules on changed Lean and `.tex` files.
-
 See our [documentation requirements](doc.html) for more suggestions
 and examples.
 

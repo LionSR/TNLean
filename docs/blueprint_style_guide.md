@@ -49,7 +49,9 @@ Notation must be **internally consistent** across the entire blueprint and **clo
 - **Lean namespace prefixes in prose.** Don't write "the `MPSTensor.transferMap`" — write "the transfer map $\E_A$".
 
 ## Banned AI/Software Language (enforced in both blueprint AND Lean code)
-The blueprint reads as a **mathematical document**, not software documentation. The following patterns are banned in ALL reader-facing text (section titles, theorem names, proof sketches, remarks, chapter preambles) and in ALL Lean docstrings, comments, and section names:
+The blueprint reads as a **mathematical document**, not software documentation. The following patterns are banned in ALL reader-facing text (section titles, theorem names, proof sketches, remarks, chapter preambles) and in ALL Lean docstrings, sectioning comments, `section`/`namespace` names, and inline comments.
+
+This extends — does not replace — the general docstring requirements in [`doc.md`](doc.md) §"Doc strings" ("Doc strings should convey the mathematical meaning of the definition") and the comment guidance in [`style.md`](style.md) §"Comments". Those mathlib-pasted documents are not modified; the project-specific banned-language rule below is layered on top of them and is what the `Blueprint Sync & Prose Review` CI workflow enforces.
 
 ### Banned software-engineering terms → replacements:
 | Banned | Use instead |
