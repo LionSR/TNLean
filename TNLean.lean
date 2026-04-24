@@ -84,6 +84,7 @@ import TNLean.Channel.Schwarz.KadisonSchwarz
 import TNLean.Channel.Schwarz.PositiveMapProperties
 import TNLean.Channel.Schwarz.Douglas
 import TNLean.Channel.Schwarz.DiagonalJensen
+import TNLean.Channel.Schwarz.OperatorJensenAux
 import TNLean.Channel.Schwarz.OperatorConvexity
 import TNLean.Channel.Schwarz.OperatorMonotone
 import TNLean.Channel.Schwarz.AndoLieb
