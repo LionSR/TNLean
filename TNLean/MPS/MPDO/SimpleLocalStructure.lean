@@ -158,14 +158,14 @@ noncomputable def physRealize (K : MPOTensor d D) (hK : K.IsInjective)
 theorem physRealize_spec (K : MPOTensor d D) (hK : K.IsInjective)
     (X : Matrix (Fin D) (Fin D) ℂ) (p : Fin (d * d)) :
     K.toMPSTensor p * X =
-      ∑ q, (physRealize K hK X) p q • K.toMPSTensor q := by
-  simpa [physRealize] using MPSTensor.physRealize_spec K.toMPSTensor hK X p
+      ∑ q, (physRealize K hK X) p q • K.toMPSTensor q :=
+  MPSTensor.physRealize_spec K.toMPSTensor hK X p
 
 /-- `MPOTensor.physRealize` is multiplicative. -/
 theorem physRealize_mul (K : MPOTensor d D) (hK : K.IsInjective)
     (X Y : Matrix (Fin D) (Fin D) ℂ) :
-    physRealize K hK (X * Y) = physRealize K hK X * physRealize K hK Y := by
-  simpa [physRealize] using MPSTensor.physRealize_mul K.toMPSTensor hK X Y
+    physRealize K hK (X * Y) = physRealize K hK X * physRealize K hK Y :=
+  MPSTensor.physRealize_mul K.toMPSTensor hK X Y
 
 /-- The physical realization map for a left virtual insertion on an injective
 simple MPO tensor. -/
@@ -178,9 +178,8 @@ noncomputable def physRealizeLeft (K : MPOTensor d D) (hK : K.IsInjective)
 theorem physRealizeLeft_spec (K : MPOTensor d D) (hK : K.IsInjective)
     (X : Matrix (Fin D) (Fin D) ℂ) (p : Fin (d * d)) :
     X * K.toMPSTensor p =
-      ∑ q, (physRealizeLeft K hK X) p q • K.toMPSTensor q := by
-  simpa [physRealizeLeft] using
-    MPSTensor.physRealizeLeft_spec K.toMPSTensor hK X p
+      ∑ q, (physRealizeLeft K hK X) p q • K.toMPSTensor q :=
+  MPSTensor.physRealizeLeft_spec K.toMPSTensor hK X p
 
 end InjectiveInverseMaps
 
