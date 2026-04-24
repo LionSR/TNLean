@@ -172,6 +172,7 @@ import TNLean.MPS.ParentHamiltonian.Basic
 import TNLean.MPS.ParentHamiltonian.IntersectionProperty
 import TNLean.MPS.ParentHamiltonian.CyclicWindow
 import TNLean.MPS.ParentHamiltonian.SuffixWindow
+import TNLean.MPS.ParentHamiltonian.RestrictTransport
 import TNLean.MPS.ParentHamiltonian.ExtendRight
 import TNLean.MPS.ParentHamiltonian.WrappingWindow
 import TNLean.MPS.ParentHamiltonian.UniqueGroundState
