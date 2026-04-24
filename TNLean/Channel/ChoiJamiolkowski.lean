@@ -2,6 +2,7 @@
 Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
+import TNLean.Algebra.MatrixSpectralDecomp
 import TNLean.Channel.PartialTrace
 import TNLean.Channel.MaximallyEntangled
 import TNLean.Channel.TensorMap
@@ -162,27 +163,6 @@ theorem omegaSlice_eq_single (i₂ j₂ : Fin D) :
   · subst hb; simp [ha, show ¬(i₂ = a) from Ne.symm ha]
   · simp [ha, hb, show ¬(i₂ = a) from Ne.symm ha, show ¬(j₂ = b) from Ne.symm hb]
 
-namespace Internal
-
-/-- `K * (c * c̄ · E_{i,j}) * K† = c · K_col(i) ⊗ c̄ · K_col(j)†` as an outer product. -/
-theorem mul_single_mul_conjTranspose_eq_vecMulVec
-    (K : Matrix (Fin D) (Fin D) ℂ)
-    (c : ℂ)
-    (i₂ j₂ : Fin D) :
-    K * Matrix.single i₂ j₂ (c * star c) * Kᴴ =
-      Matrix.vecMulVec (fun i₁ : Fin D => c * K i₁ i₂)
-        (fun j₁ : Fin D => star (c * K j₁ j₂)) := by
-  rw [show Matrix.single i₂ j₂ (c * star c) =
-      (c * star c) • Matrix.vecMulVec (Pi.single i₂ (1 : ℂ)) (Pi.single j₂ 1) by
-    rw [← Matrix.single_eq_single_vecMulVec_single i₂ j₂]
-    simp]
-  rw [Matrix.mul_smul, Matrix.smul_mul, Matrix.mul_vecMulVec, Matrix.vecMulVec_mul]
-  ext i₁ j₁
-  simp [Matrix.vecMulVec_apply, Matrix.conjTranspose_apply, Matrix.col, Matrix.row]
-  ring_nf
-
-end Internal
-
 /-- The omega coefficient `(1/√D)·(1/√D) = 1/D`. -/
 private theorem omegaCoeff_eq_inv (hd : 0 < D) :
     (((1 : ℂ) / ((D : ℝ).sqrt : ℂ)) *
@@ -276,7 +256,7 @@ theorem choiMatrix_of_kraus_posSemidef
     refine Finset.sum_congr rfl ?_
     intro x _
     simpa [Matrix.vecMulVec_apply] using congrArg (fun M => M i₁ j₁)
-      (Internal.mul_single_mul_conjTranspose_eq_vecMulVec (K := K x) (c := c) i₂ j₂)
+      (Matrix.mul_single_mul_conjTranspose_eq_vecMulVec (K := K x) (c := c) i₂ j₂)
   rw [hchoi]
   refine Matrix.posSemidef_sum (s := Finset.univ)
     (x := fun i =>
@@ -388,7 +368,7 @@ theorem cp_iff_choi_posSemidef [NeZero D] :
                       (v m (a, i) / c) * star (v m (b, j) / c) := by
                     simpa [K, Matrix.vecMulVec_apply] using
                       congrArg (fun M => M a b)
-                        (Internal.mul_single_mul_conjTranspose_eq_vecMulVec
+                        (Matrix.mul_single_mul_conjTranspose_eq_vecMulVec
                           (K := K m) (c := (1 : ℂ)) i j)
                   rw [hterm]
                   simp [div_eq_mul_inv, hstarc, hc, mul_assoc, mul_left_comm, mul_comm]
@@ -619,7 +599,7 @@ theorem exists_cpMap_of_choi_posSemidef [NeZero D]
       refine Finset.sum_congr rfl ?_
       intro x _
       simpa [Matrix.vecMulVec_apply] using congrArg (fun M => M i₁ j₁)
-        (Internal.mul_single_mul_conjTranspose_eq_vecMulVec (K := K x) (c := c) i₂ j₂)
+        (Matrix.mul_single_mul_conjTranspose_eq_vecMulVec (K := K x) (c := c) i₂ j₂)
     simpa [T, K, div_eq_mul_inv, hstarc, hc, mul_assoc, mul_left_comm, mul_comm] using hchoi'
   refine ⟨T, ⟨r, K, fun X => rfl⟩, ?_⟩
   exact hchoi.trans hτeq.symm
