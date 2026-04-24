@@ -2,6 +2,10 @@
 
 [![Lean Action CI](https://github.com/LionSR/TNLean/actions/workflows/lean_action_ci.yml/badge.svg)](https://github.com/LionSR/TNLean/actions/workflows/lean_action_ci.yml)
 [![Compile blueprint](https://github.com/LionSR/TNLean/actions/workflows/blueprint.yml/badge.svg)](https://github.com/LionSR/TNLean/actions/workflows/blueprint.yml)
+![sorries](https://img.shields.io/endpoint?url=https://sirui-lu.com/TNLean/badges/sorries.json)
+![axioms](https://img.shields.io/endpoint?url=https://sirui-lu.com/TNLean/badges/axioms.json)
+![Lean](https://img.shields.io/endpoint?url=https://sirui-lu.com/TNLean/badges/lean.json)
+![Mathlib](https://img.shields.io/endpoint?url=https://sirui-lu.com/TNLean/badges/mathlib.json)
 
 A Lean 4 formalization of major components of the **Fundamental Theorem of Matrix Product States**, the repository's **cumulative Quantum Wielandt theory**, and a growing body of finite-dimensional **quantum-channel theory** inspired by M. M. Wolf's *Quantum Channels & Operations*, using [Mathlib](https://github.com/leanprover-community/mathlib4) v4.29.0.
 
