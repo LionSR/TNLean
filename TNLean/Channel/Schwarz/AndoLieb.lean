@@ -2,6 +2,7 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
+import TNLean.Axioms.OperatorConvexity
 import TNLean.Analysis.OperatorConvexity
 import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.Analysis.Matrix.Order
@@ -9,10 +10,10 @@ import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Order
 import Mathlib.LinearAlgebra.Matrix.Trace
 
 /-!
-# Trace convexity and concavity consequences
+# Ando--Lieb theorem and trace convexity/concavity
 
-This file restates trace convexity/concavity consequences for matrix power
-functions in the Schwarz chapter namespace.
+This file states the Ando--Lieb (Lieb concavity) theorem and its trace
+convexity/concavity consequences for matrix power functions.
 
 ## Main results
 
@@ -43,6 +44,9 @@ functions in the Schwarz chapter namespace.
 ## References
 
 * [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Ch. 5]
+* [T. Ando, *Concavity of certain maps on positive definite matrices*, 1979]
+* [E. H. Lieb, *Convex trace functions and the Wigner--Yanase--Dyson
+  conjecture*, 1973]
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder
