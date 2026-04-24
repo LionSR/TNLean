@@ -325,6 +325,9 @@ import TNLean.Channel.Peripheral.CyclicDecomposition
 import TNLean.Channel.Peripheral.Cycles
 import TNLean.Channel.Peripheral.MultiCycleDecomposition
 
+-- Chapter 2 §2.3 normal-form existence (SVD + Lorentz)
+import TNLean.Channel.NormalForm
+
 -- Public documentation index modules
 import TNLean.Channel.WolfChapter2Index
 import TNLean.Channel.WolfChapter6Index
