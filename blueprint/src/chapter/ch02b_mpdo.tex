@@ -563,6 +563,7 @@ strong subadditivity for a normalized three-site reduced state.
     \lean{MPSTensor.wordEntryFamily}
     \lean{MPSTensor.duplicateScalarBlocks_counterexample}
     \lean{MPSTensor.wordTupleSpanTop_of_wordEntryFamily_linearIndependent}
+    \lean{MPSTensor.hasBlockSelectorWords_of_wordTupleSpanTop}
     \lean{MPSTensor.hasBlockSelectorWords_of_wordEntryFamily_linearIndependent}
     \lean{MPSTensor.HasBiCF}
     \lean{MPSTensor.hasBiCF_of_wordTupleSpanTop}
@@ -571,6 +572,7 @@ strong subadditivity for a normalized three-site reduced state.
     \lean{MPSTensor.PropBlockInjective}
     \lean{MPSTensor.wordTupleSpanTop_of_propBlockInjective}
     \lean{MPSTensor.hasBiCF_of_propBlockInjective}
+    \lean{MPSTensor.duplicateScalarBlocks_not_hasBiCF}
     \lean{MPOTensor.horizontalCFData_of_wordTupleSpanTop}
     \lean{MPOTensor.horizontalCFData_of_wordEntryFamily_linearIndependent}
     \lean{MPOTensor.horizontalCFData_of_propBlockInjective}
@@ -603,8 +605,9 @@ strong subadditivity for a normalized three-site reduced state.
     directly into horizontal canonical-form data.
     The duplicate-scalar counterexample shows that this finite-length witness
     is genuinely stronger than blockwise injectivity, left-canonicality, and
-    nonzero weights alone: two identical scalar blocks satisfy those hypotheses
-    while no blocking length makes the entrywise family linearly independent.
+    nonzero weights alone: two identical scalar blocks satisfy those hypotheses,
+    but the biCF separation condition fails and no blocking length makes the
+    entrywise family linearly independent.
 
     Proposition~IV.3 gives a concrete sufficient criterion for the spanning
     condition: after a common blocking length each block is block-injective,

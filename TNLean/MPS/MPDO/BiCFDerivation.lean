@@ -413,7 +413,7 @@ theorem hasBiCF_of_propBlockInjective
 section DuplicateScalarBlocks
 
 /-- Nonzero weights for the duplicate-block counterexample. -/
-noncomputable def duplicateScalarWeights : Fin 2 → ℂ
+def duplicateScalarWeights : Fin 2 → ℂ
   | 0 => 1
   | 1 => 2
 
@@ -423,7 +423,7 @@ abbrev duplicateScalarDim : Fin 2 → ℕ := fun _ => 1
 /-- Two identical `1 × 1` blocks. This family is blockwise injective and
 left-canonical, but it cannot admit any finite-length `wordEntryFamily`
 linear-independence witness. -/
-noncomputable def duplicateScalarBlocks :
+def duplicateScalarBlocks :
     (k : Fin 2) → MPSTensor 1 (duplicateScalarDim k)
   | _ => fun _ => (1 : Matrix (Fin 1) (Fin 1) ℂ)
 
@@ -457,7 +457,7 @@ theorem duplicateScalarBlocks_leftCanonical :
 theorem duplicateScalarWeights_ne_zero :
     ∀ k, duplicateScalarWeights k ≠ 0 := by
   intro k
-  fin_cases k <;> simp [duplicateScalarWeights]
+  fin_cases k <;> norm_num [duplicateScalarWeights]
 
 /-- Duplicate blocks force repeated scalar word-entry functionals, so no blocking
 length can make `wordEntryFamily` linearly independent. -/
@@ -478,10 +478,26 @@ theorem duplicateScalarBlocks_not_linearIndependent_wordEntryFamily (L : ℕ) :
 /-- Concrete obstruction to the Issue-#822 target on the current hypotheses:
 blockwise injectivity, left-canonicality, and nonzero weights do not by
 themselves imply a finite-length `wordEntryFamily` witness. -/
-theorem duplicateScalarBlocks_no_wordEntryFamily_linearIndependent :
+theorem duplicateScalarBlocks_not_exists_linearIndependent_wordEntryFamily :
     ¬ ∃ L, LinearIndependent ℂ (wordEntryFamily duplicateScalarBlocks L) := by
   rintro ⟨L, hL⟩
   exact duplicateScalarBlocks_not_linearIndependent_wordEntryFamily L hL
+
+/-- The duplicate scalar blocks do not satisfy the biCF trace-separation property. -/
+theorem duplicateScalarBlocks_not_hasBiCF :
+    ¬ HasBiCF duplicateScalarBlocks := by
+  rintro ⟨L, hL⟩
+  let Δ : (k : Fin 2) → Matrix (Fin (duplicateScalarDim k)) (Fin (duplicateScalarDim k)) ℂ :=
+    fun k => if k = 0 then 1 else -1
+  have hTrace :
+      ∀ w : Fin L → Fin 1,
+        (∑ k : Fin 2,
+          Matrix.trace (Δ k * evalWord (duplicateScalarBlocks k) (List.ofFn w))) = 0 := by
+    intro w
+    simp [Δ, duplicateScalarBlocks, duplicateScalarDim, Matrix.trace_fin_one]
+  have hzero := hL Δ hTrace 0
+  have hentry := congrFun (congrFun hzero 0) 0
+  simp [Δ] at hentry
 
 /-- Packaged counterexample to deriving finite-length block separation from the
 other `HorizontalCFData` fields alone. -/
@@ -490,10 +506,11 @@ theorem duplicateScalarBlocks_counterexample :
       (∀ k, ∑ i : Fin 1,
         (duplicateScalarBlocks k i)ᴴ * duplicateScalarBlocks k i = 1) ∧
       (∀ k, duplicateScalarWeights k ≠ 0) ∧
+      ¬ HasBiCF duplicateScalarBlocks ∧
       ¬ ∃ L, LinearIndependent ℂ (wordEntryFamily duplicateScalarBlocks L) := by
   refine ⟨duplicateScalarBlocks_isInjective, duplicateScalarBlocks_leftCanonical,
-    duplicateScalarWeights_ne_zero,
-    duplicateScalarBlocks_no_wordEntryFamily_linearIndependent⟩
+    duplicateScalarWeights_ne_zero, duplicateScalarBlocks_not_hasBiCF,
+    duplicateScalarBlocks_not_exists_linearIndependent_wordEntryFamily⟩
 
 end DuplicateScalarBlocks
 
