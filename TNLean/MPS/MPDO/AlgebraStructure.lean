@@ -45,13 +45,23 @@ side hypotheses. The `IsRFP` assumption is essential here: without idempotence,
 the adjoint fixed-point algebras of the blocked transfer maps need not stabilize
 with the blocking length.
 
+## Diagonal $\chi$-matrices and the trace-power formula
+
+On top of the blocked-coefficient layer, this file now formalizes the target
+shape of Theorem IV.13(ii): the special diagonal matrices
+$\chi_{\alpha,\beta,\gamma}$ are packaged as a `DiagonalChiFamily`, and the
+identity $c_{\alpha,\beta,\gamma}^{(L)} = \operatorname{tr}(\chi_{\alpha,\beta,\gamma}^L)$
+is encoded as the `HasChiTracePowerForm` predicate. The basic trace-power
+identity `tr(χ_{α,β,γ}^L) = \sum_k \chi_{\alpha,\beta,\gamma,k}^L` is proved
+directly from `Matrix.diagonal_pow` and `Matrix.trace_diagonal`.
+
 ## Remaining gap to the paper
 
 The present `CompatibleWith` relation identifies the support algebras with the
 adjoint fixed-point algebras of the blocked transfer maps. It does **not** yet
-extract the coefficient family `c_{\alpha,\beta,\gamma}^{(L)}` of
-Theorem IV.13(ii), nor prove the converse algebra-to-fusion implication. Those
-steps still require the BNT / coefficient-comparison layer from Appendix C.3--C.4.
+construct the specific `DiagonalChiFamily` attached to an RFP MPDO tensor, nor
+prove the converse algebra-to-fusion implication. Those steps still require the
+BNT / coefficient-comparison layer from Appendix C.3--C.4.
 
 ### Why the converse algebra-to-fusion implication is blocked
 
@@ -487,6 +497,88 @@ theorem adjoint_blockedTransferMap_apply_of_adjoint_transferMap_apply
           blockedTransferMap M k ∘ₗ transferMap M := by
         simp only [blockedTransferMap_eq_pow, pow_succ, Module.End.mul_eq_comp]
       rw [hPow, LinearMap.adjoint_comp, LinearMap.comp_apply, ih, hX]
+
+/-! ### Diagonal $\chi$-matrices and the trace-power formula
+
+The paper arXiv:1606.00608 (CPGSV17), Theorem IV.13(ii) asserts that the
+structure coefficients $c_{\alpha,\beta,\gamma}^{(L)}$ of the blocked MPDO
+support algebra have the form
+$c_{\alpha,\beta,\gamma}^{(L)} = \operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{L})$
+for a family of diagonal matrices $\chi_{\alpha,\beta,\gamma}$ with positive
+entries. This subsection packages those diagonal matrices as explicit Lean data
+and states the trace-power identity. -/
+
+/-- A family of diagonal matrices `χ_{α,β,γ}` indexed by ordered triples drawn
+from a common index type `I`. The diagonal size `rank α β γ` is allowed to
+depend on the triple, and `entry α β γ` gives the diagonal entries as complex
+numbers.
+
+In the RFP characterization of [CPGSV17, Thm IV.13(ii)] the index type `I`
+collects the BNT labels `α, β, γ`, and every `χ_{α,β,γ}` is a diagonal matrix
+with positive real entries. Positivity is *not* part of this structure: it is
+supplied separately through `PosEntries` so that the bare data can be used in
+intermediate constructions. -/
+structure DiagonalChiFamily (I : Type*) where
+  /-- Size of the diagonal matrix `χ_{α,β,γ}`. -/
+  rank : I → I → I → ℕ
+  /-- Diagonal entries of `χ_{α,β,γ}`, in order. -/
+  entry : ∀ α β γ : I, Fin (rank α β γ) → ℂ
+
+namespace DiagonalChiFamily
+
+variable {I : Type*} (χ : DiagonalChiFamily I)
+
+/-- The underlying diagonal matrix `χ_{α,β,γ}` on the index set `Fin (rank α β γ)`. -/
+noncomputable def matrix (α β γ : I) :
+    Matrix (Fin (χ.rank α β γ)) (Fin (χ.rank α β γ)) ℂ :=
+  Matrix.diagonal (χ.entry α β γ)
+
+/-- The trace-power coefficient `∑_k (χ_{α,β,γ,k})^L`. -/
+noncomputable def tracePowerCoeff (α β γ : I) (L : ℕ) : ℂ :=
+  ∑ k, (χ.entry α β γ k) ^ L
+
+/-- The $L$-th power of `χ_{α,β,γ}` is again diagonal, with entries
+`(χ_{α,β,γ,k})^L`. -/
+theorem matrix_pow (α β γ : I) (L : ℕ) :
+    χ.matrix α β γ ^ L = Matrix.diagonal fun k => (χ.entry α β γ k) ^ L := by
+  simp [matrix, Matrix.diagonal_pow]
+
+/-- Trace-power identity: `tr(χ_{α,β,γ}^L) = ∑_k (χ_{α,β,γ,k})^L`, i.e. the
+trace of the $L$-th matrix power matches `tracePowerCoeff`. -/
+theorem trace_matrix_pow (α β γ : I) (L : ℕ) :
+    (χ.matrix α β γ ^ L).trace = χ.tracePowerCoeff α β γ L := by
+  simp [matrix_pow, Matrix.trace_diagonal, tracePowerCoeff]
+
+/-- Predicate asserting that every entry of `χ_{α,β,γ}` is a positive real
+number, matching the positivity hypothesis of [CPGSV17, Thm IV.13(ii)]. -/
+def PosEntries : Prop :=
+  ∀ α β γ : I, ∀ k : Fin (χ.rank α β γ), 0 < (χ.entry α β γ k).re ∧ (χ.entry α β γ k).im = 0
+
+end DiagonalChiFamily
+
+/-- *Trace-power compatibility* between an abstract structure-coefficient family
+`c L α β γ` and a diagonal `χ` family: for every blocking size `L` and every
+triple `(α, β, γ)`, the structure coefficient `c L α β γ` equals
+`tr(χ_{α,β,γ}^L)`.
+
+This is the Lean-level form of the target identity of
+[CPGSV17, Thm IV.13(ii)] for the blocked MPDO structure coefficients. It is a
+predicate on abstract coefficient data rather than on any specific
+`AlgebraStructureData`, so that it can be reused both for the blocked
+multiplication coefficients of the algebra-side formulation and for the length-`L`
+operator algebra appearing in the paper. -/
+def HasChiTracePowerForm {I : Type*}
+    (c : ℕ → I → I → I → ℂ) (χ : DiagonalChiFamily I) : Prop :=
+  ∀ L : ℕ, ∀ α β γ : I, c L α β γ = χ.tracePowerCoeff α β γ L
+
+/-- Convenience reformulation: under trace-power compatibility, the
+structure coefficient at size `L` equals the trace of the `L`-th matrix power of
+the corresponding `χ`. -/
+theorem HasChiTracePowerForm.eq_trace_matrix_pow {I : Type*}
+    {c : ℕ → I → I → I → ℂ} {χ : DiagonalChiFamily I}
+    (h : HasChiTracePowerForm c χ) (L : ℕ) (α β γ : I) :
+    c L α β γ = (χ.matrix α β γ ^ L).trace := by
+  rw [h L α β γ, χ.trace_matrix_pow]
 
 end MPOTensor
 
