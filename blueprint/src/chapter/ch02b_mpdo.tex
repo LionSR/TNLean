@@ -774,22 +774,37 @@ recovery theorem for the MPDO renormalization fixed-point condition.
     family $c_{\alpha,\beta,\gamma}^{(L)}$ is not yet extracted.
 \end{definition}
 
+\begin{theorem}[RFP yields a stationary algebra tower under a faithful fixed point]%
+    \label{thm:mpdo_rfp_via_algebra_from_rfp}
+    \lean{MPOTensor.isRFP_MPDO_via_algebra_of_isRFP_of_isTP_of_posDef_fixed}
+    \leanok
+    \uses{def:is_rfp_mpdo, def:mpdo_rfp_via_algebra}
+    Assume the doubled tensor is trace-preserving and the transfer map admits a
+    positive-definite fixed point. If the transfer map is idempotent, then there
+    exists a stationary family of support algebras, all equal to the fixed-point
+    algebra of the adjoint transfer map, with multiplication given by matrix
+    multiplication and inclusions given by the identity.
+\end{theorem}
+\begin{proof}\leanok
+Under the trace-preserving normalization and the faithful fixed point, Wolf's
+fixed-point-algebra theorem gives a $*$-subalgebra of adjoint fixed points.
+Idempotence identifies every positive blocked transfer map with the original
+one, so the same fixed-point algebra works at every blocking size.
+\end{proof}
+
 \begin{theorem}[Fusion yields a stationary algebra tower under a faithful fixed point]%
     \label{thm:mpdo_rfp_via_algebra_from_fusion}
     \lean{MPOTensor.isRFP_MPDO_via_algebra_of_isRFP_MPDO_via_fusion_of_isTP_of_posDef_fixed}
     \leanok
-    \uses{def:mpdo_rfp_via_algebra, def:mpdo_rfp_via_fusion}
+    \uses{thm:mpdo_rfp_of_fusion, thm:mpdo_rfp_via_algebra_from_rfp}
     Assume the doubled tensor is trace-preserving and the transfer map admits a
     positive-definite fixed point. If the transfer-map fusion criterion holds,
     then the MPO satisfies the algebra-structure formulation of the
     renormalization fixed-point condition.
 \end{theorem}
 \begin{proof}\leanok
-The fusion criterion implies idempotence of the transfer map. Under the
-trace-preserving normalization and the faithful fixed point, Wolf's
-fixed-point-algebra theorem gives a $*$-subalgebra of adjoint fixed points.
-Idempotence identifies every positive blocked transfer map with the original
-one, so the same fixed-point algebra works at every blocking size.
+Combine Theorem~\ref{thm:mpdo_rfp_of_fusion} with
+Theorem~\ref{thm:mpdo_rfp_via_algebra_from_rfp}.
 \end{proof}
 
 The current Lean layer still does not recover the paper's special diagonal
