@@ -76,8 +76,8 @@ Gap §1 content is now more specific:
 
 The downstream algebraic reduction after a matched basis is now formalized by
 `fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_matched_basis`, and
-the matching data itself is packaged by the `SectorBasisMatching` witness type
-consumed by
+the matching data itself is recorded by the `SectorBasisMatching` witness type
+used in
 `fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_sectorMatching`. The
 remaining step is to construct such a `SectorBasisMatching` from arbitrary
 `SameMPV₂` sector decompositions (fed by the general BNT sector construction
@@ -174,16 +174,16 @@ theorem bilateral_commonPeriod_blocking_tp_primitive_normal
 
 /-- **Fundamental Theorem of MPS (1606.00608, after blocking): current structural shell.**
 
-For any two MPS tensors `A, B` with `SameMPV₂ A B`, this theorem packages the
+For any two MPS tensors `A, B` with `SameMPV₂ A B`, this theorem records the
 currently formalized one-sided reduction output on both sides: after blocking,
 each tensor admits a decomposition into TP blocks with primitive transfer maps,
 nonzero weights, and positive bond dimensions.
 
 The theorem does **not yet** use `SameMPV₂ A B` to compare the two blocked
-outputs. The remaining missing content is the sector-level endpoint described in
-the file documentation below: a general BNT sector construction for each side,
-followed by a heterogeneous equal-case comparison theorem for those sector
-decompositions.
+outputs. The remaining missing content is the sector-level comparison
+described in the file documentation below: a general BNT sector construction
+for each side, followed by a heterogeneous equal-case comparison theorem for
+those sector decompositions.
 
 This theorem therefore records the structural shell currently available on the
 way to arXiv:1606.00608, Theorem 1. -/
@@ -219,7 +219,7 @@ theorem fundamentalTheorem_after_blocking_1606_structural
 
 /-- A strengthened after-blocking structural interface that keeps the blocked `SameMPV₂`
 relations at the reduction periods. This is a small but genuine step toward Gap §1 because the
-common-equality input is no longer discarded by the public structural wrapper. -/
+common-equality input is no longer discarded by the public structural theorem. -/
 theorem fundamentalTheorem_after_blocking_1606_structural_with_blockedSameMPV₂
     {d D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
@@ -255,7 +255,7 @@ theorem fundamentalTheorem_after_blocking_1606_structural_with_blockedSameMPV₂
 
 The complete end-to-end FT should take two tensors `A, B` with `SameMPV₂ A B`
 and pass from the blocked reduction output to the paper's basis-of-normal-tensors
-endpoint. The remaining formalizations are now:
+sector comparison. The remaining formalizations are now:
 
 1. **General one-sided BNT construction**: starting from the blocked TP-primitive
    decomposition, construct a sector decomposition in the paper's general BNT
@@ -283,7 +283,7 @@ endpoint. The remaining formalizations are now:
    the equal-case FT.
 
 So the common-period blocking step is no longer the blocker; the missing content
-is specifically the paper-level sector endpoint.
+is specifically the paper-level sector comparison theorem.
 -/
 
 end FundamentalTheorem1606

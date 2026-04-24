@@ -114,9 +114,9 @@ theorem weight_multiset_eq_of_copies_eq_of_coeff_eq
 
 /-! ### Extrapolation of power sum sequences
 
-The bridge between "eventually equal coefficients" (for `N > N₀`) and "all positive `k` equal
-coefficients" rests on a **telescoping induction** on linear combinations of geometric
-sequences.
+The connection between "eventually equal coefficients" (for `N > N₀`) and
+"equal coefficients for every positive `k`" rests on a **telescoping induction**
+on linear combinations of geometric sequences.
 
 **Key lemma** (`geom_sum_eventually_zero`): a finite linear combination
 `N ↦ ∑ᵢ cᵢ · wᵢᴺ` with all bases `wᵢ ≠ 0` that vanishes for all `N ≥ M` vanishes
@@ -340,9 +340,9 @@ matching copy counts, and per-basis MPV relations
 `SameMPV₂`, then after absorbing the phases `ζ_j` into the sector weights on the `Q` side,
 the per-basis sector weight multisets agree.
 
-This is the algebraic core of the heterogeneous BNT-sector endpoint: once a future theorem
-supplies the basis matching and the phase factors, the remaining comparison is exactly the
-shared-basis theorem above. -/
+This is the algebraic core of the heterogeneous BNT-sector comparison: once a
+future theorem supplies the basis matching and the phase factors, the remaining
+comparison is exactly the shared-basis theorem above. -/
 theorem fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_phaseMatch
     (P Q : SectorDecomposition d)
     (perm : Fin P.basisCount ≃ Fin Q.basisCount)
@@ -432,9 +432,9 @@ theorem fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_phaseMatch
 
 /-- **Cast-compatible MPV scaling implies the phase-matched heterogeneous sector comparison.**
 
-This intermediate wrapper isolates the weaker data actually consumed by the
-phase-absorption argument: after matching basis dimensions, each block pair only needs a nonzero
-phase `ζ` relating the MPVs of the matched basis tensors. -/
+This intermediate theorem isolates the weaker data actually consumed by the
+phase-absorption argument: after matching basis dimensions, each block pair
+only needs a nonzero phase `ζ` relating the MPVs of the matched basis tensors. -/
 theorem fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_mpvScaling_matched_basis
     (P Q : SectorDecomposition d)
     (perm : Fin P.basisCount ≃ Fin Q.basisCount)
@@ -468,11 +468,13 @@ theorem fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_mpvScaling_mat
 
 /-- **Gauge-phase matched sector bases imply the phase-matched heterogeneous sector comparison.**
 
-This packages the MPV scaling relation obtained from blockwise `GaugePhaseEquiv` and feeds it
-into `fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_mpvScaling_matched_basis`.
-Thus the remaining missing ingredients for the full heterogeneous BNT-sector endpoint are not
-the algebraic phase-absorption step below, but the derivation of the basis/copy matching data
-from arbitrary `SameMPV₂` sector decompositions. -/
+This theorem records the MPV scaling relation obtained from blockwise
+`GaugePhaseEquiv` and applies
+`fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_mpvScaling_matched_basis`.
+Thus the remaining missing ingredients for the full heterogeneous BNT-sector
+comparison are not the algebraic phase-absorption step below, but the
+derivation of the basis/copy matching data from arbitrary `SameMPV₂` sector
+decompositions. -/
 theorem fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_matched_basis
     (P Q : SectorDecomposition d)
     (perm : Fin P.basisCount ≃ Fin Q.basisCount)
