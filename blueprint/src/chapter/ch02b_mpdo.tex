@@ -503,7 +503,6 @@ strong subadditivity for a normalized three-site reduced state.
     \lean{MPSTensor.PropBlockInjective}
     \lean{MPSTensor.wordTupleSpanTop_of_propBlockInjective}
     \lean{MPSTensor.hasBiCF_of_propBlockInjective}
-    \lean{MPSTensor.hasBiCF_of_propBlockInjective}
     \lean{MPOTensor.horizontalCFData_of_wordTupleSpanTop}
     \lean{MPOTensor.horizontalCFData_of_propBlockInjective}
     \leanok
@@ -526,28 +525,22 @@ strong subadditivity for a normalized three-site reduced state.
     separates the blocks by their word evaluations.
 
     Proposition~IV.3 gives a concrete sufficient criterion for this
-    finite-length separation. The predicate \texttt{PropBlockInjective}
-    isolates this finite-length content: after some common blocking length,
-    each block is block-injective, and after a second finite blocking length
-    one can form word combinations which equal the identity on one chosen
-    block and vanish on all others. Concatenating an injective prefix with
-    such a selector suffix yields the product-algebra span condition above.
-    This is formalized by
-    \texttt{wordTupleSpanTop\_of\_propBlockInjective}; the resulting biCF
-    conclusion is the theorem
-    \texttt{hasBiCF\_of\_propBlockInjective}, and the corresponding
-    horizontal canonical-form package is
-    \texttt{horizontalCFData\_of\_propBlockInjective}.
+    finite-length separation: after some common blocking length, each block is
+    block-injective, and after a second finite blocking length one can form
+    word combinations which equal the identity on one chosen block and vanish
+    on all others. Concatenating an injective prefix with such a selector
+    suffix yields the product-algebra span condition above, and therefore the
+    horizontal canonical-form conclusion.
 \end{remark}
 
-\begin{proposition}[Abstract Proposition~IV.3 package]
-    \label{prop:propblockinj_abstract}
+\begin{theorem}[Abstract Proposition~IV.3 package]
+    \label{thm:propblockinj_abstract}
     \lean{MPSTensor.hasBiCF_of_propBlockInjective}
     \leanok
     \uses{rem:word_tuple_span_top}
     If a block family admits the finite-length selector data of
     Proposition~IV.3, then it is in block-injective canonical form.
-\end{proposition}
+\end{theorem}
 
 \begin{proof}
     \leanok
@@ -562,7 +555,7 @@ strong subadditivity for a normalized three-site reduced state.
     \label{lem:blockwise_insert_eq_of_mpv_agree}
     \lean{MPOTensor.blockwise_insert_eq_of_mpv_agree}
     \leanok
-    \uses{def:tensor_from_blocks, def:injective, prop:propblockinj_abstract}
+    \uses{def:tensor_from_blocks, def:injective, thm:propblockinj_abstract}
     Let $\bigoplus_k \mu_k A_k$ be a block-diagonal tensor whose blocks are
     injective, left-canonical, weighted by nonzero scalars, and jointly
     block-injective in the sense that for some blocking length~$L$ the tuple of
@@ -575,9 +568,9 @@ strong subadditivity for a normalized three-site reduced state.
 
 \begin{proof}
     \leanok
-    \uses{def:tensor_from_blocks, def:injective, prop:propblockinj_abstract}
+    \uses{def:tensor_from_blocks, def:injective, thm:propblockinj_abstract}
     This is Lemma~L from \cite[Appendix~A]{Cirac2017MPDO_AnnPhys}, using the
-    abstract Proposition~IV.3 package from Proposition~\ref{prop:propblockinj_abstract}.
+    abstract Proposition~IV.3 package from Theorem~\ref{thm:propblockinj_abstract}.
     Expanding the hypothesis over a word of length~$L+1$ beginning with the
     fixed site and folding each block contribution into a trace pairing
     against the corresponding first-site insertion tensor yields, upon taking the
@@ -725,9 +718,8 @@ recovery theorem for the MPDO renormalization fixed-point condition.
     \uses{def:mpdo_rfp_via_algebra, def:mpdo_rfp_via_fusion}
     Assume the doubled tensor is trace-preserving and the transfer map admits a
     positive-definite fixed point. If the transfer-map fusion criterion holds,
-    then there exists a stationary family of support algebras, all equal to the
-    fixed-point algebra of the adjoint transfer map, with multiplication given
-    by matrix multiplication and inclusions given by the identity.
+    then the MPO satisfies the algebra-structure formulation of the
+    renormalization fixed-point condition.
 \end{theorem}
 \begin{proof}\leanok
 The fusion criterion implies idempotence of the transfer map. Under the

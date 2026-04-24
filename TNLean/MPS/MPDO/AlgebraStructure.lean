@@ -130,15 +130,6 @@ def CompatibleWith (data : AlgebraStructureData d D) (M : MPOTensor d D) : Prop 
   ∀ n : ℕ, 0 < n → ∀ X : Matrix (Fin D) (Fin D) ℂ,
     X ∈ data.A n ↔ (blockedTransferMap M n).adjoint X = X
 
-/-- A constant algebra tower is compatible with `M` as soon as all positive
-blocked adjoint transfer maps have the same fixed-point algebra. -/
-theorem compatible_of_eq_adjointFixedPoints
-    (data : AlgebraStructureData d D) (M : MPOTensor d D)
-    (hCompat : ∀ n : ℕ, 0 < n → ∀ X : Matrix (Fin D) (Fin D) ℂ,
-      X ∈ data.A n ↔ (blockedTransferMap M n).adjoint X = X) :
-    data.CompatibleWith M :=
-  hCompat
-
 end AlgebraStructureData
 
 /-- The fixed-point support algebra attached to a trace-preserving MPO tensor and
@@ -225,13 +216,6 @@ An MPO tensor satisfies `IsRFP_MPDO_via_algebra` when it admits algebra-structur
 support data compatible with its blocked adjoint transfer maps. -/
 def IsRFP_MPDO_via_algebra (M : MPOTensor d D) : Prop :=
   ∃ data : AlgebraStructureData d D, data.CompatibleWith M
-
-/-- Backwards-compatible alias for the previous scaffold name.
-
-The old definition was vacuous. The new alias points to the non-vacuous algebra
-predicate above. -/
-abbrev IsRFP_MPDO_via_algebra_scaffold (M : MPOTensor d D) : Prop :=
-  IsRFP_MPDO_via_algebra M
 
 /-- A trace-preserving MPO with a positive-definite fixed point admits a
 stationary algebra tower as soon as it is an RFP. -/
