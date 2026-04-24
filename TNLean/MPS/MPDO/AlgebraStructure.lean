@@ -212,9 +212,8 @@ def IsRFP_MPDO_via_algebra (M : MPOTensor d D) : Prop :=
 
 The old definition was vacuous. The new alias points to the non-vacuous algebra
 predicate above. -/
-@[deprecated IsRFP_MPDO_via_algebra (since := "2026-04-24")]
-abbrev IsRFP_MPDO_via_algebra_scaffold (M : MPOTensor d D) : Prop :=
-  IsRFP_MPDO_via_algebra M
+@[deprecated (since := "2026-04-24")] alias IsRFP_MPDO_via_algebra_scaffold :=
+  IsRFP_MPDO_via_algebra
 
 /-- A trace-preserving MPO with a positive-definite fixed point admits a
 stationary algebra tower as soon as it is an RFP. -/
