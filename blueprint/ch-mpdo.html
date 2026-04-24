@@ -4812,13 +4812,205 @@
 
   </div>
 </div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:mpdo_adjoint_fix_descent">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">3.53</span>
+    <span class="theorem_thmtitle">Adjoint fixed points descend through the algebra tower</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-mpdo.html#thm:mpdo_adjoint_fix_descent">#</a>
+    
+    <a class="icon proof" href="ch-mpdo.html#a0000000235"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mpdo.html#def:mpdo_rfp_via_algebra">Definition 3.45</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPOTensor.adjoint_transferMap_apply_of_isRFP_MPDO_via_algebra" class="lean_decl">MPOTensor.adjoint_transferMap_apply_of_isRFP_MPDO_via_algebra</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   If an MPO tensor satisfies the algebra-structure formulation, then every adjoint fixed point of the blocked transfer map \(E_n\) at a positive blocking size \(n\) is already an adjoint fixed point of the unblocked transfer map \(E_1\). </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000235">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Compatibility at size \(n\) places \(X\) in \(\mathcal{A}_n\). The inclusion map \(\iota _n\) lifts \(X\) into \(\mathcal{A}_{n+1}\), and since \(\iota _n\) is just an inclusion it does not change the underlying operator, so we continue to denote the lifted element by \(X\). Thus compatibility at size \(n + 1\) yields \(E_{n+1}^{\dagger } X = X\). Rewriting \(E_{n+1} = E_n \circ E_1\) and applying \((A \circ B)^{\dagger } = B^{\dagger } \circ A^{\dagger }\) together with the hypothesis \(E_n^{\dagger } X = X\) extracts \(E_1^{\dagger } X = X\). </p>
+
+  </div>
+</div>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:mpdo_adjoint_fix_reverse">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">3.54</span>
+    <span class="lemma_thmtitle">Reverse inclusion of adjoint fixed points</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-mpdo.html#lem:mpdo_adjoint_fix_reverse">#</a>
+    
+    <a class="icon proof" href="ch-mpdo.html#a0000000236"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPOTensor.adjoint_blockedTransferMap_apply_of_adjoint_transferMap_apply" class="lean_decl">MPOTensor.adjoint_blockedTransferMap_apply_of_adjoint_transferMap_apply</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>  Every adjoint fixed point of the unblocked transfer map \(E_1\) is an adjoint fixed point of every blocked transfer map \(E_n\). </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000236">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Induction on \(n\) using \(E_{n+1} = E_n \circ E_1\) and \((A \circ B)^{\dagger } = B^{\dagger } \circ A^{\dagger }\); the base case is \(E_0 = \mathrm{id}\). This step does not require the algebra-structure data. Combined with Theorem&#160;<a href="ch-mpdo.html#thm:mpdo_adjoint_fix_descent">3.53</a> this yields the fixed-point equality \(\mathrm{Fix}(E_n^{\dagger }) = \mathrm{Fix}(E_1^{\dagger })\) at every positive blocking size under the algebra-structure predicate. </p>
+
+  </div>
+</div>
+<div class="remark_thmwrapper theorem-style-remark" id="rem:mpdo_algebra_to_fusion_gap">
+  <div class="remark_thmheading">
+    <span class="remark_thmcaption">
+    Remark
+    </span>
+    <span class="remark_thmlabel">3.55</span>
+    <span class="remark_thmtitle">Converse algebra-to-fusion gap</span>
+    <div class="thm_header_extras">
+
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-mpdo.html#rem:mpdo_algebra_to_fusion_gap">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mpdo.html#def:mpdo_rfp_via_algebra">Definition 3.45</a></li>
+          
+          <li><a href="ch-mpdo.html#def:mpdo_rfp_via_fusion">Definition 3.40</a></li>
+          
+          <li><a href="ch-bnt.html#thm:newton_girard">Theorem 13.28</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+        </div>
+  </div>
+  <div class="remark_thmcontent">
+  <p>  The converse implication \(\ref{def:mpdo_rfp_via_algebra} \Rightarrow \ref{def:mpdo_rfp_via_fusion}\) is not provable against the present predicate. Theorem <a href="ch-mpdo.html#thm:mpdo_adjoint_fix_descent">3.53</a> already gives the strongest available consequence of the algebra-structure data – exclusion of <em>finite order</em> (root-of-unity) peripheral eigenvalues of the adjoint transfer map, since any such eigenvalue would produce a new adjoint fixed point at some positive blocking size. This does <em>not</em>, however, exclude unit-modulus eigenvalues of irrational phase, nor force idempotence of the transfer map, so ergodic quantum channels with a strict spectral gap on the \(1\)-complement still satisfy the predicate without being RFPs. For instance, on \(M_D(\mathbb {C})\) with \(0 {\lt} \varepsilon {\lt} 1\) take </p>
+<div class="displaymath" id="a0000000237">
+  \[  E(X) = \varepsilon \,  X + (1 - \varepsilon )\,  \Pi _{\mathrm{diag}}(X),  \]
+</div>
+<p> where \(\Pi _{\mathrm{diag}}\) is the projection that zeroes the off-diagonal entries of \(X\); then \(\Pi _{\mathrm{diag}} \circ \Pi _{\mathrm{diag}} = \Pi _{\mathrm{diag}}\), the channel \(E\) has peripheral spectrum \(\{ 1\} \) and diagonal fixed-point algebra at every blocking size, yet \(E \circ E \neq E\). Closing the converse therefore requires strengthening the predicate to the coefficient formulation of <span class="cite">
+	(
+	
+</span>: the positive diagonal matrices \(\chi _{\alpha ,\beta ,\gamma }\) of Appendix&#160;C.3 and the coefficient identity \(c^{(L)}_{\alpha ,\beta ,\gamma } = \mathrm{tr}(\chi _{\alpha ,\beta ,\gamma }^{L})\) of Appendix&#160;C.4. The scalar Newton–Girard power-sum identity needed for the latter step is already available as Theorem&#160;<a href="ch-bnt.html#thm:newton_girard">13.28</a>. </p>
+
+  </div>
+</div>
 <h1 id="a0000000020">3.11 Commuting form and GSNNCH</h1>
 <div class="definition_thmwrapper theorem-style-definition" id="def:mpdo_commuting_form_data">
   <div class="definition_thmheading">
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">3.53</span>
+    <span class="definition_thmlabel">3.56</span>
     <span class="definition_thmtitle">Commuting-form data for an MPDO</span>
     <div class="thm_header_extras">
 
@@ -4882,7 +5074,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">3.54</span>
+    <span class="definition_thmlabel">3.57</span>
     <span class="definition_thmtitle">Commuting-form property</span>
     <div class="thm_header_extras">
 
@@ -4906,7 +5098,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_commuting_form_data">Definition 3.53</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_commuting_form_data">Definition 3.56</a></li>
           
           <li><a href="ch-mpdo.html#def:mpo_tensor">Definition 3.1</a></li>
           
@@ -4948,7 +5140,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">3.55</span>
+    <span class="definition_thmlabel">3.58</span>
     <span class="definition_thmtitle">GSNNCH</span>
     <div class="thm_header_extras">
 
@@ -4972,7 +5164,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_has_commuting_form">Definition 3.54</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_has_commuting_form">Definition 3.57</a></li>
           
         </ul>
     
@@ -5013,7 +5205,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">3.56</span>
+    <span class="theorem_thmlabel">3.59</span>
     <span class="theorem_thmtitle">GSNNCH iff commuting form</span>
     <div class="thm_header_extras">
 
@@ -5024,7 +5216,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_is_gsnnch_iff_has_commuting_form">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000000235"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000000238"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5040,9 +5232,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_is_gsnnch">Definition 3.55</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_is_gsnnch">Definition 3.58</a></li>
           
-          <li><a href="ch-mpdo.html#def:mpdo_has_commuting_form">Definition 3.54</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_has_commuting_form">Definition 3.57</a></li>
           
         </ul>
     
@@ -5077,7 +5269,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000235">
+<div class="proof_wrapper" id="a0000000238">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5094,7 +5286,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">3.57</span>
+    <span class="definition_thmlabel">3.60</span>
     <span class="definition_thmtitle">GSNNCH with zero correlation length</span>
     <div class="thm_header_extras">
 
@@ -5118,7 +5310,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_is_gsnnch">Definition 3.55</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_is_gsnnch">Definition 3.58</a></li>
           
           <li><a href="ch-mpdo.html#def:mpo_is_zcl">Definition 3.9</a></li>
           
@@ -5161,7 +5353,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">3.58</span>
+    <span class="theorem_thmlabel">3.61</span>
     <span class="theorem_thmtitle">GSNNCH with zero correlation length iff commuting form with zero correlation length</span>
     <div class="thm_header_extras">
 
@@ -5172,7 +5364,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_is_gsnnch_zcl_iff_has_commuting_form_and_is_zcl">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000000236"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000000239"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5188,9 +5380,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_is_gsnnch_zcl">Definition 3.57</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_is_gsnnch_zcl">Definition 3.60</a></li>
           
-          <li><a href="ch-mpdo.html#thm:mpdo_is_gsnnch_iff_has_commuting_form">Theorem 3.56</a></li>
+          <li><a href="ch-mpdo.html#thm:mpdo_is_gsnnch_iff_has_commuting_form">Theorem 3.59</a></li>
           
         </ul>
     
@@ -5225,7 +5417,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000236">
+<div class="proof_wrapper" id="a0000000239">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5233,23 +5425,23 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>Unfold the definition of GSNNCH with zero correlation length and apply Theorem&#160;<a href="ch-mpdo.html#thm:mpdo_is_gsnnch_iff_has_commuting_form">3.56</a>. </p>
+  <p>Unfold the definition of GSNNCH with zero correlation length and apply Theorem&#160;<a href="ch-mpdo.html#thm:mpdo_is_gsnnch_iff_has_commuting_form">3.59</a>. </p>
 
   </div>
 </div>
-<div class="remark_thmwrapper theorem-style-remark" id="a0000000237">
+<div class="remark_thmwrapper theorem-style-remark" id="a0000000240">
   <div class="remark_thmheading">
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">3.59</span>
+    <span class="remark_thmlabel">3.62</span>
     <span class="remark_thmtitle">Remaining step toward source label <span class="ttfamily">propsimple</span></span>
     <div class="thm_header_extras">
 
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-mpdo.html#a0000000237">#</a>
+    <a class="icon proof" href="ch-mpdo.html#a0000000240">#</a>
     
     
     
@@ -5266,7 +5458,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">3.60</span>
+    <span class="definition_thmlabel">3.63</span>
     <span class="definition_thmtitle">Local simple-MPDO structure data</span>
     <div class="thm_header_extras">
 
@@ -5332,7 +5524,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">3.61</span>
+    <span class="definition_thmlabel">3.64</span>
     <span class="definition_thmtitle">Simple-MPDO blocked-RFP data</span>
     <div class="thm_header_extras">
 
@@ -5356,9 +5548,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:simple_mpdo_local_structure_data">Definition 3.60</a></li>
+          <li><a href="ch-mpdo.html#def:simple_mpdo_local_structure_data">Definition 3.63</a></li>
           
-          <li><a href="ch-mpdo.html#def:mpdo_has_commuting_form">Definition 3.54</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_has_commuting_form">Definition 3.57</a></li>
           
           <li><a href="ch-mpdo.html#def:mpo_is_zcl">Definition 3.9</a></li>
           
@@ -5400,7 +5592,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">3.62</span>
+    <span class="theorem_thmlabel">3.65</span>
     <span class="theorem_thmtitle">Zero correlation length gives a blocked fusion-isometry witness</span>
     <div class="thm_header_extras">
 
@@ -5411,7 +5603,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:structural_implies_rfp_blocked">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000000238"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000000241"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5468,7 +5660,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000238">
+<div class="proof_wrapper" id="a0000000241">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5485,7 +5677,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">3.63</span>
+    <span class="theorem_thmlabel">3.66</span>
     <span class="theorem_thmtitle">Simple-MPDO RFP chain from commuting form and ZCL</span>
     <div class="thm_header_extras">
 
@@ -5496,7 +5688,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:simple_mpdo_rfp_chain">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000000239"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000000242"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5512,13 +5704,13 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_has_commuting_form">Definition 3.54</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_has_commuting_form">Definition 3.57</a></li>
           
           <li><a href="ch-mpdo.html#def:mpo_is_zcl">Definition 3.9</a></li>
           
-          <li><a href="ch-mpdo.html#thm:mpdo_is_gsnnch_zcl_iff_has_commuting_form_and_is_zcl">Theorem 3.58</a></li>
+          <li><a href="ch-mpdo.html#thm:mpdo_is_gsnnch_zcl_iff_has_commuting_form_and_is_zcl">Theorem 3.61</a></li>
           
-          <li><a href="ch-mpdo.html#thm:structural_implies_rfp_blocked">Theorem 3.62</a></li>
+          <li><a href="ch-mpdo.html#thm:structural_implies_rfp_blocked">Theorem 3.65</a></li>
           
           <li><a href="ch-mpdo.html#def:mpdo_rfp_via_fusion">Definition 3.40</a></li>
           
@@ -5557,7 +5749,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000239">
+<div class="proof_wrapper" id="a0000000242">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5565,7 +5757,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>The commuting-form and zero-correlation-length hypotheses give the GSNNCH–ZCL branch via Theorem&#160;<a href="ch-mpdo.html#thm:mpdo_is_gsnnch_zcl_iff_has_commuting_form_and_is_zcl">3.58</a>. The blocked witness is Theorem&#160;<a href="ch-mpdo.html#thm:structural_implies_rfp_blocked">3.62</a>. The full transfer-map fusion formulation follows by applying the converse direction of Theorem&#160;<a href="ch-mpdo.html#thm:mpdo_rfp_via_fusion_iff">3.42</a> to zero correlation length, which is the current RFP predicate. </p>
+  <p>The commuting-form and zero-correlation-length hypotheses give the GSNNCH–ZCL branch via Theorem&#160;<a href="ch-mpdo.html#thm:mpdo_is_gsnnch_zcl_iff_has_commuting_form_and_is_zcl">3.61</a>. The blocked witness is Theorem&#160;<a href="ch-mpdo.html#thm:structural_implies_rfp_blocked">3.65</a>. The full transfer-map fusion formulation follows by applying the converse direction of Theorem&#160;<a href="ch-mpdo.html#thm:mpdo_rfp_via_fusion_iff">3.42</a> to zero correlation length, which is the current RFP predicate. </p>
 
   </div>
 </div>
@@ -5574,7 +5766,7 @@
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">3.64</span>
+    <span class="remark_thmlabel">3.67</span>
     <span class="remark_thmtitle">Remaining paper-level gap for Theorem&#160;4.9</span>
     <div class="thm_header_extras">
 
@@ -5596,11 +5788,11 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:simple_mpdo_local_structure_data">Definition 3.60</a></li>
+          <li><a href="ch-mpdo.html#def:simple_mpdo_local_structure_data">Definition 3.63</a></li>
           
-          <li><a href="ch-mpdo.html#def:simple_mpdo_blocked_rfp_data">Definition 3.61</a></li>
+          <li><a href="ch-mpdo.html#def:simple_mpdo_blocked_rfp_data">Definition 3.64</a></li>
           
-          <li><a href="ch-mpdo.html#thm:simple_mpdo_rfp_chain">Theorem 3.63</a></li>
+          <li><a href="ch-mpdo.html#thm:simple_mpdo_rfp_chain">Theorem 3.66</a></li>
           
         </ul>
     
@@ -5612,7 +5804,7 @@
         </div>
   </div>
   <div class="remark_thmcontent">
-  <p>   Theorem&#160;<a href="ch-mpdo.html#thm:simple_mpdo_rfp_chain">3.63</a> is fully formalized, but to recover the original Appendix&#160;C.2 implication from SAL and ZCL alone one still needs a theorem deriving the commuting-form property from the local simple-MPDO structure of Lemmas&#160;C.3–C.4. The record above is included so that this future implication has an explicit target. </p>
+  <p>   Theorem&#160;<a href="ch-mpdo.html#thm:simple_mpdo_rfp_chain">3.66</a> is fully formalized, but to recover the original Appendix&#160;C.2 implication from SAL and ZCL alone one still needs a theorem deriving the commuting-form property from the local simple-MPDO structure of Lemmas&#160;C.3–C.4. The record above is included so that this future implication has an explicit target. </p>
 
   </div>
 </div>

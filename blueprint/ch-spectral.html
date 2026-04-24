@@ -933,7 +933,7 @@
 <p>This chapter proves that the MPV overlaps between distinct (non-gauge-phase-equivalent) MPS blocks decay to zero as system size grows. It also proves the corresponding self-overlap convergence to&#160;\(1\) under the complementary spectral-gap hypothesis that encodes primitivity in the cases of interest. The argument is based on a spectral analysis of the <em>mixed transfer operator</em>, following&#160;<span class="cite">
 </span>. </p>
 <p>The algebraic mixed-transfer identities in the first two sections do not use normalization. Starting with the spectral-radius estimates, we assume the trace-preserving normalization </p>
-<div class="displaymath" id="a0000000553">
+<div class="displaymath" id="a0000000556">
   \[  \sum _i (A^i)^\dagger A^i = \mathbb {1}.  \]
 </div>
 <h1 id="a0000000061">9.1 Mixed transfer operator</h1>
@@ -998,7 +998,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   The <em>mixed transfer operator</em> (or <em>cross transfer operator</em>) for two MPS tensors \(A\) and \(B\) of the same bond dimension&#160;\(D\) is the linear map \(F_{AB} : M_{D}(\mathbb {C}) \to M_{D}(\mathbb {C})\) defined by </p>
-<div class="displaymath" id="a0000000554">
+<div class="displaymath" id="a0000000557">
   \[  F_{AB}(X) = \sum _{i=0}^{d-1} A^i X (B^i)^\dagger .  \]
 </div>
 
@@ -1065,7 +1065,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   For MPS tensors \(A\) of bond dimension \(D_1\) and \(B\) of bond dimension \(D_2\) (possibly \(D_1 \neq D_2\)), the <em>rectangular mixed transfer operator</em> is \(F_{AB}^{\mathrm{rect}} : M_{D_1 \times D_2}(\mathbb {C}) \to M_{D_1 \times D_2}(\mathbb {C})\) defined by </p>
-<div class="displaymath" id="a0000000555">
+<div class="displaymath" id="a0000000558">
   \[  F_{AB}^{\mathrm{rect}}(X) = \sum _{i=0}^{d-1} A^i X (B^i)^\dagger .  \]
 </div>
 
@@ -1151,7 +1151,7 @@
 
     <a class="icon proof" href="ch-spectral.html#thm:mixed_pow">#</a>
     
-    <a class="icon proof" href="ch-spectral.html#a0000000556"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-spectral.html#a0000000559"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1201,14 +1201,14 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   For all \(X \in M_{D}(\mathbb {C})\) and \(N \ge 0\), </p>
-<div class="displaymath" id="a0000000557">
+<div class="displaymath" id="a0000000560">
   \[  F_{AB}^N(X) = \sum _{\sigma \in \{ 0,\ldots ,d{-}1\} ^N} A^\sigma X (B^\sigma )^\dagger ,  \]
 </div>
 <p> where \(A^\sigma = A^{\sigma _1} \cdots A^{\sigma _N}\) denotes the word evaluation (Definition&#160;<a href="ch-mps.html#def:eval_word">2.2</a>). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000556">
+<div class="proof_wrapper" id="a0000000559">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1236,7 +1236,7 @@
 
     <a class="icon proof" href="ch-spectral.html#thm:mixed_trace_identity">#</a>
     
-    <a class="icon proof" href="ch-spectral.html#a0000000558"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-spectral.html#a0000000561"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1288,14 +1288,14 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   For \(N \ge 0\), </p>
-<div class="displaymath" id="a0000000559">
+<div class="displaymath" id="a0000000562">
   \[  \operatorname{tr}\bigl(F_{AB}^N(\mathbb {1})\bigr) = \sum _{\sigma } \operatorname{tr}\bigl(A^\sigma (B^\sigma )^\dagger \bigr).  \]
 </div>
 <p> This is the matrix trace of \(F_{AB}^N\) evaluated at the identity matrix. It should <em>not</em> be confused with the operator trace \(\operatorname{Tr}(F_{AB}^N)\); its relation to the MPV overlap is proved in the next section. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000558">
+<div class="proof_wrapper" id="a0000000561">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1309,7 +1309,7 @@
 </div>
 <h1 id="a0000000062">9.2 MPV overlap as transfer trace</h1>
 <p>Recall from Definition&#160;<a href="ch-mps.html#def:mpv_overlap">2.35</a> that </p>
-<div class="displaymath" id="a0000000560">
+<div class="displaymath" id="a0000000563">
   \[  O_{AB}(N) = \sum _{\sigma \in \{ 0,\ldots ,d{-}1\} ^N} V^{(N)}(A)_\sigma \overline{V^{(N)}(B)_\sigma }.  \]
 </div>
 <p> This section rewrites that scalar as the operator trace of the mixed transfer power. </p>
@@ -1329,7 +1329,7 @@
 
     <a class="icon proof" href="ch-spectral.html#lem:trace_expansion">#</a>
     
-    <a class="icon proof" href="ch-spectral.html#a0000000561"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-spectral.html#a0000000564"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1357,14 +1357,14 @@
   </div>
   <div class="lemma_thmcontent">
   <p>  For any linear endomorphism \(T\) on \(M_{D}(\mathbb {C})\), the operator trace can be expanded as </p>
-<div class="displaymath" id="a0000000562">
+<div class="displaymath" id="a0000000565">
   \[  \operatorname{Tr}(T) = \sum _{p,q = 0}^{D-1} (T(E_{pq}))_{pq},  \]
 </div>
 <p> where \(E_{pq}\) is the matrix with \(1\) in position \((p,q)\) and \(0\) elsewhere. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000561">
+<div class="proof_wrapper" id="a0000000564">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1392,7 +1392,7 @@
 
     <a class="icon proof" href="ch-spectral.html#thm:overlap_trace">#</a>
     
-    <a class="icon proof" href="ch-spectral.html#a0000000563"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-spectral.html#a0000000566"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1446,13 +1446,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   For tensors \(A, B\) of bond dimension&#160;\(D \ge 1\), </p>
-<div class="displaymath" id="a0000000564">
+<div class="displaymath" id="a0000000567">
   \[  O_{AB}(N) = \operatorname{Tr}(F_{AB}^N).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000563">
+<div class="proof_wrapper" id="a0000000566">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1480,7 +1480,7 @@
 
     <a class="icon proof" href="ch-spectral.html#thm:overlap_trace_rect">#</a>
     
-    <a class="icon proof" href="ch-spectral.html#a0000000565"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-spectral.html#a0000000568"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1532,13 +1532,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   For tensors \(A\) of bond dimension \(D_1 \ge 1\) and \(B\) of bond dimension \(D_2 \ge 1\), </p>
-<div class="displaymath" id="a0000000566">
+<div class="displaymath" id="a0000000569">
   \[  O_{AB}(N) = \operatorname{Tr}((F_{AB}^{\mathrm{rect}})^N).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000565">
+<div class="proof_wrapper" id="a0000000568">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1566,7 +1566,7 @@
 
     <a class="icon proof" href="ch-spectral.html#lem:word_trace_entrywise">#</a>
     
-    <a class="icon proof" href="ch-spectral.html#a0000000567"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-spectral.html#a0000000570"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1614,13 +1614,13 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   For a word \(\sigma \in \{ 0,\ldots ,d{-}1\} ^N\), </p>
-<div class="displaymath" id="a0000000568">
+<div class="displaymath" id="a0000000571">
   \[  \operatorname{tr}\bigl(A^\sigma (B^\sigma )^\dagger \bigr) = \sum _{j,k = 0}^{D-1} (A^\sigma )_{jk}\, \overline{(B^\sigma )_{jk}}.  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000567">
+<div class="proof_wrapper" id="a0000000570">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1675,7 +1675,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>  For a (possibly rectangular) matrix \(X \in M_{m \times n}(\mathbb {C})\), the <em>Frobenius norm squared</em> is </p>
-<div class="displaymath" id="a0000000569">
+<div class="displaymath" id="a0000000572">
   \[  \| X\| _F^2 := \sum _{i=0}^{m-1}\sum _{j=0}^{n-1} |X_{ij}|^2.  \]
 </div>
 
@@ -1697,7 +1697,7 @@
 
     <a class="icon proof" href="ch-spectral.html#lem:frob_sq_trace">#</a>
     
-    <a class="icon proof" href="ch-spectral.html#a0000000570"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-spectral.html#a0000000573"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1748,7 +1748,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000570">
+<div class="proof_wrapper" id="a0000000573">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1820,7 +1820,7 @@
 
     <a class="icon proof" href="ch-spectral.html#lem:norm_mat_to_es">#</a>
     
-    <a class="icon proof" href="ch-spectral.html#a0000000571"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-spectral.html#a0000000574"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1873,7 +1873,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000571">
+<div class="proof_wrapper" id="a0000000574">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1903,7 +1903,7 @@
 
     <a class="icon proof" href="ch-spectral.html#thm:eigenvalue_bound">#</a>
     
-    <a class="icon proof" href="ch-spectral.html#a0000000572"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-spectral.html#a0000000575"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1956,7 +1956,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000572">
+<div class="proof_wrapper" id="a0000000575">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1985,7 +1985,7 @@
 
     <a class="icon proof" href="ch-spectral.html#thm:spectral_radius_le_one">#</a>
     
-    <a class="icon proof" href="ch-spectral.html#a0000000573"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-spectral.html#a0000000576"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2038,7 +2038,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000573">
+<div class="proof_wrapper" id="a0000000576">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2066,7 +2066,7 @@
 
     <a class="icon proof" href="ch-spectral.html#thm:modulus_one_gauge">#</a>
     
-    <a class="icon proof" href="ch-spectral.html#a0000000574"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-spectral.html#a0000000577"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2139,7 +2139,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000574">
+<div class="proof_wrapper" id="a0000000577">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2189,7 +2189,7 @@
 
     <a class="icon proof" href="ch-spectral.html#thm:gauged_intertwining_core">#</a>
     
-    <a class="icon proof" href="ch-spectral.html#a0000000575"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-spectral.html#a0000000578"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2245,13 +2245,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Let \(A\) and \(B\) be normalized tensors, and let \(X \neq 0\) satisfy \(F_{AB}(X) = \mu X\) with \(|\mu | = 1\). Choose positive-definite fixed points \(\rho _A,\rho _B\) of the transfer maps and gauge to unital families \(A'^i = S_A^{-1} A^i S_A\) and \(B'^i = S_B^{-1} B^i S_B\) with \(S_A S_A^\dagger = \rho _A\) and \(S_B S_B^\dagger = \rho _B\). Then the transported matrix \(X' = S_A^{-1} X (S_B^\dagger )^{-1}\) is nonzero, the families \(A'\) and \(B'\) are unital, and for every&#160;\(i\) one has </p>
-<div class="displaymath" id="a0000000576">
+<div class="displaymath" id="a0000000579">
   \[  X' (B'^i)^\dagger = \mu \,  (A'^i)^\dagger X', \qquad A'^i X' = \mu \,  X' B'^i.  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000575">
+<div class="proof_wrapper" id="a0000000578">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2279,7 +2279,7 @@
 
     <a class="icon proof" href="ch-spectral.html#thm:gauged_intertwining_gauge_phase">#</a>
     
-    <a class="icon proof" href="ch-spectral.html#a0000000577"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-spectral.html#a0000000580"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2327,14 +2327,14 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Let \(A\) and \(B\) be tensors of the same bond dimension. Suppose there are invertible gauges taking them to families \(A'\) and \(B'\), an invertible matrix \(X'\), and a scalar \(\mu \) with \(|\mu | = 1\) such that </p>
-<div class="displaymath" id="a0000000578">
+<div class="displaymath" id="a0000000581">
   \[  A'^i X' = \mu \,  X' B'^i \qquad \text{for all } i.  \]
 </div>
 <p> Then \(A\) and \(B\) are gauge-phase equivalent. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000577">
+<div class="proof_wrapper" id="a0000000580">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2387,7 +2387,7 @@
 
     <a class="icon proof" href="ch-spectral.html#thm:spectral_gap">#</a>
     
-    <a class="icon proof" href="ch-spectral.html#a0000000579"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-spectral.html#a0000000582"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2446,7 +2446,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000579">
+<div class="proof_wrapper" id="a0000000582">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2475,7 +2475,7 @@
 
     <a class="icon proof" href="ch-spectral.html#thm:rectangular_intertwining_dim_eq">#</a>
     
-    <a class="icon proof" href="ch-spectral.html#a0000000580"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-spectral.html#a0000000583"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2525,14 +2525,14 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Let \(A\) and \(B\) be injective tensors of bond dimensions \(D_1\) and \(D_2\). If there exist \(X \in M_{D_1 \times D_2}(\mathbb {C}) \setminus \{ 0\} \) and \(\mu \in \mathbb {C}\) such that </p>
-<div class="displaymath" id="a0000000581">
+<div class="displaymath" id="a0000000584">
   \[  X (B^i)^\dagger = \mu \,  (A^i)^\dagger X, \qquad A^i X = \mu \,  X B^i \qquad \text{for all } i,  \]
 </div>
 <p> then \(D_1 = D_2\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000580">
+<div class="proof_wrapper" id="a0000000583">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2560,7 +2560,7 @@
 
     <a class="icon proof" href="ch-spectral.html#thm:spectral_gap_rect">#</a>
     
-    <a class="icon proof" href="ch-spectral.html#a0000000582"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-spectral.html#a0000000585"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2619,7 +2619,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000582">
+<div class="proof_wrapper" id="a0000000585">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2648,7 +2648,7 @@
 
     <a class="icon proof" href="ch-spectral.html#thm:overlap_decay_rect">#</a>
     
-    <a class="icon proof" href="ch-spectral.html#a0000000583"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-spectral.html#a0000000586"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2705,7 +2705,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000583">
+<div class="proof_wrapper" id="a0000000586">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2734,7 +2734,7 @@
 
     <a class="icon proof" href="ch-spectral.html#thm:transfer_pow_zero">#</a>
     
-    <a class="icon proof" href="ch-spectral.html#a0000000584"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-spectral.html#a0000000587"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2791,7 +2791,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000584">
+<div class="proof_wrapper" id="a0000000587">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2819,7 +2819,7 @@
 
     <a class="icon proof" href="ch-spectral.html#thm:overlap_decay">#</a>
     
-    <a class="icon proof" href="ch-spectral.html#a0000000585"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-spectral.html#a0000000588"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2880,7 +2880,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000585">
+<div class="proof_wrapper" id="a0000000588">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3043,7 +3043,7 @@
 
     <a class="icon proof" href="ch-spectral.html#thm:modulus_one_gauge_irr_tp">#</a>
     
-    <a class="icon proof" href="ch-spectral.html#a0000000586"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-spectral.html#a0000000589"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3120,7 +3120,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000586">
+<div class="proof_wrapper" id="a0000000589">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3148,7 +3148,7 @@
 
     <a class="icon proof" href="ch-spectral.html#thm:spectral_gap_irr_tp">#</a>
     
-    <a class="icon proof" href="ch-spectral.html#a0000000587"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-spectral.html#a0000000590"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3207,7 +3207,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000587">
+<div class="proof_wrapper" id="a0000000590">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3235,7 +3235,7 @@
 
     <a class="icon proof" href="ch-spectral.html#thm:transfer_pow_zero_irr_tp">#</a>
     
-    <a class="icon proof" href="ch-spectral.html#a0000000588"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-spectral.html#a0000000591"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3292,7 +3292,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000588">
+<div class="proof_wrapper" id="a0000000591">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3320,7 +3320,7 @@
 
     <a class="icon proof" href="ch-spectral.html#thm:overlap_decay_irr_tp">#</a>
     
-    <a class="icon proof" href="ch-spectral.html#a0000000589"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-spectral.html#a0000000592"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3379,7 +3379,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000589">
+<div class="proof_wrapper" id="a0000000592">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3407,7 +3407,7 @@
 
     <a class="icon proof" href="ch-spectral.html#thm:spectral_gap_rect_irr_tp">#</a>
     
-    <a class="icon proof" href="ch-spectral.html#a0000000590"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-spectral.html#a0000000593"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3462,7 +3462,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000590">
+<div class="proof_wrapper" id="a0000000593">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3490,7 +3490,7 @@
 
     <a class="icon proof" href="ch-spectral.html#thm:overlap_decay_rect_irr_tp">#</a>
     
-    <a class="icon proof" href="ch-spectral.html#a0000000591"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-spectral.html#a0000000594"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3547,7 +3547,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000591">
+<div class="proof_wrapper" id="a0000000594">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3665,7 +3665,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   For \(\sigma \ge 0\) with \(\operatorname{tr}(\sigma )\neq 0\), define </p>
-<div class="displaymath" id="a0000000592">
+<div class="displaymath" id="a0000000595">
   \[  E_\sigma (X) := \frac{\operatorname{tr}(\sigma X)}{\operatorname{tr}(\sigma )}\, \mathbb {1}.  \]
 </div>
 
@@ -4277,7 +4277,7 @@
 
     <a class="icon proof" href="ch-spectral.html#thm:scalar_conditional_expectation_isCPMap">#</a>
     
-    <a class="icon proof" href="ch-spectral.html#a0000000593"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-spectral.html#a0000000596"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4328,7 +4328,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000593">
+<div class="proof_wrapper" id="a0000000596">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4337,7 +4337,7 @@
   </div>
   <div class="proof_content">
   <p>Write \(S=\sqrt{\sigma }\) and define the Kraus family \(K_{j,i}=|j\rangle \langle i|\, S\) indexed by \((j,i)\in \{ 1,\dots ,D\} ^2\). Using \(|j\rangle \langle i|\, M\, |i\rangle \langle j| = M_{ii}\, |j\rangle \langle j|\) and summing first over \(i\) and then over \(j\), </p>
-<div class="displaymath" id="a0000000594">
+<div class="displaymath" id="a0000000597">
   \[  \sum _{j,i} K_{j,i}\, X\, K_{j,i}^\dagger = \sum _j |j\rangle \langle j|\, \operatorname {tr}(SXS) = \operatorname {tr}(\sigma X)\, \mathbb {1},  \]
 </div>
 <p> where we used cyclicity of the trace and \(S^2=\sigma \). Hence \(E_\sigma = (\operatorname {tr}\sigma )^{-1}\cdot \bigl(X\mapsto \sum _{j,i}K_{j,i}XK_{j,i}^\dagger \bigr)\) is the Kraus map scaled by the nonnegative real number \((\operatorname {tr}\sigma )^{-1}\), and therefore completely positive. </p>
@@ -4360,7 +4360,7 @@
 
     <a class="icon proof" href="ch-spectral.html#thm:scalar_conditional_expectation_preserves_weighted_trace">#</a>
     
-    <a class="icon proof" href="ch-spectral.html#a0000000595"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-spectral.html#a0000000598"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4408,13 +4408,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    If \(\operatorname {tr}\sigma \neq 0\), then for every \(X\) </p>
-<div class="displaymath" id="a0000000596">
+<div class="displaymath" id="a0000000599">
   \[  \operatorname {tr}\bigl(\sigma \, E_\sigma (X)\bigr) = \operatorname {tr}(\sigma X).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000595">
+<div class="proof_wrapper" id="a0000000598">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4447,7 +4447,7 @@
 
     <a class="icon proof" href="ch-spectral.html#lem:lower_zero_invariance">#</a>
     
-    <a class="icon proof" href="ch-spectral.html#a0000000597"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-spectral.html#a0000000600"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4475,18 +4475,18 @@
   </div>
   <div class="lemma_thmcontent">
   <p>  Let \(A\) be an MPS tensor and let \(P\) be an orthogonal projection. If </p>
-<div class="displaymath" id="a0000000598">
+<div class="displaymath" id="a0000000601">
   \[  (\mathbb {1}- P) A^i P = 0 \qquad \text{for all } i,  \]
 </div>
 <p> then </p>
-<div class="displaymath" id="a0000000599">
+<div class="displaymath" id="a0000000602">
   \[  P \,  \mathcal{E}_A(P X P) \,  P = \mathcal{E}_A(P X P)  \]
 </div>
 <p> for all \(X \in M_{D}(\mathbb {C})\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000597">
+<div class="proof_wrapper" id="a0000000600">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4514,7 +4514,7 @@
 
     <a class="icon proof" href="ch-spectral.html#thm:support_proj_fixed">#</a>
     
-    <a class="icon proof" href="ch-spectral.html#a0000000600"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-spectral.html#a0000000603"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4564,14 +4564,14 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Let \(E\) be a quantum channel and \(\rho \ge 0\) a positive semidefinite fixed point (\(E(\rho ) = \rho \)). Let \(P\) denote the support projection of&#160;\(\rho \). Then </p>
-<div class="displaymath" id="a0000000601">
+<div class="displaymath" id="a0000000604">
   \[  P \,  E(P X P) \,  P = E(P X P)  \]
 </div>
 <p> for all \(X \in M_{D}(\mathbb {C})\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000600">
+<div class="proof_wrapper" id="a0000000603">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4729,7 +4729,7 @@
 
     <a class="icon proof" href="ch-spectral.html#thm:stationarySupport_eq_one">#</a>
     
-    <a class="icon proof" href="ch-spectral.html#a0000000602"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-spectral.html#a0000000605"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4784,7 +4784,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000602">
+<div class="proof_wrapper" id="a0000000605">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4847,7 +4847,7 @@
 
     <a class="icon proof" href="ch-spectral.html#lem:supportProj_mulVec_eq_zero_of_mulVec_eq_zero">#</a>
     
-    <a class="icon proof" href="ch-spectral.html#a0000000603"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-spectral.html#a0000000606"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4878,7 +4878,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000603">
+<div class="proof_wrapper" id="a0000000606">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4992,7 +4992,7 @@
 
     <a class="icon proof" href="ch-spectral.html#thm:compression_on_support_posDef">#</a>
     
-    <a class="icon proof" href="ch-spectral.html#a0000000604"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-spectral.html#a0000000607"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5042,14 +5042,14 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Let \(\rho \succeq 0\) on \(\mathbb {C}^D\) with support projection \(P = \mathrm{supp}(\rho )\), and let \(V : \mathbb {C}^D \to \mathbb {C}^k\) be a compression isometry satisfying \(V\, V^\dagger = \mathbb {1}_k\) and \(V^\dagger \, V = P\). Then the compression </p>
-<div class="displaymath" id="a0000000605">
+<div class="displaymath" id="a0000000608">
   \[  V\, \rho \, V^\dagger \in M_{k}(\mathbb {C})  \]
 </div>
 <p> is positive definite. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000604">
+<div class="proof_wrapper" id="a0000000607">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5078,7 +5078,7 @@
 
     <a class="icon proof" href="ch-spectral.html#thm:fixedPointAlgebra_isSemisimpleRing">#</a>
     
-    <a class="icon proof" href="ch-spectral.html#a0000000606"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-spectral.html#a0000000609"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5131,7 +5131,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000606">
+<div class="proof_wrapper" id="a0000000609">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5162,7 +5162,7 @@
 
     <a class="icon proof" href="ch-spectral.html#thm:fixedPointAlgebra_wedderburnArtin">#</a>
     
-    <a class="icon proof" href="ch-spectral.html#a0000000607"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-spectral.html#a0000000610"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5215,7 +5215,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000607">
+<div class="proof_wrapper" id="a0000000610">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5243,7 +5243,7 @@
 
     <a class="icon proof" href="ch-spectral.html#thm:adjointFixedPoints_wedderburnDecomp">#</a>
     
-    <a class="icon proof" href="ch-spectral.html#a0000000608"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-spectral.html#a0000000611"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5293,17 +5293,17 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   There exist integers \(n\), block sizes \(d_1,\dots ,d_n \ge 1\), multiplicities \(m_1,\dots ,m_n \ge 1\), and a \(\mathbb {C}\)-algebra isomorphism from the adjoint-fixed-point \(*\)-subalgebra to </p>
-<div class="displaymath" id="a0000000609">
+<div class="displaymath" id="a0000000612">
   \[  \prod _{k=1}^{n} M_{d_k}(\mathbb {C})  \]
 </div>
 <p> such that </p>
-<div class="displaymath" id="a0000000610">
+<div class="displaymath" id="a0000000613">
   \[  \sum _{k=1}^{n} d_k m_k \le D.  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000608">
+<div class="proof_wrapper" id="a0000000611">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5315,7 +5315,7 @@
 
   </div>
 </div>
-<div class="remark_thmwrapper theorem-style-remark" id="a0000000611">
+<div class="remark_thmwrapper theorem-style-remark" id="a0000000614">
   <div class="remark_thmheading">
     <span class="remark_thmcaption">
     Remark
@@ -5327,7 +5327,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-spectral.html#a0000000611">#</a>
+    <a class="icon proof" href="ch-spectral.html#a0000000614">#</a>
     
     
     
@@ -5335,7 +5335,7 @@
   </div>
   <div class="remark_thmcontent">
   <p> The stronger ambient statement that the adjoint-fixed-point algebra is unitarily conjugate to </p>
-<div class="displaymath" id="a0000000612">
+<div class="displaymath" id="a0000000615">
   \[  0 \oplus \bigoplus _k M_{d_k}(\mathbb {C}) \otimes \mathbb {1}_{m_k}  \]
 </div>
 <p> together with the density-block form \(M_{d_k}(\mathbb {C}) \otimes \rho _k\) is not yet included here. </p>
@@ -5358,7 +5358,7 @@
 
     <a class="icon proof" href="ch-spectral.html#thm:weightedFixedPointsStarSubalgebra">#</a>
     
-    <a class="icon proof" href="ch-spectral.html#a0000000613"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-spectral.html#a0000000616"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5410,14 +5410,14 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Let \(T(X) = \sum _i K_i X K_i^\dagger \) be trace-preserving, and let \(\rho {\gt} 0\) satisfy \(T(\rho ) = \rho \). If </p>
-<div class="displaymath" id="a0000000614">
+<div class="displaymath" id="a0000000617">
   \[  F_T := \{ X \in M_{D}(\mathbb {C}) \mid T(X) = X\} ,  \]
 </div>
 <p> then \(\rho ^{-1/2} F_T \rho ^{-1/2}\) is a \(*\)-subalgebra of \(M_{D}(\mathbb {C})\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000613">
+<div class="proof_wrapper" id="a0000000616">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5426,7 +5426,7 @@
   </div>
   <div class="proof_content">
   <p> Set \(B_i = \rho ^{-1/2} K_i \rho ^{1/2}\). The equation \(T(\rho ) = \rho \) implies that the family \(\{ B_i\} \) is unital, and trace preservation of \(T\) implies that \(\rho \) is a positive-definite fixed point of the adjoint map of the gauged family. Apply Theorem&#160;<a href="ch-channels.html#thm:fixedPointsStarSubalgebra">5.133</a> to \(B\). The identity </p>
-<div class="displaymath" id="a0000000615">
+<div class="displaymath" id="a0000000618">
   \[  \sum _i B_i X B_i^\dagger = X \iff T(\rho ^{1/2} X \rho ^{1/2}) = \rho ^{1/2} X \rho ^{1/2}  \]
 </div>
 <p> identifies the fixed points of the gauged map with \(\rho ^{-1/2} F_T \rho ^{-1/2}\). </p>
@@ -5777,7 +5777,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   Let \(T : M_{D}(\mathbb {C}) \to M_{D}(\mathbb {C})\). A <em>block-permutation structure</em> for \(T\) consists of a finite index set \(\iota \), a family of orthogonal projections \(P_k \in M_{D}(\mathbb {C})\) for \(k \in \iota \), and a permutation \(\sigma \in \mathrm{Sym}(\iota )\) (not necessarily a single cycle — in general \(\sigma \) may have multiple disjoint cycles), such that </p>
-<div class="displaymath" id="a0000000616">
+<div class="displaymath" id="a0000000619">
   \[  T(P_{\sigma (k)}) = P_k,\quad T(P_k X) = T(P_k)\, T(X),\quad T(X P_k) = T(X)\, T(P_k)  \]
 </div>
 <p> for every \(k \in \iota \) and \(X \in M_{D}(\mathbb {C})\). </p>
@@ -5825,7 +5825,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   A <em>multi-cycle decomposition</em> of \(T : M_{D}(\mathbb {C}) \to M_{D}(\mathbb {C})\) records a finite cycle index \(\iota \), a per-cycle period \(m : \iota \to \mathbb {N}_{{\gt}0}\), a projection family \(P_{c,k} \in M_{D}(\mathbb {C})\) for \(c \in \iota \) and \(k \in \{ 0,\ldots ,m(c){-}1\} \) consisting of orthogonal projections, together with the per-cycle cyclic action </p>
-<div class="displaymath" id="a0000000617">
+<div class="displaymath" id="a0000000620">
   \[  T(P_{c,k+1}) = P_{c,k}\qquad (k \in \{ 0,\ldots ,m(c){-}1\} ,\  c \in \iota )  \]
 </div>
 <p> and the multiplicative-domain factorisations \(T(P_{c,k}\, X) = T(P_{c,k})\, T(X)\) and \(T(X\, P_{c,k}) = T(X)\, T(P_{c,k})\). </p>
@@ -5848,7 +5848,7 @@
 
     <a class="icon proof" href="ch-spectral.html#thm:multi_cycle_preserves_corner_pow_period">#</a>
     
-    <a class="icon proof" href="ch-spectral.html#a0000000618"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-spectral.html#a0000000621"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5901,7 +5901,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000618">
+<div class="proof_wrapper" id="a0000000621">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5929,7 +5929,7 @@
 
     <a class="icon proof" href="ch-spectral.html#thm:multi_cycle_preserves_corner_pow_of_dvd">#</a>
     
-    <a class="icon proof" href="ch-spectral.html#a0000000619"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-spectral.html#a0000000622"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5982,7 +5982,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000619">
+<div class="proof_wrapper" id="a0000000622">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6077,7 +6077,7 @@
 
     <a class="icon proof" href="ch-spectral.html#lem:isUnit_peripheral_eigenvector">#</a>
     
-    <a class="icon proof" href="ch-spectral.html#a0000000620"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-spectral.html#a0000000623"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6128,7 +6128,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000620">
+<div class="proof_wrapper" id="a0000000623">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6156,7 +6156,7 @@
 
     <a class="icon proof" href="ch-spectral.html#lem:peripheral_mul_closure">#</a>
     
-    <a class="icon proof" href="ch-spectral.html#a0000000621"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-spectral.html#a0000000624"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6209,7 +6209,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000621">
+<div class="proof_wrapper" id="a0000000624">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6237,7 +6237,7 @@
 
     <a class="icon proof" href="ch-spectral.html#thm:peripheral_cyclic_structure">#</a>
     
-    <a class="icon proof" href="ch-spectral.html#a0000000622"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-spectral.html#a0000000625"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6288,7 +6288,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000622">
+<div class="proof_wrapper" id="a0000000625">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6316,7 +6316,7 @@
 
     <a class="icon proof" href="ch-spectral.html#thm:peripheral_cyclic_group">#</a>
     
-    <a class="icon proof" href="ch-spectral.html#a0000000623"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-spectral.html#a0000000626"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6369,7 +6369,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000623">
+<div class="proof_wrapper" id="a0000000626">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6397,7 +6397,7 @@
 
     <a class="icon proof" href="ch-spectral.html#thm:channel_period_divides_dim">#</a>
     
-    <a class="icon proof" href="ch-spectral.html#a0000000624"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-spectral.html#a0000000627"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6450,7 +6450,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000624">
+<div class="proof_wrapper" id="a0000000627">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6463,7 +6463,7 @@
   </div>
 </div>
 <h2 id="a0000000076">9.14.1 Cyclic decomposition of irreducible Schwarz maps</h2>
-<div class="definition_thmwrapper theorem-style-definition" id="a0000000625">
+<div class="definition_thmwrapper theorem-style-definition" id="a0000000628">
   <div class="definition_thmheading">
     <span class="definition_thmcaption">
     Definition
@@ -6477,7 +6477,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-spectral.html#a0000000625">#</a>
+    <a class="icon proof" href="ch-spectral.html#a0000000628">#</a>
     
     
     
@@ -6507,7 +6507,7 @@
 
   </div>
 </div>
-<div class="definition_thmwrapper theorem-style-definition" id="a0000000626">
+<div class="definition_thmwrapper theorem-style-definition" id="a0000000629">
   <div class="definition_thmheading">
     <span class="definition_thmcaption">
     Definition
@@ -6521,7 +6521,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-spectral.html#a0000000626">#</a>
+    <a class="icon proof" href="ch-spectral.html#a0000000629">#</a>
     
     
     
@@ -6551,7 +6551,7 @@
 
   </div>
 </div>
-<div class="definition_thmwrapper theorem-style-definition" id="a0000000627">
+<div class="definition_thmwrapper theorem-style-definition" id="a0000000630">
   <div class="definition_thmheading">
     <span class="definition_thmcaption">
     Definition
@@ -6565,7 +6565,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-spectral.html#a0000000627">#</a>
+    <a class="icon proof" href="ch-spectral.html#a0000000630">#</a>
     
     
     
@@ -6595,7 +6595,7 @@
 
   </div>
 </div>
-<div class="definition_thmwrapper theorem-style-definition" id="a0000000628">
+<div class="definition_thmwrapper theorem-style-definition" id="a0000000631">
   <div class="definition_thmheading">
     <span class="definition_thmcaption">
     Definition
@@ -6609,7 +6609,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-spectral.html#a0000000628">#</a>
+    <a class="icon proof" href="ch-spectral.html#a0000000631">#</a>
     
     
     
@@ -6639,7 +6639,7 @@
 
   </div>
 </div>
-<div class="definition_thmwrapper theorem-style-definition" id="a0000000629">
+<div class="definition_thmwrapper theorem-style-definition" id="a0000000632">
   <div class="definition_thmheading">
     <span class="definition_thmcaption">
     Definition
@@ -6653,7 +6653,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-spectral.html#a0000000629">#</a>
+    <a class="icon proof" href="ch-spectral.html#a0000000632">#</a>
     
     
     
@@ -6771,7 +6771,7 @@
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="a0000000630">
+<div class="theorem_thmwrapper theorem-style-plain" id="a0000000633">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
     Theorem
@@ -6785,7 +6785,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-spectral.html#a0000000630">#</a>
+    <a class="icon proof" href="ch-spectral.html#a0000000633">#</a>
     
     
     <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
@@ -6835,7 +6835,7 @@
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="a0000000631">
+<div class="theorem_thmwrapper theorem-style-plain" id="a0000000634">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
     Theorem
@@ -6849,7 +6849,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-spectral.html#a0000000631">#</a>
+    <a class="icon proof" href="ch-spectral.html#a0000000634">#</a>
     
     
     <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
@@ -6899,7 +6899,7 @@
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="a0000000632">
+<div class="theorem_thmwrapper theorem-style-plain" id="a0000000635">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
     Theorem
@@ -6913,7 +6913,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-spectral.html#a0000000632">#</a>
+    <a class="icon proof" href="ch-spectral.html#a0000000635">#</a>
     
     
     <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
@@ -6963,7 +6963,7 @@
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="a0000000633">
+<div class="theorem_thmwrapper theorem-style-plain" id="a0000000636">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
     Theorem
@@ -6977,7 +6977,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-spectral.html#a0000000633">#</a>
+    <a class="icon proof" href="ch-spectral.html#a0000000636">#</a>
     
     
     <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
@@ -7027,7 +7027,7 @@
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="a0000000634">
+<div class="theorem_thmwrapper theorem-style-plain" id="a0000000637">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
     Theorem
@@ -7041,7 +7041,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-spectral.html#a0000000634">#</a>
+    <a class="icon proof" href="ch-spectral.html#a0000000637">#</a>
     
     
     <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
@@ -7091,7 +7091,7 @@
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="a0000000635">
+<div class="theorem_thmwrapper theorem-style-plain" id="a0000000638">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
     Theorem
@@ -7105,7 +7105,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-spectral.html#a0000000635">#</a>
+    <a class="icon proof" href="ch-spectral.html#a0000000638">#</a>
     
     
     
@@ -7135,7 +7135,7 @@
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="a0000000636">
+<div class="theorem_thmwrapper theorem-style-plain" id="a0000000639">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
     Theorem
@@ -7149,7 +7149,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-spectral.html#a0000000636">#</a>
+    <a class="icon proof" href="ch-spectral.html#a0000000639">#</a>
     
     
     
@@ -7179,7 +7179,7 @@
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="a0000000637">
+<div class="theorem_thmwrapper theorem-style-plain" id="a0000000640">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
     Theorem
@@ -7193,7 +7193,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-spectral.html#a0000000637">#</a>
+    <a class="icon proof" href="ch-spectral.html#a0000000640">#</a>
     
     
     
@@ -7223,7 +7223,7 @@
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="a0000000638">
+<div class="theorem_thmwrapper theorem-style-plain" id="a0000000641">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
     Theorem
@@ -7237,7 +7237,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-spectral.html#a0000000638">#</a>
+    <a class="icon proof" href="ch-spectral.html#a0000000641">#</a>
     
     
     
@@ -7268,7 +7268,7 @@
   </div>
 </div>
 <h2 id="a0000000077">9.14.2 Group structure of the peripheral spectrum</h2>
-<div class="theorem_thmwrapper theorem-style-plain" id="a0000000639">
+<div class="theorem_thmwrapper theorem-style-plain" id="a0000000642">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
     Theorem
@@ -7282,7 +7282,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-spectral.html#a0000000639">#</a>
+    <a class="icon proof" href="ch-spectral.html#a0000000642">#</a>
     
     
     <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
@@ -7332,7 +7332,7 @@
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="a0000000640">
+<div class="theorem_thmwrapper theorem-style-plain" id="a0000000643">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
     Theorem
@@ -7346,7 +7346,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-spectral.html#a0000000640">#</a>
+    <a class="icon proof" href="ch-spectral.html#a0000000643">#</a>
     
     
     <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
@@ -7396,7 +7396,7 @@
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="a0000000641">
+<div class="theorem_thmwrapper theorem-style-plain" id="a0000000644">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
     Theorem
@@ -7410,7 +7410,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-spectral.html#a0000000641">#</a>
+    <a class="icon proof" href="ch-spectral.html#a0000000644">#</a>
     
     
     <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
@@ -7476,7 +7476,7 @@
 
     <a class="icon proof" href="ch-spectral.html#thm:peripheral_multiplicity_one">#</a>
     
-    <a class="icon proof" href="ch-spectral.html#a0000000642"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-spectral.html#a0000000645"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7527,7 +7527,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000642">
+<div class="proof_wrapper" id="a0000000645">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7557,7 +7557,7 @@
 
     <a class="icon proof" href="ch-spectral.html#thm:trace_pow_one">#</a>
     
-    <a class="icon proof" href="ch-spectral.html#a0000000643"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-spectral.html#a0000000646"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7612,7 +7612,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000643">
+<div class="proof_wrapper" id="a0000000646">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7640,7 +7640,7 @@
 
     <a class="icon proof" href="ch-spectral.html#thm:primitive_overlap">#</a>
     
-    <a class="icon proof" href="ch-spectral.html#a0000000644"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-spectral.html#a0000000647"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7699,7 +7699,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000644">
+<div class="proof_wrapper" id="a0000000647">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
