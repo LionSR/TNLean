@@ -430,13 +430,49 @@ theorem fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_phaseMatch
   intro j
   simpa [T] using hMultiset j
 
+/-- **Cast-compatible MPV scaling implies the phase-matched heterogeneous sector comparison.**
+
+This intermediate wrapper isolates the weaker data actually consumed by the
+phase-absorption argument: after matching basis dimensions, each block pair only needs a nonzero
+phase `ζ` relating the MPVs of the matched basis tensors. -/
+theorem fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_mpvScaling_matched_basis
+    (P Q : SectorDecomposition d)
+    (perm : Fin P.basisCount ≃ Fin Q.basisCount)
+    (hCopies : ∀ j : Fin P.basisCount, P.copies j = Q.copies (perm j))
+    (hBasis : ∀ j : Fin P.basisCount,
+      ∃ hdim : P.basisDim j = Q.basisDim (perm j),
+        ∃ ζ : ℂ, ζ ≠ 0 ∧
+          ∀ (N : ℕ) (σ : Fin N → Fin d),
+            mpv (Q.basis (perm j)) σ =
+              ζ ^ N * mpv (cast (congr_arg (MPSTensor d) hdim) (P.basis j)) σ)
+    (hLI : ∃ N0 : ℕ, ∀ N > N0,
+      LinearIndependent ℂ (fun j : Fin P.basisCount => mpvState (P.basis j) N))
+    (hEqual : SameMPV₂ P.toTensor Q.toTensor) :
+    ∃ ζ : Fin P.basisCount → ℂ,
+      (∀ j, ζ j ≠ 0) ∧
+      ∀ j : Fin P.basisCount,
+        Finset.univ.val.map (P.weight j) =
+          Finset.univ.val.map
+            (fun q => ζ j * Q.weight (perm j) (Fin.cast (hCopies j) q)) := by
+  have hPhase : ∀ j : Fin P.basisCount,
+      ∃ ζ : ℂ, ζ ≠ 0 ∧
+        ∀ (N : ℕ) (σ : Fin N → Fin d),
+          mpv (Q.basis (perm j)) σ = ζ ^ N * mpv (P.basis j) σ := by
+    intro j
+    obtain ⟨hdim, ζ, hζne, hmpv⟩ := hBasis j
+    refine ⟨ζ, hζne, ?_⟩
+    intro N σ
+    rw [hmpv N σ, mpv_cast_dim hdim (P.basis j) N σ]
+  exact fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_phaseMatch
+    P Q perm hCopies hPhase hLI hEqual
+
 /-- **Gauge-phase matched sector bases imply the phase-matched heterogeneous sector comparison.**
 
 This packages the MPV scaling relation obtained from blockwise `GaugePhaseEquiv` and feeds it
-into `fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_phaseMatch`. Thus the remaining
-missing ingredients for the full heterogeneous BNT-sector endpoint are not the algebraic
-phase-absorption step below, but the derivation of the basis/copy matching data from arbitrary
-`SameMPV₂` sector decompositions. -/
+into `fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_mpvScaling_matched_basis`.
+Thus the remaining missing ingredients for the full heterogeneous BNT-sector endpoint are not
+the algebraic phase-absorption step below, but the derivation of the basis/copy matching data
+from arbitrary `SameMPV₂` sector decompositions. -/
 theorem fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_matched_basis
     (P Q : SectorDecomposition d)
     (perm : Fin P.basisCount ≃ Fin Q.basisCount)
@@ -455,17 +491,19 @@ theorem fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_matched_basis
         Finset.univ.val.map (P.weight j) =
           Finset.univ.val.map
             (fun q => ζ j * Q.weight (perm j) (Fin.cast (hCopies j) q)) := by
-  have hPhase : ∀ j : Fin P.basisCount,
-      ∃ ζ : ℂ, ζ ≠ 0 ∧
+  have hScaling : ∀ j : Fin P.basisCount,
+      ∃ hdim : P.basisDim j = Q.basisDim (perm j),
+        ∃ ζ : ℂ, ζ ≠ 0 ∧
         ∀ (N : ℕ) (σ : Fin N → Fin d),
-          mpv (Q.basis (perm j)) σ = ζ ^ N * mpv (P.basis j) σ := by
+          mpv (Q.basis (perm j)) σ =
+            ζ ^ N * mpv (cast (congr_arg (MPSTensor d) hdim) (P.basis j)) σ := by
     intro j
     obtain ⟨hdim, hGPE⟩ := hBasis j
     obtain ⟨X, ζ, hζne, hX⟩ := hGPE
-    refine ⟨ζ, hζne, ?_⟩
+    refine ⟨hdim, ζ, hζne, ?_⟩
     intro N σ
-    rw [mpv_eq_pow_mul_of_gaugePhase _ _ X ζ hX N σ, mpv_cast_dim hdim (P.basis j) N σ]
-  exact fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_phaseMatch
-    P Q perm hCopies hPhase hLI hEqual
+    exact mpv_eq_pow_mul_of_gaugePhase _ _ X ζ hX N σ
+  exact fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_mpvScaling_matched_basis
+    P Q perm hCopies hScaling hLI hEqual
 
 end MPSTensor

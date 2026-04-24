@@ -474,6 +474,35 @@ single weighted block.
 	Theorem~\ref{thm:route_b_hetero_phase_match}.
 \end{proof}
 
+\begin{theorem}[Cast-compatible MPV scaling implies phase-matched sector comparison]%
+\label{thm:route_b_hetero_mpv_scaling}
+	\lean{MPSTensor.fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_mpvScaling_matched_basis}
+	\leanok
+	\uses{def:paper_sector_data}
+	Let $P$ and $Q$ be sector decompositions. Assume there is a permutation
+	$\pi$ matching the basis blocks, the multiplicities satisfy
+	$r_j^P = r_{\pi(j)}^Q$, and for each $j$ the matched basis blocks have the
+	same auxiliary dimension and satisfy
+	\[
+		V^{(N)}(Q_{\pi(j)})_\sigma = \zeta_j^N V^{(N)}(P_j)_\sigma
+	\]
+	for some nonzero complex number $\zeta_j$, after identifying the two basis
+	tensors along that dimension equality. If the total MPV families of $P$
+	and $Q$ agree and the basis blocks of $P$ are eventually linearly
+	independent, then for each $j$ the sector weight multiset of $P_j$ equals
+	the multiset obtained from that of $Q_{\pi(j)}$ by multiplication
+	by~$\zeta_j$.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{thm:route_b_hetero_phase_match}
+	After transporting the matched basis tensor of $P_j$ across the dimension
+	identity, this is exactly the hypothesis of
+	Theorem~\ref{thm:route_b_hetero_phase_match}. The conclusion is therefore
+	the same multiset equality.
+\end{proof}
+
 \begin{remark}[Remaining step in the unconditional equal-case theorem]\notready
 	This chapter provides three complementary equal-case results:
 	\begin{enumerate}
