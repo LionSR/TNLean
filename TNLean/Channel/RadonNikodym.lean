@@ -12,8 +12,8 @@ This file formalizes the canonical Radon–Nikodym theorem for completely
 positive maps (Wolf Thm 2.4) and the open-system representation theorem
 (Wolf Thm 2.5).
 
-The Radon–Nikodym theorem says: if `T = T₁ + T₂` with both CP and `V` is a
-Stinespring isometry of `T`, then there exist PSD operators `P₁, P₂` on the
+The Radon–Nikodym theorem says: for CP maps `T₁, T₂`, there exist a
+Stinespring matrix `V` for `T₁ + T₂` and PSD operators `P₁, P₂` on the
 dilation space with `P₁ + P₂ = 𝟙` such that `Tᵢ(A) = V†(A ⊗ Pᵢ)V`. In our
 canonical realization, `V` is built from concatenated Kraus families of
 `T₁` and `T₂`, and `P₁, P₂` are the orthogonal block projectors.
@@ -35,10 +35,9 @@ evolution on a system-plus-environment.
   the identity: resolution of identity on the dilation space.
 * `Matrix.blockDiagTopProj_posSemidef`,
   `Matrix.blockDiagBotProj_posSemidef` — both are PSD.
-* `CPDominates.exists_radon_nikodym` (Wolf Thm 2.4 binary form):
-  if `T = T₁ + T₂` with both CP, there exist a Stinespring isometry `V` and
-  two PSD "density" operators `P₁, P₂` with `P₁ + P₂ = 𝟙` such that
-  `Tᵢ(A) = V†(A ⊗ Pᵢ)V`.
+* `IsCPMap.exists_radon_nikodym` (Wolf Thm 2.4 binary form):
+  for CP `T₁, T₂`, there exist a Stinespring matrix `V` and two PSD
+  operators `P₁, P₂` with `P₁ + P₂ = 𝟙` such that `Tᵢ(A) = V†(A ⊗ Pᵢ)V`.
 * `IsChannel.exists_stinespring_open_system` (Wolf Thm 2.5 reduced form):
   every CPTP map admits an isometric Stinespring dilation realizing it as
   the reduced dynamics `T(ρ) = tr_r(V ρ V†)`.
@@ -141,20 +140,20 @@ theorem Matrix.kroneckerMap_conjTranspose_mul_kroneckerMap
 
 /-- **Wolf Theorem 2.4 (Radon–Nikodym for CP maps, binary form)**.
 
-If `T = T₁ + T₂` with both `T₁, T₂` completely positive, then there exist:
+For completely positive maps `T₁, T₂`, there exist:
 
 * an ancilla dimension `m`,
-* a Stinespring-type isometric family `K : Fin m → M_D(ℂ)` with associated
-  Stinespring matrix `V = stinespringV K`,
+* a Kraus family `K : Fin m → M_D(ℂ)` with associated Stinespring matrix
+  `V = stinespringV K`,
 * two **positive operators** `P₁, P₂ : M_m(ℂ)` on the dilation space,
 * with `P₁ + P₂ = 𝟙_m`,
 
-such that each `Tᵢ` is recovered by the "weighted" Stinespring formula
+such that each `Tᵢ` is recovered by the weighted Stinespring formula
 `Tᵢ(A) = V† (A ⊗ Pᵢ) V`.
 
-In the canonical realization returned below, the Kraus family of `T` is the
-append of the Kraus families of `T₁` and `T₂`, and `P₁, P₂` are the
-orthogonal block projectors onto the two halves of the dilation space. -/
+In the canonical realization returned below, `K` is the append of the Kraus
+families of `T₁` and `T₂`, and `P₁, P₂` are the orthogonal block projectors
+onto the two halves of the dilation space. -/
 theorem IsCPMap.exists_radon_nikodym
     {T₁ T₂ : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
     (hT₁ : IsCPMap T₁) (hT₂ : IsCPMap T₂) :

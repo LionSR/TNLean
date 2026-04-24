@@ -72,7 +72,7 @@ representations of quantum channels.
   - `stinespringV_eq_kronecker_blockTopRows_mul_append` — intertwining
     `V_{K} = (𝟙_D ⊗ C) · V_{K ++ L}` for the block-top projector ✅
   - `CPDominates.exists_stinespring_contraction` — existential form of
-    Wolf Thm 2.3: `T₁ ≤ T₂` gives Stinespring isometries and a contraction ✅
+    Wolf Thm 2.3: `T₁ ≤ T₂` gives Stinespring realizations and a contraction ✅
 
 * **Thm 2.4** (Radon–Nikodym for CP maps):
   - `Matrix.blockDiagTopProj` / `Matrix.blockDiagBotProj` — orthogonal
@@ -80,7 +80,8 @@ representations of quantum channels.
   - `Matrix.kroneckerMap_conjTranspose_mul_kroneckerMap` — Kronecker
     identity `A ⊗ (CᴴC) = (𝟙 ⊗ C)ᴴ (A ⊗ 𝟙) (𝟙 ⊗ C)` ✅
   - `IsCPMap.exists_radon_nikodym` — Wolf Thm 2.4 binary form:
-    `T = T₁ + T₂` CP gives PSD `P₁ + P₂ = 𝟙` with `Tᵢ(A) = V†(A ⊗ Pᵢ)V` ✅
+    for CP `T₁, T₂`, a Stinespring matrix for `T₁ + T₂` yields
+    PSD `P₁ + P₂ = 𝟙` with `Tᵢ(A) = V†(A ⊗ Pᵢ)V` ✅
 
 * **Thm 2.5** (open-system representation, reduced form):
   - `IsChannel.exists_stinespring_open_system` — every CPTP map is
@@ -185,9 +186,9 @@ representations of quantum channels.
 | Result | Notes |
 |--------|-------|
 | Prop 2.4 (equiv of ensembles, necessity) | Needs purification/Schmidt decomp |
-| Thm 2.5 (unitary form) | Isometric form is formalized; unitary form needs basis extension |
-| §2.3 Lorentz normal form (existence) | Needs compactness / minimisation over `SL(2, ℂ)` filterings (Wolf Prop 2.9 / Prop 2.11) |
-| §2.3 Sorted / unique singular values | `svd_of_isUnit` is unsorted; downstream normal-form uses will want the sorted variant |
+| Thm 2.5 (unitary form) | Isometric form formalized; unitary form needs basis extension |
+| §2.3 Lorentz normal form | Needs compactness over `SL(2, ℂ)` filterings |
+| §2.3 Sorted singular values | Current SVD is unsorted; later uses want sorted values |
 
 ## References
 

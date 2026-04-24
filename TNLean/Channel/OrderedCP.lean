@@ -10,15 +10,15 @@ import Mathlib.LinearAlgebra.Matrix.Kronecker
 /-!
 # Ordered completely positive maps (Wolf Ch. 2, Thm 2.3)
 
-This file relates two CP maps `T₁ ≤ T₂` through their Stinespring dilations.
-The central statement is Wolf's Theorem 2.3: if `T₂ - T₁` is CP, then any
-Stinespring isometry for `T₁` factors through a Stinespring isometry for `T₂`
-via a **contraction** on the dilation space.
+This file relates two CP maps `T₁ ≤ T₂` through canonical Stinespring
+realizations. The central statement is Wolf's Theorem 2.3: if `T₂ - T₁` is CP,
+then a Heisenberg-form Stinespring realization for `T₁` factors through one for
+`T₂` via a **contraction** on the dilation space.
 
-In the canonical realization provided here, the Stinespring isometry for `T₂`
-is obtained by concatenating Kraus operators of `T₁` with Kraus operators of
+In the canonical realization provided here, the Stinespring matrix for `T₂` is
+obtained by concatenating Kraus operators of `T₁` with Kraus operators of
 `T₂ - T₁`, and the intertwining contraction is the explicit block-top
-projector `C : ℂ^{r₁+s} → ℂ^{r₁}` (taking the first `r₁` coordinates).
+co-isometry `C : ℂ^{r₁+s} → ℂ^{r₁}` (taking the first `r₁` coordinates).
 
 ## Main definitions
 
@@ -33,8 +33,9 @@ projector `C : ℂ^{r₁+s} → ℂ^{r₁}` (taking the first `r₁` coordinates
 * `stinespringV_eq_kronecker_blockTopRows_mul_append` — entrywise intertwining:
   `V₁ = (𝟙_D ⊗ C) * V₂` where `V₂ = stinespringV (Fin.append K L)`.
 * `CPDominates.exists_stinespring_contraction` — existential form of Wolf
-  Thm 2.3: if `T₁ ≤ T₂` (in the CP order), there exist Stinespring isometries
-  for both and a contraction on the dilation space that intertwines them.
+  Thm 2.3: if `T₁ ≤ T₂` (in the CP order), there exist Stinespring
+  realizations for both and a contraction on the dilation space that
+  intertwines them.
 
 ## References
 
@@ -62,26 +63,7 @@ theorem CPDominates.refl
   intro X
   simp
 
-/-! ### Kraus concatenation via `Fin.append` -/
-
-/-- Concatenation of Kraus families is again a Kraus family for the sum map. -/
-theorem isCPMap_kraus_append
-    {r s : ℕ}
-    (K : Fin r → Matrix (Fin D) (Fin D) ℂ)
-    (L : Fin s → Matrix (Fin D) (Fin D) ℂ) :
-    ∀ X : Matrix (Fin D) (Fin D) ℂ,
-      ∑ j : Fin (r + s),
-        (Fin.append K L) j * X * ((Fin.append K L) j)ᴴ =
-      (∑ i : Fin r, K i * X * (K i)ᴴ) +
-      (∑ k : Fin s, L k * X * (L k)ᴴ) := by
-  intro X
-  rw [Fin.sum_univ_add]
-  congr 1 <;>
-    · refine Finset.sum_congr rfl ?_
-      intro i _
-      simp [Fin.append_left, Fin.append_right]
-
-/-! ### The block-top rectangular projector -/
+/-! ### The block-top rectangular co-isometry -/
 
 /-- The block-top rectangular matrix `C : Fin r → Fin (r+s)` whose rows are
 the first `r` rows of `𝟙_{r+s}`. Concretely, `C i j = 1` if `j = castAdd s i`
@@ -262,10 +244,10 @@ theorem Matrix.blockTopRows_conjTranspose_mul_le_one (r s : ℕ) :
       rw [hsq]
       exact_mod_cast sq_nonneg ‖x j‖
 
-/-! ### Intertwining identity for the Stinespring isometries -/
+/-! ### Intertwining identity for the canonical Stinespring matrices -/
 
 /-- **Entrywise intertwining (Wolf Thm 2.3 canonical form)**: the block-top
-projector `C = blockTopRows r s` relates the Stinespring isometry of a Kraus
+co-isometry `C = blockTopRows r s` relates the Stinespring matrix of a Kraus
 family `K : Fin r → M` with that of its append with another family
 `L : Fin s → M`:
   `stinespringV K = (𝟙_D ⊗ C) * stinespringV (Fin.append K L)`. -/
@@ -300,15 +282,15 @@ theorem stinespringV_eq_kronecker_blockTopRows_mul_append
 
 Let `T₁, T₂ : M_D(ℂ) →ₗ M_D(ℂ)` be CP maps with `T₁ ≤ T₂` in the CP partial
 order (i.e. `T₂ - T₁` is CP). Then there exist an ancilla dimension `m`,
-Stinespring isometries `V₁ : Matrix (Fin D × Fin r₁) (Fin D) ℂ` and
-`V₂ : Matrix (Fin D × Fin m) (Fin D) ℂ` — both realizing `Tᵢ` in Heisenberg
-form `Tᵢ(A) = Vᵢᴴ * (A ⊗ 𝟙) * Vᵢ` — together with a **contraction**
-`C : Matrix (Fin r₁) (Fin m) ℂ` satisfying `Cᴴ * C ≤ 𝟙` and the intertwining
-identity `V₁ = (𝟙_D ⊗ C) * V₂`.
+Heisenberg-form Stinespring matrices
+`V₁ : Matrix (Fin D × Fin r₁) (Fin D) ℂ` and
+`V₂ : Matrix (Fin D × Fin m) (Fin D) ℂ` realizing `Tᵢ(A) = Vᵢᴴ * (A ⊗ 𝟙) * Vᵢ`,
+together with a **contraction** `C : Matrix (Fin r₁) (Fin m) ℂ` satisfying
+`Cᴴ * C ≤ 𝟙` and the intertwining identity `V₁ = (𝟙_D ⊗ C) * V₂`.
 
 In the canonical realization returned below, `m = r₁ + s` where `s` is a Kraus
-length of `T₂ - T₁`, the two Stinespring isometries are the Heisenberg-form
-constructions from conjugated Kraus families, and `C = blockTopRows r₁ s`. -/
+length of `T₂ - T₁`, the two Stinespring matrices come from conjugated Kraus
+families, and `C = blockTopRows r₁ s`. -/
 theorem CPDominates.exists_stinespring_contraction
     {T₁ T₂ : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
     (hT₁ : IsCPMap T₁) (hdom : CPDominates T₂ T₁) :
