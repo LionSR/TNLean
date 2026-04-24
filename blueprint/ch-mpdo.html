@@ -4279,13 +4279,13 @@
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:mpdo_rfp_via_algebra_from_fusion">
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:mpdo_rfp_via_algebra_from_rfp">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
     Theorem
     </span>
     <span class="theorem_thmlabel">3.46</span>
-    <span class="theorem_thmtitle">Fusion yields a stationary algebra tower under a faithful fixed point</span>
+    <span class="theorem_thmtitle">RFP yields a stationary algebra tower under a faithful fixed point</span>
     <div class="thm_header_extras">
 
     
@@ -4293,7 +4293,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-mpdo.html#thm:mpdo_rfp_via_algebra_from_fusion">#</a>
+    <a class="icon proof" href="ch-mpdo.html#thm:mpdo_rfp_via_algebra_from_rfp">#</a>
     
     <a class="icon proof" href="ch-mpdo.html#a0000000229"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
@@ -4311,9 +4311,90 @@
         
         <ul class="uses">
           
+          <li><a href="ch-mpdo.html#def:is_rfp_mpdo">Definition 3.18</a></li>
+          
           <li><a href="ch-mpdo.html#def:mpdo_rfp_via_algebra">Definition 3.45</a></li>
           
-          <li><a href="ch-mpdo.html#def:mpdo_rfp_via_fusion">Definition 3.40</a></li>
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPOTensor.isRFP_MPDO_via_algebra_of_isRFP_of_isTP_of_posDef_fixed" class="lean_decl">MPOTensor.isRFP_MPDO_via_algebra_of_isRFP_of_isTP_of_posDef_fixed</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   Assume the doubled tensor is trace-preserving and the transfer map admits a positive-definite fixed point. If the transfer map is idempotent, then there exists a stationary family of support algebras, all equal to the fixed-point algebra of the adjoint transfer map, with multiplication given by matrix multiplication and inclusions given by the identity. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000229">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Under the trace-preserving normalization and the faithful fixed point, Wolf’s fixed-point-algebra theorem gives a \(*\)-subalgebra of adjoint fixed points. Idempotence identifies every positive blocked transfer map with the original one, so the same fixed-point algebra works at every blocking size. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:mpdo_rfp_via_algebra_from_fusion">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">3.47</span>
+    <span class="theorem_thmtitle">Fusion yields a stationary algebra tower under a faithful fixed point</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-mpdo.html#thm:mpdo_rfp_via_algebra_from_fusion">#</a>
+    
+    <a class="icon proof" href="ch-mpdo.html#a0000000230"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mpdo.html#thm:mpdo_rfp_of_fusion">Theorem 3.41</a></li>
+          
+          <li><a href="ch-mpdo.html#thm:mpdo_rfp_via_algebra_from_rfp">Theorem 3.46</a></li>
           
         </ul>
     
@@ -4348,7 +4429,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000229">
+<div class="proof_wrapper" id="a0000000230">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4356,7 +4437,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>The fusion criterion implies idempotence of the transfer map. Under the trace-preserving normalization and the faithful fixed point, Wolf’s fixed-point-algebra theorem gives a \(*\)-subalgebra of adjoint fixed points. Idempotence identifies every positive blocked transfer map with the original one, so the same fixed-point algebra works at every blocking size. </p>
+  <p>Combine Theorem&#160;<a href="ch-mpdo.html#thm:mpdo_rfp_of_fusion">3.41</a> with Theorem&#160;<a href="ch-mpdo.html#thm:mpdo_rfp_via_algebra_from_rfp">3.46</a>. </p>
 
   </div>
 </div>
@@ -4366,7 +4447,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">3.47</span>
+    <span class="definition_thmlabel">3.48</span>
     <span class="definition_thmtitle">Blocked coefficients for the algebra tower</span>
     <div class="thm_header_extras">
 
@@ -4430,7 +4511,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">3.48</span>
+    <span class="theorem_thmlabel">3.49</span>
     <span class="theorem_thmtitle">Reconstruction from blocked coefficients</span>
     <div class="thm_header_extras">
 
@@ -4441,7 +4522,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_reconstruct_blocked_coefficients">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000000230"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000000231"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4457,7 +4538,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_blocked_coefficients">Definition 3.47</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_blocked_coefficients">Definition 3.48</a></li>
           
         </ul>
     
@@ -4492,7 +4573,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000230">
+<div class="proof_wrapper" id="a0000000231">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4509,7 +4590,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">3.49</span>
+    <span class="definition_thmlabel">3.50</span>
     <span class="definition_thmtitle">Blocked multiplication coefficients</span>
     <div class="thm_header_extras">
 
@@ -4533,7 +4614,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_blocked_coefficients">Definition 3.47</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_blocked_coefficients">Definition 3.48</a></li>
           
         </ul>
     
@@ -4573,7 +4654,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">3.50</span>
+    <span class="theorem_thmlabel">3.51</span>
     <span class="theorem_thmtitle">Blocked multiplication reconstructs from its coefficients</span>
     <div class="thm_header_extras">
 
@@ -4584,7 +4665,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_mul_coefficients_reconstruct">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000000231"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000000232"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4600,7 +4681,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_blocked_structure_coefficients">Definition 3.49</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_blocked_structure_coefficients">Definition 3.50</a></li>
           
         </ul>
     
@@ -4635,7 +4716,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000231">
+<div class="proof_wrapper" id="a0000000232">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4643,7 +4724,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>Apply the reconstruction formula of Theorem&#160;<a href="ch-mpdo.html#thm:mpdo_reconstruct_blocked_coefficients">3.48</a> to the element \(m_n(b_i,b_j) \in \mathcal{A}_{2n}\). </p>
+  <p>Apply the reconstruction formula of Theorem&#160;<a href="ch-mpdo.html#thm:mpdo_reconstruct_blocked_coefficients">3.49</a> to the element \(m_n(b_i,b_j) \in \mathcal{A}_{2n}\). </p>
 
   </div>
 </div>
@@ -4652,7 +4733,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">3.51</span>
+    <span class="theorem_thmlabel">3.52</span>
     <span class="theorem_thmtitle">Compatible adjoint fixed points reconstruct from blocked coefficients</span>
     <div class="thm_header_extras">
 
@@ -4663,7 +4744,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_fixedpoint_coefficients_reconstruct">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000000232"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000000233"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4681,7 +4762,7 @@
           
           <li><a href="ch-mpdo.html#def:mpdo_rfp_via_algebra">Definition 3.45</a></li>
           
-          <li><a href="ch-mpdo.html#def:mpdo_blocked_coefficients">Definition 3.47</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_blocked_coefficients">Definition 3.48</a></li>
           
         </ul>
     
@@ -4716,7 +4797,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000232">
+<div class="proof_wrapper" id="a0000000233">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4724,7 +4805,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>Compatibility identifies \(\mathcal{A}_n\) with the adjoint fixed-point algebra of \(E_n\), so the fixed point first becomes an element of \(\mathcal{A}_n\) and then Theorem&#160;<a href="ch-mpdo.html#thm:mpdo_reconstruct_blocked_coefficients">3.48</a> reconstructs it. </p>
+  <p>Compatibility identifies \(\mathcal{A}_n\) with the adjoint fixed-point algebra of \(E_n\), so the fixed point first becomes an element of \(\mathcal{A}_n\) and then Theorem&#160;<a href="ch-mpdo.html#thm:mpdo_reconstruct_blocked_coefficients">3.49</a> reconstructs it. </p>
 
   </div>
 </div>
@@ -4734,7 +4815,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">3.52</span>
+    <span class="definition_thmlabel">3.53</span>
     <span class="definition_thmtitle">Commuting-form data for an MPDO</span>
     <div class="thm_header_extras">
 
@@ -4798,7 +4879,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">3.53</span>
+    <span class="definition_thmlabel">3.54</span>
     <span class="definition_thmtitle">Commuting-form property</span>
     <div class="thm_header_extras">
 
@@ -4822,7 +4903,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_commuting_form_data">Definition 3.52</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_commuting_form_data">Definition 3.53</a></li>
           
           <li><a href="ch-mpdo.html#def:mpo_tensor">Definition 3.1</a></li>
           
@@ -4864,7 +4945,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">3.54</span>
+    <span class="definition_thmlabel">3.55</span>
     <span class="definition_thmtitle">GSNNCH</span>
     <div class="thm_header_extras">
 
@@ -4888,7 +4969,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_has_commuting_form">Definition 3.53</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_has_commuting_form">Definition 3.54</a></li>
           
         </ul>
     
@@ -4929,7 +5010,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">3.55</span>
+    <span class="theorem_thmlabel">3.56</span>
     <span class="theorem_thmtitle">GSNNCH iff commuting form</span>
     <div class="thm_header_extras">
 
@@ -4940,7 +5021,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_is_gsnnch_iff_has_commuting_form">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000000233"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000000234"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4956,9 +5037,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_is_gsnnch">Definition 3.54</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_is_gsnnch">Definition 3.55</a></li>
           
-          <li><a href="ch-mpdo.html#def:mpdo_has_commuting_form">Definition 3.53</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_has_commuting_form">Definition 3.54</a></li>
           
         </ul>
     
@@ -4993,7 +5074,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000233">
+<div class="proof_wrapper" id="a0000000234">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5010,7 +5091,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">3.56</span>
+    <span class="definition_thmlabel">3.57</span>
     <span class="definition_thmtitle">GSNNCH with zero correlation length</span>
     <div class="thm_header_extras">
 
@@ -5034,7 +5115,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_is_gsnnch">Definition 3.54</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_is_gsnnch">Definition 3.55</a></li>
           
           <li><a href="ch-mpdo.html#def:mpo_is_zcl">Definition 3.9</a></li>
           
@@ -5077,7 +5158,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">3.57</span>
+    <span class="theorem_thmlabel">3.58</span>
     <span class="theorem_thmtitle">GSNNCH with zero correlation length iff commuting form with zero correlation length</span>
     <div class="thm_header_extras">
 
@@ -5088,7 +5169,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_is_gsnnch_zcl_iff_has_commuting_form_and_is_zcl">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000000234"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000000235"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5104,9 +5185,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_is_gsnnch_zcl">Definition 3.56</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_is_gsnnch_zcl">Definition 3.57</a></li>
           
-          <li><a href="ch-mpdo.html#thm:mpdo_is_gsnnch_iff_has_commuting_form">Theorem 3.55</a></li>
+          <li><a href="ch-mpdo.html#thm:mpdo_is_gsnnch_iff_has_commuting_form">Theorem 3.56</a></li>
           
         </ul>
     
@@ -5141,7 +5222,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000234">
+<div class="proof_wrapper" id="a0000000235">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5149,23 +5230,23 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>Unfold the definition of GSNNCH with zero correlation length and apply Theorem&#160;<a href="ch-mpdo.html#thm:mpdo_is_gsnnch_iff_has_commuting_form">3.55</a>. </p>
+  <p>Unfold the definition of GSNNCH with zero correlation length and apply Theorem&#160;<a href="ch-mpdo.html#thm:mpdo_is_gsnnch_iff_has_commuting_form">3.56</a>. </p>
 
   </div>
 </div>
-<div class="remark_thmwrapper theorem-style-remark" id="a0000000235">
+<div class="remark_thmwrapper theorem-style-remark" id="a0000000236">
   <div class="remark_thmheading">
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">3.58</span>
+    <span class="remark_thmlabel">3.59</span>
     <span class="remark_thmtitle">Remaining step toward source label <span class="ttfamily">propsimple</span></span>
     <div class="thm_header_extras">
 
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-mpdo.html#a0000000235">#</a>
+    <a class="icon proof" href="ch-mpdo.html#a0000000236">#</a>
     
     
     
