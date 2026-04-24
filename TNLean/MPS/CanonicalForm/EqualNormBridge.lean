@@ -362,4 +362,71 @@ theorem bnt_grouping_single_norm_class_of_tp_primitive_irr_blocks
       exact ⟨ζ, hζne, hζ_norm, hmpv⟩
   exact bnt_grouping_single_norm_class μ blocks k0 hμne hNorm hPhase
 
+/-! ### §4. General BNT sector decomposition -/
+
+/-- **General BNT sector decomposition from TP + primitive + irreducible blocks.**
+
+For an arbitrary block family `(μ, blocks)` whose blocks are left-canonical (TP),
+irreducible, and have primitive transfer maps with nonzero weights, this produces a
+`SectorDecomposition P` with:
+
+1. `SameMPV₂ P.toTensor (toTensorFromBlocks μ blocks)`;
+2. `HasBNTSectorData P`: every basis tensor is irreducible, TP, primitive, with positive
+   bond dimension.
+
+Unlike the restricted single-norm-class bridge
+`bnt_grouping_single_norm_class_of_tp_primitive_irr_blocks`, this endpoint does not require
+equal-norm hypotheses or spectral non-decay input.  The construction is the most granular
+sector decomposition: every block is a distinct basis tensor with copy multiplicity 1, so
+`HasBNTSectorData` is inherited directly from the input block hypotheses.
+
+Downstream refinements that collapse gauge-phase-equivalent blocks into shared basis tensors
+(needed for e.g. `StrictAnti` weight-norm ordering) can be applied on top of this output
+via the single-norm-class bridge when the required spectral data is available, and are
+tracked separately in the Gap §1 roadmap.
+
+This is the Layer A endpoint from issue #876: it produces reusable BNT sector data for the
+after-blocking output of the canonical-form reduction, feeding the witness-producing
+heterogeneous sector comparison planned in #860. -/
+theorem exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks
+    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ)
+    (blocks : (k : Fin r) → MPSTensor d (dim k))
+    (hTP : ∀ k, ∑ i : Fin d, (blocks k i)ᴴ * blocks k i = 1)
+    (hIrr : ∀ k, IsIrreducibleTensor (blocks k))
+    (hPrim : ∀ k, _root_.IsPrimitive (transferMap (d := d) (D := dim k) (blocks k)))
+    (hμne : ∀ k, μ k ≠ 0) :
+    ∃ P : SectorDecomposition d,
+      SameMPV₂ P.toTensor (toTensorFromBlocks (d := d) (μ := μ) blocks) ∧
+      HasBNTSectorData (d := d) P := by
+  let sectors : SectorWeightData r := {
+    copies         := fun _ => 1
+    copies_pos     := fun _ => Nat.one_pos
+    weight         := fun j _ => μ j
+    weight_ne_zero := fun j _ => hμne j
+  }
+  let P : SectorDecomposition d := {
+    basisCount := r
+    basisDim   := dim
+    basis      := blocks
+    sectors    := sectors
+  }
+  refine ⟨P, ?_, ?_⟩
+  · intro N σ
+    calc mpv P.toTensor σ
+        = ∑ j : Fin r, P.coeff N j * mpv (P.basis j) σ :=
+            P.mpv_toTensor_eq_sum_coeff σ
+      _ = ∑ j : Fin r, (μ j) ^ N * mpv (blocks j) σ := by
+            refine Finset.sum_congr rfl fun j _ => congr_arg₂ _ ?_ rfl
+            simp [SectorDecomposition.coeff, SectorWeightData.coeff, P, sectors]
+      _ = mpv (toTensorFromBlocks (d := d) (μ := μ) blocks) σ := by
+            symm
+            simpa [smul_eq_mul] using mpv_toTensorFromBlocks_eq_sum μ blocks σ
+  · exact {
+      basisDim_pos      := fun k => NeZero.pos (dim k)
+      basis_irreducible := hIrr
+      basis_TP          := hTP
+      basis_primitive   := hPrim
+    }
+
 end MPSTensor

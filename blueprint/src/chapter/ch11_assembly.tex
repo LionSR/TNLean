@@ -503,6 +503,43 @@ single weighted block.
 	the same multiset equality.
 \end{proof}
 
+\begin{definition}[BNT-quality sector data]%
+\label{def:has_bnt_sector_data}
+	\lean{MPSTensor.HasBNTSectorData}
+	\leanok
+	\uses{def:paper_sector_data}
+	A sector decomposition $P$ has \emph{BNT-quality sector data} when each
+	basis tensor is left-canonical (TP), irreducible, has a primitive
+	transfer map, and positive auxiliary dimension.  These are the
+	basis-level conditions shared with the normal canonical form, lifted to
+	the sector-decomposition interface; they are sufficient for calling the
+	heterogeneous sector comparison theorems after supplying basis matching
+	and gauge-phase data.
+\end{definition}
+
+\begin{theorem}[General BNT sector decomposition from TP + primitive + irreducible blocks]%
+\label{thm:exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks}
+	\lean{MPSTensor.exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks}
+	\leanok
+	\uses{def:has_bnt_sector_data, def:paper_sector_data}
+	Let $(\mu_k, A_k)_{k=1}^{r}$ be a block family with positive auxiliary
+	dimensions, where each block is left-canonical (TP), irreducible, has a
+	primitive transfer map, and carries a nonzero weight.  Then there exists
+	a sector decomposition $P$ with total MPV family equal to
+	$\sum_k \mu_k^N V^{(N)}(A_k)$ at every system size and basis indexed so
+	that $P$ has BNT-quality sector data.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{thm:paper_decomp_formula}
+	Take $P$ with basis tensors $(A_k)_{k=1}^{r}$, basis dimension $d_k$,
+	single copy per basis, and sector weight $\mu_k$.  The MPV expansion
+	formula from Theorem~\ref{thm:paper_decomp_formula} gives the claimed
+	total MPV identity, and the BNT-quality sector data is inherited
+	directly from the hypotheses on the input blocks.
+\end{proof}
+
 \begin{remark}[Remaining step in the unconditional equal-case theorem]\notready
 	This chapter provides three complementary equal-case results:
 	\begin{enumerate}
@@ -518,25 +555,20 @@ single weighted block.
 		      recovers the sector weight multisets without requiring
 		      explicit coefficient convergence hypotheses.
 	\end{enumerate}
-	What is still missing for the unconditional equal-case theorem
+	The general basis-of-normal-tensors sector construction for the
+	after-blocking output is now formalized by
+	Theorem~\ref{thm:exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks}
+	without the single-norm-class restriction; what is still missing for
+	the unconditional equal-case theorem
 	(Theorem~\ref{thm:ft_equal}, \cite[Corollary~IV.5]{Cirac2021Matrix}) is
-	not merely a final gauge-construction step.  Two paper-level ingredients
-	remain to be formalized:
-	\begin{enumerate}
-		\item a general basis-of-normal-tensors construction for the
-		      after-blocking output, beyond the current special case where
-		      equal-modulus blocks on one side are already known to collapse
-		      to a single basis tensor; and
-		\item a witness-producing matched-basis theorem for heterogeneous
-		      sector decompositions: the algebraic reduction after a basis
-		      matching is now formalized in
-		      Theorems~\ref{thm:route_b_hetero_phase_match}
-		      and~\ref{thm:route_b_hetero_matched_basis}, but one still needs
-		      a theorem that derives the permutation, multiplicity matching,
-		      and gauge-phase data directly from equality of the total MPV
-		      families.
-	\end{enumerate}
-	Once these two ingredients are in place, the final global gauge matrix
-	of Corollary~IV.5 is obtained by the same phase-absorption and blockwise
-	composition argument already formalized in the strict single-weight setting.
+	a witness-producing matched-basis theorem for heterogeneous sector
+	decompositions: the algebraic reduction after a basis matching is now
+	formalized in Theorems~\ref{thm:route_b_hetero_phase_match}
+	and~\ref{thm:route_b_hetero_matched_basis}, but one still needs a
+	theorem that derives the permutation, multiplicity matching, and
+	gauge-phase data directly from equality of the total MPV families.
+	Once this ingredient is in place, the final global gauge matrix of
+	Corollary~IV.5 is obtained by the same phase-absorption and blockwise
+	composition argument already formalized in the strict single-weight
+	setting.
 \end{remark}

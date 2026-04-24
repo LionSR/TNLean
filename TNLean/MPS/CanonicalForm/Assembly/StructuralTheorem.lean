@@ -67,16 +67,22 @@ The theorem `exists_tp_sector_decomp_after_blocking` below provides:
 The current library already settles the common-period blocking step and the
 primitive / irreducible / normal bridges needed after blocking. The remaining
 Gap §1 content is now more specific:
-- a **general BNT sector construction** for the blocked output, matching the
-  paper's basis-of-normal-tensors decomposition rather than only the restricted
-  norm-class-collapse theorem `exists_bnt_grouping`, and
-- a **witness-producing heterogeneous sector comparison theorem** deriving the
-  basis permutation, gauge-phase data, and copy alignment for two such BNT
-  sector decompositions from arbitrary `SameMPV₂`.
+- the **general BNT sector construction** for the blocked output is now
+  provided by `exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks`
+  (`TNLean.MPS.CanonicalForm.EqualNormBridge`), which produces a
+  `SectorDecomposition` with `HasBNTSectorData` from arbitrary TP +
+  primitive + irreducible block families with nonzero weights, no longer
+  restricted to the single-norm-class collapse of `exists_bnt_grouping`;
+- what still remains is the **witness-producing heterogeneous sector
+  comparison theorem** deriving the basis permutation, gauge-phase data, and
+  copy alignment for two such BNT sector decompositions from arbitrary
+  `SameMPV₂`.
 
-The downstream algebraic reduction after a matched basis is now formalized by
-`fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_matched_basis`, but
-the full witness-producing sector endpoint is still missing.
+The downstream algebraic reduction after a matched basis is formalized by
+`fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_matched_basis`,
+and the general sector-level input it expects is now supplied by
+`exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks`. The remaining missing
+ingredient is therefore only the witness-producing matched-basis step.
 -/
 
 section FundamentalTheorem1606
@@ -252,14 +258,16 @@ The complete end-to-end FT should take two tensors `A, B` with `SameMPV₂ A B`
 and pass from the blocked reduction output to the paper's basis-of-normal-tensors
 endpoint. The remaining formalizations are now:
 
-1. **General one-sided BNT construction**: starting from the blocked TP-primitive
-   decomposition, construct a sector decomposition in the paper's general BNT
-   sense. This is stronger than the current special-case theorem
-   `exists_bnt_grouping`, which only collapses norm classes already known to
-   represent one MPV family.
+1. **General one-sided BNT construction**: now provided by
+   `exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks`
+   (`TNLean.MPS.CanonicalForm.EqualNormBridge`), which produces a
+   `SectorDecomposition` carrying `HasBNTSectorData` for arbitrary TP +
+   primitive + irreducible block families with nonzero weights. This is no
+   longer restricted to the single-norm-class case
+   `bnt_grouping_single_norm_class_of_tp_primitive_irr_blocks`.
 
 2. **Witness-producing heterogeneous sector comparison**: the algebraic
-   reduction from a matched basis to per-sector weight multiset equality is now
+   reduction from a matched basis to per-sector weight multiset equality is
    formalized by
    `fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_matched_basis`
    (with phase-match core
@@ -268,13 +276,14 @@ endpoint. The remaining formalizations are now:
    permutation, gauge-phase data, and copy alignment from arbitrary equal total
    MPVs of two sector decompositions.
 
-3. **Final global construction**: once steps 1–2 are available, combine them with the
+3. **Final global construction**: once step 2 is available, combine it with the
    already-formalized common-period blocking, blocked irreducibility,
    `isNormal_of_tp_primitive_irreducible`, and the global gauge construction of
    the equal-case FT.
 
-So the common-period blocking step is no longer the blocker; the missing content
-is specifically the paper-level sector endpoint.
+So both the common-period blocking step and the general one-sided BNT sector
+construction are in place; the remaining paper-level ingredient is the
+witness-producing matched-basis step.
 -/
 
 end FundamentalTheorem1606

@@ -558,4 +558,25 @@ theorem bnt_grouping_single_norm_class
     change ‖ζFn q * μ q‖ = ‖μ k0‖
     rw [norm_mul, hζ_norm q, one_mul, hNorm q]
 
+/-! ### §6. BNT-quality sector data -/
+
+/-- Structural BNT-quality properties of a sector decomposition: every basis tensor is
+left-canonical (TP), irreducible, and has a primitive transfer map with positive bond
+dimension.  These are the basis-level conditions shared with `IsNormalCanonicalForm`,
+lifted to the sector-decomposition interface.
+
+Sector decompositions carrying `HasBNTSectorData` expose a reusable BNT-level basis for
+downstream consumers such as the heterogeneous sector comparison theorems in
+`TNLean.MPS.FundamentalTheorem.SectorDecomposition` and the final assembly step. -/
+structure HasBNTSectorData {d : ℕ} (P : SectorDecomposition d) : Prop where
+  /-- All basis bond dimensions are positive. -/
+  basisDim_pos : ∀ j, 0 < P.basisDim j
+  /-- Every basis tensor is irreducible. -/
+  basis_irreducible : ∀ j, IsIrreducibleTensor (P.basis j)
+  /-- Every basis tensor is left-canonical (TP). -/
+  basis_TP : ∀ j, ∑ i : Fin d, (P.basis j i)ᴴ * P.basis j i = 1
+  /-- Every basis tensor has a primitive transfer map. -/
+  basis_primitive : ∀ j, _root_.IsPrimitive
+    (transferMap (d := d) (D := P.basisDim j) (P.basis j))
+
 end MPSTensor
