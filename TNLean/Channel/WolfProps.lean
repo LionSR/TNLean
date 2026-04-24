@@ -351,11 +351,13 @@ theorem exists_isometric_mixing_of_pureEnsembleDensity_eq
     (hCard : Fintype.card ι₂ ≤ Fintype.card ι₁) :
     ∃ V : Matrix ι₁ ι₂ ℂ, Vᴴ * V = 1 ∧
       ∀ i, ψ i = fun a => ∑ j, V i j * φ j a := by
-  -- Any inhabitant of `Fin D` witnesses `0 < D`; factored out once since it
-  -- is needed both when forming the CP-sandwich equality and when reading
-  -- off column `0` of the resulting rectangular isometry.
-  have hD_of : Fin D → 0 < D :=
-    fun a => Nat.pos_of_ne_zero (fun hDeq => (hDeq ▸ a).elim0)
+  -- Any inhabitant of `Fin D` yields the canonical column-`0` index. Factored
+  -- out once since the same `⟨0, _⟩` witness is needed both when forming the
+  -- CP-sandwich equality and when reading off column `0` of the resulting
+  -- rectangular isometry; bundling the `0 < D` derivation into a single `Fin D`
+  -- helper avoids rebuilding `Nat.pos_of_ne_zero` at each call site.
+  let c₀_of : Fin D → Fin D :=
+    fun a => ⟨0, Nat.pos_of_ne_zero (fun hDeq => (hDeq ▸ a).elim0)⟩
   -- Embed each vector as the `0`-th column of a `D × D` matrix. Pattern-match
   -- on the underlying `Nat` of `Fin D` so no `0 < D` hypothesis is needed to
   -- form the column index, and the match reduces definitionally at `⟨0, _⟩`.
@@ -408,16 +410,15 @@ theorem exists_isometric_mixing_of_pureEnsembleDensity_eq
       ∑ i, K i * X * (K i)ᴴ = ∑ j, L j * X * (L j)ᴴ := by
     intro X
     ext a b
-    -- `a : Fin D` forces `0 < D`.
-    have hD : 0 < D := hD_of a
-    set c₀ : Fin D := ⟨0, hD⟩ with hc₀
+    -- `a : Fin D` produces the column-`0` witness via `c₀_of`.
+    let c₀ : Fin D := c₀_of a
     -- Compute each side as `X c₀ c₀ * ρ_v a b`, then use `hρ`.
     have lhs_eq : (∑ i, K i * X * (K i)ᴴ) a b =
         X c₀ c₀ * (pureEnsembleDensity ψ) a b := by
       rw [Matrix.sum_apply]
       have each_i : ∀ i, (K i * X * (K i)ᴴ) a b =
           ψ i a * X c₀ c₀ * star (ψ i b) :=
-        fun i => sandwich_entry (ψ i) (K i) (hK_apply i) X a b hD
+        fun i => sandwich_entry (ψ i) (K i) (hK_apply i) X a b c₀.isLt
       simp_rw [each_i]
       simp only [pureEnsembleDensity, Matrix.sum_apply, Matrix.vecMulVec_apply,
         Pi.star_apply, Finset.mul_sum]
@@ -428,7 +429,7 @@ theorem exists_isometric_mixing_of_pureEnsembleDensity_eq
       rw [Matrix.sum_apply]
       have each_j : ∀ j, (L j * X * (L j)ᴴ) a b =
           φ j a * X c₀ c₀ * star (φ j b) :=
-        fun j => sandwich_entry (φ j) (L j) (hL_apply j) X a b hD
+        fun j => sandwich_entry (φ j) (L j) (hL_apply j) X a b c₀.isLt
       simp_rw [each_j]
       simp only [pureEnsembleDensity, Matrix.sum_apply, Matrix.vecMulVec_apply,
         Pi.star_apply, Finset.mul_sum]
@@ -440,8 +441,7 @@ theorem exists_isometric_mixing_of_pureEnsembleDensity_eq
   refine ⟨V, hV_iso, ?_⟩
   intro i
   funext a
-  have hD : 0 < D := hD_of a
-  set c₀ : Fin D := ⟨0, hD⟩
+  let c₀ : Fin D := c₀_of a
   -- At `c₀ = ⟨0, _⟩` both match branches reduce definitionally, so
   -- `K i a c₀ = ψ i a` and `L j a c₀ = φ j a` hold by `rfl`.
   have hKic₀ : K i a c₀ = ψ i a := rfl
