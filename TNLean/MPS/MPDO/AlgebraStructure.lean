@@ -55,24 +55,33 @@ steps still require the BNT / coefficient-comparison layer from Appendix C.3--C.
 
 The lemma `adjoint_transferMap_apply_of_isRFP_MPDO_via_algebra` below extracts
 the strongest direct consequence of `IsRFP_MPDO_via_algebra M`: the inclusion
-maps `iota n` force every adjoint fixed point of the blocked transfer map to
-be an adjoint fixed point of the unblocked transfer map, and hence
-`Fix((blockedTransferMap M n).adjoint)` coincides with
-`Fix((transferMap M).adjoint)` for every `n ≥ 1`. This rules out nontrivial
-peripheral eigenvalues of `(transferMap M).adjoint`, but stops short of
-forcing `transferMap M` itself to be idempotent. Ergodic channels with a
-strict spectral gap on the `1`-complement therefore satisfy
-`IsRFP_MPDO_via_algebra M` without being MPDO RFPs: for example,
-`E(X) = ε · X + (1 - ε) · avgDiag(X)` on `M_D(ℂ)` with `0 < ε < 1` has
-peripheral spectrum `{1}` and diagonal fixed-point algebra at every blocking
-size, yet `E ∘ E ≠ E`.
+maps `iota n` force every adjoint fixed point of the blocked transfer map at
+positive blocking size `n` to be an adjoint fixed point of the unblocked
+transfer map, i.e. `Fix((blockedTransferMap M n).adjoint)` is contained in
+`Fix((transferMap M).adjoint)` for every `n ≥ 1`. (The reverse inclusion is
+immediate from `blockedTransferMap_eq_pow` combined with the fact that an
+adjoint fixed point of `transferMap M` is fixed by every power of the
+adjoint.)
+
+This equality already excludes *finite-order* (root-of-unity) peripheral
+eigenvalues of `(transferMap M).adjoint`, because any such eigenvalue would
+produce a blocked adjoint fixed point at some positive `n` that is not fixed
+by the unblocked adjoint. It does *not* exclude unit-modulus eigenvalues of
+irrational phase, and a fortiori it is not enough to force `transferMap M`
+itself to be idempotent. Ergodic channels with a strict spectral gap on the
+`1`-complement therefore satisfy `IsRFP_MPDO_via_algebra M` without being
+MPDO RFPs: on `M_D(ℂ)`, with `0 < ε < 1`, consider
+`E(X) = ε · X + (1 - ε) · Π_diag(X)`, where `Π_diag` is the projection that
+zeroes the off-diagonal entries of `X`. Then `Π_diag ∘ Π_diag = Π_diag`,
+`E` has peripheral spectrum `{1}` and diagonal fixed-point algebra at every
+blocking size, yet `E ∘ E ≠ E`.
 
 Closing the converse algebra-to-fusion implication therefore requires
 strengthening the predicate to the paper's full coefficient formulation -- the
 positive diagonal matrices `χ_{α,β,γ}` from Appendix C.3 and the coefficient
 identity `c^{(L)}_{α,β,γ} = tr(χ_{α,β,γ}^L)` from Appendix C.4. The scalar
-Newton--Girard layer needed for the latter step is already available at
-`TNLean.Algebra.ScalarPowerSumIdentity`.
+Newton--Girard power-sum identity needed for the latter step is already
+available in this formalization.
 
 ## References
 
@@ -425,10 +434,13 @@ through `pow_succ` and applying `LinearMap.adjoint_comp` then extracts
 `(transferMap M).adjoint X = X`.
 
 This is the strongest consequence available from the current
-`IsRFP_MPDO_via_algebra` predicate: it rules out nontrivial peripheral
-eigenvalues of `(transferMap M).adjoint`, but is still not enough to force
-`transferMap M` to be idempotent. See the module docstring for the blocker
-on the converse algebra-to-fusion implication. -/
+`IsRFP_MPDO_via_algebra` predicate: it excludes *finite-order*
+(root-of-unity) peripheral eigenvalues of `(transferMap M).adjoint`, since
+any such eigenvalue would produce a blocked adjoint fixed point that is not
+fixed by the unblocked adjoint. It does not exclude unit-modulus eigenvalues
+of irrational phase, and is therefore not enough to force `transferMap M`
+to be idempotent. See the module docstring for the blocker on the converse
+algebra-to-fusion implication. -/
 theorem adjoint_transferMap_apply_of_isRFP_MPDO_via_algebra
     {M : MPOTensor d D} (hAlg : IsRFP_MPDO_via_algebra M)
     {n : ℕ} (hn : 0 < n) {X : Mat}

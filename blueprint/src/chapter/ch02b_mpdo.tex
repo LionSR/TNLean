@@ -873,37 +873,49 @@ Theorem~\ref{thm:mpdo_reconstruct_blocked_coefficients} reconstructs it.
     transfer map $E_1$.
 \end{theorem}
 \begin{proof}\leanok
-Compatibility at size $n$ places $X$ in $\mathcal{A}_n$; the inclusion map
-$\iota_n$ lifts $X$ into $\mathcal{A}_{n+1}$, so compatibility at size $n + 1$
-yields $E_{n+1}^{\dagger} X = X$. Rewriting
-$E_{n+1} = E_n \circ E_1$ and applying
+Compatibility at size $n$ places $X$ in $\mathcal{A}_n$. The inclusion map
+$\iota_n$ lifts $X$ into $\mathcal{A}_{n+1}$, and since $\iota_n$ is just an
+inclusion it does not change the underlying operator, so we continue to
+denote the lifted element by $X$. Thus compatibility at size $n + 1$ yields
+$E_{n+1}^{\dagger} X = X$. Rewriting $E_{n+1} = E_n \circ E_1$ and applying
 $(A \circ B)^{\dagger} = B^{\dagger} \circ A^{\dagger}$ together with the
 hypothesis $E_n^{\dagger} X = X$ extracts $E_1^{\dagger} X = X$.
 \end{proof}
 
 \begin{remark}[Converse algebra-to-fusion gap]%
     \label{rem:mpdo_algebra_to_fusion_gap}
-    \uses{def:mpdo_rfp_via_algebra, def:mpdo_rfp_via_fusion}
+    \uses{def:mpdo_rfp_via_algebra, def:mpdo_rfp_via_fusion, thm:newton_girard}
     The converse implication
     $\ref{def:mpdo_rfp_via_algebra} \Rightarrow \ref{def:mpdo_rfp_via_fusion}$
     is not provable against the present predicate. Theorem
     \ref{thm:mpdo_adjoint_fix_descent} already gives the strongest available
-    consequence of the algebra-structure data -- aperiodicity of the adjoint
-    transfer map -- but ergodic quantum channels with a strict spectral gap
-    on the $1$-complement still satisfy the predicate without being RFPs;
-    for instance, on $M_D(\mathbb{C})$ with $0 < \varepsilon < 1$ the channel
-    $E(X) = \varepsilon X + (1 - \varepsilon) \cdot \mathrm{avgDiag}(X)$
-    has peripheral spectrum $\{1\}$ and diagonal fixed-point algebra at
-    every blocking size, yet $E \circ E \neq E$. Closing the converse
-    therefore requires strengthening the predicate to the coefficient
-    formulation of \cite[Theorem~IV.13~(ii)]{Cirac2017MPDO_AnnPhys}: the
-    positive diagonal matrices $\chi_{\alpha,\beta,\gamma}$ of Appendix~C.3
-    and the coefficient identity
+    consequence of the algebra-structure data -- exclusion of \emph{finite
+    order} (root-of-unity) peripheral eigenvalues of the adjoint transfer
+    map, since any such eigenvalue would produce a new adjoint fixed point
+    at some positive blocking size. This does \emph{not}, however, exclude
+    unit-modulus eigenvalues of irrational phase, nor force idempotence of
+    the transfer map, so ergodic quantum channels with a strict spectral gap
+    on the $1$-complement still satisfy the predicate without being RFPs.
+    For instance, on $M_D(\mathbb{C})$ with $0 < \varepsilon < 1$ take
+    \[
+        E(X)
+            = \varepsilon\, X
+              + (1 - \varepsilon)\, \Pi_{\mathrm{diag}}(X),
+    \]
+    where $\Pi_{\mathrm{diag}}$ is the projection that zeroes the
+    off-diagonal entries of $X$; then $\Pi_{\mathrm{diag}} \circ
+    \Pi_{\mathrm{diag}} = \Pi_{\mathrm{diag}}$, the channel $E$ has
+    peripheral spectrum $\{1\}$ and diagonal fixed-point algebra at every
+    blocking size, yet $E \circ E \neq E$. Closing the converse therefore
+    requires strengthening the predicate to the coefficient formulation of
+    \cite[Theorem~IV.13~(ii)]{Cirac2017MPDO_AnnPhys}: the positive diagonal
+    matrices $\chi_{\alpha,\beta,\gamma}$ of Appendix~C.3 and the
+    coefficient identity
     $c^{(L)}_{\alpha,\beta,\gamma}
       = \mathrm{tr}(\chi_{\alpha,\beta,\gamma}^{L})$
-    of Appendix~C.4. The scalar Newton--Girard layer used in the latter
-    step is already formalised in
-    \texttt{TNLean.Algebra.ScalarPowerSumIdentity}.
+    of Appendix~C.4. The scalar Newton--Girard power-sum identity needed
+    for the latter step is already available as
+    Theorem~\ref{thm:newton_girard}.
 \end{remark}
 
 \section{Commuting form and GSNNCH}
