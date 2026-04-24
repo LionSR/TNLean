@@ -55,6 +55,8 @@ import TNLean.Channel.KrausRank
 import TNLean.Channel.KrausRepresentation
 import TNLean.Channel.KrausUnitaryFreedom
 import TNLean.Channel.Stinespring
+import TNLean.Channel.OrderedCP
+import TNLean.Channel.RadonNikodym
 import TNLean.Channel.TransferMatrix
 import TNLean.Channel.POVM
 import TNLean.Channel.POVM.Uniqueness
@@ -324,6 +326,9 @@ import TNLean.Wielandt.QuantumWielandt
 import TNLean.Channel.Peripheral.CyclicDecomposition
 import TNLean.Channel.Peripheral.Cycles
 import TNLean.Channel.Peripheral.MultiCycleDecomposition
+
+-- Chapter 2 §2.3 normal-form existence (SVD + Lorentz)
+import TNLean.Channel.NormalForm
 
 -- Public documentation index modules
 import TNLean.Channel.WolfChapter2Index
