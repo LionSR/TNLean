@@ -1809,7 +1809,7 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   Let \(A_1, A_2\) and \(B_1, B_2\) be injective MPS tensors with the same bond dimension \(D\). Suppose that for all \(X \in M_{D}(\mathbb {C})\) (on the internal bond) and all \(Y \in M_{D}(\mathbb {C})\) (on the external bond), </p>
-<div class="displaymath" id="<plasTeX.TeXFragment object at 0x7febeb07ef90>">
+<div class="displaymath" id="<plasTeX.TeXFragment object at 0x7f6969386f90>">
   \begin{align}  \operatorname{tr}(A_1^{i}\,  X\,  A_2^{j}) & = \operatorname{tr}(B_1^{i}\,  X\,  B_2^{j}) \qquad \text{for all } i, j, \label{eq:internal_bond}\\ \operatorname{tr}(A_2^{j}\,  Y\,  A_1^{i}) & = \operatorname{tr}(B_2^{j}\,  Y\,  B_1^{i}) \qquad \text{for all } i, j. \label{eq:external_bond} \end{align}
 </div>
 <p> Diagrammatically, Eq.&#160;?? is the equality obtained by inserting \(X\) on the bond between the two sites, </p>
@@ -6885,12 +6885,80 @@
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:fundamentalTheorem_PEPS">
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:fundamentalTheorem_PEPS_of_bondDim">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
     Theorem
     </span>
     <span class="theorem_thmlabel">17.81</span>
+    <span class="theorem_thmtitle">Fundamental Theorem for injective PEPS, conditional on bond-dimension equality</span>
+    <div class="thm_header_extras">
+
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-algebraic_ft.html#thm:fundamentalTheorem_PEPS_of_bondDim">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-algebraic_ft.html#thm:gaugeConsistency">Theorem 17.80</a></li>
+          
+          <li><a href="ch-algebraic_ft.html#def:GaugeEquivPEPS">Definition 17.64</a></li>
+          
+          <li><a href="ch-algebraic_ft.html#def:IsVertexInjective">Definition 17.68</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.fundamentalTheorem_PEPS_of_bondDim" class="lean_decl">TNLean.PEPS.fundamentalTheorem_PEPS_of_bondDim</a></li>
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.gaugeConsistency" class="lean_decl">TNLean.PEPS.gaugeConsistency</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   Given matching bond dimensions, two vertex-injective PEPS that generate the same state are gauge-equivalent. This conditional form isolates the bond-dimension obligation from the edge-centred consistency obligation of . </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:fundamentalTheorem_PEPS">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">17.82</span>
     <span class="theorem_thmtitle">Fundamental Theorem for injective PEPS</span>
     <div class="thm_header_extras">
 
@@ -6912,7 +6980,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-algebraic_ft.html#thm:gaugeConsistency">Theorem 17.80</a></li>
+          <li><a href="ch-algebraic_ft.html#thm:fundamentalTheorem_PEPS_of_bondDim">Theorem 17.81</a></li>
           
           <li><a href="ch-algebraic_ft.html#def:GaugeEquivPEPS">Definition 17.64</a></li>
           
@@ -6957,7 +7025,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">17.82</span>
+    <span class="definition_thmlabel">17.83</span>
     <span class="definition_thmtitle">Gauge equivalence modulo balanced edge scalars</span>
     <div class="thm_header_extras">
 
@@ -7021,7 +7089,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">17.83</span>
+    <span class="theorem_thmlabel">17.84</span>
     <span class="theorem_thmtitle">Balanced edge scalars preserve the local gauge action</span>
     <div class="thm_header_extras">
 
@@ -7048,11 +7116,11 @@
         
         <ul class="uses">
           
-          <li><a href="ch-algebraic_ft.html#def:GaugeEquivModEdgeScalars">Definition 17.82</a></li>
+          <li><a href="ch-algebraic_ft.html#def:GaugeEquivModEdgeScalars">Definition 17.83</a></li>
           
           <li><a href="ch-algebraic_ft.html#def:gaugeVertex">Definition 17.62</a></li>
           
-          <li><a href="ch-algebraic_ft.html#def:GaugeEquivModEdgeScalars">Definition 17.82</a></li>
+          <li><a href="ch-algebraic_ft.html#def:GaugeEquivModEdgeScalars">Definition 17.83</a></li>
           
           <li><a href="ch-algebraic_ft.html#def:gaugeVertex">Definition 17.62</a></li>
           
@@ -7106,7 +7174,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">17.84</span>
+    <span class="theorem_thmlabel">17.85</span>
     <span class="theorem_thmtitle">Gauge uniqueness modulo balanced edge scalars</span>
     <div class="thm_header_extras">
 
@@ -7128,7 +7196,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-algebraic_ft.html#def:GaugeEquivModEdgeScalars">Definition 17.82</a></li>
+          <li><a href="ch-algebraic_ft.html#def:GaugeEquivModEdgeScalars">Definition 17.83</a></li>
           
           <li><a href="ch-algebraic_ft.html#def:IsVertexInjective">Definition 17.68</a></li>
           
@@ -7170,7 +7238,7 @@
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">17.85</span>
+    <span class="remark_thmlabel">17.86</span>
     <div class="thm_header_extras">
 
         </div>
@@ -7195,7 +7263,7 @@
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">17.86</span>
+    <span class="remark_thmlabel">17.87</span>
     <div class="thm_header_extras">
 
         </div>
