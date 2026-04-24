@@ -2882,12 +2882,296 @@
 
   </div>
 </div>
-<div class="definition_thmwrapper theorem-style-definition" id="def:matrix_trace_rankone_predicates">
+<div class="definition_thmwrapper theorem-style-definition" id="def:mpdo_injective_inverse_layer">
   <div class="definition_thmheading">
     <span class="definition_thmcaption">
     Definition
     </span>
     <span class="definition_thmlabel">3.27</span>
+    <span class="definition_thmtitle">Injective inverse-map layer for a simple MPO tensor</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-mpdo.html#def:mpdo_injective_inverse_layer">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mpdo.html#def:mpo_tensor">Definition 3.1</a></li>
+          
+          <li><a href="ch-mpdo.html#def:mpo_to_mps">Definition 3.2</a></li>
+          
+          <li><a href="ch-mps.html#def:injective">Definition 2.21</a></li>
+          
+          <li><a href="ch-algebraic_ft.html#def:decomposition_map">Definition 17.2</a></li>
+          
+          <li><a href="ch-algebraic_ft.html#def:phys_realize">Definition 17.5</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPOTensor.IsInjective" class="lean_decl">MPOTensor.IsInjective</a></li>
+          
+          <li><a href="../docs/find/#doc/MPOTensor.inverseTensor" class="lean_decl">MPOTensor.inverseTensor</a></li>
+          
+          <li><a href="../docs/find/#doc/MPOTensor.physRealize" class="lean_decl">MPOTensor.physRealize</a></li>
+          
+          <li><a href="../docs/find/#doc/MPOTensor.physRealizeLeft" class="lean_decl">MPOTensor.physRealizeLeft</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>       A simple MPO tensor \(K\) is called injective if its doubled-index MPS tensor is injective. For such a tensor, the chosen decomposition map of the doubled-index MPS furnishes a concrete inverse tensor \(K^{-1}\) together with right- and left-physical realization maps that turn virtual bond insertions back into local physical operators. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:mpdo_injective_inverse_layer_spec">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">3.28</span>
+    <span class="theorem_thmtitle">Inverse-map identities for an injective simple MPO tensor</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-mpdo.html#thm:mpdo_injective_inverse_layer_spec">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mpdo.html#def:mpdo_injective_inverse_layer">Definition 3.27</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPOTensor.inverseTensor_spec" class="lean_decl">MPOTensor.inverseTensor_spec</a></li>
+          
+          <li><a href="../docs/find/#doc/MPOTensor.physRealize_spec" class="lean_decl">MPOTensor.physRealize_spec</a></li>
+          
+          <li><a href="../docs/find/#doc/MPOTensor.physRealize_mul" class="lean_decl">MPOTensor.physRealize_mul</a></li>
+          
+          <li><a href="../docs/find/#doc/MPOTensor.physRealizeLeft_spec" class="lean_decl">MPOTensor.physRealizeLeft_spec</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>       For an injective simple MPO tensor, contracting \(K^{-1}\) with \(K\) recovers the matrix units on the virtual bond space. Likewise, every right virtual insertion admits a physical realization, this realization is multiplicative, and the analogous left-insertion statement also holds. </p>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:mpdo_explicit_eta_operators">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">3.29</span>
+    <span class="definition_thmtitle">Explicit neighboring \(\eta \)-operator data</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-mpdo.html#def:mpdo_explicit_eta_operators">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mpdo.html#def:mpdo_eta_structure">Definition 3.25</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPOTensor.etaOperators" class="lean_decl">MPOTensor.etaOperators</a></li>
+          
+          <li><a href="../docs/find/#doc/MPOTensor.ExplicitEtaOperators" class="lean_decl">MPOTensor.ExplicitEtaOperators</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>     Fix a Hayashi decomposition witness \(h_\eta \). An explicit neighboring \(\eta \)-family is a dependent family \((\eta _{k,h})\) indexed by sector pairs, where \(\eta _{k,h}\) acts on the neighboring bond space \(B_k^{R} \otimes B_h^{L}\). Requiring positivity for each pair gives the corresponding positive \(\eta \)-data. </p>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:mpdo_explicit_eta_trace_matrix">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">3.30</span>
+    <span class="definition_thmtitle">Trace matrices of explicit \(\eta \)-data</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-mpdo.html#def:mpdo_explicit_eta_trace_matrix">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mpdo.html#def:mpdo_explicit_eta_operators">Definition 3.29</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPOTensor.ExplicitEtaOperators.traceMatrix" class="lean_decl">MPOTensor.ExplicitEtaOperators.traceMatrix</a></li>
+          
+          <li><a href="../docs/find/#doc/MPOTensor.ExplicitEtaOperators.traceMatrix_apply" class="lean_decl">MPOTensor.ExplicitEtaOperators.traceMatrix_apply</a></li>
+          
+          <li><a href="../docs/find/#doc/MPOTensor.ExplicitEtaOperators.traceMatrixRe" class="lean_decl">MPOTensor.ExplicitEtaOperators.traceMatrixRe</a></li>
+          
+          <li><a href="../docs/find/#doc/MPOTensor.ExplicitEtaOperators.traceMatrixRe_apply" class="lean_decl">MPOTensor.ExplicitEtaOperators.traceMatrixRe_apply</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>       Every explicit neighboring \(\eta \)-family determines a sector-by-sector trace matrix. We record both its complex-valued form and the real-part version, which is the direct interface to the real Perron–Frobenius matrix \(T\) used in the rank-one step. </p>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:matrix_trace_rankone_predicates">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">3.31</span>
     <span class="definition_thmtitle">Auxiliary matrix predicates for the rank-one step</span>
     <div class="thm_header_extras">
 
@@ -2936,7 +3220,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">3.28</span>
+    <span class="theorem_thmlabel">3.32</span>
     <span class="theorem_thmtitle">SAL and ZCL imply rank-one \(T\) (scoped form)</span>
     <div class="thm_header_extras">
 
@@ -2963,9 +3247,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:matrix_trace_rankone_predicates">Definition 3.27</a></li>
+          <li><a href="ch-mpdo.html#def:matrix_trace_rankone_predicates">Definition 3.31</a></li>
           
-          <li><a href="ch-mpdo.html#def:matrix_trace_rankone_predicates">Definition 3.27</a></li>
+          <li><a href="ch-mpdo.html#def:matrix_trace_rankone_predicates">Definition 3.31</a></li>
           
         </ul>
     
@@ -3025,7 +3309,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">3.29</span>
+    <span class="definition_thmlabel">3.33</span>
     <span class="definition_thmtitle">Horizontal canonical form for an MPO</span>
     <div class="thm_header_extras">
 
@@ -3093,7 +3377,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">3.30</span>
+    <span class="definition_thmlabel">3.34</span>
     <span class="definition_thmtitle">Vertical canonical form for an MPO</span>
     <div class="thm_header_extras">
 
@@ -3164,7 +3448,7 @@
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">3.31</span>
+    <span class="remark_thmlabel">3.35</span>
     <span class="remark_thmtitle">Finite-length span and selector criteria for the horizontal canonical-form hypothesis</span>
     <div class="thm_header_extras">
 
@@ -3215,7 +3499,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">3.32</span>
+    <span class="theorem_thmlabel">3.36</span>
     <span class="theorem_thmtitle">Abstract Proposition&#160;IV.3 package</span>
     <div class="thm_header_extras">
 
@@ -3242,9 +3526,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#rem:word_tuple_span_top">Remark 3.31</a></li>
+          <li><a href="ch-mpdo.html#rem:word_tuple_span_top">Remark 3.35</a></li>
           
-          <li><a href="ch-mpdo.html#rem:word_tuple_span_top">Remark 3.31</a></li>
+          <li><a href="ch-mpdo.html#rem:word_tuple_span_top">Remark 3.35</a></li>
           
         </ul>
     
@@ -3296,7 +3580,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">3.33</span>
+    <span class="lemma_thmlabel">3.37</span>
     <span class="lemma_thmtitle">Blockwise equality from agreement on the MPV family</span>
     <div class="thm_header_extras">
 
@@ -3327,13 +3611,13 @@
           
           <li><a href="ch-mps.html#def:injective">Definition 2.21</a></li>
           
-          <li><a href="ch-mpdo.html#thm:propblockinj_abstract">Theorem 3.32</a></li>
+          <li><a href="ch-mpdo.html#thm:propblockinj_abstract">Theorem 3.36</a></li>
           
           <li><a href="ch-canonical.html#def:tensor_from_blocks">Definition 11.1</a></li>
           
           <li><a href="ch-mps.html#def:injective">Definition 2.21</a></li>
           
-          <li><a href="ch-mpdo.html#thm:propblockinj_abstract">Theorem 3.32</a></li>
+          <li><a href="ch-mpdo.html#thm:propblockinj_abstract">Theorem 3.36</a></li>
           
         </ul>
     
@@ -3379,7 +3663,7 @@
   <p> This is Lemma&#160;L from <span class="cite">
 	(
 	
-</span>, using the abstract Proposition&#160;IV.3 package from Theorem&#160;<a href="ch-mpdo.html#thm:propblockinj_abstract">3.32</a>. Expanding the hypothesis over a word of length&#160;\(L+1\) beginning with the fixed site and folding each block contribution into a trace pairing against the corresponding first-site insertion tensor yields, upon taking the \(Y\)-\(Z\) difference, a tuple of block matrices whose trace pairings against every length-\(L\) block word vanish. The biCF hypothesis then forces each block difference to be zero, and dividing by the nonzero weight \(\mu _k^{L+1}\) concludes the blockwise equality of the two first-site insertions. </p>
+</span>, using the abstract Proposition&#160;IV.3 package from Theorem&#160;<a href="ch-mpdo.html#thm:propblockinj_abstract">3.36</a>. Expanding the hypothesis over a word of length&#160;\(L+1\) beginning with the fixed site and folding each block contribution into a trace pairing against the corresponding first-site insertion tensor yields, upon taking the \(Y\)-\(Z\) difference, a tuple of block matrices whose trace pairings against every length-\(L\) block word vanish. The biCF hypothesis then forces each block difference to be zero, and dividing by the nonzero weight \(\mu _k^{L+1}\) concludes the blockwise equality of the two first-site insertions. </p>
 
   </div>
 </div>
@@ -3388,7 +3672,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">3.34</span>
+    <span class="theorem_thmlabel">3.38</span>
     <span class="theorem_thmtitle">Horizontal canonical form implies vertical canonical form</span>
     <div class="thm_header_extras">
 
@@ -3415,19 +3699,19 @@
           
           <li><a href="ch-mpdo.html#def:mpdo">Definition 3.11</a></li>
           
-          <li><a href="ch-mpdo.html#def:horizontal_cf_mpdo">Definition 3.29</a></li>
+          <li><a href="ch-mpdo.html#def:horizontal_cf_mpdo">Definition 3.33</a></li>
           
-          <li><a href="ch-mpdo.html#def:vertical_cf_mpdo">Definition 3.30</a></li>
+          <li><a href="ch-mpdo.html#def:vertical_cf_mpdo">Definition 3.34</a></li>
           
-          <li><a href="ch-mpdo.html#lem:blockwise_insert_eq_of_mpv_agree">Lemma 3.33</a></li>
+          <li><a href="ch-mpdo.html#lem:blockwise_insert_eq_of_mpv_agree">Lemma 3.37</a></li>
           
           <li><a href="ch-mpdo.html#def:mpdo">Definition 3.11</a></li>
           
-          <li><a href="ch-mpdo.html#def:horizontal_cf_mpdo">Definition 3.29</a></li>
+          <li><a href="ch-mpdo.html#def:horizontal_cf_mpdo">Definition 3.33</a></li>
           
-          <li><a href="ch-mpdo.html#def:vertical_cf_mpdo">Definition 3.30</a></li>
+          <li><a href="ch-mpdo.html#def:vertical_cf_mpdo">Definition 3.34</a></li>
           
-          <li><a href="ch-mpdo.html#lem:blockwise_insert_eq_of_mpv_agree">Lemma 3.33</a></li>
+          <li><a href="ch-mpdo.html#lem:blockwise_insert_eq_of_mpv_agree">Lemma 3.37</a></li>
           
         </ul>
     
@@ -3451,7 +3735,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Starting from the horizontal canonical-form decomposition, one uses the MPDO positivity condition to compare the first-site action of the doubled-index tensor on the diagonal sector. Lemma&#160;<a href="ch-mpdo.html#lem:blockwise_insert_eq_of_mpv_agree">3.33</a> then shows that the diagonal tensor splits along the same normal blocks, with the coefficients rearranged into positive scalar weights. Flattening those positive diagonal coefficients produces the required vertical canonical-form decomposition. </p>
+  <p> Starting from the horizontal canonical-form decomposition, one uses the MPDO positivity condition to compare the first-site action of the doubled-index tensor on the diagonal sector. Lemma&#160;<a href="ch-mpdo.html#lem:blockwise_insert_eq_of_mpv_agree">3.37</a> then shows that the diagonal tensor splits along the same normal blocks, with the coefficients rearranged into positive scalar weights. Flattening those positive diagonal coefficients produces the required vertical canonical-form decomposition. </p>
 
   </div>
 </div>
@@ -3465,7 +3749,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">3.35</span>
+    <span class="definition_thmlabel">3.39</span>
     <span class="definition_thmtitle">Transfer-map fusion-isometry datum</span>
     <div class="thm_header_extras">
 
@@ -3537,7 +3821,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">3.36</span>
+    <span class="definition_thmlabel">3.40</span>
     <span class="definition_thmtitle">Fusion-isometry RFP predicate</span>
     <div class="thm_header_extras">
 
@@ -3561,7 +3845,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_fusion_isometry">Definition 3.35</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_fusion_isometry">Definition 3.39</a></li>
           
           <li><a href="ch-mpdo.html#def:mpo_tensor">Definition 3.1</a></li>
           
@@ -3603,7 +3887,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">3.37</span>
+    <span class="theorem_thmlabel">3.41</span>
     <span class="theorem_thmtitle">Fusion-isometry data imply MPDO RFP</span>
     <div class="thm_header_extras">
 
@@ -3630,7 +3914,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_rfp_via_fusion">Definition 3.36</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_rfp_via_fusion">Definition 3.40</a></li>
           
         </ul>
     
@@ -3688,7 +3972,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">3.38</span>
+    <span class="theorem_thmlabel">3.42</span>
     <span class="theorem_thmtitle">Transfer-map fusion criterion for MPDO RFP</span>
     <div class="thm_header_extras">
 
@@ -3715,9 +3999,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_rfp_via_fusion">Definition 3.36</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_rfp_via_fusion">Definition 3.40</a></li>
           
-          <li><a href="ch-mpdo.html#thm:mpdo_rfp_of_fusion">Theorem 3.37</a></li>
+          <li><a href="ch-mpdo.html#thm:mpdo_rfp_of_fusion">Theorem 3.41</a></li>
           
         </ul>
     
@@ -3762,7 +4046,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> The forward implication is Theorem&#160;<a href="ch-mpdo.html#thm:mpdo_rfp_of_fusion">3.37</a>. Conversely, if the transfer map \(E\) is idempotent, then every positive blocked transfer map equals \(E\) and therefore factors through its range. This range-factorization gives the required fusion-isometry data. </p>
+  <p> The forward implication is Theorem&#160;<a href="ch-mpdo.html#thm:mpdo_rfp_of_fusion">3.41</a>. Conversely, if the transfer map \(E\) is idempotent, then every positive blocked transfer map equals \(E\) and therefore factors through its range. This range-factorization gives the required fusion-isometry data. </p>
 
   </div>
 </div>
@@ -3771,7 +4055,7 @@
     <span class="corollary_thmcaption">
     Corollary
     </span>
-    <span class="corollary_thmlabel">3.39</span>
+    <span class="corollary_thmlabel">3.43</span>
     <span class="corollary_thmtitle">Pure-state recovery</span>
     <div class="thm_header_extras">
 
@@ -3798,7 +4082,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#thm:mpdo_rfp_via_fusion_iff">Theorem 3.38</a></li>
+          <li><a href="ch-mpdo.html#thm:mpdo_rfp_via_fusion_iff">Theorem 3.42</a></li>
           
         </ul>
     
@@ -3841,7 +4125,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>Combine Theorem&#160;<a href="ch-mpdo.html#thm:mpdo_rfp_via_fusion_iff">3.38</a> with the diagonal pure-state recovery theorem for the MPDO renormalization fixed-point condition. </p>
+  <p>Combine Theorem&#160;<a href="ch-mpdo.html#thm:mpdo_rfp_via_fusion_iff">3.42</a> with the diagonal pure-state recovery theorem for the MPDO renormalization fixed-point condition. </p>
 
   </div>
 </div>
@@ -3851,7 +4135,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">3.40</span>
+    <span class="definition_thmlabel">3.44</span>
     <span class="definition_thmtitle">Algebra-structure data for an MPDO</span>
     <div class="thm_header_extras">
 
@@ -3915,7 +4199,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">3.41</span>
+    <span class="definition_thmlabel">3.45</span>
     <span class="definition_thmtitle">Algebra-structure RFP predicate</span>
     <div class="thm_header_extras">
 
@@ -3939,7 +4223,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_algebra_structure_data">Definition 3.40</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_algebra_structure_data">Definition 3.44</a></li>
           
           <li><a href="ch-mpdo.html#def:mpo_tensor">Definition 3.1</a></li>
           
@@ -3984,7 +4268,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">3.42</span>
+    <span class="theorem_thmlabel">3.46</span>
     <span class="theorem_thmtitle">Fusion yields a stationary algebra tower under a faithful fixed point</span>
     <div class="thm_header_extras">
 
@@ -4011,9 +4295,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_rfp_via_algebra">Definition 3.41</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_rfp_via_algebra">Definition 3.45</a></li>
           
-          <li><a href="ch-mpdo.html#def:mpdo_rfp_via_fusion">Definition 3.36</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_rfp_via_fusion">Definition 3.40</a></li>
           
         </ul>
     
@@ -4066,7 +4350,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">3.43</span>
+    <span class="definition_thmlabel">3.47</span>
     <span class="definition_thmtitle">Blocked coefficients for the algebra tower</span>
     <div class="thm_header_extras">
 
@@ -4090,7 +4374,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_algebra_structure_data">Definition 3.40</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_algebra_structure_data">Definition 3.44</a></li>
           
         </ul>
     
@@ -4130,7 +4414,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">3.44</span>
+    <span class="theorem_thmlabel">3.48</span>
     <span class="theorem_thmtitle">Reconstruction from blocked coefficients</span>
     <div class="thm_header_extras">
 
@@ -4157,7 +4441,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_blocked_coefficients">Definition 3.43</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_blocked_coefficients">Definition 3.47</a></li>
           
         </ul>
     
@@ -4209,7 +4493,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">3.45</span>
+    <span class="definition_thmlabel">3.49</span>
     <span class="definition_thmtitle">Blocked multiplication coefficients</span>
     <div class="thm_header_extras">
 
@@ -4233,7 +4517,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_blocked_coefficients">Definition 3.43</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_blocked_coefficients">Definition 3.47</a></li>
           
         </ul>
     
@@ -4273,7 +4557,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">3.46</span>
+    <span class="theorem_thmlabel">3.50</span>
     <span class="theorem_thmtitle">Blocked multiplication reconstructs from its coefficients</span>
     <div class="thm_header_extras">
 
@@ -4300,7 +4584,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_blocked_structure_coefficients">Definition 3.45</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_blocked_structure_coefficients">Definition 3.49</a></li>
           
         </ul>
     
@@ -4343,7 +4627,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>Apply the reconstruction formula of Theorem&#160;<a href="ch-mpdo.html#thm:mpdo_reconstruct_blocked_coefficients">3.44</a> to the element \(m_n(b_i,b_j) \in \mathcal{A}_{2n}\). </p>
+  <p>Apply the reconstruction formula of Theorem&#160;<a href="ch-mpdo.html#thm:mpdo_reconstruct_blocked_coefficients">3.48</a> to the element \(m_n(b_i,b_j) \in \mathcal{A}_{2n}\). </p>
 
   </div>
 </div>
@@ -4352,7 +4636,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">3.47</span>
+    <span class="theorem_thmlabel">3.51</span>
     <span class="theorem_thmtitle">Compatible adjoint fixed points reconstruct from blocked coefficients</span>
     <div class="thm_header_extras">
 
@@ -4379,9 +4663,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_rfp_via_algebra">Definition 3.41</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_rfp_via_algebra">Definition 3.45</a></li>
           
-          <li><a href="ch-mpdo.html#def:mpdo_blocked_coefficients">Definition 3.43</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_blocked_coefficients">Definition 3.47</a></li>
           
         </ul>
     
@@ -4424,7 +4708,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>Compatibility identifies \(\mathcal{A}_n\) with the adjoint fixed-point algebra of \(E_n\), so the fixed point first becomes an element of \(\mathcal{A}_n\) and then Theorem&#160;<a href="ch-mpdo.html#thm:mpdo_reconstruct_blocked_coefficients">3.44</a> reconstructs it. </p>
+  <p>Compatibility identifies \(\mathcal{A}_n\) with the adjoint fixed-point algebra of \(E_n\), so the fixed point first becomes an element of \(\mathcal{A}_n\) and then Theorem&#160;<a href="ch-mpdo.html#thm:mpdo_reconstruct_blocked_coefficients">3.48</a> reconstructs it. </p>
 
   </div>
 </div>
@@ -4434,7 +4718,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">3.48</span>
+    <span class="definition_thmlabel">3.52</span>
     <span class="definition_thmtitle">Commuting-form data for an MPDO</span>
     <div class="thm_header_extras">
 
@@ -4498,7 +4782,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">3.49</span>
+    <span class="definition_thmlabel">3.53</span>
     <span class="definition_thmtitle">Commuting-form property</span>
     <div class="thm_header_extras">
 
@@ -4522,7 +4806,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_commuting_form_data">Definition 3.48</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_commuting_form_data">Definition 3.52</a></li>
           
           <li><a href="ch-mpdo.html#def:mpo_tensor">Definition 3.1</a></li>
           
@@ -4564,7 +4848,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">3.50</span>
+    <span class="definition_thmlabel">3.54</span>
     <span class="definition_thmtitle">GSNNCH</span>
     <div class="thm_header_extras">
 
@@ -4588,7 +4872,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_has_commuting_form">Definition 3.49</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_has_commuting_form">Definition 3.53</a></li>
           
         </ul>
     
@@ -4629,7 +4913,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">3.51</span>
+    <span class="theorem_thmlabel">3.55</span>
     <span class="theorem_thmtitle">GSNNCH iff commuting form</span>
     <div class="thm_header_extras">
 
@@ -4656,9 +4940,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_is_gsnnch">Definition 3.50</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_is_gsnnch">Definition 3.54</a></li>
           
-          <li><a href="ch-mpdo.html#def:mpdo_has_commuting_form">Definition 3.49</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_has_commuting_form">Definition 3.53</a></li>
           
         </ul>
     
@@ -4710,7 +4994,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">3.52</span>
+    <span class="definition_thmlabel">3.56</span>
     <span class="definition_thmtitle">GSNNCH with zero correlation length</span>
     <div class="thm_header_extras">
 
@@ -4734,7 +5018,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_is_gsnnch">Definition 3.50</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_is_gsnnch">Definition 3.54</a></li>
           
           <li><a href="ch-mpdo.html#def:mpo_is_zcl">Definition 3.9</a></li>
           
@@ -4776,7 +5060,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">3.53</span>
+    <span class="theorem_thmlabel">3.57</span>
     <span class="theorem_thmtitle">GSNNCH with zero correlation length iff commuting form with zero correlation length</span>
     <div class="thm_header_extras">
 
@@ -4803,9 +5087,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_is_gsnnch_zcl">Definition 3.52</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_is_gsnnch_zcl">Definition 3.56</a></li>
           
-          <li><a href="ch-mpdo.html#thm:mpdo_is_gsnnch_iff_has_commuting_form">Theorem 3.51</a></li>
+          <li><a href="ch-mpdo.html#thm:mpdo_is_gsnnch_iff_has_commuting_form">Theorem 3.55</a></li>
           
         </ul>
     
@@ -4848,7 +5132,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>Unfold the definition of GSNNCH with zero correlation length and apply Theorem&#160;<a href="ch-mpdo.html#thm:mpdo_is_gsnnch_iff_has_commuting_form">3.51</a>. </p>
+  <p>Unfold the definition of GSNNCH with zero correlation length and apply Theorem&#160;<a href="ch-mpdo.html#thm:mpdo_is_gsnnch_iff_has_commuting_form">3.55</a>. </p>
 
   </div>
 </div>
@@ -4857,7 +5141,7 @@
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">3.54</span>
+    <span class="remark_thmlabel">3.58</span>
     <span class="remark_thmtitle">Remaining step toward Proposition&#160;C.6</span>
     <div class="thm_header_extras">
 
