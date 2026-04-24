@@ -506,4 +506,106 @@ theorem fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_matched_basis
   exact fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_mpvScaling_matched_basis
     P Q perm hCopies hScaling hLI hEqual
 
+/-! ## Witness bundle for the heterogeneous sector comparison
+
+The matched-basis endpoints above consume the matching data as a loose bag of
+hypotheses (permutation, copy alignment, per-block dimension equality, and
+per-block gauge-phase equivalence). The `SectorBasisMatching` structure
+bundles these into a single witness so that any future theorem producing the
+matching from `SameMPV₂` — the remaining step for the unconditional equal-case
+Fundamental Theorem, fed by the general basis-of-normal-tensors construction —
+can be slotted in as a single argument, and so that downstream consumers
+(e.g. the final global Corollary IV.5 construction) depend only on this type.
+-/
+
+/-- Bundled witness data matching two sector decompositions block-by-block.
+
+This packages the four pieces of data consumed by
+`fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_matched_basis`:
+
+* a basis permutation,
+* per-block multiplicity agreement,
+* per-block bond-dimension equality, and
+* per-block gauge-phase equivalence of the (dimension-transported) basis blocks.
+
+Producing a `SectorBasisMatching P Q` from an arbitrary `SameMPV₂ P.toTensor
+Q.toTensor` is the remaining combinatorial step in the Gap §1 closure
+(see the remark in `blueprint/src/chapter/ch11_assembly.tex` and
+arXiv:2011.12127 §IV.B–IV.C). Once that extraction is available, the
+algebraic endpoint runs purely through
+`fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_sectorMatching`. -/
+structure SectorBasisMatching (P Q : SectorDecomposition d) where
+  /-- Permutation matching basis indices of `P` and `Q`. -/
+  perm : Fin P.basisCount ≃ Fin Q.basisCount
+  /-- Matched basis blocks carry the same multiplicity. -/
+  copies_eq : ∀ j : Fin P.basisCount, P.copies j = Q.copies (perm j)
+  /-- Matched basis blocks share the same bond dimension. -/
+  dim_eq : ∀ j : Fin P.basisCount, P.basisDim j = Q.basisDim (perm j)
+  /-- Matched basis blocks are gauge-phase equivalent after dimension transport. -/
+  basis_equiv : ∀ j : Fin P.basisCount,
+    GaugePhaseEquiv (d := d)
+      (cast (congr_arg (MPSTensor d) (dim_eq j)) (P.basis j))
+      (Q.basis (perm j))
+
+namespace SectorBasisMatching
+
+variable {P Q : SectorDecomposition d}
+
+/-- Repackage the per-block data in the existential form consumed by
+`fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_matched_basis`. -/
+lemma basis_match_exists (M : SectorBasisMatching P Q) :
+    ∀ j : Fin P.basisCount,
+      ∃ hdim : P.basisDim j = Q.basisDim (M.perm j),
+        GaugePhaseEquiv (d := d)
+          (cast (congr_arg (MPSTensor d) hdim) (P.basis j))
+          (Q.basis (M.perm j)) :=
+  fun j => ⟨M.dim_eq j, M.basis_equiv j⟩
+
+/-- Build a `SectorBasisMatching` from a bijective index correspondence together with the
+per-block copy / dimension / gauge-phase data.
+
+This is the natural output shape of a general basis-of-normal-tensors matching extractor
+(pending from #876): such an extractor delivers a function `f` on basis indices, a bijectivity
+certificate, and per-index compatibility data. -/
+noncomputable def ofBijective
+    (f : Fin P.basisCount → Fin Q.basisCount)
+    (hf : Function.Bijective f)
+    (hCopies : ∀ j, P.copies j = Q.copies (f j))
+    (hDim : ∀ j, P.basisDim j = Q.basisDim (f j))
+    (hEquiv : ∀ j, GaugePhaseEquiv (d := d)
+      (cast (congr_arg (MPSTensor d) (hDim j)) (P.basis j)) (Q.basis (f j))) :
+    SectorBasisMatching P Q where
+  perm := Equiv.ofBijective f hf
+  copies_eq := fun j => by
+    simpa [Equiv.ofBijective_apply] using hCopies j
+  dim_eq := fun j => by
+    simpa [Equiv.ofBijective_apply] using hDim j
+  basis_equiv := fun j => by
+    simpa [Equiv.ofBijective_apply] using hEquiv j
+
+end SectorBasisMatching
+
+/-- **Heterogeneous sector comparison via a bundled basis matching witness.**
+
+API wrapper that routes a `SectorBasisMatching` directly into the algebraic endpoint
+`fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_matched_basis`. Once a future
+theorem extracts a `SectorBasisMatching P Q` from arbitrary `SameMPV₂ P.toTensor Q.toTensor`
+(the remaining combinatorial step fed by the general basis-of-normal-tensors construction
+in #876), this endpoint closes the Gap §1 heterogeneous sector comparison without taking
+the matching data as loose hypotheses. -/
+theorem fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_sectorMatching
+    {P Q : SectorDecomposition d}
+    (M : SectorBasisMatching P Q)
+    (hLI : ∃ N0 : ℕ, ∀ N > N0,
+      LinearIndependent ℂ (fun j : Fin P.basisCount => mpvState (P.basis j) N))
+    (hEqual : SameMPV₂ P.toTensor Q.toTensor) :
+    ∃ ζ : Fin P.basisCount → ℂ,
+      (∀ j, ζ j ≠ 0) ∧
+      ∀ j : Fin P.basisCount,
+        Finset.univ.val.map (P.weight j) =
+          Finset.univ.val.map
+            (fun q => ζ j * Q.weight (M.perm j) (Fin.cast (M.copies_eq j) q)) :=
+  fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_matched_basis
+    P Q M.perm M.copies_eq M.basis_match_exists hLI hEqual
+
 end MPSTensor

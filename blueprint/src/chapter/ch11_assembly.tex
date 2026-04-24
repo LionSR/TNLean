@@ -474,6 +474,46 @@ single weighted block.
 	Theorem~\ref{thm:route_b_hetero_phase_match}.
 \end{proof}
 
+\begin{definition}[Sector basis matching witness]%
+\label{def:sector_basis_matching}
+	\lean{MPSTensor.SectorBasisMatching}
+	\leanok
+	\uses{def:paper_sector_data, def:gauge_phase_equiv}
+	A \emph{sector basis matching} between two sector decompositions $P$ and $Q$
+	is a bundle of
+	\begin{enumerate}
+		\item a basis permutation $\pi : \{1,\dots,g_P\} \to \{1,\dots,g_Q\}$,
+		\item per-block multiplicity equalities $r_j^P = r_{\pi(j)}^Q$,
+		\item per-block bond-dimension equalities $D_j^P = D_{\pi(j)}^Q$, and
+		\item per-block gauge-phase equivalences $P_j \simeq_{\mathrm{gp}} Q_{\pi(j)}$
+		      after transporting $P_j$ across the bond-dimension equality.
+	\end{enumerate}
+	The hypotheses consumed by
+	Theorem~\ref{thm:route_b_hetero_matched_basis} are exactly the fields of
+	this bundle.
+\end{definition}
+
+\begin{theorem}[Heterogeneous sector comparison via a bundled matching witness]%
+\label{thm:route_b_hetero_sector_matching}
+	\lean{MPSTensor.fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_sectorMatching}
+	\leanok
+	\uses{def:sector_basis_matching, thm:route_b_hetero_matched_basis}
+	Given two sector decompositions $P$ and $Q$, a sector basis matching
+	(Definition~\ref{def:sector_basis_matching}) between them, eventual
+	linear independence of the basis MPV states of $P$, and equality of the
+	total MPV families of $P$ and $Q$, one obtains nonzero phases $(\zeta_j)_j$
+	such that for each $j$ the sector weight multiset of $P_j$ equals the
+	multiset obtained from that of $Q_{\pi(j)}$ by multiplication by~$\zeta_j$.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{thm:route_b_hetero_matched_basis}
+	The bundled matching witness repackages exactly the permutation, copy, and
+	gauge-phase hypotheses of Theorem~\ref{thm:route_b_hetero_matched_basis},
+	so the conclusion follows directly from that theorem.
+\end{proof}
+
 \begin{theorem}[Cast-compatible MPV scaling implies phase-matched sector comparison]%
 \label{thm:route_b_hetero_mpv_scaling}
 	\lean{MPSTensor.fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_mpvScaling_matched_basis}
@@ -529,11 +569,12 @@ single weighted block.
 		      to a single basis tensor; and
 		\item a witness-producing matched-basis theorem for heterogeneous
 		      sector decompositions: the algebraic reduction after a basis
-		      matching is now formalized in
-		      Theorems~\ref{thm:route_b_hetero_phase_match}
-		      and~\ref{thm:route_b_hetero_matched_basis}, but one still needs
-		      a theorem that derives the permutation, multiplicity matching,
-		      and gauge-phase data directly from equality of the total MPV
+		      matching is formalized in
+		      Theorems~\ref{thm:route_b_hetero_phase_match},~\ref{thm:route_b_hetero_matched_basis},
+		      and~\ref{thm:route_b_hetero_sector_matching} (the bundled-witness
+		      API endpoint consuming Definition~\ref{def:sector_basis_matching}),
+		      but one still needs a theorem that constructs a sector basis
+		      matching witness directly from equality of the total MPV
 		      families.
 	\end{enumerate}
 	Once these two ingredients are in place, the final global gauge matrix

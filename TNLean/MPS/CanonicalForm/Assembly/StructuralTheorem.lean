@@ -75,8 +75,13 @@ Gap §1 content is now more specific:
   sector decompositions from arbitrary `SameMPV₂`.
 
 The downstream algebraic reduction after a matched basis is now formalized by
-`fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_matched_basis`, but
-the full witness-producing sector endpoint is still missing.
+`fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_matched_basis`, and
+the matching data itself is packaged by the `SectorBasisMatching` witness type
+consumed by
+`fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_sectorMatching`. The
+remaining step is to construct such a `SectorBasisMatching` from arbitrary
+`SameMPV₂` sector decompositions (fed by the general BNT sector construction
+tracked separately).
 -/
 
 section FundamentalTheorem1606
@@ -259,14 +264,18 @@ endpoint. The remaining formalizations are now:
    represent one MPV family.
 
 2. **Witness-producing heterogeneous sector comparison**: the algebraic
-   reduction from a matched basis to per-sector weight multiset equality is now
+   reduction from a matched basis to per-sector weight multiset equality is
    formalized by
    `fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_matched_basis`
    (with phase-match core
-   `fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_phaseMatch`).
-   What is still missing is the theorem that derives the needed basis
-   permutation, gauge-phase data, and copy alignment from arbitrary equal total
-   MPVs of two sector decompositions.
+   `fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_phaseMatch`), and
+   the matching data is bundled by the `SectorBasisMatching` witness type
+   exposed through
+   `fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_sectorMatching`.
+   What is still missing is the theorem that constructs such a
+   `SectorBasisMatching` — deriving the basis permutation, gauge-phase data,
+   and copy alignment — from arbitrary equal total MPVs of two sector
+   decompositions.
 
 3. **Final global construction**: once steps 1–2 are available, combine them with the
    already-formalized common-period blocking, blocked irreducibility,
