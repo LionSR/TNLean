@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.Periodic.Defs
 import TNLean.MPS.FundamentalTheorem.Full
+import TNLean.MPS.BNT.PermutationRigidity
 import TNLean.MPS.Periodic.Overlap
 import TNLean.MPS.Periodic.ZGauge
 
@@ -105,7 +106,7 @@ abbrev PeriodicBlockMatchingWitness
 
 /-! ## Periodic overlap dichotomy hypothesis -/
 
-/-- Hypothesis packaging the periodic overlap dichotomy (Proposition 3.3 of 1708.00029).
+/-- Hypothesis recording the periodic overlap dichotomy (Proposition 3.3 of 1708.00029).
 
 The `hetRepeatedBlocks_of_nondecaying` field can be filled via `periodicOverlapDichotomy`
 (see `PeriodicOverlapHypothesis.ofIsPeriodic`), though that dichotomy's proof in
@@ -243,7 +244,7 @@ The proof mirrors `blocks_match_of_sameMPV₂_CFBNT` in `Full.lean`:
 3. Injective maps on finite types → equal cardinalities.
 4. Bijection construction.
 
-The single-block exact-MPV reduction is packaged separately as
+The single-block exact-MPV reduction is stated separately as
 `peripheralProportionalCase_periodicFT_of_sameMPV`: once the proportionality
 scalar has been absorbed, the overlap dichotomy already gives the heterogeneous
 repeated-block conclusion. Thus the remaining paper-level gap is the multi-block
@@ -353,75 +354,6 @@ theorem fundamentalTheorem_periodic_proportional_of_isPeriodic
   fundamentalTheorem_periodic_proportional A B hNonRepA hNonRepB
     (PeriodicOverlapHypothesis.ofIsPeriodic A B periodA periodB hPerA hPerB hExA hExB)
 
-private lemma overlap_eq_sum_of_decomp_left
-    {Dtot : ℕ} {g : ℕ} {dim : Fin g → ℕ}
-    (A_total : MPSTensor d Dtot)
-    (A : (j : Fin g) → MPSTensor d (dim j))
-    {N : ℕ} (c : Fin g → ℂ)
-    (hdecomp : ∀ σ : Fin N → Fin d,
-      mpv A_total σ = ∑ j : Fin g, c j * mpv (A j) σ)
-    {D' : ℕ} (B : MPSTensor d D') :
-    mpvOverlap (d := d) A_total B N =
-      ∑ j : Fin g, c j * mpvOverlap (d := d) (A j) B N := by
-  classical
-  calc
-    mpvOverlap (d := d) A_total B N =
-        ∑ σ : Cfg d N, (∑ j : Fin g, c j * mpv (A j) σ) * star (mpv B σ) := by
-          simp only [mpvOverlap]
-          congr 1
-          ext σ
-          rw [hdecomp σ]
-    _ = ∑ σ : Cfg d N,
-          ∑ j : Fin g, c j * (mpv (A j) σ * star (mpv B σ)) := by
-          congr 1
-          ext σ
-          rw [Finset.sum_mul]
-          congr 1
-          ext j
-          ring
-    _ = ∑ j : Fin g,
-          ∑ σ : Cfg d N, c j * (mpv (A j) σ * star (mpv B σ)) := by
-          simpa only [mpv_eq, coeff_eq, RCLike.star_def] using
-            (Finset.sum_comm (s := (Finset.univ : Finset (Cfg d N)))
-              (t := (Finset.univ : Finset (Fin g)))
-              (f := fun σ j => c j * (mpv (A j) σ * star (mpv B σ))))
-    _ = ∑ j : Fin g, c j * ∑ σ : Cfg d N, mpv (A j) σ * star (mpv B σ) := by
-          refine Finset.sum_congr rfl ?_
-          intro j _
-          simpa only [mpv_eq, coeff_eq, RCLike.star_def] using
-            (Finset.mul_sum (s := (Finset.univ : Finset (Cfg d N)))
-              (f := fun σ : Cfg d N => mpv (A j) σ * star (mpv B σ))
-              (a := c j)).symm
-    _ = ∑ j : Fin g, c j * mpvOverlap (d := d) (A j) B N := by
-          simp [mpvOverlap]
-
-private lemma mpvOverlap_eq_mul_of_mpv_eq_mul
-    {D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂)
-    {N : ℕ} (c : ℂ) (h : ∀ σ : Fin N → Fin d, mpv A σ = c * mpv B σ)
-    {D' : ℕ} (C : MPSTensor d D') :
-    mpvOverlap (d := d) A C N = c * mpvOverlap (d := d) B C N := by
-  classical
-  simp only [mpvOverlap]
-  rw [Finset.mul_sum]
-  congr 1
-  ext σ
-  rw [h σ]
-  ring
-
-private lemma mpvOverlap_star_swap {D₁ D₂ : ℕ}
-    (A : MPSTensor d D₁) (B : MPSTensor d D₂) (N : ℕ) :
-    star (mpvOverlap (d := d) A B N) = mpvOverlap (d := d) B A N := by
-  classical
-  simp [mpvOverlap, star_sum, star_mul]
-
-private lemma nat_mul_tendsto_atTop (m : ℕ) (hm : 0 < m) :
-    Filter.Tendsto (fun k : ℕ => m * k) Filter.atTop Filter.atTop := by
-  rw [Filter.tendsto_atTop]
-  intro n
-  exact Filter.eventually_atTop.2 ⟨n, fun k hk => by
-    have hm' : 1 ≤ m := Nat.succ_le_of_lt hm
-    exact le_trans hk <| by simpa using Nat.mul_le_mul_right k hm'⟩
-
 private lemma periodicOverlap_tendsto_zero_of_not_hetRepeatedBlocks
     {D₁ D₂ : ℕ} [NeZero D₁] [NeZero D₂]
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
@@ -431,6 +363,102 @@ private lemma periodicOverlap_tendsto_zero_of_not_hetRepeatedBlocks
   rcases periodicOverlapDichotomy A B hA hB with hDecay | hRep
   · exact hDecay
   · exact False.elim (hNotRep hRep)
+
+private lemma tendsto_zero_subseq_of_decomp_cross
+    {r : ℕ} {dim : Fin r → ℕ}
+    {Dtot Db : ℕ}
+    (A_total : MPSTensor d Dtot)
+    (A : (j : Fin r) → MPSTensor d (dim j))
+    (coeff : ℕ → Fin r → ℂ)
+    (lim : Fin r → ℂ)
+    {m : ℕ}
+    (hdecomp : ∀ N (σ : Fin N → Fin d),
+      mpv A_total σ = ∑ j : Fin r, coeff N j * mpv (A j) σ)
+    (hcoeff : ∀ j,
+      Filter.Tendsto (fun n => coeff (m * n) j) Filter.atTop (nhds (lim j)))
+    (B : MPSTensor d Db)
+    (hcross : ∀ j,
+      Filter.Tendsto (fun n => mpvOverlap (d := d) (A j) B (m * n))
+        Filter.atTop (nhds 0)) :
+    Filter.Tendsto (fun n => mpvOverlap (d := d) A_total B (m * n))
+      Filter.atTop (nhds 0) := by
+  have hEq : ∀ n,
+      mpvOverlap (d := d) A_total B (m * n) =
+        ∑ j : Fin r, coeff (m * n) j * mpvOverlap (d := d) (A j) B (m * n) := by
+    intro n
+    simpa only using
+      (mpvOverlap_eq_sum_of_decomp_left (A_total := A_total) (A := A)
+        (c := coeff (m * n)) (hdecomp := hdecomp (m * n)) (B := B))
+  have hTerm : ∀ j : Fin r,
+      Filter.Tendsto (fun n =>
+        coeff (m * n) j * mpvOverlap (d := d) (A j) B (m * n))
+        Filter.atTop (nhds 0) := by
+    intro j
+    have := (hcoeff j).mul (hcross j)
+    simpa only [mul_zero] using this
+  have hSum : Filter.Tendsto (fun n => ∑ j : Fin r,
+      coeff (m * n) j * mpvOverlap (d := d) (A j) B (m * n))
+        Filter.atTop (nhds 0) := by
+    simpa only [Finset.sum_const_zero] using
+      (tendsto_finset_sum Finset.univ (fun j _ => hTerm j))
+  simpa only [hEq] using hSum
+
+private lemma tendsto_focus_subseq_of_decomp
+    {r : ℕ} {dim : Fin r → ℕ}
+    {Dtot : ℕ}
+    (A_total : MPSTensor d Dtot)
+    (A : (j : Fin r) → MPSTensor d (dim j))
+    (coeff : ℕ → Fin r → ℂ)
+    (lim : Fin r → ℂ)
+    {m : ℕ} (j : Fin r)
+    (hdecomp : ∀ N (σ : Fin N → Fin d),
+      mpv A_total σ = ∑ i : Fin r, coeff N i * mpv (A i) σ)
+    (hcoeff : ∀ i,
+      Filter.Tendsto (fun n => coeff (m * n) i) Filter.atTop (nhds (lim i)))
+    (hSelf : Filter.Tendsto (fun n => mpvOverlap (d := d) (A j) (A j) (m * n))
+      Filter.atTop (nhds (m : ℂ)))
+    (hOff : ∀ i : Fin r, i ≠ j →
+      Filter.Tendsto (fun n => mpvOverlap (d := d) (A i) (A j) (m * n))
+        Filter.atTop (nhds 0)) :
+    Filter.Tendsto (fun n => mpvOverlap (d := d) A_total (A j) (m * n))
+      Filter.atTop (nhds (lim j * (m : ℂ))) := by
+  have hEq : ∀ n,
+      mpvOverlap (d := d) A_total (A j) (m * n) =
+        ∑ i : Fin r, coeff (m * n) i * mpvOverlap (d := d) (A i) (A j) (m * n) := by
+    intro n
+    simpa only using
+      (mpvOverlap_eq_sum_of_decomp_left (A_total := A_total) (A := A)
+        (c := coeff (m * n)) (hdecomp := hdecomp (m * n)) (B := A j))
+  have hTerm : ∀ i : Fin r,
+      Filter.Tendsto (fun n =>
+        coeff (m * n) i * mpvOverlap (d := d) (A i) (A j) (m * n))
+        Filter.atTop (nhds (if i = j then lim j * (m : ℂ) else 0)) := by
+    intro i
+    by_cases hij : i = j
+    · cases hij
+      have := (hcoeff j).mul hSelf
+      simpa only [↓reduceIte] using this
+    · have := (hcoeff i).mul (hOff i hij)
+      simpa only [hij, ↓reduceIte, mul_zero] using this
+  have hSum := tendsto_finset_sum Finset.univ (fun i _ => hTerm i)
+  have hRhs : (∑ i : Fin r, if i = j then lim j * (m : ℂ) else 0) =
+      lim j * (m : ℂ) := by
+    simp
+  simpa only [hEq, hRhs] using hSum
+
+private lemma tendsto_zero_subseq_swap_of_tendsto_zero
+    {D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂) {m : ℕ}
+    (h : Filter.Tendsto (fun n => mpvOverlap (d := d) A B (m * n))
+      Filter.atTop (nhds 0)) :
+    Filter.Tendsto (fun n => mpvOverlap (d := d) B A (m * n))
+      Filter.atTop (nhds 0) := by
+  have hstar : Filter.Tendsto (fun n => star (mpvOverlap (d := d) A B (m * n)))
+      Filter.atTop (nhds (0 : ℂ)) := by
+    simpa only [RCLike.star_def, star_zero] using h.star
+  refine hstar.congr ?_
+  intro n
+  unfold mpvOverlap
+  simp [star_sum, star_mul]
 
 private theorem exists_nondecaying_overlap_ofProportionalDecomp_right
     {DtotA DtotB : ℕ}
@@ -473,7 +501,7 @@ private theorem exists_nondecaying_overlap_ofProportionalDecomp_right
   let m := periodB k
   have hm_pos : 0 < m := (hPerB k).period_pos
   have hMulAtTop : Filter.Tendsto (fun n : ℕ => m * n) Filter.atTop Filter.atTop :=
-    nat_mul_tendsto_atTop m hm_pos
+    Filter.tendsto_id.const_mul_atTop' hm_pos
   have haCoeff_mul : ∀ j, Filter.Tendsto (fun n => aCoeff (m * n) j) Filter.atTop
       (nhds (aLim j)) := fun j => (haCoeff j).comp hMulAtTop
   have hbCoeff_mul : ∀ k', Filter.Tendsto (fun n => bCoeff (m * n) k') Filter.atTop
@@ -483,66 +511,32 @@ private theorem exists_nondecaying_overlap_ofProportionalDecomp_right
   have hall_mul : ∀ j, Filter.Tendsto (fun n => mpvOverlap (d := d) (A j) (B k) (m * n))
       Filter.atTop (nhds 0) := fun j => (hall j).comp hMulAtTop
   have hA0 : Filter.Tendsto (fun n => mpvOverlap (d := d) A_total (B k) (m * n))
-      Filter.atTop (nhds 0) := by
-    have hEq : ∀ n,
-        mpvOverlap (d := d) A_total (B k) (m * n) =
-          ∑ j : Fin rA, aCoeff (m * n) j * mpvOverlap (d := d) (A j) (B k) (m * n) := by
-      intro n
-      simpa only using
-        (overlap_eq_sum_of_decomp_left (A_total := A_total) (A := A)
-          (c := aCoeff (m * n)) (hdecomp := hA_decomp (m * n)) (B := B k))
-    have hTerm : ∀ j : Fin rA,
-        Filter.Tendsto (fun n => aCoeff (m * n) j * mpvOverlap (d := d) (A j) (B k) (m * n))
-          Filter.atTop (nhds 0) := by
-      intro j
-      have := (haCoeff_mul j).mul (hall_mul j)
-      simpa only [mul_zero] using this
-    have hSum : Filter.Tendsto (fun n => ∑ j : Fin rA,
-        aCoeff (m * n) j * mpvOverlap (d := d) (A j) (B k) (m * n))
-          Filter.atTop (nhds 0) := by
-      simpa only [Finset.sum_const_zero] using
-        (tendsto_finset_sum Finset.univ (fun j _ => hTerm j))
-    simpa only [hEq] using hSum
+      Filter.atTop (nhds 0) :=
+    tendsto_zero_subseq_of_decomp_cross (A_total := A_total) (A := A)
+      (coeff := aCoeff) (lim := aLim) (m := m) hA_decomp haCoeff_mul (B k) hall_mul
   have hEqProp : ∀ n,
       mpvOverlap (d := d) A_total (B k) (m * n) =
         c (m * n) * mpvOverlap (d := d) B_total (B k) (m * n) := by
     intro n
-    exact mpvOverlap_eq_mul_of_mpv_eq_mul (A := A_total) (B := B_total)
-      (c := c (m * n)) (h := hProp (m * n)) (C := B k)
+    unfold mpvOverlap
+    rw [Finset.mul_sum]
+    refine Finset.sum_congr rfl ?_
+    intro σ _
+    rw [hProp (m * n) σ]
+    ring
+  have hSelf : Filter.Tendsto (fun n => mpvOverlap (d := d) (B k) (B k) (m * n))
+      Filter.atTop (nhds (m : ℂ)) := by
+    simpa [m] using periodicSelfOverlap_tendsto (A := B k) (hP := hPerB k)
+  have hOff : ∀ k' : Fin rB, k' ≠ k →
+      Filter.Tendsto (fun n => mpvOverlap (d := d) (B k') (B k) (m * n))
+        Filter.atTop (nhds 0) := by
+    intro k' hk'
+    exact (periodicOverlap_tendsto_zero_of_not_hetRepeatedBlocks (B k') (B k)
+      (hPerB k') (hPerB k) (hNonRepB k' k hk')).comp hMulAtTop
   have hB_overlap_lim : Filter.Tendsto (fun n => mpvOverlap (d := d) B_total (B k) (m * n))
-      Filter.atTop (nhds (bLim k * (m : ℂ))) := by
-    have hSelf : Filter.Tendsto (fun n => mpvOverlap (d := d) (B k) (B k) (m * n))
-        Filter.atTop (nhds (m : ℂ)) := by
-      simpa [m] using periodicSelfOverlap_tendsto (A := B k) (hP := hPerB k)
-    have hOff : ∀ k' : Fin rB, k' ≠ k →
-        Filter.Tendsto (fun n => mpvOverlap (d := d) (B k') (B k) (m * n))
-          Filter.atTop (nhds 0) := by
-      intro k' hk'
-      exact (periodicOverlap_tendsto_zero_of_not_hetRepeatedBlocks (B k') (B k)
-        (hPerB k') (hPerB k) (hNonRepB k' k hk')).comp hMulAtTop
-    have hEq : ∀ n,
-        mpvOverlap (d := d) B_total (B k) (m * n) =
-          ∑ k' : Fin rB, bCoeff (m * n) k' * mpvOverlap (d := d) (B k') (B k) (m * n) := by
-      intro n
-      simpa only using
-        (overlap_eq_sum_of_decomp_left (A_total := B_total) (A := B)
-          (c := bCoeff (m * n)) (hdecomp := hB_decomp (m * n)) (B := B k))
-    have hTerm : ∀ k' : Fin rB,
-        Filter.Tendsto (fun n =>
-          bCoeff (m * n) k' * mpvOverlap (d := d) (B k') (B k) (m * n)) Filter.atTop
-          (nhds (if k' = k then bLim k * (m : ℂ) else 0)) := by
-      intro k'
-      by_cases hk' : k' = k
-      · cases hk'
-        have := (hbCoeff_mul k).mul hSelf
-        simpa only [↓reduceIte] using this
-      · have := (hbCoeff_mul k').mul (hOff k' hk')
-        simpa only [hk', ↓reduceIte, mul_zero] using this
-    have hSum := tendsto_finset_sum Finset.univ (fun k' _ => hTerm k')
-    have hRhs : (∑ k' : Fin rB, if k' = k then bLim k * (m : ℂ) else 0) =
-        bLim k * (m : ℂ) := by
-      simp
-    simpa only [hEq, hRhs] using hSum
+      Filter.atTop (nhds (bLim k * (m : ℂ))) :=
+    tendsto_focus_subseq_of_decomp (A_total := B_total) (A := B)
+      (coeff := bCoeff) (lim := bLim) (m := m) k hB_decomp hbCoeff_mul hSelf hOff
   have hAB_overlap_lim : Filter.Tendsto (fun n => mpvOverlap (d := d) A_total (B k) (m * n))
       Filter.atTop (nhds (cLim * (bLim k * (m : ℂ)))) := by
     have := hc_mul.mul hB_overlap_lim
@@ -596,7 +590,7 @@ private theorem exists_nondecaying_overlap_ofProportionalDecomp_left
   let m := periodA j
   have hm_pos : 0 < m := (hPerA j).period_pos
   have hMulAtTop : Filter.Tendsto (fun n : ℕ => m * n) Filter.atTop Filter.atTop :=
-    nat_mul_tendsto_atTop m hm_pos
+    Filter.tendsto_id.const_mul_atTop' hm_pos
   have haCoeff_mul : ∀ j', Filter.Tendsto (fun n => aCoeff (m * n) j') Filter.atTop
       (nhds (aLim j')) := fun j' => (haCoeff j').comp hMulAtTop
   have hbCoeff_mul : ∀ k, Filter.Tendsto (fun n => bCoeff (m * n) k) Filter.atTop
@@ -609,40 +603,22 @@ private theorem exists_nondecaying_overlap_ofProportionalDecomp_left
       Filter.Tendsto (fun n => mpvOverlap (d := d) (B k) (A j) (m * n))
         Filter.atTop (nhds 0) := by
     intro k
-    have hstar : Filter.Tendsto (fun n => star (mpvOverlap (d := d) (A j) (B k) (m * n)))
-        Filter.atTop (nhds (0 : ℂ)) := by
-      simpa only [RCLike.star_def, star_zero] using (hall_mul k).star
-    refine hstar.congr ?_
-    intro n
-    simpa only [RCLike.star_def] using
-      (mpvOverlap_star_swap (A := A j) (B := B k) (N := m * n))
+    exact tendsto_zero_subseq_swap_of_tendsto_zero (A := A j) (B := B k)
+      (m := m) (hall_mul k)
   have hB0 : Filter.Tendsto (fun n => mpvOverlap (d := d) B_total (A j) (m * n))
-      Filter.atTop (nhds 0) := by
-    have hEq : ∀ n,
-        mpvOverlap (d := d) B_total (A j) (m * n) =
-          ∑ k : Fin rB, bCoeff (m * n) k * mpvOverlap (d := d) (B k) (A j) (m * n) := by
-      intro n
-      simpa only using
-        (overlap_eq_sum_of_decomp_left (A_total := B_total) (A := B)
-          (c := bCoeff (m * n)) (hdecomp := hB_decomp (m * n)) (B := A j))
-    have hTerm : ∀ k : Fin rB,
-        Filter.Tendsto (fun n => bCoeff (m * n) k * mpvOverlap (d := d) (B k) (A j) (m * n))
-          Filter.atTop (nhds 0) := by
-      intro k
-      have := (hbCoeff_mul k).mul (hall_swap_mul k)
-      simpa only [mul_zero] using this
-    have hSum : Filter.Tendsto (fun n => ∑ k : Fin rB,
-        bCoeff (m * n) k * mpvOverlap (d := d) (B k) (A j) (m * n))
-          Filter.atTop (nhds 0) := by
-      simpa only [Finset.sum_const_zero] using
-        (tendsto_finset_sum Finset.univ (fun k _ => hTerm k))
-    simpa only [hEq] using hSum
+      Filter.atTop (nhds 0) :=
+    tendsto_zero_subseq_of_decomp_cross (A_total := B_total) (A := B)
+      (coeff := bCoeff) (lim := bLim) (m := m) hB_decomp hbCoeff_mul (A j) hall_swap_mul
   have hEqProp : ∀ n,
       mpvOverlap (d := d) A_total (A j) (m * n) =
         c (m * n) * mpvOverlap (d := d) B_total (A j) (m * n) := by
     intro n
-    exact mpvOverlap_eq_mul_of_mpv_eq_mul (A := A_total) (B := B_total)
-      (c := c (m * n)) (h := hProp (m * n)) (C := A j)
+    unfold mpvOverlap
+    rw [Finset.mul_sum]
+    refine Finset.sum_congr rfl ?_
+    intro σ _
+    rw [hProp (m * n) σ]
+    ring
   have hA0 : Filter.Tendsto (fun n => mpvOverlap (d := d) A_total (A j) (m * n))
       Filter.atTop (nhds 0) := by
     have hmul : Filter.Tendsto (fun n => c (m * n) * mpvOverlap (d := d) B_total (A j) (m * n))
@@ -651,40 +627,19 @@ private theorem exists_nondecaying_overlap_ofProportionalDecomp_left
     refine hmul.congr ?_
     intro n
     simp [hEqProp n]
+  have hSelf : Filter.Tendsto (fun n => mpvOverlap (d := d) (A j) (A j) (m * n))
+      Filter.atTop (nhds (m : ℂ)) := by
+    simpa [m] using periodicSelfOverlap_tendsto (A := A j) (hP := hPerA j)
+  have hOff : ∀ j' : Fin rA, j' ≠ j →
+      Filter.Tendsto (fun n => mpvOverlap (d := d) (A j') (A j) (m * n))
+        Filter.atTop (nhds 0) := by
+    intro j' hj'
+    exact (periodicOverlap_tendsto_zero_of_not_hetRepeatedBlocks (A j') (A j)
+      (hPerA j') (hPerA j) (hNonRepA j' j hj')).comp hMulAtTop
   have hA_overlap_lim : Filter.Tendsto (fun n => mpvOverlap (d := d) A_total (A j) (m * n))
-      Filter.atTop (nhds (aLim j * (m : ℂ))) := by
-    have hSelf : Filter.Tendsto (fun n => mpvOverlap (d := d) (A j) (A j) (m * n))
-        Filter.atTop (nhds (m : ℂ)) := by
-      simpa [m] using periodicSelfOverlap_tendsto (A := A j) (hP := hPerA j)
-    have hOff : ∀ j' : Fin rA, j' ≠ j →
-        Filter.Tendsto (fun n => mpvOverlap (d := d) (A j') (A j) (m * n))
-          Filter.atTop (nhds 0) := by
-      intro j' hj'
-      exact (periodicOverlap_tendsto_zero_of_not_hetRepeatedBlocks (A j') (A j)
-        (hPerA j') (hPerA j) (hNonRepA j' j hj')).comp hMulAtTop
-    have hEq : ∀ n,
-        mpvOverlap (d := d) A_total (A j) (m * n) =
-          ∑ j' : Fin rA, aCoeff (m * n) j' * mpvOverlap (d := d) (A j') (A j) (m * n) := by
-      intro n
-      simpa only using
-        (overlap_eq_sum_of_decomp_left (A_total := A_total) (A := A)
-          (c := aCoeff (m * n)) (hdecomp := hA_decomp (m * n)) (B := A j))
-    have hTerm : ∀ j' : Fin rA,
-        Filter.Tendsto (fun n =>
-          aCoeff (m * n) j' * mpvOverlap (d := d) (A j') (A j) (m * n)) Filter.atTop
-          (nhds (if j' = j then aLim j * (m : ℂ) else 0)) := by
-      intro j'
-      by_cases hj' : j' = j
-      · cases hj'
-        have := (haCoeff_mul j).mul hSelf
-        simpa only [↓reduceIte] using this
-      · have := (haCoeff_mul j').mul (hOff j' hj')
-        simpa only [hj', ↓reduceIte, mul_zero] using this
-    have hSum := tendsto_finset_sum Finset.univ (fun j' _ => hTerm j')
-    have hRhs : (∑ j' : Fin rA, if j' = j then aLim j * (m : ℂ) else 0) =
-        aLim j * (m : ℂ) := by
-      simp
-    simpa only [hEq, hRhs] using hSum
+      Filter.atTop (nhds (aLim j * (m : ℂ))) :=
+    tendsto_focus_subseq_of_decomp (A_total := A_total) (A := A)
+      (coeff := aCoeff) (lim := aLim) (m := m) j hA_decomp haCoeff_mul hSelf hOff
   have hm_ne : (m : ℂ) ≠ 0 := by
     exact_mod_cast Nat.ne_of_gt hm_pos
   have hA_lim_ne : aLim j * (m : ℂ) ≠ 0 := by
@@ -693,7 +648,7 @@ private theorem exists_nondecaying_overlap_ofProportionalDecomp_left
 
 /-- **Build `PeriodicOverlapHypothesis` from proportional split-data.**
 
-This packages the missing multi-block step for the proportional periodic FT.
+This provides the missing multi-block step for the proportional periodic FT.
 Given periodic block families together with explicit decompositions of two total
 MPV families into those blocks, coefficient arrays converging to nonzero limits,
 and proportionality of the total MPVs, the non-decaying cross-overlap witnesses
