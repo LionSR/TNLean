@@ -891,6 +891,46 @@ for the irreducible-form framework in \cite{DeLasCuevas2017Irreducible}.
     between $C$ and $A^{[p]}$.
 \end{definition}
 
+\begin{theorem}[Irreducible form transports along same MPV families]
+    \label{thm:irreducible_form_of_same_mpv}
+    \lean{MPSTensor.isIrreducibleForm_of_sameMPV₂}
+    \leanok
+    \uses{def:irreducible_form, def:same_mpv}
+    If $A$ is in irreducible form~II and $B$ generates the same MPV family as
+    $A$, then $B$ is in irreducible form~II with the same block structure
+    (same $r$, $\dim$, blocks, weights, and periods) as $A$.
+\end{theorem}
+
+\begin{proof}\leanok
+    The block data $(r, \dim, \text{blocks}, \mu, \text{period})$ of an
+    irreducible form~II decomposition depends only on the underlying periodic
+    blocks and weights, which are shared. The reassembly condition
+    $V_N(B) = V_N\!\left(\bigoplus_k \mu_k A_k\right)$ follows by transitivity
+    from the MPV identity between $A$ and $B$ and from the reassembly identity
+    for $A$.
+\end{proof}
+
+\begin{theorem}[Blocked Z-gauge extraction from the periodic equal-case FT]
+    \label{thm:peripheral_equalcase_zgauge_from_periodic_equalcase_ft}
+    \lean{MPSTensor.peripheralEqualCaseZGaugeOfSameMPV_of_periodicEqualCaseFT}
+    \leanok
+    \uses{def:peripheral_equalcase_zgauge_sameMPV,
+          thm:irreducible_form_of_same_mpv,
+          thm:periodic_ft}
+    Fix $(d,D,p)$. If the periodic equal-case Fundamental Theorem of MPS holds
+    at the blocked dimensions $(\text{blockPhysDim}\,d\,p, D)$, then the
+    blocked equal-case $Z$-gauge extraction hypothesis holds for $(d,D,p)$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Given a blocked tensor $C$ in irreducible form~II and a blocked root
+    $A^{[p]}$ sharing an MPV family with $C$, Theorem~\ref{thm:irreducible_form_of_same_mpv}
+    transports the irreducible-form decomposition of $C$ to $A^{[p]}$. The
+    periodic equal-case Fundamental Theorem of MPS at the blocked dimensions
+    then yields the required $\mathbb Z_m$-gauge equivalence between $C$ and
+    $A^{[p]}$.
+\end{proof}
+
 \begin{definition}[Blocked-to-root reconstruction hypothesis from Z-gauge]
     \label{def:peripheral_equalcase_root_from_zgauge}
     \lean{MPSTensor.PeripheralEqualCaseRootFromZGauge}

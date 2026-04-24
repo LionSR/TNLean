@@ -291,6 +291,37 @@ noncomputable def isIrreducibleForm_rotatePhysical (A : MPSTensor d D)
     have h2 := rotatePhysical_toTensorFromBlocks u hA.μ hA.blocks
     intro N σ; rw [h1 N σ, ← h2]
 
+/-- `IsIrreducibleForm` transports along heterogeneous `SameMPV₂`.
+
+If `A : MPSTensor d D₁` is in irreducible form II and `B : MPSTensor d D₂`
+generates the same MPV family, then `B` inherits the same block structure
+`(r, dim, blocks, μ, period)` as `A`; only the ambient bond dimension `D`
+differs. The required `SameMPV₂ B (toTensorFromBlocks ...)` witness is obtained
+by transitivity from `hSame` and `hA.sameMPV`.
+
+Concretely, the reassembled block tensor is determined up to MPV equality:
+no property of `A` beyond irreducibility of each block and positivity of each
+weight is needed, so `B`'s outer bond dimension is irrelevant to the
+decomposition. -/
+noncomputable def isIrreducibleForm_of_sameMPV₂ {D₁ D₂ : ℕ}
+    {A : MPSTensor d D₁} {B : MPSTensor d D₂}
+    (hA : IsIrreducibleForm A) (hSame : SameMPV₂ A B) :
+    IsIrreducibleForm B where
+  r := hA.r
+  dim := hA.dim
+  blocks := hA.blocks
+  μ := hA.μ
+  period := hA.period
+  periodic := hA.periodic
+  weight_pos := hA.weight_pos
+  sameMPV := fun N σ => (hSame N σ).symm.trans (hA.sameMPV N σ)
+
+/-- Homogeneous `SameMPV` version of `isIrreducibleForm_of_sameMPV₂`. -/
+noncomputable def isIrreducibleForm_of_sameMPV {A B : MPSTensor d D}
+    (hA : IsIrreducibleForm A) (hSame : SameMPV A B) :
+    IsIrreducibleForm B :=
+  isIrreducibleForm_of_sameMPV₂ hA hSame
+
 end
 
 end MPSTensor
