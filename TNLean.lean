@@ -51,6 +51,7 @@ import TNLean.Channel.PartialTrace
 import TNLean.Channel.MaximallyEntangled
 import TNLean.Channel.TensorMap
 import TNLean.Channel.ChoiJamiolkowski
+import TNLean.Channel.KrausRank
 import TNLean.Channel.KrausRepresentation
 import TNLean.Channel.KrausUnitaryFreedom
 import TNLean.Channel.Stinespring
@@ -71,6 +72,7 @@ import TNLean.Axioms.Entropy
 -- re-state the sanctioned entropy axioms under the Entropy namespace.
 import TNLean.Entropy.VonNeumann
 import TNLean.Entropy.StrongSubadditivity
+import TNLean.Entropy.TripartiteTrace
 import TNLean.Entropy.MarkovChain
 import TNLean.Entropy.MutualInformation
 -- Layer 2b: Axiomatized operator convexity/concavity results (pending upstream Mathlib)
@@ -338,4 +340,7 @@ import TNLean.Channel.Determinant
 
 -- PEPS (exploratory)
 import TNLean.PEPS.Defs
+import TNLean.PEPS.VirtualInsertion
+import TNLean.PEPS.Blocking
+import TNLean.PEPS.LocalGauge
 import TNLean.PEPS.FundamentalTheorem

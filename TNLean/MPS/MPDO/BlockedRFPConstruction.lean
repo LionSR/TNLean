@@ -163,7 +163,11 @@ namespace SimpleMPDOBlockedRFPData
 variable {K : MPOTensor d D}
 
 /-- Construct this record directly from the scoped local lemmas of
-`SimpleLocalStructure.lean`, the commuting-form hypothesis, and MPO ZCL. -/
+`SimpleLocalStructure.lean`, the commuting-form hypothesis, and MPO ZCL.
+
+At present, the downstream consequences in this file use only `hCommuting` and
+`hZCL`. The local-data inputs are retained so that the eventual local-to-global
+implication from Appendix C.2 already has a canonical type-level target. -/
 def ofSALZCLAndCommutingForm
     {dA dB dC n : ℕ}
     (rhoABC : Matrix (Fin dA × Fin dB × Fin dC) (Fin dA × Fin dB × Fin dC) ℂ)
