@@ -34,11 +34,6 @@ mkdir -p "$WORK_DIR/site/blueprint"
 cp -r "$REPO_ROOT/blueprint/web/"* "$WORK_DIR/site/blueprint/"
 cp "$REPO_ROOT/blueprint/print/print.pdf" "$WORK_DIR/site/blueprint.pdf" 2>/dev/null || true
 
-# Regenerate badge endpoints so published JSON reflects current sorry/axiom
-# counts and toolchain versions, not the committed (possibly stale) values.
-echo "==> Regenerating badge endpoints..."
-python3 "$REPO_ROOT/scripts/write_badges.py"
-
 # Update homepage (remove all homepage files first, then copy fresh)
 echo "==> Updating homepage..."
 rm -rf "$WORK_DIR/site/_layouts" "$WORK_DIR/site/assets" \
@@ -46,6 +41,11 @@ rm -rf "$WORK_DIR/site/_layouts" "$WORK_DIR/site/assets" \
        "$WORK_DIR/site/404.html" "$WORK_DIR/site/Gemfile" \
        "$WORK_DIR/site/badges"
 cp -r "$REPO_ROOT/home_page/"* "$WORK_DIR/site/"
+
+# Regenerate badge endpoints directly into the site so published JSON reflects
+# current sorry/axiom counts and toolchain versions, not committed (stale) values.
+echo "==> Regenerating badge endpoints..."
+python3 "$REPO_ROOT/scripts/write_badges.py" "$WORK_DIR/site/badges"
 
 # Update API docs (only with --with-docs)
 if [ "$WITH_DOCS" = true ]; then
