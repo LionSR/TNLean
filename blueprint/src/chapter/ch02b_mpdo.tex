@@ -882,6 +882,23 @@ $(A \circ B)^{\dagger} = B^{\dagger} \circ A^{\dagger}$ together with the
 hypothesis $E_n^{\dagger} X = X$ extracts $E_1^{\dagger} X = X$.
 \end{proof}
 
+\begin{lemma}[Reverse inclusion of adjoint fixed points]%
+    \label{lem:mpdo_adjoint_fix_reverse}
+    \lean{MPOTensor.adjoint_blockedTransferMap_apply_of_adjoint_transferMap_apply}
+    \leanok
+    Every adjoint fixed point of the unblocked transfer map $E_1$ is an
+    adjoint fixed point of every blocked transfer map $E_n$.
+\end{lemma}
+\begin{proof}\leanok
+Induction on $n$ using $E_{n+1} = E_n \circ E_1$ and
+$(A \circ B)^{\dagger} = B^{\dagger} \circ A^{\dagger}$; the base case is
+$E_0 = \mathrm{id}$. This step does not require the algebra-structure data.
+Combined with Theorem~\ref{thm:mpdo_adjoint_fix_descent} this yields the
+fixed-point equality
+$\mathrm{Fix}(E_n^{\dagger}) = \mathrm{Fix}(E_1^{\dagger})$ at every positive
+blocking size under the algebra-structure predicate.
+\end{proof}
+
 \begin{remark}[Converse algebra-to-fusion gap]%
     \label{rem:mpdo_algebra_to_fusion_gap}
     \uses{def:mpdo_rfp_via_algebra, def:mpdo_rfp_via_fusion, thm:newton_girard}

@@ -58,10 +58,13 @@ the strongest direct consequence of `IsRFP_MPDO_via_algebra M`: the inclusion
 maps `iota n` force every adjoint fixed point of the blocked transfer map at
 positive blocking size `n` to be an adjoint fixed point of the unblocked
 transfer map, i.e. `Fix((blockedTransferMap M n).adjoint)` is contained in
-`Fix((transferMap M).adjoint)` for every `n ≥ 1`. (The reverse inclusion is
-immediate from `blockedTransferMap_eq_pow` combined with the fact that an
-adjoint fixed point of `transferMap M` is fixed by every power of the
-adjoint.)
+`Fix((transferMap M).adjoint)` for every `n ≥ 1`. The reverse inclusion, proved
+as `adjoint_blockedTransferMap_apply_of_adjoint_transferMap_apply`, is a simple
+induction using `blockedTransferMap_eq_pow` and `LinearMap.adjoint_comp`; it
+does not need the algebra-structure data. Together the two lemmas establish
+the fixed-point equality
+`Fix((blockedTransferMap M n).adjoint) = Fix((transferMap M).adjoint)` at every
+positive blocking size `n`.
 
 This equality already excludes *finite-order* (root-of-unity) peripheral
 eigenvalues of `(transferMap M).adjoint`, because any such eigenvalue would
@@ -463,6 +466,29 @@ theorem adjoint_transferMap_apply_of_isRFP_MPDO_via_algebra
     rw [hPow, LinearMap.adjoint_comp, LinearMap.comp_apply, hX]
   rw [hAdj] at hXsucFix
   exact hXsucFix
+
+/-- Reverse inclusion for the adjoint fixed-point comparison: any adjoint fixed
+point of `transferMap M` is an adjoint fixed point of every blocked transfer
+map `blockedTransferMap M n`.
+
+Combined with `adjoint_transferMap_apply_of_isRFP_MPDO_via_algebra`, this
+establishes the fixed-point equality
+`Fix((blockedTransferMap M n).adjoint) = Fix((transferMap M).adjoint)` at every
+positive blocking size `n` under `IsRFP_MPDO_via_algebra`. The proof is a
+simple induction using `blockedTransferMap_eq_pow` and `LinearMap.adjoint_comp`,
+and does not require the algebra-structure data. -/
+theorem adjoint_blockedTransferMap_apply_of_adjoint_transferMap_apply
+    {M : MPOTensor d D} (n : ℕ) {X : Mat}
+    (hX : (transferMap M).adjoint X = X) :
+    (blockedTransferMap M n).adjoint X = X := by
+  induction n with
+  | zero =>
+      simp [blockedTransferMap_eq_pow, Module.End.one_eq_id]
+  | succ k ih =>
+      have hPow : blockedTransferMap M (k + 1) =
+          blockedTransferMap M k ∘ₗ transferMap M := by
+        simp only [blockedTransferMap_eq_pow, pow_succ, Module.End.mul_eq_comp]
+      rw [hPow, LinearMap.adjoint_comp, LinearMap.comp_apply, ih, hX]
 
 end MPOTensor
 
