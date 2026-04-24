@@ -8,6 +8,7 @@ on:
       - "TNLean.lean"
       - "blueprint/src/**/*.tex"
       - "docs/blueprint_style_guide.md"
+      - "docs/prose_style.md"
       - ".github/workflows/blueprint-prose-review.yml"
 
 concurrency:
@@ -58,7 +59,8 @@ jobs:
           prompt: |
             Review this pull request for TWO categories ONLY:
               (A) blueprint ↔ Lean sync, and
-              (B) prose quality / banned AI-software language.
+              (B) prose quality — banned AI/software language AND no Lean jargon
+                  in the leanblueprint. Authoritative source: `docs/prose_style.md`.
 
             All other concerns (proof integrity, proof correctness, Mathlib style,
             type safety, performance, modularity, documentation) are handled by the
@@ -89,20 +91,25 @@ jobs:
             Flag any PR that adds or completes Lean declarations without updating the
             blueprint, and identify the specific .tex file/line that needs editing.
 
-            ## Category B — 🟡 Prose quality / banned language
+            ## Category B — 🟡 Prose quality / banned language and Lean jargon
 
             The blueprint is a mathematical document, not software documentation, and
-            must not read as AI-generated prose. Read
-            `docs/blueprint_style_guide.md` §"Banned AI/Software Language" for the
-            authoritative tables — TWO tables:
+            must not read as AI-generated prose. The single authoritative source is
+            `docs/prose_style.md`. Read it before reviewing. It covers THREE things:
 
-            1. **Banned software-engineering terms** (e.g. "pipeline", "assembly" as an
-               organizational label, "boilerplate", "orchestrate", "workflow",
+            1. **No Lean jargon in the leanblueprint** — blueprint prose must use
+               only standard mathematical notation. Flag Lean identifiers, namespace
+               prefixes, tactic syntax, function-call syntax with Lean naming, or
+               Mathlib type names appearing in `.tex` body text. The `\lean{...}`
+               tag is the link to the formalization; the prose must read as
+               mathematics.
+            2. **Banned software-engineering terms** (e.g. "pipeline", "assembly" as
+               an organizational label, "boilerplate", "orchestrate", "workflow",
                "scaffolding", "refactor" in prose, "deploy a lemma", "wrapper",
                "hook", "toolchain", "first-class", "plug-and-play", "out of the box",
                "under the hood", "API"/"endpoint" in blueprint prose,
                "utility"/"helper" as nouns).
-            2. **Banned LLM writing patterns** (e.g. "leverage", "delve into", "dive
+            3. **Banned LLM writing patterns** (e.g. "leverage", "delve into", "dive
                deep", "crucial"/"pivotal"/"vital" as vague filler, "seamlessly",
                "robust"/"comprehensive" as vague adjectives, "tapestry", "journey",
                "foster", "streamline", "synergy", "meticulous", "in the realm of",
@@ -119,12 +126,10 @@ jobs:
               inline **comments** (`/- ... -/`, `--`), and `section`/`namespace`
               names.
 
-            Lean docstrings must convey the **mathematical meaning** of the
-            declaration (general baseline in mathlib-style `docs/doc.md` and
-            `docs/style.md`, which are NOT modified). The project-specific
-            banned-language extension lives in `docs/blueprint_style_guide.md` —
-            that file is the single authoritative source for the lists below, and
-            applies to `.lean` and `.tex` files equally.
+            The general docstring baseline lives in `docs/doc.md` and `docs/style.md`
+            (mathlib-pasted, NOT modified). The project-specific extensions —
+            no-Lean-jargon and the banned-language tables — live in
+            `docs/prose_style.md`.
 
             Out-of-scope (do NOT flag): developer-facing markdown in `docs/`,
             workflow YAML, `lakefile.toml`, `lean-toolchain`, `Papers/`, `Notes/`,
@@ -189,4 +194,4 @@ jobs:
           claude_args: |
             --model claude-sonnet-4-6
             --allowedTools "Read,Glob,Grep,Bash(gh pr diff:*),Bash(gh pr view:*),Bash(gh pr comment:*),Bash(gh api graphql:*),Bash(grep *),mcp__github__*"
-            --append-system-prompt "This is a Lean 4 / Mathlib formalization project for quantum information theory. You are a focused reviewer scoped to TWO concerns ONLY: (A) blueprint ↔ Lean sync (\\lean{...}/\\leanok/\\uses{...} tags must track Lean declarations), and (B) prose quality / banned AI-software language in blueprint .tex and Lean docstrings/comments/section names. Authoritative banned-words tables live in docs/blueprint_style_guide.md. Do NOT comment on proof integrity, Mathlib style, performance, modularity, documentation completeness, or any other concern — those are reviewed by the main Claude Code Review workflow and duplicate comments create review noise. Apply judgment for context-sensitive entries (\\\"crucial\\\", \\\"moreover\\\", \\\"let us\\\" — fine in genuine mathematical use, banned only as vague filler)."
+            --append-system-prompt "This is a Lean 4 / Mathlib formalization project for quantum information theory. You are a focused reviewer scoped to TWO concerns ONLY: (A) blueprint ↔ Lean sync (\\lean{...}/\\leanok/\\uses{...} tags must track Lean declarations), and (B) prose quality — banned AI/software language AND no Lean jargon in the leanblueprint, in blueprint .tex and Lean docstrings/comments/section names. Authoritative source for prose rules: docs/prose_style.md (covers no-Lean-jargon, banned software-engineering terms, and banned LLM writing patterns). docs/blueprint_style_guide.md covers the LaTeX/notation/macro conventions. Do NOT comment on proof integrity, Mathlib style, performance, modularity, documentation completeness, or any other concern — those are reviewed by the main Claude Code Review workflow and duplicate comments create review noise. Apply judgment for context-sensitive entries (\\\"crucial\\\", \\\"moreover\\\", \\\"let us\\\" — fine in genuine mathematical use, banned only as vague filler)."
