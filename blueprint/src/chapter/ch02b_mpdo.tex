@@ -532,22 +532,37 @@ strong subadditivity for a normalized three-site reduced state.
     separates the blocks by their word evaluations.
 
     Proposition~IV.3 gives a concrete sufficient criterion for this
-    finite-length separation. After one common blocking length, each block is
-    block-injective; after a further finite blocking length, one can choose
-    linear combinations of words which act as the identity on one selected
-    block and vanish on all the others. Combining an injective prefix with
-    such a selector suffix yields the spanning condition above.
-
-    Once this finite-length separation is available, together with
-    injectivity, left-canonicality, and nonzero weights, one obtains the
-    horizontal canonical-form structure for the MPO.
+    finite-length separation: after some common blocking length, each block is
+    block-injective, and after a second finite blocking length one can form
+    word combinations which equal the identity on one chosen block and vanish
+    on all others. Concatenating an injective prefix with such a selector
+    suffix yields the product-algebra span condition above, and therefore the
+    horizontal canonical-form conclusion.
 \end{remark}
+
+\begin{theorem}[Abstract Proposition~IV.3 package]
+    \label{thm:propblockinj_abstract}
+    \lean{MPSTensor.hasBiCF_of_propBlockInjective}
+    \leanok
+    \uses{rem:word_tuple_span_top}
+    If a block family admits the finite-length selector data of
+    Proposition~IV.3, then it is in block-injective canonical form.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{rem:word_tuple_span_top}
+    This is the direct implication from the abstract selector package to the
+    finite-length trace-separation statement. What remains open in the full
+    Proposition~IV.3 is the derivation of the selector hypothesis from separated
+    canonical-form / BNT data.
+\end{proof}
 
 \begin{lemma}[Blockwise equality from agreement on the MPV family]
     \label{lem:blockwise_insert_eq_of_mpv_agree}
     \lean{MPOTensor.blockwise_insert_eq_of_mpv_agree}
     \leanok
-    \uses{def:tensor_from_blocks, def:injective}
+    \uses{def:tensor_from_blocks, def:injective, thm:propblockinj_abstract}
     Let $\bigoplus_k \mu_k A_k$ be a block-diagonal tensor whose blocks are
     injective, left-canonical, weighted by nonzero scalars, and jointly
     block-injective in the sense that for some blocking length~$L$ the tuple of
@@ -560,8 +575,9 @@ strong subadditivity for a normalized three-site reduced state.
 
 \begin{proof}
     \leanok
-    \uses{def:tensor_from_blocks, def:injective}
-    This is Lemma~L from \cite[Appendix~A]{Cirac2017MPDO_AnnPhys}.
+    \uses{def:tensor_from_blocks, def:injective, thm:propblockinj_abstract}
+    This is Lemma~L from \cite[Appendix~A]{Cirac2017MPDO_AnnPhys}, using the
+    abstract Proposition~IV.3 package from Theorem~\ref{thm:propblockinj_abstract}.
     Expanding the hypothesis over a word of length~$L+1$ beginning with the
     fixed site and folding each block contribution into a trace pairing
     against the corresponding first-site insertion tensor yields, upon taking the
@@ -679,28 +695,116 @@ recovery theorem for the MPDO renormalization fixed-point condition.
     \lean{MPOTensor.AlgebraStructureData}
     \leanok
     \uses{def:mpo_tensor}
-    A family of support algebras $\{\mathcal{A}_n\}_{n \ge 0}$, one at every
-    blocking size, equipped with blocking maps
-    $m_n : \mathcal{A}_n \otimes \mathcal{A}_n \to \mathcal{A}_{2n}$ arising
-    from horizontal concatenation of blocks and unital inclusion maps
-    $\iota_n : \mathcal{A}_n \to \mathcal{A}_{n+1}$ arising from appending a
-    single site, together with a coherence condition relating $m_n$ and
-    $\iota_n$.
+    A family of support $*$-algebras $\{\mathcal{A}_n\}_{n \ge 0}$, one at
+    every blocking size, equipped with blocking maps
+    $m_n : \mathcal{A}_n \otimes \mathcal{A}_n \to \mathcal{A}_{2n}$ and
+    inclusion maps $\iota_n : \mathcal{A}_n \to \mathcal{A}_{n+1}$ such that,
+    after viewing all elements inside the ambient bond-space matrix algebra,
+    $m_n$ is ordinary matrix multiplication and $\iota_n$ is the ambient
+    inclusion.
 \end{definition}
 
-\begin{definition}[Algebra-structure formulation of MPDO RFP]%
+\begin{definition}[Algebra-structure RFP predicate]%
     \label{def:mpdo_rfp_via_algebra}
-    \lean{MPOTensor.IsRFP_MPDO_via_algebra_scaffold}
+    \lean{MPOTensor.IsRFP_MPDO_via_algebra}
+    \leanok
     \uses{def:mpdo_algebra_structure_data, def:mpo_tensor}
-    An MPO tensor $M$ satisfies the \emph{algebra-structure formulation} of
-    the renormalization fixed-point condition when there exist
-    algebra-structure data compatible with $M$, in the sense of
-    \cite[Theorem~IV.13~(ii)]{Cirac2017MPDO_AnnPhys}. Here compatibility is
-    taken to be the trivial relation that holds for every pair, so this
-    formulation is satisfied by every MPO tensor. The intended compatibility
-    condition is the one appearing in
-    \cite[Theorem~IV.13~(ii)]{Cirac2017MPDO_AnnPhys}.
+    An MPO tensor $M$ satisfies the \emph{algebra-structure formulation} used
+    here when there exist algebra-structure data whose support algebra at every
+    positive blocking size coincides with the fixed-point algebra of the adjoint
+    blocked transfer map. This is a genuine algebraic condition, but it is still
+    weaker than the full coefficient formulation of
+    \cite[Theorem~IV.13~(ii)]{Cirac2017MPDO_AnnPhys}, since the coefficient
+    family $c_{\alpha,\beta,\gamma}^{(L)}$ is not yet extracted.
 \end{definition}
+
+\begin{theorem}[Fusion yields a stationary algebra tower under a faithful fixed point]%
+    \label{thm:mpdo_rfp_via_algebra_from_fusion}
+    \lean{MPOTensor.isRFP_MPDO_via_algebra_of_isRFP_MPDO_via_fusion_of_isTP_of_posDef_fixed}
+    \leanok
+    \uses{def:mpdo_rfp_via_algebra, def:mpdo_rfp_via_fusion}
+    Assume the doubled tensor is trace-preserving and the transfer map admits a
+    positive-definite fixed point. If the transfer-map fusion criterion holds,
+    then the MPO satisfies the algebra-structure formulation of the
+    renormalization fixed-point condition.
+\end{theorem}
+\begin{proof}\leanok
+The fusion criterion implies idempotence of the transfer map. Under the
+trace-preserving normalization and the faithful fixed point, Wolf's
+fixed-point-algebra theorem gives a $*$-subalgebra of adjoint fixed points.
+Idempotence identifies every positive blocked transfer map with the original
+one, so the same fixed-point algebra works at every blocking size.
+\end{proof}
+
+The current Lean layer still does not recover the paper's special diagonal
+matrices $\chi_{\alpha,\beta,\gamma}$ from Theorem~IV.13(ii). What it does
+provide is the first explicit coefficient package attached to the algebra tower:
+a chosen basis of each support algebra, coordinate maps into a finite scalar
+family, and the corresponding multiplication / inclusion coefficient arrays.
+
+\begin{definition}[Blocked coefficients for the algebra tower]%
+    \label{def:mpdo_blocked_coefficients}
+    \lean{MPOTensor.AlgebraStructureData.toBlockedCoefficients}
+    \leanok
+    \uses{def:mpdo_algebra_structure_data}
+    For each blocked size $n$, once a basis of $\mathcal{A}_n$ is chosen,
+    every element of $\mathcal{A}_n$ is identified with a finite coefficient
+    family on that basis.
+\end{definition}
+
+\begin{theorem}[Reconstruction from blocked coefficients]%
+    \label{thm:mpdo_reconstruct_blocked_coefficients}
+    \lean{MPOTensor.AlgebraStructureData.reconstructFromBlockedCoefficients_apply}
+    \leanok
+    \uses{def:mpdo_blocked_coefficients}
+    Reconstructing a coefficient family gives the corresponding basis
+    expansion $\sum_i a_i b_i$ in $\mathcal{A}_n$.
+\end{theorem}
+\begin{proof}\leanok
+This is exactly the finite-basis reconstruction formula for the chosen basis of
+$\mathcal{A}_n$.
+\end{proof}
+
+\begin{definition}[Blocked multiplication coefficients]%
+    \label{def:mpdo_blocked_structure_coefficients}
+    \lean{MPOTensor.AlgebraStructureData.blockedStructureCoefficients}
+    \leanok
+    \uses{def:mpdo_blocked_coefficients}
+    The blocking multiplication map $m_n$ determines a coefficient family for
+    the product of any two chosen basis elements of $\mathcal{A}_n$, now viewed
+    in the basis of $\mathcal{A}_{2n}$.
+\end{definition}
+
+\begin{theorem}[Blocked multiplication reconstructs from its coefficients]%
+    \label{thm:mpdo_mul_coefficients_reconstruct}
+    \lean{MPOTensor.AlgebraStructureData.coe_mul_eq_sum_blockedStructureCoefficients}
+    \leanok
+    \uses{def:mpdo_blocked_structure_coefficients}
+    In the ambient bond-space matrix algebra, the product of two chosen basis
+    elements of $\mathcal{A}_n$ is the sum of the basis elements of
+    $\mathcal{A}_{2n}$ weighted by these extracted coefficients.
+\end{theorem}
+\begin{proof}\leanok
+Apply the reconstruction formula of
+Theorem~\ref{thm:mpdo_reconstruct_blocked_coefficients} to the element
+$m_n(b_i,b_j) \in \mathcal{A}_{2n}$.
+\end{proof}
+
+\begin{theorem}[Compatible adjoint fixed points reconstruct from blocked coefficients]%
+    \label{thm:mpdo_fixedpoint_coefficients_reconstruct}
+    \lean{MPOTensor.AlgebraStructureData.reconstructFromBlockedCoefficients_of_fixedPoint}
+    \leanok
+    \uses{def:mpdo_rfp_via_algebra, def:mpdo_blocked_coefficients}
+    If the algebra tower is compatible with an MPO tensor $M$, then every adjoint
+    blocked fixed point of $E_n = \operatorname{blockedTransferMap}(M,n)$ belongs
+    to $\mathcal{A}_n$ and is recovered exactly from its extracted coefficient
+    family.
+\end{theorem}
+\begin{proof}\leanok
+Compatibility identifies $\mathcal{A}_n$ with the adjoint fixed-point algebra of
+$E_n$, so the fixed point first becomes an element of $\mathcal{A}_n$ and then
+Theorem~\ref{thm:mpdo_reconstruct_blocked_coefficients} reconstructs it.
+\end{proof}
 
 \section{Commuting form and GSNNCH}
 
