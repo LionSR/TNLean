@@ -893,8 +893,8 @@ Theorem~\ref{thm:mpdo_reconstruct_blocked_coefficients} reconstructs it.
     if every finite-chain operator admits the equivalent positive-operator
     presentation $\rho^{(N)} = c \prod_i B_{i,i+1}$ with $c > 0$ and
     commuting nearest-neighbor factors. The projector-limit convention after
-    Definition~4.8 of \cite{Cirac2017MPDO_AnnPhys} identifies this with the
-    exponential Gibbs form.
+    source label \texttt{defrhoNComm} in \cite{Cirac2017MPDO_AnnPhys}
+    identifies this with the exponential Gibbs form.
 \end{definition}
 
 \begin{theorem}[GSNNCH iff commuting form]
@@ -917,7 +917,8 @@ witness, and every GSNNCH witness remembers its underlying commuting-form data.
     \leanok
     \uses{def:mpdo_is_gsnnch, def:mpo_is_zcl}
     This is the conjunction of the GSNNCH condition with MPO zero correlation
-    length, i.e. the content of item~(iii) in the simple-MPDO theorem.
+    length, matching item~(iii) of the simple-MPDO equivalence in
+    \cite{Cirac2017MPDO_AnnPhys} (source label \texttt{thm:main-simple}).
 \end{definition}
 
 \begin{theorem}[GSNNCH with zero correlation length iff commuting form with zero correlation length]
@@ -934,7 +935,7 @@ Unfold the definition of GSNNCH with zero correlation length and apply
 Theorem~\ref{thm:mpdo_is_gsnnch_iff_has_commuting_form}.
 \end{proof}
 
-\begin{remark}[Remaining step toward Proposition~C.6]
+\begin{remark}[Remaining step toward source label \texttt{propsimple}]
 The remaining entropy-side theorem is to derive the commuting-form property
 from the strong-area-law hypotheses of Appendix~C.2. The present file isolates
 its GSNNCH target once that step is available.
