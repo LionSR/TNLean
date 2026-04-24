@@ -682,8 +682,8 @@ theorem gauge_unique_mod_edge_scalars (A B : Tensor G d)
   -- gauged tensors `gaugeVertex A X v η σ = gaugeVertex A Y v η σ`.
   have hGauge : ∀ (v : V)
       (η : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1)) (σ : Fin d),
-      gaugeVertex A X v η σ = gaugeVertex A Y v η σ := fun v η σ => by
-    rw [← hX v η σ, hY v η σ]
+      gaugeVertex A X v η σ = gaugeVertex A Y v η σ :=
+    fun v η σ => (hX v η σ).symm.trans (hY v η σ)
   -- Step 2: linear independence of `A.component v` promotes this to equality
   -- of incident edge-gauge products for every configuration pair `η, η'`.
   have hProd : ∀ (v : V)
