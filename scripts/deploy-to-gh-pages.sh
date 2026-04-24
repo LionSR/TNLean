@@ -38,7 +38,8 @@ cp "$REPO_ROOT/blueprint/print/print.pdf" "$WORK_DIR/site/blueprint.pdf" 2>/dev/
 echo "==> Updating homepage..."
 rm -rf "$WORK_DIR/site/_layouts" "$WORK_DIR/site/assets" \
        "$WORK_DIR/site/_config.yml" "$WORK_DIR/site/index.md" \
-       "$WORK_DIR/site/404.html" "$WORK_DIR/site/Gemfile"
+       "$WORK_DIR/site/404.html" "$WORK_DIR/site/Gemfile" \
+       "$WORK_DIR/site/badges"
 cp -r "$REPO_ROOT/home_page/"* "$WORK_DIR/site/"
 
 # Update API docs (only with --with-docs)
