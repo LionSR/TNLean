@@ -1,5 +1,6 @@
 import TNLean.PEPS.Blocking
 import TNLean.PEPS.LocalGauge
+import Mathlib.LinearAlgebra.LinearIndependent.Basic
 import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Defs
 
 -- This is a **scaffold** file: the forward direction and contraction algebra
@@ -631,6 +632,31 @@ theorem GaugeEquivModEdgeScalars.gaugeVertex_eq
 
 /-! ### Uniqueness modulo balanced edge scalars -/
 
+/-- If the gauged vertex tensors produced by two gauge families agree pointwise
+at a vertex `v`, then, by linear independence of `A.component v`, the products
+of incident edge-gauge matrix entries coincide for every pair of virtual
+configurations `η, η'`.
+
+This reduces the remaining step in `gauge_unique_mod_edge_scalars` from the
+functional equality of gauged vertex tensors to an equality of scalar products
+of incident edge-gauge entries, which is the proper input to the pending
+tensor-factor uniqueness argument. -/
+private lemma edgeGaugeProduct_eq_of_gaugeVertex_eq
+    (A : Tensor G d) (hA : IsVertexInjective A) (v : V)
+    (X Y : (e : Edge G) → GL (Fin (A.bondDim e)) ℂ)
+    (h : ∀ (η : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1))
+        (σ : Fin d),
+      gaugeVertex A X v η σ = gaugeVertex A Y v η σ)
+    (η η' : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1)) :
+    (∏ ie : IncidentEdge G v, edgeGaugeAt A X v ie (η ie) (η' ie)) =
+      ∏ ie : IncidentEdge G v, edgeGaugeAt A Y v ie (η ie) (η' ie) := by
+  refine (hA v).eq_coords_of_eq
+    (f := fun ξ => ∏ ie : IncidentEdge G v, edgeGaugeAt A X v ie (η ie) (ξ ie))
+    (g := fun ξ => ∏ ie : IncidentEdge G v, edgeGaugeAt A Y v ie (η ie) (ξ ie))
+    ?_ η'
+  funext σ
+  simpa [gaugeVertex, Finset.sum_apply, Pi.smul_apply, smul_eq_mul] using h η σ
+
 /-- **Gauge uniqueness modulo balanced edge scalars** (arXiv:1804.04964,
 Theorem 2, uniqueness clause, repaired form).
 
@@ -652,15 +678,29 @@ theorem gauge_unique_mod_edge_scalars (A B : Tensor G d)
       B.component v (fun ie => Fin.cast (congr_fun hDim ie.1) (η ie)) σ =
         gaugeVertex A Y v η σ) :
     GaugeEquivModEdgeScalars (G := G) A X Y := by
-  -- TODO: compare `hX` and `hY` vertexwise and use linear independence of
-  -- `A.component v` to extract scalar ratios on each incident edge.
-  -- The remaining missing ingredient is the tensor-factor uniqueness lemma:
-  -- if two products of oriented edge gauges act identically on an injective
-  -- vertex tensor, then the factors differ by nonzero scalars whose product
-  -- is `1` at that vertex. Assembling these local scalar relations into a
-  -- single edge family gives the desired balanced quotient relation.
-  -- This is the repaired uniqueness endpoint for PEPS gauges; the former
-  -- global-scalar statement was false on the triangle counterexample.
+  -- Step 1: combine `hX` and `hY` to obtain vertex-wise equality of the
+  -- gauged tensors `gaugeVertex A X v η σ = gaugeVertex A Y v η σ`.
+  have hGauge : ∀ (v : V)
+      (η : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1)) (σ : Fin d),
+      gaugeVertex A X v η σ = gaugeVertex A Y v η σ := fun v η σ => by
+    rw [← hX v η σ, hY v η σ]
+  -- Step 2: linear independence of `A.component v` promotes this to equality
+  -- of incident edge-gauge products for every configuration pair `η, η'`.
+  have hProd : ∀ (v : V)
+      (η η' : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1)),
+      (∏ ie : IncidentEdge G v, edgeGaugeAt A X v ie (η ie) (η' ie)) =
+        ∏ ie : IncidentEdge G v, edgeGaugeAt A Y v ie (η ie) (η' ie) :=
+    fun v η η' =>
+      edgeGaugeProduct_eq_of_gaugeVertex_eq (G := G) A hA v X Y (hGauge v) η η'
+  -- Remaining step (issue #842): the tensor-factor uniqueness lemma.
+  -- From `hProd v` at each vertex `v`, extract a nonzero scalar `c_v(ie)` on
+  -- each incident edge such that `edgeGaugeAt A X v ie = c_v(ie) • edgeGaugeAt A Y v ie`
+  -- with the oriented product of `c_v(ie)` over incident `ie` at `v` equal to
+  -- `1`, then reconcile `c_u` and `c_w` on every shared edge `e = (u,w)` into a
+  -- single global family `c : (e : Edge G) → Units ℂ` satisfying
+  -- `IsVertexBalanced c`. This is the local scalar-ratio argument of
+  -- arXiv:1804.04964 §3; it is independent of the virtual-insertion / blocking
+  -- machinery tracked in #763.
   sorry
 
 end PEPS
