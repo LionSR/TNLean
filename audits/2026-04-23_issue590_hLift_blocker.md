@@ -1,12 +1,25 @@
 # Issue #590 blocker report — April 23, 2026
 
+> **Status after rebasing onto current `origin/main` (later on April 23).**
+> The detailed blocker analysis below is now partly historical: current `main`
+> already contains `SectorFixedPointAlgebraRigidity`,
+> `hProjStep_of_sectorFixedPointAlgebraRigidity`, and
+> `hLift_cyclicDecomp_mps_of_sectorFixedPointAlgebraRigidity`, which combine the
+> former `hProjStep`/`hFixUpgrade` obstruction into a single named hypothesis.
+> The forward step built on top of that reformulation is the downstream consumer
+> theorem
+> `primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking_of_fixedAlgebraRigidity`
+> in `Assembly/CyclicSectorDecomposition.lean`. The remaining mathematical gap is
+> now to derive `SectorFixedPointAlgebraRigidity` from the cyclic-sector fixed-point
+> algebra / projection-word machinery.
+
 ## Outcome
 
-I could **not** honestly close issue #590 on current `origin/main`.
+I could **not yet** close issue #590 on current `origin/main`.
 
 The reason is subtle but important: the orbit-sum **combination theorem requested by the
 original issue is already present** on current `main`, after the recent
-`SectorIrreducibility` split. The remaining missing step is **not** the orbit-sum assembly
+`SectorIrreducibility` split. The remaining missing step is **not** the orbit-sum construction
 itself, but the still-abstract one-step projection-preservation hypothesis `hProjStep`.
 
 Concretely, current `main` already contains the theorem
@@ -103,7 +116,7 @@ So the new modular structure helps readability, but the mathematical gap is unch
 
 ## Search / audit evidence
 
-I checked the surrounding API in the current repository for a theorem that would bridge sector
+I checked the surrounding API in the current repository for a theorem that would connect sector
 support to one-step projection preservation.
 
 ### 1. Multiplicative-domain API
@@ -186,7 +199,7 @@ In Lean terms, the missing ingredient appears to be one of the following stronge
 3. A direct formalization of the `lem:bdcf` fixed-point / blocked-sector argument that implies the
    needed one-step projection-preservation statement.
 
-Without one of these stronger ingredients, I do not see an honest way to discharge `hProjStep`.
+Without one of these stronger ingredients, I do not currently see a way to discharge `hProjStep`.
 
 ## Practical downstream consequence
 
