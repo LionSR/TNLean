@@ -723,7 +723,7 @@ Since $E_1$ is the original transfer map, this is exactly
     The fusion-isometry formulation is equivalent to
     \lean{MPOTensor.IsRFP}.
 \end{theorem}
-\begin{proof}\leanok
+\begin{proof}\leanok\uses{thm:mpdo_rfp_of_fusion}
 The forward implication is Theorem~\ref{thm:mpdo_rfp_of_fusion}.
 Conversely, if the transfer map $E$ is idempotent, then every positive blocked
 transfer map equals $E$ and therefore factors through its range.
