@@ -14,6 +14,7 @@ import TNLean.Channel.POVM
 import TNLean.Channel.POVM.Uniqueness
 import TNLean.Channel.TransferMatrix
 import TNLean.Channel.WolfProps
+import TNLean.Channel.NormalForm
 
 /-!
 # Wolf Lecture Notes — Chapter 2: Representations
@@ -124,6 +125,15 @@ representations of quantum channels.
 * `transferMatrix_unitaryConj_sandwich` — **Props 2.7-2.8 key identity**:
   `(Ad_{U₁} ∘ T ∘ Ad_{U₂})^ = (Ū₁⊗U₁) T̂ (Ū₂⊗U₂)` ✅
 
+### §2.3 SVD normal form (existence)
+
+* `Matrix.svd_of_posSemidef` — **SVD for PSD matrices** (spectral theorem
+  packaged): `M = U * diagonal σ * Uᴴ` with `σ ≥ 0` ✅
+* `Matrix.svd_of_isUnit` — **SVD existence for invertible complex matrices**:
+  `M = U * diagonal σ * Vᴴ` with `U, V` unitary and `σ > 0` ✅
+* `transferMatrix_svd_of_isUnit` — **SVD representation of a transfer
+  matrix** (Wolf §2.3): every invertible transfer matrix admits an SVD ✅
+
 ### Infrastructure
 
 | Definition | File | Lean name |
@@ -152,8 +162,8 @@ representations of quantum channels.
 | Thm 2.3 (ordered CP-maps) | Needs Stinespring + contraction |
 | Thm 2.4 (Radon-Nikodym) | Follows from Thm 2.3 |
 | Thm 2.5 (open-system representation) | Embedding into unitary |
-| §2.3 Lorentz normal form (existence) | Needs SVD of transfer matrix |
-| §2.3 SVD representation (existence) | Needs Mathlib SVD |
+| §2.3 Lorentz normal form (existence) | Needs compactness / minimisation over `SL(2, ℂ)` filterings (Wolf Prop 2.9 / Prop 2.11) |
+| §2.3 Sorted / unique singular values | `svd_of_isUnit` is unsorted; downstream normal-form uses will want the sorted variant |
 
 ## References
 
