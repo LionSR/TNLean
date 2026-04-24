@@ -484,6 +484,40 @@ strong subadditivity for a normalized three-site reduced state.
     in the rank-one step.
 \end{definition}
 
+\begin{theorem}[Hayashi--Markov extraction of explicit $\eta$-operators]
+    \label{thm:mpdo_eta_of_hayashi_markov}
+    \lean{MPOTensor.ExplicitEtaOperators.ofHayashiMarkov}
+    \lean{MPOTensor.ExplicitEtaOperators.traceMatrix_ofHayashiMarkov}
+    \lean{MPOTensor.ExplicitEtaOperators.traceMatrixRe_ofHayashiMarkov}
+    \leanok
+    \uses{def:mpdo_eta_structure, def:mpdo_explicit_eta_operators,
+        def:mpdo_explicit_eta_trace_matrix}
+    Every Hayashi decomposition witness $h_\eta$ canonically produces an
+    explicit neighboring $\eta$-family by Kronecker-multiplying the sector
+    reduced states on the neighboring bond spaces:
+    \[
+        \eta_{k,h}
+        := \tr_C\bigl(\rho_{b_2 C}^{(k)}\bigr)
+            \otimes \tr_A\bigl(\rho_{A b_1}^{(h)}\bigr).
+    \]
+    Positive semidefiniteness of each $\eta_{k,h}$ follows from the fact
+    that partial traces preserve positivity and that positive
+    semidefiniteness is closed under Kronecker products. The induced trace
+    matrix is entrywise $T_{k,h} = 1$, hence rank one, matching the paper's
+    normalization $T_{k,h} = a_k b_h$ with $a_k = b_h = 1$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:mpdo_eta_structure, def:mpdo_explicit_eta_operators}
+    Each $\rho_{b_2 C}^{(k)}$ is a density matrix, hence positive
+    semidefinite with unit trace; the partial trace $\tr_C$ preserves both
+    properties. The analogous statement holds for $\tr_A \rho_{A b_1}^{(h)}$.
+    Closure of positive semidefiniteness under Kronecker product gives
+    $\eta_{k,h} \ge 0$. The trace identity follows from multiplicativity of
+    the trace under Kronecker products.
+\end{proof}
+
 \begin{definition}[Auxiliary matrix predicates for the rank-one step]
     \label{def:matrix_trace_rankone_predicates}
     \lean{Matrix.TracePowersConstant}
