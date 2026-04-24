@@ -353,7 +353,7 @@ MPV family as a blocked root `blockTensor A p`, one can extract a periodic
 `Z`-gauge witness between `C` and `blockTensor A p`.
 
 Compared with `PeripheralEqualCasePeriodicFTOfSameMPV`, this does **not** yet
-recover a left-canonical root. It only packages the blocked equal-case
+recover a left-canonical root. It only records the blocked equal-case
 Fundamental Theorem / Z-phase existence step. -/
 def PeripheralEqualCaseZGaugeOfSameMPV (d D p : ℕ) : Prop :=
   ∀ {A : MPSTensor d D} {C : MPSTensor (blockPhysDim d p) D},
@@ -391,7 +391,7 @@ In the paper this is the point where the blocked equal-case Fundamental Theorem
 (Theorem 3.8 of arXiv:1708.00029) is combined with the blocked-to-root
 reconstruction that distributes the resulting `Z`-gauge across the cyclic
 sectors of `A`. Formalizing that existence step is the remaining forward
-obstruction, so we package its endpoint as a separate hypothesis. The theorem
+obstruction, so we record its endpoint as a separate hypothesis. The theorem
 `peripheralEqualCase_periodicFT_of_sameMPV` below shows that this endpoint
 follows from the sharper split into blocked `Z`-gauge extraction and
 blocked-to-root reconstruction. -/
@@ -458,7 +458,7 @@ Assuming `PeripheralEqualCasePeriodicFTOfSameMPV`, the pullback theorem
 `pRefinementCanonicalization_pullback_of_irreducibleForm` already yields the
 full forward-side canonicalization hypothesis `PRefinementCanonicalization`.
 Thus the remaining forward gap in Theorem 4.1 is exactly the blocked
-equal-case/root-reconstruction step packaged by
+equal-case/root-reconstruction step captured by
 `PeripheralEqualCasePeriodicFTOfSameMPV`. -/
 theorem pRefinementCanonicalization_of_peripheralEqualCase_periodicFT_of_sameMPV
     (hPeripheralEq : PeripheralEqualCasePeriodicFTOfSameMPV d D p) :
@@ -482,7 +482,7 @@ theorem pRefinementCanonicalization_of_peripheralEqualCase_periodicFT_of_sameMPV
 
 /-- **Forward direction of Theorem 4.1 from the blocked equal-case stage.**
 
-This repackages `thm_4_1_p_refinement_forward` after replacing the coarse
+This restates `thm_4_1_p_refinement_forward` after replacing the coarse
 hypothesis `PRefinementCanonicalization` by the sharper blocked-stage
 hypothesis `PeripheralEqualCasePeriodicFTOfSameMPV`. -/
 theorem thm_4_1_p_refinement_forward_of_peripheralEqualCase_periodicFT_of_sameMPV

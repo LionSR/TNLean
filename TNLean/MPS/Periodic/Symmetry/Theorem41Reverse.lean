@@ -40,7 +40,7 @@ def PRefinementInverseCanonicalization (d D p : ℕ) : Prop :=
     IsPDivisibleChannel (transferMap B) p →
     ∃ A : MPSTensor d D, transferMap B = transferMap (blockTensor A p)
 
-/-- A bounded Kraus-rank witness for a channel root can be re-packaged as an
+/-- A bounded Kraus-rank witness for a channel root can be expressed as an
 `MPSTensor` with the ambient physical dimension by zero-padding the Kraus family. -/
 theorem exists_tensor_of_hasKrausRankLE
     {E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
