@@ -2,6 +2,7 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
+import TNLean.Algebra.HermitianHelpers
 import TNLean.Channel.TransferMatrix
 import Mathlib.Analysis.Matrix.PosDef
 import Mathlib.Analysis.Matrix.Order
@@ -59,13 +60,9 @@ theorem svd_of_posSemidef {M : Matrix n n ℂ} (hM : M.PosSemidef) :
       (∀ i, 0 ≤ σ i) ∧
       M = (U : Matrix n n ℂ) *
         Matrix.diagonal (fun i => (σ i : ℂ)) *
-        (U : Matrix n n ℂ)ᴴ := by
-  classical
-  refine ⟨hM.isHermitian.eigenvectorUnitary, hM.isHermitian.eigenvalues,
-    hM.eigenvalues_nonneg, ?_⟩
-  have h := hM.isHermitian.spectral_theorem
-  rw [Unitary.conjStarAlgAut_apply, Matrix.star_eq_conjTranspose] at h
-  convert h using 2
+        (U : Matrix n n ℂ)ᴴ :=
+  ⟨hM.isHermitian.eigenvectorUnitary, hM.isHermitian.eigenvalues,
+    hM.eigenvalues_nonneg, hM.isHermitian.spectral_decomp_eq_of_generalIndex⟩
 
 /-- **Singular Value Decomposition (invertible case).** Every invertible
 complex square matrix admits an SVD
@@ -117,10 +114,8 @@ theorem svd_of_isUnit {M : Matrix n n ℂ} (hM : IsUnit M) :
   have hSpectral :
       Mᴴ * M = (V : Matrix n n ℂ) *
         Matrix.diagonal (fun i => (lam i : ℂ)) *
-        (V : Matrix n n ℂ)ᴴ := by
-    have h := hN_psd.isHermitian.spectral_theorem
-    rw [Unitary.conjStarAlgAut_apply, Matrix.star_eq_conjTranspose] at h
-    simpa [V, lam] using h
+        (V : Matrix n n ℂ)ᴴ :=
+    hN_psd.isHermitian.spectral_decomp_eq_of_generalIndex
   -- Unitarity of V.
   have hVhV : (V : Matrix n n ℂ)ᴴ * (V : Matrix n n ℂ) = 1 := by
     have := Matrix.mem_unitaryGroup_iff'.mp V.prop

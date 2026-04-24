@@ -17,6 +17,25 @@ open scoped Matrix
 
 variable {D : ℕ}
 
+namespace Matrix.IsHermitian
+
+variable {n : Type*} [Fintype n] [DecidableEq n]
+
+/-- **Spectral decomposition of a Hermitian complex matrix** (polymorphic in the
+index type): `M = U * diagonal λ * Uᴴ` where `U = hM.eigenvectorUnitary` and
+`λ = hM.eigenvalues` are the eigenvector unitary and real eigenvalues provided
+by Mathlib's Hermitian spectral theorem. -/
+theorem spectral_decomp_eq_of_generalIndex
+    {M : Matrix n n ℂ} (hM : M.IsHermitian) :
+    M = (↑hM.eigenvectorUnitary : Matrix n n ℂ) *
+      Matrix.diagonal (fun j => (↑(hM.eigenvalues j) : ℂ)) *
+      (↑hM.eigenvectorUnitary : Matrix n n ℂ)ᴴ := by
+  have h := hM.spectral_theorem
+  rw [Unitary.conjStarAlgAut_apply, Matrix.star_eq_conjTranspose] at h
+  convert h using 2
+
+end Matrix.IsHermitian
+
 /-- `Uᴴ * U = 1` for the eigenvector unitary of a Hermitian matrix. -/
 theorem eig_conj_mul [DecidableEq (Fin D)]
     {M : Matrix (Fin D) (Fin D) ℂ} (hM : M.IsHermitian) :
@@ -38,10 +57,8 @@ theorem spectral_decomp_eq [DecidableEq (Fin D)]
     {M : Matrix (Fin D) (Fin D) ℂ} (hM : M.IsHermitian) :
     M = (↑hM.eigenvectorUnitary : Matrix (Fin D) (Fin D) ℂ) *
       Matrix.diagonal (fun j => (↑(hM.eigenvalues j) : ℂ)) *
-      (↑hM.eigenvectorUnitary : Matrix (Fin D) (Fin D) ℂ)ᴴ := by
-  have h := hM.spectral_theorem
-  rw [Unitary.conjStarAlgAut_apply, Matrix.star_eq_conjTranspose] at h
-  convert h using 2
+      (↑hM.eigenvectorUnitary : Matrix (Fin D) (Fin D) ℂ)ᴴ :=
+  hM.spectral_decomp_eq_of_generalIndex
 
 namespace HermitianHelpers
 
