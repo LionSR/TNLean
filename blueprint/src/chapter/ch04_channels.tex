@@ -987,6 +987,117 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
 \end{proof}
 
 %% =========================================================
+\section{Representation corollaries (Props 2.2--2.4)}
+\label{sec:representation_corollaries}
+%% =========================================================
+
+The next three corollaries follow from the Choi/Kraus/Stinespring
+representations already developed above. They correspond to
+\cite[Props.~2.2--2.4]{Wolf2012Quantum}.
+
+\begin{theorem}[Prop.~2.2, polarization of sesquilinear sandwiches]
+    \label{thm:polarization_sandwich}
+    \lean{WolfProps.polarization_sandwich}
+    \leanok
+    For any $A, B, X \in \MN{D}$,
+    \[
+        4\,A X B^\dagger
+          = (A+B) X (A+B)^\dagger - (A-B) X (A-B)^\dagger
+            + i\,(A + iB) X (A + iB)^\dagger
+            - i\,(A - iB) X (A - iB)^\dagger.
+    \]
+    Each of the four summands on the right is a single-Kraus CP map, so
+    every sesquilinear sandwich decomposes into a signed complex linear
+    combination of CP maps.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Working entrywise, reduces to the scalar polarization identity
+    $4\,\alpha\,\overline{\delta}
+      = \sum_{k=0}^{3} i^k (\alpha + i^k \beta)\overline{(\gamma + i^k \delta)}$
+    in $\mathbb{C}$, which holds after substituting $i^2 = -1$.
+\end{proof}
+
+\begin{theorem}[Prop.~2.2, CP decomposition of sandwich sums]
+    \label{thm:cp_decomposition_of_sandwich_sum}
+    \lean{WolfProps.cp_decomposition_of_sandwich_sum}
+    \leanok
+    \uses{thm:polarization_sandwich}
+    For any finite Kraus-like families $\{A_i\}, \{B_i\}$, the map
+    $T(X) = \sum_i A_i X B_i^\dagger$ satisfies
+    $4\,T = T_1 - T_2 + i\,T_3 - i\,T_4$ with each $T_k$ a CP map given
+    explicitly by a single-side Kraus sum of the combined families.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:polarization_sandwich}
+    Apply the polarization identity summand-by-summand.
+\end{proof}
+
+\begin{theorem}[Prop.~2.3, no information without disturbance]
+    \label{thm:linearMap_eq_id_of_fixes_rankOne}
+    \lean{WolfProps.linearMap_eq_id_of_fixes_rankOne}
+    \leanok
+    Let $T : \MN{D} \to \MN{D}$ be linear. If $T(|v\rangle\!\langle v|)
+    = |v\rangle\!\langle v|$ for every $v \in \mathbb{C}^D$, then
+    $T = \mathrm{id}$. In particular, a quantum channel preserving every
+    pure state equals the identity.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Rank-one outer products $|u\rangle\!\langle v|$ polarize into rank-one
+    self-outer-products:
+    $4\,|u\rangle\!\langle v|
+      = \sum_{k=0}^3 i^k |u + i^k v\rangle\!\langle u + i^k v|$,
+    so $T$ preserves every $|u\rangle\!\langle v|$. Since the matrix units
+    $E_{ij} = |e_i\rangle\!\langle e_j|$ span $\MN{D}$, $T$ equals the
+    identity on a spanning set, hence everywhere.
+\end{proof}
+
+\begin{definition}[Pure-state ensemble density]
+    \label{def:pureEnsembleDensity}
+    \lean{WolfProps.pureEnsembleDensity}
+    \leanok
+    Given a finite family $\{\psi_i\}_{i \in \iota}$ of (unnormalized)
+    vectors in $\mathbb{C}^D$, its \emph{pure-ensemble density} is
+    $\rho = \sum_i |\psi_i\rangle\!\langle \psi_i|$. Weights
+    $p_i \geq 0$ with $\sum p_i = 1$ can be absorbed by replacing
+    $\psi_i \mapsto \sqrt{p_i}\,\psi_i$.
+\end{definition}
+
+\begin{theorem}[Prop.~2.4, isometric mixing preserves the density]
+    \label{thm:pureEnsembleDensity_eq_of_isometric_mixing}
+    \lean{WolfProps.pureEnsembleDensity_eq_of_isometric_mixing}
+    \leanok
+    \uses{def:pureEnsembleDensity}
+    If two pure-state ensembles $\{\psi_i\}_{i \in \iota_1}$ and
+    $\{\phi_j\}_{j \in \iota_2}$ are related by an isometric mixing
+    matrix $V \in M_{\iota_1 \times \iota_2}(\mathbb{C})$ with
+    $V^\dagger V = \Id$ and $\psi_i = \sum_j V_{ij}\,\phi_j$, then
+    they induce the same pure-ensemble density operator. This is the
+    sufficient direction of the Hughston--Jozsa--Wootters theorem; the
+    converse (necessity) requires Schmidt-decomposition machinery not
+    yet in the repository.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:pureEnsembleDensity}
+    Expanding and applying the orthogonality relation
+    $\sum_i V_{ij}\overline{V_{ij'}} = \delta_{j j'}$ from
+    $V^\dagger V = \Id$:
+    \[
+      \sum_i |\psi_i\rangle\!\langle \psi_i|
+        = \sum_{j, j'} \Big(\sum_i V_{ij}\,\overline{V_{ij'}}\Big)
+           |\phi_j\rangle\!\langle \phi_{j'}|
+        = \sum_j |\phi_j\rangle\!\langle \phi_j|.
+    \]
+\end{proof}
+
+%% =========================================================
 \section{Kraus representation theorem}
 \label{sec:kraus_representation}
 %% =========================================================
