@@ -1698,14 +1698,18 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
 \end{proof}
 
 %% =========================================================
-\subsection{Normal forms: SVD and Lorentz (existence)}
-\label{subsec:svd_lorentz_normal_form}
+\subsection{SVD normal form (existence)}
+\label{subsec:svd_normal_form}
 %% =========================================================
 
 Wolf \S2.3 discusses two families of normal forms for the transfer-matrix
 representation of a quantum channel: the \emph{singular value decomposition}
 (SVD) and, for qubit channels, the \emph{Lorentz normal form} obtained by
-$\mathrm{SL}(2,\mathbb{C})$ filtering operations.
+$\mathrm{SL}(2,\mathbb{C})$ filtering operations. In this blueprint, the full
+existence statement formalized below is the SVD normal form; the Lorentz
+normal form existence requires a compactness / minimisation argument over
+$\mathrm{SL}(2,\mathbb{C})$ filterings (Wolf Prop 2.9 / Prop 2.11) that
+remains open in this formalisation.
 
 \begin{theorem}[SVD for positive semi-definite matrices]
     \label{thm:svd_posSemidef}
@@ -1764,37 +1768,14 @@ $\mathrm{SL}(2,\mathbb{C})$ filtering operations.
     representation.
 \end{proof}
 
-\begin{definition}[Doubly-stochastic Choi matrix]
-    \label{def:doubly_stochastic_choi}
-    \lean{IsDoublyStochasticChoi}\leanok
-    A Choi-like matrix $\tau \in \mathcal{M}_{2} \otimes \mathcal{M}_{2}$ is
-    \emph{doubly-stochastic} if both of its partial traces are proportional to
-    the $2 \times 2$ identity matrix.
-\end{definition}
-
-\begin{theorem}[Lorentz normal form — trivial-filtering witness]
-    \label{thm:lorentz_normal_form_trivial}
-    \lean{lorentz_normal_form_trivial}\leanok
-    \uses{def:doubly_stochastic_choi}
-    If a qubit Choi matrix $\tau$ is already doubly-stochastic, then the
-    trivial $\mathrm{SL}(2,\mathbb{C})$ filtering pair
-    $(X_{1}, X_{2}) = (\mathbf{1}, \mathbf{1})$ witnesses the Lorentz normal
-    form: both determinants are $1$ and conjugation by $X_{2} \otimes X_{1}
-    = \mathbf{1}$ returns $\tau$ unchanged and therefore preserves
-    double-stochasticity.
-
-    This is the base case of the iterative optimisation argument sketched in
-    Wolf \S2.3 (Prop 2.9 / Prop 2.11). The full existence result additionally
-    requires a compactness / minimisation step that remains open in this
-    formalisation.
-\end{theorem}
-
-\begin{proof}\leanok
-    Take $X_{1} = X_{2} = \mathbf{1}$. Then $\det X_{i} = 1$ and
-    $X_{2} \otimes X_{1} = \mathbf{1}$, so $(X_{2} \otimes X_{1}) \tau
-    (X_{2} \otimes X_{1})^{\dagger} = \tau$, which is doubly-stochastic by
-    assumption.
-\end{proof}
+\begin{remark}[Sorted / unique singular values]
+    Theorem~\ref{thm:svd_of_isUnit} produces the singular values as an
+    unordered family, without the usual convention that $\sigma_{i}$ are sorted
+    in non-increasing order or the statement that they are uniquely determined
+    by $M$. Downstream applications in Wolf \S2.3 (trace-norm identities,
+    polar decomposition, Lorentz normal form) will typically require the
+    sorted / unique variant; that refinement is future work.
+\end{remark}
 
 %% The following sections will not be needed for the fundamental theorem of the matrix product states.
 
