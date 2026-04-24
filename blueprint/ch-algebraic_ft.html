@@ -1790,7 +1790,7 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   Let \(A_1, A_2\) and \(B_1, B_2\) be injective MPS tensors with the same bond dimension \(D\). Suppose that for all \(X \in M_{D}(\mathbb {C})\) (on the internal bond) and all \(Y \in M_{D}(\mathbb {C})\) (on the external bond), </p>
-<div class="displaymath" id="<plasTeX.TeXFragment object at 0x7f3e4ec61fd0>">
+<div class="displaymath" id="<plasTeX.TeXFragment object at 0x7fd1d6539fd0>">
   \begin{align}  \operatorname{tr}(A_1^{i}\,  X\,  A_2^{j}) & = \operatorname{tr}(B_1^{i}\,  X\,  B_2^{j}) \qquad \text{for all } i, j, \label{eq:internal_bond}\\ \operatorname{tr}(A_2^{j}\,  Y\,  A_1^{i}) & = \operatorname{tr}(B_2^{j}\,  Y\,  B_1^{i}) \qquad \text{for all } i, j. \label{eq:external_bond} \end{align}
 </div>
 <p> Diagrammatically, Eq.&#160;?? is the equality obtained by inserting \(X\) on the bond between the two sites, </p>
@@ -6568,8 +6568,159 @@
         </div>
   </div>
   <div class="definition_thmcontent">
-  <p>   For fixed \(A\), \(B\), a bond-dimension equality, and a vertex \(v\), this packages the two local conclusions still needed from the blocked-middle reduction in&#160;<span class="cite">
+  <p>   For fixed \(A\), \(B\), a bond-dimension equality, and a vertex \(v\), this records the two local conclusions still needed from the blocked-middle reduction in&#160;<span class="cite">
 </span>, §3: (i) each local component of \(B\) lies in the image of the local tensor map of \(A\), and (ii) the canonical pullback through the chosen left inverse of \(A\) factorizes as one invertible matrix on each incident edge. </p>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:peps_blockedMiddleGaugeHyp">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">17.77</span>
+    <span class="definition_thmtitle">Blocked-middle local gauge output</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-algebraic_ft.html#def:peps_blockedMiddleGaugeHyp">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-algebraic_ft.html#def:peps_hasLocalGaugeLift">Definition 17.76</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.BlockedMiddleGaugeHyp" class="lean_decl">TNLean.PEPS.BlockedMiddleGaugeHyp</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>   This states the explicit local gauge formula that the edge-centered blocked-middle reduction is expected to produce: a family of invertible matrices on the incident edges of \(v\) whose product kernel reconstructs each local component of \(B\) from those of \(A\). </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:peps_hasLocalGaugeLift_of_blockedMiddleGaugeHyp">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">17.78</span>
+    <span class="theorem_thmtitle">Blocked-middle output implies sharpened lift</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-algebraic_ft.html#thm:peps_hasLocalGaugeLift_of_blockedMiddleGaugeHyp">#</a>
+    
+    <a class="icon proof" href="ch-algebraic_ft.html#a0000001088"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-algebraic_ft.html#def:peps_blockedMiddleGaugeHyp">Definition 17.77</a></li>
+          
+          <li><a href="ch-algebraic_ft.html#def:peps_hasLocalGaugeLift">Definition 17.76</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.hasLocalGaugeLift_of_blockedMiddleGaugeHyp" class="lean_decl">TNLean.PEPS.hasLocalGaugeLift_of_blockedMiddleGaugeHyp</a></li>
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.HasLocalGaugeLift" class="lean_decl">TNLean.PEPS.HasLocalGaugeLift</a></li>
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.BlockedMiddleGaugeHyp" class="lean_decl">TNLean.PEPS.BlockedMiddleGaugeHyp</a></li>
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.SameState" class="lean_decl">TNLean.PEPS.SameState</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   Any explicit local gauge formula from the blocked-middle reduction yields . The remaining open step is therefore to build  from . </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000001088">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>The explicit local gauge formula already places each local component of \(B\) in the image of the local tensor map of \(A\). Applying the chosen left inverse of \(A\) identifies the canonical candidate with the same factorized coefficient kernel, so both fields of  follow. </p>
 
   </div>
 </div>
@@ -6578,7 +6729,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">17.77</span>
+    <span class="theorem_thmlabel">17.79</span>
     <span class="theorem_thmtitle">Local gauge extraction</span>
     <div class="thm_header_extras">
 
@@ -6601,6 +6752,8 @@
         <ul class="uses">
           
           <li><a href="ch-algebraic_ft.html#def:peps_hasLocalGaugeLift">Definition 17.76</a></li>
+          
+          <li><a href="ch-algebraic_ft.html#def:peps_blockedMiddleGaugeHyp">Definition 17.77</a></li>
           
           <li><a href="ch-algebraic_ft.html#def:localTensorEval">Definition 17.67</a></li>
           
@@ -6626,6 +6779,10 @@
           
           <li><a href="../docs/find/#doc/TNLean.PEPS.HasLocalGaugeLift" class="lean_decl">TNLean.PEPS.HasLocalGaugeLift</a></li>
           
+          <li><a href="../docs/find/#doc/TNLean.PEPS.BlockedMiddleGaugeHyp" class="lean_decl">TNLean.PEPS.BlockedMiddleGaugeHyp</a></li>
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.hasLocalGaugeLift_of_blockedMiddleGaugeHyp" class="lean_decl">TNLean.PEPS.hasLocalGaugeLift_of_blockedMiddleGaugeHyp</a></li>
+          
         </ul>
     
       </div>
@@ -6635,8 +6792,8 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   Lean now proves the local gauge formula from the sharper hypothesis . What remains open is to derive this local lift datum from the global same-state hypothesis via the blocked middle tensor and the corresponding three-site injective-chain argument. Under that hypothesis, injectivity on the star neighbourhood provides a left inverse that isolates the local edge gauges: </p>
-<div class="displaymath" id="a0000001088">
+  <p>   Lean now proves the local gauge formula from the sharper hypothesis . What remains open is to derive  from the global same-state hypothesis via the blocked middle tensor and the corresponding three-site injective-chain argument, then invoke . Under that hypothesis, injectivity on the star neighbourhood provides a left inverse that isolates the local edge gauges: </p>
+<div class="displaymath" id="a0000001089">
   \[  \begin{array}{c} \text{injectivity on } \mathrm{star}(v) \text{ gives a left inverse} \\ \text{which isolates the local edge gauges around } v \end{array} \]
 </div>
 
@@ -6647,7 +6804,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">17.78</span>
+    <span class="theorem_thmlabel">17.80</span>
     <span class="theorem_thmtitle">Gauge consistency</span>
     <div class="thm_header_extras">
 
@@ -6669,7 +6826,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-algebraic_ft.html#thm:localGauge_exists">Theorem 17.77</a></li>
+          <li><a href="ch-algebraic_ft.html#thm:localGauge_exists">Theorem 17.79</a></li>
           
           <li><a href="ch-algebraic_ft.html#def:gaugeVertex">Definition 17.62</a></li>
           
@@ -6703,7 +6860,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Local gauges extracted at adjacent vertices are consistent across shared edges, yielding a global gauge family. On a shared edge, the two neighbouring local extractions match as one edge gauge: </p>
-<div class="displaymath" id="a0000001089">
+<div class="displaymath" id="a0000001090">
   \[  \begin{array}{c} \text{local gauges extracted at } u \text{ and } w \text{ agree on the shared edge } e \\ u \;  \text{---} \;  X_e \;  \text{---} \;  (X_e^{-1})^\top \;  \text{---} \;  w \\ \text{and define one global edge gauge family} \end{array} \]
 </div>
 
@@ -6714,7 +6871,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">17.79</span>
+    <span class="theorem_thmlabel">17.81</span>
     <span class="theorem_thmtitle">Fundamental Theorem for injective PEPS</span>
     <div class="thm_header_extras">
 
@@ -6736,7 +6893,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-algebraic_ft.html#thm:gaugeConsistency">Theorem 17.78</a></li>
+          <li><a href="ch-algebraic_ft.html#thm:gaugeConsistency">Theorem 17.80</a></li>
           
           <li><a href="ch-algebraic_ft.html#def:GaugeEquivPEPS">Definition 17.64</a></li>
           
@@ -6781,7 +6938,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">17.80</span>
+    <span class="definition_thmlabel">17.82</span>
     <span class="definition_thmtitle">Gauge equivalence modulo balanced edge scalars</span>
     <div class="thm_header_extras">
 
@@ -6845,7 +7002,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">17.81</span>
+    <span class="theorem_thmlabel">17.83</span>
     <span class="theorem_thmtitle">Balanced edge scalars preserve the local gauge action</span>
     <div class="thm_header_extras">
 
@@ -6856,7 +7013,7 @@
 
     <a class="icon proof" href="ch-algebraic_ft.html#thm:GaugeEquivModEdgeScalars_gaugeVertex_eq">#</a>
     
-    <a class="icon proof" href="ch-algebraic_ft.html#a0000001090"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-algebraic_ft.html#a0000001091"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6872,11 +7029,11 @@
         
         <ul class="uses">
           
-          <li><a href="ch-algebraic_ft.html#def:GaugeEquivModEdgeScalars">Definition 17.80</a></li>
+          <li><a href="ch-algebraic_ft.html#def:GaugeEquivModEdgeScalars">Definition 17.82</a></li>
           
           <li><a href="ch-algebraic_ft.html#def:gaugeVertex">Definition 17.62</a></li>
           
-          <li><a href="ch-algebraic_ft.html#def:GaugeEquivModEdgeScalars">Definition 17.80</a></li>
+          <li><a href="ch-algebraic_ft.html#def:GaugeEquivModEdgeScalars">Definition 17.82</a></li>
           
           <li><a href="ch-algebraic_ft.html#def:gaugeVertex">Definition 17.62</a></li>
           
@@ -6913,7 +7070,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001090">
+<div class="proof_wrapper" id="a0000001091">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6930,7 +7087,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">17.82</span>
+    <span class="theorem_thmlabel">17.84</span>
     <span class="theorem_thmtitle">Gauge uniqueness modulo balanced edge scalars</span>
     <div class="thm_header_extras">
 
@@ -6952,7 +7109,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-algebraic_ft.html#def:GaugeEquivModEdgeScalars">Definition 17.80</a></li>
+          <li><a href="ch-algebraic_ft.html#def:GaugeEquivModEdgeScalars">Definition 17.82</a></li>
           
           <li><a href="ch-algebraic_ft.html#def:IsVertexInjective">Definition 17.68</a></li>
           
@@ -6989,18 +7146,18 @@
 
   </div>
 </div>
-<div class="remark_thmwrapper theorem-style-remark" id="a0000001091">
+<div class="remark_thmwrapper theorem-style-remark" id="a0000001092">
   <div class="remark_thmheading">
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">17.83</span>
+    <span class="remark_thmlabel">17.85</span>
     <div class="thm_header_extras">
 
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-algebraic_ft.html#a0000001091">#</a>
+    <a class="icon proof" href="ch-algebraic_ft.html#a0000001092">#</a>
     
     
     
@@ -7014,18 +7171,18 @@
 </div>
 <h1 id="sec:closing">17.14 Closing remarks</h1>
 
-<div class="remark_thmwrapper theorem-style-remark" id="a0000001092">
+<div class="remark_thmwrapper theorem-style-remark" id="a0000001093">
   <div class="remark_thmheading">
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">17.84</span>
+    <span class="remark_thmlabel">17.86</span>
     <div class="thm_header_extras">
 
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-algebraic_ft.html#a0000001092">#</a>
+    <a class="icon proof" href="ch-algebraic_ft.html#a0000001093">#</a>
     
     
     
