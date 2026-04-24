@@ -4,7 +4,14 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import Mathlib.LinearAlgebra.Matrix.Irreducible.Defs
 import Mathlib.Data.Matrix.Mul
-import Mathlib.Tactic
+import Mathlib.Data.Real.Basic
+import Mathlib.LinearAlgebra.Matrix.Notation
+import Mathlib.LinearAlgebra.Matrix.Trace
+import Mathlib.Tactic.FinCases
+import Mathlib.Tactic.IntervalCases
+import Mathlib.Tactic.Linarith
+import Mathlib.Tactic.NormNum
+import Mathlib.Tactic.Ring
 
 /-!
 # Counterexample: primitivity plus constant trace powers does not imply rank one
