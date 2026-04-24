@@ -552,7 +552,7 @@ namespace SectorBasisMatching
 
 variable {P Q : SectorDecomposition d}
 
-/-- Repackage the per-block data in the existential form consumed by
+/-- Reformulate the per-block data in the existential form consumed by
 `fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_matched_basis`. -/
 lemma basis_match_exists (M : SectorBasisMatching P Q) :
     ∀ j : Fin P.basisCount,
