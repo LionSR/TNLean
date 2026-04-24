@@ -187,8 +187,8 @@ private theorem exists_cyclic_sector_decomp_after_blocking_of_isPeriodic
 
 /-- One-step projection transport for `((E_A^†)^m)`-fixed cyclic-sector projections.
 
-This packages the exact `hProjStep`-style consequence needed by the overlap
-pipeline, assuming the fixed-point-algebra rigidity input on cyclic sectors.
+This gives the exact `hProjStep`-style consequence needed in the overlap
+argument, assuming the fixed-point-algebra rigidity input on cyclic sectors.
 It is kept as a named wrapper for arguments that still work through
 `SectorFixedPointAlgebraRigidity`, even though the main self-overlap route now
 uses the unconditional orbit-sum lift from `SectorIrreducibility.HLift`. -/
@@ -222,8 +222,8 @@ theorem hProjStep_cyclic_sector_supported
 This isolates the channel-level input behind
 `primitive_and_irreducible_sectorBlocks_of_cyclicDecomp`: on each cyclic corner,
 the `m`-step adjoint transfer map is primitive and irreducible. The later
-compression bridge transports these facts from the corner restriction to the
-compressed sector tensor. -/
+compression identification converts these corner statements into the
+corresponding statements for the compressed sector tensor. -/
 private lemma cornerRestriction_primitive_and_irreducible_of_cyclicDecomp
     [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
     (hP : IsPeriodic m A)
@@ -494,11 +494,12 @@ map and is tensor-irreducible.
 
 The proof combines the unconditional corner result from
 `cornerRestriction_primitive_and_irreducible_of_cyclicDecomp` with the
-compression bridge `compressedSector_adjointTransferMap_cornerBridge_of_cyclicDecomp`.
+compression identification provided by
+`compressedSector_adjointTransferMap_cornerBridge_of_cyclicDecomp`.
 The first supplies primitivity and irreducibility for the `m`-step adjoint
-transfer map on the corner `P u`; the second transports those properties to the
-compressed adjoint sector tensor, after which `MPS/Irreducible/Adjoint.lean`
-converts back to the ordinary transfer map.
+transfer map on the corner `P u`; the second identifies the compressed adjoint
+sector tensor with the corresponding corner restriction, after which
+`MPS/Irreducible/Adjoint.lean` converts back to the ordinary transfer map.
 
 Kept as an explicit named sublemma so downstream consumers (`Case 2`,
 `Case 3`) and subsequent PRs can target its statement directly — the

@@ -731,7 +731,7 @@ theorem primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking_o
 
 /-- Unconditional cyclic-sector block primitivity and irreducibility after blocking.
 
-This packages `isIrreducibleOnCorner_of_cyclic_decomp_mps`, so the older
+This uses `isIrreducibleOnCorner_of_cyclic_decomp_mps`, so the older
 `hProjStep` and `SectorFixedPointAlgebraRigidity` interfaces are no longer needed
 once the ambient tensor is irreducible and trace-preserving. -/
 theorem primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking
