@@ -1640,6 +1640,28 @@ The following results separate the zero blocks from the
 	using the cyclic relation $\E_A^\dagger(P_k)=P_{k-1}$.
 \end{proof}
 
+\begin{theorem}[Sector fixed-point-algebra rigidity from tensor irreducibility]%
+	\label{thm:sector_fixed_algebra_irred_tp}
+	\lean{MPSTensor.sectorFixedPointAlgebraRigidity_of_irreducible_tp}
+	\leanok
+	\uses{thm:sector_fixed_algebra_irred_cyclic}
+	Let $A$ be a trace-preserving MPS tensor that is irreducible in the tensor
+	sense, and let $(P_k)_{k=1}^m$ be cyclic orthogonal sector projections with
+	$\sum_k P_k = \Id$ and $\E_A^\dagger(P_{k+1}) = P_k$. Then the sector
+	fixed-point-algebra rigidity property holds automatically for $\E_A^\dagger$.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:sector_fixed_algebra_irred_cyclic}
+	Tensor irreducibility of $A$ together with trace preservation implies that
+	$\E_A^\dagger$ is an irreducible channel. The Kadison--Schwarz
+	multiplicative-domain criterion, applied to the unital kernel
+	$K_i = A_i^\dagger$, shows that each cyclic sector projection $P_k$ lies in
+	the multiplicative domain of $\E_A^\dagger$, which provides the
+	multiplicativity-on-the-sector inputs required by
+	Theorem~\ref{thm:sector_fixed_algebra_irred_cyclic}.
+\end{proof}
+
 \begin{lemma}[Orbit-sum construction of the sector lift]%
 	\label{lem:orbit_sum_hLift_construction}
 	\lean{MPSTensor.hLift_cyclicDecomp_mps_of_fixUpgrade}

@@ -36,6 +36,11 @@ its MPS-formulation for irreducible TP tensors.
 * `primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking_of_fixedAlgebraRigidity`
   — the same conclusion under the structured fixed-point-algebra rigidity
   hypothesis from `SectorIrreducibility/HLift.lean`.
+* `sectorFixedPointAlgebraRigidity_of_irreducible_tp` — TP/tensor-irreducibility
+  packaging of
+  `sectorFixedPointAlgebraRigidity_of_irreducible_cyclicDecomp`: supplies the
+  multiplicativity-on-the-sector inputs from `cyclic_projection_mul_left` and
+  `cyclic_projection_mul_right`.
 
 ## References
 
@@ -484,6 +489,43 @@ theorem cyclic_projection_mul_right
   intro k X
   simpa [K, MPSTensor.transferMap_apply, KadisonSchwarz.krausMap] using
     KadisonSchwarz.krausMap_mul_left_of_mem_multiplicativeDomain (K := K) (hMulDomain k) X
+
+/-- Sector fixed-point-algebra rigidity from tensor irreducibility and
+trace preservation.
+
+For an irreducible trace-preserving MPS tensor `A` with cyclic orthogonal
+sector projections `(P k)_{k : Fin m}` summing to `1` and satisfying
+`T (P (k+1)) = P k` for `T = transferMap A†`, the sector fixed-point-algebra
+rigidity property holds automatically.
+
+This is the TP/tensor-irreducibility packaging of
+`sectorFixedPointAlgebraRigidity_of_irreducible_cyclicDecomp`: the
+multiplicativity-on-the-sector inputs `hMulLeft`, `hMulRight` are supplied by
+`cyclic_projection_mul_left` / `cyclic_projection_mul_right`, and the
+channel-level irreducibility hypothesis is discharged from `IsIrreducibleTensor A`
+via `isIrreducibleCP_transferMap_conjTranspose_of_isIrreducibleTensor`. Cf.
+`Papers/1708.00029` Lemma `lem:bdcf`. -/
+theorem sectorFixedPointAlgebraRigidity_of_irreducible_tp
+    {d D m : ℕ} [NeZero D] [NeZero m]
+    (A : MPSTensor d D)
+    (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (hIrr : IsIrreducibleTensor (d := d) (D := D) A)
+    (P : Fin m → MatrixAlg D)
+    (hPproj : ∀ k : Fin m, IsOrthogonalProjection (P k))
+    (hPsum : ∑ k : Fin m, P k = 1)
+    (hcyclic :
+      ∀ k : Fin m,
+        transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k) :
+    SectorFixedPointAlgebraRigidity
+      (D := D) (m := m)
+      (transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) P := by
+  have hIrrAdj :
+      IsIrreducibleMap (transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) :=
+    isIrreducibleCP_transferMap_conjTranspose_of_isIrreducibleTensor (A := A) hIrr
+  have hMulLeft := cyclic_projection_mul_left (A := A) (m := m) hTP P hPproj hcyclic
+  have hMulRight := cyclic_projection_mul_right (A := A) (m := m) hTP P hPproj hcyclic
+  exact sectorFixedPointAlgebraRigidity_of_irreducible_cyclicDecomp
+    (A := A) (m := m) hIrrAdj hTP P hPproj hPsum hcyclic hMulLeft hMulRight
 
 private theorem compressedTensor_adjointTransferMap_primitive_and_irreducible_of_corner
     {r D n : ℕ} [NeZero n]
