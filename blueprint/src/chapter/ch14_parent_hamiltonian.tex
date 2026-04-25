@@ -1806,12 +1806,75 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     assembled tensor, with the compensating scalar factor coming from the nonzero weight $\mu_{j}$.
 \end{proof}
 
+\begin{lemma}[Periodic block lift]
+    \label{lem:chain_ground_space_block_le_assembled}
+    \lean{MPSTensor.chainGroundSpace_block_le_toTensorFromBlocks}
+    \leanok
+    \uses{def:chain_ground_space}
+    For each block index $j$ with $\mu_{j} \neq 0$, the chain ground space of the block
+    $A_{j}$ embeds into the chain ground space of the assembled tensor:
+    \[
+        \operatorname{ChainGround}_{N,L}(A_{j})
+            \subseteq \operatorname{ChainGround}_{N,L}(\operatorname{Assemble}(\mu, A)).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The cyclic-window definition of the chain ground space reduces the inclusion to
+    the local block-embedding statement that each ground vector of $A_{j}$ on the
+    window of length $L$ lifts to the assembled tensor by inserting the block-diagonal
+    boundary matrix with the compensating scalar factor $\mu_{j}^{-L}$.
+\end{proof}
+
+\begin{lemma}[Periodic block decomposition: forward inclusion]
+    \label{lem:isup_chain_ground_space_block_le_assembled}
+    \lean{MPSTensor.iSup_chainGroundSpace_block_le_toTensorFromBlocks}
+    \leanok
+    \uses{def:chain_ground_space, lem:chain_ground_space_block_le_assembled}
+    Assume $\mu_{j} \neq 0$ for every block index $j$. The supremum of the blockwise
+    periodic-chain ground spaces is contained in the assembled tensor's periodic-chain
+    ground space:
+    \[
+        \bigsqcup_{j} \operatorname{ChainGround}_{N,L}(A_{j})
+            \subseteq \operatorname{ChainGround}_{N,L}(\operatorname{Assemble}(\mu, A)),
+    \]
+    where $j$ ranges over all block indices.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Aggregate the block lift over all block indices.
+\end{proof}
+
+\begin{lemma}[Block decomposition: forward inclusion in the assembled parent ground space]
+    \label{lem:isup_chain_ground_space_block_le_parent_ground_space}
+    \lean{MPSTensor.iSup_chainGroundSpace_block_le_parentHamiltonianGroundSpace}
+    \leanok
+    \uses{def:parent_hamiltonian_ground_space_bnt,
+        lem:isup_chain_ground_space_block_le_assembled}
+    For a canonical-form/BNT family, the supremum of the blockwise periodic-chain
+    ground spaces is contained in the assembled parent ground space:
+    \[
+        \bigsqcup_{j} \operatorname{ChainGround}_{N,L}(A_{j})
+            \subseteq \operatorname{ParentGround}_{N,L}(A).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The canonical-form/BNT hypothesis supplies $\mu_{j} \neq 0$ for every $j$, and the
+    assembled parent ground space is the chain ground space of the assembled tensor by
+    definition.
+\end{proof}
+
 \begin{theorem}[Containment in the BNT span by block decomposition]
     \label{thm:parent_ground_space_le_bnt_span}
     \lean{MPSTensor.parentHamiltonianGroundSpace_le_bntSpan_of_block_decomposition}
     \notready
     \uses{def:parent_hamiltonian_ground_space_bnt, def:bnt_span,
-        thm:chain_ground_space_eq_mpv_normal}
+        thm:chain_ground_space_eq_mpv_normal,
+        lem:isup_chain_ground_space_block_le_assembled}
     If $A$ is in canonical-form/BNT and $1 < L$ and $N \ge L + 1$, every vector in the
     assembled parent ground space should decompose into blockwise chain ground states, and
     therefore lie in the BNT span.
