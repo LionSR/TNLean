@@ -4,6 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.ParentHamiltonian.Basic
 import TNLean.MPS.ParentHamiltonian.CyclicWindow
+import TNLean.MPS.ParentHamiltonian.ExtendRight
+import TNLean.MPS.ParentHamiltonian.RestrictTransport
 import TNLean.MPS.ParentHamiltonian.WrappingWindow
 import TNLean.MPS.FundamentalTheorem.FiniteLength
 import TNLean.Algebra.TracePairing
@@ -259,6 +261,86 @@ theorem mpv_ne_zero_of_isNBlkInjective {A : MPSTensor d D} [NeZero D]
       _ = 0 := by
           simpa [Matrix.traceLinearMap_apply] using congrArg (· M) hφ
   exact allZero_contradiction hInj hL₀ (by omega : 0 < N - L₀) hprod_zero
+
+/-- A positive block-injectivity length over nonzero virtual dimension forces the
+physical alphabet to be nonempty. -/
+private theorem neZero_d_of_isNBlkInjective [NeZero D]
+    {A : MPSTensor d D} {L₀ : ℕ} (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) :
+    NeZero d := by
+  by_contra h
+  simp only [not_neZero] at h
+  subst h
+  have hempty :
+      Set.range (fun σ : Fin L₀ → Fin 0 => evalWord A (List.ofFn σ)) = ∅ := by
+    ext M
+    constructor
+    · rintro ⟨σ, _⟩
+      exact (σ ⟨0, hL₀⟩).elim0
+    · intro hM
+      cases hM
+  rw [IsNBlkInjective, hempty, Submodule.span_empty] at hInj
+  exact bot_ne_top hInj
+
+/-- Open-chain range reduction for block-injective tensors.
+
+If all contiguous windows of size `L₀ + 1` lie in the corresponding MPS ground
+space, then the full open chain lies in `groundSpace A N`.  This is the
+chain-level iteration of `groundSpace_extend_right_of_isNBlkInjective`; it is the
+open-boundary half of the normal parent-Hamiltonian range reduction. -/
+theorem contiguous_mem_groundSpace_of_isNBlkInjective
+    {A : MPSTensor d D} [NeZero D] {L₀ N : ℕ}
+    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hLN : L₀ + 1 ≤ N)
+    {ψ : NSiteSpace d N}
+    (hwindow : ∀ (s : ℕ) (hs : s + (L₀ + 1) ≤ N) (τ : Fin N → Fin d),
+      contiguousRestrictₗ s (L₀ + 1) hs τ ψ ∈ groundSpace A (L₀ + 1)) :
+    ψ ∈ groundSpace A N := by
+  haveI : NeZero d := neZero_d_of_isNBlkInjective hInj hL₀
+  have hd : 0 < d := Nat.pos_of_ne_zero (NeZero.ne d)
+  let τ₀ : Fin N → Fin d := fun _ => ⟨0, hd⟩
+  have claim : ∀ K : ℕ, ∀ (s : ℕ) (hs : s + (K + L₀ + 1) ≤ N)
+      (τ : Fin N → Fin d),
+      contiguousRestrictₗ s (K + L₀ + 1) hs τ ψ ∈ groundSpace A (K + L₀ + 1) := by
+    intro K
+    induction K with
+    | zero =>
+        intro s hs τ
+        have hEq0 : L₀ + 1 = 0 + L₀ + 1 := by omega
+        have hs₀ : s + (L₀ + 1) ≤ N := by omega
+        rw [← contiguousRestrictₗ_reindex_window (d := d) hEq0 hs₀ hs τ ψ]
+        exact reindexSites_mem_groundSpace hEq0 (hwindow s hs₀ τ)
+    | succ K ih =>
+        intro s hs τ
+        apply groundSpace_extend_right_of_isNBlkInjective (A := A) (K := K + 1) hInj hL₀
+        · intro j
+          rw [contiguousRestrictₗ_restrictLast]
+          have hEq : K + L₀ + 1 = (K + 1) + L₀ := by omega
+          let τj := Function.update τ ⟨s + ((K + 1) + L₀), by omega⟩ j
+          have hs₁ : s + (K + L₀ + 1) ≤ N := by omega
+          have hs₂ : s + ((K + 1) + L₀) ≤ N := by omega
+          rw [← contiguousRestrictₗ_reindex_window (d := d) hEq hs₁ hs₂ τj ψ]
+          exact reindexSites_mem_groundSpace hEq (ih s hs₁ τj)
+        · intro u
+          have hsTail : s + ((K + 1) + (L₀ + 1)) ≤ N := by omega
+          change tailRestrictₗ u
+              (contiguousRestrictₗ s ((K + 1) + (L₀ + 1)) hsTail τ ψ) ∈
+            groundSpace A (L₀ + 1)
+          rw [tailRestrictₗ_contiguousRestrictₗ (d := d) (s := s) (K := K + 1)
+            (L := L₀ + 1) hsTail u τ ψ]
+          exact hwindow (s + (K + 1)) (by omega) _
+  have hK : N - (L₀ + 1) + L₀ + 1 = N := by omega
+  have hmemK := claim (N - (L₀ + 1)) 0 (by omega) τ₀
+  have hmemN := reindexSites_mem_groundSpace hK hmemK
+  have hfull :
+      reindexSites hK
+        (contiguousRestrictₗ 0 (N - (L₀ + 1) + L₀ + 1) (by omega) τ₀ ψ) = ψ := by
+    ext σ
+    simp only [reindexSites_apply, contiguousRestrictₗ_apply]
+    congr 1
+    ext k
+    simp only [contiguousCfg]
+    rw [dif_pos (show 0 ≤ k.val ∧ k.val < 0 + (N - (L₀ + 1) + L₀ + 1) by omega)]
+    congr 1
+  rwa [hfull] at hmemN
 
 /-! ### Helper: vanishing on all word products implies zero -/
 
