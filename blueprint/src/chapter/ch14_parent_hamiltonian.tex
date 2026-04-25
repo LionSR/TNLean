@@ -1550,6 +1550,40 @@ Lucia~\cite{Kastoryano2018Martingale}.
     \ge \gamma^2 \sum_k |c_k|^2 = \gamma^2 \|v\|^2$.
 \end{proof}
 
+\begin{lemma}[Parent-Hamiltonian quadratic-form reduction]
+    \label{lem:parent_hamiltonian_es_quadratic_reduction}
+    \lean{MPSTensor.parentHamiltonianES_norm_bound_of_quadratic_form}
+    \lean{MPSTensor.parentHamiltonianES_gap_bound_of_quadratic_form}
+    \leanok
+    \uses{lem:transported_es_positive, thm:parent_ground_space_es_kernel,
+        lem:quadratic_form_to_norm_bound}
+    Let $H_{N,L}^{\mathrm{ES}}(A)$ be the transported parent Hamiltonian. If a
+    constant $\gamma > 0$ satisfies the uniform quadratic-form estimate
+    \[
+        \gamma\,\operatorname{Re}\langle H_{N,L}^{\mathrm{ES}}(A)v, v\rangle
+        \le
+        \operatorname{Re}\langle H_{N,L}^{\mathrm{ES}}(A)v,
+            H_{N,L}^{\mathrm{ES}}(A)v\rangle
+    \]
+    for every $N \ge 2L$ and every vector $v$, then
+    \[
+        \gamma\,\|v\| \le \|H_{N,L}^{\mathrm{ES}}(A)v\|
+    \]
+    for every $v \in (\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp$. In particular,
+    with $L>1$ and $\gamma = 1/(4L)$, the explicit gap-bound conclusion follows
+    once this same quadratic-form estimate is supplied.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The transported Hamiltonian is positive by
+    Lemma~\ref{lem:transported_es_positive}, and its transported ground space is
+    its kernel by Theorem~\ref{thm:parent_ground_space_es_kernel}. Therefore the
+    abstract spectral-theorem conversion of
+    Lemma~\ref{lem:quadratic_form_to_norm_bound} applies directly. The
+    explicit constant is positive because $L>1$ implies $4L>0$.
+\end{proof}
+
 \begin{theorem}[Martingale criterion for spectral gap]\label{thm:martingale_criterion}
     \notready
     \uses{def:is_frustration_free, lem:quadratic_form_to_norm_bound}
@@ -1712,7 +1746,9 @@ Lucia~\cite{Kastoryano2018Martingale}.
     \uses{def:parent_ground_space_es, def:parent_hamiltonian_es,
         thm:parent_ground_space_es_kernel,
         rem:euclidean_local_projector_ingredients,
-        lem:euclidean_local_projector_positive}
+        lem:euclidean_local_projector_positive,
+        lem:local_term_es_average,
+        lem:parent_hamiltonian_es_quadratic_reduction}
     For an injective tensor $A$ and a range $L > 1$, the theorem asserts
     the analytic estimate with the explicit constant
     \[
@@ -1727,13 +1763,12 @@ Lucia~\cite{Kastoryano2018Martingale}.
 
 \begin{proof}
     \notready
-    The missing argument has two parts. First, one identifies each transported
-    local term with a finite average of the conjugate summands from
-    Remark~\ref{rem:euclidean_local_projector_ingredients};
-    Lemma~\ref{lem:euclidean_local_projector_positive} then supplies positivity
-    of the local Euclidean operators. Second, the MPS-specific Friedrichs-angle
-    estimate together with the row-sum bound feeds into the abstract martingale
-    criterion.
+    The local averaging identity and positivity statements are now formalized in
+    Lemmas~\ref{lem:local_term_es_average} and~\ref{lem:transported_es_positive}.
+    Lemma~\ref{lem:parent_hamiltonian_es_quadratic_reduction} reduces the present
+    theorem to the remaining MPS-specific task: deriving the uniform
+    quadratic-form estimate from the Friedrichs-angle anti-commutator bound and
+    the finite-overlap row-sum estimate.
 \end{proof}
 
 \begin{theorem}[Spectral gap for MPS parent Hamiltonians]\label{thm:parent_hamiltonian_gapped}
