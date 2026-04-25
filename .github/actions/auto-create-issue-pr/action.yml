@@ -1,0 +1,111 @@
+name: 'Auto-create PR for issue work'
+description: 'Find the bot-pushed branch for an issue and open a PR; optionally add an autofix label when the trigger text mentions auto-fix'
+
+inputs:
+  issue-number:
+    description: 'The GitHub issue number'
+    required: true
+  repo:
+    description: 'owner/repo slug'
+    required: true
+  branch-prefix:
+    description: 'Branch prefix the bot uses (e.g. "claude/issue-" or "codex/issue-")'
+    required: true
+  creator-name:
+    description: 'Human-readable creator name for the PR body (e.g. "Claude Code action")'
+    required: true
+  autofix-label:
+    description: 'Label to add when the trigger text contains an auto-fix keyword'
+    required: true
+  event-name:
+    description: 'github.event_name; selects which fields to scan for the auto-fix keyword'
+    required: true
+  comment-body:
+    description: 'Comment body (scanned when event-name == issue_comment)'
+    required: false
+    default: ''
+  issue-body:
+    description: 'Issue body (scanned when event-name == issues)'
+    required: false
+    default: ''
+  issue-title:
+    description: 'Issue title (scanned when event-name == issues)'
+    required: false
+    default: ''
+  gh-token:
+    description: 'Token with PR write access'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - id: open-pr
+      shell: bash
+      env:
+        GH_TOKEN: ${{ inputs.gh-token }}
+        ISSUE_NUMBER: ${{ inputs.issue-number }}
+        REPO: ${{ inputs.repo }}
+        BRANCH_PREFIX: ${{ inputs.branch-prefix }}
+        CREATOR_NAME: ${{ inputs.creator-name }}
+        AUTOFIX_LABEL: ${{ inputs.autofix-label }}
+        EVENT_NAME: ${{ inputs.event-name }}
+        COMMENT_BODY: ${{ inputs.comment-body }}
+        ISSUE_BODY: ${{ inputs.issue-body }}
+        ISSUE_TITLE_INPUT: ${{ inputs.issue-title }}
+      run: |
+        set -euo pipefail
+
+        echo "Looking for branches matching ${BRANCH_PREFIX}${ISSUE_NUMBER}-*"
+
+        # Targeted refspec; works on shallow clones without full history.
+        git fetch origin --no-tags \
+          "refs/heads/${BRANCH_PREFIX}${ISSUE_NUMBER}-*:refs/remotes/origin/${BRANCH_PREFIX}${ISSUE_NUMBER}-*" \
+          || true
+
+        BRANCH=$(git for-each-ref --sort=-committerdate --format='%(refname:lstrip=3)' \
+          "refs/remotes/origin/${BRANCH_PREFIX}${ISSUE_NUMBER}-*" | head -1)
+
+        if [ -z "$BRANCH" ]; then
+          echo "No branch found for issue #${ISSUE_NUMBER} — bot likely just replied without code changes."
+          exit 0
+        fi
+
+        echo "Found branch: $BRANCH"
+
+        EXISTING=$(gh pr list --repo "$REPO" --head "$BRANCH" --state all --json number --jq 'length')
+        if [ "$EXISTING" -gt 0 ]; then
+          echo "PR already exists for branch $BRANCH — skipping."
+          exit 0
+        fi
+
+        ISSUE_TITLE=$(gh issue view "$ISSUE_NUMBER" --repo "$REPO" --json title --jq '.title')
+
+        echo "Creating PR from $BRANCH → main for issue #${ISSUE_NUMBER}"
+
+        PR_BODY=$'Addresses #'"${ISSUE_NUMBER}"$'\n\nAuto-created by '"${CREATOR_NAME}"$'.'
+
+        PR_URL=$(gh pr create \
+          --repo "$REPO" \
+          --head "$BRANCH" \
+          --base main \
+          --title "feat: ${ISSUE_TITLE}" \
+          --body "$PR_BODY")
+
+        echo "PR created successfully: $PR_URL"
+        PR_NUM=$(echo "$PR_URL" | grep -oE '[0-9]+$')
+
+        # Label so subsequent CI failures kick the matching auto-fix workflow.
+        # Scan only the fields that originated the trigger: the comment body for
+        # issue_comment events, or the issue body+title for issues events. Mixing
+        # them would mislabel a PR when the parent issue contains "auto-fix" but
+        # the actual triggering comment does not.
+        if [ "$EVENT_NAME" = "issue_comment" ]; then
+          TRIGGER_TEXT="$COMMENT_BODY"
+        else
+          TRIGGER_TEXT="$ISSUE_BODY $ISSUE_TITLE_INPUT"
+        fi
+
+        if echo "$TRIGGER_TEXT" | grep -qiE 'auto[_ -]?fix'; then
+          echo "Autofix keyword detected — adding '${AUTOFIX_LABEL}' label to PR #${PR_NUM}"
+          gh pr edit "$PR_NUM" --repo "$REPO" --add-label "$AUTOFIX_LABEL" || true
+        fi
