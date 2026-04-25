@@ -1919,18 +1919,19 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     \lean{MPSTensor.isBlockDiagonal'_of_commutes_reindexed_wordSpan}
     \lean{MPSTensor.offBlock_zero_of_commutes_reindexed_wordSpan}
     \leanok
-    \uses{def:block_projection, def:block_diagonal_matrix,
-        lem:block_diagonal_of_commutes_block_projection}
+    \uses{def:block_projection, def:block_diagonal_matrix}
     Suppose the virtual sector projections $P_j$ of a dependent direct-sum bond space
     lie in the span of a family of matrices. Any boundary matrix commuting with that
     family commutes with each $P_j$, hence is block diagonal. Applied after pulling an
     assembled tensor back along the direct-sum reindexing, length-$m$ word commutation
     plus the corresponding projection-span hypothesis forces all off-block entries of
-    the boundary matrix to vanish.
+    the pulled-back boundary matrix to vanish.
 \end{lemma}
 
 \begin{proof}
     \leanok
+    \uses{lem:block_diagonal_of_commutes_block_projection,
+        lem:block_diagonal_iff_off_block_zero}
     Commutation is linear in the matrix from the spanning family, so it extends from
     the generators to their span. Since each $P_j$ lies in that span, the boundary
     matrix commutes with every sector projection. Lemma~\ref{lem:block_diagonal_of_commutes_block_projection}
