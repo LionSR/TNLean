@@ -335,9 +335,12 @@ sector comparison. The remaining formalizations are now:
 
 1. **General one-sided BNT construction**: starting from the blocked TP-primitive
    decomposition, construct a sector decomposition in the paper's general BNT
-   sense. This is stronger than the current special-case theorem
-   `exists_bnt_grouping`, which only collapses norm classes already known to
-   represent one MPV family.
+   sense. Since `HasBNTSectorData` is the eventual linear-independence predicate,
+   this cannot be obtained by merely packaging every TP-primitive block as its
+   own basis tensor; gauge-phase-equivalent or otherwise dependent blocks must
+   first be quotient/collapsed to a true basis of normal tensors. This is
+   stronger than the current special-case theorem `exists_bnt_grouping`, which
+   only collapses norm classes already known to represent one MPV family.
 
 2. **Witness-producing heterogeneous sector comparison**: the algebraic
    reduction from a matched basis to per-sector weight multiset equality is
