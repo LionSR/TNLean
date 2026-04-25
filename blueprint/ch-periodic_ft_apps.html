@@ -3690,12 +3690,91 @@
 
   </div>
 </div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:peripheral_periodic_ft_proportional_rescaling">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">15.42</span>
+    <span class="theorem_thmtitle">Peripheral proportional case from phase rescaling</span>
+    <div class="thm_header_extras">
+
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-periodic_ft_apps.html#thm:peripheral_periodic_ft_proportional_rescaling">#</a>
+    
+    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000000929"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-periodic_ft_apps.html#def:periodic_tensor">Definition 15.1</a></li>
+          
+          <li><a href="ch-periodic_ft_apps.html#thm:peripheral_periodic_ft_proportional_same">Theorem 15.41</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.peripheralProportionalCase_periodicFT_of_rootFromRescaling" class="lean_decl">MPSTensor.peripheralProportionalCase_periodicFT_of_rootFromRescaling</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>    Assume that whenever two periodic tensors have proportional MPV families, one can rescale one tensor by a unit-modulus phase so that the MPV families agree exactly. Then proportional periodic MPV families already force the tensors to agree up to repeated blocks. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000929">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Apply the phase-rescaling hypothesis to replace \(A\) by a periodic tensor \(A'\) with the same MPV family as \(B\). Theorem&#160;<a href="ch-periodic_ft_apps.html#thm:peripheral_periodic_ft_proportional_same">15.41</a> then yields repeated-block equivalence between \(A'\) and \(B\). Since \(A'\) differs from \(A\) only by a unit-modulus phase, \(A\) and \(A'\) are themselves equivalent up to repeated blocks, and transitivity gives the claim. </p>
+
+  </div>
+</div>
 <div class="remark_thmwrapper theorem-style-remark" id="rem:periodic_ft_proportional">
   <div class="remark_thmheading">
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">15.42</span>
+    <span class="remark_thmlabel">15.43</span>
     <span class="remark_thmtitle">Proportional periodic FT</span>
     <div class="thm_header_extras">
 
@@ -3738,7 +3817,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">15.43</span>
+    <span class="theorem_thmlabel">15.44</span>
     <span class="theorem_thmtitle">Physical symmetry yields a virtual \(Z\)-gauge</span>
     <div class="thm_header_extras">
 
@@ -3749,7 +3828,7 @@
 
     <a class="icon proof" href="ch-periodic_ft_apps.html#cor:cor_4_1_physical_symmetry_zgauge">#</a>
     
-    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000000929"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000000930"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3816,13 +3895,13 @@
   <div class="theorem_thmcontent">
   <p>   Let \(A\) be an MPS tensor in irreducible form&#160;II and let \(U : G \to \mathrm{GL}_d(\mathbb {C})\) be a representation of a group \(G\) on the physical leg, acting unitarily (\(U(g)\,  U(g)^{\dagger } = \mathbb {1}\)). Assume moreover the periodic equal-case Fundamental Theorem of MPS (Theorem&#160;<a href="ch-periodic_ft_apps.html#thm:periodic_ft">15.25</a>) as an explicit hypothesis on the pair \((d, D)\), expressed by the hypothesis  \(d\, D\). If \(A\) is on-site symmetric under&#160;\(U\) — that is, the twisted tensor \(\widetilde{A}_g\) has the same MPV family as&#160;\(A\) for every \(g \in G\) — then for each \(g \in G\) there exists a positive period \(m_g\) and a \(\mathbb {Z}_{m_g}\)-gauge equivalence between&#160;\(A\) and&#160;\(\widetilde{A}_g\). </p>
 <p>Concretely there are matrices \(Z_g\) and&#160;\(Y_g\), with \(Z_g^{m_g} = \mathbb {1}\) and \([A^i, Z_g] = 0\), satisfying </p>
-<div class="displaymath" id="a0000000930">
+<div class="displaymath" id="a0000000931">
   \[  Z_g\,  A^i = Y_g\,  \widetilde{A}_g^{\, i}\,  Y_g^{-1} \quad \text{for every physical index } i.  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000929">
+<div class="proof_wrapper" id="a0000000930">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3839,7 +3918,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">15.44</span>
+    <span class="definition_thmlabel">15.45</span>
     <span class="definition_thmtitle">Periodic projective-rigidity hypothesis</span>
     <div class="thm_header_extras">
 
@@ -3912,7 +3991,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">15.45</span>
+    <span class="theorem_thmlabel">15.46</span>
     <span class="theorem_thmtitle">Projective-representation upgrade</span>
     <div class="thm_header_extras">
 
@@ -3923,7 +4002,7 @@
 
     <a class="icon proof" href="ch-periodic_ft_apps.html#thm:cor_4_1_projective_rep">#</a>
     
-    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000000931"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000000932"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3939,13 +4018,13 @@
         
         <ul class="uses">
           
-          <li><a href="ch-periodic_ft_apps.html#cor:cor_4_1_physical_symmetry_zgauge">Theorem 15.43</a></li>
+          <li><a href="ch-periodic_ft_apps.html#cor:cor_4_1_physical_symmetry_zgauge">Theorem 15.44</a></li>
           
-          <li><a href="ch-periodic_ft_apps.html#def:periodic_projective_rigidity">Definition 15.44</a></li>
+          <li><a href="ch-periodic_ft_apps.html#def:periodic_projective_rigidity">Definition 15.45</a></li>
           
-          <li><a href="ch-periodic_ft_apps.html#cor:cor_4_1_physical_symmetry_zgauge">Theorem 15.43</a></li>
+          <li><a href="ch-periodic_ft_apps.html#cor:cor_4_1_physical_symmetry_zgauge">Theorem 15.44</a></li>
           
-          <li><a href="ch-periodic_ft_apps.html#def:periodic_projective_rigidity">Definition 15.44</a></li>
+          <li><a href="ch-periodic_ft_apps.html#def:periodic_projective_rigidity">Definition 15.45</a></li>
           
         </ul>
     
@@ -3976,15 +4055,15 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   Under the hypotheses of Corollary&#160;<a href="ch-periodic_ft_apps.html#cor:cor_4_1_physical_symmetry_zgauge">15.43</a> together with the periodic projective-rigidity hypothesis (Definition&#160;<a href="ch-periodic_ft_apps.html#def:periodic_projective_rigidity">15.44</a>), the \(Y_g\) family assembles into a projective representation of \(G\) on the bond space: there exist a scalar \(2\)-cochain \(\omega : G \times G \to \mathbb {C}^{\times }\) and virtual gauges \(X : G \to \mathrm{GL}_D(\mathbb {C})\) satisfying </p>
-<div class="displaymath" id="a0000000932">
+  <p>   Under the hypotheses of Corollary&#160;<a href="ch-periodic_ft_apps.html#cor:cor_4_1_physical_symmetry_zgauge">15.44</a> together with the periodic projective-rigidity hypothesis (Definition&#160;<a href="ch-periodic_ft_apps.html#def:periodic_projective_rigidity">15.45</a>), the \(Y_g\) family assembles into a projective representation of \(G\) on the bond space: there exist a scalar \(2\)-cochain \(\omega : G \times G \to \mathbb {C}^{\times }\) and virtual gauges \(X : G \to \mathrm{GL}_D(\mathbb {C})\) satisfying </p>
+<div class="displaymath" id="a0000000933">
   \[  X(g)\,  X(h) \; =\;  \omega (g, h)\,  X(g h),  \]
 </div>
 <p> while for each \(g\) the matrix \(X(g^{-1})\) still realises the Corollary&#160;4.1 \(\mathbb {Z}_{m_g}\)-intertwining between \(A\) and the twisted tensor \(\widetilde{A}_g\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000931">
+<div class="proof_wrapper" id="a0000000932">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4001,7 +4080,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">15.46</span>
+    <span class="theorem_thmlabel">15.47</span>
     <span class="theorem_thmtitle">Cocycle identity for the upgraded factor system</span>
     <div class="thm_header_extras">
 
@@ -4012,7 +4091,7 @@
 
     <a class="icon proof" href="ch-periodic_ft_apps.html#thm:cor_4_1_projective_rep_cocycle">#</a>
     
-    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000000933"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000000934"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4028,9 +4107,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-periodic_ft_apps.html#thm:cor_4_1_projective_rep">Theorem 15.45</a></li>
+          <li><a href="ch-periodic_ft_apps.html#thm:cor_4_1_projective_rep">Theorem 15.46</a></li>
           
-          <li><a href="ch-periodic_ft_apps.html#thm:cor_4_1_projective_rep">Theorem 15.45</a></li>
+          <li><a href="ch-periodic_ft_apps.html#thm:cor_4_1_projective_rep">Theorem 15.46</a></li>
           
         </ul>
     
@@ -4061,11 +4140,11 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   If the bond dimension \(D\) is positive, the factor system \(\omega \) produced by Theorem&#160;<a href="ch-periodic_ft_apps.html#thm:cor_4_1_projective_rep">15.45</a> satisfies the multiplicative \(2\)-cocycle identity \(\omega (g, h)\,  \omega (g h, k) = \omega (g, h k)\,  \omega (h, k)\). </p>
+  <p>   If the bond dimension \(D\) is positive, the factor system \(\omega \) produced by Theorem&#160;<a href="ch-periodic_ft_apps.html#thm:cor_4_1_projective_rep">15.46</a> satisfies the multiplicative \(2\)-cocycle identity \(\omega (g, h)\,  \omega (g h, k) = \omega (g, h k)\,  \omega (h, k)\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000933">
+<div class="proof_wrapper" id="a0000000934">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4074,7 +4153,7 @@
   </div>
   <div class="proof_content">
   <p> Associativity of matrix multiplication applied to \(X(g)\,  X(h)\,  X(k)\), combined with the projective multiplication law, gives </p>
-<div class="displaymath" id="a0000000934">
+<div class="displaymath" id="a0000000935">
   \[  \omega (g, h)\,  \omega (g h, k)\,  X((g h) k) = \omega (g, h k)\,  \omega (h, k)\,  X(g (h k)).  \]
 </div>
 <p> Since \((g h) k = g (h k)\), both sides are scalar multiples of the same matrix \(X((g h) k)\). The matrix lies in \(\mathrm{GL}_D(\mathbb {C})\) and is therefore invertible, but the scalar cancellation leading from an equality of scalar multiples of a matrix to equality of the scalar coefficients additionally requires \(D {\gt} 0\) so that the underlying index set is inhabited. Cancelling then yields \(\omega (g, h)\,  \omega (g h, k) = \omega (g, h k)\,  \omega (h, k)\) in \(\mathbb {C}^{\times }\), hence in \(\mathrm{Units}(\mathbb {C})\). </p>
@@ -4086,7 +4165,7 @@
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">15.47</span>
+    <span class="remark_thmlabel">15.48</span>
     <span class="remark_thmtitle">SPT classification</span>
     <div class="thm_header_extras">
 
@@ -4108,7 +4187,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-periodic_ft_apps.html#thm:cor_4_1_projective_rep_cocycle">Theorem 15.46</a></li>
+          <li><a href="ch-periodic_ft_apps.html#thm:cor_4_1_projective_rep_cocycle">Theorem 15.47</a></li>
           
         </ul>
     
@@ -4120,7 +4199,7 @@
         </div>
   </div>
   <div class="remark_thmcontent">
-  <p>  The cohomology class of \(\omega \) in \(H^{2}(G, U(1))\) classifies the SPT phase of the symmetric MPS (cf.&#160;Chen–Gu–Wen and Pérez-García et al.). This classification statement is not established here; only the underlying 2-cocycle identity of Theorem&#160;<a href="ch-periodic_ft_apps.html#thm:cor_4_1_projective_rep_cocycle">15.46</a> is available. </p>
+  <p>  The cohomology class of \(\omega \) in \(H^{2}(G, U(1))\) classifies the SPT phase of the symmetric MPS (cf.&#160;Chen–Gu–Wen and Pérez-García et al.). This classification statement is not established here; only the underlying 2-cocycle identity of Theorem&#160;<a href="ch-periodic_ft_apps.html#thm:cor_4_1_projective_rep_cocycle">15.47</a> is available. </p>
 
   </div>
 </div>
@@ -4129,7 +4208,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">15.48</span>
+    <span class="theorem_thmlabel">15.49</span>
     <span class="theorem_thmtitle">Projective representation and cocycle from symmetry</span>
     <div class="thm_header_extras">
 
@@ -4153,9 +4232,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-periodic_ft_apps.html#thm:cor_4_1_projective_rep">Theorem 15.45</a></li>
+          <li><a href="ch-periodic_ft_apps.html#thm:cor_4_1_projective_rep">Theorem 15.46</a></li>
           
-          <li><a href="ch-periodic_ft_apps.html#thm:cor_4_1_projective_rep_cocycle">Theorem 15.46</a></li>
+          <li><a href="ch-periodic_ft_apps.html#thm:cor_4_1_projective_rep_cocycle">Theorem 15.47</a></li>
           
         </ul>
     
@@ -4186,7 +4265,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   Theorems&#160;<a href="ch-periodic_ft_apps.html#thm:cor_4_1_projective_rep">15.45</a> and&#160;<a href="ch-periodic_ft_apps.html#thm:cor_4_1_projective_rep_cocycle">15.46</a> combine into a single statement: from the periodic projective-rigidity hypothesis (Definition&#160;<a href="ch-periodic_ft_apps.html#def:periodic_projective_rigidity">15.44</a>), one obtains a projective representation of \(G\) on the bond space whose factor system is a genuine \(2\)-cocycle whenever \(D {\gt} 0\). </p>
+  <p>   Theorems&#160;<a href="ch-periodic_ft_apps.html#thm:cor_4_1_projective_rep">15.46</a> and&#160;<a href="ch-periodic_ft_apps.html#thm:cor_4_1_projective_rep_cocycle">15.47</a> combine into a single statement: from the periodic projective-rigidity hypothesis (Definition&#160;<a href="ch-periodic_ft_apps.html#def:periodic_projective_rigidity">15.45</a>), one obtains a projective representation of \(G\) on the bond space whose factor system is a genuine \(2\)-cocycle whenever \(D {\gt} 0\). </p>
 
   </div>
 </div>
@@ -4199,7 +4278,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">15.49</span>
+    <span class="definition_thmlabel">15.50</span>
     <span class="definition_thmtitle">\(p\)-divisible CP map</span>
     <div class="thm_header_extras">
 
@@ -4243,7 +4322,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">15.50</span>
+    <span class="definition_thmlabel">15.51</span>
     <span class="definition_thmtitle">\(p\)-refinable MPS tensor</span>
     <div class="thm_header_extras">
 
@@ -4301,7 +4380,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>    An MPS tensor \(B\) with physical dimension \(d\) and bond dimension \(D\) is <em>\(p\)-refinable</em> if there exist another such tensor \(A\) and an isometry \(W : \mathbb {C}^d \to (\mathbb {C}^d)^{\otimes p}\) (encoded as a matrix \(W \in M_{d^p \times d}(\mathbb {C})\) with \(W^{\dagger } W = \mathbb {1}\)) such that the \(p\)-blocked tensor \(A^{[p]}\) matches the \(W\)-image of \(B\) at the level of MPV coefficients: </p>
-<div class="displaymath" id="a0000000935">
+<div class="displaymath" id="a0000000936">
   \[  V^{(N)}(A^{[p]})_\tau \; =\;  \sum _{\sigma \in \{ 0,\ldots ,d-1\} ^N} \Big(\prod _{k} W_{\tau (k),\, \sigma (k)}\Big)\,  V^{(N)}(B)_\sigma  \]
 </div>
 <p> for every \(N \in \mathbb {N}\) and every \(\tau \in \{ 0,\ldots ,d^p-1\} ^N\). </p>
@@ -4314,7 +4393,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">15.51</span>
+    <span class="theorem_thmlabel">15.52</span>
     <span class="theorem_thmtitle">Pullback of a refinement witness</span>
     <div class="thm_header_extras">
 
@@ -4325,7 +4404,7 @@
 
     <a class="icon proof" href="ch-periodic_ft_apps.html#thm:p_refinement_pullback_irreducible_form">#</a>
     
-    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000000936"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000000937"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4343,7 +4422,7 @@
           
           <li><a href="ch-periodic_ft_apps.html#def:irreducible_form">Definition 15.2</a></li>
           
-          <li><a href="ch-periodic_ft_apps.html#def:p_refinable">Definition 15.50</a></li>
+          <li><a href="ch-periodic_ft_apps.html#def:p_refinable">Definition 15.51</a></li>
           
         </ul>
     
@@ -4375,14 +4454,14 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    Let \(B\) be an MPS tensor in irreducible form&#160;II. If \(B\) is \(p\)-refinable, then there exist a tensor \(A\), an isometry \(W : \mathbb {C}^d \to (\mathbb {C}^d)^{\otimes p}\), and the pullback tensor </p>
-<div class="displaymath" id="a0000000937">
+<div class="displaymath" id="a0000000938">
   \[  C^{\alpha } := \sum _{i=0}^{d-1} W_{\alpha ,i} B^i \qquad (\alpha \in \{ 0,\ldots ,d^p-1\} )  \]
 </div>
 <p> such that \(C\) is again in irreducible form&#160;II, \(\mathcal E_C = \mathcal E_B\), and \(C\) has the same MPV family as \(A^{[p]}\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000936">
+<div class="proof_wrapper" id="a0000000937">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4399,7 +4478,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">15.52</span>
+    <span class="definition_thmlabel">15.53</span>
     <span class="definition_thmtitle">Blocked equal-case Z-gauge extraction hypothesis</span>
     <div class="thm_header_extras">
 
@@ -4469,7 +4548,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">15.53</span>
+    <span class="definition_thmlabel">15.54</span>
     <span class="definition_thmtitle">Blocked-to-root reconstruction hypothesis from Z-gauge</span>
     <div class="thm_header_extras">
 
@@ -4537,7 +4616,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">15.54</span>
+    <span class="definition_thmlabel">15.55</span>
     <span class="definition_thmtitle">Blocked equal-case continuation hypothesis</span>
     <div class="thm_header_extras">
 
@@ -4605,7 +4684,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">15.55</span>
+    <span class="theorem_thmlabel">15.56</span>
     <span class="theorem_thmtitle">Blocked equal-case continuation from Z-gauge extraction</span>
     <div class="thm_header_extras">
 
@@ -4616,7 +4695,7 @@
 
     <a class="icon proof" href="ch-periodic_ft_apps.html#thm:peripheral_equalcase_sameMPV_zgauge_reduction">#</a>
     
-    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000000938"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000000939"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4632,11 +4711,11 @@
         
         <ul class="uses">
           
-          <li><a href="ch-periodic_ft_apps.html#def:peripheral_equalcase_zgauge_sameMPV">Definition 15.52</a></li>
+          <li><a href="ch-periodic_ft_apps.html#def:peripheral_equalcase_zgauge_sameMPV">Definition 15.53</a></li>
           
-          <li><a href="ch-periodic_ft_apps.html#def:peripheral_equalcase_root_from_zgauge">Definition 15.53</a></li>
+          <li><a href="ch-periodic_ft_apps.html#def:peripheral_equalcase_root_from_zgauge">Definition 15.54</a></li>
           
-          <li><a href="ch-periodic_ft_apps.html#def:peripheral_equalcase_periodicFT_sameMPV">Definition 15.54</a></li>
+          <li><a href="ch-periodic_ft_apps.html#def:peripheral_equalcase_periodicFT_sameMPV">Definition 15.55</a></li>
           
         </ul>
     
@@ -4671,7 +4750,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000938">
+<div class="proof_wrapper" id="a0000000939">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4688,7 +4767,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">15.56</span>
+    <span class="theorem_thmlabel">15.57</span>
     <span class="theorem_thmtitle">Reduction of forward canonicalization to the blocked equal-case stage</span>
     <div class="thm_header_extras">
 
@@ -4699,7 +4778,7 @@
 
     <a class="icon proof" href="ch-periodic_ft_apps.html#thm:p_refinement_forward_equalcase_reduction">#</a>
     
-    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000000939"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000000940"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4715,13 +4794,13 @@
         
         <ul class="uses">
           
-          <li><a href="ch-periodic_ft_apps.html#def:peripheral_equalcase_periodicFT_sameMPV">Definition 15.54</a></li>
+          <li><a href="ch-periodic_ft_apps.html#def:peripheral_equalcase_periodicFT_sameMPV">Definition 15.55</a></li>
           
           <li><a href="ch-periodic_ft_apps.html#def:irreducible_form">Definition 15.2</a></li>
           
-          <li><a href="ch-periodic_ft_apps.html#def:p_refinable">Definition 15.50</a></li>
+          <li><a href="ch-periodic_ft_apps.html#def:p_refinable">Definition 15.51</a></li>
           
-          <li><a href="ch-periodic_ft_apps.html#thm:p_refinement_pullback_irreducible_form">Theorem 15.51</a></li>
+          <li><a href="ch-periodic_ft_apps.html#thm:p_refinement_pullback_irreducible_form">Theorem 15.52</a></li>
           
         </ul>
     
@@ -4756,7 +4835,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000939">
+<div class="proof_wrapper" id="a0000000940">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4764,7 +4843,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>Apply Theorem&#160;<a href="ch-periodic_ft_apps.html#thm:p_refinement_pullback_irreducible_form">15.51</a> to the refinement witness of \(B\). This produces a blocked tensor \(C\) in irreducible form&#160;II with \(\mathcal E_C = \mathcal E_B\) and the same MPV family as \(A^{[p]}\). The blocked equal-case continuation hypothesis then gives a left-canonical tensor \(A'\) with \(\mathcal E_C = \mathcal E_{A'^{[p]}}\). Combining the two transfer-map identities yields \(\mathcal E_B = \mathcal E_{A'^{[p]}}\). </p>
+  <p>Apply Theorem&#160;<a href="ch-periodic_ft_apps.html#thm:p_refinement_pullback_irreducible_form">15.52</a> to the refinement witness of \(B\). This produces a blocked tensor \(C\) in irreducible form&#160;II with \(\mathcal E_C = \mathcal E_B\) and the same MPV family as \(A^{[p]}\). The blocked equal-case continuation hypothesis then gives a left-canonical tensor \(A'\) with \(\mathcal E_C = \mathcal E_{A'^{[p]}}\). Combining the two transfer-map identities yields \(\mathcal E_B = \mathcal E_{A'^{[p]}}\). </p>
 
   </div>
 </div>
@@ -4773,7 +4852,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">15.57</span>
+    <span class="theorem_thmlabel">15.58</span>
     <span class="theorem_thmtitle">Forward direction from the blocked equal-case continuation</span>
     <div class="thm_header_extras">
 
@@ -4784,7 +4863,7 @@
 
     <a class="icon proof" href="ch-periodic_ft_apps.html#thm:thm_4_1_p_refinement_forward_blocked_equalcase">#</a>
     
-    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000000940"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000000941"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4800,15 +4879,15 @@
         
         <ul class="uses">
           
-          <li><a href="ch-periodic_ft_apps.html#def:peripheral_equalcase_periodicFT_sameMPV">Definition 15.54</a></li>
+          <li><a href="ch-periodic_ft_apps.html#def:peripheral_equalcase_periodicFT_sameMPV">Definition 15.55</a></li>
           
           <li><a href="ch-periodic_ft_apps.html#def:irreducible_form">Definition 15.2</a></li>
           
-          <li><a href="ch-periodic_ft_apps.html#def:p_refinable">Definition 15.50</a></li>
+          <li><a href="ch-periodic_ft_apps.html#def:p_refinable">Definition 15.51</a></li>
           
-          <li><a href="ch-periodic_ft_apps.html#def:p_divisible_channel">Definition 15.49</a></li>
+          <li><a href="ch-periodic_ft_apps.html#def:p_divisible_channel">Definition 15.50</a></li>
           
-          <li><a href="ch-periodic_ft_apps.html#thm:p_refinement_forward_equalcase_reduction">Theorem 15.56</a></li>
+          <li><a href="ch-periodic_ft_apps.html#thm:p_refinement_forward_equalcase_reduction">Theorem 15.57</a></li>
           
         </ul>
     
@@ -4843,7 +4922,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000940">
+<div class="proof_wrapper" id="a0000000941">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4851,7 +4930,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>Combine Theorem&#160;<a href="ch-periodic_ft_apps.html#thm:p_refinement_forward_equalcase_reduction">15.56</a> with the witness-level forward implication: once \(\mathcal E_B\) is identified with \(\mathcal E_{A'^{[p]}}\) for a left-canonical \(A'\), the blocking identity gives \(\mathcal E_B = (\mathcal E_{A'})^p\). </p>
+  <p>Combine Theorem&#160;<a href="ch-periodic_ft_apps.html#thm:p_refinement_forward_equalcase_reduction">15.57</a> with the witness-level forward implication: once \(\mathcal E_B\) is identified with \(\mathcal E_{A'^{[p]}}\) for a left-canonical \(A'\), the blocking identity gives \(\mathcal E_B = (\mathcal E_{A'})^p\). </p>
 
   </div>
 </div>
@@ -4860,7 +4939,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">15.58</span>
+    <span class="theorem_thmlabel">15.59</span>
     <span class="theorem_thmtitle">Thm.&#160;4.1 — \(p\)-refinability \(\iff \) \(p\)-divisibility</span>
     <div class="thm_header_extras">
 
@@ -4871,7 +4950,7 @@
 
     <a class="icon proof" href="ch-periodic_ft_apps.html#thm:thm_4_1_p_refinement">#</a>
     
-    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000000941"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000000942"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4889,19 +4968,19 @@
           
           <li><a href="ch-periodic_ft_apps.html#def:irreducible_form">Definition 15.2</a></li>
           
-          <li><a href="ch-periodic_ft_apps.html#def:p_refinable">Definition 15.50</a></li>
+          <li><a href="ch-periodic_ft_apps.html#def:p_refinable">Definition 15.51</a></li>
           
-          <li><a href="ch-periodic_ft_apps.html#def:p_divisible_channel">Definition 15.49</a></li>
+          <li><a href="ch-periodic_ft_apps.html#def:p_divisible_channel">Definition 15.50</a></li>
           
           <li><a href="ch-periodic_ft_apps.html#thm:periodic_ft">Theorem 15.25</a></li>
           
-          <li><a href="ch-periodic_ft_apps.html#thm:thm_4_1_p_refinement_forward">Theorem 15.59</a></li>
+          <li><a href="ch-periodic_ft_apps.html#thm:thm_4_1_p_refinement_forward">Theorem 15.60</a></li>
           
-          <li><a href="ch-periodic_ft_apps.html#thm:thm_4_1_p_refinement_reverse">Theorem 15.62</a></li>
+          <li><a href="ch-periodic_ft_apps.html#thm:thm_4_1_p_refinement_reverse">Theorem 15.63</a></li>
           
-          <li><a href="ch-periodic_ft_apps.html#thm:thm_4_1_p_refinement_forward">Theorem 15.59</a></li>
+          <li><a href="ch-periodic_ft_apps.html#thm:thm_4_1_p_refinement_forward">Theorem 15.60</a></li>
           
-          <li><a href="ch-periodic_ft_apps.html#thm:thm_4_1_p_refinement_reverse">Theorem 15.62</a></li>
+          <li><a href="ch-periodic_ft_apps.html#thm:thm_4_1_p_refinement_reverse">Theorem 15.63</a></li>
           
         </ul>
     
@@ -4936,7 +5015,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000941">
+<div class="proof_wrapper" id="a0000000942">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4944,7 +5023,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Bundle the forward implication (Theorem&#160;<a href="ch-periodic_ft_apps.html#thm:thm_4_1_p_refinement_forward">15.59</a>) with the reverse implication (Theorem&#160;<a href="ch-periodic_ft_apps.html#thm:thm_4_1_p_refinement_reverse">15.62</a>) into a single biconditional. Both directions are formalised conditionally on their respective canonicalization hypotheses, whose combination yields the full equivalence. </p>
+  <p> Bundle the forward implication (Theorem&#160;<a href="ch-periodic_ft_apps.html#thm:thm_4_1_p_refinement_forward">15.60</a>) with the reverse implication (Theorem&#160;<a href="ch-periodic_ft_apps.html#thm:thm_4_1_p_refinement_reverse">15.63</a>) into a single biconditional. Both directions are formalised conditionally on their respective canonicalization hypotheses, whose combination yields the full equivalence. </p>
 
   </div>
 </div>
@@ -4953,7 +5032,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">15.59</span>
+    <span class="theorem_thmlabel">15.60</span>
     <span class="theorem_thmtitle">Thm.&#160;4.1 forward direction, conditional form</span>
     <div class="thm_header_extras">
 
@@ -4964,7 +5043,7 @@
 
     <a class="icon proof" href="ch-periodic_ft_apps.html#thm:thm_4_1_p_refinement_forward">#</a>
     
-    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000000942"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000000943"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4982,9 +5061,9 @@
           
           <li><a href="ch-periodic_ft_apps.html#def:irreducible_form">Definition 15.2</a></li>
           
-          <li><a href="ch-periodic_ft_apps.html#def:p_refinable">Definition 15.50</a></li>
+          <li><a href="ch-periodic_ft_apps.html#def:p_refinable">Definition 15.51</a></li>
           
-          <li><a href="ch-periodic_ft_apps.html#def:p_divisible_channel">Definition 15.49</a></li>
+          <li><a href="ch-periodic_ft_apps.html#def:p_divisible_channel">Definition 15.50</a></li>
           
         </ul>
     
@@ -5019,7 +5098,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000942">
+<div class="proof_wrapper" id="a0000000943">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5036,7 +5115,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">15.60</span>
+    <span class="definition_thmlabel">15.61</span>
     <span class="definition_thmtitle">Blocked-to-root channel-root hypothesis from Z-gauge</span>
     <div class="thm_header_extras">
 
@@ -5060,11 +5139,11 @@
         
         <ul class="uses">
           
-          <li><a href="ch-periodic_ft_apps.html#def:peripheral_equalcase_root_from_zgauge">Definition 15.53</a></li>
+          <li><a href="ch-periodic_ft_apps.html#def:peripheral_equalcase_root_from_zgauge">Definition 15.54</a></li>
           
           <li><a href="ch-periodic_ft_apps.html#def:z_gauge_equiv">Definition 15.18</a></li>
           
-          <li><a href="ch-periodic_ft_apps.html#def:p_divisible_channel">Definition 15.49</a></li>
+          <li><a href="ch-periodic_ft_apps.html#def:p_divisible_channel">Definition 15.50</a></li>
           
         </ul>
     
@@ -5104,7 +5183,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">15.61</span>
+    <span class="theorem_thmlabel">15.62</span>
     <span class="theorem_thmtitle">Channel-root criterion for blocked-to-root reconstruction</span>
     <div class="thm_header_extras">
 
@@ -5115,7 +5194,7 @@
 
     <a class="icon proof" href="ch-periodic_ft_apps.html#thm:peripheral_equalcase_root_from_root_channel">#</a>
     
-    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000000943"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000000944"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5131,9 +5210,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-periodic_ft_apps.html#def:peripheral_equalcase_root_channel_from_zgauge">Definition 15.60</a></li>
+          <li><a href="ch-periodic_ft_apps.html#def:peripheral_equalcase_root_channel_from_zgauge">Definition 15.61</a></li>
           
-          <li><a href="ch-periodic_ft_apps.html#def:peripheral_equalcase_root_from_zgauge">Definition 15.53</a></li>
+          <li><a href="ch-periodic_ft_apps.html#def:peripheral_equalcase_root_from_zgauge">Definition 15.54</a></li>
           
         </ul>
     
@@ -5168,7 +5247,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000943">
+<div class="proof_wrapper" id="a0000000944">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5185,7 +5264,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">15.62</span>
+    <span class="theorem_thmlabel">15.63</span>
     <span class="theorem_thmtitle">Thm.&#160;4.1 reverse direction, conditional form</span>
     <div class="thm_header_extras">
 
@@ -5196,7 +5275,7 @@
 
     <a class="icon proof" href="ch-periodic_ft_apps.html#thm:thm_4_1_p_refinement_reverse">#</a>
     
-    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000000944"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000000945"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5214,9 +5293,9 @@
           
           <li><a href="ch-periodic_ft_apps.html#def:irreducible_form">Definition 15.2</a></li>
           
-          <li><a href="ch-periodic_ft_apps.html#def:p_refinable">Definition 15.50</a></li>
+          <li><a href="ch-periodic_ft_apps.html#def:p_refinable">Definition 15.51</a></li>
           
-          <li><a href="ch-periodic_ft_apps.html#def:p_divisible_channel">Definition 15.49</a></li>
+          <li><a href="ch-periodic_ft_apps.html#def:p_divisible_channel">Definition 15.50</a></li>
           
         </ul>
     
@@ -5251,7 +5330,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000944">
+<div class="proof_wrapper" id="a0000000945">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5259,7 +5338,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>From the inverse canonicalization hypothesis, extract \(A\) with \(\mathcal{E}_B = \mathcal{E}_{A^{[p]}}\). This matches two finite Kraus families of the same completely positive map: the blocked family \(A^{[p]}\) with \(d^{p}\) operators and the original family \(B\) with \(d\) operators. The cardinality comparison \(d \le d^{p}\) holds whenever \(p \ge 1\), so Wolf Theorem&#160;2.18 (isometric freedom of Kraus representations, formalised as ) supplies an isometry \(V \in M_{d^p \times d}(\mathbb {C})\) with \(V^{\dagger } V = \mathbb {1}\) and \((A^{[p]})^{\alpha } = \sum _{j} V_{\alpha ,j}\,  B^{j}\). Expanding \(\mathrm{coeff}\, (A^{[p]})\, (\mathrm{ofFn}\, \tau )\) by linearity of matrix multiplication and of the trace, the contributions reorganise into the \(V\)-weighted sum over length-\(N\) words of \(B\) required by Definition&#160;<a href="ch-periodic_ft_apps.html#def:p_refinable">15.50</a>, exhibiting \(V\) as the isometry \(W\) in the statement of \(p\)-refinability. </p>
+  <p>From the inverse canonicalization hypothesis, extract \(A\) with \(\mathcal{E}_B = \mathcal{E}_{A^{[p]}}\). This matches two finite Kraus families of the same completely positive map: the blocked family \(A^{[p]}\) with \(d^{p}\) operators and the original family \(B\) with \(d\) operators. The cardinality comparison \(d \le d^{p}\) holds whenever \(p \ge 1\), so Wolf Theorem&#160;2.18 (isometric freedom of Kraus representations, formalised as ) supplies an isometry \(V \in M_{d^p \times d}(\mathbb {C})\) with \(V^{\dagger } V = \mathbb {1}\) and \((A^{[p]})^{\alpha } = \sum _{j} V_{\alpha ,j}\,  B^{j}\). Expanding \(\mathrm{coeff}\, (A^{[p]})\, (\mathrm{ofFn}\, \tau )\) by linearity of matrix multiplication and of the trace, the contributions reorganise into the \(V\)-weighted sum over length-\(N\) words of \(B\) required by Definition&#160;<a href="ch-periodic_ft_apps.html#def:p_refinable">15.51</a>, exhibiting \(V\) as the isometry \(W\) in the statement of \(p\)-refinability. </p>
 
   </div>
 </div>
@@ -5268,7 +5347,7 @@
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">15.63</span>
+    <span class="remark_thmlabel">15.64</span>
     <span class="remark_thmtitle">Continuum-limit application</span>
     <div class="thm_header_extras">
 
@@ -5282,7 +5361,7 @@
         </div>
   </div>
   <div class="remark_thmcontent">
-  <p> The original motivation for Theorem&#160;<a href="ch-periodic_ft_apps.html#thm:thm_4_1_p_refinement">15.58</a> is a continuum-limit construction in the spirit of <span class="cite">
+  <p> The original motivation for Theorem&#160;<a href="ch-periodic_ft_apps.html#thm:thm_4_1_p_refinement">15.59</a> is a continuum-limit construction in the spirit of <span class="cite">
 </span>: refinability along arbitrarily large \(p\) is equivalent to infinite divisibility of the transfer map, which selects out continuum limits of translationally invariant MPS. The further consequences are explored elsewhere. </p>
 
   </div>
