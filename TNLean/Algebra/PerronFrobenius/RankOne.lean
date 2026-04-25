@@ -150,11 +150,13 @@ private lemma hasRankOneFactorization_unitary_conj
   classical
   rcases hT with ⟨a, b, rfl⟩
   refine ⟨(U : Matrix (Fin n) (Fin n) ℝ) *ᵥ a,
-    fun j => ∑ k, b k * (star (U : Matrix (Fin n) (Fin n) ℝ)) k j, ?_⟩
+    (U : Matrix (Fin n) (Fin n) ℝ) *ᵥ b, ?_⟩
   ext i j
-  simp [Matrix.mul_apply, Matrix.vecMulVec, Matrix.mulVec, dotProduct,
-    Finset.mul_sum, Finset.sum_mul]
-  ring_nf
+  simp only [Matrix.mul_apply, Matrix.vecMulVec_apply, Matrix.mulVec, dotProduct,
+    Finset.mul_sum, Finset.sum_mul, Matrix.star_apply, star_trivial]
+  refine Finset.sum_congr rfl fun x _ => ?_
+  refine Finset.sum_congr rfl fun x_1 _ => ?_
+  ring
 
 /-- For a positive semidefinite matrix over the real or complex numbers, the
 trace of the square is the sum of the squares of its Hermitian eigenvalues. -/
