@@ -190,31 +190,34 @@ structure AppendixBStructuralData (A : MPSTensor d D) where
   /-- The original tensor has the Appendix B structural form. -/
   hA_eq : ∀ i, A i = X * Matrix.diagonal (fun k => (Λ k : ℂ)) * U i * X⁻¹
 
-/-- Extract the bundled Appendix B structural data from the proved structural
-form theorem.
-
-This is a noncomputable definition only because the structural theorem is an
-existence statement; it introduces no new assumptions or trusted constants. -/
-noncomputable def AppendixBStructuralData.ofRFP (A : MPSTensor d D) [NeZero D]
+/-- The proved structural form gives nonempty bundled Appendix B structural data. -/
+theorem AppendixBStructuralData.exists_ofRFP (A : MPSTensor d D) [NeZero D]
     (hNT : IsNormal A) (hRFP : IsRFP A)
     (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
-    AppendixBStructuralData A := by
+    Nonempty (AppendixBStructuralData A) := by
   classical
-  let h := rfp_nt_structural_full A hNT hRFP hLeft
-  let X := Classical.choose h
-  let hX := Classical.choose_spec h
-  let Λ := Classical.choose hX
-  let hΛ := Classical.choose_spec hX
-  let U := Classical.choose hΛ
-  let hSpec := Classical.choose_spec hΛ
-  exact
+  obtain ⟨X, Λ, U, hX_det, hΛ_pos, hU_left, hA_eq⟩ :=
+    rfp_nt_structural_full A hNT hRFP hLeft
+  exact ⟨
     { X := X
       Λ := Λ
       U := U
-      hX_det := hSpec.1
-      hΛ_pos := hSpec.2.1
-      hU_left := hSpec.2.2.1
-      hA_eq := hSpec.2.2.2 }
+      hX_det := hX_det
+      hΛ_pos := hΛ_pos
+      hU_left := hU_left
+      hA_eq := hA_eq }⟩
+
+/-- Extract the bundled Appendix B structural data from the proved structural
+form theorem.
+
+This is a noncomputable definition only because it chooses a witness from the
+nonempty type produced by `AppendixBStructuralData.exists_ofRFP`; it introduces
+no new assumptions or trusted constants. -/
+noncomputable def AppendixBStructuralData.ofRFP (A : MPSTensor d D) [NeZero D]
+    (hNT : IsNormal A) (hRFP : IsRFP A)
+    (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
+    AppendixBStructuralData A :=
+  Classical.choice (AppendixBStructuralData.exists_ofRFP A hNT hRFP hLeft)
 
 /-- The two-site amplitude canonically read from a chosen Appendix B structural
 witness.
