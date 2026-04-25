@@ -395,6 +395,62 @@ reduction hypothesis.
     $Z_k = X$ is a cyclic gauge.
 \end{proof}
 
+
+\begin{lemma}[Uniform site rescaling rescales the combined tensor]%
+    \label{lem:chainCombinedTensor_smul_chain}
+    \lean{MPSTensor.chainCombinedTensor_smul_chain}
+    \leanok
+    \uses{def:non_ti_chain}
+    Let $\mathbf{A} = (A_0, \ldots, A_{n-1})$ be an $n$-site chain and let
+    $\zeta \in \C$. If $\zeta \mathbf{A}$ denotes the chain obtained by
+    replacing each site tensor $A_k$ with $\zeta A_k$, then
+    \[
+        \operatorname{chainCombinedTensor}(\zeta \mathbf{A})
+        = \zeta\, \operatorname{chainCombinedTensor}(\mathbf{A}).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:non_ti_chain}
+    Bundling the site and physical indices does not change which local matrix
+    is read at the component $(k,i)$, so both sides evaluate to
+    $\zeta A_k^i$ there.
+\end{proof}
+
+\begin{theorem}[Injective-chain Fundamental Theorem up to a global phase]%
+    \label{thm:fundamentalTheorem_injective_chain_gaugePhase}
+    \lean{MPSChainTensor.fundamentalTheorem_injective_chain_gaugePhase}
+    \leanok
+    \uses{thm:fundamentalTheorem_injective_chain, def:gauge_phase_equiv,
+        def:non_ti_chain}
+    Let $\mathbf{A} = (A_0, \ldots, A_{n-1})$ and
+    $\mathbf{B} = (B_0, \ldots, B_{n-1})$ be two $n$-site chains with common
+    bond dimension $D$, and assume that $\mathbf{A}$ is injective.
+    Suppose that, after bundling the site index and physical index into a
+    single MPS tensor, the resulting tensors are gauge-phase equivalent.
+    Then there exist invertible matrices $Z_0, \ldots, Z_{n-1} \in \GL_D(\C)$
+    and a nonzero scalar $\zeta \in \C^{\times}$ such that
+    \[
+        B_k^i = \zeta\, Z_k A_k^i Z_{k+1}^{-1}
+    \]
+    for all sites $k$ and physical indices $i$, where $k+1$ is interpreted
+    cyclically modulo $n$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:chainCombinedTensor_smul_chain,
+        thm:fundamentalTheorem_injective_chain}
+    If the combined tensor of $\mathbf{B}$ differs from that of $\mathbf{A}$
+    by a gauge and a nonzero scalar $\zeta$, rescale each site of
+    $\mathbf{B}$ by $\zeta^{-1}$. Lemma~\ref{lem:chainCombinedTensor_smul_chain}
+    removes this common scalar from the combined tensor, so
+    Theorem~\ref{thm:fundamentalTheorem_injective_chain} applies to the
+    rescaled chain. Multiplying the resulting sitewise relations by $\zeta$
+    gives the displayed conclusion.
+\end{proof}
+
 \subsection{From fixed-length chain states to combined-tensor MPV agreement}
 
 \begin{definition}[Same-state reduction hypothesis]

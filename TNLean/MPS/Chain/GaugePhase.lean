@@ -6,9 +6,9 @@ import TNLean.MPS.Chain.FundamentalTheorem
 This file upgrades the exact injective-chain Fundamental Theorem to the case
 where the two **combined tensors** agree only up to a nonzero scalar.  The
 result is the chain-level contraction statement needed in periodic Case 3:
-from a gauge-phase equivalence of the full $m$-factor product tensor one
-recovers a cyclic gauge on the underlying chain together with a **common**
-nonzero phase on every site.
+from a gauge-phase equivalence between `chainCombinedTensor A` and
+`chainCombinedTensor B`, one recovers a cyclic gauge on the underlying chain
+together with a **common** nonzero phase on every site.
 
 ## Main declarations
 
@@ -36,7 +36,7 @@ variable {d D : ℕ}
 
 /-- Rescaling every site tensor in a chain rescales the combined tensor by the
 same scalar. -/
-@[simp] theorem chainCombinedTensor_smul_chain {n : ℕ}
+theorem chainCombinedTensor_smul_chain {n : ℕ}
     (A : Fin n → MPSTensor d D) (ζ : ℂ) :
     chainCombinedTensor (fun k i => ζ • A k i) = ζ • chainCombinedTensor A := by
   funext j
@@ -57,10 +57,10 @@ chains themselves are cyclically gauge equivalent with one common nonzero phase
 `ζ` multiplying every site tensor of `A`.
 
 This is the finite-chain `$m$-factor cyclic contraction` used by the periodic
-Case-3 program: once a cyclic family of sector-transition tensors is packaged
-as an injective chain and its full product tensor is known to be
-`GaugePhaseEquiv`, the conclusion recovers sitewise proportionality with a
-cyclic gauge. -/
+Case-3 program: once a cyclic family of sector-transition tensors is
+formulated as an injective chain and the corresponding combined tensors are
+known to satisfy `GaugePhaseEquiv`, the conclusion recovers sitewise
+proportionality with a cyclic gauge. -/
 theorem fundamentalTheorem_injective_chain_gaugePhase
     (A B : MPSChainTensor d D n)
     (hA : IsInjective A)
@@ -85,7 +85,8 @@ theorem fundamentalTheorem_injective_chain_gaugePhase
     calc
       MPSTensor.chainCombinedTensor B' j
           = ζ⁻¹ • MPSTensor.chainCombinedTensor B j := by
-              simp [B', MPSTensor.chainCombinedTensor]
+              simpa [B'] using
+                congrFun (MPSTensor.chainCombinedTensor_smul_chain (A := B) (ζ := ζ⁻¹)) j
       _ = ζ⁻¹ •
             (ζ • ((X : Matrix (Fin D) (Fin D) ℂ) *
               MPSTensor.chainCombinedTensor A j *
