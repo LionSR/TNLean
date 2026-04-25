@@ -1835,6 +1835,37 @@ The following results separate the zero blocks from the
 \section{Reduction to primitive blocks}%
 \label{sec:reduction_to_normal_form}
 
+\begin{theorem}[Projection-step hypothesis yields primitive blocked sectors]%
+	\label{thm:blocked_sector_projStep}
+	\lean{MPSTensor.primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking_of_projStep}
+	\leanok
+	\uses{thm:cyclic_sector_decomp_after_blocking,
+	      thm:sector_irred_proj_step,
+	      thm:primitive_adjoint_equiv}
+	Let $A$ be a left-canonical irreducible tensor whose adjoint transfer map has
+	peripheral spectrum $\{\gamma^j : 0 \le j < m\}$ for a primitive $m$-th root
+	of unity $\gamma$. Let $(C_u)_{u=1}^m$, $(P_u)_{u=1}^m$, and
+	$\varphi_u : \MN{\dim C_u} \xrightarrow{\sim} P_u \MN{D} P_u$
+	be the blocked cyclic-sector data. If the one-step projection-preservation
+	hypothesis of Lemma~\ref{lem:orbit_sum_hLift_proj_step} holds, then every
+	blocked sector tensor $C_u$ has primitive transfer map and is irreducible.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:sector_irred_proj_step,
+	      thm:primitive_adjoint_equiv}
+	Theorem~\ref{thm:sector_irred_proj_step} gives irreducibility of
+	$(\E_A^\dagger)^m$ on each corner $P_u$.
+	The blocked cyclic-sector data provide compression equivalences
+	$\varphi_u$ intertwining the adjoint transfer map of $C_u$ with the
+	corresponding corner restriction of $(\E_A^\dagger)^m$.
+	The same cyclic peripheral-spectrum argument that produces the sector
+	decomposition shows that each corner restriction is primitive.
+	Transport primitivity and irreducibility across $\varphi_u$, then use
+	Theorem~\ref{thm:primitive_adjoint_equiv} to pass from the adjoint blocked
+	map to the primal transfer map of $C_u$.
+\end{proof}
+
 \begin{theorem}[Fixed-point-algebra rigidity yields primitive blocked sectors]%
 	\label{thm:blocked_sector_fixed_algebra}
 	\lean{MPSTensor.primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking_of_fixedAlgebraRigidity}
