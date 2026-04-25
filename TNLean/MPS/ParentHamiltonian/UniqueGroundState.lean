@@ -327,21 +327,18 @@ theorem contiguous_mem_groundSpace_of_isNBlkInjective
           rw [tailRestrictₗ_contiguousRestrictₗ (d := d) (s := s) (K := K + 1)
             (L := L₀ + 1) hsTail u τ ψ]
           exact hwindow (s + (K + 1)) (by omega) _
-  let K := N - (L₀ + 1)
-  have hEq : K + L₀ + 1 = N := by
-    dsimp [K]
-    omega
-  have hmemK := claim K 0 (by dsimp [K]; omega) τ₀
-  have hmemN := reindexSites_mem_groundSpace hEq hmemK
+  have hK : N - (L₀ + 1) + L₀ + 1 = N := by omega
+  have hmemK := claim (N - (L₀ + 1)) 0 (by omega) τ₀
+  have hmemN := reindexSites_mem_groundSpace hK hmemK
   have hfull :
-      reindexSites hEq
-        (contiguousRestrictₗ 0 (K + L₀ + 1) (by dsimp [K]; omega) τ₀ ψ) = ψ := by
+      reindexSites hK
+        (contiguousRestrictₗ 0 (N - (L₀ + 1) + L₀ + 1) (by omega) τ₀ ψ) = ψ := by
     ext σ
     simp only [reindexSites_apply, contiguousRestrictₗ_apply]
     congr 1
     ext k
     simp only [contiguousCfg]
-    rw [dif_pos (show 0 ≤ k.val ∧ k.val < 0 + (K + L₀ + 1) by omega)]
+    rw [dif_pos (show 0 ≤ k.val ∧ k.val < 0 + (N - (L₀ + 1) + L₀ + 1) by omega)]
     congr 1
   rwa [hfull] at hmemN
 
