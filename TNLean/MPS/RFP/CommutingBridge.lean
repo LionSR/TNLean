@@ -67,9 +67,9 @@ adjacent pairs.
 
 When the two-site amplitude is the maximally entangled pair, this is the
 product-of-entangled-pairs state appearing in Appendix B. We keep the two-site
-amplitude abstract here; the eventual structural-form bridge will instantiate it
-with the maximally entangled pair transported through the relevant physical
-basis change. -/
+amplitude abstract here; the eventual structural-form construction will
+instantiate it with the maximally entangled pair transported through the relevant
+physical basis change. -/
 def productPairState (ψ₂ : NSiteSpace d 2) (N : ℕ) : NSiteSpace d (2 * N) :=
   fun σ => ∏ p : Fin N, ψ₂ (productPairWindow N σ p)
 
@@ -82,8 +82,8 @@ def productPairState (ψ₂ : NSiteSpace d 2) (N : ℕ) : NSiteSpace d (2 * N) :
 function factors as a repeated copy of one fixed two-site amplitude.
 
 Odd chain lengths are deliberately omitted from this definition: the product
-pairing ansatz naturally lives on even chains, and the commuting-parent bridge
-below only needs the two-site local structure. -/
+pairing ansatz naturally lives on even chains, and the commuting-parent
+construction below only needs the two-site local structure. -/
 def HasProductPairMPV (A : MPSTensor d D) : Prop :=
   ∃ ψ₂ : NSiteSpace d 2, ∀ N (σ : Cfg d (2 * N)),
     mpv A σ = productPairState ψ₂ N σ
@@ -127,9 +127,9 @@ theorem HasProductPairLocalProjectors.commuting_twoSite_localTerms
   rw [hPair.hlocal i, hPair.hlocal j]
   exact hPair.hcomm i j
 
-/-- Complete bridge data for a tensor whose MPVs are products of two-site pairs
-and whose nearest-neighbor parent projectors are induced by independent bond
-projectors on every finite chain. -/
+/-- Complete `ProductPairBridge` data for a tensor whose MPVs are products of
+two-site pairs and whose nearest-neighbor parent projectors are induced by
+independent bond projectors on every finite chain. -/
 structure ProductPairBridge (A : MPSTensor d D) where
   pairAmplitude : NSiteSpace d 2
   hmpv : ∀ N (σ : Cfg d (2 * N)),
@@ -147,8 +147,8 @@ theorem ProductPairBridge.hasProductPairMPV {A : MPSTensor d D}
     HasProductPairMPV A :=
   ⟨hBridge.pairAmplitude, hBridge.hmpv⟩
 
-/-- The bridge data yields the unfolded `IsNNCPH` conclusion: all two-site local
-terms commute on every finite chain.
+/-- The `ProductPairBridge` witness yields the unfolded `IsNNCPH` conclusion:
+all two-site local terms commute on every finite chain.
 
 Since `IsNNCPH` is defined downstream in `ParentHamiltonian/Commuting.lean`, we
 state the commutation relation directly here to keep the dependency direction
@@ -216,27 +216,42 @@ noncomputable def AppendixBStructuralData.ofRFP (A : MPSTensor d D) [NeZero D]
       hU_left := hSpec.2.2.1
       hA_eq := hSpec.2.2.2 }
 
+/-- The two-site amplitude canonically read from a chosen Appendix B structural
+witness.
+
+The key point is that this amplitude depends on the chosen decomposition
+`X, Λ, U`; an extraction witness must factor even-chain MPVs through this
+particular structural amplitude, not through an unrelated two-site vector. -/
+noncomputable def AppendixBStructuralData.twoSiteAmplitude {A : MPSTensor d D}
+    (hStruct : AppendixBStructuralData A) : NSiteSpace d 2 :=
+  let L : Matrix (Fin D) (Fin D) ℂ :=
+    Matrix.diagonal fun k => (hStruct.Λ k : ℂ)
+  fun σ =>
+    Matrix.trace
+      ((hStruct.X * L * hStruct.U (σ 0) * hStruct.X⁻¹) *
+        (hStruct.X * L * hStruct.U (σ 1) * hStruct.X⁻¹))
+
 /-- The remaining chain-space extraction needed after Appendix B.
 
 For a fixed structural witness, this records the two facts that are still not
 produced internally by `rfp_nt_structural_full`: the even-chain MPV must be a
-repeated two-site pair state, and the nearest-neighbor parent projectors on each
-finite chain must be identified with a commuting product-pair family. -/
+repeated copy of the two-site amplitude determined by that same witness, and the
+nearest-neighbor parent projectors on each finite chain must be identified with a
+commuting product-pair family. -/
 structure AppendixBProductPairExtraction {A : MPSTensor d D}
-    (_hStruct : AppendixBStructuralData A) where
-  /-- The two-site pair amplitude whose repetitions give the even-chain MPVs. -/
-  pairAmplitude : NSiteSpace d 2
-  /-- Even-chain coefficient factorization into repeated pair amplitudes. -/
-  hmpv : ∀ N (σ : Cfg d (2 * N)), mpv A σ = productPairState pairAmplitude N σ
+    (hStruct : AppendixBStructuralData A) where
+  /-- Even-chain coefficient factorization through the structural two-site amplitude. -/
+  hmpv : ∀ N (σ : Cfg d (2 * N)),
+    mpv A σ = productPairState hStruct.twoSiteAmplitude N σ
   /-- Local product-pair projectors realizing the nearest-neighbor parent terms. -/
   localProjectors : ∀ N, HasProductPairLocalProjectors A N
 
-/-- Chain-space extraction data yields the established product-pair bridge. -/
-def AppendixBProductPairExtraction.toProductPairBridge
+/-- Chain-space extraction data yields the established `ProductPairBridge` witness. -/
+noncomputable def AppendixBProductPairExtraction.toProductPairBridge
     {A : MPSTensor d D} {hStruct : AppendixBStructuralData A}
     (hExtract : AppendixBProductPairExtraction hStruct) :
     ProductPairBridge A where
-  pairAmplitude := hExtract.pairAmplitude
+  pairAmplitude := hStruct.twoSiteAmplitude
   hmpv := hExtract.hmpv
   localProjectors := hExtract.localProjectors
 

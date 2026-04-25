@@ -34,30 +34,32 @@ Those results are immediate from the already-proved unfolded commutation theorem
 `RFP ⟹ NNCPH` task to **constructing the product-pair witness**, rather than reproving the NNCPH
 wrapper each time.
 
-The 2026-04-25 follow-up packages the upstream Appendix B input and adds a conditional internal
+The 2026-04-25 follow-up records the upstream Appendix B input and adds a conditional internal
 route that does not call `Axioms.rfp_to_nncph_commute`:
 
 - `MPSTensor.AppendixBStructuralData` bundles the structural decomposition
   $A_i = X \Lambda U_i X^{-1}$;
 - `MPSTensor.AppendixBStructuralData.ofRFP` extracts that bundle from
   `rfp_nt_structural_full` under the normal, RFP, and left-canonical hypotheses;
+- `MPSTensor.AppendixBStructuralData.twoSiteAmplitude` defines the two-site amplitude
+  determined by that specific structural witness;
 - `MPSTensor.AppendixBProductPairExtraction` names the remaining chain-space extraction from a
-  fixed structural witness;
+  fixed structural witness, using its structural two-site amplitude;
 - `MPSTensor.rfp_implies_nncph_of_appendixBExtraction` proves NNCPH from RFP plus that extraction,
-  without using the sanctioned forward bridge.
+  without calling `Axioms.rfp_to_nncph_commute`.
 
 In other words, the internal part of the forward direction now factors as
 
 1. obtain Appendix B structural data from `rfp_nt_structural_full`;
-2. construct product-pair extraction data for that structural witness;
-3. apply the product-pair bridge to get NNCPH.
+2. construct product-pair extraction data through that witness's two-site amplitude;
+3. apply the product-pair theorem to get NNCPH.
 
 ## Gap 1 — replacing `Axioms.rfp_to_nncph_commute`
 
-The forward direction of Theorem 3.10 is currently discharged by the sanctioned bridge
+The forward direction of Theorem 3.10 is currently discharged by the sanctioned declaration
 `Axioms.rfp_to_nncph_commute`.
 
-After the wrappers and Appendix B packaging above, the missing internal theorem is more precise:
+After the wrappers and Appendix B structural data above, the missing internal theorem is more precise:
 
 > for the structural witness produced by `AppendixBStructuralData.ofRFP`, construct an
 > `AppendixBProductPairExtraction`; equivalently, construct a `ProductPairBridge A`
@@ -67,7 +69,7 @@ After the wrappers and Appendix B packaging above, the missing internal theorem 
 
 - `TNLean/MPS/RFP/StructuralFull.lean` proves the full Appendix B structural form
   `rfp_nt_structural_full`.
-- `TNLean/MPS/RFP/CommutingBridge.lean` now packages this output as
+- `TNLean/MPS/RFP/CommutingBridge.lean` now records this output as
   `AppendixBStructuralData` and names the remaining chain-space extraction as
   `AppendixBProductPairExtraction`.
 - `Commuting.lean` exposes both the final wrapper `ProductPairBridge.isNNCPH` and the conditional

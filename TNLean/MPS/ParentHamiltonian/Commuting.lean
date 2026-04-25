@@ -26,11 +26,12 @@ parent Hamiltonians (NNCPH).
 
 * `MPSTensor.IsCommutingParentHam.ham_comm_localTerm` — if local terms commute,
   the full Hamiltonian commutes with each local term.
-* `MPSTensor.ProductPairBridge.isNNCPH` — the product-pair witness packages
+* `MPSTensor.ProductPairBridge.isNNCPH` — the product-pair witness gives
   the NNCPH conclusion once the local-projector family is available.
 * `MPSTensor.rfp_implies_nncph_of_appendixBExtraction` — a conditional internal
   route from the proved Appendix B structural data plus the remaining
-  chain-space extraction to NNCPH, without using the external forward bridge.
+  chain-space extraction to NNCPH, without invoking
+  `Axioms.rfp_to_nncph_commute`.
 * `MPSTensor.rfp_implies_nncph` — scaffold for the RFP `⟹` NNCPH direction of
   Theorem 3.10.
 * `MPSTensor.nncph_implies_rfp` — scaffold for the NNCPH `⟹` RFP direction of
