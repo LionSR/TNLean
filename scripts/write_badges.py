@@ -1,15 +1,22 @@
 #!/usr/bin/env python3
-"""Write Shields.io endpoint JSON files for the project homepage."""
+"""Write Shields.io endpoint JSON files for the project homepage.
+
+Usage:
+  write_badges.py [OUTPUT_DIR]
+
+  OUTPUT_DIR  Directory to write badge JSON files into.
+              Defaults to <repo-root>/home_page/badges.
+"""
 
 from __future__ import annotations
 
 import json
 import re
+import sys
 from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-BADGE_DIR = ROOT / "home_page" / "badges"
 LEAN_ROOT = ROOT / "TNLean"
 
 
@@ -101,10 +108,10 @@ def mathlib_version() -> str:
     return "unknown"
 
 
-def write_badge(name: str, label: str, message: str, color: str) -> None:
-    BADGE_DIR.mkdir(parents=True, exist_ok=True)
+def write_badge(name: str, label: str, message: str, color: str, badge_dir: Path) -> None:
+    badge_dir.mkdir(parents=True, exist_ok=True)
     payload = {"schemaVersion": 1, "label": label, "message": message, "color": color}
-    (BADGE_DIR / f"{name}.json").write_text(json.dumps(payload, indent=2) + "\n")
+    (badge_dir / f"{name}.json").write_text(json.dumps(payload, indent=2) + "\n")
 
 
 def count_color(count: int, *, warning_at: int = 1) -> str:
@@ -116,12 +123,13 @@ def count_color(count: int, *, warning_at: int = 1) -> str:
 
 
 def main() -> None:
+    badge_dir = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / "home_page" / "badges"
     sorries = count_token("sorry")
     axioms = count_token("axiom")
-    write_badge("sorries", "sorries", str(sorries), count_color(sorries, warning_at=10))
-    write_badge("axioms", "axioms", str(axioms), count_color(axioms, warning_at=0))
-    write_badge("lean", "Lean", lean_version(), "blue")
-    write_badge("mathlib", "Mathlib", mathlib_version(), "blue")
+    write_badge("sorries", "sorries", str(sorries), count_color(sorries, warning_at=10), badge_dir)
+    write_badge("axioms", "axioms", str(axioms), count_color(axioms, warning_at=0), badge_dir)
+    write_badge("lean", "Lean", lean_version(), "blue", badge_dir)
+    write_badge("mathlib", "Mathlib", mathlib_version(), "blue", badge_dir)
 
 
 if __name__ == "__main__":
