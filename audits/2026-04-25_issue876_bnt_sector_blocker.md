@@ -99,7 +99,7 @@ step for the one-sided TP / primitive / irreducible input family.
 New declarations in `TNLean/MPS/CanonicalForm/EqualNormBridge.lean`:
 
 - `MPSTensor.MPVPhaseEquiv`: the finite relation identifying blocks whose MPV
-  families differ by a nonzero length-power phase factor.
+  families differ by a nonzero length-power scalar factor.
 - `MPSTensor.MPVPhaseClassData` and `MPSTensor.mpvPhaseClassData`: quotient the
   finite block index set by that relation, choose one representative per class,
   enumerate the original members of each class, and prove the representatives
@@ -108,9 +108,9 @@ New declarations in `TNLean/MPS/CanonicalForm/EqualNormBridge.lean`:
   gauge-phase-equivalent representatives would lie in the same quotient class.
 - `MPSTensor.exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks`: constructs the
   sector decomposition from arbitrary TP / primitive / irreducible blocks with
-  nonzero weights by absorbing each class member's phase into its sector weight,
-  then applies the separated-family linear-independence theorem from PR #920 to
-  prove the current `HasBNTSectorData` predicate.
+  nonzero weights by absorbing each class member's scalar factor into its sector
+  weight, then applies the separated-family linear-independence theorem from PR #920
+  to prove the current `HasBNTSectorData` predicate.
 
 This closes the #923 one-sided collapsed-representative sub-blocker.  The broader
 Gap §1 / #652 assembly still needs the heterogeneous matched-basis theorem that

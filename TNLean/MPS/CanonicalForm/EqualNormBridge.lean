@@ -2,12 +2,12 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import TNLean.MPS.CanonicalForm.BNTGrouping
 import TNLean.MPS.BNT.Construction
+import TNLean.MPS.CanonicalForm.BNTGrouping
 import TNLean.MPS.FundamentalTheorem.SectorDecomposition
-import TNLean.MPS.SharedInfra.GaugePhase
-import TNLean.MPS.Overlap.CastLemmas
 import TNLean.MPS.Overlap.CastDecay
+import TNLean.MPS.Overlap.CastLemmas
+import TNLean.MPS.SharedInfra.GaugePhase
 import TNLean.MPS.Structure.PrimitivityBridge
 import TNLean.Spectral.SpectralGapNT
 
@@ -657,16 +657,16 @@ theorem exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks
       HasBNTSectorData (d := d) P := by
   classical
   let classes := mpvPhaseClassData blocks
-  let phaseζ : (j : Fin classes.g) → Fin (classes.copies j) → ℂ :=
+  let ζFn : (j : Fin classes.g) → Fin (classes.copies j) → ℂ :=
     fun j q => (classes.enum_phase j q).choose
-  have hζ_ne : ∀ j q, phaseζ j q ≠ 0 := fun j q => (classes.enum_phase j q).choose_spec.1
+  have hζ_ne : ∀ j q, ζFn j q ≠ 0 := fun j q => (classes.enum_phase j q).choose_spec.1
   have hζ_mpv : ∀ j q (N : ℕ) (σ : Fin N → Fin d),
-      mpv (blocks (classes.enum j q)) σ = (phaseζ j q) ^ N * mpv (blocks (classes.repr j)) σ :=
+      mpv (blocks (classes.enum j q)) σ = (ζFn j q) ^ N * mpv (blocks (classes.repr j)) σ :=
     fun j q N σ => (classes.enum_phase j q).choose_spec.2 N σ
   let sectors : SectorWeightData classes.g := {
     copies := classes.copies
     copies_pos := classes.copies_pos
-    weight := fun j q => phaseζ j q * μ (classes.enum j q)
+    weight := fun j q => ζFn j q * μ (classes.enum j q)
     weight_ne_zero := fun j q => mul_ne_zero (hζ_ne j q) (hμne (classes.enum j q))
   }
   let P : SectorDecomposition d := {
@@ -683,7 +683,7 @@ theorem exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks
             P.mpv_toTensor_eq_sum_sectors σ
       _ = ∑ j : Fin classes.g,
             ∑ q : Fin (classes.copies j),
-              (phaseζ j q * μ (classes.enum j q)) ^ N *
+              (ζFn j q * μ (classes.enum j q)) ^ N *
                 mpv (blocks (classes.repr j)) σ := rfl
       _ = ∑ j : Fin classes.g,
             ∑ q : Fin (classes.copies j),
