@@ -2112,8 +2112,6 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     \lean{MPSTensor.isBlockDiagonal'_of_commutes_reindexed_toTensorFromBlocks_of_wordTuple_span_eq_top}
     \lean{MPSTensor.offBlock_zero_of_commutes_reindexed_toTensorFromBlocks_of_wordTuple_span_eq_top}
     \leanok
-    \uses{lem:block_projection_span_from_product_algebra_span,
-        lem:route_b_block_diagonal_commutant_reduction}
     If the simultaneous length-$m$ block-word tuples
     \[
         \omega \longmapsto \bigl(A_j^{\omega}\bigr)_j
@@ -2126,6 +2124,8 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
 
 \begin{proof}
     \leanok
+    \uses{lem:block_projection_span_from_product_algebra_span,
+        lem:route_b_block_diagonal_commutant_reduction}
     First embed the product algebra linearly as dependent block-diagonal matrices, scaling the
     $j$-th block by $\mu_j^m$.  Since $\mu_j^m\neq0$, the product-algebra span contains the
     tuple with $(\mu_j^m)^{-1}I$ in one component and zero elsewhere; its scaled diagonal image is
