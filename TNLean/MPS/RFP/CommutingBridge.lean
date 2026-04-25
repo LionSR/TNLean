@@ -25,8 +25,9 @@ not import `Commuting.lean`. Instead it does three things:
    projectors as an abstract witness on the full chain space, and proves from
    that witness the unfolded commutativity statement for the two-site local
    terms.
-3. It bundles the already-proved Appendix B structural data and names the
-   remaining chain-space extraction needed to turn that structural data into a
+3. It bundles the already-proved Appendix B structural data, removes the
+   harmless gauge matrices from coefficient calculations, and names the remaining
+   chain-space extraction needed to turn that structural data into a
    `ProductPairBridge`.
 
 The intended downstream use is:
@@ -62,6 +63,12 @@ def productPairWindow (N : ℕ) (σ : Cfg d (2 * N)) (p : Fin N) : Cfg d 2 :=
       have hj : j.val < 2 := j.isLt
       omega⟩ := rfl
 
+/-- On one pair, the product-pair window is the whole two-site configuration. -/
+@[simp] theorem productPairWindow_one (σ : Cfg d (2 * 1)) :
+    productPairWindow 1 σ 0 = σ := by
+  funext j
+  simp [productPairWindow]
+
 /-- The even-chain state obtained by repeating a fixed two-site amplitude on
 adjacent pairs.
 
@@ -76,6 +83,11 @@ def productPairState (ψ₂ : NSiteSpace d 2) (N : ℕ) : NSiteSpace d (2 * N) :
 @[simp] lemma productPairState_zero (ψ₂ : NSiteSpace d 2) :
     productPairState ψ₂ 0 = fun _ => (1 : ℂ) := by
   funext σ
+  simp [productPairState]
+
+/-- On a single pair, the product-pair state is the original two-site amplitude. -/
+@[simp] theorem productPairState_one (ψ₂ : NSiteSpace d 2) (σ : Cfg d (2 * 1)) :
+    productPairState ψ₂ 1 σ = ψ₂ σ := by
   simp [productPairState]
 
 /-- An MPS tensor has product-pair MPVs when every even-length coefficient
@@ -234,6 +246,56 @@ noncomputable def AppendixBStructuralData.twoSiteAmplitude {A : MPSTensor d D}
       ((hStruct.X * L * hStruct.U (σ 0) * hStruct.X⁻¹) *
         (hStruct.X * L * hStruct.U (σ 1) * hStruct.X⁻¹))
 
+/-- The gauge-removed tensor `Λ U_i` associated to a chosen Appendix B witness.
+
+The structural equality says that `A` is a similarity transform of this tensor.
+Separating it out lets the remaining even-chain coefficient calculation ignore the
+basis-change matrices `X` and `X⁻¹`. -/
+noncomputable def AppendixBStructuralData.coreTensor {A : MPSTensor d D}
+    (hStruct : AppendixBStructuralData A) : MPSTensor d D :=
+  fun i => Matrix.diagonal (fun k => (hStruct.Λ k : ℂ)) * hStruct.U i
+
+@[simp] theorem AppendixBStructuralData.coreTensor_apply {A : MPSTensor d D}
+    (hStruct : AppendixBStructuralData A) (i : Fin d) :
+    hStruct.coreTensor i = Matrix.diagonal (fun k => (hStruct.Λ k : ℂ)) * hStruct.U i :=
+  rfl
+
+/-- The original tensor is gauge equivalent to its gauge-removed Appendix B core. -/
+theorem AppendixBStructuralData.gaugeEquiv_coreTensor {A : MPSTensor d D}
+    (hStruct : AppendixBStructuralData A) :
+    GaugeEquiv hStruct.coreTensor A := by
+  let Xg : GL (Fin D) ℂ := Matrix.GeneralLinearGroup.mkOfDetNeZero hStruct.X hStruct.hX_det
+  refine ⟨Xg, ?_⟩
+  intro i
+  simp [Xg, AppendixBStructuralData.coreTensor, hStruct.hA_eq i, Matrix.mul_assoc]
+
+/-- The Appendix B basis change does not change any MPV coefficient. -/
+theorem AppendixBStructuralData.mpv_eq_coreTensor {A : MPSTensor d D}
+    (hStruct : AppendixBStructuralData A) {N : ℕ} (σ : Cfg d N) :
+    mpv A σ = mpv hStruct.coreTensor σ :=
+  (GaugeEquiv.sameMPV hStruct.gaugeEquiv_coreTensor N σ).symm
+
+/-- The structural two-site amplitude is exactly the two-site MPV coefficient. -/
+theorem AppendixBStructuralData.twoSiteAmplitude_eq_mpv {A : MPSTensor d D}
+    (hStruct : AppendixBStructuralData A) (σ : Cfg d 2) :
+    hStruct.twoSiteAmplitude σ = mpv A σ := by
+  simp [mpv, coeff, AppendixBStructuralData.twoSiteAmplitude, hStruct.hA_eq,
+    evalWord, List.ofFn_succ, List.ofFn_zero]
+
+/-- Equivalently, the structural two-site amplitude is the two-site coefficient of
+`Λ U_i`. -/
+theorem AppendixBStructuralData.twoSiteAmplitude_eq_coreTensor_mpv {A : MPSTensor d D}
+    (hStruct : AppendixBStructuralData A) (σ : Cfg d 2) :
+    hStruct.twoSiteAmplitude σ = mpv hStruct.coreTensor σ := by
+  rw [hStruct.twoSiteAmplitude_eq_mpv σ, hStruct.mpv_eq_coreTensor σ]
+
+/-- The length-two case of the requested even-chain factorization is automatic
+from the definition of the structural two-site amplitude. -/
+theorem AppendixBStructuralData.mpv_eq_productPairState_one {A : MPSTensor d D}
+    (hStruct : AppendixBStructuralData A) (σ : Cfg d (2 * 1)) :
+    mpv A σ = productPairState hStruct.twoSiteAmplitude 1 σ := by
+  rw [productPairState_one, hStruct.twoSiteAmplitude_eq_mpv]
+
 /-- The remaining chain-space extraction needed after Appendix B.
 
 For a fixed structural witness, this records the two facts that are still not
@@ -248,6 +310,22 @@ structure AppendixBProductPairExtraction {A : MPSTensor d D}
     mpv A σ = productPairState hStruct.twoSiteAmplitude N σ
   /-- Local product-pair projectors realizing the nearest-neighbor parent terms. -/
   localProjectors : ∀ N, HasProductPairLocalProjectors A N
+
+/-- Construct the MPV part of the extraction after removing the Appendix B gauge.
+
+This reduces the coefficient bookkeeping to the core tensor `Λ U_i`; the local
+projector data remains a separate chain-space input. -/
+noncomputable def AppendixBProductPairExtraction.ofCoreTensorFactorization
+    {A : MPSTensor d D} {hStruct : AppendixBStructuralData A}
+    (hCore : ∀ N (σ : Cfg d (2 * N)),
+      mpv hStruct.coreTensor σ = productPairState hStruct.twoSiteAmplitude N σ)
+    (hProj : ∀ N, HasProductPairLocalProjectors A N) :
+    AppendixBProductPairExtraction hStruct where
+  hmpv := by
+    intro N σ
+    rw [hStruct.mpv_eq_coreTensor σ]
+    exact hCore N σ
+  localProjectors := hProj
 
 /-- Chain-space extraction data yields the established `ProductPairBridge` witness. -/
 noncomputable def AppendixBProductPairExtraction.toProductPairBridge
