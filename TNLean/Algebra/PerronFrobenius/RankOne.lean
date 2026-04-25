@@ -18,15 +18,16 @@ usable theorem here records the extra diagonalizability supplied by positive
 semidefiniteness.
 
 The main corrected theorem is
-`Matrix.PosSemidefTracePowersConstantImpliesRankOne`: if a real finite matrix is
-positive semidefinite, has trace one, and has constant traces on all positive
-powers, then it factors as an outer product.  Primitivity is not needed for this
-strengthened statement; it remains in the surrounding MPDO interface because it
-is part of the paper's construction of the auxiliary matrix `T`.
+`Matrix.PosSemidef.trace_powers_constant_implies_rank_one`: if a real finite
+matrix is positive semidefinite, has trace one, and has constant traces on all
+positive powers, then it factors as an outer product.  Primitivity is not needed
+for this strengthened statement; it remains among the surrounding MPDO
+hypotheses because it is part of the paper's construction of the auxiliary
+matrix `T`.
 -/
 
 open BigOperators
-open scoped BigOperators Matrix
+open scoped BigOperators Matrix ComplexOrder
 
 namespace Matrix
 
@@ -44,18 +45,18 @@ Appendix C.2, Lemma C.4. -/
 def TracePowersConstant (T : Matrix (Fin n) (Fin n) ℝ) : Prop :=
   ∀ k : ℕ, 0 < k → Matrix.trace (T ^ k) = Matrix.trace T
 
-/-- The scoped Perron--Frobenius input for Appendix C.2, Lemma C.4.
+/-- The conditional Perron--Frobenius hypothesis for Appendix C.2, Lemma C.4.
 
-This predicate is retained as a compatibility interface for files that still
-phrase the rank-one step as a local hypothesis. As a universally quantified
-statement over primitive nonnegative real matrices it is false: there exist
-primitive nonnegative matrices with constant trace powers and rank greater than
-one. See `TNLean/Archive/PerronFrobeniusRankOneCounterexample.lean`.
+This predicate is kept for callers that phrase the rank-one step as a local
+hypothesis. As a universally quantified statement over primitive nonnegative
+real matrices it is false: there exist primitive nonnegative matrices with
+constant trace powers and rank greater than one. See
+`TNLean/Archive/PerronFrobeniusRankOneCounterexample.lean`.
 
 The corrected theorem in this module is
-`Matrix.PosSemidefTracePowersConstantImpliesRankOne`, which discharges this
-predicate whenever the concrete matrix `T` is positive semidefinite and has
-trace one. -/
+`Matrix.PosSemidef.trace_powers_constant_implies_rank_one`, which establishes
+this hypothesis whenever the concrete matrix `T` is positive semidefinite and
+has trace one. -/
 def PrimitiveTracePowersConstantImpliesRankOne
     (T : Matrix (Fin n) (Fin n) ℝ) : Prop :=
   Matrix.IsPrimitive T → TracePowersConstant T → HasRankOneFactorization T
@@ -155,42 +156,45 @@ private lemma hasRankOneFactorization_unitary_conj
     Finset.mul_sum, Finset.sum_mul]
   ring_nf
 
-/-- For a positive semidefinite real matrix, the trace of the square is the sum
-of the squares of its Hermitian eigenvalues. -/
+/-- For a positive semidefinite matrix over an `RCLike` field, the trace of
+the square is the sum of the squares of its Hermitian eigenvalues. -/
 theorem PosSemidef.trace_sq_eq_sum_eigenvalues_sq
-    {T : Matrix (Fin n) (Fin n) ℝ} (hT : T.PosSemidef) :
-    Matrix.trace (T ^ 2) = ∑ i, (hT.isHermitian.eigenvalues i) ^ 2 := by
-  let hH : T.IsHermitian := hT.isHermitian
+    {ι 𝕜 : Type*} [Fintype ι] [DecidableEq ι] [RCLike 𝕜]
+    {T : Matrix ι ι 𝕜} (hT : T.PosSemidef) :
+    Matrix.trace (T ^ 2) =
+      ∑ i, (RCLike.ofReal (hT.isHermitian.eigenvalues i) : 𝕜) ^ 2 := by
+  have hH : T.IsHermitian := hT.isHermitian
   let U := hH.eigenvectorUnitary
-  let D : Matrix (Fin n) (Fin n) ℝ := diagonal hH.eigenvalues
-  have hspec : T = (Unitary.conjStarAlgAut ℝ (Matrix (Fin n) (Fin n) ℝ) U) D := by
+  let D : Matrix ι ι 𝕜 := diagonal (RCLike.ofReal ∘ hH.eigenvalues)
+  have hspec : T = (Unitary.conjStarAlgAut 𝕜 (Matrix ι ι 𝕜) U) D := by
     simpa [D, U] using hH.spectral_theorem
   calc
     Matrix.trace (T ^ 2) =
-        Matrix.trace (((Unitary.conjStarAlgAut ℝ (Matrix (Fin n) (Fin n) ℝ) U) D) ^ 2) := by
+        Matrix.trace (((Unitary.conjStarAlgAut 𝕜 (Matrix ι ι 𝕜) U) D) ^ 2) := by
       rw [hspec]
-    _ = Matrix.trace ((Unitary.conjStarAlgAut ℝ (Matrix (Fin n) (Fin n) ℝ) U) (D ^ 2)) := by
+    _ = Matrix.trace ((Unitary.conjStarAlgAut 𝕜 (Matrix ι ι 𝕜) U) (D ^ 2)) := by
       rw [map_pow]
     _ = Matrix.trace (D ^ 2) := by
       simp [Unitary.conjStarAlgAut_apply, D, Matrix.trace_mul_cycle]
-    _ = ∑ i, (hH.eigenvalues i) ^ 2 := by
+    _ = ∑ i, (RCLike.ofReal (hH.eigenvalues i) : 𝕜) ^ 2 := by
       simp [D, diagonal_mul_diagonal, pow_two]
 
 /-- **Corrected rank-one criterion for Lemma C.4.**
 
 If a real finite matrix is positive semidefinite, has trace one, and has
 constant trace on all positive powers, then it has a rank-one factorization.
-This is the diagonalizable/PSD strengthening missing from the false bare
-primitive Perron--Frobenius statement. -/
-theorem PosSemidefTracePowersConstantImpliesRankOne
-    (T : Matrix (Fin n) (Fin n) ℝ)
+Only the second moment is used in the proof; the stronger trace-power hypothesis
+matches the ZCL input in Appendix C.2. This is the diagonalizable/PSD
+strengthening missing from the false bare primitive Perron--Frobenius statement. -/
+theorem PosSemidef.trace_powers_constant_implies_rank_one
+    {T : Matrix (Fin n) (Fin n) ℝ}
     (hPSD : T.PosSemidef)
     (hTrace : Matrix.trace T = 1)
     (hTPC : TracePowersConstant T) :
     HasRankOneFactorization T := by
   classical
-  let hH : T.IsHermitian := hPSD.isHermitian
-  let lam : Fin n → ℝ := hH.eigenvalues
+  have hH : T.IsHermitian := hPSD.isHermitian
+  set lam : Fin n → ℝ := hH.eigenvalues with hlam
   have hsum : ∑ i, lam i = 1 := by
     have htrace := hH.trace_eq_sum_eigenvalues
     change Matrix.trace T = ∑ i, (lam i : ℝ) at htrace
@@ -207,10 +211,11 @@ theorem PosSemidefTracePowersConstantImpliesRankOne
     exact htrace2eig.symm
   have hnonneg : ∀ i, 0 ≤ lam i := by
     intro i
+    rw [hlam]
     exact hPSD.eigenvalues_nonneg i
   have hD : HasRankOneFactorization (Matrix.diagonal lam) :=
     diagonal_hasRankOneFactorization lam hnonneg hsum hsq
-  let U := hH.eigenvectorUnitary
+  set U := hH.eigenvectorUnitary with hU
   have hconj : HasRankOneFactorization
       ((U : Matrix (Fin n) (Fin n) ℝ) * Matrix.diagonal lam *
         star (U : Matrix (Fin n) (Fin n) ℝ)) :=
@@ -218,20 +223,19 @@ theorem PosSemidefTracePowersConstantImpliesRankOne
   have hspec :
       T = (U : Matrix (Fin n) (Fin n) ℝ) * Matrix.diagonal lam *
         star (U : Matrix (Fin n) (Fin n) ℝ) := by
-    change T = (U : Matrix (Fin n) (Fin n) ℝ) * Matrix.diagonal hH.eigenvalues *
-      star (U : Matrix (Fin n) (Fin n) ℝ)
+    rw [hlam, hU]
     simpa [Unitary.conjStarAlgAut_apply] using hH.spectral_theorem
   rcases hconj with ⟨a, b, hab⟩
   exact ⟨a, b, by rw [hspec, hab]⟩
 
-/-- Positive semidefiniteness and trace normalization discharge the scoped
-primitive rank-one predicate. The primitive hypothesis is accepted and ignored:
+/-- Positive semidefiniteness and trace normalization establish the auxiliary
+primitive rank-one hypothesis. The primitive hypothesis is accepted and ignored:
 the PSD theorem is stronger once the trace normalization is available. -/
-theorem primitiveTracePowersConstantImpliesRankOne_of_posSemidef
+theorem primitive_trace_powers_constant_implies_rank_one_of_pos_semidef
     {T : Matrix (Fin n) (Fin n) ℝ}
     (hPSD : T.PosSemidef) (hTrace : Matrix.trace T = 1) :
     PrimitiveTracePowersConstantImpliesRankOne T := by
   intro _hPrimitive hTPC
-  exact PosSemidefTracePowersConstantImpliesRankOne T hPSD hTrace hTPC
+  exact hPSD.trace_powers_constant_implies_rank_one hTrace hTPC
 
 end Matrix

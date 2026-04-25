@@ -36,20 +36,19 @@ arXiv:1606.00608 (Cirac–Pérez-García–Schuch–Verstraete).
   `η_{k,h}` together with positivity.
 - `MPOTensor.ExplicitEtaOperators.traceMatrix` /
   `MPOTensor.ExplicitEtaOperators.traceMatrixRe`: the complex trace matrix of an
-  explicit `η`-family and its real-part interface to the downstream
+  explicit `η`-family and its real-part input to the downstream
   Perron–Frobenius step.
 - `Matrix.HasRankOneFactorization`: a finite matrix factors as `vecMulVec a b`.
 - `Matrix.TracePowersConstant`: all positive powers of a matrix have the same
   trace as the matrix itself.
-- `Matrix.PosSemidefTracePowersConstantImpliesRankOne`: the corrected PSD
-  rank-one criterion for the finite-dimensional Lemma C.4 step.
-- `Matrix.PrimitiveTracePowersConstantImpliesRankOne`: the legacy scoped
+- `Matrix.PosSemidef.trace_powers_constant_implies_rank_one`: the corrected
+  PSD rank-one criterion for the finite-dimensional Lemma C.4 step.
+- `Matrix.PrimitiveTracePowersConstantImpliesRankOne`: the conditional
   Perron–Frobenius input isolated by Lemma C.4.
-- `MPOTensor.sal_zcl_implies_rank_one_T`: the scoped Lemma C.4 consequence,
+- `MPOTensor.sal_zcl_implies_rank_one_T`: the conditional Lemma C.4 consequence,
   proved relative to that Perron–Frobenius input.
 - `MPOTensor.sal_zcl_implies_rank_one_T_of_posSemidef`: the same consequence
-  with the scoped Perron–Frobenius input discharged from positive
-  semidefiniteness of `T`.
+  with the Perron–Frobenius input derived from positive semidefiniteness of `T`.
 
 ## Implementation note
 
@@ -74,12 +73,13 @@ quantified form of that claim is false — see
 3 × 3 witness.
 
 The corrected matrix theorem now available is
-`Matrix.PosSemidefTracePowersConstantImpliesRankOne`: positive semidefiniteness
-of the concrete trace matrix, together with trace normalization and constant
-trace powers, supplies the missing diagonalizability and forces a rank-one
-factorization. The theorem `MPOTensor.sal_zcl_implies_rank_one_T_of_posSemidef`
-wires this corrected input into the Lemma C.4 interface. What remains on the
-MPDO side is to prove that the sector trace matrix `T` extracted from the
+`Matrix.PosSemidef.trace_powers_constant_implies_rank_one`: positive
+semidefiniteness of the concrete trace matrix, together with trace
+normalization and constant trace powers, supplies the missing diagonalizability
+and forces a rank-one factorization. The theorem
+`MPOTensor.sal_zcl_implies_rank_one_T_of_posSemidef` connects this corrected
+criterion to the Lemma C.4 structure. What remains on
+the MPDO side is to prove that the sector trace matrix `T` extracted from the
 η-operators is itself positive semidefinite or Hermitian; positivity of the
 individual η-operators alone only gives entrywise nonnegativity of the trace
 matrix.
@@ -182,7 +182,7 @@ abbrev EtaStructure
       (Fin dA × Fin dB × Fin dC) ℂ) : Type :=
   Entropy.QuantumMarkovDecomposition ρ_ABC
 
-/-- **Lemma C.3, scoped entropy form**: strong area law implies the local
+/-- **Lemma C.3, local entropy form**: strong area law implies the local
 `η`-structure.
 
 We formalize the SAL input at the exact local point where the paper invokes it:
@@ -240,8 +240,8 @@ noncomputable def traceMatrix (data : ExplicitEtaOperators hη) :
 
 /-- The real-part trace matrix attached to an explicit `η_{k,h}` family.
 
-This is the direct real-valued interface to the Perron–Frobenius matrix `T`
-used later in Appendix C.2, Lemma C.4. -/
+This is the direct real-valued input to the Perron–Frobenius matrix `T` used
+later in Appendix C.2, Lemma C.4. -/
 noncomputable def traceMatrixRe (data : ExplicitEtaOperators hη) :
     Matrix (Fin hη.m) (Fin hη.m) ℝ :=
   fun k h => (Matrix.trace (data.eta k h)).re
@@ -253,10 +253,11 @@ noncomputable def traceMatrixRe (data : ExplicitEtaOperators hη) :
 /-- Positivity of each neighboring operator makes the corresponding real trace
 entry nonnegative.
 
-This is the entrywise nonnegativity needed for the primitive-matrix interface.
+This is the entrywise nonnegativity needed for the primitive-matrix hypothesis.
 It is strictly weaker than the matrix-level positive semidefiniteness needed by
-`Matrix.PosSemidefTracePowersConstantImpliesRankOne`; proving that stronger
-property for the sector trace matrix is the remaining MPDO-specific evidence. -/
+`Matrix.PosSemidef.trace_powers_constant_implies_rank_one`; proving that
+stronger property for the sector trace matrix is the remaining MPDO-specific
+evidence. -/
 theorem traceMatrixRe_nonneg (data : ExplicitEtaOperators hη) (k h : Fin hη.m) :
     0 ≤ data.traceMatrixRe k h := by
   have htr : 0 ≤ Matrix.trace (data.eta k h) :=
@@ -271,7 +272,7 @@ section RankOneT
 
 variable {n : ℕ}
 
-/-- **Lemma C.4, scoped matrix form**: once the matrix `T` attached to the
+/-- **Lemma C.4, conditional matrix form**: once the matrix `T` attached to the
 local `η`-structure is known to be primitive and to have constant trace on all
 positive powers, the remaining Perron–Frobenius input forces `T` to be rank one.
 
@@ -295,8 +296,8 @@ theorem sal_zcl_implies_rank_one_T
 
 /-- **Lemma C.4, PSD-corrected matrix form**: if the auxiliary trace matrix `T`
 is positive semidefinite, then the corrected finite-dimensional theorem
-`Matrix.PosSemidefTracePowersConstantImpliesRankOne` supplies the scoped
-Perron--Frobenius input used by `MPOTensor.sal_zcl_implies_rank_one_T`.
+`Matrix.PosSemidef.trace_powers_constant_implies_rank_one` supplies the
+conditional Perron--Frobenius input used by `MPOTensor.sal_zcl_implies_rank_one_T`.
 
 The primitivity hypothesis is kept in the statement because it is part of the
 paper's construction of `T`, but the PSD rank-one criterion is stronger and does
@@ -309,7 +310,7 @@ theorem sal_zcl_implies_rank_one_T_of_posSemidef
     (hZCL : Matrix.TracePowersConstant T) :
     ∃ a b : Fin n → ℝ, T = Matrix.vecMulVec a b ∧ a ⬝ᵥ b = 1 := by
   exact sal_zcl_implies_rank_one_T T hPrimitive hTrace hZCL
-    (Matrix.primitiveTracePowersConstantImpliesRankOne_of_posSemidef hPSD hTrace)
+    (Matrix.primitive_trace_powers_constant_implies_rank_one_of_pos_semidef hPSD hTrace)
 
 end RankOneT
 

@@ -475,41 +475,70 @@ strong subadditivity for a normalized three-site reduced state.
     \lean{MPOTensor.ExplicitEtaOperators.traceMatrix_apply}
     \lean{MPOTensor.ExplicitEtaOperators.traceMatrixRe}
     \lean{MPOTensor.ExplicitEtaOperators.traceMatrixRe_apply}
-    \lean{MPOTensor.ExplicitEtaOperators.traceMatrixRe_nonneg}
     \leanok
     \uses{def:mpdo_explicit_eta_operators}
     Every explicit neighboring $\eta$-family determines a sector-by-sector trace
     matrix. We record both its complex-valued form and the real-part version,
-    which is the direct interface to the real Perron--Frobenius matrix $T$ used
-    in the rank-one step. Positivity of the neighboring operators gives
-    entrywise nonnegativity of this real trace matrix; matrix-level positive
-    semidefiniteness of $T$ is a separate structural condition.
+    which is the direct input for the real Perron--Frobenius matrix $T$ used
+    in the rank-one step.
 \end{definition}
+
+\begin{lemma}[Entrywise nonnegativity of the real trace matrix]
+    \label{lem:mpdo_explicit_eta_trace_matrix_nonneg}
+    \lean{MPOTensor.ExplicitEtaOperators.traceMatrixRe_nonneg}
+    \leanok
+    \uses{def:mpdo_explicit_eta_trace_matrix}
+    Positivity of the neighboring operators gives entrywise nonnegativity of
+    the real trace matrix. Matrix-level positive semidefiniteness of $T$ is a
+    separate structural condition.
+\end{lemma}
 
 \begin{definition}[Auxiliary matrix predicates for the rank-one step]
     \label{def:matrix_trace_rankone_predicates}
     \lean{Matrix.TracePowersConstant}
     \lean{Matrix.HasRankOneFactorization}
     \lean{Matrix.PrimitiveTracePowersConstantImpliesRankOne}
-    \lean{Matrix.PosSemidef.trace_sq_eq_sum_eigenvalues_sq}
-    \lean{Matrix.PosSemidefTracePowersConstantImpliesRankOne}
-    \lean{Matrix.primitiveTracePowersConstantImpliesRankOne_of_posSemidef}
     \leanok
     The auxiliary predicates record three matrix-theoretic ingredients used in
     the rank-one step of Appendix~C.2, Lemma~C.4: constant traces of all
     positive powers, existence of a rank-one factorization $T = a b^\top$, and
-    the scoped Perron--Frobenius implication from primitivity together with
+    the conditional Perron--Frobenius implication from primitivity together with
     constant trace powers to such a factorization.
 
-    The scoped implication is not a globally provable theorem. As a universal
-    statement over primitive nonnegative matrices it is false; a concrete
-    $3 \times 3$ counterexample is recorded in the archive. The corrected
-    criterion proved here adds positive semidefiniteness and trace normalization,
-    which provide the diagonalizability needed to turn the trace-power condition
-    into a rank-one factorization.
+    This conditional implication is not a globally provable theorem. As a
+    universal statement over primitive nonnegative matrices it is false; a
+    concrete $3 \times 3$ counterexample is recorded in the archive. The
+    corrected criterion proved here adds positive semidefiniteness and trace
+    normalization, which provide the diagonalizability needed to turn the
+    trace-power condition into a rank-one factorization.
 \end{definition}
 
-\begin{theorem}[SAL and ZCL imply rank-one $T$ (scoped form)]
+\begin{theorem}[PSD trace-power rank-one criterion]
+    \label{thm:matrix_psd_trace_power_rank_one}
+    \lean{Matrix.PosSemidef.trace_sq_eq_sum_eigenvalues_sq}
+    \lean{Matrix.PosSemidef.trace_powers_constant_implies_rank_one}
+    \lean{Matrix.primitive_trace_powers_constant_implies_rank_one_of_pos_semidef}
+    \leanok
+    \uses{def:matrix_trace_rankone_predicates}
+    Let $T$ be a finite real square matrix. If $T$ is positive semidefinite,
+    normalized by $\tr(T)=1$, and has constant traces on all positive powers,
+    then $T$ has a rank-one factorization. Consequently, under the same
+    positive-semidefinite and trace-normalization hypotheses, the conditional
+    rank-one criterion used in Lemma~C.4 follows.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:matrix_trace_rankone_predicates}
+    The spectral theorem diagonalizes the positive semidefinite matrix with
+    nonnegative real eigenvalues. The trace gives that their sum is $1$, while
+    the second trace moment gives that the sum of their squares is also $1$.
+    Hence exactly one eigenvalue is equal to $1$ and all others vanish, so the
+    diagonal form is rank one. Unitary conjugation preserves the existence of an
+    outer-product factorization.
+\end{proof}
+
+\begin{theorem}[SAL and ZCL imply rank-one $T$ (conditional form)]
     \label{thm:sal_zcl_implies_rank_one_t}
     \lean{MPOTensor.sal_zcl_implies_rank_one_T}
     \leanok
@@ -541,9 +570,9 @@ strong subadditivity for a normalized three-site reduced state.
     \lean{MPOTensor.sal_zcl_implies_rank_one_T_of_posSemidef}
     \leanok
     \uses{def:matrix_trace_rankone_predicates, thm:sal_zcl_implies_rank_one_t}
-    Let $T$ be the real matrix extracted from the local $\eta$-data. Assume that
-    $T$ is primitive, positive semidefinite, normalized by $\tr(T)=1$, and has
-    constant traces on all positive powers. Then
+    Let $T$ be a finite real square matrix. Assume that $T$ is primitive,
+    positive semidefinite, normalized by $\tr(T)=1$, and has constant traces on
+    all positive powers. Then
     \[
         T = a b^\top
     \]
@@ -555,8 +584,8 @@ strong subadditivity for a normalized three-site reduced state.
     \uses{def:matrix_trace_rankone_predicates, thm:sal_zcl_implies_rank_one_t}
     The positive-semidefinite matrix criterion diagonalizes $T$, uses the first
     two trace moments to show that exactly one eigenvalue is nonzero, and hence
-    supplies the scoped rank-one input. The scoped Lemma~C.4 statement then
-    gives the factorization and trace normalization.
+    supplies the auxiliary rank-one criterion. The conditional Lemma~C.4
+    statement then gives the factorization and trace normalization.
 \end{proof}
 
 \section{Horizontal and Vertical Canonical Forms}
