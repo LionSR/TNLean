@@ -36,8 +36,8 @@ The dedicated `Blueprint Sync & Prose Review` CI workflow
 
 ## 1. No Lean jargon in the leanblueprint
 
-The blueprint is a **bridge between the mathematics and the Lean formalization**, but
-its prose must read as standard mathematics. The `\lean{Namespace.Name}` tag is the
+The blueprint links the mathematics to its Lean formalization, but its prose must
+read as standard mathematics. The `\lean{Namespace.Name}` tag is the
 machine-readable link to the formalization; the surrounding prose must not mention
 Lean identifiers, namespaces, or syntax. If a reader cannot follow the blueprint
 without opening the `.lean` files, the prose has failed.
@@ -185,10 +185,11 @@ and must not appear in the blueprint, Lean docstrings, or commit/PR prose.
 | "We will see that" / "as we shall see" | drop; state the result directly |
 | "Let us" / "let's" (as hortative filler) | drop or use imperative |
 
-A few entries are **context-sensitive**: "crucial", "pivotal", "moreover",
-"furthermore", and "let us" appear in legitimate mathematical writing and are
-banned only as vague filler — not categorically. Apply judgment; flag the
-empty-calorie occurrences, leave the genuine mathematical uses alone.
+Several entries are **context-sensitive** and banned only as vague filler, not
+categorically: "crucial", "pivotal", "vital", "moreover", "furthermore",
+"essentially", "in essence", "ultimately", "meticulous", "let us". All have
+legitimate mathematical uses. Apply judgment: flag the empty-calorie occurrences,
+leave the genuine ones alone.
 
 ---
 
@@ -210,16 +211,4 @@ empty-calorie occurrences, leave the genuine mathematical uses alone.
   fact (e.g. "X is a subalgebra"), it must be `\begin{theorem}`, not
   `\begin{definition}`. Definitions introduce new objects; theorems prove properties.
 
----
-
-## Cross-references
-
-- [`blueprint_style_guide.md`](blueprint_style_guide.md) — LaTeX conventions,
-  notation table, `\lean{}`/`\leanok` tags, `\uses` dependency rules, blueprint
-  structure, build commands.
-- [`doc.md`](doc.md) — mathlib-pasted general docstring guidance (header comments,
-  module docstrings, LaTeX/Markdown in docstrings, citations).
-- [`style.md`](style.md) — mathlib-pasted general code-style guide (formatting,
-  comment delimiters, normal forms).
-- [`PROOF_INTEGRITY.md`](PROOF_INTEGRITY.md) — proof-integrity blockers and
-  warnings (unrelated to prose).
+See `CLAUDE.md` for the full docs index.
