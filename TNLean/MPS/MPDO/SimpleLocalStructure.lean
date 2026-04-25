@@ -5,7 +5,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.MPS.MPDO.Defs
 import TNLean.Entropy.MarkovChain
 import TNLean.MPS.Chain.VirtualInsertion
-import Mathlib.LinearAlgebra.Matrix.Irreducible.Defs
+import TNLean.Algebra.PerronFrobenius.RankOne
 
 /-!
 # Simple MPDO local structure
@@ -36,15 +36,14 @@ arXiv:1606.00608 (Cirac–Pérez-García–Schuch–Verstraete).
   `η_{k,h}` together with positivity.
 - `MPOTensor.ExplicitEtaOperators.traceMatrix` /
   `MPOTensor.ExplicitEtaOperators.traceMatrixRe`: the complex trace matrix of an
-  explicit `η`-family and its real-part interface to the downstream
+  explicit `η`-family and its real-part input to the downstream
   Perron–Frobenius step.
-- `Matrix.HasRankOneFactorization`: a finite matrix factors as `vecMulVec a b`.
-- `Matrix.TracePowersConstant`: all positive powers of a matrix have the same
-  trace as the matrix itself.
-- `Matrix.PrimitiveTracePowersConstantImpliesRankOne`: the single missing
-  Perron–Frobenius input isolated by Lemma C.4.
-- `MPOTensor.sal_zcl_implies_rank_one_T`: the scoped Lemma C.4 consequence,
-  proved relative to that Perron–Frobenius input.
+- `MPOTensor.ExplicitEtaOperators.traceMatrixRe_nonneg`: positivity of each
+  neighboring operator gives entrywise nonnegativity of the real trace matrix.
+- `MPOTensor.sal_zcl_implies_rank_one_T`: the conditional Lemma C.4 consequence,
+  proved relative to the Perron–Frobenius rank-one input.
+- `MPOTensor.sal_zcl_implies_rank_one_T_of_posSemidef`: the same consequence
+  with the Perron–Frobenius input derived from positive semidefiniteness of `T`.
 
 ## Implementation note
 
@@ -63,16 +62,22 @@ is isolated to a single local extraction statement.
 
 Lemma C.4 is further isolated to the finite-dimensional Perron–Frobenius step:
 for a primitive nonnegative matrix `T`, constant traces of positive powers are
-*claimed* (in the paper) to force `T` to have rank one. We expose that step as
-the single hypothesis `Matrix.PrimitiveTracePowersConstantImpliesRankOne`, so
-the remaining gap is exactly localized and matches the paper one-to-one.
-
-The universally quantified form of that claim is in fact false — see
+*claimed* (in the paper) to force `T` to have rank one. The universally
+quantified form of that claim is false — see
 `TNLean/Archive/PerronFrobeniusRankOneCounterexample.lean` for an explicit
-3 × 3 witness. Callers of `MPOTensor.sal_zcl_implies_rank_one_T` must therefore
-discharge the hypothesis using additional structure on the specific `T` coming
-from the MPDO context (the η-operators are positive semidefinite in the paper's
-construction, which supplies the missing diagonalizability).
+3 × 3 witness.
+
+The corrected matrix theorem now available is
+`Matrix.PosSemidef.trace_powers_constant_implies_rank_one`: positive
+semidefiniteness of the concrete trace matrix, together with trace
+normalization and constant trace powers, supplies the missing diagonalizability
+and forces a rank-one factorization. The theorem
+`MPOTensor.sal_zcl_implies_rank_one_T_of_posSemidef` connects this corrected
+criterion to the Lemma C.4 structure. What remains on
+the MPDO side is to prove that the sector trace matrix `T` extracted from the
+η-operators is itself positive semidefinite or Hermitian; positivity of the
+individual η-operators alone only gives entrywise nonnegativity of the trace
+matrix.
 
 ## References
 
@@ -83,45 +88,6 @@ construction, which supplies the missing diagonalizability).
 -/
 
 open scoped Matrix ComplexOrder BigOperators
-
-namespace Matrix
-
-variable {n : ℕ}
-
-/-- A square real matrix has the rank-one factorization of Appendix C.2,
-Lemma C.4 if it is an outer product `a bᵀ`, represented in Lean as
-`Matrix.vecMulVec a b`. -/
-def HasRankOneFactorization (T : Matrix (Fin n) (Fin n) ℝ) : Prop :=
-  ∃ a b : Fin n → ℝ, T = Matrix.vecMulVec a b
-
-/-- The traces of all positive powers of `T` agree with the trace of `T`
-itself. This is the matrix-theoretic consequence of the ZCL step used in
-Appendix C.2, Lemma C.4. -/
-def TracePowersConstant (T : Matrix (Fin n) (Fin n) ℝ) : Prop :=
-  ∀ k : ℕ, 0 < k → Matrix.trace (T ^ k) = Matrix.trace T
-
-/-- The missing Perron–Frobenius input for Appendix C.2, Lemma C.4:
-for a primitive nonnegative matrix, constant traces of positive powers imply a
-rank-one factorization.
-
-This is intentionally stated as a local hypothesis rather than a new global
-assumption. Once a genuine proof is formalized, downstream callers can simply
-supply that theorem here and the scoped result `MPOTensor.sal_zcl_implies_rank_one_T`
-will become unconditional.
-
-**Note.** As a universally quantified statement over primitive nonnegative real
-matrices this implication is *false*: there exist primitive nonnegative
-matrices with `trace (T ^ k) = trace T` for all `k ≥ 1` but rank greater than
-one. An explicit machine-checked `3 × 3` witness is recorded in
-`TNLean/Archive/PerronFrobeniusRankOneCounterexample.lean`. Discharging the
-hypothesis in a specific MPDO context therefore requires additional structure
-on `T` (for instance positive semidefiniteness or diagonalizability over `ℂ`)
-that the caller must supply. -/
-def PrimitiveTracePowersConstantImpliesRankOne
-    (T : Matrix (Fin n) (Fin n) ℝ) : Prop :=
-  Matrix.IsPrimitive T → TracePowersConstant T → HasRankOneFactorization T
-
-end Matrix
 
 namespace MPOTensor
 
@@ -211,7 +177,7 @@ abbrev EtaStructure
       (Fin dA × Fin dB × Fin dC) ℂ) : Type :=
   Entropy.QuantumMarkovDecomposition ρ_ABC
 
-/-- **Lemma C.3, scoped entropy form**: strong area law implies the local
+/-- **Lemma C.3, local entropy form**: strong area law implies the local
 `η`-structure.
 
 We formalize the SAL input at the exact local point where the paper invokes it:
@@ -230,8 +196,8 @@ theorem sal_implies_eta_structure
 Hayashi decomposition.
 
 For each pair of sectors `(k, h)`, the operator `η_{k,h}` acts on the
-neighboring bond space `B_kᴿ ⊗ B_hᴸ`, represented in Lean as the matrix algebra
-on `Fin (hη.dR k) × Fin (hη.dL h)`. -/
+neighboring bond space `B_kᴿ ⊗ B_hᴸ`, the matrix algebra with row and column
+indices `Fin (hη.dR k) × Fin (hη.dL h)`. -/
 abbrev etaOperators
     {ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)
       (Fin dA × Fin dB × Fin dC) ℂ}
@@ -269,8 +235,8 @@ noncomputable def traceMatrix (data : ExplicitEtaOperators hη) :
 
 /-- The real-part trace matrix attached to an explicit `η_{k,h}` family.
 
-This is the direct real-valued interface to the Perron–Frobenius matrix `T`
-used later in Appendix C.2, Lemma C.4. -/
+This is the direct real-valued input to the Perron–Frobenius matrix `T` used
+later in Appendix C.2, Lemma C.4. -/
 noncomputable def traceMatrixRe (data : ExplicitEtaOperators hη) :
     Matrix (Fin hη.m) (Fin hη.m) ℝ :=
   fun k h => (Matrix.trace (data.eta k h)).re
@@ -278,6 +244,20 @@ noncomputable def traceMatrixRe (data : ExplicitEtaOperators hη) :
 @[simp] theorem traceMatrixRe_apply (data : ExplicitEtaOperators hη)
     (k h : Fin hη.m) :
     data.traceMatrixRe k h = (Matrix.trace (data.eta k h)).re := rfl
+
+/-- Positivity of each neighboring operator makes the corresponding real trace
+entry nonnegative.
+
+This is the entrywise nonnegativity needed for the primitive-matrix hypothesis.
+It is strictly weaker than the matrix-level positive semidefiniteness needed by
+`Matrix.PosSemidef.trace_powers_constant_implies_rank_one`; proving that
+stronger property for the sector trace matrix is the remaining MPDO-specific
+evidence. -/
+theorem traceMatrixRe_nonneg (data : ExplicitEtaOperators hη) (k h : Fin hη.m) :
+    0 ≤ data.traceMatrixRe k h := by
+  have htr : 0 ≤ Matrix.trace (data.eta k h) :=
+    (data.eta_pos k h).trace_nonneg
+  exact (Complex.le_def.mp htr).1
 
 end ExplicitEtaOperators
 
@@ -287,7 +267,7 @@ section RankOneT
 
 variable {n : ℕ}
 
-/-- **Lemma C.4, scoped matrix form**: once the matrix `T` attached to the
+/-- **Lemma C.4, conditional matrix form**: once the matrix `T` attached to the
 local `η`-structure is known to be primitive and to have constant trace on all
 positive powers, the remaining Perron–Frobenius input forces `T` to be rank one.
 
@@ -308,6 +288,24 @@ theorem sal_zcl_implies_rank_one_T
       exact Matrix.trace_vecMulVec a b
     _ = Matrix.trace T := by rw [← hT]
     _ = 1 := hTrace
+
+/-- **Lemma C.4, PSD-corrected matrix form**: if the auxiliary trace matrix `T`
+is positive semidefinite, then the corrected finite-dimensional theorem
+`Matrix.PosSemidef.trace_powers_constant_implies_rank_one` supplies the
+conditional Perron--Frobenius input used by `MPOTensor.sal_zcl_implies_rank_one_T`.
+
+The primitivity hypothesis is kept in the statement because it is part of the
+paper's construction of `T`, but the PSD rank-one criterion is stronger and does
+not use primitivity once `trace T = 1` and constant trace powers are known. -/
+theorem sal_zcl_implies_rank_one_T_of_posSemidef
+    (T : Matrix (Fin n) (Fin n) ℝ)
+    (hPrimitive : Matrix.IsPrimitive T)
+    (hPSD : T.PosSemidef)
+    (hTrace : Matrix.trace T = 1)
+    (hZCL : Matrix.TracePowersConstant T) :
+    ∃ a b : Fin n → ℝ, T = Matrix.vecMulVec a b ∧ a ⬝ᵥ b = 1 := by
+  exact sal_zcl_implies_rank_one_T T hPrimitive hTrace hZCL
+    (Matrix.primitive_trace_powers_constant_implies_rank_one_of_posSemidef hPSD hTrace)
 
 end RankOneT
 
