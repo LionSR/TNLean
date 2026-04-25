@@ -211,9 +211,9 @@ theorem quadraticForm_sum_projections_of_ordered_rowSum {γ : ℝ} (hγle : γ �
 Assume that each row has at most `m` interacting off-diagonal entries.  On an
 interacting pair, a Friedrichs-angle estimate supplies the ordered bound with
 coefficient `1 / m`; on a noninteracting pair, the ordered cross term is
-nonnegative.  Then the coefficient matrix
-`c i j = if overlaps i j then (m : ℝ)⁻¹ else 0` has row sums at most one, so the
-abstract row-sum reduction gives `H² ≥ γ H` as a quadratic form.
+nonnegative.  Then choosing coefficient `1 / m` on interacting pairs and `0`
+on noninteracting pairs gives row sums at most one, so the abstract row-sum
+reduction gives `H² ≥ γ H` as a quadratic form.
 
 This is the abstract finite-range step: locality provides the cardinal bound
 (for parent Hamiltonians, `m = 2 * (L - 1)`), while the analytic Friedrichs-angle
