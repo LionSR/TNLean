@@ -33,7 +33,7 @@ variable {d D : ℕ}
 
 /-! ## Case 2: Same period, no sector match → orthogonal (Appendix A, second case) -/
 
-/-- Case-2 helper for the compressed blocked sector tensors.
+/-- Case-2 normality lemma for the compressed blocked sector tensors.
 
 The intended mathematical content is Lemma 2.4: after blocking by the period,
 each cyclic sector is a normal tensor. The statement uses the compressed sector
@@ -170,7 +170,7 @@ private lemma exists_nondecaying_sectorOverlap_of_blockedGaugePhaseEquiv_cyclicD
 Once global gauge-phase equivalence has been transported to the blocked
 tensors, the cyclic sector decompositions of the two blocked tensors should be
 unique up to relabeling of nonzero Wedderburn/cyclic sectors. This statement is
-the precise remaining API needed for `exists_sector_match_of_gaugePhaseEquiv`:
+the precise remaining statement needed for `exists_sector_match_of_gaugePhaseEquiv`:
 it extracts one nonzero compressed sector of `A` and a gauge-phase-equivalent
 compressed sector of `B`. -/
 private lemma exists_sector_match_of_blockedGaugePhaseEquiv_cyclicDecomp
@@ -244,7 +244,7 @@ equivalence carries a nonzero sector of `A` to a sector of `B`. The hypothesis
 `hNondegB` provides the typeclass needed to apply the mixed-sector overlap dichotomy.
 Both come from the periodic sector decomposition constructed by
 `exists_cyclic_sector_decomp_after_blocking_of_isPeriodic`.
-The current API does not yet expose that uniqueness theorem in this
+The current interface does not yet expose that uniqueness theorem in this
 compressed-sector form, so the missing step is isolated here as the only missing
 ingredient. -/
 lemma exists_sector_match_of_gaugePhaseEquiv
