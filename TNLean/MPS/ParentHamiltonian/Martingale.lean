@@ -227,8 +227,8 @@ theorem parentInteractionES_isSymmetricProjection (A : MPSTensor d D) (L : ℕ) 
 /-- The `EuclideanSpace` parent interaction is positive because it is an
 orthogonal projection. -/
 theorem parentInteractionES_isPositive (A : MPSTensor d D) (L : ℕ) :
-    (parentInteractionES A L).IsPositive := by
-  exact (parentInteractionES_isSymmetricProjection A L).isPositive
+    (parentInteractionES A L).IsPositive :=
+  (parentInteractionES_isSymmetricProjection A L).isPositive
 
 /-- The cyclic window restriction map transported from `NSiteSpace` to the
 Hilbert-space model `EuclideanSpace`. -/
@@ -597,9 +597,7 @@ the local projector `parentInteractionES`, and using `P_L^2 = P_L`; for `L > N`
 the definition gives the zero projection. -/
 theorem localTermES_isSymmetricProjection {N : ℕ} (A : MPSTensor d D) (L : ℕ)
     (i : Fin N) : (localTermES A L i).IsSymmetricProjection :=
-  LinearMap.IsSymmetricProjection.mk
-    (localTermES_isIdempotentElem A L i)
-    (localTermES_isPositive A L i).isSymmetric
+  ⟨localTermES_isIdempotentElem A L i, (localTermES_isPositive A L i).isSymmetric⟩
 
 /-- The full transported parent Hamiltonian is positive because it is a finite
 sum of positive transported local terms. -/
