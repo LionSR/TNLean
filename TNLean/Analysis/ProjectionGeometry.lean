@@ -136,12 +136,12 @@ theorem crossTerm_sum_bound_of_ordered_rowSum {γ : ℝ} (hγle : γ ≤ 1)
             intro j hj
             exact hCross i j hj
 
-private theorem indicatorRowSum_le_one_of_card_le (overlaps : ι → ι → Prop)
+private theorem indicator_row_sum_le_one_of_card_le (overlaps : ι → ι → Prop)
     [DecidableRel overlaps] {m : ℕ} (hm : 0 < m)
-    (hCard : ∀ i, ((Finset.univ.erase i).filter (fun j => overlaps i j)).card ≤ m) :
-    ∀ i, (∑ j ∈ Finset.univ.erase i,
+    (hCard : ∀ i, ((Finset.univ.erase i).filter (fun j => overlaps i j)).card ≤ m)
+    (i : ι) :
+    (∑ j ∈ Finset.univ.erase i,
       if overlaps i j then ((m : ℝ)⁻¹) else 0) ≤ 1 := by
-  intro i
   have hsum : (∑ j ∈ Finset.univ.erase i,
       if overlaps i j then ((m : ℝ)⁻¹) else 0) =
       (((Finset.univ.erase i).filter (fun j => overlaps i j)).card : ℝ) *
@@ -215,10 +215,10 @@ nonnegative.  Then the coefficient matrix
 `c i j = if overlaps i j then (m : ℝ)⁻¹ else 0` has row sums at most one, so the
 abstract row-sum reduction gives `H² ≥ γ H` as a quadratic form.
 
-This is the paper-level finite-range step: locality provides the cardinal bound
+This is the abstract finite-range step: locality provides the cardinal bound
 (for parent Hamiltonians, `m = 2 * (L - 1)`), while the analytic Friedrichs-angle
 argument provides the interacting-pair estimate. -/
-theorem quadraticForm_sum_projections_of_finiteOverlap {γ : ℝ} (hγle : γ ≤ 1)
+theorem quadraticForm_sum_projections_of_finite_overlap {γ : ℝ} (hγle : γ ≤ 1)
     (P : ι → E →ₗ[ℂ] E) (hP : ∀ i, (P i).IsSymmetricProjection)
     (overlaps : ι → ι → Prop) [DecidableRel overlaps] {m : ℕ} (hm : 0 < m)
     (hCard : ∀ i, ((Finset.univ.erase i).filter (fun j => overlaps i j)).card ≤ m)
@@ -235,7 +235,7 @@ theorem quadraticForm_sum_projections_of_finiteOverlap {γ : ℝ} (hγle : γ �
   let c : ι → ι → ℝ := fun i j => if overlaps i j then ((m : ℝ)⁻¹) else 0
   have hRow : ∀ i, (∑ j ∈ Finset.univ.erase i, c i j) ≤ 1 := by
     intro i
-    simpa [c] using indicatorRowSum_le_one_of_card_le overlaps hm hCard i
+    simpa [c] using indicator_row_sum_le_one_of_card_le overlaps hm hCard i
   have hCross : ∀ i j, j ∈ Finset.univ.erase i → ∀ v : E,
       -(1 - γ) * c i j * (⟪P i v, v⟫_ℂ).re ≤
         (⟪P i v, P j v⟫_ℂ).re := by
