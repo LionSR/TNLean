@@ -189,8 +189,8 @@ private theorem exists_cyclic_sector_decomp_after_blocking_of_isPeriodic
 
 This gives the exact `hProjStep`-style consequence needed in the overlap
 argument, assuming the fixed-point-algebra rigidity input on cyclic sectors.
-It is kept as a named wrapper for arguments that still work through
-`SectorFixedPointAlgebraRigidity`, even though the main self-overlap route now
+It is kept as a named theorem for callers that still work through
+`SectorFixedPointAlgebraRigidity`, even though the main self-overlap proof now
 uses the unconditional orbit-sum lift from `SectorIrreducibility.HLift`. -/
 theorem hProjStep_cyclic_sector_supported
     [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
@@ -571,9 +571,9 @@ gauge-phase transform.  The proof should use the trace identities
 `mpv(blocks k) = tr(P k · -)`, the cyclic corner structure, and
 `P u * P v = 0`.
 
-Keeping this as a narrow helper lets the main sector-separation lemma expose all
-currently available API facts instead of hiding the projection argument behind a
-top-level `sorry`. -/
+Keeping this as a narrow lemma lets the main sector-separation result expose all
+currently available structural facts instead of hiding the projection argument
+behind a top-level `sorry`. -/
 private lemma not_gaugePhaseEquiv_of_orthogonal_cyclicSector_traces
     [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
     {dim : Fin m → ℕ}
@@ -608,8 +608,8 @@ Through `IsCyclicSectorDecomp`, those traces are
 decomposition are orthogonal corners, so for `u ≠ v` these corner states cannot
 be related by an invertible gauge and nonzero scalar.
 
-The current cyclic-sector API exposes the trace formula and projection data but
-does not yet state this orthogonal-corner rigidity as a reusable theorem, so
+The current cyclic-sector interface exposes the trace formula and projection data
+but does not yet state this orthogonal-corner rigidity as a reusable theorem, so
 we isolate exactly that missing step here. -/
 private lemma sectorBlocks_not_gaugePhaseEquiv_of_ne
     [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
@@ -644,8 +644,8 @@ After blocking by the period, the cyclic sector decomposition should make each
 compressed sector a primitive normalized tensor, while distinct sectors are
 asymptotically orthogonal.
 
-This is the remaining step from the cyclic-sector decomposition API to the
-overlap-asymptotic API. -/
+This is the remaining step from the cyclic-sector decomposition interface to the
+overlap-asymptotic statement. -/
 private theorem sectorOverlap_tendsto_delta_of_cyclicSectorDecomp
     [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
     (hP : IsPeriodic m A)
