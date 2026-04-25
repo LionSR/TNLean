@@ -1836,12 +1836,13 @@ The following results separate the zero blocks from the
 \label{sec:reduction_to_normal_form}
 
 \begin{theorem}[Projection-step hypothesis yields primitive blocked sectors]%
-	\label{thm:blocked_sector_projStep}
+	\label{thm:blocked_sector_proj_step}
 	\lean{MPSTensor.primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking_of_projStep}
 	\leanok
 	\uses{thm:cyclic_sector_decomp_after_blocking,
 	      thm:sector_irred_proj_step,
-	      thm:primitive_adjoint_equiv}
+	      thm:primitive_adjoint_equiv,
+	      lem:orbit_sum_hLift_proj_step}
 	Let $A$ be a left-canonical irreducible tensor whose adjoint transfer map has
 	peripheral spectrum $\{\gamma^j : 0 \le j < m\}$ for a primitive $m$-th root
 	of unity $\gamma$. Let $(C_u)_{u=1}^m$, $(P_u)_{u=1}^m$, and
