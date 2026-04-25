@@ -85,7 +85,8 @@ Detailed conventions live in `docs/`. Read the relevant file before working in t
 | [`docs/pr-review.md`](docs/pr-review.md) | Review criteria: style, documentation, location, improvements, library integration |
 | [`docs/pr_review_management.md`](docs/pr_review_management.md) | PR triage process, comment API mapping, merge decisions |
 | [`docs/PROOF_INTEGRITY.md`](docs/PROOF_INTEGRITY.md) | Blockers (`sorry`, `axiom`, kernel bypasses, circular reasoning) and warnings (`maxHeartbeats`, debug artifacts) |
-| [`docs/blueprint_style_guide.md`](docs/blueprint_style_guide.md) | LaTeX conventions, `\lean{}`/`\leanok` tags, notation table, banned AI/software language |
+| [`docs/blueprint_style_guide.md`](docs/blueprint_style_guide.md) | LaTeX conventions, `\lean{}`/`\leanok` tags, notation table, `\uses` rules, blueprint build commands |
+| [`docs/prose_style.md`](docs/prose_style.md) | Prose conventions: no Lean jargon in the leanblueprint, banned software-engineering terms, banned LLM writing patterns (applies to `.tex` AND Lean docstrings/comments) |
 | [`docs/ci-automation.md`](docs/ci-automation.md) | CI workflows, auto-fix loops, iteration caps, commit message conventions |
 
 ### Quick Reference (from the docs above)
