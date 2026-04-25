@@ -954,6 +954,67 @@ blocking size under the algebra-structure predicate.
     Theorem~\ref{thm:newton_girard}.
 \end{remark}
 
+\subsection{Diagonal $\chi$-matrices and the trace-power formula}
+
+The following layer formalizes the target shape of
+\cite[Theorem~IV.13~(ii)]{Cirac2017MPDO_AnnPhys} in which the structure
+coefficients of the length-$L$ operator algebra are trace-powers of positive
+diagonal matrices $\chi_{\alpha,\beta,\gamma}$. The RFP MPDO itself is not yet
+constructed here; what is formalized is the language in which the paper's
+identity is stated, together with the elementary trace-power identity for
+diagonal matrices.
+
+\begin{definition}[Diagonal $\chi$ family]%
+    \label{def:mpdo_diagonal_chi_family}
+    \lean{MPOTensor.DiagonalChiFamily}
+    \leanok
+    A family of diagonal complex matrices $\chi_{\alpha,\beta,\gamma}$ indexed
+    by ordered triples drawn from a common index type, each of a specified
+    size. This is the paper's $\chi_{\alpha,\beta,\gamma}$ in
+    Theorem~IV.13(ii).
+\end{definition}
+
+\begin{theorem}[Trace of $\chi^L$ equals the sum of $L$-th powers of entries]%
+    \label{thm:mpdo_trace_matrix_pow}
+    \lean{MPOTensor.DiagonalChiFamily.trace_matrix_pow}
+    \leanok
+    \uses{def:mpdo_diagonal_chi_family}
+    For every triple $(\alpha, \beta, \gamma)$, if $\chi_{\alpha,\beta,\gamma}$
+    has size $r_{\alpha,\beta,\gamma}$, then for every $L \ge 0$,
+    \[
+        \operatorname{tr}\bigl(\chi_{\alpha,\beta,\gamma}^{L}\bigr)
+            = \sum_{k=1}^{r_{\alpha,\beta,\gamma}}
+                \chi_{\alpha,\beta,\gamma,k}^{L},
+    \]
+    where $\chi_{\alpha,\beta,\gamma,k}$ are the diagonal entries.
+\end{theorem}
+\begin{proof}\leanok
+Diagonal matrices raise to powers entrywise and the trace of a diagonal matrix
+is the sum of its entries.
+\end{proof}
+
+\begin{definition}[Trace-power form of a structure-coefficient family]%
+    \label{def:mpdo_has_chi_trace_power_form}
+    \lean{MPOTensor.HasChiTracePowerForm}
+    \leanok
+    \uses{def:mpdo_diagonal_chi_family}
+    A binary compatibility predicate between an abstract structure-coefficient
+    family $c^{(L)}_{\alpha,\beta,\gamma}$ and a diagonal $\chi$ family: the
+    pair $(c, \chi)$ is said to be in \emph{trace-power form} when
+    \[
+        c^{(L)}_{\alpha,\beta,\gamma}
+            = \operatorname{tr}\bigl(\chi_{\alpha,\beta,\gamma}^{L}\bigr)
+            = \sum_{k=1}^{r_{\alpha,\beta,\gamma}}
+                \chi_{\alpha,\beta,\gamma,k}^{L}
+    \]
+    for every $L \ge 0$ and every triple $(\alpha, \beta, \gamma)$, where
+    $r_{\alpha,\beta,\gamma}$ is the size of $\chi_{\alpha,\beta,\gamma}$. This
+    is the Lean-level form of the target identity of
+    \cite[Theorem~IV.13~(ii)]{Cirac2017MPDO_AnnPhys}; the existential
+    version---``there exists $\chi$ for which $(c,\chi)$ has trace-power
+    form''---is obtained by quantifying over $\chi$.
+\end{definition}
+
 \section{Commuting form and GSNNCH}
 
 \begin{definition}[Commuting-form data for an MPDO]
