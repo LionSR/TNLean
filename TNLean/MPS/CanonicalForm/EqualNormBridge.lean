@@ -391,28 +391,6 @@ theorem bnt_grouping_single_norm_class_of_tp_primitive_irr_blocks
 
 /-! ### §4. Eventual independence from separated overlap data -/
 
-/-- **Existential BNT linear independence from asymptotic orthonormal overlaps.**
-
-This is the existential form of `bntFamilies_eventually_linearIndependent` used by
-`HasBNTSectorData`: if the self-overlaps tend to `1` and all cross-overlaps tend
-to `0`, then the MPV states are linearly independent for every sufficiently large
-system size. -/
-theorem exists_eventually_linearIndependent_of_overlap_tendsto_orthonormal
-    {r : ℕ} {dim : Fin r → ℕ}
-    (blocks : (k : Fin r) → MPSTensor d (dim k))
-    (hSelf : ∀ k,
-      Tendsto (fun N => mpvOverlap (d := d) (blocks k) (blocks k) N) atTop
-        (nhds (1 : ℂ)))
-    (hCross : ∀ j k : Fin r, j ≠ k →
-      Tendsto (fun N => mpvOverlap (d := d) (blocks j) (blocks k) N) atTop
-        (nhds (0 : ℂ))) :
-    ∃ N0 : ℕ, ∀ N > N0,
-      LinearIndependent ℂ (fun k : Fin r => mpvState (d := d) (blocks k) N) := by
-  have hLI := bntFamilies_eventually_linearIndependent blocks hSelf hCross
-  rw [Filter.Eventually] at hLI
-  obtain ⟨N0, hN0⟩ := Filter.mem_atTop_sets.mp hLI
-  exact ⟨N0, fun N hN => hN0 N (le_of_lt hN)⟩
-
 /-- **Eventual BNT linear independence for an already separated normal family.**
 
 For TP primitive irreducible blocks that are pairwise not gauge-phase equivalent,

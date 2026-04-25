@@ -114,7 +114,7 @@ def toHasNormalizedSelfOverlap (hCF : IsCanonicalFormBNT μ A) :
     HasNormalizedSelfOverlap (d := d) A :=
   hCF.toIsCanonicalForm.toHasNormalizedSelfOverlap
 
-/-- Rebuild `IsCanonicalFormBNT` from the additive split API plus the BNT separation axiom. -/
+/-- Rebuild `IsCanonicalFormBNT` from the additive split API plus the BNT separation assumption. -/
 def ofSeparatedData
     (hInj : HasInjectiveBlocks (d := d) A)
     (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
@@ -129,7 +129,7 @@ def ofSeparatedData
 end IsCanonicalFormBNT
 
 /-- An `IsCanonicalForm` family with pairwise distinct block dimensions and strictly
-decreasing moduli automatically satisfies `IsCanonicalFormBNT`, since the separation axiom
+decreasing moduli automatically satisfies `IsCanonicalFormBNT`, since the separation assumption
 is vacuous. -/
 theorem IsCanonicalForm.toIsCanonicalFormBNT_of_distinct_dims
     {r : ℕ} {dim : Fin r → ℕ}
@@ -153,7 +153,7 @@ and that the block weight moduli are **strictly decreasing**.
 
 Here `IsNormalCanonicalForm` encodes the spectral / primitive-transfer-map version of
 normality with non-increasing moduli. The BNT level adds strict ordering (justified by the
-grouping step) and the BNT separation axiom.
+grouping step) and the BNT separation assumption.
 
 The later `IsBNT` predicate instead asks for blockwise `IsNormal`, i.e. the
 equivalent algebraic eventual-block-injectivity notion, so the primitive-to-normal bridge must be
@@ -201,7 +201,7 @@ def toHasNormalizedSelfOverlap [∀ k, NeZero (dim k)]
   hNCF.toIsNormalCanonicalForm.toHasNormalizedSelfOverlap
 
 /-- Rebuild `IsNormalCanonicalFormBNT` from the additive split API plus the BNT separation
-axiom. -/
+assumption. -/
 def ofSeparatedData
     (hIrr : HasIrreducibleBlocks (d := d) A)
     (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
@@ -229,8 +229,13 @@ private theorem spans_mpv_toTensorFromBlocks
   intro σ
   simpa [smul_eq_mul] using mpv_toTensorFromBlocks_eq_sum μ A σ
 
-/-- Overlaps converging to the Kronecker delta give eventual linear independence of block MPVs. -/
-private theorem eventually_li_of_overlap_limits
+/-- **Existential BNT linear independence from asymptotic orthonormal overlaps.**
+
+If the self-overlaps of a finite block family tend to `1` and the cross-overlaps
+of distinct blocks tend to `0`, then the MPV states are linearly independent for
+every sufficiently large system size.  This is the threshold form of
+`bntFamilies_eventually_linearIndependent`. -/
+theorem exists_eventually_linearIndependent_of_overlap_tendsto_orthonormal
     {r : ℕ} {dim : Fin r → ℕ}
     (A : (k : Fin r) → MPSTensor d (dim k))
     (hSelf : ∀ j,
@@ -253,7 +258,7 @@ variable {μ : Fin r → ℂ} {A : (k : Fin r) → MPSTensor d (dim k)}
 
 /-- Split-data version of CF-BNT cross-overlap decay.
 
-Only injectivity, left-canonical normalization, and the BNT non-equivalence axiom are used. -/
+Only injectivity, left-canonical normalization, and the BNT non-equivalence assumption are used. -/
 theorem cross_overlap_tendsto_zero_of_separated_CFBNT_data
     [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))
@@ -292,7 +297,7 @@ theorem isBNT_of_separated_CFBNT_data [∀ k, NeZero (dim k)]
   normal := fun j => (hInj.block_injective j).isNormal
   spans_mpv := spans_mpv_toTensorFromBlocks μ A
   eventually_li :=
-    eventually_li_of_overlap_limits A
+    exists_eventually_linearIndependent_of_overlap_tendsto_orthonormal A
       hOverlap.overlap_tendsto_one
       (fun i j hij =>
         cross_overlap_tendsto_zero_of_separated_CFBNT_data A hInj hLeft hBlocks i j hij)
@@ -346,7 +351,8 @@ variable {μ : Fin r → ℂ} {A : (k : Fin r) → MPSTensor d (dim k)}
 
 /-- Split-data version of normal-CF-BNT cross-overlap decay.
 
-Only irreducibility, left-canonical normalization, and the BNT non-equivalence axiom are used. -/
+Only irreducibility, left-canonical normalization, and the BNT non-equivalence
+assumption are used. -/
 theorem cross_overlap_tendsto_zero_of_separated_normalCFBNT_data
     [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))
@@ -385,7 +391,7 @@ theorem spans_mpv_and_eventually_li_of_separated_normalCFBNT_data [∀ k, NeZero
   constructor
   · exact spans_mpv_toTensorFromBlocks μ A
   · exact
-      eventually_li_of_overlap_limits A
+      exists_eventually_linearIndependent_of_overlap_tendsto_orthonormal A
         (fun j => hNCF.overlap_tendsto_one j)
         (fun i j hij =>
           cross_overlap_tendsto_zero_of_separated_normalCFBNT_data A
