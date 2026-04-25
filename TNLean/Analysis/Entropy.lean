@@ -273,8 +273,7 @@ theorem Matrix.PosSemidef.traceLeft
     ext i j
     simp only [Matrix.traceLeft_apply, Matrix.sum_apply, Matrix.submatrix_apply]
   rw [h_eq]
-  exact Finset.sum_induction _ _ (fun _ _ => Matrix.PosSemidef.add)
-    Matrix.PosSemidef.zero (fun _ _ => hρ.submatrix _)
+  exact Matrix.posSemidef_sum _ (fun _ _ => hρ.submatrix _)
 
 /-- `Matrix.traceRight` (partial trace over the second factor) preserves
 positive semidefiniteness. See `Matrix.PosSemidef.traceLeft`. -/
@@ -286,8 +285,7 @@ theorem Matrix.PosSemidef.traceRight
     ext i j
     simp only [Matrix.traceRight_apply, Matrix.sum_apply, Matrix.submatrix_apply]
   rw [h_eq]
-  exact Finset.sum_induction _ _ (fun _ _ => Matrix.PosSemidef.add)
-    Matrix.PosSemidef.zero (fun _ _ => hρ.submatrix _)
+  exact Matrix.posSemidef_sum _ (fun _ _ => hρ.submatrix _)
 
 end BipartiteHermiticity
 
