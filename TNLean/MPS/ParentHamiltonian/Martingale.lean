@@ -5,6 +5,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.MPS.ParentHamiltonian.Defs
 import TNLean.MPS.ParentHamiltonian.Basic
 import TNLean.MPS.ParentHamiltonian.CyclicWindow
+import TNLean.Analysis.ProjectionGeometry
 import Mathlib.Analysis.InnerProductSpace.Positive
 import Mathlib.Analysis.InnerProductSpace.Spectrum
 
@@ -67,6 +68,9 @@ concrete Friedrichs-angle/row-sum lower bound that
 * `MPSTensor.parentHamiltonianES_gap_bound_of_quadratic_form` — the explicit
   reduction from the parent-Hamiltonian gap statement to the uniform
   Friedrichs/martingale quadratic-form estimate.
+* `MPSTensor.parentHamiltonianES_gap_bound_of_ordered_local_term_bounds` — a
+  reusable reduction from explicit ordered anti-commutator row bounds for the
+  local symmetric projections to the quadratic-form hypothesis above.
 * `MPSTensor.parentHamiltonian_gapped` — uniform spectral gap for MPS
   parent Hamiltonians on injective tensors, obtained from the
   Friedrichs-angle bound recorded in
@@ -622,6 +626,78 @@ theorem parentHamiltonianES_gap_bound_of_quadratic_form
     exact div_pos (by norm_num) (mul_pos (by norm_num) hLpos)
   exact ⟨hγ, parentHamiltonianES_norm_bound_of_quadratic_form A L hγ hQuad⟩
 
+/-- Fixed-chain martingale quadratic-form estimate from ordered local
+anti-commutator row bounds.
+
+This theorem is the parent-Hamiltonian instantiation of the abstract projection
+geometry in `ProjectionGeometry.quadraticForm_sum_projections_of_ordered_rowSum`.
+It assumes explicitly that the transported local terms are symmetric projections
+and that their ordered cross terms satisfy the row-summable bound
+
+`Re ⟪hᵢ v, hⱼ v⟫ ≥ -(1 - γ) cᵢⱼ Re ⟪hᵢ v, v⟫`.
+
+Under these hypotheses the transported Hamiltonian satisfies `H² ≥ γ H` as a
+quadratic form, exactly in the shape consumed by
+`parentHamiltonianES_norm_bound_of_quadratic_form`. -/
+theorem parentHamiltonianES_quadratic_form_of_ordered_local_term_bounds
+    (A : MPSTensor d D) (L N : ℕ) {γ : ℝ} (hγle : γ ≤ 1)
+    (c : Fin N → Fin N → ℝ)
+    (hProj : ∀ i : Fin N, (localTermES A L i).IsSymmetricProjection)
+    (hRow : ∀ i : Fin N, (∑ j ∈ Finset.univ.erase i, c i j) ≤ 1)
+    (hCross : ∀ i j : Fin N, j ∈ Finset.univ.erase i →
+      ∀ v : EuclideanSpace ℂ (Cfg d N),
+        - (1 - γ) * c i j * (⟪localTermES A L i v, v⟫_ℂ).re ≤
+          (⟪localTermES A L i v, localTermES A L j v⟫_ℂ).re) :
+    ∀ v : EuclideanSpace ℂ (Cfg d N),
+      γ * (⟪parentHamiltonianES A L N v, v⟫_ℂ).re ≤
+        (⟪parentHamiltonianES A L N v,
+          parentHamiltonianES A L N v⟫_ℂ).re := by
+  intro v
+  simpa [parentHamiltonianES_eq_sum_localTermES A L N] using
+    (ProjectionGeometry.quadraticForm_sum_projections_of_ordered_rowSum
+      (ι := Fin N) (E := EuclideanSpace ℂ (Cfg d N)) hγle
+      (fun i : Fin N => localTermES A L i) hProj c hRow hCross v)
+
+/-- Uniform explicit gap-bound reduction from ordered local anti-commutator row
+bounds.
+
+For every chain length `N ≥ 2L`, assume the transported local terms are symmetric
+projections and satisfy the ordered row-summable anti-commutator estimate with
+constant `γ = 1 / (4L)`. Then the existing quadratic-form-to-gap theorem applies
+and yields the explicit norm lower bound. This exact reduction leaves proving
+these projection and Friedrichs/row-sum hypotheses for the concrete MPS local
+terms as the model-specific analytic task. -/
+theorem parentHamiltonianES_gap_bound_of_ordered_local_term_bounds
+    (A : MPSTensor d D) (L : ℕ) (hL : 1 < L)
+    (c : ∀ N : ℕ, Fin N → Fin N → ℝ)
+    (hProj : ∀ (N : ℕ) (_hLN : 2 * L ≤ N) (i : Fin N),
+      (localTermES A L i).IsSymmetricProjection)
+    (hRow : ∀ (N : ℕ) (_hLN : 2 * L ≤ N) (i : Fin N),
+      (∑ j ∈ Finset.univ.erase i, c N i j) ≤ 1)
+    (hCross : ∀ (N : ℕ) (_hLN : 2 * L ≤ N) (i j : Fin N),
+      j ∈ Finset.univ.erase i → ∀ v : EuclideanSpace ℂ (Cfg d N),
+        - (1 - ((1 : ℝ) / (4 * (L : ℝ)))) * c N i j *
+            (⟪localTermES A L i v, v⟫_ℂ).re ≤
+          (⟪localTermES A L i v, localTermES A L j v⟫_ℂ).re) :
+    0 < (1 : ℝ) / (4 * (L : ℝ)) ∧
+    ∀ (N : ℕ) (_hLN : 2 * L ≤ N)
+      (v : EuclideanSpace ℂ (Cfg d N)),
+      v ∈ (parentHamiltonianGroundSpaceES A L N)ᗮ →
+        ((1 : ℝ) / (4 * (L : ℝ))) * ‖v‖ ≤
+          ‖parentHamiltonianES A L N v‖ := by
+  refine parentHamiltonianES_gap_bound_of_quadratic_form A L hL ?_
+  intro N hLN v
+  have hLpos : (0 : ℝ) < (L : ℝ) := by
+    exact_mod_cast (Nat.zero_lt_of_lt hL)
+  have hLge_one : (1 : ℝ) ≤ (L : ℝ) := by
+    exact_mod_cast (Nat.le_of_lt hL)
+  have hγle : ((1 : ℝ) / (4 * (L : ℝ))) ≤ 1 := by
+    have hden : 0 < 4 * (L : ℝ) := mul_pos (by norm_num) hLpos
+    rw [div_le_iff₀ hden]
+    nlinarith
+  exact parentHamiltonianES_quadratic_form_of_ordered_local_term_bounds
+    A L N hγle (c N) (hProj N hLN) (hRow N hLN) (hCross N hLN) v
+
 /-! ### Uniform spectral gap for the MPS parent Hamiltonian -/
 
 /- Scout report (2026-04-19, Layer 4 KL martingale).
@@ -642,11 +718,18 @@ and the full transported Hamiltonian are now available as positive operators.
 `parentHamiltonianES_norm_bound_of_quadratic_form` and
 `parentHamiltonianES_gap_bound_of_quadratic_form` reduce the gap statement to a
 uniform estimate `γ * re ⟪H_N v, v⟫ ≤ re ⟪H_N v, H_N v⟫`.
-4. **Row-sum bound mapping:** the combinatorial part is already available from
-locality (`localTerm`, `parentHamiltonian`) and finite range: each window
-overlaps at most `2 * (L - 1)` neighbors. Missing is the analytic implication
-from overlap-angle constants to the quadratic-form inequality above.
-5. **Sorry dependency split:** `parentHamiltonian_gapped` is the downstream
+4. **Projection-geometry row reduction:**
+`ProjectionGeometry.quadraticForm_sum_projections_of_ordered_rowSum`,
+`parentHamiltonianES_quadratic_form_of_ordered_local_term_bounds`, and
+`parentHamiltonianES_gap_bound_of_ordered_local_term_bounds` now formalize the
+finite-sum algebra turning explicit ordered anti-commutator row bounds for local
+symmetric projections into the quadratic-form hypothesis above.
+5. **Remaining local analytic obligations:** the combinatorial overlap count comes
+from locality (`localTerm`, `parentHamiltonian`) and finite range: each window
+overlaps at most `2 * (L - 1)` neighbors. Still missing are the concrete local
+symmetric-projection theorem for `localTermES` and the Friedrichs-angle estimate
+that supplies the ordered anti-commutator constants with the required row sums.
+6. **Sorry dependency split:** `parentHamiltonian_gapped` is the downstream
 existential theorem, now proved by applying the Friedrichs-angle theorem
 below. The theorem `parentHamiltonianES_gap_bound_of_friedrichs` still depends
 on missing Friedrichs-angle infrastructure; this is the blocker and should not

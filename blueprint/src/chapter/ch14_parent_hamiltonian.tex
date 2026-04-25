@@ -1594,6 +1594,45 @@ Lucia~\cite{Kastoryano2018Martingale}.
     explicit constant is positive because $L>1$ implies $4L>0$.
 \end{proof}
 
+\begin{lemma}[Ordered projection row-sum reduction]
+    \label{lem:ordered_projection_rowsum_reduction}
+    \lean{ProjectionGeometry.re_inner_le_of_le}
+    \lean{ProjectionGeometry.IsSymmetric.re_inner_anticommutator}
+    \lean{ProjectionGeometry.IsSymmetricProjection.re_inner_apply_apply_self}
+    \lean{ProjectionGeometry.IsSymmetricProjection.re_inner_nonneg}
+    \lean{ProjectionGeometry.re_inner_sum_apply_left}
+    \lean{ProjectionGeometry.re_inner_sum_apply_apply}
+    \lean{ProjectionGeometry.sum_sum_eq_diag_add_offdiag}
+    \lean{ProjectionGeometry.crossTerm_sum_bound_of_ordered_rowSum}
+    \lean{ProjectionGeometry.quadraticForm_sum_projections_of_ordered_rowSum}
+    \lean{MPSTensor.parentHamiltonianES_quadratic_form_of_ordered_local_term_bounds}
+    \lean{MPSTensor.parentHamiltonianES_gap_bound_of_ordered_local_term_bounds}
+    \leanok
+    \uses{lem:parent_hamiltonian_es_quadratic_reduction}
+    Let $P_i$ be a finite family of symmetric projections and let
+    $H=\sum_i P_i$. If the ordered off-diagonal forms obey
+    \[
+        \operatorname{Re}\langle P_i v, P_j v\rangle
+        \ge -(1-\gamma)c_{ij}\operatorname{Re}\langle P_i v,v\rangle
+        \qquad (i\ne j),
+    \]
+    with row sums $\sum_{j\ne i} c_{ij}\le 1$ and $\gamma\le 1$, then
+    $H^2\ge \gamma H$ as a quadratic form.  Applied to the transported parent
+    Hamiltonian local terms, this supplies the hypothesis of
+    Lemma~\ref{lem:parent_hamiltonian_es_quadratic_reduction}; the remaining
+    model-specific work is to prove the local projection property and the
+    Friedrichs-angle constants for those local terms.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Expand $\operatorname{Re}\langle H v,Hv\rangle$ as an ordered double sum.
+    Symmetric idempotence identifies each diagonal term with
+    $\operatorname{Re}\langle P_i v,v\rangle$, while the row-summable ordered
+    anti-commutator bounds control the off-diagonal contribution by
+    $-(1-\gamma)\sum_i\operatorname{Re}\langle P_i v,v\rangle$.
+\end{proof}
+
 \begin{theorem}[Martingale criterion for spectral gap]\label{thm:martingale_criterion}
     \notready
     \uses{def:is_frustration_free, lem:quadratic_form_to_norm_bound}
@@ -1758,7 +1797,8 @@ Lucia~\cite{Kastoryano2018Martingale}.
         rem:euclidean_local_projector_ingredients,
         lem:euclidean_local_projector_positive,
         lem:local_term_es_average,
-        lem:parent_hamiltonian_es_quadratic_reduction}
+        lem:parent_hamiltonian_es_quadratic_reduction,
+        lem:ordered_projection_rowsum_reduction}
     For an injective tensor $A$ and a range $L > 1$, the theorem asserts
     the analytic estimate with the explicit constant
     \[
@@ -1777,8 +1817,11 @@ Lucia~\cite{Kastoryano2018Martingale}.
     Lemmas~\ref{lem:local_term_es_average} and~\ref{lem:transported_es_positive}.
     Lemma~\ref{lem:parent_hamiltonian_es_quadratic_reduction} reduces the present
     theorem to the remaining MPS-specific task: deriving the uniform
-    quadratic-form estimate from the Friedrichs-angle anti-commutator bound and
-    the finite-overlap row-sum estimate.
+    quadratic-form estimate.  Lemma~\ref{lem:ordered_projection_rowsum_reduction}
+    formalizes the finite-sum algebra from ordered anti-commutator row bounds;
+    the remaining MPS-specific tasks are to prove the local symmetric-projection
+    statement for the transported local terms and to obtain the Friedrichs-angle
+    constants with the required finite-overlap row sums.
 \end{proof}
 
 \begin{theorem}[Spectral gap for MPS parent Hamiltonians]\label{thm:parent_hamiltonian_gapped}
