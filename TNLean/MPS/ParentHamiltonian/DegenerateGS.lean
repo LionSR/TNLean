@@ -171,19 +171,55 @@ theorem bnt_mem_groundSpace
   exact chainGroundSpace_block_le_toTensorFromBlocks μ A j hμj L N
     (mpv_mem_chainGroundSpace (A j) L N hN' hLN)
 
-/-- Reverse inclusion bridge for the BNT ground-space theorem.
+/-- If the assembled periodic ground space splits blockwise into the block chain
+ground spaces, then blockwise injective uniqueness already yields membership in
+`bntSpan`. This isolates the endgame so the only missing ingredient is the
+block-splitting theorem itself. -/
+private theorem parentHamiltonianGroundSpace_le_bntSpan_of_block_chain_split
+    (A : (j : Fin r) → MPSTensor d (dim j))
+    (hCF : IsCanonicalFormBNT μ A) {L N : ℕ} (hL : 1 < L) (hN : N ≥ L + 1)
+    (hSplit :
+      parentHamiltonianGroundSpace (μ := μ) A L N ≤
+        ⨆ j : Fin r, chainGroundSpace (A j) L N) :
+    parentHamiltonianGroundSpace (μ := μ) A L N ≤ bntSpan A N := by
+  refine hSplit.trans ?_
+  refine iSup_le ?_
+  intro j
+  have hdim_ne : dim j ≠ 0 := by
+    intro hdim0
+    have hzero : ∀ N : ℕ, mpvOverlap (d := d) (A j) (A j) N = 0 := by
+      intro N
+      classical
+      haveI : IsEmpty (Fin (dim j)) := by rw [hdim0]; infer_instance
+      simp [mpvOverlap, mpv, coeff, Matrix.trace_eq_zero_of_isEmpty]
+    have hconst : Filter.Tendsto (fun _ : ℕ => (0 : ℂ)) Filter.atTop (nhds (1 : ℂ)) :=
+      (hCF.overlap_tendsto_one j).congr' (Filter.Eventually.of_forall hzero)
+    exact zero_ne_one (tendsto_const_nhds_iff.mp hconst)
+  haveI : NeZero (dim j) := ⟨hdim_ne⟩
+  have hInj : IsInjective (A j) := hCF.toHasInjectiveBlocks.block_injective j
+  have hEq : chainGroundSpace (A j) L N = mpvSubmodule (A j) N :=
+    chainGroundSpace_eq_mpvSubmodule hInj (by omega) hL (by omega)
+  rw [hEq]
+  intro ψ hψ
+  rw [mpvSubmodule, Submodule.mem_span_singleton] at hψ
+  rcases hψ with ⟨c, rfl⟩
+  exact Submodule.smul_mem _ c (Submodule.subset_span ⟨j, rfl⟩)
 
-This is the missing block-decomposition step: every periodic-chain ground state
-of the assembled BNT tensor should split into blockwise chain ground states, and
-blockwise normal uniqueness should place those components in the BNT span. -/
+/-- Reverse-inclusion step for the BNT ground-space theorem.
+
+This is the remaining block-decomposition step: every periodic-chain ground state
+of the assembled BNT tensor should split into blockwise chain ground states.
+Once such a split is available, blockwise injective uniqueness
+`chainGroundSpace_eq_mpvSubmodule` places those components in the BNT span. -/
 theorem parentHamiltonianGroundSpace_le_bntSpan_of_block_decomposition
     (A : (j : Fin r) → MPSTensor d (dim j))
-    (_hCF : IsCanonicalFormBNT μ A) {L N : ℕ} (_hL : 1 < L) (_hN : N ≥ L + 1) :
+    (hCF : IsCanonicalFormBNT μ A) {L N : ℕ} (hL : 1 < L) (hN : N ≥ L + 1) :
     parentHamiltonianGroundSpace (μ := μ) A L N ≤ bntSpan A N := by
-  -- Missing bridge: periodic-chain block decomposition for
-  -- `toTensorFromBlocks μ A`, followed by blockwise normal uniqueness from
-  -- `chainGroundSpace_eq_mpvSubmodule_normal`. This is the reverse inclusion
-  -- described in the theorem docstring.
+  refine parentHamiltonianGroundSpace_le_bntSpan_of_block_chain_split
+    (μ := μ) A hCF hL hN ?_
+  -- Remaining step: periodic-chain block decomposition for the assembled tensor,
+  -- i.e. a theorem identifying every assembled chain-ground-state with a sum of
+  -- block chain-ground-state components.
   sorry
 
 /-- **Degenerate ground space = span of BNT states** for block-injective parent
@@ -192,39 +228,34 @@ Hamiltonians.
 The periodic parent-Hamiltonian ground space of a canonical-form/BNT tensor
 equals the span of the individual BNT block MPV states.
 
-TODO(#195): prove by combining `bnt_mem_groundSpace` (⊇ direction) with
-blockwise decomposition / uniqueness for the assembled tensor (⊆ direction).
+TODO(#195): prove by combining `bnt_mem_groundSpace` (⊇ direction) with a
+block-splitting theorem for the assembled tensor (⊆ direction).
 
-The ⊆ direction requires *two* upstream dependencies, neither currently
-available:
+The single-block endgame is already available on `main`: for each block `A j`,
+`IsCanonicalFormBNT` supplies `IsInjective (A j)`, so
+`chainGroundSpace_eq_mpvSubmodule` identifies
+`chainGroundSpace (A j) L N` with `mpvSubmodule (A j) N` whenever `1 < L ≤ N`.
 
-1. **Block-diagonal periodic-chain ground-space decomposition.** A structural
-   theorem of the form
-   `chainGroundSpace (toTensorFromBlocks μ A) L N = ⨆ j, (embed_j) (chainGroundSpace (A j) L N)`,
-   saying that a state whose cyclic windows all lie in the block-diagonal
-   local ground space decomposes (via projectors onto the virtual-space irrep
-   sectors) into a sum of block components. This is the "projectors commute
-   through the tensor" idea from the proof sketch. No periodic-chain block
-   decomposition infrastructure is available in `MPS/Chain/` or
-   `MPS/Structure/` at present.
+The remaining missing ingredient is therefore a **periodic-chain block
+splitting theorem** of the form
+`parentHamiltonianGroundSpace (μ := μ) A L N ≤ ⨆ j, chainGroundSpace (A j) L N`,
+saying that a state whose cyclic windows all lie in the block-diagonal local
+ground space decomposes into a sum of block chain-ground-state components.
+This is the "projectors commute through the tensor" step from the proof sketch.
+No such periodic-chain block-splitting infrastructure is currently available in
+`MPS/ParentHamiltonian`, and the repository does not yet expose the analogous
+finite-length block-separation theorem used elsewhere in biCF-style arguments.
 
-2. **Blockwise MPV uniqueness** via `chainGroundSpace_eq_mpvSubmodule_normal`
-   in `UniqueGroundState.lean`. Its hard direction is isolated as the
-   range-reduction bridge
-   `chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction`. Each block of
-   a CF-BNT decomposition is normal and `L₀`-block-injective, so this theorem
-   identifies each block's chain ground space with its MPV submodule, i.e.
-   exactly one component of `bntSpan`.
-
-Given dependency (1) and (2), the ⊆ direction becomes:
+Given that block-splitting theorem, the ⊆ direction becomes:
 ```
-chainGroundSpace (toTensorFromBlocks μ A) L N
-  = ⨆ j, (embed_j) (chainGroundSpace (A j) L N)         -- by (1)
-  = ⨆ j, (embed_j) (mpvSubmodule (A j) N)               -- by (2)
-  = Submodule.span ℂ (Set.range fun j => (mpv (A j) : NSiteSpace d N))  -- = bntSpan A N
+parentHamiltonianGroundSpace (μ := μ) A L N
+  ≤ ⨆ j, chainGroundSpace (A j) L N        -- block splitting
+  = ⨆ j, mpvSubmodule (A j) N              -- blockwise injective uniqueness
+  ≤ Submodule.span ℂ (Set.range fun j => (mpv (A j) : NSiteSpace d N))
+    = bntSpan A N
 ```
-where the final step uses that the embedding of a block's MPV into the
-assembled tensor is (up to the μ_j^N scalar) the corresponding BNT MPV. -/
+where the final inclusion is immediate because `mpvSubmodule (A j) N` is the
+span of the single vector `mpv (A j)`. -/
 theorem parentHamiltonian_gs_eq_bnt_span
     (A : (j : Fin r) → MPSTensor d (dim j))
     (hCF : IsCanonicalFormBNT μ A) {L N : ℕ} (hL : 1 < L) (hN : N ≥ L + 1) :
