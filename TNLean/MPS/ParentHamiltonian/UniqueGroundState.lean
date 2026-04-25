@@ -400,9 +400,9 @@ theorem contiguous_mem_groundSpace_of_isNBlkInjective
 block-injective tensors.
 
 This combines cyclic window monotonicity (peeling longer cyclic windows down to
-`L₀ + 1`), the non-wrapping cyclic/contiguous identification, and the open-chain
-range-reduction theorem `contiguous_mem_groundSpace_of_isNBlkInjective`. It stops
-at open-chain membership; the wrapped-boundary scalarity step remains separate. -/
+`L₀ + 1`), the non-wrapping cyclic/contiguous identification, and the
+open-chain range-reduction argument for block-injective tensors. It stops at
+open-chain membership; the wrapped-boundary scalarity step remains separate. -/
 theorem chainGroundSpace_le_groundSpace_of_isNBlkInjective
     {A : MPSTensor d D} [NeZero D] {L₀ L N : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)

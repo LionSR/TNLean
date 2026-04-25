@@ -742,7 +742,8 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 
 \begin{proof}
     \leanok
-    \uses{rem:cyclic_window_operators, thm:normal_open_chain_range_reduction}
+    \uses{rem:cyclic_window_operators, thm:normal_open_chain_range_reduction,
+        lem:ground_space_in_left_ground}
     First peel cyclic windows one site at a time: a state satisfying the range
     $L+1$ constraints also satisfies the range $L$ constraints. Iterating this
     antitonicity reduces the cyclic hypotheses to range $L_0+1$. On every
