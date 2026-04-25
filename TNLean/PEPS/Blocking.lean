@@ -25,6 +25,10 @@ of a PEPS to a three-partite chain.
   incident edge.
 - `edgeLeftVertices`, `edgeMiddleVertices`, `edgeRightVertices`: the canonical
   three-region partition attached to an edge.
+- `prod_univ_splitAtEdge`: products over the vertex set factor through the
+  three-region partition.
+- `stateCoeff_splitAtEdge`: the PEPS amplitude `stateCoeff` factors the
+  per-vertex tensor contributions through the three-region partition.
 
 ## References
 
@@ -55,6 +59,10 @@ omit [Fintype V] [DecidableRel G.Adj] in
 @[simp] theorem edgeRightIncident_edge (e : Edge G) :
     (edgeRightIncident (G := G) e).1 = e :=
   rfl
+
+omit [Fintype V] [DecidableRel G.Adj] in
+theorem edgeLeft_ne_edgeRight (e : Edge G) : e.1.1 ≠ e.1.2 :=
+  ne_of_lt e.2.1
 
 /-- The incident edges at `v` other than a chosen distinguished edge. -/
 abbrev OtherIncidentEdge (v : V) (ie : IncidentEdge G v) : Type _ :=
@@ -165,8 +173,7 @@ theorem edgeLeftVertices_disjoint_edgeRightVertices (e : Edge G) :
   intro v hvLeft hvRight
   have hv₁ : v = e.1.1 := (mem_edgeLeftVertices e v).mp hvLeft
   have hv₂ : v = e.1.2 := (mem_edgeRightVertices e v).mp hvRight
-  have hne : e.1.1 ≠ e.1.2 := ne_of_lt e.2.1
-  exact hne <| hv₁.symm.trans hv₂
+  exact edgeLeft_ne_edgeRight e <| hv₁.symm.trans hv₂
 
 omit [DecidableRel G.Adj] in
 theorem edgeVertices_union (e : Edge G) :
@@ -177,6 +184,76 @@ theorem edgeVertices_union (e : Edge G) :
   · by_cases hvRight : v = e.1.2
     · simp [edgeLeftVertices, edgeMiddleVertices, edgeRightVertices, hvRight]
     · simp [edgeLeftVertices, edgeMiddleVertices, edgeRightVertices, hvLeft, hvRight]
+
+omit [DecidableRel G.Adj] in
+@[simp] theorem notMem_edgeMiddleVertices_left (e : Edge G) :
+    e.1.1 ∉ edgeMiddleVertices e := by
+  simp [mem_edgeMiddleVertices_iff]
+
+omit [DecidableRel G.Adj] in
+@[simp] theorem notMem_edgeMiddleVertices_right (e : Edge G) :
+    e.1.2 ∉ edgeMiddleVertices e := by
+  simp [mem_edgeMiddleVertices_iff]
+
+omit [Fintype V] [DecidableRel G.Adj] in
+@[simp] theorem edgeLeftVertices_card (e : Edge G) :
+    (edgeLeftVertices e).card = 1 :=
+  Finset.card_singleton _
+
+omit [Fintype V] [DecidableRel G.Adj] in
+@[simp] theorem edgeRightVertices_card (e : Edge G) :
+    (edgeRightVertices e).card = 1 :=
+  Finset.card_singleton _
+
+omit [DecidableRel G.Adj] in
+private theorem card_erase_erase_univ (a b : V) (hab : a ≠ b) :
+    (((Finset.univ : Finset V).erase a).erase b).card = Fintype.card V - 2 := by
+  have ha : a ∈ (Finset.univ : Finset V) := Finset.mem_univ _
+  have hb : b ∈ ((Finset.univ : Finset V).erase a) :=
+    Finset.mem_erase.mpr ⟨hab.symm, Finset.mem_univ _⟩
+  rw [Finset.card_erase_of_mem hb, Finset.card_erase_of_mem ha, Finset.card_univ]
+  rw [Nat.sub_sub]
+
+omit [DecidableRel G.Adj] in
+private theorem prod_univ_erase_erase {M : Type*} [CommMonoid M]
+    (a b : V) (hab : a ≠ b) (f : V → M) :
+    ∏ v : V, f v = f a * (∏ v ∈ (((Finset.univ : Finset V).erase a).erase b), f v) * f b := by
+  have ha : a ∈ (Finset.univ : Finset V) := Finset.mem_univ _
+  have hb : b ∈ ((Finset.univ : Finset V).erase a) :=
+    Finset.mem_erase.mpr ⟨hab.symm, Finset.mem_univ _⟩
+  rw [(Finset.mul_prod_erase _ f ha).symm, (Finset.mul_prod_erase _ f hb).symm]
+  simp [mul_left_comm, mul_comm]
+
+omit [DecidableRel G.Adj] in
+theorem edgeMiddleVertices_card (e : Edge G) :
+    (edgeMiddleVertices e).card = Fintype.card V - 2 := by
+  simpa [edgeMiddleVertices] using
+    card_erase_erase_univ (V := V) e.1.1 e.1.2 (edgeLeft_ne_edgeRight e)
+
+omit [DecidableRel G.Adj] in
+/-- Products over the vertex set factor through the three-region partition at
+any edge: the distinguished endpoints appear separately from the middle-region
+product. -/
+theorem prod_univ_splitAtEdge {M : Type*} [CommMonoid M] (e : Edge G) (f : V → M) :
+    ∏ v : V, f v = f e.1.1 * (∏ v ∈ edgeMiddleVertices e, f v) * f e.1.2 := by
+  simpa [edgeMiddleVertices] using
+    prod_univ_erase_erase (V := V) e.1.1 e.1.2 (edgeLeft_ne_edgeRight e) f
+
+/-- `stateCoeff` evaluates the two endpoint tensors against an independent
+product over the middle region. This isolates the two endpoints of an edge in
+the PEPS amplitude, matching the edge-centred blocking of
+arXiv:1804.04964 §3. -/
+theorem stateCoeff_splitAtEdge (A : Tensor G d) (e : Edge G) (σ : V → Fin d) :
+    stateCoeff A σ =
+      ∑ η : VirtualConfig A,
+        A.component e.1.1 (fun ie => η ie.1) (σ e.1.1) *
+          (∏ v ∈ edgeMiddleVertices e,
+              A.component v (fun ie => η ie.1) (σ v)) *
+          A.component e.1.2 (fun ie => η ie.1) (σ e.1.2) := by
+  unfold stateCoeff
+  refine Finset.sum_congr rfl ?_
+  intro η _
+  exact prod_univ_splitAtEdge e (fun v : V => A.component v (fun ie => η ie.1) (σ v))
 
 end PEPS
 end TNLean
