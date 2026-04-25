@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.SharedInfra.SectorDecomposition
 import TNLean.MPS.BNT.Basic
+import TNLean.MPS.BNT.PermutationRigidityPrimitive
 import TNLean.MPS.Overlap.CastLemmas
 import TNLean.MPS.SharedInfra.GaugePhase
 import TNLean.Algebra.ScalarPowerSumIdentity
@@ -54,7 +55,7 @@ sector comparison theorems in this file, i.e.
 introduced in PR #844.  It is the predicate tracked by issue #876 as the output
 of a general BNT sector construction for the after-blocking canonical-form
 reduction, and is the linear-independence hypothesis expected by the
-after-blocking sector endpoint of issue #877. -/
+after-blocking sector comparison of issue #877. -/
 def HasBNTSectorData (P : SectorDecomposition d) : Prop :=
   ∃ N0 : ℕ, ∀ N > N0,
     LinearIndependent ℂ (fun j : Fin P.basisCount => mpvState (P.basis j) N)
@@ -203,30 +204,37 @@ lemma geom_sum_eventually_zero
     intro k
     rw [hGeom, hS0, mul_zero]
 
-/-- If two families of nonzero complex scalars have equal power sums for all sufficiently
-large exponents, then their power sums agree for ALL exponents.
+/-- If two nonzero finite weight families have equal power sums for all sufficiently
+large exponents, then their power sums agree for every exponent.
 
-Reduces to `geom_sum_eventually_zero` by concatenating the two families with
-coefficients `+1` and `−1`. -/
-lemma power_sums_eq_of_eventually_eq
-    {m : ℕ} (a b : Fin m → ℂ)
+This is the unequal-cardinality form used to recover copy counts. The proof
+concatenates the two families with coefficients `+1` and `-1` and uses
+`geom_sum_eventually_zero`. -/
+lemma power_sums_eq_of_eventually_eq_hetero
+    {m n : ℕ} (a : Fin m → ℂ) (b : Fin n → ℂ)
     (ha : ∀ i, a i ≠ 0) (hb : ∀ i, b i ≠ 0)
     {M : ℕ}
     (hEv : ∀ N, M ≤ N → ∑ i, a i ^ N = ∑ i, b i ^ N) :
     ∀ k, ∑ i, a i ^ k = ∑ i, b i ^ k := by
-  let w : Fin (m + m) → ℂ := Fin.append a b
-  let coeffs : Fin (m + m) → ℂ := Fin.append (fun _ => (1 : ℂ)) (fun _ => (-1 : ℂ))
+  let w : Fin (m + n) → ℂ := Fin.append a b
+  let coeffs : Fin (m + n) → ℂ := Fin.append (fun _ : Fin m => (1 : ℂ))
+    (fun _ : Fin n => (-1 : ℂ))
   have hw : ∀ i, w i ≠ 0 :=
     fun i => Fin.addCases
-      (fun j => by show w (Fin.castAdd m j) ≠ 0
-                   rw [show w (Fin.castAdd m j) = a j from Fin.append_left a b j]; exact ha j)
-      (fun j => by show w (Fin.natAdd m j) ≠ 0
-                   rw [show w (Fin.natAdd m j) = b j from Fin.append_right a b j]; exact hb j)
+      (fun j => by
+        show w (Fin.castAdd n j) ≠ 0
+        rw [show w (Fin.castAdd n j) = a j from Fin.append_left a b j]
+        exact ha j)
+      (fun j => by
+        show w (Fin.natAdd m j) ≠ 0
+        rw [show w (Fin.natAdd m j) = b j from Fin.append_right a b j]
+        exact hb j)
       i
-  have hDecomp : ∀ k, ∑ i, coeffs i * w i ^ k = (∑ i, a i ^ k) - (∑ i, b i ^ k) := by
+  have hDecomp : ∀ k,
+      ∑ i, coeffs i * w i ^ k = (∑ i, a i ^ k) - (∑ i, b i ^ k) := by
     intro k
     simp only [coeffs, w, Fin.sum_univ_add, Fin.append_left, Fin.append_right,
-               one_mul, neg_one_mul, Finset.sum_neg_distrib, sub_eq_add_neg]
+      one_mul, neg_one_mul, Finset.sum_neg_distrib, sub_eq_add_neg]
   have hEvCombined : ∀ N, M ≤ N → ∑ i, coeffs i * w i ^ N = 0 := by
     intro N hN
     rw [hDecomp, sub_eq_zero]
@@ -236,6 +244,40 @@ lemma power_sums_eq_of_eventually_eq
   have hk := hAll k
   rw [hDecomp] at hk
   exact sub_eq_zero.mp hk
+
+/-- If two equal-cardinality families of nonzero complex scalars have equal power sums for all
+sufficiently large exponents, then their power sums agree for every exponent.
+
+This is the equal-cardinality specialization of
+`power_sums_eq_of_eventually_eq_hetero`. -/
+lemma power_sums_eq_of_eventually_eq
+    {m : ℕ} (a b : Fin m → ℂ)
+    (ha : ∀ i, a i ≠ 0) (hb : ∀ i, b i ≠ 0)
+    {M : ℕ}
+    (hEv : ∀ N, M ≤ N → ∑ i, a i ^ N = ∑ i, b i ^ N) :
+    ∀ k, ∑ i, a i ^ k = ∑ i, b i ^ k := by
+  exact power_sums_eq_of_eventually_eq_hetero
+    (m := m) (n := m) a b ha hb (M := M) hEv
+
+/-- Eventual equality of coefficient power sums forces equality of multiplicities. -/
+theorem copies_eq_of_eventually_coeff_eq
+    (S T : SectorWeightData g)
+    {N0 : ℕ}
+    (hEv : ∀ N > N0, ∀ j : Fin g, S.coeff N j = T.coeff N j) :
+    ∀ j : Fin g, S.copies j = T.copies j := by
+  intro j
+  have hEvj : ∀ N, N0 + 1 ≤ N →
+      ∑ q : Fin (S.copies j), (S.weight j q) ^ N =
+        ∑ q : Fin (T.copies j), (T.weight j q) ^ N := by
+    intro N hN
+    have h := hEv N (by omega) j
+    simpa only [SectorWeightData.coeff] using h
+  have h0 := power_sums_eq_of_eventually_eq_hetero
+    (S.weight j) (T.weight j)
+    (fun q => S.weight_ne_zero j q)
+    (fun q => T.weight_ne_zero j q)
+    (M := N0 + 1) hEvj 0
+  exact (Nat.cast_injective (R := ℂ)) (by simpa using h0)
 
 /-- Power-sum sequences from finite weight families that eventually agree also agree for all
 positive exponents.
@@ -291,7 +333,32 @@ theorem weight_multiset_eq_of_sameMPV_bnt
     ∀ j : Fin g,
       Finset.univ.val.map (S.weight j) =
         Finset.univ.val.map (fun q => T.weight j (Fin.cast (hCopies j) q)) := by
-  obtain ⟨N0, hCoeffEventuallyEq⟩ := coeff_eventually_eq_of_sameMPV basis S T hLI hSame
+  obtain ⟨_, hCoeffEventuallyEq⟩ := coeff_eventually_eq_of_sameMPV basis S T hLI hSame
+  have hCoeffAllPosEq := eventually_coeff_eq_implies_all_pos_eq S T hCopies hCoeffEventuallyEq
+  exact weight_multiset_eq_of_copies_eq_of_coeff_eq S T hCopies hCoeffAllPosEq
+
+/-- **BNT coefficient comparison recovers multiplicities and weight multisets.**
+
+This variant does not assume matching copy counts. Eventual coefficient equality is
+first extrapolated to exponent `0`, which recovers the cardinalities of the two
+weight families, and then Newton--Girard recovers the multisets. -/
+theorem exists_copies_eq_and_weight_multiset_eq_of_sameMPV_bnt
+    {dim : Fin g → ℕ}
+    (basis : (j : Fin g) → MPSTensor d (dim j))
+    (S T : SectorWeightData g)
+    (hLI : ∃ N0 : ℕ, ∀ N > N0,
+      LinearIndependent ℂ (fun j : Fin g => mpvState (basis j) N))
+    (hSame : ∀ (N : ℕ) (σ : Fin N → Fin d),
+      ∑ j : Fin g, S.coeff N j * mpv (basis j) σ =
+      ∑ j : Fin g, T.coeff N j * mpv (basis j) σ) :
+    ∃ hCopies : ∀ j, S.copies j = T.copies j,
+      ∀ j : Fin g,
+        Finset.univ.val.map (S.weight j) =
+          Finset.univ.val.map (fun q => T.weight j (Fin.cast (hCopies j) q)) := by
+  obtain ⟨_, hCoeffEventuallyEq⟩ := coeff_eventually_eq_of_sameMPV basis S T hLI hSame
+  let hCopies : ∀ j, S.copies j = T.copies j :=
+    copies_eq_of_eventually_coeff_eq S T hCoeffEventuallyEq
+  refine ⟨hCopies, ?_⟩
   have hCoeffAllPosEq := eventually_coeff_eq_implies_all_pos_eq S T hCopies hCoeffEventuallyEq
   exact weight_multiset_eq_of_copies_eq_of_coeff_eq S T hCopies hCoeffAllPosEq
 
@@ -351,21 +418,21 @@ theorem fundamentalTheorem_equalMPV_sectorDecomposition
     _ = mpv (SectorDecomposition.mk g dim basis T).toTensor σ := hEqual N σ
     _ = ∑ j, T.coeff N j * mpv (basis j) σ := hExpandT
 
-/-- **Heterogeneous sector comparison reduces to the shared-basis case after phase matching.**
+/-- **Phase matching and total MPV equality recover copy counts and sector weights.**
 
-Assume two sector decompositions `P` and `Q` have basis blocks matched by a permutation `perm`,
-matching copy counts, and per-basis MPV relations
-`mpv (Q.basis (perm j)) σ = ζ_j^N * mpv (P.basis j) σ`. If the total tensors are
-`SameMPV₂`, then after absorbing the phases `ζ_j` into the sector weights on the `Q` side,
-the per-basis sector weight multisets agree.
+Assume two sector decompositions `P` and `Q` have basis blocks matched by a
+permutation `perm`, and the matched basis MPVs differ by nonzero phase powers.
+If the total tensors are `SameMPV₂` and the basis of `P` is eventually linearly
+independent, then the copy counts are forced to agree. After absorbing the same
+phases into the weights of `Q`, the per-basis sector weight multisets agree.
 
-This is the algebraic core of the heterogeneous BNT-sector comparison: once a
-future theorem supplies the basis matching and the phase factors, the remaining
-comparison is exactly the shared-basis theorem above. -/
-theorem fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_phaseMatch
+This is the coefficient-extraction part of the heterogeneous sector comparison:
+copy alignment is not an input, but is recovered from the exponent-zero case of
+the power-sum identity after eventual coefficient equality has been extrapolated
+to all exponents. -/
+theorem fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_phaseMatch_exists_copies
     (P Q : SectorDecomposition d)
     (perm : Fin P.basisCount ≃ Fin Q.basisCount)
-    (hCopies : ∀ j : Fin P.basisCount, P.copies j = Q.copies (perm j))
     (hPhase : ∀ j : Fin P.basisCount,
       ∃ ζ : ℂ, ζ ≠ 0 ∧
         ∀ (N : ℕ) (σ : Fin N → Fin d),
@@ -373,12 +440,13 @@ theorem fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_phaseMatch
     (hLI : ∃ N0 : ℕ, ∀ N > N0,
       LinearIndependent ℂ (fun j : Fin P.basisCount => mpvState (P.basis j) N))
     (hEqual : SameMPV₂ P.toTensor Q.toTensor) :
-    ∃ ζ : Fin P.basisCount → ℂ,
-      (∀ j, ζ j ≠ 0) ∧
-      ∀ j : Fin P.basisCount,
-        Finset.univ.val.map (P.weight j) =
-          Finset.univ.val.map
-            (fun q => ζ j * Q.weight (perm j) (Fin.cast (hCopies j) q)) := by
+    ∃ hCopies : ∀ j : Fin P.basisCount, P.copies j = Q.copies (perm j),
+      ∃ ζ : Fin P.basisCount → ℂ,
+        (∀ j, ζ j ≠ 0) ∧
+        ∀ j : Fin P.basisCount,
+          Finset.univ.val.map (P.weight j) =
+            Finset.univ.val.map
+              (fun q => ζ j * Q.weight (perm j) (Fin.cast (hCopies j) q)) := by
   classical
   let ζFn : Fin P.basisCount → ℂ := fun j => (hPhase j).choose
   have hζ_ne : ∀ j : Fin P.basisCount, ζFn j ≠ 0 :=
@@ -436,22 +504,64 @@ theorem fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_phaseMatch
   have hEqual' : SameMPV₂ P.toTensor Q'.toTensor := by
     intro N σ
     exact (hEqual N σ).trans (hTransport N σ).symm
-  have hCopies' : ∀ j : Fin P.basisCount, P.sectors.copies j = T.copies j := by
-    intro j
-    simpa [T] using hCopies j
-  have hMultiset :
+  have hRecovered :
+      ∃ hCopies' : ∀ j : Fin P.basisCount, P.sectors.copies j = T.copies j,
+        ∀ j : Fin P.basisCount,
+          Finset.univ.val.map (P.weight j) =
+            Finset.univ.val.map (fun q => T.weight j (Fin.cast (hCopies' j) q)) :=
+    SectorWeightData.exists_copies_eq_and_weight_multiset_eq_of_sameMPV_bnt
+      (basis := P.basis) (S := P.sectors) (T := T) hLI (by
+        intro N σ
+        have hExpandP := P.mpv_toTensor_eq_sum_coeff σ (N := N)
+        have hExpandQ' := Q'.mpv_toTensor_eq_sum_coeff σ (N := N)
+        calc ∑ j, P.sectors.coeff N j * mpv (P.basis j) σ
+            = mpv P.toTensor σ := hExpandP.symm
+          _ = mpv Q'.toTensor σ := hEqual' N σ
+          _ = ∑ j, T.coeff N j * mpv (P.basis j) σ := hExpandQ')
+  obtain ⟨hCopies', hMultiset⟩ := hRecovered
+  let hCopies : ∀ j : Fin P.basisCount, P.copies j = Q.copies (perm j) := fun j => by
+    change P.sectors.copies j = T.copies j
+    exact hCopies' j
+  refine ⟨hCopies, ζFn, hζ_ne, ?_⟩
+  intro j
+  have hproof : hCopies' j = hCopies j := Subsingleton.elim _ _
+  simpa [T, hproof] using hMultiset j
+
+/-- **Heterogeneous sector comparison reduces to the shared-basis case after phase matching.**
+
+Assume two sector decompositions `P` and `Q` have basis blocks matched by a permutation `perm`,
+matching copy counts, and per-basis MPV relations
+`mpv (Q.basis (perm j)) σ = ζ_j^N * mpv (P.basis j) σ`. If the total tensors are
+`SameMPV₂`, then after absorbing the phases `ζ_j` into the sector weights on the `Q` side,
+the per-basis sector weight multisets agree. -/
+theorem fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_phaseMatch
+    (P Q : SectorDecomposition d)
+    (perm : Fin P.basisCount ≃ Fin Q.basisCount)
+    (hCopies : ∀ j : Fin P.basisCount, P.copies j = Q.copies (perm j))
+    (hPhase : ∀ j : Fin P.basisCount,
+      ∃ ζ : ℂ, ζ ≠ 0 ∧
+        ∀ (N : ℕ) (σ : Fin N → Fin d),
+          mpv (Q.basis (perm j)) σ = ζ ^ N * mpv (P.basis j) σ)
+    (hLI : ∃ N0 : ℕ, ∀ N > N0,
+      LinearIndependent ℂ (fun j : Fin P.basisCount => mpvState (P.basis j) N))
+    (hEqual : SameMPV₂ P.toTensor Q.toTensor) :
+    ∃ ζ : Fin P.basisCount → ℂ,
+      (∀ j, ζ j ≠ 0) ∧
       ∀ j : Fin P.basisCount,
         Finset.univ.val.map (P.weight j) =
-          Finset.univ.val.map (fun q => T.weight j (Fin.cast (hCopies' j) q)) :=
-      fundamentalTheorem_equalMPV_sectorDecomposition
-        (basis := P.basis) (S := P.sectors) (T := T) hCopies' hLI hEqual'
-  refine ⟨ζFn, hζ_ne, ?_⟩
+          Finset.univ.val.map
+            (fun q => ζ j * Q.weight (perm j) (Fin.cast (hCopies j) q)) := by
+  obtain ⟨hCopies', ζ, hζ_ne, hMultiset⟩ :=
+    fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_phaseMatch_exists_copies
+      P Q perm hPhase hLI hEqual
+  refine ⟨ζ, hζ_ne, ?_⟩
   intro j
-  simpa [T] using hMultiset j
+  have hproof : hCopies' j = hCopies j := Subsingleton.elim _ _
+  simpa [hproof] using hMultiset j
 
 /-- **Cast-compatible MPV scaling implies the phase-matched heterogeneous sector comparison.**
 
-This intermediate theorem isolates the weaker data actually consumed by the
+This theorem isolates the weaker data actually consumed by the
 phase-absorption argument: after matching basis dimensions, each block pair
 only needs a nonzero phase `ζ` relating the MPVs of the matched basis tensors. -/
 theorem fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_mpvScaling_matched_basis
@@ -532,13 +642,30 @@ theorem fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_matched_basis
 The matched-basis theorems above consume the matching data as four separate
 hypotheses (permutation, copy alignment, per-block dimension equality, and
 per-block gauge-phase equivalence). The `SectorBasisMatching` structure
-records these as a single witness, so that any future theorem producing the
-matching from `SameMPV₂` — the remaining step for the unconditional equal-case
+records these as a single witness. A theorem deriving this witness from
+`SameMPV₂` supplies the remaining step for the unconditional equal-case
 Fundamental Theorem, following from the general basis-of-normal-tensors
-construction — can be supplied as a single argument, and downstream results
-(such as the final global Corollary IV.5 construction) depend only on this
-structure.
+construction; the final global Corollary IV.5 construction can then depend only
+on this structure.
 -/
+
+/-- Basis matching before sector multiplicities have been recovered.
+
+This structure records the part of the heterogeneous BNT comparison supplied by
+the overlap-dichotomy argument: a permutation of basis blocks, equality of their
+bond dimensions, and gauge-phase equivalence of the matched blocks. It does not
+include copy-count alignment; that alignment is recovered from total MPV equality
+by `SectorBasisPreMatching.exists_sectorBasisMatching_of_sameMPV`. -/
+structure SectorBasisPreMatching (P Q : SectorDecomposition d) where
+  /-- Permutation matching basis indices of `P` and `Q`. -/
+  perm : Fin P.basisCount ≃ Fin Q.basisCount
+  /-- Matched basis blocks share the same bond dimension. -/
+  dim_eq : ∀ j : Fin P.basisCount, P.basisDim j = Q.basisDim (perm j)
+  /-- Matched basis blocks are gauge-phase equivalent after dimension transport. -/
+  basis_equiv : ∀ j : Fin P.basisCount,
+    GaugePhaseEquiv (d := d)
+      (cast (congr_arg (MPSTensor d) (dim_eq j)) (P.basis j))
+      (Q.basis (perm j))
 
 /-- Bundled witness data matching two sector decompositions block-by-block.
 
@@ -569,6 +696,21 @@ structure SectorBasisMatching (P Q : SectorDecomposition d) where
       (cast (congr_arg (MPSTensor d) (dim_eq j)) (P.basis j))
       (Q.basis (perm j))
 
+private lemma sectorBasisMatchExists_of_fields
+    {P Q : SectorDecomposition d}
+    (perm : Fin P.basisCount ≃ Fin Q.basisCount)
+    (dim_eq : ∀ j : Fin P.basisCount, P.basisDim j = Q.basisDim (perm j))
+    (basis_equiv : ∀ j : Fin P.basisCount,
+      GaugePhaseEquiv (d := d)
+        (cast (congr_arg (MPSTensor d) (dim_eq j)) (P.basis j))
+        (Q.basis (perm j))) :
+    ∀ j : Fin P.basisCount,
+      ∃ hdim : P.basisDim j = Q.basisDim (perm j),
+        GaugePhaseEquiv (d := d)
+          (cast (congr_arg (MPSTensor d) hdim) (P.basis j))
+          (Q.basis (perm j)) :=
+  fun j => ⟨dim_eq j, basis_equiv j⟩
+
 namespace SectorBasisMatching
 
 variable {P Q : SectorDecomposition d}
@@ -581,7 +723,7 @@ lemma basis_match_exists (M : SectorBasisMatching P Q) :
         GaugePhaseEquiv (d := d)
           (cast (congr_arg (MPSTensor d) hdim) (P.basis j))
           (Q.basis (M.perm j)) :=
-  fun j => ⟨M.dim_eq j, M.basis_equiv j⟩
+  sectorBasisMatchExists_of_fields M.perm M.dim_eq M.basis_equiv
 
 /-- Build a `SectorBasisMatching` from a bijective index correspondence together with the
 per-block copy / dimension / gauge-phase data.
@@ -611,11 +753,129 @@ noncomputable def ofBijective
 
 end SectorBasisMatching
 
+namespace SectorBasisPreMatching
+
+variable {P Q : SectorDecomposition d}
+
+/-- Reformulate pre-matching data in the existential form used by the matched-basis theorem. -/
+lemma basis_match_exists (M : SectorBasisPreMatching P Q) :
+    ∀ j : Fin P.basisCount,
+      ∃ hdim : P.basisDim j = Q.basisDim (M.perm j),
+        GaugePhaseEquiv (d := d)
+          (cast (congr_arg (MPSTensor d) hdim) (P.basis j))
+          (Q.basis (M.perm j)) :=
+  sectorBasisMatchExists_of_fields M.perm M.dim_eq M.basis_equiv
+
+/-- Gauge-phase pre-matching gives the MPV phase-scaling relation for each basis block. -/
+lemma phase_match_exists (M : SectorBasisPreMatching P Q) :
+    ∀ j : Fin P.basisCount,
+      ∃ ζ : ℂ, ζ ≠ 0 ∧
+        ∀ (N : ℕ) (σ : Fin N → Fin d),
+          mpv (Q.basis (M.perm j)) σ = ζ ^ N * mpv (P.basis j) σ := by
+  intro j
+  obtain ⟨X, ζ, hζne, hX⟩ := M.basis_equiv j
+  refine ⟨ζ, hζne, ?_⟩
+  intro N σ
+  rw [mpv_eq_pow_mul_of_gaugePhase _ _ X ζ hX N σ,
+    mpv_cast_dim (M.dim_eq j) (P.basis j) N σ]
+
+/-- Promote a basis pre-matching to a full sector basis matching.
+
+The new information is the copy-count equality. It follows from total MPV equality
+and BNT linear independence by recovering the exponent-zero power sums for the
+matched sector coefficients. -/
+theorem exists_sectorBasisMatching_of_sameMPV
+    (M : SectorBasisPreMatching P Q)
+    (hLI : HasBNTSectorData P)
+    (hEqual : SameMPV₂ P.toTensor Q.toTensor) :
+    ∃ M' : SectorBasisMatching P Q, M'.perm = M.perm := by
+  obtain ⟨hCopies, _ζ, _hζ_ne, _hMultiset⟩ :=
+    fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_phaseMatch_exists_copies
+      P Q M.perm M.phase_match_exists hLI hEqual
+  refine ⟨{
+    perm := M.perm
+    copies_eq := hCopies
+    dim_eq := M.dim_eq
+    basis_equiv := M.basis_equiv
+  }, rfl⟩
+
+end SectorBasisPreMatching
+
+/-- **Heterogeneous sector comparison from a basis pre-matching.**
+
+A pre-matching supplies the permutation, bond-dimension equalities, and
+gauge-phase equivalences of the basis blocks. Total MPV equality and BNT linear
+independence then recover the missing copy-count equalities and the phase-adjusted
+sector weight multisets. -/
+theorem fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_preMatching
+    {P Q : SectorDecomposition d}
+    (M : SectorBasisPreMatching P Q)
+    (hLI : HasBNTSectorData P)
+    (hEqual : SameMPV₂ P.toTensor Q.toTensor) :
+    ∃ hCopies : ∀ j : Fin P.basisCount, P.copies j = Q.copies (M.perm j),
+      ∃ ζ : Fin P.basisCount → ℂ,
+        (∀ j, ζ j ≠ 0) ∧
+        ∀ j : Fin P.basisCount,
+          Finset.univ.val.map (P.weight j) =
+            Finset.univ.val.map
+              (fun q => ζ j * Q.weight (M.perm j) (Fin.cast (hCopies j) q)) :=
+  fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_phaseMatch_exists_copies
+    P Q M.perm M.phase_match_exists hLI hEqual
+
+/-- Produce a sector basis matching from the primitive overlap-rigidity hypotheses.
+
+The overlap-rigidity theorem gives the basis permutation, dimension equalities,
+and gauge-phase equivalences. The preceding pre-matching result then recovers
+the sector copy-count alignment from total MPV equality. -/
+theorem exists_sectorBasisMatching_of_overlapOrtho_span_sameMPV
+    (P Q : SectorDecomposition d)
+    [∀ j : Fin P.basisCount, NeZero (P.basisDim j)]
+    [∀ k : Fin Q.basisCount, NeZero (Q.basisDim k)]
+    (hP_inj : ∀ j, IsInjective (P.basis j))
+    (hQ_inj : ∀ k, IsInjective (Q.basis k))
+    (hP_norm : ∀ j, (∑ i : Fin d, (P.basis j i)ᴴ * (P.basis j i)) = 1)
+    (hQ_norm : ∀ k, (∑ i : Fin d, (Q.basis k i)ᴴ * (Q.basis k i)) = 1)
+    (hP_self : ∀ j,
+      Filter.Tendsto (fun N => mpvOverlap (d := d) (P.basis j) (P.basis j) N)
+        Filter.atTop (nhds (1 : ℂ)))
+    (hP_off : ∀ i j, i ≠ j →
+      Filter.Tendsto (fun N => mpvOverlap (d := d) (P.basis i) (P.basis j) N)
+        Filter.atTop (nhds 0))
+    (hQ_self : ∀ k,
+      Filter.Tendsto (fun N => mpvOverlap (d := d) (Q.basis k) (Q.basis k) N)
+        Filter.atTop (nhds (1 : ℂ)))
+    (hQ_off : ∀ k l, k ≠ l →
+      Filter.Tendsto (fun N => mpvOverlap (d := d) (Q.basis k) (Q.basis l) N)
+        Filter.atTop (nhds 0))
+    (hspan : ∀ N,
+      Submodule.span ℂ (Set.range (fun j : Fin P.basisCount =>
+        mpvState (d := d) (P.basis j) N)) =
+      Submodule.span ℂ (Set.range (fun k : Fin Q.basisCount =>
+        mpvState (d := d) (Q.basis k) N)))
+    (hEqual : SameMPV₂ P.toTensor Q.toTensor) :
+    Nonempty (SectorBasisMatching P Q) := by
+  obtain ⟨_hCount, perm, hBasis⟩ :=
+    exists_eq_numBlocks_and_equiv_gaugePhase_of_overlapOrtho
+      (A := P.basis) (B := Q.basis)
+      hP_inj hQ_inj hP_norm hQ_norm hP_self hP_off hQ_self hQ_off hspan
+  let M₀ : SectorBasisPreMatching P Q := {
+    perm := perm
+    dim_eq := fun j => (hBasis j).choose
+    basis_equiv := fun j => (hBasis j).choose_spec
+  }
+  have hLI : HasBNTSectorData P := by
+    have hEventually := eventually_linearIndependent_of_overlap_tendsto_orthonormal
+      P.basis hP_self hP_off
+    obtain ⟨N0, hN0⟩ := Filter.eventually_atTop.1 hEventually
+    exact ⟨N0, fun N hN => hN0 N (le_of_lt hN)⟩
+  obtain ⟨M, _hperm⟩ := M₀.exists_sectorBasisMatching_of_sameMPV hLI hEqual
+  exact ⟨M⟩
+
 /-- **Heterogeneous sector comparison via a bundled basis matching witness.**
 
 Corollary of `fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_matched_basis`
 obtained by supplying the matching data in bundled form as a `SectorBasisMatching`. Once a
-future theorem constructs a `SectorBasisMatching P Q` from arbitrary `SameMPV₂ P.toTensor
+theorem constructs a `SectorBasisMatching P Q` from arbitrary `SameMPV₂ P.toTensor
 Q.toTensor` (the remaining combinatorial step, following from the general
 basis-of-normal-tensors construction in #876), this result completes the Gap §1
 heterogeneous sector comparison with the matching data gathered into a single argument. -/
