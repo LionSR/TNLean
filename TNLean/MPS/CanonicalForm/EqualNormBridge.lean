@@ -90,8 +90,8 @@ Theorem matching, etc.).
 
 * `exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks` — the collapsed-representative
   construction: it quotients arbitrary TP / primitive / irreducible blocks by MPV phase
-  equivalence, absorbs the phases into sector weights, proves representative separation,
-  and then obtains `HasBNTSectorData` from the separated-family theorem.
+  equivalence, absorbs the scalar factors into sector weights, proves representative
+  separation, and then obtains `HasBNTSectorData` from the separated-family theorem.
 
 * `exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_of_linearIndependent` —
   signature-compatible reformulation retaining the TP / primitive / irreducible
@@ -401,9 +401,9 @@ theorem bnt_grouping_single_norm_class_of_tp_primitive_irr_blocks
 `MPVPhaseEquiv blocks j k` means that block `k` has the same MPV family as
 block `j` after multiplying length-`N` vectors by a nonzero scalar power
 `ζ ^ N`.  Gauge-phase equivalence implies this relation, and quotienting a
-finite family by this relation is enough to absorb all repeated phase copies
-into sector weights. -/
-abbrev MPVPhaseEquiv {r : ℕ} {dim : Fin r → ℕ}
+finite family by this relation is enough to absorb all repeated scalar-power
+copies into sector weights. -/
+def MPVPhaseEquiv {r : ℕ} {dim : Fin r → ℕ}
     (blocks : (k : Fin r) → MPSTensor d (dim k)) (j k : Fin r) : Prop :=
   ∃ ζ : ℂ, ζ ≠ 0 ∧ ∀ (N : ℕ) (σ : Fin N → Fin d),
     mpv (blocks k) σ = ζ ^ N * mpv (blocks j) σ
@@ -452,7 +452,7 @@ lemma MPVPhaseEquiv.of_gaugePhaseEquiv_cast {r : ℕ} {dim : Fin r → ℕ}
     mpv_cast_dim hdim (blocks j) N σ]
 
 /-- Equivalence relation on block indices given by MPV phase equivalence. -/
-noncomputable def mpvPhaseSetoid {r : ℕ} {dim : Fin r → ℕ}
+def mpvPhaseSetoid {r : ℕ} {dim : Fin r → ℕ}
     (blocks : (k : Fin r) → MPSTensor d (dim k)) : Setoid (Fin r) where
   r := MPVPhaseEquiv blocks
   iseqv := {
@@ -462,7 +462,7 @@ noncomputable def mpvPhaseSetoid {r : ℕ} {dim : Fin r → ℕ}
   }
 
 /-- Quotient set of MPV phase equivalence classes. -/
-noncomputable abbrev MPVPhaseClass {r : ℕ} {dim : Fin r → ℕ}
+abbrev MPVPhaseClass {r : ℕ} {dim : Fin r → ℕ}
     (blocks : (k : Fin r) → MPSTensor d (dim k)) :=
   Quotient (mpvPhaseSetoid blocks)
 
@@ -495,7 +495,7 @@ structure MPVPhaseClassData {r : ℕ} {dim : Fin r → ℕ}
 The representative of each class is the first element in the finite enumeration
 of that class.  If two representatives were gauge-phase equivalent, then they
 would be MPV-phase equivalent and hence lie in the same quotient class; this
-proves the BNT separation field. -/
+proves that distinct representatives are pairwise not gauge-phase equivalent. -/
 noncomputable def mpvPhaseClassData {r : ℕ} {dim : Fin r → ℕ}
     (blocks : (k : Fin r) → MPSTensor d (dim k)) : MPVPhaseClassData blocks := by
   classical
@@ -526,12 +526,7 @@ noncomputable def mpvPhaseClassData {r : ℕ} {dim : Fin r → ℕ}
     ext k
     simp only [Finset.mem_biUnion, Finset.mem_univ, true_and, iff_true]
     refine ⟨e (Quotient.mk (mpvPhaseSetoid blocks) k), ?_⟩
-    change k ∈ Finset.univ.filter
-      (fun x => Quotient.mk (mpvPhaseSetoid blocks) x =
-        classOf (e (Quotient.mk (mpvPhaseSetoid blocks) k)))
-    rw [Finset.mem_filter]
-    refine ⟨Finset.mem_univ _, ?_⟩
-    simp [classOf, e]
+    simp [classFinset, classOf, e]
   let copiesFn : Fin g → ℕ := fun j => (classFinset j).card
   have hcopies_pos : ∀ j, 0 < copiesFn j :=
     fun j => Finset.card_pos.mpr (hClass_nonempty j)
