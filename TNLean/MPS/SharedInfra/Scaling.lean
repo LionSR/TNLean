@@ -2,7 +2,8 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import TNLean.MPS.Core.Transfer
+import TNLean.MPS.CanonicalForm.Reduction
+import TNLean.MPS.Periodic.Defs
 
 /-!
 # Shared scaling lemmas for MPS tensors
@@ -37,6 +38,28 @@ theorem leftCanonical_smul_of_norm_one (c : ℂ) (hc : ‖c‖ = 1)
       rw [mul_comm, Complex.mul_conj]
     rw [h1, Complex.normSq_eq_norm_sq, hc, one_pow, Complex.ofReal_one]
   rw [hsc, one_smul]
+
+/-- Unit-norm scaling preserves periodicity data. -/
+theorem isPeriodic_smul_of_norm_one
+    {m : ℕ} {c : ℂ} (hc : ‖c‖ = 1)
+    (A : MPSTensor d D) (hA : IsPeriodic m A) :
+    IsPeriodic m (fun i => c • A i) := by
+  have hc_ne : c ≠ 0 := by
+    intro hc0
+    have hc' := hc
+    simp [hc0] at hc'
+  have hTransfer : transferMap (fun i => c • A i) = transferMap A := by
+    ext X : 1
+    rw [transferMap_smul]
+    have hsc : c * starRingEnd ℂ c = 1 := by
+      have h1 : c * starRingEnd ℂ c = ↑(Complex.normSq c) := by
+        rw [Complex.mul_conj]
+      rw [h1, Complex.normSq_eq_norm_sq, hc, one_pow, Complex.ofReal_one]
+    simp [hsc]
+  refine ⟨isIrreducibleTensor_smul hc_ne A hA.irreducible,
+    leftCanonical_smul_of_norm_one c hc A hA.leftCanonical,
+    hA.period_pos, ?_, hA.primitiveRoot⟩
+  simpa [hTransfer] using hA.peripheral_eq
 
 /-- Scaling a tensor by `c` scales MPVs by `c^N`. -/
 theorem mpv_smul (c : ℂ) (A : MPSTensor d D) {N : ℕ} (σ : Fin N → Fin d) :
