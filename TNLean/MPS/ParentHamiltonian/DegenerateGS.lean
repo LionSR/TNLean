@@ -179,7 +179,7 @@ If the boundary matrix for `toTensorFromBlocks μ A` is itself the reindexed
 block diagonal with diagonal blocks `Xb k`, then the corresponding `N`-site
 open-chain vector is the sum of the blockwise open-chain vectors, with the
 expected weight factor `(μ k) ^ N`. -/
-private theorem groundSpaceMap_toTensorFromBlocks_blockDiagonal
+private lemma groundSpaceMap_toTensorFromBlocks_blockDiagonal
     (μ' : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (Xb : (k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ) (N : ℕ) :
     groundSpaceMap (toTensorFromBlocks μ' A) N
@@ -204,27 +204,24 @@ private theorem groundSpaceMap_toTensorFromBlocks_blockDiagonal
 
 /-- Applying `groundSpaceMap` to a scalar boundary matrix gives a scalar multiple
 of the periodic MPV coefficient vector. -/
-private theorem groundSpaceMap_matrix_scalar
+private lemma groundSpaceMap_matrix_scalar
     (A : MPSTensor d D) (N : ℕ) (c : ℂ) :
     groundSpaceMap A N (Matrix.scalar (Fin D) c) = c • (mpv A : NSiteSpace d N) := by
   ext σ
   simp only [groundSpaceMap_apply, Pi.smul_apply, smul_eq_mul, mpv, coeff]
   have hscalar : Matrix.scalar (Fin D) c = c • (1 : Matrix (Fin D) (Fin D) ℂ) := by
     ext i j
-    by_cases hij : i = j
-    · subst j
-      simp
-    · simp [Matrix.scalar, hij]
+    by_cases hij : i = j <;> simp [Matrix.scalar, hij]
   rw [hscalar, Matrix.mul_smul, mul_one, Matrix.trace_smul]
   simp [smul_eq_mul]
 
 /-- Boundary-matrix block split from the projection-span input.
 
 This is the algebraic endgame for the block-decomposition argument. Assume the
-finite-span input that every virtual sector projection lies in the pulled-back
-span of length-`m` assembled word products. If a boundary matrix `X` for the
-assembled tensor commutes with those length-`m` words (the output expected from
-the wrapping-window comparison), then the open-chain vector
+#911 finite-span input that every virtual sector projection lies in the
+pulled-back span of length-`m` assembled word products. If a boundary matrix `X`
+for the assembled tensor commutes with those length-`m` words (the output
+expected from the wrapping-window comparison), then the open-chain vector
 `groundSpaceMap (toTensorFromBlocks μ A) N X` lies in the supremum of the
 blockwise periodic chain ground spaces.
 
@@ -252,10 +249,9 @@ theorem groundSpaceMap_toTensorFromBlocks_mem_iSup_chainGroundSpace_of_reindexed
       ⨆ j : Fin r, chainGroundSpace (A j) L N := by
   classical
   let e : ((k : Fin r) × Fin (dim k)) ≃ Fin (∑ k : Fin r, dim k) := finSigmaFinEquiv
-  have hBD :=
-    isBlockDiagonal'_of_commutes_reindexed_wordSpan
-      (B := toTensorFromBlocks μ A) (m := m) hProj hComm
-  rcases hBD with ⟨Xb, hXb⟩
+  rcases isBlockDiagonal'_of_commutes_reindexed_wordSpan
+      (B := toTensorFromBlocks μ A) (m := m) hProj hComm with
+    ⟨Xb, hXb⟩
   have hCommRe : ∀ ω : Fin m → Fin d,
       Matrix.blockDiagonal' Xb *
           Matrix.blockDiagonal' (fun k : Fin r =>
@@ -325,12 +321,9 @@ theorem groundSpaceMap_toTensorFromBlocks_mem_iSup_chainGroundSpace_of_reindexed
       exact hCommBlock k ω
   choose c hc using hScalar
   have hX : X = Matrix.reindex e e (Matrix.blockDiagonal' Xb) := by
-    calc
-      X = Matrix.reindex e e (Matrix.reindex e.symm e.symm X) := by
-        ext a b
-        simp [e]
-      _ = Matrix.reindex e e (Matrix.blockDiagonal' Xb) := by
-        rw [hXb]
+    rw [← hXb]
+    ext a b
+    simp [e]
   rw [hX, groundSpaceMap_toTensorFromBlocks_blockDiagonal]
   refine Submodule.sum_mem _ ?_
   intro k _
@@ -341,12 +334,12 @@ theorem groundSpaceMap_toTensorFromBlocks_mem_iSup_chainGroundSpace_of_reindexed
 
 /-- Conditional reverse block split from the finite projection-span input.
 
-Besides the projection-span hypothesis, this theorem assumes the boundary-matrix
-output of the wrapping/open-chain layer: every vector in the assembled periodic
-ground space can be represented as `groundSpaceMap` applied to a boundary matrix
-that commutes with all length-`m` assembled word products. Under these inputs,
-the assembled periodic ground space is contained in the supremum of the blockwise
-periodic ground spaces. -/
+Besides the #911 projection-span hypothesis, this theorem assumes the
+boundary-matrix output of the wrapping/open-chain layer: every vector in the
+assembled periodic ground space can be represented as `groundSpaceMap` applied to
+a boundary matrix that commutes with all length-`m` assembled word products. Under
+these inputs, the assembled periodic ground space is contained in the supremum of
+the blockwise periodic ground spaces. -/
 theorem chainGroundSpace_toTensorFromBlocks_le_iSup_of_reindexed_projectionSpan
     (A : (j : Fin r) → MPSTensor d (dim j))
     (hCF : IsCanonicalFormBNT μ A) {L N m : ℕ}
@@ -375,10 +368,10 @@ theorem chainGroundSpace_toTensorFromBlocks_le_iSup_of_reindexed_projectionSpan
 
 This combines the already-proved forward inclusion with
 `chainGroundSpace_toTensorFromBlocks_le_iSup_of_reindexed_projectionSpan`. The
-only CF/BNT-specific finite-span assumption here is the projection-span input;
-the remaining boundary-matrix representation/commutation hypothesis is the
-wrapping-window output that supplies the boundary matrix to which the commutant
-reduction applies. -/
+only CF/BNT-specific finite-span assumption here is the #911 projection-span
+input; the remaining boundary-matrix representation/commutation hypothesis is
+the wrapping-window output that supplies the boundary matrix to which the
+commutant reduction applies. -/
 theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_of_reindexed_projectionSpan
     (A : (j : Fin r) → MPSTensor d (dim j))
     (hCF : IsCanonicalFormBNT μ A) {L N m : ℕ}
@@ -440,10 +433,10 @@ private theorem parentHamiltonianGroundSpace_le_bntSpan_of_block_chain_split
 /-- Conditional containment in the BNT span from projection-span and boundary data.
 
 This is the parent-Hamiltonian endgame after a block split has been produced by
-`chainGroundSpace_toTensorFromBlocks_le_iSup_of_reindexed_projectionSpan`.  The
-projection-span hypothesis is the finite CF/BNT input still tracked separately;
-the boundary hypothesis is the wrapping/open-chain output that supplies the
-commuting boundary matrix.  The proof then delegates to
+`chainGroundSpace_toTensorFromBlocks_le_iSup_of_reindexed_projectionSpan`. The
+projection-span hypothesis is the #911 finite CF/BNT input still tracked
+separately; the boundary hypothesis is the wrapping/open-chain output that
+supplies the commuting boundary matrix. The proof then delegates to
 `parentHamiltonianGroundSpace_le_bntSpan_of_block_chain_split`, so the final step
 uses the existing blockwise injective uniqueness theorem. -/
 theorem parentHamiltonianGroundSpace_le_bntSpan_of_reindexed_projectionSpan
@@ -513,12 +506,11 @@ The remaining missing ingredient is therefore a **periodic-chain block
 splitting theorem** of the form
 `parentHamiltonianGroundSpace (μ := μ) A L N ≤ ⨆ j, chainGroundSpace (A j) L N`,
 saying that a state whose cyclic windows all lie in the block-diagonal local
-ground space decomposes into a sum of block chain-ground-state components.
-The block-diagonal commutant reduction in `BlockDiagonalCommutant` now supplies the
-algebraic off-block-zero step once the virtual sector projections are known to
-lie in the finite word span of the assembled tensor. The repository still lacks
-that CF/BNT finite-span block-separation theorem and the resulting periodic-chain
-block-splitting infrastructure.
+ground space decomposes into a sum of block chain-ground-state components. The
+conditional Route B endgame in this file supplies the algebraic off-block-zero
+step once the #911 virtual-sector projection-span input is available and the
+wrapping/open-chain comparison has produced a commuting boundary matrix; it does
+not replace either of those remaining structural inputs.
 
 Given that block-splitting theorem, the ⊆ direction becomes:
 ```
