@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.CanonicalForm.BNTGrouping
+import TNLean.MPS.BNT.Construction
 import TNLean.MPS.FundamentalTheorem.SectorDecomposition
 import TNLean.MPS.SharedInfra.GaugePhase
 import TNLean.MPS.Overlap.CastLemmas
@@ -69,10 +70,23 @@ Theorem matching, etc.).
   the reduction output to a BNT-grouped `SectorDecomposition`.  **Fully proved.**
   Requires a `hNonDecay` hypothesis for equal-norm blocks.
 
+* `exists_eventually_linearIndependent_of_overlap_tendsto_orthonormal` —
+  turns asymptotic orthonormality of MPV overlaps into the existential eventual
+  linear-independence form used by `HasBNTSectorData`.
+
+* `exists_eventually_linearIndependent_of_tp_primitive_irr_blocks_of_blocksNotGaugePhaseEquiv` —
+  derives that eventual linear independence from TP / primitive / irreducible
+  blocks once the family is already separated by non-gauge-phase-equivalence.
+
 * `exists_bnt_sectorDecomp_of_linearIndependent` — conditional construction
   toward the post-#886 `HasBNTSectorData` predicate.  It forms the granular
   `trivialSectorDecomp` as a BNT sector decomposition when the actual BNT
   linear-independence condition is supplied explicitly.
+
+* `exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_of_blocksNotGaugePhaseEquiv` —
+  the separated-family constructor: it retains all separated basis blocks,
+  including equal-modulus ones, and proves `HasBNTSectorData` from overlap
+  asymptotics rather than from an explicit linear-independence hypothesis.
 
 * `exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_of_linearIndependent` —
   signature-compatible reformulation retaining the TP / primitive / irreducible
@@ -375,7 +389,64 @@ theorem bnt_grouping_single_norm_class_of_tp_primitive_irr_blocks
       exact ⟨ζ, hζne, hζ_norm, hmpv⟩
   exact bnt_grouping_single_norm_class μ blocks k0 hμne hNorm hPhase
 
-/-! ### §4. Conditional sector construction under BNT linear independence -/
+/-! ### §4. Eventual independence from separated overlap data -/
+
+/-- **Eventual BNT linear independence for an already separated normal family.**
+
+For TP primitive irreducible blocks that are pairwise not gauge-phase equivalent,
+self-overlaps tend to `1` and cross-overlaps tend to `0`.  Hence their MPV states
+are eventually linearly independent.  This supplies the missing linear-independence
+step after a future one-sided BNT construction has chosen separated representatives
+and absorbed all repeated gauge phases into sector weights. -/
+theorem exists_eventually_linearIndependent_of_tp_primitive_irr_blocks_of_blocksNotGaugePhaseEquiv
+    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
+    (blocks : (k : Fin r) → MPSTensor d (dim k))
+    (hTP : ∀ k, ∑ i : Fin d, (blocks k i)ᴴ * blocks k i = 1)
+    (hIrr : ∀ k, IsIrreducibleTensor (blocks k))
+    (hPrim : ∀ k, _root_.IsPrimitive (transferMap (d := d) (D := dim k) (blocks k)))
+    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) blocks) :
+    ∃ N0 : ℕ, ∀ N > N0,
+      LinearIndependent ℂ (fun k : Fin r => mpvState (d := d) (blocks k) N) := by
+  apply exists_eventually_linearIndependent_of_overlap_tendsto_orthonormal blocks
+  · intro k
+    exact overlap_tendsto_one_of_peripheralPrimitive_of_irreducible
+      (blocks k) (hIrr k) (hTP k) (hPrim k)
+  · intro j k hjk
+    exact cross_overlap_tendsto_zero_of_separated_normalCFBNT_data blocks
+      (HasIrreducibleBlocks.ofForall hIrr)
+      (IsLeftCanonicalBlockFamily.ofForall hTP)
+      hBlocks j k hjk
+
+/-- **Separated-family BNT sector construction.**
+
+If the TP primitive irreducible input blocks are already pairwise separated by
+non-gauge-phase-equivalence, the granular sector decomposition is a genuine BNT
+sector decomposition: it represents the original weighted block sum and satisfies
+`HasBNTSectorData` by the overlap-derived eventual linear independence above.
+
+This theorem does not collapse gauge-phase-equivalent input blocks.  Instead it
+identifies the exact remaining task for the full one-sided construction: first
+choose separated representatives and absorb the corresponding phases into sector
+weights, then apply this constructor. -/
+theorem exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_of_blocksNotGaugePhaseEquiv
+    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ)
+    (blocks : (k : Fin r) → MPSTensor d (dim k))
+    (hTP : ∀ k, ∑ i : Fin d, (blocks k i)ᴴ * blocks k i = 1)
+    (hIrr : ∀ k, IsIrreducibleTensor (blocks k))
+    (hPrim : ∀ k, _root_.IsPrimitive (transferMap (d := d) (D := dim k) (blocks k)))
+    (hμne : ∀ k, μ k ≠ 0)
+    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) blocks) :
+    ∃ P : SectorDecomposition d,
+      SameMPV₂ P.toTensor (toTensorFromBlocks (d := d) (μ := μ) blocks) ∧
+      HasBNTSectorData (d := d) P := by
+  refine ⟨trivialSectorDecomp μ blocks hμne,
+    sameMPV₂_trivialSectorDecomp μ blocks hμne, ?_⟩
+  simpa [trivialSectorDecomp] using
+    exists_eventually_linearIndependent_of_tp_primitive_irr_blocks_of_blocksNotGaugePhaseEquiv
+      blocks hTP hIrr hPrim hBlocks
+
+/-! ### §5. Conditional sector construction under BNT linear independence -/
 
 /-- **Minimal granular sector decomposition carrying current `HasBNTSectorData`.**
 

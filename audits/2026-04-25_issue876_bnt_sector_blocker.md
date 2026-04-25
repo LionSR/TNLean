@@ -69,3 +69,24 @@ from the blocked TP-primitive output.  Informally, it must:
 Until that theorem exists, #860 and #877 should continue to treat the one-sided
 BNT sector pair as a hypothesis, as in
 `fundamentalTheorem_after_blocking_1606_sector_of_bntPair_matched`.
+
+## Wave 14 slot D update
+
+The branch `wave14-D-876-bnt-basis` removes one real sub-blocker without
+claiming the full construction.  It adds a separated-family result:
+
+- `MPSTensor.exists_eventually_linearIndependent_of_overlap_tendsto_orthonormal`
+  rewrites the existing overlap-orthonormality criterion into the existential
+  threshold form used by `HasBNTSectorData`.
+- `MPSTensor.exists_eventually_linearIndependent_of_tp_primitive_irr_blocks_of_blocksNotGaugePhaseEquiv`
+  derives that threshold from TP / primitive / irreducible blocks once the
+  chosen family is already pairwise non-gauge-phase-equivalent.
+- `MPSTensor.exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_of_blocksNotGaugePhaseEquiv`
+  applies the granular sector construction to such a separated family and proves
+  the current `HasBNTSectorData` predicate without an explicit LI hypothesis.
+
+This retains distinct basis tensors even at equal coefficient modulus.  The
+remaining #876 theorem is now more precise: construct the separated family from
+arbitrary TP-primitive-irreducible blocks by identifying gauge-phase-equivalent
+normal tensors, absorbing the associated phases into sector weights, and proving
+that the constructed representatives satisfy `BlocksNotGaugePhaseEquiv`.
