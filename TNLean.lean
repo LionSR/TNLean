@@ -31,6 +31,7 @@ import TNLean.Algebra.ScalarPowerSumIdentity
 import TNLean.Algebra.BurnsideMatrix
 import TNLean.Algebra.IrreducibleTensorAction
 import TNLean.Algebra.MatrixFrobenius
+import TNLean.Algebra.PerronFrobenius.RankOne
 import TNLean.Algebra.ProjectiveRepresentation
 import TNLean.Algebra.ScalarCommutant
 import TNLean.Algebra.CocycleCohomology

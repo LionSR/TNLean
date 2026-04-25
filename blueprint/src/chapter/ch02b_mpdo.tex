@@ -475,12 +475,15 @@ strong subadditivity for a normalized three-site reduced state.
     \lean{MPOTensor.ExplicitEtaOperators.traceMatrix_apply}
     \lean{MPOTensor.ExplicitEtaOperators.traceMatrixRe}
     \lean{MPOTensor.ExplicitEtaOperators.traceMatrixRe_apply}
+    \lean{MPOTensor.ExplicitEtaOperators.traceMatrixRe_nonneg}
     \leanok
     \uses{def:mpdo_explicit_eta_operators}
     Every explicit neighboring $\eta$-family determines a sector-by-sector trace
     matrix. We record both its complex-valued form and the real-part version,
     which is the direct interface to the real Perron--Frobenius matrix $T$ used
-    in the rank-one step.
+    in the rank-one step. Positivity of the neighboring operators gives
+    entrywise nonnegativity of this real trace matrix; matrix-level positive
+    semidefiniteness of $T$ is a separate structural condition.
 \end{definition}
 
 \begin{definition}[Auxiliary matrix predicates for the rank-one step]
@@ -488,19 +491,22 @@ strong subadditivity for a normalized three-site reduced state.
     \lean{Matrix.TracePowersConstant}
     \lean{Matrix.HasRankOneFactorization}
     \lean{Matrix.PrimitiveTracePowersConstantImpliesRankOne}
+    \lean{Matrix.PosSemidef.trace_sq_eq_sum_eigenvalues_sq}
+    \lean{Matrix.PosSemidefTracePowersConstantImpliesRankOne}
+    \lean{Matrix.primitiveTracePowersConstantImpliesRankOne_of_posSemidef}
     \leanok
     The auxiliary predicates record three matrix-theoretic ingredients used in
     the rank-one step of Appendix~C.2, Lemma~C.4: constant traces of all
     positive powers, existence of a rank-one factorization $T = a b^\top$, and
-    the Perron--Frobenius implication from primitivity together with constant
-    trace powers to such a factorization.
+    the scoped Perron--Frobenius implication from primitivity together with
+    constant trace powers to such a factorization.
 
-    The last predicate is used as a scoped hypothesis, not a globally provable
-    theorem. As a universal statement over primitive nonnegative matrices it is
-    false; a concrete $3 \times 3$ counterexample is recorded in the archive.
-    Discharging the hypothesis in the simple-MPDO setting therefore requires
-    the extra structure carried by the specific $T$ arising from the positive
-    semidefinite $\eta$-operators.
+    The scoped implication is not a globally provable theorem. As a universal
+    statement over primitive nonnegative matrices it is false; a concrete
+    $3 \times 3$ counterexample is recorded in the archive. The corrected
+    criterion proved here adds positive semidefiniteness and trace normalization,
+    which provide the diagonalizability needed to turn the trace-power condition
+    into a rank-one factorization.
 \end{definition}
 
 \begin{theorem}[SAL and ZCL imply rank-one $T$ (scoped form)]
@@ -528,6 +534,29 @@ strong subadditivity for a normalized three-site reduced state.
     The Perron--Frobenius input gives the factorization $T = a b^\top$.
     Taking traces and using $\tr(a b^\top) = a \cdot b$ converts the
     normalization $\tr(T) = 1$ into $a \cdot b = 1$.
+\end{proof}
+
+\begin{theorem}[PSD-corrected rank-one $T$ criterion]
+    \label{thm:psd_trace_powers_rank_one_t}
+    \lean{MPOTensor.sal_zcl_implies_rank_one_T_of_posSemidef}
+    \leanok
+    \uses{def:matrix_trace_rankone_predicates, thm:sal_zcl_implies_rank_one_t}
+    Let $T$ be the real matrix extracted from the local $\eta$-data. Assume that
+    $T$ is primitive, positive semidefinite, normalized by $\tr(T)=1$, and has
+    constant traces on all positive powers. Then
+    \[
+        T = a b^\top
+    \]
+    for some vectors $a$ and $b$, with $a \cdot b = 1$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:matrix_trace_rankone_predicates, thm:sal_zcl_implies_rank_one_t}
+    The positive-semidefinite matrix criterion diagonalizes $T$, uses the first
+    two trace moments to show that exactly one eigenvalue is nonzero, and hence
+    supplies the scoped rank-one input. The scoped Lemma~C.4 statement then
+    gives the factorization and trace normalization.
 \end{proof}
 
 \section{Horizontal and Vertical Canonical Forms}
