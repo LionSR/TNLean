@@ -18,17 +18,28 @@ on:
   pull_request_review:
     types: [submitted]
 
+# Share the responder concurrency lane with claude.yml (same group name),
+# so @claude and @chatgpt jobs on the same issue/PR queue rather than racing
+# to push to the same branch.
 concurrency:
-  group: codex-respond-${{ github.event.issue.number || github.event.pull_request.number || github.event.comment.id }}
+  group: claude-respond-${{ github.event.issue.number || github.event.pull_request.number || github.event.comment.id }}
   cancel-in-progress: false
 
 jobs:
   codex:
+    # Skip when:
+    #   - sender is a bot (e.g. Copilot reposting a review that contains "@chatgpt") —
+    #     openai/codex-action errors out on non-collaborator actors anyway, so the
+    #     job would just burn minutes setting up Lean before failing.
+    #   - the same trigger also mentions @claude — let claude.yml handle it to avoid
+    #     two bots editing the same branch in parallel.
     if: |
-      (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@chatgpt')) ||
-      (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@chatgpt')) ||
-      (github.event_name == 'pull_request_review' && contains(github.event.review.body, '@chatgpt')) ||
-      (github.event_name == 'issues' && (contains(github.event.issue.body, '@chatgpt') || contains(github.event.issue.title, '@chatgpt')))
+      github.event.sender.type != 'Bot' && (
+        (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@chatgpt') && !contains(github.event.comment.body, '@claude')) ||
+        (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@chatgpt') && !contains(github.event.comment.body, '@claude')) ||
+        (github.event_name == 'pull_request_review' && contains(github.event.review.body, '@chatgpt') && !contains(github.event.review.body, '@claude')) ||
+        (github.event_name == 'issues' && (contains(github.event.issue.body, '@chatgpt') || contains(github.event.issue.title, '@chatgpt')) && !(contains(github.event.issue.body, '@claude') || contains(github.event.issue.title, '@claude')))
+      )
     runs-on: ubuntu-latest
     timeout-minutes: 45
 
