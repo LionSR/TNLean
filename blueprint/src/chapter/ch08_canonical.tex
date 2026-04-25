@@ -123,7 +123,8 @@ and~\cite[Ch.~6]{Wolf2012Quantum}.
 \end{proof}
 
 \begin{theorem}[MPV under block normalization]\label{thm:mpv_normalize}
-	\notready
+	\lean{MPSTensor.mpv_toTensorFromBlocks_normalize}
+	\leanok
 	\uses{def:tensor_from_blocks, def:mpv}
 	For any nonzero scaling factors $\mu_k$, set
 	$\eta_k := \mu_k / |\mu_k|$ and $B_k := |\mu_k| A_k$.
@@ -138,7 +139,7 @@ and~\cite[Ch.~6]{Wolf2012Quantum}.
 	remaining factor $\eta_k$ is a unit-modulus phase.
 \end{theorem}
 
-\begin{proof}\uses{thm:mpv_decomposition, lem:eval_word_smul}
+\begin{proof}\leanok\uses{thm:mpv_decomposition, lem:eval_word_smul}
 	By the MPV decomposition
 	(Theorem~\ref{thm:mpv_decomposition}),
 	the $k$-th contribution of $\bigoplus_k \mu_k A_k$ is
