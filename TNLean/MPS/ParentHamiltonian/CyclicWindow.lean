@@ -173,7 +173,7 @@ def cyclicCfg {N : ℕ} (_hN : 0 < N) (L : ℕ)
 /-- If a site has cyclic offset `r` from `i`, then it is the site `i + r` modulo
 `N`. -/
 theorem eq_cyclic_site_of_offset_eq {N : ℕ} (hN : 0 < N) {i k : Fin N} {r : ℕ}
-    (hr : r < N) (h : (k.val + N - i.val) % N = r) :
+    (h : (k.val + N - i.val) % N = r) :
     k = ⟨(i.val + r) % N, Nat.mod_lt _ hN⟩ := by
   ext
   by_cases hik : i.val ≤ k.val

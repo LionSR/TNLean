@@ -734,9 +734,10 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
           MPSTensor.chainGroundSpace_le_groundSpace_of_isNBlkInjective}
     \leanok
     \uses{rem:cyclic_window_operators, thm:normal_open_chain_range_reduction}
-    Let $A$ be $L_0$-block injective with $L_0>0$. If an $N$-site periodic-chain
-    state satisfies all cyclic ground-space constraints at some range
-    $L \ge L_0+1$, then it lies in the open-chain ground space $G_N(A)$.
+    Let $A$ be $L_0$-block injective with $L_0>0$ and $D \ge 1$.
+    If an $N$-site periodic-chain state satisfies all cyclic ground-space
+    constraints at some range $L_0+1 \le L \le N$, then it lies in the
+    open-chain ground space $G_N(A)$.
 \end{theorem}
 
 \begin{proof}

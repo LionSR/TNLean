@@ -39,6 +39,8 @@ with the periodic boundary condition:
 * `MPSTensor.mpv_mem_groundSpace` — the MPV lies in the ground space
 * `MPSTensor.chainGroundSpace` — the periodic-chain ground space as intersection
   of cyclic window ground submodules
+* `MPSTensor.chainGroundSpace_le_groundSpace_of_isNBlkInjective` — cyclic
+  normal-range constraints imply open-chain ground-space membership
 * `MPSTensor.groundSpace_unique_periodic` — uniqueness on the periodic chain
 * `MPSTensor.parentHamiltonian_unique_gs_injective` — uniqueness for `2L₀` sites
 * `MPSTensor.parentHamiltonian_unique_gs_normal` — optimal uniqueness for `L₀+1` sites
@@ -85,13 +87,10 @@ On a periodic chain of `N` sites, the ground space of the parent Hamiltonian
 is the set of states whose restriction to every cyclic window of `L` consecutive
 sites lies in `G_L(A)`.
 
-The full periodic-chain window restriction is not yet expressed directly in
-terms of cyclic window maps. We therefore expose only the chain ground-space
-interface for now, and will define it from local window constraints once those
-maps are in place. -/
-
--- TODO(parent-hamiltonian): define `chainGroundSpace` as the intersection of
--- cyclic window ground submodules once the periodic window maps are in place.
+The definition below makes this intersection explicit using the cyclic restriction
+maps from `CyclicWindow.lean`. It uses `⊤` for degenerate lengths (`N = 0` or
+`L > N`) so that downstream theorems can state their nondegenerate hypotheses
+separately. -/
 
 /-- The periodic chain ground space: the set of states `ψ` on `N` sites such
 that every cyclic window of `L` consecutive sites restricts into `G_L(A)`.
@@ -108,9 +107,8 @@ noncomputable def chainGroundSpace (A : MPSTensor d D) (L N : ℕ) :
 
 The proof uses trace cyclicity: for each cyclic window at position `i`, the
 restriction of the MPV to that window equals `groundSpaceMap A L X_τ` where
-`X_τ` is the product of `A`-matrices at outside positions.
-
-**Status**: requires cyclic list decomposition and trace cyclicity argument. -/
+`X_τ` is the product of `A`-matrices at outside positions. The cyclic list
+bookkeeping is provided by `mpv_window_mem_groundSpace`. -/
 theorem mpv_mem_chainGroundSpace (A : MPSTensor d D) (L N : ℕ)
     (hN : 0 < N) (hLN : L ≤ N) :
     (mpv A : NSiteSpace d N) ∈ chainGroundSpace A L N := by
@@ -145,7 +143,7 @@ theorem chainGroundSpace_le_chainGroundSpace_succ (A : MPSTensor d D)
     · rw [dif_neg hsmall, dif_neg hsmall]
       by_cases hlast : (k.val + N - i.val) % N = L
       · have hk : k = peeled :=
-          eq_cyclic_site_of_offset_eq hN (by omega : L < N) hlast
+          eq_cyclic_site_of_offset_eq hN hlast
         simp [τ', hk]
       · simp [τ', hlast]
   have hbig := hψ i τ
@@ -403,7 +401,8 @@ block-injective tensors.
 
 This combines cyclic window monotonicity (peeling longer cyclic windows down to
 `L₀ + 1`), the non-wrapping cyclic/contiguous identification, and the open-chain
-range-reduction theorem `contiguous_mem_groundSpace_of_isNBlkInjective`. -/
+range-reduction theorem `contiguous_mem_groundSpace_of_isNBlkInjective`. It stops
+at open-chain membership; the wrapped-boundary scalarity step remains separate. -/
 theorem chainGroundSpace_le_groundSpace_of_isNBlkInjective
     {A : MPSTensor d D} [NeZero D] {L₀ L N : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
