@@ -9049,12 +9049,101 @@
 
   </div>
 </div>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:route_b_block_diagonal_commutant_reduction">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">19.111</span>
+    <span class="lemma_thmtitle">Block-diagonal commutant reduction from span extension</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-parent_hamiltonian.html#lem:route_b_block_diagonal_commutant_reduction">#</a>
+    
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001430"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mps.html#def:block_projection">Definition 2.28</a></li>
+          
+          <li><a href="ch-mps.html#def:block_diagonal_matrix">Definition 2.29</a></li>
+          
+          <li><a href="ch-mps.html#lem:block_diagonal_of_commutes_block_projection">Lemma 2.31</a></li>
+          
+          <li><a href="ch-mps.html#lem:block_diagonal_iff_off_block_zero">Lemma 2.30</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/Matrix.isBlockDiagonal'_of_commutes_span_blockProjection" class="lean_decl">Matrix.isBlockDiagonal'_of_commutes_span_blockProjection</a></li>
+          
+          <li><a href="../docs/find/#doc/MPSTensor.isBlockDiagonal'_of_commutes_reindexed_wordSpan" class="lean_decl">MPSTensor.isBlockDiagonal'_of_commutes_reindexed_wordSpan</a></li>
+          
+          <li><a href="../docs/find/#doc/MPSTensor.offBlock_zero_of_commutes_reindexed_wordSpan" class="lean_decl">MPSTensor.offBlock_zero_of_commutes_reindexed_wordSpan</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>      Suppose the virtual sector projections \(P_j\) of a dependent direct-sum bond space lie in the span of a family of matrices. Any boundary matrix commuting with that family commutes with each \(P_j\), hence is block diagonal. Applied after pulling an assembled tensor back along the direct-sum reindexing, length-\(m\) word commutation plus the corresponding projection-span hypothesis forces all off-block entries of the pulled-back boundary matrix to vanish. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000001430">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> Commutation is linear in the matrix from the spanning family, so it extends from the generators to their span. Since each \(P_j\) lies in that span, the boundary matrix commutes with every sector projection. Lemma&#160;<a href="ch-mps.html#lem:block_diagonal_of_commutes_block_projection">2.31</a> then gives block diagonality, and Lemma&#160;<a href="ch-mps.html#lem:block_diagonal_iff_off_block_zero">2.30</a> gives the entrywise off-block-zero formulation. </p>
+
+  </div>
+</div>
 <div class="theorem_thmwrapper theorem-style-plain" id="thm:parent_ground_space_le_bnt_span">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">19.111</span>
+    <span class="theorem_thmlabel">19.112</span>
     <span class="theorem_thmtitle">Containment in the BNT span by block decomposition</span>
     <div class="thm_header_extras">
 
@@ -9063,7 +9152,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#thm:parent_ground_space_le_bnt_span">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001430"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001431"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9084,6 +9173,8 @@
           <li><a href="ch-parent_hamiltonian.html#def:bnt_span">Definition 19.106</a></li>
           
           <li><a href="ch-parent_hamiltonian.html#thm:chain_ground_space_eq_mpv_blk">Theorem 19.58</a></li>
+          
+          <li><a href="ch-parent_hamiltonian.html#lem:route_b_block_diagonal_commutant_reduction">Lemma 19.111</a></li>
           
         </ul>
     
@@ -9118,7 +9209,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001430">
+<div class="proof_wrapper" id="a0000001431">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9126,7 +9217,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>The missing step is the periodic block decomposition of the assembled chain ground space. Once such a decomposition is available, one applies the blockwise injective uniqueness theorem to each block separately and recovers the BNT span. </p>
+  <p>The remaining structural step is the periodic block decomposition of the assembled chain ground space. The block-diagonal commutant reduction above supplies the algebraic off-block-zero step once the virtual sector projections are obtained from the finite word span of the assembled tensor. With that decomposition available, one applies the blockwise injective uniqueness theorem to each block separately and recovers the BNT span. </p>
 
   </div>
 </div>
@@ -9135,7 +9226,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">19.112</span>
+    <span class="theorem_thmlabel">19.113</span>
     <span class="theorem_thmtitle">Ground space equals span of BNT</span>
     <div class="thm_header_extras">
 
@@ -9144,7 +9235,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#thm:gs_eq_bnt_span">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001431"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001432"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9160,7 +9251,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-parent_hamiltonian.html#thm:parent_ground_space_le_bnt_span">Theorem 19.111</a></li>
+          <li><a href="ch-parent_hamiltonian.html#thm:parent_ground_space_le_bnt_span">Theorem 19.112</a></li>
           
           <li><a href="ch-parent_hamiltonian.html#lem:bnt_mpv_mem_ground_space">Lemma 19.107</a></li>
           
@@ -9198,13 +9289,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   If \(1 {\lt} L\) and \(N \ge L + 1\), then for a canonical-form/BNT family the assembled parent ground space equals the BNT span: </p>
-<div class="displaymath" id="a0000001432">
+<div class="displaymath" id="a0000001433">
   \[  \operatorname {ParentGround}_{N,L}(A) = \operatorname {BNTSpan}_{N}(A).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001431">
+<div class="proof_wrapper" id="a0000001432">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9213,11 +9304,11 @@
   </div>
   <div class="proof_content">
   <p>We prove the two inclusions separately. The inclusion </p>
-<div class="displaymath" id="a0000001433">
+<div class="displaymath" id="a0000001434">
   \[  \operatorname {ParentGround}_{N,L}(A) \subseteq \operatorname {BNTSpan}_{N}(A)  \]
 </div>
-<p> is exactly Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:parent_ground_space_le_bnt_span">19.111</a>. For the reverse inclusion, Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:bnt_mpv_mem_ground_space">19.107</a> shows that each BNT MPV lies in \(\operatorname {ParentGround}_{N,L}(A)\). Since the parent ground space is a linear subspace, it therefore contains every linear combination of such vectors, and hence contains \(\operatorname {BNTSpan}_{N}(A)\). Thus </p>
-<div class="displaymath" id="a0000001434">
+<p> is exactly Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:parent_ground_space_le_bnt_span">19.112</a>. For the reverse inclusion, Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:bnt_mpv_mem_ground_space">19.107</a> shows that each BNT MPV lies in \(\operatorname {ParentGround}_{N,L}(A)\). Since the parent ground space is a linear subspace, it therefore contains every linear combination of such vectors, and hence contains \(\operatorname {BNTSpan}_{N}(A)\). Thus </p>
+<div class="displaymath" id="a0000001435">
   \[  \operatorname {BNTSpan}_{N}(A) \subseteq \operatorname {ParentGround}_{N,L}(A),  \]
 </div>
 <p> and the two spaces are equal. </p>
