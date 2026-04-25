@@ -17,10 +17,10 @@ In `TNLean/Algebra/ScalarCommutant.lean`:
 
 - `Matrix.blockProjection`: the dependent block projection onto a chosen summand
   of `Σ i, n i`.
-- `Matrix.IsBlockDiagonal`: a matrix is a dependent `Matrix.blockDiagonal'`.
-- `Matrix.isBlockDiagonal_iff_offBlock_zero`: equivalence with vanishing of all
+- `Matrix.IsBlockDiagonal'`: a matrix is a dependent `Matrix.blockDiagonal'`.
+- `Matrix.isBlockDiagonal'_iff_offBlock_zero`: equivalence with vanishing of all
   off-diagonal block entries.
-- `Matrix.isBlockDiagonal_of_commutes_blockProjection`: if a matrix commutes with
+- `Matrix.isBlockDiagonal'_of_commutes_blockProjection`: if a matrix commutes with
   every block projection, then it is block diagonal.
 
 In `TNLean/MPS/SharedInfra/BlockAssembly.lean`:
@@ -40,7 +40,7 @@ diagonal.  The expected proof factors through block projections:
 2. Use CF/BNT separation to show that the commutant of these block-diagonal word
    matrices contains the projections onto individual BNT blocks, and no
    off-diagonal intertwiner survives between distinct blocks.
-3. Apply `Matrix.isBlockDiagonal_of_commutes_blockProjection` to force the
+3. Apply `Matrix.isBlockDiagonal'_of_commutes_blockProjection` to force the
    boundary matrix to have zero off-diagonal blocks.
 
 This PR proves step 3, and adds the word-evaluation identity used in step 1.

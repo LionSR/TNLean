@@ -39,13 +39,15 @@ theorem evalWord_toTensorFromBlocks_eq_reindex_blockDiagonal
   let α := (k : Fin r) × Fin (dim k)
   let e : α ≃ Fin (∑ k, dim k) := finSigmaFinEquiv
   let BD : Fin d → Matrix α α ℂ := fun i => Matrix.blockDiagonal' (fun k => μ k • A k i)
+  have hfun : (fun i : Fin d => toTensorFromBlocks (d := d) (μ := μ) A i) =
+      fun i => (Matrix.reindex e e) (BD i) := by
+    funext i
+    rfl
   calc
     evalWord (toTensorFromBlocks (d := d) (μ := μ) A) w =
         (Matrix.reindex e e) (_root_.evalWord BD w) := by
-      simpa [toTensorFromBlocks, BD, e,
-        show (fun i : Fin d => toTensorFromBlocks (d := d) (μ := μ) A i) =
-          fun i => (Matrix.reindex e e) (BD i) from by funext i; rfl]
-        using evalWord_reindex (d := d) (e := e) (A := BD) w
+      simpa [toTensorFromBlocks, BD, e, hfun] using
+        evalWord_reindex (d := d) (e := e) (A := BD) w
     _ = (Matrix.reindex e e)
         (Matrix.blockDiagonal' fun k => (μ k) ^ w.length • evalWord (A k) w) := by
       congr 1
@@ -54,7 +56,8 @@ theorem evalWord_toTensorFromBlocks_eq_reindex_blockDiagonal
 /-- MPV of `toTensorFromBlocks` expands as a sum over blocks. -/
 theorem mpv_toTensorFromBlocks_eq_sum
     {r : ℕ} {dim : Fin r → ℕ}
-    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k)) {N : ℕ} (σ : Fin N → Fin d) :
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    {N : ℕ} (σ : Fin N → Fin d) :
     mpv (toTensorFromBlocks (d := d) (μ := μ) A) σ =
       ∑ k : Fin r, (μ k) ^ N • mpv (A k) σ := by
   classical
