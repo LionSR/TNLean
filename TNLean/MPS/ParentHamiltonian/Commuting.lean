@@ -28,6 +28,9 @@ parent Hamiltonians (NNCPH).
   the full Hamiltonian commutes with each local term.
 * `MPSTensor.ProductPairBridge.isNNCPH` — the product-pair witness packages
   the NNCPH conclusion once the local-projector family is available.
+* `MPSTensor.rfp_implies_nncph_of_appendixBExtraction` — a conditional internal
+  route from the proved Appendix B structural data plus the remaining
+  chain-space extraction to NNCPH, without using the external forward bridge.
 * `MPSTensor.rfp_implies_nncph` — scaffold for the RFP `⟹` NNCPH direction of
   Theorem 3.10.
 * `MPSTensor.nncph_implies_rfp` — scaffold for the NNCPH `⟹` RFP direction of
@@ -78,6 +81,24 @@ theorem ProductPairBridge.isNNCPH {A : MPSTensor d D} (hBridge : ProductPairBrid
     (N : ℕ) :
     IsNNCPH A N :=
   (hBridge.localProjectors N).isNNCPH
+
+/-- Conditional internal route for Theorem 3.10(i)⟹(iii).
+
+A normal left-canonical RFP tensor has the Appendix B structural data by
+`AppendixBStructuralData.ofRFP`. If the remaining chain-space extraction turns
+that structural witness into product-pair projector data, then the
+nearest-neighbor parent Hamiltonian is commuting on every finite chain.
+
+This theorem does not use `Axioms.rfp_to_nncph_commute`; it records the precise
+conditional theorem left after the structural form has been internalized. -/
+theorem rfp_implies_nncph_of_appendixBExtraction (A : MPSTensor d D) [NeZero D]
+    (hRFP : IsRFP A) (hNT : IsNormal A) (hLeft : IsLeftCanonical A)
+    (hExtract : AppendixBProductPairExtraction
+      (AppendixBStructuralData.ofRFP A hNT hRFP hLeft))
+    (N : ℕ) :
+    IsNNCPH A N :=
+  commuting_twoSite_localTerms_of_rfp_of_appendixBExtraction
+    A hNT hRFP hLeft hExtract N
 
 /-- The commuting condition is symmetric: if `h i j` holds, then `h j i` holds. -/
 theorem IsCommutingParentHam.symm {A : MPSTensor d D} {L N : ℕ}
