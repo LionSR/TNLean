@@ -42,6 +42,11 @@ rm -rf "$WORK_DIR/site/_layouts" "$WORK_DIR/site/assets" \
        "$WORK_DIR/site/badges"
 cp -r "$REPO_ROOT/home_page/"* "$WORK_DIR/site/"
 
+# Regenerate badge endpoints directly into the site so published JSON reflects
+# current sorry/axiom counts and toolchain versions, not committed (stale) values.
+echo "==> Regenerating badge endpoints..."
+python3 "$REPO_ROOT/scripts/write_badges.py" "$WORK_DIR/site/badges"
+
 # Update API docs (only with --with-docs)
 if [ "$WITH_DOCS" = true ]; then
   echo "==> Updating API docs..."
