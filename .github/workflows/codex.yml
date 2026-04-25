@@ -1,0 +1,169 @@
+name: Codex (Lean)
+
+# Mention-driven Codex counterpart to claude.yml. Triggers on `@chatgpt` in
+# issue/PR comments, reviews, and issue bodies. Distinct from auto-fix-codex.yml,
+# which is label-gated and runs after CI/blueprint/review workflows finish.
+#
+# `@chatgpt` is unregistered on GitHub (no user/org owns the handle), so the
+# mention does not collide with the OpenAI Codex GitHub Connector (`@codex`,
+# which posts as `chatgpt-codex-connector[bot]`).
+
+on:
+  issue_comment:
+    types: [created]
+  pull_request_review_comment:
+    types: [created]
+  issues:
+    types: [opened, assigned]
+  pull_request_review:
+    types: [submitted]
+
+concurrency:
+  group: codex-respond-${{ github.event.issue.number || github.event.pull_request.number || github.event.comment.id }}
+  cancel-in-progress: false
+
+jobs:
+  codex:
+    if: |
+      (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@chatgpt')) ||
+      (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@chatgpt')) ||
+      (github.event_name == 'pull_request_review' && contains(github.event.review.body, '@chatgpt')) ||
+      (github.event_name == 'issues' && (contains(github.event.issue.body, '@chatgpt') || contains(github.event.issue.title, '@chatgpt')))
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+      id-token: write
+      actions: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+          token: ${{ secrets.BOT_PAT || secrets.GITHUB_TOKEN }}
+
+      - name: Setup git identity
+        run: |
+          git config --global user.email "chatgpt-codex-connector[bot]@users.noreply.github.com"
+          git config --global user.name "chatgpt-codex-connector[bot]"
+
+      - name: Set up Lean toolchain and cache
+        uses: ./.github/actions/setup-lean
+        with:
+          install-blueprint: 'true'
+
+      - name: Run Codex
+        id: codex
+        uses: openai/codex-action@v1
+        env:
+          GH_TOKEN: ${{ secrets.BOT_PAT || secrets.GITHUB_TOKEN }}
+        with:
+          openai-api-key: ${{ secrets.OPENAI_API_KEY }}
+          # workspace-write blocks network; need outbound for `git push` and `gh ... comment`.
+          sandbox: danger-full-access
+          # Allow iterations when head of branch was authored by another bot
+          # (e.g. claude[bot] or chatgpt-codex-connector[bot]).
+          allow-bots: true
+          prompt: |
+            A user mentioned @chatgpt on this repository.
+
+            Event: ${{ github.event_name }}
+            Repository: ${{ github.repository }}
+            Issue/PR number: ${{ github.event.issue.number || github.event.pull_request.number }}
+            Triggering author: ${{ github.event.comment.user.login || github.event.review.user.login || github.event.issue.user.login }}
+
+            Instructions:
+            1. Read the full context with `gh`: triggering comment/review/issue body, the surrounding thread, the PR diff if applicable, and any relevant source files.
+               - PR comment: `gh pr view <num> --json ...` and `gh api repos/${{ github.repository }}/pulls/<num>/comments`.
+               - Issue comment / issue: `gh issue view <num> --json ...`.
+               - Review: read all threads via `gh api repos/${{ github.repository }}/pulls/<num>/reviews`.
+            2. Decide whether the request is a question (reply only) or a code change (edit + commit + reply).
+            3. Use your judgment on whether Mathlib scouting is needed. Warranted for new proofs, closing sorrys, or choosing proof strategies; unnecessary for cosmetic fixes, docstrings, imports, or renaming. When scouting, first read existing **Mathlib Scouting Reports** in PR/issue comments, then scout yourself with `exact?`, `apply?`, `rw?`, `simp?`, and by grepping `.lake/packages/mathlib/Mathlib/`. If asked explicitly to scout, post a fresh **Mathlib Scouting Report** with sections: Relevant Mathlib definitions, Relevant Mathlib lemmas/theorems, Relevant TNLean definitions, Suggested approach, Gaps to fill.
+            4. For code changes:
+               - On a PR: check out the PR's head branch (`gh pr checkout <num>`), edit, run `lake build` to verify zero errors and zero new `sorry`s, commit with prefix `[codex]`, push.
+               - On an issue: create a new branch `codex/issue-<NUMBER>-<short-description>` from main, edit, build, commit with prefix `[codex]`, push.
+            5. Reply via `gh pr comment <num>` or `gh issue comment <num>` summarizing what you did or answering the question. For review-thread triggers, reply directly to the triggering thread.
+            6. Do NOT resolve review threads — leave resolution to humans or the automated review workflow.
+
+            Quality bar (your work MUST satisfy ALL of these before committing):
+            - Proof integrity (BLOCKER): no `sorry`, `admit`, `native_decide` on non-trivial goals, `unsafeCast`, or new axioms. See docs/PROOF_INTEGRITY.md.
+            - Proof correctness (BLOCKER): structured proofs, not brute-force `simp`/`omega`/`ring` chains. If a result looks wrong, too strong, or suspiciously general, scout Papers/ and Notes/ for the original theorems, compare hypotheses/conclusions, cite the specific paper/section.
+            - Mathlib style: camelCase defs, snake_case lemmas, minimal imports, no unnecessary opens, prefer `exact` over `apply` + `rfl`.
+            - Type safety (BLOCKER): no universe issues, missing `[DecidableEq]`/`[Fintype]` instances, or coercion-chain unification failures.
+            - Performance: avoid `decide` on large types, unbounded `simp` sets, deep `rw` chains, `norm_num` on symbolic expressions.
+            - Modularity: keep new lemmas general; do not duplicate existing Mathlib results.
+            - Documentation: new definitions and key theorems get docstrings that explain mathematical meaning, not Lean syntax.
+            - Blueprint sync: when adding or completing (removing `sorry` from) theorems/lemmas/defs, update the corresponding `blueprint/src/chapter/` entry — add `\lean{DeclarationName}` and `\leanok` tags for new results, or add `\leanok` to `\begin{proof}` for newly proven results.
+            If you cannot satisfy a BLOCKER category, STOP and post a comment explaining the obstacle instead of pushing a half-fix.
+
+            Before changing theorem statements, first try to complete the proof using existing lemmas. Do not leave unrelated new sorrys.
+
+      - name: Auto-create PR for completed issue work
+        if: |
+          !cancelled() &&
+          steps.codex.outcome == 'success' &&
+          (github.event_name == 'issues' ||
+           (github.event_name == 'issue_comment' && !github.event.issue.pull_request))
+        env:
+          GH_TOKEN: ${{ secrets.BOT_PAT || github.token }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          REPO: ${{ github.repository }}
+          # Pass user-controlled text via env vars to avoid script injection
+          COMMENT_BODY: ${{ github.event.comment.body || '' }}
+          ISSUE_BODY: ${{ github.event.issue.body || '' }}
+          EVENT_ISSUE_TITLE: ${{ github.event.issue.title || '' }}
+          EVENT_NAME: ${{ github.event_name }}
+        run: |
+          set -euo pipefail
+
+          echo "Looking for branches matching codex/issue-${ISSUE_NUMBER}-*"
+
+          git fetch origin --no-tags "refs/heads/codex/issue-${ISSUE_NUMBER}-*:refs/remotes/origin/codex/issue-${ISSUE_NUMBER}-*" 2>/dev/null || true
+
+          BRANCH=$(git for-each-ref --sort=-committerdate --format='%(refname:lstrip=3)' \
+            "refs/remotes/origin/codex/issue-${ISSUE_NUMBER}-*" | head -1)
+
+          if [ -z "$BRANCH" ]; then
+            echo "No branch found for issue #${ISSUE_NUMBER} — Codex likely just replied without code changes."
+            exit 0
+          fi
+
+          echo "Found branch: $BRANCH"
+
+          EXISTING=$(gh pr list --repo "$REPO" --head "$BRANCH" --state all --json number --jq 'length')
+          if [ "$EXISTING" -gt 0 ]; then
+            echo "PR already exists for branch $BRANCH — skipping."
+            exit 0
+          fi
+
+          ISSUE_TITLE=$(gh issue view "$ISSUE_NUMBER" --repo "$REPO" --json title --jq '.title')
+
+          echo "Creating PR from $BRANCH → main for issue #${ISSUE_NUMBER}"
+
+          TRIGGER_TEXT=""
+          if [ "$EVENT_NAME" = "issue_comment" ]; then
+            TRIGGER_TEXT="$COMMENT_BODY"
+          else
+            TRIGGER_TEXT="$ISSUE_BODY $EVENT_ISSUE_TITLE"
+          fi
+
+          PR_BODY=$'Addresses #'"${ISSUE_NUMBER}"$'\n\nAuto-created by Codex action.'
+
+          PR_URL=$(gh pr create \
+            --repo "$REPO" \
+            --head "$BRANCH" \
+            --base main \
+            --title "feat: ${ISSUE_TITLE}" \
+            --body "$PR_BODY")
+
+          echo "PR created successfully: $PR_URL"
+          PR_NUM=$(echo "$PR_URL" | grep -oE '[0-9]+$')
+
+          if echo "$TRIGGER_TEXT" | grep -qiE 'auto[_ -]?fix'; then
+            echo "Autofix keyword detected — adding 'auto-fix-codex' label to PR #${PR_NUM}"
+            gh pr edit "$PR_NUM" --repo "$REPO" --add-label "auto-fix-codex" || true
+          fi
