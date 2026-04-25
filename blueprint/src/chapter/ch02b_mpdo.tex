@@ -483,6 +483,71 @@ strong subadditivity for a normalized three-site reduced state.
     in the rank-one step.
 \end{definition}
 
+
+\begin{theorem}[Positivity of bipartite partial traces]
+    \label{thm:matrix_possemidef_partial_traces}
+    \lean{Matrix.PosSemidef.traceLeft}
+    \lean{Matrix.PosSemidef.traceRight}
+    \leanok
+    If $\rho$ is positive semidefinite on a bipartite space $A \otimes B$, then
+    both reduced operators $\tr_A \rho$ and $\tr_B \rho$ are positive
+    semidefinite.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Write each partial trace as the finite sum, over the traced index, of a
+    principal submatrix of $\rho$. Principal submatrices of a positive
+    semidefinite matrix are positive semidefinite, and finite sums of positive
+    semidefinite matrices remain positive semidefinite.
+\end{proof}
+
+\begin{definition}[Hayashi--Markov extraction of explicit $\eta$-operators]
+    \label{def:mpdo_eta_of_hayashi_markov}
+    \lean{MPOTensor.ExplicitEtaOperators.ofHayashiMarkov}
+    \leanok
+    \uses{def:mpdo_eta_structure, def:mpdo_explicit_eta_operators,
+        thm:matrix_possemidef_partial_traces}
+    Every Hayashi decomposition witness $h_\eta$ canonically produces an
+    explicit neighboring $\eta$-family by Kronecker-multiplying the
+    sector-reduced states on the neighboring bond spaces:
+    \[
+        \eta_{k,h}
+        := \tr_C\bigl(\rho_{b_2 C}^{(k)}\bigr)
+            \otimes \tr_A\bigl(\rho_{A b_1}^{(h)}\bigr).
+    \]
+    Positive semidefiniteness of each $\eta_{k,h}$ follows from the fact
+    that partial traces preserve positivity and that positive
+    semidefiniteness is closed under Kronecker products. This is the
+    sector-reduced extraction layer; the remaining connection to
+    Appendix~C.2 is the identification of this family with the inverse-map
+    construction in the original simple-MPDO tensor coordinates.
+\end{definition}
+
+\begin{theorem}[Trace matrix of the Hayashi--Markov $\eta$-operators]
+    \label{thm:mpdo_eta_of_hayashi_markov_trace_matrix}
+    \lean{MPOTensor.ExplicitEtaOperators.traceMatrix_ofHayashiMarkov}
+    \lean{MPOTensor.ExplicitEtaOperators.traceMatrixRe_ofHayashiMarkov}
+    \leanok
+    \uses{def:mpdo_eta_of_hayashi_markov,
+        def:mpdo_explicit_eta_trace_matrix}
+    The trace matrix induced by the extracted family is entrywise
+    $T_{k,h} = 1$ in both its complex-valued form and its real-valued form,
+    matching the paper's normalization $T_{k,h} = a_k b_h$ with
+    $a_k = b_h = 1$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:mpdo_eta_of_hayashi_markov,
+        def:mpdo_explicit_eta_trace_matrix}
+    Each $\rho_{b_2 C}^{(k)}$ is a density matrix, hence has unit trace; the
+    partial trace $\tr_C$ preserves the trace. The analogous statement holds
+    for $\tr_A \rho_{A b_1}^{(h)}$. Multiplicativity of the trace under
+    Kronecker products gives $T_{k,h} = 1 \cdot 1 = 1$, and taking real parts
+    gives the real-valued statement.
+\end{proof}
+
 \begin{theorem}[Entrywise nonnegativity of the real trace matrix]
     \label{thm:mpdo_explicit_eta_trace_matrix_nonneg}
     \lean{MPOTensor.ExplicitEtaOperators.traceMatrixRe_nonneg}
