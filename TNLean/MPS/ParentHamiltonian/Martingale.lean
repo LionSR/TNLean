@@ -64,6 +64,9 @@ concrete Friedrichs-angle/row-sum lower bound that
 * `MPSTensor.localTermESSummand_isPositive` — positivity of the conjugated
   cyclic-window summands expected to appear in the averaged
   `EuclideanSpace` formula for local terms.
+* `MPSTensor.parentHamiltonianES_gap_bound_of_quadratic_form` — the explicit
+  reduction from the parent-Hamiltonian gap statement to the uniform
+  Friedrichs/martingale quadratic-form estimate.
 * `MPSTensor.parentHamiltonian_gapped` — uniform spectral gap for MPS
   parent Hamiltonians on injective tensors, obtained from the
   Friedrichs-angle bound recorded in
@@ -76,7 +79,7 @@ open scoped BigOperators InnerProductSpace
 
 The quadratic-form ⟹ norm-bound step is purely operator-theoretic and has no
 MPS content in its signature, so it lives in its own `FrustrationFree`
-namespace. The MPS-specific wrapper `MPSTensor.parentHamiltonian_gapped` below
+namespace. The MPS-specific theorem `MPSTensor.parentHamiltonian_gapped` below
 instantiates it for the parent Hamiltonian. -/
 
 namespace FrustrationFree
@@ -558,12 +561,73 @@ theorem parentHamiltonianGroundSpaceES_eq_ker_parentHamiltonianES
     v ∈ parentHamiltonianGroundSpaceES A L N ↔ parentHamiltonianES A L N v = 0 := by
   rw [parentHamiltonianGroundSpaceES_eq_ker_parentHamiltonianES, LinearMap.mem_ker]
 
+/-! ### Martingale quadratic-form reduction -/
+
+/-- A uniform quadratic-form estimate for the transported parent Hamiltonians
+implies the corresponding norm lower bound on the orthogonal complement of the
+transported ground space.
+
+This theorem isolates the operator-theoretic part of the remaining
+Friedrichs-angle route. The hypotheses already include the quantitative
+martingale/Friedrichs estimate
+
+`γ * re ⟪H_N v, v⟫ ≤ re ⟪H_N v, H_N v⟫`,
+
+to be supplied later from the finite-overlap projection geometry. The proof
+uses the established positivity of `parentHamiltonianES`, the kernel
+identification `parentHamiltonianGroundSpaceES_eq_ker_parentHamiltonianES`, and
+the abstract spectral-theorem step `FrustrationFree.spectralGap_of_martingale`. -/
+theorem parentHamiltonianES_norm_bound_of_quadratic_form
+    (A : MPSTensor d D) (L : ℕ) {γ : ℝ} (hγ : 0 < γ)
+    (hQuad : ∀ (N : ℕ) (_hLN : 2 * L ≤ N)
+      (v : EuclideanSpace ℂ (Cfg d N)),
+        γ * (⟪parentHamiltonianES A L N v, v⟫_ℂ).re ≤
+          (⟪parentHamiltonianES A L N v,
+              parentHamiltonianES A L N v⟫_ℂ).re) :
+    ∀ (N : ℕ) (_hLN : 2 * L ≤ N)
+      (v : EuclideanSpace ℂ (Cfg d N)),
+      v ∈ (parentHamiltonianGroundSpaceES A L N)ᗮ →
+        γ * ‖v‖ ≤ ‖parentHamiltonianES A L N v‖ := by
+  intro N hLN v hv
+  have hvKer : v ∈ (LinearMap.ker (parentHamiltonianES A L N))ᗮ := by
+    simpa [parentHamiltonianGroundSpaceES_eq_ker_parentHamiltonianES A L N] using hv
+  exact FrustrationFree.spectralGap_of_martingale (ι := Cfg d N) hγ
+    (parentHamiltonianES_isPositive A L N) (hQuad N hLN) v hvKer
+
+/-- The exact explicit gap-bound reduction needed by
+`parentHamiltonianES_gap_bound_of_friedrichs` follows from the corresponding
+uniform quadratic-form estimate with constant `1 / (4 * L)`.
+
+Thus the remaining MPS-specific content is precisely to prove the hypothesis
+`hQuad` from the Friedrichs-angle / anti-commutator estimate and the finite
+row-sum bound; the positivity, kernel transport, and spectral-theorem conversion
+are already available here. -/
+theorem parentHamiltonianES_gap_bound_of_quadratic_form
+    (A : MPSTensor d D) (L : ℕ) (hL : 1 < L)
+    (hQuad : ∀ (N : ℕ) (_hLN : 2 * L ≤ N)
+      (v : EuclideanSpace ℂ (Cfg d N)),
+        ((1 : ℝ) / (4 * (L : ℝ))) *
+          (⟪parentHamiltonianES A L N v, v⟫_ℂ).re ≤
+            (⟪parentHamiltonianES A L N v,
+                parentHamiltonianES A L N v⟫_ℂ).re) :
+    0 < (1 : ℝ) / (4 * (L : ℝ)) ∧
+    ∀ (N : ℕ) (_hLN : 2 * L ≤ N)
+      (v : EuclideanSpace ℂ (Cfg d N)),
+      v ∈ (parentHamiltonianGroundSpaceES A L N)ᗮ →
+        ((1 : ℝ) / (4 * (L : ℝ))) * ‖v‖ ≤
+          ‖parentHamiltonianES A L N v‖ := by
+  have hγ : 0 < (1 : ℝ) / (4 * (L : ℝ)) := by
+    have hLpos : (0 : ℝ) < (L : ℝ) := by
+      exact_mod_cast (Nat.zero_lt_of_lt hL)
+    exact div_pos (by norm_num) (mul_pos (by norm_num) hLpos)
+  exact ⟨hγ, parentHamiltonianES_norm_bound_of_quadratic_form A L hγ hQuad⟩
+
 /-! ### Uniform spectral gap for the MPS parent Hamiltonian -/
 
 /- Scout report (2026-04-19, Layer 4 KL martingale).
 
 1. **Friedrichs-angle surface:** TNLean currently has no dedicated
-`FriedrichsAngle`/principal-angle API in `TNLean/Analysis`. Mathlib provides
+`FriedrichsAngle`/principal-angle development in `TNLean/Analysis`. Mathlib provides
 orthogonal-projection infrastructure (for example
 `Mathlib.Analysis.InnerProductSpace.Projection.Basic` and
 `Mathlib.Analysis.InnerProductSpace.Projection.FiniteDimensional`, exposing
@@ -571,16 +635,19 @@ orthogonal-projection infrastructure (for example
 Kastoryano–Lucia-style angle-to-anticommutator bound. This is a real blocker
 for quantitative overlap constants.
 2. **Positivity formulation:** the local `EuclideanSpace` projector
-`parentInteractionES A L` is positive, and each conjugated cyclic-restriction
-summand `localTermESSummand A hN L i τ = Rᵢ,τ† P_L Rᵢ,τ` is positive by
-`LinearMap.IsPositive.conj_adjoint`. Missing is the exact averaging identity
-relating these positive summands to the transported local terms.
-3. **Row-sum bound mapping:** the combinatorial part is already available from
+`parentInteractionES A L`, each conjugated cyclic-restriction summand
+`localTermESSummand A hN L i τ = Rᵢ,τ† P_L Rᵢ,τ`, each transported local term,
+and the full transported Hamiltonian are now available as positive operators.
+3. **Quadratic-form reduction:**
+`parentHamiltonianES_norm_bound_of_quadratic_form` and
+`parentHamiltonianES_gap_bound_of_quadratic_form` reduce the gap statement to a
+uniform estimate `γ * re ⟪H_N v, v⟫ ≤ re ⟪H_N v, H_N v⟫`.
+4. **Row-sum bound mapping:** the combinatorial part is already available from
 locality (`localTerm`, `parentHamiltonian`) and finite range: each window
 overlaps at most `2 * (L - 1)` neighbors. Missing is the analytic implication
-from overlap-angle constants to operator-inequality coefficients `cᵢⱼ`.
-4. **Sorry dependency split:** `parentHamiltonian_gapped` is the downstream
-existential wrapper, now proved by applying the Friedrichs-angle theorem
+from overlap-angle constants to the quadratic-form inequality above.
+5. **Sorry dependency split:** `parentHamiltonian_gapped` is the downstream
+existential theorem, now proved by applying the Friedrichs-angle theorem
 below. The theorem `parentHamiltonianES_gap_bound_of_friedrichs` still depends
 on missing Friedrichs-angle infrastructure; this is the blocker and should not
 be replaced with axioms or unrelated sorrys. -/
@@ -600,14 +667,11 @@ theorem parentHamiltonianES_gap_bound_of_friedrichs
       v ∈ (parentHamiltonianGroundSpaceES A L N)ᗮ →
         ((1 : ℝ) / (4 * (L : ℝ))) * ‖v‖ ≤
           ‖parentHamiltonianES A L N v‖ := by
-  -- Remaining obligations: the averaging identity expressing transported local
-  -- terms as finite averages of `localTermESSummand`, the MPS-specific
-  -- Friedrichs-angle estimate for adjacent local ground spaces, and the
-  -- finite-overlap row-sum bound. The kernel identification needed for the
-  -- final martingale application is now available as
-  -- `parentHamiltonianGroundSpaceES_eq_ker_parentHamiltonianES`. Once the
-  -- remaining analytic inputs are formalized, this should feed the resulting
-  -- quadratic-form inequality into `FrustrationFree.spectralGap_of_martingale`.
+  -- Remaining obligation: derive the uniform quadratic-form estimate required by
+  -- `parentHamiltonianES_gap_bound_of_quadratic_form` from the MPS-specific
+  -- Friedrichs-angle estimate for adjacent local ground spaces and the
+  -- finite-overlap row-sum bound. Positivity, kernel identification, and the
+  -- spectral-theorem conversion are already formalized above.
   sorry
 
 /--

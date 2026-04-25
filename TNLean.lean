@@ -31,6 +31,7 @@ import TNLean.Algebra.ScalarPowerSumIdentity
 import TNLean.Algebra.BurnsideMatrix
 import TNLean.Algebra.IrreducibleTensorAction
 import TNLean.Algebra.MatrixFrobenius
+import TNLean.Algebra.PerronFrobenius.RankOne
 import TNLean.Algebra.ProjectiveRepresentation
 import TNLean.Algebra.ScalarCommutant
 import TNLean.Algebra.CocycleCohomology
@@ -263,6 +264,7 @@ import TNLean.MPS.MPDO.SimpleLocalStructure
 import TNLean.MPS.MPDO.FusionIsometries
 import TNLean.MPS.MPDO.AlgebraStructure
 import TNLean.MPS.MPDO.CommutingForm
+import TNLean.MPS.MPDO.CommutingFormBridge
 import TNLean.MPS.MPDO.BlockedRFPConstruction
 
 -- MPS examples

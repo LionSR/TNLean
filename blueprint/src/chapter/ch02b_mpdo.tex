@@ -479,9 +479,91 @@ strong subadditivity for a normalized three-site reduced state.
     \uses{def:mpdo_explicit_eta_operators}
     Every explicit neighboring $\eta$-family determines a sector-by-sector trace
     matrix. We record both its complex-valued form and the real-part version,
-    which is the direct interface to the real Perron--Frobenius matrix $T$ used
+    which is the direct input for the real Perron--Frobenius matrix $T$ used
     in the rank-one step.
 \end{definition}
+
+
+\begin{theorem}[Positivity of bipartite partial traces]
+    \label{thm:matrix_possemidef_partial_traces}
+    \lean{Matrix.PosSemidef.traceLeft}
+    \lean{Matrix.PosSemidef.traceRight}
+    \leanok
+    If $\rho$ is positive semidefinite on a bipartite space $A \otimes B$, then
+    both reduced operators $\tr_A \rho$ and $\tr_B \rho$ are positive
+    semidefinite.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Write each partial trace as the finite sum, over the traced index, of a
+    principal submatrix of $\rho$. Principal submatrices of a positive
+    semidefinite matrix are positive semidefinite, and finite sums of positive
+    semidefinite matrices remain positive semidefinite.
+\end{proof}
+
+\begin{definition}[Hayashi--Markov extraction of explicit $\eta$-operators]
+    \label{def:mpdo_eta_of_hayashi_markov}
+    \lean{MPOTensor.ExplicitEtaOperators.ofHayashiMarkov}
+    \leanok
+    \uses{def:mpdo_eta_structure, def:mpdo_explicit_eta_operators,
+        thm:matrix_possemidef_partial_traces}
+    Every Hayashi decomposition witness $h_\eta$ canonically produces an
+    explicit neighboring $\eta$-family by Kronecker-multiplying the
+    sector-reduced states on the neighboring bond spaces:
+    \[
+        \eta_{k,h}
+        := \tr_C\bigl(\rho_{b_2 C}^{(k)}\bigr)
+            \otimes \tr_A\bigl(\rho_{A b_1}^{(h)}\bigr).
+    \]
+    Positive semidefiniteness of each $\eta_{k,h}$ follows from the fact
+    that partial traces preserve positivity and that positive
+    semidefiniteness is closed under Kronecker products. This is the
+    sector-reduced extraction layer; the remaining connection to
+    Appendix~C.2 is the identification of this family with the inverse-map
+    construction in the original simple-MPDO tensor coordinates.
+\end{definition}
+
+\begin{theorem}[Trace matrix of the Hayashi--Markov $\eta$-operators]
+    \label{thm:mpdo_eta_of_hayashi_markov_trace_matrix}
+    \lean{MPOTensor.ExplicitEtaOperators.traceMatrix_ofHayashiMarkov}
+    \lean{MPOTensor.ExplicitEtaOperators.traceMatrixRe_ofHayashiMarkov}
+    \leanok
+    \uses{def:mpdo_eta_of_hayashi_markov,
+        def:mpdo_explicit_eta_trace_matrix}
+    The trace matrix induced by the extracted family is entrywise
+    $T_{k,h} = 1$ in both its complex-valued form and its real-valued form,
+    matching the paper's normalization $T_{k,h} = a_k b_h$ with
+    $a_k = b_h = 1$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:mpdo_eta_of_hayashi_markov,
+        def:mpdo_explicit_eta_trace_matrix}
+    Each $\rho_{b_2 C}^{(k)}$ is a density matrix, hence has unit trace; the
+    partial trace $\tr_C$ preserves the trace. The analogous statement holds
+    for $\tr_A \rho_{A b_1}^{(h)}$. Multiplicativity of the trace under
+    Kronecker products gives $T_{k,h} = 1 \cdot 1 = 1$, and taking real parts
+    gives the real-valued statement.
+\end{proof}
+
+\begin{theorem}[Entrywise nonnegativity of the real trace matrix]
+    \label{thm:mpdo_explicit_eta_trace_matrix_nonneg}
+    \lean{MPOTensor.ExplicitEtaOperators.traceMatrixRe_nonneg}
+    \leanok
+    \uses{def:mpdo_explicit_eta_trace_matrix}
+    Positivity of the neighboring operators gives entrywise nonnegativity of
+    the real trace matrix. Matrix-level positive semidefiniteness of $T$ is a
+    separate structural condition.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The trace of a positive semidefinite neighboring operator is nonnegative in
+    the complex order. Taking real parts gives the stated entrywise
+    nonnegativity.
+\end{proof}
 
 \begin{definition}[Auxiliary matrix predicates for the rank-one step]
     \label{def:matrix_trace_rankone_predicates}
@@ -492,27 +574,70 @@ strong subadditivity for a normalized three-site reduced state.
     The auxiliary predicates record three matrix-theoretic ingredients used in
     the rank-one step of Appendix~C.2, Lemma~C.4: constant traces of all
     positive powers, existence of a rank-one factorization $T = a b^\top$, and
-    the Perron--Frobenius implication from primitivity together with constant
-    trace powers to such a factorization.
+    the conditional Perron--Frobenius implication from primitivity together with
+    constant trace powers to such a factorization.
 
-    The last predicate is used as a scoped hypothesis, not a globally provable
-    theorem. As a universal statement over primitive nonnegative matrices it is
-    false; a concrete $3 \times 3$ counterexample is recorded in the archive.
-    Discharging the hypothesis in the simple-MPDO setting therefore requires
-    the extra structure carried by the specific $T$ arising from the positive
-    semidefinite $\eta$-operators.
+    This conditional implication is not a globally provable theorem. As a
+    universal statement over primitive nonnegative matrices it is false; a
+    concrete $3 \times 3$ counterexample is recorded in the archive. The
+    corrected criterion proved here adds positive semidefiniteness and trace
+    normalization, which provide the diagonalizability needed to turn the
+    trace-power condition into a rank-one factorization.
 \end{definition}
 
-\begin{theorem}[SAL and ZCL imply rank-one $T$ (scoped form)]
+\begin{theorem}[Trace square of a Hermitian matrix]
+    \label{thm:matrix_hermitian_trace_square_eigenvalues}
+    \lean{Matrix.IsHermitian.trace_sq_eq_sum_eigenvalues_sq}
+    \leanok
+    Let $T$ be a finite Hermitian matrix over a real or complex scalar field,
+    with Hermitian eigenvalues $\lambda_i$. Then
+    \[
+        \tr(T^2) = \sum_i \lambda_i^2.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The spectral theorem writes $T$ as a unitary conjugate of the diagonal
+    matrix of its Hermitian eigenvalues. Squaring commutes with this conjugation,
+    and cyclicity of trace reduces the identity to the trace of the squared
+    diagonal matrix.
+\end{proof}
+
+\begin{theorem}[PSD trace-power rank-one criterion]
+    \label{thm:matrix_psd_trace_power_rank_one}
+    \lean{Matrix.PosSemidef.trace_powers_constant_implies_rank_one}
+    \lean{Matrix.primitive_trace_powers_constant_implies_rank_one_of_posSemidef}
+    \leanok
+    \uses{def:matrix_trace_rankone_predicates}
+    Let $T$ be a finite real square matrix. If $T$ is positive semidefinite,
+    normalized by $\tr(T)=1$, and has constant traces on all positive powers,
+    then $T$ has a rank-one factorization. Consequently, under the same
+    positive-semidefinite and trace-normalization hypotheses, the conditional
+    rank-one criterion used in Lemma~C.4 follows.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:matrix_trace_rankone_predicates, thm:matrix_hermitian_trace_square_eigenvalues}
+    The spectral theorem diagonalizes the positive semidefinite matrix with
+    nonnegative real eigenvalues. The trace gives that their sum is $1$, while
+    the second trace moment gives that the sum of their squares is also $1$.
+    Hence exactly one eigenvalue is equal to $1$ and all others vanish, so the
+    diagonal form is rank one. Unitary conjugation preserves the existence of an
+    outer-product factorization.
+\end{proof}
+
+\begin{theorem}[SAL and ZCL imply rank-one $T$ (conditional form)]
     \label{thm:sal_zcl_implies_rank_one_t}
     \lean{MPOTensor.sal_zcl_implies_rank_one_T}
     \leanok
     \uses{def:matrix_trace_rankone_predicates}
-    Let $T$ be the nonnegative matrix extracted from the local $\eta$-data.
-    Assume that $T$ is primitive, that $\tr(T) = 1$, and that every positive
-    power of $T$ has the same trace as $T$. If one further supplies the single
-    Perron--Frobenius input asserting that every primitive nonnegative matrix
-    with constant trace powers is rank one, then
+    Let $T$ be a finite real square matrix. Assume that $T$ is primitive,
+    that $\tr(T) = 1$, and that every positive power of $T$ has the same trace
+    as $T$. If one further supplies the Perron--Frobenius input asserting that
+    this particular primitive nonnegative matrix with constant trace powers is
+    rank one, then
     \[
         T = a b^\top
     \]
@@ -528,6 +653,30 @@ strong subadditivity for a normalized three-site reduced state.
     The Perron--Frobenius input gives the factorization $T = a b^\top$.
     Taking traces and using $\tr(a b^\top) = a \cdot b$ converts the
     normalization $\tr(T) = 1$ into $a \cdot b = 1$.
+\end{proof}
+
+\begin{theorem}[PSD-corrected rank-one $T$ criterion]
+    \label{thm:psd_trace_powers_rank_one_t}
+    \lean{MPOTensor.sal_zcl_implies_rank_one_T_of_posSemidef}
+    \leanok
+    \uses{def:matrix_trace_rankone_predicates}
+    Let $T$ be a finite real square matrix. Assume that $T$ is primitive,
+    positive semidefinite, normalized by $\tr(T)=1$, and has constant traces on
+    all positive powers. Then
+    \[
+        T = a b^\top
+    \]
+    for some vectors $a$ and $b$, with $a \cdot b = 1$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:matrix_trace_rankone_predicates, thm:sal_zcl_implies_rank_one_t,
+        thm:matrix_psd_trace_power_rank_one}
+    The positive-semidefinite matrix criterion diagonalizes $T$, uses the first
+    two trace moments to show that exactly one eigenvalue is nonzero, and hence
+    supplies the auxiliary rank-one criterion. The conditional Lemma~C.4
+    statement then gives the factorization and trace normalization.
 \end{proof}
 
 \section{Horizontal and Vertical Canonical Forms}
@@ -559,13 +708,22 @@ strong subadditivity for a normalized three-site reduced state.
 \begin{remark}[Finite-length span and selector criteria for the abstract biCF hypothesis]%
     \label{rem:word_tuple_span_top}
     \lean{MPSTensor.WordTupleSpanTop}
+    \lean{MPSTensor.BlockEntryIndex}
+    \lean{MPSTensor.wordEntryFamily}
+    \lean{MPSTensor.duplicateScalarBlocks_counterexample}
+    \lean{MPSTensor.wordTupleSpanTop_of_wordEntryFamily_linearIndependent}
+    \lean{MPSTensor.hasBlockSelectorWords_of_wordTupleSpanTop}
+    \lean{MPSTensor.hasBlockSelectorWords_of_wordEntryFamily_linearIndependent}
     \lean{MPSTensor.HasBiCF}
     \lean{MPSTensor.hasBiCF_of_wordTupleSpanTop}
+    \lean{MPSTensor.hasBiCF_of_wordEntryFamily_linearIndependent}
     \lean{MPSTensor.HasBlockSelectorWords}
     \lean{MPSTensor.PropBlockInjective}
     \lean{MPSTensor.wordTupleSpanTop_of_propBlockInjective}
     \lean{MPSTensor.hasBiCF_of_propBlockInjective}
+    \lean{MPSTensor.duplicateScalarBlocks_not_hasBiCF}
     \lean{MPOTensor.horizontalCFData_of_wordTupleSpanTop}
+    \lean{MPOTensor.horizontalCFData_of_wordEntryFamily_linearIndependent}
     \lean{MPOTensor.horizontalCFData_of_propBlockInjective}
     \leanok
     Let $(A_k)$ be a family of block tensors, and fix a length $L$.
@@ -589,6 +747,17 @@ strong subadditivity for a normalized three-site reduced state.
     nonzero block weights, this finite-length separation yields the horizontal
     canonical-form data of the block-diagonal tensor.
 
+    The entrywise scalar family of block-matrix coefficients encodes the same
+    finite-length data. Linear independence of that scalar family implies the
+    product-algebra spanning statement, hence block selectors and a biCF
+    witness. The same criterion therefore gives horizontal canonical-form data
+    directly.
+    The duplicate-scalar counterexample shows that this finite-length witness
+    is strictly stronger than blockwise injectivity, left-canonicality, and
+    nonzero weights alone: two identical scalar blocks satisfy those hypotheses,
+    but the biCF separation condition fails and no blocking length makes the
+    entrywise family linearly independent.
+
     Proposition~IV.3 gives a concrete sufficient criterion for the spanning
     condition: after a common blocking length each block is block-injective,
     and after a further finite blocking length one can form linear combinations
@@ -599,7 +768,7 @@ strong subadditivity for a normalized three-site reduced state.
     canonical-form data.
 \end{remark}
 
-\begin{theorem}[Abstract Proposition~IV.3 package]
+\begin{theorem}[Abstract Proposition~IV.3 selector criterion]
     \label{thm:propblockinj_abstract}
     \lean{MPSTensor.hasBiCF_of_propBlockInjective}
     \leanok
@@ -611,7 +780,7 @@ strong subadditivity for a normalized three-site reduced state.
 \begin{proof}
     \leanok
     \uses{rem:word_tuple_span_top}
-    This is the direct implication from the abstract selector package to the
+    This is the direct implication from the abstract selector data to the
     finite-length trace-separation statement. What remains open in the full
     Proposition~IV.3 is the derivation of the selector hypothesis from separated
     canonical-form / BNT data.
@@ -636,7 +805,7 @@ strong subadditivity for a normalized three-site reduced state.
     \leanok
     \uses{def:tensor_from_blocks, def:injective, thm:propblockinj_abstract}
     This is Lemma~L from \cite[Appendix~A]{Cirac2017MPDO_AnnPhys}, using the
-    abstract Proposition~IV.3 package from Theorem~\ref{thm:propblockinj_abstract}.
+    abstract Proposition~IV.3 selector criterion from Theorem~\ref{thm:propblockinj_abstract}.
     Expanding the hypothesis over a word of length~$L+1$ beginning with the
     fixed site and folding each block contribution into a trace pairing
     against the corresponding first-site insertion tensor yields, upon taking the
@@ -670,8 +839,8 @@ strong subadditivity for a normalized three-site reduced state.
 
 \section{Fusion isometries}
 
-Following \cite[\S4.5]{Cirac2017MPDO_AnnPhys}, the current Lean development
-formalizes the transfer-map content of the fusion-isometry picture.
+Following \cite[\S4.5]{Cirac2017MPDO_AnnPhys}, the current formal development
+describes the transfer-map content of the fusion-isometry picture.
 For each blocked size $n \ge 1$, the doubled-index blocked tensor of an MPO
 has a blocked transfer map $E_n$ acting on bond-space matrices, and the
 support algebra is modeled by a subspace through which $E_n$ factors as a
@@ -772,7 +941,7 @@ recovery theorem for the provisional MPO predicate.
     An MPO tensor $M$ satisfies the \emph{algebra-structure formulation} used
     here when there exist algebra-structure data whose support algebra at every
     positive blocking size coincides with the fixed-point algebra of the adjoint
-    blocked transfer map. This is a genuine algebraic condition, but it is still
+    blocked transfer map. This is a nontrivial algebraic condition, but it is still
     weaker than the full coefficient formulation of
     \cite[Theorem~IV.13~(ii)]{Cirac2017MPDO_AnnPhys}, since the coefficient
     family $c_{\alpha,\beta,\gamma}^{(L)}$ is not yet extracted.
@@ -811,9 +980,9 @@ Combine Theorem~\ref{thm:mpdo_rfp_of_fusion} with
 Theorem~\ref{thm:mpdo_rfp_via_algebra_from_rfp}.
 \end{proof}
 
-The current Lean layer still does not recover the paper's special diagonal
+The current formal layer still does not recover the paper's special diagonal
 matrices $\chi_{\alpha,\beta,\gamma}$ from Theorem~IV.13(ii). What it does
-provide is the first explicit coefficient package attached to the algebra tower:
+provide is the first explicit coefficient data attached to the algebra tower:
 a chosen basis of each support algebra, coordinate maps into a finite scalar
 family, and the corresponding multiplication / inclusion coefficient arrays.
 
@@ -1009,7 +1178,7 @@ is the sum of its entries.
     \]
     for every $L \ge 0$ and every triple $(\alpha, \beta, \gamma)$, where
     $r_{\alpha,\beta,\gamma}$ is the size of $\chi_{\alpha,\beta,\gamma}$. This
-    is the Lean-level form of the target identity of
+    is the formal analogue of the target identity of
     \cite[Theorem~IV.13~(ii)]{Cirac2017MPDO_AnnPhys}; the existential
     version---``there exists $\chi$ for which $(c,\chi)$ has trace-power
     form''---is obtained by quantifying over $\chi$.
@@ -1088,10 +1257,38 @@ Unfold the definition of GSNNCH with zero correlation length and apply
 Theorem~\ref{thm:mpdo_is_gsnnch_iff_has_commuting_form}.
 \end{proof}
 
+\begin{definition}[$\eta$-local commuting-form data]
+    \label{def:mpdo_eta_local_structure_data}
+    \lean{MPOTensor.EtaLocalStructureData}
+    \leanok
+    \uses{def:mpdo_has_commuting_form}
+    This records the post-extraction output of Appendix~C.2: a single
+    translation-invariant positive two-site bond whose translated copies commute
+    on every periodic chain and realize the MPO at every finite length.
+\end{definition}
+
+\begin{theorem}[$\eta$-local structure implies commuting form]
+    \label{thm:mpdo_has_commuting_form_of_eta_local_structure}
+    \lean{MPOTensor.hasCommutingForm_of_etaLocalStructure}
+    \leanok
+    \uses{def:mpdo_eta_local_structure_data, def:mpdo_has_commuting_form}
+    Once the explicit neighboring operators $\eta_{k,h}$ have been assembled
+    into the data above, the global commuting-form property follows.
+\end{theorem}
+
+\begin{proof}\leanok
+For each $N \ge 2$, take the commuting-form datum given by these data.
+\end{proof}
+
 \begin{remark}[Remaining step toward source label \texttt{propsimple}]
-The remaining entropy-side theorem is to derive the commuting-form property
-from the strong-area-law hypotheses of Appendix~C.2. The present file isolates
-its GSNNCH target once that step is available.
+The remaining entropy-side theorem is to construct
+\lean{MPOTensor.EtaLocalStructureData} from the local SAL and ZCL ingredients
+already formalized in \texttt{TNLean/MPS/MPDO/SimpleLocalStructure.lean}. In
+particular, the missing piece is the extraction of explicit neighboring
+operators $\eta_{k,h}$ from the Hayashi Markov decomposition; once that is in
+place, Theorem~\ref{thm:mpdo_has_commuting_form_of_eta_local_structure}
+immediately yields the commuting-form conclusion, and the present file then
+recovers the GSNNCH target of source label \texttt{propsimple}.
 \end{remark}
 
 \section{Blocked-RFP construction for simple MPDOs}

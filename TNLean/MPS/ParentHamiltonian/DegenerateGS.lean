@@ -102,11 +102,63 @@ private lemma groundSpace_block_le_assembled
   · -- j ∈ Finset.univ
     intro h; exact absurd (Finset.mem_univ j) h
 
+/-- Periodic-chain block lift: each block `A j`'s chain ground space embeds into
+the assembled tensor's chain ground space, provided `μ j ≠ 0`.
+
+The two chain ground spaces live in the same ambient `NSiteSpace d N`, so the
+lift is an inclusion of submodules; the witness for each cyclic window is
+delivered by `groundSpace_block_le_assembled`. -/
+theorem chainGroundSpace_block_le_toTensorFromBlocks
+    (μ' : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (j : Fin r) (hμj : μ' j ≠ 0) (L N : ℕ) :
+    chainGroundSpace (A j) L N ≤ chainGroundSpace (toTensorFromBlocks μ' A) L N := by
+  intro ψ hψ
+  by_cases h : 0 < N ∧ L ≤ N
+  · rw [chainGroundSpace, dif_pos h] at hψ ⊢
+    simp only [Submodule.mem_iInf, Submodule.mem_comap] at hψ ⊢
+    intro i τ
+    exact groundSpace_block_le_assembled μ' A j hμj L (hψ i τ)
+  · rw [chainGroundSpace, dif_neg h]; exact Submodule.mem_top
+
+/-- **Periodic block decomposition (forward inclusion)**: the supremum of the
+blockwise periodic-chain ground spaces is contained in the assembled tensor's
+periodic-chain ground space, provided every weight `μ j` is nonzero.
+
+This is the `≥` half of the structural decomposition
+`chainGroundSpace (toTensorFromBlocks μ A) L N = ⨆ j, chainGroundSpace (A j) L N`
+referenced at the parent-Hamiltonian docstring (see `parentHamiltonian_gs_eq_bnt_span`).
+
+The reverse inclusion — that every periodic-chain ground state of the assembled
+tensor decomposes blockwise — is the structural projector argument from
+[CPGSV21] arXiv:2011.12127 §IV.C: the abelian-symmetry projectors
+`P_α = ∑ χ̄_k(g) U_g` onto the virtual-space irrep sectors commute with the
+assembled tensor and split a chain ground state into block components. That
+inclusion is not yet formalized; together with the blockwise normal-form
+uniqueness `chainGroundSpace_eq_mpvSubmodule_normal` (issue #588) it would
+discharge `parentHamiltonianGroundSpace_le_bntSpan_of_block_decomposition`. -/
+theorem iSup_chainGroundSpace_block_le_toTensorFromBlocks
+    (μ' : Fin r → ℂ) (hμ : ∀ j, μ' j ≠ 0)
+    (A : (k : Fin r) → MPSTensor d (dim k)) (L N : ℕ) :
+    (⨆ j, chainGroundSpace (A j) L N) ≤
+      chainGroundSpace (toTensorFromBlocks μ' A) L N :=
+  iSup_le fun j => chainGroundSpace_block_le_toTensorFromBlocks μ' A j (hμ j) L N
+
+/-- CF-BNT specialization of `iSup_chainGroundSpace_block_le_toTensorFromBlocks`:
+for a canonical-form/BNT block decomposition, the parent-Hamiltonian ground
+space contains the supremum of the blockwise periodic-chain ground spaces. -/
+theorem iSup_chainGroundSpace_block_le_parentHamiltonianGroundSpace
+    (A : (j : Fin r) → MPSTensor d (dim j))
+    (hCF : IsCanonicalFormBNT μ A) (L N : ℕ) :
+    (⨆ j, chainGroundSpace (A j) L N) ≤
+      parentHamiltonianGroundSpace (μ := μ) A L N :=
+  iSup_chainGroundSpace_block_le_toTensorFromBlocks
+    μ (fun j => hCF.toHasStrictOrderedNonzeroWeights.mu_ne_zero j) A L N
+
 /-- `⊇` direction: each BNT block MPV lies in the parent-Hamiltonian ground
 space of the assembled tensor.
 
 The proof lifts `mpv_mem_chainGroundSpace` from the block level to the
-assembled tensor using `groundSpace_block_le_assembled`. -/
+assembled tensor using `chainGroundSpace_block_le_toTensorFromBlocks`. -/
 theorem bnt_mem_groundSpace
     (A : (j : Fin r) → MPSTensor d (dim j))
     (hCF : IsCanonicalFormBNT μ A) {L N : ℕ} (hL : 1 < L) (hN : N ≥ L + 1)
@@ -116,13 +168,8 @@ theorem bnt_mem_groundSpace
   have hLN : L ≤ N := by omega
   have hN' : 0 < N := by omega
   have hμj : μ j ≠ 0 := hCF.toHasStrictOrderedNonzeroWeights.mu_ne_zero j
-  -- mpv (A j) ∈ chainGroundSpace (A j) L N by trace cyclicity
-  have hmem := mpv_mem_chainGroundSpace (A j) L N hN' hLN
-  -- Lift: chainGroundSpace (A j) ≤ chainGroundSpace (toTensorFromBlocks μ A)
-  rw [chainGroundSpace, dif_pos ⟨hN', hLN⟩] at hmem ⊢
-  simp only [Submodule.mem_iInf, Submodule.mem_comap] at hmem ⊢
-  intro i τ
-  exact groundSpace_block_le_assembled μ A j hμj L (hmem i τ)
+  exact chainGroundSpace_block_le_toTensorFromBlocks μ A j hμj L N
+    (mpv_mem_chainGroundSpace (A j) L N hN' hLN)
 
 /-- If the assembled periodic ground space splits blockwise into the block chain
 ground spaces, then blockwise injective uniqueness already yields membership in
