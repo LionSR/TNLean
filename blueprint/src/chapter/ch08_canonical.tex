@@ -1869,6 +1869,36 @@ The following results separate the zero blocks from the
 	map to the primal transfer map of $C_u$.
 \end{proof}
 
+\begin{theorem}[Unconditional primitive blocked sectors]%
+	\label{thm:blocked_sector_unconditional}
+	\lean{MPSTensor.primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking}
+	\leanok
+	\uses{thm:cyclic_sector_decomp_after_blocking,
+	      thm:sector_irred_unconditional,
+	      thm:primitive_adjoint_equiv}
+	Let $A$ be a left-canonical irreducible tensor whose adjoint transfer map has
+	peripheral spectrum $\{\gamma^j : 0 \le j < m\}$ for a primitive $m$-th root
+	of unity $\gamma$. Let $(C_u)_{u=1}^m$, $(P_u)_{u=1}^m$, and
+	$\varphi_u : \MN{\dim C_u} \xrightarrow{\sim} P_u \MN{D} P_u$
+	be the blocked cyclic-sector data. Then every blocked sector tensor $C_u$ has
+	primitive transfer map and is irreducible.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:sector_irred_unconditional,
+	      thm:primitive_adjoint_equiv}
+	Theorem~\ref{thm:sector_irred_unconditional} gives irreducibility of
+	$(\E_A^\dagger)^m$ on each corner $P_u$.
+	The blocked cyclic-sector data provide compression equivalences
+	$\varphi_u$ intertwining the adjoint transfer map of $C_u$ with the
+	corresponding corner restriction of $(\E_A^\dagger)^m$.
+	The same cyclic peripheral-spectrum argument that produces the sector
+	decomposition shows that each corner restriction is primitive.
+	Transport primitivity and irreducibility across $\varphi_u$, then use
+	Theorem~\ref{thm:primitive_adjoint_equiv} to pass from the adjoint blocked
+	map to the primal transfer map of $C_u$.
+\end{proof}
+
 \begin{theorem}[Arbitrary tensor to primitive block decomposition]%
 	\label{thm:tp_primitive_blockdecomp}
 	\lean{MPSTensor.exists_tp_primitive_blockDecomp_after_blocking}
