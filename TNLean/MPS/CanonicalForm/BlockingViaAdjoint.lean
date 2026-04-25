@@ -274,6 +274,24 @@ lemma transferMap_conjTranspose_eq_adjoint (A : MPSTensor d D) :
       _ = Matrix.trace (transferMap (d := d) (D := D) A Y * Xᴴ) := by
             rw [hadj]
 
+/-- The Frobenius adjoint of `transferMap A` is the Kraus adjoint map of `A`,
+viewed as a linear map. This is the linear-map form of
+`transferMap_conjTranspose_eq_adjoint`. -/
+lemma transferMap_adjoint_eq_adjointMapLM (A : MPSTensor d D) :
+    (transferMap A).adjoint = Kraus.adjointMapLM A := by
+  refine LinearMap.ext fun X => ?_
+  have h := congrArg (fun F => F X)
+    (transferMap_conjTranspose_eq_adjoint (A := A)).symm
+  simpa [transferMap_apply, Kraus.adjointMapLM_apply, Kraus.adjointMap,
+    Matrix.conjTranspose_conjTranspose, Matrix.mul_assoc] using h
+
+/-- Pointwise form of `transferMap_adjoint_eq_adjointMapLM`. -/
+@[simp] lemma transferMap_adjoint_apply_eq_adjointMap (A : MPSTensor d D)
+    (X : Matrix (Fin D) (Fin D) ℂ) :
+    (transferMap A).adjoint X = Kraus.adjointMap A X := by
+  rw [transferMap_adjoint_eq_adjointMapLM]
+  exact Kraus.adjointMapLM_apply A X
+
 end
 
 end TransferAdjoint
