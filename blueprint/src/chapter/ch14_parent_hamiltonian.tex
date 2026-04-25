@@ -531,19 +531,22 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 
 \subsubsection{Contiguous and cyclic window operators}
 
-\begin{remark}[Contiguous window operators]
+\begin{remark}[Contiguous window operators]\label{rem:contiguous_window_operators}
     \lean{MPSTensor.contiguousCfg}
     \lean{MPSTensor.contiguousRestrictₗ}
     \lean{MPSTensor.contiguousRestrictₗ_apply}
     \lean{MPSTensor.contiguousCfg_zero_full}
     \lean{MPSTensor.contiguousRestrictₗ_restrictLast}
     \lean{MPSTensor.contiguousRestrictₗ_restrictFirst}
+    \lean{MPSTensor.tailRestrictₗ_contiguousRestrictₗ}
     \leanok
     For a non-wrapping interval $[s,s+M-1] \subseteq \{0,\ldots,N-1\}$, one can insert a
     length-$M$ word into that interval and keep the complementary sites fixed. The
     associated restriction map evaluates an $N$-site state on those configurations.
-    The auxiliary lemmas record the full-window case $s=0$, $M=N$, and the
-    compatibility of this restriction with deleting the last or first site.
+    The auxiliary lemmas record the full-window case $s=0$, $M=N$, the
+    compatibility of this restriction with deleting the last or first site, and
+    the fact that fixing the first $K$ entries of a contiguous $(K+L)$-window
+    leaves the contiguous $L$-window beginning at $s+K$.
 \end{remark}
 
 \begin{remark}[Cyclic window operators]\label{rem:cyclic_window_operators}
@@ -693,6 +696,31 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     space vector determined by $X$. Since every configuration is obtained by
     adjoining its final letter to its initial $(K + L_0)$-tuple, the two states
     coincide, so $\psi$ lies in $G_{K + L_0 + 1}(A)$.
+\end{proof}
+
+\begin{theorem}[Open-chain normal range reduction]%
+    \label{thm:normal_open_chain_range_reduction}
+    \lean{MPSTensor.contiguous_mem_groundSpace_of_isNBlkInjective}
+    \leanok
+    \uses{thm:ground_space_extend_right_block_injective, def:l_blk_injective,
+        rem:contiguous_window_operators}
+    Let $A$ be $L_0$-block injective with $D \ge 1$ and $L_0 > 0$.
+    If an $N$-site state satisfies the ground-space constraint on every
+    non-wrapping contiguous window of length $L_0+1$, for every choice $\tau$
+    of the complementary outside configuration, with $N \ge L_0+1$, then it
+    lies in $G_N(A)$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:ground_space_extend_right_block_injective,
+        def:tail_restrict_parent, rem:contiguous_window_operators}
+    Induct on the extra length beyond $L_0+1$. The induction hypothesis gives the
+    long left-window ground condition after deleting the last site, while
+    Definition~\ref{def:tail_restrict_parent} and the contiguous-window transport above
+    identify every fixed-prefix suffix with one of the assumed length-$L_0+1$
+    windows. Theorem~\ref{thm:ground_space_extend_right_block_injective} then
+    regrows the rightmost site.
 \end{proof}
 
 \begin{theorem}[Boundary matrix commutation from the wrapping window]\label{thm:boundary_matrix_commutes}
@@ -927,14 +955,12 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     the reverse inclusion is Lemma~\ref{lem:mpv_mem_chain_ground_space}.
 \end{proof}
 
-% TODO(#703,#704): current main still lacks the suffix-window / extend-right API
-% from the recent blocked-intersection audits, so the open-boundary regrowth layer
-% is not yet documented here as separate \lean{...} entries.
 \begin{theorem}[Normal-range reduction: containment in the MPV line]
     \label{thm:normal_range_reduction_containment}
     \lean{MPSTensor.chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction}
     \notready
-    \uses{def:chain_ground_space, def:mpv_submodule, def:normal, def:l_blk_injective}
+    \uses{def:chain_ground_space, def:mpv_submodule, def:normal,
+        def:l_blk_injective, thm:normal_open_chain_range_reduction}
     If $A$ is normal, $D \ge 1$, $L_0$-block-injective, with $N \ge 2$ and $L_0 < L \le N$, then
     \[
         \mathcal G_{N,L}(A) \subseteq \spn\bigl\{V^{(N)}(A)\bigr\}.
