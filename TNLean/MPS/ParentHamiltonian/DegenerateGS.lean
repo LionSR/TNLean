@@ -5,6 +5,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.MPS.ParentHamiltonian.UniqueGroundState
 import TNLean.MPS.BNT.Construction
 import TNLean.MPS.CanonicalForm.Assembly
+import TNLean.MPS.CanonicalForm.BlockDiagonalCommutant
 import TNLean.MPS.FundamentalTheorem.Multi
 
 /-!
@@ -24,7 +25,7 @@ The detailed proof is split conceptually into two inclusions:
 
 namespace MPSTensor
 
-open scoped Matrix
+open scoped Matrix BigOperators
 
 variable {d r : ℕ} {dim : Fin r → ℕ} {μ : Fin r → ℂ}
 
@@ -172,6 +173,229 @@ theorem bnt_mem_groundSpace
   exact chainGroundSpace_block_le_toTensorFromBlocks μ A j hμj L N
     (mpv_mem_chainGroundSpace (A j) L N hN' hLN)
 
+/-- Boundary-map expansion for block-diagonal assembled boundaries.
+
+If the boundary matrix for `toTensorFromBlocks μ A` is itself the reindexed
+block diagonal with diagonal blocks `Xb k`, then the corresponding `N`-site
+open-chain vector is the sum of the blockwise open-chain vectors, with the
+expected weight factor `(μ k) ^ N`. -/
+private lemma groundSpaceMap_toTensorFromBlocks_blockDiagonal
+    (μ' : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (Xb : (k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ) (N : ℕ) :
+    groundSpaceMap (toTensorFromBlocks μ' A) N
+        ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' Xb)) =
+      ∑ k : Fin r, (μ' k) ^ N • groundSpaceMap (A k) N (Xb k) := by
+  classical
+  ext σ
+  simp only [groundSpaceMap_apply]
+  have hwlen : (List.ofFn σ).length = N := by simp
+  rw [evalWord_toTensorFromBlocks_eq_reindex_blockDiagonal μ' A (List.ofFn σ)]
+  rw [show Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv
+          (Matrix.blockDiagonal' fun k =>
+            (μ' k) ^ (List.ofFn σ).length • evalWord (A k) (List.ofFn σ)) *
+        Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv (Matrix.blockDiagonal' Xb) =
+      Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv
+        ((Matrix.blockDiagonal' fun k =>
+            (μ' k) ^ (List.ofFn σ).length • evalWord (A k) (List.ofFn σ)) *
+          Matrix.blockDiagonal' Xb) from by
+        simp [Matrix.reindex_apply, Matrix.submatrix_mul_equiv]]
+  rw [Matrix.trace_reindex, ← Matrix.blockDiagonal'_mul, Matrix.trace_blockDiagonal']
+  simp [groundSpaceMap_apply, hwlen, Matrix.trace_smul, Algebra.smul_mul_assoc]
+
+/-- Applying `groundSpaceMap` to a scalar boundary matrix gives a scalar multiple
+of the periodic MPV coefficient vector. -/
+private lemma groundSpaceMap_matrix_scalar
+    (A : MPSTensor d D) (N : ℕ) (c : ℂ) :
+    groundSpaceMap A N (Matrix.scalar (Fin D) c) = c • (mpv A : NSiteSpace d N) := by
+  ext σ
+  simp only [groundSpaceMap_apply, Pi.smul_apply, smul_eq_mul, mpv, coeff]
+  have hscalar : Matrix.scalar (Fin D) c = c • (1 : Matrix (Fin D) (Fin D) ℂ) := by
+    ext i j
+    by_cases hij : i = j <;> simp [Matrix.scalar, hij]
+  rw [hscalar, Matrix.mul_smul, mul_one, Matrix.trace_smul]
+  simp [smul_eq_mul]
+
+/-- Boundary-matrix block split from the projection-span input.
+
+This is the algebraic endgame for the block-decomposition argument. Assume the
+#911 finite-span input that every virtual sector projection lies in the
+pulled-back span of length-`m` assembled word products. If a boundary matrix `X`
+for the assembled tensor commutes with those length-`m` words (the output
+expected from the wrapping-window comparison), then the open-chain vector
+`groundSpaceMap (toTensorFromBlocks μ A) N X` lies in the supremum of the
+blockwise periodic chain ground spaces.
+
+The proof first applies
+`MPSTensor.isBlockDiagonal'_of_commutes_reindexed_wordSpan` to make the pulled-back
+boundary matrix block diagonal. Then the same length-`m` commutation, restricted
+to each diagonal block, and blockwise injectivity from `IsCanonicalFormBNT` force
+each diagonal block to be scalar. The boundary-map expansion above rewrites the
+state as a finite sum of scalar multiples of the block MPV states; each block MPV
+is in its own `chainGroundSpace`. -/
+theorem groundSpaceMap_toTensorFromBlocks_mem_iSup_chainGroundSpace_of_reindexed_projectionSpan
+    (A : (j : Fin r) → MPSTensor d (dim j))
+    (hCF : IsCanonicalFormBNT μ A) {L N m : ℕ}
+    (hL : 1 < L) (hN : N ≥ L + 1) (hm : 0 < m)
+    (hProj : ∀ k : Fin r,
+      Matrix.blockProjection (n := fun k : Fin r => Fin (dim k)) (R := ℂ) k ∈
+        Submodule.span ℂ (Set.range fun ω : Fin m → Fin d =>
+          Matrix.reindex finSigmaFinEquiv.symm finSigmaFinEquiv.symm
+            (evalWord (toTensorFromBlocks μ A) (List.ofFn ω))))
+    {X : Matrix (Fin (∑ k : Fin r, dim k)) (Fin (∑ k : Fin r, dim k)) ℂ}
+    (hComm : ∀ ω : Fin m → Fin d,
+      X * evalWord (toTensorFromBlocks μ A) (List.ofFn ω) =
+        evalWord (toTensorFromBlocks μ A) (List.ofFn ω) * X) :
+    groundSpaceMap (toTensorFromBlocks μ A) N X ∈
+      ⨆ j : Fin r, chainGroundSpace (A j) L N := by
+  classical
+  let e : ((k : Fin r) × Fin (dim k)) ≃ Fin (∑ k : Fin r, dim k) := finSigmaFinEquiv
+  rcases isBlockDiagonal'_of_commutes_reindexed_wordSpan
+      (B := toTensorFromBlocks μ A) (m := m) hProj hComm with
+    ⟨Xb, hXb⟩
+  have hCommRe : ∀ ω : Fin m → Fin d,
+      Matrix.blockDiagonal' Xb *
+          Matrix.blockDiagonal' (fun k : Fin r =>
+            (μ k) ^ m • evalWord (A k) (List.ofFn ω)) =
+        Matrix.blockDiagonal' (fun k : Fin r =>
+            (μ k) ^ m • evalWord (A k) (List.ofFn ω)) *
+          Matrix.blockDiagonal' Xb := by
+    intro ω
+    have h := congrArg (Matrix.reindex e.symm e.symm) (hComm ω)
+    have hEval :
+        Matrix.reindex e.symm e.symm
+            (evalWord (toTensorFromBlocks μ A) (List.ofFn ω)) =
+          Matrix.blockDiagonal' (fun k : Fin r =>
+            (μ k) ^ m • evalWord (A k) (List.ofFn ω)) := by
+      rw [evalWord_toTensorFromBlocks_eq_reindex_blockDiagonal μ A (List.ofFn ω)]
+      ext a b
+      simp [e]
+    have hLeft :
+        Matrix.reindex e.symm e.symm
+            (X * evalWord (toTensorFromBlocks μ A) (List.ofFn ω)) =
+          Matrix.reindex e.symm e.symm X *
+            Matrix.reindex e.symm e.symm
+              (evalWord (toTensorFromBlocks μ A) (List.ofFn ω)) := by
+      rw [Matrix.reindex_apply, Matrix.reindex_apply, Matrix.reindex_apply]
+      exact (Matrix.submatrix_mul_equiv X
+        (evalWord (toTensorFromBlocks μ A) (List.ofFn ω)) e e e).symm
+    have hRight :
+        Matrix.reindex e.symm e.symm
+            (evalWord (toTensorFromBlocks μ A) (List.ofFn ω) * X) =
+          Matrix.reindex e.symm e.symm
+              (evalWord (toTensorFromBlocks μ A) (List.ofFn ω)) *
+            Matrix.reindex e.symm e.symm X := by
+      rw [Matrix.reindex_apply, Matrix.reindex_apply, Matrix.reindex_apply]
+      exact (Matrix.submatrix_mul_equiv
+        (evalWord (toTensorFromBlocks μ A) (List.ofFn ω)) X e e e).symm
+    rw [hLeft, hRight, hXb, hEval] at h
+    exact h
+  have hCommBlock : ∀ (k : Fin r) (ω : Fin m → Fin d),
+      Xb k * evalWord (A k) (List.ofFn ω) = evalWord (A k) (List.ofFn ω) * Xb k := by
+    intro k ω
+    have hblock_smul :
+        (μ k) ^ m • (Xb k * evalWord (A k) (List.ofFn ω)) =
+          (μ k) ^ m • (evalWord (A k) (List.ofFn ω) * Xb k) := by
+      have hblockEq :
+          Matrix.blockDiagonal' (fun k : Fin r =>
+              Xb k * ((μ k) ^ m • evalWord (A k) (List.ofFn ω))) =
+            Matrix.blockDiagonal' (fun k : Fin r =>
+              ((μ k) ^ m • evalWord (A k) (List.ofFn ω)) * Xb k) := by
+        rw [Matrix.blockDiagonal'_mul, Matrix.blockDiagonal'_mul]
+        exact hCommRe ω
+      ext a b
+      have hentry := congrFun (congrFun hblockEq ⟨k, a⟩) ⟨k, b⟩
+      simpa [Algebra.mul_smul_comm, Algebra.smul_mul_assoc] using hentry
+    have hμpow : (μ k) ^ m ≠ 0 :=
+      pow_ne_zero m (hCF.toHasStrictOrderedNonzeroWeights.mu_ne_zero k)
+    have hcancel := congrArg (fun M => ((μ k) ^ m)⁻¹ • M) hblock_smul
+    simpa [smul_smul, hμpow] using hcancel
+  have hScalar : ∀ k : Fin r, ∃ c : ℂ, Xb k = Matrix.scalar (Fin (dim k)) c := by
+    intro k
+    refine Matrix.isScalar_of_commute_span_eq_top
+      (S := Set.range fun ω : Fin m → Fin d => evalWord (A k) (List.ofFn ω))
+      (Xb k) ?_ ?_
+    · simpa [wordSpan] using
+        wordSpan_eq_top_of_isInjective (hCF.toHasInjectiveBlocks.block_injective k) hm
+    · intro M hM
+      rcases hM with ⟨ω, rfl⟩
+      exact hCommBlock k ω
+  choose c hc using hScalar
+  have hX : X = Matrix.reindex e e (Matrix.blockDiagonal' Xb) := by
+    rw [← hXb]
+    ext a b
+    simp [e]
+  rw [hX, groundSpaceMap_toTensorFromBlocks_blockDiagonal]
+  refine Submodule.sum_mem _ ?_
+  intro k _
+  rw [hc k, groundSpaceMap_matrix_scalar, smul_smul]
+  exact Submodule.smul_mem _ _
+    ((le_iSup (fun j : Fin r => chainGroundSpace (A j) L N) k)
+      (mpv_mem_chainGroundSpace (A k) L N (by omega) (by omega)))
+
+/-- Conditional reverse block split from the finite projection-span input.
+
+Besides the #911 projection-span hypothesis, this theorem assumes the
+boundary-matrix output of the wrapping/open-chain layer: every vector in the
+assembled periodic ground space can be represented as `groundSpaceMap` applied to
+a boundary matrix that commutes with all length-`m` assembled word products. Under
+these inputs, the assembled periodic ground space is contained in the supremum of
+the blockwise periodic ground spaces. -/
+theorem chainGroundSpace_toTensorFromBlocks_le_iSup_of_reindexed_projectionSpan
+    (A : (j : Fin r) → MPSTensor d (dim j))
+    (hCF : IsCanonicalFormBNT μ A) {L N m : ℕ}
+    (hL : 1 < L) (hN : N ≥ L + 1) (hm : 0 < m)
+    (hProj : ∀ k : Fin r,
+      Matrix.blockProjection (n := fun k : Fin r => Fin (dim k)) (R := ℂ) k ∈
+        Submodule.span ℂ (Set.range fun ω : Fin m → Fin d =>
+          Matrix.reindex finSigmaFinEquiv.symm finSigmaFinEquiv.symm
+            (evalWord (toTensorFromBlocks μ A) (List.ofFn ω))))
+    (hBoundary : ∀ ⦃ψ : NSiteSpace d N⦄,
+      ψ ∈ chainGroundSpace (toTensorFromBlocks μ A) L N →
+        ∃ X : Matrix (Fin (∑ k : Fin r, dim k)) (Fin (∑ k : Fin r, dim k)) ℂ,
+          ψ = groundSpaceMap (toTensorFromBlocks μ A) N X ∧
+          ∀ ω : Fin m → Fin d,
+            X * evalWord (toTensorFromBlocks μ A) (List.ofFn ω) =
+              evalWord (toTensorFromBlocks μ A) (List.ofFn ω) * X) :
+    chainGroundSpace (toTensorFromBlocks μ A) L N ≤
+      ⨆ j : Fin r, chainGroundSpace (A j) L N := by
+  intro ψ hψ
+  rcases hBoundary hψ with ⟨X, hψX, hComm⟩
+  rw [hψX]
+  exact groundSpaceMap_toTensorFromBlocks_mem_iSup_chainGroundSpace_of_reindexed_projectionSpan
+    (μ := μ) A hCF hL hN hm hProj hComm
+
+/-- Conditional periodic block-decomposition equality for the assembled tensor.
+
+This combines the already-proved forward inclusion with
+`chainGroundSpace_toTensorFromBlocks_le_iSup_of_reindexed_projectionSpan`. The
+only CF/BNT-specific finite-span assumption here is the #911 projection-span
+input; the remaining boundary-matrix representation/commutation hypothesis is
+the wrapping-window output that supplies the boundary matrix to which the
+commutant reduction applies. -/
+theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_of_reindexed_projectionSpan
+    (A : (j : Fin r) → MPSTensor d (dim j))
+    (hCF : IsCanonicalFormBNT μ A) {L N m : ℕ}
+    (hL : 1 < L) (hN : N ≥ L + 1) (hm : 0 < m)
+    (hProj : ∀ k : Fin r,
+      Matrix.blockProjection (n := fun k : Fin r => Fin (dim k)) (R := ℂ) k ∈
+        Submodule.span ℂ (Set.range fun ω : Fin m → Fin d =>
+          Matrix.reindex finSigmaFinEquiv.symm finSigmaFinEquiv.symm
+            (evalWord (toTensorFromBlocks μ A) (List.ofFn ω))))
+    (hBoundary : ∀ ⦃ψ : NSiteSpace d N⦄,
+      ψ ∈ chainGroundSpace (toTensorFromBlocks μ A) L N →
+        ∃ X : Matrix (Fin (∑ k : Fin r, dim k)) (Fin (∑ k : Fin r, dim k)) ℂ,
+          ψ = groundSpaceMap (toTensorFromBlocks μ A) N X ∧
+          ∀ ω : Fin m → Fin d,
+            X * evalWord (toTensorFromBlocks μ A) (List.ofFn ω) =
+              evalWord (toTensorFromBlocks μ A) (List.ofFn ω) * X) :
+    chainGroundSpace (toTensorFromBlocks μ A) L N =
+      ⨆ j : Fin r, chainGroundSpace (A j) L N := by
+  apply le_antisymm
+  · exact chainGroundSpace_toTensorFromBlocks_le_iSup_of_reindexed_projectionSpan
+      (μ := μ) A hCF hL hN hm hProj hBoundary
+  · exact iSup_chainGroundSpace_block_le_toTensorFromBlocks μ
+      (fun j => hCF.toHasStrictOrderedNonzeroWeights.mu_ne_zero j) A L N
+
 /-- If the assembled periodic ground space splits blockwise into the block chain
 ground spaces, then blockwise injective uniqueness already yields membership in
 `bntSpan`. This isolates the endgame so the only missing ingredient is the
@@ -205,6 +429,47 @@ private theorem parentHamiltonianGroundSpace_le_bntSpan_of_block_chain_split
   rw [mpvSubmodule, Submodule.mem_span_singleton] at hψ
   rcases hψ with ⟨c, rfl⟩
   exact Submodule.smul_mem _ c (Submodule.subset_span ⟨j, rfl⟩)
+
+/-- Conditional containment in the BNT span from projection-span and boundary data.
+
+This is the parent-Hamiltonian endgame after a block split has been produced by
+`chainGroundSpace_toTensorFromBlocks_le_iSup_of_reindexed_projectionSpan`. The
+projection-span hypothesis is the #911 finite CF/BNT input still tracked
+separately; the boundary hypothesis is the wrapping/open-chain output that
+supplies the commuting boundary matrix. The proof then delegates to
+`parentHamiltonianGroundSpace_le_bntSpan_of_block_chain_split`, so the final step
+uses the existing blockwise injective uniqueness theorem. -/
+theorem parentHamiltonianGroundSpace_le_bntSpan_of_reindexed_projectionSpan
+    (A : (j : Fin r) → MPSTensor d (dim j))
+    (hCF : IsCanonicalFormBNT μ A) {L N m : ℕ}
+    (hL : 1 < L) (hN : N ≥ L + 1) (hm : 0 < m)
+    (hProj : ∀ k : Fin r,
+      Matrix.blockProjection (n := fun k : Fin r => Fin (dim k)) (R := ℂ) k ∈
+        Submodule.span ℂ (Set.range fun ω : Fin m → Fin d =>
+          Matrix.reindex finSigmaFinEquiv.symm finSigmaFinEquiv.symm
+            (evalWord (toTensorFromBlocks μ A) (List.ofFn ω))))
+    (hBoundary : ∀ ⦃ψ : NSiteSpace d N⦄,
+      ψ ∈ parentHamiltonianGroundSpace (μ := μ) A L N →
+        ∃ X : Matrix (Fin (∑ k : Fin r, dim k)) (Fin (∑ k : Fin r, dim k)) ℂ,
+          ψ = groundSpaceMap (toTensorFromBlocks μ A) N X ∧
+          ∀ ω : Fin m → Fin d,
+            X * evalWord (toTensorFromBlocks μ A) (List.ofFn ω) =
+              evalWord (toTensorFromBlocks μ A) (List.ofFn ω) * X) :
+    parentHamiltonianGroundSpace (μ := μ) A L N ≤ bntSpan A N := by
+  refine parentHamiltonianGroundSpace_le_bntSpan_of_block_chain_split
+    (μ := μ) A hCF hL hN ?_
+  have hBoundary' : ∀ ⦃ψ : NSiteSpace d N⦄,
+      ψ ∈ chainGroundSpace (toTensorFromBlocks μ A) L N →
+        ∃ X : Matrix (Fin (∑ k : Fin r, dim k)) (Fin (∑ k : Fin r, dim k)) ℂ,
+          ψ = groundSpaceMap (toTensorFromBlocks μ A) N X ∧
+          ∀ ω : Fin m → Fin d,
+            X * evalWord (toTensorFromBlocks μ A) (List.ofFn ω) =
+              evalWord (toTensorFromBlocks μ A) (List.ofFn ω) * X := by
+    intro ψ hψ
+    exact hBoundary (by simpa [parentHamiltonianGroundSpace_eq] using hψ)
+  simpa [parentHamiltonianGroundSpace_eq] using
+    chainGroundSpace_toTensorFromBlocks_le_iSup_of_reindexed_projectionSpan
+      (μ := μ) A hCF hL hN hm hProj hBoundary'
 
 /-- Reverse-inclusion step for the BNT ground-space theorem.
 
@@ -241,12 +506,11 @@ The remaining missing ingredient is therefore a **periodic-chain block
 splitting theorem** of the form
 `parentHamiltonianGroundSpace (μ := μ) A L N ≤ ⨆ j, chainGroundSpace (A j) L N`,
 saying that a state whose cyclic windows all lie in the block-diagonal local
-ground space decomposes into a sum of block chain-ground-state components.
-The block-diagonal commutant reduction in `BlockDiagonalCommutant` now supplies the
-algebraic off-block-zero step once the virtual sector projections are known to
-lie in the finite word span of the assembled tensor. The repository still lacks
-that CF/BNT finite-span block-separation theorem and the resulting periodic-chain
-block-splitting infrastructure.
+ground space decomposes into a sum of block chain-ground-state components. The
+conditional Route B endgame in this file supplies the algebraic off-block-zero
+step once the #911 virtual-sector projection-span input is available and the
+wrapping/open-chain comparison has produced a commuting boundary matrix; it does
+not replace either of those remaining structural inputs.
 
 Given that block-splitting theorem, the ⊆ direction becomes:
 ```
