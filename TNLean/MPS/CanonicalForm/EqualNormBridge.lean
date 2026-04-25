@@ -417,9 +417,9 @@ theorem exists_eventually_linearIndependent_of_overlap_tendsto_orthonormal
 
 For TP primitive irreducible blocks that are pairwise not gauge-phase equivalent,
 self-overlaps tend to `1` and cross-overlaps tend to `0`.  Hence their MPV states
-are eventually linearly independent.  This is the linear-independence bridge that
-remains after a future one-sided BNT construction has chosen separated
-representatives and absorbed all repeated gauge phases into sector weights. -/
+are eventually linearly independent.  This supplies the missing linear-independence
+step after a future one-sided BNT construction has chosen separated representatives
+and absorbed all repeated gauge phases into sector weights. -/
 theorem exists_eventually_linearIndependent_of_tp_primitive_irr_blocks_of_blocksNotGaugePhaseEquiv
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (blocks : (k : Fin r) → MPSTensor d (dim k))

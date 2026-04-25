@@ -73,7 +73,7 @@ BNT sector pair as a hypothesis, as in
 ## Wave 14 slot D update
 
 The branch `wave14-D-876-bnt-basis` removes one real sub-blocker without
-claiming the full construction.  It adds a separated-family bridge:
+claiming the full construction.  It adds a separated-family result:
 
 - `MPSTensor.exists_eventually_linearIndependent_of_overlap_tendsto_orthonormal`
   rewrites the existing overlap-orthonormality criterion into the existential
