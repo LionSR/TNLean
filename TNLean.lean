@@ -24,6 +24,7 @@ import TNLean.Algebra.BlockPermutation
 import TNLean.Algebra.SkolemNoether
 import TNLean.Algebra.GramMatrixLI
 import TNLean.Algebra.HermitianHelpers
+import TNLean.Algebra.MatrixSpectralDecomp
 import TNLean.Algebra.LinearMapAux
 import TNLean.Algebra.MatrixAux
 import TNLean.Algebra.ScalarPowerSumIdentity
@@ -55,6 +56,8 @@ import TNLean.Channel.KrausRank
 import TNLean.Channel.KrausRepresentation
 import TNLean.Channel.KrausUnitaryFreedom
 import TNLean.Channel.Stinespring
+import TNLean.Channel.OrderedCP
+import TNLean.Channel.RadonNikodym
 import TNLean.Channel.TransferMatrix
 import TNLean.Channel.POVM
 import TNLean.Channel.POVM.Uniqueness
@@ -71,8 +74,8 @@ import TNLean.Axioms.Entropy
 -- from `TNLean.Axioms.Entropy`; the `TNLean.Entropy.*` modules
 -- re-state the sanctioned entropy axioms under the Entropy namespace.
 import TNLean.Entropy.VonNeumann
-import TNLean.Entropy.TripartiteTrace
 import TNLean.Entropy.StrongSubadditivity
+import TNLean.Entropy.TripartiteTrace
 import TNLean.Entropy.MarkovChain
 import TNLean.Entropy.MutualInformation
 -- Layer 2b: Axiomatized operator convexity/concavity results (pending upstream Mathlib)
@@ -169,6 +172,7 @@ import TNLean.MPS.ParentHamiltonian.Basic
 import TNLean.MPS.ParentHamiltonian.IntersectionProperty
 import TNLean.MPS.ParentHamiltonian.CyclicWindow
 import TNLean.MPS.ParentHamiltonian.SuffixWindow
+import TNLean.MPS.ParentHamiltonian.RestrictTransport
 import TNLean.MPS.ParentHamiltonian.ExtendRight
 import TNLean.MPS.ParentHamiltonian.WrappingWindow
 import TNLean.MPS.ParentHamiltonian.UniqueGroundState
@@ -258,6 +262,7 @@ import TNLean.MPS.MPDO.SimpleLocalStructure
 import TNLean.MPS.MPDO.FusionIsometries
 import TNLean.MPS.MPDO.AlgebraStructure
 import TNLean.MPS.MPDO.CommutingForm
+import TNLean.MPS.MPDO.BlockedRFPConstruction
 
 -- MPS examples
 import TNLean.MPS.Examples.AKLT
@@ -324,6 +329,9 @@ import TNLean.Wielandt.QuantumWielandt
 import TNLean.Channel.Peripheral.CyclicDecomposition
 import TNLean.Channel.Peripheral.Cycles
 import TNLean.Channel.Peripheral.MultiCycleDecomposition
+
+-- Chapter 2 §2.3 normal-form existence (SVD + Lorentz)
+import TNLean.Channel.NormalForm
 
 -- Public documentation index modules
 import TNLean.Channel.WolfChapter2Index

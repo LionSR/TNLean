@@ -10,10 +10,13 @@ import TNLean.Channel.KrausRank
 import TNLean.Channel.KrausRepresentation
 import TNLean.Channel.KrausUnitaryFreedom
 import TNLean.Channel.Stinespring
+import TNLean.Channel.OrderedCP
+import TNLean.Channel.RadonNikodym
 import TNLean.Channel.POVM
 import TNLean.Channel.POVM.Uniqueness
 import TNLean.Channel.TransferMatrix
 import TNLean.Channel.WolfProps
+import TNLean.Channel.NormalForm
 
 /-!
 # Wolf Lecture Notes — Chapter 2: Representations
@@ -37,6 +40,10 @@ representations of quantum channels.
   - `Channel.choiRank` — rank of the Choi matrix ✅
   - `Channel.choiRank_le_of_hasKrausCard` / `Channel.choiRank_le_of_hasKrausRankLE`
     — Choi-rank upper bounds from exact / bounded Kraus families ✅
+  - `Channel.hasKrausCard_choiRank_of_cp` /
+    `Channel.hasKrausRankLE_choiRank_of_cp` /
+    `Channel.hasKrausRankLE_choiRank_of_cptp`
+    — minimal Kraus constructions from the Choi spectral decomposition ✅
 
 * **Thm 2.1** (Kraus representation):
   - `kraus_tp_of_sum_conjTranspose_mul` — `∑Kᵢ†Kᵢ = 𝟙` ⟹ TP ✅
@@ -60,6 +67,31 @@ representations of quantum channels.
   - `stinespring_dual_representation` — `T*(A) = V†(A ⊗ 𝟙)V` ✅
   - `stinespringV_isometry_iff_kraus_normalized` — `V†V = 𝟙` ↔ TP ✅
   - `stinespring_schrodinger_representation` — `T(ρ) = tr_r(VρV†)` ✅
+
+* **Thm 2.3** (ordered CP-maps):
+  - `CPDominates` — CP partial order: `S - T` is completely positive ✅
+  - `Matrix.blockTopRows` / `Matrix.blockTopRows_mul_conjTranspose` /
+    `Matrix.blockTopRows_conjTranspose_mul_le_one` — explicit block-top
+    contraction on the dilation space ✅
+  - `stinespringV_eq_kronecker_blockTopRows_mul_append` — intertwining
+    `V_{K} = (𝟙_D ⊗ C) · V_{K ++ L}` for the block-top projector ✅
+  - `CPDominates.exists_stinespring_contraction` — existential form of
+    Wolf Thm 2.3: `T₁ ≤ T₂` gives Stinespring realizations and a contraction ✅
+
+* **Thm 2.4** (Radon–Nikodym for CP maps):
+  - `Matrix.blockDiagTopProj` / `Matrix.blockDiagBotProj` — orthogonal
+    block projectors on the dilation space, PSD and summing to `𝟙` ✅
+  - `Matrix.kroneckerMap_conjTranspose_mul_kroneckerMap` — Kronecker
+    identity `A ⊗ (CᴴC) = (𝟙 ⊗ C)ᴴ (A ⊗ 𝟙) (𝟙 ⊗ C)` ✅
+  - `IsCPMap.exists_radon_nikodym` — Wolf Thm 2.4 binary form:
+    for CP `T₁, T₂`, a Stinespring matrix for `T₁ + T₂` yields
+    PSD `P₁ + P₂ = 𝟙` with `Tᵢ(A) = V†(A ⊗ Pᵢ)V` ✅
+
+* **Thm 2.5** (open-system representation, reduced form):
+  - `IsChannel.exists_stinespring_open_system` — every CPTP map is
+    `T(ρ)_{ij} = ∑ₖ (V ρ V†)_{(i,k),(j,k)}` for an isometric `V` ✅
+  - `IsChannel.exists_stinespring_open_system_traceRight` — equivalent
+    form via `Matrix.traceRight`: `T(ρ) = tr_E[V ρ V†]` ✅
 
 * **Thm 2.6** (Naimark / Neumark dilation for POVMs):
   - `POVM` — positive operator-valued measure structure ✅
@@ -94,11 +126,17 @@ representations of quantum channels.
   - `WolfProps.channel_eq_id_of_fixes_pureStates` — a channel fixing
     every pure-state projector is the identity channel ✅
 
-* **Prop 2.4** (equivalence of ensembles, sufficient direction):
+* **Prop 2.4** (equivalence of ensembles, Hughston–Jozsa–Wootters):
   - `WolfProps.pureEnsembleDensity` — density operator of a pure-state
     ensemble `∑ᵢ |ψᵢ⟩⟨ψᵢ|` ✅
-  - `WolfProps.pureEnsembleDensity_eq_of_isometric_mixing` — ensembles
-    related by an isometric mixing matrix share the same density ✅
+  - `WolfProps.pureEnsembleDensity_eq_of_isometric_mixing` — sufficient
+    direction: ensembles related by an isometric mixing matrix share
+    the same density ✅
+  - `WolfProps.exists_isometric_mixing_of_pureEnsembleDensity_eq` —
+    necessary direction (HJW converse): equal densities force an
+    isometric mixing matrix between the two ensembles ✅
+  - `WolfProps.pureEnsembleDensity_eq_iff_exists_isometric_mixing` —
+    both directions packaged as an iff ✅
 
 ### §2.2 Transfer matrix
 
@@ -124,6 +162,15 @@ representations of quantum channels.
 * `transferMatrix_unitaryConj_sandwich` — **Props 2.7-2.8 key identity**:
   `(Ad_{U₁} ∘ T ∘ Ad_{U₂})^ = (Ū₁⊗U₁) T̂ (Ū₂⊗U₂)` ✅
 
+### §2.3 SVD normal form (existence)
+
+* `Matrix.svd_of_posSemidef` — **SVD for PSD matrices** (spectral theorem
+  packaged): `M = U * diagonal σ * Uᴴ` with `σ ≥ 0` ✅
+* `Matrix.svd_of_isUnit` — **SVD existence for invertible complex matrices**:
+  `M = U * diagonal σ * Vᴴ` with `U, V` unitary and `σ > 0` ✅
+* `transferMatrix_svd_of_isUnit` — **SVD representation of a transfer
+  matrix** (Wolf §2.3): every invertible transfer matrix admits an SVD ✅
+
 ### Infrastructure
 
 | Definition | File | Lean name |
@@ -148,12 +195,9 @@ representations of quantum channels.
 
 | Result | Notes |
 |--------|-------|
-| Prop 2.4 (equiv of ensembles, necessity) | Needs purification/Schmidt decomp |
-| Thm 2.3 (ordered CP-maps) | Needs Stinespring + contraction |
-| Thm 2.4 (Radon-Nikodym) | Follows from Thm 2.3 |
-| Thm 2.5 (open-system representation) | Embedding into unitary |
-| §2.3 Lorentz normal form (existence) | Needs SVD of transfer matrix |
-| §2.3 SVD representation (existence) | Needs Mathlib SVD |
+| Thm 2.5 (unitary form) | Reduced isometric form formalized; unitary form needs basis extension |
+| §2.3 Lorentz normal form (existence) | Needs compactness over `SL(2, ℂ)` filterings |
+| §2.3 Sorted singular values | Current SVD is unsorted; later uses want sorted values |
 
 ## References
 

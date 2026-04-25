@@ -36,6 +36,9 @@ its MPS-formulation for irreducible TP tensors.
 * `primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking_of_fixedAlgebraRigidity`
   — the same conclusion under the structured fixed-point-algebra rigidity
   hypothesis from `SectorIrreducibility/HLift.lean`.
+* `primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking`
+  — the unconditional wrapper using
+  `isIrreducibleOnCorner_of_cyclic_decomp_mps`.
 
 ## References
 
@@ -722,6 +725,62 @@ theorem primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking_o
     intro k
     exact isIrreducibleOnCorner_of_cyclic_decomp_mps_of_sectorFixedPointAlgebraRigidity
       (A := A) (m := m) hIrrAdj hTP P hPproj hPsum hcyclic hMulLeft hMulRight hRigidity k
+  exact primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking_of_cornerIrreducible
+    A hTP hγprim hperiph blocks P φ hPproj hPsum hcyclic hIntertwine hMul hStar hNondeg
+    hCornerIrr
+
+/-- Unconditional cyclic-sector block primitivity and irreducibility after blocking.
+
+This uses `isIrreducibleOnCorner_of_cyclic_decomp_mps`, so the older
+`hProjStep` and `SectorFixedPointAlgebraRigidity` interfaces are no longer needed
+once the ambient tensor is irreducible and trace-preserving. -/
+theorem primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking
+    {d D m : ℕ} [NeZero D] [NeZero m]
+    (A : MPSTensor d D)
+    (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (hIrr : IsIrreducibleTensor A)
+    {γ : ℂ}
+    (hγprim : IsPrimitiveRoot γ m)
+    (hperiph :
+      peripheralEigenvalues (transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) =
+        Set.range (fun j : Fin m => γ ^ (j : ℕ)))
+    {dim : Fin m → ℕ}
+    (blocks : (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k))
+    (P : Fin m → MatrixAlg D)
+    (φ : (k : Fin m) →
+      Matrix (Fin (dim k)) (Fin (dim k)) ℂ ≃ₗ[ℂ] cornerSubmodule (P k))
+    (hPproj : ∀ k, IsOrthogonalProjection (P k))
+    (hPsum : ∑ k : Fin m, P k = 1)
+    (hcyclic :
+      ∀ k : Fin m,
+        transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k)
+    (hIntertwine :
+      ∀ k (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
+        (φ k (transferMap (d := blockPhysDim d m) (D := dim k)
+            (fun i => (blocks k i)ᴴ) X)).1 =
+          transferMap (d := blockPhysDim d m) (D := D)
+            (fun i => (P k * blockTensor A m i)ᴴ) ((φ k X).1))
+    (hMul :
+      ∀ k (X Y : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
+        (φ k (X * Y)).1 = (φ k X).1 * (φ k Y).1)
+    (hStar :
+      ∀ k (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
+        (φ k Xᴴ).1 = ((φ k X).1)ᴴ)
+    (hNondeg : ∀ k, dim k ≠ 0) :
+    ∀ u : Fin m,
+      _root_.IsPrimitive (transferMap (d := blockPhysDim d m) (D := dim u) (blocks u)) ∧
+        IsIrreducibleTensor (blocks u) := by
+  let T : MatrixEnd D := transferMap (d := d) (D := D) (fun i => (A i)ᴴ)
+  have hIrrAdj : IsIrreducibleMap T := by
+    simpa [T] using
+      isIrreducibleCP_transferMap_conjTranspose_of_isIrreducibleTensor (A := A) hIrr
+  have hMulLeft := cyclic_projection_mul_left (A := A) (m := m) hTP P hPproj hcyclic
+  have hMulRight := cyclic_projection_mul_right (A := A) (m := m) hTP P hPproj hcyclic
+  have hCornerIrr :
+      ∀ k : Fin m, IsIrreducibleOnCorner (P k) (T ^ m) := by
+    intro k
+    exact isIrreducibleOnCorner_of_cyclic_decomp_mps
+      (A := A) (m := m) hIrrAdj hTP P hPproj hPsum hcyclic hMulLeft hMulRight k
   exact primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking_of_cornerIrreducible
     A hTP hγprim hperiph blocks P φ hPproj hPsum hcyclic hIntertwine hMul hStar hNondeg
     hCornerIrr

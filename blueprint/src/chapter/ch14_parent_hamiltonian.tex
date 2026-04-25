@@ -199,6 +199,22 @@ onto $G_L(A)^\perp$ in the $L$-site Euclidean space.
     \]
 \end{lemma}
 
+\begin{lemma}[Replacing an extracted window]\label{lem:replace_window_extract_window}
+    \lean{MPSTensor.replaceWindow_extractWindow}
+    \leanok
+    \uses{def:extract_window, def:replace_window}
+    If $L \le N$, then replacing the cyclic window at $i$ in $\sigma$ by the values
+    extracted from that same $\sigma$ leaves $\sigma$ unchanged:
+    \[
+        \operatorname{replaceWindow}_{L,i}(\sigma,\operatorname{extractWindow}_{L,i}(\sigma)) = \sigma.
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    Case-split on whether the offset $(k - i + N) \bmod N$ lies in $[0,L)$: inside the
+    window the value comes from $\operatorname{extractWindow}$, which returns
+    $\sigma$ at the same position; outside the window both sides already agree with $\sigma$.
+\end{proof}
+
 For a periodic chain of length $N$, the parent Hamiltonian is the sum of
 translated copies of the local interaction.
 
@@ -1429,6 +1445,7 @@ Lucia~\cite{Kastoryano2018Martingale}.
     \label{rem:euclidean_local_projector_ingredients}
     \lean{MPSTensor.parentInteractionES}
     \lean{MPSTensor.cyclicRestrictES}
+    \lean{MPSTensor.localTermES}
     \lean{MPSTensor.localTermESSummand}
     \leanok
     \uses{def:ground_space_es, rem:cyclic_window_operators}
@@ -1436,8 +1453,9 @@ Lucia~\cite{Kastoryano2018Martingale}.
     $(G_L^{\mathrm{ES}}(A))^\perp$ on the Euclidean $L$-site space. For a cyclic
     window starting at $i$ and an outside configuration $\tau$, the transported
     restriction map $R_{i,\tau}$ evaluates an $N$-site Euclidean vector on that
-    window. The operator $R_{i,\tau}^{\dagger} P_L^{\mathrm{ES}}(A) R_{i,\tau}$ is the
-    basic local summand in the expected averaging formula for the transported local term.
+    window. The transported local term $h_{i,\mathrm{ES}}$ is the corresponding
+    $N$-site local projector, and $R_{i,\tau}^{\dagger} P_L^{\mathrm{ES}}(A) R_{i,\tau}$ is
+    the basic positive summand in its cyclic-averaging formula.
 \end{remark}
 
 \begin{lemma}[Positivity of the Euclidean local summands]
@@ -1456,6 +1474,45 @@ Lucia~\cite{Kastoryano2018Martingale}.
     \leanok
     Orthogonal projectors are positive. Conjugation by $R_{i,\tau}$ preserves
     positivity, and finite sums of positive operators remain positive.
+\end{proof}
+
+\begin{lemma}[Cyclic averaging for the transported ES local terms]
+    \label{lem:local_term_es_average}
+    \lean{MPSTensor.parentHamiltonianES_eq_sum_localTermES}
+    \lean{MPSTensor.localTermES_eq_average_localTermESSummand}
+    \leanok
+    \uses{rem:euclidean_local_projector_ingredients, lem:euclidean_local_projector_positive}
+    The transported parent Hamiltonian is the sum of the transported local terms
+    $H_{N,\mathrm{ES}} = \sum_i h_{i,\mathrm{ES}}$, and each transported local term admits
+    the exact cyclic-averaging formula
+    \[
+        h_{i,\mathrm{ES}}
+        = d^{-L} \sum_{\tau} R_{i,\tau}^{\dagger} P_L^{\mathrm{ES}}(A) R_{i,\tau}.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Unfold the transported local term and compare it configuration-by-configuration
+    with the cyclic restrictions. The $d^{-L}$ factor compensates for the $d^L$
+    choices of the window coordinates in the ambient configuration parameter $\tau$.
+\end{proof}
+
+\begin{lemma}[Positivity of the transported ES Hamiltonian]
+    \label{lem:transported_es_positive}
+    \lean{MPSTensor.localTermES_isPositive}
+    \lean{MPSTensor.parentHamiltonianES_isPositive}
+    \leanok
+    \uses{lem:local_term_es_average}
+    Each transported local term $h_{i,\mathrm{ES}}$ is positive, hence the full
+    transported parent Hamiltonian $H_{N,\mathrm{ES}}$ is positive.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Apply the averaging formula above: $h_{i,\mathrm{ES}}$ is a nonnegative scalar
+    multiple of a finite sum of positive conjugates of $P_L^{\mathrm{ES}}(A)$, hence is
+    itself positive. Summing over $i$ yields positivity of $H_{N,\mathrm{ES}}$.
 \end{proof}
 
 \begin{lemma}[Quadratic form to norm bound]\label{lem:quadratic_form_to_norm_bound}

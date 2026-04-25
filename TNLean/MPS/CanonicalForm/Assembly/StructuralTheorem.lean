@@ -75,8 +75,13 @@ Gap §1 content is now more specific:
   sector decompositions from arbitrary `SameMPV₂`.
 
 The downstream algebraic reduction after a matched basis is now formalized by
-`fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_matched_basis`, but
-the full witness-producing sector endpoint is still missing.
+`fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_matched_basis`, and
+the matching data itself is recorded by the `SectorBasisMatching` witness type
+used in
+`fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_sectorMatching`. The
+remaining step is to construct such a `SectorBasisMatching` from arbitrary
+`SameMPV₂` sector decompositions (fed by the general BNT sector construction
+tracked separately).
 -/
 
 section FundamentalTheorem1606
@@ -169,16 +174,16 @@ theorem bilateral_commonPeriod_blocking_tp_primitive_normal
 
 /-- **Fundamental Theorem of MPS (1606.00608, after blocking): current structural shell.**
 
-For any two MPS tensors `A, B` with `SameMPV₂ A B`, this theorem packages the
+For any two MPS tensors `A, B` with `SameMPV₂ A B`, this theorem records the
 currently formalized one-sided reduction output on both sides: after blocking,
 each tensor admits a decomposition into TP blocks with primitive transfer maps,
 nonzero weights, and positive bond dimensions.
 
 The theorem does **not yet** use `SameMPV₂ A B` to compare the two blocked
-outputs. The remaining missing content is the sector-level endpoint described in
-the file documentation below: a general BNT sector construction for each side,
-followed by a heterogeneous equal-case comparison theorem for those sector
-decompositions.
+outputs. The remaining missing content is the sector-level comparison
+described in the file documentation below: a general BNT sector construction
+for each side, followed by a heterogeneous equal-case comparison theorem for
+those sector decompositions.
 
 This theorem therefore records the structural shell currently available on the
 way to arXiv:1606.00608, Theorem 1. -/
@@ -214,7 +219,7 @@ theorem fundamentalTheorem_after_blocking_1606_structural
 
 /-- A strengthened after-blocking structural interface that keeps the blocked `SameMPV₂`
 relations at the reduction periods. This is a small but genuine step toward Gap §1 because the
-common-equality input is no longer discarded by the public structural wrapper. -/
+common-equality input is no longer discarded by the public structural theorem. -/
 theorem fundamentalTheorem_after_blocking_1606_structural_with_blockedSameMPV₂
     {d D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
@@ -245,12 +250,88 @@ theorem fundamentalTheorem_after_blocking_1606_structural_with_blockedSameMPV₂
   · exact sameMPV₂_blockTensor A B hSame pA
   · exact sameMPV₂_blockTensor A B hSame pB
 
+/-- **Conditional after-blocking sector endpoint (issue #877 target shape).**
+
+Given two tensors with `SameMPV₂` and the two missing Gap §1 inputs tracked by
+issues #876 and #860, this theorem produces the target assembly endpoint: a
+common blocking period, a `SectorDecomposition` on each side carrying BNT basis
+data, and matched sector-weight data closing the canonical-form reduction.
+
+The two hypotheses express the missing paper-level inputs:
+
+* `bntSectorPair` supplies a common-period BNT sector decomposition for both
+  sides, `SameMPV₂`-equivalent to the blocked tensors and carrying
+  `HasBNTSectorData`.  This is the endpoint tracked by issue #876 and replaces
+  the current single-norm-class result `bnt_grouping_single_norm_class`.
+* `matchedBasisData` supplies the matched-basis witness (permutation, copy
+  alignment, per-block gauge-phase equivalence) from `SameMPV₂` between two
+  sector decompositions whose first entry has BNT basis data.  This is the
+  endpoint tracked by issue #860.
+
+The body is a kernel-checked composition of the existing structural wrapper's
+blocking compatibility (`sameMPV₂_blockTensor`), the two hypotheses, and the
+matched-basis algebraic endpoint from PR #844
+(`fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_matched_basis`).
+
+Once #876 and #860 land on `main`, the unconditional endpoint
+`fundamentalTheorem_after_blocking_1606_sector` of issue #877 is obtained by
+instantiating this theorem with the delivered constructors. -/
+theorem fundamentalTheorem_after_blocking_1606_sector_of_bntPair_matched
+    {d D₁ D₂ : ℕ}
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (hSame : SameMPV₂ A B)
+    (bntSectorPair :
+      ∃ p : ℕ, 0 < p ∧
+      ∃ P Q : SectorDecomposition (blockPhysDim d p),
+        SameMPV₂ (blockTensor (d := d) (D := D₁) A p) P.toTensor ∧
+        SameMPV₂ (blockTensor (d := d) (D := D₂) B p) Q.toTensor ∧
+        HasBNTSectorData P ∧ HasBNTSectorData Q)
+    (matchedBasisData : ∀ {d' : ℕ} (P Q : SectorDecomposition d'),
+      HasBNTSectorData P → SameMPV₂ P.toTensor Q.toTensor →
+      ∃ perm : Fin P.basisCount ≃ Fin Q.basisCount,
+        (∀ j, P.copies j = Q.copies (perm j)) ∧
+        ∀ j : Fin P.basisCount,
+          ∃ hdim : P.basisDim j = Q.basisDim (perm j),
+            GaugePhaseEquiv (d := d')
+              (cast (congr_arg (MPSTensor d') hdim) (P.basis j))
+              (Q.basis (perm j))) :
+    ∃ p : ℕ, 0 < p ∧
+    ∃ P Q : SectorDecomposition (blockPhysDim d p),
+      SameMPV₂ (blockTensor (d := d) (D := D₁) A p) P.toTensor ∧
+      SameMPV₂ (blockTensor (d := d) (D := D₂) B p) Q.toTensor ∧
+      HasBNTSectorData P ∧ HasBNTSectorData Q ∧
+      ∃ perm : Fin P.basisCount ≃ Fin Q.basisCount,
+      ∃ hCopies : ∀ j, P.copies j = Q.copies (perm j),
+      ∃ ζ : Fin P.basisCount → ℂ,
+        (∀ j, ζ j ≠ 0) ∧
+        ∀ j : Fin P.basisCount,
+          Finset.univ.val.map (P.weight j) =
+            Finset.univ.val.map
+              (fun q => ζ j * Q.weight (perm j) (Fin.cast (hCopies j) q)) := by
+  obtain ⟨p, hp, P, Q, hPeq, hQeq, hPbnt, hQbnt⟩ := bntSectorPair
+  have hAB : SameMPV₂ (blockTensor (d := d) (D := D₁) A p)
+                      (blockTensor (d := d) (D := D₂) B p) :=
+    sameMPV₂_blockTensor A B hSame p
+  have hPQeq : SameMPV₂ P.toTensor Q.toTensor := by
+    intro N σ
+    calc
+      mpv P.toTensor σ
+          = mpv (blockTensor (d := d) (D := D₁) A p) σ := (hPeq N σ).symm
+      _ = mpv (blockTensor (d := d) (D := D₂) B p) σ := hAB N σ
+      _ = mpv Q.toTensor σ := hQeq N σ
+  obtain ⟨perm, hCopies, hBasisGPE⟩ := matchedBasisData P Q hPbnt hPQeq
+  obtain ⟨ζ, hζne, hMultiset⟩ :=
+    fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_matched_basis
+      P Q perm hCopies hBasisGPE hPbnt hPQeq
+  exact ⟨p, hp, P, Q, hPeq, hQeq, hPbnt, hQbnt,
+          perm, hCopies, ζ, hζne, hMultiset⟩
+
 /-!
 ### What remains for the full 1606.00608 Fundamental Theorem
 
 The complete end-to-end FT should take two tensors `A, B` with `SameMPV₂ A B`
 and pass from the blocked reduction output to the paper's basis-of-normal-tensors
-endpoint. The remaining formalizations are now:
+sector comparison. The remaining formalizations are now:
 
 1. **General one-sided BNT construction**: starting from the blocked TP-primitive
    decomposition, construct a sector decomposition in the paper's general BNT
@@ -259,14 +340,18 @@ endpoint. The remaining formalizations are now:
    represent one MPV family.
 
 2. **Witness-producing heterogeneous sector comparison**: the algebraic
-   reduction from a matched basis to per-sector weight multiset equality is now
+   reduction from a matched basis to per-sector weight multiset equality is
    formalized by
    `fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_matched_basis`
    (with phase-match core
-   `fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_phaseMatch`).
-   What is still missing is the theorem that derives the needed basis
-   permutation, gauge-phase data, and copy alignment from arbitrary equal total
-   MPVs of two sector decompositions.
+   `fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_phaseMatch`), and
+   the matching data is bundled by the `SectorBasisMatching` witness type
+   exposed through
+   `fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_sectorMatching`.
+   What is still missing is the theorem that constructs such a
+   `SectorBasisMatching` — deriving the basis permutation, gauge-phase data,
+   and copy alignment — from arbitrary equal total MPVs of two sector
+   decompositions.
 
 3. **Final global construction**: once steps 1–2 are available, combine them with the
    already-formalized common-period blocking, blocked irreducibility,
@@ -274,7 +359,14 @@ endpoint. The remaining formalizations are now:
    the equal-case FT.
 
 So the common-period blocking step is no longer the blocker; the missing content
-is specifically the paper-level sector endpoint.
+is specifically the paper-level sector comparison theorem.
+
+The conditional theorem
+`fundamentalTheorem_after_blocking_1606_sector_of_bntPair_matched` above gives
+the target after-blocking sector comparison shape from issue #877: once the two
+missing paper-level inputs (issues #876 and #860) land on `main`, the
+unconditional after-blocking sector theorem is a one-line instantiation of that
+result.
 -/
 
 end FundamentalTheorem1606
