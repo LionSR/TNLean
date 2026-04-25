@@ -81,7 +81,7 @@ finite word-tuple span theorem supplies the full product algebra
 `(i : ι) → Matrix (n i) (n i) ℂ`, the diagonal embedding of those same word tuples
 contains the projections onto the individual direct-sum sectors. -/
 theorem blockProjection_mem_span_blockDiagonal'_of_pi_span_eq_top
-    {α : Type*} {T : α → (i : ι) → Matrix (n i) (n i) ℂ} {c : ι → ℂ}
+    {T : α → (i : ι) → Matrix (n i) (n i) ℂ} {c : ι → ℂ}
     (hc : ∀ i : ι, c i ≠ 0)
     (hSpan : Submodule.span ℂ (Set.range T) =
       (⊤ : Submodule ℂ ((i : ι) → Matrix (n i) (n i) ℂ)))
