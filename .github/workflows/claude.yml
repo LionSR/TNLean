@@ -89,8 +89,8 @@ jobs:
           branch-prefix: 'claude/issue-'
           creator-name: 'Claude Code action'
           autofix-label: 'auto-fix-claude'
-          trigger-text: |
-            ${{ github.event.comment.body || '' }}
-            ${{ github.event.issue.body || '' }}
-            ${{ github.event.issue.title || '' }}
+          event-name: ${{ github.event_name }}
+          comment-body: ${{ github.event.comment.body || '' }}
+          issue-body: ${{ github.event.issue.body || '' }}
+          issue-title: ${{ github.event.issue.title || '' }}
           gh-token: ${{ env.GH_TOKEN }}

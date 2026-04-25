@@ -17,8 +17,19 @@ inputs:
   autofix-label:
     description: 'Label to add when the trigger text contains an auto-fix keyword'
     required: true
-  trigger-text:
-    description: 'The user-supplied text to scan for auto-fix keywords (comment body, or issue body+title)'
+  event-name:
+    description: 'github.event_name; selects which fields to scan for the auto-fix keyword'
+    required: true
+  comment-body:
+    description: 'Comment body (scanned when event-name == issue_comment)'
+    required: false
+    default: ''
+  issue-body:
+    description: 'Issue body (scanned when event-name == issues)'
+    required: false
+    default: ''
+  issue-title:
+    description: 'Issue title (scanned when event-name == issues)'
     required: false
     default: ''
   gh-token:
@@ -37,7 +48,10 @@ runs:
         BRANCH_PREFIX: ${{ inputs.branch-prefix }}
         CREATOR_NAME: ${{ inputs.creator-name }}
         AUTOFIX_LABEL: ${{ inputs.autofix-label }}
-        TRIGGER_TEXT: ${{ inputs.trigger-text }}
+        EVENT_NAME: ${{ inputs.event-name }}
+        COMMENT_BODY: ${{ inputs.comment-body }}
+        ISSUE_BODY: ${{ inputs.issue-body }}
+        ISSUE_TITLE_INPUT: ${{ inputs.issue-title }}
       run: |
         set -euo pipefail
 
@@ -81,6 +95,16 @@ runs:
         PR_NUM=$(echo "$PR_URL" | grep -oE '[0-9]+$')
 
         # Label so subsequent CI failures kick the matching auto-fix workflow.
+        # Scan only the fields that originated the trigger: the comment body for
+        # issue_comment events, or the issue body+title for issues events. Mixing
+        # them would mislabel a PR when the parent issue contains "auto-fix" but
+        # the actual triggering comment does not.
+        if [ "$EVENT_NAME" = "issue_comment" ]; then
+          TRIGGER_TEXT="$COMMENT_BODY"
+        else
+          TRIGGER_TEXT="$ISSUE_BODY $ISSUE_TITLE_INPUT"
+        fi
+
         if echo "$TRIGGER_TEXT" | grep -qiE 'auto[_ -]?fix'; then
           echo "Autofix keyword detected — adding '${AUTOFIX_LABEL}' label to PR #${PR_NUM}"
           gh pr edit "$PR_NUM" --repo "$REPO" --add-label "$AUTOFIX_LABEL" || true
