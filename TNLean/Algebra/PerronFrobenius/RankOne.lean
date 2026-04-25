@@ -26,7 +26,6 @@ hypotheses because it is part of the paper's construction of the auxiliary
 matrix `T`.
 -/
 
-open BigOperators
 open scoped BigOperators Matrix ComplexOrder
 
 namespace Matrix
@@ -46,10 +45,10 @@ def TracePowersConstant (T : Matrix (Fin n) (Fin n) ℝ) : Prop :=
 
 /-- The conditional Perron--Frobenius hypothesis for Appendix C.2, Lemma C.4.
 
-This predicate is kept for callers that phrase the rank-one step as a local
-hypothesis. As a universally quantified statement over primitive nonnegative
-real matrices it is false: there exist primitive nonnegative matrices with
-constant trace powers and rank greater than one. See
+This predicate is retained for theorems that assume this implication directly
+as a hypothesis. As a universally quantified statement over primitive
+nonnegative real matrices it is false: there exist primitive nonnegative
+matrices with constant trace powers and rank greater than one. See
 `TNLean/Archive/PerronFrobeniusRankOneCounterexample.lean`.
 
 The corrected theorem in this module is
