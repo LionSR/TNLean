@@ -71,6 +71,9 @@ concrete Friedrichs-angle/row-sum lower bound that
 * `MPSTensor.parentHamiltonianES_gap_bound_of_ordered_local_term_bounds` — a
   reusable reduction from explicit ordered cross-term row bounds for the
   local symmetric projections to the quadratic-form hypothesis above.
+* `MPSTensor.parentHamiltonianES_gap_bound_of_finite_overlap_friedrichs` — a
+  finite-overlap interface turning local Friedrichs estimates and row-cardinality
+  bounds into the ordered row-sum input.
 * `MPSTensor.parentHamiltonian_gapped` — uniform spectral gap for MPS
   parent Hamiltonians on injective tensors, obtained from the
   Friedrichs-angle bound recorded in
@@ -697,6 +700,88 @@ theorem parentHamiltonianES_gap_bound_of_ordered_local_term_bounds
     nlinarith
   exact parentHamiltonianES_quadratic_form_of_ordered_local_term_bounds
     A L N hγle (c N) (hProj N hLN) (hRow N hLN) (hCross N hLN) v
+
+/-- Fixed-chain martingale quadratic-form estimate from finite-overlap
+Friedrichs data.
+
+This is the local-window specialization of
+`ProjectionGeometry.quadraticForm_sum_projections_of_finiteOverlap`.  The
+predicate `overlaps i j` marks the off-diagonal pairs for which a Friedrichs-angle
+estimate is needed.  If each row has at most `m` such pairs, the non-overlap
+cross terms are nonnegative, and every overlap obeys the ordered estimate with
+coefficient `1 / m`, then the transported parent Hamiltonian satisfies
+`H² ≥ γ H` as a quadratic form. -/
+theorem parentHamiltonianES_quadratic_form_of_finite_overlap_friedrichs
+    (A : MPSTensor d D) (L N : ℕ) {γ : ℝ} (hγle : γ ≤ 1)
+    (overlaps : Fin N → Fin N → Prop) [DecidableRel overlaps] {m : ℕ} (hm : 0 < m)
+    (hProj : ∀ i : Fin N, (localTermES A L i).IsSymmetricProjection)
+    (hCard : ∀ i : Fin N,
+      ((Finset.univ.erase i).filter (fun j => overlaps i j)).card ≤ m)
+    (hDisjoint : ∀ i j : Fin N, j ∈ Finset.univ.erase i → ¬ overlaps i j →
+      ∀ v : EuclideanSpace ℂ (Cfg d N),
+        0 ≤ (⟪localTermES A L i v, localTermES A L j v⟫_ℂ).re)
+    (hFriedrichs : ∀ i j : Fin N, j ∈ Finset.univ.erase i → overlaps i j →
+      ∀ v : EuclideanSpace ℂ (Cfg d N),
+        - (1 - γ) * ((m : ℝ)⁻¹) * (⟪localTermES A L i v, v⟫_ℂ).re ≤
+          (⟪localTermES A L i v, localTermES A L j v⟫_ℂ).re) :
+    ∀ v : EuclideanSpace ℂ (Cfg d N),
+      γ * (⟪parentHamiltonianES A L N v, v⟫_ℂ).re ≤
+        (⟪parentHamiltonianES A L N v,
+          parentHamiltonianES A L N v⟫_ℂ).re := by
+  intro v
+  simpa [parentHamiltonianES_eq_sum_localTermES A L N] using
+    (ProjectionGeometry.quadraticForm_sum_projections_of_finiteOverlap
+      (ι := Fin N) (E := EuclideanSpace ℂ (Cfg d N)) hγle
+      (fun i : Fin N => localTermES A L i) hProj overlaps hm hCard hDisjoint
+      hFriedrichs v)
+
+/-- Uniform explicit gap-bound reduction from finite-overlap Friedrichs data.
+
+For parent-Hamiltonian windows of length `L`, the expected finite-range bound is
+`m = 2 * (L - 1)`: each local term overlaps at most that many other cyclic
+translates when `N ≥ 2L`.  This theorem does not prove the MPS-specific overlap
+or Friedrichs-angle estimates; rather, it records exactly the assumptions needed
+to turn those estimates into the existing ordered row-sum gap theorem. -/
+theorem parentHamiltonianES_gap_bound_of_finite_overlap_friedrichs
+    (A : MPSTensor d D) (L : ℕ) (hL : 1 < L)
+    (overlaps : ∀ N : ℕ, Fin N → Fin N → Prop)
+    [∀ N : ℕ, DecidableRel (overlaps N)]
+    (hProj : ∀ (N : ℕ) (_hLN : 2 * L ≤ N) (i : Fin N),
+      (localTermES A L i).IsSymmetricProjection)
+    (hCard : ∀ (N : ℕ) (_hLN : 2 * L ≤ N) (i : Fin N),
+      ((Finset.univ.erase i).filter (fun j => overlaps N i j)).card ≤ 2 * (L - 1))
+    (hDisjoint : ∀ (N : ℕ) (_hLN : 2 * L ≤ N) (i j : Fin N),
+      j ∈ Finset.univ.erase i → ¬ overlaps N i j →
+        ∀ v : EuclideanSpace ℂ (Cfg d N),
+          0 ≤ (⟪localTermES A L i v, localTermES A L j v⟫_ℂ).re)
+    (hFriedrichs : ∀ (N : ℕ) (_hLN : 2 * L ≤ N) (i j : Fin N),
+      j ∈ Finset.univ.erase i → overlaps N i j →
+        ∀ v : EuclideanSpace ℂ (Cfg d N),
+          - (1 - ((1 : ℝ) / (4 * (L : ℝ)))) *
+              (((2 * (L - 1) : ℕ) : ℝ)⁻¹) *
+                (⟪localTermES A L i v, v⟫_ℂ).re ≤
+            (⟪localTermES A L i v, localTermES A L j v⟫_ℂ).re) :
+    0 < (1 : ℝ) / (4 * (L : ℝ)) ∧
+    ∀ (N : ℕ) (_hLN : 2 * L ≤ N)
+      (v : EuclideanSpace ℂ (Cfg d N)),
+      v ∈ (parentHamiltonianGroundSpaceES A L N)ᗮ →
+        ((1 : ℝ) / (4 * (L : ℝ))) * ‖v‖ ≤
+          ‖parentHamiltonianES A L N v‖ := by
+  refine parentHamiltonianES_gap_bound_of_quadratic_form A L hL ?_
+  intro N hLN v
+  have hLpos : (0 : ℝ) < (L : ℝ) := by
+    exact_mod_cast (Nat.zero_lt_of_lt hL)
+  have hLge_one : (1 : ℝ) ≤ (L : ℝ) := by
+    exact_mod_cast (Nat.le_of_lt hL)
+  have hγle : ((1 : ℝ) / (4 * (L : ℝ))) ≤ 1 := by
+    have hden : 0 < 4 * (L : ℝ) := mul_pos (by norm_num) hLpos
+    rw [div_le_iff₀ hden]
+    nlinarith
+  have hm : 0 < 2 * (L - 1) :=
+    Nat.mul_pos (by decide) (Nat.sub_pos_of_lt hL)
+  exact parentHamiltonianES_quadratic_form_of_finite_overlap_friedrichs
+    A L N hγle (overlaps N) hm (hProj N hLN) (hCard N hLN)
+    (hDisjoint N hLN) (hFriedrichs N hLN) v
 
 /-! ### Uniform spectral gap for the MPS parent Hamiltonian -/
 
