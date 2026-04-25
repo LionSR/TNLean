@@ -494,6 +494,89 @@ single weighted block.
 	this bundle.
 \end{definition}
 
+\begin{definition}[Sector basis pre-matching]%
+\label{def:sector_basis_pre_matching}
+	\lean{MPSTensor.SectorBasisPreMatching}
+	\leanok
+	\uses{def:paper_sector_data, def:gauge_phase_equiv}
+	A \emph{sector basis pre-matching} between sector decompositions $P$
+	and $Q$ consists of a permutation of their basis blocks, equality of the
+	matched bond dimensions, and gauge-phase equivalence of each matched pair.
+	It does not include the copy-count equality; that equality is recovered
+	from total MPV equality and BNT linear independence in
+	Theorem~\ref{thm:sector_basis_pre_matching_to_matching}.
+\end{definition}
+
+\begin{theorem}[Phase-matched comparison recovers copy counts]%
+\label{thm:route_b_hetero_phase_match_copies}
+	\lean{MPSTensor.fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_phaseMatch_exists_copies}
+	\leanok
+	\uses{thm:route_b_equal}
+	Let $P$ and $Q$ be sector decompositions whose basis blocks are matched by
+	a permutation and whose matched MPVs differ by nonzero phase powers. If
+	the total MPV families agree and the basis MPVs of $P$ are eventually
+	linearly independent, then the matched copy counts agree. After absorbing
+	the phases into the weights of $Q$, the corresponding sector-weight
+	multisets agree.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{thm:route_b_equal}
+	Absorb the phase powers into the sector weights of $Q$ and write both
+	decompositions over the basis of $P$. Linear independence gives eventual
+	equality of the coefficient power sums. The telescoping identity for
+	finite sums of nonzero geometric sequences extends this equality to
+	exponent $0$, which gives equality of the copy counts. The positive
+	exponents then give equality of the weight multisets by the same
+	Newton--Girard argument as Theorem~\ref{thm:route_b_equal}.
+\end{proof}
+
+\begin{theorem}[A pre-matching gives a sector basis matching]%
+\label{thm:sector_basis_pre_matching_to_matching}
+	\lean{MPSTensor.SectorBasisPreMatching.exists_sectorBasisMatching_of_sameMPV}
+	\leanok
+	\uses{def:sector_basis_pre_matching, def:sector_basis_matching,
+		thm:route_b_hetero_phase_match_copies}
+	Let $M$ be a sector basis pre-matching between $P$ and $Q$. If the total
+	MPV families agree and the basis MPVs of $P$ are eventually linearly
+	independent, then the copy-count equalities recovered by
+	Theorem~\ref{thm:route_b_hetero_phase_match_copies} turn $M$ into a full
+	sector basis matching.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{thm:route_b_hetero_phase_match_copies}
+	Gauge-phase equivalence gives the required phase-scaling identities for
+	the matched basis MPVs. Theorem~\ref{thm:route_b_hetero_phase_match_copies}
+	recovers the missing copy-count equalities, which are precisely the extra
+	fields needed for Definition~\ref{def:sector_basis_matching}.
+\end{proof}
+
+\begin{theorem}[Overlap rigidity gives a sector basis matching]%
+\label{thm:sector_basis_matching_from_overlap_ortho_span}
+	\lean{MPSTensor.exists_sectorBasisMatching_of_overlapOrtho_span_sameMPV}
+	\leanok
+	\uses{thm:bnt_perm_simple, thm:sector_basis_pre_matching_to_matching}
+	Assume the basis blocks of two sector decompositions are trace-preserving
+	and injective, have asymptotically orthonormal overlaps within each family,
+	and span the same MPV subspace at every system size. If the total MPV
+	families also agree, then there exists a sector basis matching between the
+	two decompositions.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{thm:bnt_perm_simple, thm:sector_basis_pre_matching_to_matching}
+	The permutation-rigidity theorem for bases of normal tensors gives a
+	permutation, the matched bond dimensions, and the gauge-phase equivalences
+	of the basis blocks, hence a sector basis pre-matching. Asymptotic
+	orthonormality gives the BNT linear-independence condition, and
+	Theorem~\ref{thm:sector_basis_pre_matching_to_matching} recovers the
+	copy-count equalities from equality of the total MPV families.
+\end{proof}
+
 \begin{theorem}[Heterogeneous sector comparison via a bundled matching witness]%
 \label{thm:route_b_hetero_sector_matching}
 	\lean{MPSTensor.fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_sectorMatching}
@@ -570,16 +653,17 @@ single weighted block.
 		      separated family has the required sector weights; the separated
 		      primitive-normal case already gives BNT linear independence by
 		      Theorem~\ref{thm:bnt_sector_decomp_tp_prim_irr_separated}; and
-		\item a witness-producing matched-basis theorem for heterogeneous
-		      sector decompositions: the algebraic reduction after a basis
-		      matching is formalized in
+		\item a matched-basis theorem for heterogeneous sector decompositions:
+		      the algebraic reduction after a basis matching is formalized in
 		      Theorems~\ref{thm:route_b_hetero_phase_match},~\ref{thm:route_b_hetero_matched_basis},
-		      and~\ref{thm:route_b_hetero_sector_matching} (the latter
-		      consuming a bundled matching witness,
-		      Definition~\ref{def:sector_basis_matching}),
-		      but one still needs a theorem that constructs a sector basis
-		      matching witness directly from equality of the total MPV
-		      families.
+		      and~\ref{thm:route_b_hetero_sector_matching}.  Copy alignment is now
+		      recovered from a basis pre-matching by
+		      Theorem~\ref{thm:sector_basis_pre_matching_to_matching}, and the
+		      primitive overlap-rigidity hypotheses produce such a matching by
+		      Theorem~\ref{thm:sector_basis_matching_from_overlap_ortho_span}.  The
+		      remaining task is to derive those span and overlap hypotheses from
+		      arbitrary equal-MPV sector decompositions produced by the one-sided
+		      BNT construction.
 	\end{enumerate}
 	Once these two ingredients are in place, the final global gauge matrix
 	of Corollary~IV.5 is obtained by the same phase-absorption and blockwise
