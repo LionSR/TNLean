@@ -80,9 +80,6 @@ jobs:
           openai-api-key: ${{ secrets.OPENAI_API_KEY }}
           # workspace-write blocks network; need outbound for `git push` and `gh ... comment`.
           sandbox: danger-full-access
-          # Allow iterations when head of branch was authored by another bot
-          # (e.g. claude[bot] or chatgpt-codex-connector[bot]).
-          allow-bots: true
           prompt: |
             A user mentioned @chatgpt on this repository.
 
