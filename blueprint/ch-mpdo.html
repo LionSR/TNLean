@@ -3507,7 +3507,7 @@
         </div>
   </div>
   <div class="remark_thmcontent">
-  <p>          Let \((A_k)\) be a family of block tensors, and fix a length \(L\). Write \(A_k^w\) for the length-\(L\) word evaluation of \(A_k\) along a word \(w\). The finite-length spanning hypothesis says that the tuple-valued evaluations </p>
+  <p>                   Let \((A_k)\) be a family of block tensors, and fix a length \(L\). Write \(A_k^w\) for the length-\(L\) word evaluation of \(A_k\) along a word \(w\). The finite-length spanning hypothesis says that the tuple-valued evaluations </p>
 <div class="displaymath" id="a0000000222">
   \[  w \longmapsto (A_k^w)_k  \]
 </div>
@@ -3516,6 +3516,7 @@
   \[  \sum _k \operatorname{tr}(\Delta _k A_k^w) = 0 \qquad \text{for every word } w \text{ of length } L,  \]
 </div>
 <p> then these pairings vanish on a spanning set for the product algebra, so the induced linear functional on the product algebra is zero; by nondegeneracy of the product trace pairing, every \(\Delta _k\) vanishes. In other words, a single finite blocking length already separates the blocks by their word evaluations. Combined with injectivity, left-canonicality, and nonzero block weights, this finite-length separation yields the horizontal canonical-form data of the block-diagonal tensor. </p>
+<p>The entrywise scalar family of block-matrix coefficients encodes the same finite-length data. Linear independence of that scalar family implies the product-algebra spanning statement, hence block selectors and a biCF witness. The same criterion therefore gives horizontal canonical-form data directly. The duplicate-scalar counterexample shows that this finite-length witness is strictly stronger than blockwise injectivity, left-canonicality, and nonzero weights alone: two identical scalar blocks satisfy those hypotheses, but the biCF separation condition fails and no blocking length makes the entrywise family linearly independent. </p>
 <p>Proposition&#160;IV.3 gives a concrete sufficient criterion for the spanning condition: after a common blocking length each block is block-injective, and after a further finite blocking length one can form linear combinations of word evaluations which equal the identity on one chosen block and vanish on all others. Concatenating an injective prefix with such a selector suffix produces the product-algebra spanning condition above, so the selector-word hypotheses of Proposition&#160;IV.3 also deliver the horizontal canonical-form data. </p>
 
   </div>
@@ -3526,7 +3527,7 @@
     Theorem
     </span>
     <span class="theorem_thmlabel">3.36</span>
-    <span class="theorem_thmtitle">Abstract Proposition&#160;IV.3 package</span>
+    <span class="theorem_thmtitle">Abstract Proposition&#160;IV.3 selector criterion</span>
     <div class="thm_header_extras">
 
     
@@ -3597,7 +3598,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> This is the direct implication from the abstract selector package to the finite-length trace-separation statement. What remains open in the full Proposition&#160;IV.3 is the derivation of the selector hypothesis from separated canonical-form / BNT data. </p>
+  <p> This is the direct implication from the abstract selector data to the finite-length trace-separation statement. What remains open in the full Proposition&#160;IV.3 is the derivation of the selector hypothesis from separated canonical-form / BNT data. </p>
 
   </div>
 </div>
@@ -3689,7 +3690,7 @@
   <p> This is Lemma&#160;L from <span class="cite">
 	(
 	
-</span>, using the abstract Proposition&#160;IV.3 package from Theorem&#160;<a href="ch-mpdo.html#thm:propblockinj_abstract">3.36</a>. Expanding the hypothesis over a word of length&#160;\(L+1\) beginning with the fixed site and folding each block contribution into a trace pairing against the corresponding first-site insertion tensor yields, upon taking the \(Y\)-\(Z\) difference, a tuple of block matrices whose trace pairings against every length-\(L\) block word vanish. The biCF hypothesis then forces each block difference to be zero, and dividing by the nonzero weight \(\mu _k^{L+1}\) concludes the blockwise equality of the two first-site insertions. </p>
+</span>, using the abstract Proposition&#160;IV.3 selector criterion from Theorem&#160;<a href="ch-mpdo.html#thm:propblockinj_abstract">3.36</a>. Expanding the hypothesis over a word of length&#160;\(L+1\) beginning with the fixed site and folding each block contribution into a trace pairing against the corresponding first-site insertion tensor yields, upon taking the \(Y\)-\(Z\) difference, a tuple of block matrices whose trace pairings against every length-\(L\) block word vanish. The biCF hypothesis then forces each block difference to be zero, and dividing by the nonzero weight \(\mu _k^{L+1}\) concludes the blockwise equality of the two first-site insertions. </p>
 
   </div>
 </div>
@@ -3769,7 +3770,7 @@
 <p>Following <span class="cite">
 	(
 	
-</span>, the current Lean development formalizes the transfer-map content of the fusion-isometry picture. For each blocked size \(n \ge 1\), the doubled-index blocked tensor of an MPO has a blocked transfer map \(E_n\) acting on bond-space matrices, and the support algebra is modeled by a subspace through which \(E_n\) factors as a retract. </p>
+</span>, the current formal development describes the transfer-map content of the fusion-isometry picture. For each blocked size \(n \ge 1\), the doubled-index blocked tensor of an MPO has a blocked transfer map \(E_n\) acting on bond-space matrices, and the support algebra is modeled by a subspace through which \(E_n\) factors as a retract. </p>
 <div class="definition_thmwrapper theorem-style-definition" id="def:mpdo_fusion_isometry">
   <div class="definition_thmheading">
     <span class="definition_thmcaption">
@@ -4282,7 +4283,7 @@
         </div>
   </div>
   <div class="definition_thmcontent">
-  <p>   An MPO tensor \(M\) satisfies the <em>algebra-structure formulation</em> used here when there exist algebra-structure data whose support algebra at every positive blocking size coincides with the fixed-point algebra of the adjoint blocked transfer map. This is a genuine algebraic condition, but it is still weaker than the full coefficient formulation of <span class="cite">
+  <p>   An MPO tensor \(M\) satisfies the <em>algebra-structure formulation</em> used here when there exist algebra-structure data whose support algebra at every positive blocking size coincides with the fixed-point algebra of the adjoint blocked transfer map. This is a nontrivial algebraic condition, but it is still weaker than the full coefficient formulation of <span class="cite">
 	(
 	
 </span>, since the coefficient family \(c_{\alpha ,\beta ,\gamma }^{(L)}\) is not yet extracted. </p>
@@ -4451,7 +4452,7 @@
 
   </div>
 </div>
-<p>The current Lean layer still does not recover the paper’s special diagonal matrices \(\chi _{\alpha ,\beta ,\gamma }\) from Theorem&#160;IV.13(ii). What it does provide is the first explicit coefficient package attached to the algebra tower: a chosen basis of each support algebra, coordinate maps into a finite scalar family, and the corresponding multiplication / inclusion coefficient arrays. </p>
+<p>The current formal layer still does not recover the paper’s special diagonal matrices \(\chi _{\alpha ,\beta ,\gamma }\) from Theorem&#160;IV.13(ii). What it does provide is the first explicit coefficient data attached to the algebra tower: a chosen basis of each support algebra, coordinate maps into a finite scalar family, and the corresponding multiplication / inclusion coefficient arrays. </p>
 <div class="definition_thmwrapper theorem-style-definition" id="def:mpdo_blocked_coefficients">
   <div class="definition_thmheading">
     <span class="definition_thmcaption">
@@ -5207,7 +5208,7 @@
 <div class="displaymath" id="a0000000243">
   \[  c^{(L)}_{\alpha ,\beta ,\gamma } = \operatorname {tr}\bigl(\chi _{\alpha ,\beta ,\gamma }^{L}\bigr) = \sum _{k=1}^{r_{\alpha ,\beta ,\gamma }} \chi _{\alpha ,\beta ,\gamma ,k}^{L}  \]
 </div>
-<p> for every \(L \ge 0\) and every triple \((\alpha , \beta , \gamma )\), where \(r_{\alpha ,\beta ,\gamma }\) is the size of \(\chi _{\alpha ,\beta ,\gamma }\). This is the Lean-level form of the target identity of <span class="cite">
+<p> for every \(L \ge 0\) and every triple \((\alpha , \beta , \gamma )\), where \(r_{\alpha ,\beta ,\gamma }\) is the size of \(\chi _{\alpha ,\beta ,\gamma }\). This is the formal analogue of the target identity of <span class="cite">
 	(
 	
 </span>; the existential version—“there exists \(\chi \) for which \((c,\chi )\) has trace-power form”—is obtained by quantifying over \(\chi \). </p>
