@@ -65,6 +65,9 @@ concrete Friedrichs-angle/row-sum lower bound that
 * `MPSTensor.localTermESSummand_isPositive` — positivity of the conjugated
   cyclic-window summands expected to appear in the averaged
   `EuclideanSpace` formula for local terms.
+* `MPSTensor.localTermES_isSymmetricProjection` — each transported local term is
+  a symmetric projection, with idempotence inherited from the local orthogonal
+  projector on every cyclic window.
 * `MPSTensor.parentHamiltonianES_gap_bound_of_quadratic_form` — the explicit
   reduction from the parent-Hamiltonian gap statement to the uniform
   Friedrichs/martingale quadratic-form estimate.
@@ -215,11 +218,17 @@ noncomputable def parentInteractionES (A : MPSTensor d D) (L : ℕ) :
     EuclideanSpace ℂ (Cfg d L) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d L) :=
   ((groundSpaceES A L)ᗮ.starProjection.toLinearMap)
 
+/-- The `EuclideanSpace` parent interaction is the symmetric projection onto
+`(groundSpaceES A L)ᗮ`. -/
+theorem parentInteractionES_isSymmetricProjection (A : MPSTensor d D) (L : ℕ) :
+    (parentInteractionES A L).IsSymmetricProjection := by
+  exact Submodule.isSymmetricProjection_starProjection ((groundSpaceES A L)ᗮ)
+
 /-- The `EuclideanSpace` parent interaction is positive because it is an
 orthogonal projection. -/
 theorem parentInteractionES_isPositive (A : MPSTensor d D) (L : ℕ) :
     (parentInteractionES A L).IsPositive := by
-  exact (Submodule.isSymmetricProjection_starProjection ((groundSpaceES A L)ᗮ)).isPositive
+  exact (parentInteractionES_isSymmetricProjection A L).isPositive
 
 /-- The cyclic window restriction map transported from `NSiteSpace` to the
 Hilbert-space model `EuclideanSpace`. -/
@@ -409,6 +418,24 @@ private theorem cyclicRestrictES_adjoint_apply {N : ℕ} (hN : 0 < N) {L : ℕ}
   simp [localTermES, localTerm, hLN, parentInteraction, parentInteractionES]
   simp [hcfg, hself]
 
+private theorem cyclicRestrictES_localTermES {N : ℕ} (A : MPSTensor d D) {L : ℕ}
+    (hLN : L ≤ N) (i : Fin N) (τ : Cfg d N) (v : EuclideanSpace ℂ (Cfg d N)) :
+    cyclicRestrictES (d := d) (Fin.pos i) L i τ (localTermES A L i v) =
+      parentInteractionES A L (cyclicRestrictES (d := d) (Fin.pos i) L i τ v) := by
+  ext ω
+  rw [cyclicRestrictES_apply]
+  rw [localTermES_apply A L i hLN v (cyclicCfg (d := d) (Fin.pos i) L i ω τ)]
+  have hsame : SameOutsideWindow (L := L) i (cyclicCfg (d := d) (Fin.pos i) L i ω τ) τ :=
+    sameOutsideWindow_of_cyclicCfg_eq (d := d) (Fin.pos i) i rfl
+  have hrestrict :
+      cyclicRestrictES (d := d) (Fin.pos i) L i τ =
+        cyclicRestrictES (d := d) (Fin.pos i) L i (cyclicCfg (d := d) (Fin.pos i) L i ω τ) :=
+    cyclicRestrictES_eq_of_sameOutsideWindow (d := d) (Fin.pos i) i hsame
+  have hextract : extractWindow L i (cyclicCfg (d := d) (Fin.pos i) L i ω τ) = ω := by
+    rw [cyclicCfg_eq_replaceWindow (d := d) (Fin.pos i) L hLN]
+    exact extractWindow_replaceWindow L hLN i τ ω
+  rw [← hrestrict, hextract]
+
 @[simp] private theorem localTermESSummand_apply {N : ℕ} (A : MPSTensor d D) (hN : 0 < N)
     {L : ℕ} (hLN : L ≤ N) (i : Fin N) (τ v σ) :
     localTermESSummand A hN L i τ v σ =
@@ -538,6 +565,43 @@ theorem localTermES_isPositive {N : ℕ} (A : MPSTensor d D) (L : ℕ) (i : Fin 
       exact div_nonneg hnonneg (mul_nonneg hnonneg hnonneg)
   · simp [localTermES, localTerm, hLN]
 
+private theorem localTermES_isIdempotentElem {N : ℕ} (A : MPSTensor d D) (L : ℕ)
+    (i : Fin N) : IsIdempotentElem (localTermES A L i) := by
+  by_cases hLN : L ≤ N
+  · rw [isIdempotentElem_iff]
+    ext v σ
+    change localTermES A L i (localTermES A L i v) σ = localTermES A L i v σ
+    rw [localTermES_apply A L i hLN (localTermES A L i v) σ]
+    rw [cyclicRestrictES_localTermES A hLN i σ v]
+    rw [localTermES_apply A L i hLN v σ]
+    have hPidem : IsIdempotentElem (parentInteractionES A L) :=
+      (parentInteractionES_isSymmetricProjection A L).isIdempotentElem
+    have hPapply :
+        parentInteractionES A L
+            (parentInteractionES A L ((cyclicRestrictES (d := d) (Fin.pos i) L i σ) v)) =
+          parentInteractionES A L ((cyclicRestrictES (d := d) (Fin.pos i) L i σ) v) := by
+      simpa [Module.End.mul_apply] using
+        congrArg
+          (fun T : EuclideanSpace ℂ (Cfg d L) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d L) =>
+            T ((cyclicRestrictES (d := d) (Fin.pos i) L i σ) v)) hPidem.eq
+    rw [hPapply]
+  · simpa [localTermES, localTerm, hLN] using
+      (IsIdempotentElem.zero :
+        IsIdempotentElem (0 : EuclideanSpace ℂ (Cfg d N) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d N)))
+
+/-- Each transported local parent-Hamiltonian term is a symmetric projection.
+
+This is the Euclidean-space version of the fact that the local term is the
+orthogonal projector onto the complement of the translated local ground space.
+For `L ≤ N`, idempotence follows by restricting to the cyclic window, applying
+the local projector `parentInteractionES`, and using `P_L^2 = P_L`; for `L > N`
+the definition gives the zero projection. -/
+theorem localTermES_isSymmetricProjection {N : ℕ} (A : MPSTensor d D) (L : ℕ)
+    (i : Fin N) : (localTermES A L i).IsSymmetricProjection := by
+  exact LinearMap.IsSymmetricProjection.mk
+    (localTermES_isIdempotentElem A L i)
+    (localTermES_isPositive A L i).isSymmetric
+
 /-- The full transported parent Hamiltonian is positive because it is a finite
 sum of positive transported local terms. -/
 theorem parentHamiltonianES_isPositive (A : MPSTensor d D) (L N : ℕ) :
@@ -638,8 +702,8 @@ cross-term row bounds.
 
 This theorem is the parent-Hamiltonian instantiation of the abstract projection
 geometry in `ProjectionGeometry.quadraticForm_sum_projections_of_ordered_rowSum`.
-It assumes explicitly that the transported local terms are symmetric projections
-and that their ordered cross terms satisfy the row-summable bound
+The local projection input is supplied by `localTermES_isSymmetricProjection`, so
+its hypotheses are only the ordered row-summable cross-term bounds
 
 `Re ⟪hᵢ v, hⱼ v⟫ ≥ -(1 - γ) cᵢⱼ Re ⟪hᵢ v, v⟫`.
 
@@ -649,7 +713,6 @@ quadratic form, exactly in the shape consumed by
 theorem parentHamiltonianES_quadratic_form_of_ordered_local_term_bounds
     (A : MPSTensor d D) (L N : ℕ) {γ : ℝ} (hγle : γ ≤ 1)
     (c : Fin N → Fin N → ℝ)
-    (hProj : ∀ i : Fin N, (localTermES A L i).IsSymmetricProjection)
     (hRow : ∀ i : Fin N, (∑ j ∈ Finset.univ.erase i, c i j) ≤ 1)
     (hCross : ∀ i j : Fin N, j ∈ Finset.univ.erase i →
       ∀ v : EuclideanSpace ℂ (Cfg d N),
@@ -663,22 +726,21 @@ theorem parentHamiltonianES_quadratic_form_of_ordered_local_term_bounds
   simpa [parentHamiltonianES_eq_sum_localTermES A L N] using
     (ProjectionGeometry.quadraticForm_sum_projections_of_ordered_rowSum
       (ι := Fin N) (E := EuclideanSpace ℂ (Cfg d N)) hγle
-      (fun i : Fin N => localTermES A L i) hProj c hRow hCross v)
+      (fun i : Fin N => localTermES A L i)
+      (fun i : Fin N => localTermES_isSymmetricProjection A L i) c hRow hCross v)
 
 /-- Uniform explicit gap-bound reduction from ordered local cross-term row
 bounds.
 
-For every chain length `N ≥ 2L`, assume the transported local terms are symmetric
-projections and satisfy the ordered row-summable cross-term estimate with
-constant `γ = 1 / (4L)`. Then the existing quadratic-form-to-gap theorem applies
-and yields the explicit norm lower bound. This exact reduction leaves proving
-these projection and Friedrichs/row-sum hypotheses for the concrete MPS local
-terms as the model-specific analytic task. -/
+For every chain length `N ≥ 2L`, assume the transported local terms satisfy the
+ordered row-summable cross-term estimate with constant `γ = 1 / (4L)`. The local
+symmetric-projection input is already supplied by `localTermES_isSymmetricProjection`.
+Then the existing quadratic-form-to-gap theorem applies and yields the explicit
+norm lower bound. This exact reduction leaves proving the Friedrichs/row-sum
+hypotheses for the concrete MPS local terms as the model-specific analytic task. -/
 theorem parentHamiltonianES_gap_bound_of_ordered_local_term_bounds
     (A : MPSTensor d D) (L : ℕ) (hL : 1 < L)
     (c : ∀ N : ℕ, Fin N → Fin N → ℝ)
-    (hProj : ∀ (N : ℕ) (_hLN : 2 * L ≤ N) (i : Fin N),
-      (localTermES A L i).IsSymmetricProjection)
     (hRow : ∀ (N : ℕ) (_hLN : 2 * L ≤ N) (i : Fin N),
       (∑ j ∈ Finset.univ.erase i, c N i j) ≤ 1)
     (hCross : ∀ (N : ℕ) (_hLN : 2 * L ≤ N) (i j : Fin N),
@@ -703,7 +765,7 @@ theorem parentHamiltonianES_gap_bound_of_ordered_local_term_bounds
     rw [div_le_iff₀ hden]
     nlinarith [hLge_one]
   exact parentHamiltonianES_quadratic_form_of_ordered_local_term_bounds
-    A L N hγle (c N) (hProj N hLN) (hRow N hLN) (hCross N hLN) v
+    A L N hγle (c N) (hRow N hLN) (hCross N hLN) v
 
 /-- Fixed-chain martingale quadratic-form estimate from finite-overlap
 Friedrichs data.
@@ -800,10 +862,11 @@ orthogonal-projection infrastructure (for example
 `Submodule.starProjection` and `orthogonalProjection`) but not a ready-made
 Kastoryano–Lucia-style angle-to-anticommutator bound. This is a real blocker
 for quantitative overlap constants.
-2. **Positivity formulation:** the local `EuclideanSpace` projector
-`parentInteractionES A L`, each conjugated cyclic-restriction summand
-`localTermESSummand A hN L i τ = Rᵢ,τ† P_L Rᵢ,τ`, each transported local term,
-and the full transported Hamiltonian are now available as positive operators.
+2. **Projection/positivity formulation:** the local `EuclideanSpace` projector
+`parentInteractionES A L` and each transported local term are now available as
+symmetric projections, and the conjugated cyclic-restriction summands
+`localTermESSummand A hN L i τ = Rᵢ,τ† P_L Rᵢ,τ` plus the full transported
+Hamiltonian are available as positive operators.
 3. **Quadratic-form reduction:**
 `parentHamiltonianES_norm_bound_of_quadratic_form` and
 `parentHamiltonianES_gap_bound_of_quadratic_form` reduce the gap statement to a
@@ -816,9 +879,10 @@ finite-sum algebra turning explicit ordered cross-term row bounds for local
 symmetric projections into the quadratic-form hypothesis above.
 5. **Remaining local analytic obligations:** the combinatorial overlap count comes
 from locality (`localTerm`, `parentHamiltonian`) and finite range: each window
-overlaps at most `2 * (L - 1)` neighbors. Still missing are the concrete local
-symmetric-projection theorem for `localTermES` and the Friedrichs-angle estimate
-that supplies the ordered cross-term constants with the required row sums.
+overlaps at most `2 * (L - 1)` neighbors. The local symmetric-projection theorem
+for `localTermES` is now proved above; the remaining input is the
+Friedrichs-angle estimate that supplies the ordered cross-term constants with
+the required row sums.
 6. **Sorry dependency split:** `parentHamiltonian_gapped` is the downstream
 existential theorem, now proved by applying the Friedrichs-angle theorem
 below. The theorem `parentHamiltonianES_gap_bound_of_friedrichs` still depends
