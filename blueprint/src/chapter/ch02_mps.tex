@@ -224,6 +224,27 @@ boundary conditions (PBC).
     and each step picks up one factor of $\zeta$.
 \end{proof}
 
+\begin{lemma}[Scaling of MPV components]\label{lem:mpv_smul}
+    \lean{MPSTensor.mpv_smul}
+    \leanok
+    \uses{def:mpv, lem:eval_word_smul}
+    Let $\zeta A$ denote the tensor with matrices
+    $\{\zeta \, A^i\}_{i=0}^{d-1}$.
+    Then for every $N$ and every configuration
+    $\sigma = (i_1, \ldots, i_N)$,
+    \[
+        V^{(N)}(\zeta A)_\sigma
+            \;=\; \zeta^{N} \, V^{(N)}(A)_\sigma.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:eval_word_smul}
+    Apply Lemma~\ref{lem:eval_word_smul} to the word
+    $w = (i_1, \ldots, i_N)$ of length $N$, then take the trace; the scalar
+    $\zeta^{N}$ pulls out by linearity.
+\end{proof}
+
 \begin{definition}[Gauge-phase equivalence]\label{def:gauge_phase_equiv}
     \lean{MPSTensor.GaugePhaseEquiv}
     \leanok
