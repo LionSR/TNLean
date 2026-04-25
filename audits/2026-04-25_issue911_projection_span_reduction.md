@@ -38,10 +38,11 @@ File: `TNLean/MPS/CanonicalForm/BlockDiagonalCommutant.lean`
   - Entrywise off-block-zero corollary for the same hypotheses.
 
 Blueprint Chapter 14 now records these declarations as
-`lem:block_projection_span_from_product_word_span` and updates the downstream dependency list for
+`lem:block_projection_span_from_product_algebra_span` and
+`lem:block_projection_span_from_product_word_span`, and updates the downstream dependency list for
 `thm:parent_ground_space_le_bnt_span`.
 
-## Remaining paper-level bridge
+## Remaining paper-level finite-span theorem
 
 To close the original #911 target under bare `IsCanonicalFormBNT μ A`, one still needs a theorem of
 one of the following equivalent finite-length forms:

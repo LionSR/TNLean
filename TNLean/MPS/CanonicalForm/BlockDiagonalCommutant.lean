@@ -16,7 +16,7 @@ dependent direct sum lie in the span of a family of matrices and a boundary
 matrix commutes with that family, then it
 commutes with the projections and hence has no off-block entries.
 
-The file also records a finite-span bridge: if the simultaneous block word
+The file also records a finite-span reduction: if the simultaneous block word
 tuples span the full product algebra, then the sector projections lie in the
 finite word span of the assembled tensor.  The remaining paper-level CF/BNT input
 is to derive that product-word span from the separated canonical-form/BNT
@@ -76,7 +76,7 @@ variable [(i : ι) → DecidableEq (n i)]
 its nonzero componentwise scalar multiples, embedded as dependent block-diagonal
 matrices, contains each sector projection.
 
-This is the algebraic finite-span bridge used for assembled tensors: after a
+This is the algebraic finite-span reduction used for assembled tensors: after a
 finite word-tuple span theorem supplies the full product algebra
 `(i : ι) → Matrix (n i) (n i) ℂ`, the diagonal embedding of those same word tuples
 contains the projections onto the individual direct-sum sectors. -/
