@@ -1,8 +1,31 @@
-# Issue #588 audit update — open-chain route identified, but no Lean theorem landed yet
+# Issue #588 audit update — open-chain route and Wave 14 formal step
 
 Date: 2026-04-22
 Branch: `feat/588-chainGroundSpace-normal`
 Target theorem: `MPSTensor.chainGroundSpace_eq_mpvSubmodule_normal`
+
+## 2026-04-25 Wave 14 update
+
+Current branch `wave14-A-588-range-reduction` lands the reusable open-chain step
+that this audit had identified as missing:
+
+- `MPSTensor.tailRestrictₗ_contiguousRestrictₗ` in
+  `TNLean/MPS/ParentHamiltonian/RestrictTransport.lean` identifies a suffix
+  restriction of a contiguous `(K + L)` window with the contiguous `L`-window
+  beginning at `s + K`, after inserting the fixed prefix into the outside
+  configuration.
+- `MPSTensor.contiguous_mem_groundSpace_of_isNBlkInjective` in
+  `TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean` iterates
+  `groundSpace_extend_right_of_isNBlkInjective`: contiguous `(L₀ + 1)`-window
+  ground-space constraints now imply full open-chain membership
+  `ψ ∈ groundSpace A N`.
+
+The public theorem
+`MPSTensor.chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction` is still
+not closed by this update. The remaining work is now the periodic reintegration:
+turn cyclic `L`-window membership into the reduced contiguous `(L₀ + 1)`-window
+hypotheses, then use the existing wrapped-window compatibility results in
+`WrappingWindow.lean` to force scalar boundary matrices.
 
 ## Outcome of this pass
 

@@ -176,4 +176,41 @@ theorem contiguousRestrictₗ_reindex_total
         (reindexSites hN ψ) := by
   subst hN; rfl
 
+/-- Fixing the first `K` sites of a contiguous `(K + L)`-window leaves the
+contiguous `L`-window that starts at `s + K`, with the fixed prefix inserted into
+the outside configuration. -/
+theorem tailRestrictₗ_contiguousRestrictₗ
+    {N s K L : ℕ} (hsKL : s + (K + L) ≤ N)
+    (u : Fin K → Fin d) (τ : Fin N → Fin d) (ψ : NSiteSpace d N) :
+    tailRestrictₗ u (contiguousRestrictₗ s (K + L) hsKL τ ψ) =
+      contiguousRestrictₗ (s + K) L (by omega)
+        (fun k => if h : s ≤ k.val ∧ k.val < s + K
+          then u ⟨k.val - s, by omega⟩ else τ k) ψ := by
+  ext σ
+  simp only [tailRestrictₗ_apply, contiguousRestrictₗ_apply]
+  congr 1
+  ext ⟨k, hk⟩
+  simp only [contiguousCfg]
+  by_cases hLeft : s ≤ k ∧ k < s + K
+  · rw [dif_pos (show s ≤ k ∧ k < s + (K + L) by omega)]
+    rw [dif_neg (show ¬(s + K ≤ k ∧ k < s + K + L) by omega)]
+    rw [dif_pos hLeft]
+    have hidx : (⟨k - s, by omega⟩ : Fin (K + L)) =
+        Fin.castAdd L (⟨k - s, by omega⟩ : Fin K) := by
+      ext
+      simp [Fin.castAdd]
+    rw [hidx, Fin.append_left]
+  · by_cases hRight : s + K ≤ k ∧ k < s + K + L
+    · rw [dif_pos (show s ≤ k ∧ k < s + (K + L) by omega)]
+      rw [dif_pos hRight]
+      have hidx : (⟨k - s, by omega⟩ : Fin (K + L)) =
+          Fin.natAdd K (⟨k - (s + K), by omega⟩ : Fin L) := by
+        ext
+        simp [Fin.natAdd]
+        omega
+      rw [hidx, Fin.append_right]
+    · rw [dif_neg (show ¬(s ≤ k ∧ k < s + (K + L)) by omega)]
+      rw [dif_neg hRight]
+      rw [dif_neg hLeft]
+
 end MPSTensor
