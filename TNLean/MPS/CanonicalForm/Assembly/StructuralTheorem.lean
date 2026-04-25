@@ -338,7 +338,7 @@ sector comparison. The remaining formalizations are now:
    sense. Since `HasBNTSectorData` is the eventual linear-independence predicate,
    this cannot be obtained by merely treating every TP-primitive block as its
    own basis tensor; gauge-phase-equivalent or otherwise dependent blocks must
-   first be quotient/collapsed to a true basis of normal tensors. This is
+   first be identified and collapsed to a true basis of normal tensors. This is
    stronger than the current special-case theorem `exists_bnt_grouping`, which
    only collapses norm classes already known to represent one MPV family.
 
