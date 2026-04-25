@@ -1108,10 +1108,38 @@ Unfold the definition of GSNNCH with zero correlation length and apply
 Theorem~\ref{thm:mpdo_is_gsnnch_iff_has_commuting_form}.
 \end{proof}
 
+\begin{definition}[$\eta$-local commuting-form data]
+    \label{def:mpdo_eta_local_structure_data}
+    \lean{MPOTensor.EtaLocalStructureData}
+    \leanok
+    \uses{def:mpdo_has_commuting_form}
+    This records the post-extraction output of Appendix~C.2: a single
+    translation-invariant positive two-site bond whose translated copies commute
+    on every periodic chain and realize the MPO at every finite length.
+\end{definition}
+
+\begin{theorem}[$\eta$-local structure implies commuting form]
+    \label{thm:mpdo_has_commuting_form_of_eta_local_structure}
+    \lean{MPOTensor.hasCommutingForm_of_etaLocalStructure}
+    \leanok
+    \uses{def:mpdo_eta_local_structure_data, def:mpdo_has_commuting_form}
+    Once the explicit neighboring operators $\eta_{k,h}$ have been assembled
+    into the data above, the global commuting-form property follows.
+\end{theorem}
+
+\begin{proof}\leanok
+For each $N \ge 2$, take the commuting-form datum given by these data.
+\end{proof}
+
 \begin{remark}[Remaining step toward source label \texttt{propsimple}]
-The remaining entropy-side theorem is to derive the commuting-form property
-from the strong-area-law hypotheses of Appendix~C.2. The present file isolates
-its GSNNCH target once that step is available.
+The remaining entropy-side theorem is to construct
+\lean{MPOTensor.EtaLocalStructureData} from the local SAL and ZCL ingredients
+already formalized in \texttt{TNLean/MPS/MPDO/SimpleLocalStructure.lean}. In
+particular, the missing piece is the extraction of explicit neighboring
+operators $\eta_{k,h}$ from the Hayashi Markov decomposition; once that is in
+place, Theorem~\ref{thm:mpdo_has_commuting_form_of_eta_local_structure}
+immediately yields the commuting-form conclusion, and the present file then
+recovers the GSNNCH target of source label \texttt{propsimple}.
 \end{remark}
 
 \section{Blocked-RFP construction for simple MPDOs}
