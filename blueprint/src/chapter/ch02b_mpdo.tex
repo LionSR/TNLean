@@ -483,15 +483,15 @@ strong subadditivity for a normalized three-site reduced state.
     in the rank-one step.
 \end{definition}
 
-\begin{lemma}[Entrywise nonnegativity of the real trace matrix]
-    \label{lem:mpdo_explicit_eta_trace_matrix_nonneg}
+\begin{theorem}[Entrywise nonnegativity of the real trace matrix]
+    \label{thm:mpdo_explicit_eta_trace_matrix_nonneg}
     \lean{MPOTensor.ExplicitEtaOperators.traceMatrixRe_nonneg}
     \leanok
     \uses{def:mpdo_explicit_eta_trace_matrix}
     Positivity of the neighboring operators gives entrywise nonnegativity of
     the real trace matrix. Matrix-level positive semidefiniteness of $T$ is a
     separate structural condition.
-\end{lemma}
+\end{theorem}
 
 \begin{definition}[Auxiliary matrix predicates for the rank-one step]
     \label{def:matrix_trace_rankone_predicates}
@@ -513,23 +513,23 @@ strong subadditivity for a normalized three-site reduced state.
     trace-power condition into a rank-one factorization.
 \end{definition}
 
-\begin{lemma}[Trace square of a positive semidefinite matrix]
-    \label{lem:matrix_psd_trace_square_eigenvalues}
-    \lean{Matrix.PosSemidef.trace_sq_eq_sum_eigenvalues_sq}
+\begin{theorem}[Trace square of a Hermitian matrix]
+    \label{thm:matrix_hermitian_trace_square_eigenvalues}
+    \lean{Matrix.IsHermitian.trace_sq_eq_sum_eigenvalues_sq}
     \leanok
-    Let $T$ be a finite positive semidefinite matrix over a real or complex
-    scalar field, with Hermitian eigenvalues $\lambda_i$. Then
+    Let $T$ be a finite Hermitian matrix over a real or complex scalar field,
+    with Hermitian eigenvalues $\lambda_i$. Then
     \[
         \tr(T^2) = \sum_i \lambda_i^2.
     \]
-\end{lemma}
+\end{theorem}
 
 \begin{theorem}[PSD trace-power rank-one criterion]
     \label{thm:matrix_psd_trace_power_rank_one}
     \lean{Matrix.PosSemidef.trace_powers_constant_implies_rank_one}
     \lean{Matrix.primitive_trace_powers_constant_implies_rank_one_of_pos_semidef}
     \leanok
-    \uses{def:matrix_trace_rankone_predicates, lem:matrix_psd_trace_square_eigenvalues}
+    \uses{def:matrix_trace_rankone_predicates, thm:matrix_hermitian_trace_square_eigenvalues}
     Let $T$ be a finite real square matrix. If $T$ is positive semidefinite,
     normalized by $\tr(T)=1$, and has constant traces on all positive powers,
     then $T$ has a rank-one factorization. Consequently, under the same
@@ -539,7 +539,7 @@ strong subadditivity for a normalized three-site reduced state.
 
 \begin{proof}
     \leanok
-    \uses{def:matrix_trace_rankone_predicates, lem:matrix_psd_trace_square_eigenvalues}
+    \uses{def:matrix_trace_rankone_predicates, thm:matrix_hermitian_trace_square_eigenvalues}
     The spectral theorem diagonalizes the positive semidefinite matrix with
     nonnegative real eigenvalues. The trace gives that their sum is $1$, while
     the second trace moment gives that the sum of their squares is also $1$.

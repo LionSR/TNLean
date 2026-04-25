@@ -158,18 +158,17 @@ private lemma hasRankOneFactorization_unitary_conj
   refine Finset.sum_congr rfl fun x_1 _ => ?_
   ring
 
-/-- For a positive semidefinite matrix over the real or complex numbers, the
-trace of the square is the sum of the squares of its Hermitian eigenvalues. -/
-theorem PosSemidef.trace_sq_eq_sum_eigenvalues_sq
+/-- For a Hermitian matrix over the real or complex numbers, the trace of the
+square is the sum of the squares of its Hermitian eigenvalues. -/
+theorem IsHermitian.trace_sq_eq_sum_eigenvalues_sq
     {ι 𝕜 : Type*} [Fintype ι] [DecidableEq ι] [RCLike 𝕜]
-    {T : Matrix ι ι 𝕜} (hT : T.PosSemidef) :
+    {T : Matrix ι ι 𝕜} (hT : T.IsHermitian) :
     Matrix.trace (T ^ 2) =
-      ∑ i, (RCLike.ofReal (hT.isHermitian.eigenvalues i) : 𝕜) ^ 2 := by
-  have hH : T.IsHermitian := hT.isHermitian
-  let U := hH.eigenvectorUnitary
-  let D : Matrix ι ι 𝕜 := diagonal (RCLike.ofReal ∘ hH.eigenvalues)
+      ∑ i, (RCLike.ofReal (hT.eigenvalues i) : 𝕜) ^ 2 := by
+  let U := hT.eigenvectorUnitary
+  let D : Matrix ι ι 𝕜 := diagonal (RCLike.ofReal ∘ hT.eigenvalues)
   have hspec : T = (Unitary.conjStarAlgAut 𝕜 (Matrix ι ι 𝕜) U) D := by
-    simpa [D, U] using hH.spectral_theorem
+    simpa [D, U] using hT.spectral_theorem
   calc
     Matrix.trace (T ^ 2) =
         Matrix.trace (((Unitary.conjStarAlgAut 𝕜 (Matrix ι ι 𝕜) U) D) ^ 2) := by
@@ -178,7 +177,7 @@ theorem PosSemidef.trace_sq_eq_sum_eigenvalues_sq
       rw [map_pow]
     _ = Matrix.trace (D ^ 2) := by
       simp [Unitary.conjStarAlgAut_apply, D, Matrix.trace_mul_cycle]
-    _ = ∑ i, (RCLike.ofReal (hH.eigenvalues i) : 𝕜) ^ 2 := by
+    _ = ∑ i, (RCLike.ofReal (hT.eigenvalues i) : 𝕜) ^ 2 := by
       simp [D, diagonal_mul_diagonal, pow_two]
 
 /-- **Corrected rank-one criterion for Lemma C.4.**
@@ -207,7 +206,7 @@ theorem PosSemidef.trace_powers_constant_implies_rank_one
       Matrix.trace (T ^ 2) = Matrix.trace T := hTPC 2 (by norm_num)
       _ = 1 := hTrace
   have hsq : ∑ i, (lam i) ^ 2 = 1 := by
-    have htrace2eig := hPSD.trace_sq_eq_sum_eigenvalues_sq
+    have htrace2eig := hH.trace_sq_eq_sum_eigenvalues_sq
     change Matrix.trace (T ^ 2) = ∑ i, (lam i) ^ 2 at htrace2eig
     rw [htrace2] at htrace2eig
     exact htrace2eig.symm
