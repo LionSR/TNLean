@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.CanonicalForm.BNTGrouping
+import TNLean.MPS.FundamentalTheorem.SectorDecomposition
 import TNLean.MPS.SharedInfra.GaugePhase
 import TNLean.MPS.Overlap.CastLemmas
 import TNLean.MPS.Overlap.CastDecay
@@ -68,6 +69,15 @@ Theorem matching, etc.).
   the reduction output to a BNT-grouped `SectorDecomposition`.  **Fully proved.**
   Requires a `hNonDecay` hypothesis for equal-norm blocks.
 
+* `exists_bnt_sectorDecomp_of_linearIndependent` — conditional construction
+  toward the post-#886 `HasBNTSectorData` predicate.  It forms the granular
+  `trivialSectorDecomp` as a BNT sector decomposition when the actual BNT
+  linear-independence condition is supplied explicitly.
+
+* `exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_of_linearIndependent` —
+  signature-compatible reformulation retaining the TP / primitive / irreducible
+  inputs expected by the one-sided BNT construction chain.
+
 ## References
 
 - [CPGSV17, Lemma A.2]: Overlap dichotomy for Normal Tensors.
@@ -106,7 +116,7 @@ The proof uses the **spectral dichotomy** (proved in `SpectralGap.lean` and
 If the overlap does NOT decay, we are in the second case. Dimension equality
 follows from `mpvOverlap_tendsto_zero_of_dim_ne_of_irreducible_TP` (contrapositive).
 
-This factored-out lemma replaces the previous monolithic sorry in
+This factored-out lemma replaces the previous monolithic placeholder proof in
 `gaugePhaseEquiv_of_equal_norm_blocks`. -/
 theorem gaugePhaseEquiv_of_nonDecaying_overlap
     {D₁ D₂ : ℕ} [NeZero D₁] [NeZero D₂]
@@ -238,7 +248,10 @@ theorem exists_bnt_grouping_of_gaugePhaseEquiv
 
 This theorem relates the output of the existence reduction
 (`exists_tp_primitive_blockDecomp_after_blocking` in `Assembly.lean`) to a
-`SectorDecomposition` with strictly decreasing BNT-level norms.
+`SectorDecomposition` with strictly decreasing BNT-level norms.  It does not by
+itself prove `HasBNTSectorData`: after #886 that predicate means eventual linear
+independence of the basis MPV states, not merely TP / irreducible / primitive
+block data.
 
 The `hNonDecay` hypothesis states that equal-norm blocks have non-decaying
 cross-overlaps.  This is NOT automatic from the block properties alone (see
@@ -310,7 +323,7 @@ theorem exists_sectorDecomp_of_tp_primitive_irr_blocks
 
 /-- One-sector specialization of the TP + primitive + irreducible grouping route.
 
-This is a genuine restricted endpoint toward Gap §1: if all weights lie in a single norm class
+This is a genuine restricted result toward Gap §1: if all weights lie in a single norm class
 and every block has non-decaying overlap with a chosen representative, then the whole family
 collapses to a one-basis `SectorDecomposition`. -/
 theorem bnt_grouping_single_norm_class_of_tp_primitive_irr_blocks
@@ -361,5 +374,56 @@ theorem bnt_grouping_single_norm_class_of_tp_primitive_irr_blocks
           X ζ hX
       exact ⟨ζ, hζne, hζ_norm, hmpv⟩
   exact bnt_grouping_single_norm_class μ blocks k0 hμne hNorm hPhase
+
+/-! ### §4. Conditional sector construction under BNT linear independence -/
+
+/-- **Minimal granular sector decomposition carrying current `HasBNTSectorData`.**
+
+This is the post-#886 formulation of the conditional sector construction.  The
+predicate `HasBNTSectorData` now means eventual linear independence of the sector
+basis MPV states.  TP, irreducibility, primitivity, and nonzero weights do not by
+themselves provide that linear-independence statement for the granular basis; the
+genuine one-sided BNT construction must first choose / collapse to a basis of normal
+tensors.
+
+Accordingly this theorem gives the simplest construction: if the granular input
+basis is already known to satisfy the current BNT linear-independence hypothesis,
+then `trivialSectorDecomp` gives the requested `SectorDecomposition` and the
+`HasBNTSectorData` certificate is exactly the supplied `hLI`. -/
+theorem exists_bnt_sectorDecomp_of_linearIndependent
+    {r : ℕ} {dim : Fin r → ℕ}
+    (μ : Fin r → ℂ)
+    (blocks : (k : Fin r) → MPSTensor d (dim k))
+    (hμne : ∀ k, μ k ≠ 0)
+    (hLI : ∃ N0 : ℕ, ∀ N > N0,
+      LinearIndependent ℂ (fun k : Fin r => mpvState (blocks k) N)) :
+    ∃ P : SectorDecomposition d,
+      SameMPV₂ P.toTensor (toTensorFromBlocks (d := d) (μ := μ) blocks) ∧
+      HasBNTSectorData (d := d) P := by
+  refine ⟨trivialSectorDecomp μ blocks hμne,
+    sameMPV₂_trivialSectorDecomp μ blocks hμne, ?_⟩
+  simpa [trivialSectorDecomp] using hLI
+
+/-- Signature-compatible reformulation for TP / primitive / irreducible block data.
+
+The extra block-normality hypotheses are intentionally retained here to match the
+shape expected by the one-sided BNT-construction route, but only nonzero weights and the
+current BNT linear-independence hypothesis are used.  Use
+`exists_bnt_sectorDecomp_of_linearIndependent` when those extra hypotheses are not
+already present. -/
+theorem exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_of_linearIndependent
+    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ)
+    (blocks : (k : Fin r) → MPSTensor d (dim k))
+    (_hTP : ∀ k, ∑ i : Fin d, (blocks k i)ᴴ * blocks k i = 1)
+    (_hIrr : ∀ k, IsIrreducibleTensor (blocks k))
+    (_hPrim : ∀ k, _root_.IsPrimitive (transferMap (d := d) (D := dim k) (blocks k)))
+    (hμne : ∀ k, μ k ≠ 0)
+    (hLI : ∃ N0 : ℕ, ∀ N > N0,
+      LinearIndependent ℂ (fun k : Fin r => mpvState (blocks k) N)) :
+    ∃ P : SectorDecomposition d,
+      SameMPV₂ P.toTensor (toTensorFromBlocks (d := d) (μ := μ) blocks) ∧
+      HasBNTSectorData (d := d) P :=
+  exists_bnt_sectorDecomp_of_linearIndependent μ blocks hμne hLI
 
 end MPSTensor

@@ -58,8 +58,8 @@ of the remaining Gap 2 work for issue #652 (labeled "Gap §1" in that issue).
 
 ### §3 Trivial sector decomposition for the sorted distinct-norm case
 
-* `exists_trivialSectorDecomp_of_sorted_distinct_norms` — Packages a sorted
-  distinct-norm block family as a `SectorDecomposition` with all multiplicities
+* `exists_trivialSectorDecomp_of_sorted_distinct_norms` — Forms from a sorted
+  distinct-norm block family a `SectorDecomposition` with all multiplicities
   `copies j = 1`.
 
 ### §4 BNT grouping for possibly-equal norms (proved via norm-class enumeration)
@@ -182,9 +182,9 @@ Starting from a weighted block family satisfying all `IsNormalCanonicalForm` con
 * a `SameMPV₂` equivalence between the original and the permuted assembled tensors,
 * an `IsNormalCanonicalForm` certificate for the permuted family `(μ ∘ e, blocks ∘ e)`.
 
-This is the key reduction bridging step: it takes output from the TP-gauge / blocking
-reduction (where distinct norms are known but ordering is not guaranteed) and packages
-it as a proper normal canonical form.
+This is the key reduction step: it takes output from the TP-gauge / blocking
+reduction (where distinct norms are known but ordering is not guaranteed) and turns
+it into a proper normal canonical form.
 
 **Note on types**: The permutation changes the bond-dimension type from
 `∑ k, dim k` to `∑ k, dim (e k)`; these are equal as natural numbers (via
@@ -212,7 +212,7 @@ theorem exists_sortedNCF_of_distinct_norms
   -- Step 1: Get the sorting permutation and SameMPV₂.
   obtain ⟨e, hSame, he_anti⟩ :=
     exists_sorted_blockDecomp_of_distinct_norms μ blocks hDistinct
-  -- Step 2: Package as IsNormalCanonicalForm.
+  -- Step 2: Build the IsNormalCanonicalForm certificate.
   -- All conditions for the permuted family at index k reduce to the original conditions
   -- at index (e k), because (fun k => blocks (e k)) k = blocks (e k).
   exact ⟨e, hSame, {
@@ -224,23 +224,62 @@ theorem exists_sortedNCF_of_distinct_norms
     dim_pos           := fun k => hDim (e k)
   }⟩
 
-/-! ### §4. Trivial sector decomposition for the sorted distinct-norm case -/
+/-! ### §4. Trivial sector decomposition -/
+
+/-- **Granular `SectorDecomposition` with one basis tensor per input block.**
+
+Forms from a block family `(μ, blocks)` a `SectorDecomposition` with `copies j = 1`
+for every `j`.  Each input block becomes its own sector basis tensor with sector
+weight `μ j`.  This construction is deliberately only a structural form: by itself
+it does **not** assert the basis-of-normal-tensors linear-independence condition
+`HasBNTSectorData` from `TNLean.MPS.FundamentalTheorem.SectorDecomposition`. -/
+def trivialSectorDecomp {r : ℕ} {dim : Fin r → ℕ}
+    (μ : Fin r → ℂ) (blocks : (k : Fin r) → MPSTensor d (dim k))
+    (hμne : ∀ k, μ k ≠ 0) : SectorDecomposition d where
+  basisCount := r
+  basisDim   := dim
+  basis      := blocks
+  sectors    := {
+    copies         := fun _ => 1
+    copies_pos     := fun _ => Nat.one_pos
+    weight         := fun j _ => μ j
+    weight_ne_zero := fun j _ => hμne j
+  }
+
+/-- **MPV identity for `trivialSectorDecomp`.**
+
+The assembled tensor of `trivialSectorDecomp μ blocks hμne` has the same MPV family
+as `toTensorFromBlocks μ blocks`.  The proof expands both sides using the
+sector-decomposition formula and the block-sum formula, together with the identity
+`coeff N j = (μ j)^N` because `copies j = 1`. -/
+lemma sameMPV₂_trivialSectorDecomp {r : ℕ} {dim : Fin r → ℕ}
+    (μ : Fin r → ℂ) (blocks : (k : Fin r) → MPSTensor d (dim k))
+    (hμne : ∀ k, μ k ≠ 0) :
+    SameMPV₂ (trivialSectorDecomp μ blocks hμne).toTensor
+      (toTensorFromBlocks (d := d) (μ := μ) blocks) := by
+  intro N σ
+  set P := trivialSectorDecomp μ blocks hμne
+  calc mpv P.toTensor σ
+      = ∑ j : Fin r, P.coeff N j * mpv (P.basis j) σ :=
+          P.mpv_toTensor_eq_sum_coeff σ
+    _ = ∑ j : Fin r, (μ j) ^ N * mpv (blocks j) σ := by
+          refine Finset.sum_congr rfl fun j _ => ?_
+          have hcoeff : P.coeff N j = (μ j) ^ N := by
+            simp [P, trivialSectorDecomp, SectorDecomposition.coeff,
+              SectorWeightData.coeff]
+          rw [hcoeff]
+          rfl
+    _ = mpv (toTensorFromBlocks (d := d) (μ := μ) blocks) σ := by
+          symm
+          simpa [smul_eq_mul] using mpv_toTensorFromBlocks_eq_sum μ blocks σ
 
 /-- **Trivial `SectorDecomposition` from a sorted block family.**
 
-Given a block family `(μ, blocks)` with sorted (strictly decreasing) norms and
-nonzero weights, package it as a `SectorDecomposition` with `copies j = 1` for all
-`j`.  The BNT-level norm ordering condition (§ 4 in the docstring) holds trivially:
-each group has exactly one weight `μ j`, and those are already strictly decreasing.
-
-The assembled `P.toTensor` has `SameMPV₂` with `toTensorFromBlocks μ blocks`, proved
-by expanding both sides via the decomposition formulas:
-
-  `mpv P.toTensor σ = ∑ j, P.coeff N j * mpv (blocks j) σ`
-                    `= ∑ j, (μ j)^N * mpv (blocks j) σ`
-                    `= mpv (toTensorFromBlocks μ blocks) σ`.
-
-Here `P.coeff N j = ∑ q : Fin 1, (μ j)^N = (μ j)^N` because `copies j = 1`. -/
+Specialization of `trivialSectorDecomp` to the sorted distinct-norm case: every block
+becomes its own basis tensor with `copies j = 1`, the assembled tensor has
+`SameMPV₂` with `toTensorFromBlocks μ blocks`, and the BNT-level norm ordering is
+`StrictAnti` because each basis carries exactly one weight `μ j`, already strictly
+decreasing. -/
 theorem exists_trivialSectorDecomp_of_sorted_distinct_norms
     {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ)
@@ -252,40 +291,10 @@ theorem exists_trivialSectorDecomp_of_sorted_distinct_norms
       SameMPV₂ P.toTensor (toTensorFromBlocks (d := d) (μ := μ) blocks) ∧
       StrictAnti (fun j : Fin P.basisCount =>
         ‖P.sectors.weight j ⟨0, P.sectors.copies_pos j⟩‖) := by
-  -- Construct the trivial sector decomposition: one copy per block.
-  let sectors : SectorWeightData r := {
-    copies         := fun _ => 1
-    copies_pos     := fun _ => Nat.one_pos
-    weight         := fun j _ => μ j
-    weight_ne_zero := fun j _ => hμne j
-  }
-  let P : SectorDecomposition d := {
-    basisCount := r
-    basisDim   := dim
-    basis      := blocks
-    sectors    := sectors
-  }
-  refine ⟨P, rfl, ?_, ?_⟩
-  · -- SameMPV₂ P.toTensor (toTensorFromBlocks μ blocks).
-    -- Expand both sides using the sector decomposition and blocks formulas.
-    intro N σ
-    calc mpv P.toTensor σ
-        = ∑ j : Fin r, P.coeff N j * mpv (P.basis j) σ :=
-            P.mpv_toTensor_eq_sum_coeff σ
-      _ = ∑ j : Fin r, (μ j) ^ N * mpv (blocks j) σ := by
-            -- P.coeff N j = ∑ q : Fin (sectors.copies j), (sectors.weight j q)^N
-            --             = ∑ q : Fin 1, (μ j)^N = (μ j)^N.
-            refine Finset.sum_congr rfl fun j _ => congr_arg₂ _ ?_ rfl
-            simp [SectorDecomposition.coeff, SectorWeightData.coeff, P, sectors]
-      _ = mpv (toTensorFromBlocks (d := d) (μ := μ) blocks) σ := by
-            symm
-            simpa [smul_eq_mul] using mpv_toTensorFromBlocks_eq_sum μ blocks σ
-  · -- StrictAnti on BNT-level norms.
-    -- sectors.weight j 0 = μ j by definition, so the condition is exactly hAnti.
-    intro i j hij
-    change ‖P.sectors.weight j ⟨0, P.sectors.copies_pos j⟩‖ <
-      ‖P.sectors.weight i ⟨0, P.sectors.copies_pos i⟩‖
-    simpa only [P, sectors] using hAnti hij
+  refine ⟨trivialSectorDecomp μ blocks hμne, rfl,
+    sameMPV₂_trivialSectorDecomp μ blocks hμne, ?_⟩
+  intro i j hij
+  simpa [trivialSectorDecomp] using hAnti hij
 
 /-! ### §5. BNT grouping for blocks with possibly equal norms -/
 
