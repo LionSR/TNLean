@@ -2120,12 +2120,412 @@
 
   </div>
 </div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:sector_basis_pre_matching">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">14.17</span>
+    <span class="definition_thmtitle">Sector basis pre-matching</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-assembly.html#def:sector_basis_pre_matching">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-assembly.html#def:paper_sector_data">Definition 14.9</a></li>
+          
+          <li><a href="ch-mps.html#def:gauge_phase_equiv">Definition 2.17</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.SectorBasisPreMatching" class="lean_decl">MPSTensor.SectorBasisPreMatching</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>   A <em>sector basis pre-matching</em> between sector decompositions \(P\) and \(Q\) consists of a permutation of their basis blocks, equality of the matched bond dimensions, and gauge-phase equivalence of each matched pair. It does not include the copy-count equality; that equality is recovered from total MPV equality and BNT linear independence in Theorem&#160;<a href="ch-assembly.html#thm:sector_basis_pre_matching_to_matching">14.19</a>. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:route_b_hetero_phase_match_copies">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">14.18</span>
+    <span class="theorem_thmtitle">Phase-matched comparison recovers copy counts</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-assembly.html#thm:route_b_hetero_phase_match_copies">#</a>
+    
+    <a class="icon proof" href="ch-assembly.html#a0000000940"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-assembly.html#def:paper_sector_data">Definition 14.9</a></li>
+          
+          <li><a href="ch-assembly.html#thm:route_b_equal">Theorem 14.13</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_phaseMatch_exists_copies" class="lean_decl">MPSTensor.fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_phaseMatch_exists_copies</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   Let \(P\) and \(Q\) be sector decompositions whose basis blocks are matched by a permutation and whose matched MPVs differ by nonzero phase powers. If the total MPV families agree and the basis MPVs of \(P\) are eventually linearly independent, then the matched copy counts agree. After absorbing the phases into the weights of \(Q\), the corresponding sector-weight multisets agree. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000940">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> Absorb the phase powers into the sector weights of \(Q\) and write both decompositions over the basis of \(P\). Linear independence gives eventual equality of the coefficient power sums. The telescoping identity for finite sums of nonzero geometric sequences extends this equality to exponent \(0\), which gives equality of the copy counts. The positive exponents then give equality of the weight multisets by the same Newton–Girard argument as Theorem&#160;<a href="ch-assembly.html#thm:route_b_equal">14.13</a>. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:sector_basis_pre_matching_to_matching">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">14.19</span>
+    <span class="theorem_thmtitle">A pre-matching gives a sector basis matching</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-assembly.html#thm:sector_basis_pre_matching_to_matching">#</a>
+    
+    <a class="icon proof" href="ch-assembly.html#a0000000941"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-assembly.html#def:sector_basis_pre_matching">Definition 14.17</a></li>
+          
+          <li><a href="ch-assembly.html#def:sector_basis_matching">Definition 14.16</a></li>
+          
+          <li><a href="ch-assembly.html#thm:route_b_hetero_phase_match_copies">Theorem 14.18</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.SectorBasisPreMatching.exists_sectorBasisMatching_of_sameMPV" class="lean_decl">MPSTensor.SectorBasisPreMatching.exists_sectorBasisMatching_of_sameMPV</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   Let \(M\) be a sector basis pre-matching between \(P\) and \(Q\). If the total MPV families agree and the basis MPVs of \(P\) are eventually linearly independent, then the copy-count equalities recovered by Theorem&#160;<a href="ch-assembly.html#thm:route_b_hetero_phase_match_copies">14.18</a> turn \(M\) into a full sector basis matching. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000941">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> Gauge-phase equivalence gives the required phase-scaling identities for the matched basis MPVs. Theorem&#160;<a href="ch-assembly.html#thm:route_b_hetero_phase_match_copies">14.18</a> recovers the missing copy-count equalities, which are precisely the extra fields needed for Definition&#160;<a href="ch-assembly.html#def:sector_basis_matching">14.16</a>. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:route_b_hetero_pre_matching">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">14.20</span>
+    <span class="theorem_thmtitle">Heterogeneous sector comparison from a pre-matching</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-assembly.html#thm:route_b_hetero_pre_matching">#</a>
+    
+    <a class="icon proof" href="ch-assembly.html#a0000000942"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-assembly.html#def:sector_basis_pre_matching">Definition 14.17</a></li>
+          
+          <li><a href="ch-assembly.html#def:paper_sector_data">Definition 14.9</a></li>
+          
+          <li><a href="ch-assembly.html#thm:route_b_hetero_phase_match_copies">Theorem 14.18</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_preMatching" class="lean_decl">MPSTensor.fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_preMatching</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   Let \(M\) be a sector basis pre-matching between sector decompositions \(P\) and \(Q\). If the total MPV families agree and the basis MPVs of \(P\) are eventually linearly independent, then the matched copy counts agree, and after absorbing the gauge phases into the weights of \(Q\) the corresponding sector-weight multisets agree. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000942">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> The gauge-phase equivalences in the pre-matching give the phase-scaling identities for the matched basis MPVs. Theorem&#160;<a href="ch-assembly.html#thm:route_b_hetero_phase_match_copies">14.18</a> then gives the copy-count equalities and the phase-adjusted multiset equalities. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:sector_basis_matching_from_overlap_ortho_span">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">14.21</span>
+    <span class="theorem_thmtitle">Overlap rigidity gives a sector basis matching</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-assembly.html#thm:sector_basis_matching_from_overlap_ortho_span">#</a>
+    
+    <a class="icon proof" href="ch-assembly.html#a0000000943"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-assembly.html#def:paper_sector_data">Definition 14.9</a></li>
+          
+          <li><a href="ch-assembly.html#def:sector_basis_matching">Definition 14.16</a></li>
+          
+          <li><a href="ch-mps.html#def:mpv_overlap">Definition 2.41</a></li>
+          
+          <li><a href="ch-bnt.html#thm:bnt_perm_simple">Theorem 13.18</a></li>
+          
+          <li><a href="ch-assembly.html#thm:sector_basis_pre_matching_to_matching">Theorem 14.19</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.exists_sectorBasisMatching_of_overlapOrtho_span_sameMPV" class="lean_decl">MPSTensor.exists_sectorBasisMatching_of_overlapOrtho_span_sameMPV</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   Assume the basis blocks of two sector decompositions have nonzero bond dimensions, are trace-preserving and injective, have asymptotically orthonormal overlaps within each family, and span the same MPV subspace at every system size. If the total MPV families also agree, then there exists a sector basis matching between the two decompositions. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000943">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> The permutation-rigidity theorem for bases of normal tensors gives a permutation, the matched bond dimensions, and the gauge-phase equivalences of the basis blocks, hence a sector basis pre-matching. Asymptotic orthonormality gives the BNT linear-independence condition, and Theorem&#160;<a href="ch-assembly.html#thm:sector_basis_pre_matching_to_matching">14.19</a> recovers the copy-count equalities from equality of the total MPV families. </p>
+
+  </div>
+</div>
 <div class="theorem_thmwrapper theorem-style-plain" id="thm:route_b_hetero_sector_matching">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">14.17</span>
+    <span class="theorem_thmlabel">14.22</span>
     <span class="theorem_thmtitle">Heterogeneous sector comparison via a bundled matching witness</span>
     <div class="thm_header_extras">
 
@@ -2136,7 +2536,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:route_b_hetero_sector_matching">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000000940"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000000944"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2191,7 +2591,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000940">
+<div class="proof_wrapper" id="a0000000944">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2208,7 +2608,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">14.18</span>
+    <span class="theorem_thmlabel">14.23</span>
     <span class="theorem_thmtitle">Cast-compatible MPV scaling implies phase-matched sector comparison</span>
     <div class="thm_header_extras">
 
@@ -2219,7 +2619,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:route_b_hetero_mpv_scaling">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000000941"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000000945"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2269,14 +2669,14 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Let \(P\) and \(Q\) be sector decompositions. Assume there is a permutation \(\pi \) matching the basis blocks, the multiplicities satisfy \(r_j^P = r_{\pi (j)}^Q\), and for each \(j\) the matched basis blocks have the same auxiliary dimension and satisfy </p>
-<div class="displaymath" id="a0000000942">
+<div class="displaymath" id="a0000000946">
   \[  V^{(N)}(Q_{\pi (j)})_\sigma = \zeta _j^N V^{(N)}(P_j)_\sigma  \]
 </div>
 <p> for some nonzero complex number \(\zeta _j\), after identifying the two basis tensors along that dimension equality. If the total MPV families of \(P\) and \(Q\) agree and the basis blocks of \(P\) are eventually linearly independent, then for each \(j\) the sector weight multiset of \(P_j\) equals the multiset obtained from that of \(Q_{\pi (j)}\) by multiplication by&#160;\(\zeta _j\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000941">
+<div class="proof_wrapper" id="a0000000945">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2288,19 +2688,19 @@
 
   </div>
 </div>
-<div class="remark_thmwrapper theorem-style-remark" id="a0000000943">
+<div class="remark_thmwrapper theorem-style-remark" id="a0000000947">
   <div class="remark_thmheading">
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">14.19</span>
+    <span class="remark_thmlabel">14.24</span>
     <span class="remark_thmtitle">Remaining step in the unconditional equal-case theorem</span>
     <div class="thm_header_extras">
 
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-assembly.html#a0000000943">#</a>
+    <a class="icon proof" href="ch-assembly.html#a0000000947">#</a>
     
     
     
@@ -2323,7 +2723,7 @@
 <ol class="enumerate">
   <li><p>a one-sided basis-of-normal-tensors construction for the after-blocking output that chooses representatives of gauge-phase-equivalent normal tensors and proves the resulting separated family has the required sector weights; the separated primitive-normal case already gives BNT linear independence by Theorem&#160;<a href="ch-canonical.html#thm:bnt_sector_decomp_tp_prim_irr_separated">11.109</a>; and </p>
 </li>
-  <li><p>a witness-producing matched-basis theorem for heterogeneous sector decompositions: the algebraic reduction after a basis matching is formalized in Theorems&#160;<a href="ch-assembly.html#thm:route_b_hetero_phase_match">14.14</a>,&#160;<a href="ch-assembly.html#thm:route_b_hetero_matched_basis">14.15</a>, and&#160;<a href="ch-assembly.html#thm:route_b_hetero_sector_matching">14.17</a> (the latter consuming a bundled matching witness, Definition&#160;<a href="ch-assembly.html#def:sector_basis_matching">14.16</a>), but one still needs a theorem that constructs a sector basis matching witness directly from equality of the total MPV families. </p>
+  <li><p>a matched-basis theorem for heterogeneous sector decompositions: the algebraic reduction after a basis matching is formalized in Theorems&#160;<a href="ch-assembly.html#thm:route_b_hetero_phase_match">14.14</a>,&#160;<a href="ch-assembly.html#thm:route_b_hetero_matched_basis">14.15</a>, and&#160;<a href="ch-assembly.html#thm:route_b_hetero_sector_matching">14.22</a>. Copy alignment is now recovered from a basis pre-matching by Theorem&#160;<a href="ch-assembly.html#thm:sector_basis_pre_matching_to_matching">14.19</a>, and the primitive overlap-rigidity hypotheses produce such a matching by Theorem&#160;<a href="ch-assembly.html#thm:sector_basis_matching_from_overlap_ortho_span">14.21</a>. The remaining task is to derive those span and overlap hypotheses from arbitrary equal-MPV sector decompositions produced by the one-sided BNT construction. </p>
 </li>
 </ol>
 <p> Once these two ingredients are in place, the final global gauge matrix of Corollary&#160;IV.5 is obtained by the same phase-absorption and blockwise composition argument already formalized in the strict single-weight setting. </p>
