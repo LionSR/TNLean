@@ -48,11 +48,29 @@ route that does not call `Axioms.rfp_to_nncph_commute`:
 - `MPSTensor.rfp_implies_nncph_of_appendixBExtraction` proves NNCPH from RFP plus that extraction,
   without calling `Axioms.rfp_to_nncph_commute`.
 
+The 2026-04-25 wave-14 follow-up removes a real coefficient-bookkeeping nuisance:
+
+- `MPSTensor.productPairWindow_one` and `MPSTensor.productPairState_one` prove that the
+  one-pair product-pair state is just the chosen two-site amplitude;
+- `MPSTensor.AppendixBStructuralData.coreTensor` names the gauge-removed tensor
+  $\Lambda U_i$;
+- `MPSTensor.AppendixBStructuralData.gaugeEquiv_coreTensor` and
+  `MPSTensor.AppendixBStructuralData.mpv_eq_coreTensor` prove that the Appendix B gauge
+  matrices do not affect MPV coefficients;
+- `MPSTensor.AppendixBStructuralData.twoSiteAmplitude_eq_mpv` and
+  `MPSTensor.AppendixBStructuralData.mpv_eq_productPairState_one` prove the length-two
+  case of the requested product-pair coefficient identity;
+- `MPSTensor.AppendixBProductPairExtraction.ofCoreTensorFactorization` reduces the MPV
+  field of `AppendixBProductPairExtraction` to the same factorization theorem for the
+  gauge-removed tensor, leaving the local-projector witness as a separate input.
+
 In other words, the internal part of the forward direction now factors as
 
 1. obtain Appendix B structural data from `rfp_nt_structural_full`;
-2. construct product-pair extraction data through that witness's two-site amplitude;
-3. apply the product-pair theorem to get NNCPH.
+2. remove the similarity matrices and prove the repeated-pair coefficient identity for the
+   core tensor $\Lambda U_i$;
+3. construct the product-pair local projector family;
+4. apply the product-pair theorem to get NNCPH.
 
 ## Gap 1 — replacing `Axioms.rfp_to_nncph_commute`
 
@@ -87,11 +105,16 @@ Concretely, the missing work is to turn the structural decomposition
 $$A_i = X \, \Lambda \, U_i \, X^{-1}$$
 into
 
-- an explicit repeated two-site amplitude on even chains, and
+- an explicit repeated two-site amplitude on even chains for the gauge-removed core tensor
+  $\Lambda U_i$ (the $X$ and $X^{-1}$ matrices are now formally removed from this step, and
+  the length-two case is proved), and
 - a family of chain-level projectors whose values are exactly the nearest-neighbor `localTerm`s.
 
 This is a genuine chain-space construction problem on `NSiteSpace d N`; it is **not** a remaining
-issue about the NNCPH definition itself.
+issue about the NNCPH definition itself. The present `AppendixBStructuralData` record still exposes
+only the left-canonical identity for `U`; a proof of the all-even-length factorization may need the
+stronger matrix-entry isometry produced inside `rfp_nt_structural_full` to be exported, or an
+alternative local-support description of the product-pair state.
 
 ## Gap 2 — the forward decorrelation theorem is blocked on tensor locality
 
