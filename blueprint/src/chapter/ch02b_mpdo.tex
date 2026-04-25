@@ -581,19 +581,22 @@ strong subadditivity for a normalized three-site reduced state.
         \sum_k \tr(\Delta_k A_k^w) = 0
         \qquad \text{for every word } w \text{ of length } L,
     \]
-    then every block coefficient $\Delta_k$ vanishes.
-    One theorem proves that the spanning condition implies this separation
-    property by nondegeneracy of the product trace pairing. A second theorem
-    then inserts the resulting biCF witness into horizontal canonical-form data
-    once injectivity, left-canonicality, and nonzero weights are given.
+    then these pairings vanish on a spanning set for the product algebra, so
+    the induced linear functional on the product algebra is zero; by
+    nondegeneracy of the product trace pairing, every $\Delta_k$ vanishes.
+    In other words, a single finite blocking length already separates the blocks
+    by their word evaluations. Combined with injectivity, left-canonicality, and
+    nonzero block weights, this finite-length separation yields the horizontal
+    canonical-form data of the block-diagonal tensor.
 
-    The Proposition~IV.3 block-injectivity hypothesis isolates the
-    finite-length content needed here: after some common blocking length, each
-    block is block-injective, and after a second finite blocking length one can
-    form word combinations which equal the identity on one chosen block and
-    vanish on all others. Concatenating an injective prefix with such a selector
-    suffix yields the product-algebra span condition above, and hence again a
-    biCF witness and horizontal canonical-form data.
+    Proposition~IV.3 gives a concrete sufficient criterion for the spanning
+    condition: after a common blocking length each block is block-injective,
+    and after a further finite blocking length one can form linear combinations
+    of word evaluations which equal the identity on one chosen block and vanish
+    on all others. Concatenating an injective prefix with such a selector
+    suffix produces the product-algebra spanning condition above, so the
+    selector-word hypotheses of Proposition~IV.3 also deliver the horizontal
+    canonical-form data.
 \end{remark}
 
 \begin{theorem}[Abstract Proposition~IV.3 package]
