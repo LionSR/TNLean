@@ -234,7 +234,7 @@ rank-one hypothesis from Lemma C.4.
 
 The PSD theorem is stronger than the primitive-matrix criterion once the trace
 normalization is available. -/
-theorem primitive_trace_powers_constant_implies_rank_one_of_pos_semidef
+theorem primitive_trace_powers_constant_implies_rank_one_of_posSemidef
     {T : Matrix (Fin n) (Fin n) ℝ}
     (hPSD : T.PosSemidef) (hTrace : Matrix.trace T = 1) :
     PrimitiveTracePowersConstantImpliesRankOne T := by

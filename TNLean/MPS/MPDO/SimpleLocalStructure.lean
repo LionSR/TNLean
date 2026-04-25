@@ -38,15 +38,10 @@ arXiv:1606.00608 (Cirac–Pérez-García–Schuch–Verstraete).
   `MPOTensor.ExplicitEtaOperators.traceMatrixRe`: the complex trace matrix of an
   explicit `η`-family and its real-part input to the downstream
   Perron–Frobenius step.
-- `Matrix.HasRankOneFactorization`: a finite matrix factors as `vecMulVec a b`.
-- `Matrix.TracePowersConstant`: all positive powers of a matrix have the same
-  trace as the matrix itself.
-- `Matrix.PosSemidef.trace_powers_constant_implies_rank_one`: the corrected
-  PSD rank-one criterion for the finite-dimensional Lemma C.4 step.
-- `Matrix.PrimitiveTracePowersConstantImpliesRankOne`: the conditional
-  Perron–Frobenius input isolated by Lemma C.4.
+- `MPOTensor.ExplicitEtaOperators.traceMatrixRe_nonneg`: positivity of each
+  neighboring operator gives entrywise nonnegativity of the real trace matrix.
 - `MPOTensor.sal_zcl_implies_rank_one_T`: the conditional Lemma C.4 consequence,
-  proved relative to that Perron–Frobenius input.
+  proved relative to the Perron–Frobenius rank-one input.
 - `MPOTensor.sal_zcl_implies_rank_one_T_of_posSemidef`: the same consequence
   with the Perron–Frobenius input derived from positive semidefiniteness of `T`.
 
@@ -310,7 +305,7 @@ theorem sal_zcl_implies_rank_one_T_of_posSemidef
     (hZCL : Matrix.TracePowersConstant T) :
     ∃ a b : Fin n → ℝ, T = Matrix.vecMulVec a b ∧ a ⬝ᵥ b = 1 := by
   exact sal_zcl_implies_rank_one_T T hPrimitive hTrace hZCL
-    (Matrix.primitive_trace_powers_constant_implies_rank_one_of_pos_semidef hPSD hTrace)
+    (Matrix.primitive_trace_powers_constant_implies_rank_one_of_posSemidef hPSD hTrace)
 
 end RankOneT
 
