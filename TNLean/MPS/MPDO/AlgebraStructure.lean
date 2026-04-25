@@ -21,7 +21,7 @@ The paper's full statement uses coefficient systems
 $c_{\alpha,\beta,\gamma}^{(L)} =
   \operatorname{tr}(\chi_{\alpha,\beta,\gamma}^L)$
 and BNT data. That full coefficient layer is not yet formalized here. What we do
-formalize is the stationary C$^*$-algebra package naturally attached to an MPO
+formalize is the stationary C$^*$-algebra structure naturally attached to an MPO
 whose blocked transfer maps are idempotent, together with a first explicit
 coordinate layer obtained by choosing bases of the blocked support algebras.
 
@@ -35,7 +35,7 @@ coincides with the fixed-point algebra of the adjoint blocked transfer map
 Under a trace-preserving normalization and a positive-definite fixed point of the
 MPO transfer map, an RFP tensor yields a **stationary** algebra tower. Combined
 with the transfer-map fusion criterion from `FusionIsometries.lean`, this gives a
-one-way bridge
+one-way implication
 
 * `isRFP_MPDO_via_algebra_of_isRFP_of_isTP_of_posDef_fixed`
 * `isRFP_MPDO_via_algebra_of_isRFP_MPDO_via_fusion_of_isTP_of_posDef_fixed`
@@ -118,18 +118,6 @@ local instance instMatrixInnerProductSpace (D : ℕ) :
   Matrix.toMatrixInnerProductSpace (n := Fin D) (𝕜 := ℂ) 1
     (Matrix.frobenius_posDef_one (D := D)).posSemidef
 
-namespace MPSTensor
-
-private theorem transferMap_adjoint_apply_eq_adjointMap {d D : ℕ}
-    (A : MPSTensor d D) (X : Matrix (Fin D) (Fin D) ℂ) :
-    (transferMap A).adjoint X = Kraus.adjointMap A X := by
-  have h := congrArg (fun F => F X)
-    (transferMap_conjTranspose_eq_adjoint (A := A)).symm
-  simpa [transferMap_apply, Kraus.adjointMap, Matrix.conjTranspose_conjTranspose,
-    Matrix.mul_assoc] using h
-
-end MPSTensor
-
 namespace MPOTensor
 
 variable {d D : ℕ}
@@ -146,7 +134,10 @@ At blocked size `n`, the support object is a `StarSubalgebra` of bond-space
 matrices. The map `m n` is the blocking multiplication, landing in the
 size-`2n` support algebra, while `iota n` is the inclusion into the size-`n+1`
 support algebra. The fields `m_apply` and `iota_apply` require that these maps
-are realized by the ambient matrix product and ambient inclusion. -/
+are realized by the ambient matrix product and ambient inclusion.
+
+This structure records only this realization data. It does **not** yet include
+the full §4.5 coherence / coefficient / BNT layer from the paper. -/
 structure AlgebraStructureData (d D : ℕ) where
   /-- Support algebra at blocked size `n`. -/
   A : ℕ → StarSubalgebra ℂ (Matrix (Fin D) (Fin D) ℂ)
@@ -183,7 +174,7 @@ end AlgebraStructureData
 one of its positive-definite fixed points.
 
 Concretely, this is the fixed-point `StarSubalgebra` of the adjoint transfer map
-`(transferMap M).adjoint`, packaged through Wolf Theorem 6.12 for the doubled
+`(transferMap M).adjoint`, constructed using Wolf Theorem 6.12 for the doubled
 MPS tensor `M.toMPSTensor`. -/
 def faithfulFixedPointSupportAlgebra
     (M : MPOTensor d D) (h_tp : Kraus.IsTP M.toMPSTensor)
@@ -203,8 +194,8 @@ theorem mem_faithfulFixedPointSupportAlgebra_iff
   unfold faithfulFixedPointSupportAlgebra
   rw [Kraus.mem_fixedPoints_starSubalgebra, Kraus.mem_adjointFixedPoints]
   have hAdj : Kraus.adjointMap M.toMPSTensor X = (transferMap M).adjoint X := by
-    simpa [transferMap_eq_toMPSTensor] using
-      (MPSTensor.transferMap_adjoint_apply_eq_adjointMap (A := M.toMPSTensor) X).symm
+    rw [transferMap_eq_toMPSTensor]
+    exact (MPSTensor.transferMap_adjoint_apply_eq_adjointMap (A := M.toMPSTensor) X).symm
   rw [hAdj]
 
 namespace AlgebraStructureData
@@ -232,7 +223,6 @@ theorem stationaryOfFaithfulFixedPoint_compatible
     {ρ : Mat} (hρ : ρ.PosDef) (hρ_fix : transferMap M ρ = ρ)
     (hRFP : IsRFP M) :
     (stationaryOfFaithfulFixedPoint M h_tp hρ hρ_fix).CompatibleWith M := by
-  simp only [AlgebraStructureData.CompatibleWith]
   intro n hn X
   change X ∈ faithfulFixedPointSupportAlgebra M h_tp hρ hρ_fix ↔
     (blockedTransferMap M n).adjoint X = X
@@ -243,6 +233,23 @@ theorem stationaryOfFaithfulFixedPoint_compatible
       congrArg LinearMap.adjoint
         (blockedTransferMap_eq_transferMap_of_isRFP (M := M) hRFP hn)
   simp [blockedTransferMap_eq_pow, transferMap_eq_toMPSTensor, hAdj]
+
+/-- The same stationary tower is compatible whenever the adjoint fixed points of
+all positive blocked transfer maps agree with the adjoint fixed points of the
+original transfer map. This criterion does not assume `IsRFP M`; it isolates
+exactly the stabilization property needed by the current compatibility
+predicate. -/
+theorem stationaryOfFaithfulFixedPoint_compatible_of_adjointFixedPoints_eq
+    (M : MPOTensor d D) (h_tp : Kraus.IsTP M.toMPSTensor)
+    {ρ : Mat} (hρ : ρ.PosDef) (hρ_fix : transferMap M ρ = ρ)
+    (hEq : ∀ n : ℕ, 0 < n → ∀ X : Mat,
+      (transferMap M).adjoint X = X ↔ (blockedTransferMap M n).adjoint X = X) :
+    (stationaryOfFaithfulFixedPoint M h_tp hρ hρ_fix).CompatibleWith M := by
+  intro n hn X
+  change X ∈ faithfulFixedPointSupportAlgebra M h_tp hρ hρ_fix ↔
+    (blockedTransferMap M n).adjoint X = X
+  rw [mem_faithfulFixedPointSupportAlgebra_iff (M := M) h_tp hρ hρ_fix X]
+  exact hEq n hn X
 
 end AlgebraStructureData
 
@@ -255,8 +262,9 @@ def IsRFP_MPDO_via_algebra (M : MPOTensor d D) : Prop :=
 
 /-- Backwards-compatible alias for the previous scaffold name.
 
-The old definition was vacuous. The new alias points to the non-vacuous algebra
-predicate above. -/
+The old definition was vacuous. The alias points to the non-vacuous algebra
+predicate above, but that predicate is still weaker than the full paper
+converse: it only records the current support-algebra layer. -/
 @[deprecated (since := "2026-04-24")] alias IsRFP_MPDO_via_algebra_scaffold :=
   IsRFP_MPDO_via_algebra
 
@@ -276,9 +284,24 @@ theorem isRFP_MPDO_via_algebra_of_isRFP_MPDO_via_fusion_of_isTP_of_posDef_fixed
     {M : MPOTensor d D} (hFusion : IsRFP_MPDO_via_fusion M)
     (h_tp : Kraus.IsTP M.toMPSTensor) {ρ : Mat} (hρ : ρ.PosDef)
     (hρ_fix : transferMap M ρ = ρ) :
-    IsRFP_MPDO_via_algebra M := by
-  exact isRFP_MPDO_via_algebra_of_isRFP_of_isTP_of_posDef_fixed
+    IsRFP_MPDO_via_algebra M :=
+  isRFP_MPDO_via_algebra_of_isRFP_of_isTP_of_posDef_fixed
     (M := M) (isRFP_of_isRFP_MPDO_via_fusion hFusion) h_tp hρ hρ_fix
+
+/-- The current algebra-side predicate also holds whenever the blocked adjoint
+fixed-point spaces stabilize across all positive powers. This extracts exactly
+what the present compatibility relation can see, without asserting the fusion /
+idempotence conclusion. -/
+theorem isRFP_MPDO_via_algebra_of_adjointFixedPoints_eq_of_isTP_of_posDef_fixed
+    {M : MPOTensor d D} (h_tp : Kraus.IsTP M.toMPSTensor)
+    {ρ : Mat} (hρ : ρ.PosDef) (hρ_fix : transferMap M ρ = ρ)
+    (hEq : ∀ n : ℕ, 0 < n → ∀ X : Mat,
+      (transferMap M).adjoint X = X ↔ (blockedTransferMap M n).adjoint X = X) :
+    IsRFP_MPDO_via_algebra M := by
+  refine ⟨AlgebraStructureData.stationaryOfFaithfulFixedPoint M h_tp hρ hρ_fix, ?_⟩
+  exact
+    AlgebraStructureData.stationaryOfFaithfulFixedPoint_compatible_of_adjointFixedPoints_eq
+      (M := M) (h_tp := h_tp) hρ hρ_fix hEq
 
 namespace AlgebraStructureData
 
@@ -308,13 +331,13 @@ noncomputable def reconstructFromBlockedCoefficients
 
 @[simp] theorem toBlockedCoefficients_reconstructFromBlockedCoefficients
     (data : AlgebraStructureData d D) (n : ℕ) (a : BlockedCoefficients data n) :
-    data.toBlockedCoefficients n (data.reconstructFromBlockedCoefficients n a) = a := by
-  exact (data.toBlockedCoefficients n).apply_symm_apply a
+    data.toBlockedCoefficients n (data.reconstructFromBlockedCoefficients n a) = a :=
+  (data.toBlockedCoefficients n).apply_symm_apply a
 
 @[simp] theorem reconstructFromBlockedCoefficients_toBlockedCoefficients
     (data : AlgebraStructureData d D) (n : ℕ) (x : data.A n) :
-    data.reconstructFromBlockedCoefficients n (data.toBlockedCoefficients n x) = x := by
-  exact (data.toBlockedCoefficients n).symm_apply_apply x
+    data.reconstructFromBlockedCoefficients n (data.toBlockedCoefficients n x) = x :=
+  (data.toBlockedCoefficients n).symm_apply_apply x
 
 /-- The chosen basis reconstructs every blocked coefficient family by a finite sum. -/
 theorem reconstructFromBlockedCoefficients_apply
@@ -342,8 +365,8 @@ noncomputable def toBlockedCoefficientsOfMem
 @[simp] theorem reconstructFromBlockedCoefficients_of_mem
     (data : AlgebraStructureData d D) (n : ℕ) (X : Mat) (hX : X ∈ data.A n) :
     ((data.reconstructFromBlockedCoefficients n
-      (data.toBlockedCoefficientsOfMem n X hX) : data.A n) : Mat) = X := by
-  exact congrArg (fun x : data.A n => (x : Mat))
+      (data.toBlockedCoefficientsOfMem n X hX) : data.A n) : Mat) = X :=
+  congrArg (fun x : data.A n => (x : Mat))
     (reconstructFromBlockedCoefficients_toBlockedCoefficients
       (data := data) (n := n) (x := ⟨X, hX⟩))
 
@@ -376,8 +399,8 @@ theorem adjoint_blockedTransferMap_reconstructFromBlockedCoefficients_eq
     (a : BlockedCoefficients data n) :
     (blockedTransferMap M n).adjoint
         (((data.reconstructFromBlockedCoefficients n a : data.A n) : Mat)) =
-      (((data.reconstructFromBlockedCoefficients n a : data.A n) : Mat)) := by
-  exact (hCompat n hn _).1 (data.reconstructFromBlockedCoefficients n a).property
+      (((data.reconstructFromBlockedCoefficients n a : data.A n) : Mat)) :=
+  (hCompat n hn _).1 (data.reconstructFromBlockedCoefficients n a).property
 
 /-- The coefficient family of the blocked product of two chosen basis elements. -/
 noncomputable def blockedStructureCoefficients
