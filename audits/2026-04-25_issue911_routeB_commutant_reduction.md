@@ -1,10 +1,10 @@
-# Issue #911 Route B commutant reduction audit (2026-04-25)
+# Issue #911 block-diagonal commutant reduction audit (2026-04-25)
 
 Branch: `wave14-B-911-blockdiag-reverse`.
 
 ## Scope
 
-This note records the status after adding the first Route B algebraic reduction for the
+This note records the status after adding the first block-diagonal commutant reduction for the
 reverse inclusion from issue #911 / parent issue #905. The branch was rebased onto
 `origin/main` after PR #899 landed the blockwise-injective endgame in
 `DegenerateGS.lean`.

@@ -10,9 +10,10 @@ import TNLean.MPS.SharedInfra.BlockAssembly
 /-!
 # Block-diagonal commutants from sector projections
 
-This file isolates the algebraic part of the Route B parent-Hamiltonian block
-argument.  If the sector projections of a dependent direct sum lie in the span
-of a family of matrices and a boundary matrix commutes with that family, then it
+This file isolates the algebraic part of the block-diagonal commutant argument
+for the parent-Hamiltonian block decomposition. If the sector projections of a
+dependent direct sum lie in the span of a family of matrices and a boundary
+matrix commutes with that family, then it
 commutes with the projections and hence has no off-block entries.
 
 The remaining CF/BNT-specific step is to prove that the sector projections lie

@@ -129,7 +129,7 @@ This is the `≥` half of the structural decomposition
 referenced at the parent-Hamiltonian docstring (see `parentHamiltonian_gs_eq_bnt_span`).
 
 The reverse inclusion — that every periodic-chain ground state of the assembled
-tensor decomposes blockwise — is now reduced algebraically to the Route B
+tensor decomposes blockwise — is now reduced algebraically to the block-diagonal
 boundary-matrix commutant step. The lemma
 `isBlockDiagonal'_of_commutes_reindexed_wordSpan` shows that, once the virtual
 sector projections are known to lie in the finite span of assembled long-word
@@ -242,7 +242,7 @@ splitting theorem** of the form
 `parentHamiltonianGroundSpace (μ := μ) A L N ≤ ⨆ j, chainGroundSpace (A j) L N`,
 saying that a state whose cyclic windows all lie in the block-diagonal local
 ground space decomposes into a sum of block chain-ground-state components.
-The Route B commutant reduction in `BlockDiagonalCommutant` now supplies the
+The block-diagonal commutant reduction in `BlockDiagonalCommutant` now supplies the
 algebraic off-block-zero step once the virtual sector projections are known to
 lie in the finite word span of the assembled tensor. The repository still lacks
 that CF/BNT finite-span block-separation theorem and the resulting periodic-chain

@@ -1913,7 +1913,7 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     definition.
 \end{proof}
 
-\begin{lemma}[Route B block-diagonal commutant reduction]
+\begin{lemma}[Block-diagonal commutant reduction from span extension]
     \label{lem:route_b_block_diagonal_commutant_reduction}
     \lean{Matrix.isBlockDiagonal'_of_commutes_span_blockProjection}
     \lean{MPSTensor.isBlockDiagonal'_of_commutes_reindexed_wordSpan}
@@ -1954,8 +1954,9 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
 \begin{proof}
     \notready
     The remaining structural step is the periodic block decomposition of the assembled chain
-    ground space. The Route B reduction above supplies the algebraic off-block-zero step once
-    the virtual sector projections are obtained from the finite word span of the assembled
+    ground space. The block-diagonal commutant reduction above supplies the algebraic
+    off-block-zero step once the virtual sector projections are obtained from the finite word
+    span of the assembled
     tensor. With that decomposition available, one applies the blockwise injective uniqueness
     theorem to each block separately and recovers the BNT span.
 \end{proof}
