@@ -1,6 +1,6 @@
 # Issue #460 — Friedrichs finite-overlap row-bound handoff (2026-04-25)
 
-This note records the remaining analytic inputs after adding the finite-overlap
+This note records the remaining analytic hypotheses after adding the finite-overlap
 row-bound reductions for the parent-Hamiltonian martingale argument.
 
 ## New formal row-bound layer
@@ -27,18 +27,18 @@ The parent-Hamiltonian wrappers
 - `MPSTensor.parentHamiltonianES_quadratic_form_of_finite_overlap_friedrichs`,
 - `MPSTensor.parentHamiltonianES_gap_bound_of_finite_overlap_friedrichs`
 
-specialize the interface to the transported local terms `localTermES A L i`,
+specialize the reduction to the transported local terms `localTermES A L i`,
 with the expected cyclic-window degree `m = 2 * (L - 1)` and the explicit gap
 constant `γ = 1 / (4 * L)`.
 
-## Remaining MPS-specific inputs
+## Remaining MPS-specific hypotheses
 
 The final theorem `MPSTensor.parentHamiltonianES_gap_bound_of_friedrichs` still
-needs the following concrete inputs.
+needs the following concrete hypotheses.
 
 1. Local projector structure: for all admissible `N` and `i`, prove
    `(localTermES A L i).IsSymmetricProjection`. This row-bound branch keeps the
-   input explicit; PR #925 owns the separate projection-structure proof.
+   hypothesis explicit; PR #925 owns the separate projection-structure proof.
 2. Choose a cyclic-window overlap predicate, for example “the length-`L` cyclic
    supports of `i` and `j` intersect”.
 3. Prove the row-cardinality estimate

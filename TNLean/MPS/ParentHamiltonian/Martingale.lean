@@ -72,8 +72,8 @@ concrete Friedrichs-angle/row-sum lower bound that
   reusable reduction from explicit ordered cross-term row bounds for the
   local symmetric projections to the quadratic-form hypothesis above.
 * `MPSTensor.parentHamiltonianES_gap_bound_of_finite_overlap_friedrichs` — a
-  finite-overlap interface turning explicit local projection, overlap,
-  non-overlap positivity, and Friedrichs estimates into the gap input.
+  finite-overlap reduction turning explicit local projection, overlap,
+  non-overlap positivity, and Friedrichs estimates into the gap estimate.
 * `MPSTensor.parentHamiltonian_gapped` — uniform spectral gap for MPS
   parent Hamiltonians on injective tensors, obtained from the
   Friedrichs-angle bound recorded in
@@ -118,7 +118,7 @@ the row-sum bound) produces the operator inequality `H² ≥ γ H` for the
 PSD operator `H`, the norm lower bound — and hence the spectral gap
 for eigenvectors of `H` — follows by the spectral theorem. This lemma
 provides the final spectral-theorem step; the remaining MPS-specific
-quadratic-form input is recorded separately in
+quadratic-form hypothesis is recorded separately in
 `MPSTensor.parentHamiltonianES_gap_bound_of_friedrichs`. -/
 theorem spectralGap_of_martingale {ι : Type*} [Fintype ι] {γ : ℝ} (hγ : 0 < γ)
     {H : EuclideanSpace ℂ ι →ₗ[ℂ] EuclideanSpace ℂ ι} (hH : H.IsPositive)
@@ -745,7 +745,7 @@ For parent-Hamiltonian windows of length `L`, the expected finite-range bound is
 `m = 2 * (L - 1)`: each local term overlaps at most that many other cyclic
 translates when `N ≥ 2L`.  This theorem leaves the transported local projection
 structure, the cyclic-window overlap predicate, non-overlap positivity, and the
-Friedrichs-angle estimate as explicit inputs. It only performs the finite-overlap
+Friedrichs-angle estimate as explicit hypotheses. It only performs the finite-overlap
 row-sum reduction and the existing quadratic-form-to-gap conversion. -/
 theorem parentHamiltonianES_gap_bound_of_finite_overlap_friedrichs
     (A : MPSTensor d D) (L : ℕ) (hL : 1 < L)

@@ -206,7 +206,7 @@ theorem quadraticForm_sum_projections_of_ordered_rowSum {γ : ℝ} (hγle : γ �
         add_le_add le_rfl hCrossSum
     _ = (⟪(∑ i, P i) v, (∑ i, P i) v⟫_ℂ).re := hHH.symm
 
-/-- Finite-overlap Friedrichs input for a family of symmetric projections.
+/-- Finite-overlap Friedrichs conditions for a family of symmetric projections.
 
 Assume that each row has at most `m` interacting off-diagonal entries.  On an
 interacting pair, a Friedrichs-angle estimate supplies the ordered bound with
