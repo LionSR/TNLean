@@ -8308,12 +8308,263 @@
 
   </div>
 </div>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:chain_ground_space_block_le_assembled">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">19.102</span>
+    <span class="lemma_thmtitle">Periodic block lift</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-parent_hamiltonian.html#lem:chain_ground_space_block_le_assembled">#</a>
+    
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001386"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-parent_hamiltonian.html#def:chain_ground_space">Definition 19.50</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.chainGroundSpace_block_le_toTensorFromBlocks" class="lean_decl">MPSTensor.chainGroundSpace_block_le_toTensorFromBlocks</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>    For each block index \(j\) with \(\mu _{j} \neq 0\), the chain ground space of the block \(A_{j}\) embeds into the chain ground space of the assembled tensor: </p>
+<div class="displaymath" id="a0000001387">
+  \[  \operatorname {ChainGround}_{N,L}(A_{j}) \subseteq \operatorname {ChainGround}_{N,L}(\operatorname {Assemble}(\mu , A)).  \]
+</div>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000001386">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>The cyclic-window definition of the chain ground space reduces the inclusion to the local block-embedding statement that each ground vector of \(A_{j}\) on the window of length \(L\) lifts to the assembled tensor by inserting the block-diagonal boundary matrix with the compensating scalar factor \(\mu _{j}^{-L}\). </p>
+
+  </div>
+</div>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:isup_chain_ground_space_block_le_assembled">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">19.103</span>
+    <span class="lemma_thmtitle">Periodic block decomposition: forward inclusion</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-parent_hamiltonian.html#lem:isup_chain_ground_space_block_le_assembled">#</a>
+    
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001388"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-parent_hamiltonian.html#def:chain_ground_space">Definition 19.50</a></li>
+          
+          <li><a href="ch-parent_hamiltonian.html#lem:chain_ground_space_block_le_assembled">Lemma 19.102</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.iSup_chainGroundSpace_block_le_toTensorFromBlocks" class="lean_decl">MPSTensor.iSup_chainGroundSpace_block_le_toTensorFromBlocks</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>    Assume \(\mu _{j} \neq 0\) for every block index \(j\). The supremum of the blockwise periodic-chain ground spaces is contained in the assembled tensor’s periodic-chain ground space: </p>
+<div class="displaymath" id="a0000001389">
+  \[  \bigsqcup _{j} \operatorname {ChainGround}_{N,L}(A_{j}) \subseteq \operatorname {ChainGround}_{N,L}(\operatorname {Assemble}(\mu , A)),  \]
+</div>
+<p> where \(j\) ranges over all block indices. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000001388">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Aggregate the block lift over all block indices. </p>
+
+  </div>
+</div>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:isup_chain_ground_space_block_le_parent_ground_space">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">19.104</span>
+    <span class="lemma_thmtitle">Block decomposition: forward inclusion in the assembled parent ground space</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-parent_hamiltonian.html#lem:isup_chain_ground_space_block_le_parent_ground_space">#</a>
+    
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001390"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-parent_hamiltonian.html#def:parent_hamiltonian_ground_space_bnt">Definition 19.98</a></li>
+          
+          <li><a href="ch-parent_hamiltonian.html#lem:isup_chain_ground_space_block_le_assembled">Lemma 19.103</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.iSup_chainGroundSpace_block_le_parentHamiltonianGroundSpace" class="lean_decl">MPSTensor.iSup_chainGroundSpace_block_le_parentHamiltonianGroundSpace</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>    For a canonical-form/BNT family, the supremum of the blockwise periodic-chain ground spaces is contained in the assembled parent ground space: </p>
+<div class="displaymath" id="a0000001391">
+  \[  \bigsqcup _{j} \operatorname {ChainGround}_{N,L}(A_{j}) \subseteq \operatorname {ParentGround}_{N,L}(A).  \]
+</div>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000001390">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>The canonical-form/BNT hypothesis supplies \(\mu _{j} \neq 0\) for every \(j\), and the assembled parent ground space is the chain ground space of the assembled tensor by definition. </p>
+
+  </div>
+</div>
 <div class="theorem_thmwrapper theorem-style-plain" id="thm:parent_ground_space_le_bnt_span">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">19.102</span>
+    <span class="theorem_thmlabel">19.105</span>
     <span class="theorem_thmtitle">Containment in the BNT span by block decomposition</span>
     <div class="thm_header_extras">
 
@@ -8322,7 +8573,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#thm:parent_ground_space_le_bnt_span">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001386"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001392"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -8343,6 +8594,8 @@
           <li><a href="ch-parent_hamiltonian.html#def:bnt_span">Definition 19.100</a></li>
           
           <li><a href="ch-parent_hamiltonian.html#thm:chain_ground_space_eq_mpv_normal">Theorem 19.59</a></li>
+          
+          <li><a href="ch-parent_hamiltonian.html#lem:isup_chain_ground_space_block_le_assembled">Lemma 19.103</a></li>
           
         </ul>
     
@@ -8377,7 +8630,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001386">
+<div class="proof_wrapper" id="a0000001392">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -8394,7 +8647,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">19.103</span>
+    <span class="theorem_thmlabel">19.106</span>
     <span class="theorem_thmtitle">Ground space equals span of BNT</span>
     <div class="thm_header_extras">
 
@@ -8403,7 +8656,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#thm:gs_eq_bnt_span">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001387"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001393"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -8419,7 +8672,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-parent_hamiltonian.html#thm:parent_ground_space_le_bnt_span">Theorem 19.102</a></li>
+          <li><a href="ch-parent_hamiltonian.html#thm:parent_ground_space_le_bnt_span">Theorem 19.105</a></li>
           
           <li><a href="ch-parent_hamiltonian.html#lem:bnt_mpv_mem_ground_space">Lemma 19.101</a></li>
           
@@ -8457,13 +8710,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   If \(1 {\lt} L\) and \(N \ge L + 1\), then for a canonical-form/BNT family the assembled parent ground space equals the BNT span: </p>
-<div class="displaymath" id="a0000001388">
+<div class="displaymath" id="a0000001394">
   \[  \operatorname {ParentGround}_{N,L}(A) = \operatorname {BNTSpan}_{N}(A).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001387">
+<div class="proof_wrapper" id="a0000001393">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -8472,11 +8725,11 @@
   </div>
   <div class="proof_content">
   <p>We prove the two inclusions separately. The inclusion </p>
-<div class="displaymath" id="a0000001389">
+<div class="displaymath" id="a0000001395">
   \[  \operatorname {ParentGround}_{N,L}(A) \subseteq \operatorname {BNTSpan}_{N}(A)  \]
 </div>
-<p> is exactly Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:parent_ground_space_le_bnt_span">19.102</a>. For the reverse inclusion, Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:bnt_mpv_mem_ground_space">19.101</a> shows that each BNT MPV lies in \(\operatorname {ParentGround}_{N,L}(A)\). Since the parent ground space is a linear subspace, it therefore contains every linear combination of such vectors, and hence contains \(\operatorname {BNTSpan}_{N}(A)\). Thus </p>
-<div class="displaymath" id="a0000001390">
+<p> is exactly Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:parent_ground_space_le_bnt_span">19.105</a>. For the reverse inclusion, Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:bnt_mpv_mem_ground_space">19.101</a> shows that each BNT MPV lies in \(\operatorname {ParentGround}_{N,L}(A)\). Since the parent ground space is a linear subspace, it therefore contains every linear combination of such vectors, and hence contains \(\operatorname {BNTSpan}_{N}(A)\). Thus </p>
+<div class="displaymath" id="a0000001396">
   \[  \operatorname {BNTSpan}_{N}(A) \subseteq \operatorname {ParentGround}_{N,L}(A),  \]
 </div>
 <p> and the two spaces are equal. </p>
