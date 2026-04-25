@@ -19,15 +19,19 @@ env:
 
 jobs:
   claude:
-    # Skip bot triggers (e.g. Copilot reposting a review that contains "@claude") —
-    # claude-code-action rejects non-collaborator actors, so the job would just
-    # burn minutes on Lean toolchain setup before failing.
+    # Skip when:
+    #   - sender is a bot (e.g. Copilot reposting a review that contains "@claude")
+    #     — claude-code-action rejects non-collaborator actors anyway.
+    #   - the triggering author lacks write access (author_association not in
+    #     OWNER/MEMBER/COLLABORATOR). Defense-in-depth: this workflow runs with
+    #     write permissions and repo secrets, so prompt-injection from untrusted
+    #     commenters must not start the runner.
     if: |
       github.event.sender.type != 'Bot' && (
-        (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@claude')) ||
-        (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@claude')) ||
-        (github.event_name == 'pull_request_review' && contains(github.event.review.body, '@claude')) ||
-        (github.event_name == 'issues' && (contains(github.event.issue.body, '@claude') || contains(github.event.issue.title, '@claude')))
+        (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@claude') && contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association)) ||
+        (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@claude') && contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association)) ||
+        (github.event_name == 'pull_request_review' && contains(github.event.review.body, '@claude') && contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.review.author_association)) ||
+        (github.event_name == 'issues' && (contains(github.event.issue.body, '@claude') || contains(github.event.issue.title, '@claude')) && contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.issue.author_association))
       )
     runs-on: ubuntu-latest
     timeout-minutes: 45
