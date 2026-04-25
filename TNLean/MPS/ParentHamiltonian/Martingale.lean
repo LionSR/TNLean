@@ -221,8 +221,8 @@ noncomputable def parentInteractionES (A : MPSTensor d D) (L : ℕ) :
 /-- The `EuclideanSpace` parent interaction is the symmetric projection onto
 `(groundSpaceES A L)ᗮ`. -/
 theorem parentInteractionES_isSymmetricProjection (A : MPSTensor d D) (L : ℕ) :
-    (parentInteractionES A L).IsSymmetricProjection := by
-  exact Submodule.isSymmetricProjection_starProjection ((groundSpaceES A L)ᗮ)
+    (parentInteractionES A L).IsSymmetricProjection :=
+  Submodule.isSymmetricProjection_starProjection ((groundSpaceES A L)ᗮ)
 
 /-- The `EuclideanSpace` parent interaction is positive because it is an
 orthogonal projection. -/
@@ -574,20 +574,19 @@ private theorem localTermES_isIdempotentElem {N : ℕ} (A : MPSTensor d D) (L : 
     rw [localTermES_apply A L i hLN (localTermES A L i v) σ]
     rw [cyclicRestrictES_localTermES A hLN i σ v]
     rw [localTermES_apply A L i hLN v σ]
-    have hPidem : IsIdempotentElem (parentInteractionES A L) :=
-      (parentInteractionES_isSymmetricProjection A L).isIdempotentElem
     have hPapply :
         parentInteractionES A L
             (parentInteractionES A L ((cyclicRestrictES (d := d) (Fin.pos i) L i σ) v)) =
           parentInteractionES A L ((cyclicRestrictES (d := d) (Fin.pos i) L i σ) v) := by
       simpa [Module.End.mul_apply] using
-        congrArg
-          (fun T : EuclideanSpace ℂ (Cfg d L) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d L) =>
-            T ((cyclicRestrictES (d := d) (Fin.pos i) L i σ) v)) hPidem.eq
+        LinearMap.congr_fun
+          (parentInteractionES_isSymmetricProjection A L).isIdempotentElem.eq
+          ((cyclicRestrictES (d := d) (Fin.pos i) L i σ) v)
     rw [hPapply]
   · simpa [localTermES, localTerm, hLN] using
       (IsIdempotentElem.zero :
-        IsIdempotentElem (0 : EuclideanSpace ℂ (Cfg d N) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d N)))
+        IsIdempotentElem
+          (0 : EuclideanSpace ℂ (Cfg d N) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d N)))
 
 /-- Each transported local parent-Hamiltonian term is a symmetric projection.
 
@@ -597,8 +596,8 @@ For `L ≤ N`, idempotence follows by restricting to the cyclic window, applying
 the local projector `parentInteractionES`, and using `P_L^2 = P_L`; for `L > N`
 the definition gives the zero projection. -/
 theorem localTermES_isSymmetricProjection {N : ℕ} (A : MPSTensor d D) (L : ℕ)
-    (i : Fin N) : (localTermES A L i).IsSymmetricProjection := by
-  exact LinearMap.IsSymmetricProjection.mk
+    (i : Fin N) : (localTermES A L i).IsSymmetricProjection :=
+  LinearMap.IsSymmetricProjection.mk
     (localTermES_isIdempotentElem A L i)
     (localTermES_isPositive A L i).isSymmetric
 
