@@ -196,8 +196,8 @@ theorem sal_implies_eta_structure
 Hayashi decomposition.
 
 For each pair of sectors `(k, h)`, the operator `η_{k,h}` acts on the
-neighboring bond space `B_kᴿ ⊗ B_hᴸ`, represented in Lean as the matrix algebra
-on `Fin (hη.dR k) × Fin (hη.dL h)`. -/
+neighboring bond space `B_kᴿ ⊗ B_hᴸ`, the matrix algebra with row and column
+indices `Fin (hη.dR k) × Fin (hη.dL h)`. -/
 abbrev etaOperators
     {ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)
       (Fin dA × Fin dB × Fin dC) ℂ}

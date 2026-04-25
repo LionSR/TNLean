@@ -34,8 +34,7 @@ namespace Matrix
 variable {n : ℕ}
 
 /-- A square real matrix has the rank-one factorization of Appendix C.2,
-Lemma C.4 if it is an outer product `a bᵀ`, represented in Lean as
-`Matrix.vecMulVec a b`. -/
+Lemma C.4 if it is an outer product of two vectors. -/
 def HasRankOneFactorization (T : Matrix (Fin n) (Fin n) ℝ) : Prop :=
   ∃ a b : Fin n → ℝ, T = Matrix.vecMulVec a b
 
