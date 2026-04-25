@@ -9138,12 +9138,123 @@
 
   </div>
 </div>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:conditional_boundary_matrix_block_split_projection_span">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">19.112</span>
+    <span class="lemma_thmtitle">Conditional boundary-matrix block split from projection span</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-parent_hamiltonian.html#lem:conditional_boundary_matrix_block_split_projection_span">#</a>
+    
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001431"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-parent_hamiltonian.html#lem:route_b_block_diagonal_commutant_reduction">Lemma 19.111</a></li>
+          
+          <li><a href="ch-mps.html#lem:eval_word_block_diagonal_tensor">Lemma 2.33</a></li>
+          
+          <li><a href="ch-parent_hamiltonian.html#lem:mpv_mem_chain_ground_space">Lemma 19.52</a></li>
+          
+          <li><a href="ch-parent_hamiltonian.html#lem:isup_chain_ground_space_block_le_assembled">Lemma 19.109</a></li>
+          
+          <li><a href="ch-parent_hamiltonian.html#thm:chain_ground_space_eq_mpv_blk">Theorem 19.58</a></li>
+          
+          <li><a href="ch-algebraic_ft.html#lem:center_scalar">Lemma 17.10</a></li>
+          
+          <li><a href="ch-parent_hamiltonian.html#lem:route_b_block_diagonal_commutant_reduction">Lemma 19.111</a></li>
+          
+          <li><a href="ch-mps.html#lem:eval_word_block_diagonal_tensor">Lemma 2.33</a></li>
+          
+          <li><a href="ch-parent_hamiltonian.html#lem:mpv_mem_chain_ground_space">Lemma 19.52</a></li>
+          
+          <li><a href="ch-parent_hamiltonian.html#lem:isup_chain_ground_space_block_le_assembled">Lemma 19.109</a></li>
+          
+          <li><a href="ch-parent_hamiltonian.html#thm:chain_ground_space_eq_mpv_blk">Theorem 19.58</a></li>
+          
+          <li><a href="ch-algebraic_ft.html#lem:center_scalar">Lemma 17.10</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.groundSpaceMap_toTensorFromBlocks_mem_iSup_chainGroundSpace_of_reindexed_projectionSpan" class="lean_decl">MPSTensor.groundSpaceMap_toTensorFromBlocks_mem_iSup_chainGroundSpace_of_reindexed_projectionSpan</a></li>
+          
+          <li><a href="../docs/find/#doc/MPSTensor.chainGroundSpace_toTensorFromBlocks_le_iSup_of_reindexed_projectionSpan" class="lean_decl">MPSTensor.chainGroundSpace_toTensorFromBlocks_le_iSup_of_reindexed_projectionSpan</a></li>
+          
+          <li><a href="../docs/find/#doc/MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_of_reindexed_projectionSpan" class="lean_decl">MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_of_reindexed_projectionSpan</a></li>
+          
+          <li><a href="../docs/find/#doc/MPSTensor.parentHamiltonianGroundSpace_le_bntSpan_of_reindexed_projectionSpan" class="lean_decl">MPSTensor.parentHamiltonianGroundSpace_le_bntSpan_of_reindexed_projectionSpan</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>       Let \(A\) be in canonical-form/BNT, and assume \(1{\lt}L\), \(N \ge L+1\), and \(0{\lt}m\). Assume the remaining #911 input: every virtual sector projection lies in the pulled-back span of the length-\(m\) word products of the assembled tensor. If a boundary matrix for the assembled tensor commutes with all those length-\(m\) words, then the vector obtained by applying the assembled ground-space map to that boundary matrix lies in \(\bigsqcup _j \mathcal G_{N,L}(A_j)\). Consequently, if every assembled periodic-chain ground vector admits such a commuting boundary matrix representation (the output of the wrapping-window comparison), then </p>
+<div class="displaymath" id="a0000001432">
+  \[  \mathcal G_{N,L}\bigl(\operatorname {Assemble}(\mu , A)\bigr) \subseteq \bigsqcup _j \mathcal G_{N,L}(A_j),  \]
+</div>
+<p> and together with the already-proved forward inclusion this gives the corresponding conditional equality. Composing the reverse inclusion with blockwise injective uniqueness gives the conditional containment of the assembled parent ground space in the BNT span; this lemma is not a restatement of the final theorem, because it keeps the #911 projection-span and boundary representation inputs explicit. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000001431">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> The commutant reduction makes the pulled-back boundary matrix block diagonal. Restricting the same word-commutation identities to a diagonal block and using the injectivity of that block shows, by the scalar-commutant lemma, that each diagonal block is scalar. Expanding the assembled ground-space map on a block-diagonal boundary matrix gives a finite sum of scalar multiples of the block MPV states, and each block MPV lies in its own periodic chain ground space. The reverse-inclusion, equality, and BNT-span forms are then reformulations of this boundary-matrix calculation, combined with the forward inclusion and the blockwise uniqueness theorem. </p>
+
+  </div>
+</div>
 <div class="theorem_thmwrapper theorem-style-plain" id="thm:parent_ground_space_le_bnt_span">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">19.112</span>
+    <span class="theorem_thmlabel">19.113</span>
     <span class="theorem_thmtitle">Containment in the BNT span by block decomposition</span>
     <div class="thm_header_extras">
 
@@ -9152,7 +9263,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#thm:parent_ground_space_le_bnt_span">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001431"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001433"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9174,7 +9285,7 @@
           
           <li><a href="ch-parent_hamiltonian.html#thm:chain_ground_space_eq_mpv_blk">Theorem 19.58</a></li>
           
-          <li><a href="ch-parent_hamiltonian.html#lem:route_b_block_diagonal_commutant_reduction">Lemma 19.111</a></li>
+          <li><a href="ch-parent_hamiltonian.html#lem:conditional_boundary_matrix_block_split_projection_span">Lemma 19.112</a></li>
           
         </ul>
     
@@ -9209,7 +9320,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001431">
+<div class="proof_wrapper" id="a0000001433">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9217,7 +9328,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>The remaining structural step is the periodic block decomposition of the assembled chain ground space. The block-diagonal commutant reduction above supplies the algebraic off-block-zero step once the virtual sector projections are obtained from the finite word span of the assembled tensor. With that decomposition available, one applies the blockwise injective uniqueness theorem to each block separately and recovers the BNT span. </p>
+  <p>The remaining structural step is the periodic block decomposition of the assembled chain ground space. Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:conditional_boundary_matrix_block_split_projection_span">19.112</a> supplies the conditional boundary-matrix endgame once the #911 virtual-sector projections are obtained from the finite word span of the assembled tensor and the wrapping-window comparison provides a commuting boundary matrix. With that decomposition available, one applies the blockwise injective uniqueness theorem to each block separately and recovers the BNT span. </p>
 
   </div>
 </div>
@@ -9226,7 +9337,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">19.113</span>
+    <span class="theorem_thmlabel">19.114</span>
     <span class="theorem_thmtitle">Ground space equals span of BNT</span>
     <div class="thm_header_extras">
 
@@ -9235,7 +9346,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#thm:gs_eq_bnt_span">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001432"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001434"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9251,7 +9362,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-parent_hamiltonian.html#thm:parent_ground_space_le_bnt_span">Theorem 19.112</a></li>
+          <li><a href="ch-parent_hamiltonian.html#thm:parent_ground_space_le_bnt_span">Theorem 19.113</a></li>
           
           <li><a href="ch-parent_hamiltonian.html#lem:bnt_mpv_mem_ground_space">Lemma 19.107</a></li>
           
@@ -9289,13 +9400,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   If \(1 {\lt} L\) and \(N \ge L + 1\), then for a canonical-form/BNT family the assembled parent ground space equals the BNT span: </p>
-<div class="displaymath" id="a0000001433">
+<div class="displaymath" id="a0000001435">
   \[  \operatorname {ParentGround}_{N,L}(A) = \operatorname {BNTSpan}_{N}(A).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001432">
+<div class="proof_wrapper" id="a0000001434">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9304,11 +9415,11 @@
   </div>
   <div class="proof_content">
   <p>We prove the two inclusions separately. The inclusion </p>
-<div class="displaymath" id="a0000001434">
+<div class="displaymath" id="a0000001436">
   \[  \operatorname {ParentGround}_{N,L}(A) \subseteq \operatorname {BNTSpan}_{N}(A)  \]
 </div>
-<p> is exactly Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:parent_ground_space_le_bnt_span">19.112</a>. For the reverse inclusion, Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:bnt_mpv_mem_ground_space">19.107</a> shows that each BNT MPV lies in \(\operatorname {ParentGround}_{N,L}(A)\). Since the parent ground space is a linear subspace, it therefore contains every linear combination of such vectors, and hence contains \(\operatorname {BNTSpan}_{N}(A)\). Thus </p>
-<div class="displaymath" id="a0000001435">
+<p> is exactly Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:parent_ground_space_le_bnt_span">19.113</a>. For the reverse inclusion, Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:bnt_mpv_mem_ground_space">19.107</a> shows that each BNT MPV lies in \(\operatorname {ParentGround}_{N,L}(A)\). Since the parent ground space is a linear subspace, it therefore contains every linear combination of such vectors, and hence contains \(\operatorname {BNTSpan}_{N}(A)\). Thus </p>
+<div class="displaymath" id="a0000001437">
   \[  \operatorname {BNTSpan}_{N}(A) \subseteq \operatorname {ParentGround}_{N,L}(A),  \]
 </div>
 <p> and the two spaces are equal. </p>
