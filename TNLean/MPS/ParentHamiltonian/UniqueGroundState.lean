@@ -87,10 +87,9 @@ On a periodic chain of `N` sites, the ground space of the parent Hamiltonian
 is the set of states whose restriction to every cyclic window of `L` consecutive
 sites lies in `G_L(A)`.
 
-The definition below makes this intersection explicit using the cyclic restriction
-maps from `CyclicWindow.lean`. It uses `⊤` for degenerate lengths (`N = 0` or
-`L > N`) so that downstream theorems can state their nondegenerate hypotheses
-separately. -/
+The definition below makes this intersection explicit using cyclic restriction
+maps. It uses `⊤` for degenerate lengths (`N = 0` or `L > N`) so that downstream
+theorems can state their nondegenerate hypotheses separately. -/
 
 /-- The periodic chain ground space: the set of states `ψ` on `N` sites such
 that every cyclic window of `L` consecutive sites restricts into `G_L(A)`.
