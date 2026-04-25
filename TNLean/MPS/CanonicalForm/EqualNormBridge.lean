@@ -69,8 +69,8 @@ Theorem matching, etc.).
   the reduction output to a BNT-grouped `SectorDecomposition`.  **Fully proved.**
   Requires a `hNonDecay` hypothesis for equal-norm blocks.
 
-* `exists_bnt_sectorDecomp_of_linearIndependent` — minimal adapter to the
-  post-#886 `HasBNTSectorData` predicate.  It forms the granular
+* `exists_bnt_sectorDecomp_of_linearIndependent` — conditional construction
+  toward the post-#886 `HasBNTSectorData` predicate.  It forms the granular
   `trivialSectorDecomp` as a BNT sector decomposition when the actual BNT
   linear-independence condition is supplied explicitly.
 
@@ -375,7 +375,7 @@ theorem bnt_grouping_single_norm_class_of_tp_primitive_irr_blocks
       exact ⟨ζ, hζne, hζ_norm, hmpv⟩
   exact bnt_grouping_single_norm_class μ blocks k0 hμne hNorm hPhase
 
-/-! ### §4. Adapter to the post-#886 BNT-sector predicate -/
+/-! ### §4. Conditional sector construction under BNT linear independence -/
 
 /-- **Minimal granular sector decomposition carrying current `HasBNTSectorData`.**
 
@@ -386,7 +386,7 @@ themselves provide that linear-independence statement for the granular basis; th
 genuine one-sided BNT construction must first choose / collapse to a basis of normal
 tensors.
 
-Accordingly this theorem exposes the minimal reusable adapter: if the granular input
+Accordingly this theorem gives the simplest construction: if the granular input
 basis is already known to satisfy the current BNT linear-independence hypothesis,
 then `trivialSectorDecomp` gives the requested `SectorDecomposition` and the
 `HasBNTSectorData` certificate is exactly the supplied `hLI`. -/
@@ -407,8 +407,8 @@ theorem exists_bnt_sectorDecomp_of_linearIndependent
 /-- Signature-compatible reformulation for TP / primitive / irreducible block data.
 
 The extra block-normality hypotheses are intentionally retained here to match the
-shape expected by the one-sided BNT-construction route, but the actual adapter only
-uses nonzero weights and the current BNT linear-independence hypothesis.  Use
+shape expected by the one-sided BNT-construction route, but only nonzero weights and the
+current BNT linear-independence hypothesis are used.  Use
 `exists_bnt_sectorDecomp_of_linearIndependent` when those extra hypotheses are not
 already present. -/
 theorem exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_of_linearIndependent
