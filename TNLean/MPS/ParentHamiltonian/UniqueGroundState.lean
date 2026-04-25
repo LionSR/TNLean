@@ -107,7 +107,7 @@ noncomputable def chainGroundSpace (A : MPSTensor d D) (L N : ℕ) :
 The proof uses trace cyclicity: for each cyclic window at position `i`, the
 restriction of the MPV to that window equals `groundSpaceMap A L X_τ` where
 `X_τ` is the product of `A`-matrices at outside positions. The cyclic list
-bookkeeping is provided by `mpv_window_mem_groundSpace`. -/
+bookkeeping follows from the window-level membership calculation. -/
 theorem mpv_mem_chainGroundSpace (A : MPSTensor d D) (L N : ℕ)
     (hN : 0 < N) (hLN : L ≤ N) :
     (mpv A : NSiteSpace d N) ∈ chainGroundSpace A L N := by
