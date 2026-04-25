@@ -126,7 +126,7 @@ theorem bnt_mem_groundSpace
 
 /-- If the assembled periodic ground space splits blockwise into the block chain
 ground spaces, then blockwise injective uniqueness already yields membership in
-`bntSpan`. This packages the endgame so the only missing ingredient is the
+`bntSpan`. This isolates the endgame so the only missing ingredient is the
 block-splitting theorem itself. -/
 private theorem parentHamiltonianGroundSpace_le_bntSpan_of_block_chain_split
     (A : (j : Fin r) → MPSTensor d (dim j))
@@ -145,8 +145,8 @@ private theorem parentHamiltonianGroundSpace_le_bntSpan_of_block_chain_split
       classical
       haveI : IsEmpty (Fin (dim j)) := by rw [hdim0]; infer_instance
       simp [mpvOverlap, mpv, coeff, Matrix.trace_eq_zero_of_isEmpty]
-    have hconst : Filter.Tendsto (fun _ : ℕ => (0 : ℂ)) Filter.atTop (nhds (1 : ℂ)) := by
-      exact (hCF.overlap_tendsto_one j).congr' (Filter.Eventually.of_forall hzero)
+    have hconst : Filter.Tendsto (fun _ : ℕ => (0 : ℂ)) Filter.atTop (nhds (1 : ℂ)) :=
+      (hCF.overlap_tendsto_one j).congr' (Filter.Eventually.of_forall hzero)
     exact zero_ne_one (tendsto_const_nhds_iff.mp hconst)
   haveI : NeZero (dim j) := ⟨hdim_ne⟩
   have hInj : IsInjective (A j) := hCF.toHasInjectiveBlocks.block_injective j
@@ -156,12 +156,11 @@ private theorem parentHamiltonianGroundSpace_le_bntSpan_of_block_chain_split
   intro ψ hψ
   rw [mpvSubmodule, Submodule.mem_span_singleton] at hψ
   rcases hψ with ⟨c, rfl⟩
-  exact Submodule.smul_mem _ c <| by
-    exact Submodule.subset_span ⟨j, rfl⟩
+  exact Submodule.smul_mem _ c (Submodule.subset_span ⟨j, rfl⟩)
 
-/-- Reverse inclusion bridge for the BNT ground-space theorem.
+/-- Reverse-inclusion step for the BNT ground-space theorem.
 
-This is the missing block-decomposition step: every periodic-chain ground state
+This is the remaining block-decomposition step: every periodic-chain ground state
 of the assembled BNT tensor should split into blockwise chain ground states.
 Once such a split is available, blockwise injective uniqueness
 `chainGroundSpace_eq_mpvSubmodule` places those components in the BNT span. -/
@@ -171,7 +170,7 @@ theorem parentHamiltonianGroundSpace_le_bntSpan_of_block_decomposition
     parentHamiltonianGroundSpace (μ := μ) A L N ≤ bntSpan A N := by
   refine parentHamiltonianGroundSpace_le_bntSpan_of_block_chain_split
     (μ := μ) A hCF hL hN ?_
-  -- Missing bridge: periodic-chain block decomposition for the assembled tensor,
+  -- Remaining step: periodic-chain block decomposition for the assembled tensor,
   -- i.e. a theorem identifying every assembled chain-ground-state with a sum of
   -- block chain-ground-state components.
   sorry

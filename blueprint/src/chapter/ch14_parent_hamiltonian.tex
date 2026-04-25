@@ -1811,7 +1811,7 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     \lean{MPSTensor.parentHamiltonianGroundSpace_le_bntSpan_of_block_decomposition}
     \notready
     \uses{def:parent_hamiltonian_ground_space_bnt, def:bnt_span,
-        thm:chain_ground_space_eq_mpv_normal}
+        thm:chain_ground_space_eq_mpv_blk}
     If $A$ is in canonical-form/BNT and $1 < L$ and $N \ge L + 1$, every vector in the
     assembled parent ground space should decompose into blockwise chain ground states, and
     therefore lie in the BNT span.
@@ -1820,7 +1820,7 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
 \begin{proof}
     \notready
     The missing step is the periodic block decomposition of the assembled chain ground space.
-    Once such a decomposition is available, one applies the normal uniqueness theorem to each
+    Once such a decomposition is available, one applies the blockwise injective uniqueness theorem to each
     block separately and recovers the BNT span.
 \end{proof}
 
