@@ -17,10 +17,10 @@ together with a **common** nonzero phase on every site.
 
 ## Mathematical idea
 
-If
+If $\widetilde A$ and $\widetilde B$ denote the combined tensors of `A` and
+`B`, and if
 $$
-\mathrm{chainCombinedTensor}(B)
-  = \zeta \cdot X \, \mathrm{chainCombinedTensor}(A) \, X^{-1},
+\widetilde B = \zeta \cdot X \, \widetilde A \, X^{-1},
 $$
 then rescaling every site tensor of `B` by `ζ⁻¹` removes the global scalar on
 its combined tensor.  The exact chain Fundamental Theorem then applies to the
