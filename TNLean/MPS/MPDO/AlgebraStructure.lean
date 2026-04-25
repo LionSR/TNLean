@@ -41,7 +41,9 @@ one-way bridge
 * `isRFP_MPDO_via_algebra_of_isRFP_MPDO_via_fusion_of_isTP_of_posDef_fixed`
 
 from the current fusion formulation to the algebra formulation, under the same
-side hypotheses.
+side hypotheses. The `IsRFP` assumption is essential here: without idempotence,
+the adjoint fixed-point algebras of the blocked transfer maps need not stabilize
+with the blocking length.
 
 ## Remaining gap to the paper
 
@@ -50,6 +52,41 @@ adjoint fixed-point algebras of the blocked transfer maps. It does **not** yet
 extract the coefficient family `c_{\alpha,\beta,\gamma}^{(L)}` of
 Theorem IV.13(ii), nor prove the converse algebra-to-fusion implication. Those
 steps still require the BNT / coefficient-comparison layer from Appendix C.3--C.4.
+
+### Why the converse algebra-to-fusion implication is blocked
+
+The lemma `adjoint_transferMap_apply_of_isRFP_MPDO_via_algebra` below extracts
+the strongest direct consequence of `IsRFP_MPDO_via_algebra M`: the inclusion
+maps `iota n` force every adjoint fixed point of the blocked transfer map at
+positive blocking size `n` to be an adjoint fixed point of the unblocked
+transfer map, i.e. `Fix((blockedTransferMap M n).adjoint)` is contained in
+`Fix((transferMap M).adjoint)` for every `n ≥ 1`. The reverse inclusion, proved
+as `adjoint_blockedTransferMap_apply_of_adjoint_transferMap_apply`, is a simple
+induction using `blockedTransferMap_eq_pow` and `LinearMap.adjoint_comp`; it
+does not need the algebra-structure data. Together the two lemmas establish
+the fixed-point equality
+`Fix((blockedTransferMap M n).adjoint) = Fix((transferMap M).adjoint)` at every
+positive blocking size `n`.
+
+This equality already excludes *finite-order* (root-of-unity) peripheral
+eigenvalues of `(transferMap M).adjoint`, because any such eigenvalue would
+produce a blocked adjoint fixed point at some positive `n` that is not fixed
+by the unblocked adjoint. It does *not* exclude unit-modulus eigenvalues of
+irrational phase, and a fortiori it is not enough to force `transferMap M`
+itself to be idempotent. Ergodic channels with a strict spectral gap on the
+`1`-complement therefore satisfy `IsRFP_MPDO_via_algebra M` without being
+MPDO RFPs: on `M_D(ℂ)`, with `0 < ε < 1`, consider
+`E(X) = ε · X + (1 - ε) · Π_diag(X)`, where `Π_diag` is the projection that
+zeroes the off-diagonal entries of `X`. Then `Π_diag ∘ Π_diag = Π_diag`,
+`E` has peripheral spectrum `{1}` and diagonal fixed-point algebra at every
+blocking size, yet `E ∘ E ≠ E`.
+
+Closing the converse algebra-to-fusion implication therefore requires
+strengthening the predicate to the paper's full coefficient formulation -- the
+positive diagonal matrices `χ_{α,β,γ}` from Appendix C.3 and the coefficient
+identity `c^{(L)}_{α,β,γ} = tr(χ_{α,β,γ}^L)` from Appendix C.4. The scalar
+Newton--Girard power-sum identity needed for the latter step is already
+available in this formalization.
 
 ## References
 
@@ -138,7 +175,7 @@ one of its positive-definite fixed points.
 Concretely, this is the fixed-point `StarSubalgebra` of the adjoint transfer map
 `(transferMap M).adjoint`, packaged through Wolf Theorem 6.12 for the doubled
 MPS tensor `M.toMPSTensor`. -/
-noncomputable def faithfulFixedPointSupportAlgebra
+def faithfulFixedPointSupportAlgebra
     (M : MPOTensor d D) (h_tp : Kraus.IsTP M.toMPSTensor)
     {ρ : Mat} (hρ : ρ.PosDef) (hρ_fix : transferMap M ρ = ρ) :
     StarSubalgebra ℂ Mat :=
@@ -158,13 +195,7 @@ theorem mem_faithfulFixedPointSupportAlgebra_iff
   have hAdj : Kraus.adjointMap M.toMPSTensor X = (transferMap M).adjoint X := by
     simpa [transferMap_eq_toMPSTensor] using
       (MPSTensor.transferMap_adjoint_apply_eq_adjointMap (A := M.toMPSTensor) X).symm
-  constructor
-  · intro h
-    rw [hAdj] at h
-    exact h
-  · intro h
-    rw [hAdj]
-    exact h
+  rw [hAdj]
 
 namespace AlgebraStructureData
 
@@ -173,21 +204,16 @@ transfer map.
 
 All support algebras are the same `StarSubalgebra`, multiplication is ordinary
 matrix multiplication, and the inclusion maps are identities. -/
-noncomputable def stationaryOfFaithfulFixedPoint
+def stationaryOfFaithfulFixedPoint
     (M : MPOTensor d D) (h_tp : Kraus.IsTP M.toMPSTensor)
     {ρ : Mat} (hρ : ρ.PosDef) (hρ_fix : transferMap M ρ = ρ) :
-    AlgebraStructureData d D := by
+    AlgebraStructureData d D :=
   let S : StarSubalgebra ℂ Mat := faithfulFixedPointSupportAlgebra M h_tp hρ hρ_fix
-  refine
-    { A := fun _ => S
-      m := fun _ => LinearMap.mul ℂ ↥S
-      iota := fun _ => LinearMap.id
-      m_apply := ?_
-      iota_apply := ?_ }
-  · intro n x y
-    rfl
-  · intro n x
-    rfl
+  { A := fun _ => S
+    m := fun _ => LinearMap.mul ℂ ↥S
+    iota := fun _ => LinearMap.id
+    m_apply := fun _ _ _ => rfl
+    iota_apply := fun _ _ => rfl }
 
 /-- The stationary tower from a faithful fixed point is compatible with any RFP
 MPO tensor, because all positive blocked transfer maps agree with `transferMap M`. -/
@@ -216,6 +242,13 @@ An MPO tensor satisfies `IsRFP_MPDO_via_algebra` when it admits algebra-structur
 support data compatible with its blocked adjoint transfer maps. -/
 def IsRFP_MPDO_via_algebra (M : MPOTensor d D) : Prop :=
   ∃ data : AlgebraStructureData d D, data.CompatibleWith M
+
+/-- Backwards-compatible alias for the previous scaffold name.
+
+The old definition was vacuous. The new alias points to the non-vacuous algebra
+predicate above. -/
+@[deprecated (since := "2026-04-24")] alias IsRFP_MPDO_via_algebra_scaffold :=
+  IsRFP_MPDO_via_algebra
 
 /-- A trace-preserving MPO with a positive-definite fixed point admits a
 stationary algebra tower as soon as it is an RFP. -/
@@ -389,6 +422,71 @@ theorem coe_iota_eq_sum_blockedInclusionCoefficients
       (data := data) (n := n + 1) (a := data.blockedInclusionCoefficients n i)
 
 end AlgebraStructureData
+
+/-- The algebra-structure RFP predicate forces every adjoint fixed point of the
+blocked transfer map to be an adjoint fixed point of the unblocked transfer
+map.
+
+Concretely, compatibility at size `n` places `X` in `data.A n`; the inclusion
+`data.iota n` lifts `X` into `data.A (n + 1)`, whence compatibility at size
+`n + 1` yields `(blockedTransferMap M (n + 1)).adjoint X = X`. Rewriting
+`blockedTransferMap M (n + 1) = blockedTransferMap M n ∘ₗ transferMap M`
+through `pow_succ` and applying `LinearMap.adjoint_comp` then extracts
+`(transferMap M).adjoint X = X`.
+
+This is the strongest consequence available from the current
+`IsRFP_MPDO_via_algebra` predicate: it excludes *finite-order*
+(root-of-unity) peripheral eigenvalues of `(transferMap M).adjoint`, since
+any such eigenvalue would produce a blocked adjoint fixed point that is not
+fixed by the unblocked adjoint. It does not exclude unit-modulus eigenvalues
+of irrational phase, and is therefore not enough to force `transferMap M`
+to be idempotent. See the module docstring for the blocker on the converse
+algebra-to-fusion implication. -/
+theorem adjoint_transferMap_apply_of_isRFP_MPDO_via_algebra
+    {M : MPOTensor d D} (hAlg : IsRFP_MPDO_via_algebra M)
+    {n : ℕ} (hn : 0 < n) {X : Mat}
+    (hX : (blockedTransferMap M n).adjoint X = X) :
+    (transferMap M).adjoint X = X := by
+  obtain ⟨data, hCompat⟩ := hAlg
+  have hXn : X ∈ data.A n := (hCompat n hn X).2 hX
+  have hXsuc : X ∈ data.A (n + 1) := by
+    have hι : ((data.iota n ⟨X, hXn⟩ : data.A (n + 1)) : Mat) = X := by
+      simpa using data.iota_apply n ⟨X, hXn⟩
+    rw [← hι]
+    exact (data.iota n ⟨X, hXn⟩).property
+  have hXsucFix : (blockedTransferMap M (n + 1)).adjoint X = X :=
+    (hCompat (n + 1) (Nat.succ_pos n) X).1 hXsuc
+  have hPow : blockedTransferMap M (n + 1) =
+      blockedTransferMap M n ∘ₗ transferMap M := by
+    simp only [blockedTransferMap_eq_pow, pow_succ, Module.End.mul_eq_comp]
+  have hAdj : (blockedTransferMap M (n + 1)).adjoint X =
+      (transferMap M).adjoint X := by
+    rw [hPow, LinearMap.adjoint_comp, LinearMap.comp_apply, hX]
+  rw [hAdj] at hXsucFix
+  exact hXsucFix
+
+/-- Reverse inclusion for the adjoint fixed-point comparison: any adjoint fixed
+point of `transferMap M` is an adjoint fixed point of every blocked transfer
+map `blockedTransferMap M n`.
+
+Combined with `adjoint_transferMap_apply_of_isRFP_MPDO_via_algebra`, this
+establishes the fixed-point equality
+`Fix((blockedTransferMap M n).adjoint) = Fix((transferMap M).adjoint)` at every
+positive blocking size `n` under `IsRFP_MPDO_via_algebra`. The proof is a
+simple induction using `blockedTransferMap_eq_pow` and `LinearMap.adjoint_comp`,
+and does not require the algebra-structure data. -/
+theorem adjoint_blockedTransferMap_apply_of_adjoint_transferMap_apply
+    {M : MPOTensor d D} (n : ℕ) {X : Mat}
+    (hX : (transferMap M).adjoint X = X) :
+    (blockedTransferMap M n).adjoint X = X := by
+  induction n with
+  | zero =>
+      simp [blockedTransferMap_eq_pow, Module.End.one_eq_id]
+  | succ k ih =>
+      have hPow : blockedTransferMap M (k + 1) =
+          blockedTransferMap M k ∘ₗ transferMap M := by
+        simp only [blockedTransferMap_eq_pow, pow_succ, Module.End.mul_eq_comp]
+      rw [hPow, LinearMap.adjoint_comp, LinearMap.comp_apply, ih, hX]
 
 end MPOTensor
 

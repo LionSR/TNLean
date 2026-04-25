@@ -644,6 +644,24 @@ The following is Theorem~3.8 (``equal case'') of \cite{DeLasCuevas2017Irreducibl
     period $m_a$, contradiction.
 \end{proof}
 
+\begin{theorem}[Peripheral proportional case from phase rescaling]
+    \label{thm:peripheral_periodic_ft_proportional_rescaling}
+    \lean{MPSTensor.peripheralProportionalCase_periodicFT_of_rootFromRescaling}
+    \notready
+    \uses{def:periodic_tensor, thm:peripheral_periodic_ft_proportional_same}
+    Assume that whenever two periodic tensors have proportional MPV families,
+    one can rescale one tensor by a unit-modulus phase so that the MPV families
+    agree exactly. Then proportional periodic MPV families already force the
+    tensors to agree up to repeated blocks.
+\end{theorem}
+\begin{proof}\notready
+    Apply the phase-rescaling hypothesis to replace $A$ by a periodic tensor
+    $A'$ with the same MPV family as $B$. Theorem~\ref{thm:peripheral_periodic_ft_proportional_same}
+    then yields repeated-block equivalence between $A'$ and $B$. Since $A'$
+    differs from $A$ only by a unit-modulus phase, $A$ and $A'$ are themselves
+    equivalent up to repeated blocks, and transitivity gives the claim.
+\end{proof}
+
 \begin{remark}[Proportional periodic FT]\notready
     \label{rem:periodic_ft_proportional}
     \lean{MPSTensor.fundamentalTheorem_periodic_proportional}
@@ -974,6 +992,7 @@ for the irreducible-form framework in \cite{DeLasCuevas2017Irreducible}.
 \end{proof}
 
 \begin{theorem}[Thm.~4.1 — $p$-refinability $\iff$ $p$-divisibility]%
+
     \label{thm:thm_4_1_p_refinement}
     \lean{MPSTensor.thm_4_1_p_refinement}
     \leanok
