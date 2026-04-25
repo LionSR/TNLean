@@ -553,13 +553,17 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \lean{MPSTensor.cyclicCfg}
     \lean{MPSTensor.cyclicRestrictₗ}
     \lean{MPSTensor.cyclicRestrictₗ_apply}
+    \lean{MPSTensor.eq_cyclic_site_of_offset_eq}
+    \lean{MPSTensor.cyclicRestrictₗ_restrictLast}
     \lean{MPSTensor.cyclicCfg_eq_contiguousCfg}
     \lean{MPSTensor.cyclicRestrictₗ_eq_contiguousRestrictₗ}
     \leanok
     On the periodic chain, a cyclic window starting at $i$ reads the sites
-    $i,i+1,\ldots,i+L-1$ modulo $N$. When this window does not wrap around the ring,
-    the cyclic construction agrees with the contiguous one, and so do the two
-    restriction maps.
+    $i,i+1,\ldots,i+L-1$ modulo $N$.  Deleting the final site of a cyclic
+    $(L+1)$-window records the value at cyclic offset $L$ in the outside
+    configuration and gives the $L$-window starting at the same site.  When this
+    window does not wrap around the ring, the cyclic construction agrees with the
+    contiguous one, and so do the two restriction maps.
 \end{remark}
 
 \begin{lemma}[Iterated contiguous-window intersection]\label{lem:contiguous_mem_ground_space}
@@ -721,6 +725,28 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     identify every fixed-prefix suffix with one of the assumed length-$L_0+1$
     windows. Theorem~\ref{thm:ground_space_extend_right_block_injective} then
     regrows the rightmost site.
+\end{proof}
+
+\begin{theorem}[Cyclic-window normal open-chain reduction]%
+    \label{thm:cyclic_normal_open_chain_range_reduction}
+    \lean{MPSTensor.chainGroundSpace_le_chainGroundSpace_succ,
+          MPSTensor.chainGroundSpace_le_chainGroundSpace_of_le,
+          MPSTensor.chainGroundSpace_le_groundSpace_of_isNBlkInjective}
+    \leanok
+    \uses{rem:cyclic_window_operators, thm:normal_open_chain_range_reduction}
+    Let $A$ be $L_0$-block injective with $L_0>0$. If an $N$-site periodic-chain
+    state satisfies all cyclic ground-space constraints at some range
+    $L \ge L_0+1$, then it lies in the open-chain ground space $G_N(A)$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{rem:cyclic_window_operators, thm:normal_open_chain_range_reduction}
+    First peel cyclic windows one site at a time: a state satisfying the range
+    $L+1$ constraints also satisfies the range $L$ constraints. Iterating this
+    antitonicity reduces the cyclic hypotheses to range $L_0+1$. On every
+    non-wrapping interval, the cyclic and contiguous restriction maps agree, so
+    Theorem~\ref{thm:normal_open_chain_range_reduction} applies.
 \end{proof}
 
 \begin{theorem}[Boundary matrix commutation from the wrapping window]\label{thm:boundary_matrix_commutes}
@@ -960,7 +986,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \lean{MPSTensor.chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction}
     \notready
     \uses{def:chain_ground_space, def:mpv_submodule, def:normal,
-        def:l_blk_injective, thm:normal_open_chain_range_reduction}
+        def:l_blk_injective, thm:cyclic_normal_open_chain_range_reduction}
     If $A$ is normal, $D \ge 1$, $L_0$-block-injective, with $N \ge 2$ and $L_0 < L \le N$, then
     \[
         \mathcal G_{N,L}(A) \subseteq \spn\bigl\{V^{(N)}(A)\bigr\}.

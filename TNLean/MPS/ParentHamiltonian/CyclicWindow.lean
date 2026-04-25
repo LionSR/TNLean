@@ -170,6 +170,31 @@ def cyclicCfg {N : ℕ} (_hN : 0 < N) (L : ℕ)
     then σ ⟨(k.val + N - i.val) % N, h⟩
     else τ k
 
+/-- If a site has cyclic offset `r` from `i`, then it is the site `i + r` modulo
+`N`. -/
+theorem eq_cyclic_site_of_offset_eq {N : ℕ} (hN : 0 < N) {i k : Fin N} {r : ℕ}
+    (hr : r < N) (h : (k.val + N - i.val) % N = r) :
+    k = ⟨(i.val + r) % N, Nat.mod_lt _ hN⟩ := by
+  ext
+  by_cases hik : i.val ≤ k.val
+  · have hoff : (k.val + N - i.val) % N = k.val - i.val := by
+      have hsum : k.val + N - i.val = k.val - i.val + N := by omega
+      rw [hsum, Nat.add_mod_right]
+      exact Nat.mod_eq_of_lt (by omega)
+    have hr_eq : r = k.val - i.val := by omega
+    have hsum : i.val + r = k.val := by omega
+    have hmod : (i.val + r) % N = k.val := by
+      rw [hsum]
+      exact Nat.mod_eq_of_lt k.isLt
+    exact hmod.symm
+  · have hoff : (k.val + N - i.val) % N = k.val + N - i.val := by
+      exact Nat.mod_eq_of_lt (by omega)
+    have hsum : i.val + r = k.val + N := by omega
+    have hmod : (i.val + r) % N = k.val := by
+      rw [hsum, Nat.add_mod_right]
+      exact Nat.mod_eq_of_lt k.isLt
+    exact hmod.symm
+
 /-- Linear restriction to a cyclic window at position `i`. -/
 def cyclicRestrictₗ {N : ℕ} (hN : 0 < N) (L : ℕ)
     (i : Fin N) (τ : Fin N → Fin d) : NSiteSpace d N →ₗ[ℂ] NSiteSpace d L where
@@ -181,6 +206,28 @@ def cyclicRestrictₗ {N : ℕ} (hN : 0 < N) (L : ℕ)
 theorem cyclicRestrictₗ_apply {N : ℕ} (hN : 0 < N) (L : ℕ)
     (i : Fin N) (τ : Fin N → Fin d) (ψ : NSiteSpace d N) (σ : Fin L → Fin d) :
     cyclicRestrictₗ hN L i τ ψ σ = ψ (cyclicCfg hN L i σ τ) := rfl
+
+/-- Restricting the final site of a cyclic `(L + 1)`-window peels off the site with
+cyclic offset `L` and records its value in the outside configuration. -/
+theorem cyclicRestrictₗ_restrictLast {N L : ℕ} (hN : 0 < N)
+    (i : Fin N) (τ : Fin N → Fin d) (ψ : NSiteSpace d N) (j : Fin d) :
+    restrictLast (cyclicRestrictₗ hN (L + 1) i τ ψ) j =
+      cyclicRestrictₗ hN L i
+        (fun k => if (k.val + N - i.val) % N = L then j else τ k) ψ := by
+  ext σ
+  simp only [restrictLast_apply, cyclicRestrictₗ_apply]
+  congr 1
+  ext k
+  simp only [cyclicCfg]
+  by_cases hsmall : (k.val + N - i.val) % N < L
+  · rw [dif_pos (Nat.lt_trans hsmall (Nat.lt_succ_self L)), dif_pos hsmall]
+    simp [Fin.snoc, hsmall]
+  · rw [dif_neg hsmall]
+    by_cases hlast : (k.val + N - i.val) % N = L
+    · rw [dif_pos (by omega : (k.val + N - i.val) % N < L + 1)]
+      simp [Fin.snoc, hlast]
+    · rw [dif_neg (by omega : ¬((k.val + N - i.val) % N < L + 1))]
+      simp [hlast]
 
 /-- For a non-wrapping window (`i + L ≤ N`), the cyclic config agrees with
 the contiguous config. -/
