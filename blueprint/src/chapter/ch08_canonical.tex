@@ -2186,13 +2186,13 @@ The following results separate the zero blocks from the
 	\lean{MPSTensor.exists_eventually_linearIndependent_of_tp_primitive_irr_blocks_of_blocksNotGaugePhaseEquiv}
 	\leanok
 	\uses{thm:bnt_li_from_overlap_limits_exists, def:gauge_phase_equiv}
-	For trace-preserving primitive irreducible blocks that are pairwise not
-	gauge-phase equivalent, the block MPV states are linearly independent for all
-	sufficiently large system sizes.
+	For trace-preserving primitive irreducible blocks of positive bond dimension
+	that are pairwise not gauge-phase equivalent, the block MPV states are
+	linearly independent for all sufficiently large system sizes.
 \end{theorem}
 
 \begin{proof}\leanok
-	\uses{thm:bnt_li_from_overlap_limits_exists, thm:gauge_equiv_nondecay}
+	\uses{thm:bnt_li_from_overlap_limits_exists}
 	Primitivity and trace preservation give self-overlap convergence to $1$.
 	BNT separation gives cross-overlap convergence to $0$ for distinct blocks.
 	The result follows from
@@ -2223,8 +2223,9 @@ The following results separate the zero blocks from the
 	\lean{MPSTensor.exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_of_blocksNotGaugePhaseEquiv}
 	\leanok
 	\uses{def:trivial_sector_decomp, lem:trivial_sector_decomp_same_mpv, thm:bnt_li_tp_prim_irr_separated}
-	For trace-preserving primitive irreducible blocks with nonzero weights, if
-	distinct blocks are pairwise not gauge-phase equivalent, then the granular
+	For trace-preserving primitive irreducible blocks of positive bond dimension
+	with nonzero weights, if distinct blocks are pairwise not gauge-phase
+	equivalent, then the granular
 	sector decomposition represents the same MPS family and satisfies the BNT
 	linear-independence condition.  Equal-modulus separated blocks remain as
 	distinct basis blocks.
