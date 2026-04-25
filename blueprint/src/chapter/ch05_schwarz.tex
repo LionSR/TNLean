@@ -967,3 +967,76 @@ logarithm are not developed in this chapter.
     \]
     See Lieb (1973) and Ando (1979).
 \end{theorem}
+
+\begin{theorem}[Map form of Lieb concavity]\label{thm:lieb_concavity}
+    \lean{lieb_concavity}
+    \notready
+    \uses{thm:lieb_concavity_axiom}
+    This is the corresponding map-form statement of
+    Theorem~\ref{thm:lieb_concavity_axiom}.
+    Its proof is deferred until
+    Theorem~\ref{thm:lieb_concavity_axiom} is proved.
+\end{theorem}
+
+\begin{proof}
+    Direct application of the axiom.
+\end{proof}
+
+\begin{corollary}[Lieb concavity, $K=\Id$ case]\label{cor:lieb_concavity_id}
+    \lean{lieb_concavity_id}
+    \leanok
+    \uses{thm:lieb_concavity}
+    For $s\in[0,1]$, $t\in[0,1]$, and positive-definite matrices $A_1,A_2,B_1,B_2$, the
+    map $(A,B)\mapsto\Re\tr(A^s B^{1-s})$ is jointly concave:
+    \[
+        t\,\Re\tr(A_1^s B_1^{1-s})+(1-t)\,\Re\tr(A_2^s B_2^{1-s})
+        \;\le\;
+        \Re\tr\!\bigl((tA_1+(1-t)A_2)^s (tB_1+(1-t)B_2)^{1-s}\bigr).
+    \]
+    Obtained from Theorem~\ref{thm:lieb_concavity} by taking $K=\Id$.
+\end{corollary}
+
+\begin{proof}\leanok
+    Specialize Theorem~\ref{thm:lieb_concavity} at $K=\Id$ and simplify
+    $\Id^{\dagger}=\Id$ together with $\Id\cdot X=X\cdot\Id=X$.
+\end{proof}
+
+\begin{corollary}[Concavity of Lieb's map in the first argument]
+    \label{cor:lieb_concavity_in_fst}
+    \lean{lieb_concavity_in_fst}
+    \leanok
+    \uses{thm:lieb_concavity}
+    For $s\in[0,1]$, $t\in[0,1]$, matrix $K$, and positive-definite matrices $A_1,A_2,B$,
+    the map $A\mapsto\Re\tr(K^\dagger A^s K B^{1-s})$ is concave:
+    \[
+        t\,\Re\tr(K^\dagger A_1^s K B^{1-s})
+        +(1-t)\,\Re\tr(K^\dagger A_2^s K B^{1-s})
+        \;\le\;
+        \Re\tr\!\bigl(K^\dagger(tA_1+(1-t)A_2)^s K B^{1-s}\bigr).
+    \]
+\end{corollary}
+
+\begin{proof}\leanok
+    Specialize Theorem~\ref{thm:lieb_concavity} at $B_1=B_2=B$, so that
+    the convex combination collapses: $tB+(1-t)B=B$.
+\end{proof}
+
+\begin{corollary}[Concavity of Lieb's map in the second argument]
+    \label{cor:lieb_concavity_in_snd}
+    \lean{lieb_concavity_in_snd}
+    \leanok
+    \uses{thm:lieb_concavity}
+    For $s\in[0,1]$, $t\in[0,1]$, matrix $K$, and positive-definite matrices $A,B_1,B_2$,
+    the map $B\mapsto\Re\tr(K^\dagger A^s K B^{1-s})$ is concave:
+    \[
+        t\,\Re\tr(K^\dagger A^s K B_1^{1-s})
+        +(1-t)\,\Re\tr(K^\dagger A^s K B_2^{1-s})
+        \;\le\;
+        \Re\tr\!\bigl(K^\dagger A^s K (tB_1+(1-t)B_2)^{1-s}\bigr).
+    \]
+\end{corollary}
+
+\begin{proof}\leanok
+    Specialize Theorem~\ref{thm:lieb_concavity} at $A_1=A_2=A$, so that
+    the convex combination collapses: $tA+(1-t)A=A$.
+\end{proof}
