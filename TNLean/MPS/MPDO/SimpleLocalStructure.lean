@@ -6,6 +6,7 @@ import TNLean.MPS.MPDO.Defs
 import TNLean.Entropy.MarkovChain
 import TNLean.MPS.Chain.VirtualInsertion
 import TNLean.Algebra.PerronFrobenius.RankOne
+import Mathlib.Analysis.Matrix.Order
 
 /-!
 # Simple MPDO local structure
@@ -38,6 +39,9 @@ arXiv:1606.00608 (Cirac–Pérez-García–Schuch–Verstraete).
   `MPOTensor.ExplicitEtaOperators.traceMatrixRe`: the complex trace matrix of an
   explicit `η`-family and its real-part input to the downstream
   Perron–Frobenius step.
+- `MPOTensor.ExplicitEtaOperators.ofHayashiMarkov`: concrete extraction of an
+  explicit `η_{k,h}` family from a Hayashi decomposition witness, as the
+  Kronecker product of the sector-indexed neighboring reduced states.
 - `MPOTensor.ExplicitEtaOperators.traceMatrixRe_nonneg`: positivity of each
   neighboring operator gives entrywise nonnegativity of the real trace matrix.
 - `MPOTensor.sal_zcl_implies_rank_one_T`: the conditional Lemma C.4 consequence,
@@ -54,11 +58,17 @@ inverse-map layer for an injective simple MPO tensor, given by
 `MPOTensor.inverseTensor`, `MPOTensor.physRealize`, and
 `MPOTensor.physRealizeLeft`.
 
-What remains to be formalized is the final bookkeeping theorem connecting those
-inverse maps to the Hayashi decomposition blocks and thereby producing a term of
-`MPOTensor.ExplicitEtaOperators`. We therefore record both the inverse-map
-infrastructure and the target `η_{k,h}` family separately, so the residual gap
-is isolated to a single local extraction statement.
+The target `η_{k,h}` family is populated by
+`MPOTensor.ExplicitEtaOperators.ofHayashiMarkov`, which constructs the family
+directly from the Hayashi decomposition witness as the Kronecker product of
+the sector-indexed neighboring reduced states,
+`η_{k,h} := tr_C(ρ_right k) ⊗ tr_A(ρ_left h)`. This extraction is strictly
+weaker than the paper's `K⁻¹`-based construction — it does not invoke the
+injective inverse-map layer — but it supplies a canonical positive
+semidefinite family of the current `ExplicitEtaOperators` type, with trace
+matrix `T_{k,h} = 1`. The remaining connection to the Appendix C.2 proof is
+the identification of this sector-reduced family with the inverse-map
+construction in the original simple-MPDO tensor coordinates.
 
 Lemma C.4 is further isolated to the finite-dimensional Perron–Frobenius step:
 for a primitive nonnegative matrix `T`, constant traces of positive powers are
@@ -244,6 +254,54 @@ noncomputable def traceMatrixRe (data : ExplicitEtaOperators hη) :
 @[simp] theorem traceMatrixRe_apply (data : ExplicitEtaOperators hη)
     (k h : Fin hη.m) :
     data.traceMatrixRe k h = (Matrix.trace (data.eta k h)).re := rfl
+
+/-- **Extraction of explicit neighboring `η`-operators from a Hayashi
+decomposition witness.**
+
+Given the quantum-Markov-chain witness `hη` on the middle subsystem, the
+sector-indexed density matrices `ρ_right k` on `B_k^R ⊗ C` and `ρ_left h` on
+`A ⊗ B_h^L` canonically restrict by partial trace to operators on the
+neighboring virtual bond spaces `B_k^R` and `B_h^L`, respectively. Their
+Kronecker product is a positive semidefinite operator on
+`B_k^R ⊗ B_h^L`, which provides the data for explicit `η_{k,h}` witnesses.
+
+This extraction does not use the injectivity hypothesis on the MPO tensor
+`K`: it is the sector-reduced layer supplied directly by the Hayashi
+decomposition. See the module docstring for the remaining connection to the
+Appendix C.2 `K⁻¹`-based construction. -/
+noncomputable def ofHayashiMarkov (hη : EtaStructure ρ_ABC) :
+    ExplicitEtaOperators hη where
+  eta k h :=
+    Matrix.kroneckerMap (· * ·)
+      (Matrix.traceRight (hη.ρ_right k))
+      (Matrix.traceLeft (hη.ρ_left h))
+  eta_pos k h :=
+    ((hη.hρ_right_dm k).1.traceRight).kronecker ((hη.hρ_left_dm h).1.traceLeft)
+
+/-- The trace of each extracted `η_{k,h}` equals the product of the sector
+traces, which are both `1` by normalization of the Hayashi density matrices.
+This specializes to `T_{k,h} = 1` for the partial-trace-based extraction and
+feeds the rank-one Perron–Frobenius step of Lemma C.4 with a concrete
+rank-one trace matrix (the all-ones matrix). -/
+@[simp] theorem traceMatrix_ofHayashiMarkov
+    (hη : EtaStructure ρ_ABC) (k h : Fin hη.m) :
+    (ofHayashiMarkov hη).traceMatrix k h = 1 := by
+  have hR : (Matrix.traceRight (hη.ρ_right k)).trace = 1 := by
+    rw [← Matrix.trace_eq_trace_traceRight]
+    exact (hη.hρ_right_dm k).2
+  have hL : (Matrix.traceLeft (hη.ρ_left h)).trace = 1 := by
+    rw [← Matrix.trace_eq_trace_traceLeft]
+    exact (hη.hρ_left_dm h).2
+  simp [traceMatrix_apply, ofHayashiMarkov, Matrix.trace_kronecker, hR, hL]
+
+/-- Real-part version of `traceMatrix_ofHayashiMarkov`: the extracted
+`η`-family yields `T_{k,h} = 1` entrywise on the real Perron–Frobenius matrix. -/
+@[simp] theorem traceMatrixRe_ofHayashiMarkov
+    (hη : EtaStructure ρ_ABC) (k h : Fin hη.m) :
+    (ofHayashiMarkov hη).traceMatrixRe k h = 1 := by
+  have h := traceMatrix_ofHayashiMarkov hη k h
+  simp only [traceMatrix_apply] at h
+  simp [traceMatrixRe_apply, h]
 
 /-- Positivity of each neighboring operator makes the corresponding real trace
 entry nonnegative.
