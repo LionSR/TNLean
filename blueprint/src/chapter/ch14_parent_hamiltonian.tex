@@ -2086,6 +2086,55 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     gives the entrywise off-block-zero formulation.
 \end{proof}
 
+\begin{lemma}[Block projections from product-algebra span]
+    
+    \label{lem:block_projection_span_from_product_algebra_span}
+    \lean{Matrix.blockProjection_mem_span_blockDiagonal'_of_pi_span_eq_top}
+    \leanok
+    Let $T_a = (T_a(i))_i$ be a family of tuples spanning the full product algebra
+    $\prod_i \MN{n_i}$, and let $c_i\neq0$ be nonzero scalars. Then, for every
+    sector $k$, the sector projection $P_k$ lies in the span of the scaled
+    dependent block-diagonal matrices
+    \[
+        \bigoplus_i c_i T_a(i).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Apply the linear map $(M_i)_i \mapsto \bigoplus_i c_i M_i$ to the full-span
+    product-algebra element with $(c_k)^{-1} I$ in the $k$-th component and zero in
+    every other component. Its image is exactly $P_k$.
+\end{proof}
+
+\begin{lemma}[Projection span from product-word span]
+    \label{lem:block_projection_span_from_product_word_span}
+    \lean{MPSTensor.blockProjection_mem_span_reindexed_toTensorFromBlocks_of_wordTuple_span_eq_top}
+    \lean{MPSTensor.isBlockDiagonal'_of_commutes_reindexed_toTensorFromBlocks_of_wordTuple_span_eq_top}
+    \lean{MPSTensor.offBlock_zero_of_commutes_reindexed_toTensorFromBlocks_of_wordTuple_span_eq_top}
+    \leanok
+    \uses{lem:block_projection_span_from_product_algebra_span,
+        lem:route_b_block_diagonal_commutant_reduction}
+    If the simultaneous length-$m$ block-word tuples
+    \[
+        \omega \longmapsto \bigl(A_j^{\omega}\bigr)_j
+    \]
+    span the full product algebra $\prod_j \MN{D_j}$ and every $\mu_j$ is nonzero, then the
+    pulled-back length-$m$ word products of $\operatorname{Assemble}(\mu,A)$ span every
+    virtual sector projection $P_j$. Consequently, any boundary matrix commuting with all
+    those assembled words has block-diagonal pulled-back form, and its off-block entries vanish.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    First embed the product algebra linearly as dependent block-diagonal matrices, scaling the
+    $j$-th block by $\mu_j^m$.  Since $\mu_j^m\neq0$, the product-algebra span contains the
+    tuple with $(\mu_j^m)^{-1}I$ in one component and zero elsewhere; its scaled diagonal image is
+    exactly $P_j$.  The word-evaluation formula for the assembled tensor identifies these scaled
+    diagonal matrices with the pulled-back assembled word products, and the commutant conclusion
+    follows from Lemma~\ref{lem:route_b_block_diagonal_commutant_reduction}.
+\end{proof}
+
 \begin{lemma}[Conditional boundary-matrix block split from projection span]
     \label{lem:conditional_boundary_matrix_block_split_projection_span}
     \lean{MPSTensor.groundSpaceMap_toTensorFromBlocks_mem_iSup_chainGroundSpace_of_reindexed_projectionSpan}
@@ -2141,7 +2190,8 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     \notready
     \uses{def:parent_hamiltonian_ground_space_bnt, def:bnt_span,
         thm:chain_ground_space_eq_mpv_blk,
-        lem:conditional_boundary_matrix_block_split_projection_span}
+        lem:conditional_boundary_matrix_block_split_projection_span,
+        lem:block_projection_span_from_product_word_span}
     If $A$ is in canonical-form/BNT and $1 < L$ and $N \ge L + 1$, every vector in the
     assembled parent ground space should decompose into blockwise chain ground states, and
     therefore lie in the BNT span.
@@ -2150,13 +2200,14 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
 \begin{proof}
     \notready
     The remaining structural step is the periodic block decomposition of the
-    assembled chain ground space.
+    assembled chain ground space. Lemma~\ref{lem:block_projection_span_from_product_word_span}
+    supplies the sector projections once the separated CF/BNT data has been turned
+    into a finite full-span statement for simultaneous block words.
     Lemma~\ref{lem:conditional_boundary_matrix_block_split_projection_span}
-    supplies the conditional boundary-matrix endgame once the \#911 virtual-sector
-    projections are obtained from the finite word span of the assembled tensor and
-    the wrapping-window comparison provides a commuting boundary matrix. With that
-    decomposition available, one applies the blockwise injective uniqueness theorem
-    to each block separately and recovers the BNT span.
+    then supplies the conditional boundary-matrix endgame once the wrapping-window
+    comparison provides a commuting boundary matrix. With that decomposition available,
+    one applies the blockwise injective uniqueness theorem to each block separately
+    and recovers the BNT span.
 \end{proof}
 
 \begin{theorem}[Ground space equals span of BNT]\label{thm:gs_eq_bnt_span}

@@ -16,10 +16,13 @@ dependent direct sum lie in the span of a family of matrices and a boundary
 matrix commutes with that family, then it
 commutes with the projections and hence has no off-block entries.
 
-The remaining CF/BNT-specific step is to prove that the sector projections lie
-in the finite word span of the assembled tensor.  Once that finite-span input is
-available, `MPSTensor.isBlockDiagonal'_of_commutes_reindexed_wordSpan` turns
-long-word commutation of the assembled boundary matrix into block diagonality.
+The file also records a finite-span bridge: if the simultaneous block word
+tuples span the full product algebra, then the sector projections lie in the
+finite word span of the assembled tensor.  The remaining paper-level CF/BNT input
+is to derive that product-word span from the separated canonical-form/BNT
+hypotheses.  Once the projection-span input is available,
+`MPSTensor.isBlockDiagonal'_of_commutes_reindexed_wordSpan` turns long-word
+commutation of the assembled boundary matrix into block diagonality.
 -/
 
 open scoped Matrix BigOperators
@@ -27,6 +30,9 @@ open scoped Matrix BigOperators
 namespace Matrix
 
 variable {ι α : Type*} {n : ι → Type*}
+
+section CommutesSpan
+
 variable [Fintype ι] [DecidableEq ι]
 variable [(i : ι) → Fintype (n i)] [(i : ι) → DecidableEq (n i)]
 
@@ -59,11 +65,150 @@ theorem isBlockDiagonal'_of_commutes_span_blockProjection
         simp only [Algebra.mul_smul_comm, Algebra.smul_mul_assoc, hM]
   exact hcomm_span (blockProjection (n := n) (R := ℂ) k) (hProj k)
 
+end CommutesSpan
+
+section ProjectionSpan
+
+variable [DecidableEq ι]
+variable [(i : ι) → DecidableEq (n i)]
+
+/-- If a family of block tuples spans the full product algebra, then the span of
+its nonzero componentwise scalar multiples, embedded as dependent block-diagonal
+matrices, contains each sector projection.
+
+This is the algebraic finite-span bridge used for assembled tensors: after a
+finite word-tuple span theorem supplies the full product algebra
+`(i : ι) → Matrix (n i) (n i) ℂ`, the diagonal embedding of those same word tuples
+contains the projections onto the individual direct-sum sectors. -/
+theorem blockProjection_mem_span_blockDiagonal'_of_pi_span_eq_top
+    {α : Type*} {T : α → (i : ι) → Matrix (n i) (n i) ℂ} {c : ι → ℂ}
+    (hc : ∀ i : ι, c i ≠ 0)
+    (hSpan : Submodule.span ℂ (Set.range T) =
+      (⊤ : Submodule ℂ ((i : ι) → Matrix (n i) (n i) ℂ)))
+    (k : ι) :
+    blockProjection (n := n) (R := ℂ) k ∈
+      Submodule.span ℂ (Set.range fun a : α =>
+        Matrix.blockDiagonal' fun i : ι => c i • T a i) := by
+  classical
+  let target : (i : ι) → Matrix (n i) (n i) ℂ :=
+    fun i => if i = k then (c i)⁻¹ • 1 else 0
+  let L : ((i : ι) → Matrix (n i) (n i) ℂ) →ₗ[ℂ]
+      Matrix ((i : ι) × n i) ((i : ι) × n i) ℂ := {
+    toFun := fun M => Matrix.blockDiagonal' fun i : ι => c i • M i
+    map_add' := by
+      intro M N
+      ext x y
+      rcases x with ⟨i, p⟩
+      rcases y with ⟨j, q⟩
+      by_cases hij : i = j
+      · subst j
+        simp [Pi.add_apply, smul_add]
+      · simp [Matrix.blockDiagonal'_apply_ne _ p q hij]
+    map_smul' := by
+      intro a M
+      ext x y
+      rcases x with ⟨i, p⟩
+      rcases y with ⟨j, q⟩
+      by_cases hij : i = j
+      · subst j
+        simp [smul_smul, mul_comm, mul_left_comm]
+      · simp [Matrix.blockDiagonal'_apply_ne _ p q hij] }
+  have htarget : target ∈ Submodule.span ℂ (Set.range T) := by
+    rw [hSpan]
+    exact Submodule.mem_top
+  have hmap_span : ∀ M ∈ Submodule.span ℂ (Set.range T),
+      L M ∈ Submodule.span ℂ (Set.range fun a : α =>
+        Matrix.blockDiagonal' fun i : ι => c i • T a i) := by
+    intro M hM
+    induction hM using Submodule.span_induction with
+    | mem M hM =>
+        rcases hM with ⟨a, rfl⟩
+        exact Submodule.subset_span ⟨a, rfl⟩
+    | zero =>
+        have hL0 : L 0 = 0 := by
+          ext x y
+          rcases x with ⟨i, p⟩
+          rcases y with ⟨j, q⟩
+          by_cases hij : i = j
+          · subst j
+            simp [L]
+          · simp [L, Matrix.blockDiagonal'_apply_ne _ p q hij]
+        rw [hL0]
+        exact Submodule.zero_mem _
+    | add M N _ _ hM hN => simpa [L.map_add] using Submodule.add_mem _ hM hN
+    | smul a M _ hM => simpa [L.map_smul] using Submodule.smul_mem _ a hM
+  have hL_target : L target = blockProjection (n := n) (R := ℂ) k := by
+    ext x y
+    rcases x with ⟨i, p⟩
+    rcases y with ⟨j, q⟩
+    by_cases hij : i = j
+    · subst j
+      by_cases hik : i = k
+      · subst k
+        simp [L, target, blockProjection, hc i]
+      · simp [L, target, blockProjection, hik]
+    · simp [L, blockProjection, Matrix.blockDiagonal'_apply_ne _ p q hij]
+  simpa [L, hL_target] using hmap_span target htarget
+
+end ProjectionSpan
+
 end Matrix
 
 namespace MPSTensor
 
 variable {d r : ℕ} {dim : Fin r → ℕ}
+
+/-- Finite product-word span gives the projection-span input for the assembled tensor.
+
+Assume that the simultaneous length-`m` word evaluations
+`ω ↦ (k ↦ evalWord (A k) (List.ofFn ω))` span the full product algebra of the
+blocks.  If all assembly weights are nonzero, then after pulling the length-`m`
+word products of `toTensorFromBlocks μ A` back to the dependent direct-sum basis,
+their span contains every sector projection.
+
+The remaining paper-level CF/BNT task is to prove the displayed product-word span
+hypothesis from the separated canonical-form/BNT assumptions. -/
+theorem blockProjection_mem_span_reindexed_toTensorFromBlocks_of_wordTuple_span_eq_top
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k)) {m : ℕ}
+    (hμ : ∀ k : Fin r, μ k ≠ 0)
+    (hSpan : Submodule.span ℂ (Set.range fun ω : Fin m → Fin d =>
+        fun k : Fin r => evalWord (A k) (List.ofFn ω)) =
+      (⊤ : Submodule ℂ
+        ((k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ))) :
+    ∀ k : Fin r,
+      Matrix.blockProjection (n := fun k : Fin r => Fin (dim k)) (R := ℂ) k ∈
+        Submodule.span ℂ (Set.range fun ω : Fin m → Fin d =>
+          Matrix.reindex finSigmaFinEquiv.symm finSigmaFinEquiv.symm
+            (evalWord (toTensorFromBlocks (d := d) (μ := μ) A) (List.ofFn ω))) := by
+  classical
+  intro k
+  let e : ((k : Fin r) × Fin (dim k)) ≃ Fin (∑ k : Fin r, dim k) := finSigmaFinEquiv
+  have hproj :
+      Matrix.blockProjection (n := fun k : Fin r => Fin (dim k)) (R := ℂ) k ∈
+        Submodule.span ℂ (Set.range fun ω : Fin m → Fin d =>
+          Matrix.blockDiagonal' fun j : Fin r =>
+            (μ j) ^ m • evalWord (A j) (List.ofFn ω)) := by
+    exact Matrix.blockProjection_mem_span_blockDiagonal'_of_pi_span_eq_top
+      (n := fun k : Fin r => Fin (dim k))
+      (T := fun ω : Fin m → Fin d => fun j : Fin r => evalWord (A j) (List.ofFn ω))
+      (c := fun j : Fin r => (μ j) ^ m)
+      (fun j => pow_ne_zero m (hμ j)) hSpan k
+  have hgen : (fun ω : Fin m → Fin d =>
+        Matrix.reindex e.symm e.symm
+          (evalWord (toTensorFromBlocks (d := d) (μ := μ) A) (List.ofFn ω))) =
+      (fun ω : Fin m → Fin d =>
+        Matrix.blockDiagonal' fun j : Fin r =>
+          (μ j) ^ m • evalWord (A j) (List.ofFn ω)) := by
+    funext ω
+    rw [evalWord_toTensorFromBlocks_eq_reindex_blockDiagonal]
+    ext x y
+    simp [e, Matrix.reindex_apply]
+  change Matrix.blockProjection (n := fun k : Fin r => Fin (dim k)) (R := ℂ) k ∈
+    Submodule.span ℂ (Set.range fun ω : Fin m → Fin d =>
+      Matrix.reindex e.symm e.symm
+        (evalWord (toTensorFromBlocks (d := d) (μ := μ) A) (List.ofFn ω)))
+  rw [hgen]
+  exact hproj
 
 /-- Reindexed word-span version of the block-diagonal commutant criterion.
 
@@ -99,6 +244,32 @@ theorem isBlockDiagonal'_of_commutes_reindexed_wordSpan
   have h := congrArg (Matrix.reindex e.symm e.symm) (hComm ω)
   simpa [e, Matrix.reindex_apply, Matrix.submatrix_mul_equiv] using h
 
+/-- Assembled-tensor commutant criterion using a finite product-word span
+hypothesis instead of an explicit projection-span hypothesis.
+
+The hypothesis says that the simultaneous block word evaluations of length `m`
+span the full product algebra.  The previous projection-span lemma turns this
+into the sector-projection input required by
+`isBlockDiagonal'_of_commutes_reindexed_wordSpan`. -/
+theorem isBlockDiagonal'_of_commutes_reindexed_toTensorFromBlocks_of_wordTuple_span_eq_top
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k)) {m : ℕ}
+    (hμ : ∀ k : Fin r, μ k ≠ 0)
+    (hSpan : Submodule.span ℂ (Set.range fun ω : Fin m → Fin d =>
+        fun k : Fin r => evalWord (A k) (List.ofFn ω)) =
+      (⊤ : Submodule ℂ
+        ((k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ)))
+    {X : Matrix (Fin (∑ k : Fin r, dim k)) (Fin (∑ k : Fin r, dim k)) ℂ}
+    (hComm : ∀ ω : Fin m → Fin d,
+      X * evalWord (toTensorFromBlocks (d := d) (μ := μ) A) (List.ofFn ω) =
+        evalWord (toTensorFromBlocks (d := d) (μ := μ) A) (List.ofFn ω) * X) :
+    Matrix.IsBlockDiagonal'
+      (Matrix.reindex finSigmaFinEquiv.symm finSigmaFinEquiv.symm X) := by
+  exact isBlockDiagonal'_of_commutes_reindexed_wordSpan
+    (B := toTensorFromBlocks (d := d) (μ := μ) A)
+    (blockProjection_mem_span_reindexed_toTensorFromBlocks_of_wordTuple_span_eq_top
+      (d := d) (dim := dim) μ A hμ hSpan)
+    hComm
+
 /-- Entrywise off-block-zero corollary of
 `isBlockDiagonal'_of_commutes_reindexed_wordSpan`.
 
@@ -118,6 +289,25 @@ theorem offBlock_zero_of_commutes_reindexed_wordSpan
     {i j : Fin r} (hij : i ≠ j) (a : Fin (dim i)) (b : Fin (dim j)) :
     (Matrix.reindex finSigmaFinEquiv.symm finSigmaFinEquiv.symm X) ⟨i, a⟩ ⟨j, b⟩ = 0 := by
   have hBD := isBlockDiagonal'_of_commutes_reindexed_wordSpan (B := B) hProj hComm
+  exact (Matrix.isBlockDiagonal'_iff_offBlock_zero _).mp hBD hij a b
+
+/-- Entrywise off-block-zero form of the assembled-tensor criterion with a finite
+product-word span hypothesis. -/
+theorem offBlock_zero_of_commutes_reindexed_toTensorFromBlocks_of_wordTuple_span_eq_top
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k)) {m : ℕ}
+    (hμ : ∀ k : Fin r, μ k ≠ 0)
+    (hSpan : Submodule.span ℂ (Set.range fun ω : Fin m → Fin d =>
+        fun k : Fin r => evalWord (A k) (List.ofFn ω)) =
+      (⊤ : Submodule ℂ
+        ((k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ)))
+    {X : Matrix (Fin (∑ k : Fin r, dim k)) (Fin (∑ k : Fin r, dim k)) ℂ}
+    (hComm : ∀ ω : Fin m → Fin d,
+      X * evalWord (toTensorFromBlocks (d := d) (μ := μ) A) (List.ofFn ω) =
+        evalWord (toTensorFromBlocks (d := d) (μ := μ) A) (List.ofFn ω) * X)
+    {i j : Fin r} (hij : i ≠ j) (a : Fin (dim i)) (b : Fin (dim j)) :
+    (Matrix.reindex finSigmaFinEquiv.symm finSigmaFinEquiv.symm X) ⟨i, a⟩ ⟨j, b⟩ = 0 := by
+  have hBD := isBlockDiagonal'_of_commutes_reindexed_toTensorFromBlocks_of_wordTuple_span_eq_top
+    (d := d) (dim := dim) μ A hμ hSpan hComm
   exact (Matrix.isBlockDiagonal'_iff_offBlock_zero _).mp hBD hij a b
 
 end MPSTensor
