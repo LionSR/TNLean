@@ -2060,12 +2060,39 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     definition.
 \end{proof}
 
+\begin{lemma}[Block-diagonal commutant reduction from span extension]
+    \label{lem:route_b_block_diagonal_commutant_reduction}
+    \lean{Matrix.isBlockDiagonal'_of_commutes_span_blockProjection}
+    \lean{MPSTensor.isBlockDiagonal'_of_commutes_reindexed_wordSpan}
+    \lean{MPSTensor.offBlock_zero_of_commutes_reindexed_wordSpan}
+    \leanok
+    \uses{def:block_projection, def:block_diagonal_matrix}
+    Suppose the virtual sector projections $P_j$ of a dependent direct-sum bond space
+    lie in the span of a family of matrices. Any boundary matrix commuting with that
+    family commutes with each $P_j$, hence is block diagonal. Applied after pulling an
+    assembled tensor back along the direct-sum reindexing, length-$m$ word commutation
+    plus the corresponding projection-span hypothesis forces all off-block entries of
+    the pulled-back boundary matrix to vanish.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:block_diagonal_of_commutes_block_projection,
+        lem:block_diagonal_iff_off_block_zero}
+    Commutation is linear in the matrix from the spanning family, so it extends from
+    the generators to their span. Since each $P_j$ lies in that span, the boundary
+    matrix commutes with every sector projection. Lemma~\ref{lem:block_diagonal_of_commutes_block_projection}
+    then gives block diagonality, and Lemma~\ref{lem:block_diagonal_iff_off_block_zero}
+    gives the entrywise off-block-zero formulation.
+\end{proof}
+
 \begin{theorem}[Containment in the BNT span by block decomposition]
     \label{thm:parent_ground_space_le_bnt_span}
     \lean{MPSTensor.parentHamiltonianGroundSpace_le_bntSpan_of_block_decomposition}
     \notready
     \uses{def:parent_hamiltonian_ground_space_bnt, def:bnt_span,
-        thm:chain_ground_space_eq_mpv_blk}
+        thm:chain_ground_space_eq_mpv_blk,
+        lem:route_b_block_diagonal_commutant_reduction}
     If $A$ is in canonical-form/BNT and $1 < L$ and $N \ge L + 1$, every vector in the
     assembled parent ground space should decompose into blockwise chain ground states, and
     therefore lie in the BNT span.
@@ -2073,9 +2100,12 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
 
 \begin{proof}
     \notready
-    The missing step is the periodic block decomposition of the assembled chain ground space.
-    Once such a decomposition is available, one applies the blockwise injective uniqueness theorem to each
-    block separately and recovers the BNT span.
+    The remaining structural step is the periodic block decomposition of the assembled chain
+    ground space. The block-diagonal commutant reduction above supplies the algebraic
+    off-block-zero step once the virtual sector projections are obtained from the finite word
+    span of the assembled
+    tensor. With that decomposition available, one applies the blockwise injective uniqueness
+    theorem to each block separately and recovers the BNT span.
 \end{proof}
 
 \begin{theorem}[Ground space equals span of BNT]\label{thm:gs_eq_bnt_span}
