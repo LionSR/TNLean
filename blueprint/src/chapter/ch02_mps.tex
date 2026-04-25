@@ -424,6 +424,7 @@ boundary conditions (PBC).
 \end{lemma}
 
 \begin{proof}\leanok
+    \uses{lem:block_diagonal_iff_off_block_zero}
     Compare the $(i,j)$ block of the identity $XP_j=P_jX$ for $i\ne j$.
     The right multiplication by $P_j$ keeps that block, while the left
     multiplication by $P_j$ kills it.  Hence every off-block entry is zero,
@@ -457,7 +458,6 @@ boundary conditions (PBC).
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:eval_word_append}
     Induct on the word and multiply block-diagonal matrices block by block;
     every letter contributes one scalar factor $\mu_k$ on the $k$-th block.
 \end{proof}
