@@ -2165,6 +2165,40 @@ The following results separate the zero blocks from the
 	sector decomposition with strict norm ordering.
 \end{theorem}
 
+\begin{theorem}[Existential BNT independence from overlap limits]
+	\label{thm:bnt_li_from_overlap_limits_exists}
+	\lean{MPSTensor.exists_eventually_linearIndependent_of_overlap_tendsto_orthonormal}
+	\leanok
+	\uses{thm:bnt_overlap_orthonormal_li}
+	If the self-overlaps of a finite block family tend to $1$ and the
+	cross-overlaps of distinct blocks tend to $0$, then the MPV states are
+	linearly independent for all sufficiently large system sizes.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:bnt_overlap_orthonormal_li}
+	This is Theorem~\ref{thm:bnt_overlap_orthonormal_li}, rewritten from the
+	filter-eventual form into an explicit threshold $N_0$.
+\end{proof}
+
+\begin{theorem}[BNT independence for separated primitive normal blocks]
+	\label{thm:bnt_li_tp_prim_irr_separated}
+	\lean{MPSTensor.exists_eventually_linearIndependent_of_tp_primitive_irr_blocks_of_blocksNotGaugePhaseEquiv}
+	\leanok
+	\uses{thm:bnt_li_from_overlap_limits_exists, def:gauge_phase_equiv}
+	For trace-preserving primitive irreducible blocks that are pairwise not
+	gauge-phase equivalent, the block MPV states are linearly independent for all
+	sufficiently large system sizes.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:bnt_li_from_overlap_limits_exists, thm:gauge_equiv_nondecay}
+	Primitivity and trace preservation give self-overlap convergence to $1$.
+	BNT separation gives cross-overlap convergence to $0$ for distinct blocks.
+	The result follows from
+	Theorem~\ref{thm:bnt_li_from_overlap_limits_exists}.
+\end{proof}
+
 \begin{theorem}[Granular sector decomposition from eventual BNT independence]
 	\label{thm:bnt_sector_decomp_linear_independent}
 	\lean{MPSTensor.exists_bnt_sectorDecomp_of_linearIndependent}
@@ -2182,6 +2216,26 @@ The following results separate the zero blocks from the
 	Lemma~\ref{lem:trivial_sector_decomp_same_mpv}.  The assumed eventual linear
 	independence is exactly the BNT condition for the basis blocks of the granular
 	sector decomposition.
+\end{proof}
+
+\begin{theorem}[Separated primitive normal sector construction]
+	\label{thm:bnt_sector_decomp_tp_prim_irr_separated}
+	\lean{MPSTensor.exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_of_blocksNotGaugePhaseEquiv}
+	\leanok
+	\uses{def:trivial_sector_decomp, lem:trivial_sector_decomp_same_mpv, thm:bnt_li_tp_prim_irr_separated}
+	For trace-preserving primitive irreducible blocks with nonzero weights, if
+	distinct blocks are pairwise not gauge-phase equivalent, then the granular
+	sector decomposition represents the same MPS family and satisfies the BNT
+	linear-independence condition.  Equal-modulus separated blocks remain as
+	distinct basis blocks.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{lem:trivial_sector_decomp_same_mpv, thm:bnt_li_tp_prim_irr_separated}
+	The granular sector decomposition preserves the represented family by
+	Lemma~\ref{lem:trivial_sector_decomp_same_mpv}.  The separated primitive
+	normal hypotheses give the eventual linear independence by
+	Theorem~\ref{thm:bnt_li_tp_prim_irr_separated}.
 \end{proof}
 
 \begin{theorem}[TP primitive irreducible version with eventual BNT independence]
