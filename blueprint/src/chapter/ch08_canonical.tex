@@ -1981,11 +1981,40 @@ The following results separate the zero blocks from the
 	If each block is irreducible, trace-preserving, primitive, and has positive dimension, then sorting by strictly decreasing weight norms produces a normal canonical form.
 \end{theorem}
 
+\begin{definition}[Granular sector decomposition]
+	\label{def:trivial_sector_decomp}
+	\lean{MPSTensor.trivialSectorDecomp}
+	\leanok
+	\uses{def:paper_sector_data}
+	Given nonzero weights $(\mu_k)_{k=1}^r$ and blocks $(B_k)_{k=1}^r$,
+	form a sector decomposition with one basis block for each original block,
+	one copy in each sector, and sector weight $\mu_k$ on the $k$th sector.
+\end{definition}
+
+\begin{lemma}[Granular sector decomposition preserves the represented family]
+	\label{lem:trivial_sector_decomp_same_mpv}
+	\lean{MPSTensor.sameMPV₂_trivialSectorDecomp}
+	\leanok
+	\uses{def:trivial_sector_decomp}
+	The granular sector decomposition associated to $(\mu_k,B_k)_k$ represents
+	the same MPS family as the original weighted block sum
+	$\bigoplus_k \mu_k B_k$.
+\end{lemma}
+
+\begin{proof}\leanok
+	\uses{def:trivial_sector_decomp}
+	Expanding the sector decomposition gives the sum
+	$\sum_k \mu_k^N V^{(N)}(B_k)_\sigma$, which is exactly the finite
+	block-sum expression for $\bigoplus_k \mu_k B_k$.
+\end{proof}
+
 \begin{theorem}[Trivial sector decomposition for the sorted distinct-norm case]
 	\label{thm:bnt_trivial_sector}
 	\lean{MPSTensor.exists_trivialSectorDecomp_of_sorted_distinct_norms}\leanok
-	\uses{thm:bnt_sorted_reindexing}
-	If weights are already strictly decreasing in norm, one obtains a sector decomposition with one copy per sector that preserves the represented MPS family.
+	\uses{def:trivial_sector_decomp, lem:trivial_sector_decomp_same_mpv}
+	If weights are already strictly decreasing in norm, one obtains a sector
+	decomposition with one copy per sector that preserves the represented
+	MPS family.
 \end{theorem}
 
 \begin{definition}[Norm-class partition]
@@ -2042,8 +2071,48 @@ The following results separate the zero blocks from the
 	\label{thm:sector_decomp_tp_prim_irr}
 	\lean{MPSTensor.exists_sectorDecomp_of_tp_primitive_irr_blocks}\leanok
 	\uses{thm:gauge_equiv_nondecay, thm:bnt_grouping_gauge_equiv}
-	From a trace-preserving primitive irreducible block decomposition with nonzero weights and non-decaying cross-overlaps for equal-norm blocks, one obtains a sector decomposition with strict norm ordering.
+	From a trace-preserving primitive irreducible block decomposition with nonzero
+	weights and non-decaying cross-overlaps for equal-norm blocks, one obtains a
+	sector decomposition with strict norm ordering.
 \end{theorem}
+
+\begin{theorem}[Granular sector decomposition from eventual BNT independence]
+	\label{thm:bnt_sector_decomp_linear_independent}
+	\lean{MPSTensor.exists_bnt_sectorDecomp_of_linearIndependent}
+	\leanok
+	\uses{def:trivial_sector_decomp, lem:trivial_sector_decomp_same_mpv, def:bnt}
+	If the MPV states of the blocks are linearly independent for all sufficiently
+	large system sizes and all weights are nonzero, then the granular sector
+	decomposition represents the same MPS family and satisfies the BNT
+	linear-independence condition.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{def:trivial_sector_decomp, lem:trivial_sector_decomp_same_mpv, def:bnt}
+	The equality of represented families is
+	Lemma~\ref{lem:trivial_sector_decomp_same_mpv}.  The assumed eventual linear
+	independence is exactly the BNT condition for the basis blocks of the granular
+	sector decomposition.
+\end{proof}
+
+\begin{theorem}[TP primitive irreducible version with eventual BNT independence]
+	\label{thm:bnt_sector_decomp_tp_prim_irr_linear_independent}
+	\lean{MPSTensor.exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_of_linearIndependent}
+	\leanok
+	\uses{thm:bnt_sector_decomp_linear_independent}
+	For trace-preserving primitive irreducible blocks of positive bond dimension,
+	if the block MPV states are linearly independent for all sufficiently large
+	system sizes and the weights are nonzero, then there is a sector decomposition
+	representing the same MPS family and satisfying the BNT linear-independence
+	condition.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:bnt_sector_decomp_linear_independent}
+	Apply Theorem~\ref{thm:bnt_sector_decomp_linear_independent}; the additional
+	trace-preserving, primitive, irreducible, and positivity assumptions are carried
+	along for compatibility with the one-sided BNT construction.
+\end{proof}
 
 \subsection{Cyclic Sectors}
 

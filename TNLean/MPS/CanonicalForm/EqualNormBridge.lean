@@ -69,10 +69,14 @@ Theorem matching, etc.).
   the reduction output to a BNT-grouped `SectorDecomposition`.  **Fully proved.**
   Requires a `hNonDecay` hypothesis for equal-norm blocks.
 
+* `exists_bnt_sectorDecomp_of_linearIndependent` — minimal adapter to the
+  post-#886 `HasBNTSectorData` predicate.  It forms the granular
+  `trivialSectorDecomp` as a BNT sector decomposition when the actual BNT
+  linear-independence condition is supplied explicitly.
+
 * `exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_of_linearIndependent` —
-  Conditional adapter to the post-#886 `HasBNTSectorData` API.  It packages the
-  granular `trivialSectorDecomp` as a BNT sector decomposition when the actual
-  BNT linear-independence condition is supplied explicitly.
+  signature-compatible reformulation retaining the TP / primitive / irreducible
+  inputs expected by the one-sided BNT construction chain.
 
 ## References
 
@@ -319,7 +323,7 @@ theorem exists_sectorDecomp_of_tp_primitive_irr_blocks
 
 /-- One-sector specialization of the TP + primitive + irreducible grouping route.
 
-This is a genuine restricted endpoint toward Gap §1: if all weights lie in a single norm class
+This is a genuine restricted result toward Gap §1: if all weights lie in a single norm class
 and every block has non-decaying overlap with a chosen representative, then the whole family
 collapses to a one-basis `SectorDecomposition`. -/
 theorem bnt_grouping_single_norm_class_of_tp_primitive_irr_blocks
@@ -373,18 +377,40 @@ theorem bnt_grouping_single_norm_class_of_tp_primitive_irr_blocks
 
 /-! ### §4. Adapter to the post-#886 BNT-sector predicate -/
 
-/-- **Conditional granular sector decomposition carrying current `HasBNTSectorData`.**
+/-- **Minimal granular sector decomposition carrying current `HasBNTSectorData`.**
 
-This is the coherent post-#886 version of the old PR #882 endpoint.  The predicate
-`HasBNTSectorData` now means eventual linear independence of the sector basis MPV
-states.  TP, irreducibility, primitivity, and nonzero weights do not by themselves
-provide that linear-independence statement for the granular basis; the genuine
-one-sided BNT construction must first choose / collapse to a basis of normal tensors.
+This is the post-#886 formulation of the conditional sector construction.  The
+predicate `HasBNTSectorData` now means eventual linear independence of the sector
+basis MPV states.  TP, irreducibility, primitivity, and nonzero weights do not by
+themselves provide that linear-independence statement for the granular basis; the
+genuine one-sided BNT construction must first choose / collapse to a basis of normal
+tensors.
 
-Accordingly this theorem exposes a small reusable adapter: if the granular input
+Accordingly this theorem exposes the minimal reusable adapter: if the granular input
 basis is already known to satisfy the current BNT linear-independence hypothesis,
 then `trivialSectorDecomp` gives the requested `SectorDecomposition` and the
 `HasBNTSectorData` certificate is exactly the supplied `hLI`. -/
+theorem exists_bnt_sectorDecomp_of_linearIndependent
+    {r : ℕ} {dim : Fin r → ℕ}
+    (μ : Fin r → ℂ)
+    (blocks : (k : Fin r) → MPSTensor d (dim k))
+    (hμne : ∀ k, μ k ≠ 0)
+    (hLI : ∃ N0 : ℕ, ∀ N > N0,
+      LinearIndependent ℂ (fun k : Fin r => mpvState (blocks k) N)) :
+    ∃ P : SectorDecomposition d,
+      SameMPV₂ P.toTensor (toTensorFromBlocks (d := d) (μ := μ) blocks) ∧
+      HasBNTSectorData (d := d) P := by
+  refine ⟨trivialSectorDecomp μ blocks hμne,
+    sameMPV₂_trivialSectorDecomp μ blocks hμne, ?_⟩
+  simpa [trivialSectorDecomp] using hLI
+
+/-- Signature-compatible reformulation for TP / primitive / irreducible block data.
+
+The extra block-normality hypotheses are intentionally retained here to match the
+shape expected by the one-sided BNT-construction route, but the actual adapter only
+uses nonzero weights and the current BNT linear-independence hypothesis.  Use
+`exists_bnt_sectorDecomp_of_linearIndependent` when those extra hypotheses are not
+already present. -/
 theorem exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_of_linearIndependent
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ)
@@ -397,9 +423,7 @@ theorem exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_of_linearIndependent
       LinearIndependent ℂ (fun k : Fin r => mpvState (blocks k) N)) :
     ∃ P : SectorDecomposition d,
       SameMPV₂ P.toTensor (toTensorFromBlocks (d := d) (μ := μ) blocks) ∧
-      HasBNTSectorData (d := d) P := by
-  refine ⟨trivialSectorDecomp μ blocks hμne,
-    sameMPV₂_trivialSectorDecomp μ blocks hμne, ?_⟩
-  simpa [trivialSectorDecomp] using hLI
+      HasBNTSectorData (d := d) P :=
+  exists_bnt_sectorDecomp_of_linearIndependent μ blocks hμne hLI
 
 end MPSTensor
