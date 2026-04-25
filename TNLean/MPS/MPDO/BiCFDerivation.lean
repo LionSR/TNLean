@@ -9,8 +9,8 @@ import Mathlib.LinearAlgebra.Finsupp.LinearCombination
 /-!
 # Finite-length sufficient conditions and obstructions for MPDO biCF
 
-The `HorizontalCFData` structure in `VerticalCF.lean` packages the block-injective
-canonical-form property `biCF` as a hypothesis. This file records three complementary
+The `HorizontalCFData` structure in `VerticalCF.lean` records the block-injective
+canonical-form property `biCF` as a hypothesis. This file records four complementary
 facts about that field.
 
 1. A clean **abstract sufficient condition**: if, after blocking to some fixed
@@ -20,21 +20,27 @@ facts about that field.
    then the `biCF` conclusion follows from nondegeneracy of the product trace
    pairing.
 
-2. An abstract **Proposition IV.3-style selector package**: if each block is
+2. A finite-dimensional **linear-independence criterion**: if the scalar word-entry
+   family obtained by reading off every block matrix entry is linearly
+   independent, then those tuple-valued word evaluations already span the full
+   product algebra. This reduces biCF to a concrete linear-algebra condition.
+
+3. An abstract **Proposition IV.3-style selector data criterion**: if each block is
    block-injective at some common length and a second finite family of words
    isolates the individual blocks (identity on one block, zero on the others),
    then concatenating the two families yields the preceding span condition.
    This captures the finite-length block-separation content of
    [CPGSV17], Proposition IV.3.
 
-3. A concrete **counterexample**: blockwise injectivity, left-canonical
+4. A concrete **counterexample**: blockwise injectivity, left-canonical
    normalization, nonzero weights, and even pairwise distinct weights do **not**
    imply `biCF`. Thus the current `HorizontalCFData` fields other than `biCF`
    are insufficient for deriving that property.
 
-This isolates the missing ingredient precisely: one still needs a genuine
-finite-length block-separation theorem, i.e. the content of Proposition IV.3
-(`propblockinj`) from arXiv:1606.00608.
+This isolates the missing ingredient more precisely: one still needs a proved
+finite-length block-separation theorem producing either the selector data of
+item (3), or equivalently the word-entry linear independence of item (2), from
+canonical-form/BNT data.
 -/
 
 open scoped Matrix BigOperators
@@ -55,6 +61,23 @@ def WordTupleSpanTop
     (A : (k : Fin r) → MPSTensor d (dim k))
     (L : ℕ) : Prop :=
   Submodule.span ℂ (Set.range (wordTuple A L)) = ⊤
+
+/-- Index type for a matrix entry inside a block family. -/
+abbrev BlockEntryIndex (dim : Fin r → ℕ) :=
+  Σ k : Fin r, Fin (dim k) × Fin (dim k)
+
+/-- The value of a tuple of block matrices at a chosen block entry. -/
+def blockEntryValue
+    (M : (k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ)
+    (x : BlockEntryIndex dim) : ℂ :=
+  M x.1 x.2.1 x.2.2
+
+/-- The scalar word family obtained by reading off one chosen matrix entry of the
+block-word tuple. -/
+def wordEntryFamily
+    (A : (k : Fin r) → MPSTensor d (dim k))
+    (L : ℕ) : BlockEntryIndex dim → (Fin L → Fin d) → ℂ :=
+  fun x w => blockEntryValue (wordTuple A L w) x
 
 /-- The block-injective canonical-form property used by `HorizontalCFData`. -/
 def HasBiCF
@@ -105,6 +128,155 @@ def HasBlockSelectorWords
     (∑ w : Fin S → Fin d, c w • evalWord (A k) (List.ofFn w)) = 1 ∧
     ∀ j : Fin r, j ≠ k →
       (∑ w : Fin S → Fin d, c w • evalWord (A j) (List.ofFn w)) = 0
+
+/-- Any finite-length product-algebra spanning witness already contains block
+selectors as a special case. -/
+theorem hasBlockSelectorWords_of_wordTupleSpanTop
+    (A : (k : Fin r) → MPSTensor d (dim k))
+    {S : ℕ} (hSpan : WordTupleSpanTop A S) :
+    HasBlockSelectorWords A S := by
+  classical
+  intro k
+  let target : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ :=
+    fun j => if j = k then 1 else 0
+  have htarget : target ∈ Submodule.span ℂ (Set.range (wordTuple A S)) := by
+    rw [hSpan]
+    exact Submodule.mem_top
+  rcases (Submodule.mem_span_range_iff_exists_fun ℂ).mp htarget with ⟨c, hc⟩
+  refine ⟨c, ?_, ?_⟩
+  · simpa [target] using congrArg (fun M => M k) hc
+  · intro j hj
+    simpa [target, hj] using congrArg (fun M => M j) hc
+
+private theorem exists_dualCoeffs_of_wordEntryFamily_linearIndependent
+    (A : (k : Fin r) → MPSTensor d (dim k))
+    {L : ℕ} (hLI : LinearIndependent ℂ (wordEntryFamily A L)) :
+    ∃ coeff : BlockEntryIndex dim → (Fin L → Fin d) → ℂ,
+      ∀ x y : BlockEntryIndex dim,
+        ∑ w : Fin L → Fin d, coeff x w * wordEntryFamily A L y w =
+          if x = y then 1 else 0 := by
+  classical
+  let lc := Fintype.linearCombination ℂ (wordEntryFamily A L)
+  have hlcKer : lc.ker = ⊥ := by
+    rw [LinearMap.ker_eq_bot']
+    intro c hc
+    exact funext (Fintype.linearIndependent_iff.mp hLI c (by simpa [lc] using hc))
+  obtain ⟨Ψ, hΨ⟩ := lc.exists_leftInverse_of_injective hlcKer
+  let coeff : BlockEntryIndex dim → (Fin L → Fin d) → ℂ :=
+    fun x w => Ψ ((Pi.single w (1 : ℂ) : (Fin L → Fin d) → ℂ)) x
+  have hΨ_apply :
+      ∀ (f : (Fin L → Fin d) → ℂ) (x : BlockEntryIndex dim),
+        Ψ f x = ∑ w : Fin L → Fin d, f w * coeff x w := by
+    intro f x
+    calc
+      Ψ f x = Ψ (∑ w : Fin L → Fin d, (Pi.single w (f w) : (Fin L → Fin d) → ℂ)) x := by
+        simpa using
+          congrArg (fun g : ((Fin L → Fin d) → ℂ) => Ψ g x) (Finset.univ_sum_single f).symm
+      _ = ∑ w : Fin L → Fin d, Ψ ((Pi.single w (f w) : (Fin L → Fin d) → ℂ)) x := by
+        rw [map_sum]
+        simp
+      _ = ∑ w : Fin L → Fin d, f w * coeff x w := by
+        refine Finset.sum_congr rfl ?_
+        intro w _
+        have hsingle_smul :
+            ((Pi.single w (f w) : (Fin L → Fin d) → ℂ)) =
+              f w • ((Pi.single w (1 : ℂ) : (Fin L → Fin d) → ℂ)) := by
+          ext z
+          by_cases hzw : z = w
+          · subst hzw
+            simp
+          · simp [Pi.single_eq_of_ne hzw]
+        rw [hsingle_smul]
+        simp [coeff]
+  refine ⟨coeff, ?_⟩
+  intro x y
+  have hsingle :
+      lc ((Pi.single y (1 : ℂ) : BlockEntryIndex dim → ℂ)) = wordEntryFamily A L y := by
+    ext w
+    rw [Fintype.linearCombination_apply, Finset.sum_eq_single y]
+    · simp
+    · intro z _ hzy
+      simp [Pi.single_eq_of_ne hzy]
+    · intro hy
+      exact False.elim (hy (Finset.mem_univ y))
+  have hy : Ψ (wordEntryFamily A L y) x = if x = y then 1 else 0 := by
+    have hleft :
+        Ψ (lc ((Pi.single y (1 : ℂ) : BlockEntryIndex dim → ℂ))) =
+          ((Pi.single y (1 : ℂ) : BlockEntryIndex dim → ℂ)) := by
+      simpa using congrArg (fun f => f ((Pi.single y (1 : ℂ) : BlockEntryIndex dim → ℂ))) hΨ
+    simpa [hsingle, Pi.single_apply] using congrFun hleft x
+  simpa [hΨ_apply (wordEntryFamily A L y) x, mul_comm] using hy
+
+/-- Linear independence of the scalar word-entry family forces the tuple-valued
+length-`L` word evaluations to span the full product algebra. -/
+theorem wordTupleSpanTop_of_wordEntryFamily_linearIndependent
+    (A : (k : Fin r) → MPSTensor d (dim k))
+    {L : ℕ} (hLI : LinearIndependent ℂ (wordEntryFamily A L)) :
+    WordTupleSpanTop A L := by
+  classical
+  rcases exists_dualCoeffs_of_wordEntryFamily_linearIndependent A hLI with
+    ⟨coeff, hcoeff⟩
+  rw [WordTupleSpanTop, span_range_eq_top_iff_surjective_fintypeLinearCombination]
+  intro M
+  let c : (Fin L → Fin d) → ℂ :=
+    fun w => ∑ x : BlockEntryIndex dim, blockEntryValue M x * coeff x w
+  refine ⟨c, ?_⟩
+  ext j a b
+  calc
+    (Fintype.linearCombination ℂ (wordTuple A L) c) j a b
+        = (∑ w : Fin L → Fin d, c w • evalWord (A j) (List.ofFn w)) a b := by
+            simp [Fintype.linearCombination_apply, wordTuple, Pi.smul_apply]
+    _ = ∑ w : Fin L → Fin d, c w * wordEntryFamily A L ⟨j, (a, b)⟩ w := by
+          simp_rw [Matrix.sum_apply, Matrix.smul_apply]
+          simp [wordEntryFamily, blockEntryValue, wordTuple]
+    _ = ∑ w : Fin L → Fin d,
+          ∑ x : BlockEntryIndex dim,
+            blockEntryValue M x * (coeff x w * wordEntryFamily A L ⟨j, (a, b)⟩ w) := by
+          unfold c
+          refine Finset.sum_congr rfl ?_
+          intro w _
+          rw [Finset.sum_mul]
+          refine Finset.sum_congr rfl ?_
+          intro x _
+          ring
+    _ = ∑ x : BlockEntryIndex dim,
+          blockEntryValue M x *
+            (∑ w : Fin L → Fin d, coeff x w * wordEntryFamily A L ⟨j, (a, b)⟩ w) := by
+          rw [Finset.sum_comm]
+          refine Finset.sum_congr rfl ?_
+          intro x _
+          rw [← Finset.mul_sum]
+    _ = ∑ x : BlockEntryIndex dim,
+          blockEntryValue M x * (if x = ⟨j, (a, b)⟩ then 1 else 0) := by
+          refine Finset.sum_congr rfl ?_
+          intro x _
+          rw [hcoeff x ⟨j, (a, b)⟩]
+    _ = blockEntryValue M ⟨j, (a, b)⟩ := by
+          rw [Finset.sum_eq_single ⟨j, (a, b)⟩]
+          · simp
+          · intro x _ hx
+            simp [hx]
+          · intro hmem
+            exact False.elim (hmem (Finset.mem_univ _))
+    _ = M j a b := rfl
+
+/-- The linear-independence criterion above gives the abstract Proposition-IV.3
+selector data as a corollary. -/
+theorem hasBlockSelectorWords_of_wordEntryFamily_linearIndependent
+    (A : (k : Fin r) → MPSTensor d (dim k))
+    {L : ℕ} (hLI : LinearIndependent ℂ (wordEntryFamily A L)) :
+    HasBlockSelectorWords A L :=
+  hasBlockSelectorWords_of_wordTupleSpanTop A
+    (wordTupleSpanTop_of_wordEntryFamily_linearIndependent A hLI)
+
+/-- The linear-independence criterion above also yields the `HasBiCF` witness
+used by `HorizontalCFData`. -/
+theorem hasBiCF_of_wordEntryFamily_linearIndependent
+    (A : (k : Fin r) → MPSTensor d (dim k))
+    {L : ℕ} (hLI : LinearIndependent ℂ (wordEntryFamily A L)) :
+    HasBiCF A :=
+  hasBiCF_of_wordTupleSpanTop A
+    (wordTupleSpanTop_of_wordEntryFamily_linearIndependent A hLI)
 
 /-- Abstract finite-length data isolating the content of Proposition IV.3
 (`propblockinj`) from arXiv:1606.00608.
@@ -220,7 +392,7 @@ theorem wordTupleSpanTop_of_common_blockInjective_of_blockSelectorWords
   rw [← hassembled]
   exact hassembled_mem
 
-/-- The abstract Proposition-IV.3 selector package implies the finite-length
+/-- The abstract Proposition-IV.3 selector data imply the finite-length
 word-tuple span condition. -/
 theorem wordTupleSpanTop_of_propBlockInjective
     (A : (k : Fin r) → MPSTensor d (dim k))
@@ -230,13 +402,117 @@ theorem wordTupleSpanTop_of_propBlockInjective
   exact ⟨L + S,
     wordTupleSpanTop_of_common_blockInjective_of_blockSelectorWords A hInj hSel⟩
 
-/-- The abstract Proposition-IV.3 selector package implies `HasBiCF`. -/
+/-- The abstract Proposition-IV.3 selector data imply `HasBiCF`. -/
 theorem hasBiCF_of_propBlockInjective
     (A : (k : Fin r) → MPSTensor d (dim k))
     (hProp : PropBlockInjective A) :
     HasBiCF A := by
   rcases wordTupleSpanTop_of_propBlockInjective A hProp with ⟨N, hN⟩
   exact hasBiCF_of_wordTupleSpanTop A hN
+
+section DuplicateScalarBlocks
+
+/-- Nonzero weights for the duplicate-block counterexample. -/
+def duplicateScalarWeights : Fin 2 → ℂ
+  | 0 => 1
+  | 1 => 2
+
+/-- Common block dimension for the duplicate-block counterexample. -/
+abbrev duplicateScalarDim : Fin 2 → ℕ := fun _ => 1
+
+/-- Two identical `1 × 1` blocks. This family is blockwise injective and
+left-canonical, but it cannot admit any finite-length `wordEntryFamily`
+linear-independence witness. -/
+def duplicateScalarBlocks :
+    (k : Fin 2) → MPSTensor 1 (duplicateScalarDim k)
+  | _ => fun _ => (1 : Matrix (Fin 1) (Fin 1) ℂ)
+
+private theorem span_singleton_one_finOne_eq_top :
+    (ℂ ∙ (1 : Matrix (Fin 1) (Fin 1) ℂ)) = ⊤ := by
+  refine (Submodule.span_singleton_eq_top_iff ℂ
+    (1 : Matrix (Fin 1) (Fin 1) ℂ)).2 ?_
+  intro M
+  refine ⟨M 0 0, ?_⟩
+  ext i j
+  have hi : i = 0 := Fin.eq_zero i
+  have hj : j = 0 := Fin.eq_zero j
+  subst hi
+  subst hj
+  simp
+
+/-- Each duplicate scalar block is injective. -/
+theorem duplicateScalarBlocks_isInjective :
+    ∀ k, IsInjective (duplicateScalarBlocks k) := by
+  intro k
+  simpa [duplicateScalarBlocks, duplicateScalarDim, IsInjective, Set.range_const] using
+    span_singleton_one_finOne_eq_top
+
+/-- The duplicate scalar blocks are left-canonical. -/
+theorem duplicateScalarBlocks_leftCanonical :
+    ∀ k, ∑ i : Fin 1, (duplicateScalarBlocks k i)ᴴ * duplicateScalarBlocks k i = 1 := by
+  intro k
+  simp [duplicateScalarBlocks]
+
+/-- The counterexample weights are nonzero. -/
+theorem duplicateScalarWeights_ne_zero :
+    ∀ k, duplicateScalarWeights k ≠ 0 := by
+  intro k
+  fin_cases k <;> norm_num [duplicateScalarWeights]
+
+/-- Duplicate blocks force repeated scalar word-entry functionals, so no blocking
+length can make `wordEntryFamily` linearly independent. -/
+theorem duplicateScalarBlocks_not_linearIndependent_wordEntryFamily (L : ℕ) :
+    ¬ LinearIndependent ℂ (wordEntryFamily duplicateScalarBlocks L) := by
+  intro hLI
+  let x0 : BlockEntryIndex duplicateScalarDim := ⟨0, (0, 0)⟩
+  let x1 : BlockEntryIndex duplicateScalarDim := ⟨1, (0, 0)⟩
+  have hEq : wordEntryFamily duplicateScalarBlocks L x0 =
+      wordEntryFamily duplicateScalarBlocks L x1 := by
+    funext w
+    simp [x0, x1, wordEntryFamily, blockEntryValue, wordTuple, duplicateScalarBlocks]
+  have hx : x0 = x1 := hLI.injective hEq
+  have h01 : (0 : Fin 2) = 1 := by
+    simpa [x0, x1] using congrArg Sigma.fst hx
+  exact Fin.zero_ne_one h01
+
+/-- Concrete obstruction to the Issue-#822 target on the current hypotheses:
+blockwise injectivity, left-canonicality, and nonzero weights do not by
+themselves imply a finite-length `wordEntryFamily` witness. -/
+theorem duplicateScalarBlocks_not_exists_linearIndependent_wordEntryFamily :
+    ¬ ∃ L, LinearIndependent ℂ (wordEntryFamily duplicateScalarBlocks L) := by
+  rintro ⟨L, hL⟩
+  exact duplicateScalarBlocks_not_linearIndependent_wordEntryFamily L hL
+
+/-- The duplicate scalar blocks do not satisfy the biCF trace-separation property. -/
+theorem duplicateScalarBlocks_not_hasBiCF :
+    ¬ HasBiCF duplicateScalarBlocks := by
+  rintro ⟨L, hL⟩
+  let Δ : (k : Fin 2) → Matrix (Fin (duplicateScalarDim k)) (Fin (duplicateScalarDim k)) ℂ :=
+    fun k => if k = 0 then 1 else -1
+  have hTrace :
+      ∀ w : Fin L → Fin 1,
+        (∑ k : Fin 2,
+          Matrix.trace (Δ k * evalWord (duplicateScalarBlocks k) (List.ofFn w))) = 0 := by
+    intro w
+    simp [Δ, duplicateScalarBlocks, duplicateScalarDim, Matrix.trace_fin_one]
+  have hzero := hL Δ hTrace 0
+  have hentry := congrFun (congrFun hzero 0) 0
+  simp [Δ] at hentry
+
+/-- Counterexample to deriving finite-length block separation from the
+other `HorizontalCFData` fields alone. -/
+theorem duplicateScalarBlocks_counterexample :
+    (∀ k, IsInjective (duplicateScalarBlocks k)) ∧
+      (∀ k, ∑ i : Fin 1,
+        (duplicateScalarBlocks k i)ᴴ * duplicateScalarBlocks k i = 1) ∧
+      (∀ k, duplicateScalarWeights k ≠ 0) ∧
+      ¬ HasBiCF duplicateScalarBlocks ∧
+      ¬ ∃ L, LinearIndependent ℂ (wordEntryFamily duplicateScalarBlocks L) := by
+  refine ⟨duplicateScalarBlocks_isInjective, duplicateScalarBlocks_leftCanonical,
+    duplicateScalarWeights_ne_zero, duplicateScalarBlocks_not_hasBiCF,
+    duplicateScalarBlocks_not_exists_linearIndependent_wordEntryFamily⟩
+
+end DuplicateScalarBlocks
 
 end MPSTensor
 
@@ -252,8 +528,7 @@ theorem HorizontalCFData.toHasBiCF
     MPSTensor.HasBiCF A :=
   hCF.biCF
 
-/-- A finite-length block-separation hypothesis packages directly into
-`HorizontalCFData`. -/
+/-- A finite-length block-separation hypothesis yields `HorizontalCFData`. -/
 theorem horizontalCFData_of_wordTupleSpanTop
     (A : (k : Fin r) → MPSTensor d (dim k))
     (hInj : ∀ k, MPSTensor.IsInjective (A k))
@@ -270,8 +545,22 @@ theorem horizontalCFData_of_wordTupleSpanTop
   }
   exact MPSTensor.hasBiCF_of_wordTupleSpanTop A hL
 
-/-- Proposition-IV.3-style selector data packages directly into
-`HorizontalCFData` through the finite-length span criterion. -/
+/-- Linear independence of the scalar word-entry family is another concrete
+route into `HorizontalCFData`: it already implies the finite-length product
+algebra span condition. -/
+theorem horizontalCFData_of_wordEntryFamily_linearIndependent
+    (A : (k : Fin r) → MPSTensor d (dim k))
+    (hInj : ∀ k, MPSTensor.IsInjective (A k))
+    (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * A k i = 1)
+    (hμne : ∀ k, μ k ≠ 0)
+    {L : ℕ}
+    (hLI : LinearIndependent ℂ (MPSTensor.wordEntryFamily A L)) :
+    HorizontalCFData (d := d) μ A :=
+  horizontalCFData_of_wordTupleSpanTop A hInj hLeft hμne
+    ⟨L, MPSTensor.wordTupleSpanTop_of_wordEntryFamily_linearIndependent A hLI⟩
+
+/-- Proposition-IV.3-style selector data yield `HorizontalCFData` through the
+finite-length span criterion. -/
 theorem horizontalCFData_of_propBlockInjective
     (A : (k : Fin r) → MPSTensor d (dim k))
     (hInj : ∀ k, MPSTensor.IsInjective (A k))
@@ -290,7 +579,7 @@ theorem horizontalCFData_of_propBlockInjective
 /-!
 ## Why the remaining `HorizontalCFData` fields are still insufficient
 
-The strengthened hypotheses used above are genuinely extra data. A simple
+The strengthened hypotheses used above are strictly extra data. A simple
 obstruction shows that one cannot derive `biCF` from blockwise injectivity,
 left-canonicality, and nonzero (even pairwise distinct) weights alone.
 
@@ -305,8 +594,9 @@ any blocking length `L` there is only one word `w : Fin L → Fin 1`, and
 
 for that unique word, while `Δ ≠ 0`. Therefore `HasBiCF A` fails.
 
-The new predicate `PropBlockInjective` packages the extra finite-length block
-selectors abstractly. What remains open is to derive those selectors from the
+The new predicate `PropBlockInjective` expresses one abstract finite-length route,
+while `wordEntryFamily` gives a second, equivalent linear-algebra criterion.
+What remains open is to derive either of those finite-length witnesses from the
 repository's current BNT / canonical-form hypotheses, i.e. to formalize the full
 content of Proposition IV.3 of arXiv:1606.00608.
 -/
