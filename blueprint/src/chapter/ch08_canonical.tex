@@ -2239,6 +2239,42 @@ The following results separate the zero blocks from the
 	Theorem~\ref{thm:bnt_li_tp_prim_irr_separated}.
 \end{proof}
 
+\begin{definition}[MPV phase class data]
+	\label{def:mpv_phase_class_data}
+	\lean{MPSTensor.MPVPhaseEquiv, MPSTensor.MPVPhaseClassData, MPSTensor.mpvPhaseClassData}
+	\leanok
+	For a finite family of blocks, put $j \sim k$ when there is a nonzero
+	phase factor $\zeta$ such that
+	$V^{(N)}(B_k)=\zeta^N V^{(N)}(B_j)$ for every length $N$.  The class
+	data enumerate the finite quotient, choose one representative per class,
+	record the phase relating the representative to each member, and prove that
+	distinct representatives are not gauge-phase equivalent.
+\end{definition}
+
+\begin{theorem}[Collapsed representative BNT sector construction]
+	\label{thm:bnt_sector_decomp_tp_prim_irr_collapsed}
+	\lean{MPSTensor.exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks}
+	\leanok
+	\uses{def:mpv_phase_class_data, thm:bnt_li_tp_prim_irr_separated}
+	For trace-preserving primitive irreducible blocks of positive bond dimension
+	with nonzero weights, there is a sector decomposition representing the same
+	weighted block sum and satisfying the BNT linear-independence condition.  The
+	construction chooses one representative per MPV phase class and absorbs the
+	phase factors into the sector weights.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{def:mpv_phase_class_data, thm:bnt_li_tp_prim_irr_separated}
+	Finite phase classes partition the original block indices.  Expanding the
+	sector decomposition gives the original finite sum after replacing each class
+	member by its representative and moving the factor $\zeta^N$ into
+	$(\zeta\mu_k)^N$.  If two chosen representatives were gauge-phase equivalent,
+	they would lie in the same MPV phase class, contradicting their being distinct
+	classes.  Therefore the representatives satisfy the separated primitive-normal
+	hypothesis, and Theorem~\ref{thm:bnt_li_tp_prim_irr_separated} gives the BNT
+	linear-independence condition.
+\end{proof}
+
 \begin{theorem}[TP primitive irreducible version with eventual BNT independence]
 	\label{thm:bnt_sector_decomp_tp_prim_irr_linear_independent}
 	\lean{MPSTensor.exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_of_linearIndependent}

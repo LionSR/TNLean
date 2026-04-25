@@ -66,7 +66,7 @@ from the blocked TP-primitive output.  Informally, it must:
 4. return a `SectorDecomposition` whose `HasBNTSectorData` is the current
    post-#886 linear-independence predicate.
 
-Until that theorem exists, #860 and #877 should continue to treat the one-sided
+Before the Wave 15 update below, #860 and #877 had to treat the one-sided
 BNT sector pair as a hypothesis, as in
 `fundamentalTheorem_after_blocking_1606_sector_of_bntPair_matched`.
 
@@ -90,3 +90,29 @@ remaining #876 theorem is now more precise: construct the separated family from
 arbitrary TP-primitive-irreducible blocks by identifying gauge-phase-equivalent
 normal tensors, absorbing the associated phases into sector weights, and proving
 that the constructed representatives satisfy `BlocksNotGaugePhaseEquiv`.
+
+## Wave 15 slot A update
+
+The branch `wave15-A-923-collapsed-reps` discharges the collapsed-representative
+step for the one-sided TP / primitive / irreducible input family.
+
+New declarations in `TNLean/MPS/CanonicalForm/EqualNormBridge.lean`:
+
+- `MPSTensor.MPVPhaseEquiv`: the finite relation identifying blocks whose MPV
+  families differ by a nonzero length-power phase factor.
+- `MPSTensor.MPVPhaseClassData` and `MPSTensor.mpvPhaseClassData`: quotient the
+  finite block index set by that relation, choose one representative per class,
+  enumerate the original members of each class, and prove the representatives
+  satisfy `BlocksNotGaugePhaseEquiv`.  The separation proof uses the fact that a
+  gauge-phase equivalence produces an `MPVPhaseEquiv` relation, so two
+  gauge-phase-equivalent representatives would lie in the same quotient class.
+- `MPSTensor.exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks`: constructs the
+  sector decomposition from arbitrary TP / primitive / irreducible blocks with
+  nonzero weights by absorbing each class member's phase into its sector weight,
+  then applies the separated-family linear-independence theorem from PR #920 to
+  prove the current `HasBNTSectorData` predicate.
+
+This closes the #923 one-sided collapsed-representative sub-blocker.  The broader
+Gap §1 / #652 assembly still needs the heterogeneous matched-basis theorem that
+constructs a sector-basis matching witness directly from equality of the total
+MPV families.
