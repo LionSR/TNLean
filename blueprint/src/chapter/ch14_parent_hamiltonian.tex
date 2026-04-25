@@ -704,14 +704,16 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \leanok
     \uses{thm:ground_space_extend_right_block_injective, def:l_blk_injective,
         rem:contiguous_window_operators}
-    Let $A$ be $L_0$-block injective with $L_0 > 0$. If an $N$-site state
-    satisfies the ground-space constraint on every non-wrapping contiguous window
-    of length $L_0+1$, with $N \ge L_0+1$, then it lies in $G_N(A)$.
+    Let $A$ be $L_0$-block injective with $D \ge 1$ and $L_0 > 0$.
+    If an $N$-site state satisfies the ground-space constraint on every
+    non-wrapping contiguous window of length $L_0+1$, for every complementary
+    outside configuration, with $N \ge L_0+1$, then it lies in $G_N(A)$.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    \uses{thm:ground_space_extend_right_block_injective}
+    \uses{thm:ground_space_extend_right_block_injective,
+        def:tail_restrict_parent, rem:contiguous_window_operators}
     Induct on the extra length beyond $L_0+1$. The induction hypothesis gives the
     long left-window ground condition after deleting the last site, while
     Definition~\ref{def:tail_restrict_parent} and the contiguous-window transport above
