@@ -493,6 +493,13 @@ strong subadditivity for a normalized three-site reduced state.
     separate structural condition.
 \end{theorem}
 
+\begin{proof}
+    \leanok
+    The trace of a positive semidefinite neighboring operator is nonnegative in
+    the complex order. Taking real parts gives the stated entrywise
+    nonnegativity.
+\end{proof}
+
 \begin{definition}[Auxiliary matrix predicates for the rank-one step]
     \label{def:matrix_trace_rankone_predicates}
     \lean{Matrix.TracePowersConstant}
@@ -524,12 +531,20 @@ strong subadditivity for a normalized three-site reduced state.
     \]
 \end{theorem}
 
+\begin{proof}
+    \leanok
+    The spectral theorem writes $T$ as a unitary conjugate of the diagonal
+    matrix of its Hermitian eigenvalues. Squaring commutes with this conjugation,
+    and cyclicity of trace reduces the identity to the trace of the squared
+    diagonal matrix.
+\end{proof}
+
 \begin{theorem}[PSD trace-power rank-one criterion]
     \label{thm:matrix_psd_trace_power_rank_one}
     \lean{Matrix.PosSemidef.trace_powers_constant_implies_rank_one}
     \lean{Matrix.primitive_trace_powers_constant_implies_rank_one_of_pos_semidef}
     \leanok
-    \uses{def:matrix_trace_rankone_predicates, thm:matrix_hermitian_trace_square_eigenvalues}
+    \uses{def:matrix_trace_rankone_predicates}
     Let $T$ be a finite real square matrix. If $T$ is positive semidefinite,
     normalized by $\tr(T)=1$, and has constant traces on all positive powers,
     then $T$ has a rank-one factorization. Consequently, under the same
