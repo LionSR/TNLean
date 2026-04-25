@@ -90,20 +90,26 @@ jobs:
 
             ### Tracking Issues
 
-            Tracking issues have the `tracking` label and use **native GitHub
-            tasklist blocks**:
+            Tracking issues have the `tracking` label. Children are attached as
+            **native GitHub sub-issues** (not as ` ```[tasklist] ` fences —
+            those were retired on 2025-04-30 and now render as raw Markdown).
 
-            ````markdown
-            ```[tasklist]
-            ### Tasks
-            - [ ] #101
-            - [ ] #102
-            ```
-            ````
+            The parent/child relationship is the source of truth and is stored
+            in the GitHub sub-issue API. Use:
 
-            Each `- [ ]` line contains *only* an issue reference (`#N`) — no
-            descriptions on the same line. When editing checkboxes, preserve
-            this format exactly.
+            - `mcp__github__issue_read` with `method: "get_sub_issues"` to list
+              the children of a tracker (each result includes `number`, `state`,
+              and `title`).
+            - `mcp__github__sub_issue_write` with `method: "add"` (parent
+              `issue_number`, child node id as `sub_issue_id`) to attach a new
+              sub-issue. Use `method: "remove"` to detach.
+
+            The tracker body **also** carries a human-readable mirror under a
+            `## Native sub-issues` heading — one `- #N — short note` bullet per
+            attached child. Keep this list aligned with the actual sub-issues
+            (add a line when you attach, drop or annotate a line when a child
+            closes). Never use `- [ ] #N` / `- [x] #N` checkboxes here — closure
+            state comes from the sub-issue itself, not from a checkbox.
 
             ### Label Taxonomy
 
@@ -140,15 +146,16 @@ jobs:
 
             These rules apply across all playbooks:
 
-            1. **Checkboxes track issue state, not PR state.** Only Playbook A
-               (issue closed) checks boxes; only Playbook A2 (issue reopened)
-               unchecks them. Playbook B never touches checkboxes — issue
-               closures from `Closes`/`Fixes` will fire Playbook A separately.
+            1. **Sub-issue state is the source of truth.** Progress is computed
+               from `get_sub_issues` (closed vs total). Never toggle `- [ ]` /
+               `- [x]` checkboxes — the body bullet list is a human-readable
+               mirror of the sub-issue panel, not a state store.
 
-            2. **`all-resolved` label.** After any checkbox change, count
-               checked vs total items. If all are checked, add `all-resolved`
-               and comment "🎉 All tasks complete — this tracking issue can
-               be closed." If any are unchecked, remove `all-resolved`
+            2. **`all-resolved` label.** After any sub-issue state change,
+               recount via `get_sub_issues`. If every child is closed (and
+               the tracker has at least one child), add `all-resolved` and
+               comment "🎉 All sub-issues closed — this tracking issue can
+               be closed." If any child is open, remove `all-resolved`
                (ignore errors if the label doesn't exist).
 
             3. **No duplicate comments.** Before commenting, consider whether
@@ -158,6 +165,20 @@ jobs:
                skip silently.** But if only one is found, still act on it
                — e.g., a PR with `Addresses #N` but no tracking issue
                should still get the linked-issue progress comment.
+
+            5. **Discovering the parent tracker.** Given a child issue `#N`,
+               find its parent tracker via the GraphQL `parent` /
+               `trackedInIssues` field. Concretely, run:
+               ```
+               query { repository(owner:"...", name:"...") {
+                 issue(number: N) {
+                   trackedInIssues(first: 5) { nodes { number state labels(first:20){nodes{name}} } }
+                 }
+               } }
+               ```
+               Filter to nodes whose labels include `tracking`. This replaces
+               the previous "search for tracking issues whose tasklist
+               contains `#N`" step — never grep the body for `#N`.
 
             ---
 
@@ -169,15 +190,20 @@ jobs:
 
             **When**: `issues` / `closed` with state_reason `completed`
 
-            1. Search for **open** tracking issues (label `tracking`) whose
-               tasklist contains `#N` (the closed issue number).
-            2. For each match, update the body: `- [ ] #N` → `- [x] #N`
+            1. Use Key Rules §5 to find parent tracking issues for `#N`.
+               Skip silently if none.
+            2. For each tracker, refresh the `## Native sub-issues` bullet
+               list in its body so it mirrors the current `get_sub_issues`
+               output. Annotate the line for `#N` (e.g., strike through, or
+               drop it and add a `[x] #N` line in a separate "Recently
+               closed" section if the tracker uses one). Do **not** add
+               `- [ ]` / `- [x]` checkbox toggles — sub-issue state is the
+               source of truth.
             3. Apply the `all-resolved` rule (see Key Rules §2).
             4. Suggest next steps (see §5 below).
             5. Comment on the tracking issue (check recent comments first
                to avoid duplicates — Key Rules §3):
-               "✅ #N (*title*) has been resolved. Updated checklist.
-               [X/Y tasks complete]
+               "✅ #N (*title*) has been resolved. [X/Y sub-issues closed]
 
                **Suggested next:** <one-line recommendation from §5>"
 
@@ -187,18 +213,18 @@ jobs:
 
             **When**: `issues` / `reopened`
 
-            1. Search for tracking issues (label `tracking`, **any state**
-               — a closed tracking issue still needs its checkbox fixed)
-               whose tasklist contains `#N` (the reopened issue number).
-            2. For each match, uncheck: `- [x] #N` → `- [ ] #N`
+            1. Use Key Rules §5 to find parent tracking issues (any state —
+               a closed tracker still needs its body mirror updated).
+            2. For each tracker, refresh the `## Native sub-issues` bullet
+               list to reflect that `#N` is open again. Do not toggle
+               checkboxes.
             3. Apply the `all-resolved` rule (see Key Rules §2).
             4. Read the reopened issue to understand why it was reopened
                (check recent comments, linked PRs). Suggest what needs
                to happen to re-resolve it (see §5, linked-issue variant).
             5. Comment on the tracking issue (check recent comments first
                to avoid duplicates — Key Rules §3):
-               "🔄 #N (*title*) has been reopened. Unchecked in tasklist.
-               [X/Y tasks complete]
+               "🔄 #N (*title*) has been reopened. [X/Y sub-issues closed]
 
                **Suggested next:** <why it was reopened + what to do>"
 
@@ -216,16 +242,18 @@ jobs:
             1. **Find linked issues.** Check the PR body for `Addresses #N`,
                `Partially addresses #N`, `Closes #N`, `Fixes #N`. Also check
                the branch name for `*/issue-{N}-*`.
-            2. **Find tracking issues** (label `tracking`, **open**) whose
-               body references the PR number, or whose tasklist references
-               any linked issue number.
+            2. **Find tracking issues** for each linked issue via Key Rules §5
+               (the GraphQL `trackedInIssues` parent link, filtered to nodes
+               with the `tracking` label and `state: OPEN`). Do not grep
+               tracker bodies.
             3. Suggest next steps for each tracking issue (see §5 below).
             4. **Comment on each tracking issue** (check recent comments
                first to avoid duplicates — Key Rules §3) with a summary:
-               the PR title, what it accomplished, current task progress,
-               and a follow-up suggestion. Example:
-               "📦 PR #X (*title*) merged. <what was done>. [X/Y tasks
-               complete]
+               the PR title, what it accomplished, current sub-issue
+               progress (from `get_sub_issues`), and a follow-up suggestion.
+               Example:
+               "📦 PR #X (*title*) merged. <what was done>. [X/Y sub-issues
+               closed]
 
                **Suggested next:** <one-line recommendation from §5>"
             5. **Comment on each linked issue that stays open** (i.e., the
@@ -241,9 +269,9 @@ jobs:
 
             Do NOT comment on issues that will be auto-closed by the PR
             (`Closes`/`Fixes`) — the auto-close fires Playbook A, which
-            handles both the checkbox and the tracking comment.
+            handles the body-mirror refresh and the tracking comment.
 
-            **Remember**: Do not touch checkboxes (Key Rules §1).
+            **Remember**: Do not toggle checkboxes (Key Rules §1).
 
             #### B2 — Scan for follow-ups
 
@@ -294,14 +322,21 @@ jobs:
               copied from the PR. Add `formalization` for sorry follow-ups,
               `blueprint-sync` for missing tags, `bug` for correctness issues.
 
-            Then add each new issue to the relevant **open** tracking
-            issue checklists:
-            - Append `- [ ] #<issue>` inside the tasklist block
-            - If the tracking issue had the `all-resolved` label, remove
-              it (new unchecked items mean it's no longer all-resolved).
+            Then attach each new issue to the relevant **open** tracking
+            issue as a native sub-issue:
+            - Resolve the new issue's GraphQL node id (the
+              `mcp__github__issue_write` create response includes it; otherwise
+              fetch via `gh api repos/.../issues/<n> -q .node_id`).
+            - Call `mcp__github__sub_issue_write` with `method: "add"`,
+              `issue_number: <tracker>`, `sub_issue_id: <node id>`.
+            - Refresh the tracker's `## Native sub-issues` bullet-list mirror:
+              append `- #<issue> — <one-line description>` so the body
+              matches the new sub-issue panel.
+            - If the tracking issue had the `all-resolved` label, remove it
+              (a new open sub-issue means it's no longer all-resolved).
             - Comment (check recent comments first — Key Rules §3):
-              "📋 Added follow-up issues from #<PR>: #<issue1>, …
-              [X/Y tasks complete]"
+              "📋 Attached follow-up sub-issues from #<PR>: #<issue1>, …
+              [X/Y sub-issues closed]"
             - If multiple follow-ups were created, suggest which one to
               tackle first (see §5, tracking-issue variant).
 
@@ -339,24 +374,24 @@ jobs:
 
             ### Tracking-issue variant (Playbooks A, A2, B1, B2)
 
-            1. Read the tracking issue body to find **remaining unchecked
-               tasks** (`- [ ] #N`).
+            1. Call `get_sub_issues` on the tracker to enumerate the
+               **open sub-issues** (state `OPEN`). These are the candidates.
             2. Check dependencies. First look at the tracking issue body
                itself — it often lists a suggested order or dependency
                notes. If that's sufficient, use it. Otherwise, read the
-               unchecked issues to check their **dependencies** ("Depends
+               open sub-issues to check their **dependencies** ("Depends
                on", "Blocked by", or references to other open issues).
-            3. Recommend a task whose dependencies are all resolved
-               (checked in the tracking issue or closed). If multiple
-               tasks are unblocked, prefer:
+            3. Recommend a sub-issue whose dependencies are all resolved
+               (closed sub-issues or unrelated closed issues). If multiple
+               are unblocked, prefer:
                - Tasks explicitly marked as high-priority or foundational
                - Tasks that unblock the most other tasks
                - Tasks with lower estimated difficulty
-            4. If **no tasks are unblocked** (all have open dependencies),
-               say so and recommend the dependency that should be tackled
-               first.
-            5. If **all tasks are complete**, suggest closing the tracking
-               issue.
+            4. If **no sub-issues are unblocked** (all have open
+               dependencies), say so and recommend the dependency that
+               should be tackled first.
+            5. If **every sub-issue is closed**, suggest closing the
+               tracking issue.
             6. Note downstream impact: briefly mention what completing
                the suggested task would unblock (other tasks, other
                tracking issues, or milestones in the broader project).

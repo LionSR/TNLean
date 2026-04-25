@@ -1,13 +1,34 @@
 name: Tracking Issue
-description: Create a tracking issue to monitor progress across multiple issues and PRs
+description: Create a tracking issue to monitor progress across multiple related issues and PRs
 labels: ["tracking"]
 body:
   - type: markdown
     attributes:
       value: |
         ## Tracking Issue
-        Use this template to create an issue that tracks progress across multiple related issues and PRs.
-        List each sub-task inside a native tasklist block so GitHub shows "Tracked by" on child issues.
+
+        Use this template to create an umbrella issue that tracks progress across
+        multiple related issues and PRs.
+
+        Children are attached as **native GitHub sub-issues** — not as a
+        ` ```[tasklist] ` block (that syntax was retired on 2025-04-30 and now
+        renders as raw Markdown). After opening this issue, attach each child
+        either from the sub-issues panel in the GitHub UI or via the API:
+
+        ```bash
+        # REST: attach #234 as a sub-issue of <this issue>
+        gh api -X POST repos/lionsr/tnlean/issues/<this-issue>/sub_issues \
+          -f sub_issue_id=$(gh api repos/lionsr/tnlean/issues/234 -q .id)
+        ```
+
+        From an MCP-aware agent, call `mcp__github__sub_issue_write` with
+        `method: "add"`.
+
+        The `## Native sub-issues` section below should mirror those attachments
+        as a human-readable bullet list — one `- #N — short note` line per child.
+        The list is informational; the parent/child link itself lives in the
+        sub-issue API. The `tracking-issue-sync` workflow keeps the bullet list
+        in sync with the actual sub-issues.
 
   - type: input
     id: area
@@ -28,26 +49,25 @@ body:
       required: true
 
   - type: textarea
-    id: tasks
+    id: subissues
     attributes:
-      label: Tracked Tasks
+      label: Native sub-issues
       description: |
-        List issues/PRs to track using a native tasklist block.
-        Each line must contain only the issue reference (no descriptions).
-        The workflow will automatically update checkboxes when issues are closed or PRs are merged.
+        Mirror the attached native sub-issues as plain markdown bullets. One
+        issue per line, in the form `- #N — short note`. Update this list (or
+        let the `tracking-issue-sync` workflow update it) when sub-issues are
+        added or closed. Do not paste `- [ ] #N` checkboxes or
+        ` ```[tasklist] ` fences.
       value: |
-        ```[tasklist]
-        ### Tasks
-        - [ ] #
-        - [ ] #
-        - [ ] #
-        ```
+        ## Native sub-issues
+
+        - #
+        - #
       placeholder: |
-        ```[tasklist]
-        ### Tasks
-        - [ ] #42
-        - [ ] #43
-        ```
+        ## Native sub-issues
+
+        - #42 — definitions layer
+        - #43 — main theorem assembly
     validations:
       required: true
 
@@ -55,7 +75,7 @@ body:
     id: notes
     attributes:
       label: Additional Notes
-      description: Any extra context, dependencies, or milestones
+      description: Any extra context, dependencies, milestones, or "Completed on `main`" history
       placeholder: Optional notes
     validations:
       required: false

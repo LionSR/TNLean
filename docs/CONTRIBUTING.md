@@ -78,7 +78,7 @@ Three issue templates are available in `.github/ISSUE_TEMPLATE/`:
 |----------|-------------|
 | **Formalization Task** | A specific theorem, definition, or lemma to formalize |
 | **Bug Report** | Broken proof, type error, sorry regression, CI failure |
-| **Tracking Issue** | Umbrella issue tracking a group of sub-issues |
+| **Tracking Issue** | Umbrella issue with native sub-issues attached |
 
 ### Formalization issues
 
@@ -101,33 +101,47 @@ RFP/MPDO 2/5 Commuting parent Hamiltonians and decorrelation theorem
 ...
 ```
 
-The tracking issue lists each sub-issue using a **native GitHub tasklist** block
-so that child issues display "Tracked by #N" in their sidebar:
+The tracking issue collects its children as **native GitHub sub-issues**, not as
+a tasklist block. (GitHub retired the ` ```[tasklist] ` fenced-block syntax on
+2025-04-30 — any remaining tasklist blocks now render as raw Markdown.) Native
+sub-issues show up in a dedicated panel on the parent issue, automatically
+display "Tracked by #N" in the child sidebar, and contribute to the parent's
+built-in progress bar.
 
-````markdown
-```[tasklist]
-### Tasks
-- [ ] #101
-- [ ] #102
-- [ ] #103
+#### Attaching a sub-issue
+
+From the GitHub UI: open the parent tracking issue and use **Create sub-issue**
+or **Add sub-issue** in the sub-issues panel.
+
+From the CLI / API:
+
+```bash
+# REST: attach issue #234 as a sub-issue of #232
+gh api -X POST repos/lionsr/tnlean/issues/232/sub_issues \
+  -f sub_issue_id=$(gh api repos/lionsr/tnlean/issues/234 -q .id)
 ```
-````
 
-**Important:** Each `- [ ]` line must contain *only* the issue reference (`#N`).
-Do not add descriptions on the same line — put those in the sub-issue titles or
-in prose above the tasklist block. Items that are not issue references (plain text
-TODOs) cannot go inside the tasklist block; list them as ordinary checkboxes
-outside it.
+From an MCP-aware agent: call `mcp__github__sub_issue_write` with
+`method: "add"`, `issue_number: <parent>`, and `sub_issue_id: <child node id>`.
+
+#### Body convention
+
+The tracking issue body should mirror the attached sub-issues as a plain
+markdown bullet list under a `## Native sub-issues` heading, one issue per line,
+in the form `- #N — short note`. The bullet list is for human readers; the
+parent/child link itself lives in the sub-issue API. Do not use ` ```[tasklist] `
+fences and do not paste `- [ ] #N` checkboxes — checkbox state is no longer the
+source of truth for completion.
 
 ### Tracking issues
 
 Use the **Tracking Issue** template (`.github/ISSUE_TEMPLATE/tracking-issue.yml`).
 Label with `tracking`. The `tracking-issue-sync` workflow will automatically:
 
-- Check boxes when referenced issues are closed (including auto-closure by merged PRs).
-- Uncheck boxes when referenced issues are reopened.
+- Refresh the tracking-issue body's bullet-list mirror when sub-issues close or reopen.
 - Post progress comments on linked issues when PRs are merged (what was done, what remains).
-- Add the `all-resolved` label when every task is complete.
+- Attach genuine PR follow-ups as new sub-issues of the relevant tracker.
+- Add the `all-resolved` label when every sub-issue is closed.
 
 ### Pinned issues
 
@@ -306,7 +320,7 @@ The following workflows run automatically:
 |----------|---------|-------------|
 | **Lean CI** (`lean_action_ci.yml`) | Push to `main`, PRs touching `.lean`/`lakefile.toml`/`lean-toolchain` | Runs `lake build` with Mathlib cache |
 | **Claude Code Review** (`claude-code-review.yml`) | PR opened/synced/reopened touching `.lean`, `.tex`, `lakefile.toml`, `lean-toolchain` | Automated review for sorrys, Mathlib style, type safety, performance, modularity, documentation |
-| **Issue Tracker** (`tracking-issue-sync.yml`) | Issue closed/reopened; PR merged/opened; review submitted | Updates tracking-issue checkboxes (checks on close, unchecks on reopen), posts progress comments on linked issues when PRs merge, scans merged PRs for follow-ups (deferred review feedback, new `sorry` markers, missing blueprint tags), creates follow-up issues with `follow-up` label, adds `all-resolved` when all tasks complete |
+| **Issue Tracker** (`tracking-issue-sync.yml`) | Issue closed/reopened; PR merged/opened | Reads sub-issue parent/child links to find the relevant tracking issue, refreshes the bullet-list mirror in the tracker body, posts progress comments on linked issues when PRs merge, scans merged PRs for follow-ups (deferred review feedback, new `sorry` markers, missing blueprint tags), creates follow-up issues with the `follow-up` label and **attaches them as sub-issues** of the relevant tracker, adds `all-resolved` when every sub-issue is closed |
 | **Blueprint Lint** (`lint-blueprint.yml`) | PRs touching blueprint files | Validates LaTeX blueprint for broken labels and references |
 | **Docs & Blueprint Sync** (`docs-blueprint-sync.lock.yml`) | Daily (weekdays) + manual dispatch | Detects stale documentation and opens a sync PR if needed |
 | **Lean Audit** (`lean-audit.yml`) | On demand | Audits Lean code for style and correctness |
