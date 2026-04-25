@@ -3,7 +3,7 @@
 ## Scope of this pass
 
 This pass does **not** delete the `biCF` field from `MPOTensor.HorizontalCFData`.
-Instead it adds a genuine finite-dimensional reduction step in
+Instead it adds a substantive finite-dimensional reduction step in
 `TNLean/MPS/MPDO/BiCFDerivation.lean` and sharpens the remaining blocker.
 
 ## What landed in Lean
@@ -30,11 +30,11 @@ Mathematical content:
    family, its linear independence exactly gives a dual coefficient family on the
    finite word space. Those dual coefficients reconstruct arbitrary tuples of block
    matrices, hence force `WordTupleSpanTop`.
-3. As corollaries, the same linear-independence endpoint yields block selectors,
-   a `HasBiCF` witness, and a direct constructor of `HorizontalCFData`.
+3. As corollaries, the same linear-independence criterion yields block selectors,
+   a `HasBiCF` witness, and a direct `HorizontalCFData`.
 
-So the issue is now reduced to a more precise endpoint than the earlier abstract
-selector package: it is enough to prove
+So the issue is now reduced to a more precise criterion than the earlier abstract
+selector data: it is enough to prove
 
 > `∃ L, LinearIndependent ℂ (MPSTensor.wordEntryFamily A L)`
 
@@ -42,7 +42,7 @@ from the canonical-form/BNT hypotheses of CPGSV17 Proposition IV.3.
 
 ## Why this still does not close #587
 
-The remaining gap is **not** a generic linear-algebra packaging issue anymore.
+The remaining gap is **not** a generic linear-algebra reduction issue anymore.
 It is the actual block-separation theorem from CPGSV17 / David2006.
 
 The current `HorizontalCFData` fields still do **not** imply `biCF` directly; the
@@ -84,15 +84,15 @@ Paper statement:
   Proposition `propblockinj`: after blocking at most `3 D^5` spins, any tensor in
   CF is in biCF.
 
-Current repo-side missing endpoint:
+Current repo-side missing criterion:
 
 - no theorem in `TNLean/MPS/BNT/` or `TNLean/MPS/CanonicalForm/` currently produces
   finite-length linear independence of the **block-entry** word family, or the
-  equivalent `WordTupleSpanTop`/selector package, from BNT minimality.
+  equivalent `WordTupleSpanTop`/selector data, from BNT minimality.
 
-## Honest status
+## Status
 
-This pass is genuine forward progress, not a vacuous alias: it proves that one
-concrete finite-dimensional endpoint (`wordEntryFamily` linear independence) is
+This pass is substantive forward progress, not a vacuous alias: it proves that one
+concrete finite-dimensional criterion (`wordEntryFamily` linear independence) is
 already sufficient to obtain the full abstract `biCF` witness. But the pass does
-**not** yet derive that endpoint from the paper's hypotheses, so issue #587 stays open.
+**not** yet derive that criterion from the paper's hypotheses, so issue #587 stays open.

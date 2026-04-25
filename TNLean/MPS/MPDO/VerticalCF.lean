@@ -9,14 +9,14 @@ import TNLean.MPS.SharedInfra.BlockAssembly
 /-!
 # Vertical canonical form for MPO tensors
 
-This file introduces a Lean-facing version of the vertical canonical-form
+This file introduces a block-decomposed version of the vertical canonical-form
 structure used in the MPDO analysis of arXiv:1606.00608, §4.4.
 
 The paper's Proposition IV.12 writes the tensor, after a local isometry on the
 physical indices, as a direct sum
 `⊕_α μ_α ⊗ M_α`, where the `μ_α` are positive diagonal matrices and the
 `M_α` form a basis of normal tensors (BNT). The current repository infrastructure
-packages canonical-form and BNT data using scalar block weights. We therefore
+uses canonical-form and BNT data with scalar block weights. We therefore
 encode the paper's diagonal matrices by **flattening** each diagonal entry of
 `μ_α` into a repeated positive scalar weight attached to the same block `M_α`.
 
@@ -105,7 +105,7 @@ lemma verticalTransferMap_apply (M : MPOTensor d D)
 
 /-- Lightweight horizontal canonical-form data for a family of blocks.
 
-This is the fragment of the full canonical-form package needed for the MPDO
+This is the fragment of the full canonical-form data needed for the MPDO
 vertical-canonical-form interface in this file: injective blocks, the
 left-canonical normalization, nonzero block weights, and block-injective
 canonical form (biCF). -/
@@ -123,17 +123,17 @@ structure HorizontalCFData {r : ℕ} {dim : Fin r → ℕ}
   `Δ k : Matrix (Fin (dim k)) (Fin (dim k)) ℂ` pairs to zero against every
   length-`L` block-diagonal product, then each `Δ k` vanishes individually.
 
-  This is the Lean-facing surrogate for [CPGSV17], Proposition IV.3
+  This is the block-decomposed surrogate for [CPGSV17], Proposition IV.3
   (arXiv:1606.00608, "`propblockinj`"): after blocking at most `3 D^5` spins,
   where `D` denotes the bond dimension in the paper (in this block-decomposed
-  Lean setting one may take `D` to be a global bound such as `⨆ k, dim k`),
+  setting one may take `D` to be a global bound such as `⨆ k, dim k`),
   any tensor in CF is in biCF, which is what the paper's Lemma L invokes to
   separate blockwise contributions.
 
   *Current repository status.* `TNLean/MPS/MPDO/BiCFDerivation.lean` now provides
-  several honest constructors for this field: from a full finite-length tuple-span
-  witness (`WordTupleSpanTop`), from the abstract selector package
-  (`PropBlockInjective`), and from the more concrete linear-independence endpoint
+  several exact routes to this field: from a full finite-length tuple-span
+  witness (`WordTupleSpanTop`), from the abstract selector data
+  (`PropBlockInjective`), and from the more concrete linear-independence criterion
   `wordEntryFamily`. What is still open is to derive one of those finite-length
   witnesses from the remaining canonical-form/BNT data alone, i.e. the actual
   Proposition-IV.3 theorem from [CPGSV17]. -/

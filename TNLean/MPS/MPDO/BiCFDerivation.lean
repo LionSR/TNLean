@@ -9,7 +9,7 @@ import Mathlib.LinearAlgebra.Finsupp.LinearCombination
 /-!
 # Finite-length sufficient conditions and obstructions for MPDO biCF
 
-The `HorizontalCFData` structure in `VerticalCF.lean` packages the block-injective
+The `HorizontalCFData` structure in `VerticalCF.lean` records the block-injective
 canonical-form property `biCF` as a hypothesis. This file records four complementary
 facts about that field.
 
@@ -20,12 +20,12 @@ facts about that field.
    then the `biCF` conclusion follows from nondegeneracy of the product trace
    pairing.
 
-2. A finite-dimensional **linear-independence endpoint**: if the scalar word-entry
+2. A finite-dimensional **linear-independence criterion**: if the scalar word-entry
    family obtained by reading off every block matrix entry is linearly
    independent, then those tuple-valued word evaluations already span the full
-   product algebra. This reduces biCF to a concrete linear-algebra target.
+   product algebra. This reduces biCF to a concrete linear-algebra condition.
 
-3. An abstract **Proposition IV.3-style selector package**: if each block is
+3. An abstract **Proposition IV.3-style selector data criterion**: if each block is
    block-injective at some common length and a second finite family of words
    isolates the individual blocks (identity on one block, zero on the others),
    then concatenating the two families yields the preceding span condition.
@@ -37,8 +37,8 @@ facts about that field.
    imply `biCF`. Thus the current `HorizontalCFData` fields other than `biCF`
    are insufficient for deriving that property.
 
-This isolates the missing ingredient more precisely: one still needs a genuine
-finite-length block-separation theorem producing either the selector package of
+This isolates the missing ingredient more precisely: one still needs a proved
+finite-length block-separation theorem producing either the selector data of
 item (3), or equivalently the word-entry linear independence of item (2), from
 canonical-form/BNT data.
 -/
@@ -260,8 +260,8 @@ theorem wordTupleSpanTop_of_wordEntryFamily_linearIndependent
             exact False.elim (hmem (Finset.mem_univ _))
     _ = M j a b := rfl
 
-/-- The linear-independence endpoint above gives the abstract Proposition-IV.3
-selector package as a corollary. -/
+/-- The linear-independence criterion above gives the abstract Proposition-IV.3
+selector data as a corollary. -/
 theorem hasBlockSelectorWords_of_wordEntryFamily_linearIndependent
     (A : (k : Fin r) → MPSTensor d (dim k))
     {L : ℕ} (hLI : LinearIndependent ℂ (wordEntryFamily A L)) :
@@ -269,7 +269,7 @@ theorem hasBlockSelectorWords_of_wordEntryFamily_linearIndependent
   hasBlockSelectorWords_of_wordTupleSpanTop A
     (wordTupleSpanTop_of_wordEntryFamily_linearIndependent A hLI)
 
-/-- The linear-independence endpoint above also yields the `HasBiCF` witness
+/-- The linear-independence criterion above also yields the `HasBiCF` witness
 used by `HorizontalCFData`. -/
 theorem hasBiCF_of_wordEntryFamily_linearIndependent
     (A : (k : Fin r) → MPSTensor d (dim k))
@@ -392,7 +392,7 @@ theorem wordTupleSpanTop_of_common_blockInjective_of_blockSelectorWords
   rw [← hassembled]
   exact hassembled_mem
 
-/-- The abstract Proposition-IV.3 selector package implies the finite-length
+/-- The abstract Proposition-IV.3 selector data imply the finite-length
 word-tuple span condition. -/
 theorem wordTupleSpanTop_of_propBlockInjective
     (A : (k : Fin r) → MPSTensor d (dim k))
@@ -402,7 +402,7 @@ theorem wordTupleSpanTop_of_propBlockInjective
   exact ⟨L + S,
     wordTupleSpanTop_of_common_blockInjective_of_blockSelectorWords A hInj hSel⟩
 
-/-- The abstract Proposition-IV.3 selector package implies `HasBiCF`. -/
+/-- The abstract Proposition-IV.3 selector data imply `HasBiCF`. -/
 theorem hasBiCF_of_propBlockInjective
     (A : (k : Fin r) → MPSTensor d (dim k))
     (hProp : PropBlockInjective A) :
@@ -499,7 +499,7 @@ theorem duplicateScalarBlocks_not_hasBiCF :
   have hentry := congrFun (congrFun hzero 0) 0
   simp [Δ] at hentry
 
-/-- Packaged counterexample to deriving finite-length block separation from the
+/-- Counterexample to deriving finite-length block separation from the
 other `HorizontalCFData` fields alone. -/
 theorem duplicateScalarBlocks_counterexample :
     (∀ k, IsInjective (duplicateScalarBlocks k)) ∧
@@ -528,8 +528,7 @@ theorem HorizontalCFData.toHasBiCF
     MPSTensor.HasBiCF A :=
   hCF.biCF
 
-/-- A finite-length block-separation hypothesis packages directly into
-`HorizontalCFData`. -/
+/-- A finite-length block-separation hypothesis yields `HorizontalCFData`. -/
 theorem horizontalCFData_of_wordTupleSpanTop
     (A : (k : Fin r) → MPSTensor d (dim k))
     (hInj : ∀ k, MPSTensor.IsInjective (A k))
@@ -560,8 +559,8 @@ theorem horizontalCFData_of_wordEntryFamily_linearIndependent
   horizontalCFData_of_wordTupleSpanTop A hInj hLeft hμne
     ⟨L, MPSTensor.wordTupleSpanTop_of_wordEntryFamily_linearIndependent A hLI⟩
 
-/-- Proposition-IV.3-style selector data packages directly into
-`HorizontalCFData` through the finite-length span criterion. -/
+/-- Proposition-IV.3-style selector data yield `HorizontalCFData` through the
+finite-length span criterion. -/
 theorem horizontalCFData_of_propBlockInjective
     (A : (k : Fin r) → MPSTensor d (dim k))
     (hInj : ∀ k, MPSTensor.IsInjective (A k))
@@ -580,7 +579,7 @@ theorem horizontalCFData_of_propBlockInjective
 /-!
 ## Why the remaining `HorizontalCFData` fields are still insufficient
 
-The strengthened hypotheses used above are genuinely extra data. A simple
+The strengthened hypotheses used above are strictly extra data. A simple
 obstruction shows that one cannot derive `biCF` from blockwise injectivity,
 left-canonicality, and nonzero (even pairwise distinct) weights alone.
 
@@ -595,8 +594,8 @@ any blocking length `L` there is only one word `w : Fin L → Fin 1`, and
 
 for that unique word, while `Δ ≠ 0`. Therefore `HasBiCF A` fails.
 
-The new predicate `PropBlockInjective` packages one abstract finite-length route,
-while `wordEntryFamily` packages a second, equivalent linear-algebra endpoint.
+The new predicate `PropBlockInjective` expresses one abstract finite-length route,
+while `wordEntryFamily` gives a second, equivalent linear-algebra criterion.
 What remains open is to derive either of those finite-length witnesses from the
 repository's current BNT / canonical-form hypotheses, i.e. to formalize the full
 content of Proposition IV.3 of arXiv:1606.00608.
