@@ -2086,13 +2086,62 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     gives the entrywise off-block-zero formulation.
 \end{proof}
 
+\begin{lemma}[Conditional boundary-matrix block split from projection span]
+    \label{lem:conditional_boundary_matrix_block_split_projection_span}
+    \lean{MPSTensor.groundSpaceMap_toTensorFromBlocks_mem_iSup_chainGroundSpace_of_reindexed_projectionSpan}
+    \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_le_iSup_of_reindexed_projectionSpan}
+    \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_of_reindexed_projectionSpan}
+    \lean{MPSTensor.parentHamiltonianGroundSpace_le_bntSpan_of_reindexed_projectionSpan}
+    \leanok
+    \uses{lem:route_b_block_diagonal_commutant_reduction,
+        lem:eval_word_block_diagonal_tensor, lem:mpv_mem_chain_ground_space,
+        lem:isup_chain_ground_space_block_le_assembled,
+        thm:chain_ground_space_eq_mpv_blk, lem:center_scalar}
+    Let $A$ be in canonical-form/BNT, and assume $1<L$, $N \ge L+1$, and
+    $0<m$.  Assume the remaining \#911 input: every virtual sector projection
+    lies in the pulled-back span of the length-$m$ word products of the assembled
+    tensor.  If a boundary matrix for the assembled tensor commutes with all
+    those length-$m$ words, then the vector obtained by applying the assembled
+    ground-space map to that boundary matrix lies in
+    $\bigsqcup_j \mathcal G_{N,L}(A_j)$.  Consequently, if every assembled
+    periodic-chain ground vector admits such a commuting boundary matrix
+    representation (the output of the wrapping-window comparison), then
+    \[
+        \mathcal G_{N,L}\bigl(\operatorname{Assemble}(\mu, A)\bigr)
+        \subseteq \bigsqcup_j \mathcal G_{N,L}(A_j),
+    \]
+    and together with the already-proved forward inclusion this gives the
+    corresponding conditional equality.  Composing the reverse inclusion with
+    blockwise injective uniqueness gives the conditional containment of the
+    assembled parent ground space in the BNT span; this lemma is not a restatement
+    of the final theorem, because it keeps the \#911 projection-span and boundary
+    representation inputs explicit.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:route_b_block_diagonal_commutant_reduction,
+        lem:eval_word_block_diagonal_tensor, lem:mpv_mem_chain_ground_space,
+        lem:isup_chain_ground_space_block_le_assembled,
+        thm:chain_ground_space_eq_mpv_blk, lem:center_scalar}
+    The commutant reduction makes the pulled-back boundary matrix block diagonal.
+    Restricting the same word-commutation identities to a diagonal block and
+    using the injectivity of that block shows, by the scalar-commutant lemma, that
+    each diagonal block is scalar.  Expanding the assembled ground-space map on a
+    block-diagonal boundary matrix gives a finite sum of scalar multiples of the
+    block MPV states, and each block MPV lies in its own periodic chain ground
+    space.  The reverse-inclusion, equality, and BNT-span forms are then
+    reformulations of this boundary-matrix calculation, combined with the forward
+    inclusion and the blockwise uniqueness theorem.
+\end{proof}
+
 \begin{theorem}[Containment in the BNT span by block decomposition]
     \label{thm:parent_ground_space_le_bnt_span}
     \lean{MPSTensor.parentHamiltonianGroundSpace_le_bntSpan_of_block_decomposition}
     \notready
     \uses{def:parent_hamiltonian_ground_space_bnt, def:bnt_span,
         thm:chain_ground_space_eq_mpv_blk,
-        lem:route_b_block_diagonal_commutant_reduction}
+        lem:conditional_boundary_matrix_block_split_projection_span}
     If $A$ is in canonical-form/BNT and $1 < L$ and $N \ge L + 1$, every vector in the
     assembled parent ground space should decompose into blockwise chain ground states, and
     therefore lie in the BNT span.
@@ -2100,12 +2149,14 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
 
 \begin{proof}
     \notready
-    The remaining structural step is the periodic block decomposition of the assembled chain
-    ground space. The block-diagonal commutant reduction above supplies the algebraic
-    off-block-zero step once the virtual sector projections are obtained from the finite word
-    span of the assembled
-    tensor. With that decomposition available, one applies the blockwise injective uniqueness
-    theorem to each block separately and recovers the BNT span.
+    The remaining structural step is the periodic block decomposition of the
+    assembled chain ground space.
+    Lemma~\ref{lem:conditional_boundary_matrix_block_split_projection_span}
+    supplies the conditional boundary-matrix endgame once the \#911 virtual-sector
+    projections are obtained from the finite word span of the assembled tensor and
+    the wrapping-window comparison provides a commuting boundary matrix. With that
+    decomposition available, one applies the blockwise injective uniqueness theorem
+    to each block separately and recovers the BNT span.
 \end{proof}
 
 \begin{theorem}[Ground space equals span of BNT]\label{thm:gs_eq_bnt_span}
