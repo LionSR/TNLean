@@ -204,45 +204,11 @@ lemma geom_sum_eventually_zero
     intro k
     rw [hGeom, hS0, mul_zero]
 
-/-- If two families of nonzero complex scalars have equal power sums for all sufficiently
-large exponents, then their power sums agree for ALL exponents.
-
-Reduces to `geom_sum_eventually_zero` by concatenating the two families with
-coefficients `+1` and `−1`. -/
-lemma power_sums_eq_of_eventually_eq
-    {m : ℕ} (a b : Fin m → ℂ)
-    (ha : ∀ i, a i ≠ 0) (hb : ∀ i, b i ≠ 0)
-    {M : ℕ}
-    (hEv : ∀ N, M ≤ N → ∑ i, a i ^ N = ∑ i, b i ^ N) :
-    ∀ k, ∑ i, a i ^ k = ∑ i, b i ^ k := by
-  let w : Fin (m + m) → ℂ := Fin.append a b
-  let coeffs : Fin (m + m) → ℂ := Fin.append (fun _ => (1 : ℂ)) (fun _ => (-1 : ℂ))
-  have hw : ∀ i, w i ≠ 0 :=
-    fun i => Fin.addCases
-      (fun j => by show w (Fin.castAdd m j) ≠ 0
-                   rw [show w (Fin.castAdd m j) = a j from Fin.append_left a b j]; exact ha j)
-      (fun j => by show w (Fin.natAdd m j) ≠ 0
-                   rw [show w (Fin.natAdd m j) = b j from Fin.append_right a b j]; exact hb j)
-      i
-  have hDecomp : ∀ k, ∑ i, coeffs i * w i ^ k = (∑ i, a i ^ k) - (∑ i, b i ^ k) := by
-    intro k
-    simp only [coeffs, w, Fin.sum_univ_add, Fin.append_left, Fin.append_right,
-               one_mul, neg_one_mul, Finset.sum_neg_distrib, sub_eq_add_neg]
-  have hEvCombined : ∀ N, M ≤ N → ∑ i, coeffs i * w i ^ N = 0 := by
-    intro N hN
-    rw [hDecomp, sub_eq_zero]
-    exact hEv N hN
-  have hAll := geom_sum_eventually_zero w coeffs hw hEvCombined
-  intro k
-  have hk := hAll k
-  rw [hDecomp] at hk
-  exact sub_eq_zero.mp hk
-
 /-- If two nonzero finite weight families have equal power sums for all sufficiently
 large exponents, then their power sums agree for every exponent.
 
-This is the unequal-cardinality form of `power_sums_eq_of_eventually_eq`. The
-proof concatenates the two families with coefficients `+1` and `-1` and uses
+This is the unequal-cardinality form used to recover copy counts. The proof
+concatenates the two families with coefficients `+1` and `-1` and uses
 `geom_sum_eventually_zero`. -/
 lemma power_sums_eq_of_eventually_eq_hetero
     {m n : ℕ} (a : Fin m → ℂ) (b : Fin n → ℂ)
@@ -278,6 +244,20 @@ lemma power_sums_eq_of_eventually_eq_hetero
   have hk := hAll k
   rw [hDecomp] at hk
   exact sub_eq_zero.mp hk
+
+/-- If two equal-cardinality families of nonzero complex scalars have equal power sums for all
+sufficiently large exponents, then their power sums agree for every exponent.
+
+This is the equal-cardinality specialization of
+`power_sums_eq_of_eventually_eq_hetero`. -/
+lemma power_sums_eq_of_eventually_eq
+    {m : ℕ} (a b : Fin m → ℂ)
+    (ha : ∀ i, a i ≠ 0) (hb : ∀ i, b i ≠ 0)
+    {M : ℕ}
+    (hEv : ∀ N, M ≤ N → ∑ i, a i ^ N = ∑ i, b i ^ N) :
+    ∀ k, ∑ i, a i ^ k = ∑ i, b i ^ k := by
+  exact power_sums_eq_of_eventually_eq_hetero
+    (m := m) (n := m) a b ha hb (M := M) hEv
 
 /-- Eventual equality of coefficient power sums forces equality of multiplicities. -/
 theorem copies_eq_of_eventually_coeff_eq
@@ -353,7 +333,7 @@ theorem weight_multiset_eq_of_sameMPV_bnt
     ∀ j : Fin g,
       Finset.univ.val.map (S.weight j) =
         Finset.univ.val.map (fun q => T.weight j (Fin.cast (hCopies j) q)) := by
-  obtain ⟨N0, hCoeffEventuallyEq⟩ := coeff_eventually_eq_of_sameMPV basis S T hLI hSame
+  obtain ⟨_, hCoeffEventuallyEq⟩ := coeff_eventually_eq_of_sameMPV basis S T hLI hSame
   have hCoeffAllPosEq := eventually_coeff_eq_implies_all_pos_eq S T hCopies hCoeffEventuallyEq
   exact weight_multiset_eq_of_copies_eq_of_coeff_eq S T hCopies hCoeffAllPosEq
 
@@ -375,7 +355,7 @@ theorem exists_copies_eq_and_weight_multiset_eq_of_sameMPV_bnt
       ∀ j : Fin g,
         Finset.univ.val.map (S.weight j) =
           Finset.univ.val.map (fun q => T.weight j (Fin.cast (hCopies j) q)) := by
-  obtain ⟨N0, hCoeffEventuallyEq⟩ := coeff_eventually_eq_of_sameMPV basis S T hLI hSame
+  obtain ⟨_, hCoeffEventuallyEq⟩ := coeff_eventually_eq_of_sameMPV basis S T hLI hSame
   let hCopies : ∀ j, S.copies j = T.copies j :=
     copies_eq_of_eventually_coeff_eq S T hCoeffEventuallyEq
   refine ⟨hCopies, ?_⟩
@@ -716,6 +696,21 @@ structure SectorBasisMatching (P Q : SectorDecomposition d) where
       (cast (congr_arg (MPSTensor d) (dim_eq j)) (P.basis j))
       (Q.basis (perm j))
 
+private lemma sectorBasisMatchExists_of_fields
+    {P Q : SectorDecomposition d}
+    (perm : Fin P.basisCount ≃ Fin Q.basisCount)
+    (dim_eq : ∀ j : Fin P.basisCount, P.basisDim j = Q.basisDim (perm j))
+    (basis_equiv : ∀ j : Fin P.basisCount,
+      GaugePhaseEquiv (d := d)
+        (cast (congr_arg (MPSTensor d) (dim_eq j)) (P.basis j))
+        (Q.basis (perm j))) :
+    ∀ j : Fin P.basisCount,
+      ∃ hdim : P.basisDim j = Q.basisDim (perm j),
+        GaugePhaseEquiv (d := d)
+          (cast (congr_arg (MPSTensor d) hdim) (P.basis j))
+          (Q.basis (perm j)) :=
+  fun j => ⟨dim_eq j, basis_equiv j⟩
+
 namespace SectorBasisMatching
 
 variable {P Q : SectorDecomposition d}
@@ -728,7 +723,7 @@ lemma basis_match_exists (M : SectorBasisMatching P Q) :
         GaugePhaseEquiv (d := d)
           (cast (congr_arg (MPSTensor d) hdim) (P.basis j))
           (Q.basis (M.perm j)) :=
-  fun j => ⟨M.dim_eq j, M.basis_equiv j⟩
+  sectorBasisMatchExists_of_fields M.perm M.dim_eq M.basis_equiv
 
 /-- Build a `SectorBasisMatching` from a bijective index correspondence together with the
 per-block copy / dimension / gauge-phase data.
@@ -769,7 +764,7 @@ lemma basis_match_exists (M : SectorBasisPreMatching P Q) :
         GaugePhaseEquiv (d := d)
           (cast (congr_arg (MPSTensor d) hdim) (P.basis j))
           (Q.basis (M.perm j)) :=
-  fun j => ⟨M.dim_eq j, M.basis_equiv j⟩
+  sectorBasisMatchExists_of_fields M.perm M.dim_eq M.basis_equiv
 
 /-- Gauge-phase pre-matching gives the MPV phase-scaling relation for each basis block. -/
 lemma phase_match_exists (M : SectorBasisPreMatching P Q) :

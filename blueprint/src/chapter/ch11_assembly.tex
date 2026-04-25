@@ -511,7 +511,7 @@ single weighted block.
 \label{thm:route_b_hetero_phase_match_copies}
 	\lean{MPSTensor.fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_phaseMatch_exists_copies}
 	\leanok
-	\uses{thm:route_b_equal}
+	\uses{def:paper_sector_data}
 	Let $P$ and $Q$ be sector decompositions whose basis blocks are matched by
 	a permutation and whose matched MPVs differ by nonzero phase powers. If
 	the total MPV families agree and the basis MPVs of $P$ are eventually
@@ -536,8 +536,7 @@ single weighted block.
 \label{thm:sector_basis_pre_matching_to_matching}
 	\lean{MPSTensor.SectorBasisPreMatching.exists_sectorBasisMatching_of_sameMPV}
 	\leanok
-	\uses{def:sector_basis_pre_matching, def:sector_basis_matching,
-		thm:route_b_hetero_phase_match_copies}
+	\uses{def:sector_basis_pre_matching, def:sector_basis_matching}
 	Let $M$ be a sector basis pre-matching between $P$ and $Q$. If the total
 	MPV families agree and the basis MPVs of $P$ are eventually linearly
 	independent, then the copy-count equalities recovered by
@@ -554,16 +553,37 @@ single weighted block.
 	fields needed for Definition~\ref{def:sector_basis_matching}.
 \end{proof}
 
+\begin{theorem}[Heterogeneous sector comparison from a pre-matching]%
+\label{thm:route_b_hetero_pre_matching}
+	\lean{MPSTensor.fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_preMatching}
+	\leanok
+	\uses{def:sector_basis_pre_matching, def:paper_sector_data}
+	Let $M$ be a sector basis pre-matching between sector decompositions $P$
+	and $Q$. If the total MPV families agree and the basis MPVs of $P$ are
+	eventually linearly independent, then the matched copy counts agree, and
+	after absorbing the gauge phases into the weights of $Q$ the corresponding
+	sector-weight multisets agree.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{thm:route_b_hetero_phase_match_copies}
+	The gauge-phase equivalences in the pre-matching give the phase-scaling
+	identities for the matched basis MPVs.
+	Theorem~\ref{thm:route_b_hetero_phase_match_copies} then gives the
+	copy-count equalities and the phase-adjusted multiset equalities.
+\end{proof}
+
 \begin{theorem}[Overlap rigidity gives a sector basis matching]%
 \label{thm:sector_basis_matching_from_overlap_ortho_span}
 	\lean{MPSTensor.exists_sectorBasisMatching_of_overlapOrtho_span_sameMPV}
 	\leanok
-	\uses{thm:bnt_perm_simple, thm:sector_basis_pre_matching_to_matching}
-	Assume the basis blocks of two sector decompositions are trace-preserving
-	and injective, have asymptotically orthonormal overlaps within each family,
-	and span the same MPV subspace at every system size. If the total MPV
-	families also agree, then there exists a sector basis matching between the
-	two decompositions.
+	\uses{def:paper_sector_data, def:sector_basis_matching, def:mpv_overlap}
+	Assume the basis blocks of two sector decompositions have nonzero bond
+	dimensions, are trace-preserving and injective, have asymptotically
+	orthonormal overlaps within each family, and span the same MPV subspace at
+	every system size. If the total MPV families also agree, then there exists a
+	sector basis matching between the two decompositions.
 \end{theorem}
 
 \begin{proof}
