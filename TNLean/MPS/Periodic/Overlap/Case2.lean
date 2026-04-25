@@ -50,11 +50,10 @@ the original blocked tensor, and `hCyclic` ensures the block indexing
 follows the cyclic orbit structure of the transfer map's peripheral
 spectrum (see `IsCyclicSectorDecomp`).
 
-The current proof-structure refactor isolates the remaining upstream gap in the
-private rigidity placeholder `sectorFixedPointAlgebraRigidity_cyclic_sector_supported`
-in `SelfOverlap.lean`; the public theorem
-`SelfOverlap.hProjStep_cyclic_sector_supported` packages the corresponding
-fixed-point projection step for follow-up use. -/
+The orbit-lift / corner-irreducibility input is now supplied unconditionally by
+`SelfOverlap.primitive_and_irreducible_sectorBlocks_of_cyclicDecomp`. The
+remaining gaps in this file lie further downstream, in the sector-match and
+mixed-overlap arguments. -/
 lemma sectorBlocked_isNormal_of_isPeriodic
     [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
     (hP : IsPeriodic m A)
