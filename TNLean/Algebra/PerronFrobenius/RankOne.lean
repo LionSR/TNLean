@@ -156,8 +156,8 @@ private lemma hasRankOneFactorization_unitary_conj
     Finset.mul_sum, Finset.sum_mul]
   ring_nf
 
-/-- For a positive semidefinite matrix over an `RCLike` field, the trace of
-the square is the sum of the squares of its Hermitian eigenvalues. -/
+/-- For a positive semidefinite matrix over the real or complex numbers, the
+trace of the square is the sum of the squares of its Hermitian eigenvalues. -/
 theorem PosSemidef.trace_sq_eq_sum_eigenvalues_sq
     {ι 𝕜 : Type*} [Fintype ι] [DecidableEq ι] [RCLike 𝕜]
     {T : Matrix ι ι 𝕜} (hT : T.PosSemidef) :
@@ -229,8 +229,10 @@ theorem PosSemidef.trace_powers_constant_implies_rank_one
   exact ⟨a, b, by rw [hspec, hab]⟩
 
 /-- Positive semidefiniteness and trace normalization establish the auxiliary
-primitive rank-one hypothesis. The primitive hypothesis is accepted and ignored:
-the PSD theorem is stronger once the trace normalization is available. -/
+rank-one hypothesis from Lemma C.4.
+
+The PSD theorem is stronger than the primitive-matrix criterion once the trace
+normalization is available. -/
 theorem primitive_trace_powers_constant_implies_rank_one_of_pos_semidef
     {T : Matrix (Fin n) (Fin n) ℝ}
     (hPSD : T.PosSemidef) (hTrace : Matrix.trace T = 1) :

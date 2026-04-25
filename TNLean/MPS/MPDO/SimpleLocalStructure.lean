@@ -262,7 +262,7 @@ theorem traceMatrixRe_nonneg (data : ExplicitEtaOperators hη) (k h : Fin hη.m)
     0 ≤ data.traceMatrixRe k h := by
   have htr : 0 ≤ Matrix.trace (data.eta k h) :=
     (data.eta_pos k h).trace_nonneg
-  exact htr.1
+  exact (Complex.le_def.mp htr).1
 
 end ExplicitEtaOperators
 
