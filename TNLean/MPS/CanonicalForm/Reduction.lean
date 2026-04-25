@@ -54,6 +54,22 @@ This is the "irreducible" condition used in the canonical-form reduction. -/
 def IsIrreducibleTensor (A : MPSTensor d D) : Prop :=
   ¬ HasInvariantProj A
 
+/-- Nonzero scalar rescaling preserves tensor irreducibility. -/
+theorem isIrreducibleTensor_smul
+    {c : ℂ} (hc : c ≠ 0) (A : MPSTensor d D) (hIrr : IsIrreducibleTensor A) :
+    IsIrreducibleTensor (fun i => c • A i) := by
+  intro hHas
+  apply hIrr
+  rcases hHas with ⟨P, hPproj, hP0, hP1, hLower⟩
+  refine ⟨P, hPproj, hP0, hP1, ?_⟩
+  intro i
+  have h : c • ((1 - P) * A i * P) = 0 := by
+    calc
+      c • ((1 - P) * A i * P) = (1 - P) * (c • A i) * P := by
+        simp [Matrix.mul_assoc]
+      _ = 0 := hLower i
+  exact (smul_eq_zero.mp h).resolve_left hc
+
 /-! ## Auxiliary lemmas about casts and MPVs -/
 
 section CastLemmas
