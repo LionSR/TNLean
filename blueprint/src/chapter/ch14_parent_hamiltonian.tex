@@ -1052,7 +1052,9 @@ interaction projectors commute with each other.
 \begin{remark}[Product-pair data for NNCPH]%
     \label{rem:product_pair_bridge}
     \lean{MPSTensor.productPairWindow}
+    \lean{MPSTensor.productPairWindow_one}
     \lean{MPSTensor.productPairState}
+    \lean{MPSTensor.productPairState_one}
     \lean{MPSTensor.HasProductPairMPV}
     \lean{MPSTensor.HasProductPairLocalProjectors}
     \lean{MPSTensor.HasProductPairLocalProjectors.isNNCPH}
@@ -1064,7 +1066,15 @@ interaction projectors commute with each other.
     \lean{MPSTensor.AppendixBStructuralData.exists_ofRFP}
     \lean{MPSTensor.AppendixBStructuralData.ofRFP}
     \lean{MPSTensor.AppendixBStructuralData.twoSiteAmplitude}
+    \lean{MPSTensor.AppendixBStructuralData.coreTensor}
+    \lean{MPSTensor.AppendixBStructuralData.coreTensor_apply}
+    \lean{MPSTensor.AppendixBStructuralData.gaugeEquiv_coreTensor}
+    \lean{MPSTensor.AppendixBStructuralData.mpv_eq_coreTensor}
+    \lean{MPSTensor.AppendixBStructuralData.twoSiteAmplitude_eq_mpv}
+    \lean{MPSTensor.AppendixBStructuralData.twoSiteAmplitude_eq_coreTensor_mpv}
+    \lean{MPSTensor.AppendixBStructuralData.mpv_eq_productPairState_one}
     \lean{MPSTensor.AppendixBProductPairExtraction}
+    \lean{MPSTensor.AppendixBProductPairExtraction.ofCoreTensorFactorization}
     \lean{MPSTensor.AppendixBProductPairExtraction.toProductPairBridge}
     \lean{MPSTensor.AppendixBProductPairExtraction.commuting_twoSite_localTerms}
     \lean{MPSTensor.commuting_twoSite_localTerms_of_rfp_of_appendixBExtraction}
@@ -1072,14 +1082,19 @@ interaction projectors commute with each other.
     \leanok
     On an even chain, one can extract the $p$-th adjacent two-site word of a
     configuration and compare the MPS coefficients with a repeated two-site pair state.
-    The corresponding data record both that coefficient identity and a
-    family of idempotent chain-level projectors whose values are the nearest-neighbor
-    local terms. The final theorem in these data shows that these local terms commute.
-    Consequently the same data yields the nearest-neighbor commuting condition
-    on every finite chain. The Appendix~B construction extracts the already-proved
-    structural decomposition from normal left-canonical RFP data and identifies the
-    remaining internal step: construct product-pair extraction through the two-site
-    amplitude determined by that structural witness.
+    The one-pair case recovers the original two-site amplitude. For an Appendix~B
+    structural witness, the gauge-removed tensor $\Lambda U_i$ has the same MPV
+    coefficients as $A$, and the structural two-site amplitude is exactly the
+    two-site MPV coefficient. Hence the coefficient part of the extraction reduces
+    to proving the repeated-pair identity for this gauge-removed tensor. The
+    corresponding data also include a family of idempotent chain-level projectors
+    whose values are the nearest-neighbor local terms. The final theorem in these
+    data shows that these local terms commute. Consequently the same data yields
+    the nearest-neighbor commuting condition on every finite chain. The Appendix~B
+    construction extracts the already-proved structural decomposition from normal
+    left-canonical RFP data and identifies the remaining internal step: construct
+    product-pair extraction through the two-site amplitude determined by that
+    structural witness.
 \end{remark}
 
 \begin{theorem}[NNCPH implies RFP]\label{thm:nncph_implies_rfp}
