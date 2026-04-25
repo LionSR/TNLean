@@ -403,10 +403,11 @@ reduction hypothesis.
     \uses{def:non_ti_chain}
     Let $\mathbf{A} = (A_0, \ldots, A_{n-1})$ be an $n$-site chain and let
     $\zeta \in \C$. If $\zeta \mathbf{A}$ denotes the chain obtained by
-    replacing each site tensor $A_k$ with $\zeta A_k$, then
+    replacing each site tensor $A_k$ with $\zeta A_k$, and if
+    $\widetilde{\mathbf{A}}$ denotes the combined tensor of $\mathbf{A}$,
+    then
     \[
-        \operatorname{chainCombinedTensor}(\zeta \mathbf{A})
-        = \zeta\, \operatorname{chainCombinedTensor}(\mathbf{A}).
+        \widetilde{\zeta \mathbf{A}} = \zeta\, \widetilde{\mathbf{A}}.
     \]
 \end{lemma}
 
@@ -441,7 +442,7 @@ reduction hypothesis.
 \begin{proof}
     \leanok
     \uses{lem:chainCombinedTensor_smul_chain,
-        thm:fundamentalTheorem_injective_chain}
+        thm:gauge_invariance, thm:fundamentalTheorem_injective_chain}
     If the combined tensor of $\mathbf{B}$ differs from that of $\mathbf{A}$
     by a gauge and a nonzero scalar $\zeta$, rescale each site of
     $\mathbf{B}$ by $\zeta^{-1}$. Lemma~\ref{lem:chainCombinedTensor_smul_chain}
