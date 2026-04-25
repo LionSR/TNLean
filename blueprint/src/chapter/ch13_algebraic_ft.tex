@@ -1650,6 +1650,38 @@ Theorem~2 of~\cite{Molnar2018NormalPEPS}.
     Every vertex is either $u$, $v$, or different from both.
 \end{proof}
 
+\begin{theorem}[Product splitting at an edge]%
+    \label{thm:peps_prod_univ_splitAtEdge}
+    \lean{TNLean.PEPS.prod_univ_splitAtEdge}
+    \leanok
+    \uses{def:peps_edgeMiddleVertices, thm:peps_edgeVertices_union}
+    For any edge $e = (u,v)$ and any function $f$ on the vertex set with values
+    in a commutative monoid $M$,
+    \[
+        \prod_{x \in V} f(x) = f(u) \Bigl(\prod_{x \in V \setminus \{u,v\}} f(x)\Bigr) f(v).
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    Isolate the two distinguished endpoints in the product over $V$ and group
+    the remaining factors into the middle region.
+\end{proof}
+
+\begin{theorem}[PEPS coefficient splitting at an edge]%
+    \label{thm:peps_stateCoeff_splitAtEdge}
+    \lean{TNLean.PEPS.stateCoeff_splitAtEdge}
+    \leanok
+    \uses{def:peps_stateCoeff, def:peps_edgeMiddleVertices,
+        thm:peps_prod_univ_splitAtEdge}
+    For any edge $e = (u,v)$, each summand in the PEPS coefficient factors into
+    the tensor contribution at $u$, the product over the middle region
+    $V \setminus \{u,v\}$, and the tensor contribution at $v$.
+\end{theorem}
+\begin{proof}\leanok
+    Expand \lean{TNLean.PEPS.stateCoeff} and apply
+    \lean{TNLean.PEPS.prod_univ_splitAtEdge} to the per-vertex product inside
+    each summand.
+\end{proof}
+
 \begin{definition}[Sharpened local gauge lift datum]%
     \label{def:peps_hasLocalGaugeLift}
     \lean{TNLean.PEPS.HasLocalGaugeLift}
