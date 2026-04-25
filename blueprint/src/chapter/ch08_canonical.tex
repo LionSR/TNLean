@@ -139,12 +139,13 @@ and~\cite[Ch.~6]{Wolf2012Quantum}.
 	remaining factor $\eta_k$ is a unit-modulus phase.
 \end{theorem}
 
-\begin{proof}\leanok\uses{thm:mpv_decomposition, lem:eval_word_smul}
+\begin{proof}\leanok\uses{thm:mpv_decomposition, lem:mpv_smul}
 	By the MPV decomposition
 	(Theorem~\ref{thm:mpv_decomposition}),
 	the $k$-th contribution of $\bigoplus_k \mu_k A_k$ is
 	$\mu_k^N V^{(N)}(A_k)_\sigma$.
-	For $B_k = |\mu_k| A_k$, Lemma~\ref{lem:eval_word_smul} gives
+	For $B_k = |\mu_k| A_k$, the MPV-scaling lemma
+	(Lemma~\ref{lem:mpv_smul}) gives
 	$V^{(N)}(B_k)_\sigma = |\mu_k|^N V^{(N)}(A_k)_\sigma$.
 	Hence
 	$\eta_k^N V^{(N)}(B_k)_\sigma
