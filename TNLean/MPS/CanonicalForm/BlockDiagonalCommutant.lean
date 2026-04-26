@@ -5,6 +5,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -- Provides `Matrix.blockProjection`, `Matrix.IsBlockDiagonal'`, and the
 -- projection-commutant criterion used below.
 import TNLean.Algebra.ScalarCommutant
+import TNLean.MPS.BNT.Construction
+import TNLean.MPS.MPDO.BiCFDerivation
 import TNLean.MPS.SharedInfra.BlockAssembly
 
 /-!
@@ -210,6 +212,20 @@ theorem blockProjection_mem_span_reindexed_toTensorFromBlocks_of_wordTuple_span_
   rw [hgen]
   exact hproj
 
+/-- `WordTupleSpanTop` spelling of
+`blockProjection_mem_span_reindexed_toTensorFromBlocks_of_wordTuple_span_eq_top`. -/
+theorem blockProjection_mem_span_reindexed_toTensorFromBlocks_of_wordTupleSpanTop
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k)) {m : ℕ}
+    (hμ : ∀ k : Fin r, μ k ≠ 0)
+    (hSpan : WordTupleSpanTop A m) :
+    ∀ k : Fin r,
+      Matrix.blockProjection (n := fun k : Fin r => Fin (dim k)) (R := ℂ) k ∈
+        Submodule.span ℂ (Set.range fun ω : Fin m → Fin d =>
+          Matrix.reindex finSigmaFinEquiv.symm finSigmaFinEquiv.symm
+            (evalWord (toTensorFromBlocks (d := d) (μ := μ) A) (List.ofFn ω))) := by
+  exact blockProjection_mem_span_reindexed_toTensorFromBlocks_of_wordTuple_span_eq_top
+    (d := d) (dim := dim) μ A hμ (by simpa [WordTupleSpanTop, wordTuple] using hSpan)
+
 /-- Reindexed word-span version of the block-diagonal commutant criterion.
 
 Let `B` be a tensor whose bond space is the reindexed direct sum
@@ -268,6 +284,77 @@ theorem isBlockDiagonal'_of_commutes_reindexed_toTensorFromBlocks_of_wordTuple_s
     (B := toTensorFromBlocks (d := d) (μ := μ) A)
     (blockProjection_mem_span_reindexed_toTensorFromBlocks_of_wordTuple_span_eq_top
       (d := d) (dim := dim) μ A hμ hSpan)
+    hComm
+
+/-- Canonical-form/BNT data plus finite block-selector words give full product-word span.
+
+The remaining paper-level separation step is the construction of the selector words
+from the BNT non-equivalence hypothesis. Once those selectors are available,
+canonical-form injectivity supplies a one-letter prefix spanning the selected
+block algebra, and concatenating prefix and selector words spans the whole
+product algebra. -/
+theorem wordTupleSpanTop_of_isCanonicalFormBNT_of_blockSelectorWords
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hCF : IsCanonicalFormBNT μ A) {S : ℕ}
+    (hSel : HasBlockSelectorWords A S) :
+    WordTupleSpanTop A (1 + S) := by
+  refine wordTupleSpanTop_of_common_blockInjective_of_blockSelectorWords
+    (A := A) (L := 1) (S := S) ?_ hSel
+  intro k
+  exact isNBlkInjective_one_of_isInjective (hCF.toHasInjectiveBlocks.block_injective k)
+
+/-- Positive-length product-word span obtained from canonical-form/BNT data and
+finite block-selector words.
+
+This is the issue-#934 goal shape with the still-missing selector-word theorem
+kept explicit rather than replaced by the conclusion. -/
+theorem exists_pos_productWordSpan_of_isCanonicalFormBNT_of_blockSelectorWords
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hCF : IsCanonicalFormBNT μ A) {S : ℕ}
+    (hSel : HasBlockSelectorWords A S) :
+    ∃ m : ℕ, 0 < m ∧
+      Submodule.span ℂ (Set.range fun ω : Fin m → Fin d =>
+        fun k : Fin r => evalWord (A k) (List.ofFn ω)) =
+      (⊤ : Submodule ℂ
+        ((k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) := by
+  refine ⟨1 + S, Nat.add_pos_left Nat.zero_lt_one S, ?_⟩
+  simpa [WordTupleSpanTop, wordTuple] using
+    wordTupleSpanTop_of_isCanonicalFormBNT_of_blockSelectorWords μ A hCF hSel
+
+/-- Canonical-form/BNT data and selector words give the projection-span input for
+the assembled tensor. -/
+theorem blockProjection_mem_span_reindexed_toTensorFromBlocks_of_bntSelectorWords
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hCF : IsCanonicalFormBNT μ A) {S : ℕ}
+    (hSel : HasBlockSelectorWords A S) :
+    ∀ k : Fin r,
+      Matrix.blockProjection (n := fun k : Fin r => Fin (dim k)) (R := ℂ) k ∈
+        Submodule.span ℂ (Set.range fun ω : Fin (1 + S) → Fin d =>
+          Matrix.reindex finSigmaFinEquiv.symm finSigmaFinEquiv.symm
+            (evalWord (toTensorFromBlocks (d := d) (μ := μ) A) (List.ofFn ω))) := by
+  exact blockProjection_mem_span_reindexed_toTensorFromBlocks_of_wordTupleSpanTop
+    (d := d) (dim := dim) μ A hCF.toHasStrictOrderedNonzeroWeights.mu_ne_zero
+    (wordTupleSpanTop_of_isCanonicalFormBNT_of_blockSelectorWords μ A hCF hSel)
+
+/-- Selector-word version of the assembled-tensor commutant criterion.
+
+Under canonical-form/BNT data, finite block selectors replace the product-word
+span hypothesis in the commutant reduction. The construction of those selectors
+from BNT separation is the remaining finite-dimensional separation theorem. -/
+theorem isBlockDiagonal'_of_commutes_reindexed_toTensorFromBlocks_of_bntSelectorWords
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hCF : IsCanonicalFormBNT μ A) {S : ℕ}
+    (hSel : HasBlockSelectorWords A S)
+    {X : Matrix (Fin (∑ k : Fin r, dim k)) (Fin (∑ k : Fin r, dim k)) ℂ}
+    (hComm : ∀ ω : Fin (1 + S) → Fin d,
+      X * evalWord (toTensorFromBlocks (d := d) (μ := μ) A) (List.ofFn ω) =
+        evalWord (toTensorFromBlocks (d := d) (μ := μ) A) (List.ofFn ω) * X) :
+    Matrix.IsBlockDiagonal'
+      (Matrix.reindex finSigmaFinEquiv.symm finSigmaFinEquiv.symm X) := by
+  exact isBlockDiagonal'_of_commutes_reindexed_wordSpan
+    (B := toTensorFromBlocks (d := d) (μ := μ) A)
+    (blockProjection_mem_span_reindexed_toTensorFromBlocks_of_bntSelectorWords
+      (d := d) (dim := dim) μ A hCF hSel)
     hComm
 
 /-- Entrywise off-block-zero corollary of
