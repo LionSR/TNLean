@@ -71,6 +71,9 @@ concrete Friedrichs-angle/row-sum lower bound that
 * `MPSTensor.localTermES_re_inner_nonneg_of_cyclic_windows_disjoint` — disjoint
   cyclic windows give commuting transported local projections and hence
   nonnegative ordered cross terms.
+* `MPSTensor.localTermES_re_inner_nonneg_of_not_cyclicWindowsOverlap` — failure
+  of the concrete cyclic-support overlap predicate gives the same nonnegative
+  ordered cross term.
 * `MPSTensor.parentHamiltonianES_gap_bound_of_quadratic_form` — the explicit
   reduction from the parent-Hamiltonian gap statement to the uniform
   Friedrichs/martingale quadratic-form estimate.
@@ -83,6 +86,9 @@ concrete Friedrichs-angle/row-sum lower bound that
 * `MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_friedrichs` — the
   same reduction specialized to the concrete cyclic-window overlap predicate and
   its `2 * (L - 1)` row-cardinality bound.
+* `MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound` —
+  the final reduction from the overlapping-window norm-compression Friedrichs
+  estimate to the explicit gap bound.
 * `MPSTensor.parentHamiltonian_gapped` — uniform spectral gap for MPS
   parent Hamiltonians on injective tensors, obtained from the
   Friedrichs-angle bound recorded in
@@ -788,6 +794,27 @@ theorem localTermES_re_inner_nonneg_of_cyclic_windows_disjoint {N : ℕ}
     (localTermES_isSymmetricProjection A L j)
     (localTermES_commute_of_cyclic_windows_disjoint A hLN hij) v
 
+/-- If the concrete cyclic supports do not overlap, then the offset-based
+site-disjointness predicate holds. -/
+theorem CyclicWindowsDisjoint.of_not_cyclicWindowsOverlap {N L : ℕ} (hLN : L ≤ N)
+    {i j : Fin N} (hij : ¬ cyclicWindowsOverlap N L i j) :
+    CyclicWindowsDisjoint L i j := by
+  intro k hki hkj
+  exact hij ⟨k, (mem_cyclicWindowSupport_iff hLN i k).2 hki,
+    (mem_cyclicWindowSupport_iff hLN j k).2 hkj⟩
+
+/-- Non-overlap positivity for the concrete cyclic-window overlap predicate.
+
+When `cyclicWindowsOverlap N L i j` fails and `L ≤ N`, the two windows are
+site-disjoint, so the transported local terms commute and have nonnegative ordered
+cross term. -/
+theorem localTermES_re_inner_nonneg_of_not_cyclicWindowsOverlap {N : ℕ}
+    (A : MPSTensor d D) {L : ℕ} (hLN : L ≤ N) {i j : Fin N}
+    (hij : ¬ cyclicWindowsOverlap N L i j) (v : EuclideanSpace ℂ (Cfg d N)) :
+    0 ≤ (⟪localTermES A L i v, localTermES A L j v⟫_ℂ).re :=
+  localTermES_re_inner_nonneg_of_cyclic_windows_disjoint A hLN
+    (CyclicWindowsDisjoint.of_not_cyclicWindowsOverlap hLN hij) v
+
 /-- The full transported parent Hamiltonian is positive because it is a finite
 sum of positive transported local terms. -/
 theorem parentHamiltonianES_isPositive (A : MPSTensor d D) (L N : ℕ) :
@@ -987,6 +1014,37 @@ theorem parentHamiltonianES_quadratic_form_of_finite_overlap_friedrichs
       (fun i : Fin N => localTermES A L i) hProj overlaps hm hCard hDisjoint
       hFriedrichs v)
 
+/-- Fixed-chain martingale quadratic-form estimate from finite-overlap
+norm-compression Friedrichs data.
+
+For each overlapping pair, it is enough to bound the compressed product
+`‖hᵢ (hⱼ v)‖` by `(1 - γ) / m` times `‖hᵢ v‖`.  The abstract projection-geometry
+lemma converts this principal-angle style norm estimate into the ordered
+cross-term bound consumed by the finite-overlap row-sum reduction. -/
+theorem parentHamiltonianES_quadratic_form_of_finite_overlap_norm_bound
+    (A : MPSTensor d D) (L N : ℕ) {γ : ℝ} (hγle : γ ≤ 1)
+    (overlaps : Fin N → Fin N → Prop) [DecidableRel overlaps] {m : ℕ} (hm : 0 < m)
+    (hCard : ∀ i : Fin N,
+      ((Finset.univ.erase i).filter (fun j => overlaps i j)).card ≤ m)
+    (hDisjoint : ∀ i j : Fin N, j ∈ Finset.univ.erase i → ¬ overlaps i j →
+      ∀ v : EuclideanSpace ℂ (Cfg d N),
+        0 ≤ (⟪localTermES A L i v, localTermES A L j v⟫_ℂ).re)
+    (hOverlapNorm : ∀ i j : Fin N, j ∈ Finset.univ.erase i → overlaps i j →
+      ∀ v : EuclideanSpace ℂ (Cfg d N),
+        ‖localTermES A L i (localTermES A L j v)‖ ≤
+          ((1 - γ) * ((m : ℝ)⁻¹)) * ‖localTermES A L i v‖) :
+    ∀ v : EuclideanSpace ℂ (Cfg d N),
+      γ * (⟪parentHamiltonianES A L N v, v⟫_ℂ).re ≤
+        (⟪parentHamiltonianES A L N v,
+          parentHamiltonianES A L N v⟫_ℂ).re := by
+  intro v
+  simpa [parentHamiltonianES_eq_sum_localTermES A L N] using
+    (ProjectionGeometry.quadraticForm_sum_projections_of_finite_overlap_norm_bound
+      (ι := Fin N) (E := EuclideanSpace ℂ (Cfg d N)) hγle
+      (fun i : Fin N => localTermES A L i)
+      (fun i : Fin N => localTermES_isSymmetricProjection A L i) overlaps hm hCard
+      hDisjoint hOverlapNorm v)
+
 /-- Uniform explicit gap-bound reduction from finite-overlap Friedrichs data.
 
 For parent-Hamiltonian windows of length `L`, the expected finite-range bound is
@@ -1070,6 +1128,67 @@ theorem parentHamiltonianES_gap_bound_of_cyclic_window_friedrichs
     (fun N _hLN i => localTermES_isSymmetricProjection A L i)
     (fun N hLN i => cyclicWindowsOverlap_card_le hLN hL i)
     hDisjoint hFriedrichs
+
+/-- Uniform explicit gap-bound reduction from the remaining overlapping-window
+Friedrichs estimate.
+
+The concrete cyclic-window row-cardinality bound, local symmetric-projection
+structure, and non-overlap positivity are already proved.  Consequently it is
+enough to assume the displayed ordered Friedrichs lower bound only for pairs whose
+cyclic supports overlap. -/
+theorem parentHamiltonianES_gap_bound_of_cyclic_window_overlap_friedrichs
+    (A : MPSTensor d D) (L : ℕ) (hL : 1 < L)
+    (hFriedrichs : ∀ (N : ℕ) (_hLN : 2 * L ≤ N) (i j : Fin N),
+      j ∈ Finset.univ.erase i → cyclicWindowsOverlap N L i j →
+        ∀ v : EuclideanSpace ℂ (Cfg d N),
+          - (1 - ((1 : ℝ) / (4 * (L : ℝ)))) *
+              (((2 * (L - 1) : ℕ) : ℝ)⁻¹) *
+                (⟪localTermES A L i v, v⟫_ℂ).re ≤
+            (⟪localTermES A L i v, localTermES A L j v⟫_ℂ).re) :
+    0 < (1 : ℝ) / (4 * (L : ℝ)) ∧
+    ∀ (N : ℕ) (_hLN : 2 * L ≤ N)
+      (v : EuclideanSpace ℂ (Cfg d N)),
+      v ∈ (parentHamiltonianGroundSpaceES A L N)ᗮ →
+        ((1 : ℝ) / (4 * (L : ℝ))) * ‖v‖ ≤
+          ‖parentHamiltonianES A L N v‖ := by
+  refine parentHamiltonianES_gap_bound_of_cyclic_window_friedrichs A L hL ?_ hFriedrichs
+  intro N hLN _i _j _hij hno v
+  have hLN' : L ≤ N := by omega
+  exact localTermES_re_inner_nonneg_of_not_cyclicWindowsOverlap A hLN' hno v
+
+/-- Uniform explicit gap-bound reduction from a norm-compression form of the
+overlapping-window Friedrichs estimate.
+
+It suffices to prove that for every overlapping off-diagonal pair the compressed
+product of transported local projections satisfies
+`‖hᵢ (hⱼ v)‖ ≤ (1 - 1/(4L)) / (2(L-1)) * ‖hᵢ v‖`.  The abstract projection
+geometry converts this principal-angle style condition into the ordered
+Friedrichs lower bound and then applies the finite-overlap martingale reduction. -/
+theorem parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound
+    (A : MPSTensor d D) (L : ℕ) (hL : 1 < L)
+    (hOverlapNorm : ∀ (N : ℕ) (_hLN : 2 * L ≤ N) (i j : Fin N),
+      j ∈ Finset.univ.erase i → cyclicWindowsOverlap N L i j →
+        ∀ v : EuclideanSpace ℂ (Cfg d N),
+          ‖localTermES A L i (localTermES A L j v)‖ ≤
+            ((1 - ((1 : ℝ) / (4 * (L : ℝ)))) *
+              (((2 * (L - 1) : ℕ) : ℝ)⁻¹)) * ‖localTermES A L i v‖) :
+    0 < (1 : ℝ) / (4 * (L : ℝ)) ∧
+    ∀ (N : ℕ) (_hLN : 2 * L ≤ N)
+      (v : EuclideanSpace ℂ (Cfg d N)),
+      v ∈ (parentHamiltonianGroundSpaceES A L N)ᗮ →
+        ((1 : ℝ) / (4 * (L : ℝ))) * ‖v‖ ≤
+          ‖parentHamiltonianES A L N v‖ := by
+  refine parentHamiltonianES_gap_bound_of_cyclic_window_overlap_friedrichs A L hL ?_
+  intro N hLN i j hij hoverlap v
+  have hCross :
+      -((1 - ((1 : ℝ) / (4 * (L : ℝ)))) *
+          (((2 * (L - 1) : ℕ) : ℝ)⁻¹)) *
+        (⟪localTermES A L i v, v⟫_ℂ).re ≤
+          (⟪localTermES A L i v, localTermES A L j v⟫_ℂ).re :=
+    (localTermES_isSymmetricProjection A L i).re_inner_apply_apply_ge_neg_of_norm_apply_le
+      (hOverlapNorm N hLN i j hij hoverlap) v
+  convert hCross using 1
+  ring
 
 /-! ### Uniform spectral gap for the MPS parent Hamiltonian -/
 
