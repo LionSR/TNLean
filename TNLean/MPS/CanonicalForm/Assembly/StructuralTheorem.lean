@@ -68,7 +68,7 @@ The theorem `exists_tp_sector_decomp_after_blocking` below provides:
 The current library already settles the common-period blocking arithmetic and
 now has both a one-sided collapsed BNT construction for TP primitive irreducible
 live blocks and a witness-producing sector comparison from primitive
-overlap-span hypotheses. The strongest assembled theorem in this file,
+overlap-span hypotheses. The strongest theorem in this file,
 `fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_overlapSpan`,
 threads `SameMPV₂ A B` through those ingredients once exact common live block
 decompositions and the overlap-span hypotheses are supplied.
@@ -247,7 +247,7 @@ theorem fundamentalTheorem_after_blocking_1606_structural_with_blockedSameMPV₂
 /-- **Conditional after-blocking sector endpoint (issue #877 target shape).**
 
 Given two tensors with `SameMPV₂`, a common-period BNT sector pair, and a
-matched-basis extractor, this theorem produces the target assembly conclusion: a
+matched-basis extractor, this theorem produces the target conclusion: a
 common blocking period, a `SectorDecomposition` on each side carrying BNT basis
 data, and matched sector-weight data for the canonical-form reduction.
 
@@ -326,7 +326,7 @@ pair at a common blocking period, but the matching witness itself is now
 constructed by `SectorBasisOverlapSpanHypotheses.exists_sectorBasisMatching` and
 then fed to the bundled heterogeneous sector comparison theorem.
 
-Thus the theorem wires the post-#860 comparison machinery without assuming a
+Thus the theorem connects the post-#860 comparison machinery without assuming a
 `SectorBasisMatching` or a permutation/copy alignment as input. -/
 theorem fundamentalTheorem_after_blocking_1606_sector_of_bntPair_overlapSpan
     {d D₁ D₂ : ℕ}
@@ -369,7 +369,7 @@ theorem fundamentalTheorem_after_blocking_1606_sector_of_bntPair_overlapSpan
   exact ⟨p, hp, P, Q, hPeq, hQeq, hPbnt, hQbnt,
           M.perm, M.copies_eq, ζ, hζne, hMultiset⟩
 
-/-- **Common live-block assembly using the one-sided BNT construction.**
+/-- **Common live-block construction using the one-sided BNT construction.**
 
 Assume a common blocking period `p` has already produced exact live block
 decompositions of `blockTensor A p` and `blockTensor B p` by TP primitive
@@ -478,7 +478,7 @@ extraction is available from primitive overlap-rigidity hypotheses through
 
 The theorem
 `fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_overlapSpan`
-records the strongest assembled Lean statement currently available: once a common
+records the strongest Lean statement currently available: once a common
 blocking period gives exact live TP primitive irreducible block decompositions on
 both sides, the one-sided BNT construction and the overlap-span matching theorem
 produce the matched sector-weight conclusion from the original `SameMPV₂ A B`.
