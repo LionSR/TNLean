@@ -167,9 +167,7 @@ theorem contiguous_mem_groundSpace {A : MPSTensor d D} (hA : IsInjective A)
 def cyclicForwardSite {N : ℕ} (i : Fin N) (r : ℕ) : Fin N :=
   ⟨(i.val + r) % N, Nat.mod_lt _ (Fin.pos i)⟩
 
-/-- The site represented by `(i + N - r) % N`.
-For offsets `r ≤ N`, this is the site obtained by moving `r` steps
-counterclockwise from `i` on the cyclic chain. -/
+/-- The site obtained by moving `r` steps counterclockwise from `i` on the cyclic chain. -/
 def cyclicBackwardSite {N : ℕ} (i : Fin N) (r : ℕ) : Fin N :=
   ⟨(i.val + N - r % N) % N, Nat.mod_lt _ (Fin.pos i)⟩
 
@@ -190,10 +188,11 @@ def cyclicWindowsOverlap (N L : ℕ) (i j : Fin N) : Prop :=
   ∃ k : Fin N, k ∈ cyclicWindowSupport N L i ∧ k ∈ cyclicWindowSupport N L j
 
 /-- The cyclic-window overlap relation is decidable on a finite chain. -/
-instance cyclicWindowsOverlap_decidableRel (N L : ℕ) :
+noncomputable instance cyclicWindowsOverlap_decidableRel (N L : ℕ) :
     DecidableRel (cyclicWindowsOverlap N L) := by
+  classical
   intro i j
-  infer_instance
+  exact inferInstance
 
 /-- A nonempty cyclic window overlaps itself. -/
 theorem cyclicWindowsOverlap_self_of_pos (N : ℕ) {L : ℕ} (hL : 0 < L) (i : Fin N) :
