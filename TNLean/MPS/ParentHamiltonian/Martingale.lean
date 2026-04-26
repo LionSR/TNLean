@@ -1178,25 +1178,17 @@ theorem parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound
       v ∈ (parentHamiltonianGroundSpaceES A L N)ᗮ →
         ((1 : ℝ) / (4 * (L : ℝ))) * ‖v‖ ≤
           ‖parentHamiltonianES A L N v‖ := by
-  refine parentHamiltonianES_gap_bound_of_quadratic_form A L hL ?_
-  intro N hLN v
-  have hLpos : (0 : ℝ) < (L : ℝ) := by
-    exact_mod_cast (Nat.zero_lt_of_lt hL)
-  have hLge_one : (1 : ℝ) ≤ (L : ℝ) := by
-    exact_mod_cast (Nat.le_of_lt hL)
-  have hγle : ((1 : ℝ) / (4 * (L : ℝ))) ≤ 1 := by
-    have hden : 0 < 4 * (L : ℝ) := mul_pos (by norm_num) hLpos
-    rw [div_le_iff₀ hden]
-    nlinarith [hLge_one]
-  have hm : 0 < 2 * (L - 1) :=
-    Nat.mul_pos (by decide) (Nat.sub_pos_of_lt hL)
-  have hLN' : L ≤ N := by omega
-  exact parentHamiltonianES_quadratic_form_of_finite_overlap_norm_bound
-    A L N hγle (cyclicWindowsOverlap N L) hm
-    (fun i => cyclicWindowsOverlap_card_le hLN hL i)
-    (fun _i _j _hij hno v =>
-      localTermES_re_inner_nonneg_of_not_cyclicWindowsOverlap A hLN' hno v)
-    (fun i j hij hoverlap v => hOverlapNorm N hLN i j hij hoverlap v) v
+  refine parentHamiltonianES_gap_bound_of_cyclic_window_overlap_friedrichs A L hL ?_
+  intro N hLN i j hij hoverlap v
+  have hCross :
+      -((1 - ((1 : ℝ) / (4 * (L : ℝ)))) *
+          (((2 * (L - 1) : ℕ) : ℝ)⁻¹)) *
+        (⟪localTermES A L i v, v⟫_ℂ).re ≤
+          (⟪localTermES A L i v, localTermES A L j v⟫_ℂ).re :=
+    (localTermES_isSymmetricProjection A L i).re_inner_apply_apply_ge_neg_of_norm_apply_le
+      (hOverlapNorm N hLN i j hij hoverlap) v
+  convert hCross using 1
+  ring
 
 /-! ### Uniform spectral gap for the MPS parent Hamiltonian -/
 

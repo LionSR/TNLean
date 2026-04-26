@@ -1,9 +1,8 @@
 # Issue #460 — overlapping-window Friedrichs estimate reduction (2026-04-26)
 
 This note records the checked reduction added on the `wave17-C-460-friedrichs-overlap`
-branch.  It does not claim the full MPS Friedrichs-angle estimate; it isolates the
-last analytic statement in a norm-compression form that matches the martingale
-criterion.
+branch.  It does not claim the full MPS Friedrichs-angle estimate; it isolates a
+sufficient norm-compression input that feeds the martingale criterion.
 
 ## Paper anchor
 
@@ -19,7 +18,8 @@ The source paper discussion is `Papers/2011.12127/TN-Review-main.tex` §4.1
 
 The new Lean statements preserve this split: non-overlap positivity and row sums
 are discharged by existing local/cyclic-window theorems, while the remaining
-overlap condition is stated as a principal-angle-style norm bound.
+overlap condition is exposed both as an ordered Friedrichs lower bound and as a
+sufficient principal-angle-style norm bound.
 
 ## Checked declarations added
 
@@ -85,15 +85,16 @@ Blueprint sync:
 
 ## Remaining mathematical statement
 
-For injective MPS parent-Hamiltonian local terms, the remaining analytic theorem is:
-for all `N` with `2 * L ≤ N`, all off-diagonal `i,j` with
-`cyclicWindowsOverlap N L i j`, and all vectors `v`, prove
+For injective MPS parent-Hamiltonian local terms, the checked route still needs the
+paper's overlapping-window Friedrichs estimate.  One sufficient norm-compression
+form isolated by this branch is: for all `N` with `2 * L ≤ N`, all off-diagonal
+`i,j` with `cyclicWindowsOverlap N L i j`, and all vectors `v`, prove
 
 ```text
 ‖localTermES A L i (localTermES A L j v)‖
   ≤ (1 - 1/(4L)) * (2(L-1))⁻¹ * ‖localTermES A L i v‖.
 ```
 
-Equivalently, one may prove the ordered quadratic-form lower bound obtained from
-this norm estimate.  This is exactly the principal-angle/Friedrichs-angle content
-of the paper’s martingale condition; no new proof holes or axioms were introduced.
+Alternatively, one may prove the ordered quadratic-form lower bound directly.
+This is the principal-angle/Friedrichs-angle content of the paper's martingale
+condition; no new proof holes or axioms were introduced.

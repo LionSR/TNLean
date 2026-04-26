@@ -2206,9 +2206,8 @@ Lucia~\cite{Kastoryano2018Martingale}.
     \label{lem:parent_hamiltonian_cyclic_overlap_norm_gap}
     \lean{MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound}
     \leanok
-    \uses{lem:parent_hamiltonian_finite_overlap_norm_quadratic,
-        lem:parent_hamiltonian_es_quadratic_reduction,
-        lem:cyclic_window_overlap_cardinality, lem:cyclic_window_nonoverlap_positive}
+    \uses{lem:parent_hamiltonian_cyclic_overlap_friedrichs_gap,
+        rem:projection_geometry_rowsum_identities}
     Fix $L>1$.  Suppose uniformly for every $N\ge2L$ and every overlapping
     off-diagonal pair that
     \[
@@ -2222,14 +2221,11 @@ Lucia~\cite{Kastoryano2018Martingale}.
 
 \begin{proof}
     \leanok
-    \uses{lem:parent_hamiltonian_finite_overlap_norm_quadratic,
-        lem:parent_hamiltonian_es_quadratic_reduction,
-        lem:cyclic_window_overlap_cardinality, lem:cyclic_window_nonoverlap_positive}
+    \uses{lem:parent_hamiltonian_cyclic_overlap_friedrichs_gap,
+        rem:projection_geometry_rowsum_identities}
     The norm-compression condition is converted to the ordered Friedrichs lower
-    bound by the projection-geometry Cauchy--Schwarz lemma. The concrete cyclic
-    row-cardinality and non-overlap positivity results then give the finite-overlap
-    quadratic-form estimate, which the quadratic-form-to-gap reduction turns into
-    the norm lower bound.
+    bound by the projection-geometry Cauchy--Schwarz lemma.  The preceding
+    overlapping-cyclic Friedrichs reduction then gives the norm lower bound.
 \end{proof}
 
 \begin{theorem}[Martingale criterion for spectral gap]\label{thm:martingale_criterion}
@@ -2433,9 +2429,9 @@ Lucia~\cite{Kastoryano2018Martingale}.
     Lemma~\ref{lem:cyclic_window_overlap_cardinality} gives the concrete cyclic
     row-cardinality bound, while Lemma~\ref{lem:cyclic_window_nonoverlap_positive}
     supplies the non-overlap positivity condition for support-disjoint windows.
-    Lemmas~\ref{lem:parent_hamiltonian_cyclic_overlap_friedrichs_gap} and
-    \ref{lem:parent_hamiltonian_cyclic_overlap_norm_gap} isolate the remaining
-    analytic task: the overlapping-window Friedrichs estimate, equivalently its
+    Lemma~\ref{lem:parent_hamiltonian_cyclic_overlap_friedrichs_gap} isolates the
+    remaining overlapping-window Friedrichs estimate, and
+    Lemma~\ref{lem:parent_hamiltonian_cyclic_overlap_norm_gap} records a sufficient
     norm-compression formulation.
 \end{proof}
 
