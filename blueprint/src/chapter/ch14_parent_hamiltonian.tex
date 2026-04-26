@@ -1039,6 +1039,27 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     injectivity, so linearity gives $XM = MX$ for every $M \in \MN{D}$.
 \end{proof}
 
+\begin{lemma}[Padded complement annihilation]
+    \label{lem:padded_complement_annihilation}
+    \lean{MPSTensor.eq_zero_of_mul_evalWord_eq_zero_of_isNBlkInjective_of_le_mul}
+    \leanok
+    \uses{def:l_blk_injective}
+    If $A$ is $L_0$-block-injective and $q \ge 1$, then an operator $Z$ that
+    annihilates every length-$k$ word product on the left is zero whenever
+    $k \le qL_0$:
+    \[
+        Z A^w = 0 \quad (|w|=k) \qquad\Longrightarrow\qquad Z=0.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The hypothesis $\spn\{A^u: |u|=L_0\}=\MN{D}$ implies the same spanning
+    statement at every positive multiple $qL_0$.  Each length-$qL_0$ word factors
+    as a length-$k$ prefix followed by padding, so $Z$ annihilates all generators
+    of the full span and hence annihilates the identity.
+\end{proof}
+
 \begin{lemma}[Generator commutation from long-word commutation]
     \label{lem:boundary_matrix_commutes_long_words}
     \lean{MPSTensor.boundary_matrix_commutes_of_isNBlkInjective_of_long_word_commutes}
@@ -1051,6 +1072,23 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 \begin{proof}
     \leanok
     Apply Theorem~\ref{thm:block_word_strip_central} with $M = A^i$.
+\end{proof}
+
+\begin{theorem}[MPV-line endgame from long-word commutation]
+    \label{thm:ground_space_map_mpv_of_long_word_commutes}
+    \lean{MPSTensor.groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_long_word_commutes}
+    \leanok
+    \uses{def:mpv_submodule, thm:block_word_strip_central}
+    Let $A$ be $L_0$-block-injective with $L_0>0$ and let $m \ge L_0$.
+    If a boundary matrix $X$ commutes with every length-$m$ word product, then
+    $\Gamma_N(X)$ lies in the MPV line $\spn\{V^{(N)}(A)\}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Theorem~\ref{thm:block_word_strip_central} makes $X$ commute with the whole
+    matrix algebra.  The center of $\MN{D}$ consists of scalar matrices, so
+    $X=c\Id$, and therefore $\Gamma_N(X)=cV^{(N)}(A)$.
 \end{proof}
 
 \begin{theorem}[Chain ground space equals the MPV line in the injective case]%
@@ -1084,7 +1122,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \uses{def:chain_ground_space, def:mpv_submodule, def:normal,
         def:l_blk_injective, thm:cyclic_normal_open_chain_range_reduction,
         thm:reduced_wrapped_boundary_compatibilities,
-        lem:boundary_matrix_commutes_long_words}
+        thm:ground_space_map_mpv_of_long_word_commutes}
     If $A$ is normal, $D \ge 1$, $L_0$-block-injective, with $N \ge 2$ and $L_0 < L \le N$, then
     \[
         \mathcal G_{N,L}(A) \subseteq \spn\bigl\{V^{(N)}(A)\bigr\}.
@@ -1094,14 +1132,17 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 \begin{proof}
     \notready
     \uses{thm:reduced_wrapped_boundary_compatibilities,
-        lem:boundary_matrix_commutes_long_words}
+        thm:ground_space_map_mpv_of_long_word_commutes,
+        lem:padded_complement_annihilation}
     The remaining step is the closure property from
     \cite[\S~IV.C]{Cirac2021Matrix}: Theorem~\ref{thm:reduced_wrapped_boundary_compatibilities}
     supplies the two one-sided wrapped-boundary identities for the open-chain
-    boundary matrix $X$. What is still missing is the common-middle comparison
-    that turns these identities into commutation of $X$ with a sufficiently long
-    word product; Lemma~\ref{lem:boundary_matrix_commutes_long_words} would then
-    give the generator commutation used in the injective proof.
+    boundary matrix $X$. The padded-annihilation lemma records that exact
+    complement-span length mismatches are no longer the obstruction. What is
+    still missing is the common-middle comparison that turns the one-sided
+    identities into commutation of $X$ with a sufficiently long word product;
+    Theorem~\ref{thm:ground_space_map_mpv_of_long_word_commutes} would then put
+    $\Gamma_N(X)$ directly in the MPV line.
 \end{proof}
 
 \begin{theorem}[Chain ground space equals the MPV line in the normal case]%
