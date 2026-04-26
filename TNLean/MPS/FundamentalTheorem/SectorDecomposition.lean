@@ -822,6 +822,53 @@ theorem fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_preMatching
   fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_phaseMatch_exists_copies
     P Q M.perm M.phase_match_exists hLI hEqual
 
+/-- Primitive overlap-rigidity hypotheses for two sector bases.
+
+This structure records the analytic inputs used by
+`exists_sectorBasisMatching_of_overlapOrtho_span_sameMPV`: nonzero bond
+dimensions, injectivity, left-canonical normalization, asymptotic self/orthogonal
+overlaps, and equality of the finite-length MPV spans.  It deliberately does
+not contain a permutation or copy alignment; those are produced by the overlap
+rigidity theorem and the BNT coefficient comparison. -/
+structure SectorBasisOverlapSpanHypotheses (P Q : SectorDecomposition d) : Prop where
+  /-- The left basis blocks have nonzero bond dimension. -/
+  left_basisDim_pos : ∀ j : Fin P.basisCount, 0 < P.basisDim j
+  /-- The right basis blocks have nonzero bond dimension. -/
+  right_basisDim_pos : ∀ k : Fin Q.basisCount, 0 < Q.basisDim k
+  /-- The left basis blocks are injective. -/
+  left_injective : ∀ j : Fin P.basisCount, IsInjective (P.basis j)
+  /-- The right basis blocks are injective. -/
+  right_injective : ∀ k : Fin Q.basisCount, IsInjective (Q.basis k)
+  /-- The left basis blocks are left-canonical. -/
+  left_normalized :
+    ∀ j : Fin P.basisCount, (∑ i : Fin d, (P.basis j i)ᴴ * (P.basis j i)) = 1
+  /-- The right basis blocks are left-canonical. -/
+  right_normalized :
+    ∀ k : Fin Q.basisCount, (∑ i : Fin d, (Q.basis k i)ᴴ * (Q.basis k i)) = 1
+  /-- Each left basis block has self-overlap tending to one. -/
+  left_self_overlap : ∀ j : Fin P.basisCount,
+    Filter.Tendsto (fun N => mpvOverlap (d := d) (P.basis j) (P.basis j) N)
+      Filter.atTop (nhds (1 : ℂ))
+  /-- Distinct left basis blocks have asymptotically zero overlap. -/
+  left_off_overlap : ∀ i j : Fin P.basisCount, i ≠ j →
+    Filter.Tendsto (fun N => mpvOverlap (d := d) (P.basis i) (P.basis j) N)
+      Filter.atTop (nhds 0)
+  /-- Each right basis block has self-overlap tending to one. -/
+  right_self_overlap : ∀ k : Fin Q.basisCount,
+    Filter.Tendsto (fun N => mpvOverlap (d := d) (Q.basis k) (Q.basis k) N)
+      Filter.atTop (nhds (1 : ℂ))
+  /-- Distinct right basis blocks have asymptotically zero overlap. -/
+  right_off_overlap : ∀ k l : Fin Q.basisCount, k ≠ l →
+    Filter.Tendsto (fun N => mpvOverlap (d := d) (Q.basis k) (Q.basis l) N)
+      Filter.atTop (nhds 0)
+  /-- The finite-length spans of the two sector bases agree. -/
+  span_eq : ∀ N,
+    Submodule.span ℂ (Set.range (fun j : Fin P.basisCount =>
+      mpvState (d := d) (P.basis j) N)) =
+    Submodule.span ℂ (Set.range (fun k : Fin Q.basisCount =>
+      mpvState (d := d) (Q.basis k) N))
+
+
 /-- Produce a sector basis matching from the primitive overlap-rigidity hypotheses.
 
 The overlap-rigidity theorem gives the basis permutation, dimension equalities,
@@ -870,6 +917,28 @@ theorem exists_sectorBasisMatching_of_overlapOrtho_span_sameMPV
     exact ⟨N0, fun N hN => hN0 N (le_of_lt hN)⟩
   obtain ⟨M, _hperm⟩ := M₀.exists_sectorBasisMatching_of_sameMPV hLI hEqual
   exact ⟨M⟩
+
+namespace SectorBasisOverlapSpanHypotheses
+
+variable {P Q : SectorDecomposition d}
+
+/-- Convert the bundled primitive overlap-rigidity hypotheses into a sector basis
+matching.  The produced witness is not part of the hypotheses: it is obtained by
+`exists_sectorBasisMatching_of_overlapOrtho_span_sameMPV`. -/
+theorem exists_sectorBasisMatching
+    (H : SectorBasisOverlapSpanHypotheses P Q)
+    (hEqual : SameMPV₂ P.toTensor Q.toTensor) :
+    Nonempty (SectorBasisMatching P Q) := by
+  letI : ∀ j : Fin P.basisCount, NeZero (P.basisDim j) :=
+    fun j => ⟨Nat.ne_of_gt (H.left_basisDim_pos j)⟩
+  letI : ∀ k : Fin Q.basisCount, NeZero (Q.basisDim k) :=
+    fun k => ⟨Nat.ne_of_gt (H.right_basisDim_pos k)⟩
+  exact exists_sectorBasisMatching_of_overlapOrtho_span_sameMPV P Q
+    H.left_injective H.right_injective H.left_normalized H.right_normalized
+    H.left_self_overlap H.left_off_overlap H.right_self_overlap H.right_off_overlap
+    H.span_eq hEqual
+
+end SectorBasisOverlapSpanHypotheses
 
 /-- **Heterogeneous sector comparison via a bundled basis matching witness.**
 
