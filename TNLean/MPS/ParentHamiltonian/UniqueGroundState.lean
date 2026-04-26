@@ -506,6 +506,64 @@ theorem chainGroundSpace_eq_mpvSubmodule {A : MPSTensor d D} [NeZero D]
     obtain ⟨c, rfl⟩ := hψ
     exact Submodule.smul_mem _ c (mpv_mem_chainGroundSpace A L N hN0 hLN)
 
+/-- Reduced cyclic constraints give the two wrapped-boundary compatibility
+families for an open-chain boundary matrix.
+
+After the cyclic-to-open-chain step writes a periodic-chain vector as
+`ψ = groundSpaceMap A N X`, the two reduced wrapped windows expose the boundary
+matrix `X` on opposite sides of the same length-`N - (L₀ + 1)` complement word.
+This theorem gives exactly the local algebraic output needed for the final
+common-middle/long-word commutation step of the normal parent-Hamiltonian
+argument. -/
+theorem chainGroundSpace_wrapped_boundary_compatibilities_of_isNBlkInjective
+    {A : MPSTensor d D} [NeZero D] {L₀ L N : ℕ}
+    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
+    (hN : 2 ≤ N) (hL : L₀ < L) (hLN : L ≤ N)
+    {ψ : NSiteSpace d N} {X : Matrix (Fin D) (Fin D) ℂ}
+    (hψ : ψ ∈ chainGroundSpace A L N) (hψX : ψ = groundSpaceMap A N X) :
+    ∃ Ywrap Ymirror : (Fin N → Fin d) → Matrix (Fin D) (Fin D) ℂ,
+      (∀ (j : Fin d) (τ : Fin N → Fin d),
+        evalWord A (List.ofFn (fun k : Fin (N - (L₀ + 1)) =>
+          τ ⟨k.val + L₀, by omega⟩)) * A j * X = Ywrap τ * A j) ∧
+      (∀ (j : Fin d) (τ : Fin N → Fin d),
+        X * A j * evalWord A (List.ofFn (fun k : Fin (N - (L₀ + 1)) =>
+          τ ⟨k.val + 1, by omega⟩)) = A j * Ymirror τ) := by
+  obtain ⟨M, rfl⟩ : ∃ M, N = M + 1 := ⟨N - 1, by omega⟩
+  have hN0 : 0 < M + 1 := by omega
+  have hL₀N : L₀ + 1 ≤ M + 1 := by omega
+  have hM : L₀ ≤ M := by omega
+  have hψmap : groundSpaceMap A (M + 1) X ∈ chainGroundSpace A L (M + 1) := by
+    simpa [hψX] using hψ
+  have hψred : groundSpaceMap A (M + 1) X ∈ chainGroundSpace A (L₀ + 1) (M + 1) :=
+    chainGroundSpace_le_chainGroundSpace_of_le (A := A) hN0
+      (by omega : L₀ + 1 ≤ L) hLN hψmap
+  rw [chainGroundSpace, dif_pos ⟨hN0, hL₀N⟩] at hψred
+  simp only [Submodule.mem_iInf, Submodule.mem_comap] at hψred
+  have hGSAt : ∀ (i : Fin (M + 1)) (τ : Fin (M + 1) → Fin d),
+      ∃ Y : Matrix (Fin D) (Fin D) ℂ,
+        ∀ σ_w : Fin (L₀ + 1) → Fin d,
+          Matrix.trace (evalWord A (List.ofFn
+            (cyclicCfg hN0 (L₀ + 1) i σ_w τ)) * X) =
+          Matrix.trace (evalWord A (List.ofFn σ_w) * Y) := by
+    intro i τ
+    have hmem := hψred i τ
+    rw [groundSpace, LinearMap.mem_range] at hmem
+    obtain ⟨Y, hY⟩ := hmem
+    refine ⟨Y, fun σ_w => ?_⟩
+    have : cyclicRestrictₗ hN0 (L₀ + 1) i τ
+        (groundSpaceMap A (M + 1) X) σ_w = groundSpaceMap A (L₀ + 1) Y σ_w := by
+      rw [← hY]
+    simp only [cyclicRestrictₗ_apply, groundSpaceMap_apply] at this
+    exact this
+  choose YAt hYAt using hGSAt
+  let wrapPos : Fin (M + 1) := ⟨M, by omega⟩
+  let mirrorPos : Fin (M + 1) := ⟨M + 1 - L₀, by omega⟩
+  have hWrap := wrapping_window_compatibility_of_isNBlkInjective
+    (A := A) hInj hL₀ hM (YAt wrapPos) (fun τ σ_w => hYAt wrapPos τ σ_w)
+  have hMirror := wrapping_window_mirror_compatibility_of_isNBlkInjective
+    (A := A) hInj hL₀ hM (YAt mirrorPos) (fun τ σ_w => hYAt mirrorPos τ σ_w)
+  exact ⟨YAt wrapPos, YAt mirrorPos, hWrap, hMirror⟩
+
 /-- Range-reduction bridge for normal tensors.
 
 This is the missing hard direction of `chainGroundSpace_eq_mpvSubmodule_normal`:
