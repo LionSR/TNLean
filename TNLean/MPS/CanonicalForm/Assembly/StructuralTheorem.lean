@@ -70,7 +70,7 @@ now has both a one-sided collapsed BNT construction for TP primitive irreducible
 live blocks and a witness-producing sector comparison from primitive
 overlap-span hypotheses. The strongest theorem in this file,
 `fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_overlapSpan`,
-threads `SameMPV₂ A B` through those ingredients once exact common live block
+combines `SameMPV₂ A B` with those ingredients once exact common live block
 decompositions and the overlap-span hypotheses are supplied.
 
 The remaining Gap §1 content is to derive those exact live decompositions and the
@@ -244,7 +244,7 @@ theorem fundamentalTheorem_after_blocking_1606_structural_with_blockedSameMPV₂
   · exact sameMPV₂_blockTensor A B hSame pA
   · exact sameMPV₂_blockTensor A B hSame pB
 
-/-- **Conditional after-blocking sector endpoint (issue #877 target shape).**
+/-- **Conditional after-blocking sector comparison (issue #877 target shape).**
 
 Given two tensors with `SameMPV₂`, a common-period BNT sector pair, and a
 matched-basis extractor, this theorem produces the target conclusion: a
@@ -262,7 +262,7 @@ The two hypotheses are intentionally separated:
 
 The body is a kernel-checked composition of the existing structural theorem's
 blocking compatibility (`sameMPV₂_blockTensor`), the two hypotheses, and the
-matched-basis algebraic endpoint from PR #844
+matched-basis algebraic theorem from PR #844
 (`fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_matched_basis`). The
 later theorems below instantiate the matching side with primitive overlap-span
 hypotheses rather than assuming the witness directly. -/
@@ -316,7 +316,7 @@ theorem fundamentalTheorem_after_blocking_1606_sector_of_bntPair_matched
   exact ⟨p, hp, P, Q, hPeq, hQeq, hPbnt, hQbnt,
           perm, hCopies, ζ, hζne, hMultiset⟩
 
-/-- **After-blocking sector endpoint from primitive overlap-span data.**
+/-- **After-blocking sector comparison from primitive overlap-span hypotheses.**
 
 This theorem replaces the abstract `matchedBasisData` hypothesis in
 `fundamentalTheorem_after_blocking_1606_sector_of_bntPair_matched` by the

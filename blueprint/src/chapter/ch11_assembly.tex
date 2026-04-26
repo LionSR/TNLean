@@ -507,6 +507,19 @@ single weighted block.
 	Theorem~\ref{thm:sector_basis_pre_matching_to_matching}.
 \end{definition}
 
+\begin{definition}[Primitive overlap-span hypotheses for sector bases]%
+\label{def:sector_basis_overlap_span_hyps}
+	\lean{MPSTensor.SectorBasisOverlapSpanHypotheses}
+	\leanok
+	\uses{def:paper_sector_data, def:mpv_overlap}
+	For sector decompositions $P$ and $Q$, this condition records the
+	primitive overlap-rigidity hypotheses for their basis blocks: nonzero
+	bond dimensions, injectivity, trace-preserving normalization,
+	self-overlap limits equal to~$1$, off-overlap limits equal to~$0$, and
+	equality of the finite-length spans of the basis MPV states for every
+	system size.
+\end{definition}
+
 \begin{theorem}[Phase-matched comparison recovers copy counts]%
 \label{thm:route_b_hetero_phase_match_copies}
 	\lean{MPSTensor.fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_phaseMatch_exists_copies}
@@ -597,6 +610,25 @@ single weighted block.
 	copy-count equalities from equality of the total MPV families.
 \end{proof}
 
+\begin{theorem}[Bundled overlap-span hypotheses give a sector basis matching]%
+\label{thm:sector_basis_overlap_span_to_matching}
+	\lean{MPSTensor.SectorBasisOverlapSpanHypotheses.exists_sectorBasisMatching}
+	\leanok
+	\uses{def:sector_basis_overlap_span_hyps, def:sector_basis_matching}
+	If two sector decompositions satisfy the primitive overlap-span hypotheses
+	and their total MPV families agree, then there exists a sector basis matching
+	between them.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{thm:sector_basis_matching_from_overlap_ortho_span}
+	The bundled hypotheses are exactly the nonzero-dimension, injectivity,
+	normalization, overlap, and span assumptions of
+	Theorem~\ref{thm:sector_basis_matching_from_overlap_ortho_span}. Applying
+	that theorem gives the matching witness.
+\end{proof}
+
 \begin{theorem}[Heterogeneous sector comparison via a bundled matching witness]%
 \label{thm:route_b_hetero_sector_matching}
 	\lean{MPSTensor.fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_sectorMatching}
@@ -616,6 +648,61 @@ single weighted block.
 	The bundled matching witness contains exactly the permutation, copy, and
 	gauge-phase hypotheses of Theorem~\ref{thm:route_b_hetero_matched_basis},
 	so the conclusion follows directly from that theorem.
+\end{proof}
+
+\begin{theorem}[After-blocking sector comparison from overlap-span hypotheses]%
+\label{thm:after_blocking_sector_bnt_pair_overlap_span}
+	\lean{MPSTensor.fundamentalTheorem_after_blocking_1606_sector_of_bntPair_overlapSpan}
+	\leanok
+	\uses{def:sector_basis_overlap_span_hyps, thm:route_b_hetero_sector_matching}
+	Let $A$ and $B$ have the same MPV family. Suppose that, after a common
+	blocking period $p>0$, there are sector decompositions $P$ and $Q$ whose
+	total tensors have the same MPVs as the blocked tensors $A^{[p]}$ and
+	$B^{[p]}$, that both decompositions have BNT linear independence, and that
+	$P$ and $Q$ satisfy the primitive overlap-span hypotheses. Then the matched
+	sector-weight conclusion holds: there is a basis permutation, equality of
+	the matched copy counts, and nonzero scalars $\zeta_j$ such that the weight
+	multiset over $P_j$ equals the multiset over $Q_{\pi(j)}$ multiplied by
+	$\zeta_j$.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{thm:sector_basis_overlap_span_to_matching, thm:route_b_hetero_sector_matching}
+	Blocking preserves the equality of the MPV families of $A$ and $B$ at the
+	common period. Composing this equality with the two sector equivalences gives
+	equality of the total MPV families of $P$ and $Q$. The primitive overlap-span
+	hypotheses produce a sector basis matching by
+	Theorem~\ref{thm:sector_basis_overlap_span_to_matching}; the bundled
+	heterogeneous comparison theorem then gives the sector-weight multiset
+	equalities.
+\end{proof}
+
+\begin{theorem}[Common live blocks with overlap-span data give sector comparison]%
+\label{thm:after_blocking_sector_common_blocks_overlap_span}
+	\lean{MPSTensor.fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_overlapSpan}
+	\leanok
+	\uses{thm:bnt_sector_decomp_tp_prim_irr_collapsed, def:sector_basis_overlap_span_hyps}
+	Let $A$ and $B$ have the same MPV family. Fix a common blocking period
+	$p>0$ and exact live decompositions of $A^{[p]}$ and $B^{[p]}$ as weighted
+	block tensors whose live blocks are trace-preserving, primitive,
+	irreducible, and have nonzero weights. Assume moreover that any pair of BNT
+	sector decompositions equivalent to these two live block tensors satisfies
+	the primitive overlap-span hypotheses. Then the after-blocking sector
+	comparison conclusion of
+	Theorem~\ref{thm:after_blocking_sector_bnt_pair_overlap_span} holds for the
+	sector decompositions obtained from the live block families.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{thm:bnt_sector_decomp_tp_prim_irr_collapsed,
+		thm:after_blocking_sector_bnt_pair_overlap_span}
+	Apply the one-sided collapsed BNT construction
+	(Theorem~\ref{thm:bnt_sector_decomp_tp_prim_irr_collapsed}) to the two live
+	block families. The overlap-span hypothesis applies to the resulting sector
+	decompositions, and Theorem~\ref{thm:after_blocking_sector_bnt_pair_overlap_span}
+	then gives the matched sector-weight conclusion.
 \end{proof}
 
 \begin{theorem}[Cast-compatible MPV scaling implies phase-matched sector comparison]%

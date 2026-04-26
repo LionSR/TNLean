@@ -42,7 +42,7 @@ comparison step. Instead it adds three kernel-checked compositions.
    `blockTensor A p` and `blockTensor B p` by TP primitive irreducible blocks
    with nonzero weights, plus a proof that the collapsed BNT bases satisfy
    `SectorBasisOverlapSpanHypotheses`. From these inputs and `SameMPV₂ A B`, it
-   produces the same matched sector-weight endpoint as the issue target.
+   produces the same matched sector-weight conclusion as the issue target.
 
 ## Remaining blocker for the fully unconditional theorem
 
