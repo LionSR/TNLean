@@ -381,18 +381,88 @@ single weighted block.
 	sufficiently large $N$.
 \end{theorem}
 
+\begin{theorem}[Heterogeneous geometric sequence extrapolation]%
+\label{thm:geom_extrapolation_hetero}
+	\lean{MPSTensor.SectorWeightData.power_sums_eq_of_eventually_eq_hetero}
+	\leanok
+	If two finite families of nonzero complex numbers, possibly with different
+	cardinalities, have equal power sums
+	$\sum_i \alpha_i^k = \sum_j \beta_j^k$ for all sufficiently large
+	exponents $k$, then the same equality holds for every exponent
+	$k \geq 0$.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	Concatenate the two families with coefficients $+1$ and $-1$.
+	The resulting finite linear combination of nonzero geometric sequences
+	vanishes for all sufficiently large exponents, so the telescoping
+	induction for such combinations forces it to vanish identically.
+\end{proof}
+
 \begin{theorem}[Geometric sequence extrapolation]%
 \label{thm:geom_extrapolation}
 	\lean{MPSTensor.SectorWeightData.power_sums_eq_of_eventually_eq}
 	\leanok
-	If two finite families of nonzero complex numbers have equal power sums
-	$\sum_i \alpha_i^k = \sum_j \beta_j^k$ for all $k > N_0$, then
+	If two finite families of nonzero complex numbers with the same
+	cardinality have equal power sums
+	$\sum_i \alpha_i^k = \sum_i \beta_i^k$ for all $k > N_0$, then
 	equality holds for all $k \geq 0$.
-	The proof uses induction on the number of terms with a telescoping
-	argument: subtract a geometric factor to reduce the number of terms,
-	apply the induction hypothesis, and conclude via a geometric
-	recurrence.
 \end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{thm:geom_extrapolation_hetero}
+	This is the equal-cardinality specialization of
+	Theorem~\ref{thm:geom_extrapolation_hetero}.
+\end{proof}
+
+\begin{theorem}[Copy-count recovery from eventual coefficient equality]%
+\label{thm:copies_eq_of_eventually_coeff_eq}
+	\lean{MPSTensor.SectorWeightData.copies_eq_of_eventually_coeff_eq}
+	\leanok
+	\uses{def:paper_sector_data}
+	Let $S$ and $T$ be sector data over the same basis. If their coefficient
+	arrays satisfy $c_{S,j}^{(N)} = c_{T,j}^{(N)}$ for every basis block $j$
+	and all sufficiently large $N$, then their copy counts agree:
+	$r_j^S = r_j^T$ for every~$j$.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{thm:geom_extrapolation_hetero}
+	Apply Theorem~\ref{thm:geom_extrapolation_hetero} to the two weight
+	families in a fixed sector and then evaluate the resulting power-sum
+	equality at exponent $0$. Since each summand is then $1$, the equality
+	is exactly equality of the two copy counts.
+\end{proof}
+
+\begin{theorem}[BNT recovery of copy counts and sector weights]%
+\label{thm:route_b_equal_with_copies}
+	\lean{MPSTensor.SectorWeightData.exists_copies_eq_and_weight_multiset_eq_of_sameMPV_bnt}
+	\leanok
+	\uses{def:paper_sector_data, def:bnt}
+	Let $S$ and $T$ be two sector data over the same basis, without assuming
+	their multiplicities agree. If the basis is eventually linearly
+	independent and the total MPVs of $S$ and $T$ agree, then there are
+	copy-count equalities $r_j^S = r_j^T$ for every basis block~$j$, and,
+	after transporting along these equalities, the sector weight multisets
+	$\{\mu_{j,q}^S\}$ and $\{\mu_{j,q}^T\}$ are equal for every~$j$.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{thm:coeff_eventually_eq, thm:copies_eq_of_eventually_coeff_eq,
+	      thm:geom_extrapolation, thm:power_sum_multiset}
+	BNT linear independence and equality of total MPVs give eventual
+	coefficient equality by Theorem~\ref{thm:coeff_eventually_eq}. Then
+	Theorem~\ref{thm:copies_eq_of_eventually_coeff_eq} recovers the
+	copy-count equalities. After identifying the two index sets via these
+	copy-count equalities, the positive-power coefficient equalities extend
+	to all positive exponents by
+	Theorem~\ref{thm:geom_extrapolation}, and Newton--Girard
+	(Theorem~\ref{thm:power_sum_multiset}) recovers the weight multisets.
+\end{proof}
 
 \begin{theorem}[Weight multiset recovery from multiplicity data]%
 \label{thm:route_b_equal}
@@ -522,14 +592,12 @@ single weighted block.
 
 \begin{proof}
 	\leanok
-	\uses{thm:route_b_equal}
+	\uses{thm:route_b_equal_with_copies}
 	Absorb the phase powers into the sector weights of $Q$ and write both
 	decompositions over the basis of $P$. Linear independence gives eventual
-	equality of the coefficient power sums. The telescoping identity for
-	finite sums of nonzero geometric sequences extends this equality to
-	exponent $0$, which gives equality of the copy counts. The positive
-	exponents then give equality of the weight multisets by the same
-	Newton--Girard argument as Theorem~\ref{thm:route_b_equal}.
+	equality of the coefficient power sums, and
+	Theorem~\ref{thm:route_b_equal_with_copies} recovers both the copy-count
+	equalities and the phase-adjusted weight-multiset equalities.
 \end{proof}
 
 \begin{theorem}[A pre-matching gives a sector basis matching]%
