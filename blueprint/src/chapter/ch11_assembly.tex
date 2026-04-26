@@ -511,7 +511,7 @@ single weighted block.
 \label{def:sector_basis_overlap_span_hyps}
 	\lean{MPSTensor.SectorBasisOverlapSpanHypotheses}
 	\leanok
-	\uses{def:paper_sector_data, def:mpv_overlap}
+	\uses{def:paper_sector_data, def:mpv_overlap, def:mpv_state}
 	For sector decompositions $P$ and $Q$, this condition records the
 	primitive overlap-rigidity hypotheses for their basis blocks: nonzero
 	bond dimensions, injectivity, trace-preserving normalization,
@@ -698,12 +698,15 @@ single weighted block.
 \begin{proof}
 	\leanok
 	\uses{thm:bnt_sector_decomp_tp_prim_irr_collapsed,
-		thm:after_blocking_sector_bnt_pair_overlap_span}
+		thm:sector_basis_overlap_span_to_matching,
+		thm:route_b_hetero_sector_matching}
 	Apply the one-sided collapsed BNT construction
 	(Theorem~\ref{thm:bnt_sector_decomp_tp_prim_irr_collapsed}) to the two live
-	block families. The overlap-span hypothesis applies to the resulting sector
-	decompositions, and Theorem~\ref{thm:after_blocking_sector_bnt_pair_overlap_span}
-	then gives the matched sector-weight conclusion.
+	block families. The resulting sector decompositions satisfy the overlap-span
+	hypotheses; Theorem~\ref{thm:sector_basis_overlap_span_to_matching} then
+	produces a sector basis matching, and
+	Theorem~\ref{thm:route_b_hetero_sector_matching} gives the matched
+	sector-weight conclusion.
 \end{proof}
 
 \begin{theorem}[Cast-compatible MPV scaling implies phase-matched sector comparison]%
