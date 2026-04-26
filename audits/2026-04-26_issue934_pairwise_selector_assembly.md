@@ -91,7 +91,8 @@ Successful local checks in `wave17-D-934-selector-words`:
 
 - `lake build TNLean.MPS.MPDO.BiCFDerivation`
 - `lake build TNLean.MPS.MPDO.BiCFDerivation TNLean.MPS.CanonicalForm.BlockDiagonalCommutant`
-- `lake env lean TNLean/MPS/CanonicalForm/BlockDiagonalCommutant.lean && lake env lean TNLean/MPS/MPDO/BiCFDerivation.lean`
+- `lake env lean TNLean/MPS/CanonicalForm/BlockDiagonalCommutant.lean`
+- `lake env lean TNLean/MPS/MPDO/BiCFDerivation.lean`
 - `ulimit -n 8192 && lake build TNLean`
   - The first full-build continuation reached the command timeout after substantial progress; the
     immediate continuation completed successfully, with only pre-existing warnings in unrelated

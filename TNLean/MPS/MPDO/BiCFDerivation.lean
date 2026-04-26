@@ -10,7 +10,7 @@ import Mathlib.LinearAlgebra.Finsupp.LinearCombination
 # Finite-length sufficient conditions and obstructions for MPDO biCF
 
 The `HorizontalCFData` structure in `VerticalCF.lean` records the block-injective
-canonical-form property `biCF` as a hypothesis. This file records four complementary
+canonical-form property `biCF` as a hypothesis. This file records five complementary
 facts about that field.
 
 1. A clean **abstract sufficient condition**: if, after blocking to some fixed
@@ -138,8 +138,8 @@ def HasBlockSelectorWords
 other blocks. The tuple `M` lies in the span of simultaneous length-`S` word
 evaluations, is the identity on `k`, and vanishes on every block in `targets`.
 
-Taking `targets = Finset.univ.erase k` is equivalent to the coefficient-based
-`HasBlockSelectorWords` predicate below. Smaller target sets are useful for
+Taking `targets = Finset.univ.erase k` is the tuple-span form used to recover
+coefficient-based `HasBlockSelectorWords`. Smaller target sets are useful for
 assembling global selectors from pairwise block-separating word polynomials. -/
 def HasBlockSelectorOn
     (A : (k : Fin r) → MPSTensor d (dim k))
@@ -287,17 +287,14 @@ theorem hasBlockSelectorOn_finset_of_pairBlockSeparatingWords
       htail.mul hsingle
     have hsets : targets ∪ {j} = insert j targets := by
       ext l
-      by_cases hlj : l = j
-      · subst hlj
-        simp
-      · simp [hlj]
+      simp
     have hlen : (insert j targets).card * S = targets.card * S + S := by
       rw [Finset.card_insert_of_notMem hj_not_mem]
       exact Nat.succ_mul targets.card S
     simpa [hsets, hlen] using hmul
 
-/-- The coefficient-based selector predicate is equivalent to selecting each
-block on the target set `Finset.univ.erase k` in the tuple span. -/
+/-- Tuple-span selectors on `Finset.univ.erase k` recover coefficient-based
+block-selector words. -/
 theorem hasBlockSelectorWords_of_forall_hasBlockSelectorOn_univ_erase
     (A : (k : Fin r) → MPSTensor d (dim k)) {S : ℕ}
     (h : ∀ k : Fin r, HasBlockSelectorOn A k S (Finset.univ.erase k)) :
