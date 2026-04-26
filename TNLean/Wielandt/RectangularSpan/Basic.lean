@@ -25,7 +25,6 @@ live in `TNLean.Wielandt.RectangularSpan.Growth` and
 
 ## Main results
 
-- `wordSpan_top_of_mul`
 - `isNormal_blockTensor`
 - `blockTensor_single_eigenvector`
 - `encodeBlock`, `blockTensor_apply_encodeBlock`
@@ -40,40 +39,7 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-! ## Section 1: wordSpan at multiples -/
-
-/-- Helper: ⊤ * ⊤ = ⊤ for submodules of the matrix algebra. -/
-private theorem top_mul_top_eq_top :
-    (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) *
-    (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) = ⊤ := by
-  apply eq_top_iff.mpr
-  intro M _
-  rw [show M = M * 1 by simp]
-  exact Submodule.mul_mem_mul Submodule.mem_top Submodule.mem_top
-
-/-- If `wordSpan A N = ⊤`, then `wordSpan A (k * N) = ⊤` for any `k ≥ 1`. -/
-theorem wordSpan_top_of_mul (A : MPSTensor d D) {N : ℕ}
-    (htop : wordSpan A N = ⊤) :
-    ∀ k : ℕ, 1 ≤ k → wordSpan A (k * N) = ⊤ := by
-  intro k hk
-  induction k with
-  | zero => omega
-  | succ k ih =>
-    by_cases hk0 : k = 0
-    · simp [hk0, htop]
-    · have hkge : 1 ≤ k := Nat.one_le_iff_ne_zero.mpr hk0
-      have hih : wordSpan A (k * N) = ⊤ := ih hkge
-      have hmul : wordSpan A (k * N) * wordSpan A N ≤ wordSpan A (k * N + N) :=
-        wordSpan_mul_le A (k * N) N
-      have htoptop : wordSpan A (k * N) * wordSpan A N = ⊤ := by
-        rw [hih, htop]; exact top_mul_top_eq_top
-      have hle : (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) ≤ wordSpan A (k * N + N) := by
-        rw [← htoptop]; exact hmul
-      have hlen : k * N + N = (k + 1) * N := by ring
-      rw [hlen] at hle
-      exact eq_top_iff.mpr hle
-
-/-! ## Section 2: Blocking preserves normality -/
+/-! ## Section 1: Blocking preserves normality -/
 
 /-- A word evaluation of length `(n+1)*L` factors as a product of a length-L evaluation
 and a length-`n*L` evaluation.
@@ -188,7 +154,7 @@ theorem isNormal_blockTensor (A : MPSTensor d D) (L : ℕ) (hL : 0 < L)
     eq_top_iff.mpr (htopNL ▸ hle)
   exact ⟨N₀, (wordSpan_eq_top_iff_isNBlkInjective _ N₀).mp hBtop⟩
 
-/-! ## Section 3: Eigenvector for blocked tensor -/
+/-! ## Section 2: Eigenvector for blocked tensor -/
 
 /-- Encoding a function `σ₀ : Fin L → Fin d` as a blocked index. -/
 noncomputable def encodeBlock (d L : ℕ) (σ₀ : Fin L → Fin d) :
@@ -220,7 +186,7 @@ theorem blockTensor_transpose_encodeBlock (A : MPSTensor d D) (L : ℕ)
       (evalWord A (List.ofFn σ₀))ᵀ := by
   rw [blockTensor_apply_encodeBlock]
 
-/-! ## Section 4: Rectangular span -/
+/-! ## Section 3: Rectangular span -/
 
 /-- The **rectangular span** is the image of `wordSpan A n` under
 left-multiplication by a fixed matrix `P`. -/
@@ -248,7 +214,7 @@ theorem rectSpan_finrank_le (P : Matrix (Fin D) (Fin D) ℂ) (A : MPSTensor d D)
     _ = D * D * 1 := by simp [Fintype.card_fin, Module.finrank_self]
     _ = D ^ 2 := by ring
 
-/-! ## Section 5: Cumulative rectangular span -/
+/-! ## Section 4: Cumulative rectangular span -/
 
 /-- The **cumulative rectangular span**: image of `cumulativeSpan` under left-mult by P. -/
 noncomputable def cumulativeRectSpan (P : Matrix (Fin D) (Fin D) ℂ)
@@ -294,7 +260,7 @@ theorem cumulativeRectSpan_eq_range_of_isNormal [NeZero D]
   cumulativeRectSpan_eq_range_of_cumulativeSpan_eq_top P A
     (cumulativeSpan_eq_top A hN)
 
-/-! ## Section 6: Conditional assembly (Lemma 2(b)) -/
+/-! ## Section 5: Conditional assembly (Lemma 2(b)) -/
 
 /-- **Lemma 2(b) conditional assembly.**
 
@@ -328,7 +294,7 @@ theorem wielandt_lemma2b_conditional [NeZero D]
   exact wordSpan_eq_top_of_vectorSpreadSpan_eq_top_of_rankOne
     A φ ψ hVecSpread hRankOne hRowSpread
 
-/-! ## Section 7: Blocked assembly -/
+/-! ## Section 6: Blocked assembly -/
 
 /-- **Assembly at the blocked level.**
 

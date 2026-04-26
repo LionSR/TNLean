@@ -41,6 +41,8 @@ with the periodic boundary condition:
   of cyclic window ground submodules
 * `MPSTensor.chainGroundSpace_le_groundSpace_of_isNBlkInjective` — cyclic
   normal-range constraints imply open-chain ground-space membership
+* `MPSTensor.groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_long_word_commutes`
+  — the algebraic MPV-line endgame once long-word commutation is known
 * `MPSTensor.groundSpace_unique_periodic` — uniqueness on the periodic chain
 * `MPSTensor.parentHamiltonian_unique_gs_injective` — uniqueness for `2L₀` sites
 * `MPSTensor.parentHamiltonian_unique_gs_normal` — optimal uniqueness for `L₀+1` sites
@@ -563,6 +565,37 @@ theorem chainGroundSpace_wrapped_boundary_compatibilities_of_isNBlkInjective
   have hMirror := wrapping_window_mirror_compatibility_of_isNBlkInjective
     (A := A) hInj hL₀ hM (YAt mirrorPos) (fun τ σ_w => hYAt mirrorPos τ σ_w)
   exact ⟨YAt wrapPos, YAt mirrorPos, hWrap, hMirror⟩
+
+/-- Long-word commutation is enough to place an open-chain boundary vector in the
+periodic MPV line.
+
+After the reduced wrapped-boundary compatibilities have been converted into a
+family of identities `X A^ω = A^ω X` for one word length `m ≥ L₀`, the existing
+block-stripping theorem makes `X` commute with the full matrix algebra.  Hence
+`X` is scalar and `groundSpaceMap A N X` is a scalar multiple of the MPV. -/
+theorem groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_long_word_commutes
+    {A : MPSTensor d D} {L₀ m N : ℕ}
+    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hm : L₀ ≤ m)
+    {X : Matrix (Fin D) (Fin D) ℂ}
+    (hComm : ∀ ω : Fin m → Fin d,
+      X * evalWord A (List.ofFn ω) = evalWord A (List.ofFn ω) * X) :
+    groundSpaceMap A N X ∈ mpvSubmodule A N := by
+  have hAll : ∀ M : Matrix (Fin D) (Fin D) ℂ, X * M = M * X :=
+    commutes_all_of_commutes_long_words_of_isNBlkInjective
+      (A := A) hInj hL₀ hm hComm
+  have hCenter : X ∈ Set.center (Matrix (Fin D) (Fin D) ℂ) := by
+    rw [Semigroup.mem_center_iff]
+    intro M
+    exact (hAll M).symm
+  rw [Matrix.center_eq_range] at hCenter
+  obtain ⟨c, hc⟩ := hCenter
+  have hX_eq : X = c • (1 : Matrix (Fin D) (Fin D) ℂ) := by
+    rw [← hc, Matrix.scalar_apply, ← Matrix.smul_one_eq_diagonal]
+  rw [mpvSubmodule, Submodule.mem_span_singleton]
+  refine ⟨c, ?_⟩
+  ext σ
+  simp only [groundSpaceMap_apply, Pi.smul_apply, smul_eq_mul, mpv, coeff]
+  rw [hX_eq, Algebra.mul_smul_comm, mul_one, Matrix.trace_smul, smul_eq_mul]
 
 /-- Range-reduction bridge for normal tensors.
 
