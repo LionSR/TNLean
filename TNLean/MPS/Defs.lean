@@ -89,6 +89,13 @@ block decompositions whose summands need not live in the same matrix algebra. -/
 def SameMPV₂ {d D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂) : Prop :=
   ∀ (N : ℕ) (σ : Fin N → Fin d), mpv A σ = mpv B σ
 
+/-- Positive-length MPV equality for possibly different bond dimensions.
+
+This is useful when compressions or zero-tail removals change the `N = 0`
+coefficient but preserve all nonempty-chain coefficients. -/
+def SameMPV₂Pos {d D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂) : Prop :=
+  ∀ {N : ℕ}, 0 < N → ∀ σ : Fin N → Fin d, mpv A σ = mpv B σ
+
 /-- Proportionality of MPVs: for each N there exists c_N with V_N(A) = c_N · V_N(B). -/
 def ProportionalMPV₂ {d D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂) : Prop :=
   ∀ N : ℕ, ∃ c : ℂ, ∀ σ : Fin N → Fin d, mpv A σ = c * mpv B σ
