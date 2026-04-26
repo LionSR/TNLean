@@ -512,7 +512,7 @@ families for an open-chain boundary matrix.
 After the cyclic-to-open-chain step writes a periodic-chain vector as
 `ψ = groundSpaceMap A N X`, the two reduced wrapped windows expose the boundary
 matrix `X` on opposite sides of the same length-`N - (L₀ + 1)` complement word.
-This theorem packages exactly the local algebraic output needed for the final
+This theorem gives exactly the local algebraic output needed for the final
 common-middle/long-word commutation step of the normal parent-Hamiltonian
 argument. -/
 theorem chainGroundSpace_wrapped_boundary_compatibilities_of_isNBlkInjective
