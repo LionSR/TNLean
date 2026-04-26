@@ -2271,7 +2271,6 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
 
 \begin{lemma}[Product-word span from BNT selector words]
     \label{lem:product_word_span_from_bnt_selectors}
-    \lean{MPSTensor.isNBlkInjective_one_of_isInjective}
     \lean{MPSTensor.wordTupleSpanTop_of_isCanonicalFormBNT_of_blockSelectorWords}
     \lean{MPSTensor.exists_pos_productWordSpan_of_isCanonicalFormBNT_of_blockSelectorWords}
     \lean{MPSTensor.blockProjection_mem_span_reindexed_toTensorFromBlocks_of_bntSelectorWords}
@@ -2289,9 +2288,11 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
 
 \begin{proof}
     \leanok
-    \uses{lem:block_projection_span_from_product_word_span}
+    \uses{lem:one_block_injective_of_injective,
+        lem:block_projection_span_from_product_word_span}
     Definition~\ref{def:cf_bnt} gives one-site injectivity of each block, hence
-    $1$-block injectivity.  For a target tuple $(M_j)_j$, write $M_k$ as a
+    $1$-block injectivity by Lemma~\ref{lem:one_block_injective_of_injective}.
+    For a target tuple $(M_j)_j$, write $M_k$ as a
     one-letter linear combination in block $k$, multiply by the selector for $k$,
     and sum over $k$.  The selector kills all off-target blocks, while it is the
     identity on block $k$, so the length-$(1+S)$ word tuples span the full

@@ -338,6 +338,22 @@ boundary conditions (PBC).
     An injective tensor is $1$-block injective.
 \end{definition}
 
+\begin{lemma}[One-site injectivity gives one-block injectivity]
+    \label{lem:one_block_injective_of_injective}
+    \lean{MPSTensor.isNBlkInjective_one_of_isInjective}
+    \leanok
+    \uses{def:injective, def:l_blk_injective}
+    If the one-site matrices $\{A^i\}_{i=0}^{d-1}$ span $\MN{D}$, then the
+    length-one word products span $\MN{D}$, so $A$ is $1$-block injective.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The length-one words are exactly the letters $i \in \{0,\ldots,d-1\}$, and
+    evaluating a length-one word gives the matrix $A^i$. Thus the length-one
+    word span is the same span as in one-site injectivity.
+\end{proof}
+
 \begin{definition}[Normal tensor]\label{def:normal}
     \lean{MPSTensor.IsNormal}
     \leanok
