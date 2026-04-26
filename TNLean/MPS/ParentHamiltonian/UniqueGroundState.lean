@@ -539,45 +539,30 @@ theorem chainGroundSpace_wrapped_boundary_compatibilities_of_isNBlkInjective
       (by omega : L₀ + 1 ≤ L) hLN hψmap
   rw [chainGroundSpace, dif_pos ⟨hN0, hL₀N⟩] at hψred
   simp only [Submodule.mem_iInf, Submodule.mem_comap] at hψred
-  have hGSwrap : ∀ τ : Fin (M + 1) → Fin d,
+  have hGSAt : ∀ (i : Fin (M + 1)) (τ : Fin (M + 1) → Fin d),
       ∃ Y : Matrix (Fin D) (Fin D) ℂ,
         ∀ σ_w : Fin (L₀ + 1) → Fin d,
           Matrix.trace (evalWord A (List.ofFn
-            (cyclicCfg hN0 (L₀ + 1) ⟨M, by omega⟩ σ_w τ)) * X) =
+            (cyclicCfg hN0 (L₀ + 1) i σ_w τ)) * X) =
           Matrix.trace (evalWord A (List.ofFn σ_w) * Y) := by
-    intro τ
-    have hmem := hψred ⟨M, by omega⟩ τ
+    intro i τ
+    have hmem := hψred i τ
     rw [groundSpace, LinearMap.mem_range] at hmem
     obtain ⟨Y, hY⟩ := hmem
     refine ⟨Y, fun σ_w => ?_⟩
-    have : cyclicRestrictₗ hN0 (L₀ + 1) ⟨M, by omega⟩ τ
+    have : cyclicRestrictₗ hN0 (L₀ + 1) i τ
         (groundSpaceMap A (M + 1) X) σ_w = groundSpaceMap A (L₀ + 1) Y σ_w := by
       rw [← hY]
     simp only [cyclicRestrictₗ_apply, groundSpaceMap_apply] at this
     exact this
-  choose Ywrap hYwrap using hGSwrap
+  choose YAt hYAt using hGSAt
+  let wrapPos : Fin (M + 1) := ⟨M, by omega⟩
+  let mirrorPos : Fin (M + 1) := ⟨M + 1 - L₀, by omega⟩
   have hWrap := wrapping_window_compatibility_of_isNBlkInjective
-    (A := A) hInj hL₀ hM Ywrap (fun τ σ_w => hYwrap τ σ_w)
-  have hGSmirror : ∀ τ : Fin (M + 1) → Fin d,
-      ∃ Y : Matrix (Fin D) (Fin D) ℂ,
-        ∀ σ_w : Fin (L₀ + 1) → Fin d,
-          Matrix.trace (evalWord A (List.ofFn
-            (cyclicCfg hN0 (L₀ + 1) ⟨M + 1 - L₀, by omega⟩ σ_w τ)) * X) =
-          Matrix.trace (evalWord A (List.ofFn σ_w) * Y) := by
-    intro τ
-    have hmem := hψred ⟨M + 1 - L₀, by omega⟩ τ
-    rw [groundSpace, LinearMap.mem_range] at hmem
-    obtain ⟨Y, hY⟩ := hmem
-    refine ⟨Y, fun σ_w => ?_⟩
-    have : cyclicRestrictₗ hN0 (L₀ + 1) ⟨M + 1 - L₀, by omega⟩ τ
-        (groundSpaceMap A (M + 1) X) σ_w = groundSpaceMap A (L₀ + 1) Y σ_w := by
-      rw [← hY]
-    simp only [cyclicRestrictₗ_apply, groundSpaceMap_apply] at this
-    exact this
-  choose Ymirror hYmirror using hGSmirror
+    (A := A) hInj hL₀ hM (YAt wrapPos) (fun τ σ_w => hYAt wrapPos τ σ_w)
   have hMirror := wrapping_window_mirror_compatibility_of_isNBlkInjective
-    (A := A) hInj hL₀ hM Ymirror (fun τ σ_w => hYmirror τ σ_w)
-  exact ⟨Ywrap, Ymirror, hWrap, hMirror⟩
+    (A := A) hInj hL₀ hM (YAt mirrorPos) (fun τ σ_w => hYAt mirrorPos τ σ_w)
+  exact ⟨YAt wrapPos, YAt mirrorPos, hWrap, hMirror⟩
 
 /-- Range-reduction bridge for normal tensors.
 
