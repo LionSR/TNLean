@@ -6,6 +6,7 @@ import TNLean.MPS.ParentHamiltonian.Basic
 import TNLean.MPS.ParentHamiltonian.BlockStrip
 import TNLean.MPS.ParentHamiltonian.CyclicWindow
 import TNLean.MPS.FundamentalTheorem.FiniteLength
+import TNLean.Wielandt.RectangularSpan.Basic
 
 /-!
 # Wrapping window argument for periodic MPS chains
@@ -44,6 +45,8 @@ proceeds as follows:
 
 * `MPSTensor.boundary_matrix_commutes_of_isNBlkInjective_of_long_word_commutes`
   — block injectivity turns long-word commutation into generator commutation
+* `MPSTensor.eq_zero_of_mul_evalWord_eq_zero_of_isNBlkInjective_of_le_mul`
+  — padding short complement annihilation to a full block-injective word span
 * `MPSTensor.boundary_matrix_commutes` — if `groundSpaceMap A N X` lies in
   every cyclic window's ground space, then `X` commutes with all `A_j`.
 
@@ -518,6 +521,65 @@ theorem boundary_matrix_commutes_of_isNBlkInjective_of_long_word_commutes
   intro j
   exact commutes_all_of_commutes_long_words_of_isNBlkInjective
     (A := A) hInj hL₀ hm hComm (A j)
+
+/-- If left multiplication by `Z` annihilates every word product of length `k`,
+and words of some longer length `n` span the full matrix algebra, then `Z = 0`.
+
+This is the padding form needed in the normal wrapped-boundary closure: an
+annihilation relation obtained for a short complement word can be multiplied by
+all padding words up to any length whose exact word span is `⊤`. -/
+theorem eq_zero_of_mul_evalWord_eq_zero_of_wordSpan_eq_top
+    {A : MPSTensor d D} {k n : ℕ} {Z : Matrix (Fin D) (Fin D) ℂ}
+    (htop : wordSpan A n = ⊤) (hkn : k ≤ n)
+    (hzero : ∀ σ : Fin k → Fin d, Z * evalWord A (List.ofFn σ) = 0) :
+    Z = 0 := by
+  have hzero_span : ∀ M ∈ wordSpan A n, Z * M = 0 := by
+    apply Submodule.span_induction
+    · intro M hM
+      rcases hM with ⟨σ, rfl⟩
+      let w := List.ofFn σ
+      have htake_len : (w.take k).length = k := by
+        rw [List.length_take]
+        have hwlen : w.length = n := by simp [w]
+        omega
+      let σk : Fin k → Fin d := fun i =>
+        (w.take k).get ⟨i.val, by simp [htake_len]⟩
+      have hσk : List.ofFn σk = w.take k := by
+        simpa [σk, htake_len] using (List.ofFn_get (w.take k))
+      have hprefix : Z * evalWord A (w.take k) = 0 := by
+        simpa [hσk] using hzero σk
+      calc
+        Z * evalWord A w = Z * evalWord A (w.take k ++ w.drop k) := by
+          rw [List.take_append_drop k w]
+        _ = Z * (evalWord A (w.take k) * evalWord A (w.drop k)) := by
+          rw [evalWord_append]
+        _ = (Z * evalWord A (w.take k)) * evalWord A (w.drop k) := by
+          rw [Matrix.mul_assoc]
+        _ = 0 := by rw [hprefix, zero_mul]
+    · simp
+    · intro M₁ M₂ _ _ h₁ h₂
+      simp [Matrix.mul_add, h₁, h₂]
+    · intro c M _ hM
+      simp [hM]
+  have h1 : Z * (1 : Matrix (Fin D) (Fin D) ℂ) = 0 :=
+    hzero_span 1 (htop ▸ Submodule.mem_top)
+  simpa using h1
+
+/-- Block-injective padding variant of
+`eq_zero_of_mul_evalWord_eq_zero_of_wordSpan_eq_top`.
+
+If `A` is `L₀`-block-injective, then every positive multiple of `L₀` has full
+word span. Hence an annihilation relation at length `k` already forces `Z = 0`
+as soon as `k` is bounded by such a multiple. -/
+theorem eq_zero_of_mul_evalWord_eq_zero_of_isNBlkInjective_of_le_mul
+    {A : MPSTensor d D} {L₀ k q : ℕ} (hInj : IsNBlkInjective A L₀)
+    (hq : 1 ≤ q) (hkq : k ≤ q * L₀) {Z : Matrix (Fin D) (Fin D) ℂ}
+    (hzero : ∀ σ : Fin k → Fin d, Z * evalWord A (List.ofFn σ) = 0) :
+    Z = 0 := by
+  exact eq_zero_of_mul_evalWord_eq_zero_of_wordSpan_eq_top
+    (A := A) (k := k) (n := q * L₀)
+    (wordSpan_top_of_mul A ((wordSpan_eq_top_iff_isNBlkInjective A L₀).mpr hInj) q hq)
+    hkq hzero
 
 set_option maxHeartbeats 800000 in
 -- The double spanning argument over window tails and complements creates large
