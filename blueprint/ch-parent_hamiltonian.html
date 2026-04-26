@@ -11087,13 +11087,13 @@
 
   </div>
 </div>
-<div class="lemma_thmwrapper theorem-style-plain" id="lem:product_word_span_from_bnt_selectors">
-  <div class="lemma_thmheading">
-    <span class="lemma_thmcaption">
-    Lemma
+<div class="definition_thmwrapper theorem-style-definition" id="def:pairwise_block_separating_words">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
     </span>
-    <span class="lemma_thmlabel">19.135</span>
-    <span class="lemma_thmtitle">Product-word span from BNT selector words</span>
+    <span class="definition_thmlabel">19.135</span>
+    <span class="definition_thmtitle">Pairwise block-separating word polynomials</span>
     <div class="thm_header_extras">
 
     
@@ -11101,7 +11101,53 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-parent_hamiltonian.html#lem:product_word_span_from_bnt_selectors">#</a>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#def:pairwise_block_separating_words">#</a>
+    
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.HasBlockSelectorOn" class="lean_decl">MPSTensor.HasBlockSelectorOn</a></li>
+          
+          <li><a href="../docs/find/#doc/MPSTensor.HasPairBlockSeparatingWords" class="lean_decl">MPSTensor.HasPairBlockSeparatingWords</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>    A length-\(S\) partial selector for block \(k\) on a finite target set \(T\) is a tuple in the span of simultaneous length-\(S\) block-word evaluations which is \(I\) on block \(k\) and \(0\) on every block in \(T\). The pairwise version asks for such a partial selector for each ordered pair of distinct blocks, with \(T=\{ j\} \). </p>
+
+  </div>
+</div>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:block_selectors_from_pairwise_separators">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">19.136</span>
+    <span class="lemma_thmtitle">Block selectors from pairwise block separation</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-parent_hamiltonian.html#lem:block_selectors_from_pairwise_separators">#</a>
     
     <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001483"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
@@ -11119,11 +11165,110 @@
         
         <ul class="uses">
           
+          <li><a href="ch-parent_hamiltonian.html#def:pairwise_block_separating_words">Definition 19.135</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.pointwise_mul_mem_span_wordTuple_add" class="lean_decl">MPSTensor.pointwise_mul_mem_span_wordTuple_add</a></li>
+          
+          <li><a href="../docs/find/#doc/MPSTensor.hasBlockSelectorOn_empty" class="lean_decl">MPSTensor.hasBlockSelectorOn_empty</a></li>
+          
+          <li><a href="../docs/find/#doc/MPSTensor.HasBlockSelectorOn.mul" class="lean_decl">MPSTensor.HasBlockSelectorOn.mul</a></li>
+          
+          <li><a href="../docs/find/#doc/MPSTensor.hasBlockSelectorOn_finset_of_pairBlockSeparatingWords" class="lean_decl">MPSTensor.hasBlockSelectorOn_finset_of_pairBlockSeparatingWords</a></li>
+          
+          <li><a href="../docs/find/#doc/MPSTensor.hasBlockSelectorWords_of_forall_hasBlockSelectorOn_univ_erase" class="lean_decl">MPSTensor.hasBlockSelectorWords_of_forall_hasBlockSelectorOn_univ_erase</a></li>
+          
+          <li><a href="../docs/find/#doc/MPSTensor.hasBlockSelectorWords_of_pairBlockSeparatingWords" class="lean_decl">MPSTensor.hasBlockSelectorWords_of_pairBlockSeparatingWords</a></li>
+          
+          <li><a href="../docs/find/#doc/MPSTensor.propBlockInjective_of_common_blockInjective_of_pairBlockSeparatingWords" class="lean_decl">MPSTensor.propBlockInjective_of_common_blockInjective_of_pairBlockSeparatingWords</a></li>
+          
+          <li><a href="../docs/find/#doc/MPSTensor.wordTupleSpanTop_of_common_blockInjective_of_pairBlockSeparatingWords" class="lean_decl">MPSTensor.wordTupleSpanTop_of_common_blockInjective_of_pairBlockSeparatingWords</a></li>
+          
+          <li><a href="../docs/find/#doc/MPSTensor.hasBiCF_of_common_blockInjective_of_pairBlockSeparatingWords" class="lean_decl">MPSTensor.hasBiCF_of_common_blockInjective_of_pairBlockSeparatingWords</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>            If every ordered pair of distinct blocks admits a common-length pairwise separator, then full block-selector words exist. More precisely, multiplying the pairwise separators for a fixed block \(k\) against all other blocks gives a selector of length \((r-1)S\) for \(k\). Hence common block injectivity plus pairwise separators implies the Proposition-IV.3 finite product-word span and the biCF trace-separation condition. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000001483">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>The empty word gives the identity tuple, selecting on the empty target set. The span of word tuples is closed under pointwise multiplication because the product of a length-\(L\) word and a length-\(S\) word is the concatenated length-\((L+S)\) word. Inducting over the finite set of blocks different from \(k\) and multiplying the corresponding pairwise separators keeps the value \(I\) on \(k\) and introduces one additional zero block at each step. Extracting coefficients from the final tuple-span membership gives the coefficient form of block-selector words. </p>
+
+  </div>
+</div>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:product_word_span_from_bnt_selectors">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">19.137</span>
+    <span class="lemma_thmtitle">Product-word span from BNT selector words</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-parent_hamiltonian.html#lem:product_word_span_from_bnt_selectors">#</a>
+    
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001484"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
           <li><a href="ch-bnt.html#def:cf_bnt">Definition 13.3</a></li>
+          
+          <li><a href="ch-parent_hamiltonian.html#lem:block_selectors_from_pairwise_separators">Lemma 19.136</a></li>
           
           <li><a href="ch-parent_hamiltonian.html#lem:block_projection_span_from_product_word_span">Lemma 19.134</a></li>
           
           <li><a href="ch-mps.html#lem:one_block_injective_of_injective">Lemma 2.24</a></li>
+          
+          <li><a href="ch-parent_hamiltonian.html#lem:block_selectors_from_pairwise_separators">Lemma 19.136</a></li>
           
           <li><a href="ch-parent_hamiltonian.html#lem:block_projection_span_from_product_word_span">Lemma 19.134</a></li>
           
@@ -11147,6 +11292,10 @@
           
           <li><a href="../docs/find/#doc/MPSTensor.wordTupleSpanTop_of_isCanonicalFormBNT_of_blockSelectorWords" class="lean_decl">MPSTensor.wordTupleSpanTop_of_isCanonicalFormBNT_of_blockSelectorWords</a></li>
           
+          <li><a href="../docs/find/#doc/MPSTensor.wordTupleSpanTop_of_isCanonicalFormBNT_of_pairBlockSeparatingWords" class="lean_decl">MPSTensor.wordTupleSpanTop_of_isCanonicalFormBNT_of_pairBlockSeparatingWords</a></li>
+          
+          <li><a href="../docs/find/#doc/MPSTensor.exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairBlockSeparatingWords" class="lean_decl">MPSTensor.exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairBlockSeparatingWords</a></li>
+          
           <li><a href="../docs/find/#doc/MPSTensor.exists_pos_productWordSpan_of_isCanonicalFormBNT_of_blockSelectorWords" class="lean_decl">MPSTensor.exists_pos_productWordSpan_of_isCanonicalFormBNT_of_blockSelectorWords</a></li>
           
           <li><a href="../docs/find/#doc/MPSTensor.blockProjection_mem_span_reindexed_toTensorFromBlocks_of_bntSelectorWords" class="lean_decl">MPSTensor.blockProjection_mem_span_reindexed_toTensorFromBlocks_of_bntSelectorWords</a></li>
@@ -11162,11 +11311,11 @@
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>       Let \(((\mu _j),(A_j))\) be in canonical form with BNT separation. Suppose there are length-\(S\) block-selector words: for each sector \(k\), a linear combination of length-\(S\) words evaluates to \(I\) on \(A_k\) and to \(0\) on every other block. Then the simultaneous length-\((1+S)\) block-word evaluations span \(\prod _j M_{D_j}(\mathbb {C})\), with positive length. Consequently, the pulled-back length-\((1+S)\) words of \(\operatorname {Assemble}(\mu ,A)\) span every virtual sector projection, and the corresponding commutant reduction is available. </p>
+  <p>         Let \(((\mu _j),(A_j))\) be in canonical form with BNT separation. Suppose there are length-\(S\) block-selector words: for each sector \(k\), a linear combination of length-\(S\) words evaluates to \(I\) on \(A_k\) and to \(0\) on every other block. Then the simultaneous length-\((1+S)\) block-word evaluations span \(\prod _j M_{D_j}(\mathbb {C})\), with positive length. It is enough, by Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:block_selectors_from_pairwise_separators">19.136</a>, to construct pairwise separators for every ordered pair of distinct blocks. Consequently, the pulled-back words at the resulting length for \(\operatorname {Assemble}(\mu ,A)\) span every virtual sector projection, and the corresponding commutant reduction is available. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001483">
+<div class="proof_wrapper" id="a0000001484">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -11174,7 +11323,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Definition&#160;<a href="ch-bnt.html#def:cf_bnt">13.3</a> gives one-site injectivity of each block, hence \(1\)-block injectivity by Lemma&#160;<a href="ch-mps.html#lem:one_block_injective_of_injective">2.24</a>. For a target tuple \((M_j)_j\), write \(M_k\) as a one-letter linear combination in block \(k\), multiply by the selector for \(k\), and sum over \(k\). The selector kills all off-target blocks, while it is the identity on block \(k\), so the length-\((1+S)\) word tuples span the full product algebra. The projection-span and commutant consequences then follow from Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:block_projection_span_from_product_word_span">19.134</a>. </p>
+  <p> Definition&#160;<a href="ch-bnt.html#def:cf_bnt">13.3</a> gives one-site injectivity of each block, hence \(1\)-block injectivity by Lemma&#160;<a href="ch-mps.html#lem:one_block_injective_of_injective">2.24</a>. For a target tuple \((M_j)_j\), write \(M_k\) as a one-letter linear combination in block \(k\), multiply by the selector for \(k\), and sum over \(k\). The selector kills all off-target blocks, while it is the identity on block \(k\), so the length-\((1+S)\) word tuples span the full product algebra. If one starts with pairwise separators instead, first use Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:block_selectors_from_pairwise_separators">19.136</a> to multiply them into full selectors. The projection-span and commutant consequences then follow from Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:block_projection_span_from_product_word_span">19.134</a>. </p>
 
   </div>
 </div>
@@ -11183,7 +11332,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">19.136</span>
+    <span class="lemma_thmlabel">19.138</span>
     <span class="lemma_thmtitle">Conditional boundary-matrix block split from projection span</span>
     <div class="thm_header_extras">
 
@@ -11194,7 +11343,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:conditional_boundary_matrix_block_split_projection_span">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001484"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001485"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -11270,14 +11419,14 @@
   </div>
   <div class="lemma_thmcontent">
   <p>       Let \(A\) be in canonical-form/BNT, and assume \(1{\lt}L\), \(N \ge L+1\), and \(0{\lt}m\). Assume the remaining #911 input: every virtual sector projection lies in the pulled-back span of the length-\(m\) word products of the assembled tensor. If a boundary matrix for the assembled tensor commutes with all those length-\(m\) words, then the vector obtained by applying the assembled ground-space map to that boundary matrix lies in \(\bigsqcup _j \mathcal G_{N,L}(A_j)\). Consequently, if every assembled periodic-chain ground vector admits such a commuting boundary matrix representation (the output of the wrapping-window comparison), then </p>
-<div class="displaymath" id="a0000001485">
+<div class="displaymath" id="a0000001486">
   \[  \mathcal G_{N,L}\bigl(\operatorname {Assemble}(\mu , A)\bigr) \subseteq \bigsqcup _j \mathcal G_{N,L}(A_j),  \]
 </div>
 <p> and together with the already-proved forward inclusion this gives the corresponding conditional equality. Composing the reverse inclusion with blockwise injective uniqueness gives the conditional containment of the assembled parent ground space in the BNT span; this lemma is not a restatement of the final theorem, because it keeps the #911 projection-span and boundary representation inputs explicit. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001484">
+<div class="proof_wrapper" id="a0000001485">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -11294,7 +11443,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">19.137</span>
+    <span class="lemma_thmlabel">19.139</span>
     <span class="lemma_thmtitle">Conditional Route B block split from product-word span</span>
     <div class="thm_header_extras">
 
@@ -11305,7 +11454,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:route_b_block_split_from_product_word_span">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001486"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001487"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -11325,7 +11474,7 @@
           
           <li><a href="ch-parent_hamiltonian.html#lem:block_projection_span_from_product_word_span">Lemma 19.134</a></li>
           
-          <li><a href="ch-parent_hamiltonian.html#lem:conditional_boundary_matrix_block_split_projection_span">Lemma 19.136</a></li>
+          <li><a href="ch-parent_hamiltonian.html#lem:conditional_boundary_matrix_block_split_projection_span">Lemma 19.138</a></li>
           
         </ul>
     
@@ -11361,14 +11510,14 @@
   </div>
   <div class="lemma_thmcontent">
   <p>      Let \(A\) be in canonical-form/BNT, and assume \(1{\lt}L\), \(N \ge L+1\), and \(0{\lt}m\). If the length-\(m\) product-word tuples span \(\prod _j M_{D_j}(\mathbb {C})\) and every assembled periodic-chain ground vector comes with a boundary matrix representation commuting with all length-\(m\) assembled words, then </p>
-<div class="displaymath" id="a0000001487">
+<div class="displaymath" id="a0000001488">
   \[  \mathcal G_{N,L}\bigl(\operatorname {Assemble}(\mu , A)\bigr) \subseteq \bigsqcup _j \mathcal G_{N,L}(A_j).  \]
 </div>
 <p> Combined with the forward inclusion, this gives the corresponding conditional equality. In the parent-ground-space formulation, the same hypotheses imply containment in \(\operatorname {BNTSpan}_{N}(A)\). The product-word span and boundary representation remain hypotheses here; they are not derived by this composition lemma. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001486">
+<div class="proof_wrapper" id="a0000001487">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -11376,7 +11525,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> The product-word span witness gives the sector-projection span by Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:block_projection_span_from_product_word_span">19.134</a>; the nonzero weights required there are supplied by the canonical-form/BNT hypothesis. The conditional boundary-matrix block split from Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:conditional_boundary_matrix_block_split_projection_span">19.136</a> then gives the reverse inclusion. The equality and BNT-span forms are the corresponding projection-span results after this product-word-to-projection-span reduction, followed by the blockwise uniqueness endgame already built into the projection-span theorem. </p>
+  <p> The product-word span witness gives the sector-projection span by Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:block_projection_span_from_product_word_span">19.134</a>; the nonzero weights required there are supplied by the canonical-form/BNT hypothesis. The conditional boundary-matrix block split from Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:conditional_boundary_matrix_block_split_projection_span">19.138</a> then gives the reverse inclusion. The equality and BNT-span forms are the corresponding projection-span results after this product-word-to-projection-span reduction, followed by the blockwise uniqueness endgame already built into the projection-span theorem. </p>
 
   </div>
 </div>
@@ -11385,7 +11534,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">19.138</span>
+    <span class="theorem_thmlabel">19.140</span>
     <span class="theorem_thmtitle">Containment in the BNT span by block decomposition</span>
     <div class="thm_header_extras">
 
@@ -11394,7 +11543,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#thm:parent_ground_space_le_bnt_span">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001488"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001489"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -11416,9 +11565,11 @@
           
           <li><a href="ch-parent_hamiltonian.html#thm:chain_ground_space_eq_mpv_blk">Theorem 19.63</a></li>
           
-          <li><a href="ch-parent_hamiltonian.html#lem:product_word_span_from_bnt_selectors">Lemma 19.135</a></li>
+          <li><a href="ch-parent_hamiltonian.html#lem:block_selectors_from_pairwise_separators">Lemma 19.136</a></li>
           
-          <li><a href="ch-parent_hamiltonian.html#lem:route_b_block_split_from_product_word_span">Lemma 19.137</a></li>
+          <li><a href="ch-parent_hamiltonian.html#lem:product_word_span_from_bnt_selectors">Lemma 19.137</a></li>
+          
+          <li><a href="ch-parent_hamiltonian.html#lem:route_b_block_split_from_product_word_span">Lemma 19.139</a></li>
           
         </ul>
     
@@ -11453,7 +11604,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001488">
+<div class="proof_wrapper" id="a0000001489">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -11461,7 +11612,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>The remaining structural step is the periodic block decomposition of the assembled chain ground space. Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:product_word_span_from_bnt_selectors">19.135</a> reduces the product-word span hypothesis to the finite BNT selector-word theorem. Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:route_b_block_split_from_product_word_span">19.137</a> gives the conditional Route B composition once that product-word span is available and the wrapping-window comparison provides the commuting boundary matrix. With that decomposition available, one applies the blockwise injective uniqueness theorem to each block separately and recovers the BNT span. </p>
+  <p>The remaining structural step is the periodic block decomposition of the assembled chain ground space. Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:block_selectors_from_pairwise_separators">19.136</a> reduces global selectors to pairwise block-separating word polynomials, and Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:product_word_span_from_bnt_selectors">19.137</a> reduces product-word span to those finite selector words. Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:route_b_block_split_from_product_word_span">19.139</a> gives the conditional Route B composition once that product-word span is available and the wrapping-window comparison provides the commuting boundary matrix. With that decomposition available, one applies the blockwise injective uniqueness theorem to each block separately and recovers the BNT span. </p>
 
   </div>
 </div>
@@ -11470,7 +11621,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">19.139</span>
+    <span class="theorem_thmlabel">19.141</span>
     <span class="theorem_thmtitle">Ground space equals span of BNT</span>
     <div class="thm_header_extras">
 
@@ -11479,7 +11630,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#thm:gs_eq_bnt_span">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001489"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001490"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -11495,7 +11646,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-parent_hamiltonian.html#thm:parent_ground_space_le_bnt_span">Theorem 19.138</a></li>
+          <li><a href="ch-parent_hamiltonian.html#thm:parent_ground_space_le_bnt_span">Theorem 19.140</a></li>
           
           <li><a href="ch-parent_hamiltonian.html#lem:bnt_mpv_mem_ground_space">Lemma 19.128</a></li>
           
@@ -11533,13 +11684,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   If \(1 {\lt} L\) and \(N \ge L + 1\), then for a canonical-form/BNT family the assembled parent ground space equals the BNT span: </p>
-<div class="displaymath" id="a0000001490">
+<div class="displaymath" id="a0000001491">
   \[  \operatorname {ParentGround}_{N,L}(A) = \operatorname {BNTSpan}_{N}(A).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001489">
+<div class="proof_wrapper" id="a0000001490">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -11548,11 +11699,11 @@
   </div>
   <div class="proof_content">
   <p>We prove the two inclusions separately. The inclusion </p>
-<div class="displaymath" id="a0000001491">
+<div class="displaymath" id="a0000001492">
   \[  \operatorname {ParentGround}_{N,L}(A) \subseteq \operatorname {BNTSpan}_{N}(A)  \]
 </div>
-<p> is exactly Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:parent_ground_space_le_bnt_span">19.138</a>. For the reverse inclusion, Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:bnt_mpv_mem_ground_space">19.128</a> shows that each BNT MPV lies in \(\operatorname {ParentGround}_{N,L}(A)\). Since the parent ground space is a linear subspace, it therefore contains every linear combination of such vectors, and hence contains \(\operatorname {BNTSpan}_{N}(A)\). Thus </p>
-<div class="displaymath" id="a0000001492">
+<p> is exactly Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:parent_ground_space_le_bnt_span">19.140</a>. For the reverse inclusion, Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:bnt_mpv_mem_ground_space">19.128</a> shows that each BNT MPV lies in \(\operatorname {ParentGround}_{N,L}(A)\). Since the parent ground space is a linear subspace, it therefore contains every linear combination of such vectors, and hence contains \(\operatorname {BNTSpan}_{N}(A)\). Thus </p>
+<div class="displaymath" id="a0000001493">
   \[  \operatorname {BNTSpan}_{N}(A) \subseteq \operatorname {ParentGround}_{N,L}(A),  \]
 </div>
 <p> and the two spaces are equal. </p>
