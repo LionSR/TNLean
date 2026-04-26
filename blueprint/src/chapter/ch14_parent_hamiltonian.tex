@@ -1594,6 +1594,30 @@ Lucia~\cite{Kastoryano2018Martingale}.
     itself positive. Summing over $i$ yields positivity of $H_{N,\mathrm{ES}}$.
 \end{proof}
 
+\begin{lemma}[Symmetric-projection structure of transported ES local terms]
+    \label{lem:transported_es_local_projections}
+    \lean{MPSTensor.parentInteractionES_isSymmetricProjection}
+    \lean{MPSTensor.localTermES_isSymmetricProjection}
+    \leanok
+    \uses{rem:euclidean_local_projector_ingredients, lem:transported_es_positive}
+    The Euclidean local projector $P_L^{\mathrm{ES}}(A)$ is a symmetric projection, and
+    every transported local term $h_{i,\mathrm{ES}}$ on the $N$-site chain is a
+    symmetric projection.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:transported_es_positive}
+    The local operator $P_L^{\mathrm{ES}}(A)$ is an orthogonal projection onto
+    $(G_L^{\mathrm{ES}}(A))^\perp$. For $L\le N$, restricting
+    $h_{i,\mathrm{ES}}v$ to a cyclic window gives
+    $P_L^{\mathrm{ES}}(A)$ applied to the corresponding restriction of $v$; applying
+    $h_{i,\mathrm{ES}}$ a second time therefore applies
+    $(P_L^{\mathrm{ES}}(A))^2=P_L^{\mathrm{ES}}(A)$ on that window. The positivity
+    result above supplies symmetry, and the case $L>N$ is the zero projection by
+    definition.
+\end{proof}
+
 \begin{lemma}[Quadratic form to norm bound]\label{lem:quadratic_form_to_norm_bound}
     \lean{FrustrationFree.spectralGap_of_martingale}
     \leanok
@@ -1736,10 +1760,9 @@ Lucia~\cite{Kastoryano2018Martingale}.
     \lean{MPSTensor.parentHamiltonianES_quadratic_form_of_ordered_local_term_bounds}
     \leanok
     \uses{lem:ordered_projection_rowsum_reduction, def:parent_hamiltonian_es,
-        rem:euclidean_local_projector_ingredients}
+        rem:euclidean_local_projector_ingredients, lem:transported_es_local_projections}
     For a fixed chain length $N$, suppose the transported local terms
-    $h_{i,\mathrm{ES}}$ are symmetric projections and satisfy the ordered row-sum
-    estimate
+    $h_{i,\mathrm{ES}}$ satisfy the ordered row-sum estimate
     \[
         \operatorname{Re}\langle h_{i,\mathrm{ES}} v,h_{j,\mathrm{ES}}v\rangle
         \ge -(1-\gamma)c_{ij}\operatorname{Re}\langle h_{i,\mathrm{ES}}v,v\rangle
@@ -1758,8 +1781,10 @@ Lucia~\cite{Kastoryano2018Martingale}.
 
 \begin{proof}
     \leanok
-    Apply Lemma~\ref{lem:ordered_projection_rowsum_reduction} to the family
-    $P_i=h_{i,\mathrm{ES}}$ and use
+    \uses{lem:transported_es_local_projections, lem:ordered_projection_rowsum_reduction}
+    Lemma~\ref{lem:transported_es_local_projections} supplies the symmetric-projection
+    hypothesis for the family $P_i=h_{i,\mathrm{ES}}$. Apply
+    Lemma~\ref{lem:ordered_projection_rowsum_reduction} to this family and use
     $H_{N,L}^{\mathrm{ES}}=\sum_i h_{i,\mathrm{ES}}$.
 \end{proof}
 
@@ -1768,10 +1793,10 @@ Lucia~\cite{Kastoryano2018Martingale}.
     \lean{MPSTensor.parentHamiltonianES_gap_bound_of_ordered_local_term_bounds}
     \leanok
     \uses{lem:parent_hamiltonian_ordered_rowsum_quadratic,
-        lem:parent_hamiltonian_es_quadratic_reduction}
-    Assume uniformly for every $N\ge2L$ that the transported local terms are
-    symmetric projections and satisfy the ordered row-sum estimate above with
-    $\gamma=1/(4L)$. If $L>1$, then $1/(4L)>0$ and, for every
+        lem:parent_hamiltonian_es_quadratic_reduction, lem:transported_es_local_projections}
+    Assume uniformly for every $N\ge2L$ that the transported local terms satisfy
+    the ordered row-sum estimate above with $\gamma=1/(4L)$. If $L>1$, then
+    $1/(4L)>0$ and, for every
     $v\in(\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp$,
     \[
         \frac{1}{4L}\|v\|\le
@@ -1781,6 +1806,8 @@ Lucia~\cite{Kastoryano2018Martingale}.
 
 \begin{proof}
     \leanok
+    \uses{lem:parent_hamiltonian_ordered_rowsum_quadratic,
+        lem:parent_hamiltonian_es_quadratic_reduction}
     The fixed-chain row-sum reduction supplies the quadratic-form estimate with
     $\gamma=1/(4L)$ for every admissible $N$.  The positivity and kernel
     identification of the transported Hamiltonian then allow
@@ -1999,6 +2026,7 @@ Lucia~\cite{Kastoryano2018Martingale}.
         rem:euclidean_local_projector_ingredients,
         lem:euclidean_local_projector_positive,
         lem:local_term_es_average,
+        lem:transported_es_local_projections,
         lem:parent_hamiltonian_es_quadratic_reduction,
         lem:parent_hamiltonian_ordered_rowsum_gap,
         lem:parent_hamiltonian_finite_overlap_friedrichs_quadratic,
@@ -2017,8 +2045,9 @@ Lucia~\cite{Kastoryano2018Martingale}.
 
 \begin{proof}
     \notready
-    The local averaging identity and positivity statements are now formalized in
-    Lemmas~\ref{lem:local_term_es_average} and~\ref{lem:transported_es_positive}.
+    The local averaging, positivity, and symmetric-projection statements are now
+    recorded in Lemmas~\ref{lem:local_term_es_average},
+    \ref{lem:transported_es_positive}, and~\ref{lem:transported_es_local_projections}.
     Lemma~\ref{lem:parent_hamiltonian_es_quadratic_reduction} reduces the present
     theorem to the remaining MPS-specific task: deriving the uniform
     quadratic-form estimate.  Lemma~\ref{lem:parent_hamiltonian_ordered_rowsum_gap}
