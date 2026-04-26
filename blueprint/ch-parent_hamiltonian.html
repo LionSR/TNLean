@@ -7916,12 +7916,110 @@
 
   </div>
 </div>
-<div class="lemma_thmwrapper theorem-style-plain" id="lem:quadratic_form_to_norm_bound">
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:transported_es_nonoverlap_positive">
   <div class="lemma_thmheading">
     <span class="lemma_thmcaption">
     Lemma
     </span>
     <span class="lemma_thmlabel">19.96</span>
+    <span class="lemma_thmtitle">Non-overlap positivity for transported ES local terms</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-parent_hamiltonian.html#lem:transported_es_nonoverlap_positive">#</a>
+    
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001404"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-parent_hamiltonian.html#lem:transported_es_local_projections">Lemma 19.95</a></li>
+          
+          <li><a href="ch-parent_hamiltonian.html#rem:projection_geometry_rowsum_identities">Remark 19.99</a></li>
+          
+          <li><a href="ch-parent_hamiltonian.html#lem:transported_es_local_projections">Lemma 19.95</a></li>
+          
+          <li><a href="ch-parent_hamiltonian.html#rem:projection_geometry_rowsum_identities">Remark 19.99</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.CyclicWindowsDisjoint" class="lean_decl">MPSTensor.CyclicWindowsDisjoint</a></li>
+          
+          <li><a href="../docs/find/#doc/MPSTensor.CyclicWindowsDisjoint.symm" class="lean_decl">MPSTensor.CyclicWindowsDisjoint.symm</a></li>
+          
+          <li><a href="../docs/find/#doc/MPSTensor.localTermES_commute_of_cyclic_windows_disjoint" class="lean_decl">MPSTensor.localTermES_commute_of_cyclic_windows_disjoint</a></li>
+          
+          <li><a href="../docs/find/#doc/MPSTensor.localTermES_re_inner_nonneg_of_cyclic_windows_disjoint" class="lean_decl">MPSTensor.localTermES_re_inner_nonneg_of_cyclic_windows_disjoint</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>       Let \(L\le N\) and let \(h_{i,\mathrm{ES}},h_{j,\mathrm{ES}}\) be transported local terms whose cyclic \(L\)-windows are site-disjoint: no site of the periodic chain has cyclic offset \({\lt}L\) from both \(i\) and \(j\). Then the terms commute pointwise: for every vector \(v\), </p>
+<div class="displaymath" id="a0000001405">
+  \[  h_{i,\mathrm{ES}}(h_{j,\mathrm{ES}}v) = h_{j,\mathrm{ES}}(h_{i,\mathrm{ES}}v),  \]
+</div>
+<p> and their ordered cross term is nonnegative: </p>
+<div class="displaymath" id="a0000001406">
+  \[  0\le \operatorname {Re}\langle h_{i,\mathrm{ES}}v, h_{j,\mathrm{ES}}v\rangle .  \]
+</div>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000001404">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> In coordinates, \(h_{i,\mathrm{ES}}\) applies \(P_L^{\mathrm{ES}}(A)\) only to the \(i\)-window variables and leaves the complementary variables fixed. Site disjointness gives two replacement identities: replacing the \(i\)-window does not change the extracted \(j\)-window, and the \(i\)- and \(j\)-window replacements commute. Therefore the two embedded local operators commute. The preceding projection-geometry identity for commuting symmetric projections gives the nonnegative ordered cross term. </p>
+
+  </div>
+</div>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:quadratic_form_to_norm_bound">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">19.97</span>
     <span class="lemma_thmtitle">Quadratic form to norm bound</span>
     <div class="thm_header_extras">
 
@@ -7932,7 +8030,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:quadratic_form_to_norm_bound">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001404"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001407"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7960,18 +8058,18 @@
   </div>
   <div class="lemma_thmcontent">
   <p>  Let \(H\) be a positive semidefinite self-adjoint operator on a finite-dimensional complex Hilbert space, and suppose that </p>
-<div class="displaymath" id="a0000001405">
+<div class="displaymath" id="a0000001408">
   \[  \gamma \, \langle v, H v\rangle \le \langle H v, H v\rangle \qquad \text{for all } v,  \]
 </div>
 <p> i.e. \(H^2 \ge \gamma H\) as a quadratic form, for some \(\gamma {\gt} 0\). Then for every \(v\) in the orthogonal complement of \(\ker H\), </p>
-<div class="displaymath" id="a0000001406">
+<div class="displaymath" id="a0000001409">
   \[  \gamma \, \| v\|  \le \| H v\| .  \]
 </div>
 <p> In particular, every positive eigenvalue of \(H\) is at least \(\gamma \). The positive-semidefiniteness hypothesis is essential: without it, \(H = -\mathrm{Id}\) with \(\gamma = 2\) satisfies the quadratic-form inequality vacuously but violates the norm bound. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001404">
+<div class="proof_wrapper" id="a0000001407">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7988,7 +8086,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">19.97</span>
+    <span class="lemma_thmlabel">19.98</span>
     <span class="lemma_thmtitle">Parent-Hamiltonian quadratic-form reduction</span>
     <div class="thm_header_extras">
 
@@ -7999,7 +8097,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_es_quadratic_reduction">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001407"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001410"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -8019,7 +8117,7 @@
           
           <li><a href="ch-parent_hamiltonian.html#thm:parent_ground_space_es_kernel">Theorem 19.89</a></li>
           
-          <li><a href="ch-parent_hamiltonian.html#lem:quadratic_form_to_norm_bound">Lemma 19.96</a></li>
+          <li><a href="ch-parent_hamiltonian.html#lem:quadratic_form_to_norm_bound">Lemma 19.97</a></li>
           
         </ul>
     
@@ -8053,18 +8151,18 @@
   </div>
   <div class="lemma_thmcontent">
   <p>     Let \(H_{N,L}^{\mathrm{ES}}(A)\) be the transported parent Hamiltonian. If a constant \(\gamma {\gt} 0\) satisfies the uniform quadratic-form estimate </p>
-<div class="displaymath" id="a0000001408">
+<div class="displaymath" id="a0000001411">
   \[  \gamma \, \operatorname {Re}\langle H_{N,L}^{\mathrm{ES}}(A)v, v\rangle \le \operatorname {Re}\langle H_{N,L}^{\mathrm{ES}}(A)v, H_{N,L}^{\mathrm{ES}}(A)v\rangle  \]
 </div>
 <p> for every \(N \ge 2L\) and every vector \(v\), then </p>
-<div class="displaymath" id="a0000001409">
+<div class="displaymath" id="a0000001412">
   \[  \gamma \, \| v\|  \le \| H_{N,L}^{\mathrm{ES}}(A)v\|   \]
 </div>
 <p> for every \(v \in (\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp \). In particular, with \(L{\gt}1\) and \(\gamma = 1/(4L)\), the explicit gap-bound conclusion follows once this same quadratic-form estimate is supplied. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001407">
+<div class="proof_wrapper" id="a0000001410">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -8072,7 +8170,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>The transported Hamiltonian is positive by Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:transported_es_positive">19.94</a>, and its transported ground space is its kernel by Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:parent_ground_space_es_kernel">19.89</a>. Therefore the abstract spectral-theorem conversion of Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:quadratic_form_to_norm_bound">19.96</a> applies directly. The explicit constant is positive because \(L{\gt}1\) implies \(4L{\gt}0\). </p>
+  <p>The transported Hamiltonian is positive by Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:transported_es_positive">19.94</a>, and its transported ground space is its kernel by Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:parent_ground_space_es_kernel">19.89</a>. Therefore the abstract spectral-theorem conversion of Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:quadratic_form_to_norm_bound">19.97</a> applies directly. The explicit constant is positive because \(L{\gt}1\) implies \(4L{\gt}0\). </p>
 
   </div>
 </div>
@@ -8081,7 +8179,7 @@
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">19.98</span>
+    <span class="remark_thmlabel">19.99</span>
     <span class="remark_thmtitle">Projection-geometry identities for row-sum arguments</span>
     <div class="thm_header_extras">
 
@@ -8114,7 +8212,7 @@
         </div>
   </div>
   <div class="remark_thmcontent">
-  <p>        The projection-geometry reduction uses the following elementary Hilbert-space identities: the diagonal identity \(\operatorname {Re}\langle Pv,Pv\rangle =\operatorname {Re}\langle Pv,v\rangle \) for symmetric projections; nonnegativity of this quadratic form; finite-sum expansions of \(\operatorname {Re}\langle (\sum _i P_i)v,v\rangle \) and \(\operatorname {Re}\langle (\sum _i P_i)v,(\sum _i P_i)v\rangle \); the diagonal/off-diagonal split of the ordered double sum; and the aggregate off-diagonal estimate obtained from row sums \(\sum _{j\ne i}c_{ij}\le 1\). </p>
+  <p>         The projection-geometry reduction uses the following elementary Hilbert-space identities: the diagonal identity \(\operatorname {Re}\langle Pv,Pv\rangle =\operatorname {Re}\langle Pv,v\rangle \) for symmetric projections; nonnegativity of this quadratic form; nonnegativity of \(\operatorname {Re}\langle Pv,Qv\rangle \) for commuting symmetric projections \(P,Q\); finite-sum expansions of \(\operatorname {Re}\langle (\sum _i P_i)v,v\rangle \) and \(\operatorname {Re}\langle (\sum _i P_i)v,(\sum _i P_i)v\rangle \); the diagonal/off-diagonal split of the ordered double sum; and the aggregate off-diagonal estimate obtained from row sums \(\sum _{j\ne i}c_{ij}\le 1\). </p>
 
   </div>
 </div>
@@ -8123,7 +8221,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">19.99</span>
+    <span class="lemma_thmlabel">19.100</span>
     <span class="lemma_thmtitle">Ordered projection row-sum quadratic-form reduction</span>
     <div class="thm_header_extras">
 
@@ -8134,7 +8232,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:ordered_projection_rowsum_reduction">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001410"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001413"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -8150,7 +8248,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-parent_hamiltonian.html#rem:projection_geometry_rowsum_identities">Remark 19.98</a></li>
+          <li><a href="ch-parent_hamiltonian.html#rem:projection_geometry_rowsum_identities">Remark 19.99</a></li>
           
         </ul>
     
@@ -8182,14 +8280,14 @@
   </div>
   <div class="lemma_thmcontent">
   <p>    Let \(P_i\) be a finite family of symmetric projections and let \(H=\sum _i P_i\). If the ordered off-diagonal forms obey </p>
-<div class="displaymath" id="a0000001411">
+<div class="displaymath" id="a0000001414">
   \[  \operatorname {Re}\langle P_i v, P_j v\rangle \ge -(1-\gamma )c_{ij}\operatorname {Re}\langle P_i v,v\rangle \qquad (i\ne j),  \]
 </div>
 <p> with row sums \(\sum _{j\ne i} c_{ij}\le 1\) and \(\gamma \le 1\), then \(H^2\ge \gamma H\) as a quadratic form. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001410">
+<div class="proof_wrapper" id="a0000001413">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -8206,7 +8304,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">19.100</span>
+    <span class="lemma_thmlabel">19.101</span>
     <span class="lemma_thmtitle">Finite-overlap projection row-sum reduction</span>
     <div class="thm_header_extras">
 
@@ -8217,7 +8315,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:finite_overlap_projection_rowsum_reduction">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001412"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001415"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -8233,7 +8331,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-parent_hamiltonian.html#lem:ordered_projection_rowsum_reduction">Lemma 19.99</a></li>
+          <li><a href="ch-parent_hamiltonian.html#lem:ordered_projection_rowsum_reduction">Lemma 19.100</a></li>
           
         </ul>
     
@@ -8265,14 +8363,14 @@
   </div>
   <div class="lemma_thmcontent">
   <p>    Let \(P_i\) be a finite family of symmetric projections and let \(\gamma \le 1\). Suppose an interaction predicate \(i\sim j\) has at most \(m\) off-diagonal neighbours in each row for some positive integer \(m\). If noninteracting ordered cross terms are nonnegative and, on each interacting pair, </p>
-<div class="displaymath" id="a0000001413">
+<div class="displaymath" id="a0000001416">
   \[  \operatorname {Re}\langle P_i v,P_jv\rangle \ge -(1-\gamma )\frac{1}{m}\operatorname {Re}\langle P_i v,v\rangle ,  \]
 </div>
 <p> then \(H=\sum _i P_i\) satisfies \(H^2\ge \gamma H\) as a quadratic form. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001412">
+<div class="proof_wrapper" id="a0000001415">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -8280,7 +8378,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>Choose \(c_{ij}=1/m\) on interacting pairs and \(c_{ij}=0\) otherwise. The row cardinality bound gives \(\sum _{j\ne i}c_{ij}\le 1\); noninteracting nonnegativity supplies the zero-coefficient cross-term estimates. Apply Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:ordered_projection_rowsum_reduction">19.99</a>. </p>
+  <p>Choose \(c_{ij}=1/m\) on interacting pairs and \(c_{ij}=0\) otherwise. The row cardinality bound gives \(\sum _{j\ne i}c_{ij}\le 1\); noninteracting nonnegativity supplies the zero-coefficient cross-term estimates. Apply Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:ordered_projection_rowsum_reduction">19.100</a>. </p>
 
   </div>
 </div>
@@ -8289,7 +8387,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">19.101</span>
+    <span class="lemma_thmlabel">19.102</span>
     <span class="lemma_thmtitle">Parent-Hamiltonian ordered row-sum quadratic-form reduction</span>
     <div class="thm_header_extras">
 
@@ -8300,7 +8398,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_ordered_rowsum_quadratic">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001414"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001417"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -8316,7 +8414,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-parent_hamiltonian.html#lem:ordered_projection_rowsum_reduction">Lemma 19.99</a></li>
+          <li><a href="ch-parent_hamiltonian.html#lem:ordered_projection_rowsum_reduction">Lemma 19.100</a></li>
           
           <li><a href="ch-parent_hamiltonian.html#def:parent_hamiltonian_es">Definition 19.88</a></li>
           
@@ -8326,7 +8424,7 @@
           
           <li><a href="ch-parent_hamiltonian.html#lem:transported_es_local_projections">Lemma 19.95</a></li>
           
-          <li><a href="ch-parent_hamiltonian.html#lem:ordered_projection_rowsum_reduction">Lemma 19.99</a></li>
+          <li><a href="ch-parent_hamiltonian.html#lem:ordered_projection_rowsum_reduction">Lemma 19.100</a></li>
           
         </ul>
     
@@ -8358,18 +8456,18 @@
   </div>
   <div class="lemma_thmcontent">
   <p>    For a fixed chain length \(N\), suppose the transported local terms \(h_{i,\mathrm{ES}}\) satisfy the ordered row-sum estimate </p>
-<div class="displaymath" id="a0000001415">
+<div class="displaymath" id="a0000001418">
   \[  \operatorname {Re}\langle h_{i,\mathrm{ES}} v,h_{j,\mathrm{ES}}v\rangle \ge -(1-\gamma )c_{ij}\operatorname {Re}\langle h_{i,\mathrm{ES}}v,v\rangle \qquad (i\ne j),  \]
 </div>
 <p> with \(\sum _{j\ne i}c_{ij}\le 1\) and \(\gamma \le 1\). Then the transported parent Hamiltonian satisfies </p>
-<div class="displaymath" id="a0000001416">
+<div class="displaymath" id="a0000001419">
   \[  \gamma \operatorname {Re}\langle H_{N,L}^{\mathrm{ES}}v,v\rangle \le \operatorname {Re}\langle H_{N,L}^{\mathrm{ES}}v, H_{N,L}^{\mathrm{ES}}v\rangle  \]
 </div>
 <p> for every vector \(v\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001414">
+<div class="proof_wrapper" id="a0000001417">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -8377,7 +8475,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:transported_es_local_projections">19.95</a> supplies the symmetric-projection hypothesis for the family \(P_i=h_{i,\mathrm{ES}}\). Apply Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:ordered_projection_rowsum_reduction">19.99</a> to this family and use \(H_{N,L}^{\mathrm{ES}}=\sum _i h_{i,\mathrm{ES}}\). </p>
+  <p> Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:transported_es_local_projections">19.95</a> supplies the symmetric-projection hypothesis for the family \(P_i=h_{i,\mathrm{ES}}\). Apply Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:ordered_projection_rowsum_reduction">19.100</a> to this family and use \(H_{N,L}^{\mathrm{ES}}=\sum _i h_{i,\mathrm{ES}}\). </p>
 
   </div>
 </div>
@@ -8386,7 +8484,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">19.102</span>
+    <span class="lemma_thmlabel">19.103</span>
     <span class="lemma_thmtitle">Parent-Hamiltonian gap from ordered local row bounds</span>
     <div class="thm_header_extras">
 
@@ -8397,7 +8495,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_ordered_rowsum_gap">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001417"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001420"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -8413,15 +8511,15 @@
         
         <ul class="uses">
           
-          <li><a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_ordered_rowsum_quadratic">Lemma 19.101</a></li>
+          <li><a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_ordered_rowsum_quadratic">Lemma 19.102</a></li>
           
-          <li><a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_es_quadratic_reduction">Lemma 19.97</a></li>
+          <li><a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_es_quadratic_reduction">Lemma 19.98</a></li>
           
           <li><a href="ch-parent_hamiltonian.html#lem:transported_es_local_projections">Lemma 19.95</a></li>
           
-          <li><a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_ordered_rowsum_quadratic">Lemma 19.101</a></li>
+          <li><a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_ordered_rowsum_quadratic">Lemma 19.102</a></li>
           
-          <li><a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_es_quadratic_reduction">Lemma 19.97</a></li>
+          <li><a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_es_quadratic_reduction">Lemma 19.98</a></li>
           
         </ul>
     
@@ -8453,13 +8551,13 @@
   </div>
   <div class="lemma_thmcontent">
   <p>    Assume uniformly for every \(N\ge 2L\) that the transported local terms satisfy the ordered row-sum estimate above with \(\gamma =1/(4L)\). If \(L{\gt}1\), then \(1/(4L){\gt}0\) and, for every \(v\in (\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp \), </p>
-<div class="displaymath" id="a0000001418">
+<div class="displaymath" id="a0000001421">
   \[  \frac{1}{4L}\| v\| \le \| H_{N,L}^{\mathrm{ES}}(A)v\| .  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001417">
+<div class="proof_wrapper" id="a0000001420">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -8467,7 +8565,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> The fixed-chain row-sum reduction supplies the quadratic-form estimate with \(\gamma =1/(4L)\) for every admissible \(N\). The positivity and kernel identification of the transported Hamiltonian then allow Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_es_quadratic_reduction">19.97</a> to convert this quadratic-form estimate into the norm lower bound on the orthogonal complement of the ground space. </p>
+  <p> The fixed-chain row-sum reduction supplies the quadratic-form estimate with \(\gamma =1/(4L)\) for every admissible \(N\). The positivity and kernel identification of the transported Hamiltonian then allow Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_es_quadratic_reduction">19.98</a> to convert this quadratic-form estimate into the norm lower bound on the orthogonal complement of the ground space. </p>
 
   </div>
 </div>
@@ -8476,7 +8574,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">19.103</span>
+    <span class="lemma_thmlabel">19.104</span>
     <span class="lemma_thmtitle">Parent-Hamiltonian finite-overlap Friedrichs quadratic reduction</span>
     <div class="thm_header_extras">
 
@@ -8487,7 +8585,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_finite_overlap_friedrichs_quadratic">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001419"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001422"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -8503,7 +8601,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-parent_hamiltonian.html#lem:finite_overlap_projection_rowsum_reduction">Lemma 19.100</a></li>
+          <li><a href="ch-parent_hamiltonian.html#lem:finite_overlap_projection_rowsum_reduction">Lemma 19.101</a></li>
           
           <li><a href="ch-parent_hamiltonian.html#def:parent_hamiltonian_es">Definition 19.88</a></li>
           
@@ -8537,14 +8635,14 @@
   </div>
   <div class="lemma_thmcontent">
   <p>    For a fixed chain length \(N\), let \(m\) be a positive integer and let \(\gamma \le 1\). Suppose an overlap predicate on local windows has at most \(m\) overlapping off-diagonal windows in each row. If non-overlapping local terms have nonnegative ordered cross terms, overlapping local terms satisfy the finite-overlap Friedrichs estimate </p>
-<div class="displaymath" id="a0000001420">
+<div class="displaymath" id="a0000001423">
   \[  \operatorname {Re}\langle h_{i,\mathrm{ES}}v,h_{j,\mathrm{ES}}v\rangle \ge -(1-\gamma )\frac{1}{m} \operatorname {Re}\langle h_{i,\mathrm{ES}}v,v\rangle ,  \]
 </div>
 <p> and the transported local terms are symmetric projections, then the transported Hamiltonian satisfies \(H_{N,L}^{\mathrm{ES}}{}^2\ge \gamma H_{N,L}^{\mathrm{ES}}\) as a quadratic form. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001419">
+<div class="proof_wrapper" id="a0000001422">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -8561,7 +8659,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">19.104</span>
+    <span class="lemma_thmlabel">19.105</span>
     <span class="lemma_thmtitle">Parent-Hamiltonian gap from finite-overlap Friedrichs data</span>
     <div class="thm_header_extras">
 
@@ -8572,7 +8670,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_finite_overlap_friedrichs_gap">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001421"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001424"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -8588,9 +8686,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_finite_overlap_friedrichs_quadratic">Lemma 19.103</a></li>
+          <li><a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_finite_overlap_friedrichs_quadratic">Lemma 19.104</a></li>
           
-          <li><a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_es_quadratic_reduction">Lemma 19.97</a></li>
+          <li><a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_es_quadratic_reduction">Lemma 19.98</a></li>
           
         </ul>
     
@@ -8625,7 +8723,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001421">
+<div class="proof_wrapper" id="a0000001424">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -8633,7 +8731,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>The fixed-chain finite-overlap reduction gives the required quadratic-form estimate for every admissible \(N\). Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_es_quadratic_reduction">19.97</a> converts that estimate to the norm lower bound. </p>
+  <p>The fixed-chain finite-overlap reduction gives the required quadratic-form estimate for every admissible \(N\). Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_es_quadratic_reduction">19.98</a> converts that estimate to the norm lower bound. </p>
 
   </div>
 </div>
@@ -8642,7 +8740,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">19.105</span>
+    <span class="theorem_thmlabel">19.106</span>
     <span class="theorem_thmtitle">Martingale criterion for spectral gap</span>
     <div class="thm_header_extras">
 
@@ -8651,7 +8749,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#thm:martingale_criterion">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001422"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001425"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -8669,7 +8767,7 @@
           
           <li><a href="ch-parent_hamiltonian.html#def:is_frustration_free">Definition 19.17</a></li>
           
-          <li><a href="ch-parent_hamiltonian.html#lem:quadratic_form_to_norm_bound">Lemma 19.96</a></li>
+          <li><a href="ch-parent_hamiltonian.html#lem:quadratic_form_to_norm_bound">Lemma 19.97</a></li>
           
         </ul>
     
@@ -8682,18 +8780,18 @@
   </div>
   <div class="theorem_thmcontent">
   <p>  Consider a frustration-free Hamiltonian </p>
-<div class="displaymath" id="a0000001423">
+<div class="displaymath" id="a0000001426">
   \[  H = \sum _{i=1}^n h_i  \]
 </div>
 <p> with projector interaction terms (\(h_i^2 = h_i\)). Suppose that for every pair of overlapping terms \(h_i, h_j\) there exist constants \(c_{ij} \ge 0\) and \(\gamma {\gt} 0\) satisfying </p>
-<div class="displaymath" id="a0000001424">
+<div class="displaymath" id="a0000001427">
   \[  h_i h_j + h_j h_i \ge -c_{ij}(1-\gamma )(h_i + h_j),  \]
 </div>
 <p> and suppose further that \(c_{ij} = c_{ji}\) for every overlapping pair \((i,j)\) and that \(\sum _{j:\, j \ne i} c_{ij} \le 1\) for every \(i\). Then the smallest positive eigenvalue of \(H\) satisfies \(\lambda _{\min }^+(H) \ge \gamma \). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001422">
+<div class="proof_wrapper" id="a0000001425">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -8702,15 +8800,15 @@
   </div>
   <div class="proof_content">
   <p>The relevant geometry is a family of translated length-\(L\) projector windows on the ring; two terms \(h_i\) and \(h_j\) interact only when their supports overlap, equivalently when the cyclic distance \(d_N(i,j)\) is smaller than \(L\). From \(h_i^2 = h_i\), </p>
-<div class="displaymath" id="a0000001425">
+<div class="displaymath" id="a0000001428">
   \[  H^2 = \sum _i h_i + \sum _{\substack {i {\lt} j \\ \text{overlapping}}} (h_i h_j + h_j h_i) + \sum _{\substack {i {\lt} j \\ \text{non-overlapping}}} (h_i h_j + h_j h_i).  \]
 </div>
 <p> Non-overlapping projectors commute (\(h_i h_j = h_j h_i\)), so their product \(h_i h_j\) is itself a projector and hence PSD; thus the last sum is \(\ge 0\). For the overlapping sum, the martingale condition gives \(h_i h_j + h_j h_i \ge -c_{ij}(1-\gamma )(h_i + h_j)\). Summing over unordered pairs \(\{ i,j\} \): </p>
-<div class="displaymath" id="a0000001426">
+<div class="displaymath" id="a0000001429">
   \[  \sum _{\{ i,j\} , \text{overlap}} (h_i h_j + h_j h_i) \ge -(1-\gamma ) \sum _{\{ i,j\} , \text{overlap}} c_{ij}(h_i + h_j).  \]
 </div>
 <p> Collecting terms for each \(h_i\) and using the symmetry assumption \(c_{ij} = c_{ji}\): </p>
-<div class="displaymath" id="a0000001427">
+<div class="displaymath" id="a0000001430">
   \[  \sum _{\{ i,j\} , \text{overlap}} c_{ij}(h_i + h_j) = \sum _i \Bigl(\sum _{\substack {j \ne i \\ \text{overlap}}} c_{ij}\Bigr) h_i \le H,  \]
 </div>
 <p> where the last inequality uses the row-sum hypothesis \(\sum _{j \ne i} c_{ij} \le 1\). Combining, \(H^2 \ge H - (1-\gamma )H = \gamma H\). For any eigenvector with \(H\psi = \lambda \psi \) and \(\lambda {\gt} 0\), this gives \(\lambda ^2 \ge \gamma \lambda \), hence \(\lambda \ge \gamma \)&#160;<span class="cite">
@@ -8723,7 +8821,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">19.106</span>
+    <span class="lemma_thmlabel">19.107</span>
     <span class="lemma_thmtitle">Martingale condition for MPS</span>
     <div class="thm_header_extras">
 
@@ -8732,7 +8830,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:martingale_mps">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001428"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001431"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -8748,7 +8846,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-parent_hamiltonian.html#thm:martingale_criterion">Theorem 19.105</a></li>
+          <li><a href="ch-parent_hamiltonian.html#thm:martingale_criterion">Theorem 19.106</a></li>
           
           <li><a href="ch-parent_hamiltonian.html#def:parent_interaction">Definition 19.9</a></li>
           
@@ -8772,11 +8870,11 @@
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>  Let \(A\) be injective and fix an interaction range \(L \ge 2\) as in Definition&#160;<a href="ch-parent_hamiltonian.html#def:parent_interaction">19.9</a>. Let \(h_L(A) := \Pi _{G_L(A)^\perp }\) be the \(L\)-site parent interaction, and for each chain length and site \(i\) let \(h_i\) denote its translate as in Definition&#160;<a href="ch-parent_hamiltonian.html#def:local_term_parent">19.15</a>. Then for every pair of overlapping terms \(h_i\) and \(h_j\) with \(0 {\lt} d_N(i,j) {\lt} L\), where \(d_N(i,j) := \min (|i-j|,\,  N-|i-j|)\) is the cyclic distance on the ring (i.e. whose \(L\)-site supports share at least one site under periodic boundary conditions), the martingale condition of Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:martingale_criterion">19.105</a> holds with constants \(c_{ij}\) and \(\gamma {\gt} 0\) depending only on \(A\) (not on \(N\)). <em>Note:</em> The proof below fully establishes the martingale constants only for \(L = 2\); for \(L {\gt} 2\) the existence of suitable constants is asserted without complete proof (see the remark at the end of the proof). Only the \(L = 2\) case is used in the spectral-gap theorem below. (When \(L = 1\) the interaction terms have disjoint supports, so there are no overlapping pairs and the spectral gap follows directly without the martingale machinery.) </p>
+  <p>  Let \(A\) be injective and fix an interaction range \(L \ge 2\) as in Definition&#160;<a href="ch-parent_hamiltonian.html#def:parent_interaction">19.9</a>. Let \(h_L(A) := \Pi _{G_L(A)^\perp }\) be the \(L\)-site parent interaction, and for each chain length and site \(i\) let \(h_i\) denote its translate as in Definition&#160;<a href="ch-parent_hamiltonian.html#def:local_term_parent">19.15</a>. Then for every pair of overlapping terms \(h_i\) and \(h_j\) with \(0 {\lt} d_N(i,j) {\lt} L\), where \(d_N(i,j) := \min (|i-j|,\,  N-|i-j|)\) is the cyclic distance on the ring (i.e. whose \(L\)-site supports share at least one site under periodic boundary conditions), the martingale condition of Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:martingale_criterion">19.106</a> holds with constants \(c_{ij}\) and \(\gamma {\gt} 0\) depending only on \(A\) (not on \(N\)). <em>Note:</em> The proof below fully establishes the martingale constants only for \(L = 2\); for \(L {\gt} 2\) the existence of suitable constants is asserted without complete proof (see the remark at the end of the proof). Only the \(L = 2\) case is used in the spectral-gap theorem below. (When \(L = 1\) the interaction terms have disjoint supports, so there are no overlapping pairs and the spectral gap follows directly without the martingale machinery.) </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001428">
+<div class="proof_wrapper" id="a0000001431">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -8785,7 +8883,7 @@
   </div>
   <div class="proof_content">
   <p> Two terms \(h_i, h_j\) with \(0 {\lt} d_N(i,j) {\lt} L\) have supports overlapping in \(L - d_N(i,j)\) sites (where \(d_N\) is the cyclic distance on the \(N\)-site ring). Since \(A\) is injective, the intersection property (Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:ground_space_intersection">19.33</a>) gives the qualitative identity \(\ker (h_i) \cap \ker (h_j) = G_{[i,j+L-1]}(A)\). Because the local Hilbert space is finite-dimensional, the subspaces \(\ker (h_i)\) and \(\ker (h_j)\) live in a fixed finite-dimensional space. The intersection identity shows that \(\ker (h_i) \cap \ker (h_j)\) is exactly \(G_{[i,j+L-1]}(A)\); in particular there is no non-trivial vector in one kernel that is orthogonal to the other yet lies in both. Hence the Friedrichs angle \(\theta _{d_N(i,j)}\) between \(\ker (h_i)\) and \(\ker (h_j)\) is strictly positive (for the fixed injective tensor \(A\)). Because the angle depends only on the overlap pattern \(d_N(i,j) \in \{ 1,\ldots ,L-1\} \) and not on the absolute position, the number of distinct angles is at most \(L-1\). Let \(\alpha := \max _{1 \le s {\lt} L} \cos \theta _s {\lt} 1\) be the worst-case cosine of the Friedrichs angles. </p>
-<p><em>Row-sum bound.</em> Since \(L \ge 2\), each site \(i\) overlaps with at most \(2(L-1)\) neighbours (those \(j\) with \(0 {\lt} d_N(i,j) {\lt} L\)). Set \(c_{ij} := \tfrac {1}{2(L-1)}\) for every overlapping pair and \(c_{ij} := 0\) otherwise. These constants depend only on the cyclic distance \(d_N(i,j)\) and therefore satisfy \(c_{ij} = c_{ji}\). Then \(\sum _{j \ne i} c_{ij} \le 2(L-1)\cdot \tfrac {1}{2(L-1)} = 1\), satisfying the row-sum hypothesis of Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:martingale_criterion">19.105</a>. </p>
+<p><em>Row-sum bound.</em> Since \(L \ge 2\), each site \(i\) overlaps with at most \(2(L-1)\) neighbours (those \(j\) with \(0 {\lt} d_N(i,j) {\lt} L\)). Set \(c_{ij} := \tfrac {1}{2(L-1)}\) for every overlapping pair and \(c_{ij} := 0\) otherwise. These constants depend only on the cyclic distance \(d_N(i,j)\) and therefore satisfy \(c_{ij} = c_{ji}\). Then \(\sum _{j \ne i} c_{ij} \le 2(L-1)\cdot \tfrac {1}{2(L-1)} = 1\), satisfying the row-sum hypothesis of Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:martingale_criterion">19.106</a>. </p>
 <p><em>Positivity of \(\gamma \).</em> The Friedrichs angle bound gives, for each overlapping pair, \(h_i h_j + h_j h_i \ge -\alpha \, (h_i + h_j)\). The martingale inequality holds with \(\gamma = 1 - 2(L-1)\alpha \), which requires \(c_{ij}(1-\gamma ) = \tfrac {1}{2(L-1)} \cdot 2(L-1)\alpha = \alpha \) (matching the Friedrichs bound exactly). Since \(\alpha {\lt} 1\) (the Friedrichs angle is strictly positive), it remains to show \(\gamma {\gt} 0\), i.e. \(\alpha {\lt} \tfrac {1}{2(L-1)}\). In the blocked picture used in the spectral-gap theorem below, \(L = 2\) and each site overlaps with at most \(2\) neighbours, so the condition reduces to \(\alpha {\lt} \tfrac {1}{2}\). For \(L = 2\) with an injective tensor, the two projectors \(h_i\) and \(h_{i+1}\) act on a finite-dimensional space, and the intersection property (Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:ground_space_intersection">19.33</a>) guarantees that \(\ker (h_i) \cap \ker (h_{i+1})\) is exactly \(G_{[i,i+2]}(A)\); hence \(\| P_i P_{i+1}\|  {\lt} 1\) (the Friedrichs cosine is strictly less than&#160;1). On a finite-dimensional space with two projectors, the Friedrichs cosine satisfies the quantitative bound \(\alpha \le 1 - c_{\min }\) where \(c_{\min } {\gt} 0\) depends on the minimal principal angle between the two kernels. The bound \(\alpha {\lt} \tfrac {1}{2}\) then follows from the Nachtergaele finite-size criterion&#160;<span class="cite">
 </span>, which establishes that the overlap \(\| P_i P_{i+1}\| \) for injective MPS is bounded away from \(1\) by a constant depending only on the tensor&#160;\(A\). For general \(L {\gt} 2\), the uniform constants \(c_{ij} = \tfrac {1}{2(L-1)}\) make the condition \(\alpha {\lt} \tfrac {1}{2(L-1)}\) increasingly restrictive as \(L\) grows. A more refined choice of separation-dependent constants \(c_{ij} = c_{d_N(i,j)}\) that weight small-separation (large-overlap) pairs more heavily can exploit the exponential decay of the Friedrichs cosine \(\alpha _s\) in \(s\) to satisfy the row-sum constraint. However, this refinement is not needed for the main result: the spectral-gap argument below is applied only with \(L = 2\) in the blocked picture. In all cases, the constants depend only on \(A\) and are independent of&#160;\(N\)&#160;<span class="cite">
 </span>. </p>
@@ -8797,7 +8895,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">19.107</span>
+    <span class="theorem_thmlabel">19.108</span>
     <span class="theorem_thmtitle">Explicit Friedrichs-angle gap bound</span>
     <div class="thm_header_extras">
 
@@ -8806,7 +8904,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#thm:friedrichs_gap_bound">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001429"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001432"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -8836,13 +8934,15 @@
           
           <li><a href="ch-parent_hamiltonian.html#lem:transported_es_local_projections">Lemma 19.95</a></li>
           
-          <li><a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_es_quadratic_reduction">Lemma 19.97</a></li>
+          <li><a href="ch-parent_hamiltonian.html#lem:transported_es_nonoverlap_positive">Lemma 19.96</a></li>
           
-          <li><a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_ordered_rowsum_gap">Lemma 19.102</a></li>
+          <li><a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_es_quadratic_reduction">Lemma 19.98</a></li>
           
-          <li><a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_finite_overlap_friedrichs_quadratic">Lemma 19.103</a></li>
+          <li><a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_ordered_rowsum_gap">Lemma 19.103</a></li>
           
-          <li><a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_finite_overlap_friedrichs_gap">Lemma 19.104</a></li>
+          <li><a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_finite_overlap_friedrichs_quadratic">Lemma 19.104</a></li>
+          
+          <li><a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_finite_overlap_friedrichs_gap">Lemma 19.105</a></li>
           
         </ul>
     
@@ -8874,17 +8974,17 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    For an injective tensor \(A\) and a range \(L {\gt} 1\), the theorem asserts the analytic estimate with the explicit constant </p>
-<div class="displaymath" id="a0000001430">
+<div class="displaymath" id="a0000001433">
   \[  \gamma _{L} := \frac{1}{4L} {\gt} 0.  \]
 </div>
 <p> Concretely, it asserts that if \(N \ge 2L\) and \(v \in (\mathcal G_{N,L}^{\mathrm{ES}}(A))^{\perp }\), then </p>
-<div class="displaymath" id="a0000001431">
+<div class="displaymath" id="a0000001434">
   \[  \gamma _{L} \,  \| v\|  \le \| H_{N,L}^{\mathrm{ES}}(A) v\| .  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001429">
+<div class="proof_wrapper" id="a0000001432">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -8892,7 +8992,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>The local averaging, positivity, and symmetric-projection statements are now recorded in Lemmas&#160;<a href="ch-parent_hamiltonian.html#lem:local_term_es_average">19.93</a>, <a href="ch-parent_hamiltonian.html#lem:transported_es_positive">19.94</a>, and&#160;<a href="ch-parent_hamiltonian.html#lem:transported_es_local_projections">19.95</a>. Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_es_quadratic_reduction">19.97</a> reduces the present theorem to the remaining MPS-specific task: deriving the uniform quadratic-form estimate. Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_ordered_rowsum_gap">19.102</a> establishes the finite-sum algebra from ordered cross-term row bounds, and Lemmas&#160;<a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_finite_overlap_friedrichs_quadratic">19.103</a> and&#160;<a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_finite_overlap_friedrichs_gap">19.104</a> record the common finite-overlap specialization with \(m=2(L-1)\). This reduction keeps the transported-local-projection statement as an explicit assumption, matching the separate projection-structure work. Once that assumption is established, the remaining analytic tasks are the cyclic-window row-cardinality bound, non-overlap positivity, and the Friedrichs-angle estimate for overlapping windows. </p>
+  <p>The local averaging, positivity, and symmetric-projection statements are now recorded in Lemmas&#160;<a href="ch-parent_hamiltonian.html#lem:local_term_es_average">19.93</a>, <a href="ch-parent_hamiltonian.html#lem:transported_es_positive">19.94</a>, and&#160;<a href="ch-parent_hamiltonian.html#lem:transported_es_local_projections">19.95</a>. Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_es_quadratic_reduction">19.98</a> reduces the present theorem to the remaining MPS-specific task: deriving the uniform quadratic-form estimate. Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_ordered_rowsum_gap">19.103</a> establishes the finite-sum algebra from ordered cross-term row bounds, and Lemmas&#160;<a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_finite_overlap_friedrichs_quadratic">19.104</a> and&#160;<a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_finite_overlap_friedrichs_gap">19.105</a> record the common finite-overlap specialization with \(m=2(L-1)\). Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:transported_es_nonoverlap_positive">19.96</a> supplies the non-overlap positivity input for site-disjoint windows. The remaining analytic tasks are the cyclic-window row-cardinality bound and the Friedrichs-angle estimate for overlapping windows. </p>
 
   </div>
 </div>
@@ -8901,7 +9001,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">19.108</span>
+    <span class="theorem_thmlabel">19.109</span>
     <span class="theorem_thmtitle">Spectral gap for MPS parent Hamiltonians</span>
     <div class="thm_header_extras">
 
@@ -8912,7 +9012,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#thm:parent_hamiltonian_gapped">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001432"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001435"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -8928,9 +9028,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-parent_hamiltonian.html#thm:friedrichs_gap_bound">Theorem 19.107</a></li>
+          <li><a href="ch-parent_hamiltonian.html#thm:friedrichs_gap_bound">Theorem 19.108</a></li>
           
-          <li><a href="ch-parent_hamiltonian.html#lem:quadratic_form_to_norm_bound">Lemma 19.96</a></li>
+          <li><a href="ch-parent_hamiltonian.html#lem:quadratic_form_to_norm_bound">Lemma 19.97</a></li>
           
         </ul>
     
@@ -8962,14 +9062,14 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   For an injective tensor \(A\) and a range \(L {\gt} 1\), there exists \(\gamma {\gt} 0\) such that for every \(N \ge 2L\) and every vector \(v \in (\mathcal G_{N,L}^{\mathrm{ES}}(A))^{\perp }\) one has </p>
-<div class="displaymath" id="a0000001433">
+<div class="displaymath" id="a0000001436">
   \[  \gamma \,  \| v\|  \le \| H_{N,L}^{\mathrm{ES}}(A) v\| .  \]
 </div>
-<p> By Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:quadratic_form_to_norm_bound">19.96</a>, this implies the usual uniform lower bound on every nonzero eigenvalue of the parent Hamiltonian. </p>
+<p> By Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:quadratic_form_to_norm_bound">19.97</a>, this implies the usual uniform lower bound on every nonzero eigenvalue of the parent Hamiltonian. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001432">
+<div class="proof_wrapper" id="a0000001435">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -8977,7 +9077,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>This follows immediately from Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:friedrichs_gap_bound">19.107</a> by taking as \(\gamma \) the explicit constant produced there, which yields the required existential spectral-gap constant. </p>
+  <p>This follows immediately from Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:friedrichs_gap_bound">19.108</a> by taking as \(\gamma \) the explicit constant produced there, which yields the required existential spectral-gap constant. </p>
 
   </div>
 </div>
@@ -8990,7 +9090,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">19.109</span>
+    <span class="definition_thmlabel">19.110</span>
     <span class="definition_thmtitle">Assembled parent ground space</span>
     <div class="thm_header_extras">
 
@@ -9054,7 +9154,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">19.110</span>
+    <span class="lemma_thmlabel">19.111</span>
     <span class="lemma_thmtitle">Definition by assembled chain ground space</span>
     <div class="thm_header_extras">
 
@@ -9078,7 +9178,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-parent_hamiltonian.html#def:parent_hamiltonian_ground_space_bnt">Definition 19.109</a></li>
+          <li><a href="ch-parent_hamiltonian.html#def:parent_hamiltonian_ground_space_bnt">Definition 19.110</a></li>
           
         </ul>
     
@@ -9118,7 +9218,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">19.111</span>
+    <span class="definition_thmlabel">19.112</span>
     <span class="definition_thmtitle">Span of BNT block states</span>
     <div class="thm_header_extras">
 
@@ -9154,7 +9254,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>  The BNT span is the linear span of the periodic MPV states of the individual blocks: </p>
-<div class="displaymath" id="a0000001434">
+<div class="displaymath" id="a0000001437">
   \[  \operatorname {BNTSpan}_{N}(A) := \operatorname{span}\{ V^{(N)}(A_{j}) : j = 1,\ldots ,r\} .  \]
 </div>
 
@@ -9165,7 +9265,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">19.112</span>
+    <span class="lemma_thmlabel">19.113</span>
     <span class="lemma_thmtitle">Each BNT MPV lies in the assembled parent ground space</span>
     <div class="thm_header_extras">
 
@@ -9176,7 +9276,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:bnt_mpv_mem_ground_space">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001435"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001438"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9192,7 +9292,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-parent_hamiltonian.html#def:parent_hamiltonian_ground_space_bnt">Definition 19.109</a></li>
+          <li><a href="ch-parent_hamiltonian.html#def:parent_hamiltonian_ground_space_bnt">Definition 19.110</a></li>
           
           <li><a href="ch-parent_hamiltonian.html#lem:mpv_mem_chain_ground_space">Lemma 19.53</a></li>
           
@@ -9229,7 +9329,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001435">
+<div class="proof_wrapper" id="a0000001438">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9246,7 +9346,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">19.113</span>
+    <span class="lemma_thmlabel">19.114</span>
     <span class="lemma_thmtitle">Periodic block lift</span>
     <div class="thm_header_extras">
 
@@ -9257,7 +9357,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:chain_ground_space_block_le_assembled">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001436"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001439"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9305,13 +9405,13 @@
   </div>
   <div class="lemma_thmcontent">
   <p>    For each block index \(j\) with \(\mu _{j} \neq 0\), the chain ground space of the block \(A_{j}\) embeds into the chain ground space of the assembled tensor: </p>
-<div class="displaymath" id="a0000001437">
+<div class="displaymath" id="a0000001440">
   \[  \operatorname {ChainGround}_{N,L}(A_{j}) \subseteq \operatorname {ChainGround}_{N,L}(\operatorname {Assemble}(\mu , A)).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001436">
+<div class="proof_wrapper" id="a0000001439">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9328,7 +9428,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">19.114</span>
+    <span class="lemma_thmlabel">19.115</span>
     <span class="lemma_thmtitle">Periodic block decomposition: forward inclusion</span>
     <div class="thm_header_extras">
 
@@ -9339,7 +9439,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:isup_chain_ground_space_block_le_assembled">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001438"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001441"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9357,7 +9457,7 @@
           
           <li><a href="ch-parent_hamiltonian.html#def:chain_ground_space">Definition 19.52</a></li>
           
-          <li><a href="ch-parent_hamiltonian.html#lem:chain_ground_space_block_le_assembled">Lemma 19.113</a></li>
+          <li><a href="ch-parent_hamiltonian.html#lem:chain_ground_space_block_le_assembled">Lemma 19.114</a></li>
           
         </ul>
     
@@ -9389,14 +9489,14 @@
   </div>
   <div class="lemma_thmcontent">
   <p>    Assume \(\mu _{j} \neq 0\) for every block index \(j\). The supremum of the blockwise periodic-chain ground spaces is contained in the assembled tensor’s periodic-chain ground space: </p>
-<div class="displaymath" id="a0000001439">
+<div class="displaymath" id="a0000001442">
   \[  \bigsqcup _{j} \operatorname {ChainGround}_{N,L}(A_{j}) \subseteq \operatorname {ChainGround}_{N,L}(\operatorname {Assemble}(\mu , A)),  \]
 </div>
 <p> where \(j\) ranges over all block indices. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001438">
+<div class="proof_wrapper" id="a0000001441">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9413,7 +9513,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">19.115</span>
+    <span class="lemma_thmlabel">19.116</span>
     <span class="lemma_thmtitle">Block decomposition: forward inclusion in the assembled parent ground space</span>
     <div class="thm_header_extras">
 
@@ -9424,7 +9524,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:isup_chain_ground_space_block_le_parent_ground_space">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001440"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001443"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9440,9 +9540,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-parent_hamiltonian.html#def:parent_hamiltonian_ground_space_bnt">Definition 19.109</a></li>
+          <li><a href="ch-parent_hamiltonian.html#def:parent_hamiltonian_ground_space_bnt">Definition 19.110</a></li>
           
-          <li><a href="ch-parent_hamiltonian.html#lem:isup_chain_ground_space_block_le_assembled">Lemma 19.114</a></li>
+          <li><a href="ch-parent_hamiltonian.html#lem:isup_chain_ground_space_block_le_assembled">Lemma 19.115</a></li>
           
         </ul>
     
@@ -9474,13 +9574,13 @@
   </div>
   <div class="lemma_thmcontent">
   <p>    For a canonical-form/BNT family, the supremum of the blockwise periodic-chain ground spaces is contained in the assembled parent ground space: </p>
-<div class="displaymath" id="a0000001441">
+<div class="displaymath" id="a0000001444">
   \[  \bigsqcup _{j} \operatorname {ChainGround}_{N,L}(A_{j}) \subseteq \operatorname {ParentGround}_{N,L}(A).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001440">
+<div class="proof_wrapper" id="a0000001443">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9497,7 +9597,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">19.116</span>
+    <span class="lemma_thmlabel">19.117</span>
     <span class="lemma_thmtitle">Block-diagonal commutant reduction from span extension</span>
     <div class="thm_header_extras">
 
@@ -9508,7 +9608,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:route_b_block_diagonal_commutant_reduction">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001442"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001445"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9569,7 +9669,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001442">
+<div class="proof_wrapper" id="a0000001445">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9586,7 +9686,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">19.117</span>
+    <span class="lemma_thmlabel">19.118</span>
     <span class="lemma_thmtitle">Block projections from product-algebra span</span>
     <div class="thm_header_extras">
 
@@ -9597,7 +9697,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:block_projection_span_from_product_algebra_span">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001443"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001446"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9625,13 +9725,13 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   Let \(T_a = (T_a(i))_i\) be a family of tuples spanning the full product algebra \(\prod _i M_{n_i}(\mathbb {C})\), and let \(c_i\neq 0\) be nonzero scalars. Then, for every sector \(k\), the sector projection \(P_k\) lies in the span of the scaled dependent block-diagonal matrices </p>
-<div class="displaymath" id="a0000001444">
+<div class="displaymath" id="a0000001447">
   \[  \bigoplus _i c_i T_a(i).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001443">
+<div class="proof_wrapper" id="a0000001446">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9648,7 +9748,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">19.118</span>
+    <span class="lemma_thmlabel">19.119</span>
     <span class="lemma_thmtitle">Projection span from product-word span</span>
     <div class="thm_header_extras">
 
@@ -9659,7 +9759,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:block_projection_span_from_product_word_span">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001445"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001448"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9691,14 +9791,14 @@
   </div>
   <div class="lemma_thmcontent">
   <p>     If the simultaneous length-\(m\) block-word tuples </p>
-<div class="displaymath" id="a0000001446">
+<div class="displaymath" id="a0000001449">
   \[  \omega \longmapsto \bigl(A_j^{\omega }\bigr)_j  \]
 </div>
 <p> span the full product algebra \(\prod _j M_{D_j}(\mathbb {C})\) and every \(\mu _j\) is nonzero, then the pulled-back length-\(m\) word products of \(\operatorname {Assemble}(\mu ,A)\) span every virtual sector projection \(P_j\). Consequently, any boundary matrix commuting with all those assembled words has block-diagonal pulled-back form, and its off-block entries vanish. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001445">
+<div class="proof_wrapper" id="a0000001448">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9706,7 +9806,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> First embed the product algebra linearly as dependent block-diagonal matrices, scaling the \(j\)-th block by \(\mu _j^m\). Since \(\mu _j^m\neq 0\), the product-algebra span contains the tuple with \((\mu _j^m)^{-1}I\) in one component and zero elsewhere; its scaled diagonal image is exactly \(P_j\). The word-evaluation formula for the assembled tensor identifies these scaled diagonal matrices with the pulled-back assembled word products, and the commutant conclusion follows from Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:route_b_block_diagonal_commutant_reduction">19.116</a>. </p>
+  <p> First embed the product algebra linearly as dependent block-diagonal matrices, scaling the \(j\)-th block by \(\mu _j^m\). Since \(\mu _j^m\neq 0\), the product-algebra span contains the tuple with \((\mu _j^m)^{-1}I\) in one component and zero elsewhere; its scaled diagonal image is exactly \(P_j\). The word-evaluation formula for the assembled tensor identifies these scaled diagonal matrices with the pulled-back assembled word products, and the commutant conclusion follows from Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:route_b_block_diagonal_commutant_reduction">19.117</a>. </p>
 
   </div>
 </div>
@@ -9715,7 +9815,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">19.119</span>
+    <span class="lemma_thmlabel">19.120</span>
     <span class="lemma_thmtitle">Conditional boundary-matrix block split from projection span</span>
     <div class="thm_header_extras">
 
@@ -9726,7 +9826,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:conditional_boundary_matrix_block_split_projection_span">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001447"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001450"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9742,25 +9842,25 @@
         
         <ul class="uses">
           
-          <li><a href="ch-parent_hamiltonian.html#lem:route_b_block_diagonal_commutant_reduction">Lemma 19.116</a></li>
+          <li><a href="ch-parent_hamiltonian.html#lem:route_b_block_diagonal_commutant_reduction">Lemma 19.117</a></li>
           
           <li><a href="ch-mps.html#lem:eval_word_block_diagonal_tensor">Lemma 2.33</a></li>
           
           <li><a href="ch-parent_hamiltonian.html#lem:mpv_mem_chain_ground_space">Lemma 19.53</a></li>
           
-          <li><a href="ch-parent_hamiltonian.html#lem:isup_chain_ground_space_block_le_assembled">Lemma 19.114</a></li>
+          <li><a href="ch-parent_hamiltonian.html#lem:isup_chain_ground_space_block_le_assembled">Lemma 19.115</a></li>
           
           <li><a href="ch-parent_hamiltonian.html#thm:chain_ground_space_eq_mpv_blk">Theorem 19.59</a></li>
           
           <li><a href="ch-algebraic_ft.html#lem:center_scalar">Lemma 17.10</a></li>
           
-          <li><a href="ch-parent_hamiltonian.html#lem:route_b_block_diagonal_commutant_reduction">Lemma 19.116</a></li>
+          <li><a href="ch-parent_hamiltonian.html#lem:route_b_block_diagonal_commutant_reduction">Lemma 19.117</a></li>
           
           <li><a href="ch-mps.html#lem:eval_word_block_diagonal_tensor">Lemma 2.33</a></li>
           
           <li><a href="ch-parent_hamiltonian.html#lem:mpv_mem_chain_ground_space">Lemma 19.53</a></li>
           
-          <li><a href="ch-parent_hamiltonian.html#lem:isup_chain_ground_space_block_le_assembled">Lemma 19.114</a></li>
+          <li><a href="ch-parent_hamiltonian.html#lem:isup_chain_ground_space_block_le_assembled">Lemma 19.115</a></li>
           
           <li><a href="ch-parent_hamiltonian.html#thm:chain_ground_space_eq_mpv_blk">Theorem 19.59</a></li>
           
@@ -9802,14 +9902,14 @@
   </div>
   <div class="lemma_thmcontent">
   <p>       Let \(A\) be in canonical-form/BNT, and assume \(1{\lt}L\), \(N \ge L+1\), and \(0{\lt}m\). Assume the remaining #911 input: every virtual sector projection lies in the pulled-back span of the length-\(m\) word products of the assembled tensor. If a boundary matrix for the assembled tensor commutes with all those length-\(m\) words, then the vector obtained by applying the assembled ground-space map to that boundary matrix lies in \(\bigsqcup _j \mathcal G_{N,L}(A_j)\). Consequently, if every assembled periodic-chain ground vector admits such a commuting boundary matrix representation (the output of the wrapping-window comparison), then </p>
-<div class="displaymath" id="a0000001448">
+<div class="displaymath" id="a0000001451">
   \[  \mathcal G_{N,L}\bigl(\operatorname {Assemble}(\mu , A)\bigr) \subseteq \bigsqcup _j \mathcal G_{N,L}(A_j),  \]
 </div>
 <p> and together with the already-proved forward inclusion this gives the corresponding conditional equality. Composing the reverse inclusion with blockwise injective uniqueness gives the conditional containment of the assembled parent ground space in the BNT span; this lemma is not a restatement of the final theorem, because it keeps the #911 projection-span and boundary representation inputs explicit. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001447">
+<div class="proof_wrapper" id="a0000001450">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9826,7 +9926,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">19.120</span>
+    <span class="theorem_thmlabel">19.121</span>
     <span class="theorem_thmtitle">Containment in the BNT span by block decomposition</span>
     <div class="thm_header_extras">
 
@@ -9835,7 +9935,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#thm:parent_ground_space_le_bnt_span">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001449"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001452"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9851,15 +9951,15 @@
         
         <ul class="uses">
           
-          <li><a href="ch-parent_hamiltonian.html#def:parent_hamiltonian_ground_space_bnt">Definition 19.109</a></li>
+          <li><a href="ch-parent_hamiltonian.html#def:parent_hamiltonian_ground_space_bnt">Definition 19.110</a></li>
           
-          <li><a href="ch-parent_hamiltonian.html#def:bnt_span">Definition 19.111</a></li>
+          <li><a href="ch-parent_hamiltonian.html#def:bnt_span">Definition 19.112</a></li>
           
           <li><a href="ch-parent_hamiltonian.html#thm:chain_ground_space_eq_mpv_blk">Theorem 19.59</a></li>
           
-          <li><a href="ch-parent_hamiltonian.html#lem:conditional_boundary_matrix_block_split_projection_span">Lemma 19.119</a></li>
+          <li><a href="ch-parent_hamiltonian.html#lem:conditional_boundary_matrix_block_split_projection_span">Lemma 19.120</a></li>
           
-          <li><a href="ch-parent_hamiltonian.html#lem:block_projection_span_from_product_word_span">Lemma 19.118</a></li>
+          <li><a href="ch-parent_hamiltonian.html#lem:block_projection_span_from_product_word_span">Lemma 19.119</a></li>
           
         </ul>
     
@@ -9894,7 +9994,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001449">
+<div class="proof_wrapper" id="a0000001452">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9902,7 +10002,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>The remaining structural step is the periodic block decomposition of the assembled chain ground space. Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:block_projection_span_from_product_word_span">19.118</a> supplies the sector projections once the separated CF/BNT data has been turned into a finite full-span statement for simultaneous block words. Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:conditional_boundary_matrix_block_split_projection_span">19.119</a> then supplies the conditional boundary-matrix endgame once the wrapping-window comparison provides a commuting boundary matrix. With that decomposition available, one applies the blockwise injective uniqueness theorem to each block separately and recovers the BNT span. </p>
+  <p>The remaining structural step is the periodic block decomposition of the assembled chain ground space. Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:block_projection_span_from_product_word_span">19.119</a> supplies the sector projections once the separated CF/BNT data has been turned into a finite full-span statement for simultaneous block words. Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:conditional_boundary_matrix_block_split_projection_span">19.120</a> then supplies the conditional boundary-matrix endgame once the wrapping-window comparison provides a commuting boundary matrix. With that decomposition available, one applies the blockwise injective uniqueness theorem to each block separately and recovers the BNT span. </p>
 
   </div>
 </div>
@@ -9911,7 +10011,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">19.121</span>
+    <span class="theorem_thmlabel">19.122</span>
     <span class="theorem_thmtitle">Ground space equals span of BNT</span>
     <div class="thm_header_extras">
 
@@ -9920,7 +10020,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#thm:gs_eq_bnt_span">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001450"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001453"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9936,13 +10036,13 @@
         
         <ul class="uses">
           
-          <li><a href="ch-parent_hamiltonian.html#thm:parent_ground_space_le_bnt_span">Theorem 19.120</a></li>
+          <li><a href="ch-parent_hamiltonian.html#thm:parent_ground_space_le_bnt_span">Theorem 19.121</a></li>
           
-          <li><a href="ch-parent_hamiltonian.html#lem:bnt_mpv_mem_ground_space">Lemma 19.112</a></li>
+          <li><a href="ch-parent_hamiltonian.html#lem:bnt_mpv_mem_ground_space">Lemma 19.113</a></li>
           
-          <li><a href="ch-parent_hamiltonian.html#def:parent_hamiltonian_ground_space_bnt">Definition 19.109</a></li>
+          <li><a href="ch-parent_hamiltonian.html#def:parent_hamiltonian_ground_space_bnt">Definition 19.110</a></li>
           
-          <li><a href="ch-parent_hamiltonian.html#def:bnt_span">Definition 19.111</a></li>
+          <li><a href="ch-parent_hamiltonian.html#def:bnt_span">Definition 19.112</a></li>
           
         </ul>
     
@@ -9974,13 +10074,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   If \(1 {\lt} L\) and \(N \ge L + 1\), then for a canonical-form/BNT family the assembled parent ground space equals the BNT span: </p>
-<div class="displaymath" id="a0000001451">
+<div class="displaymath" id="a0000001454">
   \[  \operatorname {ParentGround}_{N,L}(A) = \operatorname {BNTSpan}_{N}(A).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001450">
+<div class="proof_wrapper" id="a0000001453">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9989,11 +10089,11 @@
   </div>
   <div class="proof_content">
   <p>We prove the two inclusions separately. The inclusion </p>
-<div class="displaymath" id="a0000001452">
+<div class="displaymath" id="a0000001455">
   \[  \operatorname {ParentGround}_{N,L}(A) \subseteq \operatorname {BNTSpan}_{N}(A)  \]
 </div>
-<p> is exactly Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:parent_ground_space_le_bnt_span">19.120</a>. For the reverse inclusion, Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:bnt_mpv_mem_ground_space">19.112</a> shows that each BNT MPV lies in \(\operatorname {ParentGround}_{N,L}(A)\). Since the parent ground space is a linear subspace, it therefore contains every linear combination of such vectors, and hence contains \(\operatorname {BNTSpan}_{N}(A)\). Thus </p>
-<div class="displaymath" id="a0000001453">
+<p> is exactly Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:parent_ground_space_le_bnt_span">19.121</a>. For the reverse inclusion, Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:bnt_mpv_mem_ground_space">19.113</a> shows that each BNT MPV lies in \(\operatorname {ParentGround}_{N,L}(A)\). Since the parent ground space is a linear subspace, it therefore contains every linear combination of such vectors, and hence contains \(\operatorname {BNTSpan}_{N}(A)\). Thus </p>
+<div class="displaymath" id="a0000001456">
   \[  \operatorname {BNTSpan}_{N}(A) \subseteq \operatorname {ParentGround}_{N,L}(A),  \]
 </div>
 <p> and the two spaces are equal. </p>
