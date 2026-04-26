@@ -13,7 +13,11 @@ cyclic windows of L consecutive sites on a periodic chain.
 ## Main results
 
 * `MPSTensor.contiguous_mem_groundSpace` — iterated intersection:
-  non-wrapping window conditions imply membership in the open-chain ground space
+  non-wrapping window conditions imply membership in the open-chain ground space.
+* `MPSTensor.cyclicWindowSupport` and `MPSTensor.cyclicWindowsOverlap` — the
+  support and overlap predicate for translated cyclic windows.
+* `MPSTensor.cyclicWindowsOverlap_card_le` — each cyclic window overlaps at most
+  `2 * (L - 1)` other cyclic windows when `2 * L ≤ N`.
 -/
 
 open scoped Matrix BigOperators
@@ -159,6 +163,46 @@ theorem contiguous_mem_groundSpace {A : MPSTensor d D} (hA : IsInjective A)
 
 /-! ### Cyclic window extraction -/
 
+/-- The site obtained by moving `r` steps clockwise from `i` on the cyclic chain. -/
+def cyclicForwardSite {N : ℕ} (i : Fin N) (r : ℕ) : Fin N :=
+  ⟨(i.val + r) % N, Nat.mod_lt _ (Fin.pos i)⟩
+
+/-- The site obtained by moving `r` steps counterclockwise from `i` on the cyclic chain. -/
+def cyclicBackwardSite {N : ℕ} (i : Fin N) (r : ℕ) : Fin N :=
+  ⟨(i.val + N - r % N) % N, Nat.mod_lt _ (Fin.pos i)⟩
+
+/-- The support of the length-`L` cyclic window starting at `i`, represented as the
+finite set of sites reached from `i` by offsets below `L`, modulo the chain
+length.  If `L` is larger than the chain length, repeated visits to a site are
+counted only once; the parent-Hamiltonian applications use `L ≤ N`. -/
+def cyclicWindowSupport (N L : ℕ) (i : Fin N) : Finset (Fin N) :=
+  (Finset.range L).image fun r => cyclicForwardSite i r
+
+/-- Cyclic-window overlap predicate for length-`L` windows on `Fin N`.
+
+Two windows overlap when their cyclic supports share at least one site.  This is
+the locality relation for translated local terms at the two starting sites.  In
+row-cardinality estimates, the diagonal term j = i is excluded. -/
+def cyclicWindowsOverlap (N L : ℕ) (i j : Fin N) : Prop :=
+  ∃ k : Fin N, k ∈ cyclicWindowSupport N L i ∧ k ∈ cyclicWindowSupport N L j
+
+/-- The cyclic-window overlap relation is decidable on a finite chain. -/
+instance cyclicWindowsOverlap_decidableRel (N L : ℕ) :
+    DecidableRel (cyclicWindowsOverlap N L) := by
+  intro i j
+  unfold cyclicWindowsOverlap
+  exact Fintype.decidableExistsFintype
+
+/-- Clockwise neighbours of the cyclic window starting at `i` that can overlap it
+properly. -/
+private def cyclicWindowClockwiseNeighbours (N L : ℕ) (i : Fin N) : Finset (Fin N) :=
+  (Finset.univ : Finset (Fin (L - 1))).image fun r => cyclicForwardSite i (r.val + 1)
+
+/-- Counterclockwise neighbours of the cyclic window starting at `i` that can
+overlap it properly. -/
+private def cyclicWindowCounterclockwiseNeighbours (N L : ℕ) (i : Fin N) : Finset (Fin N) :=
+  (Finset.univ : Finset (Fin (L - 1))).image fun r => cyclicBackwardSite i (r.val + 1)
+
 /-- Assemble an N-site configuration from a cyclic window at position `i`
 (covering sites `i, i+1, ..., i+L-1 mod N`) and outside values `τ`.
 Site `k` gets the window value `σ(offset)` where `offset = (k - i + N) % N`
@@ -194,6 +238,139 @@ theorem eq_cyclic_site_of_offset_eq {N : ℕ} (hN : 0 < N) {i k : Fin N} {r : �
       rw [hsum, Nat.add_mod_right]
       exact Nat.mod_eq_of_lt k.isLt
     exact hmod.symm
+
+@[simp]
+theorem cyclicForwardSite_zero {N : ℕ} (i : Fin N) :
+    cyclicForwardSite i 0 = i := by
+  ext
+  simp [cyclicForwardSite, Nat.mod_eq_of_lt i.isLt]
+
+@[simp]
+theorem cyclicForwardSite_forwardSite {N : ℕ} (i : Fin N) (a b : ℕ) :
+    cyclicForwardSite (cyclicForwardSite i a) b = cyclicForwardSite i (a + b) := by
+  ext
+  simp only [cyclicForwardSite, Fin.val_mk]
+  rw [Nat.mod_add_mod]
+  congr 1
+  omega
+
+private theorem cyclicForwardSite_eq_mod_eq {N : ℕ} (i : Fin N) {a b : ℕ}
+    (h : cyclicForwardSite i a = cyclicForwardSite i b) : a % N = b % N := by
+  have hval := congrArg Fin.val h
+  change (i.val + a) % N = (i.val + b) % N at hval
+  have hmodEq : (i.val + a) ≡ (i.val + b) [MOD N] := by
+    simpa [Nat.ModEq] using hval
+  have hcancel : a ≡ b [MOD N] :=
+    Nat.ModEq.add_left_cancel (Nat.ModEq.refl i.val) hmodEq
+  simpa [Nat.ModEq] using hcancel
+
+/-- Row-cardinality estimate for cyclic support overlap in the finite-overlap
+regime used by the martingale proof.
+
+If `2 * L ≤ N`, then every length-`L` cyclic window can meet only the `L - 1`
+clockwise starts and the `L - 1` counterclockwise starts.  Thus, after erasing
+the window itself, at most `2 * (L - 1)` translated local terms overlap it. -/
+theorem cyclicWindowsOverlap_card_le {N L : ℕ} (hLN : 2 * L ≤ N) (hL : 1 < L)
+    (i : Fin N) :
+    ((Finset.univ.erase i).filter (fun j => cyclicWindowsOverlap N L i j)).card ≤
+      2 * (L - 1) := by
+  classical
+  let cw := cyclicWindowClockwiseNeighbours N L i
+  let ccw := cyclicWindowCounterclockwiseNeighbours N L i
+  have hLNle : L ≤ N := by omega
+  have hsubset :
+      (Finset.univ.erase i).filter (fun j => cyclicWindowsOverlap N L i j) ⊆
+        cw ∪ ccw := by
+    intro j hj
+    rw [Finset.mem_filter] at hj
+    rcases hj with ⟨hjerase, hoverlap⟩
+    have hji : j ≠ i := Finset.ne_of_mem_erase hjerase
+    rcases hoverlap with ⟨k, hki, hkj⟩
+    rw [cyclicWindowSupport, Finset.mem_image] at hki hkj
+    rcases hki with ⟨a, haRange, hka⟩
+    rcases hkj with ⟨b, hbRange, hkb⟩
+    have haL : a < L := Finset.mem_range.mp haRange
+    have hbL : b < L := Finset.mem_range.mp hbRange
+    have haN : a < N := lt_of_lt_of_le haL hLNle
+    have hbN : b < N := lt_of_lt_of_le hbL hLNle
+    have hEq : cyclicForwardSite i a = cyclicForwardSite j b := hka.trans hkb.symm
+    let x := (j.val + N - i.val) % N
+    have hxN : x < N := by
+      dsimp [x]
+      exact Nat.mod_lt _ (Fin.pos i)
+    have hjx : j = cyclicForwardSite i x := by
+      simpa [x, cyclicForwardSite] using
+        (eq_cyclic_site_of_offset_eq (Fin.pos i) (i := i) (k := j) (r := x) rfl)
+    have hEq' : cyclicForwardSite i a = cyclicForwardSite i (x + b) := by
+      simpa [hjx, cyclicForwardSite_forwardSite] using hEq
+    have hmod := cyclicForwardSite_eq_mod_eq i hEq'
+    have hxb_mod : (x + b) % N = a := by
+      rw [Nat.mod_eq_of_lt haN] at hmod
+      exact hmod.symm
+    by_cases hxb_lt : x + b < N
+    · -- No wraparound: the clockwise offset `x` is a positive distance below `L`.
+      have hsum : x + b = a := by
+        rw [Nat.mod_eq_of_lt hxb_lt] at hxb_mod
+        exact hxb_mod
+      have hxpos : 0 < x := by
+        by_contra hxzero
+        push Not at hxzero
+        have hx0 : x = 0 := by omega
+        apply hji
+        rw [hjx, hx0]
+        simp
+      have hxL : x < L := by omega
+      have hrlt : x - 1 < L - 1 := by omega
+      apply Finset.mem_union_left
+      dsimp [cw, cyclicWindowClockwiseNeighbours]
+      refine Finset.mem_image.mpr ⟨⟨x - 1, hrlt⟩, Finset.mem_univ _, ?_⟩
+      have hstep : (⟨x - 1, hrlt⟩ : Fin (L - 1)).val + 1 = x := by
+        simp
+        omega
+      simpa [hstep] using hjx.symm
+    · -- Wraparound: the equivalent counterclockwise distance is `b - a`, below `L`.
+      have hxb_ge : N ≤ x + b := Nat.le_of_not_gt hxb_lt
+      have hxb_lt_two : x + b < 2 * N := by omega
+      have hmod_sub : (x + b) % N = x + b - N := by
+        rw [Nat.mod_eq_sub_mod hxb_ge]
+        exact Nat.mod_eq_of_lt (by omega)
+      have hsum : x + b - N = a := by
+        rw [hmod_sub] at hxb_mod
+        exact hxb_mod
+      have hab : a < b := by omega
+      have hdist_pos : 0 < b - a := by omega
+      have hdist_lt : b - a < L := by omega
+      have hdistN : b - a < N := lt_of_lt_of_le hdist_lt hLNle
+      have hx_eq : x = N + a - b := by omega
+      have hjback : j = cyclicBackwardSite i (b - a) := by
+        rw [hjx]
+        ext
+        simp only [cyclicForwardSite, cyclicBackwardSite, Fin.val_mk]
+        rw [Nat.mod_eq_of_lt hdistN, hx_eq]
+        congr 1
+        omega
+      have hrlt : b - a - 1 < L - 1 := by omega
+      apply Finset.mem_union_right
+      dsimp [ccw, cyclicWindowCounterclockwiseNeighbours]
+      refine Finset.mem_image.mpr ⟨⟨b - a - 1, hrlt⟩, Finset.mem_univ _, ?_⟩
+      have hstep : (⟨b - a - 1, hrlt⟩ : Fin (L - 1)).val + 1 = b - a := by
+        simp
+        omega
+      simpa [hstep] using hjback.symm
+  have hcw_card : cw.card ≤ L - 1 := by
+    dsimp [cw, cyclicWindowClockwiseNeighbours]
+    simpa using (Finset.card_image_le (s := (Finset.univ : Finset (Fin (L - 1))))
+      (f := fun r : Fin (L - 1) => cyclicForwardSite i (r.val + 1)))
+  have hccw_card : ccw.card ≤ L - 1 := by
+    dsimp [ccw, cyclicWindowCounterclockwiseNeighbours]
+    simpa using (Finset.card_image_le (s := (Finset.univ : Finset (Fin (L - 1))))
+      (f := fun r : Fin (L - 1) => cyclicBackwardSite i (r.val + 1)))
+  calc
+    ((Finset.univ.erase i).filter (fun j => cyclicWindowsOverlap N L i j)).card ≤
+        (cw ∪ ccw).card := Finset.card_le_card hsubset
+    _ ≤ cw.card + ccw.card := Finset.card_union_le cw ccw
+    _ ≤ (L - 1) + (L - 1) := Nat.add_le_add hcw_card hccw_card
+    _ = 2 * (L - 1) := by omega
 
 /-- Linear restriction to a cyclic window at position `i`. -/
 def cyclicRestrictₗ {N : ℕ} (hN : 0 < N) (L : ℕ)

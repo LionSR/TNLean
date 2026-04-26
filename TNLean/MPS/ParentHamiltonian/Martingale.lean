@@ -80,6 +80,9 @@ concrete Friedrichs-angle/row-sum lower bound that
 * `MPSTensor.parentHamiltonianES_gap_bound_of_finite_overlap_friedrichs` — a
   finite-overlap reduction turning explicit local projection, overlap,
   non-overlap positivity, and Friedrichs estimates into the gap estimate.
+* `MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_friedrichs` — the
+  same reduction specialized to the concrete cyclic-window overlap predicate and
+  its `2 * (L - 1)` row-cardinality bound.
 * `MPSTensor.parentHamiltonian_gapped` — uniform spectral gap for MPS
   parent Hamiltonians on injective tensors, obtained from the
   Friedrichs-angle bound recorded in
@@ -1032,6 +1035,41 @@ theorem parentHamiltonianES_gap_bound_of_finite_overlap_friedrichs
   exact parentHamiltonianES_quadratic_form_of_finite_overlap_friedrichs
     A L N hγle (overlaps N) hm (hProj N hLN) (hCard N hLN)
     (hDisjoint N hLN) (hFriedrichs N hLN) v
+
+/-- Uniform explicit gap-bound reduction using the concrete cyclic-window overlap
+predicate.
+
+For chains with `N ≥ 2L`, the predicate `cyclicWindowsOverlap N L i j` marks the
+cyclic translates whose length-`L` windows have the finite-range overlap relevant
+to the martingale method.  The row-cardinality estimate is supplied by
+`cyclicWindowsOverlap_card_le`, and local projection structure is supplied by
+`localTermES_isSymmetricProjection`.  Consequently the only remaining
+local hypotheses are non-overlap positivity and the Friedrichs-angle estimate for
+pairs marked by `cyclicWindowsOverlap`. -/
+theorem parentHamiltonianES_gap_bound_of_cyclic_window_friedrichs
+    (A : MPSTensor d D) (L : ℕ) (hL : 1 < L)
+    (hDisjoint : ∀ (N : ℕ) (_hLN : 2 * L ≤ N) (i j : Fin N),
+      j ∈ Finset.univ.erase i → ¬ cyclicWindowsOverlap N L i j →
+        ∀ v : EuclideanSpace ℂ (Cfg d N),
+          0 ≤ (⟪localTermES A L i v, localTermES A L j v⟫_ℂ).re)
+    (hFriedrichs : ∀ (N : ℕ) (_hLN : 2 * L ≤ N) (i j : Fin N),
+      j ∈ Finset.univ.erase i → cyclicWindowsOverlap N L i j →
+        ∀ v : EuclideanSpace ℂ (Cfg d N),
+          - (1 - ((1 : ℝ) / (4 * (L : ℝ)))) *
+              (((2 * (L - 1) : ℕ) : ℝ)⁻¹) *
+                (⟪localTermES A L i v, v⟫_ℂ).re ≤
+            (⟪localTermES A L i v, localTermES A L j v⟫_ℂ).re) :
+    0 < (1 : ℝ) / (4 * (L : ℝ)) ∧
+    ∀ (N : ℕ) (_hLN : 2 * L ≤ N)
+      (v : EuclideanSpace ℂ (Cfg d N)),
+      v ∈ (parentHamiltonianGroundSpaceES A L N)ᗮ →
+        ((1 : ℝ) / (4 * (L : ℝ))) * ‖v‖ ≤
+          ‖parentHamiltonianES A L N v‖ := by
+  exact parentHamiltonianES_gap_bound_of_finite_overlap_friedrichs A L hL
+    (fun N => cyclicWindowsOverlap N L)
+    (fun N _hLN i => localTermES_isSymmetricProjection A L i)
+    (fun N hLN i => cyclicWindowsOverlap_card_le hLN hL i)
+    hDisjoint hFriedrichs
 
 /-! ### Uniform spectral gap for the MPS parent Hamiltonian -/
 
