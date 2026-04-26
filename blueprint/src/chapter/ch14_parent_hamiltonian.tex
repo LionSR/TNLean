@@ -2606,18 +2606,15 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
 \begin{proof}
     \leanok
     \uses{lem:block_projection_span_from_product_word_span,
-        lem:conditional_boundary_matrix_block_split_projection_span,
-        lem:isup_chain_ground_space_block_le_assembled}
+        lem:conditional_boundary_matrix_block_split_projection_span}
     The product-word span witness gives the sector-projection span by
     Lemma~\ref{lem:block_projection_span_from_product_word_span}; the nonzero
     weights required there are supplied by the canonical-form/BNT hypothesis.  The
     conditional boundary-matrix block split from
     Lemma~\ref{lem:conditional_boundary_matrix_block_split_projection_span} then
-    gives the reverse inclusion.  The equality adds the already-proved forward
-    inclusion
-    Lemma~\ref{lem:isup_chain_ground_space_block_le_assembled}.  The BNT-span
-    containment is the parent-ground-space version of the same reverse inclusion,
-    followed by the blockwise uniqueness endgame already built into the
+    gives the reverse inclusion.  The equality and BNT-span forms are the
+    corresponding projection-span results after this product-word-to-projection-span
+    reduction, followed by the blockwise uniqueness endgame already built into the
     projection-span theorem.
 \end{proof}
 
