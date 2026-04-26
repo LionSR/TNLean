@@ -12,7 +12,9 @@ parent-Hamiltonian martingale method.  The main theorem is a purely algebraic
 quadratic-form reduction for a finite sum of symmetric projections: if the
 ordered off-diagonal terms satisfy a row-summable cross-term bound, then
 `H = ∑ i, P i` satisfies `H² ≥ γ H` as a quadratic form.  The file also records
-that commuting symmetric projections have nonnegative ordered cross terms.
+that commuting symmetric projections have nonnegative ordered cross terms, and
+converts norm-compression estimates for products of projections into the ordered
+Friedrichs cross-term bounds used by the row-sum reduction.
 
 The statements deliberately keep the MPS/Friedrichs-angle estimates as explicit
 hypotheses.  They provide the reusable projection-geometry layer into which the
@@ -43,6 +45,45 @@ theorem re_inner_apply_apply_self {P : E →ₗ[𝕜] E} (hP : P.IsSymmetricProj
 theorem re_inner_nonneg {P : E →ₗ[𝕜] E} (hP : P.IsSymmetricProjection) (v : E) :
     0 ≤ RCLike.re (⟪P v, v⟫_𝕜) :=
   hP.isPositive.re_inner_nonneg_left v
+
+/-- A norm bound on the compressed product of two projections gives the ordered
+Friedrichs lower bound.
+
+For a symmetric projection `P`, the ordered cross term satisfies
+`Re ⟪P v, Q v⟫ = Re ⟪P v, P (Q v)⟫`. Hence Cauchy--Schwarz shows that a
+bound `‖P (Q v)‖ ≤ c ‖P v‖` implies
+`Re ⟪P v, Q v⟫ ≥ -c Re ⟪P v, v⟫`. This is the finite-dimensional
+projection-geometry conversion from a principal-angle norm estimate to the
+ordered quadratic-form estimate used by the martingale row-sum argument. -/
+theorem re_inner_apply_apply_ge_neg_of_norm_apply_le {P Q : E →ₗ[𝕜] E}
+    (hP : P.IsSymmetricProjection) {c : ℝ}
+    (hNorm : ∀ v : E, ‖P (Q v)‖ ≤ c * ‖P v‖) (v : E) :
+    -c * RCLike.re (⟪P v, v⟫_𝕜) ≤ RCLike.re (⟪P v, Q v⟫_𝕜) := by
+  have hPidem : P (P v) = P v := by
+    simpa [Module.End.mul_apply] using congrArg (fun T : E →ₗ[𝕜] E => T v)
+      hP.isIdempotentElem.eq
+  have hcompress : ⟪P v, Q v⟫_𝕜 = ⟪P v, P (Q v)⟫_𝕜 := by
+    calc
+      ⟪P v, Q v⟫_𝕜 = ⟪P (P v), Q v⟫_𝕜 := by rw [hPidem]
+      _ = ⟪P v, P (Q v)⟫_𝕜 := hP.isSymmetric (P v) (Q v)
+  have hdiag : RCLike.re (⟪P v, v⟫_𝕜) = ‖P v‖ ^ 2 := by
+    rw [← hP.re_inner_apply_apply_self v, inner_self_eq_norm_sq]
+  have hre_lower : -‖⟪P v, P (Q v)⟫_𝕜‖ ≤ RCLike.re (⟪P v, P (Q v)⟫_𝕜) := by
+    have h := RCLike.re_le_norm (-(⟪P v, P (Q v)⟫_𝕜))
+    have h' : -RCLike.re (⟪P v, P (Q v)⟫_𝕜) ≤ ‖⟪P v, P (Q v)⟫_𝕜‖ := by
+      simpa using h
+    exact neg_le.mp h'
+  have hnorm_inner : ‖⟪P v, P (Q v)⟫_𝕜‖ ≤ c * ‖P v‖ ^ 2 := by
+    calc
+      ‖⟪P v, P (Q v)⟫_𝕜‖ ≤ ‖P v‖ * ‖P (Q v)‖ := norm_inner_le_norm (P v) (P (Q v))
+      _ ≤ ‖P v‖ * (c * ‖P v‖) :=
+          mul_le_mul_of_nonneg_left (hNorm v) (norm_nonneg (P v))
+      _ = c * ‖P v‖ ^ 2 := by ring
+  calc
+    -c * RCLike.re (⟪P v, v⟫_𝕜) = -(c * ‖P v‖ ^ 2) := by rw [hdiag]; ring
+    _ ≤ -‖⟪P v, P (Q v)⟫_𝕜‖ := neg_le_neg hnorm_inner
+    _ ≤ RCLike.re (⟪P v, P (Q v)⟫_𝕜) := hre_lower
+    _ = RCLike.re (⟪P v, Q v⟫_𝕜) := by rw [← hcompress]
 
 /-- Commuting symmetric projections have nonnegative ordered cross terms.
 
@@ -267,6 +308,37 @@ theorem quadraticForm_sum_projections_of_finite_overlap {γ : ℝ} (hγle : γ �
     · simpa [c, hoverlap] using hFriedrichs i j hij hoverlap v
     · simpa [c, hoverlap] using hDisjoint i j hij hoverlap v
   exact quadraticForm_sum_projections_of_ordered_rowSum hγle P hP c hRow hCross
+
+/-- Finite-overlap row-sum reduction from a norm-compression Friedrichs bound.
+
+For symmetric projections, a principal-angle style estimate
+`‖P_i (P_j v)‖ ≤ (1 - γ) m⁻¹ ‖P_i v‖` on every interacting pair implies the
+ordered cross-term estimate used by
+`quadraticForm_sum_projections_of_finite_overlap`.  Thus the same finite-overlap
+quadratic-form conclusion follows from this norm formulation, together with the
+usual row-cardinality and noninteraction nonnegativity hypotheses. -/
+theorem quadraticForm_sum_projections_of_finite_overlap_norm_bound {γ : ℝ} (hγle : γ ≤ 1)
+    (P : ι → E →ₗ[ℂ] E) (hP : ∀ i, (P i).IsSymmetricProjection)
+    (overlaps : ι → ι → Prop) [DecidableRel overlaps] {m : ℕ} (hm : 0 < m)
+    (hCard : ∀ i, ((Finset.univ.erase i).filter (fun j => overlaps i j)).card ≤ m)
+    (hDisjoint : ∀ i j, j ∈ Finset.univ.erase i → ¬ overlaps i j →
+      ∀ v : E, 0 ≤ (⟪P i v, P j v⟫_ℂ).re)
+    (hOverlapNorm : ∀ i j, j ∈ Finset.univ.erase i → overlaps i j →
+      ∀ v : E,
+        ‖P i (P j v)‖ ≤ ((1 - γ) * ((m : ℝ)⁻¹)) * ‖P i v‖) :
+    ∀ v : E,
+      γ * (⟪(∑ i, P i) v, v⟫_ℂ).re ≤
+        (⟪(∑ i, P i) v, (∑ i, P i) v⟫_ℂ).re := by
+  refine quadraticForm_sum_projections_of_finite_overlap hγle P hP overlaps hm hCard
+    hDisjoint ?_
+  intro i j hij hoverlap v
+  have hraw :
+      -((1 - γ) * ((m : ℝ)⁻¹)) * (⟪P i v, v⟫_ℂ).re ≤
+        (⟪P i v, P j v⟫_ℂ).re :=
+    (hP i).re_inner_apply_apply_ge_neg_of_norm_apply_le
+      (hOverlapNorm i j hij hoverlap) v
+  convert hraw using 1
+  ring
 
 end OffDiagonal
 

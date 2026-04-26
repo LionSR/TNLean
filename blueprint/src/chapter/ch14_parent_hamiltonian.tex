@@ -1827,6 +1827,7 @@ Lucia~\cite{Kastoryano2018Martingale}.
     \lean{LinearMap.IsSymmetricProjection.re_inner_apply_apply_self}
     \lean{LinearMap.IsSymmetricProjection.re_inner_nonneg}
     \lean{LinearMap.IsSymmetricProjection.re_inner_apply_apply_nonneg_of_commute}
+    \lean{LinearMap.IsSymmetricProjection.re_inner_apply_apply_ge_neg_of_norm_apply_le}
     \lean{ProjectionGeometry.re_inner_sum_apply_left}
     \lean{ProjectionGeometry.re_inner_sum_apply_apply}
     \lean{ProjectionGeometry.sum_sum_eq_diag_add_offdiag}
@@ -1837,7 +1838,10 @@ Lucia~\cite{Kastoryano2018Martingale}.
     $\operatorname{Re}\langle Pv,Pv\rangle=\operatorname{Re}\langle Pv,v\rangle$
     for symmetric projections; nonnegativity of this quadratic form; nonnegativity
     of $\operatorname{Re}\langle Pv,Qv\rangle$ for commuting symmetric projections
-    $P,Q$; finite-sum expansions of
+    $P,Q$; the Cauchy--Schwarz conversion from
+    $\|P Q v\|\le c\|Pv\|$ to
+    $\operatorname{Re}\langle Pv,Qv\rangle\ge -c\operatorname{Re}\langle Pv,v\rangle$;
+    finite-sum expansions of
     $\operatorname{Re}\langle (\sum_i P_i)v,v\rangle$ and
     $\operatorname{Re}\langle (\sum_i P_i)v,(\sum_i P_i)v\rangle$; the
     diagonal/off-diagonal split of the ordered double sum; and the aggregate
@@ -1891,6 +1895,33 @@ Lucia~\cite{Kastoryano2018Martingale}.
     cardinality bound gives $\sum_{j\ne i}c_{ij}\le1$; noninteracting
     nonnegativity supplies the zero-coefficient cross-term estimates. Apply
     Lemma~\ref{lem:ordered_projection_rowsum_reduction}.
+\end{proof}
+
+\begin{lemma}[Finite-overlap projection norm-compression reduction]
+    \label{lem:finite_overlap_projection_norm_reduction}
+    \lean{ProjectionGeometry.quadraticForm_sum_projections_of_finite_overlap_norm_bound}
+    \leanok
+    \uses{lem:finite_overlap_projection_rowsum_reduction,
+        rem:projection_geometry_rowsum_identities}
+    Let $P_i$ be a finite family of symmetric projections and let $\gamma\le1$.
+    Suppose an interaction predicate has at most $m>0$ off-diagonal neighbours
+    in each row, noninteracting ordered cross terms are nonnegative, and
+    interacting pairs satisfy the norm-compression estimate
+    \[
+        \|P_iP_jv\|\le (1-\gamma)\frac{1}{m}\|P_iv\|.
+    \]
+    Then $H=\sum_iP_i$ satisfies $H^2\ge\gamma H$ as a quadratic form.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:finite_overlap_projection_rowsum_reduction,
+        rem:projection_geometry_rowsum_identities}
+    Cauchy--Schwarz and symmetric idempotence turn the norm-compression estimate
+    into
+    $\operatorname{Re}\langle P_i v,P_jv\rangle
+    \ge -(1-\gamma)m^{-1}\operatorname{Re}\langle P_iv,v\rangle$.
+    The finite-overlap row-sum reduction then applies.
 \end{proof}
 
 \begin{lemma}[Parent-Hamiltonian ordered row-sum quadratic-form reduction]
@@ -1980,6 +2011,32 @@ Lucia~\cite{Kastoryano2018Martingale}.
     $P_i=h_{i,\mathrm{ES}}$.
 \end{proof}
 
+\begin{lemma}[Parent-Hamiltonian finite-overlap norm-compression quadratic reduction]
+    \label{lem:parent_hamiltonian_finite_overlap_norm_quadratic}
+    \lean{MPSTensor.parentHamiltonianES_quadratic_form_of_finite_overlap_norm_bound}
+    \leanok
+    \uses{lem:finite_overlap_projection_norm_reduction, def:parent_hamiltonian_es,
+        lem:transported_es_local_projections}
+    For a fixed chain length $N$, let $m>0$ and $\gamma\le1$. Suppose an overlap
+    predicate on local windows has at most $m$ overlapping off-diagonal windows in
+    each row, non-overlapping local terms have nonnegative ordered cross terms,
+    and overlapping local terms satisfy
+    \[
+        \|h_{i,\mathrm{ES}}(h_{j,\mathrm{ES}}v)\|
+        \le (1-\gamma)\frac{1}{m}\|h_{i,\mathrm{ES}}v\|.
+    \]
+    Then $H_{N,L}^{\mathrm{ES}}{}^2\ge \gamma H_{N,L}^{\mathrm{ES}}$ as a
+    quadratic form.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:finite_overlap_projection_norm_reduction,
+        lem:transported_es_local_projections}
+    Apply the finite-overlap norm-compression projection reduction to the family
+    $P_i=h_{i,\mathrm{ES}}$.
+\end{proof}
+
 \begin{definition}[Cyclic-window support]
     \label{def:cyclic_window_support}
     \lean{MPSTensor.cyclicWindowSupport}
@@ -1992,6 +2049,27 @@ Lucia~\cite{Kastoryano2018Martingale}.
     with repeated visits counted once.
 \end{definition}
 
+\begin{lemma}[Cyclic-window support offsets]
+    \label{lem:cyclic_window_support_offsets}
+    \lean{MPSTensor.mem_cyclicWindowSupport_iff}
+    \leanok
+    \uses{def:cyclic_window_support}
+    If $L\le N$, then a site $k$ belongs to the cyclic support $S_i$ exactly when
+    its cyclic offset from $i$ is below $L$:
+    \[
+        k\in S_i
+        \quad\Longleftrightarrow\quad
+        (k-i)\bmod N < L.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Write $k=i+r\pmod N$ for a representative offset $r$.  Membership in
+    $S_i$ gives an offset $r<L$, and conversely an offset below $L$ gives the
+    corresponding point of the support.
+\end{proof}
+
 \begin{definition}[Cyclic-window overlap]
     \label{def:cyclic_windows_overlap}
     \lean{MPSTensor.cyclicWindowsOverlap}
@@ -2000,6 +2078,29 @@ Lucia~\cite{Kastoryano2018Martingale}.
     Two length-$L$ cyclic windows overlap, written $i\sim_L j$, when their
     supports meet: $S_i\cap S_j\ne\varnothing$.
 \end{definition}
+
+\begin{lemma}[Concrete non-overlap positivity for cyclic supports]
+    \label{lem:cyclic_window_nonoverlap_positive}
+    \lean{MPSTensor.CyclicWindowsDisjoint.of_not_cyclicWindowsOverlap}
+    \lean{MPSTensor.localTermES_re_inner_nonneg_of_not_cyclicWindowsOverlap}
+    \leanok
+    \uses{lem:cyclic_window_support_offsets, def:cyclic_windows_overlap,
+        lem:transported_es_nonoverlap_positive}
+    If $L\le N$ and the cyclic supports $S_i$ and $S_j$ do not meet, then the
+    transported local ES terms have nonnegative ordered cross term:
+    \[
+        0\le\operatorname{Re}\langle h_{i,\mathrm{ES}}v,
+             h_{j,\mathrm{ES}}v\rangle .
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:cyclic_window_support_offsets, lem:transported_es_nonoverlap_positive}
+    The support-offset characterization converts failure of $S_i\cap S_j\ne\varnothing$
+    into site-disjointness of the two cyclic windows.  The disjoint-window
+    positivity lemma then applies.
+\end{proof}
 
 \begin{lemma}[Cyclic-window overlap row cardinality]
     \label{lem:cyclic_window_overlap_cardinality}
@@ -2072,6 +2173,63 @@ Lucia~\cite{Kastoryano2018Martingale}.
     projection structure of each transported local term. Apply
     Lemma~\ref{lem:parent_hamiltonian_finite_overlap_friedrichs_gap} with these
     facts and the stated cross-term hypotheses.
+\end{proof}
+
+\begin{lemma}[Parent-Hamiltonian gap from overlapping cyclic Friedrichs data]
+    \label{lem:parent_hamiltonian_cyclic_overlap_friedrichs_gap}
+    \lean{MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_overlap_friedrichs}
+    \leanok
+    \uses{lem:parent_hamiltonian_cyclic_window_friedrichs_gap,
+        lem:cyclic_window_nonoverlap_positive}
+    Fix $L>1$ and let $i\sim_L j$ mean that the cyclic supports of the
+    length-$L$ windows at $i$ and $j$ meet. Suppose uniformly for every
+    $N\ge2L$ that overlapping off-diagonal terms satisfy
+    \[
+        \operatorname{Re}\langle h_{i,\mathrm{ES}}v,h_{j,\mathrm{ES}}v\rangle
+        \ge -(1-\tfrac{1}{4L})\frac{1}{2(L-1)}
+              \operatorname{Re}\langle h_{i,\mathrm{ES}}v,v\rangle.
+    \]
+    Then the explicit norm lower bound with constant $1/(4L)$ follows for
+    vectors in $(\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:parent_hamiltonian_cyclic_window_friedrichs_gap,
+        lem:cyclic_window_nonoverlap_positive}
+    The preceding concrete non-overlap positivity lemma supplies the non-overlap
+    condition required by the cyclic-window finite-overlap theorem.  The displayed
+    overlapping estimate supplies the remaining ordered cross-term condition.
+\end{proof}
+
+\begin{lemma}[Parent-Hamiltonian gap from overlapping cyclic norm-compression data]
+    \label{lem:parent_hamiltonian_cyclic_overlap_norm_gap}
+    \lean{MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound}
+    \leanok
+    \uses{lem:parent_hamiltonian_finite_overlap_norm_quadratic,
+        lem:parent_hamiltonian_es_quadratic_reduction,
+        lem:cyclic_window_overlap_cardinality, lem:cyclic_window_nonoverlap_positive}
+    Fix $L>1$.  Suppose uniformly for every $N\ge2L$ and every overlapping
+    off-diagonal pair that
+    \[
+        \|h_{i,\mathrm{ES}}(h_{j,\mathrm{ES}}v)\|
+        \le (1-\tfrac{1}{4L})\frac{1}{2(L-1)}
+             \|h_{i,\mathrm{ES}}v\|.
+    \]
+    Then the explicit norm lower bound with constant $1/(4L)$ follows for
+    vectors in $(\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:parent_hamiltonian_finite_overlap_norm_quadratic,
+        lem:parent_hamiltonian_es_quadratic_reduction,
+        lem:cyclic_window_overlap_cardinality, lem:cyclic_window_nonoverlap_positive}
+    The norm-compression condition is converted to the ordered Friedrichs lower
+    bound by the projection-geometry Cauchy--Schwarz lemma. The concrete cyclic
+    row-cardinality and non-overlap positivity results then give the finite-overlap
+    quadratic-form estimate, which the quadratic-form-to-gap reduction turns into
+    the norm lower bound.
 \end{proof}
 
 \begin{theorem}[Martingale criterion for spectral gap]\label{thm:martingale_criterion}
@@ -2243,7 +2401,11 @@ Lucia~\cite{Kastoryano2018Martingale}.
         lem:parent_hamiltonian_es_quadratic_reduction,
         lem:parent_hamiltonian_ordered_rowsum_gap,
         lem:parent_hamiltonian_finite_overlap_friedrichs_quadratic,
-        lem:parent_hamiltonian_finite_overlap_friedrichs_gap}
+        lem:parent_hamiltonian_finite_overlap_friedrichs_gap,
+        lem:cyclic_window_overlap_cardinality,
+        lem:cyclic_window_nonoverlap_positive,
+        lem:parent_hamiltonian_cyclic_overlap_friedrichs_gap,
+        lem:parent_hamiltonian_cyclic_overlap_norm_gap}
     For an injective tensor $A$ and a range $L > 1$, the theorem asserts
     the analytic estimate with the explicit constant
     \[
@@ -2268,10 +2430,13 @@ Lucia~\cite{Kastoryano2018Martingale}.
     Lemmas~\ref{lem:parent_hamiltonian_finite_overlap_friedrichs_quadratic}
     and~\ref{lem:parent_hamiltonian_finite_overlap_friedrichs_gap} record the
     common finite-overlap specialization with $m=2(L-1)$.
-    Lemma~\ref{lem:transported_es_nonoverlap_positive} supplies the non-overlap
-    positivity input for site-disjoint windows.
-    The remaining analytic tasks are the cyclic-window row-cardinality bound and the
-    Friedrichs-angle estimate for overlapping windows.
+    Lemma~\ref{lem:cyclic_window_overlap_cardinality} gives the concrete cyclic
+    row-cardinality bound, while Lemma~\ref{lem:cyclic_window_nonoverlap_positive}
+    supplies the non-overlap positivity condition for support-disjoint windows.
+    Lemmas~\ref{lem:parent_hamiltonian_cyclic_overlap_friedrichs_gap} and
+    \ref{lem:parent_hamiltonian_cyclic_overlap_norm_gap} isolate the remaining
+    analytic task: the overlapping-window Friedrichs estimate, equivalently its
+    norm-compression formulation.
 \end{proof}
 
 \begin{theorem}[Spectral gap for MPS parent Hamiltonians]\label{thm:parent_hamiltonian_gapped}
