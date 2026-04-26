@@ -1,0 +1,145 @@
+# Counterexample Registry
+
+This file records checked or audited counterexamples that block tempting
+shortcut lemmas. Add new entries here when an issue or PR discovers a
+mathematical obstruction.
+
+## MPDO and RFP
+
+### PRFP does not imply MPO ZCL
+
+- Location: `TNLean/MPS/MPDO/PRFP.lean`
+- Main declarations: `MPOTensor.exists_isPRFP_not_isZCL`,
+  `MPOTensor.isPRFP_not_implies_isZCL`
+- Statement refuted: the current `MPOTensor.IsPRFP` definition implies
+  `MPOTensor.IsZCL`.
+- Witness: a bond-dimension-`1` LPDO witness with purifying coefficients
+  `3/5` and `4/5`.
+
+### Primitive constant trace powers need not be rank one
+
+- Location: `TNLean/Archive/PerronFrobeniusRankOneCounterexample.lean`
+- Main declaration: `TNLean.Archive.PerronFrobeniusRankOneCounterexample.counterexample`
+- Statement refuted: a primitive nonnegative matrix whose positive powers have
+  constant trace must have rank one.
+- Relevance: this blocks the standalone rank-one step used in the
+  simple-MPDO Appendix C.2 track of arXiv:1606.00608 unless extra structure is
+  added, such as positivity or diagonalizability hypotheses.
+
+### BiCF does not follow from the other horizontal canonical-form fields
+
+- Location: `TNLean/MPS/MPDO/BiCFDerivation.lean`
+- Statement refuted: blockwise injectivity, left-canonicality, nonzero weights,
+  and pairwise distinct weights imply `MPSTensor.HasBiCF`.
+- Witness: two scalar blocks over one physical letter with weights `1` and `2`;
+  the trace-pairing cancellation cannot isolate the two blocks.
+
+## Block Separation and Canonical Form
+
+### Weighted MPV cancellation does not imply per-block SameMPV
+
+- Location: `TNLean/Archive/BlockSepCounterexample.lean`
+- Main declaration: `MPSTensor.counterexample_block_powsum_separation`
+- Statement refuted: weighted all-length MPV cancellation with distinct nonzero
+  weights and injective blocks implies per-block `SameMPV`.
+- Relevance: block separation needs canonical-form normalization or a stronger
+  selector theorem.
+
+### Whole-tensor SameMPV does not identify equal-norm blocks
+
+- Location: `audits/2026-04-21_issue652_gap1_blocker.md`
+- Statement refuted: total `SameMPV₂` data alone determines same-norm primitive
+  blocks on one side.
+- Witness: two scalar bond-dimension-`1` blocks over two physical letters, with
+  equal weights, whose assembled tensor agrees with itself but whose individual
+  blocks already disagree at length `1`.
+
+### Same assembled MPVs determine gauge phases, not exact block MPVs
+
+- Location: `TNLean/MPS/FundamentalTheorem/Full/BlocksMatch.lean`
+- Statement refuted: assembled `SameMPV2` forces exact per-block `SameMPV2`.
+- Witness: replace one block by `zeta * (X * A * X^-1)` with `|zeta| = 1` and
+  `zeta != 1`, and compensate the assembly weight by `muB = muA / zeta`.
+- Replacement target: per-block `GaugePhaseEquiv`.
+
+### Equal-norm blocks need not be gauge-phase equivalent
+
+- Location: `TNLean/MPS/CanonicalForm/EqualNormBridge.lean`
+- Statement refuted: equal BNT-level norms plus the full-tensor MPV hypothesis
+  force non-decaying cross-overlaps, hence gauge-phase equivalence.
+- Relevance: issue #299 records the counterexample; the theorem keeps the
+  required non-decay hypothesis explicit.
+
+### Supported compression preserves positive lengths, not length zero
+
+- Location: `TNLean/MPS/CanonicalForm/CyclicSectors/CompressionPositive.lean`
+- Statement refuted: supported-projection compression gives heterogeneous
+  `SameMPV2` at all lengths.
+- Witness: the length-zero coefficient changes from `trace 1 = D` to
+  `trace P`, so only positive-length MPVs are preserved.
+
+### All-zero scalar blocks must be excluded before TP gauging
+
+- Location: `TNLean/MPS/CanonicalForm/NormalReduction/TPGauge.lean`
+- Statement refuted: the blockwise Perron-Frobenius TP-gauge step has an
+  unconditional arbitrary-input endpoint under the current `SameMPV2`
+  interface.
+- Witness: the all-zero scalar block; the theorem therefore requires a
+  nonzero Kraus operator in each input block.
+
+## Multiplicative Domain
+
+### Corner support does not imply multiplicative-domain membership
+
+- Location: `audits/2026-04-21_issue599_corner_multiplicativeDomain_counterexample.md`
+- Statement refuted: `P * X = X`, `X * P = X`, `T(P) = P`, and
+  `P` in the multiplicative domain force `X` into the multiplicative domain.
+- Witness: the dephasing channel on `M_2(C)` with `P = 1` and `X = E01`.
+- Relevance: the fixed-point-algebra route is needed; corner support alone is
+  insufficient.
+
+## Wielandt and PEPS
+
+### Cumulative spanning does not imply normality without aperiodicity
+
+- Locations: `TNLean/Wielandt/SpanGrowth/CumulativeToWordSpan.lean`,
+  `TNLean/Algebra/BurnsideMatrix.lean`,
+  `blueprint/src/chapter/ch07_wielandt.tex`
+- Statement refuted: cumulative spanning, or algebra generation, implies that a
+  single word length spans the full matrix algebra.
+- Witness: the tensor generated by `e12` and `e21`, whose word spans alternate
+  between diagonal and off-diagonal subspaces.
+
+### Irreducible channels need not be primitive
+
+- Location: `TNLean/QPF/Primitive.lean`
+- Statement refuted: irreducibility of a channel implies primitivity.
+- Witness: an irreducible channel can have period greater than `1`; primitivity
+  is a stronger peripheral-spectrum condition.
+
+### The peripheral eigenvalue set alone does not imply irreducibility
+
+- Location: `TNLean/Channel/Semigroup/Primitivity/MainTheorem.lean`
+- Statement refuted: `peripheralEigenvalues E = {1}` implies irreducibility.
+- Witness: the identity map on `M_2(C)` has peripheral eigenvalue set `{1}` in
+  the current definition but is not irreducible.
+
+### PEPS gauge uniqueness is not global-scalar uniqueness
+
+- Locations: `TNLean/PEPS/FundamentalTheorem.lean`,
+  `blueprint/src/chapter/ch13_algebraic_ft.tex`
+- Statement refuted: two PEPS gauge families differ by one global scalar.
+- Witness: the connected triangle, bond-dimension-`1` counterexample from
+  issue #762.
+- Replacement target: uniqueness modulo balanced edge scalars,
+  `TNLean.PEPS.GaugeEquivModEdgeScalars`.
+
+## Parent Hamiltonian
+
+### Positivity is necessary in the martingale spectral step
+
+- Location: `TNLean/MPS/ParentHamiltonian/Martingale.lean`
+- Statement refuted: the quadratic-form inequality `H^2 >= gamma H` alone gives
+  the norm lower bound on the orthogonal complement of `ker H`.
+- Witness: `H = -Id` satisfies the inequality vacuously for positive `gamma`
+  but fails the desired lower-bound conclusion.

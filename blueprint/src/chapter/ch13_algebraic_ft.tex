@@ -395,6 +395,63 @@ reduction hypothesis.
     $Z_k = X$ is a cyclic gauge.
 \end{proof}
 
+
+\begin{lemma}[Uniform site rescaling rescales the combined tensor]%
+    \label{lem:chainCombinedTensor_smul_chain}
+    \lean{MPSTensor.chainCombinedTensor_smul_chain}
+    \leanok
+    \uses{def:non_ti_chain}
+    Let $\mathbf{A} = (A_0, \ldots, A_{n-1})$ be an $n$-site chain and let
+    $\zeta \in \C$. If $\zeta \mathbf{A}$ denotes the chain obtained by
+    replacing each site tensor $A_k$ with $\zeta A_k$, and if
+    $\widetilde{\mathbf{A}}$ denotes the combined tensor of $\mathbf{A}$,
+    then
+    \[
+        \widetilde{\zeta \mathbf{A}} = \zeta\, \widetilde{\mathbf{A}}.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:non_ti_chain}
+    Bundling the site and physical indices does not change which local matrix
+    is read at the component $(k,i)$, so both sides evaluate to
+    $\zeta A_k^i$ there.
+\end{proof}
+
+\begin{theorem}[Injective-chain Fundamental Theorem up to a global phase]%
+    \label{thm:fundamentalTheorem_injective_chain_gaugePhase}
+    \lean{MPSChainTensor.fundamentalTheorem_injective_chain_gaugePhase}
+    \leanok
+    \uses{thm:fundamentalTheorem_injective_chain, def:gauge_phase_equiv,
+        def:non_ti_chain}
+    Let $\mathbf{A} = (A_0, \ldots, A_{n-1})$ and
+    $\mathbf{B} = (B_0, \ldots, B_{n-1})$ be two $n$-site chains with common
+    bond dimension $D$, and assume that $\mathbf{A}$ is injective.
+    Suppose that the combined tensors $\widetilde{\mathbf{A}}$ and
+    $\widetilde{\mathbf{B}}$ are gauge-phase equivalent.
+    Then there exist invertible matrices $Z_0, \ldots, Z_{n-1} \in \GL_D(\C)$
+    and a nonzero scalar $\zeta \in \C^{\times}$ such that
+    \[
+        B_k^i = \zeta\, Z_k A_k^i Z_{k+1}^{-1}
+    \]
+    for all sites $k$ and physical indices $i$, where $k+1$ is interpreted
+    cyclically modulo $n$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:chainCombinedTensor_smul_chain,
+        thm:gauge_invariance, thm:fundamentalTheorem_injective_chain}
+    If the combined tensor of $\mathbf{B}$ differs from that of $\mathbf{A}$
+    by a gauge and a nonzero scalar $\zeta$, rescale each site of
+    $\mathbf{B}$ by $\zeta^{-1}$. Lemma~\ref{lem:chainCombinedTensor_smul_chain}
+    removes this common scalar from the combined tensor, so
+    Theorem~\ref{thm:fundamentalTheorem_injective_chain} applies to the
+    rescaled chain. Multiplying the resulting sitewise relations by $\zeta$
+    gives the displayed conclusion.
+\end{proof}
+
 \subsection{From fixed-length chain states to combined-tensor MPV agreement}
 
 \begin{definition}[Same-state reduction hypothesis]
@@ -1593,28 +1650,92 @@ Theorem~2 of~\cite{Molnar2018NormalPEPS}.
     Every vertex is either $u$, $v$, or different from both.
 \end{proof}
 
+\begin{theorem}[Product splitting at an edge]%
+    \label{thm:peps_prod_univ_splitAtEdge}
+    \lean{TNLean.PEPS.prod_univ_splitAtEdge}
+    \leanok
+    \uses{def:peps_edgeMiddleVertices, thm:peps_edgeVertices_union}
+    For any edge $e = (u,v)$ and any function $f$ on the vertex set with values
+    in a commutative monoid $M$,
+    \[
+        \prod_{x \in V} f(x) = f(u) \Bigl(\prod_{x \in V \setminus \{u,v\}} f(x)\Bigr) f(v).
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    Isolate the two distinguished endpoints in the product over $V$ and group
+    the remaining factors into the middle region.
+\end{proof}
+
+\begin{theorem}[PEPS coefficient splitting at an edge]%
+    \label{thm:peps_stateCoeff_splitAtEdge}
+    \lean{TNLean.PEPS.stateCoeff_splitAtEdge}
+    \leanok
+    \uses{def:peps_stateCoeff, def:peps_edgeMiddleVertices,
+        thm:peps_prod_univ_splitAtEdge}
+    For any edge $e = (u,v)$, each summand in the PEPS coefficient factors into
+    the tensor contribution at $u$, the product over the middle region
+    $V \setminus \{u,v\}$, and the tensor contribution at $v$.
+\end{theorem}
+\begin{proof}\leanok
+    Expand \lean{TNLean.PEPS.stateCoeff} and apply
+    \lean{TNLean.PEPS.prod_univ_splitAtEdge} to the per-vertex product inside
+    each summand.
+\end{proof}
+
 \begin{definition}[Sharpened local gauge lift datum]%
     \label{def:peps_hasLocalGaugeLift}
     \lean{TNLean.PEPS.HasLocalGaugeLift}
     \leanok
     \uses{def:peps_localTensorMap, def:peps_localLeftInverse}
     For fixed $A$, $B$, a bond-dimension equality, and a vertex $v$, this
-    packages the two local conclusions still needed from the blocked-middle
+    records the two local conclusions still needed from the blocked-middle
     reduction in~\cite{Molnar2018NormalPEPS}, §3:
     (i) each local component of $B$ lies in the image of the local tensor map
     of $A$, and (ii) the canonical pullback through the chosen left inverse of
     $A$ factorizes as one invertible matrix on each incident edge.
 \end{definition}
 
+\begin{definition}[Blocked-middle local gauge output]%
+    \label{def:peps_blockedMiddleGaugeHyp}
+    \lean{TNLean.PEPS.BlockedMiddleGaugeHyp}
+    \leanok
+    \uses{def:peps_hasLocalGaugeLift}
+    This states the explicit local gauge formula that the edge-centered
+    blocked-middle reduction is expected to produce: a family of invertible
+    matrices on the incident edges of $v$ whose product kernel reconstructs each
+    local component of $B$ from those of $A$.
+\end{definition}
+
+\begin{theorem}[Blocked-middle output implies sharpened lift]%
+    \label{thm:peps_hasLocalGaugeLift_of_blockedMiddleGaugeHyp}
+    \lean{TNLean.PEPS.hasLocalGaugeLift_of_blockedMiddleGaugeHyp}
+    \leanok
+    \uses{def:peps_blockedMiddleGaugeHyp, def:peps_hasLocalGaugeLift}
+    Any explicit local gauge formula from the blocked-middle reduction yields
+    \lean{TNLean.PEPS.HasLocalGaugeLift}. The remaining open step is therefore
+    to build \lean{TNLean.PEPS.BlockedMiddleGaugeHyp} from
+    \lean{TNLean.PEPS.SameState}.
+\end{theorem}
+\begin{proof}\leanok
+    The explicit local gauge formula already places each local component of
+    $B$ in the image of the local tensor map of $A$. Applying the chosen left
+    inverse of $A$ identifies the canonical candidate with the same factorized
+    coefficient kernel, so both fields of
+    \lean{TNLean.PEPS.HasLocalGaugeLift} follow.
+\end{proof}
+
 \begin{theorem}[Local gauge extraction]%
     \label{thm:localGauge_exists}
     \lean{TNLean.PEPS.localGauge_exists}
     \notready
-    \uses{def:peps_hasLocalGaugeLift, def:localTensorEval}
+    \uses{def:peps_hasLocalGaugeLift, def:peps_blockedMiddleGaugeHyp,
+        def:localTensorEval}
     Lean now proves the local gauge formula from the sharper hypothesis
-    \lean{TNLean.PEPS.HasLocalGaugeLift}. What remains open is to derive this
-    local lift datum from the global same-state hypothesis via the blocked
-    middle tensor and the corresponding three-site injective-chain argument.
+    \lean{TNLean.PEPS.HasLocalGaugeLift}. What remains open is to derive
+    \lean{TNLean.PEPS.BlockedMiddleGaugeHyp} from the global same-state
+    hypothesis via the blocked middle tensor and the corresponding three-site
+    injective-chain argument, then invoke
+    \lean{TNLean.PEPS.hasLocalGaugeLift_of_blockedMiddleGaugeHyp}.
     Under that hypothesis, injectivity on the star neighbourhood provides a
     left inverse that isolates the local edge gauges:
     \[
@@ -1636,25 +1757,66 @@ Theorem~2 of~\cite{Molnar2018NormalPEPS}.
     \]
 \end{theorem}
 
+\begin{theorem}[Fundamental Theorem for injective PEPS, conditional on
+    bond-dimension equality]%
+    \label{thm:fundamentalTheorem_PEPS_of_bondDim}
+    \lean{TNLean.PEPS.fundamentalTheorem_PEPS_of_bondDim}
+    \notready
+    \uses{thm:gaugeConsistency, def:GaugeEquivPEPS, def:IsVertexInjective}
+    Given matching bond dimensions, two vertex-injective PEPS that generate the
+    same state are gauge-equivalent. This conditional form isolates the
+    bond-dimension obligation from the edge-centred consistency obligation of
+    \lean{TNLean.PEPS.gaugeConsistency}.
+\end{theorem}
+
 \begin{theorem}[Fundamental Theorem for injective PEPS]%
     \label{thm:fundamentalTheorem_PEPS}
     \lean{TNLean.PEPS.fundamentalTheorem_PEPS}
     \notready
-    \uses{thm:gaugeConsistency, def:GaugeEquivPEPS, def:IsVertexInjective}
+    \uses{thm:fundamentalTheorem_PEPS_of_bondDim, def:GaugeEquivPEPS,
+        def:IsVertexInjective}
     If two PEPS tensors on a simple graph are both vertex-injective and
     generate the same state, then they are gauge-equivalent
     (Theorem~2 of~\cite{Molnar2018NormalPEPS}).
 \end{theorem}
 
-\begin{remark}[Scalar-uniqueness caveat]
-    \lean{TNLean.PEPS.gauge_unique_up_to_scalar}
-    The stated global-scalar uniqueness claim is too strong.
-    On a triangle with all bond dimensions equal to $1$, edge scalars
-    $(a,a^{-1},a)$ preserve every local tensor yet are not all multiples of
-    $(1,1,1)$ when $a \neq \pm 1$.
-    The expected uniqueness statement must therefore quotient the residual
-    edge-gauge freedom by a cocycle-type normalization on the graph.
-\end{remark}
+\begin{definition}[Gauge equivalence modulo balanced edge scalars]%
+    \label{def:GaugeEquivModEdgeScalars}
+    \lean{TNLean.PEPS.GaugeEquivModEdgeScalars}
+    \leanok
+    \uses{def:edgeGaugeAt}
+    Two gauge families are equivalent modulo balanced edge scalars if there is
+    a nonzero scalar $c_e$ on each edge such that the corresponding endpoint
+    actions rescale the oriented edge gauges, and the oriented product of those
+    endpoint scalars is $1$ at every vertex.
+\end{definition}
+
+\begin{theorem}[Balanced edge scalars preserve the local gauge action]%
+    \label{thm:GaugeEquivModEdgeScalars_gaugeVertex_eq}
+    \lean{TNLean.PEPS.GaugeEquivModEdgeScalars.gaugeVertex_eq}
+    \leanok
+    \uses{def:GaugeEquivModEdgeScalars, def:gaugeVertex}
+    If two gauge families differ by a balanced edge-scalar reweighting, then
+    they produce the same gauged tensor at every vertex.
+\end{theorem}
+
+\begin{proof}\leanok\uses{def:GaugeEquivModEdgeScalars, def:gaugeVertex}
+    In the defining sum for the gauged tensor, each incident edge contributes
+    its endpoint scalar factor in addition to the original gauge entry.
+    The product of these endpoint scalars is $1$ by the balancing condition,
+    so every summand is unchanged.
+\end{proof}
+
+\begin{theorem}[Gauge uniqueness modulo balanced edge scalars]%
+    \label{thm:gauge_unique_mod_edge_scalars}
+    \lean{TNLean.PEPS.gauge_unique_mod_edge_scalars}
+    \notready
+    \uses{def:GaugeEquivModEdgeScalars, def:IsVertexInjective}
+    If two gauge families relate the same injective PEPS tensor to the same
+    target tensor, then they define the same class modulo balanced edge
+    scalars. This replaces the earlier global-scalar claim, which is false on
+    a triangle with bond dimension $1$.
+\end{theorem}
 
 \begin{remark}
     The local left inverse $\Psi_v$, the realization map $T \mapsto O_T$,
@@ -1663,11 +1825,10 @@ Theorem~2 of~\cite{Molnar2018NormalPEPS}.
     data needed for the edge-centered reduction of
     ~\cite{Molnar2018NormalPEPS}, §3. The remaining three PEPS theorems still
     require the blocked tensor on the middle region and the comparison with the
-    corresponding three-site injective chain. For the uniqueness endpoint, the
-    current global-scalar conclusion is too strong: a connected triangle with
-    bond dimension $1$ admits nontrivial edge rescalings whose vertex products
-    are all $1$. A corrected statement will need an explicit normalization of
-    the edge gauges.
+    corresponding three-site injective chain. The uniqueness endpoint has now
+    been repaired to a quotient by balanced edge scalars, but its proof still
+    requires the same blocking machinery together with the corresponding
+    tensor-factor uniqueness statement at a single vertex.
 \end{remark}
 
 %% ---------------------------------------------------------

@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Channel.Schwarz.PositiveMapProperties
+import TNLean.Channel.Schwarz.OperatorJensenAux
 import TNLean.Axioms.OperatorConvexity
 import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.Analysis.Matrix.Order
@@ -42,6 +43,10 @@ The three Jensen instances below are proved from the axioms in
 `TNLean.Axioms.OperatorConvexity`, which axiomatize the operator
 concavity/convexity results and the Jensen inequality pending upstream
 Mathlib work in `CFC.Rpow.Order` and `CFC.ExpLog.Order`.
+
+A first batch of finite-POVM / compression auxiliaries for the direct concave
+real-power route now lives in `OperatorJensenAux.lean`, but those lemmas are
+not yet assembled into the full Jensen theorem.
 
 These are consumed by the Corollary 5.2 proofs in `OperatorMonotone.lean`.
 

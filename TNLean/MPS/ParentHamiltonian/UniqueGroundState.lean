@@ -4,6 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.ParentHamiltonian.Basic
 import TNLean.MPS.ParentHamiltonian.CyclicWindow
+import TNLean.MPS.ParentHamiltonian.ExtendRight
+import TNLean.MPS.ParentHamiltonian.RestrictTransport
 import TNLean.MPS.ParentHamiltonian.WrappingWindow
 import TNLean.MPS.FundamentalTheorem.FiniteLength
 import TNLean.Algebra.TracePairing
@@ -37,6 +39,10 @@ with the periodic boundary condition:
 * `MPSTensor.mpv_mem_groundSpace` — the MPV lies in the ground space
 * `MPSTensor.chainGroundSpace` — the periodic-chain ground space as intersection
   of cyclic window ground submodules
+* `MPSTensor.chainGroundSpace_le_groundSpace_of_isNBlkInjective` — cyclic
+  normal-range constraints imply open-chain ground-space membership
+* `MPSTensor.groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_long_word_commutes`
+  — the algebraic MPV-line endgame once long-word commutation is known
 * `MPSTensor.groundSpace_unique_periodic` — uniqueness on the periodic chain
 * `MPSTensor.parentHamiltonian_unique_gs_injective` — uniqueness for `2L₀` sites
 * `MPSTensor.parentHamiltonian_unique_gs_normal` — optimal uniqueness for `L₀+1` sites
@@ -83,13 +89,9 @@ On a periodic chain of `N` sites, the ground space of the parent Hamiltonian
 is the set of states whose restriction to every cyclic window of `L` consecutive
 sites lies in `G_L(A)`.
 
-The full periodic-chain window restriction is not yet expressed directly in
-terms of cyclic window maps. We therefore expose only the chain ground-space
-interface for now, and will define it from local window constraints once those
-maps are in place. -/
-
--- TODO(parent-hamiltonian): define `chainGroundSpace` as the intersection of
--- cyclic window ground submodules once the periodic window maps are in place.
+For the nondegenerate regime used below, this is the intersection of all cyclic
+window constraints. The subsequent theorems state their nondegeneracy assumptions
+explicitly. -/
 
 /-- The periodic chain ground space: the set of states `ψ` on `N` sites such
 that every cyclic window of `L` consecutive sites restricts into `G_L(A)`.
@@ -106,9 +108,8 @@ noncomputable def chainGroundSpace (A : MPSTensor d D) (L N : ℕ) :
 
 The proof uses trace cyclicity: for each cyclic window at position `i`, the
 restriction of the MPV to that window equals `groundSpaceMap A L X_τ` where
-`X_τ` is the product of `A`-matrices at outside positions.
-
-**Status**: requires cyclic list decomposition and trace cyclicity argument. -/
+`X_τ` is the product of `A`-matrices at outside positions. The cyclic list
+bookkeeping follows from the window-level membership calculation. -/
 theorem mpv_mem_chainGroundSpace (A : MPSTensor d D) (L N : ℕ)
     (hN : 0 < N) (hLN : L ≤ N) :
     (mpv A : NSiteSpace d N) ∈ chainGroundSpace A L N := by
@@ -117,6 +118,62 @@ theorem mpv_mem_chainGroundSpace (A : MPSTensor d D) (L N : ℕ)
   intro i τ
   simpa [cyclicRestrictₗ_apply, cyclicCfg, replaceWindow] using
     mpv_window_mem_groundSpace A L N hLN i τ
+
+/-- Peeling the last site of every cyclic window shows that a larger interaction
+range imposes at least the constraints of the preceding range. -/
+theorem chainGroundSpace_le_chainGroundSpace_succ (A : MPSTensor d D)
+    {L N : ℕ} (hN : 0 < N) (hLN : L + 1 ≤ N) :
+    chainGroundSpace A (L + 1) N ≤ chainGroundSpace A L N := by
+  intro ψ hψ
+  rw [chainGroundSpace, dif_pos ⟨hN, hLN⟩] at hψ
+  simp only [Submodule.mem_iInf, Submodule.mem_comap] at hψ
+  rw [chainGroundSpace, dif_pos ⟨hN, show L ≤ N from by omega⟩]
+  simp only [Submodule.mem_iInf, Submodule.mem_comap]
+  intro i τ
+  let peeled : Fin N := ⟨(i.val + L) % N, Nat.mod_lt _ hN⟩
+  let τ' : Fin N → Fin d :=
+    fun k => if (k.val + N - i.val) % N = L then τ peeled else τ k
+  have hτ' : cyclicRestrictₗ hN L i τ' ψ = cyclicRestrictₗ hN L i τ ψ := by
+    ext σ
+    simp only [cyclicRestrictₗ_apply]
+    congr 1
+    ext k
+    simp only [cyclicCfg]
+    by_cases hsmall : (k.val + N - i.val) % N < L
+    · rw [dif_pos hsmall, dif_pos hsmall]
+    · rw [dif_neg hsmall, dif_neg hsmall]
+      by_cases hlast : (k.val + N - i.val) % N = L
+      · have hk : k = peeled :=
+          eq_cyclic_site_of_offset_eq hN hlast
+        simp [τ', hk]
+      · simp [τ', hlast]
+  have hbig := hψ i τ
+  have hleft := groundSpace_inLeftGround A L hbig (τ peeled)
+  rw [cyclicRestrictₗ_restrictLast hN i τ ψ (τ peeled)] at hleft
+  exact hτ' ▸ hleft
+
+/-- The periodic chain ground space is antitone in the interaction range: longer
+cyclic windows imply all shorter cyclic-window constraints. -/
+theorem chainGroundSpace_le_chainGroundSpace_of_le (A : MPSTensor d D)
+    {L' L N : ℕ} (hN : 0 < N) (hL'L : L' ≤ L) (hLN : L ≤ N) :
+    chainGroundSpace A L N ≤ chainGroundSpace A L' N := by
+  have claim : ∀ m : ℕ, L' + m ≤ N →
+      chainGroundSpace A (L' + m) N ≤ chainGroundSpace A L' N := by
+    intro m
+    induction m with
+    | zero =>
+        intro _ ψ hψ
+        simpa using hψ
+    | succ m ih =>
+        intro hmN
+        exact le_trans
+          (by
+            simpa [Nat.add_assoc] using
+              chainGroundSpace_le_chainGroundSpace_succ (A := A) hN
+                (L := L' + m) (by omega : L' + m + 1 ≤ N))
+          (ih (by omega))
+  have hEq : L' + (L - L') = L := Nat.add_sub_of_le hL'L
+  simpa [hEq] using claim (L - L') (by omega : L' + (L - L') ≤ N)
 
 /-! ### Unique ground state -/
 
@@ -260,6 +317,110 @@ theorem mpv_ne_zero_of_isNBlkInjective {A : MPSTensor d D} [NeZero D]
           simpa [Matrix.traceLinearMap_apply] using congrArg (· M) hφ
   exact allZero_contradiction hInj hL₀ (by omega : 0 < N - L₀) hprod_zero
 
+/-- A positive block-injectivity length over nonzero virtual dimension forces the
+physical alphabet to be nonempty. -/
+private theorem neZero_d_of_isNBlkInjective [NeZero D]
+    {A : MPSTensor d D} {L₀ : ℕ} (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) :
+    NeZero d := by
+  by_contra h
+  simp only [not_neZero] at h
+  subst h
+  have hempty :
+      Set.range (fun σ : Fin L₀ → Fin 0 => evalWord A (List.ofFn σ)) = ∅ := by
+    ext M
+    constructor
+    · rintro ⟨σ, _⟩
+      exact (σ ⟨0, hL₀⟩).elim0
+    · intro hM
+      cases hM
+  rw [IsNBlkInjective, hempty, Submodule.span_empty] at hInj
+  exact bot_ne_top hInj
+
+/-- Open-chain range reduction for block-injective tensors.
+
+If all contiguous windows of size `L₀ + 1` lie in the corresponding MPS ground
+space, then the full open chain lies in `groundSpace A N`.  This is the
+chain-level iteration of `groundSpace_extend_right_of_isNBlkInjective`; it is the
+open-boundary half of the normal parent-Hamiltonian range reduction. -/
+theorem contiguous_mem_groundSpace_of_isNBlkInjective
+    {A : MPSTensor d D} [NeZero D] {L₀ N : ℕ}
+    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hLN : L₀ + 1 ≤ N)
+    {ψ : NSiteSpace d N}
+    (hwindow : ∀ (s : ℕ) (hs : s + (L₀ + 1) ≤ N) (τ : Fin N → Fin d),
+      contiguousRestrictₗ s (L₀ + 1) hs τ ψ ∈ groundSpace A (L₀ + 1)) :
+    ψ ∈ groundSpace A N := by
+  haveI : NeZero d := neZero_d_of_isNBlkInjective hInj hL₀
+  have hd : 0 < d := Nat.pos_of_ne_zero (NeZero.ne d)
+  let τ₀ : Fin N → Fin d := fun _ => ⟨0, hd⟩
+  have claim : ∀ K : ℕ, ∀ (s : ℕ) (hs : s + (K + L₀ + 1) ≤ N)
+      (τ : Fin N → Fin d),
+      contiguousRestrictₗ s (K + L₀ + 1) hs τ ψ ∈ groundSpace A (K + L₀ + 1) := by
+    intro K
+    induction K with
+    | zero =>
+        intro s hs τ
+        have hEq0 : L₀ + 1 = 0 + L₀ + 1 := by omega
+        have hs₀ : s + (L₀ + 1) ≤ N := by omega
+        rw [← contiguousRestrictₗ_reindex_window (d := d) hEq0 hs₀ hs τ ψ]
+        exact reindexSites_mem_groundSpace hEq0 (hwindow s hs₀ τ)
+    | succ K ih =>
+        intro s hs τ
+        apply groundSpace_extend_right_of_isNBlkInjective (A := A) (K := K + 1) hInj hL₀
+        · intro j
+          rw [contiguousRestrictₗ_restrictLast]
+          have hEq : K + L₀ + 1 = (K + 1) + L₀ := by omega
+          let τj := Function.update τ ⟨s + ((K + 1) + L₀), by omega⟩ j
+          have hs₁ : s + (K + L₀ + 1) ≤ N := by omega
+          have hs₂ : s + ((K + 1) + L₀) ≤ N := by omega
+          rw [← contiguousRestrictₗ_reindex_window (d := d) hEq hs₁ hs₂ τj ψ]
+          exact reindexSites_mem_groundSpace hEq (ih s hs₁ τj)
+        · intro u
+          have hsTail : s + ((K + 1) + (L₀ + 1)) ≤ N := by omega
+          change tailRestrictₗ u
+              (contiguousRestrictₗ s ((K + 1) + (L₀ + 1)) hsTail τ ψ) ∈
+            groundSpace A (L₀ + 1)
+          rw [tailRestrictₗ_contiguousRestrictₗ (d := d) (s := s) (K := K + 1)
+            (L := L₀ + 1) hsTail u τ ψ]
+          exact hwindow (s + (K + 1)) (by omega) _
+  have hK : N - (L₀ + 1) + L₀ + 1 = N := by omega
+  have hmemK := claim (N - (L₀ + 1)) 0 (by omega) τ₀
+  have hmemN := reindexSites_mem_groundSpace hK hmemK
+  have hfull :
+      reindexSites hK
+        (contiguousRestrictₗ 0 (N - (L₀ + 1) + L₀ + 1) (by omega) τ₀ ψ) = ψ := by
+    ext σ
+    simp only [reindexSites_apply, contiguousRestrictₗ_apply]
+    congr 1
+    ext k
+    simp only [contiguousCfg]
+    rw [dif_pos (show 0 ≤ k.val ∧ k.val < 0 + (N - (L₀ + 1) + L₀ + 1) by omega)]
+    congr 1
+  rwa [hfull] at hmemN
+
+/-- Cyclic reduced-window constraints imply open-chain ground-space membership for
+block-injective tensors.
+
+This combines cyclic window monotonicity (peeling longer cyclic windows down to
+`L₀ + 1`), the non-wrapping cyclic/contiguous identification, and the
+open-chain range-reduction argument for block-injective tensors. It stops at
+open-chain membership; the wrapped-boundary scalarity step remains separate. -/
+theorem chainGroundSpace_le_groundSpace_of_isNBlkInjective
+    {A : MPSTensor d D} [NeZero D] {L₀ L N : ℕ}
+    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
+    (hN : 0 < N) (hL : L₀ < L) (hLN : L ≤ N) :
+    chainGroundSpace A L N ≤ groundSpace A N := by
+  intro ψ hψ
+  have hL₀N : L₀ + 1 ≤ N := by omega
+  have hψred : ψ ∈ chainGroundSpace A (L₀ + 1) N :=
+    chainGroundSpace_le_chainGroundSpace_of_le (A := A) hN (by omega : L₀ + 1 ≤ L) hLN hψ
+  rw [chainGroundSpace, dif_pos ⟨hN, hL₀N⟩] at hψred
+  simp only [Submodule.mem_iInf, Submodule.mem_comap] at hψred
+  apply contiguous_mem_groundSpace_of_isNBlkInjective hInj hL₀ hL₀N
+  intro s hs τ
+  rw [← cyclicRestrictₗ_eq_contiguousRestrictₗ hN hL₀N
+    (show (⟨s, by omega⟩ : Fin N).val + (L₀ + 1) ≤ N from hs)]
+  exact hψred ⟨s, by omega⟩ τ
+
 /-! ### Helper: vanishing on all word products implies zero -/
 
 /-- If `X` has the property that `tr(evalWord A w * X) = 0` for all words of
@@ -346,6 +507,95 @@ theorem chainGroundSpace_eq_mpvSubmodule {A : MPSTensor d D} [NeZero D]
     rw [mpvSubmodule, Submodule.mem_span_singleton] at hψ
     obtain ⟨c, rfl⟩ := hψ
     exact Submodule.smul_mem _ c (mpv_mem_chainGroundSpace A L N hN0 hLN)
+
+/-- Reduced cyclic constraints give the two wrapped-boundary compatibility
+families for an open-chain boundary matrix.
+
+After the cyclic-to-open-chain step writes a periodic-chain vector as
+`ψ = groundSpaceMap A N X`, the two reduced wrapped windows expose the boundary
+matrix `X` on opposite sides of the same length-`N - (L₀ + 1)` complement word.
+This theorem gives exactly the local algebraic output needed for the final
+common-middle/long-word commutation step of the normal parent-Hamiltonian
+argument. -/
+theorem chainGroundSpace_wrapped_boundary_compatibilities_of_isNBlkInjective
+    {A : MPSTensor d D} [NeZero D] {L₀ L N : ℕ}
+    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
+    (hN : 2 ≤ N) (hL : L₀ < L) (hLN : L ≤ N)
+    {ψ : NSiteSpace d N} {X : Matrix (Fin D) (Fin D) ℂ}
+    (hψ : ψ ∈ chainGroundSpace A L N) (hψX : ψ = groundSpaceMap A N X) :
+    ∃ Ywrap Ymirror : (Fin N → Fin d) → Matrix (Fin D) (Fin D) ℂ,
+      (∀ (j : Fin d) (τ : Fin N → Fin d),
+        evalWord A (List.ofFn (fun k : Fin (N - (L₀ + 1)) =>
+          τ ⟨k.val + L₀, by omega⟩)) * A j * X = Ywrap τ * A j) ∧
+      (∀ (j : Fin d) (τ : Fin N → Fin d),
+        X * A j * evalWord A (List.ofFn (fun k : Fin (N - (L₀ + 1)) =>
+          τ ⟨k.val + 1, by omega⟩)) = A j * Ymirror τ) := by
+  obtain ⟨M, rfl⟩ : ∃ M, N = M + 1 := ⟨N - 1, by omega⟩
+  have hN0 : 0 < M + 1 := by omega
+  have hL₀N : L₀ + 1 ≤ M + 1 := by omega
+  have hM : L₀ ≤ M := by omega
+  have hψmap : groundSpaceMap A (M + 1) X ∈ chainGroundSpace A L (M + 1) := by
+    simpa [hψX] using hψ
+  have hψred : groundSpaceMap A (M + 1) X ∈ chainGroundSpace A (L₀ + 1) (M + 1) :=
+    chainGroundSpace_le_chainGroundSpace_of_le (A := A) hN0
+      (by omega : L₀ + 1 ≤ L) hLN hψmap
+  rw [chainGroundSpace, dif_pos ⟨hN0, hL₀N⟩] at hψred
+  simp only [Submodule.mem_iInf, Submodule.mem_comap] at hψred
+  have hGSAt : ∀ (i : Fin (M + 1)) (τ : Fin (M + 1) → Fin d),
+      ∃ Y : Matrix (Fin D) (Fin D) ℂ,
+        ∀ σ_w : Fin (L₀ + 1) → Fin d,
+          Matrix.trace (evalWord A (List.ofFn
+            (cyclicCfg hN0 (L₀ + 1) i σ_w τ)) * X) =
+          Matrix.trace (evalWord A (List.ofFn σ_w) * Y) := by
+    intro i τ
+    have hmem := hψred i τ
+    rw [groundSpace, LinearMap.mem_range] at hmem
+    obtain ⟨Y, hY⟩ := hmem
+    refine ⟨Y, fun σ_w => ?_⟩
+    have : cyclicRestrictₗ hN0 (L₀ + 1) i τ
+        (groundSpaceMap A (M + 1) X) σ_w = groundSpaceMap A (L₀ + 1) Y σ_w := by
+      rw [← hY]
+    simp only [cyclicRestrictₗ_apply, groundSpaceMap_apply] at this
+    exact this
+  choose YAt hYAt using hGSAt
+  let wrapPos : Fin (M + 1) := ⟨M, by omega⟩
+  let mirrorPos : Fin (M + 1) := ⟨M + 1 - L₀, by omega⟩
+  have hWrap := wrapping_window_compatibility_of_isNBlkInjective
+    (A := A) hInj hL₀ hM (YAt wrapPos) (fun τ σ_w => hYAt wrapPos τ σ_w)
+  have hMirror := wrapping_window_mirror_compatibility_of_isNBlkInjective
+    (A := A) hInj hL₀ hM (YAt mirrorPos) (fun τ σ_w => hYAt mirrorPos τ σ_w)
+  exact ⟨YAt wrapPos, YAt mirrorPos, hWrap, hMirror⟩
+
+/-- Long-word commutation is enough to place an open-chain boundary vector in the
+periodic MPV line.
+
+After the reduced wrapped-boundary compatibilities have been converted into a
+family of identities `X A^ω = A^ω X` for one word length `m ≥ L₀`, the existing
+block-stripping theorem makes `X` commute with the full matrix algebra.  Hence
+`X` is scalar and `groundSpaceMap A N X` is a scalar multiple of the MPV. -/
+theorem groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_long_word_commutes
+    {A : MPSTensor d D} {L₀ m N : ℕ}
+    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hm : L₀ ≤ m)
+    {X : Matrix (Fin D) (Fin D) ℂ}
+    (hComm : ∀ ω : Fin m → Fin d,
+      X * evalWord A (List.ofFn ω) = evalWord A (List.ofFn ω) * X) :
+    groundSpaceMap A N X ∈ mpvSubmodule A N := by
+  have hAll : ∀ M : Matrix (Fin D) (Fin D) ℂ, X * M = M * X :=
+    commutes_all_of_commutes_long_words_of_isNBlkInjective
+      (A := A) hInj hL₀ hm hComm
+  have hCenter : X ∈ Set.center (Matrix (Fin D) (Fin D) ℂ) := by
+    rw [Semigroup.mem_center_iff]
+    intro M
+    exact (hAll M).symm
+  rw [Matrix.center_eq_range] at hCenter
+  obtain ⟨c, hc⟩ := hCenter
+  have hX_eq : X = c • (1 : Matrix (Fin D) (Fin D) ℂ) := by
+    rw [← hc, Matrix.scalar_apply, ← Matrix.smul_one_eq_diagonal]
+  rw [mpvSubmodule, Submodule.mem_span_singleton]
+  refine ⟨c, ?_⟩
+  ext σ
+  simp only [groundSpaceMap_apply, Pi.smul_apply, smul_eq_mul, mpv, coeff]
+  rw [hX_eq, Algebra.mul_smul_comm, mul_one, Matrix.trace_smul, smul_eq_mul]
 
 /-- Range-reduction bridge for normal tensors.
 

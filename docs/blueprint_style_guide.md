@@ -1,12 +1,12 @@
 # Blueprint Style Guide & Lessons Learned
 
 ## Core Philosophy
-The blueprint is a **bridge between the mathematics and the Lean formalization**. A reader should be able to read a blueprint entry and immediately understand the corresponding Lean declaration. Conversely, someone reading the Lean code should find the blueprint proof sketch faithful to what the code actually does.
+The blueprint links the mathematics to its Lean formalization. A reader should be able to read a blueprint entry and immediately understand the corresponding Lean declaration. Conversely, someone reading the Lean code should find the blueprint proof sketch faithful to what the code actually does.
 
 ## General Principles
 1. **Blueprint ↔ Lean must match.** Every `\lean{X}` tag must correspond to an actual Lean declaration. Every proof sketch must match what the Lean proof actually does — not a hand-wavy version of it.
 2. **Standalone.** `blueprint/` and `slides/` are independent — no cross-references, no shared files. Each has its own macros, its own `references.bib`.
-3. **Mathematical language only — zero Lean jargon.** No Lean identifiers in prose (no `evalWord_gauge`, no `mpvState(A, N)`, no `rintro ⟨X, hX⟩`). The `\lean{...}` tag is the link; the body text is standard mathematics. If you can't say it in math, rewrite it.
+3. **Mathematical language only — zero Lean jargon.** See [`prose_style.md`](prose_style.md) §1 for the full rule and examples; in short, the `\lean{...}` tag is the link, the body text is standard mathematics.
 4. **No filler prose.** Only precise definitions, theorem statements, and proof sketches. No "this is important because..." or "the transfer map governs the spectral theory...".
 5. **Cite non-trivial things.** Basic definitions (MPS tensor, MPV) don't need citations. Important results and non-obvious definitions should cite the source paper.
 6. **Don't invent terminology or notation.** Don't create ad-hoc notation like `⟨·,·⟩^ip` when standard notation exists. Don't name things that the literature doesn't name. If Lean calls it `IsInjective`, the blueprint says "injective" — not "Condition C1".
@@ -40,41 +40,30 @@ Notation must be **internally consistent** across the entire blueprint and **clo
 - **DeclareMathOperator subscripts**: always use braces: `\spn_{\C}` not `\spn_\C`.
 - **Macros** (in `macros/common.tex`): `\C`, `\R`, `\N`, `\Z`, `\E`, `\Id`, `\MD`, `\MN{D}`, `\GL`, `\tr`, `\spn`, `\ket{·}`, `\bra{·}`, `\braket{·}{·}`, `\ketbra{·}{·}`, `\mc{·}`
 
-## What NOT to Put in the Blueprint
-- **Lean identifier names in math text.** Write "the word evaluation $A^w$", never "the `evalWord` of $A$" or "$\mathrm{evalWord}(A, w)$". The `\lean{MPSTensor.evalWord}` tag handles the linking.
-- **Implementation details.** Don't say "bundled as an element of the Euclidean space" or "using `EuclideanSpace.equiv`". Describe the mathematical object.
-- **Ad-hoc notation.** Don't invent superscripts like $\langle \cdot, \cdot \rangle^{\mathrm{ip}}$ to distinguish from existing notation. Use standard conventions or define new notation explicitly if truly needed.
-- **Function-call syntax.** Don't write $\mathrm{mpv}(A^{[L]}, \sigma)$. Write $V^{(N)}(A^{[L]})_\sigma$ using the established component notation.
-- **Redundant definitions.** If two blueprint definitions describe the same mathematical object (e.g., MPV as a ket vector vs MPV as a Hilbert-space element), make one a remark or consolidate them. Each definition should introduce genuinely new mathematical content.
-- **Lean namespace prefixes in prose.** Don't write "the `MPSTensor.transferMap`" — write "the transfer map $\E_A$".
+## Prose conventions, banned language, and "no Lean jargon"
 
-## Banned AI/Software Language (enforced in both blueprint AND Lean code)
-The blueprint reads as a **mathematical document**, not software documentation. The following patterns are banned in ALL reader-facing text (section titles, theorem names, proof sketches, remarks, chapter preambles) and in ALL Lean docstrings, comments, and section names:
+The rules for prose tone, the no-Lean-jargon-in-blueprint requirement, and the full
+banned-language tables (software-engineering jargon and LLM writing patterns) live
+in their own document:
 
-### Banned terms → replacements:
-| Banned | Use instead |
-|--------|------------|
-| "Assembly" (as section/chapter title) | "Proof of [theorem]", "Construction", "Composition" |
-| "Pipeline" | "reduction", "construction", "proof chain" |
-| "Bridge" (as noun for a connection) | "connection", name by mathematical content |
-| "Handoff" / "hand off" | "transition", "continuation", or drop entirely |
-| "In this blueprint" / "Within this blueprint" | "here", "in what follows", or omit |
-| "Honest" (as adjective for rigorous) | "exact", "faithful", "unconditional", "complete" |
-| "Glue layer" | "intermediate construction", "connecting results" |
-| "Re-export" / "reexport" | "provides", "re-states" |
-| "Wiring" / "wire up" | "connecting", "composing", "combining" |
-| "Package" (as noun for a data bundle) | "form", "data", "structure" |
-| "Stored as an extra field" | "appears as a separate assumption" |
-| "Sorry-free" | acceptable only in Lean-specific technical context |
-| "Physics-oriented" | describe the mathematical property instead |
-| "[X] respects [Y]" (for equivariance) | "Multiplicativity of [X]", "[X] is equivariant under [Y]" |
+> **See [`prose_style.md`](prose_style.md) for the authoritative prose style guide.**
 
-### Additional rules:
-- **"Assembly" in Lean identifiers**: acceptable ONLY for `wielandt_blocked_assembly` and similar mathematical theorem names where "assembly" describes the mathematical step (assembling rank-one elements). NOT acceptable for file-organizational names.
-- **"Assembly" in file names**: `Assembly.lean` and `QPF/Assembly.lean` are grandfathered (renaming cascades through too many imports). New files should use mathematical names.
-- **Section names in Lean**: use mathematical terms (`section PerronFrobenius`, `section GaugeConstruction`, `section FinalConstruction`), not organizational terms (`section Assembly`, `section Pipeline`).
-- **Internal LaTeX labels** (e.g., `\label{ch:assembly}`, `\label{thm:pipeline_handoff}`) are not reader-facing and need not be renamed if doing so would break cross-references. But NEW labels should follow the standard.
-- **Definitions that are actually theorems**: if a statement asserts a mathematical fact (e.g., "X is a subalgebra"), it must be `\begin{theorem}`, not `\begin{definition}`. Definitions introduce new objects; theorems prove properties.
+That document covers:
+
+1. **No Lean jargon in the leanblueprint** — the `\lean{...}` tag is the link to
+   the formalization; blueprint prose must read as standard mathematics with no
+   Lean identifiers, namespaces, or tactic syntax.
+2. **Banned software-engineering terms → replacements** (e.g. "pipeline",
+   "boilerplate", "wrapper", "hook", "API" / "endpoint" in prose, "utility" /
+   "helper" as nouns).
+3. **Banned LLM writing patterns → replacements** (e.g. "leverage", "delve into",
+   "tapestry", "shed light on", "testament to", filler "moreover" / "furthermore").
+4. **Additional rules** about `Assembly`/`Pipeline` grandfathering, Lean section
+   naming, and definitions-vs-theorems.
+
+These rules apply to ALL reader-facing text — blueprint `.tex` files AND Lean
+docstrings, sectioning comments, and `section`/`namespace` names — and are
+enforced by the dedicated `Blueprint Sync & Prose Review` CI workflow.
 
 ## `\uses` Dependency Guidelines
 - **Statement `\uses`**: list only what's needed to *state* the result (typically definitions of the objects involved). Keep minimal — transitive deps are automatic.

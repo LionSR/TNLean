@@ -156,8 +156,7 @@ legs cyclically and taking the resulting trace.
     By Lemma~\ref{lem:mpo_transfer_eq_mps}, the transfer map of $M$ agrees with
     the transfer map of its doubled-index MPS view. Thus
     $\E_M \circ \E_M = \E_M$ holds exactly when the transfer map of
-    the doubled-index MPS view is idempotent, which is precisely the
-    renormalization fixed-point condition.
+    that doubled-index MPS tensor is idempotent, which is the RFP condition.
 \end{proof}
 
 \section{MPDOs and LPDOs}
@@ -289,7 +288,7 @@ legs cyclically and taking the resulting trace.
     \lean{MPOTensor.isRFP_iff_isZCL}
     \leanok
     \uses{def:is_rfp_mpdo, def:mpo_is_zcl}
-    The MPDO renormalization fixed-point condition is equivalent to
+    The provisional MPDO renormalization fixed-point condition is equivalent to
     the zero-correlation-length condition for MPO tensors.
 \end{theorem}
 
@@ -304,7 +303,7 @@ legs cyclically and taking the resulting trace.
     \leanok
     \uses{def:is_rfp_mpdo, def:mpo_to_mps, def:is_rfp, def:mpo_is_zcl,
         thm:mpo_is_zcl_iff_to_mps_rfp}
-    The MPDO renormalization fixed-point condition is equivalent to the pure-state RFP
+    The provisional MPDO RFP condition is equivalent to the pure-state RFP
     condition for the doubled-index MPS tensor.
 \end{theorem}
 
@@ -428,6 +427,144 @@ strong subadditivity for a normalized three-site reduced state.
     decomposition on the middle subsystem.
 \end{proof}
 
+\begin{definition}[Injective inverse-map layer for a simple MPO tensor]
+    \label{def:mpdo_injective_inverse_layer}
+    \lean{MPOTensor.IsInjective}
+    \lean{MPOTensor.inverseTensor}
+    \lean{MPOTensor.physRealize}
+    \lean{MPOTensor.physRealizeLeft}
+    \leanok
+    \uses{def:mpo_tensor, def:mpo_to_mps, def:injective, def:decomposition_map, def:phys_realize}
+    A simple MPO tensor $K$ is called injective if its doubled-index MPS tensor
+    is injective. For such a tensor, the chosen decomposition map of the
+    doubled-index MPS furnishes a concrete inverse tensor $K^{-1}$ together
+    with right- and left-physical realization maps that turn virtual bond
+    insertions back into local physical operators.
+\end{definition}
+
+\begin{theorem}[Inverse-map identities for an injective simple MPO tensor]
+    \label{thm:mpdo_injective_inverse_layer_spec}
+    \lean{MPOTensor.inverseTensor_spec}
+    \lean{MPOTensor.physRealize_spec}
+    \lean{MPOTensor.physRealize_mul}
+    \lean{MPOTensor.physRealizeLeft_spec}
+    \leanok
+    \uses{def:mpdo_injective_inverse_layer}
+    For an injective simple MPO tensor, contracting $K^{-1}$ with $K$ recovers
+    the matrix units on the virtual bond space. Likewise, every right virtual
+    insertion admits a physical realization, this realization is multiplicative,
+    and the analogous left-insertion statement also holds.
+\end{theorem}
+
+\begin{definition}[Explicit neighboring $\eta$-operator data]
+    \label{def:mpdo_explicit_eta_operators}
+    \lean{MPOTensor.etaOperators}
+    \lean{MPOTensor.ExplicitEtaOperators}
+    \leanok
+    \uses{def:mpdo_eta_structure}
+    Fix a Hayashi decomposition witness $h_\eta$. An explicit neighboring
+    $\eta$-family is a dependent family $(\eta_{k,h})$ indexed by sector pairs,
+    where $\eta_{k,h}$ acts on the neighboring bond space
+    $B_k^{R} \otimes B_h^{L}$. Requiring positivity for each pair gives the
+    corresponding positive $\eta$-data.
+\end{definition}
+
+\begin{definition}[Trace matrices of explicit $\eta$-data]
+    \label{def:mpdo_explicit_eta_trace_matrix}
+    \lean{MPOTensor.ExplicitEtaOperators.traceMatrix}
+    \lean{MPOTensor.ExplicitEtaOperators.traceMatrix_apply}
+    \lean{MPOTensor.ExplicitEtaOperators.traceMatrixRe}
+    \lean{MPOTensor.ExplicitEtaOperators.traceMatrixRe_apply}
+    \leanok
+    \uses{def:mpdo_explicit_eta_operators}
+    Every explicit neighboring $\eta$-family determines a sector-by-sector trace
+    matrix. We record both its complex-valued form and the real-part version,
+    which is the direct input for the real Perron--Frobenius matrix $T$ used
+    in the rank-one step.
+\end{definition}
+
+
+\begin{theorem}[Positivity of bipartite partial traces]
+    \label{thm:matrix_possemidef_partial_traces}
+    \lean{Matrix.PosSemidef.traceLeft}
+    \lean{Matrix.PosSemidef.traceRight}
+    \leanok
+    If $\rho$ is positive semidefinite on a bipartite space $A \otimes B$, then
+    both reduced operators $\tr_A \rho$ and $\tr_B \rho$ are positive
+    semidefinite.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Write each partial trace as the finite sum, over the traced index, of a
+    principal submatrix of $\rho$. Principal submatrices of a positive
+    semidefinite matrix are positive semidefinite, and finite sums of positive
+    semidefinite matrices remain positive semidefinite.
+\end{proof}
+
+\begin{definition}[Hayashi--Markov extraction of explicit $\eta$-operators]
+    \label{def:mpdo_eta_of_hayashi_markov}
+    \lean{MPOTensor.ExplicitEtaOperators.ofHayashiMarkov}
+    \leanok
+    \uses{def:mpdo_eta_structure, def:mpdo_explicit_eta_operators,
+        thm:matrix_possemidef_partial_traces}
+    Every Hayashi decomposition witness $h_\eta$ canonically produces an
+    explicit neighboring $\eta$-family by Kronecker-multiplying the
+    sector-reduced states on the neighboring bond spaces:
+    \[
+        \eta_{k,h}
+        := \tr_C\bigl(\rho_{b_2 C}^{(k)}\bigr)
+            \otimes \tr_A\bigl(\rho_{A b_1}^{(h)}\bigr).
+    \]
+    Positive semidefiniteness of each $\eta_{k,h}$ follows from the fact
+    that partial traces preserve positivity and that positive
+    semidefiniteness is closed under Kronecker products. This is the
+    sector-reduced extraction layer; the remaining connection to
+    Appendix~C.2 is the identification of this family with the inverse-map
+    construction in the original simple-MPDO tensor coordinates.
+\end{definition}
+
+\begin{theorem}[Trace matrix of the Hayashi--Markov $\eta$-operators]
+    \label{thm:mpdo_eta_of_hayashi_markov_trace_matrix}
+    \lean{MPOTensor.ExplicitEtaOperators.traceMatrix_ofHayashiMarkov}
+    \lean{MPOTensor.ExplicitEtaOperators.traceMatrixRe_ofHayashiMarkov}
+    \leanok
+    \uses{def:mpdo_eta_of_hayashi_markov,
+        def:mpdo_explicit_eta_trace_matrix}
+    The trace matrix induced by the extracted family is entrywise
+    $T_{k,h} = 1$ in both its complex-valued form and its real-valued form,
+    matching the paper's normalization $T_{k,h} = a_k b_h$ with
+    $a_k = b_h = 1$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:mpdo_eta_of_hayashi_markov,
+        def:mpdo_explicit_eta_trace_matrix}
+    Each $\rho_{b_2 C}^{(k)}$ is a density matrix, hence has unit trace; the
+    partial trace $\tr_C$ preserves the trace. The analogous statement holds
+    for $\tr_A \rho_{A b_1}^{(h)}$. Multiplicativity of the trace under
+    Kronecker products gives $T_{k,h} = 1 \cdot 1 = 1$, and taking real parts
+    gives the real-valued statement.
+\end{proof}
+
+\begin{theorem}[Entrywise nonnegativity of the real trace matrix]
+    \label{thm:mpdo_explicit_eta_trace_matrix_nonneg}
+    \lean{MPOTensor.ExplicitEtaOperators.traceMatrixRe_nonneg}
+    \leanok
+    \uses{def:mpdo_explicit_eta_trace_matrix}
+    Positivity of the neighboring operators gives entrywise nonnegativity of
+    the real trace matrix. Matrix-level positive semidefiniteness of $T$ is a
+    separate structural condition.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The trace of a positive semidefinite neighboring operator is nonnegative in
+    the complex order. Taking real parts gives the stated entrywise
+    nonnegativity.
+\end{proof}
+
 \begin{definition}[Auxiliary matrix predicates for the rank-one step]
     \label{def:matrix_trace_rankone_predicates}
     \lean{Matrix.TracePowersConstant}
@@ -437,20 +574,70 @@ strong subadditivity for a normalized three-site reduced state.
     The auxiliary predicates record three matrix-theoretic ingredients used in
     the rank-one step of Appendix~C.2, Lemma~C.4: constant traces of all
     positive powers, existence of a rank-one factorization $T = a b^\top$, and
-    the Perron--Frobenius implication from primitivity together with constant
-    trace powers to such a factorization.
+    the conditional Perron--Frobenius implication from primitivity together with
+    constant trace powers to such a factorization.
+
+    This conditional implication is not a globally provable theorem. As a
+    universal statement over primitive nonnegative matrices it is false; a
+    concrete $3 \times 3$ counterexample is recorded in the archive. The
+    corrected criterion proved here adds positive semidefiniteness and trace
+    normalization, which provide the diagonalizability needed to turn the
+    trace-power condition into a rank-one factorization.
 \end{definition}
 
-\begin{theorem}[SAL and ZCL imply rank-one $T$ (scoped form)]
+\begin{theorem}[Trace square of a Hermitian matrix]
+    \label{thm:matrix_hermitian_trace_square_eigenvalues}
+    \lean{Matrix.IsHermitian.trace_sq_eq_sum_eigenvalues_sq}
+    \leanok
+    Let $T$ be a finite Hermitian matrix over a real or complex scalar field,
+    with Hermitian eigenvalues $\lambda_i$. Then
+    \[
+        \tr(T^2) = \sum_i \lambda_i^2.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The spectral theorem writes $T$ as a unitary conjugate of the diagonal
+    matrix of its Hermitian eigenvalues. Squaring commutes with this conjugation,
+    and cyclicity of trace reduces the identity to the trace of the squared
+    diagonal matrix.
+\end{proof}
+
+\begin{theorem}[PSD trace-power rank-one criterion]
+    \label{thm:matrix_psd_trace_power_rank_one}
+    \lean{Matrix.PosSemidef.trace_powers_constant_implies_rank_one}
+    \lean{Matrix.primitive_trace_powers_constant_implies_rank_one_of_posSemidef}
+    \leanok
+    \uses{def:matrix_trace_rankone_predicates}
+    Let $T$ be a finite real square matrix. If $T$ is positive semidefinite,
+    normalized by $\tr(T)=1$, and has constant traces on all positive powers,
+    then $T$ has a rank-one factorization. Consequently, under the same
+    positive-semidefinite and trace-normalization hypotheses, the conditional
+    rank-one criterion used in Lemma~C.4 follows.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:matrix_trace_rankone_predicates, thm:matrix_hermitian_trace_square_eigenvalues}
+    The spectral theorem diagonalizes the positive semidefinite matrix with
+    nonnegative real eigenvalues. The trace gives that their sum is $1$, while
+    the second trace moment gives that the sum of their squares is also $1$.
+    Hence exactly one eigenvalue is equal to $1$ and all others vanish, so the
+    diagonal form is rank one. Unitary conjugation preserves the existence of an
+    outer-product factorization.
+\end{proof}
+
+\begin{theorem}[SAL and ZCL imply rank-one $T$ (conditional form)]
     \label{thm:sal_zcl_implies_rank_one_t}
     \lean{MPOTensor.sal_zcl_implies_rank_one_T}
     \leanok
     \uses{def:matrix_trace_rankone_predicates}
-    Let $T$ be the nonnegative matrix extracted from the local $\eta$-data.
-    Assume that $T$ is primitive, that $\tr(T) = 1$, and that every positive
-    power of $T$ has the same trace as $T$. If one further supplies the single
-    Perron--Frobenius input asserting that every primitive nonnegative matrix
-    with constant trace powers is rank one, then
+    Let $T$ be a finite real square matrix. Assume that $T$ is primitive,
+    that $\tr(T) = 1$, and that every positive power of $T$ has the same trace
+    as $T$. If one further supplies the Perron--Frobenius input asserting that
+    this particular primitive nonnegative matrix with constant trace powers is
+    rank one, then
     \[
         T = a b^\top
     \]
@@ -466,6 +653,30 @@ strong subadditivity for a normalized three-site reduced state.
     The Perron--Frobenius input gives the factorization $T = a b^\top$.
     Taking traces and using $\tr(a b^\top) = a \cdot b$ converts the
     normalization $\tr(T) = 1$ into $a \cdot b = 1$.
+\end{proof}
+
+\begin{theorem}[PSD-corrected rank-one $T$ criterion]
+    \label{thm:psd_trace_powers_rank_one_t}
+    \lean{MPOTensor.sal_zcl_implies_rank_one_T_of_posSemidef}
+    \leanok
+    \uses{def:matrix_trace_rankone_predicates}
+    Let $T$ be a finite real square matrix. Assume that $T$ is primitive,
+    positive semidefinite, normalized by $\tr(T)=1$, and has constant traces on
+    all positive powers. Then
+    \[
+        T = a b^\top
+    \]
+    for some vectors $a$ and $b$, with $a \cdot b = 1$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:matrix_trace_rankone_predicates, thm:sal_zcl_implies_rank_one_t,
+        thm:matrix_psd_trace_power_rank_one}
+    The positive-semidefinite matrix criterion diagonalizes $T$, uses the first
+    two trace moments to show that exactly one eigenvalue is nonzero, and hence
+    supplies the auxiliary rank-one criterion. The conditional Lemma~C.4
+    statement then gives the factorization and trace normalization.
 \end{proof}
 
 \section{Horizontal and Vertical Canonical Forms}
@@ -494,53 +705,92 @@ strong subadditivity for a normalized three-site reduced state.
     from \cite[\S4.4]{Cirac2017MPDO_AnnPhys}.
 \end{definition}
 
-\begin{remark}[Finite-length span and selector criteria for the horizontal canonical-form hypothesis]%
+\begin{remark}[Finite-length span and selector criteria for the abstract biCF hypothesis]%
     \label{rem:word_tuple_span_top}
     \lean{MPSTensor.WordTupleSpanTop}
+    \lean{MPSTensor.BlockEntryIndex}
+    \lean{MPSTensor.wordEntryFamily}
+    \lean{MPSTensor.duplicateScalarBlocks_counterexample}
+    \lean{MPSTensor.wordTupleSpanTop_of_wordEntryFamily_linearIndependent}
+    \lean{MPSTensor.hasBlockSelectorWords_of_wordTupleSpanTop}
+    \lean{MPSTensor.hasBlockSelectorWords_of_wordEntryFamily_linearIndependent}
     \lean{MPSTensor.HasBiCF}
     \lean{MPSTensor.hasBiCF_of_wordTupleSpanTop}
+    \lean{MPSTensor.hasBiCF_of_wordEntryFamily_linearIndependent}
     \lean{MPSTensor.HasBlockSelectorWords}
     \lean{MPSTensor.PropBlockInjective}
     \lean{MPSTensor.wordTupleSpanTop_of_propBlockInjective}
     \lean{MPSTensor.hasBiCF_of_propBlockInjective}
+    \lean{MPSTensor.duplicateScalarBlocks_not_hasBiCF}
     \lean{MPOTensor.horizontalCFData_of_wordTupleSpanTop}
+    \lean{MPOTensor.horizontalCFData_of_wordEntryFamily_linearIndependent}
     \lean{MPOTensor.horizontalCFData_of_propBlockInjective}
     \leanok
     Let $(A_k)$ be a family of block tensors, and fix a length $L$.
     Write $A_k^w$ for the length-$L$ word evaluation of $A_k$ along a word $w$.
-    Consider the tuple-valued evaluations
+    The finite-length spanning hypothesis says that the tuple-valued evaluations
     \[
         w \longmapsto (A_k^w)_k
     \]
-    in the direct product of the block matrix algebras.
-    The finite-length spanning hypothesis says that these tuples span the
-    whole product algebra.
-    Equivalently, if matrices $\Delta_k$ satisfy
+    span the full product algebra of block matrices.
+    The corresponding finite-length separation property asserts that there
+    exists a length $L$ such that if
     \[
         \sum_k \tr(\Delta_k A_k^w) = 0
         \qquad \text{for every word } w \text{ of length } L,
     \]
-    then every $\Delta_k$ vanishes. This is the nondegeneracy statement for
-    the product trace pairing, so a single finite blocking length already
-    separates the blocks by their word evaluations.
+    then these pairings vanish on a spanning set for the product algebra, so
+    the induced linear functional on the product algebra is zero; by
+    nondegeneracy of the product trace pairing, every $\Delta_k$ vanishes.
+    In other words, a single finite blocking length already separates the blocks
+    by their word evaluations. Combined with injectivity, left-canonicality, and
+    nonzero block weights, this finite-length separation yields the horizontal
+    canonical-form data of the block-diagonal tensor.
 
-    Proposition~IV.3 gives a concrete sufficient criterion for this
-    finite-length separation. After one common blocking length, each block is
-    block-injective; after a further finite blocking length, one can choose
-    linear combinations of words which act as the identity on one selected
-    block and vanish on all the others. Combining an injective prefix with
-    such a selector suffix yields the spanning condition above.
+    The entrywise scalar family of block-matrix coefficients encodes the same
+    finite-length data. Linear independence of that scalar family implies the
+    product-algebra spanning statement, hence block selectors and a biCF
+    witness. The same criterion therefore gives horizontal canonical-form data
+    directly.
+    The duplicate-scalar counterexample shows that this finite-length witness
+    is strictly stronger than blockwise injectivity, left-canonicality, and
+    nonzero weights alone: two identical scalar blocks satisfy those hypotheses,
+    but the biCF separation condition fails and no blocking length makes the
+    entrywise family linearly independent.
 
-    Once this finite-length separation is available, together with
-    injectivity, left-canonicality, and nonzero weights, one obtains the
-    horizontal canonical-form structure for the MPO.
+    Proposition~IV.3 gives a concrete sufficient criterion for the spanning
+    condition: after a common blocking length each block is block-injective,
+    and after a further finite blocking length one can form linear combinations
+    of word evaluations which equal the identity on one chosen block and vanish
+    on all others. Concatenating an injective prefix with such a selector
+    suffix produces the product-algebra spanning condition above, so the
+    selector-word hypotheses of Proposition~IV.3 also deliver the horizontal
+    canonical-form data.
 \end{remark}
+
+\begin{theorem}[Abstract Proposition~IV.3 selector criterion]
+    \label{thm:propblockinj_abstract}
+    \lean{MPSTensor.hasBiCF_of_propBlockInjective}
+    \leanok
+    \uses{rem:word_tuple_span_top}
+    If a block family admits the finite-length selector data of
+    Proposition~IV.3, then it is in block-injective canonical form.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{rem:word_tuple_span_top}
+    This is the direct implication from the abstract selector data to the
+    finite-length trace-separation statement. What remains open in the full
+    Proposition~IV.3 is the derivation of the selector hypothesis from separated
+    canonical-form / BNT data.
+\end{proof}
 
 \begin{lemma}[Blockwise equality from agreement on the MPV family]
     \label{lem:blockwise_insert_eq_of_mpv_agree}
     \lean{MPOTensor.blockwise_insert_eq_of_mpv_agree}
     \leanok
-    \uses{def:tensor_from_blocks, def:injective}
+    \uses{def:tensor_from_blocks, def:injective, thm:propblockinj_abstract}
     Let $\bigoplus_k \mu_k A_k$ be a block-diagonal tensor whose blocks are
     injective, left-canonical, weighted by nonzero scalars, and jointly
     block-injective in the sense that for some blocking length~$L$ the tuple of
@@ -553,8 +803,9 @@ strong subadditivity for a normalized three-site reduced state.
 
 \begin{proof}
     \leanok
-    \uses{def:tensor_from_blocks, def:injective}
-    This is Lemma~L from \cite[Appendix~A]{Cirac2017MPDO_AnnPhys}.
+    \uses{def:tensor_from_blocks, def:injective, thm:propblockinj_abstract}
+    This is Lemma~L from \cite[Appendix~A]{Cirac2017MPDO_AnnPhys}, using the
+    abstract Proposition~IV.3 selector criterion from Theorem~\ref{thm:propblockinj_abstract}.
     Expanding the hypothesis over a word of length~$L+1$ beginning with the
     fixed site and folding each block contribution into a trace pairing
     against the corresponding first-site insertion tensor yields, upon taking the
@@ -588,8 +839,8 @@ strong subadditivity for a normalized three-site reduced state.
 
 \section{Fusion isometries}
 
-Following \cite[\S4.5]{Cirac2017MPDO_AnnPhys}, this section records the
-transfer-map content of the fusion-isometry picture.
+Following \cite[\S4.5]{Cirac2017MPDO_AnnPhys}, the current formal development
+describes the transfer-map content of the fusion-isometry picture.
 For each blocked size $n \ge 1$, the doubled-index blocked tensor of an MPO
 has a blocked transfer map $E_n$ acting on bond-space matrices, and the
 support algebra is modeled by a subspace through which $E_n$ factors as a
@@ -622,12 +873,13 @@ retract.
     map $E_n$.
 \end{definition}
 
-\begin{theorem}[Fusion-isometry data imply MPDO RFP]%
+\begin{theorem}[Fusion-isometry data imply the provisional MPDO RFP condition]%
     \label{thm:mpdo_rfp_of_fusion}
     \lean{MPOTensor.isRFP_of_isRFP_MPDO_via_fusion}
     \leanok
     \uses{def:mpdo_rfp_via_fusion}
-    The fusion-isometry formulation implies \lean{MPOTensor.IsRFP}.
+    The fusion-isometry formulation implies the current predicate
+    \lean{MPOTensor.IsRFP}.
 \end{theorem}
 \begin{proof}\leanok
 Apply the definition at blocked size $n = 1$.
@@ -662,37 +914,296 @@ This range-factorization gives the required fusion-isometry data.
 \end{corollary}
 \begin{proof}\leanok
 Combine Theorem~\ref{thm:mpdo_rfp_via_fusion_iff} with the diagonal pure-state
-recovery theorem for the MPDO renormalization fixed-point condition.
+recovery theorem for the provisional MPO predicate.
 \end{proof}
 
-\section{Support-algebra structure}
+\section{Algebra structure}
 
 \begin{definition}[Algebra-structure data for an MPDO]%
     \label{def:mpdo_algebra_structure_data}
     \lean{MPOTensor.AlgebraStructureData}
     \leanok
     \uses{def:mpo_tensor}
-    A family of support algebras $\{\mathcal{A}_n\}_{n \ge 0}$, one at every
-    blocking size, equipped with blocking maps
-    $m_n : \mathcal{A}_n \otimes \mathcal{A}_n \to \mathcal{A}_{2n}$ arising
-    from horizontal concatenation of blocks and unital inclusion maps
-    $\iota_n : \mathcal{A}_n \to \mathcal{A}_{n+1}$ arising from appending a
-    single site, together with a coherence condition relating $m_n$ and
-    $\iota_n$.
+    A family of support $*$-algebras $\{\mathcal{A}_n\}_{n \ge 0}$, one at
+    every blocking size, equipped with blocking maps
+    $m_n : \mathcal{A}_n \otimes \mathcal{A}_n \to \mathcal{A}_{2n}$ and
+    inclusion maps $\iota_n : \mathcal{A}_n \to \mathcal{A}_{n+1}$ such that,
+    after viewing all elements inside the ambient bond-space matrix algebra,
+    $m_n$ is ordinary matrix multiplication and $\iota_n$ is the ambient
+    inclusion.
 \end{definition}
 
-\begin{definition}[Algebra-structure formulation of MPDO RFP]%
+\begin{definition}[Algebra-structure RFP predicate]%
     \label{def:mpdo_rfp_via_algebra}
-    \lean{MPOTensor.IsRFP_MPDO_via_algebra_scaffold}
+    \lean{MPOTensor.IsRFP_MPDO_via_algebra}
+    \leanok
     \uses{def:mpdo_algebra_structure_data, def:mpo_tensor}
-    An MPO tensor $M$ satisfies the \emph{algebra-structure formulation} of
-    the renormalization fixed-point condition when there exist
-    algebra-structure data compatible with $M$, in the sense of
-    \cite[Theorem~IV.13~(ii)]{Cirac2017MPDO_AnnPhys}. Here compatibility is
-    taken to be the trivial relation that holds for every pair, so this
-    formulation is satisfied by every MPO tensor. The intended compatibility
-    condition is the one appearing in
-    \cite[Theorem~IV.13~(ii)]{Cirac2017MPDO_AnnPhys}.
+    An MPO tensor $M$ satisfies the \emph{algebra-structure formulation} used
+    here when there exist algebra-structure data whose support algebra at every
+    positive blocking size coincides with the fixed-point algebra of the adjoint
+    blocked transfer map. This is a nontrivial algebraic condition, but it is still
+    weaker than the full coefficient formulation of
+    \cite[Theorem~IV.13~(ii)]{Cirac2017MPDO_AnnPhys}, since the coefficient
+    family $c_{\alpha,\beta,\gamma}^{(L)}$ is not yet extracted.
+\end{definition}
+
+\begin{theorem}[RFP yields a stationary algebra tower under a faithful fixed point]%
+    \label{thm:mpdo_rfp_via_algebra_from_rfp}
+    \lean{MPOTensor.isRFP_MPDO_via_algebra_of_isRFP_of_isTP_of_posDef_fixed}
+    \leanok
+    \uses{def:is_rfp_mpdo, def:mpdo_rfp_via_algebra}
+    Assume the doubled tensor is trace-preserving and the transfer map admits a
+    positive-definite fixed point. If the transfer map is idempotent, then there
+    exists a stationary family of support algebras, all equal to the fixed-point
+    algebra of the adjoint transfer map, with multiplication given by matrix
+    multiplication and inclusions given by the identity.
+\end{theorem}
+\begin{proof}\leanok
+Under the trace-preserving normalization and the faithful fixed point, Wolf's
+fixed-point-algebra theorem gives a $*$-subalgebra of adjoint fixed points.
+Idempotence identifies every positive blocked transfer map with the original
+one, so the same fixed-point algebra works at every blocking size.
+\end{proof}
+
+\begin{theorem}[Fusion yields a stationary algebra tower under a faithful fixed point]%
+    \label{thm:mpdo_rfp_via_algebra_from_fusion}
+    \lean{MPOTensor.isRFP_MPDO_via_algebra_of_isRFP_MPDO_via_fusion_of_isTP_of_posDef_fixed}
+    \leanok
+    \uses{thm:mpdo_rfp_of_fusion, thm:mpdo_rfp_via_algebra_from_rfp}
+    Assume the doubled tensor is trace-preserving and the transfer map admits a
+    positive-definite fixed point. If the transfer-map fusion criterion holds,
+    then the MPO satisfies the algebra-structure formulation of the
+    renormalization fixed-point condition.
+\end{theorem}
+\begin{proof}\leanok
+Combine Theorem~\ref{thm:mpdo_rfp_of_fusion} with
+Theorem~\ref{thm:mpdo_rfp_via_algebra_from_rfp}.
+\end{proof}
+
+\begin{theorem}[Stabilized blocked adjoint fixed points yield algebra data]%
+    \label{thm:mpdo_algebra_from_stabilized_adjoint_fixedpoints}
+    \lean{MPOTensor.isRFP_MPDO_via_algebra_of_adjointFixedPoints_eq_of_isTP_of_posDef_fixed}
+    \leanok
+    \uses{def:mpdo_rfp_via_algebra}
+    Assume the doubled tensor is trace-preserving and the transfer map admits a
+    positive-definite fixed point. If, for every positive blocked size $n$, the
+    adjoint fixed-point space of the blocked transfer map agrees with the
+    adjoint fixed-point space of the original transfer map, then the current
+    algebra predicate holds.
+\end{theorem}
+\begin{proof}\leanok
+Use the adjoint fixed-point algebra of the original transfer map as a constant
+support-algebra tower. The stabilization hypothesis identifies that same
+algebra with the adjoint fixed-point space of every positive blocked transfer
+map, so the stationary family is compatible with the present definition.
+\end{proof}
+
+This still falls short of the full converse direction of
+\cite[Theorem~IV.13]{Cirac2017MPDO_AnnPhys}: the present compatibility
+predicate only sees stabilized adjoint fixed-point algebras, not yet the
+paper's coefficient/BNT data. The current formal layer still does not recover
+the special diagonal matrices $\chi_{\alpha,\beta,\gamma}$ from
+Theorem~IV.13(ii). What it does provide is the first explicit coefficient data
+attached to the algebra tower:
+a chosen basis of each support algebra, coordinate maps into a finite scalar
+family, and the corresponding multiplication / inclusion coefficient arrays.
+
+\begin{definition}[Blocked coefficients for the algebra tower]%
+    \label{def:mpdo_blocked_coefficients}
+    \lean{MPOTensor.AlgebraStructureData.toBlockedCoefficients}
+    \leanok
+    \uses{def:mpdo_algebra_structure_data}
+    For each blocked size $n$, once a basis of $\mathcal{A}_n$ is chosen,
+    every element of $\mathcal{A}_n$ is identified with a finite coefficient
+    family on that basis.
+\end{definition}
+
+\begin{theorem}[Reconstruction from blocked coefficients]%
+    \label{thm:mpdo_reconstruct_blocked_coefficients}
+    \lean{MPOTensor.AlgebraStructureData.reconstructFromBlockedCoefficients_apply}
+    \leanok
+    \uses{def:mpdo_blocked_coefficients}
+    Reconstructing a coefficient family gives the corresponding basis
+    expansion $\sum_i a_i b_i$ in $\mathcal{A}_n$.
+\end{theorem}
+\begin{proof}\leanok
+This is exactly the finite-basis reconstruction formula for the chosen basis of
+$\mathcal{A}_n$.
+\end{proof}
+
+\begin{definition}[Blocked multiplication coefficients]%
+    \label{def:mpdo_blocked_structure_coefficients}
+    \lean{MPOTensor.AlgebraStructureData.blockedStructureCoefficients}
+    \leanok
+    \uses{def:mpdo_blocked_coefficients}
+    The blocking multiplication map $m_n$ determines a coefficient family for
+    the product of any two chosen basis elements of $\mathcal{A}_n$, now viewed
+    in the basis of $\mathcal{A}_{2n}$.
+\end{definition}
+
+\begin{theorem}[Blocked multiplication reconstructs from its coefficients]%
+    \label{thm:mpdo_mul_coefficients_reconstruct}
+    \lean{MPOTensor.AlgebraStructureData.coe_mul_eq_sum_blockedStructureCoefficients}
+    \leanok
+    \uses{def:mpdo_blocked_structure_coefficients}
+    In the ambient bond-space matrix algebra, the product of two chosen basis
+    elements of $\mathcal{A}_n$ is the sum of the basis elements of
+    $\mathcal{A}_{2n}$ weighted by these extracted coefficients.
+\end{theorem}
+\begin{proof}\leanok
+Apply the reconstruction formula of
+Theorem~\ref{thm:mpdo_reconstruct_blocked_coefficients} to the element
+$m_n(b_i,b_j) \in \mathcal{A}_{2n}$.
+\end{proof}
+
+\begin{theorem}[Compatible adjoint fixed points reconstruct from blocked coefficients]%
+    \label{thm:mpdo_fixedpoint_coefficients_reconstruct}
+    \lean{MPOTensor.AlgebraStructureData.reconstructFromBlockedCoefficients_of_fixedPoint}
+    \leanok
+    \uses{def:mpdo_rfp_via_algebra, def:mpdo_blocked_coefficients}
+    If the algebra tower is compatible with an MPO tensor $M$, then every adjoint
+    blocked fixed point of the blocked transfer map $E_n$ belongs to
+    $\mathcal{A}_n$ and is recovered exactly from its extracted coefficient
+    family.
+\end{theorem}
+\begin{proof}\leanok
+Compatibility identifies $\mathcal{A}_n$ with the adjoint fixed-point algebra of
+$E_n$, so the fixed point first becomes an element of $\mathcal{A}_n$ and then
+Theorem~\ref{thm:mpdo_reconstruct_blocked_coefficients} reconstructs it.
+\end{proof}
+
+\begin{theorem}[Adjoint fixed points descend through the algebra tower]%
+    \label{thm:mpdo_adjoint_fix_descent}
+    \lean{MPOTensor.adjoint_transferMap_apply_of_isRFP_MPDO_via_algebra}
+    \leanok
+    \uses{def:mpdo_rfp_via_algebra}
+    If an MPO tensor satisfies the algebra-structure formulation, then every
+    adjoint fixed point of the blocked transfer map $E_n$ at a positive
+    blocking size $n$ is already an adjoint fixed point of the unblocked
+    transfer map $E_1$.
+\end{theorem}
+\begin{proof}\leanok
+Compatibility at size $n$ places $X$ in $\mathcal{A}_n$. The inclusion map
+$\iota_n$ lifts $X$ into $\mathcal{A}_{n+1}$, and since $\iota_n$ is just an
+inclusion it does not change the underlying operator, so we continue to
+denote the lifted element by $X$. Thus compatibility at size $n + 1$ yields
+$E_{n+1}^{\dagger} X = X$. Rewriting $E_{n+1} = E_n \circ E_1$ and applying
+$(A \circ B)^{\dagger} = B^{\dagger} \circ A^{\dagger}$ together with the
+hypothesis $E_n^{\dagger} X = X$ extracts $E_1^{\dagger} X = X$.
+\end{proof}
+
+\begin{lemma}[Reverse inclusion of adjoint fixed points]%
+    \label{lem:mpdo_adjoint_fix_reverse}
+    \lean{MPOTensor.adjoint_blockedTransferMap_apply_of_adjoint_transferMap_apply}
+    \leanok
+    Every adjoint fixed point of the unblocked transfer map $E_1$ is an
+    adjoint fixed point of every blocked transfer map $E_n$.
+\end{lemma}
+\begin{proof}\leanok
+Induction on $n$ using $E_{n+1} = E_n \circ E_1$ and
+$(A \circ B)^{\dagger} = B^{\dagger} \circ A^{\dagger}$; the base case is
+$E_0 = \mathrm{id}$. This step does not require the algebra-structure data.
+Combined with Theorem~\ref{thm:mpdo_adjoint_fix_descent} this yields the
+fixed-point equality
+$\mathrm{Fix}(E_n^{\dagger}) = \mathrm{Fix}(E_1^{\dagger})$ at every positive
+blocking size under the algebra-structure predicate.
+\end{proof}
+
+\begin{remark}[Converse algebra-to-fusion gap]%
+    \label{rem:mpdo_algebra_to_fusion_gap}
+    \uses{def:mpdo_rfp_via_algebra, def:mpdo_rfp_via_fusion, thm:newton_girard}
+    The converse implication
+    $\ref{def:mpdo_rfp_via_algebra} \Rightarrow \ref{def:mpdo_rfp_via_fusion}$
+    is not provable against the present predicate. Theorem
+    \ref{thm:mpdo_adjoint_fix_descent} already gives the strongest available
+    consequence of the algebra-structure data -- exclusion of \emph{finite
+    order} (root-of-unity) peripheral eigenvalues of the adjoint transfer
+    map, since any such eigenvalue would produce a new adjoint fixed point
+    at some positive blocking size. This does \emph{not}, however, exclude
+    unit-modulus eigenvalues of irrational phase, nor force idempotence of
+    the transfer map, so ergodic quantum channels with a strict spectral gap
+    on the $1$-complement still satisfy the predicate without being RFPs.
+    For instance, on $M_D(\mathbb{C})$ with $0 < \varepsilon < 1$ take
+    \[
+        E(X)
+            = \varepsilon\, X
+              + (1 - \varepsilon)\, \Pi_{\mathrm{diag}}(X),
+    \]
+    where $\Pi_{\mathrm{diag}}$ is the projection that zeroes the
+    off-diagonal entries of $X$; then $\Pi_{\mathrm{diag}} \circ
+    \Pi_{\mathrm{diag}} = \Pi_{\mathrm{diag}}$, the channel $E$ has
+    peripheral spectrum $\{1\}$ and diagonal fixed-point algebra at every
+    blocking size, yet $E \circ E \neq E$. Closing the converse therefore
+    requires strengthening the predicate to the coefficient formulation of
+    \cite[Theorem~IV.13~(ii)]{Cirac2017MPDO_AnnPhys}: the positive diagonal
+    matrices $\chi_{\alpha,\beta,\gamma}$ of Appendix~C.3 and the
+    coefficient identity
+    $c^{(L)}_{\alpha,\beta,\gamma}
+      = \mathrm{tr}(\chi_{\alpha,\beta,\gamma}^{L})$
+    of Appendix~C.4. The scalar Newton--Girard power-sum identity needed
+    for the latter step is already available as
+    Theorem~\ref{thm:newton_girard}.
+\end{remark}
+
+\subsection{Diagonal $\chi$-matrices and the trace-power formula}
+
+The following layer formalizes the target shape of
+\cite[Theorem~IV.13~(ii)]{Cirac2017MPDO_AnnPhys} in which the structure
+coefficients of the length-$L$ operator algebra are trace-powers of positive
+diagonal matrices $\chi_{\alpha,\beta,\gamma}$. The RFP MPDO itself is not yet
+constructed here; what is formalized is the language in which the paper's
+identity is stated, together with the elementary trace-power identity for
+diagonal matrices.
+
+\begin{definition}[Diagonal $\chi$ family]%
+    \label{def:mpdo_diagonal_chi_family}
+    \lean{MPOTensor.DiagonalChiFamily}
+    \leanok
+    A family of diagonal complex matrices $\chi_{\alpha,\beta,\gamma}$ indexed
+    by ordered triples drawn from a common index type, each of a specified
+    size. This is the paper's $\chi_{\alpha,\beta,\gamma}$ in
+    Theorem~IV.13(ii).
+\end{definition}
+
+\begin{theorem}[Trace of $\chi^L$ equals the sum of $L$-th powers of entries]%
+    \label{thm:mpdo_trace_matrix_pow}
+    \lean{MPOTensor.DiagonalChiFamily.trace_matrix_pow}
+    \leanok
+    \uses{def:mpdo_diagonal_chi_family}
+    For every triple $(\alpha, \beta, \gamma)$, if $\chi_{\alpha,\beta,\gamma}$
+    has size $r_{\alpha,\beta,\gamma}$, then for every $L \ge 0$,
+    \[
+        \operatorname{tr}\bigl(\chi_{\alpha,\beta,\gamma}^{L}\bigr)
+            = \sum_{k=1}^{r_{\alpha,\beta,\gamma}}
+                \chi_{\alpha,\beta,\gamma,k}^{L},
+    \]
+    where $\chi_{\alpha,\beta,\gamma,k}$ are the diagonal entries.
+\end{theorem}
+\begin{proof}\leanok
+Diagonal matrices raise to powers entrywise and the trace of a diagonal matrix
+is the sum of its entries.
+\end{proof}
+
+\begin{definition}[Trace-power form of a structure-coefficient family]%
+    \label{def:mpdo_has_chi_trace_power_form}
+    \lean{MPOTensor.HasChiTracePowerForm}
+    \leanok
+    \uses{def:mpdo_diagonal_chi_family}
+    A binary compatibility predicate between an abstract structure-coefficient
+    family $c^{(L)}_{\alpha,\beta,\gamma}$ and a diagonal $\chi$ family: the
+    pair $(c, \chi)$ is said to be in \emph{trace-power form} when
+    \[
+        c^{(L)}_{\alpha,\beta,\gamma}
+            = \operatorname{tr}\bigl(\chi_{\alpha,\beta,\gamma}^{L}\bigr)
+            = \sum_{k=1}^{r_{\alpha,\beta,\gamma}}
+                \chi_{\alpha,\beta,\gamma,k}^{L}
+    \]
+    for every $L \ge 0$ and every triple $(\alpha, \beta, \gamma)$, where
+    $r_{\alpha,\beta,\gamma}$ is the size of $\chi_{\alpha,\beta,\gamma}$. This
+    is the formal analogue of the target identity of
+    \cite[Theorem~IV.13~(ii)]{Cirac2017MPDO_AnnPhys}; the existential
+    version---``there exists $\chi$ for which $(c,\chi)$ has trace-power
+    form''---is obtained by quantifying over $\chi$.
 \end{definition}
 
 \section{Commuting form and GSNNCH}
@@ -726,8 +1237,8 @@ recovery theorem for the MPDO renormalization fixed-point condition.
     if every finite-chain operator admits the equivalent positive-operator
     presentation $\rho^{(N)} = c \prod_i B_{i,i+1}$ with $c > 0$ and
     commuting nearest-neighbor factors. The projector-limit convention after
-    Definition~4.8 of \cite{Cirac2017MPDO_AnnPhys} identifies this with the
-    exponential Gibbs form.
+    source label \texttt{defrhoNComm} in \cite{Cirac2017MPDO_AnnPhys}
+    identifies this with the exponential Gibbs form.
 \end{definition}
 
 \begin{theorem}[GSNNCH iff commuting form]
@@ -750,7 +1261,8 @@ witness, and every GSNNCH witness remembers its underlying commuting-form data.
     \leanok
     \uses{def:mpdo_is_gsnnch, def:mpo_is_zcl}
     This is the conjunction of the GSNNCH condition with MPO zero correlation
-    length, i.e. the content of item~(iii) in the simple-MPDO theorem.
+    length, matching item~(iii) of the simple-MPDO equivalence in
+    \cite{Cirac2017MPDO_AnnPhys} (source label \texttt{thm:main-simple}).
 \end{definition}
 
 \begin{theorem}[GSNNCH with zero correlation length iff commuting form with zero correlation length]
@@ -767,8 +1279,118 @@ Unfold the definition of GSNNCH with zero correlation length and apply
 Theorem~\ref{thm:mpdo_is_gsnnch_iff_has_commuting_form}.
 \end{proof}
 
-\begin{remark}[Remaining step toward Proposition~C.6]
-The remaining entropy-side theorem is to derive the commuting-form property
-from the strong-area-law hypotheses of Appendix~C.2. The present file isolates
-its GSNNCH target once that step is available.
+\begin{definition}[$\eta$-local commuting-form data]
+    \label{def:mpdo_eta_local_structure_data}
+    \lean{MPOTensor.EtaLocalStructureData}
+    \leanok
+    \uses{def:mpdo_has_commuting_form}
+    This records the post-extraction output of Appendix~C.2: a single
+    translation-invariant positive two-site bond whose translated copies commute
+    on every periodic chain and realize the MPO at every finite length.
+\end{definition}
+
+\begin{theorem}[$\eta$-local structure implies commuting form]
+    \label{thm:mpdo_has_commuting_form_of_eta_local_structure}
+    \lean{MPOTensor.hasCommutingForm_of_etaLocalStructure}
+    \leanok
+    \uses{def:mpdo_eta_local_structure_data, def:mpdo_has_commuting_form}
+    Once the explicit neighboring operators $\eta_{k,h}$ have been assembled
+    into the data above, the global commuting-form property follows.
+\end{theorem}
+
+\begin{proof}\leanok
+For each $N \ge 2$, take the commuting-form datum given by these data.
+\end{proof}
+
+\begin{remark}[Remaining step toward source label \texttt{propsimple}]
+The remaining entropy-side theorem is to construct
+\lean{MPOTensor.EtaLocalStructureData} from the local SAL and ZCL ingredients
+already formalized in \texttt{TNLean/MPS/MPDO/SimpleLocalStructure.lean}. In
+particular, the missing piece is the extraction of explicit neighboring
+operators $\eta_{k,h}$ from the Hayashi Markov decomposition; once that is in
+place, Theorem~\ref{thm:mpdo_has_commuting_form_of_eta_local_structure}
+immediately yields the commuting-form conclusion, and the present file then
+recovers the GSNNCH target of source label \texttt{propsimple}.
+\end{remark}
+
+\section{Blocked-RFP construction for simple MPDOs}
+
+\begin{definition}[Local simple-MPDO structure data]
+    \label{def:simple_mpdo_local_structure_data}
+    \lean{MPOTensor.SimpleMPDOLocalStructureData}
+    \leanok
+    \uses{thm:sal_implies_eta_structure, thm:sal_zcl_implies_rank_one_t}
+    This data record collects the current local Appendix~C.2 input: a normalized
+    three-site reduced state with equality in strong subadditivity, the
+    resulting local $\eta$-structure, and the rank-one conclusion for the
+    auxiliary primitive matrix $T$.
+\end{definition}
+
+\begin{definition}[Simple-MPDO blocked-RFP data]
+    \label{def:simple_mpdo_blocked_rfp_data}
+    \lean{MPOTensor.SimpleMPDOBlockedRFPData}
+    \leanok
+    \uses{def:simple_mpdo_local_structure_data, def:mpdo_has_commuting_form,
+        def:mpo_is_zcl}
+    For an MPO tensor $K$, this consists of the local Appendix~C.2 data together
+    with a provisional compatibility relation attaching those local data to
+    $K$, the commuting-form property, and zero correlation length. The local
+    component is retained so that the still-missing implication from the
+    entropy-side hypotheses to commuting form has an explicit target, even
+    though the current blocked-RFP consequences below use only the
+    commuting-form and zero-correlation-length entries.
+\end{definition}
+
+\begin{theorem}[Zero correlation length gives a blocked fusion-isometry witness]
+    \label{thm:structural_implies_rfp_blocked}
+    \lean{MPOTensor.structural_implies_rfp_blocked}
+    \leanok
+    \uses{def:mpo_is_zcl, def:mpdo_fusion_isometry, def:mpdo_rfp_via_fusion,
+        thm:mpdo_rfp_via_fusion_iff}
+    If an MPO tensor $K$ has zero correlation length, then it has a blocked
+    fusion-isometry witness at size $2$ in the sense of
+    Definition~\ref{def:mpdo_fusion_isometry}.
+\end{theorem}
+
+\begin{proof}\leanok
+Zero correlation length is the current provisional MPDO RFP predicate.
+Applying the converse direction of
+Theorem~\ref{thm:mpdo_rfp_via_fusion_iff} to that RFP witness yields
+fusion-isometry data at every positive blocked size; evaluating it at size $2$
+produces the blocked witness.
+\end{proof}
+
+\begin{theorem}[Simple-MPDO RFP chain from commuting form and ZCL]
+    \label{thm:simple_mpdo_rfp_chain}
+    \lean{MPOTensor.simple_mpdo_rfp_chain}
+    \leanok
+    \uses{def:mpdo_has_commuting_form, def:mpo_is_zcl,
+        thm:mpdo_is_gsnnch_zcl_iff_has_commuting_form_and_is_zcl,
+        thm:structural_implies_rfp_blocked, def:mpdo_rfp_via_fusion,
+        thm:mpdo_rfp_via_fusion_iff}
+    From the commuting-form property and zero correlation length one
+    simultaneously recovers the GSNNCH-with-ZCL branch of Theorem~4.9, the
+    blocked fusion-isometry witness at size $2$, and the transfer-map fusion
+    formulation of MPDO RFP.
+\end{theorem}
+
+\begin{proof}\leanok
+The commuting-form and zero-correlation-length hypotheses give the GSNNCH--ZCL
+branch via Theorem~\ref{thm:mpdo_is_gsnnch_zcl_iff_has_commuting_form_and_is_zcl}.
+The blocked witness is Theorem~\ref{thm:structural_implies_rfp_blocked}. The
+full transfer-map fusion formulation follows by applying the converse direction
+of Theorem~\ref{thm:mpdo_rfp_via_fusion_iff} to zero correlation length, which
+is the current RFP predicate.
+\end{proof}
+
+\begin{remark}[Remaining paper-level gap for Theorem~4.9]
+    \label{rem:simple_mpdo_rfp_chain_gap}
+    \notready
+    \uses{def:simple_mpdo_local_structure_data,
+        def:simple_mpdo_blocked_rfp_data, thm:simple_mpdo_rfp_chain}
+    Theorem~\ref{thm:simple_mpdo_rfp_chain} is fully formalized, but to recover
+    the original Appendix~C.2 implication from SAL and ZCL alone one still
+    needs a theorem deriving the commuting-form property from the local
+    simple-MPDO structure of Lemmas~C.3--C.4. The record above is included so
+    that this future implication has an explicit target.
 \end{remark}

@@ -64,8 +64,8 @@ jobs:
       - name: Setup git identity
         if: steps.loop_guard.outputs.skip != 'true'
         run: |
-          git config --global user.email "codex[bot]@users.noreply.github.com"
-          git config --global user.name "codex[bot]"
+          git config --global user.email "chatgpt-codex-connector[bot]@users.noreply.github.com"
+          git config --global user.name "chatgpt-codex-connector[bot]"
 
       - name: Set up Lean toolchain and cache
         if: inputs.setup_lean && steps.loop_guard.outputs.skip != 'true'
@@ -90,7 +90,7 @@ jobs:
           # and `gh pr comment` the summary. workspace-write blocks network.
           sandbox: danger-full-access
           # Allow iterations triggered by prior bot-authored fix commits
-          # (head of branch is authored by codex[bot] / claude[bot]).
+          # (head of branch is authored by chatgpt-codex-connector[bot] / claude[bot]).
           allow-bots: true
           prompt: |
             ${{ inputs.codex_prompt }}

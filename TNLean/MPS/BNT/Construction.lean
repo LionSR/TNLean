@@ -37,7 +37,7 @@ Def. 4.2 / Prop. char-BNT in arXiv:2011.12127 and arXiv:1606.00608, lines 1145�
 4. **`fundamentalTheorem_of_separated_CFBNT_data`** and the legacy wrapper
    **`fundamentalTheorem_of_IsCanonicalFormBNT`**: if two CF-BNT decompositions generate
    proportional MPVs with convergent nonzero coefficients, then the blocks match up to
-   permutation, dimension equality, and gauge-phase equivalence. This is a bridge from
+   permutation, dimension equality, and gauge-phase equivalence. This connects
    canonical/BNT split data to the hypotheses of `BNT/PermutationRigidity`.
 
 ## Design note on coefficients
@@ -114,7 +114,7 @@ def toHasNormalizedSelfOverlap (hCF : IsCanonicalFormBNT μ A) :
     HasNormalizedSelfOverlap (d := d) A :=
   hCF.toIsCanonicalForm.toHasNormalizedSelfOverlap
 
-/-- Rebuild `IsCanonicalFormBNT` from the additive split API plus the BNT separation axiom. -/
+/-- Rebuild `IsCanonicalFormBNT` from the additive split API plus the BNT separation assumption. -/
 def ofSeparatedData
     (hInj : HasInjectiveBlocks (d := d) A)
     (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
@@ -129,7 +129,7 @@ def ofSeparatedData
 end IsCanonicalFormBNT
 
 /-- An `IsCanonicalForm` family with pairwise distinct block dimensions and strictly
-decreasing moduli automatically satisfies `IsCanonicalFormBNT`, since the separation axiom
+decreasing moduli automatically satisfies `IsCanonicalFormBNT`, since the separation assumption
 is vacuous. -/
 theorem IsCanonicalForm.toIsCanonicalFormBNT_of_distinct_dims
     {r : ℕ} {dim : Fin r → ℕ}
@@ -153,11 +153,11 @@ and that the block weight moduli are **strictly decreasing**.
 
 Here `IsNormalCanonicalForm` encodes the spectral / primitive-transfer-map version of
 normality with non-increasing moduli. The BNT level adds strict ordering (justified by the
-grouping step) and the BNT separation axiom.
+grouping step) and the BNT separation assumption.
 
 The later `IsBNT` predicate instead asks for blockwise `IsNormal`, i.e. the
-equivalent algebraic eventual-block-injectivity notion, so the primitive-to-normal bridge must be
-supplied explicitly when passing from this predicate to `IsBNT`. -/
+equivalent algebraic eventual-block-injectivity notion, so the primitive-to-normal
+implication must be supplied explicitly when passing from this predicate to `IsBNT`. -/
 structure IsNormalCanonicalFormBNT {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k)) : Prop extends
     IsNormalCanonicalForm μ A where
@@ -201,7 +201,7 @@ def toHasNormalizedSelfOverlap [∀ k, NeZero (dim k)]
   hNCF.toIsNormalCanonicalForm.toHasNormalizedSelfOverlap
 
 /-- Rebuild `IsNormalCanonicalFormBNT` from the additive split API plus the BNT separation
-axiom. -/
+assumption. -/
 def ofSeparatedData
     (hIrr : HasIrreducibleBlocks (d := d) A)
     (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
@@ -229,8 +229,13 @@ private theorem spans_mpv_toTensorFromBlocks
   intro σ
   simpa [smul_eq_mul] using mpv_toTensorFromBlocks_eq_sum μ A σ
 
-/-- Overlaps converging to the Kronecker delta give eventual linear independence of block MPVs. -/
-private theorem eventually_li_of_overlap_limits
+/-- **Existential BNT linear independence from asymptotic orthonormal overlaps.**
+
+If the self-overlaps of a finite block family tend to `1` and the cross-overlaps
+of distinct blocks tend to `0`, then the MPV states are linearly independent for
+every sufficiently large system size.  This is the threshold form of
+`bntFamilies_eventually_linearIndependent`. -/
+theorem exists_eventually_linearIndependent_of_overlap_tendsto_orthonormal
     {r : ℕ} {dim : Fin r → ℕ}
     (A : (k : Fin r) → MPSTensor d (dim k))
     (hSelf : ∀ j,
@@ -253,7 +258,7 @@ variable {μ : Fin r → ℂ} {A : (k : Fin r) → MPSTensor d (dim k)}
 
 /-- Split-data version of CF-BNT cross-overlap decay.
 
-Only injectivity, left-canonical normalization, and the BNT non-equivalence axiom are used. -/
+Only injectivity, left-canonical normalization, and the BNT non-equivalence assumption are used. -/
 theorem cross_overlap_tendsto_zero_of_separated_CFBNT_data
     [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))
@@ -292,7 +297,7 @@ theorem isBNT_of_separated_CFBNT_data [∀ k, NeZero (dim k)]
   normal := fun j => (hInj.block_injective j).isNormal
   spans_mpv := spans_mpv_toTensorFromBlocks μ A
   eventually_li :=
-    eventually_li_of_overlap_limits A
+    exists_eventually_linearIndependent_of_overlap_tendsto_orthonormal A
       hOverlap.overlap_tendsto_one
       (fun i j hij =>
         cross_overlap_tendsto_zero_of_separated_CFBNT_data A hInj hLeft hBlocks i j hij)
@@ -346,7 +351,8 @@ variable {μ : Fin r → ℂ} {A : (k : Fin r) → MPSTensor d (dim k)}
 
 /-- Split-data version of normal-CF-BNT cross-overlap decay.
 
-Only irreducibility, left-canonical normalization, and the BNT non-equivalence axiom are used. -/
+Only irreducibility, left-canonical normalization, and the BNT non-equivalence
+assumption are used. -/
 theorem cross_overlap_tendsto_zero_of_separated_normalCFBNT_data
     [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))
@@ -385,7 +391,7 @@ theorem spans_mpv_and_eventually_li_of_separated_normalCFBNT_data [∀ k, NeZero
   constructor
   · exact spans_mpv_toTensorFromBlocks μ A
   · exact
-      eventually_li_of_overlap_limits A
+      exists_eventually_linearIndependent_of_overlap_tendsto_orthonormal A
         (fun j => hNCF.overlap_tendsto_one j)
         (fun i j hij =>
           cross_overlap_tendsto_zero_of_separated_normalCFBNT_data A
@@ -398,7 +404,7 @@ theorem spans_mpv_and_eventually_li_of_separated_normalCFBNT_data [∀ k, NeZero
 Here `hNCF` supplies normality via the primitive-transfer-map characterization packaged by
 `IsNormalCanonicalForm`, while `hNormal` supplies the equivalent algebraic `IsNormal` predicate
 (eventual block injectivity) required by `IsBNT`. In applications `hNormal` comes from the
-Wielandt / primitive-to-normal bridge. -/
+Wielandt / primitive-to-normal implication. -/
 theorem isBNT_of_separated_normalCFBNT_data [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ)
     (A : (k : Fin r) → MPSTensor d (dim k))
@@ -442,9 +448,9 @@ theorem isBNT [∀ k, NeZero (dim k)]
 
 end IsNormalCanonicalFormBNT
 
-/-! ### Bridge to BNT/PermutationRigidity -/
+/-! ### Connection with BNT/PermutationRigidity -/
 
-/-- Common proportional-decomposition hypotheses used by the BNT bridge theorems. -/
+/-- Common proportional-decomposition hypotheses used by the BNT comparison theorems. -/
 structure ProportionalDecompositionData
     {rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
@@ -472,7 +478,7 @@ structure ProportionalDecompositionData
   hc : Tendsto c atTop (nhds cLim)
   hcLim_ne : cLim ≠ 0
 
-/-- Conclusion shared by the BNT proportional-MPV bridge theorems. -/
+/-- Conclusion shared by the BNT proportional-MPV comparison theorems. -/
 abbrev ProportionalDecompositionConclusion
     {rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
@@ -486,7 +492,7 @@ abbrev ProportionalDecompositionConclusion
             (cast (congr_arg (MPSTensor d) hdim) (A j))
             (B (perm j))
 
-/-- Split-data bridge theorem for CF-BNT-style decompositions (Thm 4.4).
+/-- Split-data comparison theorem for CF-BNT-style decompositions (Thm 4.4).
 
 The theorem only needs the separated pieces of data used by the proportional-MPV argument:
 blockwise injectivity, left-canonical normalization, self-overlap normalization, and the BNT
@@ -529,7 +535,7 @@ theorem fundamentalTheorem_of_separated_CFBNT_data
     (_haLim_ne := hDecomp.haLim_ne) (_hbLim_ne := hDecomp.hbLim_ne)
     (hProp := hDecomp.hProp) (hc := hDecomp.hc) (_hcLim_ne := hDecomp.hcLim_ne)
 
-/-- **Fundamental theorem bridge for CF-BNT decompositions (Thm 4.4).**
+/-- **Fundamental theorem comparison for CF-BNT decompositions (Thm 4.4).**
 
 If two families of tensors in canonical-form BNT give rise to proportional MPVs
 (with convergent nonzero coefficients), then the families have the same number
@@ -576,7 +582,7 @@ theorem fundamentalTheorem_of_IsCanonicalFormBNT
     ⟨A_total, B_total, aCoeff, bCoeff, aLim, bLim, c, cLim,
       hA_decomp, hB_decomp, haCoeff, hbCoeff, haLim_ne, hbLim_ne, hProp, hc, hcLim_ne⟩
 
-/-- Split-data bridge theorem for normal-CF-BNT-style decompositions (NT Thm 4.4). -/
+/-- Split-data comparison theorem for normal-CF-BNT-style decompositions (NT Thm 4.4). -/
 theorem fundamentalTheorem_of_separated_normalCFBNT_data
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
@@ -618,7 +624,7 @@ theorem fundamentalTheorem_of_separated_normalCFBNT_data
     (_haLim_ne := hDecomp.haLim_ne) (_hbLim_ne := hDecomp.hbLim_ne)
     (hProp := hDecomp.hProp) (hc := hDecomp.hc) (_hcLim_ne := hDecomp.hcLim_ne)
 
-/-- Fundamental theorem bridge for normal-CF-BNT decompositions (NT Thm 4.4). -/
+/-- Fundamental theorem comparison for normal-CF-BNT decompositions (NT Thm 4.4). -/
 theorem fundamentalTheorem_of_IsNormalCanonicalFormBNT
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}

@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.CanonicalForm.SectorIrreducibility.OrbitSum
+import TNLean.Channel.Peripheral.CyclicDecomposition.PeripheralUnitary
 
 /-!
 # Sector irreducibility: the `hLift` construction
@@ -17,19 +18,22 @@ resulting MPS irreducibility statements.
 
 * `hFixUpgrade_of_peripheral` — corner preservation under the `m`-th adjoint
   iterate implies fixedness in the irreducible trace-preserving case.
-* `SectorFixedPointAlgebraRigidity` — a single fixed-point-algebra hypothesis
-  expressing the remaining one-step sector rigidity.
+* `SectorFixedPointAlgebraRigidity` — a fixed-point-algebra multiplicativity
+  property on cyclic sectors.
 * `hProjStep_of_sectorFixedPointAlgebraRigidity` — fixed `T^m`-sector
   projections are sent to projections under the one-step dynamics.
+* `sectorFixedPointAlgebraRigidity_of_irreducible_cyclicDecomp` — in the
+  irreducible trace-preserving cyclic setting, this rigidity is automatic.
 * `hLift_cyclicDecomp_mps_of_fixUpgrade` — the orbit-sum construction supplies
   the `hLift` input.
 * `hLift_cyclicDecomp_mps_of_projStep` — the fixed-point hypothesis is supplied
   by `hFixUpgrade_of_peripheral`.
 * `hLift_cyclicDecomp_mps_of_sectorFixedPointAlgebraRigidity` — both former
   abstract inputs are replaced by `SectorFixedPointAlgebraRigidity`.
-* `isIrreducibleOnCorner_of_cyclic_decomp_mps_of_hLift` and its corollaries —
-  the resulting MPS irreducibility theorems, including the fixed-point-algebra
-  variant.
+* `hLift_cyclicDecomp_mps` and
+  `isIrreducibleOnCorner_of_cyclic_decomp_mps` — unconditional MPS
+  orbit-lift and sector-irreducibility theorems for the cyclic decomposition
+  data.
 
 ## Tags
 
@@ -148,6 +152,50 @@ theorem hFixUpgrade_of_peripheral
     Kraus.posSemidef_eq_zero_of_posDef_trace_mul_eq_zero hGap_psd hρ_pd htr_gap
   exact (sub_eq_zero.mp hGap_zero).symm
 
+/-- Recover a sector-supported operator from its orbit sum by compressing the orbit sum back to
+its original sector. -/
+private theorem recover_supported_from_orbitSumProjection
+    [NeZero m]
+    {T : MatrixEnd D}
+    (P : Fin m → MatrixAlg D)
+    (hPproj : ∀ k : Fin m, IsOrthogonalProjection (P k))
+    (hPsum : ∑ k : Fin m, P k = 1)
+    (hcyclic : ∀ k : Fin m, T (P (k + 1)) = P k)
+    (hMulLeft : ∀ k : Fin m, ∀ X : MatrixAlg D, T (P k * X) = T (P k) * T X)
+    (hMulRight : ∀ k : Fin m, ∀ X : MatrixAlg D, T (X * P k) = T X * T (P k))
+    {k : Fin m} {X : MatrixAlg D}
+    (hXP : X * P k = X)
+    (hPX : P k * X = X) :
+    P k * orbitSumProjection (D := D) (m := m) T X * P k = X := by
+  have hsupp :=
+    orbit_iterate_supported_on_shifted_sector
+      (T := T) (P := P) hcyclic hMulLeft hMulRight (k := k) (Q := X) hXP hPX
+  have hPPair := pairwise_mul_zero_of_orthogonalProjection_sum_one (P := P) hPproj hPsum
+  simp only [orbitSumProjection, Finset.mul_sum, Finset.sum_mul]
+  rw [Finset.sum_eq_single (0 : Fin m)]
+  · simp only [Fin.val_zero, pow_zero, Module.End.one_apply]
+    calc
+      P k * X * P k = X * P k := by rw [hPX]
+      _ = X := hXP
+  · intro l _ hne
+    have hsupp_l := hsupp l
+    have h_left : P (k - l) * (T ^ (l : ℕ)) X = (T ^ (l : ℕ)) X := hsupp_l.2
+    have hPneq : (k - l : Fin m) ≠ k := by
+      intro heq
+      apply hne
+      have hk0 : k - l = k - 0 := by simpa using heq
+      exact sub_right_injective hk0
+    have hP0 : P k * P (k - l) = 0 := hPPair (Ne.symm hPneq)
+    calc
+      P k * ((T ^ (l : ℕ)) X) * P k = P k * (P (k - l) * (T ^ (l : ℕ)) X) * P k := by
+        rw [h_left]
+      _ = (P k * P (k - l)) * ((T ^ (l : ℕ)) X) * P k := by
+            rw [← mul_assoc (P k) (P (k - l)) ((T ^ (l : ℕ)) X)]
+      _ = 0 * ((T ^ (l : ℕ)) X) * P k := by rw [hP0]
+      _ = 0 := by simp
+  · intro hmem
+    exact absurd (Finset.mem_univ (0 : Fin m)) hmem
+
 /-- Orbit-sum lift producing the `hLift` hypothesis required by
 `isIrreducible_restriction_of_cyclic_decomp`.
 
@@ -171,13 +219,10 @@ matching the shape of the `hLift` argument of
 The input `hFixUpgrade` is abstract only for the theorem signature: in the
 irreducible trace-preserving case it is discharged by
 `hFixUpgrade_of_peripheral`, using a positive definite fixed point of
-`transferMap A` and a weighted-trace argument. The remaining genuine
-structural gap is `hProjStep`: for a general unital CP map, sector support
-`X * P k = X = P k * X` does not imply that `T X` is again an orthogonal
-projection. Closing that step still appears to require the block-diagonal
-canonical-form argument in `Papers/1708.00029/main.tex`, Lemma `lem:bdcf`,
-or an equivalent multiplicative-domain implication for sector-supported
-projections. -/
+`transferMap A` and a weighted-trace argument. Likewise, the remaining
+one-step input `hProjStep` is now discharged in the same cyclic setting by
+`sectorFixedPointAlgebraRigidity_of_irreducible_cyclicDecomp`, so the present
+theorem is kept mainly as the reusable abstract interface for later wrappers. -/
 theorem hLift_cyclicDecomp_mps_of_fixUpgrade
     [NeZero m]
     {A : MPSTensor d D}
@@ -312,30 +357,9 @@ theorem hLift_cyclicDecomp_mps_of_fixUpgrade
   · -- Full-sector equivalence
     -- Forward: Q = P k ⇒ R = orbitSumProjection T (P k) = 1 (by full_sector lemma)
     -- Reverse: use P k * R * P k = Q, so R = 1 ⇒ P k = Q
-    have hPRP : P k * (orbitSumProjection (D := D) (m := m) T Q) * P k = Q := by
-      simp only [orbitSumProjection, Finset.mul_sum, Finset.sum_mul]
-      rw [Finset.sum_eq_single (0 : Fin m)]
-      · simp only [Fin.val_zero, pow_zero, Module.End.one_apply]
-        calc P k * Q * P k = Q * P k := by rw [hPQ]
-          _ = Q := hQP
-      · intros l _ hne
-        have hsupp_l := hsupp l
-        have h_left : P (k - l) * (T ^ (l : ℕ)) Q = (T ^ (l : ℕ)) Q := hsupp_l.2
-        have hPneq : (k - l : Fin m) ≠ k := by
-          intro heq
-          apply hne
-          have hk0 : k - l = k - 0 := by simpa using heq
-          exact sub_right_injective hk0
-        have hP0 : P k * P (k - l) = 0 := hPPair (Ne.symm hPneq)
-        calc P k * ((T ^ (l : ℕ)) Q) * P k
-            = P k * (P (k - l) * (T ^ (l : ℕ)) Q) * P k := by rw [h_left]
-          _ = (P k * P (k - l)) * ((T ^ (l : ℕ)) Q) * P k := by
-                rw [← mul_assoc (P k) (P (k - l)) ((T ^ (l : ℕ)) Q)]
-          _ = 0 * ((T ^ (l : ℕ)) Q) * P k := by rw [hP0]
-          _ = 0 := by
-                simp only [Matrix.zero_mul]
-      · intro hmem
-        exact absurd (Finset.mem_univ (0 : Fin m)) hmem
+    have hPRP : P k * (orbitSumProjection (D := D) (m := m) T Q) * P k = Q :=
+      recover_supported_from_orbitSumProjection
+        (D := D) (m := m) (T := T) P hPproj hPsum hcyclic hMulLeft hMulRight hQP hPQ
     refine ⟨?_, ?_⟩
     · intro hQ
       rw [hQ]
@@ -349,8 +373,8 @@ theorem hLift_cyclicDecomp_mps_of_fixUpgrade
 /-- The orbit-sum lift with the `hFixUpgrade` input discharged by
 `hFixUpgrade_of_peripheral`.
 
-This reduces the remaining abstract input to the one-step projection
-preservation statement `hProjStep`. -/
+This reduces the abstract interface to the one-step projection-preservation
+statement `hProjStep`; the unconditional wrapper is `hLift_cyclicDecomp_mps`. -/
 theorem hLift_cyclicDecomp_mps_of_projStep
     [NeZero D] [NeZero m]
     {A : MPSTensor d D}
@@ -435,8 +459,9 @@ theorem isIrreducibleOnCorner_of_cyclic_decomp_mps_of_hLift
       (T := transferMap (d := d) (D := D) (fun i => (A i)ᴴ))
       hIrr P hPproj hPsum hcyclic hLift
 
-/-- MPS-specialized sector irreducibility, with only the one-step projection-preservation
-input `hProjStep` remaining abstract. -/
+/-- MPS-specialized sector irreducibility, keeping the one-step projection-preservation
+input `hProjStep` as an explicit interface. The unconditional wrapper is
+`isIrreducibleOnCorner_of_cyclic_decomp_mps`. -/
 theorem isIrreducibleOnCorner_of_cyclic_decomp_mps_of_projStep
     [NeZero D] {A : MPSTensor d D}
     [NeZero m]
@@ -567,6 +592,121 @@ theorem hProjStep_of_sectorFixedPointAlgebraRigidity
       T X * T X = T (X * X) := hmul.symm
       _ = T X := by rw [hXproj.2]
 
+/-- In an irreducible unital cyclic decomposition, any `T^m`-fixed element supported on one
+sector is a scalar multiple of the corresponding sector projection.
+
+The orbit sum `∑ l, T^[l](X)` is `T`-fixed, hence scalar by
+`fixed_eq_scalar_of_irreducible_unital`; compressing that scalar orbit sum back to the original
+sector recovers `X`. -/
+private theorem sector_supported_pow_fixed_eq_smul_projection
+    [NeZero D] [NeZero m]
+    {A : MPSTensor d D}
+    (hIrrAdj :
+      IsIrreducibleMap (transferMap (d := d) (D := D) (fun i => (A i)ᴴ)))
+    (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (P : Fin m → MatrixAlg D)
+    (hPproj : ∀ k : Fin m, IsOrthogonalProjection (P k))
+    (hPsum : ∑ k : Fin m, P k = 1)
+    (hcyclic :
+      ∀ k : Fin m,
+        transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k)
+    (hMulLeft :
+      ∀ k : Fin m, ∀ X : MatrixAlg D,
+        transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k * X) =
+          transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k) *
+            transferMap (d := d) (D := D) (fun i => (A i)ᴴ) X)
+    (hMulRight :
+      ∀ k : Fin m, ∀ X : MatrixAlg D,
+        transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (X * P k) =
+          transferMap (d := d) (D := D) (fun i => (A i)ᴴ) X *
+            transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k))
+    {k : Fin m} {X : MatrixAlg D}
+    (hXP : X * P k = X)
+    (hPX : P k * X = X)
+    (hXfix :
+      ((transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ^ m) X = X) :
+    ∃ c : ℂ, X = c • P k := by
+  let T : MatrixEnd D := transferMap (d := d) (D := D) (fun i => (A i)ᴴ)
+  let K : Fin d → MatrixAlg D := fun i => (A i)ᴴ
+  have hUnital : KadisonSchwarz.IsUnitalKraus (d := d) (D := D) K := by
+    simpa [KadisonSchwarz.IsUnitalKraus, K] using hTP
+  have hOrbitFix :
+      T (orbitSumProjection (D := D) (m := m) T X) =
+        orbitSumProjection (D := D) (m := m) T X :=
+    orbitSumProjection_fixed_of_pow_fix (T := T) (Q := X) (m := m) (by simpa [T] using hXfix)
+  obtain ⟨c, hOrbitScalar⟩ :=
+    fixed_eq_scalar_of_irreducible_unital
+      (K := K) hUnital hIrrAdj (orbitSumProjection (D := D) (m := m) T X)
+      (by simpa [T, K] using hOrbitFix)
+  have hRecover :
+      P k * orbitSumProjection (D := D) (m := m) T X * P k = X :=
+    recover_supported_from_orbitSumProjection
+      (D := D) (m := m) (T := T) P hPproj hPsum hcyclic hMulLeft hMulRight hXP hPX
+  refine ⟨c, ?_⟩
+  calc
+    X = P k * orbitSumProjection (D := D) (m := m) T X * P k := by
+          symm
+          exact hRecover
+    _ = P k * (c • (1 : MatrixAlg D)) * P k := by rw [hOrbitScalar]
+    _ = c • P k := by
+          calc
+            P k * (c • (1 : MatrixAlg D)) * P k = c • (P k * 1 * P k) := by
+                  simp
+            _ = c • P k := by simp [(hPproj k).2]
+
+/-- For an irreducible trace-preserving cyclic decomposition, Wolf-style sector rigidity is
+automatic.
+
+Indeed, every `T^m`-fixed element supported on one sector is already a scalar multiple of the
+sector projection, so the one-step dynamics is automatically multiplicative on such elements. -/
+theorem sectorFixedPointAlgebraRigidity_of_irreducible_cyclicDecomp
+    [NeZero D] [NeZero m]
+    {A : MPSTensor d D}
+    (hIrrAdj :
+      IsIrreducibleMap (transferMap (d := d) (D := D) (fun i => (A i)ᴴ)))
+    (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (P : Fin m → MatrixAlg D)
+    (hPproj : ∀ k : Fin m, IsOrthogonalProjection (P k))
+    (hPsum : ∑ k : Fin m, P k = 1)
+    (hcyclic :
+      ∀ k : Fin m,
+        transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k)
+    (hMulLeft :
+      ∀ k : Fin m, ∀ X : MatrixAlg D,
+        transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k * X) =
+          transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k) *
+            transferMap (d := d) (D := D) (fun i => (A i)ᴴ) X)
+    (hMulRight :
+      ∀ k : Fin m, ∀ X : MatrixAlg D,
+        transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (X * P k) =
+          transferMap (d := d) (D := D) (fun i => (A i)ᴴ) X *
+            transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k)) :
+    SectorFixedPointAlgebraRigidity
+      (D := D) (m := m)
+      (transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) P := by
+  let T : MatrixEnd D := transferMap (d := d) (D := D) (fun i => (A i)ᴴ)
+  change SectorFixedPointAlgebraRigidity (D := D) (m := m) T P
+  intro k X Y hXP hPX hYP hPY hXfix hYfix
+  obtain ⟨c, hcX⟩ :=
+    sector_supported_pow_fixed_eq_smul_projection
+      (A := A) (m := m) hIrrAdj hTP P hPproj hPsum hcyclic hMulLeft hMulRight hXP hPX
+      (by simpa [T] using hXfix)
+  obtain ⟨cY, hcY⟩ :=
+    sector_supported_pow_fixed_eq_smul_projection
+      (A := A) (m := m) hIrrAdj hTP P hPproj hPsum hcyclic hMulLeft hMulRight hYP hPY
+      (by simpa [T] using hYfix)
+  have hTPk : T (P k) = P (k - 1) := by
+    simpa [T, show k - 1 + 1 = k by abel] using hcyclic (k - 1)
+  rw [hcX, hcY]
+  calc
+    T ((c • P k) * (cY • P k)) = T ((cY * c) • P k) := by
+          simp [smul_smul, (hPproj k).2]
+    _ = (cY * c) • P (k - 1) := by simp [hTPk, T]
+    _ = (c • P (k - 1)) * (cY • P (k - 1)) := by
+          simp [smul_smul, (hPproj (k - 1)).2]
+    _ = T (c • P k) * T (cY • P k) := by
+          simp [hTPk, T, smul_smul]
+
 private theorem orbit_iterate_fixed_of_pow_fix
     [NeZero m]
     {T : MatrixEnd D} {Q : MatrixAlg D}
@@ -584,8 +724,9 @@ private theorem orbit_iterate_fixed_of_pow_fix
 /-- Orbit-sum lift with the old `hProjStep` and `hFixUpgrade` inputs replaced by the
 single fixed-point-algebra hypothesis `SectorFixedPointAlgebraRigidity`.
 
-The remaining mathematical task is to derive this rigidity hypothesis from a Wolf-style
-description of the sector fixed-point algebra of `((\E_A^\dagger)^m)|_{P_k}`. -/
+This theorem packages the rigidity route as a reusable interface. In the irreducible
+trace-preserving cyclic setting, `hLift_cyclicDecomp_mps` supplies this hypothesis
+automatically via `sectorFixedPointAlgebraRigidity_of_irreducible_cyclicDecomp`. -/
 theorem hLift_cyclicDecomp_mps_of_sectorFixedPointAlgebraRigidity
     [NeZero D] [NeZero m]
     {A : MPSTensor d D}
@@ -724,32 +865,9 @@ theorem hLift_cyclicDecomp_mps_of_sectorFixedPointAlgebraRigidity
       have := hRQ
       rw [hR0] at this
       simpa using this.symm
-  · have hPRP : P k * (orbitSumProjection (D := D) (m := m) T Q) * P k = Q := by
-      simp only [orbitSumProjection, Finset.mul_sum, Finset.sum_mul]
-      rw [Finset.sum_eq_single (0 : Fin m)]
-      · simp only [Fin.val_zero, pow_zero, Module.End.one_apply]
-        calc
-          P k * Q * P k = Q * P k := by rw [hPQ]
-          _ = Q := hQP
-      · intros l _ hne
-        have hsupp_l := hsupp l
-        have h_left : P (k - l) * (T ^ (l : ℕ)) Q = (T ^ (l : ℕ)) Q := hsupp_l.2
-        have hPneq : (k - l : Fin m) ≠ k := by
-          intro heq
-          apply hne
-          have hk0 : k - l = k - 0 := by simpa using heq
-          exact sub_right_injective hk0
-        have hP0 : P k * P (k - l) = 0 := hPPair (Ne.symm hPneq)
-        calc
-          P k * ((T ^ (l : ℕ)) Q) * P k = P k * (P (k - l) * (T ^ (l : ℕ)) Q) * P k := by
-            rw [h_left]
-          _ = (P k * P (k - l)) * ((T ^ (l : ℕ)) Q) * P k := by
-                rw [← mul_assoc (P k) (P (k - l)) ((T ^ (l : ℕ)) Q)]
-          _ = 0 * ((T ^ (l : ℕ)) Q) * P k := by rw [hP0]
-          _ = 0 := by
-                simp only [Matrix.zero_mul]
-      · intro hmem
-        exact absurd (Finset.mem_univ (0 : Fin m)) hmem
+  · have hPRP : P k * (orbitSumProjection (D := D) (m := m) T Q) * P k = Q :=
+      recover_supported_from_orbitSumProjection
+        (D := D) (m := m) (T := T) P hPproj hPsum hcyclic hMulLeft hMulRight hQP hPQ
     refine ⟨?_, ?_⟩
     · intro hQ
       rw [hQ]
@@ -758,6 +876,50 @@ theorem hLift_cyclicDecomp_mps_of_sectorFixedPointAlgebraRigidity
       have := hPRP
       rw [hR1] at this
       simpa [(hPproj k).2] using this.symm
+
+
+/-- Unconditional orbit-sum lift for irreducible trace-preserving cyclic decompositions.
+
+The former abstract rigidity input is supplied automatically by
+`sectorFixedPointAlgebraRigidity_of_irreducible_cyclicDecomp`. -/
+theorem hLift_cyclicDecomp_mps
+    [NeZero D] [NeZero m]
+    {A : MPSTensor d D}
+    (hIrrAdj :
+      IsIrreducibleMap (transferMap (d := d) (D := D) (fun i => (A i)ᴴ)))
+    (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (P : Fin m → MatrixAlg D)
+    (hPproj : ∀ k : Fin m, IsOrthogonalProjection (P k))
+    (hPsum : ∑ k : Fin m, P k = 1)
+    (hcyclic :
+      ∀ k : Fin m,
+        transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k)
+    (hMulLeft :
+      ∀ k : Fin m, ∀ X : MatrixAlg D,
+        transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k * X) =
+          transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k) *
+            transferMap (d := d) (D := D) (fun i => (A i)ᴴ) X)
+    (hMulRight :
+      ∀ k : Fin m, ∀ X : MatrixAlg D,
+        transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (X * P k) =
+          transferMap (d := d) (D := D) (fun i => (A i)ᴴ) X *
+            transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k)) :
+    ∀ k : Fin m, ∀ Q : MatrixAlg D,
+      IsOrthogonalProjection Q →
+      Q * P k = Q → P k * Q = Q →
+      PreservesCorner Q
+        ((transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ^ m) →
+      ∃ R : MatrixAlg D,
+        IsOrthogonalProjection R ∧
+        PreservesCorner R
+          (transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ∧
+        (Q = 0 ↔ R = 0) ∧
+        (Q = P k ↔ R = 1) := by
+  exact
+    hLift_cyclicDecomp_mps_of_sectorFixedPointAlgebraRigidity
+      (A := A) (m := m) hIrrAdj hTP P hPproj hPsum hcyclic hMulLeft hMulRight
+      (sectorFixedPointAlgebraRigidity_of_irreducible_cyclicDecomp
+        (A := A) (m := m) hIrrAdj hTP P hPproj hPsum hcyclic hMulLeft hMulRight)
 
 /-- Sector irreducibility with the old `hProjStep` and `hFixUpgrade` inputs replaced by
 `SectorFixedPointAlgebraRigidity`. -/
@@ -796,5 +958,38 @@ theorem isIrreducibleOnCorner_of_cyclic_decomp_mps_of_sectorFixedPointAlgebraRig
       (hLift_cyclicDecomp_mps_of_sectorFixedPointAlgebraRigidity
         (A := A) (m := m) hIrr hTP P hPproj hPsum hcyclic
         hMulLeft hMulRight hRigidity)
+
+
+/-- Unconditional sector irreducibility for irreducible trace-preserving cyclic decompositions. -/
+theorem isIrreducibleOnCorner_of_cyclic_decomp_mps
+    [NeZero D] {A : MPSTensor d D}
+    [NeZero m]
+    (hIrr :
+      IsIrreducibleMap (transferMap (d := d) (D := D) (fun i => (A i)ᴴ)))
+    (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (P : Fin m → MatrixAlg D)
+    (hPproj : ∀ k : Fin m, IsOrthogonalProjection (P k))
+    (hPsum : ∑ k : Fin m, P k = 1)
+    (hcyclic :
+      ∀ k : Fin m,
+        transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k)
+    (hMulLeft :
+      ∀ k : Fin m, ∀ X : MatrixAlg D,
+        transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k * X) =
+          transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k) *
+            transferMap (d := d) (D := D) (fun i => (A i)ᴴ) X)
+    (hMulRight :
+      ∀ k : Fin m, ∀ X : MatrixAlg D,
+        transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (X * P k) =
+          transferMap (d := d) (D := D) (fun i => (A i)ᴴ) X *
+            transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k)) :
+    ∀ k : Fin m,
+      IsIrreducibleOnCorner
+        (P k) ((transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ^ m) := by
+  exact
+    isIrreducibleOnCorner_of_cyclic_decomp_mps_of_hLift
+      (A := A) (m := m) hIrr P hPproj hPsum hcyclic
+      (hLift_cyclicDecomp_mps
+        (A := A) (m := m) hIrr hTP P hPproj hPsum hcyclic hMulLeft hMulRight)
 
 end MPSTensor

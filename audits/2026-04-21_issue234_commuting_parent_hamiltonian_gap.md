@@ -15,62 +15,106 @@ On current `main`, the repository already contains:
 - `TNLean/MPS/RFP/Decorrelation.lean` with the abstract
   commuting-idempotent algebra and the extended
   `HasCommutingParentHam` / `IsDecorrelated` API
-- `TNLean/Axioms/Beigi.lean`, which records the two sanctioned axioms
+- `TNLean/Axioms/Beigi.lean`, which records the two sanctioned trusted assumptions
   currently used by the Theorem 3.10 wrappers.
 
 So the honest remaining work for #234 is **not** “define commuting parent Hamiltonians.”
 It is the pair of deeper follow-up gaps described below.
 
-## Small formal progress landed in this branch
+## Small formal progress landed so far
 
-This branch adds two theorem wrappers to `TNLean/MPS/ParentHamiltonian/Commuting.lean`:
+The first parent-Hamiltonian follow-up added two theorem wrappers to
+`TNLean/MPS/ParentHamiltonian/Commuting.lean`:
 
 - `MPSTensor.HasProductPairLocalProjectors.isNNCPH`
 - `MPSTensor.ProductPairBridge.isNNCPH`
 
-These results are immediate from the already-proved unfolded commutation theorem in
+Those results are immediate from the already-proved unfolded commutation theorem in
 `TNLean/MPS/RFP/CommutingBridge.lean`, but they matter conceptually: they isolate the internal
 `RFP ⟹ NNCPH` task to **constructing the product-pair witness**, rather than reproving the NNCPH
 wrapper each time.
 
-In other words, the non-axiomatic part of the forward direction now factors as
+The 2026-04-25 follow-up records the upstream Appendix B input and adds a conditional internal
+route that does not call `Axioms.rfp_to_nncph_commute`:
 
-1. extract product-pair data from the Appendix B structural form;
-2. apply `ProductPairBridge.isNNCPH`.
+- `MPSTensor.AppendixBStructuralData` bundles the structural decomposition
+  $A_i = X \Lambda U_i X^{-1}$;
+- `MPSTensor.AppendixBStructuralData.ofRFP` extracts that bundle from
+  `rfp_nt_structural_full` under the normal, RFP, and left-canonical hypotheses;
+- `MPSTensor.AppendixBStructuralData.twoSiteAmplitude` defines the two-site amplitude
+  determined by that specific structural witness;
+- `MPSTensor.AppendixBProductPairExtraction` names the remaining chain-space extraction from a
+  fixed structural witness, using its structural two-site amplitude;
+- `MPSTensor.rfp_implies_nncph_of_appendixBExtraction` proves NNCPH from RFP plus that extraction,
+  without calling `Axioms.rfp_to_nncph_commute`.
+
+The 2026-04-25 wave-14 follow-up removes a real coefficient-bookkeeping nuisance:
+
+- `MPSTensor.productPairWindow_one` and `MPSTensor.productPairState_one` prove that the
+  one-pair product-pair state is just the chosen two-site amplitude;
+- `MPSTensor.AppendixBStructuralData.coreTensor` names the gauge-removed tensor
+  $\Lambda U_i$;
+- `MPSTensor.AppendixBStructuralData.gaugeEquiv_coreTensor` and
+  `MPSTensor.AppendixBStructuralData.mpv_eq_coreTensor` prove that the Appendix B gauge
+  matrices do not affect MPV coefficients;
+- `MPSTensor.AppendixBStructuralData.twoSiteAmplitude_eq_mpv` and
+  `MPSTensor.AppendixBStructuralData.mpv_eq_productPairState_one` prove the length-two
+  case of the requested product-pair coefficient identity;
+- `MPSTensor.AppendixBProductPairExtraction.ofCoreTensorFactorization` reduces the MPV
+  field of `AppendixBProductPairExtraction` to the same factorization theorem for the
+  gauge-removed tensor, leaving the local-projector witness as a separate input.
+
+In other words, the internal part of the forward direction now factors as
+
+1. obtain Appendix B structural data from `rfp_nt_structural_full`;
+2. remove the similarity matrices and prove the repeated-pair coefficient identity for the
+   core tensor $\Lambda U_i$;
+3. construct the product-pair local projector family;
+4. apply the product-pair theorem to get NNCPH.
 
 ## Gap 1 — replacing `Axioms.rfp_to_nncph_commute`
 
-The forward direction of Theorem 3.10 is currently discharged by the sanctioned axiom
+The forward direction of Theorem 3.10 is currently discharged by the sanctioned declaration
 `Axioms.rfp_to_nncph_commute`.
 
-After the new wrappers above, the missing internal theorem is more precise:
+After the wrappers and Appendix B structural data above, the missing internal theorem is more precise:
 
-> from the current RFP structural results, construct a `ProductPairBridge A`
+> for the structural witness produced by `AppendixBStructuralData.ofRFP`, construct an
+> `AppendixBProductPairExtraction`; equivalently, construct a `ProductPairBridge A`
 > (or at least `HasProductPairLocalProjectors A N` for each finite `N`).
 
 ### What is already available
 
 - `TNLean/MPS/RFP/StructuralFull.lean` proves the full Appendix B structural form
   `rfp_nt_structural_full`.
-- `TNLean/MPS/RFP/CommutingBridge.lean` packages the chain-level data needed to conclude NNCPH,
-  and now `Commuting.lean` exposes the final wrapper `ProductPairBridge.isNNCPH`.
+- `TNLean/MPS/RFP/CommutingBridge.lean` now records this output as
+  `AppendixBStructuralData` and names the remaining chain-space extraction as
+  `AppendixBProductPairExtraction`.
+- `Commuting.lean` exposes both the final wrapper `ProductPairBridge.isNNCPH` and the conditional
+  theorem `rfp_implies_nncph_of_appendixBExtraction`.
 
 ### What is still missing
 
-A theorem of the following shape is not present:
+A theorem of the following shape is still not present:
 
 - **target shape**: `IsRFP A` + normality (+ the normalization data needed to invoke the Appendix B
-  form) `→ ProductPairBridge A`
+  form) `→ AppendixBProductPairExtraction (AppendixBStructuralData.ofRFP A ...)`
+  (and hence `ProductPairBridge A`)
 
 Concretely, the missing work is to turn the structural decomposition
 $$A_i = X \, \Lambda \, U_i \, X^{-1}$$
 into
 
-- an explicit repeated two-site amplitude on even chains, and
+- an explicit repeated two-site amplitude on even chains for the gauge-removed core tensor
+  $\Lambda U_i$ (the $X$ and $X^{-1}$ matrices are now formally removed from this step, and
+  the length-two case is proved), and
 - a family of chain-level projectors whose values are exactly the nearest-neighbor `localTerm`s.
 
 This is a genuine chain-space construction problem on `NSiteSpace d N`; it is **not** a remaining
-issue about the NNCPH definition itself.
+issue about the NNCPH definition itself. The present `AppendixBStructuralData` record still exposes
+only the left-canonical identity for `U`; a proof of the all-even-length factorization may need the
+stronger matrix-entry isometry produced inside `rfp_nt_structural_full` to be exported, or an
+alternative local-support description of the product-pair state.
 
 ## Gap 2 — the forward decorrelation theorem is blocked on tensor locality
 
@@ -112,5 +156,6 @@ Issue #234 should remain open, but its remaining content is now sharply separate
 2. **tensor-local decorrelation direction**: strengthen the decorrelation API with genuine locality
    data, then prove the forward implication.
 
-The present branch reduces the first item to a single concrete extraction problem and records that
-reduction in both Lean and the blueprint.
+The present Lean surface reduces the first item to a single concrete extraction problem after
+`rfp_nt_structural_full`: build `AppendixBProductPairExtraction` for the structural witness, then
+apply `rfp_implies_nncph_of_appendixBExtraction`.

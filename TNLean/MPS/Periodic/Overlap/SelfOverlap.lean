@@ -185,35 +185,45 @@ private theorem exists_cyclic_sector_decomp_after_blocking_of_isPeriodic
     ⟨P, φ, hPproj, hPsum, hCyclic, hComm, hTrace, hIntertwine, hMul, hStar⟩, hNondeg⟩
 
 
-private lemma hLift_cyclicDecomp_mps_of_fixUpgrade_missingBridge
+/-- One-step projection transport for `((E_A^†)^m)`-fixed cyclic-sector projections.
+
+This gives the exact `hProjStep`-style consequence needed in the overlap
+argument, assuming the fixed-point-algebra rigidity input on cyclic sectors.
+It is kept as a named theorem for callers that still work through
+`SectorFixedPointAlgebraRigidity`, even though the main self-overlap proof now
+uses the unconditional orbit-sum lift from `SectorIrreducibility.HLift`. -/
+theorem hProjStep_cyclic_sector_supported
     [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
-    (hP : IsPeriodic m A)
     {P : Fin m → MatrixAlg D}
-    (hPproj : ∀ k, IsOrthogonalProjection (P k))
-    (hPsum : ∑ k : Fin m, P k = 1)
-    (hCyclic :
-      ∀ k, transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k) :
-    ∀ k : Fin m, ∀ Q : MatrixAlg D,
-      IsOrthogonalProjection Q →
-      Q * P k = Q →
-      P k * Q = Q →
-      PreservesCorner Q ((transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ^ m) →
-      ∃ R : MatrixAlg D,
-        IsOrthogonalProjection R ∧
-        PreservesCorner R (transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ∧
-        (Q = 0 ↔ R = 0) ∧
-        (Q = P k ↔ R = 1) := by
-  sorry
+    (hRigidity :
+      SectorFixedPointAlgebraRigidity
+        (D := D) (m := m)
+        (transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) P)
+    {k : Fin m} {X : MatrixAlg D}
+    (hXproj : IsOrthogonalProjection X)
+    (hXP : X * P k = X)
+    (hPX : P k * X = X)
+    (hXfix :
+      ((transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ^ m) X = X) :
+    IsOrthogonalProjection
+      (transferMap (d := d) (D := D) (fun i => (A i)ᴴ) X) := by
+  let T : MatrixEnd D := transferMap (d := d) (D := D) (fun i => (A i)ᴴ)
+  have hStarT : ∀ Y : MatrixAlg D, T Yᴴ = (T Y)ᴴ := by
+    intro Y
+    simpa [T, MPSTensor.transferMap_apply, Kraus.map] using
+      (Kraus.map_conjTranspose (K := fun i => (A i)ᴴ) Y).symm
+  simpa [T] using
+    hProjStep_of_sectorFixedPointAlgebraRigidity
+      (D := D) (m := m) (T := T) (P := P) hStarT (by simpa [T] using hRigidity)
+      (k := k) (X := X) hXproj hXP hPX hXfix
 
-/-- Missing compressed-sector statement.
+/-- Corner primitivity and irreducibility for a cyclic sector.
 
-This is the precise remaining interface needed by
-`primitive_and_irreducible_sectorBlocks_of_cyclicDecomp`: the compressed sector
-tensor produced from a cyclic projection must have adjoint transfer map
-conjugate to the corner restriction of `(E_A†)^m`. Once that identification is
-available, corner primitivity and corner irreducibility give the two conclusions
-below, and the target lemma only has to convert from the adjoint map back to the
-ordinary transfer map/tensor statement. -/
+This isolates the channel-level input behind
+`primitive_and_irreducible_sectorBlocks_of_cyclicDecomp`: on each cyclic corner,
+the `m`-step adjoint transfer map is primitive and irreducible. The later
+compression identification converts these corner statements into the
+corresponding statements for the compressed sector tensor. -/
 private lemma cornerRestriction_primitive_and_irreducible_of_cyclicDecomp
     [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
     (hP : IsPeriodic m A)
@@ -378,8 +388,8 @@ private lemma cornerRestriction_primitive_and_irreducible_of_cyclicDecomp
       isIrreducibleCP_transferMap_conjTranspose_of_isIrreducibleTensor
         (A := A) hP.irreducible
   have hLift :=
-    hLift_cyclicDecomp_mps_of_fixUpgrade_missingBridge
-      A hP hPproj hPsum hCyclic
+    hLift_cyclicDecomp_mps
+      (A := A) (m := m) hIrr hP.leftCanonical P hPproj hPsum hCyclic hMulLeft hMulRight
   have hCornerIrr : IsIrreducibleOnCorner (P u) (T ^ m) :=
     isIrreducible_restriction_of_cyclic_decomp (T := T)
       hIrr P hPproj hPsum (by simpa [T] using hCyclic) (by simpa [T] using hLift) u
@@ -482,24 +492,14 @@ each nonzero compressed sector block `blocks u` arising from a cyclic sector
 decomposition of a periodic irreducible tensor has both a primitive transfer
 map and is tensor-irreducible.
 
-This is the still-missing identification
-
-  `transferMap (blocks u) ≃ cornerRestriction (P u) ((transferMap Aᴴ)^m)`
-
-threaded through the compression spectral isometry produced by
-`exists_compressedTensor_of_supported_projection` in
-`TNLean/MPS/CanonicalForm/CyclicSectors.lean`. Once that identification is in
-place, primitivity follows from `isPrimitive_restriction_of_cyclic_decomp` in
-`TNLean/Channel/Peripheral/CyclicDecomposition.lean` (which is unconditional),
-and corner irreducibility transports to `IsIrreducibleTensor (blocks u)` via
-the adjoint-side identification together with
-`MPS/Irreducible/Adjoint.lean`.
-
-See issue #450 for the recommended split: (i) close the MPS-level `hLift`
-in `SectorIrreducibility.lean` to expose corner irreducibility of `(E†)^m`,
-(ii) prove `compressedTensor_transferMap_conj` (the compressed ↔ cornerRestriction
-identification), (iii) combine with this helper to discharge
-`sectorBlocked_isNormal_of_isPeriodic`.
+The proof combines the unconditional corner result from
+`cornerRestriction_primitive_and_irreducible_of_cyclicDecomp` with the
+compression identification provided by
+`compressedSector_adjointTransferMap_cornerBridge_of_cyclicDecomp`.
+The first supplies primitivity and irreducibility for the `m`-step adjoint
+transfer map on the corner `P u`; the second identifies the compressed adjoint
+sector tensor with the corresponding corner restriction, after which
+`MPS/Irreducible/Adjoint.lean` converts back to the ordinary transfer map.
 
 Kept as an explicit named sublemma so downstream consumers (`Case 2`,
 `Case 3`) and subsequent PRs can target its statement directly — the
@@ -571,9 +571,9 @@ gauge-phase transform.  The proof should use the trace identities
 `mpv(blocks k) = tr(P k · -)`, the cyclic corner structure, and
 `P u * P v = 0`.
 
-Keeping this as a narrow helper lets the main sector-separation lemma expose all
-currently available API facts instead of hiding the projection argument behind a
-top-level `sorry`. -/
+Keeping this as a narrow lemma lets the main sector-separation result expose all
+currently available structural facts instead of hiding the projection argument
+behind a top-level `sorry`. -/
 private lemma not_gaugePhaseEquiv_of_orthogonal_cyclicSector_traces
     [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
     {dim : Fin m → ℕ}
@@ -608,8 +608,8 @@ Through `IsCyclicSectorDecomp`, those traces are
 decomposition are orthogonal corners, so for `u ≠ v` these corner states cannot
 be related by an invertible gauge and nonzero scalar.
 
-The current cyclic-sector API exposes the trace formula and projection data but
-does not yet state this orthogonal-corner rigidity as a reusable theorem, so
+The current cyclic-sector interface exposes the trace formula and projection data
+but does not yet state this orthogonal-corner rigidity as a reusable theorem, so
 we isolate exactly that missing step here. -/
 private lemma sectorBlocks_not_gaugePhaseEquiv_of_ne
     [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
@@ -644,8 +644,8 @@ After blocking by the period, the cyclic sector decomposition should make each
 compressed sector a primitive normalized tensor, while distinct sectors are
 asymptotically orthogonal.
 
-This is the remaining step from the cyclic-sector decomposition API to the
-overlap-asymptotic API. -/
+This is the remaining step from the cyclic-sector decomposition interface to the
+overlap-asymptotic statement. -/
 private theorem sectorOverlap_tendsto_delta_of_cyclicSectorDecomp
     [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
     (hP : IsPeriodic m A)

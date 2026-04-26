@@ -229,7 +229,7 @@ lemma cornerCompressionExpand_mul
         Matrix.reindex eS.symm eS.symm M₁ *
             Matrix.reindex eS.symm eS.symm M₂ =
           Matrix.reindex eS.symm eS.symm (M₁ * M₂) := by
-      simpa using
+      exact
         Matrix.reindexLinearEquiv_mul (R := ℂ) (A := ℂ)
           eS.symm eS.symm eS.symm M₁ M₂
     have hFromBlocksMul :
@@ -249,9 +249,20 @@ lemma cornerCompressionExpand_mul
               (0 : Matrix S T ℂ) (0 : Matrix T S ℂ) (0 : Matrix T T ℂ) *
             Matrix.fromBlocks (Matrix.reindex eS.symm eS.symm M₂)
               (0 : Matrix S T ℂ) (0 : Matrix T S ℂ) (0 : Matrix T T ℂ)) := by
-      simpa [Y₁, Y₂] using
-        (Matrix.reindexLinearEquiv_mul (R := ℂ) (A := ℂ)
-          eST.symm eST.symm eST.symm _ _).symm
+      change
+        Matrix.reindex eST.symm eST.symm
+            (Matrix.fromBlocks (Matrix.reindex eS.symm eS.symm M₁)
+              (0 : Matrix S T ℂ) (0 : Matrix T S ℂ) (0 : Matrix T T ℂ)) *
+          Matrix.reindex eST.symm eST.symm
+            (Matrix.fromBlocks (Matrix.reindex eS.symm eS.symm M₂)
+              (0 : Matrix S T ℂ) (0 : Matrix T S ℂ) (0 : Matrix T T ℂ)) =
+          Matrix.reindex eST.symm eST.symm
+            (Matrix.fromBlocks (Matrix.reindex eS.symm eS.symm M₁)
+              (0 : Matrix S T ℂ) (0 : Matrix T S ℂ) (0 : Matrix T T ℂ) *
+            Matrix.fromBlocks (Matrix.reindex eS.symm eS.symm M₂)
+              (0 : Matrix S T ℂ) (0 : Matrix T S ℂ) (0 : Matrix T T ℂ))
+      exact Matrix.reindexLinearEquiv_mul (R := ℂ) (A := ℂ)
+        eST.symm eST.symm eST.symm _ _
     rw [hReindexMul2, hFromBlocksMul, hReindexMul]
   rw [hY₁Y₂]
   calc

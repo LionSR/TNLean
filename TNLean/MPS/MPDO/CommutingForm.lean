@@ -15,7 +15,7 @@ For an `N`-site operator `ρ`, a commuting-form witness consists of a positive
 semidefinite two-site matrix `B`, together with proofs that its translated
 copies on the periodic chain pairwise commute and that their product
 reproduces `ρ` up to a positive scalar. This is the projector-limit version of
-Definition 4.8 (GSNNCH). The actual entropy-side derivation
+the GSNNCH definition, source label `defrhoNComm`. The actual entropy-side derivation
 `SAL ⟹ HasCommutingForm` is not yet formalized here; it is isolated as the
 upstream missing theorem recorded in the accompanying audit for issue #782.
 
@@ -33,7 +33,7 @@ upstream missing theorem recorded in the accompanying audit for issue #782.
 
 ## References
 
-* [CPGSV17] arXiv:1606.00608, Definition 4.8 and Appendix C.2 Proposition C.6
+* [CPGSV17] arXiv:1606.00608, source labels `defrhoNComm` and `propsimple`
 -/
 
 open scoped Matrix BigOperators ComplexOrder
@@ -77,7 +77,7 @@ noncomputable def embedLocalOperator (L N : ℕ) (hLN : L ≤ N) (i : Fin N)
   classical
   rfl
 
-/-- Chain-level commuting-form data for Proposition C.6.
+/-- Chain-level commuting-form data for source label `propsimple`.
 
 The current record stores the translation-invariant two-site factor `B` together
 with chain-level commutativity of its translated copies. The intended
@@ -142,11 +142,11 @@ def HasCommutingForm (M : MPOTensor d D) : Prop :=
 /-- A GSNNCH witness at chain length `N`: a commuting-form datum together with
 its positive normalization constant.
 
-This records Definition 4.8 in the equivalent positive-operator form
+This records source label `defrhoNComm` in the equivalent positive-operator form
 `ρ⁽ᴺ⁾ = c ∏ᵢ B_{i,i+1}`, where `c > 0` and the translated bond operators
 commute pairwise. The paper's exponential form is recovered by taking
 `B_{i,i+1} = e^{-h_{i,i+1}}` or, more generally, by the projector-limit
-convention explained immediately after Definition 4.8. -/
+convention explained immediately after `defrhoNComm`. -/
 structure GSNNCHData (d N : ℕ) where
   /-- The underlying commuting-form data. -/
   form : CommutingFormData d N
@@ -176,7 +176,7 @@ def IsGSNNCHAt {d N : ℕ} (ρ : ChainOperator d N) : Prop :=
   ∃ data : GSNNCHData d N, ρ = data.state
 
 /-- Global GSNNCH predicate for an MPO tensor: every chain length `N ≥ 2`
-produces a GSNNCH operator in the sense of Definition 4.8. -/
+produces a GSNNCH operator in the sense of source label `defrhoNComm`. -/
 def IsGSNNCH (M : MPOTensor d D) : Prop :=
   ∀ N : ℕ, 2 ≤ N → IsGSNNCHAt (mpo M N)
 
@@ -231,8 +231,8 @@ theorem isGSNNCH_iff_hasCommutingForm (M : MPOTensor d D) :
   · exact hasCommutingForm_of_isGSNNCH
   · exact isGSNNCH_of_hasCommutingForm
 
-/-- The GSNNCH branch of Theorem 4.9, bundled together with MPO zero
-correlation length. -/
+/-- The GSNNCH-with-zero-correlation-length branch of the simple-MPDO
+equivalence, matching source label `thm:main-simple`. -/
 def IsGSNNCHWithZCL (M : MPOTensor d D) : Prop :=
   IsGSNNCH M ∧ IsZCL M
 
