@@ -71,6 +71,9 @@ concrete Friedrichs-angle/row-sum lower bound that
 * `MPSTensor.parentHamiltonianES_gap_bound_of_ordered_local_term_bounds` — a
   reusable reduction from explicit ordered cross-term row bounds for the
   local symmetric projections to the quadratic-form hypothesis above.
+* `MPSTensor.parentHamiltonianES_gap_bound_of_finite_overlap_friedrichs` — a
+  finite-overlap reduction turning explicit local projection, overlap,
+  non-overlap positivity, and Friedrichs estimates into the gap estimate.
 * `MPSTensor.parentHamiltonian_gapped` — uniform spectral gap for MPS
   parent Hamiltonians on injective tensors, obtained from the
   Friedrichs-angle bound recorded in
@@ -115,7 +118,7 @@ the row-sum bound) produces the operator inequality `H² ≥ γ H` for the
 PSD operator `H`, the norm lower bound — and hence the spectral gap
 for eigenvectors of `H` — follows by the spectral theorem. This lemma
 provides the final spectral-theorem step; the remaining MPS-specific
-quadratic-form input is recorded separately in
+quadratic-form hypothesis is recorded separately in
 `MPSTensor.parentHamiltonianES_gap_bound_of_friedrichs`. -/
 theorem spectralGap_of_martingale {ι : Type*} [Fintype ι] {γ : ℝ} (hγ : 0 < γ)
     {H : EuclideanSpace ℂ ι →ₗ[ℂ] EuclideanSpace ℂ ι} (hH : H.IsPositive)
@@ -367,19 +370,22 @@ private theorem cyclicRestrictES_adjoint_apply {N : ℕ} (hN : 0 < N) {L : ℕ}
               (cyclicRestrictES (d := d) hN L i τ).adjoint v⟫_ℂ := by
               simpa using (EuclideanSpace.inner_single_left σ (1 : ℂ)
                 ((cyclicRestrictES (d := d) hN L i τ).adjoint v)).symm
-      _ = ⟪cyclicRestrictES (d := d) hN L i τ (EuclideanSpace.single σ (1 : ℂ)), v⟫_ℂ := by
+      _ = ⟪cyclicRestrictES (d := d) hN L i τ
+              (EuclideanSpace.single σ (1 : ℂ)), v⟫_ℂ := by
             rw [LinearMap.adjoint_inner_right]
       _ = ⟪EuclideanSpace.single (extractWindow L i σ) (1 : ℂ), v⟫_ℂ := by
             rw [cyclicRestrictES_single_of_sameOutsideWindow hN hLN i σ τ hστ]
       _ = if SameOutsideWindow (L := L) i σ τ then v (extractWindow L i σ) else 0 := by
-            simpa [hστ] using (EuclideanSpace.inner_single_left (extractWindow L i σ) (1 : ℂ) v)
+            simpa [hστ] using
+              (EuclideanSpace.inner_single_left (extractWindow L i σ) (1 : ℂ) v)
   · calc
       ((cyclicRestrictES (d := d) hN L i τ).adjoint v) σ
           = ⟪EuclideanSpace.single σ (1 : ℂ),
               (cyclicRestrictES (d := d) hN L i τ).adjoint v⟫_ℂ := by
               simpa using (EuclideanSpace.inner_single_left σ (1 : ℂ)
                 ((cyclicRestrictES (d := d) hN L i τ).adjoint v)).symm
-      _ = ⟪cyclicRestrictES (d := d) hN L i τ (EuclideanSpace.single σ (1 : ℂ)), v⟫_ℂ := by
+      _ = ⟪cyclicRestrictES (d := d) hN L i τ
+              (EuclideanSpace.single σ (1 : ℂ)), v⟫_ℂ := by
             rw [LinearMap.adjoint_inner_right]
       _ = ⟪0, v⟫_ℂ := by
             rw [cyclicRestrictES_single_of_not_sameOutsideWindow hN i σ τ hστ]
@@ -450,7 +456,8 @@ summands `Rᵢ,τ† P_L Rᵢ,τ`. -/
 theorem localTermES_eq_average_localTermESSummand {N : ℕ} (A : MPSTensor d D)
     {L : ℕ} (hLN : L ≤ N) (i : Fin N) :
     localTermES A L i =
-      ((((d ^ L : ℕ) : ℂ)⁻¹) • (∑ τ : Cfg d N, localTermESSummand A (Fin.pos i) L i τ)) := by
+      ((((d ^ L : ℕ) : ℂ)⁻¹) •
+        (∑ τ : Cfg d N, localTermESSummand A (Fin.pos i) L i τ)) := by
   classical
   ext v σ
   let q : Cfg d N → Prop := SameOutsideWindow (L := L) i σ
@@ -694,9 +701,92 @@ theorem parentHamiltonianES_gap_bound_of_ordered_local_term_bounds
   have hγle : ((1 : ℝ) / (4 * (L : ℝ))) ≤ 1 := by
     have hden : 0 < 4 * (L : ℝ) := mul_pos (by norm_num) hLpos
     rw [div_le_iff₀ hden]
-    nlinarith
+    nlinarith [hLge_one]
   exact parentHamiltonianES_quadratic_form_of_ordered_local_term_bounds
     A L N hγle (c N) (hProj N hLN) (hRow N hLN) (hCross N hLN) v
+
+/-- Fixed-chain martingale quadratic-form estimate from finite-overlap
+Friedrichs data.
+
+This is the local-window specialization of
+`ProjectionGeometry.quadraticForm_sum_projections_of_finite_overlap`.  The
+predicate `overlaps i j` marks the off-diagonal pairs for which a Friedrichs-angle
+estimate is needed.  If each row has at most `m` such pairs, the non-overlap
+cross terms are nonnegative, and every overlap obeys the ordered estimate with
+coefficient `1 / m`, then the transported parent Hamiltonian satisfies
+`H² ≥ γ H` as a quadratic form. -/
+theorem parentHamiltonianES_quadratic_form_of_finite_overlap_friedrichs
+    (A : MPSTensor d D) (L N : ℕ) {γ : ℝ} (hγle : γ ≤ 1)
+    (overlaps : Fin N → Fin N → Prop) [DecidableRel overlaps] {m : ℕ} (hm : 0 < m)
+    (hProj : ∀ i : Fin N, (localTermES A L i).IsSymmetricProjection)
+    (hCard : ∀ i : Fin N,
+      ((Finset.univ.erase i).filter (fun j => overlaps i j)).card ≤ m)
+    (hDisjoint : ∀ i j : Fin N, j ∈ Finset.univ.erase i → ¬ overlaps i j →
+      ∀ v : EuclideanSpace ℂ (Cfg d N),
+        0 ≤ (⟪localTermES A L i v, localTermES A L j v⟫_ℂ).re)
+    (hFriedrichs : ∀ i j : Fin N, j ∈ Finset.univ.erase i → overlaps i j →
+      ∀ v : EuclideanSpace ℂ (Cfg d N),
+        - (1 - γ) * ((m : ℝ)⁻¹) * (⟪localTermES A L i v, v⟫_ℂ).re ≤
+          (⟪localTermES A L i v, localTermES A L j v⟫_ℂ).re) :
+    ∀ v : EuclideanSpace ℂ (Cfg d N),
+      γ * (⟪parentHamiltonianES A L N v, v⟫_ℂ).re ≤
+        (⟪parentHamiltonianES A L N v,
+          parentHamiltonianES A L N v⟫_ℂ).re := by
+  intro v
+  simpa [parentHamiltonianES_eq_sum_localTermES A L N] using
+    (ProjectionGeometry.quadraticForm_sum_projections_of_finite_overlap
+      (ι := Fin N) (E := EuclideanSpace ℂ (Cfg d N)) hγle
+      (fun i : Fin N => localTermES A L i) hProj overlaps hm hCard hDisjoint
+      hFriedrichs v)
+
+/-- Uniform explicit gap-bound reduction from finite-overlap Friedrichs data.
+
+For parent-Hamiltonian windows of length `L`, the expected finite-range bound is
+`m = 2 * (L - 1)`: each local term overlaps at most that many other cyclic
+translates when `N ≥ 2L`.  This theorem leaves the transported local projection
+structure, the cyclic-window overlap predicate, non-overlap positivity, and the
+Friedrichs-angle estimate as explicit hypotheses. It only performs the finite-overlap
+row-sum reduction and the existing quadratic-form-to-gap conversion. -/
+theorem parentHamiltonianES_gap_bound_of_finite_overlap_friedrichs
+    (A : MPSTensor d D) (L : ℕ) (hL : 1 < L)
+    (overlaps : ∀ N : ℕ, Fin N → Fin N → Prop)
+    [∀ N : ℕ, DecidableRel (overlaps N)]
+    (hProj : ∀ (N : ℕ) (_hLN : 2 * L ≤ N) (i : Fin N),
+      (localTermES A L i).IsSymmetricProjection)
+    (hCard : ∀ (N : ℕ) (_hLN : 2 * L ≤ N) (i : Fin N),
+      ((Finset.univ.erase i).filter (fun j => overlaps N i j)).card ≤ 2 * (L - 1))
+    (hDisjoint : ∀ (N : ℕ) (_hLN : 2 * L ≤ N) (i j : Fin N),
+      j ∈ Finset.univ.erase i → ¬ overlaps N i j →
+        ∀ v : EuclideanSpace ℂ (Cfg d N),
+          0 ≤ (⟪localTermES A L i v, localTermES A L j v⟫_ℂ).re)
+    (hFriedrichs : ∀ (N : ℕ) (_hLN : 2 * L ≤ N) (i j : Fin N),
+      j ∈ Finset.univ.erase i → overlaps N i j →
+        ∀ v : EuclideanSpace ℂ (Cfg d N),
+          - (1 - ((1 : ℝ) / (4 * (L : ℝ)))) *
+              (((2 * (L - 1) : ℕ) : ℝ)⁻¹) *
+                (⟪localTermES A L i v, v⟫_ℂ).re ≤
+            (⟪localTermES A L i v, localTermES A L j v⟫_ℂ).re) :
+    0 < (1 : ℝ) / (4 * (L : ℝ)) ∧
+    ∀ (N : ℕ) (_hLN : 2 * L ≤ N)
+      (v : EuclideanSpace ℂ (Cfg d N)),
+      v ∈ (parentHamiltonianGroundSpaceES A L N)ᗮ →
+        ((1 : ℝ) / (4 * (L : ℝ))) * ‖v‖ ≤
+          ‖parentHamiltonianES A L N v‖ := by
+  refine parentHamiltonianES_gap_bound_of_quadratic_form A L hL ?_
+  intro N hLN v
+  have hLpos : (0 : ℝ) < (L : ℝ) := by
+    exact_mod_cast (Nat.zero_lt_of_lt hL)
+  have hLge_one : (1 : ℝ) ≤ (L : ℝ) := by
+    exact_mod_cast (Nat.le_of_lt hL)
+  have hγle : ((1 : ℝ) / (4 * (L : ℝ))) ≤ 1 := by
+    have hden : 0 < 4 * (L : ℝ) := mul_pos (by norm_num) hLpos
+    rw [div_le_iff₀ hden]
+    nlinarith [hLge_one]
+  have hm : 0 < 2 * (L - 1) :=
+    Nat.mul_pos (by decide) (Nat.sub_pos_of_lt hL)
+  exact parentHamiltonianES_quadratic_form_of_finite_overlap_friedrichs
+    A L N hγle (overlaps N) hm (hProj N hLN) (hCard N hLN)
+    (hDisjoint N hLN) (hFriedrichs N hLN) v
 
 /-! ### Uniform spectral gap for the MPS parent Hamiltonian -/
 

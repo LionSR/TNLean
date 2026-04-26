@@ -136,6 +136,29 @@ theorem crossTerm_sum_bound_of_ordered_rowSum {γ : ℝ} (hγle : γ ≤ 1)
             intro j hj
             exact hCross i j hj
 
+private theorem indicator_row_sum_le_one_of_card_le (overlaps : ι → ι → Prop)
+    [DecidableRel overlaps] {m : ℕ} (hm : 0 < m)
+    (hCard : ∀ i, ((Finset.univ.erase i).filter (fun j => overlaps i j)).card ≤ m)
+    (i : ι) :
+    (∑ j ∈ Finset.univ.erase i,
+      if overlaps i j then ((m : ℝ)⁻¹) else 0) ≤ 1 := by
+  have hsum : (∑ j ∈ Finset.univ.erase i,
+      if overlaps i j then ((m : ℝ)⁻¹) else 0) =
+      (((Finset.univ.erase i).filter (fun j => overlaps i j)).card : ℝ) *
+        ((m : ℝ)⁻¹) := by
+    rw [← Finset.sum_filter]
+    simp [Finset.sum_const, nsmul_eq_mul]
+  rw [hsum]
+  have hmpos : (0 : ℝ) < (m : ℝ) := by exact_mod_cast hm
+  have hcard_le :
+      (((Finset.univ.erase i).filter (fun j => overlaps i j)).card : ℝ) ≤
+        (m : ℝ) := by
+    exact_mod_cast hCard i
+  have hinv_nonneg : 0 ≤ ((m : ℝ)⁻¹) := inv_nonneg.mpr hmpos.le
+  have hmul := mul_le_mul_of_nonneg_right hcard_le hinv_nonneg
+  have hmne : (m : ℝ) ≠ 0 := ne_of_gt hmpos
+  simpa [hmne] using hmul
+
 /-- If the ordered off-diagonal terms of a finite family of symmetric
 projections satisfy a row-summable cross-term bound, then the sum satisfies
 `H² ≥ γ H` as a quadratic form.
@@ -182,6 +205,45 @@ theorem quadraticForm_sum_projections_of_ordered_rowSum {γ : ℝ} (hγle : γ �
     _ ≤ (∑ i, q i) + ∑ i, ∑ j ∈ Finset.univ.erase i, cross i j :=
         add_le_add le_rfl hCrossSum
     _ = (⟪(∑ i, P i) v, (∑ i, P i) v⟫_ℂ).re := hHH.symm
+
+/-- Finite-overlap Friedrichs conditions for a family of symmetric projections.
+
+Assume that each row has at most `m` interacting off-diagonal entries.  On an
+interacting pair, a Friedrichs-angle estimate supplies the ordered bound with
+coefficient `1 / m`; on a noninteracting pair, the ordered cross term is
+nonnegative.  Then choosing coefficient `1 / m` on interacting pairs and `0`
+on noninteracting pairs gives row sums at most one, so the abstract row-sum
+reduction gives `H² ≥ γ H` as a quadratic form.
+
+This is the abstract finite-range step: locality provides the cardinal bound
+(for parent Hamiltonians, `m = 2 * (L - 1)`), while the analytic Friedrichs-angle
+argument provides the interacting-pair estimate. -/
+theorem quadraticForm_sum_projections_of_finite_overlap {γ : ℝ} (hγle : γ ≤ 1)
+    (P : ι → E →ₗ[ℂ] E) (hP : ∀ i, (P i).IsSymmetricProjection)
+    (overlaps : ι → ι → Prop) [DecidableRel overlaps] {m : ℕ} (hm : 0 < m)
+    (hCard : ∀ i, ((Finset.univ.erase i).filter (fun j => overlaps i j)).card ≤ m)
+    (hDisjoint : ∀ i j, j ∈ Finset.univ.erase i → ¬ overlaps i j →
+      ∀ v : E, 0 ≤ (⟪P i v, P j v⟫_ℂ).re)
+    (hFriedrichs : ∀ i j, j ∈ Finset.univ.erase i → overlaps i j →
+      ∀ v : E,
+        - (1 - γ) * ((m : ℝ)⁻¹) * (⟪P i v, v⟫_ℂ).re ≤
+          (⟪P i v, P j v⟫_ℂ).re) :
+    ∀ v : E,
+      γ * (⟪(∑ i, P i) v, v⟫_ℂ).re ≤
+        (⟪(∑ i, P i) v, (∑ i, P i) v⟫_ℂ).re := by
+  classical
+  let c : ι → ι → ℝ := fun i j => if overlaps i j then ((m : ℝ)⁻¹) else 0
+  have hRow : ∀ i, (∑ j ∈ Finset.univ.erase i, c i j) ≤ 1 := by
+    intro i
+    simpa [c] using indicator_row_sum_le_one_of_card_le overlaps hm hCard i
+  have hCross : ∀ i j, j ∈ Finset.univ.erase i → ∀ v : E,
+      -(1 - γ) * c i j * (⟪P i v, v⟫_ℂ).re ≤
+        (⟪P i v, P j v⟫_ℂ).re := by
+    intro i j hij v
+    by_cases hoverlap : overlaps i j
+    · simpa [c, hoverlap] using hFriedrichs i j hij hoverlap v
+    · simpa [c, hoverlap] using hDisjoint i j hij hoverlap v
+  exact quadraticForm_sum_projections_of_ordered_rowSum hγle P hP c hRow hCross
 
 end OffDiagonal
 
