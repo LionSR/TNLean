@@ -1,7 +1,7 @@
 import TNLean.PEPS.Blocking
 import TNLean.PEPS.LocalGauge
+import Mathlib.LinearAlgebra.LinearIndependent.Basic
 import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Defs
-import Mathlib.Combinatorics.SimpleGraph.Connectivity.Connected
 
 -- This is a **scaffold** file: the forward direction and contraction algebra
 -- are formalized, while the converse PEPS fundamental theorem remains as
@@ -11,19 +11,28 @@ import Mathlib.Combinatorics.SimpleGraph.Connectivity.Connected
 -- linear-independence formulation `∀ v, LinearIndependent ℂ (A.component v)`
 -- (see issue #633 for the switch away from function-level injectivity, which
 -- is strictly weaker). Linear independence gives each vertex tensor a left
--- inverse on its image and removes the old definitional blocker.
+-- inverse on its image, removes the old definitional blocker, and is the
+-- correct hypothesis for the repaired uniqueness endpoint
+-- `gauge_unique_mod_edge_scalars`.
 --
--- The remaining `sorry`s split into two groups:
--- * `gaugeConsistency` and the `hDim` step in `fundamentalTheorem_PEPS` still
---   require the full edge-centred reduction from arXiv:1804.04964 §3. The
---   local left inverse and the elementary blocking data now live in
---   `PEPS/VirtualInsertion` and `PEPS/Blocking`, and `localGauge_exists` has
---   been reduced to the sharper local hypothesis `HasLocalGaugeLift`, but the
---   blocked middle tensor and the comparison with the 3-site MPS theorem are
---   still missing.
--- * `gauge_unique_up_to_scalar` additionally needs statement repair: the
---   current global-scalar conclusion fails on a connected triangle with bond
---   dimension `1`.
+-- The remaining `sorry`s split into three independently tracked groups:
+-- * `gaugeConsistency` (issue #820) still requires the full edge-centred
+--   reduction from arXiv:1804.04964 §3. The local left inverse and the
+--   elementary blocking data now live in `PEPS/VirtualInsertion` and
+--   `PEPS/Blocking`, and `localGauge_exists` has been reduced to the sharper
+--   local hypothesis `HasLocalGaugeLift`. The wrapper `BlockedMiddleGaugeHyp`
+--   isolates the exact remaining step: build the blocked middle tensor,
+--   compare it with the 3-site MPS theorem, and derive that explicit local
+--   gauge formula from `SameState`.
+-- * The `hDim` step inside `fundamentalTheorem_PEPS` (issue #874) is now
+--   factored out as the conditional theorem `fundamentalTheorem_PEPS_of_bondDim`
+--   so that the bond-dimension obligation is orthogonal to `gaugeConsistency`.
+--   Its derivation from `SameState` plus vertex injectivity still needs a
+--   boundary-insertion / blocking lemma.
+-- * `gauge_unique_mod_edge_scalars` (issue #842) is the repaired uniqueness
+--   endpoint, but its proof still needs the same blocking infrastructure
+--   together with a local tensor-factor uniqueness lemma for the balanced
+--   edge-scalar quotient.
 
 /-!
 # Fundamental Theorem for injective PEPS (scaffold)
@@ -33,7 +42,7 @@ This file scaffolds the Fundamental Theorem for injective PEPS on simple graphs
 
 > Two injective PEPS defined on a graph (no double edges/self-loops) generate
 > the same state iff the generating tensors are related by local gauges on each
-> edge, unique up to a multiplicative constant.
+> edge, with uniqueness understood modulo balanced edge scalars on the graph.
 
 ## Strategy
 
@@ -492,9 +501,10 @@ noncomputable def localTensorEval (A : Tensor G d) (v : V)
 factorized local gauge relation at `v`.
 
 The local left inverse and the canonical candidate operator now live in
-`PEPS/LocalGauge`. The remaining PEPS-Fundamental-Theorem gap is to derive
-`HasLocalGaugeLift` from `SameState` via the blocked-middle / three-site-MPS
-reduction from arXiv:1804.04964 §3. -/
+`PEPS/LocalGauge`. The remaining PEPS-Fundamental-Theorem gap is to prove
+`BlockedMiddleGaugeHyp` from `SameState` via the blocked-middle / three-site-MPS
+reduction, then convert it to `HasLocalGaugeLift` by
+`hasLocalGaugeLift_of_blockedMiddleGaugeHyp`. -/
 theorem localGauge_exists (A B : Tensor G d)
     (hA : IsVertexInjective A)
     (hDim : A.bondDim = B.bondDim) (v : V)
@@ -525,15 +535,36 @@ theorem gaugeConsistency (A B : Tensor G d)
       ∀ (v : V) (η : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1)) (σ : Fin d),
         B.component v (fun ie => Fin.cast (congr_fun hDim ie.1) (η ie)) σ =
           gaugeVertex A X v η σ := by
-  -- TODO: first derive `HasLocalGaugeLift A B hA hDim v` from `SameState`
-  -- at each vertex via the blocked-middle / three-site-MPS reduction, then
-  -- combine the resulting local gauges across shared edges. The key remaining
-  -- consistency step is: for each edge e = (u,v), the gauges extracted from u
-  -- and v must agree as inverse-transposes, with the orientation convention in
-  -- `edgeGaugeAt`.
+  -- TODO: first derive `BlockedMiddleGaugeHyp A B hA hDim v` from `SameState`
+  -- at each vertex via the blocked-middle / three-site-MPS reduction, then use
+  -- `hasLocalGaugeLift_of_blockedMiddleGaugeHyp` to obtain the local gauges.
+  -- The key remaining consistency step is: for each edge e = (u,v), the gauges
+  -- extracted from u and v must agree as inverse-transposes, with the
+  -- orientation convention in `edgeGaugeAt`.
   sorry
 
 /-! ### Main theorem -/
+
+/-- **Fundamental Theorem for injective PEPS, conditional on bond-dimension
+equality** (arXiv:1804.04964, Theorem 2).
+
+Given matching bond dimensions, two vertex-injective PEPS that generate the
+same state are gauge-equivalent. This isolates the two remaining blockers of
+`fundamentalTheorem_PEPS` into orthogonal hypotheses:
+
+* the bond-dimension equality `hDim` (tracked in issue #874), and
+* the globally consistent edge gauges produced by `gaugeConsistency`
+  (tracked in issue #820).
+
+Downstream consumers that already have a specific bond-dimension witness can
+call this conditional form directly, without waiting for the boundary-insertion
+argument that derives `hDim` from `SameState` alone. -/
+theorem fundamentalTheorem_PEPS_of_bondDim (A B : Tensor G d)
+    (hA : IsVertexInjective A) (hB : IsVertexInjective B)
+    (hAB : SameState A B) (hDim : A.bondDim = B.bondDim) :
+    GaugeEquiv A B := by
+  rcases gaugeConsistency A B hA hB hAB hDim with ⟨X, hX⟩
+  exact ⟨hDim, X, hX⟩
 
 /-- **Fundamental Theorem for injective PEPS** (arXiv:1804.04964, Theorem 2).
 
@@ -554,31 +585,113 @@ theorem fundamentalTheorem_PEPS (A B : Tensor G d)
     (hA : IsVertexInjective A) (hB : IsVertexInjective B)
     (hAB : SameState A B) :
     GaugeEquiv A B := by
-  -- Step 1: Show bond dimensions must agree.
-  -- TODO: derive hDim from injectivity + SameState.
-  -- Missing lemma: `SameState` captures only the fully-contracted scalar,
-  -- whereas the PEPS FT derivation of bond-dimension equality uses the full
-  -- family of boundary insertions.  Linear independence at each vertex
-  -- (`IsVertexInjective`) gives the right local data, but the global argument
-  -- that different bond dimensions cannot yield the same state family still
-  -- requires a boundary-insertion / blocking lemma.
+  -- Step 1: Show bond dimensions must agree.  Tracked in issue #874.
+  -- `SameState` captures only the fully-contracted scalar, whereas the PEPS FT
+  -- derivation of bond-dimension equality uses the full family of boundary
+  -- insertions. Linear independence at each vertex (`IsVertexInjective`) gives
+  -- the right local data, but the global argument that different bond
+  -- dimensions cannot yield the same state family still requires a
+  -- boundary-insertion / blocking lemma.
   have hDim : A.bondDim = B.bondDim := by
     sorry
-  -- Step 2: Extract globally consistent gauges.
-  rcases gaugeConsistency A B hA hB hAB hDim with ⟨X, hX⟩
-  exact ⟨hDim, X, hX⟩
+  -- Step 2: Extract globally consistent gauges via `gaugeConsistency`
+  -- (tracked in issue #820).
+  exact fundamentalTheorem_PEPS_of_bondDim A B hA hB hAB hDim
 
-/-! ### Uniqueness (up to scalar) -/
+/-! ### Balanced edge scalars -/
 
-/-- Placeholder uniqueness endpoint for the PEPS Fundamental Theorem.
+/-- The scalar contributed by an edge-scalar family at a chosen endpoint.
 
-The current statement asks for a single nonzero scalar `c : ℂ` with
-`X_e = c · Y_e` on every edge. The issue-#503 discussion records a connected
-triangle counterexample with bond dimension `1`, so this conclusion is too
-strong as stated. The eventual replacement will need an explicit normalization
-for the edge gauges before one can ask for uniqueness. -/
-theorem gauge_unique_up_to_scalar (A B : Tensor G d)
-    (hConn : G.Connected)
+For an edge `(u, w)` with `u < w` and scalar `c_e`, the lower endpoint carries
+`c_e` and the upper endpoint carries `c_e⁻¹`, mirroring `edgeGaugeAt`. -/
+def edgeScalarAt (c : (e : Edge G) → Units ℂ)
+    (v : V) (ie : IncidentEdge G v) : ℂ :=
+  if ie.1.1.1 = v then (c ie.1 : ℂ) else ↑((c ie.1)⁻¹)
+
+/-- A scalar edge family is vertex-balanced if the oriented product of its
+endpoint scalars is `1` at every vertex. -/
+def IsVertexBalanced (c : (e : Edge G) → Units ℂ) : Prop :=
+  ∀ v : V, ∏ ie : IncidentEdge G v, edgeScalarAt (G := G) c v ie = 1
+
+/-- Two PEPS gauge families are equivalent modulo balanced edge scalars if,
+after inserting the corresponding endpoint scalars, they induce the same
+oriented edge action on every incident half-edge. -/
+def GaugeEquivModEdgeScalars (A : Tensor G d)
+    (X Y : (e : Edge G) → GL (Fin (A.bondDim e)) ℂ) : Prop :=
+  ∃ c : (e : Edge G) → Units ℂ,
+    IsVertexBalanced (G := G) c ∧
+      ∀ (v : V) (ie : IncidentEdge G v),
+        edgeGaugeAt A X v ie =
+          edgeScalarAt (G := G) c v ie • edgeGaugeAt A Y v ie
+
+/-- Balanced edge-scalar reweightings do not change the gauged tensor at a
+vertex. -/
+theorem GaugeEquivModEdgeScalars.gaugeVertex_eq
+    {A : Tensor G d}
+    {X Y : (e : Edge G) → GL (Fin (A.bondDim e)) ℂ}
+    (hXY : GaugeEquivModEdgeScalars (G := G) A X Y)
+    (v : V) (η : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1))
+    (σ : Fin d) :
+    gaugeVertex A X v η σ = gaugeVertex A Y v η σ := by
+  rcases hXY with ⟨c, hc, hedge⟩
+  unfold gaugeVertex
+  refine Finset.sum_congr rfl ?_
+  intro η' _
+  have hprod :
+      ∏ ie : IncidentEdge G v, edgeGaugeAt A X v ie (η ie) (η' ie) =
+        ∏ ie : IncidentEdge G v, edgeGaugeAt A Y v ie (η ie) (η' ie) := by
+    calc
+      ∏ ie : IncidentEdge G v, edgeGaugeAt A X v ie (η ie) (η' ie) =
+          ∏ ie : IncidentEdge G v,
+            edgeScalarAt (G := G) c v ie *
+              edgeGaugeAt A Y v ie (η ie) (η' ie) := by
+            refine Finset.prod_congr rfl ?_
+            intro ie _
+            have hEntry := congrArg (fun M => M (η ie) (η' ie)) (hedge v ie)
+            simpa [Matrix.smul_apply, smul_eq_mul] using hEntry
+      _ = (∏ ie : IncidentEdge G v, edgeScalarAt (G := G) c v ie) *
+            ∏ ie : IncidentEdge G v, edgeGaugeAt A Y v ie (η ie) (η' ie) := by
+            rw [Finset.prod_mul_distrib]
+      _ = ∏ ie : IncidentEdge G v, edgeGaugeAt A Y v ie (η ie) (η' ie) := by
+            rw [hc v, one_mul]
+  rw [hprod]
+
+/-! ### Uniqueness modulo balanced edge scalars -/
+
+/-- If the gauged vertex tensors produced by two gauge families agree pointwise
+at a vertex `v`, then, by linear independence of `A.component v`, the products
+of incident edge-gauge matrix entries coincide for every pair of virtual
+configurations `η, η'`.
+
+This reduces the remaining step in `gauge_unique_mod_edge_scalars` from the
+functional equality of gauged vertex tensors to an equality of scalar products
+of incident edge-gauge entries, which is the proper input to the pending
+tensor-factor uniqueness argument. -/
+private lemma edgeGaugeProduct_eq_of_gaugeVertex_eq
+    (A : Tensor G d) (hA : IsVertexInjective A) (v : V)
+    (X Y : (e : Edge G) → GL (Fin (A.bondDim e)) ℂ)
+    (h : ∀ (η : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1))
+        (σ : Fin d),
+      gaugeVertex A X v η σ = gaugeVertex A Y v η σ)
+    (η η' : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1)) :
+    (∏ ie : IncidentEdge G v, edgeGaugeAt A X v ie (η ie) (η' ie)) =
+      ∏ ie : IncidentEdge G v, edgeGaugeAt A Y v ie (η ie) (η' ie) := by
+  refine (hA v).eq_coords_of_eq
+    (f := fun ξ => ∏ ie : IncidentEdge G v, edgeGaugeAt A X v ie (η ie) (ξ ie))
+    (g := fun ξ => ∏ ie : IncidentEdge G v, edgeGaugeAt A Y v ie (η ie) (ξ ie))
+    ?_ η'
+  funext σ
+  simpa [gaugeVertex, Finset.sum_apply, Pi.smul_apply, smul_eq_mul] using h η σ
+
+/-- **Gauge uniqueness modulo balanced edge scalars** (arXiv:1804.04964,
+Theorem 2, uniqueness clause, repaired form).
+
+If `X` and `Y` are two gauge families relating the same pair of injective PEPS,
+then they represent the same gauge class modulo edge-wise nonzero
+scalars whose oriented product is `1` at every vertex. This replaces the
+earlier global-scalar conclusion, which is refuted by the connected-triangle,
+bond-dimension-`1` counterexample discussed in issue #762. -/
+theorem gauge_unique_mod_edge_scalars (A B : Tensor G d)
     (hA : IsVertexInjective A)
     (hDim : A.bondDim = B.bondDim)
     (X Y : (e : Edge G) → GL (Fin (A.bondDim e)) ℂ)
@@ -590,18 +703,30 @@ theorem gauge_unique_up_to_scalar (A B : Tensor G d)
         (σ : Fin d),
       B.component v (fun ie => Fin.cast (congr_fun hDim ie.1) (η ie)) σ =
         gaugeVertex A Y v η σ) :
-    ∃ (c : ℂ), c ≠ 0 ∧ ∀ (e : Edge G),
-      (X e).val = c • (Y e).val := by
-  -- TODO: the current statement is too strong. The issue-#503 discussion gives
-  -- a connected triangle counterexample with bond dimension `1`, where two
-  -- nontrivial gauge families act trivially on every vertex but are not related
-  -- by one global scalar.
-  --
-  -- The eventual replacement needs two ingredients:
-  -- 1. statement repair, adding the right normalization or cocycle data for the
-  --    edge gauges;
-  -- 2. a uniqueness proof for that corrected statement, downstream of the
-  --    virtual-insertion / blocking argument from arXiv:1804.04964 §3.
+    GaugeEquivModEdgeScalars (G := G) A X Y := by
+  -- Step 1: combine `hX` and `hY` to obtain vertex-wise equality of the
+  -- gauged tensors `gaugeVertex A X v η σ = gaugeVertex A Y v η σ`.
+  have hGauge : ∀ (v : V)
+      (η : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1)) (σ : Fin d),
+      gaugeVertex A X v η σ = gaugeVertex A Y v η σ :=
+    fun v η σ => (hX v η σ).symm.trans (hY v η σ)
+  -- Step 2: linear independence of `A.component v` promotes this to equality
+  -- of incident edge-gauge products for every configuration pair `η, η'`.
+  have hProd : ∀ (v : V)
+      (η η' : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1)),
+      (∏ ie : IncidentEdge G v, edgeGaugeAt A X v ie (η ie) (η' ie)) =
+        ∏ ie : IncidentEdge G v, edgeGaugeAt A Y v ie (η ie) (η' ie) :=
+    fun v η η' =>
+      edgeGaugeProduct_eq_of_gaugeVertex_eq (G := G) A hA v X Y (hGauge v) η η'
+  -- Remaining step (issue #842): the tensor-factor uniqueness lemma.
+  -- From `hProd v` at each vertex `v`, extract a nonzero scalar `c_v(ie)` on
+  -- each incident edge such that `edgeGaugeAt A X v ie = c_v(ie) • edgeGaugeAt A Y v ie`
+  -- with the oriented product of `c_v(ie)` over incident `ie` at `v` equal to
+  -- `1`, then reconcile `c_u` and `c_w` on every shared edge `e = (u,w)` into a
+  -- single global family `c : (e : Edge G) → Units ℂ` satisfying
+  -- `IsVertexBalanced c`. This is the local scalar-ratio argument of
+  -- arXiv:1804.04964 §3; it is independent of the virtual-insertion / blocking
+  -- machinery tracked in #763.
   sorry
 
 end PEPS

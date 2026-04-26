@@ -24,18 +24,21 @@ import TNLean.Algebra.BlockPermutation
 import TNLean.Algebra.SkolemNoether
 import TNLean.Algebra.GramMatrixLI
 import TNLean.Algebra.HermitianHelpers
+import TNLean.Algebra.MatrixSpectralDecomp
 import TNLean.Algebra.LinearMapAux
 import TNLean.Algebra.MatrixAux
 import TNLean.Algebra.ScalarPowerSumIdentity
 import TNLean.Algebra.BurnsideMatrix
 import TNLean.Algebra.IrreducibleTensorAction
 import TNLean.Algebra.MatrixFrobenius
+import TNLean.Algebra.PerronFrobenius.RankOne
 import TNLean.Algebra.ProjectiveRepresentation
 import TNLean.Algebra.ScalarCommutant
 import TNLean.Algebra.CocycleCohomology
 
 -- Layer 0b: General analysis
 import TNLean.Analysis.ConvergenceHelpers
+import TNLean.Analysis.ProjectionGeometry
 
 -- Layer 1: Generic convex/topological infrastructure
 import TNLean.Topology.ConvexProjection
@@ -55,6 +58,8 @@ import TNLean.Channel.KrausRank
 import TNLean.Channel.KrausRepresentation
 import TNLean.Channel.KrausUnitaryFreedom
 import TNLean.Channel.Stinespring
+import TNLean.Channel.OrderedCP
+import TNLean.Channel.RadonNikodym
 import TNLean.Channel.TransferMatrix
 import TNLean.Channel.POVM
 import TNLean.Channel.POVM.Uniqueness
@@ -72,6 +77,7 @@ import TNLean.Axioms.Entropy
 -- re-state the sanctioned entropy axioms under the Entropy namespace.
 import TNLean.Entropy.VonNeumann
 import TNLean.Entropy.StrongSubadditivity
+import TNLean.Entropy.TripartiteTrace
 import TNLean.Entropy.MarkovChain
 import TNLean.Entropy.MutualInformation
 -- Layer 2b: Axiomatized operator convexity/concavity results (pending upstream Mathlib)
@@ -83,6 +89,7 @@ import TNLean.Channel.Schwarz.KadisonSchwarz
 import TNLean.Channel.Schwarz.PositiveMapProperties
 import TNLean.Channel.Schwarz.Douglas
 import TNLean.Channel.Schwarz.DiagonalJensen
+import TNLean.Channel.Schwarz.OperatorJensenAux
 import TNLean.Channel.Schwarz.OperatorConvexity
 import TNLean.Channel.Schwarz.OperatorMonotone
 import TNLean.Channel.Schwarz.AndoLieb
@@ -98,9 +105,11 @@ import TNLean.Channel.Schwarz.TraceCFC
 import TNLean.Channel.FixedPoint.Algebra
 import TNLean.Channel.FixedPoint.ChoiEffros
 import TNLean.Channel.FixedPoint.Cesaro
+import TNLean.Channel.FixedPoint.CornerAlgebra
 import TNLean.Channel.FixedPoint.StationarySupport
 import TNLean.Channel.FixedPoint.WedderburnDecomp
 import TNLean.Channel.FixedPoint.Corollaries
+import TNLean.Channel.Spectral.Support
 import TNLean.Channel.Irreducible.Ergodicity
 import TNLean.Channel.Irreducible.Basic
 import TNLean.Channel.Irreducible.Growth
@@ -146,6 +155,7 @@ import TNLean.MPS.Chain.VirtualInsertion
 import TNLean.MPS.Chain.TensorEquality
 import TNLean.MPS.Chain.AlgebraIsomorphism
 import TNLean.MPS.Chain.FundamentalTheorem
+import TNLean.MPS.Chain.GaugePhase
 import TNLean.MPS.Chain.BlockedChainFT
 import TNLean.MPS.Chain.SameStateBridge
 import TNLean.MPS.Chain.TranslationInvariance
@@ -165,6 +175,7 @@ import TNLean.MPS.ParentHamiltonian.Basic
 import TNLean.MPS.ParentHamiltonian.IntersectionProperty
 import TNLean.MPS.ParentHamiltonian.CyclicWindow
 import TNLean.MPS.ParentHamiltonian.SuffixWindow
+import TNLean.MPS.ParentHamiltonian.RestrictTransport
 import TNLean.MPS.ParentHamiltonian.ExtendRight
 import TNLean.MPS.ParentHamiltonian.WrappingWindow
 import TNLean.MPS.ParentHamiltonian.UniqueGroundState
@@ -191,6 +202,7 @@ import TNLean.MPS.Symmetry.StringOrder
 
 -- Layer 5: Multi-block
 import TNLean.MPS.Core.MultiBlock
+import TNLean.MPS.CanonicalForm.BlockDiagonalCommutant
 import TNLean.Algebra.BlockTriangularTrace
 import TNLean.Algebra.ProjectionTriangularTrace
 import TNLean.MPS.BNT.BasisNormal
@@ -254,6 +266,8 @@ import TNLean.MPS.MPDO.SimpleLocalStructure
 import TNLean.MPS.MPDO.FusionIsometries
 import TNLean.MPS.MPDO.AlgebraStructure
 import TNLean.MPS.MPDO.CommutingForm
+import TNLean.MPS.MPDO.CommutingFormBridge
+import TNLean.MPS.MPDO.BlockedRFPConstruction
 
 -- MPS examples
 import TNLean.MPS.Examples.AKLT
@@ -320,6 +334,9 @@ import TNLean.Wielandt.QuantumWielandt
 import TNLean.Channel.Peripheral.CyclicDecomposition
 import TNLean.Channel.Peripheral.Cycles
 import TNLean.Channel.Peripheral.MultiCycleDecomposition
+
+-- Chapter 2 §2.3 normal-form existence (SVD + Lorentz)
+import TNLean.Channel.NormalForm
 
 -- Public documentation index modules
 import TNLean.Channel.WolfChapter2Index

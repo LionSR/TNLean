@@ -123,7 +123,8 @@ and~\cite[Ch.~6]{Wolf2012Quantum}.
 \end{proof}
 
 \begin{theorem}[MPV under block normalization]\label{thm:mpv_normalize}
-	\notready
+	\lean{MPSTensor.mpv_toTensorFromBlocks_normalize}
+	\leanok
 	\uses{def:tensor_from_blocks, def:mpv}
 	For any nonzero scaling factors $\mu_k$, set
 	$\eta_k := \mu_k / |\mu_k|$ and $B_k := |\mu_k| A_k$.
@@ -138,12 +139,13 @@ and~\cite[Ch.~6]{Wolf2012Quantum}.
 	remaining factor $\eta_k$ is a unit-modulus phase.
 \end{theorem}
 
-\begin{proof}\uses{thm:mpv_decomposition, lem:eval_word_smul}
+\begin{proof}\leanok\uses{thm:mpv_decomposition, lem:mpv_smul}
 	By the MPV decomposition
 	(Theorem~\ref{thm:mpv_decomposition}),
 	the $k$-th contribution of $\bigoplus_k \mu_k A_k$ is
 	$\mu_k^N V^{(N)}(A_k)_\sigma$.
-	For $B_k = |\mu_k| A_k$, Lemma~\ref{lem:eval_word_smul} gives
+	For $B_k = |\mu_k| A_k$, the MPV-scaling lemma
+	(Lemma~\ref{lem:mpv_smul}) gives
 	$V^{(N)}(B_k)_\sigma = |\mu_k|^N V^{(N)}(A_k)_\sigma$.
 	Hence
 	$\eta_k^N V^{(N)}(B_k)_\sigma
@@ -1584,8 +1586,9 @@ The following results separate the zero blocks from the
 \end{definition}
 
 \begin{proof}\leanok
-	This is the formal statement of the missing Wolf-style fixed-point-algebra
-	rigidity statement suggested by Lemma~\texttt{lem:bdcf}.
+	This is the abstract multiplicativity property used in the orbit-sum
+	construction. Theorem~\ref{thm:sector_fixed_algebra_irred_cyclic} shows
+	that it is automatic in the irreducible trace-preserving cyclic setting.
 \end{proof}
 
 \begin{lemma}[Projection step from sector fixed-point-algebra rigidity]%
@@ -1607,6 +1610,64 @@ The following results separate the zero blocks from the
 	\]
 	since $X^2 = X$ for an orthogonal projection. Therefore $T(X)$ is again an
 	orthogonal projection.
+\end{proof}
+
+\begin{theorem}[Sector fixed-point-algebra rigidity from irreducibility]%
+	\label{thm:sector_fixed_algebra_irred_cyclic}
+	\lean{MPSTensor.sectorFixedPointAlgebraRigidity_of_irreducible_cyclicDecomp}
+	\leanok
+	\uses{def:sector_fixed_point_algebra_rigidity, lem:orbit_sum_fixed}
+	Let $A$ be a left-canonical MPS tensor with irreducible adjoint transfer map,
+	and let $(P_k)_{k=1}^m$ be cyclic orthogonal sector projections with
+	$\sum_k P_k = \Id$. Then the sector fixed-point-algebra rigidity property
+	holds automatically for $\E_A^\dagger$.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{def:sector_fixed_point_algebra_rigidity, lem:orbit_sum_fixed}
+	Fix $k$ and let $X,Y$ be operators supported on $P_k$ and fixed by
+	$(\E_A^\dagger)^m$. For such an $X$, the orbit sum
+	\[
+		R_X := \sum_{l=0}^{m-1} (\E_A^\dagger)^l(X)
+	\]
+	is fixed by $\E_A^\dagger$ by Lemma~\ref{lem:orbit_sum_fixed}. Since the
+	trace-preserving hypothesis makes $\E_A^\dagger$ unital, the irreducible
+	unital fixed-point theorem implies that $R_X$ is a scalar multiple of
+	$\Id$. Compressing by $P_k$ recovers $X$, so $X = c P_k$; the same argument
+	gives $Y = c' P_k$. Therefore
+	\[
+		\E_A^\dagger(XY) = \E_A^\dagger((cc') P_k) = (cc') P_{k-1}
+		= \E_A^\dagger(X)\E_A^\dagger(Y),
+	\]
+	using the cyclic relation $\E_A^\dagger(P_k)=P_{k-1}$.
+\end{proof}
+
+\begin{theorem}[Sector fixed-point-algebra rigidity from scalar blocked fixed points]%
+	\label{thm:sector_fixed_algebra_scalar_blocked}
+	\lean{MPSTensor.sectorFixedPointAlgebraRigidity_of_cyclic_decomp_after_blocking_of_scalarBlockedFixedPoints}
+	\leanok
+	\uses{def:sector_fixed_point_algebra_rigidity}
+	Let $A$ be a left-canonical MPS tensor and let $(P_k)_{k=1}^m$ be cyclic
+	orthogonal sector projections with $\sum_k P_k = \Id$.
+	Suppose that for each $k$ and each element $X \in P_k \MN{D} P_k$ satisfying
+	$\E_{C_k}^\dagger(X) = X$ (where $C_k$ is the blocked sector tensor), there
+	exists $c \in \mathbb{C}$ with $X = c \cdot \Id$.
+	Then the sector fixed-point-algebra rigidity property holds for
+	$\E_A^\dagger$.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{def:sector_fixed_point_algebra_rigidity}
+	Fix $k$ and let $X, Y$ be operators supported on $P_k$ and fixed by
+	$(\E_A^\dagger)^m$. Lift each to the corresponding compressed sector via the
+	intertwining equivalence $\varphi_k$; the scalar fixed-point hypothesis yields
+	$X = c_X P_k$ and $Y = c_Y P_k$. Then
+	\[
+		\E_A^\dagger(XY) = \E_A^\dagger((c_X c_Y) P_k) = (c_X c_Y) P_{k-1}
+		= \E_A^\dagger(X)\E_A^\dagger(Y),
+	\]
+	using the cyclic relation $\E_A^\dagger(P_k) = P_{k-1}$ and the linearity of
+	$\E_A^\dagger$.
 \end{proof}
 
 \begin{lemma}[Orbit-sum construction of the sector lift]%
@@ -1706,7 +1767,28 @@ The following results separate the zero blocks from the
 	preservation needed along the orbit of $Q$, via
 	Lemma~\ref{lem:sector_fixed_algebra_proj_step}. With those two inputs in hand,
 	the original orbit-sum construction from
-	Lemma~\ref{lem:orbit_sum_hLift_construction} applies verbatim.
+	Lemma~\ref{lem:orbit_sum_hLift_construction} applies verbatim. In the
+	irreducible trace-preserving cyclic case, the rigidity hypothesis here is
+	discharged by Theorem~\ref{thm:sector_fixed_algebra_irred_cyclic}.
+\end{proof}
+
+\begin{theorem}[Orbit-sum construction, unconditional variant]%
+	\label{thm:orbit_sum_hLift_unconditional}
+	\lean{MPSTensor.hLift_cyclicDecomp_mps}
+	\leanok
+	\uses{lem:orbit_sum_hLift_fixed_algebra, thm:sector_fixed_algebra_irred_cyclic}
+	Let $A$ be a left-canonical MPS tensor with irreducible adjoint transfer map,
+	and let $(P_k)_{k=1}^m$ be cyclic orthogonal sector projections. Then for
+	every orthogonal subprojection $Q \le P_k$ whose corner is preserved by
+	$(\E_A^\dagger)^m$, there is a global projection $R$ invariant under
+	$\E_A^\dagger$ with the same zero/full-sector tests.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{lem:orbit_sum_hLift_fixed_algebra, thm:sector_fixed_algebra_irred_cyclic}
+	Apply Lemma~\ref{lem:orbit_sum_hLift_fixed_algebra} with the rigidity
+	hypothesis supplied by
+	Theorem~\ref{thm:sector_fixed_algebra_irred_cyclic}.
 \end{proof}
 
 \begin{theorem}[Sector irreducibility from the orbit-sum construction]%
@@ -1763,8 +1845,148 @@ The following results separate the zero blocks from the
 	Theorem~\ref{thm:sector_irred_orbit_lift}.
 \end{proof}
 
+\begin{theorem}[Unconditional sector irreducibility]%
+	\label{thm:sector_irred_unconditional}
+	\lean{MPSTensor.isIrreducibleOnCorner_of_cyclic_decomp_mps}
+	\leanok
+	\uses{thm:sector_irred_fixed_algebra, thm:sector_fixed_algebra_irred_cyclic}
+	Let $A$ be a left-canonical MPS tensor with irreducible adjoint transfer map,
+	and let $(P_k)_{k=1}^m$ be cyclic orthogonal sector projections. Then
+	$(\E_A^\dagger)^m$ is irreducible on each corner $P_k$.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:sector_irred_fixed_algebra, thm:sector_fixed_algebra_irred_cyclic}
+	Apply Theorem~\ref{thm:sector_irred_fixed_algebra} with the rigidity
+	hypothesis supplied by
+	Theorem~\ref{thm:sector_fixed_algebra_irred_cyclic}.
+\end{proof}
+
 \section{Reduction to primitive blocks}%
 \label{sec:reduction_to_normal_form}
+
+\begin{theorem}[Projection-step hypothesis yields primitive blocked sectors]%
+	\label{thm:blocked_sector_proj_step}
+	\lean{MPSTensor.primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking_of_projStep}
+	\leanok
+	\uses{thm:cyclic_sector_decomp_after_blocking,
+	      thm:sector_irred_proj_step,
+	      thm:primitive_adjoint_equiv,
+	      lem:orbit_sum_hLift_proj_step}
+	Let $A$ be a left-canonical irreducible tensor whose adjoint transfer map has
+	peripheral spectrum $\{\gamma^j : 0 \le j < m\}$ for a primitive $m$-th root
+	of unity $\gamma$. Let $(C_u)_{u=1}^m$, $(P_u)_{u=1}^m$, and
+	$\varphi_u : \MN{\dim C_u} \xrightarrow{\sim} P_u \MN{D} P_u$
+	be the blocked cyclic-sector data. If the one-step projection-preservation
+	hypothesis of Lemma~\ref{lem:orbit_sum_hLift_proj_step} holds, then every
+	blocked sector tensor $C_u$ has primitive transfer map and is irreducible.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:sector_irred_proj_step,
+	      thm:primitive_adjoint_equiv}
+	Theorem~\ref{thm:sector_irred_proj_step} gives irreducibility of
+	$(\E_A^\dagger)^m$ on each corner $P_u$.
+	The blocked cyclic-sector data provide compression equivalences
+	$\varphi_u$ intertwining the adjoint transfer map of $C_u$ with the
+	corresponding corner restriction of $(\E_A^\dagger)^m$.
+	The same cyclic peripheral-spectrum argument that produces the sector
+	decomposition shows that each corner restriction is primitive.
+	Transport primitivity and irreducibility across $\varphi_u$, then use
+	Theorem~\ref{thm:primitive_adjoint_equiv} to pass from the adjoint blocked
+	map to the primal transfer map of $C_u$.
+\end{proof}
+
+\begin{theorem}[Fixed-point-algebra rigidity yields primitive blocked sectors]%
+	\label{thm:blocked_sector_fixed_algebra}
+	\lean{MPSTensor.primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking_of_fixedAlgebraRigidity}
+	\leanok
+	\uses{def:sector_fixed_point_algebra_rigidity,
+	      thm:cyclic_sector_decomp_after_blocking,
+	      thm:sector_irred_fixed_algebra,
+	      thm:primitive_adjoint_equiv}
+	Let $A$ be a left-canonical irreducible tensor whose adjoint transfer map has
+	peripheral spectrum $\{\gamma^j : 0 \le j < m\}$ for a primitive $m$-th root
+	of unity $\gamma$. Let $(C_u)_{u=1}^m$, $(P_u)_{u=1}^m$, and
+	$\varphi_u : \MN{\dim C_u} \xrightarrow{\sim} P_u \MN{D} P_u$
+	be the blocked cyclic-sector data. If the fixed-point-algebra rigidity
+	hypothesis from Definition~\ref{def:sector_fixed_point_algebra_rigidity}
+	holds, then every blocked sector tensor $C_u$ has primitive transfer map and
+	is irreducible.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{def:sector_fixed_point_algebra_rigidity,
+	      thm:sector_irred_fixed_algebra,
+	      thm:primitive_adjoint_equiv}
+	Theorem~\ref{thm:sector_irred_fixed_algebra} gives irreducibility of
+	$(\E_A^\dagger)^m$ on each corner $P_u$.
+	The blocked cyclic-sector data provide compression equivalences
+	$\varphi_u$ intertwining the adjoint transfer map of $C_u$ with the
+	corresponding corner restriction of $(\E_A^\dagger)^m$.
+	The same cyclic peripheral-spectrum argument that produces the sector
+	decomposition shows that each corner restriction is primitive.
+	Transport primitivity and irreducibility across $\varphi_u$, then use
+	Theorem~\ref{thm:primitive_adjoint_equiv} to pass from the adjoint blocked
+	map to the primal transfer map of $C_u$.
+\end{proof}
+
+\begin{theorem}[Scalar blocked fixed points yield primitive blocked sectors]%
+	\label{thm:blocked_sector_scalar_fixed}
+	\lean{MPSTensor.primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking_of_scalarBlockedFixedPoints}
+	\leanok
+	\uses{def:sector_fixed_point_algebra_rigidity,
+	      thm:sector_fixed_algebra_scalar_blocked,
+	      thm:blocked_sector_fixed_algebra,
+	      thm:cyclic_sector_decomp_after_blocking,
+	      thm:primitive_adjoint_equiv}
+	Let $A$ be a left-canonical irreducible tensor whose adjoint transfer map has
+	peripheral spectrum $\{\gamma^j : 0 \le j < m\}$ for a primitive $m$-th root
+	of unity $\gamma$. Let $(C_u)_{u=1}^m$, $(P_u)_{u=1}^m$, and
+	$\varphi_u : \MN{\dim C_u} \xrightarrow{\sim} P_u \MN{D} P_u$
+	be the blocked cyclic-sector data. If every $(\E_{C_u}^\dagger)$-fixed element
+	in the compressed sector $P_u \MN{D} P_u$ is a scalar multiple of the identity,
+	then every blocked sector tensor $C_u$ has primitive transfer map and is
+	irreducible.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:sector_fixed_algebra_scalar_blocked,
+	      thm:blocked_sector_fixed_algebra}
+	Apply Theorem~\ref{thm:sector_fixed_algebra_scalar_blocked} to obtain
+	sector fixed-point-algebra rigidity from the scalar fixed-point hypothesis,
+	then apply Theorem~\ref{thm:blocked_sector_fixed_algebra}.
+\end{proof}
+
+\begin{theorem}[Unconditional primitive blocked sectors]%
+	\label{thm:blocked_sector_unconditional}
+	\lean{MPSTensor.primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking}
+	\leanok
+	\uses{thm:cyclic_sector_decomp_after_blocking,
+	      thm:sector_irred_unconditional,
+	      thm:primitive_adjoint_equiv}
+	Let $A$ be a left-canonical irreducible tensor whose adjoint transfer map has
+	peripheral spectrum $\{\gamma^j : 0 \le j < m\}$ for a primitive $m$-th root
+	of unity $\gamma$. Let $(C_u)_{u=1}^m$, $(P_u)_{u=1}^m$, and
+	$\varphi_u : \MN{\dim C_u} \xrightarrow{\sim} P_u \MN{D} P_u$
+	be the blocked cyclic-sector data. Then every blocked sector tensor $C_u$ has
+	primitive transfer map and is irreducible.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:sector_irred_unconditional,
+	      thm:primitive_adjoint_equiv}
+	Theorem~\ref{thm:sector_irred_unconditional} gives irreducibility of
+	$(\E_A^\dagger)^m$ on each corner $P_u$.
+	The blocked cyclic-sector data provide compression equivalences
+	$\varphi_u$ intertwining the adjoint transfer map of $C_u$ with the
+	corresponding corner restriction of $(\E_A^\dagger)^m$.
+	The same cyclic peripheral-spectrum argument that produces the sector
+	decomposition shows that each corner restriction is primitive.
+	Transport primitivity and irreducibility across $\varphi_u$, then use
+	Theorem~\ref{thm:primitive_adjoint_equiv} to pass from the adjoint blocked
+	map to the primal transfer map of $C_u$.
+\end{proof}
 
 \begin{theorem}[Arbitrary tensor to primitive block decomposition]%
 	\label{thm:tp_primitive_blockdecomp}
@@ -1848,11 +2070,40 @@ The following results separate the zero blocks from the
 	If each block is irreducible, trace-preserving, primitive, and has positive dimension, then sorting by strictly decreasing weight norms produces a normal canonical form.
 \end{theorem}
 
+\begin{definition}[Granular sector decomposition]
+	\label{def:trivial_sector_decomp}
+	\lean{MPSTensor.trivialSectorDecomp}
+	\leanok
+	\uses{def:paper_sector_data}
+	Given nonzero weights $(\mu_k)_{k=1}^r$ and blocks $(B_k)_{k=1}^r$,
+	form a sector decomposition with one basis block for each original block,
+	one copy in each sector, and sector weight $\mu_k$ on the $k$th sector.
+\end{definition}
+
+\begin{lemma}[Granular sector decomposition preserves the represented family]
+	\label{lem:trivial_sector_decomp_same_mpv}
+	\lean{MPSTensor.sameMPV₂_trivialSectorDecomp}
+	\leanok
+	\uses{def:trivial_sector_decomp}
+	The granular sector decomposition associated to $(\mu_k,B_k)_k$ represents
+	the same MPS family as the original weighted block sum
+	$\bigoplus_k \mu_k B_k$.
+\end{lemma}
+
+\begin{proof}\leanok
+	\uses{def:trivial_sector_decomp}
+	Expanding the sector decomposition gives the sum
+	$\sum_k \mu_k^N V^{(N)}(B_k)_\sigma$, which is exactly the finite
+	block-sum expression for $\bigoplus_k \mu_k B_k$.
+\end{proof}
+
 \begin{theorem}[Trivial sector decomposition for the sorted distinct-norm case]
 	\label{thm:bnt_trivial_sector}
 	\lean{MPSTensor.exists_trivialSectorDecomp_of_sorted_distinct_norms}\leanok
-	\uses{thm:bnt_sorted_reindexing}
-	If weights are already strictly decreasing in norm, one obtains a sector decomposition with one copy per sector that preserves the represented MPS family.
+	\uses{def:trivial_sector_decomp, lem:trivial_sector_decomp_same_mpv}
+	If all weights are nonzero and strictly decreasing in norm, one obtains a
+	sector decomposition with one copy per sector that preserves the represented
+	MPS family.
 \end{theorem}
 
 \begin{definition}[Norm-class partition]
@@ -1909,8 +2160,139 @@ The following results separate the zero blocks from the
 	\label{thm:sector_decomp_tp_prim_irr}
 	\lean{MPSTensor.exists_sectorDecomp_of_tp_primitive_irr_blocks}\leanok
 	\uses{thm:gauge_equiv_nondecay, thm:bnt_grouping_gauge_equiv}
-	From a trace-preserving primitive irreducible block decomposition with nonzero weights and non-decaying cross-overlaps for equal-norm blocks, one obtains a sector decomposition with strict norm ordering.
+	From a trace-preserving primitive irreducible block decomposition with nonzero
+	weights and non-decaying cross-overlaps for equal-norm blocks, one obtains a
+	sector decomposition with strict norm ordering.
 \end{theorem}
+
+\begin{theorem}[Existential BNT independence from overlap limits]
+	\label{thm:bnt_li_from_overlap_limits_exists}
+	\lean{MPSTensor.exists_eventually_linearIndependent_of_overlap_tendsto_orthonormal}
+	\leanok
+	\uses{thm:bnt_overlap_orthonormal_li}
+	If the self-overlaps of a finite block family tend to $1$ and the
+	cross-overlaps of distinct blocks tend to $0$, then the MPV states are
+	linearly independent for all sufficiently large system sizes.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:bnt_overlap_orthonormal_li}
+	This is Theorem~\ref{thm:bnt_overlap_orthonormal_li}, restated with an
+	explicit threshold $N_0$.
+\end{proof}
+
+\begin{theorem}[BNT independence for separated primitive normal blocks]
+	\label{thm:bnt_li_tp_prim_irr_separated}
+	\lean{MPSTensor.exists_eventually_linearIndependent_of_tp_primitive_irr_blocks_of_blocksNotGaugePhaseEquiv}
+	\leanok
+	\uses{thm:bnt_li_from_overlap_limits_exists, def:gauge_phase_equiv}
+	For trace-preserving primitive irreducible blocks of positive bond dimension
+	that are pairwise not gauge-phase equivalent, the block MPV states are
+	linearly independent for all sufficiently large system sizes.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:bnt_li_from_overlap_limits_exists}
+	Primitivity and trace preservation give self-overlap convergence to $1$.
+	BNT separation gives cross-overlap convergence to $0$ for distinct blocks.
+	The result follows from
+	Theorem~\ref{thm:bnt_li_from_overlap_limits_exists}.
+\end{proof}
+
+\begin{theorem}[Granular sector decomposition from eventual BNT independence]
+	\label{thm:bnt_sector_decomp_linear_independent}
+	\lean{MPSTensor.exists_bnt_sectorDecomp_of_linearIndependent}
+	\leanok
+	\uses{def:trivial_sector_decomp, lem:trivial_sector_decomp_same_mpv, def:bnt}
+	If the MPV states of the blocks are linearly independent for all sufficiently
+	large system sizes and all weights are nonzero, then the granular sector
+	decomposition represents the same MPS family and satisfies the BNT
+	linear-independence condition.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{def:trivial_sector_decomp, lem:trivial_sector_decomp_same_mpv}
+	The equality of represented families is
+	Lemma~\ref{lem:trivial_sector_decomp_same_mpv}.  The assumed eventual linear
+	independence is exactly the BNT condition for the basis blocks of the granular
+	sector decomposition.
+\end{proof}
+
+\begin{theorem}[Separated primitive normal sector construction]
+	\label{thm:bnt_sector_decomp_tp_prim_irr_separated}
+	\lean{MPSTensor.exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_of_blocksNotGaugePhaseEquiv}
+	\leanok
+	\uses{def:trivial_sector_decomp, lem:trivial_sector_decomp_same_mpv, thm:bnt_li_tp_prim_irr_separated}
+	For trace-preserving primitive irreducible blocks of positive bond dimension
+	with nonzero weights, if distinct blocks are pairwise not gauge-phase
+	equivalent, then the granular
+	sector decomposition represents the same MPS family and satisfies the BNT
+	linear-independence condition.  Equal-modulus separated blocks remain as
+	distinct basis blocks.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{lem:trivial_sector_decomp_same_mpv, thm:bnt_li_tp_prim_irr_separated}
+	The granular sector decomposition preserves the represented family by
+	Lemma~\ref{lem:trivial_sector_decomp_same_mpv}.  The separated primitive
+	normal hypotheses give the eventual linear independence by
+	Theorem~\ref{thm:bnt_li_tp_prim_irr_separated}.
+\end{proof}
+
+\begin{definition}[MPV phase class data]
+	\label{def:mpv_phase_class_data}
+	\lean{MPSTensor.MPVPhaseEquiv, MPSTensor.MPVPhaseClassData, MPSTensor.mpvPhaseClassData}
+	\leanok
+	For a finite family of blocks, put $j \sim k$ when there is a nonzero
+	scalar factor $\zeta$ such that
+	$\ket{V^{(N)}(B_k)}=\zeta^N\ket{V^{(N)}(B_j)}$ for every length~$N$.
+	The class data enumerate the finite quotient, choose one representative per class,
+	record the scalar relating the representative to each member, and prove that
+	distinct representatives are not gauge-phase equivalent.
+\end{definition}
+
+\begin{theorem}[Collapsed representative BNT sector construction]
+	\label{thm:bnt_sector_decomp_tp_prim_irr_collapsed}
+	\lean{MPSTensor.exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks}
+	\leanok
+	\uses{def:mpv_phase_class_data, thm:bnt_li_tp_prim_irr_separated}
+	For trace-preserving primitive irreducible blocks of positive bond dimension
+	with nonzero weights, there is a sector decomposition representing the same
+	weighted block sum and satisfying the BNT linear-independence condition.  The
+	construction chooses one representative per MPV phase class and absorbs the
+	nonzero scalar factors into the sector weights.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{def:mpv_phase_class_data, thm:bnt_li_tp_prim_irr_separated, thm:mpv_decomposition}
+	Finite phase classes partition the original block indices.  Expanding the
+	sector decomposition gives the original finite sum after replacing each class
+	member by its representative and moving the factor $\zeta^N$ into
+	$(\zeta\mu_k)^N$.  If two chosen representatives were gauge-phase equivalent,
+	they would lie in the same MPV phase class, contradicting their being distinct
+	classes.  Therefore the representatives satisfy the separated primitive-normal
+	hypothesis, and Theorem~\ref{thm:bnt_li_tp_prim_irr_separated} gives the BNT
+	linear-independence condition.
+\end{proof}
+
+\begin{theorem}[TP primitive irreducible version with eventual BNT independence]
+	\label{thm:bnt_sector_decomp_tp_prim_irr_linear_independent}
+	\lean{MPSTensor.exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_of_linearIndependent}
+	\leanok
+	\uses{thm:bnt_sector_decomp_linear_independent}
+	For trace-preserving primitive irreducible blocks of positive bond dimension,
+	if the block MPV states are linearly independent for all sufficiently large
+	system sizes and the weights are nonzero, then there is a sector decomposition
+	representing the same MPS family and satisfying the BNT linear-independence
+	condition.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:bnt_sector_decomp_linear_independent}
+	Apply Theorem~\ref{thm:bnt_sector_decomp_linear_independent}; the additional
+	trace-preserving, primitive, irreducible, and positivity assumptions are carried
+	along for compatibility with the one-sided BNT construction.
+\end{proof}
 
 \subsection{Cyclic Sectors}
 

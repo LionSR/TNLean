@@ -11,7 +11,7 @@ For a PEPS tensor `A` and a vertex `v`, the family
 virtual configurations into the physical space `Fin d → ℂ`. Under
 `IsVertexInjective A`, this map is injective, hence admits a left inverse.
 
-This file packages that left inverse and the induced realization of virtual
+This file records that left inverse and the induced realization of virtual
 endomorphisms as physical linear maps on the local physical space.
 
 ## Main results

@@ -79,8 +79,9 @@ space `ℂ^d`, that map has trivial kernel iff the family `A.component v` is
 linearly independent.
 
 Note: the earlier `Function.Injective (A.component v)` formulation is *strictly
-weaker* and admits counterexamples to `gauge_unique_up_to_scalar` (see issue
-#594). Linear independence is the correct notion here. -/
+weaker* and admits counterexamples to the former global-scalar uniqueness
+claim for PEPS gauges (see issues #594 and #762). Linear independence is the
+correct notion here. -/
 def IsVertexInjective (A : Tensor G d) : Prop :=
   ∀ v : V, LinearIndependent ℂ (A.component v)
 

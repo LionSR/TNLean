@@ -74,9 +74,10 @@ instance : ContinuousSMul ℝ ℂ :=
 
 abbrev complexContinuousSMulReal : ContinuousSMul ℝ ℂ := inferInstance
 
-omit [DecidableEq n] [Fintype n] in
-instance : ContinuousSMul ℝ (Matrix n n ℂ) :=
-  show ContinuousSMul ℝ (RestrictScalars ℝ ℂ (Matrix n n ℂ)) from inferInstance
+instance (n : Type*) [Finite n] : ContinuousSMul ℝ (Matrix n n ℂ) := by
+  classical
+  letI : Fintype n := Fintype.ofFinite n
+  exact show ContinuousSMul ℝ (RestrictScalars ℝ ℂ (Matrix n n ℂ)) from inferInstance
 
 abbrev matrixContinuousSMulReal : ContinuousSMul ℝ (Matrix n n ℂ) := inferInstance
 

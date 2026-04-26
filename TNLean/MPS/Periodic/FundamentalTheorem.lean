@@ -7,6 +7,7 @@ import TNLean.MPS.FundamentalTheorem.Full
 import TNLean.MPS.BNT.PermutationRigidity
 import TNLean.MPS.Periodic.Overlap
 import TNLean.MPS.Periodic.ZGauge
+import TNLean.MPS.SharedInfra.Scaling
 
 open scoped Matrix BigOperators
 
@@ -229,6 +230,45 @@ theorem peripheralProportionalCase_periodicFT_of_sameMPV
       tendsto_nhds_unique (periodicSelfOverlap_tendsto A hA) hSelfZeroMul
   · exact ⟨hdim, hRep⟩
 
+/-- **Phase-rescaling reduction for the peripheral proportional case.**
+
+This Prop isolates the remaining scalar-absorption step behind
+`peripheralProportionalCase_periodicFT_of_sameMPV`: whenever a periodic tensor
+has an MPV family proportional to that of another tensor, one can rescale the
+periodic side by a unit-modulus phase so that the MPV families agree exactly. -/
+def PeripheralProportionalCaseRootFromRescaling (d D₁ D₂ : ℕ) : Prop :=
+  ∀ {A : MPSTensor d D₁} {B : MPSTensor d D₂} {m_a : ℕ},
+    IsPeriodic m_a A →
+    ProportionalMPV₂ A B →
+      ∃ ξ : ℂ, ‖ξ‖ = 1 ∧ SameMPV₂ (fun i => ξ • A i) B
+
+/-- **Peripheral proportional case from phase rescaling.**
+
+Assuming `PeripheralProportionalCaseRootFromRescaling`, the exact-equality theorem
+`peripheralProportionalCase_periodicFT_of_sameMPV` upgrades proportional periodic
+MPVs to `HetRepeatedBlocks`. Thus the remaining single-block proportional gap in
+Theorem 3.4 is exactly the phase-rescaling step provided by that hypothesis. -/
+theorem peripheralProportionalCase_periodicFT_of_rootFromRescaling
+    {D₁ D₂ : ℕ} [NeZero D₁] [NeZero D₂]
+    (hRescale : PeripheralProportionalCaseRootFromRescaling d D₁ D₂)
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂) {m_a m_b : ℕ}
+    (hA : IsPeriodic m_a A) (hB : IsPeriodic m_b B)
+    (hProp : ProportionalMPV₂ A B) :
+    HetRepeatedBlocks A B := by
+  obtain ⟨ξ, hξ, hSame⟩ := hRescale hA hProp
+  let A' : MPSTensor d D₁ := fun i => ξ • A i
+  have hA' : IsPeriodic m_a A' := by
+    simpa [A'] using isPeriodic_smul_of_norm_one (c := ξ) hξ A hA
+  have hScale : HetRepeatedBlocks A A' := by
+    have hRep : RepeatedBlocks A' A := by
+      refine ⟨ξ, 1, hξ, ?_⟩
+      intro i
+      simp [A']
+    exact (HetRepeatedBlocks.of_repeatedBlocks hRep).symm
+  have hRepeated : HetRepeatedBlocks A' B :=
+    peripheralProportionalCase_periodicFT_of_sameMPV A' B hA' hB hSame
+  exact hScale.trans hRepeated
+
 /-- **Theorem 3.4 (Proportional case, arXiv:1708.00029).**
 
 If two non-repeating block families satisfy the periodic overlap dichotomy, then
@@ -244,9 +284,11 @@ The proof mirrors `blocks_match_of_sameMPV₂_CFBNT` in `Full.lean`:
 3. Injective maps on finite types → equal cardinalities.
 4. Bijection construction.
 
-The single-block exact-MPV reduction is stated separately as
-`peripheralProportionalCase_periodicFT_of_sameMPV`: once the proportionality
-scalar has been absorbed, the overlap dichotomy already gives the heterogeneous
+The single-block proportional-to-equal reduction is now split explicitly.
+`PeripheralProportionalCaseRootFromRescaling` provides the missing phase-rescaling
+step, and `peripheralProportionalCase_periodicFT_of_rootFromRescaling` shows that,
+once this step is available, the exact-MPV theorem
+`peripheralProportionalCase_periodicFT_of_sameMPV` yields the heterogeneous
 repeated-block conclusion. Thus the remaining paper-level gap is the multi-block
 existence step that turns proportionality of the assembled tensors into the
 non-decaying cross-overlap hypotheses `exists_nondecaying_A/B`.

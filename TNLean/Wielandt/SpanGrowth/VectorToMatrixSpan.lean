@@ -35,8 +35,15 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-! ## Basic linear map lemmas -/
+/-! ## Main results
 
+* `MPSTensor.wordSpan_mul_le` — fixed-length word spans multiply into the span at
+  the summed length
+* `MPSTensor.wordSpan_top_of_mul` — full word span persists at positive multiples
+* `MPSTensor.wordSpan_eq_top_of_blockTensor_wordSpan_eq_top` — full blocked word
+  span gives a full unblocked word span
+
+## Basic linear map lemmas -/
 /-- The linear map `M ↦ M *ᵥ φ` for a fixed vector `φ`. -/
 def mulVecLinearMap (φ : Fin D → ℂ) :
     Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] (Fin D → ℂ) :=
@@ -92,6 +99,42 @@ theorem wordSpan_mul_le (A : MPSTensor d D) (m n : ℕ) :
       (evalWord_mem_wordSpan A (List.ofFn σ₁ ++ List.ofFn σ₂))
   -- Rewrite the product using `evalWord_append`.
   simpa [evalWord_append] using hmem
+
+/-- Helper: `⊤ * ⊤ = ⊤` for submodules of the matrix algebra. -/
+private theorem top_mul_top_eq_top :
+    (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) *
+      (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) = ⊤ := by
+  apply eq_top_iff.mpr
+  intro M _
+  simpa using
+    (Submodule.mul_mem_mul (show M ∈ (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) from
+        Submodule.mem_top)
+      (show (1 : Matrix (Fin D) (Fin D) ℂ) ∈ ⊤ from Submodule.mem_top))
+
+/-- If `wordSpan A N = ⊤`, then `wordSpan A (k * N) = ⊤` for any `k ≥ 1`. -/
+theorem wordSpan_top_of_mul (A : MPSTensor d D) {N : ℕ}
+    (htop : wordSpan A N = ⊤) :
+    ∀ k : ℕ, 1 ≤ k → wordSpan A (k * N) = ⊤ := by
+  intro k hk
+  induction k with
+  | zero => omega
+  | succ k ih =>
+      by_cases hk0 : k = 0
+      · simpa [hk0] using htop
+      · have hkge : 1 ≤ k := Nat.one_le_iff_ne_zero.mpr hk0
+        have hih : wordSpan A (k * N) = ⊤ := ih hkge
+        have hmul : wordSpan A (k * N) * wordSpan A N ≤ wordSpan A (k * N + N) :=
+          wordSpan_mul_le A (k * N) N
+        have htoptop : wordSpan A (k * N) * wordSpan A N = ⊤ := by
+          rw [hih, htop]
+          exact top_mul_top_eq_top
+        have hle : (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) ≤
+            wordSpan A (k * N + N) := by
+          rw [← htoptop]
+          exact hmul
+        have hlen : k * N + N = (k + 1) * N := by ring
+        rw [hlen] at hle
+        exact eq_top_iff.mpr hle
 
 /-! ## Blocking transfer: word spans for blocked tensors -/
 

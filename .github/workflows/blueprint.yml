@@ -11,6 +11,7 @@ on:
       - 'lake-manifest.json'
       - 'blueprint/src/**'
       - 'home_page/**'
+      - 'scripts/write_badges.py'
   workflow_dispatch:
 
 # Cancel previous runs if a new commit is pushed
@@ -39,6 +40,9 @@ jobs:
 
       - name: Install leanblueprint
         run: pip install leanblueprint
+
+      - name: Write status badges
+        run: python3 scripts/write_badges.py
 
       - name: Build blueprint
         run: |

@@ -28,11 +28,13 @@ the basic quantum entropy infrastructure needed for MPDO / RFP applications.
   tripartite partial traces preserve Hermiticity
 * `Matrix.traceLeft_isHermitian`, `Matrix.traceRight_isHermitian`:
   bipartite partial traces preserve Hermiticity
+* `Matrix.PosSemidef.traceLeft`, `Matrix.PosSemidef.traceRight`:
+  bipartite partial traces preserve positive semidefiniteness
 
 ## Status
 
-All results in this module are fully proved. The axiomatized strong
-subadditivity lives in `TNLean.Axioms.Entropy`, which is imported from
+All results in this module are fully proved. The externally stated strong
+subadditivity theorem lives in `TNLean.Axioms.Entropy`, which is imported from
 `TNLean.lean` for CI validation. See issue #239 for the deferred proof plan.
 
 ## Implementation notes
@@ -258,6 +260,32 @@ theorem Matrix.traceRight_isHermitian
   intro a₁ a₂
   simp only [Matrix.traceRight, star_sum]
   exact Finset.sum_congr rfl fun b _ => hρ.apply (a₁, b) (a₂, b)
+
+/-- `Matrix.traceLeft` (partial trace over the first factor) preserves positive
+semidefiniteness. This is a CP-map fact: the partial trace is the adjoint of the
+trivial embedding `X ↦ 1 ⊗ X`, hence completely positive, and in particular
+sends positive semidefinite matrices to positive semidefinite matrices. -/
+theorem Matrix.PosSemidef.traceLeft
+    {ρ : Matrix (Fin dA × Fin dB) (Fin dA × Fin dB) ℂ}
+    (hρ : ρ.PosSemidef) : (Matrix.traceLeft ρ).PosSemidef := by
+  have h_eq : (Matrix.traceLeft ρ : Matrix (Fin dB) (Fin dB) ℂ)
+      = ∑ k : Fin dA, ρ.submatrix (Prod.mk k) (Prod.mk k) := by
+    ext i j
+    simp only [Matrix.traceLeft_apply, Matrix.sum_apply, Matrix.submatrix_apply]
+  rw [h_eq]
+  exact Matrix.posSemidef_sum _ (fun _ _ => hρ.submatrix _)
+
+/-- `Matrix.traceRight` (partial trace over the second factor) preserves
+positive semidefiniteness. See `Matrix.PosSemidef.traceLeft`. -/
+theorem Matrix.PosSemidef.traceRight
+    {ρ : Matrix (Fin dA × Fin dB) (Fin dA × Fin dB) ℂ}
+    (hρ : ρ.PosSemidef) : (Matrix.traceRight ρ).PosSemidef := by
+  have h_eq : (Matrix.traceRight ρ : Matrix (Fin dA) (Fin dA) ℂ)
+      = ∑ k : Fin dB, ρ.submatrix (fun a => (a, k)) (fun a => (a, k)) := by
+    ext i j
+    simp only [Matrix.traceRight_apply, Matrix.sum_apply, Matrix.submatrix_apply]
+  rw [h_eq]
+  exact Matrix.posSemidef_sum _ (fun _ _ => hρ.submatrix _)
 
 end BipartiteHermiticity
 

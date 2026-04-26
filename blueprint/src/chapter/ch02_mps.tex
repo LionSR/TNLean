@@ -224,6 +224,27 @@ boundary conditions (PBC).
     and each step picks up one factor of $\zeta$.
 \end{proof}
 
+\begin{lemma}[Scaling of MPV components]\label{lem:mpv_smul}
+    \lean{MPSTensor.mpv_smul}
+    \leanok
+    \uses{def:mpv, lem:eval_word_smul}
+    Let $\zeta A$ denote the tensor with matrices
+    $\{\zeta \, A^i\}_{i=0}^{d-1}$.
+    Then for every $N$ and every configuration
+    $\sigma = (i_1, \ldots, i_N)$,
+    \[
+        V^{(N)}(\zeta A)_\sigma
+            \;=\; \zeta^{N} \, V^{(N)}(A)_\sigma.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:eval_word_smul}
+    Apply Lemma~\ref{lem:eval_word_smul} to the word
+    $w = (i_1, \ldots, i_N)$ of length $N$, then take the trace; the scalar
+    $\zeta^{N}$ pulls out by linearity.
+\end{proof}
+
 \begin{definition}[Gauge-phase equivalence]\label{def:gauge_phase_equiv}
     \lean{MPSTensor.GaugePhaseEquiv}
     \leanok
@@ -317,6 +338,22 @@ boundary conditions (PBC).
     An injective tensor is $1$-block injective.
 \end{definition}
 
+\begin{lemma}[One-site injectivity gives one-block injectivity]
+    \label{lem:one_block_injective_of_injective}
+    \lean{MPSTensor.isNBlkInjective_one_of_isInjective}
+    \leanok
+    \uses{def:injective, def:l_blk_injective}
+    If the one-site matrices $\{A^i\}_{i=0}^{d-1}$ span $\MN{D}$, then the
+    length-one word products span $\MN{D}$, so $A$ is $1$-block injective.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The length-one words are exactly the letters $i \in \{0,\ldots,d-1\}$, and
+    evaluating a length-one word gives the matrix $A^i$. Thus the length-one
+    word span is the same span as in one-site injectivity.
+\end{proof}
+
 \begin{definition}[Normal tensor]\label{def:normal}
     \lean{MPSTensor.IsNormal}
     \leanok
@@ -384,6 +421,53 @@ boundary conditions (PBC).
     arguments.
 \end{remark}
 
+\begin{definition}[Block projection]\label{def:block_projection}
+    \lean{Matrix.blockProjection}
+    \leanok
+    For a finite direct sum $\bigoplus_k \C^{D_k}$, the block projection $P_j$
+    is the matrix that is the identity on the $j$-th summand and zero on all
+    other summands.
+\end{definition}
+
+\begin{definition}[Block-diagonal matrix]\label{def:block_diagonal_matrix}
+    \lean{Matrix.IsBlockDiagonal'}
+    \leanok
+    A matrix on $\bigoplus_k \C^{D_k}$ is block diagonal if it is a direct sum
+    of square matrices, one on each summand.
+\end{definition}
+
+\begin{lemma}[Off-block characterization]\label{lem:block_diagonal_iff_off_block_zero}
+    \lean{Matrix.isBlockDiagonal'_iff_offBlock_zero}
+    \leanok
+    \uses{def:block_diagonal_matrix}
+    A matrix on $\bigoplus_k \C^{D_k}$ is block diagonal if and only if every
+    entry from one summand to a distinct summand is zero.
+\end{lemma}
+
+\begin{proof}\leanok
+    The forward direction is immediate from the definition of a direct sum of
+    matrices.  Conversely, if all off-block entries vanish, the diagonal blocks
+    reconstruct the original matrix.
+\end{proof}
+
+\begin{lemma}[Commutation with block projections]
+    \label{lem:block_diagonal_of_commutes_block_projection}
+    \lean{Matrix.isBlockDiagonal'_of_commutes_blockProjection}
+    \leanok
+    \uses{def:block_projection, def:block_diagonal_matrix,
+        lem:block_diagonal_iff_off_block_zero}
+    If a matrix on $\bigoplus_k \C^{D_k}$ commutes with every block projection
+    $P_j$, then it is block diagonal.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:block_diagonal_iff_off_block_zero}
+    Compare the $(i,j)$ block of the identity $XP_j=P_jX$ for $i\ne j$.
+    The right multiplication by $P_j$ keeps that block, while the left
+    multiplication by $P_j$ kills it.  Hence every off-block entry is zero,
+    and Lemma~\ref{lem:block_diagonal_iff_off_block_zero} applies.
+\end{proof}
+
 \begin{definition}[Block-diagonal tensor from blocks]\label{def:block_diagonal_tensor}
     \lean{MPSTensor.toTensorFromBlocks}
     \leanok
@@ -398,10 +482,27 @@ boundary conditions (PBC).
     \]
 \end{definition}
 
+\begin{lemma}[Word evaluation of a block-diagonal tensor]
+    \label{lem:eval_word_block_diagonal_tensor}
+    \lean{MPSTensor.evalWord_toTensorFromBlocks_eq_reindex_blockDiagonal}
+    \leanok
+    \uses{def:block_diagonal_tensor, def:eval_word}
+    For a word $w$, the word evaluation of a block-diagonal tensor remains
+    block diagonal:
+    \[
+        A^w = \bigoplus_k \mu_k^{|w|} A_k^w .
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    Induct on the word and multiply block-diagonal matrices block by block;
+    every letter contributes one scalar factor $\mu_k$ on the $k$-th block.
+\end{proof}
+
 \begin{theorem}[MPV decomposition]\label{thm:mpv_decomposition}
     \lean{MPSTensor.mpv_toTensorFromBlocks_eq_sum}
     \leanok
-    \uses{def:block_diagonal_tensor, def:mpv}
+    \uses{def:block_diagonal_tensor, def:mpv, lem:eval_word_block_diagonal_tensor}
     The MPV of a block-diagonal tensor decomposes as
     \[
         \ket{V^{(N)}(A)}
@@ -415,16 +516,11 @@ boundary conditions (PBC).
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:block_diagonal_tensor, def:mpv, lem:eval_word_smul}
-    For each physical index~$i$, the block-diagonal tensor
-    $A^i = \bigoplus_k \mu_k A_k^i$ is a block-diagonal matrix.
-    By Lemma~\ref{lem:eval_word_smul},
-    the word evaluation of each block picks up a factor
-    $\mu_k^{|w|}$, and the full word evaluation is block-diagonal
-    with blocks $\mu_k^N A_k^w$.
-    Taking the trace of a block-diagonal matrix gives the sum
-    of the block traces:
-    $\tr(A^w) = \sum_k \mu_k^N \tr(A_k^w)$.
+    \uses{def:block_diagonal_tensor, def:mpv, lem:eval_word_block_diagonal_tensor}
+    By Lemma~\ref{lem:eval_word_block_diagonal_tensor}, the full word evaluation
+    is block diagonal with blocks $\mu_k^N A_k^w$ for a word $w$ of length $N$.
+    Taking the trace of a block-diagonal matrix gives the sum of the block
+    traces: $\tr(A^w) = \sum_k \mu_k^N \tr(A_k^w)$.
 \end{proof}
 
 \section{Blocking}

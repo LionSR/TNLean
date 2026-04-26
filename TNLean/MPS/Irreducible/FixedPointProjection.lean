@@ -199,6 +199,49 @@ lemma mul_supportProj (hρ_psd : ρ.PosSemidef) :
   -- Rewrite.
   simpa [Matrix.conjTranspose_mul, hHermP.eq, hHermρ.eq] using this
 
+/-- Kernel inclusion `ker ρ ≤ ker (supportProj ρ)`: if `ρ *ᵥ v = 0`, then the support
+projection also annihilates `v`. -/
+theorem supportProj_mulVec_eq_zero_of_mulVec_eq_zero
+    (v : Fin D → ℂ) (hv : ρ *ᵥ v = 0) :
+    supportProj (D := D) ρ hρ *ᵥ v = 0 := by
+  classical
+  let hH : ρ.IsHermitian := hρ.isHermitian
+  set U : Matrix (Fin D) (Fin D) ℂ := ↑hH.eigenvectorUnitary
+  set s : Fin D → ℂ := fun i => if 0 < hH.eigenvalues i then 1 else 0
+  have hUU : Uᴴ * U = 1 := by
+    rw [← Matrix.star_eq_conjTranspose]
+    simp [U]
+  set w : Fin D → ℂ := Uᴴ *ᵥ v
+  have hρ_spec : ρ = U * Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ)) * Uᴴ := by
+    simpa [U] using (spectral_decomp_eq (D := D) ρ hH)
+  have hΛw : Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ)) *ᵥ w = 0 := by
+    have hρv : (U * Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ)) * Uᴴ) *ᵥ v = 0 := by
+      rw [← hρ_spec]; exact hv
+    have hUΛw : U *ᵥ (Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ)) *ᵥ w) = 0 := by
+      simpa [w, Matrix.mulVec_mulVec, Matrix.mul_assoc] using hρv
+    have hUΛw' : Uᴴ *ᵥ (U *ᵥ (Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ)) *ᵥ w)) = 0 := by
+      simp [hUΛw]
+    have : (Uᴴ * U) *ᵥ (Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ)) *ᵥ w) = 0 := by
+      simpa [Matrix.mulVec_mulVec, Matrix.mul_assoc] using hUΛw'
+    simpa [Matrix.mulVec_mulVec, hUU] using this
+  have h_comp : ∀ j, (↑(hH.eigenvalues j) : ℂ) * w j = 0 := fun j => by
+    have := congrFun hΛw j
+    simpa [Matrix.mulVec, dotProduct, Matrix.diagonal_apply] using this
+  have hSw : Matrix.diagonal s *ᵥ w = 0 := by
+    ext j
+    rw [Matrix.mulVec_diagonal]
+    by_cases hjpos : 0 < hH.eigenvalues j
+    · have hwj : w j = 0 := by
+        have hEig_ne : (↑(hH.eigenvalues j) : ℂ) ≠ 0 := by
+          exact_mod_cast (ne_of_gt hjpos)
+        exact (mul_eq_zero.mp (h_comp j)).resolve_left hEig_ne
+      simp [s, hjpos, hwj]
+    · simp [s, hjpos]
+  have hP_def : supportProj (D := D) ρ hρ = U * Matrix.diagonal s * Uᴴ := by rfl
+  have hPeval : (U * Matrix.diagonal s * Uᴴ) *ᵥ v = U *ᵥ (Matrix.diagonal s *ᵥ w) := by
+    simp [w, U, Matrix.mulVec_mulVec, Matrix.mul_assoc]
+  simp [hP_def, hPeval, hSw]
+
 end SupportProjLemmas
 
 
@@ -301,52 +344,8 @@ theorem lowerZero_of_posSemidef_fixedPoint
             rw [hv]
             simp only [Matrix.mulVec_zero]
   -- Kernel inclusion: `ker ρ ⊆ ker P` (spectral argument).
-  have ker_ρ_sub_ker_P : ∀ v, ρ *ᵥ v = 0 → P *ᵥ v = 0 := by
-    intro v hv
-    -- Expand the definition of the support projector.
-    let hH : ρ.IsHermitian := hρ_psd.isHermitian
-    set U : Matrix (Fin D) (Fin D) ℂ := ↑hH.eigenvectorUnitary
-    set s : Fin D → ℂ := fun i => if 0 < hH.eigenvalues i then 1 else 0
-    have hUU : Uᴴ * U = 1 := by
-      rw [← Matrix.star_eq_conjTranspose]
-      simp [U]
-    -- Work in the eigenbasis: `w := Uᴴ *ᵥ v`.
-    set w : Fin D → ℂ := Uᴴ *ᵥ v
-    have hΛw : Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ)) *ᵥ w = 0 := by
-      have hρv : (U * Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ)) * Uᴴ) *ᵥ v = 0 :=
-        spectral_decomp_eq (D := D) ρ hH ▸ hv
-      set Λ : Matrix (Fin D) (Fin D) ℂ := Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ))
-      have hUΛw : U *ᵥ (Λ *ᵥ w) = 0 := by
-        rw [Matrix.mulVec_mulVec, show w = Uᴴ *ᵥ v from rfl, Matrix.mulVec_mulVec]
-        exact hρv
-      have : Uᴴ *ᵥ (U *ᵥ (Λ *ᵥ w)) = 0 := by
-        rw [hUΛw]
-        simp only [Matrix.mulVec_zero]
-      rwa [Matrix.mulVec_mulVec, hUU, Matrix.one_mulVec] at this
-    have h_comp : ∀ j, (↑(hH.eigenvalues j) : ℂ) * w j = 0 := fun j => by
-      have := congrFun hΛw j
-      simp only [Matrix.mulVec, dotProduct, Matrix.diagonal_apply, Pi.zero_apply,
-        ite_mul, zero_mul, Finset.sum_ite_eq, Finset.mem_univ, ite_true] at this
-      exact this
-    have hSw : Matrix.diagonal s *ᵥ w = 0 := by
-      ext j
-      -- Entrywise, multiplying by a diagonal matrix scales each coordinate.
-      rw [Matrix.mulVec_diagonal]
-      by_cases hjpos : 0 < hH.eigenvalues j
-      · have : w j = 0 := by
-          have hEig_ne : (↑(hH.eigenvalues j) : ℂ) ≠ 0 := by
-            exact_mod_cast (ne_of_gt hjpos)
-          exact (mul_eq_zero.mp (h_comp j)).resolve_left hEig_ne
-        simp [s, hjpos, this]
-      · simp [s, hjpos]
-    -- Finish: compute `P *ᵥ v` in the `U` eigenbasis.
-    have hP_def : P = U * Matrix.diagonal s * Uᴴ := by
-      simp [P, supportProj, U, s]
-    change (U * Matrix.diagonal s * Uᴴ) *ᵥ v = 0
-    have : (U * Matrix.diagonal s * Uᴴ) *ᵥ v = U *ᵥ (Matrix.diagonal s *ᵥ w) := by
-      rw [Matrix.mulVec_mulVec, Matrix.mulVec_mulVec]
-    rw [this, hSw]
-    simp only [Matrix.mulVec_zero]
+  have ker_ρ_sub_ker_P : ∀ v, ρ *ᵥ v = 0 → P *ᵥ v = 0 := fun v hv =>
+    supportProj_mulVec_eq_zero_of_mulVec_eq_zero (D := D) ρ hρ_psd v hv
   -- Complement-zero (invariance) statement.
   have h_complement_zero : ∀ i : Fin d, (1 - P) * A i * P = 0 := by
     intro i

@@ -26,8 +26,9 @@ entropy namespace used by the Simple MPDO RFP track
   the bipartite mutual information
   `I(A:B) = S(ρ_A) + S(ρ_B) − S(ρ_AB)`.
 * `Entropy.mutualInformation_ssa_trivial_B_nonneg` — the nonnegativity
-  of the tripartite mutual information in the trivial-middle form
-  (a direct consequence of `subadditivity_ssa_trivial_B`).
+  of the tripartite mutual information in the trivial-middle form,
+  derived from `subadditivity_ssa_trivial_B` with no extra reduced-trace
+  hypothesis.
 
 ## References
 
@@ -68,14 +69,13 @@ form: `S(ρ_AB) + S(ρ_BC) − S(ρ_ABC) ≥ 0`. Direct corollary of
 theorem mutualInformation_ssa_trivial_B_nonneg
     (ρ_ABC : Matrix (Fin dA × Fin 1 × Fin dC)
       (Fin dA × Fin 1 × Fin dC) ℂ)
-    (hρ_dm : ρ_ABC.PosSemidef ∧ ρ_ABC.trace = 1)
-    (h_mid_trace : (traceAC_ABC ρ_ABC).trace = 1) :
+    (hρ_dm : ρ_ABC.PosSemidef ∧ ρ_ABC.trace = 1) :
     0 ≤ Entropy.vonNeumannEntropy (traceC_ABC ρ_ABC)
           (traceC_ABC_isHermitian hρ_dm.1.isHermitian)
         + Entropy.vonNeumannEntropy (traceA_ABC ρ_ABC)
             (traceA_ABC_isHermitian hρ_dm.1.isHermitian)
         - Entropy.vonNeumannEntropy ρ_ABC hρ_dm.1.isHermitian := by
-  have h := subadditivity_ssa_trivial_B ρ_ABC hρ_dm h_mid_trace
+  have h := subadditivity_ssa_trivial_B ρ_ABC hρ_dm
   linarith
 
 end Nonnegativity
