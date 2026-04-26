@@ -296,7 +296,8 @@ theorem CyclicWindowsDisjoint.symm {N : ℕ} {L : ℕ} {i j : Fin N}
     (hij : CyclicWindowsDisjoint L i j) : CyclicWindowsDisjoint L j i :=
   fun k hj hi => hij k hi hj
 
-private theorem cyclicWindowsDisjoint_of_not_cyclicWindowsOverlap {N L : ℕ}
+/-- If the cyclic supports of two windows do not overlap, then the windows are site-disjoint. -/
+theorem CyclicWindowsDisjoint.of_not_cyclicWindowsOverlap {N L : ℕ}
     {i j : Fin N} (hij : ¬ cyclicWindowsOverlap N L i j) :
     CyclicWindowsDisjoint L i j := by
   intro k hki hkj
@@ -1083,7 +1084,7 @@ theorem parentHamiltonianES_gap_bound_of_cyclic_window_friedrichs
     (fun N hLN i => cyclicWindowsOverlap_card_le hLN hL i)
     (fun N hLN i j _hij hnot v =>
       localTermES_re_inner_nonneg_of_cyclic_windows_disjoint A (by omega)
-        (cyclicWindowsDisjoint_of_not_cyclicWindowsOverlap hnot) v)
+        (CyclicWindowsDisjoint.of_not_cyclicWindowsOverlap hnot) v)
     hFriedrichs
 
 /-! ### Uniform spectral gap for the MPS parent Hamiltonian -/
