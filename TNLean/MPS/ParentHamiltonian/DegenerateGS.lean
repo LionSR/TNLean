@@ -471,6 +471,94 @@ theorem parentHamiltonianGroundSpace_le_bntSpan_of_reindexed_projectionSpan
     chainGroundSpace_toTensorFromBlocks_le_iSup_of_reindexed_projectionSpan
       (μ := μ) A hCF hL hN hm hProj hBoundary'
 
+private lemma reindexed_projectionSpan_of_wordTupleSpanTop
+    (A : (j : Fin r) → MPSTensor d (dim j))
+    (hCF : IsCanonicalFormBNT μ A) {m : ℕ}
+    (hSpan : WordTupleSpanTop A m) :
+    ∀ k : Fin r,
+      Matrix.blockProjection (n := fun k : Fin r => Fin (dim k)) (R := ℂ) k ∈
+        Submodule.span ℂ (Set.range fun ω : Fin m → Fin d =>
+          Matrix.reindex finSigmaFinEquiv.symm finSigmaFinEquiv.symm
+            (evalWord (toTensorFromBlocks μ A) (List.ofFn ω))) :=
+  blockProjection_mem_span_reindexed_toTensorFromBlocks_of_wordTupleSpanTop
+    (d := d) (dim := dim) μ A
+    (fun k => hCF.toHasStrictOrderedNonzeroWeights.mu_ne_zero k) hSpan
+
+/-- Conditional reverse block split from a product-word span witness.
+
+This is the Route B composition of the #927 product-word-span reduction with the
+#929 projection-span block-split endgame. The finite product-word span hypothesis
+`WordTupleSpanTop A m` is the #934 witness; the boundary hypothesis keeps the
+wrapping/open-chain step explicit by requiring each assembled chain-ground vector
+to come with a length-`m` commuting boundary-matrix representation. -/
+theorem chainGroundSpace_toTensorFromBlocks_le_iSup_of_wordTupleSpanTop
+    (A : (j : Fin r) → MPSTensor d (dim j))
+    (hCF : IsCanonicalFormBNT μ A) {L N m : ℕ}
+    (hL : 1 < L) (hN : N ≥ L + 1) (hm : 0 < m)
+    (hSpan : WordTupleSpanTop A m)
+    (hBoundary : ∀ ⦃ψ : NSiteSpace d N⦄,
+      ψ ∈ chainGroundSpace (toTensorFromBlocks μ A) L N →
+        ∃ X : Matrix (Fin (∑ k : Fin r, dim k)) (Fin (∑ k : Fin r, dim k)) ℂ,
+          ψ = groundSpaceMap (toTensorFromBlocks μ A) N X ∧
+          ∀ ω : Fin m → Fin d,
+            X * evalWord (toTensorFromBlocks μ A) (List.ofFn ω) =
+              evalWord (toTensorFromBlocks μ A) (List.ofFn ω) * X) :
+    chainGroundSpace (toTensorFromBlocks μ A) L N ≤
+      ⨆ j : Fin r, chainGroundSpace (A j) L N :=
+  chainGroundSpace_toTensorFromBlocks_le_iSup_of_reindexed_projectionSpan
+    (μ := μ) A hCF hL hN hm
+    (reindexed_projectionSpan_of_wordTupleSpanTop (μ := μ) A hCF hSpan)
+    hBoundary
+
+/-- Conditional periodic block-decomposition equality from a product-word span witness.
+
+This records the exact equality obtained once #934 supplies the finite
+product-word span and the wrapping/open-chain layer supplies the compatible
+commuting boundary matrix.  It is still conditional on those two paper-level
+inputs, and is therefore not a restatement of the final unconditional theorem. -/
+theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_of_wordTupleSpanTop
+    (A : (j : Fin r) → MPSTensor d (dim j))
+    (hCF : IsCanonicalFormBNT μ A) {L N m : ℕ}
+    (hL : 1 < L) (hN : N ≥ L + 1) (hm : 0 < m)
+    (hSpan : WordTupleSpanTop A m)
+    (hBoundary : ∀ ⦃ψ : NSiteSpace d N⦄,
+      ψ ∈ chainGroundSpace (toTensorFromBlocks μ A) L N →
+        ∃ X : Matrix (Fin (∑ k : Fin r, dim k)) (Fin (∑ k : Fin r, dim k)) ℂ,
+          ψ = groundSpaceMap (toTensorFromBlocks μ A) N X ∧
+          ∀ ω : Fin m → Fin d,
+            X * evalWord (toTensorFromBlocks μ A) (List.ofFn ω) =
+              evalWord (toTensorFromBlocks μ A) (List.ofFn ω) * X) :
+    chainGroundSpace (toTensorFromBlocks μ A) L N =
+      ⨆ j : Fin r, chainGroundSpace (A j) L N :=
+  chainGroundSpace_toTensorFromBlocks_eq_iSup_of_reindexed_projectionSpan
+    (μ := μ) A hCF hL hN hm
+    (reindexed_projectionSpan_of_wordTupleSpanTop (μ := μ) A hCF hSpan)
+    hBoundary
+
+/-- Conditional BNT-span containment from a product-word span witness.
+
+This is the final Route B composition used in the proof of the reverse inclusion:
+#927 converts the product-word span witness into the sector-projection span, #929
+turns that projection span plus the boundary representation into a block split,
+and the existing blockwise uniqueness endgame places the result in `bntSpan`. -/
+theorem parentHamiltonianGroundSpace_le_bntSpan_of_wordTupleSpanTop
+    (A : (j : Fin r) → MPSTensor d (dim j))
+    (hCF : IsCanonicalFormBNT μ A) {L N m : ℕ}
+    (hL : 1 < L) (hN : N ≥ L + 1) (hm : 0 < m)
+    (hSpan : WordTupleSpanTop A m)
+    (hBoundary : ∀ ⦃ψ : NSiteSpace d N⦄,
+      ψ ∈ parentHamiltonianGroundSpace (μ := μ) A L N →
+        ∃ X : Matrix (Fin (∑ k : Fin r, dim k)) (Fin (∑ k : Fin r, dim k)) ℂ,
+          ψ = groundSpaceMap (toTensorFromBlocks μ A) N X ∧
+          ∀ ω : Fin m → Fin d,
+            X * evalWord (toTensorFromBlocks μ A) (List.ofFn ω) =
+              evalWord (toTensorFromBlocks μ A) (List.ofFn ω) * X) :
+    parentHamiltonianGroundSpace (μ := μ) A L N ≤ bntSpan A N :=
+  parentHamiltonianGroundSpace_le_bntSpan_of_reindexed_projectionSpan
+    (μ := μ) A hCF hL hN hm
+    (reindexed_projectionSpan_of_wordTupleSpanTop (μ := μ) A hCF hSpan)
+    hBoundary
+
 /-- Reverse-inclusion step for the BNT ground-space theorem.
 
 This is the remaining block-decomposition step: every periodic-chain ground state
@@ -507,10 +595,11 @@ splitting theorem** of the form
 `parentHamiltonianGroundSpace (μ := μ) A L N ≤ ⨆ j, chainGroundSpace (A j) L N`,
 saying that a state whose cyclic windows all lie in the block-diagonal local
 ground space decomposes into a sum of block chain-ground-state components. The
-conditional Route B endgame in this file supplies the algebraic off-block-zero
-step once the #911 virtual-sector projection-span input is available and the
-wrapping/open-chain comparison has produced a commuting boundary matrix; it does
-not replace either of those remaining structural inputs.
+conditional Route B endgame in this file composes two still-explicit inputs: a
+finite product-word span witness for #934 (which gives the virtual-sector
+projection span) and a wrapping/open-chain boundary representation commuting
+with the same length words. It does not replace either paper-level input, so it
+does not close the unconditional block-splitting theorem by itself.
 
 Given that block-splitting theorem, the ⊆ direction becomes:
 ```
