@@ -16,12 +16,14 @@ projection/commutant input.
 
 ## Lean declarations added
 
-File: `TNLean/MPS/CanonicalForm/BlockDiagonalCommutant.lean`
+File: `TNLean/MPS/Defs.lean`
 
 - `MPSTensor.isNBlkInjective_one_of_isInjective`
   - Records that one-site injectivity is `1`-block injectivity.
   - This supplies the prefix length used when concatenating block-spanning words with selector
-    words.
+    words, and `MPSTensor.IsInjective.isNormal` now reuses the lemma.
+
+File: `TNLean/MPS/CanonicalForm/BlockDiagonalCommutant.lean`
 
 - `MPSTensor.blockProjection_mem_span_reindexed_toTensorFromBlocks_of_wordTupleSpanTop`
   - `WordTupleSpanTop` spelling of the existing raw product-span projection theorem.

@@ -160,30 +160,6 @@ namespace MPSTensor
 
 variable {d r : ℕ} {dim : Fin r → ℕ}
 
-/-- One-site algebraic injectivity is the same as `1`-block injectivity.
-
-This records the fixed-length form needed when a canonical-form block is
-concatenated with a block-selector word: the one-letter prefix spans the chosen
-matrix algebra, while the selector word kills all other blocks. -/
-theorem isNBlkInjective_one_of_isInjective {D : ℕ} {A : MPSTensor d D}
-    (hA : IsInjective A) :
-    IsNBlkInjective A 1 := by
-  unfold IsNBlkInjective
-  have hrange : (Set.range fun σ : Fin 1 → Fin d => evalWord A (List.ofFn σ)) =
-      Set.range A := by
-    ext M
-    constructor
-    · rintro ⟨σ, hσ⟩
-      refine ⟨σ 0, ?_⟩
-      simpa only [List.ofFn_succ, List.ofFn_zero, evalWord_cons,
-        evalWord_nil, mul_one] using hσ
-    · rintro ⟨i, hi⟩
-      refine ⟨fun _ => i, ?_⟩
-      simpa only [List.ofFn_succ, List.ofFn_zero, evalWord_cons,
-        evalWord_nil, mul_one] using hi
-  rw [hrange]
-  exact hA
-
 /-- Finite product-word span gives the projection-span input for the assembled tensor.
 
 Assume that the simultaneous length-`m` word evaluations
@@ -341,8 +317,7 @@ theorem exists_pos_productWordSpan_of_isCanonicalFormBNT_of_blockSelectorWords
         fun k : Fin r => evalWord (A k) (List.ofFn ω)) =
       (⊤ : Submodule ℂ
         ((k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) := by
-  refine ⟨1 + S, ?_, ?_⟩
-  · simp [Nat.add_comm]
+  refine ⟨1 + S, Nat.add_pos_left Nat.zero_lt_one S, ?_⟩
   simpa [WordTupleSpanTop, wordTuple] using
     wordTupleSpanTop_of_isCanonicalFormBNT_of_blockSelectorWords μ A hCF hSel
 
