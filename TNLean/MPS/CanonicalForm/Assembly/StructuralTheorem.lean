@@ -481,7 +481,7 @@ theorem sameMPV₂_live_of_sameMPV₂_with_zeroTail_eq
       mpv A σ = mpv (zeroMPSTensor d z₁) σ + mpv liveA σ)
     (hB : ∀ (N : ℕ) (σ : Fin N → Fin d),
       mpv B σ = mpv (zeroMPSTensor d z₂) σ + mpv liveB σ)
-    (hz : (z₁ : ℂ) = (z₂ : ℂ)) :
+    (hz : z₁ = z₂) :
     SameMPV₂ liveA liveB := by
   intro N σ
   have hsum :
@@ -501,8 +501,8 @@ theorem sameMPV₂_live_of_sameMPV₂_with_zeroTail_eq
       simp
     have hsum' :
         (z₂ : ℂ) + mpv liveA σ = (z₂ : ℂ) + mpv liveB σ := by
-      rw [hz₁mpv, hz₂mpv, hz]
-        at hsum
+      rw [hz₁mpv, hz₂mpv] at hsum
+      rw [hz] at hsum
       exact hsum
     exact add_left_cancel hsum'
   · have hz₁mpv : mpv (zeroMPSTensor d z₁) σ = 0 := by
@@ -514,7 +514,7 @@ theorem sameMPV₂_live_of_sameMPV₂_with_zeroTail_eq
     have hsum' : (0 : ℂ) + mpv liveA σ = 0 + mpv liveB σ := by
       rw [hz₁mpv, hz₂mpv] at hsum
       exact hsum
-    simpa using hsum'
+    simpa [zero_add] using hsum'
 
 /-- **Common live-block sector comparison with explicit zero-tail bookkeeping.**
 
@@ -546,7 +546,7 @@ theorem fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_overlapSp
         mpv (blockTensor (d := d) (D := D₂) B p) σ =
           mpv (zeroMPSTensor (blockPhysDim d p) zeroTailB) σ +
             mpv (toTensorFromBlocks (d := blockPhysDim d p) (μ := μB) blocksB) σ)
-    (hZeroTail : (zeroTailA : ℂ) = (zeroTailB : ℂ))
+    (hZeroTail : zeroTailA = zeroTailB)
     (hTPA : ∀ k, ∑ i : Fin (blockPhysDim d p), (blocksA k i)ᴴ * blocksA k i = 1)
     (hTPB : ∀ k, ∑ i : Fin (blockPhysDim d p), (blocksB k i)ᴴ * blocksB k i = 1)
     (hIrrA : ∀ k, IsIrreducibleTensor (blocksA k))
