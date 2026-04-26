@@ -6,7 +6,7 @@ import TNLean.MPS.ParentHamiltonian.Basic
 import TNLean.MPS.ParentHamiltonian.BlockStrip
 import TNLean.MPS.ParentHamiltonian.CyclicWindow
 import TNLean.MPS.FundamentalTheorem.FiniteLength
-import TNLean.Wielandt.RectangularSpan.Basic
+import TNLean.Wielandt.SpanGrowth.VectorToMatrixSpan
 
 /-!
 # Wrapping window argument for periodic MPS chains
