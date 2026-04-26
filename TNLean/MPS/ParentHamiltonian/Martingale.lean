@@ -348,18 +348,10 @@ private theorem sameOutsideWindow_of_cyclicCfg_eq {N : ℕ} (hN : 0 < N) {L : �
   have hEqk := congrFun hEq k
   simpa [cyclicCfg, hk] using hEqk
 
-private theorem cyclic_offset_add_mod_eq {N : ℕ} {i : Fin N} {r : ℕ} (hr : r < N) :
-    (((i.val + r) % N + N - i.val) % N) = r := by
-  rcases lt_or_ge (i.val + r) N with hir | hir
-  · rw [Nat.mod_eq_of_lt hir, show i.val + r + N - i.val = r + N from by omega,
-      Nat.add_mod_right, Nat.mod_eq_of_lt hr]
-  · rw [Nat.mod_eq_sub_mod hir, Nat.mod_eq_of_lt (by omega : i.val + r - N < N),
-      show i.val + r - N + N - i.val = r from by omega, Nat.mod_eq_of_lt hr]
-
 private theorem cyclic_offset_window_site_lt {N L : ℕ} (hLN : L ≤ N) (i : Fin N)
     (r : Fin L) :
     (((i.val + r.val) % N + N - i.val) % N) < L := by
-  rw [cyclic_offset_add_mod_eq (i := i) (r := r.val) (Nat.lt_of_lt_of_le r.isLt hLN)]
+  rw [offset_mod_eq i.isLt (Nat.lt_of_lt_of_le r.isLt hLN)]
   exact r.isLt
 
 private theorem extractWindow_replaceWindow_of_cyclic_windows_disjoint {N L : ℕ}
