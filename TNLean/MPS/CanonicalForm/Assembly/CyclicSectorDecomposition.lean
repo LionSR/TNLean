@@ -61,7 +61,7 @@ namespace MPSTensor
 variable {d D : ℕ}
 
 /-!
-## Cyclic sector decomposition via the CyclicSectors API
+## Cyclic sector decomposition from cyclic-sector data
 
 ### Mathematical overview
 
@@ -963,7 +963,7 @@ theorem primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking_o
 /-- Unconditional cyclic-sector block primitivity and irreducibility after blocking.
 
 This uses `isIrreducibleOnCorner_of_cyclic_decomp_mps`, so the older
-`hProjStep` and `SectorFixedPointAlgebraRigidity` interfaces are no longer needed
+projection-step and fixed-point-algebra rigidity assumptions are no longer needed
 once the ambient tensor is irreducible and trace-preserving. -/
 theorem primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking
     {d D m : ℕ} [NeZero D] [NeZero m]
@@ -1020,9 +1020,9 @@ theorem primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking
 
 This strengthens `exists_cyclic_sector_decomp_of_TP_of_isIrreducibleTensor` by
 exposing the primitive and irreducible conclusions already available from the
-unconditional sector-orbit lift. It is the public one-block interface needed by
-later assembly steps before flattening the sectors of all live blocks to a common
-period. -/
+unconditional sector-orbit lift. It is the one-block result used in the later
+multi-block construction before the sectors of all live blocks are flattened to
+a common period. -/
 theorem exists_primitive_irreducible_cyclic_sector_decomp_of_TP_of_isIrreducibleTensor
     {d D : ℕ} [NeZero D]
     (A : MPSTensor d D)

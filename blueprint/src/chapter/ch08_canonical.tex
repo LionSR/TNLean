@@ -1414,7 +1414,8 @@ The following results separate the zero blocks from the
 \end{theorem}
 
 \begin{proof}\leanok
-	\uses{thm:cyclic_sector_decomp_after_blocking, thm:blocked_sector_unconditional}
+	\uses{thm:conjtranspose_kraus_setup, thm:peripheral_cyclic_structure,
+		thm:cyclic_sector_decomp_after_blocking, thm:blocked_sector_unconditional}
 	The proof repeats the cyclic-sector construction of
 	Theorem~\ref{thm:cyclic_sector_decomp_irr_tp}, keeps the projection and
 	compression data, and applies
@@ -2563,8 +2564,8 @@ The following results separate the zero blocks from the
 	\leanok
 	\uses{thm:live_block_zero_tail_bookkeeping}
 	In the setting of Theorem~\ref{thm:live_block_zero_tail_bookkeeping}, if
-	the two zero-tail dimensions are equal, then the two live block tensors are
-	fully SameMPV$_2$-equivalent, including the length-zero case.
+	the two zero-tail dimensions are equal, then the two live block tensors have
+	the same MPV family, including the length-zero case.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -2583,14 +2584,16 @@ The following results separate the zero blocks from the
 	If two tensors generate the same MPV family, then each tensor admits a blocked
 	decomposition into a zero-tail tensor plus nonzero left-canonical live blocks
 	with primitive transfer maps and positive bond dimensions. The theorem also
-	retains the blocked SameMPV$_2$ relations supplied by the original equality.
+	retains, for each blocking period, the relation that the blocked tensors
+	generate the same MPV family.
 \end{theorem}
 
 \begin{proof}\leanok
 	\uses{thm:tp_primitive_blockdecomp}
 	Apply Theorem~\ref{thm:tp_primitive_blockdecomp} separately to the two
 	tensors and keep the zero-tail MPV equations returned by that theorem. The
-	blocked SameMPV$_2$ relations follow by blocking the original equality.
+	property that the blocked tensors generate the same MPV family follows by
+	blocking the original equality.
 \end{proof}
 
 
