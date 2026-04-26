@@ -559,6 +559,83 @@ theorem parentHamiltonianGroundSpace_le_bntSpan_of_wordTupleSpanTop
     (reindexed_projectionSpan_of_wordTupleSpanTop (μ := μ) A hCF hSpan)
     hBoundary
 
+/-- Conditional reverse block split from canonical-form/BNT data and selector words.
+
+This replaces the explicit finite product-word span witness in
+`chainGroundSpace_toTensorFromBlocks_le_iSup_of_wordTupleSpanTop` by the
+finite selector-word hypothesis `HasBlockSelectorWords A S`.  The selector words
+and the boundary-matrix representation remain separate hypotheses: this theorem
+uses the selector-to-product-span theorem, but does not construct the selectors
+from BNT separation and does not derive the wrapping/open-chain boundary input. -/
+theorem chainGroundSpace_toTensorFromBlocks_le_iSup_of_bntSelectorWords
+    (A : (j : Fin r) → MPSTensor d (dim j))
+    (hCF : IsCanonicalFormBNT μ A) {L N S : ℕ}
+    (hL : 1 < L) (hN : N ≥ L + 1)
+    (hSel : HasBlockSelectorWords A S)
+    (hBoundary : ∀ ⦃ψ : NSiteSpace d N⦄,
+      ψ ∈ chainGroundSpace (toTensorFromBlocks μ A) L N →
+        ∃ X : Matrix (Fin (∑ k : Fin r, dim k)) (Fin (∑ k : Fin r, dim k)) ℂ,
+          ψ = groundSpaceMap (toTensorFromBlocks μ A) N X ∧
+          ∀ ω : Fin (1 + S) → Fin d,
+            X * evalWord (toTensorFromBlocks μ A) (List.ofFn ω) =
+              evalWord (toTensorFromBlocks μ A) (List.ofFn ω) * X) :
+    chainGroundSpace (toTensorFromBlocks μ A) L N ≤
+      ⨆ j : Fin r, chainGroundSpace (A j) L N :=
+  chainGroundSpace_toTensorFromBlocks_le_iSup_of_wordTupleSpanTop
+    (μ := μ) A hCF hL hN (Nat.add_pos_left Nat.zero_lt_one S)
+    (wordTupleSpanTop_of_isCanonicalFormBNT_of_blockSelectorWords μ A hCF hSel)
+    hBoundary
+
+/-- Conditional periodic block-decomposition equality from selector words.
+
+Canonical-form/BNT data plus `HasBlockSelectorWords A S` provide the
+length-`1+S` product-word span used by Route B.  The compatible boundary-matrix
+representation at this same length is still an explicit wrapping/open-chain
+hypothesis. -/
+theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_of_bntSelectorWords
+    (A : (j : Fin r) → MPSTensor d (dim j))
+    (hCF : IsCanonicalFormBNT μ A) {L N S : ℕ}
+    (hL : 1 < L) (hN : N ≥ L + 1)
+    (hSel : HasBlockSelectorWords A S)
+    (hBoundary : ∀ ⦃ψ : NSiteSpace d N⦄,
+      ψ ∈ chainGroundSpace (toTensorFromBlocks μ A) L N →
+        ∃ X : Matrix (Fin (∑ k : Fin r, dim k)) (Fin (∑ k : Fin r, dim k)) ℂ,
+          ψ = groundSpaceMap (toTensorFromBlocks μ A) N X ∧
+          ∀ ω : Fin (1 + S) → Fin d,
+            X * evalWord (toTensorFromBlocks μ A) (List.ofFn ω) =
+              evalWord (toTensorFromBlocks μ A) (List.ofFn ω) * X) :
+    chainGroundSpace (toTensorFromBlocks μ A) L N =
+      ⨆ j : Fin r, chainGroundSpace (A j) L N :=
+  chainGroundSpace_toTensorFromBlocks_eq_iSup_of_wordTupleSpanTop
+    (μ := μ) A hCF hL hN (Nat.add_pos_left Nat.zero_lt_one S)
+    (wordTupleSpanTop_of_isCanonicalFormBNT_of_blockSelectorWords μ A hCF hSel)
+    hBoundary
+
+/-- Conditional BNT-span containment from selector words.
+
+This is the Route B parent-Hamiltonian containment after composing the
+selector-word product-span theorem with
+`parentHamiltonianGroundSpace_le_bntSpan_of_wordTupleSpanTop`.  It still assumes
+the finite selector words and the matching length-`1+S` commuting boundary
+representation; those are the remaining paper-level inputs. -/
+theorem parentHamiltonianGroundSpace_le_bntSpan_of_bntSelectorWords
+    (A : (j : Fin r) → MPSTensor d (dim j))
+    (hCF : IsCanonicalFormBNT μ A) {L N S : ℕ}
+    (hL : 1 < L) (hN : N ≥ L + 1)
+    (hSel : HasBlockSelectorWords A S)
+    (hBoundary : ∀ ⦃ψ : NSiteSpace d N⦄,
+      ψ ∈ parentHamiltonianGroundSpace (μ := μ) A L N →
+        ∃ X : Matrix (Fin (∑ k : Fin r, dim k)) (Fin (∑ k : Fin r, dim k)) ℂ,
+          ψ = groundSpaceMap (toTensorFromBlocks μ A) N X ∧
+          ∀ ω : Fin (1 + S) → Fin d,
+            X * evalWord (toTensorFromBlocks μ A) (List.ofFn ω) =
+              evalWord (toTensorFromBlocks μ A) (List.ofFn ω) * X) :
+    parentHamiltonianGroundSpace (μ := μ) A L N ≤ bntSpan A N :=
+  parentHamiltonianGroundSpace_le_bntSpan_of_wordTupleSpanTop
+    (μ := μ) A hCF hL hN (Nat.add_pos_left Nat.zero_lt_one S)
+    (wordTupleSpanTop_of_isCanonicalFormBNT_of_blockSelectorWords μ A hCF hSel)
+    hBoundary
+
 /-- Reverse-inclusion step for the BNT ground-space theorem.
 
 This is the remaining block-decomposition step: every periodic-chain ground state
