@@ -48,8 +48,10 @@ finite-overlap hypotheses are now formalized.
      2 * (L - 1)` under `2 * L ≤ N` and `1 < L` (PR #940).
 4. Non-overlap positivity is supplied by
    `MPSTensor.localTermES_re_inner_nonneg_of_cyclic_windows_disjoint` (PR #941).
-   In the cyclic-window gap assembly, the negation of `cyclicWindowsOverlap`
-   provides the site-disjointness condition needed by this theorem.
+   In the cyclic-window gap assembly,
+   `MPSTensor.CyclicWindowsDisjoint.of_not_cyclicWindowsOverlap` converts the
+   negation of `cyclicWindowsOverlap` into the site-disjointness condition needed
+   by this theorem.
 5. The sole remaining analytic hypothesis for the new cyclic-window gap wrapper is
    the Friedrichs-angle estimate for overlapping cyclic windows:
    `Re ⟪h_i v, h_j v⟫ ≥ -(1 - 1/(4L)) * (2(L-1))⁻¹ * Re ⟪h_i v, v⟫`.
