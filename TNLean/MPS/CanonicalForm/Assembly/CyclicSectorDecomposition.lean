@@ -1016,6 +1016,57 @@ theorem primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking
     A hTP hγprim hperiph blocks P φ hPproj hPsum hcyclic hIntertwine hMul hStar hNondeg
     hCornerIrr
 
+/-- Cyclic sector decomposition with primitive and tensor-irreducible sector blocks.
+
+This strengthens `exists_cyclic_sector_decomp_of_TP_of_isIrreducibleTensor` by
+exposing the primitive and irreducible conclusions already available from the
+unconditional sector-orbit lift. It is the public one-block interface needed by
+later assembly steps before flattening the sectors of all live blocks to a common
+period. -/
+theorem exists_primitive_irreducible_cyclic_sector_decomp_of_TP_of_isIrreducibleTensor
+    {d D : ℕ} [NeZero D]
+    (A : MPSTensor d D)
+    (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (hIrr : IsIrreducibleTensor A) :
+    ∃ (m : ℕ) (_ : 0 < m)
+      (dim : Fin m → ℕ) (blocks : (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k)),
+      (∀ k, ∑ i : Fin (blockPhysDim d m), (blocks k i)ᴴ * blocks k i = 1) ∧
+      SameMPV₂ (blockTensor A m)
+        (toTensorFromBlocks (d := blockPhysDim d m) (μ := fun _ : Fin m => (1 : ℂ)) blocks) ∧
+      (∀ k, _root_.IsPrimitive
+        (transferMap (d := blockPhysDim d m) (D := dim k) (blocks k))) ∧
+      (∀ k, IsIrreducibleTensor (blocks k)) ∧
+      (∀ k, 0 < dim k) := by
+  -- Use shared setup to get conjugate Kraus data and the cyclic peripheral structure.
+  obtain ⟨K, h_unitalK, hIrrK, ρ, hρ_pd, h_adjfix, rfl⟩ :=
+    conjTranspose_kraus_setup A hTP hIrr
+  obtain ⟨m, γ, hm_pos, hγ_prim, hperiph_set⟩ :=
+    PeripheralSpectrum.peripheral_eigenvalues_cyclic_structure _ h_unitalK ρ hρ_pd h_adjfix hIrrK
+  have hperiph_range :
+      peripheralEigenvalues (transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) =
+        Set.range (fun j : Fin m => γ ^ (j : ℕ)) := by
+    rw [hperiph_set]
+    ext x
+    simp [Set.mem_range, eq_comm]
+  haveI : NeZero m := ⟨by omega⟩
+  obtain ⟨dim, blocks, P, φ, hTP_blocks, hSame, hPproj, hPsum, hcyclic, _hComm,
+      _hTrace, hIntertwine, hMul, hStar, hNondeg⟩ :=
+    exists_cyclic_sector_decomp_after_blocking A hTP hIrr ρ hρ_pd h_adjfix hIrrK hγ_prim
+      hperiph_range
+  have hPrimIrr : ∀ u : Fin m,
+      _root_.IsPrimitive (transferMap (d := blockPhysDim d m) (D := dim u) (blocks u)) ∧
+        IsIrreducibleTensor (blocks u) :=
+    primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking
+      A hTP hIrr hγ_prim hperiph_range blocks P φ hPproj hPsum hcyclic hIntertwine hMul hStar
+      hNondeg
+  refine ⟨m, hm_pos, dim, blocks, hTP_blocks, hSame, ?_, ?_, ?_⟩
+  · intro k
+    exact (hPrimIrr k).1
+  · intro k
+    exact (hPrimIrr k).2
+  · intro k
+    exact Nat.pos_of_ne_zero (hNondeg k)
+
 end SectorOrbitLift
 
 end MPSTensor

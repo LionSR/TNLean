@@ -244,6 +244,146 @@ theorem fundamentalTheorem_after_blocking_1606_structural_with_blockedSameMPV₂
   · exact sameMPV₂_blockTensor A B hSame pA
   · exact sameMPV₂_blockTensor A B hSame pB
 
+/-- **Zero-tail bookkeeping for live block tensors.**
+
+Suppose two tensors with the same MPV family are each written as a zero-tail
+contribution plus a live block tensor. Then the live block tensors agree at every
+positive length, while the length-zero equation records exactly the difference
+between the zero-tail dimensions and the live bond dimensions.
+
+This is the local bookkeeping needed before a full `SameMPV₂` comparison of the
+live sector tensors can be recovered: the only missing datum is equality of the
+two zero-tail dimensions (or an equivalent replacement for the `N = 0` case). -/
+theorem liveBlock_positive_sameMPV₂_and_zeroTail_bookkeeping_of_sameMPV₂
+    {d D₁ D₂ rA rB : ℕ}
+    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (hSame : SameMPV₂ A B)
+    (zeroTailA zeroTailB : ℕ)
+    (μA : Fin rA → ℂ) (blocksA : (k : Fin rA) → MPSTensor d (dimA k))
+    (μB : Fin rB → ℂ) (blocksB : (k : Fin rB) → MPSTensor d (dimB k))
+    (hA : ∀ (N : ℕ) (σ : Fin N → Fin d),
+      mpv A σ = mpv (zeroMPSTensor d zeroTailA) σ +
+        mpv (toTensorFromBlocks (d := d) (μ := μA) blocksA) σ)
+    (hB : ∀ (N : ℕ) (σ : Fin N → Fin d),
+      mpv B σ = mpv (zeroMPSTensor d zeroTailB) σ +
+        mpv (toTensorFromBlocks (d := d) (μ := μB) blocksB) σ) :
+    (∀ {N : ℕ}, 0 < N → ∀ σ : Fin N → Fin d,
+      mpv (toTensorFromBlocks (d := d) (μ := μA) blocksA) σ =
+        mpv (toTensorFromBlocks (d := d) (μ := μB) blocksB) σ) ∧
+    (∀ σ : Fin 0 → Fin d,
+      (zeroTailA : ℂ) + mpv (toTensorFromBlocks (d := d) (μ := μA) blocksA) σ =
+        (zeroTailB : ℂ) + mpv (toTensorFromBlocks (d := d) (μ := μB) blocksB) σ) := by
+  constructor
+  · intro N hN σ
+    have hN_ne : N ≠ 0 := Nat.ne_of_gt hN
+    have hAσ := hA N σ
+    have hBσ := hB N σ
+    rw [mpv_zeroMPSTensor, if_neg hN_ne, zero_add] at hAσ
+    rw [mpv_zeroMPSTensor, if_neg hN_ne, zero_add] at hBσ
+    calc
+      mpv (toTensorFromBlocks (d := d) (μ := μA) blocksA) σ = mpv A σ := hAσ.symm
+      _ = mpv B σ := hSame N σ
+      _ = mpv (toTensorFromBlocks (d := d) (μ := μB) blocksB) σ := hBσ
+  · intro σ
+    have hAσ := hA 0 σ
+    have hBσ := hB 0 σ
+    rw [mpv_zeroMPSTensor] at hAσ
+    rw [mpv_zeroMPSTensor] at hBσ
+    simp only [↓reduceIte] at hAσ hBσ
+    calc
+      (zeroTailA : ℂ) + mpv (toTensorFromBlocks (d := d) (μ := μA) blocksA) σ
+          = mpv A σ := hAσ.symm
+      _ = mpv B σ := hSame 0 σ
+      _ = (zeroTailB : ℂ) + mpv (toTensorFromBlocks (d := d) (μ := μB) blocksB) σ := hBσ
+
+/-- **Recover full live-block `SameMPV₂` once zero tails agree.**
+
+This packages the positive-length bookkeeping theorem with the single additional
+length-zero datum needed to remove the zero tails. It does not assert that the
+zero-tail dimensions agree automatically; that remains a separate paper-level
+bookkeeping step for the unconditional after-blocking sector endpoint. -/
+theorem liveBlock_sameMPV₂_of_sameMPV₂_of_zeroTail_eq
+    {d D₁ D₂ rA rB : ℕ}
+    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (hSame : SameMPV₂ A B)
+    (zeroTailA zeroTailB : ℕ)
+    (μA : Fin rA → ℂ) (blocksA : (k : Fin rA) → MPSTensor d (dimA k))
+    (μB : Fin rB → ℂ) (blocksB : (k : Fin rB) → MPSTensor d (dimB k))
+    (hA : ∀ (N : ℕ) (σ : Fin N → Fin d),
+      mpv A σ = mpv (zeroMPSTensor d zeroTailA) σ +
+        mpv (toTensorFromBlocks (d := d) (μ := μA) blocksA) σ)
+    (hB : ∀ (N : ℕ) (σ : Fin N → Fin d),
+      mpv B σ = mpv (zeroMPSTensor d zeroTailB) σ +
+        mpv (toTensorFromBlocks (d := d) (μ := μB) blocksB) σ)
+    (hZeroTail : zeroTailA = zeroTailB) :
+    SameMPV₂ (toTensorFromBlocks (d := d) (μ := μA) blocksA)
+      (toTensorFromBlocks (d := d) (μ := μB) blocksB) := by
+  have hBook :=
+    liveBlock_positive_sameMPV₂_and_zeroTail_bookkeeping_of_sameMPV₂
+      A B hSame zeroTailA zeroTailB μA blocksA μB blocksB hA hB
+  intro N σ
+  by_cases hN : N = 0
+  · subst N
+    have h0 := hBook.2 σ
+    have h0' : (zeroTailB : ℂ) +
+        mpv (toTensorFromBlocks (d := d) (μ := μA) blocksA) σ =
+        (zeroTailB : ℂ) +
+        mpv (toTensorFromBlocks (d := d) (μ := μB) blocksB) σ := by
+      simpa [hZeroTail] using h0
+    exact add_left_cancel h0'
+  · exact hBook.1 (Nat.pos_of_ne_zero hN) σ
+
+/-- **Structural after-blocking theorem retaining zero-tail MPV equations.**
+
+This strengthens the structural shell by exposing the exact zero-tail identities
+returned by `exists_tp_primitive_blockDecomp_after_blocking`, in addition to the
+blocked `SameMPV₂` relations. The live blocks are trace-preserving, have
+primitive transfer maps, positive bond dimensions, and nonzero weights; the
+zero-tail equations record precisely why these live tensors are only immediately
+identified at positive lengths unless the `N = 0` zero-tail bookkeeping is also
+resolved. -/
+theorem fundamentalTheorem_after_blocking_1606_structural_with_zeroTail
+    {d D₁ D₂ : ℕ}
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (hSame : SameMPV₂ A B) :
+    ∃ (zeroTailA : ℕ) (pA : ℕ) (_ : 0 < pA)
+      (rA : ℕ) (dimA : Fin rA → ℕ) (μA : Fin rA → ℂ)
+      (blocksA : (k : Fin rA) → MPSTensor (blockPhysDim d pA) (dimA k)),
+    ∃ (zeroTailB : ℕ) (pB : ℕ) (_ : 0 < pB)
+      (rB : ℕ) (dimB : Fin rB → ℕ) (μB : Fin rB → ℂ)
+      (blocksB : (k : Fin rB) → MPSTensor (blockPhysDim d pB) (dimB k)),
+      SameMPV₂ (blockTensor (d := d) (D := D₁) A pA)
+        (blockTensor (d := d) (D := D₂) B pA) ∧
+      SameMPV₂ (blockTensor (d := d) (D := D₁) A pB)
+        (blockTensor (d := d) (D := D₂) B pB) ∧
+      (∀ k, ∑ i, (blocksA k i)ᴴ * blocksA k i = 1) ∧
+      (∀ k, ∑ i, (blocksB k i)ᴴ * blocksB k i = 1) ∧
+      (∀ k, _root_.IsPrimitive (transferMap (blocksA k))) ∧
+      (∀ k, _root_.IsPrimitive (transferMap (blocksB k))) ∧
+      (∀ k, μA k ≠ 0) ∧
+      (∀ k, μB k ≠ 0) ∧
+      (∀ k, 0 < dimA k) ∧
+      (∀ k, 0 < dimB k) ∧
+      (∀ (N : ℕ) (σ : Fin N → Fin (blockPhysDim d pA)),
+        mpv (blockTensor (d := d) (D := D₁) A pA) σ =
+          mpv (zeroMPSTensor (blockPhysDim d pA) zeroTailA) σ +
+            mpv (toTensorFromBlocks (d := blockPhysDim d pA) (μ := μA) blocksA) σ) ∧
+      (∀ (N : ℕ) (σ : Fin N → Fin (blockPhysDim d pB)),
+        mpv (blockTensor (d := d) (D := D₂) B pB) σ =
+          mpv (zeroMPSTensor (blockPhysDim d pB) zeroTailB) σ +
+            mpv (toTensorFromBlocks (d := blockPhysDim d pB) (μ := μB) blocksB) σ) := by
+  obtain ⟨zeroTailA, pA, hpA, rA, dimA, μA, blocksA, hTPA, hPrimA, hDimA, hμA, hMPVA⟩ :=
+    exists_tp_primitive_blockDecomp_after_blocking A
+  obtain ⟨zeroTailB, pB, hpB, rB, dimB, μB, blocksB, hTPB, hPrimB, hDimB, hμB, hMPVB⟩ :=
+    exists_tp_primitive_blockDecomp_after_blocking B
+  refine ⟨zeroTailA, pA, hpA, rA, dimA, μA, blocksA,
+    zeroTailB, pB, hpB, rB, dimB, μB, blocksB,
+    ?_, ?_, hTPA, hTPB, hPrimA, hPrimB, hμA, hμB, hDimA, hDimB, hMPVA, hMPVB⟩
+  · exact sameMPV₂_blockTensor A B hSame pA
+  · exact sameMPV₂_blockTensor A B hSame pB
+
 /-- **Conditional after-blocking sector comparison (issue #877 target shape).**
 
 Given two tensors with `SameMPV₂`, a common-period BNT sector pair, and a
