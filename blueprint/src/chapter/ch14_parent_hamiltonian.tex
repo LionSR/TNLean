@@ -1980,6 +1980,49 @@ Lucia~\cite{Kastoryano2018Martingale}.
     $P_i=h_{i,\mathrm{ES}}$.
 \end{proof}
 
+\begin{definition}[Cyclic-window support]
+    \label{def:cyclic_window_support}
+    \lean{MPSTensor.cyclicWindowSupport}
+    \leanok
+    \uses{rem:cyclic_window_operators}
+    For a length-$L$ cyclic window on $\Fin{N}$ starting at $i$, its support is
+    \[
+        S_i=\{i,i+1,\ldots,i+L-1\}\pmod N,
+    \]
+    with repeated visits counted once.
+\end{definition}
+
+\begin{definition}[Cyclic-window overlap]
+    \label{def:cyclic_windows_overlap}
+    \lean{MPSTensor.cyclicWindowsOverlap}
+    \leanok
+    \uses{def:cyclic_window_support}
+    Two length-$L$ cyclic windows overlap, written $i\sim_L j$, when their
+    supports meet: $S_i\cap S_j\ne\varnothing$.
+\end{definition}
+
+\begin{lemma}[Cyclic-window overlap row cardinality]
+    \label{lem:cyclic_window_overlap_cardinality}
+    \lean{MPSTensor.cyclicWindowsOverlap_card_le}
+    \leanok
+    \uses{def:cyclic_window_support, def:cyclic_windows_overlap}
+    If $2L\le N$ and $L>1$, then for every $i\in\Fin{N}$,
+    \[
+        \#\{j\ne i: i\sim_L j\}\le 2(L-1).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:cyclic_window_support, def:cyclic_windows_overlap}
+    If $S_i$ and $S_j$ meet, choose offsets $a,b<L$ with
+    $i+a\equiv j+b\pmod N$.  Since $2L\le N$, the offset from $i$ to $j$ is
+    either the clockwise distance $a-b\in\{1,\ldots,L-1\}$ or the
+    counterclockwise distance $b-a\in\{1,\ldots,L-1\}$; the zero distance is
+    excluded by $j\ne i$. Thus every overlapping off-diagonal start lies among
+    the $L-1$ clockwise starts or the $L-1$ counterclockwise starts.
+\end{proof}
+
 \begin{lemma}[Parent-Hamiltonian gap from finite-overlap Friedrichs data]
     \label{lem:parent_hamiltonian_finite_overlap_friedrichs_gap}
     \lean{MPSTensor.parentHamiltonianES_gap_bound_of_finite_overlap_friedrichs}
@@ -1998,6 +2041,37 @@ Lucia~\cite{Kastoryano2018Martingale}.
     The fixed-chain finite-overlap reduction gives the required quadratic-form
     estimate for every admissible $N$. Lemma~\ref{lem:parent_hamiltonian_es_quadratic_reduction}
     converts that estimate to the norm lower bound.
+\end{proof}
+
+\begin{lemma}[Parent-Hamiltonian gap from cyclic-window Friedrichs data]
+    \label{lem:parent_hamiltonian_cyclic_window_friedrichs_gap}
+    \lean{MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_friedrichs}
+    \leanok
+    \uses{lem:parent_hamiltonian_finite_overlap_friedrichs_gap,
+        lem:cyclic_window_overlap_cardinality, lem:transported_es_local_projections}
+    Fix $L>1$ and let $i\sim_L j$ mean that the cyclic supports of the
+    length-$L$ windows at $i$ and $j$ meet. Suppose uniformly for every
+    $N\ge2L$ that non-overlapping transported local terms have nonnegative
+    ordered cross terms, while overlapping off-diagonal terms satisfy
+    \[
+        \operatorname{Re}\langle h_{i,\mathrm{ES}}v,h_{j,\mathrm{ES}}v\rangle
+        \ge -(1-\tfrac{1}{4L})\frac{1}{2(L-1)}
+              \operatorname{Re}\langle h_{i,\mathrm{ES}}v,v\rangle.
+    \]
+    Then $1/(4L)>0$, and the explicit norm lower bound with constant $1/(4L)$
+    follows for vectors in $(\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:parent_hamiltonian_finite_overlap_friedrichs_gap,
+        lem:cyclic_window_overlap_cardinality, lem:transported_es_local_projections}
+    Lemma~\ref{lem:cyclic_window_overlap_cardinality} gives the row-cardinality
+    bound $m=2(L-1)$ for the concrete cyclic-window overlap relation, and
+    Lemma~\ref{lem:transported_es_local_projections} supplies the symmetric
+    projection structure of each transported local term. Apply
+    Lemma~\ref{lem:parent_hamiltonian_finite_overlap_friedrichs_gap} with these
+    facts and the stated cross-term hypotheses.
 \end{proof}
 
 \begin{theorem}[Martingale criterion for spectral gap]\label{thm:martingale_criterion}
