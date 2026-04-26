@@ -2500,26 +2500,78 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     follows from Lemma~\ref{lem:route_b_block_diagonal_commutant_reduction}.
 \end{proof}
 
+\begin{definition}[Pairwise block-separating word polynomials]
+    \label{def:pairwise_block_separating_words}
+    \lean{MPSTensor.HasBlockSelectorOn}
+    \lean{MPSTensor.HasPairBlockSeparatingWords}
+    \leanok
+    A length-$S$ partial selector for block $k$ on a finite target set $T$ is a
+    tuple in the span of simultaneous length-$S$ block-word evaluations which is
+    $I$ on block $k$ and $0$ on every block in $T$.  The pairwise version asks for
+    such a partial selector for each ordered pair of distinct blocks, with
+    $T=\{j\}$.
+\end{definition}
+
+\begin{lemma}[Block selectors from pairwise block separation]
+    \label{lem:block_selectors_from_pairwise_separators}
+    \lean{MPSTensor.pointwise_mul_mem_span_wordTuple_add}
+    \lean{MPSTensor.hasBlockSelectorOn_empty}
+    \lean{MPSTensor.HasBlockSelectorOn.mul}
+    \lean{MPSTensor.hasBlockSelectorOn_finset_of_pairBlockSeparatingWords}
+    \lean{MPSTensor.hasBlockSelectorWords_of_forall_hasBlockSelectorOn_univ_erase}
+    \lean{MPSTensor.hasBlockSelectorWords_of_pairBlockSeparatingWords}
+    \lean{MPSTensor.propBlockInjective_of_common_blockInjective_of_pairBlockSeparatingWords}
+    \lean{MPSTensor.wordTupleSpanTop_of_common_blockInjective_of_pairBlockSeparatingWords}
+    \lean{MPSTensor.hasBiCF_of_common_blockInjective_of_pairBlockSeparatingWords}
+    \leanok
+    \uses{def:pairwise_block_separating_words}
+    If every ordered pair of distinct blocks admits a common-length pairwise
+    separator, then full block-selector words exist.  More precisely, multiplying
+    the pairwise separators for a fixed block $k$ against all other blocks gives a
+    selector of length $(r-1)S$ for $k$.  Hence common block injectivity plus
+    pairwise separators implies the Proposition-IV.3 finite product-word span and
+    the biCF trace-separation condition.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The empty word gives the identity tuple, selecting on the empty target set.
+    The span of word tuples is closed under pointwise multiplication because the
+    product of a length-$L$ word and a length-$S$ word is the concatenated
+    length-$(L+S)$ word.  Inducting over the finite set of blocks different from
+    $k$ and multiplying the corresponding pairwise separators keeps the value $I$
+    on $k$ and introduces one additional zero block at each step.  Extracting
+    coefficients from the final tuple-span membership gives the coefficient form
+    of block-selector words.
+\end{proof}
+
 \begin{lemma}[Product-word span from BNT selector words]
     \label{lem:product_word_span_from_bnt_selectors}
     \lean{MPSTensor.wordTupleSpanTop_of_isCanonicalFormBNT_of_blockSelectorWords}
+    \lean{MPSTensor.wordTupleSpanTop_of_isCanonicalFormBNT_of_pairBlockSeparatingWords}
+    \lean{MPSTensor.exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairBlockSeparatingWords}
     \lean{MPSTensor.exists_pos_productWordSpan_of_isCanonicalFormBNT_of_blockSelectorWords}
     \lean{MPSTensor.blockProjection_mem_span_reindexed_toTensorFromBlocks_of_bntSelectorWords}
     \lean{MPSTensor.isBlockDiagonal'_of_commutes_reindexed_toTensorFromBlocks_of_bntSelectorWords}
     \leanok
-    \uses{def:cf_bnt, lem:block_projection_span_from_product_word_span}
+    \uses{def:cf_bnt, lem:block_selectors_from_pairwise_separators,
+        lem:block_projection_span_from_product_word_span}
     Let $((\mu_j),(A_j))$ be in canonical form with BNT separation.  Suppose there are
     length-$S$ block-selector words: for each sector $k$, a linear combination of
     length-$S$ words evaluates to $I$ on $A_k$ and to $0$ on every other block.
     Then the simultaneous length-$(1+S)$ block-word evaluations span
-    $\prod_j \MN{D_j}$, with positive length.  Consequently, the pulled-back
-    length-$(1+S)$ words of $\operatorname{Assemble}(\mu,A)$ span every virtual
-    sector projection, and the corresponding commutant reduction is available.
+    $\prod_j \MN{D_j}$, with positive length.  It is enough, by
+    Lemma~\ref{lem:block_selectors_from_pairwise_separators}, to construct
+    pairwise separators for every ordered pair of distinct blocks.  Consequently,
+    the pulled-back words at the resulting length for
+    $\operatorname{Assemble}(\mu,A)$ span every virtual sector projection, and the
+    corresponding commutant reduction is available.
 \end{lemma}
 
 \begin{proof}
     \leanok
     \uses{lem:one_block_injective_of_injective,
+        lem:block_selectors_from_pairwise_separators,
         lem:block_projection_span_from_product_word_span}
     Definition~\ref{def:cf_bnt} gives one-site injectivity of each block, hence
     $1$-block injectivity by Lemma~\ref{lem:one_block_injective_of_injective}.
@@ -2527,7 +2579,9 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     one-letter linear combination in block $k$, multiply by the selector for $k$,
     and sum over $k$.  The selector kills all off-target blocks, while it is the
     identity on block $k$, so the length-$(1+S)$ word tuples span the full
-    product algebra.  The projection-span and commutant consequences then follow
+    product algebra.  If one starts with pairwise separators instead, first use
+    Lemma~\ref{lem:block_selectors_from_pairwise_separators} to multiply them into
+    full selectors.  The projection-span and commutant consequences then follow
     from Lemma~\ref{lem:block_projection_span_from_product_word_span}.
 \end{proof}
 
@@ -2623,6 +2677,7 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     \notready
     \uses{def:parent_hamiltonian_ground_space_bnt, def:bnt_span,
         thm:chain_ground_space_eq_mpv_blk,
+        lem:block_selectors_from_pairwise_separators,
         lem:product_word_span_from_bnt_selectors,
         lem:route_b_block_split_from_product_word_span}
     If $A$ is in canonical-form/BNT and $1 < L$ and $N \ge L + 1$, every vector in the
@@ -2633,9 +2688,10 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
 \begin{proof}
     \notready
     The remaining structural step is the periodic block decomposition of the
-    assembled chain ground space.  Lemma~\ref{lem:product_word_span_from_bnt_selectors}
-    reduces the product-word span hypothesis to the finite BNT selector-word
-    theorem.  Lemma~\ref{lem:route_b_block_split_from_product_word_span} gives
+    assembled chain ground space.  Lemma~\ref{lem:block_selectors_from_pairwise_separators}
+    reduces global selectors to pairwise block-separating word polynomials, and
+    Lemma~\ref{lem:product_word_span_from_bnt_selectors} reduces product-word span
+    to those finite BNT selector words.  Lemma~\ref{lem:route_b_block_split_from_product_word_span} gives
     the conditional Route B composition once that product-word span is available
     and the wrapping-window comparison provides the commuting boundary matrix.
     With that decomposition available,
