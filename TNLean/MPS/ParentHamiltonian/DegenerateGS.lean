@@ -491,7 +491,7 @@ This is the Route B composition of the #927 product-word-span reduction with the
 `WordTupleSpanTop A m` is the #934 witness; the boundary hypothesis keeps the
 wrapping/open-chain step explicit by requiring each assembled chain-ground vector
 to come with a length-`m` commuting boundary-matrix representation. -/
-theorem chainGroundSpace_toTensorFromBlocks_le_iSup_of_wordTuple_span_eq_top
+theorem chainGroundSpace_toTensorFromBlocks_le_iSup_of_wordTupleSpanTop
     (A : (j : Fin r) → MPSTensor d (dim j))
     (hCF : IsCanonicalFormBNT μ A) {L N m : ℕ}
     (hL : 1 < L) (hN : N ≥ L + 1) (hm : 0 < m)
@@ -516,7 +516,7 @@ This records the exact equality obtained once #934 supplies the finite
 product-word span and the wrapping/open-chain layer supplies the compatible
 commuting boundary matrix.  It is still conditional on those two paper-level
 inputs, and is therefore not a restatement of the final unconditional theorem. -/
-theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_of_wordTuple_span_eq_top
+theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_of_wordTupleSpanTop
     (A : (j : Fin r) → MPSTensor d (dim j))
     (hCF : IsCanonicalFormBNT μ A) {L N m : ℕ}
     (hL : 1 < L) (hN : N ≥ L + 1) (hm : 0 < m)
@@ -541,7 +541,7 @@ This is the final Route B composition used in the proof of the reverse inclusion
 #927 converts the product-word span witness into the sector-projection span, #929
 turns that projection span plus the boundary representation into a block split,
 and the existing blockwise uniqueness endgame places the result in `bntSpan`. -/
-theorem parentHamiltonianGroundSpace_le_bntSpan_of_wordTuple_span_eq_top
+theorem parentHamiltonianGroundSpace_le_bntSpan_of_wordTupleSpanTop
     (A : (j : Fin r) → MPSTensor d (dim j))
     (hCF : IsCanonicalFormBNT μ A) {L N m : ℕ}
     (hL : 1 < L) (hN : N ≥ L + 1) (hm : 0 < m)
