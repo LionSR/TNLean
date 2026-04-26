@@ -2442,12 +2442,93 @@
 
   </div>
 </div>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:one_block_injective_of_injective">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">2.24</span>
+    <span class="lemma_thmtitle">One-site injectivity gives one-block injectivity</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-mps.html#lem:one_block_injective_of_injective">#</a>
+    
+    <a class="icon proof" href="ch-mps.html#a0000000174"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mps.html#def:injective">Definition 2.22</a></li>
+          
+          <li><a href="ch-mps.html#def:l_blk_injective">Definition 2.23</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.isNBlkInjective_one_of_isInjective" class="lean_decl">MPSTensor.isNBlkInjective_one_of_isInjective</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>    If the one-site matrices \(\{ A^i\} _{i=0}^{d-1}\) span \(M_{D}(\mathbb {C})\), then the length-one word products span \(M_{D}(\mathbb {C})\), so \(A\) is \(1\)-block injective. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000174">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>The length-one words are exactly the letters \(i \in \{ 0,\ldots ,d-1\} \), and evaluating a length-one word gives the matrix \(A^i\). Thus the length-one word span is the same span as in one-site injectivity. </p>
+
+  </div>
+</div>
 <div class="definition_thmwrapper theorem-style-definition" id="def:normal">
   <div class="definition_thmheading">
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">2.24</span>
+    <span class="definition_thmlabel">2.25</span>
     <span class="definition_thmtitle">Normal tensor</span>
     <div class="thm_header_extras">
 
@@ -2507,12 +2588,12 @@
 
   </div>
 </div>
-<div class="remark_thmwrapper theorem-style-remark" id="a0000000174">
+<div class="remark_thmwrapper theorem-style-remark" id="a0000000175">
   <div class="remark_thmheading">
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">2.25</span>
+    <span class="remark_thmlabel">2.26</span>
     <div class="thm_header_extras">
 
     
@@ -2520,14 +2601,14 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-mps.html#a0000000174">#</a>
+    <a class="icon proof" href="ch-mps.html#a0000000175">#</a>
     
     
     
         </div>
   </div>
   <div class="remark_thmcontent">
-  <p>The algebraic characterization of normality in Definition&#160;<a href="ch-mps.html#def:normal">2.24</a> — eventual full matrix span, equivalently eventual block injectivity — is equivalent to the spectral characterization used in <span class="cite">
+  <p>The algebraic characterization of normality in Definition&#160;<a href="ch-mps.html#def:normal">2.25</a> — eventual full matrix span, equivalently eventual block injectivity — is equivalent to the spectral characterization used in <span class="cite">
 	(
 	
 </span>: after TP normalization, the transfer map \(\mathcal{E}_A\) is a primitive channel, equivalently irreducible with trivial peripheral spectrum. This equivalence is proved in <span class="cite">
@@ -2543,7 +2624,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">2.26</span>
+    <span class="definition_thmlabel">2.27</span>
     <span class="definition_thmtitle">Block-injective canonical form</span>
     <div class="thm_header_extras">
 
@@ -2612,7 +2693,7 @@
 </li>
 </ol>
 <p> The associated tensor is the block-diagonal tensor </p>
-<div class="displaymath" id="a0000000175">
+<div class="displaymath" id="a0000000176">
   \[  A^i \; =\;  \bigoplus _{k=1}^{r} \mu _k \,  A_k^i.  \]
 </div>
 <p> This is the block-injective version of the canonical-form data; see&#160;<span class="cite">
@@ -2626,7 +2707,7 @@
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">2.27</span>
+    <span class="remark_thmlabel">2.28</span>
     <div class="thm_header_extras">
 
     
@@ -2651,7 +2732,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">2.28</span>
+    <span class="definition_thmlabel">2.29</span>
     <span class="definition_thmtitle">Block projection</span>
     <div class="thm_header_extras">
 
@@ -2695,7 +2776,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">2.29</span>
+    <span class="definition_thmlabel">2.30</span>
     <span class="definition_thmtitle">Block-diagonal matrix</span>
     <div class="thm_header_extras">
 
@@ -2739,7 +2820,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">2.30</span>
+    <span class="lemma_thmlabel">2.31</span>
     <span class="lemma_thmtitle">Off-block characterization</span>
     <div class="thm_header_extras">
 
@@ -2750,7 +2831,7 @@
 
     <a class="icon proof" href="ch-mps.html#lem:block_diagonal_iff_off_block_zero">#</a>
     
-    <a class="icon proof" href="ch-mps.html#a0000000176"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mps.html#a0000000177"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2766,7 +2847,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mps.html#def:block_diagonal_matrix">Definition 2.29</a></li>
+          <li><a href="ch-mps.html#def:block_diagonal_matrix">Definition 2.30</a></li>
           
         </ul>
     
@@ -2801,7 +2882,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000176">
+<div class="proof_wrapper" id="a0000000177">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2818,7 +2899,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">2.31</span>
+    <span class="lemma_thmlabel">2.32</span>
     <span class="lemma_thmtitle">Commutation with block projections</span>
     <div class="thm_header_extras">
 
@@ -2829,7 +2910,7 @@
 
     <a class="icon proof" href="ch-mps.html#lem:block_diagonal_of_commutes_block_projection">#</a>
     
-    <a class="icon proof" href="ch-mps.html#a0000000177"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mps.html#a0000000178"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2845,13 +2926,13 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mps.html#def:block_projection">Definition 2.28</a></li>
+          <li><a href="ch-mps.html#def:block_projection">Definition 2.29</a></li>
           
-          <li><a href="ch-mps.html#def:block_diagonal_matrix">Definition 2.29</a></li>
+          <li><a href="ch-mps.html#def:block_diagonal_matrix">Definition 2.30</a></li>
           
-          <li><a href="ch-mps.html#lem:block_diagonal_iff_off_block_zero">Lemma 2.30</a></li>
+          <li><a href="ch-mps.html#lem:block_diagonal_iff_off_block_zero">Lemma 2.31</a></li>
           
-          <li><a href="ch-mps.html#lem:block_diagonal_iff_off_block_zero">Lemma 2.30</a></li>
+          <li><a href="ch-mps.html#lem:block_diagonal_iff_off_block_zero">Lemma 2.31</a></li>
           
         </ul>
     
@@ -2886,7 +2967,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000177">
+<div class="proof_wrapper" id="a0000000178">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2894,7 +2975,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Compare the \((i,j)\) block of the identity \(XP_j=P_jX\) for \(i\ne j\). The right multiplication by \(P_j\) keeps that block, while the left multiplication by \(P_j\) kills it. Hence every off-block entry is zero, and Lemma&#160;<a href="ch-mps.html#lem:block_diagonal_iff_off_block_zero">2.30</a> applies. </p>
+  <p> Compare the \((i,j)\) block of the identity \(XP_j=P_jX\) for \(i\ne j\). The right multiplication by \(P_j\) keeps that block, while the left multiplication by \(P_j\) kills it. Hence every off-block entry is zero, and Lemma&#160;<a href="ch-mps.html#lem:block_diagonal_iff_off_block_zero">2.31</a> applies. </p>
 
   </div>
 </div>
@@ -2903,7 +2984,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">2.32</span>
+    <span class="definition_thmlabel">2.33</span>
     <span class="definition_thmtitle">Block-diagonal tensor from blocks</span>
     <div class="thm_header_extras">
 
@@ -2959,7 +3040,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   Given \(r\) blocks with bond dimensions \((D_k)_{k=1}^r\), per-block tensors \(\{ A_k^i\} \), and scaling factors \((\mu _k)_{k=1}^r\), the associated <em>block-diagonal tensor</em> is the tensor of total bond dimension \(D = \sum _{k=1}^r D_k\) defined by </p>
-<div class="displaymath" id="a0000000178">
+<div class="displaymath" id="a0000000179">
   \[  A^i \; =\;  \bigoplus _{k=1}^{r} \mu _k \,  A_k^i.  \]
 </div>
 
@@ -2970,7 +3051,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">2.33</span>
+    <span class="lemma_thmlabel">2.34</span>
     <span class="lemma_thmtitle">Word evaluation of a block-diagonal tensor</span>
     <div class="thm_header_extras">
 
@@ -2981,7 +3062,7 @@
 
     <a class="icon proof" href="ch-mps.html#lem:eval_word_block_diagonal_tensor">#</a>
     
-    <a class="icon proof" href="ch-mps.html#a0000000179"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mps.html#a0000000180"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2997,7 +3078,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mps.html#def:block_diagonal_tensor">Definition 2.32</a></li>
+          <li><a href="ch-mps.html#def:block_diagonal_tensor">Definition 2.33</a></li>
           
           <li><a href="ch-mps.html#def:eval_word">Definition 2.2</a></li>
           
@@ -3031,13 +3112,13 @@
   </div>
   <div class="lemma_thmcontent">
   <p>    For a word \(w\), the word evaluation of a block-diagonal tensor remains block diagonal: </p>
-<div class="displaymath" id="a0000000180">
+<div class="displaymath" id="a0000000181">
   \[  A^w = \bigoplus _k \mu _k^{|w|} A_k^w .  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000179">
+<div class="proof_wrapper" id="a0000000180">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3054,7 +3135,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">2.34</span>
+    <span class="theorem_thmlabel">2.35</span>
     <span class="theorem_thmtitle">MPV decomposition</span>
     <div class="thm_header_extras">
 
@@ -3065,7 +3146,7 @@
 
     <a class="icon proof" href="ch-mps.html#thm:mpv_decomposition">#</a>
     
-    <a class="icon proof" href="ch-mps.html#a0000000181"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mps.html#a0000000182"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3081,17 +3162,17 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mps.html#def:block_diagonal_tensor">Definition 2.32</a></li>
+          <li><a href="ch-mps.html#def:block_diagonal_tensor">Definition 2.33</a></li>
           
           <li><a href="ch-mps.html#def:mpv">Definition 2.4</a></li>
           
-          <li><a href="ch-mps.html#lem:eval_word_block_diagonal_tensor">Lemma 2.33</a></li>
+          <li><a href="ch-mps.html#lem:eval_word_block_diagonal_tensor">Lemma 2.34</a></li>
           
-          <li><a href="ch-mps.html#def:block_diagonal_tensor">Definition 2.32</a></li>
+          <li><a href="ch-mps.html#def:block_diagonal_tensor">Definition 2.33</a></li>
           
           <li><a href="ch-mps.html#def:mpv">Definition 2.4</a></li>
           
-          <li><a href="ch-mps.html#lem:eval_word_block_diagonal_tensor">Lemma 2.33</a></li>
+          <li><a href="ch-mps.html#lem:eval_word_block_diagonal_tensor">Lemma 2.34</a></li>
           
         </ul>
     
@@ -3123,17 +3204,17 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   The MPV of a block-diagonal tensor decomposes as </p>
-<div class="displaymath" id="a0000000182">
+<div class="displaymath" id="a0000000183">
   \[  |V^{(N)}(A)\rangle  \; =\;  \sum _{k=1}^{r} \mu _k^N \,  |V^{(N)}(A_k)\rangle .  \]
 </div>
 <p> Equivalently, for each configuration \(\sigma \) one has </p>
-<div class="displaymath" id="a0000000183">
+<div class="displaymath" id="a0000000184">
   \[  V^{(N)}(A)_\sigma \; =\;  \sum _{k=1}^{r} \mu _k^N \,  V^{(N)}(A_k)_\sigma .  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000181">
+<div class="proof_wrapper" id="a0000000182">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3141,7 +3222,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> By Lemma&#160;<a href="ch-mps.html#lem:eval_word_block_diagonal_tensor">2.33</a>, the full word evaluation is block diagonal with blocks \(\mu _k^N A_k^w\) for a word \(w\) of length \(N\). Taking the trace of a block-diagonal matrix gives the sum of the block traces: \(\operatorname{tr}(A^w) = \sum _k \mu _k^N \operatorname{tr}(A_k^w)\). </p>
+  <p> By Lemma&#160;<a href="ch-mps.html#lem:eval_word_block_diagonal_tensor">2.34</a>, the full word evaluation is block diagonal with blocks \(\mu _k^N A_k^w\) for a word \(w\) of length \(N\). Taking the trace of a block-diagonal matrix gives the sum of the block traces: \(\operatorname{tr}(A^w) = \sum _k \mu _k^N \operatorname{tr}(A_k^w)\). </p>
 
   </div>
 </div>
@@ -3151,7 +3232,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">2.35</span>
+    <span class="definition_thmlabel">2.36</span>
     <span class="definition_thmtitle">Blocked tensor</span>
     <div class="thm_header_extras">
 
@@ -3207,7 +3288,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   Given a tensor&#160;\(A\) and a blocking length \(L\), the <em>\(L\)-blocked tensor</em> is the tensor with physical index set \(\{ 0,\ldots ,d{-}1\} ^L\) (hence physical dimension \(d^L\)) and the same bond dimension&#160;\(D\), whose matrices are indexed by words \((i_1, \ldots , i_L) \in \{ 0,\ldots ,d{-}1\} ^L\): </p>
-<div class="displaymath" id="a0000000184">
+<div class="displaymath" id="a0000000185">
   \[  (A^{[L]})^{(i_1, \ldots , i_L)} \; =\;  A^{i_1} A^{i_2} \cdots A^{i_L}.  \]
 </div>
 
@@ -3218,7 +3299,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">2.36</span>
+    <span class="lemma_thmlabel">2.37</span>
     <span class="lemma_thmtitle">Blocked word evaluation</span>
     <div class="thm_header_extras">
 
@@ -3229,7 +3310,7 @@
 
     <a class="icon proof" href="ch-mps.html#lem:eval_word_block">#</a>
     
-    <a class="icon proof" href="ch-mps.html#a0000000185"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mps.html#a0000000186"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3245,7 +3326,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mps.html#def:blocked_tensor">Definition 2.35</a></li>
+          <li><a href="ch-mps.html#def:blocked_tensor">Definition 2.36</a></li>
           
           <li><a href="ch-mps.html#def:eval_word">Definition 2.2</a></li>
           
@@ -3281,13 +3362,13 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   If \(w = (J_1, \ldots , J_m)\) is a word in the blocked alphabet, where each \(J_k\) is an \(L\)-tuple in \(\{ 0, \ldots , d{-}1\} ^L\), then concatenating the block words gives a word \(\widetilde{w}\) of length \(mL\) in the original alphabet and one has </p>
-<div class="displaymath" id="a0000000186">
+<div class="displaymath" id="a0000000187">
   \[  (A^{[L]})^w = A^{\widetilde{w}}.  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000185">
+<div class="proof_wrapper" id="a0000000186">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3304,7 +3385,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">2.37</span>
+    <span class="lemma_thmlabel">2.38</span>
     <span class="lemma_thmtitle">Blocking preserves MPV coefficients</span>
     <div class="thm_header_extras">
 
@@ -3315,7 +3396,7 @@
 
     <a class="icon proof" href="ch-mps.html#lem:mpv_block">#</a>
     
-    <a class="icon proof" href="ch-mps.html#a0000000187"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mps.html#a0000000188"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3331,15 +3412,15 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mps.html#def:blocked_tensor">Definition 2.35</a></li>
+          <li><a href="ch-mps.html#def:blocked_tensor">Definition 2.36</a></li>
           
           <li><a href="ch-mps.html#def:mpv">Definition 2.4</a></li>
           
-          <li><a href="ch-mps.html#def:blocked_tensor">Definition 2.35</a></li>
+          <li><a href="ch-mps.html#def:blocked_tensor">Definition 2.36</a></li>
           
           <li><a href="ch-mps.html#def:mpv">Definition 2.4</a></li>
           
-          <li><a href="ch-mps.html#lem:eval_word_block">Lemma 2.36</a></li>
+          <li><a href="ch-mps.html#lem:eval_word_block">Lemma 2.37</a></li>
           
         </ul>
     
@@ -3371,13 +3452,13 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   For each basis state \(\sigma = (\sigma _1, \ldots , \sigma _N)\) of the blocked system, where each \(\sigma _k\) is an \(L\)-tuple in \(\{ 0, \ldots , d{-}1\} ^L\), there exists a basis state \(\widetilde{\sigma } = (\widetilde{\sigma }_1, \ldots , \widetilde{\sigma }_{NL})\) of the original system such that </p>
-<div class="displaymath" id="a0000000188">
+<div class="displaymath" id="a0000000189">
   \[  V^{(N)}(A^{[L]})_\sigma \; =\;  V^{(NL)}(A)_{\widetilde{\sigma }}.  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000187">
+<div class="proof_wrapper" id="a0000000188">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3385,7 +3466,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Concatenate the block words and apply the blocked word evaluation lemma (Lemma&#160;<a href="ch-mps.html#lem:eval_word_block">2.36</a>). </p>
+  <p> Concatenate the block words and apply the blocked word evaluation lemma (Lemma&#160;<a href="ch-mps.html#lem:eval_word_block">2.37</a>). </p>
 
   </div>
 </div>
@@ -3394,7 +3475,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">2.38</span>
+    <span class="theorem_thmlabel">2.39</span>
     <span class="theorem_thmtitle">Blocking preserves same MPV</span>
     <div class="thm_header_extras">
 
@@ -3405,7 +3486,7 @@
 
     <a class="icon proof" href="ch-mps.html#thm:blocking_same_mpv">#</a>
     
-    <a class="icon proof" href="ch-mps.html#a0000000189"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mps.html#a0000000190"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3423,9 +3504,9 @@
           
           <li><a href="ch-mps.html#def:same_mpv">Definition 2.11</a></li>
           
-          <li><a href="ch-mps.html#def:blocked_tensor">Definition 2.35</a></li>
+          <li><a href="ch-mps.html#def:blocked_tensor">Definition 2.36</a></li>
           
-          <li><a href="ch-mps.html#lem:mpv_block">Lemma 2.37</a></li>
+          <li><a href="ch-mps.html#lem:mpv_block">Lemma 2.38</a></li>
           
         </ul>
     
@@ -3460,7 +3541,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000189">
+<div class="proof_wrapper" id="a0000000190">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3468,7 +3549,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> By Lemma&#160;<a href="ch-mps.html#lem:mpv_block">2.37</a>, each MPV coefficient of the blocked tensor \(A^{[L]}\) equals a coefficient of \(A\) at the corresponding concatenated configuration. The same holds for \(B^{[L]}\) (with the same concatenated configuration). Since \(A\) and \(B\) agree on all configurations, so do \(A^{[L]}\) and \(B^{[L]}\). </p>
+  <p> By Lemma&#160;<a href="ch-mps.html#lem:mpv_block">2.38</a>, each MPV coefficient of the blocked tensor \(A^{[L]}\) equals a coefficient of \(A\) at the corresponding concatenated configuration. The same holds for \(B^{[L]}\) (with the same concatenated configuration). Since \(A\) and \(B\) agree on all configurations, so do \(A^{[L]}\) and \(B^{[L]}\). </p>
 
   </div>
 </div>
@@ -3478,7 +3559,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">2.39</span>
+    <span class="definition_thmlabel">2.40</span>
     <span class="definition_thmtitle">MPV as Hilbert-space vector</span>
     <div class="thm_header_extras">
 
@@ -3542,7 +3623,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">2.40</span>
+    <span class="definition_thmlabel">2.41</span>
     <span class="definition_thmtitle">MPV inner product</span>
     <div class="thm_header_extras">
 
@@ -3566,7 +3647,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mps.html#def:mpv_state">Definition 2.39</a></li>
+          <li><a href="ch-mps.html#def:mpv_state">Definition 2.40</a></li>
           
         </ul>
     
@@ -3598,7 +3679,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   The <em>MPV inner product</em> between two tensors \(A\) and \(B\) at system size&#160;\(N\) is </p>
-<div class="displaymath" id="a0000000190">
+<div class="displaymath" id="a0000000191">
   \[  \langle V^{(N)}(A) | V^{(N)}(B) \rangle  \; :=\;  \sum _{\sigma \in \{ 0,\ldots ,d{-}1\} ^N} \overline{V^{(N)}(A)_\sigma } \;  V^{(N)}(B)_\sigma ,  \]
 </div>
 <p> i.e. the Euclidean inner product on \(\mathbb {C}^{d^N}\) (conjugate-linear in the first argument). </p>
@@ -3610,7 +3691,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">2.41</span>
+    <span class="definition_thmlabel">2.42</span>
     <span class="definition_thmtitle">MPV overlap</span>
     <div class="thm_header_extras">
 
@@ -3666,10 +3747,10 @@
   </div>
   <div class="definition_thmcontent">
   <p>   The <em>MPV overlap</em> between two tensors \(A\) (of bond dimension \(D_1\)) and \(B\) (of bond dimension \(D_2\)) at system size&#160;\(N\) is </p>
-<div class="displaymath" id="a0000000191">
+<div class="displaymath" id="a0000000192">
   \[  O_{AB}(N) \; :=\;  \sum _{\sigma \in \{ 0,\ldots ,d{-}1\} ^N} V^{(N)}(A)_\sigma \;  \overline{V^{(N)}(B)_\sigma }.  \]
 </div>
-<p> This is the bilinear overlap (without complex conjugation) used later. By Lemma&#160;<a href="ch-mps.html#lem:overlap_eq_inner">2.42</a>, it is the complex conjugate of the Hilbert-space inner product from Definition&#160;<a href="ch-mps.html#def:mpv_inner">2.40</a>. </p>
+<p> This is the bilinear overlap (without complex conjugation) used later. By Lemma&#160;<a href="ch-mps.html#lem:overlap_eq_inner">2.43</a>, it is the complex conjugate of the Hilbert-space inner product from Definition&#160;<a href="ch-mps.html#def:mpv_inner">2.41</a>. </p>
 
   </div>
 </div>
@@ -3678,7 +3759,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">2.42</span>
+    <span class="lemma_thmlabel">2.43</span>
     <span class="lemma_thmtitle">Overlap equals conjugate inner product</span>
     <div class="thm_header_extras">
 
@@ -3689,7 +3770,7 @@
 
     <a class="icon proof" href="ch-mps.html#lem:overlap_eq_inner">#</a>
     
-    <a class="icon proof" href="ch-mps.html#a0000000192"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mps.html#a0000000193"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3705,13 +3786,13 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mps.html#def:mpv_overlap">Definition 2.41</a></li>
+          <li><a href="ch-mps.html#def:mpv_overlap">Definition 2.42</a></li>
           
-          <li><a href="ch-mps.html#def:mpv_inner">Definition 2.40</a></li>
+          <li><a href="ch-mps.html#def:mpv_inner">Definition 2.41</a></li>
           
-          <li><a href="ch-mps.html#def:mpv_overlap">Definition 2.41</a></li>
+          <li><a href="ch-mps.html#def:mpv_overlap">Definition 2.42</a></li>
           
-          <li><a href="ch-mps.html#def:mpv_inner">Definition 2.40</a></li>
+          <li><a href="ch-mps.html#def:mpv_inner">Definition 2.41</a></li>
           
         </ul>
     
@@ -3746,7 +3827,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000192">
+<div class="proof_wrapper" id="a0000000193">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3763,7 +3844,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">2.43</span>
+    <span class="lemma_thmlabel">2.44</span>
     <span class="lemma_thmtitle">Overlap determined by positive-length MPV</span>
     <div class="thm_header_extras">
 
@@ -3774,7 +3855,7 @@
 
     <a class="icon proof" href="ch-mps.html#lem:overlap_eq_of_pos_mpv">#</a>
     
-    <a class="icon proof" href="ch-mps.html#a0000000193"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mps.html#a0000000194"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3790,9 +3871,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mps.html#def:mpv_overlap">Definition 2.41</a></li>
+          <li><a href="ch-mps.html#def:mpv_overlap">Definition 2.42</a></li>
           
-          <li><a href="ch-mps.html#def:mpv_overlap">Definition 2.41</a></li>
+          <li><a href="ch-mps.html#def:mpv_overlap">Definition 2.42</a></li>
           
         </ul>
     
@@ -3827,7 +3908,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000193">
+<div class="proof_wrapper" id="a0000000194">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
