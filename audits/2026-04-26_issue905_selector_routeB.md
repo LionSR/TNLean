@@ -13,7 +13,7 @@ and it does **not** derive the wrapping/open-chain boundary representation.  The
 new theorems say that, once those two inputs are supplied at the matching length,
 the already-merged Route B block split no longer needs an explicit
 `WordTupleSpanTop A m` hypothesis: `IsCanonicalFormBNT μ A` plus
-`HasBlockSelectorWords A S` supplies `WordTupleSpanTop A (1+S)` by the selector
+`HasBlockSelectorWords A S` supplies `WordTupleSpanTop A (1 + S)` by the selector
 composition from PR #937.
 
 ## Lean declarations added
@@ -23,7 +23,7 @@ File: `TNLean/MPS/ParentHamiltonian/DegenerateGS.lean`
 - `MPSTensor.chainGroundSpace_toTensorFromBlocks_le_iSup_of_bntSelectorWords`
   - Hypotheses: `IsCanonicalFormBNT μ A`, `HasBlockSelectorWords A S`, `1 < L`,
     `N ≥ L + 1`, and a boundary matrix representation commuting with every
-    length-`1+S` assembled word.
+    length-`1 + S` assembled word.
   - Conclusion: the assembled chain ground space is contained in the supremum of
     blockwise chain ground spaces.
 
@@ -38,7 +38,7 @@ File: `TNLean/MPS/ParentHamiltonian/DegenerateGS.lean`
 All three proofs are thin compositions of
 `MPSTensor.wordTupleSpanTop_of_isCanonicalFormBNT_of_blockSelectorWords` with the
 merged Route B theorems ending in `_of_wordTupleSpanTop`.  The positive length
-input is `0 < 1+S`.
+input is `0 < 1 + S`.
 
 ## Blueprint updates
 

@@ -672,11 +672,11 @@ splitting theorem** of the form
 `parentHamiltonianGroundSpace (μ := μ) A L N ≤ ⨆ j, chainGroundSpace (A j) L N`,
 saying that a state whose cyclic windows all lie in the block-diagonal local
 ground space decomposes into a sum of block chain-ground-state components. The
-conditional Route B endgame in this file composes two still-explicit inputs: a
-finite product-word span witness for #934 (which gives the virtual-sector
-projection span) and a wrapping/open-chain boundary representation commuting
-with the same length words. It does not replace either paper-level input, so it
-does not close the unconditional block-splitting theorem by itself.
+conditional Route B endgame in this file can use either a finite product-word
+span witness or a finite selector-word hypothesis plus the selector-to-product
+span theorem. It still keeps both selector-word existence and the compatible
+wrapping/open-chain boundary representation explicit, so it does not close the
+unconditional block-splitting theorem by itself.
 
 Given that block-splitting theorem, the ⊆ direction becomes:
 ```

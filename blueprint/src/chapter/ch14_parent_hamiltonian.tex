@@ -2625,10 +2625,10 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     \leanok
     \uses{def:cf_bnt, rem:word_tuple_span_top,
         def:parent_hamiltonian_ground_space_bnt, def:bnt_span}
-    Let $A$ be in canonical-form/BNT, and suppose length-$S$ block-selector
-    words are given.  If every assembled periodic-chain ground vector has a
-    boundary matrix representation commuting with all length-$(1+S)$ assembled
-    words, then
+    Let $A$ be in canonical-form/BNT, assume $1 < L$ and $N \ge L + 1$, and suppose
+    length-$S$ block-selector words are given.  If every assembled periodic-chain
+    ground vector has a boundary matrix representation commuting with all
+    length-$(1 + S)$ assembled words, then
     \[
         \mathcal G_{N,L}\bigl(\operatorname{Assemble}(\mu, A)\bigr)
         \subseteq \bigsqcup_j \mathcal G_{N,L}(A_j).
@@ -2651,10 +2651,10 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
         lem:route_b_block_split_from_product_word_span}
     Lemma~\ref{lem:product_word_span_from_bnt_selectors} turns the
     canonical-form/BNT hypotheses plus length-$S$ selector words into the
-    product-word span condition at the positive length $1+S$.
+    product-word span condition at the positive length $1 + S$.
     Lemma~\ref{lem:route_b_block_split_from_product_word_span} then applies
     Route B with the boundary matrix commuting with the same
-    length-$(1+S)$ assembled words.  The equality and BNT-span containment are
+    length-$(1 + S)$ assembled words.  The equality and BNT-span containment are
     exactly the corresponding product-word-span consequences after this
     selector-to-product-span replacement.
 \end{proof}
