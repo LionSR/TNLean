@@ -524,7 +524,7 @@ theorem chainGroundSpace_toTensorFromBlocks_le_iSup_of_wordTuple_span_eq_top
 
 /-- Conditional periodic block-decomposition equality from a product-word span witness.
 
-This packages the exact equality obtained once #934 supplies the finite
+This records the exact equality obtained once #934 supplies the finite
 product-word span and the wrapping/open-chain layer supplies the compatible
 commuting boundary matrix.  It is still conditional on those two paper-level
 inputs, and is therefore not a restatement of the final unconditional theorem. -/
