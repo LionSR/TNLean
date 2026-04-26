@@ -408,17 +408,17 @@ private theorem scalar_sum_comm {α β : Type*} [Fintype α] [Fintype β]
   calc
     (∑ a, (∑ b, F a b * q b) * p a)
         = ∑ a, ∑ b, F a b * q b * p a := by
-            simp_rw [Finset.sum_mul]
+      simp_rw [Finset.sum_mul]
     _ = ∑ b, ∑ a, F a b * q b * p a := by
-            rw [Finset.sum_comm]
+      rw [Finset.sum_comm]
     _ = ∑ b, ∑ a, F a b * p a * q b := by
-            refine Finset.sum_congr rfl ?_
-            intro b _
-            refine Finset.sum_congr rfl ?_
-            intro a _
-            ring
+      refine Finset.sum_congr rfl ?_
+      intro b _
+      refine Finset.sum_congr rfl ?_
+      intro a _
+      ring
     _ = ∑ b, (∑ a, F a b * p a) * q b := by
-            simp_rw [Finset.sum_mul]
+      simp_rw [Finset.sum_mul]
 
 private theorem separateLinearMap_apply_commute
     {α β : Type*} [Fintype α] [Fintype β]
@@ -432,28 +432,28 @@ private theorem separateLinearMap_apply_commute
     P (WithLp.toLp 2 (fun a' => Q (WithLp.toLp 2 (fun b' => F a' b')) b)) a
         = ∑ a', (Q (WithLp.toLp 2 (fun b' => F a' b')) b) *
             P (EuclideanSpace.single a' (1 : ℂ)) a := by
-              rw [linearMap_apply_eq_sum]
+      rw [linearMap_apply_eq_sum]
     _ = ∑ a', (∑ b', F a' b' * Q (EuclideanSpace.single b' (1 : ℂ)) b) *
             P (EuclideanSpace.single a' (1 : ℂ)) a := by
-              refine Finset.sum_congr rfl ?_
-              intro a' _
-              rw [linearMap_apply_eq_sum]
+      refine Finset.sum_congr rfl ?_
+      intro a' _
+      rw [linearMap_apply_eq_sum]
     _ = ∑ b', (∑ a', F a' b' * P (EuclideanSpace.single a' (1 : ℂ)) a) *
             Q (EuclideanSpace.single b' (1 : ℂ)) b := by
-              exact scalar_sum_comm F
-                (fun a' => P (EuclideanSpace.single a' (1 : ℂ)) a)
-                (fun b' => Q (EuclideanSpace.single b' (1 : ℂ)) b)
+      exact scalar_sum_comm F
+        (fun a' => P (EuclideanSpace.single a' (1 : ℂ)) a)
+        (fun b' => Q (EuclideanSpace.single b' (1 : ℂ)) b)
     _ = ∑ b', (P (WithLp.toLp 2 (fun a' => F a' b')) a) *
             Q (EuclideanSpace.single b' (1 : ℂ)) b := by
-              refine Finset.sum_congr rfl ?_
-              intro b' _
-              have hP : (∑ a', F a' b' * P (EuclideanSpace.single a' (1 : ℂ)) a) =
-                  P (WithLp.toLp 2 (fun a' => F a' b')) a := by
-                simpa using
-                  (linearMap_apply_eq_sum P (WithLp.toLp 2 (fun a' => F a' b')) a).symm
-              rw [hP]
+      refine Finset.sum_congr rfl ?_
+      intro b' _
+      have hP : (∑ a', F a' b' * P (EuclideanSpace.single a' (1 : ℂ)) a) =
+          P (WithLp.toLp 2 (fun a' => F a' b')) a := by
+        simpa using
+          (linearMap_apply_eq_sum P (WithLp.toLp 2 (fun a' => F a' b')) a).symm
+      rw [hP]
     _ = Q (WithLp.toLp 2 (fun b' => P (WithLp.toLp 2 (fun a' => F a' b')) a)) b := by
-              rw [linearMap_apply_eq_sum]
+      rw [linearMap_apply_eq_sum]
 
 private theorem cyclicRestrictES_single_of_sameOutsideWindow {N : ℕ} (hN : 0 < N) {L : ℕ}
     (hLN : L ≤ N) (i : Fin N) (σ τ : Cfg d N)
@@ -724,13 +724,12 @@ theorem localTermES_isSymmetricProjection {N : ℕ} (A : MPSTensor d D) (L : ℕ
     (i : Fin N) : (localTermES A L i).IsSymmetricProjection :=
   ⟨localTermES_isIdempotentElem A L i, (localTermES_isPositive A L i).isSymmetric⟩
 
-/-- Transported local terms on site-disjoint cyclic windows commute.
+/-- Transported local terms on site-disjoint cyclic windows commute pointwise.
 
-The proof expands both embedded local operators in coordinates.  The cyclic-window
-disjointness hypothesis gives the two locality identities needed for the expansion:
-replacing one window leaves the other window's extracted configuration unchanged,
-and the two window replacements commute.  The remaining equality is the elementary
-fact that two linear maps acting on separate finite coordinate variables commute. -/
+If `L ≤ N` and no site belongs to both cyclic windows based at `i` and `j`, then
+applying the two transported local ES terms in either order gives the same vector.
+This is the non-overlap commutation input for the finite-overlap martingale
+reduction. -/
 theorem localTermES_commute_of_cyclic_windows_disjoint {N : ℕ} (A : MPSTensor d D)
     {L : ℕ} (hLN : L ≤ N) {i j : Fin N} (hij : CyclicWindowsDisjoint L i j)
     (v : EuclideanSpace ℂ (Cfg d N)) :
@@ -783,9 +782,8 @@ theorem localTermES_commute_of_cyclic_windows_disjoint {N : ℕ} (A : MPSTensor 
 /-- Non-overlap positivity for transported local terms on disjoint cyclic windows.
 
 For `L ≤ N`, if the cyclic windows based at `i` and `j` have no common site, then
-the corresponding transported local ES projections commute.  Since they are
-symmetric projections, their ordered cross term is nonnegative:
-`0 ≤ Re ⟪h_i v, h_j v⟫`. -/
+the ordered cross term of the corresponding transported local ES projections is
+nonnegative: `0 ≤ Re ⟪h_i v, h_j v⟫`. -/
 theorem localTermES_re_inner_nonneg_of_cyclic_windows_disjoint {N : ℕ}
     (A : MPSTensor d D) {L : ℕ} (hLN : L ≤ N) {i j : Fin N}
     (hij : CyclicWindowsDisjoint L i j) (v : EuclideanSpace ℂ (Cfg d N)) :

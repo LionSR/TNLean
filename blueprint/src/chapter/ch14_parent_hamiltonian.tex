@@ -1628,11 +1628,13 @@ Lucia~\cite{Kastoryano2018Martingale}.
     \uses{lem:transported_es_local_projections, rem:projection_geometry_rowsum_identities}
     Let $L\le N$ and let $h_{i,\mathrm{ES}},h_{j,\mathrm{ES}}$ be transported local
     terms whose cyclic $L$-windows are site-disjoint: no site of the periodic chain
-    has cyclic offset $<L$ from both $i$ and $j$. Then
+    has cyclic offset $<L$ from both $i$ and $j$. Then the terms commute pointwise:
+    for every vector $v$,
     \[
-        h_{i,\mathrm{ES}}h_{j,\mathrm{ES}}=h_{j,\mathrm{ES}}h_{i,\mathrm{ES}}
+        h_{i,\mathrm{ES}}(h_{j,\mathrm{ES}}v)
+            = h_{j,\mathrm{ES}}(h_{i,\mathrm{ES}}v),
     \]
-    and for every vector $v$,
+    and their ordered cross term is nonnegative:
     \[
         0\le \operatorname{Re}\langle h_{i,\mathrm{ES}}v,
             h_{j,\mathrm{ES}}v\rangle .
@@ -2091,12 +2093,11 @@ Lucia~\cite{Kastoryano2018Martingale}.
     establishes the finite-sum algebra from ordered cross-term row bounds, and
     Lemmas~\ref{lem:parent_hamiltonian_finite_overlap_friedrichs_quadratic}
     and~\ref{lem:parent_hamiltonian_finite_overlap_friedrichs_gap} record the
-    common finite-overlap specialization with $m=2(L-1)$.  This reduction keeps
-    the transported-local-projection statement as an explicit assumption,
-    matching the separate projection-structure work. Once that assumption is
-    established, the remaining analytic tasks are the cyclic-window
-    row-cardinality bound, non-overlap positivity, and the Friedrichs-angle
-    estimate for overlapping windows.
+    common finite-overlap specialization with $m=2(L-1)$.
+    Lemma~\ref{lem:transported_es_nonoverlap_positive} supplies the non-overlap
+    positivity input for site-disjoint windows.
+    The remaining analytic tasks are the cyclic-window row-cardinality bound and the
+    Friedrichs-angle estimate for overlapping windows.
 \end{proof}
 
 \begin{theorem}[Spectral gap for MPS parent Hamiltonians]\label{thm:parent_hamiltonian_gapped}

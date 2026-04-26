@@ -44,11 +44,10 @@ theorem re_inner_nonneg {P : E →ₗ[𝕜] E} (hP : P.IsSymmetricProjection) (v
     0 ≤ RCLike.re (⟪P v, v⟫_𝕜) :=
   hP.isPositive.re_inner_nonneg_left v
 
-/-- Commuting symmetric projections have nonnegative ordered cross term.
+/-- Commuting symmetric projections have nonnegative ordered cross terms.
 
-If `P` and `Q` are orthogonal projections and `P (Q v) = Q (P v)` for every
-`v`, then the mixed quadratic term is the quadratic form of `P` on `Q v`:
-`Re ⟪P v, Q v⟫ = Re ⟪P (Q v), Q v⟫ ≥ 0`. -/
+If `P` and `Q` are symmetric projections that commute pointwise, then
+`0 ≤ Re ⟪P v, Q v⟫` for every vector `v`. -/
 theorem re_inner_apply_apply_nonneg_of_commute {P Q : E →ₗ[𝕜] E}
     (hP : P.IsSymmetricProjection) (hQ : Q.IsSymmetricProjection)
     (hcomm : ∀ v : E, P (Q v) = Q (P v)) (v : E) :
