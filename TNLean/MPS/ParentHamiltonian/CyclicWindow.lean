@@ -2,6 +2,7 @@
 Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
+import TNLean.MPS.ParentHamiltonian.Defs
 import TNLean.MPS.ParentHamiltonian.IntersectionProperty
 
 /-!
@@ -238,6 +239,29 @@ theorem eq_cyclic_site_of_offset_eq {N : ℕ} (hN : 0 < N) {i k : Fin N} {r : �
       rw [hsum, Nat.add_mod_right]
       exact Nat.mod_eq_of_lt k.isLt
     exact hmod.symm
+
+/-- Membership in a cyclic-window support is equivalently the cyclic offset from
+the starting site being smaller than the window length, in the non-repeating regime
+`L ≤ N`. -/
+theorem mem_cyclicWindowSupport_iff {N L : ℕ} (hLN : L ≤ N) (i k : Fin N) :
+    k ∈ cyclicWindowSupport N L i ↔ ((k.val + N - i.val) % N < L) := by
+  constructor
+  · intro hk
+    rw [cyclicWindowSupport, Finset.mem_image] at hk
+    rcases hk with ⟨r, hrange, hr⟩
+    have hrL : r < L := Finset.mem_range.mp hrange
+    have hrN : r < N := Nat.lt_of_lt_of_le hrL hLN
+    rw [← hr]
+    change (((i.val + r) % N + N - i.val) % N) < L
+    rw [offset_mod_eq i.isLt hrN]
+    exact hrL
+  · intro hk
+    rw [cyclicWindowSupport, Finset.mem_image]
+    let r := (k.val + N - i.val) % N
+    refine ⟨r, Finset.mem_range.mpr hk, ?_⟩
+    have hsite :=
+      (eq_cyclic_site_of_offset_eq (Fin.pos i) (i := i) (k := k) (r := r) rfl).symm
+    simpa [cyclicForwardSite, r] using hsite
 
 @[simp]
 theorem cyclicForwardSite_zero {N : ℕ} (i : Fin N) :
