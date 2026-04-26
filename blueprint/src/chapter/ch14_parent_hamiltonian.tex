@@ -732,7 +732,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \lean{MPSTensor.chainGroundSpace_le_chainGroundSpace_succ,
           MPSTensor.chainGroundSpace_le_chainGroundSpace_of_le}
     \leanok
-    \uses{rem:cyclic_window_operators, lem:ground_space_in_left_ground}
+    \uses{rem:cyclic_window_operators}
     On a nonempty periodic chain, longer cyclic-window constraints imply all
     shorter cyclic-window constraints: if $L' \le L \le N$, then
     $\mathcal G_{N,L}(A) \subseteq \mathcal G_{N,L'}(A)$.
@@ -740,6 +740,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 
 \begin{proof}
     \leanok
+    \uses{lem:ground_space_in_left_ground}
     Fix a cyclic window of length $L+1$ and restrict its last site. The resulting
     length-$L$ vector is again in the ground space, so one-site peeling gives the
     inclusion for consecutive ranges. Iteration gives the general antitonicity.
@@ -771,8 +772,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \label{lem:wrapped_window_one_sided_compatibility}
     \lean{MPSTensor.wrapping_window_compatibility_of_isNBlkInjective}
     \leanok
-    \uses{def:l_blk_injective, rem:cyclic_window_operators,
-        lem:ground_space_map_injective_blk}
+    \uses{def:l_blk_injective, rem:cyclic_window_operators}
     Assume $A$ is $L_0$-block injective with $L_0>0$ and $M \ge L_0$.
     If the reduced wrapped window at the last site has boundary matrices
     $Y_\tau$, then for every physical letter $j$ one has
@@ -784,6 +784,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 
 \begin{proof}
     \leanok
+    \uses{lem:ground_space_map_injective_blk}
     The trace identity for the wrapped window is tested against all words of
     length $L_0$. Injectivity of $\Gamma_{L_0}$, which follows from
     $L_0$-block injectivity, strips the test word and gives the displayed matrix
@@ -794,8 +795,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \label{lem:mirror_wrapped_window_one_sided_compatibility}
     \lean{MPSTensor.wrapping_window_mirror_compatibility_of_isNBlkInjective}
     \leanok
-    \uses{def:l_blk_injective, rem:cyclic_window_operators,
-        lem:ground_space_map_injective_blk}
+    \uses{def:l_blk_injective, rem:cyclic_window_operators}
     Assume $A$ is $L_0$-block injective with $L_0>0$ and $M \ge L_0$.
     If the opposite reduced wrapped window has boundary matrices $Y_\tau$, then
     \[
@@ -807,6 +807,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 
 \begin{proof}
     \leanok
+    \uses{lem:ground_space_map_injective_blk}
     Factor the cyclic word at the opposite wrapped position, rotate the trace,
     and use injectivity of $\Gamma_{L_0}$ to remove the length-$L_0$ test word.
 \end{proof}
