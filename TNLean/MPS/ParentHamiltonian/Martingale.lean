@@ -81,8 +81,8 @@ concrete Friedrichs-angle/row-sum lower bound that
   finite-overlap reduction turning explicit local projection, overlap,
   non-overlap positivity, and Friedrichs estimates into the gap estimate.
 * `MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_friedrichs` — the
-  same reduction specialized to the concrete cyclic-window overlap predicate and
-  its `2 * (L - 1)` row-cardinality bound.
+  same reduction specialized to the concrete cyclic-window overlap predicate,
+  its `2 * (L - 1)` row-cardinality bound, and the non-overlap positivity theorem.
 * `MPSTensor.parentHamiltonian_gapped` — uniform spectral gap for MPS
   parent Hamiltonians on injective tensors, obtained from the
   Friedrichs-angle bound recorded in
@@ -295,6 +295,21 @@ def CyclicWindowsDisjoint {N : ℕ} (L : ℕ) (i j : Fin N) : Prop :=
 theorem CyclicWindowsDisjoint.symm {N : ℕ} {L : ℕ} {i j : Fin N}
     (hij : CyclicWindowsDisjoint L i j) : CyclicWindowsDisjoint L j i :=
   fun k hj hi => hij k hi hj
+
+private theorem cyclicWindowsDisjoint_of_not_cyclicWindowsOverlap {N L : ℕ}
+    {i j : Fin N} (hij : ¬ cyclicWindowsOverlap N L i j) :
+    CyclicWindowsDisjoint L i j := by
+  intro k hki hkj
+  apply hij
+  refine ⟨k, ?_, ?_⟩
+  · rw [cyclicWindowSupport, Finset.mem_image]
+    refine ⟨(k.val + N - i.val) % N, Finset.mem_range.mpr hki, ?_⟩
+    exact (eq_cyclic_site_of_offset_eq (Fin.pos i) (i := i) (k := k)
+      (r := (k.val + N - i.val) % N) rfl).symm
+  · rw [cyclicWindowSupport, Finset.mem_image]
+    refine ⟨(k.val + N - j.val) % N, Finset.mem_range.mpr hkj, ?_⟩
+    exact (eq_cyclic_site_of_offset_eq (Fin.pos j) (i := j) (k := k)
+      (r := (k.val + N - j.val) % N) rfl).symm
 
 /-- Ground-space submodule for the finite-size parent Hamiltonian,
 transported to the `EuclideanSpace` (inner-product) setting so that
@@ -1042,16 +1057,13 @@ predicate.
 For chains with `N ≥ 2L`, the predicate `cyclicWindowsOverlap N L i j` marks the
 cyclic translates whose length-`L` windows have the finite-range overlap relevant
 to the martingale method.  The row-cardinality estimate is supplied by
-`cyclicWindowsOverlap_card_le`, and local projection structure is supplied by
-`localTermES_isSymmetricProjection`.  Consequently the only remaining
-local hypotheses are non-overlap positivity and the Friedrichs-angle estimate for
-pairs marked by `cyclicWindowsOverlap`. -/
+`cyclicWindowsOverlap_card_le`, local projection structure is supplied by
+`localTermES_isSymmetricProjection`, and non-overlap positivity is supplied by
+`localTermES_re_inner_nonneg_of_cyclic_windows_disjoint`.  Consequently the only
+remaining local hypothesis is the Friedrichs-angle estimate for pairs marked by
+`cyclicWindowsOverlap`. -/
 theorem parentHamiltonianES_gap_bound_of_cyclic_window_friedrichs
     (A : MPSTensor d D) (L : ℕ) (hL : 1 < L)
-    (hDisjoint : ∀ (N : ℕ) (_hLN : 2 * L ≤ N) (i j : Fin N),
-      j ∈ Finset.univ.erase i → ¬ cyclicWindowsOverlap N L i j →
-        ∀ v : EuclideanSpace ℂ (Cfg d N),
-          0 ≤ (⟪localTermES A L i v, localTermES A L j v⟫_ℂ).re)
     (hFriedrichs : ∀ (N : ℕ) (_hLN : 2 * L ≤ N) (i j : Fin N),
       j ∈ Finset.univ.erase i → cyclicWindowsOverlap N L i j →
         ∀ v : EuclideanSpace ℂ (Cfg d N),
@@ -1069,7 +1081,10 @@ theorem parentHamiltonianES_gap_bound_of_cyclic_window_friedrichs
     (fun N => cyclicWindowsOverlap N L)
     (fun N _hLN i => localTermES_isSymmetricProjection A L i)
     (fun N hLN i => cyclicWindowsOverlap_card_le hLN hL i)
-    hDisjoint hFriedrichs
+    (fun N hLN i j _hij hnot v =>
+      localTermES_re_inner_nonneg_of_cyclic_windows_disjoint A (by omega)
+        (cyclicWindowsDisjoint_of_not_cyclicWindowsOverlap hnot) v)
+    hFriedrichs
 
 /-! ### Uniform spectral gap for the MPS parent Hamiltonian -/
 
@@ -1098,12 +1113,10 @@ uniform estimate `γ * re ⟪H_N v, v⟫ ≤ re ⟪H_N v, H_N v⟫`.
 `parentHamiltonianES_gap_bound_of_ordered_local_term_bounds` now formalize the
 finite-sum algebra turning explicit ordered cross-term row bounds for local
 symmetric projections into the quadratic-form hypothesis above.
-5. **Remaining local analytic obligations:** the combinatorial overlap count comes
-from locality (`localTerm`, `parentHamiltonian`) and finite range: each window
-overlaps at most `2 * (L - 1)` neighbors. The local symmetric-projection theorem
-for `localTermES` is now proved above; the remaining input is the
-Friedrichs-angle estimate that supplies the ordered cross-term constants with
-the required row sums.
+5. **Remaining local analytic obligation:** local projection structure, cyclic-window
+row cardinality, and non-overlap positivity are now formalized above. The remaining
+hypothesis is the Friedrichs-angle estimate for overlapping cyclic windows with the
+coefficient required by the finite-overlap row reduction.
 6. **Sorry dependency split:** `parentHamiltonian_gapped` is the downstream
 existential theorem, now proved by applying the Friedrichs-angle theorem
 below. The theorem `parentHamiltonianES_gap_bound_of_friedrichs` still depends
@@ -1125,11 +1138,10 @@ theorem parentHamiltonianES_gap_bound_of_friedrichs
       v ∈ (parentHamiltonianGroundSpaceES A L N)ᗮ →
         ((1 : ℝ) / (4 * (L : ℝ))) * ‖v‖ ≤
           ‖parentHamiltonianES A L N v‖ := by
-  -- Remaining obligation: derive the uniform quadratic-form estimate required by
-  -- `parentHamiltonianES_gap_bound_of_quadratic_form` from the MPS-specific
-  -- Friedrichs-angle estimate for adjacent local ground spaces and the
-  -- finite-overlap row-sum bound. Positivity, kernel identification, and the
-  -- spectral-theorem conversion are already formalized above.
+  -- Remaining obligation: prove the overlapping cyclic-window Friedrichs-angle
+  -- estimate consumed by `parentHamiltonianES_gap_bound_of_cyclic_window_friedrichs`.
+  -- Local projection structure, row cardinality, non-overlap positivity, kernel
+  -- identification, and the spectral-theorem conversion are already formalized above.
   sorry
 
 /--
