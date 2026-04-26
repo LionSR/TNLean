@@ -2279,7 +2279,7 @@ The following results separate the zero blocks from the
 	\label{thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_data}
 	\lean{MPSTensor.exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_with_overlapData}
 	\leanok
-	\uses{thm:bnt_sector_decomp_tp_prim_irr_collapsed, thm:bnt_li_tp_prim_irr_separated}
+	\uses{thm:bnt_li_tp_prim_irr_separated}
 	For trace-preserving primitive irreducible blocks of positive bond dimension,
 	with nonzero weights, suppose moreover that the blocks are injective. Then
 	there is a collapsed representative sector decomposition representing the
@@ -2290,7 +2290,8 @@ The following results separate the zero blocks from the
 \end{theorem}
 
 \begin{proof}\leanok
-	\uses{def:mpv_phase_class_data, thm:bnt_li_tp_prim_irr_separated}
+	\uses{def:mpv_phase_class_data, thm:bnt_li_tp_prim_irr_separated,
+		thm:bnt_sector_decomp_tp_prim_irr_collapsed}
 	Choose one representative per MPV phase class and absorb the phase factors
 	into the sector weights as in
 	Theorem~\ref{thm:bnt_sector_decomp_tp_prim_irr_collapsed}. The
