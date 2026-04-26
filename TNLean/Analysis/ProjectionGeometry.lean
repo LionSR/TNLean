@@ -52,7 +52,7 @@ Friedrichs lower bound.
 For a symmetric projection `P`, the ordered cross term satisfies
 `Re ⟪P v, Q v⟫ = Re ⟪P v, P (Q v)⟫`. Hence Cauchy--Schwarz shows that a
 bound `‖P (Q v)‖ ≤ c ‖P v‖` implies
-`Re ⟪P v, Q v⟫ ≥ -c Re ⟪P v, v⟫`. This is the finite-dimensional
+`Re ⟪P v, Q v⟫ ≥ -c Re ⟪P v, v⟫`. This is the
 projection-geometry conversion from a principal-angle norm estimate to the
 ordered quadratic-form estimate used by the martingale row-sum argument. -/
 theorem re_inner_apply_apply_ge_neg_of_norm_apply_le {P Q : E →ₗ[𝕜] E}
