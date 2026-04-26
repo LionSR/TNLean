@@ -13,7 +13,11 @@ cyclic windows of L consecutive sites on a periodic chain.
 ## Main results
 
 * `MPSTensor.contiguous_mem_groundSpace` — iterated intersection:
-  non-wrapping window conditions imply membership in the open-chain ground space
+  non-wrapping window conditions imply membership in the open-chain ground space.
+* `MPSTensor.cyclicWindowSupport` and `MPSTensor.cyclicWindowsOverlap` — the
+  support and overlap predicate for translated cyclic windows.
+* `MPSTensor.cyclicWindowsOverlap_card_le` — each cyclic window overlaps at most
+  `2 * (L - 1)` other cyclic windows when `2 * L ≤ N`.
 -/
 
 open scoped Matrix BigOperators
@@ -163,9 +167,11 @@ theorem contiguous_mem_groundSpace {A : MPSTensor d D} (hA : IsInjective A)
 def cyclicForwardSite {N : ℕ} (i : Fin N) (r : ℕ) : Fin N :=
   ⟨(i.val + r) % N, Nat.mod_lt _ (Fin.pos i)⟩
 
-/-- The site obtained by moving `r` steps counterclockwise from `i` on the cyclic chain. -/
+/-- The site represented by `(i + N - r) % N`.
+For offsets `r ≤ N`, this is the site obtained by moving `r` steps
+counterclockwise from `i` on the cyclic chain. -/
 def cyclicBackwardSite {N : ℕ} (i : Fin N) (r : ℕ) : Fin N :=
-  ⟨(i.val + N - r) % N, Nat.mod_lt _ (Fin.pos i)⟩
+  ⟨(i.val + N - r % N) % N, Nat.mod_lt _ (Fin.pos i)⟩
 
 /-- The support of the length-`L` cyclic window starting at `i`, represented as the
 finite set of sites `i, i+1, ..., i+L-1` modulo `N`.  If `L > N`, repeated visits
@@ -183,11 +189,11 @@ self-overlap case is removed by `Finset.erase`. -/
 def cyclicWindowsOverlap (N L : ℕ) (i j : Fin N) : Prop :=
   ∃ k : Fin N, k ∈ cyclicWindowSupport N L i ∧ k ∈ cyclicWindowSupport N L j
 
-noncomputable instance cyclicWindowsOverlap_decidableRel (N L : ℕ) :
+/-- The cyclic-window overlap relation is decidable on a finite chain. -/
+instance cyclicWindowsOverlap_decidableRel (N L : ℕ) :
     DecidableRel (cyclicWindowsOverlap N L) := by
-  classical
   intro i j
-  exact inferInstance
+  infer_instance
 
 /-- A nonempty cyclic window overlaps itself. -/
 theorem cyclicWindowsOverlap_self_of_pos (N : ℕ) {L : ℕ} (hL : 0 < L) (i : Fin N) :
@@ -198,12 +204,12 @@ theorem cyclicWindowsOverlap_self_of_pos (N : ℕ) {L : ℕ} (hL : 0 < L) (i : F
 
 /-- Clockwise neighbours of the cyclic window starting at `i` that can overlap it
 properly. -/
-def cyclicWindowClockwiseNeighbours (N L : ℕ) (i : Fin N) : Finset (Fin N) :=
+private def cyclicWindowClockwiseNeighbours (N L : ℕ) (i : Fin N) : Finset (Fin N) :=
   (Finset.univ : Finset (Fin (L - 1))).image fun r => cyclicForwardSite i (r.val + 1)
 
 /-- Counterclockwise neighbours of the cyclic window starting at `i` that can
 overlap it properly. -/
-def cyclicWindowCounterclockwiseNeighbours (N L : ℕ) (i : Fin N) : Finset (Fin N) :=
+private def cyclicWindowCounterclockwiseNeighbours (N L : ℕ) (i : Fin N) : Finset (Fin N) :=
   (Finset.univ : Finset (Fin (L - 1))).image fun r => cyclicBackwardSite i (r.val + 1)
 
 /-- Assemble an N-site configuration from a cyclic window at position `i`
@@ -341,12 +347,13 @@ theorem cyclicWindowsOverlap_card_le {N L : ℕ} (hLN : 2 * L ≤ N) (hL : 1 < L
       have hab : a < b := by omega
       have hdist_pos : 0 < b - a := by omega
       have hdist_lt : b - a < L := by omega
+      have hdistN : b - a < N := lt_of_lt_of_le hdist_lt hLNle
       have hx_eq : x = N + a - b := by omega
       have hjback : j = cyclicBackwardSite i (b - a) := by
         rw [hjx]
         ext
         simp only [cyclicForwardSite, cyclicBackwardSite, Fin.val_mk]
-        rw [hx_eq]
+        rw [Nat.mod_eq_of_lt hdistN, hx_eq]
         congr 1
         omega
       have hrlt : b - a - 1 < L - 1 := by omega
