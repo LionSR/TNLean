@@ -172,34 +172,26 @@ def cyclicBackwardSite {N : ℕ} (i : Fin N) (r : ℕ) : Fin N :=
   ⟨(i.val + N - r % N) % N, Nat.mod_lt _ (Fin.pos i)⟩
 
 /-- The support of the length-`L` cyclic window starting at `i`, represented as the
-finite set of sites `i, i+1, ..., i+L-1` modulo `N`.  If `L > N`, repeated visits
-are collapsed by the `Finset.image`; the parent-Hamiltonian applications use
-`L ≤ N`. -/
+finite set of sites reached from `i` by offsets below `L`, modulo the chain
+length.  If `L` is larger than the chain length, repeated visits to a site are
+counted only once; the parent-Hamiltonian applications use `L ≤ N`. -/
 def cyclicWindowSupport (N L : ℕ) (i : Fin N) : Finset (Fin N) :=
   (Finset.range L).image fun r => cyclicForwardSite i r
 
 /-- Cyclic-window overlap predicate for length-`L` windows on `Fin N`.
 
 Two windows overlap when their cyclic supports share at least one site.  This is
-the locality relation used for pairs of translated local terms
-`localTermES A L i` and `localTermES A L j`.  In row-cardinality estimates, the
-diagonal term j = i is excluded. -/
+the locality relation for translated local terms at the two starting sites.  In
+row-cardinality estimates, the diagonal term j = i is excluded. -/
 def cyclicWindowsOverlap (N L : ℕ) (i j : Fin N) : Prop :=
   ∃ k : Fin N, k ∈ cyclicWindowSupport N L i ∧ k ∈ cyclicWindowSupport N L j
 
 /-- The cyclic-window overlap relation is decidable on a finite chain. -/
-noncomputable instance cyclicWindowsOverlap_decidableRel (N L : ℕ) :
+instance cyclicWindowsOverlap_decidableRel (N L : ℕ) :
     DecidableRel (cyclicWindowsOverlap N L) := by
-  classical
   intro i j
-  exact inferInstance
-
-/-- A nonempty cyclic window overlaps itself. -/
-theorem cyclicWindowsOverlap_self_of_pos (N : ℕ) {L : ℕ} (hL : 0 < L) (i : Fin N) :
-    cyclicWindowsOverlap N L i i := by
-  refine ⟨i, ?_, ?_⟩ <;>
-    refine Finset.mem_image.mpr ⟨0, Finset.mem_range.mpr hL, ?_⟩ <;>
-    ext <;> simp [cyclicForwardSite, Nat.mod_eq_of_lt i.isLt]
+  unfold cyclicWindowsOverlap
+  exact Fintype.decidableExistsFintype
 
 /-- Clockwise neighbours of the cyclic window starting at `i` that can overlap it
 properly. -/
@@ -316,7 +308,8 @@ theorem cyclicWindowsOverlap_card_le {N L : ℕ} (hLN : 2 * L ≤ N) (hL : 1 < L
       rw [Nat.mod_eq_of_lt haN] at hmod
       exact hmod.symm
     by_cases hxb_lt : x + b < N
-    · have hsum : x + b = a := by
+    · -- No wraparound: the clockwise offset `x` is a positive distance below `L`.
+      have hsum : x + b = a := by
         rw [Nat.mod_eq_of_lt hxb_lt] at hxb_mod
         exact hxb_mod
       have hxpos : 0 < x := by
@@ -335,7 +328,8 @@ theorem cyclicWindowsOverlap_card_le {N L : ℕ} (hLN : 2 * L ≤ N) (hL : 1 < L
         simp
         omega
       simpa [hstep] using hjx.symm
-    · have hxb_ge : N ≤ x + b := Nat.le_of_not_gt hxb_lt
+    · -- Wraparound: the equivalent counterclockwise distance is `b - a`, below `L`.
+      have hxb_ge : N ≤ x + b := Nat.le_of_not_gt hxb_lt
       have hxb_lt_two : x + b < 2 * N := by omega
       have hmod_sub : (x + b) % N = x + b - N := by
         rw [Nat.mod_eq_sub_mod hxb_ge]
@@ -377,13 +371,6 @@ theorem cyclicWindowsOverlap_card_le {N L : ℕ} (hLN : 2 * L ≤ N) (hL : 1 < L
     _ ≤ cw.card + ccw.card := Finset.card_union_le cw ccw
     _ ≤ (L - 1) + (L - 1) := Nat.add_le_add hcw_card hccw_card
     _ = 2 * (L - 1) := by omega
-
-/-- Alias for the row-cardinality estimate in the finite-overlap regime. -/
-theorem cyclicWindowsOverlap_card_le_of_two_mul_le {N L : ℕ}
-    (hLN : 2 * L ≤ N) (hL : 1 < L) (i : Fin N) :
-    ((Finset.univ.erase i).filter (fun j => cyclicWindowsOverlap N L i j)).card ≤
-      2 * (L - 1) :=
-  cyclicWindowsOverlap_card_le hLN hL i
 
 /-- Linear restriction to a cyclic window at position `i`. -/
 def cyclicRestrictₗ {N : ℕ} (hN : 0 < N) (L : ℕ)

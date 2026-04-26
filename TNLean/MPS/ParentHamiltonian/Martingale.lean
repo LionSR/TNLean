@@ -856,8 +856,8 @@ predicate.
 For chains with `N ≥ 2L`, the predicate `cyclicWindowsOverlap N L i j` marks the
 cyclic translates whose length-`L` windows have the finite-range overlap relevant
 to the martingale method.  The row-cardinality estimate is supplied by
-`cyclicWindowsOverlap_card_le_of_two_mul_le`, and local projection structure is
-supplied by `localTermES_isSymmetricProjection`.  Consequently the only remaining
+`cyclicWindowsOverlap_card_le`, and local projection structure is supplied by
+`localTermES_isSymmetricProjection`.  Consequently the only remaining
 local hypotheses are non-overlap positivity and the Friedrichs-angle estimate for
 pairs marked by `cyclicWindowsOverlap`. -/
 theorem parentHamiltonianES_gap_bound_of_cyclic_window_friedrichs
@@ -882,7 +882,7 @@ theorem parentHamiltonianES_gap_bound_of_cyclic_window_friedrichs
   exact parentHamiltonianES_gap_bound_of_finite_overlap_friedrichs A L hL
     (fun N => cyclicWindowsOverlap N L)
     (fun N _hLN i => localTermES_isSymmetricProjection A L i)
-    (fun N hLN i => cyclicWindowsOverlap_card_le_of_two_mul_le hLN hL i)
+    (fun N hLN i => cyclicWindowsOverlap_card_le hLN hL i)
     hDisjoint hFriedrichs
 
 /-! ### Uniform spectral gap for the MPS parent Hamiltonian -/

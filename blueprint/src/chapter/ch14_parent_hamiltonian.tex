@@ -1842,18 +1842,32 @@ Lucia~\cite{Kastoryano2018Martingale}.
     $P_i=h_{i,\mathrm{ES}}$.
 \end{proof}
 
-\begin{lemma}[Cyclic-window overlap row cardinality]
-    \label{lem:cyclic_window_overlap_cardinality}
+\begin{definition}[Cyclic-window support]
+    \label{def:cyclic_window_support}
     \lean{MPSTensor.cyclicWindowSupport}
-    \lean{MPSTensor.cyclicWindowsOverlap}
-    \lean{MPSTensor.cyclicWindowsOverlap_card_le}
     \leanok
     \uses{rem:cyclic_window_operators}
-    For a length-$L$ cyclic window on $\Fin{N}$, let
+    For a length-$L$ cyclic window on $\Fin{N}$ starting at $i$, its support is
     \[
-        S_i=\{i,i+1,\ldots,i+L-1\}\pmod N
+        S_i=\{i,i+1,\ldots,i+L-1\}\pmod N,
     \]
-    be its cyclic support, and write $i\sim_L j$ when $S_i\cap S_j\ne\varnothing$.
+    with repeated visits counted once.
+\end{definition}
+
+\begin{definition}[Cyclic-window overlap]
+    \label{def:cyclic_windows_overlap}
+    \lean{MPSTensor.cyclicWindowsOverlap}
+    \leanok
+    \uses{def:cyclic_window_support}
+    Two length-$L$ cyclic windows overlap, written $i\sim_L j$, when their
+    supports meet: $S_i\cap S_j\ne\varnothing$.
+\end{definition}
+
+\begin{lemma}[Cyclic-window overlap row cardinality]
+    \label{lem:cyclic_window_overlap_cardinality}
+    \lean{MPSTensor.cyclicWindowsOverlap_card_le}
+    \leanok
+    \uses{def:cyclic_window_support, def:cyclic_windows_overlap}
     If $2L\le N$ and $L>1$, then for every $i\in\Fin{N}$,
     \[
         \#\{j\ne i: i\sim_L j\}\le 2(L-1).
@@ -1862,6 +1876,7 @@ Lucia~\cite{Kastoryano2018Martingale}.
 
 \begin{proof}
     \leanok
+    \uses{def:cyclic_window_support, def:cyclic_windows_overlap}
     If $S_i$ and $S_j$ meet, choose offsets $a,b<L$ with
     $i+a\equiv j+b\pmod N$.  Since $2L\le N$, the offset from $i$ to $j$ is
     either the clockwise distance $a-b\in\{1,\ldots,L-1\}$ or the
