@@ -44,7 +44,30 @@ Wave 14 addresses exactly that reverted transport layer by adding
 `tailRestrictₗ_contiguousRestrictₗ` and then landing the chain-level theorem
 `contiguous_mem_groundSpace_of_isNBlkInjective`.
 
-## Remaining blocker after Wave 14
+## 2026-04-25 Wave 15D update
+
+Current branch `wave15-D-588-normal-range` lands the cyclic-to-open-chain part of
+periodic reintegration:
+
+- `MPSTensor.eq_cyclic_site_of_offset_eq` and
+  `MPSTensor.cyclicRestrictₗ_restrictLast` in
+  `TNLean/MPS/ParentHamiltonian/CyclicWindow.lean` record the modular-index
+  calculation and the one-site peeling identity for cyclic windows.
+- `MPSTensor.chainGroundSpace_le_chainGroundSpace_succ` and
+  `MPSTensor.chainGroundSpace_le_chainGroundSpace_of_le` in
+  `TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean` show that periodic-chain
+  constraints are antitone in the interaction range.
+- `MPSTensor.chainGroundSpace_le_groundSpace_of_isNBlkInjective` combines that
+  cyclic monotonicity with the Wave 14 open-chain theorem, proving that cyclic
+  range-$L$ constraints with $L_0 < L \le N$ imply the full open-chain membership
+  `ψ ∈ groundSpace A N` whenever `A` is `L₀`-block-injective and `0 < L₀`.
+
+This leaves the final scalar-boundary step untouched: after writing
+`ψ = groundSpaceMap A N X`, the proof still has to turn the reduced wrapped
+window constraints into a long-word commutation family for `X`, and then apply
+`MPSTensor.boundary_matrix_commutes_of_isNBlkInjective_of_long_word_commutes`.
+
+## Remaining blocker after Wave 15D
 
 The final target
 
@@ -52,20 +75,19 @@ The final target
 chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction
 ```
 
-still needs the periodic reintegration step. The open-chain representation
-`ψ ∈ groundSpace A N` is now available from contiguous `(L₀ + 1)`-window
-constraints, but the periodic proof must still connect the full cyclic
-`chainGroundSpace A L N` hypothesis to that reduced open-chain hypothesis and
-then force the boundary matrix in `ψ = groundSpaceMap A N X` to be scalar.
+still needs the scalar-boundary closure step. The full cyclic
+`chainGroundSpace A L N` hypothesis is now connected to the open-chain
+representation `ψ ∈ groundSpace A N`, so one can write
+`ψ = groundSpaceMap A N X`. The remaining proof must turn the reduced wrapped
+window constraints into a long-word commutation family for `X`, then use the
+existing block-stripping theorem to force generator commutation and hence
+scalarity.
 
-The expected next formal pieces are:
-
-1. a cyclic-window range monotonicity / peeling theorem reducing cyclic
-   `L`-window constraints to cyclic `(L₀ + 1)`-window constraints;
-2. a periodic closure theorem using the existing wrapped-window compatibility
-   and mirror compatibility lemmas in `WrappingWindow.lean`, together with
-   `MPSTensor.boundary_matrix_commutes_of_isNBlkInjective_of_long_word_commutes`,
-   to obtain the same generator-commutation conclusion as in the injective proof.
+The expected next formal piece is a periodic closure theorem using the wrapped
+window compatibility and mirror compatibility lemmas in `WrappingWindow.lean`,
+together with
+`MPSTensor.boundary_matrix_commutes_of_isNBlkInjective_of_long_word_commutes`,
+to obtain the same generator-commutation conclusion as in the injective proof.
 
 ## Tracking / linkage
 
@@ -74,15 +96,18 @@ The expected next formal pieces are:
 - Related transport work: #869 / #883
 - Paper reference: CPGSV21, §IV.C
 
-## Files changed by the Wave 14 branch
+## Files changed by the Wave 14 and Wave 15D branches
 
-- `TNLean/MPS/ParentHamiltonian/RestrictTransport.lean`
+- `TNLean/MPS/ParentHamiltonian/RestrictTransport.lean` (Wave 14)
+- `TNLean/MPS/ParentHamiltonian/CyclicWindow.lean` (Wave 15D)
 - `TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean`
+- `blueprint/src/chapter/ch14_parent_hamiltonian.tex` (Wave 15D)
 - `audits/2026-04-22_issue588_normal_range_reduction_partial.md`
 
-## Status after Wave 14
+## Status after Wave 15D
 
-Wave 14 lands the open-chain theorem but does **not** discharge the remaining
-periodic `sorry` in
-`chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction`. The remaining work
-is the cyclic-window reduction and wrapped-boundary scalar-closure assembly.
+Wave 14 lands the contiguous open-chain theorem, and Wave 15D lands the
+cyclic-window reduction from periodic constraints to that open-chain theorem. The
+remaining proof obligation in
+`chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction` is now concentrated
+in the wrapped-boundary scalar-closure step.
