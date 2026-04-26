@@ -39,9 +39,9 @@ its MPS-formulation for irreducible TP tensors.
 * `sectorFixedPointAlgebraRigidity_of_cyclic_decomp_after_blocking_of_scalarBlockedFixedPoints`
   — a scalar blocked fixed-point algebra hypothesis implies the sector
   rigidity needed by the orbit-sum argument.
-* `primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking_of_scalarBlockedFixedPoints`
-  — the same blocked fixed-point algebra hypothesis yields primitive,
-  tensor-irreducible compressed sectors.
+* The scalar blocked fixed-point variant of the sector-block theorem — the same
+  blocked fixed-point algebra hypothesis yields primitive, tensor-irreducible
+  compressed sectors.
 * `primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking`
   — the unconditional conclusion using
   `isIrreducibleOnCorner_of_cyclic_decomp_mps`.
@@ -371,7 +371,7 @@ theorem exists_cyclic_sector_decomp_of_TP_of_isIrreducibleTensor
         Set.range (fun j : Fin m => γ ^ (j : ℕ)) := by
     rw [hperiph_set]; ext x; simp [Set.mem_range, eq_comm]
   -- Apply exists_cyclic_sector_decomp_after_blocking.
-  haveI : NeZero m := ⟨by omega⟩
+  haveI : NeZero m := ⟨Nat.ne_of_gt hm_pos⟩
   obtain ⟨dim, blocks, _, _, hTP_blocks, hSame, _, _, _, _, _, _, _⟩ :=
     exists_cyclic_sector_decomp_after_blocking A hTP hIrr ρ hρ_pd h_adjfix hIrrK hγ_prim
       hperiph_range
@@ -680,7 +680,8 @@ hypothesis, uses
 `isIrreducibleOnCorner_of_cyclic_decomp_mps_of_sectorFixedPointAlgebraRigidity`
 to obtain corner irreducibility of `((transferMap A†)^m)|_{P_k}`, and then
 applies the compression transport theorem above. -/
-theorem primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking_of_fixedAlgebraRigidity
+theorem
+  primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking_of_fixedAlgebraRigidity
     {d D m : ℕ} [NeZero D] [NeZero m]
     (A : MPSTensor d D)
     (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
@@ -909,8 +910,9 @@ orbit-sum / corner-compression reduction: the paper-level remaining gap is now
 concentrated in proving that the blocked sector adjoint fixed-point algebra is
 scalar. Once that input is available, the present theorem derives
 `SectorFixedPointAlgebraRigidity` and applies the orbit-sum / corner-compression
-reduction from `primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking_of_fixedAlgebraRigidity`. -/
-theorem primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking_of_scalarBlockedFixedPoints
+reduction from the fixed-algebra-rigidity sector-block theorem. -/
+theorem
+  primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking_of_scalarBlockedFixedPoints
     {d D m : ℕ} [NeZero D] [NeZero m]
     (A : MPSTensor d D)
     (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
@@ -1048,7 +1050,7 @@ theorem exists_primitive_irreducible_cyclic_sector_decomp_of_TP_of_isIrreducible
     rw [hperiph_set]
     ext x
     simp [Set.mem_range, eq_comm]
-  haveI : NeZero m := ⟨by omega⟩
+  haveI : NeZero m := ⟨Nat.ne_of_gt hm_pos⟩
   obtain ⟨dim, blocks, P, φ, hTP_blocks, hSame, hPproj, hPsum, hcyclic, _hComm,
       _hTrace, hIntertwine, hMul, hStar, hNondeg⟩ :=
     exists_cyclic_sector_decomp_after_blocking A hTP hIrr ρ hρ_pd h_adjfix hIrrK hγ_prim

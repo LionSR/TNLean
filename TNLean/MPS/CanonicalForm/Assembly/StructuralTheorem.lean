@@ -288,9 +288,8 @@ theorem liveBlock_positive_sameMPV₂_and_zeroTail_bookkeeping_of_sameMPV₂
   · intro σ
     have hAσ := hA 0 σ
     have hBσ := hB 0 σ
-    rw [mpv_zeroMPSTensor] at hAσ
-    rw [mpv_zeroMPSTensor] at hBσ
-    simp only [↓reduceIte] at hAσ hBσ
+    rw [mpv_zeroMPSTensor, if_pos rfl] at hAσ
+    rw [mpv_zeroMPSTensor, if_pos rfl] at hBσ
     calc
       (zeroTailA : ℂ) + mpv (toTensorFromBlocks (d := d) (μ := μA) blocksA) σ
           = mpv A σ := hAσ.symm
@@ -302,7 +301,7 @@ theorem liveBlock_positive_sameMPV₂_and_zeroTail_bookkeeping_of_sameMPV₂
 This packages the positive-length bookkeeping theorem with the single additional
 length-zero datum needed to remove the zero tails. It does not assert that the
 zero-tail dimensions agree automatically; that remains a separate paper-level
-bookkeeping step for the unconditional after-blocking sector endpoint. -/
+bookkeeping step for the unconditional after-blocking sector comparison. -/
 theorem liveBlock_sameMPV₂_of_sameMPV₂_of_zeroTail_eq
     {d D₁ D₂ rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
