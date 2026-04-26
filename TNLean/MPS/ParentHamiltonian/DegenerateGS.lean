@@ -50,6 +50,29 @@ noncomputable def bntSpan
     Submodule ℂ (NSiteSpace d N) :=
   Submodule.span ℂ (Set.range fun j : Fin r => (mpv (A j) : NSiteSpace d N))
 
+/-- Finite product-word span hypothesis for the Route B block-decomposition endgame.
+
+For a fixed word length `m`, this says that the simultaneous block-word
+evaluations
+`ω ↦ (k ↦ evalWord (A k) (List.ofFn ω))` span the full product algebra
+`Π k, Matrix (Fin (dim k)) (Fin (dim k)) ℂ`.  Issue #934 is precisely the
+paper-level task of deriving such a witness from `IsCanonicalFormBNT μ A`; this
+file only consumes the witness in the final Route B composition. -/
+def RouteBProductWordSpan
+    (A : (k : Fin r) → MPSTensor d (dim k)) (m : ℕ) : Prop :=
+  Submodule.span ℂ (Set.range fun ω : Fin m → Fin d =>
+      fun k : Fin r => evalWord (A k) (List.ofFn ω)) =
+    (⊤ : Submodule ℂ
+      ((k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ))
+
+/-- Existence form of the Route B product-word span witness expected from #934.
+
+The consuming theorems below use a fixed witness `m` so that the boundary-matrix
+commutation hypothesis can refer to the same word length. -/
+def HasRouteBProductWordSpan
+    (A : (k : Fin r) → MPSTensor d (dim k)) : Prop :=
+  ∃ m : ℕ, 0 < m ∧ RouteBProductWordSpan A m
+
 /-- Ground space of any block `A j` is contained in the ground space of the
 assembled tensor `toTensorFromBlocks μ A`, provided `μ j ≠ 0`.
 
@@ -470,6 +493,86 @@ theorem parentHamiltonianGroundSpace_le_bntSpan_of_reindexed_projectionSpan
   simpa [parentHamiltonianGroundSpace_eq] using
     chainGroundSpace_toTensorFromBlocks_le_iSup_of_reindexed_projectionSpan
       (μ := μ) A hCF hL hN hm hProj hBoundary'
+
+/-- Conditional reverse block split from a product-word span witness.
+
+This is the Route B composition of the #927 product-word-span reduction with the
+#929 projection-span block-split endgame.  The finite product-word span hypothesis
+`RouteBProductWordSpan A m` is the #934 witness; the boundary hypothesis keeps the
+wrapping/open-chain step explicit by requiring each assembled chain-ground vector
+to come with a length-`m` commuting boundary-matrix representation. -/
+theorem chainGroundSpace_toTensorFromBlocks_le_iSup_of_wordTuple_span_eq_top
+    (A : (j : Fin r) → MPSTensor d (dim j))
+    (hCF : IsCanonicalFormBNT μ A) {L N m : ℕ}
+    (hL : 1 < L) (hN : N ≥ L + 1) (hm : 0 < m)
+    (hSpan : RouteBProductWordSpan A m)
+    (hBoundary : ∀ ⦃ψ : NSiteSpace d N⦄,
+      ψ ∈ chainGroundSpace (toTensorFromBlocks μ A) L N →
+        ∃ X : Matrix (Fin (∑ k : Fin r, dim k)) (Fin (∑ k : Fin r, dim k)) ℂ,
+          ψ = groundSpaceMap (toTensorFromBlocks μ A) N X ∧
+          ∀ ω : Fin m → Fin d,
+            X * evalWord (toTensorFromBlocks μ A) (List.ofFn ω) =
+              evalWord (toTensorFromBlocks μ A) (List.ofFn ω) * X) :
+    chainGroundSpace (toTensorFromBlocks μ A) L N ≤
+      ⨆ j : Fin r, chainGroundSpace (A j) L N := by
+  refine chainGroundSpace_toTensorFromBlocks_le_iSup_of_reindexed_projectionSpan
+    (μ := μ) A hCF hL hN hm ?_ hBoundary
+  exact blockProjection_mem_span_reindexed_toTensorFromBlocks_of_wordTuple_span_eq_top
+    (d := d) (dim := dim) (m := m) μ A
+    (fun k => hCF.toHasStrictOrderedNonzeroWeights.mu_ne_zero k)
+    (by simpa [RouteBProductWordSpan] using hSpan)
+
+/-- Conditional periodic block-decomposition equality from a product-word span witness.
+
+This packages the exact equality obtained once #934 supplies the finite
+product-word span and the wrapping/open-chain layer supplies the compatible
+commuting boundary matrix.  It is still conditional on those two paper-level
+inputs, and is therefore not a restatement of the final unconditional theorem. -/
+theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_of_wordTuple_span_eq_top
+    (A : (j : Fin r) → MPSTensor d (dim j))
+    (hCF : IsCanonicalFormBNT μ A) {L N m : ℕ}
+    (hL : 1 < L) (hN : N ≥ L + 1) (hm : 0 < m)
+    (hSpan : RouteBProductWordSpan A m)
+    (hBoundary : ∀ ⦃ψ : NSiteSpace d N⦄,
+      ψ ∈ chainGroundSpace (toTensorFromBlocks μ A) L N →
+        ∃ X : Matrix (Fin (∑ k : Fin r, dim k)) (Fin (∑ k : Fin r, dim k)) ℂ,
+          ψ = groundSpaceMap (toTensorFromBlocks μ A) N X ∧
+          ∀ ω : Fin m → Fin d,
+            X * evalWord (toTensorFromBlocks μ A) (List.ofFn ω) =
+              evalWord (toTensorFromBlocks μ A) (List.ofFn ω) * X) :
+    chainGroundSpace (toTensorFromBlocks μ A) L N =
+      ⨆ j : Fin r, chainGroundSpace (A j) L N := by
+  apply le_antisymm
+  · exact chainGroundSpace_toTensorFromBlocks_le_iSup_of_wordTuple_span_eq_top
+      (μ := μ) A hCF hL hN hm hSpan hBoundary
+  · exact iSup_chainGroundSpace_block_le_toTensorFromBlocks μ
+      (fun j => hCF.toHasStrictOrderedNonzeroWeights.mu_ne_zero j) A L N
+
+/-- Conditional BNT-span containment from a product-word span witness.
+
+This is the final Route B composition needed downstream by the reverse inclusion:
+#927 converts the product-word span witness into the sector-projection span, #929
+turns that projection span plus the boundary representation into a block split,
+and the existing blockwise uniqueness endgame places the result in `bntSpan`. -/
+theorem parentHamiltonianGroundSpace_le_bntSpan_of_wordTuple_span_eq_top
+    (A : (j : Fin r) → MPSTensor d (dim j))
+    (hCF : IsCanonicalFormBNT μ A) {L N m : ℕ}
+    (hL : 1 < L) (hN : N ≥ L + 1) (hm : 0 < m)
+    (hSpan : RouteBProductWordSpan A m)
+    (hBoundary : ∀ ⦃ψ : NSiteSpace d N⦄,
+      ψ ∈ parentHamiltonianGroundSpace (μ := μ) A L N →
+        ∃ X : Matrix (Fin (∑ k : Fin r, dim k)) (Fin (∑ k : Fin r, dim k)) ℂ,
+          ψ = groundSpaceMap (toTensorFromBlocks μ A) N X ∧
+          ∀ ω : Fin m → Fin d,
+            X * evalWord (toTensorFromBlocks μ A) (List.ofFn ω) =
+              evalWord (toTensorFromBlocks μ A) (List.ofFn ω) * X) :
+    parentHamiltonianGroundSpace (μ := μ) A L N ≤ bntSpan A N := by
+  refine parentHamiltonianGroundSpace_le_bntSpan_of_reindexed_projectionSpan
+    (μ := μ) A hCF hL hN hm ?_ hBoundary
+  exact blockProjection_mem_span_reindexed_toTensorFromBlocks_of_wordTuple_span_eq_top
+    (d := d) (dim := dim) (m := m) μ A
+    (fun k => hCF.toHasStrictOrderedNonzeroWeights.mu_ne_zero k)
+    (by simpa [RouteBProductWordSpan] using hSpan)
 
 /-- Reverse-inclusion step for the BNT ground-space theorem.
 
