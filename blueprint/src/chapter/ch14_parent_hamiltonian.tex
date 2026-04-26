@@ -1618,6 +1618,41 @@ Lucia~\cite{Kastoryano2018Martingale}.
     definition.
 \end{proof}
 
+\begin{lemma}[Non-overlap positivity for transported ES local terms]
+    \label{lem:transported_es_nonoverlap_positive}
+    \lean{MPSTensor.CyclicWindowsDisjoint}
+    \lean{MPSTensor.CyclicWindowsDisjoint.symm}
+    \lean{MPSTensor.localTermES_commute_of_cyclic_windows_disjoint}
+    \lean{MPSTensor.localTermES_re_inner_nonneg_of_cyclic_windows_disjoint}
+    \leanok
+    \uses{lem:transported_es_local_projections, rem:projection_geometry_rowsum_identities}
+    Let $L\le N$ and let $h_{i,\mathrm{ES}},h_{j,\mathrm{ES}}$ be transported local
+    terms whose cyclic $L$-windows are site-disjoint: no site of the periodic chain
+    has cyclic offset $<L$ from both $i$ and $j$. Then the terms commute pointwise:
+    for every vector $v$,
+    \[
+        h_{i,\mathrm{ES}}(h_{j,\mathrm{ES}}v)
+            = h_{j,\mathrm{ES}}(h_{i,\mathrm{ES}}v),
+    \]
+    and their ordered cross term is nonnegative:
+    \[
+        0\le \operatorname{Re}\langle h_{i,\mathrm{ES}}v,
+            h_{j,\mathrm{ES}}v\rangle .
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:transported_es_local_projections, rem:projection_geometry_rowsum_identities}
+    In coordinates, $h_{i,\mathrm{ES}}$ applies $P_L^{\mathrm{ES}}(A)$ only to the
+    $i$-window variables and leaves the complementary variables fixed. Site
+    disjointness gives two replacement identities: replacing the $i$-window does
+    not change the extracted $j$-window, and the $i$- and $j$-window replacements
+    commute. Therefore the two embedded local operators commute. The preceding
+    projection-geometry identity for commuting symmetric projections gives the
+    nonnegative ordered cross term.
+\end{proof}
+
 \begin{lemma}[Quadratic form to norm bound]\label{lem:quadratic_form_to_norm_bound}
     \lean{FrustrationFree.spectralGap_of_martingale}
     \leanok
@@ -1691,6 +1726,7 @@ Lucia~\cite{Kastoryano2018Martingale}.
     \label{rem:projection_geometry_rowsum_identities}
     \lean{LinearMap.IsSymmetricProjection.re_inner_apply_apply_self}
     \lean{LinearMap.IsSymmetricProjection.re_inner_nonneg}
+    \lean{LinearMap.IsSymmetricProjection.re_inner_apply_apply_nonneg_of_commute}
     \lean{ProjectionGeometry.re_inner_sum_apply_left}
     \lean{ProjectionGeometry.re_inner_sum_apply_apply}
     \lean{ProjectionGeometry.sum_sum_eq_diag_add_offdiag}
@@ -1699,8 +1735,10 @@ Lucia~\cite{Kastoryano2018Martingale}.
     The projection-geometry reduction uses the following elementary Hilbert-space
     identities: the diagonal identity
     $\operatorname{Re}\langle Pv,Pv\rangle=\operatorname{Re}\langle Pv,v\rangle$
-    for symmetric projections; nonnegativity of this quadratic form; finite-sum
-    expansions of $\operatorname{Re}\langle (\sum_i P_i)v,v\rangle$ and
+    for symmetric projections; nonnegativity of this quadratic form; nonnegativity
+    of $\operatorname{Re}\langle Pv,Qv\rangle$ for commuting symmetric projections
+    $P,Q$; finite-sum expansions of
+    $\operatorname{Re}\langle (\sum_i P_i)v,v\rangle$ and
     $\operatorname{Re}\langle (\sum_i P_i)v,(\sum_i P_i)v\rangle$; the
     diagonal/off-diagonal split of the ordered double sum; and the aggregate
     off-diagonal estimate obtained from row sums $\sum_{j\ne i}c_{ij}\le1$.
@@ -2027,6 +2065,7 @@ Lucia~\cite{Kastoryano2018Martingale}.
         lem:euclidean_local_projector_positive,
         lem:local_term_es_average,
         lem:transported_es_local_projections,
+        lem:transported_es_nonoverlap_positive,
         lem:parent_hamiltonian_es_quadratic_reduction,
         lem:parent_hamiltonian_ordered_rowsum_gap,
         lem:parent_hamiltonian_finite_overlap_friedrichs_quadratic,
@@ -2054,12 +2093,11 @@ Lucia~\cite{Kastoryano2018Martingale}.
     establishes the finite-sum algebra from ordered cross-term row bounds, and
     Lemmas~\ref{lem:parent_hamiltonian_finite_overlap_friedrichs_quadratic}
     and~\ref{lem:parent_hamiltonian_finite_overlap_friedrichs_gap} record the
-    common finite-overlap specialization with $m=2(L-1)$.  This reduction keeps
-    the transported-local-projection statement as an explicit assumption,
-    matching the separate projection-structure work. Once that assumption is
-    established, the remaining analytic tasks are the cyclic-window
-    row-cardinality bound, non-overlap positivity, and the Friedrichs-angle
-    estimate for overlapping windows.
+    common finite-overlap specialization with $m=2(L-1)$.
+    Lemma~\ref{lem:transported_es_nonoverlap_positive} supplies the non-overlap
+    positivity input for site-disjoint windows.
+    The remaining analytic tasks are the cyclic-window row-cardinality bound and the
+    Friedrichs-angle estimate for overlapping windows.
 \end{proof}
 
 \begin{theorem}[Spectral gap for MPS parent Hamiltonians]\label{thm:parent_hamiltonian_gapped}

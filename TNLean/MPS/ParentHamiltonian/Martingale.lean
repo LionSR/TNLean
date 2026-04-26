@@ -68,6 +68,9 @@ concrete Friedrichs-angle/row-sum lower bound that
 * `MPSTensor.localTermES_isSymmetricProjection` — each transported local term is
   a symmetric projection, with idempotence inherited from the local orthogonal
   projector on every cyclic window.
+* `MPSTensor.localTermES_re_inner_nonneg_of_cyclic_windows_disjoint` — disjoint
+  cyclic windows give commuting transported local projections and hence
+  nonnegative ordered cross terms.
 * `MPSTensor.parentHamiltonianES_gap_bound_of_quadratic_form` — the explicit
   reduction from the parent-Hamiltonian gap statement to the uniform
   Friedrichs/martingale quadratic-form estimate.
@@ -275,6 +278,21 @@ noncomputable def localTermES {N : ℕ} (A : MPSTensor d D) (L : ℕ) (i : Fin N
   let e := (WithLp.linearEquiv 2 ℂ (NSiteSpace d N))
   e.symm.toLinearMap.comp ((localTerm A L N i).comp e.toLinearMap)
 
+/-- Site-disjointness for two cyclic `L`-windows on an `N`-site periodic chain.
+
+The window starting at `i` contains exactly the sites whose cyclic offset from `i`
+is `< L`.  Thus `CyclicWindowsDisjoint L i j` says that no site has offset `< L`
+from both starting points.  This is the non-overlap condition used by the
+finite-overlap martingale reduction. -/
+def CyclicWindowsDisjoint {N : ℕ} (L : ℕ) (i j : Fin N) : Prop :=
+  ∀ k : Fin N,
+    ((k.val + N - i.val) % N < L) → ((k.val + N - j.val) % N < L) → False
+
+/-- Cyclic-window disjointness is symmetric. -/
+theorem CyclicWindowsDisjoint.symm {N : ℕ} {L : ℕ} {i j : Fin N}
+    (hij : CyclicWindowsDisjoint L i j) : CyclicWindowsDisjoint L j i :=
+  fun k hj hi => hij k hi hj
+
 /-- Ground-space submodule for the finite-size parent Hamiltonian,
 transported to the `EuclideanSpace` (inner-product) setting so that
 orthogonal complements are available. -/
@@ -329,6 +347,105 @@ private theorem sameOutsideWindow_of_cyclicCfg_eq {N : ℕ} (hN : 0 < N) {L : �
   intro k hk
   have hEqk := congrFun hEq k
   simpa [cyclicCfg, hk] using hEqk
+
+private theorem cyclic_offset_window_site_lt {N L : ℕ} (hLN : L ≤ N) (i : Fin N)
+    (r : Fin L) :
+    (((i.val + r.val) % N + N - i.val) % N) < L := by
+  rw [offset_mod_eq i.isLt (Nat.lt_of_lt_of_le r.isLt hLN)]
+  exact r.isLt
+
+private theorem extractWindow_replaceWindow_of_cyclic_windows_disjoint {N L : ℕ}
+    (hLN : L ≤ N) {i j : Fin N} (hij : CyclicWindowsDisjoint L i j)
+    (σ : Cfg d N) (τ : Cfg d L) :
+    extractWindow L i (replaceWindow L hLN j σ τ) = extractWindow L i σ := by
+  funext r
+  unfold extractWindow replaceWindow
+  have hi : (((i.val + r.val) % N + N - i.val) % N) < L :=
+    cyclic_offset_window_site_lt hLN i r
+  have hnotj : ¬ (((i.val + r.val) % N + N - j.val) % N < L) := by
+    intro hj
+    exact hij ⟨(i.val + r.val) % N, Nat.mod_lt _ (Fin.pos i)⟩ hi hj
+  rw [dif_neg hnotj]
+
+private theorem replaceWindow_commute_of_cyclic_windows_disjoint {N L : ℕ}
+    (hLN : L ≤ N) {i j : Fin N} (hij : CyclicWindowsDisjoint L i j)
+    (σ : Cfg d N) (α β : Cfg d L) :
+    replaceWindow L hLN j (replaceWindow L hLN i σ α) β =
+      replaceWindow L hLN i (replaceWindow L hLN j σ β) α := by
+  funext k
+  by_cases hi : ((k.val + N - i.val) % N < L)
+  · have hnotj : ¬ ((k.val + N - j.val) % N < L) := fun hj => hij k hi hj
+    simp [replaceWindow, hi, hnotj]
+  · by_cases hj : ((k.val + N - j.val) % N < L)
+    · simp [replaceWindow, hi, hj]
+    · simp [replaceWindow, hi, hj]
+
+private theorem euclideanSpace_eq_sum_single {α : Type*} [Fintype α] [DecidableEq α]
+    (x : EuclideanSpace ℂ α) :
+    x = ∑ a : α, x a • EuclideanSpace.single a (1 : ℂ) := by
+  ext a
+  simp [Finset.sum_apply, Pi.single_apply]
+
+private theorem linearMap_apply_eq_sum {α : Type*} [Fintype α] [DecidableEq α]
+    (P : EuclideanSpace ℂ α →ₗ[ℂ] EuclideanSpace ℂ α)
+    (x : EuclideanSpace ℂ α) (a : α) :
+    P x a = ∑ a' : α, x a' * P (EuclideanSpace.single a' (1 : ℂ)) a := by
+  conv_lhs => rw [euclideanSpace_eq_sum_single x]
+  simp [Finset.sum_apply]
+
+private theorem scalar_sum_comm {α β : Type*} [Fintype α] [Fintype β]
+    (F : α → β → ℂ) (p : α → ℂ) (q : β → ℂ) :
+    (∑ a, (∑ b, F a b * q b) * p a) =
+      ∑ b, (∑ a, F a b * p a) * q b := by
+  calc
+    (∑ a, (∑ b, F a b * q b) * p a)
+        = ∑ a, ∑ b, F a b * q b * p a := by
+      simp_rw [Finset.sum_mul]
+    _ = ∑ b, ∑ a, F a b * q b * p a := by
+      rw [Finset.sum_comm]
+    _ = ∑ b, ∑ a, F a b * p a * q b := by
+      refine Finset.sum_congr rfl ?_
+      intro b _
+      refine Finset.sum_congr rfl ?_
+      intro a _
+      ring
+    _ = ∑ b, (∑ a, F a b * p a) * q b := by
+      simp_rw [Finset.sum_mul]
+
+private theorem separateLinearMap_apply_commute
+    {α β : Type*} [Fintype α] [Fintype β]
+    (P : EuclideanSpace ℂ α →ₗ[ℂ] EuclideanSpace ℂ α)
+    (Q : EuclideanSpace ℂ β →ₗ[ℂ] EuclideanSpace ℂ β)
+    (F : α → β → ℂ) (a : α) (b : β) :
+    P (WithLp.toLp 2 (fun a' => Q (WithLp.toLp 2 (fun b' => F a' b')) b)) a =
+      Q (WithLp.toLp 2 (fun b' => P (WithLp.toLp 2 (fun a' => F a' b')) a)) b := by
+  classical
+  calc
+    P (WithLp.toLp 2 (fun a' => Q (WithLp.toLp 2 (fun b' => F a' b')) b)) a
+        = ∑ a', (Q (WithLp.toLp 2 (fun b' => F a' b')) b) *
+            P (EuclideanSpace.single a' (1 : ℂ)) a := by
+      rw [linearMap_apply_eq_sum]
+    _ = ∑ a', (∑ b', F a' b' * Q (EuclideanSpace.single b' (1 : ℂ)) b) *
+            P (EuclideanSpace.single a' (1 : ℂ)) a := by
+      refine Finset.sum_congr rfl ?_
+      intro a' _
+      rw [linearMap_apply_eq_sum]
+    _ = ∑ b', (∑ a', F a' b' * P (EuclideanSpace.single a' (1 : ℂ)) a) *
+            Q (EuclideanSpace.single b' (1 : ℂ)) b := by
+      exact scalar_sum_comm F
+        (fun a' => P (EuclideanSpace.single a' (1 : ℂ)) a)
+        (fun b' => Q (EuclideanSpace.single b' (1 : ℂ)) b)
+    _ = ∑ b', (P (WithLp.toLp 2 (fun a' => F a' b')) a) *
+            Q (EuclideanSpace.single b' (1 : ℂ)) b := by
+      refine Finset.sum_congr rfl ?_
+      intro b' _
+      have hP : (∑ a', F a' b' * P (EuclideanSpace.single a' (1 : ℂ)) a) =
+          P (WithLp.toLp 2 (fun a' => F a' b')) a := by
+        simpa using
+          (linearMap_apply_eq_sum P (WithLp.toLp 2 (fun a' => F a' b')) a).symm
+      rw [hP]
+    _ = Q (WithLp.toLp 2 (fun b' => P (WithLp.toLp 2 (fun a' => F a' b')) a)) b := by
+      rw [linearMap_apply_eq_sum]
 
 private theorem cyclicRestrictES_single_of_sameOutsideWindow {N : ℕ} (hN : 0 < N) {L : ℕ}
     (hLN : L ≤ N) (i : Fin N) (σ τ : Cfg d N)
@@ -598,6 +715,75 @@ the definition gives the zero projection. -/
 theorem localTermES_isSymmetricProjection {N : ℕ} (A : MPSTensor d D) (L : ℕ)
     (i : Fin N) : (localTermES A L i).IsSymmetricProjection :=
   ⟨localTermES_isIdempotentElem A L i, (localTermES_isPositive A L i).isSymmetric⟩
+
+/-- Transported local terms on site-disjoint cyclic windows commute pointwise.
+
+If `L ≤ N` and no site belongs to both cyclic windows based at `i` and `j`, then
+applying the two transported local ES terms in either order gives the same vector.
+This is the non-overlap commutation input for the finite-overlap martingale
+reduction. -/
+theorem localTermES_commute_of_cyclic_windows_disjoint {N : ℕ} (A : MPSTensor d D)
+    {L : ℕ} (hLN : L ≤ N) {i j : Fin N} (hij : CyclicWindowsDisjoint L i j)
+    (v : EuclideanSpace ℂ (Cfg d N)) :
+    localTermES A L i (localTermES A L j v) =
+      localTermES A L j (localTermES A L i v) := by
+  ext σ
+  let P := parentInteractionES A L
+  let F : Cfg d L → Cfg d L → ℂ := fun α β =>
+    v (replaceWindow L hLN j (replaceWindow L hLN i σ α) β)
+  have hleft :
+      cyclicRestrictES (d := d) (Fin.pos i) L i σ (localTermES A L j v) =
+        WithLp.toLp 2 (fun α => P (WithLp.toLp 2 (fun β => F α β))
+          (extractWindow L j σ)) := by
+    ext α
+    rw [cyclicRestrictES_apply]
+    rw [cyclicCfg_eq_replaceWindow (d := d) (Fin.pos i) L hLN]
+    rw [localTermES_apply A L j hLN v (replaceWindow L hLN i σ α)]
+    rw [extractWindow_replaceWindow_of_cyclic_windows_disjoint (d := d) hLN hij.symm σ α]
+    have hrestrict :
+        cyclicRestrictES (d := d) (Fin.pos j) L j (replaceWindow L hLN i σ α) v =
+          WithLp.toLp 2 (fun β => F α β) := by
+      ext β
+      rw [cyclicRestrictES_apply]
+      rw [cyclicCfg_eq_replaceWindow (d := d) (Fin.pos j) L hLN]
+    rw [hrestrict]
+  have hright :
+      cyclicRestrictES (d := d) (Fin.pos j) L j σ (localTermES A L i v) =
+        WithLp.toLp 2 (fun β => P (WithLp.toLp 2 (fun α => F α β))
+          (extractWindow L i σ)) := by
+    ext β
+    rw [cyclicRestrictES_apply]
+    rw [cyclicCfg_eq_replaceWindow (d := d) (Fin.pos j) L hLN]
+    rw [localTermES_apply A L i hLN v (replaceWindow L hLN j σ β)]
+    rw [extractWindow_replaceWindow_of_cyclic_windows_disjoint (d := d) hLN hij σ β]
+    have hrestrict :
+        cyclicRestrictES (d := d) (Fin.pos i) L i (replaceWindow L hLN j σ β) v =
+          WithLp.toLp 2 (fun α => F α β) := by
+      ext α
+      rw [cyclicRestrictES_apply]
+      rw [cyclicCfg_eq_replaceWindow (d := d) (Fin.pos i) L hLN]
+      simp only [F]
+      rw [← replaceWindow_commute_of_cyclic_windows_disjoint (d := d) hLN hij σ α β]
+    rw [hrestrict]
+  rw [localTermES_apply A L i hLN (localTermES A L j v) σ]
+  rw [localTermES_apply A L j hLN (localTermES A L i v) σ]
+  rw [hleft, hright]
+  simpa [P] using separateLinearMap_apply_commute P P F (extractWindow L i σ)
+    (extractWindow L j σ)
+
+/-- Non-overlap positivity for transported local terms on disjoint cyclic windows.
+
+For `L ≤ N`, if the cyclic windows based at `i` and `j` have no common site, then
+the ordered cross term of the corresponding transported local ES projections is
+nonnegative: `0 ≤ Re ⟪h_i v, h_j v⟫`. -/
+theorem localTermES_re_inner_nonneg_of_cyclic_windows_disjoint {N : ℕ}
+    (A : MPSTensor d D) {L : ℕ} (hLN : L ≤ N) {i j : Fin N}
+    (hij : CyclicWindowsDisjoint L i j) (v : EuclideanSpace ℂ (Cfg d N)) :
+    0 ≤ (⟪localTermES A L i v, localTermES A L j v⟫_ℂ).re :=
+  LinearMap.IsSymmetricProjection.re_inner_apply_apply_nonneg_of_commute
+    (localTermES_isSymmetricProjection A L i)
+    (localTermES_isSymmetricProjection A L j)
+    (localTermES_commute_of_cyclic_windows_disjoint A hLN hij) v
 
 /-- The full transported parent Hamiltonian is positive because it is a finite
 sum of positive transported local terms. -/
