@@ -11,7 +11,8 @@ This file collects small finite-dimensional Hilbert-space lemmas used by the
 parent-Hamiltonian martingale method.  The main theorem is a purely algebraic
 quadratic-form reduction for a finite sum of symmetric projections: if the
 ordered off-diagonal terms satisfy a row-summable cross-term bound, then
-`H = ∑ i, P i` satisfies `H² ≥ γ H` as a quadratic form.
+`H = ∑ i, P i` satisfies `H² ≥ γ H` as a quadratic form.  The file also records
+that commuting symmetric projections have nonnegative ordered cross terms.
 
 The statements deliberately keep the MPS/Friedrichs-angle estimates as explicit
 hypotheses.  They provide the reusable projection-geometry layer into which the
@@ -42,6 +43,28 @@ theorem re_inner_apply_apply_self {P : E →ₗ[𝕜] E} (hP : P.IsSymmetricProj
 theorem re_inner_nonneg {P : E →ₗ[𝕜] E} (hP : P.IsSymmetricProjection) (v : E) :
     0 ≤ RCLike.re (⟪P v, v⟫_𝕜) :=
   hP.isPositive.re_inner_nonneg_left v
+
+/-- Commuting symmetric projections have nonnegative ordered cross terms.
+
+If `P` and `Q` are symmetric projections that commute pointwise, then
+`0 ≤ Re ⟪P v, Q v⟫` for every vector `v`. -/
+theorem re_inner_apply_apply_nonneg_of_commute {P Q : E →ₗ[𝕜] E}
+    (hP : P.IsSymmetricProjection) (hQ : Q.IsSymmetricProjection)
+    (hcomm : ∀ v : E, P (Q v) = Q (P v)) (v : E) :
+    0 ≤ RCLike.re (⟪P v, Q v⟫_𝕜) := by
+  have hQidem : Q (Q (P v)) = Q (P v) := by
+    simpa [Module.End.mul_apply] using congrArg (fun T : E →ₗ[𝕜] E => T (P v))
+      hQ.isIdempotentElem.eq
+  have hsym₁ : ⟪P v, Q v⟫_𝕜 = ⟪Q (P v), v⟫_𝕜 := by
+    exact (hQ.isSymmetric (P v) v).symm
+  have hsym₂ : ⟪Q (P v), v⟫_𝕜 = ⟪Q (P v), Q v⟫_𝕜 := by
+    calc
+      ⟪Q (P v), v⟫_𝕜 = ⟪Q (Q (P v)), v⟫_𝕜 := by rw [hQidem]
+      _ = ⟪Q (P v), Q v⟫_𝕜 := hQ.isSymmetric (Q (P v)) v
+  calc
+    0 ≤ RCLike.re (⟪P (Q v), Q v⟫_𝕜) := hP.re_inner_nonneg (Q v)
+    _ = RCLike.re (⟪P v, Q v⟫_𝕜) := by
+      rw [hsym₁, hsym₂, hcomm v]
 
 end LinearMap.IsSymmetricProjection
 

@@ -93,7 +93,9 @@ def replaceWindow (L : ℕ) (_hLN : L ≤ N) {α : Type*}
     let offset := (k.val + N - i.val) % N
     if h : offset < L then τ ⟨offset, h⟩ else σ k
 
-private lemma offset_mod_eq {a b N : ℕ} (ha : a < N) (hb : b < N) :
+/-- If `a` and `b` are residues modulo `N`, then the cyclic offset of
+`a + b` from `a` is `b`. -/
+lemma offset_mod_eq {a b N : ℕ} (ha : a < N) (hb : b < N) :
     ((a + b) % N + N - a) % N = b := by
   rcases lt_or_ge (a + b) N with hab | hab
   · rw [Nat.mod_eq_of_lt hab, show a + b + N - a = b + N from by omega,

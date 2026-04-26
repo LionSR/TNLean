@@ -89,11 +89,7 @@ lemma mpv_window_mem_groundSpace (A : MPSTensor d D) (L N : ℕ) (hLN : L ≤ N)
       else σ ⟨(k + i.val) % N, Nat.mod_lt _ hN⟩) = _
     -- The offset always equals k (regardless of wrapping)
     have hoffset : ((k + i.val) % N + N - i.val) % N = k := by
-      rcases lt_or_ge (k + i.val) N with h | h
-      · rw [Nat.mod_eq_of_lt h, show k + i.val + N - i.val = k + N from by omega,
-            Nat.add_mod_right, Nat.mod_eq_of_lt hkN]
-      · rw [Nat.mod_eq_sub_mod h, Nat.mod_eq_of_lt (by omega : k + i.val - N < N),
-            show k + i.val - N + N - i.val = k from by omega, Nat.mod_eq_of_lt hkN]
+      simpa [Nat.add_comm] using offset_mod_eq i.isLt hkN
     rw [hoffset]
     by_cases hkL : k < L
     · -- Window part → τ
