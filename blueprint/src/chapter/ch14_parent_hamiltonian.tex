@@ -1679,6 +1679,30 @@ Lucia~\cite{Kastoryano2018Martingale}.
     $-(1-\gamma)\sum_i\operatorname{Re}\langle P_i v,v\rangle$.
 \end{proof}
 
+\begin{lemma}[Finite-overlap projection row-sum reduction]
+    \label{lem:finite_overlap_projection_rowsum_reduction}
+    \lean{ProjectionGeometry.quadraticForm_sum_projections_of_finite_overlap}
+    \leanok
+    \uses{lem:ordered_projection_rowsum_reduction}
+    Let $P_i$ be a finite family of symmetric projections and let $\gamma\le1$.
+    Suppose an interaction predicate $i\sim j$ has at most $m$ off-diagonal
+    neighbours in each row for some positive integer $m$. If noninteracting
+    ordered cross terms are nonnegative and, on each interacting pair,
+    \[
+        \operatorname{Re}\langle P_i v,P_jv\rangle
+        \ge -(1-\gamma)\frac{1}{m}\operatorname{Re}\langle P_i v,v\rangle,
+    \]
+    then $H=\sum_i P_i$ satisfies $H^2\ge \gamma H$ as a quadratic form.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Choose $c_{ij}=1/m$ on interacting pairs and $c_{ij}=0$ otherwise. The row
+    cardinality bound gives $\sum_{j\ne i}c_{ij}\le1$; noninteracting
+    nonnegativity supplies the zero-coefficient cross-term estimates. Apply
+    Lemma~\ref{lem:ordered_projection_rowsum_reduction}.
+\end{proof}
+
 \begin{lemma}[Parent-Hamiltonian ordered row-sum quadratic-form reduction]
     \label{lem:parent_hamiltonian_ordered_rowsum_quadratic}
     \lean{MPSTensor.parentHamiltonianES_quadratic_form_of_ordered_local_term_bounds}
@@ -1735,6 +1759,52 @@ Lucia~\cite{Kastoryano2018Martingale}.
     Lemma~\ref{lem:parent_hamiltonian_es_quadratic_reduction} to convert this
     quadratic-form estimate into the norm lower bound on the orthogonal
     complement of the ground space.
+\end{proof}
+
+\begin{lemma}[Parent-Hamiltonian finite-overlap Friedrichs quadratic reduction]
+    \label{lem:parent_hamiltonian_finite_overlap_friedrichs_quadratic}
+    \lean{MPSTensor.parentHamiltonianES_quadratic_form_of_finite_overlap_friedrichs}
+    \leanok
+    \uses{lem:finite_overlap_projection_rowsum_reduction, def:parent_hamiltonian_es}
+    For a fixed chain length $N$, let $m$ be a positive integer and let
+    $\gamma\le1$. Suppose an overlap predicate on local windows has at most $m$
+    overlapping off-diagonal windows in each row. If non-overlapping local terms
+    have nonnegative ordered cross terms, overlapping local terms satisfy the
+    finite-overlap Friedrichs estimate
+    \[
+        \operatorname{Re}\langle h_{i,\mathrm{ES}}v,h_{j,\mathrm{ES}}v\rangle
+        \ge -(1-\gamma)\frac{1}{m}
+              \operatorname{Re}\langle h_{i,\mathrm{ES}}v,v\rangle,
+    \]
+    and the transported local terms are symmetric projections, then the
+    transported Hamiltonian satisfies $H_{N,L}^{\mathrm{ES}}{}^2\ge
+    \gamma H_{N,L}^{\mathrm{ES}}$ as a quadratic form.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Apply the finite-overlap projection reduction with
+    $P_i=h_{i,\mathrm{ES}}$.
+\end{proof}
+
+\begin{lemma}[Parent-Hamiltonian gap from finite-overlap Friedrichs data]
+    \label{lem:parent_hamiltonian_finite_overlap_friedrichs_gap}
+    \lean{MPSTensor.parentHamiltonianES_gap_bound_of_finite_overlap_friedrichs}
+    \leanok
+    \uses{lem:parent_hamiltonian_finite_overlap_friedrichs_quadratic,
+        lem:parent_hamiltonian_es_quadratic_reduction}
+    Fix $L>1$ and set $m=2(L-1)$. Suppose uniformly for every $N\ge2L$ that
+    the hypotheses of the fixed-chain finite-overlap Friedrichs reduction hold
+    with $\gamma=1/(4L)$ and this value of $m$. Then $1/(4L)>0$, and the
+    explicit norm lower bound with constant $1/(4L)$ follows for vectors in
+    $(\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The fixed-chain finite-overlap reduction gives the required quadratic-form
+    estimate for every admissible $N$. Lemma~\ref{lem:parent_hamiltonian_es_quadratic_reduction}
+    converts that estimate to the norm lower bound.
 \end{proof}
 
 \begin{theorem}[Martingale criterion for spectral gap]\label{thm:martingale_criterion}
@@ -1902,7 +1972,9 @@ Lucia~\cite{Kastoryano2018Martingale}.
         lem:euclidean_local_projector_positive,
         lem:local_term_es_average,
         lem:parent_hamiltonian_es_quadratic_reduction,
-        lem:parent_hamiltonian_ordered_rowsum_gap}
+        lem:parent_hamiltonian_ordered_rowsum_gap,
+        lem:parent_hamiltonian_finite_overlap_friedrichs_quadratic,
+        lem:parent_hamiltonian_finite_overlap_friedrichs_gap}
     For an injective tensor $A$ and a range $L > 1$, the theorem asserts
     the analytic estimate with the explicit constant
     \[
@@ -1922,10 +1994,15 @@ Lucia~\cite{Kastoryano2018Martingale}.
     Lemma~\ref{lem:parent_hamiltonian_es_quadratic_reduction} reduces the present
     theorem to the remaining MPS-specific task: deriving the uniform
     quadratic-form estimate.  Lemma~\ref{lem:parent_hamiltonian_ordered_rowsum_gap}
-    establishes the finite-sum algebra from ordered cross-term row bounds;
-    the remaining MPS-specific tasks are to prove the local symmetric-projection
-    statement for the transported local terms and to obtain the Friedrichs-angle
-    constants with the required finite-overlap row sums.
+    establishes the finite-sum algebra from ordered cross-term row bounds, and
+    Lemmas~\ref{lem:parent_hamiltonian_finite_overlap_friedrichs_quadratic}
+    and~\ref{lem:parent_hamiltonian_finite_overlap_friedrichs_gap} record the
+    common finite-overlap specialization with $m=2(L-1)$.  This reduction keeps
+    the transported-local-projection statement as an explicit assumption,
+    matching the separate projection-structure work. Once that assumption is
+    established, the remaining analytic tasks are the cyclic-window
+    row-cardinality bound, non-overlap positivity, and the Friedrichs-angle
+    estimate for overlapping windows.
 \end{proof}
 
 \begin{theorem}[Spectral gap for MPS parent Hamiltonians]\label{thm:parent_hamiltonian_gapped}
