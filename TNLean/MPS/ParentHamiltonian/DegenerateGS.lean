@@ -57,7 +57,7 @@ evaluations
 `ω ↦ (k ↦ evalWord (A k) (List.ofFn ω))` span the full product algebra
 `Π k, Matrix (Fin (dim k)) (Fin (dim k)) ℂ`.  Issue #934 is precisely the
 paper-level task of deriving such a witness from `IsCanonicalFormBNT μ A`; this
-file only consumes the witness in the final Route B composition. -/
+file only uses the witness in the Route B composition. -/
 def RouteBProductWordSpan
     (A : (k : Fin r) → MPSTensor d (dim k)) (m : ℕ) : Prop :=
   Submodule.span ℂ (Set.range fun ω : Fin m → Fin d =>
@@ -67,7 +67,7 @@ def RouteBProductWordSpan
 
 /-- Existence form of the Route B product-word span witness expected from #934.
 
-The consuming theorems below use a fixed witness `m` so that the boundary-matrix
+The theorems below use a fixed witness `m` so that the boundary-matrix
 commutation hypothesis can refer to the same word length. -/
 def HasRouteBProductWordSpan
     (A : (k : Fin r) → MPSTensor d (dim k)) : Prop :=
