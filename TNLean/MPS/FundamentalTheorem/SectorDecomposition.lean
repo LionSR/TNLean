@@ -827,14 +827,14 @@ theorem fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_preMatching
 This structure records the analytic inputs used by
 `exists_sectorBasisMatching_of_overlapOrtho_span_sameMPV`: nonzero bond
 dimensions, injectivity, left-canonical normalization, asymptotic self/orthogonal
-overlaps, and equality of the finite-length MPV spans.  It deliberately does
+overlaps, and equality of the finite-length MPV spans. It deliberately does
 not contain a permutation or copy alignment; those are produced by the overlap
 rigidity theorem and the BNT coefficient comparison. -/
 structure SectorBasisOverlapSpanHypotheses (P Q : SectorDecomposition d) : Prop where
   /-- The left basis blocks have nonzero bond dimension. -/
-  left_basisDim_pos : ∀ j : Fin P.basisCount, 0 < P.basisDim j
+  left_dim_pos : ∀ j : Fin P.basisCount, 0 < P.basisDim j
   /-- The right basis blocks have nonzero bond dimension. -/
-  right_basisDim_pos : ∀ k : Fin Q.basisCount, 0 < Q.basisDim k
+  right_dim_pos : ∀ k : Fin Q.basisCount, 0 < Q.basisDim k
   /-- The left basis blocks are injective. -/
   left_injective : ∀ j : Fin P.basisCount, IsInjective (P.basis j)
   /-- The right basis blocks are injective. -/
@@ -867,7 +867,6 @@ structure SectorBasisOverlapSpanHypotheses (P Q : SectorDecomposition d) : Prop 
       mpvState (d := d) (P.basis j) N)) =
     Submodule.span ℂ (Set.range (fun k : Fin Q.basisCount =>
       mpvState (d := d) (Q.basis k) N))
-
 
 /-- Produce a sector basis matching from the primitive overlap-rigidity hypotheses.
 
@@ -923,16 +922,16 @@ namespace SectorBasisOverlapSpanHypotheses
 variable {P Q : SectorDecomposition d}
 
 /-- Convert the bundled primitive overlap-rigidity hypotheses into a sector basis
-matching.  The produced witness is not part of the hypotheses: it is obtained by
+matching. The produced witness is not part of the hypotheses: it is obtained by
 `exists_sectorBasisMatching_of_overlapOrtho_span_sameMPV`. -/
 theorem exists_sectorBasisMatching
     (H : SectorBasisOverlapSpanHypotheses P Q)
     (hEqual : SameMPV₂ P.toTensor Q.toTensor) :
     Nonempty (SectorBasisMatching P Q) := by
   letI : ∀ j : Fin P.basisCount, NeZero (P.basisDim j) :=
-    fun j => ⟨Nat.ne_of_gt (H.left_basisDim_pos j)⟩
+    fun j => ⟨Nat.ne_of_gt (H.left_dim_pos j)⟩
   letI : ∀ k : Fin Q.basisCount, NeZero (Q.basisDim k) :=
-    fun k => ⟨Nat.ne_of_gt (H.right_basisDim_pos k)⟩
+    fun k => ⟨Nat.ne_of_gt (H.right_dim_pos k)⟩
   exact exists_sectorBasisMatching_of_overlapOrtho_span_sameMPV P Q
     H.left_injective H.right_injective H.left_normalized H.right_normalized
     H.left_self_overlap H.left_off_overlap H.right_self_overlap H.right_off_overlap

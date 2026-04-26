@@ -68,7 +68,7 @@ The theorem `exists_tp_sector_decomp_after_blocking` below provides:
 The current library already settles the common-period blocking arithmetic and
 now has both a one-sided collapsed BNT construction for TP primitive irreducible
 live blocks and a witness-producing sector comparison from primitive
-overlap-span hypotheses.  The strongest assembled theorem in this file,
+overlap-span hypotheses. The strongest assembled theorem in this file,
 `fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_overlapSpan`,
 threads `SameMPV₂ A B` through those ingredients once exact common live block
 decompositions and the overlap-span hypotheses are supplied.
@@ -263,7 +263,7 @@ The two hypotheses are intentionally separated:
 The body is a kernel-checked composition of the existing structural theorem's
 blocking compatibility (`sameMPV₂_blockTensor`), the two hypotheses, and the
 matched-basis algebraic endpoint from PR #844
-(`fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_matched_basis`).  The
+(`fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_matched_basis`). The
 later theorems below instantiate the matching side with primitive overlap-span
 hypotheses rather than assuming the witness directly. -/
 theorem fundamentalTheorem_after_blocking_1606_sector_of_bntPair_matched
@@ -316,13 +316,12 @@ theorem fundamentalTheorem_after_blocking_1606_sector_of_bntPair_matched
   exact ⟨p, hp, P, Q, hPeq, hQeq, hPbnt, hQbnt,
           perm, hCopies, ζ, hζne, hMultiset⟩
 
-
 /-- **After-blocking sector endpoint from primitive overlap-span data.**
 
 This theorem replaces the abstract `matchedBasisData` hypothesis in
 `fundamentalTheorem_after_blocking_1606_sector_of_bntPair_matched` by the
 paper-level overlap-rigidity inputs collected in
-`SectorBasisOverlapSpanHypotheses`.  The hypotheses still include a BNT sector
+`SectorBasisOverlapSpanHypotheses`. The hypotheses still include a BNT sector
 pair at a common blocking period, but the matching witness itself is now
 constructed by `SectorBasisOverlapSpanHypotheses.exists_sectorBasisMatching` and
 then fed to the bundled heterogeneous sector comparison theorem.
@@ -374,7 +373,7 @@ theorem fundamentalTheorem_after_blocking_1606_sector_of_bntPair_overlapSpan
 
 Assume a common blocking period `p` has already produced exact live block
 decompositions of `blockTensor A p` and `blockTensor B p` by TP primitive
-irreducible blocks with nonzero weights.  The theorem applies the collapsed
+irreducible blocks with nonzero weights. The theorem applies the collapsed
 one-sided BNT construction
 `exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks` on both sides, derives the
 equality of the two resulting sector tensors from the original `SameMPV₂ A B`,
@@ -472,7 +471,7 @@ theorem fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_overlapSp
 
 The complete end-to-end FT should take two tensors `A, B` with `SameMPV₂ A B`
 and pass from the blocked reduction output to the paper's basis-of-normal-tensors
-sector comparison.  The one-sided collapsed BNT construction is now available as
+sector comparison. The one-sided collapsed BNT construction is now available as
 `exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks`, and the sector matching
 extraction is available from primitive overlap-rigidity hypotheses through
 `SectorBasisOverlapSpanHypotheses.exists_sectorBasisMatching`.
@@ -486,7 +485,7 @@ produce the matched sector-weight conclusion from the original `SameMPV₂ A B`.
 
 The remaining formal work for the completely unconditional
 `fundamentalTheorem_after_blocking_1606_sector` is therefore not another matched
-basis assumption.  It is to derive, from the structural reduction itself:
+basis assumption. It is to derive, from the structural reduction itself:
 
 1. a common live block decomposition with primitive **and irreducible** blocks at
    the same physical blocking level, with the zero-tail contribution handled at
