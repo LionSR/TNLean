@@ -727,13 +727,31 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     regrows the rightmost site.
 \end{proof}
 
+\begin{lemma}[Cyclic-window range antitonicity]%
+    \label{lem:cyclic_window_range_antitonicity}
+    \lean{MPSTensor.chainGroundSpace_le_chainGroundSpace_succ,
+          MPSTensor.chainGroundSpace_le_chainGroundSpace_of_le}
+    \leanok
+    \uses{rem:cyclic_window_operators}
+    On a nonempty periodic chain, longer cyclic-window constraints imply all
+    shorter cyclic-window constraints: if $L' \le L \le N$, then
+    $\mathcal G_{N,L}(A) \subseteq \mathcal G_{N,L'}(A)$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:ground_space_in_left_ground}
+    Fix a cyclic window of length $L+1$ and restrict its last site. The resulting
+    length-$L$ vector is again in the ground space, so one-site peeling gives the
+    inclusion for consecutive ranges. Iteration gives the general antitonicity.
+\end{proof}
+
 \begin{theorem}[Cyclic-window normal open-chain reduction]%
     \label{thm:cyclic_normal_open_chain_range_reduction}
-    \lean{MPSTensor.chainGroundSpace_le_chainGroundSpace_succ,
-          MPSTensor.chainGroundSpace_le_chainGroundSpace_of_le,
-          MPSTensor.chainGroundSpace_le_groundSpace_of_isNBlkInjective}
+    \lean{MPSTensor.chainGroundSpace_le_groundSpace_of_isNBlkInjective}
     \leanok
-    \uses{rem:cyclic_window_operators, thm:normal_open_chain_range_reduction}
+    \uses{lem:cyclic_window_range_antitonicity,
+        thm:normal_open_chain_range_reduction}
     Let $A$ be $L_0$-block injective with $L_0>0$ and $D \ge 1$.
     If an $N$-site periodic-chain state satisfies all cyclic ground-space
     constraints at some range $L_0+1 \le L \le N$, then it lies in the
@@ -742,13 +760,89 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 
 \begin{proof}
     \leanok
-    \uses{rem:cyclic_window_operators, thm:normal_open_chain_range_reduction,
-        lem:ground_space_in_left_ground}
-    First peel cyclic windows one site at a time: a state satisfying the range
-    $L+1$ constraints also satisfies the range $L$ constraints. Iterating this
-    antitonicity reduces the cyclic hypotheses to range $L_0+1$. On every
-    non-wrapping interval, the cyclic and contiguous restriction maps agree, so
+    \uses{lem:cyclic_window_range_antitonicity,
+        thm:normal_open_chain_range_reduction}
+    Lemma~\ref{lem:cyclic_window_range_antitonicity} reduces the cyclic
+    hypotheses to range $L_0+1$. On every non-wrapping interval, the cyclic and
+    contiguous restriction maps agree, so
     Theorem~\ref{thm:normal_open_chain_range_reduction} applies.
+\end{proof}
+
+\begin{lemma}[Wrapped-window one-sided compatibility]%
+    \label{lem:wrapped_window_one_sided_compatibility}
+    \lean{MPSTensor.wrapping_window_compatibility_of_isNBlkInjective}
+    \leanok
+    \uses{def:l_blk_injective, rem:cyclic_window_operators}
+    Assume $A$ is $L_0$-block injective with $L_0>0$ and $M \ge L_0$.
+    If the reduced wrapped window at the last site has boundary matrices
+    $Y_\tau$, then for every physical letter $j$ one has
+    \[
+        C^+_\tau A^j X = Y_\tau A^j,
+    \]
+    where $C^+_\tau$ is the complementary word seen by that wrapped window.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:ground_space_map_injective_blk}
+    The trace identity for the wrapped window is tested against all words of
+    length $L_0$. Injectivity of $\Gamma_{L_0}$, which follows from
+    $L_0$-block injectivity, strips the test word and gives the displayed matrix
+    identity.
+\end{proof}
+
+\begin{lemma}[Mirror wrapped-window one-sided compatibility]%
+    \label{lem:mirror_wrapped_window_one_sided_compatibility}
+    \lean{MPSTensor.wrapping_window_mirror_compatibility_of_isNBlkInjective}
+    \leanok
+    \uses{def:l_blk_injective, rem:cyclic_window_operators}
+    Assume $A$ is $L_0$-block injective with $L_0>0$ and $M \ge L_0$.
+    If the opposite reduced wrapped window has boundary matrices $Y_\tau$, then
+    \[
+        X A^j C^-_\tau = A^j Y_\tau
+    \]
+    for every physical letter $j$, where $C^-_\tau$ is the complementary word
+    seen from the opposite boundary-crossing position.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:ground_space_map_injective_blk}
+    Factor the cyclic word at the opposite wrapped position, rotate the trace,
+    and use injectivity of $\Gamma_{L_0}$ to remove the length-$L_0$ test word.
+\end{proof}
+
+\begin{theorem}[Reduced wrapped-boundary compatibilities]%
+    \label{thm:reduced_wrapped_boundary_compatibilities}
+    \lean{MPSTensor.chainGroundSpace_wrapped_boundary_compatibilities_of_isNBlkInjective}
+    \leanok
+    \uses{def:chain_ground_space, def:l_blk_injective,
+        lem:cyclic_window_range_antitonicity,
+        lem:wrapped_window_one_sided_compatibility,
+        lem:mirror_wrapped_window_one_sided_compatibility}
+    Let $A$ be $L_0$-block injective with $L_0>0$ and $D \ge 1$.
+    Suppose $\psi \in \mathcal G_{N,L}(A)$, $N \ge 2$, $L_0 < L \le N$, and
+    $\psi = \Gamma_N(X)$ for a boundary matrix $X$. Then there are two families
+    of boundary matrices $Y^+_\tau$ and $Y^-_\tau$, indexed by outside
+    configurations $\tau$, such that for every physical letter $j$,
+    \[
+        C^+_\tau A^j X = Y^+_\tau A^j,
+        \qquad
+        X A^j C^-_\tau = A^j Y^-_\tau,
+    \]
+    where $C^+_\tau$ and $C^-_\tau$ are the complementary words exposed by the
+    two opposite wrapped windows of reduced length $L_0+1$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:cyclic_window_range_antitonicity,
+        lem:wrapped_window_one_sided_compatibility,
+        lem:mirror_wrapped_window_one_sided_compatibility}
+    First use Lemma~\ref{lem:cyclic_window_range_antitonicity} to reduce the
+    cyclic constraints from range $L$ to range $L_0+1$. Then apply the wrapped
+    window and mirror wrapped window compatibility lemmas at the two
+    boundary-crossing positions to obtain the displayed one-sided identities.
 \end{proof}
 
 \begin{theorem}[Boundary matrix commutation from the wrapping window]\label{thm:boundary_matrix_commutes}
@@ -988,7 +1082,9 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \lean{MPSTensor.chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction}
     \notready
     \uses{def:chain_ground_space, def:mpv_submodule, def:normal,
-        def:l_blk_injective, thm:cyclic_normal_open_chain_range_reduction}
+        def:l_blk_injective, thm:cyclic_normal_open_chain_range_reduction,
+        thm:reduced_wrapped_boundary_compatibilities,
+        lem:boundary_matrix_commutes_long_words}
     If $A$ is normal, $D \ge 1$, $L_0$-block-injective, with $N \ge 2$ and $L_0 < L \le N$, then
     \[
         \mathcal G_{N,L}(A) \subseteq \spn\bigl\{V^{(N)}(A)\bigr\}.
@@ -997,11 +1093,15 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 
 \begin{proof}
     \notready
-    \uses{thm:boundary_matrix_commutes}
-    The remaining step is the periodic range-reduction theorem from
-    \cite[\S~IV.C]{Cirac2021Matrix}: one must show that the reduced cyclic window constraints
-    still force the same boundary-matrix commutation relation as in
-    Theorem~\ref{thm:boundary_matrix_commutes}.
+    \uses{thm:reduced_wrapped_boundary_compatibilities,
+        lem:boundary_matrix_commutes_long_words}
+    The remaining step is the closure property from
+    \cite[\S~IV.C]{Cirac2021Matrix}: Theorem~\ref{thm:reduced_wrapped_boundary_compatibilities}
+    supplies the two one-sided wrapped-boundary identities for the open-chain
+    boundary matrix $X$. What is still missing is the common-middle comparison
+    that turns these identities into commutation of $X$ with a sufficiently long
+    word product; Lemma~\ref{lem:boundary_matrix_commutes_long_words} would then
+    give the generator commutation used in the injective proof.
 \end{proof}
 
 \begin{theorem}[Chain ground space equals the MPV line in the normal case]%

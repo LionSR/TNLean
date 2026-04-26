@@ -111,3 +111,42 @@ cyclic-window reduction from periodic constraints to that open-chain theorem. Th
 remaining proof obligation in
 `chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction` is now concentrated
 in the wrapped-boundary scalar-closure step.
+
+## 2026-04-26 Wave 16A update
+
+Current branch `wave16-A-588-wrapped-boundary-scalar` does **not** close the final
+MPV-line containment theorem; the existing proof placeholder in
+`MPSTensor.chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction` remains.
+It lands the next reusable Lean statement on the closure-property path:
+
+- `MPSTensor.chainGroundSpace_wrapped_boundary_compatibilities_of_isNBlkInjective`
+  in `TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean`.
+
+The theorem starts from exactly the post-open-chain situation: an $N$-site vector
+`ψ ∈ chainGroundSpace A L N` with `ψ = groundSpaceMap A N X`, an
+`L₀`-block-injective tensor with `L₀ > 0`, and `L₀ < L ≤ N`. It first reduces the
+cyclic constraints to range `L₀ + 1`, then applies the existing wrapped-window
+compatibility theorem at the last site and the mirror compatibility theorem at
+the opposite wrapped position. The output is the two one-sided boundary identities
+for some boundary families `Ywrap` and `Ymirror`:
+
+```text
+C⁺_τ · A_j · X = Ywrap_τ · A_j,
+X · A_j · C⁻_τ = A_j · Ymirror_τ,
+```
+
+where `C⁺_τ` and `C⁻_τ` are the complementary word products of length
+`N - (L₀ + 1)` exposed by the two reduced wrapped windows.
+
+This is paper-faithful to the CPGSV21 closure-property sentence at
+`Papers/2011.12127/TN-Review-main.tex:2078--2079`, especially the source text
+"Once we have reached $k=L_0$, we can resort to the above Theorem, or
+alternatively apply a similar argument when closing the boundaries". It also
+feeds the theorem statement at lines `2087--2090`, labelled
+`thm:4:unique-gs-L0_plus_1`.
+
+The remaining blocker is now sharper: prove the common-middle comparison turning
+the two one-sided identities above into a long-word commutation family
+`X A^ω = A^ω X` for some positive word length (then amplify to length at least
+`L₀` if necessary) and apply
+`MPSTensor.boundary_matrix_commutes_of_isNBlkInjective_of_long_word_commutes`.
