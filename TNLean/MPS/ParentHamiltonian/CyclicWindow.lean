@@ -182,8 +182,8 @@ def cyclicWindowSupport (N L : ℕ) (i : Fin N) : Finset (Fin N) :=
 
 Two windows overlap when their cyclic supports share at least one site.  This is
 the locality relation used for pairs of translated local terms
-`localTermES A L i` and `localTermES A L j`.  In row-cardinality estimates the
-self-overlap case is removed by `Finset.erase`. -/
+`localTermES A L i` and `localTermES A L j`.  In row-cardinality estimates, the
+diagonal term j = i is excluded. -/
 def cyclicWindowsOverlap (N L : ℕ) (i j : Fin N) : Prop :=
   ∃ k : Fin N, k ∈ cyclicWindowSupport N L i ∧ k ∈ cyclicWindowSupport N L j
 
