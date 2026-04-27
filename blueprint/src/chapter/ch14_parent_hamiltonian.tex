@@ -1039,6 +1039,27 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     injectivity, so linearity gives $XM = MX$ for every $M \in \MN{D}$.
 \end{proof}
 
+\begin{lemma}[Padded complement annihilation]
+    \label{lem:padded_complement_annihilation}
+    \lean{MPSTensor.eq_zero_of_mul_evalWord_eq_zero_of_isNBlkInjective_of_le_mul}
+    \leanok
+    \uses{def:l_blk_injective}
+    If $A$ is $L_0$-block-injective and $q \ge 1$, then an operator $Z$ that
+    annihilates every length-$k$ word product on the left is zero whenever
+    $k \le qL_0$:
+    \[
+        Z A^w = 0 \quad (|w|=k) \qquad\Longrightarrow\qquad Z=0.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The hypothesis $\spn\{A^u: |u|=L_0\}=\MN{D}$ implies the same spanning
+    statement at every positive multiple $qL_0$.  Each length-$qL_0$ word factors
+    as a length-$k$ prefix followed by padding, so $Z$ annihilates all generators
+    of the full span and hence annihilates the identity.
+\end{proof}
+
 \begin{lemma}[Generator commutation from long-word commutation]
     \label{lem:boundary_matrix_commutes_long_words}
     \lean{MPSTensor.boundary_matrix_commutes_of_isNBlkInjective_of_long_word_commutes}
@@ -1051,6 +1072,23 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 \begin{proof}
     \leanok
     Apply Theorem~\ref{thm:block_word_strip_central} with $M = A^i$.
+\end{proof}
+
+\begin{theorem}[MPV-line endgame from long-word commutation]
+    \label{thm:ground_space_map_mpv_of_long_word_commutes}
+    \lean{MPSTensor.groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_long_word_commutes}
+    \leanok
+    \uses{def:mpv_submodule, thm:block_word_strip_central}
+    Let $A$ be $L_0$-block-injective with $L_0>0$ and let $m \ge L_0$.
+    If a boundary matrix $X$ commutes with every length-$m$ word product, then
+    $\Gamma_N(X)$ lies in the MPV line $\spn\{V^{(N)}(A)\}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Theorem~\ref{thm:block_word_strip_central} makes $X$ commute with the whole
+    matrix algebra.  The center of $\MN{D}$ consists of scalar matrices, so
+    $X=c\Id$, and therefore $\Gamma_N(X)=cV^{(N)}(A)$.
 \end{proof}
 
 \begin{theorem}[Chain ground space equals the MPV line in the injective case]%
@@ -1084,7 +1122,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \uses{def:chain_ground_space, def:mpv_submodule, def:normal,
         def:l_blk_injective, thm:cyclic_normal_open_chain_range_reduction,
         thm:reduced_wrapped_boundary_compatibilities,
-        lem:boundary_matrix_commutes_long_words}
+        thm:ground_space_map_mpv_of_long_word_commutes}
     If $A$ is normal, $D \ge 1$, $L_0$-block-injective, with $N \ge 2$ and $L_0 < L \le N$, then
     \[
         \mathcal G_{N,L}(A) \subseteq \spn\bigl\{V^{(N)}(A)\bigr\}.
@@ -1094,14 +1132,17 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 \begin{proof}
     \notready
     \uses{thm:reduced_wrapped_boundary_compatibilities,
-        lem:boundary_matrix_commutes_long_words}
+        thm:ground_space_map_mpv_of_long_word_commutes,
+        lem:padded_complement_annihilation}
     The remaining step is the closure property from
     \cite[\S~IV.C]{Cirac2021Matrix}: Theorem~\ref{thm:reduced_wrapped_boundary_compatibilities}
     supplies the two one-sided wrapped-boundary identities for the open-chain
-    boundary matrix $X$. What is still missing is the common-middle comparison
-    that turns these identities into commutation of $X$ with a sufficiently long
-    word product; Lemma~\ref{lem:boundary_matrix_commutes_long_words} would then
-    give the generator commutation used in the injective proof.
+    boundary matrix $X$. The padded-annihilation lemma records that exact
+    complement-span length mismatches are no longer the obstruction. What is
+    still missing is the common-middle comparison that turns the one-sided
+    identities into commutation of $X$ with a sufficiently long word product;
+    Theorem~\ref{thm:ground_space_map_mpv_of_long_word_commutes} would then put
+    $\Gamma_N(X)$ directly in the MPV line.
 \end{proof}
 
 \begin{theorem}[Chain ground space equals the MPV line in the normal case]%
@@ -1828,6 +1869,7 @@ Lucia~\cite{Kastoryano2018Martingale}.
     \lean{LinearMap.IsSymmetricProjection.re_inner_apply_apply_self}
     \lean{LinearMap.IsSymmetricProjection.re_inner_nonneg}
     \lean{LinearMap.IsSymmetricProjection.re_inner_apply_apply_nonneg_of_commute}
+    \lean{LinearMap.IsSymmetricProjection.re_inner_apply_apply_ge_neg_of_norm_apply_le}
     \lean{ProjectionGeometry.re_inner_sum_apply_left}
     \lean{ProjectionGeometry.re_inner_sum_apply_apply}
     \lean{ProjectionGeometry.sum_sum_eq_diag_add_offdiag}
@@ -1838,7 +1880,10 @@ Lucia~\cite{Kastoryano2018Martingale}.
     $\operatorname{Re}\langle Pv,Pv\rangle=\operatorname{Re}\langle Pv,v\rangle$
     for symmetric projections; nonnegativity of this quadratic form; nonnegativity
     of $\operatorname{Re}\langle Pv,Qv\rangle$ for commuting symmetric projections
-    $P,Q$; finite-sum expansions of
+    $P,Q$; the Cauchy--Schwarz conversion from
+    $\|P Q v\|\le c\|Pv\|$ to
+    $\operatorname{Re}\langle Pv,Qv\rangle\ge -c\operatorname{Re}\langle Pv,v\rangle$;
+    finite-sum expansions of
     $\operatorname{Re}\langle (\sum_i P_i)v,v\rangle$ and
     $\operatorname{Re}\langle (\sum_i P_i)v,(\sum_i P_i)v\rangle$; the
     diagonal/off-diagonal split of the ordered double sum; and the aggregate
@@ -1892,6 +1937,33 @@ Lucia~\cite{Kastoryano2018Martingale}.
     cardinality bound gives $\sum_{j\ne i}c_{ij}\le1$; noninteracting
     nonnegativity supplies the zero-coefficient cross-term estimates. Apply
     Lemma~\ref{lem:ordered_projection_rowsum_reduction}.
+\end{proof}
+
+\begin{lemma}[Finite-overlap projection norm-compression reduction]
+    \label{lem:finite_overlap_projection_norm_reduction}
+    \lean{ProjectionGeometry.quadraticForm_sum_projections_of_finite_overlap_norm_bound}
+    \leanok
+    \uses{lem:finite_overlap_projection_rowsum_reduction,
+        rem:projection_geometry_rowsum_identities}
+    Let $P_i$ be a finite family of symmetric projections and let $\gamma\le1$.
+    Suppose an interaction predicate has at most $m>0$ off-diagonal neighbours
+    in each row, noninteracting ordered cross terms are nonnegative, and
+    interacting pairs satisfy the norm-compression estimate
+    \[
+        \|P_iP_jv\|\le (1-\gamma)\frac{1}{m}\|P_iv\|.
+    \]
+    Then $H=\sum_iP_i$ satisfies $H^2\ge\gamma H$ as a quadratic form.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:finite_overlap_projection_rowsum_reduction,
+        rem:projection_geometry_rowsum_identities}
+    Cauchy--Schwarz and symmetric idempotence turn the norm-compression estimate
+    into
+    $\operatorname{Re}\langle P_i v,P_jv\rangle
+    \ge -(1-\gamma)m^{-1}\operatorname{Re}\langle P_iv,v\rangle$.
+    The finite-overlap row-sum reduction then applies.
 \end{proof}
 
 \begin{lemma}[Parent-Hamiltonian ordered row-sum quadratic-form reduction]
@@ -1981,6 +2053,32 @@ Lucia~\cite{Kastoryano2018Martingale}.
     $P_i=h_{i,\mathrm{ES}}$.
 \end{proof}
 
+\begin{lemma}[Parent-Hamiltonian finite-overlap norm-compression quadratic reduction]
+    \label{lem:parent_hamiltonian_finite_overlap_norm_quadratic}
+    \lean{MPSTensor.parentHamiltonianES_quadratic_form_of_finite_overlap_norm_bound}
+    \leanok
+    \uses{lem:finite_overlap_projection_norm_reduction, def:parent_hamiltonian_es,
+        lem:transported_es_local_projections}
+    For a fixed chain length $N$, let $m>0$ and $\gamma\le1$. Suppose an overlap
+    predicate on local windows has at most $m$ overlapping off-diagonal windows in
+    each row, non-overlapping local terms have nonnegative ordered cross terms,
+    and overlapping local terms satisfy
+    \[
+        \|h_{i,\mathrm{ES}}(h_{j,\mathrm{ES}}v)\|
+        \le (1-\gamma)\frac{1}{m}\|h_{i,\mathrm{ES}}v\|.
+    \]
+    Then $H_{N,L}^{\mathrm{ES}}{}^2\ge \gamma H_{N,L}^{\mathrm{ES}}$ as a
+    quadratic form.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:finite_overlap_projection_norm_reduction,
+        lem:transported_es_local_projections}
+    Apply the finite-overlap norm-compression projection reduction to the family
+    $P_i=h_{i,\mathrm{ES}}$.
+\end{proof}
+
 \begin{definition}[Cyclic-window support]
     \label{def:cyclic_window_support}
     \lean{MPSTensor.cyclicWindowSupport}
@@ -1993,6 +2091,27 @@ Lucia~\cite{Kastoryano2018Martingale}.
     with repeated visits counted once.
 \end{definition}
 
+\begin{lemma}[Cyclic-window support offsets]
+    \label{lem:cyclic_window_support_offsets}
+    \lean{MPSTensor.mem_cyclicWindowSupport_iff}
+    \leanok
+    \uses{def:cyclic_window_support}
+    If $L\le N$, then a site $k$ belongs to the cyclic support $S_i$ exactly when
+    its cyclic offset from $i$ is below $L$:
+    \[
+        k\in S_i
+        \quad\Longleftrightarrow\quad
+        (k-i)\bmod N < L.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Write $k=i+r\pmod N$ for a representative offset $r$.  Membership in
+    $S_i$ gives an offset $r<L$, and conversely an offset below $L$ gives the
+    corresponding point of the support.
+\end{proof}
+
 \begin{definition}[Cyclic-window overlap]
     \label{def:cyclic_windows_overlap}
     \lean{MPSTensor.cyclicWindowsOverlap}
@@ -2001,6 +2120,29 @@ Lucia~\cite{Kastoryano2018Martingale}.
     Two length-$L$ cyclic windows overlap, written $i\sim_L j$, when their
     supports meet: $S_i\cap S_j\ne\varnothing$.
 \end{definition}
+
+\begin{lemma}[Concrete non-overlap positivity for cyclic supports]
+    \label{lem:cyclic_window_nonoverlap_positive}
+    \lean{MPSTensor.CyclicWindowsDisjoint.of_not_cyclicWindowsOverlap}
+    \lean{MPSTensor.localTermES_re_inner_nonneg_of_not_cyclicWindowsOverlap}
+    \leanok
+    \uses{lem:cyclic_window_support_offsets, def:cyclic_windows_overlap,
+        lem:transported_es_nonoverlap_positive}
+    If $L\le N$ and the cyclic supports $S_i$ and $S_j$ do not meet, then the
+    transported local ES terms have nonnegative ordered cross term:
+    \[
+        0\le\operatorname{Re}\langle h_{i,\mathrm{ES}}v,
+             h_{j,\mathrm{ES}}v\rangle .
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:cyclic_window_support_offsets, lem:transported_es_nonoverlap_positive}
+    The support-offset characterization converts failure of $S_i\cap S_j\ne\varnothing$
+    into site-disjointness of the two cyclic windows.  The disjoint-window
+    positivity lemma then applies.
+\end{proof}
 
 \begin{lemma}[Cyclic-window overlap row cardinality]
     \label{lem:cyclic_window_overlap_cardinality}
@@ -2077,6 +2219,59 @@ Lucia~\cite{Kastoryano2018Martingale}.
     nonnegative ordered cross term. Apply
     Lemma~\ref{lem:parent_hamiltonian_finite_overlap_friedrichs_gap} with these
     facts and the displayed overlapping-window estimate.
+\end{proof}
+
+\begin{lemma}[Parent-Hamiltonian gap from overlapping cyclic Friedrichs data]
+    \label{lem:parent_hamiltonian_cyclic_overlap_friedrichs_gap}
+    \lean{MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_overlap_friedrichs}
+    \leanok
+    \uses{lem:parent_hamiltonian_cyclic_window_friedrichs_gap,
+        lem:cyclic_window_nonoverlap_positive}
+    Fix $L>1$ and let $i\sim_L j$ mean that the cyclic supports of the
+    length-$L$ windows at $i$ and $j$ meet. Suppose uniformly for every
+    $N\ge2L$ that overlapping off-diagonal terms satisfy
+    \[
+        \operatorname{Re}\langle h_{i,\mathrm{ES}}v,h_{j,\mathrm{ES}}v\rangle
+        \ge -(1-\tfrac{1}{4L})\frac{1}{2(L-1)}
+              \operatorname{Re}\langle h_{i,\mathrm{ES}}v,v\rangle.
+    \]
+    Then the explicit norm lower bound with constant $1/(4L)$ follows for
+    vectors in $(\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:parent_hamiltonian_cyclic_window_friedrichs_gap,
+        lem:cyclic_window_nonoverlap_positive}
+    The preceding concrete non-overlap positivity lemma supplies the non-overlap
+    condition required by the cyclic-window finite-overlap theorem.  The displayed
+    overlapping estimate supplies the remaining ordered cross-term condition.
+\end{proof}
+
+\begin{lemma}[Parent-Hamiltonian gap from overlapping cyclic norm-compression data]
+    \label{lem:parent_hamiltonian_cyclic_overlap_norm_gap}
+    \lean{MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound}
+    \leanok
+    \uses{lem:parent_hamiltonian_cyclic_overlap_friedrichs_gap,
+        rem:projection_geometry_rowsum_identities}
+    Fix $L>1$.  Suppose uniformly for every $N\ge2L$ and every overlapping
+    off-diagonal pair that
+    \[
+        \|h_{i,\mathrm{ES}}(h_{j,\mathrm{ES}}v)\|
+        \le (1-\tfrac{1}{4L})\frac{1}{2(L-1)}
+             \|h_{i,\mathrm{ES}}v\|.
+    \]
+    Then the explicit norm lower bound with constant $1/(4L)$ follows for
+    vectors in $(\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:parent_hamiltonian_cyclic_overlap_friedrichs_gap,
+        rem:projection_geometry_rowsum_identities}
+    The norm-compression condition is converted to the ordered Friedrichs lower
+    bound by the projection-geometry Cauchy--Schwarz lemma.  The preceding
+    overlapping-cyclic Friedrichs reduction then gives the norm lower bound.
 \end{proof}
 
 \begin{theorem}[Martingale criterion for spectral gap]\label{thm:martingale_criterion}
@@ -2250,7 +2445,10 @@ Lucia~\cite{Kastoryano2018Martingale}.
         lem:parent_hamiltonian_finite_overlap_friedrichs_quadratic,
         lem:parent_hamiltonian_finite_overlap_friedrichs_gap,
         lem:cyclic_window_overlap_cardinality,
-        lem:parent_hamiltonian_cyclic_window_friedrichs_gap}
+        lem:cyclic_window_nonoverlap_positive,
+        lem:parent_hamiltonian_cyclic_window_friedrichs_gap,
+        lem:parent_hamiltonian_cyclic_overlap_friedrichs_gap,
+        lem:parent_hamiltonian_cyclic_overlap_norm_gap}
     For an injective tensor $A$ and a range $L > 1$, the theorem asserts
     the analytic estimate with the explicit constant
     \[
@@ -2277,11 +2475,17 @@ Lucia~\cite{Kastoryano2018Martingale}.
     common finite-overlap specialization with $m=2(L-1)$.
     Lemma~\ref{lem:transported_es_nonoverlap_positive} supplies the non-overlap
     positivity statement for site-disjoint windows, and
+    Lemma~\ref{lem:cyclic_window_nonoverlap_positive} translates this to the
+    concrete support-disjoint cyclic windows.
     Lemma~\ref{lem:cyclic_window_overlap_cardinality} gives the finite-overlap
     row-cardinality bound.
     Lemma~\ref{lem:parent_hamiltonian_cyclic_window_friedrichs_gap} combines
     these ingredients with the finite-overlap reduction, so the remaining
     analytic task is the Friedrichs-angle estimate for overlapping cyclic windows.
+    Lemma~\ref{lem:parent_hamiltonian_cyclic_overlap_friedrichs_gap} records the
+    same overlap-only formulation, and
+    Lemma~\ref{lem:parent_hamiltonian_cyclic_overlap_norm_gap} records a sufficient
+    norm-compression formulation.
 \end{proof}
 
 \begin{theorem}[Spectral gap for MPS parent Hamiltonians]\label{thm:parent_hamiltonian_gapped}
@@ -2510,26 +2714,78 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     follows from Lemma~\ref{lem:route_b_block_diagonal_commutant_reduction}.
 \end{proof}
 
+\begin{definition}[Pairwise block-separating word polynomials]
+    \label{def:pairwise_block_separating_words}
+    \lean{MPSTensor.HasBlockSelectorOn}
+    \lean{MPSTensor.HasPairBlockSeparatingWords}
+    \leanok
+    A length-$S$ partial selector for block $k$ on a finite target set $T$ is a
+    tuple in the span of simultaneous length-$S$ block-word evaluations which is
+    $I$ on block $k$ and $0$ on every block in $T$.  The pairwise version asks for
+    such a partial selector for each ordered pair of distinct blocks, with
+    $T=\{j\}$.
+\end{definition}
+
+\begin{lemma}[Block selectors from pairwise block separation]
+    \label{lem:block_selectors_from_pairwise_separators}
+    \lean{MPSTensor.pointwise_mul_mem_span_wordTuple_add}
+    \lean{MPSTensor.hasBlockSelectorOn_empty}
+    \lean{MPSTensor.HasBlockSelectorOn.mul}
+    \lean{MPSTensor.hasBlockSelectorOn_finset_of_pairBlockSeparatingWords}
+    \lean{MPSTensor.hasBlockSelectorWords_of_forall_hasBlockSelectorOn_univ_erase}
+    \lean{MPSTensor.hasBlockSelectorWords_of_pairBlockSeparatingWords}
+    \lean{MPSTensor.propBlockInjective_of_common_blockInjective_of_pairBlockSeparatingWords}
+    \lean{MPSTensor.wordTupleSpanTop_of_common_blockInjective_of_pairBlockSeparatingWords}
+    \lean{MPSTensor.hasBiCF_of_common_blockInjective_of_pairBlockSeparatingWords}
+    \leanok
+    \uses{def:pairwise_block_separating_words}
+    If every ordered pair of distinct blocks admits a common-length pairwise
+    separator, then full block-selector words exist.  More precisely, multiplying
+    the pairwise separators for a fixed block $k$ against all other blocks gives a
+    selector of length $(r-1)S$ for $k$.  Hence common block injectivity plus
+    pairwise separators implies the Proposition-IV.3 finite product-word span and
+    the biCF trace-separation condition.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The empty word gives the identity tuple, selecting on the empty target set.
+    The span of word tuples is closed under pointwise multiplication because the
+    product of a length-$L$ word and a length-$S$ word is the concatenated
+    length-$(L+S)$ word.  Inducting over the finite set of blocks different from
+    $k$ and multiplying the corresponding pairwise separators keeps the value $I$
+    on $k$ and introduces one additional zero block at each step.  Extracting
+    coefficients from the final tuple-span membership gives the coefficient form
+    of block-selector words.
+\end{proof}
+
 \begin{lemma}[Product-word span from BNT selector words]
     \label{lem:product_word_span_from_bnt_selectors}
     \lean{MPSTensor.wordTupleSpanTop_of_isCanonicalFormBNT_of_blockSelectorWords}
+    \lean{MPSTensor.wordTupleSpanTop_of_isCanonicalFormBNT_of_pairBlockSeparatingWords}
+    \lean{MPSTensor.exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairBlockSeparatingWords}
     \lean{MPSTensor.exists_pos_productWordSpan_of_isCanonicalFormBNT_of_blockSelectorWords}
     \lean{MPSTensor.blockProjection_mem_span_reindexed_toTensorFromBlocks_of_bntSelectorWords}
     \lean{MPSTensor.isBlockDiagonal'_of_commutes_reindexed_toTensorFromBlocks_of_bntSelectorWords}
     \leanok
-    \uses{def:cf_bnt, lem:block_projection_span_from_product_word_span}
+    \uses{def:cf_bnt, lem:block_selectors_from_pairwise_separators,
+        lem:block_projection_span_from_product_word_span}
     Let $((\mu_j),(A_j))$ be in canonical form with BNT separation.  Suppose there are
     length-$S$ block-selector words: for each sector $k$, a linear combination of
     length-$S$ words evaluates to $I$ on $A_k$ and to $0$ on every other block.
     Then the simultaneous length-$(1+S)$ block-word evaluations span
-    $\prod_j \MN{D_j}$, with positive length.  Consequently, the pulled-back
-    length-$(1+S)$ words of $\operatorname{Assemble}(\mu,A)$ span every virtual
-    sector projection, and the corresponding commutant reduction is available.
+    $\prod_j \MN{D_j}$, with positive length.  It is enough, by
+    Lemma~\ref{lem:block_selectors_from_pairwise_separators}, to construct
+    pairwise separators for every ordered pair of distinct blocks.  Consequently,
+    the pulled-back words at the resulting length for
+    $\operatorname{Assemble}(\mu,A)$ span every virtual sector projection, and the
+    corresponding commutant reduction is available.
 \end{lemma}
 
 \begin{proof}
     \leanok
     \uses{lem:one_block_injective_of_injective,
+        lem:block_selectors_from_pairwise_separators,
         lem:block_projection_span_from_product_word_span}
     Definition~\ref{def:cf_bnt} gives one-site injectivity of each block, hence
     $1$-block injectivity by Lemma~\ref{lem:one_block_injective_of_injective}.
@@ -2537,7 +2793,9 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     one-letter linear combination in block $k$, multiply by the selector for $k$,
     and sum over $k$.  The selector kills all off-target blocks, while it is the
     identity on block $k$, so the length-$(1+S)$ word tuples span the full
-    product algebra.  The projection-span and commutant consequences then follow
+    product algebra.  If one starts with pairwise separators instead, first use
+    Lemma~\ref{lem:block_selectors_from_pairwise_separators} to multiply them into
+    full selectors.  The projection-span and commutant consequences then follow
     from Lemma~\ref{lem:block_projection_span_from_product_word_span}.
 \end{proof}
 
@@ -2633,6 +2891,7 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     \notready
     \uses{def:parent_hamiltonian_ground_space_bnt, def:bnt_span,
         thm:chain_ground_space_eq_mpv_blk,
+        lem:block_selectors_from_pairwise_separators,
         lem:product_word_span_from_bnt_selectors,
         lem:route_b_block_split_from_product_word_span}
     If $A$ is in canonical-form/BNT and $1 < L$ and $N \ge L + 1$, every vector in the
@@ -2643,10 +2902,11 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
 \begin{proof}
     \notready
     The remaining structural step is the periodic block decomposition of the
-    assembled chain ground space.  Lemma~\ref{lem:product_word_span_from_bnt_selectors}
-    reduces the product-word span hypothesis to the finite BNT selector-word
-    theorem.  Lemma~\ref{lem:route_b_block_split_from_product_word_span} gives
-    the conditional Route B composition once that product-word span is available
+    assembled chain ground space.  Lemma~\ref{lem:block_selectors_from_pairwise_separators}
+    reduces global selectors to pairwise block-separating word polynomials, and
+    Lemma~\ref{lem:product_word_span_from_bnt_selectors} reduces product-word span
+    to those finite selector words.  Lemma~\ref{lem:route_b_block_split_from_product_word_span}
+    gives the conditional Route B composition once that product-word span is available
     and the wrapping-window comparison provides the commuting boundary matrix.
     With that decomposition available,
     one applies the blockwise injective uniqueness theorem to each block separately
