@@ -1109,9 +1109,9 @@ cyclic translates whose length-`L` windows have the finite-range overlap relevan
 to the martingale method.  The row-cardinality estimate is supplied by
 `cyclicWindowsOverlap_card_le`, local projection structure is supplied by
 `localTermES_isSymmetricProjection`, and non-overlap positivity is supplied by
-`localTermES_re_inner_nonneg_of_cyclic_windows_disjoint`.  Consequently the only
-remaining local hypothesis is the Friedrichs-angle estimate for pairs marked by
-`cyclicWindowsOverlap`. -/
+`localTermES_re_inner_nonneg_of_not_cyclicWindowsOverlap`.  Consequently the
+only remaining local hypothesis is the Friedrichs-angle estimate for pairs
+marked by `cyclicWindowsOverlap`. -/
 theorem parentHamiltonianES_gap_bound_of_cyclic_window_friedrichs
     (A : MPSTensor d D) (L : ℕ) (hL : 1 < L)
     (hFriedrichs : ∀ (N : ℕ) (_hLN : 2 * L ≤ N) (i j : Fin N),
