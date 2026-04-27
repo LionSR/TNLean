@@ -1419,7 +1419,6 @@ Theorem~2 of~\cite{Molnar2018NormalPEPS}.
     \label{def:peps_edge}
     \lean{TNLean.PEPS.Edge}
     \leanok
-    \uses{}
     For a finite simple graph $G$, an \emph{edge} is an ordered pair
     $(u,v)$ with $u < v$ and $u$ adjacent to $v$.
     The ordering is only used to avoid double counting.
@@ -1478,7 +1477,6 @@ Theorem~2 of~\cite{Molnar2018NormalPEPS}.
     \label{def:edgeGaugeAt}
     \lean{TNLean.PEPS.edgeGaugeAt}
     \leanok
-    \uses{}
     For an edge $e = (u,w)$ with $u < w$ and gauge $X_e \in \mathrm{GL}(D_e)$,
     the gauge matrix applied at vertex $v$ is $X_e$ if $v = u$ and
     $(X_e^{-1})^\top$ if $v = w$.
@@ -1547,7 +1545,6 @@ Theorem~2 of~\cite{Molnar2018NormalPEPS}.
     \label{def:localTensorEval}
     \lean{TNLean.PEPS.localTensorEval}
     \leanok
-    \uses{}
     The local tensor evaluated at vertex $v$ with virtual-index weighting $f$,
     computing $\sum_\eta (\prod_{ie} f(ie)(\eta(ie))) \cdot A_v(\eta, \sigma)$.
     This is multilinear in the components of $f$, not linear in the full tuple.
@@ -1557,7 +1554,6 @@ Theorem~2 of~\cite{Molnar2018NormalPEPS}.
     \label{def:IsVertexInjective}
     \lean{TNLean.PEPS.IsVertexInjective}
     \leanok
-    \uses{}
     A PEPS tensor $A$ is \emph{vertex-injective} if, at every vertex $v$, the
     family of physical vectors
     \[
