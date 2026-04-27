@@ -877,8 +877,8 @@ theorem exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_with_overlapOrtho
 classes, including the finite-length representative-span identity.
 
 
-This private helper keeps the proof of the common fields shared by the public one-sided overlap
-data theorems in one place. -/
+This private auxiliary lemma consolidates the proof of the common fields shared by the
+public one-sided overlap data theorems. -/
 private theorem bntSectorDecomp_overlapData_basisSpan_aux
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ)
