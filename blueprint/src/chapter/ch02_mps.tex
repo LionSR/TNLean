@@ -188,6 +188,16 @@ boundary conditions (PBC).
     $\ket{V^{(N)}(A)} = \ket{V^{(N)}(B)}$ for every $N$.
 \end{definition}
 
+\begin{definition}[Positive-length same MPV — different bond dimensions]%
+\label{def:same_mpv2_pos}
+    \lean{MPSTensor.SameMPV₂Pos}
+    \leanok
+    \uses{def:mpv}
+    For tensors $A$ and $B$ of possibly different bond dimensions,
+    we write $\mc{V}^+(A) = \mc{V}^+(B)$ if
+    $\ket{V^{(N)}(A)} = \ket{V^{(N)}(B)}$ for every $N > 0$.
+\end{definition}
+
 \begin{remark}\leanok
     Definition~\ref{def:same_mpv} is the same-bond-dimension
     specialization of Definition~\ref{def:same_mpv2}.

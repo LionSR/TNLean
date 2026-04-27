@@ -10,7 +10,7 @@ import Mathlib.LinearAlgebra.Finsupp.LinearCombination
 # Finite-length sufficient conditions and obstructions for MPDO biCF
 
 The `HorizontalCFData` structure in `VerticalCF.lean` records the block-injective
-canonical-form property `biCF` as a hypothesis. This file records four complementary
+canonical-form property `biCF` as a hypothesis. This file records five complementary
 facts about that field.
 
 1. A clean **abstract sufficient condition**: if, after blocking to some fixed
@@ -32,15 +32,20 @@ facts about that field.
    This captures the finite-length block-separation content of
    [CPGSV17], Proposition IV.3.
 
-4. A concrete **counterexample**: blockwise injectivity, left-canonical
+4. A **pairwise-to-global selector reduction**: if every ordered pair of
+   distinct blocks admits a finite word polynomial that is the identity on the
+   first block and zero on the second, then multiplying these pairwise
+   separators gives full block-selector words.
+
+5. A concrete **counterexample**: blockwise injectivity, left-canonical
    normalization, nonzero weights, and even pairwise distinct weights do **not**
    imply `biCF`. Thus the current `HorizontalCFData` fields other than `biCF`
    are insufficient for deriving that property.
 
 This isolates the missing ingredient more precisely: one still needs a proved
-finite-length block-separation theorem producing either the selector data of
-item (3), or equivalently the word-entry linear independence of item (2), from
-canonical-form/BNT data.
+finite-length block-separation theorem producing either the pairwise separators
+of item (4), the selector data of item (3), or equivalently the word-entry
+linear independence of item (2), from canonical-form/BNT data.
 -/
 
 open scoped Matrix BigOperators
@@ -128,6 +133,203 @@ def HasBlockSelectorWords
     (∑ w : Fin S → Fin d, c w • evalWord (A k) (List.ofFn w)) = 1 ∧
     ∀ j : Fin r, j ≠ k →
       (∑ w : Fin S → Fin d, c w • evalWord (A j) (List.ofFn w)) = 0
+
+/-- A length-`S` word polynomial which selects block `k` on a finite set of
+other blocks. The tuple `M` lies in the span of simultaneous length-`S` word
+evaluations, is the identity on `k`, and vanishes on every block in `targets`.
+
+Taking `targets = Finset.univ.erase k` is the tuple-span form used to recover
+coefficient-based `HasBlockSelectorWords`. Smaller target sets are useful for
+assembling global selectors from pairwise block-separating word polynomials. -/
+def HasBlockSelectorOn
+    (A : (k : Fin r) → MPSTensor d (dim k))
+    (k : Fin r) (S : ℕ) (targets : Finset (Fin r)) : Prop :=
+  ∃ M : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
+    M ∈ Submodule.span ℂ (Set.range (wordTuple A S)) ∧
+      M k = 1 ∧
+      ∀ j : Fin r, j ∈ targets → M j = 0
+
+/-- Pairwise finite block separation: for each ordered pair of distinct blocks,
+there is a length-`S` word polynomial that is the identity on the first block
+and zero on the second. -/
+def HasPairBlockSeparatingWords
+    (A : (k : Fin r) → MPSTensor d (dim k))
+    (S : ℕ) : Prop :=
+  ∀ k j : Fin r, j ≠ k → HasBlockSelectorOn A k S {j}
+
+/-- The tuple-valued span of word evaluations is closed under pointwise matrix
+multiplication, at the cost of adding word lengths. -/
+theorem pointwise_mul_mem_span_wordTuple_add
+    (A : (k : Fin r) → MPSTensor d (dim k))
+    {L S : ℕ}
+    {M N : (k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ}
+    (hM : M ∈ Submodule.span ℂ (Set.range (wordTuple A L)))
+    (hN : N ∈ Submodule.span ℂ (Set.range (wordTuple A S))) :
+    (fun k : Fin r => M k * N k) ∈
+      Submodule.span ℂ (Set.range (wordTuple A (L + S))) := by
+  classical
+  let spanLS : Submodule ℂ ((k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ) :=
+    Submodule.span ℂ (Set.range (wordTuple A (L + S)))
+  have hleft_gen : ∀ u : Fin L → Fin d,
+      (fun k : Fin r => wordTuple A L u k * N k) ∈ spanLS := by
+    intro u
+    induction hN using Submodule.span_induction with
+    | mem N hNmem =>
+        rcases hNmem with ⟨v, rfl⟩
+        have hEq : (fun k : Fin r => wordTuple A L u k * wordTuple A S v k) =
+            wordTuple A (L + S) (Fin.append u v) := by
+          funext k
+          simp [wordTuple, List.ofFn_fin_append, evalWord_append]
+        rw [hEq]
+        exact Submodule.subset_span ⟨Fin.append u v, rfl⟩
+    | zero =>
+        have hzero : (fun k : Fin r =>
+            wordTuple A L u k *
+              (0 : (k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ) k) = 0 := by
+          funext k
+          simp
+        rw [hzero]
+        exact Submodule.zero_mem _
+    | add N₁ N₂ _ _ hN₁ hN₂ =>
+        have hEq : (fun k : Fin r => wordTuple A L u k * (N₁ + N₂) k) =
+            (fun k : Fin r => wordTuple A L u k * N₁ k) +
+              (fun k : Fin r => wordTuple A L u k * N₂ k) := by
+          funext k
+          simp [Matrix.mul_add]
+        rw [hEq]
+        exact Submodule.add_mem _ hN₁ hN₂
+    | smul a N _ hN =>
+        have hEq : (fun k : Fin r => wordTuple A L u k * (a • N) k) =
+            a • (fun k : Fin r => wordTuple A L u k * N k) := by
+          funext k
+          simp
+        rw [hEq]
+        exact Submodule.smul_mem _ a hN
+  induction hM using Submodule.span_induction with
+  | mem M hMmem =>
+      rcases hMmem with ⟨u, rfl⟩
+      exact hleft_gen u
+  | zero =>
+      have hzero : (fun k : Fin r =>
+          (0 : (k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ) k * N k) = 0 := by
+        funext k
+        simp
+      rw [hzero]
+      exact Submodule.zero_mem _
+  | add M₁ M₂ _ _ hM₁ hM₂ =>
+      have hEq : (fun k : Fin r => (M₁ + M₂) k * N k) =
+          (fun k : Fin r => M₁ k * N k) +
+            (fun k : Fin r => M₂ k * N k) := by
+        funext k
+        simp [Matrix.add_mul]
+      rw [hEq]
+      exact Submodule.add_mem _ hM₁ hM₂
+  | smul a M _ hM =>
+      have hEq : (fun k : Fin r => (a • M) k * N k) =
+          a • (fun k : Fin r => M k * N k) := by
+        funext k
+        simp
+      rw [hEq]
+      exact Submodule.smul_mem _ a hM
+
+/-- The empty word is the identity on every block, so it selects a block on the
+empty target set. -/
+theorem hasBlockSelectorOn_empty
+    (A : (k : Fin r) → MPSTensor d (dim k)) (k : Fin r) :
+    HasBlockSelectorOn A k 0 ∅ := by
+  classical
+  refine ⟨wordTuple A 0 (fun i => Fin.elim0 i), ?_, ?_, ?_⟩
+  · exact Submodule.subset_span ⟨fun i => Fin.elim0 i, rfl⟩
+  · simp [wordTuple]
+  · intro j hj
+    simp at hj
+
+/-- Multiplying two partial selectors for the same block produces a selector
+that vanishes on the union of their target sets. -/
+theorem HasBlockSelectorOn.mul
+    {A : (k : Fin r) → MPSTensor d (dim k)} {k : Fin r}
+    {L S : ℕ} {targets₁ targets₂ : Finset (Fin r)}
+    (h₁ : HasBlockSelectorOn A k L targets₁)
+    (h₂ : HasBlockSelectorOn A k S targets₂) :
+    HasBlockSelectorOn A k (L + S) (targets₁ ∪ targets₂) := by
+  classical
+  rcases h₁ with ⟨M, hM, hMk, hMzero⟩
+  rcases h₂ with ⟨N, hN, hNk, hNzero⟩
+  refine ⟨fun j => M j * N j, ?_, ?_, ?_⟩
+  · exact pointwise_mul_mem_span_wordTuple_add A hM hN
+  · simp [hMk, hNk]
+  · intro j hj
+    rcases Finset.mem_union.mp hj with hj | hj
+    · simp [hMzero j hj]
+    · simp [hNzero j hj]
+
+/-- Pairwise block-separating word polynomials multiply to a selector on any
+finite target set. -/
+theorem hasBlockSelectorOn_finset_of_pairBlockSeparatingWords
+    (A : (k : Fin r) → MPSTensor d (dim k)) {S : ℕ}
+    (hPair : HasPairBlockSeparatingWords A S)
+    (k : Fin r) (targets : Finset (Fin r))
+    (htargets : ∀ j : Fin r, j ∈ targets → j ≠ k) :
+    HasBlockSelectorOn A k (targets.card * S) targets := by
+  classical
+  revert htargets
+  refine Finset.induction_on targets ?base ?step
+  · intro _
+    simpa using hasBlockSelectorOn_empty A k
+  · intro j targets hj_not_mem ih htargets_insert
+    have htargets_tail : ∀ l : Fin r, l ∈ targets → l ≠ k := by
+      intro l hl
+      exact htargets_insert l (Finset.mem_insert_of_mem hl)
+    have htail := ih htargets_tail
+    have hjk : j ≠ k := htargets_insert j (Finset.mem_insert_self j targets)
+    have hsingle : HasBlockSelectorOn A k S {j} := hPair k j hjk
+    have hmul : HasBlockSelectorOn A k (targets.card * S + S) (targets ∪ {j}) :=
+      htail.mul hsingle
+    have hsets : targets ∪ {j} = insert j targets := by
+      ext l
+      simp
+    have hlen : (insert j targets).card * S = targets.card * S + S := by
+      rw [Finset.card_insert_of_notMem hj_not_mem]
+      exact Nat.succ_mul targets.card S
+    simpa [hsets, hlen] using hmul
+
+/-- Tuple-span selectors on `Finset.univ.erase k` recover coefficient-based
+block-selector words. -/
+theorem hasBlockSelectorWords_of_forall_hasBlockSelectorOn_univ_erase
+    (A : (k : Fin r) → MPSTensor d (dim k)) {S : ℕ}
+    (h : ∀ k : Fin r, HasBlockSelectorOn A k S (Finset.univ.erase k)) :
+    HasBlockSelectorWords A S := by
+  classical
+  intro k
+  rcases h k with ⟨M, hM, hMk, hMzero⟩
+  rcases (Submodule.mem_span_range_iff_exists_fun ℂ).mp hM with ⟨c, hc⟩
+  refine ⟨c, ?_, ?_⟩
+  · have hk := congrArg (fun N => N k) hc
+    simpa [wordTuple, hMk] using hk
+  · intro j hjk
+    have hjmem : j ∈ Finset.univ.erase k := by
+      simp [hjk]
+    have hj := congrArg (fun N => N j) hc
+    simpa [wordTuple, hMzero j hjmem] using hj
+
+/-- Pairwise block-separating word polynomials assemble into full block-selector
+words by multiplying the pairwise selectors for the chosen block against all
+other blocks. -/
+theorem hasBlockSelectorWords_of_pairBlockSeparatingWords
+    (A : (k : Fin r) → MPSTensor d (dim k)) {S : ℕ}
+    (hPair : HasPairBlockSeparatingWords A S) :
+    HasBlockSelectorWords A ((r - 1) * S) := by
+  classical
+  refine hasBlockSelectorWords_of_forall_hasBlockSelectorOn_univ_erase A ?_
+  intro k
+  have htargets : ∀ j : Fin r, j ∈ Finset.univ.erase k → j ≠ k := by
+    intro j hj
+    exact (Finset.mem_erase.mp hj).1
+  have hsel := hasBlockSelectorOn_finset_of_pairBlockSeparatingWords A hPair k
+    (Finset.univ.erase k) htargets
+  have hcard : (Finset.univ.erase k).card = r - 1 := by
+    simp [Fintype.card_fin]
+  simpa [hcard] using hsel
 
 /-- Any finite-length product-algebra spanning witness already contains block
 selectors as a special case. -/
@@ -289,6 +491,16 @@ def PropBlockInjective
     (A : (k : Fin r) → MPSTensor d (dim k)) : Prop :=
   ∃ L S : ℕ, (∀ k, IsNBlkInjective (A k) L) ∧ HasBlockSelectorWords A S
 
+/-- Common block injectivity plus pairwise block-separating word polynomials
+produce the abstract Proposition-IV.3 selector data. -/
+theorem propBlockInjective_of_common_blockInjective_of_pairBlockSeparatingWords
+    (A : (k : Fin r) → MPSTensor d (dim k))
+    {L S : ℕ}
+    (hInj : ∀ k, IsNBlkInjective (A k) L)
+    (hPair : HasPairBlockSeparatingWords A S) :
+    PropBlockInjective A :=
+  ⟨L, (r - 1) * S, hInj, hasBlockSelectorWords_of_pairBlockSeparatingWords A hPair⟩
+
 /-- Common block injectivity plus finite-length block selectors yield the full
 word-tuple span condition. -/
 theorem wordTupleSpanTop_of_common_blockInjective_of_blockSelectorWords
@@ -391,6 +603,28 @@ theorem wordTupleSpanTop_of_common_blockInjective_of_blockSelectorWords
       _ = M j := hprefix j
   rw [← hassembled]
   exact hassembled_mem
+
+/-- Common block injectivity plus pairwise block-separating word polynomials
+yield the full word-tuple span condition. -/
+theorem wordTupleSpanTop_of_common_blockInjective_of_pairBlockSeparatingWords
+    (A : (k : Fin r) → MPSTensor d (dim k))
+    {L S : ℕ}
+    (hInj : ∀ k, IsNBlkInjective (A k) L)
+    (hPair : HasPairBlockSeparatingWords A S) :
+    WordTupleSpanTop A (L + (r - 1) * S) :=
+  wordTupleSpanTop_of_common_blockInjective_of_blockSelectorWords A hInj
+    (hasBlockSelectorWords_of_pairBlockSeparatingWords A hPair)
+
+/-- Common block injectivity plus pairwise block-separating word polynomials
+imply `HasBiCF`. -/
+theorem hasBiCF_of_common_blockInjective_of_pairBlockSeparatingWords
+    (A : (k : Fin r) → MPSTensor d (dim k))
+    {L S : ℕ}
+    (hInj : ∀ k, IsNBlkInjective (A k) L)
+    (hPair : HasPairBlockSeparatingWords A S) :
+    HasBiCF A :=
+  hasBiCF_of_wordTupleSpanTop A
+    (wordTupleSpanTop_of_common_blockInjective_of_pairBlockSeparatingWords A hInj hPair)
 
 /-- The abstract Proposition-IV.3 selector data imply the finite-length
 word-tuple span condition. -/
