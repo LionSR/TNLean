@@ -2372,6 +2372,32 @@ The following results separate the zero blocks from the
 	injectivity field required by this theorem's unbundled conclusion.
 \end{proof}
 
+\begin{theorem}[Chosen phase representatives preserve finite-length spans]
+	\label{thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_data_span}
+	\lean{MPSTensor.MPVPhaseClassData.representative_mpv_span_eq}
+	\lean{MPSTensor.exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_with_overlapData_and_basisSpan}
+	\leanok
+	\uses{def:mpv_phase_class_data,
+		thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_data}
+	For any finite block family, the chosen MPV phase-class representatives span
+	the same finite-length MPV subspace as the original blocks at every system
+	size. Consequently, for trace-preserving primitive irreducible injective
+	blocks with nonzero weights, the one-sided BNT sector construction can be
+	chosen with all overlap data from
+	Theorem~\ref{thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_data} and
+	with this representative-span identity.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{def:mpv_phase_class_data,
+		thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_data}
+	Each representative is one of the original blocks. Conversely, every original
+	block appears in a phase class and differs from that class representative by a
+	nonzero scalar power at each length, so its MPV state lies in the
+	representative span. The one-sided sector theorem then records this identity
+	for the chosen sector basis.
+\end{proof}
+
 \begin{theorem}[TP primitive irreducible version with eventual BNT independence]
 	\label{thm:bnt_sector_decomp_tp_prim_irr_linear_independent}
 	\lean{MPSTensor.exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_of_linearIndependent}
