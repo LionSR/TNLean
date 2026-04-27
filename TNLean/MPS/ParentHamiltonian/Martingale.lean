@@ -252,17 +252,8 @@ theorem parentInteractionES_apply_eq_zero_iff (A : MPSTensor d D) (L : ℕ)
     parentInteractionES A L v = 0 ↔ v ∈ groundSpaceES A L := by
   change (groundSpaceES A L)ᗮ.starProjection v = 0 ↔ v ∈ groundSpaceES A L
   rw [Submodule.starProjection_orthogonal']
-  constructor
-  · intro hv
-    have hsub : v - (groundSpaceES A L).starProjection v = 0 := by
-      simpa [ContinuousLinearMap.sub_apply] using hv
-    have hproj : (groundSpaceES A L).starProjection v = v := by
-      exact (sub_eq_zero.mp hsub).symm
-    exact Submodule.starProjection_eq_self_iff.mp hproj
-  · intro hv
-    have hproj : (groundSpaceES A L).starProjection v = v :=
-      Submodule.starProjection_eq_self_iff.mpr hv
-    simp [ContinuousLinearMap.sub_apply, hproj]
+  simp only [ContinuousLinearMap.sub_apply, ContinuousLinearMap.one_apply]
+  rw [sub_eq_zero, eq_comm, Submodule.starProjection_eq_self_iff]
 
 /-- The cyclic window restriction map transported from `NSiteSpace` to the
 Hilbert-space model `EuclideanSpace`. -/
@@ -726,7 +717,7 @@ theorem adjacent_localTermES_eq_zero_of_mem_groundSpaceES_succ
     exact groundSpace_inRightGround A L hψ (τ 0)
 
 /-- Adjacent local kernels on an `(L+1)`-site chain intersect in the MPS ground
-space.  This repackages the open-chain intersection property in the same
+space.  This restates the open-chain intersection property in the same
 Euclidean local-projector language used by the martingale proof. -/
 theorem adjacent_localTermES_eq_zero_iff_mem_groundSpaceES_succ {A : MPSTensor d D}
     (hA : IsInjective A) {L : ℕ} (hL : 1 < L)
