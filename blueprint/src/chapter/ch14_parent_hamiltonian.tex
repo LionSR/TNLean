@@ -139,6 +139,21 @@ onto $G_L(A)^\perp$ in the $L$-site Euclidean space.
     \]
 \end{definition}
 
+\begin{lemma}[Membership in the transported local ground space]\label{lem:mem_ground_space_es}
+    \lean{MPSTensor.mem_groundSpaceES_iff}
+    \leanok
+    \uses{def:ground_space_es, def:ground_space_parent}
+    A Euclidean vector lies in $G_L^{\mathrm{ES}}(A)$ exactly when transporting it
+    back through the canonical coefficient-space equivalence gives an element of
+    the original local ground space $G_L(A)$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    This is just the definition of $G_L^{\mathrm{ES}}(A)$ as the image of
+    $G_L(A)$ under the inverse of the canonical equivalence.
+\end{proof}
+
 \begin{definition}[Parent interaction]\label{def:parent_interaction}
     \lean{MPSTensor.parentInteraction}
     \leanok
@@ -1836,6 +1851,73 @@ Lucia~\cite{Kastoryano2018Martingale}.
     $(P_L^{\mathrm{ES}}(A))^2=P_L^{\mathrm{ES}}(A)$ on that window. The positivity
     result above supplies symmetry, and the case $L>N$ is the zero projection by
     definition.
+\end{proof}
+
+\begin{lemma}[Kernel of the Euclidean parent interaction]\label{lem:parent_interaction_es_kernel}
+    \lean{MPSTensor.parentInteractionES_apply_eq_zero_iff}
+    \leanok
+    \uses{def:ground_space_es, rem:euclidean_local_projector_ingredients}
+    The Euclidean local interaction $P_L^{\mathrm{ES}}(A)$ annihilates exactly the
+    Euclidean local ground space:
+    \[
+        P_L^{\mathrm{ES}}(A)v=0 \quad\Longleftrightarrow\quad
+        v\in G_L^{\mathrm{ES}}(A).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Since $P_L^{\mathrm{ES}}(A)$ is the orthogonal projector onto
+    $(G_L^{\mathrm{ES}}(A))^\perp$, its kernel is the original subspace
+    $G_L^{\mathrm{ES}}(A)$.
+\end{proof}
+
+\begin{lemma}[Local-term kernel via cyclic restrictions]\label{lem:local_term_es_kernel_restrictions}
+    \lean{MPSTensor.localTermES_eq_zero_iff_forall_cyclicRestrictES_mem_groundSpaceES}
+    \lean{MPSTensor.cyclicRestrictES_mem_groundSpaceES_of_localTermES_eq_zero}
+    \leanok
+    \uses{lem:parent_interaction_es_kernel, rem:euclidean_local_projector_ingredients}
+    For $L\le N$, a transported local term $h_{i,\mathrm{ES}}$ annihilates a vector
+    $v$ iff every boundary-filled restriction of $v$ to the cyclic $L$-window
+    starting at $i$ lies in $G_L^{\mathrm{ES}}(A)$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Restricting $h_{i,\mathrm{ES}}v$ to the same cyclic window gives
+    $P_L^{\mathrm{ES}}(A)$ applied to the corresponding restriction of $v$.
+    Lemma~\ref{lem:parent_interaction_es_kernel} identifies the vanishing of this
+    local projector with membership in $G_L^{\mathrm{ES}}(A)$.
+\end{proof}
+
+\begin{theorem}[Adjacent local kernels realize the intersection property]
+    \label{thm:adjacent_local_kernels_ground_space_es}
+    \lean{MPSTensor.mem_groundSpaceES_succ_of_adjacent_localTermES_eq_zero}
+    \lean{MPSTensor.adjacent_localTermES_eq_zero_of_mem_groundSpaceES_succ}
+    \lean{MPSTensor.adjacent_localTermES_eq_zero_iff_mem_groundSpaceES_succ}
+    \leanok
+    \uses{thm:ground_space_intersection, lem:local_term_es_kernel_restrictions,
+        lem:mem_ground_space_es}
+    If $A$ is injective and $L\ge2$, then on an $(L+1)$-site chain the kernels of
+    the two adjacent transported $L$-site local terms are exactly the transported
+    $(L+1)$-site MPS ground space:
+    \[
+        h_{0,\mathrm{ES}}v=0\ \text{ and }\ h_{1,\mathrm{ES}}v=0
+        \quad\Longleftrightarrow\quad
+        v\in G_{L+1}^{\mathrm{ES}}(A).
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:ground_space_intersection, lem:local_term_es_kernel_restrictions,
+        lem:mem_ground_space_es}
+    Lemma~\ref{lem:local_term_es_kernel_restrictions} translates the two local
+    kernel assumptions into the left and right $L$-site ground conditions.  The
+    open-chain intersection property, Theorem~\ref{thm:ground_space_intersection},
+    then regrows the shared $(L-1)$-site overlap to the $(L+1)$-site ground space.
+    The converse uses the forward restriction lemmas for ground-space vectors and
+    the same kernel--restriction characterization.
 \end{proof}
 
 \begin{lemma}[Non-overlap positivity for transported ES local terms]

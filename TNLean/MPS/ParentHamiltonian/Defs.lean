@@ -51,6 +51,26 @@ noncomputable def groundSpaceES (A : MPSTensor d D) (L : ℕ) :
     Submodule ℂ (EuclideanSpace ℂ (Cfg d L)) :=
   (groundSpace A L).map (WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm.toLinearMap
 
+/-- Membership in the Euclidean version of the MPS ground space is the same as
+membership of the transported vector in the original function-space ground space. -/
+theorem mem_groundSpaceES_iff (A : MPSTensor d D) (L : ℕ)
+    (v : EuclideanSpace ℂ (Cfg d L)) :
+    v ∈ groundSpaceES A L ↔
+      (WithLp.linearEquiv 2 ℂ (NSiteSpace d L)) v ∈ groundSpace A L := by
+  let e := WithLp.linearEquiv 2 ℂ (NSiteSpace d L)
+  constructor
+  · intro hv
+    rw [groundSpaceES, Submodule.mem_map] at hv
+    rcases hv with ⟨w, hw, hwv⟩
+    have hvw : e v = w := by
+      rw [← hwv]
+      simp [e]
+    change e v ∈ groundSpace A L
+    rwa [hvw]
+  · intro hv
+    rw [groundSpaceES, Submodule.mem_map]
+    exact ⟨e v, hv, by simp [e]⟩
+
 /-! ### Parent interaction -/
 
 /-- Parent interaction on `L` consecutive sites: the orthogonal projector onto

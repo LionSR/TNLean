@@ -74,6 +74,9 @@ concrete Friedrichs-angle/row-sum lower bound that
 * `MPSTensor.localTermES_re_inner_nonneg_of_not_cyclicWindowsOverlap` — failure
   of the concrete cyclic-support overlap predicate gives the same nonnegative
   ordered cross term.
+* `MPSTensor.adjacent_localTermES_eq_zero_iff_mem_groundSpaceES_succ` — the
+  open-chain intersection property restated as an equality between the kernels
+  of two adjacent transported local terms and the `(L+1)`-site MPS ground space.
 * `MPSTensor.parentHamiltonianES_gap_bound_of_quadratic_form` — the explicit
   reduction from the parent-Hamiltonian gap statement to the uniform
   Friedrichs/martingale quadratic-form estimate.
@@ -241,6 +244,25 @@ orthogonal projection. -/
 theorem parentInteractionES_isPositive (A : MPSTensor d D) (L : ℕ) :
     (parentInteractionES A L).IsPositive :=
   (parentInteractionES_isSymmetricProjection A L).isPositive
+
+/-- The kernel of the Euclidean parent interaction is exactly the Euclidean MPS
+local ground space. -/
+theorem parentInteractionES_apply_eq_zero_iff (A : MPSTensor d D) (L : ℕ)
+    (v : EuclideanSpace ℂ (Cfg d L)) :
+    parentInteractionES A L v = 0 ↔ v ∈ groundSpaceES A L := by
+  change (groundSpaceES A L)ᗮ.starProjection v = 0 ↔ v ∈ groundSpaceES A L
+  rw [Submodule.starProjection_orthogonal']
+  constructor
+  · intro hv
+    have hsub : v - (groundSpaceES A L).starProjection v = 0 := by
+      simpa [ContinuousLinearMap.sub_apply] using hv
+    have hproj : (groundSpaceES A L).starProjection v = v := by
+      exact (sub_eq_zero.mp hsub).symm
+    exact Submodule.starProjection_eq_self_iff.mp hproj
+  · intro hv
+    have hproj : (groundSpaceES A L).starProjection v = v :=
+      Submodule.starProjection_eq_self_iff.mpr hv
+    simp [ContinuousLinearMap.sub_apply, hproj]
 
 /-- The cyclic window restriction map transported from `NSiteSpace` to the
 Hilbert-space model `EuclideanSpace`. -/
@@ -577,6 +599,146 @@ private theorem cyclicRestrictES_localTermES {N : ℕ} (A : MPSTensor d D) {L : 
     rw [cyclicCfg_eq_replaceWindow (d := d) (Fin.pos i) L hLN]
     exact extractWindow_replaceWindow L hLN i τ ω
   rw [← hrestrict, hextract]
+
+/-- A transported local term vanishes exactly when every boundary-filled cyclic
+restriction to its window lies in the `L`-site MPS ground space. -/
+theorem localTermES_eq_zero_iff_forall_cyclicRestrictES_mem_groundSpaceES {N : ℕ}
+    (A : MPSTensor d D) {L : ℕ} (hLN : L ≤ N) (i : Fin N)
+    (v : EuclideanSpace ℂ (Cfg d N)) :
+    localTermES A L i v = 0 ↔
+      ∀ τ : Cfg d N,
+        cyclicRestrictES (d := d) (Fin.pos i) L i τ v ∈ groundSpaceES A L := by
+  constructor
+  · intro hv τ
+    rw [← parentInteractionES_apply_eq_zero_iff]
+    rw [← cyclicRestrictES_localTermES A hLN i τ v, hv, map_zero]
+  · intro hv
+    ext σ
+    rw [localTermES_apply A L i hLN v σ]
+    have hker := (parentInteractionES_apply_eq_zero_iff A L
+      (cyclicRestrictES (d := d) (Fin.pos i) L i σ v)).2 (hv σ)
+    rw [hker]
+    rfl
+
+/-- If a transported local term vanishes, every cyclic restriction to its window
+is an element of the corresponding MPS ground space. -/
+theorem cyclicRestrictES_mem_groundSpaceES_of_localTermES_eq_zero {N : ℕ}
+    (A : MPSTensor d D) {L : ℕ} (hLN : L ≤ N) (i : Fin N)
+    {v : EuclideanSpace ℂ (Cfg d N)} (hv : localTermES A L i v = 0)
+    (τ : Cfg d N) :
+    cyclicRestrictES (d := d) (Fin.pos i) L i τ v ∈ groundSpaceES A L :=
+  (localTermES_eq_zero_iff_forall_cyclicRestrictES_mem_groundSpaceES A hLN i v).1 hv τ
+
+private theorem restrictLast_eq_cyclicRestrictES_zero {L : ℕ}
+    (v : EuclideanSpace ℂ (Cfg d (L + 1))) (τ : Cfg d (L + 1)) :
+    restrictLast ((WithLp.linearEquiv 2 ℂ (NSiteSpace d (L + 1))) v) (τ (Fin.last L)) =
+      (WithLp.linearEquiv 2 ℂ (NSiteSpace d L))
+        (cyclicRestrictES (d := d) (Fin.pos (0 : Fin (L + 1))) L (0 : Fin (L + 1))
+          τ v) := by
+  ext σ
+  change v.ofLp (Fin.snoc σ (τ (Fin.last L))) = v.ofLp
+    (cyclicCfg (d := d) (Fin.pos (0 : Fin (L + 1))) L (0 : Fin (L + 1)) σ τ)
+  apply congrArg v.ofLp
+  funext k
+  rcases Fin.eq_castSucc_or_eq_last k with ⟨r, rfl⟩ | rfl
+  · have hmod : r.val % (L + 1) = r.val := Nat.mod_eq_of_lt (by omega)
+    simp [cyclicCfg, hmod]
+  · simp [cyclicCfg]
+
+private theorem restrictFirst_eq_cyclicRestrictES_one {L : ℕ} (hL : 0 < L)
+    (v : EuclideanSpace ℂ (Cfg d (L + 1))) (τ : Cfg d (L + 1)) :
+    restrictFirst ((WithLp.linearEquiv 2 ℂ (NSiteSpace d (L + 1))) v) (τ 0) =
+      (WithLp.linearEquiv 2 ℂ (NSiteSpace d L))
+        (cyclicRestrictES (d := d) (Fin.pos (1 : Fin (L + 1))) L (1 : Fin (L + 1))
+          τ v) := by
+  ext σ
+  change v.ofLp (Fin.cons (τ 0) σ) = v.ofLp
+    (cyclicCfg (d := d) (Fin.pos (1 : Fin (L + 1))) L (1 : Fin (L + 1)) σ τ)
+  apply congrArg v.ofLp
+  funext k
+  have hOneNat : 1 % (L + 1) = 1 := Nat.mod_eq_of_lt (by omega)
+  rcases Fin.eq_zero_or_eq_succ k with rfl | ⟨r, rfl⟩
+  · simp [cyclicCfg, hOneNat]
+  · have hmod : (r.val + 1 + L) % (L + 1) = r.val := by
+      rw [show r.val + 1 + L = r.val + (L + 1) by omega]
+      rw [Nat.add_mod_right]
+      exact Nat.mod_eq_of_lt (by omega)
+    simp [cyclicCfg, hOneNat, hmod]
+
+/-- Forward local intersection property for adjacent transported local terms.
+
+On an `(L+1)`-site chain, if the two overlapping `L`-site local terms based at
+`0` and `1` both annihilate a vector, then the vector lies in the `(L+1)`-site
+MPS ground space.  This is the Euclidean/local-projector form of the
+open-chain intersection property `groundSpace_intersection`; it is a structural
+predecessor to the quantitative Friedrichs-angle estimate for overlapping
+windows. -/
+theorem mem_groundSpaceES_succ_of_adjacent_localTermES_eq_zero {A : MPSTensor d D}
+    (hA : IsInjective A) {L : ℕ} (hL : 1 < L)
+    {v : EuclideanSpace ℂ (Cfg d (L + 1))}
+    (hleft : localTermES A L (0 : Fin (L + 1)) v = 0)
+    (hright : localTermES A L (1 : Fin (L + 1)) v = 0) :
+    v ∈ groundSpaceES A (L + 1) := by
+  let eN := WithLp.linearEquiv 2 ℂ (NSiteSpace d (L + 1))
+  have hLN : L ≤ L + 1 := by omega
+  have hLeft : InLeftGround A L (eN v) := by
+    intro j
+    have hmemES : cyclicRestrictES (d := d) (Fin.pos (0 : Fin (L + 1))) L
+        (0 : Fin (L + 1)) (fun _ => j) v ∈ groundSpaceES A L :=
+      cyclicRestrictES_mem_groundSpaceES_of_localTermES_eq_zero A hLN
+        (0 : Fin (L + 1)) hleft (fun _ => j)
+    have hmemNS := (mem_groundSpaceES_iff A L _).1 hmemES
+    rwa [restrictLast_eq_cyclicRestrictES_zero v (fun _ => j)]
+  have hRight : InRightGround A L (eN v) := by
+    intro i
+    have hmemES : cyclicRestrictES (d := d) (Fin.pos (1 : Fin (L + 1))) L
+        (1 : Fin (L + 1)) (fun _ => i) v ∈ groundSpaceES A L :=
+      cyclicRestrictES_mem_groundSpaceES_of_localTermES_eq_zero A hLN
+        (1 : Fin (L + 1)) hright (fun _ => i)
+    have hmemNS := (mem_groundSpaceES_iff A L _).1 hmemES
+    rwa [restrictFirst_eq_cyclicRestrictES_one (by omega : 0 < L) v (fun _ => i)]
+  have hψ : eN v ∈ groundSpace A (L + 1) :=
+    groundSpace_intersection hA hL hLeft hRight
+  exact (mem_groundSpaceES_iff A (L + 1) v).2 hψ
+
+/-- Vectors in the `(L+1)`-site MPS ground space are killed by the two adjacent
+`L`-site transported local terms. -/
+theorem adjacent_localTermES_eq_zero_of_mem_groundSpaceES_succ
+    (A : MPSTensor d D) {L : ℕ} (hL : 0 < L)
+    {v : EuclideanSpace ℂ (Cfg d (L + 1))} (hv : v ∈ groundSpaceES A (L + 1)) :
+    localTermES A L (0 : Fin (L + 1)) v = 0 ∧
+      localTermES A L (1 : Fin (L + 1)) v = 0 := by
+  let eN := WithLp.linearEquiv 2 ℂ (NSiteSpace d (L + 1))
+  have hψ : eN v ∈ groundSpace A (L + 1) := (mem_groundSpaceES_iff A (L + 1) v).1 hv
+  have hLN : L ≤ L + 1 := by omega
+  constructor
+  · rw [localTermES_eq_zero_iff_forall_cyclicRestrictES_mem_groundSpaceES A hLN
+      (0 : Fin (L + 1)) v]
+    intro τ
+    rw [mem_groundSpaceES_iff]
+    rw [← restrictLast_eq_cyclicRestrictES_zero v τ]
+    exact groundSpace_inLeftGround A L hψ (τ (Fin.last L))
+  · rw [localTermES_eq_zero_iff_forall_cyclicRestrictES_mem_groundSpaceES A hLN
+      (1 : Fin (L + 1)) v]
+    intro τ
+    rw [mem_groundSpaceES_iff]
+    rw [← restrictFirst_eq_cyclicRestrictES_one hL v τ]
+    exact groundSpace_inRightGround A L hψ (τ 0)
+
+/-- Adjacent local kernels on an `(L+1)`-site chain intersect in the MPS ground
+space.  This repackages the open-chain intersection property in the same
+Euclidean local-projector language used by the martingale proof. -/
+theorem adjacent_localTermES_eq_zero_iff_mem_groundSpaceES_succ {A : MPSTensor d D}
+    (hA : IsInjective A) {L : ℕ} (hL : 1 < L)
+    {v : EuclideanSpace ℂ (Cfg d (L + 1))} :
+    localTermES A L (0 : Fin (L + 1)) v = 0 ∧
+      localTermES A L (1 : Fin (L + 1)) v = 0 ↔
+        v ∈ groundSpaceES A (L + 1) := by
+  constructor
+  · intro h
+    exact mem_groundSpaceES_succ_of_adjacent_localTermES_eq_zero hA hL h.1 h.2
+  · intro hv
+    exact adjacent_localTermES_eq_zero_of_mem_groundSpaceES_succ A (by omega : 0 < L) hv
 
 @[simp] private theorem localTermESSummand_apply {N : ℕ} (A : MPSTensor d D) (hN : 0 < N)
     {L : ℕ} (hLN : L ≤ N) (i : Fin N) (τ v σ) :
