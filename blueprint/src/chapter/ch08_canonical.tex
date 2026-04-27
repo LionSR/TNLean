@@ -1423,6 +1423,35 @@ The following results separate the zero blocks from the
 	sector blocks.
 \end{proof}
 
+\begin{definition}[Primitive irreducible cyclic-sector package]%
+\label{def:primitive_irreducible_cyclic_sectors}
+	\lean{MPSTensor.HasPrimitiveIrreducibleCyclicSectors}
+	\leanok
+	\uses{def:blocked_tensor, def:tensor_from_blocks, def:same_mpv2}
+	A tensor has primitive irreducible cyclic sectors if some positive
+	period-removal length $m$ represents $A^{[m]}$ as a unit-weight block tensor
+	whose sector blocks are trace-preserving, have primitive transfer maps, are
+	tensor-irreducible, and have positive bond dimensions. This length $m$ is the
+	period-removal length, not the later finite blocking length used for common
+	refinement or injectivity.
+\end{definition}
+
+\begin{theorem}[Trace-preserving irreducible tensors have primitive irreducible cyclic sectors]%
+\label{thm:has_primitive_irreducible_cyclic_sectors_tp_irr}
+	\lean{MPSTensor.hasPrimitiveIrreducibleCyclicSectors_of_TP_of_isIrreducibleTensor}
+	\leanok
+	\uses{def:primitive_irreducible_cyclic_sectors,
+		thm:cyclic_sector_decomp_irr_tp_prim_irr}
+	Every trace-preserving irreducible tensor satisfies
+	Definition~\ref{def:primitive_irreducible_cyclic_sectors}.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:cyclic_sector_decomp_irr_tp_prim_irr}
+	This is Theorem~\ref{thm:cyclic_sector_decomp_irr_tp_prim_irr}, repackaged as
+	the predicate of Definition~\ref{def:primitive_irreducible_cyclic_sectors}.
+\end{proof}
+
 \subsection{Sector irreducibility helpers}%
 \label{sec:sector_irreducibility_helpers}
 
@@ -2498,6 +2527,25 @@ The following results separate the zero blocks from the
 	the irreducibility criterion for the blocked tensor.
 \end{proof}
 
+\begin{theorem}[Extra blocking of primitive irreducible sector blocks]%
+\label{thm:tp_primitive_irreducible_extra_blocking}
+	\lean{MPSTensor.tp_primitive_irreducible_extra_blocking}
+	\leanok
+	\uses{def:blocked_tensor, thm:blocked_irreducible_tp_primitive}
+	If a sector block is already trace-preserving, has primitive transfer map, and
+	is tensor-irreducible, then every later positive blocking length $k$ preserves
+	all three properties. This $k$ is the subsequent common-refinement or
+	injectivity length, distinct from the period-removal length that produced the
+	sector block.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:blocked_irreducible_tp_primitive}
+	Trace preservation follows from blocking a trace-preserving tensor, primitivity
+	from taking a positive power of a primitive transfer map, and irreducibility
+	from Theorem~\ref{thm:blocked_irreducible_tp_primitive}.
+\end{proof}
+
 \begin{theorem}[Sorted TP-primitive irreducible data already forms a normal canonical form]%
 	\label{thm:ncf_sorted_tp_primitive_irred}
 	\lean{MPSTensor.isNormalCanonicalForm_of_tp_primitive_irr_sorted}
@@ -2641,6 +2689,31 @@ The following results separate the zero blocks from the
 	tensors and keep the zero-tail MPV equations returned by that theorem. The
 	property that the blocked tensors generate the same MPV family follows by
 	blocking the original equality.
+\end{proof}
+
+\begin{theorem}[Per-block cyclic live decomposition with zero-tail bookkeeping]%
+\label{thm:ft_after_blocking_per_block_cyclic_live_zero_tail}
+	\lean{MPSTensor.fundamentalTheorem_after_blocking_1606_perBlock_cyclic_live_with_zeroTail}
+	\leanok
+	\uses{thm:tp_gauge_arbitrary, thm:live_block_zero_tail_bookkeeping,
+		def:primitive_irreducible_cyclic_sectors,
+		thm:has_primitive_irreducible_cyclic_sectors_tp_irr}
+	If two tensors generate the same MPV family, then after the zero-tail split and
+	trace-preserving gauge each side has irreducible live blocks with nonzero
+	weights. The live block tensors agree at all positive system sizes, while the
+	length-zero case is recorded as the exact zero-tail bookkeeping identity.
+	Moreover each live block has primitive irreducible cyclic sectors. The
+	period-removal length for those sectors is kept separate from any later common
+	blocking or injectivity length.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:tp_gauge_arbitrary, thm:live_block_zero_tail_bookkeeping,
+		thm:has_primitive_irreducible_cyclic_sectors_tp_irr}
+	Apply the arbitrary-input TP-gauge theorem separately to $A$ and $B$. The
+	zero-tail bookkeeping theorem compares the two resulting live tensors at
+	positive lengths and records the $N=0$ identity. Finally apply the cyclic-sector
+	package theorem to every trace-preserving irreducible live block.
 \end{proof}
 
 
