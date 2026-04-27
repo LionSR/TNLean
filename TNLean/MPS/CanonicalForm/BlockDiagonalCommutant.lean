@@ -303,6 +303,67 @@ theorem wordTupleSpanTop_of_isCanonicalFormBNT_of_blockSelectorWords
   intro k
   exact isNBlkInjective_one_of_isInjective (hCF.toHasInjectiveBlocks.block_injective k)
 
+/-- Canonical-form/BNT data plus pairwise block-separating word polynomials give
+full product-word span.
+
+The pairwise hypotheses ask only for a word polynomial separating one ordered
+pair of distinct blocks at a time.  The finite selector assembly in
+`hasBlockSelectorWords_of_pairBlockSeparatingWords` turns these pairwise
+separators into full block selectors, and the selector-word reduction then gives
+product-word span. -/
+theorem wordTupleSpanTop_of_isCanonicalFormBNT_of_pairBlockSeparatingWords
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hCF : IsCanonicalFormBNT μ A) {S : ℕ}
+    (hPair : HasPairBlockSeparatingWords A S) :
+    WordTupleSpanTop A (1 + (r - 1) * S) :=
+  wordTupleSpanTop_of_isCanonicalFormBNT_of_blockSelectorWords μ A hCF
+    (hasBlockSelectorWords_of_pairBlockSeparatingWords A hPair)
+
+/-- Canonical-form/BNT data plus a finite pair trace-separation criterion give
+full product-word span.
+
+This is the form of the result used in Route B for the remaining finite-dimensional
+BNT step: once every ordered distinct pair has a common homogeneous trace-separating
+length, the pair trace-separation duality theorem produces pairwise separators,
+and the existing selector assembly gives product-word span. -/
+theorem wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingAt
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hCF : IsCanonicalFormBNT μ A) {S : ℕ}
+    (hSep : ∀ k j : Fin r, j ≠ k → PairTraceSeparatingAt (A k) (A j) S) :
+    WordTupleSpanTop A (1 + (r - 1) * S) :=
+  wordTupleSpanTop_of_isCanonicalFormBNT_of_pairBlockSeparatingWords μ A hCF
+    (hasPairBlockSeparatingWords_of_forall_pairTraceSeparatingAt A hSep)
+
+/-- Positive-length product-word span obtained from canonical-form/BNT data and
+pairwise block-separating word polynomials. -/
+theorem exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairBlockSeparatingWords
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hCF : IsCanonicalFormBNT μ A) {S : ℕ}
+    (hPair : HasPairBlockSeparatingWords A S) :
+    ∃ m : ℕ, 0 < m ∧
+      Submodule.span ℂ (Set.range fun ω : Fin m → Fin d =>
+        fun k : Fin r => evalWord (A k) (List.ofFn ω)) =
+      (⊤ : Submodule ℂ
+        ((k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) := by
+  refine ⟨1 + (r - 1) * S, Nat.add_pos_left Nat.zero_lt_one _, ?_⟩
+  simpa [WordTupleSpanTop, wordTuple] using
+    wordTupleSpanTop_of_isCanonicalFormBNT_of_pairBlockSeparatingWords μ A hCF hPair
+
+/-- Positive-length product-word span obtained from canonical-form/BNT data and
+the finite pair trace-separation criterion. -/
+theorem exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingAt
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hCF : IsCanonicalFormBNT μ A) {S : ℕ}
+    (hSep : ∀ k j : Fin r, j ≠ k → PairTraceSeparatingAt (A k) (A j) S) :
+    ∃ m : ℕ, 0 < m ∧
+      Submodule.span ℂ (Set.range fun ω : Fin m → Fin d =>
+        fun k : Fin r => evalWord (A k) (List.ofFn ω)) =
+      (⊤ : Submodule ℂ
+        ((k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) := by
+  refine ⟨1 + (r - 1) * S, Nat.add_pos_left Nat.zero_lt_one _, ?_⟩
+  simpa [WordTupleSpanTop, wordTuple] using
+    wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingAt μ A hCF hSep
+
 /-- Positive-length product-word span obtained from canonical-form/BNT data and
 finite block-selector words.
 

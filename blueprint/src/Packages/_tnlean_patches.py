@@ -32,6 +32,7 @@ import pickle
 from pathlib import Path
 from typing import Any, Callable
 
+from _tnlean_utils import stringify_tex_item as _stringify_tex_item
 from leanblueprint.Packages import blueprint as _blueprint
 import plasTeX.Packages.natbib as _natbib
 from plasTeX import Base, Command
@@ -47,12 +48,6 @@ _HISTORICAL_DECL_REPLACEMENTS = {
     "MPSTensor.exponentialconvergenceofprimitive":
         "MPSTensor.exponential_convergence_of_primitive",
 }
-
-
-def _stringify_tex_item(obj: Any) -> str:
-    """Extract a stable string from a plasTeX token/list item."""
-
-    return getattr(obj, "source", getattr(obj, "textContent", str(obj))).strip()
 
 
 # --- natbib patch ---------------------------------------------------------

@@ -75,15 +75,42 @@ reduction:
    live sector tensors requires either equal zero-tail dimensions or a
    positive-length variant of the sector comparison/extrapolation layer.
 
-3. **Overlap/span hypotheses for the collapsed BNT bases.**
-   The one-sided #923 constructor proves `HasBNTSectorData` but does not expose
-   injectivity, left-canonical normalization of the chosen representatives,
-   asymptotic overlap orthogonality, or equality of the finite-length spans
-   between the two sides. These are exactly the fields of
-   `SectorBasisOverlapSpanHypotheses`; deriving them from the collapsed
-   representatives is the next paper-level task.
+3. **Live-block span comparison for the chosen sector bases.**
+   PR #955 exposed the one-sided representative data needed by
+   `SectorBasisOverlapSpanHypotheses`: positive dimensions, injectivity (from an
+   explicit live-block injectivity input), normalization, and self/off-overlap
+   limits. Wave 18B adds the missing quotient-span bookkeeping:
+   `MPSTensor.MPVPhaseClassData.representative_mpv_span_eq` proves that the
+   chosen MPV phase-class representatives span exactly the same finite-length MPV
+   subspace as the original live blocks, and
+   `MPSTensor.exists_bnt_sectorDecomp_pair_with_overlapSpan_of_block_span_eq`
+   transports an equality of the two original live-block spans to the two chosen
+   sector bases. Thus the remaining span input is now precisely the live-block
+   span equality itself, not an opaque `SectorBasisOverlapSpanHypotheses` field.
 
-Therefore this branch combines the available #923 and #860 ingredients without
-hiding the missing work behind `SectorBasisMatching`. The remaining work is to
-prove the listed live-block and overlap/span facts for the actual sector
-decompositions produced by the after-blocking reduction.
+## Wave 17 Slot G update
+
+`MPSTensor.exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_with_overlapOrtho`
+strengthened the #923 constructor for the fields that are one-sided in nature:
+positive basis dimensions, left-canonical normalization, self-overlap limits,
+off-overlap limits, and representative injectivity when the original live blocks
+are one-site injective. The helper
+`MPSTensor.SectorBasisOverlapOrthoHypotheses.to_overlapSpan` then combines those
+one-sided fields with the two genuinely two-family inputs needed by the #860
+overlap-rigidity theorem: injectivity of the chosen bases and equality of the
+finite-length MPV spans.
+
+## Wave 18B update
+
+`MPSTensor.fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_blockSpan`
+now replaces the two-sector span input by equality of the finite-length MPV spans
+of the original live block families. The one-sided representative-span identity
+transports those live-block spans to the chosen BNT sector bases, and the #860
+matching theorem then gives the sector-weight conclusion.
+
+Therefore the available #923/#944/#955 and #860 ingredients now reduce the
+unconditional theorem to the genuine structural inputs still missing from the
+paper-level reduction: exact common live decompositions, the `N = 0` zero-tail
+bookkeeping, live-block injectivity or a blocked replacement for the primitive
+rigidity theorem, and finite-length span equality for the original live block
+families from the global equal-MPV hypothesis.

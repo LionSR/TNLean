@@ -66,16 +66,30 @@ The theorem `exists_tp_sector_decomp_after_blocking` below provides:
   `zeroMPSTensor + toTensorFromBlocks μ sectors` for some weights `μ`
 
 The current library already settles the common-period blocking arithmetic and
-now has both a one-sided collapsed BNT construction for TP primitive irreducible
-live blocks and a witness-producing sector comparison from primitive
-overlap-span hypotheses. The strongest theorem in this file,
-`fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_overlapSpan`,
-combines `SameMPV₂ A B` with those ingredients once exact common live block
-decompositions and the overlap-span hypotheses are supplied.
+now has a one-sided phase-class BNT construction for TP primitive irreducible
+live blocks, one-sided overlap data, and witness-producing sector comparison
+from primitive overlap-span hypotheses. The theorem
+`fundamentalTheorem_after_blocking_1606_perBlock_cyclic_live_with_zeroTail`
+keeps the faithful paper order: first split off the zero tail and TP-gauge the
+irreducible live blocks, then remove each live block's period by cyclic sectors.
+It deliberately does not identify that period-removal length with the later
+finite blocking length used for common refinement or injectivity.
 
-The remaining Gap §1 content is to derive those exact live decompositions and the
-primitive overlap-span hypotheses from the structural after-blocking reduction
-itself, including the zero-tail bookkeeping at length `N = 0`.
+The exact-live theorem
+`fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_injectiveSpan`
+uses a two-basis span comparison for the constructed sector bases, while
+`fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_blockSpan`
+transports a finite-length span equality for the original live block families to
+those bases. The zero-tail-aware theorem
+`fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_overlapSpan_zeroTail`
+separately records the `N = 0` bookkeeping when full overlap-span hypotheses are
+available.
+
+The remaining Gap §1 content is to flatten the per-block cyclic-sector data to a
+single common physical blocking level, derive one-site injectivity (or a blocked
+replacement) and the finite-length span comparison for the flattened family, and
+finish the zero-tail bookkeeping from the structural after-blocking reduction
+itself.
 -/
 
 section FundamentalTheorem1606
@@ -244,6 +258,213 @@ theorem fundamentalTheorem_after_blocking_1606_structural_with_blockedSameMPV₂
   · exact sameMPV₂_blockTensor A B hSame pA
   · exact sameMPV₂_blockTensor A B hSame pB
 
+/-- **Zero-tail bookkeeping for live block tensors.**
+
+Suppose two tensors with the same MPV family are each written as a zero-tail
+contribution plus a live block tensor. Then the live block tensors agree at every
+positive length, while the length-zero equation records exactly the difference
+between the zero-tail dimensions and the live bond dimensions.
+
+This is the local bookkeeping needed before a full `SameMPV₂` comparison of the
+live sector tensors can be recovered: the only missing datum is equality of the
+two zero-tail dimensions (or an equivalent replacement for the `N = 0` case). -/
+theorem liveBlock_positive_sameMPV₂_and_zeroTail_bookkeeping_of_sameMPV₂
+    {d D₁ D₂ rA rB : ℕ}
+    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (hSame : SameMPV₂ A B)
+    (zeroTailA zeroTailB : ℕ)
+    (μA : Fin rA → ℂ) (blocksA : (k : Fin rA) → MPSTensor d (dimA k))
+    (μB : Fin rB → ℂ) (blocksB : (k : Fin rB) → MPSTensor d (dimB k))
+    (hA : ∀ (N : ℕ) (σ : Fin N → Fin d),
+      mpv A σ = mpv (zeroMPSTensor d zeroTailA) σ +
+        mpv (toTensorFromBlocks (d := d) (μ := μA) blocksA) σ)
+    (hB : ∀ (N : ℕ) (σ : Fin N → Fin d),
+      mpv B σ = mpv (zeroMPSTensor d zeroTailB) σ +
+        mpv (toTensorFromBlocks (d := d) (μ := μB) blocksB) σ) :
+    (∀ {N : ℕ}, 0 < N → ∀ σ : Fin N → Fin d,
+      mpv (toTensorFromBlocks (d := d) (μ := μA) blocksA) σ =
+        mpv (toTensorFromBlocks (d := d) (μ := μB) blocksB) σ) ∧
+    (∀ σ : Fin 0 → Fin d,
+      (zeroTailA : ℂ) + mpv (toTensorFromBlocks (d := d) (μ := μA) blocksA) σ =
+        (zeroTailB : ℂ) + mpv (toTensorFromBlocks (d := d) (μ := μB) blocksB) σ) := by
+  constructor
+  · intro N hN σ
+    have hN_ne : N ≠ 0 := Nat.ne_of_gt hN
+    have hAσ := hA N σ
+    have hBσ := hB N σ
+    rw [mpv_zeroMPSTensor, if_neg hN_ne, zero_add] at hAσ
+    rw [mpv_zeroMPSTensor, if_neg hN_ne, zero_add] at hBσ
+    calc
+      mpv (toTensorFromBlocks (d := d) (μ := μA) blocksA) σ = mpv A σ := hAσ.symm
+      _ = mpv B σ := hSame N σ
+      _ = mpv (toTensorFromBlocks (d := d) (μ := μB) blocksB) σ := hBσ
+  · intro σ
+    have hAσ := hA 0 σ
+    have hBσ := hB 0 σ
+    rw [mpv_zeroMPSTensor, if_pos rfl] at hAσ
+    rw [mpv_zeroMPSTensor, if_pos rfl] at hBσ
+    calc
+      (zeroTailA : ℂ) + mpv (toTensorFromBlocks (d := d) (μ := μA) blocksA) σ
+          = mpv A σ := hAσ.symm
+      _ = mpv B σ := hSame 0 σ
+      _ = (zeroTailB : ℂ) + mpv (toTensorFromBlocks (d := d) (μ := μB) blocksB) σ := hBσ
+
+/-- **Recover full live-block `SameMPV₂` once zero tails agree.**
+
+This combines the positive-length bookkeeping theorem with the single additional
+length-zero datum needed to remove the zero tails. It does not assert that the
+zero-tail dimensions agree automatically; that remains a separate paper-level
+bookkeeping step for the unconditional after-blocking sector comparison. -/
+theorem liveBlock_sameMPV₂_of_sameMPV₂_of_zeroTail_eq
+    {d D₁ D₂ rA rB : ℕ}
+    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (hSame : SameMPV₂ A B)
+    (zeroTailA zeroTailB : ℕ)
+    (μA : Fin rA → ℂ) (blocksA : (k : Fin rA) → MPSTensor d (dimA k))
+    (μB : Fin rB → ℂ) (blocksB : (k : Fin rB) → MPSTensor d (dimB k))
+    (hA : ∀ (N : ℕ) (σ : Fin N → Fin d),
+      mpv A σ = mpv (zeroMPSTensor d zeroTailA) σ +
+        mpv (toTensorFromBlocks (d := d) (μ := μA) blocksA) σ)
+    (hB : ∀ (N : ℕ) (σ : Fin N → Fin d),
+      mpv B σ = mpv (zeroMPSTensor d zeroTailB) σ +
+        mpv (toTensorFromBlocks (d := d) (μ := μB) blocksB) σ)
+    (hZeroTail : zeroTailA = zeroTailB) :
+    SameMPV₂ (toTensorFromBlocks (d := d) (μ := μA) blocksA)
+      (toTensorFromBlocks (d := d) (μ := μB) blocksB) := by
+  have hBook :=
+    liveBlock_positive_sameMPV₂_and_zeroTail_bookkeeping_of_sameMPV₂
+      A B hSame zeroTailA zeroTailB μA blocksA μB blocksB hA hB
+  intro N σ
+  by_cases hN : N = 0
+  · subst N
+    have h0 := hBook.2 σ
+    have h0' : (zeroTailB : ℂ) +
+        mpv (toTensorFromBlocks (d := d) (μ := μA) blocksA) σ =
+        (zeroTailB : ℂ) +
+        mpv (toTensorFromBlocks (d := d) (μ := μB) blocksB) σ := by
+      simpa [hZeroTail] using h0
+    exact add_left_cancel h0'
+  · exact hBook.1 (Nat.pos_of_ne_zero hN) σ
+
+/-- **Structural after-blocking theorem retaining zero-tail MPV equations.**
+
+This strengthens the structural shell by exposing the exact zero-tail identities
+returned by `exists_tp_primitive_blockDecomp_after_blocking`, in addition to the
+blocked `SameMPV₂` relations. The live blocks are trace-preserving, have
+primitive transfer maps, positive bond dimensions, and nonzero weights; the
+zero-tail equations record precisely why these live tensors are only immediately
+identified at positive lengths unless the `N = 0` zero-tail bookkeeping is also
+resolved. -/
+theorem fundamentalTheorem_after_blocking_1606_structural_with_zeroTail
+    {d D₁ D₂ : ℕ}
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (hSame : SameMPV₂ A B) :
+    ∃ (zeroTailA : ℕ) (pA : ℕ) (_ : 0 < pA)
+      (rA : ℕ) (dimA : Fin rA → ℕ) (μA : Fin rA → ℂ)
+      (blocksA : (k : Fin rA) → MPSTensor (blockPhysDim d pA) (dimA k)),
+    ∃ (zeroTailB : ℕ) (pB : ℕ) (_ : 0 < pB)
+      (rB : ℕ) (dimB : Fin rB → ℕ) (μB : Fin rB → ℂ)
+      (blocksB : (k : Fin rB) → MPSTensor (blockPhysDim d pB) (dimB k)),
+      SameMPV₂ (blockTensor (d := d) (D := D₁) A pA)
+        (blockTensor (d := d) (D := D₂) B pA) ∧
+      SameMPV₂ (blockTensor (d := d) (D := D₁) A pB)
+        (blockTensor (d := d) (D := D₂) B pB) ∧
+      (∀ k, ∑ i, (blocksA k i)ᴴ * blocksA k i = 1) ∧
+      (∀ k, ∑ i, (blocksB k i)ᴴ * blocksB k i = 1) ∧
+      (∀ k, _root_.IsPrimitive (transferMap (blocksA k))) ∧
+      (∀ k, _root_.IsPrimitive (transferMap (blocksB k))) ∧
+      (∀ k, μA k ≠ 0) ∧
+      (∀ k, μB k ≠ 0) ∧
+      (∀ k, 0 < dimA k) ∧
+      (∀ k, 0 < dimB k) ∧
+      (∀ (N : ℕ) (σ : Fin N → Fin (blockPhysDim d pA)),
+        mpv (blockTensor (d := d) (D := D₁) A pA) σ =
+          mpv (zeroMPSTensor (blockPhysDim d pA) zeroTailA) σ +
+            mpv (toTensorFromBlocks (d := blockPhysDim d pA) (μ := μA) blocksA) σ) ∧
+      (∀ (N : ℕ) (σ : Fin N → Fin (blockPhysDim d pB)),
+        mpv (blockTensor (d := d) (D := D₂) B pB) σ =
+          mpv (zeroMPSTensor (blockPhysDim d pB) zeroTailB) σ +
+            mpv (toTensorFromBlocks (d := blockPhysDim d pB) (μ := μB) blocksB) σ) := by
+  obtain ⟨zeroTailA, pA, hpA, rA, dimA, μA, blocksA, hTPA, hPrimA, hDimA, hμA, hMPVA⟩ :=
+    exists_tp_primitive_blockDecomp_after_blocking A
+  obtain ⟨zeroTailB, pB, hpB, rB, dimB, μB, blocksB, hTPB, hPrimB, hDimB, hμB, hMPVB⟩ :=
+    exists_tp_primitive_blockDecomp_after_blocking B
+  refine ⟨zeroTailA, pA, hpA, rA, dimA, μA, blocksA,
+    zeroTailB, pB, hpB, rB, dimB, μB, blocksB,
+    ?_, ?_, hTPA, hTPB, hPrimA, hPrimB, hμA, hμB, hDimA, hDimB, hMPVA, hMPVB⟩
+  · exact sameMPV₂_blockTensor A B hSame pA
+  · exact sameMPV₂_blockTensor A B hSame pB
+
+/-- **Per-block cyclic live decomposition with zero-tail bookkeeping.**
+
+This is the faithful predecessor to the common-live-block statement. From
+`SameMPV₂ A B`, it first uses the invariant-subspace/zero-tail split and TP gauge
+to obtain irreducible live blocks on both sides. It then removes the period of
+each live block separately, producing primitive irreducible cyclic sectors for
+every live block. The positive-length live tensors agree, and the length-zero
+case is recorded as the explicit zero-tail bookkeeping identity.
+
+The theorem intentionally keeps the per-block period-removal lengths inside
+`HasPrimitiveIrreducibleCyclicSectors`. It does not conflate those lengths with a
+later common-refinement or Wielandt/injectivity blocking length; assembling the
+per-block cyclic sectors at one physical blocking level is the next formal
+interface still missing for #942/#652. -/
+theorem fundamentalTheorem_after_blocking_1606_perBlock_cyclic_live_with_zeroTail
+    {d D₁ D₂ : ℕ}
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (hSame : SameMPV₂ A B) :
+    ∃ (zeroTailA : ℕ) (rA : ℕ) (dimA : Fin rA → ℕ) (μA : Fin rA → ℂ)
+      (blocksA : (k : Fin rA) → MPSTensor d (dimA k)),
+    ∃ (zeroTailB : ℕ) (rB : ℕ) (dimB : Fin rB → ℕ) (μB : Fin rB → ℂ)
+      (blocksB : (k : Fin rB) → MPSTensor d (dimB k)),
+      (∀ k, IsIrreducibleTensor (blocksA k)) ∧
+      (∀ k, IsIrreducibleTensor (blocksB k)) ∧
+      (∀ k, ∑ i : Fin d, (blocksA k i)ᴴ * blocksA k i = 1) ∧
+      (∀ k, ∑ i : Fin d, (blocksB k i)ᴴ * blocksB k i = 1) ∧
+      (∀ k, μA k ≠ 0) ∧
+      (∀ k, μB k ≠ 0) ∧
+      (∀ k, 0 < dimA k) ∧
+      (∀ k, 0 < dimB k) ∧
+      (∀ (N : ℕ) (σ : Fin N → Fin d),
+        mpv A σ = mpv (zeroMPSTensor d zeroTailA) σ +
+          mpv (toTensorFromBlocks (d := d) (μ := μA) blocksA) σ) ∧
+      (∀ (N : ℕ) (σ : Fin N → Fin d),
+        mpv B σ = mpv (zeroMPSTensor d zeroTailB) σ +
+          mpv (toTensorFromBlocks (d := d) (μ := μB) blocksB) σ) ∧
+      SameMPV₂Pos
+        (toTensorFromBlocks (d := d) (μ := μA) blocksA)
+        (toTensorFromBlocks (d := d) (μ := μB) blocksB) ∧
+      (∀ σ : Fin 0 → Fin d,
+        (zeroTailA : ℂ) + mpv (toTensorFromBlocks (d := d) (μ := μA) blocksA) σ =
+          (zeroTailB : ℂ) + mpv (toTensorFromBlocks (d := d) (μ := μB) blocksB) σ) ∧
+      (∀ k, HasPrimitiveIrreducibleCyclicSectors (blocksA k)) ∧
+      (∀ k, HasPrimitiveIrreducibleCyclicSectors (blocksB k)) := by
+  obtain ⟨zeroTailA, rA, dimA, μA, blocksA,
+      hIrrA, hTPA, hμA, hDimA, hMPVA⟩ :=
+    exists_tp_gauge_from_arbitrary_with_zeroTail (d := d) (D := D₁) A
+  obtain ⟨zeroTailB, rB, dimB, μB, blocksB,
+      hIrrB, hTPB, hμB, hDimB, hMPVB⟩ :=
+    exists_tp_gauge_from_arbitrary_with_zeroTail (d := d) (D := D₂) B
+  have hBook :=
+    liveBlock_positive_sameMPV₂_and_zeroTail_bookkeeping_of_sameMPV₂
+      A B hSame zeroTailA zeroTailB μA blocksA μB blocksB hMPVA hMPVB
+  refine ⟨zeroTailA, rA, dimA, μA, blocksA,
+    zeroTailB, rB, dimB, μB, blocksB,
+    hIrrA, hIrrB, hTPA, hTPB, hμA, hμB, hDimA, hDimB, hMPVA, hMPVB,
+    ?_, hBook.2, ?_, ?_⟩
+  · intro N hN σ
+    exact hBook.1 hN σ
+  · intro k
+    letI : NeZero (dimA k) := ⟨Nat.ne_of_gt (hDimA k)⟩
+    exact hasPrimitiveIrreducibleCyclicSectors_of_TP_of_isIrreducibleTensor
+      (blocksA k) (hTPA k) (hIrrA k)
+  · intro k
+    letI : NeZero (dimB k) := ⟨Nat.ne_of_gt (hDimB k)⟩
+    exact hasPrimitiveIrreducibleCyclicSectors_of_TP_of_isIrreducibleTensor
+      (blocksB k) (hTPB k) (hIrrB k)
+
 /-- **Conditional after-blocking sector comparison (issue #877 target shape).**
 
 Given two tensors with `SameMPV₂`, a common-period BNT sector pair, and a
@@ -327,7 +548,7 @@ constructed by `SectorBasisOverlapSpanHypotheses.exists_sectorBasisMatching` and
 then fed to the bundled heterogeneous sector comparison theorem.
 
 Thus the theorem connects the post-#860 comparison machinery without assuming a
-`SectorBasisMatching` or a permutation/copy alignment as input. -/
+`SectorBasisMatching` or a permutation with copy-count equalities as input. -/
 theorem fundamentalTheorem_after_blocking_1606_sector_of_bntPair_overlapSpan
     {d D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
@@ -466,42 +687,401 @@ theorem fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_overlapSp
   exact ⟨p, hp, P, Q, hPeq, hQeq, hPbnt, hQbnt,
           M.perm, M.copies_eq, ζ, hζne, hMultiset⟩
 
+/-- **Common live-block construction with derived one-sided overlap data.**
+
+This exact-live variant of
+`fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_overlapSpan`
+uses the phase-class BNT construction to derive the positive-dimension,
+normalization, self-overlap, and off-overlap inputs, and to transfer the supplied
+one-site injectivity of live blocks to the chosen basis blocks. The remaining
+two-basis analytic input is the finite-length span comparison between the two
+constructed bases. -/
+theorem fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_injectiveSpan
+    {d D₁ D₂ p rA rB : ℕ}
+    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    [∀ k : Fin rA, NeZero (dimA k)]
+    [∀ k : Fin rB, NeZero (dimB k)]
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (hSame : SameMPV₂ A B)
+    (hp : 0 < p)
+    (μA : Fin rA → ℂ)
+    (blocksA : (k : Fin rA) → MPSTensor (blockPhysDim d p) (dimA k))
+    (μB : Fin rB → ℂ)
+    (blocksB : (k : Fin rB) → MPSTensor (blockPhysDim d p) (dimB k))
+    (hAblocks : SameMPV₂ (blockTensor (d := d) (D := D₁) A p)
+      (toTensorFromBlocks (d := blockPhysDim d p) (μ := μA) blocksA))
+    (hBblocks : SameMPV₂ (blockTensor (d := d) (D := D₂) B p)
+      (toTensorFromBlocks (d := blockPhysDim d p) (μ := μB) blocksB))
+    (hTPA : ∀ k, ∑ i : Fin (blockPhysDim d p), (blocksA k i)ᴴ * blocksA k i = 1)
+    (hTPB : ∀ k, ∑ i : Fin (blockPhysDim d p), (blocksB k i)ᴴ * blocksB k i = 1)
+    (hIrrA : ∀ k, IsIrreducibleTensor (blocksA k))
+    (hIrrB : ∀ k, IsIrreducibleTensor (blocksB k))
+    (hPrimA : ∀ k, _root_.IsPrimitive
+      (transferMap (d := blockPhysDim d p) (D := dimA k) (blocksA k)))
+    (hPrimB : ∀ k, _root_.IsPrimitive
+      (transferMap (d := blockPhysDim d p) (D := dimB k) (blocksB k)))
+    (hInjA : ∀ k, IsInjective (blocksA k))
+    (hInjB : ∀ k, IsInjective (blocksB k))
+    (hμA : ∀ k, μA k ≠ 0)
+    (hμB : ∀ k, μB k ≠ 0)
+    (spanData :
+      ∀ P Q : SectorDecomposition (blockPhysDim d p),
+        SameMPV₂ P.toTensor (toTensorFromBlocks (d := blockPhysDim d p) (μ := μA) blocksA) →
+        SameMPV₂ Q.toTensor (toTensorFromBlocks (d := blockPhysDim d p) (μ := μB) blocksB) →
+        HasBNTSectorData P → HasBNTSectorData Q →
+        SectorBasisOverlapOrthoHypotheses P → SectorBasisOverlapOrthoHypotheses Q →
+        ∀ N,
+          Submodule.span ℂ (Set.range (fun j : Fin P.basisCount =>
+            mpvState (d := blockPhysDim d p) (P.basis j) N)) =
+          Submodule.span ℂ (Set.range (fun k : Fin Q.basisCount =>
+            mpvState (d := blockPhysDim d p) (Q.basis k) N))) :
+    ∃ p' : ℕ, 0 < p' ∧
+    ∃ P Q : SectorDecomposition (blockPhysDim d p'),
+      SameMPV₂ (blockTensor (d := d) (D := D₁) A p') P.toTensor ∧
+      SameMPV₂ (blockTensor (d := d) (D := D₂) B p') Q.toTensor ∧
+      HasBNTSectorData P ∧ HasBNTSectorData Q ∧
+      ∃ perm : Fin P.basisCount ≃ Fin Q.basisCount,
+      ∃ hCopies : ∀ j, P.copies j = Q.copies (perm j),
+      ∃ ζ : Fin P.basisCount → ℂ,
+        (∀ j, ζ j ≠ 0) ∧
+        ∀ j : Fin P.basisCount,
+          Finset.univ.val.map (P.weight j) =
+            Finset.univ.val.map
+              (fun q => ζ j * Q.weight (perm j) (Fin.cast (hCopies j) q)) := by
+  obtain ⟨P, hPblocks, hPbnt, hPOrtho, hPInj_of⟩ :=
+    exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_with_overlapOrtho
+      (d := blockPhysDim d p) μA blocksA hTPA hIrrA hPrimA hμA
+  obtain ⟨Q, hQblocks, hQbnt, hQOrtho, hQInj_of⟩ :=
+    exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_with_overlapOrtho
+      (d := blockPhysDim d p) μB blocksB hTPB hIrrB hPrimB hμB
+  have hPeq : SameMPV₂ (blockTensor (d := d) (D := D₁) A p) P.toTensor := by
+    intro N σ
+    calc
+      mpv (blockTensor (d := d) (D := D₁) A p) σ
+          = mpv (toTensorFromBlocks (d := blockPhysDim d p) (μ := μA) blocksA) σ :=
+            hAblocks N σ
+      _ = mpv P.toTensor σ := (hPblocks N σ).symm
+  have hQeq : SameMPV₂ (blockTensor (d := d) (D := D₂) B p) Q.toTensor := by
+    intro N σ
+    calc
+      mpv (blockTensor (d := d) (D := D₂) B p) σ
+          = mpv (toTensorFromBlocks (d := blockPhysDim d p) (μ := μB) blocksB) σ :=
+            hBblocks N σ
+      _ = mpv Q.toTensor σ := (hQblocks N σ).symm
+  have hAB : SameMPV₂ (blockTensor (d := d) (D := D₁) A p)
+                      (blockTensor (d := d) (D := D₂) B p) :=
+    sameMPV₂_blockTensor A B hSame p
+  have hPQeq : SameMPV₂ P.toTensor Q.toTensor := by
+    intro N σ
+    calc
+      mpv P.toTensor σ
+          = mpv (blockTensor (d := d) (D := D₁) A p) σ := (hPeq N σ).symm
+      _ = mpv (blockTensor (d := d) (D := D₂) B p) σ := hAB N σ
+      _ = mpv Q.toTensor σ := hQeq N σ
+  have hSpan := spanData P Q hPblocks hQblocks hPbnt hQbnt hPOrtho hQOrtho
+  have hOverlapSpan : SectorBasisOverlapSpanHypotheses P Q :=
+    hPOrtho.to_overlapSpan hQOrtho (hPInj_of hInjA) (hQInj_of hInjB) hSpan
+  obtain ⟨M⟩ := hOverlapSpan.exists_sectorBasisMatching hPQeq
+  obtain ⟨ζ, hζne, hMultiset⟩ :=
+    fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_sectorMatching M hPbnt hPQeq
+  exact ⟨p, hp, P, Q, hPeq, hQeq, hPbnt, hQbnt,
+          M.perm, M.copies_eq, ζ, hζne, hMultiset⟩
+
+/-- **Common live-block construction from live-block span equality.**
+
+This exact-live variant removes the opaque two-sector `overlapSpanData` input from
+`fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_overlapSpan`. The
+one-sided MPV phase-equivalence class representative construction supplies positive
+dimensions, injectivity, normalization, and the asymptotic overlap data for the
+representative bases. The only
+remaining two-family analytic input is the finite-length span equality for the original live
+block families; `exists_bnt_sectorDecomp_pair_with_overlapSpan_of_block_span_eq` transports it
+to the chosen sector bases. -/
+theorem fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_blockSpan
+    {d D₁ D₂ p rA rB : ℕ}
+    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    [∀ k : Fin rA, NeZero (dimA k)]
+    [∀ k : Fin rB, NeZero (dimB k)]
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (hSame : SameMPV₂ A B)
+    (hp : 0 < p)
+    (μA : Fin rA → ℂ)
+    (blocksA : (k : Fin rA) → MPSTensor (blockPhysDim d p) (dimA k))
+    (μB : Fin rB → ℂ)
+    (blocksB : (k : Fin rB) → MPSTensor (blockPhysDim d p) (dimB k))
+    (hAblocks : SameMPV₂ (blockTensor (d := d) (D := D₁) A p)
+      (toTensorFromBlocks (d := blockPhysDim d p) (μ := μA) blocksA))
+    (hBblocks : SameMPV₂ (blockTensor (d := d) (D := D₂) B p)
+      (toTensorFromBlocks (d := blockPhysDim d p) (μ := μB) blocksB))
+    (hTPA : ∀ k, ∑ i : Fin (blockPhysDim d p), (blocksA k i)ᴴ * blocksA k i = 1)
+    (hTPB : ∀ k, ∑ i : Fin (blockPhysDim d p), (blocksB k i)ᴴ * blocksB k i = 1)
+    (hIrrA : ∀ k, IsIrreducibleTensor (blocksA k))
+    (hIrrB : ∀ k, IsIrreducibleTensor (blocksB k))
+    (hPrimA : ∀ k, _root_.IsPrimitive
+      (transferMap (d := blockPhysDim d p) (D := dimA k) (blocksA k)))
+    (hPrimB : ∀ k, _root_.IsPrimitive
+      (transferMap (d := blockPhysDim d p) (D := dimB k) (blocksB k)))
+    (hInjA : ∀ k, IsInjective (blocksA k))
+    (hInjB : ∀ k, IsInjective (blocksB k))
+    (hμA : ∀ k, μA k ≠ 0)
+    (hμB : ∀ k, μB k ≠ 0)
+    (hBlockSpan : ∀ N,
+      Submodule.span ℂ (Set.range (fun k : Fin rA =>
+        mpvState (d := blockPhysDim d p) (blocksA k) N)) =
+      Submodule.span ℂ (Set.range (fun k : Fin rB =>
+        mpvState (d := blockPhysDim d p) (blocksB k) N))) :
+    ∃ p' : ℕ, 0 < p' ∧
+    ∃ P Q : SectorDecomposition (blockPhysDim d p'),
+      SameMPV₂ (blockTensor (d := d) (D := D₁) A p') P.toTensor ∧
+      SameMPV₂ (blockTensor (d := d) (D := D₂) B p') Q.toTensor ∧
+      HasBNTSectorData P ∧ HasBNTSectorData Q ∧
+      ∃ perm : Fin P.basisCount ≃ Fin Q.basisCount,
+      ∃ hCopies : ∀ j, P.copies j = Q.copies (perm j),
+      ∃ ζ : Fin P.basisCount → ℂ,
+        (∀ j, ζ j ≠ 0) ∧
+        ∀ j : Fin P.basisCount,
+          Finset.univ.val.map (P.weight j) =
+            Finset.univ.val.map
+              (fun q => ζ j * Q.weight (perm j) (Fin.cast (hCopies j) q)) := by
+  obtain ⟨P, Q, hPblocks, hQblocks, hPbnt, hQbnt, hOverlapSpan⟩ :=
+    exists_bnt_sectorDecomp_pair_with_overlapSpan_of_block_span_eq
+      (d := blockPhysDim d p) μA blocksA μB blocksB hTPA hTPB hIrrA hIrrB
+      hPrimA hPrimB hInjA hInjB hμA hμB hBlockSpan
+  have hPeq : SameMPV₂ (blockTensor (d := d) (D := D₁) A p) P.toTensor := by
+    intro N σ
+    calc
+      mpv (blockTensor (d := d) (D := D₁) A p) σ
+          = mpv (toTensorFromBlocks (d := blockPhysDim d p) (μ := μA) blocksA) σ :=
+            hAblocks N σ
+      _ = mpv P.toTensor σ := (hPblocks N σ).symm
+  have hQeq : SameMPV₂ (blockTensor (d := d) (D := D₂) B p) Q.toTensor := by
+    intro N σ
+    calc
+      mpv (blockTensor (d := d) (D := D₂) B p) σ
+          = mpv (toTensorFromBlocks (d := blockPhysDim d p) (μ := μB) blocksB) σ :=
+            hBblocks N σ
+      _ = mpv Q.toTensor σ := (hQblocks N σ).symm
+  have hAB : SameMPV₂ (blockTensor (d := d) (D := D₁) A p)
+                      (blockTensor (d := d) (D := D₂) B p) :=
+    sameMPV₂_blockTensor A B hSame p
+  have hPQeq : SameMPV₂ P.toTensor Q.toTensor := by
+    intro N σ
+    calc
+      mpv P.toTensor σ
+          = mpv (blockTensor (d := d) (D := D₁) A p) σ := (hPeq N σ).symm
+      _ = mpv (blockTensor (d := d) (D := D₂) B p) σ := hAB N σ
+      _ = mpv Q.toTensor σ := hQeq N σ
+  obtain ⟨M⟩ := hOverlapSpan.exists_sectorBasisMatching hPQeq
+  obtain ⟨ζ, hζne, hMultiset⟩ :=
+    fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_sectorMatching M hPbnt hPQeq
+  exact ⟨p, hp, P, Q, hPeq, hQeq, hPbnt, hQbnt,
+          M.perm, M.copies_eq, ζ, hζne, hMultiset⟩
+
+/-- Remove matching zero tails from two MPV identities.
+
+If `A` and `B` have the same MPVs, and each is expressed as a zero tail plus a live tensor,
+then equality of the zero-tail dimensions gives full `SameMPV₂` equality of the live tensors.
+For positive lengths the zero tails vanish; at length zero this is exactly the missing
+bookkeeping condition. -/
+theorem sameMPV₂_live_of_sameMPV₂_with_zeroTail_eq
+    {d D₁ D₂ L₁ L₂ z₁ z₂ : ℕ}
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (liveA : MPSTensor d L₁) (liveB : MPSTensor d L₂)
+    (hSame : SameMPV₂ A B)
+    (hA : ∀ (N : ℕ) (σ : Fin N → Fin d),
+      mpv A σ = mpv (zeroMPSTensor d z₁) σ + mpv liveA σ)
+    (hB : ∀ (N : ℕ) (σ : Fin N → Fin d),
+      mpv B σ = mpv (zeroMPSTensor d z₂) σ + mpv liveB σ)
+    (hz : z₁ = z₂) :
+    SameMPV₂ liveA liveB := by
+  intro N σ
+  have hsum :
+      mpv (zeroMPSTensor d z₁) σ + mpv liveA σ =
+        mpv (zeroMPSTensor d z₂) σ + mpv liveB σ := by
+    calc
+      mpv (zeroMPSTensor d z₁) σ + mpv liveA σ = mpv A σ := (hA N σ).symm
+      _ = mpv B σ := hSame N σ
+      _ = mpv (zeroMPSTensor d z₂) σ + mpv liveB σ := hB N σ
+  by_cases hN : N = 0
+  · subst hN
+    have hz₁mpv : mpv (zeroMPSTensor d z₁) σ = (z₁ : ℂ) := by
+      rw [mpv_zeroMPSTensor]
+      simp
+    have hz₂mpv : mpv (zeroMPSTensor d z₂) σ = (z₂ : ℂ) := by
+      rw [mpv_zeroMPSTensor]
+      simp
+    have hsum' :
+        (z₂ : ℂ) + mpv liveA σ = (z₂ : ℂ) + mpv liveB σ := by
+      rw [hz₁mpv, hz₂mpv] at hsum
+      rw [hz] at hsum
+      exact hsum
+    exact add_left_cancel hsum'
+  · have hz₁mpv : mpv (zeroMPSTensor d z₁) σ = 0 := by
+      rw [mpv_zeroMPSTensor]
+      simp [hN]
+    have hz₂mpv : mpv (zeroMPSTensor d z₂) σ = 0 := by
+      rw [mpv_zeroMPSTensor]
+      simp [hN]
+    have hsum' : (0 : ℂ) + mpv liveA σ = 0 + mpv liveB σ := by
+      rw [hz₁mpv, hz₂mpv] at hsum
+      exact hsum
+    simpa [zero_add] using hsum'
+
+/-- **Common live-block sector comparison with explicit zero-tail bookkeeping.**
+
+This is the zero-tail-aware variant of
+`fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_overlapSpan`.
+The blocked tensors are related to their live parts only at positive lengths,
+which is the strongest statement available after removing a nonzero zero tail. If the two
+zero-tail dimensions agree, the live parts themselves are full `SameMPV₂`, including `N = 0`,
+so the existing sector-matching layer applies unchanged. -/
+theorem fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_overlapSpan_zeroTail
+    {d D₁ D₂ p rA rB zeroTailA zeroTailB : ℕ}
+    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    [∀ k : Fin rA, NeZero (dimA k)]
+    [∀ k : Fin rB, NeZero (dimB k)]
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (hSame : SameMPV₂ A B)
+    (hp : 0 < p)
+    (μA : Fin rA → ℂ)
+    (blocksA : (k : Fin rA) → MPSTensor (blockPhysDim d p) (dimA k))
+    (μB : Fin rB → ℂ)
+    (blocksB : (k : Fin rB) → MPSTensor (blockPhysDim d p) (dimB k))
+    (hAblocks :
+      ∀ (N : ℕ) (σ : Fin N → Fin (blockPhysDim d p)),
+        mpv (blockTensor (d := d) (D := D₁) A p) σ =
+          mpv (zeroMPSTensor (blockPhysDim d p) zeroTailA) σ +
+            mpv (toTensorFromBlocks (d := blockPhysDim d p) (μ := μA) blocksA) σ)
+    (hBblocks :
+      ∀ (N : ℕ) (σ : Fin N → Fin (blockPhysDim d p)),
+        mpv (blockTensor (d := d) (D := D₂) B p) σ =
+          mpv (zeroMPSTensor (blockPhysDim d p) zeroTailB) σ +
+            mpv (toTensorFromBlocks (d := blockPhysDim d p) (μ := μB) blocksB) σ)
+    (hZeroTail : zeroTailA = zeroTailB)
+    (hTPA : ∀ k, ∑ i : Fin (blockPhysDim d p), (blocksA k i)ᴴ * blocksA k i = 1)
+    (hTPB : ∀ k, ∑ i : Fin (blockPhysDim d p), (blocksB k i)ᴴ * blocksB k i = 1)
+    (hIrrA : ∀ k, IsIrreducibleTensor (blocksA k))
+    (hIrrB : ∀ k, IsIrreducibleTensor (blocksB k))
+    (hPrimA : ∀ k, _root_.IsPrimitive
+      (transferMap (d := blockPhysDim d p) (D := dimA k) (blocksA k)))
+    (hPrimB : ∀ k, _root_.IsPrimitive
+      (transferMap (d := blockPhysDim d p) (D := dimB k) (blocksB k)))
+    (hμA : ∀ k, μA k ≠ 0)
+    (hμB : ∀ k, μB k ≠ 0)
+    (overlapSpanData :
+      ∀ P Q : SectorDecomposition (blockPhysDim d p),
+        SameMPV₂ P.toTensor (toTensorFromBlocks (d := blockPhysDim d p) (μ := μA) blocksA) →
+        SameMPV₂ Q.toTensor (toTensorFromBlocks (d := blockPhysDim d p) (μ := μB) blocksB) →
+        HasBNTSectorData P → HasBNTSectorData Q →
+        SectorBasisOverlapSpanHypotheses P Q) :
+    ∃ p' : ℕ, 0 < p' ∧
+    ∃ P Q : SectorDecomposition (blockPhysDim d p'),
+      SameMPV₂Pos (blockTensor (d := d) (D := D₁) A p') P.toTensor ∧
+      SameMPV₂Pos (blockTensor (d := d) (D := D₂) B p') Q.toTensor ∧
+      SameMPV₂ P.toTensor Q.toTensor ∧
+      HasBNTSectorData P ∧ HasBNTSectorData Q ∧
+      ∃ perm : Fin P.basisCount ≃ Fin Q.basisCount,
+      ∃ hCopies : ∀ j, P.copies j = Q.copies (perm j),
+      ∃ ζ : Fin P.basisCount → ℂ,
+        (∀ j, ζ j ≠ 0) ∧
+        ∀ j : Fin P.basisCount,
+          Finset.univ.val.map (P.weight j) =
+            Finset.univ.val.map
+              (fun q => ζ j * Q.weight (perm j) (Fin.cast (hCopies j) q)) := by
+  let liveA := toTensorFromBlocks (d := blockPhysDim d p) (μ := μA) blocksA
+  let liveB := toTensorFromBlocks (d := blockPhysDim d p) (μ := μB) blocksB
+  obtain ⟨P, hPblocks, hPbnt⟩ :=
+    exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks
+      (d := blockPhysDim d p) μA blocksA hTPA hIrrA hPrimA hμA
+  obtain ⟨Q, hQblocks, hQbnt⟩ :=
+    exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks
+      (d := blockPhysDim d p) μB blocksB hTPB hIrrB hPrimB hμB
+  have hAB : SameMPV₂ (blockTensor (d := d) (D := D₁) A p)
+                      (blockTensor (d := d) (D := D₂) B p) :=
+    sameMPV₂_blockTensor A B hSame p
+  have hLive : SameMPV₂ liveA liveB :=
+    sameMPV₂_live_of_sameMPV₂_with_zeroTail_eq
+      (blockTensor (d := d) (D := D₁) A p)
+      (blockTensor (d := d) (D := D₂) B p)
+      liveA liveB hAB hAblocks hBblocks hZeroTail
+  have hPeqPos : SameMPV₂Pos (blockTensor (d := d) (D := D₁) A p) P.toTensor := by
+    intro N hN σ
+    have hZero :
+        mpv (zeroMPSTensor (blockPhysDim d p) zeroTailA) σ = 0 := by
+      rw [mpv_zeroMPSTensor]
+      simp [Nat.ne_of_gt hN]
+    calc
+      mpv (blockTensor (d := d) (D := D₁) A p) σ
+          = mpv (zeroMPSTensor (blockPhysDim d p) zeroTailA) σ + mpv liveA σ :=
+            hAblocks N σ
+      _ = mpv liveA σ := by rw [hZero]; simp
+      _ = mpv P.toTensor σ := (hPblocks N σ).symm
+  have hQeqPos : SameMPV₂Pos (blockTensor (d := d) (D := D₂) B p) Q.toTensor := by
+    intro N hN σ
+    have hZero :
+        mpv (zeroMPSTensor (blockPhysDim d p) zeroTailB) σ = 0 := by
+      rw [mpv_zeroMPSTensor]
+      simp [Nat.ne_of_gt hN]
+    calc
+      mpv (blockTensor (d := d) (D := D₂) B p) σ
+          = mpv (zeroMPSTensor (blockPhysDim d p) zeroTailB) σ + mpv liveB σ :=
+            hBblocks N σ
+      _ = mpv liveB σ := by rw [hZero]; simp
+      _ = mpv Q.toTensor σ := (hQblocks N σ).symm
+  have hPQeq : SameMPV₂ P.toTensor Q.toTensor := by
+    intro N σ
+    calc
+      mpv P.toTensor σ = mpv liveA σ := hPblocks N σ
+      _ = mpv liveB σ := hLive N σ
+      _ = mpv Q.toTensor σ := (hQblocks N σ).symm
+  have hOverlapSpan := overlapSpanData P Q hPblocks hQblocks hPbnt hQbnt
+  obtain ⟨M⟩ := hOverlapSpan.exists_sectorBasisMatching hPQeq
+  obtain ⟨ζ, hζne, hMultiset⟩ :=
+    fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_sectorMatching M hPbnt hPQeq
+  exact ⟨p, hp, P, Q, hPeqPos, hQeqPos, hPQeq, hPbnt, hQbnt,
+          M.perm, M.copies_eq, ζ, hζne, hMultiset⟩
+
 /-!
 ### What remains for the full 1606.00608 Fundamental Theorem
 
 The complete end-to-end FT should take two tensors `A, B` with `SameMPV₂ A B`
 and pass from the blocked reduction output to the paper's basis-of-normal-tensors
-sector comparison. The one-sided collapsed BNT construction is now available as
-`exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks`, and the sector matching
-extraction is available from primitive overlap-rigidity hypotheses through
-`SectorBasisOverlapSpanHypotheses.exists_sectorBasisMatching`.
+sector comparison. The one-sided phase-class BNT construction is available as
+`exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks`, with one-sided overlap data
+exposed by `exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_with_overlapOrtho`.
+The sector matching extraction is available from primitive overlap-rigidity
+hypotheses through `SectorBasisOverlapSpanHypotheses.exists_sectorBasisMatching`.
 
 The theorem
-`fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_overlapSpan`
-records the strongest Lean statement currently available: once a common
-blocking period gives exact live TP primitive irreducible block decompositions on
-both sides, the one-sided BNT construction and the overlap-span matching theorem
-produce the matched sector-weight conclusion from the original `SameMPV₂ A B`.
+`fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_injectiveSpan`
+records an exact-live overlap-input reduction from span equality for the
+constructed sector bases. The theorem
+`fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_blockSpan`
+strengthens this in the phase-class representative setting: equality of the
+finite-length spans of the original live block families is transported to the
+chosen sector bases and the sector-weight conclusion follows from the original
+`SameMPV₂ A B`. The theorem
+`fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_overlapSpan_zeroTail`
+records the corresponding zero-tail bookkeeping route when full overlap-span data
+are supplied.
 
 The remaining formal work for the completely unconditional
-`fundamentalTheorem_after_blocking_1606_sector` is therefore not another matched
-basis assumption. It is to derive, from the structural reduction itself:
+`fundamentalTheorem_after_blocking_1606_sector` is therefore to derive, from the
+structural reduction itself:
 
 1. a common live block decomposition with primitive **and irreducible** blocks at
-   the same physical blocking level, with the zero-tail contribution handled at
-   `N = 0`;
-2. the nonzero-bond-dimension, injectivity, normalization, asymptotic
-   self/orthogonal-overlap, and finite-length span hypotheses bundled in
-   `SectorBasisOverlapSpanHypotheses` for the collapsed BNT bases produced by
-   `exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks`; and
-3. the final global gauge construction of the equal-case FT after the matched
-   sector-weight data has been obtained.
+   the same physical blocking level;
+2. the `N = 0` bookkeeping for the zero-tail contribution;
+3. one-site injectivity of the live blocks, or a blocked replacement of the
+   rigidity input; and
+4. equality of the finite-length MPV spans for the original live block families
+   (or directly for the two BNT bases), followed by the final global gauge
+   construction of the equal-case FT.
 
 Thus the common-period arithmetic and the abstract sector-matching witness are no
 longer the main blockers; the remaining gap is the paper-level derivation of the
-primitive overlap-span hypotheses for the actual collapsed BNT bases, together
-with the live/zero-tail bookkeeping needed to compare the sector tensors as full
-`SameMPV₂` families.
+listed live-block, zero-tail, injectivity, and span facts for the actual sector
+tensors produced by the after-blocking reduction.
 -/
 
 end FundamentalTheorem1606

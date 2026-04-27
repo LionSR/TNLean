@@ -6,6 +6,7 @@ import TNLean.MPS.ParentHamiltonian.Basic
 import TNLean.MPS.ParentHamiltonian.BlockStrip
 import TNLean.MPS.ParentHamiltonian.CyclicWindow
 import TNLean.MPS.FundamentalTheorem.FiniteLength
+import TNLean.Wielandt.SpanGrowth.VectorToMatrixSpan
 
 /-!
 # Wrapping window argument for periodic MPS chains
@@ -42,8 +43,14 @@ proceeds as follows:
 
 ## Main results
 
+* `MPSTensor.commutes_words_of_two_sided_middle_compatibility`
+  — same-witness two-sided common-middle identities imply word commutation
+* `MPSTensor.commutes_words_mul_of_commutes_words`
+  — fixed-length word commutation amplifies to all multiple lengths
 * `MPSTensor.boundary_matrix_commutes_of_isNBlkInjective_of_long_word_commutes`
   — block injectivity turns long-word commutation into generator commutation
+* `MPSTensor.eq_zero_of_mul_evalWord_eq_zero_of_isNBlkInjective_of_le_mul`
+  — padding short complement annihilation to a full block-injective word span
 * `MPSTensor.boundary_matrix_commutes` — if `groundSpaceMap A N X` lies in
   every cyclic window's ground space, then `X` commutes with all `A_j`.
 
@@ -503,6 +510,108 @@ theorem wrapping_window_mirror_compatibility_of_isNBlkInjective
     _ = Matrix.trace (evalWord A (List.ofFn σ_head) * (A j * Y τ)) := by
           simpa [Matrix.mul_assoc] using key'
 
+/-! ### Common-middle algebraic closure
+
+The two one-sided wrapped-boundary identities close the boundary matrix once they
+are available with a common middle word and the same boundary witness. -/
+
+/-- A same-witness pair of one-sided compatibilities around a common middle word
+forces `X` to commute with every word obtained by adjoining one physical letter on
+each side of that middle.
+
+This is the algebraic core of the remaining normal parent-Hamiltonian closure
+step: after the wrapped and mirror windows have been compared so that their
+boundary witnesses agree on a shared complement `μ`, the identities
+`A^μ A^b X = Y_μ A^b` and `X A^a A^μ = A^a Y_μ` imply
+`X A^a A^μ A^b = A^a A^μ A^b X`. -/
+theorem commutes_words_of_two_sided_middle_compatibility
+    {A : MPSTensor d D} {m : ℕ} {X : Matrix (Fin D) (Fin D) ℂ}
+    (Y : (Fin m → Fin d) → Matrix (Fin D) (Fin D) ℂ)
+    (hLeft : ∀ (j : Fin d) (μ : Fin m → Fin d),
+      evalWord A (List.ofFn μ) * A j * X = Y μ * A j)
+    (hRight : ∀ (j : Fin d) (μ : Fin m → Fin d),
+      X * A j * evalWord A (List.ofFn μ) = A j * Y μ) :
+    ∀ ω : Fin (m + 2) → Fin d,
+      X * evalWord A (List.ofFn ω) = evalWord A (List.ofFn ω) * X := by
+  intro ω
+  let a : Fin d := ω ⟨0, by omega⟩
+  let tail : Fin (m + 1) → Fin d := Fin.tail ω
+  let μ : Fin m → Fin d := Fin.init tail
+  let b : Fin d := tail (Fin.last m)
+  have htail : Fin.tail ω = Fin.snoc μ b := by
+    dsimp only [tail, μ, b]
+    exact (Fin.snoc_init_self (Fin.tail ω)).symm
+  have hω : ω = Fin.cons a (Fin.snoc μ b) := by
+    rw [← Fin.cons_self_tail ω, htail]
+    simp [a]
+  rw [hω, evalWord_ofFn_cons, evalWord_ofFn_snoc]
+  calc
+    X * (A a * (evalWord A (List.ofFn μ) * A b))
+        = (X * A a * evalWord A (List.ofFn μ)) * A b := by
+            simp [Matrix.mul_assoc]
+    _ = (A a * Y μ) * A b := by rw [hRight a μ]
+    _ = A a * (Y μ * A b) := by simp [Matrix.mul_assoc]
+    _ = A a * (evalWord A (List.ofFn μ) * A b * X) := by rw [← hLeft b μ]
+    _ = (A a * (evalWord A (List.ofFn μ) * A b)) * X := by
+            simp [Matrix.mul_assoc]
+
+/-- If `X` commutes with all words of a fixed length `m`, then it commutes
+with all words whose length is any multiple of `m`.
+
+The proof chunks a list of length `q * m` into a length-`m` prefix and a shorter
+multiple-length suffix. This formalizes the amplification observation used to
+feed positive-length commutation into the block-injective long-word endgame. -/
+theorem commutes_words_mul_of_commutes_words {A : MPSTensor d D}
+    {m q : ℕ} {X : Matrix (Fin D) (Fin D) ℂ}
+    (hComm : ∀ ω : Fin m → Fin d,
+      X * evalWord A (List.ofFn ω) = evalWord A (List.ofFn ω) * X) :
+    ∀ ω : Fin (q * m) → Fin d,
+      X * evalWord A (List.ofFn ω) = evalWord A (List.ofFn ω) * X := by
+  suffices hList : ∀ q : ℕ, ∀ w : List (Fin d), w.length = q * m →
+      X * evalWord A w = evalWord A w * X by
+    intro ω
+    exact hList q (List.ofFn ω) (by simp)
+  intro q
+  induction q with
+  | zero =>
+      intro w hw
+      have hw0 : w = [] := List.eq_nil_of_length_eq_zero (by simpa using hw)
+      simp [hw0]
+  | succ q ih =>
+      intro w hw
+      have htake_len : (w.take m).length = m := by
+        have hm_le : m ≤ w.length := by
+          rw [hw, Nat.succ_mul]
+          omega
+        rw [List.length_take, Nat.min_eq_left hm_le]
+      let μ : Fin m → Fin d := fun i => (w.take m).get ⟨i.val, by simp [htake_len]⟩
+      have hμ : List.ofFn μ = w.take m := by
+        simpa [μ, htake_len] using (List.ofFn_get (w.take m))
+      have hdrop_len : (w.drop m).length = q * m := by
+        rw [List.length_drop, hw, Nat.succ_mul]
+        omega
+      have hdrop_comm := ih (w.drop m) hdrop_len
+      calc
+        X * evalWord A w
+            = X * evalWord A (w.take m ++ w.drop m) := by
+                rw [List.take_append_drop m w]
+        _ = X * (evalWord A (w.take m) * evalWord A (w.drop m)) := by
+                rw [evalWord_append]
+        _ = (X * evalWord A (w.take m)) * evalWord A (w.drop m) := by
+                rw [Matrix.mul_assoc]
+        _ = (evalWord A (w.take m) * X) * evalWord A (w.drop m) := by
+                rw [← hμ, hComm μ]
+        _ = evalWord A (w.take m) * (X * evalWord A (w.drop m)) := by
+                simp [Matrix.mul_assoc]
+        _ = evalWord A (w.take m) * (evalWord A (w.drop m) * X) := by
+                rw [hdrop_comm]
+        _ = (evalWord A (w.take m) * evalWord A (w.drop m)) * X := by
+                simp [Matrix.mul_assoc]
+        _ = evalWord A (w.take m ++ w.drop m) * X := by
+                rw [evalWord_append]
+        _ = evalWord A w * X := by
+                rw [List.take_append_drop m w]
+
 /-! ### Main commutation result
 
 Extend from the wrapping window equation to full commutation via spanning. -/
@@ -518,6 +627,65 @@ theorem boundary_matrix_commutes_of_isNBlkInjective_of_long_word_commutes
   intro j
   exact commutes_all_of_commutes_long_words_of_isNBlkInjective
     (A := A) hInj hL₀ hm hComm (A j)
+
+/-- If left multiplication by `Z` annihilates every word product of length `k`,
+and words of some longer length `n` span the full matrix algebra, then `Z = 0`.
+
+This is the padding form needed in the normal wrapped-boundary closure: an
+annihilation relation obtained for a short complement word can be multiplied by
+all padding words up to any length whose exact word span is `⊤`. -/
+theorem eq_zero_of_mul_evalWord_eq_zero_of_wordSpan_eq_top
+    {A : MPSTensor d D} {k n : ℕ} {Z : Matrix (Fin D) (Fin D) ℂ}
+    (htop : wordSpan A n = ⊤) (hkn : k ≤ n)
+    (hzero : ∀ σ : Fin k → Fin d, Z * evalWord A (List.ofFn σ) = 0) :
+    Z = 0 := by
+  have hzero_span : ∀ M ∈ wordSpan A n, Z * M = 0 := by
+    apply Submodule.span_induction
+    · intro M hM
+      rcases hM with ⟨σ, rfl⟩
+      let w := List.ofFn σ
+      have htake_len : (w.take k).length = k := by
+        rw [List.length_take]
+        have hwlen : w.length = n := by simp [w]
+        omega
+      let σk : Fin k → Fin d := fun i =>
+        (w.take k).get ⟨i.val, by simp [htake_len]⟩
+      have hσk : List.ofFn σk = w.take k := by
+        simpa [σk, htake_len] using (List.ofFn_get (w.take k))
+      have hprefix : Z * evalWord A (w.take k) = 0 := by
+        simpa [hσk] using hzero σk
+      calc
+        Z * evalWord A w = Z * evalWord A (w.take k ++ w.drop k) := by
+          rw [List.take_append_drop k w]
+        _ = Z * (evalWord A (w.take k) * evalWord A (w.drop k)) := by
+          rw [evalWord_append]
+        _ = (Z * evalWord A (w.take k)) * evalWord A (w.drop k) := by
+          rw [Matrix.mul_assoc]
+        _ = 0 := by rw [hprefix, zero_mul]
+    · simp
+    · intro M₁ M₂ _ _ h₁ h₂
+      simp [Matrix.mul_add, h₁, h₂]
+    · intro c M _ hM
+      simp [hM]
+  have h1 : Z * (1 : Matrix (Fin D) (Fin D) ℂ) = 0 :=
+    hzero_span 1 (htop ▸ Submodule.mem_top)
+  simpa using h1
+
+/-- Block-injective padding variant of
+`eq_zero_of_mul_evalWord_eq_zero_of_wordSpan_eq_top`.
+
+If `A` is `L₀`-block-injective, then every positive multiple of `L₀` has full
+word span. Hence an annihilation relation at length `k` already forces `Z = 0`
+as soon as `k` is bounded by such a multiple. -/
+theorem eq_zero_of_mul_evalWord_eq_zero_of_isNBlkInjective_of_le_mul
+    {A : MPSTensor d D} {L₀ k q : ℕ} (hInj : IsNBlkInjective A L₀)
+    (hq : 1 ≤ q) (hkq : k ≤ q * L₀) {Z : Matrix (Fin D) (Fin D) ℂ}
+    (hzero : ∀ σ : Fin k → Fin d, Z * evalWord A (List.ofFn σ) = 0) :
+    Z = 0 := by
+  exact eq_zero_of_mul_evalWord_eq_zero_of_wordSpan_eq_top
+    (A := A) (k := k) (n := q * L₀)
+    (wordSpan_top_of_mul A ((wordSpan_eq_top_iff_isNBlkInjective A L₀).mpr hInj) q hq)
+    hkq hzero
 
 set_option maxHeartbeats 800000 in
 -- The double spanning argument over window tails and complements creates large

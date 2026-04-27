@@ -150,3 +150,81 @@ the two one-sided identities above into a long-word commutation family
 `X A^ω = A^ω X` for some positive word length (then amplify to length at least
 `L₀` if necessary) and apply
 `MPSTensor.boundary_matrix_commutes_of_isNBlkInjective_of_long_word_commutes`.
+
+## 2026-04-26 Wave 17A update
+
+This branch still does **not** close
+`MPSTensor.chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction`; the
+pre-existing proof placeholder remains.  It lands two small Lean pieces that
+remove algebraic endgame noise from the remaining closure-property blocker:
+
+- `MPSTensor.eq_zero_of_mul_evalWord_eq_zero_of_wordSpan_eq_top` and
+  `MPSTensor.eq_zero_of_mul_evalWord_eq_zero_of_isNBlkInjective_of_le_mul` in
+  `TNLean/MPS/ParentHamiltonian/WrappingWindow.lean`.  These formalize the
+  padding observation from the 2026-04-21 audit: if an operator annihilates all
+  complement words of length `k`, then padding to any full exact word span
+  length `n ≥ k` forces the operator to be zero; for an `L₀`-block-injective
+  tensor, any positive multiple of `L₀` is such a full span.
+- `MPSTensor.groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_long_word_commutes`
+  in `TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean`.  Once the wrapped
+  boundary identities are upgraded to a long-word commutation family
+  `X A^ω = A^ω X` for some `|ω| = m ≥ L₀`, this theorem applies the existing
+  block-stripping centrality theorem and the matrix-center calculation to put
+  `Γ_N(X)` directly in `mpvSubmodule A N`.
+
+Paper anchor retained: CPGSV21 §IV.C,
+`Papers/2011.12127/TN-Review-main.tex:2078--2079`, especially
+"Once we have reached $k=L_0$, we can resort to the above Theorem, or
+alternatively apply a similar argument when closing the boundaries", and theorem
+`thm:4:unique-gs-L0_plus_1` at lines 2087--2090.
+
+Remaining blocker after Wave 17A: the genuine common-middle / closure-property
+comparison.  Starting from
+`MPSTensor.chainGroundSpace_wrapped_boundary_compatibilities_of_isNBlkInjective`,
+one still has to turn the two one-sided identities
+`C^+_τ A_j X = Y^+_τ A_j` and `X A_j C^-_τ = A_j Y^-_τ` into long-word
+commutation for the same boundary matrix `X`.  The new MPV-line endgame shows
+that no further scalar-center work remains once that commutation family is
+available.
+
+## 2026-04-27 Wave 18E update
+
+Current branch `wave18-E-588-common-middle` still does **not** close
+`MPSTensor.chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction`; the
+pre-existing proof placeholder remains.  It lands the exact algebraic
+common-middle endgame that was missing after Wave 17A, without assuming
+commutation directly:
+
+- `MPSTensor.commutes_words_of_two_sided_middle_compatibility` in
+  `TNLean/MPS/ParentHamiltonian/WrappingWindow.lean`: if the two one-sided
+  identities have been compared to a single same-witness family indexed by a
+  common middle word,
+  ```text
+  A^μ A^b X = Y_μ A^b,
+  X A^a A^μ = A^a Y_μ,
+  ```
+  then `X` commutes with every product `A^a A^μ A^b`.
+- `MPSTensor.commutes_words_mul_of_commutes_words` in the same file: fixed-length
+  commutation amplifies to all multiple lengths by chunking words.
+- `MPSTensor.groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_positive_word_commutes`
+  and
+  `MPSTensor.groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_two_sided_middle_compatibility`
+  in `TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean`: same-witness
+  common-middle compatibilities now put `Γ_N(X)` directly in the MPV line via the
+  positive-length amplification and the Wave 17A centrality endgame.
+
+Paper anchor retained: CPGSV21 §IV.C,
+`Papers/2011.12127/TN-Review-main.tex:2078--2079`, especially
+"Once we have reached $k=L_0$, we can resort to the above Theorem, or
+alternatively apply a similar argument when closing the boundaries", and theorem
+`thm:4:unique-gs-L0_plus_1` at lines 2087--2090.
+
+Remaining blocker after Wave 18E: prove the actual witness comparison for the two
+wrapped windows produced by
+`MPSTensor.chainGroundSpace_wrapped_boundary_compatibilities_of_isNBlkInjective`.
+Concretely, one must reindex their complements to a common middle `μ` and show
+that the wrapped witness `Y^+` and mirror witness `Y^-` reduce to a single
+family `Y_μ` satisfying the two same-witness identities above.  Once that
+comparison is available, the new Wave 18E theorem
+`MPSTensor.groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_two_sided_middle_compatibility`
+closes the MPV-line containment.
