@@ -791,8 +791,9 @@ theorem fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_injective
 
 This exact-live variant removes the opaque two-sector `overlapSpanData` input from
 `fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_overlapSpan`. The
-one-sided MPV phase-equivalence class representative construction supplies positive dimensions, injectivity,
-normalization, and the asymptotic overlap data for the representative bases. The only
+one-sided MPV phase-equivalence class representative construction supplies positive
+dimensions, injectivity, normalization, and the asymptotic overlap data for the
+representative bases. The only
 remaining two-family analytic input is the finite-length span equality for the original live
 block families; `exists_bnt_sectorDecomp_pair_with_overlapSpan_of_block_span_eq` transports it
 to the chosen sector bases. -/

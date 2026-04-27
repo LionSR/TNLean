@@ -88,7 +88,7 @@ Theorem matching, etc.).
   including equal-modulus ones, and proves `HasBNTSectorData` from overlap
   asymptotics rather than from an explicit linear-independence hypothesis.
 
-* `exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks` — the collapsed-representative
+* `exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks` — the representative
   construction: it quotients arbitrary TP / primitive / irreducible blocks by MPV phase
   equivalence, absorbs the scalar factors into sector weights, proves representative
   separation, and then obtains `HasBNTSectorData` from the separated-family theorem.
@@ -394,7 +394,7 @@ theorem bnt_grouping_single_norm_class_of_tp_primitive_irr_blocks
       exact ⟨ζ, hζne, hζ_norm, hmpv⟩
   exact bnt_grouping_single_norm_class μ blocks k0 hμne hNorm hPhase
 
-/-! ### §4. Collapsed representatives from MPV phase classes -/
+/-! ### §4. MPV phase-class representatives -/
 
 /-- MPV phase equivalence for a dependent block family.
 
@@ -451,14 +451,17 @@ lemma MPVPhaseEquiv.of_gaugePhaseEquiv_cast {r : ℕ} {dim : Fin r → ℕ}
     (B := blocks k) X ζ hX N σ,
     mpv_cast_dim hdim (blocks j) N σ]
 
-/-- MPV phase equivalence gives scalar-power equality of the finite-length MPV state vectors. -/
-lemma MPVPhaseEquiv.mpvState_eq_smul {r : ℕ} {dim : Fin r → ℕ}
+/-- MPV phase equivalence gives a scalar-power equality of finite-length MPV state vectors. -/
+lemma MPVPhaseEquiv.exists_mpvState_eq_smul {r : ℕ} {dim : Fin r → ℕ}
     {blocks : (k : Fin r) → MPSTensor d (dim k)} {j k : Fin r}
     (h : MPVPhaseEquiv blocks j k) (N : ℕ) :
-    mpvState (d := d) (blocks k) N = h.choose ^ N • mpvState (d := d) (blocks j) N := by
+    ∃ ζ : ℂ, ζ ≠ 0 ∧
+      mpvState (d := d) (blocks k) N = ζ ^ N • mpvState (d := d) (blocks j) N := by
+  rcases h with ⟨ζ, hζ, hmpv⟩
+  refine ⟨ζ, hζ, ?_⟩
   ext σ
   simp only [PiLp.smul_apply, smul_eq_mul, mpvState_apply]
-  exact h.choose_spec.2 N σ
+  exact hmpv N σ
 
 /-- Equivalence relation on block indices given by MPV phase equivalence. -/
 def mpvPhaseSetoid {r : ℕ} {dim : Fin r → ℕ}
@@ -550,7 +553,8 @@ theorem representative_mpv_span_eq (classes : MPVPhaseClassData blocks) (N : ℕ
     change mpvState (d := d) (blocks k) N ∈
       Submodule.span ℂ (Set.range (fun j : Fin classes.g =>
         mpvState (d := d) (blocks (classes.repr j)) N))
-    rw [hphase.mpvState_eq_smul N]
+    obtain ⟨ζ, _hζ, hstate⟩ := hphase.exists_mpvState_eq_smul N
+    rw [hstate]
     exact Submodule.smul_mem _ _ (Submodule.subset_span ⟨j, rfl⟩)
 
 end MPVPhaseClassData
@@ -700,7 +704,7 @@ theorem exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_of_blocksNotGaugePhas
     exists_eventually_linearIndependent_of_tp_primitive_irr_blocks_of_blocksNotGaugePhaseEquiv
       blocks hTP hIrr hPrim hBlocks
 
-/-- The concrete collapsed-representative sector decomposition obtained from MPV phase classes. -/
+/-- The concrete sector decomposition obtained from representatives of MPV phase classes. -/
 private noncomputable def collapsedBntSectorDecomp
     {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ)
@@ -793,7 +797,7 @@ representative is chosen for each class; for every original block in the class,
 the associated phase is multiplied into its sector weight.  Gauge-phase-equivalent
 blocks land in the same MPV phase class, so the chosen representatives satisfy
 `BlocksNotGaugePhaseEquiv`.  The separated-family BNT independence theorem then
-proves `HasBNTSectorData` for the collapsed sector decomposition. -/
+proves `HasBNTSectorData` for the constructed sector decomposition. -/
 theorem exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ)
@@ -809,6 +813,7 @@ theorem exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks
   · exact collapsedBntSectorDecomp_sameMPV₂ (d := d) μ blocks hμne
   · exact collapsedBntSectorDecomp_hasBNT (d := d) μ blocks hTP hIrr hPrim hμne
 
+
 /-- **Phase-class BNT sector construction with one-sided overlap data.**
 
 Starting from trace-preserving primitive irreducible blocks with nonzero weights,
@@ -820,9 +825,8 @@ overlap-rigidity route.
 
 The theorem also records that if the original blocks are one-site injective,
 then the chosen basis blocks are injective. It does not claim the remaining
-two-family input of `SectorBasisOverlapSpanHypotheses`: equality of the
-finite-length MPV spans between two independently constructed bases is a
-separate Gap §1 task. -/
+two-family input: equality of the finite-length MPV spans between two
+independently constructed bases is a separate Gap §1 task. -/
 theorem exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_with_overlapOrtho
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ)
@@ -869,52 +873,13 @@ theorem exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_with_overlapOrtho
   · intro hInj j
     simpa [P, collapsedBntSectorDecomp] using hInj (classes.repr j)
 
-/-- **Collapsed BNT sector construction with primitive overlap data.**
+/-- Concrete one-sided data for the construction using representatives of MPV phase-equivalence
+classes, including the finite-length representative-span identity.
 
-This strengthens `exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks` by exposing the
-properties of the chosen representative basis blocks that are needed by the overlap-rigidity
-layer. The extra `hInj` hypothesis is intentional: the one-sided BNT constructor assumes
-irreducibility, primitivity, and trace preservation, while
-`SectorBasisOverlapSpanHypotheses` consumes length-1 MPS-injectivity.
 
-The finite-span comparison between two independently constructed sector bases is not part of
-this one-sided theorem; it depends on comparing the two sides. -/
-theorem exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_with_overlapData
-    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
-    (μ : Fin r → ℂ)
-    (blocks : (k : Fin r) → MPSTensor d (dim k))
-    (hTP : ∀ k, ∑ i : Fin d, (blocks k i)ᴴ * blocks k i = 1)
-    (hIrr : ∀ k, IsIrreducibleTensor (blocks k))
-    (hPrim : ∀ k, _root_.IsPrimitive (transferMap (d := d) (D := dim k) (blocks k)))
-    (hInj : ∀ k, IsInjective (blocks k))
-    (hμne : ∀ k, μ k ≠ 0) :
-    ∃ P : SectorDecomposition d,
-      SameMPV₂ P.toTensor (toTensorFromBlocks (d := d) (μ := μ) blocks) ∧
-      HasBNTSectorData (d := d) P ∧
-      (∀ j : Fin P.basisCount, 0 < P.basisDim j) ∧
-      (∀ j : Fin P.basisCount, IsInjective (P.basis j)) ∧
-      (∀ j : Fin P.basisCount, (∑ i : Fin d, (P.basis j i)ᴴ * (P.basis j i)) = 1) ∧
-      (∀ j : Fin P.basisCount,
-        Filter.Tendsto (fun N => mpvOverlap (d := d) (P.basis j) (P.basis j) N)
-          Filter.atTop (nhds (1 : ℂ))) ∧
-      (∀ i j : Fin P.basisCount, i ≠ j →
-        Filter.Tendsto (fun N => mpvOverlap (d := d) (P.basis i) (P.basis j) N)
-          Filter.atTop (nhds 0)) := by
-  obtain ⟨P, hSame, hBNT, hOrtho, hInj_of⟩ :=
-    exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_with_overlapOrtho
-      (d := d) μ blocks hTP hIrr hPrim hμne
-  exact ⟨P, hSame, hBNT, hOrtho.dim_pos, hInj_of hInj, hOrtho.normalized,
-    hOrtho.self_overlap, hOrtho.off_overlap⟩
-
-/-- **Collapsed BNT sector construction with overlap data and the quotient span identity.**
-
-This strengthens `exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_with_overlapData` by
-also exposing the finite-length span invariant of the collapsed construction: at every length,
-the chosen MPV phase-class representatives span the same MPV subspace as the original block
-family.  This removes the quotient/enumeration bookkeeping from later two-sided span
-comparisons; the remaining comparison is the genuine equality of the two original live-block
-spans. -/
-theorem exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_with_overlapData_and_basisSpan
+This private helper keeps the proof of the common fields shared by the public one-sided overlap
+data theorems in one place. -/
+private theorem bntSectorDecomp_overlapData_basisSpan_aux
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ)
     (blocks : (k : Fin r) → MPSTensor d (dim k))
@@ -969,12 +934,87 @@ theorem exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_with_overlapData_and_
   · intro N
     simpa [P, collapsedBntSectorDecomp] using classes.representative_mpv_span_eq (d := d) N
 
-/-- **Two-sided collapsed BNT overlap-span data from live-block span equality.**
+/-- **Phase-class BNT sector construction with primitive overlap data.**
 
-Apply the collapsed representative construction on both live block families.  The one-sided
-quotient span identity above transports a finite-length span equality for the original live
-blocks to the two independently chosen collapsed sector bases.  Thus the theorem packages all
-fields of `SectorBasisOverlapSpanHypotheses` without assuming that structure directly.
+This strengthens `exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks` by exposing the
+properties of the chosen representative basis blocks that are needed by the overlap-rigidity
+layer. The extra `hInj` hypothesis is intentional: the one-sided BNT constructor assumes
+irreducibility, primitivity, and trace preservation, while
+`SectorBasisOverlapSpanHypotheses` consumes length-1 MPS-injectivity.
+
+The finite-span comparison between two independently constructed sector bases is not part of
+this one-sided theorem; it depends on comparing the two sides. -/
+theorem exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_with_overlapData
+    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ)
+    (blocks : (k : Fin r) → MPSTensor d (dim k))
+    (hTP : ∀ k, ∑ i : Fin d, (blocks k i)ᴴ * blocks k i = 1)
+    (hIrr : ∀ k, IsIrreducibleTensor (blocks k))
+    (hPrim : ∀ k, _root_.IsPrimitive (transferMap (d := d) (D := dim k) (blocks k)))
+    (hInj : ∀ k, IsInjective (blocks k))
+    (hμne : ∀ k, μ k ≠ 0) :
+    ∃ P : SectorDecomposition d,
+      SameMPV₂ P.toTensor (toTensorFromBlocks (d := d) (μ := μ) blocks) ∧
+      HasBNTSectorData (d := d) P ∧
+      (∀ j : Fin P.basisCount, 0 < P.basisDim j) ∧
+      (∀ j : Fin P.basisCount, IsInjective (P.basis j)) ∧
+      (∀ j : Fin P.basisCount, (∑ i : Fin d, (P.basis j i)ᴴ * (P.basis j i)) = 1) ∧
+      (∀ j : Fin P.basisCount,
+        Filter.Tendsto (fun N => mpvOverlap (d := d) (P.basis j) (P.basis j) N)
+          Filter.atTop (nhds (1 : ℂ))) ∧
+      (∀ i j : Fin P.basisCount, i ≠ j →
+        Filter.Tendsto (fun N => mpvOverlap (d := d) (P.basis i) (P.basis j) N)
+          Filter.atTop (nhds 0)) := by
+  obtain ⟨P, hSame, hBNT, hPos, hBasisInj, hBasisTP, hSelfOverlap, hCrossOverlap, _hSpan⟩ :=
+    bntSectorDecomp_overlapData_basisSpan_aux
+      (d := d) μ blocks hTP hIrr hPrim hInj hμne
+  exact ⟨P, hSame, hBNT, hPos, hBasisInj, hBasisTP, hSelfOverlap, hCrossOverlap⟩
+
+/-- **Phase-class BNT sector construction with overlap data and the quotient span identity.**
+
+This strengthens `exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_with_overlapData` by
+also exposing the finite-length span invariant of the phase-class representative
+construction: at every length, the chosen MPV phase-class representatives span the same
+MPV subspace as the original block
+family.  This removes the quotient/enumeration bookkeeping from later two-sided span
+comparisons; the remaining comparison is the genuine equality of the two original live-block
+spans. -/
+theorem exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_with_overlapData_and_basisSpan
+    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ)
+    (blocks : (k : Fin r) → MPSTensor d (dim k))
+    (hTP : ∀ k, ∑ i : Fin d, (blocks k i)ᴴ * blocks k i = 1)
+    (hIrr : ∀ k, IsIrreducibleTensor (blocks k))
+    (hPrim : ∀ k, _root_.IsPrimitive (transferMap (d := d) (D := dim k) (blocks k)))
+    (hInj : ∀ k, IsInjective (blocks k))
+    (hμne : ∀ k, μ k ≠ 0) :
+    ∃ P : SectorDecomposition d,
+      SameMPV₂ P.toTensor (toTensorFromBlocks (d := d) (μ := μ) blocks) ∧
+      HasBNTSectorData (d := d) P ∧
+      (∀ j : Fin P.basisCount, 0 < P.basisDim j) ∧
+      (∀ j : Fin P.basisCount, IsInjective (P.basis j)) ∧
+      (∀ j : Fin P.basisCount, (∑ i : Fin d, (P.basis j i)ᴴ * (P.basis j i)) = 1) ∧
+      (∀ j : Fin P.basisCount,
+        Filter.Tendsto (fun N => mpvOverlap (d := d) (P.basis j) (P.basis j) N)
+          Filter.atTop (nhds (1 : ℂ))) ∧
+      (∀ i j : Fin P.basisCount, i ≠ j →
+        Filter.Tendsto (fun N => mpvOverlap (d := d) (P.basis i) (P.basis j) N)
+          Filter.atTop (nhds 0)) ∧
+      (∀ N,
+        Submodule.span ℂ (Set.range (fun j : Fin P.basisCount =>
+          mpvState (d := d) (P.basis j) N)) =
+        Submodule.span ℂ (Set.range (fun k : Fin r =>
+          mpvState (d := d) (blocks k) N))) := by
+  exact bntSectorDecomp_overlapData_basisSpan_aux
+    (d := d) μ blocks hTP hIrr hPrim hInj hμne
+
+/-- **Two-sided overlap-span data from live-block span equality.**
+
+Apply the construction using representatives of MPV phase-equivalence classes on both live
+block families. The one-sided quotient span identity above transports a finite-length span
+equality for the original live blocks to the two independently chosen sector bases. Thus the
+theorem provides all fields of `SectorBasisOverlapSpanHypotheses` without assuming that
+structure directly.
 
 The remaining paper-level task, not proved here, is to derive the displayed live-block span
 equality from the global `SameMPV₂` and structural reduction data. -/
