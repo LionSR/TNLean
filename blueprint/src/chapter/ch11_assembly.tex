@@ -777,6 +777,58 @@ single weighted block.
 	sector-weight conclusion.
 \end{proof}
 
+\begin{lemma}[Zero-tail cancellation]\label{lem:sameMPV2_live_of_zeroTail_eq}
+	\lean{MPSTensor.sameMPV₂_live_of_sameMPV₂_with_zeroTail_eq}
+	\leanok
+	\uses{def:same_mpv2, def:mpv}
+	Let $A$ and $B$ have the same MPV family, each decomposed as a zero-tail
+	tensor plus a live tensor. If the zero-tail dimensions agree, then the
+	live tensors themselves have the same MPV family, including at length zero.
+\end{lemma}
+
+\begin{proof}
+	\leanok
+	\uses{def:mpv}
+	At positive lengths the zero-tail term vanishes, so the live tensors
+	agree. At length zero the zero-tail values are equal by hypothesis, and
+	cancellation gives equality of the live tensors there too.
+\end{proof}
+
+\begin{theorem}[Common live blocks with zero-tail agreement and overlap-span data]%
+\label{thm:after_blocking_sector_common_blocks_overlap_span_zero_tail}
+	\lean{MPSTensor.fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_overlapSpan_zeroTail}
+	\leanok
+	\uses{def:same_mpv2_pos, lem:sameMPV2_live_of_zeroTail_eq,
+		thm:bnt_sector_decomp_tp_prim_irr_collapsed,
+		def:sector_basis_overlap_span_hyps}
+	Let $A$ and $B$ have the same MPV family. Fix $p > 0$ and suppose
+	$A^{[p]}$ and $B^{[p]}$ each decompose as a zero-tail tensor plus a
+	weighted live block tensor, with all blocks trace-preserving, primitive,
+	irreducible, and with nonzero weights. If the two zero-tail dimensions
+	agree and any pair of BNT sector decompositions equivalent to the two live
+	block tensors satisfies the primitive overlap-span hypotheses, then there
+	exist positive $p'$ and sector decompositions $P$, $Q$ such that
+	$A^{[p']}$ equals $P$'s tensor at all positive lengths, $B^{[p']}$ equals
+	$Q$'s tensor at all positive lengths, $P$ and $Q$ have the same full MPV
+	family, both have BNT data, and the matched sector-weight conclusion of
+	Theorem~\ref{thm:after_blocking_sector_bnt_pair_overlap_span} holds.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{lem:sameMPV2_live_of_zeroTail_eq,
+		thm:bnt_sector_decomp_tp_prim_irr_collapsed,
+		thm:sector_basis_overlap_span_to_matching,
+		thm:route_b_hetero_sector_matching}
+	Apply the zero-tail cancellation lemma to recover full equality of the
+	live block tensors. Then proceed as in
+	Theorem~\ref{thm:after_blocking_sector_common_blocks_overlap_span}: apply
+	the BNT construction to each live block family, compose the sector
+	equivalences to obtain equality of the total MPV families of $P$ and $Q$,
+	apply the overlap-span matching theorem, and conclude with the
+	heterogeneous sector comparison theorem.
+\end{proof}
+
 \begin{theorem}[Cast-compatible MPV scaling implies phase-matched sector comparison]%
 \label{thm:route_b_hetero_mpv_scaling}
 	\lean{MPSTensor.fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_mpvScaling_matched_basis}
