@@ -319,6 +319,21 @@ theorem wordTupleSpanTop_of_isCanonicalFormBNT_of_pairBlockSeparatingWords
   wordTupleSpanTop_of_isCanonicalFormBNT_of_blockSelectorWords μ A hCF
     (hasBlockSelectorWords_of_pairBlockSeparatingWords A hPair)
 
+/-- Canonical-form/BNT data plus a finite pair trace-separation criterion give
+full product-word span.
+
+This is the Route-B-facing formulation of the remaining finite-dimensional BNT
+step: once every ordered distinct pair has a common homogeneous trace-separating
+length, the duality lemma in `BiCFDerivation` produces pairwise separators, and
+the existing selector assembly gives product-word span. -/
+theorem wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingAt
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hCF : IsCanonicalFormBNT μ A) {S : ℕ}
+    (hSep : ∀ k j : Fin r, j ≠ k → PairTraceSeparatingAt (A k) (A j) S) :
+    WordTupleSpanTop A (1 + (r - 1) * S) :=
+  wordTupleSpanTop_of_isCanonicalFormBNT_of_pairBlockSeparatingWords μ A hCF
+    (hasPairBlockSeparatingWords_of_forall_pairTraceSeparatingAt A hSep)
+
 /-- Positive-length product-word span obtained from canonical-form/BNT data and
 pairwise block-separating word polynomials. -/
 theorem exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairBlockSeparatingWords
@@ -333,6 +348,21 @@ theorem exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairBlockSeparatingW
   refine ⟨1 + (r - 1) * S, Nat.add_pos_left Nat.zero_lt_one _, ?_⟩
   simpa [WordTupleSpanTop, wordTuple] using
     wordTupleSpanTop_of_isCanonicalFormBNT_of_pairBlockSeparatingWords μ A hCF hPair
+
+/-- Positive-length product-word span obtained from canonical-form/BNT data and
+the finite pair trace-separation criterion. -/
+theorem exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingAt
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hCF : IsCanonicalFormBNT μ A) {S : ℕ}
+    (hSep : ∀ k j : Fin r, j ≠ k → PairTraceSeparatingAt (A k) (A j) S) :
+    ∃ m : ℕ, 0 < m ∧
+      Submodule.span ℂ (Set.range fun ω : Fin m → Fin d =>
+        fun k : Fin r => evalWord (A k) (List.ofFn ω)) =
+      (⊤ : Submodule ℂ
+        ((k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) := by
+  refine ⟨1 + (r - 1) * S, Nat.add_pos_left Nat.zero_lt_one _, ?_⟩
+  simpa [WordTupleSpanTop, wordTuple] using
+    wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingAt μ A hCF hSep
 
 /-- Positive-length product-word span obtained from canonical-form/BNT data and
 finite block-selector words.
