@@ -11,14 +11,14 @@ The source paper discussion is `Papers/2011.12127/TN-Review-main.tex`,
 subsubsection label `sec:4:hams-gaps` ("Gaps"), especially equation
 `eq:4:martingale-2` and its surrounding principal-angle discussion:
 
-- line 2168: the martingale method relates the gap to the "`minimum non-zero angle
+- the martingale method relates the gap to the "`minimum non-zero angle
   between the ground spaces of overlapping regions`";
-- lines 2176--2179, equation `eq:4:martingale-2`: the required overlapping-pair
-  estimate is `h_ih_j+h_jh_i \ge -c_{ij} (1-\gamma)(h_i+h_j)`;
-- line 2180: the text following `eq:4:martingale-2` describes this estimate as a
+- equation `eq:4:martingale-2` gives the required overlapping-pair estimate
+  `h_ih_j+h_jh_i \ge -c_{ij} (1-\gamma)(h_i+h_j)`;
+- the text following `eq:4:martingale-2` describes this estimate as a
   "`lower bound on the smallest non-zero angle between the ground spaces of
   h_i and h_j`";
-- line 2182: the subsequent paragraph notes that the relevant quantities depend on
+- the subsequent paragraph notes that the relevant quantities depend on
   "`the principal angles between \ker h_i and \ker h_j`".
 
 The new Lean declarations do not claim this quantitative angle bound.  They identify,
