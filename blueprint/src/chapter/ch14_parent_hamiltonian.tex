@@ -2873,6 +2873,47 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     projection-span theorem.
 \end{proof}
 
+\begin{lemma}[Conditional Route B block split from BNT selector words]
+    \label{lem:route_b_block_split_from_bnt_selectors}
+    \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_le_iSup_of_bntSelectorWords}
+    \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_of_bntSelectorWords}
+    \lean{MPSTensor.parentHamiltonianGroundSpace_le_bntSpan_of_bntSelectorWords}
+    \leanok
+    \uses{def:cf_bnt, rem:word_tuple_span_top,
+        def:parent_hamiltonian_ground_space_bnt, def:bnt_span}
+    Let $A$ be in canonical-form/BNT, assume $1 < L$ and $N \ge L + 1$, and suppose
+    length-$S$ block-selector words are given.  If every assembled periodic-chain
+    ground vector has a boundary matrix representation commuting with all
+    length-$(1 + S)$ assembled words, then
+    \[
+        \mathcal G_{N,L}\bigl(\operatorname{Assemble}(\mu, A)\bigr)
+        \subseteq \bigsqcup_j \mathcal G_{N,L}(A_j).
+    \]
+    Together with the forward inclusion, this gives the corresponding
+    conditional block-splitting equality.  In the parent-ground-space
+    formulation, the same hypotheses imply containment in
+    $\operatorname{BNTSpan}_{N}(A)$.  The selector-word hypothesis and the
+    boundary representation remain explicit: this lemma does not derive
+    selector existence from BNT separation, nor the wrapping/open-chain boundary
+    representation.  It is the formal composition matching the CPGSV21 \S IV.C
+    block-injective ground-space route, where the regrowing argument is
+    restricted to block-diagonal boundary conditions.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:product_word_span_from_bnt_selectors,
+        lem:route_b_block_split_from_product_word_span}
+    Lemma~\ref{lem:product_word_span_from_bnt_selectors} turns the
+    canonical-form/BNT hypotheses plus length-$S$ selector words into the
+    product-word span condition at the positive length $1 + S$.
+    Lemma~\ref{lem:route_b_block_split_from_product_word_span} then applies
+    Route B with the boundary matrix commuting with the same
+    length-$(1 + S)$ assembled words.  The equality and BNT-span containment are
+    exactly the corresponding product-word-span consequences after this
+    selector-to-product-span replacement.
+\end{proof}
+
 \begin{theorem}[Containment in the BNT span by block decomposition]
     \label{thm:parent_ground_space_le_bnt_span}
     \lean{MPSTensor.parentHamiltonianGroundSpace_le_bntSpan_of_block_decomposition}
@@ -2880,8 +2921,7 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     \uses{def:parent_hamiltonian_ground_space_bnt, def:bnt_span,
         thm:chain_ground_space_eq_mpv_blk,
         lem:block_selectors_from_pairwise_separators,
-        lem:product_word_span_from_bnt_selectors,
-        lem:route_b_block_split_from_product_word_span}
+        lem:route_b_block_split_from_bnt_selectors}
     If $A$ is in canonical-form/BNT and $1 < L$ and $N \ge L + 1$, every vector in the
     assembled parent ground space should decompose into blockwise chain ground states, and
     therefore lie in the BNT span.
@@ -2891,12 +2931,12 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     \notready
     The remaining structural step is the periodic block decomposition of the
     assembled chain ground space.  Lemma~\ref{lem:block_selectors_from_pairwise_separators}
-    reduces global selectors to pairwise block-separating word polynomials, and
-    Lemma~\ref{lem:product_word_span_from_bnt_selectors} reduces product-word span
-    to those finite selector words.  Lemma~\ref{lem:route_b_block_split_from_product_word_span}
-    gives the conditional Route B composition once that product-word span is available
-    and the wrapping-window comparison provides the commuting boundary matrix.
-    With that decomposition available,
+    reduces finite selector words to pairwise block-separating word polynomials.
+    Lemma~\ref{lem:route_b_block_split_from_bnt_selectors} then gives the conditional
+    Route B composition once those selector words and the wrapping-window commuting
+    boundary matrix are available.  What remains open is to derive the needed
+    separation data and to supply the compatible boundary representation.  With the
+    block decomposition available,
     one applies the blockwise injective uniqueness theorem to each block separately
     and recovers the BNT span.
 \end{proof}
