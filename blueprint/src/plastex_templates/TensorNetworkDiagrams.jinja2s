@@ -1,0 +1,26 @@
+name: TNMPSLocal TNMPSWord TNMPV TNTransferMap TNMPOCell TNMPOChain TNLPDO
+{{ obj.tn_svg_html }}
+
+name: TNGaugeConjugation TNPhysicalRealization TNLinearTwist
+{{ obj.tn_svg_html }}
+
+name: TNPermutationTwistLabeled TNPermutationTwist TNTwistedTransfer
+{{ obj.tn_svg_html }}
+
+name: TNCondCOne TNCondCTwo TNStringOrderParameter TNVirtualInsertion
+{{ obj.tn_svg_html }}
+
+name: TNInternalTraceInsertion TNExternalTraceInsertion TNBoundaryRegrow
+{{ obj.tn_svg_html }}
+
+name: TNLocalEqualityStep TNPeriodicGauge TNGroundSpaceMap
+{{ obj.tn_svg_html }}
+
+name: TNPEPSEdgeGaugeOrientation TNPEPSGaugeVertexAction
+{{ obj.tn_svg_html }}
+
+name: TNPEPSGaugeCancellation TNPEPSLocalGaugeExtraction TNPEPSGlobalConsistency
+{{ obj.tn_svg_html }}
+
+name: TNMPOCellDiagram TNMPOChainDiagram TNLPDODiagram
+{{ obj.tn_svg_html }}
