@@ -57,19 +57,9 @@ theorem mem_groundSpaceES_iff (A : MPSTensor d D) (L : ℕ)
     (v : EuclideanSpace ℂ (Cfg d L)) :
     v ∈ groundSpaceES A L ↔
       (WithLp.linearEquiv 2 ℂ (NSiteSpace d L)) v ∈ groundSpace A L := by
-  let e := WithLp.linearEquiv 2 ℂ (NSiteSpace d L)
-  constructor
-  · intro hv
-    rw [groundSpaceES, Submodule.mem_map] at hv
-    rcases hv with ⟨w, hw, hwv⟩
-    have hvw : e v = w := by
-      rw [← hwv]
-      simp [e]
-    change e v ∈ groundSpace A L
-    rwa [hvw]
-  · intro hv
-    rw [groundSpaceES, Submodule.mem_map]
-    exact ⟨e v, hv, by simp [e]⟩
+  rw [groundSpaceES]
+  exact Submodule.mem_map_equiv (p := groundSpace A L)
+    (e := (WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm) (x := v)
 
 /-! ### Parent interaction -/
 
