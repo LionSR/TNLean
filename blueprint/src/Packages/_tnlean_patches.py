@@ -30,7 +30,7 @@ from __future__ import annotations
 import io
 import pickle
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable
 
 from leanblueprint.Packages import blueprint as _blueprint
 import plasTeX.Packages.natbib as _natbib
@@ -88,9 +88,9 @@ bibitem = _natbib.thebibliography.bibitem
 def _fallback_citation(self, *, parenthetical: bool):
     """Render unresolved natbib citations without producing bare ``()``.
 
-    The ordering mirrors ``citep.citation``/``citet.citation`` for the citation
-    forms used here: citation text followed by natbib's postnote object, whose
-    rendering already includes the configured postnote separator.
+    The ordering mirrors the corresponding natbib citation shape for the
+    citation forms used here: citation text followed by natbib's postnote
+    object, whose rendering already includes the configured postnote separator.
     """
 
     res = self.ownerDocument.createDocumentFragment()
@@ -108,30 +108,45 @@ def _fallback_citation(self, *, parenthetical: bool):
     return res
 
 
-def _wrap_natbib_citation(cls, *, parenthetical: bool) -> None:
+def _cite_uses_parenthetical_fallback(self) -> bool:
+    return bool(self.prenote or self.postnote)
+
+
+def _has_unresolved_bibitems(self) -> bool:
+    bibitems = self.bibitems
+    return not bibitems or any(
+        getattr(item, "bibcite", None) is None
+        or getattr(item.bibcite, "attributes", None) is None
+        for item in bibitems
+    )
+
+
+def _wrap_natbib_citation(
+    cls, *, parenthetical: bool | Callable[[Any], bool]
+) -> None:
     original = cls.citation
 
     def citation(self, *args, **kwargs):
-        bibitems = self.bibitems
-        if not bibitems or any(
-            getattr(item, "bibcite", None) is None
-            or getattr(item.bibcite, "attributes", None) is None
-            for item in bibitems
-        ):
-            return _fallback_citation(self, parenthetical=parenthetical)
+        if _has_unresolved_bibitems(self):
+            use_parentheses = (
+                parenthetical(self) if callable(parenthetical) else parenthetical
+            )
+            return _fallback_citation(self, parenthetical=use_parentheses)
         return original(self, *args, **kwargs)
 
     cls.citation = citation
 
 
-# Capitalized and ``*full`` variants inherit these ``citation`` methods; extend
-# this list if the blueprint starts using author/year-only natbib commands.
+# Capitalized, ``*full``, and alias variants inherit these ``citation`` methods.
 for _cls, _parenthetical in (
-    (_natbib.cite, True),
+    (_natbib.cite, _cite_uses_parenthetical_fallback),
     (_natbib.citep, True),
     (_natbib.citet, False),
     (_natbib.citealt, False),
     (_natbib.citealp, False),
+    (_natbib.citeauthor, False),
+    (_natbib.citeyear, False),
+    (_natbib.citeyearpar, True),
 ):
     _wrap_natbib_citation(_cls, parenthetical=_parenthetical)
 
