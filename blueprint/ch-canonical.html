@@ -6060,7 +6060,7 @@
           
           <li><a href="ch-canonical.html#thm:cyclic_sector_decomp_after_blocking">Theorem 11.64</a></li>
           
-          <li><a href="ch-canonical.html#thm:blocked_sector_unconditional">Theorem 11.90</a></li>
+          <li><a href="ch-canonical.html#thm:blocked_sector_unconditional">Theorem 11.92</a></li>
           
           <li><a href="ch-canonical.html#thm:conjtranspose_kraus_setup">Theorem 11.61</a></li>
           
@@ -6068,7 +6068,7 @@
           
           <li><a href="ch-canonical.html#thm:cyclic_sector_decomp_after_blocking">Theorem 11.64</a></li>
           
-          <li><a href="ch-canonical.html#thm:blocked_sector_unconditional">Theorem 11.90</a></li>
+          <li><a href="ch-canonical.html#thm:blocked_sector_unconditional">Theorem 11.92</a></li>
           
         </ul>
     
@@ -6111,7 +6111,158 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> The proof repeats the cyclic-sector construction of Theorem&#160;<a href="ch-canonical.html#thm:cyclic_sector_decomp_irr_tp">11.65</a>, keeps the projection and compression data, and applies Theorem&#160;<a href="ch-canonical.html#thm:blocked_sector_unconditional">11.90</a> to the resulting sector blocks. </p>
+  <p> The proof repeats the cyclic-sector construction of Theorem&#160;<a href="ch-canonical.html#thm:cyclic_sector_decomp_irr_tp">11.65</a>, keeps the projection and compression data, and applies Theorem&#160;<a href="ch-canonical.html#thm:blocked_sector_unconditional">11.92</a> to the resulting sector blocks. </p>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:primitive_irreducible_cyclic_sectors">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">11.67</span>
+    <span class="definition_thmtitle">Primitive irreducible cyclic-sector package</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-canonical.html#def:primitive_irreducible_cyclic_sectors">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mps.html#def:blocked_tensor">Definition 2.37</a></li>
+          
+          <li><a href="ch-canonical.html#def:tensor_from_blocks">Definition 11.1</a></li>
+          
+          <li><a href="ch-mps.html#def:same_mpv2">Definition 2.12</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.HasPrimitiveIrreducibleCyclicSectors" class="lean_decl">MPSTensor.HasPrimitiveIrreducibleCyclicSectors</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>   A tensor has primitive irreducible cyclic sectors if some positive period-removal length \(m\) represents \(A^{[m]}\) as a unit-weight block tensor whose sector blocks are trace-preserving, have primitive transfer maps, are tensor-irreducible, and have positive bond dimensions. This length \(m\) is the period-removal length, not the later finite blocking length used for common refinement or injectivity. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:has_primitive_irreducible_cyclic_sectors_tp_irr">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">11.68</span>
+    <span class="theorem_thmtitle">Trace-preserving irreducible tensors have primitive irreducible cyclic sectors</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-canonical.html#thm:has_primitive_irreducible_cyclic_sectors_tp_irr">#</a>
+    
+    <a class="icon proof" href="ch-canonical.html#a0000000805"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-canonical.html#def:primitive_irreducible_cyclic_sectors">Definition 11.67</a></li>
+          
+          <li><a href="ch-canonical.html#thm:cyclic_sector_decomp_irr_tp_prim_irr">Theorem 11.66</a></li>
+          
+          <li><a href="ch-canonical.html#thm:cyclic_sector_decomp_irr_tp_prim_irr">Theorem 11.66</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.hasPrimitiveIrreducibleCyclicSectors_of_TP_of_isIrreducibleTensor" class="lean_decl">MPSTensor.hasPrimitiveIrreducibleCyclicSectors_of_TP_of_isIrreducibleTensor</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   Every trace-preserving irreducible tensor satisfies Definition&#160;<a href="ch-canonical.html#def:primitive_irreducible_cyclic_sectors">11.67</a>. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000805">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> This is Theorem&#160;<a href="ch-canonical.html#thm:cyclic_sector_decomp_irr_tp_prim_irr">11.66</a>, repackaged as the predicate of Definition&#160;<a href="ch-canonical.html#def:primitive_irreducible_cyclic_sectors">11.67</a>. </p>
 
   </div>
 </div>
@@ -6122,7 +6273,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">11.67</span>
+    <span class="lemma_thmlabel">11.69</span>
     <span class="lemma_thmtitle">Pairwise orthogonality from projection sum</span>
     <div class="thm_header_extras">
 
@@ -6133,7 +6284,7 @@
 
     <a class="icon proof" href="ch-canonical.html#lem:pairwise_ortho_proj_sum">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000805"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000806"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6164,7 +6315,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000805">
+<div class="proof_wrapper" id="a0000000806">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6181,7 +6332,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">11.68</span>
+    <span class="lemma_thmlabel">11.70</span>
     <span class="lemma_thmtitle">Corner preservation from adjoint-fixed projection</span>
     <div class="thm_header_extras">
 
@@ -6192,7 +6343,7 @@
 
     <a class="icon proof" href="ch-canonical.html#lem:corner_preserv_adjoint_fixed">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000806"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000807"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6245,7 +6396,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000806">
+<div class="proof_wrapper" id="a0000000807">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6262,7 +6413,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">11.69</span>
+    <span class="lemma_thmlabel">11.71</span>
     <span class="lemma_thmtitle">Orbit-sum fixed point</span>
     <div class="thm_header_extras">
 
@@ -6273,7 +6424,7 @@
 
     <a class="icon proof" href="ch-canonical.html#lem:orbit_sum_fixed">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000807"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000808"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6304,7 +6455,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000807">
+<div class="proof_wrapper" id="a0000000808">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6321,7 +6472,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">11.70</span>
+    <span class="lemma_thmlabel">11.72</span>
     <span class="lemma_thmtitle">Orbit iterate supported on shifted sector</span>
     <div class="thm_header_extras">
 
@@ -6332,7 +6483,7 @@
 
     <a class="icon proof" href="ch-canonical.html#lem:orbit_iterate_shifted_sector">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000808"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000809"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6363,7 +6514,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000808">
+<div class="proof_wrapper" id="a0000000809">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6380,7 +6531,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">11.71</span>
+    <span class="lemma_thmlabel">11.73</span>
     <span class="lemma_thmtitle">Orbit iterate preserves orthogonal projection</span>
     <div class="thm_header_extras">
 
@@ -6391,7 +6542,7 @@
 
     <a class="icon proof" href="ch-canonical.html#lem:orbit_iterate_proj">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000809"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000810"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6407,9 +6558,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#lem:orbit_iterate_shifted_sector">Lemma 11.70</a></li>
+          <li><a href="ch-canonical.html#lem:orbit_iterate_shifted_sector">Lemma 11.72</a></li>
           
-          <li><a href="ch-canonical.html#lem:orbit_iterate_shifted_sector">Lemma 11.70</a></li>
+          <li><a href="ch-canonical.html#lem:orbit_iterate_shifted_sector">Lemma 11.72</a></li>
           
         </ul>
     
@@ -6440,11 +6591,11 @@
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>   Under the same cyclic shift and multiplicative-domain hypotheses as Lemma&#160;<a href="ch-canonical.html#lem:orbit_iterate_shifted_sector">11.70</a>, suppose additionally that \(T\) maps every orthogonal projection supported on a single sector to an orthogonal projection. If \(Q\) is an orthogonal projection supported on \(P_k\), then \(T^l(Q)\) is an orthogonal projection for each \(0 \le l {\lt} m\). </p>
+  <p>   Under the same cyclic shift and multiplicative-domain hypotheses as Lemma&#160;<a href="ch-canonical.html#lem:orbit_iterate_shifted_sector">11.72</a>, suppose additionally that \(T\) maps every orthogonal projection supported on a single sector to an orthogonal projection. If \(Q\) is an orthogonal projection supported on \(P_k\), then \(T^l(Q)\) is an orthogonal projection for each \(0 \le l {\lt} m\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000809">
+<div class="proof_wrapper" id="a0000000810">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6452,7 +6603,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Induction on \(l\). The base case is the hypothesis on \(Q\). At each step, Lemma&#160;<a href="ch-canonical.html#lem:orbit_iterate_shifted_sector">11.70</a> guarantees that \(T^n(Q)\) is supported on a single sector, so the one-step preservation hypothesis applies. </p>
+  <p> Induction on \(l\). The base case is the hypothesis on \(Q\). At each step, Lemma&#160;<a href="ch-canonical.html#lem:orbit_iterate_shifted_sector">11.72</a> guarantees that \(T^n(Q)\) is supported on a single sector, so the one-step preservation hypothesis applies. </p>
 
   </div>
 </div>
@@ -6461,7 +6612,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">11.72</span>
+    <span class="lemma_thmlabel">11.74</span>
     <span class="lemma_thmtitle">Orbit sum of a full sector projection</span>
     <div class="thm_header_extras">
 
@@ -6472,7 +6623,7 @@
 
     <a class="icon proof" href="ch-canonical.html#lem:orbit_sum_full_sector">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000810"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000811"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6488,7 +6639,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#lem:orbit_sum_fixed">Lemma 11.69</a></li>
+          <li><a href="ch-canonical.html#lem:orbit_sum_fixed">Lemma 11.71</a></li>
           
         </ul>
     
@@ -6520,13 +6671,13 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   Let \((P_k)_{k=1}^m\) be orthogonal projections with \(\sum _k P_k = \mathbb {1}\) and cyclic shift \(T(P_{k+1}) = P_k\). Then for every sector index \(k\), </p>
-<div class="displaymath" id="a0000000811">
+<div class="displaymath" id="a0000000812">
   \[  \sum _{l=0}^{m-1} T^l(P_k) \; =\;  \mathbb {1}.  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000810">
+<div class="proof_wrapper" id="a0000000811">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6543,7 +6694,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">11.73</span>
+    <span class="theorem_thmlabel">11.75</span>
     <span class="theorem_thmtitle">Sector irreducibility from orbit-sum lift</span>
     <div class="thm_header_extras">
 
@@ -6554,7 +6705,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:sector_irred_orbit_lift">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000812"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000813"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6607,7 +6758,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000812">
+<div class="proof_wrapper" id="a0000000813">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6624,7 +6775,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">11.74</span>
+    <span class="lemma_thmlabel">11.76</span>
     <span class="lemma_thmtitle">Fixed-point upgrade from irreducibility and trace preservation</span>
     <div class="thm_header_extras">
 
@@ -6635,7 +6786,7 @@
 
     <a class="icon proof" href="ch-canonical.html#lem:fix_upgrade_peripheral">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000813"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000814"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6700,7 +6851,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000813">
+<div class="proof_wrapper" id="a0000000814">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6717,7 +6868,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">11.75</span>
+    <span class="definition_thmlabel">11.77</span>
     <span class="definition_thmtitle">Sector fixed-point-algebra rigidity</span>
     <div class="thm_header_extras">
 
@@ -6728,7 +6879,7 @@
 
     <a class="icon proof" href="ch-canonical.html#def:sector_fixed_point_algebra_rigidity">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000814"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000815"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6756,17 +6907,17 @@
   </div>
   <div class="definition_thmcontent">
   <p>  Let \(T\) be the adjoint transfer map and \((P_k)_{k=1}^m\) a cyclic family of orthogonal sector projections. We say that the sector dynamics satisfies fixed-point-algebra rigidity if, for each \(k\), the one-step map \(T\) is multiplicative on the \(T^m\)-fixed operators supported on the corner \(P_k \mathcal M_D P_k\): whenever </p>
-<div class="displaymath" id="a0000000815">
+<div class="displaymath" id="a0000000816">
   \[  X = X P_k = P_k X, \qquad Y = Y P_k = P_k Y, \qquad T^m(X) = X, \qquad T^m(Y) = Y,  \]
 </div>
 <p> one has </p>
-<div class="displaymath" id="a0000000816">
+<div class="displaymath" id="a0000000817">
   \[  T(XY) = T(X) T(Y).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000814">
+<div class="proof_wrapper" id="a0000000815">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6774,7 +6925,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>This is the abstract multiplicativity property used in the orbit-sum construction. Theorem&#160;<a href="ch-canonical.html#thm:sector_fixed_algebra_irred_cyclic">11.77</a> shows that it is automatic in the irreducible trace-preserving cyclic setting. </p>
+  <p>This is the abstract multiplicativity property used in the orbit-sum construction. Theorem&#160;<a href="ch-canonical.html#thm:sector_fixed_algebra_irred_cyclic">11.79</a> shows that it is automatic in the irreducible trace-preserving cyclic setting. </p>
 
   </div>
 </div>
@@ -6783,7 +6934,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">11.76</span>
+    <span class="lemma_thmlabel">11.78</span>
     <span class="lemma_thmtitle">Projection step from sector fixed-point-algebra rigidity</span>
     <div class="thm_header_extras">
 
@@ -6794,7 +6945,7 @@
 
     <a class="icon proof" href="ch-canonical.html#lem:sector_fixed_algebra_proj_step">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000817"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000818"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6810,9 +6961,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#def:sector_fixed_point_algebra_rigidity">Definition 11.75</a></li>
+          <li><a href="ch-canonical.html#def:sector_fixed_point_algebra_rigidity">Definition 11.77</a></li>
           
-          <li><a href="ch-canonical.html#def:sector_fixed_point_algebra_rigidity">Definition 11.75</a></li>
+          <li><a href="ch-canonical.html#def:sector_fixed_point_algebra_rigidity">Definition 11.77</a></li>
           
         </ul>
     
@@ -6847,7 +6998,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000817">
+<div class="proof_wrapper" id="a0000000818">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6856,7 +7007,7 @@
   </div>
   <div class="proof_content">
   <p> Kraus maps preserve conjugate transpose, so \(T(X)\) is Hermitian. The rigidity hypothesis gives </p>
-<div class="displaymath" id="a0000000818">
+<div class="displaymath" id="a0000000819">
   \[  T(X)^2 = T(X^2) = T(X),  \]
 </div>
 <p> since \(X^2 = X\) for an orthogonal projection. Therefore \(T(X)\) is again an orthogonal projection. </p>
@@ -6868,7 +7019,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">11.77</span>
+    <span class="theorem_thmlabel">11.79</span>
     <span class="theorem_thmtitle">Sector fixed-point-algebra rigidity from irreducibility</span>
     <div class="thm_header_extras">
 
@@ -6879,7 +7030,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:sector_fixed_algebra_irred_cyclic">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000819"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000820"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6895,13 +7046,13 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#def:sector_fixed_point_algebra_rigidity">Definition 11.75</a></li>
+          <li><a href="ch-canonical.html#def:sector_fixed_point_algebra_rigidity">Definition 11.77</a></li>
           
-          <li><a href="ch-canonical.html#lem:orbit_sum_fixed">Lemma 11.69</a></li>
+          <li><a href="ch-canonical.html#lem:orbit_sum_fixed">Lemma 11.71</a></li>
           
-          <li><a href="ch-canonical.html#def:sector_fixed_point_algebra_rigidity">Definition 11.75</a></li>
+          <li><a href="ch-canonical.html#def:sector_fixed_point_algebra_rigidity">Definition 11.77</a></li>
           
-          <li><a href="ch-canonical.html#lem:orbit_sum_fixed">Lemma 11.69</a></li>
+          <li><a href="ch-canonical.html#lem:orbit_sum_fixed">Lemma 11.71</a></li>
           
         </ul>
     
@@ -6936,7 +7087,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000819">
+<div class="proof_wrapper" id="a0000000820">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6945,11 +7096,11 @@
   </div>
   <div class="proof_content">
   <p> Fix \(k\) and let \(X,Y\) be operators supported on \(P_k\) and fixed by \((\mathcal{E}_A^\dagger )^m\). For such an \(X\), the orbit sum </p>
-<div class="displaymath" id="a0000000820">
+<div class="displaymath" id="a0000000821">
   \[  R_X := \sum _{l=0}^{m-1} (\mathcal{E}_A^\dagger )^l(X)  \]
 </div>
-<p> is fixed by \(\mathcal{E}_A^\dagger \) by Lemma&#160;<a href="ch-canonical.html#lem:orbit_sum_fixed">11.69</a>. Since the trace-preserving hypothesis makes \(\mathcal{E}_A^\dagger \) unital, the irreducible unital fixed-point theorem implies that \(R_X\) is a scalar multiple of \(\mathbb {1}\). Compressing by \(P_k\) recovers \(X\), so \(X = c P_k\); the same argument gives \(Y = c' P_k\). Therefore </p>
-<div class="displaymath" id="a0000000821">
+<p> is fixed by \(\mathcal{E}_A^\dagger \) by Lemma&#160;<a href="ch-canonical.html#lem:orbit_sum_fixed">11.71</a>. Since the trace-preserving hypothesis makes \(\mathcal{E}_A^\dagger \) unital, the irreducible unital fixed-point theorem implies that \(R_X\) is a scalar multiple of \(\mathbb {1}\). Compressing by \(P_k\) recovers \(X\), so \(X = c P_k\); the same argument gives \(Y = c' P_k\). Therefore </p>
+<div class="displaymath" id="a0000000822">
   \[  \mathcal{E}_A^\dagger (XY) = \mathcal{E}_A^\dagger ((cc') P_k) = (cc') P_{k-1} = \mathcal{E}_A^\dagger (X)\mathcal{E}_A^\dagger (Y),  \]
 </div>
 <p> using the cyclic relation \(\mathcal{E}_A^\dagger (P_k)=P_{k-1}\). </p>
@@ -6961,7 +7112,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">11.78</span>
+    <span class="theorem_thmlabel">11.80</span>
     <span class="theorem_thmtitle">Sector fixed-point-algebra rigidity from scalar blocked fixed points</span>
     <div class="thm_header_extras">
 
@@ -6972,7 +7123,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:sector_fixed_algebra_scalar_blocked">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000822"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000823"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6988,9 +7139,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#def:sector_fixed_point_algebra_rigidity">Definition 11.75</a></li>
+          <li><a href="ch-canonical.html#def:sector_fixed_point_algebra_rigidity">Definition 11.77</a></li>
           
-          <li><a href="ch-canonical.html#def:sector_fixed_point_algebra_rigidity">Definition 11.75</a></li>
+          <li><a href="ch-canonical.html#def:sector_fixed_point_algebra_rigidity">Definition 11.77</a></li>
           
         </ul>
     
@@ -7025,7 +7176,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000822">
+<div class="proof_wrapper" id="a0000000823">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7034,7 +7185,7 @@
   </div>
   <div class="proof_content">
   <p> Fix \(k\) and let \(X, Y\) be operators supported on \(P_k\) and fixed by \((\mathcal{E}_A^\dagger )^m\). Lift each to the corresponding compressed sector via the intertwining equivalence \(\varphi _k\); the scalar fixed-point hypothesis yields \(X = c_X P_k\) and \(Y = c_Y P_k\). Then </p>
-<div class="displaymath" id="a0000000823">
+<div class="displaymath" id="a0000000824">
   \[  \mathcal{E}_A^\dagger (XY) = \mathcal{E}_A^\dagger ((c_X c_Y) P_k) = (c_X c_Y) P_{k-1} = \mathcal{E}_A^\dagger (X)\mathcal{E}_A^\dagger (Y),  \]
 </div>
 <p> using the cyclic relation \(\mathcal{E}_A^\dagger (P_k) = P_{k-1}\) and the linearity of \(\mathcal{E}_A^\dagger \). </p>
@@ -7046,7 +7197,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">11.79</span>
+    <span class="lemma_thmlabel">11.81</span>
     <span class="lemma_thmtitle">Orbit-sum construction of the sector lift</span>
     <div class="thm_header_extras">
 
@@ -7057,7 +7208,7 @@
 
     <a class="icon proof" href="ch-canonical.html#lem:orbit_sum_hLift_construction">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000824"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000825"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7073,17 +7224,17 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#lem:orbit_sum_fixed">Lemma 11.69</a></li>
+          <li><a href="ch-canonical.html#lem:orbit_sum_fixed">Lemma 11.71</a></li>
           
-          <li><a href="ch-canonical.html#lem:orbit_sum_full_sector">Lemma 11.72</a></li>
+          <li><a href="ch-canonical.html#lem:orbit_sum_full_sector">Lemma 11.74</a></li>
           
-          <li><a href="ch-canonical.html#thm:sector_irred_orbit_lift">Theorem 11.73</a></li>
+          <li><a href="ch-canonical.html#thm:sector_irred_orbit_lift">Theorem 11.75</a></li>
           
-          <li><a href="ch-canonical.html#lem:orbit_sum_fixed">Lemma 11.69</a></li>
+          <li><a href="ch-canonical.html#lem:orbit_sum_fixed">Lemma 11.71</a></li>
           
-          <li><a href="ch-canonical.html#lem:orbit_sum_full_sector">Lemma 11.72</a></li>
+          <li><a href="ch-canonical.html#lem:orbit_sum_full_sector">Lemma 11.74</a></li>
           
-          <li><a href="ch-canonical.html#thm:sector_irred_orbit_lift">Theorem 11.73</a></li>
+          <li><a href="ch-canonical.html#thm:sector_irred_orbit_lift">Theorem 11.75</a></li>
           
         </ul>
     
@@ -7127,14 +7278,14 @@
 </li>
 </ol>
 <p> Then for every sector \(k\) and every orthogonal subprojection \(Q \le P_k\) which is a corner fixed point of \(T^m\), the orbit sum </p>
-<div class="displaymath" id="a0000000825">
+<div class="displaymath" id="a0000000826">
   \[  R \; :=\;  \sum _{l=0}^{m-1} T^l(Q)  \]
 </div>
-<p> is an orthogonal projection, preserved by \(T\), with \(Q = 0 \Leftrightarrow R = 0\) and \(Q = P_k \Leftrightarrow R = \mathbb {1}\). In particular \(R\) witnesses the orbit-sum lift hypothesis of Theorem&#160;<a href="ch-canonical.html#thm:sector_irred_orbit_lift">11.73</a>. </p>
+<p> is an orthogonal projection, preserved by \(T\), with \(Q = 0 \Leftrightarrow R = 0\) and \(Q = P_k \Leftrightarrow R = \mathbb {1}\). In particular \(R\) witnesses the orbit-sum lift hypothesis of Theorem&#160;<a href="ch-canonical.html#thm:sector_irred_orbit_lift">11.75</a>. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000824">
+<div class="proof_wrapper" id="a0000000825">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7142,7 +7293,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> The iterates \(T^l(Q)\) are each orthogonal projections (repeatedly using the projection-step hypothesis), supported on the shifted sector \(P_{k-l}\), and are therefore pairwise orthogonal because distinct sectors are. This gives both the Hermitian and idempotent conjuncts for \(R\). Fixedness under \(T\) follows from \(T^m(Q) = Q\) and Lemma&#160;<a href="ch-canonical.html#lem:orbit_sum_fixed">11.69</a>, and corner preservation from the adjoint trace-preserving relation. The zero equivalence uses \(R\cdot Q = Q\) (the diagonal term \(l=0\) is \(Q\), off-diagonal terms vanish by pairwise orthogonality); the full-sector equivalence uses \(P_k \cdot R \cdot P_k = Q\) and Lemma&#160;<a href="ch-canonical.html#lem:orbit_sum_full_sector">11.72</a>. </p>
+  <p> The iterates \(T^l(Q)\) are each orthogonal projections (repeatedly using the projection-step hypothesis), supported on the shifted sector \(P_{k-l}\), and are therefore pairwise orthogonal because distinct sectors are. This gives both the Hermitian and idempotent conjuncts for \(R\). Fixedness under \(T\) follows from \(T^m(Q) = Q\) and Lemma&#160;<a href="ch-canonical.html#lem:orbit_sum_fixed">11.71</a>, and corner preservation from the adjoint trace-preserving relation. The zero equivalence uses \(R\cdot Q = Q\) (the diagonal term \(l=0\) is \(Q\), off-diagonal terms vanish by pairwise orthogonality); the full-sector equivalence uses \(P_k \cdot R \cdot P_k = Q\) and Lemma&#160;<a href="ch-canonical.html#lem:orbit_sum_full_sector">11.74</a>. </p>
 
   </div>
 </div>
@@ -7151,7 +7302,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">11.80</span>
+    <span class="lemma_thmlabel">11.82</span>
     <span class="lemma_thmtitle">Orbit-sum construction, projection-step variant</span>
     <div class="thm_header_extras">
 
@@ -7162,7 +7313,7 @@
 
     <a class="icon proof" href="ch-canonical.html#lem:orbit_sum_hLift_proj_step">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000826"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000827"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7178,13 +7329,13 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#lem:fix_upgrade_peripheral">Lemma 11.74</a></li>
+          <li><a href="ch-canonical.html#lem:fix_upgrade_peripheral">Lemma 11.76</a></li>
           
-          <li><a href="ch-canonical.html#lem:orbit_sum_hLift_construction">Lemma 11.79</a></li>
+          <li><a href="ch-canonical.html#lem:orbit_sum_hLift_construction">Lemma 11.81</a></li>
           
-          <li><a href="ch-canonical.html#lem:fix_upgrade_peripheral">Lemma 11.74</a></li>
+          <li><a href="ch-canonical.html#lem:fix_upgrade_peripheral">Lemma 11.76</a></li>
           
-          <li><a href="ch-canonical.html#lem:orbit_sum_hLift_construction">Lemma 11.79</a></li>
+          <li><a href="ch-canonical.html#lem:orbit_sum_hLift_construction">Lemma 11.81</a></li>
           
         </ul>
     
@@ -7215,11 +7366,11 @@
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>   Let \(A\) be a left-canonical MPS tensor with irreducible adjoint transfer map, and let \((P_k)_{k=1}^m\) be cyclic orthogonal sector projections. Assume the projection-step hypothesis of Lemma&#160;<a href="ch-canonical.html#lem:orbit_sum_hLift_construction">11.79</a>. Then the orbit-sum lift holds: for every orthogonal subprojection \(Q \le P_k\) whose corner is preserved by \((\mathcal{E}_A^\dagger )^m\), there is a global projection \(R\) invariant under \(\mathcal{E}_A^\dagger \) with the same zero/full-sector tests. </p>
+  <p>   Let \(A\) be a left-canonical MPS tensor with irreducible adjoint transfer map, and let \((P_k)_{k=1}^m\) be cyclic orthogonal sector projections. Assume the projection-step hypothesis of Lemma&#160;<a href="ch-canonical.html#lem:orbit_sum_hLift_construction">11.81</a>. Then the orbit-sum lift holds: for every orthogonal subprojection \(Q \le P_k\) whose corner is preserved by \((\mathcal{E}_A^\dagger )^m\), there is a global projection \(R\) invariant under \(\mathcal{E}_A^\dagger \) with the same zero/full-sector tests. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000826">
+<div class="proof_wrapper" id="a0000000827">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7227,7 +7378,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Combine the original orbit-sum construction with Lemma&#160;<a href="ch-canonical.html#lem:fix_upgrade_peripheral">11.74</a>, which supplies the fixed-point upgrade from irreducibility and trace preservation. The irreducibility hypothesis needed there is obtained by transporting irreducibility from the adjoint transfer map to the tensor and then back to the primal transfer map. </p>
+  <p> Combine the original orbit-sum construction with Lemma&#160;<a href="ch-canonical.html#lem:fix_upgrade_peripheral">11.76</a>, which supplies the fixed-point upgrade from irreducibility and trace preservation. The irreducibility hypothesis needed there is obtained by transporting irreducibility from the adjoint transfer map to the tensor and then back to the primal transfer map. </p>
 
   </div>
 </div>
@@ -7236,7 +7387,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">11.81</span>
+    <span class="lemma_thmlabel">11.83</span>
     <span class="lemma_thmtitle">Orbit-sum construction, fixed-point-algebra variant</span>
     <div class="thm_header_extras">
 
@@ -7247,7 +7398,7 @@
 
     <a class="icon proof" href="ch-canonical.html#lem:orbit_sum_hLift_fixed_algebra">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000827"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000828"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7263,21 +7414,21 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#def:sector_fixed_point_algebra_rigidity">Definition 11.75</a></li>
+          <li><a href="ch-canonical.html#def:sector_fixed_point_algebra_rigidity">Definition 11.77</a></li>
           
-          <li><a href="ch-canonical.html#lem:fix_upgrade_peripheral">Lemma 11.74</a></li>
+          <li><a href="ch-canonical.html#lem:fix_upgrade_peripheral">Lemma 11.76</a></li>
           
-          <li><a href="ch-canonical.html#lem:sector_fixed_algebra_proj_step">Lemma 11.76</a></li>
+          <li><a href="ch-canonical.html#lem:sector_fixed_algebra_proj_step">Lemma 11.78</a></li>
           
-          <li><a href="ch-canonical.html#lem:orbit_sum_hLift_construction">Lemma 11.79</a></li>
+          <li><a href="ch-canonical.html#lem:orbit_sum_hLift_construction">Lemma 11.81</a></li>
           
-          <li><a href="ch-canonical.html#def:sector_fixed_point_algebra_rigidity">Definition 11.75</a></li>
+          <li><a href="ch-canonical.html#def:sector_fixed_point_algebra_rigidity">Definition 11.77</a></li>
           
-          <li><a href="ch-canonical.html#lem:fix_upgrade_peripheral">Lemma 11.74</a></li>
+          <li><a href="ch-canonical.html#lem:fix_upgrade_peripheral">Lemma 11.76</a></li>
           
-          <li><a href="ch-canonical.html#lem:sector_fixed_algebra_proj_step">Lemma 11.76</a></li>
+          <li><a href="ch-canonical.html#lem:sector_fixed_algebra_proj_step">Lemma 11.78</a></li>
           
-          <li><a href="ch-canonical.html#lem:orbit_sum_hLift_construction">Lemma 11.79</a></li>
+          <li><a href="ch-canonical.html#lem:orbit_sum_hLift_construction">Lemma 11.81</a></li>
           
         </ul>
     
@@ -7308,11 +7459,11 @@
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>   Let \(A\) be a left-canonical MPS tensor with irreducible adjoint transfer map, and let \((P_k)_{k=1}^m\) be cyclic orthogonal sector projections. Assume the single fixed-point-algebra rigidity hypothesis from Definition&#160;<a href="ch-canonical.html#def:sector_fixed_point_algebra_rigidity">11.75</a>. Then the orbit-sum lift holds: for every orthogonal subprojection \(Q \le P_k\) whose corner is preserved by \((\mathcal{E}_A^\dagger )^m\), there is a global projection \(R\) invariant under \(\mathcal{E}_A^\dagger \) with the same zero/full-sector tests. </p>
+  <p>   Let \(A\) be a left-canonical MPS tensor with irreducible adjoint transfer map, and let \((P_k)_{k=1}^m\) be cyclic orthogonal sector projections. Assume the single fixed-point-algebra rigidity hypothesis from Definition&#160;<a href="ch-canonical.html#def:sector_fixed_point_algebra_rigidity">11.77</a>. Then the orbit-sum lift holds: for every orthogonal subprojection \(Q \le P_k\) whose corner is preserved by \((\mathcal{E}_A^\dagger )^m\), there is a global projection \(R\) invariant under \(\mathcal{E}_A^\dagger \) with the same zero/full-sector tests. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000827">
+<div class="proof_wrapper" id="a0000000828">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7320,7 +7471,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> First apply Lemma&#160;<a href="ch-canonical.html#lem:fix_upgrade_peripheral">11.74</a> to upgrade corner preservation of \(Q\) under \((\mathcal{E}_A^\dagger )^m\) to an actual fixed-point relation. The rigidity hypothesis then yields the one-step projection preservation needed along the orbit of \(Q\), via Lemma&#160;<a href="ch-canonical.html#lem:sector_fixed_algebra_proj_step">11.76</a>. With those two inputs in hand, the original orbit-sum construction from Lemma&#160;<a href="ch-canonical.html#lem:orbit_sum_hLift_construction">11.79</a> applies verbatim. In the irreducible trace-preserving cyclic case, the rigidity hypothesis here is discharged by Theorem&#160;<a href="ch-canonical.html#thm:sector_fixed_algebra_irred_cyclic">11.77</a>. </p>
+  <p> First apply Lemma&#160;<a href="ch-canonical.html#lem:fix_upgrade_peripheral">11.76</a> to upgrade corner preservation of \(Q\) under \((\mathcal{E}_A^\dagger )^m\) to an actual fixed-point relation. The rigidity hypothesis then yields the one-step projection preservation needed along the orbit of \(Q\), via Lemma&#160;<a href="ch-canonical.html#lem:sector_fixed_algebra_proj_step">11.78</a>. With those two inputs in hand, the original orbit-sum construction from Lemma&#160;<a href="ch-canonical.html#lem:orbit_sum_hLift_construction">11.81</a> applies verbatim. In the irreducible trace-preserving cyclic case, the rigidity hypothesis here is discharged by Theorem&#160;<a href="ch-canonical.html#thm:sector_fixed_algebra_irred_cyclic">11.79</a>. </p>
 
   </div>
 </div>
@@ -7329,7 +7480,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">11.82</span>
+    <span class="theorem_thmlabel">11.84</span>
     <span class="theorem_thmtitle">Orbit-sum construction, unconditional variant</span>
     <div class="thm_header_extras">
 
@@ -7340,7 +7491,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:orbit_sum_hLift_unconditional">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000828"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000829"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7356,13 +7507,13 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#lem:orbit_sum_hLift_fixed_algebra">Lemma 11.81</a></li>
+          <li><a href="ch-canonical.html#lem:orbit_sum_hLift_fixed_algebra">Lemma 11.83</a></li>
           
-          <li><a href="ch-canonical.html#thm:sector_fixed_algebra_irred_cyclic">Theorem 11.77</a></li>
+          <li><a href="ch-canonical.html#thm:sector_fixed_algebra_irred_cyclic">Theorem 11.79</a></li>
           
-          <li><a href="ch-canonical.html#lem:orbit_sum_hLift_fixed_algebra">Lemma 11.81</a></li>
+          <li><a href="ch-canonical.html#lem:orbit_sum_hLift_fixed_algebra">Lemma 11.83</a></li>
           
-          <li><a href="ch-canonical.html#thm:sector_fixed_algebra_irred_cyclic">Theorem 11.77</a></li>
+          <li><a href="ch-canonical.html#thm:sector_fixed_algebra_irred_cyclic">Theorem 11.79</a></li>
           
         </ul>
     
@@ -7397,7 +7548,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000828">
+<div class="proof_wrapper" id="a0000000829">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7405,7 +7556,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Apply Lemma&#160;<a href="ch-canonical.html#lem:orbit_sum_hLift_fixed_algebra">11.81</a> with the rigidity hypothesis supplied by Theorem&#160;<a href="ch-canonical.html#thm:sector_fixed_algebra_irred_cyclic">11.77</a>. </p>
+  <p> Apply Lemma&#160;<a href="ch-canonical.html#lem:orbit_sum_hLift_fixed_algebra">11.83</a> with the rigidity hypothesis supplied by Theorem&#160;<a href="ch-canonical.html#thm:sector_fixed_algebra_irred_cyclic">11.79</a>. </p>
 
   </div>
 </div>
@@ -7414,7 +7565,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">11.83</span>
+    <span class="theorem_thmlabel">11.85</span>
     <span class="theorem_thmtitle">Sector irreducibility from the orbit-sum construction</span>
     <div class="thm_header_extras">
 
@@ -7425,7 +7576,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:sector_irred_fix_upgrade">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000829"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000830"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7441,13 +7592,13 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#thm:sector_irred_orbit_lift">Theorem 11.73</a></li>
+          <li><a href="ch-canonical.html#thm:sector_irred_orbit_lift">Theorem 11.75</a></li>
           
-          <li><a href="ch-canonical.html#lem:orbit_sum_hLift_construction">Lemma 11.79</a></li>
+          <li><a href="ch-canonical.html#lem:orbit_sum_hLift_construction">Lemma 11.81</a></li>
           
-          <li><a href="ch-canonical.html#thm:sector_irred_orbit_lift">Theorem 11.73</a></li>
+          <li><a href="ch-canonical.html#thm:sector_irred_orbit_lift">Theorem 11.75</a></li>
           
-          <li><a href="ch-canonical.html#lem:orbit_sum_hLift_construction">Lemma 11.79</a></li>
+          <li><a href="ch-canonical.html#lem:orbit_sum_hLift_construction">Lemma 11.81</a></li>
           
         </ul>
     
@@ -7478,11 +7629,11 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   Let \(A\) be a left-canonical MPS tensor with irreducible adjoint transfer map, and let \((P_k)_{k=1}^m\) be cyclic orthogonal sector projections. Assume the projection-step and fixed-point-upgrade hypotheses of Lemma&#160;<a href="ch-canonical.html#lem:orbit_sum_hLift_construction">11.79</a>. Then \((\mathcal{E}_A^\dagger )^m\) is irreducible on each corner \(P_k\). </p>
+  <p>   Let \(A\) be a left-canonical MPS tensor with irreducible adjoint transfer map, and let \((P_k)_{k=1}^m\) be cyclic orthogonal sector projections. Assume the projection-step and fixed-point-upgrade hypotheses of Lemma&#160;<a href="ch-canonical.html#lem:orbit_sum_hLift_construction">11.81</a>. Then \((\mathcal{E}_A^\dagger )^m\) is irreducible on each corner \(P_k\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000829">
+<div class="proof_wrapper" id="a0000000830">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7490,7 +7641,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Apply Lemma&#160;<a href="ch-canonical.html#lem:orbit_sum_hLift_construction">11.79</a> to obtain the orbit-sum lift, then apply Theorem&#160;<a href="ch-canonical.html#thm:sector_irred_orbit_lift">11.73</a>. </p>
+  <p> Apply Lemma&#160;<a href="ch-canonical.html#lem:orbit_sum_hLift_construction">11.81</a> to obtain the orbit-sum lift, then apply Theorem&#160;<a href="ch-canonical.html#thm:sector_irred_orbit_lift">11.75</a>. </p>
 
   </div>
 </div>
@@ -7499,7 +7650,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">11.84</span>
+    <span class="theorem_thmlabel">11.86</span>
     <span class="theorem_thmtitle">Sector irreducibility from the projection-step hypothesis</span>
     <div class="thm_header_extras">
 
@@ -7510,7 +7661,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:sector_irred_proj_step">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000830"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000831"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7526,13 +7677,13 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#thm:sector_irred_orbit_lift">Theorem 11.73</a></li>
+          <li><a href="ch-canonical.html#thm:sector_irred_orbit_lift">Theorem 11.75</a></li>
           
-          <li><a href="ch-canonical.html#lem:orbit_sum_hLift_proj_step">Lemma 11.80</a></li>
+          <li><a href="ch-canonical.html#lem:orbit_sum_hLift_proj_step">Lemma 11.82</a></li>
           
-          <li><a href="ch-canonical.html#thm:sector_irred_orbit_lift">Theorem 11.73</a></li>
+          <li><a href="ch-canonical.html#thm:sector_irred_orbit_lift">Theorem 11.75</a></li>
           
-          <li><a href="ch-canonical.html#lem:orbit_sum_hLift_proj_step">Lemma 11.80</a></li>
+          <li><a href="ch-canonical.html#lem:orbit_sum_hLift_proj_step">Lemma 11.82</a></li>
           
         </ul>
     
@@ -7563,11 +7714,11 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   Let \(A\) be a left-canonical MPS tensor with irreducible adjoint transfer map, and let \((P_k)_{k=1}^m\) be cyclic orthogonal sector projections. Assume only the projection-step hypothesis from Lemma&#160;<a href="ch-canonical.html#lem:orbit_sum_hLift_proj_step">11.80</a>. Then \((\mathcal{E}_A^\dagger )^m\) is irreducible on each corner \(P_k\). </p>
+  <p>   Let \(A\) be a left-canonical MPS tensor with irreducible adjoint transfer map, and let \((P_k)_{k=1}^m\) be cyclic orthogonal sector projections. Assume only the projection-step hypothesis from Lemma&#160;<a href="ch-canonical.html#lem:orbit_sum_hLift_proj_step">11.82</a>. Then \((\mathcal{E}_A^\dagger )^m\) is irreducible on each corner \(P_k\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000830">
+<div class="proof_wrapper" id="a0000000831">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7575,7 +7726,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Apply Lemma&#160;<a href="ch-canonical.html#lem:orbit_sum_hLift_proj_step">11.80</a> and then Theorem&#160;<a href="ch-canonical.html#thm:sector_irred_orbit_lift">11.73</a>. </p>
+  <p> Apply Lemma&#160;<a href="ch-canonical.html#lem:orbit_sum_hLift_proj_step">11.82</a> and then Theorem&#160;<a href="ch-canonical.html#thm:sector_irred_orbit_lift">11.75</a>. </p>
 
   </div>
 </div>
@@ -7584,7 +7735,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">11.85</span>
+    <span class="theorem_thmlabel">11.87</span>
     <span class="theorem_thmtitle">Sector irreducibility from fixed-point-algebra rigidity</span>
     <div class="thm_header_extras">
 
@@ -7595,7 +7746,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:sector_irred_fixed_algebra">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000831"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000832"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7611,13 +7762,13 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#thm:sector_irred_orbit_lift">Theorem 11.73</a></li>
+          <li><a href="ch-canonical.html#thm:sector_irred_orbit_lift">Theorem 11.75</a></li>
           
-          <li><a href="ch-canonical.html#lem:orbit_sum_hLift_fixed_algebra">Lemma 11.81</a></li>
+          <li><a href="ch-canonical.html#lem:orbit_sum_hLift_fixed_algebra">Lemma 11.83</a></li>
           
-          <li><a href="ch-canonical.html#thm:sector_irred_orbit_lift">Theorem 11.73</a></li>
+          <li><a href="ch-canonical.html#thm:sector_irred_orbit_lift">Theorem 11.75</a></li>
           
-          <li><a href="ch-canonical.html#lem:orbit_sum_hLift_fixed_algebra">Lemma 11.81</a></li>
+          <li><a href="ch-canonical.html#lem:orbit_sum_hLift_fixed_algebra">Lemma 11.83</a></li>
           
         </ul>
     
@@ -7648,11 +7799,11 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   Let \(A\) be a left-canonical MPS tensor with irreducible adjoint transfer map, and let \((P_k)_{k=1}^m\) be cyclic orthogonal sector projections. Assume only the fixed-point-algebra rigidity hypothesis from Definition&#160;<a href="ch-canonical.html#def:sector_fixed_point_algebra_rigidity">11.75</a>. Then \((\mathcal{E}_A^\dagger )^m\) is irreducible on each corner \(P_k\). </p>
+  <p>   Let \(A\) be a left-canonical MPS tensor with irreducible adjoint transfer map, and let \((P_k)_{k=1}^m\) be cyclic orthogonal sector projections. Assume only the fixed-point-algebra rigidity hypothesis from Definition&#160;<a href="ch-canonical.html#def:sector_fixed_point_algebra_rigidity">11.77</a>. Then \((\mathcal{E}_A^\dagger )^m\) is irreducible on each corner \(P_k\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000831">
+<div class="proof_wrapper" id="a0000000832">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7660,7 +7811,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Apply Lemma&#160;<a href="ch-canonical.html#lem:orbit_sum_hLift_fixed_algebra">11.81</a> and then Theorem&#160;<a href="ch-canonical.html#thm:sector_irred_orbit_lift">11.73</a>. </p>
+  <p> Apply Lemma&#160;<a href="ch-canonical.html#lem:orbit_sum_hLift_fixed_algebra">11.83</a> and then Theorem&#160;<a href="ch-canonical.html#thm:sector_irred_orbit_lift">11.75</a>. </p>
 
   </div>
 </div>
@@ -7669,7 +7820,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">11.86</span>
+    <span class="theorem_thmlabel">11.88</span>
     <span class="theorem_thmtitle">Unconditional sector irreducibility</span>
     <div class="thm_header_extras">
 
@@ -7680,7 +7831,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:sector_irred_unconditional">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000832"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000833"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7696,13 +7847,13 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#thm:sector_irred_fixed_algebra">Theorem 11.85</a></li>
+          <li><a href="ch-canonical.html#thm:sector_irred_fixed_algebra">Theorem 11.87</a></li>
           
-          <li><a href="ch-canonical.html#thm:sector_fixed_algebra_irred_cyclic">Theorem 11.77</a></li>
+          <li><a href="ch-canonical.html#thm:sector_fixed_algebra_irred_cyclic">Theorem 11.79</a></li>
           
-          <li><a href="ch-canonical.html#thm:sector_irred_fixed_algebra">Theorem 11.85</a></li>
+          <li><a href="ch-canonical.html#thm:sector_irred_fixed_algebra">Theorem 11.87</a></li>
           
-          <li><a href="ch-canonical.html#thm:sector_fixed_algebra_irred_cyclic">Theorem 11.77</a></li>
+          <li><a href="ch-canonical.html#thm:sector_fixed_algebra_irred_cyclic">Theorem 11.79</a></li>
           
         </ul>
     
@@ -7737,7 +7888,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000832">
+<div class="proof_wrapper" id="a0000000833">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7745,7 +7896,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Apply Theorem&#160;<a href="ch-canonical.html#thm:sector_irred_fixed_algebra">11.85</a> with the rigidity hypothesis supplied by Theorem&#160;<a href="ch-canonical.html#thm:sector_fixed_algebra_irred_cyclic">11.77</a>. </p>
+  <p> Apply Theorem&#160;<a href="ch-canonical.html#thm:sector_irred_fixed_algebra">11.87</a> with the rigidity hypothesis supplied by Theorem&#160;<a href="ch-canonical.html#thm:sector_fixed_algebra_irred_cyclic">11.79</a>. </p>
 
   </div>
 </div>
@@ -7756,7 +7907,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">11.87</span>
+    <span class="theorem_thmlabel">11.89</span>
     <span class="theorem_thmtitle">Projection-step hypothesis yields primitive blocked sectors</span>
     <div class="thm_header_extras">
 
@@ -7767,7 +7918,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:blocked_sector_proj_step">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000833"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000834"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7785,13 +7936,13 @@
           
           <li><a href="ch-canonical.html#thm:cyclic_sector_decomp_after_blocking">Theorem 11.64</a></li>
           
-          <li><a href="ch-canonical.html#thm:sector_irred_proj_step">Theorem 11.84</a></li>
+          <li><a href="ch-canonical.html#thm:sector_irred_proj_step">Theorem 11.86</a></li>
           
           <li><a href="ch-canonical.html#thm:primitive_adjoint_equiv">Theorem 11.34</a></li>
           
-          <li><a href="ch-canonical.html#lem:orbit_sum_hLift_proj_step">Lemma 11.80</a></li>
+          <li><a href="ch-canonical.html#lem:orbit_sum_hLift_proj_step">Lemma 11.82</a></li>
           
-          <li><a href="ch-canonical.html#thm:sector_irred_proj_step">Theorem 11.84</a></li>
+          <li><a href="ch-canonical.html#thm:sector_irred_proj_step">Theorem 11.86</a></li>
           
           <li><a href="ch-canonical.html#thm:primitive_adjoint_equiv">Theorem 11.34</a></li>
           
@@ -7824,11 +7975,11 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   Let \(A\) be a left-canonical irreducible tensor whose adjoint transfer map has peripheral spectrum \(\{ \gamma ^j : 0 \le j {\lt} m\} \) for a primitive \(m\)-th root of unity \(\gamma \). Let \((C_u)_{u=1}^m\), \((P_u)_{u=1}^m\), and \(\varphi _u : M_{\dim C_u}(\mathbb {C}) \xrightarrow {\sim } P_u M_{D}(\mathbb {C}) P_u\) be the blocked cyclic-sector data. If the one-step projection-preservation hypothesis of Lemma&#160;<a href="ch-canonical.html#lem:orbit_sum_hLift_proj_step">11.80</a> holds, then every blocked sector tensor \(C_u\) has primitive transfer map and is irreducible. </p>
+  <p>   Let \(A\) be a left-canonical irreducible tensor whose adjoint transfer map has peripheral spectrum \(\{ \gamma ^j : 0 \le j {\lt} m\} \) for a primitive \(m\)-th root of unity \(\gamma \). Let \((C_u)_{u=1}^m\), \((P_u)_{u=1}^m\), and \(\varphi _u : M_{\dim C_u}(\mathbb {C}) \xrightarrow {\sim } P_u M_{D}(\mathbb {C}) P_u\) be the blocked cyclic-sector data. If the one-step projection-preservation hypothesis of Lemma&#160;<a href="ch-canonical.html#lem:orbit_sum_hLift_proj_step">11.82</a> holds, then every blocked sector tensor \(C_u\) has primitive transfer map and is irreducible. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000833">
+<div class="proof_wrapper" id="a0000000834">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7836,7 +7987,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Theorem&#160;<a href="ch-canonical.html#thm:sector_irred_proj_step">11.84</a> gives irreducibility of \((\mathcal{E}_A^\dagger )^m\) on each corner \(P_u\). The blocked cyclic-sector data provide compression equivalences \(\varphi _u\) intertwining the adjoint transfer map of \(C_u\) with the corresponding corner restriction of \((\mathcal{E}_A^\dagger )^m\). The same cyclic peripheral-spectrum argument that produces the sector decomposition shows that each corner restriction is primitive. Transport primitivity and irreducibility across \(\varphi _u\), then use Theorem&#160;<a href="ch-canonical.html#thm:primitive_adjoint_equiv">11.34</a> to pass from the adjoint blocked map to the primal transfer map of \(C_u\). </p>
+  <p> Theorem&#160;<a href="ch-canonical.html#thm:sector_irred_proj_step">11.86</a> gives irreducibility of \((\mathcal{E}_A^\dagger )^m\) on each corner \(P_u\). The blocked cyclic-sector data provide compression equivalences \(\varphi _u\) intertwining the adjoint transfer map of \(C_u\) with the corresponding corner restriction of \((\mathcal{E}_A^\dagger )^m\). The same cyclic peripheral-spectrum argument that produces the sector decomposition shows that each corner restriction is primitive. Transport primitivity and irreducibility across \(\varphi _u\), then use Theorem&#160;<a href="ch-canonical.html#thm:primitive_adjoint_equiv">11.34</a> to pass from the adjoint blocked map to the primal transfer map of \(C_u\). </p>
 
   </div>
 </div>
@@ -7845,7 +7996,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">11.88</span>
+    <span class="theorem_thmlabel">11.90</span>
     <span class="theorem_thmtitle">Fixed-point-algebra rigidity yields primitive blocked sectors</span>
     <div class="thm_header_extras">
 
@@ -7856,7 +8007,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:blocked_sector_fixed_algebra">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000834"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000835"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7872,17 +8023,17 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#def:sector_fixed_point_algebra_rigidity">Definition 11.75</a></li>
+          <li><a href="ch-canonical.html#def:sector_fixed_point_algebra_rigidity">Definition 11.77</a></li>
           
           <li><a href="ch-canonical.html#thm:cyclic_sector_decomp_after_blocking">Theorem 11.64</a></li>
           
-          <li><a href="ch-canonical.html#thm:sector_irred_fixed_algebra">Theorem 11.85</a></li>
+          <li><a href="ch-canonical.html#thm:sector_irred_fixed_algebra">Theorem 11.87</a></li>
           
           <li><a href="ch-canonical.html#thm:primitive_adjoint_equiv">Theorem 11.34</a></li>
           
-          <li><a href="ch-canonical.html#def:sector_fixed_point_algebra_rigidity">Definition 11.75</a></li>
+          <li><a href="ch-canonical.html#def:sector_fixed_point_algebra_rigidity">Definition 11.77</a></li>
           
-          <li><a href="ch-canonical.html#thm:sector_irred_fixed_algebra">Theorem 11.85</a></li>
+          <li><a href="ch-canonical.html#thm:sector_irred_fixed_algebra">Theorem 11.87</a></li>
           
           <li><a href="ch-canonical.html#thm:primitive_adjoint_equiv">Theorem 11.34</a></li>
           
@@ -7915,11 +8066,11 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   Let \(A\) be a left-canonical irreducible tensor whose adjoint transfer map has peripheral spectrum \(\{ \gamma ^j : 0 \le j {\lt} m\} \) for a primitive \(m\)-th root of unity \(\gamma \). Let \((C_u)_{u=1}^m\), \((P_u)_{u=1}^m\), and \(\varphi _u : M_{\dim C_u}(\mathbb {C}) \xrightarrow {\sim } P_u M_{D}(\mathbb {C}) P_u\) be the blocked cyclic-sector data. If the fixed-point-algebra rigidity hypothesis from Definition&#160;<a href="ch-canonical.html#def:sector_fixed_point_algebra_rigidity">11.75</a> holds, then every blocked sector tensor \(C_u\) has primitive transfer map and is irreducible. </p>
+  <p>   Let \(A\) be a left-canonical irreducible tensor whose adjoint transfer map has peripheral spectrum \(\{ \gamma ^j : 0 \le j {\lt} m\} \) for a primitive \(m\)-th root of unity \(\gamma \). Let \((C_u)_{u=1}^m\), \((P_u)_{u=1}^m\), and \(\varphi _u : M_{\dim C_u}(\mathbb {C}) \xrightarrow {\sim } P_u M_{D}(\mathbb {C}) P_u\) be the blocked cyclic-sector data. If the fixed-point-algebra rigidity hypothesis from Definition&#160;<a href="ch-canonical.html#def:sector_fixed_point_algebra_rigidity">11.77</a> holds, then every blocked sector tensor \(C_u\) has primitive transfer map and is irreducible. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000834">
+<div class="proof_wrapper" id="a0000000835">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7927,7 +8078,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Theorem&#160;<a href="ch-canonical.html#thm:sector_irred_fixed_algebra">11.85</a> gives irreducibility of \((\mathcal{E}_A^\dagger )^m\) on each corner \(P_u\). The blocked cyclic-sector data provide compression equivalences \(\varphi _u\) intertwining the adjoint transfer map of \(C_u\) with the corresponding corner restriction of \((\mathcal{E}_A^\dagger )^m\). The same cyclic peripheral-spectrum argument that produces the sector decomposition shows that each corner restriction is primitive. Transport primitivity and irreducibility across \(\varphi _u\), then use Theorem&#160;<a href="ch-canonical.html#thm:primitive_adjoint_equiv">11.34</a> to pass from the adjoint blocked map to the primal transfer map of \(C_u\). </p>
+  <p> Theorem&#160;<a href="ch-canonical.html#thm:sector_irred_fixed_algebra">11.87</a> gives irreducibility of \((\mathcal{E}_A^\dagger )^m\) on each corner \(P_u\). The blocked cyclic-sector data provide compression equivalences \(\varphi _u\) intertwining the adjoint transfer map of \(C_u\) with the corresponding corner restriction of \((\mathcal{E}_A^\dagger )^m\). The same cyclic peripheral-spectrum argument that produces the sector decomposition shows that each corner restriction is primitive. Transport primitivity and irreducibility across \(\varphi _u\), then use Theorem&#160;<a href="ch-canonical.html#thm:primitive_adjoint_equiv">11.34</a> to pass from the adjoint blocked map to the primal transfer map of \(C_u\). </p>
 
   </div>
 </div>
@@ -7936,7 +8087,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">11.89</span>
+    <span class="theorem_thmlabel">11.91</span>
     <span class="theorem_thmtitle">Scalar blocked fixed points yield primitive blocked sectors</span>
     <div class="thm_header_extras">
 
@@ -7947,7 +8098,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:blocked_sector_scalar_fixed">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000835"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000836"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7963,19 +8114,19 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#def:sector_fixed_point_algebra_rigidity">Definition 11.75</a></li>
+          <li><a href="ch-canonical.html#def:sector_fixed_point_algebra_rigidity">Definition 11.77</a></li>
           
-          <li><a href="ch-canonical.html#thm:sector_fixed_algebra_scalar_blocked">Theorem 11.78</a></li>
+          <li><a href="ch-canonical.html#thm:sector_fixed_algebra_scalar_blocked">Theorem 11.80</a></li>
           
-          <li><a href="ch-canonical.html#thm:blocked_sector_fixed_algebra">Theorem 11.88</a></li>
+          <li><a href="ch-canonical.html#thm:blocked_sector_fixed_algebra">Theorem 11.90</a></li>
           
           <li><a href="ch-canonical.html#thm:cyclic_sector_decomp_after_blocking">Theorem 11.64</a></li>
           
           <li><a href="ch-canonical.html#thm:primitive_adjoint_equiv">Theorem 11.34</a></li>
           
-          <li><a href="ch-canonical.html#thm:sector_fixed_algebra_scalar_blocked">Theorem 11.78</a></li>
+          <li><a href="ch-canonical.html#thm:sector_fixed_algebra_scalar_blocked">Theorem 11.80</a></li>
           
-          <li><a href="ch-canonical.html#thm:blocked_sector_fixed_algebra">Theorem 11.88</a></li>
+          <li><a href="ch-canonical.html#thm:blocked_sector_fixed_algebra">Theorem 11.90</a></li>
           
         </ul>
     
@@ -8010,7 +8161,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000835">
+<div class="proof_wrapper" id="a0000000836">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -8018,7 +8169,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Apply Theorem&#160;<a href="ch-canonical.html#thm:sector_fixed_algebra_scalar_blocked">11.78</a> to obtain sector fixed-point-algebra rigidity from the scalar fixed-point hypothesis, then apply Theorem&#160;<a href="ch-canonical.html#thm:blocked_sector_fixed_algebra">11.88</a>. </p>
+  <p> Apply Theorem&#160;<a href="ch-canonical.html#thm:sector_fixed_algebra_scalar_blocked">11.80</a> to obtain sector fixed-point-algebra rigidity from the scalar fixed-point hypothesis, then apply Theorem&#160;<a href="ch-canonical.html#thm:blocked_sector_fixed_algebra">11.90</a>. </p>
 
   </div>
 </div>
@@ -8027,7 +8178,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">11.90</span>
+    <span class="theorem_thmlabel">11.92</span>
     <span class="theorem_thmtitle">Unconditional primitive blocked sectors</span>
     <div class="thm_header_extras">
 
@@ -8038,7 +8189,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:blocked_sector_unconditional">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000836"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000837"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -8056,11 +8207,11 @@
           
           <li><a href="ch-canonical.html#thm:cyclic_sector_decomp_after_blocking">Theorem 11.64</a></li>
           
-          <li><a href="ch-canonical.html#thm:sector_irred_unconditional">Theorem 11.86</a></li>
+          <li><a href="ch-canonical.html#thm:sector_irred_unconditional">Theorem 11.88</a></li>
           
           <li><a href="ch-canonical.html#thm:primitive_adjoint_equiv">Theorem 11.34</a></li>
           
-          <li><a href="ch-canonical.html#thm:sector_irred_unconditional">Theorem 11.86</a></li>
+          <li><a href="ch-canonical.html#thm:sector_irred_unconditional">Theorem 11.88</a></li>
           
           <li><a href="ch-canonical.html#thm:primitive_adjoint_equiv">Theorem 11.34</a></li>
           
@@ -8097,7 +8248,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000836">
+<div class="proof_wrapper" id="a0000000837">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -8105,7 +8256,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Theorem&#160;<a href="ch-canonical.html#thm:sector_irred_unconditional">11.86</a> gives irreducibility of \((\mathcal{E}_A^\dagger )^m\) on each corner \(P_u\). The blocked cyclic-sector data provide compression equivalences \(\varphi _u\) intertwining the adjoint transfer map of \(C_u\) with the corresponding corner restriction of \((\mathcal{E}_A^\dagger )^m\). The same cyclic peripheral-spectrum argument that produces the sector decomposition shows that each corner restriction is primitive. Transport primitivity and irreducibility across \(\varphi _u\), then use Theorem&#160;<a href="ch-canonical.html#thm:primitive_adjoint_equiv">11.34</a> to pass from the adjoint blocked map to the primal transfer map of \(C_u\). </p>
+  <p> Theorem&#160;<a href="ch-canonical.html#thm:sector_irred_unconditional">11.88</a> gives irreducibility of \((\mathcal{E}_A^\dagger )^m\) on each corner \(P_u\). The blocked cyclic-sector data provide compression equivalences \(\varphi _u\) intertwining the adjoint transfer map of \(C_u\) with the corresponding corner restriction of \((\mathcal{E}_A^\dagger )^m\). The same cyclic peripheral-spectrum argument that produces the sector decomposition shows that each corner restriction is primitive. Transport primitivity and irreducibility across \(\varphi _u\), then use Theorem&#160;<a href="ch-canonical.html#thm:primitive_adjoint_equiv">11.34</a> to pass from the adjoint blocked map to the primal transfer map of \(C_u\). </p>
 
   </div>
 </div>
@@ -8114,7 +8265,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">11.91</span>
+    <span class="theorem_thmlabel">11.93</span>
     <span class="theorem_thmtitle">Arbitrary tensor to primitive block decomposition</span>
     <div class="thm_header_extras">
 
@@ -8125,7 +8276,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:tp_primitive_blockdecomp">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000837"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000838"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -8181,13 +8332,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   For any MPS tensor \(A\), there exist a period \(p \ge 1\), a zero-tail bond dimension \(D_0\), nonzero weights \((\mu _k)_{k=1}^r\), and left-canonical blocks \((B_k)_{k=1}^r\) with primitive transfer maps and positive bond dimensions, such that </p>
-<div class="displaymath" id="a0000000838">
+<div class="displaymath" id="a0000000839">
   \[  V^{(N)}\! \bigl(A^{[p]}\bigr)_\sigma = V^{(N)}\! \bigl(\mathbf{0}_{d^{[p]},D_0}\bigr)_\sigma + V^{(N)}\! \bigl(\textstyle \bigoplus _k \mu _k B_k\bigr)_\sigma .  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000837">
+<div class="proof_wrapper" id="a0000000838">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -8204,7 +8355,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">11.92</span>
+    <span class="theorem_thmlabel">11.94</span>
     <span class="theorem_thmtitle">TP-primitive irreducible tensor is normal</span>
     <div class="thm_header_extras">
 
@@ -8215,7 +8366,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:normal_tp_primitive_irred">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000839"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000840"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -8274,7 +8425,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000839">
+<div class="proof_wrapper" id="a0000000840">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -8291,7 +8442,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">11.93</span>
+    <span class="theorem_thmlabel">11.95</span>
     <span class="theorem_thmtitle">Blocking preserves normality</span>
     <div class="thm_header_extras">
 
@@ -8302,7 +8453,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:normal_blocking_preserved">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000840"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000841"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -8357,7 +8508,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000840">
+<div class="proof_wrapper" id="a0000000841">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -8375,7 +8526,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">11.94</span>
+    <span class="theorem_thmlabel">11.96</span>
     <span class="theorem_thmtitle">Sorted reindexing by strictly decreasing weight norms</span>
     <div class="thm_header_extras">
 
@@ -8419,7 +8570,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">11.95</span>
+    <span class="theorem_thmlabel">11.97</span>
     <span class="theorem_thmtitle">Sorted decomposition preserves the represented MPS family</span>
     <div class="thm_header_extras">
 
@@ -8443,7 +8594,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#thm:bnt_sorted_reindexing">Theorem 11.94</a></li>
+          <li><a href="ch-canonical.html#thm:bnt_sorted_reindexing">Theorem 11.96</a></li>
           
         </ul>
     
@@ -8483,7 +8634,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">11.96</span>
+    <span class="theorem_thmlabel">11.98</span>
     <span class="theorem_thmtitle">Normal canonical form after sorting</span>
     <div class="thm_header_extras">
 
@@ -8509,7 +8660,7 @@
           
           <li><a href="ch-canonical.html#def:is_normal_canonical_form">Definition 11.38</a></li>
           
-          <li><a href="ch-canonical.html#thm:bnt_sorted_blockdecomp">Theorem 11.95</a></li>
+          <li><a href="ch-canonical.html#thm:bnt_sorted_blockdecomp">Theorem 11.97</a></li>
           
         </ul>
     
@@ -8549,7 +8700,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">11.97</span>
+    <span class="definition_thmlabel">11.99</span>
     <span class="definition_thmtitle">Granular sector decomposition</span>
     <div class="thm_header_extras">
 
@@ -8613,7 +8764,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">11.98</span>
+    <span class="lemma_thmlabel">11.100</span>
     <span class="lemma_thmtitle">Granular sector decomposition preserves the represented family</span>
     <div class="thm_header_extras">
 
@@ -8624,7 +8775,7 @@
 
     <a class="icon proof" href="ch-canonical.html#lem:trivial_sector_decomp_same_mpv">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000841"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000842"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -8640,9 +8791,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#def:trivial_sector_decomp">Definition 11.97</a></li>
+          <li><a href="ch-canonical.html#def:trivial_sector_decomp">Definition 11.99</a></li>
           
-          <li><a href="ch-canonical.html#def:trivial_sector_decomp">Definition 11.97</a></li>
+          <li><a href="ch-canonical.html#def:trivial_sector_decomp">Definition 11.99</a></li>
           
         </ul>
     
@@ -8677,7 +8828,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000841">
+<div class="proof_wrapper" id="a0000000842">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -8694,7 +8845,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">11.99</span>
+    <span class="theorem_thmlabel">11.101</span>
     <span class="theorem_thmtitle">Trivial sector decomposition for the sorted distinct-norm case</span>
     <div class="thm_header_extras">
 
@@ -8718,9 +8869,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#def:trivial_sector_decomp">Definition 11.97</a></li>
+          <li><a href="ch-canonical.html#def:trivial_sector_decomp">Definition 11.99</a></li>
           
-          <li><a href="ch-canonical.html#lem:trivial_sector_decomp_same_mpv">Lemma 11.98</a></li>
+          <li><a href="ch-canonical.html#lem:trivial_sector_decomp_same_mpv">Lemma 11.100</a></li>
           
         </ul>
     
@@ -8760,7 +8911,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">11.100</span>
+    <span class="definition_thmlabel">11.102</span>
     <span class="definition_thmtitle">Norm-class partition</span>
     <div class="thm_header_extras">
 
@@ -8804,7 +8955,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">11.101</span>
+    <span class="definition_thmlabel">11.103</span>
     <span class="definition_thmtitle">Norm-class enumeration in decreasing order</span>
     <div class="thm_header_extras">
 
@@ -8828,7 +8979,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#def:norm_class_grouping_data">Definition 11.100</a></li>
+          <li><a href="ch-canonical.html#def:norm_class_grouping_data">Definition 11.102</a></li>
           
         </ul>
     
@@ -8868,7 +9019,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">11.102</span>
+    <span class="theorem_thmlabel">11.104</span>
     <span class="theorem_thmtitle">BNT grouping theorem</span>
     <div class="thm_header_extras">
 
@@ -8892,9 +9043,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#def:norm_class_grouping">Definition 11.101</a></li>
+          <li><a href="ch-canonical.html#def:norm_class_grouping">Definition 11.103</a></li>
           
-          <li><a href="ch-canonical.html#thm:bnt_trivial_sector">Theorem 11.99</a></li>
+          <li><a href="ch-canonical.html#thm:bnt_trivial_sector">Theorem 11.101</a></li>
           
         </ul>
     
@@ -8935,7 +9086,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">11.103</span>
+    <span class="theorem_thmlabel">11.105</span>
     <span class="theorem_thmtitle">Gauge equivalence from non-decaying cross-overlap</span>
     <div class="thm_header_extras">
 
@@ -8979,7 +9130,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">11.104</span>
+    <span class="theorem_thmlabel">11.106</span>
     <span class="theorem_thmtitle">Gauge phases have unit modulus for primitive irreducible blocks</span>
     <div class="thm_header_extras">
 
@@ -8990,7 +9141,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:unit_modulus_phase_tp_prim_irred">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000842"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000843"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9047,7 +9198,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000842">
+<div class="proof_wrapper" id="a0000000843">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9064,7 +9215,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">11.105</span>
+    <span class="theorem_thmlabel">11.107</span>
     <span class="theorem_thmtitle">BNT partition from gauge equivalence</span>
     <div class="thm_header_extras">
 
@@ -9088,7 +9239,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#thm:bnt_grouping">Theorem 11.102</a></li>
+          <li><a href="ch-canonical.html#thm:bnt_grouping">Theorem 11.104</a></li>
           
         </ul>
     
@@ -9128,7 +9279,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">11.106</span>
+    <span class="theorem_thmlabel">11.108</span>
     <span class="theorem_thmtitle">Sector decomposition from TP primitive irreducible blocks</span>
     <div class="thm_header_extras">
 
@@ -9152,9 +9303,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#thm:gauge_equiv_nondecay">Theorem 11.103</a></li>
+          <li><a href="ch-canonical.html#thm:gauge_equiv_nondecay">Theorem 11.105</a></li>
           
-          <li><a href="ch-canonical.html#thm:bnt_grouping_gauge_equiv">Theorem 11.105</a></li>
+          <li><a href="ch-canonical.html#thm:bnt_grouping_gauge_equiv">Theorem 11.107</a></li>
           
         </ul>
     
@@ -9194,7 +9345,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">11.107</span>
+    <span class="theorem_thmlabel">11.109</span>
     <span class="theorem_thmtitle">Existential BNT independence from overlap limits</span>
     <div class="thm_header_extras">
 
@@ -9205,7 +9356,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:bnt_li_from_overlap_limits_exists">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000843"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000844"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9258,7 +9409,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000843">
+<div class="proof_wrapper" id="a0000000844">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9275,7 +9426,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">11.108</span>
+    <span class="theorem_thmlabel">11.110</span>
     <span class="theorem_thmtitle">BNT independence for separated primitive normal blocks</span>
     <div class="thm_header_extras">
 
@@ -9286,7 +9437,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:bnt_li_tp_prim_irr_separated">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000844"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000845"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9302,11 +9453,11 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#thm:bnt_li_from_overlap_limits_exists">Theorem 11.107</a></li>
+          <li><a href="ch-canonical.html#thm:bnt_li_from_overlap_limits_exists">Theorem 11.109</a></li>
           
           <li><a href="ch-mps.html#def:gauge_phase_equiv">Definition 2.18</a></li>
           
-          <li><a href="ch-canonical.html#thm:bnt_li_from_overlap_limits_exists">Theorem 11.107</a></li>
+          <li><a href="ch-canonical.html#thm:bnt_li_from_overlap_limits_exists">Theorem 11.109</a></li>
           
         </ul>
     
@@ -9341,7 +9492,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000844">
+<div class="proof_wrapper" id="a0000000845">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9349,7 +9500,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Primitivity and trace preservation give self-overlap convergence to \(1\). BNT separation gives cross-overlap convergence to \(0\) for distinct blocks. The result follows from Theorem&#160;<a href="ch-canonical.html#thm:bnt_li_from_overlap_limits_exists">11.107</a>. </p>
+  <p> Primitivity and trace preservation give self-overlap convergence to \(1\). BNT separation gives cross-overlap convergence to \(0\) for distinct blocks. The result follows from Theorem&#160;<a href="ch-canonical.html#thm:bnt_li_from_overlap_limits_exists">11.109</a>. </p>
 
   </div>
 </div>
@@ -9358,7 +9509,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">11.109</span>
+    <span class="theorem_thmlabel">11.111</span>
     <span class="theorem_thmtitle">Granular sector decomposition from eventual BNT independence</span>
     <div class="thm_header_extras">
 
@@ -9369,7 +9520,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:bnt_sector_decomp_linear_independent">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000845"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000846"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9385,15 +9536,15 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#def:trivial_sector_decomp">Definition 11.97</a></li>
+          <li><a href="ch-canonical.html#def:trivial_sector_decomp">Definition 11.99</a></li>
           
-          <li><a href="ch-canonical.html#lem:trivial_sector_decomp_same_mpv">Lemma 11.98</a></li>
+          <li><a href="ch-canonical.html#lem:trivial_sector_decomp_same_mpv">Lemma 11.100</a></li>
           
           <li><a href="ch-bnt.html#def:bnt">Definition 13.1</a></li>
           
-          <li><a href="ch-canonical.html#def:trivial_sector_decomp">Definition 11.97</a></li>
+          <li><a href="ch-canonical.html#def:trivial_sector_decomp">Definition 11.99</a></li>
           
-          <li><a href="ch-canonical.html#lem:trivial_sector_decomp_same_mpv">Lemma 11.98</a></li>
+          <li><a href="ch-canonical.html#lem:trivial_sector_decomp_same_mpv">Lemma 11.100</a></li>
           
         </ul>
     
@@ -9428,7 +9579,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000845">
+<div class="proof_wrapper" id="a0000000846">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9436,7 +9587,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> The equality of represented families is Lemma&#160;<a href="ch-canonical.html#lem:trivial_sector_decomp_same_mpv">11.98</a>. The assumed eventual linear independence is exactly the BNT condition for the basis blocks of the granular sector decomposition. </p>
+  <p> The equality of represented families is Lemma&#160;<a href="ch-canonical.html#lem:trivial_sector_decomp_same_mpv">11.100</a>. The assumed eventual linear independence is exactly the BNT condition for the basis blocks of the granular sector decomposition. </p>
 
   </div>
 </div>
@@ -9445,7 +9596,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">11.110</span>
+    <span class="theorem_thmlabel">11.112</span>
     <span class="theorem_thmtitle">Separated primitive normal sector construction</span>
     <div class="thm_header_extras">
 
@@ -9456,7 +9607,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:bnt_sector_decomp_tp_prim_irr_separated">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000846"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000847"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9472,15 +9623,15 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#def:trivial_sector_decomp">Definition 11.97</a></li>
+          <li><a href="ch-canonical.html#def:trivial_sector_decomp">Definition 11.99</a></li>
           
-          <li><a href="ch-canonical.html#lem:trivial_sector_decomp_same_mpv">Lemma 11.98</a></li>
+          <li><a href="ch-canonical.html#lem:trivial_sector_decomp_same_mpv">Lemma 11.100</a></li>
           
-          <li><a href="ch-canonical.html#thm:bnt_li_tp_prim_irr_separated">Theorem 11.108</a></li>
+          <li><a href="ch-canonical.html#thm:bnt_li_tp_prim_irr_separated">Theorem 11.110</a></li>
           
-          <li><a href="ch-canonical.html#lem:trivial_sector_decomp_same_mpv">Lemma 11.98</a></li>
+          <li><a href="ch-canonical.html#lem:trivial_sector_decomp_same_mpv">Lemma 11.100</a></li>
           
-          <li><a href="ch-canonical.html#thm:bnt_li_tp_prim_irr_separated">Theorem 11.108</a></li>
+          <li><a href="ch-canonical.html#thm:bnt_li_tp_prim_irr_separated">Theorem 11.110</a></li>
           
         </ul>
     
@@ -9515,7 +9666,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000846">
+<div class="proof_wrapper" id="a0000000847">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9523,7 +9674,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> The granular sector decomposition preserves the represented family by Lemma&#160;<a href="ch-canonical.html#lem:trivial_sector_decomp_same_mpv">11.98</a>. The separated primitive normal hypotheses give the eventual linear independence by Theorem&#160;<a href="ch-canonical.html#thm:bnt_li_tp_prim_irr_separated">11.108</a>. </p>
+  <p> The granular sector decomposition preserves the represented family by Lemma&#160;<a href="ch-canonical.html#lem:trivial_sector_decomp_same_mpv">11.100</a>. The separated primitive normal hypotheses give the eventual linear independence by Theorem&#160;<a href="ch-canonical.html#thm:bnt_li_tp_prim_irr_separated">11.110</a>. </p>
 
   </div>
 </div>
@@ -9532,7 +9683,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">11.111</span>
+    <span class="definition_thmlabel">11.113</span>
     <span class="definition_thmtitle">MPV phase class data</span>
     <div class="thm_header_extras">
 
@@ -9580,7 +9731,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">11.112</span>
+    <span class="theorem_thmlabel">11.114</span>
     <span class="theorem_thmtitle">Phase-class BNT sector construction</span>
     <div class="thm_header_extras">
 
@@ -9591,7 +9742,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:bnt_sector_decomp_tp_prim_irr_collapsed">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000847"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000848"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9607,13 +9758,13 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#def:mpv_phase_class_data">Definition 11.111</a></li>
+          <li><a href="ch-canonical.html#def:mpv_phase_class_data">Definition 11.113</a></li>
           
-          <li><a href="ch-canonical.html#thm:bnt_li_tp_prim_irr_separated">Theorem 11.108</a></li>
+          <li><a href="ch-canonical.html#thm:bnt_li_tp_prim_irr_separated">Theorem 11.110</a></li>
           
-          <li><a href="ch-canonical.html#def:mpv_phase_class_data">Definition 11.111</a></li>
+          <li><a href="ch-canonical.html#def:mpv_phase_class_data">Definition 11.113</a></li>
           
-          <li><a href="ch-canonical.html#thm:bnt_li_tp_prim_irr_separated">Theorem 11.108</a></li>
+          <li><a href="ch-canonical.html#thm:bnt_li_tp_prim_irr_separated">Theorem 11.110</a></li>
           
           <li><a href="ch-mps.html#thm:mpv_decomposition">Theorem 2.36</a></li>
           
@@ -9650,7 +9801,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000847">
+<div class="proof_wrapper" id="a0000000848">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9658,7 +9809,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Finite phase classes partition the original block indices. Expanding the sector decomposition gives the original finite sum after replacing each class member by its representative and moving the factor \(\zeta ^N\) into \((\zeta \mu _k)^N\). If two chosen representatives were gauge-phase equivalent, they would lie in the same MPV phase class, contradicting their being distinct classes. Therefore the representatives satisfy the separated primitive-normal hypothesis, and Theorem&#160;<a href="ch-canonical.html#thm:bnt_li_tp_prim_irr_separated">11.108</a> gives the BNT linear-independence condition. </p>
+  <p> Finite phase classes partition the original block indices. Expanding the sector decomposition gives the original finite sum after replacing each class member by its representative and moving the factor \(\zeta ^N\) into \((\zeta \mu _k)^N\). If two chosen representatives were gauge-phase equivalent, they would lie in the same MPV phase class, contradicting their being distinct classes. Therefore the representatives satisfy the separated primitive-normal hypothesis, and Theorem&#160;<a href="ch-canonical.html#thm:bnt_li_tp_prim_irr_separated">11.110</a> gives the BNT linear-independence condition. </p>
 
   </div>
 </div>
@@ -9667,7 +9818,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">11.113</span>
+    <span class="theorem_thmlabel">11.115</span>
     <span class="theorem_thmtitle">Phase-class BNT sector construction with one-sided overlap data</span>
     <div class="thm_header_extras">
 
@@ -9678,7 +9829,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_ortho">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000848"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000849"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9694,17 +9845,17 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#thm:bnt_sector_decomp_tp_prim_irr_collapsed">Theorem 11.112</a></li>
+          <li><a href="ch-canonical.html#thm:bnt_sector_decomp_tp_prim_irr_collapsed">Theorem 11.114</a></li>
           
           <li><a href="ch-assembly.html#def:sector_basis_overlap_ortho_hyps">Definition 14.21</a></li>
           
-          <li><a href="ch-canonical.html#def:mpv_phase_class_data">Definition 11.111</a></li>
+          <li><a href="ch-canonical.html#def:mpv_phase_class_data">Definition 11.113</a></li>
           
-          <li><a href="ch-canonical.html#thm:bnt_li_tp_prim_irr_separated">Theorem 11.108</a></li>
+          <li><a href="ch-canonical.html#thm:bnt_li_tp_prim_irr_separated">Theorem 11.110</a></li>
           
           <li><a href="ch-bnt.html#thm:cross_overlap_zero_split">Theorem 13.7</a></li>
           
-          <li><a href="ch-canonical.html#thm:bnt_sector_decomp_tp_prim_irr_collapsed">Theorem 11.112</a></li>
+          <li><a href="ch-canonical.html#thm:bnt_sector_decomp_tp_prim_irr_collapsed">Theorem 11.114</a></li>
           
         </ul>
     
@@ -9739,7 +9890,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000848">
+<div class="proof_wrapper" id="a0000000849">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9747,7 +9898,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> The proof is the phase-class construction of Theorem&#160;<a href="ch-canonical.html#thm:bnt_sector_decomp_tp_prim_irr_collapsed">11.112</a>. The chosen basis blocks keep positive bond dimension, normalization, and any supplied one-site injectivity from the original trace-preserving primitive irreducible blocks. Primitivity gives the self-overlap limit, while the separation of distinct chosen phase-class blocks gives off-overlap decay. </p>
+  <p> The proof is the phase-class construction of Theorem&#160;<a href="ch-canonical.html#thm:bnt_sector_decomp_tp_prim_irr_collapsed">11.114</a>. The chosen basis blocks keep positive bond dimension, normalization, and any supplied one-site injectivity from the original trace-preserving primitive irreducible blocks. Primitivity gives the self-overlap limit, while the separation of distinct chosen phase-class blocks gives off-overlap decay. </p>
 
   </div>
 </div>
@@ -9756,7 +9907,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">11.114</span>
+    <span class="theorem_thmlabel">11.116</span>
     <span class="theorem_thmtitle">Phase-class BNT sector construction with overlap data</span>
     <div class="thm_header_extras">
 
@@ -9767,7 +9918,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_data">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000849"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000850"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9783,9 +9934,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_ortho">Theorem 11.113</a></li>
+          <li><a href="ch-canonical.html#thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_ortho">Theorem 11.115</a></li>
           
-          <li><a href="ch-canonical.html#thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_ortho">Theorem 11.113</a></li>
+          <li><a href="ch-canonical.html#thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_ortho">Theorem 11.115</a></li>
           
         </ul>
     
@@ -9820,7 +9971,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000849">
+<div class="proof_wrapper" id="a0000000850">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9828,7 +9979,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Apply Theorem&#160;<a href="ch-canonical.html#thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_ortho">11.113</a> and use the supplied injectivity of the original blocks to fill the injectivity field required by this theorem’s unbundled conclusion. </p>
+  <p> Apply Theorem&#160;<a href="ch-canonical.html#thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_ortho">11.115</a> and use the supplied injectivity of the original blocks to fill the injectivity field required by this theorem’s unbundled conclusion. </p>
 
   </div>
 </div>
@@ -9837,7 +9988,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">11.115</span>
+    <span class="theorem_thmlabel">11.117</span>
     <span class="theorem_thmtitle">TP primitive irreducible version with eventual BNT independence</span>
     <div class="thm_header_extras">
 
@@ -9848,7 +9999,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:bnt_sector_decomp_tp_prim_irr_linear_independent">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000850"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000851"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9864,9 +10015,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#thm:bnt_sector_decomp_linear_independent">Theorem 11.109</a></li>
+          <li><a href="ch-canonical.html#thm:bnt_sector_decomp_linear_independent">Theorem 11.111</a></li>
           
-          <li><a href="ch-canonical.html#thm:bnt_sector_decomp_linear_independent">Theorem 11.109</a></li>
+          <li><a href="ch-canonical.html#thm:bnt_sector_decomp_linear_independent">Theorem 11.111</a></li>
           
         </ul>
     
@@ -9901,7 +10052,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000850">
+<div class="proof_wrapper" id="a0000000851">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9909,7 +10060,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Apply Theorem&#160;<a href="ch-canonical.html#thm:bnt_sector_decomp_linear_independent">11.109</a>; the additional trace-preserving, primitive, irreducible, and positivity assumptions are carried along for compatibility with the one-sided BNT construction. </p>
+  <p> Apply Theorem&#160;<a href="ch-canonical.html#thm:bnt_sector_decomp_linear_independent">11.111</a>; the additional trace-preserving, primitive, irreducible, and positivity assumptions are carried along for compatibility with the one-sided BNT construction. </p>
 
   </div>
 </div>
@@ -9919,7 +10070,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">11.116</span>
+    <span class="definition_thmlabel">11.118</span>
     <span class="definition_thmtitle">Left sector tensor</span>
     <div class="thm_header_extras">
 
@@ -9963,7 +10114,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">11.117</span>
+    <span class="lemma_thmlabel">11.119</span>
     <span class="lemma_thmtitle">Commuting letters imply commuting words</span>
     <div class="thm_header_extras">
 
@@ -10007,7 +10158,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">11.118</span>
+    <span class="lemma_thmlabel">11.120</span>
     <span class="lemma_thmtitle">Left multiplication identity for sector words</span>
     <div class="thm_header_extras">
 
@@ -10031,9 +10182,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#def:left_sector_tensor">Definition 11.116</a></li>
+          <li><a href="ch-canonical.html#def:left_sector_tensor">Definition 11.118</a></li>
           
-          <li><a href="ch-canonical.html#lem:commutes_words">Lemma 11.117</a></li>
+          <li><a href="ch-canonical.html#lem:commutes_words">Lemma 11.119</a></li>
           
         </ul>
     
@@ -10073,7 +10224,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">11.119</span>
+    <span class="lemma_thmlabel">11.121</span>
     <span class="lemma_thmtitle">Sector support</span>
     <div class="thm_header_extras">
 
@@ -10097,7 +10248,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#def:left_sector_tensor">Definition 11.116</a></li>
+          <li><a href="ch-canonical.html#def:left_sector_tensor">Definition 11.118</a></li>
           
         </ul>
     
@@ -10137,7 +10288,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">11.120</span>
+    <span class="theorem_thmlabel">11.122</span>
     <span class="theorem_thmtitle">Adjoint-fixed projections commute with Kraus operators</span>
     <div class="thm_header_extras">
 
@@ -10181,7 +10332,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">11.121</span>
+    <span class="theorem_thmlabel">11.123</span>
     <span class="theorem_thmtitle">Left-canonical primitive blocking from irreducibility</span>
     <div class="thm_header_extras">
 
@@ -10245,7 +10396,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">11.122</span>
+    <span class="theorem_thmlabel">11.124</span>
     <span class="theorem_thmtitle">Normality from primitivity and a positive-definite fixed point</span>
     <div class="thm_header_extras">
 
@@ -10309,7 +10460,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">11.123</span>
+    <span class="theorem_thmlabel">11.125</span>
     <span class="theorem_thmtitle">Zero-word evaluation for the zero tensor</span>
     <div class="thm_header_extras">
 
@@ -10353,7 +10504,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">11.124</span>
+    <span class="theorem_thmlabel">11.126</span>
     <span class="theorem_thmtitle">Zero MPV for the zero tensor</span>
     <div class="thm_header_extras">
 
@@ -10377,7 +10528,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#thm:evalword_zero_allzero">Theorem 11.123</a></li>
+          <li><a href="ch-canonical.html#thm:evalword_zero_allzero">Theorem 11.125</a></li>
           
         </ul>
     
@@ -10417,7 +10568,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">11.125</span>
+    <span class="theorem_thmlabel">11.127</span>
     <span class="theorem_thmtitle">Nonzero Kraus operator in irreducible dimension at least two</span>
     <div class="thm_header_extras">
 
@@ -10481,7 +10632,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">11.126</span>
+    <span class="theorem_thmlabel">11.128</span>
     <span class="theorem_thmtitle">All-zero tensors are irreducible only in dimension at most one</span>
     <div class="thm_header_extras">
 
@@ -10505,7 +10656,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#thm:nonzero_kraus_irred">Theorem 11.125</a></li>
+          <li><a href="ch-canonical.html#thm:nonzero_kraus_irred">Theorem 11.127</a></li>
           
         </ul>
     
@@ -10545,7 +10696,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">11.127</span>
+    <span class="theorem_thmlabel">11.129</span>
     <span class="theorem_thmtitle">Irreducible block decomposition with trace-preserving gauge</span>
     <div class="thm_header_extras">
 
@@ -10569,7 +10720,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#thm:allzero_irred_dim_le_one">Theorem 11.126</a></li>
+          <li><a href="ch-canonical.html#thm:allzero_irred_dim_le_one">Theorem 11.128</a></li>
           
         </ul>
     
@@ -10610,7 +10761,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">11.128</span>
+    <span class="theorem_thmlabel">11.130</span>
     <span class="theorem_thmtitle">Blockwise TP-gauge normalization of irreducible blocks</span>
     <div class="thm_header_extras">
 
@@ -10621,7 +10772,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:blockwise_tp_gauge">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000851"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000852"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -10672,7 +10823,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000851">
+<div class="proof_wrapper" id="a0000000852">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -10689,7 +10840,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">11.129</span>
+    <span class="theorem_thmlabel">11.131</span>
     <span class="theorem_thmtitle">Primitive live blocks are normal</span>
     <div class="thm_header_extras">
 
@@ -10700,7 +10851,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:normal_live_block_primitive">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000852"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000853"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -10720,7 +10871,7 @@
           
           <li><a href="ch-canonical.html#def:irreducible_tensor">Definition 11.15</a></li>
           
-          <li><a href="ch-canonical.html#thm:normal_tp_primitive_irred">Theorem 11.92</a></li>
+          <li><a href="ch-canonical.html#thm:normal_tp_primitive_irred">Theorem 11.94</a></li>
           
         </ul>
     
@@ -10755,7 +10906,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000852">
+<div class="proof_wrapper" id="a0000000853">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -10763,7 +10914,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Apply Theorem&#160;<a href="ch-canonical.html#thm:normal_tp_primitive_irred">11.92</a>. </p>
+  <p> Apply Theorem&#160;<a href="ch-canonical.html#thm:normal_tp_primitive_irred">11.94</a>. </p>
 
   </div>
 </div>
@@ -10772,7 +10923,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">11.130</span>
+    <span class="theorem_thmlabel">11.132</span>
     <span class="theorem_thmtitle">Blocking preserves irreducibility for primitive irreducible blocks</span>
     <div class="thm_header_extras">
 
@@ -10783,7 +10934,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:blocked_irreducible_tp_primitive">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000853"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000854"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -10836,7 +10987,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000853">
+<div class="proof_wrapper" id="a0000000854">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -10848,12 +10999,95 @@
 
   </div>
 </div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:tp_primitive_irreducible_extra_blocking">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">11.133</span>
+    <span class="theorem_thmtitle">Extra blocking of primitive irreducible sector blocks</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-canonical.html#thm:tp_primitive_irreducible_extra_blocking">#</a>
+    
+    <a class="icon proof" href="ch-canonical.html#a0000000855"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mps.html#def:blocked_tensor">Definition 2.37</a></li>
+          
+          <li><a href="ch-canonical.html#thm:blocked_irreducible_tp_primitive">Theorem 11.132</a></li>
+          
+          <li><a href="ch-canonical.html#thm:blocked_irreducible_tp_primitive">Theorem 11.132</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.tp_primitive_irreducible_extra_blocking" class="lean_decl">MPSTensor.tp_primitive_irreducible_extra_blocking</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   If a sector block is already trace-preserving, has primitive transfer map, and is tensor-irreducible, then every later positive blocking length \(k\) preserves all three properties. This \(k\) is the subsequent common-refinement or injectivity length, distinct from the period-removal length that produced the sector block. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000855">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> Trace preservation follows from blocking a trace-preserving tensor, primitivity from taking a positive power of a primitive transfer map, and irreducibility from Theorem&#160;<a href="ch-canonical.html#thm:blocked_irreducible_tp_primitive">11.132</a>. </p>
+
+  </div>
+</div>
 <div class="theorem_thmwrapper theorem-style-plain" id="thm:ncf_sorted_tp_primitive_irred">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">11.131</span>
+    <span class="theorem_thmlabel">11.134</span>
     <span class="theorem_thmtitle">Sorted TP-primitive irreducible data already forms a normal canonical form</span>
     <div class="thm_header_extras">
 
@@ -10864,7 +11098,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:ncf_sorted_tp_primitive_irred">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000854"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000856"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -10917,7 +11151,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000854">
+<div class="proof_wrapper" id="a0000000856">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -10934,7 +11168,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">11.132</span>
+    <span class="theorem_thmlabel">11.135</span>
     <span class="theorem_thmtitle">Normal canonical form from already primitive input</span>
     <div class="thm_header_extras">
 
@@ -10945,7 +11179,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:ncf_from_primitive_input">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000855"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000857"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -10998,7 +11232,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000855">
+<div class="proof_wrapper" id="a0000000857">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -11015,7 +11249,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">11.133</span>
+    <span class="theorem_thmlabel">11.136</span>
     <span class="theorem_thmtitle">Conditional block matching after blocking</span>
     <div class="thm_header_extras">
 
@@ -11026,7 +11260,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:weak_ft_conditional_ch8">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000856"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000858"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -11077,7 +11311,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000856">
+<div class="proof_wrapper" id="a0000000858">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -11094,7 +11328,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">11.134</span>
+    <span class="theorem_thmlabel">11.137</span>
     <span class="theorem_thmtitle">Common blocking period for two primitive normal tensors</span>
     <div class="thm_header_extras">
 
@@ -11105,7 +11339,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:common_period_two_tensors">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000857"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000859"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -11127,7 +11361,7 @@
           
           <li><a href="ch-canonical.html#thm:primitive_blocking_divisible">Theorem 11.51</a></li>
           
-          <li><a href="ch-canonical.html#thm:normal_blocking_preserved">Theorem 11.93</a></li>
+          <li><a href="ch-canonical.html#thm:normal_blocking_preserved">Theorem 11.95</a></li>
           
         </ul>
     
@@ -11162,7 +11396,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000857">
+<div class="proof_wrapper" id="a0000000859">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -11179,7 +11413,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">11.135</span>
+    <span class="theorem_thmlabel">11.138</span>
     <span class="theorem_thmtitle">Structural after-blocking form of the fundamental theorem</span>
     <div class="thm_header_extras">
 
@@ -11190,7 +11424,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:ft_after_blocking_structural">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000858"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000860"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -11208,7 +11442,7 @@
           
           <li><a href="ch-mps.html#def:blocked_tensor">Definition 2.37</a></li>
           
-          <li><a href="ch-canonical.html#thm:tp_primitive_blockdecomp">Theorem 11.91</a></li>
+          <li><a href="ch-canonical.html#thm:tp_primitive_blockdecomp">Theorem 11.93</a></li>
           
         </ul>
     
@@ -11243,7 +11477,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000858">
+<div class="proof_wrapper" id="a0000000860">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -11251,7 +11485,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Apply Theorem&#160;<a href="ch-canonical.html#thm:tp_primitive_blockdecomp">11.91</a> separately to the two tensors. </p>
+  <p> Apply Theorem&#160;<a href="ch-canonical.html#thm:tp_primitive_blockdecomp">11.93</a> separately to the two tensors. </p>
 
   </div>
 </div>
@@ -11260,7 +11494,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">11.136</span>
+    <span class="theorem_thmlabel">11.139</span>
     <span class="theorem_thmtitle">Zero-tail bookkeeping for live block tensors</span>
     <div class="thm_header_extras">
 
@@ -11271,7 +11505,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:live_block_zero_tail_bookkeeping">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000859"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000861"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -11328,7 +11562,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000859">
+<div class="proof_wrapper" id="a0000000861">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -11345,7 +11579,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">11.137</span>
+    <span class="theorem_thmlabel">11.140</span>
     <span class="theorem_thmtitle">Equal zero tails give full live MPV equality</span>
     <div class="thm_header_extras">
 
@@ -11356,7 +11590,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:live_block_same_mpv_zero_tail_eq">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000860"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000862"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -11372,9 +11606,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#thm:live_block_zero_tail_bookkeeping">Theorem 11.136</a></li>
+          <li><a href="ch-canonical.html#thm:live_block_zero_tail_bookkeeping">Theorem 11.139</a></li>
           
-          <li><a href="ch-canonical.html#thm:live_block_zero_tail_bookkeeping">Theorem 11.136</a></li>
+          <li><a href="ch-canonical.html#thm:live_block_zero_tail_bookkeeping">Theorem 11.139</a></li>
           
         </ul>
     
@@ -11405,11 +11639,11 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   In the setting of Theorem&#160;<a href="ch-canonical.html#thm:live_block_zero_tail_bookkeeping">11.136</a>, if the two zero-tail dimensions are equal, then the two live block tensors have the same MPV family, including the length-zero case. </p>
+  <p>   In the setting of Theorem&#160;<a href="ch-canonical.html#thm:live_block_zero_tail_bookkeeping">11.139</a>, if the two zero-tail dimensions are equal, then the two live block tensors have the same MPV family, including the length-zero case. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000860">
+<div class="proof_wrapper" id="a0000000862">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -11417,7 +11651,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> The positive-length cases are exactly the first conclusion of Theorem&#160;<a href="ch-canonical.html#thm:live_block_zero_tail_bookkeeping">11.136</a>. At \(N=0\), substitute the equality of zero-tail dimensions into the bookkeeping identity and cancel the common scalar term. </p>
+  <p> The positive-length cases are exactly the first conclusion of Theorem&#160;<a href="ch-canonical.html#thm:live_block_zero_tail_bookkeeping">11.139</a>. At \(N=0\), substitute the equality of zero-tail dimensions into the bookkeeping identity and cancel the common scalar term. </p>
 
   </div>
 </div>
@@ -11426,7 +11660,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">11.138</span>
+    <span class="theorem_thmlabel">11.141</span>
     <span class="theorem_thmtitle">Structural after-blocking form with zero-tail equations</span>
     <div class="thm_header_extras">
 
@@ -11437,7 +11671,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:ft_after_blocking_structural_zero_tail">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000861"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000863"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -11453,13 +11687,13 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#thm:tp_primitive_blockdecomp">Theorem 11.91</a></li>
+          <li><a href="ch-canonical.html#thm:tp_primitive_blockdecomp">Theorem 11.93</a></li>
           
           <li><a href="ch-mps.html#def:same_mpv2">Definition 2.12</a></li>
           
           <li><a href="ch-canonical.html#def:zero_mps_tensor">Definition 11.45</a></li>
           
-          <li><a href="ch-canonical.html#thm:tp_primitive_blockdecomp">Theorem 11.91</a></li>
+          <li><a href="ch-canonical.html#thm:tp_primitive_blockdecomp">Theorem 11.93</a></li>
           
         </ul>
     
@@ -11494,7 +11728,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000861">
+<div class="proof_wrapper" id="a0000000863">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -11502,7 +11736,98 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Apply Theorem&#160;<a href="ch-canonical.html#thm:tp_primitive_blockdecomp">11.91</a> separately to the two tensors and keep the zero-tail MPV equations returned by that theorem. The property that the blocked tensors generate the same MPV family follows by blocking the original equality. </p>
+  <p> Apply Theorem&#160;<a href="ch-canonical.html#thm:tp_primitive_blockdecomp">11.93</a> separately to the two tensors and keep the zero-tail MPV equations returned by that theorem. The property that the blocked tensors generate the same MPV family follows by blocking the original equality. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:ft_after_blocking_per_block_cyclic_live_zero_tail">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">11.142</span>
+    <span class="theorem_thmtitle">Per-block cyclic live decomposition with zero-tail bookkeeping</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-canonical.html#thm:ft_after_blocking_per_block_cyclic_live_zero_tail">#</a>
+    
+    <a class="icon proof" href="ch-canonical.html#a0000000864"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-canonical.html#thm:tp_gauge_arbitrary">Theorem 11.48</a></li>
+          
+          <li><a href="ch-canonical.html#thm:live_block_zero_tail_bookkeeping">Theorem 11.139</a></li>
+          
+          <li><a href="ch-canonical.html#def:primitive_irreducible_cyclic_sectors">Definition 11.67</a></li>
+          
+          <li><a href="ch-canonical.html#thm:has_primitive_irreducible_cyclic_sectors_tp_irr">Theorem 11.68</a></li>
+          
+          <li><a href="ch-canonical.html#thm:tp_gauge_arbitrary">Theorem 11.48</a></li>
+          
+          <li><a href="ch-canonical.html#thm:live_block_zero_tail_bookkeeping">Theorem 11.139</a></li>
+          
+          <li><a href="ch-canonical.html#thm:has_primitive_irreducible_cyclic_sectors_tp_irr">Theorem 11.68</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.fundamentalTheorem_after_blocking_1606_perBlock_cyclic_live_with_zeroTail" class="lean_decl">MPSTensor.fundamentalTheorem_after_blocking_1606_perBlock_cyclic_live_with_zeroTail</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   If two tensors generate the same MPV family, then after the zero-tail split and trace-preserving gauge each side has irreducible live blocks with nonzero weights. The live block tensors agree at all positive system sizes, while the length-zero case is recorded as the exact zero-tail bookkeeping identity. Moreover each live block has primitive irreducible cyclic sectors. The period-removal length for those sectors is kept separate from any later common blocking or injectivity length. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000864">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> Apply the arbitrary-input TP-gauge theorem separately to \(A\) and \(B\). The zero-tail bookkeeping theorem compares the two resulting live tensors at positive lengths and records the \(N=0\) identity. Finally apply the cyclic-sector package theorem to every trace-preserving irreducible live block. </p>
 
   </div>
 </div>
@@ -11513,7 +11838,7 @@
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">11.139</span>
+    <span class="remark_thmlabel">11.143</span>
     <span class="remark_thmtitle">Remaining steps toward normal canonical form</span>
     <div class="thm_header_extras">
 
@@ -11529,9 +11854,9 @@
         </div>
   </div>
   <div class="remark_thmcontent">
-  <p> The arbitrary-input reduction (Theorem&#160;<a href="ch-canonical.html#thm:tp_gauge_arbitrary">11.48</a>) produces a trivial block together with left-canonical nontrivial blocks. After a common blocking step (Theorem&#160;<a href="ch-canonical.html#thm:tp_primitive_blockdecomp">11.91</a>), the blocked blocks have primitive transfer maps. </p>
+  <p> The arbitrary-input reduction (Theorem&#160;<a href="ch-canonical.html#thm:tp_gauge_arbitrary">11.48</a>) produces a trivial block together with left-canonical nontrivial blocks. After a common blocking step (Theorem&#160;<a href="ch-canonical.html#thm:tp_primitive_blockdecomp">11.93</a>), the blocked blocks have primitive transfer maps. </p>
 <p>To conclude the blocking-based normal-canonical-form reduction of this chapter, two further inputs are still needed. First, one must isolate irreducible TP-primitive sectors inside each blocked block, because blocking does not in general preserve tensor irreducibility. Theorems&#160;<a href="ch-canonical.html#thm:blockdecomp_commuting_projs">11.59</a> and&#160;<a href="ch-canonical.html#thm:blockdecomp_adjoint_fixed">11.60</a> supply the relevant sector-decomposition mechanism: commuting or adjoint-fixed projections produce a direct-sum decomposition of the blocked tensor. What remains is to show that the sectors arising in the canonical-form reduction are themselves irreducible, so that the primitive-sector normality results apply to them. </p>
-<p>Second, one must control the weights attached to those sectors. In particular, the present reduction does not yet produce the pairwise distinct nonzero weight norms needed before the normal canonical form after sorting of Theorem&#160;<a href="ch-canonical.html#thm:bnt_sorted_ncf">11.96</a> can be applied. </p>
+<p>Second, one must control the weights attached to those sectors. In particular, the present reduction does not yet produce the pairwise distinct nonzero weight norms needed before the normal canonical form after sorting of Theorem&#160;<a href="ch-canonical.html#thm:bnt_sorted_ncf">11.98</a> can be applied. </p>
 <p>The periodic irreducible-form approach, which studies periodic blocks directly rather than removing periodicity by blocking, belongs to Chapter&#160;<a href="ch-periodic_ft_apps.html">15</a>; it is not part of the reduction in this chapter except as a forward reference. </p>
 
   </div>
