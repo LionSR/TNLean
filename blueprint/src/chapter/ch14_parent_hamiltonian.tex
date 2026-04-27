@@ -2225,8 +2225,7 @@ Lucia~\cite{Kastoryano2018Martingale}.
     \label{lem:parent_hamiltonian_cyclic_overlap_friedrichs_gap}
     \lean{MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_overlap_friedrichs}
     \leanok
-    \uses{lem:parent_hamiltonian_cyclic_window_friedrichs_gap,
-        lem:cyclic_window_nonoverlap_positive}
+    \uses{lem:parent_hamiltonian_cyclic_window_friedrichs_gap}
     Fix $L>1$ and let $i\sim_L j$ mean that the cyclic supports of the
     length-$L$ windows at $i$ and $j$ meet. Suppose uniformly for every
     $N\ge2L$ that overlapping off-diagonal terms satisfy
@@ -2241,11 +2240,11 @@ Lucia~\cite{Kastoryano2018Martingale}.
 
 \begin{proof}
     \leanok
-    \uses{lem:parent_hamiltonian_cyclic_window_friedrichs_gap,
-        lem:cyclic_window_nonoverlap_positive}
-    The preceding concrete non-overlap positivity lemma supplies the non-overlap
-    condition required by the cyclic-window finite-overlap theorem.  The displayed
-    overlapping estimate supplies the remaining ordered cross-term condition.
+    \uses{lem:parent_hamiltonian_cyclic_window_friedrichs_gap}
+    Apply Lemma~\ref{lem:parent_hamiltonian_cyclic_window_friedrichs_gap}.
+    Its non-overlap positivity and finite-row hypotheses are already internal to
+    that cyclic-window reduction; the displayed overlapping estimate supplies its
+    remaining ordered cross-term condition.
 \end{proof}
 
 \begin{lemma}[Parent-Hamiltonian gap from overlapping cyclic norm-compression data]
