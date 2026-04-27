@@ -1423,7 +1423,7 @@ The following results separate the zero blocks from the
 	sector blocks.
 \end{proof}
 
-\begin{definition}[Primitive irreducible cyclic-sector package]%
+\begin{definition}[Primitive irreducible cyclic-sector data]%
 \label{def:primitive_irreducible_cyclic_sectors}
 	\lean{MPSTensor.HasPrimitiveIrreducibleCyclicSectors}
 	\leanok
@@ -1448,7 +1448,7 @@ The following results separate the zero blocks from the
 
 \begin{proof}\leanok
 	\uses{thm:cyclic_sector_decomp_irr_tp_prim_irr}
-	This is Theorem~\ref{thm:cyclic_sector_decomp_irr_tp_prim_irr}, repackaged as
+	This is Theorem~\ref{thm:cyclic_sector_decomp_irr_tp_prim_irr}, restated as
 	the predicate of Definition~\ref{def:primitive_irreducible_cyclic_sectors}.
 \end{proof}
 
@@ -2738,8 +2738,9 @@ The following results separate the zero blocks from the
 		thm:has_primitive_irreducible_cyclic_sectors_tp_irr}
 	Apply the arbitrary-input TP-gauge theorem separately to $A$ and $B$. The
 	zero-tail bookkeeping theorem compares the two resulting live tensors at
-	positive lengths and records the $N=0$ identity. Finally apply the cyclic-sector
-	package theorem to every trace-preserving irreducible live block.
+	positive lengths and records the $N=0$ identity. Finally apply
+	Theorem~\ref{thm:has_primitive_irreducible_cyclic_sectors_tp_irr} to every
+	trace-preserving irreducible live block.
 \end{proof}
 
 
@@ -2748,31 +2749,32 @@ The following results separate the zero blocks from the
 \begin{remark}[Remaining steps toward normal canonical form]%
 	\label{rem:canonical_pipeline_gaps}
 	\leanok
-	The arbitrary-input reduction
-	(Theorem~\ref{thm:tp_gauge_arbitrary}) produces a trivial block together
-	with left-canonical nontrivial blocks. After a common blocking step
-	(Theorem~\ref{thm:tp_primitive_blockdecomp}), the blocked blocks
-	have primitive transfer maps.
+	The paper proof first removes the upper-triangular redundancy by passing to
+	irreducible live blocks, and then removes the periodic peripheral spectrum by
+	blocking. In the informal MPS literature, this second phrase often includes two
+	operations at once: block by a period and then restrict to the cyclic sectors
+	of the blocked tensor. Here we treat these operations as separate steps.
 
-	To conclude the blocking-based normal-canonical-form reduction of this
-	chapter, two further inputs are still needed.
-	First, one must isolate irreducible TP-primitive sectors inside each
-	blocked block, because blocking does not in general preserve tensor
-	irreducibility. Theorems~\ref{thm:blockdecomp_commuting_projs}
-	and~\ref{thm:blockdecomp_adjoint_fixed} supply the relevant
-	sector-decomposition mechanism: commuting or adjoint-fixed projections
-	produce a direct-sum decomposition of the blocked tensor. What remains
-	is to show that the sectors arising in the canonical-form reduction are
-	themselves irreducible, so that the primitive-sector normality results
-	apply to them.
+	The arbitrary-input reduction of Theorem~\ref{thm:tp_gauge_arbitrary} gives the
+	zero-tail block and trace-preserving irreducible live blocks. The coarse
+	blocking theorem, Theorem~\ref{thm:tp_primitive_blockdecomp}, records a
+	blocked live-block form with primitive transfer maps, but it is not by itself
+	the final normal canonical form in the sense of the paper: after blocking, one
+	still has to identify the cyclic-sector summands that carry the normal blocks.
+	This sector step is now available one block at a time in
+	Theorem~\ref{thm:has_primitive_irreducible_cyclic_sectors_tp_irr}, which gives
+	trace-preserving primitive tensor-irreducible sectors for each
+	trace-preserving irreducible live block.
 
-	Second, one must control the weights attached to those sectors. In
-	particular, the present reduction does not yet produce the pairwise
-	distinct nonzero weight norms needed before the normal canonical form
-	after sorting of Theorem~\ref{thm:bnt_sorted_ncf} can be applied.
+	Thus the remaining reduction task in this chapter is not to prove irreducibility
+	of those cyclic sectors from scratch. It is to assemble all per-block cyclic
+	sector decompositions at one common physical blocking length, transport the
+	original block weights to the resulting sectors, and thread the existing
+	zero-tail bookkeeping through that common-length statement.
 
-	The periodic irreducible-form approach, which studies periodic blocks
-	directly rather than removing periodicity by blocking, belongs to
-	Chapter~\ref{ch:periodic_ft_apps}; it is not part of the reduction in
-	this chapter except as a forward reference.
+	The sorted normal-canonical-form theorem,
+	Theorem~\ref{thm:bnt_sorted_ncf}, assumes pairwise distinct nonzero weight
+	norms. This is a useful special form after sorting. Equal-norm families require
+	the basis-of-normal-tensors and multiplicity comparison developed later, rather
+	than an artificial separation of equal weight norms.
 \end{remark}
