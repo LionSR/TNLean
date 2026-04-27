@@ -1070,14 +1070,15 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \lean{MPSTensor.commutes_words_mul_of_commutes_words}
     \leanok
     If a boundary matrix $X$ commutes with every word product of length $m$, then
-    it commutes with every word product whose length is a multiple $qm$.
+    it commutes with every word product whose length is a multiple $q\,m$.
 \end{lemma}
 
 \begin{proof}
     \leanok
-    Chunk a word of length $qm$ into a length-$m$ prefix and a length-$(q-1)m$
-    suffix. The prefix commutes with $X$ by hypothesis, and the suffix commutes by
-    induction on $q$.
+    Proceed by induction on $q$. For $q=0$, the claim is trivial. For the
+    inductive step, let a word of length $(q+1)m$ be given and write it as a
+    length-$m$ prefix followed by a length-$q\,m$ suffix. The prefix commutes with
+    $X$ by hypothesis, and the suffix commutes by the induction hypothesis.
 \end{proof}
 
 \begin{lemma}[Padded complement annihilation]
@@ -1146,7 +1147,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 \begin{proof}
     \leanok
     Lemma~\ref{lem:word_commutation_multiple_lengths} amplifies the length-$m$
-    commutation hypothesis to length $L_0m \ge L_0$. Then
+    commutation hypothesis to length $L_0\,m \ge L_0$. Then
     Theorem~\ref{thm:ground_space_map_mpv_of_long_word_commutes} applies.
 \end{proof}
 
