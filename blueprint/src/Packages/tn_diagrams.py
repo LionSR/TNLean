@@ -10,22 +10,22 @@ from __future__ import annotations
 import hashlib
 import logging
 import os
+import posixpath
 import shutil
 import subprocess
 from html import escape
 from pathlib import Path
 from typing import Iterable
 
+from _tnlean_utils import stringify_tex_item
 from plasTeX import Command
 
 
 log = logging.getLogger(__name__)
 
 _SRC_DIR = Path(__file__).resolve().parents[1]
-_WEB_DIR = _SRC_DIR.parent / "web"
-_SVG_DIR = _WEB_DIR / "tn_svg"
 _CACHE_DIR = _SRC_DIR / ".tn_svg_cache"
-_SVG_REL_DIR = "tn_svg"
+_SVG_SUBDIR = "tn_svg"
 
 
 _DIAGRAM_ARGS: dict[str, str] = {
@@ -63,10 +63,6 @@ _DIAGRAM_ARGS: dict[str, str] = {
 }
 
 
-def _tex_item_source(obj: object) -> str:
-    return getattr(obj, "source", getattr(obj, "textContent", str(obj))).strip()
-
-
 def _tex_call(obj: Command) -> str:
     source = getattr(obj, "source", "").strip()
     if source.startswith(rf"\{obj.macroName}"):
@@ -75,8 +71,38 @@ def _tex_call(obj: Command) -> str:
     args = _DIAGRAM_ARGS[obj.macroName].split()
     chunks = [rf"\{obj.macroName}"]
     for name in args:
-        chunks.append("{" + _tex_item_source(obj.attributes.get(name, "")) + "}")
+        chunks.append("{" + stringify_tex_item(obj.attributes.get(name, "")) + "}")
     return "".join(chunks)
+
+
+def _output_dir(doc: object) -> Path:
+    configured = Path(str(doc.config["files"]["directory"]))
+    if configured.is_absolute():
+        return configured
+
+    working_dir = Path(doc.userdata.get("working-dir", _SRC_DIR))
+    return (working_dir / configured).resolve()
+
+
+def _nearest_output_url(obj: object) -> str | None:
+    current = obj
+    while current is not None:
+        url = getattr(current, "url", None)
+        if url:
+            return str(url)
+        current = getattr(current, "parentNode", None)
+    return None
+
+
+def _svg_src(obj: Command, svg_path: Path, output_dir: Path) -> str:
+    output_url = _nearest_output_url(obj)
+    if output_url is None:
+        return posixpath.join(_SVG_SUBDIR, svg_path.name)
+
+    html_path = Path(output_url)
+    if not html_path.is_absolute():
+        html_path = output_dir / html_path
+    return Path(os.path.relpath(svg_path, start=html_path.parent)).as_posix()
 
 
 def _hash_tex(tex: str) -> str:
@@ -198,7 +224,7 @@ def _missing_tools_html(tex_call: str) -> str:
 
 
 def _compile_svg(tex_call: str, stem: str, svg_path: Path) -> str | None:
-    _SVG_DIR.mkdir(parents=True, exist_ok=True)
+    svg_path.parent.mkdir(parents=True, exist_ok=True)
     _CACHE_DIR.mkdir(parents=True, exist_ok=True)
     (_CACHE_DIR / f"{stem}.tex").write_text(_latex_document(tex_call), encoding="utf-8")
 
@@ -222,12 +248,13 @@ def _compile_svg(tex_call: str, stem: str, svg_path: Path) -> str | None:
     return svg_path.name
 
 
-def _svg_for(tex_call: str) -> str | None:
+def _svg_for(obj: Command, tex_call: str) -> str | None:
     stem = f"tn-{_hash_tex(tex_call)}"
-    svg_path = _SVG_DIR / f"{stem}.svg"
-    if svg_path.exists():
-        return svg_path.name
-    return _compile_svg(tex_call, stem, svg_path)
+    output_dir = _output_dir(obj.ownerDocument)
+    svg_path = output_dir / _SVG_SUBDIR / f"{stem}.svg"
+    if not svg_path.exists() and _compile_svg(tex_call, stem, svg_path) is None:
+        return None
+    return _svg_src(obj, svg_path, output_dir)
 
 
 class _TNTikZDiagram(Command):
@@ -236,15 +263,14 @@ class _TNTikZDiagram(Command):
     @property
     def tn_svg_html(self) -> str:
         tex_call = _tex_call(self)
-        svg_name = _svg_for(tex_call)
-        if svg_name is None:
+        src = _svg_for(self, tex_call)
+        if src is None:
             logged = self.ownerDocument.userdata.setdefault("_tn_svg_missing_tools", False)
             if not logged:
                 log.warning("TikZ SVG rendering needs LaTeX and dvisvgm on PATH.")
                 self.ownerDocument.userdata["_tn_svg_missing_tools"] = True
             return _missing_tools_html(tex_call)
 
-        src = f"{_SVG_REL_DIR}/{svg_name}"
         return (
             '<img class="tn-svg" '
             f'src="{escape(src, quote=True)}" '
