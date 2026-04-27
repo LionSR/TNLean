@@ -8531,6 +8531,8 @@
           
           <li><a href="../docs/find/#doc/MPSTensor.CyclicWindowsDisjoint.symm" class="lean_decl">MPSTensor.CyclicWindowsDisjoint.symm</a></li>
           
+          <li><a href="../docs/find/#doc/MPSTensor.CyclicWindowsDisjoint.of_not_cyclicWindowsOverlap" class="lean_decl">MPSTensor.CyclicWindowsDisjoint.of_not_cyclicWindowsOverlap</a></li>
+          
           <li><a href="../docs/find/#doc/MPSTensor.localTermES_commute_of_cyclic_windows_disjoint" class="lean_decl">MPSTensor.localTermES_commute_of_cyclic_windows_disjoint</a></li>
           
           <li><a href="../docs/find/#doc/MPSTensor.localTermES_re_inner_nonneg_of_cyclic_windows_disjoint" class="lean_decl">MPSTensor.localTermES_re_inner_nonneg_of_cyclic_windows_disjoint</a></li>
@@ -8544,7 +8546,7 @@
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>       Let \(L\le N\) and let \(h_{i,\mathrm{ES}},h_{j,\mathrm{ES}}\) be transported local terms whose cyclic \(L\)-windows are site-disjoint: no site of the periodic chain has cyclic offset \({\lt}L\) from both \(i\) and \(j\). Then the terms commute pointwise: for every vector \(v\), </p>
+  <p>        Let \(L\le N\) and let \(h_{i,\mathrm{ES}},h_{j,\mathrm{ES}}\) be transported local terms whose cyclic \(L\)-windows are site-disjoint: no site of the periodic chain has cyclic offset \({\lt}L\) from both \(i\) and \(j\). Then the terms commute pointwise: for every vector \(v\), </p>
 <div class="displaymath" id="a0000001430">
   \[  h_{i,\mathrm{ES}}(h_{j,\mathrm{ES}}v) = h_{j,\mathrm{ES}}(h_{i,\mathrm{ES}}v),  \]
 </div>
@@ -9900,11 +9902,15 @@
           
           <li><a href="ch-parent_hamiltonian.html#lem:transported_es_local_projections">Lemma 19.101</a></li>
           
+          <li><a href="ch-parent_hamiltonian.html#lem:cyclic_window_nonoverlap_positive">Lemma 19.116</a></li>
+          
           <li><a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_finite_overlap_friedrichs_gap">Lemma 19.118</a></li>
           
           <li><a href="ch-parent_hamiltonian.html#lem:cyclic_window_overlap_cardinality">Lemma 19.117</a></li>
           
           <li><a href="ch-parent_hamiltonian.html#lem:transported_es_local_projections">Lemma 19.101</a></li>
+          
+          <li><a href="ch-parent_hamiltonian.html#lem:cyclic_window_nonoverlap_positive">Lemma 19.116</a></li>
           
         </ul>
     
@@ -9935,7 +9941,7 @@
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>    Fix \(L{\gt}1\) and let \(i\sim _L j\) mean that the cyclic supports of the length-\(L\) windows at \(i\) and \(j\) meet. Suppose uniformly for every \(N\ge 2L\) that non-overlapping transported local terms have nonnegative ordered cross terms, while overlapping off-diagonal terms satisfy </p>
+  <p>    Fix \(L{\gt}1\) and let \(i\sim _L j\) mean that the cyclic supports of the length-\(L\) windows at \(i\) and \(j\) meet. Suppose uniformly for every \(N\ge 2L\) that overlapping off-diagonal terms satisfy </p>
 <div class="displaymath" id="a0000001462">
   \[  \operatorname {Re}\langle h_{i,\mathrm{ES}}v,h_{j,\mathrm{ES}}v\rangle \ge -(1-\tfrac {1}{4L})\frac{1}{2(L-1)} \operatorname {Re}\langle h_{i,\mathrm{ES}}v,v\rangle .  \]
 </div>
@@ -9951,7 +9957,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:cyclic_window_overlap_cardinality">19.117</a> gives the row-cardinality bound \(m=2(L-1)\) for the concrete cyclic-window overlap relation, and Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:transported_es_local_projections">19.101</a> supplies the symmetric projection structure of each transported local term. Apply Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_finite_overlap_friedrichs_gap">19.118</a> with these facts and the stated cross-term hypotheses. </p>
+  <p> Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:cyclic_window_overlap_cardinality">19.117</a> gives the row-cardinality bound \(m=2(L-1)\) for the concrete cyclic-window overlap relation, and Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:transported_es_local_projections">19.101</a> supplies the symmetric projection structure of each transported local term. If two cyclic supports do not meet, the corresponding windows are site-disjoint, so Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:cyclic_window_nonoverlap_positive">19.116</a> gives the required nonnegative ordered cross term. Apply Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_finite_overlap_friedrichs_gap">19.118</a> with these facts and the displayed overlapping-window estimate. </p>
 
   </div>
 </div>
@@ -9989,11 +9995,7 @@
           
           <li><a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_cyclic_window_friedrichs_gap">Lemma 19.119</a></li>
           
-          <li><a href="ch-parent_hamiltonian.html#lem:cyclic_window_nonoverlap_positive">Lemma 19.116</a></li>
-          
           <li><a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_cyclic_window_friedrichs_gap">Lemma 19.119</a></li>
-          
-          <li><a href="ch-parent_hamiltonian.html#lem:cyclic_window_nonoverlap_positive">Lemma 19.116</a></li>
           
         </ul>
     
@@ -10040,7 +10042,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> The preceding concrete non-overlap positivity lemma supplies the non-overlap condition required by the cyclic-window finite-overlap theorem. The displayed overlapping estimate supplies the remaining ordered cross-term condition. </p>
+  <p> Apply Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_cyclic_window_friedrichs_gap">19.119</a>. Its non-overlap positivity and finite-row hypotheses are already internal to that cyclic-window reduction; the displayed overlapping estimate supplies its remaining ordered cross-term condition. </p>
 
   </div>
 </div>
@@ -10358,6 +10360,8 @@
           
           <li><a href="ch-parent_hamiltonian.html#lem:cyclic_window_nonoverlap_positive">Lemma 19.116</a></li>
           
+          <li><a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_cyclic_window_friedrichs_gap">Lemma 19.119</a></li>
+          
           <li><a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_cyclic_overlap_friedrichs_gap">Lemma 19.120</a></li>
           
           <li><a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_cyclic_overlap_norm_gap">Lemma 19.121</a></li>
@@ -10410,7 +10414,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>The local averaging, positivity, and symmetric-projection statements are now recorded in Lemmas&#160;<a href="ch-parent_hamiltonian.html#lem:local_term_es_average">19.99</a>, <a href="ch-parent_hamiltonian.html#lem:transported_es_positive">19.100</a>, and&#160;<a href="ch-parent_hamiltonian.html#lem:transported_es_local_projections">19.101</a>. Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_es_quadratic_reduction">19.104</a> reduces the present theorem to the remaining MPS-specific task: deriving the uniform quadratic-form estimate. Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_ordered_rowsum_gap">19.110</a> establishes the finite-sum algebra from ordered cross-term row bounds, and Lemmas&#160;<a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_finite_overlap_friedrichs_quadratic">19.111</a> and&#160;<a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_finite_overlap_friedrichs_gap">19.118</a> record the common finite-overlap specialization with \(m=2(L-1)\). Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:cyclic_window_overlap_cardinality">19.117</a> gives the concrete cyclic row-cardinality bound, while Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:cyclic_window_nonoverlap_positive">19.116</a> supplies the non-overlap positivity condition for support-disjoint windows. Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_cyclic_overlap_friedrichs_gap">19.120</a> isolates the remaining overlapping-window Friedrichs estimate, and Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_cyclic_overlap_norm_gap">19.121</a> records a sufficient norm-compression formulation. </p>
+  <p>The local averaging, positivity, and symmetric-projection statements are now recorded in Lemmas&#160;<a href="ch-parent_hamiltonian.html#lem:local_term_es_average">19.99</a>, <a href="ch-parent_hamiltonian.html#lem:transported_es_positive">19.100</a>, and&#160;<a href="ch-parent_hamiltonian.html#lem:transported_es_local_projections">19.101</a>. Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_es_quadratic_reduction">19.104</a> reduces the present theorem to the remaining MPS-specific task: deriving the uniform quadratic-form estimate. Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_ordered_rowsum_gap">19.110</a> establishes the finite-sum algebra from ordered cross-term row bounds, and Lemmas&#160;<a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_finite_overlap_friedrichs_quadratic">19.111</a> and&#160;<a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_finite_overlap_friedrichs_gap">19.118</a> record the common finite-overlap specialization with \(m=2(L-1)\). Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:transported_es_nonoverlap_positive">19.102</a> supplies the non-overlap positivity statement for site-disjoint windows, and Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:cyclic_window_nonoverlap_positive">19.116</a> translates this to the concrete support-disjoint cyclic windows. Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:cyclic_window_overlap_cardinality">19.117</a> gives the finite-overlap row-cardinality bound. Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_cyclic_window_friedrichs_gap">19.119</a> combines these ingredients with the finite-overlap reduction, so the remaining analytic task is the Friedrichs-angle estimate for overlapping cyclic windows. Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_cyclic_overlap_friedrichs_gap">19.120</a> records the same overlap-only formulation, and Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_cyclic_overlap_norm_gap">19.121</a> records a sufficient norm-compression formulation. </p>
 
   </div>
 </div>
