@@ -7,18 +7,19 @@ language used by the martingale reduction.
 
 ## Paper anchor
 
-The source paper discussion is `Papers/2011.12127/TN-Review-main.tex` §4.1 `Gaps`,
-especially:
+The source paper discussion is `Papers/2011.12127/TN-Review-main.tex`,
+subsubsection label `sec:4:hams-gaps` ("Gaps"), especially equation
+`eq:4:martingale-2` and its surrounding principal-angle discussion:
 
 - line 2168: the martingale method relates the gap to the "`minimum non-zero angle
   between the ground spaces of overlapping regions`";
 - lines 2176--2179, equation `eq:4:martingale-2`: the required overlapping-pair
-  estimate is
-  `h_ih_j+h_jh_i \ge -c_{ij} (1-\gamma)(h_i+h_j)`;
-- line 2180: the estimate is a "`lower bound on the smallest non-zero angle between
-  the ground spaces of h_i and h_j`";
-- line 2182: the quantities depend on "`the principal angles between \ker h_i and
-  \ker h_j`".
+  estimate is `h_ih_j+h_jh_i \ge -c_{ij} (1-\gamma)(h_i+h_j)`;
+- line 2180: the text following `eq:4:martingale-2` describes this estimate as a
+  "`lower bound on the smallest non-zero angle between the ground spaces of
+  h_i and h_j`";
+- line 2182: the subsequent paragraph notes that the relevant quantities depend on
+  "`the principal angles between \ker h_i and \ker h_j`".
 
 The new Lean declarations do not claim this quantitative angle bound.  They identify,
 for adjacent overlapping windows, the exact local kernel intersection to which the
@@ -34,8 +35,8 @@ principal-angle estimate must be applied.
 
 Blueprint sync:
 
-- `blueprint/src/chapter/ch14_parent_hamiltonian.tex` lines 142--148,
-  label `lem:mem_ground_space_es`, quote: "`A Euclidean vector lies in
+- `blueprint/src/chapter/ch14_parent_hamiltonian.tex`, label
+  `lem:mem_ground_space_es`, quote: "`A Euclidean vector lies in
   G_L^{\mathrm{ES}}(A) exactly when transporting it back ... gives an element of
   the original local ground space`".
 
@@ -51,9 +52,9 @@ Blueprint sync:
 
 Blueprint sync:
 
-- lines 1777--1786, label `lem:parent_interaction_es_kernel`, quote:
+- label `lem:parent_interaction_es_kernel`, quote:
   "`P_L^{\mathrm{ES}}(A)v=0` iff `v\in G_L^{\mathrm{ES}}(A)`";
-- lines 1796--1803, label `lem:local_term_es_kernel_restrictions`, quote:
+- label `lem:local_term_es_kernel_restrictions`, quote:
   "`a transported local term ... annihilates a vector v iff every boundary-filled
   restriction ... lies in G_L^{\mathrm{ES}}(A)`".
 
@@ -74,7 +75,7 @@ Blueprint sync:
 
 Blueprint sync:
 
-- lines 1814--1829, label `thm:adjacent_local_kernels_ground_space_es`, quote:
+- label `thm:adjacent_local_kernels_ground_space_es`, quote:
   "`the kernels of the two adjacent transported L-site local terms are exactly the
   transported (L+1)-site MPS ground space`".
 
