@@ -2804,6 +2804,46 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     $T=\{j\}$.
 \end{definition}
 
+\begin{definition}[Pair trace-separation criterion]
+    \label{def:pair_trace_separation_words}
+    \lean{MPSTensor.pairWordTuple}
+    \lean{MPSTensor.PairWordTupleSpanTop}
+    \lean{MPSTensor.PairTraceSeparatingAt}
+    \leanok
+    For two blocks $A$ and $B$, the length-$S$ pair word tuple is
+    $w \mapsto (A^w,B^w)$.  The pair product-span condition says that these
+    tuples span $\MN{D_A}\times\MN{D_B}$.  Equivalently, in the trace-dual
+    formulation, the only pair of test matrices $(\Delta_A,\Delta_B)$ whose
+    trace pairing with every length-$S$ tuple vanishes is $(0,0)$.
+\end{definition}
+
+\begin{lemma}[Pair trace separation gives pairwise selectors]
+    \label{lem:pair_trace_separation_to_pairwise_selectors}
+    \lean{MPSTensor.pairWordTupleSpanTop_of_pairTraceSeparatingAt}
+    \lean{MPSTensor.hasBlockSelectorOn_of_pairWordTupleSpanTop}
+    \lean{MPSTensor.hasBlockSelectorOn_of_pairTraceSeparatingAt}
+    \lean{MPSTensor.hasPairBlockSeparatingWords_of_forall_pairWordTupleSpanTop}
+    \lean{MPSTensor.hasPairBlockSeparatingWords_of_forall_pairTraceSeparatingAt}
+    \lean{MPSTensor.exists_hasPairBlockSeparatingWords_of_exists_forall_pairTraceSeparatingAt}
+    \leanok
+    \uses{def:pairwise_block_separating_words, def:pair_trace_separation_words}
+    At a fixed length $S$, the pair trace-separation criterion is dual to full
+    pair product-span.  Therefore a pair trace-separation witness supplies a
+    word polynomial that is identity on the first block and zero on the second.
+    A common witness for all ordered distinct pairs gives pairwise
+    block-separating words at the same length.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    If the pair span were proper, a nonzero linear functional would vanish on
+    it.  Nondegeneracy of the matrix trace pairing represents that functional
+    as $(\Delta_A,\Delta_B)$, contradicting pair trace separation.  Once the
+    pair span is the whole product algebra, the tuple $(I,0)$ is in the span;
+    using the same coefficients on the ambient block family gives the required
+    partial selector.
+\end{proof}
+
 \begin{lemma}[Block selectors from pairwise block separation]
     \label{lem:block_selectors_from_pairwise_separators}
     \lean{MPSTensor.pointwise_mul_mem_span_wordTuple_add}
@@ -2841,12 +2881,15 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     \label{lem:product_word_span_from_bnt_selectors}
     \lean{MPSTensor.wordTupleSpanTop_of_isCanonicalFormBNT_of_blockSelectorWords}
     \lean{MPSTensor.wordTupleSpanTop_of_isCanonicalFormBNT_of_pairBlockSeparatingWords}
+    \lean{MPSTensor.wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingAt}
     \lean{MPSTensor.exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairBlockSeparatingWords}
+    \lean{MPSTensor.exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingAt}
     \lean{MPSTensor.exists_pos_productWordSpan_of_isCanonicalFormBNT_of_blockSelectorWords}
     \lean{MPSTensor.blockProjection_mem_span_reindexed_toTensorFromBlocks_of_bntSelectorWords}
     \lean{MPSTensor.isBlockDiagonal'_of_commutes_reindexed_toTensorFromBlocks_of_bntSelectorWords}
     \leanok
-    \uses{def:cf_bnt, lem:block_selectors_from_pairwise_separators,
+    \uses{def:cf_bnt, lem:pair_trace_separation_to_pairwise_selectors,
+        lem:block_selectors_from_pairwise_separators,
         lem:block_projection_span_from_product_word_span}
     Let $((\mu_j),(A_j))$ be in canonical form with BNT separation.  Suppose there are
     length-$S$ block-selector words: for each sector $k$, a linear combination of
@@ -2854,8 +2897,10 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     Then the simultaneous length-$(1+S)$ block-word evaluations span
     $\prod_j \MN{D_j}$, with positive length.  It is enough, by
     Lemma~\ref{lem:block_selectors_from_pairwise_separators}, to construct
-    pairwise separators for every ordered pair of distinct blocks.  Consequently,
-    the pulled-back words at the resulting length for
+    pairwise separators for every ordered pair of distinct blocks; by
+    Lemma~\ref{lem:pair_trace_separation_to_pairwise_selectors}, a common
+    pair trace-separation length is one sufficient finite-dimensional witness.
+    Consequently, the pulled-back words at the resulting length for
     $\operatorname{Assemble}(\mu,A)$ span every virtual sector projection, and the
     corresponding commutant reduction is available.
 \end{lemma}
@@ -2863,6 +2908,7 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
 \begin{proof}
     \leanok
     \uses{lem:one_block_injective_of_injective,
+        lem:pair_trace_separation_to_pairwise_selectors,
         lem:block_selectors_from_pairwise_separators,
         lem:block_projection_span_from_product_word_span}
     Definition~\ref{def:cf_bnt} gives one-site injectivity of each block, hence
@@ -2873,7 +2919,9 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     identity on block $k$, so the length-$(1+S)$ word tuples span the full
     product algebra.  If one starts with pairwise separators instead, first use
     Lemma~\ref{lem:block_selectors_from_pairwise_separators} to multiply them into
-    full selectors.  The projection-span and commutant consequences then follow
+    full selectors; if one starts from the pair trace-separation criterion, first
+    use Lemma~\ref{lem:pair_trace_separation_to_pairwise_selectors}.  The
+    projection-span and commutant consequences then follow
     from Lemma~\ref{lem:block_projection_span_from_product_word_span}.
 \end{proof}
 
