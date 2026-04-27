@@ -9,14 +9,14 @@ This branch advances the common-live-block predecessor without pretending that t
 common physical flattening is already formalized.
 
 1. `MPSTensor.HasPrimitiveIrreducibleCyclicSectors` in
-   `TNLean/MPS/CanonicalForm/Assembly/CyclicSectorDecomposition.lean` packages the
+   `TNLean/MPS/CanonicalForm/Assembly/CyclicSectorDecomposition.lean` records the
    one-block period-removal output: for a tensor `A`, there is a positive
    period-removal length `m` such that `blockTensor A m` is represented by
    unit-weight sector blocks which are trace-preserving, have primitive transfer
    maps, are tensor-irreducible, and have positive bond dimensions.
 
 2. `MPSTensor.hasPrimitiveIrreducibleCyclicSectors_of_TP_of_isIrreducibleTensor`
-   repackages the existing checked cyclic-sector theorem
+   restates the existing checked cyclic-sector theorem
    `exists_primitive_irreducible_cyclic_sector_decomp_of_TP_of_isIrreducibleTensor`
    through that predicate.
 
@@ -46,7 +46,7 @@ Blueprint entries were added for the checked declarations in
   block tensor whose sector blocks are trace-preserving, have primitive transfer
   maps, are tensor-irreducible, and have positive bond dimensions.”
 - `thm:has_primitive_irreducible_cyclic_sectors_tp_irr`, source quote:
-  “Every trace-preserving irreducible tensor satisfies
+  “Every trace-preserving irreducible tensor of positive bond dimension satisfies
   Definition~\ref{def:primitive_irreducible_cyclic_sectors}.”
 - `thm:tp_primitive_irreducible_extra_blocking`, source quote:
   “This $k$ is the subsequent common-refinement or injectivity length, distinct

@@ -1067,7 +1067,7 @@ theorem exists_primitive_irreducible_cyclic_sector_decomp_of_TP_of_isIrreducible
   · intro k
     exact Nat.pos_of_ne_zero (hNondeg k)
 
-/-- A one-block period-removal package with primitive irreducible sectors.
+/-- A one-block period-removal predicate with primitive irreducible sectors.
 
 `HasPrimitiveIrreducibleCyclicSectors A` means that some positive period `m`
 removes the cyclic peripheral structure of `A`: the blocked tensor `A^[m]` is

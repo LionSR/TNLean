@@ -311,7 +311,7 @@ theorem liveBlock_positive_sameMPV₂_and_zeroTail_bookkeeping_of_sameMPV₂
 
 /-- **Recover full live-block `SameMPV₂` once zero tails agree.**
 
-This packages the positive-length bookkeeping theorem with the single additional
+This combines the positive-length bookkeeping theorem with the single additional
 length-zero datum needed to remove the zero tails. It does not assert that the
 zero-tail dimensions agree automatically; that remains a separate paper-level
 bookkeeping step for the unconditional after-blocking sector comparison. -/

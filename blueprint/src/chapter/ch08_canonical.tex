@@ -1423,11 +1423,13 @@ The following results separate the zero blocks from the
 	sector blocks.
 \end{proof}
 
-\begin{definition}[Primitive irreducible cyclic-sector package]%
+\begin{definition}[Primitive irreducible cyclic-sector structure]%
 \label{def:primitive_irreducible_cyclic_sectors}
 	\lean{MPSTensor.HasPrimitiveIrreducibleCyclicSectors}
 	\leanok
-	\uses{def:blocked_tensor, def:tensor_from_blocks, def:same_mpv2}
+	\uses{def:blocked_tensor, def:tensor_from_blocks, def:same_mpv2,
+		def:tp_kraus, def:primitive_channel, def:transfer_map,
+		def:irreducible_tensor}
 	A tensor has primitive irreducible cyclic sectors if some positive
 	period-removal length $m$ represents $A^{[m]}$ as a unit-weight block tensor
 	whose sector blocks are trace-preserving, have primitive transfer maps, are
@@ -1442,13 +1444,13 @@ The following results separate the zero blocks from the
 	\leanok
 	\uses{def:primitive_irreducible_cyclic_sectors,
 		thm:cyclic_sector_decomp_irr_tp_prim_irr}
-	Every trace-preserving irreducible tensor satisfies
+	Every trace-preserving irreducible tensor of positive bond dimension satisfies
 	Definition~\ref{def:primitive_irreducible_cyclic_sectors}.
 \end{theorem}
 
 \begin{proof}\leanok
 	\uses{thm:cyclic_sector_decomp_irr_tp_prim_irr}
-	This is Theorem~\ref{thm:cyclic_sector_decomp_irr_tp_prim_irr}, repackaged as
+	This is Theorem~\ref{thm:cyclic_sector_decomp_irr_tp_prim_irr}, restated as
 	the predicate of Definition~\ref{def:primitive_irreducible_cyclic_sectors}.
 \end{proof}
 
@@ -2531,12 +2533,14 @@ The following results separate the zero blocks from the
 \label{thm:tp_primitive_irreducible_extra_blocking}
 	\lean{MPSTensor.tp_primitive_irreducible_extra_blocking}
 	\leanok
-	\uses{def:blocked_tensor, thm:blocked_irreducible_tp_primitive}
-	If a sector block is already trace-preserving, has primitive transfer map, and
-	is tensor-irreducible, then every later positive blocking length $k$ preserves
-	all three properties. This $k$ is the subsequent common-refinement or
-	injectivity length, distinct from the period-removal length that produced the
-	sector block.
+	\uses{def:blocked_tensor, def:tp_kraus, def:primitive_channel,
+		def:transfer_map, def:irreducible_tensor,
+		thm:blocked_irreducible_tp_primitive}
+	If a sector block of positive bond dimension is already trace-preserving, has
+	primitive transfer map, and is tensor-irreducible, then every later positive
+	blocking length $k$ preserves all three properties. This $k$ is the subsequent
+	common-refinement or injectivity length, distinct from the period-removal
+	length that produced the sector block.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -2712,8 +2716,9 @@ The following results separate the zero blocks from the
 		thm:has_primitive_irreducible_cyclic_sectors_tp_irr}
 	Apply the arbitrary-input TP-gauge theorem separately to $A$ and $B$. The
 	zero-tail bookkeeping theorem compares the two resulting live tensors at
-	positive lengths and records the $N=0$ identity. Finally apply the cyclic-sector
-	package theorem to every trace-preserving irreducible live block.
+	positive lengths and records the $N=0$ identity. Finally apply
+	Theorem~\ref{thm:has_primitive_irreducible_cyclic_sectors_tp_irr} to every
+	trace-preserving irreducible live block.
 \end{proof}
 
 
