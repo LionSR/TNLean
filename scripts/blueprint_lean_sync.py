@@ -206,18 +206,34 @@ def collect_lean_decls(lean_root: Path) -> dict[str, LeanDecl]:
 # Parse blueprint .tex files
 # ---------------------------------------------------------------------------
 
-def collect_blueprint_lean_names(blueprint_src: Path) -> set[str]:
-    """Return all declaration names appearing in ``\\lean{...}`` tags."""
+def collect_blueprint_lean_refs(blueprint_src: Path) -> list[BlueprintEntry]:
+    """Return all raw declaration references appearing in ``\\lean{...}`` tags."""
     chapter_dir = blueprint_src / "chapter"
     if not chapter_dir.exists():
-        return set()
+        return []
 
-    names: set[str] = set()
+    refs: list[BlueprintEntry] = []
     for tex_file in sorted(chapter_dir.glob("*.tex")):
         text = tex_file.read_text(errors="replace")
+        rel = str(tex_file.relative_to(blueprint_src.parent))
         for lm in _TEX_LEAN_RE.finditer(text):
-            names.update(_split_lean_decls(lm.group(1)))
-    return names
+            line = text.count("\n", 0, lm.start()) + 1
+            for decl in _split_lean_decls(lm.group(1)):
+                refs.append(BlueprintEntry(
+                    file=rel,
+                    line=line,
+                    env_type="lean-tag",
+                    label=None,
+                    lean_decl=decl,
+                    has_leanok=False,
+                    proof_has_leanok=False,
+                ))
+    return refs
+
+
+def collect_blueprint_lean_names(blueprint_src: Path) -> set[str]:
+    """Return all declaration names appearing in ``\\lean{...}`` tags."""
+    return {ref.lean_decl for ref in collect_blueprint_lean_refs(blueprint_src)}
 
 
 def collect_blueprint_entries(blueprint_src: Path) -> list[BlueprintEntry]:
@@ -243,6 +259,24 @@ def collect_blueprint_entries(blueprint_src: Path) -> list[BlueprintEntry]:
         current_proof: dict | None = None
         last_env: dict | None = None  # last closed environment
 
+        def finish_proof() -> None:
+            """Attach proof ``\\leanok`` to the preceding theorem-like environment."""
+            nonlocal in_proof, current_proof
+            if current_proof and current_proof["has_leanok"] and last_env:
+                for idx in range(last_env["_entry_start"], last_env["_entry_end"]):
+                    e = entries[idx]
+                    entries[idx] = BlueprintEntry(
+                        file=e.file,
+                        line=e.line,
+                        env_type=e.env_type,
+                        label=e.label,
+                        lean_decl=e.lean_decl,
+                        has_leanok=e.has_leanok,
+                        proof_has_leanok=True,
+                    )
+            in_proof = False
+            current_proof = None
+
         for i, line in enumerate(lines, 1):
             # Check for environment begin
             m = _TEX_ENV_BEGIN_RE.search(line)
@@ -256,7 +290,7 @@ def collect_blueprint_entries(blueprint_src: Path) -> list[BlueprintEntry]:
                     "has_leanok": bool(_TEX_LEANOK_RE.search(line)),
                 }
                 env_stack.append(env)
-                # Check rest of line for \lean{} and \leanok.  Multi-line tags
+                # Check rest of line for \\lean{} and \\leanok.  Multi-line tags
                 # are attributed to the line where the tag starts.
                 env["lean_decls"].extend(lean_decls_by_line.get(i, []))
                 continue
@@ -279,54 +313,36 @@ def collect_blueprint_entries(blueprint_src: Path) -> list[BlueprintEntry]:
                 env["_entry_start"] = env_entry_start
                 env["_entry_end"] = len(entries)
                 # Only track as last_env if it produced lean entries, so an
-                # intervening remark without \lean{} doesn't steal the proof.
+                # intervening remark without \\lean{} doesn't steal the proof.
                 if env_entry_start < len(entries):
                     last_env = env
                 continue
 
-            # Proof begin
-            m = _TEX_PROOF_BEGIN_RE.search(line)
-            if m:
+            # Proof begin.  Handle one-line proofs such as
+            # ``\\begin{proof}\\leanok ... \\end{proof}`` without leaving the parser
+            # stuck inside proof mode.
+            if _TEX_PROOF_BEGIN_RE.search(line):
                 in_proof = True
                 current_proof = {
                     "has_leanok": bool(_TEX_LEANOK_RE.search(line)),
                 }
+                if _TEX_PROOF_END_RE.search(line):
+                    finish_proof()
                 continue
 
-            # Inside a proof block: detect \leanok on its own line
-            if in_proof and current_proof and _TEX_LEANOK_RE.search(line):
-                current_proof["has_leanok"] = True
-                continue
-
-            # Proof end
-            m = _TEX_PROOF_END_RE.search(line)
-            if m and in_proof:
-                # Attach proof leanok to all entries from the preceding environment.
-                # Inline \lean{} citations inside proof prose are deliberately not
-                # turned into BlueprintEntry values; they are only used when checking
-                # blueprint/lean_decls synchronisation via collect_blueprint_lean_names.
-                if current_proof and current_proof["has_leanok"] and last_env:
-                    for idx in range(last_env["_entry_start"], last_env["_entry_end"]):
-                        e = entries[idx]
-                        entries[idx] = BlueprintEntry(
-                            file=e.file,
-                            line=e.line,
-                            env_type=e.env_type,
-                            label=e.label,
-                            lean_decl=e.lean_decl,
-                            has_leanok=e.has_leanok,
-                            proof_has_leanok=True,
-                        )
-                in_proof = False
-                current_proof = None
-                continue
-
-            # Ignore proof prose for formalization statistics.  Raw \lean{} tags
-            # there are collected separately by collect_blueprint_lean_names.
+            # Inside a proof block, update the proof-status flag before checking
+            # for the proof end, so ``\\leanok`` and ``\\end{proof}`` may share a line.
+            # Inline ``\\lean{}`` citations inside proof prose are deliberately not
+            # turned into BlueprintEntry values; they are only used when checking
+            # blueprint/lean_decls synchronisation via collect_blueprint_lean_refs.
             if in_proof:
+                if current_proof and _TEX_LEANOK_RE.search(line):
+                    current_proof["has_leanok"] = True
+                if _TEX_PROOF_END_RE.search(line):
+                    finish_proof()
                 continue
 
-            # Inside an environment: collect \lean{} and \leanok
+            # Inside an environment: collect \\lean{} and \\leanok
             if env_stack:
                 env_stack[-1]["lean_decls"].extend(lean_decls_by_line.get(i, []))
                 if _TEX_LEANOK_RE.search(line):
@@ -495,21 +511,29 @@ def run_sync(
 
     # 2. Collect blueprint entries and raw tag names
     print("Scanning blueprint .tex files …")
-    all_blueprint_decl_names = collect_blueprint_lean_names(blueprint_src)
+    all_blueprint_refs = collect_blueprint_lean_refs(blueprint_src)
+    all_blueprint_decl_names = {ref.lean_decl for ref in all_blueprint_refs}
     report.blueprint_entries = collect_blueprint_entries(blueprint_src)
     print(f"  Found {len(all_blueprint_decl_names)} unique \\lean{{}} references in blueprint")
     print(f"  Found {len(report.blueprint_entries)} theorem-like blueprint entries")
 
-    # 3. Cross-reference theorem-like entries against Lean.  Inline proof-prose
-    # citations are intentionally excluded from the formalization statistics; they
-    # are still included in the lean_decls-file synchronisation below.
+    # 3. Cross-reference all raw \\lean{} tags against Lean.  Only theorem-like
+    # entries contribute to formalization statistics and \\leanok accounting, but
+    # proof-prose citations should still fail CI if their declaration name is stale
+    # or misspelled.
+    missing_seen: set[str] = set()
     for entry in report.blueprint_entries:
         if entry.lean_decl not in report.lean_decls:
             report.missing_in_lean.append(entry)
+            missing_seen.add(entry.lean_decl)
             if entry.has_leanok:
                 report.leanok_but_missing.append(entry)
+    for ref in all_blueprint_refs:
+        if ref.lean_decl not in report.lean_decls and ref.lean_decl not in missing_seen:
+            report.missing_in_lean.append(ref)
+            missing_seen.add(ref.lean_decl)
 
-    # 4. Check lean_decls file against every raw \lean{} tag, including inline
+    # 4. Check lean_decls file against every raw \\lean{} tag, including inline
     # proof-prose citations that leanblueprint records in blueprint/lean_decls.
     existing_lean_decls = read_lean_decls_file(lean_decls_path)
     for name in sorted(existing_lean_decls - all_blueprint_decl_names):
