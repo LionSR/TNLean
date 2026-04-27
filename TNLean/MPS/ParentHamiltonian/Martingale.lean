@@ -809,6 +809,7 @@ theorem localTermES_re_inner_nonneg_of_cyclic_windows_disjoint {N : ℕ}
     (localTermES_isSymmetricProjection A L i)
     (localTermES_isSymmetricProjection A L j)
     (localTermES_commute_of_cyclic_windows_disjoint A hLN hij) v
+
 /-- Non-overlap positivity for the concrete cyclic-window overlap predicate.
 
 When `cyclicWindowsOverlap N L i j` fails and `L ≤ N`, the two windows are
@@ -1245,7 +1246,7 @@ theorem parentHamiltonianES_gap_bound_of_friedrichs
         ((1 : ℝ) / (4 * (L : ℝ))) * ‖v‖ ≤
           ‖parentHamiltonianES A L N v‖ := by
   -- Remaining obligation: prove the overlapping cyclic-window Friedrichs-angle
-  -- estimate consumed by `parentHamiltonianES_gap_bound_of_cyclic_window_friedrichs`.
+  -- estimate required by `parentHamiltonianES_gap_bound_of_cyclic_window_friedrichs`.
   -- Local projection structure, row cardinality, non-overlap positivity, kernel
   -- identification, and the spectral-theorem conversion are already formalized above.
   sorry
