@@ -5,6 +5,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.MPS.MPDO.VerticalCF
 import TNLean.PiAlgebra.Construction
 import Mathlib.LinearAlgebra.Finsupp.LinearCombination
+import Mathlib.LinearAlgebra.Prod
 
 /-!
 # Finite-length sufficient conditions and obstructions for MPDO biCF
@@ -156,6 +157,181 @@ def HasPairBlockSeparatingWords
     (A : (k : Fin r) → MPSTensor d (dim k))
     (S : ℕ) : Prop :=
   ∀ k j : Fin r, j ≠ k → HasBlockSelectorOn A k S {j}
+
+/-- The simultaneous length-`S` word evaluation of two blocks. -/
+def pairWordTuple {D₁ D₂ : ℕ}
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (S : ℕ) (w : Fin S → Fin d) :
+    Matrix (Fin D₁) (Fin D₁) ℂ × Matrix (Fin D₂) (Fin D₂) ℂ :=
+  (evalWord A (List.ofFn w), evalWord B (List.ofFn w))
+
+/-- Finite-length product-algebra span for a single ordered pair of blocks. -/
+def PairWordTupleSpanTop {D₁ D₂ : ℕ}
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂) (S : ℕ) : Prop :=
+  Submodule.span ℂ (Set.range (pairWordTuple A B S)) = ⊤
+
+/-- Dual trace-separation criterion for a single ordered pair of blocks at a fixed
+length.
+
+This is the homogeneous finite-dimensional dual of pair product-span: no nonzero
+pair of trace test matrices may annihilate all simultaneous length-`S` word
+pairs.  The remaining BNT step is to prove such a finite `S` from block
+non-equivalence. -/
+def PairTraceSeparatingAt {D₁ D₂ : ℕ}
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂) (S : ℕ) : Prop :=
+  ∀ ΔA : Matrix (Fin D₁) (Fin D₁) ℂ,
+    ∀ ΔB : Matrix (Fin D₂) (Fin D₂) ℂ,
+      (∀ w : Fin S → Fin d,
+        Matrix.trace (ΔA * evalWord A (List.ofFn w)) +
+          Matrix.trace (ΔB * evalWord B (List.ofFn w)) = 0) →
+      ΔA = 0 ∧ ΔB = 0
+
+private theorem exists_trace_repr {n : Type*} [Fintype n]
+    (f : Matrix n n ℂ →ₗ[ℂ] ℂ) :
+    ∃ Δ : Matrix n n ℂ, ∀ M : Matrix n n ℂ, f M = Matrix.trace (Δ * M) := by
+  classical
+  let Δ : Matrix n n ℂ := fun p q => f (Matrix.single q p (1 : ℂ))
+  refine ⟨Δ, ?_⟩
+  have hfg : f = (Matrix.traceLinearMap n ℂ ℂ).comp (LinearMap.mulLeft ℂ Δ) := by
+    apply Matrix.ext_linearMap ℂ
+    intro i j
+    apply LinearMap.ext
+    intro a
+    simp only [LinearMap.comp_apply, Matrix.singleLinearMap_apply,
+      Matrix.traceLinearMap_apply, LinearMap.mulLeft_apply]
+    have hsingle : Matrix.single i j a = a • Matrix.single i j (1 : ℂ) := by
+      ext p q
+      by_cases hp : p = i <;> by_cases hq : q = j <;> simp [Matrix.single, hp, hq]
+    calc
+      f (Matrix.single i j a) = a * f (Matrix.single i j (1 : ℂ)) := by
+        rw [hsingle, map_smul]
+        rfl
+      _ = Matrix.trace (Δ * Matrix.single i j a) := by
+        rw [Matrix.trace_mul_single]
+        simp [Δ, mul_comm]
+  intro M
+  simp [hfg]
+
+private theorem exists_pair_trace_repr {m n : Type*} [Fintype m] [Fintype n]
+    (f : (Matrix m m ℂ × Matrix n n ℂ) →ₗ[ℂ] ℂ) :
+    ∃ ΔA : Matrix m m ℂ, ∃ ΔB : Matrix n n ℂ,
+      ∀ M : Matrix m m ℂ × Matrix n n ℂ,
+        f M = Matrix.trace (ΔA * M.1) + Matrix.trace (ΔB * M.2) := by
+  classical
+  obtain ⟨ΔA, hA⟩ := exists_trace_repr
+    (f.comp (LinearMap.inl ℂ (Matrix m m ℂ) (Matrix n n ℂ)))
+  obtain ⟨ΔB, hB⟩ := exists_trace_repr
+    (f.comp (LinearMap.inr ℂ (Matrix m m ℂ) (Matrix n n ℂ)))
+  refine ⟨ΔA, ΔB, ?_⟩
+  intro M
+  calc
+    f M = ((f.comp (LinearMap.inl ℂ (Matrix m m ℂ) (Matrix n n ℂ))).coprod
+        (f.comp (LinearMap.inr ℂ (Matrix m m ℂ) (Matrix n n ℂ)))) M := by
+      exact (congrArg
+        (fun g : (Matrix m m ℂ × Matrix n n ℂ) →ₗ[ℂ] ℂ => g M)
+        (LinearMap.coprod_comp_inl_inr f)).symm
+    _ = Matrix.trace (ΔA * M.1) + Matrix.trace (ΔB * M.2) := by
+      rw [LinearMap.coprod_apply]
+      change (f.comp (LinearMap.inl ℂ (Matrix m m ℂ) (Matrix n n ℂ))) M.1 +
+          (f.comp (LinearMap.inr ℂ (Matrix m m ℂ) (Matrix n n ℂ))) M.2 = _
+      rw [hA M.1, hB M.2]
+
+/-- The pair trace-separation criterion is the dual form of pair product-span. -/
+theorem pairWordTupleSpanTop_of_pairTraceSeparatingAt {D₁ D₂ : ℕ}
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂) {S : ℕ}
+    (hSep : PairTraceSeparatingAt A B S) :
+    PairWordTupleSpanTop A B S := by
+  classical
+  unfold PairWordTupleSpanTop
+  by_contra hnot
+  let W : Submodule ℂ
+      (Matrix (Fin D₁) (Fin D₁) ℂ × Matrix (Fin D₂) (Fin D₂) ℂ) :=
+    Submodule.span ℂ (Set.range (pairWordTuple A B S))
+  have hlt : W < ⊤ := lt_of_le_of_ne le_top (by simpa [W] using hnot)
+  obtain ⟨f, hfne, hfker⟩ := Submodule.exists_le_ker_of_lt_top W hlt
+  obtain ⟨ΔA, ΔB, hf_repr⟩ := exists_pair_trace_repr f
+  have hΔ : ΔA = 0 ∧ ΔB = 0 := by
+    refine hSep ΔA ΔB ?_
+    intro w
+    have hwmem : pairWordTuple A B S w ∈ W :=
+      Submodule.subset_span ⟨w, rfl⟩
+    have hf0 : f (pairWordTuple A B S w) = 0 := hfker hwmem
+    simpa [pairWordTuple, hf_repr] using hf0
+  have hfzero : f = 0 := by
+    apply LinearMap.ext
+    intro M
+    have hM := hf_repr M
+    rw [hΔ.1, hΔ.2] at hM
+    simpa using hM
+  exact hfne hfzero
+
+/-- Pair product-span at length `S` gives a length-`S` selector for the first
+block of the pair. -/
+theorem hasBlockSelectorOn_of_pairWordTupleSpanTop
+    (A : (k : Fin r) → MPSTensor d (dim k)) {S : ℕ}
+    {k j : Fin r} (hSpan : PairWordTupleSpanTop (A k) (A j) S) :
+    HasBlockSelectorOn A k S {j} := by
+  classical
+  have htarget : ((1 : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
+      (0 : Matrix (Fin (dim j)) (Fin (dim j)) ℂ)) ∈
+      Submodule.span ℂ (Set.range (pairWordTuple (A k) (A j) S)) := by
+    rw [hSpan]
+    exact Submodule.mem_top
+  rcases (Submodule.mem_span_range_iff_exists_fun ℂ).mp htarget with ⟨c, hc⟩
+  let M : (l : Fin r) → Matrix (Fin (dim l)) (Fin (dim l)) ℂ :=
+    fun l => ∑ w : Fin S → Fin d, c w • evalWord (A l) (List.ofFn w)
+  refine ⟨M, ?_, ?_, ?_⟩
+  · refine (Submodule.mem_span_range_iff_exists_fun ℂ).mpr ⟨c, ?_⟩
+    ext l
+    simp [M, wordTuple]
+  · have hk := congrArg
+      (LinearMap.fst ℂ (Matrix (Fin (dim k)) (Fin (dim k)) ℂ)
+        (Matrix (Fin (dim j)) (Fin (dim j)) ℂ)) hc
+    simpa [M, pairWordTuple, Fintype.linearCombination_apply] using hk
+  · intro l hl
+    have hlj : l = j := by simpa using hl
+    subst l
+    have hj := congrArg
+      (LinearMap.snd ℂ (Matrix (Fin (dim k)) (Fin (dim k)) ℂ)
+        (Matrix (Fin (dim j)) (Fin (dim j)) ℂ)) hc
+    simpa [M, pairWordTuple, Fintype.linearCombination_apply] using hj
+
+/-- Pair trace-separation at length `S` gives a length-`S` selector for the
+first block of the pair. -/
+theorem hasBlockSelectorOn_of_pairTraceSeparatingAt
+    (A : (k : Fin r) → MPSTensor d (dim k)) {S : ℕ}
+    {k j : Fin r} (hSep : PairTraceSeparatingAt (A k) (A j) S) :
+    HasBlockSelectorOn A k S {j} :=
+  hasBlockSelectorOn_of_pairWordTupleSpanTop A
+    (pairWordTupleSpanTop_of_pairTraceSeparatingAt (A k) (A j) hSep)
+
+/-- A common pair product-span length for all ordered distinct pairs gives
+pairwise block separators. -/
+theorem hasPairBlockSeparatingWords_of_forall_pairWordTupleSpanTop
+    (A : (k : Fin r) → MPSTensor d (dim k)) {S : ℕ}
+    (hSpan : ∀ k j : Fin r, j ≠ k → PairWordTupleSpanTop (A k) (A j) S) :
+    HasPairBlockSeparatingWords A S := by
+  intro k j hjk
+  exact hasBlockSelectorOn_of_pairWordTupleSpanTop A (hSpan k j hjk)
+
+/-- A common pair trace-separation length for all ordered distinct pairs gives
+pairwise block separators. -/
+theorem hasPairBlockSeparatingWords_of_forall_pairTraceSeparatingAt
+    (A : (k : Fin r) → MPSTensor d (dim k)) {S : ℕ}
+    (hSep : ∀ k j : Fin r, j ≠ k → PairTraceSeparatingAt (A k) (A j) S) :
+    HasPairBlockSeparatingWords A S := by
+  intro k j hjk
+  exact hasBlockSelectorOn_of_pairTraceSeparatingAt A (hSep k j hjk)
+
+/-- Existential form of the pair trace-separation criterion for pairwise block
+separators. -/
+theorem exists_hasPairBlockSeparatingWords_of_exists_forall_pairTraceSeparatingAt
+    (A : (k : Fin r) → MPSTensor d (dim k))
+    (hSep : ∃ S : ℕ,
+      ∀ k j : Fin r, j ≠ k → PairTraceSeparatingAt (A k) (A j) S) :
+    ∃ S : ℕ, HasPairBlockSeparatingWords A S := by
+  rcases hSep with ⟨S, hS⟩
+  exact ⟨S, hasPairBlockSeparatingWords_of_forall_pairTraceSeparatingAt A hS⟩
 
 /-- The tuple-valued span of word evaluations is closed under pointwise matrix
 multiplication, at the cost of adding word lengths. -/
