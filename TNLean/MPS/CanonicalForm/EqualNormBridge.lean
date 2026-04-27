@@ -813,7 +813,6 @@ theorem exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks
   · exact collapsedBntSectorDecomp_sameMPV₂ (d := d) μ blocks hμne
   · exact collapsedBntSectorDecomp_hasBNT (d := d) μ blocks hTP hIrr hPrim hμne
 
-
 /-- **Phase-class BNT sector construction with one-sided overlap data.**
 
 Starting from trace-preserving primitive irreducible blocks with nonzero weights,
@@ -875,7 +874,6 @@ theorem exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_with_overlapOrtho
 
 /-- Concrete one-sided data for the construction using representatives of MPV phase-equivalence
 classes, including the finite-length representative-span identity.
-
 
 This private auxiliary lemma consolidates the proof of the common fields shared by the
 public one-sided overlap data theorems. -/
