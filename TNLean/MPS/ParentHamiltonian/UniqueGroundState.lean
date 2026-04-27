@@ -43,6 +43,8 @@ with the periodic boundary condition:
   normal-range constraints imply open-chain ground-space membership
 * `MPSTensor.groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_long_word_commutes`
   — the algebraic MPV-line endgame once long-word commutation is known
+* `MPSTensor.groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_two_sided_middle_compatibility`
+  — same-witness common-middle compatibilities imply MPV-line membership
 * `MPSTensor.groundSpace_unique_periodic` — uniqueness on the periodic chain
 * `MPSTensor.parentHamiltonian_unique_gs_injective` — uniqueness for `2L₀` sites
 * `MPSTensor.parentHamiltonian_unique_gs_normal` — optimal uniqueness for `L₀+1` sites
@@ -596,6 +598,49 @@ theorem groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_long_word_commutes
   ext σ
   simp only [groundSpaceMap_apply, Pi.smul_apply, smul_eq_mul, mpv, coeff]
   rw [hX_eq, Algebra.mul_smul_comm, mul_one, Matrix.trace_smul, smul_eq_mul]
+
+/-- Positive-length word commutation is enough for the MPV-line endgame.
+
+If `X` commutes with all words of any positive length `m`, then chunking gives
+commutation at the multiple `L₀ * m`, which is at least `L₀`.  The long-word
+centrality theorem then applies exactly as in
+`groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_long_word_commutes`. -/
+theorem groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_positive_word_commutes
+    {A : MPSTensor d D} {L₀ m N : ℕ}
+    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hm : 0 < m)
+    {X : Matrix (Fin D) (Fin D) ℂ}
+    (hComm : ∀ ω : Fin m → Fin d,
+      X * evalWord A (List.ofFn ω) = evalWord A (List.ofFn ω) * X) :
+    groundSpaceMap A N X ∈ mpvSubmodule A N := by
+  have hCommMul : ∀ ω : Fin (L₀ * m) → Fin d,
+      X * evalWord A (List.ofFn ω) = evalWord A (List.ofFn ω) * X :=
+    commutes_words_mul_of_commutes_words (A := A) (m := m) (q := L₀) hComm
+  exact groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_long_word_commutes
+    (A := A) (L₀ := L₀) (m := L₀ * m) (N := N) hInj hL₀
+    (Nat.le_mul_of_pos_right L₀ hm) hCommMul
+
+/-- Same-witness two-sided middle compatibilities put the boundary vector in the
+MPV line.
+
+This combines the common-middle algebraic lemma in `WrappingWindow` with the
+positive-length amplification above.  Thus the only remaining paper-level gap is
+to compare the two wrapped-window witnesses so that the hypotheses below hold for
+the actual common middle word. -/
+theorem groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_two_sided_middle_compatibility
+    {A : MPSTensor d D} {L₀ m N : ℕ}
+    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
+    {X : Matrix (Fin D) (Fin D) ℂ}
+    (Y : (Fin m → Fin d) → Matrix (Fin D) (Fin D) ℂ)
+    (hLeft : ∀ (j : Fin d) (μ : Fin m → Fin d),
+      evalWord A (List.ofFn μ) * A j * X = Y μ * A j)
+    (hRight : ∀ (j : Fin d) (μ : Fin m → Fin d),
+      X * A j * evalWord A (List.ofFn μ) = A j * Y μ) :
+    groundSpaceMap A N X ∈ mpvSubmodule A N := by
+  have hComm : ∀ ω : Fin (m + 2) → Fin d,
+      X * evalWord A (List.ofFn ω) = evalWord A (List.ofFn ω) * X :=
+    commutes_words_of_two_sided_middle_compatibility (A := A) (X := X) Y hLeft hRight
+  exact groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_positive_word_commutes
+    (A := A) (L₀ := L₀) (m := m + 2) (N := N) hInj hL₀ (by omega) hComm
 
 /-- Range-reduction bridge for normal tensors.
 
