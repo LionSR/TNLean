@@ -2272,7 +2272,7 @@ The following results separate the zero blocks from the
 	distinct representatives are not gauge-phase equivalent.
 \end{definition}
 
-\begin{theorem}[Collapsed representative BNT sector construction]
+\begin{theorem}[Phase-class BNT sector construction]
 	\label{thm:bnt_sector_decomp_tp_prim_irr_collapsed}
 	\lean{MPSTensor.exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks}
 	\leanok
@@ -2296,18 +2296,18 @@ The following results separate the zero blocks from the
 	linear-independence condition.
 \end{proof}
 
-\begin{theorem}[Collapsed representative BNT sector construction with overlap data]
+\begin{theorem}[Phase-class BNT sector construction with overlap data]
 	\label{thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_data}
 	\lean{MPSTensor.exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_with_overlapData}
 	\leanok
 	\uses{thm:bnt_li_tp_prim_irr_separated}
 	For trace-preserving primitive irreducible blocks of positive bond dimension,
 	with nonzero weights, suppose moreover that the blocks are injective. Then
-	there is a collapsed representative sector decomposition representing the
-	same weighted block sum, satisfying the BNT linear-independence condition,
-	and whose chosen basis blocks have positive bond dimension, are injective and
-	trace-preserving, have self-overlap tending to~$1$, and have mutual overlaps
-	tending to~$0$ for distinct basis blocks.
+	there is a sector decomposition, obtained by choosing one block per MPV phase
+	class, which represents the same weighted block sum, satisfies the BNT
+	linear-independence condition, and has chosen basis blocks of positive bond
+	dimension which are injective and trace-preserving, have self-overlap tending
+	to~$1$, and have mutual overlaps tending to~$0$ for distinct basis blocks.
 \end{theorem}
 
 \begin{proof}\leanok

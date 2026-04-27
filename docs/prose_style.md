@@ -133,6 +133,10 @@ or section/namespace names.
 | "Dependency injection" | avoid; describe the mathematical dependency |
 | "Under the hood" | "internally", or drop |
 | "End-to-end" (as software metaphor) | describe the mathematical chain |
+| "Collapsed representative" / "collapsed-representative" | "representative of an MPV phase-equivalence class", or name the quotient construction |
+| "Heterogeneous decomposition" / "heterogeneous sector decomposition" | "two sector decompositions with different bases", or state the relevant dimensions/bases explicitly |
+| "Matched basis" / "matched-basis" (as unexplained shorthand) | "permutation matching the basis blocks", "paired basis blocks", or state the matching data |
+| "Copy alignment" | "multiplicity equality", "equality of copy numbers", or state the exact multiplicity condition |
 
 ---
 
