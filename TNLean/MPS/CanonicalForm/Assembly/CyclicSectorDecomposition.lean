@@ -39,9 +39,9 @@ its MPS-formulation for irreducible TP tensors.
 * `sectorFixedPointAlgebraRigidity_of_cyclic_decomp_after_blocking_of_scalarBlockedFixedPoints`
   — a scalar blocked fixed-point algebra hypothesis implies the sector
   rigidity needed by the orbit-sum argument.
-* `primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking_of_scalarBlockedFixedPoints`
-  — the same blocked fixed-point algebra hypothesis yields primitive,
-  tensor-irreducible compressed sectors.
+* The scalar blocked fixed-point variant of the sector-block theorem — the same
+  blocked fixed-point algebra hypothesis yields primitive, tensor-irreducible
+  compressed sectors.
 * `primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking`
   — the unconditional conclusion using
   `isIrreducibleOnCorner_of_cyclic_decomp_mps`.
@@ -61,7 +61,7 @@ namespace MPSTensor
 variable {d D : ℕ}
 
 /-!
-## Cyclic sector decomposition via the CyclicSectors API
+## Cyclic sector decomposition from cyclic-sector data
 
 ### Mathematical overview
 
@@ -371,7 +371,7 @@ theorem exists_cyclic_sector_decomp_of_TP_of_isIrreducibleTensor
         Set.range (fun j : Fin m => γ ^ (j : ℕ)) := by
     rw [hperiph_set]; ext x; simp [Set.mem_range, eq_comm]
   -- Apply exists_cyclic_sector_decomp_after_blocking.
-  haveI : NeZero m := ⟨by omega⟩
+  haveI : NeZero m := ⟨Nat.ne_of_gt hm_pos⟩
   obtain ⟨dim, blocks, _, _, hTP_blocks, hSame, _, _, _, _, _, _, _⟩ :=
     exists_cyclic_sector_decomp_after_blocking A hTP hIrr ρ hρ_pd h_adjfix hIrrK hγ_prim
       hperiph_range
@@ -909,7 +909,7 @@ orbit-sum / corner-compression reduction: the paper-level remaining gap is now
 concentrated in proving that the blocked sector adjoint fixed-point algebra is
 scalar. Once that input is available, the present theorem derives
 `SectorFixedPointAlgebraRigidity` and applies the orbit-sum / corner-compression
-reduction from `primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking_of_fixedAlgebraRigidity`. -/
+reduction from the fixed-algebra-rigidity sector-block theorem. -/
 theorem primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking_of_scalarBlockedFixedPoints
     {d D m : ℕ} [NeZero D] [NeZero m]
     (A : MPSTensor d D)
@@ -963,7 +963,7 @@ theorem primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking_o
 /-- Unconditional cyclic-sector block primitivity and irreducibility after blocking.
 
 This uses `isIrreducibleOnCorner_of_cyclic_decomp_mps`, so the older
-`hProjStep` and `SectorFixedPointAlgebraRigidity` interfaces are no longer needed
+projection-step and fixed-point-algebra rigidity assumptions are no longer needed
 once the ambient tensor is irreducible and trace-preserving. -/
 theorem primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking
     {d D m : ℕ} [NeZero D] [NeZero m]
@@ -1015,6 +1015,57 @@ theorem primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking
   exact primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking_of_cornerIrreducible
     A hTP hγprim hperiph blocks P φ hPproj hPsum hcyclic hIntertwine hMul hStar hNondeg
     hCornerIrr
+
+/-- Cyclic sector decomposition with primitive and tensor-irreducible sector blocks.
+
+This strengthens `exists_cyclic_sector_decomp_of_TP_of_isIrreducibleTensor` by
+exposing the primitive and irreducible conclusions already available from the
+unconditional sector-orbit lift. It is the one-block result used in the later
+multi-block construction before the sectors of all live blocks are flattened to
+a common period. -/
+theorem exists_primitive_irreducible_cyclic_sector_decomp_of_TP_of_isIrreducibleTensor
+    {d D : ℕ} [NeZero D]
+    (A : MPSTensor d D)
+    (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (hIrr : IsIrreducibleTensor A) :
+    ∃ (m : ℕ) (_ : 0 < m)
+      (dim : Fin m → ℕ) (blocks : (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k)),
+      (∀ k, ∑ i : Fin (blockPhysDim d m), (blocks k i)ᴴ * blocks k i = 1) ∧
+      SameMPV₂ (blockTensor A m)
+        (toTensorFromBlocks (d := blockPhysDim d m) (μ := fun _ : Fin m => (1 : ℂ)) blocks) ∧
+      (∀ k, _root_.IsPrimitive
+        (transferMap (d := blockPhysDim d m) (D := dim k) (blocks k))) ∧
+      (∀ k, IsIrreducibleTensor (blocks k)) ∧
+      (∀ k, 0 < dim k) := by
+  -- Use shared setup to get conjugate Kraus data and the cyclic peripheral structure.
+  obtain ⟨K, h_unitalK, hIrrK, ρ, hρ_pd, h_adjfix, rfl⟩ :=
+    conjTranspose_kraus_setup A hTP hIrr
+  obtain ⟨m, γ, hm_pos, hγ_prim, hperiph_set⟩ :=
+    PeripheralSpectrum.peripheral_eigenvalues_cyclic_structure _ h_unitalK ρ hρ_pd h_adjfix hIrrK
+  have hperiph_range :
+      peripheralEigenvalues (transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) =
+        Set.range (fun j : Fin m => γ ^ (j : ℕ)) := by
+    rw [hperiph_set]
+    ext x
+    simp [Set.mem_range, eq_comm]
+  haveI : NeZero m := ⟨Nat.ne_of_gt hm_pos⟩
+  obtain ⟨dim, blocks, P, φ, hTP_blocks, hSame, hPproj, hPsum, hcyclic, _hComm,
+      _hTrace, hIntertwine, hMul, hStar, hNondeg⟩ :=
+    exists_cyclic_sector_decomp_after_blocking A hTP hIrr ρ hρ_pd h_adjfix hIrrK hγ_prim
+      hperiph_range
+  have hPrimIrr : ∀ u : Fin m,
+      _root_.IsPrimitive (transferMap (d := blockPhysDim d m) (D := dim u) (blocks u)) ∧
+        IsIrreducibleTensor (blocks u) :=
+    primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking
+      A hTP hIrr hγ_prim hperiph_range blocks P φ hPproj hPsum hcyclic hIntertwine hMul hStar
+      hNondeg
+  refine ⟨m, hm_pos, dim, blocks, hTP_blocks, hSame, ?_, ?_, ?_⟩
+  · intro k
+    exact (hPrimIrr k).1
+  · intro k
+    exact (hPrimIrr k).2
+  · intro k
+    exact Nat.pos_of_ne_zero (hNondeg k)
 
 end SectorOrbitLift
 

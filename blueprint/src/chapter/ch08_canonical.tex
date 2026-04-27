@@ -1402,6 +1402,27 @@ The following results separate the zero blocks from the
 	Apply Theorem~\ref{thm:cyclic_sector_decomp_after_blocking}.
 \end{proof}
 
+\begin{theorem}[Cyclic sector decomposition with primitive irreducible sectors]%
+\label{thm:cyclic_sector_decomp_irr_tp_prim_irr}
+	\lean{MPSTensor.exists_primitive_irreducible_cyclic_sector_decomp_of_TP_of_isIrreducibleTensor}
+	\leanok
+	\uses{thm:cyclic_sector_decomp_after_blocking, thm:blocked_sector_unconditional}
+	Let $A$ be a left-canonical irreducible tensor. Then there is a period
+	$m \ge 1$ and a unit-weight decomposition of $A^{[m]}$ into sector blocks
+	$(C_k)_{k=1}^m$ such that every $C_k$ is left-canonical, has primitive
+	transfer map, is tensor-irreducible, and has nonzero bond dimension.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:conjtranspose_kraus_setup, thm:peripheral_cyclic_structure,
+		thm:cyclic_sector_decomp_after_blocking, thm:blocked_sector_unconditional}
+	The proof repeats the cyclic-sector construction of
+	Theorem~\ref{thm:cyclic_sector_decomp_irr_tp}, keeps the projection and
+	compression data, and applies
+	Theorem~\ref{thm:blocked_sector_unconditional} to the resulting
+	sector blocks.
+\end{proof}
+
 \subsection{Sector irreducibility helpers}%
 \label{sec:sector_irreducibility_helpers}
 
@@ -2543,6 +2564,64 @@ The following results separate the zero blocks from the
 	\uses{thm:tp_primitive_blockdecomp}
 	Apply Theorem~\ref{thm:tp_primitive_blockdecomp} separately to the two tensors.
 \end{proof}
+
+\begin{theorem}[Zero-tail bookkeeping for live block tensors]%
+\label{thm:live_block_zero_tail_bookkeeping}
+	\lean{MPSTensor.liveBlock_positive_sameMPV₂_and_zeroTail_bookkeeping_of_sameMPV₂}
+	\leanok
+	\uses{def:same_mpv2, def:zero_mps_tensor, def:tensor_from_blocks}
+	Suppose two tensors have the same MPV family and each is expressed as a
+	zero-tail tensor plus a weighted live block tensor. Then the two live block
+	tensors agree on every positive system size, and at size $0$ the equality is
+	exactly the equality of the two zero-tail contributions plus the two live
+	bond-dimension traces.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{def:zero_mps_tensor}
+	For $N>0$, the MPV of a zero-tail tensor is zero, so the two decompositions
+	can be compared directly through the common MPV family. For $N=0$, the
+	zero-tail MPV is its bond dimension, giving the stated bookkeeping identity.
+\end{proof}
+
+\begin{theorem}[Equal zero tails give full live MPV equality]%
+\label{thm:live_block_same_mpv_zero_tail_eq}
+	\lean{MPSTensor.liveBlock_sameMPV₂_of_sameMPV₂_of_zeroTail_eq}
+	\leanok
+	\uses{thm:live_block_zero_tail_bookkeeping}
+	In the setting of Theorem~\ref{thm:live_block_zero_tail_bookkeeping}, if
+	the two zero-tail dimensions are equal, then the two live block tensors have
+	the same MPV family, including the length-zero case.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:live_block_zero_tail_bookkeeping}
+	The positive-length cases are exactly the first conclusion of
+	Theorem~\ref{thm:live_block_zero_tail_bookkeeping}. At $N=0$, substitute
+	the equality of zero-tail dimensions into the bookkeeping identity and cancel
+	the common scalar term.
+\end{proof}
+
+\begin{theorem}[Structural after-blocking form with zero-tail equations]%
+\label{thm:ft_after_blocking_structural_zero_tail}
+	\lean{MPSTensor.fundamentalTheorem_after_blocking_1606_structural_with_zeroTail}
+	\leanok
+	\uses{thm:tp_primitive_blockdecomp, def:same_mpv2, def:zero_mps_tensor}
+	If two tensors generate the same MPV family, then each tensor admits a blocked
+	decomposition into a zero-tail tensor plus nonzero left-canonical live blocks
+	with primitive transfer maps and positive bond dimensions. The theorem also
+	retains, for each blocking period, the relation that the blocked tensors
+	generate the same MPV family.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:tp_primitive_blockdecomp}
+	Apply Theorem~\ref{thm:tp_primitive_blockdecomp} separately to the two
+	tensors and keep the zero-tail MPV equations returned by that theorem. The
+	property that the blocked tensors generate the same MPV family follows by
+	blocking the original equality.
+\end{proof}
+
 
 \section{Open directions}\label{sec:open_directions}
 
