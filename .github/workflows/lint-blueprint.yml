@@ -10,8 +10,10 @@ on:
       - 'lean-toolchain'
       - 'lake-manifest.json'
       - '.github/actions/setup-lean/**'
+      - '.github/requirements/**'
       - '.github/workflows/lint-blueprint.yml'
       - 'blueprint/src/**'
+      - 'scripts/blueprint_bibtex.py'
       - 'scripts/blueprint_lean_sync.py'
   pull_request:
     types: [opened, synchronize, reopened]
@@ -21,8 +23,10 @@ on:
       - 'lean-toolchain'
       - 'lake-manifest.json'
       - '.github/actions/setup-lean/**'
+      - '.github/requirements/**'
       - '.github/workflows/lint-blueprint.yml'
       - 'blueprint/src/**'
+      - 'scripts/blueprint_bibtex.py'
       - 'scripts/blueprint_lean_sync.py'
 
 concurrency:
@@ -38,14 +42,13 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-
       - name: Set up Lean and blueprint tooling
         uses: ./.github/actions/setup-lean
         with:
           install-blueprint: 'true'
+
+      - name: Build blueprint bibliography
+        run: python3 scripts/blueprint_bibtex.py
 
       - name: Run leanblueprint web and check for errors
         working-directory: blueprint
