@@ -1763,6 +1763,7 @@ Lucia~\cite{Kastoryano2018Martingale}.
     \label{lem:transported_es_nonoverlap_positive}
     \lean{MPSTensor.CyclicWindowsDisjoint}
     \lean{MPSTensor.CyclicWindowsDisjoint.symm}
+    \lean{MPSTensor.CyclicWindowsDisjoint.of_not_cyclicWindowsOverlap}
     \lean{MPSTensor.localTermES_commute_of_cyclic_windows_disjoint}
     \lean{MPSTensor.localTermES_re_inner_nonneg_of_cyclic_windows_disjoint}
     \leanok
@@ -2190,11 +2191,11 @@ Lucia~\cite{Kastoryano2018Martingale}.
     \lean{MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_friedrichs}
     \leanok
     \uses{lem:parent_hamiltonian_finite_overlap_friedrichs_gap,
-        lem:cyclic_window_overlap_cardinality, lem:transported_es_local_projections}
+        lem:cyclic_window_overlap_cardinality, lem:transported_es_local_projections,
+        lem:cyclic_window_nonoverlap_positive}
     Fix $L>1$ and let $i\sim_L j$ mean that the cyclic supports of the
     length-$L$ windows at $i$ and $j$ meet. Suppose uniformly for every
-    $N\ge2L$ that non-overlapping transported local terms have nonnegative
-    ordered cross terms, while overlapping off-diagonal terms satisfy
+    $N\ge2L$ that overlapping off-diagonal terms satisfy
     \[
         \operatorname{Re}\langle h_{i,\mathrm{ES}}v,h_{j,\mathrm{ES}}v\rangle
         \ge -(1-\tfrac{1}{4L})\frac{1}{2(L-1)}
@@ -2207,21 +2208,24 @@ Lucia~\cite{Kastoryano2018Martingale}.
 \begin{proof}
     \leanok
     \uses{lem:parent_hamiltonian_finite_overlap_friedrichs_gap,
-        lem:cyclic_window_overlap_cardinality, lem:transported_es_local_projections}
+        lem:cyclic_window_overlap_cardinality, lem:transported_es_local_projections,
+        lem:cyclic_window_nonoverlap_positive}
     Lemma~\ref{lem:cyclic_window_overlap_cardinality} gives the row-cardinality
     bound $m=2(L-1)$ for the concrete cyclic-window overlap relation, and
     Lemma~\ref{lem:transported_es_local_projections} supplies the symmetric
-    projection structure of each transported local term. Apply
+    projection structure of each transported local term. If two cyclic supports
+    do not meet, the corresponding windows are site-disjoint, so
+    Lemma~\ref{lem:cyclic_window_nonoverlap_positive} gives the required
+    nonnegative ordered cross term. Apply
     Lemma~\ref{lem:parent_hamiltonian_finite_overlap_friedrichs_gap} with these
-    facts and the stated cross-term hypotheses.
+    facts and the displayed overlapping-window estimate.
 \end{proof}
 
 \begin{lemma}[Parent-Hamiltonian gap from overlapping cyclic Friedrichs data]
     \label{lem:parent_hamiltonian_cyclic_overlap_friedrichs_gap}
     \lean{MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_overlap_friedrichs}
     \leanok
-    \uses{lem:parent_hamiltonian_cyclic_window_friedrichs_gap,
-        lem:cyclic_window_nonoverlap_positive}
+    \uses{lem:parent_hamiltonian_cyclic_window_friedrichs_gap}
     Fix $L>1$ and let $i\sim_L j$ mean that the cyclic supports of the
     length-$L$ windows at $i$ and $j$ meet. Suppose uniformly for every
     $N\ge2L$ that overlapping off-diagonal terms satisfy
@@ -2236,11 +2240,11 @@ Lucia~\cite{Kastoryano2018Martingale}.
 
 \begin{proof}
     \leanok
-    \uses{lem:parent_hamiltonian_cyclic_window_friedrichs_gap,
-        lem:cyclic_window_nonoverlap_positive}
-    The preceding concrete non-overlap positivity lemma supplies the non-overlap
-    condition required by the cyclic-window finite-overlap theorem.  The displayed
-    overlapping estimate supplies the remaining ordered cross-term condition.
+    \uses{lem:parent_hamiltonian_cyclic_window_friedrichs_gap}
+    Apply Lemma~\ref{lem:parent_hamiltonian_cyclic_window_friedrichs_gap}.
+    Its non-overlap positivity and finite-row hypotheses are already internal to
+    that cyclic-window reduction; the displayed overlapping estimate supplies its
+    remaining ordered cross-term condition.
 \end{proof}
 
 \begin{lemma}[Parent-Hamiltonian gap from overlapping cyclic norm-compression data]
@@ -2441,6 +2445,7 @@ Lucia~\cite{Kastoryano2018Martingale}.
         lem:parent_hamiltonian_finite_overlap_friedrichs_gap,
         lem:cyclic_window_overlap_cardinality,
         lem:cyclic_window_nonoverlap_positive,
+        lem:parent_hamiltonian_cyclic_window_friedrichs_gap,
         lem:parent_hamiltonian_cyclic_overlap_friedrichs_gap,
         lem:parent_hamiltonian_cyclic_overlap_norm_gap}
     For an injective tensor $A$ and a range $L > 1$, the theorem asserts
@@ -2467,11 +2472,17 @@ Lucia~\cite{Kastoryano2018Martingale}.
     Lemmas~\ref{lem:parent_hamiltonian_finite_overlap_friedrichs_quadratic}
     and~\ref{lem:parent_hamiltonian_finite_overlap_friedrichs_gap} record the
     common finite-overlap specialization with $m=2(L-1)$.
-    Lemma~\ref{lem:cyclic_window_overlap_cardinality} gives the concrete cyclic
-    row-cardinality bound, while Lemma~\ref{lem:cyclic_window_nonoverlap_positive}
-    supplies the non-overlap positivity condition for support-disjoint windows.
-    Lemma~\ref{lem:parent_hamiltonian_cyclic_overlap_friedrichs_gap} isolates the
-    remaining overlapping-window Friedrichs estimate, and
+    Lemma~\ref{lem:transported_es_nonoverlap_positive} supplies the non-overlap
+    positivity statement for site-disjoint windows, and
+    Lemma~\ref{lem:cyclic_window_nonoverlap_positive} translates this to the
+    concrete support-disjoint cyclic windows.
+    Lemma~\ref{lem:cyclic_window_overlap_cardinality} gives the finite-overlap
+    row-cardinality bound.
+    Lemma~\ref{lem:parent_hamiltonian_cyclic_window_friedrichs_gap} combines
+    these ingredients with the finite-overlap reduction, so the remaining
+    analytic task is the Friedrichs-angle estimate for overlapping cyclic windows.
+    Lemma~\ref{lem:parent_hamiltonian_cyclic_overlap_friedrichs_gap} records the
+    same overlap-only formulation, and
     Lemma~\ref{lem:parent_hamiltonian_cyclic_overlap_norm_gap} records a sufficient
     norm-compression formulation.
 \end{proof}
