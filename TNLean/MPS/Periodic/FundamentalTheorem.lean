@@ -738,7 +738,7 @@ def PeriodicOverlapHypothesis.ofProportionalDecomp
 
 /-- **Split-data proportional periodic FT (Theorem 3.4, multi-block step).**
 
-This wrapper turns proportional split-data for two periodic block families into the
+This theorem converts proportional split-data for two periodic block families into the
 `PeriodicOverlapHypothesis` needed by `fundamentalTheorem_periodic_proportional`.
 It is the current formalized endpoint of the multi-block proportional-case argument:
 all overlap-dichotomy consequences are discharged internally, while the remaining
