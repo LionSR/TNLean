@@ -938,6 +938,10 @@
 <h1 id="ch:periodic_ft_apps">15 Periodic MPS: irreducible form and the periodic Fundamental Theorem</h1>
 
 <p>This chapter develops the periodic equal-case Fundamental Theorem of MPS (Theorem&#160;<a href="ch-periodic_ft_apps.html#thm:periodic_ft">15.25</a>) following <span class="cite">
+	(
+	DeLasCuevas2017Irreducible
+	
+	)
 </span>, and records its two applications: the symmetry corollary lifting a physical on-site symmetry of a tensor in irreducible form to a virtual \(Z\)-gauge, and the equivalence between \(p\)-refinability of the matrix-product-vector family and \(p\)-divisibility of the transfer map. </p>
 <h1 id="sec:periodic_irreducible_rotation">15.1 Periodic irreducible form and physical-index rotation</h1>
 
@@ -1031,7 +1035,9 @@
 </div>
 <p> where each block \(A_j\) is an \(m_j\)-periodic tensor, each weight \(\mu _j \neq 0\), and the blocks are pairwise non-repeated (no two distinct \(j, j'\) have \(A_j\) gauge-equivalent to \(A_{j'}\)). This is the standard form introduced in <span class="cite">
 	(
-	
+	DeLasCuevas2017Irreducible
+	, §II
+	)
 </span>. It extends the normal canonical form (Definition&#160;<a href="ch-canonical.html#def:is_normal_canonical_form">11.38</a>), which requires the stronger condition that every block is \(1\)-periodic. </p>
 
   </div>
@@ -2365,6 +2371,10 @@
 <h1 id="sec:periodic_ft">15.2 Periodic Fundamental Theorem</h1>
 
 <p>The theorems in Chapter&#160;<a href="ch-assembly.html">14</a> all require that each block has a <em>primitive</em> transfer map, i.e. peripheral spectrum exactly \(\{ 1\} \). This is achieved by blocking the original tensor by a common period. The paper <span class="cite">
+	(
+	DeLasCuevas2017Irreducible
+	
+	)
 </span> develops a framework that avoids this blocking step, giving a fundamental theorem that applies directly to periodic tensors. </p>
 <h2 id="a0000000109">15.2.1 Common-period blocking lemmas</h2>
 <div class="definition_thmwrapper theorem-style-definition" id="def:lcm_period">
@@ -2562,6 +2572,10 @@
 </div>
 <h2 id="a0000000110">15.2.2 Statement of the periodic Fundamental Theorem</h2>
 <p>The following is Theorem&#160;3.8 (“equal case”) of <span class="cite">
+	(
+	DeLasCuevas2017Irreducible
+	
+	)
 </span>. </p>
 <div class="theorem_thmwrapper theorem-style-plain" id="thm:periodic_ft">
   <div class="theorem_thmheading">
@@ -2647,6 +2661,10 @@
 </div>
 <p> rather than by an ordinary aperiodic gauge alone: the operator \(Z_j\) sits on the closing virtual bond and satisfies \(Z_j^{m_j}=\mathbb {1}\). Equivalently, setting \(Y = \bigoplus _j Y_j \otimes \mathbb {1}_{r_j}\) and \(Z = \bigoplus _j Z_j \otimes \mathbb {1}_{r_j}\), one has \(Z A^i = Y B^i Y^{-1}\) for all \(i\), with \([A^i, Z] = 0\) and \(\mathcal{V}(A) = \mathcal{V}(ZA)\). </p>
 <p><em>Remark.</em> The proof is conditional on the periodic-overlap dichotomy (Proposition&#160;3.3 of&#160;<span class="cite">
+	(
+	DeLasCuevas2017Irreducible
+	
+	)
 </span>), which is left here as a separate hypothesis. </p>
 
   </div>
@@ -2917,6 +2935,10 @@
   \[  P_u \cdot A^{i_0} \cdot P_{u+1} \cdot A^{i_1} \cdot P_{u+2} \cdots P_{u+m-1} \cdot A^{i_{m-1}} \cdot P_u.  \]
 </div>
 <p> This is the ambient matrix-algebra representative of the compressed blocked sector tensor \(C_u\) in a cyclic sector decomposition; the identification with \(C_u\) through the compression isometry \(\varphi _u\) is Equation A.8 of&#160;<span class="cite">
+	(
+	DeLasCuevas2017Irreducible
+	
+	)
 </span>. </p>
 
   </div>
@@ -3606,9 +3628,17 @@
   <p> Theorem&#160;<a href="ch-periodic_ft_apps.html#thm:periodic_ft">15.25</a> and the equal-MPV Fundamental Theorem (Theorem&#160;<a href="ch-assembly.html#thm:ft_equal">14.5</a>) both characterize the gauge freedom between two tensors with equal MPV families, but they do so at different levels: </p>
 <ol class="enumerate">
   <li><p><em>Blocking approach</em> (Theorem&#160;<a href="ch-assembly.html#thm:ft_equal">14.5</a>, following <span class="cite">
+	(
+	Cirac2017MPDO_AnnPhys
+	
+	)
 </span>): Block both \(A\) and \(B\) by a common period \(p\) so that all blocks of \(A^{[p]}\) and \(B^{[p]}\) are primitive (\(1\)-periodic). Apply the aperiodic fundamental theorem to the blocked tensors. The conclusion is that \(A^{[p]}\) and \(B^{[p]}\) are gauge equivalent. The \(Z\)-gauge freedom does not appear because blocking absorbs the periodicity. </p>
 </li>
   <li><p><em>Periodic approach</em> (Theorem&#160;<a href="ch-periodic_ft_apps.html#thm:periodic_ft">15.25</a>, following <span class="cite">
+	(
+	DeLasCuevas2017Irreducible
+	
+	)
 </span>): Work directly with the periodic blocks of \(A\) and \(B\). The conclusion includes an extra \(Z\)-gauge transformation reflecting the non-trivial phase ambiguity that arises for periodic blocks. The \(Z\) matrix satisfies \(Z^m = \mathbb {1}\) and commutes with all Kraus operators; it is invisible to the MPV family because it only introduces \(m\)-th roots of unity in the trace. </p>
 </li>
 </ol>
@@ -3813,6 +3843,10 @@
   </div>
   <div class="remark_thmcontent">
   <p>  There is also a proportional-case version of the periodic Fundamental Theorem (Theorem&#160;3.4, “proportional case”, in <span class="cite">
+	(
+	DeLasCuevas2017Irreducible
+	
+	)
 </span>): if \(\mathcal{V}(A) = \lambda _N \mathcal{V}(B)\) for scalars \(\lambda _N\) with \(\lambda _N \to \lambda \neq 0\), then the bases of periodic tensors of \(A\) and \(B\) are equivalent (up to the same gauge and \(Z\) freedom as above). This extends Theorems&#160;<a href="ch-assembly.html#thm:ft_proportional">14.2</a> and&#160;<a href="ch-assembly.html#thm:ft_proportional_nt">14.4</a> to the periodic setting. </p>
 
   </div>
@@ -4279,6 +4313,10 @@
 <h1 id="sec:periodic_refinement">15.4 Refinement and divisibility</h1>
 
 <p>The next theorem characterises when the matrix-product-vector family of a periodic tensor admits a finer description in terms of a smaller-period tensor whose blocks have been merged. This was the original motivation for the irreducible-form framework in <span class="cite">
+	(
+	DeLasCuevas2017Irreducible
+	
+	)
 </span>. </p>
 <div class="definition_thmwrapper theorem-style-definition" id="def:p_divisible_channel">
   <div class="definition_thmheading">
@@ -5369,6 +5407,10 @@
   </div>
   <div class="remark_thmcontent">
   <p> The original motivation for Theorem&#160;<a href="ch-periodic_ft_apps.html#thm:thm_4_1_p_refinement">15.59</a> is a continuum-limit construction in the spirit of <span class="cite">
+	(
+	DeLasCuevas2017Irreducible
+	
+	)
 </span>: refinability along arbitrarily large \(p\) is equivalent to infinite divisibility of the transfer map, which selects out continuum limits of translationally invariant MPS. The further consequences are explored elsewhere. </p>
 
   </div>

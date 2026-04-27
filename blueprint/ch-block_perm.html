@@ -938,7 +938,15 @@
 <h1 id="ch:block_perm">12 Block Permutation and Separation</h1>
 
 <p>This chapter records the algebra of block permutations, the product-algebra maps built from per-block same-MPV data, the invariant-projection splitting step that reduces a tensor to smaller blocks, and the block-separation argument that recovers the individual blocks from a block-diagonal same-MPV hypothesis. The results correspond to the canonical-form uniqueness of&#160;<span class="cite">
+	(
+	PerezGarcia2007Matrix
+	
+	)
 </span> and the block-separation results of&#160;<span class="cite">
+	(
+	Cirac2021Matrix
+	
+	)
 </span>. </p>
 <h1 id="a0000000099">12.1 Block permutation algebra</h1>
 <div class="definition_thmwrapper theorem-style-definition" id="def:block_ideal">
@@ -1371,7 +1379,9 @@
   <p> Theorem&#160;<a href="ch-block_perm.html#thm:ring_perm">12.3</a> gives the permutation \(\pi \). Theorem&#160;<a href="ch-block_perm.html#thm:dim_preserved">12.5</a> identifies the matrix sizes \(D_{\pi (k)} = D_k\). For each \(k\), Theorem&#160;<a href="ch-block_perm.html#thm:component_map_bijective">12.6</a> gives a bijective multiplicative map from \(M_{D_k}(\mathbb {C})\) to \(M_{D_{\pi (k)}}(\mathbb {C})\) extracted from the single-support inputs of&#160;\(T\); after reindexing by the dimension equality, this is a \(\mathbb {C}\)-algebra automorphism of \(M_{D_k}(\mathbb {C})\). Skolem–Noether (Theorem&#160;<a href="ch-single.html#thm:skolem_noether">4.9</a>) makes each such automorphism inner. </p>
 <p>This is a standard result in the theory of semisimple algebras; see <span class="cite">
 	(
-	
+	Cirac2021Matrix
+	, §IV.A
+	)
 </span> for the MPS context. </p>
 
   </div>
@@ -2093,10 +2103,14 @@
 </ol>
 <p> Only this one-sided normalization is assumed; no unital condition is assumed here. Condition&#160;(5) is a primitivity hypothesis: for a primitive channel (<span class="cite">
 	(
-	
+	Wolf2012Quantum
+	, Thm.&#160;6.7, item&#160;3
+	)
 </span>), \(T^n(\rho )\to \rho _\infty \) for every initial state, which forces the self-overlap to converge to&#160;\(1\). See also <span class="cite">
 	(
-	
+	Wolf2012Quantum
+	, Thm.&#160;6.8
+	)
 </span> for the completely-positive characterisation and Chapter&#160;<a href="ch-spectral.html">9</a> for the spectral-gap proof. </p>
 
   </div>
@@ -2122,7 +2136,9 @@
   <div class="remark_thmcontent">
   <p> The convention here differs from <span class="cite">
 	(
-	
+	PerezGarcia2007Matrix
+	, Thm.&#160;4
+	)
 </span>, which uses the unital gauge \(\sum _i A_k^i (A_k^i)^\dagger = \mathbb {1}\). This chapter instead works in the dual TP gauge \(\sum _i (A_k^i)^\dagger A_k^i = \mathbb {1}\). A positive-definite fixed point of the adjoint transfer map provides a gauge transformation between these two normalizations (Theorem&#160;<a href="ch-qpf.html#thm:left_canonical_gauge">8.11</a>). </p>
 
   </div>
@@ -2147,6 +2163,10 @@
   </div>
   <div class="remark_thmcontent">
   <p> In the literature&#160;<span class="cite">
+	(
+	Cirac2021Matrix
+	
+	)
 </span>, condition&#160;(5) is derived from primitivity of the transfer map (peripheral spectrum \(= \{ 1\} \)). Theorem&#160;<a href="ch-canonical.html#thm:canonical_from_primitive">11.28</a> gives this implication: per-block primitivity implies overlap convergence, so condition&#160;(5) is redundant when primitivity holds. The canonical form conditions retain condition&#160;(5) explicitly because it can be verified independently of primitivity. </p>
 
   </div>
@@ -2801,10 +2821,14 @@
   <div class="remark_thmcontent">
   <p> The block-permutation part follows the decomposition of automorphisms of semisimple matrix algebras used in&#160;<span class="cite">
 	(
-	
+	Cirac2021Matrix
+	, §IV.A
+	)
 </span>. The separation part follows the induction on blocks from <span class="cite">
 	(
-	
+	PerezGarcia2007Matrix
+	, Appendix&#160;E
+	)
 </span>; the checked proof here uses overlap bounds and mixed-transfer decay rather than the alternative Newton/Vandermonde route recorded above. </p>
 
   </div>

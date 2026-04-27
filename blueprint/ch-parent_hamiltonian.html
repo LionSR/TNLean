@@ -938,6 +938,10 @@
 <h1 id="ch:parent_hamiltonian">19 Parent Hamiltonians</h1>
 
 <p>This chapter introduces the local ground-space construction and the parent interaction for translation-invariant periodic MPS. We follow the standard setup from <span class="cite">
+	(
+	Cirac2021Matrix;PerezGarcia2007Matrix
+	
+	)
 </span>, with the \(N\)-site Hilbert space modelled as coefficient functions </p>
 <div class="displaymath" id="a0000001307">
   \[  \{ 0,\ldots ,d{-}1\} ^N \to \mathbb {C},  \]
@@ -5898,7 +5902,9 @@
   <div class="proof_content">
   <p> The remaining step is the closure property from <span class="cite">
 	(
-	
+	Cirac2021Matrix
+	, §&#160;IV.C
+	)
 </span>: Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:reduced_wrapped_boundary_compatibilities">19.49</a> supplies the two one-sided wrapped-boundary identities for the open-chain boundary matrix \(X\). The padded-annihilation lemma records that exact complement-span length mismatches are no longer the obstruction. What is still missing is the common-middle comparison that turns the one-sided identities into commutation of \(X\) with a sufficiently long word product; Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:ground_space_map_mpv_of_long_word_commutes">19.64</a> would then put \(\Gamma _N(X)\) directly in the MPV line. </p>
 
   </div>
@@ -6258,7 +6264,9 @@
   <div class="definition_thmcontent">
   <p>   The parent Hamiltonian with block length&#160;\(L\) on \(N\) sites has <em>commuting</em> local terms if \(h_i h_j = h_j h_i\) for all \(i,j \in \{ 0,\ldots ,N{-}1\} \). See Ref.&#160;<span class="cite">
 	(
-	
+	Cirac2021Matrix
+	, Definition&#160;3.9
+	)
 </span>. </p>
 
   </div>
@@ -6325,7 +6333,9 @@
   <div class="definition_thmcontent">
   <p>   A <em>nearest-neighbor commuting parent Hamiltonian</em> (NNCPH) is a commuting parent Hamiltonian with block length \(L = 2\). See Ref.&#160;<span class="cite">
 	(
-	
+	Cirac2021Matrix
+	, Definition&#160;3.9
+	)
 </span>. </p>
 
   </div>
@@ -6437,6 +6447,10 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   If \(A\) is a normal renormalization fixed point, then for every chain length \(N \ge 2\) the parent Hamiltonian with \(L = 2\) has commuting local terms. This implication is cited here from the product-of-entangled-pairs description in Appendix&#160;B of Theorem&#160;3.10 in&#160;<span class="cite">
+	(
+	Cirac2021Matrix
+	
+	)
 </span>. </p>
 
   </div>
@@ -6554,6 +6568,10 @@
 <h1 id="sec:decorrelation">19.5 Decorrelation and commuting parent Hamiltonians</h1>
 
 <p>This section develops the abstract operator-algebraic formulation of decorrelation and its connection to commuting parent Hamiltonians, following Appendix&#160;D, §D.2 of&#160;<span class="cite">
+	(
+	Cirac2021Matrix
+	
+	)
 </span>. </p>
 <div class="definition_thmwrapper theorem-style-definition" id="def:is_decorrelated">
   <div class="definition_thmheading">
@@ -7456,6 +7474,10 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   If a subspace \(K\) has a commuting parent Hamiltonian decomposition \(P_K = P_{AX} \circ P_{XB}\) with \([P_{AX}, P_{XB}] = 0\), and \(A\)-observables commute with \(P_{XB}\) while \(B\)-observables commute with \(P_{AX}\), then regions \(A\) and \(B\) are decorrelated w.r.t. \(K\). This is the backward direction of Proposition&#160;D.3 from&#160;<span class="cite">
+	(
+	Cirac2021Matrix
+	
+	)
 </span>, Appendix&#160;D, §D.2. </p>
 
   </div>
@@ -7674,6 +7696,10 @@
   \[  Q_{AX} + Q_{XB} - Q_{AX} \circ Q_{XB} = 1 - P_K,  \]
 </div>
 <p> where \(Q_{AX} = 1 - P_{AX}\) and \(Q_{XB} = 1 - P_{XB}\) are the complementary projectors. This is the frustration-free form of the parent Hamiltonian from <span class="cite">
+	(
+	Cirac2021Matrix
+	
+	)
 </span>, Appendix&#160;D, §D.2. </p>
 
   </div>
@@ -7760,6 +7786,10 @@
   \[  P_K v = v \quad \Longleftrightarrow \quad P_{AX} v = v \text{ and } P_{XB} v = v.  \]
 </div>
 <p> This is the algebraic form of equation&#160;(D.2) from <span class="cite">
+	(
+	Cirac2021Matrix
+	
+	)
 </span>: \(K_{AXB} = (K_{AX} \otimes H_B) \cap (H_A \otimes K_{XB})\). </p>
 
   </div>
@@ -7780,6 +7810,10 @@
 <h1 id="sec:spectral_gap">19.6 Spectral gap</h1>
 
 <p>A frustration-free Hamiltonian is <em>gapped</em> if the first excited eigenvalue is bounded away from zero uniformly in the chain length \(N\). For MPS parent Hamiltonians, the spectral gap follows from a martingale criterion due to Kastoryano and Lucia&#160;<span class="cite">
+	(
+	Kastoryano2018Martingale
+	
+	)
 </span>. </p>
 <div class="definition_thmwrapper theorem-style-definition" id="def:parent_ground_space_es">
   <div class="definition_thmheading">
@@ -10176,6 +10210,10 @@
   \[  \sum _{\{ i,j\} , \text{overlap}} c_{ij}(h_i + h_j) = \sum _i \Bigl(\sum _{\substack {j \ne i \\ \text{overlap}}} c_{ij}\Bigr) h_i \le H,  \]
 </div>
 <p> where the last inequality uses the row-sum hypothesis \(\sum _{j \ne i} c_{ij} \le 1\). Combining, \(H^2 \ge H - (1-\gamma )H = \gamma H\). For any eigenvector with \(H\psi = \lambda \psi \) and \(\lambda {\gt} 0\), this gives \(\lambda ^2 \ge \gamma \lambda \), hence \(\lambda \ge \gamma \)&#160;<span class="cite">
+	(
+	Kastoryano2018Martingale
+	
+	)
 </span>. </p>
 
   </div>
@@ -10249,7 +10287,15 @@
   <p> Two terms \(h_i, h_j\) with \(0 {\lt} d_N(i,j) {\lt} L\) have supports overlapping in \(L - d_N(i,j)\) sites (where \(d_N\) is the cyclic distance on the \(N\)-site ring). Since \(A\) is injective, the intersection property (Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:ground_space_intersection">19.33</a>) gives the qualitative identity \(\ker (h_i) \cap \ker (h_j) = G_{[i,j+L-1]}(A)\). Because the local Hilbert space is finite-dimensional, the subspaces \(\ker (h_i)\) and \(\ker (h_j)\) live in a fixed finite-dimensional space. The intersection identity shows that \(\ker (h_i) \cap \ker (h_j)\) is exactly \(G_{[i,j+L-1]}(A)\); in particular there is no non-trivial vector in one kernel that is orthogonal to the other yet lies in both. Hence the Friedrichs angle \(\theta _{d_N(i,j)}\) between \(\ker (h_i)\) and \(\ker (h_j)\) is strictly positive (for the fixed injective tensor \(A\)). Because the angle depends only on the overlap pattern \(d_N(i,j) \in \{ 1,\ldots ,L-1\} \) and not on the absolute position, the number of distinct angles is at most \(L-1\). Let \(\alpha := \max _{1 \le s {\lt} L} \cos \theta _s {\lt} 1\) be the worst-case cosine of the Friedrichs angles. </p>
 <p><em>Row-sum bound.</em> Since \(L \ge 2\), each site \(i\) overlaps with at most \(2(L-1)\) neighbours (those \(j\) with \(0 {\lt} d_N(i,j) {\lt} L\)). Set \(c_{ij} := \tfrac {1}{2(L-1)}\) for every overlapping pair and \(c_{ij} := 0\) otherwise. These constants depend only on the cyclic distance \(d_N(i,j)\) and therefore satisfy \(c_{ij} = c_{ji}\). Then \(\sum _{j \ne i} c_{ij} \le 2(L-1)\cdot \tfrac {1}{2(L-1)} = 1\), satisfying the row-sum hypothesis of Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:martingale_criterion">19.122</a>. </p>
 <p><em>Positivity of \(\gamma \).</em> The Friedrichs angle bound gives, for each overlapping pair, \(h_i h_j + h_j h_i \ge -\alpha \, (h_i + h_j)\). The martingale inequality holds with \(\gamma = 1 - 2(L-1)\alpha \), which requires \(c_{ij}(1-\gamma ) = \tfrac {1}{2(L-1)} \cdot 2(L-1)\alpha = \alpha \) (matching the Friedrichs bound exactly). Since \(\alpha {\lt} 1\) (the Friedrichs angle is strictly positive), it remains to show \(\gamma {\gt} 0\), i.e. \(\alpha {\lt} \tfrac {1}{2(L-1)}\). In the blocked picture used in the spectral-gap theorem below, \(L = 2\) and each site overlaps with at most \(2\) neighbours, so the condition reduces to \(\alpha {\lt} \tfrac {1}{2}\). For \(L = 2\) with an injective tensor, the two projectors \(h_i\) and \(h_{i+1}\) act on a finite-dimensional space, and the intersection property (Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:ground_space_intersection">19.33</a>) guarantees that \(\ker (h_i) \cap \ker (h_{i+1})\) is exactly \(G_{[i,i+2]}(A)\); hence \(\| P_i P_{i+1}\|  {\lt} 1\) (the Friedrichs cosine is strictly less than&#160;1). On a finite-dimensional space with two projectors, the Friedrichs cosine satisfies the quantitative bound \(\alpha \le 1 - c_{\min }\) where \(c_{\min } {\gt} 0\) depends on the minimal principal angle between the two kernels. The bound \(\alpha {\lt} \tfrac {1}{2}\) then follows from the Nachtergaele finite-size criterion&#160;<span class="cite">
+	(
+	Nachtergaele1996Spectral
+	
+	)
 </span>, which establishes that the overlap \(\| P_i P_{i+1}\| \) for injective MPS is bounded away from \(1\) by a constant depending only on the tensor&#160;\(A\). For general \(L {\gt} 2\), the uniform constants \(c_{ij} = \tfrac {1}{2(L-1)}\) make the condition \(\alpha {\lt} \tfrac {1}{2(L-1)}\) increasingly restrictive as \(L\) grows. A more refined choice of separation-dependent constants \(c_{ij} = c_{d_N(i,j)}\) that weight small-separation (large-overlap) pairs more heavily can exploit the exponential decay of the Friedrichs cosine \(\alpha _s\) in \(s\) to satisfy the row-sum constraint. However, this refinement is not needed for the main result: the spectral-gap argument below is applied only with \(L = 2\) in the blocked picture. In all cases, the constants depend only on \(A\) and are independent of&#160;\(N\)&#160;<span class="cite">
+	(
+	Fannes1992Finitely;Kastoryano2018Martingale
+	
+	)
 </span>. </p>
 
   </div>
@@ -10456,6 +10502,10 @@
 <h1 id="sec:degenerate_ground_space">19.7 Ground space of non-injective MPS</h1>
 
 <p>For a general (non-injective) MPS tensor in block-diagonal canonical form, the ground space is no longer one-dimensional. Instead, it is spanned by the MPVs of the individual normal blocks — the basis of normal tensors (BNT) from Chapter&#160;<a href="ch-bnt.html">13</a>&#160;<span class="cite">
+	(
+	Fannes1992Finitely;PerezGarcia2007Matrix
+	
+	)
 </span>. </p>
 <div class="definition_thmwrapper theorem-style-definition" id="def:parent_hamiltonian_ground_space_bnt">
   <div class="definition_thmheading">

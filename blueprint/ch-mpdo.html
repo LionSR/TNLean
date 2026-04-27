@@ -1567,7 +1567,9 @@
 </div>
 <p> This is the mixed-state analogue of the renormalization fixed-point condition for MPS tensors; see <span class="cite">
 	(
-	
+	Cirac2021Matrix
+	, Definition&#160;4.2
+	)
 </span>. </p>
 
   </div>
@@ -1724,7 +1726,9 @@
 </div>
 <p> This is the global positivity condition of <span class="cite">
 	(
-	
+	Cirac2017MPDO_AnnPhys
+	, §4.1
+	)
 </span>. </p>
 
   </div>
@@ -1795,7 +1799,9 @@
 </div>
 <p> where \(\otimes \) denotes the Kronecker product, \(\overline{(\cdot )}\) denotes entrywise complex conjugation, and \((\cdot )_{e,e}\) denotes reindexing along \(e\) from \(\{ 0, \ldots , D' - 1\}  \times \{ 0, \ldots , D' - 1\} \) back to \(\{ 0, \ldots , D - 1\} \). This is the local purification form of <span class="cite">
 	(
-	
+	Cirac2017MPDO_AnnPhys
+	, §4.3
+	)
 </span>. </p>
 
   </div>
@@ -2024,7 +2030,9 @@
   <div class="definition_thmcontent">
   <p>   An MPO tensor \(M\) has a <em>purification RFP</em> if it admits an LPDO witness whose purifying MPS tensor is a pure-state renormalization fixed point. This is <span class="cite">
 	(
-	
+	Cirac2021Matrix
+	, Definition&#160;4.3
+	)
 </span>. </p>
 
   </div>
@@ -2753,6 +2761,10 @@
 </div>
 <h1 id="a0000000016">3.7 Simple local structure from SAL and ZCL</h1>
 <p>For the simple MPDO case in Appendix&#160;C.2 of <span class="cite">
+	(
+	Cirac2017MPDO_AnnPhys
+	
+	)
 </span>, the strong-area-law hypothesis is used locally through the equality case of strong subadditivity for a normalized three-site reduced state. </p>
 <div class="definition_thmwrapper theorem-style-definition" id="def:mpdo_eta_structure">
   <div class="definition_thmheading">
@@ -3999,7 +4011,9 @@
   <div class="definition_thmcontent">
   <p>   An MPO tensor is in <em>vertical canonical form</em> if its diagonal MPS tensor \(\{ M^{ii}\} _{i=0}^{d-1}\) generates the same MPV family as a block-diagonal tensor obtained from a basis of normal tensors by repeating each block according to a multiplicity and weighting each copy by a positive scalar. This is the flattened form of the decomposition \(\bigoplus _\alpha \mu _\alpha \otimes M_\alpha \) from <span class="cite">
 	(
-	
+	Cirac2017MPDO_AnnPhys
+	, §4.4
+	)
 </span>. </p>
 
   </div>
@@ -4224,7 +4238,9 @@
   <div class="proof_content">
   <p> This is Lemma&#160;L from <span class="cite">
 	(
-	
+	Cirac2017MPDO_AnnPhys
+	, Appendix&#160;A
+	)
 </span>, using the abstract Proposition&#160;IV.3 selector criterion from Theorem&#160;<a href="ch-mpdo.html#thm:propblockinj_abstract">3.43</a>. Expanding the hypothesis over a word of length&#160;\(L+1\) beginning with the fixed site and folding each block contribution into a trace pairing against the corresponding first-site insertion tensor yields, upon taking the \(Y\)-\(Z\) difference, a tuple of block matrices whose trace pairings against every length-\(L\) block word vanish. The biCF hypothesis then forces each block difference to be zero, and dividing by the nonzero weight \(\mu _k^{L+1}\) concludes the blockwise equality of the two first-site insertions. </p>
 
   </div>
@@ -4304,7 +4320,9 @@
 <h1 id="a0000000018">3.9 Fusion isometries</h1>
 <p>Following <span class="cite">
 	(
-	
+	Cirac2017MPDO_AnnPhys
+	, §4.5
+	)
 </span>, the current formal development describes the transfer-map content of the fusion-isometry picture. For each blocked size \(n \ge 1\), the doubled-index blocked tensor of an MPO has a blocked transfer map \(E_n\) acting on bond-space matrices, and the support algebra is modeled by a subspace through which \(E_n\) factors as a retract. </p>
 <div class="definition_thmwrapper theorem-style-definition" id="def:mpdo_fusion_isometry">
   <div class="definition_thmheading">
@@ -4820,7 +4838,9 @@
   <div class="definition_thmcontent">
   <p>   An MPO tensor \(M\) satisfies the <em>algebra-structure formulation</em> used here when there exist algebra-structure data whose support algebra at every positive blocking size coincides with the fixed-point algebra of the adjoint blocked transfer map. This is a nontrivial algebraic condition, but it is still weaker than the full coefficient formulation of <span class="cite">
 	(
-	
+	Cirac2017MPDO_AnnPhys
+	, Theorem&#160;IV.13&#160;(ii)
+	)
 </span>, since the coefficient family \(c_{\alpha ,\beta ,\gamma }^{(L)}\) is not yet extracted. </p>
 
   </div>
@@ -5068,7 +5088,9 @@
 </div>
 <p>This still falls short of the full converse direction of <span class="cite">
 	(
-	
+	Cirac2017MPDO_AnnPhys
+	, Theorem&#160;IV.13
+	)
 </span>: the present compatibility predicate only sees stabilized adjoint fixed-point algebras, not yet the paper’s coefficient/BNT data. The current formal layer still does not recover the special diagonal matrices \(\chi _{\alpha ,\beta ,\gamma }\) from Theorem&#160;IV.13(ii). What it does provide is the first explicit coefficient data attached to the algebra tower: a chosen basis of each support algebra, coordinate maps into a finite scalar family, and the corresponding multiplication / inclusion coefficient arrays. </p>
 <div class="definition_thmwrapper theorem-style-definition" id="def:mpdo_blocked_coefficients">
   <div class="definition_thmheading">
@@ -5624,7 +5646,9 @@
 </div>
 <p> where \(\Pi _{\mathrm{diag}}\) is the projection that zeroes the off-diagonal entries of \(X\); then \(\Pi _{\mathrm{diag}} \circ \Pi _{\mathrm{diag}} = \Pi _{\mathrm{diag}}\), the channel \(E\) has peripheral spectrum \(\{ 1\} \) and diagonal fixed-point algebra at every blocking size, yet \(E \circ E \neq E\). Closing the converse therefore requires strengthening the predicate to the coefficient formulation of <span class="cite">
 	(
-	
+	Cirac2017MPDO_AnnPhys
+	, Theorem&#160;IV.13&#160;(ii)
+	)
 </span>: the positive diagonal matrices \(\chi _{\alpha ,\beta ,\gamma }\) of Appendix&#160;C.3 and the coefficient identity \(c^{(L)}_{\alpha ,\beta ,\gamma } = \mathrm{tr}(\chi _{\alpha ,\beta ,\gamma }^{L})\) of Appendix&#160;C.4. The scalar Newton–Girard power-sum identity needed for the latter step is already available as Theorem&#160;<a href="ch-bnt.html#thm:newton_girard">13.28</a>. </p>
 
   </div>
@@ -5632,7 +5656,9 @@
 <h2 id="a0000000020">3.10.1 Diagonal \(\chi \)-matrices and the trace-power formula</h2>
 <p>The following layer formalizes the target shape of <span class="cite">
 	(
-	
+	Cirac2017MPDO_AnnPhys
+	, Theorem&#160;IV.13&#160;(ii)
+	)
 </span> in which the structure coefficients of the length-\(L\) operator algebra are trace-powers of positive diagonal matrices \(\chi _{\alpha ,\beta ,\gamma }\). The RFP MPDO itself is not yet constructed here; what is formalized is the language in which the paper’s identity is stated, together with the elementary trace-power identity for diagonal matrices. </p>
 <div class="definition_thmwrapper theorem-style-definition" id="def:mpdo_diagonal_chi_family">
   <div class="definition_thmheading">
@@ -5827,7 +5853,9 @@
 </div>
 <p> for every \(L \ge 0\) and every triple \((\alpha , \beta , \gamma )\), where \(r_{\alpha ,\beta ,\gamma }\) is the size of \(\chi _{\alpha ,\beta ,\gamma }\). This is the formal analogue of the target identity of <span class="cite">
 	(
-	
+	Cirac2017MPDO_AnnPhys
+	, Theorem&#160;IV.13&#160;(ii)
+	)
 </span>; the existential version—“there exists \(\chi \) for which \((c,\chi )\) has trace-power form”—is obtained by quantifying over \(\chi \). </p>
 
   </div>
@@ -6024,6 +6052,10 @@
   </div>
   <div class="definition_thmcontent">
   <p>    An MPO tensor is a Gibbs state of a nearest-neighbor commuting Hamiltonian if every finite-chain operator admits the equivalent positive-operator presentation \(\rho ^{(N)} = c \prod _i B_{i,i+1}\) with \(c {\gt} 0\) and commuting nearest-neighbor factors. The projector-limit convention after source label <span class="ttfamily">defrhoNComm</span> in <span class="cite">
+	(
+	Cirac2017MPDO_AnnPhys
+	
+	)
 </span> identifies this with the exponential Gibbs form. </p>
 
   </div>
@@ -6172,6 +6204,10 @@
   </div>
   <div class="definition_thmcontent">
   <p>    This is the conjunction of the GSNNCH condition with MPO zero correlation length, matching item&#160;(iii) of the simple-MPDO equivalence in <span class="cite">
+	(
+	Cirac2017MPDO_AnnPhys
+	
+	)
 </span> (source label <span class="ttfamily">thm:main-simple</span>). </p>
 
   </div>

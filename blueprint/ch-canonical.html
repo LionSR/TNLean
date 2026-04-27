@@ -938,11 +938,25 @@
 <h1 id="ch:canonical">11 Canonical Form Reduction</h1>
 
 <p>This chapter reduces a general MPS tensor to block-diagonal data via iterated invariant-subspace decomposition. Two reduction schemes are relevant. The block-injective reduction aims at injective TP-normalized blocks and the canonical form conditions of Chapter&#160;<a href="ch-block_perm.html">12</a>. The normal-canonical reduction uses a weighted family of irreducible TP-normalized blocks with primitive transfer maps and pairwise distinct nonzero weight moduli, in the sense of <span class="cite">
+	(
+	Cirac2017MPDO_AnnPhys
+	
+	)
 </span>. The Perron–Frobenius eigenvector existence and TP-gauge construction are in Chapter&#160;<a href="ch-qpf.html">8</a>; this chapter uses them to produce left-canonical normalization data and the normal canonical form data. The reduction draws on <span class="cite">
+	(
+	PerezGarcia2007Matrix
+	
+	)
 </span>, <span class="cite">
+	(
+	Cirac2021Matrix
+	
+	)
 </span>, and&#160;<span class="cite">
 	(
-	
+	Wolf2012Quantum
+	, Ch.&#160;6
+	)
 </span>. </p>
 <h1 id="a0000000088">11.1 Block-diagonal construction</h1>
 <div class="definition_thmwrapper theorem-style-definition" id="def:tensor_from_blocks">
@@ -1604,6 +1618,10 @@
 </div>
 <p> for every \(N \ge 1\), so the two direct sums generate the same MPV family, even though the first blocks already disagree at \(N=1\). The reason is exactly the rescaling freedom described above: a nonzero scalar may be moved from the weight \(\mu _k\) into the block tensor \(A_k\), or conversely, without changing the contribution \(\mu _k^N V^{(N)}(A_k)_\sigma \). Thus distinct nonzero weights alone do not identify the individual blocks. </p>
 <p>The canonical-form hypotheses remove this ambiguity. If each block is first placed in the normalization \(\sum _i (A_k^i)^\dagger A_k^i = \mathbb {1}\), then further rescaling is restricted to unit-modulus phases, and the strict ordering \(|\mu _1| {\gt} \cdots {\gt} |\mu _r|\) used in <span class="cite">
+	(
+	PerezGarcia2007Matrix;Cirac2021Matrix
+	
+	)
 </span> prevents trading a nontrivial modulus between the weight and the block tensor. </p>
 
   </div>
@@ -1874,13 +1892,19 @@
   <p>From \(\mathcal{E}_A(\rho ) = \rho \) and positivity of each summand \(A^i \rho (A^i)^\dagger \), \((\mathbb {1}- P) A^i \rho (A^i)^\dagger (\mathbb {1}- P) = 0\) for each&#160;\(i\). Since \(\rho \) is supported on the range of \(P\), this forces \((\mathbb {1}- P) A^i P = 0\). </p>
 <p>This is the finite-dimensional version of <span class="cite">
 	(
-	
+	Wolf2012Quantum
+	, Prop.&#160;6.10
+	)
 </span> (“Stationary subspaces”: the support projection of any stationary state is sub-harmonic, i.e. invariant under the channel). The equivalence between irreducibility and absence of nontrivial invariant projections is <span class="cite">
 	(
-	
+	Wolf2012Quantum
+	, Thm.&#160;6.2
+	)
 </span>; see also <span class="cite">
 	(
-	
+	Cirac2021Matrix
+	, §IV.A.1
+	)
 </span>. </p>
 
   </div>
@@ -2116,13 +2140,25 @@
   <div class="proof_content">
   <p> By strong induction on the bond dimension&#160;\(D\). If \(A\) is already irreducible, take \(r = 1\). Otherwise, by Definition&#160;<a href="ch-canonical.html#def:irreducible_tensor">11.15</a>, \(A\) has a nontrivial invariant projection&#160;\(P\). Diagonalizing&#160;\(P\) yields the same two-block upper-triangular splitting used in Theorem&#160;<a href="ch-canonical.html#thm:two_block_decomp">11.14</a>; the block-diagonal tensor obtained by discarding the off-diagonal part has the same MPV family as&#160;\(A\), and the two diagonal blocks have strictly smaller bond dimensions. Iterating this splitting produces a block-diagonal tensor \(\bigoplus _k A_k\) whose blocks are irreducible. Apply the induction hypothesis to each block and concatenate. (If one prefers a positive-eigenvector argument without assuming TP normalization, the correct replacement for the channel-specific Cesàro theorem is Theorem&#160;<a href="ch-qpf.html#thm:pf_eigenvector_existence">8.17</a>; the induction itself needs only the invariant projection.) </p>
 <p>Both&#160;<span class="cite">
+	(
+	PerezGarcia2007Matrix
+	
+	)
 </span> (Theorem&#160;4, “TI canonical form”) and&#160;<span class="cite">
+	(
+	Cirac2021Matrix
+	
+	)
 </span> (§IV.A.1) obtain the block decomposition by the same invariant-projection splitting used here. An alternative derivation, developed in&#160;<span class="cite">
 	(
-	
+	Wolf2012Quantum
+	, Thm.&#160;6.14
+	)
 </span>, characterises the fixed-point set of a quantum channel as a \(*\)-algebra and then applies the Wedderburn–Artin decomposition (<span class="cite">
 	(
-	
+	Wolf2012Quantum
+	, Eq.&#160;(1.39)
+	)
 </span>) to read off the block structure directly. The block decomposition is obtained by iterating the invariant-projection splitting and using strong induction on&#160;\(D\) to ensure termination. </p>
 
   </div>
@@ -2562,6 +2598,10 @@
   \[  \operatorname{alg}(A) = M_{D}(\mathbb {C}).  \]
 </div>
 <p> This is the complex finite-dimensional case of Burnside’s theorem (equivalently, Jacobson’s density theorem); see&#160;<span class="cite">
+	(
+	Jacobson2009BasicAlgebraII
+	
+	)
 </span>. </p>
 
   </div>
@@ -2769,6 +2809,10 @@
   <div class="proof_content">
   <p> By contradiction. If \(A\) and \(B\) are not gauge-phase equivalent, then \(O_{AB}(N) \to 0\) (Theorem&#160;<a href="ch-spectral.html#thm:overlap_decay">9.25</a>). From the proportionality hypothesis, \(O_{AB}(N) = c_N O_{BB}(N)\). Since \(O_{BB}(N) \to 1\), it follows that \(c_N \to 0\). But \(O_{AA}(N) = |c_N|^2 O_{BB}(N) \to 0\), contradicting \(O_{AA}(N) \to 1\). </p>
 <p>In&#160;<span class="cite">
+	(
+	PerezGarcia2007Matrix
+	
+	)
 </span>, the proportional case is handled as part of the canonical form argument. Here it is obtained directly from the overlap-decay theorem. </p>
 
   </div>
@@ -3092,6 +3136,10 @@
   </div>
   <div class="remark_thmcontent">
   <p>Theorem&#160;<a href="ch-canonical.html#thm:canonical_from_primitive">11.28</a> shows that the overlap convergence hypothesis in the canonical form conditions is redundant once peripheral-spectrum primitivity is known. The argument factors through the spectral-gap formulation of Chapter&#160;<a href="ch-spectral.html">9</a>: peripheral-spectrum primitivity is first converted to that spectral-gap condition, and the overlap limit is then deduced from it. In the paper&#160;<span class="cite">
+	(
+	Cirac2021Matrix
+	
+	)
 </span>, primitivity is obtained from irreducibility plus periodicity removal by blocking to period one. Theorem&#160;<a href="ch-canonical.html#thm:blocking_primitivity">11.30</a> is precisely this periodicity-removal step under irreducibility and TP normalization. </p>
 
   </div>
@@ -3213,7 +3261,9 @@
   <div class="remark_thmcontent">
   <p>Theorem&#160;<a href="ch-canonical.html#thm:blocking_primitivity">11.30</a> is the “periodicity removal by blocking” step in <span class="cite">
 	(
-	
+	Cirac2017MPDO_AnnPhys
+	, Appendix&#160;A
+	)
 </span> for an irreducible block already placed in TP gauge. The later existence theorems then reuse this step. </p>
 
   </div>
@@ -3753,9 +3803,15 @@
 </li>
 </ol>
 <p> Here “normal” is used in the spectral sense of <span class="cite">
+	(
+	Cirac2017MPDO_AnnPhys
+	
+	)
 </span>: irreducible blocks whose TP-normalized transfer maps are primitive. As noted in the remark after Definition&#160;<a href="ch-mps.html#def:normal">2.26</a>, this is equivalent to the eventual block-injectivity formulation of Definition&#160;<a href="ch-mps.html#def:normal">2.26</a>; see <span class="cite">
 	(
-	
+	Sanz2010Quantum
+	, Proposition&#160;3
+	)
 </span>. </p>
 
   </div>
@@ -3938,8 +3994,14 @@
 
 <p>This section combines the components of the canonical-form construction following <span class="cite">
 	(
-	
+	Cirac2017MPDO_AnnPhys
+	, §2.3 and Appendix&#160;A
+	)
 </span>. The approach here requires blocking to remove non-trivial periodicity. A separate reduction for periodic blocks without blocking is developed in <span class="cite">
+	(
+	DeLasCuevas2017Irreducible
+	
+	)
 </span>; see Chapter&#160;<a href="ch-periodic_ft_apps.html">15</a> for that direct periodic extension. </p>
 <div class="theorem_thmwrapper theorem-style-plain" id="thm:irred_decomp_reduction">
   <div class="theorem_thmheading">
@@ -4102,7 +4164,9 @@
 </ol>
 <p> This is the left-canonical normalization step (Canonical Form&#160;II) of <span class="cite">
 	(
-	
+	Cirac2017MPDO_AnnPhys
+	, Appendix&#160;A
+	)
 </span>. The unitary conjugation occurs only after TP normalization has already been achieved; it is a second step inside TP gauge, not a unitary normalization of an arbitrary irreducible block. </p>
 
   </div>
@@ -7051,6 +7115,10 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   Let \(A\) be a left-canonical MPS tensor, \((P_k)_{k=1}^m\) a cyclic family of orthogonal sector projections with \(\sum _k P_k = \mathbb {1}\), and set \(T = \mathcal{E}_A^\dagger \). Assume two upstream inputs, both discharged from the block-diagonal canonical-form analysis of <span class="cite">
+	(
+	DeLasCuevas2017Irreducible
+	
+	)
 </span>: </p>
 <ol class="enumerate">
   <li><p><em>(Projection step.)</em> For each sector index \(k\) and each orthogonal projection \(X\) supported on \(P_k\), the image \(T(X)\) is again an orthogonal projection. </p>

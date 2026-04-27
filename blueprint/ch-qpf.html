@@ -939,8 +939,14 @@
 
 <p>This chapter establishes the Perron–Frobenius theory used in subsequent chapters: existence, positive definiteness, and uniqueness of fixed points for injective and irreducible transfer maps, canonical gauge constructions, ergodicity of irreducible channels, the spectral-radius identification of Perron eigenvalues, and Wolf’s spectral characterization of irreducibility. The conceptual source is Wolf’s treatment of irreducible positive maps&#160;<span class="cite">
 	(
-	
+	Wolf2012Quantum
+	, Ch.&#160;6, especially Thms.&#160;6.2–6.5 and Cor.&#160;6.3
+	)
 </span> and&#160;<span class="cite">
+	(
+	Evans1978Spectral
+	
+	)
 </span>. </p>
 <h1 id="a0000000053">8.1 Positive definiteness</h1>
 <div class="remark_thmwrapper theorem-style-remark" id="a0000000548">
@@ -965,13 +971,19 @@
   <div class="remark_thmcontent">
   <p>Wolf’s general theory treats irreducible positive maps first (<span class="cite">
 	(
-	
+	Wolf2012Quantum
+	, Thm.&#160;6.2
+	)
 </span>), then derives non-degeneracy and positive definiteness (<span class="cite">
 	(
-	
+	Wolf2012Quantum
+	, Thm.&#160;6.3
+	)
 </span>). The injective-tensor version (Theorem&#160;<a href="ch-qpf.html#thm:psd_fp_pd">8.2</a>) uses a shorter direct kernel argument; the irreducible CP-map version (Theorem&#160;<a href="ch-qpf.html#thm:psd_fp_pd_irred">8.3</a>) follows via the support-projection argument of&#160;<span class="cite">
 	(
-	
+	Wolf2012Quantum
+	, Thm.&#160;6.2
+	)
 </span>. </p>
 
   </div>
@@ -1055,10 +1067,14 @@
   <div class="proof_content">
   <p>Suppose \(v^\dagger \rho v = 0\) for some \(v \neq 0\). Since \(\rho \ge 0\), this implies \(\rho v = 0\). The fixed-point equation gives \(v^\dagger \rho v = \sum _i ((A^i)^\dagger v)^\dagger \rho ((A^i)^\dagger v)\). Each term is nonneg; if the sum is zero, then \(\rho (A^i)^\dagger v = 0\) for all&#160;\(i\): the kernel of \(\rho \) is invariant under all \((A^i)^\dagger \). Since the \(\{ A^i\} \) span \(M_{D}(\mathbb {C})\), we have \(\rho M v = 0\) for every matrix \(M\). Given any vector \(w\), choose \(M\) with \(M v = w\). Then \(\rho w = 0\) for every \(w\), so \(\rho = 0\), contradicting \(\rho \neq 0\). In&#160;<span class="cite">
 	(
-	
+	Wolf2012Quantum
+	, Thm.&#160;6.3, item&#160;2
+	)
 </span>, the same conclusion is reached via the growth condition \((\mathbb {1}+ T)^{d-1}(X) {\gt} 0\) of&#160;<span class="cite">
 	(
-	
+	Wolf2012Quantum
+	, Thm.&#160;6.2, condition&#160;(2)
+	)
 </span>; here the direct kernel argument is shorter under injectivity. </p>
 
   </div>
@@ -1144,7 +1160,9 @@
   <div class="proof_content">
   <p> Suppose \(\rho \) is not positive definite. Then \(\rho \) has a nontrivial kernel; let \(Q\) be the orthogonal projection onto the support of \(\rho \) (the complement of the kernel). A direct computation using the fixed-point equation \(\mathcal{E}_A(\rho ) = \rho \) shows that \(Q\) is an invariant projection for \(\mathcal{E}_A\): it satisfies \(Q \,  \mathcal{E}_A(Q X Q) \,  Q = \mathcal{E}_A(Q X Q)\) for all&#160;\(X\). By irreducibility of \(\mathcal{E}_A\) (Definition&#160;<a href="ch-channels.html#def:irreducible_cp">5.15</a>), every invariant projection is \(0\) or \(\mathbb {1}\). If \(Q = 0\) then \(\rho = 0\), contradicting \(\rho \neq 0\). If \(Q = \mathbb {1}\) then \(\rho \) is positive definite, contradicting our assumption. Hence \(\rho \) must be positive definite. This is the support-projection direction of&#160;<span class="cite">
 	(
-	
+	Wolf2012Quantum
+	, Thm.&#160;6.2, condition&#160;(1)
+	)
 </span>. </p>
 
   </div>
@@ -1229,14 +1247,18 @@
   <div class="proof_content">
   <p>The growth theorem for irreducible CP maps (<span class="cite">
 	(
-	
+	Wolf2012Quantum
+	, Thm.&#160;6.2, item&#160;2
+	)
 </span>) gives \((\mathbb {1}+ E)^{D-1}(A) {\gt} 0\) (positive definite). Since \(B \ge 0\) is nonzero, \(\operatorname{tr}\bigl(B \cdot (\mathbb {1}+ E)^{D-1}(A)\bigr) {\gt} 0\). Expanding by the binomial theorem: </p>
 <div class="displaymath" id="a0000000553">
   \[  \operatorname{tr}\Bigl(B \cdot \sum _{k=0}^{D-1} \tbinom {D-1}{k} E^k(A)\Bigr) {\gt} 0.  \]
 </div>
 <p> Each term \(\operatorname{tr}(B \cdot E^k(A)) \ge 0\) since both factors are PSD. The \(k = 0\) term vanishes by hypothesis (\(\operatorname{tr}(B A) = 0\)). Hence at least one \(k \in \{ 1, \ldots , D-1\} \) contributes a strictly positive term. This is&#160;<span class="cite">
 	(
-	
+	Wolf2012Quantum
+	, Thm.&#160;6.2, item&#160;4
+	)
 </span>: item&#160;(2) (growth condition) implies item&#160;(4) by a binomial expansion and PSD positivity argument. </p>
 
   </div>
@@ -1323,10 +1345,14 @@
   <div class="proof_content">
   <p> Both \(\rho \) and \(\sigma \) are positive definite by Theorem&#160;<a href="ch-qpf.html#thm:psd_fp_pd">8.2</a>. Write \(\rho = S S^\dagger \) via a spectral square root and set \(H = (S^\dagger )^{-1} \sigma S^{-1}\), which is Hermitian and positive definite. Let \(c_0\) be the minimal eigenvalue of&#160;\(H\). Then \(\tau := \sigma - c_0 \rho \) is a PSD fixed point which is <em>not</em> positive definite (it has a zero eigenvalue by construction of&#160;\(c_0\)). By Theorem&#160;<a href="ch-qpf.html#thm:psd_fp_pd">8.2</a>, \(\tau \) must be zero, giving \(\sigma = c_0 \rho \). <b class="bfseries">Relation to Wolf:</b> In&#160;<span class="cite">
 	(
-	
+	Wolf2012Quantum
+	, Thm.&#160;6.3, item&#160;2
+	)
 </span>, uniqueness is proved via the growth condition of&#160;<span class="cite">
 	(
-	
+	Wolf2012Quantum
+	, Thm.&#160;6.2
+	)
 </span>. The same minimal-eigenvalue argument applies here, using the injective-tensor positive-definiteness (Theorem&#160;<a href="ch-qpf.html#thm:psd_fp_pd">8.2</a>) in place of the growth condition. </p>
 
   </div>
@@ -1440,7 +1466,9 @@
 </div>
 <p> Since \(\tau {\gt} 0\) and \(X \ge 0\), \(X \neq 0\), the scalar \(\operatorname{tr}(\tau X) {\gt} 0\), so \(s = t\). Applying this to both \((\rho , r_1)\) and \((\sigma , r_2)\) gives \(r_1 = t = r_2\). <b class="bfseries">Relation to Wolf:</b> This is&#160;<span class="cite">
 	(
-	
+	Wolf2012Quantum
+	, Thm.&#160;6.3, item&#160;3
+	)
 </span>, establishing non-degeneracy of the spectral-radius eigenvalue for irreducible CP maps. The proof follows Wolf’s dual-map trace argument. </p>
 
   </div>
@@ -1843,7 +1871,9 @@
   <div class="proof_content">
   <p> Suppose \(Q\) is an invariant projection for \(E'\): \(Q \neq 0\), \(Q \neq \mathbb {1}\), and \(({\mathbb {1}} - Q) E'(Q X Q) Q = 0\) for all&#160;\(X\). Setting \(R = C Q C^\dagger \), the support projection&#160;\(P\) of \(R\) is an invariant projection for \(E\). Irreducibility of \(E\) forces \(P = 0\) or \(P = \mathbb {1}\). The invertibility of \(C\) then forces \(Q = 0\) or \(Q = \mathbb {1}\), a contradiction. This is the full similarity version of <span class="cite">
 	(
-	
+	Wolf2012Quantum
+	, Prop.&#160;6.6
+	)
 </span>; the scalar case (\(C = \mathbb {1}\)) gives the scaling result stated next. </p>
 
   </div>
@@ -2062,7 +2092,9 @@
   <div class="theorem_thmcontent">
   <p>   If \(E\) is an irreducible map and \(c \neq 0\), then \(c E\) is also irreducible. This is the scalar special case (\(C = \mathbb {1}\)) of <span class="cite">
 	(
-	
+	Wolf2012Quantum
+	, Prop.&#160;6.6
+	)
 </span>. </p>
 
   </div>
@@ -2083,14 +2115,24 @@
 
 <p>This section establishes the existence of a positive definite eigenvector for the adjoint transfer map of an irreducible MPS tensor, and uses it to construct a TP-gauge normalization. The PSD-eigenvector step corresponds to <span class="cite">
 	(
-	
+	Wolf2012Quantum
+	, Thm.&#160;6.5
+	)
 </span> (general positive maps) and <span class="cite">
+	(
+	Evans1978Spectral
+	
+	)
 </span>; the upgrade to positive definiteness uses the irreducible-map theory of <span class="cite">
 	(
-	
+	Wolf2012Quantum
+	, Thm.&#160;6.3
+	)
 </span>. The TP-gauge application follows&#160;<span class="cite">
 	(
-	
+	Cirac2017MPDO_AnnPhys
+	, Appendix&#160;A
+	)
 </span>. </p>
 <div class="theorem_thmwrapper theorem-style-plain" id="thm:pf_eigenvector_existence">
   <div class="theorem_thmheading">
@@ -2155,8 +2197,14 @@
   <p>   Let \(E : M_{D}(\mathbb {C}) \to M_{D}(\mathbb {C})\) be a positive linear map with \(D {\gt} 0\), and assume that \(E(\sigma ) \neq 0\) for every nonzero PSD matrix \(\sigma \). Then there exist a nonzero PSD matrix \(\rho \) and a positive real \(r {\gt} 0\) such that \(E(\rho ) = r \rho \). </p>
 <p>This is the finite-dimensional Perron–Frobenius theorem for positive maps on matrix algebras (<span class="cite">
 	(
-	
+	Wolf2012Quantum
+	, Thm.&#160;6.5
+	)
 </span>; see also&#160;<span class="cite">
+	(
+	Evans1978Spectral
+	
+	)
 </span>). The proof applies Brouwer’s fixed-point theorem to the normalization map \(\rho \mapsto E(\rho ) / \operatorname{tr}(E(\rho ))\) on the compact convex set of density matrices. </p>
 
   </div>
@@ -2316,13 +2364,19 @@
   <p>   Let \(A\) be an irreducible MPS tensor with \(D {\gt} 0\) and some \(A^i \neq 0\). Then there exist a positive definite matrix&#160;\(\sigma \) and a positive real \(r {\gt} 0\) such that \(\mathcal{E}_A^\dagger (\sigma ) = r \sigma \). </p>
 <p>This combines the general PF existence (<span class="cite">
 	(
-	
+	Wolf2012Quantum
+	, Thm.&#160;6.5
+	)
 </span>) with the irreducible upgrade to positive definiteness (<span class="cite">
 	(
-	
+	Wolf2012Quantum
+	, Thm.&#160;6.3, item&#160;2
+	)
 </span>); the application to the adjoint transfer map follows <span class="cite">
 	(
-	
+	Cirac2017MPDO_AnnPhys
+	, Appendix&#160;A
+	)
 </span>. </p>
 
   </div>
@@ -2413,7 +2467,9 @@
 <p> is trace-preserving: \(\sum _i (B^i)^\dagger B^i = \mathbb {1}\). </p>
 <p>This is the “spectral rescaling \(+\) TP gauge” step of <span class="cite">
 	(
-	
+	Cirac2017MPDO_AnnPhys
+	, Appendix&#160;A
+	)
 </span>. The similarity is generally non-unitary. </p>
 
   </div>
@@ -2502,7 +2558,9 @@
 </div>
 <p> is positive definite. This is the finite-sum core of <span class="cite">
 	(
-	
+	Wolf2012Quantum
+	, Thm.&#160;6.2, item&#160;(3)
+	)
 </span>. </p>
 
   </div>
@@ -2590,7 +2648,9 @@
 </div>
 <p> is positive definite. This is <span class="cite">
 	(
-	
+	Wolf2012Quantum
+	, Thm.&#160;6.2, item&#160;(3)
+	)
 </span>. </p>
 
   </div>
@@ -2677,7 +2737,9 @@
   <div class="theorem_thmcontent">
   <p>    Let \(E\) be an irreducible quantum channel on \(M_{D}(\mathbb {C})\) with \(D {\gt} 0\). Then there exists a unique density matrix \(\sigma \) such that \(E(\sigma )=\sigma \). Moreover \(\sigma \) is positive definite. This is the qualitative form of <span class="cite">
 	(
-	
+	Wolf2012Quantum
+	, Cor.&#160;6.3
+	)
 </span>. </p>
 
   </div>
@@ -2769,7 +2831,9 @@
 </div>
 <p> converge to the unique positive definite density-matrix fixed point of&#160;\(E\). This is <span class="cite">
 	(
-	
+	Wolf2012Quantum
+	, Cor.&#160;6.3
+	)
 </span>. </p>
 
   </div>
@@ -2852,7 +2916,9 @@
   <div class="theorem_thmcontent">
   <p>    Let \(E\) be an irreducible completely positive map on \(M_{D}(\mathbb {C})\). Suppose \(\rho {\gt} 0\) and \(E(\rho ) = r\rho \) with \(r {\gt} 0\). Then the spectral radius of \(E\) is \(r\). This is <span class="cite">
 	(
-	
+	Wolf2012Quantum
+	, Thm.&#160;6.3, item&#160;(4)
+	)
 </span>. </p>
 
   </div>
@@ -3011,7 +3077,9 @@
   <div class="definition_thmcontent">
   <p>    A completely positive map \(E\) on \(M_{D}(\mathbb {C})\) has the <em>spectral properties</em> of <span class="cite">
 	(
-	
+	Wolf2012Quantum
+	, Thm.&#160;6.4
+	)
 </span> if there exist a positive real number \(r\), a positive definite right eigenvector \(\rho \), and a positive definite left eigenvector \(\sigma \) for the adjoint map such that \(E(\rho )=r\rho \), \(E^\dagger (\sigma )=r\sigma \), every positive semidefinite right eigenvector for eigenvalue \(r\) is a scalar multiple of \(\rho \), and the spectral radius of \(E\) is equal to&#160;\(r\). </p>
 
   </div>
@@ -3249,7 +3317,9 @@
   <div class="theorem_thmcontent">
   <p>    Let \(E\) be a nonzero completely positive map on \(M_{D}(\mathbb {C})\). Then \(E\) is irreducible if and only if it has the spectral properties of Definition&#160;<a href="ch-qpf.html#def:has_spectral_properties">8.27</a>. This is <span class="cite">
 	(
-	
+	Wolf2012Quantum
+	, Thm.&#160;6.4
+	)
 </span>. </p>
 
   </div>

@@ -938,6 +938,10 @@
 <h1 id="ch:spectral">9 Spectral Gap and Block Separation</h1>
 
 <p>This chapter proves that the MPV overlaps between distinct (non-gauge-phase-equivalent) MPS blocks decay to zero as system size grows. It also proves the corresponding self-overlap convergence to&#160;\(1\) under the complementary spectral-gap hypothesis that encodes primitivity in the cases of interest. The argument is based on a spectral analysis of the <em>mixed transfer operator</em>, following&#160;<span class="cite">
+	(
+	PerezGarcia2007Matrix
+	
+	)
 </span>. </p>
 <p>The algebraic mixed-transfer identities in the first two sections do not use normalization. Starting with the spectral-radius estimates, we assume the trace-preserving normalization </p>
 <div class="displaymath" id="a0000000585">
@@ -3033,6 +3037,10 @@
 </div>
 <h1 id="a0000000069">9.8 Spectral gap under irreducible-TP hypotheses</h1>
 <p>The preceding spectral-gap results require <em>injectivity</em> of both tensors. The following variants weaken this to <em>irreducibility</em> combined with trace-preserving normalization (\(\sum _i (A^i)^\dagger A^i = \mathbb {1}\)), following Cirac et al.&#160;<span class="cite">
+	(
+	Cirac2017Annals
+	
+	)
 </span>. The argument replaces the Kraus-commutation step with a Cauchy–Schwarz rigidity argument for the Perron–Frobenius fixed point. </p>
 <div class="theorem_thmwrapper theorem-style-plain" id="thm:modulus_one_gauge_irr_tp">
   <div class="theorem_thmheading">
@@ -4436,7 +4444,9 @@
 <h1 id="a0000000071">9.10 Stationary support</h1>
 <p>This section records the support-projection theory behind stationary states, following&#160;<span class="cite">
 	(
-	
+	Wolf2012Quantum
+	, §6.4
+	)
 </span>. </p>
 <div class="lemma_thmwrapper theorem-style-plain" id="lem:lower_zero_invariance">
   <div class="lemma_thmheading">
@@ -4836,7 +4846,9 @@
 <h2 id="a0000000072">9.10.1 Faithful compression onto the support sector</h2>
 <p>This subsection establishes the results on the corner algebra, \(*\)-structure, and compression of a PSD fixed point onto its support sector needed for&#160;<span class="cite">
 	(
-	
+	Wolf2012Quantum
+	, Cor.&#160;6.6
+	)
 </span>: the corner carries a \(\mathbb {C}\)-algebra and \(*\)-structure, the repository’s corner submodule is identified with Mathlib’s idempotent corner, and the compression of a PSD fixed point onto its support sector is positive definite. </p>
 <div class="lemma_thmwrapper theorem-style-plain" id="lem:supportProj_mulVec_eq_zero_of_mulVec_eq_zero">
   <div class="lemma_thmheading">
@@ -5148,7 +5160,9 @@
   <div class="proof_content">
   <p> The subalgebra is finite-dimensional (as a subalgebra of&#160;\(M_{D}(\mathbb {C})\)), hence Artinian. By&#160;<span class="cite">
 	(
-	
+	Wolf2012Quantum
+	, Thm.&#160;6.14
+	)
 </span>, it suffices to show the Jacobson radical&#160;\(J\) vanishes. If \(x \in J\), then \(x^*x \in J\) (left-ideal closure). The radical of an Artinian ring is nilpotent, so \(x^*x\) is nilpotent. A self-adjoint nilpotent matrix satisfies \(\lVert x^*x\rVert ^{2^k} = \lVert (x^*x)^{2^k}\rVert = 0\), hence \(x^*x = 0\), and the C\(^*\)-identity gives \(x = 0\). </p>
 
   </div>

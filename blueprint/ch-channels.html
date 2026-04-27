@@ -938,6 +938,10 @@
 <h1 id="ch:channels">5 Quantum Channels and Positive Maps</h1>
 
 <p>This chapter develops the theory of positive maps and quantum channels on matrix algebras, following&#160;<span class="cite">
+	(
+	Wolf2012Quantum
+	
+	)
 </span>. </p>
 <h1 id="a0000000028">5.1 Positive maps and channels</h1>
 <div class="definition_thmwrapper theorem-style-definition" id="def:positive_map">
@@ -1406,6 +1410,10 @@
   </div>
   <div class="definition_thmcontent">
   <p>   A linear map \(E : M_{D}(\mathbb {C}) \to M_{D}(\mathbb {C})\) is a <em>quantum channel</em> if it is both completely positive and trace-preserving (CPTP), following&#160;<span class="cite">
+	(
+	Wolf2012Quantum
+	
+	)
 </span>. </p>
 
   </div>
@@ -1886,7 +1894,9 @@
   <div class="definition_thmcontent">
   <p>   A linear map \(E : M_{D}(\mathbb {C}) \to M_{D}(\mathbb {C})\) is <em>irreducible</em> if whenever \(P\) is an orthogonal projection satisfying \(E(P M_{D}(\mathbb {C}) P) \subseteq P M_{D}(\mathbb {C}) P\), then \(P = 0\) or \(P = \mathbb {1}\). This is <span class="cite">
 	(
-	
+	Wolf2012Quantum
+	, Thm.&#160;6.2, condition&#160;(1)
+	)
 </span>. The definition applies to any linear map; complete positivity is not required. </p>
 
   </div>
@@ -2315,7 +2325,9 @@
   <div class="theorem_thmcontent">
   <p>   Let \(E\) be a quantum channel and \(X = E(X)\) a Hermitian fixed point with decomposition \(X = P_+ - P_-\) into orthogonal positive and negative parts (\(P_\pm \ge 0\), \(\operatorname{tr}(P_+ P_-) = 0\)). Then \(E(P_+) = P_+\) and \(E(P_-) = P_-\). This is <span class="cite">
 	(
-	
+	Wolf2012Quantum
+	, Prop.&#160;6.8
+	)
 </span>. </p>
 
   </div>
@@ -2423,7 +2435,9 @@
   <div class="proof_content">
   <p> Start with any \(\rho _0 \in \mathcal{D}_D\) (Theorem&#160;<a href="ch-channels.html#thm:density_nonempty">5.12</a>). Each Cesàro mean \(\sigma _N\) lies in \(\mathcal{D}_D\) (by convexity and channel preservation). By compactness (Theorem&#160;<a href="ch-channels.html#thm:density_compact">5.10</a>), extract a convergent subsequence \(\sigma _{N_k} \to \rho \). The telescope identity (Theorem&#160;<a href="ch-channels.html#thm:cesaro_telescope">5.20</a>) gives \(\| E(\sigma _N) - \sigma _N\|  = \frac{1}{N}\| E^N(\rho _0) - \rho _0\|  \to 0\), so \(E(\rho ) = \rho \) by continuity. In&#160;<span class="cite">
 	(
-	
+	Wolf2012Quantum
+	, Thm.&#160;6.11
+	)
 </span>, existence is proved via Brouwer’s fixed-point theorem; we use the Cesàro argument instead. </p>
 
   </div>
@@ -2651,7 +2665,9 @@
   <div class="definition_thmcontent">
   <p>  The <em>peripheral eigenvalues</em> of a linear map \(E\) on a finite-dimensional space are the eigenvalues \(\lambda \) on the unit circle: \(|\lambda | = 1\). For a channel, the spectral radius is&#160;\(1\) <span class="cite">
 	(
-	
+	Wolf2012Quantum
+	, Prop.&#160;6.1
+	)
 </span>, so these coincide with the eigenvalues of maximal modulus. </p>
 <p><b class="bfseries">Note:</b> The condition \(|\lambda | = 1\) is appropriate for channels, since the spectral radius of a channel is&#160;\(1\). For a general linear map with spectral radius \(r \neq 1\) the condition would generalise to \(|\lambda | = r\). </p>
 
@@ -3354,7 +3370,9 @@
 </div>
 <p> This is <span class="cite">
 	(
-	
+	Wolf2012Quantum
+	, Eq.&#160;(5.2)
+	)
 </span>. </p>
 
   </div>
@@ -3949,7 +3967,9 @@
 
 <p>The following results replace the trace-preservation hypothesis by the existence of a positive definite fixed point for the <em>adjoint</em> Kraus map, matching the weighted-trace argument in <span class="cite">
 	(
-	
+	Cirac2017MPDO_AnnPhys
+	, Appendix&#160;A
+	)
 </span>. </p>
 <div class="lemma_thmwrapper theorem-style-plain" id="lem:peripheral_closed_powers_irred_fp">
   <div class="lemma_thmheading">
@@ -4160,7 +4180,9 @@
   <div class="remark_thmcontent">
   <p>Lemma&#160;<a href="ch-channels.html#lem:peripheral_closed_powers_irred_fp">5.45</a> and Theorem&#160;<a href="ch-channels.html#thm:peripheral_roots_irred_fp">5.46</a> cover the bi-canonical (unital + TP) case as well: trace preservation gives \(E^*(\mathbb {1}) = \mathbb {1}\), which is a positive definite fixed point of the adjoint. The adjoint-fixed-point formulation matches the argument in <span class="cite">
 	(
-	
+	Cirac2017MPDO_AnnPhys
+	, Appendix&#160;A
+	)
 </span>, which uses a faithful invariant state rather than bi-canonicality. </p>
 
   </div>
@@ -4291,7 +4313,9 @@
   <div class="definition_thmcontent">
   <p>   A linear map is <em>primitive</em> if its only peripheral eigenvalue is \(\lambda = 1\), i.e. \(\mathrm{peripheral}(E) = \{ 1\} \). For channels this corresponds to <span class="cite">
 	(
-	
+	Wolf2012Quantum
+	, Thm.&#160;6.7
+	)
 </span>. This definition applies to any linear endomorphism, not only to channels. </p>
 
   </div>
@@ -4488,7 +4512,9 @@
 
 <p>The following definitions support the Choi–Jamiol\- kowski isomorphism (Theorem&#160;<a href="ch-channels.html#thm:cp_iff_choi_posSemidef">5.57</a>) and the representation theorems of&#160;<span class="cite">
 	(
-	
+	Wolf2012Quantum
+	, Ch.&#160;2
+	)
 </span>. </p>
 <div class="definition_thmwrapper theorem-style-definition" id="def:partial_trace">
   <div class="definition_thmheading">
@@ -4709,7 +4735,9 @@
 </div>
 <p> Concretely, \(\tau _{(i_1,i_2),(j_1,j_2)} = \frac{1}{D}\, (T(E_{i_2 j_2}))_{i_1 j_1}\) where \(E_{i_2 j_2}\) is the matrix unit. This is the Choi–Jamiol\- kowski convention of <span class="cite">
 	(
-	
+	Wolf2012Quantum
+	, Prop.&#160;2.1
+	)
 </span>. </p>
 
   </div>
@@ -5138,7 +5166,9 @@
 
 <p>The next three corollaries follow from the Choi/Kraus/Stinespring representations already developed above. They correspond to <span class="cite">
 	(
-	
+	Wolf2012Quantum
+	, Props.&#160;2.2–2.4
+	)
 </span>. </p>
 <div class="theorem_thmwrapper theorem-style-plain" id="thm:polarization_sandwich">
   <div class="theorem_thmheading">
@@ -7346,7 +7376,9 @@
 
 <p>The next three results form the structural package of&#160;<span class="cite">
 	(
-	
+	Wolf2012Quantum
+	, Thms.&#160;2.3–2.5
+	)
 </span>: the ordered CP-map theorem, the Radon–Nikodym theorem for completely positive maps, and the open-system representation. They refine the Stinespring dilation by tracking how two CP maps related by domination or decomposition sit inside a common dilation space. </p>
 <div class="definition_thmwrapper theorem-style-definition" id="def:cp_dominates">
   <div class="definition_thmheading">
@@ -7781,7 +7813,9 @@
 </div>
 <p> This is&#160;<span class="cite">
 	(
-	
+	Wolf2012Quantum
+	, Thm.&#160;2.3
+	)
 </span>. </p>
 
   </div>
@@ -7945,7 +7979,9 @@
 </div>
 <p> This is&#160;<span class="cite">
 	(
-	
+	Wolf2012Quantum
+	, Thm.&#160;2.4
+	)
 </span>. </p>
 
   </div>
@@ -8158,7 +8194,9 @@
   <div class="remark_thmcontent">
   <p> The fully unitary open-system form \(T(\rho ) = \operatorname {tr}_E(U (\rho \otimes |\phi \rangle \! \langle \phi |) U^\dagger )\) of&#160;<span class="cite">
 	(
-	
+	Wolf2012Quantum
+	, Thm.&#160;2.5
+	)
 </span> follows from the isometric form by extending the Stinespring isometry \(V\) to a unitary \(U\) on \(\mathbb {C}^D \otimes \mathbb {C}^r\); this uses orthonormal basis extension and is recorded as an outstanding formalization item. </p>
 
   </div>
@@ -9945,7 +9983,9 @@
   <div class="definition_thmcontent">
   <p> For a linear map \(T : M_{D}(\mathbb {C}) \to M_{D}(\mathbb {C})\), the <em>channel determinant</em> \(\det T\) is the determinant of the matrix of \(T\) with respect to the standard matrix-unit basis of \(M_{D}(\mathbb {C})\). This is the quantity studied in <span class="cite">
 	(
-	
+	Wolf2012Quantum
+	, §6.1.1
+	)
 </span>. </p>
 
   </div>
@@ -10192,7 +10232,9 @@
   <div class="theorem_thmcontent">
   <p>   For any positive trace-preserving map \(T : M_{D}(\mathbb {C}) \to M_{D}(\mathbb {C})\), \(|\det T| \le 1\). This is <span class="cite">
 	(
-	
+	Wolf2012Quantum
+	, Thm.&#160;6.1(1)
+	)
 </span>. </p>
 
   </div>
@@ -10288,7 +10330,9 @@
 </div>
 <p> This is <span class="cite">
 	(
-	
+	Wolf2012Quantum
+	, Thm.&#160;6.1(2)
+	)
 </span>. </p>
 
   </div>
@@ -10525,7 +10569,9 @@
   <div class="theorem_thmcontent">
   <p>   Let \(E\) be a unital Kraus map whose adjoint map \(E^*\) has a positive definite fixed point \(\rho {\gt} 0\). Then \(\mathrm{Fix}(E)\) is a \(*\)-subalgebra of \(M_{D}(\mathbb {C})\). This is <span class="cite">
 	(
-	
+	Wolf2012Quantum
+	, Thm.&#160;6.12
+	)
 </span>. </p>
 
   </div>
@@ -11302,7 +11348,9 @@
 </div>
 <p> This is <span class="cite">
 	(
-	
+	Wolf2012Quantum
+	, Thm.&#160;6.13
+	)
 </span>. </p>
 
   </div>

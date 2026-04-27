@@ -938,6 +938,10 @@
 <h1 id="ch:algebraic_ft">17 The Algebraic Fundamental Theorem</h1>
 
 <p>This chapter develops the one-dimensional MPS results of&#160;<span class="cite">
+	(
+	Molnar2018NormalPEPS
+	
+	)
 </span>: the Fundamental Theorem for injective and normal MPS on a finite periodic chain of fixed length. The argument is purely algebraic, working directly with \(M_{D}(\mathbb {C})\). Two preparatory lemmas—the virtual bond gauge (Lemma&#160;<a href="ch-algebraic_ft.html#lem:virtual_bond_gauge">17.11</a>) and the proportionality lemma (Lemma&#160;<a href="ch-algebraic_ft.html#lem:tensor_proportional">17.12</a>)—carry the entire argument, yielding the main theorem and its corollaries for translation-invariant chains, non-translation-invariant descriptions of translation-invariant states, and blocked chains. </p>
 <p>Throughout, \(D\) is the bond dimension and \(d\) is the physical dimension with \(d \ge D^2\). The extensions to injective and normal PEPS on arbitrary graphs and the improved system-size bound (\(2L+1\) in place of \(3L\)) are not pursued in this chapter. The chain data (Definition&#160;<a href="ch-single.html#def:non_ti_chain">4.12</a>), including same chain state, injectivity, and cyclic gauge equivalence, was introduced in Chapter&#160;<a href="ch-single.html">4</a>. </p>
 <h1 id="sec:decomposition_map">17.1 One-sided inverse and decomposition</h1>
@@ -1723,6 +1727,10 @@
 </div>
 <p> for all \(X \in M_{D}(\mathbb {C})\) and all physical indices \(i_0, i_1, i_2\). </p>
 <p>In the paper&#160;<span class="cite">
+	(
+	Molnar2018NormalPEPS
+	
+	)
 </span>, Lemma&#160;1 is stated for arbitrary chain length \(n \ge 3\) and any bond position, with uniqueness of \(Z\) up to scalar. The chain-level generalization to arbitrary \(n \ge 3\) and any bond position is not pursued here. </p>
 
   </div>
@@ -1742,6 +1750,10 @@
 <h1 id="sec:tensor_proportional">17.5 Aligned gauges force proportionality</h1>
 
 <p>After applying Lemma&#160;<a href="ch-algebraic_ft.html#lem:virtual_bond_gauge">17.11</a> to each bond and absorbing the gauge matrices, one obtains two chains whose virtual-insertion operations agree on every bond. Lemma&#160;2 of&#160;<span class="cite">
+	(
+	Molnar2018NormalPEPS
+	
+	)
 </span> shows that this agreement forces the local tensors to be proportional. </p>
 <div class="lemma_thmwrapper theorem-style-plain" id="lem:tensor_proportional">
   <div class="lemma_thmheading">
@@ -1750,6 +1762,10 @@
     </span>
     <span class="lemma_thmlabel">17.12</span>
     <span class="lemma_thmtitle">Aligned gauges force proportionality – Lemma&#160;2 of <span class="cite">
+	(
+	Molnar2018NormalPEPS
+	
+	)
 </span></span>
     <div class="thm_header_extras">
 
@@ -1816,7 +1832,7 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   Let \(A_1, A_2\) and \(B_1, B_2\) be injective MPS tensors with the same bond dimension \(D\). Suppose that for all \(X \in M_{D}(\mathbb {C})\) (on the internal bond) and all \(Y \in M_{D}(\mathbb {C})\) (on the external bond), </p>
-<div class="displaymath" id="<plasTeX.TeXFragment object at 0x7f4aa04a5df0>">
+<div class="displaymath" id="<plasTeX.TeXFragment object at 0x7f0941c69eb0>">
   \begin{align}  \operatorname{tr}(A_1^{i}\,  X\,  A_2^{j}) & = \operatorname{tr}(B_1^{i}\,  X\,  B_2^{j}) \qquad \text{for all } i, j, \label{eq:internal_bond}\\ \operatorname{tr}(A_2^{j}\,  Y\,  A_1^{i}) & = \operatorname{tr}(B_2^{j}\,  Y\,  B_1^{i}) \qquad \text{for all } i, j. \label{eq:external_bond} \end{align}
 </div>
 <p> Diagrammatically, Eq.&#160;?? is the equality obtained by inserting \(X\) on the bond between the two sites, </p>
@@ -5378,6 +5394,10 @@
 <h1 id="sec:peps_ft">17.13 Fundamental Theorem for injective PEPS</h1>
 
 <p>The following definitions and results extend the Fundamental Theorem to injective PEPS on simple graphs, following Theorem&#160;2 of&#160;<span class="cite">
+	(
+	Molnar2018NormalPEPS
+	
+	)
 </span>. </p>
 <div class="definition_thmwrapper theorem-style-definition" id="def:peps_edge">
   <div class="definition_thmheading">
@@ -5419,7 +5439,7 @@
         </div>
   </div>
   <div class="definition_thmcontent">
-  <p>    For a finite simple graph \(G\), an <em>edge</em> is an ordered pair \((u,v)\) with \(u {\lt} v\) and \(u\) adjacent to \(v\). The ordering is only used to avoid double counting. </p>
+  <p>   For a finite simple graph \(G\), an <em>edge</em> is an ordered pair \((u,v)\) with \(u {\lt} v\) and \(u\) adjacent to \(v\). The ordering is only used to avoid double counting. </p>
 
   </div>
 </div>
@@ -5789,7 +5809,7 @@
         </div>
   </div>
   <div class="definition_thmcontent">
-  <p>   For an edge \(e = (u,w)\) with \(u {\lt} w\) and gauge \(X_e \in \mathrm{GL}(D_e)\), the gauge matrix applied at vertex \(v\) is \(X_e\) if \(v = u\) and \((X_e^{-1})^\top \) if \(v = w\). Diagrammatically, the ordered edge carries opposite endpoint actions: </p>
+  <p>  For an edge \(e = (u,w)\) with \(u {\lt} w\) and gauge \(X_e \in \mathrm{GL}(D_e)\), the gauge matrix applied at vertex \(v\) is \(X_e\) if \(v = u\) and \((X_e^{-1})^\top \) if \(v = w\). Diagrammatically, the ordered edge carries opposite endpoint actions: </p>
 <div class="displaymath" id="a0000001209">
   \[  \begin{array}{c} \text{edge } e = (u,w) \text{ oriented by } u {\lt} w \\ u \;  \text{---} \;  X_e \;  \text{---} \;  (X_e^{-1})^\top \;  \text{---} \;  w \end{array} \]
 </div>
@@ -6164,7 +6184,7 @@
         </div>
   </div>
   <div class="definition_thmcontent">
-  <p>   The local tensor evaluated at vertex \(v\) with virtual-index weighting \(f\), computing \(\sum _\eta (\prod _{ie} f(ie)(\eta (ie))) \cdot A_v(\eta , \sigma )\). This is multilinear in the components of \(f\), not linear in the full tuple. </p>
+  <p>  The local tensor evaluated at vertex \(v\) with virtual-index weighting \(f\), computing \(\sum _\eta (\prod _{ie} f(ie)(\eta (ie))) \cdot A_v(\eta , \sigma )\). This is multilinear in the components of \(f\), not linear in the full tuple. </p>
 
   </div>
 </div>
@@ -6208,11 +6228,15 @@
         </div>
   </div>
   <div class="definition_thmcontent">
-  <p>   A PEPS tensor \(A\) is <em>vertex-injective</em> if, at every vertex \(v\), the family of physical vectors </p>
+  <p>  A PEPS tensor \(A\) is <em>vertex-injective</em> if, at every vertex \(v\), the family of physical vectors </p>
 <div class="displaymath" id="a0000001212">
   \[  \bigl(A_v(\eta , \cdot ) \in \mathbb {C}^d\bigr)_{\eta }  \]
 </div>
 <p> indexed by virtual configurations \(\eta \) on the edges incident to \(v\) is linearly independent in \(\mathbb {C}^d\). Equivalently, extending \(A_v\) by linearity to a map from the free vector space on virtual configurations into the physical space \(\mathbb {C}^d\) gives a linear map with trivial kernel. This matches the paper’s formulation that "all tensors interpreted as maps from the virtual space to the physical one are injective" (<span class="cite">
+	(
+	Molnar2018NormalPEPS
+	
+	)
 </span>, §3). </p>
 
   </div>
@@ -6939,6 +6963,10 @@
   </div>
   <div class="definition_thmcontent">
   <p>   For fixed \(A\), \(B\), a bond-dimension equality, and a vertex \(v\), this records the two local conclusions still needed from the blocked-middle reduction in&#160;<span class="cite">
+	(
+	Molnar2018NormalPEPS
+	
+	)
 </span>, §3: (i) each local component of \(B\) lies in the image of the local tensor map of \(A\), and (ii) the canonical pullback through the chosen left inverse of \(A\) factorizes as one invertible matrix on each incident edge. </p>
 
   </div>
@@ -7367,6 +7395,10 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   If two PEPS tensors on a simple graph are both vertex-injective and generate the same state, then they are gauge-equivalent (Theorem&#160;2 of&#160;<span class="cite">
+	(
+	Molnar2018NormalPEPS
+	
+	)
 </span>). </p>
 
   </div>
@@ -7603,6 +7635,10 @@
   </div>
   <div class="remark_thmcontent">
   <p>The local left inverse \(\Psi _v\), the realization map \(T \mapsto O_T\), the split at one incident edge, and the partition \(V = \{ u\}  \sqcup (V \setminus \{ u,v\} ) \sqcup \{ v\} \) isolate the local data needed for the edge-centered reduction of &#160;<span class="cite">
+	(
+	Molnar2018NormalPEPS
+	
+	)
 </span>, §3. The remaining three PEPS theorems still require the blocked tensor on the middle region and the comparison with the corresponding three-site injective chain. The uniqueness endpoint has now been repaired to a quotient by balanced edge scalars, but its proof still requires the same blocking machinery together with the corresponding tensor-factor uniqueness statement at a single vertex. </p>
 
   </div>
@@ -7628,6 +7664,10 @@
   </div>
   <div class="remark_thmcontent">
   <p>Appendix&#160;A of&#160;<span class="cite">
+	(
+	Molnar2018NormalPEPS
+	
+	)
 </span> strengthens the normal-MPS bound from \(n \ge 3L\) to \(n \ge 2L + 1\) by a more refined blocking argument. The injective PEPS theorem and the normal PEPS theorem on arbitrary graphs both rest on the same two core lemmas (Lemma&#160;<a href="ch-algebraic_ft.html#lem:virtual_bond_gauge">17.11</a> and Lemma&#160;<a href="ch-algebraic_ft.html#lem:tensor_proportional">17.12</a>); the graph geometry enters only through the blocking step that reduces to a three-site chain. </p>
 
   </div>
