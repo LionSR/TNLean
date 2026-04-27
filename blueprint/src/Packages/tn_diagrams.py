@@ -11,8 +11,10 @@ import hashlib
 import logging
 import os
 import posixpath
+import re
 import shutil
 import subprocess
+from functools import lru_cache
 from html import escape
 from pathlib import Path
 from typing import Iterable
@@ -26,6 +28,10 @@ log = logging.getLogger(__name__)
 _SRC_DIR = Path(__file__).resolve().parents[1]
 _CACHE_DIR = _SRC_DIR / ".tn_svg_cache"
 _SVG_SUBDIR = "tn_svg"
+_RENDER_SOURCE_FILES = (
+    _SRC_DIR / "macros/common.tex",
+    _SRC_DIR / "macros/tn_print.tex",
+)
 
 
 _DIAGRAM_ARGS: dict[str, str] = {
@@ -61,6 +67,38 @@ _DIAGRAM_ARGS: dict[str, str] = {
     "TNMPOChainDiagram": "",
     "TNLPDODiagram": "",
 }
+
+
+def _diagram_arity(args: str) -> int:
+    return len(args.split())
+
+
+def _assert_diagram_args_match_print_macros() -> None:
+    pattern = re.compile(r"\\newcommand\{\\(TN(?!@)\w+)\}(?:\[(\d+)\])?")
+    source = (_SRC_DIR / "macros/tn_print.tex").read_text(encoding="utf-8")
+    print_arities = {
+        name: int(arity) if arity else 0
+        for name, arity in pattern.findall(source)
+    }
+    expected_arities = {
+        name: _diagram_arity(args)
+        for name, args in _DIAGRAM_ARGS.items()
+    }
+    if print_arities != expected_arities:
+        missing = sorted(set(print_arities) - set(expected_arities))
+        stale = sorted(set(expected_arities) - set(print_arities))
+        mismatched = sorted(
+            name
+            for name in set(print_arities) & set(expected_arities)
+            if print_arities[name] != expected_arities[name]
+        )
+        raise RuntimeError(
+            "Tensor-network diagram arities are out of sync with macros/tn_print.tex "
+            f"(missing={missing}, stale={stale}, mismatched={mismatched})."
+        )
+
+
+_assert_diagram_args_match_print_macros()
 
 
 def _tex_call(obj: Command) -> str:
@@ -106,7 +144,22 @@ def _svg_src(obj: Command, svg_path: Path, output_dir: Path) -> str:
 
 
 def _hash_tex(tex: str) -> str:
-    return hashlib.sha256(tex.encode("utf-8")).hexdigest()[:16]
+    digest = hashlib.sha256()
+    digest.update(_render_source_digest().encode("ascii"))
+    digest.update(b"\0")
+    digest.update(tex.encode("utf-8"))
+    return digest.hexdigest()[:16]
+
+
+@lru_cache(maxsize=1)
+def _render_source_digest() -> str:
+    digest = hashlib.sha256()
+    for source_file in _RENDER_SOURCE_FILES:
+        digest.update(source_file.name.encode("utf-8"))
+        digest.update(b"\0")
+        digest.update(source_file.read_bytes())
+        digest.update(b"\0")
+    return digest.hexdigest()
 
 
 def _latex_document(tex_call: str) -> str:
@@ -135,6 +188,7 @@ def _run(cmd: Iterable[str], *, cwd: Path) -> subprocess.CompletedProcess[str]:
     )
 
 
+@lru_cache(maxsize=1)
 def _tex_env() -> dict[str, str]:
     env = os.environ.copy()
     kpsewhich = shutil.which("kpsewhich")
