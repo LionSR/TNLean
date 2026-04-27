@@ -2301,8 +2301,7 @@ The following results separate the zero blocks from the
 	\label{thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_ortho}
 	\lean{MPSTensor.exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_with_overlapOrtho}
 	\leanok
-	\uses{thm:bnt_sector_decomp_tp_prim_irr_collapsed,
-		def:sector_basis_overlap_ortho_hyps}
+	\uses{def:sector_basis_overlap_ortho_hyps}
 	For trace-preserving primitive irreducible blocks of positive bond dimension
 	with nonzero weights, there is a sector decomposition, obtained by choosing
 	one block per MPV phase class, which represents the same weighted block sum,
@@ -2313,11 +2312,10 @@ The following results separate the zero blocks from the
 
 \begin{proof}\leanok
 	\uses{def:mpv_phase_class_data, thm:bnt_li_tp_prim_irr_separated,
-		thm:cross_overlap_zero_split, thm:bnt_sector_decomp_tp_prim_irr_collapsed}
-	The proof is the phase-class construction of
-	Theorem~\ref{thm:bnt_sector_decomp_tp_prim_irr_collapsed}.  The chosen basis
-	blocks keep positive bond dimension, normalization, and any supplied
-	one-site injectivity from the original trace-preserving primitive
+		thm:cross_overlap_zero_split}
+	The proof reconstructs the phase-class representative construction directly.
+	The chosen basis blocks keep positive bond dimension, normalization, and any
+	supplied one-site injectivity from the original trace-preserving primitive
 	irreducible blocks.  Primitivity gives the self-overlap limit, while the
 	separation of distinct chosen phase-class blocks gives off-overlap decay.
 \end{proof}

@@ -607,9 +607,9 @@ single weighted block.
 	\leanok
 	\uses{def:sector_basis_overlap_ortho_hyps, def:sector_basis_overlap_span_hyps}
 	If two sector bases each satisfy the single-family overlap-orthogonality data,
-	and one also supplies one-site injectivity of all their basis blocks together
-	with equality of the finite-length MPV spans, then the two bases satisfy the
-	primitive overlap-span hypotheses.
+	and in addition the basis blocks of both sector decompositions are one-site
+	injective, and the finite-length MPV spans of the two bases are equal at every
+	system size, then the two bases satisfy the primitive overlap-span hypotheses.
 \end{theorem}
 
 \begin{proof}
@@ -817,9 +817,11 @@ single weighted block.
 	Let $A$ and $B$ have the same MPV family and fix exact live decompositions at a
 	common blocking period as in
 	Theorem~\ref{thm:after_blocking_sector_common_blocks_overlap_span}.  Assume in
-	addition that the live blocks are one-site injective, and that the two chosen
-	BNT sector bases have equal finite-length MPV spans. Then the same matched
-	sector-weight conclusion holds.
+	addition that the live blocks are one-site injective, and that any two sector
+	decompositions that each represent the respective live block tensors, satisfy
+	the BNT linear-independence condition, and carry the single-family
+	overlap-orthogonality data have equal finite-length MPV spans. Then the same
+	matched sector-weight conclusion holds.
 \end{theorem}
 
 \begin{proof}

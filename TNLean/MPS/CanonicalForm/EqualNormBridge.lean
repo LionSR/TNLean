@@ -754,10 +754,9 @@ single-family overlap-orthogonality data needed for the primitive
 overlap-rigidity route.
 
 The theorem also records that if the original blocks are one-site injective,
-then the chosen basis blocks are injective. It does not claim the remaining
-two-family input of `SectorBasisOverlapSpanHypotheses`: equality of the
-finite-length MPV spans between two independently constructed bases is a
-separate Gap §1 task. -/
+then so are the chosen representatives. It does not claim the remaining
+two-family overlap-span conditions: equality of the finite-length MPV spans
+between two independently constructed bases is a separate Gap §1 task. -/
 theorem exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_with_overlapOrtho
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ)

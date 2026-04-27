@@ -824,11 +824,11 @@ theorem fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_preMatching
 
 /-- Single-family primitive overlap-orthogonality data for a sector basis.
 
-This is the part of `SectorBasisOverlapSpanHypotheses` that can be checked one
-sector decomposition at a time: positive basis dimensions, left-canonical
-normalization, self-overlap convergence to `1`, and off-diagonal overlap
-convergence to `0`. It intentionally omits one-site injectivity and the
-finite-length span comparison between two different bases, because those are
+This is the one-sided part of the two-family overlap-span conditions: these
+fields can be checked one sector decomposition at a time. Specifically:
+positive basis dimensions, left-canonical normalization, self-overlap
+convergence to 1, and off-diagonal overlap convergence to 0. One-site
+injectivity and equality of finite-length MPV spans between two bases are
 separate inputs in the current Gap §1 route. -/
 structure SectorBasisOverlapOrthoHypotheses (P : SectorDecomposition d) : Prop where
   /-- The basis blocks have nonzero bond dimension. -/
