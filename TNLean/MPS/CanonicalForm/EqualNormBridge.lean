@@ -744,6 +744,66 @@ theorem exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks
   · exact collapsedBntSectorDecomp_sameMPV₂ (d := d) μ blocks hμne
   · exact collapsedBntSectorDecomp_hasBNT (d := d) μ blocks hTP hIrr hPrim hμne
 
+/-- **Phase-class BNT sector construction with one-sided overlap data.**
+
+Starting from trace-preserving primitive irreducible blocks with nonzero weights,
+quotient the block indices by MPV phase equivalence. The constructed sector
+decomposition represents the original weighted block sum, satisfies the BNT
+linear-independence condition, and its chosen basis blocks carry the
+single-family overlap-orthogonality data needed for the primitive
+overlap-rigidity route.
+
+The theorem also records that if the original blocks are one-site injective,
+then the chosen basis blocks are injective. It does not claim the remaining
+two-family input of `SectorBasisOverlapSpanHypotheses`: equality of the
+finite-length MPV spans between two independently constructed bases is a
+separate Gap §1 task. -/
+theorem exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_with_overlapOrtho
+    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ)
+    (blocks : (k : Fin r) → MPSTensor d (dim k))
+    (hTP : ∀ k, ∑ i : Fin d, (blocks k i)ᴴ * blocks k i = 1)
+    (hIrr : ∀ k, IsIrreducibleTensor (blocks k))
+    (hPrim : ∀ k, _root_.IsPrimitive (transferMap (d := d) (D := dim k) (blocks k)))
+    (hμne : ∀ k, μ k ≠ 0) :
+    ∃ P : SectorDecomposition d,
+      SameMPV₂ P.toTensor (toTensorFromBlocks (d := d) (μ := μ) blocks) ∧
+      HasBNTSectorData (d := d) P ∧
+      SectorBasisOverlapOrthoHypotheses P ∧
+      ((∀ k, IsInjective (blocks k)) → ∀ j, IsInjective (P.basis j)) := by
+  classical
+  let classes := mpvPhaseClassData blocks
+  let P := collapsedBntSectorDecomp (d := d) μ blocks hμne
+  have hSame : SameMPV₂ P.toTensor (toTensorFromBlocks (d := d) (μ := μ) blocks) :=
+    collapsedBntSectorDecomp_sameMPV₂ (d := d) μ blocks hμne
+  have hBNT : HasBNTSectorData (d := d) P :=
+    collapsedBntSectorDecomp_hasBNT (d := d) μ blocks hTP hIrr hPrim hμne
+  refine ⟨P, hSame, hBNT, ?_, ?_⟩
+  · refine {
+      dim_pos := ?_
+      normalized := ?_
+      self_overlap := ?_
+      off_overlap := ?_
+    }
+    · intro j
+      simpa [P, collapsedBntSectorDecomp] using NeZero.pos (dim (classes.repr j))
+    · intro j
+      simpa [P, collapsedBntSectorDecomp] using hTP (classes.repr j)
+    · intro j
+      simpa [P, collapsedBntSectorDecomp] using
+        overlap_tendsto_one_of_peripheralPrimitive_of_irreducible
+        (blocks (classes.repr j)) (hIrr (classes.repr j))
+        (hTP (classes.repr j)) (hPrim (classes.repr j))
+    · intro i j hij
+      simpa [P, collapsedBntSectorDecomp] using
+        cross_overlap_tendsto_zero_of_separated_normalCFBNT_data
+        (fun j : Fin classes.g => blocks (classes.repr j))
+        (HasIrreducibleBlocks.ofForall (fun j => hIrr (classes.repr j)))
+        (IsLeftCanonicalBlockFamily.ofForall (fun j => hTP (classes.repr j)))
+        classes.blocks_not_equiv i j hij
+  · intro hInj j
+    simpa [P, collapsedBntSectorDecomp] using hInj (classes.repr j)
+
 /-- **Collapsed BNT sector construction with primitive overlap data.**
 
 This strengthens `exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks` by exposing the
@@ -775,32 +835,11 @@ theorem exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_with_overlapData
       (∀ i j : Fin P.basisCount, i ≠ j →
         Filter.Tendsto (fun N => mpvOverlap (d := d) (P.basis i) (P.basis j) N)
           Filter.atTop (nhds 0)) := by
-  classical
-  let classes := mpvPhaseClassData blocks
-  let P := collapsedBntSectorDecomp (d := d) μ blocks hμne
-  have hSame : SameMPV₂ P.toTensor (toTensorFromBlocks (d := d) (μ := μ) blocks) :=
-    collapsedBntSectorDecomp_sameMPV₂ (d := d) μ blocks hμne
-  have hBNT : HasBNTSectorData (d := d) P :=
-    collapsedBntSectorDecomp_hasBNT (d := d) μ blocks hTP hIrr hPrim hμne
-  refine ⟨P, hSame, hBNT, ?_, ?_, ?_, ?_, ?_⟩
-  · intro j
-    simpa [P, collapsedBntSectorDecomp] using NeZero.pos (dim (classes.repr j))
-  · intro j
-    simpa [P, collapsedBntSectorDecomp] using hInj (classes.repr j)
-  · intro j
-    simpa [P, collapsedBntSectorDecomp] using hTP (classes.repr j)
-  · intro j
-    simpa [P, collapsedBntSectorDecomp] using
-      overlap_tendsto_one_of_peripheralPrimitive_of_irreducible
-      (blocks (classes.repr j)) (hIrr (classes.repr j)) (hTP (classes.repr j))
-      (hPrim (classes.repr j))
-  · intro i j hij
-    simpa [P, collapsedBntSectorDecomp] using
-      cross_overlap_tendsto_zero_of_separated_normalCFBNT_data
-      (fun j : Fin classes.g => blocks (classes.repr j))
-      (HasIrreducibleBlocks.ofForall (fun j => hIrr (classes.repr j)))
-      (IsLeftCanonicalBlockFamily.ofForall (fun j => hTP (classes.repr j)))
-      classes.blocks_not_equiv i j hij
+  obtain ⟨P, hSame, hBNT, hOrtho, hInj_of⟩ :=
+    exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_with_overlapOrtho
+      (d := d) μ blocks hTP hIrr hPrim hμne
+  exact ⟨P, hSame, hBNT, hOrtho.dim_pos, hInj_of hInj, hOrtho.normalized,
+    hOrtho.self_overlap, hOrtho.off_overlap⟩
 
 /-! ### §6. Conditional sector construction under BNT linear independence -/
 

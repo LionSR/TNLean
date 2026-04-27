@@ -66,16 +66,21 @@ The theorem `exists_tp_sector_decomp_after_blocking` below provides:
   `zeroMPSTensor + toTensorFromBlocks μ sectors` for some weights `μ`
 
 The current library already settles the common-period blocking arithmetic and
-now has both a one-sided collapsed BNT construction for TP primitive irreducible
-live blocks and a witness-producing sector comparison from primitive
-overlap-span hypotheses. The strongest theorem in this file,
-`fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_overlapSpan`,
+now has both a one-sided phase-class BNT construction for TP primitive
+irreducible live blocks and a witness-producing sector comparison from primitive
+overlap-span hypotheses. The exact-live theorem
+`fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_injectiveSpan`
 combines `SameMPV₂ A B` with those ingredients once exact common live block
-decompositions and the overlap-span hypotheses are supplied.
+decompositions, live-block injectivity, and the finite-length span comparison
+are supplied. The zero-tail-aware theorem
+`fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_overlapSpan_zeroTail`
+separately records the `N = 0` bookkeeping when full overlap-span hypotheses are
+available.
 
-The remaining Gap §1 content is to derive those exact live decompositions and the
-primitive overlap-span hypotheses from the structural after-blocking reduction
-itself, including the zero-tail bookkeeping at length `N = 0`.
+The remaining Gap §1 content is to derive the exact live decompositions,
+one-site injectivity (or a blocked replacement), the finite-length span
+comparison, and the zero-tail bookkeeping from the structural after-blocking
+reduction itself.
 -/
 
 section FundamentalTheorem1606
@@ -605,6 +610,106 @@ theorem fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_overlapSp
   exact ⟨p, hp, P, Q, hPeq, hQeq, hPbnt, hQbnt,
           M.perm, M.copies_eq, ζ, hζne, hMultiset⟩
 
+/-- **Common live-block construction with derived one-sided overlap data.**
+
+This exact-live variant of
+`fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_overlapSpan`
+uses the phase-class BNT construction to derive the positive-dimension,
+normalization, self-overlap, and off-overlap inputs, and to transfer the supplied
+one-site injectivity of live blocks to the chosen basis blocks. The remaining
+two-basis analytic input is the finite-length span comparison between the two
+constructed bases. -/
+theorem fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_injectiveSpan
+    {d D₁ D₂ p rA rB : ℕ}
+    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    [∀ k : Fin rA, NeZero (dimA k)]
+    [∀ k : Fin rB, NeZero (dimB k)]
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (hSame : SameMPV₂ A B)
+    (hp : 0 < p)
+    (μA : Fin rA → ℂ)
+    (blocksA : (k : Fin rA) → MPSTensor (blockPhysDim d p) (dimA k))
+    (μB : Fin rB → ℂ)
+    (blocksB : (k : Fin rB) → MPSTensor (blockPhysDim d p) (dimB k))
+    (hAblocks : SameMPV₂ (blockTensor (d := d) (D := D₁) A p)
+      (toTensorFromBlocks (d := blockPhysDim d p) (μ := μA) blocksA))
+    (hBblocks : SameMPV₂ (blockTensor (d := d) (D := D₂) B p)
+      (toTensorFromBlocks (d := blockPhysDim d p) (μ := μB) blocksB))
+    (hTPA : ∀ k, ∑ i : Fin (blockPhysDim d p), (blocksA k i)ᴴ * blocksA k i = 1)
+    (hTPB : ∀ k, ∑ i : Fin (blockPhysDim d p), (blocksB k i)ᴴ * blocksB k i = 1)
+    (hIrrA : ∀ k, IsIrreducibleTensor (blocksA k))
+    (hIrrB : ∀ k, IsIrreducibleTensor (blocksB k))
+    (hPrimA : ∀ k, _root_.IsPrimitive
+      (transferMap (d := blockPhysDim d p) (D := dimA k) (blocksA k)))
+    (hPrimB : ∀ k, _root_.IsPrimitive
+      (transferMap (d := blockPhysDim d p) (D := dimB k) (blocksB k)))
+    (hInjA : ∀ k, IsInjective (blocksA k))
+    (hInjB : ∀ k, IsInjective (blocksB k))
+    (hμA : ∀ k, μA k ≠ 0)
+    (hμB : ∀ k, μB k ≠ 0)
+    (spanData :
+      ∀ P Q : SectorDecomposition (blockPhysDim d p),
+        SameMPV₂ P.toTensor (toTensorFromBlocks (d := blockPhysDim d p) (μ := μA) blocksA) →
+        SameMPV₂ Q.toTensor (toTensorFromBlocks (d := blockPhysDim d p) (μ := μB) blocksB) →
+        HasBNTSectorData P → HasBNTSectorData Q →
+        SectorBasisOverlapOrthoHypotheses P → SectorBasisOverlapOrthoHypotheses Q →
+        ∀ N,
+          Submodule.span ℂ (Set.range (fun j : Fin P.basisCount =>
+            mpvState (d := blockPhysDim d p) (P.basis j) N)) =
+          Submodule.span ℂ (Set.range (fun k : Fin Q.basisCount =>
+            mpvState (d := blockPhysDim d p) (Q.basis k) N))) :
+    ∃ p' : ℕ, 0 < p' ∧
+    ∃ P Q : SectorDecomposition (blockPhysDim d p'),
+      SameMPV₂ (blockTensor (d := d) (D := D₁) A p') P.toTensor ∧
+      SameMPV₂ (blockTensor (d := d) (D := D₂) B p') Q.toTensor ∧
+      HasBNTSectorData P ∧ HasBNTSectorData Q ∧
+      ∃ perm : Fin P.basisCount ≃ Fin Q.basisCount,
+      ∃ hCopies : ∀ j, P.copies j = Q.copies (perm j),
+      ∃ ζ : Fin P.basisCount → ℂ,
+        (∀ j, ζ j ≠ 0) ∧
+        ∀ j : Fin P.basisCount,
+          Finset.univ.val.map (P.weight j) =
+            Finset.univ.val.map
+              (fun q => ζ j * Q.weight (perm j) (Fin.cast (hCopies j) q)) := by
+  obtain ⟨P, hPblocks, hPbnt, hPOrtho, hPInj_of⟩ :=
+    exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_with_overlapOrtho
+      (d := blockPhysDim d p) μA blocksA hTPA hIrrA hPrimA hμA
+  obtain ⟨Q, hQblocks, hQbnt, hQOrtho, hQInj_of⟩ :=
+    exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_with_overlapOrtho
+      (d := blockPhysDim d p) μB blocksB hTPB hIrrB hPrimB hμB
+  have hPeq : SameMPV₂ (blockTensor (d := d) (D := D₁) A p) P.toTensor := by
+    intro N σ
+    calc
+      mpv (blockTensor (d := d) (D := D₁) A p) σ
+          = mpv (toTensorFromBlocks (d := blockPhysDim d p) (μ := μA) blocksA) σ :=
+            hAblocks N σ
+      _ = mpv P.toTensor σ := (hPblocks N σ).symm
+  have hQeq : SameMPV₂ (blockTensor (d := d) (D := D₂) B p) Q.toTensor := by
+    intro N σ
+    calc
+      mpv (blockTensor (d := d) (D := D₂) B p) σ
+          = mpv (toTensorFromBlocks (d := blockPhysDim d p) (μ := μB) blocksB) σ :=
+            hBblocks N σ
+      _ = mpv Q.toTensor σ := (hQblocks N σ).symm
+  have hAB : SameMPV₂ (blockTensor (d := d) (D := D₁) A p)
+                      (blockTensor (d := d) (D := D₂) B p) :=
+    sameMPV₂_blockTensor A B hSame p
+  have hPQeq : SameMPV₂ P.toTensor Q.toTensor := by
+    intro N σ
+    calc
+      mpv P.toTensor σ
+          = mpv (blockTensor (d := d) (D := D₁) A p) σ := (hPeq N σ).symm
+      _ = mpv (blockTensor (d := d) (D := D₂) B p) σ := hAB N σ
+      _ = mpv Q.toTensor σ := hQeq N σ
+  have hSpan := spanData P Q hPblocks hQblocks hPbnt hQbnt hPOrtho hQOrtho
+  have hOverlapSpan : SectorBasisOverlapSpanHypotheses P Q :=
+    hPOrtho.to_overlapSpan hQOrtho (hPInj_of hInjA) (hQInj_of hInjB) hSpan
+  obtain ⟨M⟩ := hOverlapSpan.exists_sectorBasisMatching hPQeq
+  obtain ⟨ζ, hζne, hMultiset⟩ :=
+    fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_sectorMatching M hPbnt hPQeq
+  exact ⟨p, hp, P, Q, hPeq, hQeq, hPbnt, hQbnt,
+          M.perm, M.copies_eq, ζ, hζne, hMultiset⟩
+
 /-- Remove matching zero tails from two MPV identities.
 
 If `A` and `B` have the same MPVs, and each is expressed as a zero tail plus a live tensor,
@@ -774,37 +879,39 @@ theorem fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_overlapSp
 
 The complete end-to-end FT should take two tensors `A, B` with `SameMPV₂ A B`
 and pass from the blocked reduction output to the paper's basis-of-normal-tensors
-sector comparison. The one-sided collapsed BNT construction is now available as
-`exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks`, and the sector matching
-extraction is available from primitive overlap-rigidity hypotheses through
-`SectorBasisOverlapSpanHypotheses.exists_sectorBasisMatching`.
+sector comparison. The one-sided phase-class BNT construction is available as
+`exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks`, with one-sided overlap data
+exposed by `exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_with_overlapOrtho`.
+The sector matching extraction is available from primitive overlap-rigidity
+hypotheses through `SectorBasisOverlapSpanHypotheses.exists_sectorBasisMatching`.
 
 The theorem
-`fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_overlapSpan`
-records the strongest Lean statement currently available: once a common
-blocking period gives exact live TP primitive irreducible block decompositions on
-both sides, the one-sided BNT construction and the overlap-span matching theorem
-produce the matched sector-weight conclusion from the original `SameMPV₂ A B`.
+`fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_injectiveSpan`
+records the strongest exact-live overlap-input reduction currently available:
+once a common blocking period gives exact live TP primitive irreducible block
+decompositions on both sides, live-block injectivity and finite-length span
+equality are enough to derive the overlap-span hypotheses for the constructed
+sector bases and produce the matched sector-weight conclusion. The theorem
+`fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_overlapSpan_zeroTail`
+records the corresponding zero-tail bookkeeping route when full overlap-span data
+are supplied.
 
 The remaining formal work for the completely unconditional
-`fundamentalTheorem_after_blocking_1606_sector` is therefore not another matched
-basis assumption. It is to derive, from the structural reduction itself:
+`fundamentalTheorem_after_blocking_1606_sector` is therefore to derive, from the
+structural reduction itself:
 
 1. a common live block decomposition with primitive **and irreducible** blocks at
-   the same physical blocking level, with the zero-tail contribution handled at
-   `N = 0`;
-2. the nonzero-bond-dimension, injectivity, normalization, asymptotic
-   self/orthogonal-overlap, and finite-length span hypotheses bundled in
-   `SectorBasisOverlapSpanHypotheses` for the collapsed BNT bases produced by
-   `exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks`; and
-3. the final global gauge construction of the equal-case FT after the matched
-   sector-weight data has been obtained.
+   the same physical blocking level;
+2. the `N = 0` bookkeeping for the zero-tail contribution;
+3. one-site injectivity of the live blocks, or a blocked replacement of the
+   rigidity input; and
+4. equality of the finite-length MPV spans for the two BNT bases, followed by the
+   final global gauge construction of the equal-case FT.
 
 Thus the common-period arithmetic and the abstract sector-matching witness are no
 longer the main blockers; the remaining gap is the paper-level derivation of the
-primitive overlap-span hypotheses for the actual collapsed BNT bases, together
-with the live/zero-tail bookkeeping needed to compare the sector tensors as full
-`SameMPV₂` families.
+listed live-block, zero-tail, injectivity, and span facts for the actual sector
+tensors produced by the after-blocking reduction.
 -/
 
 end FundamentalTheorem1606

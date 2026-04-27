@@ -75,15 +75,33 @@ reduction:
    live sector tensors requires either equal zero-tail dimensions or a
    positive-length variant of the sector comparison/extrapolation layer.
 
-3. **Overlap/span hypotheses for the collapsed BNT bases.**
+3. **Overlap/span hypotheses for the phase-class BNT bases.**
    The one-sided #923 constructor proves `HasBNTSectorData` but does not expose
-   injectivity, left-canonical normalization of the chosen representatives,
-   asymptotic overlap orthogonality, or equality of the finite-length spans
-   between the two sides. These are exactly the fields of
-   `SectorBasisOverlapSpanHypotheses`; deriving them from the collapsed
-   representatives is the next paper-level task.
+   all fields of `SectorBasisOverlapSpanHypotheses`; deriving them for the
+   phase-class BNT bases is the next paper-level task.
+
+## Wave 17 Slot G update
+
+`MPSTensor.exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_with_overlapOrtho`
+now strengthens the #923 constructor for the fields that are one-sided in nature:
+positive basis dimensions, left-canonical normalization, self-overlap limits,
+off-overlap limits, and representative injectivity when the original live blocks
+are one-site injective.  The helper
+`MPSTensor.SectorBasisOverlapOrthoHypotheses.to_overlapSpan` then combines those
+one-sided fields with the two genuinely two-family inputs still needed by the
+#860 overlap-rigidity theorem: injectivity of the chosen bases and equality of
+the finite-length MPV spans.
+
+Accordingly,
+`MPSTensor.fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_injectiveSpan`
+replaces the earlier opaque overlap-span-data input by explicit live-block
+injectivity plus a finite-span comparison for the phase-class BNT bases.  The
+remaining unproved Gap §1 content is now narrower: obtain the exact common
+live-block input above, arrange one-site injectivity (or a blocked variant of the
+rigidity theorem), and prove the finite-length span comparison for the two BNT
+bases.
 
 Therefore this branch combines the available #923 and #860 ingredients without
 hiding the missing work behind `SectorBasisMatching`. The remaining work is to
-prove the listed live-block and overlap/span facts for the actual sector
-decompositions produced by the after-blocking reduction.
+prove the listed live-block and span facts for the actual sector decompositions
+produced by the after-blocking reduction.
