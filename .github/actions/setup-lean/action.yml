@@ -16,10 +16,18 @@ runs:
         use-mathlib-cache: true
         build: false
 
-    - name: Install graphviz headers (needed by pygraphviz)
+    - name: Install blueprint system dependencies
       if: inputs.install-blueprint == 'true'
       shell: bash
-      run: sudo apt-get update && sudo apt-get install -y graphviz libgraphviz-dev
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          dvisvgm \
+          graphviz \
+          libgraphviz-dev \
+          texlive-fonts-recommended \
+          texlive-latex-extra \
+          texlive-pictures
 
     - name: Set up Python for blueprint tooling
       if: inputs.install-blueprint == 'true'
