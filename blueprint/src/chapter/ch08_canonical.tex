@@ -2275,6 +2275,32 @@ The following results separate the zero blocks from the
 	linear-independence condition.
 \end{proof}
 
+\begin{theorem}[Collapsed representative BNT sector construction with overlap data]
+	\label{thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_data}
+	\lean{MPSTensor.exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_with_overlapData}
+	\leanok
+	\uses{thm:bnt_li_tp_prim_irr_separated}
+	For trace-preserving primitive irreducible blocks of positive bond dimension,
+	with nonzero weights, suppose moreover that the blocks are injective. Then
+	there is a collapsed representative sector decomposition representing the
+	same weighted block sum, satisfying the BNT linear-independence condition,
+	and whose chosen basis blocks have positive bond dimension, are injective and
+	trace-preserving, have self-overlap tending to~$1$, and have mutual overlaps
+	tending to~$0$ for distinct basis blocks.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{def:mpv_phase_class_data, thm:bnt_li_tp_prim_irr_separated,
+		thm:bnt_sector_decomp_tp_prim_irr_collapsed}
+	Choose one representative per MPV phase class and absorb the phase factors
+	into the sector weights as in
+	Theorem~\ref{thm:bnt_sector_decomp_tp_prim_irr_collapsed}. The
+	representatives inherit positivity of the bond dimension, injectivity, and
+	trace preservation from the original blocks. Their self-overlap limits follow
+	from primitivity and irreducibility, while their mutual overlap limits follow
+	from the separation of distinct phase-class representatives.
+\end{proof}
+
 \begin{theorem}[TP primitive irreducible version with eventual BNT independence]
 	\label{thm:bnt_sector_decomp_tp_prim_irr_linear_independent}
 	\lean{MPSTensor.exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_of_linearIndependent}
