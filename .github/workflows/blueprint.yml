@@ -39,7 +39,15 @@ jobs:
           python-version: '3.12'
 
       - name: Install system dependencies
-        run: sudo apt-get update && sudo apt-get install -y graphviz libgraphviz-dev
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            dvisvgm \
+            graphviz \
+            libgraphviz-dev \
+            texlive-fonts-recommended \
+            texlive-latex-extra \
+            texlive-pictures
 
       - name: Install leanblueprint
         run: pip install leanblueprint -r .github/requirements/blueprint-python.txt
@@ -59,6 +67,10 @@ jobs:
           fi
           if grep -q "WARNING: File not found:" /tmp/blueprint-output.txt; then
             echo "::error::Blueprint has missing files (see WARNING lines above)"
+            exit 1
+          fi
+          if grep -R "TikZ SVG unavailable" blueprint/web --include='*.html'; then
+            echo "::error::Blueprint contains unrendered TikZ SVG placeholders"
             exit 1
           fi
 
