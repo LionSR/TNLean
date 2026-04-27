@@ -635,6 +635,91 @@ theorem exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_of_blocksNotGaugePhas
     exists_eventually_linearIndependent_of_tp_primitive_irr_blocks_of_blocksNotGaugePhaseEquiv
       blocks hTP hIrr hPrim hBlocks
 
+/-- The concrete collapsed-representative sector decomposition obtained from MPV phase classes. -/
+private noncomputable def collapsedBntSectorDecomp
+    {r : ℕ} {dim : Fin r → ℕ}
+    (μ : Fin r → ℂ)
+    (blocks : (k : Fin r) → MPSTensor d (dim k))
+    (hμne : ∀ k, μ k ≠ 0) : SectorDecomposition d :=
+  let classes := mpvPhaseClassData blocks
+  let ζFn : (j : Fin classes.g) → Fin (classes.copies j) → ℂ :=
+    fun j q => (classes.enum_phase j q).choose
+  let hζ_ne : ∀ j q, ζFn j q ≠ 0 :=
+    fun j q => (classes.enum_phase j q).choose_spec.1
+  let sectors : SectorWeightData classes.g := {
+    copies := classes.copies
+    copies_pos := classes.copies_pos
+    weight := fun j q => ζFn j q * μ (classes.enum j q)
+    weight_ne_zero := fun j q => mul_ne_zero (hζ_ne j q) (hμne (classes.enum j q))
+  }
+  {
+    basisCount := classes.g
+    basisDim := fun j => dim (classes.repr j)
+    basis := fun j => blocks (classes.repr j)
+    sectors := sectors
+  }
+
+private theorem collapsedBntSectorDecomp_sameMPV₂
+    {r : ℕ} {dim : Fin r → ℕ}
+    (μ : Fin r → ℂ)
+    (blocks : (k : Fin r) → MPSTensor d (dim k))
+    (hμne : ∀ k, μ k ≠ 0) :
+    SameMPV₂ (collapsedBntSectorDecomp (d := d) μ blocks hμne).toTensor
+      (toTensorFromBlocks (d := d) (μ := μ) blocks) := by
+  classical
+  let classes := mpvPhaseClassData blocks
+  let ζFn : (j : Fin classes.g) → Fin (classes.copies j) → ℂ :=
+    fun j q => (classes.enum_phase j q).choose
+  have hζ_mpv : ∀ j q (N : ℕ) (σ : Fin N → Fin d),
+      mpv (blocks (classes.enum j q)) σ = (ζFn j q) ^ N * mpv (blocks (classes.repr j)) σ :=
+    fun j q N σ => (classes.enum_phase j q).choose_spec.2 N σ
+  let P := collapsedBntSectorDecomp (d := d) μ blocks hμne
+  intro N σ
+  calc mpv P.toTensor σ
+      = ∑ j : Fin P.basisCount,
+          ∑ q : Fin (P.copies j), (P.weight j q) ^ N * mpv (P.basis j) σ :=
+          P.mpv_toTensor_eq_sum_sectors σ
+    _ = ∑ j : Fin classes.g,
+          ∑ q : Fin (classes.copies j),
+            (ζFn j q * μ (classes.enum j q)) ^ N *
+              mpv (blocks (classes.repr j)) σ := by
+            rfl
+    _ = ∑ j : Fin classes.g,
+          ∑ q : Fin (classes.copies j),
+            (μ (classes.enum j q)) ^ N * mpv (blocks (classes.enum j q)) σ := by
+            refine Finset.sum_congr rfl (fun j _ =>
+              Finset.sum_congr rfl (fun q _ => ?_))
+            rw [mul_pow, hζ_mpv j q N σ]
+            ring
+    _ = ∑ k : Fin r, (μ k) ^ N * mpv (blocks k) σ :=
+          classes.regroup (fun k => (μ k) ^ N * mpv (blocks k) σ)
+    _ = mpv (toTensorFromBlocks (d := d) (μ := μ) blocks) σ := by
+            symm
+            simpa [smul_eq_mul] using mpv_toTensorFromBlocks_eq_sum μ blocks σ
+
+private theorem collapsedBntSectorDecomp_hasBNT
+    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ)
+    (blocks : (k : Fin r) → MPSTensor d (dim k))
+    (hTP : ∀ k, ∑ i : Fin d, (blocks k i)ᴴ * blocks k i = 1)
+    (hIrr : ∀ k, IsIrreducibleTensor (blocks k))
+    (hPrim : ∀ k, _root_.IsPrimitive (transferMap (d := d) (D := dim k) (blocks k)))
+    (hμne : ∀ k, μ k ≠ 0) :
+    HasBNTSectorData (d := d) (collapsedBntSectorDecomp (d := d) μ blocks hμne) := by
+  classical
+  let classes := mpvPhaseClassData blocks
+  let P := collapsedBntSectorDecomp (d := d) μ blocks hμne
+  have hLI : ∃ N0 : ℕ, ∀ N > N0,
+      LinearIndependent ℂ
+        (fun j : Fin classes.g => mpvState (d := d) (blocks (classes.repr j)) N) :=
+    exists_eventually_linearIndependent_of_tp_primitive_irr_blocks_of_blocksNotGaugePhaseEquiv
+      (fun j : Fin classes.g => blocks (classes.repr j))
+      (fun j => hTP (classes.repr j))
+      (fun j => hIrr (classes.repr j))
+      (fun j => hPrim (classes.repr j))
+      classes.blocks_not_equiv
+  simpa [P, collapsedBntSectorDecomp] using hLI
+
 /-- **Unconditional one-sided BNT sector construction for primitive irreducible blocks.**
 
 Starting from arbitrary trace-preserving primitive irreducible blocks with
@@ -655,58 +740,67 @@ theorem exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks
     ∃ P : SectorDecomposition d,
       SameMPV₂ P.toTensor (toTensorFromBlocks (d := d) (μ := μ) blocks) ∧
       HasBNTSectorData (d := d) P := by
+  refine ⟨collapsedBntSectorDecomp (d := d) μ blocks hμne, ?_, ?_⟩
+  · exact collapsedBntSectorDecomp_sameMPV₂ (d := d) μ blocks hμne
+  · exact collapsedBntSectorDecomp_hasBNT (d := d) μ blocks hTP hIrr hPrim hμne
+
+/-- **Collapsed BNT sector construction with primitive overlap data.**
+
+This strengthens `exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks` by exposing the
+properties of the chosen representative basis blocks that are needed by the overlap-rigidity
+layer. The extra `hInj` hypothesis is intentional: the one-sided BNT constructor assumes
+irreducibility, primitivity, and trace preservation, while
+`SectorBasisOverlapSpanHypotheses` consumes length-1 MPS-injectivity.
+
+The finite-span comparison between two independently constructed sector bases is not part of
+this one-sided theorem; it depends on comparing the two sides. -/
+theorem exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_with_overlapData
+    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ)
+    (blocks : (k : Fin r) → MPSTensor d (dim k))
+    (hTP : ∀ k, ∑ i : Fin d, (blocks k i)ᴴ * blocks k i = 1)
+    (hIrr : ∀ k, IsIrreducibleTensor (blocks k))
+    (hPrim : ∀ k, _root_.IsPrimitive (transferMap (d := d) (D := dim k) (blocks k)))
+    (hInj : ∀ k, IsInjective (blocks k))
+    (hμne : ∀ k, μ k ≠ 0) :
+    ∃ P : SectorDecomposition d,
+      SameMPV₂ P.toTensor (toTensorFromBlocks (d := d) (μ := μ) blocks) ∧
+      HasBNTSectorData (d := d) P ∧
+      (∀ j : Fin P.basisCount, 0 < P.basisDim j) ∧
+      (∀ j : Fin P.basisCount, IsInjective (P.basis j)) ∧
+      (∀ j : Fin P.basisCount, (∑ i : Fin d, (P.basis j i)ᴴ * (P.basis j i)) = 1) ∧
+      (∀ j : Fin P.basisCount,
+        Filter.Tendsto (fun N => mpvOverlap (d := d) (P.basis j) (P.basis j) N)
+          Filter.atTop (nhds (1 : ℂ))) ∧
+      (∀ i j : Fin P.basisCount, i ≠ j →
+        Filter.Tendsto (fun N => mpvOverlap (d := d) (P.basis i) (P.basis j) N)
+          Filter.atTop (nhds 0)) := by
   classical
   let classes := mpvPhaseClassData blocks
-  let ζFn : (j : Fin classes.g) → Fin (classes.copies j) → ℂ :=
-    fun j q => (classes.enum_phase j q).choose
-  have hζ_ne : ∀ j q, ζFn j q ≠ 0 := fun j q => (classes.enum_phase j q).choose_spec.1
-  have hζ_mpv : ∀ j q (N : ℕ) (σ : Fin N → Fin d),
-      mpv (blocks (classes.enum j q)) σ = (ζFn j q) ^ N * mpv (blocks (classes.repr j)) σ :=
-    fun j q N σ => (classes.enum_phase j q).choose_spec.2 N σ
-  let sectors : SectorWeightData classes.g := {
-    copies := classes.copies
-    copies_pos := classes.copies_pos
-    weight := fun j q => ζFn j q * μ (classes.enum j q)
-    weight_ne_zero := fun j q => mul_ne_zero (hζ_ne j q) (hμne (classes.enum j q))
-  }
-  let P : SectorDecomposition d := {
-    basisCount := classes.g
-    basisDim := fun j => dim (classes.repr j)
-    basis := fun j => blocks (classes.repr j)
-    sectors := sectors
-  }
-  refine ⟨P, ?_, ?_⟩
-  · intro N σ
-    calc mpv P.toTensor σ
-        = ∑ j : Fin P.basisCount,
-            ∑ q : Fin (P.copies j), (P.weight j q) ^ N * mpv (P.basis j) σ :=
-            P.mpv_toTensor_eq_sum_sectors σ
-      _ = ∑ j : Fin classes.g,
-            ∑ q : Fin (classes.copies j),
-              (ζFn j q * μ (classes.enum j q)) ^ N *
-                mpv (blocks (classes.repr j)) σ := rfl
-      _ = ∑ j : Fin classes.g,
-            ∑ q : Fin (classes.copies j),
-              (μ (classes.enum j q)) ^ N * mpv (blocks (classes.enum j q)) σ := by
-              refine Finset.sum_congr rfl (fun j _ =>
-                Finset.sum_congr rfl (fun q _ => ?_))
-              rw [mul_pow, hζ_mpv j q N σ]
-              ring
-      _ = ∑ k : Fin r, (μ k) ^ N * mpv (blocks k) σ :=
-            classes.regroup (fun k => (μ k) ^ N * mpv (blocks k) σ)
-      _ = mpv (toTensorFromBlocks (d := d) (μ := μ) blocks) σ := by
-              symm
-              simpa [smul_eq_mul] using mpv_toTensorFromBlocks_eq_sum μ blocks σ
-  · have hLI : ∃ N0 : ℕ, ∀ N > N0,
-        LinearIndependent ℂ
-          (fun j : Fin classes.g => mpvState (d := d) (blocks (classes.repr j)) N) :=
-      exists_eventually_linearIndependent_of_tp_primitive_irr_blocks_of_blocksNotGaugePhaseEquiv
-        (fun j : Fin classes.g => blocks (classes.repr j))
-        (fun j => hTP (classes.repr j))
-        (fun j => hIrr (classes.repr j))
-        (fun j => hPrim (classes.repr j))
-        classes.blocks_not_equiv
-    simpa [P] using hLI
+  let P := collapsedBntSectorDecomp (d := d) μ blocks hμne
+  have hSame : SameMPV₂ P.toTensor (toTensorFromBlocks (d := d) (μ := μ) blocks) :=
+    collapsedBntSectorDecomp_sameMPV₂ (d := d) μ blocks hμne
+  have hBNT : HasBNTSectorData (d := d) P :=
+    collapsedBntSectorDecomp_hasBNT (d := d) μ blocks hTP hIrr hPrim hμne
+  refine ⟨P, hSame, hBNT, ?_, ?_, ?_, ?_, ?_⟩
+  · intro j
+    simpa [P, collapsedBntSectorDecomp] using NeZero.pos (dim (classes.repr j))
+  · intro j
+    simpa [P, collapsedBntSectorDecomp] using hInj (classes.repr j)
+  · intro j
+    simpa [P, collapsedBntSectorDecomp] using hTP (classes.repr j)
+  · intro j
+    simpa [P, collapsedBntSectorDecomp] using
+      overlap_tendsto_one_of_peripheralPrimitive_of_irreducible
+      (blocks (classes.repr j)) (hIrr (classes.repr j)) (hTP (classes.repr j))
+      (hPrim (classes.repr j))
+  · intro i j hij
+    simpa [P, collapsedBntSectorDecomp] using
+      cross_overlap_tendsto_zero_of_separated_normalCFBNT_data
+      (fun j : Fin classes.g => blocks (classes.repr j))
+      (HasIrreducibleBlocks.ofForall (fun j => hIrr (classes.repr j)))
+      (IsLeftCanonicalBlockFamily.ofForall (fun j => hTP (classes.repr j)))
+      classes.blocks_not_equiv i j hij
 
 /-! ### §6. Conditional sector construction under BNT linear independence -/
 
