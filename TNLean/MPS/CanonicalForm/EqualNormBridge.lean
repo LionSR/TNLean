@@ -451,6 +451,15 @@ lemma MPVPhaseEquiv.of_gaugePhaseEquiv_cast {r : ℕ} {dim : Fin r → ℕ}
     (B := blocks k) X ζ hX N σ,
     mpv_cast_dim hdim (blocks j) N σ]
 
+/-- MPV phase equivalence gives scalar-power equality of the finite-length MPV state vectors. -/
+lemma MPVPhaseEquiv.mpvState_eq_smul {r : ℕ} {dim : Fin r → ℕ}
+    {blocks : (k : Fin r) → MPSTensor d (dim k)} {j k : Fin r}
+    (h : MPVPhaseEquiv blocks j k) (N : ℕ) :
+    mpvState (d := d) (blocks k) N = h.choose ^ N • mpvState (d := d) (blocks j) N := by
+  ext σ
+  simp only [PiLp.smul_apply, smul_eq_mul, mpvState_apply]
+  exact h.choose_spec.2 N σ
+
 /-- Equivalence relation on block indices given by MPV phase equivalence. -/
 def mpvPhaseSetoid {r : ℕ} {dim : Fin r → ℕ}
     (blocks : (k : Fin r) → MPSTensor d (dim k)) : Setoid (Fin r) where
@@ -489,6 +498,62 @@ structure MPVPhaseClassData {r : ℕ} {dim : Fin r → ℕ}
   blocks_not_equiv : BlocksNotGaugePhaseEquiv (d := d) (fun j => blocks (repr j))
   regroup : ∀ f : Fin r → ℂ,
     ∑ j : Fin g, ∑ q : Fin (copies j), f (enum j q) = ∑ k : Fin r, f k
+
+namespace MPVPhaseClassData
+
+variable {r : ℕ} {dim : Fin r → ℕ}
+variable {blocks : (k : Fin r) → MPSTensor d (dim k)}
+
+/-- Every original block index occurs in the finite enumeration of MPV phase classes. -/
+lemma exists_enum_eq (classes : MPVPhaseClassData blocks) (k : Fin r) :
+    ∃ j : Fin classes.g, ∃ q : Fin (classes.copies j), classes.enum j q = k := by
+  classical
+  by_contra h
+  push Not at h
+  have hzero :
+      (∑ j : Fin classes.g, ∑ q : Fin (classes.copies j),
+        (if classes.enum j q = k then (1 : ℂ) else 0)) = 0 := by
+    apply Finset.sum_eq_zero
+    intro j _
+    apply Finset.sum_eq_zero
+    intro q _
+    simp [h j q]
+  have hone : (∑ x : Fin r, (if x = k then (1 : ℂ) else 0)) = 1 := by
+    simp
+  have hregroup := classes.regroup (fun x : Fin r => if x = k then (1 : ℂ) else 0)
+  rw [hzero, hone] at hregroup
+  exact zero_ne_one hregroup
+
+/-- The chosen MPV phase-class representatives span exactly the same finite-length MPV
+subspace as the original block family.
+
+Each representative is one of the original blocks, giving one inclusion. Conversely, every
+original block occurs in a phase class and is a nonzero scalar-power multiple of that class's
+representative at each length, hence lies in the representative span. -/
+theorem representative_mpv_span_eq (classes : MPVPhaseClassData blocks) (N : ℕ) :
+    Submodule.span ℂ (Set.range (fun j : Fin classes.g =>
+      mpvState (d := d) (blocks (classes.repr j)) N)) =
+    Submodule.span ℂ (Set.range (fun k : Fin r =>
+      mpvState (d := d) (blocks k) N)) := by
+  classical
+  apply le_antisymm
+  · refine Submodule.span_le.2 ?_
+    intro v hv
+    rcases hv with ⟨j, rfl⟩
+    exact Submodule.subset_span ⟨classes.repr j, rfl⟩
+  · refine Submodule.span_le.2 ?_
+    intro v hv
+    rcases hv with ⟨k, rfl⟩
+    obtain ⟨j, q, hq⟩ := classes.exists_enum_eq k
+    have hphase : MPVPhaseEquiv blocks (classes.repr j) k := by
+      simpa [hq] using classes.enum_phase j q
+    change mpvState (d := d) (blocks k) N ∈
+      Submodule.span ℂ (Set.range (fun j : Fin classes.g =>
+        mpvState (d := d) (blocks (classes.repr j)) N))
+    rw [hphase.mpvState_eq_smul N]
+    exact Submodule.smul_mem _ _ (Submodule.subset_span ⟨j, rfl⟩)
+
+end MPVPhaseClassData
 
 /-- Construct the finite MPV phase classes of a block family.
 
@@ -840,6 +905,142 @@ theorem exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_with_overlapData
       (d := d) μ blocks hTP hIrr hPrim hμne
   exact ⟨P, hSame, hBNT, hOrtho.dim_pos, hInj_of hInj, hOrtho.normalized,
     hOrtho.self_overlap, hOrtho.off_overlap⟩
+
+/-- **Collapsed BNT sector construction with overlap data and the quotient span identity.**
+
+This strengthens `exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_with_overlapData` by
+also exposing the finite-length span invariant of the collapsed construction: at every length,
+the chosen MPV phase-class representatives span the same MPV subspace as the original block
+family.  This removes the quotient/enumeration bookkeeping from later two-sided span
+comparisons; the remaining comparison is the genuine equality of the two original live-block
+spans. -/
+theorem exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_with_overlapData_and_basisSpan
+    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ)
+    (blocks : (k : Fin r) → MPSTensor d (dim k))
+    (hTP : ∀ k, ∑ i : Fin d, (blocks k i)ᴴ * blocks k i = 1)
+    (hIrr : ∀ k, IsIrreducibleTensor (blocks k))
+    (hPrim : ∀ k, _root_.IsPrimitive (transferMap (d := d) (D := dim k) (blocks k)))
+    (hInj : ∀ k, IsInjective (blocks k))
+    (hμne : ∀ k, μ k ≠ 0) :
+    ∃ P : SectorDecomposition d,
+      SameMPV₂ P.toTensor (toTensorFromBlocks (d := d) (μ := μ) blocks) ∧
+      HasBNTSectorData (d := d) P ∧
+      (∀ j : Fin P.basisCount, 0 < P.basisDim j) ∧
+      (∀ j : Fin P.basisCount, IsInjective (P.basis j)) ∧
+      (∀ j : Fin P.basisCount, (∑ i : Fin d, (P.basis j i)ᴴ * (P.basis j i)) = 1) ∧
+      (∀ j : Fin P.basisCount,
+        Filter.Tendsto (fun N => mpvOverlap (d := d) (P.basis j) (P.basis j) N)
+          Filter.atTop (nhds (1 : ℂ))) ∧
+      (∀ i j : Fin P.basisCount, i ≠ j →
+        Filter.Tendsto (fun N => mpvOverlap (d := d) (P.basis i) (P.basis j) N)
+          Filter.atTop (nhds 0)) ∧
+      (∀ N,
+        Submodule.span ℂ (Set.range (fun j : Fin P.basisCount =>
+          mpvState (d := d) (P.basis j) N)) =
+        Submodule.span ℂ (Set.range (fun k : Fin r =>
+          mpvState (d := d) (blocks k) N))) := by
+  classical
+  let classes := mpvPhaseClassData blocks
+  let P := collapsedBntSectorDecomp (d := d) μ blocks hμne
+  have hSame : SameMPV₂ P.toTensor (toTensorFromBlocks (d := d) (μ := μ) blocks) :=
+    collapsedBntSectorDecomp_sameMPV₂ (d := d) μ blocks hμne
+  have hBNT : HasBNTSectorData (d := d) P :=
+    collapsedBntSectorDecomp_hasBNT (d := d) μ blocks hTP hIrr hPrim hμne
+  refine ⟨P, hSame, hBNT, ?_, ?_, ?_, ?_, ?_, ?_⟩
+  · intro j
+    simpa [P, collapsedBntSectorDecomp] using NeZero.pos (dim (classes.repr j))
+  · intro j
+    simpa [P, collapsedBntSectorDecomp] using hInj (classes.repr j)
+  · intro j
+    simpa [P, collapsedBntSectorDecomp] using hTP (classes.repr j)
+  · intro j
+    simpa [P, collapsedBntSectorDecomp] using
+      overlap_tendsto_one_of_peripheralPrimitive_of_irreducible
+      (blocks (classes.repr j)) (hIrr (classes.repr j)) (hTP (classes.repr j))
+      (hPrim (classes.repr j))
+  · intro i j hij
+    simpa [P, collapsedBntSectorDecomp] using
+      cross_overlap_tendsto_zero_of_separated_normalCFBNT_data
+      (fun j : Fin classes.g => blocks (classes.repr j))
+      (HasIrreducibleBlocks.ofForall (fun j => hIrr (classes.repr j)))
+      (IsLeftCanonicalBlockFamily.ofForall (fun j => hTP (classes.repr j)))
+      classes.blocks_not_equiv i j hij
+  · intro N
+    simpa [P, collapsedBntSectorDecomp] using classes.representative_mpv_span_eq (d := d) N
+
+/-- **Two-sided collapsed BNT overlap-span data from live-block span equality.**
+
+Apply the collapsed representative construction on both live block families.  The one-sided
+quotient span identity above transports a finite-length span equality for the original live
+blocks to the two independently chosen collapsed sector bases.  Thus the theorem packages all
+fields of `SectorBasisOverlapSpanHypotheses` without assuming that structure directly.
+
+The remaining paper-level task, not proved here, is to derive the displayed live-block span
+equality from the global `SameMPV₂` and structural reduction data. -/
+theorem exists_bnt_sectorDecomp_pair_with_overlapSpan_of_block_span_eq
+    {rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
+    (μA : Fin rA → ℂ)
+    (blocksA : (k : Fin rA) → MPSTensor d (dimA k))
+    (μB : Fin rB → ℂ)
+    (blocksB : (k : Fin rB) → MPSTensor d (dimB k))
+    (hTPA : ∀ k, ∑ i : Fin d, (blocksA k i)ᴴ * blocksA k i = 1)
+    (hTPB : ∀ k, ∑ i : Fin d, (blocksB k i)ᴴ * blocksB k i = 1)
+    (hIrrA : ∀ k, IsIrreducibleTensor (blocksA k))
+    (hIrrB : ∀ k, IsIrreducibleTensor (blocksB k))
+    (hPrimA : ∀ k, _root_.IsPrimitive (transferMap (d := d) (D := dimA k) (blocksA k)))
+    (hPrimB : ∀ k, _root_.IsPrimitive (transferMap (d := d) (D := dimB k) (blocksB k)))
+    (hInjA : ∀ k, IsInjective (blocksA k))
+    (hInjB : ∀ k, IsInjective (blocksB k))
+    (hμA : ∀ k, μA k ≠ 0)
+    (hμB : ∀ k, μB k ≠ 0)
+    (hBlockSpan : ∀ N,
+      Submodule.span ℂ (Set.range (fun k : Fin rA =>
+        mpvState (d := d) (blocksA k) N)) =
+      Submodule.span ℂ (Set.range (fun k : Fin rB =>
+        mpvState (d := d) (blocksB k) N))) :
+    ∃ P Q : SectorDecomposition d,
+      SameMPV₂ P.toTensor (toTensorFromBlocks (d := d) (μ := μA) blocksA) ∧
+      SameMPV₂ Q.toTensor (toTensorFromBlocks (d := d) (μ := μB) blocksB) ∧
+      HasBNTSectorData (d := d) P ∧
+      HasBNTSectorData (d := d) Q ∧
+      SectorBasisOverlapSpanHypotheses P Q := by
+  obtain ⟨P, hPblocks, hPbnt, hPdim, hPinj, hPnorm, hPself, hPoff, hPspan⟩ :=
+    exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_with_overlapData_and_basisSpan
+      (d := d) μA blocksA hTPA hIrrA hPrimA hInjA hμA
+  obtain ⟨Q, hQblocks, hQbnt, hQdim, hQinj, hQnorm, hQself, hQoff, hQspan⟩ :=
+    exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_with_overlapData_and_basisSpan
+      (d := d) μB blocksB hTPB hIrrB hPrimB hInjB hμB
+  have hSpan : ∀ N,
+      Submodule.span ℂ (Set.range (fun j : Fin P.basisCount =>
+        mpvState (d := d) (P.basis j) N)) =
+      Submodule.span ℂ (Set.range (fun k : Fin Q.basisCount =>
+        mpvState (d := d) (Q.basis k) N)) := by
+    intro N
+    calc
+      Submodule.span ℂ (Set.range (fun j : Fin P.basisCount =>
+          mpvState (d := d) (P.basis j) N))
+          = Submodule.span ℂ (Set.range (fun k : Fin rA =>
+              mpvState (d := d) (blocksA k) N)) := hPspan N
+      _ = Submodule.span ℂ (Set.range (fun k : Fin rB =>
+              mpvState (d := d) (blocksB k) N)) := hBlockSpan N
+      _ = Submodule.span ℂ (Set.range (fun k : Fin Q.basisCount =>
+              mpvState (d := d) (Q.basis k) N)) := (hQspan N).symm
+  refine ⟨P, Q, hPblocks, hQblocks, hPbnt, hQbnt, ?_⟩
+  exact {
+    left_dim_pos := hPdim
+    right_dim_pos := hQdim
+    left_injective := hPinj
+    right_injective := hQinj
+    left_normalized := hPnorm
+    right_normalized := hQnorm
+    left_self_overlap := hPself
+    left_off_overlap := hPoff
+    right_self_overlap := hQself
+    right_off_overlap := hQoff
+    span_eq := hSpan
+  }
 
 /-! ### §6. Conditional sector construction under BNT linear independence -/
 
