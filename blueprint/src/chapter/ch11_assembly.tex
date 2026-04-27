@@ -875,20 +875,22 @@ single weighted block.
 	\end{enumerate}
 	What is still missing for the unconditional equal-case theorem
 	(Theorem~\ref{thm:ft_equal}, \cite[Corollary~IV.5]{Cirac2021Matrix}) is
-	not the one-sided sector construction: the collapsed-representative
-		construction for trace-preserving primitive irreducible blocks is now
-		Theorem~\ref{thm:bnt_sector_decomp_tp_prim_irr_collapsed}.  The remaining
-		paper-level ingredient is a matched-basis theorem for heterogeneous sector
-		decompositions.  The algebraic reduction after a basis matching is formalized in
-		Theorems~\ref{thm:route_b_hetero_phase_match},~\ref{thm:route_b_hetero_matched_basis},
-		and~\ref{thm:route_b_hetero_sector_matching}.  Copy alignment is now recovered
-		from a basis pre-matching by
-		Theorem~\ref{thm:sector_basis_pre_matching_to_matching}, and the primitive
-		overlap-rigidity hypotheses produce such a matching by
-		Theorem~\ref{thm:sector_basis_matching_from_overlap_ortho_span}.  The remaining
-		task is to derive those span and overlap hypotheses from arbitrary equal-MPV
-		sector decompositions produced by the one-sided BNT construction.
-		Once this ingredient is in place, the final global gauge matrix
-	of Corollary~IV.5 is obtained by the same phase-absorption and blockwise
+	not the one-sided construction of a basis of normal tensors: for
+	trace-preserving primitive irreducible blocks with positive bond dimensions
+	and nonzero weights, representatives of the MPV phase-equivalence classes are
+	constructed in Theorem~\ref{thm:bnt_sector_decomp_tp_prim_irr_collapsed}.
+	When the original blocks are also injective, the same construction exposes
+	positive dimension, injectivity, normalization, and asymptotic overlap
+	orthogonality in
+	Theorem~\ref{thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_data}.
+	The remaining paper-level inputs are to obtain, from the arbitrary
+	after-blocking reduction, exact live primitive irreducible block families at a
+	common blocking length, to settle the length-zero bookkeeping for discarded
+	zero blocks, and to prove equality of the finite-length MPV spans for the two
+	independently chosen bases of normal tensors.  Once those inputs are supplied,
+	Theorems~\ref{thm:sector_basis_matching_from_overlap_ortho_span}
+	and~\ref{thm:route_b_hetero_sector_matching} recover the basis permutation,
+	multiplicities, and sector-weight multisets.  The final global gauge matrix of
+	Corollary~IV.5 is then obtained by the same phase-absorption and blockwise
 	composition argument already formalized in the strict single-weight setting.
 \end{remark}
