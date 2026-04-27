@@ -1402,6 +1402,56 @@ The following results separate the zero blocks from the
 	Apply Theorem~\ref{thm:cyclic_sector_decomp_after_blocking}.
 \end{proof}
 
+\begin{theorem}[Cyclic sector decomposition with primitive irreducible sectors]%
+\label{thm:cyclic_sector_decomp_irr_tp_prim_irr}
+	\lean{MPSTensor.exists_primitive_irreducible_cyclic_sector_decomp_of_TP_of_isIrreducibleTensor}
+	\leanok
+	\uses{thm:cyclic_sector_decomp_after_blocking, thm:blocked_sector_unconditional}
+	Let $A$ be a left-canonical irreducible tensor. Then there is a period
+	$m \ge 1$ and a unit-weight decomposition of $A^{[m]}$ into sector blocks
+	$(C_k)_{k=1}^m$ such that every $C_k$ is left-canonical, has primitive
+	transfer map, is tensor-irreducible, and has nonzero bond dimension.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:conjtranspose_kraus_setup, thm:peripheral_cyclic_structure,
+		thm:cyclic_sector_decomp_after_blocking, thm:blocked_sector_unconditional}
+	The proof repeats the cyclic-sector construction of
+	Theorem~\ref{thm:cyclic_sector_decomp_irr_tp}, keeps the projection and
+	compression data, and applies
+	Theorem~\ref{thm:blocked_sector_unconditional} to the resulting
+	sector blocks.
+\end{proof}
+
+\begin{definition}[Primitive irreducible cyclic-sector package]%
+\label{def:primitive_irreducible_cyclic_sectors}
+	\lean{MPSTensor.HasPrimitiveIrreducibleCyclicSectors}
+	\leanok
+	\uses{def:blocked_tensor, def:tensor_from_blocks, def:same_mpv2}
+	A tensor has primitive irreducible cyclic sectors if some positive
+	period-removal length $m$ represents $A^{[m]}$ as a unit-weight block tensor
+	whose sector blocks are trace-preserving, have primitive transfer maps, are
+	tensor-irreducible, and have positive bond dimensions. This length $m$ is the
+	period-removal length, not the later finite blocking length used for common
+	refinement or injectivity.
+\end{definition}
+
+\begin{theorem}[Trace-preserving irreducible tensors have primitive irreducible cyclic sectors]%
+\label{thm:has_primitive_irreducible_cyclic_sectors_tp_irr}
+	\lean{MPSTensor.hasPrimitiveIrreducibleCyclicSectors_of_TP_of_isIrreducibleTensor}
+	\leanok
+	\uses{def:primitive_irreducible_cyclic_sectors,
+		thm:cyclic_sector_decomp_irr_tp_prim_irr}
+	Every trace-preserving irreducible tensor satisfies
+	Definition~\ref{def:primitive_irreducible_cyclic_sectors}.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:cyclic_sector_decomp_irr_tp_prim_irr}
+	This is Theorem~\ref{thm:cyclic_sector_decomp_irr_tp_prim_irr}, repackaged as
+	the predicate of Definition~\ref{def:primitive_irreducible_cyclic_sectors}.
+\end{proof}
+
 \subsection{Sector irreducibility helpers}%
 \label{sec:sector_irreducibility_helpers}
 
@@ -2251,7 +2301,7 @@ The following results separate the zero blocks from the
 	distinct representatives are not gauge-phase equivalent.
 \end{definition}
 
-\begin{theorem}[Collapsed representative BNT sector construction]
+\begin{theorem}[Phase-class BNT sector construction]
 	\label{thm:bnt_sector_decomp_tp_prim_irr_collapsed}
 	\lean{MPSTensor.exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks}
 	\leanok
@@ -2273,6 +2323,79 @@ The following results separate the zero blocks from the
 	classes.  Therefore the representatives satisfy the separated primitive-normal
 	hypothesis, and Theorem~\ref{thm:bnt_li_tp_prim_irr_separated} gives the BNT
 	linear-independence condition.
+\end{proof}
+
+
+\begin{theorem}[Phase-class BNT sector construction with one-sided overlap data]
+	\label{thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_ortho}
+	\lean{MPSTensor.exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_with_overlapOrtho}
+	\leanok
+	\uses{thm:bnt_sector_decomp_tp_prim_irr_collapsed,
+		def:sector_basis_overlap_ortho_hyps}
+	For trace-preserving primitive irreducible blocks of positive bond dimension
+	with nonzero weights, there is a sector decomposition, obtained by choosing
+	one block per MPV phase class, which represents the same weighted block sum,
+	satisfies the BNT linear-independence condition, and has a basis satisfying
+	the single-family overlap-orthogonality data.  If the original blocks are
+	one-site injective, then the chosen basis blocks are one-site injective.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{def:mpv_phase_class_data, thm:bnt_li_tp_prim_irr_separated,
+		thm:cross_overlap_zero_split, thm:bnt_sector_decomp_tp_prim_irr_collapsed}
+	The proof is the phase-class construction of
+	Theorem~\ref{thm:bnt_sector_decomp_tp_prim_irr_collapsed}.  The chosen basis
+	blocks keep positive bond dimension, normalization, and any supplied
+	one-site injectivity from the original trace-preserving primitive
+	irreducible blocks.  Primitivity gives the self-overlap limit, while the
+	separation of distinct chosen phase-class blocks gives off-overlap decay.
+\end{proof}
+
+\begin{theorem}[Phase-class BNT sector construction with overlap data]
+	\label{thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_data}
+	\lean{MPSTensor.exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_with_overlapData}
+	\leanok
+	\uses{thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_ortho}
+	For trace-preserving primitive irreducible blocks of positive bond dimension,
+	with nonzero weights, suppose moreover that the blocks are injective. Then
+	there is a sector decomposition, obtained by choosing one block per MPV phase
+	class, which represents the same weighted block sum, satisfies the BNT
+	linear-independence condition, and has chosen basis blocks of positive bond
+	dimension which are injective and trace-preserving, have self-overlap tending
+	to~$1$, and have mutual overlaps tending to~$0$ for distinct basis blocks.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_ortho}
+	Apply Theorem~\ref{thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_ortho}
+	and use the supplied injectivity of the original blocks to fill the
+	injectivity field required by this theorem's unbundled conclusion.
+\end{proof}
+
+\begin{theorem}[Chosen phase representatives preserve finite-length spans]
+	\label{thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_data_span}
+	\lean{MPSTensor.MPVPhaseClassData.representative_mpv_span_eq}
+	\lean{MPSTensor.exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_with_overlapData_and_basisSpan}
+	\leanok
+	\uses{def:mpv_phase_class_data,
+		thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_data}
+	For any finite block family, the chosen MPV phase-class representatives span
+	the same finite-length MPV subspace as the original blocks at every system
+	size. Consequently, for trace-preserving primitive irreducible injective
+	blocks with nonzero weights, the one-sided BNT sector construction can be
+	chosen with all overlap data from
+	Theorem~\ref{thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_data} and
+	with this representative-span identity.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{def:mpv_phase_class_data,
+		thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_data}
+	Each representative is one of the original blocks. Conversely, every original
+	block appears in a phase class and differs from that class representative by a
+	nonzero scalar power at each length, so its MPV state lies in the
+	representative span. The one-sided sector theorem then records this identity
+	for the chosen sector basis.
 \end{proof}
 
 \begin{theorem}[TP primitive irreducible version with eventual BNT independence]
@@ -2430,6 +2553,25 @@ The following results separate the zero blocks from the
 	the irreducibility criterion for the blocked tensor.
 \end{proof}
 
+\begin{theorem}[Extra blocking of primitive irreducible sector blocks]%
+\label{thm:tp_primitive_irreducible_extra_blocking}
+	\lean{MPSTensor.tp_primitive_irreducible_extra_blocking}
+	\leanok
+	\uses{def:blocked_tensor, thm:blocked_irreducible_tp_primitive}
+	If a sector block is already trace-preserving, has primitive transfer map, and
+	is tensor-irreducible, then every later positive blocking length $k$ preserves
+	all three properties. This $k$ is the subsequent common-refinement or
+	injectivity length, distinct from the period-removal length that produced the
+	sector block.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:blocked_irreducible_tp_primitive}
+	Trace preservation follows from blocking a trace-preserving tensor, primitivity
+	from taking a positive power of a primitive transfer map, and irreducibility
+	from Theorem~\ref{thm:blocked_irreducible_tp_primitive}.
+\end{proof}
+
 \begin{theorem}[Sorted TP-primitive irreducible data already forms a normal canonical form]%
 	\label{thm:ncf_sorted_tp_primitive_irred}
 	\lean{MPSTensor.isNormalCanonicalForm_of_tp_primitive_irr_sorted}
@@ -2517,6 +2659,89 @@ The following results separate the zero blocks from the
 	\uses{thm:tp_primitive_blockdecomp}
 	Apply Theorem~\ref{thm:tp_primitive_blockdecomp} separately to the two tensors.
 \end{proof}
+
+\begin{theorem}[Zero-tail bookkeeping for live block tensors]%
+\label{thm:live_block_zero_tail_bookkeeping}
+	\lean{MPSTensor.liveBlock_positive_sameMPV₂_and_zeroTail_bookkeeping_of_sameMPV₂}
+	\leanok
+	\uses{def:same_mpv2, def:zero_mps_tensor, def:tensor_from_blocks}
+	Suppose two tensors have the same MPV family and each is expressed as a
+	zero-tail tensor plus a weighted live block tensor. Then the two live block
+	tensors agree on every positive system size, and at size $0$ the equality is
+	exactly the equality of the two zero-tail contributions plus the two live
+	bond-dimension traces.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{def:zero_mps_tensor}
+	For $N>0$, the MPV of a zero-tail tensor is zero, so the two decompositions
+	can be compared directly through the common MPV family. For $N=0$, the
+	zero-tail MPV is its bond dimension, giving the stated bookkeeping identity.
+\end{proof}
+
+\begin{theorem}[Equal zero tails give full live MPV equality]%
+\label{thm:live_block_same_mpv_zero_tail_eq}
+	\lean{MPSTensor.liveBlock_sameMPV₂_of_sameMPV₂_of_zeroTail_eq}
+	\leanok
+	\uses{thm:live_block_zero_tail_bookkeeping}
+	In the setting of Theorem~\ref{thm:live_block_zero_tail_bookkeeping}, if
+	the two zero-tail dimensions are equal, then the two live block tensors have
+	the same MPV family, including the length-zero case.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:live_block_zero_tail_bookkeeping}
+	The positive-length cases are exactly the first conclusion of
+	Theorem~\ref{thm:live_block_zero_tail_bookkeeping}. At $N=0$, substitute
+	the equality of zero-tail dimensions into the bookkeeping identity and cancel
+	the common scalar term.
+\end{proof}
+
+\begin{theorem}[Structural after-blocking form with zero-tail equations]%
+\label{thm:ft_after_blocking_structural_zero_tail}
+	\lean{MPSTensor.fundamentalTheorem_after_blocking_1606_structural_with_zeroTail}
+	\leanok
+	\uses{thm:tp_primitive_blockdecomp, def:same_mpv2, def:zero_mps_tensor}
+	If two tensors generate the same MPV family, then each tensor admits a blocked
+	decomposition into a zero-tail tensor plus nonzero left-canonical live blocks
+	with primitive transfer maps and positive bond dimensions. The theorem also
+	retains, for each blocking period, the relation that the blocked tensors
+	generate the same MPV family.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:tp_primitive_blockdecomp}
+	Apply Theorem~\ref{thm:tp_primitive_blockdecomp} separately to the two
+	tensors and keep the zero-tail MPV equations returned by that theorem. The
+	property that the blocked tensors generate the same MPV family follows by
+	blocking the original equality.
+\end{proof}
+
+\begin{theorem}[Per-block cyclic live decomposition with zero-tail bookkeeping]%
+\label{thm:ft_after_blocking_per_block_cyclic_live_zero_tail}
+	\lean{MPSTensor.fundamentalTheorem_after_blocking_1606_perBlock_cyclic_live_with_zeroTail}
+	\leanok
+	\uses{thm:tp_gauge_arbitrary, thm:live_block_zero_tail_bookkeeping,
+		def:primitive_irreducible_cyclic_sectors,
+		thm:has_primitive_irreducible_cyclic_sectors_tp_irr}
+	If two tensors generate the same MPV family, then after the zero-tail split and
+	trace-preserving gauge each side has irreducible live blocks with nonzero
+	weights. The live block tensors agree at all positive system sizes, while the
+	length-zero case is recorded as the exact zero-tail bookkeeping identity.
+	Moreover each live block has primitive irreducible cyclic sectors. The
+	period-removal length for those sectors is kept separate from any later common
+	blocking or injectivity length.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:tp_gauge_arbitrary, thm:live_block_zero_tail_bookkeeping,
+		thm:has_primitive_irreducible_cyclic_sectors_tp_irr}
+	Apply the arbitrary-input TP-gauge theorem separately to $A$ and $B$. The
+	zero-tail bookkeeping theorem compares the two resulting live tensors at
+	positive lengths and records the $N=0$ identity. Finally apply the cyclic-sector
+	package theorem to every trace-preserving irreducible live block.
+\end{proof}
+
 
 \section{Open directions}\label{sec:open_directions}
 

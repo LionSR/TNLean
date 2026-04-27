@@ -577,11 +577,22 @@ single weighted block.
 	Theorem~\ref{thm:sector_basis_pre_matching_to_matching}.
 \end{definition}
 
+\begin{definition}[Single-family overlap-orthogonality data for sector bases]%
+\label{def:sector_basis_overlap_ortho_hyps}
+	\lean{MPSTensor.SectorBasisOverlapOrthoHypotheses}
+	\leanok
+	\uses{def:paper_sector_data, def:mpv_overlap}
+	For one sector decomposition $P$, this condition records positive basis
+	dimensions, trace-preserving normalization of all basis blocks,
+	self-overlap limits equal to~$1$, and off-overlap limits equal to~$0$.
+\end{definition}
+
 \begin{definition}[Primitive overlap-span hypotheses for sector bases]%
 \label{def:sector_basis_overlap_span_hyps}
 	\lean{MPSTensor.SectorBasisOverlapSpanHypotheses}
 	\leanok
-	\uses{def:paper_sector_data, def:mpv_overlap, def:mpv_state}
+	\uses{def:paper_sector_data, def:mpv_overlap, def:mpv_state,
+		def:sector_basis_overlap_ortho_hyps}
 	For sector decompositions $P$ and $Q$, this condition records the
 	primitive overlap-rigidity hypotheses for their basis blocks: nonzero
 	bond dimensions, injectivity, trace-preserving normalization,
@@ -589,6 +600,24 @@ single weighted block.
 	equality of the finite-length spans of the basis MPV states for every
 	system size.
 \end{definition}
+
+\begin{theorem}[Single-family overlap data plus span give overlap-span hypotheses]%
+\label{thm:sector_basis_overlap_ortho_to_span}
+	\lean{MPSTensor.SectorBasisOverlapOrthoHypotheses.to_overlapSpan}
+	\leanok
+	\uses{def:sector_basis_overlap_ortho_hyps, def:sector_basis_overlap_span_hyps}
+	If two sector bases each satisfy the single-family overlap-orthogonality data,
+	and one also supplies one-site injectivity of all their basis blocks together
+	with equality of the finite-length MPV spans, then the two bases satisfy the
+	primitive overlap-span hypotheses.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{def:sector_basis_overlap_ortho_hyps, def:sector_basis_overlap_span_hyps}
+	This is just collecting the one-family fields on the left and right, and adding
+	the remaining injectivity and span-comparison inputs.
+\end{proof}
 
 \begin{theorem}[Phase-matched comparison recovers copy counts]%
 \label{thm:route_b_hetero_phase_match_copies}
@@ -629,7 +658,7 @@ single weighted block.
 	\leanok
 	\uses{thm:route_b_hetero_phase_match_copies}
 	Gauge-phase equivalence gives the required phase-scaling identities for
-	the matched basis MPVs. Theorem~\ref{thm:route_b_hetero_phase_match_copies}
+	the corresponding basis MPVs. Theorem~\ref{thm:route_b_hetero_phase_match_copies}
 	recovers the missing copy-count equalities, which are precisely the extra
 	fields needed for Definition~\ref{def:sector_basis_matching}.
 \end{proof}
@@ -650,7 +679,7 @@ single weighted block.
 	\leanok
 	\uses{thm:route_b_hetero_phase_match_copies}
 	The gauge-phase equivalences in the pre-matching give the phase-scaling
-	identities for the matched basis MPVs.
+	identities for the corresponding basis MPVs.
 	Theorem~\ref{thm:route_b_hetero_phase_match_copies} then gives the
 	copy-count equalities and the phase-adjusted multiset equalities.
 \end{proof}
@@ -695,6 +724,32 @@ single weighted block.
 	normalization, overlap, and span assumptions of
 	Theorem~\ref{thm:sector_basis_matching_from_overlap_ortho_span}. Applying
 	that theorem gives the matching witness.
+\end{proof}
+
+
+\begin{theorem}[Live-block span equality gives phase-class representative overlap-span data]%
+\label{thm:bnt_sector_decomp_pair_overlap_span_of_block_span}
+	\lean{MPSTensor.exists_bnt_sectorDecomp_pair_with_overlapSpan_of_block_span_eq}
+	\leanok
+	\uses{def:sector_basis_overlap_span_hyps,
+		thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_data_span}
+	Let two live block families be trace-preserving, primitive, irreducible,
+	injective, and carry nonzero weights. If their finite-length MPV spans agree
+	for every system size, then there exist sector decompositions $P$ and $Q$
+	whose total tensors have the same MPVs as the two weighted live block tensors,
+	whose bases satisfy BNT linear independence, and whose sector bases satisfy
+	the primitive overlap-span hypotheses.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_data_span}
+	Apply the one-sided construction with the representative-span identity on both
+	sides. The one-sided positive-dimension, injectivity, normalization, and
+	overlap fields fill all fields of
+	Definition~\ref{def:sector_basis_overlap_span_hyps} except the two-family
+	span equality. That span equality follows by transporting the assumed
+	live-block span equality through the two representative-span identities.
 \end{proof}
 
 \begin{theorem}[Heterogeneous sector comparison via a bundled matching witness]%
@@ -768,13 +823,129 @@ single weighted block.
 	\uses{thm:bnt_sector_decomp_tp_prim_irr_collapsed,
 		thm:sector_basis_overlap_span_to_matching,
 		thm:route_b_hetero_sector_matching}
-	Apply the one-sided collapsed BNT construction
+	Apply the one-sided phase-class BNT construction
 	(Theorem~\ref{thm:bnt_sector_decomp_tp_prim_irr_collapsed}) to the two live
 	block families. The resulting sector decompositions satisfy the overlap-span
 	hypotheses; Theorem~\ref{thm:sector_basis_overlap_span_to_matching} then
 	produces a sector basis matching, and
 	Theorem~\ref{thm:route_b_hetero_sector_matching} gives the matched
 	sector-weight conclusion.
+\end{proof}
+
+
+\begin{theorem}[Common live blocks with derived overlap data and span comparison]%
+\label{thm:after_blocking_sector_common_blocks_injective_span}
+	\lean{MPSTensor.fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_injectiveSpan}
+	\leanok
+	\uses{thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_ortho,
+		thm:sector_basis_overlap_ortho_to_span,
+		thm:route_b_hetero_sector_matching}
+	Let $A$ and $B$ have the same MPV family and fix exact live decompositions at a
+	common blocking period as in
+	Theorem~\ref{thm:after_blocking_sector_common_blocks_overlap_span}.  Assume in
+	addition that the live blocks are one-site injective, and that the two chosen
+	BNT sector bases have equal finite-length MPV spans. Then the same matched
+	sector-weight conclusion holds.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_ortho,
+		thm:sector_basis_overlap_ortho_to_span,
+		thm:sector_basis_overlap_span_to_matching,
+		thm:route_b_hetero_sector_matching}
+	The phase-class BNT construction gives BNT linear independence and the
+	single-family overlap-orthogonality data for both sides, and carries one-site
+	injectivity from the live blocks to the chosen basis blocks.  The assumed span
+	comparison combines with those one-family data by
+	Theorem~\ref{thm:sector_basis_overlap_ortho_to_span}; the matching and
+	sector-weight comparison then proceed as before.
+\end{proof}
+
+
+\begin{theorem}[Common live blocks with live-block span equality give sector comparison]%
+\label{thm:after_blocking_sector_common_blocks_block_span}
+	\lean{MPSTensor.fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_blockSpan}
+	\leanok
+	\uses{thm:bnt_sector_decomp_pair_overlap_span_of_block_span,
+		thm:sector_basis_overlap_span_to_matching,
+		thm:route_b_hetero_sector_matching}
+	Let $A$ and $B$ have the same MPV family, and fix a common blocking period
+	$p>0$ with exact live decompositions by trace-preserving, primitive,
+	irreducible, injective blocks with nonzero weights. If the two live block
+	families have equal finite-length MPV spans at every system size, then there
+	exist a positive blocking period $p'$ and sector decompositions $P,Q$ over the
+	blocked physical dimension such that $A^{[p']}$ and $B^{[p']}$ have the same
+	MPV families as $P$ and $Q$, both sector bases satisfy BNT linear
+	independence, and there are a basis permutation, matched copy-count equalities,
+	and nonzero scalars $\zeta_j$ making the corresponding sector-weight multisets
+	equal after multiplication by $\zeta_j$.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{thm:bnt_sector_decomp_pair_overlap_span_of_block_span,
+		thm:sector_basis_overlap_span_to_matching,
+		thm:route_b_hetero_sector_matching}
+	Theorem~\ref{thm:bnt_sector_decomp_pair_overlap_span_of_block_span} converts
+	the live-block span equality into the primitive overlap-span hypotheses for the
+	chosen sector bases. Equality of the blocked total MPVs gives equality of the
+	sector tensors, so
+	Theorem~\ref{thm:sector_basis_overlap_span_to_matching} produces the sector
+	basis matching and Theorem~\ref{thm:route_b_hetero_sector_matching} gives the
+	sector-weight conclusion.
+\end{proof}
+
+\begin{lemma}[Zero-tail cancellation]\label{lem:sameMPV2_live_of_zeroTail_eq}
+	\lean{MPSTensor.sameMPV₂_live_of_sameMPV₂_with_zeroTail_eq}
+	\leanok
+	\uses{def:same_mpv2, def:mpv}
+	Let $A$ and $B$ have the same MPV family, each decomposed as a zero-tail
+	tensor plus a live tensor. If the zero-tail dimensions agree, then the
+	live tensors themselves have the same MPV family, including at length zero.
+\end{lemma}
+
+\begin{proof}
+	\leanok
+	\uses{def:mpv}
+	At positive lengths the zero-tail term vanishes, so the live tensors
+	agree. At length zero the zero-tail values are equal by hypothesis, and
+	cancellation gives equality of the live tensors there too.
+\end{proof}
+
+\begin{theorem}[Common live blocks with zero-tail agreement and overlap-span data]%
+\label{thm:after_blocking_sector_common_blocks_overlap_span_zero_tail}
+	\lean{MPSTensor.fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_overlapSpan_zeroTail}
+	\leanok
+	\uses{def:same_mpv2_pos, lem:sameMPV2_live_of_zeroTail_eq,
+		thm:bnt_sector_decomp_tp_prim_irr_collapsed,
+		def:sector_basis_overlap_span_hyps}
+	Let $A$ and $B$ have the same MPV family. Fix $p > 0$ and suppose
+	$A^{[p]}$ and $B^{[p]}$ each decompose as a zero-tail tensor plus a
+	weighted live block tensor, with all blocks trace-preserving, primitive,
+	irreducible, and with nonzero weights. If the two zero-tail dimensions
+	agree and any pair of BNT sector decompositions equivalent to the two live
+	block tensors satisfies the primitive overlap-span hypotheses, then there
+	exist positive $p'$ and sector decompositions $P$, $Q$ such that
+	$A^{[p']}$ equals $P$'s tensor at all positive lengths, $B^{[p']}$ equals
+	$Q$'s tensor at all positive lengths, $P$ and $Q$ have the same full MPV
+	family, both have BNT data, and the matched sector-weight conclusion of
+	Theorem~\ref{thm:after_blocking_sector_bnt_pair_overlap_span} holds.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{lem:sameMPV2_live_of_zeroTail_eq,
+		thm:bnt_sector_decomp_tp_prim_irr_collapsed,
+		thm:sector_basis_overlap_span_to_matching,
+		thm:route_b_hetero_sector_matching}
+	Apply the zero-tail cancellation lemma to recover full equality of the
+	live block tensors. Then proceed as in
+	Theorem~\ref{thm:after_blocking_sector_common_blocks_overlap_span}: apply
+	the BNT construction to each live block family, compose the sector
+	equivalences to obtain equality of the total MPV families of $P$ and $Q$,
+	apply the overlap-span matching theorem, and conclude with the
+	heterogeneous sector comparison theorem.
 \end{proof}
 
 \begin{theorem}[Cast-compatible MPV scaling implies phase-matched sector comparison]%
@@ -784,7 +955,7 @@ single weighted block.
 	\uses{def:paper_sector_data}
 	Let $P$ and $Q$ be sector decompositions. Assume there is a permutation
 	$\pi$ matching the basis blocks, the multiplicities satisfy
-	$r_j^P = r_{\pi(j)}^Q$, and for each $j$ the matched basis blocks have the
+	$r_j^P = r_{\pi(j)}^Q$, and for each $j$ the corresponding basis blocks have the
 	same auxiliary dimension and satisfy
 	\[
 		V^{(N)}(Q_{\pi(j)})_\sigma = \zeta_j^N V^{(N)}(P_j)_\sigma
@@ -800,7 +971,7 @@ single weighted block.
 \begin{proof}
 	\leanok
 	\uses{thm:route_b_hetero_phase_match}
-	After transporting the matched basis tensor of $P_j$ across the dimension
+	After transporting the corresponding basis tensor of $P_j$ across the dimension
 	identity, this is exactly the hypothesis of
 	Theorem~\ref{thm:route_b_hetero_phase_match}. The conclusion is therefore
 	the same multiset equality.
@@ -823,20 +994,22 @@ single weighted block.
 	\end{enumerate}
 	What is still missing for the unconditional equal-case theorem
 	(Theorem~\ref{thm:ft_equal}, \cite[Corollary~IV.5]{Cirac2021Matrix}) is
-	not the one-sided sector construction: the collapsed-representative
-		construction for trace-preserving primitive irreducible blocks is now
-		Theorem~\ref{thm:bnt_sector_decomp_tp_prim_irr_collapsed}.  The remaining
-		paper-level ingredient is a matched-basis theorem for heterogeneous sector
-		decompositions.  The algebraic reduction after a basis matching is formalized in
-		Theorems~\ref{thm:route_b_hetero_phase_match},~\ref{thm:route_b_hetero_matched_basis},
-		and~\ref{thm:route_b_hetero_sector_matching}.  Copy alignment is now recovered
-		from a basis pre-matching by
-		Theorem~\ref{thm:sector_basis_pre_matching_to_matching}, and the primitive
-		overlap-rigidity hypotheses produce such a matching by
-		Theorem~\ref{thm:sector_basis_matching_from_overlap_ortho_span}.  The remaining
-		task is to derive those span and overlap hypotheses from arbitrary equal-MPV
-		sector decompositions produced by the one-sided BNT construction.
-		Once this ingredient is in place, the final global gauge matrix
-	of Corollary~IV.5 is obtained by the same phase-absorption and blockwise
+	not the one-sided construction of a basis of normal tensors: for
+	trace-preserving primitive irreducible blocks with positive bond dimensions
+	and nonzero weights, representatives of the MPV phase-equivalence classes are
+	constructed in Theorem~\ref{thm:bnt_sector_decomp_tp_prim_irr_collapsed}.
+	When the original blocks are also injective, the same construction exposes
+	positive dimension, injectivity, normalization, and asymptotic overlap
+	orthogonality in
+	Theorem~\ref{thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_data}.
+	The remaining paper-level inputs are to obtain, from the arbitrary
+	after-blocking reduction, exact live primitive irreducible block families at a
+	common blocking length, to settle the length-zero bookkeeping for discarded
+	zero blocks, and to prove equality of the finite-length MPV spans for the two
+	independently chosen bases of normal tensors.  Once those inputs are supplied,
+	Theorems~\ref{thm:sector_basis_matching_from_overlap_ortho_span}
+	and~\ref{thm:route_b_hetero_sector_matching} recover the basis permutation,
+	multiplicities, and sector-weight multisets.  The final global gauge matrix of
+	Corollary~IV.5 is then obtained by the same phase-absorption and blockwise
 	composition argument already formalized in the strict single-weight setting.
 \end{remark}

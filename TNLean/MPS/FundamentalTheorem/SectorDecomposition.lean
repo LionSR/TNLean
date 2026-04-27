@@ -822,6 +822,29 @@ theorem fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_preMatching
   fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_phaseMatch_exists_copies
     P Q M.perm M.phase_match_exists hLI hEqual
 
+/-- Single-family primitive overlap-orthogonality data for a sector basis.
+
+This is the part of `SectorBasisOverlapSpanHypotheses` that can be checked one
+sector decomposition at a time: positive basis dimensions, left-canonical
+normalization, self-overlap convergence to `1`, and off-diagonal overlap
+convergence to `0`. It intentionally omits one-site injectivity and the
+finite-length span comparison between two different bases, because those are
+separate inputs in the current Gap §1 route. -/
+structure SectorBasisOverlapOrthoHypotheses (P : SectorDecomposition d) : Prop where
+  /-- The basis blocks have nonzero bond dimension. -/
+  dim_pos : ∀ j : Fin P.basisCount, 0 < P.basisDim j
+  /-- The basis blocks are left-canonical. -/
+  normalized :
+    ∀ j : Fin P.basisCount, (∑ i : Fin d, (P.basis j i)ᴴ * (P.basis j i)) = 1
+  /-- Each basis block has self-overlap tending to one. -/
+  self_overlap : ∀ j : Fin P.basisCount,
+    Filter.Tendsto (fun N => mpvOverlap (d := d) (P.basis j) (P.basis j) N)
+      Filter.atTop (nhds (1 : ℂ))
+  /-- Distinct basis blocks have asymptotically zero overlap. -/
+  off_overlap : ∀ i j : Fin P.basisCount, i ≠ j →
+    Filter.Tendsto (fun N => mpvOverlap (d := d) (P.basis i) (P.basis j) N)
+      Filter.atTop (nhds 0)
+
 /-- Primitive overlap-rigidity hypotheses for two sector bases.
 
 This structure records the analytic inputs used by
@@ -867,6 +890,38 @@ structure SectorBasisOverlapSpanHypotheses (P Q : SectorDecomposition d) : Prop 
       mpvState (d := d) (P.basis j) N)) =
     Submodule.span ℂ (Set.range (fun k : Fin Q.basisCount =>
       mpvState (d := d) (Q.basis k) N))
+
+namespace SectorBasisOverlapOrthoHypotheses
+
+variable {P Q : SectorDecomposition d}
+
+/-- Combine the single-family overlap-orthogonality data for two sector bases
+with the remaining one-site injectivity and finite-length span comparison inputs
+needed by the primitive overlap-rigidity theorem. -/
+theorem to_overlapSpan
+    (HP : SectorBasisOverlapOrthoHypotheses P)
+    (HQ : SectorBasisOverlapOrthoHypotheses Q)
+    (hP_inj : ∀ j : Fin P.basisCount, IsInjective (P.basis j))
+    (hQ_inj : ∀ k : Fin Q.basisCount, IsInjective (Q.basis k))
+    (hspan : ∀ N,
+      Submodule.span ℂ (Set.range (fun j : Fin P.basisCount =>
+        mpvState (d := d) (P.basis j) N)) =
+      Submodule.span ℂ (Set.range (fun k : Fin Q.basisCount =>
+        mpvState (d := d) (Q.basis k) N))) :
+    SectorBasisOverlapSpanHypotheses P Q where
+  left_dim_pos := HP.dim_pos
+  right_dim_pos := HQ.dim_pos
+  left_injective := hP_inj
+  right_injective := hQ_inj
+  left_normalized := HP.normalized
+  right_normalized := HQ.normalized
+  left_self_overlap := HP.self_overlap
+  left_off_overlap := HP.off_overlap
+  right_self_overlap := HQ.self_overlap
+  right_off_overlap := HQ.off_overlap
+  span_eq := hspan
+
+end SectorBasisOverlapOrthoHypotheses
 
 /-- Produce a sector basis matching from the primitive overlap-rigidity hypotheses.
 

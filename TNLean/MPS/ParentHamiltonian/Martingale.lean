@@ -74,6 +74,9 @@ concrete Friedrichs-angle/row-sum lower bound that
 * `MPSTensor.localTermES_re_inner_nonneg_of_not_cyclicWindowsOverlap` — failure
   of the concrete cyclic-support overlap predicate gives the same nonnegative
   ordered cross term.
+* `MPSTensor.adjacent_localTermES_eq_zero_iff_mem_groundSpaceES_succ` — the
+  open-chain intersection property restated as an equality between the kernels
+  of two adjacent transported local terms and the `(L+1)`-site MPS ground space.
 * `MPSTensor.parentHamiltonianES_gap_bound_of_quadratic_form` — the explicit
   reduction from the parent-Hamiltonian gap statement to the uniform
   Friedrichs/martingale quadratic-form estimate.
@@ -84,8 +87,8 @@ concrete Friedrichs-angle/row-sum lower bound that
   finite-overlap reduction turning explicit local projection, overlap,
   non-overlap positivity, and Friedrichs estimates into the gap estimate.
 * `MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_friedrichs` — the
-  same reduction specialized to the concrete cyclic-window overlap predicate and
-  its `2 * (L - 1)` row-cardinality bound.
+  same reduction specialized to the concrete cyclic-window overlap predicate,
+  its `2 * (L - 1)` row-cardinality bound, and the non-overlap positivity theorem.
 * `MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound` —
   the final reduction from the overlapping-window norm-compression Friedrichs
   estimate to the explicit gap bound.
@@ -242,6 +245,16 @@ theorem parentInteractionES_isPositive (A : MPSTensor d D) (L : ℕ) :
     (parentInteractionES A L).IsPositive :=
   (parentInteractionES_isSymmetricProjection A L).isPositive
 
+/-- The kernel of the Euclidean parent interaction is exactly the Euclidean MPS
+local ground space. -/
+theorem parentInteractionES_apply_eq_zero_iff (A : MPSTensor d D) (L : ℕ)
+    (v : EuclideanSpace ℂ (Cfg d L)) :
+    parentInteractionES A L v = 0 ↔ v ∈ groundSpaceES A L := by
+  change (groundSpaceES A L)ᗮ.starProjection v = 0 ↔ v ∈ groundSpaceES A L
+  rw [Submodule.starProjection_orthogonal']
+  simp only [ContinuousLinearMap.sub_apply, ContinuousLinearMap.one_apply]
+  rw [sub_eq_zero, eq_comm, Submodule.starProjection_eq_self_iff]
+
 /-- The cyclic window restriction map transported from `NSiteSpace` to the
 Hilbert-space model `EuclideanSpace`. -/
 noncomputable def cyclicRestrictES {N : ℕ} (hN : 0 < N) (L : ℕ) (i : Fin N)
@@ -301,6 +314,22 @@ def CyclicWindowsDisjoint {N : ℕ} (L : ℕ) (i j : Fin N) : Prop :=
 theorem CyclicWindowsDisjoint.symm {N : ℕ} {L : ℕ} {i j : Fin N}
     (hij : CyclicWindowsDisjoint L i j) : CyclicWindowsDisjoint L j i :=
   fun k hj hi => hij k hi hj
+
+/-- If the cyclic supports of two windows do not overlap, then the windows are site-disjoint. -/
+theorem CyclicWindowsDisjoint.of_not_cyclicWindowsOverlap {N L : ℕ}
+    {i j : Fin N} (hij : ¬ cyclicWindowsOverlap N L i j) :
+    CyclicWindowsDisjoint L i j := by
+  intro k hki hkj
+  apply hij
+  refine ⟨k, ?_, ?_⟩
+  · rw [cyclicWindowSupport, Finset.mem_image]
+    refine ⟨(k.val + N - i.val) % N, Finset.mem_range.mpr hki, ?_⟩
+    exact (eq_cyclic_site_of_offset_eq (Fin.pos i) (i := i) (k := k)
+      (r := (k.val + N - i.val) % N) rfl).symm
+  · rw [cyclicWindowSupport, Finset.mem_image]
+    refine ⟨(k.val + N - j.val) % N, Finset.mem_range.mpr hkj, ?_⟩
+    exact (eq_cyclic_site_of_offset_eq (Fin.pos j) (i := j) (k := k)
+      (r := (k.val + N - j.val) % N) rfl).symm
 
 /-- Ground-space submodule for the finite-size parent Hamiltonian,
 transported to the `EuclideanSpace` (inner-product) setting so that
@@ -562,6 +591,146 @@ private theorem cyclicRestrictES_localTermES {N : ℕ} (A : MPSTensor d D) {L : 
     exact extractWindow_replaceWindow L hLN i τ ω
   rw [← hrestrict, hextract]
 
+/-- A transported local term vanishes exactly when every boundary-filled cyclic
+restriction to its window lies in the `L`-site MPS ground space. -/
+theorem localTermES_eq_zero_iff_forall_cyclicRestrictES_mem_groundSpaceES {N : ℕ}
+    (A : MPSTensor d D) {L : ℕ} (hLN : L ≤ N) (i : Fin N)
+    (v : EuclideanSpace ℂ (Cfg d N)) :
+    localTermES A L i v = 0 ↔
+      ∀ τ : Cfg d N,
+        cyclicRestrictES (d := d) (Fin.pos i) L i τ v ∈ groundSpaceES A L := by
+  constructor
+  · intro hv τ
+    rw [← parentInteractionES_apply_eq_zero_iff]
+    rw [← cyclicRestrictES_localTermES A hLN i τ v, hv, map_zero]
+  · intro hv
+    ext σ
+    rw [localTermES_apply A L i hLN v σ]
+    have hker := (parentInteractionES_apply_eq_zero_iff A L
+      (cyclicRestrictES (d := d) (Fin.pos i) L i σ v)).2 (hv σ)
+    rw [hker]
+    rfl
+
+/-- If a transported local term vanishes, every cyclic restriction to its window
+is an element of the corresponding MPS ground space. -/
+theorem cyclicRestrictES_mem_groundSpaceES_of_localTermES_eq_zero {N : ℕ}
+    (A : MPSTensor d D) {L : ℕ} (hLN : L ≤ N) (i : Fin N)
+    {v : EuclideanSpace ℂ (Cfg d N)} (hv : localTermES A L i v = 0)
+    (τ : Cfg d N) :
+    cyclicRestrictES (d := d) (Fin.pos i) L i τ v ∈ groundSpaceES A L :=
+  (localTermES_eq_zero_iff_forall_cyclicRestrictES_mem_groundSpaceES A hLN i v).1 hv τ
+
+private theorem restrictLast_eq_cyclicRestrictES_zero {L : ℕ}
+    (v : EuclideanSpace ℂ (Cfg d (L + 1))) (τ : Cfg d (L + 1)) :
+    restrictLast ((WithLp.linearEquiv 2 ℂ (NSiteSpace d (L + 1))) v) (τ (Fin.last L)) =
+      (WithLp.linearEquiv 2 ℂ (NSiteSpace d L))
+        (cyclicRestrictES (d := d) (Fin.pos (0 : Fin (L + 1))) L (0 : Fin (L + 1))
+          τ v) := by
+  ext σ
+  change v.ofLp (Fin.snoc σ (τ (Fin.last L))) = v.ofLp
+    (cyclicCfg (d := d) (Fin.pos (0 : Fin (L + 1))) L (0 : Fin (L + 1)) σ τ)
+  apply congrArg v.ofLp
+  funext k
+  rcases Fin.eq_castSucc_or_eq_last k with ⟨r, rfl⟩ | rfl
+  · have hmod : r.val % (L + 1) = r.val := Nat.mod_eq_of_lt (by omega)
+    simp [cyclicCfg, hmod]
+  · simp [cyclicCfg]
+
+private theorem restrictFirst_eq_cyclicRestrictES_one {L : ℕ} (hL : 0 < L)
+    (v : EuclideanSpace ℂ (Cfg d (L + 1))) (τ : Cfg d (L + 1)) :
+    restrictFirst ((WithLp.linearEquiv 2 ℂ (NSiteSpace d (L + 1))) v) (τ 0) =
+      (WithLp.linearEquiv 2 ℂ (NSiteSpace d L))
+        (cyclicRestrictES (d := d) (Fin.pos (1 : Fin (L + 1))) L (1 : Fin (L + 1))
+          τ v) := by
+  ext σ
+  change v.ofLp (Fin.cons (τ 0) σ) = v.ofLp
+    (cyclicCfg (d := d) (Fin.pos (1 : Fin (L + 1))) L (1 : Fin (L + 1)) σ τ)
+  apply congrArg v.ofLp
+  funext k
+  have hOneNat : 1 % (L + 1) = 1 := Nat.mod_eq_of_lt (by omega)
+  rcases Fin.eq_zero_or_eq_succ k with rfl | ⟨r, rfl⟩
+  · simp [cyclicCfg, hOneNat]
+  · have hmod : (r.val + 1 + L) % (L + 1) = r.val := by
+      rw [show r.val + 1 + L = r.val + (L + 1) by omega]
+      rw [Nat.add_mod_right]
+      exact Nat.mod_eq_of_lt (by omega)
+    simp [cyclicCfg, hOneNat, hmod]
+
+/-- Forward local intersection property for adjacent transported local terms.
+
+On an `(L+1)`-site chain, if the two overlapping `L`-site local terms based at
+`0` and `1` both annihilate a vector, then the vector lies in the `(L+1)`-site
+MPS ground space.  This is the Euclidean/local-projector form of the
+open-chain intersection property `groundSpace_intersection`; it is a structural
+predecessor to the quantitative Friedrichs-angle estimate for overlapping
+windows. -/
+theorem mem_groundSpaceES_succ_of_adjacent_localTermES_eq_zero {A : MPSTensor d D}
+    (hA : IsInjective A) {L : ℕ} (hL : 1 < L)
+    {v : EuclideanSpace ℂ (Cfg d (L + 1))}
+    (hleft : localTermES A L (0 : Fin (L + 1)) v = 0)
+    (hright : localTermES A L (1 : Fin (L + 1)) v = 0) :
+    v ∈ groundSpaceES A (L + 1) := by
+  let eN := WithLp.linearEquiv 2 ℂ (NSiteSpace d (L + 1))
+  have hLN : L ≤ L + 1 := by omega
+  have hLeft : InLeftGround A L (eN v) := by
+    intro j
+    have hmemES : cyclicRestrictES (d := d) (Fin.pos (0 : Fin (L + 1))) L
+        (0 : Fin (L + 1)) (fun _ => j) v ∈ groundSpaceES A L :=
+      cyclicRestrictES_mem_groundSpaceES_of_localTermES_eq_zero A hLN
+        (0 : Fin (L + 1)) hleft (fun _ => j)
+    have hmemNS := (mem_groundSpaceES_iff A L _).1 hmemES
+    rwa [restrictLast_eq_cyclicRestrictES_zero v (fun _ => j)]
+  have hRight : InRightGround A L (eN v) := by
+    intro i
+    have hmemES : cyclicRestrictES (d := d) (Fin.pos (1 : Fin (L + 1))) L
+        (1 : Fin (L + 1)) (fun _ => i) v ∈ groundSpaceES A L :=
+      cyclicRestrictES_mem_groundSpaceES_of_localTermES_eq_zero A hLN
+        (1 : Fin (L + 1)) hright (fun _ => i)
+    have hmemNS := (mem_groundSpaceES_iff A L _).1 hmemES
+    rwa [restrictFirst_eq_cyclicRestrictES_one (by omega : 0 < L) v (fun _ => i)]
+  have hψ : eN v ∈ groundSpace A (L + 1) :=
+    groundSpace_intersection hA hL hLeft hRight
+  exact (mem_groundSpaceES_iff A (L + 1) v).2 hψ
+
+/-- Vectors in the `(L+1)`-site MPS ground space are killed by the two adjacent
+`L`-site transported local terms. -/
+theorem adjacent_localTermES_eq_zero_of_mem_groundSpaceES_succ
+    (A : MPSTensor d D) {L : ℕ} (hL : 0 < L)
+    {v : EuclideanSpace ℂ (Cfg d (L + 1))} (hv : v ∈ groundSpaceES A (L + 1)) :
+    localTermES A L (0 : Fin (L + 1)) v = 0 ∧
+      localTermES A L (1 : Fin (L + 1)) v = 0 := by
+  let eN := WithLp.linearEquiv 2 ℂ (NSiteSpace d (L + 1))
+  have hψ : eN v ∈ groundSpace A (L + 1) := (mem_groundSpaceES_iff A (L + 1) v).1 hv
+  have hLN : L ≤ L + 1 := by omega
+  constructor
+  · rw [localTermES_eq_zero_iff_forall_cyclicRestrictES_mem_groundSpaceES A hLN
+      (0 : Fin (L + 1)) v]
+    intro τ
+    rw [mem_groundSpaceES_iff]
+    rw [← restrictLast_eq_cyclicRestrictES_zero v τ]
+    exact groundSpace_inLeftGround A L hψ (τ (Fin.last L))
+  · rw [localTermES_eq_zero_iff_forall_cyclicRestrictES_mem_groundSpaceES A hLN
+      (1 : Fin (L + 1)) v]
+    intro τ
+    rw [mem_groundSpaceES_iff]
+    rw [← restrictFirst_eq_cyclicRestrictES_one hL v τ]
+    exact groundSpace_inRightGround A L hψ (τ 0)
+
+/-- Adjacent local kernels on an `(L+1)`-site chain intersect in the MPS ground
+space.  This restates the open-chain intersection property in the same
+Euclidean local-projector language used by the martingale proof. -/
+theorem adjacent_localTermES_eq_zero_iff_mem_groundSpaceES_succ {A : MPSTensor d D}
+    (hA : IsInjective A) {L : ℕ} (hL : 1 < L)
+    {v : EuclideanSpace ℂ (Cfg d (L + 1))} :
+    localTermES A L (0 : Fin (L + 1)) v = 0 ∧
+      localTermES A L (1 : Fin (L + 1)) v = 0 ↔
+        v ∈ groundSpaceES A (L + 1) := by
+  constructor
+  · intro h
+    exact mem_groundSpaceES_succ_of_adjacent_localTermES_eq_zero hA hL h.1 h.2
+  · intro hv
+    exact adjacent_localTermES_eq_zero_of_mem_groundSpaceES_succ A (by omega : 0 < L) hv
+
 @[simp] private theorem localTermESSummand_apply {N : ℕ} (A : MPSTensor d D) (hN : 0 < N)
     {L : ℕ} (hLN : L ≤ N) (i : Fin N) (τ v σ) :
     localTermESSummand A hN L i τ v σ =
@@ -794,15 +963,6 @@ theorem localTermES_re_inner_nonneg_of_cyclic_windows_disjoint {N : ℕ}
     (localTermES_isSymmetricProjection A L j)
     (localTermES_commute_of_cyclic_windows_disjoint A hLN hij) v
 
-/-- If the concrete cyclic supports do not overlap, then the offset-based
-site-disjointness predicate holds. -/
-theorem CyclicWindowsDisjoint.of_not_cyclicWindowsOverlap {N L : ℕ} (hLN : L ≤ N)
-    {i j : Fin N} (hij : ¬ cyclicWindowsOverlap N L i j) :
-    CyclicWindowsDisjoint L i j := by
-  intro k hki hkj
-  exact hij ⟨k, (mem_cyclicWindowSupport_iff hLN i k).2 hki,
-    (mem_cyclicWindowSupport_iff hLN j k).2 hkj⟩
-
 /-- Non-overlap positivity for the concrete cyclic-window overlap predicate.
 
 When `cyclicWindowsOverlap N L i j` fails and `L ≤ N`, the two windows are
@@ -813,7 +973,7 @@ theorem localTermES_re_inner_nonneg_of_not_cyclicWindowsOverlap {N : ℕ}
     (hij : ¬ cyclicWindowsOverlap N L i j) (v : EuclideanSpace ℂ (Cfg d N)) :
     0 ≤ (⟪localTermES A L i v, localTermES A L j v⟫_ℂ).re :=
   localTermES_re_inner_nonneg_of_cyclic_windows_disjoint A hLN
-    (CyclicWindowsDisjoint.of_not_cyclicWindowsOverlap hLN hij) v
+    (CyclicWindowsDisjoint.of_not_cyclicWindowsOverlap hij) v
 
 /-- The full transported parent Hamiltonian is positive because it is a finite
 sum of positive transported local terms. -/
@@ -1100,16 +1260,13 @@ predicate.
 For chains with `N ≥ 2L`, the predicate `cyclicWindowsOverlap N L i j` marks the
 cyclic translates whose length-`L` windows have the finite-range overlap relevant
 to the martingale method.  The row-cardinality estimate is supplied by
-`cyclicWindowsOverlap_card_le`, and local projection structure is supplied by
-`localTermES_isSymmetricProjection`.  Consequently the only remaining
-local hypotheses are non-overlap positivity and the Friedrichs-angle estimate for
-pairs marked by `cyclicWindowsOverlap`. -/
+`cyclicWindowsOverlap_card_le`, local projection structure is supplied by
+`localTermES_isSymmetricProjection`, and non-overlap positivity is supplied by
+`localTermES_re_inner_nonneg_of_not_cyclicWindowsOverlap`.  Consequently the
+only remaining local hypothesis is the Friedrichs-angle estimate for pairs
+marked by `cyclicWindowsOverlap`. -/
 theorem parentHamiltonianES_gap_bound_of_cyclic_window_friedrichs
     (A : MPSTensor d D) (L : ℕ) (hL : 1 < L)
-    (hDisjoint : ∀ (N : ℕ) (_hLN : 2 * L ≤ N) (i j : Fin N),
-      j ∈ Finset.univ.erase i → ¬ cyclicWindowsOverlap N L i j →
-        ∀ v : EuclideanSpace ℂ (Cfg d N),
-          0 ≤ (⟪localTermES A L i v, localTermES A L j v⟫_ℂ).re)
     (hFriedrichs : ∀ (N : ℕ) (_hLN : 2 * L ≤ N) (i j : Fin N),
       j ∈ Finset.univ.erase i → cyclicWindowsOverlap N L i j →
         ∀ v : EuclideanSpace ℂ (Cfg d N),
@@ -1127,7 +1284,9 @@ theorem parentHamiltonianES_gap_bound_of_cyclic_window_friedrichs
     (fun N => cyclicWindowsOverlap N L)
     (fun N _hLN i => localTermES_isSymmetricProjection A L i)
     (fun N hLN i => cyclicWindowsOverlap_card_le hLN hL i)
-    hDisjoint hFriedrichs
+    (fun N hLN i j _hij hnot v =>
+      localTermES_re_inner_nonneg_of_not_cyclicWindowsOverlap A (by omega) hnot v)
+    hFriedrichs
 
 /-- Uniform explicit gap-bound reduction from the remaining overlapping-window
 Friedrichs estimate.
@@ -1151,10 +1310,7 @@ theorem parentHamiltonianES_gap_bound_of_cyclic_window_overlap_friedrichs
       v ∈ (parentHamiltonianGroundSpaceES A L N)ᗮ →
         ((1 : ℝ) / (4 * (L : ℝ))) * ‖v‖ ≤
           ‖parentHamiltonianES A L N v‖ := by
-  refine parentHamiltonianES_gap_bound_of_cyclic_window_friedrichs A L hL ?_ hFriedrichs
-  intro N hLN _i _j _hij hno v
-  have hLN' : L ≤ N := by omega
-  exact localTermES_re_inner_nonneg_of_not_cyclicWindowsOverlap A hLN' hno v
+  exact parentHamiltonianES_gap_bound_of_cyclic_window_friedrichs A L hL hFriedrichs
 
 /-- Uniform explicit gap-bound reduction from a norm-compression form of the
 overlapping-window Friedrichs estimate.
@@ -1217,12 +1373,10 @@ uniform estimate `γ * re ⟪H_N v, v⟫ ≤ re ⟪H_N v, H_N v⟫`.
 `parentHamiltonianES_gap_bound_of_ordered_local_term_bounds` now formalize the
 finite-sum algebra turning explicit ordered cross-term row bounds for local
 symmetric projections into the quadratic-form hypothesis above.
-5. **Remaining local analytic obligations:** the combinatorial overlap count comes
-from locality (`localTerm`, `parentHamiltonian`) and finite range: each window
-overlaps at most `2 * (L - 1)` neighbors. The local symmetric-projection theorem
-for `localTermES` is now proved above; the remaining input is the
-Friedrichs-angle estimate that supplies the ordered cross-term constants with
-the required row sums.
+5. **Remaining local analytic obligation:** local projection structure, cyclic-window
+row cardinality, and non-overlap positivity are now formalized above. The remaining
+hypothesis is the Friedrichs-angle estimate for overlapping cyclic windows with the
+coefficient required by the finite-overlap row reduction.
 6. **Sorry dependency split:** `parentHamiltonian_gapped` is the downstream
 existential theorem, now proved by applying the Friedrichs-angle theorem
 below. The theorem `parentHamiltonianES_gap_bound_of_friedrichs` still depends
@@ -1244,11 +1398,10 @@ theorem parentHamiltonianES_gap_bound_of_friedrichs
       v ∈ (parentHamiltonianGroundSpaceES A L N)ᗮ →
         ((1 : ℝ) / (4 * (L : ℝ))) * ‖v‖ ≤
           ‖parentHamiltonianES A L N v‖ := by
-  -- Remaining obligation: derive the uniform quadratic-form estimate required by
-  -- `parentHamiltonianES_gap_bound_of_quadratic_form` from the MPS-specific
-  -- Friedrichs-angle estimate for adjacent local ground spaces and the
-  -- finite-overlap row-sum bound. Positivity, kernel identification, and the
-  -- spectral-theorem conversion are already formalized above.
+  -- Remaining obligation: prove the overlapping cyclic-window Friedrichs-angle
+  -- estimate required by `parentHamiltonianES_gap_bound_of_cyclic_window_friedrichs`.
+  -- Local projection structure, row cardinality, non-overlap positivity, kernel
+  -- identification, and the spectral-theorem conversion are already formalized above.
   sorry
 
 /--
