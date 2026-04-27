@@ -28,6 +28,7 @@ The remaining local fixes are:
 from __future__ import annotations
 
 import io
+import os
 import pickle
 from pathlib import Path
 from typing import Any, Callable
@@ -89,6 +90,10 @@ def _fallback_citation(self, *, parenthetical: bool):
     spacing and separator.
     """
 
+    if os.environ.get("TNLEAN_FAIL_ON_CITATION_FALLBACK"):
+        keys = [_stringify_tex_item(key) for key in self.attributes.get("bibkeys", [])]
+        raise RuntimeError(f"unexpected unresolved natbib citation fallback: {keys}")
+
     res = self.ownerDocument.createDocumentFragment()
     keys = [_stringify_tex_item(key) for key in self.attributes.get("bibkeys", [])]
     punctuation = getattr(self, "punctuation", {}) or {}
@@ -111,7 +116,11 @@ def _cite_uses_parenthetical_fallback(self) -> bool:
 
 def _has_unresolved_bibitems(self) -> bool:
     bibitems = self.bibitems
-    return not bibitems or any(
+    if not bibitems:
+        return True
+    if self.isNumeric():
+        return any(getattr(item, "bibcite", None) is None for item in bibitems)
+    return any(
         getattr(item, "bibcite", None) is None
         or getattr(item.bibcite, "attributes", None) is None
         for item in bibitems
