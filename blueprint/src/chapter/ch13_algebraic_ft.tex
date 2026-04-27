@@ -109,9 +109,9 @@ operation on the physical indices.
     of $A^i X$ in the spanning set $\{A^j\}$.
     Diagrammatically, the inserted virtual matrix is re-expressed as a
     physical operation on the same local tensor:
-    \[
+    \begin{center}
         \TNPhysicalRealization{X}{O_A(X)}
-    \]
+    \end{center}
     The map $X \mapsto O_A(X)$ is $\C$-linear.
 \end{definition}
 
@@ -303,14 +303,14 @@ forces the local tensors to be proportional.
     \end{align}
     Diagrammatically, Eq.~\eqref{eq:internal_bond} is the equality obtained
     by inserting $X$ on the bond between the two sites,
-    \[
+    \begin{center}
         \TNInternalTraceInsertion{i}{j}{X}
-    \]
+    \end{center}
     while Eq.~\eqref{eq:external_bond} is the corresponding equality with
     the insertion $Y$ on the outer trace bond,
-    \[
+    \begin{center}
         \TNExternalTraceInsertion{i}{j}{Y}
-    \]
+    \end{center}
     so the two hypotheses distinguish the internal and external virtual
     loops of the two-site periodic chain.
 
@@ -340,11 +340,11 @@ forces the local tensors to be proportional.
     $\Psi_{A_2}$, and define $Z := \sum_j c_j B_2^j \in \MN{D}$.
     This is the point where the two-site comparison collapses to a single
     boundary matrix:
-    \[
+    \begin{center}
         \TNBoundaryRegrow{Z}{i}{j}{2}
         \qquad
         \TNLocalEqualityStep{Z}{\lambda \Id}{i}
-    \]
+    \end{center}
     The first product identity gives $A_1^i = Z B_1^i$, and the second
     gives $A_1^i = B_1^i Z$.
     Hence $Z$ commutes with every $B_1^i$; since $\{B_1^i\}$ spans
@@ -1337,11 +1337,11 @@ scalar factor.
     \leanok
     \uses{def:gauge_equiv}
     Diagrammatically, the hypothesis is that the two local gauges
-    \[
+    \begin{center}
         \TNGaugeConjugation{X}{i}{X^{-1}}
-        \qquad\text{and}\qquad
+        \qquad and\qquad
         \TNGaugeConjugation{Y}{i}{Y^{-1}}
-    \]
+    \end{center}
     produce the same target tensor $B^i$ from the same source tensor
     $A^i$.
     If $X, Y \in \GL_D(\C)$ both conjugate an MPS tensor $A$ to the same
@@ -1391,9 +1391,9 @@ scalar factor.
     In fact $c(g,h) \ne 0$ since both sides are invertible, so
     $c(g,h) \in \C^{\times}$. Diagrammatically, the two candidate gauges
     are competing local replacements for the same twisted tensor:
-    \[
+    \begin{center}
         \TNLocalEqualityStep{X(h)\,X(g)}{X(gh)}{i}
-    \]
+    \end{center}
     and both sides conjugate $A^i$ to the same twisted tensor
     $\widetilde{A}_{gh}^i$.
 \end{theorem}
@@ -1483,9 +1483,9 @@ Theorem~2 of~\cite{Molnar2018NormalPEPS}.
     the gauge matrix applied at vertex $v$ is $X_e$ if $v = u$ and
     $(X_e^{-1})^\top$ if $v = w$.
     Diagrammatically, the ordered edge carries opposite endpoint actions:
-    \[
+    \begin{center}
         \TNPEPSEdgeGaugeOrientation
-    \]
+    \end{center}
 \end{definition}
 
 \begin{definition}[Gauge vertex action]%
@@ -1499,9 +1499,9 @@ Theorem~2 of~\cite{Molnar2018NormalPEPS}.
         A_v(\eta', \sigma)$.
     In tensor-network notation, one inserts the appropriate gauge matrix on
     each incident virtual leg of the local tensor:
-    \[
+    \begin{center}
         \TNPEPSGaugeVertexAction
-    \]
+    \end{center}
 \end{definition}
 
 \begin{definition}[Apply gauge]%
@@ -1530,9 +1530,9 @@ Theorem~2 of~\cite{Molnar2018NormalPEPS}.
     \uses{def:applyGauge}
     Applying a gauge to a PEPS tensor preserves the state coefficients.
     Along each internal edge, the two endpoint insertions cancel:
-    \[
+    \begin{center}
         \TNPEPSGaugeCancellation
-    \]
+    \end{center}
 \end{theorem}
 
 \begin{theorem}[Gauge equivalence implies same state]%
@@ -1738,9 +1738,9 @@ Theorem~2 of~\cite{Molnar2018NormalPEPS}.
     \lean{TNLean.PEPS.hasLocalGaugeLift_of_blockedMiddleGaugeHyp}.
     Under that hypothesis, injectivity on the star neighbourhood provides a
     left inverse that isolates the local edge gauges:
-    \[
+    \begin{center}
         \TNPEPSLocalGaugeExtraction
-    \]
+    \end{center}
 \end{theorem}
 
 \begin{theorem}[Gauge consistency]%
@@ -1752,9 +1752,9 @@ Theorem~2 of~\cite{Molnar2018NormalPEPS}.
     shared edges, yielding a global gauge family.
     On a shared edge, the two neighbouring local extractions match as one
     edge gauge:
-    \[
+    \begin{center}
         \TNPEPSGlobalConsistency
-    \]
+    \end{center}
 \end{theorem}
 
 \begin{theorem}[Fundamental Theorem for injective PEPS, conditional on

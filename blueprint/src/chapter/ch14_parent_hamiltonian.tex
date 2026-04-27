@@ -45,9 +45,9 @@ $A^{\sigma(0)}\cdots A^{\sigma(L-1)}$.
         \Gamma_L : \MN{D} \to (\{0,\ldots,d{-}1\}^L \to \C).
     \]
     In tensor-network notation,
-    \[
+    \begin{center}
         \TNGroundSpaceMap{A}{\sigma_1}{\sigma_L}{L}{X}
-    \]
+    \end{center}
     the upper chain denotes the word tensor $A^\sigma$ with open physical
     indices $\sigma_1,\ldots,\sigma_L$, and the lower red node denotes the boundary
     matrix $X$ inserted on the closing virtual bond before taking the trace.
@@ -380,9 +380,9 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 \begin{proof}
     \leanok
     The restriction simply absorbs the last tensor into the boundary matrix:
-    \[
+    \begin{center}
         \TNGroundSpaceMap{A}{\sigma_1}{\sigma_L}{L}{A^j X}
-    \]
+    \end{center}
     Direct computation:
     $\psi(\sigma_1,\ldots,\sigma_L,j) = \tr(A^{\sigma_1}\cdots A^{\sigma_L} \cdot A^j \cdot X)
         = \Gamma_L(A^j X)(\sigma)$.
@@ -401,9 +401,9 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \leanok
     On the right restriction one first rotates the trace and then reads the
     resulting boundary matrix on the shortened window:
-    \[
+    \begin{center}
         \TNGroundSpaceMap{A}{\sigma_1}{\sigma_L}{L}{X A^i}
-    \]
+    \end{center}
     By trace cyclicity:
     $\psi(i,\sigma_1,\ldots,\sigma_L) = \tr(A^i A^{\sigma} X)
         = \tr(A^{\sigma} \cdot X A^i) = \Gamma_L(X A^i)(\sigma)$.
@@ -490,9 +490,9 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     The ``invert-and-regrow'' argument compares the left and right
     restrictions on their common $(L-1)$-site overlap and then reconstructs the
     full $(L+1)$-site word from a single boundary matrix:
-    \[
+    \begin{center}
         \TNBoundaryRegrow{X'}{\sigma_1}{\sigma_{L+1}}{L+1}
-    \]
+    \end{center}
     \begin{enumerate}
         \item From the right ground condition, for each physical index~$i$ there
               exists a unique $Y_i \in \MN{D}$ (by injectivity of $\Gamma_L$) such
