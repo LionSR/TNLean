@@ -31,26 +31,36 @@ specialize the reduction to the transported local terms `localTermES A L i`,
 with the expected cyclic-window degree `m = 2 * (L - 1)` and the explicit gap
 constant `γ = 1 / (4 * L)`.
 
-## Remaining MPS-specific hypotheses
+## Current MPS-specific status after the cyclic-window assembly
 
 The final theorem `MPSTensor.parentHamiltonianES_gap_bound_of_friedrichs` still
-needs the following concrete hypotheses.
+needs the concrete overlapping-window Friedrichs estimate, but the other
+finite-overlap hypotheses are now formalized.
 
-1. Local projector structure: for all admissible `N` and `i`, prove
-   `(localTermES A L i).IsSymmetricProjection`. This row-bound branch keeps the
-   hypothesis explicit; PR #925 owns the separate projection-structure proof.
-2. Choose a cyclic-window overlap predicate, for example “the length-`L` cyclic
-   supports of `i` and `j` intersect”.
-3. Prove the row-cardinality estimate
-   `((Finset.univ.erase i).filter (fun j => overlaps N i j)).card ≤ 2 * (L - 1)`
-   under `2 * L ≤ N`.
-4. Prove non-overlap positivity of ordered cross terms, expected from disjoint
-   tensor factors / commuting local projectors:
-   `0 ≤ Re ⟪localTermES A L i v, localTermES A L j v⟫` whenever the windows are
-   disjoint.
-5. Prove the Friedrichs-angle estimate for overlapping cyclic windows:
+1. Local projector structure is supplied by
+   `MPSTensor.localTermES_isSymmetricProjection` (PR #925).
+2. The concrete overlap predicate is
+   `MPSTensor.cyclicWindowsOverlap`: two length-`L` cyclic supports intersect
+   (PR #940).
+3. The row-cardinality estimate is supplied by
+   `MPSTensor.cyclicWindowsOverlap_card_le`:
+   `((Finset.univ.erase i).filter (fun j => cyclicWindowsOverlap N L i j)).card ≤
+     2 * (L - 1)` under `2 * L ≤ N` and `1 < L` (PR #940).
+4. Non-overlap positivity is supplied by
+   `MPSTensor.localTermES_re_inner_nonneg_of_cyclic_windows_disjoint` (PR #941).
+   In the cyclic-window gap assembly,
+   `MPSTensor.CyclicWindowsDisjoint.of_not_cyclicWindowsOverlap` converts the
+   negation of `cyclicWindowsOverlap` into the site-disjointness condition needed
+   by this theorem.
+5. The sole remaining analytic hypothesis for the new cyclic-window gap wrapper is
+   the Friedrichs-angle estimate for overlapping cyclic windows:
    `Re ⟪h_i v, h_j v⟫ ≥ -(1 - 1/(4L)) * (2(L-1))⁻¹ * Re ⟪h_i v, v⟫`.
 
-Items 2–5 are the genuine CPGSV21 / Kastoryano–Lucia overlap analysis. The new
-Lean theorems only perform the finite-sum and row-sum algebra once those local
-estimates are available.
+Accordingly,
+`MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_friedrichs` now composes
+local projection structure, cyclic-window row cardinality, and non-overlap
+positivity. Its only local hypothesis is the overlapping-window Friedrichs
+estimate above. This matches the martingale discussion in
+`Papers/2011.12127/TN-Review-main.tex:2166-2180`, especially equations
+`eq:4:martingale-1` and `eq:4:martingale-2`, where non-overlapping products are
+nonnegative and the only estimate imposed is on overlapping pairs.
