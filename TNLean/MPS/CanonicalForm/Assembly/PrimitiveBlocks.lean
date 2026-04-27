@@ -197,6 +197,33 @@ theorem isIrreducibleTensor_blockTensor_of_tp_primitive_irr [NeZero D]
   -- Step 7: IsIrreducibleMap → IsIrreducibleTensor.
   exact isIrreducibleTensor_of_isIrreducibleMap (blockTensor A P) hIrrMap
 
+/-- **Extra blocking after period removal.**
+
+If a live sector block is already trace-preserving, primitive, and tensor-irreducible,
+then any later positive blocking length `k` preserves all three properties. In the
+canonical-form reduction, the period-removal length that produces such sector blocks
+is a different datum from this later finite blocking length, which is used only for
+common refinement or injectivity/Wielandt-span arguments. -/
+theorem tp_primitive_irreducible_extra_blocking [NeZero D]
+    (A : MPSTensor d D)
+    (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (hPrim : _root_.IsPrimitive (transferMap (d := d) (D := D) A))
+    (hIrr : IsIrreducibleTensor A)
+    {k : ℕ} (hk : 0 < k) :
+    (∑ i : Fin (blockPhysDim d k),
+      (blockTensor (d := d) (D := D) A k i)ᴴ * blockTensor (d := d) (D := D) A k i = 1) ∧
+    _root_.IsPrimitive
+      (transferMap (d := blockPhysDim d k) (D := D)
+        (blockTensor (d := d) (D := D) A k)) ∧
+    IsIrreducibleTensor (blockTensor (d := d) (D := D) A k) := by
+  refine ⟨?_, ?_, ?_⟩
+  · exact leftCanonical_blockTensor (d := d) (D := D) (A := A) (L := k) hTP
+  · rw [transferMap_blockTensor]
+    exact isPrimitive_pow_of_isPrimitive (D := D)
+      (transferMap (d := d) (D := D) A) k hk hPrim
+  · exact isIrreducibleTensor_blockTensor_of_tp_primitive_irr
+      (d := d) (D := D) A hTP hPrim hIrr hk
+
 /-!
 ## Conditional Fundamental Theorem: proportional MPVs → block matching
 

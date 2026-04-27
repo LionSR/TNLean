@@ -68,19 +68,27 @@ The theorem `exists_tp_sector_decomp_after_blocking` below provides:
 The current library already settles the common-period blocking arithmetic and
 now has both a one-sided phase-class BNT construction for TP primitive
 irreducible live blocks and a witness-producing sector comparison from primitive
-overlap-span hypotheses. The exact-live theorem
+overlap-span hypotheses. The theorem
+`fundamentalTheorem_after_blocking_1606_perBlock_cyclic_live_with_zeroTail`
+keeps the faithful paper order: first split off the zero tail and TP-gauge the
+irreducible live blocks, then remove each live block's period by cyclic sectors.
+It deliberately does not identify that period-removal length with the later
+finite blocking length used for common refinement or injectivity.
+
+The exact-live theorem
 `fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_injectiveSpan`
-combines `SameMPV₂ A B` with those ingredients once exact common live block
-decompositions, live-block injectivity, and the finite-length span comparison
-are supplied. The zero-tail-aware theorem
+combines `SameMPV₂ A B` with the BNT and matching ingredients once exact common
+live block decompositions, live-block injectivity, and the finite-length span
+comparison are supplied. The zero-tail-aware theorem
 `fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_overlapSpan_zeroTail`
 separately records the `N = 0` bookkeeping when full overlap-span hypotheses are
 available.
 
-The remaining Gap §1 content is to derive the exact live decompositions,
-one-site injectivity (or a blocked replacement), the finite-length span
-comparison, and the zero-tail bookkeeping from the structural after-blocking
-reduction itself.
+The remaining Gap §1 content is to flatten the per-block cyclic-sector data to a
+single common physical blocking level, derive one-site injectivity (or a blocked
+replacement) and the finite-length span comparison for the flattened family, and
+finish the zero-tail bookkeeping from the structural after-blocking reduction
+itself.
 -/
 
 section FundamentalTheorem1606
@@ -387,6 +395,74 @@ theorem fundamentalTheorem_after_blocking_1606_structural_with_zeroTail
     ?_, ?_, hTPA, hTPB, hPrimA, hPrimB, hμA, hμB, hDimA, hDimB, hMPVA, hMPVB⟩
   · exact sameMPV₂_blockTensor A B hSame pA
   · exact sameMPV₂_blockTensor A B hSame pB
+
+/-- **Per-block cyclic live decomposition with zero-tail bookkeeping.**
+
+This is the faithful predecessor to the common-live-block statement. From
+`SameMPV₂ A B`, it first uses the invariant-subspace/zero-tail split and TP gauge
+to obtain irreducible live blocks on both sides. It then removes the period of
+each live block separately, producing primitive irreducible cyclic sectors for
+every live block. The positive-length live tensors agree, and the length-zero
+case is recorded as the explicit zero-tail bookkeeping identity.
+
+The theorem intentionally keeps the per-block period-removal lengths inside
+`HasPrimitiveIrreducibleCyclicSectors`. It does not conflate those lengths with a
+later common-refinement or Wielandt/injectivity blocking length; assembling the
+per-block cyclic sectors at one physical blocking level is the next formal
+interface still missing for #942/#652. -/
+theorem fundamentalTheorem_after_blocking_1606_perBlock_cyclic_live_with_zeroTail
+    {d D₁ D₂ : ℕ}
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (hSame : SameMPV₂ A B) :
+    ∃ (zeroTailA : ℕ) (rA : ℕ) (dimA : Fin rA → ℕ) (μA : Fin rA → ℂ)
+      (blocksA : (k : Fin rA) → MPSTensor d (dimA k)),
+    ∃ (zeroTailB : ℕ) (rB : ℕ) (dimB : Fin rB → ℕ) (μB : Fin rB → ℂ)
+      (blocksB : (k : Fin rB) → MPSTensor d (dimB k)),
+      (∀ k, IsIrreducibleTensor (blocksA k)) ∧
+      (∀ k, IsIrreducibleTensor (blocksB k)) ∧
+      (∀ k, ∑ i : Fin d, (blocksA k i)ᴴ * blocksA k i = 1) ∧
+      (∀ k, ∑ i : Fin d, (blocksB k i)ᴴ * blocksB k i = 1) ∧
+      (∀ k, μA k ≠ 0) ∧
+      (∀ k, μB k ≠ 0) ∧
+      (∀ k, 0 < dimA k) ∧
+      (∀ k, 0 < dimB k) ∧
+      (∀ (N : ℕ) (σ : Fin N → Fin d),
+        mpv A σ = mpv (zeroMPSTensor d zeroTailA) σ +
+          mpv (toTensorFromBlocks (d := d) (μ := μA) blocksA) σ) ∧
+      (∀ (N : ℕ) (σ : Fin N → Fin d),
+        mpv B σ = mpv (zeroMPSTensor d zeroTailB) σ +
+          mpv (toTensorFromBlocks (d := d) (μ := μB) blocksB) σ) ∧
+      SameMPV₂Pos
+        (toTensorFromBlocks (d := d) (μ := μA) blocksA)
+        (toTensorFromBlocks (d := d) (μ := μB) blocksB) ∧
+      (∀ σ : Fin 0 → Fin d,
+        (zeroTailA : ℂ) + mpv (toTensorFromBlocks (d := d) (μ := μA) blocksA) σ =
+          (zeroTailB : ℂ) + mpv (toTensorFromBlocks (d := d) (μ := μB) blocksB) σ) ∧
+      (∀ k, HasPrimitiveIrreducibleCyclicSectors (blocksA k)) ∧
+      (∀ k, HasPrimitiveIrreducibleCyclicSectors (blocksB k)) := by
+  obtain ⟨zeroTailA, rA, dimA, μA, blocksA,
+      hIrrA, hTPA, hμA, hDimA, hMPVA⟩ :=
+    exists_tp_gauge_from_arbitrary_with_zeroTail (d := d) (D := D₁) A
+  obtain ⟨zeroTailB, rB, dimB, μB, blocksB,
+      hIrrB, hTPB, hμB, hDimB, hMPVB⟩ :=
+    exists_tp_gauge_from_arbitrary_with_zeroTail (d := d) (D := D₂) B
+  have hBook :=
+    liveBlock_positive_sameMPV₂_and_zeroTail_bookkeeping_of_sameMPV₂
+      A B hSame zeroTailA zeroTailB μA blocksA μB blocksB hMPVA hMPVB
+  refine ⟨zeroTailA, rA, dimA, μA, blocksA,
+    zeroTailB, rB, dimB, μB, blocksB,
+    hIrrA, hIrrB, hTPA, hTPB, hμA, hμB, hDimA, hDimB, hMPVA, hMPVB,
+    ?_, hBook.2, ?_, ?_⟩
+  · intro N hN σ
+    exact hBook.1 hN σ
+  · intro k
+    letI : NeZero (dimA k) := ⟨Nat.ne_of_gt (hDimA k)⟩
+    exact hasPrimitiveIrreducibleCyclicSectors_of_TP_of_isIrreducibleTensor
+      (blocksA k) (hTPA k) (hIrrA k)
+  · intro k
+    letI : NeZero (dimB k) := ⟨Nat.ne_of_gt (hDimB k)⟩
+    exact hasPrimitiveIrreducibleCyclicSectors_of_TP_of_isIrreducibleTensor
+      (blocksB k) (hTPB k) (hIrrB k)
 
 /-- **Conditional after-blocking sector comparison (issue #877 target shape).**
 

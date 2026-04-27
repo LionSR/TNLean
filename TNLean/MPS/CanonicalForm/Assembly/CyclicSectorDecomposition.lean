@@ -1067,6 +1067,36 @@ theorem exists_primitive_irreducible_cyclic_sector_decomp_of_TP_of_isIrreducible
   · intro k
     exact Nat.pos_of_ne_zero (hNondeg k)
 
+/-- A one-block period-removal package with primitive irreducible sectors.
+
+`HasPrimitiveIrreducibleCyclicSectors A` means that some positive period `m`
+removes the cyclic peripheral structure of `A`: the blocked tensor `A^[m]` is
+represented by unit-weight sector blocks, each of which is trace-preserving, has
+primitive transfer map, is tensor-irreducible, and has positive bond dimension.
+The later common-refinement or Wielandt/injectivity blocking length is deliberately
+not part of this predicate. -/
+def HasPrimitiveIrreducibleCyclicSectors {d D : ℕ} (A : MPSTensor d D) : Prop :=
+  ∃ (m : ℕ), 0 < m ∧
+  ∃ (dim : Fin m → ℕ) (blocks : (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k)),
+    (∀ k, ∑ i : Fin (blockPhysDim d m), (blocks k i)ᴴ * blocks k i = 1) ∧
+    SameMPV₂ (blockTensor (d := d) (D := D) A m)
+      (toTensorFromBlocks (d := blockPhysDim d m) (μ := fun _ : Fin m => (1 : ℂ)) blocks) ∧
+    (∀ k, _root_.IsPrimitive
+      (transferMap (d := blockPhysDim d m) (D := dim k) (blocks k))) ∧
+    (∀ k, IsIrreducibleTensor (blocks k)) ∧
+    (∀ k, 0 < dim k)
+
+/-- Trace-preserving irreducible tensors admit primitive irreducible cyclic sectors. -/
+theorem hasPrimitiveIrreducibleCyclicSectors_of_TP_of_isIrreducibleTensor
+    {d D : ℕ} [NeZero D]
+    (A : MPSTensor d D)
+    (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (hIrr : IsIrreducibleTensor A) :
+    HasPrimitiveIrreducibleCyclicSectors A := by
+  simpa [HasPrimitiveIrreducibleCyclicSectors] using
+    exists_primitive_irreducible_cyclic_sector_decomp_of_TP_of_isIrreducibleTensor
+      (d := d) (D := D) A hTP hIrr
+
 end SectorOrbitLift
 
 end MPSTensor
