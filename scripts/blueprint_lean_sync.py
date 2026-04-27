@@ -231,11 +231,6 @@ def collect_blueprint_lean_refs(blueprint_src: Path) -> list[BlueprintEntry]:
     return refs
 
 
-def collect_blueprint_lean_names(blueprint_src: Path) -> set[str]:
-    """Return all declaration names appearing in ``\\lean{...}`` tags."""
-    return {ref.lean_decl for ref in collect_blueprint_lean_refs(blueprint_src)}
-
-
 def collect_blueprint_entries(blueprint_src: Path) -> list[BlueprintEntry]:
     """Parse theorem-like blueprint environments for ``\\lean{}`` and ``\\leanok``."""
     entries: list[BlueprintEntry] = []
