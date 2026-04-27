@@ -85,6 +85,52 @@ _natbib.bibliography.loadBibliographyFile = _patched_load_bibliography_file
 bibitem = _natbib.thebibliography.bibitem
 
 
+def _fallback_citation(self, *, parenthetical: bool):
+    """Render unresolved natbib citations without producing bare ``()``."""
+
+    res = self.ownerDocument.createDocumentFragment()
+    keys = [_stringify_tex_item(key) for key in self.attributes.get("bibkeys", [])]
+    citesep = self.punctuation.get("citesep", ", ")
+    text = citesep.join(keys) if keys else "unresolved citation"
+
+    if parenthetical:
+        res.append(self.punctuation["open"])
+    res.append(text)
+    # ``postnote`` already carries natbib's post separator, usually ``, ``.
+    res.append(self.postnote)
+    if parenthetical:
+        res.append(self.punctuation["close"])
+    return res
+
+
+def _wrap_natbib_citation(cls, *, parenthetical: bool) -> None:
+    original = cls.citation
+
+    def citation(self, *args, **kwargs):
+        bibitems = self.bibitems
+        missing_attributes = any(
+            getattr(getattr(item, "bibcite", None), "attributes", None) is None
+            for item in bibitems
+        )
+        if not bibitems or missing_attributes:
+            return _fallback_citation(self, parenthetical=parenthetical)
+        return original(self, *args, **kwargs)
+
+    cls.citation = citation
+
+
+# Capitalized and ``*full`` variants inherit these ``citation`` methods; extend
+# this list if the blueprint starts using author/year-only natbib commands.
+for _cls, _parenthetical in (
+    (_natbib.cite, True),
+    (_natbib.citep, True),
+    (_natbib.citet, False),
+    (_natbib.citealt, False),
+    (_natbib.citealp, False),
+):
+    _wrap_natbib_citation(_cls, parenthetical=_parenthetical)
+
+
 # --- leanblueprint patch --------------------------------------------------
 
 
