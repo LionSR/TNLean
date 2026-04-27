@@ -85,6 +85,44 @@ _natbib.bibliography.loadBibliographyFile = _patched_load_bibliography_file
 bibitem = _natbib.thebibliography.bibitem
 
 
+def _fallback_citation(self, *, parenthetical: bool):
+    """Render unresolved natbib citations without producing bare ``()``."""
+
+    res = self.ownerDocument.createDocumentFragment()
+    keys = [str(key) for key in self.attributes.get("bibkeys", [])]
+    text = ", ".join(keys) if keys else "unresolved citation"
+
+    if parenthetical:
+        res.append(self.punctuation["open"])
+    res.append(text)
+    res.append(self.postnote)
+    if parenthetical:
+        res.append(self.punctuation["close"])
+    return res
+
+
+def _wrap_natbib_citation(cls, *, parenthetical: bool) -> None:
+    original = cls.citation
+
+    def citation(self, *args, **kwargs):
+        bibitems = self.bibitems
+        if not bibitems or any(item.bibcite.attributes is None for item in bibitems):
+            return _fallback_citation(self, parenthetical=parenthetical)
+        return original(self, *args, **kwargs)
+
+    cls.citation = citation
+
+
+for _cls, _parenthetical in (
+    (_natbib.cite, True),
+    (_natbib.citep, True),
+    (_natbib.citet, False),
+    (_natbib.citealt, False),
+    (_natbib.citealp, False),
+):
+    _wrap_natbib_citation(_cls, parenthetical=_parenthetical)
+
+
 # --- leanblueprint patch --------------------------------------------------
 
 
