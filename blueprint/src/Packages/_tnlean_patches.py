@@ -84,8 +84,9 @@ def _fallback_citation(self, *, parenthetical: bool):
     """Render unresolved natbib citations without producing bare ``()``.
 
     The ordering mirrors the corresponding natbib citation shape for the
-    citation forms used here: citation text followed by natbib's postnote
-    object, whose rendering already includes the configured postnote separator.
+    citation forms used here: natbib's prenote object, citation text, and
+    natbib's postnote object. The note objects already include their configured
+    spacing and separator.
     """
 
     res = self.ownerDocument.createDocumentFragment()
@@ -96,6 +97,7 @@ def _fallback_citation(self, *, parenthetical: bool):
 
     if parenthetical:
         res.append(punctuation.get("open", "("))
+    res.append(self.prenote)
     res.append(text)
     res.append(self.postnote)
     if parenthetical:
