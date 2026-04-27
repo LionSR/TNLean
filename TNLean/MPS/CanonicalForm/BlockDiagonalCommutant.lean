@@ -322,10 +322,10 @@ theorem wordTupleSpanTop_of_isCanonicalFormBNT_of_pairBlockSeparatingWords
 /-- Canonical-form/BNT data plus a finite pair trace-separation criterion give
 full product-word span.
 
-This is the Route-B-facing formulation of the remaining finite-dimensional BNT
-step: once every ordered distinct pair has a common homogeneous trace-separating
-length, the duality lemma in `BiCFDerivation` produces pairwise separators, and
-the existing selector assembly gives product-word span. -/
+This is the form of the result used in Route B for the remaining finite-dimensional
+BNT step: once every ordered distinct pair has a common homogeneous trace-separating
+length, the pair trace-separation duality theorem produces pairwise separators,
+and the existing selector assembly gives product-word span. -/
 theorem wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingAt
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hCF : IsCanonicalFormBNT μ A) {S : ℕ}
