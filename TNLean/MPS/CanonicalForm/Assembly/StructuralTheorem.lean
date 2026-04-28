@@ -468,11 +468,12 @@ theorem fundamentalTheorem_after_blocking_1606_perBlock_cyclic_live_with_zeroTai
 /-- **Common-blocking predecessor for live cyclic sectors with zero-tail bookkeeping.**
 
 This theorem combines the zero-tail/TP-gauge live-block reduction with the common
-reblocking constructor for per-block cyclic sectors.  It returns the original live
-block families on both sides and, for each side, a finite flattened sector family
-at one common physical dimension `blockPhysDim d F.p`.  The flattened sectors are
-trace-preserving, have primitive transfer maps, are tensor-irreducible, have
-positive bond dimensions, and carry nonzero unit weights.  The statement keeps the
+reblocking constructor for per-block cyclic sectors.  The theorem asserts the
+existence of the original live block families on both sides and, for each side, a
+finite flattened sector family at the corresponding common blocked physical
+dimension.  The flattened sectors are trace-preserving, have primitive transfer
+maps, are tensor-irreducible, have positive bond dimensions, and carry nonzero
+unit weights.  The statement keeps the
 checked zero-tail equations, positive-length live equality, and length-zero
 bookkeeping at the unblocked live-block level; the remaining #969 work is the
 one-shot iterated-blocking identification and weighted direct-sum flattening that

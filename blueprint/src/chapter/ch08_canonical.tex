@@ -1134,13 +1134,13 @@ The following results separate the zero blocks from the
 	right-hand side is $d^{mn}$.
 \end{proof}
 
-\begin{theorem}[Physical-dimension transport preserves MPV equality]
+\begin{theorem}[Physical-dimension transport and MPV equality]
 	\label{thm:samempv_cast_phys_dim}
 	\lean{MPSTensor.sameMPV₂_cast_physDim}
 	\leanok
 	\uses{def:same_mpv2}
-	If two physical alphabets have the same cardinality, identifying the tensor
-	families along that equality preserves heterogeneous MPV equality.
+	If two physical alphabets have the same cardinality, then the transported
+	tensors have the same MPV family if and only if the original tensors do.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -1148,7 +1148,7 @@ The following results separate the zero blocks from the
 	statements are the same.
 \end{proof}
 
-\begin{theorem}[Physical-dimension transport preserves block-diagonal tensors]
+\begin{theorem}[Physical-dimension transport for block-diagonal tensors]
 	\label{thm:tensor_from_blocks_cast_phys_dim}
 	\lean{MPSTensor.toTensorFromBlocks_cast_physDim}
 	\leanok
@@ -1162,13 +1162,13 @@ The following results separate the zero blocks from the
 	block-diagonal tensor.
 \end{proof}
 
-\begin{theorem}[Physical-dimension transport preserves trace preservation]
+\begin{theorem}[Physical-dimension transport and trace preservation]
 	\label{thm:left_canonical_cast_phys_dim}
 	\lean{MPSTensor.leftCanonical_cast_physDim}
 	\leanok
 	\uses{def:tp_kraus}
-	Identifying equal physical alphabets preserves the trace-preserving condition
-	$\sum_i A_i^\dagger A_i=\Id$.
+	After identifying equal physical alphabets, the transported tensor is
+	trace-preserving if and only if the original tensor is trace-preserving.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -1176,24 +1176,26 @@ The following results separate the zero blocks from the
 	identical.
 \end{proof}
 
-\begin{theorem}[Physical-dimension transport preserves primitive transfer maps]
+\begin{theorem}[Physical-dimension transport and primitive transfer maps]
 	\label{thm:primitive_transfer_cast_phys_dim}
 	\lean{MPSTensor.isPrimitive_transferMap_cast_physDim}
 	\leanok
 	\uses{def:transfer_map, def:primitive_channel}
-	Identifying equal physical alphabets preserves primitivity of the transfer map.
+	After identifying equal physical alphabets, the transported transfer map is
+	primitive if and only if the original transfer map is primitive.
 \end{theorem}
 
 \begin{proof}\leanok
 	Substitute the equality of physical dimensions; the transfer maps coincide.
 \end{proof}
 
-\begin{theorem}[Physical-dimension transport preserves tensor irreducibility]
+\begin{theorem}[Physical-dimension transport and tensor irreducibility]
 	\label{thm:irreducible_tensor_cast_phys_dim}
 	\lean{MPSTensor.isIrreducibleTensor_cast_physDim}
 	\leanok
 	\uses{def:irreducible_tensor}
-	Identifying equal physical alphabets preserves tensor irreducibility.
+	After identifying equal physical alphabets, the transported tensor is
+	irreducible if and only if the original tensor is irreducible.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -1568,6 +1570,10 @@ The following results separate the zero blocks from the
 	Every unit weight in Definition~\ref{def:common_blocked_cyclic_sector_flat_weight}
 	is nonzero.
 \end{theorem}
+
+\begin{proof}\leanok
+	The weight is the constant value $1$, so it is nonzero.
+\end{proof}
 
 \begin{theorem}[Common reblocking of per-block cyclic sectors]%
 \label{thm:exists_common_blocked_cyclic_sector_family}
