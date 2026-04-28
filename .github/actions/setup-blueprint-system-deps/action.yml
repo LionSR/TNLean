@@ -1,0 +1,60 @@
+name: 'Setup Blueprint System Dependencies'
+description: 'Install TeX, dvisvgm, and Graphviz dependencies with an apt archive cache'
+
+inputs:
+  cache-suffix:
+    description: 'Cache suffix for this package set'
+    required: false
+    default: 'web-v1'
+  extra-packages:
+    description: 'Additional apt packages to install'
+    required: false
+    default: ''
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Restore blueprint apt archive cache
+      id: blueprint-apt-cache
+      uses: actions/cache/restore@v5
+      with:
+        path: .cache/apt/archives
+        key: blueprint-apt-${{ runner.os }}-${{ runner.arch }}-${{ inputs.cache-suffix }}
+
+    - name: Install blueprint system dependencies
+      shell: bash
+      env:
+        EXTRA_PACKAGES: ${{ inputs.extra-packages }}
+      run: |
+        sudo apt-get update
+
+        apt_cache_dir="$PWD/.cache/apt/archives"
+        mkdir -p "$apt_cache_dir/partial"
+        chmod -R a+rwX "$PWD/.cache/apt"
+
+        packages=(
+          dvisvgm
+          graphviz
+          libgraphviz-dev
+          texlive-fonts-recommended
+          texlive-latex-extra
+          texlive-pictures
+        )
+
+        if [ -n "$EXTRA_PACKAGES" ]; then
+          read -r -a extra_packages <<< "$EXTRA_PACKAGES"
+          packages+=("${extra_packages[@]}")
+        fi
+
+        sudo apt-get install -y \
+          -o Dir::Cache::archives="$apt_cache_dir" \
+          "${packages[@]}"
+
+        sudo chown -R "$USER:$(id -gn)" .cache/apt
+
+    - name: Save blueprint apt archive cache
+      if: steps.blueprint-apt-cache.outputs.cache-hit != 'true'
+      uses: actions/cache/save@v5
+      with:
+        path: .cache/apt/archives
+        key: ${{ steps.blueprint-apt-cache.outputs.cache-primary-key }}
