@@ -2891,13 +2891,60 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     \lean{MPSTensor.pairWordTuple}
     \lean{MPSTensor.PairWordTupleSpanTop}
     \lean{MPSTensor.PairTraceSeparatingAt}
+    \lean{MPSTensor.pairEvalWordTuple}
+    \lean{MPSTensor.pairCumulativeSpan}
+    \lean{MPSTensor.PairCumulativeWordTupleSpanTop}
+    \lean{MPSTensor.PairTraceSeparatingUpTo}
+    \lean{MPSTensor.PairTraceSeparatingAll}
+    \lean{MPSTensor.pairAllWordsSpan}
+    \lean{MPSTensor.PairAllWordsSpanTop}
     \leanok
     For two blocks $A$ and $B$, the length-$S$ pair word tuple is
     $w \mapsto (A^w,B^w)$.  The pair product-span condition says that these
     tuples span $\MN{D_A}\times\MN{D_B}$.  Equivalently, in the trace-dual
     formulation, the only pair of test matrices $(\Delta_A,\Delta_B)$ whose
-    trace pairing with every length-$S$ tuple vanishes is $(0,0)$.
+    trace pairing with every length-$S$ tuple vanishes is $(0,0)$.  The
+    cumulative variant replaces one fixed length by all word lengths at most
+    $S$, and the all-length variant allows every finite word.
 \end{definition}
+
+\begin{lemma}[All-length pair trace separation has finite cumulative length]
+    \label{lem:all_length_pair_trace_separation_finite_cutoff}
+    \lean{MPSTensor.pairEvalWordTuple_mem_pairCumulativeSpan}
+    \lean{MPSTensor.pairCumulativeSpan_mono}
+    \lean{MPSTensor.PairTraceSeparatingUpTo.mono}
+    \lean{MPSTensor.pairTraceSeparatingUpTo_of_pairTraceSeparatingAt}
+    \lean{MPSTensor.pairCumulativeWordTupleSpanTop_of_pairTraceSeparatingUpTo}
+    \lean{MPSTensor.pairTraceSeparatingUpTo_of_pairCumulativeWordTupleSpanTop}
+    \lean{MPSTensor.pairCumulativeWordTupleSpanTop_iff_pairTraceSeparatingUpTo}
+    \lean{MPSTensor.pairCumulativeWordTupleSpanTop_of_pairWordTupleSpanTop}
+    \lean{MPSTensor.pairCumulativeWordTupleSpanTop_of_pairTraceSeparatingAt}
+    \lean{MPSTensor.pairAllWordsSpanTop_of_pairTraceSeparatingAll}
+    \lean{MPSTensor.pairTraceSeparatingAll_of_pairAllWordsSpanTop}
+    \lean{MPSTensor.pairAllWordsSpanTop_iff_pairTraceSeparatingAll}
+    \lean{MPSTensor.exists_pairCumulativeWordTupleSpanTop_of_pairAllWordsSpanTop}
+    \lean{MPSTensor.exists_pairTraceSeparatingUpTo_of_pairTraceSeparatingAll}
+    \lean{MPSTensor.exists_pairTraceSeparatingUpTo_iff_pairTraceSeparatingAll}
+    \lean{MPSTensor.exists_forall_pairTraceSeparatingUpTo_of_forall_pairTraceSeparatingAll}
+    \leanok
+    \uses{def:pair_trace_separation_words}
+    If no nonzero trace functional vanishes on all finite pair words, then
+    there is a finite $S$ such that vanishing on every word of length at most
+    $S$ already forces the test pair to be zero.  For a finite family of ordered
+    block pairs, these bounds can be replaced by one common bound.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The trace condition is dual to the span of all finite pair words.  If that
+    span is the whole product algebra, every vector lies in some cumulative
+    span.  Since the product algebra is finite-dimensional, the increasing
+    sequence of cumulative spans stabilizes; at the stabilization index it is
+    already the whole product algebra.  Applying the finite trace-duality
+    criterion gives the stated finite bound.  This proves the cumulative
+    finite-dimensional step; the remaining BNT step is to convert it to a
+    single homogeneous length.
+\end{proof}
 
 \begin{lemma}[Pair trace separation gives pairwise selectors]
     \label{lem:pair_trace_separation_to_pairwise_selectors}
