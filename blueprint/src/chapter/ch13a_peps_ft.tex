@@ -86,7 +86,10 @@ Theorem~2 of~\cite{Molnar2018NormalPEPS}.
     \lean{TNLean.PEPS.gaugeVertex}
     \leanok
     \uses{def:edgeGaugeAt}
-    The gauged tensor at vertex $v$ is $A^X_v$, where
+    The gauged tensor at vertex $v$ is $A^X_v$. For each incident edge $ie$,
+    write $M_{ie}$ for the matrix specified by
+    Definition~\ref{def:edgeGaugeAt}, applied at the vertex $v$ to the gauge
+    on the underlying edge of $ie$. Then
     $A^X_v(\eta, \sigma)
         = \sum_{\eta'} (\prod_{ie} M_{ie}(\eta(ie), \eta'(ie)))
         A_v(\eta', \sigma)$.
@@ -120,7 +123,7 @@ Theorem~2 of~\cite{Molnar2018NormalPEPS}.
     \label{thm:applyGauge_stateCoeff}
     \lean{TNLean.PEPS.applyGauge_stateCoeff}
     \leanok
-    \uses{def:applyGauge}
+    \uses{def:applyGauge, def:peps_stateCoeff}
     Applying a gauge to a PEPS tensor preserves the state coefficients.
     Along each internal edge, the two endpoint insertions cancel:
     \begin{center}
@@ -132,7 +135,7 @@ Theorem~2 of~\cite{Molnar2018NormalPEPS}.
     \label{thm:GaugeEquiv_sameState}
     \lean{TNLean.PEPS.GaugeEquiv.sameState}
     \leanok
-    \uses{def:GaugeEquivPEPS, thm:applyGauge_stateCoeff}
+    \uses{def:GaugeEquivPEPS, def:peps_same_state, thm:applyGauge_stateCoeff}
     Gauge equivalence implies that the two PEPS tensors represent the same state.
 \end{theorem}
 
