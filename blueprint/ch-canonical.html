@@ -13988,9 +13988,21 @@
         </div>
   </div>
   <div class="remark_thmcontent">
-  <p> The paper proof first removes the upper-triangular redundancy by passing to irreducible live blocks, and then removes the periodic peripheral spectrum by blocking. In the informal MPS literature, this second phrase often includes two operations at once: block by a period and then restrict to the cyclic sectors of the blocked tensor. Here we treat these operations as separate steps. </p>
-<p>The arbitrary-input reduction of Theorem&#160;<a href="ch-canonical.html#thm:tp_gauge_arbitrary">11.48</a> gives the zero-tail block and trace-preserving irreducible live blocks. The coarse blocking theorem, Theorem&#160;<a href="ch-canonical.html#thm:tp_primitive_blockdecomp">11.113</a>, records a blocked live-block form with primitive transfer maps, but it is not by itself the final normal canonical form in the sense of the paper: after blocking, one still has to identify the cyclic-sector summands that carry the normal blocks. This sector step is now available one block at a time in Theorem&#160;<a href="ch-canonical.html#thm:has_primitive_irreducible_cyclic_sectors_tp_irr">11.81</a>, which gives trace-preserving primitive tensor-irreducible sectors for each trace-preserving irreducible live block. </p>
-<p>Thus the remaining reduction task in this chapter is not to prove irreducibility of those cyclic sectors from scratch. It is to assemble all per-block cyclic sector decompositions at one common physical blocking length, transport the original block weights to the resulting sectors, and thread the existing zero-tail bookkeeping through that common-length statement. </p>
+  <p> The canonical-form proof in the MPS literature first separates the nilpotent part, which contributes only to the zero-length trace, from the live part. The live tensor is decomposed into irreducible blocks and each block is put in trace-preserving gauge. If such a block has period \(m\), one blocks \(m\) sites and restricts the blocked tensor to the cyclic spectral sectors. The resulting sector tensors are the normal blocks used later: they are trace-preserving, primitive, irreducible, and have positive bond dimension. For a finite family of live blocks, the paper then chooses one common multiple of all periods so that every sector lives over the same blocked physical alphabet. This is the construction of <span class="cite">
+	[
+	
+	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
+	, §2.3 and Appendix&#160;A
+	]
+</span>, and it is the canonical-form input used before the basis-of-normal-tensors argument in <span class="cite">
+	[
+	
+	<a href="sect0001.html#Cirac2021Matrix" >CPGSV21</a>
+	, Proposition&#160;IV.4 and Corollary&#160;IV.5
+	]
+</span>. </p>
+<p>The formalization has already separated these steps. Theorem&#160;<a href="ch-canonical.html#thm:tp_gauge_arbitrary">11.48</a> gives the zero-tail block together with trace-preserving irreducible live blocks, and Theorem&#160;<a href="ch-canonical.html#thm:ft_after_blocking_per_block_cyclic_live_zero_tail">11.166</a> applies the cyclic-sector construction to each live block while keeping the positive-length MPV equality and the \(N=0\) bookkeeping. Theorem&#160;<a href="ch-canonical.html#thm:exists_common_blocked_cyclic_sector_family">11.88</a> then replaces the different sector periods in a finite live family by one common blocking length. The supporting blocking and transport results, including Theorem&#160;<a href="ch-canonical.html#thm:iterated_blocking_samempv_reindex">11.59</a>, identify iterated blocking with one blocking by the product length, up to the evident relabeling of physical words. </p>
+<p>What remains is a single normal-canonical-form statement for the whole blocked live tensor. One must prove that, after the common blocking length is chosen, the weighted direct sum of the original live blocks is MPV-equivalent to the weighted direct sum of all common-length cyclic sectors, with the original weights attached to the corresponding sectors and with the zero-tail equations unchanged. The current common-sector theorem records this information one live block at a time; it does not yet assemble the weighted direct sum needed by the equal-case theorem. A later comparison of two equal MPV families also needs a finite-length span statement for these common-length live sectors, obtained after any additional blocking needed for injectivity. </p>
 <p>The sorted normal-canonical-form theorem, Theorem&#160;<a href="ch-canonical.html#thm:bnt_sorted_ncf">11.118</a>, assumes pairwise distinct nonzero weight norms. This is a useful special form after sorting. Equal-norm families require the basis-of-normal-tensors and multiplicity comparison developed later, rather than an artificial separation of equal weight norms. </p>
 
   </div>
