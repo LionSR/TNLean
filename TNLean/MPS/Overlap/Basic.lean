@@ -65,6 +65,78 @@ lemma mpvOverlap_eq_star_mpvInner {d D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B 
   -- Expand `mpvInner` as a sum, then take `star` termwise.
   simp [mpvOverlap, mpvInner_eq_sum, star_sum, mul_comm]
 
+/-- If `V(A_total)` expands in a finite family `A j`, then the overlap with `B` expands
+with the same coefficients. -/
+lemma mpvOverlap_eq_sum_of_decomp_left
+    {d : ℕ} {Dtot : ℕ} {g : ℕ} {dim : Fin g → ℕ}
+    (A_total : MPSTensor d Dtot)
+    (A : (j : Fin g) → MPSTensor d (dim j))
+    {N : ℕ} (c : Fin g → ℂ)
+    (hdecomp : ∀ σ : Fin N → Fin d,
+      mpv A_total σ = ∑ j : Fin g, c j * mpv (A j) σ)
+    {D' : ℕ} (B : MPSTensor d D') :
+    mpvOverlap (d := d) A_total B N =
+      ∑ j : Fin g, c j * mpvOverlap (d := d) (A j) B N := by
+  classical
+  calc
+    mpvOverlap (d := d) A_total B N =
+        ∑ σ : Cfg d N, (∑ j : Fin g, c j * mpv (A j) σ) * star (mpv B σ) := by
+          simp only [mpvOverlap]
+          congr 1
+          ext σ
+          rw [hdecomp σ]
+    _ = ∑ σ : Cfg d N,
+          ∑ j : Fin g, c j * (mpv (A j) σ * star (mpv B σ)) := by
+          congr 1
+          ext σ
+          rw [Finset.sum_mul]
+          congr 1
+          ext j
+          ring
+    _ = ∑ j : Fin g,
+          ∑ σ : Cfg d N, c j * (mpv (A j) σ * star (mpv B σ)) := by
+          rw [Finset.sum_comm]
+    _ = ∑ j : Fin g, c j * ∑ σ : Cfg d N, mpv (A j) σ * star (mpv B σ) := by
+          refine Finset.sum_congr rfl ?_
+          intro j _
+          rw [Finset.mul_sum]
+    _ = ∑ j : Fin g, c j * mpvOverlap (d := d) (A j) B N := by
+          simp [mpvOverlap]
+
+/-- Proportionality of MPVs at a fixed system size upgrades to proportionality of overlaps. -/
+lemma mpvOverlap_eq_mul_of_mpv_eq_mul
+    {d : ℕ} {D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    {N : ℕ} (c : ℂ) (h : ∀ σ : Fin N → Fin d, mpv A σ = c * mpv B σ)
+    {D' : ℕ} (C : MPSTensor d D') :
+    mpvOverlap (d := d) A C N = c * mpvOverlap (d := d) B C N := by
+  classical
+  simp only [mpvOverlap]
+  rw [Finset.mul_sum]
+  congr 1
+  ext σ
+  rw [h σ]
+  ring
+
+/-- Conjugate symmetry for `mpvOverlap`. -/
+lemma mpvOverlap_star_swap {d D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (N : ℕ) :
+    star (mpvOverlap (d := d) A B N) = mpvOverlap (d := d) B A N := by
+  classical
+  simp [mpvOverlap, star_sum, star_mul]
+
+/-- If an overlap tends to zero along any sequence of lengths, then the swapped overlap also
+tends to zero along the same sequence. -/
+lemma tendsto_mpvOverlap_zero_swap {d D₁ D₂ : ℕ} {ι : Type*} {l : Filter ι}
+    {N : ι → ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (h : Filter.Tendsto (fun i => mpvOverlap (d := d) A B (N i)) l (nhds 0)) :
+    Filter.Tendsto (fun i => mpvOverlap (d := d) B A (N i)) l (nhds 0) := by
+  have hstar : Filter.Tendsto (fun i => star (mpvOverlap (d := d) A B (N i))) l
+      (nhds (0 : ℂ)) := by
+    simpa only [RCLike.star_def, star_zero] using h.star
+  refine hstar.congr ?_
+  intro i
+  simpa only [RCLike.star_def] using mpvOverlap_star_swap (d := d) A B (N i)
+
 /-- Positive-length MPV equality on both sides upgrades to positive-length overlap equality. -/
 theorem mpvOverlap_eq_of_pos_mpv_eq
     {d D₁ D₁' D₂ D₂' : ℕ}

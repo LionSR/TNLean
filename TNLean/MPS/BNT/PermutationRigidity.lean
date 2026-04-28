@@ -36,61 +36,6 @@ open Filter Finset
 
 namespace MPSTensor
 
-/-! ## Overlap algebra for decompositions -/
-
-/-- If `V(A_total)` expands in a finite family `A j`, then the overlap with `B` expands
-with the same coefficients.
-
-Intended for reuse by canonical-form bridge arguments (e.g. the equal-norm
-nondecay proof in `EqualNormBridge`). -/
-lemma mpvOverlap_eq_sum_of_decomp_left
-    {d : ℕ} {Dtot : ℕ} {g : ℕ} {dim : Fin g → ℕ}
-    (A_total : MPSTensor d Dtot)
-    (A : (j : Fin g) → MPSTensor d (dim j))
-    {N : ℕ} (c : Fin g → ℂ)
-    (hdecomp : ∀ (σ : Fin N → Fin d),
-      mpv A_total σ = ∑ j : Fin g, c j * mpv (A j) σ)
-    {D' : ℕ} (B : MPSTensor d D') :
-    mpvOverlap (d := d) A_total B N =
-      ∑ j : Fin g, c j * mpvOverlap (d := d) (A j) B N := by
-  classical
-  -- Expand `mpvOverlap` and commute the finite sums over configurations and block indices.
-  calc
-    mpvOverlap (d := d) A_total B N =
-        ∑ σ : Cfg d N, (∑ j : Fin g, c j * mpv (A j) σ) * star (mpv B σ) := by
-          simp only [mpvOverlap]
-          congr 1; ext σ; rw [hdecomp σ]
-    _ = ∑ σ : Cfg d N, ∑ j : Fin g, c j * (mpv (A j) σ * star (mpv B σ)) := by
-          congr 1; ext σ; rw [Finset.sum_mul]; congr 1; ext j; ring
-    _ = ∑ j : Fin g, ∑ σ : Cfg d N, c j * (mpv (A j) σ * star (mpv B σ)) := by
-          -- Swap the two finite sums.
-          simpa only [mpv_eq, coeff_eq, RCLike.star_def] using
-            (Finset.sum_comm (s := (Finset.univ : Finset (Cfg d N)))
-              (t := (Finset.univ : Finset (Fin g)))
-              (f := fun σ j => c j * (mpv (A j) σ * star (mpv B σ))))
-    _ = ∑ j : Fin g, c j * ∑ σ : Cfg d N, mpv (A j) σ * star (mpv B σ) := by
-          -- Factor out the scalar `c j` from each inner sum.
-          refine Finset.sum_congr rfl ?_
-          intro j _
-          -- `Finset.mul_sum` is stated with an explicit membership binder; `simp` removes it.
-          simpa only [mpv_eq, coeff_eq, RCLike.star_def] using
-            (Finset.mul_sum (s := (Finset.univ : Finset (Cfg d N)))
-              (f := fun σ : Cfg d N => mpv (A j) σ * star (mpv B σ)) (a := c j)).symm
-    _ = ∑ j : Fin g, c j * mpvOverlap (d := d) (A j) B N := by
-          simp [mpvOverlap]
-
-/-- Proportionality of MPVs at a fixed system size upgrades to proportionality of overlaps. -/
-private lemma mpvOverlap_eq_mul_of_mpv_eq_mul
-    {d : ℕ} {D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂)
-    {N : ℕ} (c : ℂ) (h : ∀ (σ : Fin N → Fin d), mpv A σ = c * mpv B σ)
-    {D' : ℕ} (C : MPSTensor d D') :
-    mpvOverlap (d := d) A C N = c * mpvOverlap (d := d) B C N := by
-  classical
-  -- Factor out the scalar `c` from the overlap sum.
-  simp only [mpvOverlap]
-  rw [Finset.mul_sum]
-  congr 1; ext σ; rw [h σ]; ring
-
 /-! ## Key paper step: some mixed overlap does not decay -/
 
 /--
@@ -222,14 +167,6 @@ For the block-count equality we also need the converse direction: for each `A j`
 with a `B k` does not decay.
 -/
 
-/-- Conjugate symmetry for `mpvOverlap`. -/
-private lemma mpvOverlap_star_swap {d D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂)
-    (N : ℕ) :
-    star (mpvOverlap (d := d) A B N) = mpvOverlap (d := d) B A N := by
-  classical
-  -- Take `star` of the defining sum and simplify termwise.
-  simp [mpvOverlap, star_sum, star_mul]
-
 /--
 **Key step of Thm 4.4 (paper route), opposite direction.**
 
@@ -276,13 +213,7 @@ theorem exists_nonzero_overlap_of_proportional_decomp_left
   have hall_swap : ∀ k : Fin gB,
       Tendsto (fun N => mpvOverlap (d := d) (B k) (A j) N) atTop (nhds 0) := by
     intro k
-    have hstar : Tendsto (fun N => star (mpvOverlap (d := d) (A j) (B k) N))
-        atTop (nhds (0 : ℂ)) := by
-      simpa only [RCLike.star_def, star_zero] using (hall k).star
-    refine hstar.congr ?_
-    intro N
-    simpa only [RCLike.star_def] using
-      (mpvOverlap_star_swap (d := d) (A := A j) (B := B k) N)
+    exact tendsto_mpvOverlap_zero_swap (A := A j) (B := B k) (hall k)
   -- Step 1: show `mpvOverlap B_total (A j) → 0` using the B-decomposition.
   have hB0 : Tendsto (fun N => mpvOverlap (d := d) B_total (A j) N) atTop (nhds (0 : ℂ)) := by
     have hEq : ∀ N,
