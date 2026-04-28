@@ -2,7 +2,7 @@
 
 ## Scope and issue-thread check
 
-This branch starts the next non-Gemma bridge after merged PR #984.  Before
+This branch starts the next non-Gemma connection after merged PR #984.  Before
 writing statements I read the bodies and comments for issues #970, #944, #969,
 #942, and #652, and inspected the merged PR #984 diff.
 
@@ -16,8 +16,8 @@ The issue-thread conclusions used here are:
   common MPV phase family.
 - #944 is now reduced to the finite-length span comparison for the original live
   block families, after the one-sided BNT representative-span transport.
-- #970 asks for the bridge from the common live-sector construction to that span
-  comparison.  The mathematically precise input is a common family together with
+- #970 asks for the comparison step from the common live-sector construction to
+  that span comparison.  The mathematically precise input is a common family together with
   surjective class maps from both sides and MPV-phase equivalences for every live
   block.
 - #969 and #652 still require a later common injectivity/Wielandt blocking stage
@@ -47,8 +47,8 @@ New declarations:
 
 - `MPSTensor.MPVCommonPhaseCover`: a data record for two live-block families.
   It stores a finite common block family, class maps from both live families to
-  the common family, MPV-phase equivalences from each live block to its common
-  representative, and surjectivity of both maps.
+  the common family, MPV-phase equivalences between each live block and its
+  common representative, and surjectivity of both maps.
 - `MPSTensor.MPVCommonPhaseCover.span_eq`: applies the already-merged span
   theorem to prove equality of the two finite-length live-block MPV spans from
   this common-cover data.
@@ -80,7 +80,7 @@ Added entries for:
 
 ## Remaining paper input
 
-The full #970/#944 bridge is not closed by this branch.  The remaining
+The full #970/#944 comparison is not closed by this branch.  The remaining
 mathematical input is the construction, from the structural `SameMPV₂` reduction
 and the common-blocking output, of:
 
@@ -91,5 +91,5 @@ and the common-blocking output, of:
 4. exact zero-tail bookkeeping at the final common blocking length.
 
 Once those data are available, `MPVCommonPhaseCover.span_eq` discharges the
-finite-length span equality required by #944, and the new assembly wrapper feeds
-that span equality into the existing after-blocking sector comparison theorem.
+finite-length span equality required by #944, and the new assembly reformulation
+feeds that span equality into the existing after-blocking sector comparison theorem.
