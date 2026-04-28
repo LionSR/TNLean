@@ -10,7 +10,10 @@ on:
       - 'lean-toolchain'
       - 'lake-manifest.json'
       - 'blueprint/src/**'
+      - '.github/requirements/**'
+      - '.github/workflows/blueprint.yml'
       - 'home_page/**'
+      - 'scripts/blueprint_bibtex.py'
       - 'scripts/write_badges.py'
   workflow_dispatch:
 
@@ -36,13 +39,16 @@ jobs:
           python-version: '3.12'
 
       - name: Install system dependencies
-        run: sudo apt-get update && sudo apt-get install -y graphviz libgraphviz-dev texlive-binaries
+        run: sudo apt-get update && sudo apt-get install -y graphviz libgraphviz-dev
 
       - name: Install leanblueprint
-        run: pip install leanblueprint
+        run: pip install leanblueprint -r .github/requirements/blueprint-python.txt
 
       - name: Write status badges
         run: python3 scripts/write_badges.py
+
+      - name: Build blueprint bibliography
+        run: python3 scripts/blueprint_bibtex.py
 
       - name: Build blueprint
         run: |
