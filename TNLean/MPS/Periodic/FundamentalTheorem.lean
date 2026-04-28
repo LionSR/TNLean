@@ -374,7 +374,7 @@ equivalence.
 **Remaining proof obligations.** `periodicOverlapDichotomy` is stated and callable, but
 its proof in `TNLean/MPS/Periodic/Overlap.lean` still contains several
 admitted sub-lemmas. Downstream users of this theorem inherit those obligations — this
-variant is a convenience wrapper, not an unconditional strengthening. -/
+variant is a convenience reformulation, not an unconditional strengthening. -/
 theorem fundamentalTheorem_periodic_proportional_of_isPeriodic
     (A : (j : Fin rA) → MPSTensor d (dimA j))
     (B : (k : Fin rB) → MPSTensor d (dimB k))
@@ -740,7 +740,7 @@ def PeriodicOverlapHypothesis.ofProportionalDecomp
 
 This theorem converts proportional split-data for two periodic block families into the
 `PeriodicOverlapHypothesis` needed by `fundamentalTheorem_periodic_proportional`.
-It is the current formalized endpoint of the multi-block proportional-case argument:
+It is the current culminating theorem for the multi-block proportional-case argument:
 all overlap-dichotomy consequences are discharged internally, while the remaining
 residual hypothesis is the explicit coefficient-convergence / proportionality data
 for the assembled tensors.
@@ -814,7 +814,7 @@ theorem zgauge_construction
 
 /-- **Per-block Z-gauge (Theorem 3.8, step 7 instantiated for `Fin r`).**
 
-Convenience wrapper: given matched sector weights indexed by `Fin r` whose `m`-th powers
+Convenience reformulation: given matched sector weights indexed by `Fin r` whose `m`-th powers
 agree and whose denominators are nonzero, produces the diagonal Z-gauge matrix. -/
 theorem perBlock_zgauge_of_power_eq
     {r : ℕ} (m : ℕ) (μ ν : Fin r → ℂ)
@@ -828,7 +828,7 @@ theorem perBlock_zgauge_of_power_eq
 /-- **Weight multiset recovery via Newton-Girard (Theorem 3.8, step 6).**
 
 If two weight families have equal power sums for all positive exponents, they determine
-the same multiset. Direct wrapper around `power_sum_eq_implies_multiset_eq`. -/
+the same multiset. Direct reformulation of `power_sum_eq_implies_multiset_eq`. -/
 theorem weight_multisets_eq_of_power_sums_eq
     {r : ℕ} (μ ν : Fin r → ℂ)
     (h : ∀ k : ℕ, 0 < k → ∑ i : Fin r, μ i ^ k = ∑ i : Fin r, ν i ^ k) :
@@ -884,7 +884,7 @@ If two tensors in irreducible form with non-repeating blocks satisfy the periodi
 dichotomy, their bases of periodic tensors match: equal block counts, a bijection, and
 per-block `HetRepeatedBlocks` equivalence.
 
-Convenience wrapper around `fundamentalTheorem_periodic_proportional` that extracts block
+Convenience reformulation of `fundamentalTheorem_periodic_proportional` that extracts block
 families from `IsIrreducibleForm`.
 
 **Conditional on #81**: The `PeriodicOverlapHypothesis` parameter will be discharged once

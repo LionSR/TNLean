@@ -213,13 +213,7 @@ theorem exists_nonzero_overlap_of_proportional_decomp_left
   have hall_swap : ∀ k : Fin gB,
       Tendsto (fun N => mpvOverlap (d := d) (B k) (A j) N) atTop (nhds 0) := by
     intro k
-    have hstar : Tendsto (fun N => star (mpvOverlap (d := d) (A j) (B k) N))
-        atTop (nhds (0 : ℂ)) := by
-      simpa only [RCLike.star_def, star_zero] using (hall k).star
-    refine hstar.congr ?_
-    intro N
-    simpa only [RCLike.star_def] using
-      (mpvOverlap_star_swap (d := d) (A := A j) (B := B k) N)
+    exact tendsto_mpvOverlap_zero_swap (A := A j) (B := B k) (hall k)
   -- Step 1: show `mpvOverlap B_total (A j) → 0` using the B-decomposition.
   have hB0 : Tendsto (fun N => mpvOverlap (d := d) B_total (A j) N) atTop (nhds (0 : ℂ)) := by
     have hEq : ∀ N,

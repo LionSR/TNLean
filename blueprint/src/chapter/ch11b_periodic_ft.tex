@@ -667,9 +667,10 @@ The following is Theorem~3.8 (``equal case'') of \cite{DeLasCuevas2017Irreducibl
     \lean{MPSTensor.fundamentalTheorem_periodic_proportional_ofProportionalDecomp}
     There is also a proportional-case version of the periodic Fundamental Theorem
     (Theorem~3.4, ``proportional case'', in \cite{DeLasCuevas2017Irreducible}).
-    The current Lean endpoint is a \emph{split-data} theorem: if one has periodic
-    block families together with explicit decompositions of two total MPV families
-    into those blocks, coefficient arrays converging to nonzero limits, and
+    The current formulation is a \emph{split-data} theorem: if one has periodic
+    block families whose distinct blocks are pairwise non-repeating, together with
+    explicit decompositions of two total MPV families into those blocks, coefficient
+    arrays converging to nonzero limits, and
     proportionality $\mathcal{V}(A_{\mathrm{tot}}) = \lambda_N
     \mathcal{V}(B_{\mathrm{tot}})$ with $\lambda_N \to \lambda \neq 0$, then the
     bases of periodic tensors match up to the same repeated-block/gauge freedom as
