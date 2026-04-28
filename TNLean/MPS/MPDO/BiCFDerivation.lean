@@ -696,12 +696,11 @@ theorem pair_mul_mem_span_pairWordTuple_add {D₁ D₂ : ℕ}
         rw [hEq]
         exact Submodule.subset_span ⟨Fin.append u v, rfl⟩
     | zero =>
+        let PairMat := Matrix (Fin D₁) (Fin D₁) ℂ × Matrix (Fin D₂) (Fin D₂) ℂ
         have hzero :
-            ((pairWordTuple A B L u).1 *
-                (0 : Matrix (Fin D₁) (Fin D₁) ℂ × Matrix (Fin D₂) (Fin D₂) ℂ).1,
-              (pairWordTuple A B L u).2 *
-                (0 : Matrix (Fin D₁) (Fin D₁) ℂ × Matrix (Fin D₂) (Fin D₂) ℂ).2) = 0 := by
-          simp
+            ((pairWordTuple A B L u).1 * (0 : PairMat).1,
+              (pairWordTuple A B L u).2 * (0 : PairMat).2) = 0 := by
+          simp [PairMat]
         rw [hzero]
         exact Submodule.zero_mem _
     | add N₁ N₂ _ _ hN₁ hN₂ =>
@@ -753,7 +752,7 @@ theorem pair_mul_mem_span_pairWordTuple_add {D₁ D₂ : ℕ}
 is available at every padding length needed to reach the target length.
 
 The padding hypothesis is the Burnside-Jacobson input deferred to a later step. -/
-theorem pairWordTupleSpanTop_of_pairCumulativeWordTupleSpanTop_of_identityPadding
+theorem pairWordTupleSpanTop_of_pairCumulativeWordTupleSpanTop_of_identity_padding
     {D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂) {S T : ℕ}
     (hST : S ≤ T)
     (hCum : PairCumulativeWordTupleSpanTop A B S)
@@ -793,8 +792,8 @@ theorem pairWordTupleSpanTop_of_pairCumulativeWordTupleSpanTop_of_identityPaddin
   simpa [hprod] using hmul
 
 /-- Trace-separation version of
-`pairWordTupleSpanTop_of_pairCumulativeWordTupleSpanTop_of_identityPadding`. -/
-theorem pairTraceSeparatingAt_of_pairTraceSeparatingUpTo_of_identityPadding
+`pairWordTupleSpanTop_of_pairCumulativeWordTupleSpanTop_of_identity_padding`. -/
+theorem pairTraceSeparatingAt_of_pairTraceSeparatingUpTo_of_identity_padding
     {D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂) {S T : ℕ}
     (hST : S ≤ T)
     (hSep : PairTraceSeparatingUpTo A B S)
@@ -803,7 +802,7 @@ theorem pairTraceSeparatingAt_of_pairTraceSeparatingUpTo_of_identityPadding
         Submodule.span ℂ (Set.range (pairWordTuple A B (T - l)))) :
     PairTraceSeparatingAt A B T :=
   pairTraceSeparatingAt_of_pairWordTupleSpanTop A B
-    (pairWordTupleSpanTop_of_pairCumulativeWordTupleSpanTop_of_identityPadding
+    (pairWordTupleSpanTop_of_pairCumulativeWordTupleSpanTop_of_identity_padding
       A B hST (pairCumulativeWordTupleSpanTop_of_pairTraceSeparatingUpTo A B hSep) hPad)
 
 /-- Pair product-span at length `S` gives a length-`S` selector for the first
