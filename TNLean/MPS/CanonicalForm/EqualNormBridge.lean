@@ -106,9 +106,9 @@ Theorem matching, etc.).
 * `SectorBasisPreMatching.commonPhaseCover` — turns BNT pre-matching data into
   a common MPV phase cover, hence into finite-length basis-span equality.
 
-* `nonempty_mpvCommonPhaseCover_of_separated_normalCFBNT_data` — reads the
-  span-equality-free BNT proportional-decomposition comparison as common-cover
-  existence.
+* `nonempty_mpvCommonPhaseCover_of_separated_normalCFBNT_data` — the
+  span-equality-free BNT proportional-decomposition comparison gives
+  common-cover existence.
 
 ## References
 
@@ -742,11 +742,12 @@ theorem nonempty_mpvCommonPhaseCover_of_proportionalDecompositionConclusion
   · intro j
     exact ⟨perm j, by simp⟩
 
-/-- Separated normal BNT data and a proportional decomposition produce a common MPV phase cover.
+/-- Separated normal canonical-form data and a proportional decomposition produce a common MPV
+phase cover.
 
 The proof uses the BNT comparison theorem to obtain a permutation and gauge phases between the
-basis blocks, then reads that matching as a common MPV phase cover. It does not use a
-finite-length span equality hypothesis. -/
+basis blocks; applying the proportional-decomposition cover theorem to that matching yields the
+common MPV phase cover. It does not use a finite-length span equality hypothesis. -/
 theorem nonempty_mpvCommonPhaseCover_of_separated_normalCFBNT_data
     {rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]

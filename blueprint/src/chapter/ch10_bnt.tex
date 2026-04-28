@@ -50,10 +50,20 @@ The main references are
 	large $N$ it is invertible, so the MPV states are linearly independent.
 \end{proof}
 
+\begin{definition}[No gauge-phase-equivalent distinct blocks]%
+\label{def:blocks_not_gauge_phase_equiv}
+	\lean{MPSTensor.BlocksNotGaugePhaseEquiv}
+	\leanok
+	\uses{def:gauge_phase_equiv}
+	A finite block family has no gauge-phase-equivalent distinct blocks when,
+	for any two distinct indices with the same bond dimension, the corresponding
+	blocks are not gauge-phase equivalent.
+\end{definition}
+
 \begin{definition}[Canonical form with BNT separation]\label{def:cf_bnt}
 	\lean{MPSTensor.IsCanonicalFormBNT}
 	\leanok
-	\uses{def:is_canonical_form, def:gauge_phase_equiv}
+	\uses{def:is_canonical_form, def:blocks_not_gauge_phase_equiv}
 	A family is in \emph{canonical form with BNT separation}
 	if it satisfies Definition~\ref{def:is_canonical_form} and,
 	in addition:
@@ -88,7 +98,7 @@ The main references are
 
 \begin{definition}[Normal canonical form with BNT separation]\label{def:normal_cf_bnt}
 	\lean{MPSTensor.IsNormalCanonicalFormBNT}\leanok
-	\uses{def:is_normal_canonical_form, def:gauge_phase_equiv}
+	\uses{def:is_normal_canonical_form, def:blocks_not_gauge_phase_equiv}
 	A family is in \emph{normal canonical form with BNT separation}
 	if it satisfies Definition~\ref{def:is_normal_canonical_form}
 	and, in addition:
