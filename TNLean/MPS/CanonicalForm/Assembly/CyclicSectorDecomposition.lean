@@ -1202,8 +1202,8 @@ end CommonBlockedCyclicSectorFamily
 admits one common physical blocking length for all those sectors.
 
 This theorem chooses the least common multiple of the per-live-block period-removal
-lengths.  Each cyclic sector is then blocked by the corresponding quotient, cast
-to the common physical alphabet `blockPhysDim d p`, and collected into one finite
+lengths.  Each cyclic sector is then blocked by the corresponding quotient,
+identified with the common physical alphabet, and collected into one finite
 flattened family.  Trace preservation, primitive transfer maps, tensor
 irreducibility, positive bond dimensions, nonzero unit weights, and the per-block
 iterated-blocking MPV compatibility conditions are all retained. -/
