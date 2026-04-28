@@ -752,6 +752,37 @@ single weighted block.
 	live-block span equality through the two representative-span identities.
 \end{proof}
 
+\begin{definition}[MPV phase equivalence for live blocks]
+\label{def:mpv_block_phase_equiv}
+	\lean{MPSTensor.MPVBlockPhaseEquiv}
+	\leanok
+	\uses{def:mpv}
+	Two live blocks $A$ and $B$ are MPV-phase equivalent if there is a nonzero
+	scalar $\zeta$ such that, for every system size $N$ and every physical word,
+	the MPV coefficient of $B$ equals $\zeta^N$ times the MPV coefficient of $A$.
+	The two bond dimensions are allowed to differ.
+\end{definition}
+
+\begin{lemma}[Common MPV phase cover gives live-block span equality]%
+\label{lem:live_block_span_eq_of_common_phase_cover}
+	\lean{MPSTensor.mpv_span_eq_of_common_phase_cover}
+	\leanok
+	\uses{def:mpv_block_phase_equiv, def:mpv_state}
+	Let two finite live-block families map onto a third finite family of common
+	blocks. Suppose both maps are surjective, and each live block has finite-length
+	MPV vectors equal to a nonzero scalar power times the MPV vectors of its common
+	block. Then, for every system size, the two live-block families span the same
+	MPV subspace.
+\end{lemma}
+
+\begin{proof}
+	\leanok
+	Each live-block MPV vector lies in the span of the common family because it is a
+	scalar multiple of its common block's MPV vector. Surjectivity gives the reverse
+	inclusion, so each live-block span equals the common span; transitivity gives
+	the equality of the two live-block spans.
+\end{proof}
+
 \begin{theorem}[Heterogeneous sector comparison via a bundled matching witness]%
 \label{thm:route_b_hetero_sector_matching}
 	\lean{MPSTensor.fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_sectorMatching}
@@ -894,6 +925,32 @@ single weighted block.
 	Theorem~\ref{thm:sector_basis_overlap_span_to_matching} produces the sector
 	basis matching and Theorem~\ref{thm:route_b_hetero_sector_matching} gives the
 	sector-weight conclusion.
+\end{proof}
+
+\begin{theorem}[Common live blocks with a common MPV phase cover give sector comparison]%
+\label{thm:after_blocking_sector_common_blocks_phase_cover}
+	\lean{MPSTensor.fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_phaseCover}
+	\leanok
+	\uses{lem:live_block_span_eq_of_common_phase_cover,
+		thm:after_blocking_sector_common_blocks_block_span}
+	Let $A$ and $B$ have the same MPV family, and fix exact live decompositions at a
+	common blocking period as in
+	Theorem~\ref{thm:after_blocking_sector_common_blocks_block_span}. Assume the live
+	blocks are trace-preserving, primitive, irreducible, injective, and have nonzero
+	weights. Suppose moreover that both live-block families map surjectively to one
+	common family of blocks, and that every live block is MPV-phase equivalent to its
+	image in the common family. Then the same sector comparison conclusion as in
+	Theorem~\ref{thm:after_blocking_sector_common_blocks_block_span} holds.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{lem:live_block_span_eq_of_common_phase_cover,
+		thm:after_blocking_sector_common_blocks_block_span}
+	Lemma~\ref{lem:live_block_span_eq_of_common_phase_cover} converts the common
+	MPV phase cover into equality of the live-block finite-length spans.
+	Theorem~\ref{thm:after_blocking_sector_common_blocks_block_span} then applies
+	without any additional sector-basis assumptions.
 \end{proof}
 
 \begin{lemma}[Zero-tail cancellation]\label{lem:sameMPV2_live_of_zeroTail_eq}

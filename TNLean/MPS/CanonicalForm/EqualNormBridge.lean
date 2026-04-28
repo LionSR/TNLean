@@ -97,6 +97,9 @@ Theorem matching, etc.).
   signature-compatible reformulation retaining the TP / primitive / irreducible
   inputs expected by the one-sided BNT construction chain.
 
+* `mpv_span_eq_of_common_phase_cover` — finite-length live-block span equality
+  from a common family covered surjectively up to MPV phase.
+
 ## References
 
 - [CPGSV17, Lemma A.2]: Overlap dichotomy for Normal Tensors.
@@ -396,45 +399,99 @@ theorem bnt_grouping_single_norm_class_of_tp_primitive_irr_blocks
 
 /-! ### §4. MPV phase-class representatives -/
 
-/-- MPV phase equivalence for a dependent block family.
+/-- Heterogeneous MPV phase equivalence between two individual blocks.
 
-`MPVPhaseEquiv blocks j k` means that block `k` has the same MPV family as
-block `j` after multiplying length-`N` vectors by a nonzero scalar power
-`ζ ^ N`.  Gauge-phase equivalence implies this relation, and quotienting a
-finite family by this relation is enough to absorb all repeated scalar-power
-copies into sector weights. -/
-def MPVPhaseEquiv {r : ℕ} {dim : Fin r → ℕ}
-    (blocks : (k : Fin r) → MPSTensor d (dim k)) (j k : Fin r) : Prop :=
+`MPVBlockPhaseEquiv A B` means that the finite-chain MPV of `B` is a nonzero
+scalar power times the finite-chain MPV of `A`, uniformly in the chain length and
+physical word.  The bond dimensions of `A` and `B` may differ. -/
+def MPVBlockPhaseEquiv {d DA DB : ℕ} (A : MPSTensor d DA) (B : MPSTensor d DB) : Prop :=
   ∃ ζ : ℂ, ζ ≠ 0 ∧ ∀ (N : ℕ) (σ : Fin N → Fin d),
-    mpv (blocks k) σ = ζ ^ N * mpv (blocks j) σ
+    mpv B σ = ζ ^ N * mpv A σ
 
-/-- MPV phase equivalence is reflexive. -/
-lemma MPVPhaseEquiv.refl {r : ℕ} {dim : Fin r → ℕ}
-    (blocks : (k : Fin r) → MPSTensor d (dim k)) (j : Fin r) :
-    MPVPhaseEquiv blocks j j := by
+namespace MPVBlockPhaseEquiv
+
+/-- Reflexivity of heterogeneous MPV phase equivalence. -/
+lemma refl {D : ℕ} (A : MPSTensor d D) : MPVBlockPhaseEquiv A A := by
   exact ⟨1, one_ne_zero, fun N σ => by simp⟩
 
-/-- MPV phase equivalence is symmetric. -/
-lemma MPVPhaseEquiv.symm {r : ℕ} {dim : Fin r → ℕ}
-    (blocks : (k : Fin r) → MPSTensor d (dim k)) {j k : Fin r}
-    (h : MPVPhaseEquiv blocks j k) : MPVPhaseEquiv blocks k j := by
+/-- Symmetry of heterogeneous MPV phase equivalence. -/
+lemma symm {DA DB : ℕ} {A : MPSTensor d DA} {B : MPSTensor d DB}
+    (h : MPVBlockPhaseEquiv A B) : MPVBlockPhaseEquiv B A := by
   rcases h with ⟨ζ, hζ, hmpv⟩
   refine ⟨ζ⁻¹, inv_ne_zero hζ, ?_⟩
   intro N σ
   rw [hmpv N σ]
   rw [inv_pow, ← mul_assoc, inv_mul_cancel₀ (pow_ne_zero N hζ), one_mul]
 
-/-- MPV phase equivalence is transitive. -/
-lemma MPVPhaseEquiv.trans {r : ℕ} {dim : Fin r → ℕ}
-    (blocks : (k : Fin r) → MPSTensor d (dim k)) {i j k : Fin r}
-    (hij : MPVPhaseEquiv blocks i j) (hjk : MPVPhaseEquiv blocks j k) :
-    MPVPhaseEquiv blocks i k := by
-  rcases hij with ⟨ζ, hζ, hζmpv⟩
-  rcases hjk with ⟨η, hη, hηmpv⟩
+/-- Transitivity of heterogeneous MPV phase equivalence. -/
+lemma trans {DA DB DC : ℕ} {A : MPSTensor d DA} {B : MPSTensor d DB}
+    {C : MPSTensor d DC} (hAB : MPVBlockPhaseEquiv A B)
+    (hBC : MPVBlockPhaseEquiv B C) : MPVBlockPhaseEquiv A C := by
+  rcases hAB with ⟨ζ, hζ, hζmpv⟩
+  rcases hBC with ⟨η, hη, hηmpv⟩
   refine ⟨η * ζ, mul_ne_zero hη hζ, ?_⟩
   intro N σ
   rw [hηmpv N σ, hζmpv N σ, mul_pow]
   ring
+
+/-- Gauge-phase equivalence after a dimension cast gives heterogeneous MPV phase equivalence. -/
+lemma of_gaugePhaseEquiv_cast {DA DB : ℕ} (A : MPSTensor d DA) (B : MPSTensor d DB)
+    (hdim : DA = DB)
+    (hGPE : GaugePhaseEquiv (d := d)
+      (cast (congr_arg (MPSTensor d) hdim) A) B) :
+    MPVBlockPhaseEquiv A B := by
+  rcases hGPE with ⟨X, ζ, hζ, hX⟩
+  refine ⟨ζ, hζ, ?_⟩
+  intro N σ
+  rw [mpv_eq_pow_mul_of_gaugePhase
+    (A := cast (congr_arg (MPSTensor d) hdim) A) (B := B) X ζ hX N σ,
+    mpv_cast_dim hdim A N σ]
+
+/-- Heterogeneous MPV phase equivalence gives a scalar-power equality of MPV state vectors. -/
+lemma exists_mpvState_eq_smul {DA DB : ℕ} {A : MPSTensor d DA} {B : MPSTensor d DB}
+    (h : MPVBlockPhaseEquiv A B) (N : ℕ) :
+    ∃ ζ : ℂ, ζ ≠ 0 ∧ mpvState (d := d) B N = ζ ^ N • mpvState (d := d) A N := by
+  rcases h with ⟨ζ, hζ, hmpv⟩
+  refine ⟨ζ, hζ, ?_⟩
+  ext σ
+  simp only [PiLp.smul_apply, smul_eq_mul, mpvState_apply]
+  exact hmpv N σ
+
+end MPVBlockPhaseEquiv
+
+/-- MPV phase equivalence for a dependent block family.
+
+`MPVPhaseEquiv blocks j k` means that block `k` has the same MPV family as
+block `j` after multiplying length-`N` vectors by a nonzero scalar power
+`ζ ^ N`.  Gauge-phase equivalence implies this relation, and quotienting a
+finite family by this relation is enough to absorb all repeated scalar-power
+copies into sector weights.
+
+This is the family-indexed specialization of `MPVBlockPhaseEquiv`, so the
+homogeneous phase-class relation shares the heterogeneous block-level relation
+rather than duplicating it. -/
+def MPVPhaseEquiv {r : ℕ} {dim : Fin r → ℕ}
+    (blocks : (k : Fin r) → MPSTensor d (dim k)) (j k : Fin r) : Prop :=
+  MPVBlockPhaseEquiv (blocks j) (blocks k)
+
+/-- MPV phase equivalence is reflexive. -/
+lemma MPVPhaseEquiv.refl {r : ℕ} {dim : Fin r → ℕ}
+    (blocks : (k : Fin r) → MPSTensor d (dim k)) (j : Fin r) :
+    MPVPhaseEquiv blocks j j :=
+  MPVBlockPhaseEquiv.refl (blocks j)
+
+/-- MPV phase equivalence is symmetric. -/
+lemma MPVPhaseEquiv.symm {r : ℕ} {dim : Fin r → ℕ}
+    (blocks : (k : Fin r) → MPSTensor d (dim k)) {j k : Fin r}
+    (h : MPVPhaseEquiv blocks j k) : MPVPhaseEquiv blocks k j :=
+  MPVBlockPhaseEquiv.symm h
+
+/-- MPV phase equivalence is transitive. -/
+lemma MPVPhaseEquiv.trans {r : ℕ} {dim : Fin r → ℕ}
+    (blocks : (k : Fin r) → MPSTensor d (dim k)) {i j k : Fin r}
+    (hij : MPVPhaseEquiv blocks i j) (hjk : MPVPhaseEquiv blocks j k) :
+    MPVPhaseEquiv blocks i k :=
+  MPVBlockPhaseEquiv.trans hij hjk
 
 /-- A gauge-phase equivalence between equal-dimension blocks gives MPV phase equivalence. -/
 lemma MPVPhaseEquiv.of_gaugePhaseEquiv_cast {r : ℕ} {dim : Fin r → ℕ}
@@ -442,26 +499,101 @@ lemma MPVPhaseEquiv.of_gaugePhaseEquiv_cast {r : ℕ} {dim : Fin r → ℕ}
     (hdim : dim j = dim k)
     (hGPE : GaugePhaseEquiv (d := d)
       (cast (congr_arg (MPSTensor d) hdim) (blocks j)) (blocks k)) :
-    MPVPhaseEquiv blocks j k := by
-  rcases hGPE with ⟨X, ζ, hζ, hX⟩
-  refine ⟨ζ, hζ, ?_⟩
-  intro N σ
-  rw [mpv_eq_pow_mul_of_gaugePhase
-    (A := cast (congr_arg (MPSTensor d) hdim) (blocks j))
-    (B := blocks k) X ζ hX N σ,
-    mpv_cast_dim hdim (blocks j) N σ]
+    MPVPhaseEquiv blocks j k :=
+  MPVBlockPhaseEquiv.of_gaugePhaseEquiv_cast (blocks j) (blocks k) hdim hGPE
 
 /-- MPV phase equivalence gives a scalar-power equality of finite-length MPV state vectors. -/
 lemma MPVPhaseEquiv.exists_mpvState_eq_smul {r : ℕ} {dim : Fin r → ℕ}
     {blocks : (k : Fin r) → MPSTensor d (dim k)} {j k : Fin r}
     (h : MPVPhaseEquiv blocks j k) (N : ℕ) :
     ∃ ζ : ℂ, ζ ≠ 0 ∧
-      mpvState (d := d) (blocks k) N = ζ ^ N • mpvState (d := d) (blocks j) N := by
-  rcases h with ⟨ζ, hζ, hmpv⟩
-  refine ⟨ζ, hζ, ?_⟩
-  ext σ
-  simp only [PiLp.smul_apply, smul_eq_mul, mpvState_apply]
-  exact hmpv N σ
+      mpvState (d := d) (blocks k) N = ζ ^ N • mpvState (d := d) (blocks j) N :=
+  MPVBlockPhaseEquiv.exists_mpvState_eq_smul h N
+
+/-- Span inclusion for live blocks covered by another family up to MPV phase.
+
+For each block in `blocksA`, choose a block in `blocksB` whose MPV state differs only by a
+nonzero scalar power. Then, at every finite length, the MPV span of `blocksA` is contained in
+the MPV span of `blocksB`. -/
+theorem mpv_span_le_of_phase_cover {rA rB : ℕ}
+    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    (blocksA : (j : Fin rA) → MPSTensor d (dimA j))
+    (blocksB : (k : Fin rB) → MPSTensor d (dimB k))
+    (hcover : ∀ j : Fin rA, ∃ k : Fin rB, MPVBlockPhaseEquiv (blocksB k) (blocksA j))
+    (N : ℕ) :
+    Submodule.span ℂ (Set.range (fun j : Fin rA => mpvState (d := d) (blocksA j) N)) ≤
+    Submodule.span ℂ (Set.range (fun k : Fin rB => mpvState (d := d) (blocksB k) N)) := by
+  refine Submodule.span_le.2 ?_
+  intro v hv
+  rcases hv with ⟨j, rfl⟩
+  obtain ⟨k, hphase⟩ := hcover j
+  obtain ⟨ζ, _hζ, hstate⟩ := hphase.exists_mpvState_eq_smul N
+  have hmem : ζ ^ N • mpvState (d := d) (blocksB k) N ∈
+      Submodule.span ℂ (Set.range (fun k : Fin rB => mpvState (d := d) (blocksB k) N)) :=
+    Submodule.smul_mem _ _ (Submodule.subset_span ⟨k, rfl⟩)
+  simpa [hstate] using hmem
+
+/-- Mutual MPV-phase covers give equality of finite-length live-block MPV spans. -/
+theorem mpv_span_eq_of_mutual_phase_cover {rA rB : ℕ}
+    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    (blocksA : (j : Fin rA) → MPSTensor d (dimA j))
+    (blocksB : (k : Fin rB) → MPSTensor d (dimB k))
+    (hA_le_B : ∀ j : Fin rA, ∃ k : Fin rB, MPVBlockPhaseEquiv (blocksB k) (blocksA j))
+    (hB_le_A : ∀ k : Fin rB, ∃ j : Fin rA, MPVBlockPhaseEquiv (blocksA j) (blocksB k))
+    (N : ℕ) :
+    Submodule.span ℂ (Set.range (fun j : Fin rA => mpvState (d := d) (blocksA j) N)) =
+    Submodule.span ℂ (Set.range (fun k : Fin rB => mpvState (d := d) (blocksB k) N)) :=
+  le_antisymm
+    (mpv_span_le_of_phase_cover blocksA blocksB hA_le_B N)
+    (mpv_span_le_of_phase_cover blocksB blocksA hB_le_A N)
+
+/-- A surjective common MPV-phase quotient preserves finite-length live-block spans.
+
+This is the abstract span step needed after a common live-block theorem has identified a family
+of representative blocks and shown that every live block maps onto it up to MPV phase. -/
+theorem mpv_span_eq_of_surjective_phase_cover {r rC : ℕ}
+    {dim : Fin r → ℕ} {dimC : Fin rC → ℕ}
+    (blocks : (k : Fin r) → MPSTensor d (dim k))
+    (common : (c : Fin rC) → MPSTensor d (dimC c))
+    (classOf : Fin r → Fin rC)
+    (hphase : ∀ k : Fin r, MPVBlockPhaseEquiv (common (classOf k)) (blocks k))
+    (hsurj : Function.Surjective classOf)
+    (N : ℕ) :
+    Submodule.span ℂ (Set.range (fun k : Fin r => mpvState (d := d) (blocks k) N)) =
+    Submodule.span ℂ (Set.range (fun c : Fin rC => mpvState (d := d) (common c) N)) := by
+  refine mpv_span_eq_of_mutual_phase_cover blocks common ?_ ?_ N
+  · intro k
+    exact ⟨classOf k, hphase k⟩
+  · intro c
+    obtain ⟨k, hk⟩ := hsurj c
+    refine ⟨k, ?_⟩
+    rw [← hk]
+    exact (hphase k).symm
+
+/-- Two live-block families with a common surjective MPV-phase quotient have equal finite-length
+MPV spans.
+
+This theorem is deliberately independent of the sector weights.  It records the precise
+linear-algebra input needed by the exact-live after-blocking theorem once a future common-blocking
+result supplies a common family of live representatives and shows that both sides cover it. -/
+theorem mpv_span_eq_of_common_phase_cover {rA rB rC : ℕ}
+    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ} {dimC : Fin rC → ℕ}
+    (blocksA : (j : Fin rA) → MPSTensor d (dimA j))
+    (blocksB : (k : Fin rB) → MPSTensor d (dimB k))
+    (common : (c : Fin rC) → MPSTensor d (dimC c))
+    (classA : Fin rA → Fin rC) (classB : Fin rB → Fin rC)
+    (hAphase : ∀ j : Fin rA, MPVBlockPhaseEquiv (common (classA j)) (blocksA j))
+    (hBphase : ∀ k : Fin rB, MPVBlockPhaseEquiv (common (classB k)) (blocksB k))
+    (hAsurj : Function.Surjective classA) (hBsurj : Function.Surjective classB)
+    (N : ℕ) :
+    Submodule.span ℂ (Set.range (fun j : Fin rA => mpvState (d := d) (blocksA j) N)) =
+    Submodule.span ℂ (Set.range (fun k : Fin rB => mpvState (d := d) (blocksB k) N)) := by
+  calc
+    Submodule.span ℂ (Set.range (fun j : Fin rA => mpvState (d := d) (blocksA j) N))
+        = Submodule.span ℂ (Set.range (fun c : Fin rC => mpvState (d := d) (common c) N)) :=
+          mpv_span_eq_of_surjective_phase_cover blocksA common classA hAphase hAsurj N
+    _ = Submodule.span ℂ (Set.range (fun k : Fin rB => mpvState (d := d) (blocksB k) N)) :=
+          (mpv_span_eq_of_surjective_phase_cover blocksB common classB hBphase hBsurj N).symm
 
 /-- Equivalence relation on block indices given by MPV phase equivalence. -/
 def mpvPhaseSetoid {r : ℕ} {dim : Fin r → ℕ}
