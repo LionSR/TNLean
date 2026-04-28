@@ -1587,7 +1587,13 @@ The following results separate the zero blocks from the
 
 \begin{proof}\leanok
 	\uses{thm:tp_primitive_irreducible_extra_blocking,
-		thm:samempv_blocking_distributes}
+		thm:samempv_blocking_distributes,
+		thm:iterated_blocking_phys_dim,
+		thm:samempv_cast_phys_dim,
+		thm:tensor_from_blocks_cast_phys_dim,
+		thm:left_canonical_cast_phys_dim,
+		thm:primitive_transfer_cast_phys_dim,
+		thm:irreducible_tensor_cast_phys_dim}
 	Choose the least common multiple $p$ of the per-block periods $m_k$ and write
 	$p=m_k e_k$.  Apply the extra-blocking theorem to each cyclic sector for the
 	positive length $e_k$.  The MPV equivalence is obtained by blocking the
