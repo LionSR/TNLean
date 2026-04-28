@@ -81,7 +81,7 @@ _natbib.bibliography.loadBibliographyFile = _patched_load_bibliography_file
 bibitem = _natbib.thebibliography.bibitem
 
 
-def _fallback_citation(self, *, parenthetical: bool):
+def _fallback_citation(self, *, parenthetical: bool, include_prenote: bool):
     """Render unresolved natbib citations without producing bare ``()``.
 
     The ordering mirrors the corresponding natbib citation shape for the
@@ -90,19 +90,19 @@ def _fallback_citation(self, *, parenthetical: bool):
     spacing and separator.
     """
 
+    keys = [_stringify_tex_item(key) for key in self.attributes.get("bibkeys", [])]
     if os.environ.get("TNLEAN_FAIL_ON_CITATION_FALLBACK"):
-        keys = [_stringify_tex_item(key) for key in self.attributes.get("bibkeys", [])]
         raise RuntimeError(f"unexpected unresolved natbib citation fallback: {keys}")
 
     res = self.ownerDocument.createDocumentFragment()
-    keys = [_stringify_tex_item(key) for key in self.attributes.get("bibkeys", [])]
     punctuation = getattr(self, "punctuation", {}) or {}
     citesep = punctuation.get("citesep", punctuation.get("sep", ", "))
     text = citesep.join(keys) if keys else "unresolved citation"
 
     if parenthetical:
         res.append(punctuation.get("open", "("))
-    res.append(self.prenote)
+    if include_prenote:
+        res.append(self.prenote)
     res.append(text)
     res.append(self.postnote)
     if parenthetical:
@@ -128,7 +128,7 @@ def _has_unresolved_bibitems(self) -> bool:
 
 
 def _wrap_natbib_citation(
-    cls, *, parenthetical: bool | Callable[[Any], bool]
+    cls, *, parenthetical: bool | Callable[[Any], bool], include_prenote: bool = True
 ) -> None:
     original = cls.citation
 
@@ -137,24 +137,31 @@ def _wrap_natbib_citation(
             use_parentheses = (
                 parenthetical(self) if callable(parenthetical) else parenthetical
             )
-            return _fallback_citation(self, parenthetical=use_parentheses)
+            return _fallback_citation(
+                self,
+                parenthetical=use_parentheses,
+                include_prenote=include_prenote,
+            )
         return original(self, *args, **kwargs)
 
     cls.citation = citation
 
 
-# Capitalized, ``*full``, and alias variants inherit these ``citation`` methods.
-for _cls, _parenthetical in (
-    (_natbib.cite, _cite_uses_parenthetical_fallback),
-    (_natbib.citep, True),
-    (_natbib.citet, False),
-    (_natbib.citealt, False),
-    (_natbib.citealp, False),
-    (_natbib.citeauthor, False),
-    (_natbib.citeyear, False),
-    (_natbib.citeyearpar, True),
+# Capitalized, ``*full``, and alias variants delegate to these patched
+# ``citation`` methods.
+for _cls, _parenthetical, _include_prenote in (
+    (_natbib.cite, _cite_uses_parenthetical_fallback, True),
+    (_natbib.citep, True, True),
+    (_natbib.citet, False, True),
+    (_natbib.citealt, False, True),
+    (_natbib.citealp, False, True),
+    (_natbib.citeauthor, False, False),
+    (_natbib.citeyear, False, False),
+    (_natbib.citeyearpar, True, True),
 ):
-    _wrap_natbib_citation(_cls, parenthetical=_parenthetical)
+    _wrap_natbib_citation(
+        _cls, parenthetical=_parenthetical, include_prenote=_include_prenote
+    )
 
 
 # --- leanblueprint patch --------------------------------------------------
