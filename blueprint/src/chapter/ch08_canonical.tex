@@ -1087,6 +1087,92 @@ The following results separate the zero blocks from the
 	then gives the equivalence at length $N$ with weights $\mu_k^p$.
 \end{proof}
 
+\begin{theorem}[Blocking assembled weighted blocks]%
+	\label{thm:block_tensor_to_tensor_from_blocks}
+	\lean{MPSTensor.sameMPV₂_blockTensor_toTensorFromBlocks}
+	\leanok
+	\uses{thm:samempv_blocking_distributes, def:tensor_from_blocks, def:blocked_tensor}
+	For any weighted block tensor $\bigoplus_k \mu_k B_k$ and any blocking
+	length $p \ge 0$, its blocked MPV family agrees with the weighted block tensor
+	formed from the blocked blocks $B_k^{[p]}$ and the powered weights $\mu_k^p$.
+\end{theorem}
+
+\begin{proof}\leanok
+	Apply Theorem~\ref{thm:samempv_blocking_distributes} to the identity MPV
+	relation for the assembled weighted block tensor.
+\end{proof}
+
+\begin{theorem}[Positive-length MPV equality after blocking]%
+	\label{thm:samempv2pos_block_tensor}
+	\lean{MPSTensor.sameMPV₂Pos_blockTensor}
+	\leanok
+	\uses{def:same_mpv2_pos, def:blocked_tensor}
+	If two tensors agree on all positive system sizes, then their $p$-blocked
+	tensors agree on all positive blocked system sizes for every $p \ge 1$.
+\end{theorem}
+
+\begin{proof}\leanok
+	A positive blocked chain of length $N$ corresponds to an original chain of
+	length $Np$, which is positive when both $N$ and $p$ are positive.
+\end{proof}
+
+\begin{theorem}[Positive-length equality for powered weighted live blocks]%
+	\label{thm:samempv2pos_toTensorFromBlocks_block_power}
+	\lean{MPSTensor.sameMPV₂Pos_toTensorFromBlocks_blockPower}
+	\leanok
+	\uses{thm:block_tensor_to_tensor_from_blocks, thm:samempv2pos_block_tensor,
+	      def:tensor_from_blocks}
+	If two weighted live block tensors agree on all positive system sizes, then
+	after any positive common blocking their blocked live block tensors still agree
+	on all positive system sizes, with weights transported from $\mu_k$ to
+	$\mu_k^p$.
+\end{theorem}
+
+\begin{proof}\leanok
+	Use Theorem~\ref{thm:samempv2pos_block_tensor} for the assembled live tensors,
+	then rewrite each blocked assembled tensor by
+	Theorem~\ref{thm:block_tensor_to_tensor_from_blocks}.
+\end{proof}
+
+\begin{lemma}[Nonzero weights after blocking powers]%
+	\label{lem:block_weights_ne_zero}
+	\lean{MPSTensor.blockWeights_ne_zero}
+	\leanok
+	If every $\mu_k$ is nonzero, then every powered weight $\mu_k^p$ is nonzero.
+\end{lemma}
+
+\begin{proof}\leanok
+	This is the elementary fact that powers of a nonzero complex number are
+	nonzero.
+\end{proof}
+
+\begin{lemma}[Nonzero weights after sector replication]%
+	\label{lem:replicated_weights_pow_ne_zero}
+	\lean{MPSTensor.replicatedWeights_pow_ne_zero}
+	\leanok
+	Suppose a live block $k$ is replaced by a finite family of cyclic sectors. If
+	$\mu_k \ne 0$, then every replicated sector weight $\mu_k^{p_k}$ remains
+	nonzero.
+\end{lemma}
+
+\begin{proof}\leanok
+	Apply Lemma~\ref{lem:block_weights_ne_zero} to the parent block weight and the
+	blocking power assigned to that block.
+\end{proof}
+
+\begin{lemma}[Nonzero replicated weights with sector phases]%
+	\label{lem:replicated_weights_pow_mul_phase_ne_zero}
+	\lean{MPSTensor.replicatedWeights_pow_mul_phase_ne_zero}
+	\leanok
+	If the replicated sector weights are additionally multiplied by nonzero sector
+	phases, then the resulting sector weights are still nonzero.
+\end{lemma}
+
+\begin{proof}\leanok
+	Combine Lemma~\ref{lem:replicated_weights_pow_ne_zero} with nonvanishing of
+	the phase factor.
+\end{proof}
+
 \begin{theorem}[Primitive channels remain primitive under powers]%
 	\label{thm:primitive_pow}
 	\lean{MPSTensor.isPrimitive_pow_of_isPrimitive}
@@ -2056,12 +2142,14 @@ The following results separate the zero blocks from the
 
 \begin{proof}\leanok
 	\uses{thm:tp_gauge_arbitrary, thm:common_blocking_period,
-	      thm:samempv_blocking_distributes}
+	      lem:block_weights_ne_zero, thm:zero_tail_to_tensor_from_blocks_block_power}
 	Apply Theorem~\ref{thm:tp_gauge_arbitrary} to get the trivial block
 	and left-canonical nontrivial blocks.
 	Apply Theorem~\ref{thm:common_blocking_period} to find a common
-	blocking period $p$ making all transfer maps primitive.
-	Apply Theorem~\ref{thm:samempv_blocking_distributes}.
+	blocking period $p$ making all transfer maps primitive. Lemma~\ref{lem:block_weights_ne_zero}
+	keeps the blocked weights nonzero, and
+	Theorem~\ref{thm:zero_tail_to_tensor_from_blocks_block_power} transports the
+	zero-tail/live MPV identity through the blocking step.
 \end{proof}
 
 \begin{theorem}[TP-primitive irreducible tensor is normal]%
@@ -2660,6 +2748,41 @@ The following results separate the zero blocks from the
 	Apply Theorem~\ref{thm:tp_primitive_blockdecomp} separately to the two tensors.
 \end{proof}
 
+\begin{theorem}[Zero-tail decomposition after blocking]%
+	\label{thm:zero_tail_decomp_block_tensor}
+	\lean{MPSTensor.zeroTail_mpv_decomp_blockTensor}
+	\leanok
+	\uses{def:blocked_tensor, def:zero_mps_tensor}
+	Suppose $A$ is expressed as a zero-tail tensor plus a live tensor $L$ at all
+	system sizes. For every positive blocking length $p$, the blocked tensor
+	$A^{[p]}$ is expressed as the same zero-tail bond dimension plus $L^{[p]}$.
+	The zero-tail term still contributes only at blocked length $0$.
+\end{theorem}
+
+\begin{proof}\leanok
+	Flatten a blocked word of length $N$ to an original word of length $Np$. Since
+	$p>0$, this length is zero exactly when $N=0$, so the zero-tail MPV is
+	unchanged by the reblocking convention.
+\end{proof}
+
+\begin{theorem}[Zero-tail weighted block decomposition after blocking]%
+	\label{thm:zero_tail_to_tensor_from_blocks_block_power}
+	\lean{MPSTensor.zeroTail_toTensorFromBlocks_blockPower}
+	\leanok
+	\uses{thm:zero_tail_decomp_block_tensor, thm:block_tensor_to_tensor_from_blocks,
+	      def:tensor_from_blocks}
+	Suppose $A$ is expressed as a zero-tail tensor plus the weighted live block
+	tensor $\bigoplus_k \mu_k B_k$. For every positive blocking length $p$,
+	$A^{[p]}$ is expressed as the same zero-tail contribution plus the weighted
+	blocked live tensor $\bigoplus_k \mu_k^p B_k^{[p]}$.
+\end{theorem}
+
+\begin{proof}\leanok
+	Apply Theorem~\ref{thm:zero_tail_decomp_block_tensor} to the assembled
+	weighted live tensor and rewrite the blocked assembled tensor using
+	Theorem~\ref{thm:block_tensor_to_tensor_from_blocks}.
+\end{proof}
+
 \begin{theorem}[Zero-tail bookkeeping for live block tensors]%
 \label{thm:live_block_zero_tail_bookkeeping}
 	\lean{MPSTensor.liveBlock_positive_sameMPV₂_and_zeroTail_bookkeeping_of_sameMPV₂}
@@ -2677,6 +2800,26 @@ The following results separate the zero blocks from the
 	For $N>0$, the MPV of a zero-tail tensor is zero, so the two decompositions
 	can be compared directly through the common MPV family. For $N=0$, the
 	zero-tail MPV is its bond dimension, giving the stated bookkeeping identity.
+\end{proof}
+
+\begin{theorem}[Reblocked live equality with zero-tail bookkeeping]%
+	\label{thm:live_block_block_power_zero_tail_bookkeeping}
+	\lean{MPSTensor.liveBlock_blockPower_positive_sameMPV₂_and_zeroTail_bookkeeping_of_sameMPV₂}
+	\leanok
+	\uses{thm:live_block_zero_tail_bookkeeping,
+	      thm:zero_tail_to_tensor_from_blocks_block_power, def:same_mpv2_pos}
+	In the setting of Theorem~\ref{thm:live_block_zero_tail_bookkeeping}, after
+	any positive common blocking length $p$, the powered weighted live block tensors
+	agree on all positive blocked system sizes. At blocked length $0$, the same
+	zero-tail bookkeeping identity holds with weights transported from $\mu_k$ to
+	$\mu_k^p$.
+\end{theorem}
+
+\begin{proof}\leanok
+	Use Theorem~\ref{thm:zero_tail_to_tensor_from_blocks_block_power} on both
+	zero-tail decompositions, block the original MPV equality, and apply
+	Theorem~\ref{thm:live_block_zero_tail_bookkeeping} at the blocked physical
+	dimension.
 \end{proof}
 
 \begin{theorem}[Equal zero tails give full live MPV equality]%
