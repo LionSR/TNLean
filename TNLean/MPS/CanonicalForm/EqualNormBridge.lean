@@ -467,8 +467,8 @@ end MPVBlockPhaseEquiv
 The data record the finite common family, the class maps from the two
 live-block families to it, the MPV-phase equivalences to the chosen common
 blocks, and surjectivity of both class maps.  They are the exact paper-level
-input needed by the current span adapter; constructing this package from the
-full structural `SameMPV₂` data is a separate comparison theorem. -/
+input needed by the current span adapter; constructing this bundled data from
+the full structural `SameMPV₂` data is a separate comparison theorem. -/
 structure MPVCommonPhaseCover {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     (blocksA : (j : Fin rA) → MPSTensor d (dimA j))

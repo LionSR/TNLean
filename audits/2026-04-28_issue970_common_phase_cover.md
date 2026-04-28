@@ -63,7 +63,7 @@ New theorem:
 
 - `MPSTensor.fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_commonPhaseCover`.
 
-This is the packaged form of
+This is the bundled form of
 `MPSTensor.fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_phaseCover`:
 callers supply one `MPVCommonPhaseCover` instead of separately passing the common
 family, two class maps, phase equivalences, and surjectivity proofs.  The proof is
