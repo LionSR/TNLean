@@ -11,6 +11,7 @@ from pathlib import Path
 try:
     from pybtex.backends.latex import Backend
     from pybtex.database import BibliographyData, parse_file
+    from pybtex.style.labels.alpha import LabelStyle as AlphaLabelStyle
     from pybtex.plugin import PluginNotFound, find_plugin
 except ImportError as err:  # pragma: no cover - exercised in CI setup failures.
     raise SystemExit(
@@ -25,6 +26,50 @@ TEX_CITE_RE = re.compile(
 BIB_STYLE_RE = re.compile(r"""\\bibliographystyle\{([^{}]+)\}""")
 BIB_DATA_RE = re.compile(r"""\\bibliography\{([^{}]+)\}""")
 INPUT_RE = re.compile(r"""\\(?:input|include)\{([^{}]+)\}""")
+LATEX_ACCENT_RE = re.compile(r"""\{\\(?:['`^"~=.]|[Hkruv])\s*([A-Za-z])\}""")
+LATEX_LETTER_RE = re.compile(r"""\{\\([A-Za-z])\}""")
+
+
+def bibtex_alpha_abbrev(parts: list[str]) -> str:
+    """Return a compact alpha-label abbreviation matching BibTeX's initials."""
+
+    text = " ".join(parts)
+    text = LATEX_ACCENT_RE.sub(r"\1", text)
+    text = LATEX_LETTER_RE.sub(r"\1", text)
+    text = text.replace("{", "").replace("}", "")
+    words = [word for word in re.split(r"[\s~.-]+", text) if word]
+    return "".join(word[0] for word in words if word[0].isalnum())
+
+
+class BibTeXAlphaLabelStyle(AlphaLabelStyle):
+    """Alpha labels with BibTeX-like initials for TeX-accented surnames."""
+
+    def format_lab_names(self, persons):
+        numnames = len(persons)
+        if numnames > 1:
+            namesleft = 3 if numnames > 4 else numnames
+            result = ""
+            nameptr = 1
+            while namesleft:
+                person = persons[nameptr - 1]
+                if nameptr == numnames and str(person) == "others":
+                    result += "+"
+                else:
+                    result += bibtex_alpha_abbrev(
+                        person.prelast_names + person.last_names
+                    )
+                nameptr += 1
+                namesleft -= 1
+            if numnames > 4:
+                result += "+"
+            return result
+
+        person = persons[0]
+        result = bibtex_alpha_abbrev(person.prelast_names + person.last_names)
+        if len(result) < 2:
+            normalized = re.sub(r"[^A-Za-z0-9]", "", " ".join(person.last_names))
+            result = normalized[:3]
+        return result
 
 
 def first_match(pattern: re.Pattern[str], text: str, default: str = "") -> str:
@@ -183,7 +228,11 @@ def run(args: argparse.Namespace) -> int:
         return 1
 
     output_path = tex_path.with_suffix(".bbl")
-    formatted = style_cls().format_bibliography(bibliography, citations=citations)
+    style = style_cls()
+    if style_name == "alpha":
+        style.label_style = BibTeXAlphaLabelStyle()
+        style.format_labels = style.label_style.format_labels
+    formatted = style.format_bibliography(bibliography, citations=citations)
     with output_path.open("w", encoding="utf-8") as stream:
         Backend().write_to_stream(formatted, stream)
     print(f"Generated {output_path}")
