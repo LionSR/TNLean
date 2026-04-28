@@ -103,6 +103,13 @@ Theorem matching, etc.).
 * `MPVCommonPhaseCover` — bundled common-family, class-map, phase, and
   surjectivity data for the same span-equality theorem.
 
+* `SectorBasisPreMatching.commonPhaseCover` — turns BNT pre-matching data into
+  a common MPV phase cover, hence into finite-length basis-span equality.
+
+* `nonempty_mpvCommonPhaseCover_of_separated_normalCFBNT_data` — reads the
+  span-equality-free BNT proportional-decomposition comparison as common-cover
+  existence.
+
 ## References
 
 - [CPGSV17, Lemma A.2]: Overlap dichotomy for Normal Tensors.
@@ -635,6 +642,127 @@ theorem span_eq (C : MPVCommonPhaseCover blocksA blocksB) (N : ℕ) :
     C.classA C.classB C.phaseA C.phaseB C.surjA C.surjB N
 
 end MPVCommonPhaseCover
+
+namespace SectorBasisPreMatching
+
+variable {P Q : SectorDecomposition d}
+
+/-- A sector-basis pre-matching supplies a common MPV phase cover of the two basis families.
+
+The common family is the left basis. The left class map is the identity, the right
+class map is the inverse of the matching permutation, and gauge-phase equivalence
+of matched basis blocks gives the required MPV-phase equivalences. -/
+def commonPhaseCover (M : SectorBasisPreMatching P Q) :
+    MPVCommonPhaseCover P.basis Q.basis := by
+  refine {
+    rC := P.basisCount
+    dimC := P.basisDim
+    common := P.basis
+    classA := id
+    classB := M.perm.symm
+    phaseA := ?_
+    phaseB := ?_
+    surjA := ?_
+    surjB := ?_
+  }
+  · intro j
+    exact MPVBlockPhaseEquiv.refl (P.basis j)
+  · intro k
+    rcases M.basis_equiv (M.perm.symm k) with ⟨X, ζ, hζ, hX⟩
+    refine ⟨ζ, hζ, ?_⟩
+    intro N σ
+    have hk : M.perm (M.perm.symm k) = k := M.perm.apply_symm_apply k
+    conv_lhs => rw [← hk]
+    rw [mpv_eq_pow_mul_of_gaugePhase
+      (A := cast (congr_arg (MPSTensor d) (M.dim_eq (M.perm.symm k)))
+        (P.basis (M.perm.symm k)))
+      (B := Q.basis (M.perm (M.perm.symm k))) X ζ hX N σ,
+      mpv_cast_dim (M.dim_eq (M.perm.symm k)) (P.basis (M.perm.symm k)) N σ]
+  · intro j
+    exact ⟨j, rfl⟩
+  · intro j
+    exact ⟨M.perm j, by simp⟩
+
+/-- A sector-basis pre-matching gives equality of finite-length MPV spans of the two basis
+families. -/
+theorem span_eq (M : SectorBasisPreMatching P Q) (N : ℕ) :
+    Submodule.span ℂ (Set.range (fun j : Fin P.basisCount =>
+      mpvState (d := d) (P.basis j) N)) =
+    Submodule.span ℂ (Set.range (fun k : Fin Q.basisCount =>
+      mpvState (d := d) (Q.basis k) N)) :=
+  M.commonPhaseCover.span_eq N
+
+/-- A sector-basis pre-matching supplies the finite-length span field of the primitive
+overlap-span hypotheses. -/
+theorem to_overlapSpan (M : SectorBasisPreMatching P Q)
+    (HP : SectorBasisOverlapOrthoHypotheses P)
+    (HQ : SectorBasisOverlapOrthoHypotheses Q)
+    (hP_inj : ∀ j : Fin P.basisCount, IsInjective (P.basis j))
+    (hQ_inj : ∀ k : Fin Q.basisCount, IsInjective (Q.basis k)) :
+    SectorBasisOverlapSpanHypotheses P Q :=
+  HP.to_overlapSpan HQ hP_inj hQ_inj M.span_eq
+
+end SectorBasisPreMatching
+
+/-- A proportional-decomposition BNT comparison conclusion produces a common MPV phase cover. -/
+theorem nonempty_mpvCommonPhaseCover_of_proportionalDecompositionConclusion
+    {rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    (blocksA : (j : Fin rA) → MPSTensor d (dimA j))
+    (blocksB : (k : Fin rB) → MPSTensor d (dimB k))
+    (h : ProportionalDecompositionConclusion (d := d) blocksA blocksB) :
+    Nonempty (MPVCommonPhaseCover blocksA blocksB) := by
+  rcases h with ⟨_hcount, perm, hmatch⟩
+  refine ⟨?_⟩
+  refine {
+    rC := rA
+    dimC := dimA
+    common := blocksA
+    classA := id
+    classB := perm.symm
+    phaseA := ?_
+    phaseB := ?_
+    surjA := ?_
+    surjB := ?_
+  }
+  · intro j
+    exact MPVBlockPhaseEquiv.refl (blocksA j)
+  · intro k
+    obtain ⟨hdim, hGPE⟩ := hmatch (perm.symm k)
+    rcases hGPE with ⟨X, ζ, hζ, hX⟩
+    refine ⟨ζ, hζ, ?_⟩
+    intro N σ
+    have hk : perm (perm.symm k) = k := perm.apply_symm_apply k
+    conv_lhs => rw [← hk]
+    rw [mpv_eq_pow_mul_of_gaugePhase
+      (A := cast (congr_arg (MPSTensor d) hdim) (blocksA (perm.symm k)))
+      (B := blocksB (perm (perm.symm k))) X ζ hX N σ,
+      mpv_cast_dim hdim (blocksA (perm.symm k)) N σ]
+  · intro j
+    exact ⟨j, rfl⟩
+  · intro j
+    exact ⟨perm j, by simp⟩
+
+/-- Separated normal BNT data and a proportional decomposition produce a common MPV phase cover.
+
+The proof uses the BNT comparison theorem to obtain a permutation and gauge phases between the
+basis blocks, then reads that matching as a common MPV phase cover. It does not use a
+finite-length span equality hypothesis. -/
+theorem nonempty_mpvCommonPhaseCover_of_separated_normalCFBNT_data
+    {rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
+    {DtotA DtotB : ℕ} {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
+    (blocksA : (j : Fin rA) → MPSTensor d (dimA j))
+    (blocksB : (k : Fin rB) → MPSTensor d (dimB k))
+    (hA_ncf : IsNormalCanonicalForm μA blocksA)
+    (hA_blocks : BlocksNotGaugePhaseEquiv (d := d) blocksA)
+    (hB_ncf : IsNormalCanonicalForm μB blocksB)
+    (hB_blocks : BlocksNotGaugePhaseEquiv (d := d) blocksB)
+    (hDecomp : ProportionalDecompositionData (d := d) blocksA blocksB DtotA DtotB) :
+    Nonempty (MPVCommonPhaseCover blocksA blocksB) :=
+  nonempty_mpvCommonPhaseCover_of_proportionalDecompositionConclusion
+    (d := d) blocksA blocksB
+    (fundamentalTheorem_of_separated_normalCFBNT_data
+      blocksA blocksB hA_ncf hA_blocks hB_ncf hB_blocks hDecomp)
 
 /-- Equivalence relation on block indices given by MPV phase equivalence. -/
 def mpvPhaseSetoid {r : ℕ} {dim : Fin r → ℕ}

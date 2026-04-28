@@ -811,6 +811,94 @@ single weighted block.
 	and the MPV-phase equivalences. The span lemma then applies directly.
 \end{proof}
 
+\begin{definition}[Common phase cover from a sector basis pre-matching]%
+\label{def:sector_basis_pre_matching_common_phase_cover}
+	\lean{MPSTensor.SectorBasisPreMatching.commonPhaseCover}
+	\leanok
+	\uses{def:sector_basis_pre_matching, def:mpv_common_phase_cover}
+	A sector basis pre-matching between sector decompositions $P$ and $Q$
+	canonically gives a common MPV phase cover of their basis block families.  The
+	common family is the basis of $P$, the class map from $P$ is the identity, and
+	the class map from $Q$ is the inverse of the pre-matching permutation.
+\end{definition}
+
+\begin{lemma}[Sector basis pre-matching gives basis-span equality]%
+\label{lem:sector_basis_pre_matching_span_eq}
+	\lean{MPSTensor.SectorBasisPreMatching.span_eq}
+	\leanok
+	\uses{def:sector_basis_pre_matching_common_phase_cover,
+		lem:mpv_common_phase_cover_span_eq}
+	A sector basis pre-matching between $P$ and $Q$ implies equality, for every
+	system size, of the finite-length MPV spans of the two sector bases.
+\end{lemma}
+
+\begin{proof}
+	\leanok
+	\uses{lem:mpv_common_phase_cover_span_eq}
+	Apply the common-cover span lemma to the common phase cover constructed from
+	the pre-matching.
+\end{proof}
+
+\begin{theorem}[Pre-matching supplies primitive overlap-span hypotheses]%
+\label{thm:sector_basis_pre_matching_to_overlap_span}
+	\lean{MPSTensor.SectorBasisPreMatching.to_overlapSpan}
+	\leanok
+	\uses{def:sector_basis_pre_matching, def:sector_basis_overlap_ortho_hyps,
+		def:sector_basis_overlap_span_hyps}
+	If two sector bases satisfy the one-family overlap-orthogonality data and their
+	basis blocks are one-site injective, then a sector basis pre-matching between
+	them supplies the finite-length span field and hence the full primitive
+	overlap-span hypotheses.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{lem:sector_basis_pre_matching_span_eq,
+		thm:sector_basis_overlap_ortho_to_span}
+	The pre-matching gives the basis-span equality. Combining that equality with
+	the one-family overlap data and injectivity is exactly the construction of
+	Theorem~\ref{thm:sector_basis_overlap_ortho_to_span}.
+\end{proof}
+
+\begin{theorem}[Common phase cover from a BNT proportional-decomposition conclusion]%
+\label{thm:common_phase_cover_of_proportional_decomposition}
+	\lean{MPSTensor.nonempty_mpvCommonPhaseCover_of_proportionalDecompositionConclusion}
+	\leanok
+	\uses{def:mpv_common_phase_cover}
+	If a BNT proportional-decomposition comparison has produced a permutation of
+	the two basis families together with matched bond dimensions and gauge-phase
+	equivalences, then the two basis families have a common MPV phase cover.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{def:mpv_block_phase_equiv}
+	Take the left basis family as the common family. The comparison permutation and
+	its inverse give the two class maps, while each gauge-phase equivalence gives
+	the required MPV-phase equivalence.
+\end{proof}
+
+\begin{theorem}[Separated normal BNT data produce a common phase cover]%
+\label{thm:common_phase_cover_of_separated_normal_bnt}
+	\lean{MPSTensor.nonempty_mpvCommonPhaseCover_of_separated_normalCFBNT_data}
+	\leanok
+	\uses{def:mpv_common_phase_cover, thm:bnt_perm_prop_nt}
+	For two separated normal BNT families with proportional decompositions whose
+	coefficient limits are nonzero, the two basis families have a common MPV phase
+	cover. This is the BNT route to the cover data; it does not assume equality of
+	finite-length spans.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{thm:common_phase_cover_of_proportional_decomposition,
+		thm:bnt_perm_prop_nt}
+	The irreducible trace-preserving BNT permutation theorem gives the matched
+	basis permutation, bond-dimension equalities, and gauge-phase equivalences.
+	The previous theorem reads that matched basis conclusion as a common phase
+	cover.
+\end{proof}
+
 \begin{theorem}[Heterogeneous sector comparison via a bundled matching witness]%
 \label{thm:route_b_hetero_sector_matching}
 	\lean{MPSTensor.fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_sectorMatching}
