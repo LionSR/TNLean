@@ -46,6 +46,11 @@ jobs:
         with:
           build: true
 
+      - name: Install Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
       - name: Install TeX and graphviz
         run: sudo apt-get update && sudo apt-get install -y texlive-latex-extra texlive-fonts-recommended texlive-science latexmk graphviz libgraphviz-dev
 
@@ -53,6 +58,10 @@ jobs:
         run: |
           pipx install leanblueprint
           pipx inject --include-apps --force leanblueprint plastex
+          python3 -m pip install -r .github/requirements/blueprint-python.txt
+
+      - name: Build blueprint bibliography
+        run: python3 scripts/blueprint_bibtex.py
 
       - name: Build blueprint
         working-directory: blueprint
