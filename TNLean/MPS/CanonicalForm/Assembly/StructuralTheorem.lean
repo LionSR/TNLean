@@ -1169,6 +1169,61 @@ theorem fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_phaseCove
   exact mpv_span_eq_of_common_phase_cover (d := blockPhysDim d p)
     blocksA blocksB common classA classB hAphase hBphase hAsurj hBsurj N
 
+/-- **Common live-block sector comparison from a bundled common MPV-phase cover.**
+
+This is the bundled form of
+`fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_phaseCover`: the
+common family, the two class maps, the MPV-phase identifications, and the
+surjectivity proofs are supplied as a single `MPVCommonPhaseCover`.  It does not
+construct that cover from the structural `SameMPV₂` hypothesis; that cross-side
+BNT comparison is the remaining paper-level input. -/
+theorem fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_commonPhaseCover
+    {d D₁ D₂ p rA rB : ℕ}
+    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    [∀ k : Fin rA, NeZero (dimA k)]
+    [∀ k : Fin rB, NeZero (dimB k)]
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (hSame : SameMPV₂ A B)
+    (hp : 0 < p)
+    (μA : Fin rA → ℂ)
+    (blocksA : (k : Fin rA) → MPSTensor (blockPhysDim d p) (dimA k))
+    (μB : Fin rB → ℂ)
+    (blocksB : (k : Fin rB) → MPSTensor (blockPhysDim d p) (dimB k))
+    (cover : MPVCommonPhaseCover blocksA blocksB)
+    (hAblocks : SameMPV₂ (blockTensor (d := d) (D := D₁) A p)
+      (toTensorFromBlocks (d := blockPhysDim d p) (μ := μA) blocksA))
+    (hBblocks : SameMPV₂ (blockTensor (d := d) (D := D₂) B p)
+      (toTensorFromBlocks (d := blockPhysDim d p) (μ := μB) blocksB))
+    (hTPA : ∀ k, ∑ i : Fin (blockPhysDim d p), (blocksA k i)ᴴ * blocksA k i = 1)
+    (hTPB : ∀ k, ∑ i : Fin (blockPhysDim d p), (blocksB k i)ᴴ * blocksB k i = 1)
+    (hIrrA : ∀ k, IsIrreducibleTensor (blocksA k))
+    (hIrrB : ∀ k, IsIrreducibleTensor (blocksB k))
+    (hPrimA : ∀ k, _root_.IsPrimitive
+      (transferMap (d := blockPhysDim d p) (D := dimA k) (blocksA k)))
+    (hPrimB : ∀ k, _root_.IsPrimitive
+      (transferMap (d := blockPhysDim d p) (D := dimB k) (blocksB k)))
+    (hInjA : ∀ k, IsInjective (blocksA k))
+    (hInjB : ∀ k, IsInjective (blocksB k))
+    (hμA : ∀ k, μA k ≠ 0)
+    (hμB : ∀ k, μB k ≠ 0) :
+    ∃ p' : ℕ, 0 < p' ∧
+    ∃ P Q : SectorDecomposition (blockPhysDim d p'),
+      SameMPV₂ (blockTensor (d := d) (D := D₁) A p') P.toTensor ∧
+      SameMPV₂ (blockTensor (d := d) (D := D₂) B p') Q.toTensor ∧
+      HasBNTSectorData P ∧ HasBNTSectorData Q ∧
+      ∃ perm : Fin P.basisCount ≃ Fin Q.basisCount,
+      ∃ hCopies : ∀ j, P.copies j = Q.copies (perm j),
+      ∃ ζ : Fin P.basisCount → ℂ,
+        (∀ j, ζ j ≠ 0) ∧
+        ∀ j : Fin P.basisCount,
+          Finset.univ.val.map (P.weight j) =
+            Finset.univ.val.map
+              (fun q => ζ j * Q.weight (perm j) (Fin.cast (hCopies j) q)) :=
+  fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_phaseCover
+    A B hSame hp μA blocksA μB blocksB cover.common cover.classA cover.classB
+    cover.phaseA cover.phaseB cover.surjA cover.surjB hAblocks hBblocks
+    hTPA hTPB hIrrA hIrrB hPrimA hPrimB hInjA hInjB hμA hμB
+
 /-- Remove matching zero tails from two MPV identities.
 
 If `A` and `B` have the same MPVs, and each is expressed as a zero tail plus a live tensor,
