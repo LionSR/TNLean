@@ -10,6 +10,7 @@ on:
       - 'lean-toolchain'
       - 'lake-manifest.json'
       - 'blueprint/src/**'
+      - '.github/actions/setup-blueprint-system-deps/**'
       - '.github/requirements/**'
       - '.github/workflows/blueprint.yml'
       - 'home_page/**'
@@ -39,15 +40,7 @@ jobs:
           python-version: '3.12'
 
       - name: Install system dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-            dvisvgm \
-            graphviz \
-            libgraphviz-dev \
-            texlive-fonts-recommended \
-            texlive-latex-extra \
-            texlive-pictures
+        uses: ./.github/actions/setup-blueprint-system-deps
 
       - name: Install leanblueprint
         run: pip install leanblueprint -r .github/requirements/blueprint-python.txt
