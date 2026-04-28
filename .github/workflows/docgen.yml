@@ -77,16 +77,20 @@ jobs:
         working-directory: blueprint
         run: |
           leanblueprint pdf
+          set -o pipefail
+          tmp_output_file="$(mktemp)"
+
           set +o pipefail
-          leanblueprint web 2>&1 | tee /tmp/blueprint-output.txt
+          leanblueprint web 2>&1 | tee "$tmp_output_file"
           cmd_status=${PIPESTATUS[0]}
           set -o pipefail
-          if [ "$cmd_status" -ne 0 ]; then
-            exit "$cmd_status"
-          fi
-          if grep -q "^ERROR:" /tmp/blueprint-output.txt; then
+
+          if grep -q "^ERROR:" "$tmp_output_file"; then
             echo "::error::Blueprint has unresolved labels (see ERROR lines above)"
             exit 1
+          fi
+          if [ "$cmd_status" -ne 0 ]; then
+            exit "$cmd_status"
           fi
           if grep -R "TikZ SVG unavailable" web --include='*.html'; then
             echo "::error::Blueprint contains unrendered TikZ SVG placeholders"
