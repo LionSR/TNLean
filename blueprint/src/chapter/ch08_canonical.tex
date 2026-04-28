@@ -1693,9 +1693,9 @@ The following results separate the zero blocks from the
 		def:tensor_from_blocks, thm:iterated_blocking_samempv_reindex}
 	From a common reblocked cyclic-sector family, one may derive sector tensors at
 	the common alphabet directly from the original per-block sector tensors.  The
-	definition `oneShotReindexedBlock` keeps the physical-label relabeling explicit:
-	for the live block $B_k$, it uses the one-shot block $B_k^{[m_k e_k]}$ with the
-	labels obtained by flattening an iterated $(m_k,e_k)$ block.
+	one-shot live-block data keeps the physical-label relabeling explicit: for the
+	live block $B_k$, it uses the one-shot block $B_k^{[m_k e_k]}$ with the labels
+	obtained by flattening an iterated $(m_k,e_k)$ block.
 \end{definition}
 
 \begin{theorem}[Derived common-alphabet cyclic sectors retain structural properties]%
@@ -3176,10 +3176,12 @@ The following results separate the zero blocks from the
 	from Theorem~\ref{thm:ft_after_blocking_common_blocked_cyclic_live_zero_tail}
 	also yields, on each side, a derived common-alphabet sector family obtained from
 	one-shot blocked live blocks with explicit physical-label relabeling.  The
-	sector weights are the transported powers $\mu_k^p$ and remain nonzero, the
-	derived sectors are trace-preserving, primitive, tensor-irreducible, and
-	positive-dimensional, and the zero-tail/live equations are also recorded after
-	the corresponding common reblocking.
+	conclusion includes the two MPV-family equalities comparing the weighted
+	relabeled one-shot live-block tensors with the weighted derived common-sector
+	tensors.  The sector weights are the transported powers $\mu_k^p$ and remain
+	nonzero, the derived sectors are trace-preserving, primitive, tensor-irreducible,
+	and positive-dimensional, and the zero-tail/live equations are also recorded
+	after the corresponding common reblocking.
 \end{theorem}
 
 \begin{proof}\leanok

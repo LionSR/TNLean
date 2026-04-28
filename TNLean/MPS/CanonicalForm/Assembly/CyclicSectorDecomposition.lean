@@ -1212,7 +1212,9 @@ noncomputable def commonSectorBlock (F : CommonBlockedCyclicSectorFamily blocks)
 /-- Bond dimensions of the derived flattened common-sector family. -/
 noncomputable def commonFlatDim (F : CommonBlockedCyclicSectorFamily blocks) :
     Fin (∑ k : Fin r, F.period k) → ℕ :=
-  fun x => F.sectorDim (F.flatKey x).1 (F.flatKey x).2
+  fun x =>
+    let y := F.flatKey x
+    F.sectorDim y.1 y.2
 
 /-- The derived flattened common-sector family, indexed by `Fin (∑ k, F.period k)`. -/
 noncomputable def commonFlatBlocks (F : CommonBlockedCyclicSectorFamily blocks)
@@ -1254,49 +1256,52 @@ theorem commonFlatWeight_ne_zero (F : CommonBlockedCyclicSectorFamily blocks)
     (x : Fin (∑ k : Fin r, F.period k)) : F.commonFlatWeight μ x ≠ 0 :=
   pow_ne_zero F.p (hμ (F.flatKey x).1)
 
-/-- Derived common-alphabet sectors are trace-preserving. -/
-theorem commonSectorBlock_tp (F : CommonBlockedCyclicSectorFamily blocks)
+private theorem commonSectorBlock_structural (F : CommonBlockedCyclicSectorFamily blocks)
     (k : Fin r) (s : Fin (F.period k)) :
-    ∑ i : Fin (blockPhysDim d F.p),
-      (F.commonSectorBlock k s i)ᴴ * F.commonSectorBlock k s i = 1 := by
+    (∑ i : Fin (blockPhysDim d F.p),
+      (F.commonSectorBlock k s i)ᴴ * F.commonSectorBlock k s i = 1) ∧
+    _root_.IsPrimitive
+      (transferMap (d := blockPhysDim d F.p) (D := F.sectorDim k s)
+        (F.commonSectorBlock k s)) ∧
+    IsIrreducibleTensor (F.commonSectorBlock k s) := by
   haveI : NeZero (F.sectorDim k s) := ⟨Nat.ne_of_gt (F.sector_dim_pos k s)⟩
   have hExtra := tp_primitive_irreducible_extra_blocking
     (d := blockPhysDim d (F.period k)) (D := F.sectorDim k s)
     (A := F.sectorBlocks k s) (F.sector_tp k s) (F.sector_primitive k s)
     (F.sector_irreducible k s) (hk := F.extra_pos k)
-  have hcast := (leftCanonical_cast_physDim (F.blockPhysDim_nested_eq k)
-    (A := blockTensor (d := blockPhysDim d (F.period k)) (D := F.sectorDim k s)
-      (F.sectorBlocks k s) (F.extra k))).2 hExtra.1
-  simpa [commonSectorBlock] using hcast
+  refine ⟨?_, ?_, ?_⟩
+  · have hcast := (leftCanonical_cast_physDim (F.blockPhysDim_nested_eq k)
+      (A := blockTensor (d := blockPhysDim d (F.period k)) (D := F.sectorDim k s)
+        (F.sectorBlocks k s) (F.extra k))).2 hExtra.1
+    simpa [commonSectorBlock] using hcast
+  · have hcast := (isPrimitive_transferMap_cast_physDim (F.blockPhysDim_nested_eq k)
+      (A := blockTensor (d := blockPhysDim d (F.period k)) (D := F.sectorDim k s)
+        (F.sectorBlocks k s) (F.extra k))).2 hExtra.2.1
+    simpa [commonSectorBlock] using hcast
+  · have hcast := (isIrreducibleTensor_cast_physDim (F.blockPhysDim_nested_eq k)
+      (A := blockTensor (d := blockPhysDim d (F.period k)) (D := F.sectorDim k s)
+        (F.sectorBlocks k s) (F.extra k))).2 hExtra.2.2
+    simpa [commonSectorBlock] using hcast
+
+/-- Derived common-alphabet sectors are trace-preserving. -/
+theorem commonSectorBlock_tp (F : CommonBlockedCyclicSectorFamily blocks)
+    (k : Fin r) (s : Fin (F.period k)) :
+    ∑ i : Fin (blockPhysDim d F.p),
+      (F.commonSectorBlock k s i)ᴴ * F.commonSectorBlock k s i = 1 :=
+  (commonSectorBlock_structural F k s).1
 
 /-- Derived common-alphabet sectors have primitive transfer maps. -/
 theorem commonSectorBlock_primitive (F : CommonBlockedCyclicSectorFamily blocks)
     (k : Fin r) (s : Fin (F.period k)) :
     _root_.IsPrimitive
       (transferMap (d := blockPhysDim d F.p) (D := F.sectorDim k s)
-        (F.commonSectorBlock k s)) := by
-  haveI : NeZero (F.sectorDim k s) := ⟨Nat.ne_of_gt (F.sector_dim_pos k s)⟩
-  have hExtra := tp_primitive_irreducible_extra_blocking
-    (d := blockPhysDim d (F.period k)) (D := F.sectorDim k s)
-    (A := F.sectorBlocks k s) (F.sector_tp k s) (F.sector_primitive k s)
-    (F.sector_irreducible k s) (hk := F.extra_pos k)
-  have hcast := (isPrimitive_transferMap_cast_physDim (F.blockPhysDim_nested_eq k)
-    (A := blockTensor (d := blockPhysDim d (F.period k)) (D := F.sectorDim k s)
-      (F.sectorBlocks k s) (F.extra k))).2 hExtra.2.1
-  simpa [commonSectorBlock] using hcast
+        (F.commonSectorBlock k s)) :=
+  (commonSectorBlock_structural F k s).2.1
 
 /-- Derived common-alphabet sectors are tensor-irreducible. -/
 theorem commonSectorBlock_irreducible (F : CommonBlockedCyclicSectorFamily blocks)
-    (k : Fin r) (s : Fin (F.period k)) : IsIrreducibleTensor (F.commonSectorBlock k s) := by
-  haveI : NeZero (F.sectorDim k s) := ⟨Nat.ne_of_gt (F.sector_dim_pos k s)⟩
-  have hExtra := tp_primitive_irreducible_extra_blocking
-    (d := blockPhysDim d (F.period k)) (D := F.sectorDim k s)
-    (A := F.sectorBlocks k s) (F.sector_tp k s) (F.sector_primitive k s)
-    (F.sector_irreducible k s) (hk := F.extra_pos k)
-  have hcast := (isIrreducibleTensor_cast_physDim (F.blockPhysDim_nested_eq k)
-    (A := blockTensor (d := blockPhysDim d (F.period k)) (D := F.sectorDim k s)
-      (F.sectorBlocks k s) (F.extra k))).2 hExtra.2.2
-  simpa [commonSectorBlock] using hcast
+    (k : Fin r) (s : Fin (F.period k)) : IsIrreducibleTensor (F.commonSectorBlock k s) :=
+  (commonSectorBlock_structural F k s).2.2
 
 /-- Derived common-alphabet sectors have positive bond dimensions. -/
 theorem commonSectorBlock_dim_pos (F : CommonBlockedCyclicSectorFamily blocks)
