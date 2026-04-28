@@ -76,10 +76,10 @@ lemma twistedTensor_mul (A : MPSTensor d D)
 
 /-- Injective on-site symmetry implies each twisted tensor is gauge equivalent to `A`.
 
-This is the single-block Fundamental Theorem route: `hSymm g` supplies
+This is the single-block Fundamental Theorem route: on-site symmetry supplies
 `SameMPV A (twistedTensor A U g)`, and
-`sameMPV_iff_gaugeEquiv_of_injective hA` converts equal MPV families into gauge
-equivalence. -/
+`sameMPV_iff_gaugeEquiv_of_injective` converts equal MPV families into gauge
+equivalence for injective tensors. -/
 theorem gaugeEquiv_twistedTensor_of_injective
     (A : MPSTensor d D) (hA : IsInjective A)
     (U : G →* Matrix (Fin d) (Fin d) ℂ)
