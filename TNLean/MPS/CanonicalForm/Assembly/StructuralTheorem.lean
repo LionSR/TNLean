@@ -1171,7 +1171,7 @@ theorem fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_phaseCove
 
 /-- **Common live-block sector comparison from a bundled common MPV-phase cover.**
 
-This is the packaged form of
+This is the bundled form of
 `fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_phaseCover`: the
 common family, the two class maps, the MPV-phase identifications, and the
 surjectivity proofs are supplied as a single `MPVCommonPhaseCover`.  It does not
