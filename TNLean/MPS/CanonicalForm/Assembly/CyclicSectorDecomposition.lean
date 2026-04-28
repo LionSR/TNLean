@@ -1244,7 +1244,11 @@ noncomputable def commonFlatWeight (F : CommonBlockedCyclicSectorFamily blocks)
     (μ : Fin r → ℂ) : Fin (∑ k : Fin r, F.period k) → ℂ :=
   fun x => (μ (F.flatKey x).1) ^ F.p
 
-/-- Transported live weights remain nonzero after common blocking. -/
+/-- Transported live weights remain nonzero after common blocking.
+
+This named form records the per-live-block weight transport used before flattening;
+`commonFlatWeight_ne_zero` is the corresponding statement after passing to flattened
+sector indices. -/
 theorem commonBlockWeight_ne_zero (F : CommonBlockedCyclicSectorFamily blocks)
     (μ : Fin r → ℂ) (hμ : ∀ k, μ k ≠ 0) (k : Fin r) :
     (μ k) ^ F.p ≠ 0 :=
