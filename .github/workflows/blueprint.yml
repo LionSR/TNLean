@@ -60,8 +60,13 @@ jobs:
 
       - name: Build blueprint
         run: |
-          set -o pipefail
+          set +o pipefail
           leanblueprint web 2>&1 | tee /tmp/blueprint-output.txt
+          cmd_status=${PIPESTATUS[0]}
+          set -o pipefail
+          if [ "$cmd_status" -ne 0 ]; then
+            exit "$cmd_status"
+          fi
           if grep -q "^ERROR:" /tmp/blueprint-output.txt; then
             echo "::warning::Blueprint has unresolved labels (see ERROR lines above)"
           fi
