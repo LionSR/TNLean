@@ -315,9 +315,8 @@ Theorem~2 of~\cite{Molnar2018NormalPEPS}.
 \begin{theorem}[Local gauge extraction]%
     \label{thm:localGauge_exists}
     \lean{TNLean.PEPS.localGauge_exists}
-    \notready
-    \uses{def:peps_hasLocalGaugeLift, def:peps_blockedMiddleGaugeHyp,
-        def:localTensorEval}
+    \leanok
+    \uses{def:peps_hasLocalGaugeLift}
     Under the sharpened local lift hypothesis, the local gauge formula follows.
     What remains open is to derive the blocked-middle formula from the global
     same-state hypothesis via the blocked middle tensor and the corresponding
@@ -328,6 +327,10 @@ Theorem~2 of~\cite{Molnar2018NormalPEPS}.
         \TNPEPSLocalGaugeExtraction
     \end{center}
 \end{theorem}
+\begin{proof}\leanok
+    The sharpened local lift datum already supplies the incident-edge
+    invertible matrices and the factorized local coefficient identity.
+\end{proof}
 
 \begin{theorem}[Gauge consistency]%
     \label{thm:gaugeConsistency}
@@ -411,7 +414,7 @@ Theorem~2 of~\cite{Molnar2018NormalPEPS}.
     data needed for the edge-centered reduction of
     ~\cite{Molnar2018NormalPEPS}, §3. The remaining three PEPS theorems still
     require the blocked tensor on the middle region and the comparison with the
-    corresponding three-site injective chain. The uniqueness endpoint has now
+    corresponding three-site injective chain. The uniqueness statement has now
     been repaired to a quotient by balanced edge scalars, but its proof still
     requires the same blocking machinery together with the corresponding
     tensor-factor uniqueness statement at a single vertex.
