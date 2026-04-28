@@ -323,6 +323,10 @@ class _TNTikZDiagram(Command):
             if not logged:
                 log.warning("TikZ SVG rendering needs LaTeX and dvisvgm on PATH.")
                 self.ownerDocument.userdata["_tn_svg_missing_tools"] = True
+            if os.environ.get("CI") == "true":
+                raise RuntimeError(
+                    f"TikZ SVG rendering needs LaTeX and dvisvgm on PATH for {tex_call}."
+                )
             return _missing_tools_html(tex_call)
 
         return (
