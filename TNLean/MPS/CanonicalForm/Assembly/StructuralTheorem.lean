@@ -534,12 +534,12 @@ existence of the original live block families on both sides and, for each side, 
 finite flattened sector family at the corresponding common blocked physical
 dimension.  The flattened sectors are trace-preserving, have primitive transfer
 maps, are tensor-irreducible, have positive bond dimensions, and carry nonzero
-unit weights.  The statement keeps the
-checked zero-tail equations, positive-length live equality, and length-zero
-bookkeeping at the unblocked live-block level; the remaining #969 work is the
-one-shot iterated-blocking identification and weighted direct-sum flattening that
-would turn these common-alphabet sector families into exact decompositions of a
-single `blockTensor A p` and `blockTensor B p`. -/
+unit weights.  The statement keeps the checked zero-tail equations,
+positive-length live equality, and length-zero bookkeeping at the unblocked
+live-block level.  The companion theorem
+`fundamentalTheorem_after_blocking_1606_reindexed_commonSector_live_with_zeroTail`
+adds the one-shot, explicitly relabeled cyclic-sector flattening available after
+the iterated-blocking comparison theorem. -/
 theorem fundamentalTheorem_after_blocking_1606_commonBlocked_cyclic_live_with_zeroTail
     {d D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
@@ -591,6 +591,106 @@ theorem fundamentalTheorem_after_blocking_1606_commonBlocked_cyclic_live_with_ze
     exact familyA.flatWeight_ne_zero x
   · intro x
     exact familyB.flatWeight_ne_zero x
+
+/-- **Relabeled one-shot common-sector data with zero-tail reblocking.**
+
+This companion to
+`fundamentalTheorem_after_blocking_1606_commonBlocked_cyclic_live_with_zeroTail`
+uses the common cyclic-sector family to expose the actual one-shot output available
+after the iterated-blocking comparison theorem.  For each side, the cyclic
+sectors are expressed as derived common-alphabet blocks `family.commonFlatBlocks`,
+with weights `μ^family.p` and
+nonzero transported sector weights.  The theorem also records the zero-tail
+identities after the corresponding common reblocking.
+
+The statement is deliberately explicit about physical labels: `oneShotReindexedBlock`
+is the block `B_k^[family.p]` after the iterated-block-to-one-shot relabeling
+`iteratedBlockIndex`.  It does not assert that the canonical one-shot blocked live
+block family and the per-block relabeled family are label-identical. -/
+theorem fundamentalTheorem_after_blocking_1606_reindexed_commonSector_live_with_zeroTail
+    {d D₁ D₂ : ℕ}
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (hSame : SameMPV₂ A B) :
+    ∃ (zeroTailA : ℕ) (rA : ℕ) (dimA : Fin rA → ℕ) (μA : Fin rA → ℂ)
+      (blocksA : (k : Fin rA) → MPSTensor d (dimA k)),
+    ∃ (zeroTailB : ℕ) (rB : ℕ) (dimB : Fin rB → ℕ) (μB : Fin rB → ℂ)
+      (blocksB : (k : Fin rB) → MPSTensor d (dimB k)),
+    ∃ (familyA : CommonBlockedCyclicSectorFamily blocksA),
+    ∃ (familyB : CommonBlockedCyclicSectorFamily blocksB),
+      (∀ (N : ℕ) (σ : Fin N → Fin (blockPhysDim d familyA.p)),
+        mpv (blockTensor (d := d) (D := D₁) A familyA.p) σ =
+          mpv (zeroMPSTensor (blockPhysDim d familyA.p) zeroTailA) σ +
+            mpv (toTensorFromBlocks (d := blockPhysDim d familyA.p)
+              (fun k => (μA k) ^ familyA.p)
+              (fun k => blockTensor (d := d) (D := dimA k) (blocksA k) familyA.p)) σ) ∧
+      (∀ (N : ℕ) (σ : Fin N → Fin (blockPhysDim d familyB.p)),
+        mpv (blockTensor (d := d) (D := D₂) B familyB.p) σ =
+          mpv (zeroMPSTensor (blockPhysDim d familyB.p) zeroTailB) σ +
+            mpv (toTensorFromBlocks (d := blockPhysDim d familyB.p)
+              (fun k => (μB k) ^ familyB.p)
+              (fun k => blockTensor (d := d) (D := dimB k) (blocksB k) familyB.p)) σ) ∧
+      SameMPV₂
+        (toTensorFromBlocks (d := blockPhysDim d familyA.p)
+          (μ := fun k : Fin rA => (μA k) ^ familyA.p) familyA.oneShotReindexedBlock)
+        (toTensorFromBlocks (d := blockPhysDim d familyA.p)
+          (μ := familyA.commonFlatWeight μA) familyA.commonFlatBlocks) ∧
+      SameMPV₂
+        (toTensorFromBlocks (d := blockPhysDim d familyB.p)
+          (μ := fun k : Fin rB => (μB k) ^ familyB.p) familyB.oneShotReindexedBlock)
+        (toTensorFromBlocks (d := blockPhysDim d familyB.p)
+          (μ := familyB.commonFlatWeight μB) familyB.commonFlatBlocks) ∧
+      (∀ x, familyA.commonFlatWeight μA x ≠ 0) ∧
+      (∀ x, familyB.commonFlatWeight μB x ≠ 0) ∧
+      (∀ x, ∑ i : Fin (blockPhysDim d familyA.p),
+        (familyA.commonFlatBlocks x i)ᴴ * familyA.commonFlatBlocks x i = 1) ∧
+      (∀ x, ∑ i : Fin (blockPhysDim d familyB.p),
+        (familyB.commonFlatBlocks x i)ᴴ * familyB.commonFlatBlocks x i = 1) ∧
+      (∀ x, _root_.IsPrimitive
+        (transferMap (d := blockPhysDim d familyA.p) (D := familyA.commonFlatDim x)
+          (familyA.commonFlatBlocks x))) ∧
+      (∀ x, _root_.IsPrimitive
+        (transferMap (d := blockPhysDim d familyB.p) (D := familyB.commonFlatDim x)
+          (familyB.commonFlatBlocks x))) ∧
+      (∀ x, IsIrreducibleTensor (familyA.commonFlatBlocks x)) ∧
+      (∀ x, IsIrreducibleTensor (familyB.commonFlatBlocks x)) ∧
+      (∀ x, 0 < familyA.commonFlatDim x) ∧
+      (∀ x, 0 < familyB.commonFlatDim x) := by
+  obtain ⟨zeroTailA, rA, dimA, μA, blocksA,
+      zeroTailB, rB, dimB, μB, blocksB,
+      familyA, familyB, _hIrrA, _hIrrB, _hTPA, _hTPB, hμA, hμB, _hDimA, _hDimB,
+      hMPVA, hMPVB, _hPos, _hZero, _hUnitA, _hUnitB⟩ :=
+    fundamentalTheorem_after_blocking_1606_commonBlocked_cyclic_live_with_zeroTail A B hSame
+  refine ⟨zeroTailA, rA, dimA, μA, blocksA,
+    zeroTailB, rB, dimB, μB, blocksB, familyA, familyB, ?_, ?_, ?_, ?_, ?_, ?_,
+    ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
+  · exact zeroTail_toTensorFromBlocks_blockPower
+      (d := d) (D := D₁) (r := rA) (z := zeroTailA) (p := familyA.p) (dim := dimA)
+      A μA blocksA familyA.p_pos hMPVA
+  · exact zeroTail_toTensorFromBlocks_blockPower
+      (d := d) (D := D₂) (r := rB) (z := zeroTailB) (p := familyB.p) (dim := dimB)
+      B μB blocksB familyB.p_pos hMPVB
+  · exact familyA.sameMPV₂_weightedOneShotReindexedBlock_commonFlat μA
+  · exact familyB.sameMPV₂_weightedOneShotReindexedBlock_commonFlat μB
+  · intro x
+    exact familyA.commonFlatWeight_ne_zero μA hμA x
+  · intro x
+    exact familyB.commonFlatWeight_ne_zero μB hμB x
+  · intro x
+    exact familyA.commonFlatBlocks_tp x
+  · intro x
+    exact familyB.commonFlatBlocks_tp x
+  · intro x
+    exact familyA.commonFlatBlocks_primitive x
+  · intro x
+    exact familyB.commonFlatBlocks_primitive x
+  · intro x
+    exact familyA.commonFlatBlocks_irreducible x
+  · intro x
+    exact familyB.commonFlatBlocks_irreducible x
+  · intro x
+    exact familyA.commonFlatDim_pos x
+  · intro x
+    exact familyB.commonFlatDim_pos x
 
 /-- **Conditional after-blocking sector comparison (issue #877 target shape).**
 

@@ -1182,19 +1182,233 @@ structure CommonBlockedCyclicSectorFamily {d r : ℕ} {dim : Fin r → ℕ}
 
 namespace CommonBlockedCyclicSectorFamily
 
+variable {d r : ℕ} {dim : Fin r → ℕ}
+variable {blocks : (k : Fin r) → MPSTensor d (dim k)}
+
+/-- Decode a flattened common-sector index as an original live block and a cyclic sector. -/
+noncomputable def flatKey (F : CommonBlockedCyclicSectorFamily blocks)
+    (x : Fin (∑ k : Fin r, F.period k)) : (k : Fin r) × Fin (F.period k) :=
+  finSigmaFinEquiv.symm x
+
 /-- The flattened sectors produced by `CommonBlockedCyclicSectorFamily` carry unit weights. -/
-def flatWeight {d r : ℕ} {dim : Fin r → ℕ}
-    {blocks : (k : Fin r) → MPSTensor d (dim k)}
-    (F : CommonBlockedCyclicSectorFamily blocks) :
+def flatWeight (F : CommonBlockedCyclicSectorFamily blocks) :
     Fin (∑ k : Fin r, F.period k) → ℂ :=
   fun _ => 1
 
 /-- The unit weights of the flattened common-alphabet sectors are nonzero. -/
-theorem flatWeight_ne_zero {d r : ℕ} {dim : Fin r → ℕ}
-    {blocks : (k : Fin r) → MPSTensor d (dim k)}
-    (F : CommonBlockedCyclicSectorFamily blocks) (x : Fin (∑ k : Fin r, F.period k)) :
-    F.flatWeight x ≠ 0 := by
+theorem flatWeight_ne_zero (F : CommonBlockedCyclicSectorFamily blocks)
+    (x : Fin (∑ k : Fin r, F.period k)) : F.flatWeight x ≠ 0 := by
   simp [flatWeight]
+
+/-- The common-alphabet sector obtained by later reblocking one cyclic sector. -/
+noncomputable def commonSectorBlock (F : CommonBlockedCyclicSectorFamily blocks)
+    (k : Fin r) (s : Fin (F.period k)) :
+    MPSTensor (blockPhysDim d F.p) (F.sectorDim k s) :=
+  cast (congr_arg (fun d' => MPSTensor d' (F.sectorDim k s))
+      (F.blockPhysDim_nested_eq k))
+    (blockTensor (d := blockPhysDim d (F.period k)) (D := F.sectorDim k s)
+      (F.sectorBlocks k s) (F.extra k))
+
+/-- Bond dimensions of the derived flattened common-sector family. -/
+noncomputable def commonFlatDim (F : CommonBlockedCyclicSectorFamily blocks) :
+    Fin (∑ k : Fin r, F.period k) → ℕ :=
+  fun x => F.sectorDim (F.flatKey x).1 (F.flatKey x).2
+
+/-- The derived flattened common-sector family, indexed by `Fin (∑ k, F.period k)`. -/
+noncomputable def commonFlatBlocks (F : CommonBlockedCyclicSectorFamily blocks)
+    (x : Fin (∑ k : Fin r, F.period k)) :
+    MPSTensor (blockPhysDim d F.p) (F.commonFlatDim x) :=
+  let y := F.flatKey x
+  show MPSTensor (blockPhysDim d F.p) (F.sectorDim y.1 y.2) from
+    F.commonSectorBlock y.1 y.2
+
+/-- The common-alphabet sector tensor for one original live block. -/
+noncomputable def commonSectorTensor (F : CommonBlockedCyclicSectorFamily blocks)
+    (k : Fin r) : MPSTensor (blockPhysDim d F.p) (∑ s : Fin (F.period k), F.sectorDim k s) :=
+  toTensorFromBlocks (d := blockPhysDim d F.p)
+    (μ := fun _ : Fin (F.period k) => (1 : ℂ)) (F.commonSectorBlock k)
+
+/-- A one-shot common-blocked live block with the explicit physical-label relabeling
+from iterated blocking to the one-shot blocked alphabet. -/
+noncomputable def oneShotReindexedBlock (F : CommonBlockedCyclicSectorFamily blocks)
+    (k : Fin r) : MPSTensor (blockPhysDim d F.p) (dim k) :=
+  cast (congr_arg (fun d' => MPSTensor d' (dim k)) (F.blockPhysDim_nested_eq k))
+    (reindexPhysical (iteratedBlockIndex d (F.period k) (F.extra k))
+      (blockTensor (d := d) (D := dim k) (blocks k) (F.period k * F.extra k)))
+
+/-- The derived flattened sector weights obtained from the original live weights after
+blocking by the common length. -/
+noncomputable def commonFlatWeight (F : CommonBlockedCyclicSectorFamily blocks)
+    (μ : Fin r → ℂ) : Fin (∑ k : Fin r, F.period k) → ℂ :=
+  fun x => (μ (F.flatKey x).1) ^ F.p
+
+/-- Transported live weights remain nonzero after common blocking. -/
+theorem commonBlockWeight_ne_zero (F : CommonBlockedCyclicSectorFamily blocks)
+    (μ : Fin r → ℂ) (hμ : ∀ k, μ k ≠ 0) (k : Fin r) :
+    (μ k) ^ F.p ≠ 0 :=
+  pow_ne_zero F.p (hμ k)
+
+/-- Flattened sector weights remain nonzero after common blocking. -/
+theorem commonFlatWeight_ne_zero (F : CommonBlockedCyclicSectorFamily blocks)
+    (μ : Fin r → ℂ) (hμ : ∀ k, μ k ≠ 0)
+    (x : Fin (∑ k : Fin r, F.period k)) : F.commonFlatWeight μ x ≠ 0 :=
+  pow_ne_zero F.p (hμ (F.flatKey x).1)
+
+/-- Derived common-alphabet sectors are trace-preserving. -/
+theorem commonSectorBlock_tp (F : CommonBlockedCyclicSectorFamily blocks)
+    (k : Fin r) (s : Fin (F.period k)) :
+    ∑ i : Fin (blockPhysDim d F.p),
+      (F.commonSectorBlock k s i)ᴴ * F.commonSectorBlock k s i = 1 := by
+  haveI : NeZero (F.sectorDim k s) := ⟨Nat.ne_of_gt (F.sector_dim_pos k s)⟩
+  have hExtra := tp_primitive_irreducible_extra_blocking
+    (d := blockPhysDim d (F.period k)) (D := F.sectorDim k s)
+    (A := F.sectorBlocks k s) (F.sector_tp k s) (F.sector_primitive k s)
+    (F.sector_irreducible k s) (hk := F.extra_pos k)
+  have hcast := (leftCanonical_cast_physDim (F.blockPhysDim_nested_eq k)
+    (A := blockTensor (d := blockPhysDim d (F.period k)) (D := F.sectorDim k s)
+      (F.sectorBlocks k s) (F.extra k))).2 hExtra.1
+  simpa [commonSectorBlock] using hcast
+
+/-- Derived common-alphabet sectors have primitive transfer maps. -/
+theorem commonSectorBlock_primitive (F : CommonBlockedCyclicSectorFamily blocks)
+    (k : Fin r) (s : Fin (F.period k)) :
+    _root_.IsPrimitive
+      (transferMap (d := blockPhysDim d F.p) (D := F.sectorDim k s)
+        (F.commonSectorBlock k s)) := by
+  haveI : NeZero (F.sectorDim k s) := ⟨Nat.ne_of_gt (F.sector_dim_pos k s)⟩
+  have hExtra := tp_primitive_irreducible_extra_blocking
+    (d := blockPhysDim d (F.period k)) (D := F.sectorDim k s)
+    (A := F.sectorBlocks k s) (F.sector_tp k s) (F.sector_primitive k s)
+    (F.sector_irreducible k s) (hk := F.extra_pos k)
+  have hcast := (isPrimitive_transferMap_cast_physDim (F.blockPhysDim_nested_eq k)
+    (A := blockTensor (d := blockPhysDim d (F.period k)) (D := F.sectorDim k s)
+      (F.sectorBlocks k s) (F.extra k))).2 hExtra.2.1
+  simpa [commonSectorBlock] using hcast
+
+/-- Derived common-alphabet sectors are tensor-irreducible. -/
+theorem commonSectorBlock_irreducible (F : CommonBlockedCyclicSectorFamily blocks)
+    (k : Fin r) (s : Fin (F.period k)) : IsIrreducibleTensor (F.commonSectorBlock k s) := by
+  haveI : NeZero (F.sectorDim k s) := ⟨Nat.ne_of_gt (F.sector_dim_pos k s)⟩
+  have hExtra := tp_primitive_irreducible_extra_blocking
+    (d := blockPhysDim d (F.period k)) (D := F.sectorDim k s)
+    (A := F.sectorBlocks k s) (F.sector_tp k s) (F.sector_primitive k s)
+    (F.sector_irreducible k s) (hk := F.extra_pos k)
+  have hcast := (isIrreducibleTensor_cast_physDim (F.blockPhysDim_nested_eq k)
+    (A := blockTensor (d := blockPhysDim d (F.period k)) (D := F.sectorDim k s)
+      (F.sectorBlocks k s) (F.extra k))).2 hExtra.2.2
+  simpa [commonSectorBlock] using hcast
+
+/-- Derived common-alphabet sectors have positive bond dimensions. -/
+theorem commonSectorBlock_dim_pos (F : CommonBlockedCyclicSectorFamily blocks)
+    (k : Fin r) (s : Fin (F.period k)) : 0 < F.sectorDim k s :=
+  F.sector_dim_pos k s
+
+/-- The derived flattened common-sector family is trace-preserving. -/
+theorem commonFlatBlocks_tp (F : CommonBlockedCyclicSectorFamily blocks)
+    (x : Fin (∑ k : Fin r, F.period k)) :
+    ∑ i : Fin (blockPhysDim d F.p),
+      (F.commonFlatBlocks x i)ᴴ * F.commonFlatBlocks x i = 1 := by
+  let y := F.flatKey x
+  simpa [commonFlatBlocks, commonFlatDim, y] using F.commonSectorBlock_tp y.1 y.2
+
+/-- The derived flattened common-sector family has primitive transfer maps. -/
+theorem commonFlatBlocks_primitive (F : CommonBlockedCyclicSectorFamily blocks)
+    (x : Fin (∑ k : Fin r, F.period k)) :
+    _root_.IsPrimitive
+      (transferMap (d := blockPhysDim d F.p) (D := F.commonFlatDim x)
+        (F.commonFlatBlocks x)) := by
+  let y := F.flatKey x
+  simpa [commonFlatBlocks, commonFlatDim, y] using F.commonSectorBlock_primitive y.1 y.2
+
+/-- The derived flattened common-sector family is tensor-irreducible. -/
+theorem commonFlatBlocks_irreducible (F : CommonBlockedCyclicSectorFamily blocks)
+    (x : Fin (∑ k : Fin r, F.period k)) : IsIrreducibleTensor (F.commonFlatBlocks x) := by
+  let y := F.flatKey x
+  simpa [commonFlatBlocks, commonFlatDim, y] using F.commonSectorBlock_irreducible y.1 y.2
+
+/-- The derived flattened common-sector family has positive bond dimensions. -/
+theorem commonFlatDim_pos (F : CommonBlockedCyclicSectorFamily blocks)
+    (x : Fin (∑ k : Fin r, F.period k)) : 0 < F.commonFlatDim x := by
+  let y := F.flatKey x
+  simpa [commonFlatDim, y] using F.commonSectorBlock_dim_pos y.1 y.2
+
+/-- Iterated blocking of a live block is the relabeled one-shot common block. -/
+theorem nestedBlock_sameMPV₂_oneShotReindexedBlock
+    (F : CommonBlockedCyclicSectorFamily blocks) (k : Fin r) :
+    SameMPV₂
+      (cast (congr_arg (fun d' => MPSTensor d' (dim k)) (F.blockPhysDim_nested_eq k))
+        (blockTensor (d := blockPhysDim d (F.period k)) (D := dim k)
+          (blockTensor (d := d) (D := dim k) (blocks k) (F.period k)) (F.extra k)))
+      (F.oneShotReindexedBlock k) := by
+  have h := sameMPV₂_blockTensor_blockTensor_mul_reindex
+    (d := d) (D := dim k) (A := blocks k) (m := F.period k) (n := F.extra k)
+  exact (sameMPV₂_cast_physDim (F.blockPhysDim_nested_eq k)
+    (A := blockTensor (d := blockPhysDim d (F.period k)) (D := dim k)
+      (blockTensor (d := d) (D := dim k) (blocks k) (F.period k)) (F.extra k))
+    (B := reindexPhysical (iteratedBlockIndex d (F.period k) (F.extra k))
+      (blockTensor (d := d) (D := dim k) (blocks k) (F.period k * F.extra k)))).2 h
+
+/-- A one-shot relabeled live block is represented by its common-alphabet cyclic sectors. -/
+theorem oneShotReindexedBlock_sameMPV₂_commonSectorTensor
+    (F : CommonBlockedCyclicSectorFamily blocks) (k : Fin r) :
+    SameMPV₂ (F.oneShotReindexedBlock k) (F.commonSectorTensor k) := by
+  intro N σ
+  calc
+    mpv (F.oneShotReindexedBlock k) σ =
+        mpv (cast (congr_arg (fun d' => MPSTensor d' (dim k)) (F.blockPhysDim_nested_eq k))
+          (blockTensor (d := blockPhysDim d (F.period k)) (D := dim k)
+            (blockTensor (d := d) (D := dim k) (blocks k) (F.period k)) (F.extra k))) σ :=
+      ((F.nestedBlock_sameMPV₂_oneShotReindexedBlock k) N σ).symm
+    _ = mpv (F.commonSectorTensor k) σ := by
+      simpa [commonSectorTensor, commonSectorBlock] using F.nested_same k N σ
+
+/-- Weighted live blocks with explicit one-shot relabelings flatten to the common-sector family. -/
+theorem sameMPV₂_weightedOneShotReindexedBlock_commonFlat
+    (F : CommonBlockedCyclicSectorFamily blocks) (μ : Fin r → ℂ) :
+    SameMPV₂
+      (toTensorFromBlocks (d := blockPhysDim d F.p)
+        (μ := fun k : Fin r => (μ k) ^ F.p) (F.oneShotReindexedBlock))
+      (toTensorFromBlocks (d := blockPhysDim d F.p)
+        (μ := F.commonFlatWeight μ) (F.commonFlatBlocks)) := by
+  intro N σ
+  let gSigma : ((k : Fin r) × Fin (F.period k)) → ℂ := fun y =>
+    ((μ y.1) ^ F.p) ^ N * mpv (F.commonSectorBlock y.1 y.2) σ
+  calc
+    mpv (toTensorFromBlocks (d := blockPhysDim d F.p)
+        (μ := fun k : Fin r => (μ k) ^ F.p) (F.oneShotReindexedBlock)) σ
+        = ∑ k : Fin r, ((μ k) ^ F.p) ^ N •
+            mpv (F.oneShotReindexedBlock k) σ :=
+          mpv_toTensorFromBlocks_eq_sum (fun k : Fin r => (μ k) ^ F.p)
+            (F.oneShotReindexedBlock) σ
+    _ = ∑ k : Fin r, ((μ k) ^ F.p) ^ N • mpv (F.commonSectorTensor k) σ := by
+          refine Finset.sum_congr rfl fun k _ => ?_
+          rw [F.oneShotReindexedBlock_sameMPV₂_commonSectorTensor k N σ]
+    _ = ∑ k : Fin r, ∑ s : Fin (F.period k),
+          ((μ k) ^ F.p) ^ N • mpv (F.commonSectorBlock k s) σ := by
+          refine Finset.sum_congr rfl fun k _ => ?_
+          change ((μ k) ^ F.p) ^ N •
+              mpv (toTensorFromBlocks (d := blockPhysDim d F.p)
+                (fun _ : Fin (F.period k) => (1 : ℂ)) (F.commonSectorBlock k)) σ =
+            ∑ s : Fin (F.period k),
+              ((μ k) ^ F.p) ^ N • mpv (F.commonSectorBlock k s) σ
+          rw [mpv_toTensorFromBlocks_eq_sum
+            (fun _ : Fin (F.period k) => (1 : ℂ)) (F.commonSectorBlock k) σ]
+          simp [smul_eq_mul, Finset.mul_sum]
+    _ = ∑ y : ((k : Fin r) × Fin (F.period k)),
+          ((μ y.1) ^ F.p) ^ N • mpv (F.commonSectorBlock y.1 y.2) σ := by
+          exact (Fintype.sum_sigma'
+            (fun k s => ((μ k) ^ F.p) ^ N • mpv (F.commonSectorBlock k s) σ)).symm
+    _ = ∑ x : Fin (∑ k : Fin r, F.period k),
+          (F.commonFlatWeight μ x) ^ N • mpv (F.commonFlatBlocks x) σ := by
+          have h := (Equiv.sum_comp
+            (finSigmaFinEquiv.symm :
+              Fin (∑ k : Fin r, F.period k) ≃ ((k : Fin r) × Fin (F.period k)))
+            gSigma).symm
+          simpa [gSigma, commonFlatWeight, commonFlatBlocks, commonFlatDim, flatKey,
+            smul_eq_mul] using h
+    _ = mpv (toTensorFromBlocks (d := blockPhysDim d F.p)
+        (μ := F.commonFlatWeight μ) (F.commonFlatBlocks)) σ := by
+          exact (mpv_toTensorFromBlocks_eq_sum (F.commonFlatWeight μ) (F.commonFlatBlocks) σ).symm
 
 end CommonBlockedCyclicSectorFamily
 
