@@ -385,10 +385,10 @@ theorem exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingA
   simpa [WordTupleSpanTop, wordTuple] using
     wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingAt μ A hCF hSep
 
+set_option linter.style.longLine false in
 /-- Positive-length product-word span from cumulative pair trace separation plus
 exact identity padding. -/
-theorem
-    exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingUpTo_of_identityPadding
+theorem exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingUpTo_of_identityPadding
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hCF : IsCanonicalFormBNT μ A) {S T : ℕ}
     (hST : S ≤ T)

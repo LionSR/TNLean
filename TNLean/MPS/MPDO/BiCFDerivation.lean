@@ -696,12 +696,11 @@ theorem pair_mul_mem_span_pairWordTuple_add {D₁ D₂ : ℕ}
         rw [hEq]
         exact Submodule.subset_span ⟨Fin.append u v, rfl⟩
     | zero =>
+        let PairMat := Matrix (Fin D₁) (Fin D₁) ℂ × Matrix (Fin D₂) (Fin D₂) ℂ
         have hzero :
-            ((pairWordTuple A B L u).1 *
-                (0 : Matrix (Fin D₁) (Fin D₁) ℂ × Matrix (Fin D₂) (Fin D₂) ℂ).1,
-              (pairWordTuple A B L u).2 *
-                (0 : Matrix (Fin D₁) (Fin D₁) ℂ × Matrix (Fin D₂) (Fin D₂) ℂ).2) = 0 := by
-          simp
+            ((pairWordTuple A B L u).1 * (0 : PairMat).1,
+              (pairWordTuple A B L u).2 * (0 : PairMat).2) = 0 := by
+          simp [PairMat]
         rw [hzero]
         exact Submodule.zero_mem _
     | add N₁ N₂ _ _ hN₁ hN₂ =>
