@@ -2914,6 +2914,8 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     \lean{MPSTensor.pairCumulativeSpan_mono}
     \lean{MPSTensor.PairTraceSeparatingUpTo.mono}
     \lean{MPSTensor.pairTraceSeparatingUpTo_of_pairTraceSeparatingAt}
+    \lean{MPSTensor.pairTraceSeparatingAt_of_pairWordTupleSpanTop}
+    \lean{MPSTensor.pairWordTupleSpanTop_iff_pairTraceSeparatingAt}
     \lean{MPSTensor.pairCumulativeWordTupleSpanTop_of_pairTraceSeparatingUpTo}
     \lean{MPSTensor.pairTraceSeparatingUpTo_of_pairCumulativeWordTupleSpanTop}
     \lean{MPSTensor.pairCumulativeWordTupleSpanTop_iff_pairTraceSeparatingUpTo}
@@ -2944,6 +2946,31 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     criterion gives the stated finite bound.  This proves the cumulative
     finite-dimensional step; the remaining BNT step is to convert it to a
     single homogeneous length.
+\end{proof}
+
+\begin{lemma}[Homogenizing cumulative pair separation]
+    \label{lem:pair_trace_separation_homogenization_with_padding}
+    \lean{MPSTensor.pairEvalWordTuple_mem_span_pairWordTuple_length}
+    \lean{MPSTensor.pair_mul_mem_span_pairWordTuple_add}
+    \lean{MPSTensor.pairWordTupleSpanTop_of_pairCumulativeWordTupleSpanTop_of_identityPadding}
+    \lean{MPSTensor.pairTraceSeparatingAt_of_pairTraceSeparatingUpTo_of_identityPadding}
+    \leanok
+    \uses{def:pair_trace_separation_words, lem:all_length_pair_trace_separation_finite_cutoff}
+    Suppose $S\le T$ and pair words of length at most $S$ span the product
+    algebra.  If, for every $\ell\le S$, the simultaneous identity pair belongs
+    to the span of pair words of length $T-\ell$, then pair words of the single
+    length $T$ already span the product algebra.  Equivalently, cumulative
+    trace separation up to $S$ becomes homogeneous trace separation at length
+    $T$ under the same identity-padding hypothesis.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    A pair word of length $\ell$ is multiplied by a length-$T-\ell$ expression
+    for the simultaneous identity.  Componentwise multiplication concatenates
+    words, so each cumulative generator is rewritten as a linear combination of
+    length-$T$ pair words.  The trace-dual version follows from homogeneous
+    pair trace duality.
 \end{proof}
 
 \begin{lemma}[Pair trace separation gives pairwise selectors]
@@ -3013,11 +3040,14 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     \lean{MPSTensor.wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingAt}
     \lean{MPSTensor.exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairBlockSeparatingWords}
     \lean{MPSTensor.exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingAt}
+    \lean{MPSTensor.wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingUpTo_of_identityPadding}
+    \lean{MPSTensor.exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingUpTo_of_identityPadding}
     \lean{MPSTensor.exists_pos_productWordSpan_of_isCanonicalFormBNT_of_blockSelectorWords}
     \lean{MPSTensor.blockProjection_mem_span_reindexed_toTensorFromBlocks_of_bntSelectorWords}
     \lean{MPSTensor.isBlockDiagonal'_of_commutes_reindexed_toTensorFromBlocks_of_bntSelectorWords}
     \leanok
     \uses{def:cf_bnt, lem:pair_trace_separation_to_pairwise_selectors,
+        lem:pair_trace_separation_homogenization_with_padding,
         lem:block_selectors_from_pairwise_separators,
         lem:block_projection_span_from_product_word_span}
     Let $((\mu_j),(A_j))$ be in canonical form with BNT separation.  Suppose there are
@@ -3029,6 +3059,9 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     pairwise separators for every ordered pair of distinct blocks; by
     Lemma~\ref{lem:pair_trace_separation_to_pairwise_selectors}, a common
     pair trace-separation length is one sufficient finite-dimensional witness.
+    A cumulative pair trace cutoff is also enough, once $S\le T$, when paired
+    with the simultaneous identity-padding hypothesis of
+    Lemma~\ref{lem:pair_trace_separation_homogenization_with_padding}.
     Consequently, the pulled-back words at the resulting length for
     $\operatorname{Assemble}(\mu,A)$ span every virtual sector projection, and the
     corresponding commutant reduction is available.
