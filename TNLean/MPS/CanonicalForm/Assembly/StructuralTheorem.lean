@@ -310,6 +310,67 @@ theorem liveBlock_positive_sameMPV₂_and_zeroTail_bookkeeping_of_sameMPV₂
       _ = mpv B σ := hSame 0 σ
       _ = (zeroTailB : ℂ) + mpv (toTensorFromBlocks (d := d) (μ := μB) blocksB) σ := hBσ
 
+/-- **Reblocked live-block equality with zero-tail bookkeeping.**
+
+If two tensors have the same MPVs and each is expressed as a zero tail plus a
+weighted live block tensor, then every positive common reblocking transports the
+live weights to powers, preserves positive-length equality of the live tensors,
+and leaves the zero-tail contribution as the sole length-zero bookkeeping term. -/
+theorem liveBlock_blockPower_positive_sameMPV₂_and_zeroTail_bookkeeping_of_sameMPV₂
+    {d D₁ D₂ rA rB p : ℕ}
+    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (hSame : SameMPV₂ A B)
+    (zeroTailA zeroTailB : ℕ)
+    (μA : Fin rA → ℂ) (blocksA : (k : Fin rA) → MPSTensor d (dimA k))
+    (μB : Fin rB → ℂ) (blocksB : (k : Fin rB) → MPSTensor d (dimB k))
+    (hp : 0 < p)
+    (hA : ∀ (N : ℕ) (σ : Fin N → Fin d),
+      mpv A σ = mpv (zeroMPSTensor d zeroTailA) σ +
+        mpv (toTensorFromBlocks (d := d) (μ := μA) blocksA) σ)
+    (hB : ∀ (N : ℕ) (σ : Fin N → Fin d),
+      mpv B σ = mpv (zeroMPSTensor d zeroTailB) σ +
+        mpv (toTensorFromBlocks (d := d) (μ := μB) blocksB) σ) :
+    SameMPV₂Pos
+      (toTensorFromBlocks (d := blockPhysDim d p)
+        (fun k => (μA k) ^ p)
+        (fun k => blockTensor (d := d) (D := dimA k) (blocksA k) p))
+      (toTensorFromBlocks (d := blockPhysDim d p)
+        (fun k => (μB k) ^ p)
+        (fun k => blockTensor (d := d) (D := dimB k) (blocksB k) p)) ∧
+    (∀ σ : Fin 0 → Fin (blockPhysDim d p),
+      (zeroTailA : ℂ) +
+          mpv (toTensorFromBlocks (d := blockPhysDim d p)
+            (fun k => (μA k) ^ p)
+            (fun k => blockTensor (d := d) (D := dimA k) (blocksA k) p)) σ =
+        (zeroTailB : ℂ) +
+          mpv (toTensorFromBlocks (d := blockPhysDim d p)
+            (fun k => (μB k) ^ p)
+            (fun k => blockTensor (d := d) (D := dimB k) (blocksB k) p)) σ) := by
+  have hAblock :=
+    zeroTail_toTensorFromBlocks_blockPower
+      (d := d) (D := D₁) (r := rA) (z := zeroTailA) (p := p) (dim := dimA)
+      A μA blocksA hp hA
+  have hBblock :=
+    zeroTail_toTensorFromBlocks_blockPower
+      (d := d) (D := D₂) (r := rB) (z := zeroTailB) (p := p) (dim := dimB)
+      B μB blocksB hp hB
+  have hAB : SameMPV₂ (blockTensor (d := d) (D := D₁) A p)
+      (blockTensor (d := d) (D := D₂) B p) :=
+    sameMPV₂_blockTensor A B hSame p
+  have hBook :=
+    liveBlock_positive_sameMPV₂_and_zeroTail_bookkeeping_of_sameMPV₂
+      (d := blockPhysDim d p)
+      (blockTensor (d := d) (D := D₁) A p)
+      (blockTensor (d := d) (D := D₂) B p)
+      hAB zeroTailA zeroTailB
+      (fun k => (μA k) ^ p)
+      (fun k => blockTensor (d := d) (D := dimA k) (blocksA k) p)
+      (fun k => (μB k) ^ p)
+      (fun k => blockTensor (d := d) (D := dimB k) (blocksB k) p)
+      hAblock hBblock
+  exact ⟨fun N hN σ => hBook.1 hN σ, hBook.2⟩
+
 /-- **Recover full live-block `SameMPV₂` once zero tails agree.**
 
 This combines the positive-length bookkeeping theorem with the single additional

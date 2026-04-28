@@ -59,6 +59,74 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
+/-! ## Zero-tail and weight transport through blocking -/
+
+/-- Reblocking preserves a zero-tail/live MPV decomposition.
+
+The positive-period hypothesis is exactly what keeps the zero-tail contribution
+confined to length zero after blocking: a blocked chain of positive length expands
+to a positive number of original sites. -/
+theorem zeroTail_mpv_decomp_blockTensor
+    {d D L z p : ℕ}
+    (A : MPSTensor d D) (live : MPSTensor d L)
+    (hp : 0 < p)
+    (hMPV : ∀ (N : ℕ) (σ : Fin N → Fin d),
+      mpv A σ = mpv (zeroMPSTensor d z) σ + mpv live σ) :
+    ∀ (N : ℕ) (σ : Fin N → Fin (blockPhysDim d p)),
+      mpv (blockTensor (d := d) (D := D) A p) σ =
+        mpv (zeroMPSTensor (blockPhysDim d p) z) σ +
+          mpv (blockTensor (d := d) (D := L) live p) σ := by
+  intro N σ
+  let σflat := blockedFlatConfig (d := d) p σ
+  rw [mpv_blockTensor_eq_mpv_blockedFlatConfig (d := d) A p σ]
+  rw [hMPV (N * p) σflat]
+  have hNP_iff : N * p = 0 ↔ N = 0 := by
+    rw [Nat.mul_eq_zero]
+    exact ⟨fun h => h.resolve_right hp.ne', fun h => Or.inl h⟩
+  have hZero :
+      mpv (zeroMPSTensor d z) σflat =
+        mpv (zeroMPSTensor (blockPhysDim d p) z) σ := by
+    rw [mpv_zeroMPSTensor, mpv_zeroMPSTensor]
+    simp [hNP_iff]
+  rw [hZero]
+  congr 1
+  exact (mpv_blockTensor_eq_mpv_blockedFlatConfig (d := d) live p σ).symm
+
+/-- Reblocking a zero-tail plus weighted live-block decomposition transports every
+live-block weight to the corresponding blocking power. -/
+theorem zeroTail_toTensorFromBlocks_blockPower
+    {d D r z p : ℕ} {dim : Fin r → ℕ}
+    (A : MPSTensor d D)
+    (μ : Fin r → ℂ)
+    (blocks : (k : Fin r) → MPSTensor d (dim k))
+    (hp : 0 < p)
+    (hMPV : ∀ (N : ℕ) (σ : Fin N → Fin d),
+      mpv A σ = mpv (zeroMPSTensor d z) σ +
+        mpv (toTensorFromBlocks (d := d) (μ := μ) blocks) σ) :
+    ∀ (N : ℕ) (σ : Fin N → Fin (blockPhysDim d p)),
+      mpv (blockTensor (d := d) (D := D) A p) σ =
+        mpv (zeroMPSTensor (blockPhysDim d p) z) σ +
+          mpv (toTensorFromBlocks (d := blockPhysDim d p)
+            (fun k => (μ k) ^ p)
+            (fun k => blockTensor (d := d) (D := dim k) (blocks k) p)) σ := by
+  intro N σ
+  have hBlock :=
+    zeroTail_mpv_decomp_blockTensor
+      (d := d) (D := D) (L := ∑ k : Fin r, dim k) (z := z) (p := p)
+      A (toTensorFromBlocks (d := d) (μ := μ) blocks) hp hMPV N σ
+  have hLive := sameMPV₂_blockTensor_toTensorFromBlocks
+    (d := d) (dim := dim) μ blocks p
+  calc
+    mpv (blockTensor (d := d) (D := D) A p) σ =
+        mpv (zeroMPSTensor (blockPhysDim d p) z) σ +
+          mpv (blockTensor (d := d) (D := ∑ k : Fin r, dim k)
+            (toTensorFromBlocks (d := d) (μ := μ) blocks) p) σ := hBlock
+    _ = mpv (zeroMPSTensor (blockPhysDim d p) z) σ +
+          mpv (toTensorFromBlocks (d := blockPhysDim d p)
+            (fun k => (μ k) ^ p)
+            (fun k => blockTensor (d := d) (D := dim k) (blocks k) p)) σ := by
+          rw [hLive N σ]
+
 /-!
 ## The main reduction theorem
 
@@ -130,54 +198,13 @@ theorem exists_tp_primitive_blockDecomp_after_blocking (A : MPSTensor d D) :
   · exact hPrim
   -- (c) Positive bond dimensions (unchanged by blocking).
   · exact hDim₀
-  -- (d) Nonzero weights: (μ₀ k)^P ≠ 0 since μ₀ k ≠ 0.
-  · intro k
-    exact pow_ne_zero P (hμNe₀ k)
+  -- (d) Nonzero weights: `(μ₀ k)^P` remains nonzero since `μ₀ k ≠ 0`.
+  · exact blockWeights_ne_zero μ₀ hμNe₀ P
   -- (e) MPV relationship.
-  · intro N σ
-    -- Build the flattened configuration σflat : Fin (N * P) → Fin d.
-    set flat : List (Fin d) := flattenBlockedWord d P (List.ofFn σ) with flat_def
-    have hlen : flat.length = N * P := by
-      simpa [flat_def] using (length_flattenBlockedWord (d := d) (L := P) (List.ofFn σ))
-    set σflat : Fin (N * P) → Fin d :=
-      fun i => flat.get (Fin.cast hlen.symm i) with σflat_def
-    have hofFn : List.ofFn σflat = flat := by
-      rw [σflat_def]
-      conv_rhs => rw [← List.ofFn_get flat]
-      have hcongr :=
-        (List.ofFn_congr (m := N * P) (n := flat.length) hlen.symm
-          (fun i : Fin (N * P) => flat.get (Fin.cast hlen.symm i)))
-      simpa [Function.comp, Fin.cast_cast] using hcongr
-    -- Key: for ANY tensor T, mpv (blockTensor T P) σ = mpv T σflat.
-    have hblock (D' : ℕ) (T : MPSTensor d D') :
-        mpv (blockTensor (d := d) (D := D') T P) σ = mpv T σflat := by
-      simp [mpv, coeff, hofFn, flat_def, evalWord_blockTensor]
-    -- LHS: mpv (blockTensor A P) σ = mpv A σflat.
-    rw [hblock D A]
-    -- Pre-blocking MPV identity: mpv A σflat = zero-tail + live-blocks.
-    rw [hMPV₀ (N * P) σflat]
-    -- Trivial block: both sides equal `if N = 0 then zeroTailDim else 0`.
-    have hNP_iff : N * P = 0 ↔ N = 0 := by
-      rw [Nat.mul_eq_zero]
-      exact ⟨fun h => h.resolve_right hP.ne', fun h => Or.inl h⟩
-    have hZero :
-        mpv (zeroMPSTensor d zeroTailDim) σflat =
-          mpv (zeroMPSTensor (blockPhysDim d P) zeroTailDim) σ := by
-      rw [mpv_zeroMPSTensor, mpv_zeroMPSTensor]
-      simp [hNP_iff]
-    rw [hZero]
-    -- Live blocks: expand both sides via toTensorFromBlocks.
-    congr 1
-    rw [mpv_toTensorFromBlocks_eq_sum (μ := μ₀) (A := blocks₀) (σ := σflat)]
-    rw [mpv_toTensorFromBlocks_eq_sum (μ := μ₁) (A := blocks₁) (σ := σ)]
-    refine Finset.sum_congr rfl fun k _ => ?_
-    -- Weights: (μ₀ k)^(N*P) = ((μ₀ k)^P)^N = (μ₁ k)^N.
-    have hpow : (μ₀ k) ^ (N * P) = (μ₁ k) ^ N := by
-      simp [μ₁_def, Nat.mul_comm, pow_mul]
-    rw [hpow]
-    -- Block MPV: mpv (blocks₀ k) σflat = mpv (blockTensor (blocks₀ k) P) σ.
-    congr 1
-    exact (hblock (dim₀ k) (blocks₀ k)).symm
+  · simpa [μ₁_def, blocks₁_def] using
+      zeroTail_toTensorFromBlocks_blockPower
+        (d := d) (D := D) (r := r₀) (z := zeroTailDim) (p := P) (dim := dim₀)
+        A μ₀ blocks₀ hP hMPV₀
 
 /-!
 ## Conditional normal canonical form
