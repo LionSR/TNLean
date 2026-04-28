@@ -62,7 +62,8 @@ jobs:
             texlive-fonts-recommended \
             texlive-latex-extra \
             texlive-pictures \
-            texlive-science
+            texlive-science \
+            texlive-xetex
 
       - name: Install leanblueprint
         run: |
