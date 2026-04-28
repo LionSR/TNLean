@@ -12,9 +12,9 @@
 <meta name="generator" content="plasTeX" />
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Basis of Normal Tensors</title>
-<link rel="next" href="ch-assembly.html" title="Proof of the Fundamental Theorem" />
-<link rel="prev" href="ch-block_perm.html" title="Block Permutation and Separation" />
+<title>Fundamental Theorem for Injective PEPS</title>
+<link rel="next" href="ch-symmetry.html" title="Symmetries and String Order" />
+<link rel="prev" href="ch-algebraic_ft.html" title="The Algebraic Fundamental Theorem" />
 <link rel="up" href="index.html" title="Fundamental Theorem of Matrix Product States" />
 <link rel="stylesheet" href="styles/theme-white.css" />
 <link rel="stylesheet" href="styles/amsthm.css" />
@@ -560,10 +560,10 @@
 
   </ul>
  </li>
-<li class=" active current">
+<li class="">
   <a href="ch-bnt.html"><span class="toc_ref">13</span> <span class="toc_entry">Basis of Normal Tensors</span></a>
-  <span class="expand-toc">▼</span>
-  <ul class="sub-toc-1 active">
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-1">
      <li class="">
   <a href="ch-bnt.html#a0000000103"><span class="toc_ref">13.1</span> <span class="toc_entry">Basis of normal tensors</span></a>
  </li>
@@ -807,7 +807,7 @@
 
   </ul>
  </li>
-<li class="">
+<li class=" active current">
   <a href="sec-peps_ft.html"><span class="toc_ref">18</span> <span class="toc_entry">Fundamental Theorem for Injective PEPS</span></a>
  </li>
 <li class="">
@@ -935,29 +935,22 @@
 
 
 <div class="main-text">
-<h1 id="ch:bnt">13 Basis of Normal Tensors</h1>
+<h1 id="sec:peps_ft">18 Fundamental Theorem for Injective PEPS</h1>
 
-<p>This chapter introduces the <em>basis of normal tensors</em> (BNT) notion, the canonical-form variants with BNT separation, the cross-overlap decay theorem, and the permutation-rigidity arguments used in the proof of the Fundamental Theorem. The chapter concludes with auxiliary results on coefficient convergence and Newton–Girard identities. The main references are <span class="cite">
+<p>The following definitions and results extend the Fundamental Theorem to injective PEPS on simple graphs, following Theorem&#160;2 of&#160;<span class="cite">
 	[
 	
-	<a href="sect0001.html#PerezGarcia2007Matrix" >PGVWC07</a>
-	
-	]
-</span> and&#160;<span class="cite">
-	[
-	
-	<a href="sect0001.html#Cirac2021Matrix" >CPGSV21</a>
+	<a href="sect0001.html#Molnar2018NormalPEPS" >MGRPG+18</a>
 	
 	]
 </span>. </p>
-<h1 id="a0000000103">13.1 Basis of normal tensors</h1>
-<div class="definition_thmwrapper theorem-style-definition" id="def:bnt">
+<div class="definition_thmwrapper theorem-style-definition" id="def:peps_edge">
   <div class="definition_thmheading">
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">13.1</span>
-    <span class="definition_thmtitle">Basis of Normal Tensors (BNT)</span>
+    <span class="definition_thmlabel">18.1</span>
+    <span class="definition_thmtitle">Graph edge for PEPS</span>
     <div class="thm_header_extras">
 
     
@@ -965,7 +958,51 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-bnt.html#def:bnt">#</a>
+    <a class="icon proof" href="sec-peps_ft.html#def:peps_edge">#</a>
+    
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.Edge" class="lean_decl">TNLean.PEPS.Edge</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>   For a finite simple graph \(G\), an <em>edge</em> is an ordered pair \((u,v)\) with \(u {\lt} v\) and \(u\) adjacent to \(v\). The ordering is only used to avoid double counting. </p>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:peps_incident_edge">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">18.2</span>
+    <span class="definition_thmtitle">Incident edges at a vertex</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sec-peps_ft.html#def:peps_incident_edge">#</a>
     
     
     <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
@@ -980,9 +1017,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mps.html#def:normal">Definition 2.26</a></li>
-          
-          <li><a href="ch-mps.html#def:mpv">Definition 2.4</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_edge">Definition 18.1</a></li>
           
         </ul>
     
@@ -1002,7 +1037,7 @@
         
         <ul class="uses">
           
-          <li><a href="../docs/find/#doc/MPSTensor.IsBNT" class="lean_decl">MPSTensor.IsBNT</a></li>
+          <li><a href="../docs/find/#doc/TNLean.PEPS.IncidentEdge" class="lean_decl">TNLean.PEPS.IncidentEdge</a></li>
           
         </ul>
     
@@ -1013,111 +1048,750 @@
         </div>
   </div>
   <div class="definition_thmcontent">
-  <p>   A <em>basis of normal tensors</em> (BNT) for a total tensor \(A_{\mathrm{tot}}\) consists of \(g\) block tensors \((A_1, \ldots , A_g)\) with bond dimensions \((D_1, \ldots , D_g)\) such that: </p>
-<ol class="enumerate">
-  <li><p>each \(A_j\) is normal (Definition&#160;<a href="ch-mps.html#def:normal">2.26</a>), </p>
-</li>
-  <li><p>at each system size&#160;\(N\), the MPV of \(A_{\mathrm{tot}}\) lies in the span of the block MPVs \(\{ |V^{(N)}(A_j)\rangle \} _{j=1}^g\), </p>
-</li>
-  <li><p>for sufficiently large&#160;\(N\), the block MPV vectors \(\{ |V^{(N)}(A_j)\rangle \} _{j=1}^g\) are linearly independent. </p>
-</li>
-</ol>
-<p> This is <span class="cite">
+  <p>    For a vertex \(v\), an <em>incident edge</em> is an edge of \(G\) having \(v\) as one of its endpoints. </p>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:peps_tensor">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">18.3</span>
+    <span class="definition_thmtitle">PEPS tensor on a graph</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sec-peps_ft.html#def:peps_tensor">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sec-peps_ft.html#def:peps_edge">Definition 18.1</a></li>
+          
+          <li><a href="sec-peps_ft.html#def:peps_incident_edge">Definition 18.2</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.Tensor" class="lean_decl">TNLean.PEPS.Tensor</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>    A PEPS tensor on \(G\) with physical dimension \(d\) consists of a bond dimension \(D_e\) for every edge \(e\), together with a local tensor at each vertex \(v\) whose virtual indices are indexed by the edges incident to \(v\) and whose physical index lies in \(\{ 0,\ldots ,d-1\} \). </p>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:peps_virtual_config">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">18.4</span>
+    <span class="definition_thmtitle">Virtual configuration</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sec-peps_ft.html#def:peps_virtual_config">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sec-peps_ft.html#def:peps_tensor">Definition 18.3</a></li>
+          
+          <li><a href="sec-peps_ft.html#def:peps_edge">Definition 18.1</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.VirtualConfig" class="lean_decl">TNLean.PEPS.VirtualConfig</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>    A <em>virtual configuration</em> assigns to every edge \(e\) one basis index in the corresponding bond space of dimension \(D_e\). </p>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:peps_stateCoeff">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">18.5</span>
+    <span class="definition_thmtitle">PEPS state coefficient</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sec-peps_ft.html#def:peps_stateCoeff">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sec-peps_ft.html#def:peps_tensor">Definition 18.3</a></li>
+          
+          <li><a href="sec-peps_ft.html#def:peps_virtual_config">Definition 18.4</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.stateCoeff" class="lean_decl">TNLean.PEPS.stateCoeff</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>    For a physical configuration \(\sigma \) on the vertices, the PEPS state coefficient is obtained by summing over all virtual configurations and, for each such configuration, multiplying the local tensor entries over all vertices. </p>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:peps_same_state">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">18.6</span>
+    <span class="definition_thmtitle">Equality of PEPS states</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sec-peps_ft.html#def:peps_same_state">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sec-peps_ft.html#def:peps_stateCoeff">Definition 18.5</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.SameState" class="lean_decl">TNLean.PEPS.SameState</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>    Two PEPS tensors represent the same state if all their state coefficients agree for every physical configuration. </p>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:edgeGaugeAt">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">18.7</span>
+    <span class="definition_thmtitle">Edge gauge at a vertex</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sec-peps_ft.html#def:edgeGaugeAt">#</a>
+    
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.edgeGaugeAt" class="lean_decl">TNLean.PEPS.edgeGaugeAt</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>  For an edge \(e = (u,w)\) with \(u {\lt} w\) and gauge \(X_e \in \mathrm{GL}(D_e)\), the gauge matrix applied at vertex \(v\) is \(X_e\) if \(v = u\) and \((X_e^{-1})^\top \) if \(v = w\). Diagrammatically, the ordered edge carries opposite endpoint actions: </p>
+<div class="centered"> <img class="tn-svg" src="tn_svg/tn-d732232b80967571.svg" alt="\TNPEPSEdgeGaugeOrientation"></div>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:gaugeVertex">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">18.8</span>
+    <span class="definition_thmtitle">Gauge vertex action</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sec-peps_ft.html#def:gaugeVertex">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sec-peps_ft.html#def:edgeGaugeAt">Definition 18.7</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.gaugeVertex" class="lean_decl">TNLean.PEPS.gaugeVertex</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>   The gauged tensor at vertex \(v\) is \(A^X_v\). For each incident edge \(ie\), write \(M_{ie}\) for the matrix specified by Definition&#160;<a href="sec-peps_ft.html#def:edgeGaugeAt">18.7</a>, applied at the vertex \(v\) to the gauge on the underlying edge of \(ie\). Then \(A^X_v(\eta , \sigma ) = \sum _{\eta '} (\prod _{ie} M_{ie}(\eta (ie), \eta '(ie))) A_v(\eta ', \sigma )\). In tensor-network notation, one inserts the appropriate gauge matrix on each incident virtual leg of the local tensor: </p>
+<div class="centered"> <img class="tn-svg" src="tn_svg/tn-5c10028cd6bc26b0.svg" alt="\TNPEPSGaugeVertexAction"></div>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:applyGauge">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">18.9</span>
+    <span class="definition_thmtitle">Apply gauge</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sec-peps_ft.html#def:applyGauge">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sec-peps_ft.html#def:gaugeVertex">Definition 18.8</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.applyGauge" class="lean_decl">TNLean.PEPS.applyGauge</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>   The PEPS tensor obtained by applying edge-gauge matrices to \(A\), with vertex tensors \(A^X_v\). </p>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:GaugeEquivPEPS">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">18.10</span>
+    <span class="definition_thmtitle">Gauge equivalence for PEPS</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sec-peps_ft.html#def:GaugeEquivPEPS">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sec-peps_ft.html#def:gaugeVertex">Definition 18.8</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.GaugeEquiv" class="lean_decl">TNLean.PEPS.GaugeEquiv</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>   Two PEPS tensors \(A, B\) are gauge-equivalent if they have the same bond dimensions and \(B\) is obtained from \(A\) by applying invertible gauge matrices on each edge. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:applyGauge_stateCoeff">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">18.11</span>
+    <span class="theorem_thmtitle">Gauge invariance of PEPS state</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sec-peps_ft.html#thm:applyGauge_stateCoeff">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sec-peps_ft.html#def:applyGauge">Definition 18.9</a></li>
+          
+          <li><a href="sec-peps_ft.html#def:peps_stateCoeff">Definition 18.5</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.applyGauge_stateCoeff" class="lean_decl">TNLean.PEPS.applyGauge_stateCoeff</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   Applying a gauge to a PEPS tensor preserves the state coefficients. Along each internal edge, the two endpoint insertions cancel: </p>
+<div class="centered"> <img class="tn-svg" src="tn_svg/tn-58f6841b434f4593.svg" alt="\TNPEPSGaugeCancellation"></div>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:GaugeEquiv_sameState">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">18.12</span>
+    <span class="theorem_thmtitle">Gauge equivalence implies same state</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sec-peps_ft.html#thm:GaugeEquiv_sameState">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sec-peps_ft.html#def:GaugeEquivPEPS">Definition 18.10</a></li>
+          
+          <li><a href="sec-peps_ft.html#def:peps_same_state">Definition 18.6</a></li>
+          
+          <li><a href="sec-peps_ft.html#thm:applyGauge_stateCoeff">Theorem 18.11</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.GaugeEquiv.sameState" class="lean_decl">TNLean.PEPS.GaugeEquiv.sameState</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   Gauge equivalence implies that the two PEPS tensors represent the same state. </p>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:localTensorEval">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">18.13</span>
+    <span class="definition_thmtitle">Local tensor evaluation</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sec-peps_ft.html#def:localTensorEval">#</a>
+    
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.localTensorEval" class="lean_decl">TNLean.PEPS.localTensorEval</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>  The local tensor evaluated at vertex \(v\) with virtual-index weighting \(f\), computing \(\sum _\eta (\prod _{ie} f(ie)(\eta (ie))) \cdot A_v(\eta , \sigma )\). This is multilinear in the components of \(f\), not linear in the full tuple. </p>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:IsVertexInjective">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">18.14</span>
+    <span class="definition_thmtitle">Vertex injectivity</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sec-peps_ft.html#def:IsVertexInjective">#</a>
+    
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.IsVertexInjective" class="lean_decl">TNLean.PEPS.IsVertexInjective</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>  A PEPS tensor \(A\) is <em>vertex-injective</em> if, at every vertex \(v\), the family of physical vectors </p>
+<div class="displaymath" id="a0000001246">
+  \[  \bigl(A_v(\eta , \cdot ) \in \mathbb {C}^d\bigr)_{\eta }  \]
+</div>
+<p> indexed by virtual configurations \(\eta \) on the edges incident to \(v\) is linearly independent in \(\mathbb {C}^d\). Equivalently, extending \(A_v\) by linearity to a map from the free vector space on virtual configurations into the physical space \(\mathbb {C}^d\) gives a linear map with trivial kernel. This matches the paper’s formulation that "all tensors interpreted as maps from the virtual space to the physical one are injective" (<span class="cite">
 	[
 	
-	<a href="sect0001.html#Cirac2021Matrix" >CPGSV21</a>
-	, Definition&#160;4.2
+	<a href="sect0001.html#Molnar2018NormalPEPS" >MGRPG+18</a>
+	
 	]
-</span>. </p>
+</span>, §3). </p>
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:bnt_overlap_orthonormal_li">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
-    </span>
-    <span class="theorem_thmlabel">13.2</span>
-    <span class="theorem_thmtitle">Overlap-orthonormality implies eventual linear independence</span>
-    <div class="thm_header_extras">
-
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-bnt.html#thm:bnt_overlap_orthonormal_li">#</a>
-    
-    <a class="icon proof" href="ch-bnt.html#a0000000911"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
-</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-mps.html#def:mpv_overlap">Definition 2.43</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.eventually_linearIndependent_of_overlap_tendsto_orthonormal" class="lean_decl">MPSTensor.eventually_linearIndependent_of_overlap_tendsto_orthonormal</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="theorem_thmcontent">
-  <p>    Let \((A_j)_{j=1}^g\) be a finite family of tensors such that \(O_{A_jA_j}(N) \to 1\) for each \(j\) and \(O_{A_iA_j}(N) \to 0\) for \(i \neq j\). Then the MPV states \(\{ |V^{(N)}(A_j)\rangle \} _{j=1}^g\) are linearly independent for all sufficiently large&#160;\(N\). </p>
-
-  </div>
-</div>
-<div class="proof_wrapper" id="a0000000911">
-  <div class="proof_heading">
-    <span class="proof_caption">
-    Proof
-    </span>
-    <span class="expand-proof">▶</span>
-  </div>
-  <div class="proof_content">
-  <p>The Gram matrix of the family \(\{ |V^{(N)}(A_j)\rangle \} _{j=1}^g\) converges entrywise to the identity matrix. Hence for all sufficiently large \(N\) it is invertible, so the MPV states are linearly independent. </p>
-
-  </div>
-</div>
-<div class="definition_thmwrapper theorem-style-definition" id="def:cf_bnt">
+<div class="definition_thmwrapper theorem-style-definition" id="def:peps_localTensorMap">
   <div class="definition_thmheading">
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">13.3</span>
-    <span class="definition_thmtitle">Canonical form with BNT separation</span>
+    <span class="definition_thmlabel">18.15</span>
+    <span class="definition_thmtitle">Local tensor map</span>
     <div class="thm_header_extras">
 
     
@@ -1125,7 +1799,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-bnt.html#def:cf_bnt">#</a>
+    <a class="icon proof" href="sec-peps_ft.html#def:peps_localTensorMap">#</a>
     
     
     <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
@@ -1140,9 +1814,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-block_perm.html#def:is_canonical_form">Definition 12.16</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_tensor">Definition 18.3</a></li>
           
-          <li><a href="ch-mps.html#def:gauge_phase_equiv">Definition 2.18</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_incident_edge">Definition 18.2</a></li>
           
         </ul>
     
@@ -1162,7 +1836,7 @@
         
         <ul class="uses">
           
-          <li><a href="../docs/find/#doc/MPSTensor.IsCanonicalFormBNT" class="lean_decl">MPSTensor.IsCanonicalFormBNT</a></li>
+          <li><a href="../docs/find/#doc/TNLean.PEPS.localTensorMap" class="lean_decl">TNLean.PEPS.localTensorMap</a></li>
           
         </ul>
     
@@ -1173,105 +1847,17 @@
         </div>
   </div>
   <div class="definition_thmcontent">
-  <p>   A family is in <em>canonical form with BNT separation</em> if it satisfies Definition&#160;<a href="ch-block_perm.html#def:is_canonical_form">12.16</a> and, in addition: </p>
-<ol class="enumerate">
-  <li><p>the moduli are <em>strictly</em> decreasing: \(|\mu _1| {\gt} |\mu _2| {\gt} \cdots {\gt} |\mu _r|\) (strengthened from the non-increasing ordering of Definition&#160;<a href="ch-block_perm.html#def:is_canonical_form">12.16</a>), </p>
-</li>
-  <li><p>distinct blocks of the same bond dimension are <em>not</em> gauge-phase equivalent. </p>
-</li>
-</ol>
-<p> The strictly decreasing condition is justified by the BNT grouping step, which merges gauge-phase-equivalent blocks with equal moduli. </p>
+  <p>   For a fixed vertex \(v\), the family of local physical vectors \(\eta \mapsto A_v(\eta , \cdot )\) extends by linearity to a map from the coefficient space on local virtual configurations at \(v\) into \(\mathbb {C}^d\). </p>
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:cf_bnt_distinct_dims">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
-    </span>
-    <span class="theorem_thmlabel">13.4</span>
-    <span class="theorem_thmtitle">Distinct bond dimensions force BNT separation</span>
-    <div class="thm_header_extras">
-
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-bnt.html#thm:cf_bnt_distinct_dims">#</a>
-    
-    <a class="icon proof" href="ch-bnt.html#a0000000912"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
-</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-block_perm.html#def:is_canonical_form">Definition 12.16</a></li>
-          
-          <li><a href="ch-bnt.html#def:cf_bnt">Definition 13.3</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.IsCanonicalForm.toIsCanonicalFormBNT_of_distinct_dims" class="lean_decl">MPSTensor.IsCanonicalForm.toIsCanonicalFormBNT_of_distinct_dims</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="theorem_thmcontent">
-  <p>    If a canonical-form family has strictly decreasing weight moduli and pairwise distinct bond dimensions, then it is in canonical form with BNT separation. </p>
-
-  </div>
-</div>
-<div class="proof_wrapper" id="a0000000912">
-  <div class="proof_heading">
-    <span class="proof_caption">
-    Proof
-    </span>
-    <span class="expand-proof">▶</span>
-  </div>
-  <div class="proof_content">
-  <p>The only new clause in Definition&#160;<a href="ch-bnt.html#def:cf_bnt">13.3</a> is the prohibition on gauge-phase equivalence between distinct blocks of the same bond dimension. When the bond dimensions are pairwise distinct, this clause is vacuous. </p>
-
-  </div>
-</div>
-<div class="definition_thmwrapper theorem-style-definition" id="def:normal_cf_bnt">
+<div class="definition_thmwrapper theorem-style-definition" id="def:peps_localLeftInverse">
   <div class="definition_thmheading">
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">13.5</span>
-    <span class="definition_thmtitle">Normal canonical form with BNT separation</span>
+    <span class="definition_thmlabel">18.16</span>
+    <span class="definition_thmtitle">Local left inverse</span>
     <div class="thm_header_extras">
 
     
@@ -1279,7 +1865,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-bnt.html#def:normal_cf_bnt">#</a>
+    <a class="icon proof" href="sec-peps_ft.html#def:peps_localLeftInverse">#</a>
     
     
     <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
@@ -1294,9 +1880,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#def:is_normal_canonical_form">Definition 11.38</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_localTensorMap">Definition 18.15</a></li>
           
-          <li><a href="ch-mps.html#def:gauge_phase_equiv">Definition 2.18</a></li>
+          <li><a href="sec-peps_ft.html#def:IsVertexInjective">Definition 18.14</a></li>
           
         </ul>
     
@@ -1316,7 +1902,7 @@
         
         <ul class="uses">
           
-          <li><a href="../docs/find/#doc/MPSTensor.IsNormalCanonicalFormBNT" class="lean_decl">MPSTensor.IsNormalCanonicalFormBNT</a></li>
+          <li><a href="../docs/find/#doc/TNLean.PEPS.localLeftInverse" class="lean_decl">TNLean.PEPS.localLeftInverse</a></li>
           
         </ul>
     
@@ -1327,23 +1913,17 @@
         </div>
   </div>
   <div class="definition_thmcontent">
-  <p>  A family is in <em>normal canonical form with BNT separation</em> if it satisfies Definition&#160;<a href="ch-canonical.html#def:is_normal_canonical_form">11.38</a> and, in addition: </p>
-<ol class="enumerate">
-  <li><p>the moduli are strictly decreasing (strengthened from non-increasing), </p>
-</li>
-  <li><p>distinct blocks of the same bond dimension are not gauge-phase equivalent. </p>
-</li>
-</ol>
+  <p>   If \(A\) is vertex-injective, one may choose a linear map \(\Psi _v\) from \(\mathbb {C}^d\) to the coefficient space on local virtual configurations at \(v\) such that \(\Psi _v \circ \Phi _v = \mathbb {1}\). </p>
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:bnt_grouping_equal_norm">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
+<div class="definition_thmwrapper theorem-style-definition" id="def:peps_physRealizeLocalOp">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
     </span>
-    <span class="theorem_thmlabel">13.6</span>
-    <span class="theorem_thmtitle">Equal-norm grouping step</span>
+    <span class="definition_thmlabel">18.17</span>
+    <span class="definition_thmtitle">Physical realization of a local virtual operator</span>
     <div class="thm_header_extras">
 
     
@@ -1351,9 +1931,78 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-bnt.html#thm:bnt_grouping_equal_norm">#</a>
+    <a class="icon proof" href="sec-peps_ft.html#def:peps_physRealizeLocalOp">#</a>
     
-    <a class="icon proof" href="ch-bnt.html#a0000000913"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sec-peps_ft.html#def:peps_localTensorMap">Definition 18.15</a></li>
+          
+          <li><a href="sec-peps_ft.html#def:peps_localLeftInverse">Definition 18.16</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.physRealizeLocalOp" class="lean_decl">TNLean.PEPS.physRealizeLocalOp</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>   For an endomorphism \(T\) of the coefficient space on local virtual configurations at \(v\), define the local physical operator </p>
+<div class="displaymath" id="a0000001247">
+  \[  O_T = \Phi _v \circ T \circ \Psi _v .  \]
+</div>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:peps_physRealizeLocalOp_spec">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">18.18</span>
+    <span class="theorem_thmtitle">Local virtual operations on the image</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sec-peps_ft.html#thm:peps_physRealizeLocalOp_spec">#</a>
+    
+    <a class="icon proof" href="sec-peps_ft.html#a0000001248"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1369,7 +2018,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mps.html#def:mpv">Definition 2.4</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_physRealizeLocalOp">Definition 18.17</a></li>
           
         </ul>
     
@@ -1389,7 +2038,7 @@
         
         <ul class="uses">
           
-          <li><a href="../docs/find/#doc/MPSTensor.exists_bnt_grouping" class="lean_decl">MPSTensor.exists_bnt_grouping</a></li>
+          <li><a href="../docs/find/#doc/TNLean.PEPS.physRealizeLocalOp_spec" class="lean_decl">TNLean.PEPS.physRealizeLocalOp_spec</a></li>
           
         </ul>
     
@@ -1400,11 +2049,14 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>    Let \((\mu _k, A_k)_{k=1}^r\) be a weighted block family with \(\mu _k \neq 0\) for every \(k\). Assume that whenever \(\| \mu _j\|  = \| \mu _k\| \), the tensors \(A_j\) and \(A_k\) generate the same MPV family. Then one can regroup the blocks into a sector decomposition whose associated total tensor generates the same MPV family as \(\bigoplus _k \mu _k A_k\), and whose sector-weight norms are strictly decreasing. </p>
+  <p>   For every coefficient function \(c\) on the local virtual configurations at \(v\), </p>
+<div class="displaymath" id="a0000001249">
+  \[  O_T\bigl(\Phi _v(c)\bigr) = \Phi _v(Tc).  \]
+</div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000913">
+<div class="proof_wrapper" id="a0000001248">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1412,17 +2064,17 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>Order the distinct norms of the weights in decreasing order, choose one representative block from each norm class, and retain the multiplicities inside each class as sector copies. The equal-MPV hypothesis lets every block in a class be replaced by the chosen representative, so the regrouped decomposition has the same MPV family. By construction, the sector-weight norms are strictly decreasing. </p>
+  <p>This is immediate from \(\Psi _v \circ \Phi _v = \mathbb {1}\). </p>
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:cross_overlap_zero_split">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
+<div class="definition_thmwrapper theorem-style-definition" id="def:peps_localVirtualConfigSplitAt">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
     </span>
-    <span class="theorem_thmlabel">13.7</span>
-    <span class="theorem_thmtitle">Cross-overlap decay from explicit BNT hypotheses</span>
+    <span class="definition_thmlabel">18.19</span>
+    <span class="definition_thmtitle">Split at one incident edge</span>
     <div class="thm_header_extras">
 
     
@@ -1430,9 +2082,139 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-bnt.html#thm:cross_overlap_zero_split">#</a>
+    <a class="icon proof" href="sec-peps_ft.html#def:peps_localVirtualConfigSplitAt">#</a>
     
-    <a class="icon proof" href="ch-bnt.html#a0000000914"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sec-peps_ft.html#def:peps_tensor">Definition 18.3</a></li>
+          
+          <li><a href="sec-peps_ft.html#def:peps_incident_edge">Definition 18.2</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.localVirtualConfigSplitAt" class="lean_decl">TNLean.PEPS.localVirtualConfigSplitAt</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>   Choosing one incident edge at \(v\) identifies the set of local virtual configurations with the product of the bond index on that edge and the residual indices on the remaining incident edges. </p>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:peps_edgeMiddleVertices">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">18.20</span>
+    <span class="definition_thmtitle">Middle region of an edge</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sec-peps_ft.html#def:peps_edgeMiddleVertices">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sec-peps_ft.html#def:peps_edge">Definition 18.1</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.edgeMiddleVertices" class="lean_decl">TNLean.PEPS.edgeMiddleVertices</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>   For an edge \(e = (u,v)\), the middle region is the complement \(V \setminus \{ u,v\} \). </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:peps_edgeVertices_union">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">18.21</span>
+    <span class="theorem_thmtitle">Edge-centered vertex partition</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sec-peps_ft.html#thm:peps_edgeVertices_union">#</a>
+    
+    <a class="icon proof" href="sec-peps_ft.html#a0000001250"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1448,13 +2230,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mps.html#def:mpv_overlap">Definition 2.43</a></li>
-          
-          <li><a href="ch-mps.html#def:gauge_phase_equiv">Definition 2.18</a></li>
-          
-          <li><a href="ch-spectral.html#thm:overlap_decay">Theorem 9.25</a></li>
-          
-          <li><a href="ch-spectral.html#thm:overlap_decay_rect">Theorem 9.23</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_edgeMiddleVertices">Definition 18.20</a></li>
           
         </ul>
     
@@ -1474,7 +2250,7 @@
         
         <ul class="uses">
           
-          <li><a href="../docs/find/#doc/MPSTensor.cross_overlap_tendsto_zero_of_separated_CFBNT_data" class="lean_decl">MPSTensor.cross_overlap_tendsto_zero_of_separated_CFBNT_data</a></li>
+          <li><a href="../docs/find/#doc/TNLean.PEPS.edgeVertices_union" class="lean_decl">TNLean.PEPS.edgeVertices_union</a></li>
           
         </ul>
     
@@ -1485,11 +2261,11 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>    Let \((A_j)_{j=1}^r\) be injective and trace-preserving normalized. Assume that distinct equal-dimension blocks are not gauge-phase equivalent. Then \(O_{A_jA_k}(N) \to 0\) for every pair \(j \neq k\). </p>
+  <p>   For an edge \(e = (u,v)\), the three regions \(\{ u\} \), \(V \setminus \{ u,v\} \), and \(\{ v\} \) cover the whole vertex set. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000914">
+<div class="proof_wrapper" id="a0000001250">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1497,17 +2273,17 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> If the bond dimensions differ, Theorem&#160;<a href="ch-spectral.html#thm:overlap_decay_rect">9.23</a> gives the decay. If the bond dimensions agree, the non-equivalence hypothesis excludes gauge-phase equivalence, so Theorem&#160;<a href="ch-spectral.html#thm:overlap_decay">9.25</a> gives the decay. </p>
+  <p>Every vertex is either \(u\), \(v\), or different from both. </p>
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:cross_overlap_zero">
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:peps_prod_univ_splitAtEdge">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">13.8</span>
-    <span class="theorem_thmtitle">Cross-overlap decay for distinct blocks in canonical form with BNT separation</span>
+    <span class="theorem_thmlabel">18.22</span>
+    <span class="theorem_thmtitle">Product splitting at an edge</span>
     <div class="thm_header_extras">
 
     
@@ -1515,9 +2291,9 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-bnt.html#thm:cross_overlap_zero">#</a>
+    <a class="icon proof" href="sec-peps_ft.html#thm:peps_prod_univ_splitAtEdge">#</a>
     
-    <a class="icon proof" href="ch-bnt.html#a0000000915"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001251"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1533,13 +2309,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-bnt.html#def:cf_bnt">Definition 13.3</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_edgeMiddleVertices">Definition 18.20</a></li>
           
-          <li><a href="ch-mps.html#def:mpv_overlap">Definition 2.43</a></li>
-          
-          <li><a href="ch-bnt.html#def:cf_bnt">Definition 13.3</a></li>
-          
-          <li><a href="ch-bnt.html#thm:cross_overlap_zero_split">Theorem 13.7</a></li>
+          <li><a href="sec-peps_ft.html#thm:peps_edgeVertices_union">Theorem 18.21</a></li>
           
         </ul>
     
@@ -1559,7 +2331,7 @@
         
         <ul class="uses">
           
-          <li><a href="../docs/find/#doc/MPSTensor.IsCanonicalFormBNT.cross_overlap_tendsto_zero" class="lean_decl">MPSTensor.IsCanonicalFormBNT.cross_overlap_tendsto_zero</a></li>
+          <li><a href="../docs/find/#doc/TNLean.PEPS.prod_univ_splitAtEdge" class="lean_decl">TNLean.PEPS.prod_univ_splitAtEdge</a></li>
           
         </ul>
     
@@ -1570,11 +2342,14 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   If \(((\mu _k),(A_k))\) is in canonical form with BNT separation and \(j \neq k\), then \(O_{A_j A_k}(N) \to 0\). </p>
+  <p>   For any edge \(e = (u,v)\) and any function \(f\) on the vertex set with values in a commutative monoid \(M\), </p>
+<div class="displaymath" id="a0000001252">
+  \[  \prod _{x \in V} f(x) = f(u) \Bigl(\prod _{x \in V \setminus \{ u,v\} } f(x)\Bigr) f(v).  \]
+</div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000915">
+<div class="proof_wrapper" id="a0000001251">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1582,17 +2357,17 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Definition&#160;<a href="ch-bnt.html#def:cf_bnt">13.3</a> supplies injectivity, left-canonical normalization, and the BNT separation hypothesis, so Theorem&#160;<a href="ch-bnt.html#thm:cross_overlap_zero_split">13.7</a> applies directly. </p>
+  <p>Isolate the two distinguished endpoints in the product over \(V\) and group the remaining factors into the middle region. </p>
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:cf_bnt_is_bnt_split">
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:peps_stateCoeff_splitAtEdge">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">13.9</span>
-    <span class="theorem_thmtitle">BNT from explicit blockwise hypotheses</span>
+    <span class="theorem_thmlabel">18.23</span>
+    <span class="theorem_thmtitle">PEPS coefficient splitting at an edge</span>
     <div class="thm_header_extras">
 
     
@@ -1600,9 +2375,9 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-bnt.html#thm:cf_bnt_is_bnt_split">#</a>
+    <a class="icon proof" href="sec-peps_ft.html#thm:peps_stateCoeff_splitAtEdge">#</a>
     
-    <a class="icon proof" href="ch-bnt.html#a0000000916"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001253"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1618,15 +2393,11 @@
         
         <ul class="uses">
           
-          <li><a href="ch-bnt.html#def:bnt">Definition 13.1</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_stateCoeff">Definition 18.5</a></li>
           
-          <li><a href="ch-mps.html#def:mpv_overlap">Definition 2.43</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_edgeMiddleVertices">Definition 18.20</a></li>
           
-          <li><a href="ch-mps.html#thm:mpv_decomposition">Theorem 2.36</a></li>
-          
-          <li><a href="ch-bnt.html#thm:bnt_overlap_orthonormal_li">Theorem 13.2</a></li>
-          
-          <li><a href="ch-bnt.html#thm:cross_overlap_zero_split">Theorem 13.7</a></li>
+          <li><a href="sec-peps_ft.html#thm:peps_prod_univ_splitAtEdge">Theorem 18.22</a></li>
           
         </ul>
     
@@ -1646,7 +2417,7 @@
         
         <ul class="uses">
           
-          <li><a href="../docs/find/#doc/MPSTensor.isBNT_of_separated_CFBNT_data" class="lean_decl">MPSTensor.isBNT_of_separated_CFBNT_data</a></li>
+          <li><a href="../docs/find/#doc/TNLean.PEPS.stateCoeff_splitAtEdge" class="lean_decl">TNLean.PEPS.stateCoeff_splitAtEdge</a></li>
           
         </ul>
     
@@ -1657,11 +2428,11 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>    Let \((\mu _k, A_k)_{k=1}^r\) be a weighted block family. Assume that the blocks are injective and trace-preserving normalized, that \(O_{A_kA_k}(N) \to 1\) for each \(k\), and that distinct equal-dimension blocks are not gauge-phase equivalent. Then the blocks form a basis of normal tensors for the block-diagonal tensor \(\bigoplus _k \mu _k A_k\). </p>
+  <p>   For any edge \(e = (u,v)\), each summand in the PEPS coefficient factors into the tensor contribution at \(u\), the product over the middle region \(V \setminus \{ u,v\} \), and the tensor contribution at \(v\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000916">
+<div class="proof_wrapper" id="a0000001253">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1669,17 +2440,17 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Injective blocks are normal. The block-diagonal decomposition theorem gives the MPV expansion of \(\bigoplus _k \mu _k A_k\) in terms of the block MPVs. The self-overlap limits are part of the hypotheses, and Theorem&#160;<a href="ch-bnt.html#thm:cross_overlap_zero_split">13.7</a> supplies the off-diagonal decay. Therefore Theorem&#160;<a href="ch-bnt.html#thm:bnt_overlap_orthonormal_li">13.2</a> gives the eventual linear independence required in Definition&#160;<a href="ch-bnt.html#def:bnt">13.1</a>. </p>
+  <p>Expand the state coefficient and apply the product splitting at the chosen edge to the per-vertex product inside each summand. </p>
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:cf_bnt_is_bnt">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
+<div class="definition_thmwrapper theorem-style-definition" id="def:peps_hasLocalGaugeLift">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
     </span>
-    <span class="theorem_thmlabel">13.10</span>
-    <span class="theorem_thmtitle">Canonical form with BNT separation yields a basis of normal tensors</span>
+    <span class="definition_thmlabel">18.24</span>
+    <span class="definition_thmtitle">Sharpened local gauge lift datum</span>
     <div class="thm_header_extras">
 
     
@@ -1687,10 +2458,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-bnt.html#thm:cf_bnt_is_bnt">#</a>
-    
-    <a class="icon proof" href="ch-bnt.html#a0000000917"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
-</a>
+    <a class="icon proof" href="sec-peps_ft.html#def:peps_hasLocalGaugeLift">#</a>
     
     
     <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
@@ -1705,13 +2473,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-bnt.html#def:cf_bnt">Definition 13.3</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_localTensorMap">Definition 18.15</a></li>
           
-          <li><a href="ch-bnt.html#def:bnt">Definition 13.1</a></li>
-          
-          <li><a href="ch-bnt.html#def:cf_bnt">Definition 13.3</a></li>
-          
-          <li><a href="ch-bnt.html#thm:cf_bnt_is_bnt_split">Theorem 13.9</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_localLeftInverse">Definition 18.16</a></li>
           
         </ul>
     
@@ -1731,7 +2495,7 @@
         
         <ul class="uses">
           
-          <li><a href="../docs/find/#doc/MPSTensor.IsCanonicalFormBNT.isBNT" class="lean_decl">MPSTensor.IsCanonicalFormBNT.isBNT</a></li>
+          <li><a href="../docs/find/#doc/TNLean.PEPS.HasLocalGaugeLift" class="lean_decl">TNLean.PEPS.HasLocalGaugeLift</a></li>
           
         </ul>
     
@@ -1741,1166 +2505,24 @@
     
         </div>
   </div>
-  <div class="theorem_thmcontent">
-  <p>   If \(((\mu _k), (A_k))\) is in canonical form with BNT separation, then the block tensors form a basis of normal tensors for the block-diagonal tensor \(\bigoplus _k \mu _k A_k\). </p>
-
-  </div>
-</div>
-<div class="proof_wrapper" id="a0000000917">
-  <div class="proof_heading">
-    <span class="proof_caption">
-    Proof
-    </span>
-    <span class="expand-proof">▶</span>
-  </div>
-  <div class="proof_content">
-  <p> Definition&#160;<a href="ch-bnt.html#def:cf_bnt">13.3</a> provides injective blocks, left-canonical normalization, normalized self-overlaps, and BNT separation. Hence Theorem&#160;<a href="ch-bnt.html#thm:cf_bnt_is_bnt_split">13.9</a> applies. </p>
-
-  </div>
-</div>
-<div class="remark_thmwrapper theorem-style-remark" id="rem:normalcf_bnt_gap">
-  <div class="remark_thmheading">
-    <span class="remark_thmcaption">
-    Remark
-    </span>
-    <span class="remark_thmlabel">13.11</span>
-    <span class="remark_thmtitle">The normality gap for normal canonical form with BNT separation</span>
-    <div class="thm_header_extras">
-
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-bnt.html#rem:normalcf_bnt_gap">#</a>
-    
-    
-    
-        </div>
-  </div>
-  <div class="remark_thmcontent">
-  <p> Definition&#160;<a href="ch-bnt.html#def:normal_cf_bnt">13.5</a> references the normal canonical form conditions (Definition&#160;<a href="ch-canonical.html#def:is_normal_canonical_form">11.38</a>), which encode normality via the spectral characterization (primitive transfer map). Definition&#160;<a href="ch-bnt.html#def:bnt">13.1</a> requires normality via the algebraic characterization (eventual block injectivity, Definition&#160;<a href="ch-mps.html#def:normal">2.26</a>). These are equivalent by Remark&#160;2.20, but the equivalence must be invoked explicitly: the Wielandt theory of Chapter&#160;<a href="ch-wielandt.html">10</a> provides the implication from primitivity to eventual block injectivity needed here. </p>
-
-  </div>
-</div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:normal_cf_bnt_is_bnt">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
-    </span>
-    <span class="theorem_thmlabel">13.12</span>
-    <span class="theorem_thmtitle">Normal canonical form with BNT separation yields a BNT after algebraic normality is supplied</span>
-    <div class="thm_header_extras">
-
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-bnt.html#thm:normal_cf_bnt_is_bnt">#</a>
-    
-    <a class="icon proof" href="ch-bnt.html#a0000000918"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
-</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-bnt.html#def:normal_cf_bnt">Definition 13.5</a></li>
-          
-          <li><a href="ch-bnt.html#def:bnt">Definition 13.1</a></li>
-          
-          <li><a href="ch-bnt.html#rem:normalcf_bnt_gap">Remark 13.11</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.IsNormalCanonicalFormBNT.isBNT" class="lean_decl">MPSTensor.IsNormalCanonicalFormBNT.isBNT</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="theorem_thmcontent">
-  <p>    If a family is in normal canonical form with BNT separation and each block is also known to be normal in the algebraic sense, then the blocks form a basis of normal tensors for the associated block-diagonal tensor. </p>
-
-  </div>
-</div>
-<div class="proof_wrapper" id="a0000000918">
-  <div class="proof_heading">
-    <span class="proof_caption">
-    Proof
-    </span>
-    <span class="expand-proof">▶</span>
-  </div>
-  <div class="proof_content">
-  <p> Normal-canonical BNT data already give the block-diagonal MPV expansion, the self-overlap normalization, and the eventual linear independence coming from irreducible trace-preserving overlap decay. Supplying algebraic normality for each block adds the remaining clause in Definition&#160;<a href="ch-bnt.html#def:bnt">13.1</a>. </p>
-
-  </div>
-</div>
-<h1 id="a0000000104">13.2 Permutation rigidity for bases of normal tensors</h1>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:bnt_invertible_change_basis">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
-    </span>
-    <span class="theorem_thmlabel">13.13</span>
-    <span class="theorem_thmtitle">Invertible change of basis</span>
-    <div class="thm_header_extras">
-
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-bnt.html#thm:bnt_invertible_change_basis">#</a>
-    
-    <a class="icon proof" href="ch-bnt.html#a0000000919"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
-</a>
-    
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/exists_invertible_changeBasis" class="lean_decl">exists_invertible_changeBasis</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="theorem_thmcontent">
-  <p>   Let \(v_1, \ldots , v_g\) and \(w_1, \ldots , w_g\) be two linearly independent families in a complex vector space with the same span. Then there exists an invertible matrix \(U \in \mathrm{GL}_g(\mathbb {C})\) such that </p>
-<div class="displaymath" id="a0000000920">
-  \[  w_j = \sum _{i=1}^g U_{ij} v_i  \]
-</div>
-<p> for every \(j\). </p>
-
-  </div>
-</div>
-<div class="proof_wrapper" id="a0000000919">
-  <div class="proof_heading">
-    <span class="proof_caption">
-    Proof
-    </span>
-    <span class="expand-proof">▶</span>
-  </div>
-  <div class="proof_content">
-  <p>Because the two families span the same subspace, each \(w_j\) has a unique expansion in the basis \(\{ v_i\} _{i=1}^g\); these coefficients form the columns of \(U\). If \(U a = 0\), then the corresponding linear relation among the \(w_j\) is trivial because the \(w_j\) are linearly independent. Thus \(U\) is injective, hence invertible. </p>
-
-  </div>
-</div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:bnt_eventual_change_basis">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
-    </span>
-    <span class="theorem_thmlabel">13.14</span>
-    <span class="theorem_thmtitle">Eventual change of basis from equal spans</span>
-    <div class="thm_header_extras">
-
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-bnt.html#thm:bnt_eventual_change_basis">#</a>
-    
-    <a class="icon proof" href="ch-bnt.html#a0000000921"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
-</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-bnt.html#thm:bnt_invertible_change_basis">Theorem 13.13</a></li>
-          
-          <li><a href="ch-mps.html#def:mpv_overlap">Definition 2.43</a></li>
-          
-          <li><a href="ch-bnt.html#thm:bnt_overlap_orthonormal_li">Theorem 13.2</a></li>
-          
-          <li><a href="ch-bnt.html#thm:bnt_invertible_change_basis">Theorem 13.13</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.eventually_exists_invertible_changeBasis" class="lean_decl">MPSTensor.eventually_exists_invertible_changeBasis</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="theorem_thmcontent">
-  <p>    If two finite families of blocks have asymptotically orthonormal overlaps within each family and their MPV spans agree for every system size \(N\), then for all sufficiently large \(N\) there exists an invertible matrix \(U_N\) expressing the MPV states of one family as linear combinations of the MPV states of the other. </p>
-
-  </div>
-</div>
-<div class="proof_wrapper" id="a0000000921">
-  <div class="proof_heading">
-    <span class="proof_caption">
-    Proof
-    </span>
-    <span class="expand-proof">▶</span>
-  </div>
-  <div class="proof_content">
-  <p> By Theorem&#160;<a href="ch-bnt.html#thm:bnt_overlap_orthonormal_li">13.2</a>, both families are linearly independent for all sufficiently large \(N\). At such an \(N\), the span equality lets us apply Theorem&#160;<a href="ch-bnt.html#thm:bnt_invertible_change_basis">13.13</a>. </p>
-
-  </div>
-</div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:bnt_perm_same_card">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
-    </span>
-    <span class="theorem_thmlabel">13.15</span>
-    <span class="theorem_thmtitle">Permutation rigidity for equal block counts</span>
-    <div class="thm_header_extras">
-
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-bnt.html#thm:bnt_perm_same_card">#</a>
-    
-    <a class="icon proof" href="ch-bnt.html#a0000000922"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
-</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-mps.html#def:injective">Definition 2.23</a></li>
-          
-          <li><a href="ch-mps.html#def:mpv_overlap">Definition 2.43</a></li>
-          
-          <li><a href="ch-mps.html#def:gauge_phase_equiv">Definition 2.18</a></li>
-          
-          <li><a href="ch-bnt.html#thm:bnt_eventual_change_basis">Theorem 13.14</a></li>
-          
-          <li><a href="ch-spectral.html#thm:overlap_decay">Theorem 9.25</a></li>
-          
-          <li><a href="ch-spectral.html#thm:overlap_decay_rect">Theorem 9.23</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho" class="lean_decl">MPSTensor.exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="theorem_thmcontent">
-  <p>    Let \((A_j)_{j=1}^g\) and \((B_j)_{j=1}^g\) be injective families satisfying trace-preserving normalization, with self-overlaps tending to&#160;\(1\) and off-diagonal overlaps tending to&#160;\(0\) within each family. If the spans of the MPV states agree for every system size \(N\), then there is a permutation \(\pi \) of \(\{ 1, \ldots , g\} \) such that \(A_j\) and \(B_{\pi (j)}\) have the same bond dimension and are gauge-phase equivalent. </p>
-
-  </div>
-</div>
-<div class="proof_wrapper" id="a0000000922">
-  <div class="proof_heading">
-    <span class="proof_caption">
-    Proof
-    </span>
-    <span class="expand-proof">▶</span>
-  </div>
-  <div class="proof_content">
-  <p> For large \(N\), Theorem&#160;<a href="ch-bnt.html#thm:bnt_eventual_change_basis">13.14</a> gives an invertible matrix \(U_N\) relating the two MPV families. Fix \(j\). If every mixed overlap \(O_{A_iB_j}(N)\) tended to \(0\), then taking inner products of the relation with the \(A_i\) and using that the Gram matrix of the \(A\)-family tends to the identity would force the \(j\)th column of \(U_N\) to vanish asymptotically, contradicting the self-overlap limit of \(B_j\). Thus each \(B_j\) has a matched block \(A_{f(j)}\) with non-decaying mixed overlap. Theorems&#160;<a href="ch-spectral.html#thm:overlap_decay_rect">9.23</a> and&#160;<a href="ch-spectral.html#thm:overlap_decay">9.25</a> then force equal bond dimension and gauge-phase equivalence for each match. Off-diagonal decay within the \(B\)-family makes \(f\) injective, hence bijective, and its inverse is the required permutation. </p>
-
-  </div>
-</div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:bnt_perm_prop">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
-    </span>
-    <span class="theorem_thmlabel">13.16</span>
-    <span class="theorem_thmtitle">Permutation rigidity for proportional MPV decompositions</span>
-    <div class="thm_header_extras">
-
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-bnt.html#thm:bnt_perm_prop">#</a>
-    
-    <a class="icon proof" href="ch-bnt.html#a0000000923"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
-</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-mps.html#def:injective">Definition 2.23</a></li>
-          
-          <li><a href="ch-mps.html#def:mpv">Definition 2.4</a></li>
-          
-          <li><a href="ch-mps.html#def:mpv_overlap">Definition 2.43</a></li>
-          
-          <li><a href="ch-mps.html#def:gauge_phase_equiv">Definition 2.18</a></li>
-          
-          <li><a href="ch-spectral.html#thm:overlap_decay">Theorem 9.25</a></li>
-          
-          <li><a href="ch-spectral.html#thm:overlap_decay_rect">Theorem 9.23</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp" class="lean_decl">MPSTensor.exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="theorem_thmcontent">
-  <p>   Let \((A_j)_{j=1}^{g_A}\) and \((B_k)_{k=1}^{g_B}\) be injective families satisfying the TP normalization \(\sum _i (A_j^i)^\dagger A_j^i = \mathbb {1}\) and \(\sum _i (B_k^i)^\dagger B_k^i = \mathbb {1}\), whose self-overlaps converge to&#160;\(1\) and whose cross-overlaps within each family converge to&#160;\(0\). Assume moreover that there exist MPS tensors \(A_{\mathrm{tot}}\) and \(B_{\mathrm{tot}}\), coefficient arrays \(a_{N,j}\) and \(b_{N,k}\), and a sequence \(c_N\) with nonzero limits \(a_j^\infty \), \(b_k^\infty \), \(c^\infty \) such that for every \(N\), </p>
-<div class="displaymath" id="a0000000924">
-  \[  |V^{(N)}(A_{\mathrm{tot}})\rangle  = \sum _{j=1}^{g_A} a_{N,j} |V^{(N)}(A_j)\rangle , \qquad |V^{(N)}(B_{\mathrm{tot}})\rangle  = \sum _{k=1}^{g_B} b_{N,k} |V^{(N)}(B_k)\rangle ,  \]
-</div>
-<p> with \(a_{N,j} \to a_j^\infty \neq 0\) and \(b_{N,k} \to b_k^\infty \neq 0\), and also </p>
-<div class="displaymath" id="a0000000925">
-  \[  |V^{(N)}(A_{\mathrm{tot}})\rangle  = c_N |V^{(N)}(B_{\mathrm{tot}})\rangle   \]
-</div>
-<p> with \(c_N \to c^\infty \neq 0\). Then \(g_A = g_B\), and there is a permutation \(\pi \) of the common block index set such that \(A_{\pi (k)}\) and \(B_k\) have the same bond dimension and are gauge-phase equivalent for each&#160;\(k\). The canonical-form application of these hypotheses is described in the following remark. </p>
-
-  </div>
-</div>
-<div class="proof_wrapper" id="a0000000923">
-  <div class="proof_heading">
-    <span class="proof_caption">
-    Proof
-    </span>
-    <span class="expand-proof">▶</span>
-  </div>
-  <div class="proof_content">
-  <p> The proportional decomposition implies that, for each block on the \(B\)-side, the mixed overlaps with \(A_{\mathrm{tot}}\) are linear combinations of the overlaps with the \(A\)-family. If every mixed overlap with a fixed \(B_k\) decayed to \(0\), then the coefficient limits would force the limiting coefficient \(b_k^\infty \) to vanish, contrary to the hypotheses. Thus every \(B_k\) matches some \(A_j\) with non-decaying mixed overlap. Theorems&#160;<a href="ch-spectral.html#thm:overlap_decay_rect">9.23</a> and&#160;<a href="ch-spectral.html#thm:overlap_decay">9.25</a> then force equal bond dimension and gauge-phase equivalence for each match. Repeating the same argument in the opposite direction gives an injective matching from the \(A\)-family to the \(B\)-family. Comparing the two injective matchings yields the permutation. </p>
-
-  </div>
-</div>
-<div class="remark_thmwrapper theorem-style-remark" id="rem:bnt_perm_prop_canonical">
-  <div class="remark_thmheading">
-    <span class="remark_thmcaption">
-    Remark
-    </span>
-    <span class="remark_thmlabel">13.17</span>
-    <div class="thm_header_extras">
-
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-bnt.html#rem:bnt_perm_prop_canonical">#</a>
-    
-    
-    
-        </div>
-  </div>
-  <div class="remark_thmcontent">
-  <p> In the canonical-form application, the abstract data above come from block-diagonal tensors </p>
-<div class="displaymath" id="a0000000926">
-  \[  A_{\mathrm{tot}} = \bigoplus _{j=1}^{g_A} \mu _j A_j, \qquad B_{\mathrm{tot}} = \bigoplus _{k=1}^{g_B} \nu _k B_k,  \]
-</div>
-<p> and Theorem&#160;<a href="ch-mps.html#thm:mpv_decomposition">2.36</a> gives the coefficient arrays \(a_{N,j} = \mu _j^N\) and \(b_{N,k} = \nu _k^N\). To fit the convergence hypotheses of Theorem&#160;<a href="ch-bnt.html#thm:bnt_perm_prop">13.16</a>, one first normalizes by the dominant weight on each side: the relevant arrays are \((\mu _j/\mu _0)^N\) and \((\nu _k/\nu _0)^N\), with \((\mu _j/\mu _0)^N \to 0\) for \(j \ge 1\) and \((\nu _k/\nu _0)^N \to 0\) for \(k \ge 1\) by Theorem&#160;<a href="ch-bnt.html#thm:coeff_ratio_decay">13.26</a>, while the overall factors \(\mu _0^N\) and \(\nu _0^N\) are absorbed into the proportionality constant \(c_N\). Definition&#160;<a href="ch-bnt.html#def:cf_bnt">13.3</a> supplies injectivity, TP normalization, and the within-family overlap limits, so the theorem isolates the abstract permutation argument from this canonical-form setting. </p>
-
-  </div>
-</div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:bnt_perm_simple">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
-    </span>
-    <span class="theorem_thmlabel">13.18</span>
-    <span class="theorem_thmtitle">Permutation rigidity with asymptotically orthonormal overlaps</span>
-    <div class="thm_header_extras">
-
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-bnt.html#thm:bnt_perm_simple">#</a>
-    
-    <a class="icon proof" href="ch-bnt.html#a0000000927"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
-</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-mps.html#def:injective">Definition 2.23</a></li>
-          
-          <li><a href="ch-mps.html#def:mpv">Definition 2.4</a></li>
-          
-          <li><a href="ch-mps.html#def:mpv_overlap">Definition 2.43</a></li>
-          
-          <li><a href="ch-mps.html#def:gauge_phase_equiv">Definition 2.18</a></li>
-          
-          <li><a href="ch-bnt.html#thm:bnt_overlap_orthonormal_li">Theorem 13.2</a></li>
-          
-          <li><a href="ch-bnt.html#thm:bnt_perm_same_card">Theorem 13.15</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.exists_eq_numBlocks_and_equiv_gaugePhase_of_overlapOrtho" class="lean_decl">MPSTensor.exists_eq_numBlocks_and_equiv_gaugePhase_of_overlapOrtho</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="theorem_thmcontent">
-  <p>   Let \((A_j)_{j=1}^{g_A}\) and \((B_k)_{k=1}^{g_B}\) be two families of injective tensors satisfying the TP normalization \(\sum _i (A_j^i)^\dagger A_j^i = \mathbb {1}\) and \(\sum _i (B_k^i)^\dagger B_k^i = \mathbb {1}\), whose self-overlaps converge to&#160;\(1\) and whose cross-overlaps within each family converge to&#160;\(0\). If for every system size&#160;\(N\), </p>
-<div class="displaymath" id="a0000000928">
-  \[  \operatorname{span}_{\mathbb {C}}\{ |V^{(N)}(A_j)\rangle  : 1 \le j \le g_A\}  = \operatorname{span}_{\mathbb {C}}\{ |V^{(N)}(B_k)\rangle  : 1 \le k \le g_B\} ,  \]
-</div>
-<p> then \(g_A = g_B\), and there is a permutation \(\pi \) of the common block index set such that \(A_j\) and \(B_{\pi (j)}\) have the same bond dimension and are gauge-phase equivalent for each&#160;\(j\). </p>
-
-  </div>
-</div>
-<div class="proof_wrapper" id="a0000000927">
-  <div class="proof_heading">
-    <span class="proof_caption">
-    Proof
-    </span>
-    <span class="expand-proof">▶</span>
-  </div>
-  <div class="proof_content">
-  <p> By Theorem&#160;<a href="ch-bnt.html#thm:bnt_overlap_orthonormal_li">13.2</a>, both families are linearly independent for all sufficiently large \(N\). At such an \(N\), the common span has the same dimension when computed from the \(A\)-family or the \(B\)-family, so \(g_A = g_B\). After identifying the two index sets, Theorem&#160;<a href="ch-bnt.html#thm:bnt_perm_same_card">13.15</a> yields the permutation conclusion. </p>
-
-  </div>
-</div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:bnt_perm_prop_nt">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
-    </span>
-    <span class="theorem_thmlabel">13.19</span>
-    <span class="theorem_thmtitle">Permutation rigidity for proportional decompositions, irreducible TP version</span>
-    <div class="thm_header_extras">
-
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-bnt.html#thm:bnt_perm_prop_nt">#</a>
-    
-    <a class="icon proof" href="ch-bnt.html#a0000000929"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
-</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-canonical.html#def:irreducible_tensor">Definition 11.15</a></li>
-          
-          <li><a href="ch-mps.html#def:mpv_overlap">Definition 2.43</a></li>
-          
-          <li><a href="ch-mps.html#def:gauge_phase_equiv">Definition 2.18</a></li>
-          
-          <li><a href="ch-bnt.html#thm:bnt_perm_prop">Theorem 13.16</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp_of_irreducible_TP" class="lean_decl">MPSTensor.exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp_of_irreducible_TP</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="theorem_thmcontent">
-  <p>    Under the hypotheses of Theorem&#160;<a href="ch-bnt.html#thm:bnt_perm_prop">13.16</a>, replace injectivity of each block by irreducibility while keeping trace-preserving normalization and the same overlap limits. Then the same permutation conclusion holds. </p>
-
-  </div>
-</div>
-<div class="proof_wrapper" id="a0000000929">
-  <div class="proof_heading">
-    <span class="proof_caption">
-    Proof
-    </span>
-    <span class="expand-proof">▶</span>
-  </div>
-  <div class="proof_content">
-  <p> The same matching argument applies. The only change is at the two contradiction steps: the overlap-decay inputs for injective blocks are replaced by the corresponding irreducible trace-preserving decay theorems. </p>
-
-  </div>
-</div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:cf_bnt_ft_proportional">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
-    </span>
-    <span class="theorem_thmlabel">13.20</span>
-    <span class="theorem_thmtitle">Canonical-form proportional decomposition theorem</span>
-    <div class="thm_header_extras">
-
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-bnt.html#thm:cf_bnt_ft_proportional">#</a>
-    
-    <a class="icon proof" href="ch-bnt.html#a0000000930"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
-</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-bnt.html#def:cf_bnt">Definition 13.3</a></li>
-          
-          <li><a href="ch-bnt.html#thm:bnt_perm_prop">Theorem 13.16</a></li>
-          
-          <li><a href="ch-bnt.html#thm:bnt_perm_prop">Theorem 13.16</a></li>
-          
-          <li><a href="ch-bnt.html#thm:cross_overlap_zero">Theorem 13.8</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.fundamentalTheorem_of_IsCanonicalFormBNT" class="lean_decl">MPSTensor.fundamentalTheorem_of_IsCanonicalFormBNT</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="theorem_thmcontent">
-  <p>    If two families in canonical form with BNT separation admit proportional MPV decompositions with convergent nonzero coefficients, then they have the same number of blocks and match blockwise up to permutation, bond-dimension equality, and gauge-phase equivalence. </p>
-
-  </div>
-</div>
-<div class="proof_wrapper" id="a0000000930">
-  <div class="proof_heading">
-    <span class="proof_caption">
-    Proof
-    </span>
-    <span class="expand-proof">▶</span>
-  </div>
-  <div class="proof_content">
-  <p> Project the two canonical-form hypotheses to blockwise injectivity, left-canonical normalization, self-overlap convergence, and BNT separation. Then Theorem&#160;<a href="ch-bnt.html#thm:bnt_perm_prop">13.16</a> applies to the resulting proportional decomposition data. </p>
-
-  </div>
-</div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:normal_cf_bnt_ft_proportional">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
-    </span>
-    <span class="theorem_thmlabel">13.21</span>
-    <span class="theorem_thmtitle">Normal-canonical proportional decomposition theorem</span>
-    <div class="thm_header_extras">
-
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-bnt.html#thm:normal_cf_bnt_ft_proportional">#</a>
-    
-    <a class="icon proof" href="ch-bnt.html#a0000000931"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
-</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-bnt.html#def:normal_cf_bnt">Definition 13.5</a></li>
-          
-          <li><a href="ch-bnt.html#thm:bnt_perm_prop_nt">Theorem 13.19</a></li>
-          
-          <li><a href="ch-bnt.html#thm:bnt_perm_prop_nt">Theorem 13.19</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.fundamentalTheorem_of_IsNormalCanonicalFormBNT" class="lean_decl">MPSTensor.fundamentalTheorem_of_IsNormalCanonicalFormBNT</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="theorem_thmcontent">
-  <p>    If two families in normal canonical form with BNT separation admit proportional MPV decompositions with convergent nonzero coefficients, then they have the same number of blocks and match blockwise up to permutation, bond-dimension equality, and gauge-phase equivalence. </p>
-
-  </div>
-</div>
-<div class="proof_wrapper" id="a0000000931">
-  <div class="proof_heading">
-    <span class="proof_caption">
-    Proof
-    </span>
-    <span class="expand-proof">▶</span>
-  </div>
-  <div class="proof_content">
-  <p> Project the two normal-canonical hypotheses to irreducibility, left-canonical normalization, self-overlap convergence, and BNT separation, and then apply Theorem&#160;<a href="ch-bnt.html#thm:bnt_perm_prop_nt">13.19</a>. </p>
-
-  </div>
-</div>
-<div class="remark_thmwrapper theorem-style-remark" id="a0000000932">
-  <div class="remark_thmheading">
-    <span class="remark_thmcaption">
-    Remark
-    </span>
-    <span class="remark_thmlabel">13.22</span>
-    <div class="thm_header_extras">
-
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-bnt.html#a0000000932">#</a>
-    
-    
-    
-        </div>
-  </div>
-  <div class="remark_thmcontent">
-  <p>Theorem&#160;<a href="ch-bnt.html#thm:bnt_perm_simple">13.18</a> is retained for completeness but is not used in the proofs given here; the proportional version (Theorem&#160;<a href="ch-bnt.html#thm:bnt_perm_prop">13.16</a>) suffices for the Fundamental Theorem. </p>
-
-  </div>
-</div>
-<h2 id="a0000000105">13.2.1 Fixed-size separation by Vandermonde inversion</h2>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:bnt_vandermonde_separation">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
-    </span>
-    <span class="theorem_thmlabel">13.23</span>
-    <span class="theorem_thmtitle">Vandermonde separation</span>
-    <div class="thm_header_extras">
-
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-bnt.html#thm:bnt_vandermonde_separation">#</a>
-    
-    <a class="icon proof" href="ch-bnt.html#a0000000933"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
-</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-block_perm.html#def:is_canonical_form">Definition 12.16</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.vandermonde_separation" class="lean_decl">MPSTensor.vandermonde_separation</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="theorem_thmcontent">
-  <p>    Let \(C\) be a canonical form with \(r\) blocks and pairwise distinct weights \(\mu _k\). If coefficients \(c_k\) satisfy </p>
-<div class="displaymath" id="a0000000934">
-  \[  \sum _k c_k \mu _k^N = 0  \]
-</div>
-<p> for \(N = 0, \ldots , r-1\), then every \(c_k\) vanishes. </p>
-
-  </div>
-</div>
-<div class="proof_wrapper" id="a0000000933">
-  <div class="proof_heading">
-    <span class="proof_caption">
-    Proof
-    </span>
-    <span class="expand-proof">▶</span>
-  </div>
-  <div class="proof_content">
-  <p>The Vandermonde matrix with entries \(V_{Nk} = \mu _k^N\) is invertible when the weights are pairwise distinct. Therefore the displayed linear system has only the zero solution. </p>
-
-  </div>
-</div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:block_mpvs_fixed_size_li">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
-    </span>
-    <span class="theorem_thmlabel">13.24</span>
-    <span class="theorem_thmtitle">Fixed-size linear independence of block MPVs</span>
-    <div class="thm_header_extras">
-
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-bnt.html#thm:block_mpvs_fixed_size_li">#</a>
-    
-    <a class="icon proof" href="ch-bnt.html#a0000000935"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
-</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-bnt.html#thm:bnt_vandermonde_separation">Theorem 13.23</a></li>
-          
-          <li><a href="ch-bnt.html#thm:bnt_vandermonde_separation">Theorem 13.23</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.block_mpvs_lin_indep_at_fixed_size" class="lean_decl">MPSTensor.block_mpvs_lin_indep_at_fixed_size</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="theorem_thmcontent">
-  <p>    Let \(C\) be a canonical form with \(r\) blocks and pairwise distinct weights \(\mu _k\), and fix a system size \(N_0\). Assume that each block MPV \(|V^{(N_0)}(A_k)\rangle \) is nonzero. If </p>
-<div class="displaymath" id="a0000000936">
-  \[  \sum _k c_k\, V^{(N_0)}(A_k)_\sigma \, \mu _k^i = 0  \]
-</div>
-<p> for every word \(\sigma \) of length \(N_0\) and every \(i = 0, \ldots , r-1\), then \(c_k = 0\) for all \(k\). </p>
-
-  </div>
-</div>
-<div class="proof_wrapper" id="a0000000935">
-  <div class="proof_heading">
-    <span class="proof_caption">
-    Proof
-    </span>
-    <span class="expand-proof">▶</span>
-  </div>
-  <div class="proof_content">
-  <p> Apply Theorem&#160;<a href="ch-bnt.html#thm:bnt_vandermonde_separation">13.23</a> pointwise in the word \(\sigma \). This shows that every component of \(c_k|V^{(N_0)}(A_k)\rangle \) vanishes. Since the MPV of each block is nonzero at size \(N_0\), some component survives, so \(c_k = 0\). </p>
-
-  </div>
-</div>
-<div class="remark_thmwrapper theorem-style-remark" id="a0000000937">
-  <div class="remark_thmheading">
-    <span class="remark_thmcaption">
-    Remark
-    </span>
-    <span class="remark_thmlabel">13.25</span>
-    <div class="thm_header_extras">
-
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-bnt.html#a0000000937">#</a>
-    
-    
-    
-        </div>
-  </div>
-  <div class="remark_thmcontent">
-  <p>These fixed-size Vandermonde theorems remain available for alternative finite-length arguments, but the present BNT proof chain uses the eventual linear independence from Theorem&#160;<a href="ch-bnt.html#thm:bnt_overlap_orthonormal_li">13.2</a> instead. </p>
-
-  </div>
-</div>
-<h1 id="a0000000106">13.3 Coefficient convergence</h1>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:coeff_ratio_decay">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
-    </span>
-    <span class="theorem_thmlabel">13.26</span>
-    <span class="theorem_thmtitle">Coefficient ratio decay</span>
-    <div class="thm_header_extras">
-
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-bnt.html#thm:coeff_ratio_decay">#</a>
-    
-    <a class="icon proof" href="ch-bnt.html#a0000000938"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
-</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-bnt.html#def:cf_bnt">Definition 13.3</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.IsCanonicalFormBNT.coeff_ratio_tendsto" class="lean_decl">MPSTensor.IsCanonicalFormBNT.coeff_ratio_tendsto</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="theorem_thmcontent">
-  <p>   Under the canonical form with BNT separation of Definition&#160;<a href="ch-bnt.html#def:cf_bnt">13.3</a>, indexed so that \(\mu _0\) is the (strictly) dominant weight, one has \((\mu _k / \mu _0)^N \to 0\) for every \(k \ge 1\) as \(N \to \infty \). </p>
-
-  </div>
-</div>
-<div class="proof_wrapper" id="a0000000938">
-  <div class="proof_heading">
-    <span class="proof_caption">
-    Proof
-    </span>
-    <span class="expand-proof">▶</span>
-  </div>
-  <div class="proof_content">
-  <p>By the BNT separation condition in Definition&#160;<a href="ch-bnt.html#def:cf_bnt">13.3</a>, \(|\mu _k| {\lt} |\mu _0|\) strictly, so \(|\mu _k / \mu _0| {\lt} 1\) and the geometric sequence converges to&#160;\(0\). </p>
-
-  </div>
-</div>
-<div class="remark_thmwrapper theorem-style-remark" id="a0000000939">
-  <div class="remark_thmheading">
-    <span class="remark_thmcaption">
-    Remark
-    </span>
-    <span class="remark_thmlabel">13.27</span>
-    <span class="remark_thmtitle">Strict-dominance regime</span>
-    <div class="thm_header_extras">
-
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-bnt.html#a0000000939">#</a>
-    
-    
-    
-        </div>
-  </div>
-  <div class="remark_thmcontent">
-  <p>Theorem&#160;<a href="ch-bnt.html#thm:coeff_ratio_decay">13.26</a> applies when one modulus is strictly dominant: \(|\mu _0| {\gt} |\mu _k|\) for \(k \ge 1\). In the more general periodic setting of <span class="cite">
+  <div class="definition_thmcontent">
+  <p>   For fixed \(A\), \(B\), a bond-dimension equality, and a vertex \(v\), this records the two local conclusions still needed from the blocked-middle reduction in&#160;<span class="cite">
 	[
 	
-	<a href="sect0001.html#Cirac2021Matrix" >CPGSV21</a>
-	, Eq.&#160;(72a)
+	<a href="sect0001.html#Molnar2018NormalPEPS" >MGRPG+18</a>
+	
 	]
-</span>, the coefficient attached to block&#160;\(j\) can take the form \(\sum _q \mu _{j,q}^N\), where the \(\mu _{j,q}\) are the individual weights contributed by that block. The oscillatory case with \(|\mu _{j,q}| = 1\) is treated separately in the full paper. </p>
+</span>, §3: (i) each local component of \(B\) lies in the image of the local tensor map of \(A\), and (ii) the canonical pullback through the chosen left inverse of \(A\) factorizes as one invertible matrix on each incident edge. </p>
 
   </div>
 </div>
-<h1 id="a0000000107">13.4 Newton–Girard identities</h1>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:newton_girard">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
+<div class="definition_thmwrapper theorem-style-definition" id="def:peps_blockedMiddleGaugeHyp">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
     </span>
-    <span class="theorem_thmlabel">13.28</span>
-    <span class="theorem_thmtitle">Newton–Girard trace recursion</span>
+    <span class="definition_thmlabel">18.25</span>
+    <span class="definition_thmtitle">Blocked-middle local gauge output</span>
     <div class="thm_header_extras">
 
     
@@ -2908,11 +2530,28 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-bnt.html#thm:newton_girard">#</a>
+    <a class="icon proof" href="sec-peps_ft.html#def:peps_blockedMiddleGaugeHyp">#</a>
     
-    <a class="icon proof" href="ch-bnt.html#a0000000940"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
-</a>
     
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sec-peps_ft.html#def:peps_hasLocalGaugeLift">Definition 18.24</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
     
     
     <button class="modal lean">L∃∀N</button>
@@ -2926,7 +2565,7 @@
         
         <ul class="uses">
           
-          <li><a href="../docs/find/#doc/Matrix.charpoly_eq_of_forall_trace_pow_eq" class="lean_decl">Matrix.charpoly_eq_of_forall_trace_pow_eq</a></li>
+          <li><a href="../docs/find/#doc/TNLean.PEPS.BlockedMiddleGaugeHyp" class="lean_decl">TNLean.PEPS.BlockedMiddleGaugeHyp</a></li>
           
         </ul>
     
@@ -2936,34 +2575,18 @@
     
         </div>
   </div>
-  <div class="theorem_thmcontent">
-  <p>  If \(A, B \in M_{n}(\mathbb {C})\) satisfy \(\operatorname{tr}(A^k) = \operatorname{tr}(B^k)\) for all \(k \ge 1\), then \(A\) and \(B\) have the same characteristic polynomial. </p>
+  <div class="definition_thmcontent">
+  <p>   This states the explicit local gauge formula that the edge-centered blocked-middle reduction is expected to produce: a family of invertible matrices on the incident edges of \(v\) whose product kernel reconstructs each local component of \(B\) from those of \(A\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000940">
-  <div class="proof_heading">
-    <span class="proof_caption">
-    Proof
-    </span>
-    <span class="expand-proof">▶</span>
-  </div>
-  <div class="proof_content">
-  <p>Let \(e_m\) denote the \(m\)th elementary symmetric polynomial in the eigenvalues, with \(e_0 = 1\). The Newton–Girard recursion </p>
-<div class="displaymath" id="a0000000941">
-  \[  m e_m = \sum _{i=1}^m (-1)^{i-1} e_{m-i} \operatorname{tr}(A^i)  \]
-</div>
-<p> expresses the coefficients of the characteristic polynomial in terms of the power-sum traces \(\operatorname{tr}(A^i)\). Equal power sums for \(A\) and \(B\) therefore give equal coefficients, hence equal characteristic polynomials. </p>
-
-  </div>
-</div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:power_sum_multiset">
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:peps_hasLocalGaugeLift_of_blockedMiddleGaugeHyp">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">13.29</span>
-    <span class="theorem_thmtitle">Equal power sums imply equal multisets</span>
+    <span class="theorem_thmlabel">18.26</span>
+    <span class="theorem_thmtitle">Blocked-middle output implies sharpened lift</span>
     <div class="thm_header_extras">
 
     
@@ -2971,11 +2594,33 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-bnt.html#thm:power_sum_multiset">#</a>
+    <a class="icon proof" href="sec-peps_ft.html#thm:peps_hasLocalGaugeLift_of_blockedMiddleGaugeHyp">#</a>
     
-    <a class="icon proof" href="ch-bnt.html#a0000000942"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001254"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sec-peps_ft.html#def:peps_blockedMiddleGaugeHyp">Definition 18.25</a></li>
+          
+          <li><a href="sec-peps_ft.html#def:peps_hasLocalGaugeLift">Definition 18.24</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
     
     
     <button class="modal lean">L∃∀N</button>
@@ -2989,7 +2634,7 @@
         
         <ul class="uses">
           
-          <li><a href="../docs/find/#doc/Matrix.sum_pow_eq_implies_multiset_eq" class="lean_decl">Matrix.sum_pow_eq_implies_multiset_eq</a></li>
+          <li><a href="../docs/find/#doc/TNLean.PEPS.hasLocalGaugeLift_of_blockedMiddleGaugeHyp" class="lean_decl">TNLean.PEPS.hasLocalGaugeLift_of_blockedMiddleGaugeHyp</a></li>
           
         </ul>
     
@@ -3000,11 +2645,11 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>  Let \(\alpha , \beta : \{ 1, \ldots , n\}  \to \mathbb {C}\). If \(\sum _i \alpha _i^k = \sum _i \beta _i^k\) for all \(k \ge 1\), then the multisets \(\{ \alpha _i\} \) and \(\{ \beta _i\} \) are equal. </p>
+  <p>   Any explicit local gauge formula from the blocked-middle reduction yields the sharpened local lift. The remaining open step is to derive this blocked-middle formula from equality of PEPS states. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000942">
+<div class="proof_wrapper" id="a0000001254">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3012,29 +2657,531 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Construct diagonal matrices \(\operatorname{diag}(\alpha )\) and \(\operatorname{diag}(\beta )\). The power-sum hypothesis gives \(\operatorname{tr}(\operatorname{diag}(\alpha )^k) = \operatorname{tr}(\operatorname{diag}(\beta )^k)\). By Theorem&#160;<a href="ch-bnt.html#thm:newton_girard">13.28</a>, the characteristic polynomials agree: \(\prod _i (X - \alpha _i) = \prod _i (X - \beta _i)\). Extracting roots gives multiset equality. </p>
+  <p>The explicit local gauge formula already places each local component of \(B\) in the image of the local tensor map of \(A\). Applying the chosen left inverse of \(A\) identifies the canonical candidate with the same factorized coefficient kernel, so both parts of the sharpened lift follow. </p>
 
   </div>
 </div>
-<div class="remark_thmwrapper theorem-style-remark" id="a0000000943">
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:localGauge_exists">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">18.27</span>
+    <span class="theorem_thmtitle">Local gauge extraction</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sec-peps_ft.html#thm:localGauge_exists">#</a>
+    
+    <a class="icon proof" href="sec-peps_ft.html#a0000001255"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sec-peps_ft.html#def:peps_hasLocalGaugeLift">Definition 18.24</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.localGauge_exists" class="lean_decl">TNLean.PEPS.localGauge_exists</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   Under the sharpened local lift hypothesis, the local gauge formula follows. What remains open is to derive the blocked-middle formula from the global same-state hypothesis via the blocked middle tensor and the corresponding three-site injective-chain argument. Under that hypothesis, injectivity on the star neighbourhood provides a left inverse that isolates the local edge gauges: </p>
+<div class="centered"> <img class="tn-svg" src="tn_svg/tn-f94e3de78c5b1cbf.svg" alt="\TNPEPSLocalGaugeExtraction"></div>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000001255">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>The sharpened local lift datum already supplies the incident-edge invertible matrices and the factorized local coefficient identity. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:gaugeConsistency">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">18.28</span>
+    <span class="theorem_thmtitle">Gauge consistency</span>
+    <div class="thm_header_extras">
+
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sec-peps_ft.html#thm:gaugeConsistency">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sec-peps_ft.html#thm:localGauge_exists">Theorem 18.27</a></li>
+          
+          <li><a href="sec-peps_ft.html#def:gaugeVertex">Definition 18.8</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.gaugeConsistency" class="lean_decl">TNLean.PEPS.gaugeConsistency</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   Local gauges extracted at adjacent vertices are consistent across shared edges, yielding a global gauge family. On a shared edge, the two neighbouring local extractions match as one edge gauge: </p>
+<div class="centered"> <img class="tn-svg" src="tn_svg/tn-a8f62a73508ef00c.svg" alt="\TNPEPSGlobalConsistency"></div>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:fundamentalTheorem_PEPS_of_bondDim">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">18.29</span>
+    <span class="theorem_thmtitle">Fundamental Theorem for injective PEPS, conditional on bond-dimension equality</span>
+    <div class="thm_header_extras">
+
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sec-peps_ft.html#thm:fundamentalTheorem_PEPS_of_bondDim">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sec-peps_ft.html#thm:gaugeConsistency">Theorem 18.28</a></li>
+          
+          <li><a href="sec-peps_ft.html#def:GaugeEquivPEPS">Definition 18.10</a></li>
+          
+          <li><a href="sec-peps_ft.html#def:IsVertexInjective">Definition 18.14</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.fundamentalTheorem_PEPS_of_bondDim" class="lean_decl">TNLean.PEPS.fundamentalTheorem_PEPS_of_bondDim</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   Given matching bond dimensions, two vertex-injective PEPS that generate the same state are gauge-equivalent. This conditional form isolates the bond-dimension obligation from the edge-centred consistency obligation of the global gauge construction. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:fundamentalTheorem_PEPS">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">18.30</span>
+    <span class="theorem_thmtitle">Fundamental Theorem for injective PEPS</span>
+    <div class="thm_header_extras">
+
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sec-peps_ft.html#thm:fundamentalTheorem_PEPS">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sec-peps_ft.html#thm:fundamentalTheorem_PEPS_of_bondDim">Theorem 18.29</a></li>
+          
+          <li><a href="sec-peps_ft.html#def:GaugeEquivPEPS">Definition 18.10</a></li>
+          
+          <li><a href="sec-peps_ft.html#def:IsVertexInjective">Definition 18.14</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.fundamentalTheorem_PEPS" class="lean_decl">TNLean.PEPS.fundamentalTheorem_PEPS</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   If two PEPS tensors on a simple graph are both vertex-injective and generate the same state, then they are gauge-equivalent (Theorem&#160;2 of&#160;<span class="cite">
+	[
+	
+	<a href="sect0001.html#Molnar2018NormalPEPS" >MGRPG+18</a>
+	
+	]
+</span>). </p>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:GaugeEquivModEdgeScalars">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">18.31</span>
+    <span class="definition_thmtitle">Gauge equivalence modulo balanced edge scalars</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sec-peps_ft.html#def:GaugeEquivModEdgeScalars">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sec-peps_ft.html#def:edgeGaugeAt">Definition 18.7</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.GaugeEquivModEdgeScalars" class="lean_decl">TNLean.PEPS.GaugeEquivModEdgeScalars</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>   Two gauge families are equivalent modulo balanced edge scalars if there is a nonzero scalar \(c_e\) on each edge such that the corresponding endpoint actions rescale the oriented edge gauges, and the oriented product of those endpoint scalars is \(1\) at every vertex. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:GaugeEquivModEdgeScalars_gaugeVertex_eq">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">18.32</span>
+    <span class="theorem_thmtitle">Balanced edge scalars preserve the local gauge action</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sec-peps_ft.html#thm:GaugeEquivModEdgeScalars_gaugeVertex_eq">#</a>
+    
+    <a class="icon proof" href="sec-peps_ft.html#a0000001258"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sec-peps_ft.html#def:GaugeEquivModEdgeScalars">Definition 18.31</a></li>
+          
+          <li><a href="sec-peps_ft.html#def:gaugeVertex">Definition 18.8</a></li>
+          
+          <li><a href="sec-peps_ft.html#def:GaugeEquivModEdgeScalars">Definition 18.31</a></li>
+          
+          <li><a href="sec-peps_ft.html#def:gaugeVertex">Definition 18.8</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.GaugeEquivModEdgeScalars.gaugeVertex_eq" class="lean_decl">TNLean.PEPS.GaugeEquivModEdgeScalars.gaugeVertex_eq</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   If two gauge families differ by a balanced edge-scalar reweighting, then they produce the same gauged tensor at every vertex. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000001258">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> In the defining sum for the gauged tensor, each incident edge contributes its endpoint scalar factor in addition to the original gauge entry. The product of these endpoint scalars is \(1\) by the balancing condition, so every summand is unchanged. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:gauge_unique_mod_edge_scalars">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">18.33</span>
+    <span class="theorem_thmtitle">Gauge uniqueness modulo balanced edge scalars</span>
+    <div class="thm_header_extras">
+
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sec-peps_ft.html#thm:gauge_unique_mod_edge_scalars">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sec-peps_ft.html#def:GaugeEquivModEdgeScalars">Definition 18.31</a></li>
+          
+          <li><a href="sec-peps_ft.html#def:IsVertexInjective">Definition 18.14</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.gauge_unique_mod_edge_scalars" class="lean_decl">TNLean.PEPS.gauge_unique_mod_edge_scalars</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   If two gauge families relate the same injective PEPS tensor to the same target tensor, then they define the same class modulo balanced edge scalars. This replaces the earlier global-scalar claim, which is false on a triangle with bond dimension \(1\). </p>
+
+  </div>
+</div>
+<div class="remark_thmwrapper theorem-style-remark" id="a0000001259">
   <div class="remark_thmheading">
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">13.30</span>
+    <span class="remark_thmlabel">18.34</span>
     <div class="thm_header_extras">
 
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-bnt.html#a0000000943">#</a>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001259">#</a>
     
     
     
         </div>
   </div>
   <div class="remark_thmcontent">
-  <p>Theorems&#160;<a href="ch-bnt.html#thm:newton_girard">13.28</a> and&#160;<a href="ch-bnt.html#thm:power_sum_multiset">13.29</a> remain relevant for the general equal-MPV Theorem&#160;<a href="ch-assembly.html#thm:ft_equal">14.5</a>, where one expects a power-sum step to recover the multiplicity-weight data. The present explicit-coefficient special case, Theorem&#160;<a href="ch-assembly.html#thm:ft_equal_explicit">14.6</a>, instead uses linear independence of the block MPV family supplied by a basis of normal tensors. </p>
+  <p>The local left inverse \(\Psi _v\), the realization map \(T \mapsto O_T\), the split at one incident edge, and the partition \(V = \{ u\}  \sqcup (V \setminus \{ u,v\} ) \sqcup \{ v\} \) isolate the local data needed for the edge-centered reduction of &#160;<span class="cite">
+	[
+	
+	<a href="sect0001.html#Molnar2018NormalPEPS" >MGRPG+18</a>
+	
+	]
+</span>, §3. The remaining three PEPS theorems still require the blocked tensor on the middle region and the comparison with the corresponding three-site injective chain. The uniqueness statement has now been repaired to a quotient by balanced edge scalars, but its proof still requires the same blocking machinery together with the corresponding tensor-factor uniqueness statement at a single vertex. </p>
 
   </div>
 </div>
@@ -3049,11 +3196,11 @@
 
   <svg  id="showmore-plus" class="icon icon-eye-plus showmore"><use xlink:href="symbol-defs.svg#icon-eye-plus"></use></svg>
 
-  <a href="ch-block_perm.html" title="Block Permutation and Separation"><svg  class="icon icon-arrow-left "><use xlink:href="symbol-defs.svg#icon-arrow-left"></use></svg>
+  <a href="ch-algebraic_ft.html" title="The Algebraic Fundamental Theorem"><svg  class="icon icon-arrow-left "><use xlink:href="symbol-defs.svg#icon-arrow-left"></use></svg>
 </a>
   <a href="index.html" title="Fundamental Theorem of Matrix Product States"><svg  class="icon icon-arrow-up "><use xlink:href="symbol-defs.svg#icon-arrow-up"></use></svg>
 </a>
-  <a href="ch-assembly.html" title="Proof of the Fundamental Theorem"><svg  class="icon icon-arrow-right "><use xlink:href="symbol-defs.svg#icon-arrow-right"></use></svg>
+  <a href="ch-symmetry.html" title="Symmetries and String Order"><svg  class="icon icon-arrow-right "><use xlink:href="symbol-defs.svg#icon-arrow-right"></use></svg>
 </a>
 </nav>
 
