@@ -1,0 +1,98 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../.././style.css"></link><link rel="icon" href="../.././favicon.svg"></link><link rel="mask-icon" href="../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../.././/declarations/declaration-data.bmp" as="image"></link><title>TNLean.Axioms.Beigi</title><script defer="true" src="../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../.././";</script><script>const MODULE_NAME="TNLean.Axioms.Beigi";</script><script type="module" src="../.././jump-src.js"></script><script type="module" src="../.././search.js"></script><script type="module" src="../.././expand-nav.js"></script><script type="module" src="../.././how-about.js"></script><script type="module" src="../.././instances.js"></script><script type="module" src="../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">TNLean</span>.<span class="name">Axioms</span>.<span class="name">Beigi</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/LionSR/TNLean/blob/85b358c027cd73b287cc9b761e7b8b40c0f919ca/TNLean/Axioms/Beigi.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../.././Init.html">Init</a></li><li><a href="../.././TNLean/MPS/ParentHamiltonian/Defs.html">TNLean.MPS.ParentHamiltonian.Defs</a></li><li><a href="../.././TNLean/MPS/Periodic/Defs.html">TNLean.MPS.Periodic.Defs</a></li><li><a href="../.././TNLean/MPS/RFP/Defs.html">TNLean.MPS.RFP.Defs</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-TNLean.Axioms.Beigi" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#Axioms.rfp_to_nncph_commute"><span class="name">Axioms</span>.<span class="name">rfp_to_nncph_commute</span></a></div><div class="nav_link"><a class="break_within" href="#Axioms.beigi_nncph_to_rfp"><span class="name">Axioms</span>.<span class="name">beigi_nncph_to_rfp</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Beigi-s-ground-space-theorem-axiomatized-and-the-RFP-⟺-NNCPH-split" class="markdown-heading">Beigi's ground-space theorem (axiomatized) and the RFP ⟺ NNCPH split <a class="hover-link" href="#Beigi-s-ground-space-theorem-axiomatized-and-the-RFP-⟺-NNCPH-split">#</a></h1><p>This module records two axioms that together realize the equivalence
+<code>IsRFP A ⇔ IsNNCPH A N</code> used in the proof of Theorem 3.10 of
+arXiv:1606.00608. Following the proof in §3.3 of that paper, the two
+directions have very different external provenance and so are
+recorded here as <strong>separate</strong> axioms with <strong>separate</strong> citations:</p><ul><li><code><a href="../.././TNLean/Axioms/Beigi.html#Axioms.rfp_to_nncph_commute">Axioms.rfp_to_nncph_commute</a></code> — RFP ⟹ NNCPH. Per
+arXiv:1606.00608 §3.3 (line 1307 of the source): <em>&quot;The implication
+RFP ⟹ NNCPH is trivial from Theorem [charact-MPS]&quot;</em>. It is
+therefore <strong>not</strong> gated on [Beigi 2012]; it is gated only on
+Theorem 3.10 of arXiv:1606.00608 (the full structural
+characterization of RFPs via product-of-entangled-pairs).</li><li><code><a href="../.././TNLean/Axioms/Beigi.html#Axioms.beigi_nncph_to_rfp">Axioms.beigi_nncph_to_rfp</a></code> — NNCPH ⟹ RFP. This is the
+non-trivial direction. Per arXiv:1606.00608 §3.3 (line 1307): <em>&quot;To
+prove the reverse, we will use [Beigi]&quot;</em>. It is gated on S. Beigi,
+<em>J. Phys. A: Math. Theor.</em> <strong>45</strong> (2012) 025306 — the ground-space
+theorem for nearest-neighbor commuting 1D Hamiltonians with finite
+degeneracy.</li></ul><p>To avoid a circular file dependency with
+<code><a href="../.././TNLean/MPS/ParentHamiltonian/Commuting.html">TNLean/MPS/ParentHamiltonian/Commuting.lean</a></code>, the nearest-neighbor
+commuting condition <code>IsNNCPH A N</code> is expressed in this file via its
+unfolded definition: pairwise commutativity of the two-site <code>localTerm</code>
+projectors.</p><h2 id="Status" class="markdown-heading">Status <a class="hover-link" href="#Status">#</a></h2><p>The two statements <code><a href="../.././TNLean/Axioms/Beigi.html#Axioms.rfp_to_nncph_commute">Axioms.rfp_to_nncph_commute</a></code> and
+<code><a href="../.././TNLean/Axioms/Beigi.html#Axioms.beigi_nncph_to_rfp">Axioms.beigi_nncph_to_rfp</a></code> below are introduced as <strong>axioms</strong> (not as
+proved theorems). They are the two axioms introduced by
+<code><a href="../.././TNLean/Axioms/Beigi.html">TNLean/Axioms/Beigi.lean</a></code>. Downstream, they are consumed by
+<code><a href="../.././TNLean/MPS/ParentHamiltonian/Commuting.html#MPSTensor.rfp_implies_nncph">MPSTensor.rfp_implies_nncph</a></code> and <code><a href="../.././TNLean/MPS/ParentHamiltonian/Commuting.html#MPSTensor.nncph_implies_rfp">MPSTensor.nncph_implies_rfp</a></code> in
+<code><a href="../.././TNLean/MPS/ParentHamiltonian/Commuting.html">TNLean/MPS/ParentHamiltonian/Commuting.lean</a></code>, respectively.</p><h2 id="TODO" class="markdown-heading">TODO <a class="hover-link" href="#TODO">#</a></h2><p>Replace <code><a href="../.././TNLean/Axioms/Beigi.html#Axioms.rfp_to_nncph_commute">Axioms.rfp_to_nncph_commute</a></code> with a Lean proof that uses the
+product-of-entangled-pairs structural form (Appendix B of
+arXiv:1606.00608). The scaffolding in
+<code><a href="../.././TNLean/MPS/RFP/CommutingBridge.html">TNLean/MPS/RFP/CommutingBridge.lean</a></code> (<code>ProductPairBridge</code>) already
+encodes the key combinatorial content; the missing piece is the
+extraction of a <code>ProductPairBridge A</code> witness from <code>IsRFP A</code> and
+normality. In that construction one may pass to a normalized
+representative only for building the witness / establishing the NNCPH
+conclusion, whose content is insensitive to this scaling; this is not
+a claim that <code>IsRFP</code> itself is preserved under rescaling. This is
+internal to the library.</p><p>Replace <code><a href="../.././TNLean/Axioms/Beigi.html#Axioms.beigi_nncph_to_rfp">Axioms.beigi_nncph_to_rfp</a></code> with a Lean proof that internalizes
+S. Beigi's (2012) classification of ground spaces of nearest-neighbor
+commuting Hamiltonians in 1D with finite degeneracy, exhibiting the
+ground space as the span of locally orthogonal product-of-pairs
+states. Formalization is expected to require:</p><ol><li>A tensor-product / local-support API on <code>NSiteSpace d N</code> beyond the
+current <code>Cfg</code>-based representation.</li><li>A translation from the ground-space decomposition of [Beigi] to the
+RFP idempotence equation <code>transferMap A ∘ transferMap A = transferMap A</code> via zero correlation length.</li></ol><h2 id="References" class="markdown-heading">References <a class="hover-link" href="#References">#</a></h2><ul><li>S. Beigi, <em>J. Phys. A: Math. Theor.</em> <strong>45</strong> (2012) 025306 —
+ground-space characterization of 1D nearest-neighbor commuting
+Hamiltonians with finite degeneracy (the single-author paper
+explicitly cited as <code>\bibitem{Beigi}</code> in the source of
+arXiv:1606.00608).</li><li>Cirac, Pérez-García, Schuch, Verstraete, &quot;Matrix Product States and
+Projected Entangled Pair States: Concepts, Symmetries, and Theorems&quot;,
+arXiv:1606.00608 §3.3 Theorem 3.10, Appendix B and Appendix D.2.</li></ul></div><div class="decl" id="Axioms.rfp_to_nncph_commute"><div class="axiom"><div class="gh_link"><a href="https://github.com/LionSR/TNLean/blob/85b358c027cd73b287cc9b761e7b8b40c0f919ca/TNLean/Axioms/Beigi.lean#L88-L114">source</a></div><div class="decl_header"><span class="decl_kind">axiom</span>
+<span class="decl_name"><a class="break_within" href="../.././TNLean/Axioms/Beigi.html#Axioms.rfp_to_nncph_commute"><span class="name">Axioms</span>.<span class="name">rfp_to_nncph_commute</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">d </span><span class="fn">D</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Data/NeZero.html#NeZero">NeZero</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <span class="fn"><a href="../.././TNLean/MPS/Defs.html#MPSTensor">MPSTensor</a> <span class="fn">d</span> <span class="fn">D</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">_hNT</span> : <span class="fn"><span class="fn">A</span>.<a href="../.././TNLean/MPS/Defs.html#MPSTensor.IsNormal">IsNormal</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">_hRFP</span> : <span class="fn"><span class="fn">A</span>.<a href="../.././TNLean/MPS/RFP/Defs.html#MPSTensor.IsRFP">IsRFP</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">N</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">2</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">N</span> → <span class="fn">∀ (<span class="fn">i </span><span class="fn">j</span> : <span class="fn"><a href="../.././Init/Prelude.html#Fin">Fin</a> <span class="fn">N</span></span>), <span class="fn"><span class="fn"><span class="fn">A</span>.<a href="../.././TNLean/MPS/ParentHamiltonian/Defs.html#MPSTensor.localTerm">localTerm</a></span> <span class="fn">2</span> <span class="fn">N</span> <span class="fn">i</span></span> <a href="../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><span class="fn"><span class="fn">A</span>.<a href="../.././TNLean/MPS/ParentHamiltonian/Defs.html#MPSTensor.localTerm">localTerm</a></span> <span class="fn">2</span> <span class="fn">N</span> <span class="fn">j</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">A</span>.<a href="../.././TNLean/MPS/ParentHamiltonian/Defs.html#MPSTensor.localTerm">localTerm</a></span> <span class="fn">2</span> <span class="fn">N</span> <span class="fn">j</span></span> <a href="../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><span class="fn"><span class="fn">A</span>.<a href="../.././TNLean/MPS/ParentHamiltonian/Defs.html#MPSTensor.localTerm">localTerm</a></span> <span class="fn">2</span> <span class="fn">N</span> <span class="fn">i</span></span></span></span></div></div><p><strong>RFP ⟹ NNCPH</strong> direction of arXiv:1606.00608 §3.3 Theorem 3.10.</p><p>For a normal MPS tensor <code>A</code> in RFP, the two-site parent-Hamiltonian
+<code>localTerm</code> projectors pairwise commute on every finite periodic chain
+of length at least <code>2</code>.</p><p>Unfolded on the NNCPH side, the commutativity condition is exactly
+<code><a href="../.././TNLean/MPS/ParentHamiltonian/Commuting.html#MPSTensor.IsNNCPH">MPSTensor.IsNNCPH</a> A N</code> (as defined in
+<code><a href="../.././TNLean/MPS/ParentHamiltonian/Commuting.html">TNLean/MPS/ParentHamiltonian/Commuting.lean</a></code>); stating it here in
+unfolded form avoids a circular import between this axiom module and
+the file that consumes it.</p><p><strong>Citation.</strong> This direction is attributed in arXiv:1606.00608 §3.3
+(source line 1307) as <em>&quot;trivial from Theorem [charact-MPS]&quot;</em>, i.e.,
+from Theorem 3.10 itself. It does <strong>not</strong> depend on S. Beigi (2012);
+it depends only on the product-of-entangled-pairs structural form
+(Appendix B of arXiv:1606.00608). A scaffold for that structural form
+lives in <code><a href="../.././TNLean/MPS/RFP/CommutingBridge.html">TNLean/MPS/RFP/CommutingBridge.lean</a></code> as
+<code>ProductPairBridge</code>.</p><p>See the module docstring for the formalization plan.</p></div></div><div class="decl" id="Axioms.beigi_nncph_to_rfp"><div class="axiom"><div class="gh_link"><a href="https://github.com/LionSR/TNLean/blob/85b358c027cd73b287cc9b761e7b8b40c0f919ca/TNLean/Axioms/Beigi.lean#L116-L141">source</a></div><div class="decl_header"><span class="decl_kind">axiom</span>
+<span class="decl_name"><a class="break_within" href="../.././TNLean/Axioms/Beigi.html#Axioms.beigi_nncph_to_rfp"><span class="name">Axioms</span>.<span class="name">beigi_nncph_to_rfp</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">d </span><span class="fn">D</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Init/Data/NeZero.html#NeZero">NeZero</a> <span class="fn">D</span></span>]</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">A</span> : <span class="fn"><a href="../.././TNLean/MPS/Defs.html#MPSTensor">MPSTensor</a> <span class="fn">d</span> <span class="fn">D</span></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">_hNT</span> : <span class="fn"><span class="fn">A</span>.<a href="../.././TNLean/MPS/Defs.html#MPSTensor.IsNormal">IsNormal</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">_hLeft</span> : <span class="fn"><span class="fn">A</span>.<a href="../.././TNLean/MPS/Periodic/Defs.html#MPSTensor.IsLeftCanonical">IsLeftCanonical</a></span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">_hNNCPH</span> :
+  <span class="fn">∀ (<span class="fn">N</span> : <a href="../.././Init/Prelude.html#Nat">ℕ</a>), <span class="fn"><span class="fn">2</span> <a href="../.././Init/Prelude.html#LE.le">≤</a> <span class="fn">N</span> → <span class="fn">∀ (<span class="fn">i </span><span class="fn">j</span> : <span class="fn"><a href="../.././Init/Prelude.html#Fin">Fin</a> <span class="fn">N</span></span>), <span class="fn"><span class="fn"><span class="fn">A</span>.<a href="../.././TNLean/MPS/ParentHamiltonian/Defs.html#MPSTensor.localTerm">localTerm</a></span> <span class="fn">2</span> <span class="fn">N</span> <span class="fn">i</span></span> <a href="../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><span class="fn"><span class="fn">A</span>.<a href="../.././TNLean/MPS/ParentHamiltonian/Defs.html#MPSTensor.localTerm">localTerm</a></span> <span class="fn">2</span> <span class="fn">N</span> <span class="fn">j</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn"><span class="fn"><span class="fn">A</span>.<a href="../.././TNLean/MPS/ParentHamiltonian/Defs.html#MPSTensor.localTerm">localTerm</a></span> <span class="fn">2</span> <span class="fn">N</span> <span class="fn">j</span></span> <a href="../.././Init/Prelude.html#HMul.hMul">*</a> <span class="fn"><span class="fn"><span class="fn">A</span>.<a href="../.././TNLean/MPS/ParentHamiltonian/Defs.html#MPSTensor.localTerm">localTerm</a></span> <span class="fn">2</span> <span class="fn">N</span> <span class="fn">i</span></span></span></span></span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn"><span class="fn">A</span>.<a href="../.././TNLean/MPS/RFP/Defs.html#MPSTensor.IsRFP">IsRFP</a></span></div></div><p><strong>NNCPH ⟹ RFP</strong> direction of arXiv:1606.00608 §3.3 Theorem 3.10,
+the non-trivial implication gated on [Beigi 2012].</p><p>For a normal MPS tensor <code>A</code> in left-canonical form, if the two-site
+parent-Hamiltonian <code>localTerm</code> projectors pairwise commute on every
+finite periodic chain of length at least <code>2</code>, then the transfer map
+<code>transferMap A</code> is idempotent (equivalently, <code><a href="../.././TNLean/MPS/RFP/Defs.html#MPSTensor.IsRFP">MPSTensor.IsRFP</a> A</code>
+holds).</p><p><strong>Citation.</strong> This is the only direction that uses the external
+result of S. Beigi, <em>J. Phys. A: Math. Theor.</em> <strong>45</strong> (2012) 025306.
+Per arXiv:1606.00608 §3.3 (source line 1307): <em>&quot;To prove the reverse,
+we will use [Beigi] where it is shown that the ground space of any
+nearest-neighbor commuting Hamiltonian in a 1D spin chain with a
+finite (independent of system size) degeneracy <code>g</code> is spanned by <code>g</code>
+states of the form … that are locally orthogonal.&quot;</em></p><p>See the module docstring for the formalization plan.</p></div></div></main>
+<nav class="nav"><iframe src="../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>

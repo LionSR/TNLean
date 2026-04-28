@@ -1,0 +1,52 @@
+<html lang="en"><head><meta charset="UTF-8"></meta><meta name="viewport" content="width=device-width, initial-scale=1"></meta><link rel="stylesheet" href="../.././style.css"></link><link rel="icon" href="../.././favicon.svg"></link><link rel="mask-icon" href="../.././favicon.svg" color="#000000"></link><link rel="prefetch" href="../.././/declarations/declaration-data.bmp" as="image"></link><title>TNLean.Algebra.LinearMapAux</title><script defer="true" src="../.././mathjax-config.js"></script><script defer="true" src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>const SITE_ROOT="../.././";</script><script>const MODULE_NAME="TNLean.Algebra.LinearMapAux";</script><script type="module" src="../.././jump-src.js"></script><script type="module" src="../.././search.js"></script><script type="module" src="../.././expand-nav.js"></script><script type="module" src="../.././how-about.js"></script><script type="module" src="../.././instances.js"></script><script type="module" src="../.././importedBy.js"></script></head><body><input id="nav_toggle" type="checkbox"></input><header><h1><label for="nav_toggle"></label><span>Documentation</span></h1><h2 class="header_filename break_within"><span class="name">TNLean</span>.<span class="name">Algebra</span>.<span class="name">LinearMapAux</span></h2><form id="search_form"><input type="text" name="q" autocomplete="off"></input>&#32;<button id="search_button" onclick="javascript: form.action='../.././search.html';">Search</button></form></header><nav class="internal_nav"><p><a href="#top">return to top</a></p><p class="gh_nav_link"><a href="https://github.com/LionSR/TNLean/blob/85b358c027cd73b287cc9b761e7b8b40c0f919ca/TNLean/Algebra/LinearMapAux.lean">source</a></p><div class="imports"><details><summary>Imports</summary><ul><li><a href="../.././Init.html">Init</a></li><li><a href="../.././Mathlib/Algebra/Module/Basic.html">Mathlib.Algebra.Module.Basic</a></li><li><a href="../.././Mathlib/Algebra/NoZeroSMulDivisors/Defs.html">Mathlib.Algebra.NoZeroSMulDivisors.Defs</a></li><li><a href="../.././Mathlib/Data/Complex/Basic.html">Mathlib.Data.Complex.Basic</a></li><li><a href="../.././Mathlib/Algebra/Module/LinearMap/Basic.html">Mathlib.Algebra.Module.LinearMap.Basic</a></li></ul></details><details><summary>Imported by</summary><ul id="imported-by-TNLean.Algebra.LinearMapAux" class="imported-by-list"></ul></details></div><div class="nav_link"><a class="break_within" href="#LinearMap.ne_zero_of_eigenvector"><span class="name">LinearMap</span>.<span class="name">ne_zero_of_eigenvector</span></a></div><div class="nav_link"><a class="break_within" href="#LinearMap.ne_zero_of_pos_eigenvector"><span class="name">LinearMap</span>.<span class="name">ne_zero_of_pos_eigenvector</span></a></div></nav><main>
+<div class="mod_doc"><h1 id="Auxiliary-linear-map-lemmas" class="markdown-heading">Auxiliary linear-map lemmas <a class="hover-link" href="#Auxiliary-linear-map-lemmas">#</a></h1><p>General-purpose linear-map lemmas that are not specific to any chapter's
+theory.</p><h2 id="Main-results" class="markdown-heading">Main results <a class="hover-link" href="#Main-results">#</a></h2><ul><li><code><a href="../.././TNLean/Algebra/LinearMapAux.html#LinearMap.ne_zero_of_eigenvector">LinearMap.ne_zero_of_eigenvector</a></code>: a nonzero eigenvector for a nonzero
+eigenvalue forces a linear map to be nonzero</li><li><code><a href="../.././TNLean/Algebra/LinearMapAux.html#LinearMap.ne_zero_of_pos_eigenvector">LinearMap.ne_zero_of_pos_eigenvector</a></code>: a positive-eigenvalue equation with nonzero
+eigenvector forces a linear map to be nonzero</li></ul></div><div class="decl" id="LinearMap.ne_zero_of_eigenvector"><div class="theorem"><div class="gh_link"><a href="https://github.com/LionSR/TNLean/blob/85b358c027cd73b287cc9b761e7b8b40c0f919ca/TNLean/Algebra/LinearMapAux.lean#L24-L34">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././TNLean/Algebra/LinearMapAux.html#LinearMap.ne_zero_of_eigenvector"><span class="name">LinearMap</span>.<span class="name">ne_zero_of_eigenvector</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">R</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> u_2}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Ring/Defs.html#Semiring">Semiring</a> <span class="fn">R</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/NoZeroSMulDivisors/Defs.html#NoZeroSMulDivisors">NoZeroSMulDivisors</a> <span class="fn">R</span> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <span class="fn">M</span> <a href="../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap">→ₗ[</a><span class="fn">R</span><a href="../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap">]</a> <span class="fn">M</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ρ</span> : <span class="fn">M</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">μ</span> : <span class="fn">R</span>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hρ_ne</span> : <span class="fn">ρ</span> <a href="../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hμ_ne</span> : <span class="fn">μ</span> <a href="../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hEig</span> : <span class="fn"><span class="fn">E</span> <span class="fn">ρ</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">μ</span> <a href="../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">ρ</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">E</span> <a href="../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span></div></div><p>A nonzero eigenvector for a nonzero eigenvalue forces a linear map to be nonzero.</p></div></div><div class="decl" id="LinearMap.ne_zero_of_pos_eigenvector"><div class="theorem"><div class="gh_link"><a href="https://github.com/LionSR/TNLean/blob/85b358c027cd73b287cc9b761e7b8b40c0f919ca/TNLean/Algebra/LinearMapAux.lean#L36-L43">source</a></div><div class="decl_header"><span class="decl_kind">theorem</span>
+<span class="decl_name"><a class="break_within" href="../.././TNLean/Algebra/LinearMapAux.html#LinearMap.ne_zero_of_pos_eigenvector"><span class="name">LinearMap</span>.<span class="name">ne_zero_of_pos_eigenvector</span></a></span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">M</span> : <a href="../.././foundational_types.html">Type</a> u_1}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Group/Defs.html#AddCommMonoid">AddCommMonoid</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/Module/Defs.html#Module">Module</a> <a href="../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">[<span class="fn"><a href="../.././Mathlib/Algebra/NoZeroSMulDivisors/Defs.html#NoZeroSMulDivisors">NoZeroSMulDivisors</a> <a href="../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a> <span class="fn">M</span></span>]</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">E</span> : <span class="fn">M</span> <a href="../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap">→ₗ[</a><a href="../.././Mathlib/Data/Complex/Basic.html#Complex">ℂ</a><a href="../.././Mathlib/Algebra/Module/LinearMap/Defs.html#LinearMap">]</a> <span class="fn">M</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">ρ</span> : <span class="fn">M</span>}</span></span>
+</span><span class="impl_arg"><span class="decl_args">
+<span class="fn">{<span class="fn">r</span> : <a href="../.././Mathlib/Data/Real/Basic.html#Real">ℝ</a>}</span></span>
+</span><span class="decl_args">
+<span class="fn">(<span class="fn">hρ_ne</span> : <span class="fn">ρ</span> <a href="../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hr</span> : <span class="fn">0</span> <a href="../.././Init/Prelude.html#LT.lt">&lt;</a> <span class="fn">r</span>)</span></span>
+<span class="decl_args">
+<span class="fn">(<span class="fn">hEig</span> : <span class="fn"><span class="fn">E</span> <span class="fn">ρ</span></span> <a href="../.././Init/Prelude.html#Eq">=</a> <span class="fn">↑<span class="fn">r</span></span> <a href="../.././Init/Prelude.html#HSMul.hSMul">•</a> <span class="fn">ρ</span>)</span></span>
+<span class="decl_args"> :</span><div class="decl_type"><span class="fn">E</span> <a href="../.././Init/Core.html#Ne">≠</a> <span class="fn">0</span></div></div><p>A positive-eigenvalue equation with nonzero eigenvector forces a linear map to be nonzero.</p></div></div></main>
+<nav class="nav"><iframe src="../.././navbar.html" class="navframe" frameBorder="0"></iframe></nav></body></html>
