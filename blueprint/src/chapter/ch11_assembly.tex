@@ -1035,46 +1035,58 @@ single weighted block.
 \end{proof}
 
 \begin{remark}[Remaining inputs for the unconditional equal-case theorem]\notready
-	This chapter provides three complementary equal-case results:
-	\begin{enumerate}
-		\item Theorem~\ref{thm:ft_equal_explicit}: the explicit-coefficient
-		      equal-case theorem (upgrade of
-		      Theorem~\ref{thm:ft_proportional} with $c_N = 1$),
-		      concluding a global gauge equivalence of the reindexed
-		      weighted block-diagonal tensors.
-		\item Theorem~\ref{thm:ft_equal_same_structure}: the common
-		      block-structure special case.
-		\item Theorem~\ref{thm:route_b_equal}: the equal-case multiplicity
-		      corollary, which from the richer multiplicity data
-		      recovers the sector weight multisets without requiring
-		      explicit coefficient convergence hypotheses.
-	\end{enumerate}
-	What is still missing for the unconditional equal-case theorem
-	(Theorem~\ref{thm:ft_equal}, \cite[Corollary~IV.5]{Cirac2021Matrix}) is
-	now quite specific. The one-sided basis-of-normal-tensors construction is not
-	the obstruction: for trace-preserving primitive irreducible blocks with
-	positive bond dimensions and nonzero weights, representatives of the MPV
-	phase-equivalence classes are constructed in
-	Theorem~\ref{thm:bnt_sector_decomp_tp_prim_irr_collapsed}. When the original
-	blocks are also injective, the same construction exposes positive dimension,
-	injectivity, normalization, and asymptotic overlap orthogonality in
-	Theorem~\ref{thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_data}. The
-	chosen representatives also preserve the finite-length MPV spans of the
-	original live blocks by
-	Theorem~\ref{thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_data_span},
-	and Theorem~\ref{thm:bnt_sector_decomp_pair_overlap_span_of_block_span}
-	transports equality of the live-block spans to the overlap-span hypotheses for
-	the two chosen bases.
+	The equal-case proof in the literature assumes first that both tensors are in
+	canonical form.  One chooses a basis of normal tensors for each tensor, so
+	that every canonical-form block is a phase times a gauge transform of exactly
+	one basis tensor; this is the content of the basis characterization in
+	\cite[Proposition~\texttt{prop:char-BNT}, lines 1852--1861]{Cirac2021Matrix}
+	and
+	\cite[Proposition~\texttt{prop:char-BNT}, lines 1135--1148]{Cirac2016MPDO_arXiv}.
+	Equality, or proportionality, of the MPV families then forces the two bases to
+	pair by phase and gauge, as in
+	\cite[Theorem~\texttt{thm1}, lines 1167--1183]{Cirac2016MPDO_arXiv}.
+	In the equal case, one expands each tensor in its basis of normal tensors and
+	compares, for every basis tensor and every length $N$, the power sums
+	\[
+		\sum_q \mu_{j,q}^N = \sum_q (\nu_{j,q}e^{i\phi_j})^N.
+	\]
+	Newton identities, or equivalently the elementary power-sum lemma used in the
+	paper, recover the multiplicities and the weights.  The blockwise gauge
+	matrices are then put on the diagonal to obtain the global conjugating matrix;
+	this is the proof of
+	\cite[Corollary~\texttt{II\_cor2}, lines 1184--1192]{Cirac2016MPDO_arXiv},
+	restated as
+	\cite[Corollary~\texttt{II\_cor2}, lines 1896--1900]{Cirac2021Matrix}.
 
-	Thus the remaining paper-level inputs are upstream of the sector comparison:
-	one must, starting from arbitrary equal MPVs, produce exact live primitive
-	irreducible block families for both tensors at one common physical blocking
-	length, transport the weights and the already-isolated zero-tail bookkeeping
-	to that common-length statement, and prove equality of the finite-length MPV
-	spans of those live block families. Once those inputs are supplied,
-	Theorems~\ref{thm:sector_basis_matching_from_overlap_ortho_span}
-	and~\ref{thm:route_b_hetero_sector_matching} recover the basis permutation,
-	multiplicities, and sector-weight multisets. The final global gauge matrix of
-	Corollary~IV.5 is then obtained by the same phase-absorption and blockwise
-	composition argument already formalized in the strict single-weight setting.
+	The formalized results cover the downstream parts of this argument.
+	Theorem~\ref{thm:ft_equal_explicit} proves the equal case when the coefficient
+	identities are given explicitly,
+	Theorem~\ref{thm:ft_equal_same_structure} proves the common block-structure
+	special case, and Theorem~\ref{thm:route_b_equal} recovers the sector-weight
+	multisets from the multiplicity data.  The basis-of-normal-tensors
+	construction is also available for trace-preserving primitive irreducible live
+	blocks with positive bond dimensions and nonzero weights in
+	Theorem~\ref{thm:bnt_sector_decomp_tp_prim_irr_collapsed}.  When the live
+	blocks are injective, Theorems~\ref{thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_data}
+	and~\ref{thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_data_span}
+	provide the asymptotic orthogonality and finite-length span preservation needed
+	to separate coefficients.  Theorem~\ref{thm:bnt_sector_decomp_pair_overlap_span_of_block_span}
+	then turns equality of live-sector spans into the hypotheses used by the
+	sector comparison theorem.
+
+	The remaining input for the unconditional equal-case theorem is the bridge from
+	arbitrary equal MPV families to those hypotheses.  After applying the
+	canonical-form reduction of Chapter~\ref{ch:canonical}, one must put the live
+	sectors of both tensors at one common blocking length, carry the original
+	weights and the zero-tail identities through that blocking, and prove that the
+	two resulting live-sector families span the same finite-length MPV spaces.  A
+	convenient sufficient form is already formalized in
+	Theorem~\ref{thm:after_blocking_sector_common_blocks_phase_cover}: both live
+	families may be compared with one common family of phase-gauge classes,
+	surjectively on both sides.  What is not yet formalized is the construction of
+	that common family, or an equivalent direct proof of the span equality, from
+	the equal-MPV hypothesis and the common-length cyclic-sector data of
+	Chapter~\ref{ch:canonical}.  Without this bridge, equality of the total MPV
+	vectors has not yet been converted into the componentwise power-sum identities
+	used in the paper proof, so Corollary~IV.5 cannot be invoked unconditionally.
 \end{remark}
