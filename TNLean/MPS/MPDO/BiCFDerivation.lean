@@ -385,6 +385,41 @@ theorem pairWordTupleSpanTop_of_pairTraceSeparatingAt {D₁ D₂ : ℕ}
     simpa using hM
   exact hfne hfzero
 
+/-- Homogeneous pair product-span gives homogeneous trace separation. -/
+theorem pairTraceSeparatingAt_of_pairWordTupleSpanTop {D₁ D₂ : ℕ}
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂) {S : ℕ}
+    (hSpan : PairWordTupleSpanTop A B S) :
+    PairTraceSeparatingAt A B S := by
+  classical
+  intro ΔA ΔB hΔ
+  have hZeroOnSpan :
+      ∀ M : Matrix (Fin D₁) (Fin D₁) ℂ × Matrix (Fin D₂) (Fin D₂) ℂ,
+        M ∈ Submodule.span ℂ (Set.range (pairWordTuple A B S)) →
+          Matrix.trace (ΔA * M.1) + Matrix.trace (ΔB * M.2) = 0 := by
+    intro M hM
+    exact pair_trace_zero_on_span ΔA ΔB
+      (Ω := Set.range (pairWordTuple A B S))
+      (by
+        rintro M ⟨w, rfl⟩
+        exact hΔ w)
+      M hM
+  constructor
+  · apply trace_mul_right_eq_zero
+    intro M
+    have hpair := hZeroOnSpan (M, 0) (by rw [hSpan]; exact Submodule.mem_top)
+    simpa using hpair
+  · apply trace_mul_right_eq_zero
+    intro N
+    have hpair := hZeroOnSpan (0, N) (by rw [hSpan]; exact Submodule.mem_top)
+    simpa using hpair
+
+/-- Homogeneous pair product-span is equivalent to homogeneous trace separation. -/
+theorem pairWordTupleSpanTop_iff_pairTraceSeparatingAt {D₁ D₂ : ℕ}
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂) {S : ℕ} :
+    PairWordTupleSpanTop A B S ↔ PairTraceSeparatingAt A B S :=
+  ⟨pairTraceSeparatingAt_of_pairWordTupleSpanTop A B,
+    pairWordTupleSpanTop_of_pairTraceSeparatingAt A B⟩
+
 /-- Cumulative trace separation is the dual form of cumulative pair product-span. -/
 theorem pairCumulativeWordTupleSpanTop_of_pairTraceSeparatingUpTo {D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂) {S : ℕ}
@@ -622,6 +657,154 @@ theorem exists_forall_pairTraceSeparatingUpTo_of_forall_pairTraceSeparatingAll
   have hle : Sij (k, j) ≤ S := by
     exact Finset.le_sup (s := Finset.univ) (f := Sij) (Finset.mem_univ (k, j))
   exact hbase.mono hle
+
+/-! ### Homogenizing cumulative pair spans -/
+
+/-- A finite word pair belongs to the homogeneous pair span at its own length. -/
+theorem pairEvalWordTuple_mem_span_pairWordTuple_length {D₁ D₂ : ℕ}
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂) (w : List (Fin d)) :
+    pairEvalWordTuple A B w ∈
+      Submodule.span ℂ (Set.range (pairWordTuple A B w.length)) := by
+  apply Submodule.subset_span
+  exact ⟨w.get, by simp [pairWordTuple, pairEvalWordTuple, List.ofFn_get]⟩
+
+/-- Homogeneous pair spans are closed under componentwise multiplication, with
+word lengths adding. -/
+theorem pair_mul_mem_span_pairWordTuple_add {D₁ D₂ : ℕ}
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂) {L S : ℕ}
+    {M N : Matrix (Fin D₁) (Fin D₁) ℂ × Matrix (Fin D₂) (Fin D₂) ℂ}
+    (hM : M ∈ Submodule.span ℂ (Set.range (pairWordTuple A B L)))
+    (hN : N ∈ Submodule.span ℂ (Set.range (pairWordTuple A B S))) :
+    (M.1 * N.1, M.2 * N.2) ∈
+      Submodule.span ℂ (Set.range (pairWordTuple A B (L + S))) := by
+  classical
+  let spanLS : Submodule ℂ
+      (Matrix (Fin D₁) (Fin D₁) ℂ × Matrix (Fin D₂) (Fin D₂) ℂ) :=
+    Submodule.span ℂ (Set.range (pairWordTuple A B (L + S)))
+  have hleft_gen : ∀ u : Fin L → Fin d,
+      ((pairWordTuple A B L u).1 * N.1, (pairWordTuple A B L u).2 * N.2) ∈
+        spanLS := by
+    intro u
+    induction hN using Submodule.span_induction with
+    | mem N' hNmem =>
+        rcases hNmem with ⟨v, rfl⟩
+        have hEq :
+            ((pairWordTuple A B L u).1 * (pairWordTuple A B S v).1,
+                (pairWordTuple A B L u).2 * (pairWordTuple A B S v).2) =
+              pairWordTuple A B (L + S) (Fin.append u v) := by
+          ext <;> simp [pairWordTuple, List.ofFn_fin_append, evalWord_append]
+        rw [hEq]
+        exact Submodule.subset_span ⟨Fin.append u v, rfl⟩
+    | zero =>
+        have hzero :
+            ((pairWordTuple A B L u).1 *
+                (0 : Matrix (Fin D₁) (Fin D₁) ℂ × Matrix (Fin D₂) (Fin D₂) ℂ).1,
+              (pairWordTuple A B L u).2 *
+                (0 : Matrix (Fin D₁) (Fin D₁) ℂ × Matrix (Fin D₂) (Fin D₂) ℂ).2) = 0 := by
+          simp
+        rw [hzero]
+        exact Submodule.zero_mem _
+    | add N₁ N₂ _ _ hN₁ hN₂ =>
+        have hEq :
+            ((pairWordTuple A B L u).1 * (N₁ + N₂).1,
+              (pairWordTuple A B L u).2 * (N₁ + N₂).2) =
+              ((pairWordTuple A B L u).1 * N₁.1,
+                (pairWordTuple A B L u).2 * N₁.2) +
+              ((pairWordTuple A B L u).1 * N₂.1,
+                (pairWordTuple A B L u).2 * N₂.2) := by
+          ext <;> simp [Matrix.mul_add]
+        rw [hEq]
+        exact Submodule.add_mem _ hN₁ hN₂
+    | smul a N _ hN =>
+        have hEq :
+            ((pairWordTuple A B L u).1 * (a • N).1,
+              (pairWordTuple A B L u).2 * (a • N).2) =
+              a • ((pairWordTuple A B L u).1 * N.1,
+                (pairWordTuple A B L u).2 * N.2) := by
+          ext <;> simp
+        rw [hEq]
+        exact Submodule.smul_mem _ a hN
+  induction hM using Submodule.span_induction with
+  | mem M hMmem =>
+      rcases hMmem with ⟨u, rfl⟩
+      exact hleft_gen u
+  | zero =>
+      have hzero :
+          ((0 : Matrix (Fin D₁) (Fin D₁) ℂ × Matrix (Fin D₂) (Fin D₂) ℂ).1 * N.1,
+            (0 : Matrix (Fin D₁) (Fin D₁) ℂ × Matrix (Fin D₂) (Fin D₂) ℂ).2 * N.2)
+            = 0 := by
+        simp
+      rw [hzero]
+      exact Submodule.zero_mem _
+  | add M₁ M₂ _ _ hM₁ hM₂ =>
+      have hEq : ((M₁ + M₂).1 * N.1, (M₁ + M₂).2 * N.2) =
+          (M₁.1 * N.1, M₁.2 * N.2) + (M₂.1 * N.1, M₂.2 * N.2) := by
+        ext <;> simp [Matrix.add_mul]
+      rw [hEq]
+      exact Submodule.add_mem _ hM₁ hM₂
+  | smul a M _ hM =>
+      have hEq : ((a • M).1 * N.1, (a • M).2 * N.2) =
+          a • (M.1 * N.1, M.2 * N.2) := by
+        ext <;> simp
+      rw [hEq]
+      exact Submodule.smul_mem _ a hM
+
+/-- A cumulative pair span can be homogenized once the simultaneous pair identity
+is available at every padding length needed to reach the target length.
+
+The padding hypothesis is the Burnside-Jacobson input deferred to a later step. -/
+theorem pairWordTupleSpanTop_of_pairCumulativeWordTupleSpanTop_of_identityPadding
+    {D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂) {S T : ℕ}
+    (hST : S ≤ T)
+    (hCum : PairCumulativeWordTupleSpanTop A B S)
+    (hPad : ∀ l : ℕ, l ≤ S →
+      ((1 : Matrix (Fin D₁) (Fin D₁) ℂ), (1 : Matrix (Fin D₂) (Fin D₂) ℂ)) ∈
+        Submodule.span ℂ (Set.range (pairWordTuple A B (T - l)))) :
+    PairWordTupleSpanTop A B T := by
+  classical
+  unfold PairWordTupleSpanTop
+  apply eq_top_iff.mpr
+  intro M _
+  have hM : M ∈ pairCumulativeSpan A B S := by
+    rw [hCum]
+    exact Submodule.mem_top
+  suffices hle : pairCumulativeSpan A B S ≤
+      Submodule.span ℂ (Set.range (pairWordTuple A B T)) from hle hM
+  apply Submodule.span_le.mpr
+  rintro N ⟨w, hwS, rfl⟩
+  have hwT : w.length ≤ T := le_trans hwS hST
+  have hword :
+      pairEvalWordTuple A B w ∈
+        Submodule.span ℂ (Set.range (pairWordTuple A B w.length)) :=
+    pairEvalWordTuple_mem_span_pairWordTuple_length A B w
+  have hmul :=
+    pair_mul_mem_span_pairWordTuple_add (A := A) (B := B)
+      (L := w.length) (S := T - w.length)
+      (M := pairEvalWordTuple A B w)
+      (N := ((1 : Matrix (Fin D₁) (Fin D₁) ℂ), (1 : Matrix (Fin D₂) (Fin D₂) ℂ)))
+      hword (hPad w.length hwS)
+  have hlen : w.length + (T - w.length) = T := Nat.add_sub_of_le hwT
+  have hprod :
+      ((pairEvalWordTuple A B w).1 * (1 : Matrix (Fin D₁) (Fin D₁) ℂ),
+        (pairEvalWordTuple A B w).2 * (1 : Matrix (Fin D₂) (Fin D₂) ℂ)) =
+        pairEvalWordTuple A B w := by
+    ext <;> simp
+  rw [hlen] at hmul
+  simpa [hprod] using hmul
+
+/-- Trace-separation version of
+`pairWordTupleSpanTop_of_pairCumulativeWordTupleSpanTop_of_identityPadding`. -/
+theorem pairTraceSeparatingAt_of_pairTraceSeparatingUpTo_of_identityPadding
+    {D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂) {S T : ℕ}
+    (hST : S ≤ T)
+    (hSep : PairTraceSeparatingUpTo A B S)
+    (hPad : ∀ l : ℕ, l ≤ S →
+      ((1 : Matrix (Fin D₁) (Fin D₁) ℂ), (1 : Matrix (Fin D₂) (Fin D₂) ℂ)) ∈
+        Submodule.span ℂ (Set.range (pairWordTuple A B (T - l)))) :
+    PairTraceSeparatingAt A B T :=
+  pairTraceSeparatingAt_of_pairWordTupleSpanTop A B
+    (pairWordTupleSpanTop_of_pairCumulativeWordTupleSpanTop_of_identityPadding
+      A B hST (pairCumulativeWordTupleSpanTop_of_pairTraceSeparatingUpTo A B hSep) hPad)
 
 /-- Pair product-span at length `S` gives a length-`S` selector for the first
 block of the pair. -/

@@ -334,6 +334,27 @@ theorem wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingAt
   wordTupleSpanTop_of_isCanonicalFormBNT_of_pairBlockSeparatingWords μ A hCF
     (hasPairBlockSeparatingWords_of_forall_pairTraceSeparatingAt A hSep)
 
+/-- Canonical-form/BNT data plus cumulative pair trace separation and exact
+identity padding give full product-word span.
+
+This is the Route B homogenization: the cumulative finite cutoff can be
+used once each ordered pair has simultaneous identity padding at the lengths
+needed to reach a common homogeneous target `T`. -/
+theorem wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingUpTo_of_identityPadding
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hCF : IsCanonicalFormBNT μ A) {S T : ℕ}
+    (hST : S ≤ T)
+    (hSep : ∀ k j : Fin r, j ≠ k → PairTraceSeparatingUpTo (A k) (A j) S)
+    (hPad : ∀ k j : Fin r, j ≠ k → ∀ l : ℕ, l ≤ S →
+      ((1 : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
+          (1 : Matrix (Fin (dim j)) (Fin (dim j)) ℂ)) ∈
+        Submodule.span ℂ (Set.range (pairWordTuple (A k) (A j) (T - l)))) :
+    WordTupleSpanTop A (1 + (r - 1) * T) :=
+  wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingAt μ A hCF
+    (fun k j hjk =>
+      pairTraceSeparatingAt_of_pairTraceSeparatingUpTo_of_identityPadding
+        (A k) (A j) hST (hSep k j hjk) (hPad k j hjk))
+
 /-- Positive-length product-word span obtained from canonical-form/BNT data and
 pairwise block-separating word polynomials. -/
 theorem exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairBlockSeparatingWords
@@ -363,6 +384,28 @@ theorem exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingA
   refine ⟨1 + (r - 1) * S, Nat.add_pos_left Nat.zero_lt_one _, ?_⟩
   simpa [WordTupleSpanTop, wordTuple] using
     wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingAt μ A hCF hSep
+
+/-- Positive-length product-word span from cumulative pair trace separation plus
+exact identity padding. -/
+theorem
+    exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingUpTo_of_identityPadding
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hCF : IsCanonicalFormBNT μ A) {S T : ℕ}
+    (hST : S ≤ T)
+    (hSep : ∀ k j : Fin r, j ≠ k → PairTraceSeparatingUpTo (A k) (A j) S)
+    (hPad : ∀ k j : Fin r, j ≠ k → ∀ l : ℕ, l ≤ S →
+      ((1 : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
+          (1 : Matrix (Fin (dim j)) (Fin (dim j)) ℂ)) ∈
+        Submodule.span ℂ (Set.range (pairWordTuple (A k) (A j) (T - l)))) :
+    ∃ m : ℕ, 0 < m ∧
+      Submodule.span ℂ (Set.range fun ω : Fin m → Fin d =>
+        fun k : Fin r => evalWord (A k) (List.ofFn ω)) =
+      (⊤ : Submodule ℂ
+        ((k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) := by
+  refine ⟨1 + (r - 1) * T, Nat.add_pos_left Nat.zero_lt_one _, ?_⟩
+  simpa [WordTupleSpanTop, wordTuple] using
+    wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingUpTo_of_identityPadding
+      μ A hCF hST hSep hPad
 
 /-- Positive-length product-word span obtained from canonical-form/BNT data and
 finite block-selector words.
