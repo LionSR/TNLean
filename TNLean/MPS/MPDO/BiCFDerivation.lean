@@ -329,6 +329,33 @@ private theorem exists_pair_trace_repr {m n : Type*} [Fintype m] [Fintype n]
           (f.comp (LinearMap.inr ℂ (Matrix m m ℂ) (Matrix n n ℂ))) M.2 = _
       rw [hA M.1, hB M.2]
 
+private theorem pair_trace_zero_on_span {D₁ D₂ : ℕ}
+    {Ω : Set (Matrix (Fin D₁) (Fin D₁) ℂ × Matrix (Fin D₂) (Fin D₂) ℂ)}
+    (ΔA : Matrix (Fin D₁) (Fin D₁) ℂ)
+    (ΔB : Matrix (Fin D₂) (Fin D₂) ℂ)
+    (hΩ : ∀ M ∈ Ω, Matrix.trace (ΔA * M.1) + Matrix.trace (ΔB * M.2) = 0) :
+    ∀ M : Matrix (Fin D₁) (Fin D₁) ℂ × Matrix (Fin D₂) (Fin D₂) ℂ,
+      M ∈ Submodule.span ℂ Ω →
+        Matrix.trace (ΔA * M.1) + Matrix.trace (ΔB * M.2) = 0 := by
+  intro M hM
+  induction hM using Submodule.span_induction with
+  | mem M hMmem =>
+      exact hΩ M hMmem
+  | zero => simp
+  | add M N _ _ hM hN =>
+      calc
+        Matrix.trace (ΔA * (M + N).1) + Matrix.trace (ΔB * (M + N).2)
+            = (Matrix.trace (ΔA * M.1) + Matrix.trace (ΔB * M.2)) +
+                (Matrix.trace (ΔA * N.1) + Matrix.trace (ΔB * N.2)) := by
+              simp [Matrix.mul_add, Matrix.trace_add, add_assoc, add_left_comm]
+        _ = 0 := by simp [hM, hN]
+  | smul a M _ hM =>
+      calc
+        Matrix.trace (ΔA * (a • M).1) + Matrix.trace (ΔB * (a • M).2)
+            = a * (Matrix.trace (ΔA * M.1) + Matrix.trace (ΔB * M.2)) := by
+              simp [Matrix.trace_smul, mul_add]
+        _ = 0 := by simp [hM]
+
 /-- The pair trace-separation criterion is the dual form of pair product-span. -/
 theorem pairWordTupleSpanTop_of_pairTraceSeparatingAt {D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂) {S : ℕ}
@@ -399,24 +426,12 @@ theorem pairTraceSeparatingUpTo_of_pairCumulativeWordTupleSpanTop {D₁ D₂ : �
         M ∈ pairCumulativeSpan A B S →
           Matrix.trace (ΔA * M.1) + Matrix.trace (ΔB * M.2) = 0 := by
     intro M hM
-    induction hM using Submodule.span_induction with
-    | mem M hMmem =>
-        rcases hMmem with ⟨w, hw, rfl⟩
-        exact hΔ w hw
-    | zero => simp
-    | add M N _ _ hM hN =>
-        calc
-          Matrix.trace (ΔA * (M + N).1) + Matrix.trace (ΔB * (M + N).2)
-              = (Matrix.trace (ΔA * M.1) + Matrix.trace (ΔB * M.2)) +
-                  (Matrix.trace (ΔA * N.1) + Matrix.trace (ΔB * N.2)) := by
-                simp [Matrix.mul_add, Matrix.trace_add, add_assoc, add_left_comm]
-          _ = 0 := by simp [hM, hN]
-    | smul a M _ hM =>
-        calc
-          Matrix.trace (ΔA * (a • M).1) + Matrix.trace (ΔB * (a • M).2)
-              = a * (Matrix.trace (ΔA * M.1) + Matrix.trace (ΔB * M.2)) := by
-                simp [Matrix.trace_smul, mul_add]
-          _ = 0 := by simp [hM]
+    exact pair_trace_zero_on_span ΔA ΔB
+      (Ω := {M | ∃ w : List (Fin d), w.length ≤ S ∧ M = pairEvalWordTuple A B w})
+      (by
+        rintro M ⟨w, hw, rfl⟩
+        exact hΔ w hw)
+      M (by simpa [pairCumulativeSpan] using hM)
   constructor
   · apply trace_mul_right_eq_zero
     intro M
@@ -503,24 +518,12 @@ theorem pairTraceSeparatingAll_of_pairAllWordsSpanTop {D₁ D₂ : ℕ}
         M ∈ pairAllWordsSpan A B →
           Matrix.trace (ΔA * M.1) + Matrix.trace (ΔB * M.2) = 0 := by
     intro M hM
-    induction hM using Submodule.span_induction with
-    | mem M hMmem =>
-        rcases hMmem with ⟨w, rfl⟩
-        exact hΔ w
-    | zero => simp
-    | add M N _ _ hM hN =>
-        calc
-          Matrix.trace (ΔA * (M + N).1) + Matrix.trace (ΔB * (M + N).2)
-              = (Matrix.trace (ΔA * M.1) + Matrix.trace (ΔB * M.2)) +
-                  (Matrix.trace (ΔA * N.1) + Matrix.trace (ΔB * N.2)) := by
-                simp [Matrix.mul_add, Matrix.trace_add, add_assoc, add_left_comm]
-          _ = 0 := by simp [hM, hN]
-    | smul a M _ hM =>
-        calc
-          Matrix.trace (ΔA * (a • M).1) + Matrix.trace (ΔB * (a • M).2)
-              = a * (Matrix.trace (ΔA * M.1) + Matrix.trace (ΔB * M.2)) := by
-                simp [Matrix.trace_smul, mul_add]
-          _ = 0 := by simp [hM]
+    exact pair_trace_zero_on_span ΔA ΔB
+      (Ω := Set.range (pairEvalWordTuple A B))
+      (by
+        rintro M ⟨w, rfl⟩
+        exact hΔ w)
+      M (by simpa [pairAllWordsSpan] using hM)
   constructor
   · apply trace_mul_right_eq_zero
     intro M
