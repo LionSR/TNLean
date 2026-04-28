@@ -946,7 +946,7 @@
 	
 	]
 </span>, with the \(N\)-site Hilbert space modelled as coefficient functions </p>
-<div class="displaymath" id="a0000001348">
+<div class="displaymath" id="a0000001350">
   \[  \{ 0,\ldots ,d{-}1\} ^N \to \mathbb {C},  \]
 </div>
 <p> rather than as an explicit tensor product. </p>
@@ -991,7 +991,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>  For local dimension \(d\) and chain length \(N\), the ambient coefficient space is </p>
-<div class="displaymath" id="a0000001349">
+<div class="displaymath" id="a0000001351">
   \[  \mathcal H_{N}^{(d)} := \{ 0,\ldots ,d{-}1\} ^{N} \to \mathbb {C}.  \]
 </div>
 <p> This is the concrete model used throughout the chapter for periodic-chain states. </p>
@@ -1001,7 +1001,7 @@
 <h1 id="sec:ground_space_parent">20.1 Local ground space \(G_L(A)\)</h1>
 
 <p>Fix an MPS tensor \(A = \{ A^i\} _{i=0}^{d-1}\) with \(A^i \in M_{D}(\mathbb {C})\) and a block length \(L \ge 1\). For a word \(w = (i_1,\ldots ,i_L)\), write \(A^w := A^{i_1}\cdots A^{i_L}\). The local ground-space map is </p>
-<div class="displaymath" id="a0000001350">
+<div class="displaymath" id="a0000001352">
   \[  \Gamma _L : M_{D}(\mathbb {C}) \to (\{ 0,\ldots ,d{-}1\} ^L \to \mathbb {C}), \qquad \Gamma _L(X)(\sigma ) := \operatorname{tr}\! (A^{\sigma } X),  \]
 </div>
 <p> where \(A^{\sigma }\) abbreviates \(A^{\sigma (0)}\cdots A^{\sigma (L-1)}\). </p>
@@ -1066,7 +1066,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   The map \(\Gamma _L\) above is a \(\mathbb {C}\)-linear map </p>
-<div class="displaymath" id="a0000001351">
+<div class="displaymath" id="a0000001353">
   \[  \Gamma _L : M_{D}(\mathbb {C}) \to (\{ 0,\ldots ,d{-}1\} ^L \to \mathbb {C}).  \]
 </div>
 <p> In tensor-network notation, </p>
@@ -1136,7 +1136,7 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   For every boundary matrix \(X \in M_{D}(\mathbb {C})\) and every length-\(L\) word \(\sigma \), </p>
-<div class="displaymath" id="a0000001353">
+<div class="displaymath" id="a0000001355">
   \[  \Gamma _{L}(X)(\sigma ) = \operatorname{tr}(A^{\sigma } X).  \]
 </div>
 
@@ -1203,7 +1203,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   The <em>local ground space</em> is the image </p>
-<div class="displaymath" id="a0000001354">
+<div class="displaymath" id="a0000001356">
   \[  G_L(A) := \mathrm{im}(\Gamma _L) \subseteq (\{ 0,\ldots ,d{-}1\} ^L \to \mathbb {C}).  \]
 </div>
 
@@ -1225,7 +1225,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:ground_space_finrank_le">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001355"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001357"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1273,13 +1273,13 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   For every \(L\), </p>
-<div class="displaymath" id="a0000001356">
+<div class="displaymath" id="a0000001358">
   \[  \dim G_L(A) \le D^2.  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001355">
+<div class="proof_wrapper" id="a0000001357">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1288,7 +1288,7 @@
   </div>
   <div class="proof_content">
   <p>Since \(G_L(A)\) is the range of a linear map from \(M_{D}(\mathbb {C})\), </p>
-<div class="displaymath" id="a0000001357">
+<div class="displaymath" id="a0000001359">
   \[  \dim G_L(A) \le \dim M_{D}(\mathbb {C}) = D^2.  \]
 </div>
 
@@ -1335,7 +1335,7 @@
   </div>
   <div class="lemma_thmcontent">
   <p>  The coefficient-function model satisfies </p>
-<div class="displaymath" id="a0000001358">
+<div class="displaymath" id="a0000001360">
   \[  \dim \! (\{ 0,\ldots ,d{-}1\} ^L \to \mathbb {C})=d^L.  \]
 </div>
 
@@ -1357,7 +1357,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:ground_space_ne_top">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001359"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001361"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1407,13 +1407,13 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   If \(d^L {\gt} D^2\), then \(G_L(A)\) is a proper subspace of the local Hilbert space: </p>
-<div class="displaymath" id="a0000001360">
+<div class="displaymath" id="a0000001362">
   \[  G_L(A) \neq (\{ 0,\ldots ,d{-}1\} ^L \to \mathbb {C}).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001359">
+<div class="proof_wrapper" id="a0000001361">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1491,7 +1491,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   Via the canonical identification between coefficient functions and the Euclidean space \(\ell ^{2}(\{ 0,\ldots ,d{-}1\} ^{L})\), one transports the local ground space to a Hilbert-space subspace </p>
-<div class="displaymath" id="a0000001361">
+<div class="displaymath" id="a0000001363">
   \[  G_{L}^{\mathrm{ES}}(A) \subseteq \ell ^{2}(\{ 0,\ldots ,d{-}1\} ^{L}).  \]
 </div>
 
@@ -1513,7 +1513,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:mem_ground_space_es">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001362"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001364"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1566,7 +1566,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001362">
+<div class="proof_wrapper" id="a0000001364">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1639,7 +1639,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   The parent interaction at range \(L\) is the orthogonal projector </p>
-<div class="displaymath" id="a0000001363">
+<div class="displaymath" id="a0000001365">
   \[  h_L(A) := \Pi _{G_L(A)^\perp },  \]
 </div>
 <p> on the local \(L\)-site space. </p>
@@ -1662,7 +1662,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:parent_interaction_apply_mem_ground_space">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001364"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001366"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1715,7 +1715,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001364">
+<div class="proof_wrapper" id="a0000001366">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1788,7 +1788,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   For a configuration \(\sigma \in \{ 0,\ldots ,d{-}1\} ^{N}\) on the periodic chain and a starting site \(i\), the extracted word </p>
-<div class="displaymath" id="a0000001365">
+<div class="displaymath" id="a0000001367">
   \[  \operatorname {extractWindow}_{L,i}(\sigma ) \in \{ 0,\ldots ,d{-}1\} ^{L}  \]
 </div>
 <p> records the entries of \(\sigma \) on the cyclic interval \(i,i+1,\ldots ,i+L-1\) modulo \(N\). </p>
@@ -1856,7 +1856,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   If \(L \le N\), the configuration </p>
-<div class="displaymath" id="a0000001366">
+<div class="displaymath" id="a0000001368">
   \[  \operatorname {replaceWindow}_{L,i}(\sigma ,\tau )  \]
 </div>
 <p> is obtained from \(\sigma \) by replacing the cyclic window starting at \(i\) by the length-\(L\) word \(\tau \). </p>
@@ -1926,7 +1926,7 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   If \(L \le N\), then extracting the same cyclic window after replacement recovers the inserted word: </p>
-<div class="displaymath" id="a0000001367">
+<div class="displaymath" id="a0000001369">
   \[  \operatorname {extractWindow}_{L,i}(\operatorname {replaceWindow}_{L,i}(\sigma ,\tau )) = \tau .  \]
 </div>
 
@@ -1948,7 +1948,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:replace_window_extract_window">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001368"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001370"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1998,13 +1998,13 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   If \(L \le N\), then replacing the cyclic window at \(i\) in \(\sigma \) by the values extracted from that same \(\sigma \) leaves \(\sigma \) unchanged: </p>
-<div class="displaymath" id="a0000001369">
+<div class="displaymath" id="a0000001371">
   \[  \operatorname {replaceWindow}_{L,i}(\sigma ,\operatorname {extractWindow}_{L,i}(\sigma )) = \sigma .  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001368">
+<div class="proof_wrapper" id="a0000001370">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2142,7 +2142,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   The chain Hamiltonian is </p>
-<div class="displaymath" id="a0000001370">
+<div class="displaymath" id="a0000001372">
   \[  H_N(A,L) := \sum _{i=0}^{N-1} h_i.  \]
 </div>
 
@@ -2209,7 +2209,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   A state \(\psi \) is frustration-free if each local term annihilates it: </p>
-<div class="displaymath" id="a0000001371">
+<div class="displaymath" id="a0000001373">
   \[  \forall \,  i \in \{ 0,\ldots ,N{-}1\} ,\quad h_i \psi = 0.  \]
 </div>
 
@@ -2231,7 +2231,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:mpv_window_mem_ground_space">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001372"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001374"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2284,7 +2284,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001372">
+<div class="proof_wrapper" id="a0000001374">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2312,7 +2312,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:local_term_annihilates_mpv">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001373"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001375"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2369,7 +2369,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001373">
+<div class="proof_wrapper" id="a0000001375">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2397,7 +2397,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_annihilates">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001374"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001376"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2449,13 +2449,13 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   For every \(N\), the MPV state satisfies </p>
-<div class="displaymath" id="a0000001375">
+<div class="displaymath" id="a0000001377">
   \[  H_N(A,L)\, V^{(N)}(A) = 0.  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001374">
+<div class="proof_wrapper" id="a0000001376">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2483,7 +2483,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_ff">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001376"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001378"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2538,7 +2538,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001376">
+<div class="proof_wrapper" id="a0000001378">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2555,7 +2555,7 @@
 <p>This section develops the intersection property of local ground spaces for injective MPS and the resulting uniqueness of the ground state on the periodic chain. </p>
 <h2 id="a0000000136">20.3.1 Restriction maps</h2>
 <p>Given a state \(\psi \) on \(L+1\) sites, we define two restriction maps. </p>
-<div class="remark_thmwrapper theorem-style-remark" id="a0000001377">
+<div class="remark_thmwrapper theorem-style-remark" id="a0000001379">
   <div class="remark_thmheading">
     <span class="remark_thmcaption">
     Remark
@@ -2569,7 +2569,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001377">#</a>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001379">#</a>
     
     
     
@@ -2638,7 +2638,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>  Fix the last physical index \(j\): </p>
-<div class="displaymath" id="a0000001378">
+<div class="displaymath" id="a0000001380">
   \[  \sigma \longmapsto \psi (\sigma _1,\ldots ,\sigma _L,j).  \]
 </div>
 
@@ -2685,7 +2685,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>  Fix the first physical index \(i\): </p>
-<div class="displaymath" id="a0000001379">
+<div class="displaymath" id="a0000001381">
   \[  \sigma \longmapsto \psi (i,\sigma _1,\ldots ,\sigma _L).  \]
 </div>
 
@@ -2840,7 +2840,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:ground_space_in_left_ground">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001380"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001382"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2893,7 +2893,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001380">
+<div class="proof_wrapper" id="a0000001382">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2923,7 +2923,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:ground_space_in_right_ground">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001382"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001384"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2976,7 +2976,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001382">
+<div class="proof_wrapper" id="a0000001384">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3007,7 +3007,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#thm:ground_space_map_injective">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001384"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001386"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3060,7 +3060,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001384">
+<div class="proof_wrapper" id="a0000001386">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3088,7 +3088,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#thm:ground_space_map_injective_word_span">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001385"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001387"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3139,7 +3139,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001385">
+<div class="proof_wrapper" id="a0000001387">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3167,7 +3167,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:ground_space_map_injective_blk">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001386"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001388"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3220,7 +3220,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001386">
+<div class="proof_wrapper" id="a0000001388">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3248,7 +3248,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#thm:ground_space_finrank_eq">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001387"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001389"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3301,7 +3301,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001387">
+<div class="proof_wrapper" id="a0000001389">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3330,7 +3330,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#thm:ground_space_intersection">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001388"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001390"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3386,13 +3386,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   If \(A\) is injective and \(L \ge 2\), then a state \(\psi \) on \(L+1\) sites satisfying both the left and right ground conditions lies in \(G_{L+1}(A)\): </p>
-<div class="displaymath" id="a0000001389">
+<div class="displaymath" id="a0000001391">
   \[  \psi \in G_L^{\mathrm{left}} \cap G_L^{\mathrm{right}} \Longrightarrow \psi \in G_{L+1}(A).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001388">
+<div class="proof_wrapper" id="a0000001390">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3433,7 +3433,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#thm:ground_space_iff">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001391"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001393"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3488,7 +3488,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001391">
+<div class="proof_wrapper" id="a0000001393">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3501,7 +3501,7 @@
   </div>
 </div>
 <h2 id="a0000000140">20.3.5 Unique ground state</h2>
-<h3 id="a0000001392">Contiguous and cyclic window operators</h3>
+<h3 id="a0000001394">Contiguous and cyclic window operators</h3>
 <div class="remark_thmwrapper theorem-style-remark" id="rem:contiguous_window_operators">
   <div class="remark_thmheading">
     <span class="remark_thmcaption">
@@ -3602,7 +3602,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:contiguous_mem_ground_space">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001393"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001395"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3653,7 +3653,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001393">
+<div class="proof_wrapper" id="a0000001395">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3706,7 +3706,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>  Fix a prefix \(u : \{ 0,\ldots ,K{-}1\}  \to \{ 0,\ldots ,d{-}1\} \). The suffix restriction of an \((K+L)\)-site state \(\psi \) is the \(L\)-site state given by </p>
-<div class="displaymath" id="a0000001394">
+<div class="displaymath" id="a0000001396">
   \[  (\operatorname {tailRestrict}_u \psi )(\sigma ) = \psi (u,\sigma ).  \]
 </div>
 
@@ -3794,7 +3794,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:ground_space_in_tail_ground">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001395"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001397"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3851,7 +3851,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001395">
+<div class="proof_wrapper" id="a0000001397">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3860,7 +3860,7 @@
   </div>
   <div class="proof_content">
   <p>Write \(\psi (\rho ) = \operatorname{tr}(A^\rho X)\) for a boundary matrix \(X\). Fixing a prefix \(u\) gives </p>
-<div class="displaymath" id="a0000001396">
+<div class="displaymath" id="a0000001398">
   \[  \psi (u,\sigma ) = \operatorname{tr}(A^u A^\sigma X) = \operatorname{tr}(A^\sigma X A^u),  \]
 </div>
 <p> so the suffix restriction again has the form of a ground-space vector. </p>
@@ -3883,7 +3883,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:left_tail_compatibility">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001397"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001399"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3935,17 +3935,17 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   Assume \(\psi \) on \(K+L_0+1\) sites satisfies the left ground condition on the first \(K+L_0\) sites and the suffix ground condition on every fixed prefix of length \(K\). Then there exist matrices \((Z_j)_j\) and \((Y_u)_u\) such that </p>
-<div class="displaymath" id="a0000001398">
+<div class="displaymath" id="a0000001400">
   \[  \psi (\sigma ,j) = \operatorname{tr}(A^\sigma Z_j), \qquad \psi (u,\tau ) = \operatorname{tr}(A^\tau Y_u),  \]
 </div>
 <p> and for all \(j\) and \(u\), </p>
-<div class="displaymath" id="a0000001399">
+<div class="displaymath" id="a0000001401">
   \[  Z_j A^u = A_j Y_u.  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001397">
+<div class="proof_wrapper" id="a0000001399">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3973,7 +3973,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#thm:right_factor_word_compatibility">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001400"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001402"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4021,14 +4021,14 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Assume \(A\) is \(L_0\)-block injective with \(L_0 {\gt} 0\). If matrices \((Z_j)_j\) satisfy </p>
-<div class="displaymath" id="a0000001401">
+<div class="displaymath" id="a0000001403">
   \[  Z_j A^\sigma = A_j Y_\sigma  \]
 </div>
 <p> for every word \(\sigma \) of length \(K\), then there exists a matrix \(X\) such that \(Z_j = A_j X\) for all \(j\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001400">
+<div class="proof_wrapper" id="a0000001402">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4056,7 +4056,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#thm:ground_space_extend_right_block_injective">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001402"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001404"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4115,7 +4115,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001402">
+<div class="proof_wrapper" id="a0000001404">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4143,7 +4143,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#thm:normal_open_chain_range_reduction">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001403"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001405"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4204,7 +4204,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001403">
+<div class="proof_wrapper" id="a0000001405">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4232,7 +4232,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:cyclic_window_range_antitonicity">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001404"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001406"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4287,7 +4287,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001404">
+<div class="proof_wrapper" id="a0000001406">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4315,7 +4315,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#thm:cyclic_normal_open_chain_range_reduction">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001405"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001407"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4372,7 +4372,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001405">
+<div class="proof_wrapper" id="a0000001407">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4400,7 +4400,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:wrapped_window_one_sided_compatibility">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001406"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001408"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4452,14 +4452,14 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   Assume \(A\) is \(L_0\)-block injective with \(L_0{\gt}0\) and \(M \ge L_0\). If the reduced wrapped window at the last site has boundary matrices \(Y_\tau \), then for every physical letter \(j\) one has </p>
-<div class="displaymath" id="a0000001407">
+<div class="displaymath" id="a0000001409">
   \[  C^+_\tau A^j X = Y_\tau A^j,  \]
 </div>
 <p> where \(C^+_\tau \) is the complementary word seen by that wrapped window. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001406">
+<div class="proof_wrapper" id="a0000001408">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4487,7 +4487,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:mirror_wrapped_window_one_sided_compatibility">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001408"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001410"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4539,14 +4539,14 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   Assume \(A\) is \(L_0\)-block injective with \(L_0{\gt}0\) and \(M \ge L_0\). If the opposite reduced wrapped window has boundary matrices \(Y_\tau \), then </p>
-<div class="displaymath" id="a0000001409">
+<div class="displaymath" id="a0000001411">
   \[  X A^j C^-_\tau = A^j Y_\tau  \]
 </div>
 <p> for every physical letter \(j\), where \(C^-_\tau \) is the complementary word seen from the opposite boundary-crossing position. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001408">
+<div class="proof_wrapper" id="a0000001410">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4574,7 +4574,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#thm:reduced_wrapped_boundary_compatibilities">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001410"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001412"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4636,14 +4636,14 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Let \(A\) be \(L_0\)-block injective with \(L_0{\gt}0\) and \(D \ge 1\). Suppose \(\psi \in \mathcal G_{N,L}(A)\), \(N \ge 2\), \(L_0 {\lt} L \le N\), and \(\psi = \Gamma _N(X)\) for a boundary matrix \(X\). Then there are two families of boundary matrices \(Y^+_\tau \) and \(Y^-_\tau \), indexed by outside configurations \(\tau \), such that for every physical letter \(j\), </p>
-<div class="displaymath" id="a0000001411">
+<div class="displaymath" id="a0000001413">
   \[  C^+_\tau A^j X = Y^+_\tau A^j, \qquad X A^j C^-_\tau = A^j Y^-_\tau ,  \]
 </div>
 <p> where \(C^+_\tau \) and \(C^-_\tau \) are the complementary words exposed by the two opposite wrapped windows of reduced length \(L_0+1\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001410">
+<div class="proof_wrapper" id="a0000001412">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4671,7 +4671,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:common_middle_same_witness_commutation">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001412"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001414"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4699,14 +4699,14 @@
   </div>
   <div class="lemma_thmcontent">
   <p>  Suppose a single family of boundary matrices \(Y_\mu \), indexed by middle words \(\mu \), satisfies the two one-sided identities </p>
-<div class="displaymath" id="a0000001413">
+<div class="displaymath" id="a0000001415">
   \[  A^\mu A^b X = Y_\mu A^b, \qquad X A^a A^\mu = A^a Y_\mu  \]
 </div>
 <p> for every pair of physical letters \(a,b\). Then \(X\) commutes with every word product \(A^a A^\mu A^b\) obtained by adjoining one letter on each side of the common middle. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001412">
+<div class="proof_wrapper" id="a0000001414">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4715,7 +4715,7 @@
   </div>
   <div class="proof_content">
   <p>Multiply the second identity on the right by \(A^b\) and the first identity on the left by \(A^a\): </p>
-<div class="displaymath" id="a0000001414">
+<div class="displaymath" id="a0000001416">
   \[  X A^a A^\mu A^b = A^a Y_\mu A^b = A^a A^\mu A^b X.  \]
 </div>
 
@@ -4737,7 +4737,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#thm:boundary_matrix_commutes">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001415"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001417"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4789,13 +4789,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Let \(A\) be injective with \(D \ge 1\), and let \(\psi = \Gamma _{N}(X)\) for some boundary matrix \(X \in M_{D}(\mathbb {C})\). If every cyclic restriction of length \(L\) of \(\psi \) lies in \(G_{L}(A)\), with \(N \ge 2\) and \(1 {\lt} L \le N\), then </p>
-<div class="displaymath" id="a0000001416">
+<div class="displaymath" id="a0000001418">
   \[  X A^{j} = A^{j} X \qquad \text{for every } j = 0,\ldots ,d-1.  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001415">
+<div class="proof_wrapper" id="a0000001417">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4934,7 +4934,7 @@
   </div>
   <div class="lemma_thmcontent">
   <p>    For every chain length \(N\), </p>
-<div class="displaymath" id="a0000001417">
+<div class="displaymath" id="a0000001419">
   \[  V^{(N)}(A) = \Gamma _{N}(\mathbb {1}).  \]
 </div>
 
@@ -4956,7 +4956,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:mpv_mem_ground_space">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001418"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001420"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5009,7 +5009,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001418">
+<div class="proof_wrapper" id="a0000001420">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5081,7 +5081,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#thm:has_unique_ground_state_iff_proportional">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001419"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001421"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5132,7 +5132,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001419">
+<div class="proof_wrapper" id="a0000001421">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5205,7 +5205,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   For \(N {\gt} 0\) and \(L \le N\), define the <em>periodic chain ground space</em> </p>
-<div class="displaymath" id="a0000001420">
+<div class="displaymath" id="a0000001422">
   \[  \mathcal{G}_{N,L}(A) := \bigl\{ \psi \in (\{ 0,\ldots ,d{-}1\} ^N \to \mathbb {C}) : \text{for every cyclic window } [i,i{+}L{-}1], \psi |_{[i,i+L-1]} \in G_L(A)\bigr\} ,  \]
 </div>
 <p> where the condition \(\psi |_{[i,i+L-1]} \in G_L(A)\) means that for every choice of physical indices outside the window, the restriction of \(\psi \) to that window lies in \(G_L(A)\). When \(N = 0\) or \(L {\gt} N\), set \(\mathcal{G}_{N,L}(A) := \top \) by convention. </p>
@@ -5275,7 +5275,7 @@
   </div>
   <div class="lemma_thmcontent">
   <p>    If \(0 {\lt} N\) and \(L \le N\), then </p>
-<div class="displaymath" id="a0000001421">
+<div class="displaymath" id="a0000001423">
   \[  V^{(N)}(A) \in \mathcal G_{N,L}(A).  \]
 </div>
 
@@ -5297,7 +5297,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#thm:mpv_ne_zero_blk_injective">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001422"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001424"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5350,7 +5350,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001422">
+<div class="proof_wrapper" id="a0000001424">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5379,7 +5379,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#thm:block_word_strip_right_factor">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001423"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001425"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5427,14 +5427,14 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    Assume \(A\) is \(L_0\)-block-injective with \(L_0 {\gt} 0\). Let \(\{ Z_u\} _{|u|=L_0}\) be a family indexed by words of length \(L_0\). If for some \(K \ge 0\) and every suffix word \(w\) of length \(K\) there exists \(Y_w \in M_{D}(\mathbb {C})\) such that </p>
-<div class="displaymath" id="a0000001424">
+<div class="displaymath" id="a0000001426">
   \[  Z_u A^w = A^u Y_w \qquad \text{for every word }u\text{ of length }L_0,  \]
 </div>
 <p> then there exists \(X \in M_{D}(\mathbb {C})\) with \(Z_u = A^u X\) for every word \(u\) of length \(L_0\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001423">
+<div class="proof_wrapper" id="a0000001425">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5462,7 +5462,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#thm:block_word_strip_commutes">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001425"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001427"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5515,7 +5515,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001425">
+<div class="proof_wrapper" id="a0000001427">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5524,7 +5524,7 @@
   </div>
   <div class="proof_content">
   <p>Write each length-\(m\) word as a concatenation \(uw\) with \(|u| = L_0\) and \(|w| = m - L_0\). The hypothesis gives </p>
-<div class="displaymath" id="a0000001426">
+<div class="displaymath" id="a0000001428">
   \[  X A^u A^w = A^u A^w X = A^u (A^w X).  \]
 </div>
 <p> Thus the family \(Z_u := X A^u\) satisfies the hypothesis of Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:block_word_strip_right_factor">20.61</a>. One obtains \(X A^u = A^u R\) for all \(|u| = L_0\). Decomposing \(\mathbb {1}\) in the span of the length-\(L_0\) words shows \(R = X\), hence \(X A^u = A^u X\). </p>
@@ -5547,7 +5547,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#thm:block_word_strip_central">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001427"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001429"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5600,7 +5600,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001427">
+<div class="proof_wrapper" id="a0000001429">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5628,7 +5628,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:word_commutation_multiple_lengths">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001428"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001430"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5659,7 +5659,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001428">
+<div class="proof_wrapper" id="a0000001430">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5687,7 +5687,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:padded_complement_annihilation">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001429"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001431"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5735,13 +5735,13 @@
   </div>
   <div class="lemma_thmcontent">
   <p>    If \(A\) is \(L_0\)-block-injective and \(q \ge 1\), then an operator \(Z\) that annihilates every length-\(k\) word product on the left is zero whenever \(k \le qL_0\): </p>
-<div class="displaymath" id="a0000001430">
+<div class="displaymath" id="a0000001432">
   \[  Z A^w = 0 \quad (|w|=k) \qquad \Longrightarrow \qquad Z=0.  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001429">
+<div class="proof_wrapper" id="a0000001431">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5769,7 +5769,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:boundary_matrix_commutes_long_words">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001431"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001433"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5820,7 +5820,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001431">
+<div class="proof_wrapper" id="a0000001433">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5848,7 +5848,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#thm:ground_space_map_mpv_of_long_word_commutes">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001432"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001434"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5901,7 +5901,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001432">
+<div class="proof_wrapper" id="a0000001434">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5929,7 +5929,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#thm:ground_space_map_mpv_of_positive_word_commutes">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001433"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001435"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5982,7 +5982,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001433">
+<div class="proof_wrapper" id="a0000001435">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6010,7 +6010,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#thm:ground_space_map_mpv_of_common_middle">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001434"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001436"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6063,7 +6063,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001434">
+<div class="proof_wrapper" id="a0000001436">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6091,7 +6091,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#thm:chain_ground_space_eq_mpv_blk">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001435"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001437"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6151,13 +6151,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   If \(A\) is injective, \(D \ge 1\), \(N \ge 2\), and \(1 {\lt} L \le N\), then </p>
-<div class="displaymath" id="a0000001436">
+<div class="displaymath" id="a0000001438">
   \[  \mathcal G_{N,L}(A) = \operatorname{span}\bigl\{ V^{(N)}(A)\bigr\} .  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001435">
+<div class="proof_wrapper" id="a0000001437">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6183,7 +6183,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#thm:normal_range_reduction_containment">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001437"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001439"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6249,13 +6249,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    If \(A\) is normal, \(D \ge 1\), \(L_0\)-block-injective, with \(N \ge 2\) and \(L_0 {\lt} L \le N\), then </p>
-<div class="displaymath" id="a0000001438">
+<div class="displaymath" id="a0000001440">
   \[  \mathcal G_{N,L}(A) \subseteq \operatorname{span}\bigl\{ V^{(N)}(A)\bigr\} .  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001437">
+<div class="proof_wrapper" id="a0000001439">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6338,7 +6338,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   If \(A\) is normal, \(D \ge 1\), \(L_0\)-block-injective, with \(N \ge 2\) and \(L_0 {\lt} L \le N\), then </p>
-<div class="displaymath" id="a0000001439">
+<div class="displaymath" id="a0000001441">
   \[  \mathcal G_{N,L}(A) = \operatorname{span}\bigl\{ V^{(N)}(A)\bigr\} .  \]
 </div>
 
@@ -6360,7 +6360,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#thm:ground_space_unique_periodic">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001440"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001442"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6423,7 +6423,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001440">
+<div class="proof_wrapper" id="a0000001442">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6432,7 +6432,7 @@
   </div>
   <div class="proof_content">
   <p> By Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:chain_ground_space_eq_mpv_blk">20.70</a>, the ground space is the line \(\operatorname{span}\bigl\{ V^{(N)}(A)\bigr\} \). It remains to show that the MPV is nonzero. If \(V^{(N)}(A)=0\), then Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:mpv_eq_ground_space_map_one">20.54</a> gives </p>
-<div class="displaymath" id="a0000001441">
+<div class="displaymath" id="a0000001443">
   \[  \Gamma _{N}(\mathbb {1}) = \Gamma _{N}(0).  \]
 </div>
 <p> Since \(A\) is injective and \(N {\gt} 0\), Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:ground_space_map_injective">20.30</a> forces \(\mathbb {1}= 0\), a contradiction. Therefore the spanning line is one-dimensional. </p>
@@ -6706,7 +6706,7 @@
 
   </div>
 </div>
-<div class="remark_thmwrapper theorem-style-remark" id="a0000001442">
+<div class="remark_thmwrapper theorem-style-remark" id="a0000001444">
   <div class="remark_thmheading">
     <span class="remark_thmcaption">
     Remark
@@ -6720,7 +6720,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001442">#</a>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001444">#</a>
     
     
     
@@ -7045,7 +7045,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#thm:has_commuting_parent_ham_of_idem">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001443"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001445"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7095,14 +7095,14 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   If </p>
-<div class="displaymath" id="a0000001444">
+<div class="displaymath" id="a0000001446">
   \[  P_K \circ P_K = P_K,  \]
 </div>
 <p> then \(P_K\) has a commuting parent Hamiltonian structure. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001443">
+<div class="proof_wrapper" id="a0000001445">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7130,7 +7130,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:comp_complement_comm_zero">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001445"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001447"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7158,13 +7158,13 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   If \(P\) and \(Q\) are commuting idempotents, then </p>
-<div class="displaymath" id="a0000001446">
+<div class="displaymath" id="a0000001448">
   \[  Q \circ (1 - P \circ Q) \circ P = 0.  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001445">
+<div class="proof_wrapper" id="a0000001447">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7192,7 +7192,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#thm:pk_idem">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001447"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001449"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7242,13 +7242,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   If \(P_K = P_{AX} \circ P_{XB}\) is a commuting parent Hamiltonian decomposition, then </p>
-<div class="displaymath" id="a0000001448">
+<div class="displaymath" id="a0000001450">
   \[  P_K \circ P_K = P_K.  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001447">
+<div class="proof_wrapper" id="a0000001449">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7276,7 +7276,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#thm:pAX_comp_pK">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001449"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001451"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7326,13 +7326,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   If \(P_K = P_{AX} \circ P_{XB}\) is a commuting parent Hamiltonian decomposition, then </p>
-<div class="displaymath" id="a0000001450">
+<div class="displaymath" id="a0000001452">
   \[  P_{AX} \circ P_K = P_K.  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001449">
+<div class="proof_wrapper" id="a0000001451">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7341,7 +7341,7 @@
   </div>
   <div class="proof_content">
   <p> Using \(P_K = P_{AX} \circ P_{XB}\) and the idempotence of \(P_{AX}\), </p>
-<div class="displaymath" id="a0000001451">
+<div class="displaymath" id="a0000001453">
   \[  P_{AX} \circ P_K = P_{AX} \circ P_{AX} \circ P_{XB} = P_{AX} \circ P_{XB} = P_K.  \]
 </div>
 
@@ -7363,7 +7363,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#thm:pK_comp_pXB">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001452"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001454"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7413,13 +7413,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   If \(P_K = P_{AX} \circ P_{XB}\) is a commuting parent Hamiltonian decomposition, then </p>
-<div class="displaymath" id="a0000001453">
+<div class="displaymath" id="a0000001455">
   \[  P_K \circ P_{XB} = P_K.  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001452">
+<div class="proof_wrapper" id="a0000001454">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7428,7 +7428,7 @@
   </div>
   <div class="proof_content">
   <p> Using \(P_K = P_{AX} \circ P_{XB}\) and the idempotence of \(P_{XB}\), </p>
-<div class="displaymath" id="a0000001454">
+<div class="displaymath" id="a0000001456">
   \[  P_K \circ P_{XB} = P_{AX} \circ P_{XB} \circ P_{XB} = P_{AX} \circ P_{XB} = P_K.  \]
 </div>
 
@@ -7450,7 +7450,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#thm:pXB_comp_pK">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001455"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001457"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7500,13 +7500,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   If \(P_K = P_{AX} \circ P_{XB}\) is a commuting parent Hamiltonian decomposition, then </p>
-<div class="displaymath" id="a0000001456">
+<div class="displaymath" id="a0000001458">
   \[  P_{XB} \circ P_K = P_K.  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001455">
+<div class="proof_wrapper" id="a0000001457">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7534,7 +7534,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#thm:pK_comp_pAX">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001457"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001459"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7584,13 +7584,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   If \(P_K = P_{AX} \circ P_{XB}\) is a commuting parent Hamiltonian decomposition, then </p>
-<div class="displaymath" id="a0000001458">
+<div class="displaymath" id="a0000001460">
   \[  P_K \circ P_{AX} = P_K.  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001457">
+<div class="proof_wrapper" id="a0000001459">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7618,7 +7618,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#thm:reverse_product">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001459"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001461"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7668,13 +7668,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   If \(P_K = P_{AX} \circ P_{XB}\) is a commuting parent Hamiltonian decomposition, then </p>
-<div class="displaymath" id="a0000001460">
+<div class="displaymath" id="a0000001462">
   \[  P_{XB} \circ P_{AX} = P_K.  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001459">
+<div class="proof_wrapper" id="a0000001461">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7702,7 +7702,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#thm:complement_comm">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001461"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001463"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7752,17 +7752,17 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   If \(P_K = P_{AX} \circ P_{XB}\) is a commuting parent Hamiltonian decomposition and </p>
-<div class="displaymath" id="a0000001462">
+<div class="displaymath" id="a0000001464">
   \[  Q_{AX} = 1 - P_{AX}, \qquad Q_{XB} = 1 - P_{XB},  \]
 </div>
 <p> then </p>
-<div class="displaymath" id="a0000001463">
+<div class="displaymath" id="a0000001465">
   \[  Q_{AX} \circ Q_{XB} = Q_{XB} \circ Q_{AX}.  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001461">
+<div class="proof_wrapper" id="a0000001463">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7790,7 +7790,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#thm:commuting_ham_is_decorrelated">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001464"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001466"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7851,7 +7851,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001464">
+<div class="proof_wrapper" id="a0000001466">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7947,7 +7947,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:frustration_free_ham_eq">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001465"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001467"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7975,13 +7975,13 @@
   </div>
   <div class="lemma_thmcontent">
   <p>  For any endomorphisms \(P\) and \(Q\), </p>
-<div class="displaymath" id="a0000001466">
+<div class="displaymath" id="a0000001468">
   \[  (1-P) + (1-Q) - (1-P)\circ (1-Q) = 1 - P\circ Q.  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001465">
+<div class="proof_wrapper" id="a0000001467">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -8009,7 +8009,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#thm:hamiltonian_eq">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001467"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001469"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -8061,7 +8061,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   If \(P_K = P_{AX} \circ P_{XB}\) is a commuting parent Hamiltonian decomposition, then </p>
-<div class="displaymath" id="a0000001468">
+<div class="displaymath" id="a0000001470">
   \[  Q_{AX} + Q_{XB} - Q_{AX} \circ Q_{XB} = 1 - P_K,  \]
 </div>
 <p> where \(Q_{AX} = 1 - P_{AX}\) and \(Q_{XB} = 1 - P_{XB}\) are the complementary projectors. This is the frustration-free form of the parent Hamiltonian from <span class="cite">
@@ -8074,7 +8074,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001467">
+<div class="proof_wrapper" id="a0000001469">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -8102,7 +8102,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#thm:mem_ground_iff">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001469"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001471"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -8152,7 +8152,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   If \(P_K = P_{AX} \circ P_{XB}\) is a commuting parent Hamiltonian decomposition, then </p>
-<div class="displaymath" id="a0000001470">
+<div class="displaymath" id="a0000001472">
   \[  P_K v = v \quad \Longleftrightarrow \quad P_{AX} v = v \text{ and } P_{XB} v = v.  \]
 </div>
 <p> This is the algebraic form of equation&#160;(D.2) from <span class="cite">
@@ -8165,7 +8165,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001469">
+<div class="proof_wrapper" id="a0000001471">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -8335,7 +8335,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#thm:parent_ground_space_es_kernel">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001471"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001473"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -8366,7 +8366,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001471">
+<div class="proof_wrapper" id="a0000001473">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -8522,7 +8522,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:euclidean_local_projector_positive">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001472"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001474"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -8577,7 +8577,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001472">
+<div class="proof_wrapper" id="a0000001474">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -8605,7 +8605,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:local_term_es_average">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001473"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001475"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -8657,13 +8657,13 @@
   </div>
   <div class="lemma_thmcontent">
   <p>     The transported parent Hamiltonian is the sum of the transported local terms \(H_{N,\mathrm{ES}} = \sum _i h_{i,\mathrm{ES}}\), and each transported local term admits the exact cyclic-averaging formula </p>
-<div class="displaymath" id="a0000001474">
+<div class="displaymath" id="a0000001476">
   \[  h_{i,\mathrm{ES}} = d^{-L} \sum _{\tau } R_{i,\tau }^{\dagger } P_L^{\mathrm{ES}}(A) R_{i,\tau }.  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001473">
+<div class="proof_wrapper" id="a0000001475">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -8691,7 +8691,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:transported_es_positive">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001475"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001477"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -8744,7 +8744,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001475">
+<div class="proof_wrapper" id="a0000001477">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -8772,7 +8772,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:transported_es_local_projections">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001476"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001478"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -8829,7 +8829,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001476">
+<div class="proof_wrapper" id="a0000001478">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -8857,7 +8857,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:parent_interaction_es_kernel">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001477"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001479"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -8907,13 +8907,13 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   The Euclidean local interaction \(P_L^{\mathrm{ES}}(A)\) annihilates exactly the Euclidean local ground space: </p>
-<div class="displaymath" id="a0000001478">
+<div class="displaymath" id="a0000001480">
   \[  P_L^{\mathrm{ES}}(A)v=0 \quad \Longleftrightarrow \quad v\in G_L^{\mathrm{ES}}(A).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001477">
+<div class="proof_wrapper" id="a0000001479">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -8941,7 +8941,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:local_term_es_kernel_restrictions">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001479"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001481"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -8996,7 +8996,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001479">
+<div class="proof_wrapper" id="a0000001481">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9024,7 +9024,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#thm:adjacent_local_kernels_ground_space_es">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001480"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001482"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9086,13 +9086,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>      If \(A\) is injective and \(L\ge 2\), then on an \((L+1)\)-site chain the kernels of the two adjacent transported \(L\)-site local terms are exactly the transported \((L+1)\)-site MPS ground space: </p>
-<div class="displaymath" id="a0000001481">
+<div class="displaymath" id="a0000001483">
   \[  h_{0,\mathrm{ES}}v=0\  \text{ and }\  h_{1,\mathrm{ES}}v=0 \quad \Longleftrightarrow \quad v\in G_{L+1}^{\mathrm{ES}}(A).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001480">
+<div class="proof_wrapper" id="a0000001482">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9120,7 +9120,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:transported_es_nonoverlap_positive">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001482"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001484"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9182,17 +9182,17 @@
   </div>
   <div class="lemma_thmcontent">
   <p>        Let \(L\le N\) and let \(h_{i,\mathrm{ES}},h_{j,\mathrm{ES}}\) be transported local terms whose cyclic \(L\)-windows are site-disjoint: no site of the periodic chain has cyclic offset \({\lt}L\) from both \(i\) and \(j\). Then the terms commute pointwise: for every vector \(v\), </p>
-<div class="displaymath" id="a0000001483">
+<div class="displaymath" id="a0000001485">
   \[  h_{i,\mathrm{ES}}(h_{j,\mathrm{ES}}v) = h_{j,\mathrm{ES}}(h_{i,\mathrm{ES}}v),  \]
 </div>
 <p> and their ordered cross term is nonnegative: </p>
-<div class="displaymath" id="a0000001484">
+<div class="displaymath" id="a0000001486">
   \[  0\le \operatorname {Re}\langle h_{i,\mathrm{ES}}v, h_{j,\mathrm{ES}}v\rangle .  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001482">
+<div class="proof_wrapper" id="a0000001484">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9220,7 +9220,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:quadratic_form_to_norm_bound">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001485"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001487"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9248,18 +9248,18 @@
   </div>
   <div class="lemma_thmcontent">
   <p>  Let \(H\) be a positive semidefinite self-adjoint operator on a finite-dimensional complex Hilbert space, and suppose that </p>
-<div class="displaymath" id="a0000001486">
+<div class="displaymath" id="a0000001488">
   \[  \gamma \, \langle v, H v\rangle \le \langle H v, H v\rangle \qquad \text{for all } v,  \]
 </div>
 <p> i.e. \(H^2 \ge \gamma H\) as a quadratic form, for some \(\gamma {\gt} 0\). Then for every \(v\) in the orthogonal complement of \(\ker H\), </p>
-<div class="displaymath" id="a0000001487">
+<div class="displaymath" id="a0000001489">
   \[  \gamma \, \| v\|  \le \| H v\| .  \]
 </div>
 <p> In particular, every positive eigenvalue of \(H\) is at least \(\gamma \). The positive-semidefiniteness hypothesis is essential: without it, \(H = -\mathrm{Id}\) with \(\gamma = 2\) satisfies the quadratic-form inequality vacuously but violates the norm bound. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001485">
+<div class="proof_wrapper" id="a0000001487">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9287,7 +9287,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_es_quadratic_reduction">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001488"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001490"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9341,18 +9341,18 @@
   </div>
   <div class="lemma_thmcontent">
   <p>     Let \(H_{N,L}^{\mathrm{ES}}(A)\) be the transported parent Hamiltonian. If a constant \(\gamma {\gt} 0\) satisfies the uniform quadratic-form estimate </p>
-<div class="displaymath" id="a0000001489">
+<div class="displaymath" id="a0000001491">
   \[  \gamma \, \operatorname {Re}\langle H_{N,L}^{\mathrm{ES}}(A)v, v\rangle \le \operatorname {Re}\langle H_{N,L}^{\mathrm{ES}}(A)v, H_{N,L}^{\mathrm{ES}}(A)v\rangle  \]
 </div>
 <p> for every \(N \ge 2L\) and every vector \(v\), then </p>
-<div class="displaymath" id="a0000001490">
+<div class="displaymath" id="a0000001492">
   \[  \gamma \, \| v\|  \le \| H_{N,L}^{\mathrm{ES}}(A)v\|   \]
 </div>
 <p> for every \(v \in (\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp \). In particular, with \(L{\gt}1\) and \(\gamma = 1/(4L)\), the explicit gap-bound conclusion follows once this same quadratic-form estimate is supplied. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001488">
+<div class="proof_wrapper" id="a0000001490">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9422,7 +9422,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:ordered_projection_rowsum_reduction">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001491"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001493"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9470,14 +9470,14 @@
   </div>
   <div class="lemma_thmcontent">
   <p>    Let \(P_i\) be a finite family of symmetric projections and let \(H=\sum _i P_i\). If the ordered off-diagonal forms obey </p>
-<div class="displaymath" id="a0000001492">
+<div class="displaymath" id="a0000001494">
   \[  \operatorname {Re}\langle P_i v, P_j v\rangle \ge -(1-\gamma )c_{ij}\operatorname {Re}\langle P_i v,v\rangle \qquad (i\ne j),  \]
 </div>
 <p> with row sums \(\sum _{j\ne i} c_{ij}\le 1\) and \(\gamma \le 1\), then \(H^2\ge \gamma H\) as a quadratic form. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001491">
+<div class="proof_wrapper" id="a0000001493">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9505,7 +9505,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:finite_overlap_projection_rowsum_reduction">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001493"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001495"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9553,14 +9553,14 @@
   </div>
   <div class="lemma_thmcontent">
   <p>    Let \(P_i\) be a finite family of symmetric projections and let \(\gamma \le 1\). Suppose an interaction predicate \(i\sim j\) has at most \(m\) off-diagonal neighbours in each row for some positive integer \(m\). If noninteracting ordered cross terms are nonnegative and, on each interacting pair, </p>
-<div class="displaymath" id="a0000001494">
+<div class="displaymath" id="a0000001496">
   \[  \operatorname {Re}\langle P_i v,P_jv\rangle \ge -(1-\gamma )\frac{1}{m}\operatorname {Re}\langle P_i v,v\rangle ,  \]
 </div>
 <p> then \(H=\sum _i P_i\) satisfies \(H^2\ge \gamma H\) as a quadratic form. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001493">
+<div class="proof_wrapper" id="a0000001495">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9588,7 +9588,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:finite_overlap_projection_norm_reduction">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001495"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001497"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9642,14 +9642,14 @@
   </div>
   <div class="lemma_thmcontent">
   <p>    Let \(P_i\) be a finite family of symmetric projections and let \(\gamma \le 1\). Suppose an interaction predicate has at most \(m{\gt}0\) off-diagonal neighbours in each row, noninteracting ordered cross terms are nonnegative, and interacting pairs satisfy the norm-compression estimate </p>
-<div class="displaymath" id="a0000001496">
+<div class="displaymath" id="a0000001498">
   \[  \| P_iP_jv\| \le (1-\gamma )\frac{1}{m}\| P_iv\| .  \]
 </div>
 <p> Then \(H=\sum _iP_i\) satisfies \(H^2\ge \gamma H\) as a quadratic form. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001495">
+<div class="proof_wrapper" id="a0000001497">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9677,7 +9677,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_ordered_rowsum_quadratic">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001497"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001499"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9735,18 +9735,18 @@
   </div>
   <div class="lemma_thmcontent">
   <p>    For a fixed chain length \(N\), suppose the transported local terms \(h_{i,\mathrm{ES}}\) satisfy the ordered row-sum estimate </p>
-<div class="displaymath" id="a0000001498">
+<div class="displaymath" id="a0000001500">
   \[  \operatorname {Re}\langle h_{i,\mathrm{ES}} v,h_{j,\mathrm{ES}}v\rangle \ge -(1-\gamma )c_{ij}\operatorname {Re}\langle h_{i,\mathrm{ES}}v,v\rangle \qquad (i\ne j),  \]
 </div>
 <p> with \(\sum _{j\ne i}c_{ij}\le 1\) and \(\gamma \le 1\). Then the transported parent Hamiltonian satisfies </p>
-<div class="displaymath" id="a0000001499">
+<div class="displaymath" id="a0000001501">
   \[  \gamma \operatorname {Re}\langle H_{N,L}^{\mathrm{ES}}v,v\rangle \le \operatorname {Re}\langle H_{N,L}^{\mathrm{ES}}v, H_{N,L}^{\mathrm{ES}}v\rangle  \]
 </div>
 <p> for every vector \(v\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001497">
+<div class="proof_wrapper" id="a0000001499">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9774,7 +9774,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_ordered_rowsum_gap">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001500"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001502"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9830,13 +9830,13 @@
   </div>
   <div class="lemma_thmcontent">
   <p>    Assume uniformly for every \(N\ge 2L\) that the transported local terms satisfy the ordered row-sum estimate above with \(\gamma =1/(4L)\). If \(L{\gt}1\), then \(1/(4L){\gt}0\) and, for every \(v\in (\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp \), </p>
-<div class="displaymath" id="a0000001501">
+<div class="displaymath" id="a0000001503">
   \[  \frac{1}{4L}\| v\| \le \| H_{N,L}^{\mathrm{ES}}(A)v\| .  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001500">
+<div class="proof_wrapper" id="a0000001502">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9864,7 +9864,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_finite_overlap_friedrichs_quadratic">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001502"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001504"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9914,14 +9914,14 @@
   </div>
   <div class="lemma_thmcontent">
   <p>    For a fixed chain length \(N\), let \(m\) be a positive integer and let \(\gamma \le 1\). Suppose an overlap predicate on local windows has at most \(m\) overlapping off-diagonal windows in each row. If non-overlapping local terms have nonnegative ordered cross terms, overlapping local terms satisfy the finite-overlap Friedrichs estimate </p>
-<div class="displaymath" id="a0000001503">
+<div class="displaymath" id="a0000001505">
   \[  \operatorname {Re}\langle h_{i,\mathrm{ES}}v,h_{j,\mathrm{ES}}v\rangle \ge -(1-\gamma )\frac{1}{m} \operatorname {Re}\langle h_{i,\mathrm{ES}}v,v\rangle ,  \]
 </div>
 <p> and the transported local terms are symmetric projections, then the transported Hamiltonian satisfies \(H_{N,L}^{\mathrm{ES}}{}^2\ge \gamma H_{N,L}^{\mathrm{ES}}\) as a quadratic form. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001502">
+<div class="proof_wrapper" id="a0000001504">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9949,7 +9949,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_finite_overlap_norm_quadratic">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001504"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001506"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -10005,14 +10005,14 @@
   </div>
   <div class="lemma_thmcontent">
   <p>    For a fixed chain length \(N\), let \(m{\gt}0\) and \(\gamma \le 1\). Suppose an overlap predicate on local windows has at most \(m\) overlapping off-diagonal windows in each row, non-overlapping local terms have nonnegative ordered cross terms, and overlapping local terms satisfy </p>
-<div class="displaymath" id="a0000001505">
+<div class="displaymath" id="a0000001507">
   \[  \| h_{i,\mathrm{ES}}(h_{j,\mathrm{ES}}v)\|  \le (1-\gamma )\frac{1}{m}\| h_{i,\mathrm{ES}}v\| .  \]
 </div>
 <p> Then \(H_{N,L}^{\mathrm{ES}}{}^2\ge \gamma H_{N,L}^{\mathrm{ES}}\) as a quadratic form. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001504">
+<div class="proof_wrapper" id="a0000001506">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -10085,7 +10085,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>    For a length-\(L\) cyclic window on \(\{ 0,\ldots ,N{-}1\} \) starting at \(i\), its support is </p>
-<div class="displaymath" id="a0000001506">
+<div class="displaymath" id="a0000001508">
   \[  S_i=\{ i,i+1,\ldots ,i+L-1\} \pmod N,  \]
 </div>
 <p> with repeated visits counted once. </p>
@@ -10108,7 +10108,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:cyclic_window_support_offsets">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001507"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001509"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -10156,13 +10156,13 @@
   </div>
   <div class="lemma_thmcontent">
   <p>    If \(L\le N\), then a site \(k\) belongs to the cyclic support \(S_i\) exactly when its cyclic offset from \(i\) is below \(L\): </p>
-<div class="displaymath" id="a0000001508">
+<div class="displaymath" id="a0000001510">
   \[  k\in S_i \quad \Longleftrightarrow \quad (k-i)\bmod N {\lt} L.  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001507">
+<div class="proof_wrapper" id="a0000001509">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -10254,7 +10254,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:cyclic_window_nonoverlap_positive">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001509"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001511"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -10312,13 +10312,13 @@
   </div>
   <div class="lemma_thmcontent">
   <p>     If \(L\le N\) and the cyclic supports \(S_i\) and \(S_j\) do not meet, then the transported local ES terms have nonnegative ordered cross term: </p>
-<div class="displaymath" id="a0000001510">
+<div class="displaymath" id="a0000001512">
   \[  0\le \operatorname {Re}\langle h_{i,\mathrm{ES}}v, h_{j,\mathrm{ES}}v\rangle .  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001509">
+<div class="proof_wrapper" id="a0000001511">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -10346,7 +10346,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:cyclic_window_overlap_cardinality">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001511"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001513"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -10400,13 +10400,13 @@
   </div>
   <div class="lemma_thmcontent">
   <p>    If \(2L\le N\) and \(L{\gt}1\), then for every \(i\in \{ 0,\ldots ,N{-}1\} \), </p>
-<div class="displaymath" id="a0000001512">
+<div class="displaymath" id="a0000001514">
   \[  \# \{ j\ne i: i\sim _L j\} \le 2(L-1).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001511">
+<div class="proof_wrapper" id="a0000001513">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -10434,7 +10434,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_finite_overlap_friedrichs_gap">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001513"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001515"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -10487,7 +10487,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001513">
+<div class="proof_wrapper" id="a0000001515">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -10515,7 +10515,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_cyclic_window_friedrichs_gap">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001514"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001516"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -10577,14 +10577,14 @@
   </div>
   <div class="lemma_thmcontent">
   <p>    Fix \(L{\gt}1\) and let \(i\sim _L j\) mean that the cyclic supports of the length-\(L\) windows at \(i\) and \(j\) meet. Suppose uniformly for every \(N\ge 2L\) that overlapping off-diagonal terms satisfy </p>
-<div class="displaymath" id="a0000001515">
+<div class="displaymath" id="a0000001517">
   \[  \operatorname {Re}\langle h_{i,\mathrm{ES}}v,h_{j,\mathrm{ES}}v\rangle \ge -(1-\tfrac {1}{4L})\frac{1}{2(L-1)} \operatorname {Re}\langle h_{i,\mathrm{ES}}v,v\rangle .  \]
 </div>
 <p> Then \(1/(4L){\gt}0\), and the explicit norm lower bound with constant \(1/(4L)\) follows for vectors in \((\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp \). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001514">
+<div class="proof_wrapper" id="a0000001516">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -10612,7 +10612,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_cyclic_overlap_friedrichs_gap">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001516"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001518"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -10662,14 +10662,14 @@
   </div>
   <div class="lemma_thmcontent">
   <p>    Fix \(L{\gt}1\) and let \(i\sim _L j\) mean that the cyclic supports of the length-\(L\) windows at \(i\) and \(j\) meet. Suppose uniformly for every \(N\ge 2L\) that overlapping off-diagonal terms satisfy </p>
-<div class="displaymath" id="a0000001517">
+<div class="displaymath" id="a0000001519">
   \[  \operatorname {Re}\langle h_{i,\mathrm{ES}}v,h_{j,\mathrm{ES}}v\rangle \ge -(1-\tfrac {1}{4L})\frac{1}{2(L-1)} \operatorname {Re}\langle h_{i,\mathrm{ES}}v,v\rangle .  \]
 </div>
 <p> Then the explicit norm lower bound with constant \(1/(4L)\) follows for vectors in \((\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp \). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001516">
+<div class="proof_wrapper" id="a0000001518">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -10697,7 +10697,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_cyclic_overlap_norm_gap">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001518"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001520"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -10751,14 +10751,14 @@
   </div>
   <div class="lemma_thmcontent">
   <p>    Fix \(L{\gt}1\). Suppose uniformly for every \(N\ge 2L\) and every overlapping off-diagonal pair that </p>
-<div class="displaymath" id="a0000001519">
+<div class="displaymath" id="a0000001521">
   \[  \| h_{i,\mathrm{ES}}(h_{j,\mathrm{ES}}v)\|  \le (1-\tfrac {1}{4L})\frac{1}{2(L-1)} \| h_{i,\mathrm{ES}}v\| .  \]
 </div>
 <p> Then the explicit norm lower bound with constant \(1/(4L)\) follows for vectors in \((\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp \). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001518">
+<div class="proof_wrapper" id="a0000001520">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -10784,7 +10784,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#thm:martingale_criterion">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001520"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001522"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -10815,18 +10815,18 @@
   </div>
   <div class="theorem_thmcontent">
   <p>  Consider a frustration-free Hamiltonian </p>
-<div class="displaymath" id="a0000001521">
+<div class="displaymath" id="a0000001523">
   \[  H = \sum _{i=1}^n h_i  \]
 </div>
 <p> with projector interaction terms (\(h_i^2 = h_i\)). Suppose that for every pair of overlapping terms \(h_i, h_j\) there exist constants \(c_{ij} \ge 0\) and \(\gamma {\gt} 0\) satisfying </p>
-<div class="displaymath" id="a0000001522">
+<div class="displaymath" id="a0000001524">
   \[  h_i h_j + h_j h_i \ge -c_{ij}(1-\gamma )(h_i + h_j),  \]
 </div>
 <p> and suppose further that \(c_{ij} = c_{ji}\) for every overlapping pair \((i,j)\) and that \(\sum _{j:\, j \ne i} c_{ij} \le 1\) for every \(i\). Then the smallest positive eigenvalue of \(H\) satisfies \(\lambda _{\min }^+(H) \ge \gamma \). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001520">
+<div class="proof_wrapper" id="a0000001522">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -10835,15 +10835,15 @@
   </div>
   <div class="proof_content">
   <p>The relevant geometry is a family of translated length-\(L\) projector windows on the ring; two terms \(h_i\) and \(h_j\) interact only when their supports overlap, equivalently when the cyclic distance \(d_N(i,j)\) is smaller than \(L\). From \(h_i^2 = h_i\), </p>
-<div class="displaymath" id="a0000001523">
+<div class="displaymath" id="a0000001525">
   \[  H^2 = \sum _i h_i + \sum _{\substack {i {\lt} j \\ \text{overlapping}}} (h_i h_j + h_j h_i) + \sum _{\substack {i {\lt} j \\ \text{non-overlapping}}} (h_i h_j + h_j h_i).  \]
 </div>
 <p> Non-overlapping projectors commute (\(h_i h_j = h_j h_i\)), so their product \(h_i h_j\) is itself a projector and hence PSD; thus the last sum is \(\ge 0\). For the overlapping sum, the martingale condition gives \(h_i h_j + h_j h_i \ge -c_{ij}(1-\gamma )(h_i + h_j)\). Summing over unordered pairs \(\{ i,j\} \): </p>
-<div class="displaymath" id="a0000001524">
+<div class="displaymath" id="a0000001526">
   \[  \sum _{\{ i,j\} , \text{overlap}} (h_i h_j + h_j h_i) \ge -(1-\gamma ) \sum _{\{ i,j\} , \text{overlap}} c_{ij}(h_i + h_j).  \]
 </div>
 <p> Collecting terms for each \(h_i\) and using the symmetry assumption \(c_{ij} = c_{ji}\): </p>
-<div class="displaymath" id="a0000001525">
+<div class="displaymath" id="a0000001527">
   \[  \sum _{\{ i,j\} , \text{overlap}} c_{ij}(h_i + h_j) = \sum _i \Bigl(\sum _{\substack {j \ne i \\ \text{overlap}}} c_{ij}\Bigr) h_i \le H,  \]
 </div>
 <p> where the last inequality uses the row-sum hypothesis \(\sum _{j \ne i} c_{ij} \le 1\). Combining, \(H^2 \ge H - (1-\gamma )H = \gamma H\). For any eigenvector with \(H\psi = \lambda \psi \) and \(\lambda {\gt} 0\), this gives \(\lambda ^2 \ge \gamma \lambda \), hence \(\lambda \ge \gamma \)&#160;<span class="cite">
@@ -10870,7 +10870,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:martingale_mps">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001526"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001528"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -10914,7 +10914,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001526">
+<div class="proof_wrapper" id="a0000001528">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -10956,7 +10956,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#thm:friedrichs_gap_bound">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001527"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001529"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -11036,17 +11036,17 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    For an injective tensor \(A\) and a range \(L {\gt} 1\), the theorem asserts the analytic estimate with the explicit constant </p>
-<div class="displaymath" id="a0000001528">
+<div class="displaymath" id="a0000001530">
   \[  \gamma _{L} := \frac{1}{4L} {\gt} 0.  \]
 </div>
 <p> Concretely, it asserts that if \(N \ge 2L\) and \(v \in (\mathcal G_{N,L}^{\mathrm{ES}}(A))^{\perp }\), then </p>
-<div class="displaymath" id="a0000001529">
+<div class="displaymath" id="a0000001531">
   \[  \gamma _{L} \,  \| v\|  \le \| H_{N,L}^{\mathrm{ES}}(A) v\| .  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001527">
+<div class="proof_wrapper" id="a0000001529">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -11074,7 +11074,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#thm:parent_hamiltonian_gapped">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001530"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001532"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -11124,14 +11124,14 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   For an injective tensor \(A\) and a range \(L {\gt} 1\), there exists \(\gamma {\gt} 0\) such that for every \(N \ge 2L\) and every vector \(v \in (\mathcal G_{N,L}^{\mathrm{ES}}(A))^{\perp }\) one has </p>
-<div class="displaymath" id="a0000001531">
+<div class="displaymath" id="a0000001533">
   \[  \gamma \,  \| v\|  \le \| H_{N,L}^{\mathrm{ES}}(A) v\| .  \]
 </div>
 <p> By Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:quadratic_form_to_norm_bound">20.111</a>, this implies the usual uniform lower bound on every nonzero eigenvalue of the parent Hamiltonian. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001530">
+<div class="proof_wrapper" id="a0000001532">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -11323,7 +11323,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>  The BNT span is the linear span of the periodic MPV states of the individual blocks: </p>
-<div class="displaymath" id="a0000001532">
+<div class="displaymath" id="a0000001534">
   \[  \operatorname {BNTSpan}_{N}(A) := \operatorname{span}\{ V^{(N)}(A_{j}) : j = 1,\ldots ,r\} .  \]
 </div>
 
@@ -11390,7 +11390,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   For a fixed length \(m\), the Route B product-word span condition is the finite-length spanning condition already recorded in Remark&#160;<a href="ch-mpdo.html#rem:word_tuple_span_top">3.42</a>: the simultaneous block-word evaluations </p>
-<div class="displaymath" id="a0000001533">
+<div class="displaymath" id="a0000001535">
   \[  \omega \longmapsto \bigl(A_j^{\omega }\bigr)_j  \]
 </div>
 <p> span the whole product algebra \(\prod _j M_{D_j}(\mathbb {C})\). The issue&#160;#934 task is to derive this condition for some positive length from the separated canonical-form/BNT hypotheses. It matches the block-injective span requirement in CPGSV21 §IV.C, where lines 2123–2128 state that the parent ground space is generated by the basis of normal tensors after blocking and then improve the bound by “restricting to boundary conditions \(L\) and \(R\) which are themselves block-diagonal.” </p>
@@ -11413,7 +11413,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:bnt_mpv_mem_ground_space">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001534"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001536"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -11466,7 +11466,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001534">
+<div class="proof_wrapper" id="a0000001536">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -11494,7 +11494,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:chain_ground_space_block_le_assembled">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001535"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001537"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -11542,13 +11542,13 @@
   </div>
   <div class="lemma_thmcontent">
   <p>    For each block index \(j\) with \(\mu _{j} \neq 0\), the chain ground space of the block \(A_{j}\) embeds into the chain ground space of the assembled tensor: </p>
-<div class="displaymath" id="a0000001536">
+<div class="displaymath" id="a0000001538">
   \[  \operatorname {ChainGround}_{N,L}(A_{j}) \subseteq \operatorname {ChainGround}_{N,L}(\operatorname {Assemble}(\mu , A)).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001535">
+<div class="proof_wrapper" id="a0000001537">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -11576,7 +11576,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:isup_chain_ground_space_block_le_assembled">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001537"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001539"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -11626,14 +11626,14 @@
   </div>
   <div class="lemma_thmcontent">
   <p>    Assume \(\mu _{j} \neq 0\) for every block index \(j\). The supremum of the blockwise periodic-chain ground spaces is contained in the assembled tensor’s periodic-chain ground space: </p>
-<div class="displaymath" id="a0000001538">
+<div class="displaymath" id="a0000001540">
   \[  \bigsqcup _{j} \operatorname {ChainGround}_{N,L}(A_{j}) \subseteq \operatorname {ChainGround}_{N,L}(\operatorname {Assemble}(\mu , A)),  \]
 </div>
 <p> where \(j\) ranges over all block indices. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001537">
+<div class="proof_wrapper" id="a0000001539">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -11661,7 +11661,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:isup_chain_ground_space_block_le_parent_ground_space">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001539"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001541"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -11711,13 +11711,13 @@
   </div>
   <div class="lemma_thmcontent">
   <p>    For a canonical-form/BNT family, the supremum of the blockwise periodic-chain ground spaces is contained in the assembled parent ground space: </p>
-<div class="displaymath" id="a0000001540">
+<div class="displaymath" id="a0000001542">
   \[  \bigsqcup _{j} \operatorname {ChainGround}_{N,L}(A_{j}) \subseteq \operatorname {ParentGround}_{N,L}(A).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001539">
+<div class="proof_wrapper" id="a0000001541">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -11745,7 +11745,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:route_b_block_diagonal_commutant_reduction">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001541"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001543"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -11806,7 +11806,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001541">
+<div class="proof_wrapper" id="a0000001543">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -11834,7 +11834,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:block_projection_span_from_product_algebra_span">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001542"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001544"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -11862,13 +11862,13 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   Let \(T_a = (T_a(i))_i\) be a family of tuples spanning the full product algebra \(\prod _i M_{n_i}(\mathbb {C})\), and let \(c_i\neq 0\) be nonzero scalars. Then, for every sector \(k\), the sector projection \(P_k\) lies in the span of the scaled dependent block-diagonal matrices </p>
-<div class="displaymath" id="a0000001543">
+<div class="displaymath" id="a0000001545">
   \[  \bigoplus _i c_i T_a(i).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001542">
+<div class="proof_wrapper" id="a0000001544">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -11896,7 +11896,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:block_projection_span_from_product_word_span">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001544"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001546"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -11930,14 +11930,14 @@
   </div>
   <div class="lemma_thmcontent">
   <p>      If the simultaneous length-\(m\) block-word tuples </p>
-<div class="displaymath" id="a0000001545">
+<div class="displaymath" id="a0000001547">
   \[  \omega \longmapsto \bigl(A_j^{\omega }\bigr)_j  \]
 </div>
 <p> span the full product algebra \(\prod _j M_{D_j}(\mathbb {C})\) and every \(\mu _j\) is nonzero, then the pulled-back length-\(m\) word products of \(\operatorname {Assemble}(\mu ,A)\) span every virtual sector projection \(P_j\). Consequently, any boundary matrix commuting with all those assembled words has block-diagonal pulled-back form, and its off-block entries vanish. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001544">
+<div class="proof_wrapper" id="a0000001546">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -12073,7 +12073,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:all_length_pair_trace_separation_finite_cutoff">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001546"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001548"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -12158,7 +12158,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001546">
+<div class="proof_wrapper" id="a0000001548">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -12186,7 +12186,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:pair_trace_separation_homogenization_with_padding">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001547"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001549"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -12245,7 +12245,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001547">
+<div class="proof_wrapper" id="a0000001549">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -12273,7 +12273,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:pair_trace_separation_to_pairwise_selectors">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001548"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001550"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -12336,7 +12336,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001548">
+<div class="proof_wrapper" id="a0000001550">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -12364,7 +12364,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:block_selectors_from_pairwise_separators">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001549"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001551"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -12431,7 +12431,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001549">
+<div class="proof_wrapper" id="a0000001551">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -12459,7 +12459,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:product_word_span_from_bnt_selectors">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001550"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001552"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -12544,7 +12544,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001550">
+<div class="proof_wrapper" id="a0000001552">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -12572,7 +12572,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:conditional_boundary_matrix_block_split_projection_span">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001551"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001553"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -12648,14 +12648,14 @@
   </div>
   <div class="lemma_thmcontent">
   <p>       Let \(A\) be in canonical-form/BNT, and assume \(1{\lt}L\), \(N \ge L+1\), and \(0{\lt}m\). Assume the remaining #911 input: every virtual sector projection lies in the pulled-back span of the length-\(m\) word products of the assembled tensor. If a boundary matrix for the assembled tensor commutes with all those length-\(m\) words, then the vector obtained by applying the assembled ground-space map to that boundary matrix lies in \(\bigsqcup _j \mathcal G_{N,L}(A_j)\). Consequently, if every assembled periodic-chain ground vector admits such a commuting boundary matrix representation (the output of the wrapping-window comparison), then </p>
-<div class="displaymath" id="a0000001552">
+<div class="displaymath" id="a0000001554">
   \[  \mathcal G_{N,L}\bigl(\operatorname {Assemble}(\mu , A)\bigr) \subseteq \bigsqcup _j \mathcal G_{N,L}(A_j),  \]
 </div>
 <p> and together with the already-proved forward inclusion this gives the corresponding conditional equality. Composing the reverse inclusion with blockwise injective uniqueness gives the conditional containment of the assembled parent ground space in the BNT span; this lemma is not a restatement of the final theorem, because it keeps the #911 projection-span and boundary representation inputs explicit. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001551">
+<div class="proof_wrapper" id="a0000001553">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -12683,7 +12683,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:route_b_block_split_from_product_word_span">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001553"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001555"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -12739,14 +12739,14 @@
   </div>
   <div class="lemma_thmcontent">
   <p>      Let \(A\) be in canonical-form/BNT, and assume \(1{\lt}L\), \(N \ge L+1\), and \(0{\lt}m\). If the length-\(m\) product-word tuples span \(\prod _j M_{D_j}(\mathbb {C})\) and every assembled periodic-chain ground vector comes with a boundary matrix representation commuting with all length-\(m\) assembled words, then </p>
-<div class="displaymath" id="a0000001554">
+<div class="displaymath" id="a0000001556">
   \[  \mathcal G_{N,L}\bigl(\operatorname {Assemble}(\mu , A)\bigr) \subseteq \bigsqcup _j \mathcal G_{N,L}(A_j).  \]
 </div>
 <p> Combined with the forward inclusion, this gives the corresponding conditional equality. In the parent-ground-space formulation, the same hypotheses imply containment in \(\operatorname {BNTSpan}_{N}(A)\). The product-word span and boundary representation remain hypotheses here; they are not derived by this composition lemma. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001553">
+<div class="proof_wrapper" id="a0000001555">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -12774,7 +12774,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#lem:route_b_block_split_from_bnt_selectors">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001555"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001557"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -12836,14 +12836,14 @@
   </div>
   <div class="lemma_thmcontent">
   <p>      Let \(A\) be in canonical-form/BNT, assume \(1 {\lt} L\) and \(N \ge L + 1\), and suppose length-\(S\) block-selector words are given. If every assembled periodic-chain ground vector has a boundary matrix representation commuting with all length-\((1 + S)\) assembled words, then </p>
-<div class="displaymath" id="a0000001556">
+<div class="displaymath" id="a0000001558">
   \[  \mathcal G_{N,L}\bigl(\operatorname {Assemble}(\mu , A)\bigr) \subseteq \bigsqcup _j \mathcal G_{N,L}(A_j).  \]
 </div>
 <p> Together with the forward inclusion, this gives the corresponding conditional block-splitting equality. In the parent-ground-space formulation, the same hypotheses imply containment in \(\operatorname {BNTSpan}_{N}(A)\). The selector-word hypothesis and the boundary representation remain explicit: this lemma does not derive selector existence from BNT separation, nor the wrapping/open-chain boundary representation. It is the formal composition matching the CPGSV21 §IV.C block-injective ground-space route, where the regrowing argument is restricted to block-diagonal boundary conditions. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001555">
+<div class="proof_wrapper" id="a0000001557">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -12869,7 +12869,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#thm:parent_ground_space_le_bnt_span">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001557"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001559"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -12928,7 +12928,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001557">
+<div class="proof_wrapper" id="a0000001559">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -12954,7 +12954,7 @@
 
     <a class="icon proof" href="ch-parent_hamiltonian.html#thm:gs_eq_bnt_span">#</a>
     
-    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001558"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-parent_hamiltonian.html#a0000001560"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -13008,13 +13008,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   If \(1 {\lt} L\) and \(N \ge L + 1\), then for a canonical-form/BNT family the assembled parent ground space equals the BNT span: </p>
-<div class="displaymath" id="a0000001559">
+<div class="displaymath" id="a0000001561">
   \[  \operatorname {ParentGround}_{N,L}(A) = \operatorname {BNTSpan}_{N}(A).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001558">
+<div class="proof_wrapper" id="a0000001560">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -13023,11 +13023,11 @@
   </div>
   <div class="proof_content">
   <p>We prove the two inclusions separately. The inclusion </p>
-<div class="displaymath" id="a0000001560">
+<div class="displaymath" id="a0000001562">
   \[  \operatorname {ParentGround}_{N,L}(A) \subseteq \operatorname {BNTSpan}_{N}(A)  \]
 </div>
 <p> is exactly Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:parent_ground_space_le_bnt_span">20.155</a>. For the reverse inclusion, Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:bnt_mpv_mem_ground_space">20.138</a> shows that each BNT MPV lies in \(\operatorname {ParentGround}_{N,L}(A)\). Since the parent ground space is a linear subspace, it therefore contains every linear combination of such vectors, and hence contains \(\operatorname {BNTSpan}_{N}(A)\). Thus </p>
-<div class="displaymath" id="a0000001561">
+<div class="displaymath" id="a0000001563">
   \[  \operatorname {BNTSpan}_{N}(A) \subseteq \operatorname {ParentGround}_{N,L}(A),  \]
 </div>
 <p> and the two spaces are equal. </p>
