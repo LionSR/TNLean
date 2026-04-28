@@ -6,6 +6,10 @@ inputs:
     description: 'Also install graphviz and leanblueprint (for blueprint workflows)'
     required: false
     default: 'false'
+  use-github-cache:
+    description: 'Enable lean-action GitHub caching for the .lake directory'
+    required: false
+    default: 'true'
 
 runs:
   using: 'composite'
@@ -14,6 +18,7 @@ runs:
       uses: leanprover/lean-action@v1
       with:
         use-mathlib-cache: true
+        use-github-cache: ${{ inputs.use-github-cache }}
         build: false
 
     - name: Install blueprint system dependencies
