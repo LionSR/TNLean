@@ -100,6 +100,9 @@ Theorem matching, etc.).
 * `mpv_span_eq_of_common_phase_cover` — finite-length live-block span equality
   from a common family covered surjectively up to MPV phase.
 
+* `MPVCommonPhaseCover` — bundled common-family, class-map, phase, and
+  surjectivity data for the same span-equality theorem.
+
 ## References
 
 - [CPGSV17, Lemma A.2]: Overlap dichotomy for Normal Tensors.
@@ -459,6 +462,28 @@ lemma exists_mpvState_eq_smul {DA DB : ℕ} {A : MPSTensor d DA} {B : MPSTensor 
 
 end MPVBlockPhaseEquiv
 
+/-- Bundled common MPV-phase cover for two live-block families.
+
+The data record the finite common family, the class maps from the two
+live-block families to it, the MPV-phase equivalences between each live block
+and its chosen common block, and surjectivity of both class maps.  They are the
+exact paper-level input needed by the current span adapter; constructing this
+bundled data from the full structural `SameMPV₂` data is a separate comparison
+theorem. -/
+structure MPVCommonPhaseCover {d rA rB : ℕ}
+    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    (blocksA : (j : Fin rA) → MPSTensor d (dimA j))
+    (blocksB : (k : Fin rB) → MPSTensor d (dimB k)) where
+  rC : ℕ
+  dimC : Fin rC → ℕ
+  common : (c : Fin rC) → MPSTensor d (dimC c)
+  classA : Fin rA → Fin rC
+  classB : Fin rB → Fin rC
+  phaseA : ∀ j : Fin rA, MPVBlockPhaseEquiv (common (classA j)) (blocksA j)
+  phaseB : ∀ k : Fin rB, MPVBlockPhaseEquiv (common (classB k)) (blocksB k)
+  surjA : Function.Surjective classA
+  surjB : Function.Surjective classB
+
 /-- MPV phase equivalence for a dependent block family.
 
 `MPVPhaseEquiv blocks j k` means that block `k` has the same MPV family as
@@ -594,6 +619,22 @@ theorem mpv_span_eq_of_common_phase_cover {rA rB rC : ℕ}
           mpv_span_eq_of_surjective_phase_cover blocksA common classA hAphase hAsurj N
     _ = Submodule.span ℂ (Set.range (fun k : Fin rB => mpvState (d := d) (blocksB k) N)) :=
           (mpv_span_eq_of_surjective_phase_cover blocksB common classB hBphase hBsurj N).symm
+
+namespace MPVCommonPhaseCover
+
+variable {rA rB : ℕ}
+variable {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+variable {blocksA : (j : Fin rA) → MPSTensor d (dimA j)}
+variable {blocksB : (k : Fin rB) → MPSTensor d (dimB k)}
+
+/-- The bundled common cover gives equality of the finite-length live-block MPV spans. -/
+theorem span_eq (C : MPVCommonPhaseCover blocksA blocksB) (N : ℕ) :
+    Submodule.span ℂ (Set.range (fun j : Fin rA => mpvState (d := d) (blocksA j) N)) =
+    Submodule.span ℂ (Set.range (fun k : Fin rB => mpvState (d := d) (blocksB k) N)) :=
+  mpv_span_eq_of_common_phase_cover (d := d) blocksA blocksB C.common
+    C.classA C.classB C.phaseA C.phaseB C.surjA C.surjB N
+
+end MPVCommonPhaseCover
 
 /-- Equivalence relation on block indices given by MPV phase equivalence. -/
 def mpvPhaseSetoid {r : ℕ} {dim : Fin r → ℕ}

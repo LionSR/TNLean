@@ -763,6 +763,18 @@ single weighted block.
 	The two bond dimensions are allowed to differ.
 \end{definition}
 
+\begin{definition}[Common MPV phase-cover data]
+\label{def:mpv_common_phase_cover}
+	\lean{MPSTensor.MPVCommonPhaseCover}
+	\leanok
+	\uses{def:mpv_block_phase_equiv}
+	For two finite live-block families, a common MPV phase cover consists of a third
+	finite family of blocks, a map from each live-block family onto that common
+	family, and MPV-phase equivalences between each live block and its common
+	representative. Both maps are required to be surjective, so the common family
+	contains no unused representative.
+\end{definition}
+
 \begin{lemma}[Common MPV phase cover gives live-block span equality]%
 \label{lem:live_block_span_eq_of_common_phase_cover}
 	\lean{MPSTensor.mpv_span_eq_of_common_phase_cover}
@@ -781,6 +793,22 @@ single weighted block.
 	scalar multiple of its common block's MPV vector. Surjectivity gives the reverse
 	inclusion, so each live-block span equals the common span; transitivity gives
 	the equality of the two live-block spans.
+\end{proof}
+
+\begin{lemma}[Bundled common phase cover gives live-block span equality]%
+\label{lem:mpv_common_phase_cover_span_eq}
+	\lean{MPSTensor.MPVCommonPhaseCover.span_eq}
+	\leanok
+	\uses{def:mpv_common_phase_cover}
+	A common MPV phase cover for two live-block families gives equality of their
+	finite-length MPV spans at every system size.
+\end{lemma}
+
+\begin{proof}
+	\leanok
+	\uses{lem:live_block_span_eq_of_common_phase_cover}
+	The common cover data specify the common family, the two surjective class maps,
+	and the MPV-phase equivalences. The span lemma then applies directly.
 \end{proof}
 
 \begin{theorem}[Heterogeneous sector comparison via a bundled matching witness]%
@@ -951,6 +979,29 @@ single weighted block.
 	MPV phase cover into equality of the live-block finite-length spans.
 	Theorem~\ref{thm:after_blocking_sector_common_blocks_block_span} then applies
 	without any additional sector-basis assumptions.
+\end{proof}
+
+\begin{theorem}[Common live blocks with bundled MPV phase cover give sector comparison]%
+\label{thm:after_blocking_sector_common_blocks_common_phase_cover}
+	\lean{MPSTensor.fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_commonPhaseCover}
+	\leanok
+	\uses{def:mpv_common_phase_cover,
+		thm:after_blocking_sector_common_blocks_phase_cover}
+	Let $A$ and $B$ have the same MPV family, and fix exact live decompositions at a
+	common blocking period as in
+	Theorem~\ref{thm:after_blocking_sector_common_blocks_phase_cover}. Assume the
+	live blocks are trace-preserving, primitive, irreducible, injective, and have
+	nonzero weights. If the two live-block families are equipped with common MPV
+	phase-cover data, then the same sector comparison conclusion holds.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{thm:after_blocking_sector_common_blocks_phase_cover}
+	The common cover data specify the common representative family, the two
+	surjective maps, and the MPV-phase equivalences. The common-cover sector
+	theorem then applies with the same live decompositions and structural
+	hypotheses.
 \end{proof}
 
 \begin{lemma}[Zero-tail cancellation]\label{lem:sameMPV2_live_of_zeroTail_eq}
