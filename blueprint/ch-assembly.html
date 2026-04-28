@@ -3164,12 +3164,157 @@
 
   </div>
 </div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:mpv_block_phase_equiv">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">14.30</span>
+    <span class="definition_thmtitle">MPV phase equivalence for live blocks</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-assembly.html#def:mpv_block_phase_equiv">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mps.html#def:mpv">Definition 2.4</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.MPVBlockPhaseEquiv" class="lean_decl">MPSTensor.MPVBlockPhaseEquiv</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>    Two live blocks \(A\) and \(B\) are MPV-phase equivalent if there is a nonzero scalar \(\zeta \) such that, for every system size \(N\) and every physical word, the MPV coefficient of \(B\) equals \(\zeta ^N\) times the MPV coefficient of \(A\). The two bond dimensions are allowed to differ. </p>
+
+  </div>
+</div>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:live_block_span_eq_of_common_phase_cover">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">14.31</span>
+    <span class="lemma_thmtitle">Common MPV phase cover gives live-block span equality</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-assembly.html#lem:live_block_span_eq_of_common_phase_cover">#</a>
+    
+    <a class="icon proof" href="ch-assembly.html#a0000000982"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-assembly.html#def:mpv_block_phase_equiv">Definition 14.30</a></li>
+          
+          <li><a href="ch-mps.html#def:mpv_state">Definition 2.41</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.mpv_span_eq_of_common_phase_cover" class="lean_decl">MPSTensor.mpv_span_eq_of_common_phase_cover</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>   Let two finite live-block families map onto a third finite family of common blocks. Suppose both maps are surjective, and each live block has finite-length MPV vectors equal to a nonzero scalar power times the MPV vectors of its common block. Then, for every system size, the two live-block families span the same MPV subspace. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000982">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Each live-block MPV vector lies in the span of the common family because it is a scalar multiple of its common block’s MPV vector. Surjectivity gives the reverse inclusion, so each live-block span equals the common span; transitivity gives the equality of the two live-block spans. </p>
+
+  </div>
+</div>
 <div class="theorem_thmwrapper theorem-style-plain" id="thm:route_b_hetero_sector_matching">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">14.30</span>
+    <span class="theorem_thmlabel">14.32</span>
     <span class="theorem_thmtitle">Heterogeneous sector comparison via a bundled matching witness</span>
     <div class="thm_header_extras">
 
@@ -3180,7 +3325,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:route_b_hetero_sector_matching">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000000982"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000000983"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3235,7 +3380,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000982">
+<div class="proof_wrapper" id="a0000000983">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3252,7 +3397,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">14.31</span>
+    <span class="theorem_thmlabel">14.33</span>
     <span class="theorem_thmtitle">After-blocking sector comparison from overlap-span hypotheses</span>
     <div class="thm_header_extras">
 
@@ -3263,7 +3408,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:after_blocking_sector_bnt_pair_overlap_span">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000000983"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000000984"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3281,11 +3426,11 @@
           
           <li><a href="ch-assembly.html#def:sector_basis_overlap_span_hyps">Definition 14.22</a></li>
           
-          <li><a href="ch-assembly.html#thm:route_b_hetero_sector_matching">Theorem 14.30</a></li>
+          <li><a href="ch-assembly.html#thm:route_b_hetero_sector_matching">Theorem 14.32</a></li>
           
           <li><a href="ch-assembly.html#thm:sector_basis_overlap_span_to_matching">Theorem 14.28</a></li>
           
-          <li><a href="ch-assembly.html#thm:route_b_hetero_sector_matching">Theorem 14.30</a></li>
+          <li><a href="ch-assembly.html#thm:route_b_hetero_sector_matching">Theorem 14.32</a></li>
           
         </ul>
     
@@ -3320,7 +3465,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000983">
+<div class="proof_wrapper" id="a0000000984">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3337,7 +3482,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">14.32</span>
+    <span class="theorem_thmlabel">14.34</span>
     <span class="theorem_thmtitle">Common live blocks with overlap-span data give sector comparison</span>
     <div class="thm_header_extras">
 
@@ -3348,7 +3493,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:after_blocking_sector_common_blocks_overlap_span">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000000984"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000000985"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3372,7 +3517,7 @@
           
           <li><a href="ch-assembly.html#thm:sector_basis_overlap_span_to_matching">Theorem 14.28</a></li>
           
-          <li><a href="ch-assembly.html#thm:route_b_hetero_sector_matching">Theorem 14.30</a></li>
+          <li><a href="ch-assembly.html#thm:route_b_hetero_sector_matching">Theorem 14.32</a></li>
           
         </ul>
     
@@ -3403,11 +3548,11 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   Let \(A\) and \(B\) have the same MPV family. Fix a common blocking period \(p{\gt}0\) and exact live decompositions of \(A^{[p]}\) and \(B^{[p]}\) as weighted block tensors whose live blocks have nonzero bond dimensions, are trace-preserving, primitive, irreducible, and have nonzero weights. Assume moreover that any pair of BNT sector decompositions equivalent to these two live block tensors satisfies the primitive overlap-span hypotheses. Then the after-blocking sector comparison conclusion of Theorem&#160;<a href="ch-assembly.html#thm:after_blocking_sector_bnt_pair_overlap_span">14.31</a> holds for the sector decompositions obtained from the live block families. </p>
+  <p>   Let \(A\) and \(B\) have the same MPV family. Fix a common blocking period \(p{\gt}0\) and exact live decompositions of \(A^{[p]}\) and \(B^{[p]}\) as weighted block tensors whose live blocks have nonzero bond dimensions, are trace-preserving, primitive, irreducible, and have nonzero weights. Assume moreover that any pair of BNT sector decompositions equivalent to these two live block tensors satisfies the primitive overlap-span hypotheses. Then the after-blocking sector comparison conclusion of Theorem&#160;<a href="ch-assembly.html#thm:after_blocking_sector_bnt_pair_overlap_span">14.33</a> holds for the sector decompositions obtained from the live block families. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000984">
+<div class="proof_wrapper" id="a0000000985">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3415,7 +3560,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Apply the one-sided phase-class BNT construction (Theorem&#160;<a href="ch-canonical.html#thm:bnt_sector_decomp_tp_prim_irr_collapsed">11.130</a>) to the two live block families. The resulting sector decompositions satisfy the overlap-span hypotheses; Theorem&#160;<a href="ch-assembly.html#thm:sector_basis_overlap_span_to_matching">14.28</a> then produces a sector basis matching, and Theorem&#160;<a href="ch-assembly.html#thm:route_b_hetero_sector_matching">14.30</a> gives the matched sector-weight conclusion. </p>
+  <p> Apply the one-sided phase-class BNT construction (Theorem&#160;<a href="ch-canonical.html#thm:bnt_sector_decomp_tp_prim_irr_collapsed">11.130</a>) to the two live block families. The resulting sector decompositions satisfy the overlap-span hypotheses; Theorem&#160;<a href="ch-assembly.html#thm:sector_basis_overlap_span_to_matching">14.28</a> then produces a sector basis matching, and Theorem&#160;<a href="ch-assembly.html#thm:route_b_hetero_sector_matching">14.32</a> gives the matched sector-weight conclusion. </p>
 
   </div>
 </div>
@@ -3424,7 +3569,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">14.33</span>
+    <span class="theorem_thmlabel">14.35</span>
     <span class="theorem_thmtitle">Common live blocks with derived overlap data and span comparison</span>
     <div class="thm_header_extras">
 
@@ -3435,7 +3580,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:after_blocking_sector_common_blocks_injective_span">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000000985"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000000986"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3455,7 +3600,7 @@
           
           <li><a href="ch-assembly.html#thm:sector_basis_overlap_ortho_to_span">Theorem 14.23</a></li>
           
-          <li><a href="ch-assembly.html#thm:route_b_hetero_sector_matching">Theorem 14.30</a></li>
+          <li><a href="ch-assembly.html#thm:route_b_hetero_sector_matching">Theorem 14.32</a></li>
           
           <li><a href="ch-canonical.html#thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_ortho">Theorem 11.131</a></li>
           
@@ -3463,7 +3608,7 @@
           
           <li><a href="ch-assembly.html#thm:sector_basis_overlap_span_to_matching">Theorem 14.28</a></li>
           
-          <li><a href="ch-assembly.html#thm:route_b_hetero_sector_matching">Theorem 14.30</a></li>
+          <li><a href="ch-assembly.html#thm:route_b_hetero_sector_matching">Theorem 14.32</a></li>
           
         </ul>
     
@@ -3494,11 +3639,11 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   Let \(A\) and \(B\) have the same MPV family and fix exact live decompositions at a common blocking period as in Theorem&#160;<a href="ch-assembly.html#thm:after_blocking_sector_common_blocks_overlap_span">14.32</a>. Assume in addition that the live blocks are one-site injective, and that the two chosen BNT sector bases have equal finite-length MPV spans. Then the same matched sector-weight conclusion holds. </p>
+  <p>   Let \(A\) and \(B\) have the same MPV family and fix exact live decompositions at a common blocking period as in Theorem&#160;<a href="ch-assembly.html#thm:after_blocking_sector_common_blocks_overlap_span">14.34</a>. Assume in addition that the live blocks are one-site injective, and that the two chosen BNT sector bases have equal finite-length MPV spans. Then the same matched sector-weight conclusion holds. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000985">
+<div class="proof_wrapper" id="a0000000986">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3515,7 +3660,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">14.34</span>
+    <span class="theorem_thmlabel">14.36</span>
     <span class="theorem_thmtitle">Common live blocks with live-block span equality give sector comparison</span>
     <div class="thm_header_extras">
 
@@ -3526,7 +3671,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:after_blocking_sector_common_blocks_block_span">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000000986"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000000987"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3546,13 +3691,13 @@
           
           <li><a href="ch-assembly.html#thm:sector_basis_overlap_span_to_matching">Theorem 14.28</a></li>
           
-          <li><a href="ch-assembly.html#thm:route_b_hetero_sector_matching">Theorem 14.30</a></li>
+          <li><a href="ch-assembly.html#thm:route_b_hetero_sector_matching">Theorem 14.32</a></li>
           
           <li><a href="ch-assembly.html#thm:bnt_sector_decomp_pair_overlap_span_of_block_span">Theorem 14.29</a></li>
           
           <li><a href="ch-assembly.html#thm:sector_basis_overlap_span_to_matching">Theorem 14.28</a></li>
           
-          <li><a href="ch-assembly.html#thm:route_b_hetero_sector_matching">Theorem 14.30</a></li>
+          <li><a href="ch-assembly.html#thm:route_b_hetero_sector_matching">Theorem 14.32</a></li>
           
         </ul>
     
@@ -3587,7 +3732,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000986">
+<div class="proof_wrapper" id="a0000000987">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3595,7 +3740,92 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Theorem&#160;<a href="ch-assembly.html#thm:bnt_sector_decomp_pair_overlap_span_of_block_span">14.29</a> converts the live-block span equality into the primitive overlap-span hypotheses for the chosen sector bases. Equality of the blocked total MPVs gives equality of the sector tensors, so Theorem&#160;<a href="ch-assembly.html#thm:sector_basis_overlap_span_to_matching">14.28</a> produces the sector basis matching and Theorem&#160;<a href="ch-assembly.html#thm:route_b_hetero_sector_matching">14.30</a> gives the sector-weight conclusion. </p>
+  <p> Theorem&#160;<a href="ch-assembly.html#thm:bnt_sector_decomp_pair_overlap_span_of_block_span">14.29</a> converts the live-block span equality into the primitive overlap-span hypotheses for the chosen sector bases. Equality of the blocked total MPVs gives equality of the sector tensors, so Theorem&#160;<a href="ch-assembly.html#thm:sector_basis_overlap_span_to_matching">14.28</a> produces the sector basis matching and Theorem&#160;<a href="ch-assembly.html#thm:route_b_hetero_sector_matching">14.32</a> gives the sector-weight conclusion. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:after_blocking_sector_common_blocks_phase_cover">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">14.37</span>
+    <span class="theorem_thmtitle">Common live blocks with a common MPV phase cover give sector comparison</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-assembly.html#thm:after_blocking_sector_common_blocks_phase_cover">#</a>
+    
+    <a class="icon proof" href="ch-assembly.html#a0000000988"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-assembly.html#lem:live_block_span_eq_of_common_phase_cover">Lemma 14.31</a></li>
+          
+          <li><a href="ch-assembly.html#thm:after_blocking_sector_common_blocks_block_span">Theorem 14.36</a></li>
+          
+          <li><a href="ch-assembly.html#lem:live_block_span_eq_of_common_phase_cover">Lemma 14.31</a></li>
+          
+          <li><a href="ch-assembly.html#thm:after_blocking_sector_common_blocks_block_span">Theorem 14.36</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_phaseCover" class="lean_decl">MPSTensor.fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_phaseCover</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   Let \(A\) and \(B\) have the same MPV family, and fix exact live decompositions at a common blocking period as in Theorem&#160;<a href="ch-assembly.html#thm:after_blocking_sector_common_blocks_block_span">14.36</a>. Assume the live blocks are trace-preserving, primitive, irreducible, injective, and have nonzero weights. Suppose moreover that both live-block families map surjectively to one common family of blocks, and that every live block is MPV-phase equivalent to its image in the common family. Then the same sector comparison conclusion as in Theorem&#160;<a href="ch-assembly.html#thm:after_blocking_sector_common_blocks_block_span">14.36</a> holds. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000988">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> Lemma&#160;<a href="ch-assembly.html#lem:live_block_span_eq_of_common_phase_cover">14.31</a> converts the common MPV phase cover into equality of the live-block finite-length spans. Theorem&#160;<a href="ch-assembly.html#thm:after_blocking_sector_common_blocks_block_span">14.36</a> then applies without any additional sector-basis assumptions. </p>
 
   </div>
 </div>
@@ -3604,7 +3834,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">14.35</span>
+    <span class="lemma_thmlabel">14.38</span>
     <span class="lemma_thmtitle">Zero-tail cancellation</span>
     <div class="thm_header_extras">
 
@@ -3615,7 +3845,7 @@
 
     <a class="icon proof" href="ch-assembly.html#lem:sameMPV2_live_of_zeroTail_eq">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000000987"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000000989"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3670,7 +3900,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000987">
+<div class="proof_wrapper" id="a0000000989">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3687,7 +3917,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">14.36</span>
+    <span class="theorem_thmlabel">14.39</span>
     <span class="theorem_thmtitle">Common live blocks with zero-tail agreement and overlap-span data</span>
     <div class="thm_header_extras">
 
@@ -3698,7 +3928,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:after_blocking_sector_common_blocks_overlap_span_zero_tail">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000000988"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000000990"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3716,19 +3946,19 @@
           
           <li><a href="ch-mps.html#def:same_mpv2_pos">Definition 2.13</a></li>
           
-          <li><a href="ch-assembly.html#lem:sameMPV2_live_of_zeroTail_eq">Lemma 14.35</a></li>
+          <li><a href="ch-assembly.html#lem:sameMPV2_live_of_zeroTail_eq">Lemma 14.38</a></li>
           
           <li><a href="ch-canonical.html#thm:bnt_sector_decomp_tp_prim_irr_collapsed">Theorem 11.130</a></li>
           
           <li><a href="ch-assembly.html#def:sector_basis_overlap_span_hyps">Definition 14.22</a></li>
           
-          <li><a href="ch-assembly.html#lem:sameMPV2_live_of_zeroTail_eq">Lemma 14.35</a></li>
+          <li><a href="ch-assembly.html#lem:sameMPV2_live_of_zeroTail_eq">Lemma 14.38</a></li>
           
           <li><a href="ch-canonical.html#thm:bnt_sector_decomp_tp_prim_irr_collapsed">Theorem 11.130</a></li>
           
           <li><a href="ch-assembly.html#thm:sector_basis_overlap_span_to_matching">Theorem 14.28</a></li>
           
-          <li><a href="ch-assembly.html#thm:route_b_hetero_sector_matching">Theorem 14.30</a></li>
+          <li><a href="ch-assembly.html#thm:route_b_hetero_sector_matching">Theorem 14.32</a></li>
           
         </ul>
     
@@ -3759,11 +3989,11 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   Let \(A\) and \(B\) have the same MPV family. Fix \(p {\gt} 0\) and suppose \(A^{[p]}\) and \(B^{[p]}\) each decompose as a zero-tail tensor plus a weighted live block tensor, with all blocks trace-preserving, primitive, irreducible, and with nonzero weights. If the two zero-tail dimensions agree and any pair of BNT sector decompositions equivalent to the two live block tensors satisfies the primitive overlap-span hypotheses, then there exist positive \(p'\) and sector decompositions \(P\), \(Q\) such that \(A^{[p']}\) equals \(P\)’s tensor at all positive lengths, \(B^{[p']}\) equals \(Q\)’s tensor at all positive lengths, \(P\) and \(Q\) have the same full MPV family, both have BNT data, and the matched sector-weight conclusion of Theorem&#160;<a href="ch-assembly.html#thm:after_blocking_sector_bnt_pair_overlap_span">14.31</a> holds. </p>
+  <p>   Let \(A\) and \(B\) have the same MPV family. Fix \(p {\gt} 0\) and suppose \(A^{[p]}\) and \(B^{[p]}\) each decompose as a zero-tail tensor plus a weighted live block tensor, with all blocks trace-preserving, primitive, irreducible, and with nonzero weights. If the two zero-tail dimensions agree and any pair of BNT sector decompositions equivalent to the two live block tensors satisfies the primitive overlap-span hypotheses, then there exist positive \(p'\) and sector decompositions \(P\), \(Q\) such that \(A^{[p']}\) equals \(P\)’s tensor at all positive lengths, \(B^{[p']}\) equals \(Q\)’s tensor at all positive lengths, \(P\) and \(Q\) have the same full MPV family, both have BNT data, and the matched sector-weight conclusion of Theorem&#160;<a href="ch-assembly.html#thm:after_blocking_sector_bnt_pair_overlap_span">14.33</a> holds. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000988">
+<div class="proof_wrapper" id="a0000000990">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3771,7 +4001,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Apply the zero-tail cancellation lemma to recover full equality of the live block tensors. Then proceed as in Theorem&#160;<a href="ch-assembly.html#thm:after_blocking_sector_common_blocks_overlap_span">14.32</a>: apply the BNT construction to each live block family, compose the sector equivalences to obtain equality of the total MPV families of \(P\) and \(Q\), apply the overlap-span matching theorem, and conclude with the heterogeneous sector comparison theorem. </p>
+  <p> Apply the zero-tail cancellation lemma to recover full equality of the live block tensors. Then proceed as in Theorem&#160;<a href="ch-assembly.html#thm:after_blocking_sector_common_blocks_overlap_span">14.34</a>: apply the BNT construction to each live block family, compose the sector equivalences to obtain equality of the total MPV families of \(P\) and \(Q\), apply the overlap-span matching theorem, and conclude with the heterogeneous sector comparison theorem. </p>
 
   </div>
 </div>
@@ -3780,7 +4010,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">14.37</span>
+    <span class="theorem_thmlabel">14.40</span>
     <span class="theorem_thmtitle">Cast-compatible MPV scaling implies phase-matched sector comparison</span>
     <div class="thm_header_extras">
 
@@ -3791,7 +4021,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:route_b_hetero_mpv_scaling">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000000989"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000000991"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3841,14 +4071,14 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Let \(P\) and \(Q\) be sector decompositions. Assume there is a permutation \(\pi \) matching the basis blocks, the multiplicities satisfy \(r_j^P = r_{\pi (j)}^Q\), and for each \(j\) the corresponding basis blocks have the same auxiliary dimension and satisfy </p>
-<div class="displaymath" id="a0000000990">
+<div class="displaymath" id="a0000000992">
   \[  V^{(N)}(Q_{\pi (j)})_\sigma = \zeta _j^N V^{(N)}(P_j)_\sigma  \]
 </div>
 <p> for some nonzero complex number \(\zeta _j\), after identifying the two basis tensors along that dimension equality. If the total MPV families of \(P\) and \(Q\) agree and the basis blocks of \(P\) are eventually linearly independent, then for each \(j\) the sector weight multiset of \(P_j\) equals the multiset obtained from that of \(Q_{\pi (j)}\) by multiplication by&#160;\(\zeta _j\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000989">
+<div class="proof_wrapper" id="a0000000991">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3860,19 +4090,19 @@
 
   </div>
 </div>
-<div class="remark_thmwrapper theorem-style-remark" id="a0000000991">
+<div class="remark_thmwrapper theorem-style-remark" id="a0000000993">
   <div class="remark_thmheading">
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">14.38</span>
+    <span class="remark_thmlabel">14.41</span>
     <span class="remark_thmtitle">Remaining inputs for the unconditional equal-case theorem</span>
     <div class="thm_header_extras">
 
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-assembly.html#a0000000991">#</a>
+    <a class="icon proof" href="ch-assembly.html#a0000000993">#</a>
     
     
     
@@ -3895,7 +4125,7 @@
 	, Corollary&#160;IV.5
 	]
 </span>) is now quite specific. The one-sided basis-of-normal-tensors construction is not the obstruction: for trace-preserving primitive irreducible blocks with positive bond dimensions and nonzero weights, representatives of the MPV phase-equivalence classes are constructed in Theorem&#160;<a href="ch-canonical.html#thm:bnt_sector_decomp_tp_prim_irr_collapsed">11.130</a>. When the original blocks are also injective, the same construction exposes positive dimension, injectivity, normalization, and asymptotic overlap orthogonality in Theorem&#160;<a href="ch-canonical.html#thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_data">11.132</a>. The chosen representatives also preserve the finite-length MPV spans of the original live blocks by Theorem&#160;<a href="ch-canonical.html#thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_data_span">11.133</a>, and Theorem&#160;<a href="ch-assembly.html#thm:bnt_sector_decomp_pair_overlap_span_of_block_span">14.29</a> transports equality of the live-block spans to the overlap-span hypotheses for the two chosen bases. </p>
-<p>Thus the remaining paper-level inputs are upstream of the sector comparison: one must, starting from arbitrary equal MPVs, produce exact live primitive irreducible block families for both tensors at one common physical blocking length, transport the weights and the already-isolated zero-tail bookkeeping to that common-length statement, and prove equality of the finite-length MPV spans of those live block families. Once those inputs are supplied, Theorems&#160;<a href="ch-assembly.html#thm:sector_basis_matching_from_overlap_ortho_span">14.27</a> and&#160;<a href="ch-assembly.html#thm:route_b_hetero_sector_matching">14.30</a> recover the basis permutation, multiplicities, and sector-weight multisets. The final global gauge matrix of Corollary&#160;IV.5 is then obtained by the same phase-absorption and blockwise composition argument already formalized in the strict single-weight setting. </p>
+<p>Thus the remaining paper-level inputs are upstream of the sector comparison: one must, starting from arbitrary equal MPVs, produce exact live primitive irreducible block families for both tensors at one common physical blocking length, transport the weights and the already-isolated zero-tail bookkeeping to that common-length statement, and prove equality of the finite-length MPV spans of those live block families. Once those inputs are supplied, Theorems&#160;<a href="ch-assembly.html#thm:sector_basis_matching_from_overlap_ortho_span">14.27</a> and&#160;<a href="ch-assembly.html#thm:route_b_hetero_sector_matching">14.32</a> recover the basis permutation, multiplicities, and sector-weight multisets. The final global gauge matrix of Corollary&#160;IV.5 is then obtained by the same phase-absorption and blockwise composition argument already formalized in the strict single-weight setting. </p>
 
   </div>
 </div>
