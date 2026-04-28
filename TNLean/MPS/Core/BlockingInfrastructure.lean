@@ -60,22 +60,26 @@ section SameMPV₂Blocking
 
 variable {D : ℕ} {r : ℕ} {dim : Fin r → ℕ}
 
+/-- Flatten a blocked configuration to the underlying word of original physical indices. -/
 private noncomputable def blockedFlatWord (p : ℕ) {N : ℕ}
     (σ : Fin N → Fin (blockPhysDim d p)) : List (Fin d) :=
   flattenBlockedWord d p (List.ofFn σ)
 
+/-- The flattened word of an `N`-site blocked configuration has length `N * p`. -/
 private theorem length_blockedFlatWord (p : ℕ) {N : ℕ}
     (σ : Fin N → Fin (blockPhysDim d p)) :
     (blockedFlatWord (d := d) p σ).length = N * p := by
   simpa [blockedFlatWord] using
     (length_flattenBlockedWord (d := d) (L := p) (List.ofFn σ))
 
-private noncomputable def blockedFlatConfig (p : ℕ) {N : ℕ}
+/-- The flattened configuration associated to a blocked physical configuration. -/
+noncomputable def blockedFlatConfig (p : ℕ) {N : ℕ}
     (σ : Fin N → Fin (blockPhysDim d p)) : Fin (N * p) → Fin d :=
   fun i =>
     (blockedFlatWord (d := d) p σ).get
       (Fin.cast (length_blockedFlatWord (d := d) p σ).symm i)
 
+/-- Reconstruct the flattened blocked word from `blockedFlatConfig`. -/
 private theorem ofFn_blockedFlatConfig (p : ℕ) {N : ℕ}
     (σ : Fin N → Fin (blockPhysDim d p)) :
     List.ofFn (blockedFlatConfig (d := d) p σ) = blockedFlatWord (d := d) p σ := by
@@ -89,7 +93,9 @@ private theorem ofFn_blockedFlatConfig (p : ℕ) {N : ℕ}
           (Fin.cast (length_blockedFlatWord (d := d) p σ).symm i)))
   simpa [Function.comp, Fin.cast_cast] using hcongr
 
-private theorem mpv_blockTensor_eq_mpv_blockedFlatConfig
+/-- Evaluating the blocked tensor on a blocked configuration agrees with evaluating
+    the original tensor on the flattened configuration. -/
+theorem mpv_blockTensor_eq_mpv_blockedFlatConfig
     {D' : ℕ} (T : MPSTensor d D') (p : ℕ) {N : ℕ}
     (σ : Fin N → Fin (blockPhysDim d p)) :
     mpv (blockTensor (d := d) (D := D') T p) σ =
@@ -151,7 +157,118 @@ theorem sameMPV₂_blockTensor
     _ = mpv (blockTensor (d := d) (D := D₂) B p) σ :=
           (mpv_blockTensor_eq_mpv_blockedFlatConfig (d := d) B p σ).symm
 
+/-- Blocking the assembled weighted block tensor is MPV-equivalent to assembling the
+blocked blocks with powered weights. -/
+theorem sameMPV₂_blockTensor_toTensorFromBlocks
+    (μ : Fin r → ℂ)
+    (blocks : (k : Fin r) → MPSTensor d (dim k))
+    (p : ℕ) :
+    SameMPV₂
+      (blockTensor (d := d) (D := ∑ k : Fin r, dim k)
+        (toTensorFromBlocks (d := d) (μ := μ) blocks) p)
+      (toTensorFromBlocks (d := blockPhysDim d p)
+        (fun k => (μ k) ^ p)
+        (fun k => blockTensor (d := d) (D := dim k) (blocks k) p)) := by
+  exact sameMPV₂_blockTensor_of_sameMPV₂_toTensorFromBlocks
+    (d := d) (D := ∑ k : Fin r, dim k) (dim := dim)
+    (A := toTensorFromBlocks (d := d) (μ := μ) blocks)
+    μ blocks (by intro N σ; rfl) p
+
+/-- Positive-length MPV equality is preserved by positive physical blocking. -/
+theorem sameMPV₂Pos_blockTensor
+    {D₁ D₂ : ℕ}
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (hSame : SameMPV₂Pos A B) (p : ℕ) (hp : 0 < p) :
+    SameMPV₂Pos
+      (blockTensor (d := d) (D := D₁) A p)
+      (blockTensor (d := d) (D := D₂) B p) := by
+  intro N hN σ
+  let σflat := blockedFlatConfig (d := d) p σ
+  calc
+    mpv (blockTensor (d := d) (D := D₁) A p) σ
+        = mpv A σflat := mpv_blockTensor_eq_mpv_blockedFlatConfig (d := d) A p σ
+    _ = mpv B σflat := hSame (N * p) (Nat.mul_pos hN hp) σflat
+    _ = mpv (blockTensor (d := d) (D := D₂) B p) σ :=
+          (mpv_blockTensor_eq_mpv_blockedFlatConfig (d := d) B p σ).symm
+
+/-- Positive-length equality of weighted live block tensors is preserved after
+positive common blocking, with each weight transported to the corresponding power. -/
+theorem sameMPV₂Pos_toTensorFromBlocks_blockPower
+    {rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    (μA : Fin rA → ℂ) (blocksA : (k : Fin rA) → MPSTensor d (dimA k))
+    (μB : Fin rB → ℂ) (blocksB : (k : Fin rB) → MPSTensor d (dimB k))
+    (hSame : SameMPV₂Pos
+      (toTensorFromBlocks (d := d) (μ := μA) blocksA)
+      (toTensorFromBlocks (d := d) (μ := μB) blocksB))
+    (p : ℕ) (hp : 0 < p) :
+    SameMPV₂Pos
+      (toTensorFromBlocks (d := blockPhysDim d p)
+        (fun k => (μA k) ^ p)
+        (fun k => blockTensor (d := d) (D := dimA k) (blocksA k) p))
+      (toTensorFromBlocks (d := blockPhysDim d p)
+        (fun k => (μB k) ^ p)
+        (fun k => blockTensor (d := d) (D := dimB k) (blocksB k) p)) := by
+  have hA := sameMPV₂_blockTensor_toTensorFromBlocks
+    (d := d) (dim := dimA) μA blocksA p
+  have hB := sameMPV₂_blockTensor_toTensorFromBlocks
+    (d := d) (dim := dimB) μB blocksB p
+  have hBlock : SameMPV₂Pos
+      (blockTensor (d := d) (D := ∑ k : Fin rA, dimA k)
+        (toTensorFromBlocks (d := d) (μ := μA) blocksA) p)
+      (blockTensor (d := d) (D := ∑ k : Fin rB, dimB k)
+        (toTensorFromBlocks (d := d) (μ := μB) blocksB) p) :=
+    sameMPV₂Pos_blockTensor
+      (d := d)
+      (toTensorFromBlocks (d := d) (μ := μA) blocksA)
+      (toTensorFromBlocks (d := d) (μ := μB) blocksB) hSame p hp
+  intro N hN σ
+  calc
+    mpv (toTensorFromBlocks (d := blockPhysDim d p)
+        (fun k => (μA k) ^ p)
+        (fun k => blockTensor (d := d) (D := dimA k) (blocksA k) p)) σ
+        = mpv (blockTensor (d := d) (D := ∑ k : Fin rA, dimA k)
+            (toTensorFromBlocks (d := d) (μ := μA) blocksA) p) σ := (hA N σ).symm
+    _ = mpv (blockTensor (d := d) (D := ∑ k : Fin rB, dimB k)
+            (toTensorFromBlocks (d := d) (μ := μB) blocksB) p) σ := hBlock N hN σ
+    _ = mpv (toTensorFromBlocks (d := blockPhysDim d p)
+        (fun k => (μB k) ^ p)
+        (fun k => blockTensor (d := d) (D := dimB k) (blocksB k) p)) σ := hB N σ
+
 end SameMPV₂Blocking
+
+/-! ## Weight transport under blocking and sector replication -/
+
+section WeightTransport
+
+variable {r : ℕ}
+
+/-- Nonzero block weights remain nonzero after taking a blocking power. -/
+theorem blockWeights_ne_zero
+    (μ : Fin r → ℂ) (hμ : ∀ k, μ k ≠ 0) (p : ℕ) :
+    ∀ k, (μ k) ^ p ≠ 0 := by
+  intro k
+  exact pow_ne_zero p (hμ k)
+
+/-- Replicating a block weight over cyclic sectors preserves nonvanishing after
+any family of blocking powers. -/
+theorem replicatedWeights_pow_ne_zero
+    {m : Fin r → ℕ}
+    (μ : Fin r → ℂ) (hμ : ∀ k, μ k ≠ 0) (p : Fin r → ℕ) :
+    ∀ x : Σ k : Fin r, Fin (m k), (μ x.1) ^ (p x.1) ≠ 0 := by
+  intro x
+  exact pow_ne_zero (p x.1) (hμ x.1)
+
+/-- A nonzero sector phase can be multiplied into a transported block weight
+without making the sector weight vanish. -/
+theorem replicatedWeights_pow_mul_phase_ne_zero
+    {m : Fin r → ℕ}
+    (μ : Fin r → ℂ) (θ : (Σ k : Fin r, Fin (m k)) → ℂ)
+    (hμ : ∀ k, μ k ≠ 0) (hθ : ∀ x, θ x ≠ 0) (p : Fin r → ℕ) :
+    ∀ x : Σ k : Fin r, Fin (m k), (μ x.1) ^ (p x.1) * θ x ≠ 0 := by
+  intro x
+  exact mul_ne_zero (replicatedWeights_pow_ne_zero μ hμ p x) (hθ x)
+
+end WeightTransport
 
 /-!
 ## Part B: Primitivity under multiples
