@@ -154,6 +154,70 @@ theorem sameMPV₂_blockTensor
 end SameMPV₂Blocking
 
 /-!
+## Physical-dimension casts and iterated blocking dimensions
+
+These helpers keep the later common-blocking statements at a single physical
+alphabet size.  They are all propositional transports: once the two physical
+dimensions are definitionally identified, the tensors and their MPV/transfer-map
+properties are unchanged.
+-/
+
+/-- The physical dimension of an iterated blocking is the physical dimension of
+one-shot blocking by the product length. -/
+theorem blockPhysDim_blockPhysDim (d m n : ℕ) :
+    blockPhysDim (blockPhysDim d m) n = blockPhysDim d (m * n) := by
+  simp [blockPhysDim_eq_pow, pow_mul]
+
+/-- Casting the physical dimension of both tensors preserves heterogeneous MPV equality. -/
+theorem sameMPV₂_cast_physDim {d₁ d₂ D₁ D₂ : ℕ} (h : d₁ = d₂)
+    (A : MPSTensor d₁ D₁) (B : MPSTensor d₁ D₂) :
+    SameMPV₂
+        (cast (congr_arg (fun d' => MPSTensor d' D₁) h) A)
+        (cast (congr_arg (fun d' => MPSTensor d' D₂) h) B) ↔
+      SameMPV₂ A B := by
+  subst h
+  rfl
+
+/-- Casting the physical dimension commutes with the block-diagonal tensor constructor. -/
+theorem toTensorFromBlocks_cast_physDim {d₁ d₂ r : ℕ} {dim : Fin r → ℕ}
+    (h : d₁ = d₂) (μ : Fin r → ℂ)
+    (blocks : (k : Fin r) → MPSTensor d₁ (dim k)) :
+    cast (congr_arg (fun d' => MPSTensor d' (∑ k : Fin r, dim k)) h)
+        (toTensorFromBlocks (d := d₁) (μ := μ) blocks) =
+      toTensorFromBlocks (d := d₂) (μ := μ)
+        (fun k => cast (congr_arg (fun d' => MPSTensor d' (dim k)) h) (blocks k)) := by
+  subst h
+  rfl
+
+/-- Casting the physical dimension preserves trace-preserving normalization. -/
+theorem leftCanonical_cast_physDim {d₁ d₂ D : ℕ} (h : d₁ = d₂)
+    (A : MPSTensor d₁ D) :
+    (∑ i : Fin d₂,
+        (cast (congr_arg (fun d' => MPSTensor d' D) h) A i)ᴴ *
+          cast (congr_arg (fun d' => MPSTensor d' D) h) A i = 1) ↔
+      (∑ i : Fin d₁, (A i)ᴴ * A i = 1) := by
+  subst h
+  simp
+
+/-- Casting the physical dimension preserves transfer-map primitivity. -/
+theorem isPrimitive_transferMap_cast_physDim {d₁ d₂ D : ℕ} (h : d₁ = d₂)
+    (A : MPSTensor d₁ D) :
+    _root_.IsPrimitive
+        (transferMap (d := d₂) (D := D)
+          (cast (congr_arg (fun d' => MPSTensor d' D) h) A)) ↔
+      _root_.IsPrimitive (transferMap (d := d₁) (D := D) A) := by
+  subst h
+  rfl
+
+/-- Casting the physical dimension preserves tensor irreducibility. -/
+theorem isIrreducibleTensor_cast_physDim {d₁ d₂ D : ℕ} (h : d₁ = d₂)
+    (A : MPSTensor d₁ D) :
+    IsIrreducibleTensor (cast (congr_arg (fun d' => MPSTensor d' D) h) A) ↔
+      IsIrreducibleTensor A := by
+  subst h
+  rfl
+
+/-!
 ## Part B: Primitivity under multiples
 
 If the transfer map of `blockTensor A p` is primitive and `p ∣ q`, then the
