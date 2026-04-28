@@ -153,7 +153,8 @@ on the bond space.
 
 \begin{remark}[Fundamental-Theorem route for injective symmetry]%
     \label{rem:injective_symmetry_ft_route}
-    \uses{thm:ft_single, lem:gauge_equiv_twisted, thm:virtual_rep_injective}
+    \uses{thm:ft_single, lem:gauge_equiv_twisted, lem:gauge_unique_up_to_scalar,
+        lem:twisted_tensor_mul, thm:virtual_rep_injective}
     The injective virtual-representation theorem is not proved from string-order
     rigidity. The on-site symmetry condition first identifies $A$ and
     $\widetilde{A}_g$ as the same MPV family; the single-block Fundamental
@@ -275,7 +276,7 @@ on the bond space.
     \leanok
     \uses{def:injective, def:on_site_symmetric, def:projective_rep,
         def:scalar_cocycle, lem:gauge_unique_up_to_scalar,
-        lem:twisted_tensor_mul, thm:ft_single}
+        lem:twisted_tensor_mul}
     Let $A$ be an injective MPS tensor that is on-site symmetric
     under a group representation $U : G \to \GL_d(\C)$.
     Then there exist:
@@ -308,7 +309,7 @@ on the bond space.
 \begin{proof}
     \leanok
     \uses{def:on_site_symmetric, lem:gauge_equiv_twisted,
-        lem:gauge_unique_up_to_scalar, lem:twisted_tensor_mul, thm:ft_single}
+        lem:gauge_unique_up_to_scalar, lem:twisted_tensor_mul}
     Since $A$ is injective and on-site symmetric, each twisted tensor
     $\widetilde{A}_g$ is gauge equivalent to~$A$
     (Lemma~\ref{lem:gauge_equiv_twisted}).
