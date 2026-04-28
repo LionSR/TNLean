@@ -42,10 +42,19 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Restore Lake build cache
+        id: lake-cache
+        uses: actions/cache/restore@v5
+        with:
+          path: .lake
+          key: lake-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('lean-toolchain') }}-${{ hashFiles('lake-manifest.json') }}-${{ github.sha }}
+          restore-keys: lake-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('lean-toolchain') }}-${{ hashFiles('lake-manifest.json') }}
+
       - name: Set up Lean and blueprint tooling
         uses: ./.github/actions/setup-lean
         with:
           install-blueprint: 'true'
+          use-github-cache: 'false'
 
       - name: Build blueprint bibliography
         run: python3 scripts/blueprint_bibtex.py
@@ -75,6 +84,13 @@ jobs:
 
       - name: Build project (needed for checkdecls)
         run: lake build
+
+      - name: Save Lake build cache
+        if: steps.lake-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v5
+        with:
+          path: .lake
+          key: ${{ steps.lake-cache.outputs.cache-primary-key }}
 
       - name: Generate lean_decls from blueprint .tex files
         run: python3 scripts/blueprint_lean_sync.py --root . --update-lean-decls
