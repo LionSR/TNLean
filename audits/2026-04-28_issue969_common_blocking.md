@@ -18,6 +18,7 @@ The new statements keep the period-removal lengths distinct from any later commo
 ## Lean declarations added
 
 - `MPSTensor.blockPhysDim_blockPhysDim`: physical dimension of iterated blocking agrees with one-shot blocking by the product length.
+- `MPSTensor.sameMPV₂_blockTensor_blockTensor_mul_reindex`: iterated blocking and one-shot blocking have the same MPV family after the physical labels are identified by flattening iterated blocks.
 - Physical-dimension transport lemmas in `TNLean/MPS/Core/BlockingInfrastructure.lean` for `SameMPV₂`, `toTensorFromBlocks`, trace preservation, transfer-map primitivity, and tensor irreducibility.
 - `MPSTensor.CommonBlockedCyclicSectorFamily`: one-sided data structure for a finite live-block family. It stores:
   - a single positive blocking length `p`;
@@ -33,9 +34,9 @@ The new statements keep the period-removal lengths distinct from any later commo
 
 ## What remains for full #969 closure
 
-The new API deliberately exposes the remaining formal obligations instead of hiding them:
+The new statements deliberately expose the remaining formal obligations:
 
-1. Prove a one-shot iterated-blocking MPV/tensor compatibility theorem identifying `(B_k^[period k])^[extra k]` with `B_k^[p]` at the MPV equivalence needed by `toTensorFromBlocks`.
+1. Use the iterated-blocking relabeling theorem inside the common cyclic-sector data so each `(B_k^[period k])^[extra k]` is replaced by the corresponding one-shot block `B_k^[p]` with the same flattened physical labels.
 2. Flatten the weighted direct sum over original live blocks and cyclic sectors, transporting the original nonzero weights through the common blocking length.
 3. Re-express the zero-tail equations after the common physical reblocking, including the exact length-zero bookkeeping.
 4. Use the flattened common-alphabet live block family as the exact-live input for the sector comparison theorem from PR #960 once the finite-length span equality is available.

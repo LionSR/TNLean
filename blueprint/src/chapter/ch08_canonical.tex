@@ -1220,6 +1220,24 @@ The following results separate the zero blocks from the
 	right-hand side is $d^{mn}$.
 \end{proof}
 
+\begin{theorem}[Iterated blocking and one-shot blocking yield the same MPV family after relabeling]
+	\label{thm:iterated_blocking_samempv_reindex}
+	\lean{MPSTensor.sameMPV₂_blockTensor_blockTensor_mul_reindex}
+	\leanok
+	\uses{def:blocked_tensor, def:same_mpv2}
+	If one first blocks $m$ sites and then blocks $n$ of the resulting sites,
+	the resulting tensor has the same MPV family as the tensor obtained by
+	blocking $mn$ original sites, after the physical labels are identified by
+	flattening each iterated block.
+\end{theorem}
+
+\begin{proof}\leanok
+	For each iterated blocked index, decode the outer block, decode each inner
+	block, and concatenate the resulting words. This is exactly the word
+	decoded from the corresponding one-shot blocked index, so the word
+	evaluations, and hence all MPV coefficients, agree.
+\end{proof}
+
 \begin{theorem}[Physical-dimension transport and MPV equality]
 	\label{thm:samempv_cast_phys_dim}
 	\lean{MPSTensor.sameMPV₂_cast_physDim}
