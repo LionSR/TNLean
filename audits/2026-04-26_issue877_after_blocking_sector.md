@@ -114,3 +114,29 @@ paper-level reduction: exact common live decompositions, the `N = 0` zero-tail
 bookkeeping, live-block injectivity or a blocked replacement for the primitive
 rigidity theorem, and finite-length span equality for the original live block
 families from the global equal-MPV hypothesis.
+
+## Issue #970 predecessor update
+
+Issue #969 is not yet available on `origin/main`, so the final theorem deriving
+live-block finite-length span equality from the full structural `SameMPV₂` data
+cannot honestly be proved in this step.  The new predecessor isolates a reusable
+span mechanism for the common-block route:
+
+- `MPSTensor.MPVBlockPhaseEquiv` records heterogeneous MPV phase equivalence
+  between individual blocks, allowing different bond dimensions.
+- `MPSTensor.mpv_span_eq_of_common_phase_cover` proves that if both live-block
+  families map surjectively to one common family and each live block is
+  MPV-phase equivalent to its image, then their finite-length MPV spans agree at
+  every system size.
+- `MPSTensor.fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_phaseCover`
+  feeds this span equality directly into
+  `fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_blockSpan`, so
+  the exact-live sector comparison no longer needs a raw span-equality
+  hypothesis once a future common-blocking theorem supplies the common family and
+  the two surjective class maps.
+
+This keeps the remaining #970 obligation mathematically honest: the unproved
+paper-level input is now the construction of the common live family (with the
+phase-cover maps) from the after-blocking structural reduction, together with
+zero-tail and injectivity bookkeeping, rather than any further quotient/span
+transport for the BNT representatives.
