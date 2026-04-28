@@ -37,7 +37,10 @@ New declarations:
 - `MPSTensor.nonempty_mpvCommonPhaseCover_of_proportionalDecompositionConclusion`:
   a BNT proportional-decomposition comparison conclusion already contains enough data (permutation, bond-dimension equalities, gauge phases) to produce a common MPV phase cover.
 - `MPSTensor.nonempty_mpvCommonPhaseCover_of_separated_normalCFBNT_data`:
-  the existing span-equality-free irreducible trace-preserving BNT comparison theorem supplies the preceding conclusion, hence produces common-cover existence directly from separated normal BNT data and proportional-decomposition hypotheses.
+  the existing span-equality-free irreducible trace-preserving BNT comparison theorem gives the
+  preceding conclusion, hence produces common MPV phase-cover existence directly from separated
+  normal canonical-form data, the no-gauge-phase-equivalent-distinct-blocks hypothesis, and
+  proportional-decomposition hypotheses.
 
 The key point is non-circularity: these declarations do not use `SectorBasisOverlapSpanHypotheses`, the live-block span equality, or `mpv_span_eq_of_common_phase_cover` as an input to obtain the BNT pre-matching.  The direction is the paper direction: BNT matching data gives the common cover; the common cover then gives span equality.
 
@@ -49,7 +52,7 @@ New entries at lines 814--899 document:
 - sector-basis span equality from a pre-matching (`lem:sector_basis_pre_matching_span_eq`);
 - primitive overlap-span hypotheses from a pre-matching (`thm:sector_basis_pre_matching_to_overlap_span`);
 - common phase cover from a BNT proportional-decomposition conclusion (`thm:common_phase_cover_of_proportional_decomposition`);
-- common phase cover from separated normal BNT data (`thm:common_phase_cover_of_separated_normal_bnt`).
+- common phase cover from separated normal canonical-form data (`thm:common_phase_cover_of_separated_normal_bnt`).
 
 ## Remaining paper input
 
