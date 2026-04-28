@@ -396,88 +396,6 @@ theorem fundamentalTheorem_periodic_proportional_of_isPeriodic
   fundamentalTheorem_periodic_proportional A B hNonRepA hNonRepB
     (PeriodicOverlapHypothesis.ofIsPeriodic A B periodA periodB hPerA hPerB hExA hExB)
 
-private lemma tendsto_zero_subseq_of_decomp_cross
-    {r : ℕ} {dim : Fin r → ℕ}
-    {Dtot Db : ℕ}
-    (A_total : MPSTensor d Dtot)
-    (A : (j : Fin r) → MPSTensor d (dim j))
-    (coeff : ℕ → Fin r → ℂ)
-    (lim : Fin r → ℂ)
-    {m : ℕ}
-    (hdecomp : ∀ N (σ : Fin N → Fin d),
-      mpv A_total σ = ∑ j : Fin r, coeff N j * mpv (A j) σ)
-    (hcoeff : ∀ j,
-      Filter.Tendsto (fun n => coeff (m * n) j) Filter.atTop (nhds (lim j)))
-    (B : MPSTensor d Db)
-    (hcross : ∀ j,
-      Filter.Tendsto (fun n => mpvOverlap (d := d) (A j) B (m * n))
-        Filter.atTop (nhds 0)) :
-    Filter.Tendsto (fun n => mpvOverlap (d := d) A_total B (m * n))
-      Filter.atTop (nhds 0) := by
-  have hEq : ∀ n,
-      mpvOverlap (d := d) A_total B (m * n) =
-        ∑ j : Fin r, coeff (m * n) j * mpvOverlap (d := d) (A j) B (m * n) := by
-    intro n
-    simpa only using
-      (mpvOverlap_eq_sum_of_decomp_left (A_total := A_total) (A := A)
-        (c := coeff (m * n)) (hdecomp := hdecomp (m * n)) (B := B))
-  have hTerm : ∀ j : Fin r,
-      Filter.Tendsto (fun n =>
-        coeff (m * n) j * mpvOverlap (d := d) (A j) B (m * n))
-        Filter.atTop (nhds 0) := by
-    intro j
-    have := (hcoeff j).mul (hcross j)
-    simpa only [mul_zero] using this
-  have hSum : Filter.Tendsto (fun n => ∑ j : Fin r,
-      coeff (m * n) j * mpvOverlap (d := d) (A j) B (m * n))
-        Filter.atTop (nhds 0) := by
-    simpa only [Finset.sum_const_zero] using
-      (tendsto_finset_sum Finset.univ (fun j _ => hTerm j))
-  simpa only [hEq] using hSum
-
-private lemma tendsto_focus_subseq_of_decomp
-    {r : ℕ} {dim : Fin r → ℕ}
-    {Dtot : ℕ}
-    (A_total : MPSTensor d Dtot)
-    (A : (j : Fin r) → MPSTensor d (dim j))
-    (coeff : ℕ → Fin r → ℂ)
-    (lim : Fin r → ℂ)
-    {m : ℕ} (j : Fin r)
-    (hdecomp : ∀ N (σ : Fin N → Fin d),
-      mpv A_total σ = ∑ i : Fin r, coeff N i * mpv (A i) σ)
-    (hcoeff : ∀ i,
-      Filter.Tendsto (fun n => coeff (m * n) i) Filter.atTop (nhds (lim i)))
-    (hSelf : Filter.Tendsto (fun n => mpvOverlap (d := d) (A j) (A j) (m * n))
-      Filter.atTop (nhds (m : ℂ)))
-    (hOff : ∀ i : Fin r, i ≠ j →
-      Filter.Tendsto (fun n => mpvOverlap (d := d) (A i) (A j) (m * n))
-        Filter.atTop (nhds 0)) :
-    Filter.Tendsto (fun n => mpvOverlap (d := d) A_total (A j) (m * n))
-      Filter.atTop (nhds (lim j * (m : ℂ))) := by
-  have hEq : ∀ n,
-      mpvOverlap (d := d) A_total (A j) (m * n) =
-        ∑ i : Fin r, coeff (m * n) i * mpvOverlap (d := d) (A i) (A j) (m * n) := by
-    intro n
-    simpa only using
-      (mpvOverlap_eq_sum_of_decomp_left (A_total := A_total) (A := A)
-        (c := coeff (m * n)) (hdecomp := hdecomp (m * n)) (B := A j))
-  have hTerm : ∀ i : Fin r,
-      Filter.Tendsto (fun n =>
-        coeff (m * n) i * mpvOverlap (d := d) (A i) (A j) (m * n))
-        Filter.atTop (nhds (if i = j then lim j * (m : ℂ) else 0)) := by
-    intro i
-    by_cases hij : i = j
-    · cases hij
-      have := (hcoeff j).mul hSelf
-      simpa only [↓reduceIte] using this
-    · have := (hcoeff i).mul (hOff i hij)
-      simpa only [hij, ↓reduceIte, mul_zero] using this
-  have hSum := tendsto_finset_sum Finset.univ (fun i _ => hTerm i)
-  have hRhs : (∑ i : Fin r, if i = j then lim j * (m : ℂ) else 0) =
-      lim j * (m : ℂ) := by
-    simp
-  simpa only [hEq, hRhs] using hSum
-
 private theorem exists_nondecaying_overlap_ofProportionalDecomp_core
     {rX rY : ℕ}
     {dimX : Fin rX → ℕ} {dimY : Fin rY → ℕ}
@@ -533,8 +451,9 @@ private theorem exists_nondecaying_overlap_ofProportionalDecomp_core
         Filter.atTop (nhds 0) := fun x => (hall x).comp hMulAtTop
   have hZero0 : Filter.Tendsto (fun n => mpvOverlap (d := d) zero_total (Y y) (m * n))
       Filter.atTop (nhds 0) :=
-    tendsto_zero_subseq_of_decomp_cross (A_total := zero_total) (A := X)
-      (coeff := xCoeff) (lim := xLim) (m := m) hZero_decomp hxCoeff_mul (Y y) hall_mul
+    tendsto_mpvOverlap_zero_of_decomp_left (A_total := zero_total) (A := X)
+      (coeff := xCoeff) (lim := xLim) (N := fun n => m * n) hZero_decomp hxCoeff_mul
+      (Y y) hall_mul
   have hSelf : Filter.Tendsto (fun n => mpvOverlap (d := d) (Y y) (Y y) (m * n))
       Filter.atTop (nhds (m : ℂ)) := by
     simpa [m] using periodicSelfOverlap_tendsto (A := Y y) (hP := hPerY y)
@@ -548,8 +467,9 @@ private theorem exists_nondecaying_overlap_ofProportionalDecomp_core
   have hFocus_lim : Filter.Tendsto
       (fun n => mpvOverlap (d := d) focus_total (Y y) (m * n))
       Filter.atTop (nhds (yLim y * (m : ℂ))) :=
-    tendsto_focus_subseq_of_decomp (A_total := focus_total) (A := Y)
-      (coeff := yCoeff) (lim := yLim) (m := m) y hFocus_decomp hyCoeff_mul hSelf hOff
+    tendsto_mpvOverlap_focus_of_decomp_left (A_total := focus_total) (A := Y)
+      (coeff := yCoeff) (lim := yLim) (N := fun n => m * n) y (m : ℂ) hFocus_decomp
+      hyCoeff_mul hSelf hOff
   have hm_ne : (m : ℂ) ≠ 0 := by
     exact_mod_cast Nat.ne_of_gt hm_pos
   have hFocus_ne : yLim y * (m : ℂ) ≠ 0 := by

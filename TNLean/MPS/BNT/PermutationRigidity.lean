@@ -87,28 +87,10 @@ theorem exists_nonzero_overlap_of_proportional_decomp
   by_contra hall
   push Not at hall
   -- Step 1: show `mpvOverlap A_total (B k) → 0` using the A-decomposition.
-  have hA0 : Tendsto (fun N => mpvOverlap (d := d) A_total (B k) N) atTop (nhds (0 : ℂ)) := by
-    -- Expand the overlap at each N as a finite sum over j.
-    have hEq : ∀ N,
-        mpvOverlap (d := d) A_total (B k) N =
-          ∑ j : Fin gA, (aCoeff N j) * mpvOverlap (d := d) (A j) (B k) N := by
-      intro N
-      -- apply the fixed-N overlap expansion lemma
-      simpa only using (mpvOverlap_eq_sum_of_decomp_left (d := d)
-        (A_total := A_total) (A := A) (N := N) (c := aCoeff N)
-        (hdecomp := hA_decomp N) (B := B k))
-    -- Now take limits termwise.
-    have hTerm : ∀ j : Fin gA,
-        Tendsto (fun N => (aCoeff N j) * mpvOverlap (d := d) (A j) (B k) N)
-          atTop (nhds (0 : ℂ)) := by
-      intro j
-      have := (haCoeff j).mul (hall j)
-      simpa only [mul_zero] using this
-    have hSum : Tendsto (fun N => ∑ j : Fin gA,
-        (aCoeff N j) * mpvOverlap (d := d) (A j) (B k) N) atTop (nhds (0 : ℂ)) := by
-      simpa only [sum_const_zero] using (tendsto_finset_sum Finset.univ (fun j _ => hTerm j))
-    -- Conclude.
-    simpa only [hEq] using hSum
+  have hA0 : Tendsto (fun N => mpvOverlap (d := d) A_total (B k) N)
+      atTop (nhds (0 : ℂ)) :=
+    tendsto_mpvOverlap_zero_of_decomp_left (A_total := A_total) (A := A)
+      (coeff := aCoeff) (lim := aLim) (N := fun N : ℕ => N) hA_decomp haCoeff (B k) hall
   -- Step 2: compute the same overlap using proportionality + B-decomposition.
   have hEqProp : ∀ N,
       mpvOverlap (d := d) A_total (B k) N =
@@ -120,34 +102,10 @@ theorem exists_nonzero_overlap_of_proportional_decomp
       (c := c N) (h := hProp N) (C := B k)
   have hB_overlap_lim : Tendsto (fun N => mpvOverlap (d := d) B_total (B k) N)
       atTop (nhds (bLim k)) := by
-    -- Expand overlap(B_total, B_k) as sum over blocks.
-    have hEq : ∀ N,
-        mpvOverlap (d := d) B_total (B k) N =
-          ∑ k' : Fin gB, (bCoeff N k') * mpvOverlap (d := d) (B k') (B k) N := by
-      intro N
-      simpa only using (mpvOverlap_eq_sum_of_decomp_left (d := d)
-        (A_total := B_total) (A := B) (N := N) (c := bCoeff N)
-        (hdecomp := hB_decomp N) (B := B k))
-    -- Termwise limits.
-    have hTerm : ∀ k' : Fin gB,
-        Tendsto (fun N => (bCoeff N k') * mpvOverlap (d := d) (B k') (B k) N)
-          atTop (nhds (if k' = k then bLim k else 0)) := by
-      intro k'
-      by_cases hk' : k' = k
-      · cases hk'
-        have := (hbCoeff k).mul (hB_self k)
-        simpa only [↓reduceIte, mul_one] using this
-      · have := (hbCoeff k').mul (hB_off k' k hk')
-        simpa only [hk', ↓reduceIte, mul_zero] using this
-    have hSum : Tendsto (fun N => ∑ k' : Fin gB,
-        (bCoeff N k') * mpvOverlap (d := d) (B k') (B k) N)
-        atTop (nhds (∑ k' : Fin gB, (if k' = k then bLim k else 0))) := by
-      simpa only [sum_ite_eq', mem_univ, ↓reduceIte] using
-        (tendsto_finset_sum Finset.univ (fun k' _ => hTerm k'))
-    -- Simplify the RHS sum.
-    have hRhs : (∑ k' : Fin gB, (if k' = k then bLim k else 0)) = bLim k := by
-      simp
-    simpa only [hEq, hRhs] using hSum
+    simpa only [mul_one] using
+      (tendsto_mpvOverlap_focus_of_decomp_left (A_total := B_total) (A := B)
+        (coeff := bCoeff) (lim := bLim) (N := fun N : ℕ => N) k (1 : ℂ)
+        hB_decomp hbCoeff (hB_self k) (fun k' hk' => hB_off k' k hk'))
   have hAB_overlap_lim : Tendsto (fun N => mpvOverlap (d := d) A_total (B k) N)
       atTop (nhds (cLim * bLim k)) := by
     have := hc.mul hB_overlap_lim
@@ -215,24 +173,11 @@ theorem exists_nonzero_overlap_of_proportional_decomp_left
     intro k
     exact tendsto_mpvOverlap_zero_swap (A := A j) (B := B k) (hall k)
   -- Step 1: show `mpvOverlap B_total (A j) → 0` using the B-decomposition.
-  have hB0 : Tendsto (fun N => mpvOverlap (d := d) B_total (A j) N) atTop (nhds (0 : ℂ)) := by
-    have hEq : ∀ N,
-        mpvOverlap (d := d) B_total (A j) N =
-          ∑ k : Fin gB, (bCoeff N k) * mpvOverlap (d := d) (B k) (A j) N := by
-      intro N
-      simpa only using (mpvOverlap_eq_sum_of_decomp_left (d := d)
-        (A_total := B_total) (A := B) (N := N) (c := bCoeff N)
-        (hdecomp := hB_decomp N) (B := A j))
-    have hTerm : ∀ k : Fin gB,
-        Tendsto (fun N => (bCoeff N k) * mpvOverlap (d := d) (B k) (A j) N)
-          atTop (nhds (0 : ℂ)) := by
-      intro k
-      have := (hbCoeff k).mul (hall_swap k)
-      simpa only [mul_zero] using this
-    have hSum : Tendsto (fun N => ∑ k : Fin gB,
-        (bCoeff N k) * mpvOverlap (d := d) (B k) (A j) N) atTop (nhds (0 : ℂ)) := by
-      simpa only [sum_const_zero] using (tendsto_finset_sum Finset.univ (fun k _ => hTerm k))
-    simpa only [hEq] using hSum
+  have hB0 : Tendsto (fun N => mpvOverlap (d := d) B_total (A j) N)
+      atTop (nhds (0 : ℂ)) :=
+    tendsto_mpvOverlap_zero_of_decomp_left (A_total := B_total) (A := B)
+      (coeff := bCoeff) (lim := bLim) (N := fun N : ℕ => N) hB_decomp hbCoeff
+      (A j) hall_swap
   -- Step 2: use proportionality to show `mpvOverlap A_total (A j) → 0`.
   have hEqProp : ∀ N,
       mpvOverlap (d := d) A_total (A j) N =
@@ -251,31 +196,10 @@ theorem exists_nonzero_overlap_of_proportional_decomp_left
   -- Step 3: compute the *nonzero* limit of `mpvOverlap A_total (A j)` from the A-decomposition.
   have hA_overlap_lim : Tendsto (fun N => mpvOverlap (d := d) A_total (A j) N)
       atTop (nhds (aLim j)) := by
-    have hEq : ∀ N,
-        mpvOverlap (d := d) A_total (A j) N =
-          ∑ i : Fin gA, (aCoeff N i) * mpvOverlap (d := d) (A i) (A j) N := by
-      intro N
-      simpa only using (mpvOverlap_eq_sum_of_decomp_left (d := d)
-        (A_total := A_total) (A := A) (N := N) (c := aCoeff N)
-        (hdecomp := hA_decomp N) (B := A j))
-    have hTerm : ∀ i : Fin gA,
-        Tendsto (fun N => (aCoeff N i) * mpvOverlap (d := d) (A i) (A j) N)
-          atTop (nhds (if i = j then aLim j else 0)) := by
-      intro i
-      by_cases hij : i = j
-      · cases hij
-        have := (haCoeff j).mul (hA_self j)
-        simpa only [↓reduceIte, mul_one] using this
-      · have := (haCoeff i).mul (hA_off i j hij)
-        simpa only [hij, ↓reduceIte, mul_zero] using this
-    have hSum : Tendsto (fun N => ∑ i : Fin gA,
-        (aCoeff N i) * mpvOverlap (d := d) (A i) (A j) N)
-        atTop (nhds (∑ i : Fin gA, (if i = j then aLim j else 0))) := by
-      simpa only [sum_ite_eq', mem_univ, ↓reduceIte] using
-        (tendsto_finset_sum Finset.univ (fun i _ => hTerm i))
-    have hRhs : (∑ i : Fin gA, (if i = j then aLim j else 0)) = aLim j := by
-      simp
-    simpa only [hEq, hRhs] using hSum
+    simpa only [mul_one] using
+      (tendsto_mpvOverlap_focus_of_decomp_left (A_total := A_total) (A := A)
+        (coeff := aCoeff) (lim := aLim) (N := fun N : ℕ => N) j (1 : ℂ)
+        hA_decomp haCoeff (hA_self j) (fun i hij => hA_off i j hij))
   -- Contradiction: the overlap tends both to `0` and to `aLim j ≠ 0`.
   exact (hA_overlap_lim.ne_nhds (_haLim_ne j)) hA0
 
