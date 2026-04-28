@@ -14,6 +14,12 @@ then the virtual gauge matrices extracted from the single-block Fundamental Theo
 can be reindexed by inversion to produce a genuine projective representation on the
 bond space.
 
+The proof uses `gaugeEquiv_twistedTensor_of_injective` as its only source of the
+pointwise gauges. That theorem is the single-block Fundamental Theorem applied to
+each twisted tensor. The rest of this file uses gauge uniqueness and the twist
+composition law; the string-order development later consumes this theorem rather
+than proving it.
+
 ## Main results
 
 * `MPSTensor.virtual_rep_of_symmetric_injective`: the main theorem — the virtual gauges
@@ -88,7 +94,8 @@ private lemma gauge_product_intertwines
 /-- **Virtual representation theorem for injective MPS with on-site symmetry.**
 
 If an injective MPS tensor `A` is symmetric under on-site action of a group `G`,
-then there exist:
+then the single-block Fundamental Theorem supplies gauges for all twists, and
+there exist:
 - a unit-valued scalar cocycle `ω : ScalarCocycle G`,
 - a projective representation `ρ` of `G` on the bond space,
 

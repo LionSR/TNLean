@@ -144,11 +144,25 @@ on the bond space.
     gauge equivalent to~$A$.
 \end{lemma}
 
-\begin{proof}\leanok\uses{def:on_site_symmetric}
+\begin{proof}\leanok\uses{def:on_site_symmetric, thm:ft_single}
     On-site symmetry gives
-    $\mc{V}(A) = \mc{V}(\widetilde{A}_g)$, and equal MPV
-    for injective tensors implies gauge equivalence.
+    $\mc{V}(A) = \mc{V}(\widetilde{A}_g)$, and the single-block
+    Fundamental Theorem turns this equality of MPV families into gauge
+    equivalence.
 \end{proof}
+
+\begin{remark}[Fundamental-Theorem route for injective symmetry]%
+    \label{rem:injective_symmetry_ft_route}
+    \uses{thm:ft_single, lem:gauge_equiv_twisted, lem:gauge_unique_up_to_scalar,
+        lem:twisted_tensor_mul, thm:virtual_rep_injective}
+    The injective virtual-representation theorem is not proved from string-order
+    rigidity. The on-site symmetry condition first identifies $A$ and
+    $\widetilde{A}_g$ as the same MPV family; the single-block Fundamental
+    Theorem gives the gauge in Lemma~\ref{lem:gauge_equiv_twisted}. Gauge
+    uniqueness and the twist composition law then assemble these gauges into
+    Theorem~\ref{thm:virtual_rep_injective}. The string-order results later in
+    this chapter use this virtual representation as an input.
+\end{remark}
 
 \begin{theorem}[Virtual symmetry equation]\label{thm:virtual_symmetry_eq}
     \lean{MPSTensor.virtual_symmetry_eq}
