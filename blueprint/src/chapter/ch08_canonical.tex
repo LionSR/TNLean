@@ -1679,6 +1679,85 @@ The following results separate the zero blocks from the
 	The weight is the constant value $1$, so it is nonzero.
 \end{proof}
 
+\begin{definition}[Derived common-alphabet cyclic sectors]%
+\label{def:common_blocked_cyclic_sector_derived_blocks}
+	\lean{MPSTensor.CommonBlockedCyclicSectorFamily.flatKey,
+		MPSTensor.CommonBlockedCyclicSectorFamily.commonSectorBlock,
+		MPSTensor.CommonBlockedCyclicSectorFamily.commonFlatDim,
+		MPSTensor.CommonBlockedCyclicSectorFamily.commonFlatBlocks,
+		MPSTensor.CommonBlockedCyclicSectorFamily.commonSectorTensor,
+		MPSTensor.CommonBlockedCyclicSectorFamily.oneShotReindexedBlock,
+		MPSTensor.CommonBlockedCyclicSectorFamily.commonFlatWeight}
+	\leanok
+	\uses{def:common_blocked_cyclic_sector_family, def:blocked_tensor,
+		def:tensor_from_blocks, thm:iterated_blocking_samempv_reindex}
+	From a common reblocked cyclic-sector family, one may derive sector tensors at
+	the common alphabet directly from the original per-block sector tensors.  The
+	definition `oneShotReindexedBlock` keeps the physical-label relabeling explicit:
+	for the live block $B_k$, it uses the one-shot block $B_k^{[m_k e_k]}$ with the
+	labels obtained by flattening an iterated $(m_k,e_k)$ block.
+\end{definition}
+
+\begin{theorem}[Derived common-alphabet cyclic sectors retain structural properties]%
+\label{thm:common_blocked_cyclic_sector_derived_properties}
+	\lean{MPSTensor.CommonBlockedCyclicSectorFamily.commonSectorBlock_tp,
+		MPSTensor.CommonBlockedCyclicSectorFamily.commonSectorBlock_primitive,
+		MPSTensor.CommonBlockedCyclicSectorFamily.commonSectorBlock_irreducible,
+		MPSTensor.CommonBlockedCyclicSectorFamily.commonSectorBlock_dim_pos,
+		MPSTensor.CommonBlockedCyclicSectorFamily.commonFlatBlocks_tp,
+		MPSTensor.CommonBlockedCyclicSectorFamily.commonFlatBlocks_primitive,
+		MPSTensor.CommonBlockedCyclicSectorFamily.commonFlatBlocks_irreducible,
+		MPSTensor.CommonBlockedCyclicSectorFamily.commonFlatDim_pos,
+		MPSTensor.CommonBlockedCyclicSectorFamily.commonBlockWeight_ne_zero,
+		MPSTensor.CommonBlockedCyclicSectorFamily.commonFlatWeight_ne_zero}
+	\leanok
+	\uses{def:common_blocked_cyclic_sector_derived_blocks,
+		thm:tp_primitive_irreducible_extra_blocking,
+		thm:left_canonical_cast_phys_dim, thm:primitive_transfer_cast_phys_dim,
+		thm:irreducible_tensor_cast_phys_dim}
+	The derived common-alphabet sectors are trace-preserving, have primitive transfer
+	maps, are tensor-irreducible, and have positive bond dimensions.  Original
+	nonzero live-block weights remain nonzero after being transported to the common
+	blocking length and replicated over the derived flattened sector family.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:tp_primitive_irreducible_extra_blocking,
+		thm:left_canonical_cast_phys_dim, thm:primitive_transfer_cast_phys_dim,
+		thm:irreducible_tensor_cast_phys_dim}
+	Apply the extra-blocking theorem to each period-removal sector, substitute the
+	equality between the iterated and common physical alphabets, and use that a
+	positive power of a nonzero complex number is nonzero.
+\end{proof}
+
+\begin{theorem}[Relabeled one-shot blocks decompose into common cyclic sectors]%
+\label{thm:common_blocked_cyclic_sector_reindexed_samempv}
+	\lean{MPSTensor.CommonBlockedCyclicSectorFamily.nestedBlock_sameMPV₂_oneShotReindexedBlock,
+		MPSTensor.CommonBlockedCyclicSectorFamily.oneShotReindexedBlock_sameMPV₂_commonSectorTensor,
+		MPSTensor.CommonBlockedCyclicSectorFamily.sameMPV₂_weightedOneShotReindexedBlock_commonFlat}
+	\leanok
+	\uses{def:common_blocked_cyclic_sector_derived_blocks,
+		thm:iterated_blocking_samempv_reindex,
+		thm:samempv_cast_phys_dim, thm:samempv_blocking_distributes,
+		thm:common_blocked_cyclic_sector_derived_properties}
+	For each live block, the iterated block $(B_k^{[m_k]})^{[e_k]}$ agrees, after
+	the explicit physical-label relabeling, with a one-shot block of length
+	$m_k e_k$.  Combining this with the stored cyclic-sector decomposition gives an
+	MPV equality between the relabeled one-shot block and its derived common-sector
+	tensor.  Summing over live blocks transports the weights to $\mu_k^p$ and
+	flattens the two-level live-block/sector sum into one sector family.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:iterated_blocking_samempv_reindex,
+		thm:samempv_cast_phys_dim, thm:samempv_blocking_distributes,
+		thm:common_blocked_cyclic_sector_derived_properties}
+	First use the iterated-blocking comparison theorem and substitute the common
+	physical alphabet.  Then compose with the per-live-block cyclic-sector MPV
+	equivalence stored in the family.  Finally expand both block-diagonal tensors as
+	sums and reindex the double sum over pairs $(k,s)$ by the flattened sector index.
+\end{proof}
+
 \begin{theorem}[Common reblocking of per-block cyclic sectors]%
 \label{thm:exists_common_blocked_cyclic_sector_family}
 	\lean{MPSTensor.exists_commonBlockedCyclicSectorFamily_of_hasPrimitiveIrreducibleCyclicSectors}
@@ -3083,6 +3162,35 @@ The following results separate the zero blocks from the
 	Then apply Theorem~\ref{thm:exists_common_blocked_cyclic_sector_family} to the
 	per-block cyclic-sector data on each side.  The nonzero unit-weight conclusion
 	is Theorem~\ref{thm:common_blocked_cyclic_sector_flat_weight_ne_zero}.
+\end{proof}
+
+\begin{theorem}[Relabeled common cyclic sectors with reblocked zero-tail equations]%
+\label{thm:ft_after_blocking_reindexed_common_sector_live_zero_tail}
+	\lean{MPSTensor.fundamentalTheorem_after_blocking_1606_reindexed_commonSector_live_with_zeroTail}
+	\leanok
+	\uses{thm:ft_after_blocking_common_blocked_cyclic_live_zero_tail,
+		thm:zero_tail_to_tensor_from_blocks_block_power,
+		thm:common_blocked_cyclic_sector_reindexed_samempv,
+		thm:common_blocked_cyclic_sector_derived_properties}
+	If two tensors generate the same MPV family, then the common cyclic-sector data
+	from Theorem~\ref{thm:ft_after_blocking_common_blocked_cyclic_live_zero_tail}
+	also yields, on each side, a derived common-alphabet sector family obtained from
+	one-shot blocked live blocks with explicit physical-label relabeling.  The
+	sector weights are the transported powers $\mu_k^p$ and remain nonzero, the
+	derived sectors are trace-preserving, primitive, tensor-irreducible, and
+	positive-dimensional, and the zero-tail/live equations are also recorded after
+	the corresponding common reblocking.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:ft_after_blocking_common_blocked_cyclic_live_zero_tail,
+		thm:zero_tail_to_tensor_from_blocks_block_power,
+		thm:common_blocked_cyclic_sector_reindexed_samempv,
+		thm:common_blocked_cyclic_sector_derived_properties}
+	Start from the common reblocked cyclic-sector families on the two sides.  Apply
+	the zero-tail reblocking theorem to the original live-block decomposition, then
+	use the relabeled one-shot sector decomposition and the derived structural
+	properties of the common-sector family.
 \end{proof}
 
 
