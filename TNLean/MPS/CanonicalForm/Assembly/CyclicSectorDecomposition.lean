@@ -1097,6 +1097,290 @@ theorem hasPrimitiveIrreducibleCyclicSectors_of_TP_of_isIrreducibleTensor
     exists_primitive_irreducible_cyclic_sector_decomp_of_TP_of_isIrreducibleTensor
       (d := d) (D := D) A hTP hIrr
 
+/-- Common reblocking data for the cyclic sectors of a finite live-block family.
+
+For each original live block, `period k` is the period-removal length produced by
+cyclic-sector decomposition, while `extra k` is the later positive blocking length
+that moves all sectors to the single physical alphabet `blockPhysDim d p`.  The
+flattened family `flatBlocks` is indexed by the finite type
+`Fin (∑ k, period k)`, using `finSigmaFinEquiv` to identify an index with an
+original live block and one of its cyclic sectors.
+
+The field `nested_same` records the checked MPV compatibility condition available
+at this stage: the iterated blocked live block is MPV-equivalent to the corresponding
+unit-weight reblocked cyclic sectors, all at the common physical dimension.  The
+remaining work for issue #969 is the one-shot iterated-blocking identification
+and the weighted direct-sum flattening across the original live-block weights. -/
+structure CommonBlockedCyclicSectorFamily {d r : ℕ} {dim : Fin r → ℕ}
+    (blocks : (k : Fin r) → MPSTensor d (dim k)) where
+  /-- The common physical blocking length. -/
+  p : ℕ
+  /-- The common physical blocking length is positive. -/
+  p_pos : 0 < p
+  /-- The period-removal length of each original live block. -/
+  period : Fin r → ℕ
+  /-- Every period-removal length is positive. -/
+  period_pos : ∀ k, 0 < period k
+  /-- The later reblocking length applied after period removal. -/
+  extra : Fin r → ℕ
+  /-- Every later reblocking length is positive. -/
+  extra_pos : ∀ k, 0 < extra k
+  /-- The common length factors as period removal followed by later reblocking. -/
+  p_eq_period_mul_extra : ∀ k, p = period k * extra k
+  /-- Bond dimensions of the cyclic sector blocks before later reblocking. -/
+  sectorDim : (k : Fin r) → Fin (period k) → ℕ
+  /-- Cyclic sector blocks before later reblocking. -/
+  sectorBlocks : (k : Fin r) → (s : Fin (period k)) →
+    MPSTensor (blockPhysDim d (period k)) (sectorDim k s)
+  /-- The sector blocks are trace-preserving before later reblocking. -/
+  sector_tp : ∀ k s,
+    ∑ i : Fin (blockPhysDim d (period k)), (sectorBlocks k s i)ᴴ * sectorBlocks k s i = 1
+  /-- Each period-blocked live block is represented by its unit-weight cyclic sectors. -/
+  sector_same : ∀ k,
+    SameMPV₂ (blockTensor (d := d) (D := dim k) (blocks k) (period k))
+      (toTensorFromBlocks (d := blockPhysDim d (period k))
+        (μ := fun _ : Fin (period k) => (1 : ℂ)) (sectorBlocks k))
+  /-- The sector transfer maps are primitive before later reblocking. -/
+  sector_primitive : ∀ k s,
+    _root_.IsPrimitive
+      (transferMap (d := blockPhysDim d (period k)) (D := sectorDim k s)
+        (sectorBlocks k s))
+  /-- The sector blocks are tensor-irreducible before later reblocking. -/
+  sector_irreducible : ∀ k s, IsIrreducibleTensor (sectorBlocks k s)
+  /-- The sector bond dimensions are positive before later reblocking. -/
+  sector_dim_pos : ∀ k s, 0 < sectorDim k s
+  /-- The iterated blocked physical alphabet is propositionally the common alphabet. -/
+  blockPhysDim_nested_eq : ∀ k,
+    blockPhysDim (blockPhysDim d (period k)) (extra k) = blockPhysDim d p
+  /-- Bond dimensions of the flattened common-alphabet sector family. -/
+  flatDim : Fin (∑ k : Fin r, period k) → ℕ
+  /-- The flattened common-alphabet sector family. -/
+  flatBlocks : (x : Fin (∑ k : Fin r, period k)) → MPSTensor (blockPhysDim d p) (flatDim x)
+  /-- Flattened common-alphabet sectors are trace-preserving. -/
+  flat_tp : ∀ x,
+    ∑ i : Fin (blockPhysDim d p), (flatBlocks x i)ᴴ * flatBlocks x i = 1
+  /-- Flattened common-alphabet sectors have primitive transfer maps. -/
+  flat_primitive : ∀ x,
+    _root_.IsPrimitive (transferMap (d := blockPhysDim d p) (D := flatDim x) (flatBlocks x))
+  /-- Flattened common-alphabet sectors are tensor-irreducible. -/
+  flat_irreducible : ∀ x, IsIrreducibleTensor (flatBlocks x)
+  /-- Flattened common-alphabet sectors have positive bond dimensions. -/
+  flat_dim_pos : ∀ x, 0 < flatDim x
+  /-- The checked MPV compatibility condition for each original live block
+  after later reblocking. -/
+  nested_same : ∀ k,
+    SameMPV₂
+      (cast (congr_arg (fun d' => MPSTensor d' (dim k)) (blockPhysDim_nested_eq k))
+        (blockTensor (d := blockPhysDim d (period k)) (D := dim k)
+          (blockTensor (d := d) (D := dim k) (blocks k) (period k)) (extra k)))
+      (toTensorFromBlocks (d := blockPhysDim d p)
+        (μ := fun _ : Fin (period k) => (1 : ℂ))
+        (fun s => cast
+          (congr_arg (fun d' => MPSTensor d' (sectorDim k s)) (blockPhysDim_nested_eq k))
+          (blockTensor (d := blockPhysDim d (period k)) (D := sectorDim k s)
+            (sectorBlocks k s) (extra k))))
+
+namespace CommonBlockedCyclicSectorFamily
+
+/-- The flattened sectors produced by `CommonBlockedCyclicSectorFamily` carry unit weights. -/
+def flatWeight {d r : ℕ} {dim : Fin r → ℕ}
+    {blocks : (k : Fin r) → MPSTensor d (dim k)}
+    (F : CommonBlockedCyclicSectorFamily blocks) :
+    Fin (∑ k : Fin r, F.period k) → ℂ :=
+  fun _ => 1
+
+/-- The unit weights of the flattened common-alphabet sectors are nonzero. -/
+theorem flatWeight_ne_zero {d r : ℕ} {dim : Fin r → ℕ}
+    {blocks : (k : Fin r) → MPSTensor d (dim k)}
+    (F : CommonBlockedCyclicSectorFamily blocks) (x : Fin (∑ k : Fin r, F.period k)) :
+    F.flatWeight x ≠ 0 := by
+  simp [flatWeight]
+
+end CommonBlockedCyclicSectorFamily
+
+/-- A finite family of live blocks with per-block primitive irreducible cyclic sectors
+admits one common physical blocking length for all those sectors.
+
+This theorem chooses the least common multiple of the per-live-block period-removal
+lengths.  Each cyclic sector is then blocked by the corresponding quotient,
+identified with the common physical alphabet, and collected into one finite
+flattened family.  Trace preservation, primitive transfer maps, tensor
+irreducibility, positive bond dimensions, nonzero unit weights, and the per-block
+iterated-blocking MPV compatibility conditions are all retained. -/
+theorem exists_commonBlockedCyclicSectorFamily_of_hasPrimitiveIrreducibleCyclicSectors
+    {d r : ℕ} {dim : Fin r → ℕ}
+    (blocks : (k : Fin r) → MPSTensor d (dim k))
+    (hcyc : ∀ k, HasPrimitiveIrreducibleCyclicSectors (blocks k)) :
+    Nonempty (CommonBlockedCyclicSectorFamily blocks) := by
+  classical
+  let period : Fin r → ℕ := fun k => (hcyc k).choose
+  have period_pos : ∀ k, 0 < period k := fun k => (hcyc k).choose_spec.1
+  let sectorDim : (k : Fin r) → Fin (period k) → ℕ :=
+    fun k => (hcyc k).choose_spec.2.choose
+  let sectorBlocks : (k : Fin r) → (s : Fin (period k)) →
+      MPSTensor (blockPhysDim d (period k)) (sectorDim k s) :=
+    fun k => (hcyc k).choose_spec.2.choose_spec.choose
+  have hSector : ∀ k,
+      (∀ s, ∑ i : Fin (blockPhysDim d (period k)),
+        (sectorBlocks k s i)ᴴ * sectorBlocks k s i = 1) ∧
+      SameMPV₂ (blockTensor (d := d) (D := dim k) (blocks k) (period k))
+        (toTensorFromBlocks (d := blockPhysDim d (period k))
+          (μ := fun _ : Fin (period k) => (1 : ℂ)) (sectorBlocks k)) ∧
+      (∀ s, _root_.IsPrimitive
+        (transferMap (d := blockPhysDim d (period k)) (D := sectorDim k s)
+          (sectorBlocks k s))) ∧
+      (∀ s, IsIrreducibleTensor (sectorBlocks k s)) ∧
+      (∀ s, 0 < sectorDim k s) := by
+    intro k
+    exact (hcyc k).choose_spec.2.choose_spec.choose_spec
+  have sector_tp : ∀ k s,
+      ∑ i : Fin (blockPhysDim d (period k)),
+        (sectorBlocks k s i)ᴴ * sectorBlocks k s i = 1 := fun k => (hSector k).1
+  have sector_same : ∀ k,
+      SameMPV₂ (blockTensor (d := d) (D := dim k) (blocks k) (period k))
+        (toTensorFromBlocks (d := blockPhysDim d (period k))
+          (μ := fun _ : Fin (period k) => (1 : ℂ)) (sectorBlocks k)) :=
+    fun k => (hSector k).2.1
+  have sector_primitive : ∀ k s,
+      _root_.IsPrimitive
+        (transferMap (d := blockPhysDim d (period k)) (D := sectorDim k s)
+          (sectorBlocks k s)) := fun k => (hSector k).2.2.1
+  have sector_irreducible : ∀ k s, IsIrreducibleTensor (sectorBlocks k s) :=
+    fun k => (hSector k).2.2.2.1
+  have sector_dim_pos : ∀ k s, 0 < sectorDim k s :=
+    fun k => (hSector k).2.2.2.2
+  let p := lcmPeriod period
+  have p_pos : 0 < p := lcmPeriod_pos period_pos
+  let extra : Fin r → ℕ := fun k => (dvd_lcmPeriod period k).choose
+  have p_eq_period_mul_extra : ∀ k, p = period k * extra k :=
+    fun k => (dvd_lcmPeriod period k).choose_spec
+  have extra_pos : ∀ k, 0 < extra k := by
+    intro k
+    have hmul_pos : 0 < period k * extra k := by
+      simpa [p_eq_period_mul_extra k] using p_pos
+    exact Nat.pos_of_mul_pos_left hmul_pos
+  have hPhys : ∀ k,
+      blockPhysDim (blockPhysDim d (period k)) (extra k) = blockPhysDim d p := by
+    intro k
+    simpa [p_eq_period_mul_extra k] using
+      (blockPhysDim_blockPhysDim d (period k) (extra k))
+  let flatKey : Fin (∑ k : Fin r, period k) → ((k : Fin r) × Fin (period k)) :=
+    fun x => finSigmaFinEquiv.symm x
+  let flatDim : Fin (∑ k : Fin r, period k) → ℕ :=
+    fun x => sectorDim (flatKey x).1 (flatKey x).2
+  let flatBlocks : (x : Fin (∑ k : Fin r, period k)) →
+      MPSTensor (blockPhysDim d p) (flatDim x) := fun x =>
+    let y := flatKey x
+    show MPSTensor (blockPhysDim d p) (sectorDim y.1 y.2) from
+      cast (congr_arg (fun d' => MPSTensor d' (sectorDim y.1 y.2)) (hPhys y.1))
+        (blockTensor (d := blockPhysDim d (period y.1)) (D := sectorDim y.1 y.2)
+          (sectorBlocks y.1 y.2) (extra y.1))
+  have hExtra : ∀ k s,
+      (∑ i : Fin (blockPhysDim (blockPhysDim d (period k)) (extra k)),
+        (blockTensor (d := blockPhysDim d (period k)) (D := sectorDim k s)
+          (sectorBlocks k s) (extra k) i)ᴴ *
+          blockTensor (d := blockPhysDim d (period k)) (D := sectorDim k s)
+            (sectorBlocks k s) (extra k) i = 1) ∧
+      _root_.IsPrimitive
+        (transferMap (d := blockPhysDim (blockPhysDim d (period k)) (extra k))
+          (D := sectorDim k s)
+          (blockTensor (d := blockPhysDim d (period k)) (D := sectorDim k s)
+            (sectorBlocks k s) (extra k))) ∧
+      IsIrreducibleTensor
+        (blockTensor (d := blockPhysDim d (period k)) (D := sectorDim k s)
+          (sectorBlocks k s) (extra k)) := by
+    intro k s
+    haveI : NeZero (sectorDim k s) := ⟨Nat.ne_of_gt (sector_dim_pos k s)⟩
+    exact tp_primitive_irreducible_extra_blocking
+      (d := blockPhysDim d (period k)) (D := sectorDim k s)
+      (A := sectorBlocks k s) (sector_tp k s) (sector_primitive k s)
+      (sector_irreducible k s) (hk := extra_pos k)
+  have flat_tp : ∀ x,
+      ∑ i : Fin (blockPhysDim d p), (flatBlocks x i)ᴴ * flatBlocks x i = 1 := by
+    intro x
+    let y := flatKey x
+    have hcast := (leftCanonical_cast_physDim (hPhys y.1)
+      (A := blockTensor (d := blockPhysDim d (period y.1)) (D := sectorDim y.1 y.2)
+        (sectorBlocks y.1 y.2) (extra y.1))).2 (hExtra y.1 y.2).1
+    simpa [flatBlocks, y] using hcast
+  have flat_primitive : ∀ x,
+      _root_.IsPrimitive
+        (transferMap (d := blockPhysDim d p) (D := flatDim x) (flatBlocks x)) := by
+    intro x
+    let y := flatKey x
+    have hcast := (isPrimitive_transferMap_cast_physDim (hPhys y.1)
+      (A := blockTensor (d := blockPhysDim d (period y.1)) (D := sectorDim y.1 y.2)
+        (sectorBlocks y.1 y.2) (extra y.1))).2 (hExtra y.1 y.2).2.1
+    simpa [flatBlocks, flatDim, y] using hcast
+  have flat_irreducible : ∀ x, IsIrreducibleTensor (flatBlocks x) := by
+    intro x
+    let y := flatKey x
+    have hcast := (isIrreducibleTensor_cast_physDim (hPhys y.1)
+      (A := blockTensor (d := blockPhysDim d (period y.1)) (D := sectorDim y.1 y.2)
+        (sectorBlocks y.1 y.2) (extra y.1))).2 (hExtra y.1 y.2).2.2
+    simpa [flatBlocks, y] using hcast
+  have flat_dim_pos : ∀ x, 0 < flatDim x := by
+    intro x
+    let y := flatKey x
+    simpa [flatDim, y] using sector_dim_pos y.1 y.2
+  have nested_same : ∀ k,
+      SameMPV₂
+        (cast (congr_arg (fun d' => MPSTensor d' (dim k)) (hPhys k))
+          (blockTensor (d := blockPhysDim d (period k)) (D := dim k)
+            (blockTensor (d := d) (D := dim k) (blocks k) (period k)) (extra k)))
+        (toTensorFromBlocks (d := blockPhysDim d p)
+          (μ := fun _ : Fin (period k) => (1 : ℂ))
+          (fun s => cast
+            (congr_arg (fun d' => MPSTensor d' (sectorDim k s)) (hPhys k))
+            (blockTensor (d := blockPhysDim d (period k)) (D := sectorDim k s)
+              (sectorBlocks k s) (extra k)))) := by
+    intro k
+    have hNested : SameMPV₂
+        (blockTensor (d := blockPhysDim d (period k)) (D := dim k)
+          (blockTensor (d := d) (D := dim k) (blocks k) (period k)) (extra k))
+        (toTensorFromBlocks (d := blockPhysDim (blockPhysDim d (period k)) (extra k))
+          (μ := fun _ : Fin (period k) => (1 : ℂ))
+          (fun s => blockTensor (d := blockPhysDim d (period k)) (D := sectorDim k s)
+            (sectorBlocks k s) (extra k))) := by
+      simpa using
+        (sameMPV₂_blockTensor_of_sameMPV₂_toTensorFromBlocks
+          (d := blockPhysDim d (period k)) (D := dim k)
+          (A := blockTensor (d := d) (D := dim k) (blocks k) (period k))
+          (μ := fun _ : Fin (period k) => (1 : ℂ))
+          (blocks := sectorBlocks k) (hSame := sector_same k) (p := extra k))
+    have hCast := (sameMPV₂_cast_physDim (hPhys k)
+      (A := blockTensor (d := blockPhysDim d (period k)) (D := dim k)
+        (blockTensor (d := d) (D := dim k) (blocks k) (period k)) (extra k))
+      (B := toTensorFromBlocks (d := blockPhysDim (blockPhysDim d (period k)) (extra k))
+        (μ := fun _ : Fin (period k) => (1 : ℂ))
+        (fun s => blockTensor (d := blockPhysDim d (period k)) (D := sectorDim k s)
+          (sectorBlocks k s) (extra k)))).2 hNested
+    rw [toTensorFromBlocks_cast_physDim (h := hPhys k)] at hCast
+    simpa using hCast
+  exact ⟨{
+    p := p
+    p_pos := p_pos
+    period := period
+    period_pos := period_pos
+    extra := extra
+    extra_pos := extra_pos
+    p_eq_period_mul_extra := p_eq_period_mul_extra
+    sectorDim := sectorDim
+    sectorBlocks := sectorBlocks
+    sector_tp := sector_tp
+    sector_same := sector_same
+    sector_primitive := sector_primitive
+    sector_irreducible := sector_irreducible
+    sector_dim_pos := sector_dim_pos
+    blockPhysDim_nested_eq := hPhys
+    flatDim := flatDim
+    flatBlocks := flatBlocks
+    flat_tp := flat_tp
+    flat_primitive := flat_primitive
+    flat_irreducible := flat_irreducible
+    flat_dim_pos := flat_dim_pos
+    nested_same := nested_same }⟩
+
 end SectorOrbitLift
 
 end MPSTensor

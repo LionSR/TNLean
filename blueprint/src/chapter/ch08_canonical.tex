@@ -1202,6 +1202,93 @@ The following results separate the zero blocks from the
 	Apply Theorem~\ref{thm:primitive_pow} with $\E = \E_{A^{[p]}}$.
 \end{proof}
 
+\begin{theorem}[Iterated blocking multiplies physical dimensions]
+	\label{thm:iterated_blocking_phys_dim}
+	\lean{MPSTensor.blockPhysDim_blockPhysDim}
+	\leanok
+	\uses{def:blocked_tensor}
+	The physical alphabet obtained by first blocking $m$ sites and then blocking
+	$n$ of those sites has the same cardinality as blocking $mn$ original sites:
+	\[
+		\operatorname{blockPhysDim}(\operatorname{blockPhysDim}(d,m),n)
+		= \operatorname{blockPhysDim}(d,mn).
+	\]
+\end{theorem}
+
+\begin{proof}\leanok
+	Both sides are powers of $d$: the left-hand side is $(d^m)^n$, and the
+	right-hand side is $d^{mn}$.
+\end{proof}
+
+\begin{theorem}[Physical-dimension transport and MPV equality]
+	\label{thm:samempv_cast_phys_dim}
+	\lean{MPSTensor.sameMPV₂_cast_physDim}
+	\leanok
+	\uses{def:same_mpv2}
+	If two physical alphabets have the same cardinality, then the transported
+	tensors have the same MPV family if and only if the original tensors do.
+\end{theorem}
+
+\begin{proof}\leanok
+	After substituting the equality of physical dimensions, the two MPV equality
+	statements are the same.
+\end{proof}
+
+\begin{theorem}[Physical-dimension transport for block-diagonal tensors]
+	\label{thm:tensor_from_blocks_cast_phys_dim}
+	\lean{MPSTensor.toTensorFromBlocks_cast_physDim}
+	\leanok
+	\uses{def:tensor_from_blocks}
+	Identifying equal physical alphabets commutes with forming a weighted
+	block-diagonal tensor from a finite block family.
+\end{theorem}
+
+\begin{proof}\leanok
+	Substitute the equality of physical dimensions; both sides are then the same
+	block-diagonal tensor.
+\end{proof}
+
+\begin{theorem}[Physical-dimension transport and trace preservation]
+	\label{thm:left_canonical_cast_phys_dim}
+	\lean{MPSTensor.leftCanonical_cast_physDim}
+	\leanok
+	\uses{def:tp_kraus}
+	After identifying equal physical alphabets, the transported tensor is
+	trace-preserving if and only if the original tensor is trace-preserving.
+\end{theorem}
+
+\begin{proof}\leanok
+	Substitute the equality of physical dimensions; the two normalization sums are
+	identical.
+\end{proof}
+
+\begin{theorem}[Physical-dimension transport and primitive transfer maps]
+	\label{thm:primitive_transfer_cast_phys_dim}
+	\lean{MPSTensor.isPrimitive_transferMap_cast_physDim}
+	\leanok
+	\uses{def:transfer_map, def:primitive_channel}
+	After identifying equal physical alphabets, the transported transfer map is
+	primitive if and only if the original transfer map is primitive.
+\end{theorem}
+
+\begin{proof}\leanok
+	Substitute the equality of physical dimensions; the transfer maps coincide.
+\end{proof}
+
+\begin{theorem}[Physical-dimension transport and tensor irreducibility]
+	\label{thm:irreducible_tensor_cast_phys_dim}
+	\lean{MPSTensor.isIrreducibleTensor_cast_physDim}
+	\leanok
+	\uses{def:irreducible_tensor}
+	After identifying equal physical alphabets, the transported tensor is
+	irreducible if and only if the original tensor is irreducible.
+\end{theorem}
+
+\begin{proof}\leanok
+	Substitute the equality of physical dimensions; the irreducibility predicates
+	are identical.
+\end{proof}
+
 \begin{theorem}[Iterated blocking multiplies periods at the transfer-map level]%
 	\label{thm:iterated_blocking_transfer}
 	\lean{MPSTensor.transferMap_blockTensor_mul}
@@ -1536,6 +1623,74 @@ The following results separate the zero blocks from the
 	\uses{thm:cyclic_sector_decomp_irr_tp_prim_irr}
 	This is Theorem~\ref{thm:cyclic_sector_decomp_irr_tp_prim_irr}, restated as
 	the predicate of Definition~\ref{def:primitive_irreducible_cyclic_sectors}.
+\end{proof}
+
+\begin{definition}[Common reblocked cyclic-sector family]%
+\label{def:common_blocked_cyclic_sector_family}
+	\lean{MPSTensor.CommonBlockedCyclicSectorFamily}
+	\leanok
+	\uses{def:primitive_irreducible_cyclic_sectors, def:blocked_tensor,
+		def:tensor_from_blocks, def:same_mpv2}
+	For a finite family of live blocks $(B_k)$, these data record a single
+	positive physical blocking length $p$, the per-block period-removal lengths
+	$m_k$, the later positive reblocking lengths $e_k$ with $p=m_k e_k$, and the
+	resulting flattened finite sector family at physical dimension $d^p$.  They
+	retain trace preservation, primitive transfer maps, tensor irreducibility,
+	positive bond dimensions, and the per-block iterated-blocking MPV equivalences.
+\end{definition}
+
+\begin{definition}[Unit weights for a common reblocked cyclic-sector family]%
+\label{def:common_blocked_cyclic_sector_flat_weight}
+	\lean{MPSTensor.CommonBlockedCyclicSectorFamily.flatWeight}
+	\leanok
+	\uses{def:common_blocked_cyclic_sector_family}
+	The flattened sectors of a common reblocked cyclic-sector family carry the
+	unit weights inherited from cyclic period removal.
+\end{definition}
+
+\begin{theorem}[Unit weights are nonzero for common reblocked cyclic sectors]%
+\label{thm:common_blocked_cyclic_sector_flat_weight_ne_zero}
+	\lean{MPSTensor.CommonBlockedCyclicSectorFamily.flatWeight_ne_zero}
+	\leanok
+	\uses{def:common_blocked_cyclic_sector_flat_weight}
+	Every unit weight in Definition~\ref{def:common_blocked_cyclic_sector_flat_weight}
+	is nonzero.
+\end{theorem}
+
+\begin{proof}\leanok
+	The weight is the constant value $1$, so it is nonzero.
+\end{proof}
+
+\begin{theorem}[Common reblocking of per-block cyclic sectors]%
+\label{thm:exists_common_blocked_cyclic_sector_family}
+	\lean{MPSTensor.exists_commonBlockedCyclicSectorFamily_of_hasPrimitiveIrreducibleCyclicSectors}
+	\leanok
+	\uses{def:common_blocked_cyclic_sector_family,
+		def:primitive_irreducible_cyclic_sectors,
+		thm:tp_primitive_irreducible_extra_blocking,
+		thm:samempv_blocking_distributes}
+	If every live block in a finite family has primitive irreducible cyclic
+	sectors, then the family admits a common reblocked cyclic-sector family.
+	The proof chooses the least common multiple of the per-block periods, blocks
+	each sector by the corresponding quotient, transports all sectors to the common
+	physical alphabet, and preserves TP, primitivity, tensor irreducibility,
+	positive bond dimensions, and the unit-weight MPV equivalences.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:tp_primitive_irreducible_extra_blocking,
+		thm:samempv_blocking_distributes,
+		thm:iterated_blocking_phys_dim,
+		thm:samempv_cast_phys_dim,
+		thm:tensor_from_blocks_cast_phys_dim,
+		thm:left_canonical_cast_phys_dim,
+		thm:primitive_transfer_cast_phys_dim,
+		thm:irreducible_tensor_cast_phys_dim}
+	Choose the least common multiple $p$ of the per-block periods $m_k$ and write
+	$p=m_k e_k$.  Apply the extra-blocking theorem to each cyclic sector for the
+	positive length $e_k$.  The MPV equivalence is obtained by blocking the
+	unit-weight cyclic-sector equivalence and transporting the physical alphabet
+	to $d^p$.
 \end{proof}
 
 \subsection{Sector irreducibility helpers}%
@@ -2884,6 +3039,32 @@ The following results separate the zero blocks from the
 	positive lengths and records the $N=0$ identity. Finally apply
 	Theorem~\ref{thm:has_primitive_irreducible_cyclic_sectors_tp_irr} to every
 	trace-preserving irreducible live block.
+\end{proof}
+
+\begin{theorem}[Common reblocked live cyclic sectors with zero-tail bookkeeping]%
+\label{thm:ft_after_blocking_common_blocked_cyclic_live_zero_tail}
+	\lean{MPSTensor.fundamentalTheorem_after_blocking_1606_commonBlocked_cyclic_live_with_zeroTail}
+	\leanok
+	\uses{thm:ft_after_blocking_per_block_cyclic_live_zero_tail,
+		thm:exists_common_blocked_cyclic_sector_family,
+		thm:common_blocked_cyclic_sector_flat_weight_ne_zero}
+	If two tensors generate the same MPV family, then the zero-tail/TP-gauge
+	live-block reduction can be combined with a common reblocking of all
+	per-block cyclic sectors.  Each side obtains a finite flattened sector family
+	at one physical blocking length, with trace preservation, primitive transfer
+	maps, tensor irreducibility, positive bond dimensions, and nonzero unit
+	weights.  The theorem keeps the positive-length live equality and the exact
+	$N=0$ zero-tail bookkeeping for the original live block tensors.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:ft_after_blocking_per_block_cyclic_live_zero_tail,
+		thm:exists_common_blocked_cyclic_sector_family,
+		thm:common_blocked_cyclic_sector_flat_weight_ne_zero}
+	Apply Theorem~\ref{thm:ft_after_blocking_per_block_cyclic_live_zero_tail}.
+	Then apply Theorem~\ref{thm:exists_common_blocked_cyclic_sector_family} to the
+	per-block cyclic-sector data on each side.  The nonzero unit-weight conclusion
+	is Theorem~\ref{thm:common_blocked_cyclic_sector_flat_weight_ne_zero}.
 \end{proof}
 
 
