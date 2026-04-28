@@ -1134,6 +1134,73 @@ The following results separate the zero blocks from the
 	right-hand side is $d^{mn}$.
 \end{proof}
 
+\begin{theorem}[Physical-dimension transport preserves MPV equality]
+	\label{thm:samempv_cast_phys_dim}
+	\lean{MPSTensor.sameMPV₂_cast_physDim}
+	\leanok
+	\uses{def:same_mpv2}
+	If two physical alphabets have the same cardinality, identifying the tensor
+	families along that equality preserves heterogeneous MPV equality.
+\end{theorem}
+
+\begin{proof}\leanok
+	After substituting the equality of physical dimensions, the two MPV equality
+	statements are the same.
+\end{proof}
+
+\begin{theorem}[Physical-dimension transport preserves block-diagonal tensors]
+	\label{thm:tensor_from_blocks_cast_phys_dim}
+	\lean{MPSTensor.toTensorFromBlocks_cast_physDim}
+	\leanok
+	\uses{def:tensor_from_blocks}
+	Identifying equal physical alphabets commutes with forming a weighted
+	block-diagonal tensor from a finite block family.
+\end{theorem}
+
+\begin{proof}\leanok
+	Substitute the equality of physical dimensions; both sides are then the same
+	block-diagonal tensor.
+\end{proof}
+
+\begin{theorem}[Physical-dimension transport preserves trace preservation]
+	\label{thm:left_canonical_cast_phys_dim}
+	\lean{MPSTensor.leftCanonical_cast_physDim}
+	\leanok
+	\uses{def:tp_kraus}
+	Identifying equal physical alphabets preserves the trace-preserving condition
+	$\sum_i A_i^\dagger A_i=\Id$.
+\end{theorem}
+
+\begin{proof}\leanok
+	Substitute the equality of physical dimensions; the two normalization sums are
+	identical.
+\end{proof}
+
+\begin{theorem}[Physical-dimension transport preserves primitive transfer maps]
+	\label{thm:primitive_transfer_cast_phys_dim}
+	\lean{MPSTensor.isPrimitive_transferMap_cast_physDim}
+	\leanok
+	\uses{def:transfer_map, def:primitive_channel}
+	Identifying equal physical alphabets preserves primitivity of the transfer map.
+\end{theorem}
+
+\begin{proof}\leanok
+	Substitute the equality of physical dimensions; the transfer maps coincide.
+\end{proof}
+
+\begin{theorem}[Physical-dimension transport preserves tensor irreducibility]
+	\label{thm:irreducible_tensor_cast_phys_dim}
+	\lean{MPSTensor.isIrreducibleTensor_cast_physDim}
+	\leanok
+	\uses{def:irreducible_tensor}
+	Identifying equal physical alphabets preserves tensor irreducibility.
+\end{theorem}
+
+\begin{proof}\leanok
+	Substitute the equality of physical dimensions; the irreducibility predicates
+	are identical.
+\end{proof}
+
 \begin{theorem}[Iterated blocking multiplies periods at the transfer-map level]%
 	\label{thm:iterated_blocking_transfer}
 	\lean{MPSTensor.transferMap_blockTensor_mul}
@@ -1476,13 +1543,12 @@ The following results separate the zero blocks from the
 	\leanok
 	\uses{def:primitive_irreducible_cyclic_sectors, def:blocked_tensor,
 		def:tensor_from_blocks, def:same_mpv2}
-	For a finite family of live blocks $(B_k)$, this structure records a single
+	For a finite family of live blocks $(B_k)$, these data record a single
 	positive physical blocking length $p$, the per-block period-removal lengths
 	$m_k$, the later positive reblocking lengths $e_k$ with $p=m_k e_k$, and the
-	resulting flattened finite sector family at physical dimension
-	$\operatorname{blockPhysDim}(d,p)$.  It retains trace preservation,
-	primitive transfer maps, tensor irreducibility, positive bond dimensions, and
-	the per-block iterated-blocking MPV interfaces.
+	resulting flattened finite sector family at physical dimension $d^p$.  They
+	retain trace preservation, primitive transfer maps, tensor irreducibility,
+	positive bond dimensions, and the per-block iterated-blocking MPV equivalences.
 \end{definition}
 
 \begin{definition}[Unit weights for a common reblocked cyclic-sector family]%
@@ -1514,9 +1580,9 @@ The following results separate the zero blocks from the
 	If every live block in a finite family has primitive irreducible cyclic
 	sectors, then the family admits a common reblocked cyclic-sector family.
 	The proof chooses the least common multiple of the per-block periods, blocks
-	each sector by the corresponding quotient, casts all sectors to the common
+	each sector by the corresponding quotient, transports all sectors to the common
 	physical alphabet, and preserves TP, primitivity, tensor irreducibility,
-	positive bond dimensions, and the unit-weight MPV interfaces.
+	positive bond dimensions, and the unit-weight MPV equivalences.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -1524,9 +1590,9 @@ The following results separate the zero blocks from the
 		thm:samempv_blocking_distributes}
 	Choose the least common multiple $p$ of the per-block periods $m_k$ and write
 	$p=m_k e_k$.  Apply the extra-blocking theorem to each cyclic sector for the
-	positive length $e_k$.  The MPV interface is obtained by blocking the
+	positive length $e_k$.  The MPV equivalence is obtained by blocking the
 	unit-weight cyclic-sector equivalence and transporting the physical alphabet
-	to $\operatorname{blockPhysDim}(d,p)$.
+	to $d^p$.
 \end{proof}
 
 \subsection{Sector irreducibility helpers}%
@@ -2838,7 +2904,8 @@ The following results separate the zero blocks from the
 
 \begin{proof}\leanok
 	\uses{thm:ft_after_blocking_per_block_cyclic_live_zero_tail,
-		thm:exists_common_blocked_cyclic_sector_family}
+		thm:exists_common_blocked_cyclic_sector_family,
+		thm:common_blocked_cyclic_sector_flat_weight_ne_zero}
 	Apply Theorem~\ref{thm:ft_after_blocking_per_block_cyclic_live_zero_tail}.
 	Then apply Theorem~\ref{thm:exists_common_blocked_cyclic_sector_family} to the
 	per-block cyclic-sector data on each side.  The nonzero unit-weight conclusion

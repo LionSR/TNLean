@@ -1106,8 +1106,8 @@ flattened family `flatBlocks` is indexed by the finite type
 `Fin (∑ k, period k)`, using `finSigmaFinEquiv` to identify an index with an
 original live block and one of its cyclic sectors.
 
-The field `nested_same` records the checked MPV interface that is available at
-this stage: the iterated blocked live block is MPV-equivalent to the corresponding
+The field `nested_same` records the checked MPV compatibility condition available
+at this stage: the iterated blocked live block is MPV-equivalent to the corresponding
 unit-weight reblocked cyclic sectors, all at the common physical dimension.  The
 remaining work for issue #969 is the one-shot iterated-blocking identification
 and the weighted direct-sum flattening across the original live-block weights. -/
@@ -1166,7 +1166,8 @@ structure CommonBlockedCyclicSectorFamily {d r : ℕ} {dim : Fin r → ℕ}
   flat_irreducible : ∀ x, IsIrreducibleTensor (flatBlocks x)
   /-- Flattened common-alphabet sectors have positive bond dimensions. -/
   flat_dim_pos : ∀ x, 0 < flatDim x
-  /-- The checked MPV interface for each original live block after later reblocking. -/
+  /-- The checked MPV compatibility condition for each original live block
+  after later reblocking. -/
   nested_same : ∀ k,
     SameMPV₂
       (cast (congr_arg (fun d' => MPSTensor d' (dim k)) (blockPhysDim_nested_eq k))
@@ -1182,7 +1183,7 @@ structure CommonBlockedCyclicSectorFamily {d r : ℕ} {dim : Fin r → ℕ}
 namespace CommonBlockedCyclicSectorFamily
 
 /-- The flattened sectors produced by `CommonBlockedCyclicSectorFamily` carry unit weights. -/
-noncomputable def flatWeight {d r : ℕ} {dim : Fin r → ℕ}
+def flatWeight {d r : ℕ} {dim : Fin r → ℕ}
     {blocks : (k : Fin r) → MPSTensor d (dim k)}
     (F : CommonBlockedCyclicSectorFamily blocks) :
     Fin (∑ k : Fin r, F.period k) → ℂ :=
@@ -1205,7 +1206,7 @@ lengths.  Each cyclic sector is then blocked by the corresponding quotient, cast
 to the common physical alphabet `blockPhysDim d p`, and collected into one finite
 flattened family.  Trace preservation, primitive transfer maps, tensor
 irreducibility, positive bond dimensions, nonzero unit weights, and the per-block
-iterated-blocking MPV interfaces are all retained. -/
+iterated-blocking MPV compatibility conditions are all retained. -/
 theorem exists_commonBlockedCyclicSectorFamily_of_hasPrimitiveIrreducibleCyclicSectors
     {d r : ℕ} {dim : Fin r → ℕ}
     (blocks : (k : Fin r) → MPSTensor d (dim k))

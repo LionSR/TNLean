@@ -156,7 +156,7 @@ end SameMPV₂Blocking
 /-!
 ## Physical-dimension casts and iterated blocking dimensions
 
-These helpers keep the later common-blocking statements at a single physical
+These auxiliary lemmas keep the later common-blocking statements at a single physical
 alphabet size.  They are all propositional transports: once the two physical
 dimensions are definitionally identified, the tensors and their MPV/transfer-map
 properties are unchanged.
