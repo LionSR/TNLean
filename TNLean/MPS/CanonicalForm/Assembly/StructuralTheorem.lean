@@ -1218,8 +1218,8 @@ theorem fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_commonPha
         ∀ j : Fin P.basisCount,
           Finset.univ.val.map (P.weight j) =
             Finset.univ.val.map
-              (fun q => ζ j * Q.weight (perm j) (Fin.cast (hCopies j) q)) := by
-  exact fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_phaseCover
+              (fun q => ζ j * Q.weight (perm j) (Fin.cast (hCopies j) q)) :=
+  fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_phaseCover
     A B hSame hp μA blocksA μB blocksB cover.common cover.classA cover.classB
     cover.phaseA cover.phaseB cover.surjA cover.surjB hAblocks hBblocks
     hTPA hTPB hIrrA hIrrB hPrimA hPrimB hInjA hInjB hμA hμB
