@@ -526,6 +526,72 @@ theorem fundamentalTheorem_after_blocking_1606_perBlock_cyclic_live_with_zeroTai
     exact hasPrimitiveIrreducibleCyclicSectors_of_TP_of_isIrreducibleTensor
       (blocksB k) (hTPB k) (hIrrB k)
 
+/-- **Common-blocking predecessor for live cyclic sectors with zero-tail bookkeeping.**
+
+This theorem combines the zero-tail/TP-gauge live-block reduction with the common
+reblocking constructor for per-block cyclic sectors.  The theorem asserts the
+existence of the original live block families on both sides and, for each side, a
+finite flattened sector family at the corresponding common blocked physical
+dimension.  The flattened sectors are trace-preserving, have primitive transfer
+maps, are tensor-irreducible, have positive bond dimensions, and carry nonzero
+unit weights.  The statement keeps the
+checked zero-tail equations, positive-length live equality, and length-zero
+bookkeeping at the unblocked live-block level; the remaining #969 work is the
+one-shot iterated-blocking identification and weighted direct-sum flattening that
+would turn these common-alphabet sector families into exact decompositions of a
+single `blockTensor A p` and `blockTensor B p`. -/
+theorem fundamentalTheorem_after_blocking_1606_commonBlocked_cyclic_live_with_zeroTail
+    {d D₁ D₂ : ℕ}
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (hSame : SameMPV₂ A B) :
+    ∃ (zeroTailA : ℕ) (rA : ℕ) (dimA : Fin rA → ℕ) (μA : Fin rA → ℂ)
+      (blocksA : (k : Fin rA) → MPSTensor d (dimA k)),
+    ∃ (zeroTailB : ℕ) (rB : ℕ) (dimB : Fin rB → ℕ) (μB : Fin rB → ℂ)
+      (blocksB : (k : Fin rB) → MPSTensor d (dimB k)),
+    ∃ (familyA : CommonBlockedCyclicSectorFamily blocksA),
+    ∃ (familyB : CommonBlockedCyclicSectorFamily blocksB),
+      (∀ k, IsIrreducibleTensor (blocksA k)) ∧
+      (∀ k, IsIrreducibleTensor (blocksB k)) ∧
+      (∀ k, ∑ i : Fin d, (blocksA k i)ᴴ * blocksA k i = 1) ∧
+      (∀ k, ∑ i : Fin d, (blocksB k i)ᴴ * blocksB k i = 1) ∧
+      (∀ k, μA k ≠ 0) ∧
+      (∀ k, μB k ≠ 0) ∧
+      (∀ k, 0 < dimA k) ∧
+      (∀ k, 0 < dimB k) ∧
+      (∀ (N : ℕ) (σ : Fin N → Fin d),
+        mpv A σ = mpv (zeroMPSTensor d zeroTailA) σ +
+          mpv (toTensorFromBlocks (d := d) (μ := μA) blocksA) σ) ∧
+      (∀ (N : ℕ) (σ : Fin N → Fin d),
+        mpv B σ = mpv (zeroMPSTensor d zeroTailB) σ +
+          mpv (toTensorFromBlocks (d := d) (μ := μB) blocksB) σ) ∧
+      SameMPV₂Pos
+        (toTensorFromBlocks (d := d) (μ := μA) blocksA)
+        (toTensorFromBlocks (d := d) (μ := μB) blocksB) ∧
+      (∀ σ : Fin 0 → Fin d,
+        (zeroTailA : ℂ) + mpv (toTensorFromBlocks (d := d) (μ := μA) blocksA) σ =
+          (zeroTailB : ℂ) + mpv (toTensorFromBlocks (d := d) (μ := μB) blocksB) σ) ∧
+      (∀ x, familyA.flatWeight x ≠ 0) ∧
+      (∀ x, familyB.flatWeight x ≠ 0) := by
+  obtain ⟨zeroTailA, rA, dimA, μA, blocksA,
+      zeroTailB, rB, dimB, μB, blocksB,
+      hIrrA, hIrrB, hTPA, hTPB, hμA, hμB, hDimA, hDimB,
+      hMPVA, hMPVB, hPos, hZero, hCycA, hCycB⟩ :=
+    fundamentalTheorem_after_blocking_1606_perBlock_cyclic_live_with_zeroTail A B hSame
+  obtain ⟨familyA⟩ :=
+    exists_commonBlockedCyclicSectorFamily_of_hasPrimitiveIrreducibleCyclicSectors
+      blocksA hCycA
+  obtain ⟨familyB⟩ :=
+    exists_commonBlockedCyclicSectorFamily_of_hasPrimitiveIrreducibleCyclicSectors
+      blocksB hCycB
+  refine ⟨zeroTailA, rA, dimA, μA, blocksA,
+    zeroTailB, rB, dimB, μB, blocksB, familyA, familyB,
+    hIrrA, hIrrB, hTPA, hTPB, hμA, hμB, hDimA, hDimB,
+    hMPVA, hMPVB, hPos, hZero, ?_, ?_⟩
+  · intro x
+    exact familyA.flatWeight_ne_zero x
+  · intro x
+    exact familyB.flatWeight_ne_zero x
+
 /-- **Conditional after-blocking sector comparison (issue #877 target shape).**
 
 Given two tensors with `SameMPV₂`, a common-period BNT sector pair, and a
