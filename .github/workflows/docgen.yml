@@ -77,8 +77,13 @@ jobs:
         working-directory: blueprint
         run: |
           leanblueprint pdf
-          set -o pipefail
+          set +o pipefail
           leanblueprint web 2>&1 | tee /tmp/blueprint-output.txt
+          cmd_status=${PIPESTATUS[0]}
+          set -o pipefail
+          if [ "$cmd_status" -ne 0 ]; then
+            exit "$cmd_status"
+          fi
           if grep -q "^ERROR:" /tmp/blueprint-output.txt; then
             echo "::error::Blueprint has unresolved labels (see ERROR lines above)"
             exit 1
