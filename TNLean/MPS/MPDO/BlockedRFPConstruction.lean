@@ -21,7 +21,7 @@ side live in separate modules:
 * `CommutingForm.lean` records the GSNNCH / commuting-form target side of
   Proposition C.6 and Theorem 4.9(iii).
 
-What is still missing as a preceding is the theorem turning the local simple-MPDO data
+What is still missing is the preceding theorem turning the local simple-MPDO data
 into the global commuting-form property. Because of that gap, the present file
 is formulated around the explicit record `SimpleMPDOBlockedRFPData`. The local
 Appendix C.2 data are retained there, together with a provisional compatibility

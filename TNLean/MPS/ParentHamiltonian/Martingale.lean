@@ -1377,10 +1377,10 @@ symmetric projections into the quadratic-form hypothesis above.
 row cardinality, and non-overlap positivity are now formalized above. The remaining
 hypothesis is the Friedrichs-angle estimate for overlapping cyclic windows with the
 coefficient required by the finite-overlap row reduction.
-6. the gap is: `parentHamiltonian_gapped` is the subsequent
+6. **Spectral-gap theorem:** `parentHamiltonian_gapped` is the subsequent
 existential theorem, now proved by applying the Friedrichs-angle theorem
 below. The theorem `parentHamiltonianES_gap_bound_of_friedrichs` still depends
-on missing Friedrichs-angle formulation; this is the blocker and should not
+on the missing Friedrichs-angle formulation; this is the blocker and should not
 be replaced with axioms or unrelated sorrys. -/
 /-- Friedrichs-angle and row-sum estimate for the MPS parent Hamiltonian.
 
