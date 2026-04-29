@@ -421,11 +421,13 @@ jobs:
 
             - **Mathlib scouting**: If the recommended issue involves
               heavy Mathlib dependencies and does not already have a
-              Mathlib scouting report in its comments, suggest running
-              one (the Mathlib Scout workflow triggers on issues with
-              the `formalization` label). Rescouting may also be
-              warranted when Mathlib has been bumped since the last
-              report — new lemmas may simplify the approach.
+              Mathlib scouting report in its comments, suggest running one.
+              The Mathlib Scout workflow runs automatically for
+              member-authored issues whose opened text or labels indicate a
+              formalization task; for outside reports, a maintainer should
+              first review the source and then add `scout`. Rescouting may
+              also be warranted when Mathlib has been bumped since the last
+              report -- new lemmas may simplify the approach.
             - **Blueprint / paper review**: If the task formalizes a
               specific theorem or section from a paper, suggest
               reviewing the corresponding blueprint LaTeX source
