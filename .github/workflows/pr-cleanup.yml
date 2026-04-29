@@ -1,4 +1,4 @@
-name: PR Cleanup (AI-generated)
+name: PR Cleanup (bot-generated)
 
 on:
   pull_request:
@@ -41,13 +41,13 @@ jobs:
               .replace(/```/g, '\u200B`\u200B`\u200B`');
             core.setOutput('body', sanitized);
 
-      - name: Clean up AI-generated PR
+      - name: Clean up bot-generated PR
         uses: anthropics/claude-code-action@v1
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           allowed_bots: 'claude,chatgpt-codex-connector'
           prompt: |
-            You are a PR-cleanup bot. Your job is to bring AI-generated pull requests
+            You are a PR-cleanup bot. Your job is to bring bot-generated pull requests
             into compliance with this project's conventions. Do NOT touch code — only
             update PR metadata (title, body, labels) and comment on the linked issue.
 
@@ -69,6 +69,7 @@ jobs:
               - `docs/doc.md` — documentation standards
               - `docs/style.md` — code style (helps determine PR type)
               - `docs/pr-review.md` — review checklist (what reviewers expect)
+              - `docs/prose_style.md` — mathematical prose and banned AI/software language
 
             These files are checked out in the workspace. Read them before proceeding
             so your cleanup is fully aligned with project standards.
@@ -166,6 +167,14 @@ jobs:
             - If `### Motivation`, `### Description`, `### Testing` sections already
               exist and are filled in, keep their content — just ensure all three
               sections are present and the `Addresses` footer exists.
+            - For mathematical work, the body must name the paper theorem, blueprint
+              label, issue, or repository source location that fixes the scope. If
+              the source is missing from the original PR and linked issue, state
+              that the source is not yet identified rather than inventing one.
+            - State definitions, lemmas, and theorems in mathematical language
+              understandable without reading the issue thread.
+            - Avoid AI vocabulary, software-process metaphors, and local shorthand
+              when describing mathematics.
             - Use `Addresses #N` (keeps issue open but linked) by default. If the
               original body says "Closes" or "Fixes", preserve that verb instead.
             - If there's a Cursor Bugbot `> [!NOTE]` block at the end, preserve it
@@ -211,7 +220,7 @@ jobs:
             ─── STEP 7: TAG THE ISSUE ───
             If an issue was found, post a comment on it:
               ```
-              gh issue comment <N> --repo <REPO> --body "🤖 PR #<PR_NUMBER> has been opened to address this issue.
+              gh issue comment <N> --repo <REPO> --body "PR #<PR_NUMBER> has been opened to address this issue.
 
               **Branch:** \`<BRANCH>\`
               **Title:** <new title>
@@ -223,7 +232,7 @@ jobs:
             After completing all steps, post a PR comment summarizing what was changed:
               ```
               gh pr comment <NUMBER> --repo <REPO> --body "$(cat <<'CEOF'
-              🧹 **PR Cleanup Bot**
+              **PR cleanup**
 
               | Field | Before | After |
               |-------|--------|-------|

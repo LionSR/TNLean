@@ -32,6 +32,12 @@ The dedicated `Blueprint Sync & Prose Review` CI workflow
 - `Papers/`, `Notes/` (LaTeX sources of the underlying papers, not project prose).
 - `Archive/` (legacy code, kept for reference).
 
+Generated GitHub issues, pull requests, audit reports, standup summaries, and
+tracking comments should also follow the spirit of this guide. They should ask
+for mathematical references, theorem labels, blueprint locations, and precise
+statements; they should not introduce AI vocabulary, software-process metaphors,
+or local shorthand when describing mathematics.
+
 ---
 
 ## 1. No Lean jargon in the leanblueprint
