@@ -1758,20 +1758,36 @@ The following results separate the zero blocks from the
 	sums and reindex the double sum over pairs $(k,s)$ by the flattened sector index.
 \end{proof}
 
-\begin{theorem}[Common reblocking of per-block cyclic sectors]%
-\label{thm:exists_common_blocked_cyclic_sector_family}
-	\lean{MPSTensor.exists_commonBlockedCyclicSectorFamily_of_hasPrimitiveIrreducibleCyclicSectors}
+\begin{theorem}[Canonical blocked live tensor under physical-label compatibility]%
+\label{thm:common_blocked_cyclic_sector_canonical_label_compat}
+	\lean{MPSTensor.CommonBlockedCyclicSectorFamily.sameMPV₂_weightedCanonicalBlock_commonFlat_of_oneShot}
+	\leanok
+	\uses{thm:common_blocked_cyclic_sector_reindexed_samempv,
+		def:common_blocked_cyclic_sector_derived_blocks}
+	Assume that the canonical one-shot blocked live-block tensor agrees, as an
+	MPV family, with the explicitly relabeled one-shot live-block tensor coming
+	from iterated blocking.  Then the canonical weighted live-block tensor agrees
+	with the weighted derived common-sector tensor.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:common_blocked_cyclic_sector_reindexed_samempv}
+	Compose the assumed MPV equality with the relabeled one-shot decomposition of
+	Theorem~\ref{thm:common_blocked_cyclic_sector_reindexed_samempv}.
+\end{proof}
+
+\begin{theorem}[Common reblocking at a prescribed common multiple]%
+\label{thm:exists_common_blocked_cyclic_sector_family_common_multiple}
+	\lean{MPSTensor.exists_commonBlockedCyclicSectorFamily_of_commonMultiple}
 	\leanok
 	\uses{def:common_blocked_cyclic_sector_family,
 		def:primitive_irreducible_cyclic_sectors,
 		thm:tp_primitive_irreducible_extra_blocking,
 		thm:samempv_blocking_distributes}
-	If every live block in a finite family has primitive irreducible cyclic
-	sectors, then the family admits a common reblocked cyclic-sector family.
-	The proof chooses the least common multiple of the per-block periods, blocks
-	each sector by the corresponding quotient, transports all sectors to the common
-	physical alphabet, and preserves TP, primitivity, tensor irreducibility,
-	positive bond dimensions, and the unit-weight MPV equivalences.
+	If every live block has primitive irreducible cyclic sectors and a positive
+	integer $p$ is a common multiple of all period-removal lengths, then the live
+	family admits a common reblocked cyclic-sector family whose common length is
+	that prescribed $p$.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -1783,11 +1799,29 @@ The following results separate the zero blocks from the
 		thm:left_canonical_cast_phys_dim,
 		thm:primitive_transfer_cast_phys_dim,
 		thm:irreducible_tensor_cast_phys_dim}
-	Choose the least common multiple $p$ of the per-block periods $m_k$ and write
-	$p=m_k e_k$.  Apply the extra-blocking theorem to each cyclic sector for the
-	positive length $e_k$.  The MPV equivalence is obtained by blocking the
-	unit-weight cyclic-sector equivalence and transporting the physical alphabet
-	to $d^p$.
+	For each block with period $m_k$, write the prescribed common multiple as
+	$p=m_k e_k$.  Then block every cyclic sector by $e_k$, substitute the equality
+	between the iterated and common physical alphabets, and transport the MPV and
+	structural properties exactly as in the least-common-multiple construction.
+\end{proof}
+
+\begin{theorem}[Common reblocking of per-block cyclic sectors]%
+\label{thm:exists_common_blocked_cyclic_sector_family}
+	\lean{MPSTensor.exists_commonBlockedCyclicSectorFamily_of_hasPrimitiveIrreducibleCyclicSectors}
+	\leanok
+	\uses{thm:exists_common_blocked_cyclic_sector_family_common_multiple}
+	If every live block in a finite family has primitive irreducible cyclic
+	sectors, then the family admits a common reblocked cyclic-sector family.
+	The proof chooses the least common multiple of the per-block periods, blocks
+	each sector by the corresponding quotient, transports all sectors to the common
+	physical alphabet, and preserves TP, primitivity, tensor irreducibility,
+	positive bond dimensions, and the unit-weight MPV equivalences.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:exists_common_blocked_cyclic_sector_family_common_multiple}
+	Choose the least common multiple $p$ of the per-block periods and apply
+	Theorem~\ref{thm:exists_common_blocked_cyclic_sector_family_common_multiple}.
 \end{proof}
 
 \subsection{Sector irreducibility helpers}%
@@ -3193,6 +3227,59 @@ The following results separate the zero blocks from the
 	the zero-tail reblocking theorem to the original live-block decomposition, then
 	use the relabeled one-shot sector decomposition and the derived structural
 	properties of the common-sector family.
+\end{proof}
+
+\begin{theorem}[Two-sided common-length relabeled cyclic-sector endpoint]%
+\label{thm:ft_after_blocking_common_length_common_sector_endpoint}
+	\lean{MPSTensor.fundamentalTheorem_after_blocking_1606_commonLength_commonSector_endpoint}
+	\leanok
+	\uses{thm:ft_after_blocking_per_block_cyclic_live_zero_tail,
+		thm:exists_common_blocked_cyclic_sector_family_common_multiple,
+		thm:zero_tail_to_tensor_from_blocks_block_power,
+		thm:live_block_block_power_zero_tail_bookkeeping,
+		thm:common_blocked_cyclic_sector_reindexed_samempv,
+		thm:common_blocked_cyclic_sector_derived_properties}
+	If two tensors generate the same MPV family, then one can choose a single
+	positive physical blocking length for the cyclic-sector data on both sides.
+	At that length the theorem records the exact zero-tail equations for the
+	canonically blocked live tensors, the positive-length equality and length-zero
+	bookkeeping for those live tensors, and the relabeled primitive irreducible
+	common-sector families on both sides with nonzero transported weights.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:ft_after_blocking_per_block_cyclic_live_zero_tail,
+		thm:exists_common_blocked_cyclic_sector_family_common_multiple,
+		thm:zero_tail_to_tensor_from_blocks_block_power,
+		thm:live_block_block_power_zero_tail_bookkeeping,
+		thm:common_blocked_cyclic_sector_reindexed_samempv,
+		thm:common_blocked_cyclic_sector_derived_properties}
+	Start from the per-block cyclic live theorem.  Let $p_A$ and $p_B$ be the
+	least common multiples of the period-removal lengths on the two sides, and
+	use $p=p_Ap_B$.  The prescribed-common-multiple theorem constructs both
+	one-sided sector families at this same length.  The zero-tail and positive-
+	length equalities are the existing reblocking statements, and the relabeled
+	sector conclusions are the one-shot common-sector MPV equalities.
+\end{proof}
+
+\begin{theorem}[Zero-tail equation after resolving the one-shot relabeling]%
+\label{thm:zero_tail_common_flat_of_one_shot_label_compat}
+	\lean{MPSTensor.zeroTail_commonFlat_of_oneShot_labelCompat}
+	\leanok
+	\uses{thm:zero_tail_to_tensor_from_blocks_block_power,
+		thm:common_blocked_cyclic_sector_canonical_label_compat}
+	For one side, suppose the canonical blocked live tensor agrees with the
+	explicitly relabeled one-shot live tensor.  Then the zero-tail equation after
+	blocking may be written directly with the weighted derived common-sector
+	family.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:zero_tail_to_tensor_from_blocks_block_power,
+		thm:common_blocked_cyclic_sector_canonical_label_compat}
+	First transport the original zero-tail/live decomposition through the common
+	blocking length.  Then replace the canonical blocked live tensor by the
+	derived common-sector tensor using the physical-label compatibility hypothesis.
 \end{proof}
 
 
