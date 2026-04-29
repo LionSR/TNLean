@@ -10,7 +10,7 @@ This repository uses [Claude Code](https://docs.anthropic.com/en/docs/claude-cod
   - [The Fixed-Point Loop](#the-fixed-point-loop)
 - [Workflow Reference](#workflow-reference)
   - [Claude Code Review](#claude-code-review-claude-code-reviewyml)
-  - [Issue Intake](#issue-intake-issue-intakeyml)
+  - [Issue Classification](#issue-classification-issue-classificationyml)
   - [CI Failure Auto-Fix](#ci-failure-auto-fix-auto-fixyml)
   - [Blueprint Auto-Fix](#blueprint-auto-fix-auto-fixyml)
   - [Codex Auto-Fix (CI/Blueprint/Review)](#codex-auto-fix-ciblueprintreview-auto-fix-codexyml)
@@ -155,7 +155,7 @@ Here is exactly what happens:
 
 ---
 
-### Issue Intake (`issue-intake.yml`)
+### Issue Classification (`issue-classification.yml`)
 
 **What it does**: When a human-authored issue is opened, this workflow applies
 the project label taxonomy and posts a concise initial classification comment.
@@ -178,7 +178,7 @@ is `Bot`. The model-backed classifier runs only for issues opened by an
 **Interaction with Mathlib Scout**: If the issue is a theorem, definition,
 lemma, proof, or other mathematical formalization task, the workflow adds the
 `formalization` label. That label triggers `mathlib-scout.yml`, which posts the
-Mathlib scouting report. Issue Intake does not duplicate that scouting report.
+Mathlib scouting report. Issue Classification does not duplicate that scouting report.
 
 **Label rule**: The workflow must not apply `auto-fix-claude` or
 `auto-fix-codex` to issues. Those labels are pull-request workflow controls.
