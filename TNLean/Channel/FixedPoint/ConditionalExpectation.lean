@@ -189,7 +189,7 @@ theorem scalarConditionalExpectation_mem_adjointFixedPoints
 
 /-! ## Complete positivity and weighted trace preservation -/
 
-/-- A auxiliary lemma identity: `∑ j, single j j c = c • 1` for `c : ℂ`.
+/-- An auxiliary lemma identity: `∑ j, single j j c = c • 1` for `c : ℂ`.
 
 The sum of diagonal basis matrices with a common scalar equals that scalar
 times the identity. -/

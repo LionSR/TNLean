@@ -8,13 +8,13 @@ import TNLean.Channel.Semigroup.ReducibleQDS
 # Wolf Corollary 7.2 — Sufficient conditions for non-reducibility
 
 This module states three standard sufficient-condition patterns from
-Wolf Corollary 7.2, each funneled through the already formalized bridge
+Wolf Corollary 7.2, each using the already formalized implication
 
 `¬ HasBlockUpperTriangularLindblad L → ¬ IsReducibleQDS L`.
 
 The conversion from each algebraic hypothesis to
-`¬ HasBlockUpperTriangularLindblad` is stated as auxiliary lemma theorems
-(`*_implies_no_blockUpperTriangular`) so downstream files can use uniform
+`¬ HasBlockUpperTriangularLindblad` is stated as auxiliary lemmas
+(`*_implies_no_blockUpperTriangular`) so later files can use uniform
 non-reducibility consequences.
 -/
 
