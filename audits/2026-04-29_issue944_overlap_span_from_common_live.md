@@ -49,9 +49,9 @@ New declarations:
   given trace-preserving, primitive, irreducible, injective block families with nonzero
   weights and common phase-cover data, construct sector decompositions whose bases
   satisfy `SectorBasisOverlapSpanHypotheses`.
-- `MPSTensor.exists_bnt_sectorDecomposition_pair_with_overlapSpan_of_proportionalDecompositionConclusion`:
-  first turns BNT proportional-decomposition data into a common MPV phase cover, then
-  applies the previous theorem.
+- `exists_bnt_sectorDecomposition_pair_with_overlapSpan_of_proportionalDecompositionConclusion`
+  (in namespace `MPSTensor`): first turns BNT proportional-decomposition data into a
+  common MPV phase cover, then applies the previous theorem.
 
 These theorems discharge the `span_eq` field through `MPVCommonPhaseCover.span_eq`; no
 finite-length span equality is assumed as a hypothesis.
@@ -60,10 +60,10 @@ finite-length span equality is assumed as a hypothesis.
 
 New declarations:
 
-- `MPSTensor.fundamentalTheorem_after_blocking_1606_sector_of_proportionalDecompositionConclusion`:
+- `MPSTensor.afterBlocking_sectorComparison_of_proportionalDecompositionConclusion`:
   exact nonzero-part decompositions at a common blocking period plus BNT
   proportional-decomposition data imply the sector-weight comparison theorem.
-- `fundamentalTheorem_after_blocking_1606_sector_zeroTail_of_proportionalDecompositionConclusion`
+- `afterBlocking_sectorComparison_zeroTail_of_proportionalDecompositionConclusion`
   (in namespace `MPSTensor`): zero-tail equations at a common blocking period, equality
   of zero-tail dimensions, injectivity, and BNT proportional-decomposition data imply the
   zero-tail-aware sector comparison theorem.

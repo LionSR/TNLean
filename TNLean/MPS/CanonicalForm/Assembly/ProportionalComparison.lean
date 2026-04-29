@@ -16,10 +16,10 @@ zero-tail bookkeeping.
 
 ## Main statements
 
-* `fundamentalTheorem_after_blocking_1606_sector_of_proportionalDecompositionConclusion` — exact
+* `afterBlocking_sectorComparison_of_proportionalDecompositionConclusion` — exact
   nonzero part decompositions plus BNT proportional-decomposition data imply the sector-weight
   comparison.
-* `fundamentalTheorem_after_blocking_1606_sector_zeroTail_of_proportionalDecompositionConclusion` —
+* `afterBlocking_sectorComparison_zeroTail_of_proportionalDecompositionConclusion` —
   the same comparison with explicit zero-tail bookkeeping.
 
 ## References
@@ -39,7 +39,7 @@ namespace MPSTensor
 A proportional-decomposition comparison supplies a common MPV phase cover of the two
 nonzero-weight block families. Therefore the common-cover sector theorem applies without an
 extra finite-length span hypothesis. -/
-theorem fundamentalTheorem_after_blocking_1606_sector_of_proportionalDecompositionConclusion
+theorem afterBlocking_sectorComparison_of_proportionalDecompositionConclusion
     {d D₁ D₂ p rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     [∀ k : Fin rA, NeZero (dimA k)]
@@ -87,14 +87,13 @@ theorem fundamentalTheorem_after_blocking_1606_sector_of_proportionalDecompositi
     A B hSame hp μA blocksA μB blocksB cover hAblocks hBblocks hTPA hTPB hIrrA hIrrB
     hPrimA hPrimB hInjA hInjB hμA hμB
 
-set_option linter.style.longLine false in
 /-- **Zero-tail sector comparison from BNT proportional-decomposition data.**
 
 This zero-tail-aware variant combines the exact nonzero part cancellation step with the BNT
 proportional-decomposition comparison. The proportional comparison gives the common MPV phase
 cover, hence the finite-length span equality for the nonzero part; injectivity supplies the
 remaining overlap-span hypothesis. -/
-theorem fundamentalTheorem_after_blocking_1606_sector_zeroTail_of_proportionalDecompositionConclusion
+theorem afterBlocking_sectorComparison_zeroTail_of_proportionalDecompositionConclusion
     {d D₁ D₂ p rA rB zeroTailA zeroTailB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     [∀ k : Fin rA, NeZero (dimA k)]
