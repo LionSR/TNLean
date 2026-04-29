@@ -7,7 +7,10 @@ body:
       value: |
         ## Tracking Issue
         Use this template to create an issue that tracks progress across multiple related issues and PRs.
-        List each sub-task inside a native tasklist block so GitHub shows "Tracked by" on child issues.
+        Overall tracking issue titles start with `Tracking:`.
+        Example: `Tracking: Wolf Ch6 spectral properties`.
+        Add child issues through GitHub's native Sub-issues relation, not through Markdown checkbox lists.
+        Write the title, description, notes, and sub-issue titles in ordinary mathematical prose, using the terminology of the relevant tensor-network, MPS, quantum-channel, or operator-algebra literature.
 
   - type: input
     id: area
@@ -23,39 +26,33 @@ body:
     attributes:
       label: Description
       description: Describe the goal this tracking issue covers
-      placeholder: What is the overall objective?
+      placeholder: >
+        What mathematical development, source chapter, or theorem family does
+        this issue organize? Include source file, line, label, and a short
+        quotation when available.
     validations:
       required: true
 
   - type: textarea
     id: tasks
     attributes:
-      label: Tracked Tasks
+      label: Sub-issues
       description: |
-        List issues/PRs to track using a native tasklist block.
-        Each line must contain only the issue reference (no descriptions).
-        The workflow will automatically update checkboxes when issues are closed or PRs are merged.
-      value: |
-        ```[tasklist]
-        ### Tasks
-        - [ ] #
-        - [ ] #
-        - [ ] #
-        ```
+        List any existing issue numbers that should be attached through GitHub Sub-issues after creation.
+        Do not use Markdown checkbox syntax here.
       placeholder: |
-        ```[tasklist]
-        ### Tasks
-        - [ ] #42
-        - [ ] #43
-        ```
+        #42
+        #43
     validations:
-      required: true
+      required: false
 
   - type: textarea
     id: notes
     attributes:
       label: Additional Notes
-      description: Any extra context, dependencies, or milestones
-      placeholder: Optional notes
+      description: Any extra context, dependencies, source references, or milestones
+      placeholder: >
+        Optional notes on dependencies, chapter order, textual references, labels,
+        or expected formalization outcomes
     validations:
       required: false

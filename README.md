@@ -21,7 +21,9 @@ Done in Lean today:
 - arbitrary tensor → irreducible block decomposition
 - density-matrix Brouwer, Perron–Frobenius eigenvector existence, and TP-gauge normalization for irreducible blocks (no project-specific PF / Brouwer axiom remains on the main path)
 - CFII / diagonal fixed-point data and periodicity removal by blocking
-- strong-hypothesis canonical-form / CF-BNT theorems, including the same-structure equal-MPV theorem and the proportional theorem with explicit coefficient-convergence data
+- canonical-form / CF-BNT theorems under stated structural hypotheses, including
+  the same-structure equal-MPV theorem and the proportional theorem with
+  explicit hypotheses on convergence of the relevant overlap coefficients
 - the cumulative `D²` Wielandt bound for the project's `IsNormal` notion
 - periodic tensor definitions for the irreducible-form theory (`IsPeriodic`, `IsIrreducibleForm`, `ZGaugeEquiv`, `RepeatedBlocks`)
 - translation-invariance corollary for injective MPS chains (`ti_tensors_collapse_to_single_gauge`)
@@ -44,13 +46,18 @@ Done in Lean today:
 - virtual symmetry equation: `virtual_symmetry_eq` — injective MPS with on-site symmetry U(g) admits virtual representatives X(g) satisfying the conjugation equation (`MPS/Symmetry/SymmetricMPS.lean`)
 - scalar 2-cocycle cohomology: `ScalarCocycle.IsCoboundary`, `CohomologousTo`, `H2` quotient, `ProjectivelyEquivalent`, and `projRep_equiv_iff_cohomologous` (`Algebra/CocycleCohomology.lean`); gauge independence `cohomologousTo_of_isInjective` (`MPS/Symmetry/CocycleCoboundary.lean`)
 
-Still not assembled end-to-end:
+Remaining formalization targets:
 
-- arbitrary tensor → final repository canonical form / biCF theorem matching Section 2 + Appendix A of [arXiv:1606.00608](https://arxiv.org/abs/1606.00608)
-- the bridge from primitive blocked TP / CFII data to the stronger block-injective / `IsNormal` hypotheses used by the final canonical-form predicate
-- the fully automatic multi-block proportional assembly in the oscillatory / coefficient-convergence regime
+- prove the canonical-form theorem for an arbitrary tensor, matching Section 2
+  and Appendix A of [arXiv:1606.00608](https://arxiv.org/abs/1606.00608)
+- prove that the primitive blocks obtained after trace-preserving normalization
+  and Canonical Form II normalization satisfy the block-injectivity and
+  normality hypotheses required by the final canonical-form predicate
+- complete the multi-block proportional theorem for periodic tensors, including
+  the hypotheses asserting convergence of the overlap coefficients needed to
+  assemble the block gauges
 
-Complementary channel-side milestones now in Lean:
+Complementary quantum-channel milestones now in Lean:
 
 - Choi, Kraus, and Stinespring representation results from Wolf Chapter 2, including existential Stinespring dilation theorems (`exists_stinespring_dilation`, `exists_stinespring_isometry_of_cptp`; Wolf Thm 2.2 in both Heisenberg and Schrödinger pictures)
 - Wolf Proposition 5.1, Theorems 5.5–5.7, and Example 5.3 in the Schwarz package
@@ -60,7 +67,7 @@ Complementary channel-side milestones now in Lean:
 - peripheral eigenvalue group structure (`PeripheralSpectrum` namespace, `Channel/Peripheral/GroupStructure.lean`): peripheral eigenvalues of irreducible channels form a cyclic group with period dividing dimension (Wolf Thm 6.6, `peripheral_eigenvalues_form_cyclic_group`, `channel_period_divides_dim` proved); multiplicity-one result (`peripheral_eigenvalue_multiplicity_one`) proved sorry-free; product closure of peripheral eigenvalues proved sorry-free in `Channel/Peripheral/CyclicGroup.lean`
 - spectral gap of injective channels (`spectral_gap_of_injective`), exponential convergence of injective primitive channels (`exponential_convergence_of_primitive`), and correlation length bound (`correlation_length_bound`) all proved sorry-free in `Spectral/QuantitativeGap.lean`
 
-### Wolf channel-side snapshot (audit of 2026-03-26)
+### Wolf quantum-channel snapshot (audit of 2026-03-26)
 
 | Wolf chapter | Topic | Estimated theorem-level coverage |
 |---|---|---:|
@@ -125,7 +132,10 @@ theorem fundamentalTheorem_proportionalMPV_CFBNT
     ∃ h : rA = rB, ∃ perm : Fin rA ≃ Fin rB, ...
 ```
 
-This is the current proportional-case top theorem in Lean. The decomposition coefficients and their convergence / nonvanishing data are explicit hypotheses; Lean does not yet derive them automatically from arbitrary raw input tensors.
+This is the current proportional-case top theorem in Lean. The decomposition
+coefficients, their convergence, and their nonvanishing data are explicit
+hypotheses; the present formalization has not yet derived them from arbitrary
+input tensors.
 
 ### Cumulative Quantum Wielandt Bound
 
@@ -163,7 +173,7 @@ For repository-specific migration notes about the Lean/Mathlib 4.29 upgrade, see
 
 ## Blueprint
 
-The repository ships a LeanBlueprint in `blueprint/` covering both the MPS development and the channel-side Wolf material. As of 2026-04-07, the blueprint chapters `ch02b_mpdo.tex`, `ch04_channels.tex`, `ch05_schwarz.tex`, `ch06_spectral.tex`, `ch07_wielandt.tex`, `ch08_canonical.tex`, `ch11_assembly.tex`, `ch12_semigroup.tex`, `ch13_algebraic_ft.tex`, `ch13b_symmetry.tex`, `ch14_parent_hamiltonian.tex`, and `ch15_correlations.tex` have been synchronized to reflect current Lean status, including the stationary-support package, periodic tensor definitions, semigroup sorry closures, MPDO foundations, symmetry / string-order / coboundary entries, chain FT declarations, quantitative spectral gap / correlation decay results, PEPS FT scaffold definitions, and the `isCID_implies_isRFP` reverse direction entry.
+The repository ships a LeanBlueprint in `blueprint/` covering both the MPS development and the Wolf quantum-channel material. As of 2026-04-07, the blueprint chapters `ch02b_mpdo.tex`, `ch04_channels.tex`, `ch05_schwarz.tex`, `ch06_spectral.tex`, `ch07_wielandt.tex`, `ch08_canonical.tex`, `ch11_assembly.tex`, `ch12_semigroup.tex`, `ch13_algebraic_ft.tex`, `ch13b_symmetry.tex`, `ch14_parent_hamiltonian.tex`, and `ch15_correlations.tex` have been synchronized to reflect current Lean status, including the stationary-support package, periodic tensor definitions, semigroup sorry closures, MPDO foundations, symmetry / string-order / coboundary entries, chain FT declarations, quantitative spectral gap / correlation decay results, PEPS FT scaffold definitions, and the `isCID_implies_isRFP` reverse direction entry.
 
 Typical blueprint commands:
 

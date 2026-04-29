@@ -2,12 +2,19 @@ name: Formalization Task
 description: A specific theorem, definition, or lemma to formalize in Lean
 labels: ["formalization"]
 body:
+  - type: markdown
+    attributes:
+      value: |
+        **Title convention.** Use `<area>: <mathematical result or construction>`.
+        Avoid bracket prefixes and software-process wording. Example:
+        `MPS/CanonicalForm: assemble cyclic sectors at a common blocking length`.
+
   - type: input
     id: statement
     attributes:
       label: Mathematical statement
       description: Name and source of the result to formalize
-      placeholder: "e.g., Wolf Thm 6.15: conditional expectation from faithful fixed point"
+      placeholder: "e.g., Wolf Thm 6.15: conditional expectation from a faithful fixed point"
     validations:
       required: true
 
@@ -19,6 +26,20 @@ body:
       placeholder: "e.g., arXiv:1804.04964 Theorem 3.2, Wolf Lecture Notes Prop 7.4"
     validations:
       required: true
+
+  - type: textarea
+    id: source_anchor
+    attributes:
+      label: Blueprint / LaTeX reference
+      description: >
+        Path, line number, label, and a short quotation from the mathematical
+        text, if available
+      placeholder: |
+        - Text: `blueprint/src/chapter/ch06_spectral.tex:123`
+        - Label: `thm:wolf-6-15`
+        - Quote: "..."
+    validations:
+      required: false
 
   - type: input
     id: lean_target
@@ -44,7 +65,7 @@ body:
     id: sketch
     attributes:
       label: Proof sketch / approach
-      description: Brief outline of the formalization strategy
+      description: Brief outline of the mathematical formalization strategy
       placeholder: Optional
     validations:
       required: false

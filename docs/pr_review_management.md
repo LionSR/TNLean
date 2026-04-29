@@ -33,14 +33,31 @@ PRs should follow the mathlib review checklist — review for: **style**, **docu
 - Sectioning comments `/-! ### Section title -/` for structure within files
 - References should use BibTeX entries
 
-### PR title and description convention
-@codex and @claude generate inconsistent PR titles. Unify before merging:
-- **Title format**: `type(scope): description` — e.g. `feat(Wolf Ch6): add conditional expectation (Thm 6.15)`
-- **Types**: `feat` (new formalization), `fix` (bug/correctness fix), `docs` (documentation only), `style` (formatting/naming), `refactor` (restructure without changing behavior), `ci` (CI/workflow changes)
-- **Scope**: paper tag or chapter — `Wolf Ch2`, `Wolf Ch6`, `1804.04964`, `1708.00029`, `MPS/Chain`, `PEPS`, etc. No brackets.
-- **Description**: lowercase, imperative mood, concise. Reference theorem/proposition numbers where applicable.
-- **Body**: should have `### Motivation` and `### Description` sections. Reference the issue number. List files changed.
-- **Clean up bot-generated titles** before merging — codex/claude often produce verbose or inconsistent titles like `[PR #165 follow-up] BlockedChainFT style cleanups and term-mode endpoint`. Rename to e.g. `style(MPS/Chain): BlockedChainFT term-mode endpoint and naming cleanup`.
+### PR and issue title convention
+
+Unify generated titles before merging or triage.
+
+- **PR title format**: `type(scope): description`, e.g.
+  `feat(Wolf Ch6): add conditional expectation (Thm 6.15)`.
+- **PR types**: `feat` (new formalization), `fix` (bug/correctness fix),
+  `docs` (documentation only), `style` (formatting, naming, or prose cleanup),
+  `refactor` (restructure without changing behavior), `ci` (CI/workflow
+  changes), `chore` (tooling or dependency maintenance).
+- **PR scope**: paper tag, chapter, or module path, such as `Wolf Ch2`,
+  `Wolf Ch6`, `1804.04964`, `1708.00029`, `MPS/Chain`, `PEPS`, or
+  `blueprint`. No brackets.
+- **PR description**: lower-case except for mathematical names, concise, and
+  written in mathematical language. Reference theorem/proposition numbers where
+  applicable.
+- **Issue titles**: use plain mathematical titles, not conventional-commit
+  prefixes. Overall trackers start with `Tracking:`. Formalization tasks use
+  `<area>: <mathematical result or construction>`, for example
+  `MPS/CanonicalForm: assemble cyclic sectors at a common blocking length`.
+- **Body**: should have `### Motivation` and `### Description` sections for
+  PRs, and should reference the issue number. List files changed.
+- **Clean up generated titles** before merging. Replace verbose or process-heavy
+  titles with mathematical prose, and avoid bracket prefixes such as
+  `[PR #165 follow-up]`.
 
 ### Review checklist (docs/pr-review.md)
 - **Style**: code formatting, naming conventions (`naming.html`), PR title/description informative
@@ -123,10 +140,19 @@ gh api "repos/$REPO/pulls/$PR/reviews" --jq '.[] | "REVIEW [\(.user.login)] stat
 2. Verify they exist on main or in another open PR
 3. If unique content would be lost, note it in the close comment and create a tracking issue
 
-## How @codex and @claude Respond
+## How repository mention requests respond
 
-### @codex/@claude only trigger from COMMENTS, not issue/PR body
-Putting `@codex` or `@claude` in the body text when creating an issue does nothing. They only trigger from **comments** posted after creation. Must post a separate comment to activate them.
+### Repository mention workflows
+The repository-defined mention workflows are `.github/workflows/claude.yml` for
+`@claude` and `.github/workflows/codex.yml` for `@chatgpt`. They start from
+comments, PR reviews, and issue titles or bodies, but only when the triggering
+author has write access and the GitHub event sender is not a bot. For issue
+titles and bodies, the workflow events are `issues: opened` and
+`issues: assigned`; for comments, the event is comment creation.
+
+The `@codex` notes below describe the external GitHub connector behavior that
+has been observed in this repository; that behavior is not configured by
+`.github/workflows/codex.yml`.
 
 ### Issue comments vs PR comments — critical distinction
 
