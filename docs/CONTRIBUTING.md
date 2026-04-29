@@ -411,7 +411,7 @@ The following workflows run automatically:
 | Workflow | Trigger | What it does |
 |----------|---------|-------------|
 | **Lean CI** (`lean_action_ci.yml`) | Push to `main`, PRs touching `.lean`/`lakefile.toml`/`lean-toolchain` | Runs `lake build` with Mathlib cache |
-| **Issue Classification** (`issue-classification.yml`) | Human-authored issue opened | Applies label taxonomy, identifies missing source or dependency information, and posts a concise next-step comment |
+| **Issue Classification** (`issue-classification.yml`) | Human-authored issue opened | Applies label taxonomy for repository members; records preliminary labels for outside reports; identifies missing source or dependency information; posts a concise next-step comment |
 | **Claude Code Review** (`claude-code-review.yml`) | PR opened/synced/reopened touching `.lean`, `.tex`, `lakefile.toml`, `lean-toolchain` | Automated review for sorrys, Mathlib style, type safety, performance, modularity, documentation |
 | **Issue Tracker** (`tracking-issue-sync.yml`) | Issue closed/reopened; PR merged/opened; review submitted | Tracks native sub-issue state, posts progress comments on linked issues when PRs merge, scans merged PRs for follow-ups (deferred review feedback, new `sorry` markers, missing blueprint tags), creates follow-up issues with `follow-up` label, adds `all-resolved` when all sub-issues are complete |
 | **Blueprint Lint** (`lint-blueprint.yml`) | PRs touching blueprint files | Validates LaTeX blueprint for broken labels and references |
