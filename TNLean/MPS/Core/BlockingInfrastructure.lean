@@ -191,7 +191,7 @@ theorem sameMPV₂Pos_blockTensor
     _ = mpv (blockTensor (d := d) (D := D₂) B p) σ :=
           (mpv_blockTensor_eq_mpv_blockedFlatConfig (d := d) B p σ).symm
 
-/-- Positive-length equality of nonzero-weight block families is preserved after
+/-- Positive-length equality of weighted block families is preserved after
 positive common blocking, with each weight transported to the corresponding power. -/
 theorem sameMPV₂Pos_toTensorFromBlocks_blockPower
     {rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
@@ -310,7 +310,8 @@ noncomputable def iteratedBlockIndex (d m n : ℕ)
     rw [length_flattenBlockedWord, length_wordOfBlock, Nat.mul_comm]
   blockIndexOfList d (m * n) w hw
 
-/-- The flattened physical word associated to an iterated blocked index is the flattened word. -/
+/-- Decoding the direct-block index produced by `iteratedBlockIndex` yields the
+flattened word obtained from decoding the iterated blocked index. -/
 theorem wordOfBlock_iteratedBlockIndex (d m n : ℕ)
     (i : Fin (blockPhysDim (blockPhysDim d m) n)) :
     wordOfBlock d (m * n) (iteratedBlockIndex d m n i) =
