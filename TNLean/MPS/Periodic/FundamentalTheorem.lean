@@ -859,14 +859,6 @@ theorem equalCase_zgauge_of_power_sums
   let ⟨Z, hZm, hZmul⟩ := zgauge_construction m μ ν hPow hν
   ⟨Z, hZm, hZmul, weight_multisets_eq_of_power_sums_eq μ ν hPS⟩
 
-@[deprecated equalCase_zgauge_of_power_sums (since := "2026-04-29")]
-abbrev equalCase_zgauge_pipeline
-    {r : ℕ} (m : ℕ) (μ ν : Fin r → ℂ)
-    (hν : ∀ i, ν i ≠ 0)
-    (hPow : ∀ i, μ i ^ m = ν i ^ m)
-    (hPS : ∀ k : ℕ, 0 < k → ∑ i : Fin r, μ i ^ k = ∑ i : Fin r, ν i ^ k) :=
-  equalCase_zgauge_of_power_sums m μ ν hν hPow hPS
-
 end ZGaugeAssembly
 
 /-! ## Theorem 3.8 — Equal case assembly (arXiv:1708.00029)
