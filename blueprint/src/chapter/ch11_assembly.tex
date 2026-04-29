@@ -27,7 +27,7 @@ with an extra $Z$-gauge degree of freedom.
 The following theorem combines the reduction to canonical form
 (zero-block separation, TP gauge, blocking, primitivity)
 with the Fundamental Theorem for normal canonical form.
-It is still conditional on the two post-blocking inputs left open in
+It is still conditional on the two post-blocking hypotheses left open in
 Chapter~\ref{ch:canonical}: irreducibility for the blocked sectors and
 pairwise distinct nonzero weight norms.
 The direct periodic route of Chapter~\ref{ch:periodic_ft_apps} is not
@@ -491,7 +491,7 @@ single weighted block.
 	now aggregated over the multiplicity layers.
 \end{theorem}
 
-\begin{theorem}[Heterogeneous sector comparison after phase matching]%
+\begin{theorem}[Two-basis sector comparison after phase matching]%
 \label{thm:route_b_hetero_phase_match}
 	\lean{MPSTensor.fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_phaseMatch}
 	\leanok
@@ -520,7 +520,7 @@ single weighted block.
 	the claimed equality of multisets.
 \end{proof}
 
-\begin{theorem}[Gauge-phase matched bases imply phase-matched sector comparison]%
+\begin{theorem}[Gauge-phase paired bases imply phase-matched sector comparison]%
 \label{thm:route_b_hetero_matched_basis}
 	\lean{MPSTensor.fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_matched_basis}
 	\leanok
@@ -550,7 +550,7 @@ single weighted block.
 	\leanok
 	\uses{def:paper_sector_data, def:gauge_phase_equiv}
 	A \emph{sector basis matching} between two sector decompositions $P$ and $Q$
-	is a bundle of
+	consists of
 	\begin{enumerate}
 		\item a basis permutation (bijection)
 		      $\pi : \{1,\dots,g_P\} \simeq \{1,\dots,g_Q\}$,
@@ -561,7 +561,7 @@ single weighted block.
 	\end{enumerate}
 	The hypotheses consumed by
 	Theorem~\ref{thm:route_b_hetero_matched_basis} are exactly the fields of
-	this bundle.
+	this matching datum.
 \end{definition}
 
 \begin{definition}[Sector basis pre-matching]%
@@ -616,7 +616,7 @@ single weighted block.
 	\leanok
 	\uses{def:sector_basis_overlap_ortho_hyps, def:sector_basis_overlap_span_hyps}
 	This is just collecting the one-family fields on the left and right, and adding
-	the remaining injectivity and span-comparison inputs.
+	the remaining injectivity and span-comparison hypotheses.
 \end{proof}
 
 \begin{theorem}[Phase-matched comparison recovers copy counts]%
@@ -663,7 +663,7 @@ single weighted block.
 	fields needed for Definition~\ref{def:sector_basis_matching}.
 \end{proof}
 
-\begin{theorem}[Heterogeneous sector comparison from a pre-matching]%
+\begin{theorem}[Two-basis sector comparison from a pre-matching]%
 \label{thm:route_b_hetero_pre_matching}
 	\lean{MPSTensor.fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_preMatching}
 	\leanok
@@ -707,7 +707,7 @@ single weighted block.
 	copy-count equalities from equality of the total MPV families.
 \end{proof}
 
-\begin{theorem}[Bundled overlap-span hypotheses give a sector basis matching]%
+\begin{theorem}[Primitive overlap-span hypotheses give a sector basis matching]%
 \label{thm:sector_basis_overlap_span_to_matching}
 	\lean{MPSTensor.SectorBasisOverlapSpanHypotheses.exists_sectorBasisMatching}
 	\leanok
@@ -720,23 +720,23 @@ single weighted block.
 \begin{proof}
 	\leanok
 	\uses{thm:sector_basis_matching_from_overlap_ortho_span}
-	The bundled hypotheses are exactly the nonzero-dimension, injectivity,
+	The collected hypotheses are exactly the nonzero-dimension, injectivity,
 	normalization, overlap, and span assumptions of
 	Theorem~\ref{thm:sector_basis_matching_from_overlap_ortho_span}. Applying
 	that theorem gives the matching witness.
 \end{proof}
 
 
-\begin{theorem}[Live-block span equality gives phase-class representative overlap-span data]%
+\begin{theorem}[Nonzero-block span equality gives phase-class representative overlap-span data]%
 \label{thm:bnt_sector_decomp_pair_overlap_span_of_block_span}
 	\lean{MPSTensor.exists_bnt_sectorDecomp_pair_with_overlapSpan_of_block_span_eq}
 	\leanok
 	\uses{def:sector_basis_overlap_span_hyps,
 		thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_data_span}
-	Let two live block families be trace-preserving, primitive, irreducible,
+	Let two nonzero-weight block families be trace-preserving, primitive, irreducible,
 	injective, and carry nonzero weights. If their finite-length MPV spans agree
 	for every system size, then there exist sector decompositions $P$ and $Q$
-	whose total tensors have the same MPVs as the two weighted live block tensors,
+	whose total tensors have the same MPVs as the two weighted nonzero-block tensors,
 	whose bases satisfy BNT linear independence, and whose sector bases satisfy
 	the primitive overlap-span hypotheses.
 \end{theorem}
@@ -749,15 +749,15 @@ single weighted block.
 	overlap fields fill all fields of
 	Definition~\ref{def:sector_basis_overlap_span_hyps} except the two-family
 	span equality. That span equality follows by transporting the assumed
-	live-block span equality through the two representative-span identities.
+	nonzero-block span equality through the two representative-span identities.
 \end{proof}
 
-\begin{definition}[MPV phase equivalence for live blocks]
+\begin{definition}[MPV phase equivalence for nonzero blocks]
 \label{def:mpv_block_phase_equiv}
 	\lean{MPSTensor.MPVBlockPhaseEquiv}
 	\leanok
 	\uses{def:mpv}
-	Two live blocks $A$ and $B$ are MPV-phase equivalent if there is a nonzero
+	Two blocks $A$ and $B$ are MPV-phase equivalent if there is a nonzero
 	scalar $\zeta$ such that, for every system size $N$ and every physical word,
 	the MPV coefficient of $B$ equals $\zeta^N$ times the MPV coefficient of $A$.
 	The two bond dimensions are allowed to differ.
@@ -768,39 +768,39 @@ single weighted block.
 	\lean{MPSTensor.MPVCommonPhaseCover}
 	\leanok
 	\uses{def:mpv_block_phase_equiv}
-	For two finite live-block families, a common MPV phase cover consists of a third
-	finite family of blocks, a map from each live-block family onto that common
-	family, and MPV-phase equivalences between each live block and its common
+	For two finite nonzero-weight block families, a common MPV phase cover consists of a third
+	finite family of blocks, a map from each nonzero-weight block family onto that common
+	family, and MPV-phase equivalences between each block and its common
 	representative. Both maps are required to be surjective, so the common family
 	contains no unused representative.
 \end{definition}
 
-\begin{lemma}[Common MPV phase cover gives live-block span equality]%
+\begin{lemma}[Common MPV phase cover gives nonzero-block span equality]%
 \label{lem:live_block_span_eq_of_common_phase_cover}
 	\lean{MPSTensor.mpv_span_eq_of_common_phase_cover}
 	\leanok
 	\uses{def:mpv_block_phase_equiv, def:mpv_state}
-	Let two finite live-block families map onto a third finite family of common
-	blocks. Suppose both maps are surjective, and each live block has finite-length
+	Let two finite nonzero-weight block families map onto a third finite family of common
+	blocks. Suppose both maps are surjective, and each block has finite-length
 	MPV vectors equal to a nonzero scalar power times the MPV vectors of its common
-	block. Then, for every system size, the two live-block families span the same
+	block. Then, for every system size, the two nonzero-weight block families span the same
 	MPV subspace.
 \end{lemma}
 
 \begin{proof}
 	\leanok
-	Each live-block MPV vector lies in the span of the common family because it is a
+	Each nonzero-block MPV vector lies in the span of the common family because it is a
 	scalar multiple of its common block's MPV vector. Surjectivity gives the reverse
-	inclusion, so each live-block span equals the common span; transitivity gives
-	the equality of the two live-block spans.
+	inclusion, so each nonzero-block span equals the common span; transitivity gives
+	the equality of the two nonzero-block spans.
 \end{proof}
 
-\begin{lemma}[Bundled common phase cover gives live-block span equality]%
+\begin{lemma}[Common phase-cover data give nonzero-block span equality]%
 \label{lem:mpv_common_phase_cover_span_eq}
 	\lean{MPSTensor.MPVCommonPhaseCover.span_eq}
 	\leanok
 	\uses{def:mpv_common_phase_cover}
-	A common MPV phase cover for two live-block families gives equality of their
+	A common MPV phase cover for two nonzero-weight block families gives equality of their
 	finite-length MPV spans at every system size.
 \end{lemma}
 
@@ -945,7 +945,7 @@ single weighted block.
 	common phase cover data.
 \end{proof}
 
-\begin{theorem}[Heterogeneous sector comparison via a bundled matching witness]%
+\begin{theorem}[Sector comparison via a sector-basis matching]%
 \label{thm:route_b_hetero_sector_matching}
 	\lean{MPSTensor.fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_sectorMatching}
 	\leanok
@@ -961,7 +961,7 @@ single weighted block.
 \begin{proof}
 	\leanok
 	\uses{thm:route_b_hetero_matched_basis}
-	The bundled matching witness contains exactly the permutation, copy, and
+	The sector-basis matching contains exactly the permutation, copy, and
 	gauge-phase hypotheses of Theorem~\ref{thm:route_b_hetero_matched_basis},
 	so the conclusion follows directly from that theorem.
 \end{proof}
@@ -989,26 +989,25 @@ single weighted block.
 	common period. Composing this equality with the two sector equivalences gives
 	equality of the total MPV families of $P$ and $Q$. The primitive overlap-span
 	hypotheses produce a sector basis matching by
-	Theorem~\ref{thm:sector_basis_overlap_span_to_matching}; the bundled
-	heterogeneous comparison theorem then gives the sector-weight multiset
-	equalities.
+	Theorem~\ref{thm:sector_basis_overlap_span_to_matching}; the two-basis
+	sector comparison theorem then gives the sector-weight multiset equalities.
 \end{proof}
 
-\begin{theorem}[Common live blocks with overlap-span data give sector comparison]%
+\begin{theorem}[Common nonzero blocks with overlap-span data give sector comparison]%
 \label{thm:after_blocking_sector_common_blocks_overlap_span}
 	\lean{MPSTensor.fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_overlapSpan}
 	\leanok
 	\uses{thm:bnt_sector_decomp_tp_prim_irr_collapsed, def:sector_basis_overlap_span_hyps}
 	Let $A$ and $B$ have the same MPV family. Fix a common blocking period
-	$p>0$ and exact live decompositions of $A^{[p]}$ and $B^{[p]}$ as weighted
-	block tensors whose live blocks have nonzero bond dimensions, are
+	$p>0$ and exact nonzero-block decompositions of $A^{[p]}$ and $B^{[p]}$ as weighted
+	block tensors whose nonzero blocks have nonzero bond dimensions, are
 	trace-preserving, primitive, irreducible, and have nonzero weights. Assume
 	moreover that any pair of BNT sector decompositions equivalent to these two
-	live block tensors satisfies
+	nonzero-block tensors satisfies
 	the primitive overlap-span hypotheses. Then the after-blocking sector
 	comparison conclusion of
 	Theorem~\ref{thm:after_blocking_sector_bnt_pair_overlap_span} holds for the
-	sector decompositions obtained from the live block families.
+	sector decompositions obtained from the nonzero-weight block families.
 \end{theorem}
 
 \begin{proof}
@@ -1017,8 +1016,8 @@ single weighted block.
 		thm:sector_basis_overlap_span_to_matching,
 		thm:route_b_hetero_sector_matching}
 	Apply the one-sided phase-class BNT construction
-	(Theorem~\ref{thm:bnt_sector_decomp_tp_prim_irr_collapsed}) to the two live
-	block families. The resulting sector decompositions satisfy the overlap-span
+	(Theorem~\ref{thm:bnt_sector_decomp_tp_prim_irr_collapsed}) to the two
+	nonzero-weight block families. The resulting sector decompositions satisfy the overlap-span
 	hypotheses; Theorem~\ref{thm:sector_basis_overlap_span_to_matching} then
 	produces a sector basis matching, and
 	Theorem~\ref{thm:route_b_hetero_sector_matching} gives the matched
@@ -1026,17 +1025,17 @@ single weighted block.
 \end{proof}
 
 
-\begin{theorem}[Common live blocks with derived overlap data and span comparison]%
+\begin{theorem}[Common nonzero blocks with derived overlap data and span comparison]%
 \label{thm:after_blocking_sector_common_blocks_injective_span}
 	\lean{MPSTensor.fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_injectiveSpan}
 	\leanok
 	\uses{thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_ortho,
 		thm:sector_basis_overlap_ortho_to_span,
 		thm:route_b_hetero_sector_matching}
-	Let $A$ and $B$ have the same MPV family and fix exact live decompositions at a
+	Let $A$ and $B$ have the same MPV family and fix exact nonzero-block decompositions at a
 	common blocking period as in
 	Theorem~\ref{thm:after_blocking_sector_common_blocks_overlap_span}.  Assume in
-	addition that the live blocks are one-site injective, and that the two chosen
+	addition that the nonzero blocks are one-site injective, and that the two chosen
 	BNT sector bases have equal finite-length MPV spans. Then the same matched
 	sector-weight conclusion holds.
 \end{theorem}
@@ -1049,14 +1048,14 @@ single weighted block.
 		thm:route_b_hetero_sector_matching}
 	The phase-class BNT construction gives BNT linear independence and the
 	single-family overlap-orthogonality data for both sides, and carries one-site
-	injectivity from the live blocks to the chosen basis blocks.  The assumed span
+	injectivity from the nonzero blocks to the chosen basis blocks.  The assumed span
 	comparison combines with those one-family data by
 	Theorem~\ref{thm:sector_basis_overlap_ortho_to_span}; the matching and
 	sector-weight comparison then proceed as before.
 \end{proof}
 
 
-\begin{theorem}[Common live blocks with live-block span equality give sector comparison]%
+\begin{theorem}[Common nonzero blocks with nonzero-block span equality give sector comparison]%
 \label{thm:after_blocking_sector_common_blocks_block_span}
 	\lean{MPSTensor.fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_blockSpan}
 	\leanok
@@ -1064,8 +1063,8 @@ single weighted block.
 		thm:sector_basis_overlap_span_to_matching,
 		thm:route_b_hetero_sector_matching}
 	Let $A$ and $B$ have the same MPV family, and fix a common blocking period
-	$p>0$ with exact live decompositions by trace-preserving, primitive,
-	irreducible, injective blocks with nonzero weights. If the two live block
+	$p>0$ with exact nonzero-block decompositions by trace-preserving, primitive,
+	irreducible, injective blocks with nonzero weights. If the two nonzero-weight block
 	families have equal finite-length MPV spans at every system size, then there
 	exist a positive blocking period $p'$ and sector decompositions $P,Q$ over the
 	blocked physical dimension such that $A^{[p']}$ and $B^{[p']}$ have the same
@@ -1081,7 +1080,7 @@ single weighted block.
 		thm:sector_basis_overlap_span_to_matching,
 		thm:route_b_hetero_sector_matching}
 	Theorem~\ref{thm:bnt_sector_decomp_pair_overlap_span_of_block_span} converts
-	the live-block span equality into the primitive overlap-span hypotheses for the
+	the nonzero-block span equality into the primitive overlap-span hypotheses for the
 	chosen sector bases. Equality of the blocked total MPVs gives equality of the
 	sector tensors, so
 	Theorem~\ref{thm:sector_basis_overlap_span_to_matching} produces the sector
@@ -1089,19 +1088,19 @@ single weighted block.
 	sector-weight conclusion.
 \end{proof}
 
-\begin{theorem}[Common live blocks with a common MPV phase cover give sector comparison]%
+\begin{theorem}[Common nonzero blocks with a common MPV phase cover give sector comparison]%
 \label{thm:after_blocking_sector_common_blocks_phase_cover}
 	\lean{MPSTensor.fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_phaseCover}
 	\leanok
 	\uses{lem:live_block_span_eq_of_common_phase_cover,
 		thm:after_blocking_sector_common_blocks_block_span}
-	Let $A$ and $B$ have the same MPV family, and fix exact live decompositions at a
+	Let $A$ and $B$ have the same MPV family, and fix exact nonzero-block decompositions at a
 	common blocking period as in
-	Theorem~\ref{thm:after_blocking_sector_common_blocks_block_span}. Assume the live
+	Theorem~\ref{thm:after_blocking_sector_common_blocks_block_span}. Assume the nonzero
 	blocks are trace-preserving, primitive, irreducible, injective, and have nonzero
-	weights. Suppose moreover that both live-block families map surjectively to one
-	common family of blocks, and that every live block is MPV-phase equivalent to its
-	image in the common family. Then the same sector comparison conclusion as in
+	weights. Suppose moreover that both nonzero-weight block families map surjectively to one
+	common family of blocks, and that every block is MPV-phase equivalent to its image
+	in the common family. Then the same sector comparison conclusion as in
 	Theorem~\ref{thm:after_blocking_sector_common_blocks_block_span} holds.
 \end{theorem}
 
@@ -1110,22 +1109,22 @@ single weighted block.
 	\uses{lem:live_block_span_eq_of_common_phase_cover,
 		thm:after_blocking_sector_common_blocks_block_span}
 	Lemma~\ref{lem:live_block_span_eq_of_common_phase_cover} converts the common
-	MPV phase cover into equality of the live-block finite-length spans.
+	MPV phase cover into equality of the nonzero-block finite-length spans.
 	Theorem~\ref{thm:after_blocking_sector_common_blocks_block_span} then applies
 	without any additional sector-basis assumptions.
 \end{proof}
 
-\begin{theorem}[Common live blocks with bundled MPV phase cover give sector comparison]%
+\begin{theorem}[Common nonzero blocks with common MPV phase-cover data give sector comparison]%
 \label{thm:after_blocking_sector_common_blocks_common_phase_cover}
 	\lean{MPSTensor.fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_commonPhaseCover}
 	\leanok
 	\uses{def:mpv_common_phase_cover,
 		thm:after_blocking_sector_common_blocks_phase_cover}
-	Let $A$ and $B$ have the same MPV family, and fix exact live decompositions at a
+	Let $A$ and $B$ have the same MPV family, and fix exact nonzero-block decompositions at a
 	common blocking period as in
 	Theorem~\ref{thm:after_blocking_sector_common_blocks_phase_cover}. Assume the
-	live blocks are trace-preserving, primitive, irreducible, injective, and have
-	nonzero weights. If the two live-block families are equipped with common MPV
+	nonzero blocks are trace-preserving, primitive, irreducible, injective, and have
+	nonzero weights. If the two nonzero-weight block families are equipped with common MPV
 	phase-cover data, then the same sector comparison conclusion holds.
 \end{theorem}
 
@@ -1167,19 +1166,19 @@ single weighted block.
 	\leanok
 	\uses{def:same_mpv2, def:mpv}
 	Let $A$ and $B$ have the same MPV family, each decomposed as a zero-tail
-	tensor plus a live tensor. If the zero-tail dimensions agree, then the
-	live tensors themselves have the same MPV family, including at length zero.
+	tensor plus a nonzero part. If the zero-tail dimensions agree, then the
+	nonzero parts themselves have the same MPV family, including at length zero.
 \end{lemma}
 
 \begin{proof}
 	\leanok
 	\uses{def:mpv}
-	At positive lengths the zero-tail term vanishes, so the live tensors
+	At positive lengths the zero-tail term vanishes, so the nonzero parts
 	agree. At length zero the zero-tail values are equal by hypothesis, and
-	cancellation gives equality of the live tensors there too.
+	cancellation gives equality of the nonzero parts there too.
 \end{proof}
 
-\begin{theorem}[Common live blocks with zero-tail agreement and overlap-span data]%
+\begin{theorem}[Common nonzero blocks with zero-tail agreement and overlap-span data]%
 \label{thm:after_blocking_sector_common_blocks_overlap_span_zero_tail}
 	\lean{MPSTensor.fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_overlapSpan_zeroTail}
 	\leanok
@@ -1188,10 +1187,10 @@ single weighted block.
 		def:sector_basis_overlap_span_hyps}
 	Let $A$ and $B$ have the same MPV family. Fix $p > 0$ and suppose
 	$A^{[p]}$ and $B^{[p]}$ each decompose as a zero-tail tensor plus a
-	weighted live block tensor, with all blocks trace-preserving, primitive,
+	weighted nonzero-block tensor, with all blocks trace-preserving, primitive,
 	irreducible, and with nonzero weights. If the two zero-tail dimensions
-	agree and any pair of BNT sector decompositions equivalent to the two live
-	block tensors satisfies the primitive overlap-span hypotheses, then there
+	agree and any pair of BNT sector decompositions equivalent to the two
+	nonzero-block tensors satisfies the primitive overlap-span hypotheses, then there
 	exist positive $p'$ and sector decompositions $P$, $Q$ such that
 	$A^{[p']}$ equals $P$'s tensor at all positive lengths, $B^{[p']}$ equals
 	$Q$'s tensor at all positive lengths, $P$ and $Q$ have the same full MPV
@@ -1206,12 +1205,12 @@ single weighted block.
 		thm:sector_basis_overlap_span_to_matching,
 		thm:route_b_hetero_sector_matching}
 	Apply the zero-tail cancellation lemma to recover full equality of the
-	live block tensors. Then proceed as in
+	nonzero-block tensors. Then proceed as in
 	Theorem~\ref{thm:after_blocking_sector_common_blocks_overlap_span}: apply
-	the BNT construction to each live block family, compose the sector
+	the BNT construction to each block family, compose the sector
 	equivalences to obtain equality of the total MPV families of $P$ and $Q$,
 	apply the overlap-span matching theorem, and conclude with the
-	heterogeneous sector comparison theorem.
+two-basis sector comparison theorem.
 \end{proof}
 
 \begin{theorem}[Zero-tail nonzero block decompositions with BNT proportional-decomposition data]%
@@ -1242,7 +1241,7 @@ single weighted block.
 	Zero-tail cancellation gives full equality of the two nonzero parts. The
 	proportional-decomposition comparison gives the primitive overlap-span
 	hypotheses through the common phase-cover construction. The sector basis
-	matching and heterogeneous sector comparison theorems then give the
+	matching and two-basis sector comparison theorems then give the
 	sector-weight conclusion.
 \end{proof}
 
@@ -1275,7 +1274,7 @@ single weighted block.
 	the same multiset equality.
 \end{proof}
 
-\begin{remark}[Remaining inputs for the unconditional equal-case theorem]\notready
+\begin{remark}[Remaining hypotheses for the unconditional equal-case theorem]\notready
 	The equal-case proof in the literature assumes first that both tensors are in
 	canonical form.  One chooses a basis of normal tensors for each tensor, so
 	that every canonical-form block is a phase times a gauge transform of exactly
@@ -1299,24 +1298,24 @@ single weighted block.
 	restated as
 	\cite[Corollary~\texttt{II\_cor2}, lines 1896--1900]{Cirac2021Matrix}.
 
-	The formalized results cover the downstream parts of this argument.
+	The formalized results cover the later comparison steps of this argument.
 	Theorem~\ref{thm:ft_equal_explicit} proves the equal case when the coefficient
 	identities are given explicitly,
 	Theorem~\ref{thm:ft_equal_same_structure} proves the common block-structure
 	special case, and Theorem~\ref{thm:route_b_equal} recovers the sector-weight
 	multisets from the multiplicity data.  The basis-of-normal-tensors
-	construction is also available for trace-preserving primitive irreducible live
-	blocks with positive bond dimensions and nonzero weights in
-	Theorem~\ref{thm:bnt_sector_decomp_tp_prim_irr_collapsed}.  When the live
+	construction is also available for trace-preserving primitive irreducible
+	nonzero-weight blocks with positive bond dimensions and nonzero weights in
+	Theorem~\ref{thm:bnt_sector_decomp_tp_prim_irr_collapsed}.  When these
 	blocks are injective, Theorems~\ref{thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_data}
 	and~\ref{thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_data_span}
 	provide the asymptotic orthogonality and finite-length span preservation needed
 	to separate coefficients.  Theorem~\ref{thm:bnt_sector_decomp_pair_overlap_span_of_block_span}
-	then turns equality of live-sector spans into the hypotheses used by the
+	then turns equality of nonzero-sector spans into the hypotheses used by the
 	sector comparison theorem.
 
-	The common-family comparison input is also formalized in reusable forms.  A
-	common MPV phase cover gives equality of finite-length live-block spans by
+	The common-family comparison data is also formalized in reusable forms.  A
+	common MPV phase cover gives equality of finite-length nonzero-block spans by
 	Lemma~\ref{lem:mpv_common_phase_cover_span_eq}.  A sector basis pre-matching
 	gives such span equality and the primitive overlap-span hypotheses by
 	Lemma~\ref{lem:sector_basis_pre_matching_span_eq} and
@@ -1325,7 +1324,7 @@ single weighted block.
 	conclusions in Theorems~\ref{thm:common_phase_cover_of_proportional_decomposition}
 	and~\ref{thm:common_phase_cover_of_separated_normal_bnt}.
 
-	The remaining input for the unconditional equal-case theorem is the connection
+	The remaining hypothesis for the unconditional equal-case theorem is the connection
 	from arbitrary equal MPV families to those hypotheses.  Chapter~\ref{ch:canonical}
 	now supplies a common physical blocking length and relabeled cyclic-sector
 	families on both sides, while preserving the zero-tail identities.  What remains

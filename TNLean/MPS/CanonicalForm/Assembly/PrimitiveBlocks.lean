@@ -199,7 +199,7 @@ theorem isIrreducibleTensor_blockTensor_of_tp_primitive_irr [NeZero D]
 
 /-- **Extra blocking after period removal.**
 
-If a live sector block is already trace-preserving, primitive, and tensor-irreducible,
+If a cyclic-sector block is already trace-preserving, primitive, and tensor-irreducible,
 then any later positive blocking length `k` preserves all three properties. In the
 canonical-form reduction, the period-removal length that produces such sector blocks
 is a different datum from this later finite blocking length, which is used only for
@@ -227,7 +227,7 @@ theorem tp_primitive_irreducible_extra_blocking [NeZero D]
 /-!
 ## Conditional Fundamental Theorem: proportional MPVs → block matching
 
-This combines the full reduction output with the block-matching conclusions
+This combines the full reduction data with the block-matching conclusions
 of the fundamental theorem.
 
 For two arbitrary tensors A, B with proportional MPVs, the reduction produces

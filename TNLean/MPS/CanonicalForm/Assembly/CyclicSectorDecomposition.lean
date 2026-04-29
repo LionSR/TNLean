@@ -519,10 +519,10 @@ private theorem compressedTensor_adjointTransferMap_primitive_and_irreducible_of
 /-- Transport corner primitivity and corner irreducibility of the blocked adjoint
 transfer map to the compressed cyclic-sector tensors.
 
-The only remaining input beyond the cyclic-sector decomposition data is the
+The only remaining hypothesis beyond the cyclic-sector decomposition data is the
 corner irreducibility theorem for `((transferMap A†)^m)` on each projection
 `P k`. In particular, this theorem isolates the orbit-sum / `hProjStep` part of
-the non-periodic Gap §1 proof chain from the downstream compression-transport
+the non-periodic Gap §1 proof chain from the subsequent compression-transport
 step. -/
 theorem primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking_of_cornerIrreducible
     {d D m : ℕ} [NeZero D] [NeZero m]
@@ -612,7 +612,7 @@ sector blocks produced after blocking are primitive and tensor-irreducible.
 This combines the orbit-sum part of the argument via
 `isIrreducibleOnCorner_of_cyclic_decomp_mps_of_projStep` and then applies the
 compression transport theorem above. The residual non-periodic Gap §1 blocker is
-therefore isolated exactly to the one-step `hProjStep` input. -/
+therefore isolated exactly to the one-step `hProjStep` hypothesis. -/
 theorem primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking_of_projStep
     {d D m : ℕ} [NeZero D] [NeZero m]
     (A : MPSTensor d D)
@@ -907,7 +907,7 @@ sectors are primitive and tensor-irreducible.
 This combines the scalar blocked fixed-point algebra hypothesis with the
 orbit-sum / corner-compression reduction: the paper-level remaining gap is now
 concentrated in proving that the blocked sector adjoint fixed-point algebra is
-scalar. Once that input is available, the present theorem derives
+scalar. Once that hypothesis is available, the present theorem derives
 `SectorFixedPointAlgebraRigidity` and applies the orbit-sum / corner-compression
 reduction from the fixed-algebra-rigidity sector-block theorem. -/
 theorem primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking_of_scalarBlockedFixedPoints
@@ -1021,7 +1021,7 @@ theorem primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking
 This strengthens `exists_cyclic_sector_decomp_of_TP_of_isIrreducibleTensor` by
 exposing the primitive and irreducible conclusions already available from the
 unconditional sector-orbit lift. It is the one-block result used in the later
-multi-block construction before the sectors of all live blocks are flattened to
+multi-block construction before the sectors of all nonzero-weight blocks are flattened to
 a common period. -/
 theorem exists_primitive_irreducible_cyclic_sector_decomp_of_TP_of_isIrreducibleTensor
     {d D : ℕ} [NeZero D]
@@ -1067,7 +1067,7 @@ theorem exists_primitive_irreducible_cyclic_sector_decomp_of_TP_of_isIrreducible
   · intro k
     exact Nat.pos_of_ne_zero (hNondeg k)
 
-/-- A one-block period-removal package with primitive irreducible sectors.
+/-- One-block period-removal data with primitive irreducible sectors.
 
 `HasPrimitiveIrreducibleCyclicSectors A` means that some positive period `m`
 removes the cyclic peripheral structure of `A`: the blocked tensor `A^[m]` is
@@ -1097,27 +1097,27 @@ theorem hasPrimitiveIrreducibleCyclicSectors_of_TP_of_isIrreducibleTensor
     exists_primitive_irreducible_cyclic_sector_decomp_of_TP_of_isIrreducibleTensor
       (d := d) (D := D) A hTP hIrr
 
-/-- Common reblocking data for the cyclic sectors of a finite live-block family.
+/-- Common reblocking data for the cyclic sectors of a finite nonzero-weight block family.
 
-For each original live block, `period k` is the period-removal length produced by
+For each original nonzero-weight block, `period k` is the period-removal length produced by
 cyclic-sector decomposition, while `extra k` is the later positive blocking length
 that moves all sectors to the single physical alphabet `blockPhysDim d p`.  The
 flattened family `flatBlocks` is indexed by the finite type
 `Fin (∑ k, period k)`, using `finSigmaFinEquiv` to identify an index with an
-original live block and one of its cyclic sectors.
+original nonzero-weight block and one of its cyclic sectors.
 
 The field `nested_same` records the checked MPV compatibility condition available
-at this stage: the iterated blocked live block is MPV-equivalent to the corresponding
+at this stage: the iterated blocked nonzero-weight block is MPV-equivalent to the corresponding
 unit-weight reblocked cyclic sectors, all at the common physical dimension.  The
 remaining work for issue #969 is the one-shot iterated-blocking identification
-and the weighted direct-sum flattening across the original live-block weights. -/
+and the weighted direct-sum flattening across the original nonzero weights. -/
 structure CommonBlockedCyclicSectorFamily {d r : ℕ} {dim : Fin r → ℕ}
     (blocks : (k : Fin r) → MPSTensor d (dim k)) where
   /-- The common physical blocking length. -/
   p : ℕ
   /-- The common physical blocking length is positive. -/
   p_pos : 0 < p
-  /-- The period-removal length of each original live block. -/
+  /-- The period-removal length of each original nonzero-weight block. -/
   period : Fin r → ℕ
   /-- Every period-removal length is positive. -/
   period_pos : ∀ k, 0 < period k
@@ -1135,7 +1135,7 @@ structure CommonBlockedCyclicSectorFamily {d r : ℕ} {dim : Fin r → ℕ}
   /-- The sector blocks are trace-preserving before later reblocking. -/
   sector_tp : ∀ k s,
     ∑ i : Fin (blockPhysDim d (period k)), (sectorBlocks k s i)ᴴ * sectorBlocks k s i = 1
-  /-- Each period-blocked live block is represented by its unit-weight cyclic sectors. -/
+  /-- Each period-blocked nonzero-weight block is represented by its unit-weight cyclic sectors. -/
   sector_same : ∀ k,
     SameMPV₂ (blockTensor (d := d) (D := dim k) (blocks k) (period k))
       (toTensorFromBlocks (d := blockPhysDim d (period k))
@@ -1166,7 +1166,7 @@ structure CommonBlockedCyclicSectorFamily {d r : ℕ} {dim : Fin r → ℕ}
   flat_irreducible : ∀ x, IsIrreducibleTensor (flatBlocks x)
   /-- Flattened common-alphabet sectors have positive bond dimensions. -/
   flat_dim_pos : ∀ x, 0 < flatDim x
-  /-- The checked MPV compatibility condition for each original live block
+  /-- The checked MPV compatibility condition for each original nonzero-weight block
   after later reblocking. -/
   nested_same : ∀ k,
     SameMPV₂
@@ -1185,7 +1185,7 @@ namespace CommonBlockedCyclicSectorFamily
 variable {d r : ℕ} {dim : Fin r → ℕ}
 variable {blocks : (k : Fin r) → MPSTensor d (dim k)}
 
-/-- Decode a flattened common-sector index as an original live block and a cyclic sector. -/
+/-- Decode a flattened common-sector index as an original block and a cyclic sector. -/
 noncomputable def flatKey (F : CommonBlockedCyclicSectorFamily blocks)
     (x : Fin (∑ k : Fin r, F.period k)) : (k : Fin r) × Fin (F.period k) :=
   finSigmaFinEquiv.symm x
@@ -1224,7 +1224,7 @@ noncomputable def commonFlatBlocks (F : CommonBlockedCyclicSectorFamily blocks)
   show MPSTensor (blockPhysDim d F.p) (F.sectorDim y.1 y.2) from
     F.commonSectorBlock y.1 y.2
 
-/-- The common-alphabet sector tensor for one original live block. -/
+/-- The common-alphabet sector tensor for one original nonzero-weight block. -/
 noncomputable def commonSectorTensor (F : CommonBlockedCyclicSectorFamily blocks)
     (k : Fin r) : MPSTensor (blockPhysDim d F.p) (∑ s : Fin (F.period k), F.sectorDim k s) :=
   toTensorFromBlocks (d := blockPhysDim d F.p)
@@ -1238,15 +1238,15 @@ noncomputable def oneShotReindexedBlock (F : CommonBlockedCyclicSectorFamily blo
     (reindexPhysical (iteratedBlockIndex d (F.period k) (F.extra k))
       (blockTensor (d := d) (D := dim k) (blocks k) (F.period k * F.extra k)))
 
-/-- The derived flattened sector weights obtained from the original live weights after
+/-- The derived flattened sector weights obtained from the original nonzero weights after
 blocking by the common length. -/
 noncomputable def commonFlatWeight (F : CommonBlockedCyclicSectorFamily blocks)
     (μ : Fin r → ℂ) : Fin (∑ k : Fin r, F.period k) → ℂ :=
   fun x => (μ (F.flatKey x).1) ^ F.p
 
-/-- Transported live weights remain nonzero after common blocking.
+/-- Transported nonzero weights remain nonzero after common blocking.
 
-This named form records the per-live-block weight transport used before flattening;
+This named form records the per-block weight transport used before flattening;
 `commonFlatWeight_ne_zero` is the corresponding statement after passing to flattened
 sector indices. -/
 theorem commonBlockWeight_ne_zero (F : CommonBlockedCyclicSectorFamily blocks)
@@ -1341,7 +1341,7 @@ theorem commonFlatDim_pos (F : CommonBlockedCyclicSectorFamily blocks)
   let y := F.flatKey x
   simpa [commonFlatDim, y] using F.commonSectorBlock_dim_pos y.1 y.2
 
-/-- Iterated blocking of a live block is the relabeled one-shot common block. -/
+/-- Iterated blocking of a nonzero-weight block is the relabeled common block. -/
 theorem nestedBlock_sameMPV₂_oneShotReindexedBlock
     (F : CommonBlockedCyclicSectorFamily blocks) (k : Fin r) :
     SameMPV₂
@@ -1357,7 +1357,7 @@ theorem nestedBlock_sameMPV₂_oneShotReindexedBlock
     (B := reindexPhysical (iteratedBlockIndex d (F.period k) (F.extra k))
       (blockTensor (d := d) (D := dim k) (blocks k) (F.period k * F.extra k)))).2 h
 
-/-- A one-shot relabeled live block is represented by its common-alphabet cyclic sectors. -/
+/-- A relabeled nonzero-weight block is represented by its common-alphabet cyclic sectors. -/
 theorem oneShotReindexedBlock_sameMPV₂_commonSectorTensor
     (F : CommonBlockedCyclicSectorFamily blocks) (k : Fin r) :
     SameMPV₂ (F.oneShotReindexedBlock k) (F.commonSectorTensor k) := by
@@ -1371,7 +1371,7 @@ theorem oneShotReindexedBlock_sameMPV₂_commonSectorTensor
     _ = mpv (F.commonSectorTensor k) σ := by
       simpa [commonSectorTensor, commonSectorBlock] using F.nested_same k N σ
 
-/-- Weighted live blocks with explicit one-shot relabelings flatten to the common-sector family. -/
+/-- Weighted nonzero blocks with explicit relabelings flatten to the common-sector family. -/
 theorem sameMPV₂_weightedOneShotReindexedBlock_commonFlat
     (F : CommonBlockedCyclicSectorFamily blocks) (μ : Fin r → ℂ) :
     SameMPV₂
@@ -1445,7 +1445,7 @@ theorem sameMPV₂_weightedCanonicalBlock_commonFlat_of_oneShot
 
 end CommonBlockedCyclicSectorFamily
 
-/-- A finite family of live blocks with per-block primitive irreducible cyclic sectors
+/-- A finite family of nonzero-weight blocks with per-block primitive irreducible cyclic sectors
 admits a prescribed common physical blocking length, provided that the prescribed
 length is a positive multiple of every period-removal length.
 
@@ -1626,10 +1626,10 @@ theorem exists_commonBlockedCyclicSectorFamily_of_commonMultiple
     flat_dim_pos := flat_dim_pos
     nested_same := nested_same }, rfl⟩⟩
 
-/-- A finite family of live blocks with per-block primitive irreducible cyclic sectors
+/-- A finite family of nonzero-weight blocks with per-block primitive irreducible cyclic sectors
 admits one common physical blocking length for all those sectors.
 
-This theorem chooses the least common multiple of the per-live-block period-removal
+This theorem chooses the least common multiple of the per-block period-removal
 lengths.  Each cyclic sector is then blocked by the corresponding quotient,
 identified with the common physical alphabet, and collected into one finite
 flattened family.  Trace preservation, primitive transfer maps, tensor
