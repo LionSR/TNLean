@@ -78,11 +78,42 @@ runs:
           exit 0
         fi
 
-        ISSUE_TITLE=$(gh issue view "$ISSUE_NUMBER" --repo "$REPO" --json title --jq '.title')
+        ISSUE_JSON=$(gh issue view "$ISSUE_NUMBER" --repo "$REPO" --json title,labels,url)
+        ISSUE_TITLE=$(echo "$ISSUE_JSON" | jq -r '.title')
+        ISSUE_URL=$(echo "$ISSUE_JSON" | jq -r '.url')
+        ISSUE_LABELS=$(echo "$ISSUE_JSON" | jq -r '[.labels[].name] | join(", ")')
+
+        CHANGED_FILES=$(
+          git diff --name-only "origin/main...origin/$BRANCH" 2>/dev/null \
+            | sed 's/^/- `/' \
+            | sed 's/$/`/' \
+            || true
+        )
+        if [ -z "$CHANGED_FILES" ]; then
+          CHANGED_FILES="- See the commits on \`$BRANCH\`."
+        fi
 
         echo "Creating PR from $BRANCH → main for issue #${ISSUE_NUMBER}"
 
-        PR_BODY=$'Addresses #'"${ISSUE_NUMBER}"$'\n\nAuto-created by '"${CREATOR_NAME}"$'.'
+        PR_BODY=$(cat <<EOF
+        ### Motivation
+        - Addresses #${ISSUE_NUMBER}: ${ISSUE_TITLE}.
+        - Source issue: ${ISSUE_URL}
+
+        ### Description
+        - This PR was opened from \`${BRANCH}\` by ${CREATOR_NAME}.
+        - Changed files:
+        ${CHANGED_FILES}
+
+        ### Testing
+        - CI should run the Lean and blueprint checks for this branch.
+
+        ---
+        Addresses #${ISSUE_NUMBER}
+
+        Issue labels: ${ISSUE_LABELS}
+        EOF
+        )
 
         PR_URL=$(gh pr create \
           --repo "$REPO" \

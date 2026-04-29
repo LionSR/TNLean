@@ -83,6 +83,9 @@ When you make updates, create a PR that includes:
 - A concise summary of what was out of sync
 - Which documentation/blueprint files were updated
 - Why those updates were needed based on recent code changes
+- For mathematical content, cite the relevant theorem label, blueprint entry,
+  paper reference, or Lean declaration rather than using local shorthand
+- Avoid AI vocabulary and software-process metaphors when describing mathematics
 
 If no updates are needed, call `noop` with a short explanation of what you checked.
 

@@ -6,8 +6,8 @@ body:
     id: statement
     attributes:
       label: Mathematical statement
-      description: Name and source of the result to formalize
-      placeholder: "e.g., Wolf Thm 6.15: conditional expectation from faithful fixed point"
+      description: State the theorem, definition, or lemma in mathematical language.
+      placeholder: "e.g., Wolf Thm 6.15: faithful fixed points yield a conditional expectation"
     validations:
       required: true
 
@@ -15,8 +15,25 @@ body:
     id: reference
     attributes:
       label: Reference
-      description: Paper or textbook citation
+      description: >-
+        Paper, textbook, or blueprint citation, including theorem/lemma label
+        if available.
       placeholder: "e.g., arXiv:1804.04964 Theorem 3.2, Wolf Lecture Notes Prop 7.4"
+    validations:
+      required: true
+
+  - type: textarea
+    id: source_location
+    attributes:
+      label: Source location and quotation
+      description: >-
+        Give a file path and line number when the source is in this repository,
+        plus a short quotation or precise paraphrase of the mathematical claim.
+      placeholder: |
+        - Source: `blueprint/src/chapter/ch06_spectral.tex:142`
+        - Label: `thm:peripheral-fixed-point`
+        - Claim: The peripheral fixed points form a finite-dimensional
+          C*-algebra under the stated hypotheses.
     validations:
       required: true
 
@@ -33,9 +50,10 @@ body:
     id: dependencies
     attributes:
       label: Dependencies
-      description: Existing Lean declarations or issues this depends on
+      description: Existing formalized results, blueprint entries, or issues this depends on
       placeholder: |
         - `MPSTensor.transferMap` (exists)
+        - `blueprint/src/chapter/ch06_spectral.tex:118`
         - #191 (ground space definitions, in progress)
     validations:
       required: false
@@ -44,8 +62,12 @@ body:
     id: sketch
     attributes:
       label: Proof sketch / approach
-      description: Brief outline of the formalization strategy
-      placeholder: Optional
+      description: >-
+        Brief mathematical proof sketch, with the main lemmas or reductions
+        expected.
+      placeholder: |
+        Reduce to the finite-dimensional spectral decomposition, identify the
+        fixed-point projection, and apply the cited conditional-expectation theorem.
     validations:
       required: false
 
