@@ -53,7 +53,7 @@ Recommended core defs:
   noncomputable def mpvOverlap {d D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂) (N : ℕ) : ℂ :=
     ∑ σ : Cfg d N, mpv A σ * star (mpv B σ)
 
-Basic bookkeeping lemmas to add immediately:
+Basic auxiliary identities to add immediately:
 
   /-- Expand `mpvInner` as a finite sum of coordinates. -/
   lemma mpvInner_eq_sum {d D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂) (N : ℕ) :
