@@ -45,11 +45,11 @@ The statements follow the standard MPS route used in the canonical-form proofs:
 
 New declarations:
 
-- `MPSTensor.exists_bnt_sectorDecomposition_pair_with_overlapSpan_of_commonPhaseCover`:
+- `MPSTensor.exists_bnt_sectorDecomp_pair_with_overlapSpan_of_commonPhaseCover`:
   given trace-preserving, primitive, irreducible, injective block families with nonzero
   weights and common phase-cover data, construct sector decompositions whose bases
   satisfy `SectorBasisOverlapSpanHypotheses`.
-- `exists_bnt_sectorDecomposition_pair_with_overlapSpan_of_proportionalDecompositionConclusion`
+- `exists_bnt_sectorDecomp_pair_with_overlapSpan_of_proportionalDecompositionConclusion`
   (in namespace `MPSTensor`): first turns BNT proportional-decomposition data into a
   common MPV phase cover, then applies the previous theorem.
 

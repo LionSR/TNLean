@@ -879,8 +879,8 @@ single weighted block.
 \end{proof}
 
 \begin{theorem}[Common phase cover gives phase-class representative overlap-span data]%
-\label{thm:bnt_sectorDecomposition_pair_overlapSpan_of_commonPhaseCover}
-	\lean{MPSTensor.exists_bnt_sectorDecomposition_pair_with_overlapSpan_of_commonPhaseCover}
+\label{thm:bnt_sectorDecomp_pair_overlapSpan_of_commonPhaseCover}
+	\lean{MPSTensor.exists_bnt_sectorDecomp_pair_with_overlapSpan_of_commonPhaseCover}
 	\leanok
 	\uses{def:mpv_common_phase_cover, def:sector_basis_overlap_span_hyps}
 	Let two block families be trace-preserving, primitive, irreducible, injective,
@@ -901,8 +901,8 @@ single weighted block.
 \end{proof}
 
 \begin{theorem}[Proportional-decomposition data give phase-class representative overlap-span data]%
-\label{thm:bnt_sectorDecomposition_pair_overlapSpan_of_proportionalDecompositionConclusion}
-	\lean{MPSTensor.exists_bnt_sectorDecomposition_pair_with_overlapSpan_of_proportionalDecompositionConclusion}
+\label{thm:bnt_sectorDecomp_pair_overlapSpan_of_proportionalDecompositionConclusion}
+	\lean{MPSTensor.exists_bnt_sectorDecomp_pair_with_overlapSpan_of_proportionalDecompositionConclusion}
 	\leanok
 	\uses{def:sector_basis_overlap_span_hyps}
 	Let two block families be trace-preserving, primitive, irreducible, injective,
@@ -916,7 +916,7 @@ single weighted block.
 \begin{proof}
 	\leanok
 	\uses{thm:common_phase_cover_of_proportional_decomposition,
-		thm:bnt_sectorDecomposition_pair_overlapSpan_of_commonPhaseCover}
+		thm:bnt_sectorDecomp_pair_overlapSpan_of_commonPhaseCover}
 	First turn the proportional-decomposition data into common MPV phase-cover data.
 	The preceding theorem then converts that cover into the overlap-span hypotheses
 	for the constructed sector bases.
@@ -1236,7 +1236,7 @@ single weighted block.
 \begin{proof}
 	\leanok
 	\uses{lem:sameMPV2_live_of_zeroTail_eq,
-		thm:bnt_sectorDecomposition_pair_overlapSpan_of_proportionalDecompositionConclusion,
+		thm:bnt_sectorDecomp_pair_overlapSpan_of_proportionalDecompositionConclusion,
 		thm:sector_basis_overlap_span_to_matching,
 		thm:route_b_hetero_sector_matching}
 	Zero-tail cancellation gives full equality of the two nonzero parts. The

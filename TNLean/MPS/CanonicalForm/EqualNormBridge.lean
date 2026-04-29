@@ -1379,7 +1379,7 @@ This is the common-cover form of
 supplies the finite-length span equality for the two nonzero-weight block families,
 and the one-sided BNT representative construction supplies the remaining overlap,
 normalization, positive-dimension, and injectivity data. -/
-theorem exists_bnt_sectorDecomposition_pair_with_overlapSpan_of_commonPhaseCover
+theorem exists_bnt_sectorDecomp_pair_with_overlapSpan_of_commonPhaseCover
     {rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
     (μA : Fin rA → ℂ)
@@ -1413,7 +1413,7 @@ A proportional-decomposition comparison gives a common MPV phase cover of the tw
 nonzero-weight block families. Therefore it supplies the finite-length span equality
 needed by the two-sided BNT representative construction, without assuming that span
 equality as a separate hypothesis. -/
-theorem exists_bnt_sectorDecomposition_pair_with_overlapSpan_of_proportionalDecompositionConclusion
+theorem exists_bnt_sectorDecomp_pair_with_overlapSpan_of_proportionalDecompositionConclusion
     {rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
     (μA : Fin rA → ℂ)
@@ -1439,7 +1439,7 @@ theorem exists_bnt_sectorDecomposition_pair_with_overlapSpan_of_proportionalDeco
       SectorBasisOverlapSpanHypotheses P Q := by
   obtain ⟨cover⟩ := nonempty_mpvCommonPhaseCover_of_proportionalDecompositionConclusion
     (d := d) blocksA blocksB hMatch
-  exact exists_bnt_sectorDecomposition_pair_with_overlapSpan_of_commonPhaseCover
+  exact exists_bnt_sectorDecomp_pair_with_overlapSpan_of_commonPhaseCover
     (d := d) μA blocksA μB blocksB hTPA hTPB hIrrA hIrrB hPrimA hPrimB
     hInjA hInjB hμA hμB cover
 
