@@ -1693,9 +1693,9 @@ The following results separate the zero blocks from the
 		def:tensor_from_blocks, thm:iterated_blocking_samempv_reindex}
 	From a common reblocked cyclic-sector family, one may derive sector tensors at
 	the common alphabet directly from the original per-block sector tensors.  The
-	one-shot block data keeps the relabeling of blocked physical words explicit: for the
-	live block $B_k$, it uses the one-shot block $B_k^{[m_k e_k]}$ with the labels
-	obtained by flattening an iterated $(m_k,e_k)$ block.
+	reindexed block data keep the reindexing of blocked physical words explicit: for
+	the block $B_k$, it uses $B_k^{[m_k e_k]}$ with the labels obtained by flattening
+	an iterated $(m_k,e_k)$ block.
 \end{definition}
 
 \begin{theorem}[Derived common-alphabet cyclic sectors retain structural properties]%
@@ -1740,12 +1740,12 @@ The following results separate the zero blocks from the
 		thm:iterated_blocking_samempv_reindex,
 		thm:samempv_cast_phys_dim, thm:samempv_blocking_distributes,
 		thm:common_blocked_cyclic_sector_derived_properties}
-	For each live block, the iterated block $(B_k^{[m_k]})^{[e_k]}$ agrees, after
-	the explicit relabeling of blocked physical words, with a one-shot block of length
+	For each block, the iterated block $(B_k^{[m_k]})^{[e_k]}$ agrees, after the
+	explicit reindexing of blocked physical words, with the block of length
 	$m_k e_k$.  Combining this with the stored cyclic-sector decomposition gives an
-	MPV equality between the relabeled one-shot block and its derived common-sector
-	tensor.  Summing over live blocks transports the weights to $\mu_k^p$ and
-	flattens the two-level live-block/sector sum into one sector family.
+	MPV equality between the reindexed block and its derived common-sector tensor.
+	Summing over the original blocks transports the weights to $\mu_k^p$ and
+	flattens the two-level block/sector sum into one sector family.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -1764,9 +1764,9 @@ The following results separate the zero blocks from the
 	\leanok
 	\uses{thm:common_blocked_cyclic_sector_reindexed_samempv,
 		def:common_blocked_cyclic_sector_derived_blocks}
-	Assume that the canonical one-shot blocked nonzero part agrees, as an
-	MPV family, with the relabelled cyclic-sector tensor coming from iterated
-	blocking.  Then the canonical weighted nonzero part agrees
+	Assume that the canonical blocked nonzero part agrees, as an MPV family, with
+	the relabeled cyclic-sector tensor coming from iterated blocking.  Then the
+	canonical weighted nonzero part agrees
 	with the weighted derived common-sector tensor.
 \end{theorem}
 
@@ -3209,13 +3209,12 @@ The following results separate the zero blocks from the
 	If two tensors generate the same MPV family, then the common cyclic-sector data
 	from Theorem~\ref{thm:ft_after_blocking_common_blocked_cyclic_live_zero_tail}
 	also yields, on each side, a derived common-alphabet sector family obtained from
-	one-shot blocked nonzero blocks with an explicit relabeling of blocked physical words.  The
-	conclusion includes the two MPV-family equalities comparing the weighted
-	relabeled one-shot live-block tensors with the weighted derived common-sector
-	tensors.  The sector weights are the transported powers $\mu_k^p$ and remain
-	nonzero, the derived sectors are trace-preserving, primitive, tensor-irreducible,
-	and positive-dimensional, and the zero-tail/live equations are also recorded
-	after the corresponding common reblocking.
+	reindexed blocked nonzero blocks.  The conclusion includes the two MPV-family
+	equalities comparing the weighted reindexed nonzero tensors with the weighted
+	derived common-sector tensors.  The sector weights are the transported powers
+	$\mu_k^p$ and remain nonzero, the derived sectors are trace-preserving,
+	primitive, tensor-irreducible, and positive-dimensional, and the zero-tail/nonzero
+	equations are also recorded after the corresponding common reblocking.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -3327,7 +3326,7 @@ The following results separate the zero blocks from the
 	Theorem~\ref{thm:zero_tail_common_flat_of_one_shot_label_compat} already shows
 	that, once this blocked-word relabeling agreement is proved, the zero-tail equations
 	can be written directly with the weighted common-length cyclic sectors.
-	Theorem~\ref{thm:after_blocking_sector_zeroTail_of_proportionalDecompositionConclusion}
+	Theorem~\ref{thm:afterBlocking_sectorComparison_zeroTail_of_proportionalDecompositionConclusion}
 	records the next comparison step: if those common-length sector blocks are
 	injective and the BNT proportional-decomposition comparison supplies the
 	blockwise permutation, bond-dimension equalities, and gauge phases, then the

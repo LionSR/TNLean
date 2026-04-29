@@ -904,6 +904,7 @@ single weighted block.
 \label{thm:bnt_sectorDecomposition_pair_overlapSpan_of_proportionalDecompositionConclusion}
 	\lean{MPSTensor.exists_bnt_sectorDecomposition_pair_with_overlapSpan_of_proportionalDecompositionConclusion}
 	\leanok
+	\uses{def:sector_basis_overlap_span_hyps}
 	Let two block families be trace-preserving, primitive, irreducible, injective,
 	and carry nonzero weights. If a BNT proportional-decomposition comparison
 	supplies a permutation, equal bond
@@ -1138,11 +1139,10 @@ single weighted block.
 \end{proof}
 
 \begin{theorem}[Common nonzero block decompositions with BNT proportional-decomposition data]%
-\label{thm:after_blocking_sector_of_proportionalDecompositionConclusion}
-	\lean{MPSTensor.fundamentalTheorem_after_blocking_1606_sector_of_proportionalDecompositionConclusion}
+\label{thm:afterBlocking_sectorComparison_of_proportionalDecompositionConclusion}
+	\lean{MPSTensor.afterBlocking_sectorComparison_of_proportionalDecompositionConclusion}
 	\leanok
-	\uses{thm:common_phase_cover_of_proportional_decomposition,
-		thm:after_blocking_sector_common_blocks_common_phase_cover}
+	\uses{thm:after_blocking_sector_common_blocks_common_phase_cover}
 	Let $A$ and $B$ have the same MPV family, and fix exact decompositions of the
 	nonzero parts at a common blocking period as in
 	Theorem~\ref{thm:after_blocking_sector_common_blocks_common_phase_cover}. Assume
@@ -1215,8 +1215,8 @@ single weighted block.
 \end{proof}
 
 \begin{theorem}[Zero-tail nonzero block decompositions with BNT proportional-decomposition data]%
-\label{thm:after_blocking_sector_zeroTail_of_proportionalDecompositionConclusion}
-	\lean{MPSTensor.fundamentalTheorem_after_blocking_1606_sector_zeroTail_of_proportionalDecompositionConclusion}
+\label{thm:afterBlocking_sectorComparison_zeroTail_of_proportionalDecompositionConclusion}
+	\lean{MPSTensor.afterBlocking_sectorComparison_zeroTail_of_proportionalDecompositionConclusion}
 	\leanok
 	\uses{def:same_mpv2_pos,
 		thm:after_blocking_sector_common_blocks_common_phase_cover,
@@ -1329,14 +1329,15 @@ single weighted block.
 	from arbitrary equal MPV families to those hypotheses.  Chapter~\ref{ch:canonical}
 	now supplies a common physical blocking length and relabeled cyclic-sector
 	families on both sides, while preserving the zero-tail identities.  What remains
-	is the exact agreement, after relabeling blocked physical words, that identifies the canonical blocked
-	live tensor with the relabeled one-shot live tensor for the whole weighted live
-	family, followed by the final live-sector extraction used by the equal-case
-	comparison.  After any additional blocking required for injectivity, one must
-	then prove the finite-length live-sector span equality, or produce the common
-	phase-cover or BNT proportional-decomposition data from which the theorems above
-	derive that equality.  Until this connection is formalized, equality of the
-	total MPV vectors has not yet been converted into the componentwise power-sum
+	is the exact agreement, after reindexing blocked physical words, that identifies
+	the canonical blocked nonzero part with the relabeled cyclic-sector tensor for
+	the whole weighted family, followed by the final nonzero-sector extraction used
+	by the equal-case comparison.  After any additional blocking required for
+	injectivity, one must then prove the finite-length nonzero-sector span equality,
+	or produce the common phase-cover or BNT proportional-decomposition data from
+	which the theorems above derive that equality.  Until this connection is
+	formalized, equality of the total MPV vectors has not yet been converted into
+	the componentwise power-sum
 	identities used in the paper proof, so Corollary~IV.5 cannot be invoked
 	unconditionally.
 \end{remark}

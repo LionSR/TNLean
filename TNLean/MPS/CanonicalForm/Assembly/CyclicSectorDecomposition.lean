@@ -1419,13 +1419,12 @@ theorem sameMPV₂_weightedOneShotReindexedBlock_commonFlat
         (μ := F.commonFlatWeight μ) (F.commonFlatBlocks)) σ := by
           exact (mpv_toTensorFromBlocks_eq_sum (F.commonFlatWeight μ) (F.commonFlatBlocks) σ).symm
 
-/-- If the canonical one-shot blocked live blocks agree with the explicitly relabeled
-blocks, then the weighted live tensor agrees with the derived common-sector family.
+/-- If the canonical blocked nonzero part agrees with the explicitly reindexed
+blocks, then the weighted nonzero part agrees with the derived common-sector family.
 
-The hypothesis isolates the remaining agreement under the blocked-word relabeling:
-`oneShotReindexedBlock` uses the iterated-blocking relabeling supplied by
-`iteratedBlockIndex`, while the canonical blocked tensor uses the ambient blocked
-alphabet directly. -/
+The hypothesis isolates the remaining equality under the word reindexing from
+`iteratedBlockIndex`; the canonical blocked tensor uses the ambient blocked alphabet
+directly. -/
 theorem sameMPV₂_weightedCanonicalBlock_commonFlat_of_oneShot
     (F : CommonBlockedCyclicSectorFamily blocks) (μ : Fin r → ℂ)
     (hLabel : SameMPV₂
