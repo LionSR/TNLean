@@ -754,18 +754,28 @@ Named instances do not require deprecations. Deprecated declarations can be dele
 
 ### Mathematical-language renames
 
-The standard deprecation convention (§Deprecation) says renamed declarations should keep
+The standard deprecation convention ([Deprecation](#deprecation)) says renamed declarations should keep
 a `@[deprecated] alias`.  When the **old name encodes misleading terminology** —
 process jargon, project-internal shorthand, or non-mathematical phrasing — a clean
 one-step rename without a deprecated alias is preferred.
 
 #### When to skip a deprecated alias
 
-Skip the alias when the old name contains a term that appears in the banned-vocabulary
-list in [`docs/prose_style.md` §2](prose_style.md#2-banned-software-engineering-terms--replacements).
-Examples of terms that make an alias inappropriate:
+Skip the alias when the old name contains a term that appears in, or is a
+contextual variant of, the banned-vocabulary list in
+[`docs/prose_style.md` §2](prose_style.md#2-banned-software-engineering-terms--replacements).
+Apply context-qualified bans only in the stated context: for example, "Assembly"
+is banned as a section or chapter title, but not when it is part of a standard
+mathematical phrase.
 
-- process/software metaphors: `pipeline`, `wrapper`, `package`, `raw`, `scaffold`, `bookkeeping`, `helper`, `endpoint`
+Examples of terms that make an alias inappropriate in declaration names:
+
+- exact entries or variants of process/software metaphors from the prose guide:
+  `pipeline`, `package`, `scaffolding`/`scaffold`, `workflow`, `plumbing`,
+  `boilerplate`, `glueLayer`, `reexport`
+- additional project-internal cleanup terms with the same non-mathematical force:
+  `raw`, `helper`, `wrapper`, `endpoint` when it means a proof milestone rather
+  than a boundary point
 - project-internal shorthand: `liveBlock`, `oneShot`, `deadProof`, `sourceAnchor`
 - AI/LLM vocabulary in declaration names
 

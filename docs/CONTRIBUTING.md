@@ -47,10 +47,10 @@ Every PR body must contain three sections:
 - Use bullet points.
 - State the mathematical content precisely enough for a reader who has not read
   the issue thread.
-- When renaming a public declaration and intentionally omitting a `@[deprecated]
-  alias` because the old name encodes misleading terminology, explicitly note:
-  `No compatibility alias is provided — the old name encodes [term] (see
-  docs/style.md §Mathematical-language renames).`
+- When renaming a public declaration and intentionally omitting a
+  `@[deprecated] alias` because the old name encodes misleading terminology,
+  explicitly note: `No compatibility alias is provided — the old name encodes
+  [term] (see docs/style.md §Mathematical-language renames).`
 
 ### Testing
 - What was verified and how.
