@@ -1111,12 +1111,76 @@
 
   </div>
 </div>
-<div class="definition_thmwrapper theorem-style-definition" id="def:cf_bnt">
+<div class="definition_thmwrapper theorem-style-definition" id="def:blocks_not_gauge_phase_equiv">
   <div class="definition_thmheading">
     <span class="definition_thmcaption">
     Definition
     </span>
     <span class="definition_thmlabel">13.3</span>
+    <span class="definition_thmtitle">No gauge-phase-equivalent distinct blocks</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-bnt.html#def:blocks_not_gauge_phase_equiv">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mps.html#def:gauge_phase_equiv">Definition 2.18</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.BlocksNotGaugePhaseEquiv" class="lean_decl">MPSTensor.BlocksNotGaugePhaseEquiv</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>   A finite block family has no gauge-phase-equivalent distinct blocks when, for any two distinct indices with the same bond dimension, the corresponding blocks are not gauge-phase equivalent. </p>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:cf_bnt">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">13.4</span>
     <span class="definition_thmtitle">Canonical form with BNT separation</span>
     <div class="thm_header_extras">
 
@@ -1142,7 +1206,7 @@
           
           <li><a href="ch-block_perm.html#def:is_canonical_form">Definition 12.16</a></li>
           
-          <li><a href="ch-mps.html#def:gauge_phase_equiv">Definition 2.18</a></li>
+          <li><a href="ch-bnt.html#def:blocks_not_gauge_phase_equiv">Definition 13.3</a></li>
           
         </ul>
     
@@ -1189,7 +1253,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">13.4</span>
+    <span class="theorem_thmlabel">13.5</span>
     <span class="theorem_thmtitle">Distinct bond dimensions force BNT separation</span>
     <div class="thm_header_extras">
 
@@ -1218,7 +1282,7 @@
           
           <li><a href="ch-block_perm.html#def:is_canonical_form">Definition 12.16</a></li>
           
-          <li><a href="ch-bnt.html#def:cf_bnt">Definition 13.3</a></li>
+          <li><a href="ch-bnt.html#def:cf_bnt">Definition 13.4</a></li>
           
         </ul>
     
@@ -1261,7 +1325,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>The only new clause in Definition&#160;<a href="ch-bnt.html#def:cf_bnt">13.3</a> is the prohibition on gauge-phase equivalence between distinct blocks of the same bond dimension. When the bond dimensions are pairwise distinct, this clause is vacuous. </p>
+  <p>The only new clause in Definition&#160;<a href="ch-bnt.html#def:cf_bnt">13.4</a> is the prohibition on gauge-phase equivalence between distinct blocks of the same bond dimension. When the bond dimensions are pairwise distinct, this clause is vacuous. </p>
 
   </div>
 </div>
@@ -1270,7 +1334,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">13.5</span>
+    <span class="definition_thmlabel">13.6</span>
     <span class="definition_thmtitle">Normal canonical form with BNT separation</span>
     <div class="thm_header_extras">
 
@@ -1296,7 +1360,7 @@
           
           <li><a href="ch-canonical.html#def:is_normal_canonical_form">Definition 11.38</a></li>
           
-          <li><a href="ch-mps.html#def:gauge_phase_equiv">Definition 2.18</a></li>
+          <li><a href="ch-bnt.html#def:blocks_not_gauge_phase_equiv">Definition 13.3</a></li>
           
         </ul>
     
@@ -1342,7 +1406,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">13.6</span>
+    <span class="theorem_thmlabel">13.7</span>
     <span class="theorem_thmtitle">Equal-norm grouping step</span>
     <div class="thm_header_extras">
 
@@ -1421,7 +1485,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">13.7</span>
+    <span class="theorem_thmlabel">13.8</span>
     <span class="theorem_thmtitle">Cross-overlap decay from explicit BNT hypotheses</span>
     <div class="thm_header_extras">
 
@@ -1506,7 +1570,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">13.8</span>
+    <span class="theorem_thmlabel">13.9</span>
     <span class="theorem_thmtitle">Cross-overlap decay for distinct blocks in canonical form with BNT separation</span>
     <div class="thm_header_extras">
 
@@ -1533,13 +1597,13 @@
         
         <ul class="uses">
           
-          <li><a href="ch-bnt.html#def:cf_bnt">Definition 13.3</a></li>
+          <li><a href="ch-bnt.html#def:cf_bnt">Definition 13.4</a></li>
           
           <li><a href="ch-mps.html#def:mpv_overlap">Definition 2.43</a></li>
           
-          <li><a href="ch-bnt.html#def:cf_bnt">Definition 13.3</a></li>
+          <li><a href="ch-bnt.html#def:cf_bnt">Definition 13.4</a></li>
           
-          <li><a href="ch-bnt.html#thm:cross_overlap_zero_split">Theorem 13.7</a></li>
+          <li><a href="ch-bnt.html#thm:cross_overlap_zero_split">Theorem 13.8</a></li>
           
         </ul>
     
@@ -1582,7 +1646,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Definition&#160;<a href="ch-bnt.html#def:cf_bnt">13.3</a> supplies injectivity, left-canonical normalization, and the BNT separation hypothesis, so Theorem&#160;<a href="ch-bnt.html#thm:cross_overlap_zero_split">13.7</a> applies directly. </p>
+  <p> Definition&#160;<a href="ch-bnt.html#def:cf_bnt">13.4</a> supplies injectivity, left-canonical normalization, and the BNT separation hypothesis, so Theorem&#160;<a href="ch-bnt.html#thm:cross_overlap_zero_split">13.8</a> applies directly. </p>
 
   </div>
 </div>
@@ -1591,7 +1655,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">13.9</span>
+    <span class="theorem_thmlabel">13.10</span>
     <span class="theorem_thmtitle">BNT from explicit blockwise hypotheses</span>
     <div class="thm_header_extras">
 
@@ -1626,7 +1690,7 @@
           
           <li><a href="ch-bnt.html#thm:bnt_overlap_orthonormal_li">Theorem 13.2</a></li>
           
-          <li><a href="ch-bnt.html#thm:cross_overlap_zero_split">Theorem 13.7</a></li>
+          <li><a href="ch-bnt.html#thm:cross_overlap_zero_split">Theorem 13.8</a></li>
           
         </ul>
     
@@ -1669,7 +1733,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Injective blocks are normal. The block-diagonal decomposition theorem gives the MPV expansion of \(\bigoplus _k \mu _k A_k\) in terms of the block MPVs. The self-overlap limits are part of the hypotheses, and Theorem&#160;<a href="ch-bnt.html#thm:cross_overlap_zero_split">13.7</a> supplies the off-diagonal decay. Therefore Theorem&#160;<a href="ch-bnt.html#thm:bnt_overlap_orthonormal_li">13.2</a> gives the eventual linear independence required in Definition&#160;<a href="ch-bnt.html#def:bnt">13.1</a>. </p>
+  <p> Injective blocks are normal. The block-diagonal decomposition theorem gives the MPV expansion of \(\bigoplus _k \mu _k A_k\) in terms of the block MPVs. The self-overlap limits are part of the hypotheses, and Theorem&#160;<a href="ch-bnt.html#thm:cross_overlap_zero_split">13.8</a> supplies the off-diagonal decay. Therefore Theorem&#160;<a href="ch-bnt.html#thm:bnt_overlap_orthonormal_li">13.2</a> gives the eventual linear independence required in Definition&#160;<a href="ch-bnt.html#def:bnt">13.1</a>. </p>
 
   </div>
 </div>
@@ -1678,7 +1742,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">13.10</span>
+    <span class="theorem_thmlabel">13.11</span>
     <span class="theorem_thmtitle">Canonical form with BNT separation yields a basis of normal tensors</span>
     <div class="thm_header_extras">
 
@@ -1705,13 +1769,13 @@
         
         <ul class="uses">
           
-          <li><a href="ch-bnt.html#def:cf_bnt">Definition 13.3</a></li>
+          <li><a href="ch-bnt.html#def:cf_bnt">Definition 13.4</a></li>
           
           <li><a href="ch-bnt.html#def:bnt">Definition 13.1</a></li>
           
-          <li><a href="ch-bnt.html#def:cf_bnt">Definition 13.3</a></li>
+          <li><a href="ch-bnt.html#def:cf_bnt">Definition 13.4</a></li>
           
-          <li><a href="ch-bnt.html#thm:cf_bnt_is_bnt_split">Theorem 13.9</a></li>
+          <li><a href="ch-bnt.html#thm:cf_bnt_is_bnt_split">Theorem 13.10</a></li>
           
         </ul>
     
@@ -1754,7 +1818,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Definition&#160;<a href="ch-bnt.html#def:cf_bnt">13.3</a> provides injective blocks, left-canonical normalization, normalized self-overlaps, and BNT separation. Hence Theorem&#160;<a href="ch-bnt.html#thm:cf_bnt_is_bnt_split">13.9</a> applies. </p>
+  <p> Definition&#160;<a href="ch-bnt.html#def:cf_bnt">13.4</a> provides injective blocks, left-canonical normalization, normalized self-overlaps, and BNT separation. Hence Theorem&#160;<a href="ch-bnt.html#thm:cf_bnt_is_bnt_split">13.10</a> applies. </p>
 
   </div>
 </div>
@@ -1763,7 +1827,7 @@
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">13.11</span>
+    <span class="remark_thmlabel">13.12</span>
     <span class="remark_thmtitle">The normality gap for normal canonical form with BNT separation</span>
     <div class="thm_header_extras">
 
@@ -1777,7 +1841,7 @@
         </div>
   </div>
   <div class="remark_thmcontent">
-  <p> Definition&#160;<a href="ch-bnt.html#def:normal_cf_bnt">13.5</a> references the normal canonical form conditions (Definition&#160;<a href="ch-canonical.html#def:is_normal_canonical_form">11.38</a>), which encode normality via the spectral characterization (primitive transfer map). Definition&#160;<a href="ch-bnt.html#def:bnt">13.1</a> requires normality via the algebraic characterization (eventual block injectivity, Definition&#160;<a href="ch-mps.html#def:normal">2.26</a>). These are equivalent by Remark&#160;2.20, but the equivalence must be invoked explicitly: the Wielandt theory of Chapter&#160;<a href="ch-wielandt.html">10</a> provides the implication from primitivity to eventual block injectivity needed here. </p>
+  <p> Definition&#160;<a href="ch-bnt.html#def:normal_cf_bnt">13.6</a> references the normal canonical form conditions (Definition&#160;<a href="ch-canonical.html#def:is_normal_canonical_form">11.38</a>), which encode normality via the spectral characterization (primitive transfer map). Definition&#160;<a href="ch-bnt.html#def:bnt">13.1</a> requires normality via the algebraic characterization (eventual block injectivity, Definition&#160;<a href="ch-mps.html#def:normal">2.26</a>). These are equivalent by Remark&#160;2.20, but the equivalence must be invoked explicitly: the Wielandt theory of Chapter&#160;<a href="ch-wielandt.html">10</a> provides the implication from primitivity to eventual block injectivity needed here. </p>
 
   </div>
 </div>
@@ -1786,7 +1850,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">13.12</span>
+    <span class="theorem_thmlabel">13.13</span>
     <span class="theorem_thmtitle">Normal canonical form with BNT separation yields a BNT after algebraic normality is supplied</span>
     <div class="thm_header_extras">
 
@@ -1813,11 +1877,11 @@
         
         <ul class="uses">
           
-          <li><a href="ch-bnt.html#def:normal_cf_bnt">Definition 13.5</a></li>
+          <li><a href="ch-bnt.html#def:normal_cf_bnt">Definition 13.6</a></li>
           
           <li><a href="ch-bnt.html#def:bnt">Definition 13.1</a></li>
           
-          <li><a href="ch-bnt.html#rem:normalcf_bnt_gap">Remark 13.11</a></li>
+          <li><a href="ch-bnt.html#rem:normalcf_bnt_gap">Remark 13.12</a></li>
           
         </ul>
     
@@ -1870,7 +1934,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">13.13</span>
+    <span class="theorem_thmlabel">13.14</span>
     <span class="theorem_thmtitle">Invertible change of basis</span>
     <div class="thm_header_extras">
 
@@ -1933,7 +1997,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">13.14</span>
+    <span class="theorem_thmlabel">13.15</span>
     <span class="theorem_thmtitle">Eventual change of basis from equal spans</span>
     <div class="thm_header_extras">
 
@@ -1960,13 +2024,13 @@
         
         <ul class="uses">
           
-          <li><a href="ch-bnt.html#thm:bnt_invertible_change_basis">Theorem 13.13</a></li>
+          <li><a href="ch-bnt.html#thm:bnt_invertible_change_basis">Theorem 13.14</a></li>
           
           <li><a href="ch-mps.html#def:mpv_overlap">Definition 2.43</a></li>
           
           <li><a href="ch-bnt.html#thm:bnt_overlap_orthonormal_li">Theorem 13.2</a></li>
           
-          <li><a href="ch-bnt.html#thm:bnt_invertible_change_basis">Theorem 13.13</a></li>
+          <li><a href="ch-bnt.html#thm:bnt_invertible_change_basis">Theorem 13.14</a></li>
           
         </ul>
     
@@ -2009,7 +2073,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> By Theorem&#160;<a href="ch-bnt.html#thm:bnt_overlap_orthonormal_li">13.2</a>, both families are linearly independent for all sufficiently large \(N\). At such an \(N\), the span equality lets us apply Theorem&#160;<a href="ch-bnt.html#thm:bnt_invertible_change_basis">13.13</a>. </p>
+  <p> By Theorem&#160;<a href="ch-bnt.html#thm:bnt_overlap_orthonormal_li">13.2</a>, both families are linearly independent for all sufficiently large \(N\). At such an \(N\), the span equality lets us apply Theorem&#160;<a href="ch-bnt.html#thm:bnt_invertible_change_basis">13.14</a>. </p>
 
   </div>
 </div>
@@ -2018,7 +2082,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">13.15</span>
+    <span class="theorem_thmlabel">13.16</span>
     <span class="theorem_thmtitle">Permutation rigidity for equal block counts</span>
     <div class="thm_header_extras">
 
@@ -2051,7 +2115,7 @@
           
           <li><a href="ch-mps.html#def:gauge_phase_equiv">Definition 2.18</a></li>
           
-          <li><a href="ch-bnt.html#thm:bnt_eventual_change_basis">Theorem 13.14</a></li>
+          <li><a href="ch-bnt.html#thm:bnt_eventual_change_basis">Theorem 13.15</a></li>
           
           <li><a href="ch-spectral.html#thm:overlap_decay">Theorem 9.25</a></li>
           
@@ -2098,7 +2162,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> For large \(N\), Theorem&#160;<a href="ch-bnt.html#thm:bnt_eventual_change_basis">13.14</a> gives an invertible matrix \(U_N\) relating the two MPV families. Fix \(j\). If every mixed overlap \(O_{A_iB_j}(N)\) tended to \(0\), then taking inner products of the relation with the \(A_i\) and using that the Gram matrix of the \(A\)-family tends to the identity would force the \(j\)th column of \(U_N\) to vanish asymptotically, contradicting the self-overlap limit of \(B_j\). Thus each \(B_j\) has a matched block \(A_{f(j)}\) with non-decaying mixed overlap. Theorems&#160;<a href="ch-spectral.html#thm:overlap_decay_rect">9.23</a> and&#160;<a href="ch-spectral.html#thm:overlap_decay">9.25</a> then force equal bond dimension and gauge-phase equivalence for each match. Off-diagonal decay within the \(B\)-family makes \(f\) injective, hence bijective, and its inverse is the required permutation. </p>
+  <p> For large \(N\), Theorem&#160;<a href="ch-bnt.html#thm:bnt_eventual_change_basis">13.15</a> gives an invertible matrix \(U_N\) relating the two MPV families. Fix \(j\). If every mixed overlap \(O_{A_iB_j}(N)\) tended to \(0\), then taking inner products of the relation with the \(A_i\) and using that the Gram matrix of the \(A\)-family tends to the identity would force the \(j\)th column of \(U_N\) to vanish asymptotically, contradicting the self-overlap limit of \(B_j\). Thus each \(B_j\) has a matched block \(A_{f(j)}\) with non-decaying mixed overlap. Theorems&#160;<a href="ch-spectral.html#thm:overlap_decay_rect">9.23</a> and&#160;<a href="ch-spectral.html#thm:overlap_decay">9.25</a> then force equal bond dimension and gauge-phase equivalence for each match. Off-diagonal decay within the \(B\)-family makes \(f\) injective, hence bijective, and its inverse is the required permutation. </p>
 
   </div>
 </div>
@@ -2107,7 +2171,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">13.16</span>
+    <span class="theorem_thmlabel">13.17</span>
     <span class="theorem_thmtitle">Permutation rigidity for proportional MPV decompositions</span>
     <div class="thm_header_extras">
 
@@ -2204,7 +2268,7 @@
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">13.17</span>
+    <span class="remark_thmlabel">13.18</span>
     <div class="thm_header_extras">
 
         </div>
@@ -2221,7 +2285,7 @@
 <div class="displaymath" id="a0000000929">
   \[  A_{\mathrm{tot}} = \bigoplus _{j=1}^{g_A} \mu _j A_j, \qquad B_{\mathrm{tot}} = \bigoplus _{k=1}^{g_B} \nu _k B_k,  \]
 </div>
-<p> and Theorem&#160;<a href="ch-mps.html#thm:mpv_decomposition">2.36</a> gives the coefficient arrays \(a_{N,j} = \mu _j^N\) and \(b_{N,k} = \nu _k^N\). To fit the convergence hypotheses of Theorem&#160;<a href="ch-bnt.html#thm:bnt_perm_prop">13.16</a>, one first normalizes by the dominant weight on each side: the relevant arrays are \((\mu _j/\mu _0)^N\) and \((\nu _k/\nu _0)^N\), with \((\mu _j/\mu _0)^N \to 0\) for \(j \ge 1\) and \((\nu _k/\nu _0)^N \to 0\) for \(k \ge 1\) by Theorem&#160;<a href="ch-bnt.html#thm:coeff_ratio_decay">13.26</a>, while the overall factors \(\mu _0^N\) and \(\nu _0^N\) are absorbed into the proportionality constant \(c_N\). Definition&#160;<a href="ch-bnt.html#def:cf_bnt">13.3</a> supplies injectivity, TP normalization, and the within-family overlap limits, so the theorem isolates the abstract permutation argument from this canonical-form setting. </p>
+<p> and Theorem&#160;<a href="ch-mps.html#thm:mpv_decomposition">2.36</a> gives the coefficient arrays \(a_{N,j} = \mu _j^N\) and \(b_{N,k} = \nu _k^N\). To fit the convergence hypotheses of Theorem&#160;<a href="ch-bnt.html#thm:bnt_perm_prop">13.17</a>, one first normalizes by the dominant weight on each side: the relevant arrays are \((\mu _j/\mu _0)^N\) and \((\nu _k/\nu _0)^N\), with \((\mu _j/\mu _0)^N \to 0\) for \(j \ge 1\) and \((\nu _k/\nu _0)^N \to 0\) for \(k \ge 1\) by Theorem&#160;<a href="ch-bnt.html#thm:coeff_ratio_decay">13.27</a>, while the overall factors \(\mu _0^N\) and \(\nu _0^N\) are absorbed into the proportionality constant \(c_N\). Definition&#160;<a href="ch-bnt.html#def:cf_bnt">13.4</a> supplies injectivity, TP normalization, and the within-family overlap limits, so the theorem isolates the abstract permutation argument from this canonical-form setting. </p>
 
   </div>
 </div>
@@ -2230,7 +2294,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">13.18</span>
+    <span class="theorem_thmlabel">13.19</span>
     <span class="theorem_thmtitle">Permutation rigidity with asymptotically orthonormal overlaps</span>
     <div class="thm_header_extras">
 
@@ -2267,7 +2331,7 @@
           
           <li><a href="ch-bnt.html#thm:bnt_overlap_orthonormal_li">Theorem 13.2</a></li>
           
-          <li><a href="ch-bnt.html#thm:bnt_perm_same_card">Theorem 13.15</a></li>
+          <li><a href="ch-bnt.html#thm:bnt_perm_same_card">Theorem 13.16</a></li>
           
         </ul>
     
@@ -2314,7 +2378,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> By Theorem&#160;<a href="ch-bnt.html#thm:bnt_overlap_orthonormal_li">13.2</a>, both families are linearly independent for all sufficiently large \(N\). At such an \(N\), the common span has the same dimension when computed from the \(A\)-family or the \(B\)-family, so \(g_A = g_B\). After identifying the two index sets, Theorem&#160;<a href="ch-bnt.html#thm:bnt_perm_same_card">13.15</a> yields the permutation conclusion. </p>
+  <p> By Theorem&#160;<a href="ch-bnt.html#thm:bnt_overlap_orthonormal_li">13.2</a>, both families are linearly independent for all sufficiently large \(N\). At such an \(N\), the common span has the same dimension when computed from the \(A\)-family or the \(B\)-family, so \(g_A = g_B\). After identifying the two index sets, Theorem&#160;<a href="ch-bnt.html#thm:bnt_perm_same_card">13.16</a> yields the permutation conclusion. </p>
 
   </div>
 </div>
@@ -2323,7 +2387,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">13.19</span>
+    <span class="theorem_thmlabel">13.20</span>
     <span class="theorem_thmtitle">Permutation rigidity for proportional decompositions, irreducible TP version</span>
     <div class="thm_header_extras">
 
@@ -2356,7 +2420,7 @@
           
           <li><a href="ch-mps.html#def:gauge_phase_equiv">Definition 2.18</a></li>
           
-          <li><a href="ch-bnt.html#thm:bnt_perm_prop">Theorem 13.16</a></li>
+          <li><a href="ch-bnt.html#thm:bnt_perm_prop">Theorem 13.17</a></li>
           
         </ul>
     
@@ -2387,7 +2451,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>    Under the hypotheses of Theorem&#160;<a href="ch-bnt.html#thm:bnt_perm_prop">13.16</a>, replace injectivity of each block by irreducibility while keeping trace-preserving normalization and the same overlap limits. Then the same permutation conclusion holds. </p>
+  <p>    Under the hypotheses of Theorem&#160;<a href="ch-bnt.html#thm:bnt_perm_prop">13.17</a>, replace injectivity of each block by irreducibility while keeping trace-preserving normalization and the same overlap limits. Then the same permutation conclusion holds. </p>
 
   </div>
 </div>
@@ -2408,7 +2472,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">13.20</span>
+    <span class="theorem_thmlabel">13.21</span>
     <span class="theorem_thmtitle">Canonical-form proportional decomposition theorem</span>
     <div class="thm_header_extras">
 
@@ -2435,13 +2499,13 @@
         
         <ul class="uses">
           
-          <li><a href="ch-bnt.html#def:cf_bnt">Definition 13.3</a></li>
+          <li><a href="ch-bnt.html#def:cf_bnt">Definition 13.4</a></li>
           
-          <li><a href="ch-bnt.html#thm:bnt_perm_prop">Theorem 13.16</a></li>
+          <li><a href="ch-bnt.html#thm:bnt_perm_prop">Theorem 13.17</a></li>
           
-          <li><a href="ch-bnt.html#thm:bnt_perm_prop">Theorem 13.16</a></li>
+          <li><a href="ch-bnt.html#thm:bnt_perm_prop">Theorem 13.17</a></li>
           
-          <li><a href="ch-bnt.html#thm:cross_overlap_zero">Theorem 13.8</a></li>
+          <li><a href="ch-bnt.html#thm:cross_overlap_zero">Theorem 13.9</a></li>
           
         </ul>
     
@@ -2484,7 +2548,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Project the two canonical-form hypotheses to blockwise injectivity, left-canonical normalization, self-overlap convergence, and BNT separation. Then Theorem&#160;<a href="ch-bnt.html#thm:bnt_perm_prop">13.16</a> applies to the resulting proportional decomposition data. </p>
+  <p> Project the two canonical-form hypotheses to blockwise injectivity, left-canonical normalization, self-overlap convergence, and BNT separation. Then Theorem&#160;<a href="ch-bnt.html#thm:bnt_perm_prop">13.17</a> applies to the resulting proportional decomposition data. </p>
 
   </div>
 </div>
@@ -2493,7 +2557,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">13.21</span>
+    <span class="theorem_thmlabel">13.22</span>
     <span class="theorem_thmtitle">Normal-canonical proportional decomposition theorem</span>
     <div class="thm_header_extras">
 
@@ -2520,11 +2584,11 @@
         
         <ul class="uses">
           
-          <li><a href="ch-bnt.html#def:normal_cf_bnt">Definition 13.5</a></li>
+          <li><a href="ch-bnt.html#def:normal_cf_bnt">Definition 13.6</a></li>
           
-          <li><a href="ch-bnt.html#thm:bnt_perm_prop_nt">Theorem 13.19</a></li>
+          <li><a href="ch-bnt.html#thm:bnt_perm_prop_nt">Theorem 13.20</a></li>
           
-          <li><a href="ch-bnt.html#thm:bnt_perm_prop_nt">Theorem 13.19</a></li>
+          <li><a href="ch-bnt.html#thm:bnt_perm_prop_nt">Theorem 13.20</a></li>
           
         </ul>
     
@@ -2567,7 +2631,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Project the two normal-canonical hypotheses to irreducibility, left-canonical normalization, self-overlap convergence, and BNT separation, and then apply Theorem&#160;<a href="ch-bnt.html#thm:bnt_perm_prop_nt">13.19</a>. </p>
+  <p> Project the two normal-canonical hypotheses to irreducibility, left-canonical normalization, self-overlap convergence, and BNT separation, and then apply Theorem&#160;<a href="ch-bnt.html#thm:bnt_perm_prop_nt">13.20</a>. </p>
 
   </div>
 </div>
@@ -2576,7 +2640,7 @@
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">13.22</span>
+    <span class="remark_thmlabel">13.23</span>
     <div class="thm_header_extras">
 
         </div>
@@ -2589,7 +2653,7 @@
         </div>
   </div>
   <div class="remark_thmcontent">
-  <p>Theorem&#160;<a href="ch-bnt.html#thm:bnt_perm_simple">13.18</a> is retained for completeness but is not used in the proofs given here; the proportional version (Theorem&#160;<a href="ch-bnt.html#thm:bnt_perm_prop">13.16</a>) suffices for the Fundamental Theorem. </p>
+  <p>Theorem&#160;<a href="ch-bnt.html#thm:bnt_perm_simple">13.19</a> is retained for completeness but is not used in the proofs given here; the proportional version (Theorem&#160;<a href="ch-bnt.html#thm:bnt_perm_prop">13.17</a>) suffices for the Fundamental Theorem. </p>
 
   </div>
 </div>
@@ -2599,7 +2663,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">13.23</span>
+    <span class="theorem_thmlabel">13.24</span>
     <span class="theorem_thmtitle">Vandermonde separation</span>
     <div class="thm_header_extras">
 
@@ -2682,7 +2746,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">13.24</span>
+    <span class="theorem_thmlabel">13.25</span>
     <span class="theorem_thmtitle">Fixed-size linear independence of block MPVs</span>
     <div class="thm_header_extras">
 
@@ -2709,9 +2773,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-bnt.html#thm:bnt_vandermonde_separation">Theorem 13.23</a></li>
+          <li><a href="ch-bnt.html#thm:bnt_vandermonde_separation">Theorem 13.24</a></li>
           
-          <li><a href="ch-bnt.html#thm:bnt_vandermonde_separation">Theorem 13.23</a></li>
+          <li><a href="ch-bnt.html#thm:bnt_vandermonde_separation">Theorem 13.24</a></li>
           
         </ul>
     
@@ -2758,7 +2822,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Apply Theorem&#160;<a href="ch-bnt.html#thm:bnt_vandermonde_separation">13.23</a> pointwise in the word \(\sigma \). This shows that every component of \(c_k|V^{(N_0)}(A_k)\rangle \) vanishes. Since the MPV of each block is nonzero at size \(N_0\), some component survives, so \(c_k = 0\). </p>
+  <p> Apply Theorem&#160;<a href="ch-bnt.html#thm:bnt_vandermonde_separation">13.24</a> pointwise in the word \(\sigma \). This shows that every component of \(c_k|V^{(N_0)}(A_k)\rangle \) vanishes. Since the MPV of each block is nonzero at size \(N_0\), some component survives, so \(c_k = 0\). </p>
 
   </div>
 </div>
@@ -2767,7 +2831,7 @@
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">13.25</span>
+    <span class="remark_thmlabel">13.26</span>
     <div class="thm_header_extras">
 
         </div>
@@ -2790,7 +2854,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">13.26</span>
+    <span class="theorem_thmlabel">13.27</span>
     <span class="theorem_thmtitle">Coefficient ratio decay</span>
     <div class="thm_header_extras">
 
@@ -2817,7 +2881,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-bnt.html#def:cf_bnt">Definition 13.3</a></li>
+          <li><a href="ch-bnt.html#def:cf_bnt">Definition 13.4</a></li>
           
         </ul>
     
@@ -2848,7 +2912,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   Under the canonical form with BNT separation of Definition&#160;<a href="ch-bnt.html#def:cf_bnt">13.3</a>, indexed so that \(\mu _0\) is the (strictly) dominant weight, one has \((\mu _k / \mu _0)^N \to 0\) for every \(k \ge 1\) as \(N \to \infty \). </p>
+  <p>   Under the canonical form with BNT separation of Definition&#160;<a href="ch-bnt.html#def:cf_bnt">13.4</a>, indexed so that \(\mu _0\) is the (strictly) dominant weight, one has \((\mu _k / \mu _0)^N \to 0\) for every \(k \ge 1\) as \(N \to \infty \). </p>
 
   </div>
 </div>
@@ -2860,7 +2924,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>By the BNT separation condition in Definition&#160;<a href="ch-bnt.html#def:cf_bnt">13.3</a>, \(|\mu _k| {\lt} |\mu _0|\) strictly, so \(|\mu _k / \mu _0| {\lt} 1\) and the geometric sequence converges to&#160;\(0\). </p>
+  <p>By the BNT separation condition in Definition&#160;<a href="ch-bnt.html#def:cf_bnt">13.4</a>, \(|\mu _k| {\lt} |\mu _0|\) strictly, so \(|\mu _k / \mu _0| {\lt} 1\) and the geometric sequence converges to&#160;\(0\). </p>
 
   </div>
 </div>
@@ -2869,7 +2933,7 @@
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">13.27</span>
+    <span class="remark_thmlabel">13.28</span>
     <span class="remark_thmtitle">Strict-dominance regime</span>
     <div class="thm_header_extras">
 
@@ -2883,7 +2947,7 @@
         </div>
   </div>
   <div class="remark_thmcontent">
-  <p>Theorem&#160;<a href="ch-bnt.html#thm:coeff_ratio_decay">13.26</a> applies when one modulus is strictly dominant: \(|\mu _0| {\gt} |\mu _k|\) for \(k \ge 1\). In the more general periodic setting of <span class="cite">
+  <p>Theorem&#160;<a href="ch-bnt.html#thm:coeff_ratio_decay">13.27</a> applies when one modulus is strictly dominant: \(|\mu _0| {\gt} |\mu _k|\) for \(k \ge 1\). In the more general periodic setting of <span class="cite">
 	[
 	
 	<a href="sect0001.html#Cirac2021Matrix" >CPGSV21</a>
@@ -2899,7 +2963,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">13.28</span>
+    <span class="theorem_thmlabel">13.29</span>
     <span class="theorem_thmtitle">Newton–Girard trace recursion</span>
     <div class="thm_header_extras">
 
@@ -2962,7 +3026,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">13.29</span>
+    <span class="theorem_thmlabel">13.30</span>
     <span class="theorem_thmtitle">Equal power sums imply equal multisets</span>
     <div class="thm_header_extras">
 
@@ -3012,7 +3076,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Construct diagonal matrices \(\operatorname{diag}(\alpha )\) and \(\operatorname{diag}(\beta )\). The power-sum hypothesis gives \(\operatorname{tr}(\operatorname{diag}(\alpha )^k) = \operatorname{tr}(\operatorname{diag}(\beta )^k)\). By Theorem&#160;<a href="ch-bnt.html#thm:newton_girard">13.28</a>, the characteristic polynomials agree: \(\prod _i (X - \alpha _i) = \prod _i (X - \beta _i)\). Extracting roots gives multiset equality. </p>
+  <p> Construct diagonal matrices \(\operatorname{diag}(\alpha )\) and \(\operatorname{diag}(\beta )\). The power-sum hypothesis gives \(\operatorname{tr}(\operatorname{diag}(\alpha )^k) = \operatorname{tr}(\operatorname{diag}(\beta )^k)\). By Theorem&#160;<a href="ch-bnt.html#thm:newton_girard">13.29</a>, the characteristic polynomials agree: \(\prod _i (X - \alpha _i) = \prod _i (X - \beta _i)\). Extracting roots gives multiset equality. </p>
 
   </div>
 </div>
@@ -3021,7 +3085,7 @@
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">13.30</span>
+    <span class="remark_thmlabel">13.31</span>
     <div class="thm_header_extras">
 
         </div>
@@ -3034,7 +3098,7 @@
         </div>
   </div>
   <div class="remark_thmcontent">
-  <p>Theorems&#160;<a href="ch-bnt.html#thm:newton_girard">13.28</a> and&#160;<a href="ch-bnt.html#thm:power_sum_multiset">13.29</a> remain relevant for the general equal-MPV Theorem&#160;<a href="ch-assembly.html#thm:ft_equal">14.5</a>, where one expects a power-sum step to recover the multiplicity-weight data. The present explicit-coefficient special case, Theorem&#160;<a href="ch-assembly.html#thm:ft_equal_explicit">14.6</a>, instead uses linear independence of the block MPV family supplied by a basis of normal tensors. </p>
+  <p>Theorems&#160;<a href="ch-bnt.html#thm:newton_girard">13.29</a> and&#160;<a href="ch-bnt.html#thm:power_sum_multiset">13.30</a> remain relevant for the general equal-MPV Theorem&#160;<a href="ch-assembly.html#thm:ft_equal">14.5</a>, where one expects a power-sum step to recover the multiplicity-weight data. The present explicit-coefficient special case, Theorem&#160;<a href="ch-assembly.html#thm:ft_equal_explicit">14.6</a>, instead uses linear independence of the block MPV family supplied by a basis of normal tensors. </p>
 
   </div>
 </div>
