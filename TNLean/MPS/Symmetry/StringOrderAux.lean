@@ -17,7 +17,7 @@ import TNLean.Spectral.SpectralGapNT
 /-!
 # String order: auxiliary lemmas and private proofs
 
-This file contains the TP-gauge setup infrastructure and the long auxiliary proofs
+This file contains the TP-gauge setup and the long auxiliary proofs
 supporting the main string-order equivalence theorems in
 `TNLean.MPS.Symmetry.StringOrder`.
 
