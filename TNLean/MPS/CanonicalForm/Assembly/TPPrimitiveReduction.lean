@@ -24,14 +24,14 @@ open Filter
 /-!
 # TP-primitive reduction after blocking
 
-This file begins the end-to-end canonical-form reduction for arbitrary MPS
-families. It combines the output of the zero-block separation, TP gauge, and
+This file begins the canonical-form reduction for arbitrary MPS
+families. It combines the zero-block separation, TP gauge, and
 common blocking steps into a blocked decomposition whose nontrivial blocks are
 left-canonical and have primitive transfer maps.
 
 It also records two immediate consequences when extra hypotheses are already
 available: the sorted normal-canonical-form criterion for blocked primitive
-families and the trivial-blocking shortcut for inputs that already come with a
+families and the trivial-blocking shortcut for tensors that already come with a
 primitive block decomposition.
 
 ## Main statements
@@ -41,7 +41,7 @@ primitive block decomposition.
 * `isNormalCanonicalForm_of_tp_primitive_irr_sorted` — a blocked TP-primitive
   family with irreducible blocks and strictly separated weights is already in
   normal canonical form.
-* `exists_normalCanonicalForm_of_primitive_input` — primitive input data with
+* `exists_normalCanonicalForm_of_primitive_input` — primitive block data with
   distinct weight norms yields a normal canonical form without nontrivial
   blocking.
 
@@ -92,8 +92,8 @@ theorem zeroTail_mpv_decomp_blockTensor
   congr 1
   exact (mpv_blockTensor_eq_mpv_blockedFlatConfig (d := d) live p σ).symm
 
-/-- Reblocking a zero-tail plus weighted live-block decomposition transports every
-live-block weight to the corresponding blocking power. -/
+/-- Reblocking a zero-tail plus weighted nonzero-block decomposition transports every
+nonzero-block weight to the corresponding blocking power. -/
 theorem zeroTail_toTensorFromBlocks_blockPower
     {d D r z p : ℕ} {dim : Fin r → ℕ}
     (A : MPSTensor d D)
@@ -179,7 +179,7 @@ theorem exists_tp_primitive_blockDecomp_after_blocking (A : MPSTensor d D) :
           mpv (zeroMPSTensor (blockPhysDim d p) zeroTailDim) σ +
             mpv (toTensorFromBlocks (d := blockPhysDim d p) (μ := μ) blocks) σ) := by
   classical
-  -- Step A: Get TP-gauged irreducible blocks from arbitrary input.
+  -- Step A: Get TP-gauged irreducible blocks from an arbitrary tensor.
   obtain ⟨zeroTailDim, r₀, dim₀, μ₀, blocks₀, hIrr₀, hTP₀, hμNe₀, hDim₀, hMPV₀⟩ :=
     exists_tp_gauge_from_arbitrary_with_zeroTail (d := d) (D := D) A
   -- Step B: Find a common blocking period making all transfer maps primitive.
@@ -219,7 +219,7 @@ that the reduction does not produce automatically (see gap documentation above).
 
 /-- **Conditional normal canonical form after blocking.**
 
-If the blocked output additionally satisfies tensor irreducibility for each block,
+If the blocked data additionally satisfy tensor irreducibility for each block,
 pairwise distinct weight norms, and strict weight ordering (already sorted), then
 the data forms an `IsNormalCanonicalForm` directly.
 
@@ -248,7 +248,7 @@ theorem isNormalCanonicalForm_of_tp_primitive_irr_sorted
 /-!
 ## Reduction shortcut for pre-primitive blocks
 
-When the input already has primitive blocks with distinct weight norms
+When the tensor already has primitive blocks with distinct weight norms
 (e.g., from an external construction or a tensor that is already aperiodic),
 the blocking step is trivial (p = 1) and the full `IsNormalCanonicalForm`
 follows directly via `exists_normalCanonicalForm_of_primitive_blockDecomp`.
