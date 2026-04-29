@@ -381,10 +381,11 @@ theorem exists_irreducible_blockDecomp_with_CFII
 /-!
 ## Zero-block separation (1606.00608 §2.3: partition into zero tail + nonzero blocks)
 
-The irreducible block decomposition may produce all-zero blocks. Because `SameMPV₂` at `N = 0`
-includes the identity `trace(I_D) = D`, we cannot silently drop these. Instead we accumulate them into a
-**zero tail** of dimension `zeroTailDim` (the sum of their bond dimensions) and retain a family
-of **nonzero blocks** (each having at least one nonzero Kraus operator).
+The irreducible block decomposition may produce all-zero blocks. Because `SameMPV₂`
+at `N = 0` includes the identity `trace(I_D) = D`, we cannot silently drop these.
+Instead we accumulate them into a **zero tail** of dimension `zeroTailDim` (the sum
+of their bond dimensions) and retain a family of **nonzero blocks** (each having at
+least one nonzero Kraus operator).
 
 Key facts:
 - All-zero irreducible blocks have `dim ≤ 1` (`isIrreducibleTensor_allZero_dim_le_one`).
