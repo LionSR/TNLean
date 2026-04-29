@@ -1,4 +1,4 @@
-# 2026-04-29 — Issue #944 overlap-span from common live-sector comparison
+# 2026-04-29 — Issue #944 overlap-span from common nonzero-sector comparison
 
 ## Scope and issue-thread check
 
@@ -6,7 +6,7 @@ This branch continues the non-Gemma canonical-form equal-case path after merged 
 #988, and #989. The current issue-thread state is:
 
 - #944 has reduced the collapsed-BNT representative obligation to the finite-length span
-  equality for the two live block families.
+  equality for the two nonzero-weight block families.
 - #970 has the common phase-cover span mechanism and the BNT proportional-decomposition
   comparison route on `main`.
 - #942/#969/#989 provide common physical blocking length and relabeled cyclic-sector families
@@ -17,8 +17,8 @@ This branch continues the non-Gemma canonical-form equal-case path after merged 
 
 The new theorems therefore do not assert that arbitrary `SameMPV₂ A B` already gives the
 final span equality. Instead they compose the available common-cover and BNT comparison
-machinery with the exact-live and zero-tail sector comparison theorems, making the
-remaining inputs precise.
+machinery with the exact nonzero-part and zero-tail sector comparison theorems, making the
+remaining hypotheses precise.
 
 ## Paper/source anchors
 
@@ -45,32 +45,32 @@ The statements follow the standard MPS route used in the canonical-form proofs:
 
 New declarations:
 
-- `MPSTensor.exists_bnt_sectorDecomp_pair_with_overlapSpan_of_commonPhaseCover`:
-  given trace-preserving, primitive, irreducible, injective live block families with
+- `MPSTensor.exists_bnt_sector_decomposition_pair_with_overlap_span_of_common_phase_cover`:
+  given trace-preserving, primitive, irreducible, injective nonzero-weight block families with
   nonzero weights and common phase-cover data, construct sector decompositions whose
   bases satisfy `SectorBasisOverlapSpanHypotheses`.
-- `MPSTensor.exists_bnt_sectorDecomp_pair_with_overlapSpan_of_proportionalDecompositionConclusion`:
-  first turns a BNT proportional-decomposition conclusion into a common MPV phase cover,
-  then applies the previous theorem.
+- `MPSTensor.exists_bnt_sector_decomposition_pair_with_overlap_span_of_bnt_proportional_decomposition`:
+  first turns BNT proportional-decomposition data into a common MPV phase cover, then
+  applies the previous theorem.
 
 These theorems discharge the `span_eq` field through `MPVCommonPhaseCover.span_eq`; no
-finite-length span equality is assumed as input.
+finite-length span equality is assumed as a hypothesis.
 
-### `TNLean/MPS/CanonicalForm/Assembly/StructuralTheorem.lean`
+### BNT proportional comparison assembly file
 
 New declarations:
 
-- `MPSTensor.fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_proportionalConclusion`:
-  exact live decompositions at a common blocking period plus a BNT proportional-decomposition
-  conclusion imply the sector-weight comparison theorem.
-- `fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_proportionalConclusion_zeroTail`
+- `MPSTensor.fundamentalTheorem_after_blocking_1606_sector_of_bnt_proportional_decomposition`:
+  exact nonzero-part decompositions at a common blocking period plus BNT
+  proportional-decomposition data imply the sector-weight comparison theorem.
+- `fundamentalTheorem_after_blocking_1606_sector_zero_tail_of_bnt_proportional_decomposition`
   (in namespace `MPSTensor`): zero-tail equations at a common blocking period, equality
-  of zero-tail dimensions, injectivity, and a BNT proportional-decomposition conclusion
-  imply the zero-tail-aware sector comparison theorem.
+  of zero-tail dimensions, injectivity, and BNT proportional-decomposition data imply the
+  zero-tail-aware sector comparison theorem.
 
-The zero-tail theorem is the direct downstream consumer for the #989 data once the
+The zero-tail theorem is the direct mathematical consequence for the #989 data once the
 physical-label compatibility theorem rewrites the common-length zero-tail equations with
-the derived cyclic-sector live families and any needed injectivity refinement has been
+the derived cyclic-sector families and any needed injectivity refinement has been
 supplied.
 
 ### Blueprint updates
@@ -80,15 +80,15 @@ and the two sector-comparison theorems. `blueprint/src/chapter/ch08_canonical.te
 points from the common-length cyclic-sector discussion to the zero-tail
 proportional-decomposition theorem as the next checked comparison step.
 
-## Remaining paper inputs
+## Remaining paper hypotheses
 
-The branch deliberately leaves the following inputs explicit:
+The branch deliberately leaves the following hypotheses explicit:
 
-1. physical-label compatibility between the canonical blocked live tensor and the explicitly
-   relabeled one-shot live tensor for the whole weighted family;
-2. any additional common blocking required to make the final live sectors injective;
-3. BNT proportional-decomposition data for those final common-length live-sector families,
-   obtained from the exact live equality without assuming finite-length span equality.
+1. physical-label compatibility between the canonical blocked nonzero part and the explicitly
+   relabeled cyclic-sector tensor for the whole weighted family;
+2. any additional common blocking required to make the final nonzero sectors injective;
+3. BNT proportional-decomposition data for those final common-length nonzero-sector families,
+   obtained from the exact nonzero-part equality without assuming finite-length span equality.
 
 Once these are supplied, the new zero-tail theorem produces the overlap-span data and
 sector-weight conclusion through the common phase-cover route.
