@@ -7,11 +7,11 @@ import TNLean.Wielandt.Primitivity.Equivalence
 import TNLean.Wielandt.RankOne.ExtractionFull
 
 /-!
-# Lemma 2(b) — coarse existential wrapper (arXiv:0909.5347)
+# Lemma 2(b) — coarse existential statement (arXiv:0909.5347)
 
 This file states a **coarse existential** version of **Lemma 2(b)** from
 Sanz–Pérez-García–Wolf–Cirac, *A quantum version of Wielandt's inequality*
-(arXiv:0909.5347), in the paper-facing `IsPrimitivePaper` language.
+(arXiv:0909.5347), in the `IsPrimitivePaper` language of the paper.
 
 ## Main results
 
@@ -25,11 +25,11 @@ Sanz–Pérez-García–Wolf–Cirac, *A quantum version of Wielandt's inequalit
 
 ## Quantitative status
 
-These wrappers are intentionally **coarse existential** statements. They use the
+These statements are intentionally **coarse existential** statements. They use the
 backend theorem `wielandt_lemma2b`, which produces a witness `N` without
 claiming the paper's exact bound.
 
-They record only the qualitative conclusion `∃ N, S_N(A) = M_D(ℂ)`. In
+They state only the qualitative conclusion `∃ N, S_N(A) = M_D(ℂ)`. In
 particular, they do **not** track the explicit `D²` blocked noninvertible bound
 or the sharp `D² − D + 1` fixed-length bound. Those quantitative statements are
 formalized separately in `PaperResults/MatrixSpanSharpBound.lean` and in the
@@ -50,7 +50,7 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- **Lemma 2(b)** (coarse existential wrapper).
+/-- **Lemma 2(b)** (coarse existential statement).
 
 If `A` is normalized and primitive in the paper sense, then there exists `N`
 such that `S_N(A) = M_D(ℂ)`.

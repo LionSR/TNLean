@@ -7,15 +7,15 @@ import TNLean.MPS.Core.Transfer
 import TNLean.Channel.Peripheral.Spectrum
 
 /-!
-# Paper-facing definition layer for primitivity (arXiv:0909.5347)
+# Paper-level definition layer for primitivity (arXiv:0909.5347)
 
 This file provides **paper-faithful definitions** that mirror the notation and
 terminology of Sanz–Pérez-García–Wolf–Cirac, *A quantum version of Wielandt's
 inequality* (arXiv:0909.5347) and Wolf's lecture notes (Chapter 6).
 
-All definitions here are thin wrappers around existing codebase constructs.
-They are intended as the public API surface for stating Proposition 3 and the
-Wielandt bound in paper notation, without changing the internal proof machinery.
+All definitions here are concise restatements of existing codebase constructs.
+They provide the public paper-notation formulation of Proposition 3 and the
+Wielandt bound, without changing the internal proof argument.
 
 ## Main definitions
 
@@ -37,12 +37,12 @@ There are four distinct primitivity predicates in the codebase:
   peripheral-spectrum predicate for an arbitrary linear map `E`, defined by
   `peripheralEigenvalues E = {1}`.
 * `MPSTensor.HasPrimitiveFixedPoint A` in
-  `TNLean/MPS/Structure/PrimitivityBridge.lean`: the existential wrapper
+  `TNLean/MPS/Structure/PrimitivityBridge.lean`: the existential statement
   `∃ ρ, IsPrimitiveMPS A ρ`, encoding the spectral-gap formulation used in the MPS
-  proof chain.
+  proof route.
 * `IsPrimitivePaper A` in this file: the paper-faithful uniform spreading condition from
   Proposition 3(a).
-* `IsPeripherallyPrimitive A` in this file: the transfer-map wrapper around
+* `IsPeripherallyPrimitive A` in this file: the transfer-map formulation of
   `_root_.IsPrimitive (transferMap A)`.
 
 The intended relationships are:
@@ -59,13 +59,12 @@ The intended relationships are:
 
 ## Design notes
 
-These are **paper-facing wrappers only**. The internal proof chain flows through
+These are **paper-level statements only**. The internal proof route flows through
 `IsNormal`, `IsPrimitiveMPS`, `HasPrimitiveFixedPoint`, etc. The full equivalence of
 all three Proposition 3 conditions is assembled in `Primitivity/Equivalence.lean`.
 
 At present this layer is not imported by the canonical / FT / BNT assembly in
-`TNLean.MPS.*` or `TNLean.PiAlgebra.*`; it serves the standalone paper-facing
-endpoint modules below.
+`TNLean.MPS.*` or `TNLean.PiAlgebra.*`; it serves the standalone theorem modules below.
 
 ## References
 
@@ -152,23 +151,23 @@ if no such `q` exists. -/
 noncomputable def qIndex (A : MPSTensor d D) : ℕ :=
   sInf {q : ℕ | ∀ φ : Fin D → ℂ, φ ≠ 0 → vectorSpreadSpan A φ q = ⊤}
 
-/-! ## Peripheral primitivity (transfer-map wrapper) -/
+/-! ## Peripheral primitivity (transfer-map formulation) -/
 
 /-- **Peripheral primitivity** of an MPS tensor: the transfer map `E_A` has
 peripheral spectrum `{1}`, i.e. `1` is the only eigenvalue of `E_A` on the unit
 circle.
 
-This is the transfer-map wrapper around the canonical predicate
+This is the transfer-map formulation of the canonical predicate
 `_root_.IsPrimitive (transferMap A)` from
 `TNLean/Channel/Peripheral/Spectrum.lean`.
 
 For orientation, the codebase distinguishes four related notions:
 
 * `_root_.IsPrimitive E`: generic peripheral-spectrum primitivity for any linear map `E`;
-* `MPSTensor.HasPrimitiveFixedPoint A`: existential wrapper around the spectral-gap
+* `MPSTensor.HasPrimitiveFixedPoint A`: existential statement around the spectral-gap
   predicate `IsPrimitiveMPS`;
 * `IsPrimitivePaper A`: the paper-faithful uniform spreading condition;
-* `IsPeripherallyPrimitive A`: this thin transfer-map wrapper.
+* `IsPeripherallyPrimitive A`: this thin transfer-map formulation.
 
 Paper: "E_A is primitive" means `1` is the only eigenvalue with `|λ| = 1`.
 Wolf Ch6 Definition 6.2(2). -/
@@ -200,7 +199,7 @@ quantum Perron–Frobenius theorem) and aperiodicity giving uniqueness of the
 peripheral eigenvalue.
 
 **Relationship to `IsPrimitiveMPS` / `HasPrimitiveFixedPoint`**: this is
-strictly stronger than the spectral-gap wrapper because the fixed point is
+strictly stronger than the spectral-gap statement because the fixed point is
 required to be positive *definite* (not merely positive semidefinite). For
 irreducible channels, the PSD fixed point is automatically PosDef, so the two
 notions coincide in that case.
