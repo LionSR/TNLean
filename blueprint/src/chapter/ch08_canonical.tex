@@ -454,7 +454,7 @@ For Burnside-style arguments it is more natural to work with invariant
 
 \begin{remark}\leanok
 	This Burnside/Jacobson-density step is a substantial external algebraic
-	input in the chapter. We use it here as the finite-dimensional complex
+	ingredient in the chapter. We use it here as the finite-dimensional complex
 	Burnside theorem, namely the statement that an irreducible matrix algebra
 	action already generates the full endomorphism algebra.
 \end{remark}
@@ -833,7 +833,7 @@ per-block peripheral-spectrum primitivity.
 		The argument is the same as in Theorem~\ref{thm:modulus_one_gauge}
 		(with the gauging formula given by Theorem~\ref{thm:right_canonical_gauge}
 		directly),
-		but the fixed-point input comes from irreducibility rather than
+		but the fixed-point theorem used here comes from irreducibility rather than
 		injectivity.
 		Take a modulus-one eigenvector of the mixed transfer map.
 		Because $A$ and $B$ are TP-normalized, each transfer map has a nonzero
@@ -949,7 +949,7 @@ Chapter~\ref{ch:periodic_ft_apps} for that direct periodic extension.
 
 \begin{proof}\leanok
 		\uses{def:is_normal_canonical_form}
-		No new blocking is needed here: the input blocks are already primitive,
+		No new blocking is needed here: the given blocks are already primitive,
 		so one may take $p = 1$.
 		The theorem is stated with a blocking length because earlier reduction
 		steps may require a common blocking period; under these hypotheses
@@ -1032,10 +1032,10 @@ The following results separate the zero blocks from the
 	The MPV identity follows from the block structure.
 \end{proof}
 
-\section{Arbitrary-input TP-gauge reduction}%
+\section{TP-gauge reduction for arbitrary tensors}%
 \label{sec:tp_gauge_arbitrary}
 
-\begin{theorem}[Arbitrary-input TP-gauge reduction with zero-block separation]%
+\begin{theorem}[TP-gauge reduction for arbitrary tensors with zero-block separation]%
 	\label{thm:tp_gauge_arbitrary}
 	\lean{MPSTensor.exists_tp_gauge_from_arbitrary_with_zeroTail}
 	\leanok
@@ -1054,7 +1054,7 @@ The following results separate the zero blocks from the
 		= V^{(N)}(\mathbf{0}_{d,D_0})_\sigma
 		+ V^{(N)}\!\bigl(\textstyle\bigoplus_{k=1}^r \mu_k B_k\bigr)_\sigma.
 	\]
-	This is the furthest unconditional arbitrary-input reduction step available
+	This is the furthest unconditional reduction step available for arbitrary tensors
 	before periodicity removal.
 \end{theorem}
 
@@ -1116,20 +1116,20 @@ The following results separate the zero blocks from the
 	length $Np$, which is positive when both $N$ and $p$ are positive.
 \end{proof}
 
-\begin{theorem}[Positive-length equality for powered weighted live blocks]%
+\begin{theorem}[Positive-length equality for powered weighted nonzero blocks]%
 	\label{thm:samempv2pos_toTensorFromBlocks_block_power}
 	\lean{MPSTensor.sameMPV₂Pos_toTensorFromBlocks_blockPower}
 	\leanok
 	\uses{thm:block_tensor_to_tensor_from_blocks, thm:samempv2pos_block_tensor,
 	      def:tensor_from_blocks}
-	If two weighted live block tensors agree on all positive system sizes, then
-	after any positive common blocking their blocked live block tensors still agree
+	If two weighted nonzero-block tensors agree on all positive system sizes, then
+	after any positive common blocking their blocked nonzero-block tensors still agree
 	on all positive system sizes, with weights transported from $\mu_k$ to
 	$\mu_k^p$.
 \end{theorem}
 
 \begin{proof}\leanok
-	Use Theorem~\ref{thm:samempv2pos_block_tensor} for the assembled live tensors,
+	Use Theorem~\ref{thm:samempv2pos_block_tensor} for the assembled nonzero parts,
 	then rewrite each blocked assembled tensor by
 	Theorem~\ref{thm:block_tensor_to_tensor_from_blocks}.
 \end{proof}
@@ -1150,7 +1150,7 @@ The following results separate the zero blocks from the
 	\label{lem:replicated_weights_pow_ne_zero}
 	\lean{MPSTensor.replicatedWeights_pow_ne_zero}
 	\leanok
-	Suppose a live block $k$ is replaced by a finite family of cyclic sectors. If
+	Suppose a nonzero-weight block $k$ is replaced by a finite family of cyclic sectors. If
 	$\mu_k \ne 0$, then every replicated sector weight $\mu_k^{p_k}$ remains
 	nonzero.
 \end{lemma}
@@ -1649,7 +1649,7 @@ The following results separate the zero blocks from the
 	\leanok
 	\uses{def:primitive_irreducible_cyclic_sectors, def:blocked_tensor,
 		def:tensor_from_blocks, def:same_mpv2}
-	For a finite family of live blocks $(B_k)$, these data record a single
+	For a finite family of nonzero-weight blocks $(B_k)$, these data record a single
 	positive physical blocking length $p$, the per-block period-removal lengths
 	$m_k$, the later positive reblocking lengths $e_k$ with $p=m_k e_k$, and the
 	resulting flattened finite sector family at physical dimension $d^p$.  They
@@ -1717,7 +1717,7 @@ The following results separate the zero blocks from the
 		thm:irreducible_tensor_cast_phys_dim}
 	The derived common-alphabet sectors are trace-preserving, have primitive transfer
 	maps, are tensor-irreducible, and have positive bond dimensions.  Original
-	nonzero live-block weights remain nonzero after being transported to the common
+	nonzero weights remain nonzero after being transported to the common
 	blocking length and replicated over the derived flattened sector family.
 \end{theorem}
 
@@ -1753,7 +1753,7 @@ The following results separate the zero blocks from the
 		thm:samempv_cast_phys_dim, thm:samempv_blocking_distributes,
 		thm:common_blocked_cyclic_sector_derived_properties}
 	First use the iterated-blocking comparison theorem and substitute the common
-	physical alphabet.  Then compose with the per-live-block cyclic-sector MPV
+	physical alphabet.  Then compose with the per-block cyclic-sector MPV
 	equivalence stored in the family.  Finally expand both block-diagonal tensors as
 	sums and reindex the double sum over pairs $(k,s)$ by the flattened sector index.
 \end{proof}
@@ -1784,10 +1784,10 @@ The following results separate the zero blocks from the
 		def:primitive_irreducible_cyclic_sectors,
 		thm:tp_primitive_irreducible_extra_blocking,
 		thm:samempv_blocking_distributes}
-	If every live block has primitive irreducible cyclic sectors and a positive
-	integer $p$ is a common multiple of all period-removal lengths, then the live
-	family admits a common reblocked cyclic-sector family whose common length is
-	that prescribed $p$.
+	If every nonzero-weight block has primitive irreducible cyclic sectors and a positive
+	integer $p$ is a common multiple of all period-removal lengths, then the
+	nonzero-weight family admits a common reblocked cyclic-sector family whose common
+	length is that prescribed $p$.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -1810,7 +1810,7 @@ The following results separate the zero blocks from the
 	\lean{MPSTensor.exists_commonBlockedCyclicSectorFamily_of_hasPrimitiveIrreducibleCyclicSectors}
 	\leanok
 	\uses{thm:exists_common_blocked_cyclic_sector_family_common_multiple}
-	If every live block in a finite family has primitive irreducible cyclic
+	If every nonzero-weight block in a finite family has primitive irreducible cyclic
 	sectors, then the family admits a common reblocked cyclic-sector family.
 	The proof chooses the least common multiple of the per-block periods, blocks
 	each sector by the corresponding quotient, transports all sectors to the common
@@ -2100,7 +2100,7 @@ The following results separate the zero blocks from the
 	      thm:sector_irred_orbit_lift}
 	Let $A$ be a left-canonical MPS tensor, $(P_k)_{k=1}^m$ a cyclic family
 	of orthogonal sector projections with $\sum_k P_k = \Id$, and set
-	$T = \E_A^\dagger$. Assume two upstream inputs, both discharged from the
+	$T = \E_A^\dagger$. Assume two auxiliary facts, both discharged from the
 	block-diagonal canonical-form analysis of
 	\cite{DeLasCuevas2017Irreducible}:
 	\begin{enumerate}
@@ -2187,7 +2187,7 @@ The following results separate the zero blocks from the
 	preservation of $Q$ under $(\E_A^\dagger)^m$ to an actual fixed-point
 	relation. The rigidity hypothesis then yields the one-step projection
 	preservation needed along the orbit of $Q$, via
-	Lemma~\ref{lem:sector_fixed_algebra_proj_step}. With those two inputs in hand,
+	Lemma~\ref{lem:sector_fixed_algebra_proj_step}. With those two facts in hand,
 	the original orbit-sum construction from
 	Lemma~\ref{lem:orbit_sum_hLift_construction} applies verbatim. In the
 	irreducible trace-preserving cyclic case, the rigidity hypothesis here is
@@ -2743,7 +2743,7 @@ The following results separate the zero blocks from the
 	\uses{thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_ortho}
 	Apply Theorem~\ref{thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_ortho}
 	and use the supplied injectivity of the original blocks to fill the
-	injectivity field required by this theorem's unbundled conclusion.
+	injectivity field required by this theorem's explicit conclusion.
 \end{proof}
 
 \begin{theorem}[Chosen phase representatives preserve finite-length spans]
@@ -2895,7 +2895,7 @@ The following results separate the zero blocks from the
 	positive scaling factors are absorbed into the new weights.
 \end{proof}
 
-\begin{theorem}[Primitive live blocks are normal]%
+\begin{theorem}[Primitive nonzero blocks are normal]%
 	\label{thm:normal_live_block_primitive}
 	\lean{MPSTensor.isNormal_live_block_of_primitive}
 	\leanok
@@ -2964,7 +2964,7 @@ The following results separate the zero blocks from the
 	data supplied by the hypotheses.
 \end{proof}
 
-\begin{theorem}[Normal canonical form from already primitive input]%
+\begin{theorem}[Normal canonical form from an already primitive block decomposition]%
 	\label{thm:ncf_from_primitive_input}
 	\lean{MPSTensor.exists_normalCanonicalForm_of_primitive_input}
 	\leanok
@@ -3039,7 +3039,7 @@ The following results separate the zero blocks from the
 	\lean{MPSTensor.zeroTail_mpv_decomp_blockTensor}
 	\leanok
 	\uses{def:blocked_tensor, def:zero_mps_tensor}
-	Suppose $A$ is expressed as a zero-tail tensor plus a live tensor $L$ at all
+	Suppose $A$ is expressed as a zero-tail tensor plus a nonzero part $L$ at all
 	system sizes. For every positive blocking length $p$, the blocked tensor
 	$A^{[p]}$ is expressed as the same zero-tail bond dimension plus $L^{[p]}$.
 	The zero-tail term still contributes only at blocked length $0$.
@@ -3057,25 +3057,25 @@ The following results separate the zero blocks from the
 	\leanok
 	\uses{thm:zero_tail_decomp_block_tensor, thm:block_tensor_to_tensor_from_blocks,
 	      def:tensor_from_blocks}
-	Suppose $A$ is expressed as a zero-tail tensor plus the weighted live block
+	Suppose $A$ is expressed as a zero-tail tensor plus the weighted nonzero-block
 	tensor $\bigoplus_k \mu_k B_k$. For every positive blocking length $p$,
 	$A^{[p]}$ is expressed as the same zero-tail contribution plus the weighted
-	blocked live tensor $\bigoplus_k \mu_k^p B_k^{[p]}$.
+	blocked nonzero tensor $\bigoplus_k \mu_k^p B_k^{[p]}$.
 \end{theorem}
 
 \begin{proof}\leanok
 	Apply Theorem~\ref{thm:zero_tail_decomp_block_tensor} to the assembled
-	weighted live tensor and rewrite the blocked assembled tensor using
+	weighted nonzero tensor and rewrite the blocked assembled tensor using
 	Theorem~\ref{thm:block_tensor_to_tensor_from_blocks}.
 \end{proof}
 
-\begin{theorem}[Zero-tail bookkeeping for live block tensors]%
+\begin{theorem}[Zero-tail bookkeeping for nonzero block tensors]%
 \label{thm:live_block_zero_tail_bookkeeping}
 	\lean{MPSTensor.liveBlock_positive_sameMPV₂_and_zeroTail_bookkeeping_of_sameMPV₂}
 	\leanok
 	\uses{def:same_mpv2, def:zero_mps_tensor, def:tensor_from_blocks}
 	Suppose two tensors have the same MPV family and each is expressed as a
-	zero-tail tensor plus a weighted live block tensor. Then the two live block
+	zero-tail tensor plus a weighted nonzero-block tensor. Then the two nonzero-block
 	tensors agree on every positive system size, and at size $0$ the equality is
 	exactly the equality of the two zero-tail contributions plus the two live
 	bond-dimension traces.
@@ -3088,14 +3088,14 @@ The following results separate the zero blocks from the
 	zero-tail MPV is its bond dimension, giving the stated bookkeeping identity.
 \end{proof}
 
-\begin{theorem}[Reblocked live equality with zero-tail bookkeeping]%
+\begin{theorem}[Reblocked nonzero-part equality with zero-tail bookkeeping]%
 	\label{thm:live_block_block_power_zero_tail_bookkeeping}
 	\lean{MPSTensor.liveBlock_blockPower_positive_sameMPV₂_and_zeroTail_bookkeeping_of_sameMPV₂}
 	\leanok
 	\uses{thm:live_block_zero_tail_bookkeeping,
 	      thm:zero_tail_to_tensor_from_blocks_block_power, def:same_mpv2_pos}
 	In the setting of Theorem~\ref{thm:live_block_zero_tail_bookkeeping}, after
-	any positive common blocking length $p$, the powered weighted live block tensors
+	any positive common blocking length $p$, the powered weighted nonzero-block tensors
 	agree on all positive blocked system sizes. At blocked length $0$, the same
 	zero-tail bookkeeping identity holds with weights transported from $\mu_k$ to
 	$\mu_k^p$.
@@ -3108,13 +3108,13 @@ The following results separate the zero blocks from the
 	dimension.
 \end{proof}
 
-\begin{theorem}[Equal zero tails give full live MPV equality]%
+\begin{theorem}[Equal zero tails give full nonzero-part MPV equality]%
 \label{thm:live_block_same_mpv_zero_tail_eq}
 	\lean{MPSTensor.liveBlock_sameMPV₂_of_sameMPV₂_of_zeroTail_eq}
 	\leanok
 	\uses{thm:live_block_zero_tail_bookkeeping}
 	In the setting of Theorem~\ref{thm:live_block_zero_tail_bookkeeping}, if
-	the two zero-tail dimensions are equal, then the two live block tensors have
+	the two zero-tail dimensions are equal, then the two nonzero-block tensors have
 	the same MPV family, including the length-zero case.
 \end{theorem}
 
@@ -3132,7 +3132,7 @@ The following results separate the zero blocks from the
 	\leanok
 	\uses{thm:tp_primitive_blockdecomp, def:same_mpv2, def:zero_mps_tensor}
 	If two tensors generate the same MPV family, then each tensor admits a blocked
-	decomposition into a zero-tail tensor plus nonzero left-canonical live blocks
+	decomposition into a zero-tail tensor plus nonzero left-canonical blocks
 	with primitive transfer maps and positive bond dimensions. The theorem also
 	retains, for each blocking period, the relation that the blocked tensors
 	generate the same MPV family.
@@ -3146,7 +3146,7 @@ The following results separate the zero blocks from the
 	blocking the original equality.
 \end{proof}
 
-\begin{theorem}[Per-block cyclic live decomposition with zero-tail bookkeeping]%
+\begin{theorem}[Per-block cyclic-sector decomposition with zero-tail bookkeeping]%
 \label{thm:ft_after_blocking_per_block_cyclic_live_zero_tail}
 	\lean{MPSTensor.fundamentalTheorem_after_blocking_1606_perBlock_cyclic_live_with_zeroTail}
 	\leanok
@@ -3154,10 +3154,10 @@ The following results separate the zero blocks from the
 		def:primitive_irreducible_cyclic_sectors,
 		thm:has_primitive_irreducible_cyclic_sectors_tp_irr}
 	If two tensors generate the same MPV family, then after the zero-tail split and
-	trace-preserving gauge each side has irreducible live blocks with nonzero
-	weights. The live block tensors agree at all positive system sizes, while the
+	trace-preserving gauge each side has irreducible nonzero-weight blocks.
+	The nonzero-block tensors agree at all positive system sizes, while the
 	length-zero case is recorded as the exact zero-tail bookkeeping identity.
-	Moreover each live block has primitive irreducible cyclic sectors. The
+	Moreover each nonzero-weight block has primitive irreducible cyclic sectors. The
 	period-removal length for those sectors is kept separate from any later common
 	blocking or injectivity length.
 \end{theorem}
@@ -3165,14 +3165,14 @@ The following results separate the zero blocks from the
 \begin{proof}\leanok
 	\uses{thm:tp_gauge_arbitrary, thm:live_block_zero_tail_bookkeeping,
 		thm:has_primitive_irreducible_cyclic_sectors_tp_irr}
-	Apply the arbitrary-input TP-gauge theorem separately to $A$ and $B$. The
-	zero-tail bookkeeping theorem compares the two resulting live tensors at
+	Apply the arbitrary-tensor TP-gauge theorem separately to $A$ and $B$. The
+	zero-tail bookkeeping theorem compares the two resulting nonzero parts at
 	positive lengths and records the $N=0$ identity. Finally apply
 	Theorem~\ref{thm:has_primitive_irreducible_cyclic_sectors_tp_irr} to every
-	trace-preserving irreducible live block.
+	trace-preserving irreducible nonzero-weight block.
 \end{proof}
 
-\begin{theorem}[Common reblocked live cyclic sectors with zero-tail bookkeeping]%
+\begin{theorem}[Common reblocked nonzero cyclic sectors with zero-tail bookkeeping]%
 \label{thm:ft_after_blocking_common_blocked_cyclic_live_zero_tail}
 	\lean{MPSTensor.fundamentalTheorem_after_blocking_1606_commonBlocked_cyclic_live_with_zeroTail}
 	\leanok
@@ -3180,12 +3180,12 @@ The following results separate the zero blocks from the
 		thm:exists_common_blocked_cyclic_sector_family,
 		thm:common_blocked_cyclic_sector_flat_weight_ne_zero}
 	If two tensors generate the same MPV family, then the zero-tail/TP-gauge
-	live-block reduction can be combined with a common reblocking of all
-	per-block cyclic sectors.  Each side obtains a finite flattened sector family
+	reduction for nonzero-weight blocks can be combined with a common reblocking
+	of all per-block cyclic sectors.  Each side obtains a finite flattened sector family
 	at one physical blocking length, with trace preservation, primitive transfer
 	maps, tensor irreducibility, positive bond dimensions, and nonzero unit
-	weights.  The theorem keeps the positive-length live equality and the exact
-	$N=0$ zero-tail bookkeeping for the original live block tensors.
+	weights.  The theorem keeps the positive-length equality of the nonzero parts and the exact
+	$N=0$ zero-tail bookkeeping for the original nonzero-block tensors.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -3223,7 +3223,7 @@ The following results separate the zero blocks from the
 		thm:common_blocked_cyclic_sector_reindexed_samempv,
 		thm:common_blocked_cyclic_sector_derived_properties}
 	Start from the common reblocked cyclic-sector families on the two sides.  Apply
-	the zero-tail reblocking theorem to the original live-block decomposition, then
+	the zero-tail reblocking theorem to the original nonzero-block decomposition, then
 	use the relabeled one-shot sector decomposition and the derived structural
 	properties of the common-sector family.
 \end{proof}
@@ -3241,8 +3241,8 @@ The following results separate the zero blocks from the
 	If two tensors generate the same MPV family, then one can choose a single
 	positive physical blocking length for the cyclic-sector data on both sides.
 	At that length the theorem records the exact zero-tail equations for the
-	canonically blocked live tensors, the positive-length equality and length-zero
-	bookkeeping for those live tensors, and the relabeled primitive irreducible
+	canonically blocked nonzero tensors, the positive-length equality and length-zero
+	bookkeeping for those nonzero parts, and the relabeled primitive irreducible
 	common-sector families on both sides with nonzero transported weights.
 \end{theorem}
 
@@ -3253,7 +3253,7 @@ The following results separate the zero blocks from the
 		thm:live_block_block_power_zero_tail_bookkeeping,
 		thm:common_blocked_cyclic_sector_reindexed_samempv,
 		thm:common_blocked_cyclic_sector_derived_properties}
-	Start from the per-block cyclic live theorem.  Let $p_A$ and $p_B$ be the
+	Start from the per-block cyclic-sector theorem.  Let $p_A$ and $p_B$ be the
 	least common multiples of the period-removal lengths on the two sides, and
 	use $p=\mathrm{lcm}(p_A,p_B)$.  The prescribed-common-multiple theorem constructs both
 	one-sided sector families at this same length.  The zero-tail and positive-
@@ -3268,10 +3268,10 @@ The following results separate the zero blocks from the
 	\uses{thm:zero_tail_to_tensor_from_blocks_block_power,
 		thm:common_blocked_cyclic_sector_canonical_label_compat}
 	For one side, suppose first that the original tensor decomposes, as an MPV
-	family, into a zero-tail contribution plus a weighted block-sum live part at
+	family, into a zero-tail contribution plus a weighted block-sum nonzero part at
 	the original physical alphabet.  Suppose also that, after blocking by the
-	common length, the canonical blocked live tensor agrees with the explicitly
-	relabeled one-shot live tensor as an MPV family.  Then the zero-tail equation
+	common length, the canonical blocked nonzero tensor agrees with the explicitly
+	relabeled reindexed one-step nonzero tensor as an MPV family.  Then the zero-tail equation
 	after blocking may be written directly with the weighted derived common-sector
 	family.
 \end{theorem}
@@ -3279,8 +3279,8 @@ The following results separate the zero blocks from the
 \begin{proof}\leanok
 	\uses{thm:zero_tail_to_tensor_from_blocks_block_power,
 		thm:common_blocked_cyclic_sector_canonical_label_compat}
-	First transport the original zero-tail/live decomposition through the common
-	blocking length.  Then replace the canonical blocked live tensor by the
+	First transport the original zero-tail/nonzero decomposition through the common
+	blocking length.  Then replace the canonical blocked nonzero tensor by the
 	derived common-sector tensor using the blocked-word relabeling agreement.
 \end{proof}
 
@@ -3291,23 +3291,23 @@ The following results separate the zero blocks from the
 	\label{rem:canonical_pipeline_gaps}
 	\leanok
 	The canonical-form proof in the MPS literature first separates the nilpotent
-	part, which contributes only to the zero-length trace, from the live part.
-	The live tensor is decomposed into irreducible blocks and each block is put in
+	part, which contributes only to the zero-length trace, from the nonzero part.
+	The nonzero part is decomposed into irreducible blocks and each block is put in
 	trace-preserving gauge.  If such a block has period $m$, one blocks $m$ sites
 	and restricts the blocked tensor to the cyclic spectral sectors.  The resulting
 	sector tensors are the normal blocks used later: they are trace-preserving,
 	primitive, irreducible, and have positive bond dimension.  For a finite family
-	of live blocks, the paper then chooses one common multiple of all periods so
-	that every sector lives over the same blocked physical alphabet.  This is the
+	of nonzero-weight blocks, the paper then chooses one common multiple of all periods
+	so that every sector is expressed over the same blocked physical alphabet.  This is the
 	construction of
 	\cite[\S2.3 and Appendix~A]{Cirac2017MPDO_AnnPhys}, and it is the
-	canonical-form input used before the basis-of-normal-tensors argument in
+	canonical-form data used before the basis-of-normal-tensors argument in
 	\cite[Proposition~IV.4 and Corollary~IV.5]{Cirac2021Matrix}.
 
 	The formalization has already separated these steps.  Theorem~\ref{thm:tp_gauge_arbitrary}
-	gives the zero-tail block together with trace-preserving irreducible live
+	gives the zero-tail block together with trace-preserving irreducible nonzero-weight
 	blocks, and Theorem~\ref{thm:ft_after_blocking_per_block_cyclic_live_zero_tail}
-	applies the cyclic-sector construction to each live block while keeping the
+	applies the cyclic-sector construction to each nonzero-weight block while keeping the
 	positive-length MPV equality and the $N=0$ bookkeeping.
 	Theorem~\ref{thm:exists_common_blocked_cyclic_sector_family_common_multiple}
 	constructs the common reblocked sector family at any prescribed common multiple

@@ -24,8 +24,8 @@ normality.
 
 * `isNormal_of_tp_primitive_irreducible` — TP, primitive transfer map, and
   tensor irreducibility imply normality.
-* `isNormal_live_block_of_primitive` — the same conclusion for a single live
-  block from the reduction output.
+* `isNormal_live_block_of_primitive` — the same conclusion for a single
+  nonzero-weight block from the reduction data.
 * `isNormal_blockTensor_of_isNormal` — blocking preserves normality.
 
 ## References
@@ -96,8 +96,8 @@ normal once we know their transfer maps are primitive.
 
 /-- **Pre-blocking blocks are normal once primitive.**
 
-For the nonzero-weight blocks from the arbitrary-input TP-gauge reduction, if a block
-additionally has a primitive transfer map, then it is normal. -/
+For the nonzero-weight blocks from the arbitrary-tensor TP-gauge reduction, if a
+block additionally has a primitive transfer map, then it is normal. -/
 theorem isNormal_live_block_of_primitive [NeZero D]
     (A : MPSTensor d D)
     (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
