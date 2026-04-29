@@ -107,7 +107,7 @@ jobs:
             Types (from CONTRIBUTING.md):
               feat     — New definition, lemma, theorem, or module
               fix      — Bug fix (broken proof, wrong identifier, etc.)
-              refactor — Restructuring without changing API surface
+              refactor — Restructuring without changing the public interface
               doc      — Documentation or blueprint changes only
               ci       — CI/CD workflow changes
               chore    — Dependency bumps, linting, toolchain updates

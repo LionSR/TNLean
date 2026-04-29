@@ -20,11 +20,11 @@ I also checked the relevant blueprint-tagged declarations for missing `[NeZero D
   Proposed fix: rewrite this paragraph in mathematical terms, e.g. say that the remaining step is to pass from the per-block cyclic-sector decompositions to a single common-period direct-sum decomposition.
 
 - Lines 120-122
-  Issue: "blocked live blocks" is stale formalization jargon.
+  Issue: "blocked nonzero blocks" is the intended mathematical language.
   Proposed fix: replace with "nontrivial blocked blocks" or "weighted blocked blocks".
 
 - Lines 353-355 and 360
-  Issue: repeated use of "live blocks".
+  Issue: repeated use of "nonzero blocks".
   Proposed fix: replace with "nonzero-weight blocks" or "blocks coming from the nontrivial summands of the decomposition".
 
 - Lines 607-614 and 622
