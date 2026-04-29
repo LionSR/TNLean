@@ -1,4 +1,4 @@
-name: Issue Intake
+name: Issue Classification
 
 # Classify newly opened human-authored issues. Issues from repository members
 # receive full taxonomy classification; outside reports receive inexpensive
@@ -9,11 +9,11 @@ on:
     types: [opened]
 
 concurrency:
-  group: issue-intake-${{ github.event.issue.number }}
+  group: issue-classification-${{ github.event.issue.number }}
   cancel-in-progress: true
 
 jobs:
-  intake:
+  classify:
     if: github.event.sender.type != 'Bot'
     runs-on: ubuntu-latest
 
@@ -126,7 +126,7 @@ jobs:
           claude_args: |
             --model claude-sonnet-4-6
             --allowedTools "Read,Glob,Grep,mcp__github__*"
-            --append-system-prompt "This workflow performs issue intake only. It may read repository documentation, add labels to the opened issue, and post one concise issue comment. It must not edit repository files, create branches, open pull requests, or perform code changes. Public comments should use ordinary mathematical and repository-maintenance prose."
+            --append-system-prompt "This workflow performs issue classification only. It may read repository documentation, add labels to the opened issue, and post one concise issue comment. It must not edit repository files, create branches, open pull requests, or perform code changes. Public comments should use ordinary mathematical and repository-maintenance prose."
 
       - name: Preliminary classification for outside reports
         if: ${{ !contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.issue.author_association) }}
