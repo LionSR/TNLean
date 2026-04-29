@@ -59,7 +59,7 @@ The blueprint now says this explicitly in
 * #982 itself has only the title/body request and no comments.
 * #652 is the non-periodic canonical-form umbrella.  The current thread no
   longer asks for a direct same-norm shortcut; it has been refined to the
-  sector-level route through common live blocks, BNT sector comparison, zero-tail
+  sector-level route through common nonzero blocks, BNT sector comparison, zero-tail
   bookkeeping, and finite-length span equality.
 * #942 remains open as the broad common-live-block tracker, but its thread now
   points to the more precise common blocking work in #969.

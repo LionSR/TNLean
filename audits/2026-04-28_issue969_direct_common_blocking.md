@@ -19,7 +19,7 @@ The important conclusions from those threads are:
   pattern instead of reproving zero-tail arithmetic inline.
 - #976 reduced the later span-equality step to common MPV phase-cover data. This
   branch does not attempt to close #970/#944; it only makes the #969 common-sector data
-  more usable by exposing the direct, explicitly relabeled one-shot sector family.
+  more usable by exposing the direct, explicitly relabeled sector family.
 - The issue #969 addendum remains binding: the full route to #944/#652 still needs a
   later common injectivity/Wielandt blocking stage.  The present branch preserves the
   distinction between period removal and later injectivity blocking.
@@ -56,7 +56,7 @@ New derived operations for an existing `F : MPSTensor.CommonBlockedCyclicSectorF
 - `F.commonFlatDim` and `F.commonFlatBlocks`: a derived flattened family tied directly to
   `F.sectorBlocks`, avoiding any dependence on abstract `F.flatBlocks` coincidences.
 - `F.commonSectorTensor`: the unit-weight sector tensor for one original nonzero-weight block.
-- `F.oneShotReindexedBlock`: the reindexed one-step nonzero-weight block with the explicit
+- `F.oneShotReindexedBlock`: the reindexed nonzero-weight block with the explicit
   blocked-word reindexing supplied by `MPSTensor.iteratedBlockIndex`.
 - `F.commonFlatWeight μ`: the flattened sector weights `(μ k) ^ F.p`.
 
@@ -73,10 +73,10 @@ New MPV comparison facts:
 - `F.nestedBlock_sameMPV₂_oneShotReindexedBlock`: composes `F.nested_same` with
   `sameMPV₂_blockTensor_blockTensor_mul_reindex`, keeping the per-block physical relabeling
   explicit.
-- `F.oneShotReindexedBlock_sameMPV₂_commonSectorTensor`: the relabeled one-shot nonzero-weight block
+- `F.oneShotReindexedBlock_sameMPV₂_commonSectorTensor`: the relabeled nonzero-weight block
   is represented by the corresponding common-alphabet cyclic sectors.
 - `F.sameMPV₂_weightedOneShotReindexedBlock_commonFlat`: the weighted direct sum of
-  relabeled one-shot nonzero-weight blocks flattens to the derived common-sector family with weights
+  relabeled nonzero-weight blocks flattens to the derived common-sector family with weights
   `F.commonFlatWeight μ`.
 
 ### `TNLean/MPS/CanonicalForm/Assembly/StructuralTheorem.lean`
@@ -89,7 +89,7 @@ This theorem starts from `SameMPV₂ A B`, reuses the already-merged common cycl
 families on both sides, and exposes:
 
 1. zero-tail/live equations after the corresponding common reblocking on each side;
-2. a `SameMPV₂` comparison between the weighted relabeled one-shot nonzero-weight blocks and the
+2. a `SameMPV₂` comparison between the weighted relabeled nonzero-weight blocks and the
    derived flattened common-sector family;
 3. nonzero transported sector weights;
 4. trace preservation, primitive transfer maps, tensor irreducibility, and positive bond
@@ -97,7 +97,7 @@ families on both sides, and exposes:
 
 The statement is explicit about labels. It does **not** assert an unlabeled
 `SameMPV₂ (blockTensor (blocks k) F.p) ...`; instead it uses `F.oneShotReindexedBlock k`,
-which includes the explicit blocked-word reindexing from iterated blocking to one-shot
+which includes the explicit blocked-word reindexing from iterated blocking to direct
 blocking.  Because the relabeling can depend on the nonzero-weight block through `F.period k` and
 `F.extra k`, a global label-independent equality for the original weighted nonzero part is
 not claimed here.
@@ -122,7 +122,7 @@ exact nonzero-part data those theorems will eventually need. The new data provid
   all four structural properties needed before a later injectivity refinement.
 - **Exact relabeled nonzero decomposition:**
   `family.sameMPV₂_weightedOneShotReindexedBlock_commonFlat` proves that the weighted
-  family of explicitly relabeled one-shot nonzero-weight blocks has the same MPV family as the
+  family of explicitly relabeled nonzero-weight blocks has the same MPV family as the
   flattened common sectors.
 - **Zero-tail equations after common reblocking:**
   `fundamentalTheorem_after_blocking_1606_reindexed_commonSector_live_with_zeroTail`

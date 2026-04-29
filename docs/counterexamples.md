@@ -82,7 +82,7 @@ mathematical obstruction.
 
 - Location: `TNLean/MPS/CanonicalForm/NormalReduction/TPGauge.lean`
 - Statement refuted: the blockwise Perron-Frobenius TP-gauge step has an
-  unconditional arbitrary-input endpoint under the current `SameMPV2`
+  unconditional arbitrary-input theorem under the current `SameMPV2`
   interface.
 - Witness: the all-zero scalar block; the theorem therefore requires a
   nonzero Kraus operator in each input block.
