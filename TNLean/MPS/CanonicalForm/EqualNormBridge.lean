@@ -668,16 +668,10 @@ def commonPhaseCover (M : SectorBasisPreMatching P Q) :
   · intro j
     exact MPVBlockPhaseEquiv.refl (P.basis j)
   · intro k
-    rcases M.basis_equiv (M.perm.symm k) with ⟨X, ζ, hζ, hX⟩
-    refine ⟨ζ, hζ, ?_⟩
-    intro N σ
-    have hk : M.perm (M.perm.symm k) = k := M.perm.apply_symm_apply k
-    conv_lhs => rw [← hk]
-    rw [mpv_eq_pow_mul_of_gaugePhase
-      (A := cast (congr_arg (MPSTensor d) (M.dim_eq (M.perm.symm k)))
-        (P.basis (M.perm.symm k)))
-      (B := Q.basis (M.perm (M.perm.symm k))) X ζ hX N σ,
-      mpv_cast_dim (M.dim_eq (M.perm.symm k)) (P.basis (M.perm.symm k)) N σ]
+    simpa [M.perm.apply_symm_apply k] using
+      MPVBlockPhaseEquiv.of_gaugePhaseEquiv_cast
+        (P.basis (M.perm.symm k)) (Q.basis (M.perm (M.perm.symm k)))
+        (M.dim_eq (M.perm.symm k)) (M.basis_equiv (M.perm.symm k))
   · intro j
     exact ⟨j, rfl⟩
   · intro j
@@ -728,15 +722,10 @@ theorem nonempty_mpvCommonPhaseCover_of_proportionalDecompositionConclusion
     exact MPVBlockPhaseEquiv.refl (blocksA j)
   · intro k
     obtain ⟨hdim, hGPE⟩ := hmatch (perm.symm k)
-    rcases hGPE with ⟨X, ζ, hζ, hX⟩
-    refine ⟨ζ, hζ, ?_⟩
-    intro N σ
     have hk : perm (perm.symm k) = k := perm.apply_symm_apply k
-    conv_lhs => rw [← hk]
-    rw [mpv_eq_pow_mul_of_gaugePhase
-      (A := cast (congr_arg (MPSTensor d) hdim) (blocksA (perm.symm k)))
-      (B := blocksB (perm (perm.symm k))) X ζ hX N σ,
-      mpv_cast_dim hdim (blocksA (perm.symm k)) N σ]
+    rw [← hk]
+    exact MPVBlockPhaseEquiv.of_gaugePhaseEquiv_cast
+      (blocksA (perm.symm k)) (blocksB (perm (perm.symm k))) hdim hGPE
   · intro j
     exact ⟨j, rfl⟩
   · intro j
