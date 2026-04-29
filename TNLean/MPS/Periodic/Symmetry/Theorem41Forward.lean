@@ -499,7 +499,7 @@ theorem thm_4_1_p_refinement_forward_of_peripheralEqualCase_periodicFT_of_sameMP
 /-- **Forward direction of Theorem 4.1 (conditional form).**
 
 Let `B` be an MPS tensor in irreducible form II. Assume
-`PRefinementCanonicalization`, which captures the remaining analytic bridge from
+`PRefinementCanonicalization`, which captures the remaining analytic step from
 `IsPRefinable B p` to a left-canonical witness with matching transfer map. Then
 `IsPRefinable B p` implies `IsPDivisibleChannel (transferMap B) p`.
 

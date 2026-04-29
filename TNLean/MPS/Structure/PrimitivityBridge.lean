@@ -61,7 +61,7 @@ see `HasPrimitiveFixedPoint`.
 This is the operational definition used in the proof chain. The connection to the standard
 peripheral-spectrum predicate `_root_.IsPrimitive`, the transfer-map formulation
 `MPSTensor.IsPeripherallyPrimitive`, and the paper-facing spreading predicate
-`MPSTensor.IsPrimitivePaper` is deferred to later bridge files. -/
+`MPSTensor.IsPrimitivePaper` is deferred to later connection results. -/
 structure IsPrimitiveMPS {d D : ℕ} [NeZero D]
     (A : MPSTensor d D) (ρ : Matrix (Fin D) (Fin D) ℂ) : Prop where
   /-- Left-canonical (trace-preserving) normalization:
