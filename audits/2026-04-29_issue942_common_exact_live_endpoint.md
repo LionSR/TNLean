@@ -49,7 +49,7 @@ The remaining paper inputs are stated below.
    `fundamentalTheorem_after_blocking_1606_commonLength_commonSector_endpoint`
    starts from `SameMPV₂ A B`.  It takes the per-block cyclic live reduction,
    lets `p_A` and `p_B` be the one-sided least common multiples, and chooses the
-   single two-sided length `p = p_A p_B`.  At this common length it records:
+   single two-sided length `p = lcm(p_A,p_B)`.  At this common length it records:
 
    - exact zero-tail equations for `blockTensor A p` and `blockTensor B p`
      against the canonically blocked live tensors;
