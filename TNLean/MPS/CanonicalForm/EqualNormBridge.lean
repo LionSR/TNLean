@@ -651,7 +651,7 @@ variable {P Q : SectorDecomposition d}
 
 The common family is the left basis. The left class map is the identity, the right
 class map is the inverse of the matching permutation, and gauge-phase equivalence
-of matched basis blocks gives the required MPV-phase equivalences. -/
+of paired basis blocks gives the required MPV-phase equivalences. -/
 def commonPhaseCover (M : SectorBasisPreMatching P Q) :
     MPVCommonPhaseCover P.basis Q.basis := by
   refine {
