@@ -301,6 +301,7 @@ needs `\lean{}` / `\leanok` tags.
 | `tracking`        | Tracking issue for a formalization area        |
 | `blueprint-sync`  | Blueprint out of sync with Lean code           |
 | `automation`      | Automated documentation/sync PR                |
+| `scout`           | Issue-side request for a Mathlib scouting report |
 | `auto-fix-claude` | PR-only: enable review-comment fixes           |
 | `auto-fix-codex`  | PR-only: opt into alternate auto-fix workflows |
 
@@ -310,7 +311,8 @@ not issues.
 
 **TNLean labels.** The `auto-fix-claude` and `auto-fix-codex` labels control
 TNLean pull-request workflows. Do not apply them to issues; they do not trigger
-issue-side automation here.
+issue-side automation here. The `scout` label belongs on issues and is
+reserved for maintainer-reviewed requests for a Mathlib scouting report.
 
 See [ci-automation.md](ci-automation.md#auto-fix-labels-are-pr-only) for the
 issue-started workflow behavior that creates pull requests from trusted issue
