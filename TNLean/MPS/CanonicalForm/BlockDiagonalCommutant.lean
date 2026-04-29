@@ -340,7 +340,7 @@ identity padding give full product-word span.
 This is the Route B homogenization: the cumulative finite cutoff can be
 used once each ordered pair has simultaneous identity padding at the lengths
 needed to reach a common homogeneous target `T`. -/
-theorem wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingUpTo_of_identityPadding
+theorem wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingUpTo_of_identity_padding
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hCF : IsCanonicalFormBNT μ A) {S T : ℕ}
     (hST : S ≤ T)
@@ -352,7 +352,7 @@ theorem wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingUpTo_of_ide
     WordTupleSpanTop A (1 + (r - 1) * T) :=
   wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingAt μ A hCF
     (fun k j hjk =>
-      pairTraceSeparatingAt_of_pairTraceSeparatingUpTo_of_identityPadding
+      pairTraceSeparatingAt_of_pairTraceSeparatingUpTo_of_identity_padding
         (A k) (A j) hST (hSep k j hjk) (hPad k j hjk))
 
 /-- Positive-length product-word span obtained from canonical-form/BNT data and
@@ -385,10 +385,10 @@ theorem exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingA
   simpa [WordTupleSpanTop, wordTuple] using
     wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingAt μ A hCF hSep
 
-set_option linter.style.longLine false in
 /-- Positive-length product-word span from cumulative pair trace separation plus
 exact identity padding. -/
-theorem exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingUpTo_of_identityPadding
+theorem
+    exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingUpTo_of_identity_padding
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hCF : IsCanonicalFormBNT μ A) {S T : ℕ}
     (hST : S ≤ T)
@@ -404,7 +404,7 @@ theorem exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingU
         ((k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) := by
   refine ⟨1 + (r - 1) * T, Nat.add_pos_left Nat.zero_lt_one _, ?_⟩
   simpa [WordTupleSpanTop, wordTuple] using
-    wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingUpTo_of_identityPadding
+    wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingUpTo_of_identity_padding
       μ A hCF hST hSep hPad
 
 /-- Positive-length product-word span obtained from canonical-form/BNT data and
