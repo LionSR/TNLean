@@ -10,7 +10,7 @@ import TNLean.MPS.MPDO.RFP
 /-!
 # Fusion-isometry formulations of the MPDO renormalization fixed point
 
-This file records the **fusion-isometry** side of the equivalence stated in
+This file gives the **fusion-isometry** side of the equivalence stated in
 arXiv:1606.00608 §4.5 (Cirac–Pérez-García–Schuch–Verstraete). In the notation
 of the paper, a fusion isometry at blocked size `n` is a pair of linear maps
 `T`, `S` between the physical space of `n` blocked sites and the corresponding
@@ -23,12 +23,12 @@ dynamics underlying the provisional `MPOTensor.IsRFP` predicate in
 Two layers coexist in this file.
 
 1. **Provisional shell layer** (`FusionIsometry`, `FusionIsometry.CompatibleWith`,
-   `IsRFP_MPDO_via_fusion_scaffold`): kept for downstream compatibility. The
+   `IsRFP_MPDO_via_fusionIsometries_provisional`): kept for downstream compatibility. The
    physical space at blocked size `n` and the support algebra at blocked size
    `n` are both represented by `Matrix (Fin D) (Fin D) ℂ`, a stand-in for the
    genuine objects; the compatibility predicate is currently the trivial
-   proposition `True`, so `IsRFP_MPDO_via_fusion_scaffold` as a whole is
-   satisfied by every `M`. The `_scaffold` suffix marks the predicate to
+   proposition `True`, so `IsRFP_MPDO_via_fusionIsometries_provisional` as a whole is
+   satisfied by every `M`. The name marks the predicate as provisional, to
    prevent its use in nontrivial reasoning until the relation is tightened.
 2. **Transfer-map-level layer** (`blockedTransferMap`, `FusionIsometryData`,
    `IsRFP_MPDO_via_fusion`): formalizes the transfer-map content already
@@ -46,7 +46,7 @@ Two layers coexist in this file.
 ## Main declarations
 
 * Provisional shell declarations: `FusionIsometry`, `FusionIsometry.CompatibleWith`,
-  `IsRFP_MPDO_via_fusion_scaffold`.
+  `IsRFP_MPDO_via_fusionIsometries_provisional`.
 * `blockedTransferMap`: the transfer map of the `n`-site blocked doubled-index
   MPS tensor.
 * `FusionIsometryData`: retract data whose characteristic identity is the
@@ -164,18 +164,21 @@ size close under multiplication via a system of fusion isometries
 compatible with `M`. The definition below asserts the existence of such a
 family using the relation `FusionIsometry.CompatibleWith`.
 
-The `_scaffold` suffix marks that `FusionIsometry.CompatibleWith` is
-currently `True`: the predicate is consequently satisfied by every `M`, and
-must not be used as a hypothesis or conclusion of any nontrivial result
-until the relation is tightened.
+The adjective `provisional` marks that `FusionIsometry.CompatibleWith` is currently
+`True`: the predicate is consequently satisfied by every `M`, and must not be used
+as a hypothesis or conclusion of any nontrivial result until the relation is tightened.
 
 TODO (#611): replace `FusionIsometry.CompatibleWith` with the
 compatibility condition between `M` and its fusion isometries, add the
 inter-level compatibility asking the size-`n+1` isometry to factor through
-the size-`n` one, and drop the `_scaffold` suffix once the relation is no
-longer trivial. -/
-def IsRFP_MPDO_via_fusion_scaffold (M : MPOTensor d D) : Prop :=
+the size-`n` one, and remove the provisional formulation once the relation is
+no longer trivial. -/
+def IsRFP_MPDO_via_fusionIsometries_provisional (M : MPOTensor d D) : Prop :=
   ∀ n : ℕ, ∃ F : FusionIsometry d D n, F.CompatibleWith M
+
+@[deprecated IsRFP_MPDO_via_fusionIsometries_provisional (since := "2026-04-29")]
+abbrev IsRFP_MPDO_via_fusion_scaffold (M : MPOTensor d D) : Prop :=
+  IsRFP_MPDO_via_fusionIsometries_provisional M
 
 /-! ## Transfer-map-level fusion data -/
 
