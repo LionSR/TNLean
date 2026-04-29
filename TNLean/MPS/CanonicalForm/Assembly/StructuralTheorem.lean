@@ -775,8 +775,8 @@ theorem fundamentalTheorem_after_blocking_1606_commonLength_commonSector_endpoin
       (∀ x, 0 < familyB.commonFlatDim x) := by
   obtain ⟨zeroTailA, rA, dimA, μA, blocksA,
       zeroTailB, rB, dimB, μB, blocksB,
-      hIrrA, hIrrB, hTPA, hTPB, hμA, hμB, hDimA, hDimB,
-      hMPVA, hMPVB, hPos, hZero, hCycA, hCycB⟩ :=
+      _hIrrA, _hIrrB, _hTPA, _hTPB, hμA, hμB, _hDimA, _hDimB,
+      hMPVA, hMPVB, _hPos, _hZero, hCycA, hCycB⟩ :=
     fundamentalTheorem_after_blocking_1606_perBlock_cyclic_live_with_zeroTail A B hSame
   let periodA : Fin rA → ℕ := fun k => (hCycA k).choose
   let periodB : Fin rB → ℕ := fun k => (hCycB k).choose

@@ -1440,16 +1440,8 @@ theorem sameMPV₂_weightedCanonicalBlock_commonFlat_of_oneShot
       (toTensorFromBlocks (d := blockPhysDim d F.p)
         (μ := F.commonFlatWeight μ) F.commonFlatBlocks) := by
   intro N σ
-  calc
-    mpv (toTensorFromBlocks (d := blockPhysDim d F.p)
-        (μ := fun k : Fin r => (μ k) ^ F.p)
-        (fun k => blockTensor (d := d) (D := dim k) (blocks k) F.p)) σ
-        = mpv (toTensorFromBlocks (d := blockPhysDim d F.p)
-          (μ := fun k : Fin r => (μ k) ^ F.p) F.oneShotReindexedBlock) σ :=
-            hLabel N σ
-    _ = mpv (toTensorFromBlocks (d := blockPhysDim d F.p)
-        (μ := F.commonFlatWeight μ) F.commonFlatBlocks) σ :=
-          F.sameMPV₂_weightedOneShotReindexedBlock_commonFlat μ N σ
+  exact (hLabel N σ).trans
+    (F.sameMPV₂_weightedOneShotReindexedBlock_commonFlat μ N σ)
 
 end CommonBlockedCyclicSectorFamily
 
@@ -1504,14 +1496,13 @@ theorem exists_commonBlockedCyclicSectorFamily_of_commonMultiple
     fun k => (hSector k).2.2.2.1
   have sector_dim_pos : ∀ k s, 0 < sectorDim k s :=
     fun k => (hSector k).2.2.2.2
-  have p_pos : 0 < p := hp
   let extra : Fin r → ℕ := fun k => (hperiod_dvd k).choose
   have p_eq_period_mul_extra : ∀ k, p = period k * extra k :=
     fun k => (hperiod_dvd k).choose_spec
   have extra_pos : ∀ k, 0 < extra k := by
     intro k
     have hmul_pos : 0 < period k * extra k := by
-      simpa [p_eq_period_mul_extra k] using p_pos
+      simpa [p_eq_period_mul_extra k] using hp
     exact Nat.pos_of_mul_pos_left hmul_pos
   have hPhys : ∀ k,
       blockPhysDim (blockPhysDim d (period k)) (extra k) = blockPhysDim d p := by
@@ -1613,7 +1604,7 @@ theorem exists_commonBlockedCyclicSectorFamily_of_commonMultiple
     simpa using hCast
   exact ⟨⟨{
     p := p
-    p_pos := p_pos
+    p_pos := hp
     period := period
     period_pos := period_pos
     extra := extra
