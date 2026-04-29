@@ -177,8 +177,10 @@ is `Bot`. The model-backed classifier runs only for issues opened by an
 
 **Interaction with Mathlib Scout**: If the issue is a theorem, definition,
 lemma, proof, or other mathematical formalization task, the workflow adds the
-`formalization` label. That label triggers `mathlib-scout.yml`, which posts the
-Mathlib scouting report. Issue Classification does not duplicate that scouting report.
+`formalization` label. The Mathlib Scout workflow posts the Mathlib report only
+for issues opened by an `OWNER`, `MEMBER`, or `COLLABORATOR`; outside reports
+keep the label but require maintainer review before an automatic scouting report.
+Issue Classification does not duplicate that scouting report.
 
 **Label rule**: The workflow must not apply `auto-fix-claude` or
 `auto-fix-codex` to issues. Those labels are pull-request workflow controls.
