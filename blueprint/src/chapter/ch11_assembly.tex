@@ -1215,19 +1215,28 @@ single weighted block.
 	then turns equality of live-sector spans into the hypotheses used by the
 	sector comparison theorem.
 
+	The common-family comparison input is also formalized in reusable forms.  A
+	common MPV phase cover gives equality of finite-length live-block spans by
+	Lemma~\ref{lem:mpv_common_phase_cover_span_eq}.  A sector basis pre-matching
+	gives such span equality and the primitive overlap-span hypotheses by
+	Lemma~\ref{lem:sector_basis_pre_matching_span_eq} and
+	Theorem~\ref{thm:sector_basis_pre_matching_to_overlap_span}.  The BNT comparison
+	results produce common phase-cover data from proportional-decomposition
+	conclusions in Theorems~\ref{thm:common_phase_cover_of_proportional_decomposition}
+	and~\ref{thm:common_phase_cover_of_separated_normal_bnt}.
+
 	The remaining input for the unconditional equal-case theorem is the connection
-	from arbitrary equal MPV families to those hypotheses.  After applying the
-	canonical-form reduction of Chapter~\ref{ch:canonical}, one must put the live
-	sectors of both tensors at one common blocking length, carry the original
-	weights and the zero-tail identities through that blocking, and prove that the
-	two resulting live-sector families span the same finite-length MPV spaces.  A
-	convenient sufficient form is already formalized in
-	Theorem~\ref{thm:after_blocking_sector_common_blocks_phase_cover}: both live
-	families may be compared with one common family of phase-gauge classes,
-	surjectively on both sides.  What is not yet formalized is the construction of
-	that common family, or an equivalent direct proof of the span equality, from
-	the equal-MPV hypothesis and the common-length cyclic-sector data of
-	Chapter~\ref{ch:canonical}.  Without this construction, equality of the total
-	MPV vectors has not yet been converted into the componentwise power-sum identities
-	used in the paper proof, so Corollary~IV.5 cannot be invoked unconditionally.
+	from arbitrary equal MPV families to those hypotheses.  Chapter~\ref{ch:canonical}
+	now supplies a common physical blocking length and relabeled cyclic-sector
+	families on both sides, while preserving the zero-tail identities.  What remains
+	is the exact physical-label compatibility that identifies the canonical blocked
+	live tensor with the relabeled one-shot live tensor for the whole weighted live
+	family, followed by the final live-sector extraction used by the equal-case
+	comparison.  After any additional blocking required for injectivity, one must
+	then prove the finite-length live-sector span equality, or produce the common
+	phase-cover or BNT proportional-decomposition data from which the theorems above
+	derive that equality.  Until this connection is formalized, equality of the
+	total MPV vectors has not yet been converted into the componentwise power-sum
+	identities used in the paper proof, so Corollary~IV.5 cannot be invoked
+	unconditionally.
 \end{remark}
