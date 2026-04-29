@@ -603,10 +603,10 @@ with weights `μ^family.p` and
 nonzero transported sector weights.  The theorem also records the zero-tail
 identities after the corresponding common reblocking.
 
-The statement is deliberately explicit about physical labels: `oneShotReindexedBlock`
-is the block `B_k^[family.p]` after the iterated-block-to-one-shot relabeling
-`iteratedBlockIndex`.  It does not assert that the canonical one-shot blocked live
-block family and the per-block relabeled family are label-identical. -/
+The statement is deliberately explicit about the reindexing of blocked physical
+words: the relabeled block field is the block `B_k^[family.p]` after applying
+`iteratedBlockIndex`.  It does not assert that the canonical blocked family and
+the per-block reindexed family are identical as physical-word indexed tensors. -/
 theorem fundamentalTheorem_after_blocking_1606_reindexed_commonSector_live_with_zeroTail
     {d D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
@@ -705,9 +705,9 @@ of those live tensors, and the relabeled cyclic-sector families produced by
 `CommonBlockedCyclicSectorFamily` on both sides.
 
 The last two `SameMPV₂` conclusions are deliberately stated for the relabeled
-one-shot live blocks.  They isolate the remaining physical-label compatibility
-step needed to replace the canonical blocked live blocks in the zero-tail equations
-by the derived primitive irreducible common-sector blocks. -/
+blocked sector blocks.  They isolate the remaining equality under the chosen word
+reindexing needed to replace the canonical blocked nonzero blocks in the zero-tail
+equations by the derived primitive irreducible common-sector blocks. -/
 theorem fundamentalTheorem_after_blocking_1606_commonLength_commonSector_endpoint
     {d D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
