@@ -692,8 +692,8 @@ theorem span_eq (M : SectorBasisPreMatching P Q) (N : ℕ) :
       mpvState (d := d) (Q.basis k) N)) :=
   M.commonPhaseCover.span_eq N
 
-/-- A sector-basis pre-matching supplies the finite-length span field of the primitive
-overlap-span hypotheses. -/
+/-- A sector-basis pre-matching establishes the finite-length span equality needed by the
+primitive overlap-span hypotheses. -/
 theorem to_overlapSpan (M : SectorBasisPreMatching P Q)
     (HP : SectorBasisOverlapOrthoHypotheses P)
     (HQ : SectorBasisOverlapOrthoHypotheses Q)
