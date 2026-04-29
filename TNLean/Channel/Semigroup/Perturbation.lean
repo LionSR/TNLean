@@ -138,7 +138,7 @@ theorem duhamel_formula
   -- f(0) = expSemigroupCLM L (t - 0) * expSemigroupCLM L' 0 = T t * 1 = T t
   simp [sub_self, sub_zero, expSemigroupCLM_zero, one_mul, mul_one]
 
-/-! ## Helper for biSup bounds -/
+/-! ## Auxiliary estimate for biSup bounds -/
 
 private lemma norm_expSemigroup_le_biSup (L : MatrixCLM (Fin D)) {t : ℝ} (ht : 0 ≤ t)
     {x : ℝ} (hx : x ∈ Set.Icc 0 t) :
@@ -253,7 +253,7 @@ noncomputable def dysonTerm
         expSemigroupCLM L (t - s) * (L' - L) * dysonTerm L L' s n := rfl
 
 /-- Summability criterion for Dyson terms from a factorial majorant.
-This records the M-test step independently of the inductive norm proof. -/
+This states the M-test step independently of the inductive norm proof. -/
 lemma summable_dysonTerm_of_factorial_bound
     (L L' : MatrixCLM (Fin D)) {t M : ℝ}
     (hbound : ∀ n, ‖dysonTerm L L' t n‖ ≤ M * ((t * ‖L' - L‖ * M) ^ n / ↑(n.factorial))) :

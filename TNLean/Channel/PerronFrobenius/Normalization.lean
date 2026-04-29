@@ -30,7 +30,7 @@ variable {D : ℕ}
 
 namespace PerronFrobeniusNormalization
 
-/-- A small helper: rewrite the spectral theorem in `U * diagonal * Uᴴ` form. -/
+/-- A small auxiliary lemma: rewrite the spectral theorem in `U * diagonal * Uᴴ` form. -/
 private lemma spectral_decomp_eq [DecidableEq (Fin D)]
     {M : Matrix (Fin D) (Fin D) ℂ} (hM : M.IsHermitian) :
     M = (↑hM.eigenvectorUnitary : Matrix (Fin D) (Fin D) ℂ)

@@ -11,10 +11,10 @@ import TNLean.MPS.CanonicalForm.BlockingViaAdjoint
 import TNLean.Spectral.SpectralGap
 
 /-!
-# Channel-level wrappers for peripheral spectrum and primitivity
+# Channel-level formulations for peripheral spectrum and primitivity
 
 This file collects the general channel-level consequences of the MPS-specific
-peripheral-spectrum machinery from Wolf Chapter 6.
+peripheral-spectrum theory from Wolf Chapter 6.
 
 ## Main results
 
@@ -28,7 +28,7 @@ peripheral-spectrum machinery from Wolf Chapter 6.
   primitive irreducible channels have a strict complementary spectral gap
 
 The proofs reduce general channels to Kraus transfer maps and then reuse the
-existing MPS blocking / periodicity-removal infrastructure.
+existing MPS blocking / periodicity-removal formalization.
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder BigOperators NNReal ENNReal
@@ -178,7 +178,7 @@ theorem peripheral_isRootOfUnity_of_irreducible_channel [NeZero D]
   have hμp_norm : ‖μ ^ p‖ = 1 := norm_pow_eq_one_of_norm_eq_one hμ_norm p
   exact ⟨p, hp_pos, hPrimP.unique_peripheral (μ ^ p) hμp_eig hμp_norm⟩
 
-/-- Channel-level wrapper for `compl_eigenvalue_norm_lt_one_of_primitive`.
+/-- Channel-level formulation for `compl_eigenvalue_norm_lt_one_of_primitive`.
 
 For an irreducible channel, the auxiliary hypotheses needed by the general
 spectral-gap lemma are automatic: channel eigenvalues have norm at most `1`,

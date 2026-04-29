@@ -44,7 +44,7 @@ open Matrix Finset BigOperators
 
 variable {D : ℕ}
 
-/-! ### Helper: dual map equality from primal map equality -/
+/-! ### Auxiliary lemma: dual map equality from primal map equality -/
 
 /-- If two Kraus families define the same Schrödinger map, they also define
 the same Heisenberg dual: `∑ Bα† Y Bα = ∑ Aj† Y Aj` for all `Y`.

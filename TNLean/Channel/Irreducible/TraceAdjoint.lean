@@ -6,7 +6,7 @@ import TNLean.Channel.Schwarz.Basic
 import TNLean.MPS.Core.Transfer
 
 /-!
-# Shared trace-adjoint helper for irreducible-channel developments
+# Shared trace-adjoint auxiliary lemma for irreducible-channel developments
 
 This file factors out a common trace-pairing identity used in multiple
 irreducibility proofs.

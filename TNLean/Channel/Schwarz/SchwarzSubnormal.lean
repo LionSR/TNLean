@@ -12,7 +12,7 @@ import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Basic
 /-!
 # Schwarz inequalities for subnormal and commuting dominant operators
 
-This file records the Chapter 5 extensions of the normal-input Schwarz inequality
+This file states the Chapter 5 extensions of the normal-input Schwarz inequality
 that appear in Wolf's notes.
 
 ## Main declarations
@@ -40,7 +40,7 @@ general PSD case follows by approximating `D` with `D + ε · I`.
 open scoped Matrix ComplexOrder MatrixOrder TNOperatorSpace
 open Matrix
 
-/-! ### C*-algebra infrastructure for matrices -/
+/-! ### C*-algebra formalization for matrices -/
 
 namespace KadisonSchwarz
 
@@ -370,14 +370,14 @@ theorem schwarz_inequality_subnormal_operator
 /-- Alias for `schwarz_inequality_subnormal_operator` matching Wolf Theorem 5.5. -/
 alias wolf_theorem_5_5 := schwarz_inequality_subnormal_operator
 
-/-- Linear-map wrapper for the canonical adjoint Kraus map.
+/-- Linear-map formulation for the canonical adjoint Kraus map.
 
 This bundles `KadisonSchwarz.krausAdjointMap` from `KadisonSchwarz.lean` as a
 linear map. It is convenient for reusing the generic positivity/monotonicity
-API from `PositiveMapProperties`.
+interface from `PositiveMapProperties`.
 
 Note: `TNLean.Channel.Semigroup.Generator` contains an older duplicate
-formula with the same name; inside `namespace KadisonSchwarz`, this wrapper
+formula with the same name; inside `namespace KadisonSchwarz`, this formulation
 intentionally uses the canonical Schwarz-side definition. -/
 noncomputable def krausAdjointMapLinear (K : Fin d → Mat) : Mat →ₗ[ℂ] Mat where
   toFun := krausAdjointMap K
@@ -569,7 +569,7 @@ private lemma intertwine_sqrt_of_mul_eq
   simp [K, Matrix.fromBlocks_multiply] at h
   simpa only [h22eq, h11eq] using h.symm
 
-/-- Helper: the PD Schwarz inequality for commuting dominant operators.
+/-- Auxiliary lemma: the PD Schwarz inequality for commuting dominant operators.
 
 This is proved by a normal dilation whose `NᴴN` top-left block is `Dom`. -/
 private lemma schwarz_commuting_dominant_posDef

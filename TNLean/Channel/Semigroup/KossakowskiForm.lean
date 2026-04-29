@@ -41,7 +41,7 @@ section KossakowskiForms
 `L(ρ) = i[ρ,H] + ½ Σ_{k,l} C_{kl} ([F_k, ρ F_l†] + [F_k ρ, F_l†])`
 where `C ≥ 0` is the Kossakowski matrix and `F` is the chosen family of
 matrices. In the paper this family is a basis of traceless matrices; the
-current structure records only the data used in the algebraic conversion to
+current structure states only the data used in the algebraic conversion to
 Lindblad form. -/
 structure KossakowskiForm (D : ℕ) where
   /-- The number of matrices in the chosen family `F`. -/
@@ -115,7 +115,7 @@ def KossakowskiForm.toLinearMap (K : KossakowskiForm D) :
     congr 1
     congr 1 <;> ring_nf
 
-/-! ### Helpers for Kossakowski ↔ Lindblad conversion -/
+/-! ### AuxiliaryLemmas for Kossakowski ↔ Lindblad conversion -/
 
 /-- Collapsing a sum weighted by the identity matrix:
 `∑_l (1 : Matrix) l k • f(l) = f(k)`. -/

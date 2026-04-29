@@ -11,7 +11,7 @@ import TNLean.Channel.ChoiJamiolkowski
 /-!
 # Kraus-cardinality and Choi-rank correspondence
 
-This file packages the channel-side infrastructure relating Kraus families to the
+This file states the channel-side formalization relating Kraus families to the
 rank of the Choi matrix.
 
 ## Main definitions

@@ -10,7 +10,7 @@ import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Unital
 /-!
 # Order and spectral interval properties of positive maps
 
-This file records two basic consequences of positivity used in Wolf's discussion
+This file states two basic consequences of positivity used in Wolf's discussion
 of Schwarz inequalities:
 
 * `IsPositiveMap.map_le_map`: positivity implies monotonicity for the matrix
