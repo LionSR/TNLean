@@ -280,13 +280,13 @@ From any `A : MPSTensor d D`, produce:
 * a zero-tail of dimension `zeroTailDim` accumulating all-zero irreducible blocks;
 * TP-gauged irreducible blocks `blocks k` with nonzero weights `μ k`.
 
-Every live block satisfies:
+Every nonzero block satisfies:
 * `IsIrreducibleTensor`;
 * left-canonical normalization `∑ᵢ (Bᵢ)ᴴ Bᵢ = I`;
 * positive bond dimension;
 * nonzero weight.
 
-The MPV of `A` equals the zero-tail contribution plus the weighted live-block sum. -/
+The MPV of `A` equals the zero-tail contribution plus the weighted nonzero-block sum. -/
 theorem exists_tp_gauge_from_arbitrary_with_zeroTail (A : MPSTensor d D) :
     ∃ (zeroTailDim : ℕ) (r : ℕ) (dim : Fin r → ℕ)
       (μ : Fin r → ℂ)
@@ -303,20 +303,20 @@ theorem exists_tp_gauge_from_arbitrary_with_zeroTail (A : MPSTensor d D) :
   obtain ⟨zeroTailDim, r₀, dim₀, blocks₀, hIrr₀, hNonzero₀, hDim₀, hMPV₀⟩ :=
     exists_irreducible_blockDecomp_nonzeroBlocks (d := d) (D := D) A
   -- Step 2: Apply blockwise TP gauge to the nonzero blocks.
-  -- We feed `A_live := toTensorFromBlocks μ=1 blocks₀` as the input tensor.
+  -- We feed `A_nonzero := toTensorFromBlocks μ=1 blocks₀` as the input tensor.
   -- The SameMPV₂ hypothesis for `exists_tp_gauge_blockwise` holds by reflexivity.
-  let A_live := toTensorFromBlocks (d := d) (μ := fun _ : Fin r₀ => (1 : ℂ)) blocks₀
-  have hSame_refl : SameMPV₂ A_live
+  let A_nonzero := toTensorFromBlocks (d := d) (μ := fun _ : Fin r₀ => (1 : ℂ)) blocks₀
+  have hSame_refl : SameMPV₂ A_nonzero
       (toTensorFromBlocks (d := d) (μ := fun _ : Fin r₀ => (1 : ℂ)) blocks₀) :=
     fun _ _ => rfl
   obtain ⟨r₁, dim₁, μ₁, blocks₁, hSame₁, hIrr₁, hLeft₁, hμNe₁, hDim₁⟩ :=
-    exists_tp_gauge_blockwise A_live blocks₀ hIrr₀ hSame_refl hNonzero₀
+    exists_tp_gauge_blockwise A_nonzero blocks₀ hIrr₀ hSame_refl hNonzero₀
   -- Step 3: Assemble the result.
   refine ⟨zeroTailDim, r₁, dim₁, μ₁, blocks₁, hIrr₁, hLeft₁, hμNe₁, hDim₁, ?_⟩
   -- The MPV relationship chains through the zero-block separation and TP gauge.
   intro N σ
   calc mpv A σ
-      = mpv (zeroMPSTensor d zeroTailDim) σ + mpv A_live σ := hMPV₀ N σ
+      = mpv (zeroMPSTensor d zeroTailDim) σ + mpv A_nonzero σ := hMPV₀ N σ
     _ = mpv (zeroMPSTensor d zeroTailDim) σ +
           mpv (toTensorFromBlocks (d := d) (μ := μ₁) blocks₁) σ := by
         congr 1

@@ -595,7 +595,7 @@ theorem fundamentalTheorem_after_blocking_1606_commonBlocked_cyclic_live_with_ze
 
 This companion to
 `fundamentalTheorem_after_blocking_1606_commonBlocked_cyclic_live_with_zeroTail`
-uses the common cyclic-sector family to express the one-step reindexed data available
+uses the common cyclic-sector family to express the reindexed block data available
 after the iterated-blocking comparison theorem.  For each side, the cyclic
 sectors are expressed as derived common-alphabet blocks `family.commonFlatBlocks`,
 with weights `μ^family.p` and
@@ -841,10 +841,10 @@ theorem fundamentalTheorem_after_blocking_1606_commonLength_commonSector
   · intro x
     exact familyB.commonFlatDim_pos x
 
-/-- If the canonical blocked nonzero part agrees with the relabeled one-step
-blocks, the zero-tail equation can be rewritten using the derived common-sector
-family.  This is the one-sided theorem that puts the relabeled data above in the
-form used by the span and BNT comparison theorems. -/
+/-- If the canonical blocked nonzero part agrees with the common reindexed blocks,
+the zero-tail equation can be rewritten using the derived common-sector family.
+This is the one-sided theorem that puts the reindexed data above in the form used
+by the span and BNT comparison theorems. -/
 theorem zeroTail_commonFlat_of_reindexed_labelCompat
     {d D r z : ℕ} {dim : Fin r → ℕ}
     (A : MPSTensor d D) (μ : Fin r → ℂ)
