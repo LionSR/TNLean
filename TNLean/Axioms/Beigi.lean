@@ -47,7 +47,7 @@ proved theorems). They are the two axioms introduced by
 
 Replace `Axioms.rfp_to_nncph_commute` with a Lean proof that uses the
 product-of-entangled-pairs structural form (Appendix B of
-arXiv:1606.00608). The structural bridge in
+arXiv:1606.00608). The structural construction in
 `TNLean/MPS/RFP/CommutingBridge.lean` (`ProductPairBridge`) already
 encodes the key combinatorial content; the missing piece is the
 extraction of a `ProductPairBridge A` witness from `IsRFP A` and
@@ -101,7 +101,7 @@ the file that consumes it.
 (source line 1307) as *"trivial from Theorem [charact-MPS]"*, i.e.,
 from Theorem 3.10 itself. It does **not** depend on S. Beigi (2012);
 it depends only on the product-of-entangled-pairs structural form
-(Appendix B of arXiv:1606.00608). A structural bridge for that decomposition
+(Appendix B of arXiv:1606.00608). A structural construction for that decomposition
 lives in `TNLean/MPS/RFP/CommutingBridge.lean` as
 `ProductPairBridge`.
 
