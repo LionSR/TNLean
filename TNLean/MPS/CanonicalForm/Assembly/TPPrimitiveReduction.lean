@@ -61,7 +61,7 @@ variable {d D : ℕ}
 
 /-! ## Zero-tail and weight transport through blocking -/
 
-/-- Reblocking preserves a zero-tail/live MPV decomposition.
+/-- Reblocking preserves an explicit zero-tail equation for the nonzero tensor.
 
 The positive-period hypothesis is exactly what keeps the zero-tail contribution
 confined to length zero after blocking: a blocked chain of positive length expands
