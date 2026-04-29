@@ -2,6 +2,13 @@ name: Formalization Task
 description: A specific theorem, definition, or lemma to formalize in Lean
 labels: ["formalization"]
 body:
+  - type: markdown
+    attributes:
+      value: |
+        **Title convention.** Use `<area>: <mathematical result or construction>`.
+        Avoid bracket prefixes and software-process wording. Example:
+        `MPS/CanonicalForm: assemble cyclic sectors at a common blocking length`.
+
   - type: input
     id: statement
     attributes:

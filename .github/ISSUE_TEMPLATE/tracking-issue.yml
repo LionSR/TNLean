@@ -7,9 +7,10 @@ body:
       value: |
         ## Tracking Issue
         Use this template for a family of related mathematical tasks.
-        Each task should be a separate GitHub issue with its own statement and source citation.
-        List sub-issues inside a native tasklist block so GitHub shows "Tracked by" on child issues.
-        Do not use ordinary Markdown checklists for tracked work.
+        Overall tracking issue titles start with `Tracking:`.
+        Example: `Tracking: Wolf Ch6 spectral properties`.
+        Add child issues through GitHub's native Sub-issues relation, not through Markdown checkbox lists.
+        Write the title, description, notes, and sub-issue titles in ordinary mathematical prose, using the terminology of the relevant tensor-network, MPS, quantum-channel, or operator-algebra literature.
 
   - type: input
     id: area
@@ -52,22 +53,13 @@ body:
     attributes:
       label: Sub-issues
       description: |
-        List issue numbers to track using a native GitHub tasklist block.
-        Each line must contain only the issue reference (no descriptions).
-        Put mathematical descriptions in the sub-issue titles and bodies.
-        The tracking workflow updates checkboxes when issues are closed or reopened.
-      value: |
-        ```[tasklist]
-        ### Tasks
-        ```
+        List any existing issue numbers that should be attached through GitHub Sub-issues after creation.
+        Do not use Markdown checkbox syntax here.
       placeholder: |
-        ```[tasklist]
-        ### Tasks
-        - [ ] #42
-        - [ ] #43
-        ```
+        #42
+        #43
     validations:
-      required: true
+      required: false
 
   - type: textarea
     id: notes
