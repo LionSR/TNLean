@@ -220,13 +220,13 @@ jobs:
             ─── STEP 7: TAG THE ISSUE ───
             If an issue was found, post a comment on it:
               ```
-              gh issue comment <N> --repo <REPO> --body "PR #<PR_NUMBER> has been opened to address this issue.
-
-              **Branch:** \`<BRANCH>\`
-              **Title:** <new title>
+              gh issue comment <N> --repo <REPO> --body "PR #<PR_NUMBER> has been opened for this mathematical task.
 
               **Mathematical statement:** <one-line statement, or "not identified in the linked issue">
               **Source:** <paper theorem, blueprint label, file:line, or "not identified">
+
+              **Branch:** \`<BRANCH>\`
+              **Title:** <new title>
 
               <one-line summary of what the PR proves or changes>"
               ```

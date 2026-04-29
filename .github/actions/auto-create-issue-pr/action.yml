@@ -78,10 +78,8 @@ runs:
           exit 0
         fi
 
-        ISSUE_JSON=$(gh issue view "$ISSUE_NUMBER" --repo "$REPO" --json title,labels,url)
-        ISSUE_TITLE=$(echo "$ISSUE_JSON" | jq -r '.title')
-        ISSUE_URL=$(echo "$ISSUE_JSON" | jq -r '.url')
-        ISSUE_LABELS=$(echo "$ISSUE_JSON" | jq -r '[.labels[].name] | join(", ")')
+        ISSUE_TITLE=$(gh issue view "$ISSUE_NUMBER" --repo "$REPO" --json title --jq '.title')
+        ISSUE_URL=$(gh issue view "$ISSUE_NUMBER" --repo "$REPO" --json url --jq '.url')
 
         CHANGED_FILES=$(
           git diff --name-only "origin/main...origin/$BRANCH" 2>/dev/null \
@@ -102,7 +100,6 @@ runs:
 
         ### Description
         - This PR was opened from \`${BRANCH}\` by ${CREATOR_NAME}.
-        - Linked issue labels: ${ISSUE_LABELS}
         - Changed files:
         ${CHANGED_FILES}
 
