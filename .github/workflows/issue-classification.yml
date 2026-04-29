@@ -182,7 +182,7 @@ jobs:
               ? [...labels].sort().map((label) => `\`${label}\``).join(', ')
               : 'No automatic label was clear from the title or body.';
             const formalizationText = looksLikeFormalization
-              ? ' The title or body appears to ask for a formalization task; after reviewing the mathematical source, a maintainer may request a Mathlib report by adding `scout`.'
+              ? ' The workflow added `formalization`; after reviewing the mathematical source, a maintainer may request a Mathlib report by adding `scout`.'
               : '';
 
             await github.rest.issues.createComment({
