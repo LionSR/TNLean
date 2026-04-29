@@ -1,9 +1,9 @@
-# 2026-04-29 — Common exact live-sector endpoint predecessor (#942/#969/#970/#944/#652)
+# 2026-04-29 — Common exact live-sector construction predecessor (#942/#969/#970/#944/#652)
 
 ## Scope
 
 This audit records a non-Gemma predecessor toward the common exact live-sector
-endpoint needed before the common phase-cover and BNT span theorems can close
+statement needed before the common phase-cover and BNT span theorems can close
 #970/#944 and then the #652 Gap §1 umbrella.
 
 The new Lean declarations are:
@@ -45,7 +45,7 @@ The remaining paper inputs are stated below.
    cyclic sector by `e_k`, and transports trace preservation, primitivity,
    tensor irreducibility, positive dimension, and MPV equivalence.
 
-2. **Two-sided common-length endpoint from structural reduction.**
+2. **Two-sided common-length theorem from structural reduction.**
    `fundamentalTheorem_after_blocking_1606_commonLength_commonSector_endpoint`
    starts from `SameMPV₂ A B`.  It takes the per-block cyclic live reduction,
    lets `p_A` and `p_B` be the one-sided least common multiples, and chooses the
@@ -80,8 +80,8 @@ The exact blockers are now narrower than before:
    relabeled one-shot live tensor, or an equivalent downstream theorem formulated
    directly for the relabeled families.
 
-2. **Injectivity/Wielandt endpoint.**
-   The new endpoint proves trace preservation, primitive transfer maps, tensor
+2. **Injectivity/Wielandt stage.**
+   The new theorem proves trace preservation, primitive transfer maps, tensor
    irreducibility, and positive bond dimension.  The #944/#652 overlap-rigidity
    route also needs one-site injectivity of the final live blocks, or a theorem
    replacing the one-site injectivity input by a later blocked variant.  This is
@@ -91,7 +91,7 @@ The exact blockers are now narrower than before:
 3. **Common phase-cover or BNT comparison data.**
    PRs #987/#988 provide `MPVCommonPhaseCover`, `SectorBasisPreMatching`, and the
    BNT cover construction once proportional-decomposition matching data is
-   available.  This branch supplies the common-length sector endpoint needed
+   available.  This branch supplies the common-length sector data needed
    before those theorems can be applied, but it does not construct the
    cross-side class maps or phase equivalences from arbitrary `SameMPV₂`.
 

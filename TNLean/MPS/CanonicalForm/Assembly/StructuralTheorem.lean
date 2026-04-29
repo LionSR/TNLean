@@ -693,10 +693,10 @@ theorem fundamentalTheorem_after_blocking_1606_reindexed_commonSector_live_with_
     exact familyB.commonFlatDim_pos x
 
 set_option maxHeartbeats 800000 in
--- The next endpoint has a large dependent existential conclusion, matching the
+-- The next theorem has a large dependent existential conclusion, matching the
 -- paper data needed downstream.
 
-/-- **Two-sided common-length relabeled cyclic-sector endpoint.**
+/-- **Two-sided common-length relabeled cyclic-sector theorem.**
 
 Starting from `SameMPV₂ A B`, this theorem chooses one positive physical blocking
 length for both sides.  At that common length it records the exact zero-tail
