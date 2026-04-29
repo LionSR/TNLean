@@ -146,7 +146,7 @@ theorem afterBlocking_sectorComparison_zeroTail_of_proportionalDecompositionConc
   let nonzeroA := toTensorFromBlocks (d := blockPhysDim d p) (μ := μA) blocksA
   let nonzeroB := toTensorFromBlocks (d := blockPhysDim d p) (μ := μB) blocksB
   obtain ⟨P, Q, hPblocks, hQblocks, hPbnt, hQbnt, hOverlapSpan⟩ :=
-    exists_bnt_sectorDecomposition_pair_with_overlapSpan_of_proportionalDecompositionConclusion
+    exists_bnt_sectorDecomp_pair_with_overlapSpan_of_proportionalDecompositionConclusion
       (d := blockPhysDim d p) μA blocksA μB blocksB hTPA hTPB hIrrA hIrrB
       hPrimA hPrimB hInjA hInjB hμA hμB hMatch
   have hAB : SameMPV₂ (blockTensor (d := d) (D := D₁) A p)
