@@ -33,14 +33,28 @@ PRs should follow the mathlib review checklist — review for: **style**, **docu
 - Sectioning comments `/-! ### Section title -/` for structure within files
 - References should use BibTeX entries
 
-### PR title and description convention
-@codex and @claude generate inconsistent PR titles. Unify before merging:
-- **Title format**: `type(scope): description` — e.g. `feat(Wolf Ch6): add conditional expectation (Thm 6.15)`
-- **Types**: `feat` (new formalization), `fix` (bug/correctness fix), `docs` (documentation only), `style` (formatting/naming), `refactor` (restructure without changing behavior), `ci` (CI/workflow changes)
-- **Scope**: paper tag or chapter — `Wolf Ch2`, `Wolf Ch6`, `1804.04964`, `1708.00029`, `MPS/Chain`, `PEPS`, etc. No brackets.
-- **Description**: lowercase, imperative mood, concise. Reference theorem/proposition numbers where applicable.
-- **Body**: should have `### Motivation` and `### Description` sections. Reference the issue number. List files changed.
-- **Clean up bot-generated titles** before merging — codex/claude often produce verbose or inconsistent titles like `[PR #165 follow-up] BlockedChainFT style cleanups and term-mode endpoint`. Rename to e.g. `style(MPS/Chain): BlockedChainFT term-mode endpoint and naming cleanup`.
+### PR and issue title conventions
+@codex and @claude generate inconsistent titles. Unify before merging:
+- **Title format**: `type(scope): description`, for example
+  `feat(Wolf Ch6): add conditional expectation (Thm 6.15)`.
+- **Types**: `feat` (new formalization), `fix` (mathematical or proof correction),
+  `doc` (documentation only), `style` (formatting, naming, prose, or title
+  cleanup), `refactor` (restructure without changing mathematical content),
+  `ci` (CI/workflow changes), `chore` (dependencies or linting).
+- **Scope**: paper tag or chapter, such as `Wolf Ch2`, `Wolf Ch6`,
+  `1804.04964`, `1708.00029`, `MPS/Chain`, or `PEPS`. No brackets.
+- **Description**: lowercase, imperative mood, concise. Reference
+  theorem/proposition numbers where applicable.
+- **Body**: should have `### Motivation` and `### Description` sections.
+  Reference the issue number. List files changed.
+- **Clean up bot-generated titles** before merging. Codex/Claude often produce
+  verbose or inconsistent titles like `[PR #165 follow-up] BlockedChainFT style
+  cleanups and term-mode endpoint`. Rename to, for example,
+  `style(MPS/Chain): BlockedChainFT term-mode endpoint and naming cleanup`.
+- **Issue titles**: do not use PR prefixes. Use plain mathematical titles such
+  as `Wolf Ch6: fixed-point decomposition for Schwarz maps`,
+  `MPS/CanonicalForm: assemble cyclic sectors at a common blocking length`, or
+  `Tracking: Wolf Ch6 spectral properties`.
 
 ### Review checklist (docs/pr-review.md)
 - **Style**: code formatting, naming conventions (`naming.html`), PR title/description informative
@@ -143,7 +157,10 @@ Putting `@codex` or `@claude` in the body text when creating an issue does nothi
 4. **@codex cannot fetch other branches.** Sandboxed environment blocks `git fetch` (HTTP 403). Asking it to "review branch X" or "push to branch Y" will always fail.
 
 ### Why @claude fails on codex branches — confirmed root cause
-Codex auto-generates branch names from the issue title: `codex/github-mention-{ISSUE_TITLE_SLUG}-{RANDOM}`. Our issue titles use `[brackets]` like `[Wolf Ch6]` or `[1804.04964]`, so `]` flows into the branch name.
+Codex auto-generates branch names from the issue title:
+`codex/github-mention-{ISSUE_TITLE_SLUG}-{RANDOM}`. Issue titles with brackets,
+such as `[Wolf Ch6]` or `[1804.04964]`, can therefore put `]` into the branch
+name.
 
 The `anthropics/claude-code-action` **explicitly validates branch names** and rejects any containing git special characters `~^:?*[\]`. The exact error:
 ```
@@ -151,12 +168,16 @@ Action failed with error: Invalid branch name: "codex/github-mention-wolf-ch5]-s
 Branch names cannot contain control characters, spaces, or special git characters (~^:?*[\]).
 ```
 
-This means **every PR created by @codex from a bracket-titled issue → @claude will always fail**. All 30 of our open issues have brackets in their titles.
+This means **every PR created by @codex from a bracket-titled issue → @claude will always fail**.
 
-**The root cause is our issue naming convention.** All 30 open issues use `[brackets]` in titles (e.g. `[Wolf Ch6]`, `[1804.04964]`). Codex strips the `[` but keeps the `]` in the branch slug.
+**The root cause was the old issue naming convention.** Codex strips the `[` but keeps the `]` in the branch slug.
 
 **Solutions:**
-- **ADOPTED: Bracket-free issue naming convention.** Use `Wolf Ch6 —` or `1804.04964 —` instead of `[Wolf Ch6]` or `[1804.04964]`. This prevents `]` from appearing in codex branch names, making them @claude-compatible. Apply to all new issues going forward; existing issues can be renamed as needed.
+- **ADOPTED: Bracket-free issue naming convention.** Use `Wolf Ch6: ...` or
+  `1804.04964: ...` instead of `[Wolf Ch6] ...` or `[1804.04964] ...`. This
+  prevents `]` from appearing in codex branch names, making them
+  @claude-compatible. Apply to all new issues going forward; existing issues
+  can be renamed as needed.
 - Fix locally (checkout branch, make changes, push) — still needed for existing `]` branches
 - Ask @codex on the issue to create a fresh replacement PR from main (new branch, new PR)
 - @codex on the PR can still run reviews (reads the diff, doesn't need to checkout the branch)

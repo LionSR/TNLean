@@ -206,12 +206,12 @@ jobs:
 
             Before creating any issue, use the mcp__github__search_issues tool to check
             whether a standup issue for today's date already exists (search for
-            "Daily Standup — ${{ steps.date.outputs.today }}" with the "standup" label).
-            If such an issue exists, DO NOT create a new one — instead, use
+            "Daily Standup -- ${{ steps.date.outputs.today }}" with the "standup" label).
+            If such an issue exists, DO NOT create a new one -- instead, use
             mcp__github__add_issue_comment to update the existing issue.
 
             If no such issue exists, use mcp__github__issue_write to create a GitHub
-            issue with the title: "Daily Standup — ${{ steps.date.outputs.today }}" and
+            issue with the title: "Daily Standup -- ${{ steps.date.outputs.today }}" and
             label it "standup". Use mcp__github__get_label to check if the label exists
             first, and use Bash(gh label create *) to create it if needed.
 

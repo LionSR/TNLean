@@ -1,7 +1,16 @@
 name: Formalization Task
 description: A specific theorem, definition, or lemma to formalize in Lean
+title: "<area>: <mathematical result or construction>"
 labels: ["formalization"]
 body:
+  - type: markdown
+    attributes:
+      value: |
+        Use a plain mathematical title, for example
+        `Wolf Ch6: peripheral spectrum of irreducible Schwarz maps`.
+        Do not begin an issue title with `formalization(...)`, `feat(...)`,
+        `fix(...)`, or `doc(...)`.
+
   - type: input
     id: statement
     attributes:
