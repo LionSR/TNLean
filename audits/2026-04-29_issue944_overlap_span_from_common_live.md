@@ -47,8 +47,8 @@ New declarations:
 
 - `MPSTensor.exists_bnt_sectorDecomp_pair_with_overlapSpan_of_commonPhaseCover`:
   given trace-preserving, primitive, irreducible, injective live block families with
-  nonzero weights and a bundled `MPVCommonPhaseCover`, construct sector decompositions
-  whose bases satisfy `SectorBasisOverlapSpanHypotheses`.
+  nonzero weights and common phase-cover data, construct sector decompositions whose
+  bases satisfy `SectorBasisOverlapSpanHypotheses`.
 - `MPSTensor.exists_bnt_sectorDecomp_pair_with_overlapSpan_of_proportionalDecompositionConclusion`:
   first turns a BNT proportional-decomposition conclusion into a common MPV phase cover,
   then applies the previous theorem.
