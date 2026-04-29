@@ -169,8 +169,8 @@ is `Bot`. The model-backed classifier runs only for issues opened by an
 
 **What it checks**:
 - Which area, paper, topic, workflow, or standard labels apply
-- Whether a formalization issue includes a source reference, blueprint or LaTeX
-  anchor, dependencies, and a target Lean declaration
+- Whether a formalization issue includes a source reference, a location in the
+  blueprint or LaTeX source, dependencies, and a target Lean declaration
 - Whether a tracking issue should use GitHub Sub-issues
 - Whether a bug report identifies affected files, error messages, and expected
   behavior
@@ -378,7 +378,7 @@ created.
 
 **TNLean issue-started workflow behavior.** When the responder creates a pull
 request from issue work, the follow-up action scans the same triggering text for
-the magic phrase `auto[_ -]?fix`, matching `auto-fix`, `auto fix`, or `autofix`.
+the phrase `auto[_ -]?fix`, matching `auto-fix`, `auto fix`, or `autofix`.
 If it finds one of those forms, it adds `auto-fix-claude` to the created pull
 request.
 

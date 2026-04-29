@@ -19,7 +19,7 @@ type(scope): short description
 |------------|--------------------------------------------------|
 | `feat`     | New definition, lemma, theorem, or module         |
 | `fix`      | Bug fix (broken proof, wrong identifier, etc.)    |
-| `refactor` | Restructuring without changing API surface        |
+| `refactor` | Restructuring without changing the public interface |
 | `doc`      | Documentation or blueprint changes only           |
 | `style`    | Formatting, naming, or prose cleanup              |
 | `ci`       | CI/CD workflow changes                            |
@@ -115,8 +115,8 @@ Rules:
   algebras, gauge equivalence, and finite-length span equality.
 - Avoid titles that sound like internal task management or software automation.
   For example, prefer `Prove equality of the blocked MPS under iterated-blocking
-  relabelling of physical indices` to `Prove physical-label compatibility
-  between canonical blocked live tensor and relabeled one-shot live blocks`.
+  relabelling of physical indices` to a title written in local shorthand about
+  labels or nonzero block structure.
 
 ### Issue templates
 
@@ -289,9 +289,9 @@ needs `\lean{}` / `\leanok` tags.
 | `auto-fix-claude` | PR-only: enable review-comment fixes           |
 | `auto-fix-codex`  | PR-only: opt into alternate auto-fix workflows |
 
-**General rule.** Workflow-control labels belong on the artifact whose workflow
-they control. Pull-request automation labels should be applied to pull requests,
-not issues.
+**General rule.** Workflow-control labels belong on the pull request or issue
+whose automation they control. Pull-request automation labels should be applied
+to pull requests, not issues.
 
 **TNLean labels.** The `auto-fix-claude` and `auto-fix-codex` labels control
 TNLean pull-request workflows. Do not apply them to issues; they do not trigger

@@ -1,7 +1,7 @@
 /-
 # TNLean
 
-Stable import surface for the maintained TNLean library.
+Stable root import list for the maintained TNLean library.
 
 This file imports the modules intended for downstream users. Most
 specialized helper modules are still omitted from the root import list, but the

@@ -28,7 +28,7 @@ body:
       required: true
 
   - type: textarea
-    id: source_anchor
+    id: blueprint_reference
     attributes:
       label: Blueprint / LaTeX reference
       description: >

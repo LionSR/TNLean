@@ -1109,7 +1109,7 @@ original nonzero-weight block and one of its cyclic sectors.
 The field `nested_same` records the checked MPV compatibility condition available
 at this stage: the iterated blocked nonzero-weight block is MPV-equivalent to the corresponding
 unit-weight reblocked cyclic sectors, all at the common physical dimension.  The
-remaining work for issue #969 is the one-shot iterated-blocking identification
+remaining work for issue #969 is the direct iterated-blocking identification
 and the weighted direct-sum flattening across the original nonzero weights. -/
 structure CommonBlockedCyclicSectorFamily {d r : ℕ} {dim : Fin r → ℕ}
     (blocks : (k : Fin r) → MPSTensor d (dim k)) where

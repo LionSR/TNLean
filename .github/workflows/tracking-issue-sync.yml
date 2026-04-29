@@ -402,7 +402,7 @@ jobs:
             ### Scouting and source review
 
             For tasks that are mathematically complex or involve new
-            Mathlib API surface, suggest preparatory scouting before
+            Mathlib interface, suggest preparatory scouting before
             diving into the proof:
 
             - **Mathlib scouting**: If the recommended issue involves

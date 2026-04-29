@@ -15,7 +15,7 @@ open scoped Matrix BigOperators ComplexOrder MatrixOrder TNMatrixCFC
 # TP-gauge reduction for normal canonical-form construction
 
 This module records the TP-gauge normalization part of the normal-reduction
-pipeline.
+argument.
 
 Its public outputs are:
 
@@ -24,7 +24,7 @@ Its public outputs are:
 * `MPSTensor.exists_tp_gauge_from_arbitrary_with_zeroTail` — the corresponding
   arbitrary-input result obtained after zero-block separation.
 
-The auxiliary declarations stay file-local because they are bookkeeping lemmas
+The auxiliary declarations stay file-local because they are compatibility lemmas
 for rescaling, gauge transport, and the final zero-tail threading step.
 -/
 
@@ -120,12 +120,12 @@ This theorem is the blockwise TP-normalization step used by
 `exists_tp_gauge_from_arbitrary_with_zeroTail`, and it also records the earlier
 TP-normalization route on a fixed irreducible decomposition. Its extra
 nonzero-block hypothesis lives on a chosen decomposition, so it still does not
-by itself give an unconditional arbitrary-input endpoint under the current
+by itself give an unconditional arbitrary-input theorem under the current
 `SameMPV₂` interface. Concretely, every input block is assumed to have some
 nonzero Kraus operator, excluding the all-zero scalar counterexample and
-matching the hypotheses of the corresponding irreducible-to-TP wrapper from
+matching the hypotheses of the corresponding irreducible-to-TP theorem from
 `Existence.lean`. It remains separate from the later normal-canonical-form
-endpoint in `NormalReduction/Main.lean`. -/
+theorem in `NormalReduction/Main.lean`. -/
 theorem exists_tp_gauge_blockwise
     (A : MPSTensor d D)
     {r0 : ℕ} {dim0 : Fin r0 → ℕ}
@@ -271,7 +271,7 @@ The MPV relationship accounts exactly for both contributions:
   `mpv A σ = mpv (zeroMPSTensor d zeroTailDim) σ + mpv (toTensorFromBlocks μ blocks) σ`
 
 This is the furthest unconditional arbitrary-input step available before periodicity removal and
-cyclic-sector / equal-weight bookkeeping.
+cyclic-sector / equal-weight comparison.
 -/
 
 /-- **Arbitrary-input TP-gauge reduction (1606.00608 §2.3 + App. A, with zero-block separation).**
@@ -280,13 +280,13 @@ From any `A : MPSTensor d D`, produce:
 * a zero-tail of dimension `zeroTailDim` accumulating all-zero irreducible blocks;
 * TP-gauged irreducible blocks `blocks k` with nonzero weights `μ k`.
 
-Every live block satisfies:
+Every nonzero block satisfies:
 * `IsIrreducibleTensor`;
 * left-canonical normalization `∑ᵢ (Bᵢ)ᴴ Bᵢ = I`;
 * positive bond dimension;
 * nonzero weight.
 
-The MPV of `A` equals the zero-tail contribution plus the weighted live-block sum. -/
+The MPV of `A` equals the zero-tail contribution plus the weighted nonzero-block sum. -/
 theorem exists_tp_gauge_from_arbitrary_with_zeroTail (A : MPSTensor d D) :
     ∃ (zeroTailDim : ℕ) (r : ℕ) (dim : Fin r → ℕ)
       (μ : Fin r → ℂ)
@@ -302,8 +302,8 @@ theorem exists_tp_gauge_from_arbitrary_with_zeroTail (A : MPSTensor d D) :
   -- Step 1: Obtain the zero-block-separated irreducible decomposition.
   obtain ⟨zeroTailDim, r₀, dim₀, blocks₀, hIrr₀, hNonzero₀, hDim₀, hMPV₀⟩ :=
     exists_irreducible_blockDecomp_liveBlocks (d := d) (D := D) A
-  -- Step 2: Apply blockwise TP gauge to the live blocks.
-  -- We feed `A_live := toTensorFromBlocks μ=1 blocks₀` as the input tensor.
+  -- Step 2: Apply blockwise TP gauge to the nonzero blocks.
+  -- We use `A_live := toTensorFromBlocks μ=1 blocks₀` as the input tensor.
   -- The SameMPV₂ hypothesis for `exists_tp_gauge_blockwise` holds by reflexivity.
   let A_live := toTensorFromBlocks (d := d) (μ := fun _ : Fin r₀ => (1 : ℂ)) blocks₀
   have hSame_refl : SameMPV₂ A_live

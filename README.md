@@ -11,7 +11,7 @@ A Lean 4 formalization of major components of the **Fundamental Theorem of Matri
 
 ## Overview
 
-[Matrix Product States](https://en.wikipedia.org/wiki/Matrix_product_state) (MPS) — equivalently, Tensor Networks with one-dimensional geometry — are a central tool in quantum information theory and condensed matter physics. The **Fundamental Theorem of MPS** states that two MPS tensors generating the same family of quantum states must be related by a gauge transform. The **Quantum Wielandt Bound** gives a constructive upper bound on the length needed for products of matrices to span the full algebra. On the MPS side, this repository formalizes the injective single-block theorem, substantial Perron–Frobenius / canonical-form infrastructure, and strong-hypothesis multi-block and canonical-form assembly theorems, but not yet a full arbitrary-tensor → final canonical-form / biCF pipeline matching Section 2 + Appendix A of [arXiv:1606.00608](https://arxiv.org/abs/1606.00608). In parallel, the channel side now includes Choi/Kraus/Stinespring representation theory, a substantial Chapter-5 Schwarz package, a broad Chapter-6 spectral / fixed-point package, and a near-complete Chapter-7 semigroup / GKSL package.
+[Matrix Product States](https://en.wikipedia.org/wiki/Matrix_product_state) (MPS) — equivalently, Tensor Networks with one-dimensional geometry — are a central tool in quantum information theory and condensed matter physics. The **Fundamental Theorem of MPS** states that two MPS tensors generating the same family of quantum states must be related by a gauge transform. The **Quantum Wielandt Bound** gives a constructive upper bound on the length needed for products of matrices to span the full algebra. For MPS, this repository formalizes the injective single-block theorem, substantial Perron–Frobenius / canonical-form theory, and multi-block and canonical-form assembly theorems under strong structural hypotheses; the complete reduction from an arbitrary tensor to the final canonical form / biCF of Section 2 and Appendix A of [arXiv:1606.00608](https://arxiv.org/abs/1606.00608) remains to be proved. The quantum-channel development includes Choi/Kraus/Stinespring representation theory, substantial Chapter-5 Schwarz theory, broad Chapter-6 spectral / fixed-point theory, and near-complete Chapter-7 semigroup / GKSL theory.
 
 ## Current Status
 
@@ -27,22 +27,44 @@ Done in Lean today:
 - the cumulative `D²` Wielandt bound for the project's `IsNormal` notion
 - periodic tensor definitions for the irreducible-form theory (`IsPeriodic`, `IsIrreducibleForm`, `ZGaugeEquiv`, `RepeatedBlocks`)
 - translation-invariance corollary for injective MPS chains (`ti_tensors_collapse_to_single_gauge`)
-- blocked normal-chain FT endpoint via `IsNBlkInjective` bridge (`isNBlkInjective_iff_blockTensor_isInjective`)
+- blocked normal-chain Fundamental Theorem using `IsNBlkInjective`
+  (`isNBlkInjective_iff_blockTensor_isInjective`)
 - physical-rotation symmetry corollary: physical `u`-action on MPS implies virtual Z-gauge equivalence (`gaugeEquiv_of_sameMPV_rotatePhysical`; Corollary 4.1 of [arXiv:1708.00029](https://arxiv.org/abs/1708.00029))
-- SameState-to-SameMPV bridge interface for injective chains (`SameStateBridgeHyp`), providing `fundamentalTheorem_injective_chain_of_sameState` as a weaker-hypothesis chain FT endpoint; the actual proof that `SameState` implies `SameMPV` is packaged as an abstract hypothesis rather than a completed argument
+- SameState-to-SameMPV reduction hypothesis for injective chains
+  (`SameStateBridgeHyp`), giving
+  `fundamentalTheorem_injective_chain_of_sameState` under weaker hypotheses; the
+  proof that `SameState` implies `SameMPV` remains a separate assumption
 - `physRealize_mul` for general injective tensors: the physical realization map is multiplicative
-- periodic blocking helper API in `MPS/Irreducible/PeriodicBlocking.lean` (`periodicBlockCount`, `periodicBlockPeriod`, `orbitSumProjection`, `blockedSectorProjection`; Lemma 2.4–2.5 bookkeeping infrastructure)
+- periodic blocking constructions in `MPS/Irreducible/PeriodicBlocking.lean`
+  (`periodicBlockCount`, `periodicBlockPeriod`, `orbitSumProjection`,
+  `blockedSectorProjection`; Lemmas 2.4--2.5)
 - on-site symmetry definitions (`IsOnSiteSymmetric`, `twistedTensor`) and gauge uniqueness for injective tensors (`gauge_unique_up_to_scalar`: two gauge equivalences of the same injective tensor are related by a scalar)
 - renormalization fixed-point definitions (`IsRFP` from arXiv:1606.00608 Def 3.2) and `isRFP_iff_kraus_isometry` (Thm 3.1); structural-form theorems `rfp_cf_structural` and `rfp_bnt_structural` proved as reductions from the `rfp_nt_structural` sorry (rank-1 transfer map, requires rectangular Kraus freedom); zero-correlation-length predicates (`IsCID`, `IsLocallyOrthogonal`, `IsZCL`) and ZCL equivalence theorem (`zcl_iff_idempotent_transfer`) formalized in `MPS/RFP/ZeroCorrelationLength.lean`; reverse direction of Theorem 3.8 (`isCID_implies_isRFP`) proved sorry-free: a tensor with a PosDef fixed point and correlations independent of distance is a renormalization fixed point
 - parent Hamiltonian with real orthogonal projector implementation (`parentHamiltonian`, `IsFrustrationFree`, `localTerm`); `parentHamiltonian_annihilates` and `parentHamiltonian_frustrationFree` proved; ground-space intersection property (`IntersectionProperty.lean`) and unique ground state infrastructure (`UniqueGroundState.lean`): `chainGroundSpace_eq_mpvSubmodule` proved sorry-free for `IsInjective` tensors (the IsNBlkInjective analogue remains sorry'd); commuting parent Hamiltonians and decorrelation theorem backward direction (`Commuting.lean`, `Decorrelation.lean`)
-- exploratory PEPS definitions on finite simple graphs (`TNLean/PEPS/Defs.lean`): `Tensor`, `stateCoeff`, `SameState`, `IsVertexInjective`; scaffold for the Fundamental Theorem for injective PEPS (`TNLean/PEPS/FundamentalTheorem.lean`, refs arXiv:1804.04964 Thm 2): definitions `edgeGaugeAt`, `gaugeVertex`, `applyGauge`, `GaugeEquiv`, `localTensorEval`, and theorems `applyGauge_stateCoeff`, `GaugeEquiv.sameState`, `localGauge_exists`, `gaugeConsistency`, `fundamentalTheorem_PEPS`, `gauge_unique_up_to_scalar` (all proofs sorry'd pending the full argument)
+- exploratory PEPS definitions on finite simple graphs (`TNLean/PEPS/Defs.lean`):
+  `Tensor`, `stateCoeff`, `SameState`, `IsVertexInjective`; preliminary
+  formalization of the Fundamental Theorem for injective PEPS
+  (`TNLean/PEPS/FundamentalTheorem.lean`, refs arXiv:1804.04964 Thm 2):
+  definitions `edgeGaugeAt`, `gaugeVertex`, `applyGauge`, `GaugeEquiv`,
+  `localTensorEval`, and theorems `applyGauge_stateCoeff`,
+  `GaugeEquiv.sameState`, `localGauge_exists`, `gaugeConsistency`,
+  `fundamentalTheorem_PEPS`, `gauge_unique_up_to_scalar` (proofs deferred
+  pending the full argument)
 - finite-length FT variant: for injective tensors, `SameMPV` can be weakened to `SameMPVFrom N₀` for any finite threshold N₀ (`MPS/FundamentalTheorem/FiniteLength.lean`; core propagation proof carries a sorry)
 - QPF with relaxed injectivity: quantum Perron-Frobenius holds under `IsIrreducibleMap (transferMap A)`, not just `IsInjective A`, exposing the natural generality of Wolf Theorem 6.3 and applying to blocked tensors (`QPF/Primitive.lean`)
-- primitive proportional FT convenience wrapper: `gaugePhaseEquiv_of_proportionalMPV₂_of_isPrimitiveMPS` reduces the 7-hypothesis proportional form to 4 by composing irreducibility, left-canonicality, and overlap-convergence from `IsPrimitiveMPS` (`MPS/FundamentalTheorem/ProportionalPrimitive.lean`)
+- primitive proportional Fundamental Theorem reformulation:
+  `gaugePhaseEquiv_of_proportionalMPV₂_of_isPrimitiveMPS` reduces the
+  7-hypothesis proportional form to 4 by composing irreducibility,
+  left-canonicality, and overlap-convergence from `IsPrimitiveMPS`
+  (`MPS/FundamentalTheorem/ProportionalPrimitive.lean`)
 - periodic fundamental theorem infrastructure: `fundamentalTheorem_periodic_proportional` (Theorem 3.4, arXiv:1708.00029) proved conditionally on `PeriodicOverlapHypothesis`; Z-gauge construction helpers for the equal-case (Theorem 3.8 steps 5–7) proved sorry-free (`MPS/FundamentalTheorem/Periodic.lean`)
 - periodic overlap dichotomy: `periodicOverlapDichotomy` (Proposition 3.3, arXiv:1708.00029) stated with type-correct hypotheses; core proof bodies are sorry'd pending the full argument (`MPS/FundamentalTheorem/PeriodicOverlap.lean`)
 - MPO/MPDO/LPDO foundations: `MPOTensor`, `MPOTensor.IsMPDO`, `MPOTensor.IsLPDO`, transfer map, toMPSTensor bridge, and LPDO→Hermitian proved (`MPS/MPDO/Defs.lean`)
-- string order and local symmetry: `twistedTransferMap`, `stringOrderParam`, `IsLocalSymmetry`, `condC2_iff_condC3`, `condC1_imp_condC2`, and `stringOrder_iff_localSymmetry` stated; spectral-theory proofs (requiring canonical fixed-point primitivity) carry sorry stubs (`MPS/Symmetry/StringOrder.lean`)
+- string order and local symmetry: `twistedTransferMap`, `stringOrderParam`,
+  `IsLocalSymmetry`, `condC2_iff_condC3`, `condC1_imp_condC2`, and
+  `stringOrder_iff_localSymmetry` stated; spectral-theory proofs requiring
+  canonical fixed-point primitivity remain incomplete
+  (`MPS/Symmetry/StringOrder.lean`)
 - virtual symmetry equation: `virtual_symmetry_eq` — injective MPS with on-site symmetry U(g) admits virtual representatives X(g) satisfying the conjugation equation (`MPS/Symmetry/SymmetricMPS.lean`)
 - scalar 2-cocycle cohomology: `ScalarCocycle.IsCoboundary`, `CohomologousTo`, `H2` quotient, `ProjectivelyEquivalent`, and `projRep_equiv_iff_cohomologous` (`Algebra/CocycleCohomology.lean`); gauge independence `cohomologousTo_of_isInjective` (`MPS/Symmetry/CocycleCoboundary.lean`)
 
@@ -60,10 +82,14 @@ Remaining formalization targets:
 Complementary quantum-channel milestones now in Lean:
 
 - Choi, Kraus, and Stinespring representation results from Wolf Chapter 2, including existential Stinespring dilation theorems (`exists_stinespring_dilation`, `exists_stinespring_isometry_of_cptp`; Wolf Thm 2.2 in both Heisenberg and Schrödinger pictures)
-- Wolf Proposition 5.1, Theorems 5.5–5.7, and Example 5.3 in the Schwarz package
-- Wolf Theorem 6.1 together with substantial Chapter-6 spectral / fixed-point theory, including Theorems 6.12–6.13, the stationary-support package (Lemma 6.4, Proposition 6.9, `stationaryState`, `stationarySupport`), the full bidirectional equivalence for Wolf Theorem 6.2 item 3 (irreducibility ↔ exponential semigroup strict positivity, `irreducible_iff_exp_posDef_forall`), Propositions 6.6/6.8 (similarity invariance of irreducibility, Hermitian fixed-point decomposition; `wolf_prop_6_6`, `wolf_prop_6_8`), and Theorem 6.15 scalar conditional expectation (`Kraus.wolf_theorem_6_15_scalar`)
-- Wolf Chapter-7 semigroup / GKSL package through Proposition 7.6 and Theorem 7.2, Proposition 7.5 (irreducible implies primitive for QDS), and a partial non-reducibility criterion for Corollary 7.2; the full convergence statement of Corollary 7.2 remains unformalized
-- `IsNPositiveMap` hierarchy (n-positive maps) and `kadison_schwarz_2positive` for unital 2-positive maps (Kadison 1952, Choi 1974), generalizing the CP-based Kadison–Schwarz result (`Channel/Schwarz/TwoPositive.lean`; connection from CP through 2-positive to Kadison–Schwarz carries partial sorry stubs)
+- Wolf Proposition 5.1, Theorems 5.5–5.7, and Example 5.3 in the Schwarz theory
+- Wolf Theorem 6.1 together with substantial Chapter-6 spectral / fixed-point theory, including Theorems 6.12–6.13, the stationary-support results (Lemma 6.4, Proposition 6.9, `stationaryState`, `stationarySupport`), the full bidirectional equivalence for Wolf Theorem 6.2 item 3 (irreducibility ↔ exponential semigroup strict positivity, `irreducible_iff_exp_posDef_forall`), Propositions 6.6/6.8 (similarity invariance of irreducibility, Hermitian fixed-point decomposition; `wolf_prop_6_6`, `wolf_prop_6_8`), and Theorem 6.15 scalar conditional expectation (`Kraus.wolf_theorem_6_15_scalar`)
+- Wolf Chapter-7 semigroup / GKSL theory through Proposition 7.6 and Theorem 7.2, Proposition 7.5 (irreducible implies primitive for QDS), and a partial non-reducibility criterion for Corollary 7.2; the full convergence statement of Corollary 7.2 remains unformalized
+- `IsNPositiveMap` hierarchy (n-positive maps) and `kadison_schwarz_2positive`
+  for unital 2-positive maps (Kadison 1952, Choi 1974), generalizing the
+  CP-based Kadison--Schwarz result (`Channel/Schwarz/TwoPositive.lean`;
+  the implication from complete positivity through 2-positivity to
+  Kadison--Schwarz remains partly incomplete)
 - peripheral eigenvalue group structure (`PeripheralSpectrum` namespace, `Channel/Peripheral/GroupStructure.lean`): peripheral eigenvalues of irreducible channels form a cyclic group with period dividing dimension (Wolf Thm 6.6, `peripheral_eigenvalues_form_cyclic_group`, `channel_period_divides_dim` proved); multiplicity-one result (`peripheral_eigenvalue_multiplicity_one`) proved sorry-free; product closure of peripheral eigenvalues proved sorry-free in `Channel/Peripheral/CyclicGroup.lean`
 - spectral gap of injective channels (`spectral_gap_of_injective`), exponential convergence of injective primitive channels (`exponential_convergence_of_primitive`), and correlation length bound (`correlation_length_bound`) all proved sorry-free in `Spectral/QuantitativeGap.lean`
 
@@ -173,7 +199,7 @@ For repository-specific migration notes about the Lean/Mathlib 4.29 upgrade, see
 
 ## Blueprint
 
-The repository ships a LeanBlueprint in `blueprint/` covering both the MPS development and the Wolf quantum-channel material. As of 2026-04-07, the blueprint chapters `ch02b_mpdo.tex`, `ch04_channels.tex`, `ch05_schwarz.tex`, `ch06_spectral.tex`, `ch07_wielandt.tex`, `ch08_canonical.tex`, `ch11_assembly.tex`, `ch12_semigroup.tex`, `ch13_algebraic_ft.tex`, `ch13b_symmetry.tex`, `ch14_parent_hamiltonian.tex`, and `ch15_correlations.tex` have been synchronized to reflect current Lean status, including the stationary-support package, periodic tensor definitions, semigroup sorry closures, MPDO foundations, symmetry / string-order / coboundary entries, chain FT declarations, quantitative spectral gap / correlation decay results, PEPS FT scaffold definitions, and the `isCID_implies_isRFP` reverse direction entry.
+The repository ships a LeanBlueprint in `blueprint/` covering both the MPS development and the Wolf quantum-channel material. As of 2026-04-07, the blueprint chapters `ch02b_mpdo.tex`, `ch04_channels.tex`, `ch05_schwarz.tex`, `ch06_spectral.tex`, `ch07_wielandt.tex`, `ch08_canonical.tex`, `ch11_assembly.tex`, `ch12_semigroup.tex`, `ch13_algebraic_ft.tex`, `ch13b_symmetry.tex`, `ch14_parent_hamiltonian.tex`, and `ch15_correlations.tex` have been synchronized to reflect current Lean status, including the stationary-support results, periodic tensor definitions, semigroup sorry closures, MPDO foundations, symmetry / string-order / coboundary entries, chain FT declarations, quantitative spectral gap / correlation decay results, PEPS FT preliminary definitions, and the `isCID_implies_isRFP` reverse direction entry.
 
 Typical blueprint commands:
 

@@ -82,13 +82,13 @@ uses a two-basis span comparison for the constructed sector bases, while
 transports a finite-length span equality for the original nonzero-weight block families to
 those bases. The zero-tail-aware theorem
 `fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_overlapSpan_zeroTail`
-separately records the `N = 0` bookkeeping when full overlap-span hypotheses are
+separately records the `N = 0` equation when full overlap-span hypotheses are
 available.
 
 The remaining Gap §1 content is to flatten the per-block cyclic-sector data to a
 single common physical blocking level, derive one-site injectivity (or a blocked
 replacement) and the finite-length span comparison for the flattened family, and
-finish the zero-tail bookkeeping from the structural after-blocking reduction
+finish the zero-tail identities from the structural after-blocking reduction
 itself.
 -/
 
@@ -257,14 +257,14 @@ theorem fundamentalTheorem_after_blocking_1606_structural_with_blockedSameMPV₂
   · exact sameMPV₂_blockTensor A B hSame pA
   · exact sameMPV₂_blockTensor A B hSame pB
 
-/-- **Zero-tail bookkeeping for nonzero block tensors.**
+/-- **Zero-tail identities for nonzero block tensors.**
 
 Suppose two tensors with the same MPV family are each written as a zero-tail
 contribution plus a weighted nonzero block tensor. Then the nonzero parts agree at every
 positive length, while the length-zero equation records exactly the difference
 between the zero-tail dimensions and the nonzero block bond dimensions.
 
-This is the local bookkeeping needed before a full `SameMPV₂` comparison of the
+This is the local identity needed before a full `SameMPV₂` comparison of the
 nonzero block tensors can be recovered: the only missing datum is equality of the
 two zero-tail dimensions (or an equivalent replacement for the `N = 0` case). -/
 theorem liveBlock_positive_sameMPV₂_and_zeroTail_bookkeeping_of_sameMPV₂
@@ -309,12 +309,12 @@ theorem liveBlock_positive_sameMPV₂_and_zeroTail_bookkeeping_of_sameMPV₂
       _ = mpv B σ := hSame 0 σ
       _ = (zeroTailB : ℂ) + mpv (toTensorFromBlocks (d := d) (μ := μB) blocksB) σ := hBσ
 
-/-- **Reblocked nonzero-block equality with zero-tail bookkeeping.**
+/-- **Reblocked nonzero-block equality with zero-tail identities.**
 
 If two tensors have the same MPVs and each is expressed as a zero tail plus a
 weighted nonzero block tensor, then every positive common reblocking transports the
 nonzero weights to powers, preserves positive-length equality of the nonzero parts,
-and leaves the zero-tail contribution as the sole length-zero bookkeeping term. -/
+and leaves the zero-tail contribution as the sole length-zero term. -/
 theorem liveBlock_blockPower_positive_sameMPV₂_and_zeroTail_bookkeeping_of_sameMPV₂
     {d D₁ D₂ rA rB p : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
@@ -372,10 +372,10 @@ theorem liveBlock_blockPower_positive_sameMPV₂_and_zeroTail_bookkeeping_of_sam
 
 /-- **Recover full nonzero-block `SameMPV₂` once zero tails agree.**
 
-This combines the positive-length bookkeeping theorem with the single additional
+This combines the positive-length equality theorem with the single additional
 length-zero datum needed to remove the zero tails. It does not assert that the
 zero-tail dimensions agree automatically; that remains a separate paper-level
-bookkeeping step for the unconditional after-blocking sector comparison. -/
+identity for the unconditional after-blocking sector comparison. -/
 theorem liveBlock_sameMPV₂_of_sameMPV₂_of_zeroTail_eq
     {d D₁ D₂ rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
@@ -415,7 +415,7 @@ returned by `exists_tp_primitive_blockDecomp_after_blocking`, in addition to the
 blocked `SameMPV₂` relations. The nonzero-weight blocks are trace-preserving, have
 primitive transfer maps, positive bond dimensions, and nonzero weights; the
 zero-tail equations record precisely why these nonzero parts are only immediately
-identified at positive lengths unless the `N = 0` zero-tail bookkeeping is also
+identified at positive lengths unless the `N = 0` zero-tail equation is also
 resolved. -/
 theorem fundamentalTheorem_after_blocking_1606_structural_with_zeroTail
     {d D₁ D₂ : ℕ}
@@ -457,14 +457,14 @@ theorem fundamentalTheorem_after_blocking_1606_structural_with_zeroTail
   · exact sameMPV₂_blockTensor A B hSame pA
   · exact sameMPV₂_blockTensor A B hSame pB
 
-/-- **Per-block cyclic-sector decomposition with zero-tail bookkeeping.**
+/-- **Per-block cyclic-sector decomposition with zero-tail identities.**
 
 This is the faithful predecessor to the common nonzero-sector statement. From
 `SameMPV₂ A B`, it first uses the invariant-subspace/zero-tail split and TP gauge
 to obtain irreducible nonzero-weight blocks on both sides. It then removes the period of
 each block separately, producing primitive irreducible cyclic sectors for
 every nonzero-weight block. The nonzero parts agree at positive lengths, and the length-zero
-case is recorded as the explicit zero-tail bookkeeping identity.
+case is recorded as the explicit zero-tail identity.
 
 The theorem intentionally keeps the per-block period-removal lengths inside
 `HasPrimitiveIrreducibleCyclicSectors`. It does not conflate those lengths with a
@@ -525,7 +525,7 @@ theorem fundamentalTheorem_after_blocking_1606_perBlock_cyclic_live_with_zeroTai
     exact hasPrimitiveIrreducibleCyclicSectors_of_TP_of_isIrreducibleTensor
       (blocksB k) (hTPB k) (hIrrB k)
 
-/-- **Common-blocking predecessor for nonzero cyclic sectors with zero-tail bookkeeping.**
+/-- **Common-blocking predecessor for nonzero cyclic sectors with zero-tail identities.**
 
 This theorem combines the zero-tail/TP-gauge reduction for nonzero-weight blocks with the common
 reblocking constructor for per-block cyclic sectors.  The theorem asserts the
@@ -534,10 +534,10 @@ finite flattened sector family at the corresponding common blocked physical
 dimension.  The flattened sectors are trace-preserving, have primitive transfer
 maps, are tensor-irreducible, have positive bond dimensions, and carry nonzero
 unit weights.  The statement keeps the checked zero-tail equations,
-positive-length equality of the nonzero parts, and length-zero bookkeeping at the unblocked
+positive-length equality of the nonzero parts, and the length-zero equation at the unblocked
 nonzero-block level.  The companion theorem
 `fundamentalTheorem_after_blocking_1606_reindexed_commonSector_live_with_zeroTail`
-adds the one-shot, explicitly relabeled cyclic-sector flattening available after
+adds the explicitly relabeled cyclic-sector flattening available after
 the iterated-blocking comparison theorem. -/
 theorem fundamentalTheorem_after_blocking_1606_commonBlocked_cyclic_live_with_zeroTail
     {d D₁ D₂ : ℕ}
@@ -591,7 +591,7 @@ theorem fundamentalTheorem_after_blocking_1606_commonBlocked_cyclic_live_with_ze
   · intro x
     exact familyB.flatWeight_ne_zero x
 
-/-- **Relabeled one-shot common-sector data with zero-tail reblocking.**
+/-- **Relabeled common-sector data with zero-tail reblocking.**
 
 This companion to
 `fundamentalTheorem_after_blocking_1606_commonBlocked_cyclic_live_with_zeroTail`
@@ -699,7 +699,7 @@ set_option maxHeartbeats 800000 in
 
 Starting from `SameMPV₂ A B`, this theorem chooses one positive physical blocking
 length for both sides.  At that common length it records the exact zero-tail
-bookkeeping for the canonically blocked nonzero parts, the positive-length equality
+identities for the canonically blocked nonzero parts, the positive-length equality
 of those nonzero parts, and the relabeled cyclic-sector families produced by
 `CommonBlockedCyclicSectorFamily` on both sides.
 
@@ -1416,7 +1416,7 @@ theorem fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_commonPha
 If `A` and `B` have the same MPVs, and each is expressed as a zero tail plus a nonzero part,
 then equality of the zero-tail dimensions gives full `SameMPV₂` equality of the nonzero parts.
 For positive lengths the zero tails vanish; at length zero this is exactly the missing
-bookkeeping condition. -/
+zero-tail condition. -/
 theorem sameMPV₂_live_of_sameMPV₂_with_zeroTail_eq
     {d D₁ D₂ L₁ L₂ z₁ z₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
@@ -1461,7 +1461,7 @@ theorem sameMPV₂_live_of_sameMPV₂_with_zeroTail_eq
       exact hsum
     simpa [zero_add] using hsum'
 
-/-- **Common nonzero-block sector comparison with explicit zero-tail bookkeeping.**
+/-- **Common nonzero-block sector comparison with explicit zero-tail identities.**
 
 This is the zero-tail-aware variant of
 `fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_overlapSpan`.
@@ -1596,7 +1596,7 @@ finite-length spans of the original nonzero-weight block families is transported
 chosen sector bases and the sector-weight conclusion follows from the original
 `SameMPV₂ A B`. The theorem
 `fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_overlapSpan_zeroTail`
-records the corresponding zero-tail bookkeeping route when full overlap-span data
+records the corresponding zero-tail route when full overlap-span data
 are supplied.
 
 The remaining formal work for the completely unconditional
@@ -1605,7 +1605,7 @@ structural reduction itself:
 
 1. a common nonzero-block decomposition with primitive **and irreducible** blocks at
    the same physical blocking level;
-2. the `N = 0` bookkeeping for the zero-tail contribution;
+2. the `N = 0` equation for the zero-tail contribution;
 3. one-site injectivity of the nonzero-weight blocks, or a blocked replacement of the
    rigidity hypothesis; and
 4. equality of the finite-length MPV spans for the original nonzero-weight block families

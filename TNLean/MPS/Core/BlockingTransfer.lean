@@ -87,7 +87,7 @@ theorem transferMap_blockTensor_fixedPoint
   -- Now rewrite the blocked transfer map as an iterate.
   simpa [transferMap_blockTensor_apply (A := A) (L := L) (X := X)] using hpow
 
-/-- Iterated physical blocking is compatible with one-shot blocking by the multiplied period,
+/-- Iterated physical blocking is compatible with blocking by the product length,
 at the transfer-map level:
 `transferMap(block(block(A, m), n)) = transferMap(block(A, m * n))`. -/
 theorem transferMap_blockTensor_mul

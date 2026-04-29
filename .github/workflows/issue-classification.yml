@@ -1,7 +1,7 @@
 name: Issue Classification
 
 # Classify newly opened human-authored issues. Issues from repository members
-# receive full taxonomy classification; outside reports receive inexpensive
+# receive full taxonomy classification; outside reports receive a light
 # preliminary classification for obvious labels and a maintainer follow-up comment.
 
 on:
@@ -113,14 +113,14 @@ jobs:
 
             ### Reading
             - For formalization issues, state whether the issue already gives a
-              source reference, blueprint or LaTeX anchor, and target Lean
-              declaration.
+              source reference, a location in the blueprint or LaTeX source, and
+              a target Lean declaration.
             - For non-formalization issues, summarize the affected files,
               workflow, or documentation area if identifiable.
 
             ### Next step
             - One concrete recommendation, such as adding a missing source
-              anchor, attaching the issue to a tracking issue, waiting for the
+              reference, attaching the issue to a tracking issue, waiting for the
               Mathlib scouting report, or opening a focused pull request.
 
           claude_args: |
@@ -139,13 +139,16 @@ jobs:
 
             const has = (...patterns) => patterns.some((pattern) => pattern.test(text));
 
-            if (has(/\b(theorem|lemma|proof|formalization|formalisation|lean declaration|sorry)\b/)) {
+            if (has(/\b(theorem|lemma|proposition|corollary|definition|conjecture|proof|formalization|formalisation|lean declaration|sorry)\b/)) {
               labels.add('formalization');
             }
             if (has(/\b(blueprint|latex|docstring|documentation|readme)\b/)) {
               labels.add('documentation');
             }
-            if (has(/\b(ci|workflow|build|failure|failed|error|type error)\b/)) {
+            if (has(/\b(type error|compilation error|compile error|broken proof|failing proof|lake build|build failure|build failed|failed to build)\b/)) {
+              labels.add('bug');
+            }
+            if (has(/\b(ci|github actions|lean action|workflow failure|workflow failed|failing check|failed check)\b/)) {
               labels.add('bug');
               labels.add('ci');
             }
