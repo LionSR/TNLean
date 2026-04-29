@@ -784,21 +784,21 @@ theorem fundamentalTheorem_after_blocking_1606_commonLength_commonSector_endpoin
   have periodB_pos : ∀ k, 0 < periodB k := fun k => (hCycB k).choose_spec.1
   let pA : ℕ := lcmPeriod periodA
   let pB : ℕ := lcmPeriod periodB
-  let p : ℕ := pA * pB
+  let p : ℕ := Nat.lcm pA pB
   have hpA : 0 < pA := lcmPeriod_pos periodA_pos
   have hpB : 0 < pB := lcmPeriod_pos periodB_pos
-  have hp : 0 < p := Nat.mul_pos hpA hpB
+  have hp : 0 < p := Nat.lcm_pos hpA hpB
   have hDvdA : ∀ k, (hCycA k).choose ∣ p := by
     intro k
     have h₁ : periodA k ∣ pA := dvd_lcmPeriod periodA k
     have h₂ : periodA k ∣ p := by
-      simpa [p] using (Nat.dvd_mul_right_of_dvd h₁ pB)
+      exact Nat.dvd_trans h₁ (Nat.dvd_lcm_left pA pB)
     simpa [periodA] using h₂
   have hDvdB : ∀ k, (hCycB k).choose ∣ p := by
     intro k
     have h₁ : periodB k ∣ pB := dvd_lcmPeriod periodB k
     have h₂ : periodB k ∣ p := by
-      simpa [p] using (Nat.dvd_mul_left_of_dvd h₁ pA)
+      exact Nat.dvd_trans h₁ (Nat.dvd_lcm_right pA pB)
     simpa [periodB] using h₂
   obtain ⟨⟨familyA, hFamilyA⟩⟩ :=
     exists_commonBlockedCyclicSectorFamily_of_commonMultiple
