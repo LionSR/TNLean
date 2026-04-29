@@ -40,7 +40,7 @@ Unify generated titles before merging or triage.
 - **PR title format**: `type(scope): description`, e.g.
   `feat(Wolf Ch6): add conditional expectation (Thm 6.15)`.
 - **PR types**: `feat` (new formalization), `fix` (bug/correctness fix),
-  `docs` (documentation only), `style` (formatting, naming, or prose cleanup),
+  `doc` (documentation only), `style` (formatting, naming, or prose cleanup),
   `refactor` (restructure without changing behavior), `ci` (CI/workflow
   changes), `chore` (tooling or dependency maintenance).
 - **PR scope**: paper tag, chapter, or module path, such as `Wolf Ch2`,
@@ -53,6 +53,8 @@ Unify generated titles before merging or triage.
   prefixes. Overall trackers start with `Tracking:`. Formalization tasks use
   `<area>: <mathematical result or construction>`, for example
   `MPS/CanonicalForm: assemble cyclic sectors at a common blocking length`.
+  As in mathlib, issue type and topic metadata should live in labels and
+  hierarchy, not in a dense title prefix.
 - **Body**: should have `### Motivation` and `### Description` sections for
   PRs, and should reference the issue number. List files changed.
 - **Clean up generated titles** before merging. Replace verbose or process-heavy
