@@ -1352,7 +1352,7 @@ theorem parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound
 
 1. **Friedrichs-angle surface:** TNLean currently has no dedicated
 `FriedrichsAngle`/principal-angle development in `TNLean/Analysis`. Mathlib provides
-orthogonal-projection infrastructure (for example
+orthogonal-projection structure (for example
 `Mathlib.Analysis.InnerProductSpace.Projection.Basic` and
 `Mathlib.Analysis.InnerProductSpace.Projection.FiniteDimensional`, exposing
 `Submodule.starProjection` and `orthogonalProjection`) but not a ready-made
@@ -1373,14 +1373,14 @@ uniform estimate `γ * re ⟪H_N v, v⟫ ≤ re ⟪H_N v, H_N v⟫`.
 `parentHamiltonianES_gap_bound_of_ordered_local_term_bounds` now formalize the
 finite-sum algebra turning explicit ordered cross-term row bounds for local
 symmetric projections into the quadratic-form hypothesis above.
-5. **Remaining local analytic obligation:** local projection structure, cyclic-window
+5. **Remaining local analytic step:** local projection structure, cyclic-window
 row cardinality, and non-overlap positivity are now formalized above. The remaining
 hypothesis is the Friedrichs-angle estimate for overlapping cyclic windows with the
 coefficient required by the finite-overlap row reduction.
-6. **Sorry dependency split:** `parentHamiltonian_gapped` is the downstream
+6. the gap is: `parentHamiltonian_gapped` is the subsequent
 existential theorem, now proved by applying the Friedrichs-angle theorem
 below. The theorem `parentHamiltonianES_gap_bound_of_friedrichs` still depends
-on missing Friedrichs-angle infrastructure; this is the blocker and should not
+on missing Friedrichs-angle formulation; this is the blocker and should not
 be replaced with axioms or unrelated sorrys. -/
 /-- Friedrichs-angle and row-sum estimate for the MPS parent Hamiltonian.
 

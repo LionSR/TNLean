@@ -13,9 +13,9 @@ This file records the connection between the Appendix B structural form
 `A i = X * diag(Λ) * U i * X⁻¹` and the nearest-neighbor commutativity statement
 needed in `TNLean/MPS/ParentHamiltonian/Commuting.lean`.
 
-At the current stage of the library, the `NSiteSpace` API does not yet encode
+At the current stage of the library, the `NSiteSpace` formalization does not yet encode
 explicit tensor-product support/locality data, while `IsNNCPH` is defined
-*downstream* in `ParentHamiltonian/Commuting.lean`. To keep the dependency
+*later* in `ParentHamiltonian/Commuting.lean`. To keep the dependency
 direction suitable for the eventual proof of `rfp_implies_nncph`, this file does
 not import `Commuting.lean`. Instead it does three things:
 
@@ -30,7 +30,7 @@ not import `Commuting.lean`. Instead it does three things:
    chain-space extraction needed to turn that structural data into a
    `ProductPairBridge`.
 
-The intended downstream use is:
+The intended subsequent use is:
 
 * obtain `AppendixBStructuralData A` from `rfp_nt_structural_full`;
 * build `AppendixBProductPairExtraction` for that structural witness;
@@ -39,7 +39,7 @@ The intended downstream use is:
 
 TODO(tensor-product-locality): replace the abstract commutation witness for the
 full-chain endomorphisms by genuine support-locality statements once
-`NSiteSpace` carries the required tensor-product factorization API.
+`NSiteSpace` carries the required tensor-product factorization structure.
 -/
 
 open scoped Matrix BigOperators
@@ -109,7 +109,7 @@ theorem HasProductPairMPV.exists_twoSiteAmplitude {A : MPSTensor d D}
 /-- Witness that the nearest-neighbor local terms of `A` are the local
 projectors coming from independent product-pair bonds on an `N`-site chain.
 
-Because the current parent-Hamiltonian API does not yet carry tensor-product
+Because the current parent-Hamiltonian formalization does not yet carry tensor-product
 support data on `NSiteSpace d N`, the witness is recorded directly as a family
 of endomorphisms on the full chain space. -/
 structure HasProductPairLocalProjectors (A : MPSTensor d D) (N : ℕ) where
@@ -162,7 +162,7 @@ theorem ProductPairBridge.hasProductPairMPV {A : MPSTensor d D}
 /-- The `ProductPairBridge` witness yields the unfolded `IsNNCPH` conclusion:
 all two-site local terms commute on every finite chain.
 
-Since `IsNNCPH` is defined downstream in `ParentHamiltonian/Commuting.lean`, we
+Since `IsNNCPH` is defined in a later module in `ParentHamiltonian/Commuting.lean`, we
 state the commutation relation directly here to keep the dependency direction
 suitable for the eventual `rfp_implies_nncph` proof. -/
 theorem ProductPairBridge.commuting_twoSite_localTerms
@@ -177,7 +177,7 @@ theorem ProductPairBridge.localTerm_idempotent
     localTerm A 2 N i * localTerm A 2 N i = localTerm A 2 N i :=
   (hBridge.localProjectors N).localTerm_idempotent i
 
-/-! ### Appendix B structural data as the upstream input -/
+/-! ### Appendix B structural data as the preceding input -/
 
 /-- Bundled form of the Appendix B structural decomposition
 `A i = X * diag(Λ) * U i * X⁻¹`.
@@ -313,7 +313,7 @@ structure AppendixBProductPairExtraction {A : MPSTensor d D}
 
 /-- Construct the MPV part of the extraction after removing the Appendix B gauge.
 
-This reduces the coefficient bookkeeping to the core tensor `Λ U_i`; the local
+This reduces the coefficient computation to the core tensor `Λ U_i`; the local
 projector data remains a separate chain-space input. -/
 noncomputable def AppendixBProductPairExtraction.ofCoreTensorFactorization
     {A : MPSTensor d D} {hStruct : AppendixBStructuralData A}

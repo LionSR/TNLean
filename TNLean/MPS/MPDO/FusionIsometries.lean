@@ -23,7 +23,8 @@ dynamics underlying the provisional `MPOTensor.IsRFP` predicate in
 Two layers coexist in this file.
 
 1. **Provisional shell layer** (`FusionIsometry`, `FusionIsometry.CompatibleWith`,
-   `IsRFP_MPDO_via_fusionIsometries_provisional`): kept for downstream compatibility. The
+   `IsRFP_MPDO_via_fusionIsometries_provisional`): kept for compatibility with earlier
+   formalizations. The
    physical space at blocked size `n` and the support algebra at blocked size
    `n` are both represented by `Matrix (Fin D) (Fin D) ℂ`, a stand-in for the
    genuine objects; the compatibility predicate is currently the trivial
@@ -36,7 +37,7 @@ Two layers coexist in this file.
    blocked size `n` is a retract factorization of the blocked transfer map
    through a support subspace of bond-space matrices. Concretely, if `Eₙ`
    denotes the blocked transfer map of `M`, then `FusionIsometryData M n`
-   packages a support subspace `𝒜ₙ`, a forward map `Tₙ : phys → 𝒜ₙ`, and a
+   records a support subspace `𝒜ₙ`, a forward map `Tₙ : phys → 𝒜ₙ`, and a
    backward map `Sₙ : 𝒜ₙ → phys` with `Tₙ ∘ Sₙ = id_{𝒜ₙ}` and `Sₙ ∘ Tₙ = Eₙ`.
    The retract identity forces `Eₙ^2 = Eₙ`; conversely any idempotent blocked
    transfer map factors through its range. This yields an equivalence
@@ -81,13 +82,13 @@ abbrev FusionPhysicalSpace (D : ℕ) : Type :=
 /-- The *support algebra at blocked size `n`*.
 
 TODO (#611): replace with the support algebra
-`span { ρ^{(n)}(M) | ... } ⊂ M_{D²}`, once the support-algebra API is
+`span { ρ^{(n)}(M) | ... } ⊂ M_{D²}`, once the support-algebra formalization is
 available. The current definition uses `Matrix (Fin D) (Fin D) ℂ` as a
 stand-in. -/
 abbrev FusionSupportAlgebra (D : ℕ) : Type :=
   Matrix (Fin D) (Fin D) ℂ
 
-/-- A provisional fusion-isometry package at blocked size `n`.
+/-- A provisional fusion-isometry datum at blocked size `n`.
 
 In arXiv:1606.00608 §4.5 the corresponding object is a pair of linear maps
 `T_n : (ℂ^d)^{⊗ n} → 𝒜_n` and `S_n : 𝒜_n → (ℂ^d)^{⊗ n}` realising a splitting
@@ -201,10 +202,10 @@ map to the corresponding power. -/
 /-- Transfer-map-level fusion-isometry data at blocked size `n`.
 
 This is the part of the paper's fusion-isometry picture that can already be
-expressed with the current infrastructure: a support subspace of bond-space
+expressed with the current formalization: a support subspace of bond-space
 matrices together with a retract whose characteristic map is the blocked
 transfer map. The actual Hilbert-space isometry statement is deferred until the
-support-algebra API is available. -/
+support-algebra formulation is available. -/
 structure FusionIsometryData (M : MPOTensor d D) (n : ℕ) where
   /-- The support subspace through which the blocked transfer map factors. -/
   supportAlgebra : Submodule ℂ (FusionPhysicalSpace D)

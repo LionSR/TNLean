@@ -14,7 +14,7 @@ import TNLean.MPS.MPDO.FusionIsometries
 /-!
 # Algebra-structure witnesses for MPDO renormalization fixed points
 
-This file upgrades the old scaffold for the algebra-structure side of
+This file replaces the earlier construction for the algebra-structure side of
 arXiv:1606.00608, §4.5.
 
 The paper's full statement uses coefficient systems
@@ -49,7 +49,7 @@ with the blocking length.
 
 On top of the blocked-coefficient layer, this file now formalizes the target
 shape of Theorem IV.13(ii): the special diagonal matrices
-$\chi_{\alpha,\beta,\gamma}$ are packaged as a `DiagonalChiFamily`, and the
+$\chi_{\alpha,\beta,\gamma}$ are represented as a `DiagonalChiFamily`, and the
 identity $c_{\alpha,\beta,\gamma}^{(L)} = \operatorname{tr}(\chi_{\alpha,\beta,\gamma}^L)$
 is encoded as the `HasChiTracePowerForm` predicate. The basic trace-power
 identity `tr(χ_{α,β,γ}^L) = \sum_k \chi_{\alpha,\beta,\gamma,k}^L` is proved
@@ -260,7 +260,7 @@ support data compatible with its blocked adjoint transfer maps. -/
 def IsRFP_MPDO_via_algebra (M : MPOTensor d D) : Prop :=
   ∃ data : AlgebraStructureData d D, data.CompatibleWith M
 
-/-- Backwards-compatible alias for the previous scaffold name.
+/-- Backwards-compatible alias for the earlier construction name.
 
 The old definition was vacuous. The alias points to the non-vacuous algebra
 predicate above, but that predicate is still weaker than the full paper
@@ -528,7 +528,7 @@ structure coefficients $c_{\alpha,\beta,\gamma}^{(L)}$ of the blocked MPDO
 support algebra have the form
 $c_{\alpha,\beta,\gamma}^{(L)} = \operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{L})$
 for a family of diagonal matrices $\chi_{\alpha,\beta,\gamma}$ with positive
-entries. This subsection packages those diagonal matrices as explicit Lean data
+entries. This subsection represents those diagonal matrices as explicit Lean data
 and states the trace-power identity. -/
 
 /-- A family of diagonal matrices `χ_{α,β,γ}` indexed by ordered triples drawn

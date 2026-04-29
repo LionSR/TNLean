@@ -32,9 +32,9 @@ parent Hamiltonians (NNCPH).
   route from the proved Appendix B structural data plus the remaining
   chain-space extraction to NNCPH, without invoking
   `Axioms.rfp_to_nncph_commute`.
-* `MPSTensor.rfp_implies_nncph` — scaffold for the RFP `⟹` NNCPH direction of
+* `MPSTensor.rfp_implies_nncph` — construction for the RFP `⟹` NNCPH direction of
   Theorem 3.10.
-* `MPSTensor.nncph_implies_rfp` — scaffold for the NNCPH `⟹` RFP direction of
+* `MPSTensor.nncph_implies_rfp` — construction for the NNCPH `⟹` RFP direction of
   Theorem 3.10.
 
 ## References
@@ -124,7 +124,7 @@ commuting parent Hamiltonian.
 
 Per arXiv:1606.00608 §3.3 (source line 1307), this direction is
 *"trivial from Theorem [charact-MPS]"*; it is therefore **not** gated
-on S. Beigi (2012). It is gated only on the product-of-entangled-pairs
+on S. Beigi (2012). It is conditioned only on the product-of-entangled-pairs
 structural form (Appendix B), recorded here as
 `Axioms.rfp_to_nncph_commute`. -/
 theorem rfp_implies_nncph (A : MPSTensor d D) [NeZero D]

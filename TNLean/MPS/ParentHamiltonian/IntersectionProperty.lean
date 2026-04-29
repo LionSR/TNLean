@@ -57,7 +57,7 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-! ### Helper lemmas for `List.ofFn` with `Fin.snoc` and `Fin.cons` -/
+/-! ### Auxiliary lemmas for `List.ofFn` with `Fin.snoc` and `Fin.cons` -/
 
 /-- Evaluating a word obtained by snoc: peel off the last letter. -/
 theorem evalWord_ofFn_snoc (A : MPSTensor d D) {L : ℕ}

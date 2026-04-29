@@ -15,7 +15,7 @@ Definition 4.3.
 
 ## Main definitions
 
-* `MPOTensor.IsLPDOWitness`: a packaged LPDO witness for a fixed purifying
+* `MPOTensor.IsLPDOWitness`: a consolidated LPDO witness for a fixed purifying
   tensor family and bond-space equivalence.
 * `MPOTensor.purifyingMPSTensor`: the doubled-index MPS tensor associated to
   a purifying family `A`.
@@ -37,7 +37,7 @@ namespace MPOTensor
 
 variable {d D : ℕ}
 
-/-- A packaged witness for the LPDO relation of `M` with a fixed purifying
+/-- A consolidated witness for the LPDO relation of `M` with a fixed purifying
 family `A` and bond-space identification `e`. This isolates the witness data
 from `IsLPDO` so it can be reused in purification-RFP statements. -/
 def IsLPDOWitness {dK D' : ℕ} (M : MPOTensor d D)
@@ -46,7 +46,7 @@ def IsLPDOWitness {dK D' : ℕ} (M : MPOTensor d D)
   ∀ i j : Fin d, M i j = (∑ k : Fin dK,
     (A i k) ⊗ₖ ((A j k).map (starRingEnd ℂ))).submatrix ↑e ↑e
 
-/-- The MPS tensor obtained by bundling the physical and ancilla indices of a
+/-- The MPS tensor obtained by combining the physical and ancilla indices of a
 purifying family `A`. -/
 def purifyingMPSTensor {dK D' : ℕ}
     (A : Fin d → Fin dK → Matrix (Fin D') (Fin D') ℂ) : MPSTensor (d * dK) D' :=

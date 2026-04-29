@@ -21,7 +21,7 @@ side live in separate modules:
 * `CommutingForm.lean` records the GSNNCH / commuting-form target side of
   Proposition C.6 and Theorem 4.9(iii).
 
-What is still missing upstream is the theorem turning the local simple-MPDO data
+What is still missing as a preceding is the theorem turning the local simple-MPDO data
 into the global commuting-form property. Because of that gap, the present file
 is formulated around the explicit record `SimpleMPDOBlockedRFPData`. The local
 Appendix C.2 data are retained there, together with a provisional compatibility
@@ -35,7 +35,7 @@ The current consequences recorded here are:
 * the GSNNCH-with-ZCL branch of Theorem 4.9;
 * the transfer-map fusion formulation of MPDO RFP.
 
-Thus this file supplies the paper-facing endpoint that downstream work can use
+Thus this file supplies the paper-facing conclusion that later work can use
 once the remaining local-to-global implication has been formalized.
 
 ## Main declarations
@@ -66,7 +66,7 @@ subadditivity, the resulting local `η`-structure, and a primitive real matrix
 condition.
 
 The record is intentionally independent of a particular MPO tensor. The missing
-upstream theorem is the map from a concrete simple MPDO satisfying SAL/ZCL to
+preceding theorem is the map from a concrete simple MPDO satisfying SAL/ZCL to
 such a record and then onward to `HasCommutingForm`. -/
 structure SimpleMPDOLocalStructureData where
   /-- Dimensions of the three contiguous local regions. -/
@@ -165,7 +165,7 @@ variable {K : MPOTensor d D}
 /-- Construct this record directly from the scoped local lemmas of
 `SimpleLocalStructure.lean`, the commuting-form hypothesis, and MPO ZCL.
 
-At present, the downstream consequences in this file use only `hCommuting` and
+At present, the subsequent consequences in this file use only `hCommuting` and
 `hZCL`. The local-data inputs are retained so that the eventual local-to-global
 implication from Appendix C.2 already has a canonical type-level target. -/
 def ofSALZCLAndCommutingForm
@@ -224,7 +224,7 @@ theorem structural_implies_rfp_blocked_of_data {K : MPOTensor d D}
     Nonempty (FusionIsometryData K 2) :=
   structural_implies_rfp_blocked (K := K) data.zcl
 
-/-- **Theorem 4.9 endpoint, data-parameterized form**.
+/-- **Theorem 4.9 conclusion, data-parameterized form**.
 
 From the explicit simple-MPDO inputs one simultaneously recovers:
 

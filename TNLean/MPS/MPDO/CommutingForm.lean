@@ -17,7 +17,7 @@ copies on the periodic chain pairwise commute and that their product
 reproduces `ρ` up to a positive scalar. This is the projector-limit version of
 the GSNNCH definition, source label `defrhoNComm`. The actual entropy-side derivation
 `SAL ⟹ HasCommutingForm` is not yet formalized here; it is isolated as the
-upstream missing theorem recorded in the accompanying audit for issue #782.
+preceding missing theorem recorded in the accompanying audit for issue #782.
 
 ## Main declarations
 
@@ -82,7 +82,7 @@ noncomputable def embedLocalOperator (L N : ℕ) (hLN : L ≤ N) (i : Fin N)
 The current record stores the translation-invariant two-site factor `B` together
 with chain-level commutativity of its translated copies. The intended
 nearest-neighbor support is encoded by `embedLocalOperator`; no separate
-factorization API is required downstream. -/
+factorization structure is required later. -/
 structure CommutingFormData (d N : ℕ) where
   /-- The theorem only makes sense for genuine nearest-neighbor chains. -/
   hN : 2 ≤ N
