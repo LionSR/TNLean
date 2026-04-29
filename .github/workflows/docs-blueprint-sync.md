@@ -41,7 +41,7 @@ tools:
 
 safe-outputs:
   create-pull-request:
-    title-prefix: "[docs-sync] "
+    title-prefix: "doc(blueprint): "
     labels: [documentation, automation]
     if-no-changes: "warn"
     expires: 7d

@@ -108,7 +108,7 @@ jobs:
               feat     — New definition, lemma, theorem, or module
               fix      — Bug fix (broken proof, wrong identifier, etc.)
               refactor — Restructuring without changing API surface
-              docs     — Documentation or blueprint changes only
+              doc      — Documentation or blueprint changes only
               ci       — CI/CD workflow changes
               chore    — Dependency bumps, linting, toolchain updates
 
@@ -123,7 +123,7 @@ jobs:
                 to see changed files. Derive the scope from the common path prefix.
               • New definitions/lemmas/theorems → feat
               • Bug fixes, broken proofs, wrong identifiers → fix
-              • Blueprint-only `.tex` changes → docs(blueprint) or fix(blueprint)
+              • Blueprint-only `.tex` changes → doc(blueprint) or fix(blueprint)
                 depending on whether it's new content or fixing mismatches
               • Restructuring → refactor
               • CI changes → ci
