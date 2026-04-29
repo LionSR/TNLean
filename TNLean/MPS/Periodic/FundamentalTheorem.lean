@@ -107,7 +107,7 @@ abbrev PeriodicBlockMatchingWitness
 
 /-! ## Periodic overlap dichotomy hypothesis -/
 
-/-- Hypothesis recording the periodic overlap dichotomy (Proposition 3.3 of 1708.00029).
+/-- Hypothesis giving the periodic overlap dichotomy (Proposition 3.3 of 1708.00029).
 
 The `hetRepeatedBlocks_of_nondecaying` field can be filled via `periodicOverlapDichotomy`
 (see `PeriodicOverlapHypothesis.ofIsPeriodic`), though that dichotomy's proof in
@@ -847,7 +847,7 @@ produces: weight multiset equality, a diagonal Z with `Z^m = 1`, and `Z · diag(
 In the full Theorem 3.8 proof, hypothesis (3) follows from BNT linear independence + equal
 MPVs (via `power_sums_eq_of_eventually_eq`), and hypothesis (1) is the Newton-Girard
 consequence of (3) restricted to multiples of `m`. -/
-theorem equalCase_zgauge_pipeline
+theorem equalCase_zgauge_of_power_sums
     {r : ℕ} (m : ℕ) (μ ν : Fin r → ℂ)
     (hν : ∀ i, ν i ≠ 0)
     (hPow : ∀ i, μ i ^ m = ν i ^ m)
@@ -866,7 +866,7 @@ end ZGaugeAssembly
 The equal-case Fundamental Theorem of MPS in irreducible form composes:
 
 1. **Theorem 3.4** (`fundamentalTheorem_periodic_proportional`): block matching.
-2. **Z-gauge construction** (`equalCase_zgauge_pipeline`): Newton–Girard + Z-gauge diagonal.
+2. **Z-gauge construction** (`equalCase_zgauge_of_power_sums`): Newton–Girard + Z-gauge diagonal.
 
 **Conditional on #81**: The `PeriodicOverlapHypothesis` and per-block weight power
 equality hypotheses will be discharged once the periodic overlap dichotomy (Proposition
@@ -915,7 +915,7 @@ This composes Theorem 3.4 with the Z-gauge construction from PR #94.
 
 **Conditional on #81**: The `PeriodicOverlapHypothesis` and `hPowEq` hypotheses will be
 discharged once the periodic overlap dichotomy and coefficient extraction infrastructure
-are formalized. The Z-gauge construction itself (`equalCase_zgauge_pipeline`) is fully
+are formalized. The Z-gauge construction itself (`equalCase_zgauge_of_power_sums`) is fully
 proved. -/
 theorem fundamentalTheorem_periodic_equalCase
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
@@ -950,7 +950,7 @@ theorem fundamentalTheorem_periodic_equalCase
   have hPow_period : (hA.μ j) ^ (hA.period j) = (hB.μ (perm j)) ^ (hA.period j) :=
     hPowEqJ (hA.period j) (hA.periodic j).period_pos
   obtain ⟨Z, hZpow, hZmul, hMultiset⟩ :=
-    equalCase_zgauge_pipeline (hA.period j)
+    equalCase_zgauge_of_power_sums (hA.period j)
       (fun _ : Fin 1 => hA.μ j) (fun _ : Fin 1 => hB.μ (perm j))
       (fun _ => hμB_ne (perm j))
       (fun _ => hPow_period)
