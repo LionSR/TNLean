@@ -10,7 +10,7 @@ open Filter
 /-!
 # Primitive blocked tensors and conditional block matching
 
-This file records two consequences for TP-primitive irreducible blocks after
+This file proves two consequences for TP-primitive irreducible blocks after
 blocking. First, blocking preserves tensor irreducibility under the primitive
 hypothesis. Second, once two separated normal-canonical-form families are in the
 TP-primitive setting, proportional MPVs force the usual permutation and

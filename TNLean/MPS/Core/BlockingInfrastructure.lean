@@ -191,7 +191,7 @@ theorem sameMPV₂Pos_blockTensor
     _ = mpv (blockTensor (d := d) (D := D₂) B p) σ :=
           (mpv_blockTensor_eq_mpv_blockedFlatConfig (d := d) B p σ).symm
 
-/-- Positive-length equality of weighted live block tensors is preserved after
+/-- Positive-length equality of weighted nonzero-block tensors is preserved after
 positive common blocking, with each weight transported to the corresponding power. -/
 theorem sameMPV₂Pos_toTensorFromBlocks_blockPower
     {rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
@@ -279,7 +279,7 @@ dimensions leaves the tensors and their MPV/transfer-map properties unchanged.
 -/
 
 /-- The physical dimension of an iterated blocking is the physical dimension of
-one-shot blocking by the product length. -/
+direct blocking by the product length. -/
 theorem blockPhysDim_blockPhysDim (d m n : ℕ) :
     blockPhysDim (blockPhysDim d m) n = blockPhysDim d (m * n) := by
   simp [blockPhysDim_eq_pow, pow_mul]
@@ -301,7 +301,7 @@ theorem wordOfBlock_blockIndexOfList (d L : ℕ) (w : List (Fin d))
       (fun i : Fin L => w.get (Fin.cast h.symm i)))
   simpa [Function.comp, Fin.cast_cast, blockPhysDim] using hcongr
 
-/-- The physical index of the one-shot block obtained from an iterated blocked index. -/
+/-- The physical index of the direct block obtained from an iterated blocked index. -/
 noncomputable def iteratedBlockIndex (d m n : ℕ)
     (i : Fin (blockPhysDim (blockPhysDim d m) n)) :
     Fin (blockPhysDim d (m * n)) :=
@@ -310,7 +310,7 @@ noncomputable def iteratedBlockIndex (d m n : ℕ)
     rw [length_flattenBlockedWord, length_wordOfBlock, Nat.mul_comm]
   blockIndexOfList d (m * n) w hw
 
-/-- The one-shot word associated to an iterated blocked index is the flattened word. -/
+/-- The directly blocked word associated to an iterated blocked index is the flattened word. -/
 theorem wordOfBlock_iteratedBlockIndex (d m n : ℕ)
     (i : Fin (blockPhysDim (blockPhysDim d m) n)) :
     wordOfBlock d (m * n) (iteratedBlockIndex d m n i) =
@@ -325,7 +325,7 @@ noncomputable def reindexPhysical {d₁ d₂ D : ℕ} (f : Fin d₁ → Fin d₂
     (A : MPSTensor d₂ D) : MPSTensor d₁ D :=
   fun i => A (f i)
 
-/-- Iterated physical blocking agrees with one-shot blocking after the canonical
+/-- Iterated physical blocking agrees with direct blocking after the canonical
 index relabeling from iterated blocks to flattened blocks. -/
 theorem blockTensor_blockTensor_apply {D : ℕ} (A : MPSTensor d D) (m n : ℕ)
     (i : Fin (blockPhysDim (blockPhysDim d m) n)) :
@@ -334,7 +334,7 @@ theorem blockTensor_blockTensor_apply {D : ℕ} (A : MPSTensor d D) (m n : ℕ)
       blockTensor (d := d) (D := D) A (m * n) (iteratedBlockIndex d m n i) := by
   simp [blockTensor, evalWord_blockTensor, wordOfBlock_iteratedBlockIndex]
 
-/-- Tensor form of iterated blocking versus one-shot blocking with physical relabeling. -/
+/-- Tensor form of iterated blocking versus direct blocking with physical relabeling. -/
 theorem blockTensor_blockTensor_eq_reindex {D : ℕ} (A : MPSTensor d D) (m n : ℕ) :
     blockTensor (d := blockPhysDim d m) (D := D)
         (blockTensor (d := d) (D := D) A m) n =
@@ -343,7 +343,7 @@ theorem blockTensor_blockTensor_eq_reindex {D : ℕ} (A : MPSTensor d D) (m n : 
   funext i
   exact blockTensor_blockTensor_apply (d := d) A m n i
 
-/-- Iterated physical blocking and one-shot blocking have the same MPV family after
+/-- Iterated physical blocking and direct blocking have the same MPV family after
 the natural relabeling of physical indices. -/
 theorem sameMPV₂_blockTensor_blockTensor_mul_reindex {D : ℕ}
     (A : MPSTensor d D) (m n : ℕ) :
