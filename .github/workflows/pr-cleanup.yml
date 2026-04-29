@@ -110,6 +110,7 @@ jobs:
               fix      — Bug fix (broken proof, wrong identifier, etc.)
               refactor — Restructuring without changing the public interface
               doc      — Documentation or blueprint changes only
+              style    — Formatting, naming, or prose cleanup
               ci       — CI/CD workflow changes
               chore    — Dependency bumps, linting, toolchain updates
 
@@ -127,6 +128,7 @@ jobs:
               • Blueprint-only `.tex` changes → doc(blueprint) or fix(blueprint)
                 depending on whether it's new content or fixing mismatches
               • Restructuring → refactor
+              • Formatting, naming, or prose cleanup → style
               • CI changes → ci
               • Dependency bumps → chore
             - Keep the description concise (under ~60 chars after prefix).
