@@ -121,7 +121,7 @@ theorem pRefinementInverseCanonicalization_of_rootKrausRankBound
 
 Let `B` be an MPS tensor in irreducible form II and let `p ≥ 1`. Assume the inverse
 canonicalization hypothesis `PRefinementInverseCanonicalization` (which collects the
-remaining analytic bridge from `p`-divisibility of `transferMap B` to a compatible
+remaining analytic step from `p`-divisibility of `transferMap B` to a compatible
 Kraus-reducible witness). Then `IsPDivisibleChannel (transferMap B) p` implies
 `IsPRefinable B p`.
 
