@@ -1,8 +1,8 @@
 name: Issue Intake
 
-# Classify newly opened human-authored issues, apply the project label taxonomy,
-# and leave a concise next-step comment. Formalization issues are handed to the
-# existing Mathlib Scout workflow by applying the `formalization` label.
+# Classify newly opened human-authored issues. Issues from repository members
+# receive full taxonomy classification; outside reports receive inexpensive
+# preliminary classification for obvious labels and a maintainer follow-up comment.
 
 on:
   issues:
@@ -14,7 +14,7 @@ concurrency:
 
 jobs:
   intake:
-    if: github.event.sender.type != 'Bot' && contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.issue.author_association)
+    if: github.event.sender.type != 'Bot'
     runs-on: ubuntu-latest
 
     permissions:
@@ -42,6 +42,7 @@ jobs:
             return { title, body };
 
       - name: Classify issue
+        if: contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.issue.author_association)
         uses: anthropics/claude-code-action@v1
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
@@ -126,3 +127,67 @@ jobs:
             --model claude-sonnet-4-6
             --allowedTools "Read,Glob,Grep,mcp__github__*"
             --append-system-prompt "This workflow performs issue intake only. It may read repository documentation, add labels to the opened issue, and post one concise issue comment. It must not edit repository files, create branches, open pull requests, or perform code changes. Public comments should use ordinary mathematical and repository-maintenance prose."
+
+      - name: Preliminary classification for outside reports
+        if: ${{ !contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.issue.author_association) }}
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const issue = context.payload.issue;
+            const text = `${issue.title}\n${issue.body || ''}`.toLowerCase();
+            const labels = new Set();
+
+            const has = (...patterns) => patterns.some((pattern) => pattern.test(text));
+
+            if (has(/\b(theorem|lemma|proof|formalization|formalisation|lean declaration|sorry)\b/)) {
+              labels.add('formalization');
+            }
+            if (has(/\b(blueprint|latex|docstring|documentation|readme)\b/)) {
+              labels.add('documentation');
+            }
+            if (has(/\b(ci|workflow|build|failure|failed|error|type error)\b/)) {
+              labels.add('bug');
+              labels.add('ci');
+            }
+            if (/^tracking:/.test(issue.title.toLowerCase())) {
+              labels.add('tracking');
+            }
+
+            const chapter = text.match(/\bwolf(?:\s+|-)ch(?:apter)?\s*([1-7])\b/);
+            if (chapter) labels.add(`wolf-ch${chapter[1]}`);
+
+            const papers = ['0802.0447', '1606.00608', '1708.00029', '1804.04964', '2011.12127'];
+            for (const paper of papers) {
+              if (text.includes(paper)) labels.add(paper);
+            }
+
+            if (labels.size > 0) {
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                labels: [...labels].sort(),
+              });
+            }
+
+            const labelText = labels.size > 0
+              ? [...labels].sort().map((label) => `\`${label}\``).join(', ')
+              : 'No automatic label was clear from the title or body.';
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issue.number,
+              body: [
+                '## Initial classification',
+                '',
+                '### Labels',
+                `- ${labelText}`,
+                '',
+                '### Reading',
+                '- This issue was opened by an outside reporter, so the workflow recorded only a preliminary classification.',
+                '',
+                '### Next step',
+                '- A maintainer should check the mathematical source, affected files, and labels before assigning follow-up work.',
+              ].join('\n'),
+            });
