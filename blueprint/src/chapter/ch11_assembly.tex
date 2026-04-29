@@ -1160,7 +1160,8 @@ single weighted block.
 	\uses{thm:common_phase_cover_of_proportional_decomposition,
 		thm:after_blocking_sector_common_blocks_common_phase_cover}
 	The BNT proportional-decomposition conclusion gives common MPV phase-cover data.
-	Apply the bundled common-cover sector theorem to those data.
+	Apply Theorem~\ref{thm:after_blocking_sector_common_blocks_common_phase_cover}
+	to those data.
 \end{proof}
 
 \begin{lemma}[Zero-tail cancellation]\label{lem:sameMPV2_live_of_zeroTail_eq}
@@ -1219,17 +1220,20 @@ single weighted block.
 \label{thm:after_blocking_sector_common_blocks_proportional_decomposition_zero_tail}
 	\lean{MPSTensor.fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_proportionalConclusion_zeroTail}
 	\leanok
-	\uses{lem:sameMPV2_live_of_zeroTail_eq,
+	\uses{def:same_mpv2_pos,
 		thm:bnt_sector_decomp_pair_overlap_span_of_proportional_decomposition,
-		thm:sector_basis_overlap_span_to_matching,
-		thm:route_b_hetero_sector_matching}
+		thm:after_blocking_sector_common_blocks_common_phase_cover,
+		thm:after_blocking_sector_common_blocks_overlap_span_zero_tail}
 	Let $A$ and $B$ have the same MPV family. Fix $p>0$ and suppose $A^{[p]}$
 	and $B^{[p]}$ each decompose as a zero-tail tensor plus a weighted live block
 	tensor, with all live blocks trace-preserving, primitive, irreducible,
 	injective, and with nonzero weights. If the two zero-tail dimensions agree and
 	a BNT proportional-decomposition comparison supplies a permutation, equal bond
 	dimensions, and gauge-phase equivalences between the two live-block families,
-	then the zero-tail-aware sector comparison conclusion holds.
+	then the live sector bases yield the comparison data of
+	Theorem~\ref{thm:after_blocking_sector_common_blocks_common_phase_cover}, with
+	the positive-length zero-tail bookkeeping of
+	Theorem~\ref{thm:after_blocking_sector_common_blocks_overlap_span_zero_tail}.
 \end{theorem}
 
 \begin{proof}
@@ -1238,11 +1242,10 @@ single weighted block.
 		thm:bnt_sector_decomp_pair_overlap_span_of_proportional_decomposition,
 		thm:sector_basis_overlap_span_to_matching,
 		thm:route_b_hetero_sector_matching}
-	Zero-tail cancellation gives equality of the two live tensors, including at
-	length zero. The proportional-decomposition comparison gives the primitive
-	overlap-span hypotheses through the common phase-cover construction. The sector
-	basis matching and heterogeneous sector comparison theorems then give the
-	sector-weight conclusion.
+	Zero-tail cancellation gives full equality of the two live block tensors. The
+	proportional-decomposition comparison gives the primitive overlap-span hypotheses
+	through the common phase-cover construction. The sector basis matching and
+	heterogeneous sector comparison theorems then give the sector-weight conclusion.
 \end{proof}
 
 \begin{theorem}[Cast-compatible MPV scaling implies phase-matched sector comparison]%

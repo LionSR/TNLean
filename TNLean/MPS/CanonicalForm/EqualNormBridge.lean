@@ -1372,7 +1372,7 @@ theorem exists_bnt_sectorDecomp_pair_with_overlapSpan_of_block_span_eq
     span_eq := hSpan
   }
 
-/-- **Two-sided overlap-span data from a bundled common phase cover.**
+/-- **Two-sided overlap-span data from common phase-cover data.**
 
 This is the common-cover form of
 `exists_bnt_sectorDecomp_pair_with_overlapSpan_of_block_span_eq`.  The cover
