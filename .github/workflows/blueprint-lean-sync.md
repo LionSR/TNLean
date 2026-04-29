@@ -141,6 +141,8 @@ When you make updates, create a PR that includes:
 - Which `.tex` files were modified
 - Whether `lean_decls` was updated
 - The current formalization progress (from the sync checker output)
+- The theorem, lemma, or definition labels affected by the changes
+- Mathematical descriptions without AI vocabulary or software-process metaphors
 
 ## Safety and quality constraints
 

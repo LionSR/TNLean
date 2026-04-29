@@ -39,10 +39,14 @@ Every PR body must contain three sections:
 ```markdown
 ### Motivation
 - Why this change is needed (1--3 bullets).
+- For mathematical work, cite the paper theorem, blueprint entry, or issue
+  that fixes the scope.
 
 ### Description
 - What was changed: files added/modified, definitions introduced, lemmas proved.
 - Use bullet points.
+- State the mathematical content precisely enough for a reader who has not read
+  the issue thread.
 
 ### Testing
 - What was verified and how.
@@ -90,6 +94,13 @@ Symmetry/SPT 3/6 Definitions: twisted tensor and on-site symmetry
 
 Label with **area** + **arXiv paper** + **topic** as applicable.
 
+The body must identify the mathematical source precisely. Include the paper or
+book citation, the theorem/lemma/definition label when available, the repository
+file path and line number when the source is in `blueprint/`, `Papers/`, or
+`Notes/`, and either a short quotation or a precise paraphrase of the claim.
+Avoid AI vocabulary, software-process metaphors, and local shorthand when
+describing the mathematics.
+
 ### Multi-part work
 
 For work spanning multiple PRs, use the `Area K/N: title` pattern and create
@@ -119,6 +130,10 @@ in prose above the tasklist block. Items that are not issue references (plain te
 TODOs) cannot go inside the tasklist block; list them as ordinary checkboxes
 outside it.
 
+Generated tracking issues should create sub-issues for the mathematical tasks
+rather than using Markdown task lists as the only record of work. Each sub-issue
+should carry its own source citation and precise statement.
+
 ### Tracking issues
 
 Use the **Tracking Issue** template (`.github/ISSUE_TEMPLATE/tracking-issue.yml`).
@@ -144,7 +159,7 @@ target date; remove it when the date no longer applies.
 ### Discussions
 
 GitHub Discussions is enabled for design questions, proof strategy debates, and
-topics that don't map to a single actionable issue (e.g., "Should MPDO live
+topics that do not determine a single concrete issue (e.g., "Should MPDO live
 under MPS/?"). Use issues for concrete work items; use discussions for open-ended
 conversations.
 
@@ -310,7 +325,7 @@ The following workflows run automatically:
 | **Blueprint Lint** (`lint-blueprint.yml`) | PRs touching blueprint files | Validates LaTeX blueprint for broken labels and references |
 | **Docs & Blueprint Sync** (`docs-blueprint-sync.lock.yml`) | Daily (weekdays) + manual dispatch | Detects stale documentation and opens a sync PR if needed |
 | **Lean Audit** (`lean-audit.yml`) | On demand | Audits Lean code for style and correctness |
-| **PR Cleanup** (`pr-cleanup.yml`) | AI-generated PR opened (`claude/*` or `codex/*` branches) | Normalizes title to `type(scope): desc`, restructures body to PR template, copies labels from linked issue, adds `Addresses #N` reference, comments on the issue |
+| **PR Cleanup** (`pr-cleanup.yml`) | Bot-generated PR opened (`claude/*` or `codex/*` branches) | Normalizes title to `type(scope): desc`, restructures body to PR template, copies labels from linked issue, adds `Addresses #N` reference, comments on the issue |
 
 ### What CI checks before merge
 

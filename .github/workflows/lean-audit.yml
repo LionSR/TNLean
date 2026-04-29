@@ -47,6 +47,12 @@ jobs:
 
             ${{ github.event.inputs.audit_type == 'mathlib-readiness' && 'Task: Review the TNLean/ directory for lemmas that could be upstreamed to Mathlib. Look for: (1) general-purpose lemmas not specific to the MPS/quantum channel domain, (2) lemmas that fill gaps in existing Mathlib files (check import paths), (3) well-documented, sorry-free results. For each candidate, note the file, lemma name, and which Mathlib module it could belong to. Output a markdown list.' || '' }}
 
+            Write the audit as mathematics first. For each formalization item, give
+            file path, line number, declaration name, mathematical statement, and
+            paper or blueprint source when available. Avoid AI vocabulary,
+            software-process metaphors, and local shorthand when describing
+            mathematics.
+
           claude_args: |
             --model claude-sonnet-4-6
             --allowedTools "Read,Glob,Grep,Bash(lake build),Bash(lake exe cache get),Bash(lake update),Bash(lake env),Bash(lean *),Bash(elan *),Bash(grep *),Bash(find *),Bash(wc *),Bash(leanblueprint *)"

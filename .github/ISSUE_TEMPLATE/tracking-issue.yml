@@ -1,13 +1,15 @@
 name: Tracking Issue
-description: Create a tracking issue to monitor progress across multiple issues and PRs
+description: Create a tracking issue for a group of mathematical tasks
 labels: ["tracking"]
 body:
   - type: markdown
     attributes:
       value: |
         ## Tracking Issue
-        Use this template to create an issue that tracks progress across multiple related issues and PRs.
-        List each sub-task inside a native tasklist block so GitHub shows "Tracked by" on child issues.
+        Use this template for a family of related mathematical tasks.
+        Each task should be a separate GitHub issue with its own statement and source citation.
+        List sub-issues inside a native tasklist block so GitHub shows "Tracked by" on child issues.
+        Do not use ordinary Markdown checklists for tracked work.
 
   - type: input
     id: area
@@ -21,26 +23,42 @@ body:
   - type: textarea
     id: description
     attributes:
-      label: Description
-      description: Describe the goal this tracking issue covers
-      placeholder: What is the overall objective?
+      label: Mathematical goal
+      description: >-
+        Describe the theorem, chapter, construction, or proof family covered by
+        this tracking issue.
+      placeholder: |
+        Formalize the spectral decomposition results for finite-dimensional
+        quantum channels in Wolf Chapter 6, with each sub-issue tied to a
+        theorem label or blueprint entry.
+    validations:
+      required: true
+
+  - type: textarea
+    id: sources
+    attributes:
+      label: Sources
+      description: >-
+        List the papers, blueprint files, theorem labels, or repository notes
+        that define the scope.
+      placeholder: |
+        - Wolf Lecture Notes, Chapter 6, Theorems 6.14--6.18
+        - `blueprint/src/chapter/ch06_spectral.tex:120`
     validations:
       required: true
 
   - type: textarea
     id: tasks
     attributes:
-      label: Tracked Tasks
+      label: Sub-issues
       description: |
-        List issues/PRs to track using a native tasklist block.
+        List issue numbers to track using a native GitHub tasklist block.
         Each line must contain only the issue reference (no descriptions).
-        The workflow will automatically update checkboxes when issues are closed or PRs are merged.
+        Put mathematical descriptions in the sub-issue titles and bodies.
+        The tracking workflow updates checkboxes when issues are closed or reopened.
       value: |
         ```[tasklist]
         ### Tasks
-        - [ ] #
-        - [ ] #
-        - [ ] #
         ```
       placeholder: |
         ```[tasklist]
@@ -54,8 +72,9 @@ body:
   - type: textarea
     id: notes
     attributes:
-      label: Additional Notes
-      description: Any extra context, dependencies, or milestones
-      placeholder: Optional notes
+      label: Dependencies and order
+      description: State mathematical dependencies, proposed order, or milestone information.
+      placeholder: |
+        Prove the fixed-point algebra statements before the peripheral-spectrum statements.
     validations:
       required: false

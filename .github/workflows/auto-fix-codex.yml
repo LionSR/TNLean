@@ -341,7 +341,7 @@ jobs:
             1. Use your judgment on whether Mathlib scouting is needed. For proof-level review comments, read PR/issue comments for existing **Mathlib Scouting Reports**. For cosmetic comments (naming, docstrings, style), skip scouting.
             2. Read each review thread conversation and understand the issue raised, including any follow-up replies.
             3. Fix each issue in the relevant file at the indicated line.
-            4. If the review state is "APPROVED" with no actionable comments, do nothing.
+            4. If the review state is "APPROVED" with no comments requiring changes, do nothing.
             5. Common fixes:
                - Remove `sorry` and fully close the lemma/theorem.
                - Fix naming to match Mathlib conventions.
