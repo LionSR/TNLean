@@ -188,7 +188,7 @@ onto $G_L(A)^\perp$ in the $L$-site Euclidean space.
     \[
         \operatorname{extractWindow}_{L,i}(\sigma) \in \{0,\ldots,d{-}1\}^{L}
     \]
-    records the entries of $\sigma$ on the cyclic interval $i,i+1,\ldots,i+L-1$ modulo $N$.
+    reads the entries of $\sigma$ on the cyclic interval $i,i+1,\ldots,i+L-1$ modulo $N$.
 \end{definition}
 
 \begin{definition}[Periodic window replacement]\label{def:replace_window}
@@ -330,7 +330,7 @@ chain.
 
 Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 
-\begin{remark}[Word and restriction helper formulas]
+\begin{remark}[Word and restriction auxiliary formulas]
     \lean{List.ofFn_snoc}
     \lean{MPSTensor.evalWord_ofFn_snoc}
     \lean{MPSTensor.evalWord_ofFn_cons}
@@ -558,7 +558,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     For a non-wrapping interval $[s,s+M-1] \subseteq \{0,\ldots,N-1\}$, one can insert a
     length-$M$ word into that interval and keep the complementary sites fixed. The
     associated restriction map evaluates an $N$-site state on those configurations.
-    The auxiliary lemmas record the full-window case $s=0$, $M=N$, the
+    The auxiliary lemmas state the full-window case $s=0$, $M=N$, the
     compatibility of this restriction with deleting the last or first site, and
     the fact that fixing the first $K$ entries of a contiguous $(K+L)$-window
     leaves the contiguous $L$-window beginning at $s+K$.
@@ -575,7 +575,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \leanok
     On the periodic chain, a cyclic window starting at $i$ reads the sites
     $i,i+1,\ldots,i+L-1$ modulo $N$.  Deleting the final site of a cyclic
-    $(L+1)$-window records the value at cyclic offset $L$ in the outside
+    $(L+1)$-window reads the value at cyclic offset $L$ in the outside
     configuration and gives the $L$-window starting at the same site.  When this
     window does not wrap around the ring, the cyclic construction agrees with the
     contiguous one, and so do the two restriction maps.
@@ -1231,7 +1231,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     The remaining step is the closure property from
     \cite[\S~IV.C]{Cirac2021Matrix}: Theorem~\ref{thm:reduced_wrapped_boundary_compatibilities}
     supplies the two one-sided wrapped-boundary identities for the open-chain
-    boundary matrix $X$. The padded-annihilation lemma records that exact
+    boundary matrix $X$. The padded-annihilation lemma states that exact
     complement-span length mismatches are no longer the obstruction, and
     Theorem~\ref{thm:ground_space_map_mpv_of_common_middle} formalizes the
     algebraic endgame once those one-sided identities have been compared to a
@@ -2513,7 +2513,7 @@ Lucia~\cite{Kastoryano2018Martingale}.
     Only the $L = 2$ case is used in the spectral-gap theorem below.
     (When $L = 1$ the interaction terms have disjoint supports, so there are no
     overlapping pairs and the spectral gap follows directly without the
-    martingale machinery.)
+    martingale argument.)
 \end{lemma}
 
 \begin{proof}
@@ -2624,14 +2624,14 @@ Lucia~\cite{Kastoryano2018Martingale}.
 \begin{proof}
     \notready
     The local averaging, positivity, and symmetric-projection statements are now
-    recorded in Lemmas~\ref{lem:local_term_es_average},
+    established in Lemmas~\ref{lem:local_term_es_average},
     \ref{lem:transported_es_positive}, and~\ref{lem:transported_es_local_projections}.
     Lemma~\ref{lem:parent_hamiltonian_es_quadratic_reduction} reduces the present
     theorem to the remaining MPS-specific task: deriving the uniform
     quadratic-form estimate.  Lemma~\ref{lem:parent_hamiltonian_ordered_rowsum_gap}
     establishes the finite-sum algebra from ordered cross-term row bounds, and
     Lemmas~\ref{lem:parent_hamiltonian_finite_overlap_friedrichs_quadratic}
-    and~\ref{lem:parent_hamiltonian_finite_overlap_friedrichs_gap} record the
+    and~\ref{lem:parent_hamiltonian_finite_overlap_friedrichs_gap} state the
     common finite-overlap specialization with $m=2(L-1)$.
     Lemma~\ref{lem:transported_es_nonoverlap_positive} supplies the non-overlap
     positivity statement for site-disjoint windows, and
@@ -2642,9 +2642,9 @@ Lucia~\cite{Kastoryano2018Martingale}.
     Lemma~\ref{lem:parent_hamiltonian_cyclic_window_friedrichs_gap} combines
     these ingredients with the finite-overlap reduction, so the remaining
     analytic task is the Friedrichs-angle estimate for overlapping cyclic windows.
-    Lemma~\ref{lem:parent_hamiltonian_cyclic_overlap_friedrichs_gap} records the
+    Lemma~\ref{lem:parent_hamiltonian_cyclic_overlap_friedrichs_gap} states the
     same overlap-only formulation, and
-    Lemma~\ref{lem:parent_hamiltonian_cyclic_overlap_norm_gap} records a sufficient
+    Lemma~\ref{lem:parent_hamiltonian_cyclic_overlap_norm_gap} states a sufficient
     norm-compression formulation.
 \end{proof}
 
@@ -2708,7 +2708,7 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     \leanok
     \uses{rem:word_tuple_span_top}
     For a fixed length $m$, the Route B product-word span condition is the
-    finite-length spanning condition already recorded in
+    finite-length spanning condition already stated in
     Remark~\ref{rem:word_tuple_span_top}: the simultaneous block-word evaluations
     \[
         \omega \longmapsto \bigl(A_j^{\omega}\bigr)_j
@@ -3099,14 +3099,14 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
         lem:isup_chain_ground_space_block_le_assembled,
         thm:chain_ground_space_eq_mpv_blk, lem:center_scalar}
     Let $A$ be in canonical-form/BNT, and assume $1<L$, $N \ge L+1$, and
-    $0<m$.  Assume the remaining \#911 input: every virtual sector projection
+    $0<m$.  Assume the remaining \#911 hypothesis: every virtual sector projection
     lies in the pulled-back span of the length-$m$ word products of the assembled
     tensor.  If a boundary matrix for the assembled tensor commutes with all
     those length-$m$ words, then the vector obtained by applying the assembled
     ground-space map to that boundary matrix lies in
     $\bigsqcup_j \mathcal G_{N,L}(A_j)$.  Consequently, if every assembled
     periodic-chain ground vector admits such a commuting boundary matrix
-    representation (the output of the wrapping-window comparison), then
+    representation (the result of the wrapping-window comparison), then
     \[
         \mathcal G_{N,L}\bigl(\operatorname{Assemble}(\mu, A)\bigr)
         \subseteq \bigsqcup_j \mathcal G_{N,L}(A_j),
@@ -3271,5 +3271,5 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
 \end{proof}
 
 \noindent\emph{Remark.} A separate kernel-identification statement for these assembled
-block families is still to be recorded; at present, the formal results are stated in the
+block families is still to be established; at present, the formal results are stated in the
 chain-ground-space model rather than directly as $\ker(H_{N})$.
