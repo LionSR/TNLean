@@ -97,8 +97,8 @@ Theorem matching, etc.).
   signature-compatible reformulation retaining the TP / primitive / irreducible
   hypotheses used by the one-sided BNT construction chain.
 
-* `mpv_span_eq_of_common_phase_cover` — finite-length span equality for
-  nonzero-weight blocks from a common family covered surjectively up to MPV phase.
+* `mpv_span_eq_of_common_phase_cover` — finite-length MPV span equality for
+  block families arising from a common family covered surjectively up to MPV phase.
 
 * `MPVCommonPhaseCover` — common-family, class-map, phase, and
   surjectivity data for the same span-equality theorem.
@@ -469,13 +469,13 @@ lemma exists_mpvState_eq_smul {DA DB : ℕ} {A : MPSTensor d DA} {B : MPSTensor 
 
 end MPVBlockPhaseEquiv
 
-/-- Common MPV-phase cover for two nonzero-weight block families.
+/-- Common MPV-phase cover for two block families.
 
-The data record the finite common family, the class maps from the two
-nonzero-weight block families to it, the MPV-phase equivalences between each
-block and its chosen common block, and surjectivity of both class maps.  These
-are the paper-level data needed by the span comparison theorem; constructing
-them from the full structural `SameMPV₂` data is a separate comparison theorem. -/
+The data record the finite common family, the class maps from the two block
+families to it, the MPV-phase equivalences between each block and its chosen
+common block, and surjectivity of both class maps.  These are the paper-level
+data needed by the span comparison theorem; constructing them from the full
+structural `SameMPV₂` data is a separate comparison theorem. -/
 structure MPVCommonPhaseCover {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     (blocksA : (j : Fin rA) → MPSTensor d (dimA j))
