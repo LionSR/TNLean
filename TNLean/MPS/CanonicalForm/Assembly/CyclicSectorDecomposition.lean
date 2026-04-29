@@ -1419,22 +1419,46 @@ theorem sameMPV₂_weightedOneShotReindexedBlock_commonFlat
         (μ := F.commonFlatWeight μ) (F.commonFlatBlocks)) σ := by
           exact (mpv_toTensorFromBlocks_eq_sum (F.commonFlatWeight μ) (F.commonFlatBlocks) σ).symm
 
+/-- If the canonical one-shot blocked live blocks agree with the explicitly relabeled
+blocks, then the weighted live tensor agrees with the derived common-sector family.
+
+The hypothesis isolates the remaining physical-label compatibility step: `oneShotReindexedBlock`
+uses the iterated-blocking relabeling supplied by `iteratedBlockIndex`, while the canonical
+blocked live tensor uses the ambient blocked alphabet directly. -/
+theorem sameMPV₂_weightedCanonicalBlock_commonFlat_of_oneShot
+    (F : CommonBlockedCyclicSectorFamily blocks) (μ : Fin r → ℂ)
+    (hLabel : SameMPV₂
+      (toTensorFromBlocks (d := blockPhysDim d F.p)
+        (μ := fun k : Fin r => (μ k) ^ F.p)
+        (fun k => blockTensor (d := d) (D := dim k) (blocks k) F.p))
+      (toTensorFromBlocks (d := blockPhysDim d F.p)
+        (μ := fun k : Fin r => (μ k) ^ F.p) F.oneShotReindexedBlock)) :
+    SameMPV₂
+      (toTensorFromBlocks (d := blockPhysDim d F.p)
+        (μ := fun k : Fin r => (μ k) ^ F.p)
+        (fun k => blockTensor (d := d) (D := dim k) (blocks k) F.p))
+      (toTensorFromBlocks (d := blockPhysDim d F.p)
+        (μ := F.commonFlatWeight μ) F.commonFlatBlocks) := by
+  intro N σ
+  exact (hLabel N σ).trans
+    (F.sameMPV₂_weightedOneShotReindexedBlock_commonFlat μ N σ)
+
 end CommonBlockedCyclicSectorFamily
 
 /-- A finite family of live blocks with per-block primitive irreducible cyclic sectors
-admits one common physical blocking length for all those sectors.
+admits a prescribed common physical blocking length, provided that the prescribed
+length is a positive multiple of every period-removal length.
 
-This theorem chooses the least common multiple of the per-live-block period-removal
-lengths.  Each cyclic sector is then blocked by the corresponding quotient,
-identified with the common physical alphabet, and collected into one finite
-flattened family.  Trace preservation, primitive transfer maps, tensor
-irreducibility, positive bond dimensions, nonzero unit weights, and the per-block
-iterated-blocking MPV compatibility conditions are all retained. -/
-theorem exists_commonBlockedCyclicSectorFamily_of_hasPrimitiveIrreducibleCyclicSectors
+This variant is used for two-sided constructions: one first chooses a common
+multiple of the period-removal lengths on both sides, then builds each one-sided
+cyclic sector family at that same physical length. -/
+theorem exists_commonBlockedCyclicSectorFamily_of_commonMultiple
     {d r : ℕ} {dim : Fin r → ℕ}
     (blocks : (k : Fin r) → MPSTensor d (dim k))
-    (hcyc : ∀ k, HasPrimitiveIrreducibleCyclicSectors (blocks k)) :
-    Nonempty (CommonBlockedCyclicSectorFamily blocks) := by
+    (hcyc : ∀ k, HasPrimitiveIrreducibleCyclicSectors (blocks k))
+    (p : ℕ) (hp : 0 < p)
+    (hperiod_dvd : ∀ k, (hcyc k).choose ∣ p) :
+    Nonempty { F : CommonBlockedCyclicSectorFamily blocks // F.p = p } := by
   classical
   let period : Fin r → ℕ := fun k => (hcyc k).choose
   have period_pos : ∀ k, 0 < period k := fun k => (hcyc k).choose_spec.1
@@ -1472,15 +1496,13 @@ theorem exists_commonBlockedCyclicSectorFamily_of_hasPrimitiveIrreducibleCyclicS
     fun k => (hSector k).2.2.2.1
   have sector_dim_pos : ∀ k s, 0 < sectorDim k s :=
     fun k => (hSector k).2.2.2.2
-  let p := lcmPeriod period
-  have p_pos : 0 < p := lcmPeriod_pos period_pos
-  let extra : Fin r → ℕ := fun k => (dvd_lcmPeriod period k).choose
+  let extra : Fin r → ℕ := fun k => (hperiod_dvd k).choose
   have p_eq_period_mul_extra : ∀ k, p = period k * extra k :=
-    fun k => (dvd_lcmPeriod period k).choose_spec
+    fun k => (hperiod_dvd k).choose_spec
   have extra_pos : ∀ k, 0 < extra k := by
     intro k
     have hmul_pos : 0 < period k * extra k := by
-      simpa [p_eq_period_mul_extra k] using p_pos
+      simpa [p_eq_period_mul_extra k] using hp
     exact Nat.pos_of_mul_pos_left hmul_pos
   have hPhys : ∀ k,
       blockPhysDim (blockPhysDim d (period k)) (extra k) = blockPhysDim d p := by
@@ -1580,9 +1602,9 @@ theorem exists_commonBlockedCyclicSectorFamily_of_hasPrimitiveIrreducibleCyclicS
           (sectorBlocks k s) (extra k)))).2 hNested
     rw [toTensorFromBlocks_cast_physDim (h := hPhys k)] at hCast
     simpa using hCast
-  exact ⟨{
+  exact ⟨⟨{
     p := p
-    p_pos := p_pos
+    p_pos := hp
     period := period
     period_pos := period_pos
     extra := extra
@@ -1602,7 +1624,31 @@ theorem exists_commonBlockedCyclicSectorFamily_of_hasPrimitiveIrreducibleCyclicS
     flat_primitive := flat_primitive
     flat_irreducible := flat_irreducible
     flat_dim_pos := flat_dim_pos
-    nested_same := nested_same }⟩
+    nested_same := nested_same }, rfl⟩⟩
+
+/-- A finite family of live blocks with per-block primitive irreducible cyclic sectors
+admits one common physical blocking length for all those sectors.
+
+This theorem chooses the least common multiple of the per-live-block period-removal
+lengths.  Each cyclic sector is then blocked by the corresponding quotient,
+identified with the common physical alphabet, and collected into one finite
+flattened family.  Trace preservation, primitive transfer maps, tensor
+irreducibility, positive bond dimensions, nonzero unit weights, and the per-block
+iterated-blocking MPV compatibility conditions are all retained. -/
+theorem exists_commonBlockedCyclicSectorFamily_of_hasPrimitiveIrreducibleCyclicSectors
+    {d r : ℕ} {dim : Fin r → ℕ}
+    (blocks : (k : Fin r) → MPSTensor d (dim k))
+    (hcyc : ∀ k, HasPrimitiveIrreducibleCyclicSectors (blocks k)) :
+    Nonempty (CommonBlockedCyclicSectorFamily blocks) := by
+  classical
+  let period : Fin r → ℕ := fun k => (hcyc k).choose
+  have period_pos : ∀ k, 0 < period k := fun k => (hcyc k).choose_spec.1
+  obtain ⟨F, _hFp⟩ :=
+    exists_commonBlockedCyclicSectorFamily_of_commonMultiple
+      blocks hcyc (lcmPeriod period) (lcmPeriod_pos period_pos) (by
+        intro k
+        simpa [period] using (dvd_lcmPeriod period k))
+  exact ⟨F⟩
 
 end SectorOrbitLift
 
