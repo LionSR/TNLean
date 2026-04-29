@@ -115,7 +115,7 @@ def KossakowskiForm.toLinearMap (K : KossakowskiForm D) :
     congr 1
     congr 1 <;> ring_nf
 
-/-! ### AuxiliaryLemmas for Kossakowski ↔ Lindblad conversion -/
+/-! ### Auxiliary lemmas for Kossakowski ↔ Lindblad conversion -/
 
 /-- Collapsing a sum weighted by the identity matrix:
 `∑_l (1 : Matrix) l k • f(l) = f(k)`. -/
