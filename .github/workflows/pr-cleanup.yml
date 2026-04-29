@@ -119,7 +119,8 @@ jobs:
                         Channel/TransferMatrix, MPS/CanonicalForm
 
             Rules:
-            - If the current title already matches `type(scope): ...`, keep it as-is.
+            - If the current title already matches `type(scope): ...` with one
+              of the allowed types above, keep it as-is.
             - Otherwise, determine the correct type and scope:
               • Run `gh pr view ${{ github.event.pull_request.number }} --repo ${{ github.repository }} --json files`
                 to see changed files. Derive the scope from the common path prefix.
