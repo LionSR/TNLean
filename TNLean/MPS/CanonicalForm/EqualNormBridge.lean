@@ -15,7 +15,7 @@ open scoped Matrix BigOperators
 open Filter
 
 /-!
-# Equal-norm connection: from BNT properties to BNT grouping hypotheses
+# Equal-norm comparison for BNT grouping hypotheses
 
 This file relates the BNT overlap/spectral theory to the
 BNT grouping theorem (`exists_bnt_grouping`), which requires `hMPVEq`
@@ -23,7 +23,7 @@ for equal-norm blocks.
 
 ## Background (Issue #243)
 
-The existence reduction chain (`Assembly.lean`) produces TP + primitive blocks with
+The canonical-form reduction produces TP + primitive blocks with
 nonzero weights.  The BNT grouping theorem groups blocks by weight norm into a
 `SectorDecomposition`, and requires one hypothesis for equal-norm blocks:
 
@@ -67,7 +67,7 @@ Theorem matching, etc.).
   equivalence data (rather than `SameMPV₂`) for equal-norm blocks.  **Fully proved.**
 
 * `exists_sectorDecomp_of_tp_primitive_irr_blocks` — Construction connecting
-  the reduction output to a BNT-grouped `SectorDecomposition`.  **Fully proved.**
+  the reduction result to a BNT-grouped `SectorDecomposition`.  **Fully proved.**
   Requires a `hNonDecay` hypothesis for equal-norm blocks.
 
 * `exists_eventually_linearIndependent_of_overlap_tendsto_orthonormal` —
@@ -95,12 +95,12 @@ Theorem matching, etc.).
 
 * `exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_of_linearIndependent` —
   signature-compatible reformulation retaining the TP / primitive / irreducible
-  inputs expected by the one-sided BNT construction chain.
+  hypotheses used by the one-sided BNT construction chain.
 
-* `mpv_span_eq_of_common_phase_cover` — finite-length live-block span equality
-  from a common family covered surjectively up to MPV phase.
+* `mpv_span_eq_of_common_phase_cover` — finite-length MPV span equality for
+  block families arising from a common family covered surjectively up to MPV phase.
 
-* `MPVCommonPhaseCover` — bundled common-family, class-map, phase, and
+* `MPVCommonPhaseCover` — common-family, class-map, phase, and
   surjectivity data for the same span-equality theorem.
 
 * `SectorBasisPreMatching.commonPhaseCover` — turns BNT pre-matching data into
@@ -278,7 +278,7 @@ theorem exists_bnt_grouping_of_gaugePhaseEquiv
 /-- **From TP + primitive + irreducible blocks to BNT-grouped
 `SectorDecomposition`.**
 
-This theorem relates the output of the existence reduction
+This theorem relates the result of the existence reduction
 (`exists_tp_primitive_blockDecomp_after_blocking` in `Assembly.lean`) to a
 `SectorDecomposition` with strictly decreasing BNT-level norms.  It does not by
 itself prove `HasBNTSectorData`: after #886 that predicate means eventual linear
@@ -469,14 +469,13 @@ lemma exists_mpvState_eq_smul {DA DB : ℕ} {A : MPSTensor d DA} {B : MPSTensor 
 
 end MPVBlockPhaseEquiv
 
-/-- Bundled common MPV-phase cover for two live-block families.
+/-- Common MPV-phase cover for two block families.
 
-The data record the finite common family, the class maps from the two
-live-block families to it, the MPV-phase equivalences between each live block
-and its chosen common block, and surjectivity of both class maps.  They are the
-exact paper-level input needed by the current span adapter; constructing this
-bundled data from the full structural `SameMPV₂` data is a separate comparison
-theorem. -/
+The data record the finite common family, the class maps from the two block
+families to it, the MPV-phase equivalences between each block and its chosen
+common block, and surjectivity of both class maps.  These are the paper-level
+data needed by the span comparison theorem; constructing them from the full
+structural `SameMPV₂` data is a separate comparison theorem. -/
 structure MPVCommonPhaseCover {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     (blocksA : (j : Fin rA) → MPSTensor d (dimA j))
@@ -542,7 +541,7 @@ lemma MPVPhaseEquiv.exists_mpvState_eq_smul {r : ℕ} {dim : Fin r → ℕ}
       mpvState (d := d) (blocks k) N = ζ ^ N • mpvState (d := d) (blocks j) N :=
   MPVBlockPhaseEquiv.exists_mpvState_eq_smul h N
 
-/-- Span inclusion for live blocks covered by another family up to MPV phase.
+/-- Span inclusion for blocks covered by another family up to MPV phase.
 
 For each block in `blocksA`, choose a block in `blocksB` whose MPV state differs only by a
 nonzero scalar power. Then, at every finite length, the MPV span of `blocksA` is contained in
@@ -565,7 +564,7 @@ theorem mpv_span_le_of_phase_cover {rA rB : ℕ}
     Submodule.smul_mem _ _ (Submodule.subset_span ⟨k, rfl⟩)
   simpa [hstate] using hmem
 
-/-- Mutual MPV-phase covers give equality of finite-length live-block MPV spans. -/
+/-- Mutual MPV-phase covers give equality of finite-length block MPV spans. -/
 theorem mpv_span_eq_of_mutual_phase_cover {rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     (blocksA : (j : Fin rA) → MPSTensor d (dimA j))
@@ -579,10 +578,10 @@ theorem mpv_span_eq_of_mutual_phase_cover {rA rB : ℕ}
     (mpv_span_le_of_phase_cover blocksA blocksB hA_le_B N)
     (mpv_span_le_of_phase_cover blocksB blocksA hB_le_A N)
 
-/-- A surjective common MPV-phase quotient preserves finite-length live-block spans.
+/-- A surjective common MPV-phase quotient preserves finite-length block spans.
 
-This is the abstract span step needed after a common live-block theorem has identified a family
-of representative blocks and shown that every live block maps onto it up to MPV phase. -/
+This is the abstract span step used after a common nonzero-weight block theorem identifies a
+representative family and shows that every block maps onto it up to MPV phase. -/
 theorem mpv_span_eq_of_surjective_phase_cover {r rC : ℕ}
     {dim : Fin r → ℕ} {dimC : Fin rC → ℕ}
     (blocks : (k : Fin r) → MPSTensor d (dim k))
@@ -602,12 +601,12 @@ theorem mpv_span_eq_of_surjective_phase_cover {r rC : ℕ}
     rw [← hk]
     exact (hphase k).symm
 
-/-- Two live-block families with a common surjective MPV-phase quotient have equal finite-length
+/-- Two block families with a common surjective MPV-phase quotient have equal finite-length
 MPV spans.
 
 This theorem is deliberately independent of the sector weights.  It records the precise
-linear-algebra input needed by the exact-live after-blocking theorem once a future common-blocking
-result supplies a common family of live representatives and shows that both sides cover it. -/
+linear-algebra hypothesis used by the nonzero-part after-blocking theorem once a common-blocking
+result supplies a common representative family and shows that both sides cover it. -/
 theorem mpv_span_eq_of_common_phase_cover {rA rB rC : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ} {dimC : Fin rC → ℕ}
     (blocksA : (j : Fin rA) → MPSTensor d (dimA j))
@@ -634,7 +633,7 @@ variable {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
 variable {blocksA : (j : Fin rA) → MPSTensor d (dimA j)}
 variable {blocksB : (k : Fin rB) → MPSTensor d (dimB k)}
 
-/-- The bundled common cover gives equality of the finite-length live-block MPV spans. -/
+/-- A common cover gives equality of the finite-length block MPV spans. -/
 theorem span_eq (C : MPVCommonPhaseCover blocksA blocksB) (N : ℕ) :
     Submodule.span ℂ (Set.range (fun j : Fin rA => mpvState (d := d) (blocksA j) N)) =
     Submodule.span ℂ (Set.range (fun k : Fin rB => mpvState (d := d) (blocksB k) N)) :=
@@ -969,12 +968,12 @@ theorem exists_eventually_linearIndependent_of_tp_primitive_irr_blocks_of_blocks
 
 /-- **Separated-family BNT sector construction.**
 
-If the TP primitive irreducible input blocks are already pairwise separated by
+If the given TP primitive irreducible blocks are already pairwise separated by
 non-gauge-phase-equivalence, the granular sector decomposition is a genuine BNT
 sector decomposition: it represents the original weighted block sum and satisfies
 `HasBNTSectorData` by the overlap-derived eventual linear independence above.
 
-This theorem does not collapse gauge-phase-equivalent input blocks.  Instead it
+This theorem does not identify gauge-phase-equivalent blocks.  Instead it
 identifies the exact remaining task for the full one-sided construction: first
 choose separated representatives and absorb the corresponding phases into sector
 weights, then apply this constructor. -/
@@ -1116,7 +1115,7 @@ overlap-rigidity route.
 
 The theorem also records that if the original blocks are one-site injective,
 then the chosen basis blocks are injective. It does not claim the remaining
-two-family input: equality of the finite-length MPV spans between two
+two-family hypothesis: equality of the finite-length MPV spans between two
 independently constructed bases is a separate Gap §1 task. -/
 theorem exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_with_overlapOrtho
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
@@ -1267,7 +1266,7 @@ also exposing the finite-length span invariant of the phase-class representative
 construction: at every length, the chosen MPV phase-class representatives span the same
 MPV subspace as the original block
 family.  This removes the quotient/enumeration bookkeeping from later two-sided span
-comparisons; the remaining comparison is the genuine equality of the two original live-block
+comparisons; the remaining comparison is the genuine equality of the two original nonzero-block
 spans. -/
 theorem exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_with_overlapData_and_basisSpan
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
@@ -1298,15 +1297,15 @@ theorem exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_with_overlapData_and_
   exact bntSectorDecomp_overlapData_basisSpan_aux
     (d := d) μ blocks hTP hIrr hPrim hInj hμne
 
-/-- **Two-sided overlap-span data from live-block span equality.**
+/-- **Two-sided overlap-span data from nonzero-weight block span equality.**
 
-Apply the construction using representatives of MPV phase-equivalence classes on both live
-block families. The one-sided quotient span identity above transports a finite-length span
-equality for the original live blocks to the two independently chosen sector bases. Thus the
-theorem provides all fields of `SectorBasisOverlapSpanHypotheses` without assuming that
-structure directly.
+Apply the construction using representatives of MPV phase-equivalence classes on both
+nonzero-weight block families. The one-sided quotient span identity above transports a
+finite-length span equality for the original blocks to the two independently chosen sector bases.
+Thus the theorem provides all fields of `SectorBasisOverlapSpanHypotheses` without assuming
+that structure directly.
 
-The remaining paper-level task, not proved here, is to derive the displayed live-block span
+The remaining paper-level task, not proved here, is to derive the displayed block-span
 equality from the global `SameMPV₂` and structural reduction data. -/
 theorem exists_bnt_sectorDecomp_pair_with_overlapSpan_of_block_span_eq
     {rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
@@ -1451,11 +1450,11 @@ This is the post-#886 formulation of the conditional sector construction.  The
 predicate `HasBNTSectorData` now means eventual linear independence of the sector
 basis MPV states.  TP, irreducibility, primitivity, and nonzero weights do not by
 themselves provide that linear-independence statement for the granular basis; the
-genuine one-sided BNT construction must first choose / collapse to a basis of normal
+genuine one-sided BNT construction must first choose representatives forming a basis of normal
 tensors.
 
-Accordingly this theorem gives the simplest construction: if the granular input
-basis is already known to satisfy the current BNT linear-independence hypothesis,
+Accordingly this theorem gives the simplest construction: if the granular basis
+is already known to satisfy the current BNT linear-independence hypothesis,
 then `trivialSectorDecomp` gives the requested `SectorDecomposition` and the
 `HasBNTSectorData` certificate is exactly the supplied `hLI`. -/
 theorem exists_bnt_sectorDecomp_of_linearIndependent
