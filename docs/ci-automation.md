@@ -159,9 +159,13 @@ Here is exactly what happens:
 
 **What it does**: When a human-authored issue is opened, this workflow applies
 the project label taxonomy and posts a concise initial classification comment.
+Issues from repository members receive the full classifier. Outside reports
+receive an inexpensive preliminary classification for clear labels, followed by
+a maintainer review.
 
 **When it runs**: On `issues: opened`, excluding senders whose GitHub event type
-is `Bot`.
+is `Bot`. The model-backed classifier runs only for issues opened by an
+`OWNER`, `MEMBER`, or `COLLABORATOR`.
 
 **What it checks**:
 - Which area, paper, topic, workflow, or standard labels apply
