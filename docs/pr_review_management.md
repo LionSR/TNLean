@@ -45,8 +45,8 @@ PRs should follow the mathlib review checklist — review for: **style**, **docu
   `1804.04964`, `1708.00029`, `MPS/Chain`, or `PEPS`. No brackets.
 - **Description**: lowercase, imperative mood, concise. Reference
   theorem/proposition numbers where applicable.
-- **Body**: should have `### Motivation` and `### Description` sections.
-  Reference the issue number. List files changed.
+- **Body**: should have `### Motivation`, `### Description`, and
+  `### Testing` sections. Reference the issue number. List files changed.
 - **Clean up bot-generated titles** before merging. Codex/Claude often produce
   verbose or inconsistent titles like `[PR #165 follow-up] BlockedChainFT style
   cleanups and term-mode endpoint`. Rename to, for example,
