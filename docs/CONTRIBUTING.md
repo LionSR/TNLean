@@ -20,7 +20,7 @@ type(scope): short description
 | `feat`     | New definition, lemma, theorem, or module         |
 | `fix`      | Bug fix (broken proof, wrong identifier, etc.)    |
 | `refactor` | Restructuring without changing API surface        |
-| `docs`     | Documentation or blueprint changes only           |
+| `doc`      | Documentation or blueprint changes only           |
 | `style`    | Formatting, naming, or prose cleanup              |
 | `ci`       | CI/CD workflow changes                            |
 | `chore`    | Dependency bumps, linting, toolchain updates      |
@@ -37,7 +37,7 @@ Examples:
 - `feat(MPS/Symmetry): add twistedTensor as MonoidHom`
 - `fix(blueprint+docgen): resolve broken labels and malformed docstring table`
 - `refactor(MPS): move Correlations.lean from ParentHamiltonian/ to Core/`
-- `docs(MPS/CanonicalForm): rewrite equal-case prose in MPS language`
+- `doc(MPS/CanonicalForm): rewrite equal-case prose in MPS language`
 
 ### Body template
 
@@ -87,6 +87,15 @@ Issue titles do **not** use conventional-commit prefixes such as `feat(...)` or
 bracket prefixes such as `[Wolf Ch6]`. Use a plain mathematical title that says
 what theorem, construction, chapter, or record the issue concerns.
 
+This follows the practice used in the Lean/mathlib community: issue titles are
+short mathematical or tooling phrases, while labels carry issue type and topic
+metadata. For example, mathlib issue titles include phrases such as
+`Rename Counterexamples/OrderedCancelAddCommMonoidWithBounds.lean`,
+`Tracking issue: indentation linter enhancements`, and
+`Kernel type checking performance depends on lexicographic ordering of universe
+variables`; labels such as `enhancement`, `t-meta`, `t-linter`, and
+`good first issue` carry the classification.
+
 | Issue kind | Title format | Example |
 |------------|--------------|---------|
 | Overall tracker | `Tracking: <area>` | `Tracking: Wolf lecture notes on quantum channels` |
@@ -103,6 +112,8 @@ Rules:
   break PR workflows.
 - Put parent issue numbers, PR numbers, audit filenames, and implementation
   notes in the body unless they are essential to disambiguate the title.
+- Put type, topic, paper, chapter, and priority metadata in labels and
+  sub-issue relations rather than encoding all of it in the title.
 - Use the terminology of the relevant literature: blocked tensors, physical
   words, sector decompositions, zero-tail terms, transfer maps, fixed-point
   algebras, gauge equivalence, and finite-length span equality.
@@ -301,18 +312,9 @@ not issues.
 TNLean pull-request workflows. Do not apply them to issues; they do not trigger
 issue-side automation here.
 
-**General issue-started workflow behavior.** The Claude responder starts from
-issue titles, issue bodies, or issue comments that contain `@claude`, provided
-the triggering author has write access to the repository and the GitHub event
-sender is not a bot. For issue titles and issue bodies, this applies when the
-issue is opened or assigned; for comments, it applies when the comment is
-created.
-
-**TNLean issue-started workflow behavior.** When the responder creates a pull
-request from issue work, the follow-up action scans the same triggering text for
-the magic phrase `auto[_ -]?fix`, matching `auto-fix`, `auto fix`, or `autofix`.
-If it finds one of those forms, it adds `auto-fix-claude` to the created pull
-request.
+See [ci-automation.md](ci-automation.md#auto-fix-labels-are-pr-only) for the
+issue-started workflow behavior that creates pull requests from trusted issue
+events.
 
 ### Standard GitHub labels
 
