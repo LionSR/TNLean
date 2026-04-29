@@ -1693,7 +1693,7 @@ The following results separate the zero blocks from the
 		def:tensor_from_blocks, thm:iterated_blocking_samempv_reindex}
 	From a common reblocked cyclic-sector family, one may derive sector tensors at
 	the common alphabet directly from the original per-block sector tensors.  The
-	one-shot live-block data keeps the physical-label relabeling explicit: for the
+	one-shot block data keeps the relabeling of blocked physical words explicit: for the
 	live block $B_k$, it uses the one-shot block $B_k^{[m_k e_k]}$ with the labels
 	obtained by flattening an iterated $(m_k,e_k)$ block.
 \end{definition}
@@ -1741,7 +1741,7 @@ The following results separate the zero blocks from the
 		thm:samempv_cast_phys_dim, thm:samempv_blocking_distributes,
 		thm:common_blocked_cyclic_sector_derived_properties}
 	For each live block, the iterated block $(B_k^{[m_k]})^{[e_k]}$ agrees, after
-	the explicit physical-label relabeling, with a one-shot block of length
+	the explicit relabeling of blocked physical words, with a one-shot block of length
 	$m_k e_k$.  Combining this with the stored cyclic-sector decomposition gives an
 	MPV equality between the relabeled one-shot block and its derived common-sector
 	tensor.  Summing over live blocks transports the weights to $\mu_k^p$ and
@@ -1758,15 +1758,15 @@ The following results separate the zero blocks from the
 	sums and reindex the double sum over pairs $(k,s)$ by the flattened sector index.
 \end{proof}
 
-\begin{theorem}[Canonical blocked live tensor under physical-label compatibility]%
+\begin{theorem}[Canonical blocked nonzero part under blocked-word relabeling]%
 \label{thm:common_blocked_cyclic_sector_canonical_label_compat}
 	\lean{MPSTensor.CommonBlockedCyclicSectorFamily.sameMPV₂_weightedCanonicalBlock_commonFlat_of_oneShot}
 	\leanok
 	\uses{thm:common_blocked_cyclic_sector_reindexed_samempv,
 		def:common_blocked_cyclic_sector_derived_blocks}
-	Assume that the canonical one-shot blocked live-block tensor agrees, as an
-	MPV family, with the explicitly relabeled one-shot live-block tensor coming
-	from iterated blocking.  Then the canonical weighted live-block tensor agrees
+	Assume that the canonical one-shot blocked nonzero part agrees, as an
+	MPV family, with the relabelled cyclic-sector tensor coming from iterated
+	blocking.  Then the canonical weighted nonzero part agrees
 	with the weighted derived common-sector tensor.
 \end{theorem}
 
@@ -3209,7 +3209,7 @@ The following results separate the zero blocks from the
 	If two tensors generate the same MPV family, then the common cyclic-sector data
 	from Theorem~\ref{thm:ft_after_blocking_common_blocked_cyclic_live_zero_tail}
 	also yields, on each side, a derived common-alphabet sector family obtained from
-	one-shot blocked live blocks with explicit physical-label relabeling.  The
+	one-shot blocked nonzero blocks with an explicit relabeling of blocked physical words.  The
 	conclusion includes the two MPV-family equalities comparing the weighted
 	relabeled one-shot live-block tensors with the weighted derived common-sector
 	tensors.  The sector weights are the transported powers $\mu_k^p$ and remain
@@ -3282,7 +3282,7 @@ The following results separate the zero blocks from the
 		thm:common_blocked_cyclic_sector_canonical_label_compat}
 	First transport the original zero-tail/live decomposition through the common
 	blocking length.  Then replace the canonical blocked live tensor by the
-	derived common-sector tensor using the physical-label compatibility hypothesis.
+	derived common-sector tensor using the blocked-word relabeling agreement.
 \end{proof}
 
 
@@ -3321,19 +3321,19 @@ The following results separate the zero blocks from the
 	with one blocking by the product length, up to the evident relabeling of
 	physical words.
 
-	What remains on the canonical-form side is the exact compatibility between the
-	canonical blocked nonzero part and the explicitly relabeled cyclic-sector tensor
-	for the whole weighted family.  The conditional statement
+	What remains on the canonical-form side is the exact equality, after the
+	relabeling of blocked physical words, between the canonical blocked nonzero part
+	and the cyclic-sector tensor for the whole weighted family.  The conditional statement
 	Theorem~\ref{thm:zero_tail_common_flat_of_one_shot_label_compat} already shows
-	that, once this physical-label compatibility is proved, the zero-tail equations
+	that, once this blocked-word relabeling agreement is proved, the zero-tail equations
 	can be written directly with the weighted common-length cyclic sectors.
-	Theorem~\ref{thm:after_blocking_sector_zero_tail_bnt_proportional_decomposition}
+	Theorem~\ref{thm:after_blocking_sector_zeroTail_of_proportionalDecompositionConclusion}
 	records the next comparison step: if those common-length sector blocks are
 	injective and the BNT proportional-decomposition comparison supplies the
 	blockwise permutation, bond-dimension equalities, and gauge phases, then the
 	finite-length span equality follows through the common phase-cover theorem.
-	Thus the remaining canonical-form hypotheses are precisely the physical-label
-	compatibility, any additional blocking needed for injectivity, and the final
+	Thus the remaining canonical-form hypotheses are precisely this blocked-word
+	relabeling agreement, any additional blocking needed for injectivity, and the final
 	BNT proportional-decomposition data for the common-length nonzero sector blocks.
 
 	The sorted normal-canonical-form theorem,
