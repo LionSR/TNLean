@@ -57,7 +57,7 @@ mathematical obstruction.
 ### Same assembled MPVs determine gauge phases, not exact block MPVs
 
 - Location: `TNLean/MPS/FundamentalTheorem/Full/BlocksMatch.lean`
-- Statement refuted: assembled `SameMPV2` forces exact per-block `SameMPV2`.
+- Statement refuted: assembled `SameMPV₂` forces exact per-block `SameMPV₂`.
 - Witness: replace one block by `zeta * (X * A * X^-1)` with `|zeta| = 1` and
   `zeta != 1`, and compensate the assembly weight by `muB = muA / zeta`.
 - Replacement target: per-block `GaugePhaseEquiv`.
@@ -74,7 +74,7 @@ mathematical obstruction.
 
 - Location: `TNLean/MPS/CanonicalForm/CyclicSectors/CompressionPositive.lean`
 - Statement refuted: supported-projection compression gives heterogeneous
-  `SameMPV2` at all lengths.
+  `SameMPV₂` at all lengths.
 - Witness: the length-zero coefficient changes from `trace 1 = D` to
   `trace P`, so only positive-length MPVs are preserved.
 
@@ -82,7 +82,7 @@ mathematical obstruction.
 
 - Location: `TNLean/MPS/CanonicalForm/NormalReduction/TPGauge.lean`
 - Statement refuted: the blockwise Perron-Frobenius TP-gauge step has an
-  unconditional arbitrary-input theorem under the current `SameMPV2`
+  unconditional arbitrary-input theorem under the current `SameMPV₂`
   interface.
 - Witness: the all-zero scalar block; the theorem therefore requires a
   nonzero Kraus operator in each input block.

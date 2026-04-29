@@ -139,7 +139,10 @@ jobs:
 
             const has = (...patterns) => patterns.some((pattern) => pattern.test(text));
 
-            if (has(/\b(theorem|lemma|proof|formalization|formalisation|lean declaration|sorry)\b/)) {
+            const looksLikeFormalization = has(
+              /\b(theorem|lemma|proposition|corollary|definition|conjecture|proof|formalization|formalisation|lean declaration|sorry)\b/
+            );
+            if (looksLikeFormalization) {
               labels.add('formalization');
             }
             if (has(/\b(blueprint|latex|docstring|documentation|readme)\b/)) {
@@ -173,6 +176,9 @@ jobs:
             const labelText = labels.size > 0
               ? [...labels].sort().map((label) => `\`${label}\``).join(', ')
               : 'No automatic label was clear from the title or body.';
+            const formalizationText = looksLikeFormalization
+              ? ' The title or body appears to ask for a formalization task; after reviewing the mathematical source, a maintainer may request a Mathlib report by adding `scout`.'
+              : '';
 
             await github.rest.issues.createComment({
               owner: context.repo.owner,
@@ -185,7 +191,7 @@ jobs:
                 `- ${labelText}`,
                 '',
                 '### Reading',
-                '- This issue was opened by an outside reporter, so the workflow recorded only a preliminary classification.',
+                `- This issue was opened by an outside reporter, so the workflow recorded only a preliminary classification.${formalizationText}`,
                 '',
                 '### Next step',
                 '- A maintainer should check the mathematical source, affected files, and labels before assigning follow-up work.',

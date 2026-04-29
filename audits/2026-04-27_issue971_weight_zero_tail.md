@@ -1,6 +1,6 @@
 # 2026-04-27 — Issue #971 weight transport and zero-tail reblocking
 
-This branch adds checked bookkeeping lemmas for transporting live-block weights and zero-tail MPV identities through positive physical reblocking, as a modular input for the common cyclic-sector flattening work in #969.
+This branch adds checked auxiliary identities for transporting nonzero-block weights and zero-tail MPV identities through positive physical reblocking, as a modular input for the common cyclic-sector flattening work in #969.
 
 ## Lean declarations added
 
