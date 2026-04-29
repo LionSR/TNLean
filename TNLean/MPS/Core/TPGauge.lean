@@ -100,7 +100,7 @@ theorem tpGauge_isTP_of_transferMap_conjTranspose_fixedPoint
     intro i
     -- Expand the conjugate transpose and use `Sᴴ * S = ρ`.
     rw [Matrix.conjTranspose_mul, Matrix.conjTranspose_mul, Matrix.conjTranspose_nonsing_inv]
-    -- Goal is now a reassociation; `simp` handles the bookkeeping.
+    -- Goal is now a reassociation; `simp` proves the required matrix identity.
     simp [Matrix.mul_assoc, ← hStS]
   -- Identify the adjoint fixed point equation as a sum.
   have h_sum_eq : ∑ i : Fin d, (A i)ᴴ * ρ * A i = ρ := by
@@ -116,9 +116,8 @@ theorem tpGauge_isTP_of_transferMap_conjTranspose_fixedPoint
   -- (Sᴴ)⁻¹ * (Sᴴ * S) * S⁻¹ = ((Sᴴ)⁻¹ * Sᴴ) * (S * S⁻¹) = 1.
   simp [Matrix.mul_assoc, hStinv_mul, hSmul_inv]
 
-/-- The gauge-transformed tensor `tpGauge A ρ` is gauge-equivalent to `A` (hence has the same MPV).
-
-We record this as a `GaugeEquiv` witness. -/
+/-- The gauge-transformed tensor `tpGauge A ρ` is gauge-equivalent to `A`
+(hence has the same MPV). -/
 theorem gaugeEquiv_tpGauge (A : MPSTensor d D) (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) :
     GaugeEquiv (d := d) (D := D) A (tpGauge (d := d) (D := D) A ρ) := by
   classical

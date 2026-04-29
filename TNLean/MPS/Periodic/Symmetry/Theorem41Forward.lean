@@ -271,7 +271,7 @@ From a `p`-refinement witness `(A, W)` for `B`, the `W`-pullback tensor
 `C τ := ∑_σ W(τ, σ) • B σ` has the same transfer map as `B` and the same MPV
 family as `blockTensor A p`.
 
-This records the first three steps of the forward-direction plan recorded in
+This proves the first three steps of the forward-direction condition
 `PRefinementCanonicalization`: construct the pullback, identify its transfer map
 using `transferMap_kraus_isometry`, and rewrite the coefficient-level refinement
 identity as a `SameMPV` statement. The remaining gap is therefore exactly the
@@ -353,7 +353,7 @@ MPV family as a blocked root `blockTensor A p`, one can extract a periodic
 `Z`-gauge witness between `C` and `blockTensor A p`.
 
 Compared with `PeripheralEqualCasePeriodicFTOfSameMPV`, this does **not** yet
-recover a left-canonical root. It only records the blocked equal-case
+recover a left-canonical root. It only asserts the blocked equal-case
 Fundamental Theorem / Z-phase existence step. -/
 def PeripheralEqualCaseZGaugeOfSameMPV (d D p : ℕ) : Prop :=
   ∀ {A : MPSTensor d D} {C : MPSTensor (blockPhysDim d p) D},
@@ -391,8 +391,8 @@ In the paper this is the point where the blocked equal-case Fundamental Theorem
 (Theorem 3.8 of arXiv:1708.00029) is combined with the blocked-to-root
 reconstruction that distributes the resulting `Z`-gauge across the cyclic
 sectors of `A`. Formalizing that existence step is the remaining forward
-obstruction, so we record its endpoint as a separate hypothesis. The theorem
-`peripheralEqualCase_periodicFT_of_sameMPV` below shows that this endpoint
+obstruction, so we keep the resulting existence statement as a separate hypothesis. The theorem
+`peripheralEqualCase_periodicFT_of_sameMPV` below shows that this statement
 follows from the sharper split into blocked `Z`-gauge extraction and
 blocked-to-root reconstruction. -/
 def PeripheralEqualCasePeriodicFTOfSameMPV (d D p : ℕ) : Prop :=
@@ -499,7 +499,7 @@ theorem thm_4_1_p_refinement_forward_of_peripheralEqualCase_periodicFT_of_sameMP
 /-- **Forward direction of Theorem 4.1 (conditional form).**
 
 Let `B` be an MPS tensor in irreducible form II. Assume
-`PRefinementCanonicalization`, which records the remaining analytic bridge from
+`PRefinementCanonicalization`, which states the remaining analytic passage from
 `IsPRefinable B p` to a left-canonical witness with matching transfer map. Then
 `IsPRefinable B p` implies `IsPDivisibleChannel (transferMap B) p`.
 

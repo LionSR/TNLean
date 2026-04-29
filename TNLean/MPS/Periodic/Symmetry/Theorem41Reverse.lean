@@ -25,7 +25,7 @@ variable {d D : ℕ}
 
 /-- **Inverse canonicalization hypothesis for the reverse direction of Theorem 4.1.**
 
-This Prop records the analytic content that connects `IsPDivisibleChannel (transferMap B) p`
+This proposition states the analytic content that connects `IsPDivisibleChannel (transferMap B) p`
 (a channel-level `p`-th-root statement) to the existence of a witness tensor
 `A : MPSTensor d D` whose `p`-blocked transfer map matches that of `B`.
 
@@ -120,8 +120,8 @@ theorem pRefinementInverseCanonicalization_of_rootKrausRankBound
 /-- **Reverse direction of Theorem 4.1 (conditional form).**
 
 Let `B` be an MPS tensor in irreducible form II and let `p ≥ 1`. Assume the inverse
-canonicalization hypothesis `PRefinementInverseCanonicalization` (which records the
-remaining analytic bridge from `p`-divisibility of `transferMap B` to a compatible
+canonicalization hypothesis `PRefinementInverseCanonicalization` (which states the
+remaining analytic passage from `p`-divisibility of `transferMap B` to a compatible
 Kraus-reducible witness). Then `IsPDivisibleChannel (transferMap B) p` implies
 `IsPRefinable B p`.
 
