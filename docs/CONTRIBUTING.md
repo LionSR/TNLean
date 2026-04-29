@@ -9,7 +9,7 @@ Lean style, and CI automation used in the MPSLean project.
 
 ### Title format
 
-Use **conventional-commit** style:
+Use mathlib-style conventional titles:
 
 ```
 type(scope): short description
@@ -18,19 +18,20 @@ type(scope): short description
 | Type       | When to use                                      |
 |------------|--------------------------------------------------|
 | `feat`     | New definition, lemma, theorem, or module         |
-| `fix`      | Bug fix (broken proof, wrong identifier, etc.)    |
-| `refactor` | Restructuring without changing API surface        |
-| `docs`     | Documentation or blueprint changes only           |
-| `ci`       | CI/CD workflow changes                            |
+| `fix`      | Broken proof, wrong identifier, or wrong statement |
+| `refactor` | Reorganization without changing mathematical content |
+| `doc`      | Documentation or blueprint changes only           |
+| `style`    | Naming, formatting, prose, or title cleanup       |
+| `ci`       | CI workflow changes                               |
 | `chore`    | Dependency bumps, linting, toolchain updates      |
 
 **Scope** is a shortened module path: `MPS/Symmetry`, `Channel`, `blueprint+docgen`,
 `MPS/Core`, etc. Omit the `TNLean/` prefix.
 
 Examples:
-- `feat(MPS/Symmetry): add twistedTensor as MonoidHom`
-- `fix(blueprint+docgen): resolve broken labels and malformed docstring table`
-- `refactor(MPS): move Correlations.lean from ParentHamiltonian/ to Core/`
+- `feat(MPS/CanonicalForm): assemble cyclic sectors at a common blocking length`
+- `doc(Wolf Ch6): add Lean tags for spectral theorems`
+- `style(MPS/CanonicalForm): rewrite equal-case prose in MPS language`
 
 ### Body template
 
@@ -84,12 +85,34 @@ Three issue templates are available in `.github/ISSUE_TEMPLATE/`:
 | **Bug Report** | Broken proof, type error, sorry regression, CI failure |
 | **Tracking Issue** | Umbrella issue tracking a group of sub-issues |
 
+### Title format
+
+Issue titles are plain mathematical or repository-maintenance titles, not
+PR-title prefixes. Labels carry the type, topic, paper, chapter,
+priority, and status metadata.
+
+Use these forms:
+
+| Issue kind | Title form |
+|------------|------------|
+| Overall tracker | `Tracking: <area>` |
+| Formalization task | `<area>: <mathematical result or construction>` |
+| Blueprint or documentation task | `<document area>: <mathematical documentation change>` |
+| CI or repository maintenance | `<area>: <concrete maintenance task>` |
+| Daily record | `<record type> -- <date>` |
+
+Keep issue titles bracket-free. Use `Wolf Ch6: ...`, not `[Wolf Ch6] ...`.
+Do not put `feat(...)`, `fix(...)`, `doc(...)`, or `formalization(...)` at
+the start of an issue title. Put parent issue numbers, PR numbers, audit
+filenames, and implementation notes in the body unless they are needed to
+disambiguate the title.
+
 ### Formalization issues
 
 Use a descriptive title that names the mathematical content:
 
 ```
-Symmetry/SPT 3/6 Definitions: twisted tensor and on-site symmetry
+MPS/Symmetry: twisted tensor and on-site symmetry
 ```
 
 Label with **area** + **arXiv paper** + **topic** as applicable.
@@ -103,13 +126,13 @@ describing the mathematics.
 
 ### Multi-part work
 
-For work spanning multiple PRs, use the `Area K/N: title` pattern and create
-an umbrella **tracking issue**:
+For work spanning multiple PRs, create an umbrella **tracking issue** and put
+the part numbering in the body or in sub-issue relations when it is not needed
+to distinguish the mathematical statement:
 
 ```
-RFP/MPDO 1/5 Pure-state RFP: definitions, ZCL <=> E^2=E, structural form
-RFP/MPDO 2/5 Commuting parent Hamiltonians and decorrelation theorem
-...
+RFP/MPDO: algebra structure and fusion isometries
+RFP/MPDO: commuting parent Hamiltonians and decorrelation theorem
 ```
 
 The tracking issue lists each sub-issue using a **native GitHub tasklist** block
