@@ -59,7 +59,7 @@ lemma SameMPV.trace_evalWord {A B : MPSTensor d D} (h : SameMPV A B) (w : List (
   -- Use the `SameMPV` equality on the configuration `σ := w.get`.
   simpa [mpv, coeff, List.ofFn_get] using h w.length w.get
 
-/-- Lemma 3 (helper): nondegeneracy of the trace pairing on `D×D` complex matrices. -/
+/-- Nondegeneracy of the trace pairing on `D×D` complex matrices. -/
 lemma trace_mul_right_eq_zero {M : Matrix (Fin D) (Fin D) ℂ}
     (h : ∀ N : Matrix (Fin D) (Fin D) ℂ, Matrix.trace (M * N) = 0) : M = 0 := by
   simpa using (Matrix.trace_mul_right_eq_zero_iff (n := Fin D) M).1 h
@@ -76,9 +76,8 @@ lemma traceMulRightPi_apply (A : MPSTensor d D)
     traceMulRightPi A M i = Matrix.trace (M * A i) := by
   simp [traceMulRightPi, Matrix.traceLinearMap_apply]
 
-/-- Auxiliary length-2 specialisation of `SameMPV.trace_evalWord`.
-
-This is kept as a small helper for the linear-extension proofs. -/
+/-- Auxiliary length-2 specialisation of `SameMPV.trace_evalWord`, used in
+linear-extension proofs. -/
 lemma sameMPV_trace_word2 {A B : MPSTensor d D} (hAB : SameMPV A B) (i j : Fin d) :
     Matrix.trace (A i * A j) = Matrix.trace (B i * B j) := by
   have h := hAB.trace_evalWord [i, j]
