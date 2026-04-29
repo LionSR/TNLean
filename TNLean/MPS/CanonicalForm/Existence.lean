@@ -421,8 +421,8 @@ private theorem mpv_eq_dim_at_zero (A : MPSTensor d' D') (σ : Fin 0 → Fin d')
 
 /-- **Zero-block separation (1606.00608 §2.3).**
 
-Every MPS tensor `A : MPSTensor d D` admits an irreducible block decomposition that faithfully
-partitioned into:
+Every MPS tensor `A : MPSTensor d D` admits an irreducible block decomposition that is
+faithfully partitioned into:
 
 * a **zero tail** of dimension `zeroTailDim` (accumulating all-zero irreducible blocks), and
 * a family of **nonzero blocks** `blocks k : MPSTensor d (dim k)` for `k : Fin r`, each with at
@@ -450,38 +450,41 @@ theorem exists_irreducible_blockDecomp_nonzeroBlocks (A : MPSTensor d D) :
   -- Step 1: Obtain the irreducible block decomposition.
   obtain ⟨r₀, dim₀, blocks₀, hIrr₀, hSame₀⟩ :=
     exists_irreducible_blockDecomp (d := d) (D := D) A
-  -- Step 2: Classify blocks as "live" or "zero".
+  -- Step 2: Classify blocks as nonzero or zero.
   -- Use `set` to avoid `let ... in` scoping issues with big-operator notation.
-  set isLive : Fin r₀ → Prop := fun k => ∃ i, blocks₀ k i ≠ 0 with isLive_def
-  set liveSet : Finset (Fin r₀) := Finset.univ.filter (fun k => isLive k) with liveSet_def
-  set zeroSet : Finset (Fin r₀) := Finset.univ.filter (fun k => ¬ isLive k) with zeroSet_def
+  set isNonzero : Fin r₀ → Prop := fun k => ∃ i, blocks₀ k i ≠ 0 with isNonzero_def
+  set nonzeroSet : Finset (Fin r₀) := Finset.univ.filter (fun k => isNonzero k)
+    with nonzeroSet_def
+  set zeroSet : Finset (Fin r₀) := Finset.univ.filter (fun k => ¬ isNonzero k)
+    with zeroSet_def
   -- The zero tail dimension is the sum of bond dimensions of zero blocks.
   set zeroTailDim : ℕ := zeroSet.sum dim₀ with zeroTailDim_def
-  -- Reindex nonzero blocks via a bijection with `Fin liveSet.card`.
-  set liveEquiv : liveSet ≃ Fin liveSet.card := liveSet.equivFin with liveEquiv_def
-  -- Define the new live block family.
-  set r := liveSet.card with r_def
-  set dim : Fin r → ℕ := fun j => dim₀ (liveEquiv.symm j).1 with dim_def
+  -- Reindex nonzero blocks via a bijection with `Fin nonzeroSet.card`.
+  set nonzeroEquiv : nonzeroSet ≃ Fin nonzeroSet.card := nonzeroSet.equivFin
+    with nonzeroEquiv_def
+  -- Define the new nonzero block family.
+  set r := nonzeroSet.card with r_def
+  set dim : Fin r → ℕ := fun j => dim₀ (nonzeroEquiv.symm j).1 with dim_def
   set newBlocks : (k : Fin r) → MPSTensor d (dim k) :=
-    fun j => blocks₀ (liveEquiv.symm j).1 with newBlocks_def
+    fun j => blocks₀ (nonzeroEquiv.symm j).1 with newBlocks_def
   -- Step 3: Prove all properties.
   refine ⟨zeroTailDim, r, dim, newBlocks, ?_, ?_, ?_, ?_⟩
   -- (a) Irreducibility of nonzero blocks.
   · intro k
-    exact hIrr₀ (liveEquiv.symm k).1
-  -- (b) Each live block has a nonzero Kraus operator.
+    exact hIrr₀ (nonzeroEquiv.symm k).1
+  -- (b) Each nonzero block has a nonzero Kraus operator.
   · intro k
-    have hMem := (liveEquiv.symm k).2
-    -- `(liveEquiv.symm k).1 ∈ liveSet` means `isLive (liveEquiv.symm k).1`.
-    have hLive : isLive (liveEquiv.symm k).1 :=
+    have hMem := (nonzeroEquiv.symm k).2
+    -- Membership in `nonzeroSet` means `isNonzero`.
+    have hNonzero : isNonzero (nonzeroEquiv.symm k).1 :=
       (Finset.mem_filter.mp hMem).2
-    exact hLive
-  -- (c) Each live block has positive bond dimension.
+    exact hNonzero
+  -- (c) Each nonzero block has positive bond dimension.
   · intro k
-    have hMem := (liveEquiv.symm k).2
-    have hLive : isLive (liveEquiv.symm k).1 :=
+    have hMem := (nonzeroEquiv.symm k).2
+    have hNonzero : isNonzero (nonzeroEquiv.symm k).1 :=
       (Finset.mem_filter.mp hMem).2
-    rcases hLive with ⟨i, hi⟩
+    rcases hNonzero with ⟨i, hi⟩
     by_contra h
     push Not at h
     have hd0 : dim k = 0 := Nat.le_zero.mp h
@@ -495,28 +498,29 @@ theorem exists_irreducible_blockDecomp_nonzeroBlocks (A : MPSTensor d D) :
       have h := hSame₀ N σ
       rw [h, mpv_toTensorFromBlocks_eq_sum]
       simp only [one_pow, one_smul]
-    -- Expand the live-block toTensorFromBlocks.
-    have hLive : mpv (toTensorFromBlocks (d := d) (μ := fun _ : Fin r => (1 : ℂ)) newBlocks) σ =
+    -- Expand the nonzero-block toTensorFromBlocks.
+    have hNonzero : mpv (toTensorFromBlocks (d := d) (μ := fun _ : Fin r => (1 : ℂ)) newBlocks) σ =
         ∑ j : Fin r, mpv (newBlocks j) σ := by
       rw [mpv_toTensorFromBlocks_eq_sum]
       simp only [one_pow, one_smul]
-    -- Split the original sum into live and zero parts.
-    have hDisj : Disjoint liveSet zeroSet := by
-      simp only [liveSet_def, zeroSet_def]
+    -- Split the original sum into nonzero and zero parts.
+    have hDisj : Disjoint nonzeroSet zeroSet := by
+      simp only [nonzeroSet_def, zeroSet_def]
       exact Finset.disjoint_filter_filter_not _ _ _
-    have hUnion : liveSet ∪ zeroSet = Finset.univ := by
-      simp only [liveSet_def, zeroSet_def]
+    have hUnion : nonzeroSet ∪ zeroSet = Finset.univ := by
+      simp only [nonzeroSet_def, zeroSet_def]
       ext k
       simp [Finset.mem_filter, Finset.mem_union, em]
     have hSplit : ∑ k : Fin r₀, mpv (blocks₀ k) σ =
-        liveSet.sum (fun k => mpv (blocks₀ k) σ) +
+        nonzeroSet.sum (fun k => mpv (blocks₀ k) σ) +
           zeroSet.sum (fun k => mpv (blocks₀ k) σ) := by
       rw [← Finset.sum_union hDisj, hUnion]
     -- The nonzero-block sum equals ∑ over the reindexed blocks.
-    have hLiveSum : liveSet.sum (fun k => mpv (blocks₀ k) σ) =
+    have hNonzeroSum : nonzeroSet.sum (fun k => mpv (blocks₀ k) σ) =
         ∑ j : Fin r, mpv (newBlocks j) σ := by
-      rw [← liveSet.sum_coe_sort (fun k => mpv (blocks₀ k) σ)]
-      exact (liveEquiv.symm.sum_comp (fun x : liveSet => mpv (blocks₀ x.1) σ)).symm
+      rw [← nonzeroSet.sum_coe_sort (fun k => mpv (blocks₀ k) σ)]
+      exact (nonzeroEquiv.symm.sum_comp
+        (fun x : nonzeroSet => mpv (blocks₀ x.1) σ)).symm
     -- The zero sum: at N > 0, each zero block contributes 0; at N = 0, it contributes dim.
     have hZeroSum : zeroSet.sum (fun k => mpv (blocks₀ k) σ) =
         if N = 0 then (zeroTailDim : ℂ) else 0 := by
@@ -534,15 +538,15 @@ theorem exists_irreducible_blockDecomp_nonzeroBlocks (A : MPSTensor d D) :
         have hkz : ∀ i, blocks₀ k i = 0 := by
           by_contra hne
           push Not at hne
-          have hkLive : k ∈ liveSet :=
+          have hkNonzero : k ∈ nonzeroSet :=
             Finset.mem_filter.mpr ⟨Finset.mem_univ k, hne⟩
-          exact absurd hkLive (Finset.disjoint_right.mp hDisj hk)
+          exact absurd hkNonzero (Finset.disjoint_right.mp hDisj hk)
         exact mpv_eq_zero_of_all_zero (blocks₀ k) hkz σ (Nat.pos_of_ne_zero hN)
     -- Expand the zero-tail MPV.
     have hZeroTail : mpv (zeroMPSTensor d zeroTailDim) σ =
         if N = 0 then (zeroTailDim : ℂ) else 0 :=
       mpv_zeroMPSTensor σ zeroTailDim
     -- Chain everything together.
-    rw [hA, hSplit, hLiveSum, hZeroSum, hZeroTail, hLive, add_comm]
+    rw [hA, hSplit, hNonzeroSum, hZeroSum, hZeroTail, hNonzero, add_comm]
 
 end MPSTensor
