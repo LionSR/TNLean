@@ -668,10 +668,11 @@ def commonPhaseCover (M : SectorBasisPreMatching P Q) :
   · intro j
     exact MPVBlockPhaseEquiv.refl (P.basis j)
   · intro k
-    simpa [M.perm.apply_symm_apply k] using
-      MPVBlockPhaseEquiv.of_gaugePhaseEquiv_cast
-        (P.basis (M.perm.symm k)) (Q.basis (M.perm (M.perm.symm k)))
-        (M.dim_eq (M.perm.symm k)) (M.basis_equiv (M.perm.symm k))
+    have h := MPVBlockPhaseEquiv.of_gaugePhaseEquiv_cast
+      (P.basis (M.perm.symm k)) (Q.basis (M.perm (M.perm.symm k)))
+      (M.dim_eq (M.perm.symm k)) (M.basis_equiv (M.perm.symm k))
+    rw [M.perm.apply_symm_apply k] at h
+    exact h
   · intro j
     exact ⟨j, rfl⟩
   · intro j
@@ -722,10 +723,10 @@ theorem nonempty_mpvCommonPhaseCover_of_proportionalDecompositionConclusion
     exact MPVBlockPhaseEquiv.refl (blocksA j)
   · intro k
     obtain ⟨hdim, hGPE⟩ := hmatch (perm.symm k)
-    have hk : perm (perm.symm k) = k := perm.apply_symm_apply k
-    rw [← hk]
-    exact MPVBlockPhaseEquiv.of_gaugePhaseEquiv_cast
+    have h := MPVBlockPhaseEquiv.of_gaugePhaseEquiv_cast
       (blocksA (perm.symm k)) (blocksB (perm (perm.symm k))) hdim hGPE
+    rw [perm.apply_symm_apply k] at h
+    exact h
   · intro j
     exact ⟨j, rfl⟩
   · intro j
