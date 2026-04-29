@@ -22,7 +22,7 @@ The split follows the same review-oriented pattern as the earlier `Full/` and
 * `TNLean.Channel.Determinant.Bound` — Wolf Theorem 6.1(1), the determinant
   bound for positive trace-preserving maps.
 * `TNLean.Channel.Determinant.HilbertSchmidt` — spectral and Hilbert--Schmidt
-  helper lemmas for the rigidity argument.
+  auxiliary lemmas for the rigidity argument.
 * `TNLean.Channel.Determinant.HeisenbergDual` — Heisenberg-dual
   multiplicativity from determinant saturation.
 * `TNLean.Channel.Determinant.UnitaryCharacterization` — Wolf Theorem 6.1(2)

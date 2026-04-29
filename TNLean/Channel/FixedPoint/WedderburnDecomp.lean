@@ -189,7 +189,7 @@ structure IsWedderburnBlockDecomp
   /-- The multiplicities are nondegenerate. -/
   multDim_pos : ∀ i, 0 < multDim i
   /-- The total size of the matrix blocks does not exceed `D`
-  (equivalently, there is some complementary dimension not recorded here). -/
+  (equivalently, there is some complementary dimension not stated here). -/
   dim_le : ∑ i : Fin numBlocks, blockDim i * multDim i ≤ D
   /-- The subalgebra is ℂ-algebra isomorphic to the product of matrix blocks.
   This field ties the decomposition data to `S`. -/
@@ -214,7 +214,7 @@ structure IsWedderburnBlockDecomp
 /-- Every finite-dimensional `*`-subalgebra of `M_D(ℂ)` admits a Wedderburn
 block decomposition (Wolf Eq. 1.39).
 
-The current `IsWedderburnBlockDecomp` structure records the abstract
+The current `IsWedderburnBlockDecomp` structure states the abstract
 Wedderburn--Artin product decomposition, multiplicities set to `1`, and the
 ambient dimension bound. The unitary block-diagonal intertwiner is still
 deferred in the structure TODO above. -/
@@ -348,7 +348,7 @@ weighted sum of block dimensions and multiplicities is at most `D`.
 
 Concretely, if the decomposition has simple summands `M_{d_k}(ℂ)` with
 multiplicities `m_k`, then the parameters satisfy `Σ_k d_k * m_k ≤ D`. This
-is exactly the ambient-dimension constraint recorded in
+is exactly the ambient-dimension constraint stated in
 `IsWedderburnBlockDecomp.dim_le`.
 
 This is a convenience accessor for `IsWedderburnBlockDecomp.dim_le`. -/

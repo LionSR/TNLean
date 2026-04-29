@@ -66,7 +66,7 @@ This formalization captures the equivalence of items 1, 2, and 3:
 `(∃ t₀ > 0, IsIrreducibleMap (T t₀)) ↔ (∀ t > 0, IsPrimitive (T t) ∧ IsIrreducibleMap (T t))`.
 
 The RHS includes `IsIrreducibleMap` alongside `IsPrimitive` because the definition
-`IsPrimitive E := peripheralEigenvalues E = {1}` records only the *set* of peripheral
+`IsPrimitive E := peripheralEigenvalues E = {1}` states only the *set* of peripheral
 eigenvalues, which alone does not imply irreducibility (e.g. the identity map on
 `M₂(ℂ)` is primitive but not irreducible). For quantum dynamical semigroups,
 irreducibility at one time propagates to all times, making the conjunction equivalent

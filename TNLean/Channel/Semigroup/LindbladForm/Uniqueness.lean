@@ -29,9 +29,9 @@ section LindbladForms
 def LindbladForm.HasTracelessKraus (F : LindbladForm D) : Prop :=
   ∀ j : Fin F.r, trace (F.L j) = 0
 
-/-! ### Private helpers for the uniqueness proofs -/
+/-! ### Private auxiliary lemmas for the uniqueness proofs -/
 
-/-- Key tracelessness helper:
+/-- Key tracelessness auxiliary lemma:
 `choiMatrix(φ) *ᵥ ω = 0` when all Kraus operators are traceless. -/
 private theorem choi_phi_mulVec_omega_eq_zero
     [NeZero D]

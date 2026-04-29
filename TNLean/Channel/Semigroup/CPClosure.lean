@@ -12,7 +12,7 @@ import Mathlib.Topology.Algebra.Module.FiniteDimension
 /-!
 # Complete-positivity closure lemmas for semigroup arguments
 
-This file develops a small closure API for `IsCPMap`, geared toward the
+This file develops a small closure interface for `IsCPMap`, geared toward the
 continuous-time semigroup arguments in Wolf Chapter 7.
 
 ## Main results

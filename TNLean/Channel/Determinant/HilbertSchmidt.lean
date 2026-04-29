@@ -10,7 +10,7 @@ import Mathlib.Analysis.MeanInequalities
 import Mathlib.LinearAlgebra.Matrix.Charpoly.Eigs
 
 /-!
-# Hilbert--Schmidt helper lemmas for determinant saturation
+# Hilbert--Schmidt auxiliary lemmas for determinant saturation
 
 This file collects the auxiliary results used in the forward direction of Wolf
 Theorem 6.1(2) before the Heisenberg-dual multiplicativity argument proper.
@@ -63,7 +63,7 @@ section WolfStatements
 
 variable {T : MatrixEnd d}
 
-/-! ### Helper lemmas for the forward direction of Wolf Thm 6.1(2) -/
+/-! ### Auxiliary lemmas for the forward direction of Wolf Thm 6.1(2) -/
 
 namespace ChannelDeterminant
 namespace Internal

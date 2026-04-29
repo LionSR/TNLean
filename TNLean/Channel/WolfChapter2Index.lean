@@ -51,7 +51,7 @@ representations of quantum channels.
   - `kraus_sum_mul_conjTranspose_of_unital` — unital ⟹ `∑KᵢKᵢ† = 𝟙` ✅
   - `kraus_same_map_of_unitary_combination` — unitary freedom (sufficient direction) ✅
   - `kraus_same_map_of_unitaryGroup_combination` / `kraus_same_map_of_exists_unitary_combination`
-    — bundled/existential unitary-witness wrappers for reuse in the converse roadmap ✅
+    — bundled/existential unitary-witness formulations for reuse in the converse roadmap ✅
   - `kraus_transition_unitary_of_hs_orthonormal`
     — converse linear-algebra core: orthonormal Kraus frames force unitary transition ✅
   - `kraus_dual_eq_of_map_eq` — dual map equality from primal map equality ✅
@@ -101,14 +101,14 @@ representations of quantum channels.
   - `POVM.naimark_recovers_povm` — `V† P_i V = E_i` ✅
   - `POVM.exists_naimark_dilation` — existential Naimark dilation ✅
   - `POVM.IsNaimarkDilation` / `POVM.isNaimarkDilation_naimark`
-    — packaged Naimark-dilation predicate and canonical witness ✅
+    — formulated Naimark-dilation predicate and canonical witness ✅
   - `POVM.exists_isometry_mul_naimarkIsometry_of_recovery`
     — concrete uniqueness: any dilation using the canonical projectors factors
       through the canonical Naimark isometry via a dilation isometry ✅
   - `POVM.ofPSDResolutionOfIdentity` — converse construction: PSD resolution
     of identity on a dilation pulls back to a POVM ✅
   - `Instrument` — quantum-instrument structure + `total_isChannel`,
-    `sum_probability`, `posteriorState` API ✅
+    `sum_probability`, `posteriorState` interface ✅
 
 ### §2.1 Representation corollaries (Props 2.2–2.4)
 
@@ -136,7 +136,7 @@ representations of quantum channels.
     necessary direction (HJW converse): equal densities force an
     isometric mixing matrix between the two ensembles ✅
   - `WolfProps.pureEnsembleDensity_eq_iff_exists_isometric_mixing` —
-    both directions packaged as an iff ✅
+    both directions stated as an iff ✅
 
 ### §2.2 Transfer matrix
 
@@ -165,13 +165,13 @@ representations of quantum channels.
 ### §2.3 SVD normal form (existence)
 
 * `Matrix.svd_of_posSemidef` — **SVD for PSD matrices** (spectral theorem
-  packaged): `M = U * diagonal σ * Uᴴ` with `σ ≥ 0` ✅
+  formulated): `M = U * diagonal σ * Uᴴ` with `σ ≥ 0` ✅
 * `Matrix.svd_of_isUnit` — **SVD existence for invertible complex matrices**:
   `M = U * diagonal σ * Vᴴ` with `U, V` unitary and `σ > 0` ✅
 * `transferMatrix_svd_of_isUnit` — **SVD representation of a transfer
   matrix** (Wolf §2.3): every invertible transfer matrix admits an SVD ✅
 
-### Infrastructure
+### Formalization
 
 | Definition | File | Lean name |
 |------------|------|-----------|

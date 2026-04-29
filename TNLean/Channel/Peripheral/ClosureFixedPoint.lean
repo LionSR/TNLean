@@ -25,7 +25,7 @@ The key new input is the weighted Kadison–Schwarz equality
 `Kraus.ks_equality_of_peripheral_eigenvector_of_fixedPoint` from
 `TNLean/Channel/Schwarz/Basic.lean`.
 
-The older special-case wrapper `TNLean/Archive/PeripheralClosure.lean` is
+The older special-case formulation `TNLean/Archive/PeripheralClosure.lean` is
 retained only for compatibility and is intentionally off the stable root
 import surface.
 -/
@@ -35,7 +35,7 @@ open Matrix Finset Complex
 
 namespace KadisonSchwarz
 
-/-- Bridge between the `KadisonSchwarz.IsUnitalKraus` and `Kraus.IsUnital` APIs.
+/-- Bridge between the `KadisonSchwarz.IsUnitalKraus` and `Kraus.IsUnital` interfaces.
 Both express `∑ᵢ Kᵢ Kᵢ† = I` but live in different namespaces. -/
 theorem IsUnitalKraus.toIsUnital {d D : ℕ}
     {K : Fin d → Matrix (Fin D) (Fin D) ℂ}
@@ -179,7 +179,7 @@ theorem peripheralEigenvalues_pow_mem_of_irreducible_unital_of_adjoint_fixedPoin
 /-- For irreducible unital Kraus maps with a positive definite adjoint fixed point,
 all peripheral eigenvalues are roots of unity.
 
-This is a thin wrapper around `peripheral_isRootOfUnity_of_closed_powers`. -/
+This is a direct formulation around `peripheral_isRootOfUnity_of_closed_powers`. -/
 theorem peripheral_isRootOfUnity_of_irreducible_unital_of_adjoint_fixedPoint
     {d D : ℕ} [NeZero D]
     (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
