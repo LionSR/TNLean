@@ -2,7 +2,7 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import TNLean.MPS.CanonicalForm.Assembly.StructuralTheorem
+import TNLean.MPS.CanonicalForm.Assembly.ProportionalComparison
 
 /-!
 # Canonical-form reduction after blocking
@@ -10,7 +10,7 @@ import TNLean.MPS.CanonicalForm.Assembly.StructuralTheorem
 This module is the public entry point for the end-to-end canonical-form
 reduction after blocking. It keeps the historical import path
 `TNLean.MPS.CanonicalForm.Assembly` available while the underlying development is
-split across five focused supporting modules.
+split across six focused supporting modules.
 
 The supporting modules are:
 
@@ -24,6 +24,8 @@ The supporting modules are:
   decomposition after blocking.
 * `TNLean.MPS.CanonicalForm.Assembly.StructuralTheorem` — common-period blocking
   and the structural after-blocking theorem.
+* `TNLean.MPS.CanonicalForm.Assembly.ProportionalComparison` — sector comparison
+  from BNT proportional-decomposition data.
 
 ## Main statements
 

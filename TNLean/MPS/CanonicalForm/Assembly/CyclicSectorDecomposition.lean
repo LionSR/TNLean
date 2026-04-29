@@ -1230,8 +1230,8 @@ noncomputable def commonSectorTensor (F : CommonBlockedCyclicSectorFamily blocks
   toTensorFromBlocks (d := blockPhysDim d F.p)
     (μ := fun _ : Fin (F.period k) => (1 : ℂ)) (F.commonSectorBlock k)
 
-/-- A one-shot common-blocked live block with the explicit physical-label relabeling
-from iterated blocking to the one-shot blocked alphabet. -/
+/-- The common blocked tensor obtained by reindexing blocked physical words from
+iterated blocking to the ambient blocked alphabet. -/
 noncomputable def oneShotReindexedBlock (F : CommonBlockedCyclicSectorFamily blocks)
     (k : Fin r) : MPSTensor (blockPhysDim d F.p) (dim k) :=
   cast (congr_arg (fun d' => MPSTensor d' (dim k)) (F.blockPhysDim_nested_eq k))
@@ -1419,12 +1419,12 @@ theorem sameMPV₂_weightedOneShotReindexedBlock_commonFlat
         (μ := F.commonFlatWeight μ) (F.commonFlatBlocks)) σ := by
           exact (mpv_toTensorFromBlocks_eq_sum (F.commonFlatWeight μ) (F.commonFlatBlocks) σ).symm
 
-/-- If the canonical one-shot blocked live blocks agree with the explicitly relabeled
-blocks, then the weighted live tensor agrees with the derived common-sector family.
+/-- If the canonical blocked nonzero part agrees with the explicitly reindexed
+blocks, then the weighted nonzero part agrees with the derived common-sector family.
 
-The hypothesis isolates the remaining physical-label compatibility step: `oneShotReindexedBlock`
-uses the iterated-blocking relabeling supplied by `iteratedBlockIndex`, while the canonical
-blocked live tensor uses the ambient blocked alphabet directly. -/
+The hypothesis isolates the remaining equality under the word reindexing from
+`iteratedBlockIndex`; the canonical blocked tensor uses the ambient blocked alphabet
+directly. -/
 theorem sameMPV₂_weightedCanonicalBlock_commonFlat_of_oneShot
     (F : CommonBlockedCyclicSectorFamily blocks) (μ : Fin r → ℂ)
     (hLabel : SameMPV₂

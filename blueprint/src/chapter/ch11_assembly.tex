@@ -878,6 +878,50 @@ single weighted block.
 	the required MPV-phase equivalence.
 \end{proof}
 
+\begin{theorem}[Common phase cover gives phase-class representative overlap-span data]%
+\label{thm:bnt_sectorDecomp_pair_overlapSpan_of_commonPhaseCover}
+	\lean{MPSTensor.exists_bnt_sectorDecomp_pair_with_overlapSpan_of_commonPhaseCover}
+	\leanok
+	\uses{def:mpv_common_phase_cover, def:sector_basis_overlap_span_hyps}
+	Let two block families be trace-preserving, primitive, irreducible, injective,
+	and carry nonzero weights. If they have common MPV phase-cover data, then there
+	exist BNT sector decompositions $P$ and $Q$ for
+	the two weighted nonzero parts, and the sector bases satisfy the primitive
+	overlap-span hypotheses.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{lem:mpv_common_phase_cover_span_eq,
+		thm:bnt_sector_decomp_pair_overlap_span_of_block_span}
+	The common cover gives finite-length span equality for the two nonzero-weight
+	block families. The phase-class representative construction then transports
+	this span equality to the BNT sector bases and supplies the remaining
+	one-family overlap data.
+\end{proof}
+
+\begin{theorem}[Proportional-decomposition data give phase-class representative overlap-span data]%
+\label{thm:bnt_sectorDecomp_pair_overlapSpan_of_proportionalDecompositionConclusion}
+	\lean{MPSTensor.exists_bnt_sectorDecomp_pair_with_overlapSpan_of_proportionalDecompositionConclusion}
+	\leanok
+	\uses{def:sector_basis_overlap_span_hyps}
+	Let two block families be trace-preserving, primitive, irreducible, injective,
+	and carry nonzero weights. If a BNT proportional-decomposition comparison
+	supplies a permutation, equal bond
+	dimensions, and gauge-phase equivalences between the two families, then the
+	phase-class representative BNT sector decompositions satisfy the primitive
+	overlap-span hypotheses.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{thm:common_phase_cover_of_proportional_decomposition,
+		thm:bnt_sectorDecomp_pair_overlapSpan_of_commonPhaseCover}
+	First turn the proportional-decomposition data into common MPV phase-cover data.
+	The preceding theorem then converts that cover into the overlap-span hypotheses
+	for the constructed sector bases.
+\end{proof}
+
 \begin{theorem}[Separated normal canonical-form data produce a common phase cover]%
 \label{thm:common_phase_cover_of_separated_normal_bnt}
 	\lean{MPSTensor.nonempty_mpvCommonPhaseCover_of_separated_normalCFBNT_data}
@@ -1090,8 +1134,32 @@ single weighted block.
 	\uses{thm:after_blocking_sector_common_blocks_phase_cover}
 	The common cover data specify the common representative family, the two
 	surjective maps, and the MPV-phase equivalences. The common-cover sector
-	theorem then applies with the same live decompositions and structural
+	theorem then applies with the same nonzero-part decompositions and structural
 	hypotheses.
+\end{proof}
+
+\begin{theorem}[Common nonzero block decompositions with BNT proportional-decomposition data]%
+\label{thm:afterBlocking_sectorComparison_of_proportionalDecompositionConclusion}
+	\lean{MPSTensor.afterBlocking_sectorComparison_of_proportionalDecompositionConclusion}
+	\leanok
+	\uses{thm:after_blocking_sector_common_blocks_common_phase_cover}
+	Let $A$ and $B$ have the same MPV family, and fix exact decompositions of the
+	nonzero parts at a common blocking period as in
+	Theorem~\ref{thm:after_blocking_sector_common_blocks_common_phase_cover}. Assume
+	the blocks in the nonzero parts are trace-preserving, primitive, irreducible,
+	injective, and have nonzero weights. If a BNT proportional-decomposition
+	comparison supplies a permutation, equal bond dimensions, and gauge-phase
+	equivalences between the two block families, then the same sector comparison
+	conclusion holds.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{thm:common_phase_cover_of_proportional_decomposition,
+		thm:after_blocking_sector_common_blocks_common_phase_cover}
+	The BNT proportional-decomposition data give common MPV phase-cover data.
+	Apply Theorem~\ref{thm:after_blocking_sector_common_blocks_common_phase_cover}
+	to those data.
 \end{proof}
 
 \begin{lemma}[Zero-tail cancellation]\label{lem:sameMPV2_live_of_zeroTail_eq}
@@ -1144,6 +1212,38 @@ single weighted block.
 	equivalences to obtain equality of the total MPV families of $P$ and $Q$,
 	apply the overlap-span matching theorem, and conclude with the
 	heterogeneous sector comparison theorem.
+\end{proof}
+
+\begin{theorem}[Zero-tail nonzero block decompositions with BNT proportional-decomposition data]%
+\label{thm:afterBlocking_sectorComparison_zeroTail_of_proportionalDecompositionConclusion}
+	\lean{MPSTensor.afterBlocking_sectorComparison_zeroTail_of_proportionalDecompositionConclusion}
+	\leanok
+	\uses{def:same_mpv2_pos,
+		thm:after_blocking_sector_common_blocks_common_phase_cover,
+		thm:after_blocking_sector_common_blocks_overlap_span_zero_tail}
+	Let $A$ and $B$ have the same MPV family. Fix $p>0$ and suppose $A^{[p]}$
+	and $B^{[p]}$ each decompose as a zero-tail tensor plus a weighted nonzero
+	part, with all blocks in the nonzero part trace-preserving, primitive,
+	irreducible, injective, and with nonzero weights. If the two zero-tail
+	dimensions agree and a BNT proportional-decomposition comparison supplies a
+	permutation, equal bond dimensions, and gauge-phase equivalences between the two
+	nonzero-weight block families, then the sector bases yield the comparison data
+	of Theorem~\ref{thm:after_blocking_sector_common_blocks_common_phase_cover},
+	with the positive-length zero-tail bookkeeping of
+	Theorem~\ref{thm:after_blocking_sector_common_blocks_overlap_span_zero_tail}.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{lem:sameMPV2_live_of_zeroTail_eq,
+		thm:bnt_sectorDecomp_pair_overlapSpan_of_proportionalDecompositionConclusion,
+		thm:sector_basis_overlap_span_to_matching,
+		thm:route_b_hetero_sector_matching}
+	Zero-tail cancellation gives full equality of the two nonzero parts. The
+	proportional-decomposition comparison gives the primitive overlap-span
+	hypotheses through the common phase-cover construction. The sector basis
+	matching and heterogeneous sector comparison theorems then give the
+	sector-weight conclusion.
 \end{proof}
 
 \begin{theorem}[Cast-compatible MPV scaling implies phase-matched sector comparison]%
@@ -1229,14 +1329,15 @@ single weighted block.
 	from arbitrary equal MPV families to those hypotheses.  Chapter~\ref{ch:canonical}
 	now supplies a common physical blocking length and relabeled cyclic-sector
 	families on both sides, while preserving the zero-tail identities.  What remains
-	is the exact physical-label compatibility that identifies the canonical blocked
-	live tensor with the relabeled one-shot live tensor for the whole weighted live
-	family, followed by the final live-sector extraction used by the equal-case
-	comparison.  After any additional blocking required for injectivity, one must
-	then prove the finite-length live-sector span equality, or produce the common
-	phase-cover or BNT proportional-decomposition data from which the theorems above
-	derive that equality.  Until this connection is formalized, equality of the
-	total MPV vectors has not yet been converted into the componentwise power-sum
+	is the exact agreement, after reindexing blocked physical words, that identifies
+	the canonical blocked nonzero part with the relabeled cyclic-sector tensor for
+	the whole weighted family, followed by the final nonzero-sector extraction used
+	by the equal-case comparison.  After any additional blocking required for
+	injectivity, one must then prove the finite-length nonzero-sector span equality,
+	or produce the common phase-cover or BNT proportional-decomposition data from
+	which the theorems above derive that equality.  Until this connection is
+	formalized, equality of the total MPV vectors has not yet been converted into
+	the componentwise power-sum
 	identities used in the paper proof, so Corollary~IV.5 cannot be invoked
 	unconditionally.
 \end{remark}
