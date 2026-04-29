@@ -51,7 +51,7 @@ of TP sectors, where each sector is left-canonical and the direct sum is
 `SameMPV₂`-equivalent to the blocked tensor.
 
 The full proof chain is:
-1. Zero-block separation (`exists_irreducible_blockDecomp_liveBlocks`)
+1. Zero-block separation (`exists_irreducible_blockDecomp_nonzeroBlocks`)
 2. TP gauge (`exists_tp_gauge_from_arbitrary_with_zeroTail`)
 3. Common blocking to primitive (`exists_common_blocking_all_primitive_of_TP_irr`)
 4. Cyclic sector decomposition per block (`exists_cyclic_sector_decomp_after_blocking`)
@@ -82,13 +82,13 @@ uses a two-basis span comparison for the constructed sector bases, while
 transports a finite-length span equality for the original nonzero-weight block families to
 those bases. The zero-tail-aware theorem
 `fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_overlapSpan_zeroTail`
-separately records the `N = 0` bookkeeping when full overlap-span hypotheses are
+separately gives the length-zero identity when full overlap-span hypotheses are
 available.
 
 The remaining Gap §1 content is to flatten the per-block cyclic-sector data to a
 single common physical blocking level, derive one-site injectivity (or a blocked
 replacement) and the finite-length span comparison for the flattened family, and
-finish the zero-tail bookkeeping from the structural after-blocking reduction
+finish the zero-tail length-zero identity from the structural after-blocking reduction
 itself.
 -/
 
@@ -182,7 +182,7 @@ theorem bilateral_commonPeriod_blocking_tp_primitive_normal
 
 /-- **Fundamental Theorem of MPS (1606.00608, after blocking): current structural shell.**
 
-For any two MPS tensors `A, B` with `SameMPV₂ A B`, this theorem records the
+For any two MPS tensors `A, B` with `SameMPV₂ A B`, this theorem gives the
 currently formalized one-sided reduction data on both sides: after blocking,
 each tensor admits a decomposition into TP blocks with primitive transfer maps,
 nonzero weights, and positive bond dimensions.
@@ -192,7 +192,7 @@ families. The remaining missing content is the sector-level comparison described
 in the file documentation below: a general BNT sector construction for each side,
 followed by a two-basis equal-case comparison theorem for those sector decompositions.
 
-This theorem therefore records the structural shell currently available on the
+This theorem therefore gives the structural statement currently available on the
 way to arXiv:1606.00608, Theorem 1. -/
 theorem fundamentalTheorem_after_blocking_1606_structural
     {d D₁ D₂ : ℕ}
@@ -257,17 +257,17 @@ theorem fundamentalTheorem_after_blocking_1606_structural_with_blockedSameMPV₂
   · exact sameMPV₂_blockTensor A B hSame pA
   · exact sameMPV₂_blockTensor A B hSame pB
 
-/-- **Zero-tail bookkeeping for nonzero block tensors.**
+/-- **Zero-tail identity for nonzero block tensors.**
 
 Suppose two tensors with the same MPV family are each written as a zero-tail
 contribution plus a weighted nonzero block tensor. Then the nonzero parts agree at every
-positive length, while the length-zero equation records exactly the difference
+positive length, while the length-zero equation gives exactly the difference
 between the zero-tail dimensions and the nonzero block bond dimensions.
 
-This is the local bookkeeping needed before a full `SameMPV₂` comparison of the
+This is the local length-zero identity needed before a full `SameMPV₂` comparison of the
 nonzero block tensors can be recovered: the only missing datum is equality of the
 two zero-tail dimensions (or an equivalent replacement for the `N = 0` case). -/
-theorem liveBlock_positive_sameMPV₂_and_zeroTail_bookkeeping_of_sameMPV₂
+theorem nonzeroBlock_positive_sameMPV₂_and_zeroTail_identity_of_sameMPV₂
     {d D₁ D₂ rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
@@ -309,13 +309,32 @@ theorem liveBlock_positive_sameMPV₂_and_zeroTail_bookkeeping_of_sameMPV₂
       _ = mpv B σ := hSame 0 σ
       _ = (zeroTailB : ℂ) + mpv (toTensorFromBlocks (d := d) (μ := μB) blocksB) σ := hBσ
 
-/-- **Reblocked nonzero-block equality with zero-tail bookkeeping.**
+@[deprecated nonzeroBlock_positive_sameMPV₂_and_zeroTail_identity_of_sameMPV₂
+  (since := "2026-04-29")]
+abbrev liveBlock_positive_sameMPV₂_and_zeroTail_bookkeeping_of_sameMPV₂
+    {d D₁ D₂ rA rB : ℕ}
+    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (hSame : SameMPV₂ A B)
+    (zeroTailA zeroTailB : ℕ)
+    (μA : Fin rA → ℂ) (blocksA : (k : Fin rA) → MPSTensor d (dimA k))
+    (μB : Fin rB → ℂ) (blocksB : (k : Fin rB) → MPSTensor d (dimB k))
+    (hA : ∀ (N : ℕ) (σ : Fin N → Fin d),
+      mpv A σ = mpv (zeroMPSTensor d zeroTailA) σ +
+        mpv (toTensorFromBlocks (d := d) (μ := μA) blocksA) σ)
+    (hB : ∀ (N : ℕ) (σ : Fin N → Fin d),
+      mpv B σ = mpv (zeroMPSTensor d zeroTailB) σ +
+        mpv (toTensorFromBlocks (d := d) (μ := μB) blocksB) σ) :=
+  nonzeroBlock_positive_sameMPV₂_and_zeroTail_identity_of_sameMPV₂
+    A B hSame zeroTailA zeroTailB μA blocksA μB blocksB hA hB
+
+/-- **Reblocked nonzero-block equality with a zero-tail identity.**
 
 If two tensors have the same MPVs and each is expressed as a zero tail plus a
 weighted nonzero block tensor, then every positive common reblocking transports the
 nonzero weights to powers, preserves positive-length equality of the nonzero parts,
-and leaves the zero-tail contribution as the sole length-zero bookkeeping term. -/
-theorem liveBlock_blockPower_positive_sameMPV₂_and_zeroTail_bookkeeping_of_sameMPV₂
+and leaves the zero-tail contribution as the sole length-zero term. -/
+theorem nonzeroBlock_blockPower_positive_sameMPV₂_and_zeroTail_identity_of_sameMPV₂
     {d D₁ D₂ rA rB p : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
@@ -358,7 +377,7 @@ theorem liveBlock_blockPower_positive_sameMPV₂_and_zeroTail_bookkeeping_of_sam
       (blockTensor (d := d) (D := D₂) B p) :=
     sameMPV₂_blockTensor A B hSame p
   have hBook :=
-    liveBlock_positive_sameMPV₂_and_zeroTail_bookkeeping_of_sameMPV₂
+    nonzeroBlock_positive_sameMPV₂_and_zeroTail_identity_of_sameMPV₂
       (d := blockPhysDim d p)
       (blockTensor (d := d) (D := D₁) A p)
       (blockTensor (d := d) (D := D₂) B p)
@@ -370,13 +389,33 @@ theorem liveBlock_blockPower_positive_sameMPV₂_and_zeroTail_bookkeeping_of_sam
       hAblock hBblock
   exact ⟨fun N hN σ => hBook.1 hN σ, hBook.2⟩
 
+@[deprecated nonzeroBlock_blockPower_positive_sameMPV₂_and_zeroTail_identity_of_sameMPV₂
+  (since := "2026-04-29")]
+abbrev liveBlock_blockPower_positive_sameMPV₂_and_zeroTail_bookkeeping_of_sameMPV₂
+    {d D₁ D₂ rA rB p : ℕ}
+    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (hSame : SameMPV₂ A B)
+    (zeroTailA zeroTailB : ℕ)
+    (μA : Fin rA → ℂ) (blocksA : (k : Fin rA) → MPSTensor d (dimA k))
+    (μB : Fin rB → ℂ) (blocksB : (k : Fin rB) → MPSTensor d (dimB k))
+    (hp : 0 < p)
+    (hA : ∀ (N : ℕ) (σ : Fin N → Fin d),
+      mpv A σ = mpv (zeroMPSTensor d zeroTailA) σ +
+        mpv (toTensorFromBlocks (d := d) (μ := μA) blocksA) σ)
+    (hB : ∀ (N : ℕ) (σ : Fin N → Fin d),
+      mpv B σ = mpv (zeroMPSTensor d zeroTailB) σ +
+        mpv (toTensorFromBlocks (d := d) (μ := μB) blocksB) σ) :=
+  nonzeroBlock_blockPower_positive_sameMPV₂_and_zeroTail_identity_of_sameMPV₂
+    A B hSame zeroTailA zeroTailB μA blocksA μB blocksB hp hA hB
+
 /-- **Recover full nonzero-block `SameMPV₂` once zero tails agree.**
 
-This combines the positive-length bookkeeping theorem with the single additional
+This combines the positive-length theorem with the single additional
 length-zero datum needed to remove the zero tails. It does not assert that the
 zero-tail dimensions agree automatically; that remains a separate paper-level
-bookkeeping step for the unconditional after-blocking sector comparison. -/
-theorem liveBlock_sameMPV₂_of_sameMPV₂_of_zeroTail_eq
+length-zero condition for the unconditional after-blocking sector comparison. -/
+theorem nonzeroBlock_sameMPV₂_of_sameMPV₂_of_zeroTail_eq
     {d D₁ D₂ rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
@@ -394,7 +433,7 @@ theorem liveBlock_sameMPV₂_of_sameMPV₂_of_zeroTail_eq
     SameMPV₂ (toTensorFromBlocks (d := d) (μ := μA) blocksA)
       (toTensorFromBlocks (d := d) (μ := μB) blocksB) := by
   have hBook :=
-    liveBlock_positive_sameMPV₂_and_zeroTail_bookkeeping_of_sameMPV₂
+    nonzeroBlock_positive_sameMPV₂_and_zeroTail_identity_of_sameMPV₂
       A B hSame zeroTailA zeroTailB μA blocksA μB blocksB hA hB
   intro N σ
   by_cases hN : N = 0
@@ -408,14 +447,33 @@ theorem liveBlock_sameMPV₂_of_sameMPV₂_of_zeroTail_eq
     exact add_left_cancel h0'
   · exact hBook.1 (Nat.pos_of_ne_zero hN) σ
 
+@[deprecated nonzeroBlock_sameMPV₂_of_sameMPV₂_of_zeroTail_eq (since := "2026-04-29")]
+abbrev liveBlock_sameMPV₂_of_sameMPV₂_of_zeroTail_eq
+    {d D₁ D₂ rA rB : ℕ}
+    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (hSame : SameMPV₂ A B)
+    (zeroTailA zeroTailB : ℕ)
+    (μA : Fin rA → ℂ) (blocksA : (k : Fin rA) → MPSTensor d (dimA k))
+    (μB : Fin rB → ℂ) (blocksB : (k : Fin rB) → MPSTensor d (dimB k))
+    (hA : ∀ (N : ℕ) (σ : Fin N → Fin d),
+      mpv A σ = mpv (zeroMPSTensor d zeroTailA) σ +
+        mpv (toTensorFromBlocks (d := d) (μ := μA) blocksA) σ)
+    (hB : ∀ (N : ℕ) (σ : Fin N → Fin d),
+      mpv B σ = mpv (zeroMPSTensor d zeroTailB) σ +
+        mpv (toTensorFromBlocks (d := d) (μ := μB) blocksB) σ)
+    (hZeroTail : zeroTailA = zeroTailB) :=
+  nonzeroBlock_sameMPV₂_of_sameMPV₂_of_zeroTail_eq
+    A B hSame zeroTailA zeroTailB μA blocksA μB blocksB hA hB hZeroTail
+
 /-- **Structural after-blocking theorem retaining zero-tail MPV equations.**
 
 This strengthens the structural shell by exposing the exact zero-tail identities
 returned by `exists_tp_primitive_blockDecomp_after_blocking`, in addition to the
 blocked `SameMPV₂` relations. The nonzero-weight blocks are trace-preserving, have
 primitive transfer maps, positive bond dimensions, and nonzero weights; the
-zero-tail equations record precisely why these nonzero parts are only immediately
-identified at positive lengths unless the `N = 0` zero-tail bookkeeping is also
+zero-tail equations explain precisely why these nonzero parts are only immediately
+identified at positive lengths unless the `N = 0` zero-tail identity is also
 resolved. -/
 theorem fundamentalTheorem_after_blocking_1606_structural_with_zeroTail
     {d D₁ D₂ : ℕ}
@@ -457,14 +515,14 @@ theorem fundamentalTheorem_after_blocking_1606_structural_with_zeroTail
   · exact sameMPV₂_blockTensor A B hSame pA
   · exact sameMPV₂_blockTensor A B hSame pB
 
-/-- **Per-block cyclic-sector decomposition with zero-tail bookkeeping.**
+/-- **Per-block cyclic-sector decomposition with a zero-tail identity.**
 
 This is the faithful predecessor to the common nonzero-sector statement. From
 `SameMPV₂ A B`, it first uses the invariant-subspace/zero-tail split and TP gauge
 to obtain irreducible nonzero-weight blocks on both sides. It then removes the period of
 each block separately, producing primitive irreducible cyclic sectors for
 every nonzero-weight block. The nonzero parts agree at positive lengths, and the length-zero
-case is recorded as the explicit zero-tail bookkeeping identity.
+case is given as the explicit zero-tail identity.
 
 The theorem intentionally keeps the per-block period-removal lengths inside
 `HasPrimitiveIrreducibleCyclicSectors`. It does not conflate those lengths with a
@@ -508,7 +566,7 @@ theorem fundamentalTheorem_after_blocking_1606_perBlock_cyclic_live_with_zeroTai
       hIrrB, hTPB, hμB, hDimB, hMPVB⟩ :=
     exists_tp_gauge_from_arbitrary_with_zeroTail (d := d) (D := D₂) B
   have hBook :=
-    liveBlock_positive_sameMPV₂_and_zeroTail_bookkeeping_of_sameMPV₂
+    nonzeroBlock_positive_sameMPV₂_and_zeroTail_identity_of_sameMPV₂
       A B hSame zeroTailA zeroTailB μA blocksA μB blocksB hMPVA hMPVB
   refine ⟨zeroTailA, rA, dimA, μA, blocksA,
     zeroTailB, rB, dimB, μB, blocksB,
@@ -525,7 +583,7 @@ theorem fundamentalTheorem_after_blocking_1606_perBlock_cyclic_live_with_zeroTai
     exact hasPrimitiveIrreducibleCyclicSectors_of_TP_of_isIrreducibleTensor
       (blocksB k) (hTPB k) (hIrrB k)
 
-/-- **Common-blocking predecessor for nonzero cyclic sectors with zero-tail bookkeeping.**
+/-- **Common-blocking predecessor for nonzero cyclic sectors with a zero-tail identity.**
 
 This theorem combines the zero-tail/TP-gauge reduction for nonzero-weight blocks with the common
 reblocking constructor for per-block cyclic sectors.  The theorem asserts the
@@ -534,10 +592,10 @@ finite flattened sector family at the corresponding common blocked physical
 dimension.  The flattened sectors are trace-preserving, have primitive transfer
 maps, are tensor-irreducible, have positive bond dimensions, and carry nonzero
 unit weights.  The statement keeps the checked zero-tail equations,
-positive-length equality of the nonzero parts, and length-zero bookkeeping at the unblocked
+positive-length equality of the nonzero parts, and the length-zero identity at the unblocked
 nonzero-block level.  The companion theorem
 `fundamentalTheorem_after_blocking_1606_reindexed_commonSector_live_with_zeroTail`
-adds the one-shot, explicitly relabeled cyclic-sector flattening available after
+adds the explicitly relabeled cyclic-sector flattening available after
 the iterated-blocking comparison theorem. -/
 theorem fundamentalTheorem_after_blocking_1606_commonBlocked_cyclic_live_with_zeroTail
     {d D₁ D₂ : ℕ}
@@ -591,7 +649,7 @@ theorem fundamentalTheorem_after_blocking_1606_commonBlocked_cyclic_live_with_ze
   · intro x
     exact familyB.flatWeight_ne_zero x
 
-/-- **Relabeled one-shot common-sector data with zero-tail reblocking.**
+/-- **Relabeled common-sector data with zero-tail reblocking.**
 
 This companion to
 `fundamentalTheorem_after_blocking_1606_commonBlocked_cyclic_live_with_zeroTail`
@@ -599,7 +657,7 @@ uses the common cyclic-sector family to express the one-step reindexed data avai
 after the iterated-blocking comparison theorem.  For each side, the cyclic
 sectors are expressed as derived common-alphabet blocks `family.commonFlatBlocks`,
 with weights `μ^family.p` and
-nonzero transported sector weights.  The theorem also records the zero-tail
+nonzero transported sector weights.  The theorem also gives the zero-tail
 identities after the corresponding common reblocking.
 
 The statement is deliberately explicit about the reindexing of blocked physical
@@ -630,12 +688,12 @@ theorem fundamentalTheorem_after_blocking_1606_reindexed_commonSector_live_with_
               (fun k => blockTensor (d := d) (D := dimB k) (blocksB k) familyB.p)) σ) ∧
       SameMPV₂
         (toTensorFromBlocks (d := blockPhysDim d familyA.p)
-          (μ := fun k : Fin rA => (μA k) ^ familyA.p) familyA.oneShotReindexedBlock)
+          (μ := fun k : Fin rA => (μA k) ^ familyA.p) familyA.commonReindexedBlock)
         (toTensorFromBlocks (d := blockPhysDim d familyA.p)
           (μ := familyA.commonFlatWeight μA) familyA.commonFlatBlocks) ∧
       SameMPV₂
         (toTensorFromBlocks (d := blockPhysDim d familyB.p)
-          (μ := fun k : Fin rB => (μB k) ^ familyB.p) familyB.oneShotReindexedBlock)
+          (μ := fun k : Fin rB => (μB k) ^ familyB.p) familyB.commonReindexedBlock)
         (toTensorFromBlocks (d := blockPhysDim d familyB.p)
           (μ := familyB.commonFlatWeight μB) familyB.commonFlatBlocks) ∧
       (∀ x, familyA.commonFlatWeight μA x ≠ 0) ∧
@@ -668,8 +726,8 @@ theorem fundamentalTheorem_after_blocking_1606_reindexed_commonSector_live_with_
   · exact zeroTail_toTensorFromBlocks_blockPower
       (d := d) (D := D₂) (r := rB) (z := zeroTailB) (p := familyB.p) (dim := dimB)
       B μB blocksB familyB.p_pos hMPVB
-  · exact familyA.sameMPV₂_weightedOneShotReindexedBlock_commonFlat μA
-  · exact familyB.sameMPV₂_weightedOneShotReindexedBlock_commonFlat μB
+  · exact familyA.sameMPV₂_weightedCommonReindexedBlock_commonFlat μA
+  · exact familyB.sameMPV₂_weightedCommonReindexedBlock_commonFlat μB
   · intro x
     exact familyA.commonFlatWeight_ne_zero μA hμA x
   · intro x
@@ -698,8 +756,8 @@ set_option maxHeartbeats 800000 in
 /-- **Two-sided common-length relabeled cyclic-sector theorem.**
 
 Starting from `SameMPV₂ A B`, this theorem chooses one positive physical blocking
-length for both sides.  At that common length it records the exact zero-tail
-bookkeeping for the canonically blocked nonzero parts, the positive-length equality
+length for both sides.  At that common length it gives the exact zero-tail
+identity for the canonically blocked nonzero parts, the positive-length equality
 of those nonzero parts, and the relabeled cyclic-sector families produced by
 `CommonBlockedCyclicSectorFamily` on both sides.
 
@@ -707,7 +765,7 @@ The last two `SameMPV₂` conclusions are deliberately stated for the relabeled
 blocked sector blocks.  They isolate the remaining equality under the chosen word
 reindexing needed to replace the canonical blocked nonzero blocks in the zero-tail
 equations by the derived primitive irreducible common-sector blocks. -/
-theorem fundamentalTheorem_after_blocking_1606_commonLength_commonSector_endpoint
+theorem fundamentalTheorem_after_blocking_1606_commonLength_commonSector
     {d D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (hSame : SameMPV₂ A B) :
@@ -748,12 +806,12 @@ theorem fundamentalTheorem_after_blocking_1606_commonLength_commonSector_endpoin
           (fun k => blockTensor (d := d) (D := dimB k) (blocksB k) p)) σ) ∧
       SameMPV₂
         (toTensorFromBlocks (d := blockPhysDim d familyA.p)
-          (μ := fun k : Fin rA => (μA k) ^ familyA.p) familyA.oneShotReindexedBlock)
+          (μ := fun k : Fin rA => (μA k) ^ familyA.p) familyA.commonReindexedBlock)
         (toTensorFromBlocks (d := blockPhysDim d familyA.p)
           (μ := familyA.commonFlatWeight μA) familyA.commonFlatBlocks) ∧
       SameMPV₂
         (toTensorFromBlocks (d := blockPhysDim d familyB.p)
-          (μ := fun k : Fin rB => (μB k) ^ familyB.p) familyB.oneShotReindexedBlock)
+          (μ := fun k : Fin rB => (μB k) ^ familyB.p) familyB.commonReindexedBlock)
         (toTensorFromBlocks (d := blockPhysDim d familyB.p)
           (μ := familyB.commonFlatWeight μB) familyB.commonFlatBlocks) ∧
       (∀ x, familyA.commonFlatWeight μA x ≠ 0) ∧
@@ -812,14 +870,14 @@ theorem fundamentalTheorem_after_blocking_1606_commonLength_commonSector_endpoin
     (d := d) (D := D₂) (r := rB) (z := zeroTailB) (p := p) (dim := dimB)
     B μB blocksB hp hMPVB
   have hBook :=
-    liveBlock_blockPower_positive_sameMPV₂_and_zeroTail_bookkeeping_of_sameMPV₂
+    nonzeroBlock_blockPower_positive_sameMPV₂_and_zeroTail_identity_of_sameMPV₂
       A B hSame zeroTailA zeroTailB μA blocksA μB blocksB hp hMPVA hMPVB
   refine ⟨p, hp, zeroTailA, rA, dimA, μA, blocksA,
     zeroTailB, rB, dimB, μB, blocksB, familyA, familyB,
     hFamilyA, hFamilyB, hZA, hZB, hBook.1, hBook.2, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_,
     ?_, ?_, ?_, ?_⟩
-  · exact familyA.sameMPV₂_weightedOneShotReindexedBlock_commonFlat μA
-  · exact familyB.sameMPV₂_weightedOneShotReindexedBlock_commonFlat μB
+  · exact familyA.sameMPV₂_weightedCommonReindexedBlock_commonFlat μA
+  · exact familyB.sameMPV₂_weightedCommonReindexedBlock_commonFlat μB
   · intro x
     exact familyA.commonFlatWeight_ne_zero μA hμA x
   · intro x
@@ -841,11 +899,19 @@ theorem fundamentalTheorem_after_blocking_1606_commonLength_commonSector_endpoin
   · intro x
     exact familyB.commonFlatDim_pos x
 
+@[deprecated fundamentalTheorem_after_blocking_1606_commonLength_commonSector
+  (since := "2026-04-29")]
+abbrev fundamentalTheorem_after_blocking_1606_commonLength_commonSector_endpoint
+    {d D₁ D₂ : ℕ}
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (hSame : SameMPV₂ A B) :=
+  fundamentalTheorem_after_blocking_1606_commonLength_commonSector A B hSame
+
 /-- If the canonical blocked nonzero part agrees with the relabeled one-step
 blocks, the zero-tail equation can be rewritten using the derived common-sector
 family.  This is the one-sided theorem that puts the relabeled data above in the
 form used by the span and BNT comparison theorems. -/
-theorem zeroTail_commonFlat_of_oneShot_labelCompat
+theorem zeroTail_commonFlat_of_reindexed_labelCompat
     {d D r z : ℕ} {dim : Fin r → ℕ}
     (A : MPSTensor d D) (μ : Fin r → ℂ)
     (blocks : (k : Fin r) → MPSTensor d (dim k))
@@ -858,7 +924,7 @@ theorem zeroTail_commonFlat_of_oneShot_labelCompat
         (μ := fun k : Fin r => (μ k) ^ F.p)
         (fun k => blockTensor (d := d) (D := dim k) (blocks k) F.p))
       (toTensorFromBlocks (d := blockPhysDim d F.p)
-        (μ := fun k : Fin r => (μ k) ^ F.p) F.oneShotReindexedBlock)) :
+        (μ := fun k : Fin r => (μ k) ^ F.p) F.commonReindexedBlock)) :
     ∀ (N : ℕ) (σ : Fin N → Fin (blockPhysDim d F.p)),
       mpv (blockTensor (d := d) (D := D) A F.p) σ =
         mpv (zeroMPSTensor (blockPhysDim d F.p) z) σ +
@@ -868,7 +934,7 @@ theorem zeroTail_commonFlat_of_oneShot_labelCompat
   have hCanon := zeroTail_toTensorFromBlocks_blockPower
     (d := d) (D := D) (r := r) (z := z) (p := F.p) (dim := dim)
     A μ blocks F.p_pos hMPV
-  have hFlat := F.sameMPV₂_weightedCanonicalBlock_commonFlat_of_oneShot μ hLabel
+  have hFlat := F.sameMPV₂_weightedCanonicalBlock_commonFlat_of_reindexed μ hLabel
   calc
     mpv (blockTensor (d := d) (D := D) A F.p) σ =
         mpv (zeroMPSTensor (blockPhysDim d F.p) z) σ +
@@ -879,6 +945,23 @@ theorem zeroTail_commonFlat_of_oneShot_labelCompat
           mpv (toTensorFromBlocks (d := blockPhysDim d F.p)
             (μ := F.commonFlatWeight μ) F.commonFlatBlocks) σ := by
           rw [hFlat N σ]
+
+@[deprecated zeroTail_commonFlat_of_reindexed_labelCompat (since := "2026-04-29")]
+abbrev zeroTail_commonFlat_of_oneShot_labelCompat
+    {d D r z : ℕ} {dim : Fin r → ℕ}
+    (A : MPSTensor d D) (μ : Fin r → ℂ)
+    (blocks : (k : Fin r) → MPSTensor d (dim k))
+    (F : CommonBlockedCyclicSectorFamily blocks)
+    (hMPV : ∀ (N : ℕ) (σ : Fin N → Fin d),
+      mpv A σ = mpv (zeroMPSTensor d z) σ +
+        mpv (toTensorFromBlocks (d := d) (μ := μ) blocks) σ)
+    (hLabel : SameMPV₂
+      (toTensorFromBlocks (d := blockPhysDim d F.p)
+        (μ := fun k : Fin r => (μ k) ^ F.p)
+        (fun k => blockTensor (d := d) (D := dim k) (blocks k) F.p))
+      (toTensorFromBlocks (d := blockPhysDim d F.p)
+        (μ := fun k : Fin r => (μ k) ^ F.p) F.commonReindexedBlock)) :=
+  zeroTail_commonFlat_of_reindexed_labelCompat A μ blocks F hMPV hLabel
 
 /-- **Conditional after-blocking sector comparison (issue #877 target shape).**
 
@@ -1416,7 +1499,7 @@ theorem fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_commonPha
 If `A` and `B` have the same MPVs, and each is expressed as a zero tail plus a nonzero part,
 then equality of the zero-tail dimensions gives full `SameMPV₂` equality of the nonzero parts.
 For positive lengths the zero tails vanish; at length zero this is exactly the missing
-bookkeeping condition. -/
+zero-tail condition. -/
 theorem sameMPV₂_live_of_sameMPV₂_with_zeroTail_eq
     {d D₁ D₂ L₁ L₂ z₁ z₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
@@ -1461,7 +1544,7 @@ theorem sameMPV₂_live_of_sameMPV₂_with_zeroTail_eq
       exact hsum
     simpa [zero_add] using hsum'
 
-/-- **Common nonzero-block sector comparison with explicit zero-tail bookkeeping.**
+/-- **Common nonzero-block sector comparison with an explicit zero-tail identity.**
 
 This is the zero-tail-aware variant of
 `fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_overlapSpan`.
@@ -1588,7 +1671,7 @@ hypotheses through `SectorBasisOverlapSpanHypotheses.exists_sectorBasisMatching`
 
 The theorem
 `fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_injectiveSpan`
-records a nonzero-part overlap-span reduction from span equality for the
+gives a nonzero-part overlap-span reduction from span equality for the
 constructed sector bases. The theorem
 `fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_blockSpan`
 strengthens this in the phase-class representative setting: equality of the
@@ -1596,7 +1679,7 @@ finite-length spans of the original nonzero-weight block families is transported
 chosen sector bases and the sector-weight conclusion follows from the original
 `SameMPV₂ A B`. The theorem
 `fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_overlapSpan_zeroTail`
-records the corresponding zero-tail bookkeeping route when full overlap-span data
+gives the corresponding zero-tail route when full overlap-span data
 are supplied.
 
 The remaining formal work for the completely unconditional
@@ -1605,7 +1688,7 @@ structural reduction itself:
 
 1. a common nonzero-block decomposition with primitive **and irreducible** blocks at
    the same physical blocking level;
-2. the `N = 0` bookkeeping for the zero-tail contribution;
+2. the `N = 0` identity for the zero-tail contribution;
 3. one-site injectivity of the nonzero-weight blocks, or a blocked replacement of the
    rigidity hypothesis; and
 4. equality of the finite-length MPV spans for the original nonzero-weight block families

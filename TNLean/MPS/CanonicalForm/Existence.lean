@@ -28,7 +28,7 @@ We currently have the following components:
 * Appendix A (CFII part): inside that TP gauge, unitary conjugation → diagonal PD fixed point.
 * Appendix A (periodicity): TP + irreducible → primitive after blocking.
 
-We also keep a couple of downstream compatibility wrappers for already-normalized primitive /
+We also keep a couple of downstream compatibility formulations for already-normalized primitive /
 injective block families, but those are **not** assembled from arbitrary input in this file.
 
 Note: the Appendix-A CFII story is genuinely two-step:
@@ -46,7 +46,7 @@ What is **not** yet assembled end-to-end here:
 
 Accordingly, this file should be read as a collection of early-stage
 reduction lemmas plus explicit continuation statements, **not** as a
-near-endpoint canonical-form existence theorem for arbitrary input tensors.
+near-final canonical-form existence theorem for arbitrary input tensors.
 -/
 
 namespace MPSTensor
@@ -147,7 +147,7 @@ theorem exists_blockTensor_isPrimitive
   simpa using
     (exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor (A := A) hTP hIrr hDpos)
 
-/-- **Reduction step (1606.00608 Appendix A, TP bookkeeping after blocking).**
+/-- **Reduction step (1606.00608 Appendix A, TP normalization after blocking).**
 
 If `A` is trace-preserving and irreducible, then some physical blocking makes the
 blocked transfer map primitive, and the blocked tensor remains left-canonical. -/
@@ -166,7 +166,7 @@ theorem exists_blockTensor_leftCanonical_isPrimitive
     exists_blockTensor_isPrimitive (A := A) hTP hIrr
   refine ⟨p, hp, leftCanonical_blockTensor (d := d) (D := D) (A := A) (L := p) hTP, hPrim⟩
 
-/-- **Reduction compatibility wrapper:** spectral-gap primitivity with a positive-definite
+/-- **Reduction compatibility theorem:** spectral-gap primitivity with a positive-definite
 fixed point implies normality. -/
 theorem isNormal_of_isPrimitiveMPS
     [NeZero D]
@@ -271,7 +271,7 @@ theorem isIrreducibleTensor_allZero_dim_le_one
 
 
 /-!
-## Unconditional arbitrary-input continuations (still far from the endpoint)
+## Unconditional arbitrary-input continuations
 
 The last unconditional arbitrary-input step currently available here is the blockwise PF / TP-gauge
 continuation below: after decomposing `A` into irreducible blocks, one may continue on each block
@@ -285,10 +285,10 @@ file does **not** currently construct that input from an arbitrary tensor.
 
 Remaining gap for a full end-to-end canonical-form existence theorem:
 
-* Thread the irreducible-to-TP-gauge wrapper blockwise through the irreducible block decomposition
+* Apply the irreducible-to-TP-gauge theorem blockwise through the irreducible block decomposition
   while handling possible zero blocks exactly.
 * Apply the TP-irreducible-to-primitive blocking theorem and then perform the post-blocking cyclic
-  sector / equal-weight bookkeeping needed for strict nonzero weight ordering.
+  sector and equal-weight arguments needed for strict nonzero weight ordering.
 * Use the resulting data to reach the stronger normal / injective-by-blocking hypotheses needed by
   the later normal-canonical-form packaging lemmas and the downstream `IsCanonicalForm` builders.
 -/
@@ -345,7 +345,7 @@ From an arbitrary tensor `A` we produce an irreducible block decomposition. More
 block, assuming one has already supplied (i) a TP representative and (ii) positive bond dimension,
 we can produce CFII fixed-point data (unitary conjugation + diagonal PD fixed point).
 
-This is an optional Appendix-A side branch, not a near-endpoint theorem: it does not thread the PF
+This is an optional Appendix-A side branch, not a near-final theorem: it does not thread the PF
 / TP-gauge or periodicity-removal steps through the block decomposition. Later packaging into
 normal canonical form, once primitive weighted blocks are already in hand, lives in the later
 normal-canonical-form packaging file. -/
@@ -379,12 +379,12 @@ theorem exists_irreducible_blockDecomp_with_CFII
       (A := blocks k) (hTP := hTPk) (hIrr := hIrr k) (hD := hDk))
 
 /-!
-## Zero-block separation (1606.00608 §2.3: partition into zero tail + live blocks)
+## Zero-block separation (1606.00608 §2.3: partition into zero tail + nonzero blocks)
 
 The irreducible block decomposition may produce all-zero blocks. Because `SameMPV₂` at `N = 0`
-records `trace(I_D) = D`, we cannot silently drop these. Instead we accumulate them into a
+includes the identity `trace(I_D) = D`, we cannot silently drop these. Instead we accumulate them into a
 **zero tail** of dimension `zeroTailDim` (the sum of their bond dimensions) and retain a family
-of **live blocks** (each having at least one nonzero Kraus operator).
+of **nonzero blocks** (each having at least one nonzero Kraus operator).
 
 Key facts:
 - All-zero irreducible blocks have `dim ≤ 1` (`isIrreducibleTensor_allZero_dim_le_one`).
@@ -424,8 +424,8 @@ Every MPS tensor `A : MPSTensor d D` admits an irreducible block decomposition t
 partitioned into:
 
 * a **zero tail** of dimension `zeroTailDim` (accumulating all-zero irreducible blocks), and
-* a family of **live blocks** `blocks k : MPSTensor d (dim k)` for `k : Fin r`, each with at least
-  one nonzero Kraus operator, positive bond dimension, and irreducibility.
+* a family of **nonzero blocks** `blocks k : MPSTensor d (dim k)` for `k : Fin r`, each with at
+  least one nonzero Kraus operator, positive bond dimension, and irreducibility.
 
 The MPV relationship is:
 
@@ -434,9 +434,9 @@ The MPV relationship is:
 which at `N = 0` reduces to `D = zeroTailDim + ∑ k, dim k` and at `N > 0` reduces to
 `mpv A σ = mpv (toTensorFromBlocks μ≡1 blocks) σ` (zero tail vanishes).
 
-This separation is **exact**: the zero tail is not silently discarded, and the `N = 0`
-bookkeeping is preserved. -/
-theorem exists_irreducible_blockDecomp_liveBlocks (A : MPSTensor d D) :
+This separation is **exact**: the zero tail is not silently discarded, and the length-zero
+identity is preserved. -/
+theorem exists_irreducible_blockDecomp_nonzeroBlocks (A : MPSTensor d D) :
     ∃ (zeroTailDim : ℕ) (r : ℕ) (dim : Fin r → ℕ)
       (blocks : (k : Fin r) → MPSTensor d (dim k)),
       (∀ k, IsIrreducibleTensor (blocks k)) ∧
@@ -456,7 +456,7 @@ theorem exists_irreducible_blockDecomp_liveBlocks (A : MPSTensor d D) :
   set zeroSet : Finset (Fin r₀) := Finset.univ.filter (fun k => ¬ isLive k) with zeroSet_def
   -- The zero tail dimension is the sum of bond dimensions of zero blocks.
   set zeroTailDim : ℕ := zeroSet.sum dim₀ with zeroTailDim_def
-  -- Reindex live blocks via a bijection with `Fin liveSet.card`.
+  -- Reindex nonzero blocks via a bijection with `Fin liveSet.card`.
   set liveEquiv : liveSet ≃ Fin liveSet.card := liveSet.equivFin with liveEquiv_def
   -- Define the new live block family.
   set r := liveSet.card with r_def
@@ -465,7 +465,7 @@ theorem exists_irreducible_blockDecomp_liveBlocks (A : MPSTensor d D) :
     fun j => blocks₀ (liveEquiv.symm j).1 with newBlocks_def
   -- Step 3: Prove all properties.
   refine ⟨zeroTailDim, r, dim, newBlocks, ?_, ?_, ?_, ?_⟩
-  -- (a) Irreducibility of live blocks.
+  -- (a) Irreducibility of nonzero blocks.
   · intro k
     exact hIrr₀ (liveEquiv.symm k).1
   -- (b) Each live block has a nonzero Kraus operator.
@@ -511,7 +511,7 @@ theorem exists_irreducible_blockDecomp_liveBlocks (A : MPSTensor d D) :
         liveSet.sum (fun k => mpv (blocks₀ k) σ) +
           zeroSet.sum (fun k => mpv (blocks₀ k) σ) := by
       rw [← Finset.sum_union hDisj, hUnion]
-    -- The live sum equals ∑ over reindexed live blocks.
+    -- The nonzero-block sum equals ∑ over the reindexed blocks.
     have hLiveSum : liveSet.sum (fun k => mpv (blocks₀ k) σ) =
         ∑ j : Fin r, mpv (newBlocks j) σ := by
       rw [← liveSet.sum_coe_sort (fun k => mpv (blocks₀ k) σ)]
@@ -543,5 +543,9 @@ theorem exists_irreducible_blockDecomp_liveBlocks (A : MPSTensor d D) :
       mpv_zeroMPSTensor σ zeroTailDim
     -- Chain everything together.
     rw [hA, hSplit, hLiveSum, hZeroSum, hZeroTail, hLive, add_comm]
+
+@[deprecated exists_irreducible_blockDecomp_nonzeroBlocks (since := "2026-04-29")]
+abbrev exists_irreducible_blockDecomp_liveBlocks (A : MPSTensor d D) :=
+  exists_irreducible_blockDecomp_nonzeroBlocks A
 
 end MPSTensor
