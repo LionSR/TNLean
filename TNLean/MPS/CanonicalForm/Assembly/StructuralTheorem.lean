@@ -309,25 +309,6 @@ theorem nonzeroBlock_positive_sameMPV₂_and_zeroTail_identity_of_sameMPV₂
       _ = mpv B σ := hSame 0 σ
       _ = (zeroTailB : ℂ) + mpv (toTensorFromBlocks (d := d) (μ := μB) blocksB) σ := hBσ
 
-@[deprecated nonzeroBlock_positive_sameMPV₂_and_zeroTail_identity_of_sameMPV₂
-  (since := "2026-04-29")]
-abbrev liveBlock_positive_sameMPV₂_and_zeroTail_bookkeeping_of_sameMPV₂
-    {d D₁ D₂ rA rB : ℕ}
-    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
-    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
-    (hSame : SameMPV₂ A B)
-    (zeroTailA zeroTailB : ℕ)
-    (μA : Fin rA → ℂ) (blocksA : (k : Fin rA) → MPSTensor d (dimA k))
-    (μB : Fin rB → ℂ) (blocksB : (k : Fin rB) → MPSTensor d (dimB k))
-    (hA : ∀ (N : ℕ) (σ : Fin N → Fin d),
-      mpv A σ = mpv (zeroMPSTensor d zeroTailA) σ +
-        mpv (toTensorFromBlocks (d := d) (μ := μA) blocksA) σ)
-    (hB : ∀ (N : ℕ) (σ : Fin N → Fin d),
-      mpv B σ = mpv (zeroMPSTensor d zeroTailB) σ +
-        mpv (toTensorFromBlocks (d := d) (μ := μB) blocksB) σ) :=
-  nonzeroBlock_positive_sameMPV₂_and_zeroTail_identity_of_sameMPV₂
-    A B hSame zeroTailA zeroTailB μA blocksA μB blocksB hA hB
-
 /-- **Reblocked nonzero-block equality with a zero-tail identity.**
 
 If two tensors have the same MPVs and each is expressed as a zero tail plus a
@@ -389,26 +370,6 @@ theorem nonzeroBlock_blockPower_positive_sameMPV₂_and_zeroTail_identity_of_sam
       hAblock hBblock
   exact ⟨fun N hN σ => hBook.1 hN σ, hBook.2⟩
 
-@[deprecated nonzeroBlock_blockPower_positive_sameMPV₂_and_zeroTail_identity_of_sameMPV₂
-  (since := "2026-04-29")]
-abbrev liveBlock_blockPower_positive_sameMPV₂_and_zeroTail_bookkeeping_of_sameMPV₂
-    {d D₁ D₂ rA rB p : ℕ}
-    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
-    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
-    (hSame : SameMPV₂ A B)
-    (zeroTailA zeroTailB : ℕ)
-    (μA : Fin rA → ℂ) (blocksA : (k : Fin rA) → MPSTensor d (dimA k))
-    (μB : Fin rB → ℂ) (blocksB : (k : Fin rB) → MPSTensor d (dimB k))
-    (hp : 0 < p)
-    (hA : ∀ (N : ℕ) (σ : Fin N → Fin d),
-      mpv A σ = mpv (zeroMPSTensor d zeroTailA) σ +
-        mpv (toTensorFromBlocks (d := d) (μ := μA) blocksA) σ)
-    (hB : ∀ (N : ℕ) (σ : Fin N → Fin d),
-      mpv B σ = mpv (zeroMPSTensor d zeroTailB) σ +
-        mpv (toTensorFromBlocks (d := d) (μ := μB) blocksB) σ) :=
-  nonzeroBlock_blockPower_positive_sameMPV₂_and_zeroTail_identity_of_sameMPV₂
-    A B hSame zeroTailA zeroTailB μA blocksA μB blocksB hp hA hB
-
 /-- **Recover full nonzero-block `SameMPV₂` once zero tails agree.**
 
 This combines the positive-length theorem with the single additional
@@ -446,25 +407,6 @@ theorem nonzeroBlock_sameMPV₂_of_sameMPV₂_of_zeroTail_eq
       simpa [hZeroTail] using h0
     exact add_left_cancel h0'
   · exact hBook.1 (Nat.pos_of_ne_zero hN) σ
-
-@[deprecated nonzeroBlock_sameMPV₂_of_sameMPV₂_of_zeroTail_eq (since := "2026-04-29")]
-abbrev liveBlock_sameMPV₂_of_sameMPV₂_of_zeroTail_eq
-    {d D₁ D₂ rA rB : ℕ}
-    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
-    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
-    (hSame : SameMPV₂ A B)
-    (zeroTailA zeroTailB : ℕ)
-    (μA : Fin rA → ℂ) (blocksA : (k : Fin rA) → MPSTensor d (dimA k))
-    (μB : Fin rB → ℂ) (blocksB : (k : Fin rB) → MPSTensor d (dimB k))
-    (hA : ∀ (N : ℕ) (σ : Fin N → Fin d),
-      mpv A σ = mpv (zeroMPSTensor d zeroTailA) σ +
-        mpv (toTensorFromBlocks (d := d) (μ := μA) blocksA) σ)
-    (hB : ∀ (N : ℕ) (σ : Fin N → Fin d),
-      mpv B σ = mpv (zeroMPSTensor d zeroTailB) σ +
-        mpv (toTensorFromBlocks (d := d) (μ := μB) blocksB) σ)
-    (hZeroTail : zeroTailA = zeroTailB) :=
-  nonzeroBlock_sameMPV₂_of_sameMPV₂_of_zeroTail_eq
-    A B hSame zeroTailA zeroTailB μA blocksA μB blocksB hA hB hZeroTail
 
 /-- **Structural after-blocking theorem retaining zero-tail MPV equations.**
 
@@ -899,14 +841,6 @@ theorem fundamentalTheorem_after_blocking_1606_commonLength_commonSector
   · intro x
     exact familyB.commonFlatDim_pos x
 
-@[deprecated fundamentalTheorem_after_blocking_1606_commonLength_commonSector
-  (since := "2026-04-29")]
-abbrev fundamentalTheorem_after_blocking_1606_commonLength_commonSector_endpoint
-    {d D₁ D₂ : ℕ}
-    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
-    (hSame : SameMPV₂ A B) :=
-  fundamentalTheorem_after_blocking_1606_commonLength_commonSector A B hSame
-
 /-- If the canonical blocked nonzero part agrees with the relabeled one-step
 blocks, the zero-tail equation can be rewritten using the derived common-sector
 family.  This is the one-sided theorem that puts the relabeled data above in the
@@ -945,23 +879,6 @@ theorem zeroTail_commonFlat_of_reindexed_labelCompat
           mpv (toTensorFromBlocks (d := blockPhysDim d F.p)
             (μ := F.commonFlatWeight μ) F.commonFlatBlocks) σ := by
           rw [hFlat N σ]
-
-@[deprecated zeroTail_commonFlat_of_reindexed_labelCompat (since := "2026-04-29")]
-abbrev zeroTail_commonFlat_of_oneShot_labelCompat
-    {d D r z : ℕ} {dim : Fin r → ℕ}
-    (A : MPSTensor d D) (μ : Fin r → ℂ)
-    (blocks : (k : Fin r) → MPSTensor d (dim k))
-    (F : CommonBlockedCyclicSectorFamily blocks)
-    (hMPV : ∀ (N : ℕ) (σ : Fin N → Fin d),
-      mpv A σ = mpv (zeroMPSTensor d z) σ +
-        mpv (toTensorFromBlocks (d := d) (μ := μ) blocks) σ)
-    (hLabel : SameMPV₂
-      (toTensorFromBlocks (d := blockPhysDim d F.p)
-        (μ := fun k : Fin r => (μ k) ^ F.p)
-        (fun k => blockTensor (d := d) (D := dim k) (blocks k) F.p))
-      (toTensorFromBlocks (d := blockPhysDim d F.p)
-        (μ := fun k : Fin r => (μ k) ^ F.p) F.commonReindexedBlock)) :=
-  zeroTail_commonFlat_of_reindexed_labelCompat A μ blocks F hMPV hLabel
 
 /-- **Conditional after-blocking sector comparison (issue #877 target shape).**
 

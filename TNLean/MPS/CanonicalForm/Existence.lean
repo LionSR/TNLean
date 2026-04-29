@@ -545,8 +545,4 @@ theorem exists_irreducible_blockDecomp_nonzeroBlocks (A : MPSTensor d D) :
     -- Chain everything together.
     rw [hA, hSplit, hLiveSum, hZeroSum, hZeroTail, hLive, add_comm]
 
-@[deprecated exists_irreducible_blockDecomp_nonzeroBlocks (since := "2026-04-29")]
-abbrev exists_irreducible_blockDecomp_liveBlocks (A : MPSTensor d D) :=
-  exists_irreducible_blockDecomp_nonzeroBlocks A
-
 end MPSTensor

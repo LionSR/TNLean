@@ -176,10 +176,6 @@ no longer trivial. -/
 def IsRFP_MPDO_via_fusionIsometries_provisional (M : MPOTensor d D) : Prop :=
   ∀ n : ℕ, ∃ F : FusionIsometry d D n, F.CompatibleWith M
 
-@[deprecated IsRFP_MPDO_via_fusionIsometries_provisional (since := "2026-04-29")]
-abbrev IsRFP_MPDO_via_fusion_scaffold (M : MPOTensor d D) : Prop :=
-  IsRFP_MPDO_via_fusionIsometries_provisional M
-
 /-! ## Transfer-map-level fusion data -/
 
 /-- The blocked transfer map of an MPO tensor, obtained by viewing `M` as a
