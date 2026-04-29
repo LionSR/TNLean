@@ -225,7 +225,10 @@ jobs:
               **Branch:** \`<BRANCH>\`
               **Title:** <new title>
 
-              <one-line summary of what the PR does>"
+              **Mathematical statement:** <one-line statement, or "not identified in the linked issue">
+              **Source:** <paper theorem, blueprint label, file:line, or "not identified">
+
+              <one-line summary of what the PR proves or changes>"
               ```
 
             ─── OUTPUT ───

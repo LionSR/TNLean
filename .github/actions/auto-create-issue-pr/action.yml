@@ -102,6 +102,7 @@ runs:
 
         ### Description
         - This PR was opened from \`${BRANCH}\` by ${CREATOR_NAME}.
+        - Linked issue labels: ${ISSUE_LABELS}
         - Changed files:
         ${CHANGED_FILES}
 
@@ -110,8 +111,6 @@ runs:
 
         ---
         Addresses #${ISSUE_NUMBER}
-
-        Issue labels: ${ISSUE_LABELS}
         EOF
         )
 

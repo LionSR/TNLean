@@ -59,9 +59,6 @@ body:
       value: |
         ```[tasklist]
         ### Tasks
-        - [ ] #
-        - [ ] #
-        - [ ] #
         ```
       placeholder: |
         ```[tasklist]
