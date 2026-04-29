@@ -47,6 +47,10 @@ Every PR body must contain three sections:
 - Use bullet points.
 - State the mathematical content precisely enough for a reader who has not read
   the issue thread.
+- When renaming a public declaration and intentionally omitting a `@[deprecated]
+  alias` because the old name encodes misleading terminology, explicitly note:
+  `No compatibility alias is provided — the old name encodes [term] (see
+  docs/style.md §Mathematical-language renames).`
 
 ### Testing
 - What was verified and how.
@@ -241,7 +245,9 @@ Every PR touching Lean code should be reviewed against these criteria:
 
 2. **Mathlib style** -- Follow the naming conventions in [naming.md](naming.md)
    and documentation standards in [doc.md](doc.md). See [pr-review.md](pr-review.md)
-   for the full Mathlib review guide.
+   for the full Mathlib review guide. For renames that intentionally omit
+   deprecated aliases under the mathematical-language exception, confirm the
+   PR body states the reason (see [style.md §Mathematical-language renames](style.md#mathematical-language-renames)).
 
 3. **Type safety** -- No universe mismatches, coercion problems, or unresolved
    metavariables.
