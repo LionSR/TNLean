@@ -3,11 +3,11 @@ import Mathlib.Data.Complex.BigOperators
 import Mathlib.LinearAlgebra.LinearIndependent.Defs
 
 /-!
-# Exploratory PEPS definitions on finite simple graphs
+# PEPS definitions on finite simple graphs
 
-This file introduces a lightweight PEPS scaffold on a finite graph.
-The index types (`Edge`, `IncidentEdge`, `VirtualConfig`) are lightweight
-wrappers used for PEPS indexing.
+This file introduces the finite-graph PEPS tensor objects.
+The index types (`Edge`, `IncidentEdge`, `VirtualConfig`) are the combinatorial
+index sets for PEPS tensors on a finite simple graph.
 
 ## Design note on decidability
 
