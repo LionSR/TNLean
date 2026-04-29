@@ -3310,23 +3310,29 @@ The following results separate the zero blocks from the
 	blocks, and Theorem~\ref{thm:ft_after_blocking_per_block_cyclic_live_zero_tail}
 	applies the cyclic-sector construction to each live block while keeping the
 	positive-length MPV equality and the $N=0$ bookkeeping.
-	Theorem~\ref{thm:exists_common_blocked_cyclic_sector_family} then replaces the
-	different sector periods in a finite live family by one common blocking length.
-	The supporting blocking and transport results, including
-	Theorem~\ref{thm:iterated_blocking_samempv_reindex}, identify
-	iterated blocking with one blocking by the product length, up to the evident
-	relabeling of physical words.
+	Theorem~\ref{thm:exists_common_blocked_cyclic_sector_family_common_multiple}
+	constructs the common reblocked sector family at any prescribed common multiple
+	of the period-removal lengths.  Consequently
+	Theorem~\ref{thm:ft_after_blocking_common_length_common_sector_theorem} now
+	chooses one physical blocking length for both tensors, carries the zero-tail
+	identities to that length, and supplies the relabeled cyclic-sector families on
+	both sides.  The supporting blocking and transport results, including
+	Theorem~\ref{thm:iterated_blocking_samempv_reindex}, identify iterated blocking
+	with one blocking by the product length, up to the evident relabeling of
+	physical words.
 
-	What remains is a single normal-canonical-form statement for the whole blocked
-	live tensor.  One must prove that, after the common blocking length is chosen,
-	the weighted direct sum of the original live blocks is MPV-equivalent to the
-	weighted direct sum of all common-length cyclic sectors, with the original
-	weights attached to the corresponding sectors and with the zero-tail equations
-	unchanged.  The current common-sector theorem records this information one
-	live block at a time; it does not yet assemble the weighted direct sum needed
-	by the equal-case theorem.  A later comparison of two equal MPV families also
-	needs a finite-length span statement for these common-length live sectors,
-	obtained after any additional blocking needed for injectivity.
+	What remains on the canonical-form side is the exact compatibility between the
+	canonical blocked live tensor and the explicitly relabeled one-shot live tensor
+	for the whole weighted live family.  The conditional statement
+	Theorem~\ref{thm:zero_tail_common_flat_of_one_shot_label_compat} already shows
+	that, once this physical-label compatibility is proved, the zero-tail equations
+	can be written directly with the weighted common-length cyclic sectors.  After
+	that conversion one still needs the final live-sector family used by the
+	equal-case comparison, any additional blocking required for injectivity, and a
+	finite-length span statement for the resulting live sectors.
+	Chapter~\ref{ch:assembly} contains the common phase-cover and BNT comparison
+	theorems that use such span
+	data once the canonical-form construction has supplied it.
 
 	The sorted normal-canonical-form theorem,
 	Theorem~\ref{thm:bnt_sorted_ncf}, assumes pairwise distinct nonzero weight
