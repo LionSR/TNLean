@@ -15,8 +15,11 @@ concurrency:
 jobs:
   scout:
     if: |
-      (github.event.action == 'opened' && contains(github.event.issue.labels.*.name, 'formalization')) ||
-      (github.event.action == 'labeled' && github.event.label.name == 'formalization')
+      contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.issue.author_association) &&
+      (
+        (github.event.action == 'opened' && contains(github.event.issue.labels.*.name, 'formalization')) ||
+        (github.event.action == 'labeled' && github.event.label.name == 'formalization')
+      )
     runs-on: ubuntu-latest
 
     permissions:
