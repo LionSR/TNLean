@@ -170,9 +170,9 @@ jobs:
             and attentive to the logical dependencies between results. When discussing
             proofs, note the key lemmas invoked, the mathematical content of what was
             shown, and any `sorry` eliminations (which represent open proof obligations
-            finally discharged). Distinguish between scaffolding (imports, refactors,
-            API lemmas) and substantive mathematical progress (new theorems, completed
-            proofs, resolved conjectures).
+            finally discharged). Distinguish between preliminary formal material
+            (imports, reorganized declarations, auxiliary lemmas) and substantive
+            mathematical progress (new theorems, completed proofs, resolved conjectures).
 
             Today's date: ${{ steps.date.outputs.today }}
             Activity window: last ${{ fromJSON(steps.activity.outputs.result).hoursBack }} hours (since ${{ fromJSON(steps.activity.outputs.result).since }})
@@ -227,7 +227,7 @@ jobs:
               of the blueprint")
 
             ## Proof Engineering & Refactors
-            - API lemmas, simp lemmas, or coercions added to smooth future work
+            - Auxiliary lemmas, simp lemmas, or coercions added for later proofs
             - Import restructuring, namespace changes, or Mathlib alignment
             - Performance improvements (proof term simplification, reducing heartbeats)
 
@@ -253,8 +253,13 @@ jobs:
             Guidelines:
             - Be precise and mathematically literate — this is for a team of
               mathematicians and formalization experts
+            - Write as mathematics first: cite theorem labels, blueprint entries,
+              paper references, and file paths when the activity concerns a specific
+              statement or proof
             - Use proper mathematical terminology (e.g., "completely positive map"
               not "channel function", "tensor product" not "combined space")
+            - Avoid AI vocabulary, software-process metaphors, and local shorthand
+              when describing mathematical work
             - Reference PR/issue numbers (e.g., #123) and file paths where relevant
             - If there was no activity, state so briefly
             - Prioritize mathematical substance over engineering details

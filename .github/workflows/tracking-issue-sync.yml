@@ -105,6 +105,12 @@ jobs:
             descriptions on the same line. When editing checkboxes, preserve
             this format exactly.
 
+            Generated tracking prose must be mathematical and self-contained.
+            When creating an issue, include a paper or blueprint source, theorem
+            label, file path and line number when available, and a short quotation
+            or precise paraphrase of the claim. Do not describe mathematical work
+            with AI vocabulary, software-process metaphors, or local shorthand.
+
             ### Label Taxonomy
 
             Use the project's established labels (see `docs/CONTRIBUTING.md` §4):
@@ -127,8 +133,8 @@ jobs:
 
             - **PR Cleanup** (`pr-cleanup.yml`): When a PR opens from a
               `claude/*` or `codex/*` branch, it already comments on the
-              linked issue ("🤖 PR #X has been opened…"). Do NOT duplicate
-              that comment for AI-generated PRs.
+              linked issue ("PR #X has been opened…"). Do NOT duplicate
+              that comment for bot-generated PRs.
             - **Claude Code Review** (`claude-code-review.yml`): Handles
               code quality. You handle tracking metadata only.
             - **Daily Standup / CI Auto-Fix**: Separate workflows. Treat
@@ -176,7 +182,7 @@ jobs:
             4. Suggest next steps (see §5 below).
             5. Comment on the tracking issue (check recent comments first
                to avoid duplicates — Key Rules §3):
-               "✅ #N (*title*) has been resolved. Updated checklist.
+               "#N (*title*) has been resolved. Updated tasklist.
                [X/Y tasks complete]
 
                **Suggested next:** <one-line recommendation from §5>"
@@ -197,7 +203,7 @@ jobs:
                to happen to re-resolve it (see §5, linked-issue variant).
             5. Comment on the tracking issue (check recent comments first
                to avoid duplicates — Key Rules §3):
-               "🔄 #N (*title*) has been reopened. Unchecked in tasklist.
+               "#N (*title*) has been reopened. Marked as open in the tasklist.
                [X/Y tasks complete]
 
                **Suggested next:** <why it was reopened + what to do>"
@@ -224,7 +230,7 @@ jobs:
                first to avoid duplicates — Key Rules §3) with a summary:
                the PR title, what it accomplished, current task progress,
                and a follow-up suggestion. Example:
-               "📦 PR #X (*title*) merged. <what was done>. [X/Y tasks
+               "PR #X (*title*) merged. <what was proved or changed>. [X/Y tasks
                complete]
 
                **Suggested next:** <one-line recommendation from §5>"
@@ -234,7 +240,7 @@ jobs:
                what the PR accomplished and what remains. Include a
                follow-up suggestion for what to tackle next on that issue.
                Example:
-               "📦 PR #X (*title*) has been merged. <what was done>.
+               "PR #X (*title*) has been merged. <what was proved or changed>.
                Remaining: <what's left>.
 
                **Suggested next step:** <concrete action for this issue>"
@@ -281,10 +287,18 @@ jobs:
               ```markdown
               ## Context
               Follow-up from #<PR> (<PR title>).
-              <Why this work is needed>
+              <Why this mathematical statement or proof obligation is needed>
 
-              ## Details
-              <What needs to be done — specific declarations, files, proofs>
+              ## Mathematical statement
+              <Precise theorem, lemma, definition, or proof obligation>
+
+              ## Source
+              - File: `<path>:<line>` when available
+              - Label or citation: <paper theorem, blueprint label, or review comment>
+              - Claim: <short quotation or precise paraphrase>
+
+              ## Formalization target
+              <Specific declarations, files, and proofs>
 
               ## References
               - PR: #<PR>
@@ -300,12 +314,12 @@ jobs:
             - If the tracking issue had the `all-resolved` label, remove
               it (new unchecked items mean it's no longer all-resolved).
             - Comment (check recent comments first — Key Rules §3):
-              "📋 Added follow-up issues from #<PR>: #<issue1>, …
+              "Added follow-up issues from #<PR>: #<issue1>, …
               [X/Y tasks complete]"
             - If multiple follow-ups were created, suggest which one to
               tackle first (see §5, tracking-issue variant).
 
-            **Be conservative.** Only create issues for genuine, actionable
+            **Be conservative.** Only create issues for genuine, concrete
             follow-ups. When in doubt, skip. False positives create noise.
 
             ---
@@ -323,7 +337,7 @@ jobs:
                workflow. All comments go on the **tracking issue**:
                - **PR opened** — only for branches that do NOT start with
                  `claude/` or `codex/` (PR Cleanup already handles those):
-                 "🔄 #<PR> opened to address #<issue>"
+                 "#<PR> opened to address #<issue>"
             4. Skip everything else silently.
 
             ---
@@ -331,7 +345,7 @@ jobs:
             ## §5 — Follow-up Suggestions
 
             When a playbook asks you to "suggest next steps", generate a
-            brief, actionable recommendation. Think beyond the immediate
+            brief, concrete recommendation. Think beyond the immediate
             next task — consider what this completion unblocks downstream,
             how it fits into the broader formalization roadmap, and whether
             preparatory work (scouting, blueprint review) would de-risk
@@ -379,7 +393,7 @@ jobs:
 
             For tasks that are mathematically complex or involve new
             Mathlib API surface, suggest preparatory scouting before
-            diving into the proof:
+            starting the proof:
 
             - **Mathlib scouting**: If the recommended issue involves
               heavy Mathlib dependencies and does not already have a
