@@ -17,9 +17,9 @@ Building on the backward direction proved in
 1. Develops the **product algebra** of commuting idempotents — absorption,
    cross-absorption, complement commutativity, and the frustration-free
    Hamiltonian identity.
-2. Extends the **`HasCommutingParentHam` API** with absorption, reverse-product,
+2. Extends the `HasCommutingParentHam` properties with absorption, reverse-product,
    complement commutativity, and a ground-space membership characterisation.
-3. Provides **`IsDecorrelated` API** — monotonicity and triviality lemmas.
+3. Provides `IsDecorrelated` properties — monotonicity and triviality lemmas.
 
 All results are fully proved (no `sorry`).
 
@@ -36,7 +36,7 @@ All results are fully proved (no `sorry`).
 * `comm_of_complement_comm` — `[1 − P, 1 − Q] = 0 → [P, Q] = 0`
 * `frustration_free_ham_eq` — `(1−P) + (1−Q) − (1−P)∘(1−Q) = 1 − P∘Q`
 
-### `Decorrelation.HasCommutingParentHam` API
+### `Decorrelation.HasCommutingParentHam` properties
 
 * `pK_idem` — `P_K ∘ P_K = P_K`
 * `pAX_comp_pK` — `P_AX ∘ P_K = P_K`
@@ -47,7 +47,7 @@ All results are fully proved (no `sorry`).
 * `complement_comm` — `(id − P_AX) ∘ (id − P_XB) = (id − P_XB) ∘ (id − P_AX)`
 * `mem_ground_iff` — `P_K v = v ↔ P_AX v = v ∧ P_XB v = v`
 
-### `Decorrelation.IsDecorrelated` API
+### `Decorrelation.IsDecorrelated` properties
 
 * `mono_obsA` / `mono_obsB` — monotone in observable sets
 * `empty_obsA` / `empty_obsB` — trivially decorrelated for empty sets
@@ -159,7 +159,7 @@ end LinearMap
 end CommutingIdempotentAlgebra
 
 /-!
-### Extended `HasCommutingParentHam` API
+### Extended `HasCommutingParentHam` properties
 
 Absorption, reverse-product, and ground-space characterisation lemmas
 for the commuting parent Hamiltonian structure.
@@ -273,7 +273,7 @@ end Decorrelation
 end HasCommutingParentHamAPI
 
 /-!
-### `IsDecorrelated` API
+### `IsDecorrelated` properties
 
 Monotonicity and triviality lemmas for the decorrelation predicate.
 -/

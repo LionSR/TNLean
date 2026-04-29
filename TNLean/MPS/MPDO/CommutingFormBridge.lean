@@ -23,7 +23,7 @@ local-to-global datum that the future extraction theorem should produce: a
 single translation-invariant positive two-site bond whose translated copies
 commute on all periodic chains and realize the MPO on every finite length.
 
-This is the strongest unconditional forward step currently justified on `main`.
+This is the strongest unconditional forward step currently available.
 Once the explicit `η_{k,h}` operators are available, the intended future
 Proposition C.6 proof should first construct `EtaLocalStructureData M`; the
 existing theorem `hasCommutingForm_of_etaLocalStructure` will then discharge the

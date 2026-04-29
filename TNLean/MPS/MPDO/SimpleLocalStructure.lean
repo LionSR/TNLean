@@ -37,7 +37,7 @@ arXiv:1606.00608 (Cirac–Pérez-García–Schuch–Verstraete).
   `η_{k,h}` together with positivity.
 - `MPOTensor.ExplicitEtaOperators.traceMatrix` /
   `MPOTensor.ExplicitEtaOperators.traceMatrixRe`: the complex trace matrix of an
-  explicit `η`-family and its real-part input to the downstream
+  explicit `η`-family and its real-part input to the subsequent
   Perron–Frobenius step.
 - `MPOTensor.ExplicitEtaOperators.ofHayashiMarkov`: concrete extraction of an
   explicit `η_{k,h}` family from a Hayashi decomposition witness, as the
@@ -139,7 +139,7 @@ theorem inverseTensor_spec (K : MPOTensor d D) (hK : K.IsInjective)
     (Matrix.single α β (1 : ℂ))
 
 /-- The physical realization map for a right virtual insertion on an injective
-simple MPO tensor. This is the MPO wrapper around
+simple MPO tensor. This is the MPO encoding of
 `MPSTensor.physRealize` for the doubled-index tensor. -/
 noncomputable def physRealize (K : MPOTensor d D) (hK : K.IsInjective)
     (X : Matrix (Fin D) (Fin D) ℂ) :

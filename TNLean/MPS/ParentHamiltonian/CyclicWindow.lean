@@ -6,9 +6,9 @@ import TNLean.MPS.ParentHamiltonian.Defs
 import TNLean.MPS.ParentHamiltonian.IntersectionProperty
 
 /-!
-# Cyclic window infrastructure for periodic MPS chains
+# Cyclic window restrictions for periodic MPS chains
 
-This file provides the infrastructure for restricting N-site quantum states to
+This file provides the formalization for restricting N-site quantum states to
 cyclic windows of L consecutive sites on a periodic chain.
 
 ## Main results

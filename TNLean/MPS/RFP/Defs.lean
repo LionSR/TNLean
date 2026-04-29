@@ -32,7 +32,7 @@ See arXiv:1606.00608, Definition 3.2. -/
 def IsRFP (A : MPSTensor d D) : Prop :=
   transferMap A ∘ₗ transferMap A = transferMap A
 
-/-- The idempotence equation packaged as a projection lemma. -/
+/-- The idempotence equation expressed as a projection lemma. -/
 theorem IsRFP.idempotent {A : MPSTensor d D} (h : IsRFP A) :
     transferMap A ∘ₗ transferMap A = transferMap A :=
   h
