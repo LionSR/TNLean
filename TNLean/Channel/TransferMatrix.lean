@@ -232,7 +232,7 @@ namespace MPSTensor
 /-- The MPS transfer map `E_A(X) = ∑ᵢ Aᵢ X Aᵢ†` has transfer matrix
 `∑ᵢ Āᵢ ⊗ₖ Aᵢ`.
 
-This bridges Wolf's channel-side §2.2 transfer matrix with the MPS-side
+This relates Wolf's §2.2 transfer matrix for quantum channels to the MPS
 transfer operator. -/
 theorem transferMatrix_eq (A : MPSTensor d D) :
     transferMatrix (MPSTensor.transferMap A) =

@@ -54,7 +54,7 @@ jobs:
         uses: github/gh-aw-actions/setup@dc50be57c94373431b49d3d0927f318ac2bb5c4c # v0.62.5
         with:
           destination: ${{ runner.temp }}/gh-aw/actions
-      - name: Generate agentic run info
+      - name: Generate run information
         id: generate_aw_info
         env:
           GH_AW_INFO_ENGINE_ID: "copilot"
@@ -558,7 +558,7 @@ jobs:
         continue-on-error: true
         run: bash ${RUNNER_TEMP}/gh-aw/actions/clean_git_credentials.sh
       - name: Execute GitHub Copilot CLI
-        id: agentic_execution
+        id: copilot_execution
         # Copilot CLI tool arguments (sorted):
         # --allow-tool github
         # --allow-tool safeoutputs
@@ -807,7 +807,7 @@ jobs:
           touch /tmp/gh-aw/threat-detection/detection.log
       - name: Execute GitHub Copilot CLI
         if: always() && steps.detection_guard.outputs.run_detection == 'true'
-        id: detection_agentic_execution
+        id: detection_copilot_execution
         # Copilot CLI tool arguments (sorted):
         # --allow-tool shell(cat)
         # --allow-tool shell(grep)
@@ -1104,4 +1104,3 @@ jobs:
           name: safe-output-items
           path: /tmp/gh-aw/safe-output-items.jsonl
           if-no-files-found: ignore
-

@@ -9,7 +9,7 @@ Lean style, and CI automation used in the MPSLean project.
 
 ### Title format
 
-Use **conventional-commit** style:
+Use **conventional-commit** style for pull requests:
 
 ```
 type(scope): short description
@@ -21,16 +21,23 @@ type(scope): short description
 | `fix`      | Bug fix (broken proof, wrong identifier, etc.)    |
 | `refactor` | Restructuring without changing API surface        |
 | `docs`     | Documentation or blueprint changes only           |
+| `style`    | Formatting, naming, or prose cleanup              |
 | `ci`       | CI/CD workflow changes                            |
 | `chore`    | Dependency bumps, linting, toolchain updates      |
 
 **Scope** is a shortened module path: `MPS/Symmetry`, `Channel`, `blueprint+docgen`,
 `MPS/Core`, etc. Omit the `TNLean/` prefix.
 
+The description should be short, lower-case except for mathematical names, and
+written in ordinary mathematical language. Avoid bracket prefixes, bot markers,
+and process shorthand such as "endpoint", "wrapper", "package", "live block",
+"one-shot", or "bookkeeping" when a mathematical description is available.
+
 Examples:
 - `feat(MPS/Symmetry): add twistedTensor as MonoidHom`
 - `fix(blueprint+docgen): resolve broken labels and malformed docstring table`
 - `refactor(MPS): move Correlations.lean from ParentHamiltonian/ to Core/`
+- `docs(MPS/CanonicalForm): rewrite equal-case prose in MPS language`
 
 ### Body template
 
@@ -74,6 +81,36 @@ Apply all relevant labels from the taxonomy in [Section 4](#4-label-taxonomy).
 
 ## 2. Issue Conventions
 
+### Title format
+
+Issue titles do **not** use conventional-commit prefixes such as `feat(...)` or
+bracket prefixes such as `[Wolf Ch6]`. Use a plain mathematical title that says
+what theorem, construction, chapter, or record the issue concerns.
+
+| Issue kind | Title format | Example |
+|------------|--------------|---------|
+| Overall tracker | `Tracking: <area>` | `Tracking: Wolf lecture notes on quantum channels` |
+| Chapter or paper tracker | `Tracking: <paper/chapter/topic>` | `Tracking: Wolf Ch6 spectral properties` |
+| Formalization task | `<area>: <mathematical result or construction>` | `MPS/CanonicalForm: assemble cyclic sectors at a common blocking length` |
+| Blueprint or documentation task | `<document area>: <mathematical documentation change>` | `Blueprint Ch6: add Lean tags for Wolf spectral theorems` |
+| CI or repository maintenance | `<area>: <concrete maintenance task>` | `CI: repair blueprint declaration check` |
+| Daily record | `<record type> -- <date>` | `Daily Standup -- 2026-04-22` |
+
+Rules:
+
+- Start every overall tracker with `Tracking:`.
+- Keep titles bracket-free. Brackets can leak into generated branch names and
+  break PR workflows.
+- Put parent issue numbers, PR numbers, audit filenames, and implementation
+  notes in the body unless they are essential to disambiguate the title.
+- Use the terminology of the relevant literature: blocked tensors, physical
+  words, sector decompositions, zero-tail terms, transfer maps, fixed-point
+  algebras, gauge equivalence, and finite-length span equality.
+- Avoid titles that sound like internal task management or software automation.
+  For example, prefer `Prove equality of the blocked MPS under iterated-blocking
+  relabelling of physical indices` to `Prove physical-label compatibility
+  between canonical blocked live tensor and relabeled one-shot live blocks`.
+
 ### Issue templates
 
 Three issue templates are available in `.github/ISSUE_TEMPLATE/`:
@@ -101,6 +138,43 @@ file path and line number when the source is in `blueprint/`, `Papers/`, or
 Avoid AI vocabulary, software-process metaphors, and local shorthand when
 describing the mathematics.
 
+### Scientific prose in issues and PRs
+
+Issue titles, tracking issues, sub-issues, PR descriptions, and tracking
+comments should read like working mathematical notes, not administrative reports.
+Use the vocabulary of tensor networks, matrix product states, quantum channels,
+operator algebras, and the relevant source text. For example, say "formalize
+the peripheral spectral decomposition in Wolf Chapter 6" rather than "organize
+the remaining items."
+
+Avoid AI or process slang in public mathematical discussion: "agent", "bot", "auto-generated",
+"AI-generated", "prompt", "handoff", "nit", "cleanup pass", and similar phrases
+should not appear unless the issue is explicitly about CI or automation. When a
+tracking issue covers a source such as Wolf's lecture notes, state the
+mathematical scope, chapter structure, dependencies, and expected formalization
+outcome in ordinary scientific prose.
+
+### References for formalization work
+
+Before drafting a formalization issue, sub-issue, tracking issue, or PR
+description, read the relevant mathematical source. When the work corresponds
+to the blueprint or another LaTeX source, point to that source directly and
+include all available references:
+
+- the source file path;
+- the relevant line number or narrow line range;
+- the LaTeX label, theorem name, or proposition number;
+- a short quotation of the mathematical statement or proof step being formalized.
+
+For Wolf lecture-note tracking, use the convention at three levels. The
+overall tracking issue should have the chapter tracking issues as its sub-issues. Each
+chapter tracking issue should identify the chapter-level source material and list
+the theorem-level formalization issues. Each theorem-level sub-issue should
+identify the precise theorem, proposition, lemma, definition, or proof segment
+it formalizes. If the LaTeX source has not yet been written or does not contain
+the result, say that explicitly and cite the paper or lecture-note location
+instead.
+
 ### Multi-part work
 
 For work spanning multiple PRs, use the `Area K/N: title` pattern and create
@@ -112,23 +186,14 @@ RFP/MPDO 2/5 Commuting parent Hamiltonians and decorrelation theorem
 ...
 ```
 
-The tracking issue lists each sub-issue using a **native GitHub tasklist** block
-so that child issues display "Tracked by #N" in their sidebar:
+The tracking issue should use GitHub's native **Sub-issues** relation for its
+child issues. Do not encode parent-child structure as Markdown checkbox lists;
+those lists do not give the same issue hierarchy and are easy to let drift from
+the true issue state.
 
-````markdown
-```[tasklist]
-### Tasks
-- [ ] #101
-- [ ] #102
-- [ ] #103
-```
-````
-
-**Important:** Each `- [ ]` line must contain *only* the issue reference (`#N`).
-Do not add descriptions on the same line — put those in the sub-issue titles or
-in prose above the tasklist block. Items that are not issue references (plain text
-TODOs) cannot go inside the tasklist block; list them as ordinary checkboxes
-outside it.
+Use the issue body for mathematical scope, references in the source text, dependencies, and
+the intended order of attack. Keep the child issue list itself in the native
+Sub-issues panel.
 
 Generated tracking issues should create sub-issues for the mathematical tasks
 rather than using Markdown task lists as the only record of work. Each sub-issue
@@ -137,10 +202,9 @@ should carry its own source citation and precise statement.
 ### Tracking issues
 
 Use the **Tracking Issue** template (`.github/ISSUE_TEMPLATE/tracking-issue.yml`).
-Label with `tracking`. The `tracking-issue-sync` workflow will automatically:
+Label with `tracking`. Add child issues through GitHub's native Sub-issues UI
+or API. The `tracking-issue-sync` workflow will automatically:
 
-- Check boxes when referenced issues are closed (including auto-closure by merged PRs).
-- Uncheck boxes when referenced issues are reopened.
 - Post progress comments on linked issues when PRs are merged (what was done, what remains).
 - Add the `all-resolved` label when every task is complete.
 
@@ -213,17 +277,42 @@ needs `\lean{}` / `\leanok` tags.
 | `algebraic-FT`       | Algebraic approach to Fundamental Theorem                             |
 | `wolf-ch1`           | Wolf Lecture Notes -- Chapter 1: Deconstructing Quantum               |
 | `wolf-ch2`           | Wolf Lecture Notes -- Chapter 2: Representations                      |
+| `wolf-ch3`           | Wolf Lecture Notes -- Chapter 3: Positive but not completely positive maps |
+| `wolf-ch4`           | Wolf Lecture Notes -- Chapter 4: Convex structure                     |
 | `wolf-ch5`           | Wolf Lecture Notes -- Chapter 5: Schwarz Inequalities                 |
 | `wolf-ch6`           | Wolf Lecture Notes -- Chapter 6: Spectral Properties                  |
 | `wolf-ch7`           | Wolf Lecture Notes -- Chapter 7: Semigroup Structure                  |
 
 ### Workflow labels
 
-| Label            | Description                                    |
-|------------------|------------------------------------------------|
-| `tracking`       | Tracking issue for a formalization area         |
-| `blueprint-sync` | Blueprint out of sync with Lean code            |
-| `automation`     | Automated documentation/sync PR                 |
+| Label             | Description                                    |
+|-------------------|------------------------------------------------|
+| `tracking`        | Tracking issue for a formalization area        |
+| `blueprint-sync`  | Blueprint out of sync with Lean code           |
+| `automation`      | Automated documentation/sync PR                |
+| `auto-fix-claude` | PR-only: enable review-comment fixes           |
+| `auto-fix-codex`  | PR-only: opt into alternate auto-fix workflows |
+
+**General rule.** Workflow-control labels belong on the artifact whose workflow
+they control. Pull-request automation labels should be applied to pull requests,
+not issues.
+
+**TNLean labels.** The `auto-fix-claude` and `auto-fix-codex` labels control
+TNLean pull-request workflows. Do not apply them to issues; they do not trigger
+issue-side automation here.
+
+**General issue-started workflow behavior.** The Claude responder starts from
+issue titles, issue bodies, or issue comments that contain `@claude`, provided
+the triggering author has write access to the repository and the GitHub event
+sender is not a bot. For issue titles and issue bodies, this applies when the
+issue is opened or assigned; for comments, it applies when the comment is
+created.
+
+**TNLean issue-started workflow behavior.** When the responder creates a pull
+request from issue work, the follow-up action scans the same triggering text for
+the magic phrase `auto[_ -]?fix`, matching `auto-fix`, `auto fix`, or `autofix`.
+If it finds one of those forms, it adds `auto-fix-claude` to the created pull
+request.
 
 ### Standard GitHub labels
 
@@ -320,12 +409,13 @@ The following workflows run automatically:
 | Workflow | Trigger | What it does |
 |----------|---------|-------------|
 | **Lean CI** (`lean_action_ci.yml`) | Push to `main`, PRs touching `.lean`/`lakefile.toml`/`lean-toolchain` | Runs `lake build` with Mathlib cache |
+| **Issue Classification** (`issue-classification.yml`) | Human-authored issue opened | Applies label taxonomy, identifies missing source or dependency information, and posts a concise next-step comment |
 | **Claude Code Review** (`claude-code-review.yml`) | PR opened/synced/reopened touching `.lean`, `.tex`, `lakefile.toml`, `lean-toolchain` | Automated review for sorrys, Mathlib style, type safety, performance, modularity, documentation |
-| **Issue Tracker** (`tracking-issue-sync.yml`) | Issue closed/reopened; PR merged/opened; review submitted | Updates tracking-issue checkboxes (checks on close, unchecks on reopen), posts progress comments on linked issues when PRs merge, scans merged PRs for follow-ups (deferred review feedback, new `sorry` markers, missing blueprint tags), creates follow-up issues with `follow-up` label, adds `all-resolved` when all tasks complete |
+| **Issue Tracker** (`tracking-issue-sync.yml`) | Issue closed/reopened; PR merged/opened; review submitted | Tracks native sub-issue state, posts progress comments on linked issues when PRs merge, scans merged PRs for follow-ups (deferred review feedback, new `sorry` markers, missing blueprint tags), creates follow-up issues with `follow-up` label, adds `all-resolved` when all sub-issues are complete |
 | **Blueprint Lint** (`lint-blueprint.yml`) | PRs touching blueprint files | Validates LaTeX blueprint for broken labels and references |
 | **Docs & Blueprint Sync** (`docs-blueprint-sync.lock.yml`) | Daily (weekdays) + manual dispatch | Detects stale documentation and opens a sync PR if needed |
 | **Lean Audit** (`lean-audit.yml`) | On demand | Audits Lean code for style and correctness |
-| **PR Cleanup** (`pr-cleanup.yml`) | Bot-generated PR opened (`claude/*` or `codex/*` branches) | Normalizes title to `type(scope): desc`, restructures body to PR template, copies labels from linked issue, adds `Addresses #N` reference, comments on the issue |
+| **PR Cleanup** (`pr-cleanup.yml`) | PR opened from a `claude/*` or `codex/*` branch | Normalizes title to `type(scope): desc`, restructures body to PR template, copies labels from linked issue, adds `Addresses #N` reference, comments on the issue |
 
 ### What CI checks before merge
 
