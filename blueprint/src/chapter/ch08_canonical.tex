@@ -3229,8 +3229,8 @@ The following results separate the zero blocks from the
 	properties of the common-sector family.
 \end{proof}
 
-\begin{theorem}[Two-sided common-length relabeled cyclic-sector endpoint]%
-\label{thm:ft_after_blocking_common_length_common_sector_endpoint}
+\begin{theorem}[Two-sided common-length relabeled cyclic-sector theorem]%
+\label{thm:ft_after_blocking_common_length_common_sector_theorem}
 	\lean{MPSTensor.fundamentalTheorem_after_blocking_1606_commonLength_commonSector_endpoint}
 	\leanok
 	\uses{thm:ft_after_blocking_per_block_cyclic_live_zero_tail,
@@ -3268,9 +3268,12 @@ The following results separate the zero blocks from the
 	\leanok
 	\uses{thm:zero_tail_to_tensor_from_blocks_block_power,
 		thm:common_blocked_cyclic_sector_canonical_label_compat}
-	For one side, suppose the canonical blocked live tensor agrees with the
-	explicitly relabeled one-shot live tensor.  Then the zero-tail equation after
-	blocking may be written directly with the weighted derived common-sector
+	For one side, suppose first that the original tensor decomposes, as an MPV
+	family, into a zero-tail contribution plus a weighted block-sum live part at
+	the original physical alphabet.  Suppose also that, after blocking by the
+	common length, the canonical blocked live tensor agrees with the explicitly
+	relabeled one-shot live tensor as an MPV family.  Then the zero-tail equation
+	after blocking may be written directly with the weighted derived common-sector
 	family.
 \end{theorem}
 

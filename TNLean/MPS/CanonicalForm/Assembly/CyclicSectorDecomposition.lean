@@ -1457,9 +1457,9 @@ end CommonBlockedCyclicSectorFamily
 admits a prescribed common physical blocking length, provided that the prescribed
 length is a positive multiple of every period-removal length.
 
-This variant is used for two-sided endpoints: one first chooses a common multiple
-of the period-removal lengths on both sides, then builds each one-sided cyclic
-sector family at that same physical length. -/
+This variant is used for two-sided constructions: one first chooses a common
+multiple of the period-removal lengths on both sides, then builds each one-sided
+cyclic sector family at that same physical length. -/
 theorem exists_commonBlockedCyclicSectorFamily_of_commonMultiple
     {d r : ℕ} {dim : Fin r → ℕ}
     (blocks : (k : Fin r) → MPSTensor d (dim k))
