@@ -67,7 +67,7 @@ Also carries per-sector compression `∗`-algebra isomorphisms
 `φ k : M_{dim k}(ℂ) ≃ₗ[ℂ] cornerSubmodule (P k)` that are multiplicative and
 `∗`-preserving, together with the intertwining identity relating the compressed
 adjoint transfer map to the sector adjoint transfer map on the corner of `P k`.
-Exposing `φ k` as a `LinearEquiv` with mul/star compatibility lets downstream
+Exposing `φ k` as a `LinearEquiv` with mul/star compatibility lets subsequent
 consumers (see `compressedTensor_adjointTransferMap_cornerBridge`) transport
 corner-level irreducibility / primitivity results back to the compressed matrix
 algebra via conjugation.  The underlying linear map is an isometry for the
@@ -501,7 +501,7 @@ transfer map on the corner `P u`; the second identifies the compressed adjoint
 sector tensor with the corresponding corner restriction, after which
 `MPS/Irreducible/Adjoint.lean` converts back to the ordinary transfer map.
 
-Kept as an explicit named sublemma so downstream consumers (`Case 2`,
+Kept as an explicit named sublemma so subsequent uses (`Case 2`,
 `Case 3`) and subsequent PRs can target its statement directly — the
 declaration is intentionally non-`private` so that follow-up modules
 (e.g. a dedicated `SectorIrreducibility` lemma) can reference it. -/

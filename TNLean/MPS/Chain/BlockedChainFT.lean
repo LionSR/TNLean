@@ -2,14 +2,14 @@ import TNLean.MPS.Core.Blocking
 import TNLean.MPS.Chain.FundamentalTheorem
 
 /-!
-# Fundamental theorem endpoint for blocked chains
+# Fundamental theorem for blocked chains
 
-This module gives a blocked-chain endpoint. The theorem
-`fundamentalTheorem_blockedChain` is stated for blocked chains built from a
+This module states a fundamental theorem for blocked chains. The theorem
+`fundamentalTheorem_blockedChain` applies to blocked chains built from a
 common blocking length `L`.
 
-Design note: we keep the endpoint in explicit-assumption style (`L`, `hA_block`,
-`hMPV`) so downstream uses can choose blocking witnesses locally.
+Design note: the theorem is stated in explicit-assumption style (`L`, `hA_block`,
+`hMPV`) so that subsequent uses can choose blocking witnesses locally.
 -/
 
 namespace MPSTensor
@@ -65,7 +65,7 @@ lemma blockedChain_isInjective (A : MPSTensor d D) (L n : ℕ)
   simpa [blockedChain] using
     (MPSTensor.isNBlkInjective_iff_blockTensor_isInjective A L).1 hA
 
-/-- Fundamental theorem endpoint for blocked chains at a common blocking length.
+/-- Fundamental theorem for blocked chains at a common blocking length.
 
 The hypothesis `hA_block` chooses a witness `L` used in the blocked-chain
 reduction to the injective-chain theorem. -/

@@ -7,7 +7,7 @@ import TNLean.MPS.Structure.PrimitivityBridge
 import TNLean.Wielandt.Primitivity.ImpliesIrreducible
 
 /-!
-# Proportional Fundamental Theorem — Primitive convenience wrappers
+# Proportional Fundamental Theorem — Primitive convenience formulations
 
 This file provides strengthened versions of the proportional single-block
 Fundamental Theorem that take `IsPrimitiveMPS` hypotheses directly, eliminating
@@ -23,9 +23,9 @@ the need to separately supply normalization and overlap-convergence conditions.
 
 The standard statement (arXiv:2011.12127, Theorem 4.4) requires the user to
 separately verify left-canonicality, self-overlap convergence, and
-irreducibility.  Since `IsPrimitiveMPS` packages all of these (primitivity
+irreducibility.  Since `IsPrimitiveMPS` comprises all of these (primitivity
 implies irreducibility, left-canonicality is built in, and the spectral gap
-gives overlap convergence), the wrapper here reduces the hypothesis count from
+gives overlap convergence), the formulation here reduces the hypothesis count from
 7 to 4.
 
 ## References

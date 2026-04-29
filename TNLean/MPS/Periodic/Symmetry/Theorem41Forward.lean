@@ -26,7 +26,7 @@ variable {d D : ℕ}
 For a (possibly rectangular) isometry `W : Fin m → Fin d` with `Wᴴ · W = 1`,
 the `W`-pullback family `C τ := ∑_σ W(τ, σ) · B σ` has the same transfer map
 as `B`. This is an adapter from
-`kraus_same_map_of_isometry_combination` to the `MPSTensor.transferMap` API. -/
+`kraus_same_map_of_isometry_combination` to the `MPSTensor.transferMap` interface. -/
 theorem transferMap_kraus_isometry
     {m : ℕ} (B : MPSTensor d D)
     (W : Matrix (Fin m) (Fin d) ℂ) (hW : Wᴴ * W = 1) :
@@ -271,7 +271,7 @@ From a `p`-refinement witness `(A, W)` for `B`, the `W`-pullback tensor
 `C τ := ∑_σ W(τ, σ) • B σ` has the same transfer map as `B` and the same MPV
 family as `blockTensor A p`.
 
-This records the first three steps of the forward-direction plan recorded in
+This states the first three steps of the forward-direction plan documented in
 `PRefinementCanonicalization`: construct the pullback, identify its transfer map
 using `transferMap_kraus_isometry`, and rewrite the coefficient-level refinement
 identity as a `SameMPV` statement. The remaining gap is therefore exactly the
@@ -333,7 +333,7 @@ transfer map `E_A` is a CPTP channel) *and* the channel-level matching
 
 The proof combines the channel-level blocking identity `E_{A^{[p]}} = (E_A)^p`
 (`MPSTensor.transferMap_blockTensor`) with the left-canonical channel property
-`MPSTensor.transferMap_isChannel`. The bridging from the raw coefficient-level
+`MPSTensor.transferMap_isChannel`. The bridging from the direct coefficient-level
 `IsPRefinable B p` hypothesis to this witness is handled in
 `thm_4_1_p_refinement_forward` below. -/
 theorem thm_4_1_p_refinement_forward_witness
@@ -353,7 +353,7 @@ MPV family as a blocked root `blockTensor A p`, one can extract a periodic
 `Z`-gauge witness between `C` and `blockTensor A p`.
 
 Compared with `PeripheralEqualCasePeriodicFTOfSameMPV`, this does **not** yet
-recover a left-canonical root. It only records the blocked equal-case
+recover a left-canonical root. It only states the blocked equal-case
 Fundamental Theorem / Z-phase existence step. -/
 def PeripheralEqualCaseZGaugeOfSameMPV (d D p : ℕ) : Prop :=
   ∀ {A : MPSTensor d D} {C : MPSTensor (blockPhysDim d p) D},
@@ -391,8 +391,8 @@ In the paper this is the point where the blocked equal-case Fundamental Theorem
 (Theorem 3.8 of arXiv:1708.00029) is combined with the blocked-to-root
 reconstruction that distributes the resulting `Z`-gauge across the cyclic
 sectors of `A`. Formalizing that existence step is the remaining forward
-obstruction, so we record its endpoint as a separate hypothesis. The theorem
-`peripheralEqualCase_periodicFT_of_sameMPV` below shows that this endpoint
+obstruction, so we record its conclusion as a separate hypothesis. The theorem
+`peripheralEqualCase_periodicFT_of_sameMPV` below shows that this conclusion
 follows from the sharper split into blocked `Z`-gauge extraction and
 blocked-to-root reconstruction. -/
 def PeripheralEqualCasePeriodicFTOfSameMPV (d D p : ℕ) : Prop :=
@@ -441,7 +441,7 @@ hypothesis `PeriodicEqualCaseFT`) then supplies a `Z`-gauge equivalence
 between `C` and `blockTensor A p`, which — combined with a unitary
 canonical-form reduction for irreducible form II and Wolf Theorem 2.18 —
 produces the sought left-canonical witness. Formalizing this remaining second
-stage in Lean still requires infrastructure (canonical unitary gauge, Kraus
+stage in Lean still requires supporting theory (canonical unitary gauge, Kraus
 uniqueness), so we expose the end-result predicate as a hypothesis. The theorem
 `pRefinementCanonicalization_of_peripheralEqualCase_periodicFT_of_sameMPV`
 below shows that this coarse hypothesis follows from the sharper blocked-stage
@@ -499,7 +499,7 @@ theorem thm_4_1_p_refinement_forward_of_peripheralEqualCase_periodicFT_of_sameMP
 /-- **Forward direction of Theorem 4.1 (conditional form).**
 
 Let `B` be an MPS tensor in irreducible form II. Assume
-`PRefinementCanonicalization`, which records the remaining analytic bridge from
+`PRefinementCanonicalization`, which captures the remaining analytic bridge from
 `IsPRefinable B p` to a left-canonical witness with matching transfer map. Then
 `IsPRefinable B p` implies `IsPDivisibleChannel (transferMap B) p`.
 

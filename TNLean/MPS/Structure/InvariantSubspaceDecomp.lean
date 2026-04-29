@@ -39,7 +39,7 @@ variable {d D : ℕ}
 
 /-! ## Two-block block-diagonal constructor
 
-We record the `r = 2` special case of `toTensorFromBlocks` with weights `μ ≡ 1` in a dedicated
+We state the `r = 2` special case of `toTensorFromBlocks` with weights `μ ≡ 1` in a dedicated
 constructor. This keeps statements readable and avoids elaboration timeouts from large dependent
 `Fin.cases` terms.
 -/
@@ -270,7 +270,7 @@ then `A` is MPV-equivalent to an explicit `2`-block block-diagonal tensor.
 We return the two smaller tensors `A₁ : MPSTensor d n` and `A₂ : MPSTensor d m` together with the
 dimension split `n + m = D`.
 
-The MPV equivalence is stated using `SameMPV₂` to avoid type-cast bookkeeping.
+The MPV equivalence is stated using `SameMPV₂` to avoid type-cast overhead.
 -/
 theorem exists_twoBlock_decomp_of_lowerZero
     (A : MPSTensor d D)
@@ -345,7 +345,7 @@ theorem exists_twoBlock_decomp_of_lowerZero
     have hcard : Fintype.card S + Fintype.card T = D := by
       exact hsum.symm.trans hST
     simpa [n, m] using hcard
-  -- Helper: `f` is `0` on the complement subtype.
+  -- Auxiliary: `f` is `0` on the complement subtype.
   have hfT : ∀ t : T, f t.1 = 0 := by
     intro t
     rcases hf01 t.1 with h0 | h1
@@ -406,7 +406,7 @@ theorem exists_twoBlock_decomp_of_lowerZero
   let X : Fin d → Matrix (S ⊕ T) (S ⊕ T) ℂ := fun i => Matrix.reindex eST eST (Aconj i)
   let A11raw : Fin d → Matrix S S ℂ := fun i => (X i).toBlocks₁₁
   let A22raw : Fin d → Matrix T T ℂ := fun i => (X i).toBlocks₂₂
-  -- Convert the raw blocks to `Fin n` / `Fin m` indices.
+  -- Convert the direct blocks to `Fin n` / `Fin m` indices.
   let eS : S ≃ Fin n := Fintype.equivFin S
   let eT : T ≃ Fin m := Fintype.equivFin T
   let A₁ : MPSTensor d n := fun i => Matrix.reindex eS eS (A11raw i)
@@ -543,7 +543,7 @@ theorem exists_twoBlock_decomp_of_lowerZero
       simpa using
         (trace_fromBlocks_diag (ι₁ := S) (ι₂ := T)
           (_root_.evalWord A11raw w) (_root_.evalWord A22raw w))
-    -- Express `mpv A₁` and `mpv A₂` via the raw blocks.
+    -- Express `mpv A₁` and `mpv A₂` via the direct blocks.
     have hmpv₁ : mpv A₁ σ = Matrix.trace (_root_.evalWord A11raw w) := by
       have hEval₁ := MPSTensor.evalWord_reindex (d := d) (D := n) (e := eS) (A := A11raw) w
       have : MPSTensor.evalWord A₁ w = Matrix.reindex eS eS (_root_.evalWord A11raw w) := by
@@ -597,7 +597,7 @@ section StrictDimDecrease
 
 variable {d D : ℕ}
 
-/-- Spectral decomposition helper for a Hermitian matrix (matrix form). -/
+/-- Spectral decomposition auxiliary lemma for a Hermitian matrix (matrix form). -/
 private lemma orthProj_spectral_eq'
     (P : Matrix (Fin D) (Fin D) ℂ) (hHerm : P.IsHermitian) :
     P = (↑hHerm.eigenvectorUnitary : Matrix (Fin D) (Fin D) ℂ) *

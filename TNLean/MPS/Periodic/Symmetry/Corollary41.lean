@@ -42,7 +42,7 @@ In paper notation, for each `g` there exist matrices `Z_g, Y_g` with `Z_g^{m_g} 
 This generalises the single-`u` corollary obtained via
 `zGaugeEquiv_of_isIrreducibleForm_sameMPV_rotatePhysical` to a full group of symmetries.
 The projective-representation upgrade (joint factor system on the family `(Y_g)_{g∈G}`)
-is left to downstream SPT classification work; see
+is left to subsequent SPT classification work; see
 `MPS/Symmetry/VirtualRepresentation.lean` for the analogous injective construction.
 
 The periodic equal-case FT is taken as an explicit hypothesis `hPeriodicEq` (see file
@@ -71,7 +71,7 @@ theorem cor_4_1_physical_symmetry_zgauge
   exact ⟨m, hm_pos, by rw [hRotEq]; exact hZGauge⟩
 
 /-- **A convenient reformulation of `cor_4_1_physical_symmetry_zgauge`** in the form most
-useful for downstream SPT arguments: extract the gauge `Y(g)` and matrix `Z(g)`
+useful for subsequent SPT arguments: extract the gauge `Y(g)` and matrix `Z(g)`
 explicitly. -/
 theorem cor_4_1_physical_symmetry_zgauge_explicit
     (A : MPSTensor d D)
