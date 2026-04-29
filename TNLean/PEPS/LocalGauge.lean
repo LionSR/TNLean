@@ -145,7 +145,7 @@ structure HasLocalGaugeLift (A B : Tensor G d) (hA : IsVertexInjective A)
 /-- Any explicit edgewise local gauge formula at `v` yields the sharper datum
 `HasLocalGaugeLift`.
 
-This is the final bookkeeping step after the blocked-middle / three-site-MPS
+This is the final algebraic conversion after the blocked-middle / three-site-MPS
 reduction: once that reduction produces invertible incident-edge gauges
 realizing the local tensors of `B`, the canonical candidate pulled back through
 `localLeftInverse` is forced to be the same factorized operator. -/
