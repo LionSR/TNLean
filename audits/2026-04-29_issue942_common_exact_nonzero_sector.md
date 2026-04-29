@@ -14,7 +14,7 @@ derived common-sector family.
 They deliberately do not assert the full arbitrary `SameMPV₂` fundamental theorem.
 The remaining paper hypotheses are stated below.
 
-## Source anchors
+## Source references
 
 - `Papers/1606.00608/MPDO-22-12-17-2.tex:214--231` describes replacing an
   arbitrary tensor by a block diagonal nonzero part and then blocking by the
@@ -52,7 +52,7 @@ The remaining paper hypotheses are stated below.
    - exact zero-tail equations for `blockTensor A p` and `blockTensor B p`
      against the canonically blocked nonzero parts;
    - positive-length equality of those canonically blocked nonzero parts;
-   - the exact length-zero zero-tail bookkeeping identity at the common length;
+  - the exact length-zero zero-tail identity at the common length;
    - relabeled cyclic-sector families on both sides at that same `p`;
    - nonzero transported sector weights and TP / primitive / tensor-irreducible /
      positive-dimension properties for those derived sectors.
@@ -68,7 +68,7 @@ The remaining paper hypotheses are stated below.
 The remaining mathematical obligations are now narrower than before:
 
 1. **Agreement after reindexing blocked physical words for the flat nonzero part.**
-   The current common sectors are expressed through `oneShotReindexedBlock`, which
+   The current common sectors are expressed through the explicitly reindexed block, which
    uses the iterated-blocking relabeling `iteratedBlockIndex` for each original
    nonzero-weight block. The canonical zero-tail equations use the ambient blocked
    alphabet of `blockTensor (blocks k) p`. One still needs the global statement

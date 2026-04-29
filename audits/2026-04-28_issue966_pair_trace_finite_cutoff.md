@@ -86,7 +86,7 @@ The expected paper path remains the one identified in the issue: BNT non-equival
 nonzero trace functional surviving on all pair words; finite-dimensionality then supplies a finite
 bound.  This PR formalizes the second sentence for the cumulative version.
 
-## Source anchors
+## Source references
 
 - `Papers/2011.12127/TN-Review-main.tex` lines 2115--2116 define block-injective canonical form by
   access to every element of the direct-sum block algebra.

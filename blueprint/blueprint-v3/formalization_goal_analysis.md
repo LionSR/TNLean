@@ -93,7 +93,7 @@ block data" was flagged as open.
 The pipeline is mostly in place:
 - Thm 9.15: any tensor → irreducible blocks (invariant-subspace splitting)
 - Thm 9.38: zero-block separation
-- Thm 9.39: arbitrary tensor → TP-gauged irreducible live blocks
+- Thm 9.39: arbitrary tensor -> TP-gauged irreducible nonzero blocks
 - Thms 9.40–9.43: blocking infrastructure (distributes over MPV, powers
   preserve primitivity, common blocking period)
 - Thm 9.47: arbitrary tensor → primitive block decomposition
