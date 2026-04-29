@@ -56,7 +56,7 @@ Theorem 1 also gives the case-(2) bound:
   `iIndex A ≤ D ^ 2 - krausRank A + 1`.
 
 These case-(2) statements pass from paper primitivity to `IsNormal A` and then
-invoke the backend theorem `wordSpan_eq_top_of_isNormal_of_isUnit` from
+invoke the theorem `wordSpan_eq_top_of_isNormal_of_isUnit` from
 `SpanGrowth/InvertibleWordSpan.lean`.
 
 Within TNLean these results are currently standalone paper-level theorem statements:

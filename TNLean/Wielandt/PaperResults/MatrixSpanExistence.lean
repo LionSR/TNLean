@@ -26,7 +26,7 @@ Sanz–Pérez-García–Wolf–Cirac, *A quantum version of Wielandt's inequalit
 ## Quantitative status
 
 These statements are intentionally **coarse existential** statements. They use the
-backend theorem `wielandt_lemma2b`, which produces a witness `N` without
+underlying theorem `wielandt_lemma2b`, which produces a witness `N` without
 claiming the paper's exact bound.
 
 They state only the qualitative conclusion `∃ N, S_N(A) = M_D(ℂ)`. In
