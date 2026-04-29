@@ -13,7 +13,7 @@ import TNLean.Wielandt.RankOne.Products
 /-!
 # Theorem 1 — Quantum Wielandt's inequality (arXiv:0909.5347 / Wolf §6.9)
 
-This file contains the public paper-facing wrappers for the currently
+This file contains the public paper-level statements for the currently
 formalized parts of **Theorem 1** from Sanz–Pérez-García–Wolf–Cirac,
 *A quantum version of Wielandt's inequality* (arXiv:0909.5347), equivalently
 Wolf's Theorem 6.9 in *Quantum Channels & Operations: Guided Tour*.
@@ -55,17 +55,17 @@ Theorem 1 also gives the case-(2) bound:
   the corresponding numeric bound
   `iIndex A ≤ D ^ 2 - krausRank A + 1`.
 
-These case-(2) wrappers pass from paper primitivity to `IsNormal A` and then
+These case-(2) statements pass from paper primitivity to `IsNormal A` and then
 invoke the backend theorem `wordSpan_eq_top_of_isNormal_of_isUnit` from
 `SpanGrowth/InvertibleWordSpan.lean`.
 
-Within TNLean these results are currently standalone paper-facing endpoints:
+Within TNLean these results are currently standalone paper-level theorem statements:
 the canonical / FT / BNT development does not import them directly.
 
 This file is the preferred public entry point for the currently formalized
-Theorem 1 wrappers. The auxiliary module `QuantumWielandt.lean` keeps a
+Theorem 1 statements. The auxiliary module `QuantumWielandt.lean` keeps a
 backward-compatible exact-word-span witness theorem with an explicit
-aperiodicity argument in its statement; it is not the default paper-facing API.
+aperiodicity argument in its statement; it is not the default paper-level formulation.
 
 ### Part 4 — Case (1): general bound
 
