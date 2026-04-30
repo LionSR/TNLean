@@ -1,6 +1,6 @@
 %% ==================================================
 %% Chapter: Matrix Product Operators and Density Operators
-%% Introduces MPO and LPDO notation for the blueprint and records the
+%% Introduces MPO and LPDO notation for the blueprint and describes the
 %% correspondence between local MPO data and the associated MPS view.
 %% ==================================================
 
@@ -236,7 +236,7 @@ legs cyclically and taking the resulting trace.
     $A^{(i,k)} \in \MN{D'}$ for $i \in \{0,\ldots,d{-}1\}$ and
     $k \in \{0,\ldots,d_K{-}1\}$, the \emph{purifying MPS tensor} is the
     MPS tensor with physical dimension $d \cdot d_K$ and bond dimension $D'$
-    obtained by bundling the pair $(i,k)$ into a single index.
+    obtained by combining the pair $(i,k)$ into a single index.
 \end{definition}
 
 \begin{definition}[Purification RFP]\label{def:is_prfp}
@@ -288,7 +288,7 @@ legs cyclically and taking the resulting trace.
     \lean{MPOTensor.isRFP_iff_isZCL}
     \leanok
     \uses{def:is_rfp_mpdo, def:mpo_is_zcl}
-    The provisional MPDO renormalization fixed-point condition is equivalent to
+    The current MPDO renormalization fixed-point condition is equivalent to
     the zero-correlation-length condition for MPO tensors.
 \end{theorem}
 
@@ -303,7 +303,7 @@ legs cyclically and taking the resulting trace.
     \leanok
     \uses{def:is_rfp_mpdo, def:mpo_to_mps, def:is_rfp, def:mpo_is_zcl,
         thm:mpo_is_zcl_iff_to_mps_rfp}
-    The provisional MPDO RFP condition is equivalent to the pure-state RFP
+    The current MPDO RFP condition is equivalent to the pure-state RFP
     condition for the doubled-index MPS tensor.
 \end{theorem}
 
@@ -478,8 +478,8 @@ strong subadditivity for a normalized three-site reduced state.
     \leanok
     \uses{def:mpdo_explicit_eta_operators}
     Every explicit neighboring $\eta$-family determines a sector-by-sector trace
-    matrix. We record both its complex-valued form and the real-part version,
-    which is the direct input for the real Perron--Frobenius matrix $T$ used
+    matrix. We give both its complex-valued form and the real-part version,
+    which is the direct data for the real Perron--Frobenius matrix $T$ used
     in the rank-one step.
 \end{definition}
 
@@ -571,7 +571,7 @@ strong subadditivity for a normalized three-site reduced state.
     \lean{Matrix.HasRankOneFactorization}
     \lean{Matrix.PrimitiveTracePowersConstantImpliesRankOne}
     \leanok
-    The auxiliary predicates record three matrix-theoretic ingredients used in
+    The auxiliary predicates state three matrix-theoretic ingredients used in
     the rank-one step of Appendix~C.2, Lemma~C.4: constant traces of all
     positive powers, existence of a rank-one factorization $T = a b^\top$, and
     the conditional Perron--Frobenius implication from primitivity together with
@@ -579,7 +579,7 @@ strong subadditivity for a normalized three-site reduced state.
 
     This conditional implication is not a globally provable theorem. As a
     universal statement over primitive nonnegative matrices it is false; a
-    concrete $3 \times 3$ counterexample is recorded in the archive. The
+    concrete $3 \times 3$ counterexample appears in the archive. The
     corrected criterion proved here adds positive semidefiniteness and trace
     normalization, which provide the diagonalizability needed to turn the
     trace-power condition into a rank-one factorization.
@@ -635,7 +635,7 @@ strong subadditivity for a normalized three-site reduced state.
     \uses{def:matrix_trace_rankone_predicates}
     Let $T$ be a finite real square matrix. Assume that $T$ is primitive,
     that $\tr(T) = 1$, and that every positive power of $T$ has the same trace
-    as $T$. If one further supplies the Perron--Frobenius input asserting that
+    as $T$. If one further supplies the Perron--Frobenius hypothesis that
     this particular primitive nonnegative matrix with constant trace powers is
     rank one, then
     \[
@@ -650,7 +650,7 @@ strong subadditivity for a normalized three-site reduced state.
 \begin{proof}
     \leanok
     \uses{def:matrix_trace_rankone_predicates}
-    The Perron--Frobenius input gives the factorization $T = a b^\top$.
+    The Perron--Frobenius hypothesis gives the factorization $T = a b^\top$.
     Taking traces and using $\tr(a b^\top) = a \cdot b$ converts the
     normalization $\tr(T) = 1$ into $a \cdot b = 1$.
 \end{proof}
@@ -873,7 +873,7 @@ retract.
     map $E_n$.
 \end{definition}
 
-\begin{theorem}[Fusion-isometry data imply the provisional MPDO RFP condition]%
+\begin{theorem}[Fusion-isometry data imply the MPDO RFP condition]%
     \label{thm:mpdo_rfp_of_fusion}
     \lean{MPOTensor.isRFP_of_isRFP_MPDO_via_fusion}
     \leanok
@@ -914,7 +914,7 @@ This range-factorization gives the required fusion-isometry data.
 \end{corollary}
 \begin{proof}\leanok
 Combine Theorem~\ref{thm:mpdo_rfp_via_fusion_iff} with the diagonal pure-state
-recovery theorem for the provisional MPO predicate.
+recovery theorem for the MPO predicate.
 \end{proof}
 
 \section{Algebra structure}
@@ -1284,7 +1284,7 @@ Theorem~\ref{thm:mpdo_is_gsnnch_iff_has_commuting_form}.
     \lean{MPOTensor.EtaLocalStructureData}
     \leanok
     \uses{def:mpdo_has_commuting_form}
-    This records the post-extraction output of Appendix~C.2: a single
+    This defines the post-extraction form of Appendix~C.2: a single
     translation-invariant positive two-site bond whose translated copies commute
     on every periodic chain and realize the MPO at every finite length.
 \end{definition}
@@ -1320,7 +1320,7 @@ recovers the GSNNCH target of source label \texttt{propsimple}.
     \lean{MPOTensor.SimpleMPDOLocalStructureData}
     \leanok
     \uses{thm:sal_implies_eta_structure, thm:sal_zcl_implies_rank_one_t}
-    This data record collects the current local Appendix~C.2 input: a normalized
+    This structure collects the current local Appendix~C.2 data: a normalized
     three-site reduced state with equality in strong subadditivity, the
     resulting local $\eta$-structure, and the rank-one conclusion for the
     auxiliary primitive matrix $T$.
@@ -1333,7 +1333,7 @@ recovers the GSNNCH target of source label \texttt{propsimple}.
     \uses{def:simple_mpdo_local_structure_data, def:mpdo_has_commuting_form,
         def:mpo_is_zcl}
     For an MPO tensor $K$, this consists of the local Appendix~C.2 data together
-    with a provisional compatibility relation attaching those local data to
+    with a compatibility relation attaching those local data to
     $K$, the commuting-form property, and zero correlation length. The local
     component is retained so that the still-missing implication from the
     entropy-side hypotheses to commuting form has an explicit target, even
@@ -1353,7 +1353,7 @@ recovers the GSNNCH target of source label \texttt{propsimple}.
 \end{theorem}
 
 \begin{proof}\leanok
-Zero correlation length is the current provisional MPDO RFP predicate.
+Zero correlation length is the current MPDO RFP predicate.
 Applying the converse direction of
 Theorem~\ref{thm:mpdo_rfp_via_fusion_iff} to that RFP witness yields
 fusion-isometry data at every positive blocked size; evaluating it at size $2$
@@ -1391,6 +1391,6 @@ is the current RFP predicate.
     Theorem~\ref{thm:simple_mpdo_rfp_chain} is fully formalized, but to recover
     the original Appendix~C.2 implication from SAL and ZCL alone one still
     needs a theorem deriving the commuting-form property from the local
-    simple-MPDO structure of Lemmas~C.3--C.4. The record above is included so
+    simple-MPDO structure of Lemmas~C.3--C.4. The definition above is included so
     that this future implication has an explicit target.
 \end{remark}
