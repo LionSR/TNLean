@@ -10,7 +10,7 @@ The issue-thread conclusions used here are:
 
 - #976 already proved the nonzero-block span adapter
   `MPSTensor.mpv_span_eq_of_common_phase_cover` and the exact-nonzero sector theorem
-  `MPSTensor.fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_phaseCover`.
+  `MPSTensor.fundamentalTheorem_after_blocking_sector_of_common_blocks_phaseCover`.
 - #984 exposes explicitly relabeled one-sided common-sector families, but it does
   not yet construct cross-side maps from both nonzero-sector families onto a single
   common MPV phase family.
@@ -61,10 +61,10 @@ data needed by the span adapter.  It does not claim that this data follows from
 
 New theorem:
 
-- `MPSTensor.fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_commonPhaseCover`.
+- `MPSTensor.fundamentalTheorem_after_blocking_sector_of_common_blocks_commonPhaseCover`.
 
 This is the common-cover form of
-`MPSTensor.fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_phaseCover`:
+`MPSTensor.fundamentalTheorem_after_blocking_sector_of_common_blocks_phaseCover`:
 callers supply one `MPVCommonPhaseCover` instead of separately passing the common
 family, two class maps, phase equivalences, and surjectivity proofs.  The proof is
 a direct application of the existing theorem and introduces no new analytic

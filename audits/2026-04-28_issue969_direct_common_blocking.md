@@ -83,7 +83,7 @@ New MPV comparison facts:
 
 New theorem:
 
-- `MPSTensor.fundamentalTheorem_after_blocking_1606_reindexed_commonSector_live_with_zeroTail`.
+- `MPSTensor.fundamentalTheorem_after_blocking_reindexed_commonSector_live_with_zeroTail`.
 
 This theorem starts from `SameMPV₂ A B`, reuses the already-merged common cyclic-sector
 families on both sides, and exposes:
@@ -108,7 +108,7 @@ Current `main` already contains the span adapter from #976:
 
 - `MPSTensor.MPVBlockPhaseEquiv`;
 - `MPSTensor.mpv_span_eq_of_common_phase_cover`;
-- `MPSTensor.fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_phaseCover`.
+- `MPSTensor.fundamentalTheorem_after_blocking_sector_of_common_blocks_phaseCover`.
 
 This branch therefore aims only to make the #969 common-blocking data closer to the
 exact nonzero-part data those theorems will eventually need. The new data provide:
@@ -125,7 +125,7 @@ exact nonzero-part data those theorems will eventually need. The new data provid
   family of explicitly relabeled nonzero-weight blocks has the same MPV family as the
   flattened common sectors.
 - **Zero-tail equations after common reblocking:**
-  `fundamentalTheorem_after_blocking_1606_reindexed_commonSector_live_with_zeroTail`
+  `fundamentalTheorem_after_blocking_reindexed_commonSector_live_with_zeroTail`
   records the zero-tail/live equation for `blockTensor A familyA.p` and `blockTensor B familyB.p`
   with canonical blocked nonzero-weight blocks, and separately records the relabeled common-sector
   flattening.

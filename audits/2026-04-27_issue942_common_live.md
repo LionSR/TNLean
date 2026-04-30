@@ -27,7 +27,7 @@ common physical flattening is already formalized.
    primitive transfer, and tensor irreducibility. This is intentionally separate
    from the period-removal length `m`.
 
-4. `MPSTensor.fundamentalTheorem_after_blocking_1606_perBlock_cyclic_live_with_zeroTail`
+4. `MPSTensor.fundamentalTheorem_after_blocking_perBlock_cyclic_live_with_zeroTail`
    in `TNLean/MPS/CanonicalForm/Assembly/StructuralTheorem.lean` is the main
    predecessor theorem. From `SameMPV₂ A B`, it:
    - applies the arbitrary-tensor zero-tail / TP-gauge reduction to both sides;

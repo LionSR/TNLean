@@ -44,7 +44,7 @@ or injectivity/Wielandt blocking length.
 - `MPSTensor.exists_commonBlockedCyclicSectorFamily_of_hasPrimitiveIrreducibleCyclicSectors`:
   constructs the one-sided common reblocked family by taking the LCM of the per-block
   periods and applying `tp_primitive_irreducible_extra_blocking` to each cyclic sector.
-- `MPSTensor.fundamentalTheorem_after_blocking_1606_commonBlocked_cyclic_live_with_zeroTail`:
+- `MPSTensor.fundamentalTheorem_after_blocking_commonBlocked_cyclic_live_with_zeroTail`:
   combines the zero-tail/TP-gauge reduction for nonzero-weight blocks with the one-sided
   common reblocking constructor on both sides, preserving positive-length nonzero-part
   equality and the exact `N = 0` zero-tail bookkeeping.
