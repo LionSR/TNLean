@@ -789,7 +789,7 @@
   <a href="ch-algebraic_ft.html#sec:block_separation"><span class="toc_ref">17.10</span> <span class="toc_entry">Block separation from canonical form</span></a>
  </li>
 <li class="">
-  <a href="ch-algebraic_ft.html#sec:hetero_equal_case_ft"><span class="toc_ref">17.11</span> <span class="toc_entry">Heterogeneous equal-case endpoint</span></a>
+  <a href="ch-algebraic_ft.html#sec:hetero_equal_case_ft"><span class="toc_ref">17.11</span> <span class="toc_entry">Heterogeneous equal-case result</span></a>
  </li>
 <li class="">
   <a href="ch-algebraic_ft.html#sec:ti_reduction"><span class="toc_ref">17.12</span> <span class="toc_entry">Translation-invariant reduction</span></a>
@@ -1644,7 +1644,7 @@
 </div>
 <h1 id="sec:virtual_bond_gauge">17.4 Same state forces a virtual bond gauge</h1>
 
-<p>This section records the 3-site virtual-bond statement used later in the paper proof. Here the hypothesis is already the all-length MPV equality of the combined tensors, and the conclusion is the conjugacy of the middle-bond insertion data. </p>
+<p>This section presents the 3-site virtual-bond statement used later in the paper proof. Here the hypothesis is already the all-length MPV equality of the combined tensors, and the conclusion is the conjugacy of the middle-bond insertion data. </p>
 <div class="lemma_thmwrapper theorem-style-plain" id="lem:virtual_bond_gauge">
   <div class="lemma_thmheading">
     <span class="lemma_thmcaption">
@@ -1834,7 +1834,7 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   Let \(A_1, A_2\) and \(B_1, B_2\) be injective MPS tensors with the same bond dimension \(D\). Suppose that for all \(X \in M_{D}(\mathbb {C})\) (on the internal bond) and all \(Y \in M_{D}(\mathbb {C})\) (on the external bond), </p>
-<div class="displaymath" id="<plasTeX.TeXFragment object at 0x7fe7d2dde2d0>">
+<div class="displaymath" id="<plasTeX.TeXFragment object at 0x7f1941bde2d0>">
   \begin{align}  \operatorname{tr}(A_1^{i}\,  X\,  A_2^{j}) & = \operatorname{tr}(B_1^{i}\,  X\,  B_2^{j}) \qquad \text{for all } i, j, \label{eq:internal_bond}\\ \operatorname{tr}(A_2^{j}\,  Y\,  A_1^{i}) & = \operatorname{tr}(B_2^{j}\,  Y\,  B_1^{i}) \qquad \text{for all } i, j. \label{eq:external_bond} \end{align}
 </div>
 <p> Diagrammatically, Eq.&#160;?? is the equality obtained by inserting \(X\) on the bond between the two sites, </p>
@@ -1870,7 +1870,7 @@
 </div>
 <h1 id="sec:ft_chain">17.6 The Fundamental Theorem for injective chains</h1>
 
-<p>The current Lean endpoint for chains is obtained by bundling the site index into the physical index and applying the single-block Fundamental Theorem to the resulting tensor. The paper-style fixed-length same-state statement is recovered only after adding a separate same-state reduction hypothesis. </p>
+<p>The current formalized result for chains is obtained by combining the site and physical indices into a single physical index and applying the single-block Fundamental Theorem to the resulting tensor. The paper-style fixed-length same-state statement is recovered only after adding a separate same-state reduction hypothesis. </p>
 <div class="theorem_thmwrapper theorem-style-plain" id="thm:fundamentalTheorem_injective_chain">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
@@ -1940,7 +1940,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   Let \(\mathbf{A} = (A_0, \ldots , A_{n-1})\) and \(\mathbf{B} = (B_0, \ldots , B_{n-1})\) be two \(n\)-site chains with common bond dimension \(D\), and assume that \(\mathbf{A}\) is injective. Suppose that, after bundling the site index and physical index into a single MPS tensor, the resulting two tensors generate the same MPV family. Then \(\mathbf{A}\) and \(\mathbf{B}\) are cyclically gauge equivalent. </p>
+  <p>   Let \(\mathbf{A} = (A_0, \ldots , A_{n-1})\) and \(\mathbf{B} = (B_0, \ldots , B_{n-1})\) be two \(n\)-site chains with common bond dimension \(D\), and assume that \(\mathbf{A}\) is injective. Suppose that, after combining the site index and physical index into a single MPS tensor, the resulting two tensors generate the same MPV family. Then \(\mathbf{A}\) and \(\mathbf{B}\) are cyclically gauge equivalent. </p>
 
   </div>
 </div>
@@ -3240,7 +3240,7 @@
         </div>
   </div>
   <div class="remark_thmcontent">
-  <p>The theorem above is the exact blocked-chain endpoint established here. Recovering sitewise gauges for the original unblocked tensors, and hence the paper’s normal-MPS corollary, is not established here. </p>
+  <p>The theorem above is the exact blocked-chain result established here. Recovering sitewise gauges for the original unblocked tensors, and hence the paper’s normal-MPS corollary, is not established here. </p>
 
   </div>
 </div>
@@ -4861,7 +4861,7 @@
 
   </div>
 </div>
-<h1 id="sec:hetero_equal_case_ft">17.11 Heterogeneous equal-case endpoint</h1>
+<h1 id="sec:hetero_equal_case_ft">17.11 Heterogeneous equal-case result</h1>
 
 <div class="theorem_thmwrapper theorem-style-plain" id="thm:fundamentalTheorem_equalMPV_CFBNT_hetero">
   <div class="theorem_thmheading">

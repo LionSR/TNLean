@@ -789,7 +789,7 @@
   <a href="ch-algebraic_ft.html#sec:block_separation"><span class="toc_ref">17.10</span> <span class="toc_entry">Block separation from canonical form</span></a>
  </li>
 <li class="">
-  <a href="ch-algebraic_ft.html#sec:hetero_equal_case_ft"><span class="toc_ref">17.11</span> <span class="toc_entry">Heterogeneous equal-case endpoint</span></a>
+  <a href="ch-algebraic_ft.html#sec:hetero_equal_case_ft"><span class="toc_ref">17.11</span> <span class="toc_entry">Heterogeneous equal-case result</span></a>
  </li>
 <li class="">
   <a href="ch-algebraic_ft.html#sec:ti_reduction"><span class="toc_ref">17.12</span> <span class="toc_entry">Translation-invariant reduction</span></a>
@@ -1791,7 +1791,7 @@
 <div class="displaymath" id="a0000001379">
   \[  \operatorname {extractWindow}_{L,i}(\sigma ) \in \{ 0,\ldots ,d{-}1\} ^{L}  \]
 </div>
-<p> records the entries of \(\sigma \) on the cyclic interval \(i,i+1,\ldots ,i+L-1\) modulo \(N\). </p>
+<p> reads the entries of \(\sigma \) on the cyclic interval \(i,i+1,\ldots ,i+L-1\) modulo \(N\). </p>
 
   </div>
 </div>
@@ -2561,7 +2561,7 @@
     Remark
     </span>
     <span class="remark_thmlabel">20.23</span>
-    <span class="remark_thmtitle">Word and restriction helper formulas</span>
+    <span class="remark_thmtitle">Word and restriction auxiliary formulas</span>
     <div class="thm_header_extras">
 
     
@@ -3540,7 +3540,7 @@
         </div>
   </div>
   <div class="remark_thmcontent">
-  <p>        For a non-wrapping interval \([s,s+M-1] \subseteq \{ 0,\ldots ,N-1\} \), one can insert a length-\(M\) word into that interval and keep the complementary sites fixed. The associated restriction map evaluates an \(N\)-site state on those configurations. The auxiliary lemmas record the full-window case \(s=0\), \(M=N\), the compatibility of this restriction with deleting the last or first site, and the fact that fixing the first \(K\) entries of a contiguous \((K+L)\)-window leaves the contiguous \(L\)-window beginning at \(s+K\). </p>
+  <p>        For a non-wrapping interval \([s,s+M-1] \subseteq \{ 0,\ldots ,N-1\} \), one can insert a length-\(M\) word into that interval and keep the complementary sites fixed. The associated restriction map evaluates an \(N\)-site state on those configurations. The auxiliary lemmas state the full-window case \(s=0\), \(M=N\), the compatibility of this restriction with deleting the last or first site, and the fact that fixing the first \(K\) entries of a contiguous \((K+L)\)-window leaves the contiguous \(L\)-window beginning at \(s+K\). </p>
 
   </div>
 </div>
@@ -3582,7 +3582,7 @@
         </div>
   </div>
   <div class="remark_thmcontent">
-  <p>        On the periodic chain, a cyclic window starting at \(i\) reads the sites \(i,i+1,\ldots ,i+L-1\) modulo \(N\). Deleting the final site of a cyclic \((L+1)\)-window records the value at cyclic offset \(L\) in the outside configuration and gives the \(L\)-window starting at the same site. When this window does not wrap around the ring, the cyclic construction agrees with the contiguous one, and so do the two restriction maps. </p>
+  <p>        On the periodic chain, a cyclic window starting at \(i\) reads the sites \(i,i+1,\ldots ,i+L-1\) modulo \(N\). Deleting the final site of a cyclic \((L+1)\)-window reads the value at cyclic offset \(L\) in the outside configuration and gives the \(L\)-window starting at the same site. When this window does not wrap around the ring, the cyclic construction agrees with the contiguous one, and so do the two restriction maps. </p>
 
   </div>
 </div>
@@ -6269,7 +6269,7 @@
 	<a href="sect0001.html#Cirac2021Matrix" >CPGSV21</a>
 	, §&#160;IV.C
 	]
-</span>: Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:reduced_wrapped_boundary_compatibilities">20.50</a> supplies the two one-sided wrapped-boundary identities for the open-chain boundary matrix \(X\). The padded-annihilation lemma records that exact complement-span length mismatches are no longer the obstruction, and Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:ground_space_map_mpv_of_common_middle">20.69</a> formalizes the algebraic endgame once those one-sided identities have been compared to a single same-witness common-middle family. What is still missing is precisely that witness comparison for the actual two wrapped windows. </p>
+</span>: Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:reduced_wrapped_boundary_compatibilities">20.50</a> supplies the two one-sided wrapped-boundary identities for the open-chain boundary matrix \(X\). The padded-annihilation lemma states that exact complement-span length mismatches are no longer the obstruction, and Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:ground_space_map_mpv_of_common_middle">20.69</a> formalizes the algebraic endgame once those one-sided identities have been compared to a single same-witness common-middle family. What is still missing is precisely that witness comparison for the actual two wrapped windows. </p>
 
   </div>
 </div>
@@ -10910,7 +10910,7 @@
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>  Let \(A\) be injective and fix an interaction range \(L \ge 2\) as in Definition&#160;<a href="ch-parent_hamiltonian.html#def:parent_interaction">20.10</a>. Let \(h_L(A) := \Pi _{G_L(A)^\perp }\) be the \(L\)-site parent interaction, and for each chain length and site \(i\) let \(h_i\) denote its translate as in Definition&#160;<a href="ch-parent_hamiltonian.html#def:local_term_parent">20.16</a>. Then for every pair of overlapping terms \(h_i\) and \(h_j\) with \(0 {\lt} d_N(i,j) {\lt} L\), where \(d_N(i,j) := \min (|i-j|,\,  N-|i-j|)\) is the cyclic distance on the ring (i.e. whose \(L\)-site supports share at least one site under periodic boundary conditions), the martingale condition of Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:martingale_criterion">20.130</a> holds with constants \(c_{ij}\) and \(\gamma {\gt} 0\) depending only on \(A\) (not on \(N\)). <em>Note:</em> The proof below fully establishes the martingale constants only for \(L = 2\); for \(L {\gt} 2\) the existence of suitable constants is asserted without complete proof (see the remark at the end of the proof). Only the \(L = 2\) case is used in the spectral-gap theorem below. (When \(L = 1\) the interaction terms have disjoint supports, so there are no overlapping pairs and the spectral gap follows directly without the martingale machinery.) </p>
+  <p>  Let \(A\) be injective and fix an interaction range \(L \ge 2\) as in Definition&#160;<a href="ch-parent_hamiltonian.html#def:parent_interaction">20.10</a>. Let \(h_L(A) := \Pi _{G_L(A)^\perp }\) be the \(L\)-site parent interaction, and for each chain length and site \(i\) let \(h_i\) denote its translate as in Definition&#160;<a href="ch-parent_hamiltonian.html#def:local_term_parent">20.16</a>. Then for every pair of overlapping terms \(h_i\) and \(h_j\) with \(0 {\lt} d_N(i,j) {\lt} L\), where \(d_N(i,j) := \min (|i-j|,\,  N-|i-j|)\) is the cyclic distance on the ring (i.e. whose \(L\)-site supports share at least one site under periodic boundary conditions), the martingale condition of Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:martingale_criterion">20.130</a> holds with constants \(c_{ij}\) and \(\gamma {\gt} 0\) depending only on \(A\) (not on \(N\)). <em>Note:</em> The proof below fully establishes the martingale constants only for \(L = 2\); for \(L {\gt} 2\) the existence of suitable constants is asserted without complete proof (see the remark at the end of the proof). Only the \(L = 2\) case is used in the spectral-gap theorem below. (When \(L = 1\) the interaction terms have disjoint supports, so there are no overlapping pairs and the spectral gap follows directly without the martingale argument.) </p>
 
   </div>
 </div>
@@ -11054,7 +11054,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>The local averaging, positivity, and symmetric-projection statements are now recorded in Lemmas&#160;<a href="ch-parent_hamiltonian.html#lem:local_term_es_average">20.104</a>, <a href="ch-parent_hamiltonian.html#lem:transported_es_positive">20.105</a>, and&#160;<a href="ch-parent_hamiltonian.html#lem:transported_es_local_projections">20.106</a>. Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_es_quadratic_reduction">20.112</a> reduces the present theorem to the remaining MPS-specific task: deriving the uniform quadratic-form estimate. Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_ordered_rowsum_gap">20.118</a> establishes the finite-sum algebra from ordered cross-term row bounds, and Lemmas&#160;<a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_finite_overlap_friedrichs_quadratic">20.119</a> and&#160;<a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_finite_overlap_friedrichs_gap">20.126</a> record the common finite-overlap specialization with \(m=2(L-1)\). Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:transported_es_nonoverlap_positive">20.110</a> supplies the non-overlap positivity statement for site-disjoint windows, and Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:cyclic_window_nonoverlap_positive">20.124</a> translates this to the concrete support-disjoint cyclic windows. Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:cyclic_window_overlap_cardinality">20.125</a> gives the finite-overlap row-cardinality bound. Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_cyclic_window_friedrichs_gap">20.127</a> combines these ingredients with the finite-overlap reduction, so the remaining analytic task is the Friedrichs-angle estimate for overlapping cyclic windows. Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_cyclic_overlap_friedrichs_gap">20.128</a> records the same overlap-only formulation, and Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_cyclic_overlap_norm_gap">20.129</a> records a sufficient norm-compression formulation. </p>
+  <p>The local averaging, positivity, and symmetric-projection statements are now established in Lemmas&#160;<a href="ch-parent_hamiltonian.html#lem:local_term_es_average">20.104</a>, <a href="ch-parent_hamiltonian.html#lem:transported_es_positive">20.105</a>, and&#160;<a href="ch-parent_hamiltonian.html#lem:transported_es_local_projections">20.106</a>. Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_es_quadratic_reduction">20.112</a> reduces the present theorem to the remaining MPS-specific task: deriving the uniform quadratic-form estimate. Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_ordered_rowsum_gap">20.118</a> establishes the finite-sum algebra from ordered cross-term row bounds, and Lemmas&#160;<a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_finite_overlap_friedrichs_quadratic">20.119</a> and&#160;<a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_finite_overlap_friedrichs_gap">20.126</a> state the common finite-overlap specialization with \(m=2(L-1)\). Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:transported_es_nonoverlap_positive">20.110</a> supplies the non-overlap positivity statement for site-disjoint windows, and Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:cyclic_window_nonoverlap_positive">20.124</a> translates this to the concrete support-disjoint cyclic windows. Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:cyclic_window_overlap_cardinality">20.125</a> gives the finite-overlap row-cardinality bound. Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_cyclic_window_friedrichs_gap">20.127</a> combines these ingredients with the finite-overlap reduction, so the remaining analytic task is the Friedrichs-angle estimate for overlapping cyclic windows. Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_cyclic_overlap_friedrichs_gap">20.128</a> states the same overlap-only formulation, and Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_cyclic_overlap_norm_gap">20.129</a> states a sufficient norm-compression formulation. </p>
 
   </div>
 </div>
@@ -11389,7 +11389,7 @@
         </div>
   </div>
   <div class="definition_thmcontent">
-  <p>   For a fixed length \(m\), the Route B product-word span condition is the finite-length spanning condition already recorded in Remark&#160;<a href="ch-mpdo.html#rem:word_tuple_span_top">3.42</a>: the simultaneous block-word evaluations </p>
+  <p>   For a fixed length \(m\), the Route B product-word span condition is the finite-length spanning condition already stated in Remark&#160;<a href="ch-mpdo.html#rem:word_tuple_span_top">3.42</a>: the simultaneous block-word evaluations </p>
 <div class="displaymath" id="a0000001547">
   \[  \omega \longmapsto \bigl(A_j^{\omega }\bigr)_j  \]
 </div>
@@ -12228,9 +12228,9 @@
           
           <li><a href="../docs/find/#doc/MPSTensor.pair_mul_mem_span_pairWordTuple_add" class="lean_decl">MPSTensor.pair_mul_mem_span_pairWordTuple_add</a></li>
           
-          <li><a href="../docs/find/#doc/MPSTensor.pairWordTupleSpanTop_of_pairCumulativeWordTupleSpanTop_of_identityPadding" class="lean_decl">MPSTensor.pairWordTupleSpanTop_of_pairCumulativeWordTupleSpanTop_of_identityPadding</a></li>
+          <li><a href="../docs/find/#doc/MPSTensor.pairWordTupleSpanTop_of_pairCumulativeWordTupleSpanTop_of_identity_padding" class="lean_decl">MPSTensor.pairWordTupleSpanTop_of_pairCumulativeWordTupleSpanTop_of_identity_padding</a></li>
           
-          <li><a href="../docs/find/#doc/MPSTensor.pairTraceSeparatingAt_of_pairTraceSeparatingUpTo_of_identityPadding" class="lean_decl">MPSTensor.pairTraceSeparatingAt_of_pairTraceSeparatingUpTo_of_identityPadding</a></li>
+          <li><a href="../docs/find/#doc/MPSTensor.pairTraceSeparatingAt_of_pairTraceSeparatingUpTo_of_identity_padding" class="lean_decl">MPSTensor.pairTraceSeparatingAt_of_pairTraceSeparatingUpTo_of_identity_padding</a></li>
           
         </ul>
     
@@ -12521,9 +12521,9 @@
           
           <li><a href="../docs/find/#doc/MPSTensor.exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingAt" class="lean_decl">MPSTensor.exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingAt</a></li>
           
-          <li><a href="../docs/find/#doc/MPSTensor.wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingUpTo_of_identityPadding" class="lean_decl">MPSTensor.wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingUpTo_of_identityPadding</a></li>
+          <li><a href="../docs/find/#doc/MPSTensor.wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingUpTo_of_identity_padding" class="lean_decl">MPSTensor.wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingUpTo_of_identity_padding</a></li>
           
-          <li><a href="../docs/find/#doc/MPSTensor.exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingUpTo_of_identityPadding" class="lean_decl">MPSTensor.exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingUpTo_of_identityPadding</a></li>
+          <li><a href="../docs/find/#doc/MPSTensor.exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingUpTo_of_identity_padding" class="lean_decl">MPSTensor.exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingUpTo_of_identity_padding</a></li>
           
           <li><a href="../docs/find/#doc/MPSTensor.exists_pos_productWordSpan_of_isCanonicalFormBNT_of_blockSelectorWords" class="lean_decl">MPSTensor.exists_pos_productWordSpan_of_isCanonicalFormBNT_of_blockSelectorWords</a></li>
           
@@ -12647,11 +12647,11 @@
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>       Let \(A\) be in canonical-form/BNT, and assume \(1{\lt}L\), \(N \ge L+1\), and \(0{\lt}m\). Assume the remaining #911 input: every virtual sector projection lies in the pulled-back span of the length-\(m\) word products of the assembled tensor. If a boundary matrix for the assembled tensor commutes with all those length-\(m\) words, then the vector obtained by applying the assembled ground-space map to that boundary matrix lies in \(\bigsqcup _j \mathcal G_{N,L}(A_j)\). Consequently, if every assembled periodic-chain ground vector admits such a commuting boundary matrix representation (the output of the wrapping-window comparison), then </p>
+  <p>       Let \(A\) be in canonical-form/BNT, and assume \(1{\lt}L\), \(N \ge L+1\), and \(0{\lt}m\). Assume the remaining #911 hypothesis: every virtual sector projection lies in the pulled-back span of the length-\(m\) word products of the assembled tensor. If a boundary matrix for the assembled tensor commutes with all those length-\(m\) words, then the vector obtained by applying the assembled ground-space map to that boundary matrix lies in \(\bigsqcup _j \mathcal G_{N,L}(A_j)\). Consequently, if every assembled periodic-chain ground vector admits such a commuting boundary matrix representation (the result of the wrapping-window comparison), then </p>
 <div class="displaymath" id="a0000001566">
   \[  \mathcal G_{N,L}\bigl(\operatorname {Assemble}(\mu , A)\bigr) \subseteq \bigsqcup _j \mathcal G_{N,L}(A_j),  \]
 </div>
-<p> and together with the already-proved forward inclusion this gives the corresponding conditional equality. Composing the reverse inclusion with blockwise injective uniqueness gives the conditional containment of the assembled parent ground space in the BNT span; this lemma is not a restatement of the final theorem, because it keeps the #911 projection-span and boundary representation inputs explicit. </p>
+<p> and together with the already-proved forward inclusion this gives the corresponding conditional equality. Composing the reverse inclusion with blockwise injective uniqueness gives the conditional containment of the assembled parent ground space in the BNT span; this lemma is not a restatement of the final theorem, because it keeps the #911 projection-span and boundary representation hypotheses explicit. </p>
 
   </div>
 </div>
@@ -13034,7 +13034,7 @@
 
   </div>
 </div>
-<p><em>Remark.</em> A separate kernel-identification statement for these assembled block families is still to be recorded; at present, the formal results are stated in the chain-ground-space model rather than directly as \(\ker (H_{N})\).  </p>
+<p><em>Remark.</em> A separate kernel-identification statement for these assembled block families is still to be established; at present, the formal results are stated in the chain-ground-space model rather than directly as \(\ker (H_{N})\).  </p>
 
 </div> <!--main-text -->
 </div> <!-- content-wrapper -->
