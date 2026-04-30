@@ -7,10 +7,11 @@ import TNLean.MPS.CanonicalForm.Assembly.StructuralTheorem
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
 
 /-!
-# BNT proportional-decomposition sector comparisons
+# Sector comparisons from common MPV phase covers
 
-This module gives after-blocking sector-comparison consequences from common MPV phase covers and
-from BNT proportional-decomposition comparisons of the nonzero-weight block families.
+The results here give after-blocking sector-comparison consequences from common MPV phase covers,
+and record the special case where the cover comes from a BNT proportional-decomposition
+comparison of the nonzero-weight block families.
 
 ## Main statements
 
@@ -92,7 +93,7 @@ theorem afterBlocking_sectorComparison_of_proportionalDecompositionConclusion
 This zero-tail-aware variant combines exact zero-tail decompositions with a common MPV phase
 cover of the nonzero-weight block families. The cover gives the finite-length span equality for
 those families, while the one-sided phase-class BNT construction supplies the remaining overlap
-data for the collapsed representatives. -/
+data for the representatives of the MPV phase-equivalence classes. -/
 theorem afterBlocking_sectorComparison_zeroTail_of_commonPhaseCover
     {d D₁ D₂ p rA rB zeroTailA zeroTailB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
