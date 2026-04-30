@@ -14,7 +14,7 @@ This file proves two key lemmas for the Fundamental Theorem of MPS:
    under the assumption that `A` is injective and `SameMPV A B`.
 2. **Multiplicativity** of `T`: the SameMPV condition forces `T(MN) = T(M)T(N)`.
 
-Both proofs use the `traceMulRightPi` machinery from `TracePairing.lean`.
+Both proofs use the `traceMulRightPi` methods from `TracePairing.lean`.
 -/
 
 open scoped Matrix BigOperators

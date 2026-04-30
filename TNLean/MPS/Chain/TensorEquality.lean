@@ -11,7 +11,7 @@ local tensors agree under all virtual insertions on both bonds, then the two
 pairs are proportional by inverse nonzero scalars.
 
 The full proportionality theorem is stated as `tensor_proportional`.
-The first trace-to-product reduction steps are provided as helper lemmas.
+The first trace-to-product reduction steps are provided as auxiliary lemmas.
 -/
 
 open scoped Matrix

@@ -197,7 +197,7 @@ lemma exists_nondecaying_overlap_of_sameMPV₂_CFBNT
   -- ── Steps B+C: Match existence via dominant-weight contradiction + induction. ──
   set a0 : Fin rA := ⟨0, hrA_pos⟩
   set b0 : Fin rB := ⟨0, hrB_pos⟩
-  -- ── Helper: dominant case prover ──
+  -- ── Auxiliary: dominant case prover ──
   -- If ∀ k, overlap(A j₀, B k) → 0 AND j₀ is the dominant block, derive False.
   have dominant_A_contra :
       (∀ k, Tendsto (fun N => mpvOverlap (d := d) (A a0) (B k) N) atTop (nhds 0)) →
@@ -664,7 +664,7 @@ lemma exists_nondecaying_overlap_of_sameMPV₂_CFBNT
     simp [succA, Fin.ext_iff] at h; exact Fin.ext (by omega)
   have succB_inj : Function.Injective succB := fun k₁ k₂ h => by
     simp [succB, Fin.ext_iff] at h; exact Fin.ext (by omega)
-  -- ── Helper: reindex Finset sums from erase to Fin (r - 1) ──
+  -- ── Auxiliary: reindex Finset sums from erase to Fin (r - 1) ──
   have hSumA_reindex : ∀ N,
       ∑ j ∈ Finset.univ.erase a0, μA j ^ N • (A j).mpvState N =
       ∑ j : Fin (rA - 1), μA (succA j) ^ N • (A (succA j)).mpvState N := by
