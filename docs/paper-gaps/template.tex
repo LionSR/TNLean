@@ -2,9 +2,9 @@
 
 \usepackage{amsmath,amssymb}
 \usepackage{xurl}
-\usepackage[hidelinks]{hyperref}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
 
-\input{command}
+\input{docs/paper-gaps/command}
 
 \title{Model Note: Comparing a Cited Argument with a Formal Statement}
 \author{}
@@ -29,8 +29,8 @@
 \section{The assertion}
 
 This note concerns a hypothetical proposition, of the sort one might encounter
-in a cited argument such as \cite{Cirac2021Matrix}.  The proposition
-is used later in the same argument.
+in a cited argument such as \cite{Cirac2021Matrix}.  The proposition is used
+later in the same argument.
 
 Let \(\mathcal H\) denote the hypotheses available at a certain point of the
 argument, and let \(C\) denote the conclusion needed there.  Suppose the cited
@@ -72,9 +72,11 @@ This is a strengthening of the hypotheses, not a derivation of \(\mathcal K\)
 from the original assumptions.
 
 If the formal development proves this corrected statement, the note should state
-that fact in prose and identify the exact formal declaration in a footnote.  The
-formal declaration is evidence for the corrected mathematical statement; it is
-not a substitute for explaining the statement.
+that fact in prose and identify the exact formal declaration in a footnote.  For
+example, the declaration might be recorded as \leanid{modelCorrected} in
+\doclink{TNLean/Path/To/File}.  The formal declaration is evidence for the
+corrected mathematical statement; it is not a substitute for explaining the
+statement.
 
 The same principle applies if the formal proof uses a theorem from a library
 which is not present in the cited source.  The note should first state that
@@ -91,6 +93,6 @@ such a derivation or a different proof of \(C\), the original implication
 \(\mathcal H\Rightarrow C\) remains unjustified.
 
 \bibliographystyle{alpha}
-\bibliography{references}
+\bibliography{docs/paper-gaps/references}
 
 \end{document}
