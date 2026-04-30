@@ -32,7 +32,7 @@ namespace MPOTensor
 
 variable {d D : ℕ}
 
-/-- In the current development, the current mixed-state RFP condition is
+/-- The mixed-state RFP condition in the current development is
 definitionally the same as MPO ZCL. -/
 theorem isRFP_iff_isZCL (M : MPOTensor d D) : IsRFP M ↔ IsZCL M :=
   Iff.rfl

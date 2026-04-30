@@ -520,7 +520,7 @@ structure coefficients $c_{\alpha,\beta,\gamma}^{(L)}$ of the blocked MPDO
 support algebra have the form
 $c_{\alpha,\beta,\gamma}^{(L)} = \operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{L})$
 for a family of diagonal matrices $\chi_{\alpha,\beta,\gamma}$ with positive
-entries. This subsection represents those diagonal matrices as explicit Lean data
+entries. This subsection represents those diagonal matrices explicitly
 and states the trace-power identity. -/
 
 /-- A family of diagonal matrices `χ_{α,β,γ}` indexed by ordered triples drawn
