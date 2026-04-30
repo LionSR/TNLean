@@ -1,0 +1,186 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{The Span-Element Cases in the Quantum Wielandt Inequality}
+\author{}
+\date{2026-04-30}
+
+\begin{document}
+\maketitle
+
+\section{The assertion}
+
+This note concerns the quantum Wielandt inequality of
+Sanz--P\'erez-Garc\'ia--Wolf--Cirac \cite{Sanz2010Quantum}.\footnote{For
+traceability, this note corresponds to
+\href{https://github.com/LionSR/TNLean/issues/1049}{issue \#1049}. The local
+source passage is \path{Papers/0909.5347/main.tex:360--365},
+\path{Papers/0909.5347/main.tex:572--590}, and
+\path{Papers/0909.5347/main.tex:645--684}.}
+
+Let $\mathcal E_A$ be a quantum channel on $M_D(\mathbb C)$ with Kraus
+operators $A_1,\ldots,A_a$. For each $n$, let
+\[
+  S_n(A)=\operatorname{span}\{A_{i_1}\cdots A_{i_n}:1\leq i_1,\ldots,i_n\leq a\}.
+\]
+Let
+\[
+  i(A)=\min\{n:S_n(A)=M_D(\mathbb C)\}
+\]
+when the set is nonempty. The source theorem uses $d$ for the number of
+linearly independent Kraus operators, equivalently $d=\dim S_1(A)$ in the
+minimal Kraus-span convention. With this convention Theorem~1 of the source
+states that, if $\mathcal E_A$ is primitive, then $q(\mathcal E_A)\leq i(A)$
+and
+\[
+  i(A)\leq (D^2-d+1)D^2.
+\]
+It also states two sharper cases:
+\[
+  S_1(A)\text{ contains an invertible element}
+  \quad\Longrightarrow\quad
+  i(A)\leq D^2-d+1,
+\]
+and
+\[
+  S_1(A)\text{ contains a non-invertible element with a nonzero eigenvalue}
+  \quad\Longrightarrow\quad
+  i(A)\leq D^2.
+\]
+These hypotheses are hypotheses about elements of the one-step span $S_1(A)$,
+not only about the displayed Kraus operators themselves.
+
+\section{The formal statements}
+
+The formal development defines $S_n(A)$ as the exact word span and defines the
+Kraus rank as
+\[
+  \operatorname{kr}(A)=\dim S_1(A).
+\]
+This is the paper's linearly independent Kraus count. Replacing the printed
+symbol $d$ by $\operatorname{kr}(A)$ is therefore a faithful convention rather
+than a weakening of the numerical bound.
+\footnote{The formal definitions are \texttt{MPSTensor.wordSpan} in
+\path{TNLean/Wielandt/SpanGrowth/CumulativeSpan.lean:57--64} and
+\texttt{MPSTensor.krausRank} in
+\path{TNLean/Wielandt/Primitivity/PaperDefinitions.lean:85--91}. The local
+source identifies $d$ as the number of linearly independent Kraus operators in
+\path{Papers/0909.5347/main.tex:360--365}; the proof of Lemma~1 uses
+$\dim T_1(A)=d$ in \path{Papers/0909.5347/main.tex:579--583}.}
+
+The general bound is formalized with the exact word-span index:
+\[
+  i(A)\leq (D^2-\operatorname{kr}(A)+1)D^2.
+\]
+The statement assumes the paper's primitive spreading condition and
+trace-preserving normalization. The proof passes through eventual full Kraus
+rank and uses a blocking argument, but the conclusion is the fixed-length
+statement for $S_n(A)$, not merely a cumulative-span statement.
+\footnote{The paper-facing general theorem is
+\texttt{MPSTensor.iIndex\_le\_general\_of\_isPrimitivePaper} in
+\path{TNLean/Wielandt/PaperResults/WielandtInequality.lean:251--348}. The
+formal equivalence between paper primitivity and eventual full Kraus rank under
+normalization is in \path{TNLean/Wielandt/Primitivity/Equivalence.lean:169--191}.}
+
+The standalone formal statements corresponding to the two sharper cases have a
+different form. The invertible case assumes that one of the listed Kraus
+operators $A_{i_0}$ is invertible, and concludes
+\[
+  S_{D^2-\operatorname{kr}(A)+1}(A)=M_D(\mathbb C).
+\]
+The non-invertible case assumes that one listed Kraus operator $A_{i_0}$ is
+non-invertible and has a nonzero eigenvalue, and concludes
+\[
+  S_{D^2}(A)=M_D(\mathbb C).
+\]
+Thus the formal hypotheses are hypotheses on a displayed generator, whereas the
+source hypotheses are hypotheses on the whole subspace $S_1(A)$.
+\footnote{The formal invertible case is
+\texttt{MPSTensor.wordSpan\_eq\_top\_of\_isPrimitivePaper\_of\_isUnit} and
+\texttt{MPSTensor.iIndex\_le\_of\_isPrimitivePaper\_of\_isUnit} in
+\path{TNLean/Wielandt/PaperResults/WielandtInequality.lean:182--217}. The
+formal non-invertible case is
+\texttt{MPSTensor.wordSpan\_eq\_top\_of\_isPrimitivePaper\_of\_noninvertible\_eigenvector}
+and \texttt{MPSTensor.iIndex\_le\_sq\_of\_noninvertible\_eigenvector} in
+\path{TNLean/Wielandt/PaperResults/WielandtInequality.lean:119--178}.}
+
+\section{The point at issue}
+
+For a fixed Kraus representation, the assertion that $S_1(A)$ contains an
+invertible element is weaker than the assertion that one of the matrices
+$A_i$ is invertible. The same distinction applies to a non-invertible element
+of $S_1(A)$ with a nonzero eigenvalue. A linear combination of Kraus operators
+can have one of these properties even when no displayed Kraus operator has it.
+
+This distinction is mathematical, not merely syntactic. In the source theorem,
+the element supplied by the hypothesis may be any matrix in $S_1(A)$. The
+formal theorem can be applied directly only after that element has been made
+into a named one-step generator, or after the proof is generalized so that the
+one-step element itself replaces the named generator.
+
+The invertible case is expected to generalize directly: if $X\in S_1(A)$ is
+invertible, then left multiplication by $X$ maps $S_n(A)$ into $S_{n+1}(A)$ and
+is injective. This is the dimension-growth mechanism used in the source proof.
+The formal statement instead uses this mechanism only for a listed Kraus
+operator. The non-invertible case similarly should be stated for an
+element $X\in S_1(A)$ with a nonzero eigenvalue, or else accompanied by a
+Kraus-representation-change lemma showing that the same channel and the same
+word spans may be represented with $X$ as a displayed Kraus operator.
+
+\section{What is not a discrepancy}
+
+The replacement of $d$ by $\operatorname{kr}(A)=\dim S_1(A)$ is not a paper
+error and not a formal weakening. It records explicitly the linearly
+independent Kraus count used by the source proof.
+
+Nor is the cumulative-span material, by itself, a theorem-level deviation.
+There are intermediate formal results about
+\[
+  T_n(A)=S_0(A)+S_1(A)+\cdots+S_n(A),
+\]
+including the bound $T_{D^2}(A)=M_D(\mathbb C)$ under normality. These results
+are weaker than the full quantum Wielandt theorem, but the paper-facing general
+theorem proves the exact word-span bound for $i(A)$.
+\footnote{The cumulative-span theorem is
+\texttt{MPSTensor.cumulativeSpan\_eq\_top} in
+\path{TNLean/Wielandt/SpanGrowth/NonzeroTraceProduct.lean:164--197}; the
+paper-facing exact-word-span theorem is the general theorem cited above. The
+blueprint makes this distinction in
+\path{blueprint/src/chapter/ch07_wielandt.tex:461--490} and states the general
+bound in \path{blueprint/src/chapter/ch07_wielandt.tex:492--548}.}
+
+Finally, the lower-level use of normality is not itself a mismatch. In these
+formal statements, normality is eventual full Kraus rank. Under the paper's
+normalization, the formal statements prove the equivalence between the paper's
+primitive condition and eventual full Kraus rank, so using normality as an intermediate
+hypothesis is a legitimate intermediate argument.
+
+\section{Conclusion}
+
+The conclusion is a provisional difference in hypotheses for the sharper cases.
+The general quantum Wielandt bound is formalized with the correct fixed-length
+index and with the source's linearly independent Kraus count made explicit as
+$\operatorname{kr}(A)$. The formal proof through normality and blocking is
+therefore not a gap in the general bound.
+
+The standalone sharper cases are not yet stated in the same generality as
+Theorem~1 of \cite{Sanz2010Quantum}. The source assumes that the one-step span
+$S_1(A)$ contains an invertible element, or a non-invertible element with a
+nonzero eigenvalue. The formal statements assume that such an element is one of
+the listed Kraus operators. This is a strengthening of the hypotheses for those
+standalone cases. To remove the deviation, the formal development should either
+prove the two sharper cases for arbitrary qualifying elements of $S_1(A)$, or
+prove an explicit Kraus-representation invariance theorem that reduces the
+span-element hypotheses to the displayed-generator hypotheses without changing
+the channel or the relevant word-span indices.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
