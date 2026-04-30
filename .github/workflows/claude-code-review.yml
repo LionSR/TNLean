@@ -9,6 +9,8 @@ on:
       - "lakefile.toml"
       - "lean-toolchain"
       - "blueprint/src/**/*.tex"
+      - "docs/paper-gaps/**/*.tex"
+      - "docs/paper-gaps/**/*.bib"
 
 concurrency:
   group: claude-review-${{ github.event.pull_request.number }}
@@ -115,11 +117,21 @@ jobs:
             7. 🟡 **Documentation**: Do new definitions and key theorems have docstrings? Are module-level
                doc comments present for new files? Do docstrings explain mathematical meaning, not just
                Lean syntax? Missing documentation must be added before approval.
+            8. 🟡 **Paper-gap notes**: When the PR changes files under `docs/paper-gaps/`, read
+               `docs/paper-gaps/policy.tex` before reviewing the changed note. Check that the note is a
+               self-contained mathematical account: it introduces its notation, states the cited assertion,
+               isolates the calculation or logical obstruction, compares the cited source with the
+               blueprint and Lean statement when relevant, and gives a precise verdict. If the note cites
+               a paper, blueprint, or project source file, inspect the cited passage and flag unsupported,
+               overstated, or ambiguous claims. Paper-gap notes must be written for third-party
+               mathematical readers, not as issue logs or implementation diaries.
 
             **Out of scope** (handled by the dedicated `Blueprint Sync & Prose Review` workflow — do
             NOT comment on these here, to avoid duplicate review threads):
             - Blueprint ↔ Lean sync (`\lean{...}` / `\leanok` / `\uses{...}` tags, `\leanok` on proofs).
             - Prose quality / banned AI-software language in blueprint `.tex` and Lean docstrings.
+              This exclusion does not apply to paper-gap notes, which are reviewed here against
+              `docs/paper-gaps/policy.tex`.
 
             ---
 
@@ -133,6 +145,10 @@ jobs:
 
             For each issue found, post an inline comment on the relevant line using the GitHub CLI.
             At the end, post a summary comment on the PR with your overall assessment.
+            In that assessment, describe mathematical concerns by naming the theorem, lemma,
+            definition, proof obligation, or paper-gap assertion. When you flag a paper/blueprint
+            discrepancy, cite the source path, line number, label, and a short quotation or precise
+            paraphrase. State the theorem, lemma, definition, or proof obligation directly.
 
             **Reading existing feedback:**
             Before posting new comments, read ALL existing feedback on this PR using the GitHub MCP tools:
@@ -208,4 +224,4 @@ jobs:
           claude_args: |
             --model claude-opus-4-7
             --allowedTools "Read,Glob,Grep,Bash(gh pr diff:*),Bash(gh pr view:*),Bash(gh pr comment:*),Bash(gh api graphql:*),Bash(lake build),Bash(lake exe cache get),Bash(lake update),Bash(lake env),Bash(lean *),Bash(elan *),Bash(grep *),mcp__github__*"
-            --append-system-prompt "This is a Lean 4 / Mathlib formalization project for quantum information theory (MPS tensors, quantum channels, Wielandt theorem). Review with mathematical rigor. Flag any sorry that is not clearly marked as a known TODO."
+            --append-system-prompt "This is a Lean 4 / Mathlib formalization project for quantum information theory (MPS tensors, quantum channels, Wielandt theorem). Review with mathematical rigor. Flag any sorry that is not clearly marked as a known TODO. Generated review prose should name the theorem, lemma, definition, proof obligation, or paper-gap assertion directly and cite paper or blueprint path, line, label, and short quotation or precise paraphrase when a mathematical source discrepancy is involved. Paper-gap notes under docs/paper-gaps/ are mathematical documents; review them against docs/paper-gaps/policy.tex for self-contained exposition, faithful citation, precise comparison with the blueprint and Lean formalization, and a clear verdict."

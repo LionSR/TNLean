@@ -1,10 +1,11 @@
-\documentclass[11pt]{article}
+\documentclass{article}
 
 \usepackage{amsmath,amssymb}
 \usepackage{xurl}
-\usepackage[hidelinks]{hyperref}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\setlength{\emergencystretch}{2em}
 
-\input{command}
+\input{docs/paper-gaps/command}
 
 \title{Model Note: Comparing a Cited Argument with a Formal Statement}
 \author{}
@@ -13,84 +14,67 @@
 \begin{document}
 \maketitle
 
-% This file is a model for notes in docs/paper-gaps/.
-% When making a real note, replace the abstract toy assertion below by the actual
-% mathematical assertion, source citation, issue link, and formal declarations.
-% The visible document should remain a coherent mathematical note, not a form.
-% If the issue is a scalar correction, a missing term, a counterexample, or a
-% different formal-library route, specialize the middle sections accordingly.
-% If a Mathlib theorem or construction replaces a step from the paper, explain
-% that theorem in ordinary mathematics before naming the formal declaration.
-% In a real note, the first paragraph should identify the cited assertion and
-% the part of the argument in which it is used.  Put issue links, pull requests,
-% source files, line ranges, labels, and formal declaration names in footnotes
-% when they are only traceability data.
+% This file is a model for notes in docs/paper-gaps/. See policy.tex for the
+% full style guide. Key rules:
+%   - Notation must match the cited source.
+%   - Lean identifiers, file paths, and issue numbers go in footnotes only.
+%     Use \leanid{Name} for Lean identifiers, \ghissue{N} for issues,
+%     \ghpr{N} for pull requests, \doclink{path/to/File.lean} for doc-gen links.
+%   - Write in the first-person plural, active voice, direct sentences.
+%   - No \noindent\textbf{Verdict:} labels - the Conclusion section IS the verdict.
+%   - The body must read as pure mathematical prose.
+%   - Displayed equations should be clean; do not pack \text{...} annotations
+%     or formal declaration names into displayed math.
+%   - Compile from the repository root with pdflatex.
 
 \section{The assertion}
 
-This note concerns a hypothetical proposition, of the sort one might encounter
-in a cited argument such as \cite{Cirac2021Matrix}.  The proposition
-is used later in the same argument.
-
-Let \(\mathcal H\) denote the hypotheses available at a certain point of the
-argument, and let \(C\) denote the conclusion needed there.  Suppose the cited
-source states the implication
+We examine a step in \cite{Cirac2021Matrix}.%
+\footnote{Tracked in \ghissue{NNN}. The cited passage is at
+\path{Papers/FILE.tex}, lines~A--B.}
+Let the cited source state
 \[
   \mathcal H \Longrightarrow C.
   \tag{\path{thm:model-source}}
 \]
-The notation in the displayed implication has now been fixed: \(\mathcal H\) is
-the available hypothesis set, and \(C\) is the conclusion required by the later
-argument.
+The notation is fixed: \(\mathcal H\) is the available hypothesis set,
+and \(C\) is the conclusion required later in the argument.
 
 \section{The point at issue}
 
-Assume that the proof of the displayed implication invokes a lemma which, in the
-special case being used, proves
+The proof of the displayed implication invokes a lemma which, in the
+special case used, proves
 \[
-  \mathcal H \wedge \mathcal K \Longrightarrow C,
+  \mathcal H \land \mathcal K \Longrightarrow C,
   \tag{\path{lem:model-input}}
 \]
-where \(\mathcal K\) is an additional hypothesis.  If the surrounding argument
-does not prove \(\mathcal K\), then the displayed implication
-\(\mathcal H\Rightarrow C\) has not been justified by that proof.  The
-mathematical question is whether \(\mathcal K\) follows from \(\mathcal H\), must
-be added to the statement, or can be avoided by a different argument.
+where \(\mathcal K\) is an additional hypothesis. If the surrounding
+argument does not prove \(\mathcal K\), then \(\mathcal H\Rightarrow C\)
+has not been justified. The mathematical question is whether
+\(\mathcal K\) follows from \(\mathcal H\), must be added to the statement,
+or can be avoided by a different argument.
 
-Thus the proof supplies the desired conclusion only after the additional
-hypothesis \(\mathcal K\) has been accounted for.
+\section{The formal statement}
 
-\section{The corrected statement}
-
-In this model, suppose that \(\mathcal K\) is not known to follow from
-\(\mathcal H\), but that the later proof only uses the theorem in situations
-where \(\mathcal K\) is available.  The corrected statement is then
+The formal development proves\footnote{The declaration is
+\leanid{modelCorrected} in \doclink{TNLean/Path/To/File.lean}.}
 \[
-  \mathcal H \wedge \mathcal K \Longrightarrow C.
+  \mathcal H \land \mathcal K \Longrightarrow C.
 \]
-This is a strengthening of the hypotheses, not a derivation of \(\mathcal K\)
-from the original assumptions.
-
-If the formal development proves this corrected statement, the note should state
-that fact in prose and identify the exact formal declaration in a footnote.  The
-formal declaration is evidence for the corrected mathematical statement; it is
-not a substitute for explaining the statement.
-
-The same principle applies if the formal proof uses a theorem from a library
-which is not present in the cited source.  The note should first state that
-theorem as a mathematical assertion, then explain how its hypotheses are verified
-in the present notation, and only then identify the corresponding formal
-declaration.
+This strengthens the hypotheses rather than deriving \(\mathcal K\) from
+the original assumptions. The formal declaration confirms the
+corrected mathematical statement; it is not a substitute for explaining
+that statement in prose.
 
 \section{Conclusion}
 
-The verdict in this model is that the original proof uses an additional
-hypothesis \(\mathcal K\).  The corrected statement is sufficient for the
-surrounding argument only in the cases where \(\mathcal K\) is supplied.  Without
-such a derivation or a different proof of \(C\), the original implication
+The original proof requires the additional hypothesis \(\mathcal K\).
+The corrected statement suffices for the surrounding argument whenever
+\(\mathcal K\) is supplied. Without a derivation of \(\mathcal K\) or a
+different proof of \(C\), the original implication
 \(\mathcal H\Rightarrow C\) remains unjustified.
 
 \bibliographystyle{alpha}
-\bibliography{references}
+\bibliography{docs/paper-gaps/references}
 
 \end{document}
