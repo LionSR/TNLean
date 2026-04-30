@@ -22,7 +22,7 @@
 #
 # Daily workflow to detect repository documentation and blueprint files that are out of sync with recent code changes and open a PR with updates.
 #
-# gh-aw-metadata: {"schema_version":"v3","frontmatter_hash":"cc5cc8448adbf388781bc46a7a1b2e3306fa48fa85d5f426b8ec322b59343770","compiler_version":"v0.62.5","strict":true,"agent_id":"copilot"}
+# gh-aw-metadata: {"schema_version":"v3","frontmatter_hash":"1a9da8c3ff69222d038c9a9e6f9ea6203689148eba105221b47402e39e8a00e9","compiler_version":"v0.62.5","strict":true,"agent_id":"copilot"}
 
 name: "Docs & Blueprint Sync"
 "on":
@@ -960,7 +960,7 @@ jobs:
           GH_AW_CODE_PUSH_FAILURE_COUNT: ${{ needs.safe_outputs.outputs.code_push_failure_count }}
           GH_AW_LOCKDOWN_CHECK_FAILED: ${{ needs.activation.outputs.lockdown_check_failed }}
           GH_AW_GROUP_REPORTS: "false"
-          GH_AW_FAILURE_REPORT_AS_ISSUE: "true"
+          GH_AW_FAILURE_REPORT_AS_ISSUE: "false"
           GH_AW_TIMEOUT_MINUTES: "25"
         with:
           github-token: ${{ secrets.GH_AW_GITHUB_TOKEN || secrets.GITHUB_TOKEN }}
