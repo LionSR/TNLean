@@ -1,5 +1,6 @@
 name: Tracking Issue
 description: Create a tracking issue for a group of mathematical tasks
+title: "Tracking: <area>"
 labels: ["tracking"]
 body:
   - type: markdown
@@ -10,6 +11,7 @@ body:
         Each task should be a separate GitHub issue with its own statement and source citation.
         List sub-issues inside a native tasklist block so GitHub shows "Tracked by" on child issues.
         Do not use ordinary Markdown checklists for tracked work.
+        The title should begin with `Tracking:` and should not contain brackets.
 
   - type: input
     id: area
