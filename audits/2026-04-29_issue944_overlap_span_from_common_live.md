@@ -20,7 +20,7 @@ final span equality. Instead they compose the available common-cover and BNT com
 machinery with the exact nonzero-part and zero-tail sector comparison theorems, making the
 remaining hypotheses precise.
 
-## Paper/source anchors
+## Paper/source references
 
 The statements follow the standard MPS route used in the canonical-form proofs:
 

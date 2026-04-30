@@ -67,7 +67,8 @@ Beyond point fixes, the session included a broad language and presentation clean
 - Replaced `predicate` with `conditions` throughout the affected text, about 25 occurrences across
   Chapters 8 and 9.
 - Replaced `CFII data` with `left-canonical normalization` in Chapter 8.
-- Replaced `zero tail` and `live blocks` with `trivial block` and `nontrivial blocks` in Chapter 8.
+- Replaced `zero tail` and the earlier nonzero-block wording with `trivial block`
+  and `nontrivial blocks` in Chapter 8.
 - Renamed five section titles using terms like `infrastructure` or `declarations` so they now use
   mathematical names.
 - Removed process-oriented and status-oriented prose such as `not yet formalized`, `upstream`,

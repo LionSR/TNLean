@@ -100,7 +100,7 @@ The expected proof route is:
    `hasBlockSelectorOn_of_pairTraceSeparatingAt`.
 4. Use the already-checked pairwise selector assembly from PR #950.
 
-## Source anchors
+## Source references
 
 - `Papers/2011.12127/TN-Review-main.tex` lines 2115--2116 define block-injective canonical form
   by access to every element of the direct-sum block algebra:
