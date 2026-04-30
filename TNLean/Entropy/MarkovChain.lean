@@ -7,7 +7,7 @@ import TNLean.Entropy.StrongSubadditivity
 /-!
 # SSA equality and quantum Markov-chain structure
 
-This module records the sanctioned axiom
+This module states the sanctioned axiom
 `_root_.hayashi_ssa_equality_characterization` from
 `TNLean/Axioms/Entropy.lean` in the `Entropy` namespace.
 
@@ -21,15 +21,15 @@ subsystem `B`: after a unitary change of basis on `B`, the Hilbert space of
 block-diagonal direct sum `⊕_j p_j (ρ_{A B_jᴸ} ⊗ ρ_{B_jᴿ C})`.
 
 The actual proof is intentionally deferred to the sanctioned axiom in
-`TNLean.Axioms.Entropy`; this file provides only theorem wrappers and the
-abbreviation used for the decomposition record in the `Entropy` namespace.
+`TNLean.Axioms.Entropy`; this file provides only the named formulations and the
+namespace abbreviation for the quantum-Markov-chain decomposition.
 
 ## Main declarations
 
 * `Entropy.QuantumMarkovDecomposition` — abbreviation for
   `_root_.HayashiMarkovDecomposition`.
-* `Entropy.ssaEquality_iff_exists_quantumMarkovDecomposition` — theorem wrapper
-  around `_root_.hayashi_ssa_equality_characterization`.
+* `Entropy.ssaEquality_iff_exists_quantumMarkovDecomposition` — theorem statement of
+  the sanctioned equivalence `_root_.hayashi_ssa_equality_characterization`.
 * `Entropy.exists_quantumMarkovDecomposition_of_ssaEquality` — forward
   direction.
 * `Entropy.isSSAEquality_of_quantumMarkovDecomposition` — reverse direction.
@@ -52,7 +52,7 @@ section MarkovChain
 
 variable {dA dB dC : ℕ}
 
-/-- Namespaced abbreviation for the quantum-Markov-chain decomposition witness
+/-- Namespace abbreviation for the quantum-Markov-chain decomposition witness
 associated to equality in strong subadditivity. -/
 abbrev QuantumMarkovDecomposition
     (ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)
@@ -62,7 +62,7 @@ abbrev QuantumMarkovDecomposition
 /-- Equality in strong subadditivity is equivalent to the existence of a
 quantum-Markov-chain decomposition on the middle subsystem.
 
-This is a theorem wrapper around the sanctioned axiom
+This is a statement of the sanctioned axiom
 `_root_.hayashi_ssa_equality_characterization`; no new axiom is introduced by
 this file. -/
 theorem ssaEquality_iff_exists_quantumMarkovDecomposition
