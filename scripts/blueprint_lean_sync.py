@@ -38,6 +38,14 @@ _LEAN_DECL_RE = re.compile(
     r"((?![\d.])[\w']+(?:\.(?![\d.])[\w']+)*)",
     re.MULTILINE,
 )
+# Matches a line consisting solely of a declaration keyword (with optional
+# attribute/modifier prefixes), used to detect multi-line declarations whose
+# name appears on the following line.
+_LEAN_DECL_KEYWORD_ONLY_RE = re.compile(
+    r"^\s*(?:@\[.*?\]\s*)?"
+    r"(?:(?:noncomputable|protected|private)\s+)*"
+    r"(def|theorem|lemma|abbrev|instance|class|structure|inductive|axiom|opaque|alias)\s*$"
+)
 _TRACKED_REVERSE_DECL_KINDS = {"def", "theorem", "lemma"}
 _DIFF_HUNK_RE = re.compile(r"^@@ -\d+(?:,\d+)? \+(\d+)(?:,(\d+))? @@")
 
@@ -164,6 +172,10 @@ def collect_file_lean_decls(lean_file: Path, lean_root: Path) -> list[LeanDecl]:
             continue
 
         m = _LEAN_DECL_RE.match(line)
+        if not m and _LEAN_DECL_KEYWORD_ONLY_RE.match(line) and i < len(lines):
+            # Handle multi-line declarations where the keyword is on its own
+            # line and the name is on the following line.
+            m = _LEAN_DECL_RE.match(line + " " + lines[i])
         if m:
             kind = m.group(1)
             short_name = m.group(2)

@@ -57,7 +57,7 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-! ### Helper lemmas for `List.ofFn` with `Fin.snoc` and `Fin.cons` -/
+/-! ### Auxiliary lemmas for `List.ofFn` with `Fin.snoc` and `Fin.cons` -/
 
 /-- Evaluating a word obtained by snoc: peel off the last letter. -/
 theorem evalWord_ofFn_snoc (A : MPSTensor d D) {L : ℕ}
@@ -248,7 +248,7 @@ This is the "invert-and-regrow" step. The proof proceeds as follows:
    `Y_i = X' · A^i` for a single matrix `X' = ∑ⱼ (Ψ(I))ⱼ · Z_j`.
 5. By trace cyclicity, `ψ(σ) = tr(A^σ · X')`, so `ψ ∈ G_{L+1}(A)`.
 
-The formal overlap argument uses the `(L - 1)`-site intersection, so we record
+The formal overlap argument uses the `(L - 1)`-site intersection, so we state
 the theorem with the exact hypothesis `1 < L`. -/
 theorem groundSpace_intersection {A : MPSTensor d D} (hA : IsInjective A)
     {L : ℕ} (hL : 1 < L) {ψ : NSiteSpace d (L + 1)}

@@ -25,7 +25,7 @@ variable {d D : ℕ}
 
 /-- **Inverse canonicalization hypothesis for the reverse direction of Theorem 4.1.**
 
-This Prop records the analytic content that connects `IsPDivisibleChannel (transferMap B) p`
+This proposition states the analytic content that connects `IsPDivisibleChannel (transferMap B) p`
 (a channel-level `p`-th-root statement) to the existence of a witness tensor
 `A : MPSTensor d D` whose `p`-blocked transfer map matches that of `B`.
 
@@ -120,8 +120,8 @@ theorem pRefinementInverseCanonicalization_of_rootKrausRankBound
 /-- **Reverse direction of Theorem 4.1 (conditional form).**
 
 Let `B` be an MPS tensor in irreducible form II and let `p ≥ 1`. Assume the inverse
-canonicalization hypothesis `PRefinementInverseCanonicalization` (which records the
-remaining analytic bridge from `p`-divisibility of `transferMap B` to a compatible
+canonicalization hypothesis `PRefinementInverseCanonicalization` (which states the
+remaining analytic passage from `p`-divisibility of `transferMap B` to a compatible
 Kraus-reducible witness). Then `IsPDivisibleChannel (transferMap B) p` implies
 `IsPRefinable B p`.
 
@@ -132,7 +132,7 @@ the same CP map (`blockTensor A p` with `d^p` operators and `B` with `d` operato
 Wolf Theorem 2.18 (`kraus_isometry_freedom_iff`) supplies an isometry
 `V : Matrix (Fin (d^p)) (Fin d) ℂ` with `Vᴴ V = 1` and
 `blockTensor A p α = ∑_j V α j • B j`. Expanding `coeff (blockTensor A p) (ofFn τ)` with
-the helper `evalWord_sum_smul_ofFn` and linearity of `trace` produces exactly the
+the auxiliary `evalWord_sum_smul_ofFn` and linearity of `trace` produces exactly the
 `W`-weighted coefficient identity defining `IsPRefinable B p`. -/
 theorem thm_4_1_p_refinement_reverse
     (B : MPSTensor d D) (hB : IsIrreducibleForm B)

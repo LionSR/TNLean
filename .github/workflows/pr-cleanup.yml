@@ -102,16 +102,16 @@ jobs:
             Save the issue title, labels, and body for later steps.
 
             ─── STEP 3: FIX TITLE ───
-            The title MUST follow conventional-commit format (see docs/CONTRIBUTING.md §1):
+            The title MUST follow the PR title format (see docs/CONTRIBUTING.md §1):
               type(scope): short description
 
             Types (from CONTRIBUTING.md):
               feat     — New definition, lemma, theorem, or module
-              fix      — Bug fix (broken proof, wrong identifier, etc.)
-              refactor — Restructuring without changing the public interface
+              fix      — Broken proof, wrong identifier, or wrong statement
+              refactor — Reorganization without changing mathematical content
               doc      — Documentation or blueprint changes only
-              style    — Formatting, naming, or prose cleanup
-              ci       — CI/CD workflow changes
+              style    — Naming, formatting, prose, or title cleanup
+              ci       — CI workflow changes
               chore    — Dependency bumps, linting, toolchain updates
 
             Scope: shortened module path (omit TNLean/ prefix).
@@ -119,7 +119,8 @@ jobs:
                         Channel/TransferMatrix, MPS/CanonicalForm
 
             Rules:
-            - If the current title already matches `type(scope): ...`, keep it as-is.
+            - If the current title already matches `type(scope): ...` with one
+              of the allowed types above, keep it as-is.
             - Otherwise, determine the correct type and scope:
               • Run `gh pr view ${{ github.event.pull_request.number }} --repo ${{ github.repository }} --json files`
                 to see changed files. Derive the scope from the common path prefix.
@@ -128,7 +129,7 @@ jobs:
               • Blueprint-only `.tex` changes → doc(blueprint) or fix(blueprint)
                 depending on whether it's new content or fixing mismatches
               • Restructuring → refactor
-              • Formatting, naming, or prose cleanup → style
+              • Naming, formatting, prose, or title cleanup → style
               • CI changes → ci
               • Dependency bumps → chore
             - Keep the description concise (under ~60 chars after prefix).

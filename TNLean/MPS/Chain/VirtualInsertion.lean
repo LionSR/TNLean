@@ -33,7 +33,7 @@ theorem physRealize_spec (A : MPSTensor d D) (hA : IsInjective A)
       (decompositionMap_sum (A := A) hA (A i * X)).symm
 
 /-- Left-bond analogue of `physRealize`:
-`physRealizeLeft A hA X` records coefficients that rewrite each `X * A i`. -/
+`physRealizeLeft A hA X` captures coefficients that rewrite each `X * A i`. -/
 noncomputable def physRealizeLeft (A : MPSTensor d D) (hA : IsInjective A)
     (X : Matrix (Fin D) (Fin D) ℂ) : Matrix (Fin d) (Fin d) ℂ :=
   fun i j => decompositionMap (A := A) hA (X * A i) j

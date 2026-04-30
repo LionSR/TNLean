@@ -39,7 +39,7 @@ variable {D : ℕ}
 
 section CommutatorHelpers
 
-/-! ## Commutator and anticommutator helpers -/
+/-! ## Commutator and anticommutator auxiliary lemmas -/
 
 /-- The **commutator** `[A, B] = AB - BA`. -/
 abbrev Matrix.commutator (A B : Matrix (Fin D) (Fin D) ℂ) :

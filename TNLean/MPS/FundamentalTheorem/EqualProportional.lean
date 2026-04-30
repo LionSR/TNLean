@@ -117,7 +117,7 @@ The theorem takes convergent coefficient data as explicit hypotheses.
 /-- Split-data proportional-MPV Fundamental Theorem for CF-BNT-style data (Thm 4.4).
 
 This is the Stage B low-risk interface: it uses only the hypotheses actually used by the
-proportional-MPV argument, and leaves the legacy `IsCanonicalFormBNT` wrapper theorem below
+proportional-MPV argument, and leaves the legacy `IsCanonicalFormBNT` version below
 unchanged. -/
 abbrev BlockPermutationGaugeWitness
     {d rA rB : ℕ}
@@ -304,12 +304,12 @@ theorem sameMPV₂_implies_proportionalMPV₂
 /-- **Equal-MPV upgrade of the current formalized proportional FT for CF-BNT.**
 
 The literature-level equal-MPV FT (`thm:ft_equal` in the blueprint) should start from only the
-CF-BNT data and `SameMPV₂`.  The current local machinery is weaker: the available proportional FT
+CF-BNT data and `SameMPV₂`.  The current local results are weaker: the available proportional FT
 `fundamentalTheorem_proportionalMPV_CFBNT` still requires explicit decomposition coefficients with
 nonzero limits, and its conclusion is a block permutation together with per-block
 `GaugePhaseEquiv` data.
 
-This theorem records the equal-case endpoint that *is* derivable from that machinery.  Under the
+This theorem states the equal-case conclusion that *is* derivable from those results.  Under the
 same coefficient hypotheses as the proportional theorem, equal MPVs force the phase-corrected
 weights to match blockwise.  After reindexing the `B`-family by the permutation from the
 proportional FT, the assembled weighted block tensors are globally gauge equivalent. -/

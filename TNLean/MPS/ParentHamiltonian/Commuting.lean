@@ -32,9 +32,9 @@ parent Hamiltonians (NNCPH).
   route from the proved Appendix B structural data plus the remaining
   chain-space extraction to NNCPH, without invoking
   `Axioms.rfp_to_nncph_commute`.
-* `MPSTensor.rfp_implies_nncph` — scaffold for the RFP `⟹` NNCPH direction of
+* `MPSTensor.rfp_implies_nncph` — construction for the RFP `⟹` NNCPH direction of
   Theorem 3.10.
-* `MPSTensor.nncph_implies_rfp` — scaffold for the NNCPH `⟹` RFP direction of
+* `MPSTensor.nncph_implies_rfp` — construction for the NNCPH `⟹` RFP direction of
   Theorem 3.10.
 
 ## References
@@ -90,7 +90,7 @@ A normal left-canonical RFP tensor has the Appendix B structural data by
 that structural witness into product-pair projector data, then the
 nearest-neighbor parent Hamiltonian is commuting on every finite chain.
 
-This theorem does not use `Axioms.rfp_to_nncph_commute`; it records the precise
+This theorem does not use `Axioms.rfp_to_nncph_commute`; it states the precise
 conditional theorem left after the structural form has been internalized. -/
 theorem rfp_implies_nncph_of_appendixBExtraction (A : MPSTensor d D) [NeZero D]
     (hRFP : IsRFP A) (hNT : IsNormal A) (hLeft : IsLeftCanonical A)
@@ -123,9 +123,9 @@ A normal renormalization fixed-point tensor has a nearest-neighbor
 commuting parent Hamiltonian.
 
 Per arXiv:1606.00608 §3.3 (source line 1307), this direction is
-*"trivial from Theorem [charact-MPS]"*; it is therefore **not** gated
-on S. Beigi (2012). It is gated only on the product-of-entangled-pairs
-structural form (Appendix B), recorded here as
+*"trivial from Theorem [charact-MPS]"*; it therefore does not depend
+on S. Beigi (2012). It is conditioned only on the product-of-entangled-pairs
+structural form (Appendix B), stated here as
 `Axioms.rfp_to_nncph_commute`. -/
 theorem rfp_implies_nncph (A : MPSTensor d D) [NeZero D]
     (hRFP : IsRFP A) (hNT : IsNormal A)

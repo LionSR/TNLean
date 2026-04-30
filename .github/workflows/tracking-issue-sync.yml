@@ -24,10 +24,14 @@ jobs:
   track:
     # Skip: forks (no secrets), closed-but-not-completed issues, closed-but-not-merged PRs
     if: |
-      !github.event.pull_request.head.repo.fork &&
       (
-        (github.event_name == 'issues' && (github.event.issue.state_reason == 'completed' || github.event.action == 'reopened')) ||
-        (github.event_name == 'pull_request' && (github.event.action != 'closed' || github.event.pull_request.merged == true))
+        github.event_name == 'issues' &&
+        (github.event.issue.state_reason == 'completed' || github.event.action == 'reopened')
+      ) ||
+      (
+        github.event_name == 'pull_request' &&
+        !github.event.pull_request.head.repo.fork &&
+        (github.event.action != 'closed' || github.event.pull_request.merged == true)
       )
     runs-on: ubuntu-latest
     permissions:

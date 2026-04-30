@@ -18,7 +18,7 @@ dependent direct sum lie in the span of a family of matrices and a boundary
 matrix commutes with that family, then it
 commutes with the projections and hence has no off-block entries.
 
-The file also records a finite-span reduction: if the simultaneous block word
+The file also proves a finite-span reduction: if the simultaneous block word
 tuples span the full product algebra, then the sector projections lie in the
 finite word span of the assembled tensor.  The remaining paper-level CF/BNT input
 is to derive that product-word span from the separated canonical-form/BNT
@@ -41,7 +41,7 @@ variable [(i : ι) → Fintype (n i)] [(i : ι) → DecidableEq (n i)]
 /-- If every block projection lies in the span of a matrix family `S`, then any
 matrix commuting with all members of `S` is block diagonal.
 
-This records the common linearity step used in commutant arguments: commutation
+This is the common linearity step used in commutant arguments: commutation
 extends from generators to their span, giving commutation with each projection;
 `Matrix.isBlockDiagonal'_of_commutes_blockProjection` then kills all off-block
 entries. -/
@@ -340,7 +340,7 @@ identity padding give full product-word span.
 This is the Route B homogenization: the cumulative finite cutoff can be
 used once each ordered pair has simultaneous identity padding at the lengths
 needed to reach a common homogeneous target `T`. -/
-theorem wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingUpTo_of_identityPadding
+theorem wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingUpTo_of_identity_padding
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hCF : IsCanonicalFormBNT μ A) {S T : ℕ}
     (hST : S ≤ T)
@@ -352,7 +352,7 @@ theorem wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingUpTo_of_ide
     WordTupleSpanTop A (1 + (r - 1) * T) :=
   wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingAt μ A hCF
     (fun k j hjk =>
-      pairTraceSeparatingAt_of_pairTraceSeparatingUpTo_of_identityPadding
+      pairTraceSeparatingAt_of_pairTraceSeparatingUpTo_of_identity_padding
         (A k) (A j) hST (hSep k j hjk) (hPad k j hjk))
 
 /-- Positive-length product-word span obtained from canonical-form/BNT data and
@@ -385,10 +385,9 @@ theorem exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingA
   simpa [WordTupleSpanTop, wordTuple] using
     wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingAt μ A hCF hSep
 
-set_option linter.style.longLine false in
 /-- Positive-length product-word span from cumulative pair trace separation plus
 exact identity padding. -/
-theorem exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingUpTo_of_identityPadding
+theorem exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingUpTo_of_identity_padding
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hCF : IsCanonicalFormBNT μ A) {S T : ℕ}
     (hST : S ≤ T)
@@ -404,7 +403,7 @@ theorem exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingU
         ((k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) := by
   refine ⟨1 + (r - 1) * T, Nat.add_pos_left Nat.zero_lt_one _, ?_⟩
   simpa [WordTupleSpanTop, wordTuple] using
-    wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingUpTo_of_identityPadding
+    wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingUpTo_of_identity_padding
       μ A hCF hST hSep hPad
 
 /-- Positive-length product-word span obtained from canonical-form/BNT data and

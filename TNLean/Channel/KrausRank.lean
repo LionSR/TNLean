@@ -11,8 +11,8 @@ import TNLean.Channel.ChoiJamiolkowski
 /-!
 # Kraus-cardinality and Choi-rank correspondence
 
-This file packages the quantum-channel infrastructure relating Kraus families
-to the rank of the Choi matrix.
+This file states the channel-side formalization relating Kraus families to the
+rank of the Choi matrix.
 
 ## Main definitions
 
@@ -38,7 +38,7 @@ to the rank of the Choi matrix.
 ## Design note
 
 The converse direction is proved by diagonalizing the positive semidefinite Choi
-matrix, discarding the terms with zero eigenvalue, and reconstructing Kraus
+matrix, discarding the zero-eigenvalue summands, and reconstructing Kraus
 operators from the remaining rank-one terms.
 -/
 

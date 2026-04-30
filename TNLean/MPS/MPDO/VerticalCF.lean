@@ -15,7 +15,7 @@ structure used in the MPDO analysis of arXiv:1606.00608, §4.4.
 The paper's Proposition IV.12 writes the tensor, after a local isometry on the
 physical indices, as a direct sum
 `⊕_α μ_α ⊗ M_α`, where the `μ_α` are positive diagonal matrices and the
-`M_α` form a basis of normal tensors (BNT). The current repository infrastructure
+`M_α` form a basis of normal tensors (BNT). The current repository formalization
 uses canonical-form and BNT data with scalar block weights. We therefore
 encode the paper's diagonal matrices by **flattening** each diagonal entry of
 `μ_α` into a repeated positive scalar weight attached to the same block `M_α`.
@@ -48,7 +48,7 @@ empty placeholder.
 
 The MPO/MPDO/LPDO foundations introduced by issue #235 live under `TNLean/MPS/MPDO/`
 (imported as layer 3b in `TNLean.lean`) rather than as a top-level `TNLean/MPDO/`
-namespace: they sit on top of the `MPSTensor` infrastructure from `TNLean/MPS/`, so
+namespace: they sit on top of the `MPSTensor` framework from `TNLean/MPS/`, so
 the MPS-scoped location matches the existing layering.
 
 ## References

@@ -1,7 +1,15 @@
 name: Bug Report
 description: Report a broken proof, type error, sorry regression, or CI failure
+title: "<area>: <broken theorem, proof, or workflow>"
 labels: ["bug"]
 body:
+  - type: markdown
+    attributes:
+      value: |
+        Use a plain title naming the affected mathematical or workflow area, for example
+        `Wolf Ch6: fixed-point decomposition no longer builds`.
+        Keep issue titles bracket-free and do not use PR prefixes such as `fix(...)`.
+
   - type: input
     id: file
     attributes:

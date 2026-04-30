@@ -10,7 +10,7 @@ import Mathlib.Data.Fin.Tuple.Basic
 /-!
 # Arithmetic transport for open-chain restriction maps
 
-This file provides a small reusable API for transporting the parent-Hamiltonian
+This file provides a small reusable collection for transporting the parent-Hamiltonian
 open-chain restriction maps (`contiguousRestrictₗ`, `tailRestrictₗ`,
 `restrictFirst`) across arithmetic-equal indexings of the total length. It is
 aimed at the periodic-chain normal-form range-reduction argument
@@ -22,7 +22,7 @@ viewed as states indexed by `N`.
 Because `NSiteSpace d N = (Fin N → Fin d) → ℂ` depends definitionally on `N`,
 two states whose length-witnesses are propositionally but not definitionally
 equal cannot be compared directly. The canonical solution is to reindex via
-`Fin.cast`, which this file packages as a `LinearEquiv`.
+`Fin.cast`, which this file represents as a `LinearEquiv`.
 
 ## Main contents
 

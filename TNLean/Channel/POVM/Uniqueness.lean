@@ -9,16 +9,16 @@ import TNLean.Channel.KrausFreedom
 /-!
 # Uniqueness properties of concrete Naimark dilations
 
-This file provides additional API around `TNLean.Channel.POVM`.
+This file provides additional interface around `TNLean.Channel.POVM`.
 
 ## Main definitions
 
-- `POVM.IsNaimarkDilation` — a packaged predicate for a Naimark dilation.
+- `POVM.IsNaimarkDilation` — a predicate for a Naimark dilation.
 
 ## Main results
 
 - `POVM.isNaimarkDilation_naimark` — the explicit dilation from `POVM.lean`
-  satisfies the packaged `IsNaimarkDilation` predicate.
+  satisfies the formulated `IsNaimarkDilation` predicate.
 - `POVM.exists_isometry_mul_naimarkIsometry_of_recovery` — any dilation matrix
   recovering the POVM through the canonical projectors factors through the
   canonical Naimark isometry via an isometry on the dilated space.
@@ -117,7 +117,7 @@ private theorem exists_unitary_mul_eq_of_conjTranspose_mul_eq
   refine ⟨⟨U_mat, Matrix.mem_unitaryGroup_iff'.2 hU_unitary⟩, ?_⟩
   exact hU_mat_eq.symm
 
-/-- Packaged predicate saying that `V` together with the projective measurement `P`
+/-- Predicate saying that `V` together with the projective measurement `P`
 realizes `E` as a Naimark dilation. -/
 def IsNaimarkDilation {r : ℕ}
     (E : POVM D n)

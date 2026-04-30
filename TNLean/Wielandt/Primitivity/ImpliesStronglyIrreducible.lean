@@ -12,16 +12,16 @@ import Mathlib.Analysis.InnerProductSpace.Positive
 import Mathlib.Analysis.Matrix.Spectrum
 
 /-!
-# Proposition 3, (a) → (c): Helper lemmas (Parts 1–8)
+# Proposition 3, (a) → (c): Auxiliary lemmas (Parts 1–8)
 
-This file develops the foundational helper lemmas (Parts 1–8) toward the (a)→(c)
+This file develops the foundational auxiliary lemmas (Parts 1–8) toward the (a)→(c)
 direction of Proposition 3 from arXiv:0909.5347:
 **IsPrimitivePaper A → IsStronglyIrreduciblePaper A**.
 
-The spectral-perturbation machinery and concluding theorems (Parts 9–14) are in
+The spectral-perturbation argument and concluding theorems (Parts 9–14) are in
 `TNLean.Wielandt.Primitivity.ImpliesStronglyIrreducibleAux`.
 
-For the packaged public Proposition 3 API, prefer
+For the public Proposition 3 formulation, prefer
 `TNLean.Wielandt.Primitivity.Equivalence`; this file is retained for specialized
 access to the intermediate lemmas used in the (a)→(c) proof.
 
@@ -251,7 +251,7 @@ theorem posDef_fixedPoint_of_isPrimitivePaper
 
 /-! ## Part 6: Positivity-improving map and fixed-point contradiction lemmas
 
-These lemmas form the contradiction machinery for the paper's case analysis
+These lemmas form the contradiction argument for the paper's case analysis
 in the proof of `IsPrimitivePaper A → IsPeripherallyPrimitive A`.
 
 **Paper context** (arXiv:0909.5347 Proposition 3, (a)→(c)):

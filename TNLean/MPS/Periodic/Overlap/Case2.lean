@@ -52,7 +52,7 @@ spectrum (see `IsCyclicSectorDecomp`).
 
 The orbit-lift / corner-irreducibility input is now supplied unconditionally by
 `SelfOverlap.primitive_and_irreducible_sectorBlocks_of_cyclicDecomp`. The
-remaining gaps in this file lie further downstream, in the sector-match and
+remaining gaps in this file lie further along, in the sector-match and
 mixed-overlap arguments. -/
 lemma sectorBlocked_isNormal_of_isPeriodic
     [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
@@ -240,7 +240,7 @@ gauge-phase equivalent.
 This is the structural step used by the no-sector-match case: the cyclic
 sector decomposition is unique up to relabeling, and a global gauge-phase
 equivalence carries a nonzero sector of `A` to a sector of `B`. The hypothesis
-`hNondegA` supplies the nonzero-sector bookkeeping for the returned `A` sector, while
+`hNondegA` supplies the nonzero-sector condition for the returned `A` sector, while
 `hNondegB` provides the typeclass needed to apply the mixed-sector overlap dichotomy.
 Both come from the periodic sector decomposition constructed by
 `exists_cyclic_sector_decomp_after_blocking_of_isPeriodic`.
