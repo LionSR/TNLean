@@ -1274,69 +1274,68 @@ two-basis sector comparison theorem.
 	the same multiset equality.
 \end{proof}
 
-\begin{remark}[Remaining hypotheses for the unconditional equal-case theorem]\notready
-	The equal-case proof in the literature assumes first that both tensors are in
-	canonical form.  One chooses a basis of normal tensors for each tensor, so
-	that every canonical-form block is a phase times a gauge transform of exactly
-	one basis tensor; this is the content of the basis characterization in
+\begin{remark}[Equal-case comparison after canonical reduction]\notready
+	The equal-case proof in the literature begins with both tensors in canonical
+	form.  One chooses a basis of normal tensors for each tensor, so that every
+	canonical-form block is a phase times a gauge transform of exactly one basis
+	tensor; this is the basis characterization of
 	\cite[Proposition~\texttt{prop:char-BNT}, lines 1852--1861]{Cirac2021Matrix}
 	and
 	\cite[Proposition~\texttt{prop:char-BNT}, lines 1135--1148]{Cirac2016MPDO_arXiv}.
-	Equality, or proportionality, of the MPV families then forces the two bases to
-	pair by phase and gauge, as in
+	Equality, or proportionality, of the MPV families then pairs the two bases by
+	phase and gauge, as in
 	\cite[Theorem~\texttt{thm1}, lines 1167--1183]{Cirac2016MPDO_arXiv}.
 	In the equal case, one expands each tensor in its basis of normal tensors and
 	compares, for every basis tensor and every length $N$, the power sums
 	\[
 		\sum_q \mu_{j,q}^N = \sum_q (\nu_{j,q}e^{i\phi_j})^N.
 	\]
-	Newton identities, or equivalently the elementary power-sum lemma used in the
+	Newton identities, equivalently the elementary power-sum lemma used in the
 	paper, recover the multiplicities and the weights.  The blockwise gauge
-	matrices are then put on the diagonal to obtain the global conjugating matrix;
-	this is the proof of
+	matrices are then placed on the diagonal to obtain the global conjugating
+	matrix; this is the proof of
 	\cite[Corollary~\texttt{II\_cor2}, lines 1184--1192]{Cirac2016MPDO_arXiv},
 	restated as
 	\cite[Corollary~\texttt{II\_cor2}, lines 1896--1900]{Cirac2021Matrix}.
 
-	The formalized results cover the later comparison steps of this argument.
+	The comparison theorems in this chapter cover this latter part of the argument.
 	Theorem~\ref{thm:ft_equal_explicit} proves the equal case when the coefficient
 	identities are given explicitly,
 	Theorem~\ref{thm:ft_equal_same_structure} proves the common block-structure
 	special case, and Theorem~\ref{thm:route_b_equal} recovers the sector-weight
-	multisets from the multiplicity data.  The basis-of-normal-tensors
-	construction is also available for trace-preserving primitive irreducible
-	nonzero-weight blocks with positive bond dimensions and nonzero weights in
-	Theorem~\ref{thm:bnt_sector_decomp_tp_prim_irr_collapsed}.  When these
-	blocks are injective, Theorems~\ref{thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_data}
+	multisets from the multiplicity data.  The basis-of-normal-tensors construction
+	is available for trace-preserving primitive irreducible nonzero blocks with
+	positive bond dimensions and nonzero weights in
+	Theorem~\ref{thm:bnt_sector_decomp_tp_prim_irr_collapsed}.  When these blocks
+	are injective,
+	Theorems~\ref{thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_data}
 	and~\ref{thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_data_span}
-	provide the asymptotic orthogonality and finite-length span preservation needed
-	to separate coefficients.  Theorem~\ref{thm:bnt_sector_decomp_pair_overlap_span_of_block_span}
+	give the asymptotic orthogonality and finite-length span preservation needed to
+	separate coefficients.  Theorem~\ref{thm:bnt_sector_decomp_pair_overlap_span_of_block_span}
 	then turns equality of nonzero-sector spans into the hypotheses used by the
 	sector comparison theorem.
 
-	The common-family comparison data are also formalized in reusable forms.  A
-	common MPV phase cover gives equality of finite-length nonzero-block spans by
+	The same comparison can also be expressed through common phases.  A common
+	MPV phase cover gives equality of finite-length nonzero-block spans by
 	Lemma~\ref{lem:mpv_common_phase_cover_span_eq}.  A sector basis pre-matching
-	gives such span equality and the primitive overlap-span hypotheses by
+	gives the same span equality and the primitive overlap-span hypotheses by
 	Lemma~\ref{lem:sector_basis_pre_matching_span_eq} and
 	Theorem~\ref{thm:sector_basis_pre_matching_to_overlap_span}.  The BNT comparison
-	results produce common phase-cover data from proportional-decomposition
-	conclusions in Theorems~\ref{thm:common_phase_cover_of_proportional_decomposition}
+	theorems produce such common phases from a proportional-decomposition conclusion in
+	Theorems~\ref{thm:common_phase_cover_of_proportional_decomposition}
 	and~\ref{thm:common_phase_cover_of_separated_normal_bnt}.
 
-	The remaining hypothesis for the unconditional equal-case theorem is the connection
-	from arbitrary equal MPV families to those hypotheses.  Chapter~\ref{ch:canonical}
-	now supplies a common physical blocking length and relabeled cyclic-sector
-	families on both sides, while preserving the zero-tail identities.  What remains
-	is the exact agreement, after reindexing blocked physical words, that identifies
-	the canonical blocked nonzero part with the relabeled cyclic-sector tensor for
-	the whole weighted family, followed by the final nonzero-sector extraction used
-	by the equal-case comparison.  After any additional blocking required for
-	injectivity, one must then prove the finite-length nonzero-sector span equality,
-	or produce the common phase-cover or BNT proportional-decomposition data from
-	which the theorems above derive that equality.  Until this connection is
-	formalized, equality of the total MPV vectors has not yet been converted into
-	the componentwise power-sum
-	identities used in the paper proof, so Corollary~IV.5 cannot be invoked
-	unconditionally.
+	Chapter~\ref{ch:canonical} supplies the canonical-form reduction needed before
+	these comparison theorems can be applied: a common physical blocking length,
+	the zero-tail identities at that length, and relabelled cyclic-sector families
+	on both sides.  The unproved assertion is the exact equality, after relabelling
+	blocked physical words, between the canonical blocked nonzero part and the
+	relabelled cyclic-sector tensor for the whole weighted family.  With that
+	equality, the zero-tail identity can be written in the common-length sector
+	basis; after a further injective blocking, one must establish either the
+	finite-length MPV span equality of the nonzero sectors or the corresponding
+	common phases, equivalently the BNT proportional-decomposition conclusion, from
+	which the theorems above derive the span equality.  This is the mathematical
+	passage from equality of total MPV vectors to the componentwise power-sum
+	identities used in the paper proof of Corollary~IV.5.
 \end{remark}
