@@ -3286,53 +3286,53 @@ The following results separate the zero blocks from the nonzero blocks.
 
 \section{Open directions}\label{sec:open_directions}
 
-\begin{remark}[Remaining steps toward normal canonical form]%
+\begin{remark}[Canonical-form reduction before the equal-case comparison]%
 	\label{rem:canonical_pipeline_gaps}
 	\leanok
 	The canonical-form proof in the MPS literature first separates the nilpotent
-	part, which contributes only to the zero-length trace, from the nonzero part.
-	The nonzero part is decomposed into irreducible blocks and each block is put in
-	trace-preserving gauge.  If such a block has period $m$, one blocks $m$ sites
-	and restricts the blocked tensor to the cyclic spectral sectors.  The resulting
-	sector tensors are the normal blocks used later: they are trace-preserving,
-	primitive, irreducible, and have positive bond dimension.  For a finite family
-	of nonzero-weight blocks, the paper then chooses one common multiple of all periods
-	so that every sector is expressed over the same blocked physical alphabet.  This is the
+	part, which contributes only to the length-zero trace, from the nonzero part.
+	The nonzero part is decomposed into irreducible blocks, and each block is put in
+	trace-preserving gauge.  A block of period $m$ is then blocked over $m$ sites and
+	restricted to its cyclic spectral sectors.  These sector tensors are the normal
+	blocks used in the comparison theorem: they are trace-preserving, primitive,
+	irreducible, and have positive bond dimension.  For a finite nonzero block
+	family, the paper chooses one common multiple of all periods so that every
+	sector is expressed over the same blocked physical alphabet.  This is the
 	construction of
 	\cite[\S2.3 and Appendix~A]{Cirac2017MPDO_AnnPhys}, and it is the
-	canonical-form data used before the basis-of-normal-tensors argument in
+	canonical-form information used before the basis-of-normal-tensors argument in
 	\cite[Proposition~IV.4 and Corollary~IV.5]{Cirac2021Matrix}.
 
-	The formalization has already separated these steps.  Theorem~\ref{thm:tp_gauge_arbitrary}
-	gives the zero-tail block together with trace-preserving irreducible nonzero-weight
-	blocks, and Theorem~\ref{thm:ft_after_blocking_per_block_cyclic_live_zero_tail}
-	applies the cyclic-sector construction to each nonzero-weight block while keeping the
-	positive-length MPV equality and the $N=0$ identity.
+	The statements in this chapter mirror this reduction.  Theorem~\ref{thm:tp_gauge_arbitrary}
+	gives the zero-tail block and the trace-preserving irreducible nonzero block
+	family.  Theorem~\ref{thm:ft_after_blocking_per_block_cyclic_live_zero_tail}
+	applies the cyclic-sector decomposition to each nonzero block, preserving the
+	positive-length MPV equality and the zero-tail identity at $N=0$.
 	Theorem~\ref{thm:exists_common_blocked_cyclic_sector_family_common_multiple}
-	constructs the common reblocked sector family at any prescribed common multiple
-	of the period-removal lengths.  Consequently
-	Theorem~\ref{thm:ft_after_blocking_common_length_common_sector_theorem} now
-	chooses one physical blocking length for both tensors, carries the zero-tail
-	identities to that length, and supplies the relabeled cyclic-sector families on
+	constructs the common reblocked sector family at any common multiple of the
+	period-removal lengths.  Consequently
+	Theorem~\ref{thm:ft_after_blocking_common_length_common_sector_theorem} chooses
+	one physical blocking length for both tensors, transports the zero-tail
+	identities to that length, and supplies relabeled cyclic-sector families on
 	both sides.  The supporting blocking and transport results, including
 	Theorem~\ref{thm:iterated_blocking_samempv_reindex}, identify iterated blocking
-	with one blocking by the product length, up to the evident relabeling of
-	physical words.
+	with one blocking by the product length, after relabeling the blocked physical
+	words.
 
-	What remains on the canonical-form side is the exact equality, after the
-	relabeling of blocked physical words, between the canonical blocked nonzero part
-	and the cyclic-sector tensor for the whole weighted family.  The conditional statement
-	Theorem~\ref{thm:zero_tail_common_flat_of_reindexed_label_compat} already shows
-	that, once this blocked-word relabeling agreement is proved, the zero-tail equations
-	can be written directly with the weighted common-length cyclic sectors.
-	Theorem~\ref{thm:afterBlocking_sectorComparison_zeroTail_of_proportionalDecompositionConclusion}
-	gives the next comparison step: if those common-length sector blocks are
-	injective and the BNT proportional-decomposition comparison supplies the
-	blockwise permutation, bond-dimension equalities, and gauge phases, then the
-	finite-length span equality follows through the common phase-cover theorem.
-	Thus the remaining canonical-form hypotheses are precisely this blocked-word
-	relabeling agreement, any additional blocking needed for injectivity, and the final
-	BNT proportional-decomposition data for the common-length nonzero sector blocks.
+	The next mathematical assertion is the equality, after relabeling blocked
+	physical words, between the canonical blocked nonzero part and the cyclic-sector
+	tensor for the whole weighted family.  The conditional statement
+	Theorem~\ref{thm:zero_tail_common_flat_of_reindexed_label_compat} shows that this
+	equality rewrites the zero-tail identity directly with the weighted
+	common-length cyclic sectors.  Once the common-length sectors have also been
+	blocked far enough to be injective, a BNT proportional-decomposition comparison
+	gives the block permutation, the bond-dimension equalities, and the gauge
+	phases.  Theorem~\ref{thm:afterBlocking_sectorComparison_zeroTail_of_proportionalDecompositionConclusion}
+	then turns that comparison into the finite-length MPV span equality and the
+	sector-weight conclusion.  Thus the open canonical-form assertions are the
+	blocked-word relabeling equality for the whole weighted nonzero family, the
+	injectivity of a suitable further blocking, and the proportional-decomposition
+	comparison for the common-length nonzero sectors.
 
 	The sorted normal-canonical-form theorem,
 	Theorem~\ref{thm:bnt_sorted_ncf}, assumes pairwise distinct nonzero weight
