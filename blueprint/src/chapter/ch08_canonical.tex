@@ -1757,6 +1757,36 @@ The following results separate the zero blocks from the nonzero blocks.
 	sums and reindex the double sum over pairs $(k,s)$ by the flattened sector index.
 \end{proof}
 
+\begin{theorem}[Comparison of direct and iterated blocking for weighted nonzero blocks]%
+\label{thm:common_blocked_cyclic_sector_blocked_word_comparison}
+	\lean{MPSTensor.CommonBlockedCyclicSectorFamily.blockTensor_eq_commonReindexedBlock_of_word_eq,
+		MPSTensor.CommonBlockedCyclicSectorFamily.blockTensor_sameMPV₂_commonReindexedBlock_of_word_eq,
+		MPSTensor.CommonBlockedCyclicSectorFamily.sameMPV₂_weightedCanonicalBlock_commonReindexedBlock_of_blockwise,
+		MPSTensor.CommonBlockedCyclicSectorFamily.sameMPV₂_weightedCanonicalBlock_commonReindexedBlock_of_word_eq,
+		MPSTensor.CommonBlockedCyclicSectorFamily.sameMPV₂_weightedCanonicalBlock_commonFlat_of_blockwise,
+		MPSTensor.CommonBlockedCyclicSectorFamily.sameMPV₂_weightedCanonicalBlock_commonFlat_of_word_eq}
+	\leanok
+	\uses{def:common_blocked_cyclic_sector_derived_blocks,
+		thm:common_blocked_cyclic_sector_reindexed_samempv}
+	Suppose that, for each original nonzero block, the length-$p$ word read from
+	the common blocked alphabet is the same word as the one obtained by viewing the
+	index as an iterated $(m_k,e_k)$ block and flattening it.  Then direct blocking
+	of each original block agrees with the corresponding iterated-blocking tensor.
+	Consequently the weighted direct sum of the directly blocked nonzero blocks
+	agrees with the weighted direct sum built from the iterated-blocking tensors,
+	and hence with the derived common-sector family.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:common_blocked_cyclic_sector_reindexed_samempv}
+	The word equality gives equality of the corresponding block tensors, hence
+	blockwise MPV equality.  Expanding both weighted block-diagonal tensors as
+	finite sums over the original block index and applying the blockwise equality
+	term by term gives the weighted comparison.  Composing with
+	Theorem~\ref{thm:common_blocked_cyclic_sector_reindexed_samempv} gives the
+	common-sector statement.
+\end{proof}
+
 \begin{theorem}[Canonical blocked nonzero part under blocked-word relabeling]%
 \label{thm:common_blocked_cyclic_sector_canonical_reindexed_nonzero}
 	\lean{MPSTensor.CommonBlockedCyclicSectorFamily.sameMPV₂_weightedCanonicalBlock_commonFlat_of_reindexed}
@@ -3260,6 +3290,31 @@ The following results separate the zero blocks from the nonzero blocks.
 	sector conclusions are the reindexed common-sector MPV equalities.
 \end{proof}
 
+\begin{theorem}[Zero-tail equation from blockwise comparison of direct and iterated blocking]%
+\label{thm:zero_tail_common_flat_of_blocked_word_comparison}
+	\lean{MPSTensor.zeroTail_commonFlat_of_blockwise,
+		MPSTensor.zeroTail_commonFlat_of_word_eq}
+	\leanok
+	\uses{thm:zero_tail_to_tensor_from_blocks_block_power,
+		thm:common_blocked_cyclic_sector_blocked_word_comparison}
+	For one side, suppose that the original tensor decomposes, as an MPV family,
+	into a zero-tail contribution plus a weighted block-sum nonzero part over the
+	original physical alphabet.  If each directly blocked nonzero block agrees with
+	the corresponding iterated-blocking tensor, then after the common blocking length
+	the zero-tail equation may be written directly with the weighted derived
+	common-sector family.  It is enough to prove the corresponding equality of
+	blocked words for every nonzero block.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:zero_tail_to_tensor_from_blocks_block_power,
+		thm:common_blocked_cyclic_sector_blocked_word_comparison}
+	First transport the original zero-tail/nonzero decomposition through the common
+	blocking length.  Then use the blockwise comparison of direct and iterated
+	blocking, assembled over the weighted direct sum, to replace the directly
+	blocked nonzero part by the weighted derived common-sector tensor.
+\end{proof}
+
 \begin{theorem}[Zero-tail equation after resolving the blocked-word relabeling]%
 \label{thm:zero_tail_common_flat_of_reindexed}
 	\lean{MPSTensor.zeroTail_commonFlat_of_reindexed}
@@ -3393,19 +3448,31 @@ The following results separate the zero blocks from the nonzero blocks.
 	with one blocking by the product length, after relabeling the blocked physical
 	words.
 
-	The next mathematical assertion is the equality, after relabeling blocked
-	physical words, between the canonical blocked nonzero part and the cyclic-sector
-	tensor for the whole weighted family.  The conditional statements
+	The results above now separate the finite-sum comparison from the remaining
+	blocked-word assertion.  Theorem~\ref{thm:common_blocked_cyclic_sector_blocked_word_comparison}
+	shows that, once the length-$p$ word read directly from the common blocked
+	alphabet equals the word obtained by flattening an iterated $(m_k,e_k)$ block,
+	the weighted direct sum of directly blocked nonzero blocks agrees with the
+	derived common-sector family.  Theorem~\ref{thm:zero_tail_common_flat_of_blocked_word_comparison}
+	then rewrites the one-sided zero-tail identity with the weighted common-length
+	cyclic sectors under this blockwise word equality.
+
+	The next mathematical assertion is the corresponding equality, after relabeling
+	blocked physical words, between the canonical blocked nonzero part and the
+	cyclic-sector tensor for the whole weighted family.  Under this comparison,
 	Theorems~\ref{thm:zero_tail_common_flat_transport_of_reindexed},
 	\ref{thm:samempv_pos_zero_tail_identity_transport}, and
 	\ref{thm:after_blocking_common_primitive_irreducible_blocks_reindexed}
-	show that this equality rewrites the zero-tail identities, the positive-length
-	equality, the length-zero identity, and the nonzero transported weights directly
-	with the weighted common-length cyclic sectors, while also collecting the
-	two-sided primitive irreducible sector decompositions needed for comparison.
-	Once these sectors have also been blocked far enough to be injective, a BNT
-	proportional-decomposition comparison gives the block permutation, the
-	bond-dimension equalities, and the gauge phases.
+	rewrite the zero-tail identities, the positive-length equality, the length-zero
+	identity, and the nonzero transported weights directly with the weighted
+	common-length cyclic sectors, while also collecting the two-sided primitive
+	irreducible sector decompositions needed for comparison.  Thus the remaining
+	assertions are this equality of blocked words for the chosen coordinates, or an
+	equivalent final comparison with the relabeling made explicit, and the
+	injectivity of a suitable further blocking.  Once the common-length sectors have
+	also been blocked far enough to be injective, a BNT proportional-decomposition
+	comparison gives the block permutation, the bond-dimension equalities, and the
+	gauge phases.
 	Theorem~\ref{thm:afterBlocking_sectorComparison_zeroTail_of_proportionalDecompositionConclusion}
 	then turns that comparison into the finite-length MPV span equality and the
 	sector-weight conclusion.  Thus the open canonical-form assertions are the
