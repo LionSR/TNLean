@@ -392,7 +392,7 @@ theorem condC1_imp_condC2
     (hC1 : CondC1 A u V) :
     CondC2 A V := by
   have hVc : Vᴴ * V = 1 := mul_eq_one_comm.mp hV
-  -- Helper: Vᴴ * (V * Z) = Z (cancel VᴴV in right-associated form)
+  -- Auxiliary: Vᴴ * (V * Z) = Z (cancel VᴴV in right-associated form)
   have hc : ∀ Z : Matrix (Fin D) (Fin D) ℂ, Vᴴ * (V * Z) = Z :=
     fun Z => by rw [← Matrix.mul_assoc, hVc, Matrix.one_mul]
   intro X
@@ -424,7 +424,7 @@ arXiv:0802.0447). The present formal proof is slightly stronger
 than the paper-facing statement: it derives C1 from C2 by
 identifying `V A_i V†` as an alternative Kraus family for the same
 channel and applying rectangular Kraus freedom, so the explicit
-injectivity hypothesis is retained only to match the paper's API. -/
+injectivity hypothesis is retained only to match the paper's formulation. -/
 theorem condC2_imp_condC1_of_injective
     (_hA : IsInjective A)
     (hV : V * Vᴴ = 1)

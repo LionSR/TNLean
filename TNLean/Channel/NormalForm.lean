@@ -16,7 +16,7 @@ transfer-matrix normal forms discussed there.
 
 * **SVD for PSD matrices.** Every positive semi-definite complex square matrix
   admits a decomposition `M = U * diagonal σ * Uᴴ` with `U` unitary and `σ`
-  non-negative; this is the spectral theorem packaged in SVD form.
+  non-negative; this is the spectral theorem formulated in SVD form.
 * **SVD for invertible matrices.** Every invertible complex square matrix
   admits a decomposition `M = U * diagonal σ * Vᴴ` with `U, V` unitary and
   `σ : n → ℝ` strictly positive.
@@ -52,7 +52,7 @@ section SVD
 
 variable {n : Type*} [Fintype n] [DecidableEq n]
 
-/-- **SVD for positive semi-definite matrices** (spectral theorem, packaged).
+/-- **SVD for positive semi-definite matrices** (spectral theorem, formulated).
 If `M` is positive semi-definite, then `M = U * diagonal σ * Uᴴ` for a unitary
 `U` and some non-negative real sequence `σ`. -/
 theorem svd_of_posSemidef {M : Matrix n n ℂ} (hM : M.PosSemidef) :
@@ -166,7 +166,7 @@ theorem svd_of_isUnit {M : Matrix n n ℂ} (hM : IsUnit M) :
         = (Sinv * Sdiag) * (Sdiag * Sinv) := by noncomm_ring
       _ = 1 * 1 := by rw [hSinv_mul_S, hS_mul_Sinv]
       _ = 1 := by simp
-  -- Package U as a unitary group element.
+  -- State U as a unitary group element.
   refine ⟨⟨Um, Matrix.mem_unitaryGroup_iff'.mpr
     (by simpa [Matrix.star_eq_conjTranspose] using hUhU)⟩, V, sig, hsig_pos, ?_⟩
   -- Verify M = Um * Sdiag * Vᴴ.

@@ -36,7 +36,7 @@ variable {d D : ℕ}
 
 /-- Nonzero sector dimensions propagate one step around a cyclic sector decomposition.
 
-This part uses only the currently exposed cyclic-sector API: if `dim u ≠ 0` then the
+This part uses only the currently exposed cyclic-sector interface: if `dim u ≠ 0` then the
 projection `P u` is nonzero by the `N = 0` trace identity. If `P (u + 1)` were zero,
 the cyclic relation `E†(P (u + 1)) = P u` would force `P u = 0`, contradiction. -/
 private lemma sectorDim_ne_zero_succ_of_cyclicSectorDecomp
@@ -75,7 +75,7 @@ private lemma sectorDim_ne_zero_succ_of_cyclicSectorDecomp
 
 /-- Missing cyclic gauge-transport statement.
 
-This is the precise API still needed for Eq. A.8 of arXiv:1708.00029. From the
+This is the precise interface still needed for Eq. A.8 of arXiv:1708.00029. From the
 current `IsCyclicSectorDecomp` data one knows the projection shift
 `E†(P (k+1)) = P k` and the blocked trace realization of each compressed sector.
 To prove this statement, the cyclic-sector construction must additionally expose

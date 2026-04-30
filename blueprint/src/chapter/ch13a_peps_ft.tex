@@ -281,14 +281,14 @@ Theorem~2 of~\cite{Molnar2018NormalPEPS}.
     \leanok
     \uses{def:peps_localTensorMap, def:peps_localLeftInverse}
     For fixed $A$, $B$, a bond-dimension equality, and a vertex $v$, this
-    records the two local conclusions still needed from the blocked-middle
+    states the two local conclusions still needed from the blocked-middle
     reduction in~\cite{Molnar2018NormalPEPS}, §3:
     (i) each local component of $B$ lies in the image of the local tensor map
     of $A$, and (ii) the canonical pullback through the chosen left inverse of
     $A$ factorizes as one invertible matrix on each incident edge.
 \end{definition}
 
-\begin{definition}[Blocked-middle local gauge output]%
+\begin{definition}[Blocked-middle local gauge data]%
     \label{def:peps_blockedMiddleGaugeHyp}
     \lean{TNLean.PEPS.BlockedMiddleGaugeHyp}
     \leanok
@@ -299,7 +299,7 @@ Theorem~2 of~\cite{Molnar2018NormalPEPS}.
     local component of $B$ from those of $A$.
 \end{definition}
 
-\begin{theorem}[Blocked-middle output implies sharpened lift]%
+\begin{theorem}[Blocked-middle local gauge data implies sharpened lift]%
     \label{thm:peps_hasLocalGaugeLift_of_blockedMiddleGaugeHyp}
     \lean{TNLean.PEPS.hasLocalGaugeLift_of_blockedMiddleGaugeHyp}
     \leanok
@@ -419,6 +419,6 @@ Theorem~2 of~\cite{Molnar2018NormalPEPS}.
     require the blocked tensor on the middle region and the comparison with the
     corresponding three-site injective chain. The uniqueness statement has now
     been repaired to a quotient by balanced edge scalars, but its proof still
-    requires the same blocking machinery together with the corresponding
+    requires the same blocking construction together with the corresponding
     tensor-factor uniqueness statement at a single vertex.
 \end{remark}

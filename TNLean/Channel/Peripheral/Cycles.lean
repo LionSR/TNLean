@@ -9,7 +9,7 @@ import TNLean.Channel.Peripheral.CyclicDecomposition
 
 This file formalizes the *block-permutation* side of
 Wolf, *Quantum Channels & Operations*, Theorem 6.16, on top of the existing
-cyclic-decomposition infrastructure.
+cyclic-decomposition formalization.
 
 Thm. 6.16 describes the asymptotic dynamics of a general trace-preserving
 positive Schwarz map `T` as acting on a direct sum of equal-size blocks by
@@ -45,7 +45,7 @@ fixed-point algebra, issues #27/#360) and is left to future work.
   of Wolf Thm. 6.16 in its permutation-of-blocks form and is the basis for
   descending the dynamics of `T ^ orderOf σ` to each block.
 
-* `CycleStructure.ofPermDecomp` — convenient constructor from raw
+* `CycleStructure.ofPermDecomp` — convenient constructor from explicit
   permutation-decomposition data.
 
 ## References
@@ -60,7 +60,7 @@ variable {D : ℕ}
 
 /-- Bundled data for the **block-permutation form** of Wolf Theorem 6.16.
 
-A `CycleStructure T` records a finite family of orthogonal projections
+A `CycleStructure T` states a finite family of orthogonal projections
 `P : ι → M_D(ℂ)` on equal-size blocks together with a permutation
 `σ : Equiv.Perm ι` and the compatibility conditions that govern the
 permutation dynamics of `T` on the corresponding corners:
@@ -143,7 +143,7 @@ theorem preserves_corner_pow_orderOf (C : CycleStructure T) (k : C.ι) :
   preserves_corner_pow_orderOf_of_perm_decomp
     (σ := C.σ) (P := C.P) C.isProj C.permute C.mulLeft C.mulRight k
 
-/-- Convenient constructor from raw permutation-decomposition data.
+/-- Convenient constructor from explicit permutation-decomposition data.
 
 This exposes the hypotheses of `preserves_corner_pow_orderOf_of_perm_decomp`
 as a bundled `CycleStructure`. -/

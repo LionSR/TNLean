@@ -7,23 +7,22 @@ import TNLean.Entropy.TripartiteTrace
 import TNLean.Entropy.VonNeumann
 
 /-!
-# Strong subadditivity (namespaced wrapper + basic corollaries)
+# Strong subadditivity (theorem formulation and basic corollaries)
 
-This module exposes **strong subadditivity** (SSA) of the von Neumann
-entropy inside the `Entropy` namespace, following the roadmap of
-issue #613 for the Simple MPDO RFP track (issue #236, umbrella
-#239).
+This module states **strong subadditivity** (SSA) of the von Neumann
+entropy as a theorem inside the `Entropy` namespace, following the
+roadmap of issue #613 for the Simple MPDO RFP track (issue #236,
+umbrella #239).
 
 SSA is the statement that for any tripartite density matrix
 `ρ_ABC` on `A ⊗ B ⊗ C`,
 `S(ρ_ABC) + S(ρ_B) ≤ S(ρ_AB) + S(ρ_BC)`.
-This is a deep theorem of Lieb–Ruskai (1973). Its full Lean proof is
+This is a deep theorem of Lieb–Ruskai (1973). The full Lean proof is
 deferred to the sanctioned axiom `_root_.strong_subadditivity` in
 `TNLean.Axioms.Entropy`; the theorem `Entropy.strongSubadditivity`
-provided here is a thin *theorem* wrapper around that single
-axiom, so that the sanctioned axiom inventory under
-`TNLean/Axioms/` remains authoritative and no duplicate
-axiomatization of SSA is introduced.
+stated here forwards that single axiom, so that the sanctioned
+axiom inventory under `TNLean/Axioms/` remains authoritative and
+no duplicate axiomatization of SSA is introduced.
 
 ## Main declarations
 
@@ -69,13 +68,14 @@ open Matrix Finset Real
 
 namespace Entropy
 
-/-! ## The strong subadditivity wrapper -/
+/-! ## The strong subadditivity theorem -/
 
 section StrongSubadditivity
 
 variable {dA dB dC : ℕ}
 
-/-- **Strong subadditivity** (Lieb–Ruskai 1973), namespaced wrapper.
+/-- **Strong subadditivity** (Lieb–Ruskai 1973), stated in the
+`Entropy` namespace.
 
 For a tripartite density matrix `ρ_ABC` on `A ⊗ B ⊗ C`:
   `S(ρ_ABC) + S(ρ_B) ≤ S(ρ_AB) + S(ρ_BC)`
@@ -84,7 +84,7 @@ where the reduced states are obtained via the tripartite partial
 traces `traceAC_ABC`, `traceC_ABC`, `traceA_ABC` (see
 `TNLean.Analysis.Entropy`).
 
-This is a thin theorem wrapper around the sanctioned axiom
+This theorem forwards the sanctioned axiom
 `_root_.strong_subadditivity` (in `TNLean/Axioms/Entropy.lean`); no
 new axiom is introduced by this module. See the module-level TODO for
 the roadmap replacing the underlying axiom with a proof.

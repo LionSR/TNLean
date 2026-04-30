@@ -6,7 +6,7 @@ import Mathlib.Analysis.Matrix.PosDef
 import Mathlib.Analysis.Matrix.Spectrum
 
 /-!
-# Spectral decomposition helpers for complex matrices
+# Spectral decomposition lemmas for complex matrices
 
 This file collects channel-agnostic linear-algebra lemmas that relate a complex
 matrix to outer-product sums over its spectral data.

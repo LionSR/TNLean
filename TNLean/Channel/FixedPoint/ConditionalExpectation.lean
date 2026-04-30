@@ -23,7 +23,7 @@ Wedderburn block decomposition from Wolf Theorem 6.14 (issue #27).
 
 ## Main results
 
-* `IsConditionalExpectation`: predicate recording that a linear map is
+* `IsConditionalExpectation`: predicate stating that a linear map is
   idempotent, unital, maps into a `StarSubalgebra`, and fixes it pointwise.
   Defined generically over any `StarAlgebra` for upstream compatibility.
 * `scalarConditionalExpectation`: the linear map `X ↦ (tr(σX)/tr(σ)) • 1`.
@@ -189,7 +189,7 @@ theorem scalarConditionalExpectation_mem_adjointFixedPoints
 
 /-! ## Complete positivity and weighted trace preservation -/
 
-/-- A helper identity: `∑ j, single j j c = c • 1` for `c : ℂ`.
+/-- An auxiliary lemma identity: `∑ j, single j j c = c • 1` for `c : ℂ`.
 
 The sum of diagonal basis matrices with a common scalar equals that scalar
 times the identity. -/

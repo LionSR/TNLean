@@ -3,24 +3,24 @@ import TNLean.PEPS.LocalGauge
 import Mathlib.LinearAlgebra.LinearIndependent.Basic
 import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Defs
 
--- This is a **scaffold** file: the forward direction and contraction algebra
--- are formalized, while the converse PEPS fundamental theorem remains as
--- `sorry` placeholders marking proof obligations for future PRs (see #128).
+-- The forward direction and contraction algebra are formalized, while the
+-- converse PEPS fundamental theorem remains as `sorry` placeholders marking
+-- proof obligations for future PRs (see #128).
 --
 -- Provability note: `IsVertexInjective` in `PEPS.Defs` is the
 -- linear-independence formulation `∀ v, LinearIndependent ℂ (A.component v)`
 -- (see issue #633 for the switch away from function-level injectivity, which
 -- is strictly weaker). Linear independence gives each vertex tensor a left
 -- inverse on its image, removes the old definitional blocker, and is the
--- correct hypothesis for the repaired uniqueness endpoint
+-- correct hypothesis for the repaired uniqueness statement
 -- `gauge_unique_mod_edge_scalars`.
 --
 -- The remaining `sorry`s split into three independently tracked groups:
 -- * `gaugeConsistency` (issue #820) still requires the full edge-centred
 --   reduction from arXiv:1804.04964 §3. The local left inverse and the
---   elementary blocking data now live in `PEPS/VirtualInsertion` and
+--   elementary blocking data are developed in `PEPS/VirtualInsertion` and
 --   `PEPS/Blocking`, and `localGauge_exists` has been reduced to the sharper
---   local hypothesis `HasLocalGaugeLift`. The wrapper `BlockedMiddleGaugeHyp`
+--   local hypothesis `HasLocalGaugeLift`. The abbreviation `BlockedMiddleGaugeHyp`
 --   isolates the exact remaining step: build the blocked middle tensor,
 --   compare it with the 3-site MPS theorem, and derive that explicit local
 --   gauge formula from `SameState`.
@@ -30,14 +30,14 @@ import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Defs
 --   Its derivation from `SameState` plus vertex injectivity still needs a
 --   boundary-insertion / blocking lemma.
 -- * `gauge_unique_mod_edge_scalars` (issue #842) is the repaired uniqueness
---   endpoint, but its proof still needs the same blocking infrastructure
+--   statement, but its proof still needs the same blocking infrastructure
 --   together with a local tensor-factor uniqueness lemma for the balanced
 --   edge-scalar quotient.
 
 /-!
-# Fundamental Theorem for injective PEPS (scaffold)
+# Fundamental Theorem for injective PEPS
 
-This file scaffolds the Fundamental Theorem for injective PEPS on simple graphs
+This file develops the Fundamental Theorem for injective PEPS on simple graphs
 (arXiv:1804.04964, Theorem 2, Section 3):
 
 > Two injective PEPS defined on a graph (no double edges/self-loops) generate
@@ -500,7 +500,7 @@ noncomputable def localTensorEval (A : Tensor G d) (v : V)
 /-- Under the sharper local hypothesis `HasLocalGaugeLift`, one obtains a
 factorized local gauge relation at `v`.
 
-The local left inverse and the canonical candidate operator now live in
+The local left inverse and the canonical candidate operator are defined in
 `PEPS/LocalGauge`. The remaining PEPS-Fundamental-Theorem gap is to prove
 `BlockedMiddleGaugeHyp` from `SameState` via the blocked-middle / three-site-MPS
 reduction, then convert it to `HasLocalGaugeLift` by

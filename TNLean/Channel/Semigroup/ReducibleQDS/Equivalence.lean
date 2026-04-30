@@ -90,7 +90,7 @@ theorem wolf_prop_7_6_three_implies_two
     (hasBlockUpperTriangularLindblad_of_hasInvariantCompression hGKSL h)
 
 /-- **Wolf Proposition 7.6 (full equivalence)**: For a GKSL generator `L`, the
-four reducibility conditions are equivalent. We package the result by taking
+four reducibility conditions are equivalent. We state the result by taking
 condition (1) as the base condition. -/
 theorem wolf_prop_7_6_full_equivalence
     {L : Mat →ₗ[ℂ] Mat}

@@ -6,9 +6,9 @@ import TNLean.MPS.FundamentalTheorem.EqualProportional
 import TNLean.MPS.FundamentalTheorem.OverlapConvergenceAux
 
 /-!
-# Helpers for the heterogeneous equal-case fundamental theorem
+# Auxiliary lemmas for the heterogeneous equal-case fundamental theorem
 
-This module collects small helper lemmas used by the two core lemmas
+This module collects small auxiliary lemmas used by the two core lemmas
 `exists_nondecaying_overlap_of_sameMPV₂_CFBNT`
 (`TNLean.MPS.FundamentalTheorem.Full.NondecayingOverlap`) and
 `blocks_match_of_sameMPV₂_CFBNT` (`TNLean.MPS.FundamentalTheorem.Full.BlocksMatch`)
@@ -20,7 +20,7 @@ that together prove the self-contained equal-case fundamental theorem
 * `tendsto_norm_selfOverlap_one`: normed form of a self-overlap tending to `1`.
 * `tendsto_inner_zero_swap`: swapping a decaying overlap conjugates the inner product.
 
-This file currently consists of these two public helper lemmas used by the full
+This file currently consists of these two public auxiliary lemmas used by the full
 heterogeneous equal-case theorem.
 
 ## References
