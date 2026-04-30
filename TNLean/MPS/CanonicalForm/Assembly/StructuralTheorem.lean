@@ -845,7 +845,7 @@ theorem fundamentalTheorem_after_blocking_commonLength_commonSector
 the zero-tail equation can be rewritten using the derived common-sector family.
 This is the one-sided theorem that puts the reindexed data above in the form used
 by the span and BNT comparison theorems. -/
-theorem zeroTail_commonFlat_of_reindexed_labelCompat
+theorem zeroTail_commonFlat_of_reindexed
     {d D r z : ℕ} {dim : Fin r → ℕ}
     (A : MPSTensor d D) (μ : Fin r → ℂ)
     (blocks : (k : Fin r) → MPSTensor d (dim k))
@@ -879,6 +879,69 @@ theorem zeroTail_commonFlat_of_reindexed_labelCompat
           mpv (toTensorFromBlocks (d := blockPhysDim d F.p)
             (μ := F.commonFlatWeight μ) F.commonFlatBlocks) σ := by
           rw [hFlat N σ]
+
+/-- Replacing nonzero parts by MPV-equivalent tensors preserves the positive-length
+MPV equality and the length-zero zero-tail identity. -/
+theorem sameMPV₂Pos_and_zeroTail_identity_of_sameMPV₂
+    {d LA LB LA' LB' zeroTailA zeroTailB : ℕ}
+    (liveA : MPSTensor d LA) (liveB : MPSTensor d LB)
+    (flatA : MPSTensor d LA') (flatB : MPSTensor d LB')
+    (hA : SameMPV₂ liveA flatA) (hB : SameMPV₂ liveB flatB)
+    (hPos : SameMPV₂Pos liveA liveB)
+    (hZero : ∀ σ : Fin 0 → Fin d,
+      (zeroTailA : ℂ) + mpv liveA σ = (zeroTailB : ℂ) + mpv liveB σ) :
+    SameMPV₂Pos flatA flatB ∧
+      ∀ σ : Fin 0 → Fin d,
+        (zeroTailA : ℂ) + mpv flatA σ = (zeroTailB : ℂ) + mpv flatB σ := by
+  refine ⟨?_, ?_⟩
+  · intro N hN σ
+    calc
+      mpv flatA σ = mpv liveA σ := (hA N σ).symm
+      _ = mpv liveB σ := hPos N hN σ
+      _ = mpv flatB σ := hB N σ
+  · intro σ
+    calc
+      (zeroTailA : ℂ) + mpv flatA σ = (zeroTailA : ℂ) + mpv liveA σ := by
+        rw [(hA 0 σ).symm]
+      _ = (zeroTailB : ℂ) + mpv liveB σ := hZero σ
+      _ = (zeroTailB : ℂ) + mpv flatB σ := by
+        rw [hB 0 σ]
+
+/-- Once the canonical blocked nonzero part agrees with the reindexed common-sector
+nonzero part, the zero-tail equation, the transported-weight equality, and the
+nonvanishing of the common-sector weights are available together. -/
+theorem zeroTail_commonFlat_transport_of_reindexed
+    {d D r z : ℕ} {dim : Fin r → ℕ}
+    (A : MPSTensor d D) (μ : Fin r → ℂ)
+    (blocks : (k : Fin r) → MPSTensor d (dim k))
+    (F : CommonBlockedCyclicSectorFamily blocks)
+    (hμ : ∀ k, μ k ≠ 0)
+    (hMPV : ∀ (N : ℕ) (σ : Fin N → Fin d),
+      mpv A σ = mpv (zeroMPSTensor d z) σ +
+        mpv (toTensorFromBlocks (d := d) (μ := μ) blocks) σ)
+    (hRelabel : SameMPV₂
+      (toTensorFromBlocks (d := blockPhysDim d F.p)
+        (μ := fun k : Fin r => (μ k) ^ F.p)
+        (fun k => blockTensor (d := d) (D := dim k) (blocks k) F.p))
+      (toTensorFromBlocks (d := blockPhysDim d F.p)
+        (μ := fun k : Fin r => (μ k) ^ F.p) F.commonReindexedBlock)) :
+    (∀ (N : ℕ) (σ : Fin N → Fin (blockPhysDim d F.p)),
+      mpv (blockTensor (d := d) (D := D) A F.p) σ =
+        mpv (zeroMPSTensor (blockPhysDim d F.p) z) σ +
+          mpv (toTensorFromBlocks (d := blockPhysDim d F.p)
+            (μ := F.commonFlatWeight μ) F.commonFlatBlocks) σ) ∧
+    SameMPV₂
+      (toTensorFromBlocks (d := blockPhysDim d F.p)
+        (μ := fun k : Fin r => (μ k) ^ F.p)
+        (fun k => blockTensor (d := d) (D := dim k) (blocks k) F.p))
+      (toTensorFromBlocks (d := blockPhysDim d F.p)
+        (μ := F.commonFlatWeight μ) F.commonFlatBlocks) ∧
+    (∀ x, F.commonFlatWeight μ x ≠ 0) := by
+  refine ⟨?_, ?_, ?_⟩
+  · exact zeroTail_commonFlat_of_reindexed A μ blocks F hMPV hRelabel
+  · exact F.sameMPV₂_weightedCanonicalBlock_commonFlat_of_reindexed μ hRelabel
+  · intro x
+    exact F.commonFlatWeight_ne_zero μ hμ x
 
 /-- **Conditional after-blocking sector comparison (issue #877 target shape).**
 
