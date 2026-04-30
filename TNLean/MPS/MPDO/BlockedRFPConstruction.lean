@@ -10,7 +10,7 @@ import TNLean.MPS.MPDO.SimpleLocalStructure
 /-!
 # Blocked-RFP construction for simple MPDOs
 
-This file states the current blocked-RFP theorem interface for the simple-MPDO
+This file states the current blocked-RFP theorem for the simple-MPDO
 branch of arXiv:1606.00608, Appendix C.2 / Theorem 4.9.
 
 At the present repository state, the local entropy side and the commuting-form
