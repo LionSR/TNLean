@@ -214,7 +214,7 @@ theorem isNormal_of_isIrreducibleAction_of_aperiodic [NeZero D]
 /-- If `IsIrreducibleTensor A`, `1 ∈ wordSpan A 1`, and `NeZero D`, then `IsNormal A`.
 
 Extends the chain with `IsIrreducibleTensor → IsIrreducibleAction`
-(proved in `IrreducibleTensorAction.lean`). This is the endpoint later combined
+(proved in `IrreducibleTensorAction.lean`). This is the conclusion later combined
 with strong irreducibility, which supplies the aperiodicity hypothesis. -/
 theorem isNormal_of_isIrreducibleTensor_of_aperiodic [NeZero D]
     (A : MPSTensor d D)

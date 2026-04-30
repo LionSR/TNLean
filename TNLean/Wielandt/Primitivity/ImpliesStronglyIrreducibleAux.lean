@@ -11,10 +11,10 @@ import TNLean.Wielandt.Primitivity.ImpliesStronglyIrreducible
 This file continues the (a)→(c) direction of Proposition 3 from arXiv:0909.5347:
 **IsPrimitivePaper A → IsStronglyIrreduciblePaper A**.
 
-It builds on the helper lemmas in `ImpliesStronglyIrreducible` (Parts 1–8) and develops:
+It builds on the auxiliary lemmas in `ImpliesStronglyIrreducible` (Parts 1–8) and develops:
 
 - **Part 9: Spectral perturbation** — from peripheral eigenvectors to PSD non-PosDef
-  fixed points (the machinery for case (iii) of Wolf §6.4 Theorem 6.7).
+  fixed points (the argument for case (iii) of Wolf §6.4 Theorem 6.7).
 - **Part 10: Uniqueness** of PSD fixed points under paper-primitivity.
 - **Part 11: Channel structure** — the iterated transfer map `E^p` is a quantum channel.
 - **Part 12: Hermitian vanishing** — Hermitian trace-zero `E^p`-fixed points vanish
@@ -24,7 +24,7 @@ It builds on the helper lemmas in `ImpliesStronglyIrreducible` (Parts 1–8) and
 - **Part 14: Conclusion** — `IsPrimitivePaper A → IsPeripherallyPrimitive A` and
   `IsPrimitivePaper A → IsStronglyIrreduciblePaper A`.
 
-For the packaged public Proposition 3 API, prefer
+For the public Proposition 3 formulation, prefer
 `TNLean.Wielandt.Primitivity.Equivalence`; this file is retained for specialized
 access to the intermediate lemmas used in the (a)→(c) proof.
 
@@ -41,7 +41,7 @@ namespace MPSTensor
 
 /-! ## Part 9: Spectral perturbation — from peripheral eigenvectors to PSD non-PosDef fixed points
 
-This section develops the spectral-perturbation machinery needed for the paper's case (iii)
+This section develops the spectral-perturbation argument needed for the paper's case (iii)
 in Proposition 3 (a)→(c) of arXiv:0909.5347.
 
 **Setup**: Given `ρ.PosDef` with `E(ρ) = ρ`, and a nontrivial peripheral eigenvector
@@ -265,7 +265,7 @@ theorem exists_hermitian_ne_zero_trace_zero_pow_fixedPoint
       not_posSemidef_of_hermitian_ne_zero_trace_eq_zero
         (isHermitian_smul_I_sub_conjTranspose X) h (trace_antiHermitianPart_eq_zero htr)⟩
 
-/-! ### Step 7: Helper lemmas for the perturbation construction -/
+/-! ### Step 7: Auxiliary lemmas for the perturbation construction -/
 
 /-- **Negative eigenvalue of non-PSD Hermitian matrix.**
 
@@ -666,12 +666,12 @@ a positive-definite fixed point, peripheral spectrum `{1}`, and is irreducible
    `IsIrreducibleMap` on the transfer map
    (`isIrreducibleCP_transferMap_of_isIrreducibleTensor`).
 
-This packaged strong-irreducibility statement is exactly the input later fed
+This formulated strong-irreducibility statement is exactly the input later fed
 into Proposition 3(c)→(b), which yields eventual full Kraus rank (hence
 normality) directly, without passing through an aperiodicity argument.
 
 Paper: Proposition 3 (a)⟹(c) of arXiv:0909.5347.
-This is the full paper-facing (a)→(c) direction. -/
+This is the full paper-level (a)→(c) direction. -/
 theorem isStronglyIrreduciblePaper_of_isPrimitivePaper [NeZero D]
     (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)

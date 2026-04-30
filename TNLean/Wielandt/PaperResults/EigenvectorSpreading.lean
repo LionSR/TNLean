@@ -7,7 +7,7 @@ import TNLean.Wielandt.Primitivity.Equivalence
 import TNLean.Wielandt.SpanGrowth.EigenvectorSpreading
 
 /-!
-# Lemma 2(a) — paper-facing eigenvector spreading wrapper (arXiv:0909.5347)
+# Lemma 2(a) — paper-level eigenvector-spreading statement (arXiv:0909.5347)
 
 This file states the current formal version of **Lemma 2(a)** from
 Sanz–Pérez-García–Wolf–Cirac, *A quantum version of Wielandt's inequality*
@@ -30,7 +30,7 @@ Sanz–Pérez-García–Wolf–Cirac, *A quantum version of Wielandt's inequalit
    using `vectorSpreadSpan_eq_top_of_cumulativeVectorSpan_eq_top_of_eigenvector`.
 
 This keeps the public statement in the exact fixed-length `H_{D-1}` form of the
-paper/Wolf lemma, while reusing the existing backend infrastructure.
+paper/Wolf lemma, while reusing the existing underlying formalization.
 -/
 
 open scoped Matrix ComplexOrder BigOperators
@@ -40,7 +40,7 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- **Lemma 2(a)** (paper-facing wrapper).
+/-- **Lemma 2(a)** (paper-level statement).
 
 If `A` is normalized and primitive in the paper sense, and `φ` is a
 nonzero eigenvector of some `A i₀` with nonzero corresponding eigenvalue `μ`,

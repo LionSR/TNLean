@@ -10,7 +10,7 @@ import TNLean.Wielandt.WielandtBound
 /-!
 # Primitivity consequences and normality restatements
 
-This file records the low-level consequences of `HasPrimitiveFixedPoint` used in the
+This file states the low-level consequences of `HasPrimitiveFixedPoint` used in the
 Wielandt development and recalls the normality side of the chain from
 `WielandtBound.lean`.
 
@@ -26,7 +26,7 @@ with extra `ρ.PosDef` and aperiodicity hypotheses is assembled in
 * `transferMap_pow_apply_eq_sum`: `E^n(X) = Σ_σ (evalWord A σ) X (evalWord A σ)†`
 * `exists_nonzero_evalWord_of_isPrimitiveMPS`: for every `n`, some length-`n`
   word product is nonzero
-* `exists_nonzero_evalWord_of_hasPrimitiveFixedPoint`: existential wrapper
+* `exists_nonzero_evalWord_of_hasPrimitiveFixedPoint`: existential statement
 * `transferMap_pow_ne_zero_of_hasPrimitiveFixedPoint`: every transfer-map iterate is nonzero
 
 ### From normality
@@ -97,7 +97,7 @@ theorem exists_nonzero_evalWord_of_isPrimitiveMPS [NeZero D]
   rw [hsum] at hfix
   exact hP.fixedPoint_ne_zero hfix.symm
 
-/-- Existential wrapper: if `A` has a primitive fixed point, every word length has a
+/-- Existential statement: if `A` has a primitive fixed point, every word length has a
 nonzero word product. -/
 theorem exists_nonzero_evalWord_of_hasPrimitiveFixedPoint [NeZero D]
     {A : MPSTensor d D} (hP : HasPrimitiveFixedPoint A) (n : ℕ) :
@@ -119,7 +119,7 @@ theorem transferMap_pow_ne_zero_of_isPrimitiveMPS [NeZero D]
   rw [transferMap_pow_fixed hP.fixedPoint_is_fixed n] at this
   exact hP.fixedPoint_ne_zero this
 
-/-- Existential wrapper for `transferMap_pow_ne_zero`. -/
+/-- Existential statement for `transferMap_pow_ne_zero`. -/
 theorem transferMap_pow_ne_zero_of_hasPrimitiveFixedPoint [NeZero D]
     {A : MPSTensor d D} (hP : HasPrimitiveFixedPoint A) (n : ℕ) :
     (transferMap (d := d) (D := D) A) ^ n ≠ 0 := by
@@ -136,7 +136,7 @@ Given `IsNormal A`, the full Wielandt chain provides:
 3. A nonzero eigenvalue μ and eigenvector φ for evalWord A w₀
 4. Vector spanning: for any nonzero φ, word products applied to φ span ℂ^D
 
-This records `wielandt_chain` from `WielandtBound.lean` under a cleaner name. -/
+This states `wielandt_chain` from `WielandtBound.lean` under a cleaner name. -/
 theorem wielandt_full_analysis [NeZero D]
     (A : MPSTensor d D) (hN : IsNormal A) :
     cumulativeSpan A (D ^ 2) = ⊤ ∧
@@ -158,8 +158,8 @@ positive definite and `1 ∈ wordSpan A 1`.
 
 What remains here is the gap from bare spectral-gap primitivity to eventual
 full matrix spanning. Conceptually this should follow from irreducibility plus a
-Burnside- or peripheral-spectrum argument, but that infrastructure is kept out
-of this lightweight wrapper file.
+Burnside- or peripheral-spectrum argument, but that formalization is kept out
+of this lightweight statement file.
 -/
 
 
