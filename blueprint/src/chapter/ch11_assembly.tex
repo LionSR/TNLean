@@ -1213,36 +1213,55 @@ single weighted block.
 two-basis sector comparison theorem.
 \end{proof}
 
+\begin{theorem}[Zero-tail nonzero block decompositions with a common MPV phase cover]%
+\label{thm:afterBlocking_sectorComparison_zeroTail_of_commonPhaseCover}
+	\lean{MPSTensor.afterBlocking_sectorComparison_zeroTail_of_commonPhaseCover}
+	\leanok
+	\uses{def:same_mpv2_pos, def:mpv_common_phase_cover}
+	Let $A$ and $B$ have the same MPV family. Fix $p>0$ and suppose $A^{[p]}$
+	and $B^{[p]}$ each decompose as a zero-tail tensor plus a weighted nonzero
+	part, with all blocks in the nonzero part trace-preserving, primitive,
+	irreducible, injective, and with nonzero weights. If the two zero-tail
+	dimensions agree and the two nonzero-weight block families have a common MPV
+	phase cover, then there are sector decompositions satisfying the positive-length
+	zero-tail identities, full equality of their MPV families, BNT linear
+	independence, and the matched sector-weight conclusion.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{lem:sameMPV2_live_of_zeroTail_eq,
+		thm:bnt_sectorDecomp_pair_overlapSpan_of_commonPhaseCover,
+		thm:sector_basis_overlap_span_to_matching,
+		thm:route_b_hetero_sector_matching}
+	Zero-tail cancellation gives full equality of the two nonzero parts. The
+	common phase cover gives the primitive overlap-span hypotheses for the
+	phase-class representative sector bases. The sector basis matching and
+	two-basis sector comparison theorems then give the sector-weight conclusion.
+\end{proof}
+
 \begin{theorem}[Zero-tail nonzero block decompositions with BNT proportional-decomposition data]%
 \label{thm:afterBlocking_sectorComparison_zeroTail_of_proportionalDecompositionConclusion}
 	\lean{MPSTensor.afterBlocking_sectorComparison_zeroTail_of_proportionalDecompositionConclusion}
 	\leanok
 	\uses{def:same_mpv2_pos,
-		thm:after_blocking_sector_common_blocks_common_phase_cover,
-		thm:after_blocking_sector_common_blocks_overlap_span_zero_tail}
+		thm:common_phase_cover_of_proportional_decomposition,
+		thm:afterBlocking_sectorComparison_zeroTail_of_commonPhaseCover}
 	Let $A$ and $B$ have the same MPV family. Fix $p>0$ and suppose $A^{[p]}$
 	and $B^{[p]}$ each decompose as a zero-tail tensor plus a weighted nonzero
 	part, with all blocks in the nonzero part trace-preserving, primitive,
 	irreducible, injective, and with nonzero weights. If the two zero-tail
 	dimensions agree and a BNT proportional-decomposition comparison supplies a
 	permutation, equal bond dimensions, and gauge-phase equivalences between the two
-	nonzero-weight block families, then the sector bases yield the comparison data
-	of Theorem~\ref{thm:after_blocking_sector_common_blocks_common_phase_cover},
-	with the positive-length zero-tail identities of
-	Theorem~\ref{thm:after_blocking_sector_common_blocks_overlap_span_zero_tail}.
+	nonzero-weight block families, then the matched sector-weight conclusion holds.
 \end{theorem}
 
 \begin{proof}
 	\leanok
-	\uses{lem:sameMPV2_live_of_zeroTail_eq,
-		thm:bnt_sectorDecomp_pair_overlapSpan_of_proportionalDecompositionConclusion,
-		thm:sector_basis_overlap_span_to_matching,
-		thm:route_b_hetero_sector_matching}
-	Zero-tail cancellation gives full equality of the two nonzero parts. The
-	proportional-decomposition comparison gives the primitive overlap-span
-	hypotheses through the common phase-cover construction. The sector basis
-	matching and two-basis sector comparison theorems then give the
-	sector-weight conclusion.
+	\uses{thm:common_phase_cover_of_proportional_decomposition,
+		thm:afterBlocking_sectorComparison_zeroTail_of_commonPhaseCover}
+	First convert the proportional-decomposition conclusion into common MPV
+	phase-cover data. The preceding zero-tail theorem then applies.
 \end{proof}
 
 \begin{theorem}[Cast-compatible MPV scaling implies phase-matched sector comparison]%
