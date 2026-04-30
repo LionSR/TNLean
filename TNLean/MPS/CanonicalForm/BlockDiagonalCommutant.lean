@@ -18,7 +18,7 @@ dependent direct sum lie in the span of a family of matrices and a boundary
 matrix commutes with that family, then it
 commutes with the projections and hence has no off-block entries.
 
-The file also records a finite-span reduction: if the simultaneous block word
+The file also proves a finite-span reduction: if the simultaneous block word
 tuples span the full product algebra, then the sector projections lie in the
 finite word span of the assembled tensor.  The remaining paper-level CF/BNT input
 is to derive that product-word span from the separated canonical-form/BNT
@@ -41,7 +41,7 @@ variable [(i : ι) → Fintype (n i)] [(i : ι) → DecidableEq (n i)]
 /-- If every block projection lies in the span of a matrix family `S`, then any
 matrix commuting with all members of `S` is block diagonal.
 
-This records the common linearity step used in commutant arguments: commutation
+This is the common linearity step used in commutant arguments: commutation
 extends from generators to their span, giving commutation with each projection;
 `Matrix.isBlockDiagonal'_of_commutes_blockProjection` then kills all off-block
 entries. -/

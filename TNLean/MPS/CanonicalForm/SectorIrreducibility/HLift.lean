@@ -222,7 +222,7 @@ irreducible trace-preserving case it is discharged by
 `transferMap A` and a weighted-trace argument. Likewise, the remaining
 one-step input `hProjStep` is now discharged in the same cyclic setting by
 `sectorFixedPointAlgebraRigidity_of_irreducible_cyclicDecomp`, so the present
-theorem is kept mainly as the reusable abstract interface for later wrappers. -/
+theorem is kept mainly as the reusable abstract statement for later applications. -/
 theorem hLift_cyclicDecomp_mps_of_fixUpgrade
     [NeZero m]
     {A : MPSTensor d D}
@@ -374,7 +374,7 @@ theorem hLift_cyclicDecomp_mps_of_fixUpgrade
 `hFixUpgrade_of_peripheral`.
 
 This reduces the abstract interface to the one-step projection-preservation
-statement `hProjStep`; the unconditional wrapper is `hLift_cyclicDecomp_mps`. -/
+statement `hProjStep`; the unconditional theorem is `hLift_cyclicDecomp_mps`. -/
 theorem hLift_cyclicDecomp_mps_of_projStep
     [NeZero D] [NeZero m]
     {A : MPSTensor d D}
@@ -426,7 +426,7 @@ theorem hLift_cyclicDecomp_mps_of_projStep
         hFixUpgrade_of_peripheral (A := A) (period := m) hTP hIrr hQproj hQinv)
       k Q hQproj hQP hPQ hQcorner
 
-/-- MPS-specialized wrapper: once the orbit-sum lift is constructed in the
+/-- MPS-specialized theorem: once the orbit-sum lift is constructed in the
 shape required by `isIrreducible_restriction_of_cyclic_decomp`, sector
 irreducibility follows immediately. -/
 theorem isIrreducibleOnCorner_of_cyclic_decomp_mps_of_hLift
@@ -460,7 +460,7 @@ theorem isIrreducibleOnCorner_of_cyclic_decomp_mps_of_hLift
       hIrr P hPproj hPsum hcyclic hLift
 
 /-- MPS-specialized sector irreducibility, keeping the one-step projection-preservation
-input `hProjStep` as an explicit interface. The unconditional wrapper is
+input `hProjStep` as an explicit interface. The unconditional theorem is
 `isIrreducibleOnCorner_of_cyclic_decomp_mps`. -/
 theorem isIrreducibleOnCorner_of_cyclic_decomp_mps_of_projStep
     [NeZero D] {A : MPSTensor d D}

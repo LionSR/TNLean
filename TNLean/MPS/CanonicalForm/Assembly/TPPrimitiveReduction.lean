@@ -29,7 +29,7 @@ families. It combines the zero-block separation, TP gauge, and
 common blocking steps into a blocked decomposition whose nontrivial blocks are
 left-canonical and have primitive transfer maps.
 
-It also records two immediate consequences when extra hypotheses are already
+It also includes two immediate consequences when extra hypotheses are already
 available: the sorted normal-canonical-form criterion for blocked primitive
 families and the trivial-blocking shortcut for tensors that already come with a
 primitive block decomposition.
@@ -61,21 +61,21 @@ variable {d D : ℕ}
 
 /-! ## Zero-tail and weight transport through blocking -/
 
-/-- Reblocking preserves an explicit zero-tail equation for the live tensor.
+/-- Reblocking preserves a zero-tail/nonzero-part MPV decomposition.
 
 The positive-period hypothesis is exactly what keeps the zero-tail contribution
 confined to length zero after blocking: a blocked chain of positive length expands
 to a positive number of original sites. -/
 theorem zeroTail_mpv_decomp_blockTensor
     {d D L z p : ℕ}
-    (A : MPSTensor d D) (live : MPSTensor d L)
+    (A : MPSTensor d D) (nonzeroPart : MPSTensor d L)
     (hp : 0 < p)
     (hMPV : ∀ (N : ℕ) (σ : Fin N → Fin d),
-      mpv A σ = mpv (zeroMPSTensor d z) σ + mpv live σ) :
+      mpv A σ = mpv (zeroMPSTensor d z) σ + mpv nonzeroPart σ) :
     ∀ (N : ℕ) (σ : Fin N → Fin (blockPhysDim d p)),
       mpv (blockTensor (d := d) (D := D) A p) σ =
         mpv (zeroMPSTensor (blockPhysDim d p) z) σ +
-          mpv (blockTensor (d := d) (D := L) live p) σ := by
+          mpv (blockTensor (d := d) (D := L) nonzeroPart p) σ := by
   intro N σ
   let σflat := blockedFlatConfig (d := d) p σ
   rw [mpv_blockTensor_eq_mpv_blockedFlatConfig (d := d) A p σ]
@@ -90,7 +90,7 @@ theorem zeroTail_mpv_decomp_blockTensor
     simp [hNP_iff]
   rw [hZero]
   congr 1
-  exact (mpv_blockTensor_eq_mpv_blockedFlatConfig (d := d) live p σ).symm
+  exact (mpv_blockTensor_eq_mpv_blockedFlatConfig (d := d) nonzeroPart p σ).symm
 
 /-- Reblocking a zero-tail plus weighted nonzero-block decomposition transports every
 nonzero-block weight to the corresponding blocking power. -/
@@ -114,7 +114,7 @@ theorem zeroTail_toTensorFromBlocks_blockPower
     zeroTail_mpv_decomp_blockTensor
       (d := d) (D := D) (L := ∑ k : Fin r, dim k) (z := z) (p := p)
       A (toTensorFromBlocks (d := d) (μ := μ) blocks) hp hMPV N σ
-  have hLive := sameMPV₂_blockTensor_toTensorFromBlocks
+  have hNonzeroPart := sameMPV₂_blockTensor_toTensorFromBlocks
     (d := d) (dim := dim) μ blocks p
   calc
     mpv (blockTensor (d := d) (D := D) A p) σ =
@@ -125,7 +125,7 @@ theorem zeroTail_toTensorFromBlocks_blockPower
           mpv (toTensorFromBlocks (d := blockPhysDim d p)
             (fun k => (μ k) ^ p)
             (fun k => blockTensor (d := d) (D := dim k) (blocks k) p)) σ := by
-          rw [hLive N σ]
+          rw [hNonzeroPart N σ]
 
 /-!
 ## The main reduction theorem

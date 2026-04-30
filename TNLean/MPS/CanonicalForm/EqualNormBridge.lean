@@ -471,7 +471,7 @@ end MPVBlockPhaseEquiv
 
 /-- Common MPV-phase cover for two block families.
 
-The data record the finite common family, the class maps from the two block
+The data consist of the finite common family, the class maps from the two block
 families to it, the MPV-phase equivalences between each block and its chosen
 common block, and surjectivity of both class maps.  These are the paper-level
 data needed by the span comparison theorem; constructing them from the full
@@ -604,7 +604,7 @@ theorem mpv_span_eq_of_surjective_phase_cover {r rC : ℕ}
 /-- Two block families with a common surjective MPV-phase quotient have equal finite-length
 MPV spans.
 
-This theorem is deliberately independent of the sector weights.  It records the precise
+This theorem is deliberately independent of the sector weights.  It states the precise
 linear-algebra hypothesis used by the nonzero-part after-blocking theorem once a common-blocking
 result supplies a common representative family and shows that both sides cover it. -/
 theorem mpv_span_eq_of_common_phase_cover {rA rB rC : ℕ}
@@ -1113,7 +1113,7 @@ linear-independence condition, and its chosen basis blocks carry the
 single-family overlap-orthogonality data needed for the primitive
 overlap-rigidity route.
 
-The theorem also records that if the original blocks are one-site injective,
+The theorem also proves that if the original blocks are one-site injective,
 then the chosen basis blocks are injective. It does not claim the remaining
 two-family hypothesis: equality of the finite-length MPV spans between two
 independently constructed bases is a separate Gap §1 task. -/
@@ -1265,7 +1265,7 @@ This strengthens `exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_with_overla
 also exposing the finite-length span invariant of the phase-class representative
 construction: at every length, the chosen MPV phase-class representatives span the same
 MPV subspace as the original block
-family.  This removes the quotient/enumeration bookkeeping from later two-sided span
+family.  This removes the quotient/enumeration identities from later two-sided span
 comparisons; the remaining comparison is the genuine equality of the two original nonzero-block
 spans. -/
 theorem exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_with_overlapData_and_basisSpan

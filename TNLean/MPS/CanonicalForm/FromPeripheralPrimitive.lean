@@ -8,9 +8,9 @@ import TNLean.MPS.Overlap.PeripheralToSpectralGap
 /-!
 # Canonical form from peripheral primitive blocks
 
-This file is a downstream compatibility layer: it converts peripheral-spectrum primitivity of the
-transfer maps into the existing spectral-gap notion `MPSTensor.HasPrimitiveFixedPoint`, and then
-reuses `MPSTensor.isCanonicalForm_of_primitive`.
+This file converts peripheral-spectrum primitivity of the transfer maps into the existing
+spectral-gap notion `MPSTensor.HasPrimitiveFixedPoint`, and then applies
+`MPSTensor.isCanonicalForm_of_primitive`.
 It does not produce canonical-form data from arbitrary input tensors.
 -/
 
@@ -20,8 +20,7 @@ namespace MPSTensor
 
 /-- Build `IsCanonicalForm` from peripheral-spectrum primitivity of each block transfer map.
 
-This is a compatibility wrapper: the actual work is delegated first to
-`hasPrimitiveFixedPoint_of_peripheralPrimitive`, and then to
+The proof first applies `hasPrimitiveFixedPoint_of_peripheralPrimitive`, and then
 `isCanonicalForm_of_primitive`. As in the primitive-builder file, all blockwise injectivity /
 normalization / ordering data are assumed as inputs. -/
 theorem isCanonicalForm_of_peripheralPrimitive
