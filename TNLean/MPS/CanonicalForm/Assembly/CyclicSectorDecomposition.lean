@@ -1224,6 +1224,16 @@ noncomputable def commonFlatBlocks (F : CommonBlockedCyclicSectorFamily blocks)
   show MPSTensor (blockPhysDim d F.p) (F.sectorDim y.1 y.2) from
     F.commonSectorBlock y.1 y.2
 
+/-- The same flattened common-sector family expressed at a prescribed common length.
+
+The equality hypothesis is usually supplied by the two-sided common-length theorem,
+which constructs both one-sided cyclic-sector families with the same blocking length. -/
+noncomputable def commonFlatBlocksAt (F : CommonBlockedCyclicSectorFamily blocks)
+    {p' : ℕ} (hp : F.p = p') (x : Fin (∑ k : Fin r, F.period k)) :
+    MPSTensor (blockPhysDim d p') (F.commonFlatDim x) :=
+  cast (congr_arg (fun q => MPSTensor (blockPhysDim d q) (F.commonFlatDim x)) hp)
+    (F.commonFlatBlocks x)
+
 /-- The common-alphabet sector tensor for one original nonzero-weight block. -/
 noncomputable def commonSectorTensor (F : CommonBlockedCyclicSectorFamily blocks)
     (k : Fin r) : MPSTensor (blockPhysDim d F.p) (∑ s : Fin (F.period k), F.sectorDim k s) :=
@@ -1545,12 +1555,12 @@ theorem sameMPV₂_weightedCanonicalBlock_commonFlat_of_word_eq
 /-- If the canonical blocked nonzero part agrees with the explicitly reindexed
 blocks, then the weighted nonzero part agrees with the derived common-sector family.
 
-The hypothesis isolates the remaining equality after relabelling blocked physical
+The hypothesis isolates the remaining equality after relabeling blocked physical
 words by `iteratedBlockIndex`; the canonical blocked tensor uses the ambient blocked
 alphabet directly. -/
 theorem sameMPV₂_weightedCanonicalBlock_commonFlat_of_reindexed
     (F : CommonBlockedCyclicSectorFamily blocks) (μ : Fin r → ℂ)
-    (hLabel : SameMPV₂
+    (hRelabel : SameMPV₂
       (toTensorFromBlocks (d := blockPhysDim d F.p)
         (μ := fun k : Fin r => (μ k) ^ F.p)
         (fun k => blockTensor (d := d) (D := dim k) (blocks k) F.p))
@@ -1563,8 +1573,28 @@ theorem sameMPV₂_weightedCanonicalBlock_commonFlat_of_reindexed
       (toTensorFromBlocks (d := blockPhysDim d F.p)
         (μ := F.commonFlatWeight μ) F.commonFlatBlocks) := by
   intro N σ
-  exact (hLabel N σ).trans
+  exact (hRelabel N σ).trans
     (F.sameMPV₂_weightedCommonReindexedBlock_commonFlat μ N σ)
+
+/-- The preceding comparison expressed at a prescribed common length. -/
+theorem sameMPV₂_weightedCanonicalBlock_commonFlatAt_of_relabeling
+    (F : CommonBlockedCyclicSectorFamily blocks) (μ : Fin r → ℂ)
+    {p' : ℕ} (hp : F.p = p')
+    (hRelabel : SameMPV₂
+      (toTensorFromBlocks (d := blockPhysDim d F.p)
+        (μ := fun k : Fin r => (μ k) ^ F.p)
+        (fun k => blockTensor (d := d) (D := dim k) (blocks k) F.p))
+      (toTensorFromBlocks (d := blockPhysDim d F.p)
+        (μ := fun k : Fin r => (μ k) ^ F.p) F.commonReindexedBlock)) :
+    SameMPV₂
+      (toTensorFromBlocks (d := blockPhysDim d p')
+        (μ := fun k : Fin r => (μ k) ^ p')
+        (fun k => blockTensor (d := d) (D := dim k) (blocks k) p'))
+      (toTensorFromBlocks (d := blockPhysDim d p')
+        (μ := F.commonFlatWeight μ) (F.commonFlatBlocksAt hp)) := by
+  subst p'
+  simpa [commonFlatBlocksAt] using
+    F.sameMPV₂_weightedCanonicalBlock_commonFlat_of_reindexed μ hRelabel
 
 end CommonBlockedCyclicSectorFamily
 
