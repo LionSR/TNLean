@@ -15,7 +15,7 @@ import Mathlib.Data.Fin.Tuple.Basic
 
 This file defines physical blocking for MPS tensors via `blockPhysDim`,
 `wordOfBlock`, and `blockTensor`. It proves that blocked word evaluation agrees
-with flattening of physical words and records basic consequences such as
+with flattening of physical words and states basic consequences such as
 preservation of left-canonical normalization and `SameMPV`.
 -/
 

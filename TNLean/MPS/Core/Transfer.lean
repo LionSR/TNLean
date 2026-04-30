@@ -7,7 +7,7 @@ import Mathlib.LinearAlgebra.Matrix.PosDef
 # Transfer maps of MPS tensors
 
 This file defines the transfer operator `transferMap` associated to an MPS
-tensor. It proves the basic API needed later: the evaluation formula, gauge
+tensor. It proves the basic properties needed later: the evaluation formula, gauge
 covariance, and preservation of positive semidefiniteness. These lemmas bridge
 between tensor data and channel-theoretic arguments.
 -/
@@ -45,7 +45,7 @@ lemma transferMap_gauge_conj (A : MPSTensor d D) (X : GL (Fin D) ℂ)
 
 /-- Positivity of the transfer map: it maps PSD matrices to PSD matrices.
 
-This is a local tensor-specific helper; later chapters subsume it under the
+This is a local tensor-specific auxiliary lemma; later chapters subsume it under the
 abstract completely-positive / positive-map framework. -/
 lemma transferMap_pos (A : MPSTensor d D) {X : Matrix (Fin D) (Fin D) ℂ}
     (hX : X.PosSemidef) : (transferMap (d := d) (D := D) A X).PosSemidef := by

@@ -14,13 +14,13 @@ import Mathlib.Analysis.SpecialFunctions.Log.Basic
 
 This file defines connected correlations for a (normalized) MPS tensor
 in the thermodynamic limit. We express one-point and two-point
-observables through the transfer map `transferMap`, and record the standard
+observables through the transfer map `transferMap`, and state the standard
 sum-of-exponentials / exponential-decay statements in a form that later
 results use.
 
-The theorems in this file are intentionally lightweight wrappers: they expose
+The theorems in this file are intentionally lightweight formulations: they expose
 exact assumptions needed in later files while keeping the implementation
-independent of a specific spectral decomposition API.
+independent of a specific spectral decomposition.
 -/
 
 open scoped Matrix BigOperators

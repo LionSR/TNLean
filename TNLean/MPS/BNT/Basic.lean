@@ -8,13 +8,13 @@ import Mathlib.LinearAlgebra.Finsupp.LinearCombination
 import Mathlib.LinearAlgebra.Matrix.NonsingularInverse
 
 /-!
-# Basis of normal tensors (BNT) and matching infrastructure
+# Basis of normal tensors (BNT) and matching theory
 
 This module combines two natural units:
 
-## Part 1: Basic BNT infrastructure (from `BasisNormalTensors`)
+## Part 1: Basic BNT definitions (from `BasisNormalTensors`)
 
-Introduces the basic infrastructure for the **basis of normal tensors** (BNT) notion, as in
+Introduces the basic definitions for the **basis of normal tensors** (BNT) notion, as in
 Def. 4.2 of arXiv:2011.12127.
 
 A decomposition into a basis of normal tensors for a tensor `A_total` is a finite family of
@@ -27,9 +27,9 @@ We also provide a convenient lemma: if pairwise overlaps of a finite family of M
 converge to the Kronecker delta (i.e. the Gram matrix tends to the identity), then the
 states are eventually linearly independent.
 
-## Part 2: BNT matching infrastructure (from `BNTMatching`)
+## Part 2: BNT matching theory (from `BNTMatching`)
 
-Provides the **permutation-matching** linear-algebra scaffolding for the proof of
+Provides the **permutation-matching** linear-algebra results for the proof of
 Theorem 4.4 of arXiv:2011.12127 (Cirac–Pérez-García–Schuch–Verstraete, RMP 2021).
 
 ### Pure linear algebra
@@ -86,7 +86,7 @@ structure IsBNT {d Dtot : ℕ} (A_total : MPSTensor d Dtot)
 If the MPV overlaps of a finite family `A j` converge to an orthonormal Gram matrix,
 then the MPV states `mpvState (A j) N` are eventually linearly independent.
 
-This is a convenient wrapper around
+This is a convenient formulation around
 `MPSTensor.eventually_linearIndependent_of_gram_tendsto_id`.
 -/
 theorem eventually_linearIndependent_of_overlap_tendsto_orthonormal

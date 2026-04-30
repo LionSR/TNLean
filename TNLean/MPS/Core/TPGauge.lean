@@ -28,7 +28,7 @@ open Matrix Finset Complex
 
 variable {d D : ℕ}
 
-/-! ## Helper lemmas about `CFC.sqrt` for positive definite matrices -/
+/-! ## Auxiliary lemmas about `CFC.sqrt` for positive definite matrices -/
 
 /-- For a positive definite matrix `ρ`, the CFC square root satisfies `sqrt ρ * sqrt ρ = ρ`. -/
 lemma cfc_sqrt_mul_self_of_posDef (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) :
@@ -100,7 +100,7 @@ theorem tpGauge_isTP_of_transferMap_conjTranspose_fixedPoint
     intro i
     -- Expand the conjugate transpose and use `Sᴴ * S = ρ`.
     rw [Matrix.conjTranspose_mul, Matrix.conjTranspose_mul, Matrix.conjTranspose_nonsing_inv]
-    -- Goal is now a reassociation; `simp` handles the bookkeeping.
+    -- Goal is now a reassociation; `simp` handles the algebraic organization.
     simp [Matrix.mul_assoc, ← hStS]
   -- Identify the adjoint fixed point equation as a sum.
   have h_sum_eq : ∑ i : Fin d, (A i)ᴴ * ρ * A i = ρ := by
@@ -118,7 +118,7 @@ theorem tpGauge_isTP_of_transferMap_conjTranspose_fixedPoint
 
 /-- The gauge-transformed tensor `tpGauge A ρ` is gauge-equivalent to `A` (hence has the same MPV).
 
-We record this as a `GaugeEquiv` witness. -/
+We state this as a `GaugeEquiv` witness. -/
 theorem gaugeEquiv_tpGauge (A : MPSTensor d D) (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) :
     GaugeEquiv (d := d) (D := D) A (tpGauge (d := d) (D := D) A ρ) := by
   classical

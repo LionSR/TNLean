@@ -15,17 +15,17 @@ open scoped Matrix BigOperators
 # Periodic Fundamental Theorem of MPS (arXiv:1708.00029, §3)
 
 This file formalizes the periodic fundamental theorem of arXiv:1708.00029 §3 and the
-Z-gauge infrastructure used in its equal-case strengthening:
+Z-gauge theory used in its equal-case strengthening:
 
 * **Theorem 3.4** (`fundamentalTheorem_periodic_proportional`): If two non-repeating
   block families satisfy the periodic overlap dichotomy, their bases of periodic tensors
   match up to a bijection with per-block `RepeatedBlocks` equivalence. (In the paper,
   proportional MPVs imply the dichotomy; here it is a direct hypothesis.)
 
-* **Infrastructure for Theorem 3.8**: The equal-case strengthening produces per-block
+* **Supporting lemmas for Theorem 3.8**: The equal-case strengthening produces per-block
   Z-gauge data (diagonal Z with Z^m = 1) from the Newton–Girard identity on sector weights.
   The Z-gauge construction helpers (`zgauge_construction`, `perBlock_zgauge_of_power_eq`)
-  compose the infrastructure from PR #94 into ready-to-use form.
+  compose the definitions from PR #94 into ready-to-use form.
 
 ## Status of #81 (periodic overlap dichotomy)
 
@@ -33,7 +33,7 @@ Theorem 3.4 is stated in two forms:
 
 * `fundamentalTheorem_periodic_proportional` takes a `PeriodicOverlapHypothesis` directly,
   leaving callers free to supply the dichotomy from any source.
-* `fundamentalTheorem_periodic_proportional_of_isPeriodic` is an API variant that no
+* `fundamentalTheorem_periodic_proportional_of_isPeriodic` is a variant that no
   longer takes `PeriodicOverlapHypothesis` as a parameter: the
   `hetRepeatedBlocks_of_nondecaying` field is filled inside
   `PeriodicOverlapHypothesis.ofIsPeriodic` via `periodicOverlapDichotomy` (PR #573,
@@ -44,7 +44,7 @@ Theorem 3.4 is stated in two forms:
   **Caveat**: `periodicOverlapDichotomy` is stated and callable, but its proof in
   `TNLean/MPS/Periodic/Overlap.lean` still depends on several
   admitted sub-lemmas (see that file's header: "should not yet be relied on as a
-  completed formalization of Proposition 3.3"). Downstream results using the
+  completed formalization of Proposition 3.3"). Subsequent results using the
   `_of_isPeriodic` variant therefore inherit those remaining proof obligations and
   should not be treated as unconditional.
 
@@ -151,7 +151,7 @@ on several admitted sub-lemmas (`periodicSelfOverlap_tendsto`,
 `periodicOverlap_tendsto_zero_of_no_sector_match`,
 `exists_cyclic_sector_decomp_after_blocking`). The module header of `PeriodicOverlap.lean`
 states that file "should not yet be relied on as a completed formalization of
-Proposition 3.3". Downstream users of this constructor therefore inherit those
+Proposition 3.3". Subsequent users of this constructor therefore inherit those
 obligations and should not treat the resulting `PeriodicOverlapHypothesis` as
 unconditionally proven. -/
 def PeriodicOverlapHypothesis.ofIsPeriodic
@@ -361,7 +361,7 @@ theorem fundamentalTheorem_periodic_proportional
 
 /-- **Theorem 3.4 (Periodic FT, proportional case) from `IsPeriodic` data.**
 
-API variant of `fundamentalTheorem_periodic_proportional` that no longer takes
+variant of `fundamentalTheorem_periodic_proportional` that no longer takes
 `PeriodicOverlapHypothesis` as a parameter; instead, the dichotomy field is filled via
 `periodicOverlapDichotomy` (PR #573). The caller only needs to supply `IsPeriodic` data
 plus the existence of non-decaying cross-family overlaps (the content of proportional
@@ -373,7 +373,7 @@ equivalence.
 
 **Remaining proof obligations.** `periodicOverlapDichotomy` is stated and callable, but
 its proof in `TNLean/MPS/Periodic/Overlap.lean` still contains several
-admitted sub-lemmas. Downstream users of this theorem inherit those obligations — this
+admitted sub-lemmas. Subsequent users of this theorem inherit those obligations — this
 variant is a convenience reformulation, not an unconditional strengthening. -/
 theorem fundamentalTheorem_periodic_proportional_of_isPeriodic
     (A : (j : Fin rA) → MPSTensor d (dimA j))
@@ -870,7 +870,7 @@ The equal-case Fundamental Theorem of MPS in irreducible form composes:
 
 **Conditional on #81**: The `PeriodicOverlapHypothesis` and per-block weight power
 equality hypotheses will be discharged once the periodic overlap dichotomy (Proposition
-3.3) and coefficient extraction infrastructure are formalized. The Z-gauge construction
+3.3) and coefficient extraction theory are formalized. The Z-gauge construction
 itself is fully proved.
 -/
 
@@ -914,7 +914,7 @@ overlap dichotomy and per-block weight power equality, then:
 This composes Theorem 3.4 with the Z-gauge construction from PR #94.
 
 **Conditional on #81**: The `PeriodicOverlapHypothesis` and `hPowEq` hypotheses will be
-discharged once the periodic overlap dichotomy and coefficient extraction infrastructure
+discharged once the periodic overlap dichotomy and coefficient extraction theory
 are formalized. The Z-gauge construction itself (`equalCase_zgauge_of_power_sums`) is fully
 proved. -/
 theorem fundamentalTheorem_periodic_equalCase
