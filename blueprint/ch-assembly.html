@@ -4890,13 +4890,13 @@
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:afterBlocking_sectorComparison_zeroTail_of_proportionalDecompositionConclusion">
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:afterBlocking_sectorComparison_zeroTail_of_commonPhaseCover">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
     Theorem
     </span>
     <span class="theorem_thmlabel">14.51</span>
-    <span class="theorem_thmtitle">Zero-tail nonzero block decompositions with BNT proportional-decomposition data</span>
+    <span class="theorem_thmtitle">Zero-tail nonzero block decompositions with a common MPV phase cover</span>
     <div class="thm_header_extras">
 
     
@@ -4904,7 +4904,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-assembly.html#thm:afterBlocking_sectorComparison_zeroTail_of_proportionalDecompositionConclusion">#</a>
+    <a class="icon proof" href="ch-assembly.html#thm:afterBlocking_sectorComparison_zeroTail_of_commonPhaseCover">#</a>
     
     <a class="icon proof" href="ch-assembly.html#a0000001008"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
@@ -4924,17 +4924,102 @@
           
           <li><a href="ch-mps.html#def:same_mpv2_pos">Definition 2.13</a></li>
           
-          <li><a href="ch-assembly.html#thm:after_blocking_sector_common_blocks_common_phase_cover">Theorem 14.47</a></li>
-          
-          <li><a href="ch-assembly.html#thm:after_blocking_sector_common_blocks_overlap_span_zero_tail">Theorem 14.50</a></li>
+          <li><a href="ch-assembly.html#def:mpv_common_phase_cover">Definition 14.31</a></li>
           
           <li><a href="ch-assembly.html#lem:sameMPV2_live_of_zeroTail_eq">Lemma 14.49</a></li>
           
-          <li><a href="ch-assembly.html#thm:bnt_sectorDecomp_pair_overlapSpan_of_proportionalDecompositionConclusion">Theorem 14.39</a></li>
+          <li><a href="ch-assembly.html#thm:bnt_sectorDecomp_pair_overlapSpan_of_commonPhaseCover">Theorem 14.38</a></li>
           
           <li><a href="ch-assembly.html#thm:sector_basis_overlap_span_to_matching">Theorem 14.28</a></li>
           
           <li><a href="ch-assembly.html#thm:route_b_hetero_sector_matching">Theorem 14.41</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.afterBlocking_sectorComparison_zeroTail_of_commonPhaseCover" class="lean_decl">MPSTensor.afterBlocking_sectorComparison_zeroTail_of_commonPhaseCover</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   Let \(A\) and \(B\) have the same MPV family. Fix \(p{\gt}0\) and suppose \(A^{[p]}\) and \(B^{[p]}\) each decompose as a zero-tail tensor plus a weighted nonzero part, with all blocks in the nonzero part trace-preserving, primitive, irreducible, injective, and with nonzero weights. If the two zero-tail dimensions agree and the two nonzero-weight block families have a common MPV phase cover, then there exist a period \(p' {\gt} 0\) and sector decompositions \(P,Q\) such that \(A^{[p']}\) and \(B^{[p']}\) agree with the corresponding sector tensors at every positive length, \(P\) and \(Q\) have the same full MPV family, both have BNT data, and their sector weights satisfy the matched sector-weight conclusion. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000001008">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> Zero-tail cancellation gives full equality of the two nonzero parts. The common phase cover gives the primitive overlap-span hypotheses for the phase-class representative sector bases. The sector basis matching and two-basis sector comparison theorems then give the sector-weight conclusion. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:afterBlocking_sectorComparison_zeroTail_of_proportionalDecompositionConclusion">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">14.52</span>
+    <span class="theorem_thmtitle">Zero-tail nonzero block decompositions with BNT proportional-decomposition data</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-assembly.html#thm:afterBlocking_sectorComparison_zeroTail_of_proportionalDecompositionConclusion">#</a>
+    
+    <a class="icon proof" href="ch-assembly.html#a0000001009"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mps.html#def:same_mpv2_pos">Definition 2.13</a></li>
+          
+          <li><a href="ch-assembly.html#thm:common_phase_cover_of_proportional_decomposition">Theorem 14.37</a></li>
+          
+          <li><a href="ch-assembly.html#thm:afterBlocking_sectorComparison_zeroTail_of_commonPhaseCover">Theorem 14.51</a></li>
+          
+          <li><a href="ch-assembly.html#thm:common_phase_cover_of_proportional_decomposition">Theorem 14.37</a></li>
+          
+          <li><a href="ch-assembly.html#thm:afterBlocking_sectorComparison_zeroTail_of_commonPhaseCover">Theorem 14.51</a></li>
           
         </ul>
     
@@ -4965,11 +5050,11 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   Let \(A\) and \(B\) have the same MPV family. Fix \(p{\gt}0\) and suppose \(A^{[p]}\) and \(B^{[p]}\) each decompose as a zero-tail tensor plus a weighted nonzero part, with all blocks in the nonzero part trace-preserving, primitive, irreducible, injective, and with nonzero weights. If the two zero-tail dimensions agree and a BNT proportional-decomposition comparison supplies a permutation, equal bond dimensions, and gauge-phase equivalences between the two nonzero-weight block families, then the sector bases yield the comparison data of Theorem&#160;<a href="ch-assembly.html#thm:after_blocking_sector_common_blocks_common_phase_cover">14.47</a>, with the positive-length zero-tail identities of Theorem&#160;<a href="ch-assembly.html#thm:after_blocking_sector_common_blocks_overlap_span_zero_tail">14.50</a>. </p>
+  <p>   Let \(A\) and \(B\) have the same MPV family. Fix \(p{\gt}0\) and suppose \(A^{[p]}\) and \(B^{[p]}\) each decompose as a zero-tail tensor plus a weighted nonzero part, with all blocks in the nonzero part trace-preserving, primitive, irreducible, injective, and with nonzero weights. If the two zero-tail dimensions agree and a BNT proportional-decomposition comparison supplies a permutation, equal bond dimensions, and gauge-phase equivalences between the two nonzero-weight block families, then there exist a period \(p' {\gt} 0\) and sector decompositions \(P,Q\) such that \(A^{[p']}\) and \(B^{[p']}\) agree with the corresponding sector tensors at every positive length, \(P\) and \(Q\) have the same full MPV family, both have BNT data, and their sector weights satisfy the matched sector-weight conclusion. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001008">
+<div class="proof_wrapper" id="a0000001009">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4977,7 +5062,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Zero-tail cancellation gives full equality of the two nonzero parts. The proportional-decomposition comparison gives the primitive overlap-span hypotheses through the common phase-cover construction. The sector basis matching and two-basis sector comparison theorems then give the sector-weight conclusion. </p>
+  <p> First convert the proportional-decomposition conclusion into common MPV phase-cover data. The preceding zero-tail theorem then applies. </p>
 
   </div>
 </div>
@@ -4986,7 +5071,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">14.52</span>
+    <span class="theorem_thmlabel">14.53</span>
     <span class="theorem_thmtitle">Cast-compatible MPV scaling implies phase-matched sector comparison</span>
     <div class="thm_header_extras">
 
@@ -4997,7 +5082,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:route_b_hetero_mpv_scaling">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001009"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001010"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5047,14 +5132,14 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Let \(P\) and \(Q\) be sector decompositions. Assume there is a permutation \(\pi \) matching the basis blocks, the multiplicities satisfy \(r_j^P = r_{\pi (j)}^Q\), and for each \(j\) the corresponding basis blocks have the same auxiliary dimension and satisfy </p>
-<div class="displaymath" id="a0000001010">
+<div class="displaymath" id="a0000001011">
   \[  V^{(N)}(Q_{\pi (j)})_\sigma = \zeta _j^N V^{(N)}(P_j)_\sigma  \]
 </div>
 <p> for some nonzero complex number \(\zeta _j\), after identifying the two basis tensors along that dimension equality. If the total MPV families of \(P\) and \(Q\) agree and the basis blocks of \(P\) are eventually linearly independent, then for each \(j\) the sector weight multiset of \(P_j\) equals the multiset obtained from that of \(Q_{\pi (j)}\) by multiplication by&#160;\(\zeta _j\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001009">
+<div class="proof_wrapper" id="a0000001010">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5066,19 +5151,19 @@
 
   </div>
 </div>
-<div class="remark_thmwrapper theorem-style-remark" id="a0000001011">
+<div class="remark_thmwrapper theorem-style-remark" id="a0000001012">
   <div class="remark_thmheading">
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">14.53</span>
+    <span class="remark_thmlabel">14.54</span>
     <span class="remark_thmtitle">Equal-case comparison after canonical reduction</span>
     <div class="thm_header_extras">
 
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-assembly.html#a0000001011">#</a>
+    <a class="icon proof" href="ch-assembly.html#a0000001012">#</a>
     
     
     
@@ -5104,7 +5189,7 @@
 	, Theorem&#160;<span class="ttfamily">thm1</span>, lines 1167–1183
 	]
 </span>. In the equal case, one expands each tensor in its basis of normal tensors and compares, for every basis tensor and every length \(N\), the power sums </p>
-<div class="displaymath" id="a0000001012">
+<div class="displaymath" id="a0000001013">
   \[  \sum _q \mu _{j,q}^N = \sum _q (\nu _{j,q}e^{i\phi _j})^N.  \]
 </div>
 <p> Newton identities, equivalently the elementary power-sum lemma used in the paper, recover the multiplicities and the weights. The blockwise gauge matrices are then placed on the diagonal to obtain the global conjugating matrix; this is the proof of <span class="cite">
