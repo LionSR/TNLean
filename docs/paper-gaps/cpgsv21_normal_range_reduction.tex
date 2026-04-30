@@ -16,7 +16,7 @@
 
 \section{The assertion}
 
-This note concerns the range-reduction step for normal matrix product states in
+The range-reduction step for normal matrix product states appears in
 Section~IV.C of Cirac--P\'erez-Garc\'ia--Schuch--Verstraete
 \cite{Cirac2021Matrix}.\footnote{For traceability, this note corresponds to
 \href{https://github.com/LionSR/TNLean/issues/1042}{issue \#1042}. The principal
@@ -61,8 +61,8 @@ boundary-closing sentence, and
 
 \section{The formal statement}
 
-The corresponding formal target keeps the intended hypotheses. In mathematical
-terms, it assumes that $A$ is normal, that $A$ is injective after blocking
+The corresponding formal statement keeps the intended hypotheses. In
+mathematical terms, it assumes that $A$ is normal, that $A$ is injective after blocking
 $L_0$ sites, and that the periodic chain has length $N\ge 2$ with an interaction
 range $L$ satisfying $L_0<L\le N$. The desired conclusion is that the
 periodic-chain ground space is the line spanned by the periodic MPS vector
@@ -158,24 +158,25 @@ algebra, so $X$ is scalar.
 \path{MPSTensor.groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_two_sided_middle_compatibility}.}
 The remaining point is the comparison between the two wrapped-window outputs:
 one must reindex their complementary words to a common middle word and identify
-the two witnesses as a single same-witness family. This is the mathematical
-content recorded for traceability in \href{https://github.com/LionSR/TNLean/issues/961}{issue \#961}.
+the two witnesses as a single same-witness family.\footnote{For traceability,
+this is the mathematical content recorded in
+\href{https://github.com/LionSR/TNLean/issues/961}{issue \#961}.}
 
 \section{Conclusion}
 
-The conclusion is provisional: this is a difference between the compressed source
-paragraph and the available formal lemmas, not a source-error claim. The cited
-CPGSV21 argument is not refuted. Rather, the source compresses two mechanisms
-which the formal proof must keep separate: the $B$-region invert-and-grow
+The comparison is provisional. It identifies a difference between the compressed
+source paragraph and the available formal lemmas; it is not a source-error claim.
+The cited CPGSV21 argument is not refuted. The source compresses two mathematical
+steps which the formal proof must keep separate: the $B$-region invert-and-grow
 open-chain range reduction, and the boundary-closing comparison of the witnesses
 arising from the wrapped windows.
 
 The open-chain part has been proved under the intended block-injective
 hypotheses, though not by reusing the older single-site intersection theorem.
 The last mathematical point is the same-witness comparison at the periodic
-boundary. If that comparison is proved, the discrepancy is only expository. If
-it reveals an additional mathematical obstruction, the conclusion should be
-revised accordingly.
+boundary. If that comparison is proved, the difference is only expository. If it
+reveals an additional mathematical obstruction, the conclusion should be revised
+accordingly.
 
 \bibliographystyle{alpha}
 \bibliography{references}
