@@ -938,6 +938,94 @@ theorem zeroTail_commonFlat_of_reindexed
             (μ := F.commonFlatWeight μ) F.commonFlatBlocks) σ := by
           rw [hFlat N σ]
 
+/-- The same one-sided zero-tail rewriting, named by the blocked-word relabeling
+hypothesis it uses. -/
+theorem zeroTail_commonFlat_of_blockWordRelabeling
+    {d D r z : ℕ} {dim : Fin r → ℕ}
+    (A : MPSTensor d D) (μ : Fin r → ℂ)
+    (blocks : (k : Fin r) → MPSTensor d (dim k))
+    (F : CommonBlockedCyclicSectorFamily blocks)
+    (hMPV : ∀ (N : ℕ) (σ : Fin N → Fin d),
+      mpv A σ = mpv (zeroMPSTensor d z) σ +
+        mpv (toTensorFromBlocks (d := d) (μ := μ) blocks) σ)
+    (hRelabel : SameMPV₂
+      (toTensorFromBlocks (d := blockPhysDim d F.p)
+        (μ := fun k : Fin r => (μ k) ^ F.p)
+        (fun k => blockTensor (d := d) (D := dim k) (blocks k) F.p))
+      (toTensorFromBlocks (d := blockPhysDim d F.p)
+        (μ := fun k : Fin r => (μ k) ^ F.p) F.commonReindexedBlock)) :
+    ∀ (N : ℕ) (σ : Fin N → Fin (blockPhysDim d F.p)),
+      mpv (blockTensor (d := d) (D := D) A F.p) σ =
+        mpv (zeroMPSTensor (blockPhysDim d F.p) z) σ +
+          mpv (toTensorFromBlocks (d := blockPhysDim d F.p)
+            (μ := F.commonFlatWeight μ) F.commonFlatBlocks) σ := by
+  exact zeroTail_commonFlat_of_reindexed
+    (d := d) (D := D) (r := r) (z := z) (dim := dim)
+    A μ blocks F hMPV hRelabel
+
+/-- The preceding zero-tail rewriting expressed at a prescribed common length. -/
+theorem zeroTail_commonFlatAt_of_blockWordRelabeling
+    {d D r z : ℕ} {dim : Fin r → ℕ}
+    (A : MPSTensor d D) (μ : Fin r → ℂ)
+    (blocks : (k : Fin r) → MPSTensor d (dim k))
+    (F : CommonBlockedCyclicSectorFamily blocks)
+    {p : ℕ} (hp : F.p = p)
+    (hMPV : ∀ (N : ℕ) (σ : Fin N → Fin d),
+      mpv A σ = mpv (zeroMPSTensor d z) σ +
+        mpv (toTensorFromBlocks (d := d) (μ := μ) blocks) σ)
+    (hRelabel : SameMPV₂
+      (toTensorFromBlocks (d := blockPhysDim d F.p)
+        (μ := fun k : Fin r => (μ k) ^ F.p)
+        (fun k => blockTensor (d := d) (D := dim k) (blocks k) F.p))
+      (toTensorFromBlocks (d := blockPhysDim d F.p)
+        (μ := fun k : Fin r => (μ k) ^ F.p) F.commonReindexedBlock)) :
+    ∀ (N : ℕ) (σ : Fin N → Fin (blockPhysDim d p)),
+      mpv (blockTensor (d := d) (D := D) A p) σ =
+        mpv (zeroMPSTensor (blockPhysDim d p) z) σ +
+          mpv (toTensorFromBlocks (d := blockPhysDim d p)
+            (μ := F.commonFlatWeight μ) (F.commonFlatBlocksAt hp)) σ := by
+  subst p
+  simpa [CommonBlockedCyclicSectorFamily.commonFlatBlocksAt] using
+    zeroTail_commonFlat_of_blockWordRelabeling A μ blocks F hMPV hRelabel
+
+/-- At positive lengths, the blocked tensor has the same MPV coefficients as the
+weighted common-sector family once the blocked words have been reindexed. -/
+theorem sameMPV₂Pos_blockTensor_commonFlatAt_of_blockWordRelabeling
+    {d D r z : ℕ} {dim : Fin r → ℕ}
+    (A : MPSTensor d D) (μ : Fin r → ℂ)
+    (blocks : (k : Fin r) → MPSTensor d (dim k))
+    (F : CommonBlockedCyclicSectorFamily blocks)
+    {p : ℕ} (hp : F.p = p)
+    (hMPV : ∀ (N : ℕ) (σ : Fin N → Fin d),
+      mpv A σ = mpv (zeroMPSTensor d z) σ +
+        mpv (toTensorFromBlocks (d := d) (μ := μ) blocks) σ)
+    (hRelabel : SameMPV₂
+      (toTensorFromBlocks (d := blockPhysDim d F.p)
+        (μ := fun k : Fin r => (μ k) ^ F.p)
+        (fun k => blockTensor (d := d) (D := dim k) (blocks k) F.p))
+      (toTensorFromBlocks (d := blockPhysDim d F.p)
+        (μ := fun k : Fin r => (μ k) ^ F.p) F.commonReindexedBlock)) :
+    SameMPV₂Pos
+      (blockTensor (d := d) (D := D) A p)
+      (toTensorFromBlocks (d := blockPhysDim d p)
+        (μ := F.commonFlatWeight μ) (F.commonFlatBlocksAt hp)) := by
+  intro N hN σ
+  have hZeroTail := zeroTail_commonFlatAt_of_blockWordRelabeling
+    (d := d) (D := D) (r := r) (z := z) (dim := dim)
+    A μ blocks F hp hMPV hRelabel
+  have hZero : mpv (zeroMPSTensor (blockPhysDim d p) z) σ = 0 := by
+    rw [mpv_zeroMPSTensor]
+    simp [Nat.ne_of_gt hN]
+  calc
+    mpv (blockTensor (d := d) (D := D) A p) σ =
+        mpv (zeroMPSTensor (blockPhysDim d p) z) σ +
+          mpv (toTensorFromBlocks (d := blockPhysDim d p)
+            (μ := F.commonFlatWeight μ) (F.commonFlatBlocksAt hp)) σ := hZeroTail N σ
+    _ = mpv (toTensorFromBlocks (d := blockPhysDim d p)
+            (μ := F.commonFlatWeight μ) (F.commonFlatBlocksAt hp)) σ := by
+        rw [hZero]
+        simp
+
 /-- Replacing nonzero parts by MPV-equivalent tensors preserves the positive-length
 MPV equality and the length-zero zero-tail identity. -/
 theorem sameMPV₂Pos_and_zeroTail_identity_of_sameMPV₂
