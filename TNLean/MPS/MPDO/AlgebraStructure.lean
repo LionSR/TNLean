@@ -260,14 +260,6 @@ support data compatible with its blocked adjoint transfer maps. -/
 def IsRFP_MPDO_via_algebra (M : MPOTensor d D) : Prop :=
   ∃ data : AlgebraStructureData d D, data.CompatibleWith M
 
-/-- Backwards-compatible alias for the earlier construction name.
-
-The old definition was vacuous. The alias points to the non-vacuous algebra
-predicate above, but that predicate is still weaker than the full paper
-converse: it only records the current support-algebra layer. -/
-@[deprecated (since := "2026-04-24")] alias IsRFP_MPDO_via_algebra_scaffold :=
-  IsRFP_MPDO_via_algebra
-
 /-- A trace-preserving MPO with a positive-definite fixed point admits a
 stationary algebra tower as soon as it is an RFP. -/
 theorem isRFP_MPDO_via_algebra_of_isRFP_of_isTP_of_posDef_fixed
