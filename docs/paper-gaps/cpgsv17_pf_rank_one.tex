@@ -131,7 +131,7 @@ an outer-product factorization of $T$.
 
 This corrected theorem should not be read as a refutation of the intended MPDO
 result. It identifies the extra matrix structure that is sufficient to justify
-the rank-one step. The remaining MPDO-specific bridge is to derive that
+the rank-one step. The remaining MPDO-specific task is to derive that
 structure for the trace matrix arising from the neighboring operators
 $\eta_{k,h}$. Positivity of each $\eta_{k,h}$ gives
 $T_{k,h}=\operatorname{tr}(\eta_{k,h})\geq 0$ entry by entry, but entrywise
@@ -140,7 +140,7 @@ symmetry of $T$.
 \footnote{The entrywise nonnegativity result is
 \texttt{MPOTensor.ExplicitEtaOperators.traceMatrixRe\_nonneg} in
 \path{TNLean/MPS/MPDO/SimpleLocalStructure.lean:306--318}. The
-positive-semidefinite wrapper for the rank-one conclusion is
+positive-semidefinite reformulation for the rank-one conclusion is
 \texttt{MPOTensor.sal\_zcl\_implies\_rank\_one\_T\_of\_posSemidef} in
 \path{TNLean/MPS/MPDO/SimpleLocalStructure.lean:350--366}. The corresponding
 blueprint discussion is
