@@ -16,7 +16,7 @@ used in the “periodicity removal / peripheral spectrum” reduction:
 * `krausMap_pow_of_peripheral_eigenvector`:
   if `E(X) = μ • X` with `‖μ‖ = 1`, then `E(X^n) = μ^n • X^n` for all `n`.
 
-We also provide a small `LinearMap` wrapper `krausMapL` and an eigenvalue
+We also provide a small `LinearMap` formulation `krausMapL` and an eigenvalue
 corollary `hasEigenvalue_pow_of_peripheral_eigenvector` assuming `X^n ≠ 0`.
 -/
 
@@ -108,11 +108,11 @@ theorem krausMap_pow_of_peripheral_eigenvector (K : Fin d → Matrix (Fin D) (Fi
 
 end Powers
 
-/-! ## Optional: eigenvalue corollary via a `LinearMap` wrapper -/
+/-! ## Optional: eigenvalue corollary via a `LinearMap` formulation -/
 
 section Eigenvalue
 
-/-- The Kraus map packaged as a `ℂ`-linear endomorphism. -/
+/-- The Kraus map stated as a `ℂ`-linear endomorphism. -/
 noncomputable def krausMapL (K : Fin d → Matrix (Fin D) (Fin D) ℂ) :
     Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ where
   toFun := krausMap K

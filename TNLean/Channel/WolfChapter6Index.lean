@@ -98,7 +98,7 @@ for the Perron–Frobenius eigenvalue.
   Full Cesàro convergence: for every density matrix `ρ`,
   `(1/N) ∑_{t=0}^{N-1} E^[t](ρ) → σ`.
 
-Supporting infrastructure in `TNLean.Channel.Irreducible.Ergodicity`:
+Supporting formalization in `TNLean.Channel.Irreducible.Ergodicity`:
 * `IsChannel.iter_mem_densityMatrices`: iterates of a channel preserve density matrices.
 * `IsChannel.cesaroMean_subseq_limit_fixedPoint`: any subsequential Cesàro limit is
   a density-matrix fixed point (compactness + telescoping argument).
@@ -128,7 +128,7 @@ Uses Brouwer's fixed-point theorem on density matrices (proved in
 * Full Wolf form `T' = c C⁻¹ T(C · C†) C⁻†`:
   `isIrreducibleMap_full_similarity` (and the stronger
   `isIrreducibleMap_similarity_smul`) — `TNLean.Channel.Irreducible.Similarity`
-* Numbered wrapper: `Kraus.wolf_prop_6_6` — `TNLean.Channel.WolfChapter6Wrappers`
+* Numbered theorem: `Kraus.wolf_prop_6_6` — `TNLean.Channel.WolfChapter6Wrappers`
 
 ### Wolf Theorem 6.6 (Peripheral spectrum of irreducible Schwarz maps)
 
@@ -148,7 +148,7 @@ PARTIALLY FORMALIZED in `TNLean.Channel.Peripheral.CyclicDecomposition`.
 * `IsPrimitive` — `TNLean.Channel.Peripheral.Spectrum`
 * `isPrimitive_of_compl_eigenvalues_lt_one` / `compl_eigenvalue_norm_lt_one_of_primitive`
 
-Other items: PARTIALLY via spectral gap infrastructure in `TNLean.Spectral.*`.
+Other items: PARTIALLY via spectral gap formalization in `TNLean.Spectral.*`.
 
 ### Wolf Theorem 6.8 (CP primitive maps, Kraus span characterizations)
 
@@ -159,14 +159,14 @@ Other items: PARTIALLY via spectral gap infrastructure in `TNLean.Spectral.*`.
     (in `TNLean.Wielandt.Primitivity.Equivalence`)
   * `hasEventuallyFullKrausRank_iff_isNormal`
     (in `TNLean.Wielandt.Primitivity.PaperDefinitions`)
-* Packaged Wolf-facing wrappers:
+* Formulated Wolf-facing formulations:
   * `wolf_theorem_6_8_kraus_span`
   * `wolf_theorem_6_8_conjunction`
   (in `TNLean.Wielandt.Primitivity.Equivalence`)
 
 ### Wolf Theorem 6.9 (Quantum Wielandt inequality)
 
-Current paper-facing wrappers live in `TNLean.Wielandt.PaperResults.WielandtInequality`:
+Current paper-level statements live in `TNLean.Wielandt.PaperResults.WielandtInequality`:
 * `qIndex_le_iIndex_of_isPrimitivePaper`
 * `wordSpan_eq_top_of_isPrimitivePaper_of_isUnit` /
   `iIndex_le_of_isPrimitivePaper_of_isUnit`
@@ -175,13 +175,13 @@ Current paper-facing wrappers live in `TNLean.Wielandt.PaperResults.WielandtIneq
 
 The auxiliary aperiodicity-based assembly remains in
 `TNLean.Wielandt.QuantumWielandt`; it is not the default paper-facing
-endpoint.
+conclusion.
 
 ---
 
 ## §6.4 Fixed points
 
-### Wolf §6 stationary-support package (Props. 6.9--6.11, Lems. 6.4--6.5)
+### Wolf §6 stationary-support state (Props. 6.9--6.11, Lems. 6.4--6.5)
 
 In `TNLean.Channel.FixedPoint.StationarySupport`:
 
@@ -208,7 +208,7 @@ In `TNLean.Channel.FixedPoint.Algebra`:
 * `Kraus.fixedPoints_in_multiplicativeDomain` — the key intermediate step:
   every fixed point of the adjoint map lies in the multiplicative domain.
 * `Kraus.fixedPoints_starSubalgebra` / `Kraus.mem_fixedPoints_starSubalgebra`
-  — prompt-facing wrapper with Wolf naming convention.
+  — numbered theorem with Wolf naming convention.
 
 ### Wolf Theorem 6.13 (Fixed points and Kraus commutant) — FORMALIZED
 
@@ -238,7 +238,7 @@ In `TNLean.Channel.FixedPoint.Algebra`:
 ### Wolf Proposition 6.8 (Positive fixed-points)
 
 * `IsChannel.posSemidef_parts_of_hermitian_fixedPoint` — `TNLean.Channel.FixedPoint.Cesaro`
-* Numbered wrapper: `IsChannel.wolf_prop_6_8` — `TNLean.Channel.WolfChapter6Wrappers`
+* Numbered theorem: `IsChannel.wolf_prop_6_8` — `TNLean.Channel.WolfChapter6Wrappers`
 
 ### Wolf Corollary 6.6 (projected support corner) — NOT YET FORMALIZED
 
@@ -297,7 +297,7 @@ In `TNLean.Channel.FixedPoint.ConditionalExpectation`:
   `T*(E_σ(X)) = E_σ(X)` when `T` is TP.
 * `Kraus.scalarConditionalExpectation_isConditionalExpectation` —
   bundles everything into `IsConditionalExpectation` for the scalar case.
-* Numbered wrapper: `Kraus.wolf_theorem_6_15_scalar` —
+* Numbered theorem: `Kraus.wolf_theorem_6_15_scalar` —
   `TNLean.Channel.WolfChapter6Wrappers`.
 
 The general irreducible case with period `h > 1` requires Wedderburn blocks
@@ -309,7 +309,7 @@ The general irreducible case with period `h > 1` requires Wedderburn blocks
 
 ### Wolf Theorem 6.16 (Structure of cycles) — PARTIALLY FORMALIZED
 
-* Reusable infrastructure for the permutation-of-blocks direction lives in
+* Reusable formalization for the permutation-of-blocks direction lives in
   `TNLean.Channel.Peripheral.CyclicDecomposition` and
   `TNLean.Channel.Peripheral.Cycles`:
   - `preserves_corner_pow_orderOf_of_perm_decomp` — permutation-of-blocks
@@ -323,10 +323,10 @@ The general irreducible case with period `h > 1` requires Wedderburn blocks
   - `CycleStructure.preserves_corner_pow_orderOf` — `T ^ orderOf σ` preserves
     each corner `P k · M_D(ℂ) · P k`, the corner-preservation half of
     Thm. 6.16 in its permutation-of-blocks form.
-  - `CycleStructure.ofPermDecomp` — constructor from raw permutation data.
+  - `CycleStructure.ofPermDecomp` — constructor from explicit permutation data.
 
 * Multi-cycle block-permutation data (disjoint union of cycles with possibly
-  distinct periods) is packaged in `TNLean.Channel.Peripheral.MultiCycleDecomposition`:
+  distinct periods) is formulated in `TNLean.Channel.Peripheral.MultiCycleDecomposition`:
   - `MultiCycleDecomposition T` — bundled data: a finite cycle index `ι`, a
     per-cycle period `period : ι → ℕ` (each nonzero), a projection family
     `P : (c : ι) → Fin (period c) → M_D(ℂ)`, the per-cycle cyclic action

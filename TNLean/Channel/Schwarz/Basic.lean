@@ -1,9 +1,9 @@
 import TNLean.Channel.Basic
 
 /-!
-# CP Schwarz / Multiplicative-domain infrastructure for Kraus maps
+# CP Schwarz / Multiplicative-domain formalization for Kraus maps
 
-This file provides a small self-contained API for Kraus maps on matrices
+This file provides a small self-contained interface for Kraus maps on matrices
 `Matrix n n ℂ`, parametrised by an arbitrary finite Kraus index type `ι`.
 
 The main purpose is to support the spectral-gap proof for the mixed transfer

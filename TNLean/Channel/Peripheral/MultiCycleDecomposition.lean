@@ -8,7 +8,7 @@ import TNLean.Channel.Peripheral.Cycles
 # Multi-cycle block-permutation decompositions
 
 This file develops an explicit multi-cycle refinement of the
-block-permutation infrastructure developed in
+block-permutation formalization developed in
 `TNLean.Channel.Peripheral.Cycles`, in the form needed for the
 asymptotic-image side of
 Wolf, *Quantum Channels & Operations*, Theorem 6.16.
@@ -20,7 +20,7 @@ already be represented abstractly by the `CycleStructure` bundled data of
 `TNLean.Channel.Peripheral.Cycles`, whose underlying permutation `σ` is
 allowed to have multiple disjoint cycles.  The present file refines that
 view by choosing an *explicit* cycle-index type `ι`, a per-cycle period
-`period : ι → ℕ`, and the corresponding projection families, recording the
+`period : ι → ℕ`, and the corresponding projection families, stating the
 disjoint-union-of-cycles structure as separate data.
 
 The corner-preservation proofs reuse the per-orbit proof pattern of
@@ -64,7 +64,7 @@ variable {D : ℕ}
 /-- Bundled data for a **multi-cycle block-permutation decomposition** of a
 matrix endomorphism `T`.
 
-A `MultiCycleDecomposition T` records a finite family of cycles — one per
+A `MultiCycleDecomposition T` states a finite family of cycles — one per
 element of the cycle-index type `ι` — together with:
 
 * a per-cycle `period c : ℕ` with `NeZero (period c)`;
@@ -125,7 +125,7 @@ instance instNeZeroPeriod (M : MultiCycleDecomposition T) (c : M.ι) :
 section CyclicShift
 
 /-- The cyclic-shift index: an explicit `Fin m` representative of `k + n`,
-constructed from `⟨((k : ℕ) + n) % m, _⟩`.  Mirrors the `cyclicIndex` helper
+constructed from `⟨((k : ℕ) + n) % m, _⟩`.  Mirrors the `cyclicIndex` auxiliary lemma
 used inside `preserves_corner_pow_of_cyclic_decomp`. -/
 private def shiftIndex {m : ℕ} [NeZero m] (k : Fin m) (n : ℕ) : Fin m :=
   ⟨((k : ℕ) + n) % m, Nat.mod_lt _ (Nat.pos_of_ne_zero (NeZero.ne m))⟩
@@ -306,7 +306,7 @@ index matches the per-cycle action on each `Fin (period c)`.
 This provides an assembly point: given a Wolf Thm. 6.16 Wedderburn-based
 existence result (currently blocked on issues #27/#360), the resulting
 `MultiCycleDecomposition` can be flattened to a `CycleStructure` for use
-with the existing block-permutation infrastructure in
+with the existing block-permutation formalization in
 `TNLean.Channel.Peripheral.Cycles`. -/
 noncomputable def toCycleStructure (M : MultiCycleDecomposition T) :
     CycleStructure T :=

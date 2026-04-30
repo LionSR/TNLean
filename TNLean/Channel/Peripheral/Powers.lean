@@ -14,7 +14,7 @@ The core root-of-unity statement already lives in
 `TNLean/Channel/PeripheralSpectrum.lean` as
 `peripheral_isRootOfUnity_of_pow_eigenvalue`.
 
-Here we package the common hypothesis “the peripheral eigenvalue set is closed
+Here we state the common hypothesis “the peripheral eigenvalue set is closed
 under powers” into a form that can be fed into that theorem.
 -/
 
@@ -39,7 +39,7 @@ theorem hasEigenvalue_pow_of_mem_peripheralEigenvalues
 /-- **Finite + closed under powers ⇒ root of unity** (via
 `peripheral_isRootOfUnity_of_pow_eigenvalue`).
 
-This is a convenient wrapper: if one can show that peripheral eigenvalues are
+This is a convenient formulation: if one can show that peripheral eigenvalues are
 closed under powers (typically using multiplicative-domain theory), then every
 peripheral eigenvalue must be a root of unity. -/
 theorem peripheral_isRootOfUnity_of_pow_mem_peripheralEigenvalues
@@ -59,7 +59,7 @@ This is the “set-level” version: assuming
 `∀ μ ∈ peripheralEigenvalues E, ∀ n, μ^n ∈ peripheralEigenvalues E`, any
 `μ ∈ peripheralEigenvalues E` is a root of unity.
 
-We keep the proof as a thin wrapper around
+We keep the proof as a direct formulation around
 `peripheral_isRootOfUnity_of_pow_mem_peripheralEigenvalues`. -/
 theorem peripheral_isRootOfUnity_of_closed_powers
     [FiniteDimensional ℂ V]

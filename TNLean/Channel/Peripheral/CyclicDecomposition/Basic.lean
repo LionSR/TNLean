@@ -461,7 +461,7 @@ from the eigendecomposition of `P` via `Matrix.IsHermitian.eigenvectorUnitary`,
 
 This is the projector analog of the isometry `φ` already constructed inside
 `exists_compressedTensor_of_supported_projection` in `MPS/CanonicalForm/CyclicSectors`.
-The public API is exposed through the `noncomputable def`s `cornerRank` and
+The public interface is exposed through the `noncomputable def`s `cornerRank` and
 `cornerSubmoduleMatrixLinearEquiv` together with the companion lemma
 `cornerRank_eq_trace`. -/
 private lemma exists_cornerSubmodule_matrixLinearEquiv_aux {D : ℕ}

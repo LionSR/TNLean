@@ -200,7 +200,7 @@ theorem cp_semigroup_implies_ccp_generator
       simpa [Matrix.IsHermitian, hρ.eq] using (hpres ρ).symm
     exact choi_projected_posSemidef_implies_ccp L hL_herm hproj_psd
 
-/-! ### Euler approximation helpers for CCP → CP -/
+/-! ### Euler approximation auxiliary lemmas for CCP → CP -/
 
 private abbrev sgMat (D : ℕ) := Matrix (Fin D) (Fin D) ℂ
 private abbrev sgLM (D : ℕ) := sgMat D →ₗ[ℂ] sgMat D

@@ -99,10 +99,10 @@ identification, and the ampliation acts blockwise:
 `(E ⊗ id_k)(X)_{ij} = E(X_{ij})` for block indices `i, j ∈ Fin k`.
 
 **Encoding choice**: We use a blockwise `Matrix.of` encoding rather than
-`TensorProduct` because it avoids the overhead of tensor product API and
+`TensorProduct` because it avoids the overhead of tensor product interface and
 matches the block-matrix arguments used in `KadisonSchwarz.lean`. A
 `TensorProduct`-based definition would be closer to the mathematical
-definition but would require additional infrastructure to connect with the
+definition but would require additional formalization to connect with the
 existing Kraus-based proofs.
 
 **Index convention**: We use `(n × Fin k)` indexing where `n` is the inner

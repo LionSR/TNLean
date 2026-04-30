@@ -21,7 +21,7 @@ local instance : ContinuousSMul ℝ Mat :=
 local instance : IsScalarTower ℝ ℂ Mat :=
   TNOperatorSpace.matrixScalarTowerRealComplex (n := Fin D)
 
-/-! ## Helper lemmas for the primitivity proof -/
+/-! ## Auxiliary lemmas for the primitivity proof -/
 
 /-- Semigroup iteration: `T (n * t) = (T t) ^ n` for nonneg `t`. -/
 theorem semigroup_pow
@@ -222,7 +222,7 @@ theorem bounded_root_of_peripheral_closed_powers [NeZero D]
         rw [← pow_add, Nat.add_sub_cancel' hgt.le, mul_one]
         exact hab')
 
-/-- Power-closure helper at an irreducible time slice.
+/-- Power-closure auxiliary lemma at an irreducible time slice.
 
 This is the only new semigroup-specific ingredient still missing from the refactor below: we need
 that after a similarity transform by a positive-definite fixed point, the irreducible channel
@@ -311,7 +311,7 @@ theorem peripheral_powers_closed_of_irreducible_channel_with_fixed [NeZero D]
     rw [hL_transfer X]
     change S⁻¹ * E (S * X * S) * S⁻¹ = S⁻¹ * E (S * X * Sᴴ) * (Sᴴ)⁻¹
     rw [hS_herm]
-  -- Helper: sandwich cancellation lemmas
+  -- Auxiliary lemma: sandwich cancellation lemmas
   have hSandwich : ∀ A : Mat, S * (S⁻¹ * A * S⁻¹) * S = A := by
     intro A
     calc S * (S⁻¹ * A * S⁻¹) * S

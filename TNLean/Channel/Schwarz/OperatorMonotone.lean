@@ -14,7 +14,7 @@ import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.ExpLog.Ord
 # Operator-monotone corollaries for subunital positive maps
 
 Mathlib already proves operator monotonicity of `x ↦ x^p` for `p ∈ [0,1]` and of
-`log`. This file records those matrix-specialized lemmas and proves Wolf
+`log`. This file states those matrix-specialized lemmas and proves Wolf
 Corollary 5.2 from the operator Jensen inequality
 (`OperatorConvexity.lean`).
 

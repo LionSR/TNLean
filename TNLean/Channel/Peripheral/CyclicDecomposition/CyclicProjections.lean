@@ -8,7 +8,7 @@ import TNLean.Channel.Peripheral.CyclicDecomposition.Basic
 # Cyclic projections of a finite-order peripheral unitary
 
 This file constructs the Fourier spectral projections attached to a unitary of
-finite order and records their cyclic behavior under a linear map.
+finite order and states their cyclic behavior under a linear map.
 
 ## Main statements
 

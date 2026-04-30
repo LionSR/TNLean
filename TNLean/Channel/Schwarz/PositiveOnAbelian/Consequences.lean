@@ -8,7 +8,7 @@ import TNLean.Channel.Schwarz.PositiveOnAbelian.Basic
 # Normal-input consequences of positivity on abelian subalgebras
 
 This file derives the normal-input Schwarz inequality from the positive-on-
-abelian machinery. The main step is a spectral decomposition of a normal
+abelian theory. The main step is a spectral decomposition of a normal
 matrix into rank-one positive pieces, after which the diagonal-family Schwarz
 inequality applies termwise.
 

@@ -67,7 +67,7 @@ quantum channels:
   divides the bond dimension `D`.
 -/
 
-/-! ## Helper lemmas for the divisibility proof -/
+/-! ## Auxiliary lemmas for the divisibility proof -/
 
 /-- The transfer map preserves the matrix trace when the Kraus family is trace-preserving
 (i.e., `∑ᵢ Kᵢ† Kᵢ = I`). -/
