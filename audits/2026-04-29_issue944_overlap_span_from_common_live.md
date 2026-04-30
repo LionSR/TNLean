@@ -52,9 +52,16 @@ New declarations:
 - `exists_bnt_sectorDecomp_pair_with_overlapSpan_of_proportionalDecompositionConclusion`
   (in namespace `MPSTensor`): first turns BNT proportional-decomposition data into a
   common MPV phase cover, then applies the previous theorem.
+- `mpv_span_eq_of_proportionalDecompositionConclusion` (in namespace `MPSTensor`):
+  exposes the finite-length MPV span equality obtained from the same proportional
+  comparison.
+- `mpv_span_eq_of_separated_normalCFBNT_data` (in namespace `MPSTensor`): combines
+  separated normal canonical-form data with the BNT comparison theorem to obtain the
+  same finite-length span equality.
 
 These theorems discharge the `span_eq` field through `MPVCommonPhaseCover.span_eq`; no
-finite-length span equality is assumed as a hypothesis.
+finite-length span equality is assumed as a hypothesis in the common-cover and
+proportional-decomposition routes.
 
 ### BNT proportional comparison assembly file
 
@@ -63,21 +70,29 @@ New declarations:
 - `MPSTensor.afterBlocking_sectorComparison_of_proportionalDecompositionConclusion`:
   exact nonzero-part decompositions at a common blocking period plus BNT
   proportional-decomposition data imply the sector-weight comparison theorem.
+- `afterBlocking_sectorComparison_zeroTail_of_blockSpan` (in namespace `MPSTensor`):
+  zero-tail equations at a common blocking period, equality of zero-tail dimensions,
+  injectivity, and finite-length nonzero-block span equality imply the zero-tail-aware
+  sector comparison theorem.
+- `afterBlocking_sectorComparison_zeroTail_of_commonPhaseCover` (in namespace
+  `MPSTensor`): obtains the previous span hypothesis from common MPV phase-cover data.
 - `afterBlocking_sectorComparison_zeroTail_of_proportionalDecompositionConclusion`
-  (in namespace `MPSTensor`): zero-tail equations at a common blocking period, equality
-  of zero-tail dimensions, injectivity, and BNT proportional-decomposition data imply the
-  zero-tail-aware sector comparison theorem.
+  (in namespace `MPSTensor`): obtains the common MPV phase-cover data from BNT
+  proportional-decomposition data and applies the common-cover zero-tail theorem.
 
-The zero-tail theorem is the direct mathematical consequence for the #989 data once a
+These zero-tail theorems are the direct mathematical consequence for the #989 data once a
 theorem identifies the canonical blocked nonzero part with the relabeled cyclic-sector
 description in the common blocked alphabet and any needed injectivity refinement has been
 supplied.
 
 ### Blueprint updates
 
-`blueprint/src/chapter/ch11_assembly.tex` now records the two overlap-span consequences
-and the two sector-comparison theorems. `blueprint/src/chapter/ch08_canonical.tex` now
-points from the common-length cyclic-sector discussion to the zero-tail
+`blueprint/src/chapter/ch11_assembly.tex` now records the overlap-span consequences,
+the direct span-equality corollaries, and the sector-comparison theorems. The zero-tail
+entries are split into block-span, common-cover, and proportional-decomposition forms so
+downstream arguments can cite exactly the hypothesis they have.
+`blueprint/src/chapter/ch08_canonical.tex` continues to point from the common-length
+cyclic-sector discussion to the zero-tail
 proportional-decomposition theorem as the next checked comparison step.
 
 ## Remaining paper hypotheses

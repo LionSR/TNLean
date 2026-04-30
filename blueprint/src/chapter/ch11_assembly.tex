@@ -878,6 +878,24 @@ single weighted block.
 	the required MPV-phase equivalence.
 \end{proof}
 
+\begin{theorem}[Proportional-decomposition conclusion gives nonzero-block span equality]%
+\label{thm:nonzero_block_span_eq_of_proportional_decomposition}
+	\lean{MPSTensor.mpv_span_eq_of_proportionalDecompositionConclusion}
+	\leanok
+	\uses{thm:common_phase_cover_of_proportional_decomposition,
+		lem:mpv_common_phase_cover_span_eq}
+	A BNT proportional-decomposition comparison gives equality, for every system
+	size, of the finite-length MPV spans of the two nonzero-weight block families.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{thm:common_phase_cover_of_proportional_decomposition,
+		lem:mpv_common_phase_cover_span_eq}
+	First form the common MPV phase cover from the proportional-decomposition
+	comparison. The common-cover span lemma then gives the stated span equality.
+\end{proof}
+
 \begin{theorem}[Common phase cover gives phase-class representative overlap-span data]%
 \label{thm:bnt_sectorDecomp_pair_overlapSpan_of_commonPhaseCover}
 	\lean{MPSTensor.exists_bnt_sectorDecomp_pair_with_overlapSpan_of_commonPhaseCover}
@@ -943,6 +961,26 @@ single weighted block.
 	matching the basis blocks, bond-dimension equalities, and gauge-phase
 	equivalences. Applying the previous theorem to that conclusion yields the
 	common phase cover data.
+\end{proof}
+
+\begin{theorem}[Separated normal canonical-form data give nonzero-block span equality]%
+\label{thm:separated_normal_bnt_span_eq}
+	\lean{MPSTensor.mpv_span_eq_of_separated_normalCFBNT_data}
+	\leanok
+	\uses{thm:common_phase_cover_of_separated_normal_bnt,
+		lem:mpv_common_phase_cover_span_eq}
+	For two separated normal canonical-form block families as in
+	Theorem~\ref{thm:common_phase_cover_of_separated_normal_bnt}, the BNT
+	comparison data imply equality, at every system size, of the finite-length
+	MPV spans of the two basis families.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{thm:common_phase_cover_of_separated_normal_bnt,
+		lem:mpv_common_phase_cover_span_eq}
+	The separated normal-form comparison first gives a common MPV phase cover.
+	Applying the common-cover span lemma to that cover gives the span equality.
 \end{proof}
 
 \begin{theorem}[Sector comparison via a sector-basis matching]%
@@ -1213,41 +1251,70 @@ single weighted block.
 two-basis sector comparison theorem.
 \end{proof}
 
-\begin{theorem}[Zero-tail nonzero block decompositions with a common MPV phase cover]%
-\label{thm:afterBlocking_sectorComparison_zeroTail_of_commonPhaseCover}
-	\lean{MPSTensor.afterBlocking_sectorComparison_zeroTail_of_commonPhaseCover}
+\begin{theorem}[Zero-tail nonzero block decompositions with nonzero-block span equality]%
+\label{thm:afterBlocking_sectorComparison_zeroTail_of_blockSpan}
+	\lean{MPSTensor.afterBlocking_sectorComparison_zeroTail_of_blockSpan}
 	\leanok
-	\uses{def:same_mpv2_pos, def:mpv_common_phase_cover}
+	\uses{lem:sameMPV2_live_of_zeroTail_eq,
+		thm:bnt_sector_decomp_pair_overlap_span_of_block_span,
+		thm:sector_basis_overlap_span_to_matching,
+		thm:route_b_hetero_sector_matching}
 	Let $A$ and $B$ have the same MPV family. Fix $p>0$ and suppose $A^{[p]}$
 	and $B^{[p]}$ each decompose as a zero-tail tensor plus a weighted nonzero
 	part, with all blocks in the nonzero part trace-preserving, primitive,
 	irreducible, injective, and with nonzero weights. If the two zero-tail
-	dimensions agree and the two nonzero-weight block families have a common MPV
-	phase cover, then there exist a period $p' > 0$ and sector decompositions
-	$P,Q$ such that $A^{[p']}$ and $B^{[p']}$ agree with the corresponding sector
-	tensors at every positive length, $P$ and $Q$ have the same full MPV family,
-	both have BNT data, and their sector weights satisfy the matched sector-weight
-	conclusion.
+	dimensions agree and the two nonzero-weight block families have equal
+	finite-length MPV spans at every system size, then there exist a period
+	$p' > 0$ and sector decompositions $P,Q$ such that $A^{[p']}$ and
+	$B^{[p']}$ agree with the corresponding sector tensors at every positive
+	length, $P$ and $Q$ have the same full MPV family, both have BNT data, and
+	their sector weights satisfy the matched sector-weight conclusion.
 \end{theorem}
 
 \begin{proof}
 	\leanok
 	\uses{lem:sameMPV2_live_of_zeroTail_eq,
-		thm:bnt_sectorDecomp_pair_overlapSpan_of_commonPhaseCover,
+		thm:bnt_sector_decomp_pair_overlap_span_of_block_span,
 		thm:sector_basis_overlap_span_to_matching,
 		thm:route_b_hetero_sector_matching}
-	Zero-tail cancellation gives full equality of the two nonzero parts. The
-	common phase cover gives the primitive overlap-span hypotheses for the
-	phase-class representative sector bases. The sector basis matching and
-	two-basis sector comparison theorems then give the sector-weight conclusion.
+	The finite-length span equality gives the primitive overlap-span hypotheses
+	for the BNT sector bases of the two nonzero parts. Zero-tail cancellation
+	identifies the two nonzero parts as full MPV families, while the zero-tail
+	summands vanish at positive lengths, giving the positive-length comparison of
+	$A^{[p]}$ and $B^{[p]}$ with the two sector decompositions. The sector-basis
+	matching and two-basis comparison theorems then give the sector-weight
+	conclusion.
+\end{proof}
+
+\begin{theorem}[Zero-tail nonzero block decompositions with a common MPV phase cover]%
+\label{thm:afterBlocking_sectorComparison_zeroTail_of_commonPhaseCover}
+	\lean{MPSTensor.afterBlocking_sectorComparison_zeroTail_of_commonPhaseCover}
+	\leanok
+	\uses{def:mpv_common_phase_cover, lem:mpv_common_phase_cover_span_eq,
+		thm:afterBlocking_sectorComparison_zeroTail_of_blockSpan}
+	Under the hypotheses of
+	Theorem~\ref{thm:afterBlocking_sectorComparison_zeroTail_of_blockSpan}, a
+	common MPV phase cover for the two nonzero-weight block families supplies the
+	finite-length span equality. Hence there exist a period $p' > 0$ and sector
+	decompositions $P,Q$ such that $A^{[p']}$ and $B^{[p']}$ agree with the
+	corresponding sector tensors at every positive length, $P$ and $Q$ have the
+	same full MPV family, both have BNT data, and their sector weights satisfy the
+	matched sector-weight conclusion.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{lem:mpv_common_phase_cover_span_eq,
+		thm:afterBlocking_sectorComparison_zeroTail_of_blockSpan}
+	Apply the common-cover span lemma to obtain the nonzero-block span equality at
+	each system size, then invoke the zero-tail block-span theorem.
 \end{proof}
 
 \begin{theorem}[Zero-tail nonzero block decompositions with BNT proportional-decomposition data]%
 \label{thm:afterBlocking_sectorComparison_zeroTail_of_proportionalDecompositionConclusion}
 	\lean{MPSTensor.afterBlocking_sectorComparison_zeroTail_of_proportionalDecompositionConclusion}
 	\leanok
-	\uses{def:same_mpv2_pos,
-		thm:common_phase_cover_of_proportional_decomposition,
+	\uses{thm:common_phase_cover_of_proportional_decomposition,
 		thm:afterBlocking_sectorComparison_zeroTail_of_commonPhaseCover}
 	Let $A$ and $B$ have the same MPV family. Fix $p>0$ and suppose $A^{[p]}$
 	and $B^{[p]}$ each decompose as a zero-tail tensor plus a weighted nonzero
