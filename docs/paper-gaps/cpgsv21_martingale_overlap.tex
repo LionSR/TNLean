@@ -16,7 +16,7 @@
 
 \section{The source assertion}
 
-This note compares the martingale-method paragraph in CPGSV21 with the
+The martingale-method paragraph in CPGSV21 can be compared with the
 quantitative estimate isolated in the formal parent-Hamiltonian proof.\footnote{For
 traceability, this note corresponds to
 \href{https://github.com/LionSR/TNLean/issues/1044}{issue \#1044}. The remaining
@@ -83,7 +83,7 @@ The formal row-sum reduction specializes the source coefficients to
 for overlapping cyclic windows and to $0$ otherwise. The row-cardinality bound
 then gives $\sum_j c_{ij}\le 1$.
 
-With this choice, the formal target constant is
+With this choice, the constant in the formal statement is
 \[
   \gamma_L=\frac{1}{4L}.
 \]
@@ -117,15 +117,15 @@ For a symmetric projection $p_i$ one has
   \ge -\|p_i v\| \|p_i p_j v\|.
 \]
 Thus (N), together with $\operatorname{Re}\langle p_i v,v\rangle=\|p_i v\|^2$,
-implies (F). This is the projection-geometry comparison used in the formal proof: a
-norm-compression estimate for each overlapping pair is converted by
+implies (F). This is the projection-geometry comparison used in the formal proof:
+a norm-compression estimate for each overlapping pair is converted by
 Cauchy--Schwarz to the ordered Friedrichs estimate, and the finite row-sum
-argument converts those ordered estimates into the global gap bound.
-The corresponding formal anchors are the cyclic-window gap reductions in
+argument converts those ordered estimates into the global gap bound.\footnote{The
+formal anchors are the cyclic-window gap reductions in
 \path{TNLean/MPS/ParentHamiltonian/Martingale.lean}, lines 1268--1347, the
-remaining theorem \path{parentHamiltonianES_gap_bound_of_friedrichs} at lines
+remaining theorem \path{parentHamiltonianES\_gap\_bound\_of\_friedrichs} at lines
 1393--1405, and the projection-geometry lemmas in
-\path{TNLean/Analysis/ProjectionGeometry.lean}, lines 58--87 and 285--341.
+\path{TNLean/Analysis/ProjectionGeometry.lean}, lines 58--87 and 285--341.}
 
 \section{What remains to compare}
 
@@ -185,14 +185,14 @@ source states the martingale condition in terms of general row-sum coefficients
 and invokes principal-angle estimates to obtain a positive MPS parent-Hamiltonian
 gap. The formal proof contains the finite-overlap row reduction for cyclic
 windows, specializes the coefficients to
-$c_{ij}=1/(2(L-1))$, fixed the target constant $\gamma_L=1/(4L)$, and reduced
+$c_{ij}=1/(2(L-1))$, fixes the constant $\gamma_L=1/(4L)$, and reduces
 the remaining MPS-specific work to the norm-compression or ordered Friedrichs
 estimate above.
 
-This note does not assert that CPGSV21 is wrong. It records that the available
-formal argument is more explicit than the review paragraph: the exact constants
-and the cyclic-window blocking convention still have to be compared with the FNW,
-Nachtergaele, and Kastoryano--Lucia estimates.
+The CPGSV21 statement is not being challenged. The comparison records that the
+available formal argument is more explicit than the review paragraph: the exact
+constants and the cyclic-window blocking convention still have to be compared
+with the FNW, Nachtergaele, and Kastoryano--Lucia estimates.
 
 \bibliographystyle{alpha}
 \bibliography{references}
