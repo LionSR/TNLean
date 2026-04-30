@@ -17,7 +17,10 @@ jobs:
     if: |
       (
         github.event.action == 'opened' &&
-        contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.issue.author_association)
+        (
+          contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.issue.author_association) ||
+          contains(github.event.issue.labels.*.name, 'scout')
+        )
       ) ||
       (
         github.event.action == 'labeled' &&
@@ -65,6 +68,8 @@ jobs:
 
             let shouldScout = false;
             if (action === 'labeled' && label === 'scout') {
+              shouldScout = true;
+            } else if (action === 'opened' && labels.includes('scout')) {
               shouldScout = true;
             } else if (trusted && action === 'opened') {
               shouldScout = labels.includes('formalization') || looksLikeFormalization;
