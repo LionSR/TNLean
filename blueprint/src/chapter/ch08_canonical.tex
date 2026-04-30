@@ -1768,13 +1768,15 @@ The following results separate the zero blocks from the nonzero blocks.
 	\leanok
 	\uses{def:common_blocked_cyclic_sector_derived_blocks,
 		thm:common_blocked_cyclic_sector_reindexed_samempv}
-	Suppose that, for each original nonzero block, the length-$p$ word read from
-	the common blocked alphabet is the same word as the one obtained by viewing the
-	index as an iterated $(m_k,e_k)$ block and flattening it.  Then direct blocking
-	of each original block agrees with the corresponding iterated-blocking tensor.
-	Consequently the weighted direct sum of the directly blocked nonzero blocks
+	The comparison has two forms.  First, assume that each directly blocked
+	nonzero block has the same MPV family as its corresponding iterated-blocking
+	tensor.  Then the weighted direct sum of the directly blocked nonzero blocks
 	agrees with the weighted direct sum built from the iterated-blocking tensors,
-	and hence with the derived common-sector family.
+	and hence with the derived common-sector family.  Second, this blockwise MPV
+	equality follows from the stronger pointwise condition that the length-$p$ word
+	read from the common blocked alphabet is the same word as the one obtained by
+	viewing the index as an iterated $(m_k,e_k)$ block and flattening it; under this
+	condition the two individual block tensors are equal.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -3467,13 +3469,12 @@ The following results separate the zero blocks from the nonzero blocks.
 	rewrite the zero-tail identities, the positive-length equality, the length-zero
 	identity, and the nonzero transported weights directly with the weighted
 	common-length cyclic sectors, while also collecting the two-sided primitive
-	irreducible sector decompositions needed for comparison.  Thus the remaining
-	assertions are this equality of blocked words for the chosen coordinates, or an
-	equivalent final comparison with the relabeling made explicit, and the
-	injectivity of a suitable further blocking.  Once the common-length sectors have
-	also been blocked far enough to be injective, a BNT proportional-decomposition
-	comparison gives the block permutation, the bond-dimension equalities, and the
-	gauge phases.
+	irreducible sector decompositions needed for comparison.  The remaining
+	blocked-word assertion is the equality of these words for the chosen coordinates,
+	or an equivalent final comparison with the relabeling made explicit.  Once the
+	common-length sectors have also been blocked far enough to be injective, a BNT
+	proportional-decomposition comparison gives the block permutation, the
+	bond-dimension equalities, and the gauge phases.
 	Theorem~\ref{thm:afterBlocking_sectorComparison_zeroTail_of_proportionalDecompositionConclusion}
 	then turns that comparison into the finite-length MPV span equality and the
 	sector-weight conclusion.  Thus the open canonical-form assertions are the
