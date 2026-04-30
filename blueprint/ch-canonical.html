@@ -7780,7 +7780,7 @@
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:common_blocked_cyclic_sector_canonical_label_compat">
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:common_blocked_cyclic_sector_canonical_reindexed_nonzero">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
     Theorem
@@ -7794,7 +7794,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-canonical.html#thm:common_blocked_cyclic_sector_canonical_label_compat">#</a>
+    <a class="icon proof" href="ch-canonical.html#thm:common_blocked_cyclic_sector_canonical_reindexed_nonzero">#</a>
     
     <a class="icon proof" href="ch-canonical.html#a0000000823"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
@@ -14264,11 +14264,11 @@
           
           <li><a href="ch-canonical.html#thm:zero_tail_to_tensor_from_blocks_block_power">Theorem 11.163</a></li>
           
-          <li><a href="ch-canonical.html#thm:common_blocked_cyclic_sector_canonical_label_compat">Theorem 11.88</a></li>
+          <li><a href="ch-canonical.html#thm:common_blocked_cyclic_sector_canonical_reindexed_nonzero">Theorem 11.88</a></li>
           
           <li><a href="ch-canonical.html#thm:zero_tail_to_tensor_from_blocks_block_power">Theorem 11.163</a></li>
           
-          <li><a href="ch-canonical.html#thm:common_blocked_cyclic_sector_canonical_label_compat">Theorem 11.88</a></li>
+          <li><a href="ch-canonical.html#thm:common_blocked_cyclic_sector_canonical_reindexed_nonzero">Theorem 11.88</a></li>
           
         </ul>
     
@@ -14315,12 +14315,99 @@
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:samempv_pos_zero_tail_identity_transport">
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:after_blocking_common_primitive_irreducible_blocks_reindexed">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
     Theorem
     </span>
     <span class="theorem_thmlabel">11.173</span>
+    <span class="theorem_thmtitle">Common primitive irreducible block decompositions after reindexing</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-canonical.html#thm:after_blocking_common_primitive_irreducible_blocks_reindexed">#</a>
+    
+    <a class="icon proof" href="ch-canonical.html#a0000000893"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-canonical.html#thm:ft_after_blocking_common_length_common_sector_theorem">Theorem 11.171</a></li>
+          
+          <li><a href="ch-canonical.html#thm:common_blocked_cyclic_sector_canonical_reindexed_nonzero">Theorem 11.88</a></li>
+          
+          <li><a href="ch-mps.html#def:same_mpv2_pos">Definition 2.13</a></li>
+          
+          <li><a href="ch-canonical.html#thm:ft_after_blocking_common_length_common_sector_theorem">Theorem 11.171</a></li>
+          
+          <li><a href="ch-canonical.html#thm:common_blocked_cyclic_sector_canonical_reindexed_nonzero">Theorem 11.88</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts" class="lean_decl">MPSTensor.afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   Assume the one-sided theorem identifying the canonically blocked weighted nonzero part with the same family written through the reindexing of blocked physical words. Then two tensors with the same MPV family have one positive blocking length at which both nonzero parts are weighted families of trace-preserving, primitive, tensor-irreducible blocks with positive bond dimensions and nonzero weights. The theorem records the two zero-tail equations at this common length, the positive-length agreement of each blocked tensor with its own nonzero-sector part, the positive-length equality of the two nonzero-sector parts, and the length-zero zero-tail identity. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000893">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> Apply Theorem&#160;<a href="ch-canonical.html#thm:ft_after_blocking_common_length_common_sector_theorem">11.171</a> to choose the common blocking length and the two common cyclic-sector families. The assumed blocked-word reindexing equality converts the canonically blocked nonzero part into the weighted common-sector family on each side. Substituting these two equalities into the existing zero-tail equations gives the displayed decompositions; the structural properties and nonzero weights are those of the derived common-sector families. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:samempv_pos_zero_tail_identity_transport">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">11.174</span>
     <span class="theorem_thmtitle">Positive-length and length-zero identities under MPV equality</span>
     <div class="thm_header_extras">
 
@@ -14331,7 +14418,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:samempv_pos_zero_tail_identity_transport">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000893"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000894"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -14388,7 +14475,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000893">
+<div class="proof_wrapper" id="a0000000894">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -14405,7 +14492,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">11.174</span>
+    <span class="theorem_thmlabel">11.175</span>
     <span class="theorem_thmtitle">Common-sector zero-tail data after blocked-word relabeling</span>
     <div class="thm_header_extras">
 
@@ -14416,7 +14503,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:zero_tail_common_flat_transport_of_reindexed">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000894"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000895"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -14434,13 +14521,13 @@
           
           <li><a href="ch-canonical.html#thm:zero_tail_common_flat_of_reindexed">Theorem 11.172</a></li>
           
-          <li><a href="ch-canonical.html#thm:common_blocked_cyclic_sector_canonical_label_compat">Theorem 11.88</a></li>
+          <li><a href="ch-canonical.html#thm:common_blocked_cyclic_sector_canonical_reindexed_nonzero">Theorem 11.88</a></li>
           
           <li><a href="ch-canonical.html#thm:common_blocked_cyclic_sector_derived_properties">Theorem 11.86</a></li>
           
           <li><a href="ch-canonical.html#thm:zero_tail_common_flat_of_reindexed">Theorem 11.172</a></li>
           
-          <li><a href="ch-canonical.html#thm:common_blocked_cyclic_sector_canonical_label_compat">Theorem 11.88</a></li>
+          <li><a href="ch-canonical.html#thm:common_blocked_cyclic_sector_canonical_reindexed_nonzero">Theorem 11.88</a></li>
           
           <li><a href="ch-canonical.html#thm:common_blocked_cyclic_sector_derived_properties">Theorem 11.86</a></li>
           
@@ -14477,7 +14564,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000894">
+<div class="proof_wrapper" id="a0000000895">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -14496,7 +14583,7 @@
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">11.175</span>
+    <span class="remark_thmlabel">11.176</span>
     <span class="remark_thmtitle">Canonical-form reduction before the equal-case comparison</span>
     <div class="thm_header_extras">
 
@@ -14526,7 +14613,7 @@
 	]
 </span>. </p>
 <p>The statements in this chapter mirror this reduction. Theorem&#160;<a href="ch-canonical.html#thm:tp_gauge_arbitrary">11.48</a> gives the zero-tail block and the trace-preserving irreducible nonzero block family. Theorem&#160;<a href="ch-canonical.html#thm:ft_after_blocking_per_block_cyclic_live_zero_tail">11.168</a> applies the cyclic-sector decomposition to each nonzero block, preserving the positive-length MPV equality and the zero-tail identity at \(N=0\). Theorem&#160;<a href="ch-canonical.html#thm:exists_common_blocked_cyclic_sector_family_common_multiple">11.89</a> constructs the common reblocked sector family at any common multiple of the period-removal lengths. Consequently Theorem&#160;<a href="ch-canonical.html#thm:ft_after_blocking_common_length_common_sector_theorem">11.171</a> chooses one physical blocking length for both tensors, transports the zero-tail identities to that length, and supplies relabeled cyclic-sector families on both sides. The supporting blocking and transport results, including Theorem&#160;<a href="ch-canonical.html#thm:iterated_blocking_samempv_reindex">11.59</a>, identify iterated blocking with one blocking by the product length, after relabeling the blocked physical words. </p>
-<p>The next mathematical assertion is the equality, after relabeling blocked physical words, between the canonical blocked nonzero part and the cyclic-sector tensor for the whole weighted family. The conditional statements Theorems&#160;<a href="ch-canonical.html#thm:zero_tail_common_flat_transport_of_reindexed">11.174</a> and <a href="ch-canonical.html#thm:samempv_pos_zero_tail_identity_transport">11.173</a> show that this equality rewrites the zero-tail identities, the positive-length equality, the length-zero identity, and the nonzero transported weights directly with the weighted common-length cyclic sectors. Once the common-length sectors have also been blocked far enough to be injective, a BNT proportional-decomposition comparison gives the block permutation, the bond-dimension equalities, and the gauge phases. Theorem&#160;<a href="ch-assembly.html#thm:afterBlocking_sectorComparison_zeroTail_of_proportionalDecompositionConclusion">14.55</a> then turns that comparison into the finite-length MPV span equality and the sector-weight conclusion. Thus the open canonical-form assertions are the blocked-word relabeling equality for the whole weighted nonzero family, the injectivity of a suitable further blocking, and the proportional-decomposition comparison for the common-length nonzero sectors. </p>
+<p>The next mathematical assertion is the equality, after relabeling blocked physical words, between the canonical blocked nonzero part and the cyclic-sector tensor for the whole weighted family. The conditional statements Theorems&#160;<a href="ch-canonical.html#thm:zero_tail_common_flat_transport_of_reindexed">11.175</a>, <a href="ch-canonical.html#thm:samempv_pos_zero_tail_identity_transport">11.174</a>, and <a href="ch-canonical.html#thm:after_blocking_common_primitive_irreducible_blocks_reindexed">11.173</a> show that this equality rewrites the zero-tail identities, the positive-length equality, the length-zero identity, and the nonzero transported weights directly with the weighted common-length cyclic sectors, while also collecting the two-sided primitive irreducible sector decompositions needed for comparison. Once these sectors have also been blocked far enough to be injective, a BNT proportional-decomposition comparison gives the block permutation, the bond-dimension equalities, and the gauge phases. Theorem&#160;<a href="ch-assembly.html#thm:afterBlocking_sectorComparison_zeroTail_of_proportionalDecompositionConclusion">14.55</a> then turns that comparison into the finite-length MPV span equality and the sector-weight conclusion. Thus the open canonical-form assertions are the blocked-word relabeling equality for the whole weighted nonzero family, the injectivity of a suitable further blocking, and the proportional-decomposition comparison for the common-length nonzero sectors. </p>
 <p>The sorted normal-canonical-form theorem, Theorem&#160;<a href="ch-canonical.html#thm:bnt_sorted_ncf">11.120</a>, assumes pairwise distinct nonzero weight norms. This is a useful special form after sorting. Equal-norm families require the basis-of-normal-tensors and multiplicity comparison developed later, rather than an artificial separation of equal weight norms. </p>
 
   </div>
