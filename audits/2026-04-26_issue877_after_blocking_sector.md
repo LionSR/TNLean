@@ -25,7 +25,7 @@ comparison step. Instead it adds three kernel-checked compositions.
    theorem. The permutation, dimension transport, gauge-phase data, and copy
    alignment are outputs, not assumptions.
 
-2. `MPSTensor.fundamentalTheorem_after_blocking_1606_sector_of_bntPair_overlapSpan`
+2. `MPSTensor.fundamentalTheorem_after_blocking_sector_of_bntPair_overlapSpan`
    in `TNLean/MPS/CanonicalForm/Assembly/StructuralTheorem.lean` replaces the
    old abstract `matchedBasisData` argument with a BNT sector pair carrying
    `SectorBasisOverlapSpanHypotheses P Q`. It derives
@@ -35,7 +35,7 @@ comparison step. Instead it adds three kernel-checked compositions.
    `fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_sectorMatching` to
    obtain the actual sector-weight multiset conclusion.
 
-3. `MPSTensor.fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_overlapSpan`
+3. `MPSTensor.fundamentalTheorem_after_blocking_sector_of_common_blocks_overlapSpan`
    additionally invokes the #923 one-sided constructor
    `exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks` on both sides. Its inputs
    are a common blocking period with exact live decompositions of
@@ -49,7 +49,7 @@ comparison step. Instead it adds three kernel-checked compositions.
 The requested hSame-only theorem
 
 ```lean
-theorem fundamentalTheorem_after_blocking_1606_sector
+theorem fundamentalTheorem_after_blocking_sector
     {d D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (hSame : SameMPV₂ A B) : ...
@@ -102,7 +102,7 @@ finite-length MPV spans.
 
 ## Wave 18B update
 
-`MPSTensor.fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_blockSpan`
+`MPSTensor.fundamentalTheorem_after_blocking_sector_of_common_blocks_blockSpan`
 now replaces the two-sector span input by equality of the finite-length MPV spans
 of the original nonzero-block families. The one-sided representative-span identity
 transports those nonzero-block spans to the chosen BNT sector bases, and the #860
@@ -128,9 +128,9 @@ span mechanism for the common-block route:
   families map surjectively to one common family and each nonzero block is
   MPV-phase equivalent to its image, then their finite-length MPV spans agree at
   every system size.
-- `MPSTensor.fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_phaseCover`
+- `MPSTensor.fundamentalTheorem_after_blocking_sector_of_common_blocks_phaseCover`
   feeds this span equality directly into
-  `fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_blockSpan`, so
+  `fundamentalTheorem_after_blocking_sector_of_common_blocks_blockSpan`, so
   the exact-live sector comparison no longer needs a raw span-equality
   hypothesis once a future common-blocking theorem supplies the common family and
   the two surjective class maps.

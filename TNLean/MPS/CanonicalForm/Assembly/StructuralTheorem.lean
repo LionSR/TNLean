@@ -21,7 +21,7 @@ sides have TP-primitive decompositions.
 * `bilateral_commonPeriod_blocking_tp_primitive_normal` — two tensors with
   primitive blocked transfer maps have a common positive blocking period that
   preserves primitivity, left-canonical normalization, and normality.
-* `fundamentalTheorem_after_blocking_1606_structural` — two tensors with the
+* `fundamentalTheorem_after_blocking_structural` — two tensors with the
   same MPVs have blocked TP-primitive decompositions on both sides.
 
 ## References
@@ -69,19 +69,19 @@ The current library already settles the common-period blocking arithmetic and
 now has a one-sided phase-class BNT construction for TP primitive irreducible
 nonzero-weight blocks, one-sided overlap data, and witness-producing sector comparison
 from primitive overlap-span hypotheses. The theorem
-`fundamentalTheorem_after_blocking_1606_perBlock_cyclic_live_with_zeroTail`
+`fundamentalTheorem_after_blocking_perBlock_cyclic_live_with_zeroTail`
 keeps the faithful paper order: first split off the zero tail and TP-gauge the
 irreducible nonzero-weight blocks, then remove each block's period by cyclic sectors.
 It deliberately does not identify that period-removal length with the later
 finite blocking length used for common refinement or injectivity.
 
 The nonzero-part theorem
-`fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_injectiveSpan`
+`fundamentalTheorem_after_blocking_sector_of_common_blocks_injectiveSpan`
 uses a two-basis span comparison for the constructed sector bases, while
-`fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_blockSpan`
+`fundamentalTheorem_after_blocking_sector_of_common_blocks_blockSpan`
 transports a finite-length span equality for the original nonzero-weight block families to
 those bases. The zero-tail-aware theorem
-`fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_overlapSpan_zeroTail`
+`fundamentalTheorem_after_blocking_sector_of_common_blocks_overlapSpan_zeroTail`
 separately gives the length-zero identity when full overlap-span hypotheses are
 available.
 
@@ -92,7 +92,7 @@ finish the zero-tail length-zero identity from the structural after-blocking red
 itself.
 -/
 
-section FundamentalTheorem1606
+section FundamentalTheoremAfterBlocking
 
 -- **Structural decomposition of MPS tensors after blocking (1606.00608 reduction).**
 --
@@ -194,7 +194,7 @@ followed by a two-basis equal-case comparison theorem for those sector decomposi
 
 This theorem therefore gives the structural statement currently available on the
 way to arXiv:1606.00608, Theorem 1. -/
-theorem fundamentalTheorem_after_blocking_1606_structural
+theorem fundamentalTheorem_after_blocking_structural
     {d D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (_hSame : SameMPV₂ A B) :
@@ -227,7 +227,7 @@ theorem fundamentalTheorem_after_blocking_1606_structural
 /-- A strengthened after-blocking structural statement that keeps the blocked `SameMPV₂`
 relations at the reduction periods. This is a small but genuine step toward Gap §1 because the
 common equality is no longer discarded by the public structural theorem. -/
-theorem fundamentalTheorem_after_blocking_1606_structural_with_blockedSameMPV₂
+theorem fundamentalTheorem_after_blocking_structural_with_blockedSameMPV₂
     {d D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (hSame : SameMPV₂ A B) :
@@ -251,7 +251,7 @@ theorem fundamentalTheorem_after_blocking_1606_structural_with_blockedSameMPV₂
       (∀ k, 0 < dimB k) := by
   obtain ⟨pA, hpA, rA, dimA, μA, blocksA, pB, hpB, rB, dimB, μB, blocksB,
     hTPA, hTPB, hPrimA, hPrimB, hμA, hμB, hDimA, hDimB⟩ :=
-    fundamentalTheorem_after_blocking_1606_structural A B hSame
+    fundamentalTheorem_after_blocking_structural A B hSame
   refine ⟨pA, hpA, rA, dimA, μA, blocksA, pB, hpB, rB, dimB, μB, blocksB,
     ?_, ?_, hTPA, hTPB, hPrimA, hPrimB, hμA, hμB, hDimA, hDimB⟩
   · exact sameMPV₂_blockTensor A B hSame pA
@@ -417,7 +417,7 @@ primitive transfer maps, positive bond dimensions, and nonzero weights; the
 zero-tail equations explain precisely why these nonzero parts are only immediately
 identified at positive lengths unless the `N = 0` zero-tail identity is also
 resolved. -/
-theorem fundamentalTheorem_after_blocking_1606_structural_with_zeroTail
+theorem fundamentalTheorem_after_blocking_structural_with_zeroTail
     {d D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (hSame : SameMPV₂ A B) :
@@ -471,7 +471,7 @@ The theorem intentionally keeps the per-block period-removal lengths inside
 later common-refinement or Wielandt/injectivity blocking length; assembling the
 per-block cyclic sectors at one physical blocking level is the next formal
 statement still missing for #942/#652. -/
-theorem fundamentalTheorem_after_blocking_1606_perBlock_cyclic_live_with_zeroTail
+theorem fundamentalTheorem_after_blocking_perBlock_cyclic_live_with_zeroTail
     {d D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (hSame : SameMPV₂ A B) :
@@ -536,10 +536,10 @@ maps, are tensor-irreducible, have positive bond dimensions, and carry nonzero
 unit weights.  The statement keeps the checked zero-tail equations,
 positive-length equality of the nonzero parts, and the length-zero identity at the unblocked
 nonzero-block level.  The companion theorem
-`fundamentalTheorem_after_blocking_1606_reindexed_commonSector_live_with_zeroTail`
+`fundamentalTheorem_after_blocking_reindexed_commonSector_live_with_zeroTail`
 adds the explicitly relabeled cyclic-sector flattening available after
 the iterated-blocking comparison theorem. -/
-theorem fundamentalTheorem_after_blocking_1606_commonBlocked_cyclic_live_with_zeroTail
+theorem fundamentalTheorem_after_blocking_commonBlocked_cyclic_live_with_zeroTail
     {d D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (hSame : SameMPV₂ A B) :
@@ -575,7 +575,7 @@ theorem fundamentalTheorem_after_blocking_1606_commonBlocked_cyclic_live_with_ze
       zeroTailB, rB, dimB, μB, blocksB,
       hIrrA, hIrrB, hTPA, hTPB, hμA, hμB, hDimA, hDimB,
       hMPVA, hMPVB, hPos, hZero, hCycA, hCycB⟩ :=
-    fundamentalTheorem_after_blocking_1606_perBlock_cyclic_live_with_zeroTail A B hSame
+    fundamentalTheorem_after_blocking_perBlock_cyclic_live_with_zeroTail A B hSame
   obtain ⟨familyA⟩ :=
     exists_commonBlockedCyclicSectorFamily_of_hasPrimitiveIrreducibleCyclicSectors
       blocksA hCycA
@@ -594,7 +594,7 @@ theorem fundamentalTheorem_after_blocking_1606_commonBlocked_cyclic_live_with_ze
 /-- **Relabeled common-sector data with zero-tail reblocking.**
 
 This companion to
-`fundamentalTheorem_after_blocking_1606_commonBlocked_cyclic_live_with_zeroTail`
+`fundamentalTheorem_after_blocking_commonBlocked_cyclic_live_with_zeroTail`
 uses the common cyclic-sector family to express the reindexed block data available
 after the iterated-blocking comparison theorem.  For each side, the cyclic
 sectors are expressed as derived common-alphabet blocks `family.commonFlatBlocks`,
@@ -606,7 +606,7 @@ The statement is deliberately explicit about the reindexing of blocked physical
 words: the relabeled block field is the block `B_k^[family.p]` after applying
 `iteratedBlockIndex`.  It does not assert that the canonical blocked family and
 the per-block reindexed family are identical as physical-word indexed tensors. -/
-theorem fundamentalTheorem_after_blocking_1606_reindexed_commonSector_live_with_zeroTail
+theorem fundamentalTheorem_after_blocking_reindexed_commonSector_live_with_zeroTail
     {d D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (hSame : SameMPV₂ A B) :
@@ -658,7 +658,7 @@ theorem fundamentalTheorem_after_blocking_1606_reindexed_commonSector_live_with_
       zeroTailB, rB, dimB, μB, blocksB,
       familyA, familyB, _hIrrA, _hIrrB, _hTPA, _hTPB, hμA, hμB, _hDimA, _hDimB,
       hMPVA, hMPVB, _hPos, _hZero, _hUnitA, _hUnitB⟩ :=
-    fundamentalTheorem_after_blocking_1606_commonBlocked_cyclic_live_with_zeroTail A B hSame
+    fundamentalTheorem_after_blocking_commonBlocked_cyclic_live_with_zeroTail A B hSame
   refine ⟨zeroTailA, rA, dimA, μA, blocksA,
     zeroTailB, rB, dimB, μB, blocksB, familyA, familyB, ?_, ?_, ?_, ?_, ?_, ?_,
     ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
@@ -707,7 +707,7 @@ The last two `SameMPV₂` conclusions are deliberately stated for the relabeled
 blocked sector blocks.  They isolate the remaining equality under the chosen word
 reindexing needed to replace the canonical blocked nonzero blocks in the zero-tail
 equations by the derived primitive irreducible common-sector blocks. -/
-theorem fundamentalTheorem_after_blocking_1606_commonLength_commonSector
+theorem fundamentalTheorem_after_blocking_commonLength_commonSector
     {d D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (hSame : SameMPV₂ A B) :
@@ -776,7 +776,7 @@ theorem fundamentalTheorem_after_blocking_1606_commonLength_commonSector
       zeroTailB, rB, dimB, μB, blocksB,
       _hIrrA, _hIrrB, _hTPA, _hTPB, hμA, hμB, _hDimA, _hDimB,
       hMPVA, hMPVB, _hPos, _hZero, hCycA, hCycB⟩ :=
-    fundamentalTheorem_after_blocking_1606_perBlock_cyclic_live_with_zeroTail A B hSame
+    fundamentalTheorem_after_blocking_perBlock_cyclic_live_with_zeroTail A B hSame
   let periodA : Fin rA → ℕ := fun k => (hCycA k).choose
   let periodB : Fin rB → ℕ := fun k => (hCycB k).choose
   have periodA_pos : ∀ k, 0 < periodA k := fun k => (hCycA k).choose_spec.1
@@ -902,7 +902,7 @@ basis-block matching theorem from PR #844
 (`fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_matched_basis`). The
 later theorems below instantiate the matching side with primitive overlap-span
 hypotheses rather than assuming the witness directly. -/
-theorem fundamentalTheorem_after_blocking_1606_sector_of_bntPair_matched
+theorem fundamentalTheorem_after_blocking_sector_of_bntPair_matched
     {d D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (hSame : SameMPV₂ A B)
@@ -955,7 +955,7 @@ theorem fundamentalTheorem_after_blocking_1606_sector_of_bntPair_matched
 /-- **After-blocking sector comparison from primitive overlap-span hypotheses.**
 
 This theorem replaces the abstract `matchedBasisData` hypothesis in
-`fundamentalTheorem_after_blocking_1606_sector_of_bntPair_matched` by the
+`fundamentalTheorem_after_blocking_sector_of_bntPair_matched` by the
 paper-level overlap-rigidity hypotheses collected in
 `SectorBasisOverlapSpanHypotheses`. The hypotheses still include a BNT sector
 pair at a common blocking period, but the matching witness itself is now
@@ -964,7 +964,7 @@ then used in the two-basis sector comparison theorem.
 
 Thus the theorem connects the post-#860 comparison machinery without assuming a
 `SectorBasisMatching` or a permutation with copy-count equalities as a hypothesis. -/
-theorem fundamentalTheorem_after_blocking_1606_sector_of_bntPair_overlapSpan
+theorem fundamentalTheorem_after_blocking_sector_of_bntPair_overlapSpan
     {d D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (hSame : SameMPV₂ A B)
@@ -1019,7 +1019,7 @@ produce the matched sector-weight conclusion.
 The remaining work for the fully unconditional theorem is to obtain these exact
 common nonzero-block decompositions, and the overlap-span data for their BNT
 sector bases, from the current structural reduction without extra hypotheses. -/
-theorem fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_overlapSpan
+theorem fundamentalTheorem_after_blocking_sector_of_common_blocks_overlapSpan
     {d D₁ D₂ p rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     [∀ k : Fin rA, NeZero (dimA k)]
@@ -1104,13 +1104,13 @@ theorem fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_overlapSp
 /-- **Common nonzero-block construction with derived one-sided overlap data.**
 
 This nonzero-part variant of
-`fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_overlapSpan`
+`fundamentalTheorem_after_blocking_sector_of_common_blocks_overlapSpan`
 uses the phase-class BNT construction to derive the positive-dimension,
 normalization, self-overlap, and off-overlap hypotheses, and to transfer the supplied
 one-site injectivity of the nonzero-weight blocks to the chosen basis blocks. The remaining
 two-basis analytic hypothesis is the finite-length span comparison between the two
 constructed bases. -/
-theorem fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_injectiveSpan
+theorem fundamentalTheorem_after_blocking_sector_of_common_blocks_injectiveSpan
     {d D₁ D₂ p rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     [∀ k : Fin rA, NeZero (dimA k)]
@@ -1204,14 +1204,14 @@ theorem fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_injective
 /-- **Common nonzero-block construction from nonzero-block span equality.**
 
 This nonzero-part variant replaces the opaque two-sector `overlapSpanData` hypothesis in
-`fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_overlapSpan`. The
+`fundamentalTheorem_after_blocking_sector_of_common_blocks_overlapSpan`. The
 one-sided MPV phase-equivalence class representative construction supplies positive
 dimensions, injectivity, normalization, and the asymptotic overlap data for the
 representative bases. The remaining two-family analytic hypothesis is the finite-length span
 equality for the original nonzero-weight block families;
 `exists_bnt_sectorDecomp_pair_with_overlapSpan_of_block_span_eq` transports it to the chosen
 sector bases. -/
-theorem fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_blockSpan
+theorem fundamentalTheorem_after_blocking_sector_of_common_blocks_blockSpan
     {d D₁ D₂ p rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     [∀ k : Fin rA, NeZero (dimA k)]
@@ -1294,7 +1294,7 @@ theorem fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_blockSpan
 /-- **Common nonzero-block construction from a common MPV-phase cover.**
 
 This nonzero-part variant proves the nonzero-block span equality required by
-`fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_blockSpan` from a stronger
+`fundamentalTheorem_after_blocking_sector_of_common_blocks_blockSpan` from a stronger
 common-structure hypothesis: both nonzero-weight block families map onto one common family
 of MPV phase classes, and every block is MPV-phase equivalent to its image.  The conclusion
 is the same sector-weight comparison as the block-span theorem.
@@ -1302,7 +1302,7 @@ is the same sector-weight comparison as the block-span theorem.
 This theorem is a paper-faithful predecessor for #970 while the final common-blocking theorem
 (#969) is not yet available: once that theorem supplies the common family and the two surjective
 class maps, the remaining span hypothesis follows from `mpv_span_eq_of_common_phase_cover`. -/
-theorem fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_phaseCover
+theorem fundamentalTheorem_after_blocking_sector_of_common_blocks_phaseCover
     {d D₁ D₂ p rA rB rC : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ} {dimC : Fin rC → ℕ}
     [∀ k : Fin rA, NeZero (dimA k)]
@@ -1349,7 +1349,7 @@ theorem fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_phaseCove
           Finset.univ.val.map (P.weight j) =
             Finset.univ.val.map
               (fun q => ζ j * Q.weight (perm j) (Fin.cast (hCopies j) q)) := by
-  refine fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_blockSpan
+  refine fundamentalTheorem_after_blocking_sector_of_common_blocks_blockSpan
     A B hSame hp μA blocksA μB blocksB hAblocks hBblocks hTPA hTPB hIrrA hIrrB
     hPrimA hPrimB hInjA hInjB hμA hμB ?_
   intro N
@@ -1359,12 +1359,12 @@ theorem fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_phaseCove
 /-- **Common nonzero-block sector comparison from common MPV-phase-cover data.**
 
 This is the common-cover form of
-`fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_phaseCover`: the
+`fundamentalTheorem_after_blocking_sector_of_common_blocks_phaseCover`: the
 common family, the two class maps, the MPV-phase identifications, and the
 surjectivity proofs are supplied by `MPVCommonPhaseCover`.  It does not
 construct that cover from the structural `SameMPV₂` hypothesis; that cross-side
 BNT comparison is a remaining paper-level hypothesis. -/
-theorem fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_commonPhaseCover
+theorem fundamentalTheorem_after_blocking_sector_of_common_blocks_commonPhaseCover
     {d D₁ D₂ p rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     [∀ k : Fin rA, NeZero (dimA k)]
@@ -1406,7 +1406,7 @@ theorem fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_commonPha
           Finset.univ.val.map (P.weight j) =
             Finset.univ.val.map
               (fun q => ζ j * Q.weight (perm j) (Fin.cast (hCopies j) q)) :=
-  fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_phaseCover
+  fundamentalTheorem_after_blocking_sector_of_common_blocks_phaseCover
     A B hSame hp μA blocksA μB blocksB cover.common cover.classA cover.classB
     cover.phaseA cover.phaseB cover.surjA cover.surjB hAblocks hBblocks
     hTPA hTPB hIrrA hIrrB hPrimA hPrimB hInjA hInjB hμA hμB
@@ -1464,12 +1464,12 @@ theorem sameMPV₂_live_of_sameMPV₂_with_zeroTail_eq
 /-- **Common nonzero-block sector comparison with an explicit zero-tail identity.**
 
 This is the zero-tail-aware variant of
-`fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_overlapSpan`.
+`fundamentalTheorem_after_blocking_sector_of_common_blocks_overlapSpan`.
 The blocked tensors are related to their nonzero parts only at positive lengths,
 which is the strongest statement available after removing a nonzero zero tail. If the two
 zero-tail dimensions agree, the nonzero parts themselves are full `SameMPV₂`, including `N = 0`,
 so the existing sector-matching layer applies unchanged. -/
-theorem fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_overlapSpan_zeroTail
+theorem fundamentalTheorem_after_blocking_sector_of_common_blocks_overlapSpan_zeroTail
     {d D₁ D₂ p rA rB zeroTailA zeroTailB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     [∀ k : Fin rA, NeZero (dimA k)]
@@ -1587,20 +1587,20 @@ The sector matching extraction is available from primitive overlap-rigidity
 hypotheses through `SectorBasisOverlapSpanHypotheses.exists_sectorBasisMatching`.
 
 The theorem
-`fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_injectiveSpan`
+`fundamentalTheorem_after_blocking_sector_of_common_blocks_injectiveSpan`
 gives a nonzero-part overlap-span reduction from span equality for the
 constructed sector bases. The theorem
-`fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_blockSpan`
+`fundamentalTheorem_after_blocking_sector_of_common_blocks_blockSpan`
 strengthens this in the phase-class representative setting: equality of the
 finite-length spans of the original nonzero-weight block families is transported to the
 chosen sector bases and the sector-weight conclusion follows from the original
 `SameMPV₂ A B`. The theorem
-`fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_overlapSpan_zeroTail`
+`fundamentalTheorem_after_blocking_sector_of_common_blocks_overlapSpan_zeroTail`
 gives the corresponding zero-tail route when full overlap-span data
 are supplied.
 
 The remaining formal work for the completely unconditional
-`fundamentalTheorem_after_blocking_1606_sector` is therefore to derive, from the
+`fundamentalTheorem_after_blocking_sector` is therefore to derive, from the
 structural reduction itself:
 
 1. a common nonzero-block decomposition with primitive **and irreducible** blocks at
@@ -1618,6 +1618,6 @@ listed nonzero-block, zero-tail, injectivity, and span facts for the actual sect
 tensors produced by the after-blocking reduction.
 -/
 
-end FundamentalTheorem1606
+end FundamentalTheoremAfterBlocking
 
 end MPSTensor
