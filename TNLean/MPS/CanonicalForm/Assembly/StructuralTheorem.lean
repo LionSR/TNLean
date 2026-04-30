@@ -841,6 +841,64 @@ theorem fundamentalTheorem_after_blocking_commonLength_commonSector
   · intro x
     exact familyB.commonFlatDim_pos x
 
+/-- If each directly blocked nonzero block agrees with its iterated-blocking version,
+the zero-tail equation can be written using the derived common-sector family. -/
+theorem zeroTail_commonFlat_of_blockwise
+    {d D r z : ℕ} {dim : Fin r → ℕ}
+    (A : MPSTensor d D) (μ : Fin r → ℂ)
+    (blocks : (k : Fin r) → MPSTensor d (dim k))
+    (F : CommonBlockedCyclicSectorFamily blocks)
+    (hMPV : ∀ (N : ℕ) (σ : Fin N → Fin d),
+      mpv A σ = mpv (zeroMPSTensor d z) σ +
+        mpv (toTensorFromBlocks (d := d) (μ := μ) blocks) σ)
+    (hBlock : ∀ k : Fin r,
+      SameMPV₂
+        (blockTensor (d := d) (D := dim k) (blocks k) F.p)
+        (F.commonReindexedBlock k)) :
+    ∀ (N : ℕ) (σ : Fin N → Fin (blockPhysDim d F.p)),
+      mpv (blockTensor (d := d) (D := D) A F.p) σ =
+        mpv (zeroMPSTensor (blockPhysDim d F.p) z) σ +
+          mpv (toTensorFromBlocks (d := blockPhysDim d F.p)
+            (μ := F.commonFlatWeight μ) F.commonFlatBlocks) σ := by
+  intro N σ
+  have hCanon := zeroTail_toTensorFromBlocks_blockPower
+    (d := d) (D := D) (r := r) (z := z) (p := F.p) (dim := dim)
+    A μ blocks F.p_pos hMPV
+  have hFlat := F.sameMPV₂_weightedCanonicalBlock_commonFlat_of_blockwise μ hBlock
+  calc
+    mpv (blockTensor (d := d) (D := D) A F.p) σ =
+        mpv (zeroMPSTensor (blockPhysDim d F.p) z) σ +
+          mpv (toTensorFromBlocks (d := blockPhysDim d F.p)
+            (fun k => (μ k) ^ F.p)
+            (fun k => blockTensor (d := d) (D := dim k) (blocks k) F.p)) σ := hCanon N σ
+    _ = mpv (zeroMPSTensor (blockPhysDim d F.p) z) σ +
+          mpv (toTensorFromBlocks (d := blockPhysDim d F.p)
+            (μ := F.commonFlatWeight μ) F.commonFlatBlocks) σ := by
+          rw [hFlat N σ]
+
+/-- If the blocked-word decodings agree for every nonzero block, the zero-tail equation
+can be written using the derived common-sector family. -/
+theorem zeroTail_commonFlat_of_word_eq
+    {d D r z : ℕ} {dim : Fin r → ℕ}
+    (A : MPSTensor d D) (μ : Fin r → ℂ)
+    (blocks : (k : Fin r) → MPSTensor d (dim k))
+    (F : CommonBlockedCyclicSectorFamily blocks)
+    (hMPV : ∀ (N : ℕ) (σ : Fin N → Fin d),
+      mpv A σ = mpv (zeroMPSTensor d z) σ +
+        mpv (toTensorFromBlocks (d := d) (μ := μ) blocks) σ)
+    (hWord : ∀ (k : Fin r) (i : Fin (blockPhysDim d F.p)),
+      wordOfBlock d F.p i =
+        wordOfBlock d (F.period k * F.extra k)
+          (iteratedBlockIndex d (F.period k) (F.extra k)
+            (Fin.cast ((F.blockPhysDim_nested_eq k).symm) i))) :
+    ∀ (N : ℕ) (σ : Fin N → Fin (blockPhysDim d F.p)),
+      mpv (blockTensor (d := d) (D := D) A F.p) σ =
+        mpv (zeroMPSTensor (blockPhysDim d F.p) z) σ +
+          mpv (toTensorFromBlocks (d := blockPhysDim d F.p)
+            (μ := F.commonFlatWeight μ) F.commonFlatBlocks) σ := by
+  exact zeroTail_commonFlat_of_blockwise A μ blocks F hMPV
+    (fun k => F.blockTensor_sameMPV₂_commonReindexedBlock_of_word_eq k (hWord k))
+
 /-- If the canonical blocked nonzero part agrees with the common reindexed blocks,
 the zero-tail equation can be rewritten using the derived common-sector family.
 This is the one-sided theorem that puts the reindexed data above in the form used
