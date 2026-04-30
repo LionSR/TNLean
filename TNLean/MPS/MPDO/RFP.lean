@@ -7,18 +7,18 @@ import TNLean.MPS.MPDO.ZCL
 /-!
 # General MPDO renormalization fixed point
 
-This file records consequences of the provisional mixed-state RFP definition for
+This file states consequences of the current mixed-state RFP definition for
 MPO tensors, following the transfer-map aspect of arXiv:1606.00608,
 Definition 4.1.
 
 The full definition in the paper is phrased using trace-preserving completely
 positive blocking and unblocking maps. In this first pass `MPOTensor.IsRFP`
-records the transfer-map idempotence condition, which is the part already
-supported by the current infrastructure.
+states the transfer-map idempotence condition, which is the part already
+supported by the current formalization.
 
 ## Main results
 
-* `MPOTensor.isRFP_iff_isZCL`: this provisional RFP condition coincides with
+* `MPOTensor.isRFP_iff_isZCL`: this current RFP condition coincides with
   `MPOTensor.IsZCL`.
 
 ## References
@@ -32,16 +32,16 @@ namespace MPOTensor
 
 variable {d D : ℕ}
 
-/-- In the current development, the provisional mixed-state RFP condition is
+/-- The mixed-state RFP condition in the current development is
 definitionally the same as MPO ZCL. -/
 theorem isRFP_iff_isZCL (M : MPOTensor d D) : IsRFP M ↔ IsZCL M :=
   Iff.rfl
 
-/-- The provisional mixed-state RFP condition implies MPO ZCL. -/
+/-- The current mixed-state RFP condition implies MPO ZCL. -/
 theorem IsRFP.isZCL {M : MPOTensor d D} (h : IsRFP M) : IsZCL M :=
   h
 
-/-- The provisional mixed-state RFP condition is equivalent to the pure-state
+/-- The current mixed-state RFP condition is equivalent to the pure-state
 RFP condition for the doubled-index MPS tensor. -/
 theorem isRFP_iff_toMPSTensor_isRFP (M : MPOTensor d D) :
     IsRFP M ↔ MPSTensor.IsRFP (M.toMPSTensor) := by

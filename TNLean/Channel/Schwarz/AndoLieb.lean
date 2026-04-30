@@ -36,7 +36,7 @@ convexity/concavity consequences for matrix power functions.
   for downstream use.
 * `lieb_concavity` is still derived from `lieb_concavity_axiom` in
   `TNLean.Axioms.OperatorConvexity`, pending the integral-representation
-  infrastructure in Mathlib.
+  formalization in Mathlib.
 * The three downstream corollaries (`lieb_concavity_id`,
   `lieb_concavity_in_fst`, `lieb_concavity_in_snd`) are specializations of
   `lieb_concavity` and add no new axioms.

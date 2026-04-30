@@ -27,7 +27,7 @@ on-site symmetric under `U`, then for each `g` there exists an invertible matrix
 `∑_j U(g)_{ij} A^j = φ(g) • X * A^i * X⁻¹`.
 
 In the single-block (injective) case `φ = 1`, but we include the phase to
-match the general form expected by downstream projective-representation
+match the general form expected by subsequent projective-representation
 arguments (arXiv:0802.0447 Condition C1, issue #76). -/
 theorem virtual_symmetry_eq
     (A : MPSTensor d D) (U : G →* Matrix (Fin d) (Fin d) ℂ)

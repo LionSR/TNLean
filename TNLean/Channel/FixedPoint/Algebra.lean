@@ -271,7 +271,7 @@ theorem fixedPoints_in_multiplicativeDomain
     (by simpa [adjointMap, map] using hρ_fix)
     (by simpa [fixedPoints, adjointFixedPoints, map, adjointMap] using hX)
 
-/-- **Wolf Thm 6.12** packaged as a `*`-subalgebra, with the prompt's naming
+/-- **Wolf Thm 6.12** stated as a `*`-subalgebra, with the prompt's naming
 convention. -/
 noncomputable def fixedPoints_starSubalgebra
     (K : Fin d → Mat) (h_tp : IsTP K)

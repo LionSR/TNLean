@@ -14,7 +14,7 @@ decorrelation–commuting-parent-Hamiltonian equivalence: a commuting parent
 Hamiltonian implies decorrelation when observables respect locality.
 
 This is the backward direction of Proposition D.3 from arXiv:1606.00608,
-Appendix D, §D.2. The forward direction requires tensor-product infrastructure
+Appendix D, §D.2. The forward direction requires tensor-product formulation
 and is deferred.
 
 ## Main definitions
@@ -125,7 +125,7 @@ Formally: `[Q_AX, Q_XB] = 0` where `Q = 1 - P`, and
 Note: this definition only requires idempotence and commutativity, not
 orthogonality / self-adjointness. Locality (that `P_AX` acts on the AX
 tensor factor and `P_XB` on XB) is not enforced in this abstract setting;
-it will be added once tensor-product Hilbert space infrastructure is
+it will be added once tensor-product Hilbert space formulation is
 available. In particular, the trivial witness `P_AX = P_XB = P_K` always
 satisfies this predicate for any idempotent `P_K`; non-trivial content
 arises only when combined with locality constraints (see
@@ -235,7 +235,7 @@ theorem commutingHam_isDecorrelated
   -- Step 3: Apply key cancellation (P_XB kills the middle)
   rw [key_pw, map_zero, map_zero]
 
-/-- Convenience wrapper that consumes `HasCommutingParentHam` directly.
+/-- Convenience form that accepts `HasCommutingParentHam` directly.
 
 The witnessing projectors `P_AX`, `P_XB` are extracted from the structure
 fields. See `commutingHam_isDecorrelated` for the version with explicit

@@ -7,9 +7,9 @@ import TNLean.Channel.Semigroup.Basic
 import Mathlib.Analysis.SpecificLimits.Normed
 
 /-!
-# Preliminary analytic helpers for Lie--Trotter arguments
+# Preliminary analytic auxiliary lemmas for Lie--Trotter arguments
 
-This file records the basic operator-norm estimates and algebraic identities
+This file states the basic operator-norm estimates and algebraic identities
 needed for finite-dimensional product-formula arguments on `End(M_D(ℂ))`.
 
 ## Main results

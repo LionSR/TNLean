@@ -9,7 +9,7 @@ import TNLean.MPS.FundamentalTheorem.Full.BlocksMatch
 
 This module contains **Theorem 5**: the self-contained equal-case fundamental theorem for
 heterogeneous `IsCanonicalFormBNT` families. It is the entry point that exposes the
-machinery developed in three supporting sub-modules and provides the public theorem
+constructions developed in three supporting sub-modules and provides the public theorem
 `fundamentalTheorem_equalMPV_CFBNT_hetero`.
 
 For Theorems 1–4 (equal-MPV FT, proportional-MPV FT, equal ⟹ proportional, power-sum

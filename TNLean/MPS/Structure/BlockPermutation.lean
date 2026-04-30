@@ -9,7 +9,8 @@ import Mathlib.LinearAlgebra.Matrix.Reindex
 /-!
 # Decomposition of algebra automorphisms of products of matrix algebras
 
-This file connects `BlockPermutation.lean` with the MPS gauge-equivalence machinery.
+This file connects the algebra-level decomposition results from
+`TNLean.Algebra.BlockPermutation` with the MPS gauge-equivalence theory.
 
 Given a ℂ-algebra automorphism `T` of `∏_i M_{D_i}(ℂ)`, we decompose it as:
 1. A block permutation `σ : ι ≃ ι`
@@ -18,7 +19,7 @@ Given a ℂ-algebra automorphism `T` of `∏_i M_{D_i}(ℂ)`, we decompose it as
 
 Technical note on the two-level algebraic structure:
 
-* the block-ideal permutation step and the raw `componentMap` identities are proved first at the
+* the block-ideal permutation step and the direct `componentMap` identities are proved first at the
   `RingEquiv` level, since they use only ideal transport and multiplicative structure;
 * the dimension-preservation step and the final Skolem–Noether decomposition require ℂ-linearity,
   so they are stated for `AlgEquiv`s.

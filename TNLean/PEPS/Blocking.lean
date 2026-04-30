@@ -5,7 +5,7 @@ import Mathlib.Logic.Equiv.Prod
 /-!
 # Edge-centered decompositions for PEPS local data
 
-This file records two elementary decompositions that recur in the PEPS
+This file provides two elementary decompositions that recur in the PEPS
 Fundamental-Theorem argument.
 
 First, if one incident edge at a vertex is singled out, then local virtual

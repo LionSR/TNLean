@@ -1,3 +1,12 @@
+<!--
+PR title format: type(scope): short mathematical description
+Types: feat, fix, refactor, doc, style, ci, chore.
+Examples:
+- feat(MPS/CanonicalForm): assemble cyclic sectors at a common blocking length
+- doc(Wolf Ch6): add Lean tags for spectral theorems
+- style(MPS/CanonicalForm): rewrite equal-case prose in MPS language
+-->
+
 ### Motivation
 <!-- PR title convention: `type(scope): short mathematical description`. -->
 <!-- Example: `feat(MPS/CanonicalForm): assemble cyclic sectors at a common blocking length`. -->

@@ -7,7 +7,7 @@ import TNLean.MPS.MPDO.CommutingForm
 /-!
 # Local-to-global commuting-form data
 
-This file records the exact post-extraction output still needed from the
+This file states the exact post-extraction output still needed from the
 simple-MPDO SAL + ZCL analysis of arXiv:1606.00608 Appendix C.2 in order to
 conclude `MPOTensor.HasCommutingForm`.
 
@@ -19,11 +19,11 @@ The current repository already exposes the local entropy-side ingredients
 
 but the extraction of the explicit neighboring operators `η_{k,h}` from the
 Hayashi Markov decomposition is still open. We therefore introduce the exact
-local-to-global datum that the future extraction theorem should produce: a
+local-to-global witness that the future extraction theorem should produce: a
 single translation-invariant positive two-site bond whose translated copies
 commute on all periodic chains and realize the MPO on every finite length.
 
-This is the strongest unconditional forward step currently justified on `main`.
+This is the strongest unconditional forward step currently available.
 Once the explicit `η_{k,h}` operators are available, the intended future
 Proposition C.6 proof should first construct `EtaLocalStructureData M`; the
 existing theorem `hasCommutingForm_of_etaLocalStructure` will then discharge the
@@ -98,7 +98,7 @@ end TranslationInvariantBondData
 /-- The explicit `η`-local structure needed for Appendix C.2 once the abstract
 Hayashi decomposition has been converted into concrete neighboring operators.
 
-Concretely, this record stores the single translation-invariant bond extracted
+Concretely, this structure stores the single translation-invariant bond extracted
 from the local simple-MPDO analysis, together with proofs that it realizes the
 finite-chain MPO operators. This is stronger than `HasCommutingForm M`, since
 it requires one bond that works for every chain length rather than a separate

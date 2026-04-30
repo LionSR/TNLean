@@ -8,7 +8,7 @@ import Mathlib.LinearAlgebra.Matrix.ToLin
 /-!
 # Douglas factorization: range inclusion implies right factorization
 
-This file records the easy algebraic half of Wolf's Douglas theorem in the
+This file states the easy algebraic half of Wolf's Douglas theorem in the
 finite-dimensional matrix setting: if the range of `A` is contained in the range
 of `B`, then `A = B * C` for some matrix `C`.
 

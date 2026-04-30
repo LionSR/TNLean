@@ -6,10 +6,10 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import Mathlib.Topology.Separation.Hausdorff
 
 /-!
-# Small helpers about `Filter.Tendsto`
+# Uniqueness of limits for `Filter.Tendsto`
 
-This file contains a uniqueness-of-limits helper for later compactness and
-convergence arguments. The theorem `Filter.Tendsto.ne_nhds` records the
+This file contains the uniqueness-of-limits theorem used in later compactness and
+convergence arguments. The theorem `Filter.Tendsto.ne_nhds` states the
 standard T2-space fact that a nontrivial filter cannot tend simultaneously to
 two distinct points.
 -/

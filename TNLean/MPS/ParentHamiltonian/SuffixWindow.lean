@@ -11,7 +11,7 @@ import Mathlib.Data.Fin.Tuple.Basic
 # Suffix-window restrictions for parent-Hamiltonian ground spaces
 
 This file introduces restriction maps obtained by fixing a prefix and reading the
-last `L` sites of a state on `K + L` sites. It records the resulting matrix
+last `L` sites of a state on `K + L` sites. It states the resulting matrix
 identities needed for the open-chain range-reduction argument in
 [CPGSV21, §IV.C].
 

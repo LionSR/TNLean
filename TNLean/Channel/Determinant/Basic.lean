@@ -12,11 +12,11 @@ import Mathlib.LinearAlgebra.Matrix.Trace
 import Mathlib.LinearAlgebra.UnitaryGroup
 
 /-!
-# Determinant API and unitary channels
+# Determinant interface and unitary channels
 
 This file contains the foundational definitions for the determinant of a quantum
 channel acting on $M_d(\mathbb{C})$, together with the basic unitary-channel
-API used in Wolf's determinant-rigidity argument.
+interface used in Wolf's determinant-rigidity argument.
 
 ## Main definitions
 
@@ -25,7 +25,7 @@ API used in Wolf's determinant-rigidity argument.
   ambient matrix algebra and its endomorphisms.
 * `ChannelDeterminant.Internal.MatrixBasisIndex`,
   `ChannelDeterminant.Internal.matrixSpaceBasis` — shared internal linear-algebra
-  scaffolding for the standard matrix basis.
+  framework for the standard matrix basis.
 * `channelMatrix`, `channelDet` — the matrix representation of a channel and its
   determinant.
 * `unitaryChannel` — conjugation by a unitary matrix.

@@ -6,7 +6,7 @@ import Mathlib.Analysis.SpecificLimits.Normed
 import Mathlib.Analysis.Complex.Basic
 
 /-!
-# General-purpose convergence helpers
+# Convergence lemmas for complex sequences
 
 Convergence lemmas for complex sequences, geometric series, and weighted sums.
 These are used in the fundamental theorem proof chain but are fully general.

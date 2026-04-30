@@ -37,7 +37,7 @@ the *definition* of complete positivity. This file shows this is equivalent
 to positivity of the Choi matrix, via an explicit eigendecomposition.
 
 For square maps `T : M_D(ℂ) → M_D(ℂ)`, we work with bipartite matrices
-indexed by `Fin D × Fin D`, matching the infrastructure in
+indexed by `Fin D × Fin D`, matching the formalization in
 `PartialTrace.lean`, `MaximallyEntangled.lean`, and `TensorMap.lean`.
 
 ## References
@@ -143,7 +143,7 @@ theorem projectedChoiMatrix_sub
     projectedChoiMatrix (T - S) = projectedChoiMatrix T - projectedChoiMatrix S := by
   rw [sub_eq_add_neg, projectedChoiMatrix_add, projectedChoiMatrix_neg, sub_eq_add_neg]
 
-/-! ### Private helper lemmas -/
+/-! ### Private auxiliary lemmas -/
 
 /-- The `(i₂, j₂)`-slice of `|Ω⟩⟨Ω|` equals a scalar multiple of the matrix unit
 `|i₂⟩⟨j₂|`. Specifically:

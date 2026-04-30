@@ -196,7 +196,7 @@ theorem exists_cumulativeSpan_eq_top_of_algSpan_eq_top (A : MPSTensor d D)
 /-! ## Part 2: Invariant submodule characterization -/
 
 
-/-- Helper: if `(1 - P) * M * P = 0`, then `M * P = P * (M * P)`. -/
+/-- If `(1 - P) * M * P = 0`, then `M * P = P * (M * P)`. -/
 private theorem mul_proj_eq {P M : Matrix (Fin D) (Fin D) ℂ}
     (hinv : (1 - P) * M * P = 0) :
     M * P = P * (M * P) := by

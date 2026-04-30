@@ -12,7 +12,7 @@ open scoped Matrix BigOperators ComplexOrder MatrixOrder
 This file contains the after-blocking sector-comparison consequences that use a BNT
 proportional-decomposition comparison of the nonzero-weight block families.  They are separated
 from `StructuralTheorem` so the structural reduction file remains focused on common blocking and
-zero-tail bookkeeping.
+zero-tail identities.
 
 ## Main statements
 
@@ -20,7 +20,7 @@ zero-tail bookkeeping.
   nonzero part decompositions plus BNT proportional-decomposition data imply the sector-weight
   comparison.
 * `afterBlocking_sectorComparison_zeroTail_of_proportionalDecompositionConclusion` —
-  the same comparison with explicit zero-tail bookkeeping.
+  the same comparison with explicit zero-tail identities.
 
 ## References
 

@@ -32,7 +32,7 @@ See arXiv:1606.00608, Definition 3.2. -/
 def IsRFP (A : MPSTensor d D) : Prop :=
   transferMap A ∘ₗ transferMap A = transferMap A
 
-/-- The idempotence equation packaged as a projection lemma. -/
+/-- The idempotence equation expressed as a projection lemma. -/
 theorem IsRFP.idempotent {A : MPSTensor d D} (h : IsRFP A) :
     transferMap A ∘ₗ transferMap A = transferMap A :=
   h
@@ -146,7 +146,7 @@ theorem isRFP_iff_kraus_isometry (A : MPSTensor d D) :
     rintro ⟨V, hV, hprod⟩
     exact isRFP_of_kraus_isometry A V hV hprod
 
-/-- Backwards-compatible name for `isRFP_iff_kraus_isometry`. -/
+/-- Equivalent formulation of `isRFP_iff_kraus_isometry` using the shorter historical name. -/
 theorem isRFP_iff_kraus (A : MPSTensor d D) :
     IsRFP A ↔
       ∃ V : Matrix (Fin d × Fin d) (Fin d) ℂ,

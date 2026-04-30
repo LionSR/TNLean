@@ -11,8 +11,8 @@ import Mathlib.RingTheory.Noetherian.Defs
 /-!
 # Finite-length sufficient conditions and obstructions for MPDO biCF
 
-The `HorizontalCFData` structure in `VerticalCF.lean` records the block-injective
-canonical-form property `biCF` as a hypothesis. This file records six complementary
+The `HorizontalCFData` structure in `VerticalCF.lean` states the block-injective
+canonical-form property `biCF` as a hypothesis. This file states six complementary
 facts about that field.
 
 1. A clean **abstract sufficient condition**: if, after blocking to some fixed
@@ -752,7 +752,7 @@ theorem pair_mul_mem_span_pairWordTuple_add {D₁ D₂ : ℕ}
 is available at every padding length needed to reach the target length.
 
 The padding hypothesis is the Burnside-Jacobson input deferred to a later step. -/
-theorem pairWordTupleSpanTop_of_pairCumulativeWordTupleSpanTop_of_identityPadding
+theorem pairWordTupleSpanTop_of_pairCumulativeWordTupleSpanTop_of_identity_padding
     {D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂) {S T : ℕ}
     (hST : S ≤ T)
     (hCum : PairCumulativeWordTupleSpanTop A B S)
@@ -792,8 +792,8 @@ theorem pairWordTupleSpanTop_of_pairCumulativeWordTupleSpanTop_of_identityPaddin
   simpa [hprod] using hmul
 
 /-- Trace-separation version of
-`pairWordTupleSpanTop_of_pairCumulativeWordTupleSpanTop_of_identityPadding`. -/
-theorem pairTraceSeparatingAt_of_pairTraceSeparatingUpTo_of_identityPadding
+`pairWordTupleSpanTop_of_pairCumulativeWordTupleSpanTop_of_identity_padding`. -/
+theorem pairTraceSeparatingAt_of_pairTraceSeparatingUpTo_of_identity_padding
     {D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂) {S T : ℕ}
     (hST : S ≤ T)
     (hSep : PairTraceSeparatingUpTo A B S)
@@ -802,7 +802,7 @@ theorem pairTraceSeparatingAt_of_pairTraceSeparatingUpTo_of_identityPadding
         Submodule.span ℂ (Set.range (pairWordTuple A B (T - l)))) :
     PairTraceSeparatingAt A B T :=
   pairTraceSeparatingAt_of_pairWordTupleSpanTop A B
-    (pairWordTupleSpanTop_of_pairCumulativeWordTupleSpanTop_of_identityPadding
+    (pairWordTupleSpanTop_of_pairCumulativeWordTupleSpanTop_of_identity_padding
       A B hST (pairCumulativeWordTupleSpanTop_of_pairTraceSeparatingUpTo A B hSep) hPad)
 
 /-- Pair product-span at length `S` gives a length-`S` selector for the first

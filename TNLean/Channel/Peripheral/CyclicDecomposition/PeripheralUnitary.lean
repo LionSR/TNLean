@@ -232,7 +232,7 @@ section PeripheralUnitary
 matrix eigenvector.
 
 This is the unitary part of Wolf Theorem 6.6. The formulation is stated for transfer maps of
-Kraus families because the available Kadison--Schwarz / multiplicative-domain API is implemented
+Kraus families because the available Kadison--Schwarz / multiplicative-domain interface is implemented
 at that level. -/
 theorem exists_peripheral_unitary_of_irreducible_schwarz
     {r D : ℕ} [NeZero D]

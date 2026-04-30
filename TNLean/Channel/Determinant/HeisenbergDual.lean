@@ -210,7 +210,7 @@ private theorem heisenberg_dual_basis_commute [NeZero d]
       Matrix.stdBasis ℂ (Fin d) (Fin d) ij * K a =
         K a * Td (Matrix.stdBasis ℂ (Fin d) (Fin d) ij) := by
   -- TODO(refactor/513): thread the shared `L`/`hTd_kraus`/`hL_unital` setup
-  -- through these helpers instead of rebuilding it here and in
+  -- through these auxiliary lemmas instead of rebuilding it here and in
   -- `heisenberg_dual_ks_eq_stdBasis`.
   set L : Fin r → MatrixAlg d := fun i => (K i)ᴴ with hL_def
   have hTd_kraus : ∀ X, Td X = KadisonSchwarz.krausMap L X := by

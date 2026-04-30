@@ -91,7 +91,11 @@ Detailed conventions live in `docs/`. Read the relevant file before working in t
 
 ### Quick Reference (from the docs above)
 
-- **PR titles**: `type(scope): description` — types: `feat`, `fix`, `refactor`, `doc`, `style`, `ci`, `chore`; scope is shortened module path without `TNLean/` prefix
+- **PR titles**: `type(scope): description` -- types: `feat`, `fix`, `refactor`,
+  `doc`, `style`, `ci`, `chore`; scope is shortened module path without
+  `TNLean/` prefix
+- **Issue titles**: plain mathematical titles, not `type(scope): ...`; use
+  `Tracking: <area>` for trackers and keep titles bracket-free
 - **Naming**: Definitions `camelCase`, predicates `IsPrefix`, theorems `snake_case`, files `CamelCase.lean`
 - **Proof integrity blockers**: `sorry`, `admit`, `native_decide`, `unsafeCast`, `axiom`, circular reasoning
 - **Blueprint prose**: Pure mathematics only — no Lean identifiers in text, no software jargon (see banned terms list in blueprint style guide)

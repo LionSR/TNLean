@@ -111,7 +111,7 @@ noncomputable def chainGroundSpace (A : MPSTensor d D) (L N : ℕ) :
 The proof uses trace cyclicity: for each cyclic window at position `i`, the
 restriction of the MPV to that window equals `groundSpaceMap A L X_τ` where
 `X_τ` is the product of `A`-matrices at outside positions. The cyclic list
-bookkeeping follows from the window-level membership calculation. -/
+verification follows from the window-level membership calculation. -/
 theorem mpv_mem_chainGroundSpace (A : MPSTensor d D) (L N : ℕ)
     (hN : 0 < N) (hLN : L ≤ N) :
     (mpv A : NSiteSpace d N) ∈ chainGroundSpace A L N := by
@@ -206,7 +206,7 @@ theorem hasUniqueGroundState_iff_proportional {V : Type*} [AddCommGroup V] [Modu
       obtain ⟨c, hc⟩ := hgen ψ
       exact ⟨c, hc.symm⟩
 
-/-! ### Helper: MPV nonvanishing for block-injective tensors -/
+/-! ### MPV nonvanishing for block-injective tensors -/
 
 /-- If all products of some positive length `k` are zero and `A` is `L₀`-block-injective
 with `L₀ > 0`, we reach a contradiction.
@@ -423,7 +423,7 @@ theorem chainGroundSpace_le_groundSpace_of_isNBlkInjective
     (show (⟨s, by omega⟩ : Fin N).val + (L₀ + 1) ≤ N from hs)]
   exact hψred ⟨s, by omega⟩ τ
 
-/-! ### Helper: vanishing on all word products implies zero -/
+/-! ### Vanishing on all word products implies zero -/
 
 /-- If `X` has the property that `tr(evalWord A w * X) = 0` for all words of
 length `k` (with `k ≥ 1` and `A` injective), then `X = 0`. -/

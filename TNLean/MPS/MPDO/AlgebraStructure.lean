@@ -14,7 +14,7 @@ import TNLean.MPS.MPDO.FusionIsometries
 /-!
 # Algebra-structure witnesses for MPDO renormalization fixed points
 
-This file upgrades the old scaffold for the algebra-structure side of
+This file replaces the earlier construction for the algebra-structure side of
 arXiv:1606.00608, §4.5.
 
 The paper's full statement uses coefficient systems
@@ -25,7 +25,7 @@ formalize is the stationary C$^*$-algebra structure naturally attached to an MPO
 whose blocked transfer maps are idempotent, together with a first explicit
 coordinate layer obtained by choosing bases of the blocked support algebras.
 
-More precisely, `AlgebraStructureData` now records a genuine tower of support
+More precisely, `AlgebraStructureData` now contains a genuine tower of support
 `StarSubalgebra`s together with multiplication and inclusion maps realized by the
 ambient matrix product and the ambient inclusion. Compatibility with an MPO
 tensor `M` means that, for every positive blocked size `n`, the carrier `A n`
@@ -49,7 +49,7 @@ with the blocking length.
 
 On top of the blocked-coefficient layer, this file now formalizes the target
 shape of Theorem IV.13(ii): the special diagonal matrices
-$\chi_{\alpha,\beta,\gamma}$ are packaged as a `DiagonalChiFamily`, and the
+$\chi_{\alpha,\beta,\gamma}$ are represented as a `DiagonalChiFamily`, and the
 identity $c_{\alpha,\beta,\gamma}^{(L)} = \operatorname{tr}(\chi_{\alpha,\beta,\gamma}^L)$
 is encoded as the `HasChiTracePowerForm` predicate. The basic trace-power
 identity `tr(χ_{α,β,γ}^L) = \sum_k \chi_{\alpha,\beta,\gamma,k}^L` is proved
@@ -136,7 +136,7 @@ size-`2n` support algebra, while `iota n` is the inclusion into the size-`n+1`
 support algebra. The fields `m_apply` and `iota_apply` require that these maps
 are realized by the ambient matrix product and ambient inclusion.
 
-This structure records only this realization data. It does **not** yet include
+This structure contains only this realization data. It does **not** yet include
 the full §4.5 coherence / coefficient / BNT layer from the paper. -/
 structure AlgebraStructureData (d D : ℕ) where
   /-- Support algebra at blocked size `n`. -/
@@ -259,14 +259,6 @@ An MPO tensor satisfies `IsRFP_MPDO_via_algebra` when it admits algebra-structur
 support data compatible with its blocked adjoint transfer maps. -/
 def IsRFP_MPDO_via_algebra (M : MPOTensor d D) : Prop :=
   ∃ data : AlgebraStructureData d D, data.CompatibleWith M
-
-/-- Backwards-compatible alias for the previous scaffold name.
-
-The old definition was vacuous. The alias points to the non-vacuous algebra
-predicate above, but that predicate is still weaker than the full paper
-converse: it only records the current support-algebra layer. -/
-@[deprecated (since := "2026-04-24")] alias IsRFP_MPDO_via_algebra_scaffold :=
-  IsRFP_MPDO_via_algebra
 
 /-- A trace-preserving MPO with a positive-definite fixed point admits a
 stationary algebra tower as soon as it is an RFP. -/
@@ -528,7 +520,7 @@ structure coefficients $c_{\alpha,\beta,\gamma}^{(L)}$ of the blocked MPDO
 support algebra have the form
 $c_{\alpha,\beta,\gamma}^{(L)} = \operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{L})$
 for a family of diagonal matrices $\chi_{\alpha,\beta,\gamma}$ with positive
-entries. This subsection packages those diagonal matrices as explicit Lean data
+entries. This subsection represents those diagonal matrices explicitly
 and states the trace-power identity. -/
 
 /-- A family of diagonal matrices `χ_{α,β,γ}` indexed by ordered triples drawn

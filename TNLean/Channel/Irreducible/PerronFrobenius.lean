@@ -117,7 +117,7 @@ theorem posSemidef_eigenvector_unique_of_irreducible_cp
   -- Define rescaled Kraus operators: K' i = (1/√r) • K i.
   set c := (Real.sqrt r)⁻¹ with hc_def
   set K' : Fin n → Matrix (Fin D) (Fin D) ℂ := fun i => (↑c : ℂ) • K i
-  -- Helper: star of a real-coerced scalar is itself.
+  -- Auxiliary lemma: star of a real-coerced scalar is itself.
   have hstar_c : star (↑c : ℂ) = (↑c : ℂ) := by
     rw [RCLike.star_def, Complex.conj_ofReal]
   -- Key scalar identity: c * c = r⁻¹ in ℂ.
