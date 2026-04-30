@@ -123,7 +123,7 @@ A normal renormalization fixed-point tensor has a nearest-neighbor
 commuting parent Hamiltonian.
 
 Per arXiv:1606.00608 §3.3 (source line 1307), this direction is
-*"trivial from Theorem [charact-MPS]"*; it is therefore **not** gated
+*"trivial from Theorem [charact-MPS]"*; it therefore does not depend
 on S. Beigi (2012). It is conditioned only on the product-of-entangled-pairs
 structural form (Appendix B), stated here as
 `Axioms.rfp_to_nncph_commute`. -/

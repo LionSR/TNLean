@@ -57,7 +57,7 @@ def purifyingMPSTensor {dK D' : ℕ}
     purifyingMPSTensor A ik = A ik.divNat ik.modNat :=
   rfl
 
-/-- Repackaging `IsLPDO` in terms of `IsLPDOWitness`. -/
+/-- The LPDO condition expressed in terms of `IsLPDOWitness`. -/
 theorem isLPDO_iff_exists_witness (M : MPOTensor d D) :
     IsLPDO M ↔
       ∃ (dK D' : ℕ) (A : Fin d → Fin dK → Matrix (Fin D') (Fin D') ℂ)
