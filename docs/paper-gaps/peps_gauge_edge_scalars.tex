@@ -16,8 +16,8 @@
 
 \section{The assertion}
 
-This note concerns the uniqueness clause in the Fundamental Theorem for
-injective PEPS on a simple graph in \cite[Theorem~2 and Section~3]{Molnar2018NormalPEPS}.
+The uniqueness clause in the Fundamental Theorem for injective PEPS on a simple
+graph appears in \cite[Theorem~2 and Section~3]{Molnar2018NormalPEPS}.
 The argument first blocks the graph around a chosen edge to a three-site
 injective MPS. The one-dimensional fundamental theorem then assigns a gauge to
 that edge. Repeating this construction over all edges gives a family of edge
@@ -72,7 +72,7 @@ vertex $v$ by the factors $c_{v,e}$ multiplies the gauged local tensor at $v$ by
 $\prod_{e\ni v} c_{v,e}$. If the scalar family is vertex-balanced, this product
 is $1$ at every vertex, so all local gauged tensors are unchanged. Thus local
 gauge uniqueness can at best be uniqueness modulo these balanced edge scalars.
-The formal theorem uses this quotient as the corrected uniqueness target.\footnote{The formal definitions are
+The formal statement uses this quotient as the corrected uniqueness statement.\footnote{The formal definitions are
 \texttt{TNLean.PEPS.edgeScalarAt}, \texttt{TNLean.PEPS.IsVertexBalanced}, and
 \texttt{TNLean.PEPS.GaugeEquivModEdgeScalars} in
 \path{TNLean/PEPS/FundamentalTheorem.lean:603--625}. The corresponding
@@ -118,23 +118,23 @@ balanced edge-scalar family but not by one global scalar. Consequently the
 source phrase must either be read with this quotient understood, or corrected to
 say uniqueness modulo balanced edge scalars.
 
-The corrected quotient has not yet been fully proved.
-The theorem named \texttt{TNLean.PEPS.gauge\_unique\_mod\_edge\_scalars} states
-the repaired uniqueness result, but its proof still has a remaining tensor-factor
+The corrected quotient has not yet been fully proved. The repaired uniqueness
+result is stated formally, but its proof still has a remaining tensor-factor
 scalar-ratio and global-reconciliation step. The formal proof has reduced the
 problem to equality of products of incident edge-gauge entries at each vertex;
 what remains is to extract nonzero scalar ratios on the incident edges with
 product $1$ at the vertex, and then reconcile these local choices into a single
-global vertex-balanced edge-scalar family.\footnote{The declaration and
-remaining proof obligation are at
-\path{TNLean/PEPS/FundamentalTheorem.lean:686--730}. For traceability, the
-this point is recorded in \href{https://github.com/LionSR/TNLean/issues/842}{issue \#842};
-\href{https://github.com/LionSR/TNLean/pull/879}{PR \#879} reduced the formal statement
-to the scalar-ratio and global-reconciliation step.}
+global vertex-balanced edge-scalar family.\footnote{For traceability, the
+declaration is \texttt{TNLean.PEPS.gauge\_unique\_mod\_edge\_scalars}, and the
+remaining proof obligation is at
+\path{TNLean/PEPS/FundamentalTheorem.lean:686--730}. This point is recorded in
+\href{https://github.com/LionSR/TNLean/issues/842}{issue \#842};
+\href{https://github.com/LionSR/TNLean/pull/879}{PR \#879} reduced the formal
+statement to the scalar-ratio and global-reconciliation step.}
 
-Thus the present note records the corrected mathematical statement and the
-counterexample to the smaller quotient. It does not claim that the repaired
-uniqueness theorem has already been fully proved.
+Thus the corrected mathematical statement is uniqueness modulo balanced edge
+scalars, and the triangle example refutes the smaller quotient. The repaired
+uniqueness theorem remains a stated formal result rather than a completed proof.
 
 \bibliographystyle{alpha}
 \bibliography{references}
