@@ -31,13 +31,13 @@ blocking $L_0$ consecutive sites, the resulting tensor is injective. The source
 first proves an intersection step for two overlapping local Hamiltonian terms of
 range $L_0+1$. These terms act on sites $1,\ldots,L_0+1$ and
 $2,\ldots,L_0+2$. In the source's diagrammatic notation, the proof names
-the first site $A$, the middle region $B$ consisting of sites
-$2,\ldots,L_0+1$, and the last site $C$; the tensor associated to $B$ is
+the first site $A_{\mathrm{left}}$, the middle region $B$ consisting of sites
+$2,\ldots,L_0+1$, and the last site $C_{\mathrm{right}}$; the tensor associated to $B$ is
 injective. For a state in the intersection
 \[
   \mathcal G_{1,\ldots,L_0+1}\cap \mathcal G_{2,\ldots,L_0+2},
 \]
-the argument inverts the first tensor $A$, restores the middle region $B$, and
+the argument inverts the left boundary tensor $A_{\mathrm{left}}$, restores the middle region $B$, and
 then uses injectivity of the enlarged region to invert the joint region. It
 concludes that every vector in the intersection already lies in
 $\mathcal G_{1,\ldots,L_0+2}$; the reverse inclusion is immediate.
@@ -129,8 +129,7 @@ while the mirror wrapped window gives
 \[
   X A_j C^-_{\tau} = A_j Y^-_{\tau}.
 \]
-Here $C^+_{\tau}$ and $C^-_{\tau}$ are products over complementary words exposed
-by the two different wrapped windows. The two formulas are both valid, but their
+Here $\tau$ denotes the data of the complementary boundary word exposed by a wrapped window; equivalently, it records the physical labels outside the open middle interval. The matrices $C^+_{\tau}$ and $C^-_{\tau}$ are the corresponding word products for the two orientations of the wrapped window. The two formulas are both valid, but their
 complement words and their witnesses are produced with different indexings.
 \footnote{Formal locations:
 \path{TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean}:522--534 for
