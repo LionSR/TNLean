@@ -1,0 +1,145 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+
+\input{command}
+
+\title{Finite-Length Block Separation in CPGSV17 Proposition IV.3}
+\author{}
+\date{2026-04-30}
+
+\begin{document}
+\maketitle
+
+\section{The assertion}
+
+This note concerns the finite-length block-separation step in Proposition IV.3
+of Cirac, P\'erez-Garc\'ia, Schuch, and Verstraete
+\cite{Cirac2016MPDO_arXiv,Cirac2017MPDO_AnnPhys}.\footnote{For traceability,
+this note corresponds to \href{https://github.com/LionSR/TNLean/issues/1043}{issue \#1043}.
+Related formal work is recorded in
+\href{https://github.com/LionSR/TNLean/issues/587}{issue \#587} and
+\href{https://github.com/LionSR/TNLean/issues/822}{issue \#822}; earlier proof attempts are
+\href{https://github.com/LionSR/TNLean/pull/682}{PR \#682} and
+\href{https://github.com/LionSR/TNLean/pull/813}{PR \#813}.}
+
+Let $A$ be a tensor in canonical form, and let
+$A_1,\ldots,A_g$ be a basis of normal tensors for $A$. The paper characterizes
+such a basis by minimality: no two chosen normal tensors may be related by an
+invertible similarity together with a phase. It then defines block-injective
+canonical form as the statement that, after passing to these blocks, simultaneous
+word evaluations span the whole product algebra
+\[
+  \bigoplus_{j=1}^g M_{D_j}(\mathbb C).
+\]
+Equivalently, for every block tuple $X=(X_j)_j$ there should be a linear
+combination of common physical words whose evaluation on block $j$ gives $X_j$
+for every $j$.
+
+The source first invokes the quantum Wielandt theorem: after at most $D^4$
+blockings, each normal tensor becomes injective. It then cites David2006 for the
+cross-block step: if $L$ is a blocking length after which every normal block is
+injective, then after $3(L+1)(D-1)$ blockings the tensor is block
+injective. The proposition records the resulting bound as follows:
+\[
+  \text{after blocking at most } 3D^5 \text{ spins, every tensor in canonical
+  form is in block-injective canonical form.}
+  \tag{CPGSV17, Prop. IV.3}
+\]
+Here $D$ is the bond-dimension parameter used in the paper.
+The local source is
+\path{Papers/1606.00608/MPDO-22-12-17-2.tex}, lines 271--345. The standalone
+bibliography for these notes does not contain a key for David2006; the citation
+is therefore recorded here in the form in which it appears in the paper.
+
+\section{The formal replacement}
+
+The formal treatment does not yet derive this proposition from the
+canonical-form and basis-of-normal-tensors hypotheses. Instead, it makes the
+finite-length conclusion explicit. The horizontal canonical-form data contain,
+as a field, the following trace-separation property: there is a length $N$ such
+that, if matrices $\Delta_j\in M_{D_j}(\mathbb C)$ satisfy
+\[
+  \sum_{j=1}^g \operatorname{tr}(\Delta_j A_j^w)=0
+  \qquad\text{for every word } w \text{ of length } N,
+\]
+then $\Delta_j=0$ for every $j$. By nondegeneracy of the trace pairing on the
+product algebra, this is the dual form of the finite-length spanning property
+above.
+
+Several exact sufficient hypotheses have been proved. The first is the
+finite-length product-algebra span itself: the tuples
+\[
+  w \longmapsto (A_1^w,\ldots,A_g^w)
+\]
+span $\bigoplus_j M_{D_j}(\mathbb C)$ for one common length. The second is an
+entrywise linear-independence criterion: the scalar functions
+$w\mapsto (A_j^w)_{\alpha\beta}$, indexed by the block and by a matrix entry in
+that block, are linearly independent at one common length. This implies the
+product-algebra span, hence the trace-separation property. The third is a
+selector-word formulation of Proposition IV.3: after a common blocking length
+each block is injective, and after a further finite length there are word
+polynomials which are the identity on one chosen block and vanish on all the
+others. Concatenating an injective prefix with such a selector suffix gives the
+full product-algebra span.
+
+In the formal files these three criteria are named
+\texttt{WordTupleSpanTop}, \texttt{wordEntryFamily}, and
+\texttt{PropBlockInjective}. The field corresponding to the trace-separation
+conclusion is \texttt{HorizontalCFData.biCF}, and the constructors from the three
+finite-length hypotheses to horizontal canonical-form data are in
+\path{TNLean/MPS/MPDO/BiCFDerivation.lean}.  In particular, the relevant
+formal implications include \texttt{hasBiCF\_of\_wordTupleSpanTop},
+\texttt{hasBiCF\_of\_wordEntryFamily\_linearIndependent},
+\texttt{hasBiCF\_of\_propBlockInjective}, and the corresponding
+\texttt{HorizontalCFData} constructors such as
+\texttt{horizontalCFData\_of\_propBlockInjective}.  The blueprint records the
+same state in \path{blueprint/src/chapter/ch02b_mpdo.tex}, lines 708--787.
+Thus Proposition IV.3 has not been asserted without proof. The formal statements
+prove that several finite-length witnesses are sufficient, while the derivation
+of such a witness from the full canonical-form and BNT hypotheses remains open.
+
+\section{The counterexample boundary}
+
+A tempting shortcut is false. One cannot recover the finite-length biCF witness
+from blockwise injectivity, left-canonicality, and nonzero weights alone. Take
+two one-dimensional scalar blocks over a one-letter alphabet, with both block
+tensors equal to $1$ and with weights $1$ and $2$. Each block is injective and
+left-canonical, and the weights are nonzero and distinct. However every word
+evaluation is the same on the two blocks. The tuple span is the diagonal line in
+$\mathbb C\oplus\mathbb C$, not the whole product algebra. Equivalently,
+choosing $\Delta_1=1$ and $\Delta_2=-1$ makes the trace pairing vanish on every
+word while the tuple $(\Delta_1,\Delta_2)$ is nonzero.
+
+This example is formalized in
+\path{TNLean/MPS/MPDO/BiCFDerivation.lean}, lines 1363--1463, and is recorded in
+\path{docs/counterexamples.md}, lines 29--35. It shows that the extra
+finite-length witness included in the formal hypotheses is genuinely
+stronger than the other horizontal canonical-form fields. It does not refute
+CPGSV17 Proposition IV.3. The duplicate scalar blocks are related by similarity
+and phase, and therefore do not form a minimal basis of normal tensors in the
+sense of the source characterization.
+
+\section{Conclusion}
+
+The present status is provisional and should not be read as a source erratum.
+The formal statements replace the paper's finite-length block-separation theorem
+by explicit finite-length span, linear-independence, or selector hypotheses. A
+small counterexample shows that those hypotheses cannot be derived from the
+weaker fields alone. The full source theorem remains plausible under the actual
+canonical-form and minimal BNT hypotheses.
+
+What remains to be formalized is the David2006/CPGSV17 finite-length
+block-separation argument: from minimality of the BNT blocks, together with
+single-block injectivity after Wielandt blocking, one must produce a common
+finite selector or entrywise linear-independence witness, with the paper's bound
+$3(L+1)(D-1)$ and hence the stated $3D^5$ corollary. Until that argument is
+available, formal uses of biCF should keep the finite-length witness as an
+explicit hypothesis or field.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
