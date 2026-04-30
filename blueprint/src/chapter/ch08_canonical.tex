@@ -1684,6 +1684,7 @@ The following results separate the zero blocks from the nonzero blocks.
 		MPSTensor.CommonBlockedCyclicSectorFamily.commonSectorBlock,
 		MPSTensor.CommonBlockedCyclicSectorFamily.commonFlatDim,
 		MPSTensor.CommonBlockedCyclicSectorFamily.commonFlatBlocks,
+		MPSTensor.CommonBlockedCyclicSectorFamily.commonFlatBlocksAt,
 		MPSTensor.CommonBlockedCyclicSectorFamily.commonSectorTensor,
 		MPSTensor.CommonBlockedCyclicSectorFamily.commonReindexedBlock,
 		MPSTensor.CommonBlockedCyclicSectorFamily.commonFlatWeight}
@@ -1692,9 +1693,11 @@ The following results separate the zero blocks from the nonzero blocks.
 		def:tensor_from_blocks, thm:iterated_blocking_samempv_reindex}
 	From a common reblocked cyclic-sector family, one may derive sector tensors at
 	the common alphabet directly from the original per-block sector tensors.  The
-	reindexed block data keep the reindexing of blocked physical words explicit: for
-	the block $B_k$, it uses $B_k^{[m_k e_k]}$ with the labels obtained by flattening
-	an iterated $(m_k,e_k)$ block.
+	same flattened common-sector family is also provided at a prescribed length
+	$p'$ assuming the family length equals $p'$.  The reindexed block data
+	keep the reindexing of blocked physical words explicit: for the block $B_k$, it
+	uses $B_k^{[m_k e_k]}$ with the labels obtained by flattening an iterated
+	$(m_k,e_k)$ block.
 \end{definition}
 
 \begin{theorem}[Derived common-alphabet cyclic sectors retain structural properties]%
