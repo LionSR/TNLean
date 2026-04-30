@@ -198,7 +198,7 @@ right eigenvector with `E ρ = r • ρ`, `r > 0`. Then the spectral radius of `
 (as a continuous linear map on matrices) is exactly `r`.
 
 The proof follows Wolf's similarity argument, but uses the already-formalized
-TP-gauge infrastructure:
+TP-gauge formalization:
 1. obtain a positive-definite left eigenvector `σ > 0` for the adjoint map;
 2. use the weighted trace identity to show its eigenvalue also equals `r`;
 3. gauge by `σ^{1/2}` and rescale by `1 / r` to obtain a TP map;

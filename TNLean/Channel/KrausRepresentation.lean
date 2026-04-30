@@ -158,7 +158,7 @@ theorem kraus_same_map_of_unitary_combination
       ∑ l, K' l * X * (K' l)ᴴ := by
   simpa using kraus_same_map_of_isometry_combination K K' U hU hK
 
-/-- Convenience wrapper of `kraus_same_map_of_unitary_combination` with a bundled
+/-- Convenience formulation of `kraus_same_map_of_unitary_combination` with a bundled
 unitary witness. This formulation is intended for use by the future converse direction:
 once a unitary witness is constructed (typically from Choi data), map equality follows
 immediately. -/
@@ -174,7 +174,7 @@ theorem kraus_same_map_of_unitaryGroup_combination
   exact kraus_same_map_of_unitary_combination K K' (U : Matrix (Fin r) (Fin r) ℂ)
     (Matrix.mem_unitaryGroup_iff'.mp U.prop) hK
 
-/-- Existentially packaged sufficient direction for Kraus unitary freedom:
+/-- Existentially formulated sufficient direction for Kraus unitary freedom:
 if a unitary mixing witness exists, the two Kraus families define the same map. -/
 theorem kraus_same_map_of_exists_unitary_combination
     {r : ℕ}

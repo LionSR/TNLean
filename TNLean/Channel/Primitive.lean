@@ -9,7 +9,7 @@ import Mathlib.LinearAlgebra.Matrix.Trace
 /-!
 # Primitive Quantum Channels
 
-This file contains basic infrastructure toward the theory of **primitive** quantum channels
+This file contains basic formalization toward the theory of **primitive** quantum channels
 (Wolf §6.3, Theorem 6.7: equivalent characterizations of primitivity).
 
 We formalize the **rank-one projection** onto a fixed point and the algebraic decomposition

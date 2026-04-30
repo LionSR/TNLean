@@ -7,7 +7,7 @@ import Mathlib.Analysis.Matrix.HermitianFunctionalCalculus
 /-!
 # Trace of the continuous functional calculus on a Hermitian matrix
 
-Small helper lemmas used in the `trace_rpow_*` convexity/concavity proofs: the
+Small auxiliary lemmas used in the `trace_rpow_*` convexity/concavity proofs: the
 trace of `hA.cfc f` equals the sum of `f` over the eigenvalues of `A`.
 
 The proof combines the unitary-diagonal form of `Matrix.IsHermitian.cfc`
