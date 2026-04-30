@@ -409,7 +409,7 @@ theorem cyclicRestrictₗ_apply {N : ℕ} (hN : 0 < N) (L : ℕ)
     cyclicRestrictₗ hN L i τ ψ σ = ψ (cyclicCfg hN L i σ τ) := rfl
 
 /-- Restricting the final site of a cyclic `(L + 1)`-window peels off the site with
-cyclic offset `L` and records its value in the outside configuration. -/
+cyclic offset `L` and stores its value in the outside configuration. -/
 theorem cyclicRestrictₗ_restrictLast {N L : ℕ} (hN : 0 < N)
     (i : Fin N) (τ : Fin N → Fin d) (ψ : NSiteSpace d N) (j : Fin d) :
     restrictLast (cyclicRestrictₗ hN (L + 1) i τ ψ) j =

@@ -90,7 +90,7 @@ A normal left-canonical RFP tensor has the Appendix B structural data by
 that structural witness into product-pair projector data, then the
 nearest-neighbor parent Hamiltonian is commuting on every finite chain.
 
-This theorem does not use `Axioms.rfp_to_nncph_commute`; it records the precise
+This theorem does not use `Axioms.rfp_to_nncph_commute`; it states the precise
 conditional theorem left after the structural form has been internalized. -/
 theorem rfp_implies_nncph_of_appendixBExtraction (A : MPSTensor d D) [NeZero D]
     (hRFP : IsRFP A) (hNT : IsNormal A) (hLeft : IsLeftCanonical A)
@@ -125,7 +125,7 @@ commuting parent Hamiltonian.
 Per arXiv:1606.00608 §3.3 (source line 1307), this direction is
 *"trivial from Theorem [charact-MPS]"*; it is therefore **not** gated
 on S. Beigi (2012). It is conditioned only on the product-of-entangled-pairs
-structural form (Appendix B), recorded here as
+structural form (Appendix B), stated here as
 `Axioms.rfp_to_nncph_commute`. -/
 theorem rfp_implies_nncph (A : MPSTensor d D) [NeZero D]
     (hRFP : IsRFP A) (hNT : IsNormal A)

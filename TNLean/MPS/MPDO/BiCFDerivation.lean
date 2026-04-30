@@ -11,8 +11,8 @@ import Mathlib.RingTheory.Noetherian.Defs
 /-!
 # Finite-length sufficient conditions and obstructions for MPDO biCF
 
-The `HorizontalCFData` structure in `VerticalCF.lean` records the block-injective
-canonical-form property `biCF` as a hypothesis. This file records six complementary
+The `HorizontalCFData` structure in `VerticalCF.lean` states the block-injective
+canonical-form property `biCF` as a hypothesis. This file states six complementary
 facts about that field.
 
 1. A clean **abstract sufficient condition**: if, after blocking to some fixed

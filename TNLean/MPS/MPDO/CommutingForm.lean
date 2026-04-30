@@ -8,7 +8,7 @@ import TNLean.MPS.ParentHamiltonian.Defs
 /-!
 # Commuting-form and GSNNCH data for simple MPDOs
 
-This file records the commuting-form side of the simple MPDO story from
+This file states the commuting-form side of the simple MPDO story from
 arXiv:1606.00608 §4.4 and Appendix C.2.
 
 For an `N`-site operator `ρ`, a commuting-form witness consists of a positive
@@ -17,7 +17,7 @@ copies on the periodic chain pairwise commute and that their product
 reproduces `ρ` up to a positive scalar. This is the projector-limit version of
 the GSNNCH definition, source label `defrhoNComm`. The actual entropy-side derivation
 `SAL ⟹ HasCommutingForm` is not yet formalized here; it is isolated as the
-preceding missing theorem recorded in the accompanying audit for issue #782.
+preceding missing theorem stated in the accompanying audit for issue #782.
 
 ## Main declarations
 
@@ -79,7 +79,7 @@ noncomputable def embedLocalOperator (L N : ℕ) (hLN : L ≤ N) (i : Fin N)
 
 /-- Chain-level commuting-form data for source label `propsimple`.
 
-The current record stores the translation-invariant two-site factor `B` together
+The current structure stores the translation-invariant two-site factor `B` together
 with chain-level commutativity of its translated copies. The intended
 nearest-neighbor support is encoded by `embedLocalOperator`; no separate
 factorization structure is required later. -/
@@ -125,7 +125,7 @@ natural order of `Fin N`. -/
 noncomputable def product (data : CommutingFormData d N) : ChainOperator d N :=
   (List.ofFn fun i : Fin N => data.bondAt i).prod
 
-/-- The commuting-form datum realizes `ρ` when `ρ` equals the commuting product
+/-- The commuting-form witness realizes `ρ` when `ρ` equals the commuting product
 up to a positive real normalization factor. -/
 def Realizes (data : CommutingFormData d N) (ρ : ChainOperator d N) : Prop :=
   ∃ c : ℝ, 0 < c ∧ ρ = (c : ℂ) • data.product
@@ -139,10 +139,10 @@ def HasCommutingForm (M : MPOTensor d D) : Prop :=
   ∀ N : ℕ, 2 ≤ N →
     ∃ data : CommutingFormData d N, data.Realizes (mpo M N)
 
-/-- A GSNNCH witness at chain length `N`: a commuting-form datum together with
+/-- A GSNNCH witness at chain length `N`: a commuting-form witness together with
 its positive normalization constant.
 
-This records source label `defrhoNComm` in the equivalent positive-operator form
+This structures source label `defrhoNComm` in the equivalent positive-operator form
 `ρ⁽ᴺ⁾ = c ∏ᵢ B_{i,i+1}`, where `c > 0` and the translated bond operators
 commute pairwise. The paper's exponential form is recovered by taking
 `B_{i,i+1} = e^{-h_{i,i+1}}` or, more generally, by the projector-limit

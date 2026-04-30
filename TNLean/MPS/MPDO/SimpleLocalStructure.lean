@@ -11,7 +11,7 @@ import Mathlib.Analysis.Matrix.Order
 /-!
 # Simple MPDO local structure
 
-This file records the local entropy-theoretic part of the simple MPDO
+This file states the local entropy-theoretic part of the simple MPDO
 renormalization fixed-point argument from Appendix C.2 of
 arXiv:1606.00608 (Cirac–Pérez-García–Schuch–Verstraete).
 

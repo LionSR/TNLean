@@ -10,7 +10,7 @@ import TNLean.MPS.MPDO.SimpleLocalStructure
 /-!
 # Blocked-RFP construction for simple MPDOs
 
-This file records the current blocked-RFP theorem interface for the simple-MPDO
+This file states the current blocked-RFP theorem interface for the simple-MPDO
 branch of arXiv:1606.00608, Appendix C.2 / Theorem 4.9.
 
 At the present repository state, the local entropy side and the commuting-form
@@ -18,24 +18,24 @@ side live in separate modules:
 
 * `SimpleLocalStructure.lean` isolates the local SAL/SSA and rank-one-`T`
   consequences of Lemmas C.3--C.4.
-* `CommutingForm.lean` records the GSNNCH / commuting-form target side of
+* `CommutingForm.lean` states the GSNNCH / commuting-form target side of
   Proposition C.6 and Theorem 4.9(iii).
 
 What is still missing is the preceding theorem turning the local simple-MPDO data
 into the global commuting-form property. Because of that gap, the present file
-is formulated around the explicit record `SimpleMPDOBlockedRFPData`. The local
-Appendix C.2 data are retained there, together with a provisional compatibility
+is formulated around the explicit structure `SimpleMPDOBlockedRFPData`. The local
+Appendix C.2 hypotheses are retained there, together with a temporary compatibility
 relation to the ambient MPO tensor, so that the eventual local-to-global
 implication has a canonical target.
 
-The current consequences recorded here are:
+The current consequences are:
 
 * a **blocked fusion-isometry witness** at size `2`, formalized as
   `Nonempty (FusionIsometryData K 2)`;
 * the GSNNCH-with-ZCL branch of Theorem 4.9;
 * the transfer-map fusion formulation of MPDO RFP.
 
-Thus this file supplies the paper-facing conclusion that later work can use
+Thus this file supplies the paper-level conclusion that later work can use
 once the remaining local-to-global implication has been formalized.
 
 ## Main declarations
@@ -58,16 +58,16 @@ variable {d D : ℕ}
 
 /-- The local simple-MPDO structure isolated by Appendix C.2, Lemmas C.3--C.4.
 
-This records exactly the information exposed by `SimpleLocalStructure.lean`:
+This structure contains exactly the information proved in `SimpleLocalStructure.lean`:
 
 a normalized three-site reduced state satisfying equality in strong
 subadditivity, the resulting local `η`-structure, and a primitive real matrix
 `T` together with the rank-one conclusion extracted from the constant-trace
 condition.
 
-The record is intentionally independent of a particular MPO tensor. The missing
+The structure is intentionally independent of a particular MPO tensor. The missing
 preceding theorem is the map from a concrete simple MPDO satisfying SAL/ZCL to
-such a record and then onward to `HasCommutingForm`. -/
+such a structure and then onward to `HasCommutingForm`. -/
 structure SimpleMPDOLocalStructureData where
   /-- Dimensions of the three contiguous local regions. -/
   dA : ℕ
@@ -95,7 +95,7 @@ structure SimpleMPDOLocalStructureData where
 
 namespace SimpleMPDOLocalStructureData
 
-/-- Construct the local simple-MPDO data record from the scoped Lemma C.3/C.4
+/-- Construct the local simple-MPDO structure from the scoped Lemma C.3/C.4
 inputs already available in `SimpleLocalStructure.lean`. -/
 def ofSALZCL
     {dA dB dC n : ℕ}
@@ -124,7 +124,7 @@ def ofSALZCL
 
 end SimpleMPDOLocalStructureData
 
-/-- Provisional relation expressing that local simple-MPDO structure data are
+/-- Temporary relation expressing that local simple-MPDO structure data are
 attached to a specific MPO tensor.
 
 The current development does not yet formalize the local-to-global map from the
@@ -136,12 +136,12 @@ def SimpleMPDOLocalStructureData.CompatibleWith
     (_data : SimpleMPDOLocalStructureData) (_K : MPOTensor d D) : Prop :=
   True
 
-/-- Auxiliary record for the simple-MPDO blocked-RFP argument.
+/-- Auxiliary structure for the simple-MPDO blocked-RFP argument.
 
-The field `localData` records the Appendix C.2 local structure from issue #781,
-the field `compatible` records its provisional attachment to `K`, and the
-fields `commutingForm` and `zcl` record the issue-#782 target side and the MPO
-zero-correlation-length input. This is the current point where the two sibling
+The field `localData` contains the Appendix C.2 local structure from issue #781,
+the field `compatible` gives its temporary attachment to `K`, and the
+fields `commutingForm` and `zcl` contain the issue-#782 commuting-form conclusion
+and the MPO zero-correlation-length hypothesis. This is the current point where the two sibling
 branches meet: the missing theorem is the derivation of `commutingForm` from
 the entropy-side hypotheses attached to `K`.
 
@@ -151,18 +151,18 @@ implication already has a type-level target. -/
 structure SimpleMPDOBlockedRFPData (K : MPOTensor d D) where
   /-- Local SAL/SSA/rank-one data from Appendix C.2. -/
   localData : SimpleMPDOLocalStructureData
-  /-- Provisional attachment of the local data to the ambient MPO tensor. -/
+  /-- Temporary attachment of the local data to the ambient MPO tensor. -/
   compatible : localData.CompatibleWith K
   /-- Global commuting-form / GSNNCH data. -/
   commutingForm : HasCommutingForm K
-  /-- Zero correlation length, hence the current provisional RFP predicate. -/
+  /-- Zero correlation length, hence the current RFP predicate. -/
   zcl : IsZCL K
 
 namespace SimpleMPDOBlockedRFPData
 
 variable {K : MPOTensor d D}
 
-/-- Construct this record directly from the scoped local lemmas of
+/-- Construct this structure directly from the scoped local lemmas of
 `SimpleLocalStructure.lean`, the commuting-form hypothesis, and MPO ZCL.
 
 At present, the subsequent consequences in this file use only `hCommuting` and
@@ -193,11 +193,11 @@ theorem isGSNNCHWithZCL (data : SimpleMPDOBlockedRFPData K) :
   exact (isGSNNCHWithZCL_iff_hasCommutingForm_and_isZCL K).2
     ⟨data.commutingForm, data.zcl⟩
 
-/-- The data record implies the current provisional MPDO RFP predicate. -/
+/-- The structure implies the current MPDO RFP predicate. -/
 theorem isRFP (data : SimpleMPDOBlockedRFPData K) : IsRFP K :=
   data.zcl
 
-/-- The data record implies the transfer-map fusion formulation of MPDO RFP. -/
+/-- The structure implies the transfer-map fusion formulation of MPDO RFP. -/
 theorem isRFPViaFusion (data : SimpleMPDOBlockedRFPData K) :
     IsRFP_MPDO_via_fusion K := by
   exact isRFP_MPDO_via_fusion_of_isRFP (M := K) data.isRFP
@@ -213,7 +213,7 @@ theorem structural_implies_rfp_blocked {K : MPOTensor d D}
     (M := K)
     (show IsRFP K from hZCL)) 2 (show 0 < 2 by decide)
 
-/-- Data-parameterized blocked fusion-isometry witness.
+/-- Hypothesis-parameterized blocked fusion-isometry witness.
 
 Relative to the current convention `IsRFP = IsZCL`, the present conclusion uses
 only `data.zcl`. The fields `localData`, `compatible`, and `commutingForm` are
@@ -224,9 +224,9 @@ theorem structural_implies_rfp_blocked_of_data {K : MPOTensor d D}
     Nonempty (FusionIsometryData K 2) :=
   structural_implies_rfp_blocked (K := K) data.zcl
 
-/-- **Theorem 4.9 conclusion, data-parameterized form**.
+/-- **Theorem 4.9 conclusion, hypothesis-parameterized form**.
 
-From the explicit simple-MPDO inputs one simultaneously recovers:
+From the explicit simple-MPDO hypotheses one simultaneously recovers:
 
 * the GSNNCH-with-ZCL branch of Theorem 4.9(iii),
 * the blocked fusion-isometry witness at size `2`, and
@@ -242,7 +242,7 @@ theorem simple_mpdo_rfp_chain_of_data {K : MPOTensor d D}
     data.isRFPViaFusion⟩
 
 /-- Direct-argument form of Theorem 4.9 using only the hypotheses that enter the
-current conclusion. -/
+current theorem. -/
 theorem simple_mpdo_rfp_chain {K : MPOTensor d D}
     (hCommuting : HasCommutingForm K) (hZCL : IsZCL K) :
     IsGSNNCHWithZCL K ∧ Nonempty (FusionIsometryData K 2) ∧
