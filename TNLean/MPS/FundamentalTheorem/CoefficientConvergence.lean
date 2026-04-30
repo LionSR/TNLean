@@ -10,18 +10,18 @@ import Mathlib.Analysis.SpecificLimits.Normed
 
 This module proves that the normalized decomposition coefficients `(μ k / μ 0)^N` converge
 automatically from the separated weight hypothesis `HasStrictOrderedNonzeroWeights μ`
-(with legacy wrappers through `IsCanonicalForm`), and provides a self-contained version of the
+(with legacy formulations through `IsCanonicalForm`), and provides a self-contained version of the
 Fundamental Theorem (Thm 4.4) that derives the decomposition data from canonical form structure.
 
 ## Main results
 
 ### `HasStrictOrderedNonzeroWeights.norm_div_mu_lt_one`
 For `k ≠ 0`, the norm ratio `‖μ k / μ 0‖ < 1` from the separated weight data.
-A BNT-level wrapper `IsCanonicalFormBNT.norm_div_mu_lt_one` is also available.
+A BNT-level version `IsCanonicalFormBNT.norm_div_mu_lt_one` is also available.
 
 ### `HasStrictOrderedNonzeroWeights.coeff_ratio_tendsto`
 The normalized coefficient `(μ k / μ ⟨0, hr⟩) ^ N` converges: to `1` for the dominant
-block `k = 0`, and to `0` for all other blocks. A BNT-level wrapper
+block `k = 0`, and to `0` for all other blocks. A BNT-level version
 `IsCanonicalFormBNT.coeff_ratio_tendsto` is also available.
 
 ### `mpv_toTensorFromBlocks_eq_mu0_pow_mul_normalized`
@@ -114,20 +114,20 @@ namespace IsCanonicalFormBNT
 variable {r : ℕ} {dim : Fin r → ℕ}
 variable {μ : Fin r → ℂ} {A : (k : Fin r) → MPSTensor d (dim k)}
 
-/-- CF-BNT wrapper for `HasStrictOrderedNonzeroWeights.norm_div_mu_lt_one`. -/
+/-- CF-BNT version for `HasStrictOrderedNonzeroWeights.norm_div_mu_lt_one`. -/
 theorem norm_div_mu_lt_one (hCF : IsCanonicalFormBNT μ A) (hr : 0 < r)
     (k : Fin r) (hk : k ≠ ⟨0, hr⟩) :
     ‖μ k / μ ⟨0, hr⟩‖ < 1 :=
   hCF.toHasStrictOrderedNonzeroWeights.norm_div_mu_lt_one hr k hk
 
-/-- CF-BNT wrapper for `HasStrictOrderedNonzeroWeights.coeff_ratio_tendsto`. -/
+/-- CF-BNT version for `HasStrictOrderedNonzeroWeights.coeff_ratio_tendsto`. -/
 theorem coeff_ratio_tendsto (hCF : IsCanonicalFormBNT μ A) (hr : 0 < r) :
     ∀ k : Fin r,
       Tendsto (fun N => (μ k / μ ⟨0, hr⟩) ^ N) atTop
         (nhds (if k = ⟨0, hr⟩ then 1 else 0)) :=
   hCF.toHasStrictOrderedNonzeroWeights.coeff_ratio_tendsto hr
 
-/-- CF-BNT wrapper for `HasStrictOrderedNonzeroWeights.norm_mu_lt_dominant`. -/
+/-- CF-BNT version for `HasStrictOrderedNonzeroWeights.norm_mu_lt_dominant`. -/
 theorem norm_mu_lt_dominant (hCF : IsCanonicalFormBNT μ A) (hr : 0 < r)
     (k : Fin r) (hk : k ≠ ⟨0, hr⟩) :
     ‖μ k‖ < ‖μ ⟨0, hr⟩‖ :=
@@ -218,7 +218,7 @@ The user only needs to supply:
 2. Coefficients and their limits for the re-weighted decomposition
 3. The convergence of the (adjusted) proportionality constant
 
-The coefficient data `aLim`/`bLim` is needed because the raw decomposition coefficients
+The coefficient data `aLim`/`bLim` is needed because the direct decomposition coefficients
 `(μ k)^N` do not satisfy the convergence hypotheses directly. In the strict-dominance regime one
 first normalizes by the dominant weight, so the relevant arrays are `(μ k / μ 0)^N`; these
 converge to `0` for non-dominant blocks, while the overall factor `μ 0^N` is absorbed into the
@@ -236,7 +236,7 @@ explicit hypotheses.
 - The proportionality `mpv(A_total) = c_N * mpv(B_total)`
 - Convergent decomposition coefficients `aCoeff`, `bCoeff` with nonzero limits
 - The convergence of the proportionality constant `c` -/
-/-- Self-contained CF-BNT proportional FT wrapper using the assembled theorem from
+/-- Self-contained CF-BNT proportional FT version using the assembled theorem from
 `FundamentalTheoremFull`. -/
 theorem fundamentalTheorem_proportionalMPV_CFBNT_auto
     {d rA rB : ℕ}

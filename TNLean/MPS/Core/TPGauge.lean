@@ -28,7 +28,7 @@ open Matrix Finset Complex
 
 variable {d D : ℕ}
 
-/-! ## Helper lemmas about `CFC.sqrt` for positive definite matrices -/
+/-! ## Auxiliary lemmas about `CFC.sqrt` for positive definite matrices -/
 
 /-- For a positive definite matrix `ρ`, the CFC square root satisfies `sqrt ρ * sqrt ρ = ρ`. -/
 lemma cfc_sqrt_mul_self_of_posDef (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) :

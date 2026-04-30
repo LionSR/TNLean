@@ -4,12 +4,12 @@ import TNLean.Spectral.MixedTransfer
 /-!
 # Canonical gauge normalizations from transfer fixed points
 
-This file records the two standard one-sided similarity gauges extracted from
+This file states the two standard one-sided similarity gauges extracted from
 fixed points of the transfer map and its adjoint. It is **not** a formalization
 of a doubly stochastic gauge. Instead, `gauged_unital` gives the
 right-canonical/unital gauge, while `gauged_tracePreserving` gives the
 left-canonical/trace-preserving gauge. The aliases `gauged_rightCanonical` and
-`gauged_leftCanonical` package the same formulas in the project's MPS
+`gauged_leftCanonical` state the same formulas in the project's MPS
 terminology.
 -/
 

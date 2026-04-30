@@ -8,7 +8,7 @@ import Mathlib.LinearAlgebra.Matrix.Trace
 /-!
 # Wolf Example 5.3: a Schwarz map which is not completely positive
 
-This file records the concrete map from Wolf, Example 5.3,
+This file states the concrete map from Wolf, Example 5.3,
 
 $$T_*(A) = \frac{1}{2} A^T + \frac{1}{4} \operatorname{tr}(A) I,$$
 

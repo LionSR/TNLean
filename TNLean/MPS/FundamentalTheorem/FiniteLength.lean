@@ -90,7 +90,7 @@ lemma SameMPVFrom.trace_evalWord_of_length_ge
   simp only [mpv, coeff, List.ofFn_get] at this
   exact this
 
-/-! ## Helper: word span for injective tensors -/
+/-! ## Auxiliary: word span for injective tensors -/
 
 /-- For an injective tensor, `wordSpan A n = ⊤` for all `n ≥ 1`.
 

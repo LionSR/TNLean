@@ -43,7 +43,7 @@ Wolf's *Quantum Channels & Operations: Guided Tour*:
   (necessary direction, HJW converse): equal densities force an isometric
   mixing matrix between the two ensembles.
 * `WolfProps.pureEnsembleDensity_eq_iff_exists_isometric_mixing` — Prop 2.4
-  packaged as an iff.
+  stated as an iff.
 
 ## Design notes
 
@@ -276,7 +276,7 @@ by an isometric mixing matrix `V : Matrix ι₁ ι₂ ℂ` (that is, `Vᴴ V = 1
 
 The converse (necessity) is
 `exists_isometric_mixing_of_pureEnsembleDensity_eq`, and both directions
-are packaged as `pureEnsembleDensity_eq_iff_exists_isometric_mixing`. -/
+are stated as `pureEnsembleDensity_eq_iff_exists_isometric_mixing`. -/
 theorem pureEnsembleDensity_eq_of_isometric_mixing
     {ι₁ ι₂ : Type*} [Fintype ι₁] [Fintype ι₂] [DecidableEq ι₂]
     (ψ : ι₁ → (Fin D → ℂ)) (φ : ι₂ → (Fin D → ℂ))
@@ -355,7 +355,7 @@ theorem exists_isometric_mixing_of_pureEnsembleDensity_eq
   -- out once since the same `⟨0, _⟩` witness is needed both when forming the
   -- CP-sandwich equality and when reading off column `0` of the resulting
   -- rectangular isometry; bundling the `0 < D` derivation into a single `Fin D`
-  -- helper avoids rebuilding `Nat.pos_of_ne_zero` at each call site.
+  -- auxiliary lemma avoids rebuilding `Nat.pos_of_ne_zero` at each call site.
   let c₀_of : Fin D → Fin D :=
     fun a => ⟨0, Nat.pos_of_ne_zero (fun hDeq => (hDeq ▸ a).elim0)⟩
   -- Embed each vector as the `0`-th column of a `D × D` matrix. Pattern-match
@@ -373,7 +373,7 @@ theorem exists_isometric_mixing_of_pureEnsembleDensity_eq
   have hL_apply : ∀ j a c,
       L j a c = match c with | ⟨0, _⟩ => φ j a | ⟨_ + 1, _⟩ => 0 :=
     fun _ _ _ => rfl
-  -- Helper: collapse a single-column Kraus sandwich `(M * X * Mᴴ)` at
+  -- Auxiliary lemma: collapse a single-column Kraus sandwich `(M * X * Mᴴ)` at
   -- entry `(a, b)` for any single vector `v` with column-`0` encoding.
   -- Applied to each summand below for both the `ψ` and `φ` families.
   have sandwich_entry : ∀ (v : Fin D → ℂ) (M : Matrix (Fin D) (Fin D) ℂ)

@@ -10,7 +10,7 @@ import Mathlib.LinearAlgebra.Matrix.PosDef
 /-!
 # Finite-POVM compression lemmas for operator Jensen
 
-This file records algebraic lemmas for the finite-POVM / compression route to
+This file states algebraic lemmas for the finite-POVM / compression route to
 operator Jensen inequalities. The main target is the concave real-power case in
 Wolf Corollary 5.2, but the final Löwner-integral packaging is still absent.
 

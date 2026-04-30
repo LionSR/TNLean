@@ -17,10 +17,10 @@ be shown to
    `B` lies in the image of `localTensorMap A v`, and
 2. factor into independent edge gauges.
 
-We record those two requirements as `HasLocalGaugeLift`. This isolates the exact
+We capture those two requirements as `HasLocalGaugeLift`. This isolates the exact
 output still needed from the blocked-middle / three-site-MPS reduction in
-arXiv:1804.04964 §3, and `hasLocalGaugeLift_of_localGaugeFormula` records the
-final bookkeeping step that turns an explicit local gauge formula into that
+arXiv:1804.04964 §3, and `hasLocalGaugeLift_of_localGaugeFormula` is the final
+conversion that turns an explicit local gauge formula into that
 sharper datum.
 -/
 
@@ -122,7 +122,7 @@ theorem localGaugeCandidate_apply_single (A B : Tensor G d)
 
 /-- Sharper local hypothesis for PEPS gauge extraction.
 
-This records exactly the two local outputs still needed from the blocked-middle
+This states exactly the two local conclusions still needed from the blocked-middle
 reduction in arXiv:1804.04964 §3:
 
 1. the local components of `B` lie in the image of `localTensorMap A v`, and
@@ -145,7 +145,7 @@ structure HasLocalGaugeLift (A B : Tensor G d) (hA : IsVertexInjective A)
 /-- Any explicit edgewise local gauge formula at `v` yields the sharper datum
 `HasLocalGaugeLift`.
 
-This is the final bookkeeping step after the blocked-middle / three-site-MPS
+This is the final algebraic conversion after the blocked-middle / three-site-MPS
 reduction: once that reduction produces invertible incident-edge gauges
 realizing the local tensors of `B`, the canonical candidate pulled back through
 `localLeftInverse` is forced to be the same factorized operator. -/

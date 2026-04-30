@@ -32,7 +32,7 @@ completely positive maps on `M_D(ℂ)`.
 ## Formalization note
 
 Wolf states that the spectral-radius eigenvalue is *non-degenerate*.  In the
-current API we formalize exactly the part needed for the irreducibility
+current interface we formalize exactly the part needed for the irreducibility
 argument: any positive-semidefinite right eigenvector for the distinguished
 positive eigenvalue is a scalar multiple of the Perron eigenvector.
 
@@ -48,7 +48,7 @@ variable {D : ℕ}
 
 noncomputable section
 
-/-! ## Small linear-algebra helpers -/
+/-! ## Small linear-algebra auxiliary lemmas -/
 
 private noncomputable def sandwichLinearMap
     (L R : Matrix (Fin D) (Fin D) ℂ) :
@@ -147,7 +147,7 @@ private theorem proj_mul_posDef_mul_proj_ne_zero
     Finset.mem_univ, ite_true] at h
   simpa using h
 
-/-! ## Spectral property package -/
+/-! ## Spectral property state -/
 
 /-- A Kraus-witness formulation of the spectral properties in Wolf Theorem 6.4.
 

@@ -39,7 +39,7 @@ variable {d D : ℕ}
 /-- The combined MPS tensor for a chain: packs site index `k : Fin n` and
 physical index `σ : Fin d` into a single index in `Fin (n * d)` via
 `finProdFinEquiv`. This lets us apply the single-tensor `linearExtension`
-machinery to a non-translation-invariant chain. -/
+construction to a non-translation-invariant chain. -/
 noncomputable def chainCombinedTensor {n : ℕ} (A : Fin n → MPSTensor d D) :
     MPSTensor (n * d) D :=
   fun i => A (finProdFinEquiv.symm i).1 (finProdFinEquiv.symm i).2

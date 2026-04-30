@@ -37,7 +37,7 @@ This is the core continuous-time fact: irreducibility is a generator property.
 In a norm-continuous QDS `T_t = exp(tL)`, the generator `L` is irreducible
 (no non-trivial invariant faces of the PSD cone). An irreducible generator
 generates an irreducible semigroup: `T_t` is irreducible for ALL `t > 0`.
-*Missing infrastructure*: formalization of "generator irreducibility ↔ T_t irr ∀ t".
+*Missing formalization*: formalization of "generator irreducibility ↔ T_t irr ∀ t".
 
 **Step B**: `T_t` irreducible + channel → peripheral eigenvalues of `T_t` are roots
 of unity (Wolf Thm 6.6). This channel-level bridge is now available as
@@ -51,7 +51,7 @@ peripheral `μ`), the eigenvector `V` with `T_t V = μ V` satisfies
 is one-dimensional.  Thus `V = c · σ'` (the unique faithful density fixed point),
 and `T_t σ' = μ σ'`.  Trace preservation forces `μ = 1`.
 
-The helper lemmas `eigenvalue_exp_of_eigenvalue_generator`,
+The auxiliary lemmas `eigenvalue_exp_of_eigenvalue_generator`,
 `eq_zero_of_exp_mul_I_isRootOfUnity`, and `re_eq_zero_of_peripheral_generator`
 are fully proved. Step A (generator irreducibility ↔ semigroup irreducibility)
 is formalized via `irreducible_all_of_irreducible_time` in

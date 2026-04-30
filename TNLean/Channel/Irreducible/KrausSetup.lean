@@ -15,7 +15,7 @@ paired with the adjoint Perron--Frobenius eigenvector of that family.
 ## Main declarations
 
 - `IrreducibleCPKrausSetup`: shared Kraus witness for an irreducible CP map
-- `irreducibleCPKrausSetup`: records the standard Kraus witness attached to an
+- `irreducibleCPKrausSetup`: states the standard Kraus witness attached to an
   irreducible CP map
 - `IrreducibleCPKrausSetup.exists_nonzero_kraus`: a nonzero map in a Kraus
   setup has a nonzero Kraus operator
@@ -35,7 +35,7 @@ structure IrreducibleCPKrausSetup
   map_eq : E = MPSTensor.transferMap (d := n) (D := D) K
   irreducible : MPSTensor.IsIrreducibleTensor (d := n) (D := D) K
 
-/-- Package the standard Kraus witness attached to an irreducible CP map. -/
+/-- State the standard Kraus witness attached to an irreducible CP map. -/
 noncomputable def irreducibleCPKrausSetup
     (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (hCP : IsCPMap E) (hIrr : IsIrreducibleMap E) :

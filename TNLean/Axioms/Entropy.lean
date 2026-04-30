@@ -16,7 +16,7 @@ clear to downstream files and to CI.
 ## Status
 
 * `strong_subadditivity` is an **axiom** (proof deferred; see TODO below).
-* `hayashi_ssa_equality_characterization` is an **axiom** recording the
+* `hayashi_ssa_equality_characterization` is an **axiom** stating the
   standard equality case of strong subadditivity as a quantum-Markov-chain
   decomposition on the middle subsystem.
 * A `subadditivity` result can be derived from `strong_subadditivity` by
@@ -214,7 +214,7 @@ matrices, and the block-diagonal equality.
 This result is introduced here as a **sanctioned axiom**: the full proof needs
 operator-algebra / recovery-map infrastructure that is not yet formalized in
 Mathlib or in this repository. Downstream consumers should import the theorem
-wrapper from `TNLean/Entropy/MarkovChain.lean`, not this axiom module.
+statement from `TNLean/Entropy/MarkovChain.lean`, not this axiom module.
 
 References:
 * Hayashi, J. Phys. A: Math. Gen. 37 (2004) L205--L208

@@ -21,23 +21,22 @@ This module proves the trace convexity and concavity of the map
 
 Both statements were previously axiomatized in `TNLean.Axioms.OperatorConvexity`
 (as `trace_rpow_concave_axiom` / `trace_rpow_convex_axiom`); this module
-discharges them using the matrix-analysis helpers
+discharges them using the matrix-analysis lemmas
 `Matrix.IsHermitian.trace_cfc_eq_sum_re` (from `TNLean/Channel/Schwarz/TraceCFC.lean`)
 and `Matrix.diagonal_jensen_of_convexOn`
 (from `TNLean/Channel/Schwarz/DiagonalJensen.lean`).
 
 ## Proof sketch
 
-The common scaffolding is factored into the private helper
-`trace_cfc_convex_bound`, which takes a convex `f : ℝ → ℝ` on `[0, ∞)` and
-proves the CFC-level trace inequality. The top-level theorems are then thin
-wrappers:
+The common reduction is the private lemma `trace_cfc_convex_bound`, which takes
+a convex `f : ℝ → ℝ` on `[0, ∞)` and proves the CFC-level trace inequality. The
+top-level theorems are then the two real-power specialisations:
 
-* `trace_rpow_convex` applies the helper directly to `f = fun x => x^p`.
-* `trace_rpow_concave` applies the helper to `-f` and uses
+* `trace_rpow_convex` applies the lemma directly to `f = fun x => x^p`.
+* `trace_rpow_concave` applies the lemma to `-f` and uses
   `IsHermitian.cfc_neg` plus `trace_neg` to flip signs.
 
-Internally the helper:
+Internally the convexity lemma:
 
 1. Rewrites `Re Tr(hH.cfc f) = ∑ⱼ f(μⱼ)` via `trace_cfc_eq_sum_re`, where
    `{ψⱼ}` is the eigenbasis of `A := t • A₁ + (1 − t) • A₂` and `μⱼ` its
@@ -179,15 +178,14 @@ private lemma psd_smul_real
       rw [Complex.le_def]; exact ⟨by simpa, by simp⟩
     exact mul_nonneg ht_ℂ hnn
 
-/-- Helper: `(t • A₁ + (1 − t) • A₂).PosSemidef` when `A₁, A₂` are PSD
-and `t, 1 − t ≥ 0`. -/
+/-- Positive semidefiniteness is preserved under convex combinations of PSD matrices. -/
 private lemma posSemidef_convex_combination
     {A₁ A₂ : Mat} (h₁ : A₁.PosSemidef) (h₂ : A₂.PosSemidef)
     {t : ℝ} (ht₀ : 0 ≤ t) (ht₁ : 0 ≤ 1 - t) :
     (t • A₁ + (1 - t) • A₂).PosSemidef :=
   (psd_smul_real h₁ ht₀).add (psd_smul_real h₂ ht₁)
 
-/-- **Shared scaffolding for trace convex/concave bounds on matrix CFC.**
+/-- **Trace convexity bound for the continuous functional calculus.**
 
 For a convex `f : ℝ → ℝ` on `[0, ∞)` and PSD matrices `A₁, A₂` with
 `t ∈ [0, 1]`, the real trace of `f` applied (via the Hermitian CFC) to the

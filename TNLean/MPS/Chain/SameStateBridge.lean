@@ -7,7 +7,7 @@ The paper's blocking argument (for chain length `n ≥ 3`) upgrades a fixed-leng
 `SameState` hypothesis to the all-length mixed-word trace agreement `SameMPV`
 needed by `fundamentalTheorem_injective_chain`.
 
-This file records that blocking step as an explicit hypothesis object and
+This file encodes that blocking step as an explicit hypothesis object and
 provides convenience lemmas/theorems that consume it.
 -/
 
@@ -44,7 +44,7 @@ theorem sameMPV_chainCombined_of_sameState
       (MPSTensor.chainCombinedTensor B) :=
   hBridge.sameMPV_of_sameState A B hA hn hState
 
-/-- Paper-style chain endpoint:
+/-- Paper-style chain theorem:
 assuming the blocking bridge hypothesis, fixed-length `SameState` at `n ≥ 3`
 implies cyclic gauge equivalence for injective `A`. -/
 theorem fundamentalTheorem_injective_chain_of_sameState

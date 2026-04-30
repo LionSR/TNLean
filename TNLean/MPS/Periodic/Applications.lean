@@ -19,7 +19,7 @@ periodic fundamental theorem. It contains:
    preserves the transfer map, left-canonical normalization, irreducibility,
    periodicity, and irreducible form II structure.
 
-## Status for §4 (as of merged periodic FT infrastructure)
+## Status for §4 (as of merged periodic FT theory)
 
 * Corollary 4.1 (symmetry corollary): reduced to one call to the periodic
   equal-case FT, now that `isIrreducibleForm_rotatePhysical` is fully proven.
@@ -210,7 +210,7 @@ private lemma trace_evalWord_rotatePhysical_prefix {D₁ D₂ : ℕ}
   | nil => simp only [evalWord_nil, mul_one, coeff_eq] at *; exact h p
   | cons i w ih =>
     simp only [evalWord_cons, rotatePhysical_apply]
-    -- Helper: expand trace(prefix * (∑ j, u i j • C j) * tail) as
+    -- Auxiliary: expand trace(prefix * (∑ j, u i j • C j) * tail) as
     -- ∑ j, u i j * trace(evalWord C (p ++ [j]) * tail)
     have expand : ∀ {D' : ℕ} (C : MPSTensor d D'),
         Matrix.trace (evalWord C p * ((∑ j : Fin d, u i j • C j) *

@@ -52,7 +52,7 @@ spectrum (see `IsCyclicSectorDecomp`).
 
 The orbit-lift / corner-irreducibility input is now supplied unconditionally by
 `SelfOverlap.primitive_and_irreducible_sectorBlocks_of_cyclicDecomp`. The
-remaining gaps in this file lie further downstream, in the sector-match and
+remaining gaps in this file lie further along, in the sector-match and
 mixed-overlap arguments. -/
 lemma sectorBlocked_isNormal_of_isPeriodic
     [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]

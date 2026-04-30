@@ -132,7 +132,7 @@ the same CP map (`blockTensor A p` with `d^p` operators and `B` with `d` operato
 Wolf Theorem 2.18 (`kraus_isometry_freedom_iff`) supplies an isometry
 `V : Matrix (Fin (d^p)) (Fin d) ℂ` with `Vᴴ V = 1` and
 `blockTensor A p α = ∑_j V α j • B j`. Expanding `coeff (blockTensor A p) (ofFn τ)` with
-the helper `evalWord_sum_smul_ofFn` and linearity of `trace` produces exactly the
+the auxiliary `evalWord_sum_smul_ofFn` and linearity of `trace` produces exactly the
 `W`-weighted coefficient identity defining `IsPRefinable B p`. -/
 theorem thm_4_1_p_refinement_reverse
     (B : MPSTensor d D) (hB : IsIrreducibleForm B)

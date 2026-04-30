@@ -266,7 +266,7 @@ theorem exists_posDef_adjoint_eigenvector
   -- transferMap T σ = σ (fixed point, not just eigenvector).
   set c := (Real.sqrt r)⁻¹ with hc_def
   set T : MPSTensor d D := fun i => (c : ℂ) • (A i)ᴴ
-  -- Helper: star of a real-coerced scalar is itself.
+  -- Auxiliary lemma: star of a real-coerced scalar is itself.
   have hstar_c : star (↑c : ℂ) = (↑c : ℂ) := by
     rw [RCLike.star_def, Complex.conj_ofReal]
   -- Key scalar identity: c * c = r⁻¹ in ℂ.
@@ -337,7 +337,7 @@ theorem exists_tp_data_of_irreducible
   -- Define the rescaled tensor.
   set c := (Real.sqrt r)⁻¹ with hc_def
   set A' : MPSTensor d D := fun i => (↑c : ℂ) • A i with hA'_def
-  -- Helper: star of a real-coerced scalar is itself.
+  -- Auxiliary lemma: star of a real-coerced scalar is itself.
   have hstar_c : star (↑c : ℂ) = (↑c : ℂ) := by
     rw [RCLike.star_def, Complex.conj_ofReal]
   -- Key scalar identity.

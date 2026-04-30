@@ -29,7 +29,7 @@ than proving it.
 ## Convention note
 
 The natural law from `twistedTensor_mul` (which says `twist(g*h) = twist_g ∘ twist_h`)
-gives `X(h) * X(g) = ω(h,g) • X(g * h)`. The theorem below packages this into the
+gives `X(h) * X(g) = ω(h,g) • X(g * h)`. The theorem below formulates this as the
 standard projective representation law by defining `V(g) = X(g⁻¹)`.
 
 ## References

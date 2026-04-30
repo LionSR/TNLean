@@ -42,7 +42,7 @@ variable {d D : ℕ}
 
 namespace KadisonSchwarz
 
-/-! ## Helper lemmas -/
+/-! ## Auxiliary lemmas -/
 
 section Helpers
 

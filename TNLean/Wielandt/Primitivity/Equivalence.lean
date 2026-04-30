@@ -10,7 +10,7 @@ import TNLean.Wielandt.Primitivity.StronglyIrreducibleToFullRank
 /-!
 # Proposition 3 — Full Equivalence (arXiv:0909.5347)
 
-This file contains the paper-facing development of **Proposition 3** from
+This file contains the paper-level development of **Proposition 3** from
 Sanz–Pérez-García–Wolf–Cirac, *A quantum version of Wielandt's inequality*
 (arXiv:0909.5347, Section II), and establishes the full circular equivalence.
 
@@ -44,7 +44,7 @@ import surface. The direction-specific files
 `Primitivity/ImpliesStronglyIrreducibleAux.lean`, and
 `Primitivity/StronglyIrreducibleToFullRank.lean` remain specialized
 implementation modules, while the canonical / FT / BNT assembly does not
-import these wrappers directly.
+import these statements directly.
 
 ## Full-equivalence corollaries
 
@@ -214,13 +214,13 @@ theorem hasEventuallyFullKrausRank_iff_stronglyIrreducible [NeZero D]
   ⟨fun hB => isStronglyIrreduciblePaper_of_hasEventuallyFullKrausRank A hNorm hB,
    fun hC => prop3_cb A hNorm hC⟩
 
-/-! ## Wolf Theorem 6.8 packaged forms -/
+/-! ## Wolf Theorem 6.8 statements -/
 
 /-- **Wolf Theorem 6.8 (Kraus-span form)**:
 paper primitivity is equivalent to eventual full Kraus-word span.
 
-This is a naming wrapper around `primitivePaper_iff_hasEventuallyFullKrausRank`,
-matching Wolf's Chapter 6 wording ("the Kraus operators eventually span all
+This theorem gives `primitivePaper_iff_hasEventuallyFullKrausRank` the
+numbered Wolf Chapter 6 name ("the Kraus operators eventually span all
 matrices"). -/
 theorem wolf_theorem_6_8_kraus_span [NeZero D]
     (A : MPSTensor d D)
@@ -228,7 +228,7 @@ theorem wolf_theorem_6_8_kraus_span [NeZero D]
     IsPrimitivePaper A ↔ HasEventuallyFullKrausRank A :=
   primitivePaper_iff_hasEventuallyFullKrausRank A hNorm
 
-/-- **Wolf Theorem 6.8 (packaged conjunction form)**:
+/-- **Wolf Theorem 6.8 (conjunction form)**:
 paper primitivity is equivalent to the conjunction of eventual full Kraus rank,
 normality, and strong irreducibility.
 
@@ -273,7 +273,7 @@ theorem prop3_a_implies_peripherallyPrimitive [NeZero D]
 /-- **Equation (2)**: the primitivity index is at most the full-Kraus-rank
 index.
 
-This records the quantitative bound following Proposition 3.
+This states the quantitative bound following Proposition 3.
 Paper: arXiv:0909.5347, equation (2); Wolf, Theorem 6.9.
 -/
 theorem prop3_qIndex_le_iIndex (A : MPSTensor d D)

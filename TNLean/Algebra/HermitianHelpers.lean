@@ -5,10 +5,10 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import Mathlib.Analysis.Matrix.PosDef
 
 /-!
-# Hermitian matrix helpers
+# Hermitian matrix spectral decomposition and adjoint identities
 
-This file provides small reusable helpers for Hermitian complex matrices over
-`Fin D`: the unitary identities for the eigenvector matrix, the standard
+This file provides lemmas for Hermitian complex matrices over `Fin D`: the
+unitary identities for the eigenvector matrix, the standard
 `U * diagonal * Uᴴ` spectral decomposition, and the adjoint identity for the
 matrix-vector dot-product pairing.
 -/
