@@ -28,6 +28,8 @@ Notes/Wolf/build/
 
 # Compiled PDFs (regenerable)
 presentation*.pdf
+docs/paper-gaps/*.pdf
+docs/paper-gaps/*.dvi
 
 # OS junk
 .DS_Store
