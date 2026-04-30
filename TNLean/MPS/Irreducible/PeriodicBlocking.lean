@@ -18,7 +18,7 @@ This module records lightweight definitions used by periodic-sector arguments:
 
 namespace MPSTensor
 
-/-! ## GCD blocking numerics (Lemma 2.5 bookkeeping) -/
+/-! ## GCD arithmetic for periodic-sector blocking (Lemma 2.5) -/
 
 /-- Number of periodic blocks after blocking period-`m` data by `p`: `gcd(m,p)`. -/
 def periodicBlockCount (m p : ℕ) : ℕ := Nat.gcd m p
