@@ -16,8 +16,8 @@
 
 \section{The assertion}
 
-This note concerns the quantum Wielandt inequality of
-Sanz--P\'erez-Garc\'ia--Wolf--Cirac \cite{Sanz2010Quantum}.\footnote{For
+The quantum Wielandt inequality of Sanz--P\'erez-Garc\'ia--Wolf--Cirac
+is stated in \cite{Sanz2010Quantum}.\footnote{For
 traceability, this note corresponds to
 \href{https://github.com/LionSR/TNLean/issues/1049}{issue \#1049}. The local
 source passage is \path{Papers/0909.5347/main.tex:360--365},
@@ -36,8 +36,7 @@ Let
 when the set is nonempty. The source theorem uses $d$ for the number of
 linearly independent Kraus operators, equivalently $d=\dim S_1(A)$ in the
 minimal Kraus-span convention. With this convention Theorem~1 of the source
-states that, if $\mathcal E_A$ is primitive, then $q(\mathcal E_A)\leq i(A)$
-and
+states that, if $\mathcal E_A$ is primitive, then
 \[
   i(A)\leq (D^2-d+1)D^2.
 \]
@@ -126,8 +125,8 @@ one-step element itself replaces the named generator.
 
 The invertible case is expected to generalize directly: if $X\in S_1(A)$ is
 invertible, then left multiplication by $X$ maps $S_n(A)$ into $S_{n+1}(A)$ and
-is injective. This is the dimension-growth mechanism used in the source proof.
-The formal statement instead uses this mechanism only for a listed Kraus
+is injective. This is the dimension-growth argument used in the source proof.
+The formal statement instead applies the argument only to a listed Kraus
 operator. The non-invertible case similarly should be stated for an
 element $X\in S_1(A)$ with a nonzero eigenvalue, or else accompanied by a
 Kraus-representation-change lemma showing that the same channel and the same
@@ -163,7 +162,8 @@ hypothesis is a legitimate intermediate argument.
 
 \section{Conclusion}
 
-The conclusion is a provisional difference in hypotheses for the sharper cases.
+The remaining difference is a provisional strengthening of the hypotheses in the
+sharper cases.
 The general quantum Wielandt bound is formalized with the correct fixed-length
 index and with the source's linearly independent Kraus count made explicit as
 $\operatorname{kr}(A)$. The formal proof through normality and blocking is
