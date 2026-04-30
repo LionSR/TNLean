@@ -50,7 +50,7 @@ positive-length MPV equalities, and the length-zero identity.
 - `MPSTensor.sameMPV₂Pos_blockTensor_commonFlatAt_of_blockWordRelabeling` records
   that the zero-tail term vanishes at positive system sizes, so the blocked tensor
   and the weighted common-sector family have equal MPV coefficients there.
-- `MPSTensor.fundamentalTheorem_after_blocking_1606_commonLength_commonSector_of_blockWordRelabeling`
+- `MPSTensor.fundamentalTheorem_after_blocking_commonLength_commonSector_of_blockWordRelabeling`
   starts from `SameMPV₂ A B`, chooses one positive blocking length for both sides,
   obtains common cyclic-sector families on both sides, and then conditionally
   rewrites all nonzero-part and zero-tail conclusions with the weighted
