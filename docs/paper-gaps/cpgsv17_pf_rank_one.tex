@@ -19,9 +19,7 @@
 Appendix C.2 of Cirac--P\'erez-Garc\'ia--Schuch--Verstraete relates the strong
 area law and zero correlation length for a simple matrix product density operator
 to an outer-product factorization of a finite trace matrix
-\cite[Appendix~C.2, Lemmas~C.3--C.4]{Cirac2016MPDO_arXiv}. The relevant source
-and formal locations are listed for comparison.
-\footnote{For traceability, this note corresponds to
+\cite[Appendix~C.2, Lemmas~C.3--C.4]{Cirac2016MPDO_arXiv}.\footnote{For traceability, this note corresponds to
 \href{https://github.com/LionSR/TNLean/issues/1041}{issue \#1041}. The
 underlying question was isolated in
 \href{https://github.com/LionSR/TNLean/issues/832}{issue \#832}; the finite
@@ -129,11 +127,11 @@ this forces exactly one $\lambda_i$ to be $1$ and all the others to be
 $0$. Therefore the diagonal form has rank one, and unitary conjugation gives
 an outer-product factorization of $T$.
 
-This corrected theorem should not be read as a refutation of the intended MPDO
-result. It identifies the extra matrix structure that is sufficient to justify
-the rank-one step. It remains to show that the trace matrix arising from the neighboring operators
-has this positive-semidefinite or Hermitian structure
-$\eta_{k,h}$. Positivity of each $\eta_{k,h}$ gives
+This corrected theorem does not refute the intended MPDO result. It identifies
+a matrix-level hypothesis sufficient for the rank-one step. The remaining
+question is whether the trace matrix
+$T_{k,h}=\operatorname{tr}(\eta_{k,h})$ arising from the neighboring operators is
+Hermitian or positive semidefinite. Positivity of each $\eta_{k,h}$ gives
 $T_{k,h}=\operatorname{tr}(\eta_{k,h})\geq 0$ entry by entry, but entrywise
 nonnegativity is not matrix-level positive semidefiniteness or Hermitian
 symmetry of $T$.
