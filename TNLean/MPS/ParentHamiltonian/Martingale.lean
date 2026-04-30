@@ -40,7 +40,7 @@ Kastoryano–Lucia 2018 (arXiv:1705.09491), Nachtergaele 1996
    gives `γ ‖v‖ ≤ ‖H v‖` for `v ⊥ ker H`.
 
 The last step — the implication from the quadratic-form inequality
-`H² ≥ γ H` to the norm bound `γ ‖v‖ ≤ ‖H v‖` on `(ker H)ᗮ` — is recorded
+`H² ≥ γ H` to the norm bound `γ ‖v‖ ≤ ‖H v‖` on `(ker H)ᗮ` — is stated
 as the abstract lemma `FrustrationFree.spectralGap_of_martingale` below.
 Its hypothesis is the quadratic-form inequality (in inner-product form),
 and its proof is the spectral-theorem argument: diagonalising the
@@ -52,7 +52,7 @@ vanish on `(ker H)ᗮ`) then yields `γ² ‖v‖² ≤ ‖H v‖²`.
 
 The MPS-specific step (producing the finite-overlap estimate for
 `parentHamiltonianES A L N`) is the remaining obligation of
-`MPSTensor.parentHamiltonianES_gap_bound_of_friedrichs`, which records a
+`MPSTensor.parentHamiltonianES_gap_bound_of_friedrichs`, which states a
 concrete Friedrichs-angle/row-sum lower bound that
 `MPSTensor.parentHamiltonian_gapped` turns into the existential gap statement.
 
@@ -94,7 +94,7 @@ concrete Friedrichs-angle/row-sum lower bound that
   estimate to the explicit gap bound.
 * `MPSTensor.parentHamiltonian_gapped` — uniform spectral gap for MPS
   parent Hamiltonians on injective tensors, obtained from the
-  Friedrichs-angle bound recorded in
+  Friedrichs-angle bound stated in
   `parentHamiltonianES_gap_bound_of_friedrichs`.
 -/
 
@@ -136,7 +136,7 @@ the row-sum bound) produces the operator inequality `H² ≥ γ H` for the
 PSD operator `H`, the norm lower bound — and hence the spectral gap
 for eigenvectors of `H` — follows by the spectral theorem. This lemma
 provides the final spectral-theorem step; the remaining MPS-specific
-quadratic-form hypothesis is recorded separately in
+quadratic-form hypothesis is stated separately in
 `MPSTensor.parentHamiltonianES_gap_bound_of_friedrichs`. -/
 theorem spectralGap_of_martingale {ι : Type*} [Fintype ι] {γ : ℝ} (hγ : 0 < γ)
     {H : EuclideanSpace ℂ ι →ₗ[ℂ] EuclideanSpace ℂ ι} (hH : H.IsPositive)

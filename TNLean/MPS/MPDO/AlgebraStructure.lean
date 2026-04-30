@@ -25,7 +25,7 @@ formalize is the stationary C$^*$-algebra structure naturally attached to an MPO
 whose blocked transfer maps are idempotent, together with a first explicit
 coordinate layer obtained by choosing bases of the blocked support algebras.
 
-More precisely, `AlgebraStructureData` now records a genuine tower of support
+More precisely, `AlgebraStructureData` now contains a genuine tower of support
 `StarSubalgebra`s together with multiplication and inclusion maps realized by the
 ambient matrix product and the ambient inclusion. Compatibility with an MPO
 tensor `M` means that, for every positive blocked size `n`, the carrier `A n`
@@ -136,7 +136,7 @@ size-`2n` support algebra, while `iota n` is the inclusion into the size-`n+1`
 support algebra. The fields `m_apply` and `iota_apply` require that these maps
 are realized by the ambient matrix product and ambient inclusion.
 
-This structure records only this realization data. It does **not** yet include
+This structure contains only this realization data. It does **not** yet include
 the full §4.5 coherence / coefficient / BNT layer from the paper. -/
 structure AlgebraStructureData (d D : ℕ) where
   /-- Support algebra at blocked size `n`. -/

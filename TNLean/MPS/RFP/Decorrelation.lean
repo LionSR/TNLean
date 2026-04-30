@@ -165,7 +165,7 @@ Absorption, reverse-product, and ground-space characterisation lemmas
 for the commuting parent Hamiltonian structure.
 -/
 
-section HasCommutingParentHamAPI
+section HasCommutingParentHamProperties
 
 variable {E : Type*} [AddCommGroup E] [Module ℂ E]
 
@@ -270,7 +270,7 @@ theorem HasCommutingParentHam.pXB_of_ground {P_K : E →ₗ[ℂ] E}
 
 end Decorrelation
 
-end HasCommutingParentHamAPI
+end HasCommutingParentHamProperties
 
 /-!
 ### `IsDecorrelated` properties
@@ -278,7 +278,7 @@ end HasCommutingParentHamAPI
 Monotonicity and triviality lemmas for the decorrelation predicate.
 -/
 
-section IsDecorrelatedAPI
+section IsDecorrelatedProperties
 
 variable {E : Type*} [AddCommGroup E] [Module ℂ E]
 
@@ -371,4 +371,4 @@ theorem IsDecorrelated.union_obsB {P_K : E →ₗ[ℂ] E}
 
 end Decorrelation
 
-end IsDecorrelatedAPI
+end IsDecorrelatedProperties
