@@ -142,7 +142,7 @@ def HasCommutingForm (M : MPOTensor d D) : Prop :=
 /-- A GSNNCH witness at chain length `N`: a commuting-form witness together with
 its positive normalization constant.
 
-This structures source label `defrhoNComm` in the equivalent positive-operator form
+This states source label `defrhoNComm` in the equivalent positive-operator form
 `ρ⁽ᴺ⁾ = c ∏ᵢ B_{i,i+1}`, where `c > 0` and the translated bond operators
 commute pairwise. The paper's exponential form is recovered by taking
 `B_{i,i+1} = e^{-h_{i,i+1}}` or, more generally, by the projector-limit

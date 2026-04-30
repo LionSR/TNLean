@@ -298,7 +298,7 @@ theorem AppendixBStructuralData.mpv_eq_productPairState_one {A : MPSTensor d D}
 
 /-- The remaining chain-space extraction needed after Appendix B.
 
-For a fixed structural witness, this structures the two facts that are still not
+For a fixed structural witness, this captures the two facts that are still not
 produced internally by `rfp_nt_structural_full`: the even-chain MPV must be a
 repeated copy of the two-site amplitude determined by that same witness, and the
 nearest-neighbor parent projectors on each finite chain must be identified with a
