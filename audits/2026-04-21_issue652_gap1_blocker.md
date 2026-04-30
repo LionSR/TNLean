@@ -19,7 +19,7 @@ Close the remaining non-periodic canonical-form reduction gap by:
    `MPSTensor.exists_bnt_grouping`, namely the equal-norm same-MPV assumption
    `hMPVEq`; and
 2. upgrading
-   `MPSTensor.fundamentalTheorem_after_blocking_1606_structural`
+   `MPSTensor.fundamentalTheorem_after_blocking_structural`
    so that its `SameMPV₂ A B` hypothesis is actually used to produce the
    after-blocking matching form of CPSV17 Theorem 1.
 
@@ -118,7 +118,7 @@ those sums need not converge, so the old proportional-FT route cannot yet be
 used to recover a global gauge statement
 (`FundamentalTheorem/SectorDecomposition.lean:290-295`).
 
-## Consequence for `fundamentalTheorem_after_blocking_1606_structural`
+## Consequence for `fundamentalTheorem_after_blocking_structural`
 
 The common-period part is available on `main`:
 
@@ -173,7 +173,7 @@ A realistic path is:
 2. Add a theorem comparing two sector decompositions with different BNT bases:
    first recover a common basis up to permutation and gauge phase, then compare
    sector-weight multisets on the matched basis blocks.
-3. Only after that should `fundamentalTheorem_after_blocking_1606_structural`
+3. Only after that should `fundamentalTheorem_after_blocking_structural`
    be upgraded and the `\notready` blueprint remark flipped.
 
 Without that sector-level endpoint theorem, the issue cannot be closed by local

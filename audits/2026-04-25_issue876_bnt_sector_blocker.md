@@ -68,7 +68,7 @@ from the blocked TP-primitive output.  Informally, it must:
 
 Before the Wave 15 update below, #860 and #877 had to treat the one-sided
 BNT sector pair as a hypothesis, as in
-`fundamentalTheorem_after_blocking_1606_sector_of_bntPair_matched`.
+`fundamentalTheorem_after_blocking_sector_of_bntPair_matched`.
 
 ## Wave 14 slot D update
 

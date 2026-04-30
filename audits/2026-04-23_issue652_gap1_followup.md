@@ -228,7 +228,7 @@ Once Layers A and B exist, the structural after-blocking theorem can finally be
 retargeted honestly:
 
 ```lean
-theorem fundamentalTheorem_after_blocking_1606_sector
+theorem fundamentalTheorem_after_blocking_sector
     {d D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (hSame : SameMPV₂ A B) :
@@ -271,7 +271,7 @@ already formalized on `main`; the missing content is the sector endpoint.
    formalize the basis-matching + phase-absorption theorem
    `fundamentalTheorem_equalMPV_sectorDecomposition_hetero`.
 3. **Assembly issue**:
-   retarget `fundamentalTheorem_after_blocking_1606_structural` at the sector
+   retarget `fundamentalTheorem_after_blocking_structural` at the sector
    endpoint, then tighten the `\notready` blueprint remark in
    `blueprint/src/chapter/ch11_assembly.tex`.
 

@@ -83,7 +83,7 @@ theorem afterBlocking_sectorComparison_of_proportionalDecompositionConclusion
               (fun q => ζ j * Q.weight (perm j) (Fin.cast (hCopies j) q)) := by
   obtain ⟨cover⟩ := nonempty_mpvCommonPhaseCover_of_proportionalDecompositionConclusion
     (d := blockPhysDim d p) blocksA blocksB hMatch
-  exact fundamentalTheorem_after_blocking_1606_sector_of_common_blocks_commonPhaseCover
+  exact fundamentalTheorem_after_blocking_sector_of_common_blocks_commonPhaseCover
     A B hSame hp μA blocksA μB blocksB cover hAblocks hBblocks hTPA hTPB hIrrA hIrrB
     hPrimA hPrimB hInjA hInjB hμA hμB
 
