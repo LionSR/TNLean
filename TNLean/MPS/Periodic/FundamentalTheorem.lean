@@ -24,8 +24,8 @@ Z-gauge theory used in its equal-case strengthening:
 
 * **Supporting lemmas for Theorem 3.8**: The equal-case strengthening produces per-block
   Z-gauge data (diagonal Z with Z^m = 1) from the Newton–Girard identity on sector weights.
-  The Z-gauge construction helpers (`zgauge_construction`, `perBlock_zgauge_of_power_eq`)
-  compose the definitions from PR #94 into ready-to-use form.
+  The Z-gauge construction theorems (`zgauge_construction`, `perBlock_zgauge_of_power_eq`)
+  combine the results from PR #94.
 
 ## Status of #81 (periodic overlap dichotomy)
 

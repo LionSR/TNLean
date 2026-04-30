@@ -9,7 +9,7 @@ open scoped BigOperators
 /-!
 # Periodic-sector blocking helpers
 
-This module records lightweight definitions used by periodic-sector arguments:
+This module defines the elementary blocking data used by periodic-sector arguments:
 
 * the gcd-based block count/period for blocking by an arbitrary `p`;
 * a concrete orbit-sum projection builder (`∑ l, T^[l](Q)`);
@@ -18,7 +18,7 @@ This module records lightweight definitions used by periodic-sector arguments:
 
 namespace MPSTensor
 
-/-! ## GCD arithmetic for periodic-sector blocking (Lemma 2.5) -/
+/-! ## GCD blocking arithmetic (Lemma 2.5) -/
 
 /-- Number of periodic blocks after blocking period-`m` data by `p`: `gcd(m,p)`. -/
 def periodicBlockCount (m p : ℕ) : ℕ := Nat.gcd m p

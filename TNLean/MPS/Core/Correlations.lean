@@ -18,9 +18,8 @@ observables through the transfer map `transferMap`, and state the standard
 sum-of-exponentials / exponential-decay statements in a form that later
 results use.
 
-The theorems in this file are intentionally lightweight formulations: they expose
-exact assumptions needed in later files while keeping the implementation
-independent of a specific spectral decomposition.
+The theorems in this file state the exact assumptions needed later while keeping
+the spectral input independent of a particular diagonalization theorem.
 -/
 
 open scoped Matrix BigOperators

@@ -11,7 +11,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 This module houses the Gemma/arXiv:1708.00029 §4 content that depends on the
 periodic fundamental theorem. It contains:
 
-1. A lightweight **single-block** symmetry formulation (`rotatePhysical` +
+1. A **single-block** symmetry theorem (`rotatePhysical` +
    `gaugeEquiv_of_sameMPV_rotatePhysical`).
 2. A **periodic-form assembly lemma** that isolates the only missing input for
    the full Corollary 4.1 of arXiv:1708.00029 §4.
@@ -46,13 +46,13 @@ def rotatePhysical (u : Matrix (Fin d) (Fin d) ℂ) (A : MPSTensor d D) : MPSTen
     (u : Matrix (Fin d) (Fin d) ℂ) (A : MPSTensor d D) (i : Fin d) :
     rotatePhysical u A i = ∑ j : Fin d, u i j • A j := rfl
 
-/-- Symmetry-to-virtual-gauge formulation.
+/-- Symmetry-to-virtual-gauge theorem.
 
 If `A` is injective and has the same MPV family as its physical-leg rotation
 `B = rotatePhysical u A`, then `B` is gauge equivalent to `A`.
 
-This is the formal Lean bridge used in Corollary-4.1 style arguments: the
-nontrivial analytic/group-theoretic part is in the hypothesis
+This is the formal statement used in Corollary-4.1 style arguments: the
+analytic and group-theoretic content is in the hypothesis
 `SameMPV A (rotatePhysical u A)`, and the conclusion is provided by the
 single-block Fundamental Theorem. -/
 theorem gaugeEquiv_of_sameMPV_rotatePhysical
@@ -70,7 +70,7 @@ tensors are in irreducible form II and generate the same MPV family, they are
 Z-gauge equivalent. Then the symmetry corollary follows immediately for
 `B := rotatePhysical u A` once `B` is known to be in irreducible form II.
 
-This theorem explicitly documents the current dependency boundary: no
+This theorem states the current dependency boundary: no
 additional overlap arguments are needed *here* beyond the periodic equal-case
 FT input. -/
 theorem zGaugeEquiv_of_isIrreducibleForm_sameMPV_rotatePhysical
