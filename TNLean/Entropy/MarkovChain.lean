@@ -21,8 +21,8 @@ subsystem `B`: after a unitary change of basis on `B`, the Hilbert space of
 block-diagonal direct sum `⊕_j p_j (ρ_{A B_jᴸ} ⊗ ρ_{B_jᴿ C})`.
 
 The actual proof is intentionally deferred to the sanctioned axiom in
-`TNLean.Axioms.Entropy`; this file provides only the named formulations and the
-namespace abbreviation for the quantum-Markov-chain decomposition.
+`TNLean.Axioms.Entropy`; this file provides only the named formulations and
+the namespace abbreviation for the quantum-Markov-chain decomposition.
 
 ## Main declarations
 
