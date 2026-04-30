@@ -153,7 +153,7 @@ jobs:
             if (has(/\b(blueprint|latex|docstring|documentation|readme)\b/)) {
               labels.add('documentation');
             }
-            if (has(/\b(bug|failure|failed|error|type error|incorrect|wrong|broken)\b/)) {
+            if (has(/\b(bug|failure|failed|type error|compile error|incorrect|wrong|broken)\b/)) {
               labels.add('bug');
             }
             if (has(/\b(ci|workflow|build|action|actions|check|checks)\b/)) {
