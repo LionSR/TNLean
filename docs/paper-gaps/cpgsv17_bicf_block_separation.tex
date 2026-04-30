@@ -15,8 +15,8 @@
 
 \section{The assertion}
 
-This note concerns the finite-length block-separation step in Proposition IV.3
-of Cirac, P\'erez-Garc\'ia, Schuch, and Verstraete
+The finite-length block-separation step in Proposition IV.3 of Cirac,
+P\'erez-Garc\'ia, Schuch, and Verstraete is the point at issue
 \cite{Cirac2016MPDO_arXiv,Cirac2017MPDO_AnnPhys}.\footnote{For traceability,
 this note corresponds to \href{https://github.com/LionSR/TNLean/issues/1043}{issue \#1043}.
 Related formal work is recorded in
@@ -60,9 +60,9 @@ Representations'', \emph{Quantum Information and Computation} \textbf{7}
 
 The formal treatment does not yet derive this proposition from the
 canonical-form and basis-of-normal-tensors hypotheses. Instead, it makes the
-finite-length conclusion explicit. The horizontal canonical-form data assume
-the following trace-separation property: there is a length $N$ such
-that, if matrices $\Delta_j\in M_{D_j}(\mathbb C)$ satisfy
+finite-length conclusion explicit. The horizontal canonical-form data record
+the following trace-separation assumption: there is a length $N$ such that, if
+matrices $\Delta_j\in M_{D_j}(\mathbb C)$ satisfy
 \[
   \sum_{j=1}^g \operatorname{tr}(\Delta_j A_j^w)=0
   \qquad\text{for every word } w \text{ of length } N,
@@ -87,21 +87,23 @@ polynomials which are the identity on one chosen block and vanish on all the
 others. Concatenating an injective prefix with such a selector suffix gives the
 full product-algebra span.
 
-In the formal files these three criteria are named
-\texttt{WordTupleSpanTop}, \texttt{wordEntryFamily}, and
-\texttt{PropBlockInjective}. The field corresponding to the trace-separation
-conclusion is \texttt{HorizontalCFData.biCF}, and the constructors from the three
-finite-length hypotheses to horizontal canonical-form data are in
-\path{TNLean/MPS/MPDO/BiCFDerivation.lean}.  In particular, the relevant
-formal implications include \texttt{hasBiCF\_of\_wordTupleSpanTop},
+In the formal files, these three finite-length criteria suffice to produce the
+horizontal canonical-form trace-separation conclusion.\footnote{The criteria are
+named \texttt{WordTupleSpanTop}, \texttt{wordEntryFamily}, and
+\texttt{PropBlockInjective}. The trace-separation assumption is
+\texttt{HorizontalCFData.biCF}. The constructors from these hypotheses to
+horizontal canonical-form data are in
+\path{TNLean/MPS/MPDO/BiCFDerivation.lean}. Relevant implications include
+\texttt{hasBiCF\_of\_wordTupleSpanTop},
 \texttt{hasBiCF\_of\_wordEntryFamily\_linearIndependent},
-\texttt{hasBiCF\_of\_propBlockInjective}, and the corresponding
+\texttt{hasBiCF\_of\_propBlockInjective}, and corresponding
 \texttt{HorizontalCFData} constructors such as
-\texttt{horizontalCFData\_of\_propBlockInjective}.  The blueprint records the
-same state in \path{blueprint/src/chapter/ch02b_mpdo.tex}, lines 708--787.
+\texttt{horizontalCFData\_of\_propBlockInjective}. The blueprint records the same
+state in \path{blueprint/src/chapter/ch02b_mpdo.tex}, lines 708--787.}
 Thus Proposition IV.3 has not been asserted without proof. The formal statements
 prove that several finite-length witnesses are sufficient, while the derivation
-of such a witness from the full canonical-form and BNT hypotheses remains open.
+of such a witness from the full canonical-form and basis-of-normal-tensors
+hypotheses remains open.
 
 \section{The counterexample boundary}
 
@@ -117,29 +119,29 @@ word while the tuple $(\Delta_1,\Delta_2)$ is nonzero.
 
 This example is formalized in
 \path{TNLean/MPS/MPDO/BiCFDerivation.lean}, lines 1363--1463, and is recorded in
-\path{docs/counterexamples.md}, lines 29--35. It shows that the extra
-finite-length witness included in the formal hypotheses is genuinely
-stronger than the other horizontal canonical-form fields. It does not refute
+\path{docs/counterexamples.md}, lines 29--35. It shows that the additional
+finite-length witness in the formal hypotheses is genuinely stronger than the
+other horizontal canonical-form assumptions. It does not refute
 CPGSV17 Proposition IV.3. The duplicate scalar blocks are related by similarity
 and phase, and therefore do not form a minimal basis of normal tensors in the
 sense of the source characterization.
 
 \section{Conclusion}
 
-The present status is provisional and should not be read as a source erratum.
+The conclusion is provisional and should not be read as a source erratum.
 The formal statements replace the paper's finite-length block-separation theorem
 by explicit finite-length span, linear-independence, or selector hypotheses. A
 small counterexample shows that those hypotheses cannot be derived from the
-weaker fields alone. The full source theorem remains plausible under the actual
-canonical-form and minimal BNT hypotheses.
+weaker assumptions alone. The full source theorem remains plausible under the
+actual canonical-form and minimal basis-of-normal-tensors hypotheses.
 
 What remains to be formalized is the David2006/CPGSV17 finite-length
-block-separation argument: from minimality of the BNT blocks, together with
-single-block injectivity after Wielandt blocking, one must produce a common
-finite selector or entrywise linear-independence witness, with the paper's bound
-$3(L+1)(D-1)$ and hence the stated $3D^5$ corollary. Until that argument is
-available, formal uses of biCF should keep the finite-length witness as an
-explicit hypothesis or field.
+block-separation argument: from minimality of the basis-of-normal-tensors blocks,
+together with single-block injectivity after Wielandt blocking, one must produce
+a common finite selector or entrywise linear-independence witness, with the
+paper's bound $3(L+1)(D-1)$ and hence the stated $3D^5$ corollary. Until that
+argument is available, the finite-length witness should remain an explicit
+hypothesis.
 
 \bibliographystyle{alpha}
 \bibliography{references}
