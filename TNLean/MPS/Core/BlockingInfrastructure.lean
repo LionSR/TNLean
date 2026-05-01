@@ -5,6 +5,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.MPS.Core.BlockingTransfer
 import TNLean.MPS.FundamentalTheorem.Multi
 import TNLean.MPS.CanonicalForm.BlockingViaAdjoint
+import TNLean.MPS.Tactic.Basic
 
 import Mathlib.Algebra.GCDMonoid.Finset
 
@@ -120,7 +121,7 @@ theorem sameMPV₂_blockTensor_of_sameMPV₂_toTensorFromBlocks
       (blockTensor (d := d) (D := D) A p)
       (toTensorFromBlocks (d := blockPhysDim d p)
         (fun k => (μ k) ^ p) (fun k => blockTensor (d := d) (D := dim k) (blocks k) p)) := by
-  intro N σ
+  mpv_ext
   let σflat := blockedFlatConfig (d := d) p σ
   calc
     mpv (blockTensor (d := d) (D := D) A p) σ
@@ -148,7 +149,7 @@ theorem sameMPV₂_blockTensor
     SameMPV₂
       (blockTensor (d := d) (D := D₁) A p)
       (blockTensor (d := d) (D := D₂) B p) := by
-  intro N σ
+  mpv_ext
   let σflat := blockedFlatConfig (d := d) p σ
   calc
     mpv (blockTensor (d := d) (D := D₁) A p) σ
@@ -172,7 +173,7 @@ theorem sameMPV₂_blockTensor_toTensorFromBlocks
   exact sameMPV₂_blockTensor_of_sameMPV₂_toTensorFromBlocks
     (d := d) (D := ∑ k : Fin r, dim k) (dim := dim)
     (A := toTensorFromBlocks (d := d) (μ := μ) blocks)
-    μ blocks (by intro N σ; rfl) p
+    μ blocks (by mpv_ext; rfl) p
 
 /-- Positive-length MPV equality is preserved by positive physical blocking. -/
 theorem sameMPV₂Pos_blockTensor
@@ -182,7 +183,7 @@ theorem sameMPV₂Pos_blockTensor
     SameMPV₂Pos
       (blockTensor (d := d) (D := D₁) A p)
       (blockTensor (d := d) (D := D₂) B p) := by
-  intro N hN σ
+  mpv_ext
   let σflat := blockedFlatConfig (d := d) p σ
   calc
     mpv (blockTensor (d := d) (D := D₁) A p) σ
@@ -221,7 +222,7 @@ theorem sameMPV₂Pos_toTensorFromBlocks_blockPower
       (d := d)
       (toTensorFromBlocks (d := d) (μ := μA) blocksA)
       (toTensorFromBlocks (d := d) (μ := μB) blocksB) hSame p hp
-  intro N hN σ
+  mpv_ext
   calc
     mpv (toTensorFromBlocks (d := blockPhysDim d p)
         (fun k => (μA k) ^ p)
@@ -280,6 +281,7 @@ dimensions leaves the tensors and their MPV/transfer-map properties unchanged.
 
 /-- The physical dimension of an iterated blocking is the physical dimension of
 direct blocking by the product length. -/
+@[mps_block_words]
 theorem blockPhysDim_blockPhysDim (d m n : ℕ) :
     blockPhysDim (blockPhysDim d m) n = blockPhysDim d (m * n) := by
   simp [blockPhysDim_eq_pow, pow_mul]
@@ -393,6 +395,7 @@ theorem wordOfBlock_iteratedBlockIndex_directToIteratedBlockIndex (d m n : ℕ)
 
 /-- Grouping a direct blocked index and then flattening the iterated index recovers the
 original direct blocked index. -/
+@[mps_block_words]
 theorem iteratedBlockIndex_directToIteratedBlockIndex (d m n : ℕ)
     (i : Fin (blockPhysDim d (m * n))) :
     iteratedBlockIndex d m n (directToIteratedBlockIndex d m n i) = i := by
@@ -412,6 +415,7 @@ theorem directToIteratedBlockIndex_surjective (d m n : ℕ) :
 
 /-- Flattening an iterated blocked index and then grouping it back recovers the iterated
 blocked index. -/
+@[mps_block_words]
 theorem directToIteratedBlockIndex_iteratedBlockIndex (d m n : ℕ)
     (i : Fin (blockPhysDim (blockPhysDim d m) n)) :
     directToIteratedBlockIndex d m n (iteratedBlockIndex d m n i) = i := by
@@ -428,16 +432,17 @@ noncomputable def directIteratedBlockEquiv (d m n : ℕ) :
   left_inv := iteratedBlockIndex_directToIteratedBlockIndex d m n
   right_inv := directToIteratedBlockIndex_iteratedBlockIndex d m n
 
-@[simp] theorem directIteratedBlockEquiv_apply (d m n : ℕ)
+@[simp, mps_block_words] theorem directIteratedBlockEquiv_apply (d m n : ℕ)
     (i : Fin (blockPhysDim d (m * n))) :
     directIteratedBlockEquiv d m n i = directToIteratedBlockIndex d m n i := rfl
 
-@[simp] theorem directIteratedBlockEquiv_symm_apply (d m n : ℕ)
+@[simp, mps_block_words] theorem directIteratedBlockEquiv_symm_apply (d m n : ℕ)
     (i : Fin (blockPhysDim (blockPhysDim d m) n)) :
     (directIteratedBlockEquiv d m n).symm i = iteratedBlockIndex d m n i := rfl
 
 /-- An iterated blocked index `j` is the grouping of a direct blocked index `i`
 exactly when flattening `j` recovers `i`. -/
+@[mps_block_words]
 theorem eq_directToIteratedBlockIndex_iff_iteratedBlockIndex_eq (d m n : ℕ)
     (i : Fin (blockPhysDim d (m * n)))
     (j : Fin (blockPhysDim (blockPhysDim d m) n)) :
@@ -466,6 +471,7 @@ noncomputable def reindexPhysical {d₁ d₂ D : ℕ} (f : Fin d₁ → Fin d₂
 
 /-- Iterated physical blocking agrees with direct blocking after the canonical
 index relabeling from iterated blocks to flattened blocks. -/
+@[mps_block_words]
 theorem blockTensor_blockTensor_apply {D : ℕ} (A : MPSTensor d D) (m n : ℕ)
     (i : Fin (blockPhysDim (blockPhysDim d m) n)) :
     blockTensor (d := blockPhysDim d m) (D := D)
@@ -492,7 +498,7 @@ theorem sameMPV₂_blockTensor_blockTensor_mul_reindex {D : ℕ}
       (reindexPhysical (iteratedBlockIndex d m n)
         (blockTensor (d := d) (D := D) A (m * n))) := by
   rw [blockTensor_blockTensor_eq_reindex]
-  intro N σ
+  mpv_ext
   rfl
 
 /-- Casting the physical dimension of both tensors preserves heterogeneous MPV equality. -/

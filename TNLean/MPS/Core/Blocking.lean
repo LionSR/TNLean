@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 
 import TNLean.MPS.Defs
+import TNLean.MPS.Tactic.Basic
 
 import Mathlib.Data.Fintype.BigOperators
 import Mathlib.Data.Fintype.Card
@@ -45,7 +46,7 @@ noncomputable def decodeBlock (d L : ℕ) : Fin (blockPhysDim d L) → (Fin L �
 noncomputable def wordOfBlock (d L : ℕ) (i : Fin (blockPhysDim d L)) : List (Fin d) :=
   List.ofFn (decodeBlock d L i)
 
-@[simp] lemma length_wordOfBlock (d L : ℕ) (i : Fin (blockPhysDim d L)) :
+@[simp, mps_block_words] lemma length_wordOfBlock (d L : ℕ) (i : Fin (blockPhysDim d L)) :
     (wordOfBlock d L i).length = L := by
   classical
   simp [wordOfBlock]
@@ -59,14 +60,16 @@ noncomputable def blockTensor (A : MPSTensor d D) (L : ℕ) :
 noncomputable def flattenBlockedWord (d L : ℕ) : List (Fin (blockPhysDim d L)) → List (Fin d)
   | w => (w.map (wordOfBlock d L)).flatten
 
-@[simp] lemma flattenBlockedWord_nil (d L : ℕ) : flattenBlockedWord d L [] = [] := by
+@[simp, mps_block_words] lemma flattenBlockedWord_nil (d L : ℕ) : flattenBlockedWord d L [] = [] := by
   simp [flattenBlockedWord]
 
+@[mps_block_words]
 lemma flattenBlockedWord_cons (d L : ℕ) (i : Fin (blockPhysDim d L))
     (w : List (Fin (blockPhysDim d L))) :
     flattenBlockedWord d L (i :: w) = wordOfBlock d L i ++ flattenBlockedWord d L w := by
   simp [flattenBlockedWord]
 
+@[mps_block_words]
 lemma evalWord_blockTensor (A : MPSTensor d D) (L : ℕ) :
     ∀ w : List (Fin (blockPhysDim d L)),
       evalWord (blockTensor (d := d) (D := D) A L) w =
@@ -81,6 +84,7 @@ lemma evalWord_blockTensor (A : MPSTensor d D) (L : ℕ) :
       simp [evalWord, blockTensor, flattenBlockedWord_cons, ih, evalWord_append]
 
 /-- Length of a flattened blocked word. -/
+@[mps_block_words]
 lemma length_flattenBlockedWord (d L : ℕ) :
     ∀ w : List (Fin (blockPhysDim d L)), (flattenBlockedWord d L w).length = w.length * L := by
   intro w
