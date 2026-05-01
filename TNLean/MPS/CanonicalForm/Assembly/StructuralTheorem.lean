@@ -1194,6 +1194,79 @@ theorem toRelabelingHypothesis {d : ℕ}
 
 end CommonGroupedBlockCastHypothesis
 
+/-- **Unconditional common primitive irreducible block decompositions.**
+
+If the Fintype-level coordinate assertion `flattenWordOfBlock_cast_eq` holds (the
+single remaining mathematical fact from #1075/#990), then the
+`afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts` theorem
+applies without any blocking-coordinate hypothesis.
+
+The proof chains:
+1. `flattenWordOfBlock_cast_eq` → `CommonGroupedBlockCastHypothesis d`
+   (via `groupedBlockCastAgrees_of_flattenWordOfBlock_cast_eq`)
+2. `CommonGroupedBlockCastHypothesis d` → `CommonSectorRelabelingHypothesis d`
+   (via `CommonGroupedBlockCastHypothesis.toRelabelingHypothesis`)
+3. `CommonSectorRelabelingHypothesis d` → the full common-block decomposition
+   (via `afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts`)
+
+The remaining gap is therefore exactly the single `sorry` in
+`flattenWordOfBlock_cast_eq` in `CyclicSectorDecomposition.lean`. -/
+theorem unconditional_commonPrimitiveIrreducibleBlocks
+    {d D₁ D₂ : ℕ}
+    (h_flatten : ∀ {m n p : ℕ} (hp_eq : p = m * n)
+      (h_card : blockPhysDim (blockPhysDim d m) n = blockPhysDim d p)
+      (i : Fin (blockPhysDim d p)),
+      flattenBlockedWord d m
+        (wordOfBlock (blockPhysDim d m) n (Fin.cast h_card.symm i)) =
+      wordOfBlock d p i)
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (hSame : SameMPV₂ A B) :
+    ∃ p : ℕ, 0 < p ∧
+    ∃ (zeroTailA zeroTailB : ℕ),
+    ∃ (rA : ℕ) (dimA : Fin rA → ℕ) (μA : Fin rA → ℂ)
+      (blocksA : (x : Fin rA) → MPSTensor (blockPhysDim d p) (dimA x)),
+    ∃ (rB : ℕ) (dimB : Fin rB → ℕ) (μB : Fin rB → ℂ)
+      (blocksB : (x : Fin rB) → MPSTensor (blockPhysDim d p) (dimB x)),
+      (∀ (N : ℕ) (σ : Fin N → Fin (blockPhysDim d p)),
+        mpv (blockTensor (d := d) (D := D₁) A p) σ =
+          mpv (zeroMPSTensor (blockPhysDim d p) zeroTailA) σ +
+            mpv (toTensorFromBlocks (d := blockPhysDim d p) (μ := μA) blocksA) σ) ∧
+      (∀ (N : ℕ) (σ : Fin N → Fin (blockPhysDim d p)),
+        mpv (blockTensor (d := d) (D := D₂) B p) σ =
+          mpv (zeroMPSTensor (blockPhysDim d p) zeroTailB) σ +
+            mpv (toTensorFromBlocks (d := blockPhysDim d p) (μ := μB) blocksB) σ) ∧
+      SameMPV₂Pos (blockTensor (d := d) (D := D₁) A p)
+        (toTensorFromBlocks (d := blockPhysDim d p) (μ := μA) blocksA) ∧
+      SameMPV₂Pos (blockTensor (d := d) (D := D₂) B p)
+        (toTensorFromBlocks (d := blockPhysDim d p) (μ := μB) blocksB) ∧
+      SameMPV₂Pos
+        (toTensorFromBlocks (d := blockPhysDim d p) (μ := μA) blocksA)
+        (toTensorFromBlocks (d := blockPhysDim d p) (μ := μB) blocksB) ∧
+      (∀ σ : Fin 0 → Fin (blockPhysDim d p),
+        (zeroTailA : ℂ) +
+            mpv (toTensorFromBlocks (d := blockPhysDim d p) (μ := μA) blocksA) σ =
+          (zeroTailB : ℂ) +
+            mpv (toTensorFromBlocks (d := blockPhysDim d p) (μ := μB) blocksB) σ) ∧
+      (∀ x, μA x ≠ 0) ∧
+      (∀ x, μB x ≠ 0) ∧
+      (∀ x, ∑ i : Fin (blockPhysDim d p), (blocksA x i)ᴴ * blocksA x i = 1) ∧
+      (∀ x, ∑ i : Fin (blockPhysDim d p), (blocksB x i)ᴴ * blocksB x i = 1) ∧
+      (∀ x, _root_.IsPrimitive
+        (transferMap (d := blockPhysDim d p) (D := dimA x) (blocksA x))) ∧
+      (∀ x, _root_.IsPrimitive
+        (transferMap (d := blockPhysDim d p) (D := dimB x) (blocksB x))) ∧
+      (∀ x, IsIrreducibleTensor (blocksA x)) ∧
+      (∀ x, IsIrreducibleTensor (blocksB x)) ∧
+      (∀ x, 0 < dimA x) ∧
+      (∀ x, 0 < dimB x) := by
+  have h_group : CommonGroupedBlockCastHypothesis d := by
+    intro r dim blocks F k
+    exact F.groupedBlockCastAgrees_of_flattenWordOfBlock_cast_eq h_flatten k
+  have h_relabel : CommonSectorRelabelingHypothesis d :=
+    h_group.toRelabelingHypothesis
+  exact afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts
+    A B hSame h_relabel
+
 set_option maxHeartbeats 800000 in
 -- The conclusion records both decompositions and all their structural hypotheses together.
 /-- **Common primitive irreducible block decompositions after blocked-word reindexing.**
