@@ -8,7 +8,7 @@ comparison theorem, or equivalently to common MPV phase-cover data for the two
 nonzero-sector families.
 
 The Lean theorem added in this round is
-`MPSTensor.afterBlocking_commonPrimitiveIrreducibleBlocks_blockSpanConsequences_of_reindexedNonzeroParts`
+`MPSTensor.afterBlocking_commonSector_blockSpan_of_reindexedNonzeroParts`
 in `TNLean/MPS/CanonicalForm/Assembly/ProportionalComparison.lean`.  It starts
 from `SameMPV₂ A B` and the one-sided equality after relabeling blocked physical
 words used by
@@ -73,4 +73,4 @@ common-sector output without an external span hypothesis, one still needs:
    further blocking;
 4. the zero-tail dimension equality required by the zero-tail block-span theorem.
 
-No Gemma-periodic fundamental theorem input is used here.
+No periodic-blocking fundamental theorem from the Gemma route (arXiv:1708.00029) is used here.
