@@ -1318,6 +1318,40 @@ two-basis sector comparison theorem.
 	Lemma~\ref{lem:mpv_common_phase_cover_span_eq}.
 \end{proof}
 
+\begin{definition}[Remaining phase-cover hypotheses for common primitive sectors]%
+\label{def:common_primitive_phase_cover_hypotheses}
+	\lean{MPSTensor.CommonPrimitivePhaseCoverHypotheses}
+	\leanok
+	\uses{def:mpv_common_phase_cover, def:injective}
+	For two common primitive nonzero-sector families at one blocking length, this
+	condition records the phase-cover version of
+	Definition~\ref{def:common_primitive_span_hypotheses}: equality of the two
+	zero-tail dimensions, one-site injectivity of all blocks on both sides, and a
+	common MPV phase cover for the two block families.
+\end{definition}
+
+\begin{theorem}[Phase-cover hypotheses imply the remaining span hypotheses]%
+\label{thm:common_primitive_phase_cover_hypotheses_to_span_hypotheses}
+	\lean{MPSTensor.CommonPrimitivePhaseCoverHypotheses.toSpanHypotheses}
+	\leanok
+	\uses{def:common_primitive_phase_cover_hypotheses,
+		def:common_primitive_span_hypotheses}
+	If two common primitive nonzero-sector families satisfy the phase-cover
+	hypotheses of
+	Definition~\ref{def:common_primitive_phase_cover_hypotheses}, then they
+	satisfy the remaining span hypotheses of
+	Definition~\ref{def:common_primitive_span_hypotheses}.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{thm:common_primitive_span_hypotheses_of_common_phase_cover}
+	The zero-tail equality and the two injectivity assertions are already part of
+	the phase-cover hypotheses.  Apply
+	Theorem~\ref{thm:common_primitive_span_hypotheses_of_common_phase_cover} to a
+	common MPV phase cover for the two block families.
+\end{proof}
+
 \begin{theorem}[Zero-tail nonzero block decompositions with a common MPV phase cover]%
 \label{thm:afterBlocking_sectorComparison_zeroTail_of_commonPhaseCover}
 	\lean{MPSTensor.afterBlocking_sectorComparison_zeroTail_of_commonPhaseCover}
@@ -1399,6 +1433,42 @@ two-basis sector comparison theorem.
 	zero-tail dimensions, one-site injectivity, and finite-length nonzero-sector
 	span equality.  These are exactly the additional hypotheses required by the
 	zero-tail block-span comparison theorem.
+\end{proof}
+
+\begin{definition}[Blocked-word relabeling hypothesis for common sectors]%
+\label{def:common_sector_relabeling_hypothesis}
+	\lean{MPSTensor.CommonSectorRelabelingHypothesis}
+	\leanok
+	This is the one-sided assertion that the canonically blocked weighted nonzero
+	part agrees, as an MPV family, with the same common cyclic-sector family after
+	the explicit relabeling of blocked physical words. It is the formal hypothesis
+	isolated by the remaining coordinate equality for direct and iterated blocking.
+\end{definition}
+
+\begin{theorem}[Relabeled common sectors with a common MPV phase cover]%
+\label{thm:afterBlocking_sectorComparison_reindexed_commonPhaseCover}
+	\lean{MPSTensor.afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_commonPhaseCover}
+	\leanok
+	\uses{def:common_primitive_phase_cover_hypotheses,
+		def:common_sector_relabeling_hypothesis}
+	Let $A$ and $B$ have the same MPV family.  Assume the blocked-word relabeling
+	hypothesis for common cyclic sectors.  The common-sector structural theorem then
+	produces a common blocking length, zero-tail identities, and trace-preserving,
+	primitive, irreducible nonzero-sector families on both sides.  If those
+	families satisfy the phase-cover hypotheses of
+	Definition~\ref{def:common_primitive_phase_cover_hypotheses}, then the sector
+	decompositions obtained from the two sides have BNT data, agree as full MPV
+	families, and their sector weights satisfy the matched sector-weight conclusion.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{thm:afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_spanHypotheses,
+		thm:common_primitive_phase_cover_hypotheses_to_span_hypotheses}
+	Use Theorem~\ref{thm:common_primitive_phase_cover_hypotheses_to_span_hypotheses}
+	to form the remaining span hypotheses of
+	Definition~\ref{def:common_primitive_span_hypotheses}.  Then apply the
+	relabeled common-sector theorem with those span hypotheses.
 \end{proof}
 
 \begin{theorem}[Cast-compatible MPV scaling implies phase-matched sector comparison]%
@@ -1492,8 +1562,9 @@ two-basis sector comparison theorem.
 	comparison theorems.  Theorem~\ref{thm:afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_spanHypotheses}
 	then records the remaining hypotheses in their present form: equality of the
 	zero-tail dimensions, injectivity of the common nonzero-sector blocks, and
-	either finite-length MPV span equality or a common phase cover for those
-	blocks.  Establishing these hypotheses is the mathematical passage from
-	equality of total MPV vectors to the componentwise power-sum identities used in
-	the paper proof of Corollary~IV.5.
+	finite-length MPV span equality.  Theorem~\ref{thm:afterBlocking_sectorComparison_reindexed_commonPhaseCover}
+	shows that a common MPV phase cover supplies that span equality and therefore
+	gives the same sector-weight conclusion.  Establishing these hypotheses is the
+	mathematical passage from equality of total MPV vectors to the componentwise
+	power-sum identities used in the paper proof of Corollary~IV.5.
 \end{remark}

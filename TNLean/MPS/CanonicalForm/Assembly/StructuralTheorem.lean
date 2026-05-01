@@ -1081,6 +1081,23 @@ theorem zeroTail_commonFlat_transport_of_reindexed
   · intro x
     exact F.commonFlatWeight_ne_zero μ hμ x
 
+/-- The one-sided blocked-word relabeling hypothesis for common cyclic sectors.
+
+It says that, for every common cyclic-sector family, the canonically blocked
+weighted nonzero tensor agrees as an MPV family with the same blocks read through
+the explicit relabeling of blocked physical words. This is the hypothesis isolated
+by the current blocked-word coordinate problem. -/
+abbrev CommonSectorRelabelingHypothesis (d : ℕ) : Prop :=
+  ∀ {r : ℕ} {dim : Fin r → ℕ}
+    (μ : Fin r → ℂ) (blocks : (k : Fin r) → MPSTensor d (dim k))
+    (F : CommonBlockedCyclicSectorFamily blocks),
+    SameMPV₂
+      (toTensorFromBlocks (d := blockPhysDim d F.p)
+        (μ := fun k : Fin r => (μ k) ^ F.p)
+        (fun k => blockTensor (d := d) (D := dim k) (blocks k) F.p))
+      (toTensorFromBlocks (d := blockPhysDim d F.p)
+        (μ := fun k : Fin r => (μ k) ^ F.p) F.commonReindexedBlock)
+
 set_option maxHeartbeats 800000 in
 -- The conclusion records both decompositions and all their structural hypotheses together.
 /-- **Common primitive irreducible block decompositions after blocked-word reindexing.**
@@ -1101,15 +1118,7 @@ theorem afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts
     {d D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (hSame : SameMPV₂ A B)
-    (hReindexed : ∀ {r : ℕ} {dim : Fin r → ℕ}
-      (μ : Fin r → ℂ) (blocks : (k : Fin r) → MPSTensor d (dim k))
-      (F : CommonBlockedCyclicSectorFamily blocks),
-      SameMPV₂
-        (toTensorFromBlocks (d := blockPhysDim d F.p)
-          (μ := fun k : Fin r => (μ k) ^ F.p)
-          (fun k => blockTensor (d := d) (D := dim k) (blocks k) F.p))
-        (toTensorFromBlocks (d := blockPhysDim d F.p)
-          (μ := fun k : Fin r => (μ k) ^ F.p) F.commonReindexedBlock)) :
+    (hReindexed : CommonSectorRelabelingHypothesis d) :
     ∃ p : ℕ, 0 < p ∧
     ∃ (zeroTailA zeroTailB : ℕ),
     ∃ (rA : ℕ) (dimA : Fin rA → ℕ) (μA : Fin rA → ℂ)
