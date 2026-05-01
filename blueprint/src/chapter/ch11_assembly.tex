@@ -1352,6 +1352,58 @@ two-basis sector comparison theorem.
 	common MPV phase cover for the two block families.
 \end{proof}
 
+\begin{definition}[Remaining proportional-comparison hypotheses for common primitive sectors]%
+\label{def:common_primitive_proportional_hypotheses}
+	\lean{MPSTensor.CommonPrimitiveProportionalHypotheses}
+	\leanok
+	\uses{def:injective}
+	For two common primitive nonzero-sector families at one blocking length, this
+	condition records equality of the two zero-tail dimensions, one-site
+	injectivity of all blocks on both sides, and a BNT proportional-decomposition
+	comparison for the two block families. It is the BNT-comparison version of
+	Definition~\ref{def:common_primitive_phase_cover_hypotheses}.
+\end{definition}
+
+\begin{theorem}[Proportional-comparison hypotheses imply phase-cover hypotheses]%
+\label{thm:common_primitive_proportional_hypotheses_to_phase_cover_hypotheses}
+	\lean{MPSTensor.CommonPrimitiveProportionalHypotheses.toPhaseCoverHypotheses}
+	\leanok
+	\uses{def:common_primitive_proportional_hypotheses,
+		def:common_primitive_phase_cover_hypotheses,
+		thm:common_phase_cover_of_proportional_decomposition}
+	If two common primitive nonzero-sector families satisfy the proportional-comparison
+	hypotheses, then they satisfy the phase-cover hypotheses of
+	Definition~\ref{def:common_primitive_phase_cover_hypotheses}.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{thm:common_phase_cover_of_proportional_decomposition}
+	The zero-tail equality and injectivity assumptions are already present. The BNT
+	proportional-decomposition comparison gives a common MPV phase cover by
+	Theorem~\ref{thm:common_phase_cover_of_proportional_decomposition}.
+\end{proof}
+
+\begin{theorem}[Proportional-comparison hypotheses imply the remaining span hypotheses]%
+\label{thm:common_primitive_proportional_hypotheses_to_span_hypotheses}
+	\lean{MPSTensor.CommonPrimitiveProportionalHypotheses.toSpanHypotheses}
+	\leanok
+	\uses{def:common_primitive_proportional_hypotheses,
+		def:common_primitive_span_hypotheses}
+	If two common primitive nonzero-sector families satisfy the proportional-comparison
+	hypotheses, then they satisfy the remaining span hypotheses of
+	Definition~\ref{def:common_primitive_span_hypotheses}.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{thm:common_primitive_proportional_hypotheses_to_phase_cover_hypotheses,
+		thm:common_primitive_phase_cover_hypotheses_to_span_hypotheses}
+	First convert the BNT proportional-decomposition comparison into common phase-cover
+	hypotheses. The phase-cover-to-span theorem then gives the finite-length span
+	equality together with the zero-tail and injectivity hypotheses.
+\end{proof}
+
 \begin{theorem}[Zero-tail nonzero block decompositions with a common MPV phase cover]%
 \label{thm:afterBlocking_sectorComparison_zeroTail_of_commonPhaseCover}
 	\lean{MPSTensor.afterBlocking_sectorComparison_zeroTail_of_commonPhaseCover}
@@ -1505,6 +1557,29 @@ two-basis sector comparison theorem.
 	to form the remaining span hypotheses of
 	Definition~\ref{def:common_primitive_span_hypotheses}.  Then apply the
 	relabeled common-sector theorem with those span hypotheses.
+\end{proof}
+
+\begin{theorem}[Relabeled common sectors with proportional-comparison data]%
+\label{thm:afterBlocking_sectorComparison_reindexed_proportional}
+	\lean{MPSTensor.afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_proportional}
+	\leanok
+	\uses{def:common_primitive_proportional_hypotheses,
+		def:common_sector_relabeling_hypothesis}
+	Let $A$ and $B$ have the same MPV family, and assume the blocked-word relabeling
+	hypothesis for common cyclic sectors. The common-sector structural theorem
+	produces the common primitive nonzero-sector families. If those families satisfy
+	the proportional-comparison hypotheses of
+	Definition~\ref{def:common_primitive_proportional_hypotheses}, then the same
+	sector-weight comparison conclusion holds.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{thm:common_primitive_proportional_hypotheses_to_phase_cover_hypotheses,
+		thm:afterBlocking_sectorComparison_reindexed_commonPhaseCover}
+	Convert the BNT proportional-decomposition comparison for the produced families
+	to common phase-cover hypotheses, and then apply the relabeled common-sector
+	comparison theorem with common phase-cover data.
 \end{proof}
 
 \begin{theorem}[Cast-compatible MPV scaling implies phase-matched sector comparison]%
