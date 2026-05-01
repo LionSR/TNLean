@@ -20,7 +20,7 @@ The proof has two parts:
 
 **Part 1 — Irreducibility propagation** (`hT_irr_all`):
 `T_{t₀}` irreducible → `T_s` irreducible for ALL `s > 0`.
-Uses the kernel bridge: `ker(L) = Span{σ}` where `σ` is the unique
+Uses the kernel characterization: `ker(L) = Span{σ}` where `σ` is the unique
 faithful density fixed point of `T_{t₀}`. Then `σ` is fixed by all `T_s`
 (semigroup commutativity + density uniqueness). For each `s > 0`, `T_s`
 is shown irreducible via `isIrreducibleMap_of_channel_posDef_fixedPoint_unique`.

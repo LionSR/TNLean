@@ -39,7 +39,7 @@ norm-continuous semigroup.  The Lean proof realizes this propagation in
 density at the irreducible time with a primitive positive fractional slice.
 
 **Step B**: `T_t` irreducible + channel → peripheral eigenvalues of `T_t` are roots
-of unity (Wolf Thm 6.6). This channel-level bridge is now available as
+of unity (Wolf Thm 6.6). This channel-level result is available as
 `peripheral_isRootOfUnity_of_irreducible_channel`, proved by choosing a Kraus
 representation, converting to an irreducible tensor, and applying the existing
 blocking-periodicity theorem.
