@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.CanonicalForm.SectorIrreducibility.OrbitSum
 import TNLean.Channel.Peripheral.CyclicDecomposition.PeripheralUnitary
+import TNLean.Channel.Schwarz.MultiplicativeDomainFull
 
 /-!
 # Sector irreducibility: the `hLift` construction
@@ -991,5 +992,88 @@ theorem isIrreducibleOnCorner_of_cyclic_decomp_mps
       (A := A) (m := m) hIrr P hPproj hPsum hcyclic
       (hLift_cyclicDecomp_mps
         (A := A) (m := m) hIrr hTP P hPproj hPsum hcyclic hMulLeft hMulRight)
+
+/-- Wolf-style fixed-point-algebra rigidity for an irreducible trace-preserving MPS tensor.
+
+Given the basic input of a cyclic-sector decomposition `P` of the adjoint transfer map, the
+multiplicativity condition `SectorFixedPointAlgebraRigidity` follows automatically when the
+original tensor `A` is irreducible. The proof combines three observations:
+
+1. `IsIrreducibleTensor A` yields irreducibility of the adjoint transfer map via
+   `isIrreducibleCP_transferMap_conjTranspose_of_isIrreducibleTensor`;
+2. Each `P k` belongs to the multiplicative domain of the Kraus family `i ↦ (A i)ᴴ`
+   by a Kadison–Schwarz argument using the cyclic shift condition;
+3. The existing theorem `sectorFixedPointAlgebraRigidity_of_irreducible_cyclicDecomp`
+   then supplies the conclusion. -/
+theorem sectorFixedPointAlgebraRigidity_of_irreducible_tp
+    {d D m : ℕ} [NeZero D] [NeZero m]
+    (A : MPSTensor d D)
+    (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (hIrr : IsIrreducibleTensor A)
+    (P : Fin m → MatrixAlg D)
+    (hPproj : ∀ k, IsOrthogonalProjection (P k))
+    (hPsum : ∑ k : Fin m, P k = 1)
+    (hcyclic : ∀ k,
+      transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k+1)) = P k) :
+    SectorFixedPointAlgebraRigidity
+      (transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) P := by
+  let T : MatrixEnd D := transferMap (d := d) (D := D) (fun i => (A i)ᴴ)
+  let K : Fin d → MatrixAlg D := fun i => (A i)ᴴ
+  -- 1. Irreducibility of the adjoint transfer map
+  have hIrrAdj : IsIrreducibleMap T :=
+    isIrreducibleCP_transferMap_conjTranspose_of_isIrreducibleTensor A hIrr
+  -- 2. Unital Kadison–Schwarz structure from trace-preserving condition
+  have hUnital : KadisonSchwarz.IsUnitalKraus (d := d) (D := D) K := by
+    simpa [KadisonSchwarz.IsUnitalKraus, K] using hTP
+  -- 3. Each cyclic projection belongs to the multiplicative domain
+  have hMulDomain : ∀ k : Fin m, P k ∈ KadisonSchwarz.multiplicativeDomain K := by
+    intro k
+    have hPk_star : (P k)ᴴ = P k := (hPproj k).1.eq
+    have hTPk_eq : T (P k) = P (k - 1) := by
+      simpa [T, show k - 1 + 1 = k by abel] using hcyclic (k - 1)
+    have hTPk_proj : IsOrthogonalProjection (T (P k)) := by
+      simpa [hTPk_eq] using hPproj (k - 1)
+    have hRight :
+        KadisonSchwarz.krausMap K (P k * (P k)ᴴ) =
+          KadisonSchwarz.krausMap K (P k) * (KadisonSchwarz.krausMap K (P k))ᴴ := by
+      calc
+        KadisonSchwarz.krausMap K (P k * (P k)ᴴ)
+            = T (P k * (P k)ᴴ) := by
+              simp [T, K, MPSTensor.transferMap_apply, KadisonSchwarz.krausMap]
+        _ = T (P k) := by rw [hPk_star, (hPproj k).2]
+        _ = T (P k) * (T (P k))ᴴ := by
+              rw [hTPk_proj.1.eq, hTPk_proj.2]
+        _ = KadisonSchwarz.krausMap K (P k) * (KadisonSchwarz.krausMap K (P k))ᴴ := by
+              simp [T, K, MPSTensor.transferMap_apply, KadisonSchwarz.krausMap]
+    have hLeft :
+        KadisonSchwarz.krausMap K ((P k)ᴴ * P k) =
+          (KadisonSchwarz.krausMap K (P k))ᴴ * KadisonSchwarz.krausMap K (P k) := by
+      calc
+        KadisonSchwarz.krausMap K ((P k)ᴴ * P k)
+            = T ((P k)ᴴ * P k) := by
+              simp [T, K, MPSTensor.transferMap_apply, KadisonSchwarz.krausMap]
+        _ = T (P k) := by rw [hPk_star, (hPproj k).2]
+        _ = (T (P k))ᴴ * T (P k) := by
+              rw [hTPk_proj.1.eq, hTPk_proj.2]
+        _ = (KadisonSchwarz.krausMap K (P k))ᴴ * KadisonSchwarz.krausMap K (P k) := by
+              simp [T, K, MPSTensor.transferMap_apply, KadisonSchwarz.krausMap]
+    exact ⟨
+      (KadisonSchwarz.mem_rightMultiplicativeDomain_iff K hUnital (P k)).2 hRight,
+      (KadisonSchwarz.mem_leftMultiplicativeDomain_iff K hUnital (P k)).2 hLeft⟩
+  -- 4. One-sided multiplicativity follows from the multiplicative-domain membership
+  have hMulLeft : ∀ k : Fin m, ∀ X : MatrixAlg D,
+      T (P k * X) = T (P k) * T X := by
+    intro k X
+    simpa [T, K, MPSTensor.transferMap_apply, KadisonSchwarz.krausMap] using
+      KadisonSchwarz.krausMap_mul_right_of_mem_multiplicativeDomain (K := K) (hMulDomain k) X
+  have hMulRight : ∀ k : Fin m, ∀ X : MatrixAlg D,
+      T (X * P k) = T X * T (P k) := by
+    intro k X
+    simpa [T, K, MPSTensor.transferMap_apply, KadisonSchwarz.krausMap] using
+      KadisonSchwarz.krausMap_mul_left_of_mem_multiplicativeDomain (K := K) (hMulDomain k) X
+  -- 5. Delegate to the existing theorem that needs irreducibility + multiplicativity
+  exact
+    sectorFixedPointAlgebraRigidity_of_irreducible_cyclicDecomp
+      (A := A) (m := m) hIrrAdj hTP P hPproj hPsum hcyclic hMulLeft hMulRight
 
 end MPSTensor
