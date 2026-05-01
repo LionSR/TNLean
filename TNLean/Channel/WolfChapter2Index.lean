@@ -31,137 +31,137 @@ representations of quantum channels.
 ### §2.1 Choi–Jamiolkowski and Kraus
 
 * **Prop 2.1** (CJ isomorphism):
-  - `ChoiJamiolkowski.choiMatrix` — Choi matrix `τ = (T ⊗ id)(|Ω⟩⟨Ω|)` ✅
-  - `ChoiJamiolkowski.cp_iff_choi_posSemidef` — CP ↔ `τ ≥ 0` ✅
-  - `ChoiJamiolkowski.traceLeft_choiMatrix_of_tp` — TP ⟹ `tr_A(τ) = 𝟙/D` ✅
+  - `ChoiJamiolkowski.choiMatrix` — Choi matrix `τ = (T ⊗ id)(|Ω⟩⟨Ω|)` ✅️
+  - `ChoiJamiolkowski.cp_iff_choi_posSemidef` — CP ↔ `τ ≥ 0` ✅️
+  - `ChoiJamiolkowski.traceLeft_choiMatrix_of_tp` — TP ⟹ `tr_A(τ) = 𝟙/D` ✅️
   - `ChoiJamiolkowski.choiMatrix_isHermitian_iff_hermiticityPreserving` —
-    Hermiticity-preserving ↔ `τ` is Hermitian ✅
-  - `ChoiJamiolkowski.trace_choiMatrix_of_tp` — `tr(τ) = 1` for TP ✅
-  - `ChoiJamiolkowski.choiMatrix_id` — `τ` of identity = `|Ω⟩⟨Ω|` ✅
-  - `Channel.choiRank` — rank of the Choi matrix ✅
+    Hermiticity-preserving ↔ `τ` is Hermitian ✅️
+  - `ChoiJamiolkowski.trace_choiMatrix_of_tp` — `tr(τ) = 1` for TP ✅️
+  - `ChoiJamiolkowski.choiMatrix_id` — `τ` of identity = `|Ω⟩⟨Ω|` ✅️
+  - `Channel.choiRank` — rank of the Choi matrix ✅️
   - `Channel.choiRank_le_of_hasKrausCard` / `Channel.choiRank_le_of_hasKrausRankLE`
-    — Choi-rank upper bounds from exact / bounded Kraus families ✅
+    — Choi-rank upper bounds from exact / bounded Kraus families ✅️
   - `Channel.hasKrausCard_choiRank_of_cp` /
     `Channel.hasKrausRankLE_choiRank_of_cp` /
     `Channel.hasKrausRankLE_choiRank_of_cptp`
-    — minimal Kraus constructions from the Choi spectral decomposition ✅
+    — minimal Kraus constructions from the Choi spectral decomposition ✅️
 
 * **Thm 2.1** (Kraus representation):
-  - `kraus_tp_of_sum_conjTranspose_mul` — `∑Kᵢ†Kᵢ = 𝟙` ⟹ TP ✅
-  - `kraus_sum_conjTranspose_mul_of_tp` — TP ⟹ `∑Kᵢ†Kᵢ = 𝟙` ✅
-  - `kraus_sum_mul_conjTranspose_of_unital` — unital ⟹ `∑KᵢKᵢ† = 𝟙` ✅
-  - `kraus_same_map_of_unitary_combination` — unitary freedom (sufficient direction) ✅
+  - `kraus_tp_of_sum_conjTranspose_mul` — `∑Kᵢ†Kᵢ = 𝟙` ⟹ TP ✅️
+  - `kraus_sum_conjTranspose_mul_of_tp` — TP ⟹ `∑Kᵢ†Kᵢ = 𝟙` ✅️
+  - `kraus_sum_mul_conjTranspose_of_unital` — unital ⟹ `∑KᵢKᵢ† = 𝟙` ✅️
+  - `kraus_same_map_of_unitary_combination` — unitary freedom (sufficient direction) ✅️
   - `kraus_same_map_of_unitaryGroup_combination` / `kraus_same_map_of_exists_unitary_combination`
-    — bundled/existential unitary-witness formulations for reuse in the converse roadmap ✅
+    — bundled/existential unitary-witness formulations for reuse in the converse roadmap ✅️
   - `kraus_transition_unitary_of_hs_orthonormal`
-    — converse linear-algebra core: orthonormal Kraus frames force unitary transition ✅
-  - `kraus_dual_eq_of_map_eq` — dual map equality from primal map equality ✅
-  - `kraus_conjTranspose_mul_eq_of_map_eq` — equal Stinespring Gramians ✅
+    — converse linear-algebra core: orthonormal Kraus frames force unitary transition ✅️
+  - `kraus_dual_eq_of_map_eq` — dual map equality from primal map equality ✅️
+  - `kraus_conjTranspose_mul_eq_of_map_eq` — equal Stinespring Gramians ✅️
   - `kraus_rectangular_freedom` / `kraus_rectangular_freedom'`
-    — rectangular Kraus freedom (necessary direction) ✅
+    — rectangular Kraus freedom (necessary direction) ✅️
   - `kraus_isometry_freedom_iff`
-    — Wolf Thm 2.18 in isometric form, including zero-padding of the smaller family ✅
+    — Wolf Thm 2.18 in isometric form, including zero-padding of the smaller family ✅️
   - `kraus_unitary_freedom_iff`
-    — Wolf Thm 2.18 in same-size unitary form ✅
+    — Wolf Thm 2.18 in same-size unitary form ✅️
 
 * **Thm 2.2** (Stinespring dilation):
-  - `stinespring_dual_representation` — `T*(A) = V†(A ⊗ 𝟙)V` ✅
-  - `stinespringV_isometry_iff_kraus_normalized` — `V†V = 𝟙` ↔ TP ✅
-  - `stinespring_schrodinger_representation` — `T(ρ) = tr_r(VρV†)` ✅
+  - `stinespring_dual_representation` — `T*(A) = V†(A ⊗ 𝟙)V` ✅️
+  - `stinespringV_isometry_iff_kraus_normalized` — `V†V = 𝟙` ↔ TP ✅️
+  - `stinespring_schrodinger_representation` — `T(ρ) = tr_r(VρV†)` ✅️
 
 * **Thm 2.3** (ordered CP-maps):
-  - `CPDominates` — CP partial order: `S - T` is completely positive ✅
+  - `CPDominates` — CP partial order: `S - T` is completely positive ✅️
   - `Matrix.blockTopRows` / `Matrix.blockTopRows_mul_conjTranspose` /
     `Matrix.blockTopRows_conjTranspose_mul_le_one` — explicit block-top
-    contraction on the dilation space ✅
+    contraction on the dilation space ✅️
   - `stinespringV_eq_kronecker_blockTopRows_mul_append` — intertwining
-    `V_{K} = (𝟙_D ⊗ C) · V_{K ++ L}` for the block-top projector ✅
+    `V_{K} = (𝟙_D ⊗ C) · V_{K ++ L}` for the block-top projector ✅️
   - `CPDominates.exists_stinespring_contraction` — existential form of
-    Wolf Thm 2.3: `T₁ ≤ T₂` gives Stinespring realizations and a contraction ✅
+    Wolf Thm 2.3: `T₁ ≤ T₂` gives Stinespring realizations and a contraction ✅️
 
 * **Thm 2.4** (Radon–Nikodym for CP maps):
   - `Matrix.blockDiagTopProj` / `Matrix.blockDiagBotProj` — orthogonal
-    block projectors on the dilation space, PSD and summing to `𝟙` ✅
+    block projectors on the dilation space, PSD and summing to `𝟙` ✅️
   - `Matrix.kroneckerMap_conjTranspose_mul_kroneckerMap` — Kronecker
-    identity `A ⊗ (CᴴC) = (𝟙 ⊗ C)ᴴ (A ⊗ 𝟙) (𝟙 ⊗ C)` ✅
+    identity `A ⊗ (CᴴC) = (𝟙 ⊗ C)ᴴ (A ⊗ 𝟙) (𝟙 ⊗ C)` ✅️
   - `IsCPMap.exists_radon_nikodym` — Wolf Thm 2.4 binary form:
     for CP `T₁, T₂`, a Stinespring matrix for `T₁ + T₂` yields
-    PSD `P₁ + P₂ = 𝟙` with `Tᵢ(A) = V†(A ⊗ Pᵢ)V` ✅
+    PSD `P₁ + P₂ = 𝟙` with `Tᵢ(A) = V†(A ⊗ Pᵢ)V` ✅️
 
 * **Thm 2.5** (open-system representation, reduced form):
   - `IsChannel.exists_stinespring_open_system` — every CPTP map is
-    `T(ρ)_{ij} = ∑ₖ (V ρ V†)_{(i,k),(j,k)}` for an isometric `V` ✅
+    `T(ρ)_{ij} = ∑ₖ (V ρ V†)_{(i,k),(j,k)}` for an isometric `V` ✅️
   - `IsChannel.exists_stinespring_open_system_traceRight` — equivalent
-    form via `Matrix.traceRight`: `T(ρ) = tr_E[V ρ V†]` ✅
+    form via `Matrix.traceRight`: `T(ρ) = tr_E[V ρ V†]` ✅️
 
 * **Thm 2.6** (Naimark / Neumark dilation for POVMs):
-  - `POVM` — positive operator-valued measure structure ✅
-  - `POVM.naimarkIsometry_isometry` — `V†V = 𝟙` ✅
+  - `POVM` — positive operator-valued measure structure ✅️
+  - `POVM.naimarkIsometry_isometry` — `V†V = 𝟙` ✅️
   - `POVM.naimarkProjection_mul_self` / `_hermitian` / `_orthogonal` /
-    `_sum_eq_one` — projective-measurement axioms on the dilation ✅
-  - `POVM.naimark_recovers_povm` — `V† P_i V = E_i` ✅
-  - `POVM.exists_naimark_dilation` — existential Naimark dilation ✅
+    `_sum_eq_one` — projective-measurement axioms on the dilation ✅️
+  - `POVM.naimark_recovers_povm` — `V† P_i V = E_i` ✅️
+  - `POVM.exists_naimark_dilation` — existential Naimark dilation ✅️
   - `POVM.IsNaimarkDilation` / `POVM.isNaimarkDilation_naimark`
-    — formulated Naimark-dilation predicate and canonical witness ✅
+    — formulated Naimark-dilation predicate and canonical witness ✅️
   - `POVM.exists_isometry_mul_naimarkIsometry_of_recovery`
     — concrete uniqueness: any dilation using the canonical projectors factors
-      through the canonical Naimark isometry via a dilation isometry ✅
+      through the canonical Naimark isometry via a dilation isometry ✅️
   - `POVM.ofPSDResolutionOfIdentity` — converse construction: PSD resolution
-    of identity on a dilation pulls back to a POVM ✅
+    of identity on a dilation pulls back to a POVM ✅️
   - `Instrument` — quantum-instrument structure + `total_isChannel`,
-    `sum_probability`, `posteriorState` interface ✅
+    `sum_probability`, `posteriorState` interface ✅️
 
 ### §2.1 Representation corollaries (Props 2.2–2.4)
 
 * **Prop 2.2** (CP decomposition):
   - `WolfProps.polarization_sandwich` — `4 • (A X Bᴴ) = (A+B) X (A+B)ᴴ
-    − (A−B) X (A−B)ᴴ + I•(A+I·B) X (A+I·B)ᴴ − I•(A−I·B) X (A−I·B)ᴴ` ✅
+    − (A−B) X (A−B)ᴴ + I•(A+I·B) X (A+I·B)ᴴ − I•(A−I·B) X (A−I·B)ᴴ` ✅️
   - `WolfProps.cp_decomposition_of_sandwich_sum` — every
-    `∑ᵢ Aᵢ X Bᵢᴴ` is a signed ℂ-linear combination of four CP maps ✅
+    `∑ᵢ Aᵢ X Bᵢᴴ` is a signed ℂ-linear combination of four CP maps ✅️
 
 * **Prop 2.3** (no information without disturbance):
   - `WolfProps.vecMulVec_star_eq_polarization` — rank-one outer products
-    polarize into rank-one self-outer-products ✅
+    polarize into rank-one self-outer-products ✅️
   - `WolfProps.linearMap_eq_id_of_fixes_rankOne` — a linear map fixing
-    every `vecMulVec v (star v)` is the identity ✅
+    every `vecMulVec v (star v)` is the identity ✅️
   - `WolfProps.channel_eq_id_of_fixes_pureStates` — a channel fixing
-    every pure-state projector is the identity channel ✅
+    every pure-state projector is the identity channel ✅️
 
 * **Prop 2.4** (equivalence of ensembles, Hughston–Jozsa–Wootters):
   - `WolfProps.pureEnsembleDensity` — density operator of a pure-state
-    ensemble `∑ᵢ |ψᵢ⟩⟨ψᵢ|` ✅
+    ensemble `∑ᵢ |ψᵢ⟩⟨ψᵢ|` ✅️
   - `WolfProps.pureEnsembleDensity_eq_of_isometric_mixing` — sufficient
     direction: ensembles related by an isometric mixing matrix share
-    the same density ✅
+    the same density ✅️
   - `WolfProps.exists_isometric_mixing_of_pureEnsembleDensity_eq` —
     necessary direction (HJW converse): equal densities force an
-    isometric mixing matrix between the two ensembles ✅
+    isometric mixing matrix between the two ensembles ✅️
   - `WolfProps.pureEnsembleDensity_eq_iff_exists_isometric_mixing` —
-    both directions stated as an iff ✅
+    both directions stated as an iff ✅️
 
 ### §2.2 Transfer matrix
 
 * `transferMatrix` — the `D² × D²` matrix representing `T` in the
-  standard-basis vectorization ✅
-* `transferMatrix_mulVec_eq` — `T̂ *ᵥ vec(ρ) = vec(T(ρ))` ✅
-* `transferMatrix_comp` — `(S ∘ T)^ = Ŝ * T̂` ✅
-* `transferMatrix_id` — transfer matrix of identity = identity ✅
-* `transferMatrix_injective` — the representation is faithful ✅
-* `transferMatrix_kraus` — Kraus form: `T̂ = ∑ᵢ K̄ᵢ ⊗ₖ Kᵢ` ✅
+  standard-basis vectorization ✅️
+* `transferMatrix_mulVec_eq` — `T̂ *ᵥ vec(ρ) = vec(T(ρ))` ✅️
+* `transferMatrix_comp` — `(S ∘ T)^ = Ŝ * T̂` ✅️
+* `transferMatrix_id` — transfer matrix of identity = identity ✅️
+* `transferMatrix_injective` — the representation is faithful ✅️
+* `transferMatrix_kraus` — Kraus form: `T̂ = ∑ᵢ K̄ᵢ ⊗ₖ Kᵢ` ✅️
 * `MPSTensor.transferMatrix_eq` — MPS bridge:
-  `E_A` has transfer matrix `∑ᵢ Āᵢ ⊗ₖ Aᵢ` ✅
+  `E_A` has transfer matrix `∑ᵢ Āᵢ ⊗ₖ Aᵢ` ✅️
 
 ### §2.2–2.3 Transfer matrix characterizations & normal forms (Props 2.5-2.8)
 
-* `transferMatrix_tp_iff` — **Prop 2.6**: TP ↔ column-diagonal sums = δ ✅
-* `transferMatrix_unital_iff` — **Prop 2.6**: unital ↔ row-diagonal sums = δ ✅
+* `transferMatrix_tp_iff` — **Prop 2.6**: TP ↔ column-diagonal sums = δ ✅️
+* `transferMatrix_unital_iff` — **Prop 2.6**: unital ↔ row-diagonal sums = δ ✅️
 * `transferMatrix_hermiticityPreserving_iff` — **Prop 2.5**: HP ↔ conjugation
-  symmetry of transfer matrix entries ✅
-* `unitaryConjLM` — unitary conjugation map `Ad_U(X) = U X U†` ✅
-* `transferMatrix_unitaryConj` — **Prop 2.7 ingredient**: `(Ad_U)^ = Ū ⊗ₖ U` ✅
-* `unitaryConjLM_isChannel_of_unitary` — `Ad_U` is a channel for unitary `U` ✅
+  symmetry of transfer matrix entries ✅️
+* `unitaryConjLM` — unitary conjugation map `Ad_U(X) = U X U†` ✅️
+* `transferMatrix_unitaryConj` — **Prop 2.7 ingredient**: `(Ad_U)^ = Ū ⊗ₖ U` ✅️
+* `unitaryConjLM_isChannel_of_unitary` — `Ad_U` is a channel for unitary `U` ✅️
 * `transferMatrix_unitaryConj_sandwich` — **Props 2.7-2.8 key identity**:
-  `(Ad_{U₁} ∘ T ∘ Ad_{U₂})^ = (Ū₁⊗U₁) T̂ (Ū₂⊗U₂)` ✅
+  `(Ad_{U₁} ∘ T ∘ Ad_{U₂})^ = (Ū₁⊗U₁) T̂ (Ū₂⊗U₂)` ✅️
 
 ### §2.3 SVD normal form (existence)
 
