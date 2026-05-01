@@ -1415,9 +1415,9 @@ theorem parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound_of_le
 
 If every overlapping off-diagonal cyclic pair satisfies the compression estimate
 with coefficient `η`, and `η * (2 * (L - 1)) < 1`, then the transported parent
-Hamiltonians have gap constant `1 - η * (2 * (L - 1))`.  Thus the remaining MPS
-angle estimate can be supplied as any uniform compression constant strictly below
-the reciprocal of the cyclic overlap degree. -/
+Hamiltonians have gap constant `1 - η * (2 * (L - 1))`.  Thus any uniform
+compression constant strictly below the reciprocal of the cyclic overlap degree
+yields a positive gap. -/
 theorem parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound_of_lt
     (A : MPSTensor d D) (L : ℕ) (hL : 1 < L) {η : ℝ}
     (hηnonneg : 0 ≤ η)
