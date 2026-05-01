@@ -228,3 +228,39 @@ family `Y_μ` satisfying the two same-witness identities above.  Once that
 comparison is available, the new Wave 18E theorem
 `MPSTensor.groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_two_sided_middle_compatibility`
 closes the MPV-line containment.
+
+## 2026-05-01 Wave 25 update
+
+Current branch `wave25-961-wrapped-window-witness` still does **not** close
+`MPSTensor.chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction`; the
+pre-existing proof placeholder remains.  It lands the reindexing and conditional
+endgame layer for the actual wrapped-window witness comparison:
+
+- `MPSTensor.wrappedMiddleBackground` and `MPSTensor.mirrorMiddleBackground` in
+  `TNLean/MPS/ParentHamiltonian/WrappingWindow.lean` build the two background
+  configurations whose exposed complements are the same middle word `μ`.
+- `MPSTensor.wrappedMiddleBackground_complement` and
+  `MPSTensor.mirrorMiddleBackground_complement` prove the corresponding
+  complement-extraction identities.
+- `MPSTensor.two_sided_middle_compatibility_of_wrapped_witness_comparison` turns
+  the concrete comparison
+  `Ywrap (wrappedMiddleBackground L₀ N η μ) =
+   Ymirror (mirrorMiddleBackground L₀ N η μ)`
+  into the same-witness common-middle hypotheses used by the Wave 18E algebraic
+  endgame.
+- `MPSTensor.groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_wrapped_witness_comparison`
+  and
+  `MPSTensor.chainGroundSpace_le_mpvSubmodule_of_isNBlkInjective_of_wrapped_witness_comparison`
+  integrate this comparison into the MPV-line containment argument.
+
+This narrows issue #961 to the remaining comparison theorem itself: for the
+witness families produced from the two reduced wrapped windows, prove equality
+after filling the complements by the same middle word through the two background
+maps above.  Once that theorem is available, the new conditional reduction theorem
+feeds directly into the existing normal-range containment target.
+
+Paper anchor retained: CPGSV21 §IV.C,
+`Papers/2011.12127/TN-Review-main.tex:2078--2079`, especially
+"Once we have reached $k=L_0$, we can resort to the above Theorem, or
+alternatively apply a similar argument when closing the boundaries", and theorem
+`thm:4:unique-gs-L0_plus_1` at lines 2087--2090.
