@@ -176,17 +176,25 @@ representations of quantum channels.
 
 * `Wolf.SLFiltering` — **SL(d, ℂ)-filtering operation**: a CP map
   Φ(X) = S X S† with det(S) = 1 ✅️ (definitional)
+* `Wolf.SLFiltering.comp` — composition of SL-filterings ✅️
+* `Wolf.SLFiltering.S_isUnit` — `S` invertible follows from det=1 ✅️
 * `Wolf.DoublyStochastic` — doubly-stochastic condition: T(1) ∝ 1 and
-  T*(1) ∝ 1 ✅️ (definitional)
-* `Wolf.infimum_is_attained` — **key compactness lemma**: the trace minimisation
+  tr₁[τ] ∝ 1 ✅️ (definitional)
+* `pauliMatrices` — the four Pauli matrices (qubit basis) ✅️ (definitional)
+* `pauliTransferEntry` — Pauli-basis transfer matrix entry ✅️ (definitional)
+* `IsLorentzDiagonal` — diagonal Lorentz normal form (Wolf Prop 2.9 case 1) ✅️
+* `IsLorentzNonDiagonal` — non-diagonal Lorentz normal form (case 2) ✅️
+* `IsLorentzSingular` — singular Lorentz normal form (case 3) ✅️
+* `Wolf.infimum_is_attained` — **key compactness lemma**: trace minimisation
   over SL(d, ℂ) filterings attains its infimum ⚠ (stated with `sorry`;
   requires compactness of bounded SL(n, ℂ) sets)
-* `Wolf.exists_normal_form_generic` — **Wolf Prop 2.8 (generic normal form)**:
+* `Wolf.exists_normal_form_generic` — **Wolf Prop 2.9 (generic normal form)**:
   every CP map with full Kraus rank admits SL-filterings making it
   doubly-stochastic ⚠ (depends on `infimum_is_attained`)
 * `Wolf.exists_lorentz_normal_form_qubit` — **Wolf Prop 2.9/2.11 (Lorentz
-  normal form for qubit channels)** ⚠ (depends on `infimum_is_attained`
-  and Lorentz group classification)
+  normal form for qubit channels)**: conclusion is a three-way disjunction
+  `IsLorentzDiagonal ∨ IsLorentzNonDiagonal ∨ IsLorentzSingular` ⚠
+  (depends on `infimum_is_attained` and Lorentz group classification)
 
 ### Formalization
 
@@ -208,7 +216,13 @@ representations of quantum channels.
 | Unitary conjugation | `TransferMatrix.lean` | `unitaryConjLM` |
 | Vectorization | `Mathlib.LinearAlgebra.Matrix.Vec` | `Matrix.vec` |
 | SL-filtering | `LorentzNormalForm.lean` | `Wolf.SLFiltering` |
+| SL-filtering composition | `LorentzNormalForm.lean` | `Wolf.SLFiltering.comp` |
 | Doubly-stochastic | `LorentzNormalForm.lean` | `Wolf.DoublyStochastic` |
+| Pauli matrices | `LorentzNormalForm.lean` | `pauliMatrices` |
+| Pauli transfer entry | `LorentzNormalForm.lean` | `pauliTransferEntry` |
+| Diagonal Lorentz form | `LorentzNormalForm.lean` | `IsLorentzDiagonal` |
+| Non-diagonal Lorentz form | `LorentzNormalForm.lean` | `IsLorentzNonDiagonal` |
+| Singular Lorentz form | `LorentzNormalForm.lean` | `IsLorentzSingular` |
 | Lorentz normal form | `LorentzNormalForm.lean` | `Wolf.exists_lorentz_normal_form_qubit` |
 
 ### Not yet formalized

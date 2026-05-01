@@ -36,8 +36,8 @@ normal form* — with three canonical representatives.
 
 4. **Lorentz normal form for qubit channels (Wolf Prop 2.9 / Prop 2.11).**
    For every qubit channel (D = 2), after suitable SL(2, ℂ)-filterings, the
-   transfer matrix takes one of three canonical forms: diagonal, non-diagonal,
-   or singular.
+   Pauli-basis transfer matrix takes one of three canonical forms: diagonal,
+   non-diagonal, or singular.
 
 ## Dependencies on missing Mathlib infrastructure
 
@@ -61,15 +61,12 @@ section FilteringOperations
 
 /-- An `SLFiltering` for `D × D` matrices bundles a matrix `S` with
 `det S = 1` (and `S` invertible) together with its associated CP map
-`Φ(X) = S X S†`.  Such maps are called *filtering operations* in Wolf §2.3.
--/
+`Φ(X) = S X S†`.  Such maps are called *filtering operations* in Wolf §2.3. -/
 structure SLFiltering (D : ℕ) where
   /-- The filtering matrix, with determinant 1. -/
   S : Matrix (Fin D) (Fin D) ℂ
   /-- `det S = 1`. -/
   det_eq_one : S.det = 1
-  /-- `S` is invertible. -/
-  S_isUnit : IsUnit S
   /-- The CP map: Φ(X) = S X S†. -/
   map : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ
   /-- `map` is exactly the unitary conjugation by `S`. -/
@@ -77,41 +74,35 @@ structure SLFiltering (D : ℕ) where
   /-- SL-filterings are CP. -/
   cp : IsCPMap map
 
+/-- The matrix `S` of an SL-filtering is invertible (follows from `det_eq_one`). -/
+lemma SLFiltering.S_isUnit {D : ℕ} (Φ : SLFiltering D) : IsUnit Φ.S := by
+  have h : Φ.S.det = 1 := Φ.det_eq_one
+  have hdet : IsUnit (Φ.S.det) := by rw [h]; exact isUnit_one
+  -- In a CommRing, a matrix is invertible iff its determinant is a unit.
+  refine (Matrix.isUnit_iff_isUnit_det Φ.S).mpr hdet
+
 /-- The identity map is an SL-filtering (S = 1). -/
 noncomputable def SLFiltering.id (D : ℕ) : SLFiltering D where
   S := 1
   det_eq_one := by simp
-  S_isUnit := by simp
   map := unitaryConjLM (D := D) 1
   map_eq := rfl
   cp := unitaryConjLM_isCPMap (D := D) 1
-
-/-- The canonical SL-filtering from a matrix S with det S = 1 (when S is invertible). -/
-noncomputable def SLFiltering.ofMatrix {D : ℕ} (S : Matrix (Fin D) (Fin D) ℂ)
-    (hdet : S.det = 1) (hunit : IsUnit S) : SLFiltering D where
-  S := S
-  det_eq_one := hdet
-  S_isUnit := hunit
-  map := unitaryConjLM (D := D) S
-  map_eq := rfl
-  cp := unitaryConjLM_isCPMap (D := D) S
 
 /-- Composition of two SL-filterings is an SL-filtering. -/
 noncomputable def SLFiltering.comp {D : ℕ} (Φ Ψ : SLFiltering D) : SLFiltering D where
   S := Φ.S * Ψ.S
   det_eq_one := by
     rw [Matrix.det_mul, Φ.det_eq_one, Ψ.det_eq_one, one_mul]
-  S_isUnit := Φ.S_isUnit.mul Ψ.S_isUnit
   map := unitaryConjLM (D := D) (Φ.S * Ψ.S)
   map_eq := rfl
-  cp := by
-    have hcomp : ∀ X : Matrix (Fin D) (Fin D) ℂ,
-        (unitaryConjLM Φ.S ∘ₗ unitaryConjLM Ψ.S) X =
-        unitaryConjLM (Φ.S * Ψ.S) X := by
-      intro X
-      simp [unitaryConjLM_apply, Matrix.mul_assoc, Matrix.conjTranspose_mul]
-    -- `unitaryConjLM (Φ.S * Ψ.S)` is CP (single Kraus operator).
-    exact unitaryConjLM_isCPMap (D := D) (Φ.S * Ψ.S)
+  cp := unitaryConjLM_isCPMap (D := D) (Φ.S * Ψ.S)
+
+/-- `unitaryConjLM A ∘ₗ unitaryConjLM B = unitaryConjLM (A * B)`. -/
+lemma unitaryConjLM_comp {D : ℕ} (A B : Matrix (Fin D) (Fin D) ℂ) :
+    unitaryConjLM (D := D) A ∘ₗ unitaryConjLM (D := D) B =
+    unitaryConjLM (D := D) (A * B) := by
+  ext X; simp [unitaryConjLM_apply, Matrix.mul_assoc, Matrix.conjTranspose_mul]
 
 end FilteringOperations
 
@@ -119,7 +110,7 @@ end FilteringOperations
 
 section DoublyStochastic
 
-variable {D : ℕ}
+variable {D : ℕ} (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
 
 /-- A CP map `T` is **doubly-stochastic** if `T(1) ∝ 1` and the reduced density
 matrix `tr₁[τ]` of its Choi matrix `τ = (T ⊗ id)(|Ω⟩⟨Ω|)` is proportional to
@@ -127,10 +118,9 @@ the identity.  By Choi–Jamiołkowski, this is equivalent to both `T(1)` and
 `T*(1)` being proportional to identity, which is the target normal form in
 Wolf Prop 2.8.
 
-We use the partial-trace formulation to avoid depending on the Hilbert–Schmidt
-inner-product adjoint `LinearMap.adjoint`, which requires additional type-class
-instances. -/
-def DoublyStochastic (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) : Prop :=
+We use the partial-trace formulation to avoid depending on the adjoint of `T`
+as a Hilbert–Schmidt operator. -/
+def DoublyStochastic : Prop :=
   (∃ c₁ : ℂ, T 1 = c₁ • (1 : Matrix (Fin D) (Fin D) ℂ)) ∧
   (∃ c₂ : ℂ, Matrix.traceLeft (choiMatrix T) = c₂ • (1 : Matrix (Fin D) (Fin D) ℂ))
 
@@ -150,8 +140,7 @@ end DoublyStochastic
 
 The proof idea (see Wolf §2.3):
 1. Work at the level of the Choi matrix τ = (T ⊗ id)(|Ω⟩⟨Ω|).
-2. Under SL-filterings Φ(X) = S X S†, τ transforms as τ → (S₂ ⊗ₖ S₁) τ (S₂ ⊗ₖ S₁)†
-   (up to transposition convention).
+2. Under SL-filterings Φ(X) = S X S†, τ transforms as τ → (S₂ ⊗ₖ S₁) τ (S₂ ⊗ₖ S₁)†.
 3. Minimize tr[τ'] over S₁, S₂ with det = 1.
 4. The infimum is attained (compactness of the bounded subset of SL(n, ℂ)).
 5. At the optimum, both partial traces of τ' are proportional to identity,
@@ -181,16 +170,14 @@ continuous trace functional attains its infimum by the extreme value theorem.
 **Missing Mathlib facts:**
 - Compactness of the set `{S : Matrix n n ℂ | det S = 1 ∧ ‖S‖ ≤ C}`.
   This needs: (a) the determinant condition `det S = 1` defines a closed set
-  (it's a polynomial equation), and (b) the spectral-norm ball `‖S‖ ≤ C` is
+  (it is a polynomial equation), and (b) the spectral-norm ball `‖S‖ ≤ C` is
   compact (finite-dimensional Heine–Borel).
 - The extreme value theorem for the continuous map
   `(S₁, S₂) ↦ tr[(S₂ ⊗ₖ S₁) τ (S₂ ⊗ₖ S₁)†]`
   on this compact product set.
 Both should be obtainable from `Mathlib.Topology.Instances.Matrix` and
-`Mathlib.Topology.Algebra.Module.FiniteDimension`, but the glue is missing.
-
-Once this lemma is proved, the rest of the normal-form argument (Thm 2.8) is
-purely algebraic and follows from the optimality conditions. -/
+`Mathlib.Topology.Algebra.Module.FiniteDimension`, but the connecting results
+are not yet in Mathlib. -/
 lemma infimum_is_attained
     {τ : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ}
     (_hτ_posDef : τ.PosDef) :
@@ -198,34 +185,28 @@ lemma infimum_is_attained
       S₁.det = 1 ∧ S₂.det = 1 ∧
       ∀ (T₁ T₂ : Matrix (Fin D) (Fin D) ℂ),
         T₁.det = 1 → T₂.det = 1 →
-        Matrix.trace (((T₂ ⊗ₖ T₁) * τ * ((T₂ ⊗ₖ T₁)ᴴ))) ≥
-          Matrix.trace (((S₂ ⊗ₖ S₁) * τ * ((S₂ ⊗ₖ S₁)ᴴ))) := by
-  -- Not yet formalised: requires compactness of bounded SL(n, ℂ) sets and the
-  -- extreme value theorem.  See the docstring for the missing Mathlib facts.
+        (Matrix.trace (((T₂ ⊗ₖ T₁) * τ * ((T₂ ⊗ₖ T₁)ᴴ)))).re ≥
+          (Matrix.trace (((S₂ ⊗ₖ S₁) * τ * ((S₂ ⊗ₖ S₁)ᴴ)))).re := by
   sorry
 
-/-- **Wolf Prop 2.8: generic normal form for CP maps with full Kraus rank.**
+/-- **Wolf Prop 2.9: generic normal form for CP maps with full Kraus rank.**
 
 Let `T : M_D(ℂ) → M_D(ℂ)` be a completely positive map with full Kraus rank
 (equivalently, its Choi matrix is positive-definite).  Then there exist
 SL(D, ℂ)-filterings Φ₁, Φ₂ such that `Φ₂ ∘ T ∘ Φ₁` is doubly-stochastic.
 
-This is the main normal-form existence result for generic CP maps.  The Lorentz
-normal form for qubit channels (Prop 2.9) is the D = 2 specialisation with the
-complete classification of the possible doubly-stochastic normal forms. -/
+This is the CP-map version of Wolf Prop 2.8 (which is stated at the τ-level).
+The Lorentz normal form for qubit channels (Prop 2.9) is the D = 2
+specialisation with the complete classification of the possible
+doubly-stochastic normal forms. -/
 theorem exists_normal_form_generic
     (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (_hCP : IsCPMap T)
     (_hFullRank : (choiMatrix T).PosDef) :
     ∃ (Φ₁ Φ₂ : SLFiltering D),
       DoublyStochastic (Φ₂.map ∘ₗ T ∘ₗ Φ₁.map) := by
-  -- Let τ be the Choi matrix of T.
   let τ := choiMatrix T
-  -- Use the infimum-attainment lemma (sorry for now).
   obtain ⟨_S₁, _S₂, _, _, _⟩ := infimum_is_attained (τ := τ) _hFullRank
-  -- The rest: use the optimality condition to conclude doubly-stochasticity.
-  -- This requires the AGM-inequality iteration from Wolf §2.3, which is
-  -- not yet formalised.
   sorry
 
 end GenericNormalForm
@@ -233,48 +214,121 @@ end GenericNormalForm
 /-! ### Lorentz normal form for qubit channels (Wolf Prop 2.9 / Prop 2.11)
 
 For `D = 2` (qubit channels), the doubly-stochastic normal form from
-Prop 2.8 can be further simplified using the Lorentz group action on the
+Prop 2.8 is further simplified using the Lorentz group action on the
 transfer matrix.  The result is a complete classification into three
-canonical forms:
+canonical forms.
 
-1. **Diagonal** (generic case): unital with diagonal Δ.
-2. **Non-diagonal**: a one-parameter family with specific v and Δ.
-3. **Singular**: maps everything to a fixed output.
+We work in the Pauli basis representation: let σ₀, …, σ₃ be the Pauli
+matrices (σ₀ = 1, σ₁ = σₓ, σ₂ = σ_y, σ₃ = σ_z).  For a
+Hermiticity-preserving TP qubit channel `T`, the Pauli-basis transfer
+matrix
+  `T̂_{ij} = (1/2) tr[σ_i T(σ_j)]`   (i, j ∈ {0,1,2,3})
+has real entries and the block structure
+  `T̂ = [1 0; v Δ]`
+where `v ∈ ℝ³` and `Δ` is a 3×3 real matrix (the Bloch-ball affine map:
+`x ↦ v + Δ x`).
 
-The formal proof of this classification requires:
-- The Pauli basis representation of qubit channels (4 × 4 transfer matrix).
-- The spinor map SL(2, ℂ) → SO⁺(1, 3) (Lorentz group).
-- Singular value decomposition of the 3 × 3 real submatrix Δ.
-- The inequality λ₁ + λ₂ ≤ 1 + λ₃ for complete positivity.
+After SL(2, ℂ) filtering (which acts on `T̂` as a Lorentz transformation
+`L₂ T̂ L₁` with `L_i ∈ SO⁺(1,3)`), the transfer matrix can be brought to
+one of three canonical forms (Wolf Prop 2.9):
 
-We state the theorem as a formal existence result with a `sorry` for the
-compactness / classification steps.  The statement is placed here as a
-formal target for future work. -/
+1. **Diagonal** (generic, full Kraus rank): `T̂` is diagonal —
+   `v = 0` and `Δ = diag(λ₁, λ₂, λ₃)` with the CP condition
+   `λ₁ + λ₂ ≤ 1 + λ₃`.  This is the doubly-stochastic case.
+
+2. **Non-diagonal** (Kraus rank 3): `T̂` has
+   `Δ = diag(x/√3, x/√3, 1/3)`, `v = (0, 0, 2/3)`, with
+   `0 ≤ x ≤ 1`.
+
+3. **Singular** (Kraus rank 2): `T̂` has `Δ = 0` and `v = (0, 0, 1)`;
+   the channel maps every input to a single pure state. -/
 
 section LorentzNormalFormQubit
+
+/-- The four Pauli matrices as 2×2 complex matrices, indexed by `Fin 4`:
+`σ₀ = [[1,0],[0,1]]`, `σ₁ = [[0,1],[1,0]]`, `σ₂ = [[0,-I],[I,0]]`,
+`σ₃ = [[1,0],[0,-1]]`. -/
+def pauliMatrices : Fin 4 → Matrix (Fin 2) (Fin 2) ℂ
+  | 0 => !![1, 0; 0, 1]
+  | 1 => !![0, 1; 1, 0]
+  | 2 => !![0, -Complex.I; Complex.I, 0]
+  | 3 => !![1, 0; 0, -1]
+
+/-- The entry `(i,j)` of the **Pauli-basis transfer matrix** of a linear map
+`T : M₂(ℂ) → M₂(ℂ)`:
+  `T̂_{ij} = (1/2) tr[σ_i T(σ_j)]`.
+
+This is the `4×4` matrix representing `T` in the Pauli basis
+`{σ₀/√2, σ₁/√2, σ₂/√2, σ₃/√2}`, so that `T̂` has real entries for
+Hermiticity-preserving `T`. -/
+noncomputable def pauliTransferEntry
+    (T : Matrix (Fin 2) (Fin 2) ℂ →ₗ[ℂ] Matrix (Fin 2) (Fin 2) ℂ)
+    (i j : Fin 4) : ℂ :=
+  ((1 : ℂ) / 2) * Matrix.trace (pauliMatrices i * T (pauliMatrices j))
+
+/-- A Hermiticity-preserving TP qubit channel `T'` is in **diagonal Lorentz normal
+form** (Wolf Prop 2.9, case 1) if its Pauli-basis transfer matrix is diagonal:
+`T'(1) = 1` (unital) and all off-diagonal entries of `T̂` vanish
+(i.e., `v = 0` and `Δ = diag(λ₁, λ₂, λ₃)`).
+
+Furthermore, the singular values satisfy the complete-positivity condition
+`λ₁ + λ₂ ≤ 1 + λ₃` (not checked here; future refinement). -/
+def IsLorentzDiagonal
+    (T' : Matrix (Fin 2) (Fin 2) ℂ →ₗ[ℂ] Matrix (Fin 2) (Fin 2) ℂ) : Prop :=
+  IsChannel T' ∧ T' 1 = (1 : Matrix (Fin 2) (Fin 2) ℂ) ∧
+    ∀ (i j : Fin 4), i ≠ j → pauliTransferEntry T' i j = 0
+
+/-- A Hermiticity-preserving TP qubit channel `T'` is in **non-diagonal Lorentz
+normal form** (Wolf Prop 2.9, case 2) if its Pauli-basis transfer matrix has
+`Δ = diag(x/√3, x/√3, 1/3)` and `v = (0, 0, 2/3)` for some `x ∈ [0, 1]`.
+
+In Pauli-entry terms:
+- `T̂_{00} = 1` (TP)
+- `T̂_{0j} = 0` for `j > 0` (TP)
+- `T̂_{10} = T̂_{20} = 0`, `T̂_{30} = 2/3`
+- `T̂_{11} = T̂_{22} = x/√3`, `T̂_{33} = 1/3`
+- All other off-diagonals are zero. -/
+def IsLorentzNonDiagonal
+    (T' : Matrix (Fin 2) (Fin 2) ℂ →ₗ[ℂ] Matrix (Fin 2) (Fin 2) ℂ) : Prop :=
+  IsChannel T' ∧
+    pauliTransferEntry T' 3 0 = (2/3 : ℂ) ∧
+    pauliTransferEntry T' 1 0 = 0 ∧ pauliTransferEntry T' 2 0 = 0 ∧
+    pauliTransferEntry T' 3 3 = (1/3 : ℂ) ∧
+    pauliTransferEntry T' 1 1 = pauliTransferEntry T' 2 2 ∧
+    (∀ (i j : Fin 4), i ≠ j → pauliTransferEntry T' i j = 0 ∨
+      (i = 3 ∧ j = 0) ∨ (i = 1 ∧ j = 1) ∨ (i = 2 ∧ j = 2) ∨ (i = 3 ∧ j = 3))
+
+/-- A Hermiticity-preserving TP qubit channel `T'` is in **singular Lorentz normal
+form** (Wolf Prop 2.9, case 3) if its Pauli-basis transfer matrix has
+`Δ = 0` and `v = (0, 0, 1)`.  That is, only `T̂_{00} = 1` and
+`T̂_{30} = 1` are nonzero; the channel maps every input to the pure state
+`(1 + σ_z)/2`. -/
+def IsLorentzSingular
+    (T' : Matrix (Fin 2) (Fin 2) ℂ →ₗ[ℂ] Matrix (Fin 2) (Fin 2) ℂ) : Prop :=
+  IsChannel T' ∧
+    pauliTransferEntry T' 3 0 = 1 ∧
+    ∀ (i j : Fin 4), (i, j) ≠ (0, 0) ∧ (i, j) ≠ (3, 0) → pauliTransferEntry T' i j = 0
 
 /-- **Lorentz normal form for qubit channels (Wolf Prop 2.9 / Prop 2.11).**
 
 For every qubit channel `T : M₂(ℂ) → M₂(ℂ)`, there exist SL(2, ℂ)-filterings
-Φ₁, Φ₂ such that `T' = Φ₂ ∘ T ∘ Φ₁` is a qubit channel of one of three types:
-- `type_diagonal`: T' is unital with diagonal Δ (the generic case);
-- `type_nondiagonal`: T' has a specific one-parameter form;
-- `type_singular`: T' maps everything to a single pure state.
+Φ₁, Φ₂ such that the filtered channel `T' = Φ₂ ∘ T ∘ Φ₁` is in one of the
+three Lorentz normal forms: diagonal, non-diagonal, or singular.
 
 The proof is not yet formalised; it depends on:
 - The compactness lemma `infimum_is_attained` (above);
-- The Lorentz group classification of SL(2, ℂ) orbits;
-- The complete-positivity condition λ₁ + λ₂ ≤ 1 + λ₃.
+- The Lorentz group classification of SL(2, ℂ) orbits (spinor map
+  SL(2, ℂ) → SO⁺(1, 3));
+- The complete-positivity condition `λ₁ + λ₂ ≤ 1 + λ₃`.
 
 See Wolf §2.3 for the complete proof. -/
 theorem exists_lorentz_normal_form_qubit
     (T : Matrix (Fin 2) (Fin 2) ℂ →ₗ[ℂ] Matrix (Fin 2) (Fin 2) ℂ)
     (_hCh : IsChannel T) :
     ∃ (Φ₁ Φ₂ : SLFiltering 2),
-      IsChannel (Φ₂.map ∘ₗ T ∘ₗ Φ₁.map) := by
-  -- Not yet formalised.  This is a target theorem; the proof depends on
-  -- `infimum_is_attained` and the Lorentz group classification, neither of
-  -- which is available in Mathlib or TNLean as of 2026-05.
+      IsLorentzDiagonal (Φ₂.map ∘ₗ T ∘ₗ Φ₁.map) ∨
+      IsLorentzNonDiagonal (Φ₂.map ∘ₗ T ∘ₗ Φ₁.map) ∨
+      IsLorentzSingular (Φ₂.map ∘ₗ T ∘ₗ Φ₁.map) := by
   sorry
 
 end LorentzNormalFormQubit

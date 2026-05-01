@@ -2077,11 +2077,12 @@ a common dilation space.
 Wolf \S2.3 discusses two families of normal forms for the transfer-matrix
 representation of a quantum channel: the \emph{singular value decomposition}
 (SVD) and, for qubit channels, the \emph{Lorentz normal form} obtained by
-$\mathrm{SL}(2,\mathbb{C})$ filtering operations. In this blueprint, the full
-existence statement formalized below is the SVD normal form; the Lorentz
-normal form existence requires a compactness / minimisation argument over
-$\mathrm{SL}(2,\mathbb{C})$ filterings (Wolf Prop 2.9 / Prop 2.11) that
-remains open in this formalisation.
+$\mathrm{SL}(2,\mathbb{C})$ filtering operations. In this blueprint, the SVD
+normal form is fully formalised.  The Lorentz normal form existence is stated
+as a theorem (Theorem~\ref{thm:lorentz_normal_form_qubit}) but the proof
+requires a compactness / minimisation argument over $\mathrm{SL}(2,\mathbb{C})$
+filterings (Wolf Prop 2.9 / Prop 2.11) that remains open in this
+formalisation---see \S\ref{subsec:lorentz_normal_form}.
 
 \begin{theorem}[SVD for positive semi-definite matrices]
     \label{thm:svd_posSemidef}
@@ -2148,6 +2149,63 @@ remains open in this formalisation.
     polar decomposition, Lorentz normal form) will typically require the
     sorted / unique variant; that refinement is future work.
 \end{remark}
+
+%% =========================================================
+\subsection{Lorentz normal form (Wolf \S2.3, existence statements)}
+\label{subsec:lorentz_normal_form}
+%% =========================================================
+
+\begin{definition}[SL-filtering operation]\label{def:sl_filtering}
+    \lean{Wolf.SLFiltering}\leanok
+    An \emph{SL-filtering} for $D \times D$ matrices is a completely
+    positive map of the form $\Phi(X) = S X S^{\dagger}$ where
+    $S \in M_{D}(\mathbb{C})$ satisfies $\det S = 1$.  Such maps are
+    invertible and have Kraus rank~1.
+\end{definition}
+
+\begin{definition}[Doubly-stochastic map]\label{def:doubly_stochastic}
+    \lean{Wolf.DoublyStochastic}\leanok
+    A linear map $T : \MN{D} \to \MN{D}$ is \emph{doubly-stochastic}
+    if $T(1) \propto 1$ and the reduced density matrix
+    $\tr_{1}[\tau]$ of its Choi matrix $\tau = (T \otimes \id)(\ketbra{\Omega}{\Omega})$
+    is proportional to the identity.  This is the target normal form
+    in Wolf Prop~2.8.
+\end{definition}
+
+\begin{lemma}[Infimum attainment for SL-filterings]\label{lem:infimum_is_attained}
+    \lean{Wolf.infimum_is_attained}
+    For a positive-definite Choi matrix $\tau$, the infimum of
+    $\tr\!\big[(S_{2} \otimes_{k} S_{1}) \tau (S_{2} \otimes_{k} S_{1})^{\dagger}\big]$
+    over $S_{1}, S_{2} \in M_{D}(\mathbb{C})$ with $\det S_{1} = \det S_{2} = 1$
+    is attained.  \textbf{Not yet proved}---requires compactness of bounded
+    subsets of $\SL(D, \mathbb{C})$ and the extreme-value theorem.
+\end{lemma}
+
+\begin{theorem}[Generic normal form for CP maps]\label{thm:exists_normal_form_generic}
+    \lean{Wolf.exists_normal_form_generic}
+    \uses{def:sl_filtering, def:doubly_stochastic, lem:infimum_is_attained}
+    Let $T : \MN{D} \to \MN{D}$ be a completely positive map whose Choi matrix
+    is positive-definite (equivalently, $T$ has full Kraus rank).  Then there
+    exist SL-filterings $\Phi_{1}, \Phi_{2}$ such that
+    $\Phi_{2} \circ T \circ \Phi_{1}$ is doubly-stochastic.
+    \textbf{Not yet proved}---proof blocked on Lemma~\ref{lem:infimum_is_attained}.
+\end{theorem}
+
+\begin{theorem}[Lorentz normal form for qubit channels]\label{thm:lorentz_normal_form_qubit}
+    \lean{Wolf.exists_lorentz_normal_form_qubit}
+    \uses{def:sl_filtering, lem:infimum_is_attained}
+    For every qubit channel $T : M_{2}(\mathbb{C}) \to M_{2}(\mathbb{C})$,
+    there exist $\SL(2, \mathbb{C})$-filterings $\Phi_{1}, \Phi_{2}$ such that
+    the filtered channel $T' = \Phi_{2} \circ T \circ \Phi_{1}$ is in one of
+    the three Lorentz normal forms: diagonal, non-diagonal, or singular.
+    The three canonical forms are defined as the Lean predicates
+    \texttt{Wolf.IsLorentzDiagonal}, \texttt{Wolf.IsLorentzNonDiagonal},
+    \texttt{Wolf.IsLorentzSingular} in
+    \texttt{LorentzNormalForm.lean}.
+    \textbf{Not yet proved}---proof blocked on
+    Lemma~\ref{lem:infimum_is_attained} and the Lorentz group classification
+    of $\SL(2, \mathbb{C})$ orbits.
+\end{theorem}
 
 %% The following sections will not be needed for the fundamental theorem of the matrix product states.
 
