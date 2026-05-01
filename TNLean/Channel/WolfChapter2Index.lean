@@ -17,6 +17,7 @@ import TNLean.Channel.POVM.Uniqueness
 import TNLean.Channel.TransferMatrix
 import TNLean.Channel.WolfProps
 import TNLean.Channel.NormalForm
+import TNLean.Channel.LorentzNormalForm
 
 /-!
 # Wolf Lecture Notes — Chapter 2: Representations
@@ -171,6 +172,22 @@ representations of quantum channels.
 * `transferMatrix_svd_of_isUnit` — **SVD representation of a transfer
   matrix** (Wolf §2.3): every invertible transfer matrix admits an SVD ✅
 
+### §2.3 Lorentz normal form (existence)
+
+* `Wolf.SLFiltering` — **SL(d, ℂ)-filtering operation**: a CP map
+  Φ(X) = S X S† with det(S) = 1 ✅ (definitional)
+* `Wolf.DoublyStochastic` — doubly-stochastic condition: T(1) ∝ 1 and
+  T*(1) ∝ 1 ✅ (definitional)
+* `Wolf.infimum_is_attained` — **key compactness lemma**: the trace minimisation
+  over SL(d, ℂ) filterings attains its infimum ⚠️ (stated with `sorry`;
+  requires compactness of bounded SL(n, ℂ) sets)
+* `Wolf.exists_normal_form_generic` — **Wolf Prop 2.8 (generic normal form)**:
+  every CP map with full Kraus rank admits SL-filterings making it
+  doubly-stochastic ⚠️ (depends on `infimum_is_attained`)
+* `Wolf.exists_lorentz_normal_form_qubit` — **Wolf Prop 2.9/2.11 (Lorentz
+  normal form for qubit channels)** ⚠️ (depends on `infimum_is_attained`
+  and Lorentz group classification)
+
 ### Formalization
 
 | Definition | File | Lean name |
@@ -190,13 +207,17 @@ representations of quantum channels.
 | Transfer matrix | `TransferMatrix.lean` | `transferMatrix` |
 | Unitary conjugation | `TransferMatrix.lean` | `unitaryConjLM` |
 | Vectorization | `Mathlib.LinearAlgebra.Matrix.Vec` | `Matrix.vec` |
+| SL-filtering | `LorentzNormalForm.lean` | `Wolf.SLFiltering` |
+| Doubly-stochastic | `LorentzNormalForm.lean` | `Wolf.DoublyStochastic` |
+| Lorentz normal form | `LorentzNormalForm.lean` | `Wolf.exists_lorentz_normal_form_qubit` |
 
 ### Not yet formalized
 
 | Result | Notes |
 |--------|-------|
 | Thm 2.5 (unitary form) | Reduced isometric form formalized; unitary form needs basis extension |
-| §2.3 Lorentz normal form (existence) | Needs compactness over `SL(2, ℂ)` filterings |
+| §2.3 Lorentz normal form (full proof) | Statement formalised (`exists_lorentz_normal_form_qubit`); proof blocked on compactness of bounded SL(n, ℂ) sets (`infimum_is_attained`) — see `LorentzNormalForm.lean` for details |
+| §2.3 Generic normal form (full proof) | Statement formalised (`exists_normal_form_generic`); proof blocked on same compactness lemma |
 | §2.3 Sorted singular values | Current SVD is unsorted; later uses want sorted values |
 
 ## References
