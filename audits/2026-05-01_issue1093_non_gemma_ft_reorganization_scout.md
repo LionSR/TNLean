@@ -38,7 +38,7 @@ BNT sector comparison and matched sector weights
 
 A scan of `TNLean/MPS/CanonicalForm` and `TNLean/MPS/FundamentalTheorem` found no local `sorry` or `admit` occurrences.  The remaining issue is therefore not proof integrity; it is the shape of the public and intermediate API.
 
-## Paper-facing wrapper now available
+## Paper-facing theorem form now available
 
 The follow-up API in `TNLean/MPS/CanonicalForm/Assembly.lean` adds the current
 strongest statement in the language of the Cirac--Pérez-García--Schuch--Verstraete
@@ -48,7 +48,7 @@ Fundamental Theorem:
   comparison inputs: blocked-word relabeling, equality of the zero-tail
   dimensions, one-site injectivity of the produced common primitive sectors, and
   BNT proportional-comparison data for those same produced sectors.
-- `MPSTensor.AfterBlockingFundamentalTheoremConclusion` packages the output: after
+- `MPSTensor.AfterBlockingFundamentalTheoremConclusion` records the output: after
   a positive blocking, there are BNT sector decompositions `P` and `Q`; the
   original blocked tensors agree with them at positive lengths; `P` and `Q`
   generate the same full MPV family; and the basis sectors, multiplicities, and

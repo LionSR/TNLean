@@ -41,7 +41,7 @@ original names, including
 `bilateral_commonPeriod_blocking_tp_primitive_normal`, and
 `fundamentalTheorem_after_blocking_structural`.
 
-This public entry point also records a paper-facing wrapper for the present
+This public entry point also records the present closest paper-facing analogue of the
 non-Gemma route.  The structure `AfterBlockingFundamentalTheoremHypotheses`
 names the remaining comparison inputs, while
 `fundamentalTheorem_afterBlocking_of_comparisonHypotheses` returns the current
@@ -170,8 +170,8 @@ structure AfterBlockingFundamentalTheoremConclusion
 Let `A` and `B` generate the same MPV family.  Under the currently explicit remaining comparison
 hypotheses, there is a positive blocking after which the two tensors admit BNT sector
 decompositions with the same sector MPV family, matched basis-sector multiplicities, and matched
-sector-weight multisets up to nonzero phases.  This is the strongest paper-facing wrapper currently
-available on the non-Gemma route: it is a direct repackaging of
+sector-weight multisets up to nonzero phases.  This is the strongest paper-facing conditional form
+currently available on the non-Gemma route: it is a direct consequence of
 `afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_proportional`, not a new hidden
 assumption or an appeal to the periodic fundamental theorem. -/
 theorem fundamentalTheorem_afterBlocking_of_comparisonHypotheses
