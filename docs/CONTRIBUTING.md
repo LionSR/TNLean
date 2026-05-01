@@ -48,6 +48,10 @@ Every PR body must contain three sections:
 - Use bullet points.
 - State the mathematical content precisely enough for a reader who has not read
   the issue thread.
+- When renaming a public declaration and intentionally omitting a
+  `@[deprecated] alias` because the old name encodes misleading terminology,
+  explicitly note: `No compatibility alias is provided — the old name encodes
+  [term] (see docs/CONTRIBUTING.md §Mathematical-language renames).`
 
 ### Testing
 - What was verified and how.
@@ -264,7 +268,9 @@ Every PR touching Lean code should be reviewed against these criteria:
 
 2. **Mathlib style** -- Follow the naming conventions in [naming.md](naming.md)
    and documentation standards in [doc.md](doc.md). See [pr-review.md](pr-review.md)
-   for the full Mathlib review guide.
+   for the full Mathlib review guide. For renames that intentionally omit
+   deprecated aliases under the mathematical-language exception, confirm the
+   PR body states the reason (see [CONTRIBUTING.md §Mathematical-language renames](#mathematical-language-renames)).
 
 3. **Type safety** -- No universe mismatches, coercion problems, or unresolved
    metavariables.
@@ -333,6 +339,60 @@ this project specifically:
 - `E` for transfer matrices / quantum channels
 - `d` for physical dimension, `D` for bond dimension
 - `N`, `L` for chain length
+
+### Mathematical-language renames
+
+The standard Mathlib deprecation convention says renamed declarations should keep
+a `@[deprecated] alias`.  When the **old name encodes misleading terminology** —
+process jargon, project-internal shorthand, or non-mathematical phrasing — a clean
+one-step rename without a deprecated alias is preferred.
+
+#### When to skip a deprecated alias
+
+Skip the alias when the old name contains a term that appears in, or is a
+contextual variant of, the banned-vocabulary list in
+[`docs/prose_style.md` §2](prose_style.md#2-banned-software-engineering-terms--replacements).
+Apply context-qualified bans only in the stated context: for example, "Assembly"
+is banned as a section or chapter title, but not when it is part of a standard
+mathematical phrase.
+
+Examples of terms that make an alias inappropriate in declaration names:
+
+- exact entries or variants of process/software metaphors from the prose guide:
+  `pipeline`, `package`, `scaffolding`/`scaffold`, `workflow`, `plumbing`,
+  `boilerplate`, `glueLayer`, `reexport`
+- additional project-internal cleanup terms with the same non-mathematical force:
+  `raw`, `helper`, `wrapper`, `endpoint` when it means a proof milestone rather
+  than a boundary point
+- project-internal shorthand: `liveBlock`, `oneShot`, `deadProof`, `sourceAnchor`
+- AI/LLM vocabulary in declaration names
+
+Keep the `@[deprecated] alias` when the old name uses genuine mathematical language that
+is merely imprecise or outdated (e.g., `transferMap` → `transferMatrix` when the object is
+a matrix) — the old name is not misleading, just suboptimal.
+
+#### What PRs must state
+
+When a rename skips a deprecated alias under this exception, the PR body must explicitly say:
+
+> **No compatibility alias is provided.** The old name encodes [misleading term]
+> (see [`docs/CONTRIBUTING.md` §Mathematical-language renames](CONTRIBUTING.md#mathematical-language-renames)).
+
+This makes the exception visible to reviewers and prevents downstream users from
+wondering whether the omission was an oversight.
+
+#### Blueprint references
+
+In the same PR, update every `\lean{OldName}` tag in `blueprint/src/` to
+`\lean{NewName}`.  Run `leanblueprint checkdecls` to confirm no stale references
+remain.
+
+#### Migration within the project
+
+Before deleting or renaming, search the project for call sites of the old name
+(`rg -n "oldName" TNLean/`) and update them in the same PR.  If the old name
+appears in a module docstring or comment, rewrite the surrounding prose to use
+the new mathematical name.
 
 ---
 
