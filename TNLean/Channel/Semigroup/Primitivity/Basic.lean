@@ -33,14 +33,13 @@ import Mathlib.NumberTheory.Real.Irrational
 The proof requires the following chain:
 
 **Step A** (continuous-time key): `T_{t₀}` irreducible → `T_t` irreducible for all `t > 0`.
-This is the core continuous-time fact: irreducibility is a generator property.
-In a norm-continuous QDS `T_t = exp(tL)`, the generator `L` is irreducible
-(no non-trivial invariant faces of the PSD cone). An irreducible generator
-generates an irreducible semigroup: `T_t` is irreducible for ALL `t > 0`.
-*Missing formalization*: formalization of "generator irreducibility ↔ T_t irr ∀ t".
+This is the core continuous-time fact: irreducibility propagates through the
+norm-continuous semigroup.  The Lean proof realizes this propagation in
+`irreducible_all_of_irreducible_time` by combining the unique faithful fixed
+density at the irreducible time with a primitive positive fractional slice.
 
 **Step B**: `T_t` irreducible + channel → peripheral eigenvalues of `T_t` are roots
-of unity (Wolf Thm 6.6). This channel-level bridge is now available as
+of unity (Wolf Thm 6.6). This channel-level result is available as
 `peripheral_isRootOfUnity_of_irreducible_channel`, proved by choosing a Kraus
 representation, converting to an irreducible tensor, and applying the existing
 blocking-periodicity theorem.
@@ -53,10 +52,10 @@ and `T_t σ' = μ σ'`.  Trace preservation forces `μ = 1`.
 
 The auxiliary lemmas `eigenvalue_exp_of_eigenvalue_generator`,
 `eq_zero_of_exp_mul_I_isRootOfUnity`, and `re_eq_zero_of_peripheral_generator`
-are fully proved. Step A (generator irreducibility ↔ semigroup irreducibility)
-is formalized via `irreducible_all_of_irreducible_time` in
-`IrreducibleAnalysis.lean`, but that theorem transitively depends on 13
-`sorry` placeholders (formerly `axiom` declarations).
+are fully proved.  The propagation theorem `irreducible_all_of_irreducible_time`
+in `IrreducibleAnalysis.lean` establishes Step A from the faithful fixed-density
+construction, the primitive fractional slice, and the one-dimensional fixed-point
+space obtained from that slice.
 
 ## References
 

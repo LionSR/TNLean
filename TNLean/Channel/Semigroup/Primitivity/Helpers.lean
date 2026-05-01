@@ -224,12 +224,13 @@ theorem bounded_root_of_peripheral_closed_powers [NeZero D]
 
 /-- Power-closure auxiliary lemma at an irreducible time slice.
 
-This is the only new semigroup-specific ingredient still missing from the refactor below: we need
-that after a similarity transform by a positive-definite fixed point, the irreducible channel
-becomes unital with an adjoint fixed point, so Wolf's peripheral-power closure theorem applies.
+After conjugating by the square root of a positive-definite fixed point, the
+irreducible channel becomes unital with an adjoint fixed point, so Wolf's
+peripheral-power closure theorem applies to the gauged Kraus family.
 
-The statement is substantially simpler than the original circular `sorry`: it is a pure channel
-lemma, independent of continuous-time propagation or generator kernels. -/
+This is a purely channel-level lemma: its hypotheses mention one channel with a
+positive-definite fixed point and do not use continuous-time propagation or
+generator kernels. -/
 theorem peripheral_powers_closed_of_irreducible_channel_with_fixed [NeZero D]
     (E : Mat →ₗ[ℂ] Mat) (hE : IsChannel E) (hIrr : IsIrreducibleMap E)
     (σ : Mat) (hσ_pd : σ.PosDef) (hσ_fix : E σ = σ)

@@ -9,8 +9,8 @@ import TNLean.Channel.FixedPoint.Algebra
 /-!
 # Kernel of the Liouvillian — Wolf Theorem 7.2
 
-This file begins the formalization of Wolf Theorem 7.2 on the kernel of the
-Liouvillian. For a Lindblad form
+This file formalizes the faithful-stationary-state kernel/commutant statement
+from Wolf Theorem 7.2. For a Lindblad form
 
 $$
 L(\rho) = i(\rho H - H \rho) + \sum_j \left(L_j \rho L_j^\dagger -
@@ -470,8 +470,8 @@ theorem mem_commutant_of_mem_adjointKernel_of_hasFaithfulStationaryState
   rw [mem_commutant]
   exact ⟨hHA, fun j => ⟨hAL j, hALstar j⟩⟩
 
-/-- Wolf Theorem 7.2 with the current formalization status: under a faithful
-stationary state, the adjoint kernel equals the commutant. -/
+/-- Wolf Theorem 7.2: under a faithful stationary state, the adjoint kernel equals
+the commutant. -/
 theorem adjointKernel_eq_commutant_of_hasFaithfulStationaryState
     (F : LindbladForm D)
     (hstat : HasFaithfulStationaryState (D := D) F.toLinearMap) :

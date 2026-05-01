@@ -21,8 +21,10 @@ Euler step approximation.
 * `cp_semigroup_implies_ccp_generator` — **Prop 7.3** direction 1→2.
 * `cp_semigroup_iff_ccp_generator` — **Prop 7.3**: CP semigroup ↔ CCP generator.
 
-All Prop 7.3 statements in this file are proved constructively in Lean without
-`sorry`/`axiom` placeholders.
+The main theorem gives the two directions: a CP exponential semigroup has a CCP
+generator, and a CCP generator yields CP maps at all nonnegative times.  The
+proofs use projected Choi matrices, boundary derivatives of PSD curves, and the
+Euler product approximation.
 -/
 
 open scoped Matrix ComplexOrder BigOperators NNReal MatrixOrder TNOperatorSpace
@@ -57,10 +59,10 @@ of completely positive maps, then `L` is conditionally completely positive.
 at `t = 0` to get `(L⊗id)(|Ω⟩⟨Ω|) + |Ω⟩⟨Ω|·(L⊗id)† ≥ 0` on the range of `P`,
 i.e. `P(L⊗id)(|Ω⟩⟨Ω|)P ≥ 0`. Then Prop 7.2 gives CCP.
 
-**Formalization needs**:
-1. Choi matrix of `exp(tL)` is PSD (from CP hypothesis)
-2. Derivative of a PSD-valued function at a boundary point has the PSD projection property
-3. Extract CCP decomposition from projected PSD Choi matrix (Prop 7.2 reverse) -/
+**Proof ingredients**:
+1. The CP hypothesis gives positivity of the Choi matrix of `exp(tL)`.
+2. Boundary differentiation of a PSD-valued curve yields positivity of the projected derivative.
+3. Wolf Prop. 7.2 identifies projected Choi positivity with conditional complete positivity. -/
 theorem cp_semigroup_implies_ccp_generator
     (L : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (hCP : ∀ t : ℝ, 0 ≤ t → IsCPMap (expSemigroup L t)) :
