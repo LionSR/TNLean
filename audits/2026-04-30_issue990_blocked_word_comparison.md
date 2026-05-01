@@ -27,6 +27,7 @@ The issue #1075 refinement adds a canonical grouping map in
 
 - `blockWordChunk`
 - `directToIteratedBlockIndex`
+- `blockIndexOfList_wordOfBlock`
 - `flattenBlockedWord_wordOfBlock_directToIteratedBlockIndex`
 - `wordOfBlock_iteratedBlockIndex_directToIteratedBlockIndex`
 
