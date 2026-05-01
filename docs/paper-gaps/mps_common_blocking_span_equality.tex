@@ -106,7 +106,7 @@ nonzero parts, and records the exact $N=0$ identity separately.\footnote{See
 \texttt{thm:nonzero\_block\_block\_power\_zero\_tail\_identity}, and
 \texttt{thm:nonzero\_block\_same\_mpv\_zero\_tail\_eq}. The corresponding
 zero-tail cancellation step in the assembly chapter is
-\path{blueprint/src/chapter/ch11_assembly.tex:1164--1246}.}
+\path{blueprint/src/chapter/ch11_assembly.tex:1202--1217}.}
 
 The common blocking step is also more explicit. For a single family of blocks,
 the source phrase ``block by the least common multiple of the periods'' hides no
@@ -153,11 +153,13 @@ bond dimensions, and gauge phases, the formal construction gives the common phas
 cover from that comparison and then obtains the span equality needed by the sector
 comparison theorem.\footnote{See
 \path{blueprint/src/chapter/ch11_assembly.tex:755--923}. The corresponding formal
-objects are the common phase-cover structure and its span lemmas, together with
-the proportional-decomposition overlap-span theorem. They live respectively at
+objects include the common phase-cover structure and span lemmas, the block-span
+and common-phase-cover overlap-span adapters, and the proportional-decomposition
+specialization. They are located at
 \path{TNLean/MPS/CanonicalForm/EqualNormBridge.lean:472--491},
-\path{TNLean/MPS/CanonicalForm/EqualNormBridge.lean:604--641}, and
-\path{TNLean/MPS/CanonicalForm/EqualNormBridge.lean:1348--1480}.}
+\path{TNLean/MPS/CanonicalForm/EqualNormBridge.lean:604--641},
+\path{TNLean/MPS/CanonicalForm/EqualNormBridge.lean:1348--1449}, and
+\path{TNLean/MPS/CanonicalForm/EqualNormBridge.lean:1453--1480}.}
 These lemmas state precisely what comparison data are needed; they do not by
 themselves derive all of that data from an arbitrary equality of total MPV
 families.
