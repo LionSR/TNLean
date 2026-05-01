@@ -489,6 +489,297 @@ The results follow~\cite{Sanz2010Quantum}.
     are not proved here.
 \end{remark}
 
+% Source check: Papers/0909.5347/main.tex lines 645--654, theorem
+% label thm:mainthm, state Theorem 1 cases (2) and (3). Lines
+% 660--664 give the dimension-growth proof of case (2), and lines
+% 679--684 identify the analogous proof of case (3).
+\begin{definition}[One-step augmentation]\label{def:one_step_augment}
+    \lean{MPSTensor.oneStepAugment}
+    \leanok
+    \uses{def:mps_tensor}
+    Let $A$ be an MPS tensor with Kraus family $(A^i)_{i=0}^{d-1}$, and
+    let $X \in \MN{D}$. The \emph{one-step augmentation} of $A$ by $X$
+    is the tensor $\widetilde A$ with physical dimension $d+1$ whose
+    first Kraus operator is $X$ and whose remaining Kraus operators are
+    those of $A$:
+    \[
+        \widetilde A^0 = X, \qquad \widetilde A^{i+1}=A^i.
+    \]
+\end{definition}
+
+\begin{lemma}[Kraus operators lie in the one-step span]\label{lem:kraus_mem_word_span_one}
+    \lean{MPSTensor.apply_mem_wordSpan_one}
+    \leanok
+    \uses{def:word_span}
+    Every Kraus operator $A^i$ belongs to the one-step span $S_1(A)$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    This is the length-one word with letter~$i$.
+\end{proof}
+
+\begin{lemma}[Redundant one-step augmentation]\label{lem:one_step_augment_word_span}
+    \lean{MPSTensor.oneStepAugment_apply_mem_wordSpan_one,
+          MPSTensor.wordSpan_oneStepAugment_one,
+          MPSTensor.wordSpan_oneStepAugment_eq}
+    \leanok
+    \uses{def:one_step_augment, def:word_span, lem:kraus_mem_word_span_one}
+    Let $X \in S_1(A)$, and let $\widetilde A$ be the one-step
+    augmentation of $A$ by $X$. Then
+    \[
+        S_n(\widetilde A)=S_n(A)
+    \]
+    for every $n \ge 0$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:kraus_mem_word_span_one}
+    The new generator $X$ is already in $S_1(A)$, and each original
+    generator remains in the augmented family. Hence the one-step spans
+    agree. Multiplying word spans and arguing by induction on the word
+    length gives equality at every length.
+\end{proof}
+
+\begin{lemma}[Normality and Kraus rank under one-step augmentation]%
+    \label{lem:one_step_augment_normal_kraus_rank}
+    \lean{MPSTensor.isNormal_oneStepAugment_of_mem_wordSpan_one,
+          MPSTensor.krausRank_oneStepAugment}
+    \leanok
+    \uses{def:one_step_augment, def:normal, lem:one_step_augment_word_span}
+    Let $X \in S_1(A)$, and let $\widetilde A$ be the one-step
+    augmentation of $A$ by $X$. If $A$ is normal, then $\widetilde A$ is
+    normal, and
+    \[
+        \krausrk(\widetilde A)=\krausrk(A).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:one_step_augment_word_span}
+    Since all exact word spans are unchanged by
+    Lemma~\ref{lem:one_step_augment_word_span}, eventual full word span
+    for $A$ gives eventual full word span for $\widetilde A$. The equality
+    of Kraus ranks is the equality of the dimensions of the common
+    one-step span.
+\end{proof}
+
+\begin{theorem}[Wielandt case (2), invertible generator]%
+    \label{thm:wielandt_case2_normal_generator}
+    \lean{MPSTensor.wordSpan_eq_top_of_isNormal_of_isUnit,
+          MPSTensor.iIndex_le_of_isNormal_of_isUnit}
+    \leanok
+    \uses{def:word_span, def:normal}
+    Let $A$ be a normal MPS tensor with bond dimension $D$, and suppose
+    that some Kraus operator $A^{i_0}$ is invertible. Then
+    \[
+        S_{D^2-\krausrk(A)+1}(A)=\MN{D},
+        \qquad
+        \iota(A) \le D^2-\krausrk(A)+1.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The dimensions of the exact word spans cannot decrease, because
+    left multiplication by the invertible Kraus operator is injective.
+    If this dimension growth stopped before the full matrix algebra was
+    reached, the same argument applied at all later lengths would
+    contradict normality. Since $\dim S_1(A)=\krausrk(A)$ and
+    $\dim \MN{D}=D^2$, the full algebra is reached by
+    length $D^2-\krausrk(A)+1$. The index bound follows from the
+    definition of $\iota(A)$.
+\end{proof}
+
+\begin{theorem}[Wielandt case (2), one-step invertible element]%
+    \label{thm:wielandt_case2_one_step_span}
+    \lean{MPSTensor.wordSpan_eq_top_of_isPrimitivePaper_of_mem_wordSpan_one_of_isUnit}
+    \leanok
+    \uses{def:word_span, def:one_step_augment,
+          lem:one_step_augment_word_span, lem:one_step_augment_normal_kraus_rank,
+          thm:wielandt_case2_normal_generator}
+    Let $A$ be an MPS tensor with bond dimension $D \ge 1$, satisfying
+    $\sum_i (A^i)^\dagger A^i=\Id$, and suppose that $A$ is primitive in
+    the paper sense. If $S_1(A)$ contains an invertible matrix $X$, then
+    \[
+        S_{D^2-\krausrk(A)+1}(A)=\MN{D}.
+    \]
+    In the terminology of Sanz--Pérez-García--Wolf--Cirac, this is
+    the case where the first application space $S_1(A)$ contains an
+    invertible operator. This is the exact word-span form of
+    \cite[Theorem~1, case~(2)]{Sanz2010Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:one_step_augment_word_span, lem:one_step_augment_normal_kraus_rank,
+          thm:wielandt_case2_normal_generator}
+    Adjoin $X$ as an extra first Kraus operator, obtaining
+    $\widetilde A$. Paper primitivity and normalization give normality
+    of $A$, hence normality of $\widetilde A$; the Kraus rank and all
+    exact word spans are unchanged. The first Kraus operator of
+    $\widetilde A$ is invertible, so
+    Theorem~\ref{thm:wielandt_case2_normal_generator} gives
+    $S_{D^2-\krausrk(\widetilde A)+1}(\widetilde A)=\MN{D}$.
+    Transfer this equality back to $A$.
+\end{proof}
+
+\begin{corollary}[Wielandt case (2), index bound]%
+    \label{cor:wielandt_case2_one_step_index}
+    \lean{MPSTensor.iIndex_le_of_mem_wordSpan_one_of_isUnit}
+    \leanok
+    \uses{thm:wielandt_case2_one_step_span}
+    Under the hypotheses of Theorem~\ref{thm:wielandt_case2_one_step_span},
+    \[
+        \iota(A) \le D^2-\krausrk(A)+1,
+    \]
+    where $\iota(A)=\min\{n:S_n(A)=\MN{D}\}$.
+\end{corollary}
+
+\begin{proof}
+    \leanok
+    \uses{thm:wielandt_case2_one_step_span}
+    The displayed word-span equality gives an admissible value in the
+    defining minimum for $\iota(A)$.
+\end{proof}
+
+\begin{corollary}[Wielandt case (2), invertible Kraus operator]%
+    \label{cor:wielandt_case2_generator}
+    \lean{MPSTensor.wordSpan_eq_top_of_isPrimitivePaper_of_isUnit,
+          MPSTensor.iIndex_le_of_isPrimitivePaper_of_isUnit}
+    \leanok
+    \uses{lem:kraus_mem_word_span_one, thm:wielandt_case2_one_step_span,
+          cor:wielandt_case2_one_step_index}
+    Let $A$ be an MPS tensor with bond dimension $D \ge 1$, satisfying
+    $\sum_i (A^i)^\dagger A^i=\Id$, and suppose that $A$ is primitive in
+    the paper sense. If some Kraus operator $A^{i_0}$ is invertible, then
+    \[
+        S_{D^2-\krausrk(A)+1}(A)=\MN{D},
+        \qquad
+        \iota(A) \le D^2-\krausrk(A)+1.
+    \]
+\end{corollary}
+
+\begin{proof}
+    \leanok
+    \uses{lem:kraus_mem_word_span_one, thm:wielandt_case2_one_step_span,
+          cor:wielandt_case2_one_step_index}
+    Apply the one-step case to $X=A^{i_0}$, which belongs to $S_1(A)$ by
+    Lemma~\ref{lem:kraus_mem_word_span_one}.
+\end{proof}
+
+\begin{lemma}[Rank-one extraction from a non-invertible eigenvector]%
+    \label{lem:rank_one_noninvertible_eigenvector}
+    \lean{MPSTensor.vecMulVec_eigenvector_exact_wordSpan}
+    \leanok
+    \uses{def:word_span, def:normal, thm:fitting_decomp}
+    Let $A$ be a normal MPS tensor with bond dimension $D \ge 1$.
+    Suppose that a Kraus operator $A^{i_0}$ is non-invertible and has
+    an eigenvector $\varphi\ne0$ with nonzero eigenvalue $\mu$.
+    Then, for every $\psi \in \C^D$,
+    \[
+        \ketbra{\varphi}{\psi} \in S_{D^2-D+1}(A).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{thm:fitting_decomp}
+    Decompose $A^{i_0}$ into its nilpotent and nonzero generalized
+    eigenspaces. On the nonzero part, multiplication by $A^{i_0}$ is
+    injective, so the rectangular spans grow strictly until they fill
+    the whole range. The nilpotent index contributes the remaining
+    length. Since the eigenvalue on $\varphi$ is nonzero, eigenvector
+    padding moves the resulting cumulative membership to the exact
+    length $D^2-D+1$.
+\end{proof}
+
+\begin{theorem}[Wielandt case (3), one-step non-invertible element]%
+    \label{thm:wielandt_case3_one_step_span}
+    \lean{MPSTensor.wordSpan_eq_top_of_isPrimitivePaper_of_mem_wordSpan_one_of_noninvertible_eigenvector}
+    \leanok
+    \uses{def:word_span, def:one_step_augment,
+          lem:one_step_augment_word_span, lem:one_step_augment_normal_kraus_rank,
+          thm:eigenvector_spreading, lem:rank_one_noninvertible_eigenvector,
+          thm:lemma2b_assembly}
+    Let $A$ be an MPS tensor with bond dimension $D \ge 1$, satisfying
+    $\sum_i (A^i)^\dagger A^i=\Id$, and suppose that $A$ is primitive in
+    the paper sense. If $S_1(A)$ contains a non-invertible matrix $X$
+    with a nonzero eigenvalue, then
+    \[
+        S_{D^2}(A)=\MN{D}.
+    \]
+    More explicitly, it is enough to have $X\varphi=\mu\varphi$ with
+    $\varphi\ne 0$ and $\mu\ne 0$. In the terminology of
+    Sanz--Pérez-García--Wolf--Cirac, this is the case where the first
+    application space $S_1(A)$ contains a non-invertible operator with a
+    nonzero eigenvalue. This is the exact word-span form of
+    \cite[Theorem~1, case~(3)]{Sanz2010Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:one_step_augment_word_span, lem:one_step_augment_normal_kraus_rank,
+          thm:eigenvector_spreading, lem:rank_one_noninvertible_eigenvector,
+          thm:lemma2b_assembly}
+    Adjoin $X$ as an extra first Kraus operator. The augmented tensor is
+    normal and has the same exact word spans as $A$. The eigenvector
+    relation for $X$ is now a one-generator eigenvector relation. The
+    eigenvector-spreading argument gives full fixed-length vector span
+    by length $D-1$, and
+    Lemma~\ref{lem:rank_one_noninvertible_eigenvector} gives the
+    rank-one operators $\ketbra{\varphi}{\psi}$ in length $D^2-D+1$.
+    Multiplying these two fixed-length spans gives
+    $S_{D^2}$ for the augmented tensor, hence for $A$.
+\end{proof}
+
+\begin{corollary}[Wielandt case (3), index bound]%
+    \label{cor:wielandt_case3_one_step_index}
+    \lean{MPSTensor.iIndex_le_sq_of_mem_wordSpan_one_of_noninvertible_eigenvector}
+    \leanok
+    \uses{thm:wielandt_case3_one_step_span}
+    Under the hypotheses of Theorem~\ref{thm:wielandt_case3_one_step_span},
+    \[
+        \iota(A) \le D^2.
+    \]
+\end{corollary}
+
+\begin{proof}
+    \leanok
+    \uses{thm:wielandt_case3_one_step_span}
+    The equality $S_{D^2}(A)=\MN{D}$ gives an admissible value in the
+    defining minimum for $\iota(A)$.
+\end{proof}
+
+\begin{corollary}[Wielandt case (3), non-invertible Kraus operator]%
+    \label{cor:wielandt_case3_generator}
+    \lean{MPSTensor.wordSpan_eq_top_of_isPrimitivePaper_of_noninvertible_eigenvector,
+          MPSTensor.iIndex_le_sq_of_noninvertible_eigenvector}
+    \leanok
+    \uses{lem:kraus_mem_word_span_one, thm:wielandt_case3_one_step_span,
+          cor:wielandt_case3_one_step_index}
+    Let $A$ be an MPS tensor with bond dimension $D \ge 1$, satisfying
+    $\sum_i (A^i)^\dagger A^i=\Id$, and suppose that $A$ is primitive in
+    the paper sense. If some Kraus operator $A^{i_0}$ is non-invertible
+    and has an eigenvector $\varphi\ne0$ with nonzero eigenvalue $\mu$,
+    then
+    \[
+        S_{D^2}(A)=\MN{D},
+        \qquad
+        \iota(A) \le D^2.
+    \]
+\end{corollary}
+
+\begin{proof}
+    \leanok
+    \uses{lem:kraus_mem_word_span_one, thm:wielandt_case3_one_step_span,
+          cor:wielandt_case3_one_step_index}
+    Apply the one-step case to $X=A^{i_0}$, which belongs to $S_1(A)$ by
+    Lemma~\ref{lem:kraus_mem_word_span_one}.
+\end{proof}
+
 \begin{theorem}[Wielandt's inequality --- general bound]%
     \label{thm:wielandt_general}
     \lean{MPSTensor.iIndex_le_general_of_isPrimitivePaper}
@@ -508,7 +799,8 @@ The results follow~\cite{Sanz2010Quantum}.
 \begin{proof}
     \leanok
     \uses{thm:nonzero_trace_word_sharp_pos, thm:eigenvector_from_trace,
-          thm:isNormal_blockTensor}
+          thm:isNormal_blockTensor, cor:wielandt_case2_generator,
+          cor:wielandt_case3_generator}
     \begin{enumerate}
     \item \emph{$D = 1$:} In this case $\iota(A) = 0$, so the bound
           holds trivially.
