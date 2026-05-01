@@ -1,0 +1,195 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{Normal Parent-Hamiltonian Range Reduction in CPGSV21}
+\author{}
+\date{2026-04-30}
+
+\begin{document}
+\maketitle
+
+\section{The assertion}
+
+The range-reduction step for normal matrix product states appears in
+Section~IV.C of Cirac--P\'erez-Garc\'ia--Schuch--Verstraete
+\cite{Cirac2021Matrix}.\footnote{For traceability, this note corresponds to
+\href{https://github.com/LionSR/TNLean/issues/1042}{issue \#1042}. The principal
+formal obligation is recorded in
+\href{https://github.com/LionSR/TNLean/issues/588}{issue \#588}; the wrapped-boundary
+comparison is recorded in \href{https://github.com/LionSR/TNLean/issues/961}{issue \#961};
+and the parent-Hamiltonian consequences are recorded in
+\href{https://github.com/LionSR/TNLean/issues/460}{issue \#460}.}
+
+Let $A$ be a normal MPS tensor, and let $L_0$ be its injectivity length: after
+blocking $L_0$ consecutive sites, the resulting tensor is injective. The source
+first proves an intersection step for two overlapping local Hamiltonian terms of
+range $L_0+1$. These terms act on sites $1,\ldots,L_0+1$ and
+$2,\ldots,L_0+2$. The source denotes the three regions by $A$, $B$, and $C$: the first site,
+the middle region consisting of sites $2,\ldots,L_0+1$, and the last site. The
+tensor associated to the middle region $B$ is injective. For a state in the intersection
+\[
+  \mathcal G_{1,\ldots,L_0+1}\cap \mathcal G_{2,\ldots,L_0+2},
+\]
+the argument inverts the left boundary tensor $A_{\mathrm{left}}$, restores the middle region $B$, and
+then uses injectivity of the enlarged region to invert the joint region. It
+concludes that every vector in the intersection already lies in
+$\mathcal G_{1,\ldots,L_0+2}$; the reverse inclusion is immediate.
+\footnote{Source location:
+\path{Papers/2011.12127/TN-Review-main.tex}:2049--2077, especially the
+middle-region argument around the displayed figures following
+\path{eq:4:initiate-intersection-proof}.}
+
+The source then says that this argument can be iterated. Hence the ground space
+obtained from all length-$L_0+1$ terms agrees with the ground space obtained from
+all longer length-$L_0+k$ terms. When $k=L_0$, the proof either appeals to the
+previous $2L_0$-range uniqueness theorem or applies the same kind of argument
+when closing the periodic boundary. The resulting theorem states that a normal
+MPS which becomes injective after blocking $L_0$ sites has a unique ground state
+for the parent Hamiltonian whose interaction range is $L_0+1$.
+\footnote{Source location:
+\path{Papers/2011.12127/TN-Review-main.tex}:2078--2079 for the iteration and
+boundary-closing sentence, and
+\path{Papers/2011.12127/TN-Review-main.tex}:2087--2090 for the theorem labeled
+\path{thm:4:unique-gs-L0_plus_1}.}
+
+\section{The formal statement}
+
+The corresponding formal statement keeps the intended hypotheses. In
+mathematical terms, it assumes that $A$ is normal, that $A$ is injective after blocking
+$L_0$ sites, and that the periodic chain has length $N\ge 2$ with an interaction
+range $L$ satisfying $L_0<L\le N$. The desired conclusion is that the
+periodic-chain ground space is the line spanned by the periodic MPS vector
+$\Omega_N(A)$:
+\[
+  \mathcal G_{N,L}(A)=\mathbb C\,\Omega_N(A).
+\]
+In the formal statement this is the equality between the cyclic chain ground space
+and the MPV, or periodic MPS vector, subspace. The hard inclusion into the MPV
+line is the remaining range-reduction lemma.
+\footnote{Formal locations:
+\path{TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean}:651--660 for
+\path{MPSTensor.chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction},
+and
+\path{TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean}:670--680 for
+\path{MPSTensor.chainGroundSpace_eq_mpvSubmodule_normal}. The formal hypotheses
+are named \path{IsNormal A} and \path{IsNBlkInjective A L0}, together with
+\path{2 <= N} and \path{L0 < L <= N}.}
+
+The blueprint records the same range-reduction target in
+\path{blueprint/src/chapter/ch14_parent_hamiltonian.tex}:1212--1240, under the
+label \texttt{thm:normal\_range\_reduction\_containment}. Its proof sketch
+already separates the open-chain containment from the cyclic boundary comparison,
+which is the same division made by the formal statements below.
+
+
+The first mismatch is that the available intersection theorem is not a literal
+expression of the proof through the region $B$. That theorem was written for a
+tensor that is already injective at one site. Its proof decomposes the identity as a linear combination of the one-site matrices
+$A_j$ and then iterates this single-letter intersection property through
+contiguous windows.
+\footnote{Formal locations:
+\path{TNLean/MPS/ParentHamiltonian/IntersectionProperty.lean}:253--256 for
+\path{MPSTensor.groundSpace_intersection},
+\path{TNLean/MPS/ParentHamiltonian/IntersectionProperty.lean}:313--330 for the
+use of \path{decompositionMap hA 1}, and
+\path{TNLean/MPS/ParentHamiltonian/CyclicWindow.lean}:153--155 for the contiguous
+iteration using that theorem.}
+For a normal tensor with injectivity length $L_0$, the available inverse is the
+inverse for words of length $L_0$, not a one-site inverse. This is not a
+contradiction in the source argument; it is a mismatch between the diagrammatic
+region-by-region proof and the available formal statements for intersection
+properties.
+
+The formal argument therefore separates the proof into two parts instead of
+reproducing the source paragraph verbatim. The open-chain component has been
+proved by a block-injective range-reduction lemma: if every contiguous
+window of length $L_0+1$ lies in the corresponding local MPS ground space, then
+the full open chain lies in the full MPS ground space. Combining this with cyclic
+window monotonicity gives an open-chain consequence from the cyclic length-$L$
+constraints. This supplies the formal analog of the iterated open-boundary
+part of the source proof, without expressing the inverse for the region $B$
+through the older single-site intersection lemma.
+\footnote{Formal locations:
+\path{TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean}:347--353 for
+\path{MPSTensor.contiguous_mem_groundSpace_of_isNBlkInjective}, and
+\path{TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean}:409--424 for
+\path{MPSTensor.chainGroundSpace_le_groundSpace_of_isNBlkInjective}.}
+
+\section{The remaining comparison}
+
+After the open-chain step, a periodic-chain ground state can be written with an
+open-chain boundary matrix $X$. The point left to prove is that the wrapped
+length-$L_0+1$ constraints force $X$ to be scalar, and hence that the state is
+in the MPV line. The formal proof has extracted the two one-sided wrapped
+compatibilities. In schematic notation, the wrapped window gives
+\[
+  C^+_{\tau} A_j X = Y^+_{\tau} A_j,
+\]
+while the mirror wrapped window gives
+\[
+  X A_j C^-_{\tau} = A_j Y^-_{\tau}.
+\]
+Here $\tau$ denotes the complementary boundary word exposed by a wrapped
+window, equivalently the physical labels outside the open middle interval. The
+formal wrapped and mirrored lemmas produce analogous complement-word products,
+written schematically as $C^+_{\tau}$ and $C^-_{\tau}$, but the two products are
+obtained with different orientations and indexings. The two formulas are both
+valid; what is missing is a comparison that puts the two outputs over one common
+middle word and one common witness family.
+\footnote{Formal locations:
+\path{TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean}:522--534 for
+\path{MPSTensor.chainGroundSpace_wrapped_boundary_compatibilities_of_isNBlkInjective},
+\path{TNLean/MPS/ParentHamiltonian/WrappingWindow.lean}:386--397 for the wrapped
+compatibility, and
+\path{TNLean/MPS/ParentHamiltonian/WrappingWindow.lean}:434--445 for the mirror
+compatibility.}
+
+The algebraic endgame needs a stronger same-witness statement. There should be
+a common middle word $\mu$ and a single family of matrices $Y_\mu$ such that, for
+every physical letter $j$,
+\[
+  A^\mu A_j X = Y_\mu A_j,
+  \qquad
+  X A_j A^\mu = A_j Y_\mu.
+\]
+Once these two identities have the same middle word and the same witness, the
+formal algebraic lemma proves that $X$ commutes with all words of a fixed positive
+length; block injectivity then promotes this to commutation with the full matrix
+algebra, so $X$ is scalar.
+\footnote{Formal locations:
+\path{TNLean/MPS/ParentHamiltonian/WrappingWindow.lean}:527--535 for
+\path{MPSTensor.commutes_words_of_two_sided_middle_compatibility}, and
+\path{TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean}:629--643 for
+\path{MPSTensor.groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_two_sided_middle_compatibility}.}
+The remaining point is the comparison between the two wrapped-window outputs:
+one must reindex their complementary words to a common middle word and identify
+the two witnesses as a single same-witness family.\footnote{For traceability,
+this is the mathematical content recorded in
+\href{https://github.com/LionSR/TNLean/issues/961}{issue \#961}.}
+
+\section{Conclusion}
+
+The comparison is provisional. It identifies a difference between the compressed
+source paragraph and the available formal lemmas; it is not a source-error claim.
+The cited CPGSV21 argument is not refuted. The source compresses two mathematical
+steps which the formal proof must keep separate: the $B$-region invert-and-grow
+open-chain range reduction, and the boundary-closing comparison of the witnesses
+arising from the wrapped windows.
+
+The open-chain part has been proved under the intended block-injective
+hypotheses, though not by reusing the older single-site intersection theorem.
+The last mathematical point is the same-witness comparison at the periodic
+boundary. If that comparison is proved, the difference is only expository. If it
+reveals an additional mathematical obstruction, the conclusion should be revised
+accordingly.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
