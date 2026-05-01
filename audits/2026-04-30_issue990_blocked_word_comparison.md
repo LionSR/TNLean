@@ -58,7 +58,7 @@ sharpened coordinate assertion `groupedBlockCastAgrees`.
 
 ## Remaining point
 
-The remaining theorem is now sharpened to a precise coordinate assertion.  For
+The remaining theorem is now sharpened to a precise coordinate assertion. For
 each common cyclic-sector family `F`, block `k`, and physical index
 `i : Fin (blockPhysDim d F.p)`, the numeric cast
 
@@ -68,18 +68,18 @@ Fin.cast ((F.blockPhysDim_nested_eq k).symm) i
 
 must agree with the index obtained by first rewriting the direct alphabet to the
 product length `F.period k * F.extra k` and then applying
-`directToIteratedBlockIndex`.  This is the proposition
+`directToIteratedBlockIndex`. This is the proposition
 `F.groupedBlockCastAgrees k`.
 
 The new core theorem proves that `directToIteratedBlockIndex` is the mathematically
 expected grouping map: applying `iteratedBlockIndex` to it recovers the original
-direct blocked word.  Thus no MPS-theoretic assumption remains hidden in the
-comparison lemmas.  What remains is only the compatibility between this grouping
+direct blocked word. Thus no MPS-theoretic assumption remains hidden in the
+comparison lemmas. What remains is only the compatibility between this grouping
 map and the particular numeric `Fin.cast` used by `CommonBlockedCyclicSectorFamily`.
 
 Since the current blocked physical index is chosen through `Fintype.equivFin`,
 cardinal equality alone does not specify that the numeric order on the two `Fin`
-types is the consecutive grouping order.  That coordinate choice must either be
+types is the consecutive grouping order. That coordinate choice must either be
 proved for the chosen enumeration or kept as the explicit relabelling recorded by
 `groupedBlockCastAgrees`.
 
