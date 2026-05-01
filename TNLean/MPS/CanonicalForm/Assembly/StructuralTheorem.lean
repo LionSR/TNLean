@@ -919,8 +919,8 @@ theorem zeroTail_commonFlat_of_word_eq
   exact zeroTail_commonFlat_of_blockwise A μ blocks F hMPV
     (fun k => F.blockTensor_sameMPV₂_commonReindexedBlock_of_word_eq k (hWord k))
 
-/-- If the numeric casts agree with consecutive grouping for every nonzero block, the
-zero-tail equation can be written using the derived common-sector family. -/
+/-- If the canonical identifications agree with consecutive grouping for every nonzero block,
+the zero-tail equation can be written using the derived common-sector family. -/
 theorem zeroTail_commonFlat_of_groupedBlockCastAgrees
     {d D r z : ℕ} {dim : Fin r → ℕ}
     (A : MPSTensor d D) (μ : Fin r → ℂ)
