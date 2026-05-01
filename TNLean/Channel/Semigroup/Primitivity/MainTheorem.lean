@@ -20,7 +20,7 @@ The proof has two parts:
 
 **Part 1 — Irreducibility propagation** (`hT_irr_all`):
 `T_{t₀}` irreducible → `T_s` irreducible for ALL `s > 0`.
-Uses the kernel bridge: `ker(L) = Span{σ}` where `σ` is the unique
+Uses the kernel characterization: `ker(L) = Span{σ}` where `σ` is the unique
 faithful density fixed point of `T_{t₀}`. Then `σ` is fixed by all `T_s`
 (semigroup commutativity + density uniqueness). For each `s > 0`, `T_s`
 is shown irreducible via `isIrreducibleMap_of_channel_posDef_fixedPoint_unique`.
@@ -32,10 +32,12 @@ the eigenvector `V` is a fixed point of `T_{pt}`. By irreducibility of
 `T_{pt}`, `V` must be proportional to the unique faithful density fixed
 point `σ'`, giving `T_t σ' = μ σ'`. Trace preservation then forces `μ = 1`.
 
-**Status**: The glue logic is complete, but this theorem transitively depends on
-13 `sorry` placeholders in `IrreducibleAnalysis.lean` (formerly `axiom`
-declarations), including `primitive_of_irreducible_all`,
-`exists_primitive_fraction_slice`, and `fixedPoint_eq_trace_smul_of_primitive_slice`. -/
+The Lean proof combines the propagation theorem
+`irreducible_all_of_irreducible_time` with the primitive-slice analysis in
+`IrreducibleAnalysis.lean`: `primitive_of_irreducible_all` reduces primitivity
+to irreducibility at all positive times, while `exists_primitive_fraction_slice`
+and `fixedPoint_eq_trace_smul_of_primitive_slice` supply the fixed-point input
+for the propagation theorem. -/
 theorem irreducible_semigroup_implies_primitive
     [NeZero D]
     (L : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
