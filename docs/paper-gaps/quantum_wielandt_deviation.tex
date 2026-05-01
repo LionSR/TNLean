@@ -66,9 +66,9 @@ rank by
 \]
 This is the paper's number $d$ written invariantly. Replacing $d$ by
 $\operatorname{kr}(A)$ is therefore not a change in the mathematical bound.
-\footnote{The formal definitions are \texttt{MPSTensor.wordSpan} in
+\footnote{The formal definitions are \leanid{MPSTensor.wordSpan} in
 \path{TNLean/Wielandt/SpanGrowth/CumulativeSpan.lean:57--64} and
-\texttt{MPSTensor.krausRank} in
+\leanid{MPSTensor.krausRank} in
 \path{TNLean/Wielandt/Primitivity/PaperDefinitions.lean:85--91}. The local
 source identifies $d$ as the number of linearly independent Kraus operators in
 \path{Papers/0909.5347/main.tex:360--365}; the proof of Lemma~1 uses
@@ -82,7 +82,7 @@ The proof passes through the usual eventual full-rank formulation and a
 blocking argument, but the conclusion is the equality
 $S_n(A)=M_D(\mathbb C)$ for one fixed length $n$. It is not merely a statement
 about the increasing sum $S_0(A)+\cdots+S_n(A)$.\footnote{The paper-facing
-general theorem is \texttt{MPSTensor.iIndex\_le\_general\_of\_isPrimitivePaper}
+general theorem is \leanid{MPSTensor.iIndex\_le\_general\_of\_isPrimitivePaper}
 in \path{TNLean/Wielandt/PaperResults/WielandtInequality.lean:251--348}. The
 formal equivalence between paper primitivity and eventual full Kraus rank under
 normalization is in \path{TNLean/Wielandt/Primitivity/Equivalence.lean:169--191}.}
@@ -101,12 +101,12 @@ non-invertible and has a nonzero eigenvalue; under that assumption it proves
 The paper's hypotheses are weaker: they allow the invertible or non-invertible
 matrix to be any element of $S_1(A)$, hence any linear combination of the Kraus
 matrices.\footnote{The formal invertible case is
-\texttt{MPSTensor.wordSpan\_eq\_top\_of\_isPrimitivePaper\_of\_isUnit} and
-\texttt{MPSTensor.iIndex\_le\_of\_isPrimitivePaper\_of\_isUnit} in
+\leanid{MPSTensor.wordSpan\_eq\_top\_of\_isPrimitivePaper\_of\_isUnit} and
+\leanid{MPSTensor.iIndex\_le\_of\_isPrimitivePaper\_of\_isUnit} in
 \path{TNLean/Wielandt/PaperResults/WielandtInequality.lean:182--217}. The
 formal non-invertible case is
-\texttt{MPSTensor.wordSpan\_eq\_top\_of\_isPrimitivePaper\_of\_noninvertible\_eigenvector}
-and \texttt{MPSTensor.iIndex\_le\_sq\_of\_noninvertible\_eigenvector} in
+\leanid{MPSTensor.wordSpan\_eq\_top\_of\_isPrimitivePaper\_of\_noninvertible\_eigenvector}
+and \leanid{MPSTensor.iIndex\_le\_sq\_of\_noninvertible\_eigenvector} in
 \path{TNLean/Wielandt/PaperResults/WielandtInequality.lean:119--178}.}
 
 \section{The mathematical difference}
@@ -153,7 +153,7 @@ $T_{D^2}(A)=M_D(\mathbb C)$ under normality. These results are weaker than the
 full quantum Wielandt theorem, but the paper-facing theorem proves the stated
 bound for $i(A)$, where $i(A)$ is defined using the spaces $S_n(A)$ themselves.
 \footnote{The cumulative-span theorem is
-\texttt{MPSTensor.cumulativeSpan\_eq\_top} in
+\leanid{MPSTensor.cumulativeSpan\_eq\_top} in
 \path{TNLean/Wielandt/SpanGrowth/NonzeroTraceProduct.lean:164--197}; the
 paper-facing theorem for the spaces $S_n(A)$ is the general theorem cited above.
 The blueprint makes this distinction in
