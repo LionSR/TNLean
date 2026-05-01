@@ -495,14 +495,13 @@ theorem sameMPV₂_blockTensor_blockTensor_mul_reindex {D : ℕ}
   intro N σ
   rfl
 
-
 /-- Reindexing the physical alphabet of the iterated block tensor by the consecutive-grouping
 map returns the direct block tensor at length `m*n`.
 
 This lemma avoids the `Fin.cast` / `Fintype.equivFin` identification and instead uses the
 explicit bijection `directToIteratedBlockIndex` (PR #1096).  It gives a clean connection
 between iterated and direct blocking without needing `groupedBlockCastAgrees`. -/
-theorem reindexPhysical_directToIteratedBlockIndex_blockTensor (A : MPSTensor d D) (m n : ℕ) :
+theorem reindexPhysical_directToIteratedBlockIndex_blockTensor {D : ℕ} (A : MPSTensor d D) (m n : ℕ) :
     reindexPhysical (directToIteratedBlockIndex d m n)
       (blockTensor (d := blockPhysDim d m) (D := D)
         (blockTensor (d := d) (D := D) A m) n) =
@@ -523,7 +522,7 @@ theorem reindexPhysical_directToIteratedBlockIndex_blockTensor (A : MPSTensor d 
 This is the tensor-level version of the blocked-word identity that underlies
 `groupedBlockCastAgrees`. -/
 theorem sameMPV₂_reindexPhysical_directToIteratedBlockIndex_blockTensor
-    (A : MPSTensor d D) (m n : ℕ) :
+    {D : ℕ} (A : MPSTensor d D) (m n : ℕ) :
     SameMPV₂
       (reindexPhysical (directToIteratedBlockIndex d m n)
         (blockTensor (d := blockPhysDim d m) (D := D)
@@ -531,7 +530,6 @@ theorem sameMPV₂_reindexPhysical_directToIteratedBlockIndex_blockTensor
       (blockTensor (d := d) (D := D) A (m * n)) := by
   rw [reindexPhysical_directToIteratedBlockIndex_blockTensor A m n]
   intro N σ; rfl
-
 
 /-!
 ### Blocked-word identification gap
