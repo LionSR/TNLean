@@ -1437,6 +1437,31 @@ def groupedBlockCastAgrees (F : CommonBlockedCyclicSectorFamily blocks) (k : Fin
       directToIteratedBlockIndex d (F.period k) (F.extra k)
         (Fin.cast (congr_arg (blockPhysDim d) (F.p_eq_period_mul_extra k)) i)
 
+/-- The grouped-block cast predicate is equivalently the assertion that flattening the
+order-preserving cast from the common blocked alphabet gives the corresponding direct
+blocked index.  This isolates the remaining point as a comparison between the `Fin.cast`
+identification and the canonical direct/iterated blocking equivalence. -/
+theorem groupedBlockCastAgrees_iff_iteratedBlockIndex_cast
+    (F : CommonBlockedCyclicSectorFamily blocks) (k : Fin r) :
+    F.groupedBlockCastAgrees k ↔
+      ∀ i : Fin (blockPhysDim d F.p),
+        iteratedBlockIndex d (F.period k) (F.extra k)
+          (Fin.cast ((F.blockPhysDim_nested_eq k).symm) i) =
+          Fin.cast (congr_arg (blockPhysDim d) (F.p_eq_period_mul_extra k)) i := by
+  constructor
+  · intro hCast i
+    rw [hCast i, iteratedBlockIndex_directToIteratedBlockIndex]
+  · intro hIndex i
+    calc
+      Fin.cast ((F.blockPhysDim_nested_eq k).symm) i =
+          directToIteratedBlockIndex d (F.period k) (F.extra k)
+            (iteratedBlockIndex d (F.period k) (F.extra k)
+              (Fin.cast ((F.blockPhysDim_nested_eq k).symm) i)) := by
+            rw [directToIteratedBlockIndex_iteratedBlockIndex]
+      _ = directToIteratedBlockIndex d (F.period k) (F.extra k)
+          (Fin.cast (congr_arg (blockPhysDim d) (F.p_eq_period_mul_extra k)) i) := by
+            rw [hIndex i]
+
 /-- The blocked-word comparison follows if the canonical identification from the common
 alphabet to an iterated alphabet agrees with the grouping map that reads a direct word in
 consecutive blocks of length $m_k$ (the period of block $k$). -/
