@@ -323,17 +323,6 @@ theorem wordSpan_eq_top_of_ge_of_isUnit (A : MPSTensor d D)
 
 /-! ## Right-multiplication stabilization and strict growth -/
 
-private theorem evalWord_ofFn_one (A : MPSTensor d D) (σ : Fin 1 → Fin d) :
-    evalWord A (List.ofFn σ) = A (σ 0) := by
-  have h : List.ofFn σ = [σ 0] := by
-    apply List.ext_getElem <;> simp
-  rw [h]
-  simp only [evalWord, Matrix.mul_one]
-
-private theorem gen_mem_wordSpan_one (A : MPSTensor d D) (j : Fin d) :
-    A j ∈ wordSpan A 1 :=
-  Submodule.subset_span ⟨fun _ => j, evalWord_ofFn_one A (fun _ => j)⟩
-
 private theorem finrank_top_matrix :
     Module.finrank ℂ (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) = D ^ 2 := by
   calc
@@ -369,7 +358,7 @@ theorem mulRight_image_wordSpan_le_succ (A : MPSTensor d D)
   rcases Submodule.mem_map.mp hX with ⟨M, hM, rfl⟩
   change M * A i₀ ∈ wordSpan A (n + 1)
   rw [wordSpan_succ_eq_mul_right A n]
-  exact Submodule.mul_mem_mul hM (gen_mem_wordSpan_one A i₀)
+  exact Submodule.mul_mem_mul hM (apply_mem_wordSpan_one A i₀)
 
 /-- When `A i₀` is invertible, right multiplication also gives
 `dim(S_{n+1}) ≥ dim(S_n)`.
