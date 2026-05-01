@@ -340,6 +340,35 @@ theorem quadraticForm_sum_projections_of_finite_overlap_norm_bound {γ : ℝ} (h
   convert hraw using 1
   ring
 
+/-- Finite-overlap row-sum reduction from an explicit overlap-compression
+coefficient.
+
+If interacting pairs satisfy `‖P_i (P_j v)‖ ≤ η ‖P_i v‖`, and the coefficient
+`η` is no larger than `(1 - γ) / m`, then the usual finite-overlap
+norm-compression theorem applies.  This form separates the analytic principal-angle
+constant from the gap parameter: any later bound `η < 1 / m` can be fed in by
+choosing a positive `γ` with `η ≤ (1 - γ) / m`. -/
+theorem quadraticForm_sum_projections_of_finite_overlap_norm_bound_of_le
+    {γ η : ℝ} (hγle : γ ≤ 1)
+    (P : ι → E →ₗ[ℂ] E) (hP : ∀ i, (P i).IsSymmetricProjection)
+    (overlaps : ι → ι → Prop) [DecidableRel overlaps] {m : ℕ} (hm : 0 < m)
+    (hCard : ∀ i, ((Finset.univ.erase i).filter (fun j => overlaps i j)).card ≤ m)
+    (hDisjoint : ∀ i j, j ∈ Finset.univ.erase i → ¬ overlaps i j →
+      ∀ v : E, 0 ≤ (⟪P i v, P j v⟫_ℂ).re)
+    (hηle : η ≤ (1 - γ) * ((m : ℝ)⁻¹))
+    (hOverlapNorm : ∀ i j, j ∈ Finset.univ.erase i → overlaps i j →
+      ∀ v : E, ‖P i (P j v)‖ ≤ η * ‖P i v‖) :
+    ∀ v : E,
+      γ * (⟪(∑ i, P i) v, v⟫_ℂ).re ≤
+        (⟪(∑ i, P i) v, (∑ i, P i) v⟫_ℂ).re := by
+  refine quadraticForm_sum_projections_of_finite_overlap_norm_bound hγle P hP
+    overlaps hm hCard hDisjoint ?_
+  intro i j hij hoverlap v
+  calc
+    ‖P i (P j v)‖ ≤ η * ‖P i v‖ := hOverlapNorm i j hij hoverlap v
+    _ ≤ ((1 - γ) * ((m : ℝ)⁻¹)) * ‖P i v‖ :=
+      mul_le_mul_of_nonneg_right hηle (norm_nonneg (P i v))
+
 end OffDiagonal
 
 end ProjectionGeometry

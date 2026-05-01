@@ -2103,6 +2103,7 @@ Lucia~\cite{Kastoryano2018Martingale}.
 \begin{lemma}[Finite-overlap projection norm-compression reduction]
     \label{lem:finite_overlap_projection_norm_reduction}
     \lean{ProjectionGeometry.quadraticForm_sum_projections_of_finite_overlap_norm_bound}
+    \lean{ProjectionGeometry.quadraticForm_sum_projections_of_finite_overlap_norm_bound_of_le}
     \leanok
     \uses{lem:finite_overlap_projection_rowsum_reduction,
         rem:projection_geometry_rowsum_identities}
@@ -2113,7 +2114,9 @@ Lucia~\cite{Kastoryano2018Martingale}.
     \[
         \|P_iP_jv\|\le (1-\gamma)\frac{1}{m}\|P_iv\|.
     \]
-    Then $H=\sum_iP_i$ satisfies $H^2\ge\gamma H$ as a quadratic form.
+    Then $H=\sum_iP_i$ satisfies $H^2\ge\gamma H$ as a quadratic form. The same
+    conclusion holds from a separate compression coefficient $\eta$ whenever
+    $\eta\le (1-\gamma)/m$.
 \end{lemma}
 
 \begin{proof}
@@ -2124,7 +2127,9 @@ Lucia~\cite{Kastoryano2018Martingale}.
     into
     $\operatorname{Re}\langle P_i v,P_jv\rangle
     \ge -(1-\gamma)m^{-1}\operatorname{Re}\langle P_iv,v\rangle$.
-    The finite-overlap row-sum reduction then applies.
+    If a separate coefficient $\eta$ is used, the assumption
+    $\eta\le(1-\gamma)/m$ first weakens that estimate to the displayed one. The
+    finite-overlap row-sum reduction then applies.
 \end{proof}
 
 \begin{lemma}[Parent-Hamiltonian ordered row-sum quadratic-form reduction]
@@ -2217,6 +2222,7 @@ Lucia~\cite{Kastoryano2018Martingale}.
 \begin{lemma}[Parent-Hamiltonian finite-overlap norm-compression quadratic reduction]
     \label{lem:parent_hamiltonian_finite_overlap_norm_quadratic}
     \lean{MPSTensor.parentHamiltonianES_quadratic_form_of_finite_overlap_norm_bound}
+    \lean{MPSTensor.parentHamiltonianES_quadratic_form_of_finite_overlap_norm_bound_of_le}
     \leanok
     \uses{lem:finite_overlap_projection_norm_reduction, def:parent_hamiltonian_es,
         lem:transported_es_local_projections}
@@ -2229,7 +2235,8 @@ Lucia~\cite{Kastoryano2018Martingale}.
         \le (1-\gamma)\frac{1}{m}\|h_{i,\mathrm{ES}}v\|.
     \]
     Then $H_{N,L}^{\mathrm{ES}}{}^2\ge \gamma H_{N,L}^{\mathrm{ES}}$ as a
-    quadratic form.
+    quadratic form. The same conclusion holds from a separate coefficient $\eta$
+    satisfying $\eta\le(1-\gamma)/m$.
 \end{lemma}
 
 \begin{proof}
@@ -2237,7 +2244,8 @@ Lucia~\cite{Kastoryano2018Martingale}.
     \uses{lem:finite_overlap_projection_norm_reduction,
         lem:transported_es_local_projections}
     Apply the finite-overlap norm-compression projection reduction to the family
-    $P_i=h_{i,\mathrm{ES}}$.
+    $P_i=h_{i,\mathrm{ES}}$. If a separate coefficient $\eta$ is used, first weaken
+    the compression estimate using $\eta\le(1-\gamma)/m$.
 \end{proof}
 
 \begin{definition}[Cyclic-window support]
@@ -2432,6 +2440,42 @@ Lucia~\cite{Kastoryano2018Martingale}.
     The norm-compression condition is converted to the ordered Friedrichs lower
     bound by the projection-geometry Cauchy--Schwarz lemma.  The preceding
     overlapping-cyclic Friedrichs reduction then gives the norm lower bound.
+\end{proof}
+
+\begin{lemma}[Parent-Hamiltonian gap from a cyclic overlap compression constant]
+    \label{lem:parent_hamiltonian_cyclic_overlap_norm_constant_gap}
+    \lean{MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound_of_le}
+    \lean{MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound_of_lt}
+    \leanok
+    \uses{lem:parent_hamiltonian_finite_overlap_norm_quadratic,
+        lem:cyclic_window_overlap_cardinality, lem:cyclic_window_nonoverlap_positive,
+        lem:parent_hamiltonian_es_quadratic_reduction}
+    Fix $L>1$, and let $m=2(L-1)$. Suppose uniformly for every $N\ge2L$ and every
+    overlapping off-diagonal pair that
+    \[
+        \|h_{i,\mathrm{ES}}(h_{j,\mathrm{ES}}v)\|
+        \le \eta\,\|h_{i,\mathrm{ES}}v\|.
+    \]
+    If $\gamma>0$, $\gamma\le1$, and $\eta\le(1-\gamma)/m$, then $\gamma$ is a
+    valid norm lower-bound constant for vectors in
+    $(\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp$. In particular, if
+    $\eta\ge0$ and $\eta m<1$, then
+    \[
+        (1-\eta m)\|v\|\le \|H_{N,L}^{\mathrm{ES}}(A)v\|.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:parent_hamiltonian_finite_overlap_norm_quadratic,
+        lem:cyclic_window_overlap_cardinality, lem:cyclic_window_nonoverlap_positive,
+        lem:parent_hamiltonian_es_quadratic_reduction}
+    The cyclic-window cardinality lemma gives at most $m=2(L-1)$ overlapping
+    off-diagonal neighbours in each row, while the non-overlap positivity lemma
+    handles disjoint supports. The finite-overlap norm-compression reduction gives
+    the quadratic-form estimate with the chosen $\gamma$, and the positive
+    quadratic-form criterion converts it to the norm lower bound. The strict form
+    is the same statement with $\gamma=1-\eta m$.
 \end{proof}
 
 \begin{theorem}[Martingale criterion for spectral gap]\label{thm:martingale_criterion}
