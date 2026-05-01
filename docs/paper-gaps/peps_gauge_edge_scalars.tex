@@ -73,8 +73,8 @@ $\prod_{e\ni v} c_{v,e}$. If the scalar family is vertex-balanced, this product
 is $1$ at every vertex, so all local gauged tensors are unchanged. Thus local
 gauge uniqueness can at best be uniqueness modulo these balanced edge scalars.
 The formal statement uses this quotient as the corrected uniqueness statement.\footnote{The formal definitions are
-\texttt{TNLean.PEPS.edgeScalarAt}, \texttt{TNLean.PEPS.IsVertexBalanced}, and
-\texttt{TNLean.PEPS.GaugeEquivModEdgeScalars} in
+\leanid{TNLean.PEPS.edgeScalarAt}, \leanid{TNLean.PEPS.IsVertexBalanced}, and
+\leanid{TNLean.PEPS.GaugeEquivModEdgeScalars} in
 \path{TNLean/PEPS/FundamentalTheorem.lean:603--625}. The corresponding
 blueprint entries are at \path{blueprint/src/chapter/ch13a_peps_ft.tex:375--423}.}
 
@@ -106,8 +106,7 @@ graph with one-dimensional bonds. The same example fits the balanced
 edge-scalar quotient exactly.\footnote{This is the counterexample recorded in
 \path{docs/counterexamples.md:127--135}. It originated in
 \href{https://github.com/LionSR/TNLean/issues/762}{issue \#762}; the formal
-statement was corrected in \href{https://github.com/LionSR/TNLean/pull/790}{PR
-\#790}.}
+statement was corrected in \ghpr{790}.}
 
 \section{Formal statement}
 
@@ -129,7 +128,7 @@ declaration is \texttt{TNLean.PEPS.gauge\_unique\_mod\_edge\_scalars}, and the
 remaining proof obligation is at
 \path{TNLean/PEPS/FundamentalTheorem.lean:686--730}. This point is recorded in
 \href{https://github.com/LionSR/TNLean/issues/842}{issue \#842};
-\href{https://github.com/LionSR/TNLean/pull/879}{PR \#879} reduced the formal
+\ghpr{879} reduced the formal
 statement to the scalar-ratio and global-reconciliation step.}
 
 Thus the corrected mathematical statement is uniqueness modulo balanced edge
