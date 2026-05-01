@@ -35,22 +35,22 @@ positive-length MPV equalities, and the length-zero identity.
 - `MPSTensor.CommonBlockedCyclicSectorFamily.commonFlatBlocksAt` expresses the
   derived flattened common-sector family at a prescribed length `p'` when
   `F.p = p'`.
-- `MPSTensor.CommonBlockedCyclicSectorFamily.sameMPV₂_weightedCanonicalBlock_commonFlatAt_of_relabeling`
-  is the prescribed-length form of the canonical-to-common-sector comparison.
-  Its hypothesis is the `SameMPV₂` equality between the directly blocked
-  nonzero family and the explicitly reindexed family.  This is exactly the
-  hypothesis expected from #990.
+- The prescribed-length comparison is
+  `MPSTensor.CommonBlockedCyclicSectorFamily.sameMPV₂_weightedCanonicalBlock_commonFlatAt_of_reindexed`.
+  Its hypothesis is the `SameMPV₂` equality between the directly blocked nonzero
+  family and the explicitly reindexed family.  This is exactly the hypothesis expected
+  from #990.
 
 ### `TNLean/MPS/CanonicalForm/Assembly/StructuralTheorem.lean`
 
-- `MPSTensor.zeroTail_commonFlat_of_blockWordRelabeling` is the renamed one-sided
-  zero-tail conversion; it avoids the earlier informal wording about labels.
-- `MPSTensor.zeroTail_commonFlatAt_of_blockWordRelabeling` gives the same
-  zero-tail conversion at a prescribed common length.
-- `MPSTensor.sameMPV₂Pos_blockTensor_commonFlatAt_of_blockWordRelabeling` records
+- `MPSTensor.zeroTail_commonFlat_of_reindexed` is the one-sided zero-tail
+  conversion for the reindexed nonzero-part hypothesis.
+- `MPSTensor.zeroTail_commonFlatAt_of_reindexed` gives the same zero-tail
+  conversion at a prescribed common length.
+- `MPSTensor.sameMPV₂Pos_blockTensor_commonFlatAt_of_reindexed` records
   that the zero-tail term vanishes at positive system sizes, so the blocked tensor
   and the weighted common-sector family have equal MPV coefficients there.
-- `MPSTensor.fundamentalTheorem_after_blocking_commonLength_commonSector_of_blockWordRelabeling`
+- `MPSTensor.fundamentalTheorem_after_blocking_commonLength_commonSector_of_reindexed`
   starts from `SameMPV₂ A B`, chooses one positive blocking length for both sides,
   obtains common cyclic-sector families on both sides, and then conditionally
   rewrites all nonzero-part and zero-tail conclusions with the weighted
@@ -77,3 +77,14 @@ positive-length MPV equalities, and the length-zero identity.
    period-removal length.
 3. Derive the common phase-cover or BNT proportional-decomposition hypotheses
    from the exact common-length nonzero-sector data.
+
+## Cleanup note (#1073)
+
+The follow-up cleanup normalized the public suffix for the remaining conditional
+common-sector comparisons to `_of_reindexed`, matching the tensor
+`commonReindexedBlock` that appears in the hypothesis.  The pure alias
+`zeroTail_commonFlat_of_blockWordRelabeling` was removed rather than retained as
+a compatibility theorem; the blueprint now points directly to
+`zeroTail_commonFlat_of_reindexed`.  A private zero-tail transport helper factors
+the repeated one-sided calculations used to pass from the canonical blocked
+nonzero part to the weighted common-sector family.
