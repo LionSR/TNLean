@@ -112,7 +112,7 @@ structure CommonPrimitivePhaseCoverHypotheses
 
 namespace CommonPrimitivePhaseCoverHypotheses
 
-/-- A common-cover hypothesis package supplies the span-hypothesis package. -/
+/-- A common MPV phase cover hypothesis implies the corresponding span hypothesis. -/
 theorem toSpanHypotheses
     {d p rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     {zeroTailA zeroTailB : ℕ}
