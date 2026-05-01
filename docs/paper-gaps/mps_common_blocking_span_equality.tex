@@ -100,7 +100,7 @@ has trace $D_0$. Consequently the formal proof separates the zero-tail
 contribution from the nonzero part, proves positive-length equality for the
 nonzero parts, and records the exact $N=0$ identity separately.\footnote{See
 \path{blueprint/src/chapter/ch08_canonical.tex:967--1022} and
-\path{blueprint/src/chapter/ch08_canonical.tex:3036--3126}, with labels
+\path{blueprint/src/chapter/ch08_canonical.tex:3036--3164}, with labels
 \texttt{def:zero\_mps\_tensor}, \texttt{thm:mpv\_zero\_tensor},
 \texttt{thm:zero\_block\_separation},
 \texttt{thm:nonzero\_block\_block\_power\_zero\_tail\_identity}, and
@@ -123,9 +123,9 @@ are recorded in \path{blueprint/src/chapter/ch08_canonical.tex:1645--1824} and
 statement is
 \texttt{MPSTensor.fundamentalTheorem\_after\_blocking\_commonLength\_commonSector},
 with the one-sided relabeling-compatible zero-tail statement
-\texttt{MPSTensor.zeroTail\_commonFlat\_of\_reindexed\_labelCompat}; see
+\texttt{MPSTensor.zeroTail\_commonFlat\_of\_reindexed}; see
 \path{TNLean/MPS/CanonicalForm/Assembly/StructuralTheorem.lean:698--774} and
-\path{TNLean/MPS/CanonicalForm/Assembly/StructuralTheorem.lean:844--866}.}
+\path{TNLean/MPS/CanonicalForm/Assembly/StructuralTheorem.lean:902--939}.}
 This is why the canonical-form theorem supplies relabeled common-sector
 families and a conditional label-compatibility statement, rather than immediately
 replacing every canonical nonzero part after blocking by its flattened sector tensor.
@@ -152,12 +152,9 @@ proportional-decomposition comparison has already produced a permutation, matche
 bond dimensions, and gauge phases, the formal construction gives the common phase
 cover from that comparison and then obtains the span equality needed by the sector
 comparison theorem.\footnote{See
-\path{blueprint/src/chapter/ch11_assembly.tex:755--923}; the corresponding formal
-declarations include \texttt{MPSTensor.MPVCommonPhaseCover},
-\texttt{MPSTensor.mpv\_span\_eq\_of\_common\_phase\_cover},
-\texttt{MPSTensor.MPVCommonPhaseCover.span\_eq}, and
-\texttt{MPSTensor.exists\_bnt\_sectorDecomp\_pair\_with\_overlapSpan\_of\_proportionalDecompositionConclusion}.
-The declarations live in
+\path{blueprint/src/chapter/ch11_assembly.tex:755--923}. The corresponding formal
+objects are the common phase-cover structure and its span lemmas, together with
+the proportional-decomposition overlap-span theorem. They live respectively at
 \path{TNLean/MPS/CanonicalForm/EqualNormBridge.lean:472--491},
 \path{TNLean/MPS/CanonicalForm/EqualNormBridge.lean:604--641}, and
 \path{TNLean/MPS/CanonicalForm/EqualNormBridge.lean:1348--1480}.}
