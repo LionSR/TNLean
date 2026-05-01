@@ -38,6 +38,32 @@ BNT sector comparison and matched sector weights
 
 A scan of `TNLean/MPS/CanonicalForm` and `TNLean/MPS/FundamentalTheorem` found no local `sorry` or `admit` occurrences.  The remaining issue is therefore not proof integrity; it is the shape of the public and intermediate API.
 
+## Paper-facing wrapper now available
+
+The follow-up API in `TNLean/MPS/CanonicalForm/Assembly.lean` adds the current
+strongest statement in the language of the Cirac--Pérez-García--Schuch--Verstraete
+Fundamental Theorem:
+
+- `MPSTensor.AfterBlockingFundamentalTheoremHypotheses` names the remaining
+  comparison inputs: blocked-word relabeling, equality of the zero-tail
+  dimensions, one-site injectivity of the produced common primitive sectors, and
+  BNT proportional-comparison data for those same produced sectors.
+- `MPSTensor.AfterBlockingFundamentalTheoremConclusion` packages the output: after
+  a positive blocking, there are BNT sector decompositions `P` and `Q`; the
+  original blocked tensors agree with them at positive lengths; `P` and `Q`
+  generate the same full MPV family; and the basis sectors, multiplicities, and
+  sector-weight multisets match up to a permutation and nonzero phases.
+- `MPSTensor.fundamentalTheorem_afterBlocking_of_comparisonHypotheses` proves the
+  conclusion from `SameMPV₂ A B` and those named hypotheses by repackaging the
+  existing relabeled-common-sector proportional theorem.
+
+This is intentionally conditional.  It mirrors the source assertions that bases
+of normal tensors match up to permutation, phases, and gauge transformations
+(`Papers/1606.00608/MPDO-22-12-17-2.tex` lines 347--360 and
+`Papers/2011.12127/TN-Review-main.tex` lines 1887--1900), while keeping the real
+remaining inputs explicit rather than hiding them behind a vague convenience
+hypothesis.
+
 ## What is still not clean
 
 The non-Gemma route is not yet a single unconditional paper-level theorem.  The remaining mathematical inputs are still visible, and this is the right kind of incompleteness:
