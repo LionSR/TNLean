@@ -1445,6 +1445,42 @@ two-basis sector comparison theorem.
 	isolated by the remaining coordinate equality for direct and iterated blocking.
 \end{definition}
 
+\begin{theorem}[Common-length sectors with conditional block-span consequences]%
+\label{thm:after_blocking_common_primitive_irreducible_blocks_block_span_consequences}
+	\lean{MPSTensor.afterBlocking_commonSector_blockSpan_of_reindexedNonzeroParts}
+	\leanok
+	\uses{def:common_sector_relabeling_hypothesis, def:same_mpv2_pos,
+		def:mpv_common_phase_cover}
+	Assume two tensors generate the same MPV family and assume the blocked-word
+	relabeling hypothesis used in the common-sector construction.  Then there is a
+	common blocking length at which both tensors have zero-tail decompositions whose
+	nonzero parts are weighted families of trace-preserving, primitive,
+	tensor-irreducible blocks with positive bond dimension and nonzero weights.  The
+	theorem further records the three positive-length MPV agreements
+	\(\mc{V}^{+}(\cdot)=\mc{V}^{+}(\cdot)\): the two agreements comparing each
+	blocked tensor with its own nonzero-sector part and the agreement comparing the
+	two nonzero-sector parts, together with the length-zero zero-tail identity, as
+	in
+	Theorem~\ref{thm:after_blocking_common_primitive_irreducible_blocks_reindexed}.
+	For these particular common-sector families, any common MPV phase cover gives
+	the finite-length nonzero-block span equality needed by the zero-tail block-span
+	theorem.  A BNT proportional-decomposition conclusion for the same families
+	gives the same span equality.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{thm:after_blocking_common_primitive_irreducible_blocks_reindexed,
+		lem:mpv_common_phase_cover_span_eq,
+		thm:nonzero_block_span_eq_of_proportional_decomposition}
+	Apply
+	Theorem~\ref{thm:after_blocking_common_primitive_irreducible_blocks_reindexed}
+	to obtain the common-sector decompositions.  The implication from a common MPV
+	phase cover is Lemma~\ref{lem:mpv_common_phase_cover_span_eq}; the implication
+	from proportional-decomposition data is
+	Theorem~\ref{thm:nonzero_block_span_eq_of_proportional_decomposition}.
+\end{proof}
+
 \begin{theorem}[Relabeled common sectors with a common MPV phase cover]%
 \label{thm:afterBlocking_sectorComparison_reindexed_commonPhaseCover}
 	\lean{MPSTensor.afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_commonPhaseCover}
@@ -1559,12 +1595,18 @@ two-basis sector comparison theorem.
 	relabeled cyclic-sector tensor for the whole weighted family.  With that
 	equality, Theorem~\ref{thm:after_blocking_common_primitive_irreducible_blocks_reindexed}
 	gives the common weighted nonzero-sector decompositions needed for the
-	comparison theorems.  Theorem~\ref{thm:afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_spanHypotheses}
+	comparison theorems.
+	Theorem~\ref{thm:afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_spanHypotheses}
 	then records the remaining hypotheses in their present form: equality of the
 	zero-tail dimensions, injectivity of the common nonzero-sector blocks, and
-	finite-length MPV span equality.  Theorem~\ref{thm:afterBlocking_sectorComparison_reindexed_commonPhaseCover}
-	shows that a common MPV phase cover supplies that span equality and therefore
-	gives the same sector-weight conclusion.  Establishing these hypotheses is the
-	mathematical passage from equality of total MPV vectors to the componentwise
-	power-sum identities used in the paper proof of Corollary~IV.5.
+	finite-length MPV span equality.
+	Theorem~\ref{thm:after_blocking_common_primitive_irreducible_blocks_block_span_consequences}
+	records the corresponding conditional span consequence for the common-sector
+	families themselves: a common MPV phase cover or a proportional-decomposition
+	conclusion supplies the finite-length nonzero-block span equality.
+	Theorem~\ref{thm:afterBlocking_sectorComparison_reindexed_commonPhaseCover}
+	adds the zero-tail and injectivity data to the common phase-cover route and
+	therefore gives the same sector-weight conclusion.  Establishing these
+	hypotheses is the mathematical passage from equality of total MPV vectors to the
+	componentwise power-sum identities used in the paper proof of Corollary~IV.5.
 \end{remark}
