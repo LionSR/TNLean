@@ -78,10 +78,10 @@ Detailed conventions live in `docs/`. Read the relevant file before working in t
 
 | File | Covers |
 |------|--------|
-| [`docs/style.md`](docs/style.md) | Code formatting, line length (100 chars), declarations, tactic style, whitespace, transparency, deprecation, mathematical-language renames |
+| [`docs/style.md`](docs/style.md) | Code formatting, line length (100 chars), declarations, tactic style, whitespace, transparency, deprecation |
 | [`docs/naming.md`](docs/naming.md) | Capitalization rules, symbol-to-name dictionary, variable conventions |
 | [`docs/doc.md`](docs/doc.md) | Module docstrings, definition docstrings, sectioning comments, BibTeX citations |
-| [`docs/CONTRIBUTING.md`](docs/CONTRIBUTING.md) | PR title format (`type(scope): description`), issue conventions, label taxonomy, review checklist |
+| [`docs/CONTRIBUTING.md`](docs/CONTRIBUTING.md) | PR title format (`type(scope): description`), issue conventions, label taxonomy, review checklist, mathematical-language renames |
 | [`docs/pr-review.md`](docs/pr-review.md) | Review criteria: style, documentation, location, improvements, library integration |
 | [`docs/pr_review_management.md`](docs/pr_review_management.md) | PR triage process, comment API mapping, merge decisions |
 | [`docs/PROOF_INTEGRITY.md`](docs/PROOF_INTEGRITY.md) | Blockers (`sorry`, `axiom`, kernel bypasses, circular reasoning) and warnings (`maxHeartbeats`, debug artifacts) |
@@ -96,7 +96,7 @@ Detailed conventions live in `docs/`. Read the relevant file before working in t
 - **Proof integrity blockers**: `sorry`, `admit`, `native_decide`, `unsafeCast`, `axiom`, circular reasoning
 - **Blueprint prose**: Pure mathematics only — no Lean identifiers in text, no software jargon (see banned terms list in blueprint style guide)
 - **Paper references**: Cite theorem numbers in docstrings (e.g., "Wolf Thm 6.3", "arXiv:1606.00608 Appendix A")
-- **Mathematical renames**: When renaming a declaration whose old name encodes misleading terminology (banned vocabulary in `docs/prose_style.md` §2), skip the `@[deprecated] alias` and state the reason in the PR body (see `docs/style.md` §Mathematical-language renames).
+- **Mathematical renames**: When renaming a declaration whose old name encodes misleading terminology (banned vocabulary in `docs/prose_style.md` §2), skip the `@[deprecated] alias` and state the reason in the PR body (see `docs/CONTRIBUTING.md` §Mathematical-language renames).
 
 ## Workflow
 

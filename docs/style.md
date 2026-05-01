@@ -752,60 +752,6 @@ In this case, no deprecation attribute is required for X, but it is for W.
 
 Named instances do not require deprecations. Deprecated declarations can be deleted after 6 months.
 
-### Mathematical-language renames
-
-The standard deprecation convention ([Deprecation](#deprecation)) says renamed declarations should keep
-a `@[deprecated] alias`.  When the **old name encodes misleading terminology** —
-process jargon, project-internal shorthand, or non-mathematical phrasing — a clean
-one-step rename without a deprecated alias is preferred.
-
-#### When to skip a deprecated alias
-
-Skip the alias when the old name contains a term that appears in, or is a
-contextual variant of, the banned-vocabulary list in
-[`docs/prose_style.md` §2](prose_style.md#2-banned-software-engineering-terms--replacements).
-Apply context-qualified bans only in the stated context: for example, "Assembly"
-is banned as a section or chapter title, but not when it is part of a standard
-mathematical phrase.
-
-Examples of terms that make an alias inappropriate in declaration names:
-
-- exact entries or variants of process/software metaphors from the prose guide:
-  `pipeline`, `package`, `scaffolding`/`scaffold`, `workflow`, `plumbing`,
-  `boilerplate`, `glueLayer`, `reexport`
-- additional project-internal cleanup terms with the same non-mathematical force:
-  `raw`, `helper`, `wrapper`, `endpoint` when it means a proof milestone rather
-  than a boundary point
-- project-internal shorthand: `liveBlock`, `oneShot`, `deadProof`, `sourceAnchor`
-- AI/LLM vocabulary in declaration names
-
-Keep the `@[deprecated] alias` when the old name uses genuine mathematical language that
-is merely imprecise or outdated (e.g., `transferMap` → `transferMatrix` when the object is
-a matrix) — the old name is not misleading, just suboptimal.
-
-#### What PRs must state
-
-When a rename skips a deprecated alias under this exception, the PR body must explicitly say:
-
-> **No compatibility alias is provided.** The old name encodes [misleading term]
-> (see [`docs/style.md` §Mathematical-language renames](style.md#mathematical-language-renames)).
-
-This makes the exception visible to reviewers and prevents downstream users from
-wondering whether the omission was an oversight.
-
-#### Blueprint references
-
-In the same PR, update every `\lean{OldName}` tag in `blueprint/src/` to
-`\lean{NewName}`.  Run `leanblueprint checkdecls` to confirm no stale references
-remain.
-
-#### Migration within the project
-
-Before deleting or renaming, search the project for call sites of the old name
-(`rg -n "oldName" TNLean/`) and update them in the same PR.  If the old name
-appears in a module docstring or comment, rewrite the surrounding prose to use
-the new mathematical name.
-
 ### Avoid `nonrec`
 
 The `nonrec` keyword tells Lean to assume that apparently recursive calls in the declaration body
