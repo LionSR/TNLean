@@ -9,6 +9,8 @@ on:
       - 'lakefile.*'
       - 'lean-toolchain'
       - 'lake-manifest.json'
+      - 'scripts/LintStyle.lean'
+      - '.github/workflows/lean_action_ci.yml'
   pull_request:
     types: [opened, synchronize, reopened]
     paths:
@@ -16,6 +18,8 @@ on:
       - 'lakefile.*'
       - 'lean-toolchain'
       - 'lake-manifest.json'
+      - 'scripts/LintStyle.lean'
+      - '.github/workflows/lean_action_ci.yml'
   workflow_dispatch:
 
 concurrency:
@@ -29,3 +33,6 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - uses: leanprover/lean-action@v1
+
+      - name: Run text-based style linter
+        run: lake exe lint_style --github

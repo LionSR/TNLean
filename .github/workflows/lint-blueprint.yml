@@ -56,6 +56,23 @@ jobs:
           install-blueprint: 'true'
           use-github-cache: 'false'
 
+      - name: Lint LaTeX (chktex)
+        run: |
+          find blueprint/src -name '*.tex' -not -path '*/Packages/*' -print0 \
+            | xargs -0 chktex -q
+
+      - name: Check LaTeX formatting (latexindent)
+        run: |
+          set -e
+          status=0
+          while IFS= read -r f; do
+            if ! diff -u "$f" <(latexindent --silent --logfile=/dev/null "$f") > /dev/null; then
+              echo "::error file=$f::not formatted to latexindent defaults; run 'latexindent -w -s \"$f\"' locally to fix"
+              status=1
+            fi
+          done < <(find blueprint/src -name '*.tex' -not -path '*/Packages/*')
+          exit $status
+
       - name: Build blueprint bibliography
         run: python3 scripts/blueprint_bibtex.py
 
