@@ -576,7 +576,7 @@ The hypotheses `hWrap` and `hMirror` are the two one-sided identities produced b
 `chainGroundSpace_wrapped_boundary_compatibilities_of_isNBlkInjective`.  The only
 extra input is the genuine witness comparison: after filling the two complements
 with the same middle word `μ`, the wrapped and mirror witnesses agree.  The
-conclusion packages the exact same-witness hypotheses needed by
+conclusion yields the exact same-witness hypotheses needed by
 `commutes_words_of_two_sided_middle_compatibility`. -/
 theorem two_sided_middle_compatibility_of_wrapped_witness_comparison
     {A : MPSTensor d D} {L₀ N : ℕ} (η : Fin d)

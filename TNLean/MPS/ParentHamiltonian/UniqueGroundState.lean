@@ -645,8 +645,8 @@ theorem groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_two_sided_middle_c
 /-- Reindexed wrapped-window witness comparison puts the boundary vector in the
 MPV line.
 
-This is the integrated form of the Wave 18E algebraic endgame for the actual
-wrapped and mirror windows.  The one-sided hypotheses are exactly the outputs of
+This combines the common-middle commutation argument with the actual wrapped and
+mirror windows.  The one-sided hypotheses are exactly the outputs of
 `chainGroundSpace_wrapped_boundary_compatibilities_of_isNBlkInjective`; the
 additional hypothesis says that, after both complements are filled by the same
 middle word `μ`, the two witnesses are equal. -/
@@ -673,13 +673,12 @@ theorem groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_wrapped_witness_co
 
 /-- Conditional range-reduction theorem from the actual wrapped-window witness comparison.
 
-This theorem isolates the exact remaining proof obligation for the normal-case
-range reduction.  The already formalized cyclic-to-open-chain step produces a
-boundary matrix `X`, and
-`chainGroundSpace_wrapped_boundary_compatibilities_of_isNBlkInjective` produces
-the two one-sided wrapped-window witness families.  If those actual witnesses
-agree after reindexing their complements to the same middle word, the chain
-state lies in the MPV line. -/
+This theorem isolates the remaining comparison needed for the normal-case range
+reduction.  The cyclic-to-open-chain reduction produces a boundary matrix `X`,
+and `chainGroundSpace_wrapped_boundary_compatibilities_of_isNBlkInjective`
+produces the two one-sided wrapped-window witness families.  If those actual
+witnesses agree after reindexing their complements to the same middle word, the
+chain state lies in the MPV line. -/
 theorem chainGroundSpace_le_mpvSubmodule_of_isNBlkInjective_of_wrapped_witness_comparison
     {A : MPSTensor d D} [NeZero D] {L₀ L N : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
