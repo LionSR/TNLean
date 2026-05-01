@@ -216,8 +216,11 @@ representations of quantum channels.
 | Result | Notes |
 |--------|-------|
 | Thm 2.5 (unitary form) | Reduced isometric form formalized; unitary form needs basis extension |
-| §2.3 Lorentz normal form (full proof) | Statement formalised (`exists_lorentz_normal_form_qubit`); proof blocked on compactness of bounded SL(n, ℂ) sets (`infimum_is_attained`) — see `LorentzNormalForm.lean` for details |
-| §2.3 Generic normal form (full proof) | Statement formalised (`exists_normal_form_generic`); proof blocked on same compactness lemma |
+| §2.3 Lorentz normal form (full proof) | Statement formalised (`exists_lorentz_normal_form_qubit`);
+  proof blocked on compactness of bounded SL(n, ℂ) sets (`infimum_is_attained`) —
+  see `LorentzNormalForm.lean` for details |
+| §2.3 Generic normal form (full proof) | Statement formalised (`exists_normal_form_generic`);
+  proof blocked on same compactness lemma |
 | §2.3 Sorted singular values | Current SVD is unsorted; later uses want sorted values |
 
 ## References
