@@ -860,6 +860,57 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     boundary-crossing positions to obtain the displayed one-sided identities.
 \end{proof}
 
+\begin{lemma}[Middle-word backgrounds for the two wrapped complements]%
+    \label{lem:wrapped_middle_backgrounds}
+    \lean{MPSTensor.wrappedMiddleBackground,
+        MPSTensor.mirrorMiddleBackground,
+        MPSTensor.wrappedMiddleBackground_complement,
+        MPSTensor.mirrorMiddleBackground_complement}
+    \leanok
+    \uses{rem:cyclic_window_operators}
+    Fix a middle word $\mu$ of length $N-(L_0+1)$. There are two background
+    configurations, one for the last-site wrapped window and one for the opposite
+    wrapped window, whose exposed complements are both exactly $\mu$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Fill the physical sites $L_0,\ldots,N-2$ with $\mu$ for the last-site
+    wrapped window, and fill the sites $1,\ldots,N-L_0-1$ with $\mu$ for the
+    opposite wrapped window. The remaining sites are dummy window sites. The two
+    complement-extraction identities are then immediate from the index
+    arithmetic.
+\end{proof}
+
+\begin{lemma}[Same-witness identities from compared wrapped witnesses]%
+    \label{lem:two_sided_middle_of_wrapped_witness_comparison}
+    \lean{MPSTensor.two_sided_middle_compatibility_of_wrapped_witness_comparison}
+    \leanok
+    \uses{lem:wrapped_middle_backgrounds,
+        thm:reduced_wrapped_boundary_compatibilities}
+    Suppose the wrapped and mirror one-sided witnesses $Y^+$ and $Y^-$ have been
+    extracted. If, after the two complements are filled by the same middle word
+    $\mu$, the witnesses agree,
+    \[
+        Y^+_{\tau^+(\mu)} = Y^-_{\tau^-(\mu)},
+    \]
+    then there is a single family $Y_\mu$ satisfying
+    \[
+        A^\mu A^b X = Y_\mu A^b,
+        \qquad
+        X A^a A^\mu = A^a Y_\mu
+    \]
+    for all letters $a,b$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Define $Y_\mu$ to be the wrapped witness evaluated on the background
+    $\tau^+(\mu)$. Lemma~\ref{lem:wrapped_middle_backgrounds} rewrites the
+    wrapped complement as $\mu$, while the assumed comparison rewrites the mirror
+    witness to the same $Y_\mu$.
+\end{proof}
+
 \begin{lemma}[Same-witness common-middle commutation]%
     \label{lem:common_middle_same_witness_commutation}
     \lean{MPSTensor.commutes_words_of_two_sided_middle_compatibility}
@@ -1185,6 +1236,47 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     finishes.
 \end{proof}
 
+\begin{theorem}[MPV-line endgame from compared wrapped witnesses]
+    \label{thm:ground_space_map_mpv_of_wrapped_witness_comparison}
+    \lean{MPSTensor.groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_wrapped_witness_comparison}
+    \leanok
+    \uses{lem:two_sided_middle_of_wrapped_witness_comparison,
+        thm:ground_space_map_mpv_of_common_middle}
+    Let $A$ be $L_0$-block-injective with $L_0>0$. If the wrapped and mirror
+    one-sided witnesses agree after reindexing their complements to a common
+    middle word, then $\Gamma_N(X)$ lies in the MPV line.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Lemma~\ref{lem:two_sided_middle_of_wrapped_witness_comparison} turns the
+    compared wrapped witnesses into a single same-witness common-middle family.
+    Theorem~\ref{thm:ground_space_map_mpv_of_common_middle} then applies.
+\end{proof}
+
+\begin{theorem}[Conditional normal-range reduction from witness comparison]
+    \label{thm:conditional_normal_range_reduction_witness_comparison}
+    \lean{MPSTensor.chainGroundSpace_le_mpvSubmodule_of_isNBlkInjective_of_wrapped_witness_comparison}
+    \leanok
+    \uses{thm:cyclic_normal_open_chain_range_reduction,
+        thm:ground_space_map_mpv_of_wrapped_witness_comparison}
+    Suppose that, for every boundary matrix obtained from an $N$-site chain
+    ground state, the wrapped and mirror witnesses supplied by
+    Theorem~\ref{thm:reduced_wrapped_boundary_compatibilities} agree after the
+    common-middle reindexing. Then the range-$L$ chain ground space is contained
+    in the MPV line.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The cyclic-to-open-chain reduction writes any chain ground state as
+    $\Gamma_N(X)$. The reduced wrapped-boundary compatibility theorem supplies
+    the two one-sided witness families for this $X$. The assumed comparison says
+    that these witnesses agree after the common-middle reindexing, and
+    Theorem~\ref{thm:ground_space_map_mpv_of_wrapped_witness_comparison}
+    finishes.
+\end{proof}
+
 \begin{theorem}[Chain ground space equals the MPV line in the injective case]%
     \label{thm:chain_ground_space_eq_mpv_blk}
     \lean{MPSTensor.chainGroundSpace_eq_mpvSubmodule}
@@ -1216,7 +1308,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \uses{def:chain_ground_space, def:mpv_submodule, def:normal,
         def:l_blk_injective, thm:cyclic_normal_open_chain_range_reduction,
         thm:reduced_wrapped_boundary_compatibilities,
-        thm:ground_space_map_mpv_of_common_middle}
+        thm:conditional_normal_range_reduction_witness_comparison}
     If $A$ is normal, $D \ge 1$, $L_0$-block-injective, with $N \ge 2$ and $L_0 < L \le N$, then
     \[
         \mathcal G_{N,L}(A) \subseteq \spn\bigl\{V^{(N)}(A)\bigr\}.
@@ -1226,17 +1318,17 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 \begin{proof}
     \notready
     \uses{thm:reduced_wrapped_boundary_compatibilities,
-        thm:ground_space_map_mpv_of_common_middle,
+        thm:conditional_normal_range_reduction_witness_comparison,
         lem:padded_complement_annihilation}
     The remaining step is the closure property from
     \cite[\S~IV.C]{Cirac2021Matrix}: Theorem~\ref{thm:reduced_wrapped_boundary_compatibilities}
     supplies the two one-sided wrapped-boundary identities for the open-chain
     boundary matrix $X$. The padded-annihilation lemma states that exact
-    complement-span length mismatches are no longer the obstruction, and
-    Theorem~\ref{thm:ground_space_map_mpv_of_common_middle} formalizes the
-    algebraic endgame once those one-sided identities have been compared to a
-    single same-witness common-middle family. What is still missing is precisely
-    that witness comparison for the actual two wrapped windows.
+    complement-span length mismatches are no longer the obstruction. The new
+    conditional reduction theorem shows that the proof would finish as soon as
+    those actual wrapped-window witnesses are compared after reindexing their
+    complements to a common middle word. What is still missing is precisely that
+    comparison of the witnesses themselves.
 \end{proof}
 
 \begin{theorem}[Chain ground space equals the MPV line in the normal case]%

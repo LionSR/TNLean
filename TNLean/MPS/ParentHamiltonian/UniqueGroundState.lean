@@ -642,6 +642,81 @@ theorem groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_two_sided_middle_c
   exact groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_positive_word_commutes
     (A := A) (L₀ := L₀) (m := m + 2) (N := N) hInj hL₀ (by omega) hComm
 
+/-- Reindexed wrapped-window witness comparison puts the boundary vector in the
+MPV line.
+
+This is the integrated form of the Wave 18E algebraic endgame for the actual
+wrapped and mirror windows.  The one-sided hypotheses are exactly the outputs of
+`chainGroundSpace_wrapped_boundary_compatibilities_of_isNBlkInjective`; the
+additional hypothesis says that, after both complements are filled by the same
+middle word `μ`, the two witnesses are equal. -/
+theorem groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_wrapped_witness_comparison
+    {A : MPSTensor d D} {L₀ N : ℕ}
+    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (η : Fin d)
+    {X : Matrix (Fin D) (Fin D) ℂ}
+    (Ywrap Ymirror : (Fin N → Fin d) → Matrix (Fin D) (Fin D) ℂ)
+    (hWrap : ∀ (j : Fin d) (τ : Fin N → Fin d),
+      evalWord A (List.ofFn (fun k : Fin (N - (L₀ + 1)) =>
+        τ ⟨k.val + L₀, by omega⟩)) * A j * X = Ywrap τ * A j)
+    (hMirror : ∀ (j : Fin d) (τ : Fin N → Fin d),
+      X * A j * evalWord A (List.ofFn (fun k : Fin (N - (L₀ + 1)) =>
+        τ ⟨k.val + 1, by omega⟩)) = A j * Ymirror τ)
+    (hCompare : ∀ μ : Fin (N - (L₀ + 1)) → Fin d,
+      Ywrap (wrappedMiddleBackground L₀ N η μ) =
+        Ymirror (mirrorMiddleBackground L₀ N η μ)) :
+    groundSpaceMap A N X ∈ mpvSubmodule A N := by
+  obtain ⟨Y, hLeft, hRight⟩ :=
+    two_sided_middle_compatibility_of_wrapped_witness_comparison
+      (A := A) (L₀ := L₀) (N := N) η Ywrap Ymirror hWrap hMirror hCompare
+  exact groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_two_sided_middle_compatibility
+    (A := A) (L₀ := L₀) (m := N - (L₀ + 1)) (N := N) hInj hL₀ Y hLeft hRight
+
+/-- Conditional range-reduction theorem from the actual wrapped-window witness comparison.
+
+This theorem isolates the exact remaining proof obligation for the normal-case
+range reduction.  The already formalized cyclic-to-open-chain step produces a
+boundary matrix `X`, and
+`chainGroundSpace_wrapped_boundary_compatibilities_of_isNBlkInjective` produces
+the two one-sided wrapped-window witness families.  If those actual witnesses
+agree after reindexing their complements to the same middle word, the chain
+state lies in the MPV line. -/
+theorem chainGroundSpace_le_mpvSubmodule_of_isNBlkInjective_of_wrapped_witness_comparison
+    {A : MPSTensor d D} [NeZero D] {L₀ L N : ℕ}
+    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
+    (hN : 2 ≤ N) (hL : L₀ < L) (hLN : L ≤ N)
+    (hCompare :
+      ∀ {ψ : NSiteSpace d N} {X : Matrix (Fin D) (Fin D) ℂ} (η : Fin d),
+        (hψ : ψ ∈ chainGroundSpace A L N) →
+        (hψX : ψ = groundSpaceMap A N X) →
+        (Ywrap Ymirror : (Fin N → Fin d) → Matrix (Fin D) (Fin D) ℂ) →
+        (∀ (j : Fin d) (τ : Fin N → Fin d),
+          evalWord A (List.ofFn (fun k : Fin (N - (L₀ + 1)) =>
+            τ ⟨k.val + L₀, by omega⟩)) * A j * X = Ywrap τ * A j) →
+        (∀ (j : Fin d) (τ : Fin N → Fin d),
+          X * A j * evalWord A (List.ofFn (fun k : Fin (N - (L₀ + 1)) =>
+            τ ⟨k.val + 1, by omega⟩)) = A j * Ymirror τ) →
+        ∀ μ : Fin (N - (L₀ + 1)) → Fin d,
+          Ywrap (wrappedMiddleBackground L₀ N η μ) =
+            Ymirror (mirrorMiddleBackground L₀ N η μ)) :
+    chainGroundSpace A L N ≤ mpvSubmodule A N := by
+  intro ψ hψ
+  have hψGS : ψ ∈ groundSpace A N :=
+    chainGroundSpace_le_groundSpace_of_isNBlkInjective hInj hL₀ (by omega : 0 < N) hL hLN hψ
+  rw [groundSpace, LinearMap.mem_range] at hψGS
+  obtain ⟨X, hX⟩ := hψGS
+  haveI : NeZero d := neZero_d_of_isNBlkInjective hInj hL₀
+  let η : Fin d := ⟨0, Nat.pos_of_ne_zero (NeZero.ne d)⟩
+  obtain ⟨Ywrap, Ymirror, hWrap, hMirror⟩ :=
+    chainGroundSpace_wrapped_boundary_compatibilities_of_isNBlkInjective
+      (A := A) hInj hL₀ hN hL hLN hψ hX.symm
+  have hCompare' : ∀ μ : Fin (N - (L₀ + 1)) → Fin d,
+      Ywrap (wrappedMiddleBackground L₀ N η μ) =
+        Ymirror (mirrorMiddleBackground L₀ N η μ) :=
+    hCompare (ψ := ψ) (X := X) η hψ hX.symm Ywrap Ymirror hWrap hMirror
+  rw [← hX]
+  exact groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_wrapped_witness_comparison
+    (A := A) (L₀ := L₀) (N := N) hInj hL₀ η Ywrap Ymirror hWrap hMirror hCompare'
+
 /-- Range-reduction bridge for normal tensors.
 
 This is the missing hard direction of `chainGroundSpace_eq_mpvSubmodule_normal`:

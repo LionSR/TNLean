@@ -515,6 +515,96 @@ theorem wrapping_window_mirror_compatibility_of_isNBlkInjective
 The two one-sided wrapped-boundary identities close the boundary matrix once they
 are available with a common middle word and the same boundary witness. -/
 
+/-- A background configuration whose wrapped-window complement is the prescribed
+middle word.
+
+For the wrapped window at the last site, the complement occupies physical sites
+`L₀, ..., N - 2`.  This helper fills exactly those sites with `μ`; the remaining
+sites are dummy values and do not affect the complement word extracted by
+`wrapping_window_compatibility_of_isNBlkInjective`. -/
+def wrappedMiddleBackground (L₀ N : ℕ) (η : Fin d)
+    (μ : Fin (N - (L₀ + 1)) → Fin d) : Fin N → Fin d :=
+  fun i =>
+    if h : L₀ ≤ i.val ∧ i.val < N - 1 then
+      μ ⟨i.val - L₀, by omega⟩
+    else
+      η
+
+/-- A background configuration whose mirror-window complement is the prescribed
+middle word.
+
+For the opposite wrapped window, the complement occupies physical sites
+`1, ..., N - L₀ - 1`.  This helper fills exactly those sites with `μ`; all window
+sites receive the dummy value `η`. -/
+def mirrorMiddleBackground (L₀ N : ℕ) (η : Fin d)
+    (μ : Fin (N - (L₀ + 1)) → Fin d) : Fin N → Fin d :=
+  fun i =>
+    if h : 1 ≤ i.val ∧ i.val < N - L₀ then
+      μ ⟨i.val - 1, by omega⟩
+    else
+      η
+
+/-- Extracting the wrapped complement from `wrappedMiddleBackground` returns the
+prescribed middle word. -/
+theorem wrappedMiddleBackground_complement (L₀ N : ℕ) (η : Fin d)
+    (μ : Fin (N - (L₀ + 1)) → Fin d) :
+    (fun k : Fin (N - (L₀ + 1)) =>
+      wrappedMiddleBackground L₀ N η μ ⟨k.val + L₀, by omega⟩) = μ := by
+  ext k
+  simp only [wrappedMiddleBackground]
+  rw [dif_pos]
+  · congr 1
+    ext
+    simp
+  · constructor <;> omega
+
+/-- Extracting the mirror complement from `mirrorMiddleBackground` returns the
+prescribed middle word. -/
+theorem mirrorMiddleBackground_complement (L₀ N : ℕ) (η : Fin d)
+    (μ : Fin (N - (L₀ + 1)) → Fin d) :
+    (fun k : Fin (N - (L₀ + 1)) =>
+      mirrorMiddleBackground L₀ N η μ ⟨k.val + 1, by omega⟩) = μ := by
+  ext k
+  simp only [mirrorMiddleBackground]
+  rw [dif_pos]
+  · congr 1
+  · constructor <;> omega
+
+/-- Reindexed wrapped and mirror witnesses give a same-witness common-middle pair.
+
+The hypotheses `hWrap` and `hMirror` are the two one-sided identities produced by
+`chainGroundSpace_wrapped_boundary_compatibilities_of_isNBlkInjective`.  The only
+extra input is the genuine witness comparison: after filling the two complements
+with the same middle word `μ`, the wrapped and mirror witnesses agree.  The
+conclusion packages the exact same-witness hypotheses needed by
+`commutes_words_of_two_sided_middle_compatibility`. -/
+theorem two_sided_middle_compatibility_of_wrapped_witness_comparison
+    {A : MPSTensor d D} {L₀ N : ℕ} (η : Fin d)
+    {X : Matrix (Fin D) (Fin D) ℂ}
+    (Ywrap Ymirror : (Fin N → Fin d) → Matrix (Fin D) (Fin D) ℂ)
+    (hWrap : ∀ (j : Fin d) (τ : Fin N → Fin d),
+      evalWord A (List.ofFn (fun k : Fin (N - (L₀ + 1)) =>
+        τ ⟨k.val + L₀, by omega⟩)) * A j * X = Ywrap τ * A j)
+    (hMirror : ∀ (j : Fin d) (τ : Fin N → Fin d),
+      X * A j * evalWord A (List.ofFn (fun k : Fin (N - (L₀ + 1)) =>
+        τ ⟨k.val + 1, by omega⟩)) = A j * Ymirror τ)
+    (hCompare : ∀ μ : Fin (N - (L₀ + 1)) → Fin d,
+      Ywrap (wrappedMiddleBackground L₀ N η μ) =
+        Ymirror (mirrorMiddleBackground L₀ N η μ)) :
+    ∃ Y : (Fin (N - (L₀ + 1)) → Fin d) → Matrix (Fin D) (Fin D) ℂ,
+      (∀ (j : Fin d) (μ : Fin (N - (L₀ + 1)) → Fin d),
+        evalWord A (List.ofFn μ) * A j * X = Y μ * A j) ∧
+      (∀ (j : Fin d) (μ : Fin (N - (L₀ + 1)) → Fin d),
+        X * A j * evalWord A (List.ofFn μ) = A j * Y μ) := by
+  refine ⟨fun μ => Ywrap (wrappedMiddleBackground L₀ N η μ), ?_, ?_⟩
+  · intro j μ
+    have h := hWrap j (wrappedMiddleBackground L₀ N η μ)
+    simpa [wrappedMiddleBackground_complement] using h
+  · intro j μ
+    have h := hMirror j (mirrorMiddleBackground L₀ N η μ)
+    have hCmp := hCompare μ
+    simpa [mirrorMiddleBackground_complement, hCmp.symm] using h
+
 /-- A same-witness pair of one-sided compatibilities around a common middle word
 forces `X` to commute with every word obtained by adjoining one physical letter on
 each side of that middle.
