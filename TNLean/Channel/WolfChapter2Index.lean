@@ -166,26 +166,26 @@ representations of quantum channels.
 ### §2.3 SVD normal form (existence)
 
 * `Matrix.svd_of_posSemidef` — **SVD for PSD matrices** (spectral theorem
-  formulated): `M = U * diagonal σ * Uᴴ` with `σ ≥ 0` ✅
+  formulated): `M = U * diagonal σ * Uᴴ` with `σ ≥ 0` ✅️
 * `Matrix.svd_of_isUnit` — **SVD existence for invertible complex matrices**:
-  `M = U * diagonal σ * Vᴴ` with `U, V` unitary and `σ > 0` ✅
+  `M = U * diagonal σ * Vᴴ` with `U, V` unitary and `σ > 0` ✅️
 * `transferMatrix_svd_of_isUnit` — **SVD representation of a transfer
-  matrix** (Wolf §2.3): every invertible transfer matrix admits an SVD ✅
+  matrix** (Wolf §2.3): every invertible transfer matrix admits an SVD ✅️
 
 ### §2.3 Lorentz normal form (existence)
 
 * `Wolf.SLFiltering` — **SL(d, ℂ)-filtering operation**: a CP map
-  Φ(X) = S X S† with det(S) = 1 ✅ (definitional)
+  Φ(X) = S X S† with det(S) = 1 ✅️ (definitional)
 * `Wolf.DoublyStochastic` — doubly-stochastic condition: T(1) ∝ 1 and
-  T*(1) ∝ 1 ✅ (definitional)
+  T*(1) ∝ 1 ✅️ (definitional)
 * `Wolf.infimum_is_attained` — **key compactness lemma**: the trace minimisation
-  over SL(d, ℂ) filterings attains its infimum ⚠️ (stated with `sorry`;
+  over SL(d, ℂ) filterings attains its infimum ⚠ (stated with `sorry`;
   requires compactness of bounded SL(n, ℂ) sets)
 * `Wolf.exists_normal_form_generic` — **Wolf Prop 2.8 (generic normal form)**:
   every CP map with full Kraus rank admits SL-filterings making it
-  doubly-stochastic ⚠️ (depends on `infimum_is_attained`)
+  doubly-stochastic ⚠ (depends on `infimum_is_attained`)
 * `Wolf.exists_lorentz_normal_form_qubit` — **Wolf Prop 2.9/2.11 (Lorentz
-  normal form for qubit channels)** ⚠️ (depends on `infimum_is_attained`
+  normal form for qubit channels)** ⚠ (depends on `infimum_is_attained`
   and Lorentz group classification)
 
 ### Formalization
