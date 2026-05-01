@@ -71,6 +71,96 @@ theorem wordSpan_finrank_le (A : MPSTensor d D) (n : ℕ) :
           simp only [Fintype.card_fin, Module.finrank_self, mul_one]
     _ = D ^ 2 := by ring
 
+
+/-! ## One-step span elements as redundant generators -/
+
+/-- A length-one word evaluates to the corresponding tensor entry. -/
+theorem evalWord_ofFn_one_eq (A : MPSTensor d D) (σ : Fin 1 → Fin d) :
+    evalWord A (List.ofFn σ) = A (σ 0) := by
+  have h : List.ofFn σ = [σ 0] := by
+    apply List.ext_getElem <;> simp
+  rw [h]
+  simp [evalWord]
+
+/-- Every displayed tensor entry belongs to the one-step word span `S₁(A)`. -/
+theorem apply_mem_wordSpan_one (A : MPSTensor d D) (i : Fin d) :
+    A i ∈ wordSpan A 1 := by
+  simpa [evalWord] using evalWord_mem_wordSpan A ([i] : List (Fin d))
+
+/-- Add a one-step span element as a redundant first generator.
+
+If `X ∈ wordSpan A 1`, then `oneStepAugment A X` has the same exact word spans
+as `A`; see `wordSpan_oneStepAugment_eq`. This is a convenient way to reuse
+single-generator Wielandt backends for arbitrary elements of `S₁(A)`. -/
+def oneStepAugment (A : MPSTensor d D) (X : Matrix (Fin D) (Fin D) ℂ) :
+    MPSTensor (d + 1) D :=
+  Fin.cases X A
+
+@[simp] theorem oneStepAugment_zero (A : MPSTensor d D)
+    (X : Matrix (Fin D) (Fin D) ℂ) :
+    oneStepAugment A X 0 = X := rfl
+
+@[simp] theorem oneStepAugment_succ (A : MPSTensor d D)
+    (X : Matrix (Fin D) (Fin D) ℂ) (i : Fin d) :
+    oneStepAugment A X i.succ = A i := rfl
+
+/-- Every entry of the augmented tensor lies in the original one-step span,
+provided the new first entry does. -/
+theorem oneStepAugment_apply_mem_wordSpan_one (A : MPSTensor d D)
+    {X : Matrix (Fin D) (Fin D) ℂ} (hX : X ∈ wordSpan A 1)
+    (i : Fin (d + 1)) :
+    oneStepAugment A X i ∈ wordSpan A 1 := by
+  refine Fin.cases ?_ ?_ i
+  · simpa [oneStepAugment] using hX
+  · intro j
+    simpa [oneStepAugment] using apply_mem_wordSpan_one A j
+
+/-- Adding an element already in `S₁(A)` as a redundant generator does not change
+`S₁(A)`. -/
+theorem wordSpan_oneStepAugment_one (A : MPSTensor d D)
+    {X : Matrix (Fin D) (Fin D) ℂ} (hX : X ∈ wordSpan A 1) :
+    wordSpan (oneStepAugment A X) 1 = wordSpan A 1 := by
+  apply le_antisymm
+  · apply Submodule.span_le.mpr
+    rintro M ⟨σ, rfl⟩
+    simpa [evalWord_ofFn_one_eq] using
+      oneStepAugment_apply_mem_wordSpan_one A hX (σ 0)
+  · apply Submodule.span_le.mpr
+    rintro M ⟨σ, rfl⟩
+    have hmem : oneStepAugment A X (Fin.succ (σ 0)) ∈
+        wordSpan (oneStepAugment A X) 1 :=
+      apply_mem_wordSpan_one (oneStepAugment A X) (Fin.succ (σ 0))
+    simpa [evalWord_ofFn_one_eq] using hmem
+
+/-- Adding an element already in `S₁(A)` as a redundant generator does not change
+any exact word span. -/
+theorem wordSpan_oneStepAugment_eq (A : MPSTensor d D)
+    {X : Matrix (Fin D) (Fin D) ℂ} (hX : X ∈ wordSpan A 1) (n : ℕ) :
+    wordSpan (oneStepAugment A X) n = wordSpan A n := by
+  induction n with
+  | zero =>
+      simp [wordSpan_zero]
+  | succ n ih =>
+      rw [wordSpan_succ_eq_mul_right (oneStepAugment A X) n,
+        wordSpan_succ_eq_mul_right A n, ih, wordSpan_oneStepAugment_one A hX]
+
+/-- Normality is unchanged after adding a redundant one-step generator. -/
+theorem isNormal_oneStepAugment_of_mem_wordSpan_one (A : MPSTensor d D)
+    {X : Matrix (Fin D) (Fin D) ℂ} (hX : X ∈ wordSpan A 1)
+    (hN : IsNormal A) :
+    IsNormal (oneStepAugment A X) := by
+  obtain ⟨N, hNtop⟩ := (hasEventuallyFullKrausRank_iff_isNormal A).2 hN
+  exact (hasEventuallyFullKrausRank_iff_isNormal (oneStepAugment A X)).1
+    ⟨N, by simpa [wordSpan_oneStepAugment_eq A hX N] using hNtop⟩
+
+/-- The Kraus rank is unchanged after adding a redundant one-step generator. -/
+theorem krausRank_oneStepAugment (A : MPSTensor d D)
+    {X : Matrix (Fin D) (Fin D) ℂ} (hX : X ∈ wordSpan A 1) :
+    krausRank (oneStepAugment A X) = krausRank A := by
+  unfold krausRank
+  rw [wordSpan_oneStepAugment_eq A hX 1]
+
+
 /-! ## Left multiplication maps S_n into S_{n+1} -/
 
 /-- Left multiplication by `A i₀` maps `S_n` into `S_{n+1}`.
