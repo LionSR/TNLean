@@ -1,0 +1,231 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{Common Blocking and Span Equality in the Non-periodic MPS Fundamental Theorem}
+\author{}
+\date{2026-04-30}
+
+\begin{document}
+\maketitle
+
+\section{The compressed source argument}
+
+The proof of the non-periodic matrix product state fundamental theorem passes
+from arbitrary tensors with the same matrix product vectors to
+basis-of-normal-tensors comparison data. The source argument is the MPDO
+canonical-form paper \cite{Cirac2016MPDO_arXiv,Cirac2017MPDO_AnnPhys}, together
+with the later review \cite{Cirac2021Matrix}.\footnote{For traceability, this
+note corresponds to \href{https://github.com/LionSR/TNLean/issues/1047}{issue \#1047}.}
+The cited papers are not being questioned. The point is that a formal proof has
+to separate several canonical-form steps which are compressed in the source
+prose.
+
+For a tensor $A=(A^i)_{i=1}^d$, the source paper defines the matrix product
+vectors by
+\[
+  |V^{(N)}(A)\rangle
+  = \sum_{i_1,\ldots,i_N=1}^d
+      \operatorname{tr}(A^{i_1}\cdots A^{i_N})
+      |i_1\rangle\otimes\cdots\otimes |i_N\rangle,
+\]
+for $N=1,2,3,\ldots$ \cite[Definition~\texttt{MPV}, lines~130--138]{Cirac2016MPDO_arXiv}.
+After removing invariant subspaces, the same paper writes the tensor in block form
+\[
+  A^i = \bigoplus_{k=1}^r \mu_k A_k^i,
+\]
+allowing zero blocks and scaling the nonzero blocks so that their transfer maps
+have spectral radius one. Each nonzero irreducible block may still have peripheral
+period. Blocking by a common multiple of the periods removes that periodicity
+\cite[lines~214--231]{Cirac2016MPDO_arXiv}. The review follows the same
+canonical-form argument \cite[lines~1798--1820]{Cirac2021Matrix}.
+
+The later comparison is made through bases of normal tensors. A basis of normal
+tensors is a minimal family $(A_j)_{j=1}^g$ of normal tensors such that every
+matrix product vector of $A$ is a linear combination of the matrix product vectors
+of the $A_j$, and such that those vectors are eventually linearly independent.
+Equivalently, every normal block in the canonical form is a phase times a gauge
+transform of exactly one basis tensor, with the family chosen minimally
+\cite[Proposition~\texttt{prop:char-BNT}, lines~271--280]{Cirac2016MPDO_arXiv}.
+The review states the same characterization
+\cite[Proposition~\texttt{prop:char-BNT}, lines~1846--1859]{Cirac2021Matrix}.
+For a tensor in canonical form one then has an expansion
+\[
+  |V^{(N)}(A)\rangle
+    = \sum_{j=1}^g \left(\sum_{q=1}^{r_j} \mu_{j,q}^N\right)
+        |V^{(N)}(A_j)\rangle.
+\]
+This is the basis-of-normal-tensors expansion used in the equal-case proof
+\cite[lines~283--302]{Cirac2016MPDO_arXiv}. The review uses the same expansion
+\cite[lines~1864--1885]{Cirac2021Matrix}.
+
+Injectivity enters at a different point. The source first defines injective and
+block-injective canonical form, and then invokes the quantum Wielandt theorem to
+say that, after a bounded further blocking, every normal tensor becomes injective
+\cite[lines~317--332]{Cirac2016MPDO_arXiv}. The review records the corresponding
+$3D^5$ bound for block-injective canonical form
+\cite[lines~2120--2124]{Cirac2021Matrix}.
+This step is not the same as period removal: period removal gives primitive normal
+blocks, while the overlap-rigidity arguments used later require one-site
+injectivity, or an explicit replacement after further blocking.
+
+Finally, the source comparison for the equal case is compact. Equality or
+proportionality of the matrix product vector families first matches the two bases
+of normal tensors by phase and gauge. After relabeling, the coefficient
+multiplicities are compared through the power sums
+\[
+  \sum_{q=1}^{r_{a,j}} \mu_{j,q}^N
+  = \sum_{q=1}^{r_{b,j}} (\nu_{j,q}e^{i\phi_j})^N,
+  \qquad \text{for all } j \text{ and } N.
+\]
+The elementary power-sum lemma then recovers the multiplicities and the weights,
+and the blockwise gauges are assembled into the global conjugating matrix
+\cite[lines~1181--1192]{Cirac2016MPDO_arXiv}. The review states the resulting
+proportional and equal MPV fundamental theorems in the same form
+\cite[Theorem~\texttt{thm1} and Corollary~\texttt{II\_cor2}, lines~1891--1900]{Cirac2021Matrix}.
+
+\section{The formal argument}
+
+The formal equality relation \(\mathrm{SameMPV}_2\) compares matrix product
+vector coefficients for all finite words, including the empty word.
+This convention is stronger than the positive-length family in the source
+definition. An all-zero block of bond dimension $D_0$ contributes nothing at
+positive length, but it contributes $D_0$ at length zero, because the empty product
+has trace $D_0$. Consequently the formal proof separates the zero-tail
+contribution from the nonzero part, proves positive-length equality for the
+nonzero parts, and records the exact $N=0$ identity separately.\footnote{See
+\path{blueprint/src/chapter/ch08_canonical.tex:967--1022} and
+\path{blueprint/src/chapter/ch08_canonical.tex:3036--3164}, with labels
+\texttt{def:zero\_mps\_tensor}, \texttt{thm:mpv\_zero\_tensor},
+\texttt{thm:zero\_block\_separation},
+\texttt{thm:nonzero\_block\_block\_power\_zero\_tail\_identity}, and
+\texttt{thm:nonzero\_block\_same\_mpv\_zero\_tail\_eq}. The corresponding
+zero-tail cancellation step in the assembly chapter is
+\path{blueprint/src/chapter/ch11_assembly.tex:1202--1217}.}
+
+The common blocking step is also more explicit. For a single family of blocks,
+the source phrase ``block by the least common multiple of the periods'' hides no
+mathematical difficulty. In the two-tensor comparison, however, the formal proof
+must choose one positive physical blocking length for both sides. For each
+original block with period-removal length $m_k$, the common length is written as
+$p=m_k e_k$. The tensor obtained by first blocking by $m_k$ and then by $e_k$
+has physical labels given by nested words, while the tensor obtained by
+blocking once by $p$ has physical labels in the alphabet of words of length $p$.
+The formal statement therefore keeps the relabeling between these two alphabets as
+part of the statement.\footnote{The common-sector data and the relabeling results
+are recorded in \path{blueprint/src/chapter/ch08_canonical.tex:1645--1824} and
+\path{blueprint/src/chapter/ch08_canonical.tex:3230--3284}. The main formal
+statement is
+\texttt{MPSTensor.fundamentalTheorem\_after\_blocking\_commonLength\_commonSector},
+with the one-sided relabeling-compatible zero-tail statement
+\texttt{MPSTensor.zeroTail\_commonFlat\_of\_reindexed}; see
+\path{TNLean/MPS/CanonicalForm/Assembly/StructuralTheorem.lean:698--774} and
+\path{TNLean/MPS/CanonicalForm/Assembly/StructuralTheorem.lean:902--939}.}
+This is why the canonical-form theorem supplies relabeled common-sector
+families and a conditional label-compatibility statement, rather than immediately
+replacing every canonical nonzero part after blocking by its flattened sector tensor.
+
+The formal comparison theorems downstream use primitive overlap-rigidity data for
+sector bases. Those data include equality of the finite-length spans of the basis
+matrix product vectors and one-site injectivity of the basis blocks. Thus the
+additional Wielandt blocking needed for injectivity remains a separate refinement
+after period removal. Treating it separately prevents a common period-removal
+length from being used as though it already supplied the injective hypotheses
+needed by the overlap-span theorem.\footnote{The span hypotheses are stated in
+\path{blueprint/src/chapter/ch11_assembly.tex:590--602}, label
+\texttt{def:sector\_basis\_overlap\_span\_hyps}. The remaining canonical
+proof obligations are summarized in
+\path{blueprint/src/chapter/ch08_canonical.tex:3289--3341}.}
+
+The paper's compact BNT matching and power-sum comparison is represented in the
+formal statement by common phase-cover and finite-length span-equality adapters. A
+common phase cover consists of a common family of nonzero blocks, surjective maps
+from the two block families onto that common family, and phase equivalences between
+each block and its common representative. Such data imply that, for every system
+size, the spans of the two nonzero-block MPV families are equal. When a BNT
+proportional-decomposition comparison has already produced a permutation, matched
+bond dimensions, and gauge phases, the formal construction gives the common phase
+cover from that comparison and then obtains the span equality needed by the sector
+comparison theorem.\footnote{See
+\path{blueprint/src/chapter/ch11_assembly.tex:755--923}. The corresponding formal
+objects include the common phase-cover structure and span lemmas, the block-span
+and common-phase-cover overlap-span adapters, and the proportional-decomposition
+specialization. They are located at
+\path{TNLean/MPS/CanonicalForm/EqualNormBridge.lean:472--491},
+\path{TNLean/MPS/CanonicalForm/EqualNormBridge.lean:604--641},
+\path{TNLean/MPS/CanonicalForm/EqualNormBridge.lean:1348--1449}, and
+\path{TNLean/MPS/CanonicalForm/EqualNormBridge.lean:1453--1480}.}
+These lemmas state precisely what comparison data are needed; they do not by
+themselves derive all of that data from an arbitrary equality of total MPV
+families.
+
+\section{Why these distinctions belong together}
+
+These distinctions are coupled in the single conversion from an arbitrary equality
+of MPV families to the hypotheses of the BNT sector-comparison theorem. The
+zero-tail convention determines what is known at length zero after each blocking.
+The common blocking construction determines the physical alphabet and the relabeled
+sector families to which the later comparison must apply. The injectivity
+refinement may further change the final block length before the overlap-rigidity
+hypotheses are available. The common phase-cover or BNT proportional-decomposition
+data then have to be constructed for those final nonzero-sector families, not for
+an earlier family before relabeling or before injectivity blocking.
+
+For this reason common blocking and finite-length span equality should be kept
+in one account. The formal proof needs the whole chain: remove the zero tail,
+choose one common physical blocking length, account for the word-relabeling, keep
+the later injectivity blocking separate, and then turn BNT matching data into the
+finite-length nonzero-sector span equality used by the sector comparison theorem.
+The blueprint states this chain as the remaining connection between the
+canonical-form chapter and the final comparison chapter.\footnote{See the
+``Remaining hypotheses'' discussion in
+\path{blueprint/src/chapter/ch11_assembly.tex:1277--1341}. Audit notes recording
+the same remaining obligations include
+\path{audits/2026-04-28_issue969_direct_common_blocking.md:139--153},
+\path{audits/2026-04-28_issue970_common_phase_cover.md:81--95},
+\path{audits/2026-04-29_issue942_common_exact_nonzero_sector.md:66--97}, and
+\path{audits/2026-04-29_issue944_overlap_span_from_common_live.md:83--94}.}
+
+This note should also not be read as a claim that the same-side equal-norm scalar
+obstruction discussed in the broader fundamental-theorem work is a flaw in the
+CPSV or CPGSV arguments. That obstruction corrected an over-strong formal statement
+which tried to identify an equal-norm class with a single basis tensor. The BNT
+expansion in the papers already allows multiple basis tensors and multiplicities.
+The formal argument therefore moved from naive norm-class grouping to phase-class
+sector decompositions and common-cover data.
+
+\section{Conclusion}
+
+The conclusion is that the cited papers compress several standard canonical-form
+operations; no counterexample is claimed. Zero or nilpotent contributions are
+invisible to positive-length MPVs, periods are removed by blocking, injectivity is
+obtained by a later Wielandt-type blocking, BNT bases are matched by phase and
+gauge, and coefficient multiplicities are recovered from power sums. The formal
+development exposes these operations as separate statements because the formal MPV
+relation includes the empty word, the two sides must be placed over one explicitly
+relabeled alphabet after blocking, and the downstream comparison theorem requires
+finite-length span equality and injective final blocks.
+
+Thus the comparison gives neither a counterexample nor a theorem-level source
+error. It explains why the formal proof cannot compress the argument into a
+single invocation of the BNT uniqueness theorem. The relevant comparison points are
+zero-tail cancellation, common primitive block construction, common blocking,
+finite-length span equality, zero-tail transport, overlap-span hypotheses, and
+iterated-blocking relabeling.\footnote{For traceability, these are recorded in
+\href{https://github.com/LionSR/TNLean/issues/652}{issue \#652},
+\href{https://github.com/LionSR/TNLean/issues/942}{issue \#942},
+\href{https://github.com/LionSR/TNLean/issues/969}{issue \#969},
+\href{https://github.com/LionSR/TNLean/issues/970}{issue \#970},
+\href{https://github.com/LionSR/TNLean/issues/971}{issue \#971},
+\href{https://github.com/LionSR/TNLean/issues/944}{issue \#944}, and
+\href{https://github.com/LionSR/TNLean/issues/990}{issue \#990}.}
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
