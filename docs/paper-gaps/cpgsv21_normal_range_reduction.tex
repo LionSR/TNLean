@@ -30,10 +30,9 @@ Let $A$ be a normal MPS tensor, and let $L_0$ be its injectivity length: after
 blocking $L_0$ consecutive sites, the resulting tensor is injective. The source
 first proves an intersection step for two overlapping local Hamiltonian terms of
 range $L_0+1$. These terms act on sites $1,\ldots,L_0+1$ and
-$2,\ldots,L_0+2$. In the source's diagrammatic notation, the proof names
-the first site $A_{\mathrm{left}}$, the middle region $B$ consisting of sites
-$2,\ldots,L_0+1$, and the last site $C_{\mathrm{right}}$; the tensor associated to $B$ is
-injective. For a state in the intersection
+$2,\ldots,L_0+2$. The source denotes the three regions by $A$, $B$, and $C$: the first site,
+the middle region consisting of sites $2,\ldots,L_0+1$, and the last site. The
+tensor associated to the middle region $B$ is injective. For a state in the intersection
 \[
   \mathcal G_{1,\ldots,L_0+1}\cap \mathcal G_{2,\ldots,L_0+2},
 \]
@@ -82,6 +81,13 @@ and
 are named \path{IsNormal A} and \path{IsNBlkInjective A L0}, together with
 \path{2 <= N} and \path{L0 < L <= N}.}
 
+The blueprint records the same range-reduction target in
+\path{blueprint/src/chapter/ch14_parent_hamiltonian.tex}:1212--1240, under the
+label \texttt{thm:normal\_range\_reduction\_containment}. Its proof sketch
+already separates the open-chain containment from the cyclic boundary comparison,
+which is the same division made by the formal statements below.
+
+
 The first mismatch is that the available intersection theorem is not a literal
 expression of the proof through the region $B$. That theorem was written for a
 tensor that is already injective at one site. Its proof decomposes the identity as a linear combination of the one-site matrices
@@ -129,8 +135,13 @@ while the mirror wrapped window gives
 \[
   X A_j C^-_{\tau} = A_j Y^-_{\tau}.
 \]
-Here $\tau$ denotes the data of the complementary boundary word exposed by a wrapped window; equivalently, it records the physical labels outside the open middle interval. The matrices $C^+_{\tau}$ and $C^-_{\tau}$ are the corresponding word products for the two orientations of the wrapped window. The two formulas are both valid, but their
-complement words and their witnesses are produced with different indexings.
+Here $\tau$ denotes the complementary boundary word exposed by a wrapped
+window, equivalently the physical labels outside the open middle interval. The
+formal wrapped and mirrored lemmas produce analogous complement-word products,
+written schematically as $C^+_{\tau}$ and $C^-_{\tau}$, but the two products are
+obtained with different orientations and indexings. The two formulas are both
+valid; what is missing is a comparison that puts the two outputs over one common
+middle word and one common witness family.
 \footnote{Formal locations:
 \path{TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean}:522--534 for
 \path{MPSTensor.chainGroundSpace_wrapped_boundary_compatibilities_of_isNBlkInjective},
