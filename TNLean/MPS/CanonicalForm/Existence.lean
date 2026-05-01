@@ -71,7 +71,7 @@ We use `MPSTensor.exists_tp_data_of_irreducible` from
 /-!
 ## (3) CFII normalization for irreducible TP blocks (1606.00608 Appendix A)
 
-We package `exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleTensor` together with the
+We collect `exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleTensor` together with the
 fact that unitary conjugation preserves MPVs.
 
 Important: this is the **second** half of the Appendix-A normalization story. The preceding
@@ -120,7 +120,7 @@ theorem exists_CFII_data_of_TP_of_isIrreducibleTensor
     -- Existing lemma is stated with `star` rather than `ᴴ`.
     simpa only [Matrix.star_eq_conjTranspose] using
       sameMPV_conj_unitary (d := d) (D := D) A U
-  -- Assemble the packaged data under the `let B := ...` binder.
+  -- Assemble the collected data under the `let B := ...` binder.
   exact ⟨hSame, hΛ_pd, hΛ_diag, hTP_conj, hΛ_fix⟩
 
 
@@ -279,7 +279,7 @@ once one separately knows that the block has a nonzero Kraus operator. This expl
 is essential because, under the current `SameMPV₂` relation, zero scalar blocks cannot simply be
 discarded: the `N = 0` sector is remembered.
 
-The newer normal-canonical-form packaging file packages a later stage once one already has
+The newer normal-canonical-form file collects a later stage once one already has
 a primitive weighted block family with positive bond dimensions and distinct nonzero weights. This
 file does **not** currently construct that input from an arbitrary tensor.
 
@@ -373,7 +373,7 @@ theorem exists_irreducible_blockDecomp_with_CFII
     exists_irreducible_blockDecomp (d := d) (D := D) A
   refine ⟨r, dim, blocks, hIrr, hSame, ?_⟩
   intro k hTPk hDk
-  -- Apply the packaged CFII lemma to the k-th block.
+  -- Apply the collected CFII lemma to the k-th block.
   simpa using
     (exists_CFII_data_of_TP_of_isIrreducibleTensor (d := d) (D := dim k)
       (A := blocks k) (hTP := hTPk) (hIrr := hIrr k) (hD := hDk))
