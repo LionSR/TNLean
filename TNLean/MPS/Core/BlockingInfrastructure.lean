@@ -377,6 +377,13 @@ theorem toTensorFromBlocks_cast_physDim {d₁ d₂ r : ℕ} {dim : Fin r → ℕ
   subst h
   rfl
 
+/-- Evaluating a physical-dimension cast amounts to casting the physical index. -/
+theorem cast_physDim_apply {d₁ d₂ D : ℕ} (h : d₁ = d₂)
+    (A : MPSTensor d₁ D) (i : Fin d₂) :
+    cast (congr_arg (fun d' => MPSTensor d' D) h) A i = A (Fin.cast h.symm i) := by
+  subst h
+  rfl
+
 /-- Casting the physical dimension preserves trace-preserving normalization. -/
 theorem leftCanonical_cast_physDim {d₁ d₂ D : ℕ} (h : d₁ = d₂)
     (A : MPSTensor d₁ D) :
