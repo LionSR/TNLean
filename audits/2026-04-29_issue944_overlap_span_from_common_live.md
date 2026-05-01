@@ -107,3 +107,32 @@ The branch deliberately leaves the following hypotheses explicit:
 
 Once these are supplied, the new zero-tail theorem produces the overlap-span data and
 sector-weight conclusion through the common phase-cover route.
+
+## 2026-05-01 update: common primitive sector hypotheses
+
+After the common primitive and common-length sector theorems from Wave 23, the
+zero-tail sector comparison can be stated one step closer to the canonical-form
+reduction.  The new structure
+`MPSTensor.CommonPrimitiveSpanHypotheses` records precisely the remaining
+conditions on the common primitive nonzero-sector families: equality of the two
+zero-tail dimensions, one-site injectivity of the sector blocks, and equality of
+the finite-length MPV spans.  The helper
+`MPSTensor.CommonPrimitiveSpanHypotheses.of_commonPhaseCover` fills the span field
+from a common MPV phase cover.
+
+The theorem
+`MPSTensor.afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_spanHypotheses`
+then composes the conditional common primitive theorem
+`MPSTensor.afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts`
+with the zero-tail block-span comparison.  It does not construct the blocked-word
+coordinate equality or the common phase cover.  Instead, it consumes exactly the
+mathematical assertions expected from those neighboring steps: the reindexing of
+blocked physical words, equal zero tails, injectivity, and either span equality
+or common phase-cover data for the produced common primitive sector families.
+
+This remains aligned with the paper references listed above.  The BNT comparison
+and phase matching are the steps described in `Papers/1606.00608/MPDO-22-12-17-2.tex`
+lines 271--302 and 349--352, while the injectivity/Wielandt blocking requirement
+is the passage in lines 317--332.  In the review article, the corresponding BNT
+comparison is `Papers/2011.12127/TN-Review-main.tex` lines 1846--1859,
+1864--1885, and 1891--1894.
