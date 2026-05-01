@@ -125,7 +125,7 @@ theorem exists_irreducible_blockDecomp (A : MPSTensor d D) :
     ∃ blocks : (k : Fin r) → MPSTensor d (dim k),
       (∀ k, IsIrreducibleTensor (blocks k)) ∧
       SameMPV₂ A (toTensorFromBlocks (d := d) (μ := fun _ : Fin r => (1 : ℂ)) blocks) := by
-  -- Package the statement for all tensors of a given bond dimension (for strong induction).
+  -- Formulate the statement for all tensors of a given bond dimension (for strong induction).
   suffices h : ∀ (D : ℕ) (A : MPSTensor d D),
       ∃ r : ℕ, ∃ dim : Fin r → ℕ,
       ∃ blocks : (k : Fin r) → MPSTensor d (dim k),

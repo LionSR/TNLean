@@ -409,7 +409,7 @@ theorem exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingU
 /-- Positive-length product-word span obtained from canonical-form/BNT data and
 finite block-selector words.
 
-This is the issue-#934 goal shape with the still-missing selector-word theorem
+This is the goal shape with the still-missing selector-word theorem
 kept explicit rather than replaced by the conclusion. -/
 theorem exists_pos_productWordSpan_of_isCanonicalFormBNT_of_blockSelectorWords
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))

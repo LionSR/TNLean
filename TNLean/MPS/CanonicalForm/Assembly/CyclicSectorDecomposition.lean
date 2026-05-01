@@ -522,7 +522,7 @@ transfer map to the compressed cyclic-sector tensors.
 The only remaining hypothesis beyond the cyclic-sector decomposition data is the
 corner irreducibility theorem for `((transferMap A†)^m)` on each projection
 `P k`. In particular, this theorem isolates the orbit-sum / `hProjStep` part of
-the non-periodic Gap §1 proof chain from the subsequent compression-transport
+the non-periodic proof chain from the subsequent compression-transport
 step. -/
 theorem primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking_of_cornerIrreducible
     {d D m : ℕ} [NeZero D] [NeZero m]
@@ -611,7 +611,7 @@ sector blocks produced after blocking are primitive and tensor-irreducible.
 
 This combines the orbit-sum part of the argument via
 `isIrreducibleOnCorner_of_cyclic_decomp_mps_of_projStep` and then applies the
-compression transport theorem above. The residual non-periodic Gap §1 blocker is
+compression transport theorem above. The residual blocker is
 therefore isolated exactly to the one-step `hProjStep` hypothesis. -/
 theorem primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking_of_projStep
     {d D m : ℕ} [NeZero D] [NeZero m]
@@ -1109,7 +1109,7 @@ original nonzero-weight block and one of its cyclic sectors.
 The field `nested_same` gives the checked MPV compatibility condition available
 at this stage: the iterated blocked nonzero-weight block is MPV-equivalent to the corresponding
 unit-weight reblocked cyclic sectors, all at the common physical dimension.  The
-remaining work for issue #969 is the single-step iterated-blocking identification
+remaining work is the single-step iterated-blocking identification
 and the weighted direct-sum flattening across the original nonzero weights. -/
 structure CommonBlockedCyclicSectorFamily {d r : ℕ} {dim : Fin r → ℕ}
     (blocks : (k : Fin r) → MPSTensor d (dim k)) where

@@ -297,7 +297,7 @@ end
 end TransferAdjoint
 
 /-!
-## Main theorem: periodicity removal by blocking (preferred live route)
+## Main theorem: periodicity removal by blocking
 
 This is the maintained Appendix-A blocking argument. Starting from a
 left-canonical / trace-preserving tensor, we pass to the

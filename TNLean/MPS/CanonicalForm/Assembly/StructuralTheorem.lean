@@ -85,7 +85,7 @@ those bases. The zero-tail-aware theorem
 separately gives the length-zero identity when full overlap-span hypotheses are
 available.
 
-The remaining Gap §1 content is to flatten the per-block cyclic-sector data to a
+The remaining content is to flatten the per-block cyclic-sector data to a
 single common physical blocking level, derive one-site injectivity (or a blocked
 replacement) and the finite-length span comparison for the flattened family, and
 finish the zero-tail length-zero identity from the structural after-blocking reduction
@@ -121,7 +121,7 @@ blocking. If `A` and `B` are normal, normality is also preserved for such a
 common blocking period.
 
 This is the building block for BNT canonical form alignment in subsequent
-reduction steps; see issue #672 (Gap §1 step 2a). -/
+reduction steps. -/
 theorem bilateral_commonPeriod_blocking_tp_primitive_normal
     {d D₁ D₂ : ℕ}
     [NeZero D₁] [NeZero D₂]
@@ -187,9 +187,9 @@ currently formalized one-sided reduction data on both sides: after blocking,
 each tensor admits a decomposition into TP blocks with primitive transfer maps,
 nonzero weights, and positive bond dimensions.
 
-The theorem does **not yet** use `SameMPV₂ A B` to compare the two blocked
-families. The remaining missing content is the sector-level comparison described
-in the file documentation below: a general BNT sector construction for each side,
+The theorem does not yet use `SameMPV₂ A B` to compare the two blocked
+families. The subsequent content is the sector-level comparison:
+a BNT sector construction for each side,
 followed by a two-basis equal-case comparison theorem for those sector decompositions.
 
 This theorem therefore gives the structural statement currently available on the
@@ -225,7 +225,7 @@ theorem fundamentalTheorem_after_blocking_structural
     hTPA, hTPB, hPrimA, hPrimB, hμA, hμB, hDimA, hDimB⟩
 
 /-- A strengthened after-blocking structural statement that keeps the blocked `SameMPV₂`
-relations at the reduction periods. This is a small but genuine step toward Gap §1 because the
+relations at the reduction periods. This is a genuine step forward because the
 common equality is no longer discarded by the public structural theorem. -/
 theorem fundamentalTheorem_after_blocking_structural_with_blockedSameMPV₂
     {d D₁ D₂ : ℕ}
@@ -470,7 +470,7 @@ The theorem intentionally keeps the per-block period-removal lengths inside
 `HasPrimitiveIrreducibleCyclicSectors`. It does not conflate those lengths with a
 later common-refinement or Wielandt/injectivity blocking length; assembling the
 per-block cyclic sectors at one physical blocking level is the next formal
-statement still missing for #942/#652. -/
+statement in the reduction chain. -/
 theorem fundamentalTheorem_after_blocking_perBlock_cyclic_live_with_zeroTail
     {d D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
@@ -1569,7 +1569,7 @@ theorem fundamentalTheorem_after_blocking_commonLength_commonSector_of_reindexed
             rw [hFlatB 0 σ]
   exact ⟨hFlatA, hFlatB, hZAflat, hZBflat, hApos, hBpos, hFlatPos, hZeroFlat⟩
 
-/-- **Conditional after-blocking sector comparison (issue #877 target shape).**
+/-- **Conditional after-blocking sector comparison.**
 
 Given two tensors with `SameMPV₂`, a common-period BNT sector pair, and a
 basis-block matching theorem, this theorem produces the target conclusion: a
@@ -1586,9 +1586,8 @@ The two hypotheses are intentionally separated:
   sector decompositions whose first entry has BNT basis data.
 
 The body is a kernel-checked composition of the existing structural theorem's
-blocking compatibility (`sameMPV₂_blockTensor`), the two hypotheses, and the
-basis-block matching theorem from PR #844
-(`fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_matched_basis`). The
+blocking compatibility (`sameMPV₂_blockTensor`), the two hypotheses, and
+`fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_matched_basis`. The
 later theorems below instantiate the matching side with primitive overlap-span
 hypotheses rather than assuming the witness directly. -/
 theorem fundamentalTheorem_after_blocking_sector_of_bntPair_matched
@@ -1651,7 +1650,7 @@ pair at a common blocking period, but the matching witness itself is now
 constructed by `SectorBasisOverlapSpanHypotheses.exists_sectorBasisMatching` and
 then used in the two-basis sector comparison theorem.
 
-Thus the theorem connects the post-#860 comparison machinery without assuming a
+Thus the theorem connects the comparison machinery without assuming a
 `SectorBasisMatching` or a permutation with copy-count equalities as a hypothesis. -/
 theorem fundamentalTheorem_after_blocking_sector_of_bntPair_overlapSpan
     {d D₁ D₂ : ℕ}
@@ -1705,7 +1704,7 @@ equality of the two resulting sector tensors from the original `SameMPV₂ A B`,
 and then uses primitive overlap-span data for the constructed sector bases to
 produce the matched sector-weight conclusion.
 
-The remaining work for the fully unconditional theorem is to obtain these exact
+The remaining work to reach the fully unconditional theorem is to obtain these exact
 common nonzero-block decompositions, and the overlap-span data for their BNT
 sector bases, from the current structural reduction without extra hypotheses. -/
 theorem fundamentalTheorem_after_blocking_sector_of_common_blocks_overlapSpan
@@ -1988,9 +1987,8 @@ common-structure hypothesis: both nonzero-weight block families map onto one com
 of MPV phase classes, and every block is MPV-phase equivalent to its image.  The conclusion
 is the same sector-weight comparison as the block-span theorem.
 
-This theorem is a paper-faithful predecessor for #970 while the final common-blocking theorem
-(#969) is not yet available: once that theorem supplies the common family and the two surjective
-class maps, the remaining span hypothesis follows from `mpv_span_eq_of_common_phase_cover`. -/
+This theorem is a paper-faithful predecessor whose conclusion follows once the common family and
+the two surjective class maps are available (via `mpv_span_eq_of_common_phase_cover`). -/
 theorem fundamentalTheorem_after_blocking_sector_of_common_blocks_phaseCover
     {d D₁ D₂ p rA rB rC : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ} {dimC : Fin rC → ℕ}

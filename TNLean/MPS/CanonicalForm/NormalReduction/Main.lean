@@ -254,7 +254,7 @@ private theorem sort_blocks_by_weight_norm
   · intro i
     exact hDim2 (e i)
 
-/-- Package a primitive weighted block family into separated blocked data for
+/-- Collect a primitive weighted block family into separated blocked data for
 `IsNormalCanonicalForm`. -/
 private theorem exists_blocked_normal_data_of_primitive_blockDecomp
     (A : MPSTensor d D)
