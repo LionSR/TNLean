@@ -1429,12 +1429,6 @@ theorem sameMPV₂_weightedCommonReindexedBlock_commonFlat
         (μ := F.commonFlatWeight μ) (F.commonFlatBlocks)) σ := by
           exact (mpv_toTensorFromBlocks_eq_sum (F.commonFlatWeight μ) (F.commonFlatBlocks) σ).symm
 
-private theorem cast_physDim_apply {d₁ d₂ D : ℕ} (h : d₁ = d₂)
-    (A : MPSTensor d₁ D) (i : Fin d₂) :
-    cast (congr_arg (fun d' => MPSTensor d' D) h) A i = A (Fin.cast h.symm i) := by
-  subst h
-  rfl
-
 /-- If the two decodings of each blocked physical word agree, then directly blocking
 one original block gives the corresponding block obtained through iterated blocking.
 
@@ -1465,8 +1459,7 @@ theorem blockTensor_sameMPV₂_commonReindexedBlock_of_word_eq
       (blockTensor (d := d) (D := dim k) (blocks k) F.p)
       (F.commonReindexedBlock k) := by
   rw [F.blockTensor_eq_commonReindexedBlock_of_word_eq k hWord]
-  intro N σ
-  rfl
+  exact fun _ _ => rfl
 
 /-- Blockwise MPV comparisons assemble over the weighted direct sum after common blocking. -/
 theorem sameMPV₂_weightedCanonicalBlock_commonReindexedBlock_of_blockwise
