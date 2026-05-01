@@ -45,7 +45,7 @@ is the material around
   `γ ≤ 1`, and
 
   ```text
-  η ≤ (1 - γ) * (((2 * (L - 1) : ℕ) : ℝ)⁻¹),
+  η ≤ (1 - γ) * (((2 * (L - 1) : ℕ) : ℝ)⁻¹)
   ```
 
   then the uniform norm lower bound with constant `γ` follows from the cyclic
@@ -54,13 +54,13 @@ is the material around
   packages the preceding theorem in the strict form: if `0 ≤ η` and
 
   ```text
-  η * (((2 * (L - 1) : ℕ) : ℝ)) < 1,
+  η * (((2 * (L - 1) : ℕ) : ℝ)) < 1
   ```
 
   then the transported parent Hamiltonians have the checked lower-bound constant
 
   ```text
-  1 - η * (((2 * (L - 1) : ℕ) : ℝ)).
+  1 - η * (((2 * (L - 1) : ℕ) : ℝ))
   ```
 
 ## Remaining mathematical statement
