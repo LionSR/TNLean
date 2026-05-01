@@ -680,7 +680,8 @@ hypothesis, uses
 `isIrreducibleOnCorner_of_cyclic_decomp_mps_of_sectorFixedPointAlgebraRigidity`
 to obtain corner irreducibility of `((transferMap A†)^m)|_{P_k}`, and then
 applies the compression transport theorem above. -/
-theorem primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking_of_fixedAlgebraRigidity
+theorem
+  primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking_of_fixedAlgebraRigidity
     {d D m : ℕ} [NeZero D] [NeZero m]
     (A : MPSTensor d D)
     (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
@@ -910,7 +911,8 @@ concentrated in proving that the blocked sector adjoint fixed-point algebra is
 scalar. Once that hypothesis is available, the present theorem derives
 `SectorFixedPointAlgebraRigidity` and applies the orbit-sum / corner-compression
 reduction from the fixed-algebra-rigidity sector-block theorem. -/
-theorem primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking_of_scalarBlockedFixedPoints
+theorem
+  primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking_of_scalarBlockedFixedPoints
     {d D m : ℕ} [NeZero D] [NeZero m]
     (A : MPSTensor d D)
     (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
@@ -1525,7 +1527,7 @@ theorem groupedBlockCastAgrees_of_flattenWordOfBlock_cast_eq
         simpa [hcard_symm, hp_eq] using h_flatten hp_eq (F.blockPhysDim_nested_eq k) i
       _ = wordOfBlock d (m * n)
           (Fin.cast (congr_arg (blockPhysDim d) hp_eq) i) :=
-        wordOfBlock_cast_length d hp_eq i
+        (wordOfBlock_cast_length d hp_eq i).symm
   simpa using hcast_eq
 
 /-- The blocked-word comparison follows if the canonical identification from the common
