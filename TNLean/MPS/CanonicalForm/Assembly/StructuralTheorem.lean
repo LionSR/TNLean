@@ -417,7 +417,7 @@ primitive transfer maps, positive bond dimensions, and nonzero weights; the
 zero-tail equations explain precisely why these nonzero parts are only immediately
 identified at positive lengths unless the `N = 0` zero-tail identity is also
 resolved. -/
-theorem fundamentalTheorem_after_blocking_structural_with_zeroTail
+theorem afterBlocking_tpPrimitiveBlockDecompositions_of_sameMPV₂
     {d D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (hSame : SameMPV₂ A B) :

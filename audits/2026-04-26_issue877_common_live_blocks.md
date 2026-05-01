@@ -29,7 +29,7 @@ separate overlap/span hypotheses owned by Slot G.
    `SameMPV₂` of the two nonzero-block tensors.  The equality of zero tails is deliberately
    not asserted automatically here.
 
-4. `MPSTensor.fundamentalTheorem_after_blocking_structural_with_zeroTail`
+4. `MPSTensor.afterBlocking_tpPrimitiveBlockDecompositions_of_sameMPV₂`
    strengthens the existing structural wrapper by retaining the zero-tail MPV
    equations returned by `exists_tp_primitive_blockDecomp_after_blocking`, together
    with the blocked `SameMPV₂` relations from the original equality.
