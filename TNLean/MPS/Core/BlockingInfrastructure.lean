@@ -357,6 +357,14 @@ theorem blockIndexOfList_wordOfBlock (d L : ℕ) (i : Fin (blockPhysDim d L)) :
   unfold blockIndexOfList wordOfBlock decodeBlock
   simp [blockPhysDim]
 
+/-- Decoding blocked physical indices as words is injective. -/
+theorem wordOfBlock_injective (d L : ℕ) : Function.Injective (wordOfBlock d L) := by
+  intro i j hij
+  have hdecode : decodeBlock d L i = decodeBlock d L j := by
+    exact List.ofFn_injective hij
+  unfold decodeBlock at hdecode
+  exact (Fintype.equivFin (Fin L → Fin d)).symm.injective hdecode
+
 /-- Flattening the grouped iterated index recovers the direct blocked word. -/
 theorem flattenBlockedWord_wordOfBlock_directToIteratedBlockIndex (d m n : ℕ)
     (i : Fin (blockPhysDim d (m * n))) :
@@ -382,6 +390,67 @@ theorem wordOfBlock_iteratedBlockIndex_directToIteratedBlockIndex (d m n : ℕ)
       wordOfBlock d (m * n) i := by
   rw [wordOfBlock_iteratedBlockIndex,
     flattenBlockedWord_wordOfBlock_directToIteratedBlockIndex]
+
+/-- Grouping a direct blocked index and then flattening the iterated index recovers the
+original direct blocked index. -/
+theorem iteratedBlockIndex_directToIteratedBlockIndex (d m n : ℕ)
+    (i : Fin (blockPhysDim d (m * n))) :
+    iteratedBlockIndex d m n (directToIteratedBlockIndex d m n i) = i := by
+  exact wordOfBlock_injective d (m * n)
+    (wordOfBlock_iteratedBlockIndex_directToIteratedBlockIndex d m n i)
+
+/-- The map grouping a direct blocked word into iterated blocked words is surjective. -/
+theorem directToIteratedBlockIndex_surjective (d m n : ℕ) :
+    Function.Surjective (directToIteratedBlockIndex d m n) := by
+  have hLeft : Function.LeftInverse (iteratedBlockIndex d m n) (directToIteratedBlockIndex d m n) :=
+    iteratedBlockIndex_directToIteratedBlockIndex d m n
+  have hInjective : Function.Injective (directToIteratedBlockIndex d m n) := hLeft.injective
+  have hEquiv : Fin (blockPhysDim d (m * n)) ≃
+      Fin (blockPhysDim (blockPhysDim d m) n) :=
+    finCongr (blockPhysDim_blockPhysDim d m n).symm
+  exact (Finite.injective_iff_surjective_of_equiv hEquiv).mp hInjective
+
+/-- Flattening an iterated blocked index and then grouping it back recovers the iterated
+blocked index. -/
+theorem directToIteratedBlockIndex_iteratedBlockIndex (d m n : ℕ)
+    (i : Fin (blockPhysDim (blockPhysDim d m) n)) :
+    directToIteratedBlockIndex d m n (iteratedBlockIndex d m n i) = i := by
+  have hLeft : Function.LeftInverse (iteratedBlockIndex d m n) (directToIteratedBlockIndex d m n) :=
+    iteratedBlockIndex_directToIteratedBlockIndex d m n
+  exact hLeft.rightInverse_of_surjective (directToIteratedBlockIndex_surjective d m n) i
+
+/-- The canonical bijection between direct length-`m * n` blocked indices and iterated
+length-`n` blocked indices obtained by grouping consecutive length-`m` words. -/
+noncomputable def directIteratedBlockEquiv (d m n : ℕ) :
+    Fin (blockPhysDim d (m * n)) ≃ Fin (blockPhysDim (blockPhysDim d m) n) where
+  toFun := directToIteratedBlockIndex d m n
+  invFun := iteratedBlockIndex d m n
+  left_inv := iteratedBlockIndex_directToIteratedBlockIndex d m n
+  right_inv := directToIteratedBlockIndex_iteratedBlockIndex d m n
+
+@[simp] theorem directIteratedBlockEquiv_apply (d m n : ℕ)
+    (i : Fin (blockPhysDim d (m * n))) :
+    directIteratedBlockEquiv d m n i = directToIteratedBlockIndex d m n i := rfl
+
+@[simp] theorem directIteratedBlockEquiv_symm_apply (d m n : ℕ)
+    (i : Fin (blockPhysDim (blockPhysDim d m) n)) :
+    (directIteratedBlockEquiv d m n).symm i = iteratedBlockIndex d m n i := rfl
+
+/-- A direct index is the grouping of a direct blocked word exactly when flattening it
+recovers that direct blocked index. -/
+theorem eq_directToIteratedBlockIndex_iff_iteratedBlockIndex_eq (d m n : ℕ)
+    (i : Fin (blockPhysDim d (m * n)))
+    (j : Fin (blockPhysDim (blockPhysDim d m) n)) :
+    j = directToIteratedBlockIndex d m n i ↔ iteratedBlockIndex d m n j = i := by
+  constructor
+  · intro h
+    rw [h, iteratedBlockIndex_directToIteratedBlockIndex]
+  · intro h
+    calc
+      j = directToIteratedBlockIndex d m n (iteratedBlockIndex d m n j) :=
+        (directToIteratedBlockIndex_iteratedBlockIndex d m n j).symm
+      _ = directToIteratedBlockIndex d m n i := by
+        rw [h]
 
 /-- Rewriting the blocking length does not change the decoded blocked word. -/
 theorem wordOfBlock_cast_length (d : ℕ) {L₁ L₂ : ℕ} (h : L₁ = L₂)
