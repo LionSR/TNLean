@@ -41,14 +41,14 @@ original names, including
 `bilateral_commonPeriod_blocking_tp_primitive_normal`, and
 `fundamentalTheorem_after_blocking_structural`.
 
-This public entry point also records the present closest paper-facing analogue of the
-non-Gemma route.  The structure `AfterBlockingFundamentalTheoremHypotheses`
-names the remaining comparison inputs, while
-`fundamentalTheorem_afterBlocking_of_comparisonHypotheses` returns the current
-closest analogue of the Cirac--Pérez-García--Schuch--Verstraete fundamental
-theorem: after blocking, the two tensors are represented by BNT sector
-decompositions whose basis sectors and weights match up to permutation and
-nonzero phases.
+This public entry point also records a conditional formulation of the
+Cirac--Pérez-García--Schuch--Verstraete after-blocking theorem that does not
+invoke the periodic Fundamental Theorem.  The structure
+`AfterBlockingFundamentalTheoremHypotheses` names the remaining comparison inputs,
+while `fundamentalTheorem_afterBlocking_of_comparisonHypotheses` gives the
+corresponding sector-decomposition conclusion: after blocking, the two tensors
+are represented by BNT sector decompositions whose basis sectors and weights
+match up to permutation and nonzero phases.
 
 ## References
 
@@ -64,15 +64,15 @@ open scoped Matrix BigOperators ComplexOrder MatrixOrder
 
 namespace MPSTensor
 
-/-- Remaining hypotheses for the paper-facing after-blocking fundamental theorem.
+/-- Remaining hypotheses for the after-blocking Fundamental Theorem formulation.
 
-The formalized non-Gemma route from `SameMPV₂ A B` already constructs common primitive
+Starting from `SameMPV₂ A B`, the present derivation constructs common primitive
 nonzero-sector families after a common blocking, once the blocked-word relabeling assertion is
-available.  To reach the sector-weight conclusion of the Cirac--Pérez-García--Schuch--Verstraete
-fundamental theorem for exactly those produced families, the current library still needs the
-comparison data for those produced families.  The field `comparison` is supplied with their
-trace-preserving, primitive, and irreducible structural evidence, so the remaining assumptions
-cannot be applied to a different, more convenient decomposition. -/
+established.  To reach the sector-weight conclusion of the Cirac--Pérez-García--Schuch--Verstraete
+Fundamental Theorem for exactly those produced families, one still needs comparison data for
+those produced families.  The field `comparison` is supplied with their trace-preserving,
+primitive, and irreducible structural evidence, so the remaining assumptions cannot be applied to
+a different decomposition. -/
 structure AfterBlockingFundamentalTheoremHypotheses
     {d D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂) : Prop where
   /-- The one-sided blocked-word relabeling equality for common cyclic-sector families. -/
@@ -119,13 +119,13 @@ structure AfterBlockingFundamentalTheoremHypotheses
       (∀ x, 0 < dimB x) →
       CommonPrimitiveProportionalHypotheses zeroTailA zeroTailB blocksA blocksB
 
-/-- Paper-facing conclusion of the current after-blocking fundamental theorem.
+/-- Conclusion of the conditional after-blocking Fundamental Theorem formulation.
 
-The conclusion follows the Cirac--Pérez-García--Schuch--Verstraete source language as closely
-as the present infrastructure permits.  After one positive blocking, there are sector
-decompositions `P` and `Q` with BNT data.  The blocked tensors agree with these sector
-tensors at all positive lengths, the two sector tensors generate the same full MPV family, and the
-basis sectors have matching multiplicities and weights up to a permutation and nonzero phases.
+The conclusion follows the Cirac--Pérez-García--Schuch--Verstraete statement at the level of
+BNT sector decompositions.  After one positive blocking, there are sector decompositions `P` and
+`Q` with BNT data.  The blocked tensors agree with these sector tensors at all positive lengths,
+the two sector tensors generate the same full MPV family, and the basis sectors have matching
+multiplicities and weights up to a permutation and nonzero phases.
 
 The positive-length comparison with the original blocked tensors is intentional: before the
 zero-tail dimensions are identified, the zero-tail contribution is the only obstruction at
@@ -164,15 +164,15 @@ structure AfterBlockingFundamentalTheoremConclusion
       Finset.univ.val.map
         (fun q => phase j * Q.weight (perm j) (Fin.cast (copies_eq j) q))
 
-/-- **Paper-facing non-Gemma fundamental theorem after blocking, conditional form.**
+/-- **Conditional after-blocking Fundamental Theorem formulation.**
 
-Let `A` and `B` generate the same MPV family.  Under the currently explicit remaining comparison
+Let `A` and `B` generate the same MPV family.  Under the explicit remaining comparison
 hypotheses, there is a positive blocking after which the two tensors admit BNT sector
 decompositions with the same sector MPV family, matched basis-sector multiplicities, and matched
-sector-weight multisets up to nonzero phases.  This is the strongest paper-facing conditional form
-currently available on the non-Gemma route: it is a direct consequence of
-`afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_proportional`, not a new hidden
-assumption or an appeal to the periodic fundamental theorem. -/
+sector-weight multisets up to nonzero phases.  This is the conditional formulation proved by the
+present periodic-theorem-free derivation: it is a direct consequence of
+`afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_proportional`, not a hidden
+assumption or an appeal to the periodic Fundamental Theorem. -/
 theorem fundamentalTheorem_afterBlocking_of_comparisonHypotheses
     {d D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)

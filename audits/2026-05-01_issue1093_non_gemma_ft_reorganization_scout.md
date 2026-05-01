@@ -38,27 +38,28 @@ BNT sector comparison and matched sector weights
 
 A scan of `TNLean/MPS/CanonicalForm` and `TNLean/MPS/FundamentalTheorem` found no local `sorry` or `admit` occurrences.  The remaining issue is therefore not proof integrity; it is the shape of the public and intermediate API.
 
-## Paper-facing theorem form now available
+## Conditional CPSV theorem formulation
 
-The follow-up API in `TNLean/MPS/CanonicalForm/Assembly.lean` adds the current
-strongest statement in the language of the Cirac--Pérez-García--Schuch--Verstraete
+The declaration group in `TNLean/MPS/CanonicalForm/Assembly.lean` records a
+conditional statement in the language of the Cirac--Pérez-García--Schuch--Verstraete
 Fundamental Theorem:
 
 - `MPSTensor.AfterBlockingFundamentalTheoremHypotheses` names the remaining
-  comparison inputs: blocked-word relabeling, equality of the zero-tail
-  dimensions, one-site injectivity of the produced common primitive sectors, and
-  BNT proportional-comparison data for those same produced sectors.
-- `MPSTensor.AfterBlockingFundamentalTheoremConclusion` records the output: after
-  a positive blocking, there are BNT sector decompositions `P` and `Q`; the
+  comparison data.  It includes blocked-word relabeling, and its comparison field
+  is supplied with the produced sectors' trace-preserving, primitive, and
+  irreducible structure before returning the remaining zero-tail, injectivity, and
+  BNT proportional-comparison hypotheses for those same sectors.
+- `MPSTensor.AfterBlockingFundamentalTheoremConclusion` records the conclusion:
+  after a positive blocking, there are BNT sector decompositions `P` and `Q`; the
   original blocked tensors agree with them at positive lengths; `P` and `Q`
   generate the same full MPV family; and the basis sectors, multiplicities, and
   sector-weight multisets match up to a permutation and nonzero phases.
-- `MPSTensor.fundamentalTheorem_afterBlocking_of_comparisonHypotheses` proves the
-  conclusion from `SameMPV₂ A B` and those named hypotheses by repackaging the
+- `MPSTensor.fundamentalTheorem_afterBlocking_of_comparisonHypotheses` derives the
+  conclusion from `SameMPV₂ A B` and those named hypotheses by applying the
   existing relabeled-common-sector proportional theorem.
 
-This is intentionally conditional.  It mirrors the source assertions that bases
-of normal tensors match up to permutation, phases, and gauge transformations
+The statement is conditional.  It mirrors the source assertions that bases of
+normal tensors match up to permutation, phases, and gauge transformations
 (`Papers/1606.00608/MPDO-22-12-17-2.tex` lines 347--360 and
 `Papers/2011.12127/TN-Review-main.tex` lines 1887--1900), while keeping the real
 remaining inputs explicit rather than hiding them behind a vague convenience
@@ -66,7 +67,7 @@ hypothesis.
 
 ## What is still not clean
 
-The non-Gemma route is not yet a single unconditional paper-level theorem.  The remaining mathematical inputs are still visible, and this is the right kind of incompleteness:
+The derivation without the periodic theorem is not yet a single unconditional CPSV/CPGSV theorem.  The remaining mathematical inputs are still visible, and this is the right kind of incompleteness:
 
 1. **Blocked-word coordinate agreement.**  The current path isolates this as `CommonSectorRelabelingHypothesis d`.  PR #1096 narrowed the direct-versus-iterated blocking equivalence, but the exact common-sector coordinate agreement is still part of the #990 line of work.
 2. **Transport of weights and zero tails through the final common-sector choice.**  The #971 line remains relevant wherever the statement needs the produced common sectors to carry the exact weights and zero-tail comparison in the final form.
@@ -117,7 +118,7 @@ This is a documentation reorganization, but it prevents future theorem names fro
 
 ### 4. Keep `MPS/FundamentalTheorem` and `MPS/CanonicalForm/Assembly` distinct
 
-`TNLean/MPS/FundamentalTheorem` contains the equal-case and proportional BNT comparison layer.  `TNLean/MPS/CanonicalForm/Assembly` builds the after-blocking canonical-form reduction.  The non-Gemma route uses both, but they should not be collapsed into one file or one theorem family yet.  The clean final theorem should import the comparison layer, not duplicate it.
+`TNLean/MPS/FundamentalTheorem` contains the equal-case and proportional BNT comparison layer.  `TNLean/MPS/CanonicalForm/Assembly` builds the after-blocking canonical-form reduction.  The derivation without the periodic theorem uses both, but they should not be collapsed into one file or one theorem family yet.  The clean final theorem should import the comparison layer, not duplicate it.
 
 ## Suggested next PRs
 
@@ -128,4 +129,4 @@ This is a documentation reorganization, but it prevents future theorem names fro
 
 ## Answer to the issue question
 
-The route is much cleaner now, and it is clean in the most important sense: the non-Gemma assumptions are exposed rather than hidden.  It is not yet as clean as it can be.  The remaining cleanup is mostly API reorganization around theorem names and named hypothesis structures, while the remaining mathematical work is exactly the blocked-word, zero-tail/weight transport, common-cover/proportional, and injectivity data listed above.
+The derivation is much clearer now, in the most important sense: the non-Gemma assumptions are exposed rather than hidden.  It is not yet as clean as it can be.  The remaining cleanup is mostly API reorganization around theorem names and named hypothesis structures, while the remaining mathematical work is exactly the blocked-word, zero-tail/weight transport, common-cover/proportional, and injectivity data listed above.

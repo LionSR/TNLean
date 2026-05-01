@@ -1,4 +1,4 @@
-\documentclass{article}
+\documentclass[11pt]{article}
 
 \usepackage{amsmath,amssymb}
 \usepackage{xurl}
@@ -18,11 +18,11 @@
 
 The non-periodic matrix product vector Fundamental Theorem in
 \cite{Cirac2016MPDO_arXiv,Cirac2017MPDO_AnnPhys,Cirac2021Matrix} is not stated
-with the auxiliary hypotheses used in the present formal theorem form.
-It is stated after the tensors have already been put in canonical form and after
-bases of normal tensors have been chosen. This note records the distinction for
-the conditional after-blocking theorem introduced in \ghpr{1104}, which is part
-of the discussion in \ghissue{1093}.
+with the auxiliary hypotheses used in the conditional Lean theorem.  It is stated
+after the tensors have already been put in canonical form and after bases of
+normal tensors have been chosen.  This note records that distinction for the
+after-blocking theorem in \ghpr{1104}, which is part of the discussion in
+\ghissue{1093}.
 
 In the 2016 source, the canonical-form discussion first removes invariant
 subspaces. After finitely many steps the matrices are replaced by block-diagonal
@@ -64,7 +64,7 @@ after blocking at most $3D^5$ sites a canonical-form tensor acquires
 block-injective canonical form
 \cite[lines~2114--2124]{Cirac2021Matrix}.
 
-The paper-facing theorem itself is then short. For tensors $A$ and $B$ in
+The CPSV statement itself is then short. For tensors $A$ and $B$ in
 canonical form, with bases of normal tensors $A_{k_a}$ and $B_{k_b}$,
 proportionality of all matrix product vector families implies equality of the
 number of basis tensors and a matching of basis tensors up to permutation,
@@ -76,31 +76,34 @@ review repeats these two statements
 \cite[Theorem~\texttt{thm1} and Corollary~\texttt{II\_cor2}, lines~1891--1900]{Cirac2021Matrix}.
 The review also points out that a later periodic Fundamental Theorem avoids the
 period-removing blocking step
-\cite[lines~1908--1909]{Cirac2021Matrix}; that route is intentionally not used in
-the non-Gemma formal development considered here.
+\cite[lines~1908--1909]{Cirac2021Matrix}; that theorem is intentionally not used
+in the derivation considered here.
 
-\section{The conditional formal theorem form}
+\section{The conditional Lean theorem}
 
-The theorem form added in \ghpr{1104} starts from two tensors $A$ and $B$
-with the same formal matrix product vector family. Its conclusion is close to
-the source theorem: after a positive blocking, there are sector decompositions
-$P$ and $Q$ with basis-of-normal-tensor data, the blocked tensors agree with
-these sector decompositions at positive lengths, the sector decompositions have
-the same full matrix product vector family, and the sector multiplicities and
-weights match up to a permutation and nonzero phases. Formally this is the
-structure \path{MPSTensor.AfterBlockingFundamentalTheoremConclusion} and the
-theorem \path{MPSTensor.fundamentalTheorem_afterBlocking_of_comparisonHypotheses}.
+The theorem added in \ghpr{1104} starts from two tensors $A$ and $B$ with the
+same formal matrix product vector family.  Its conclusion has the same shape as
+the sector-comparison part of the CPSV statement: after a positive blocking,
+there are sector decompositions $P$ and $Q$ with basis-of-normal-tensor data, the
+blocked tensors agree with these sector decompositions at positive lengths, the
+sector decompositions have the same full matrix product vector family, and the
+sector multiplicities and weights match up to a permutation and nonzero phases.
+Formally this is the structure
+\path{MPSTensor.AfterBlockingFundamentalTheoremConclusion} and the theorem
+\path{MPSTensor.fundamentalTheorem_afterBlocking_of_comparisonHypotheses}.
 
-The hypotheses of this theorem form are collected in
-\path{MPSTensor.AfterBlockingFundamentalTheoremHypotheses}. They consist of a
-blocked-word relabeling assertion for common cyclic sectors and, for the common
-primitive nonzero-sector families produced by the preceding structural theorem,
-equality of the zero-tail dimensions, one-site injectivity on both sides, and a
-BNT proportional-comparison conclusion for those produced families.
+The hypotheses of this theorem are collected in
+\path{MPSTensor.AfterBlockingFundamentalTheoremHypotheses}.  They consist of a
+blocked-word relabeling assertion for common cyclic sectors and a comparison
+field for the common primitive nonzero-sector families produced by the preceding
+structural theorem.  That field is supplied with trace-preserving, primitive, and
+irreducible structural data for the produced families; it then returns equality
+of the zero-tail dimensions, one-site injectivity on both sides, and a BNT
+proportional-comparison conclusion for those produced families.
 
 These hypotheses are not written as hypotheses of Theorem~\texttt{thm1} or of
 Corollary~\texttt{II\_cor2} in the cited papers. They are the formal boundary
-between the canonical-form construction already available in \Lean{} and the
+between the canonical-form construction already proved in \Lean{} and the
 compressed source argument which passes from equality of total matrix product
 vectors to the BNT comparison theorem.
 
@@ -108,14 +111,15 @@ vectors to the BNT comparison theorem.
 
 Two parts of the named hypotheses correspond to genuine paper-level mathematics
 which the sources treat as part of the theorem or as standard cited input, but
-which is not yet derived in the present non-Gemma Lean route for the specific
-common-sector families produced by the construction.
+which is not yet derived in the present Lean proof without using the periodic
+Fundamental Theorem, for the specific common-sector families produced by the
+construction.
 
 First, the injectivity assumptions on the produced nonzero-sector blocks
 correspond to the paper's use of quantum Wielandt and block injectivity. The
 sources do not assume injectivity in Theorem~\texttt{thm1}; rather, they explain
 that one obtains injective or block-injective tensors after further blocking.
-The formal proof must still show that this refinement is available for the final
+The formal proof must still show that this refinement holds for the final
 common primitive sector families to which the overlap-rigidity comparison is
 applied.
 
@@ -125,15 +129,16 @@ the tensors are in canonical form and the bases of normal tensors have been
 chosen, proportionality or equality of all matrix product vectors matches the
 basis tensors up to phases and gauges. The formal theorem in \ghpr{1104} still
 takes the corresponding proportional-decomposition conclusion as input for the
-specific common-sector families. A complete non-Gemma formal proof must derive
-that conclusion from the equality of the original tensors' matrix product vector
-families, after all blockings and reindexings have been accounted for.
+specific common-sector families. A complete proof without the periodic
+Fundamental Theorem must derive that conclusion from the equality of the original
+tensors' matrix product vector families, after all blockings and reindexings have
+been accounted for.
 
 These two inputs are therefore not extra assumptions proposed by the papers. They
 are parts of the paper argument that remain to be connected to the current
 formal construction.
 
-\section{Formal bookkeeping introduced by the representation}
+\section{Coordinate and transport conditions in the formal representation}
 
 The other hypotheses are best understood as coordinate and transport data exposed
 by the formal representation. They are mathematical assertions, but the papers do
@@ -157,7 +162,7 @@ identity separate. This is a consequence of the chosen formal convention, not a
 hypothesis appearing in the paper theorem.
 
 The transport of weights and zero-tail identities through the chosen common-sector
-representatives is likewise a bookkeeping step. The comparison theorem must be
+representatives is likewise a coordinate-transport condition. The comparison theorem must be
 applied to exactly the final family of blocks after common blocking and relabeling.
 The paper moves between these descriptions without naming each transport map; the
 formal proof must show that the weights, nonzero-sector tensors, and zero-tail
@@ -168,17 +173,17 @@ identities survive these changes of description.
 The papers do not state the hypotheses of
 \path{MPSTensor.AfterBlockingFundamentalTheoremHypotheses} as explicit theorem
 hypotheses. The conditional theorem in \ghpr{1104} is therefore not yet the
-unconditional CPSV/CPGSV statement. It is the strongest current formal theorem
-form on the non-Gemma route, with the missing paper-level inputs and the formal
-coordinate transports made visible.
+unconditional CPSV/CPGSV statement. It records the theorem form proved by the
+present derivation without the periodic Fundamental Theorem, with the remaining
+paper-level inputs and formal coordinate transports made visible.
 
-This note records a formalization gap rather than a source error. The cited
-papers compress the canonical-form reduction, blocking, BNT matching, and
-injectivity refinements in the usual paper notation. The Lean development should
-keep the theorem conditional until the injectivity refinement, the BNT
-proportional comparison for the produced sectors, the blocked-word relabeling,
-and the zero-tail and weight transports have been proved for the same final
-common-sector data.
+This note records a proof gap in the present Lean development rather than a
+source error. The cited papers compress the canonical-form reduction, blocking,
+BNT matching, and injectivity refinements in the usual paper notation. The Lean
+development should keep the theorem conditional until the injectivity refinement,
+the BNT proportional comparison for the produced sectors, the blocked-word
+relabeling, and the zero-tail and weight transports have been proved for the same
+final common-sector data.
 
 \bibliographystyle{alpha}
 \bibliography{references}

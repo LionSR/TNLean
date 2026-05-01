@@ -1614,24 +1614,24 @@ two-basis sector comparison theorem.
 	comparison theorem with common phase-cover data.
 \end{proof}
 
-\begin{definition}[After-blocking hypotheses for the paper-facing Fundamental Theorem]%
+\begin{definition}[After-blocking hypotheses for the CPSV formulation]%
 \label{def:after_blocking_fundamental_theorem_hypotheses}
 	\lean{MPSTensor.AfterBlockingFundamentalTheoremHypotheses}
 	\leanok
 	\uses{def:common_sector_relabeling_hypothesis,
 		def:common_primitive_proportional_hypotheses}
-	These named hypotheses record exactly the comparison data still needed
-	for the non-Gemma after-blocking route to reach the source-language
-	Fundamental Theorem. It contains the blocked-word relabeling hypothesis for
-	common cyclic sectors. For the common primitive nonzero-sector families
-	produced from two tensors with the same MPV family, the comparison field is
-	supplied with their isometry, primitivity, and irreducibility evidence before
-	returning the remaining proportional-comparison hypotheses for those blocks.
-	The hypotheses are tied to the produced families rather than to an arbitrary
-	chosen decomposition.
+	These named hypotheses record the comparison data still needed for the
+	periodic-theorem-free after-blocking formulation of the CPSV Fundamental
+	Theorem. They contain the blocked-word relabeling hypothesis for common cyclic
+	sectors. For the common primitive nonzero-sector families produced from two
+	tensors with the same MPV family, the comparison field is supplied with their
+	isometry, primitivity, and irreducibility evidence before returning the
+	remaining proportional-comparison hypotheses for those blocks. The hypotheses
+	are tied to the produced families rather than to an arbitrary chosen
+	decomposition.
 \end{definition}
 
-\begin{definition}[Paper-facing after-blocking Fundamental Theorem conclusion]%
+\begin{definition}[CPSV after-blocking Fundamental Theorem conclusion]%
 \label{def:after_blocking_fundamental_theorem_conclusion}
 	\lean{MPSTensor.AfterBlockingFundamentalTheoremConclusion}
 	\leanok
@@ -1645,7 +1645,7 @@ two-basis sector comparison theorem.
 	side by nonzero sector phases.
 \end{definition}
 
-\begin{theorem}[Paper-facing after-blocking Fundamental Theorem, conditional form]%
+\begin{theorem}[Conditional after-blocking CPSV formulation]%
 \label{thm:fundamental_theorem_after_blocking_comparison_hypotheses}
 	\lean{MPSTensor.fundamentalTheorem_afterBlocking_of_comparisonHypotheses}
 	\leanok
@@ -1655,15 +1655,15 @@ two-basis sector comparison theorem.
 	Let $A$ and $B$ generate the same MPV family. Assume the after-blocking
 	comparison hypotheses of
 	Definition~\ref{def:after_blocking_fundamental_theorem_hypotheses}. Then the
-	paper-facing conclusion of
+	the CPSV conclusion of
 	Definition~\ref{def:after_blocking_fundamental_theorem_conclusion} is
 	nonempty.
 
-	This is the current formal statement closest to the Cirac--P\'erez-Garc\'ia--
-	Schuch--Verstraete Fundamental Theorem: after blocking, the tensor families are
-	represented by BNT sector decompositions whose basis sectors and weights match
-	up to permutation and nonzero phases, as in
-	\cite[Theorem~\texttt{thm1}, lines 347--352]{Cirac2016MPDO_arXiv} and
+	The conclusion matches the sector-decomposition part of the
+	Cirac--P\'erez-Garc\'ia--Schuch--Verstraete Fundamental Theorem: after
+	blocking, the tensor families are represented by BNT sector decompositions
+	whose basis sectors and weights match up to permutation and nonzero phases, as
+	in \cite[Theorem~\texttt{thm1}, lines 347--352]{Cirac2016MPDO_arXiv} and
 	\cite[Theorem~\texttt{thm1} and Corollary~\texttt{II\_cor2},
 	lines 1891--1900]{Cirac2021Matrix}. The remaining hypotheses are explicit:
 	the statement does not assume away the blocked-word relabeling, zero-tail,
