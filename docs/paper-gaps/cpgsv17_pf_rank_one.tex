@@ -1,0 +1,167 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{The Perron--Frobenius Rank-One Step in CPGSV17 Appendix C.2}
+\author{}
+\date{2026-04-30}
+
+\begin{document}
+\maketitle
+
+\section{The assertion}
+
+Appendix C.2 of Cirac--P\'erez-Garc\'ia--Schuch--Verstraete relates the strong
+area law and zero correlation length for a simple matrix product density operator
+to an outer-product factorization of a finite trace matrix
+\cite[Appendix~C.2, Lemmas~C.3--C.4]{Cirac2016MPDO_arXiv}.\footnote{For traceability, this note corresponds to
+\href{https://github.com/LionSR/TNLean/issues/1041}{issue \#1041}. The
+underlying question was isolated in
+\href{https://github.com/LionSR/TNLean/issues/832}{issue \#832}; the finite
+counterexample was added in
+\href{https://github.com/LionSR/TNLean/pull/849}{pull request \#849}; and the
+positive-semidefinite replacement theorem was added in
+\href{https://github.com/LionSR/TNLean/pull/917}{pull request \#917}. The
+source passage is
+\path{Papers/1606.00608/MPDO-22-12-17-2.tex:1394--1499}.}
+
+The paper constructs positive neighboring operators $\eta_{k,h}$ and defines
+\[
+  T_{k,h}=\operatorname{tr}(\eta_{k,h}).
+\]
+Thus $T$ is entrywise nonnegative. Under the strong area law the source argues
+that $T$ is primitive, in the sense that some power of $T$ has all entries
+strictly positive. Under zero correlation length it obtains
+\[
+  \operatorname{tr}(T^N)=\operatorname{tr}(T)
+\]
+for every positive integer $N$, with $\operatorname{tr}(T)=1$ after
+normalization. The proof then invokes fixed-point theory for primitive
+nonnegative matrices and concludes that $T$ has one eigenvalue equal to $1$
+and all other eigenvalues equal to $0$. From this it concludes the desired
+factorization
+\[
+  T_{k,h}=a_k b_h.
+\]
+
+The last implication is the point at issue. Primitivity and the equalities of
+positive-power traces control the nonzero eigenvalues of $T$, but they do not
+exclude nilpotent Jordan structure on the generalized eigenspace for the
+eigenvalue $0$. Such nilpotent structure is invisible to traces of positive
+powers and can prevent $T$ from having rank one.
+
+\section{The counterexample}
+
+Consider the real $3\times 3$ matrix
+\[
+  T=
+  \begin{pmatrix}
+    \tfrac12 & \tfrac12 & 0\\
+    \tfrac16 & \tfrac16 & \tfrac23\\
+    \tfrac13 & \tfrac13 & \tfrac13
+  \end{pmatrix}.
+\]
+All entries are nonnegative, and
+\[
+  T^2=
+  P:=\frac13
+  \begin{pmatrix}
+    1&1&1\\
+    1&1&1\\
+    1&1&1
+  \end{pmatrix}.
+\]
+Hence $T$ is primitive, since $T^2$ has all entries strictly positive. Also
+$P^2=P$ and $PT=TP=P$, so $T^N=P$ for every $N\geq 2$. Since
+$\operatorname{tr}(T)=\operatorname{tr}(P)=1$, it follows that
+\[
+  \operatorname{tr}(T^N)=\operatorname{tr}(T)=1
+\]
+for every positive integer $N$.
+
+Nevertheless $T$ is not an outer product. If $T=a b^{\top}$, then the
+entry $T_{1,1}=1/2$ implies $a_1\neq 0$. The entry $T_{1,3}=0$ then
+forces $b_3=0$, but this contradicts $T_{2,3}=2/3$. Thus the universal
+matrix implication
+\[
+  \text{primitive} + \text{constant positive-power traces}
+  \Longrightarrow \text{rank one}
+\]
+is false for finite entrywise nonnegative real matrices.
+\footnote{The formal counterexample is
+\path{TNLean/Archive/PerronFrobeniusRankOneCounterexample.lean}, especially the
+matrix definition at lines 63--65 and the theorem \texttt{counterexample} at
+lines 150--154. It is also summarized in
+\path{docs/counterexamples.md:19--27}.}
+
+This example has the form $T=P+\frac16 xy^{\top}$, where
+$x=(1,-1,0)^{\top}$ and $y=(1,1,-2)^{\top}$. The perturbation satisfies
+$(xy^{\top})^2=0$ and is annihilated by $P$ on both sides. It therefore
+leaves all traces of positive powers unchanged from the Perron projector while
+raising the rank of $T$.
+
+\section{The corrected statement}
+
+The formal development proves a corrected sufficient matrix theorem. Let $T$
+be a finite real square matrix. If $T$ is positive semidefinite,
+$\operatorname{tr}(T)=1$, and
+$\operatorname{tr}(T^N)=\operatorname{tr}(T)$ for every positive integer
+$N$, then $T$ has an outer-product factorization $T=a b^{\top}$.
+\footnote{The formal statements are
+\texttt{Matrix.PosSemidef.trace\_powers\_constant\_implies\_rank\_one} and
+\texttt{Matrix.primitive\_trace\_powers\_constant\_implies\_rank\_one\_of\_posSemidef}
+in \path{TNLean/Algebra/PerronFrobenius/RankOne.lean:181--240}.}
+Primitivity is not needed for this corrected matrix theorem once positive
+semidefiniteness and trace normalization are assumed.
+
+The proof is spectral. Positive semidefiniteness makes $T$ Hermitian and
+diagonalizable with nonnegative real eigenvalues $\lambda_i$. The trace
+normalization gives $\sum_i \lambda_i=1$. The trace-power hypothesis at
+$N=2$ gives $\sum_i \lambda_i^2=1$. For nonnegative numbers with sum one,
+this forces exactly one $\lambda_i$ to be $1$ and all the others to be
+$0$. Therefore the diagonal form has rank one, and unitary conjugation gives
+an outer-product factorization of $T$.
+
+This corrected theorem does not refute the intended MPDO result. It identifies
+a matrix-level hypothesis sufficient for the rank-one step. The remaining
+question is whether the trace matrix
+$T_{k,h}=\operatorname{tr}(\eta_{k,h})$ arising from the neighboring operators is
+Hermitian or positive semidefinite. Positivity of each $\eta_{k,h}$ gives
+$T_{k,h}=\operatorname{tr}(\eta_{k,h})\geq 0$ entry by entry, but entrywise
+nonnegativity is not matrix-level positive semidefiniteness or Hermitian
+symmetry of $T$.
+\footnote{The entrywise nonnegativity result is
+\texttt{MPOTensor.ExplicitEtaOperators.traceMatrixRe\_nonneg} in
+\path{TNLean/MPS/MPDO/SimpleLocalStructure.lean:306--318}. The
+positive-semidefinite reformulation for the rank-one conclusion is
+\texttt{MPOTensor.sal\_zcl\_implies\_rank\_one\_T\_of\_posSemidef} in
+\path{TNLean/MPS/MPDO/SimpleLocalStructure.lean:350--366}. The corresponding
+blueprint discussion is
+\path{blueprint/src/chapter/ch02b_mpdo.tex:568--680}.}
+
+\section{Conclusion}
+
+The proof in Appendix C.2 contains an unjustified matrix step as written: a
+primitive entrywise nonnegative matrix with constant traces of positive powers
+need not have rank one. The obstruction is a nilpotent Jordan component at the
+zero eigenvalue, which is not detected by the trace identities.
+
+The formal development proves a corrected sufficient theorem: positive
+semidefiniteness, trace normalization, and the same trace-power hypothesis imply
+the required rank-one factorization. What remains for the unconditional MPDO
+argument is not another Perron--Frobenius statement for arbitrary nonnegative
+matrices, but an MPDO-specific proof that the trace matrix obtained from the
+$\eta$-operators has the Hermitian or positive-semidefinite structure needed by
+the corrected theorem. Thus the source proof has a genuine unsupported
+intermediate assertion, while the intended MPDO theorem itself has not been
+disproved.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
