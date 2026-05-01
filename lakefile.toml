@@ -32,3 +32,4 @@ name = "TNLean"
 name = "lint_style"
 srcDir = "scripts"
 root = "LintStyle"
+supportInterpreter = true
