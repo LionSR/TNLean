@@ -1,0 +1,16 @@
+-- Manual exceptions for TNLean text-based style linters.
+--
+-- These entries record pre-existing whitespace issues discovered when the
+-- native Lean style gate was introduced. They keep the new CI check from
+-- touching mathematical Lean files in the lint-infrastructure PR; remove them
+-- in a follow-up cleanup PR after the corresponding source lines are fixed.
+
+TNLean/MPS/ParentHamiltonian/Commuting.lean : line 1 : ERR_TWS : This line ends with some whitespace: please remove this
+TNLean/MPS/SharedInfra/GaugePhase.lean : line 1 : ERR_TWS : This line ends with some whitespace: please remove this
+TNLean/MPS/SharedInfra/SectorDecomposition.lean : line 1 : ERR_TWS : This line ends with some whitespace: please remove this
+TNLean/MPS/SharedInfra/KrausAdjointSetup.lean : line 1 : ERR_TWS : This line ends with some whitespace: please remove this
+TNLean/MPS/MPDO/ZCL.lean : line 1 : ERR_TWS : This line ends with some whitespace: please remove this
+TNLean/MPS/MPDO/VerticalCF.lean : line 1 : ERR_TWS : This line ends with some whitespace: please remove this
+TNLean/MPS/MPDO/RFP.lean : line 1 : ERR_TWS : This line ends with some whitespace: please remove this
+TNLean/MPS/MPDO/PRFP.lean : line 1 : ERR_TWS : This line ends with some whitespace: please remove this
+TNLean/Algebra/LinearMapAux.lean : line 1 : ERR_TWS : This line ends with some whitespace: please remove this

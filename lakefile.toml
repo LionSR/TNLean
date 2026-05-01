@@ -25,3 +25,11 @@ rev = "v4.29.0"
 
 [[lean_lib]]
 name = "TNLean"
+
+# Text-based style linter driver for `Mathlib.Linter.TextBased.lintModules`.
+# Run with `lake exe lint_style` (or `--fix` to auto-correct, `--github` for CI annotations).
+[[lean_exe]]
+name = "lint_style"
+srcDir = "scripts"
+root = "LintStyle"
+supportInterpreter = true

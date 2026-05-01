@@ -1,0 +1,11 @@
+# latexindent policy for blueprint sources.
+#
+# The existing blueprint files use four-space indentation. The workflow points
+# latexindent at this file explicitly; the check remains advisory until a
+# separate mechanical reformat PR applies this policy to blueprint/src.
+
+defaultIndent: "    "
+
+removeTrailingWhitespace:
+  beforeProcessing: 0
+  afterProcessing: 1
