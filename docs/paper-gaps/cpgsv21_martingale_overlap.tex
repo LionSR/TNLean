@@ -1,0 +1,199 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{The Martingale Overlap Estimate for MPS Parent Hamiltonians}
+\author{}
+\date{2026-04-30}
+
+\begin{document}
+\maketitle
+
+\section{The source assertion}
+
+The martingale-method paragraph in CPGSV21 can be compared with the
+quantitative estimate isolated in the formal parent-Hamiltonian proof.\footnote{For
+traceability, this note corresponds to
+\href{https://github.com/LionSR/TNLean/issues/1044}{issue \#1044}. The remaining
+quantitative estimate is recorded in
+\href{https://github.com/LionSR/TNLean/issues/952}{issue \#952}, and the broader
+parent-Hamiltonian theorem in
+\href{https://github.com/LionSR/TNLean/issues/460}{issue \#460}.}
+The relevant source passage is the discussion of gaps for MPS parent Hamiltonians
+in \cite[Section~IV.C]{Cirac2021Matrix}, where the local paragraph
+\path{sec:4:hams-gaps} develops the inequalities labelled
+\path{eq:4:martingale-1} and \path{eq:4:martingale-2}.
+
+Let
+\[
+  H=\sum_i h_i
+\]
+be a frustration-free Hamiltonian whose local terms are projections. The
+source recalls that a gap lower bound $\gamma>0$ is equivalent, at the
+quadratic-form level, to
+\[
+  H^2\ge \gamma H.
+\]
+Since $h_i^2=h_i$, the expansion of $H^2$ separates diagonal terms,
+overlapping products, and non-overlapping products. The non-overlapping
+products are treated as non-negative. Thus it is enough to control each
+overlapping pair by an anticommutator estimate
+\begin{equation}
+  h_i h_j+h_j h_i
+  \ge -c_{ij}(1-\gamma)(h_i+h_j),
+  \tag{\path{eq:4:martingale-2}}
+\end{equation}
+where the coefficients $c_{ij}$ are chosen so that the contributions in each
+row add up to one. The formal row-sum algebra uses the slightly more flexible
+condition that, for each fixed $i$, the sum of the coefficients attached to
+terms overlapping $h_i$ is at most one.
+
+The same paragraph interprets this estimate as a lower bound on the smallest
+non-zero principal angle between the local ground spaces of overlapping terms.
+It then cites the martingale method and the MPS parent-Hamiltonian results of
+Fannes--Nachtergaele--Werner and Nachtergaele, together with the later
+Kastoryano--Lucia formulation, for the conclusion that MPS parent Hamiltonians
+have a uniform positive spectral gap after a suitable blocking
+\cite{Fannes1992Finitely,Nachtergaele1996Spectral,Kastoryano2018Martingale}.
+The review text does not spell out the numerical constants or the precise
+finite cyclic blocking convention needed for the formal statement below.
+
+\section{The formal reduction}
+
+The formal development has separated the finite-row martingale algebra from the
+remaining MPS-specific principal-angle estimate. Fix an interaction range
+$L>1$ and an $N$-site periodic chain with $N\ge 2L$. Let $p_i$ denote the
+transported length-$L$ local parent-Hamiltonian projection at the cyclic window
+starting at $i$. Write $i\sim_L j$ when the two length-$L$ cyclic windows
+intersect and $i\ne j$.
+For each fixed $i$, the number of indices $j$ with $i\sim_L j$ is at most
+\[
+  m=2(L-1).
+\]
+The formal row-sum reduction specializes the source coefficients to
+\[
+  c_{ij}=\frac{1}{2(L-1)}
+\]
+for overlapping cyclic windows and to $0$ otherwise. The row-cardinality bound
+then gives $\sum_j c_{ij}\le 1$.
+
+With this choice, the constant in the formal statement is
+\[
+  \gamma_L=\frac{1}{4L}.
+\]
+The ordered overlapping estimate sufficient for the gap bound is
+\begin{equation}
+  \operatorname{Re}\langle p_i v,p_j v\rangle
+  \ge
+  -\left(1-\frac{1}{4L}\right)\frac{1}{2(L-1)}
+    \operatorname{Re}\langle p_i v,v\rangle
+  \tag{F}
+\end{equation}
+for every $N\ge 2L$, every off-diagonal overlapping pair $i\sim_L j$, and every
+vector $v$ in the finite chain Hilbert space. Given this estimate, the already
+formalized row-sum argument proves $H_{N,L}^2\ge \gamma_L H_{N,L}$, and hence a
+norm lower bound with constant $\gamma_L$ on the orthogonal complement of the
+ground space.
+
+The formal proof also isolates a sufficient norm-compression form of the same
+input:
+\begin{equation}
+  \|p_i p_j v\|
+  \le
+  \left(1-\frac{1}{4L}\right)\frac{1}{2(L-1)}
+  \|p_i v\|.
+  \tag{N}
+\end{equation}
+For a symmetric projection $p_i$ one has
+\[
+  \operatorname{Re}\langle p_i v,p_j v\rangle
+  =\operatorname{Re}\langle p_i v,p_i p_j v\rangle
+  \ge -\|p_i v\| \|p_i p_j v\|.
+\]
+Thus (N), together with $\operatorname{Re}\langle p_i v,v\rangle=\|p_i v\|^2$,
+implies (F). This is the projection-geometry comparison used in the formal proof:
+a norm-compression estimate for each overlapping pair is converted by
+Cauchy--Schwarz to the ordered Friedrichs estimate, and the finite row-sum
+argument converts those ordered estimates into the global gap bound.\footnote{The
+formal anchors are the cyclic-window gap reductions in
+\path{TNLean/MPS/ParentHamiltonian/Martingale.lean}, lines 1268--1347, the
+remaining theorem \path{parentHamiltonianES\_gap\_bound\_of\_friedrichs} at lines
+1393--1405, and the projection-geometry lemmas in
+\path{TNLean/Analysis/ProjectionGeometry.lean}, lines 58--87 and 285--341.}
+
+\section{What remains to compare}
+
+The source discussion and the formal theorem are aligned at the qualitative
+level: both use the martingale expansion, non-negativity of non-overlapping
+terms, row-sum coefficients for overlapping terms, and principal-angle estimates
+for local ground spaces. The point still requiring a mathematical check is
+quantitative and conventional.
+
+First, the formal theorem fixes the uniform coefficient
+$1/(2(L-1))$ for every overlapping cyclic-window pair and asks for the explicit
+constant $\gamma_L=1/(4L)$. The review text states the general martingale
+condition with coefficients $c_{ij}$ whose rows add to one, and it refers to
+blocking and principal angles to obtain a positive gap. It does not by itself
+show that the Fannes--Nachtergaele--Werner, Nachtergaele, or
+Kastoryano--Lucia estimates provide exactly the bound (F), or the stronger
+sufficient bound (N), for this fixed cyclic-window convention and for this
+particular numerical value of $\gamma_L$.
+
+Second, the blocking parameter in the cited martingale argument must be matched
+with the formal convention. The formal statement is uniform for all $N\ge 2L$
+and for the length-$L$ cyclic windows used in the formal finite-chain
+Hilbert-space realization. A source proof that produces some positive gap after
+increasing or changing the blocking may still be mathematically sufficient for the
+existential MPS gap theorem, but it would not immediately be the displayed
+all-$L$ estimate with constant $1/(4L)$ unless the constants are transported
+through the same blocking convention.
+
+Consequently the remaining comparison is not whether the row-sum algebra is
+valid; that part has been isolated and formalized. The remaining comparison is
+whether the cited FNW--Nachtergaele--Kastoryano principal-angle estimates supply
+the precise overlapping cyclic-window estimate required by (F) or (N), or
+whether the formal development is using a stronger replacement input than the
+review text states explicitly.
+
+\section{Relation to the blueprint}
+
+The blueprint contains an older unproved item labelled
+\path{lem:martingale_mps} in
+\path{blueprint/src/chapter/ch14_parent_hamiltonian.tex}, lines 2496--2590.
+That prose says that the constants are fully established only for $L=2$ and
+that only the $L=2$ case is used below. This should be read as blueprint
+prose to be clarified, not as a source error. The surrounding blueprint and the
+formal statements now isolate an all-$L>1$ statement with explicit constant
+$1/(4L)$, while the corresponding formal theorem still has the remaining
+principal-angle obligation described above. Once the quantitative comparison
+with the cited martingale estimates is settled, the blueprint should say either
+that the all-$L$ bound follows from the cited estimates under the formal
+blocking convention, or that the formal proof uses a deliberately stronger
+replacement estimate.
+
+\section{Conclusion}
+
+The conclusion is a difference between the review paragraph and the formal
+quantitative statement, with one mathematical comparison still to be made. The
+source states the martingale condition in terms of general row-sum coefficients
+and invokes principal-angle estimates to obtain a positive MPS parent-Hamiltonian
+gap. The formal proof contains the finite-overlap row reduction for cyclic
+windows, specializes the coefficients to
+$c_{ij}=1/(2(L-1))$, fixes the constant $\gamma_L=1/(4L)$, and reduces
+the remaining MPS-specific work to the norm-compression or ordered Friedrichs
+estimate above.
+
+The CPGSV21 statement is not being challenged. The comparison records that the
+available formal argument is more explicit than the review paragraph: the exact
+constants and the cyclic-window blocking convention still have to be compared
+with the FNW, Nachtergaele, and Kastoryano--Lucia estimates.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
