@@ -249,12 +249,16 @@ all block weights and the defect scalar are nonzero. -/
 lemma povmDiagonal_inv (w : ι → ℝ) (t : ℝ) (hw : ∀ i, w i ≠ 0) (ht : t ≠ 0) :
     (povmDiagonal (D := D) w t)⁻¹ =
       povmDiagonal (D := D) (fun i => (w i)⁻¹) (t⁻¹) := by
+  refine Matrix.inv_eq_right_inv ?_
   unfold povmDiagonal
-  rw [Matrix.inv_diagonal]
-  -- Goal: diagonal (v⁻¹ʳ) = diagonal v' where v' has reciprocal entries
-  -- Both sides are diagonal matrices; compare entries via ext
-  ext a b
-  simp [Matrix.diagonal_apply, Pi.inv_apply, Ring.inverse_eq_inv]
+  rw [Matrix.diagonal_mul_diagonal, ← Matrix.diagonal_one]
+  congr 1
+  funext a
+  rcases a with ⟨i, _⟩ | _
+  · show ((w i : ℝ) : ℂ) * (((w i)⁻¹ : ℝ) : ℂ) = 1
+    rw [← Complex.ofReal_mul, mul_inv_cancel₀ (hw i), Complex.ofReal_one]
+  · show ((t : ℝ) : ℂ) * (((t)⁻¹ : ℝ) : ℂ) = 1
+    rw [← Complex.ofReal_mul, mul_inv_cancel₀ ht, Complex.ofReal_one]
 
 /-- Compressing the inverse of `povmDiagonal w t` by the POVM dilation. -/
 lemma povmIsometry_compress_diagonal_inv
@@ -307,23 +311,19 @@ lemma povm_resolvent_inv_le
   -- LHS simplification
   have hLHS : (Wᴴ * Y * W) = (∑ i, wgt i • (C i * (C i)ᴴ)) + t • (1 : MatD) := by
     rw [h_compress]
-    -- Goal: (∑ i, y i • B_i) + t • (S * Sᴴ) = (∑ i, wgt i • B_i) + t • 1
-    -- where y i = wgt i + t
-    have hy_sum : (∑ i : ι, y i • (C i * (C i)ᴴ)) = (∑ i : ι, wgt i • (C i * (C i)ᴴ)) + (∑ i : ι, t • (C i * (C i)ᴴ)) := by
-      simp [y, Finset.sum_add_distrib, add_smul]
-    rw [hy_sum]
-    -- Goal: ((∑ wgt_i•B_i) + (∑ t•B_i)) + t•(S*Sᴴ) = (∑ wgt_i•B_i) + t•1
-    rw [← add_assoc, add_comm (∑ i : ι, t • (C i * (C i)ᴴ)), add_assoc]
-    -- Goal: (∑ wgt_i•B_i) + ((∑ t•B_i) + t•(S*Sᴴ)) = (∑ wgt_i•B_i) + t•1
-    rw [add_left_cancel_iff]
-    -- Goal: (∑ t•B_i) + t•(S*Sᴴ) = t•1
-    rw [← Finset.smul_sum, ← smul_add, povm_sum_add_defect hdef, smul_eq_mul]
-    -- Goal: t • 1 = t • 1
-    rfl
-  -- RHS simplification: (y i)⁻¹ = (wgt i + t)⁻¹
-  have hRHS : Wᴴ * Y⁻¹ * W = (∑ i, (wgt i + t)⁻¹ • (C i * (C i)ᴴ)) + t⁻¹ • (S * Sᴴ) := by
-    rw [h_compress_inv]
-    simp [y]
+    have h1 : (∑ i : ι, y i • (C i * (C i)ᴴ)) =
+        (∑ i : ι, wgt i • (C i * (C i)ᴴ)) + (∑ i : ι, t • (C i * (C i)ᴴ)) := by
+      rw [← Finset.sum_add_distrib]
+      exact Finset.sum_congr rfl fun i _ => add_smul (wgt i) t (C i * (C i)ᴴ)
+    have h2 : (∑ i : ι, t • (C i * (C i)ᴴ)) = t • (∑ i : ι, C i * (C i)ᴴ) :=
+      (Finset.smul_sum).symm
+    have h3 : t • (∑ i : ι, C i * (C i)ᴴ) + t • (S * Sᴴ)
+        = t • ((∑ i : ι, C i * (C i)ᴴ) + S * Sᴴ) :=
+      (smul_add t _ _).symm
+    rw [h1, add_assoc, h2, h3, povm_sum_add_defect hdef]
+  -- RHS simplification: (y i)⁻¹ = (wgt i + t)⁻¹ (definitionally)
+  have hRHS : Wᴴ * Y⁻¹ * W = (∑ i, (wgt i + t)⁻¹ • (C i * (C i)ᴴ)) + t⁻¹ • (S * Sᴴ) :=
+    h_compress_inv
   rw [hLHS, hRHS] at h_inv_le
   exact h_inv_le
 
