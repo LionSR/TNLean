@@ -284,7 +284,7 @@ def edgeBoundaryConfigEquivProd (A : Tensor G d) (e : Edge G) :
     rcases x with ⟨edgeIndex, leftResidual, rightResidual⟩
     rfl
 
-noncomputable instance instFintypeEdgeBoundaryConfig (A : Tensor G d) (e : Edge G) :
+instance instFintypeEdgeBoundaryConfig (A : Tensor G d) (e : Edge G) :
     Fintype (EdgeBoundaryConfig (G := G) A e) :=
   Fintype.ofEquiv
     (Fin (A.bondDim e) ×
@@ -459,23 +459,15 @@ theorem edgeBlockedCoeff_eq_stateCoeff (A : Tensor G d) (e : Edge G) (σ : V →
     edgeBlockedCoeff (G := G) A e σ = stateCoeff A σ := by
   classical
   rw [stateCoeff_splitAtEdge]
-  change
-    (∑ β : EdgeBoundaryConfig (G := G) A e,
-        A.component e.1.1 (edgeLeftLocalConfig (G := G) A e β) (σ e.1.1) *
-          (∑ η : EdgeMiddleConfig (G := G) A e β,
-            ∏ v ∈ edgeMiddleVertices e, A.component v (fun ie => η.1 ie.1) (σ v)) *
-          A.component e.1.2 (edgeRightLocalConfig (G := G) A e β) (σ e.1.2)) =
-      ∑ η : VirtualConfig A,
-        A.component e.1.1 (fun ie => η ie.1) (σ e.1.1) *
-          (∏ v ∈ edgeMiddleVertices e, A.component v (fun ie => η ie.1) (σ v)) *
-          A.component e.1.2 (fun ie => η ie.1) (σ e.1.2)
   calc
-    (∑ β : EdgeBoundaryConfig (G := G) A e,
-        A.component e.1.1 (edgeLeftLocalConfig (G := G) A e β) (σ e.1.1) *
-          (∑ η : EdgeMiddleConfig (G := G) A e β,
-            ∏ v ∈ edgeMiddleVertices e, A.component v (fun ie => η.1 ie.1) (σ v)) *
-          A.component e.1.2 (edgeRightLocalConfig (G := G) A e β) (σ e.1.2))
+    edgeBlockedCoeff (G := G) A e σ
       = ∑ β : EdgeBoundaryConfig (G := G) A e,
+          A.component e.1.1 (edgeLeftLocalConfig (G := G) A e β) (σ e.1.1) *
+            (∑ η : EdgeMiddleConfig (G := G) A e β,
+              ∏ v ∈ edgeMiddleVertices e, A.component v (fun ie => η.1 ie.1) (σ v)) *
+            A.component e.1.2 (edgeRightLocalConfig (G := G) A e β) (σ e.1.2) := by
+          rfl
+    _ = ∑ β : EdgeBoundaryConfig (G := G) A e,
           ∑ η : EdgeMiddleConfig (G := G) A e β,
             A.component e.1.1 (edgeLeftLocalConfig (G := G) A e β) (σ e.1.1) *
               (∏ v ∈ edgeMiddleVertices e, A.component v (fun ie => η.1 ie.1) (σ v)) *
