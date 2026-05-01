@@ -35,12 +35,11 @@ positive-length MPV equalities, and the length-zero identity.
 - `MPSTensor.CommonBlockedCyclicSectorFamily.commonFlatBlocksAt` expresses the
   derived flattened common-sector family at a prescribed length `p'` when
   `F.p = p'`.
-- `MPSTensor.CommonBlockedCyclicSectorFamily.`
-  `sameMPV₂_weightedCanonicalBlock_commonFlatAt_of_reindexed` is the prescribed-length
-  form of the canonical-to-common-sector comparison.  Its hypothesis is the `SameMPV₂`
-  equality between the directly blocked
-  nonzero family and the explicitly reindexed family.  This is exactly the
-  hypothesis expected from #990.
+- The prescribed-length comparison is
+  `MPSTensor.CommonBlockedCyclicSectorFamily.sameMPV₂_weightedCanonicalBlock_commonFlatAt_of_reindexed`.
+  Its hypothesis is the `SameMPV₂` equality between the directly blocked nonzero
+  family and the explicitly reindexed family.  This is exactly the hypothesis expected
+  from #990.
 
 ### `TNLean/MPS/CanonicalForm/Assembly/StructuralTheorem.lean`
 
