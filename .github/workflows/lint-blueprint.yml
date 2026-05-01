@@ -13,6 +13,8 @@ on:
       - '.github/requirements/**'
       - '.github/workflows/lint-blueprint.yml'
       - 'blueprint/src/**'
+      - 'blueprint/.chktexrc'
+      - 'blueprint/latexindent.yaml'
       - 'scripts/blueprint_bibtex.py'
       - 'scripts/blueprint_lean_sync.py'
   pull_request:
@@ -26,6 +28,8 @@ on:
       - '.github/requirements/**'
       - '.github/workflows/lint-blueprint.yml'
       - 'blueprint/src/**'
+      - 'blueprint/.chktexrc'
+      - 'blueprint/latexindent.yaml'
       - 'scripts/blueprint_bibtex.py'
       - 'scripts/blueprint_lean_sync.py'
 
@@ -56,24 +60,21 @@ jobs:
           install-blueprint: 'true'
           use-github-cache: 'false'
 
-      # TODO: flip both LaTeX checks to strict (drop continue-on-error) once
-      # `blueprint/.chktexrc` and `blueprint/latexindent.yaml` pin the rule sets,
-      # and a separate PR has run `latexindent -w -s` over the existing tree.
-      # Until then, run them as advisory so they surface fallout without blocking.
       - name: Lint LaTeX (chktex)
-        continue-on-error: true
         run: |
           find blueprint/src -name '*.tex' -not -path '*/Packages/*' -print0 \
-            | xargs -0 -r chktex -q
+            | xargs -0 -r chktex -q -l blueprint/.chktexrc
 
+      # TODO: drop continue-on-error after a separate mechanical PR has run
+      # `latexindent -l blueprint/latexindent.yaml -w -s` over blueprint/src.
       - name: Check LaTeX formatting (latexindent)
         continue-on-error: true
         run: |
           set -e
           status=0
           while IFS= read -r f; do
-            if ! diff -u "$f" <(latexindent --silent --logfile=/dev/null "$f") > /dev/null; then
-              echo "::warning file=$f::not formatted to latexindent defaults; run 'latexindent -w -s \"$f\"' locally to fix"
+            if ! latexindent -k -s -l blueprint/latexindent.yaml "$f" > /dev/null; then
+              echo "::warning file=$f::not formatted to blueprint/latexindent.yaml; run 'latexindent -l blueprint/latexindent.yaml -w -s \"$f\"' locally to fix"
               status=1
             fi
           done < <(find blueprint/src -name '*.tex' -not -path '*/Packages/*')

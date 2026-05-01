@@ -10,8 +10,9 @@ import Mathlib.Tactic.Linter.TextBased
 
 Invokes Mathlib's `Mathlib.Linter.TextBased.lintModules` on every `.lean` file under
 `TNLean/` and on the top-level `TNLean.lean` import surface. Runs the text-based style
-linters with their default `LinterOptions`: trailing whitespace, Windows line endings,
-space-before-semicolon, disallowed Unicode characters, module naming conventions.
+linters with their default `Lean.Linter.LinterOptions`: trailing whitespace,
+Windows line endings, space-before-semicolon, disallowed Unicode characters, and
+module naming conventions.
 
 Flags:
 * `--github` — emit GitHub problem-matcher annotations
@@ -19,6 +20,14 @@ Flags:
 -/
 
 open Mathlib.Linter.TextBased System
+
+/-- Read committed text-linter exceptions for pre-existing source-tree issues. -/
+def readStyleExceptions : IO (Array String) := do
+  let path := FilePath.mk "scripts/nolints-style.txt"
+  if ← path.pathExists then
+    return (← IO.FS.readFile path).splitOn "\n" |>.toArray
+  else
+    return #[]
 
 /-- Recursively collect every `.lean` file under `dir` as a `Lean.Name`. -/
 partial def collectLeanModules (dir : FilePath) : IO (Array Lean.Name) := do
@@ -41,4 +50,9 @@ def main (args : List String) : IO UInt32 := do
     modules := modules.push `TNLean
   if modules.isEmpty then
     throw <| IO.userError "lint_style: no `.lean` files found under TNLean/ or at TNLean.lean"
-  lintModules ({} : LinterOptions) #[] modules style fix
+  let opts : Lean.Linter.LinterOptions := {
+    toOptions := Lean.Options.empty
+    linterSets := {}
+  }
+  let nolints ← readStyleExceptions
+  lintModules opts nolints modules style fix

@@ -10,6 +10,7 @@ on:
       - 'lean-toolchain'
       - 'lake-manifest.json'
       - 'scripts/LintStyle.lean'
+      - 'scripts/nolints-style.txt'
       - '.github/workflows/lean_action_ci.yml'
   pull_request:
     types: [opened, synchronize, reopened]
@@ -19,6 +20,7 @@ on:
       - 'lean-toolchain'
       - 'lake-manifest.json'
       - 'scripts/LintStyle.lean'
+      - 'scripts/nolints-style.txt'
       - '.github/workflows/lean_action_ci.yml'
   workflow_dispatch:
 
