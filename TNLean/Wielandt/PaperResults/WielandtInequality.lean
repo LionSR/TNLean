@@ -60,7 +60,7 @@ Theorem 1 also gives the case-(2) bound:
   `iIndex A ≤ D ^ 2 - krausRank A + 1`.
 
 The former single-Kraus statements `wordSpan_eq_top_of_isPrimitivePaper_of_isUnit`
-and `iIndex_le_of_isPrimitivePaper_of_isUnit` are retained as corollaries.  The
+and `iIndex_le_of_isPrimitivePaper_of_isUnit` are retained as corollaries. The
 proofs add the chosen one-step element as a redundant generator and use the
 word-span invariance lemmas from `SpanGrowth/InvertibleWordSpan.lean`.
 
@@ -130,8 +130,8 @@ with eigenvector `φ ≠ 0`, then the exact word span at level `D ^ 2` is the fu
 matrix algebra.
 
 The proof adds `X` as a redundant first generator. Since `X ∈ S₁(A)`, this does
-not change any exact word span or the Kraus rank; it only lets us reuse the
-single-generator backend with `X` as the distinguished first entry.
+not change any exact word span or the Kraus rank; it only lets us apply the
+single-generator theorem with `X` as the distinguished first entry.
 
 Paper: arXiv:0909.5347, Theorem 1 case (3); Wolf, Theorem 6.9.
 -/
@@ -254,7 +254,7 @@ word-length bound holds.
 
 The proof adds `X` as a redundant first generator. This leaves every exact word
 span and `krausRank` unchanged, and reduces the statement to the existing
-single-generator invertible backend.
+single-generator invertible theorem.
 
 Paper: arXiv:0909.5347, Theorem 1 case (2); Wolf, Theorem 6.9.
 -/

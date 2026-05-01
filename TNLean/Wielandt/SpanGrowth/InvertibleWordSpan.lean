@@ -28,7 +28,7 @@ Wielandt inequality (arXiv:0909.5347, Theorem 1; Wolf §6.9).
   then `S_m = ⊤` for all `m ≥ N`.
 * `wordSpan_succ_eq_mul_left`: `S_{n+1} = span{A_i} · S_n`.
 
-### Sharp case-(2) backend theorem
+### Sharp case-(2) theorem
 * `wordSpan_eq_top_of_isNormal_of_isUnit`: under `IsNormal A` and an
   invertible Kraus operator, `S_{D² - krausRank A + 1}(A) = M_D(ℂ)`.
 * `iIndex_le_of_isNormal_of_isUnit`: the corresponding numerical bound on
@@ -91,7 +91,7 @@ theorem apply_mem_wordSpan_one (A : MPSTensor d D) (i : Fin d) :
 
 If `X ∈ wordSpan A 1`, then `oneStepAugment A X` has the same exact word spans
 as `A`; see `wordSpan_oneStepAugment_eq`. This is a convenient way to reuse
-single-generator Wielandt backends for arbitrary elements of `S₁(A)`. -/
+single-generator Wielandt theorems for arbitrary elements of `S₁(A)`. -/
 def oneStepAugment (A : MPSTensor d D) (X : Matrix (Fin D) (Fin D) ℂ) :
     MPSTensor (d + 1) D :=
   Fin.cases X A
