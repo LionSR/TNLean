@@ -519,8 +519,8 @@ are available with a common middle word and the same boundary witness. -/
 middle word.
 
 For the wrapped window at the last site, the complement occupies physical sites
-`L₀, ..., N - 2`.  This helper fills exactly those sites with `μ`; the remaining
-sites are dummy values and do not affect the complement word extracted by
+`L₀, ..., N - 2`.  This construction fills exactly those sites with `μ`; the
+remaining sites are dummy values and do not affect the complement word extracted by
 `wrapping_window_compatibility_of_isNBlkInjective`. -/
 def wrappedMiddleBackground (L₀ N : ℕ) (η : Fin d)
     (μ : Fin (N - (L₀ + 1)) → Fin d) : Fin N → Fin d :=
@@ -534,8 +534,8 @@ def wrappedMiddleBackground (L₀ N : ℕ) (η : Fin d)
 middle word.
 
 For the opposite wrapped window, the complement occupies physical sites
-`1, ..., N - L₀ - 1`.  This helper fills exactly those sites with `μ`; all window
-sites receive the dummy value `η`. -/
+`1, ..., N - L₀ - 1`.  This construction fills exactly those sites with `μ`; all
+window sites receive the dummy value `η`. -/
 def mirrorMiddleBackground (L₀ N : ℕ) (η : Fin d)
     (μ : Fin (N - (L₀ + 1)) → Fin d) : Fin N → Fin d :=
   fun i =>
