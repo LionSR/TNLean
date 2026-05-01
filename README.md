@@ -74,8 +74,7 @@ One recurrent tool is the Perron--Frobenius existence theorem for positive maps,
 proved through a Brouwer fixed-point theorem on density matrices:
 
 ```lean
-theorem exists_posSemidef_eigenvector
-    [NeZero D]
+theorem exists_posSemidef_eigenvector [NeZero D]
     (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (hpos : IsPositiveMap E)
     (hNZ : ∀ {ρ : Matrix (Fin D) (Fin D) ℂ}, ρ.PosSemidef → ρ ≠ 0 → E ρ ≠ 0) :
@@ -131,8 +130,8 @@ statements are intentionally present near the definitions they require, but the
 complete proof of the two-dimensional theorem is still future work.
 
 The repository also contains small MPS examples such as AKLT, GHZ, even parity,
-and $\mathbb{Z}/2\mathbb{Z}$ examples, together with a `PiAlgebra/` branch of
-algebraic Fundamental-Theorem variants.
+and $\mathbb{Z}/2\mathbb{Z}$ examples, together with the `TNLean/PiAlgebra/`
+directory of algebraic Fundamental-Theorem variants.
 
 ## Module structure
 
@@ -142,12 +141,12 @@ import.  The main source tree is organized as follows.
 
 | Path | Role |
 |---|---|
-| `TNLean/Algebra`, `Analysis`, `Topology` | Matrix algebra, trace pairings, Gram matrices, Frobenius norms, Skolem--Noether, convergence helpers, and finite-dimensional fixed-point infrastructure. |
-| `TNLean/Axioms`, `Entropy` | Explicit interfaces for Brouwer, strong subadditivity, Beigi recovery, operator convexity, and entropy corollaries. |
+| `TNLean/Algebra`, `TNLean/Analysis`, `TNLean/Topology` | Matrix algebra, trace pairings, Gram matrices, Frobenius norms, Skolem--Noether, convergence helpers, and finite-dimensional fixed-point infrastructure. |
+| `TNLean/Axioms`, `TNLean/Entropy` | Explicit interfaces for Brouwer, strong subadditivity, Beigi recovery, operator convexity, and entropy corollaries. |
 | `TNLean/Channel` | Quantum-channel representations, Schwarz theory, fixed points, irreducibility, peripheral spectra, semigroups, determinants, POVMs, and Wolf chapter index modules. |
 | `TNLean/QPF`, `TNLean/Spectral` | Perron--Frobenius, positivity, mixed transfers, overlap decay, spectral gaps, and quantitative correlation estimates. |
-| `TNLean/MPS/Core`, `Chain`, `Overlap` | MPS tensors, words, blocking, chains, transfer maps, and overlap matrices. |
-| `TNLean/MPS/FundamentalTheorem`, `BNT`, `CanonicalForm`, `Periodic`, `Structure` | Single-block, same-structure, BNT, periodic, and canonical-form Fundamental-Theorem material. |
+| `TNLean/MPS/Core`, `TNLean/MPS/Chain`, `TNLean/MPS/Overlap` | MPS tensors, words, blocking, chains, transfer maps, and overlap matrices. |
+| `TNLean/MPS/FundamentalTheorem`, `TNLean/MPS/BNT`, `TNLean/MPS/CanonicalForm`, `TNLean/MPS/Periodic`, `TNLean/MPS/Structure` | Single-block, same-structure, BNT, periodic, and canonical-form Fundamental-Theorem material. |
 | `TNLean/MPS/ParentHamiltonian` | Parent Hamiltonians, local projectors, ground spaces, intersection and wrapping-window arguments, commuting cases, and martingale estimates. |
 | `TNLean/MPS/MPDO`, `TNLean/MPS/RFP` | MPDO/LPDO foundations, canonical-form and zero-correlation-length predicates, pure RFP structures, and structural bridges. |
 | `TNLean/Wielandt` | Quantum Wielandt span growth, rank-one constructions, rectangular span, primitivity equivalences, and paper-facing endpoints. |
