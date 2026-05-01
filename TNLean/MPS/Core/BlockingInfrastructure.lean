@@ -326,9 +326,9 @@ private theorem blockWordChunkIndex_lt (m n : ℕ) (j : Fin n) (t : Fin m) :
     m * (j : ℕ) + (t : ℕ) < m * n := by
   calc
     m * (j : ℕ) + (t : ℕ) < m * (j : ℕ) + m :=
-      Nat.add_lt_add_left t.is_lt _
+      Nat.add_lt_add_left t.isLt _
     _ = m * ((j : ℕ) + 1) := by rw [Nat.mul_add, Nat.mul_one]
-    _ ≤ m * n := Nat.mul_le_mul_left m (Nat.succ_le_of_lt j.is_lt)
+    _ ≤ m * n := Nat.mul_le_mul_left m (Nat.succ_le_of_lt j.isLt)
 
 /-- The `j`-th length-`m` subword of a direct length-`m * n` blocked word. -/
 noncomputable def blockWordChunk (d m n : ℕ) (i : Fin (blockPhysDim d (m * n)))
