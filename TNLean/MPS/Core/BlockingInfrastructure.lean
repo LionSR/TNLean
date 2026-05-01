@@ -436,8 +436,8 @@ noncomputable def directIteratedBlockEquiv (d m n : ℕ) :
     (i : Fin (blockPhysDim (blockPhysDim d m) n)) :
     (directIteratedBlockEquiv d m n).symm i = iteratedBlockIndex d m n i := rfl
 
-/-- A direct index is the grouping of a direct blocked word exactly when flattening it
-recovers that direct blocked index. -/
+/-- An iterated blocked index `j` is the grouping of a direct blocked index `i`
+exactly when flattening `j` recovers `i`. -/
 theorem eq_directToIteratedBlockIndex_iff_iteratedBlockIndex_eq (d m n : ℕ)
     (i : Fin (blockPhysDim d (m * n)))
     (j : Fin (blockPhysDim (blockPhysDim d m) n)) :
