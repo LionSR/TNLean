@@ -1,0 +1,159 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{The Root-Channel Kraus-Rank Step in Theorem 4.1}
+\author{}
+\date{2026-04-30}
+
+\begin{document}
+\maketitle
+
+\section{The assertion}
+
+The reverse implication in Theorem~4.1 of de las Cuevas, Cirac, Schuch,
+and P\'erez-Garc\'ia is the point at issue
+\cite[Theorem~4.1]{DeLasCuevas2017Irreducible}.\footnote{For traceability, this
+note corresponds to \href{https://github.com/LionSR/TNLean/issues/1046}{issue \#1046}.
+Related formal work is recorded in
+\href{https://github.com/LionSR/TNLean/issues/670}{issue \#670},
+\href{https://github.com/LionSR/TNLean/issues/821}{issue \#821},
+\href{https://github.com/LionSR/TNLean/issues/622}{issue \#622}, and
+\href{https://github.com/LionSR/TNLean/issues/664}{issue \#664}.} The source passages
+are \path{Papers/1708.00029/main.tex:717--731} and
+\path{Papers/1708.00029/main.tex:812--818}.
+
+Let $B=(B^1,\ldots,B^d)$ be an MPS tensor, let $p\geq 1$, and let
+$\mathcal E_B$ be the transfer channel
+\[
+  \mathcal E_B(X)=\sum_{i=1}^d B^i X (B^i)^\dagger.
+\]
+The paper says that a trace-preserving completely positive map $\mathcal E$ is
+$p$-divisible if there is another trace-preserving completely positive map
+$\mathcal E'$ with
+\[
+  \mathcal E=(\mathcal E')^p.
+\]
+This is a channel-level condition. It places no restriction on the number of
+Kraus operators needed to represent the root channel $\mathcal E'$.
+
+In the same passage, $B$ is called $p$-refinable if there are a tensor
+$A=(A^1,\ldots,A^d)$ with the same physical alphabet and an isometry
+\[
+  W:\mathbb C^d \longrightarrow (\mathbb C^d)^{\otimes p}
+\]
+such that
+\[
+  |V_{pN}(A)\rangle = W^{\otimes N}|V_N(B)\rangle
+  \qquad\text{for every } N.
+\]
+Thus the tensor root in a refinement is indexed by the original $d$ physical
+letters. The theorem states the unconditional equivalence
+\[
+  B \text{ is } p\text{-refinable}
+  \quad\Longleftrightarrow\quad
+  \mathcal E_B \text{ is } p\text{-divisible}
+\]
+for $B$ in irreducible form~II.
+
+\section{The point at issue}
+
+The reverse proof begins with $p$-divisibility of $\mathcal E_B$. This gives a
+trace-preserving completely positive map $\mathcal E'$ such that
+$\mathcal E_B=(\mathcal E')^p$. The proof then writes that there exists a tensor
+$A$ such that
+\[
+  \mathcal E_B=\mathcal E_A^p,
+\]
+and proceeds to compare two Kraus representations of the same channel by the
+usual isometric freedom of Kraus representations.
+
+The displayed passage is the missing step. To realize the channel root
+$\mathcal E'$ as $\mathcal E_A$ for a tensor
+$A=(A^1,\ldots,A^d)$, the root channel must admit a Kraus representation with at
+most $d$ Kraus operators. Equivalently, its minimal Kraus rank, or Choi rank,
+must be at most $d$. If the root channel has minimal Kraus rank $r>d$, then it
+can be represented by an $r$-letter tensor but not by a $d$-letter tensor. The
+resulting isometry would land in $(\mathbb C^r)^{\otimes p}$ rather than in the
+space $(\mathbb C^d)^{\otimes p}$ required by the definition of $p$-refinement.
+
+This is a mathematical point, not a matter of notation. A completely positive map
+can require more than a prescribed number of Kraus operators. The channel-level
+assertion $\mathcal E_B=(\mathcal E')^p$ does not by itself rule out the possibility that
+every Kraus representation of $\mathcal E'$ has more than $d$ terms. Therefore
+one needs either an argument that the special hypotheses of Theorem~4.1 force a
+$d$-term Kraus representation for some root channel, or a different proof of the
+reverse implication.
+
+\section{The formal statement}
+
+The formal definition of $p$-divisibility follows the channel-level definition
+from the paper: it asserts the existence of a trace-preserving completely
+positive root channel and does not include any bound on the root channel's Kraus
+rank. The conditional reverse theorem therefore separates the missing step from
+the rest of the proof.
+\footnote{The definition is
+\texttt{MPSTensor.IsPDivisibleChannel} in
+\path{TNLean/MPS/Periodic/Symmetry/Theorem41Defs.lean:24--32}. The conditional
+reverse theorem is \texttt{MPSTensor.thm\_4\_1\_p\_refinement\_reverse} in
+\path{TNLean/MPS/Periodic/Symmetry/Theorem41Reverse.lean:120--142}.}
+
+The extra formal hypothesis is an inverse canonicalization statement. In
+ordinary mathematical terms, it says that whenever $B$ is in irreducible form~II
+and $\mathcal E_B$ is $p$-divisible, there is a $d$-letter tensor $A$ such that
+\[
+  \mathcal E_B=\mathcal E_{A^{[p]}}.
+\]
+If such a tensor-level root is available, the rest of the argument follows
+the source proof: the tensor $A^{[p]}$ obtained by blocking and the original
+tensor $B$ give two finite Kraus representations of the same completely positive map, and
+isometric freedom of Kraus representations gives the isometry
+$W:\mathbb C^d\to(\mathbb C^d)^{\otimes p}$ needed for refinement.
+\footnote{The inverse canonicalization hypothesis is
+\texttt{MPSTensor.PRefinementInverseCanonicalization} in
+\path{TNLean/MPS/Periodic/Symmetry/Theorem41Reverse.lean:26--42}. The blueprint
+records the corresponding conditional statement in
+\path{blueprint/src/chapter/ch11b_periodic_ft.tex:1076--1103}.}
+
+The formal theorem also isolates a sufficient channel-theoretic hypothesis for
+the missing step: if every trace-preserving completely positive root
+$\mathcal E'$ with $\mathcal E_B=(\mathcal E')^p$ has Kraus rank at most $d$,
+then one can choose a $d$-term Kraus representation by padding with zero Kraus
+operators and obtain the required tensor $A$. This is a genuine mathematical
+hypothesis about the root channel, not a change of notation. The minimal-Kraus
+fact that the least number of Kraus operators equals the Choi rank is the right
+background theorem, but it does not itself prove the required inequality
+$\operatorname{rank}_{\mathrm{Kraus}}(\mathcal E')\le d$ for a root of
+$\mathcal E_B$.
+\footnote{The bounded-root formulation is
+\texttt{MPSTensor.PRefinementInverseRootKrausRankBound}; the implication from
+this bound to inverse canonicalization is
+\texttt{MPSTensor.pRefinementInverseCanonicalization\_of\_rootKrausRankBound},
+recorded in \path{TNLean/MPS/Periodic/Symmetry/Theorem41Reverse.lean:98--118}.}
+
+\section{Conclusion}
+
+The formal theorem adds a hypothesis relative to the source theorem. The source
+statement claims that channel-level $p$-divisibility of $\mathcal E_B$ is already
+enough to construct a $p$-refinement of $B$, but the reverse proof passes through
+a tensor root whose existence requires a Kraus-rank bound on the channel root.
+That bound is not part of the paper's definition of $p$-divisibility and is not
+proved in the cited converse paragraph.
+
+The point left open is whether the channel root can always be chosen with Kraus
+rank at most $d$ under the irreducible-form hypotheses of the theorem. The formal
+theorem therefore proves the reverse implication under an explicit inverse
+canonicalization hypothesis, or under the stronger root-Kraus-rank assumption
+which implies it. Until a paper-level argument proves such a bound, the reverse
+implication of Theorem~4.1 should be treated in the formal statement as
+conditional on that additional mathematical input.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
