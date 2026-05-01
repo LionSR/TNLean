@@ -21,7 +21,7 @@ This file relates the BNT overlap/spectral theory to the
 BNT grouping theorem (`exists_bnt_grouping`), which requires `hMPVEq`
 for equal-norm blocks.
 
-## Background (Issue #243)
+## Background
 
 The canonical-form reduction produces TP + primitive blocks with
 nonzero weights.  The BNT grouping theorem groups blocks by weight norm into a
@@ -50,7 +50,7 @@ The BNT of a tensor (CPGSV17, Proposition A.6) is constructed so that all pairs 
 BNT elements have *decaying* cross-overlaps.  In particular, two BNT elements can
 share the same weight norm while being completely independent (non-GPE).  The BNT
 already groups gauge-equivalent blocks together; remaining blocks are pairwise
-non-gauge-equivalent.  See issue #299 for the counter-example showing that the
+non-gauge-equivalent.  A counter-example shows that the
 MPV-level hypothesis `hFullTensor` alone cannot force non-decaying cross-overlaps.
 
 To obtain GPE for equal-norm blocks, one must derive the non-decay property from
@@ -79,7 +79,7 @@ Theorem matching, etc.).
   blocks once the family is already separated by non-gauge-phase-equivalence.
 
 * `exists_bnt_sectorDecomp_of_linearIndependent` — conditional construction
-  toward the post-#886 `HasBNTSectorData` predicate.  It forms the granular
+  toward the `HasBNTSectorData` predicate.  It forms the granular
   `trivialSectorDecomp` as a BNT sector decomposition when the actual BNT
   linear-independence condition is supplied explicitly.
 
@@ -115,8 +115,6 @@ Theorem matching, etc.).
 - [CPGSV17, Lemma A.2]: Overlap dichotomy for Normal Tensors.
 - [CPGSV17, Proposition A.6]: BNT construction and minimality.
 - [CPGSV17, Definition 2.6, Proposition 2.7]: BNT minimality and grouping.
-- GitHub issue #243: BNT grouping for weight norm separation.
-- GitHub issue #299: Counter-example showing `hFullTensor` is insufficient.
 -/
 
 namespace MPSTensor
@@ -281,7 +279,7 @@ theorem exists_bnt_grouping_of_gaugePhaseEquiv
 This theorem relates the result of the existence reduction
 (`exists_tp_primitive_blockDecomp_after_blocking` in `Assembly.lean`) to a
 `SectorDecomposition` with strictly decreasing BNT-level norms.  It does not by
-itself prove `HasBNTSectorData`: after #886 that predicate means eventual linear
+itself prove `HasBNTSectorData`: that predicate means eventual linear
 independence of the basis MPV states, not merely TP / irreducible / primitive
 block data.
 
@@ -355,7 +353,7 @@ theorem exists_sectorDecomp_of_tp_primitive_irr_blocks
 
 /-- One-sector specialization of the TP + primitive + irreducible grouping route.
 
-This is a genuine restricted result toward Gap §1: if all weights lie in a single norm class
+This is a genuine restricted result: if all weights lie in a single norm class
 and every block has non-decaying overlap with a chosen representative, then the whole family
 collapses to a one-basis `SectorDecomposition`. -/
 theorem bnt_grouping_single_norm_class_of_tp_primitive_irr_blocks
@@ -1154,7 +1152,7 @@ overlap-rigidity route.
 The theorem also proves that if the original blocks are one-site injective,
 then the chosen basis blocks are injective. It does not claim the remaining
 two-family hypothesis: equality of the finite-length MPV spans between two
-independently constructed bases is a separate Gap §1 task. -/
+independently constructed bases is a separate task. -/
 theorem exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_with_overlapOrtho
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ)
@@ -1484,7 +1482,7 @@ theorem exists_bnt_sectorDecomp_pair_with_overlapSpan_of_proportionalDecompositi
 
 /-- **Minimal granular sector decomposition carrying current `HasBNTSectorData`.**
 
-This is the post-#886 formulation of the conditional sector construction.  The
+This is the formulation of the conditional sector construction.  The
 predicate `HasBNTSectorData` now means eventual linear independence of the sector
 basis MPV states.  TP, irreducibility, primitivity, and nonzero weights do not by
 themselves provide that linear-independence statement for the granular basis; the

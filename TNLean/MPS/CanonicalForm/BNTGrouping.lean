@@ -15,7 +15,7 @@ canonical form existence reduction (blocks with nonzero weights, not necessarily
 ordered by norm) with the `IsNormalCanonicalForm` predicate (which requires
 `Antitone (fun k => ‖μ k‖)`).
 
-## Background: Gap 2 in the existence reduction
+## Background: Norm sorting in the existence reduction
 
 The existence reduction (in `Assembly.lean`) produces a weighted block family
 `(μ k, blocks k)` with `μ k ≠ 0` for all `k`, but does **not** guarantee pairwise
@@ -33,8 +33,7 @@ This file implements strategy **(b)** only in the restricted case where equal-mo
 blocks on one side are already known to collapse to a single basis tensor. It is
 therefore a useful **special-case norm-class collapse** module, not the full
 basis-of-normal-tensors construction from [CPGSV17, Proposition A.6 /
-`prop:char-BNT`]. The general one-sided BNT construction remains open and is part
-of the remaining Gap 2 work for issue #652 (labeled "Gap §1" in that issue).
+`prop:char-BNT`]. The general one-sided BNT construction remains open.
 
 ## Main results
 
@@ -77,7 +76,6 @@ of the remaining Gap 2 work for issue #652 (labeled "Gap §1" in that issue).
 
 - [CPGSV17, Definition 2.6, Proposition 2.7]: BNT minimality condition and grouping.
 - [CPGSV21, §IV.A]: Existence of canonical form.
-- `formalization_goal_analysis.md`, Gap 2.
 -/
 
 namespace MPSTensor

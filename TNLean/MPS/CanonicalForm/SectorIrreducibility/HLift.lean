@@ -724,7 +724,7 @@ private theorem orbit_iterate_fixed_of_pow_fix
 /-- Orbit-sum lift with the old `hProjStep` and `hFixUpgrade` inputs replaced by the
 single fixed-point-algebra hypothesis `SectorFixedPointAlgebraRigidity`.
 
-This theorem packages the rigidity route as a reusable interface. In the irreducible
+This theorem encapsulates the rigidity route as a reusable interface. In the irreducible
 trace-preserving cyclic setting, `hLift_cyclicDecomp_mps` supplies this hypothesis
 automatically via `sectorFixedPointAlgebraRigidity_of_irreducible_cyclicDecomp`. -/
 theorem hLift_cyclicDecomp_mps_of_sectorFixedPointAlgebraRigidity
