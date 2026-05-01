@@ -1172,8 +1172,8 @@ abbrev CommonSectorRelabelingHypothesis (d : ℕ) : Prop :=
 
 /-- The global coordinate-grouping assertion for common cyclic-sector families.
 
-It requires every common blocked cyclic-sector family to satisfy
-`groupedBlockCastAgrees` for each original block, so the canonical identification
+It requires every common blocked cyclic-sector family to satisfy the
+coordinate-grouping condition for each original block, so the canonical identification
 with the iterated blocked alphabet is the explicit grouping of direct blocked words. -/
 abbrev CommonGroupedBlockCastHypothesis (d : ℕ) : Prop :=
   ∀ {r : ℕ} {dim : Fin r → ℕ}
