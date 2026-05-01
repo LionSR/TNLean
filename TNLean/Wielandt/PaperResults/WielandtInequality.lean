@@ -27,37 +27,42 @@ Wolf's Theorem 6.9 in *Quantum Channels & Operations: Guided Tour*.
   index `i(A)`. This is equation (2) of arXiv:0909.5347 and appears immediately
   after Proposition 3 in the paper.
 
-### Part 2 — Case (3): noninvertible Kraus operator with nonzero eigenvalue
+### Part 2 — Case (3): noninvertible one-step element with nonzero eigenvalue
 
 Theorem 1 gives the case-(3) bound:
-*if some Kraus operator `A_{i₀}` is noninvertible and has a nonzero eigenvalue,
-then `i(A) ≤ D²`.*
+*if the one-step subspace `S₁(A) = wordSpan A 1` contains a noninvertible matrix
+with a nonzero eigenvalue, then `i(A) ≤ D²`.*
 
-* `wordSpan_eq_top_of_isPrimitivePaper_of_noninvertible_eigenvector`:
-  under paper primitivity, normalization, and the case-(3) hypotheses
-  (`A i₀` noninvertible, eigenvector `φ ≠ 0` with `μ ≠ 0`), we prove
+* `wordSpan_eq_top_of_isPrimitivePaper_of_mem_wordSpan_one_of_noninvertible_eigenvector`:
+  under paper primitivity, normalization, `X ∈ wordSpan A 1`, noninvertibility of
+  `X`, and eigenvector data `φ ≠ 0`, `μ ≠ 0`, we prove
   `wordSpan A (D ^ 2) = ⊤`.
 
-* `iIndex_le_sq_of_noninvertible_eigenvector`:
+* `iIndex_le_sq_of_mem_wordSpan_one_of_noninvertible_eigenvector`:
   the corresponding numeric bound `iIndex A ≤ D ^ 2`.
 
-### Part 3 — Case (2): invertible Kraus operator
+The former single-Kraus statements
+`wordSpan_eq_top_of_isPrimitivePaper_of_noninvertible_eigenvector` and
+`iIndex_le_sq_of_noninvertible_eigenvector` are retained as corollaries.
+
+### Part 3 — Case (2): invertible one-step element
 
 Theorem 1 also gives the case-(2) bound:
-*if some Kraus operator `A_{i₀}` is invertible, then
+*if `wordSpan A 1` contains an invertible matrix, then
 `i(A) ≤ D² − krausRank(A) + 1`.*
 
-* `wordSpan_eq_top_of_isPrimitivePaper_of_isUnit`:
-  under paper primitivity, normalization, and `IsUnit (A i₀)`, we prove
-  `wordSpan A (D ^ 2 - krausRank A + 1) = ⊤`.
+* `wordSpan_eq_top_of_isPrimitivePaper_of_mem_wordSpan_one_of_isUnit`:
+  under paper primitivity, normalization, `X ∈ wordSpan A 1`, and `IsUnit X`, we
+  prove `wordSpan A (D ^ 2 - krausRank A + 1) = ⊤`.
 
-* `iIndex_le_of_isPrimitivePaper_of_isUnit`:
+* `iIndex_le_of_mem_wordSpan_one_of_isUnit`:
   the corresponding numeric bound
   `iIndex A ≤ D ^ 2 - krausRank A + 1`.
 
-These case-(2) statements pass from paper primitivity to `IsNormal A` and then
-invoke the theorem `wordSpan_eq_top_of_isNormal_of_isUnit` from
-`SpanGrowth/InvertibleWordSpan.lean`.
+The former single-Kraus statements `wordSpan_eq_top_of_isPrimitivePaper_of_isUnit`
+and `iIndex_le_of_isPrimitivePaper_of_isUnit` are retained as corollaries. The
+proofs add the chosen one-step element as a redundant generator and use the
+word-span invariance lemmas from `SpanGrowth/InvertibleWordSpan.lean`.
 
 Within TNLean these results are currently standalone paper-level theorem statements:
 the canonical / FT / BNT development does not import them directly.
@@ -116,8 +121,89 @@ theorem qIndex_le_iIndex_of_isPrimitivePaper [NeZero D]
 
 /-! ## Part 2: Case (3) — noninvertible with nonzero eigenvalue gives `D²` -/
 
-/-- **Theorem 1, case (3)**: under the noninvertible eigenvalue hypotheses,
-`wordSpan A (D ^ 2) = ⊤`.
+/-- **Theorem 1, case (3)**: under the paper-faithful one-step subspace
+noninvertible eigenvalue hypotheses, `wordSpan A (D ^ 2) = ⊤`.
+
+If `A` is normalized and primitive in the paper's sense, and some arbitrary
+matrix `X ∈ S₁(A) = wordSpan A 1` is noninvertible and has a nonzero eigenvalue
+with eigenvector `φ ≠ 0`, then the exact word span at level `D ^ 2` is the full
+matrix algebra.
+
+The proof adds `X` as a redundant first generator. Since `X ∈ S₁(A)`, this does
+not change any exact word span or the Kraus rank; it only lets us apply the
+single-generator theorem with `X` as the distinguished first entry.
+
+Paper: arXiv:0909.5347, Theorem 1 case (3); Wolf, Theorem 6.9.
+-/
+theorem wordSpan_eq_top_of_isPrimitivePaper_of_mem_wordSpan_one_of_noninvertible_eigenvector
+    [NeZero D]
+    (A : MPSTensor d D)
+    (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (hPrim : IsPrimitivePaper A)
+    {X : Matrix (Fin D) (Fin D) ℂ}
+    (hX : X ∈ wordSpan A 1)
+    (hNotInv : ¬ IsUnit (toLin' X))
+    {φ : Fin D → ℂ} {μ : ℂ} (hφ : φ ≠ 0) (hμ : μ ≠ 0)
+    (heig : X *ᵥ φ = μ • φ) :
+    wordSpan A (D ^ 2) = ⊤ := by
+  let B : MPSTensor (d + 1) D := oneStepAugment A X
+  have hN : IsNormal A := isNormal_of_isPrimitivePaper A hNorm hPrim
+  have hNB : IsNormal B := by
+    simpa [B] using isNormal_oneStepAugment_of_mem_wordSpan_one A hX hN
+  have heigB : B (0 : Fin (d + 1)) *ᵥ φ = μ • φ := by
+    simpa [B, oneStepAugment] using heig
+  have hNotInvB : ¬ IsUnit (toLin' (B (0 : Fin (d + 1)))) := by
+    simpa [B, oneStepAugment] using hNotInv
+  have hCum : cumulativeVectorSpan B φ (D - 1) = ⊤ :=
+    eigenvector_spreading B φ hφ (0 : Fin (d + 1)) μ hμ heigB hNB
+  have hVec : vectorSpreadSpan B φ (D - 1) = ⊤ :=
+    vectorSpreadSpan_eq_top_of_cumulativeVectorSpan_eq_top_of_eigenvector
+      B φ (D - 1) (0 : Fin (d + 1)) μ hμ heigB hCum
+  have hRankOne : ∀ ψ : Fin D → ℂ,
+      vecMulVec φ ψ ∈ wordSpan B (D ^ 2 - D + 1) :=
+    vecMulVec_eigenvector_exact_wordSpan B (0 : Fin (d + 1)) hNB hNotInvB hμ heigB
+  have hBasis : ∀ j : Fin D,
+      vecMulVec φ (Pi.single j (1 : ℂ)) ∈ wordSpan B (D ^ 2 - D + 1) :=
+    fun j => hRankOne (Pi.single j 1)
+  have hAssembly : wordSpan B ((D - 1) + (D ^ 2 - D + 1)) = ⊤ :=
+    wordSpan_eq_top_of_vectorSpreadSpan_eq_top_of_rankOneBasis B φ hVec hBasis
+  have hD_pos : 0 < D := Nat.pos_of_ne_zero (NeZero.ne D)
+  have hArith : (D - 1) + (D ^ 2 - D + 1) = D ^ 2 := by
+    have hDD2 : D ≤ D ^ 2 := by
+      calc
+        D = D * 1 := (Nat.mul_one D).symm
+        _ ≤ D * D := Nat.mul_le_mul_left D hD_pos
+        _ = D ^ 2 := (sq D).symm
+    zify [hD_pos, hDD2]
+    ring
+  have hBtop : wordSpan B (D ^ 2) = ⊤ := by
+    rwa [hArith] at hAssembly
+  have hEq : wordSpan B (D ^ 2) = wordSpan A (D ^ 2) := by
+    simpa [B] using wordSpan_oneStepAugment_eq A hX (D ^ 2)
+  rwa [hEq] at hBtop
+
+/-- **Theorem 1, case (3)**: under the paper-faithful one-step subspace
+noninvertible eigenvalue hypotheses, `iIndex A ≤ D ^ 2`.
+
+Paper: arXiv:0909.5347, Theorem 1 case (3); Wolf, Theorem 6.9.
+-/
+theorem iIndex_le_sq_of_mem_wordSpan_one_of_noninvertible_eigenvector
+    [NeZero D]
+    (A : MPSTensor d D)
+    (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (hPrim : IsPrimitivePaper A)
+    {X : Matrix (Fin D) (Fin D) ℂ}
+    (hX : X ∈ wordSpan A 1)
+    (hNotInv : ¬ IsUnit (toLin' X))
+    {φ : Fin D → ℂ} {μ : ℂ} (hφ : φ ≠ 0) (hμ : μ ≠ 0)
+    (heig : X *ᵥ φ = μ • φ) :
+    iIndex A ≤ D ^ 2 := by
+  have htop : wordSpan A (D ^ 2) = ⊤ :=
+    wordSpan_eq_top_of_isPrimitivePaper_of_mem_wordSpan_one_of_noninvertible_eigenvector
+      A hNorm hPrim hX hNotInv hφ hμ heig
+  exact Nat.sInf_le (show D ^ 2 ∈ {n : ℕ | wordSpan A n = ⊤} from htop)
+
+/-- **Theorem 1, case (3)**: generator corollary of the one-step subspace theorem.
 
 If `A` is normalized and primitive in the paper's sense, `A i₀` is not
 invertible, and `φ ≠ 0` is an eigenvector of `A i₀` with eigenvalue `μ ≠ 0`,
@@ -135,30 +221,11 @@ theorem wordSpan_eq_top_of_isPrimitivePaper_of_noninvertible_eigenvector
     {φ : Fin D → ℂ} {μ : ℂ} (hφ : φ ≠ 0) (hμ : μ ≠ 0)
     (heig : A i₀ *ᵥ φ = μ • φ) :
     wordSpan A (D ^ 2) = ⊤ := by
-  have hVec : vectorSpreadSpan A φ (D - 1) = ⊤ :=
-    vectorSpreadSpan_eq_top_of_isPrimitivePaper_of_eigenvector
-      A hNorm hPrim φ hφ i₀ μ hμ heig
-  have hRankOne : ∀ ψ : Fin D → ℂ, vecMulVec φ ψ ∈ wordSpan A (D ^ 2 - D + 1) :=
-    vecMulVec_mem_wordSpan_of_isPrimitivePaper_of_noninvertible_eigenvector
-      A hNorm hPrim i₀ hNotInv hμ heig
-  have hBasis : ∀ j : Fin D,
-      vecMulVec φ (Pi.single j (1 : ℂ)) ∈ wordSpan A (D ^ 2 - D + 1) :=
-    fun j => hRankOne (Pi.single j 1)
-  have hAssembly : wordSpan A ((D - 1) + (D ^ 2 - D + 1)) = ⊤ :=
-    wordSpan_eq_top_of_vectorSpreadSpan_eq_top_of_rankOneBasis A φ hVec hBasis
-  have hD_pos : 0 < D := Nat.pos_of_ne_zero (NeZero.ne D)
-  have hArith : (D - 1) + (D ^ 2 - D + 1) = D ^ 2 := by
-    have hDD2 : D ≤ D ^ 2 := by
-      calc
-        D = D * 1 := (Nat.mul_one D).symm
-        _ ≤ D * D := Nat.mul_le_mul_left D hD_pos
-        _ = D ^ 2 := (sq D).symm
-    zify [hD_pos, hDD2]
-    ring
-  rwa [hArith] at hAssembly
+  exact
+    wordSpan_eq_top_of_isPrimitivePaper_of_mem_wordSpan_one_of_noninvertible_eigenvector
+      A hNorm hPrim (apply_mem_wordSpan_one A i₀) hNotInv hφ hμ heig
 
-/-- **Theorem 1, case (3)**: under the noninvertible eigenvalue hypotheses,
-`iIndex A ≤ D ^ 2`.
+/-- **Theorem 1, case (3)**: generator corollary of the one-step subspace theorem.
 
 Paper: arXiv:0909.5347, Theorem 1 case (3); Wolf, Theorem 6.9.
 -/
@@ -172,15 +239,72 @@ theorem iIndex_le_sq_of_noninvertible_eigenvector
     {φ : Fin D → ℂ} {μ : ℂ} (hφ : φ ≠ 0) (hμ : μ ≠ 0)
     (heig : A i₀ *ᵥ φ = μ • φ) :
     iIndex A ≤ D ^ 2 := by
-  have htop : wordSpan A (D ^ 2) = ⊤ :=
-    wordSpan_eq_top_of_isPrimitivePaper_of_noninvertible_eigenvector
-      A hNorm hPrim i₀ hNotInv hφ hμ heig
-  exact Nat.sInf_le (show D ^ 2 ∈ {n : ℕ | wordSpan A n = ⊤} from htop)
+  exact
+    iIndex_le_sq_of_mem_wordSpan_one_of_noninvertible_eigenvector
+      A hNorm hPrim (apply_mem_wordSpan_one A i₀) hNotInv hφ hμ heig
 
-/-! ## Part 3: Case (2) — invertible Kraus operator -/
+/-! ## Part 3: Case (2) — invertible one-step subspace element -/
 
-/-- **Theorem 1, case (2)**: under an invertible Kraus operator hypothesis,
-`wordSpan A (D ^ 2 - krausRank A + 1) = ⊤`.
+/-- **Theorem 1, case (2)**: under the paper-faithful one-step subspace
+invertibility hypothesis, `wordSpan A (D ^ 2 - krausRank A + 1) = ⊤`.
+
+If `A` is normalized and primitive in the paper's sense and some arbitrary
+matrix `X ∈ S₁(A) = wordSpan A 1` is invertible, then the sharp case-(2)
+word-length bound holds.
+
+The proof adds `X` as a redundant first generator. This leaves every exact word
+span and `krausRank` unchanged, and reduces the statement to the existing
+single-generator invertible theorem.
+
+Paper: arXiv:0909.5347, Theorem 1 case (2); Wolf, Theorem 6.9.
+-/
+theorem wordSpan_eq_top_of_isPrimitivePaper_of_mem_wordSpan_one_of_isUnit
+    [NeZero D]
+    (A : MPSTensor d D)
+    (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (hPrim : IsPrimitivePaper A)
+    {X : Matrix (Fin D) (Fin D) ℂ}
+    (hX : X ∈ wordSpan A 1)
+    (hInv : IsUnit X) :
+    wordSpan A (D ^ 2 - krausRank A + 1) = ⊤ := by
+  let B : MPSTensor (d + 1) D := oneStepAugment A X
+  have hN : IsNormal A := isNormal_of_isPrimitivePaper A hNorm hPrim
+  have hNB : IsNormal B := by
+    simpa [B] using isNormal_oneStepAugment_of_mem_wordSpan_one A hX hN
+  have hInvB : IsUnit (B (0 : Fin (d + 1))) := by
+    simpa [B, oneStepAugment] using hInv
+  have hKraus : krausRank B = krausRank A := by
+    simpa [B] using krausRank_oneStepAugment A hX
+  have hBtop : wordSpan B (D ^ 2 - krausRank B + 1) = ⊤ :=
+    wordSpan_eq_top_of_isNormal_of_isUnit B (0 : Fin (d + 1)) hInvB hNB
+  have hBtop' : wordSpan B (D ^ 2 - krausRank A + 1) = ⊤ := by
+    simpa [hKraus] using hBtop
+  have hEq : wordSpan B (D ^ 2 - krausRank A + 1) =
+      wordSpan A (D ^ 2 - krausRank A + 1) := by
+    simpa [B] using wordSpan_oneStepAugment_eq A hX (D ^ 2 - krausRank A + 1)
+  rwa [hEq] at hBtop'
+
+/-- **Theorem 1, case (2)**: under the paper-faithful one-step subspace
+invertibility hypothesis, `iIndex A ≤ D ^ 2 - krausRank A + 1`.
+
+Paper: arXiv:0909.5347, Theorem 1 case (2); Wolf, Theorem 6.9.
+-/
+theorem iIndex_le_of_mem_wordSpan_one_of_isUnit
+    [NeZero D]
+    (A : MPSTensor d D)
+    (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (hPrim : IsPrimitivePaper A)
+    {X : Matrix (Fin D) (Fin D) ℂ}
+    (hX : X ∈ wordSpan A 1)
+    (hInv : IsUnit X) :
+    iIndex A ≤ D ^ 2 - krausRank A + 1 := by
+  have htop : wordSpan A (D ^ 2 - krausRank A + 1) = ⊤ :=
+    wordSpan_eq_top_of_isPrimitivePaper_of_mem_wordSpan_one_of_isUnit
+      A hNorm hPrim hX hInv
+  exact Nat.sInf_le
+    (show D ^ 2 - krausRank A + 1 ∈ {n : ℕ | wordSpan A n = ⊤} from htop)
+
+/-- **Theorem 1, case (2)**: generator corollary of the one-step subspace theorem.
 
 If `A` is normalized and primitive in the paper's sense and some Kraus operator
 `A i₀` is invertible, then the sharp case-(2) word-length bound holds.
@@ -195,11 +319,10 @@ theorem wordSpan_eq_top_of_isPrimitivePaper_of_isUnit
     (i₀ : Fin d)
     (hInv : IsUnit (A i₀)) :
     wordSpan A (D ^ 2 - krausRank A + 1) = ⊤ := by
-  exact wordSpan_eq_top_of_isNormal_of_isUnit A i₀ hInv
-    (isNormal_of_isPrimitivePaper A hNorm hPrim)
+  exact wordSpan_eq_top_of_isPrimitivePaper_of_mem_wordSpan_one_of_isUnit
+    A hNorm hPrim (apply_mem_wordSpan_one A i₀) hInv
 
-/-- **Theorem 1, case (2)**: under an invertible Kraus operator hypothesis,
-`iIndex A ≤ D ^ 2 - krausRank A + 1`.
+/-- **Theorem 1, case (2)**: generator corollary of the one-step subspace theorem.
 
 Paper: arXiv:0909.5347, Theorem 1 case (2); Wolf, Theorem 6.9.
 -/
@@ -211,10 +334,8 @@ theorem iIndex_le_of_isPrimitivePaper_of_isUnit
     (i₀ : Fin d)
     (hInv : IsUnit (A i₀)) :
     iIndex A ≤ D ^ 2 - krausRank A + 1 := by
-  have htop : wordSpan A (D ^ 2 - krausRank A + 1) = ⊤ :=
-    wordSpan_eq_top_of_isPrimitivePaper_of_isUnit A hNorm hPrim i₀ hInv
-  exact Nat.sInf_le
-    (show D ^ 2 - krausRank A + 1 ∈ {n : ℕ | wordSpan A n = ⊤} from htop)
+  exact iIndex_le_of_mem_wordSpan_one_of_isUnit
+    A hNorm hPrim (apply_mem_wordSpan_one A i₀) hInv
 
 /-! ## Part 4: Case (1) — General bound via blocking
 
