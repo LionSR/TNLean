@@ -70,16 +70,15 @@ The formalized non-Gemma route from `SameMPV₂ A B` already constructs common p
 nonzero-sector families after a common blocking, once the blocked-word relabeling assertion is
 available.  To reach the sector-weight conclusion of the Cirac--Pérez-García--Schuch--Verstraete
 fundamental theorem for exactly those produced families, the current library still needs the
-comparison data listed here: equality of zero-tail dimensions, one-site injectivity, and a BNT
-proportional-decomposition comparison.  The field `comparison` is deliberately phrased for the
-families produced by the structural theorem, so the remaining assumptions cannot be applied to a
-different, more convenient decomposition. -/
+comparison data for those produced families.  The field `comparison` is supplied with their
+trace-preserving, primitive, and irreducible structural evidence, so the remaining assumptions
+cannot be applied to a different, more convenient decomposition. -/
 structure AfterBlockingFundamentalTheoremHypotheses
     {d D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂) : Prop where
   /-- The one-sided blocked-word relabeling equality for common cyclic-sector families. -/
   relabel : CommonSectorRelabelingHypothesis d
-  /-- The remaining zero-tail, injectivity, and BNT proportional-comparison data for the produced
-  common primitive nonzero-sector families. -/
+  /-- The remaining comparison data for the produced common primitive nonzero-sector families,
+  with the structural evidence for trace preservation, primitivity, and irreducibility supplied. -/
   comparison : ∀ {p zeroTailA zeroTailB rA rB : ℕ}
       {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
       {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
