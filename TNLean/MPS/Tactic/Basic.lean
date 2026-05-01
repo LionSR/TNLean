@@ -7,41 +7,43 @@ import Mathlib.Tactic
 /-!
 # Tactics for tensor-network proofs
 
-This file provides small custom `simp` attribute sets and thin tactic wrappers
+This file provides small custom `simp` attribute sets and thin tactic macros
 for recurring proof patterns in MPS / channel / overlap files.
 
 ## Custom simp attributes
 
 * `mps_block_words` : direct/iterated blocking maps, `wordOfBlock` expressions
-* `mps_transfer` : transfer map unfoldings, basic trace/scalar identities
-* `mps_zero_tail` : zero-tail MPV terms
+* `mps_transfer` : transfer map unfoldings
+* `mps_zero_tail` : zero-tail MPV term simplification
 
-## Tactic wrappers
+## Tactic macros
 
 * `mpv_ext` : introduce `N`, `σ` for `SameMPV₂` or `N`, `hN`, `σ` for `SameMPV₂Pos`
 * `block_words` : normalize direct/iterated blocking maps and `wordOfBlock` expressions
-* `transfer_simp` : unfold transfer maps and simplify trace/scalar side conditions
-* `zero_tail_simp` : simplify zero-tail MPV terms after the length case is chosen
+* `transfer_simp` : unfold transfer maps using `@[mps_transfer]`
+* `zero_tail_simp` : simplify zero-tail MPV terms using `@[mps_zero_tail]`
 
 ## Design
 
 The tactics are intentionally simple. They do not search; when the normal form does
 not apply, they leave clear unsolved goals. The `simp` attribute sets are the primary
-mechanism; the tactic wrappers are thin sugar over the attributes.
+mechanism; the tactic macros are thin sugar over the attributes.
 -/
+
+open Lean Elab Tactic Meta
 
 /-! ### Custom simp attribute sets -/
 
 /-- Simp set for direct/iterated blocking maps and `wordOfBlock` normal forms. -/
 register_simp_attr mps_block_words
 
-/-- Simp set for transfer map unfoldings and trace/scalar identities. -/
+/-- Simp set for transfer map unfoldings. -/
 register_simp_attr mps_transfer
 
 /-- Simp set for zero-tail MPV term simplification. -/
 register_simp_attr mps_zero_tail
 
-/-! ### Tactic wrappers -/
+/-! ### Tactic macros -/
 
 /--
 Introduce MPV length and word variables for `SameMPV₂` or `SameMPV₂Pos` goals.
@@ -50,16 +52,37 @@ For `SameMPV₂ A B` (i.e. `∀ N σ, mpv A σ = mpv B σ`), `mpv_ext` reduces t
 `mpv A σ = mpv B σ` by introducing `N` and `σ` as fresh variables.
 
 For `SameMPV₂Pos A B` (i.e. `∀ N, 0 < N → ∀ σ, mpv A σ = mpv B σ`), `mpv_ext` also
-introduces a name for the positivity hypothesis.
+introduces `hN : 0 < N`.
 
-If the goal does not match either pattern, `mpv_ext` does nothing.
+If the goal does not match either pattern, `mpv_ext` leaves the goal unchanged.
 -/
-macro "mpv_ext" : tactic => `(tactic|
-  first
-    | intro N hN σ
-    | intro N σ
-    | skip
-)
+elab "mpv_ext" : tactic => do
+  -- Introduce N : ℕ
+  let fvNId ← liftMetaTacticAux fun mvarId => do
+    let (fvarId, mvarId) ← mvarId.intro `N
+    pure (fvarId, [mvarId])
+  Term.addLocalVarInfo (mkNullNode) (mkFVar fvNId)
+  -- Check next binder type to distinguish SameMPV₂ from SameMPV₂Pos
+  -- SameMPV₂:  ∀ (σ : Fin N → Fin d), ...   (non-Prop domain)
+  -- SameMPV₂Pos: 0 < N → ∀ σ, ...           (Prop domain)
+  let g ← getMainGoal
+  let targetType ← withTransparency .all <| whnf (← g.getType)
+  if targetType.isForall && !(← isProp targetType.bindingDomain!) then
+    -- SameMPV₂ path: immediate ∀ σ
+    let fvSId ← liftMetaTacticAux fun mvarId => do
+      let (fvarId, mvarId) ← mvarId.intro `σ
+      pure (fvarId, [mvarId])
+    Term.addLocalVarInfo (mkNullNode) (mkFVar fvSId)
+  else
+    -- SameMPV₂Pos path: 0 < N → then ∀ σ
+    let fvHNId ← liftMetaTacticAux fun mvarId => do
+      let (fvarId, mvarId) ← mvarId.intro `hN
+      pure (fvarId, [mvarId])
+    Term.addLocalVarInfo (mkNullNode) (mkFVar fvHNId)
+    let fvSId ← liftMetaTacticAux fun mvarId => do
+      let (fvarId, mvarId) ← mvarId.intro `σ
+      pure (fvarId, [mvarId])
+    Term.addLocalVarInfo (mkNullNode) (mkFVar fvSId)
 
 /--
 Normalize direct/iterated blocking maps and `wordOfBlock` expressions.
@@ -73,27 +96,22 @@ Uses the lemmas tagged with `@[mps_block_words]`.  After `block_words`:
 The tactic does not rewrite general matrix multiplication or common MPS tensor identities;
 it only normalises the block-word presentation.
 -/
-macro "block_words" : tactic => `(tactic| simp [mps_block_words])
+macro "block_words" : tactic => `(tactic| simp only [mps_block_words])
 
 /--
-Unfold transfer maps and simplify trace/scalar side conditions.
+Unfold transfer maps using `@[mps_transfer]`.
 
-Uses the lemmas tagged with `@[mps_transfer]`.  After `transfer_simp`:
-* `transferMap A X` is unfolded to `∑ i, A i * X * (A i)ᴴ`
-* basic `Multiplicative.ofAdd` conversions (if any) are resolved
-
-The tactic avoids broad `simp` over matrix multiplication, since that tends to
-make goals harder to read.
+Currently the `mps_transfer` set contains `transferMap_apply`, so `transfer_simp`
+unfolds `transferMap A X` to `∑ i, A i * X * (A i)ᴴ`.
 -/
-macro "transfer_simp" : tactic => `(tactic| simp [mps_transfer])
+macro "transfer_simp" : tactic => `(tactic| simp only [mps_transfer])
 
 /--
-Simplify zero-tail MPV terms.
+Simplify zero-tail MPV terms using `@[mps_zero_tail]`.
 
-Uses the lemmas tagged with `@[mps_zero_tail]`.  After `zero_tail_simp`:
-* at positive length `N > 0`, `mpv (zeroMPSTensor d D) σ` simplifies to `0`
-* at length zero `N = 0`, `mpv (zeroMPSTensor d D) σ` simplifies to `(D : ℂ)`
-
-Call `zero_tail_simp` only after fixing the length case.
+Currently the `mps_zero_tail` set contains `mpv_zeroMPSTensor`, so `zero_tail_simp`
+rewrites `mpv (zeroMPSTensor d D) σ` to `if N = 0 then (D : ℂ) else 0`.
+The user is responsible for resolving the `if` by providing the length case (e.g.
+`hN : 0 < N` or `hN : N ≠ 0`).
 -/
-macro "zero_tail_simp" : tactic => `(tactic| simp [mps_zero_tail])
+macro "zero_tail_simp" : tactic => `(tactic| simp only [mps_zero_tail])
