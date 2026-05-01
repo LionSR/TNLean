@@ -938,6 +938,48 @@ theorem zeroTail_commonFlat_of_groupedBlockCastAgrees
   exact zeroTail_commonFlat_of_blockwise A μ blocks F hMPV
     (fun k => F.blockTensor_sameMPV₂_commonReindexedBlock_of_groupedBlockCastAgrees k (hCast k))
 
+/-- The preceding zero-tail rewriting from the coordinate-grouping condition, expressed at a
+prescribed common length. -/
+theorem zeroTail_commonFlatAt_of_groupedBlockCastAgrees
+    {d D r z : ℕ} {dim : Fin r → ℕ}
+    (A : MPSTensor d D) (μ : Fin r → ℂ)
+    (blocks : (k : Fin r) → MPSTensor d (dim k))
+    (F : CommonBlockedCyclicSectorFamily blocks)
+    {p : ℕ} (hp : F.p = p)
+    (hMPV : ∀ (N : ℕ) (σ : Fin N → Fin d),
+      mpv A σ = mpv (zeroMPSTensor d z) σ +
+        mpv (toTensorFromBlocks (d := d) (μ := μ) blocks) σ)
+    (hCast : ∀ k : Fin r, F.groupedBlockCastAgrees k) :
+    ∀ (N : ℕ) (σ : Fin N → Fin (blockPhysDim d p)),
+      mpv (blockTensor (d := d) (D := D) A p) σ =
+        mpv (zeroMPSTensor (blockPhysDim d p) z) σ +
+          mpv (toTensorFromBlocks (d := blockPhysDim d p)
+            (μ := F.commonFlatWeight μ) (F.commonFlatBlocksAt hp)) σ := by
+  subst p
+  simpa [CommonBlockedCyclicSectorFamily.commonFlatBlocksAt] using
+    zeroTail_commonFlat_of_groupedBlockCastAgrees A μ blocks F hMPV hCast
+
+/-- At positive lengths, the blocked tensor has the same MPV coefficients as the
+weighted common-sector family whenever the coordinate-grouping condition holds. -/
+theorem sameMPV₂Pos_blockTensor_commonFlatAt_of_groupedBlockCastAgrees
+    {d D r z : ℕ} {dim : Fin r → ℕ}
+    (A : MPSTensor d D) (μ : Fin r → ℂ)
+    (blocks : (k : Fin r) → MPSTensor d (dim k))
+    (F : CommonBlockedCyclicSectorFamily blocks)
+    {p : ℕ} (hp : F.p = p)
+    (hMPV : ∀ (N : ℕ) (σ : Fin N → Fin d),
+      mpv A σ = mpv (zeroMPSTensor d z) σ +
+        mpv (toTensorFromBlocks (d := d) (μ := μ) blocks) σ)
+    (hCast : ∀ k : Fin r, F.groupedBlockCastAgrees k) :
+    SameMPV₂Pos
+      (blockTensor (d := d) (D := D) A p)
+      (toTensorFromBlocks (d := blockPhysDim d p)
+        (μ := F.commonFlatWeight μ) (F.commonFlatBlocksAt hp)) := by
+  have hZeroTail := zeroTail_commonFlatAt_of_groupedBlockCastAgrees
+    (d := d) (D := D) (r := r) (z := z) (dim := dim)
+    A μ blocks F hp hMPV hCast
+  exact sameMPV₂Pos_of_zeroTail_eq _ _ hZeroTail
+
 /-- If the canonical blocked nonzero part agrees with the common reindexed blocks,
 the zero-tail equation can be rewritten using the derived common-sector family.
 This is the one-sided theorem that puts the reindexed data above in the form used
@@ -1081,6 +1123,36 @@ theorem zeroTail_commonFlat_transport_of_reindexed
   · intro x
     exact F.commonFlatWeight_ne_zero μ hμ x
 
+/-- The one-sided zero-tail equation, weighted nonzero-part equality, and nonvanishing
+of transported common-sector weights obtained from the coordinate-grouping condition. -/
+theorem zeroTail_commonFlat_transport_of_groupedBlockCastAgrees
+    {d D r z : ℕ} {dim : Fin r → ℕ}
+    (A : MPSTensor d D) (μ : Fin r → ℂ)
+    (blocks : (k : Fin r) → MPSTensor d (dim k))
+    (F : CommonBlockedCyclicSectorFamily blocks)
+    (hμ : ∀ k, μ k ≠ 0)
+    (hMPV : ∀ (N : ℕ) (σ : Fin N → Fin d),
+      mpv A σ = mpv (zeroMPSTensor d z) σ +
+        mpv (toTensorFromBlocks (d := d) (μ := μ) blocks) σ)
+    (hCast : ∀ k : Fin r, F.groupedBlockCastAgrees k) :
+    (∀ (N : ℕ) (σ : Fin N → Fin (blockPhysDim d F.p)),
+      mpv (blockTensor (d := d) (D := D) A F.p) σ =
+        mpv (zeroMPSTensor (blockPhysDim d F.p) z) σ +
+          mpv (toTensorFromBlocks (d := blockPhysDim d F.p)
+            (μ := F.commonFlatWeight μ) F.commonFlatBlocks) σ) ∧
+    SameMPV₂
+      (toTensorFromBlocks (d := blockPhysDim d F.p)
+        (μ := fun k : Fin r => (μ k) ^ F.p)
+        (fun k => blockTensor (d := d) (D := dim k) (blocks k) F.p))
+      (toTensorFromBlocks (d := blockPhysDim d F.p)
+        (μ := F.commonFlatWeight μ) F.commonFlatBlocks) ∧
+    (∀ x, F.commonFlatWeight μ x ≠ 0) := by
+  refine ⟨?_, ?_, ?_⟩
+  · exact zeroTail_commonFlat_of_groupedBlockCastAgrees A μ blocks F hMPV hCast
+  · exact F.sameMPV₂_weightedCanonicalBlock_commonFlat_of_groupedBlockCastAgrees μ hCast
+  · intro x
+    exact F.commonFlatWeight_ne_zero μ hμ x
+
 /-- The one-sided blocked-word relabeling hypothesis for common cyclic sectors.
 
 It says that, for every common cyclic-sector family, the canonically blocked
@@ -1097,6 +1169,30 @@ abbrev CommonSectorRelabelingHypothesis (d : ℕ) : Prop :=
         (fun k => blockTensor (d := d) (D := dim k) (blocks k) F.p))
       (toTensorFromBlocks (d := blockPhysDim d F.p)
         (μ := fun k : Fin r => (μ k) ^ F.p) F.commonReindexedBlock)
+
+/-- The global coordinate-grouping assertion for common cyclic-sector families.
+
+It requires every common blocked cyclic-sector family to satisfy the
+coordinate-grouping condition for each original block, so the canonical identification
+with the iterated blocked alphabet is the explicit grouping of direct blocked words. -/
+abbrev CommonGroupedBlockCastHypothesis (d : ℕ) : Prop :=
+  ∀ {r : ℕ} {dim : Fin r → ℕ}
+    (blocks : (k : Fin r) → MPSTensor d (dim k))
+    (F : CommonBlockedCyclicSectorFamily blocks),
+    ∀ k : Fin r, F.groupedBlockCastAgrees k
+
+namespace CommonGroupedBlockCastHypothesis
+
+/-- The coordinate-grouping assertion implies the one-sided reindexing hypothesis
+used by the common-sector structural theorem. -/
+theorem toRelabelingHypothesis {d : ℕ}
+    (hCast : CommonGroupedBlockCastHypothesis d) :
+    CommonSectorRelabelingHypothesis d := by
+  intro r dim μ blocks F
+  exact F.sameMPV₂_weightedCanonicalBlock_commonReindexedBlock_of_groupedBlockCastAgrees μ
+    (hCast blocks F)
+
+end CommonGroupedBlockCastHypothesis
 
 set_option maxHeartbeats 800000 in
 -- The conclusion records both decompositions and all their structural hypotheses together.

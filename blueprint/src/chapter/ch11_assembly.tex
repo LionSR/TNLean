@@ -1497,6 +1497,38 @@ two-basis sector comparison theorem.
 	isolated by the remaining coordinate equality for direct and iterated blocking.
 \end{definition}
 
+\begin{definition}[Global coordinate-grouping hypothesis for common sectors]%
+\label{def:common_grouped_block_cast_hypothesis}
+	\lean{MPSTensor.CommonGroupedBlockCastHypothesis}
+	\leanok
+	\uses{def:common_blocked_cyclic_sector_grouped_block_cast}
+	This is the corresponding global assertion at the level of blocked words: every
+	common blocked cyclic-sector family satisfies the coordinate-grouping condition
+	for each original nonzero block.  Equivalently, the canonical identification with
+	each iterated blocked alphabet agrees with grouping the direct blocked word into
+	consecutive words of the period-removal length.
+\end{definition}
+
+\begin{theorem}[Coordinate grouping implies common-sector relabeling]%
+\label{thm:common_grouped_block_cast_to_relabeling}
+	\lean{MPSTensor.CommonGroupedBlockCastHypothesis.toRelabelingHypothesis}
+	\leanok
+	\uses{def:common_grouped_block_cast_hypothesis,
+		def:common_sector_relabeling_hypothesis,
+		thm:common_blocked_cyclic_sector_blocked_word_comparison}
+	If the global coordinate-grouping hypothesis holds, then the blocked-word
+	relabeling hypothesis used by the common-sector structural theorem holds.  The
+	proof is exactly the weighted finite-sum comparison for direct and iterated
+	blocking applied to each common cyclic-sector family.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{thm:common_blocked_cyclic_sector_blocked_word_comparison}
+	Apply the coordinate-grouping comparison to each one-sided family and sum over
+	the original nonzero blocks with the transported powers of the weights.
+\end{proof}
+
 \begin{theorem}[Common-length sectors with conditional block-span consequences]%
 \label{thm:after_blocking_common_primitive_irreducible_blocks_block_span_consequences}
 	\lean{MPSTensor.afterBlocking_commonSector_blockSpan_of_reindexedNonzeroParts}

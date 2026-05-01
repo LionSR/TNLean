@@ -30,3 +30,36 @@ In `TNLean/MPS/CanonicalForm/Assembly/StructuralTheorem.lean`:
 ## Remaining #969/#971 interface gap
 
 These lemmas do not yet construct the final flattened cyclic-sector family at one common physical blocking level. They provide the reusable arithmetic and MPV bookkeeping that such a theorem should call once the dependent-index flattening and nested-blocking associativity data are fixed.
+
+## 2026-05-01 update — coordinate-grouped common-sector transport
+
+After the common-sector comparison and blocked-word grouping infrastructure
+merged, the one-sided zero-tail transport can be stated directly from the precise
+coordinate assertion now isolated in
+`CommonBlockedCyclicSectorFamily.groupedBlockCastAgrees`.
+
+New declarations in `TNLean/MPS/CanonicalForm/Assembly/StructuralTheorem.lean`:
+
+- `MPSTensor.zeroTail_commonFlatAt_of_groupedBlockCastAgrees`: the grouped-block
+  comparison rewrites the zero-tail equation with the weighted common-sector
+  family at any prescribed equal common length.
+- `MPSTensor.sameMPV₂Pos_blockTensor_commonFlatAt_of_groupedBlockCastAgrees`: at
+  positive lengths the zero-tail term vanishes, so the blocked tensor agrees with
+  that weighted common-sector family.
+- `MPSTensor.zeroTail_commonFlat_transport_of_groupedBlockCastAgrees`: bundles the
+  zero-tail equation, the weighted nonzero-part MPV equality, and nonvanishing of
+  the transported common-sector weights under the grouped-block coordinate
+  assertion.
+- `MPSTensor.CommonGroupedBlockCastHypothesis` and
+  `MPSTensor.CommonGroupedBlockCastHypothesis.toRelabelingHypothesis`: record the
+  global coordinate-grouping assertion and show that it implies the reindexed
+  nonzero-part hypothesis used by the common-sector structural theorem.
+
+This does not prove the coordinate assertion itself.  After #1096, the direct
+and iterated blocked alphabets are related by the explicit equivalence
+`directIteratedBlockEquiv`, and
+`groupedBlockCastAgrees_iff_iteratedBlockIndex_cast` restates the remaining point
+as the comparison between this equivalence and the canonical identification used
+inside `CommonBlockedCyclicSectorFamily`.  The present transport theorem therefore
+uses the grouped-block coordinate assertion as the honest remaining input rather
+than replacing it by a stronger unproved coordinate choice.
