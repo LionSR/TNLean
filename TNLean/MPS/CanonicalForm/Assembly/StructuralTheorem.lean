@@ -919,6 +919,25 @@ theorem zeroTail_commonFlat_of_word_eq
   exact zeroTail_commonFlat_of_blockwise A μ blocks F hMPV
     (fun k => F.blockTensor_sameMPV₂_commonReindexedBlock_of_word_eq k (hWord k))
 
+/-- If the numeric casts agree with consecutive grouping for every nonzero block, the
+zero-tail equation can be written using the derived common-sector family. -/
+theorem zeroTail_commonFlat_of_groupedBlockCastAgrees
+    {d D r z : ℕ} {dim : Fin r → ℕ}
+    (A : MPSTensor d D) (μ : Fin r → ℂ)
+    (blocks : (k : Fin r) → MPSTensor d (dim k))
+    (F : CommonBlockedCyclicSectorFamily blocks)
+    (hMPV : ∀ (N : ℕ) (σ : Fin N → Fin d),
+      mpv A σ = mpv (zeroMPSTensor d z) σ +
+        mpv (toTensorFromBlocks (d := d) (μ := μ) blocks) σ)
+    (hCast : ∀ k : Fin r, F.groupedBlockCastAgrees k) :
+    ∀ (N : ℕ) (σ : Fin N → Fin (blockPhysDim d F.p)),
+      mpv (blockTensor (d := d) (D := D) A F.p) σ =
+        mpv (zeroMPSTensor (blockPhysDim d F.p) z) σ +
+          mpv (toTensorFromBlocks (d := blockPhysDim d F.p)
+            (μ := F.commonFlatWeight μ) F.commonFlatBlocks) σ := by
+  exact zeroTail_commonFlat_of_blockwise A μ blocks F hMPV
+    (fun k => F.blockTensor_sameMPV₂_commonReindexedBlock_of_groupedBlockCastAgrees k (hCast k))
+
 /-- If the canonical blocked nonzero part agrees with the common reindexed blocks,
 the zero-tail equation can be rewritten using the derived common-sector family.
 This is the one-sided theorem that puts the reindexed data above in the form used

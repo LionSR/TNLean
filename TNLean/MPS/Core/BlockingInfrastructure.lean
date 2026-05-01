@@ -320,6 +320,76 @@ theorem wordOfBlock_iteratedBlockIndex (d m n : ℕ)
   exact wordOfBlock_blockIndexOfList d (m * n)
     (flattenBlockedWord d m (wordOfBlock (blockPhysDim d m) n i)) _
 
+/-- The position of the `t`-th letter in the `j`-th block of a word split into
+`n` consecutive blocks of length `m`. -/
+private theorem blockWordChunkIndex_lt (m n : ℕ) (j : Fin n) (t : Fin m) :
+    m * (j : ℕ) + (t : ℕ) < m * n := by
+  calc
+    m * (j : ℕ) + (t : ℕ) < m * (j : ℕ) + m :=
+      Nat.add_lt_add_left t.is_lt _
+    _ = m * ((j : ℕ) + 1) := by rw [Nat.mul_add, Nat.mul_one]
+    _ ≤ m * n := Nat.mul_le_mul_left m (Nat.succ_le_of_lt j.is_lt)
+
+/-- The `j`-th length-`m` subword of a direct length-`m * n` blocked word. -/
+noncomputable def blockWordChunk (d m n : ℕ) (i : Fin (blockPhysDim d (m * n)))
+    (j : Fin n) : List (Fin d) :=
+  List.ofFn fun t : Fin m =>
+    decodeBlock d (m * n) i ⟨m * (j : ℕ) + (t : ℕ), blockWordChunkIndex_lt m n j t⟩
+
+@[simp] theorem length_blockWordChunk (d m n : ℕ) (i : Fin (blockPhysDim d (m * n)))
+    (j : Fin n) : (blockWordChunk d m n i j).length = m := by
+  simp [blockWordChunk]
+
+/-- Encode a direct length-`m * n` blocked index as an iterated blocked index by grouping
+its decoded word into `n` consecutive blocks of length `m`. -/
+noncomputable def directToIteratedBlockIndex (d m n : ℕ)
+    (i : Fin (blockPhysDim d (m * n))) :
+    Fin (blockPhysDim (blockPhysDim d m) n) :=
+  blockIndexOfList (blockPhysDim d m) n
+    (List.ofFn fun j : Fin n =>
+      blockIndexOfList d m (blockWordChunk d m n i j) (length_blockWordChunk d m n i j))
+    (by simp)
+
+/-- Encoding the decoded word of a block gives back the original blocked index. -/
+theorem blockIndexOfList_wordOfBlock (d L : ℕ) (i : Fin (blockPhysDim d L)) :
+    blockIndexOfList d L (wordOfBlock d L i) (length_wordOfBlock d L i) = i := by
+  classical
+  unfold blockIndexOfList wordOfBlock decodeBlock
+  simp [blockPhysDim]
+
+/-- Flattening the grouped iterated index recovers the direct blocked word. -/
+theorem flattenBlockedWord_wordOfBlock_directToIteratedBlockIndex (d m n : ℕ)
+    (i : Fin (blockPhysDim d (m * n))) :
+    flattenBlockedWord d m
+        (wordOfBlock (blockPhysDim d m) n (directToIteratedBlockIndex d m n i)) =
+      wordOfBlock d (m * n) i := by
+  classical
+  unfold directToIteratedBlockIndex
+  rw [wordOfBlock_blockIndexOfList]
+  simp only [flattenBlockedWord, List.map_ofFn]
+  change (List.ofFn (fun j : Fin n =>
+    wordOfBlock d m (blockIndexOfList d m (blockWordChunk d m n i j) _))).flatten =
+      wordOfBlock d (m * n) i
+  simp_rw [wordOfBlock_blockIndexOfList]
+  simpa [blockWordChunk, wordOfBlock] using
+    (List.ofFn_mul' (m := m) (n := n) (f := decodeBlock d (m * n) i)).symm
+
+/-- Direct blocking is recovered after grouping a direct blocked index and then flattening
+it through the iterated-blocking map. -/
+theorem wordOfBlock_iteratedBlockIndex_directToIteratedBlockIndex (d m n : ℕ)
+    (i : Fin (blockPhysDim d (m * n))) :
+    wordOfBlock d (m * n) (iteratedBlockIndex d m n (directToIteratedBlockIndex d m n i)) =
+      wordOfBlock d (m * n) i := by
+  rw [wordOfBlock_iteratedBlockIndex,
+    flattenBlockedWord_wordOfBlock_directToIteratedBlockIndex]
+
+/-- Rewriting the blocking length does not change the decoded blocked word. -/
+theorem wordOfBlock_cast_length (d : ℕ) {L₁ L₂ : ℕ} (h : L₁ = L₂)
+    (i : Fin (blockPhysDim d L₁)) :
+    wordOfBlock d L₂ (Fin.cast (congr_arg (blockPhysDim d) h) i) = wordOfBlock d L₁ i := by
+  subst h
+  rfl
+
 /-- Reindex the physical alphabet of a tensor by a map of physical indices. -/
 noncomputable def reindexPhysical {d₁ d₂ D : ℕ} (f : Fin d₁ → Fin d₂)
     (A : MPSTensor d₂ D) : MPSTensor d₁ D :=
