@@ -3,6 +3,7 @@
 \usepackage{amsmath,amssymb}
 \usepackage{xurl}
 \usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
 
 \input{command}
 
@@ -25,8 +26,8 @@ Related formal work is recorded in
 \href{https://github.com/LionSR/TNLean/pull/682}{PR \#682} and
 \href{https://github.com/LionSR/TNLean/pull/813}{PR \#813}.}
 
-Let $A$ be a tensor in canonical form, and let
-$A_1,\ldots,A_g$ be a basis of normal tensors for $A$. The paper characterizes
+Let $A$ be a tensor in canonical form with bond-dimension parameter $D$, and
+let $A_1,\ldots,A_g$ be a basis of normal tensors for $A$. The paper characterizes
 such a basis by minimality: no two chosen normal tensors may be related by an
 invertible similarity together with a phase. It then defines block-injective
 canonical form as the statement that, after passing to these blocks, simultaneous
@@ -42,19 +43,15 @@ The source first invokes the quantum Wielandt theorem: after at most $D^4$
 blockings, each normal tensor becomes injective. It then cites David2006 for the
 cross-block step: if $L$ is a blocking length after which every normal block is
 injective, then after $3(L+1)(D-1)$ blockings the tensor is block
-injective. The proposition records the resulting bound as follows:
-\[
-  \text{after blocking at most } 3D^5 \text{ spins, every tensor in canonical
-  form is in block-injective canonical form.}
-  \tag{CPGSV17, Prop. IV.3}
-\]
-Here $D$ is the bond-dimension parameter used in the paper.
+injective. The proposition records the resulting bound in the following form: after
+blocking at most $3D^5$ spins, every tensor in canonical form is in
+block-injective canonical form. This is the assertion labelled CPGSV17,
+Proposition~IV.3.
 The local source is
 \path{Papers/1606.00608/MPDO-22-12-17-2.tex}, lines 271--345. The cited
-reference is the paper's item \texttt{David2006}, namely D. P\'erez-Garc\'ia,
-F. Verstraete, M. M. Wolf, and J. I. Cirac, ``Matrix Product State
-Representations'', \emph{Quantum Information and Computation} \textbf{7}
-(2007), 401--430.
+reference is the paper's item \texttt{David2006}, namely
+P\'erez-Garc\'ia--Verstraete--Wolf--Cirac
+\cite{PerezGarcia2007MPSReps}.
 
 \section{The formal replacement}
 
