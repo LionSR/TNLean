@@ -1,0 +1,141 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{PEPS Gauge Uniqueness and Balanced Edge Scalars}
+\author{}
+\date{2026-04-30}
+
+\begin{document}
+\maketitle
+
+\section{The assertion}
+
+The uniqueness clause in the Fundamental Theorem for injective PEPS on a simple
+graph appears in \cite[Theorem~2 and Section~3]{Molnar2018NormalPEPS}.
+The argument first blocks the graph around a chosen edge to a three-site
+injective MPS. The one-dimensional fundamental theorem then assigns a gauge to
+that edge. Repeating this construction over all edges gives a family of edge
+gauges, and a local two-tensor comparison gives scalar proportionalities at the
+vertices.\footnote{In the repository source, the edge-blocking step is at
+\path{Papers/1804.04964/paper_normal.tex:981--1009}; the assignment of edge
+gauges is at \path{Papers/1804.04964/paper_normal.tex:1037--1065}; the local
+scalar proportionality argument is at
+\path{Papers/1804.04964/paper_normal.tex:1066--1092} and
+\path{Papers/1804.04964/paper_normal.tex:1204--1207}.}
+
+The theorem is then stated for PEPS on graphs with no double edges and no
+self-loops. It says that two injective PEPS generate the same state if and only
+if their tensors are related by local gauges. In short, the source says that the
+local gauges are ``unique up to a multiplicative constant.''\footnote{The
+quoted uniqueness phrase occurs in
+\path{Papers/1804.04964/paper_normal.tex:1207--1210}. For traceability, this
+note corresponds to \ghissue{1045}.}
+Interpreted as uniqueness up to one common scalar multiplying all edge gauges,
+this statement is too small for a general graph.
+
+\section{The corrected quotient}
+
+Let $G=(V,E)$ be a finite simple graph with a fixed orientation of each edge.
+For an edge $e$, a local gauge family assigns an invertible matrix $X_e$ on the
+bond space of $e$. At the tail of $e$ the endpoint action is $X_e$, and at the
+head of $e$ it is $X_e^{-1}$.
+
+A family of nonzero edge scalars $c=(c_e)_{e\in E}$ determines endpoint scalars
+\[
+  c_{v,e}=\begin{cases}
+    c_e, & \text{if } v \text{ is the tail of } e,\\
+    c_e^{-1}, & \text{if } v \text{ is the head of } e.
+  \end{cases}
+\]
+The family is vertex-balanced if
+\[
+  \prod_{e\ni v} c_{v,e}=1
+  \qquad\text{for every } v\in V.
+\]
+Two gauge families $X$ and $Y$ are equivalent modulo balanced edge scalars if
+there is such a vertex-balanced family $c$ with
+\[
+  X_{v,e}=c_{v,e}Y_{v,e}
+  \qquad\text{for every incident pair } (v,e),
+\]
+where $X_{v,e}$ and $Y_{v,e}$ denote the oriented endpoint actions of the two
+families.
+
+This is the graph-correct quotient. Rescaling the incident endpoint gauges at a
+vertex $v$ by the factors $c_{v,e}$ multiplies the gauged local tensor at $v$ by
+$\prod_{e\ni v} c_{v,e}$. If the scalar family is vertex-balanced, this product
+is $1$ at every vertex, so all local gauged tensors are unchanged. Thus local
+gauge uniqueness can at best be uniqueness modulo these balanced edge scalars.
+The formal statement uses this quotient as the corrected uniqueness statement.\footnote{The formal definitions are
+\leanid{TNLean.PEPS.edgeScalarAt}, \leanid{TNLean.PEPS.IsVertexBalanced}, and
+\leanid{TNLean.PEPS.GaugeEquivModEdgeScalars} in
+\path{TNLean/PEPS/FundamentalTheorem.lean:603--625}. The corresponding
+blueprint entries are at \path{blueprint/src/chapter/ch13a_peps_ft.tex:375--423}.}
+
+\section{The triangle witness}
+
+The obstruction already appears on the connected triangle. Let the vertices be
+$1<2<3$, orient every edge from the smaller endpoint to the larger endpoint, and
+let every bond dimension be $1$. Then an edge gauge is just a nonzero complex
+number. Take any nonzero injective bond-dimension-one PEPS tensor $A$, and
+compare the identity gauge family with the scalar gauge family
+\[
+  c_{12}=t,\qquad c_{23}=t,\qquad c_{13}=t^{-1},
+  \qquad t\in\mathbb C^\times,\quad t^2\ne 1.
+\]
+At the three vertices the oriented products are
+\[
+  c_{12}c_{13}=1,\qquad
+  c_{12}^{-1}c_{23}=1,\qquad
+  c_{13}^{-1}c_{23}^{-1}=1.
+\]
+Hence the family is vertex-balanced. Applying this gauge family to $A$ gives
+back the same local tensor at every vertex, so it is a second gauge family
+relating $A$ to itself.
+
+There is no single global scalar $s$ with $c_{12}=c_{13}=c_{23}=s$. Indeed,
+$c_{12}=c_{13}$ would give $t=t^{-1}$, contradicting $t^2\ne 1$. Therefore the
+global-scalar uniqueness interpretation is false even for a connected simple
+graph with one-dimensional bonds. The same example fits the balanced
+edge-scalar quotient exactly.\footnote{This is the counterexample recorded in
+\path{docs/counterexamples.md:127--135}. It originated in
+\ghissue{762}; the formal
+statement was corrected in \ghpr{790}.}
+
+\section{Formal statement}
+
+The discrepancy is a statement-level divergence, not only an unfinished proof.
+The triangle example satisfies the graph-theoretic setting of the uniqueness
+clause and produces two genuine gauge families which differ by a
+balanced edge-scalar family but not by one global scalar. Consequently the
+source phrase must either be read with this quotient understood, or corrected to
+say uniqueness modulo balanced edge scalars.
+
+The corrected quotient has not yet been fully proved. The repaired uniqueness
+result is stated formally, but its proof still has a remaining tensor-factor
+scalar-ratio and global-reconciliation step. The formal proof has reduced the
+problem to equality of products of incident edge-gauge entries at each vertex;
+what remains is to extract nonzero scalar ratios on the incident edges with
+product $1$ at the vertex, and then reconcile these local choices into a single
+global vertex-balanced edge-scalar family.\footnote{For traceability, the
+declaration is \texttt{TNLean.PEPS.gauge\_unique\_mod\_edge\_scalars}, and the
+remaining proof obligation is at
+\path{TNLean/PEPS/FundamentalTheorem.lean:686--730}. This point is recorded in
+\ghissue{842};
+\ghpr{879} reduced the formal
+statement to the scalar-ratio and global-reconciliation step.}
+
+Thus the corrected mathematical statement is uniqueness modulo balanced edge
+scalars, and the triangle example refutes the smaller quotient. The repaired
+uniqueness theorem remains a stated formal result rather than a completed proof.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
