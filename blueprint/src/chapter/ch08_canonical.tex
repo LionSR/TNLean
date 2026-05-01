@@ -3324,22 +3324,29 @@ The following results separate the zero blocks from the nonzero blocks.
 \label{thm:zero_tail_common_flat_of_blocked_word_comparison}
 	\lean{MPSTensor.zeroTail_commonFlat_of_blockwise,
 		MPSTensor.zeroTail_commonFlat_of_word_eq,
-		MPSTensor.zeroTail_commonFlat_of_groupedBlockCastAgrees}
+		MPSTensor.zeroTail_commonFlat_of_groupedBlockCastAgrees,
+		MPSTensor.zeroTail_commonFlatAt_of_groupedBlockCastAgrees,
+		MPSTensor.sameMPV₂Pos_blockTensor_commonFlatAt_of_groupedBlockCastAgrees}
 	\leanok
 	\uses{thm:zero_tail_to_tensor_from_blocks_block_power,
-		thm:common_blocked_cyclic_sector_blocked_word_comparison}
+		thm:common_blocked_cyclic_sector_blocked_word_comparison,
+		def:same_mpv2_pos}
 	For one side, suppose that the original tensor decomposes, as an MPV family,
 	into a zero-tail contribution plus a weighted block-sum nonzero part over the
 	original physical alphabet.  If each directly blocked nonzero block agrees with
 	the corresponding iterated-blocking tensor, then after the common blocking length
 	the zero-tail equation may be written directly with the weighted derived
 	common-sector family.  It is enough to prove the corresponding equality of
-	blocked words for every nonzero block.
+	blocked words for every nonzero block.  Under the coordinate-grouping condition,
+	the same statement is available at any prescribed equal common length, and at
+	positive lengths the zero-tail term vanishes so the blocked tensor agrees with
+	the weighted common-sector tensor.
 \end{theorem}
 
 \begin{proof}\leanok
 	\uses{thm:zero_tail_to_tensor_from_blocks_block_power,
-		thm:common_blocked_cyclic_sector_blocked_word_comparison}
+		thm:common_blocked_cyclic_sector_blocked_word_comparison,
+		def:same_mpv2_pos}
 	First transport the original zero-tail/nonzero decomposition through the common
 	blocking length.  Then use the blockwise comparison of direct and iterated
 	blocking, assembled over the weighted direct sum, to replace the directly
@@ -3450,6 +3457,32 @@ The following results separate the zero blocks from the nonzero blocks.
 	derived common sectors.
 \end{proof}
 
+\begin{theorem}[Common-sector zero-tail data from coordinate grouping]%
+\label{thm:zero_tail_common_flat_transport_of_grouped_block_cast}
+	\lean{MPSTensor.zeroTail_commonFlat_transport_of_groupedBlockCastAgrees}
+	\leanok
+	\uses{thm:zero_tail_common_flat_of_blocked_word_comparison,
+		thm:common_blocked_cyclic_sector_blocked_word_comparison,
+		thm:common_blocked_cyclic_sector_derived_properties,
+		def:same_mpv2}
+	Assume the one-sided zero-tail/nonzero decomposition and nonzero original
+	weights.  If the canonical identification of the common blocked alphabet with
+	each iterated alphabet agrees with consecutive grouping of blocked words, then
+	the zero-tail equation is rewritten with the weighted common-sector family, the
+	canonically blocked nonzero part agrees with that weighted common-sector family,
+	and all transported common-sector weights are nonzero.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:zero_tail_common_flat_of_blocked_word_comparison,
+		thm:common_blocked_cyclic_sector_blocked_word_comparison,
+		thm:common_blocked_cyclic_sector_derived_properties,
+		def:same_mpv2}
+	Use the coordinate-grouping comparison to identify the directly blocked nonzero
+	part with the weighted common-sector family, and combine this with the zero-tail
+	rewriting and the nonzero-weight statement for derived common sectors.
+\end{proof}
+
 \begin{theorem}[Two-sided common-length sectors after reindexing blocked words]%
 \label{thm:ft_after_blocking_common_length_common_sector_reindexed}
 	\lean{MPSTensor.fundamentalTheorem_after_blocking_commonLength_commonSector_of_reindexed}
@@ -3528,9 +3561,10 @@ The following results separate the zero blocks from the nonzero blocks.
 	one-sided form of this conversion, and
 	Theorem~\ref{thm:ft_after_blocking_common_length_common_sector_reindexed}
 	records it simultaneously for the two common-length sector families.  The
-	auxiliary transport statements
-	Theorems~\ref{thm:zero_tail_common_flat_transport_of_reindexed} and
-	\ref{thm:samempv_pos_zero_tail_identity_transport} record the nonzero
+	auxiliary transport statements,
+	Theorems~\ref{thm:zero_tail_common_flat_transport_of_reindexed},
+	\ref{thm:zero_tail_common_flat_transport_of_grouped_block_cast}, and
+	\ref{thm:samempv_pos_zero_tail_identity_transport}, record the nonzero
 	transported weights and the preservation of the positive-length and length-zero
 	identities, while
 	Theorem~\ref{thm:after_blocking_common_primitive_irreducible_blocks_reindexed}
