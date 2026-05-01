@@ -121,7 +121,7 @@ This theorem is the blockwise TP-normalization step used by
 TP-normalization route on a fixed irreducible decomposition. Its extra
 nonzero-block hypothesis lives on a chosen decomposition, so it still does not
 by itself give an unconditional arbitrary-input theorem under the current
-`SameMPV₂` interface. Concretely, every input block is assumed to have some
+`SameMPV₂` relation. Concretely, every input block is assumed to have some
 nonzero Kraus operator, excluding the all-zero scalar counterexample and
 matching the hypotheses of the corresponding irreducible-to-TP result from
 `Existence.lean`. It remains separate from the later normal-canonical-form theorem

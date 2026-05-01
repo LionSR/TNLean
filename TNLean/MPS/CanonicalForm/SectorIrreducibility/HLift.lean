@@ -373,7 +373,7 @@ theorem hLift_cyclicDecomp_mps_of_fixUpgrade
 /-- The orbit-sum lift with the `hFixUpgrade` input discharged by
 `hFixUpgrade_of_peripheral`.
 
-This reduces the abstract interface to the one-step projection-preservation
+This reduces the abstract statement to the one-step projection-preservation
 statement `hProjStep`; the unconditional theorem is `hLift_cyclicDecomp_mps`. -/
 theorem hLift_cyclicDecomp_mps_of_projStep
     [NeZero D] [NeZero m]
@@ -460,7 +460,7 @@ theorem isIrreducibleOnCorner_of_cyclic_decomp_mps_of_hLift
       hIrr P hPproj hPsum hcyclic hLift
 
 /-- MPS-specialized sector irreducibility, keeping the one-step projection-preservation
-input `hProjStep` as an explicit interface. The unconditional theorem is
+input `hProjStep` as an explicit hypothesis. The unconditional theorem is
 `isIrreducibleOnCorner_of_cyclic_decomp_mps`. -/
 theorem isIrreducibleOnCorner_of_cyclic_decomp_mps_of_projStep
     [NeZero D] {A : MPSTensor d D}
@@ -724,7 +724,7 @@ private theorem orbit_iterate_fixed_of_pow_fix
 /-- Orbit-sum lift with the old `hProjStep` and `hFixUpgrade` inputs replaced by the
 single fixed-point-algebra hypothesis `SectorFixedPointAlgebraRigidity`.
 
-This theorem encapsulates the rigidity route as a reusable interface. In the irreducible
+This theorem encapsulates the rigidity route as a reusable statement. In the irreducible
 trace-preserving cyclic setting, `hLift_cyclicDecomp_mps` supplies this hypothesis
 automatically via `sectorFixedPointAlgebraRigidity_of_irreducible_cyclicDecomp`. -/
 theorem hLift_cyclicDecomp_mps_of_sectorFixedPointAlgebraRigidity
