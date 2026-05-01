@@ -346,8 +346,8 @@ coefficient.
 If interacting pairs satisfy `‖P_i (P_j v)‖ ≤ η ‖P_i v‖`, and the coefficient
 `η` is no larger than `(1 - γ) / m`, then the usual finite-overlap
 norm-compression theorem applies.  This form separates the analytic principal-angle
-constant from the gap parameter: any later bound `η < 1 / m` can be fed in by
-choosing a positive `γ` with `η ≤ (1 - γ) / m`. -/
+constant from the gap parameter: it suffices to choose a positive `γ` satisfying
+`η ≤ (1 - γ) / m` whenever a later bound gives `η < 1 / m`. -/
 theorem quadraticForm_sum_projections_of_finite_overlap_norm_bound_of_le
     {γ η : ℝ} (hγle : γ ≤ 1)
     (P : ι → E →ₗ[ℂ] E) (hP : ∀ i, (P i).IsSymmetricProjection)
