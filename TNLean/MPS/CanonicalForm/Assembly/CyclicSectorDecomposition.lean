@@ -1577,7 +1577,7 @@ theorem sameMPV₂_weightedCanonicalBlock_commonFlat_of_reindexed
     (F.sameMPV₂_weightedCommonReindexedBlock_commonFlat μ N σ)
 
 /-- The preceding comparison expressed at a prescribed common length. -/
-theorem sameMPV₂_weightedCanonicalBlock_commonFlatAt_of_relabeling
+theorem sameMPV₂_weightedCanonicalBlock_commonFlatAt_of_reindexed
     (F : CommonBlockedCyclicSectorFamily blocks) (μ : Fin r → ℂ)
     {p' : ℕ} (hp : F.p = p')
     (hRelabel : SameMPV₂
