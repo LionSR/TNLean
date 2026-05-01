@@ -2444,12 +2444,910 @@
 
   </div>
 </div>
-<div class="definition_thmwrapper theorem-style-definition" id="def:peps_hasLocalGaugeLift">
+<div class="definition_thmwrapper theorem-style-definition" id="def:peps_edgeBoundaryConfig">
   <div class="definition_thmheading">
     <span class="definition_thmcaption">
     Definition
     </span>
     <span class="definition_thmlabel">18.24</span>
+    <span class="definition_thmtitle">Edge-centered boundary data</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sec-peps_ft.html#def:peps_edgeBoundaryConfig">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sec-peps_ft.html#def:peps_tensor">Definition 18.3</a></li>
+          
+          <li><a href="sec-peps_ft.html#def:peps_localVirtualConfigSplitAt">Definition 18.19</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.EdgeBoundaryConfig" class="lean_decl">TNLean.PEPS.EdgeBoundaryConfig</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>   For an edge \(e=(u,v)\), the boundary data consist of the virtual index on \(e\), the remaining virtual indices incident to \(u\), and the remaining virtual indices incident to \(v\). These are the indices over which the endpoint tensors couple to the blocked middle region. </p>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:peps_edgeBoundaryOfVirtualConfig">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">18.25</span>
+    <span class="definition_thmtitle">Boundary data read from a virtual configuration</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sec-peps_ft.html#def:peps_edgeBoundaryOfVirtualConfig">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sec-peps_ft.html#def:peps_edgeBoundaryConfig">Definition 18.24</a></li>
+          
+          <li><a href="sec-peps_ft.html#def:peps_virtual_config">Definition 18.4</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.edgeBoundaryOfVirtualConfig" class="lean_decl">TNLean.PEPS.edgeBoundaryOfVirtualConfig</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>   A global virtual configuration determines edge-centered boundary data by reading the index on the distinguished edge and the residual endpoint indices. </p>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:peps_edgeBoundaryMatches">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">18.26</span>
+    <span class="definition_thmtitle">Boundary compatibility at an edge</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sec-peps_ft.html#def:peps_edgeBoundaryMatches">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sec-peps_ft.html#def:peps_edgeBoundaryConfig">Definition 18.24</a></li>
+          
+          <li><a href="sec-peps_ft.html#def:peps_virtual_config">Definition 18.4</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.edgeBoundaryMatches" class="lean_decl">TNLean.PEPS.edgeBoundaryMatches</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>   A global virtual configuration is compatible with fixed edge-centered boundary data if it has the prescribed index on the distinguished edge and the prescribed residual indices at both endpoint stars. </p>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:peps_edgeMiddleConfig">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">18.27</span>
+    <span class="definition_thmtitle">Middle configurations over fixed boundary data</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sec-peps_ft.html#def:peps_edgeMiddleConfig">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sec-peps_ft.html#def:peps_edgeBoundaryMatches">Definition 18.26</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.EdgeMiddleConfig" class="lean_decl">TNLean.PEPS.EdgeMiddleConfig</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>   For fixed boundary data \(\beta \), the middle configurations are the subtype of global virtual configurations satisfying the compatibility condition with \(\beta \). </p>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:peps_virtualConfigEquivEdgeBoundary">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">18.28</span>
+    <span class="definition_thmtitle">Virtual configurations fibred by edge boundary data</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sec-peps_ft.html#def:peps_virtualConfigEquivEdgeBoundary">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sec-peps_ft.html#def:peps_edgeBoundaryOfVirtualConfig">Definition 18.25</a></li>
+          
+          <li><a href="sec-peps_ft.html#def:peps_edgeMiddleConfig">Definition 18.27</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.virtualConfigEquivEdgeBoundary" class="lean_decl">TNLean.PEPS.virtualConfigEquivEdgeBoundary</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>   A global virtual configuration is equivalently a choice of edge-centered boundary data together with a middle configuration in the corresponding fibre. </p>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:peps_edgeLeftLocalConfig">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">18.29</span>
+    <span class="definition_thmtitle">Left endpoint local configuration from boundary data</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sec-peps_ft.html#def:peps_edgeLeftLocalConfig">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sec-peps_ft.html#def:peps_edgeBoundaryConfig">Definition 18.24</a></li>
+          
+          <li><a href="sec-peps_ft.html#def:peps_localVirtualConfigSplitAt">Definition 18.19</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.edgeLeftLocalConfig" class="lean_decl">TNLean.PEPS.edgeLeftLocalConfig</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>   The left endpoint local virtual configuration is reconstructed from the edge index and the residual data on the left endpoint star. </p>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:peps_edgeRightLocalConfig">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">18.30</span>
+    <span class="definition_thmtitle">Right endpoint local configuration from boundary data</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sec-peps_ft.html#def:peps_edgeRightLocalConfig">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sec-peps_ft.html#def:peps_edgeBoundaryConfig">Definition 18.24</a></li>
+          
+          <li><a href="sec-peps_ft.html#def:peps_localVirtualConfigSplitAt">Definition 18.19</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.edgeRightLocalConfig" class="lean_decl">TNLean.PEPS.edgeRightLocalConfig</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>   The right endpoint local virtual configuration is reconstructed from the edge index and the residual data on the right endpoint star. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:peps_edgeLeftLocalConfig_eq_of_boundaryMatches">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">18.31</span>
+    <span class="theorem_thmtitle">Left endpoint reconstruction for compatible boundary data</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sec-peps_ft.html#thm:peps_edgeLeftLocalConfig_eq_of_boundaryMatches">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sec-peps_ft.html#def:peps_edgeBoundaryMatches">Definition 18.26</a></li>
+          
+          <li><a href="sec-peps_ft.html#def:peps_edgeLeftLocalConfig">Definition 18.29</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.edgeLeftLocalConfig_eq_of_boundaryMatches" class="lean_decl">TNLean.PEPS.edgeLeftLocalConfig_eq_of_boundaryMatches</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   If a global virtual configuration is compatible with boundary data, then its restriction to the left endpoint star is the local configuration reconstructed from those data. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:peps_edgeRightLocalConfig_eq_of_boundaryMatches">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">18.32</span>
+    <span class="theorem_thmtitle">Right endpoint reconstruction for compatible boundary data</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sec-peps_ft.html#thm:peps_edgeRightLocalConfig_eq_of_boundaryMatches">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sec-peps_ft.html#def:peps_edgeBoundaryMatches">Definition 18.26</a></li>
+          
+          <li><a href="sec-peps_ft.html#def:peps_edgeRightLocalConfig">Definition 18.30</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.edgeRightLocalConfig_eq_of_boundaryMatches" class="lean_decl">TNLean.PEPS.edgeRightLocalConfig_eq_of_boundaryMatches</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   If a global virtual configuration is compatible with boundary data, then its restriction to the right endpoint star is the local configuration reconstructed from those data. </p>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:peps_edgeMiddleWeight">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">18.33</span>
+    <span class="definition_thmtitle">Blocked middle tensor at an edge</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sec-peps_ft.html#def:peps_edgeMiddleWeight">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sec-peps_ft.html#def:peps_edgeBoundaryMatches">Definition 18.26</a></li>
+          
+          <li><a href="sec-peps_ft.html#def:peps_edgeMiddleConfig">Definition 18.27</a></li>
+          
+          <li><a href="sec-peps_ft.html#def:peps_edgeMiddleVertices">Definition 18.20</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.edgeMiddleWeight" class="lean_decl">TNLean.PEPS.edgeMiddleWeight</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>   Fixing the edge-centered boundary data, the blocked middle tensor is the sum over global virtual configurations compatible with those data of the product of local tensor entries over the middle region \(V\setminus \{ u,v\} \). </p>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:peps_edgeBlockedCoeff">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">18.34</span>
+    <span class="definition_thmtitle">Edge-blocked PEPS coefficient</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sec-peps_ft.html#def:peps_edgeBlockedCoeff">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sec-peps_ft.html#def:peps_edgeLeftLocalConfig">Definition 18.29</a></li>
+          
+          <li><a href="sec-peps_ft.html#def:peps_edgeMiddleWeight">Definition 18.33</a></li>
+          
+          <li><a href="sec-peps_ft.html#def:peps_edgeRightLocalConfig">Definition 18.30</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.edgeBlockedCoeff" class="lean_decl">TNLean.PEPS.edgeBlockedCoeff</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>   The edge-blocked coefficient is the three-block contraction obtained from the left endpoint tensor, the blocked middle tensor, and the right endpoint tensor at the chosen edge. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:peps_edgeBlockedCoeff_eq_stateCoeff">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">18.35</span>
+    <span class="theorem_thmtitle">Edge-blocked coefficient equals the PEPS coefficient</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sec-peps_ft.html#thm:peps_edgeBlockedCoeff_eq_stateCoeff">#</a>
+    
+    <a class="icon proof" href="sec-peps_ft.html#a0000001284"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sec-peps_ft.html#def:peps_edgeBlockedCoeff">Definition 18.34</a></li>
+          
+          <li><a href="sec-peps_ft.html#thm:peps_stateCoeff_splitAtEdge">Theorem 18.23</a></li>
+          
+          <li><a href="sec-peps_ft.html#def:peps_virtualConfigEquivEdgeBoundary">Definition 18.28</a></li>
+          
+          <li><a href="sec-peps_ft.html#def:peps_virtualConfigEquivEdgeBoundary">Definition 18.28</a></li>
+          
+          <li><a href="sec-peps_ft.html#thm:peps_edgeLeftLocalConfig_eq_of_boundaryMatches">Theorem 18.31</a></li>
+          
+          <li><a href="sec-peps_ft.html#thm:peps_edgeRightLocalConfig_eq_of_boundaryMatches">Theorem 18.32</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.edgeBlockedCoeff_eq_stateCoeff" class="lean_decl">TNLean.PEPS.edgeBlockedCoeff_eq_stateCoeff</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   For every edge \(e\), the edge-blocked three-block coefficient is exactly the original PEPS state coefficient. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000001284">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> Fibre the global virtual sum by the edge-centered boundary data. The remaining fibre sum is the blocked middle tensor, and the two endpoint factors are reconstructed from the same boundary data. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:peps_sameState_edgeBlockedCoeff_eq">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">18.36</span>
+    <span class="theorem_thmtitle">Same state gives the same edge-blocked coefficients</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sec-peps_ft.html#thm:peps_sameState_edgeBlockedCoeff_eq">#</a>
+    
+    <a class="icon proof" href="sec-peps_ft.html#a0000001285"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sec-peps_ft.html#def:peps_same_state">Definition 18.6</a></li>
+          
+          <li><a href="sec-peps_ft.html#thm:peps_edgeBlockedCoeff_eq_stateCoeff">Theorem 18.35</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.SameState.edgeBlockedCoeff_eq" class="lean_decl">TNLean.PEPS.SameState.edgeBlockedCoeff_eq</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   If two PEPS tensors have the same state, then their edge-blocked coefficients agree at every edge and every physical configuration. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000001285">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Rewrite both edge-blocked coefficients as the corresponding PEPS state coefficients and apply the same-state hypothesis. </p>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:peps_hasLocalGaugeLift">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">18.37</span>
     <span class="definition_thmtitle">Sharpened local gauge lift datum</span>
     <div class="thm_header_extras">
 
@@ -2521,7 +3419,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">18.25</span>
+    <span class="definition_thmlabel">18.38</span>
     <span class="definition_thmtitle">Blocked-middle local gauge data</span>
     <div class="thm_header_extras">
 
@@ -2545,7 +3443,7 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#def:peps_hasLocalGaugeLift">Definition 18.24</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_hasLocalGaugeLift">Definition 18.37</a></li>
           
         </ul>
     
@@ -2585,7 +3483,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">18.26</span>
+    <span class="theorem_thmlabel">18.39</span>
     <span class="theorem_thmtitle">Blocked-middle local gauge data implies sharpened lift</span>
     <div class="thm_header_extras">
 
@@ -2596,7 +3494,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#thm:peps_hasLocalGaugeLift_of_blockedMiddleGaugeHyp">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001284"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001286"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2612,9 +3510,9 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#def:peps_blockedMiddleGaugeHyp">Definition 18.25</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_blockedMiddleGaugeHyp">Definition 18.38</a></li>
           
-          <li><a href="sec-peps_ft.html#def:peps_hasLocalGaugeLift">Definition 18.24</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_hasLocalGaugeLift">Definition 18.37</a></li>
           
         </ul>
     
@@ -2649,7 +3547,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001284">
+<div class="proof_wrapper" id="a0000001286">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2666,7 +3564,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">18.27</span>
+    <span class="theorem_thmlabel">18.40</span>
     <span class="theorem_thmtitle">Local gauge extraction</span>
     <div class="thm_header_extras">
 
@@ -2677,7 +3575,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#thm:localGauge_exists">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001285"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001287"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2693,7 +3591,7 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#def:peps_hasLocalGaugeLift">Definition 18.24</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_hasLocalGaugeLift">Definition 18.37</a></li>
           
         </ul>
     
@@ -2724,12 +3622,12 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   Under the sharpened local lift hypothesis, the local gauge formula follows. What remains open is to derive the blocked-middle formula from the global same-state hypothesis via the blocked middle tensor and the corresponding three-site injective-chain argument. Under that hypothesis, injectivity on the star neighbourhood provides a left inverse that isolates the local edge gauges: </p>
+  <p>   Under the sharpened local lift hypothesis, the local gauge formula follows. What remains open is to upgrade equality of the edge-blocked coefficients to the blocked-middle formula using the corresponding three-site injective-chain argument. Under that hypothesis, injectivity on the star neighbourhood provides a left inverse that isolates the local edge gauges: </p>
 <div class="centered"> <img class="tn-svg" src="tn_svg/tn-f94e3de78c5b1cbf.svg" alt="\TNPEPSLocalGaugeExtraction"></div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001285">
+<div class="proof_wrapper" id="a0000001287">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2746,7 +3644,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">18.28</span>
+    <span class="theorem_thmlabel">18.41</span>
     <span class="theorem_thmtitle">Gauge consistency</span>
     <div class="thm_header_extras">
 
@@ -2768,7 +3666,7 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#thm:localGauge_exists">Theorem 18.27</a></li>
+          <li><a href="sec-peps_ft.html#thm:localGauge_exists">Theorem 18.40</a></li>
           
           <li><a href="sec-peps_ft.html#def:gaugeVertex">Definition 18.8</a></li>
           
@@ -2811,7 +3709,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">18.29</span>
+    <span class="theorem_thmlabel">18.42</span>
     <span class="theorem_thmtitle">Fundamental Theorem for injective PEPS, conditional on bond-dimension equality</span>
     <div class="thm_header_extras">
 
@@ -2833,7 +3731,7 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#thm:gaugeConsistency">Theorem 18.28</a></li>
+          <li><a href="sec-peps_ft.html#thm:gaugeConsistency">Theorem 18.41</a></li>
           
           <li><a href="sec-peps_ft.html#def:GaugeEquivPEPS">Definition 18.10</a></li>
           
@@ -2877,7 +3775,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">18.30</span>
+    <span class="theorem_thmlabel">18.43</span>
     <span class="theorem_thmtitle">Fundamental Theorem for injective PEPS</span>
     <div class="thm_header_extras">
 
@@ -2899,7 +3797,7 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#thm:fundamentalTheorem_PEPS_of_bondDim">Theorem 18.29</a></li>
+          <li><a href="sec-peps_ft.html#thm:fundamentalTheorem_PEPS_of_bondDim">Theorem 18.42</a></li>
           
           <li><a href="sec-peps_ft.html#def:GaugeEquivPEPS">Definition 18.10</a></li>
           
@@ -2949,7 +3847,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">18.31</span>
+    <span class="definition_thmlabel">18.44</span>
     <span class="definition_thmtitle">Gauge equivalence modulo balanced edge scalars</span>
     <div class="thm_header_extras">
 
@@ -3013,7 +3911,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">18.32</span>
+    <span class="theorem_thmlabel">18.45</span>
     <span class="theorem_thmtitle">Balanced edge scalars preserve the local gauge action</span>
     <div class="thm_header_extras">
 
@@ -3024,7 +3922,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#thm:GaugeEquivModEdgeScalars_gaugeVertex_eq">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001288"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001290"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3040,11 +3938,11 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#def:GaugeEquivModEdgeScalars">Definition 18.31</a></li>
+          <li><a href="sec-peps_ft.html#def:GaugeEquivModEdgeScalars">Definition 18.44</a></li>
           
           <li><a href="sec-peps_ft.html#def:gaugeVertex">Definition 18.8</a></li>
           
-          <li><a href="sec-peps_ft.html#def:GaugeEquivModEdgeScalars">Definition 18.31</a></li>
+          <li><a href="sec-peps_ft.html#def:GaugeEquivModEdgeScalars">Definition 18.44</a></li>
           
           <li><a href="sec-peps_ft.html#def:gaugeVertex">Definition 18.8</a></li>
           
@@ -3081,7 +3979,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001288">
+<div class="proof_wrapper" id="a0000001290">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3098,7 +3996,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">18.33</span>
+    <span class="theorem_thmlabel">18.46</span>
     <span class="theorem_thmtitle">Gauge uniqueness modulo balanced edge scalars</span>
     <div class="thm_header_extras">
 
@@ -3120,7 +4018,7 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#def:GaugeEquivModEdgeScalars">Definition 18.31</a></li>
+          <li><a href="sec-peps_ft.html#def:GaugeEquivModEdgeScalars">Definition 18.44</a></li>
           
           <li><a href="sec-peps_ft.html#def:IsVertexInjective">Definition 18.14</a></li>
           
@@ -3157,18 +4055,18 @@
 
   </div>
 </div>
-<div class="remark_thmwrapper theorem-style-remark" id="a0000001289">
+<div class="remark_thmwrapper theorem-style-remark" id="a0000001291">
   <div class="remark_thmheading">
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">18.34</span>
+    <span class="remark_thmlabel">18.47</span>
     <div class="thm_header_extras">
 
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="sec-peps_ft.html#a0000001289">#</a>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001291">#</a>
     
     
     
@@ -3181,7 +4079,7 @@
 	<a href="sect0001.html#Molnar2018NormalPEPS" >MGRPG+18</a>
 	
 	]
-</span>, §3. The remaining three PEPS theorems still require the blocked tensor on the middle region and the comparison with the corresponding three-site injective chain. The uniqueness statement has now been repaired to a quotient by balanced edge scalars, but its proof still requires the same blocking construction together with the corresponding tensor-factor uniqueness statement at a single vertex. </p>
+</span>, §3. The middle-region blocked coefficient is now formalized; the remaining local-gauge step is the comparison with the corresponding three-site injective chain. The uniqueness statement has now been repaired to a quotient by balanced edge scalars, but its proof still requires the same blocking construction together with the corresponding tensor-factor uniqueness statement at a single vertex. </p>
 
   </div>
 </div>
