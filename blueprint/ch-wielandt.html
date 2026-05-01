@@ -3055,7 +3055,7 @@
 	<a href="sect0001.html#Sanz2010Quantum" >SPGWC10</a>
 	
 	]
-</span>) is proved in Theorem&#160;<a href="ch-wielandt.html#thm:wielandt_general">10.28</a> below. The sharp blocking-length estimates for injectivity (\(D^4\)) and bi-canonical form (\(3D^5\)) from <span class="cite">
+</span>) is proved in Theorem&#160;<a href="ch-wielandt.html#thm:wielandt_general">10.40</a> below. The sharp blocking-length estimates for injectivity (\(D^4\)) and bi-canonical form (\(3D^5\)) from <span class="cite">
 	[
 	
 	<a href="sect0001.html#Sanz2010Quantum" >SPGWC10</a>
@@ -3065,12 +3065,1086 @@
 
   </div>
 </div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:one_step_augment">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">10.28</span>
+    <span class="definition_thmtitle">One-step augmentation</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-wielandt.html#def:one_step_augment">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mps.html#def:mps_tensor">Definition 2.1</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.oneStepAugment" class="lean_decl">MPSTensor.oneStepAugment</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>   Let \(A\) be an MPS tensor with Kraus family \((A^i)_{i=0}^{d-1}\), and let \(X \in M_{D}(\mathbb {C})\). The <em>one-step augmentation</em> of \(A\) by \(X\) is the tensor \(\widetilde A\) with physical dimension \(d+1\) whose first Kraus operator is \(X\) and whose remaining Kraus operators are those of \(A\): </p>
+<div class="displaymath" id="a0000000702">
+  \[  \widetilde A^0 = X, \qquad \widetilde A^{i+1}=A^i.  \]
+</div>
+
+  </div>
+</div>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:kraus_mem_word_span_one">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">10.29</span>
+    <span class="lemma_thmtitle">Kraus operators lie in the one-step span</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-wielandt.html#lem:kraus_mem_word_span_one">#</a>
+    
+    <a class="icon proof" href="ch-wielandt.html#a0000000703"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-wielandt.html#def:word_span">Definition 10.1</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.apply_mem_wordSpan_one" class="lean_decl">MPSTensor.apply_mem_wordSpan_one</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>   Every Kraus operator \(A^i\) belongs to the one-step span \(S_1(A)\). </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000703">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>This is the length-one word with letter&#160;\(i\). </p>
+
+  </div>
+</div>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:one_step_augment_word_span">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">10.30</span>
+    <span class="lemma_thmtitle">Redundant one-step augmentation</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-wielandt.html#lem:one_step_augment_word_span">#</a>
+    
+    <a class="icon proof" href="ch-wielandt.html#a0000000704"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-wielandt.html#def:one_step_augment">Definition 10.28</a></li>
+          
+          <li><a href="ch-wielandt.html#def:word_span">Definition 10.1</a></li>
+          
+          <li><a href="ch-wielandt.html#lem:kraus_mem_word_span_one">Lemma 10.29</a></li>
+          
+          <li><a href="ch-wielandt.html#lem:kraus_mem_word_span_one">Lemma 10.29</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.oneStepAugment_apply_mem_wordSpan_one" class="lean_decl">MPSTensor.oneStepAugment_apply_mem_wordSpan_one</a></li>
+          
+          <li><a href="../docs/find/#doc/MPSTensor.wordSpan_oneStepAugment_one" class="lean_decl">MPSTensor.wordSpan_oneStepAugment_one</a></li>
+          
+          <li><a href="../docs/find/#doc/MPSTensor.wordSpan_oneStepAugment_eq" class="lean_decl">MPSTensor.wordSpan_oneStepAugment_eq</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>   Let \(X \in S_1(A)\), and let \(\widetilde A\) be the one-step augmentation of \(A\) by \(X\). Then </p>
+<div class="displaymath" id="a0000000705">
+  \[  S_n(\widetilde A)=S_n(A)  \]
+</div>
+<p> for every \(n \ge 0\). </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000704">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> The new generator \(X\) is already in \(S_1(A)\), and each original generator remains in the augmented family. Hence the one-step spans agree. Multiplying word spans and arguing by induction on the word length gives equality at every length. </p>
+
+  </div>
+</div>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:one_step_augment_normal_kraus_rank">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">10.31</span>
+    <span class="lemma_thmtitle">Normality and Kraus rank under one-step augmentation</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-wielandt.html#lem:one_step_augment_normal_kraus_rank">#</a>
+    
+    <a class="icon proof" href="ch-wielandt.html#a0000000706"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-wielandt.html#def:one_step_augment">Definition 10.28</a></li>
+          
+          <li><a href="ch-mps.html#def:normal">Definition 2.26</a></li>
+          
+          <li><a href="ch-wielandt.html#lem:one_step_augment_word_span">Lemma 10.30</a></li>
+          
+          <li><a href="ch-wielandt.html#lem:one_step_augment_word_span">Lemma 10.30</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.isNormal_oneStepAugment_of_mem_wordSpan_one" class="lean_decl">MPSTensor.isNormal_oneStepAugment_of_mem_wordSpan_one</a></li>
+          
+          <li><a href="../docs/find/#doc/MPSTensor.krausRank_oneStepAugment" class="lean_decl">MPSTensor.krausRank_oneStepAugment</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>   Let \(X \in S_1(A)\), and let \(\widetilde A\) be the one-step augmentation of \(A\) by \(X\). If \(A\) is normal, then \(\widetilde A\) is normal, and </p>
+<div class="displaymath" id="a0000000707">
+  \[  \operatorname{kr}(\widetilde A)=\operatorname{kr}(A).  \]
+</div>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000706">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> Since all exact word spans are unchanged by Lemma&#160;<a href="ch-wielandt.html#lem:one_step_augment_word_span">10.30</a>, eventual full word span for \(A\) gives eventual full word span for \(\widetilde A\). The equality of Kraus ranks is the equality of the dimensions of the common one-step span. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:wielandt_case2_normal_generator">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">10.32</span>
+    <span class="theorem_thmtitle">Wielandt case (2), invertible generator</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-wielandt.html#thm:wielandt_case2_normal_generator">#</a>
+    
+    <a class="icon proof" href="ch-wielandt.html#a0000000708"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-wielandt.html#def:word_span">Definition 10.1</a></li>
+          
+          <li><a href="ch-mps.html#def:normal">Definition 2.26</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.wordSpan_eq_top_of_isNormal_of_isUnit" class="lean_decl">MPSTensor.wordSpan_eq_top_of_isNormal_of_isUnit</a></li>
+          
+          <li><a href="../docs/find/#doc/MPSTensor.iIndex_le_of_isNormal_of_isUnit" class="lean_decl">MPSTensor.iIndex_le_of_isNormal_of_isUnit</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   Let \(A\) be a normal MPS tensor with bond dimension \(D\), and suppose that some Kraus operator \(A^{i_0}\) is invertible. Then </p>
+<div class="displaymath" id="a0000000709">
+  \[  S_{D^2-\operatorname{kr}(A)+1}(A)=M_{D}(\mathbb {C}), \qquad \iota (A) \le D^2-\operatorname{kr}(A)+1.  \]
+</div>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000708">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>The dimensions of the exact word spans cannot decrease, because left multiplication by the invertible Kraus operator is injective. If this dimension growth stopped before the full matrix algebra was reached, the same argument applied at all later lengths would contradict normality. Since \(\dim S_1(A)=\operatorname{kr}(A)\) and \(\dim M_{D}(\mathbb {C})=D^2\), the full algebra is reached by length \(D^2-\operatorname{kr}(A)+1\). The index bound follows from the definition of \(\iota (A)\). </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:wielandt_case2_one_step_span">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">10.33</span>
+    <span class="theorem_thmtitle">Wielandt case (2), one-step invertible element</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-wielandt.html#thm:wielandt_case2_one_step_span">#</a>
+    
+    <a class="icon proof" href="ch-wielandt.html#a0000000710"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-wielandt.html#def:word_span">Definition 10.1</a></li>
+          
+          <li><a href="ch-wielandt.html#def:one_step_augment">Definition 10.28</a></li>
+          
+          <li><a href="ch-wielandt.html#lem:one_step_augment_word_span">Lemma 10.30</a></li>
+          
+          <li><a href="ch-wielandt.html#lem:one_step_augment_normal_kraus_rank">Lemma 10.31</a></li>
+          
+          <li><a href="ch-wielandt.html#thm:wielandt_case2_normal_generator">Theorem 10.32</a></li>
+          
+          <li><a href="ch-wielandt.html#lem:one_step_augment_word_span">Lemma 10.30</a></li>
+          
+          <li><a href="ch-wielandt.html#lem:one_step_augment_normal_kraus_rank">Lemma 10.31</a></li>
+          
+          <li><a href="ch-wielandt.html#thm:wielandt_case2_normal_generator">Theorem 10.32</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.wordSpan_eq_top_of_isPrimitivePaper_of_mem_wordSpan_one_of_isUnit" class="lean_decl">MPSTensor.wordSpan_eq_top_of_isPrimitivePaper_of_mem_wordSpan_one_of_isUnit</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   Let \(A\) be an MPS tensor with bond dimension \(D \ge 1\), satisfying \(\sum _i (A^i)^\dagger A^i=\mathbb {1}\), and suppose that \(A\) is primitive in the paper sense. If \(S_1(A)\) contains an invertible matrix \(X\), then </p>
+<div class="displaymath" id="a0000000711">
+  \[  S_{D^2-\operatorname{kr}(A)+1}(A)=M_{D}(\mathbb {C}).  \]
+</div>
+<p> In the terminology of Sanz–Pérez-García–Wolf–Cirac, this is the case where the first application space \(S_1(A)\) contains an invertible operator. This is the exact word-span form of <span class="cite">
+	[
+	
+	<a href="sect0001.html#Sanz2010Quantum" >SPGWC10</a>
+	, Theorem&#160;1, case&#160;(2)
+	]
+</span>. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000710">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> Adjoin \(X\) as an extra first Kraus operator, obtaining \(\widetilde A\). Paper primitivity and normalization give normality of \(A\), hence normality of \(\widetilde A\); the Kraus rank and all exact word spans are unchanged. The first Kraus operator of \(\widetilde A\) is invertible, so Theorem&#160;<a href="ch-wielandt.html#thm:wielandt_case2_normal_generator">10.32</a> gives \(S_{D^2-\operatorname{kr}(\widetilde A)+1}(\widetilde A)=M_{D}(\mathbb {C})\). Transfer this equality back to \(A\). </p>
+
+  </div>
+</div>
+<div class="corollary_thmwrapper theorem-style-plain" id="cor:wielandt_case2_one_step_index">
+  <div class="corollary_thmheading">
+    <span class="corollary_thmcaption">
+    Corollary
+    </span>
+    <span class="corollary_thmlabel">10.34</span>
+    <span class="corollary_thmtitle">Wielandt case (2), index bound</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-wielandt.html#cor:wielandt_case2_one_step_index">#</a>
+    
+    <a class="icon proof" href="ch-wielandt.html#a0000000712"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-wielandt.html#thm:wielandt_case2_one_step_span">Theorem 10.33</a></li>
+          
+          <li><a href="ch-wielandt.html#thm:wielandt_case2_one_step_span">Theorem 10.33</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.iIndex_le_of_mem_wordSpan_one_of_isUnit" class="lean_decl">MPSTensor.iIndex_le_of_mem_wordSpan_one_of_isUnit</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="corollary_thmcontent">
+  <p>   Under the hypotheses of Theorem&#160;<a href="ch-wielandt.html#thm:wielandt_case2_one_step_span">10.33</a>, </p>
+<div class="displaymath" id="a0000000713">
+  \[  \iota (A) \le D^2-\operatorname{kr}(A)+1,  \]
+</div>
+<p> where \(\iota (A)=\min \{ n:S_n(A)=M_{D}(\mathbb {C})\} \). </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000712">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> The displayed word-span equality gives an admissible value in the defining minimum for \(\iota (A)\). </p>
+
+  </div>
+</div>
+<div class="corollary_thmwrapper theorem-style-plain" id="cor:wielandt_case2_generator">
+  <div class="corollary_thmheading">
+    <span class="corollary_thmcaption">
+    Corollary
+    </span>
+    <span class="corollary_thmlabel">10.35</span>
+    <span class="corollary_thmtitle">Wielandt case (2), invertible Kraus operator</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-wielandt.html#cor:wielandt_case2_generator">#</a>
+    
+    <a class="icon proof" href="ch-wielandt.html#a0000000714"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-wielandt.html#lem:kraus_mem_word_span_one">Lemma 10.29</a></li>
+          
+          <li><a href="ch-wielandt.html#thm:wielandt_case2_one_step_span">Theorem 10.33</a></li>
+          
+          <li><a href="ch-wielandt.html#cor:wielandt_case2_one_step_index">Corollary 10.34</a></li>
+          
+          <li><a href="ch-wielandt.html#lem:kraus_mem_word_span_one">Lemma 10.29</a></li>
+          
+          <li><a href="ch-wielandt.html#thm:wielandt_case2_one_step_span">Theorem 10.33</a></li>
+          
+          <li><a href="ch-wielandt.html#cor:wielandt_case2_one_step_index">Corollary 10.34</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.wordSpan_eq_top_of_isPrimitivePaper_of_isUnit" class="lean_decl">MPSTensor.wordSpan_eq_top_of_isPrimitivePaper_of_isUnit</a></li>
+          
+          <li><a href="../docs/find/#doc/MPSTensor.iIndex_le_of_isPrimitivePaper_of_isUnit" class="lean_decl">MPSTensor.iIndex_le_of_isPrimitivePaper_of_isUnit</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="corollary_thmcontent">
+  <p>   Let \(A\) be an MPS tensor with bond dimension \(D \ge 1\), satisfying \(\sum _i (A^i)^\dagger A^i=\mathbb {1}\), and suppose that \(A\) is primitive in the paper sense. If some Kraus operator \(A^{i_0}\) is invertible, then </p>
+<div class="displaymath" id="a0000000715">
+  \[  S_{D^2-\operatorname{kr}(A)+1}(A)=M_{D}(\mathbb {C}), \qquad \iota (A) \le D^2-\operatorname{kr}(A)+1.  \]
+</div>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000714">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> Apply the one-step case to \(X=A^{i_0}\), which belongs to \(S_1(A)\) by Lemma&#160;<a href="ch-wielandt.html#lem:kraus_mem_word_span_one">10.29</a>. </p>
+
+  </div>
+</div>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:rank_one_noninvertible_eigenvector">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">10.36</span>
+    <span class="lemma_thmtitle">Rank-one extraction from a non-invertible eigenvector</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-wielandt.html#lem:rank_one_noninvertible_eigenvector">#</a>
+    
+    <a class="icon proof" href="ch-wielandt.html#a0000000716"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-wielandt.html#def:word_span">Definition 10.1</a></li>
+          
+          <li><a href="ch-mps.html#def:normal">Definition 2.26</a></li>
+          
+          <li><a href="ch-wielandt.html#thm:fitting_decomp">Theorem 10.9</a></li>
+          
+          <li><a href="ch-wielandt.html#thm:fitting_decomp">Theorem 10.9</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.vecMulVec_eigenvector_exact_wordSpan" class="lean_decl">MPSTensor.vecMulVec_eigenvector_exact_wordSpan</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>   Let \(A\) be a normal MPS tensor with bond dimension \(D \ge 1\). Suppose that a Kraus operator \(A^{i_0}\) is non-invertible and has an eigenvector \(\varphi \ne 0\) with nonzero eigenvalue \(\mu \). Then, for every \(\psi \in \mathbb {C}^D\), </p>
+<div class="displaymath" id="a0000000717">
+  \[  |\varphi \rangle \! \langle \psi | \in S_{D^2-D+1}(A).  \]
+</div>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000716">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> Decompose \(A^{i_0}\) into its nilpotent and nonzero generalized eigenspaces. On the nonzero part, multiplication by \(A^{i_0}\) is injective, so the rectangular spans grow strictly until they fill the whole range. The nilpotent index contributes the remaining length. Since the eigenvalue on \(\varphi \) is nonzero, eigenvector padding moves the resulting cumulative membership to the exact length \(D^2-D+1\). </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:wielandt_case3_one_step_span">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">10.37</span>
+    <span class="theorem_thmtitle">Wielandt case (3), one-step non-invertible element</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-wielandt.html#thm:wielandt_case3_one_step_span">#</a>
+    
+    <a class="icon proof" href="ch-wielandt.html#a0000000718"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-wielandt.html#def:word_span">Definition 10.1</a></li>
+          
+          <li><a href="ch-wielandt.html#def:one_step_augment">Definition 10.28</a></li>
+          
+          <li><a href="ch-wielandt.html#lem:one_step_augment_word_span">Lemma 10.30</a></li>
+          
+          <li><a href="ch-wielandt.html#lem:one_step_augment_normal_kraus_rank">Lemma 10.31</a></li>
+          
+          <li><a href="ch-wielandt.html#thm:eigenvector_spreading">Theorem 10.22</a></li>
+          
+          <li><a href="ch-wielandt.html#lem:rank_one_noninvertible_eigenvector">Lemma 10.36</a></li>
+          
+          <li><a href="ch-wielandt.html#thm:lemma2b_assembly">Theorem 10.45</a></li>
+          
+          <li><a href="ch-wielandt.html#lem:one_step_augment_word_span">Lemma 10.30</a></li>
+          
+          <li><a href="ch-wielandt.html#lem:one_step_augment_normal_kraus_rank">Lemma 10.31</a></li>
+          
+          <li><a href="ch-wielandt.html#thm:eigenvector_spreading">Theorem 10.22</a></li>
+          
+          <li><a href="ch-wielandt.html#lem:rank_one_noninvertible_eigenvector">Lemma 10.36</a></li>
+          
+          <li><a href="ch-wielandt.html#thm:lemma2b_assembly">Theorem 10.45</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.wordSpan_eq_top_of_isPrimitivePaper_of_mem_wordSpan_one_of_noninvertible_eigenvector" class="lean_decl">MPSTensor.wordSpan_eq_top_of_isPrimitivePaper_of_mem_wordSpan_one_of_noninvertible_eigenvector</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   Let \(A\) be an MPS tensor with bond dimension \(D \ge 1\), satisfying \(\sum _i (A^i)^\dagger A^i=\mathbb {1}\), and suppose that \(A\) is primitive in the paper sense. If \(S_1(A)\) contains a non-invertible matrix \(X\) with a nonzero eigenvalue, then </p>
+<div class="displaymath" id="a0000000719">
+  \[  S_{D^2}(A)=M_{D}(\mathbb {C}).  \]
+</div>
+<p> More explicitly, it is enough to have \(X\varphi =\mu \varphi \) with \(\varphi \ne 0\) and \(\mu \ne 0\). In the terminology of Sanz–Pérez-García–Wolf–Cirac, this is the case where the first application space \(S_1(A)\) contains a non-invertible operator with a nonzero eigenvalue. This is the exact word-span form of <span class="cite">
+	[
+	
+	<a href="sect0001.html#Sanz2010Quantum" >SPGWC10</a>
+	, Theorem&#160;1, case&#160;(3)
+	]
+</span>. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000718">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> Adjoin \(X\) as an extra first Kraus operator. The augmented tensor is normal and has the same exact word spans as \(A\). The eigenvector relation for \(X\) is now a one-generator eigenvector relation. The eigenvector-spreading argument gives full fixed-length vector span by length \(D-1\), and Lemma&#160;<a href="ch-wielandt.html#lem:rank_one_noninvertible_eigenvector">10.36</a> gives the rank-one operators \(|\varphi \rangle \! \langle \psi |\) in length \(D^2-D+1\). Multiplying these two fixed-length spans gives \(S_{D^2}\) for the augmented tensor, hence for \(A\). </p>
+
+  </div>
+</div>
+<div class="corollary_thmwrapper theorem-style-plain" id="cor:wielandt_case3_one_step_index">
+  <div class="corollary_thmheading">
+    <span class="corollary_thmcaption">
+    Corollary
+    </span>
+    <span class="corollary_thmlabel">10.38</span>
+    <span class="corollary_thmtitle">Wielandt case (3), index bound</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-wielandt.html#cor:wielandt_case3_one_step_index">#</a>
+    
+    <a class="icon proof" href="ch-wielandt.html#a0000000720"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-wielandt.html#thm:wielandt_case3_one_step_span">Theorem 10.37</a></li>
+          
+          <li><a href="ch-wielandt.html#thm:wielandt_case3_one_step_span">Theorem 10.37</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.iIndex_le_sq_of_mem_wordSpan_one_of_noninvertible_eigenvector" class="lean_decl">MPSTensor.iIndex_le_sq_of_mem_wordSpan_one_of_noninvertible_eigenvector</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="corollary_thmcontent">
+  <p>   Under the hypotheses of Theorem&#160;<a href="ch-wielandt.html#thm:wielandt_case3_one_step_span">10.37</a>, </p>
+<div class="displaymath" id="a0000000721">
+  \[  \iota (A) \le D^2.  \]
+</div>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000720">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> The equality \(S_{D^2}(A)=M_{D}(\mathbb {C})\) gives an admissible value in the defining minimum for \(\iota (A)\). </p>
+
+  </div>
+</div>
+<div class="corollary_thmwrapper theorem-style-plain" id="cor:wielandt_case3_generator">
+  <div class="corollary_thmheading">
+    <span class="corollary_thmcaption">
+    Corollary
+    </span>
+    <span class="corollary_thmlabel">10.39</span>
+    <span class="corollary_thmtitle">Wielandt case (3), non-invertible Kraus operator</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-wielandt.html#cor:wielandt_case3_generator">#</a>
+    
+    <a class="icon proof" href="ch-wielandt.html#a0000000722"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-wielandt.html#lem:kraus_mem_word_span_one">Lemma 10.29</a></li>
+          
+          <li><a href="ch-wielandt.html#thm:wielandt_case3_one_step_span">Theorem 10.37</a></li>
+          
+          <li><a href="ch-wielandt.html#cor:wielandt_case3_one_step_index">Corollary 10.38</a></li>
+          
+          <li><a href="ch-wielandt.html#lem:kraus_mem_word_span_one">Lemma 10.29</a></li>
+          
+          <li><a href="ch-wielandt.html#thm:wielandt_case3_one_step_span">Theorem 10.37</a></li>
+          
+          <li><a href="ch-wielandt.html#cor:wielandt_case3_one_step_index">Corollary 10.38</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.wordSpan_eq_top_of_isPrimitivePaper_of_noninvertible_eigenvector" class="lean_decl">MPSTensor.wordSpan_eq_top_of_isPrimitivePaper_of_noninvertible_eigenvector</a></li>
+          
+          <li><a href="../docs/find/#doc/MPSTensor.iIndex_le_sq_of_noninvertible_eigenvector" class="lean_decl">MPSTensor.iIndex_le_sq_of_noninvertible_eigenvector</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="corollary_thmcontent">
+  <p>   Let \(A\) be an MPS tensor with bond dimension \(D \ge 1\), satisfying \(\sum _i (A^i)^\dagger A^i=\mathbb {1}\), and suppose that \(A\) is primitive in the paper sense. If some Kraus operator \(A^{i_0}\) is non-invertible and has an eigenvector \(\varphi \ne 0\) with nonzero eigenvalue \(\mu \), then </p>
+<div class="displaymath" id="a0000000723">
+  \[  S_{D^2}(A)=M_{D}(\mathbb {C}), \qquad \iota (A) \le D^2.  \]
+</div>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000722">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> Apply the one-step case to \(X=A^{i_0}\), which belongs to \(S_1(A)\) by Lemma&#160;<a href="ch-wielandt.html#lem:kraus_mem_word_span_one">10.29</a>. </p>
+
+  </div>
+</div>
 <div class="theorem_thmwrapper theorem-style-plain" id="thm:wielandt_general">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">10.28</span>
+    <span class="theorem_thmlabel">10.40</span>
     <span class="theorem_thmtitle">Wielandt’s inequality — general bound</span>
     <div class="thm_header_extras">
 
@@ -3081,7 +4155,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#thm:wielandt_general">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000702"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000724"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3103,7 +4177,11 @@
           
           <li><a href="ch-wielandt.html#thm:eigenvector_from_trace">Theorem 10.17</a></li>
           
-          <li><a href="ch-wielandt.html#thm:isNormal_blockTensor">Theorem 10.36</a></li>
+          <li><a href="ch-wielandt.html#thm:isNormal_blockTensor">Theorem 10.48</a></li>
+          
+          <li><a href="ch-wielandt.html#cor:wielandt_case2_generator">Corollary 10.35</a></li>
+          
+          <li><a href="ch-wielandt.html#cor:wielandt_case3_generator">Corollary 10.39</a></li>
           
         </ul>
     
@@ -3135,7 +4213,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Let \(A\) be a normalized MPS tensor (\(\sum _i (A^i)^\dagger A^i = \mathbb {1}\)) that is primitive in the paper sense. Then </p>
-<div class="displaymath" id="a0000000703">
+<div class="displaymath" id="a0000000725">
   \[  \iota (A) \; \le \;  (D^2 - \operatorname{kr}(A) + 1) \cdot D^2,  \]
 </div>
 <p> where \(\iota (A) = \min \{ n : S_n(A) = M_{D}(\mathbb {C})\} \) is the full-Kraus-rank index. This is <span class="cite">
@@ -3148,7 +4226,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000702">
+<div class="proof_wrapper" id="a0000000724">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3160,7 +4238,7 @@
 <ol class="enumerate">
   <li><p><em>\(D = 1\):</em> In this case \(\iota (A) = 0\), so the bound holds trivially. </p>
 </li>
-  <li><p><em>\(D \ge 2\):</em> By Theorem&#160;<a href="ch-wielandt.html#thm:nonzero_trace_word_sharp_pos">10.16</a>, there exists a <em>positive-length</em> word&#160;\(w\) with \(|w| \le D^2 - d' + 1\) and \(\operatorname{tr}(A^w) \neq 0\), where \(d' = \operatorname{kr}(A)\). The matrix \(A^w\) has nonzero trace, hence a nonzero eigenvalue \(\mu \) and eigenvector \(\varphi \) (Theorem&#160;<a href="ch-wielandt.html#thm:eigenvector_from_trace">10.17</a>). Set \(n = |w|\) and let \(B = A^{[n]}\) be the blocked tensor. Then \(B\) is normal (Theorem&#160;<a href="ch-wielandt.html#thm:isNormal_blockTensor">10.36</a>), and the encoding of \(w\) as a single block index gives \(B^{i_0} = A^w\). </p>
+  <li><p><em>\(D \ge 2\):</em> By Theorem&#160;<a href="ch-wielandt.html#thm:nonzero_trace_word_sharp_pos">10.16</a>, there exists a <em>positive-length</em> word&#160;\(w\) with \(|w| \le D^2 - d' + 1\) and \(\operatorname{tr}(A^w) \neq 0\), where \(d' = \operatorname{kr}(A)\). The matrix \(A^w\) has nonzero trace, hence a nonzero eigenvalue \(\mu \) and eigenvector \(\varphi \) (Theorem&#160;<a href="ch-wielandt.html#thm:eigenvector_from_trace">10.17</a>). Set \(n = |w|\) and let \(B = A^{[n]}\) be the blocked tensor. Then \(B\) is normal (Theorem&#160;<a href="ch-wielandt.html#thm:isNormal_blockTensor">10.48</a>), and the encoding of \(w\) as a single block index gives \(B^{i_0} = A^w\). </p>
 <ol class="enumerate">
   <li><p>If \(A^w\) is invertible (invertible case), \(S_{D^2}(B) = M_{D}(\mathbb {C})\), whence \(S_{D^2 \cdot n}(A) = M_{D}(\mathbb {C})\). </p>
 </li>
@@ -3179,13 +4257,13 @@
 
   </div>
 </div>
-<div class="remark_thmwrapper theorem-style-remark" id="a0000000704">
+<div class="remark_thmwrapper theorem-style-remark" id="a0000000726">
   <div class="remark_thmheading">
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">10.29</span>
-    <span class="remark_thmtitle">Quantitative vs. qualitative content of Theorem&#160;<a href="ch-wielandt.html#thm:wielandt_general">10.28</a></span>
+    <span class="remark_thmlabel">10.41</span>
+    <span class="remark_thmtitle">Quantitative vs. qualitative content of Theorem&#160;<a href="ch-wielandt.html#thm:wielandt_general">10.40</a></span>
     <div class="thm_header_extras">
 
     
@@ -3193,7 +4271,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-wielandt.html#a0000000704">#</a>
+    <a class="icon proof" href="ch-wielandt.html#a0000000726">#</a>
     
     
     
@@ -3206,7 +4284,7 @@
 	<a href="sect0001.html#Sanz2010Quantum" >SPGWC10</a>
 	, Theorem&#160;1, case&#160;(1)
 	]
-</span>. The blueprint’s own lemmas prove the qualitative conclusion used on the fundamental-theorem route, namely Theorem&#160;<a href="ch-wielandt.html#thm:wielandt_lemma2b">10.41</a>: there exists \(N\) with \(S_N(A) = M_{D}(\mathbb {C})\). The quantitative bound is not on the fundamental-theorem critical path. </p>
+</span>. The blueprint’s own lemmas prove the qualitative conclusion used on the fundamental-theorem route, namely Theorem&#160;<a href="ch-wielandt.html#thm:wielandt_lemma2b">10.53</a>: there exists \(N\) with \(S_N(A) = M_{D}(\mathbb {C})\). The quantitative bound is not on the fundamental-theorem critical path. </p>
 
   </div>
 </div>
@@ -3224,7 +4302,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">10.30</span>
+    <span class="definition_thmlabel">10.42</span>
     <span class="definition_thmtitle">Fixed-length vector span</span>
     <div class="thm_header_extras">
 
@@ -3282,7 +4360,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   The <em>fixed-length vector span</em> at length&#160;\(n\) is </p>
-<div class="displaymath" id="a0000000705">
+<div class="displaymath" id="a0000000727">
   \[  H_n(A, \varphi ) = \operatorname{span}_{\mathbb {C}}\{ A^w \varphi : |w| = n\}  \subseteq \mathbb {C}^D.  \]
 </div>
 <p> This is \(S_n(A)|\varphi \rangle \) in the notation of&#160;<span class="cite">
@@ -3300,7 +4378,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">10.31</span>
+    <span class="lemma_thmlabel">10.43</span>
     <span class="lemma_thmtitle">Word span products</span>
     <div class="thm_header_extras">
 
@@ -3311,7 +4389,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#lem:word_span_mul">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000706"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000728"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3362,7 +4440,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000706">
+<div class="proof_wrapper" id="a0000000728">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3379,7 +4457,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">10.32</span>
+    <span class="lemma_thmlabel">10.44</span>
     <span class="lemma_thmtitle">Eigenvector padding</span>
     <div class="thm_header_extras">
 
@@ -3390,7 +4468,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#lem:eigenvector_padding">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000707"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000729"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3408,7 +4486,7 @@
           
           <li><a href="ch-wielandt.html#def:cumulative_vector_span">Definition 10.19</a></li>
           
-          <li><a href="ch-wielandt.html#def:vector_spread_span">Definition 10.30</a></li>
+          <li><a href="ch-wielandt.html#def:vector_spread_span">Definition 10.42</a></li>
           
         </ul>
     
@@ -3440,14 +4518,14 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   Suppose \(A^{i_0} \varphi = \mu \varphi \) with \(\mu \neq 0\). Then for all&#160;\(n\), </p>
-<div class="displaymath" id="a0000000708">
+<div class="displaymath" id="a0000000730">
   \[  K_n(A, \varphi ) = H_n(A, \varphi ).  \]
 </div>
 <p> In particular, if \(K_n(A,\varphi ) = \mathbb {C}^D\) then already \(H_n(A,\varphi ) = \mathbb {C}^D\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000707">
+<div class="proof_wrapper" id="a0000000729">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3464,7 +4542,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">10.33</span>
+    <span class="theorem_thmlabel">10.45</span>
     <span class="theorem_thmtitle">Fixed-length vector spanning implies matrix spanning</span>
     <div class="thm_header_extras">
 
@@ -3475,7 +4553,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#thm:lemma2b_assembly">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000709"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000731"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3493,9 +4571,9 @@
           
           <li><a href="ch-wielandt.html#def:word_span">Definition 10.1</a></li>
           
-          <li><a href="ch-wielandt.html#def:vector_spread_span">Definition 10.30</a></li>
+          <li><a href="ch-wielandt.html#def:vector_spread_span">Definition 10.42</a></li>
           
-          <li><a href="ch-wielandt.html#lem:word_span_mul">Lemma 10.31</a></li>
+          <li><a href="ch-wielandt.html#lem:word_span_mul">Lemma 10.43</a></li>
           
         </ul>
     
@@ -3537,7 +4615,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000709">
+<div class="proof_wrapper" id="a0000000731">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3546,10 +4624,10 @@
   </div>
   <div class="proof_content">
   <p> Fix a matrix unit \(E_{ij}\). By hypothesis&#160;(1), there exists \(M_i \in S_n(A)\) with \(M_i \varphi = e_i\). By hypothesis&#160;(2), \(|\varphi \rangle \! \langle e_j| \in S_m(A)\). Their product satisfies </p>
-<div class="displaymath" id="a0000000710">
+<div class="displaymath" id="a0000000732">
   \[  M_i \cdot |\varphi \rangle \! \langle e_j| = |M_i \varphi \rangle \! \langle e_j| = |e_i\rangle \! \langle e_j| = E_{ij},  \]
 </div>
-<p> and \(E_{ij} \in S_{n+m}(A)\) by Lemma&#160;<a href="ch-wielandt.html#lem:word_span_mul">10.31</a>. Since the matrix units span \(M_{D}(\mathbb {C})\), \(S_{n+m}(A) = M_{D}(\mathbb {C})\). </p>
+<p> and \(E_{ij} \in S_{n+m}(A)\) by Lemma&#160;<a href="ch-wielandt.html#lem:word_span_mul">10.43</a>. Since the matrix units span \(M_{D}(\mathbb {C})\), \(S_{n+m}(A) = M_{D}(\mathbb {C})\). </p>
 
   </div>
 </div>
@@ -3558,7 +4636,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">10.34</span>
+    <span class="lemma_thmlabel">10.46</span>
     <span class="lemma_thmtitle">Blocking transfer</span>
     <div class="thm_header_extras">
 
@@ -3569,7 +4647,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#lem:blocking_transfer">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000711"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000733"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3622,7 +4700,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000711">
+<div class="proof_wrapper" id="a0000000733">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3639,7 +4717,7 @@
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">10.35</span>
+    <span class="remark_thmlabel">10.47</span>
     <span class="remark_thmtitle">Relation with the rank-one extraction lemma</span>
     <div class="thm_header_extras">
 
@@ -3661,7 +4739,7 @@
 	<a href="sect0001.html#Sanz2010Quantum" >SPGWC10</a>
 	
 	]
-</span>, Lemma&#160;2(b) combines a rank-one extraction for fixed-length spans with a product argument turning fixed-length vector spanning into fixed-length matrix spanning. Theorem&#160;<a href="ch-wielandt.html#thm:lemma2b_assembly">10.33</a> is the second step. Theorem&#160;<a href="ch-wielandt.html#thm:rankone_extraction_blockTensor">10.40</a> supplies the rank-one hypothesis in blocked form, and Theorem&#160;<a href="ch-wielandt.html#thm:wielandt_lemma2b">10.41</a> then gives a blocked, fixed-length word-span saturation result. </p>
+</span>, Lemma&#160;2(b) combines a rank-one extraction for fixed-length spans with a product argument turning fixed-length vector spanning into fixed-length matrix spanning. Theorem&#160;<a href="ch-wielandt.html#thm:lemma2b_assembly">10.45</a> is the second step. Theorem&#160;<a href="ch-wielandt.html#thm:rankone_extraction_blockTensor">10.52</a> supplies the rank-one hypothesis in blocked form, and Theorem&#160;<a href="ch-wielandt.html#thm:wielandt_lemma2b">10.53</a> then gives a blocked, fixed-length word-span saturation result. </p>
 
   </div>
 </div>
@@ -3673,7 +4751,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">10.36</span>
+    <span class="theorem_thmlabel">10.48</span>
     <span class="theorem_thmtitle">Blocking preserves normality</span>
     <div class="thm_header_extras">
 
@@ -3684,7 +4762,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#thm:isNormal_blockTensor">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000712"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000734"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3704,9 +4782,9 @@
           
           <li><a href="ch-mps.html#def:blocked_tensor">Definition 2.37</a></li>
           
-          <li><a href="ch-wielandt.html#lem:word_span_le_blockTensor">Lemma 10.37</a></li>
+          <li><a href="ch-wielandt.html#lem:word_span_le_blockTensor">Lemma 10.49</a></li>
           
-          <li><a href="ch-wielandt.html#lem:word_span_mul">Lemma 10.31</a></li>
+          <li><a href="ch-wielandt.html#lem:word_span_mul">Lemma 10.43</a></li>
           
         </ul>
     
@@ -3741,7 +4819,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000712">
+<div class="proof_wrapper" id="a0000000734">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3750,10 +4828,10 @@
   </div>
   <div class="proof_content">
   <p> Choose \(N\) with \(S_N(A) = M_{D}(\mathbb {C})\). Then \(\mathbb {1}\in S_N(A)\). For any \(M \in S_N(A)\), write \(\mathbb {1}= \sum _r c_r A^{w_r}\) with each \(|w_r| = N\). Then </p>
-<div class="displaymath" id="a0000000713">
+<div class="displaymath" id="a0000000735">
   \[  M = M \cdot \mathbb {1}= \sum _r c_r \,  M A^{w_r} \in S_N(A) \cdot S_N(A) \subseteq S_{2N}(A)  \]
 </div>
-<p> by Lemma&#160;<a href="ch-wielandt.html#lem:word_span_mul">10.31</a>. Iterating this inclusion gives \(S_N(A) \subseteq S_{kN}(A)\) for every \(k \ge 1\); taking \(k = L\) yields \(M_{D}(\mathbb {C}) = S_N(A) \subseteq S_{NL}(A)\). By Lemma&#160;<a href="ch-wielandt.html#lem:word_span_le_blockTensor">10.37</a>, \(S_{NL}(A) \subseteq S_N(A^{[L]})\), so \(S_N(A^{[L]}) = M_{D}(\mathbb {C})\). </p>
+<p> by Lemma&#160;<a href="ch-wielandt.html#lem:word_span_mul">10.43</a>. Iterating this inclusion gives \(S_N(A) \subseteq S_{kN}(A)\) for every \(k \ge 1\); taking \(k = L\) yields \(M_{D}(\mathbb {C}) = S_N(A) \subseteq S_{NL}(A)\). By Lemma&#160;<a href="ch-wielandt.html#lem:word_span_le_blockTensor">10.49</a>, \(S_{NL}(A) \subseteq S_N(A^{[L]})\), so \(S_N(A^{[L]}) = M_{D}(\mathbb {C})\). </p>
 
   </div>
 </div>
@@ -3762,7 +4840,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">10.37</span>
+    <span class="lemma_thmlabel">10.49</span>
     <span class="lemma_thmtitle">Chunking: word span embeds into blocked word span</span>
     <div class="thm_header_extras">
 
@@ -3773,7 +4851,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#lem:word_span_le_blockTensor">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000714"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000736"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3793,7 +4871,7 @@
           
           <li><a href="ch-mps.html#def:blocked_tensor">Definition 2.37</a></li>
           
-          <li><a href="ch-wielandt.html#lem:word_span_mul">Lemma 10.31</a></li>
+          <li><a href="ch-wielandt.html#lem:word_span_mul">Lemma 10.43</a></li>
           
         </ul>
     
@@ -3828,7 +4906,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000714">
+<div class="proof_wrapper" id="a0000000736">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3836,7 +4914,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Every length-\(nL\) word in the original alphabet can be split into \(n\) consecutive chunks of length&#160;\(L\), each of which is a single blocked Kraus operator. By induction on&#160;\(n\), using the word span product lemma (Lemma&#160;<a href="ch-wielandt.html#lem:word_span_mul">10.31</a>). </p>
+  <p> Every length-\(nL\) word in the original alphabet can be split into \(n\) consecutive chunks of length&#160;\(L\), each of which is a single blocked Kraus operator. By induction on&#160;\(n\), using the word span product lemma (Lemma&#160;<a href="ch-wielandt.html#lem:word_span_mul">10.43</a>). </p>
 
   </div>
 </div>
@@ -3845,7 +4923,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">10.38</span>
+    <span class="theorem_thmlabel">10.50</span>
     <span class="theorem_thmtitle">Word eigenvector gives blocked eigenvector</span>
     <div class="thm_header_extras">
 
@@ -3856,7 +4934,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#thm:blockTensor_single_eigenvector">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000715"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000737"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3907,7 +4985,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000715">
+<div class="proof_wrapper" id="a0000000737">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3924,7 +5002,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">10.39</span>
+    <span class="theorem_thmlabel">10.51</span>
     <span class="theorem_thmtitle">Blocked fixed-length matrix spanning</span>
     <div class="thm_header_extras">
 
@@ -3935,7 +5013,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#thm:wielandt_blocked_assembly">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000716"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000738"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3957,15 +5035,15 @@
           
           <li><a href="ch-mps.html#def:blocked_tensor">Definition 2.37</a></li>
           
-          <li><a href="ch-wielandt.html#thm:isNormal_blockTensor">Theorem 10.36</a></li>
+          <li><a href="ch-wielandt.html#thm:isNormal_blockTensor">Theorem 10.48</a></li>
           
-          <li><a href="ch-wielandt.html#thm:blockTensor_single_eigenvector">Theorem 10.38</a></li>
+          <li><a href="ch-wielandt.html#thm:blockTensor_single_eigenvector">Theorem 10.50</a></li>
           
           <li><a href="ch-wielandt.html#thm:eigenvector_spreading">Theorem 10.22</a></li>
           
-          <li><a href="ch-wielandt.html#lem:blocking_transfer">Lemma 10.34</a></li>
+          <li><a href="ch-wielandt.html#lem:blocking_transfer">Lemma 10.46</a></li>
           
-          <li><a href="ch-wielandt.html#thm:lemma2b_assembly">Theorem 10.33</a></li>
+          <li><a href="ch-wielandt.html#thm:lemma2b_assembly">Theorem 10.45</a></li>
           
         </ul>
     
@@ -4010,7 +5088,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000716">
+<div class="proof_wrapper" id="a0000000738">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4018,7 +5096,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Apply Theorem&#160;<a href="ch-wielandt.html#thm:lemma2b_assembly">10.33</a> to the blocked tensor \(A^{[L]}\), which is normal by Theorem&#160;<a href="ch-wielandt.html#thm:isNormal_blockTensor">10.36</a>. The eigenvector and transpose eigenvector are transferred to single-index eigenvectors of \(A^{[L]}\) by Theorem&#160;<a href="ch-wielandt.html#thm:blockTensor_single_eigenvector">10.38</a>. Transfer back to the original tensor via Lemma&#160;<a href="ch-wielandt.html#lem:blocking_transfer">10.34</a>. </p>
+  <p> Apply Theorem&#160;<a href="ch-wielandt.html#thm:lemma2b_assembly">10.45</a> to the blocked tensor \(A^{[L]}\), which is normal by Theorem&#160;<a href="ch-wielandt.html#thm:isNormal_blockTensor">10.48</a>. The eigenvector and transpose eigenvector are transferred to single-index eigenvectors of \(A^{[L]}\) by Theorem&#160;<a href="ch-wielandt.html#thm:blockTensor_single_eigenvector">10.50</a>. Transfer back to the original tensor via Lemma&#160;<a href="ch-wielandt.html#lem:blocking_transfer">10.46</a>. </p>
 
   </div>
 </div>
@@ -4027,7 +5105,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">10.40</span>
+    <span class="theorem_thmlabel">10.52</span>
     <span class="theorem_thmtitle">Rank-one extraction for blocked tensor</span>
     <div class="thm_header_extras">
 
@@ -4038,7 +5116,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#thm:rankone_extraction_blockTensor">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000717"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000739"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4062,7 +5140,7 @@
           
           <li><a href="ch-mps.html#def:blocked_tensor">Definition 2.37</a></li>
           
-          <li><a href="ch-wielandt.html#thm:isNormal_blockTensor">Theorem 10.36</a></li>
+          <li><a href="ch-wielandt.html#thm:isNormal_blockTensor">Theorem 10.48</a></li>
           
           <li><a href="ch-wielandt.html#thm:eigenvector_from_trace">Theorem 10.17</a></li>
           
@@ -4107,7 +5185,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000717">
+<div class="proof_wrapper" id="a0000000739">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4115,7 +5193,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Set \(B = A^{[N_0]}\). Since \(S_{N_0}(A) = M_{D}(\mathbb {C})\), we have \(S_1(B) = M_{D}(\mathbb {C})\) by definition of the blocked tensor. Hence \(\mathbb {1}\in S_1(B)\), so in the nontrivial case \(D \ge 1\) not all blocked generators can have trace zero. Choose \(j_0\) with \(\operatorname{tr}(B^{j_0}) \neq 0\). By Theorem&#160;<a href="ch-wielandt.html#thm:eigenvector_from_trace">10.17</a>, \(B^{j_0}\) has a nonzero eigenvector \(\varphi \) with eigenvalue \(\mu \neq 0\). Writing \(j_0\) as the blocked index corresponding to a word \(\sigma _0\) of length&#160;\(N_0\) gives \(A^{\sigma _0} \varphi = \mu \varphi \). Applying the same argument to the transpose blocked tensor gives a word \(\tau _0\) of length&#160;\(N_0\), a nonzero vector \(\psi \), and \(\nu \neq 0\) with \((A^{\tau _0})^T \psi = \nu \psi \). Since \(A\) is normal and \(N_0 \ge 1\), the blocked tensor \(B\) is normal by Theorem&#160;<a href="ch-wielandt.html#thm:isNormal_blockTensor">10.36</a>. Therefore there exists \(M\) with \(S_M(B) = M_{D}(\mathbb {C})\). In particular \(\varphi \psi ^T \in S_M(B)\). Taking \(m = M\) proves&#160;(3). </p>
+  <p> Set \(B = A^{[N_0]}\). Since \(S_{N_0}(A) = M_{D}(\mathbb {C})\), we have \(S_1(B) = M_{D}(\mathbb {C})\) by definition of the blocked tensor. Hence \(\mathbb {1}\in S_1(B)\), so in the nontrivial case \(D \ge 1\) not all blocked generators can have trace zero. Choose \(j_0\) with \(\operatorname{tr}(B^{j_0}) \neq 0\). By Theorem&#160;<a href="ch-wielandt.html#thm:eigenvector_from_trace">10.17</a>, \(B^{j_0}\) has a nonzero eigenvector \(\varphi \) with eigenvalue \(\mu \neq 0\). Writing \(j_0\) as the blocked index corresponding to a word \(\sigma _0\) of length&#160;\(N_0\) gives \(A^{\sigma _0} \varphi = \mu \varphi \). Applying the same argument to the transpose blocked tensor gives a word \(\tau _0\) of length&#160;\(N_0\), a nonzero vector \(\psi \), and \(\nu \neq 0\) with \((A^{\tau _0})^T \psi = \nu \psi \). Since \(A\) is normal and \(N_0 \ge 1\), the blocked tensor \(B\) is normal by Theorem&#160;<a href="ch-wielandt.html#thm:isNormal_blockTensor">10.48</a>. Therefore there exists \(M\) with \(S_M(B) = M_{D}(\mathbb {C})\). In particular \(\varphi \psi ^T \in S_M(B)\). Taking \(m = M\) proves&#160;(3). </p>
 
   </div>
 </div>
@@ -4124,7 +5202,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">10.41</span>
+    <span class="theorem_thmlabel">10.53</span>
     <span class="theorem_thmtitle">Fixed-length word-span saturation via blocking</span>
     <div class="thm_header_extras">
 
@@ -4135,7 +5213,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#thm:wielandt_lemma2b">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000718"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000740"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4155,9 +5233,9 @@
           
           <li><a href="ch-mps.html#def:normal">Definition 2.26</a></li>
           
-          <li><a href="ch-wielandt.html#thm:rankone_extraction_blockTensor">Theorem 10.40</a></li>
+          <li><a href="ch-wielandt.html#thm:rankone_extraction_blockTensor">Theorem 10.52</a></li>
           
-          <li><a href="ch-wielandt.html#thm:wielandt_blocked_assembly">Theorem 10.39</a></li>
+          <li><a href="ch-wielandt.html#thm:wielandt_blocked_assembly">Theorem 10.51</a></li>
           
         </ul>
     
@@ -4198,7 +5276,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000718">
+<div class="proof_wrapper" id="a0000000740">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4206,7 +5284,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> By normality, some \(N_0\) has \(S_{N_0}(A) = M_{D}(\mathbb {C})\). If \(N_0 = 0\) we are done. Otherwise, Theorem&#160;<a href="ch-wielandt.html#thm:rankone_extraction_blockTensor">10.40</a> produces eigenvectors and a rank-one element \(\varphi \psi ^T \in S_m(A^{[N_0]})\). Theorem&#160;<a href="ch-wielandt.html#thm:wielandt_blocked_assembly">10.39</a> then gives \(S_{((D-1) + m + (D-1)) \cdot N_0}(A) = M_{D}(\mathbb {C})\). </p>
+  <p> By normality, some \(N_0\) has \(S_{N_0}(A) = M_{D}(\mathbb {C})\). If \(N_0 = 0\) we are done. Otherwise, Theorem&#160;<a href="ch-wielandt.html#thm:rankone_extraction_blockTensor">10.52</a> produces eigenvectors and a rank-one element \(\varphi \psi ^T \in S_m(A^{[N_0]})\). Theorem&#160;<a href="ch-wielandt.html#thm:wielandt_blocked_assembly">10.51</a> then gives \(S_{((D-1) + m + (D-1)) \cdot N_0}(A) = M_{D}(\mathbb {C})\). </p>
 
   </div>
 </div>
@@ -4215,7 +5293,7 @@
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">10.42</span>
+    <span class="remark_thmlabel">10.54</span>
     <span class="remark_thmtitle">Blocking argument for fixed-length spanning</span>
     <div class="thm_header_extras">
 
@@ -4231,7 +5309,7 @@
         </div>
   </div>
   <div class="remark_thmcontent">
-  <p>Theorem&#160;<a href="ch-wielandt.html#thm:wielandt_lemma2b">10.41</a> is obtained by first extracting a rank-one operator in a blocked tensor (Theorem&#160;<a href="ch-wielandt.html#thm:rankone_extraction_blockTensor">10.40</a>) and then applying the fixed-length matrix-spanning theorem (Theorem&#160;<a href="ch-wielandt.html#thm:wielandt_blocked_assembly">10.39</a>). Thus the fixed-length span of \(A\) is reached through a blocked auxiliary tensor rather than by a direct unblocked argument. </p>
+  <p>Theorem&#160;<a href="ch-wielandt.html#thm:wielandt_lemma2b">10.53</a> is obtained by first extracting a rank-one operator in a blocked tensor (Theorem&#160;<a href="ch-wielandt.html#thm:rankone_extraction_blockTensor">10.52</a>) and then applying the fixed-length matrix-spanning theorem (Theorem&#160;<a href="ch-wielandt.html#thm:wielandt_blocked_assembly">10.51</a>). Thus the fixed-length span of \(A\) is reached through a blocked auxiliary tensor rather than by a direct unblocked argument. </p>
 
   </div>
 </div>
@@ -4241,7 +5319,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">10.43</span>
+    <span class="definition_thmlabel">10.55</span>
     <span class="definition_thmtitle">Primitive MPS tensor</span>
     <div class="thm_header_extras">
 
@@ -4301,10 +5379,10 @@
   </div>
   <div class="definition_thmcontent">
   <p>   Assume \(D {\gt} 0\). A tensor \(A\) together with a matrix \(\rho \in M_{D}(\mathbb {C})\) is <em>primitive</em> if </p>
-<div class="displaymath" id="a0000000719">
+<div class="displaymath" id="a0000000741">
   \[  \sum _i (A^i)^\dagger A^i = \mathbb {1}, \qquad \rho \ge 0, \qquad \rho \neq 0, \qquad \mathcal{E}_A(\rho ) = \rho ,  \]
 </div>
-<p> and, if \(P\) is the fixed-point projection associated to \(\rho \), then \(\rho _{\mathrm{spec}}(\mathcal{E}_A - P) {\lt} 1\). When the choice of \(\rho \) is irrelevant, we simply say that \(A\) is a primitive MPS tensor. This is weaker than the paper’s notion, which requires \(\rho {\gt} 0\); see Remark&#160;<a href="ch-wielandt.html#rem:prim_definition_mismatch">10.49</a>. The stronger positive-definite hypothesis is imposed separately in Theorems&#160;<a href="ch-wielandt.html#thm:primitive_implies_irreducible">10.50</a> and&#160;<a href="ch-wielandt.html#thm:primitive_posDef_aperiodic_normal">10.61</a>. </p>
+<p> and, if \(P\) is the fixed-point projection associated to \(\rho \), then \(\rho _{\mathrm{spec}}(\mathcal{E}_A - P) {\lt} 1\). When the choice of \(\rho \) is irrelevant, we simply say that \(A\) is a primitive MPS tensor. This is weaker than the paper’s notion, which requires \(\rho {\gt} 0\); see Remark&#160;<a href="ch-wielandt.html#rem:prim_definition_mismatch">10.61</a>. The stronger positive-definite hypothesis is imposed separately in Theorems&#160;<a href="ch-wielandt.html#thm:primitive_implies_irreducible">10.62</a> and&#160;<a href="ch-wielandt.html#thm:primitive_posDef_aperiodic_normal">10.73</a>. </p>
 
   </div>
 </div>
@@ -4313,7 +5391,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">10.44</span>
+    <span class="theorem_thmlabel">10.56</span>
     <span class="theorem_thmtitle">Primitive overlap convergence</span>
     <div class="thm_header_extras">
 
@@ -4324,7 +5402,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#thm:prim_overlap_one">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000720"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000742"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4340,7 +5418,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-wielandt.html#def:primitive_mps">Definition 10.43</a></li>
+          <li><a href="ch-wielandt.html#def:primitive_mps">Definition 10.55</a></li>
           
           <li><a href="ch-mps.html#def:mpv_overlap">Definition 2.43</a></li>
           
@@ -4379,7 +5457,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000720">
+<div class="proof_wrapper" id="a0000000742">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4392,13 +5470,13 @@
   </div>
 </div>
 <h1 id="a0000000087">10.10 Primitivity and normality</h1>
-<p>Throughout this section, primitivity means the condition of Definition&#160;<a href="ch-wielandt.html#def:primitive_mps">10.43</a>: the tensor is in TP gauge, it has a nonzero PSD fixed point, and the complementary map has spectral radius \({\lt} 1\). </p>
+<p>Throughout this section, primitivity means the condition of Definition&#160;<a href="ch-wielandt.html#def:primitive_mps">10.55</a>: the tensor is in TP gauge, it has a nonzero PSD fixed point, and the complementary map has spectral radius \({\lt} 1\). </p>
 <div class="theorem_thmwrapper theorem-style-plain" id="thm:prim_nonzero_word">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">10.45</span>
+    <span class="theorem_thmlabel">10.57</span>
     <span class="theorem_thmtitle">Primitive MPS tensors have nonzero word products</span>
     <div class="thm_header_extras">
 
@@ -4409,7 +5487,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#thm:prim_nonzero_word">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000721"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000743"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4425,7 +5503,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-wielandt.html#def:primitive_mps">Definition 10.43</a></li>
+          <li><a href="ch-wielandt.html#def:primitive_mps">Definition 10.55</a></li>
           
           <li><a href="ch-mps.html#def:eval_word">Definition 2.2</a></li>
           
@@ -4462,7 +5540,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000721">
+<div class="proof_wrapper" id="a0000000743">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4479,7 +5557,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">10.46</span>
+    <span class="theorem_thmlabel">10.58</span>
     <span class="theorem_thmtitle">Iterated transfer does not vanish</span>
     <div class="thm_header_extras">
 
@@ -4490,7 +5568,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#thm:transfer_pow_ne_zero">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000722"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000744"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4506,11 +5584,11 @@
         
         <ul class="uses">
           
-          <li><a href="ch-wielandt.html#def:primitive_mps">Definition 10.43</a></li>
+          <li><a href="ch-wielandt.html#def:primitive_mps">Definition 10.55</a></li>
           
           <li><a href="ch-mps.html#def:transfer_map">Definition 2.5</a></li>
           
-          <li><a href="ch-wielandt.html#thm:prim_nonzero_word">Theorem 10.45</a></li>
+          <li><a href="ch-wielandt.html#thm:prim_nonzero_word">Theorem 10.57</a></li>
           
         </ul>
     
@@ -4545,7 +5623,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000722">
+<div class="proof_wrapper" id="a0000000744">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4553,19 +5631,19 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> By Theorem&#160;<a href="ch-wielandt.html#thm:prim_nonzero_word">10.45</a>, there exists a word&#160;\(w\) of length&#160;\(n\) with \(A^w \neq 0\), so \(\mathcal{E}_A^n(\rho )\) has a nonzero summand. </p>
+  <p> By Theorem&#160;<a href="ch-wielandt.html#thm:prim_nonzero_word">10.57</a>, there exists a word&#160;\(w\) of length&#160;\(n\) with \(A^w \neq 0\), so \(\mathcal{E}_A^n(\rho )\) has a nonzero summand. </p>
 
   </div>
 </div>
 <h2 id="subsec:prim_to_normal">10.10.1 From primitivity to normality</h2>
 
-<p>The primitivity condition of Definition&#160;<a href="ch-wielandt.html#def:primitive_mps">10.43</a> combines TP normalization, a nonzero PSD fixed point, and a complementary spectral gap. It is connected to normality through the following results. </p>
+<p>The primitivity condition of Definition&#160;<a href="ch-wielandt.html#def:primitive_mps">10.55</a> combines TP normalization, a nonzero PSD fixed point, and a complementary spectral gap. It is connected to normality through the following results. </p>
 <div class="theorem_thmwrapper theorem-style-plain" id="thm:fixedpoint_unique_spectral">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">10.47</span>
+    <span class="theorem_thmlabel">10.59</span>
     <span class="theorem_thmtitle">Fixed-point uniqueness from spectral gap</span>
     <div class="thm_header_extras">
 
@@ -4576,7 +5654,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#thm:fixedpoint_unique_spectral">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000723"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000745"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4592,7 +5670,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-wielandt.html#def:primitive_mps">Definition 10.43</a></li>
+          <li><a href="ch-wielandt.html#def:primitive_mps">Definition 10.55</a></li>
           
         </ul>
     
@@ -4627,7 +5705,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000723">
+<div class="proof_wrapper" id="a0000000745">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4644,7 +5722,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">10.48</span>
+    <span class="theorem_thmlabel">10.60</span>
     <span class="theorem_thmtitle">Complement powers tend to zero</span>
     <div class="thm_header_extras">
 
@@ -4655,7 +5733,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#thm:complement_pow_zero">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000724"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000746"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4671,7 +5749,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-wielandt.html#def:primitive_mps">Definition 10.43</a></li>
+          <li><a href="ch-wielandt.html#def:primitive_mps">Definition 10.55</a></li>
           
         </ul>
     
@@ -4706,7 +5784,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000724">
+<div class="proof_wrapper" id="a0000000746">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4723,7 +5801,7 @@
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">10.49</span>
+    <span class="remark_thmlabel">10.61</span>
     <span class="remark_thmtitle">Primitivity: spectral gap vs. positive definiteness</span>
     <div class="thm_header_extras">
 
@@ -4746,11 +5824,11 @@
 	, Proposition&#160;3
 	]
 </span> additionally requires \(\rho \) to be positive definite (full rank). Without positive definiteness, the spectral-gap condition alone does <em>not</em> imply irreducibility or normality. A counterexample is \(D = 2\), \(\rho = \operatorname{diag}(1,0)\). </p>
-<p>With the additional hypothesis \(\rho {\gt} 0\), Theorem&#160;<a href="ch-wielandt.html#thm:primitive_implies_irreducible">10.50</a> gives irreducibility. Together with Burnside’s theorem (Chapter&#160;<a href="ch-canonical.html">11</a>, §<a href="ch-canonical.html#subsec:burnside_bridge">11.4.1</a>) and Theorem&#160;<a href="ch-wielandt.html#thm:algspan_to_normal">10.59</a>, one obtains </p>
-<div class="displaymath" id="a0000000725">
+<p>With the additional hypothesis \(\rho {\gt} 0\), Theorem&#160;<a href="ch-wielandt.html#thm:primitive_implies_irreducible">10.62</a> gives irreducibility. Together with Burnside’s theorem (Chapter&#160;<a href="ch-canonical.html">11</a>, §<a href="ch-canonical.html#subsec:burnside_bridge">11.4.1</a>) and Theorem&#160;<a href="ch-wielandt.html#thm:algspan_to_normal">10.71</a>, one obtains </p>
+<div class="displaymath" id="a0000000747">
   \[  \text{primitive} + \rho \text{ positive definite} \; \Rightarrow \;  \text{irreducible} \; \Rightarrow \;  \operatorname{alg}(A) = M_{D}(\mathbb {C}) \; \Rightarrow \;  \text{normal}.  \]
 </div>
-<p> The last step uses the aperiodicity condition \(\mathbb {1}\in S_1(A)\) from Remark&#160;<a href="ch-wielandt.html#rem:aperiodicity">10.54</a>. After restoring the positive-definite hypothesis, <span class="cite">
+<p> The last step uses the aperiodicity condition \(\mathbb {1}\in S_1(A)\) from Remark&#160;<a href="ch-wielandt.html#rem:aperiodicity">10.66</a>. After restoring the positive-definite hypothesis, <span class="cite">
 	[
 	
 	<a href="sect0001.html#Sanz2010Quantum" >SPGWC10</a>
@@ -4767,7 +5845,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">10.50</span>
+    <span class="theorem_thmlabel">10.62</span>
     <span class="theorem_thmtitle">Primitive with positive-definite fixed point implies irreducible tensor</span>
     <div class="thm_header_extras">
 
@@ -4778,7 +5856,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#thm:primitive_implies_irreducible">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000726"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000748"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4794,13 +5872,13 @@
         
         <ul class="uses">
           
-          <li><a href="ch-wielandt.html#def:primitive_mps">Definition 10.43</a></li>
+          <li><a href="ch-wielandt.html#def:primitive_mps">Definition 10.55</a></li>
           
           <li><a href="ch-canonical.html#def:irreducible_tensor">Definition 11.15</a></li>
           
           <li><a href="ch-canonical.html#def:has_inv_proj">Definition 11.12</a></li>
           
-          <li><a href="ch-wielandt.html#thm:complement_pow_zero">Theorem 10.48</a></li>
+          <li><a href="ch-wielandt.html#thm:complement_pow_zero">Theorem 10.60</a></li>
           
         </ul>
     
@@ -4847,7 +5925,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000726">
+<div class="proof_wrapper" id="a0000000748">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4859,7 +5937,7 @@
 <ol class="enumerate">
   <li><p><em>Invariance of \(\sigma \) under \(\mathcal{E}_A^n\):</em> the projection relation \((\mathbb {1}- P) A^i P = 0\) implies \((\mathbb {1}- P) \cdot \mathcal{E}_A^n(\sigma ) = 0\) for all&#160;\(n\) (by induction on&#160;\(n\)). </p>
 </li>
-  <li><p><em>Convergence:</em> By Theorem&#160;<a href="ch-wielandt.html#thm:complement_pow_zero">10.48</a>, \(\mathcal{E}_A^n(\sigma ) \to \frac{\operatorname{tr}(\sigma )}{\operatorname{tr}(\rho )} \rho \). Hence \((\mathbb {1}- P) \cdot \frac{\operatorname{tr}(\sigma )}{\operatorname{tr}(\rho )} \rho = 0\). </p>
+  <li><p><em>Convergence:</em> By Theorem&#160;<a href="ch-wielandt.html#thm:complement_pow_zero">10.60</a>, \(\mathcal{E}_A^n(\sigma ) \to \frac{\operatorname{tr}(\sigma )}{\operatorname{tr}(\rho )} \rho \). Hence \((\mathbb {1}- P) \cdot \frac{\operatorname{tr}(\sigma )}{\operatorname{tr}(\rho )} \rho = 0\). </p>
 </li>
   <li><p><em>Nonzero scalar:</em> Since \(P \neq 0\) and \(\rho \) is positive definite, \(\operatorname{tr}(P \rho P) {\gt} 0\), so \(\frac{\operatorname{tr}(\sigma )}{\operatorname{tr}(\rho )} \neq 0\). Therefore \((\mathbb {1}- P) \rho = 0\). </p>
 </li>
@@ -4871,13 +5949,13 @@
 </div>
 <h2 id="subsec:prim_bridge_normality">10.10.3 From primitivity to strong irreducibility and normality</h2>
 
-<p>The results in this subsection remove the aperiodicity assumption from the normality conclusions. They connect the spectral-gap primitivity of Definition&#160;<a href="ch-wielandt.html#def:primitive_mps">10.43</a> directly to normality (eventually full Kraus rank), using the convergence of the transfer-map iterates to the projection onto the fixed-point subspace. </p>
+<p>The results in this subsection remove the aperiodicity assumption from the normality conclusions. They connect the spectral-gap primitivity of Definition&#160;<a href="ch-wielandt.html#def:primitive_mps">10.55</a> directly to normality (eventually full Kraus rank), using the convergence of the transfer-map iterates to the projection onto the fixed-point subspace. </p>
 <div class="theorem_thmwrapper theorem-style-plain" id="thm:irreducible_map_from_primitive">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">10.51</span>
+    <span class="theorem_thmlabel">10.63</span>
     <span class="theorem_thmtitle">Primitive MPS with positive-definite fixed point has irreducible transfer map</span>
     <div class="thm_header_extras">
 
@@ -4888,7 +5966,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#thm:irreducible_map_from_primitive">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000727"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000749"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4904,9 +5982,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-wielandt.html#def:primitive_mps">Definition 10.43</a></li>
+          <li><a href="ch-wielandt.html#def:primitive_mps">Definition 10.55</a></li>
           
-          <li><a href="ch-wielandt.html#thm:fixedpoint_unique_spectral">Theorem 10.47</a></li>
+          <li><a href="ch-wielandt.html#thm:fixedpoint_unique_spectral">Theorem 10.59</a></li>
           
         </ul>
     
@@ -4938,11 +6016,11 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   If \(A\) is a primitive MPS tensor with positive-definite fixed point&#160;\(\rho \), then the transfer map \(\mathcal{E}_A\) is irreducible. </p>
-<p>The proof uses fixed-point uniqueness (Theorem&#160;<a href="ch-wielandt.html#thm:fixedpoint_unique_spectral">10.47</a>): every PSD fixed point is proportional to \(\rho \), so Wolf’s criterion for irreducibility (positive-definite fixed point implies irreducibility) applies directly. </p>
+<p>The proof uses fixed-point uniqueness (Theorem&#160;<a href="ch-wielandt.html#thm:fixedpoint_unique_spectral">10.59</a>): every PSD fixed point is proportional to \(\rho \), so Wolf’s criterion for irreducibility (positive-definite fixed point implies irreducibility) applies directly. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000727">
+<div class="proof_wrapper" id="a0000000749">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4950,7 +6028,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> By Theorem&#160;<a href="ch-wielandt.html#thm:fixedpoint_unique_spectral">10.47</a>, if \(\sigma \ge 0\) and \(\mathcal{E}_A(\sigma ) = \sigma \), then \(\sigma = \frac{\operatorname{tr}\sigma }{\operatorname{tr}\rho } \rho \). Since \(\rho {\gt} 0\), Wolf’s uniqueness criterion for irreducibility applies. </p>
+  <p> By Theorem&#160;<a href="ch-wielandt.html#thm:fixedpoint_unique_spectral">10.59</a>, if \(\sigma \ge 0\) and \(\mathcal{E}_A(\sigma ) = \sigma \), then \(\sigma = \frac{\operatorname{tr}\sigma }{\operatorname{tr}\rho } \rho \). Since \(\rho {\gt} 0\), Wolf’s uniqueness criterion for irreducibility applies. </p>
 
   </div>
 </div>
@@ -4959,7 +6037,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">10.52</span>
+    <span class="theorem_thmlabel">10.64</span>
     <span class="theorem_thmtitle">Primitive MPS with positive-definite fixed point is strongly irreducible</span>
     <div class="thm_header_extras">
 
@@ -4970,7 +6048,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#thm:strongly_irred_from_primitive">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000728"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000750"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4986,11 +6064,11 @@
         
         <ul class="uses">
           
-          <li><a href="ch-wielandt.html#def:primitive_mps">Definition 10.43</a></li>
+          <li><a href="ch-wielandt.html#def:primitive_mps">Definition 10.55</a></li>
           
-          <li><a href="ch-wielandt.html#thm:irreducible_map_from_primitive">Theorem 10.51</a></li>
+          <li><a href="ch-wielandt.html#thm:irreducible_map_from_primitive">Theorem 10.63</a></li>
           
-          <li><a href="ch-wielandt.html#thm:prim_overlap_one">Theorem 10.44</a></li>
+          <li><a href="ch-wielandt.html#thm:prim_overlap_one">Theorem 10.56</a></li>
           
         </ul>
     
@@ -5031,7 +6109,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000728">
+<div class="proof_wrapper" id="a0000000750">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5039,7 +6117,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Combine Theorem&#160;<a href="ch-wielandt.html#thm:irreducible_map_from_primitive">10.51</a> (irreducibility) with the peripheral-spectrum primitivity from the spectral-gap hypothesis (Theorem&#160;<a href="ch-wielandt.html#thm:prim_overlap_one">10.44</a>). </p>
+  <p> Combine Theorem&#160;<a href="ch-wielandt.html#thm:irreducible_map_from_primitive">10.63</a> (irreducibility) with the peripheral-spectrum primitivity from the spectral-gap hypothesis (Theorem&#160;<a href="ch-wielandt.html#thm:prim_overlap_one">10.56</a>). </p>
 
   </div>
 </div>
@@ -5048,7 +6126,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">10.53</span>
+    <span class="theorem_thmlabel">10.65</span>
     <span class="theorem_thmtitle">Primitive MPS with positive-definite fixed point is normal</span>
     <div class="thm_header_extras">
 
@@ -5059,7 +6137,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#thm:normal_from_primitive_posdef">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000729"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000751"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5075,11 +6153,11 @@
         
         <ul class="uses">
           
-          <li><a href="ch-wielandt.html#def:primitive_mps">Definition 10.43</a></li>
+          <li><a href="ch-wielandt.html#def:primitive_mps">Definition 10.55</a></li>
           
           <li><a href="ch-mps.html#def:normal">Definition 2.26</a></li>
           
-          <li><a href="ch-wielandt.html#thm:strongly_irred_from_primitive">Theorem 10.52</a></li>
+          <li><a href="ch-wielandt.html#thm:strongly_irred_from_primitive">Theorem 10.64</a></li>
           
           <li><a href="ch-spectral.html#thm:wolf_6_8_conjunction">Theorem 9.64</a></li>
           
@@ -5113,11 +6191,11 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   If \(A\) is a primitive MPS tensor with positive-definite fixed point&#160;\(\rho \), then \(A\) is normal (has eventually full Kraus rank). No aperiodicity assumption is needed. </p>
-<p>This is the key connection between the spectral-gap primitivity of Definition&#160;<a href="ch-wielandt.html#def:primitive_mps">10.43</a> and normality, filling the gap left by the earlier aperiodicity-based argument. </p>
+<p>This is the key connection between the spectral-gap primitivity of Definition&#160;<a href="ch-wielandt.html#def:primitive_mps">10.55</a> and normality, filling the gap left by the earlier aperiodicity-based argument. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000729">
+<div class="proof_wrapper" id="a0000000751">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5125,7 +6203,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> By Theorem&#160;<a href="ch-wielandt.html#thm:strongly_irred_from_primitive">10.52</a>, \(A\) is strongly irreducible, i.e. primitive in Wolf’s sense. Under normalization, Theorem&#160;<a href="ch-spectral.html#thm:wolf_6_8_conjunction">9.64</a> identifies this primitivity condition directly with normality (equivalently, eventual full Kraus rank). </p>
+  <p> By Theorem&#160;<a href="ch-wielandt.html#thm:strongly_irred_from_primitive">10.64</a>, \(A\) is strongly irreducible, i.e. primitive in Wolf’s sense. Under normalization, Theorem&#160;<a href="ch-spectral.html#thm:wolf_6_8_conjunction">9.64</a> identifies this primitivity condition directly with normality (equivalently, eventual full Kraus rank). </p>
 
   </div>
 </div>
@@ -5137,7 +6215,7 @@
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">10.54</span>
+    <span class="remark_thmlabel">10.66</span>
     <span class="remark_thmtitle">Aperiodicity condition</span>
     <div class="thm_header_extras">
 
@@ -5162,7 +6240,7 @@
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">10.55</span>
+    <span class="remark_thmlabel">10.67</span>
     <span class="remark_thmtitle">Counterexample: cumulative spanning does not imply normality</span>
     <div class="thm_header_extras">
 
@@ -5187,7 +6265,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">10.56</span>
+    <span class="theorem_thmlabel">10.68</span>
     <span class="theorem_thmtitle">Word span monotonicity from aperiodicity</span>
     <div class="thm_header_extras">
 
@@ -5198,7 +6276,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#thm:wordspan_mono_aperiodic">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000730"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000752"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5216,7 +6294,7 @@
           
           <li><a href="ch-wielandt.html#def:word_span">Definition 10.1</a></li>
           
-          <li><a href="ch-wielandt.html#lem:word_span_mul">Lemma 10.31</a></li>
+          <li><a href="ch-wielandt.html#lem:word_span_mul">Lemma 10.43</a></li>
           
         </ul>
     
@@ -5251,7 +6329,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000730">
+<div class="proof_wrapper" id="a0000000752">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5259,7 +6337,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> For any \(M \in S_n(A)\), \(M = M \cdot \mathbb {1}\in S_n(A) \cdot S_1(A) \subseteq S_{n+1}(A)\) by Lemma&#160;<a href="ch-wielandt.html#lem:word_span_mul">10.31</a>. </p>
+  <p> For any \(M \in S_n(A)\), \(M = M \cdot \mathbb {1}\in S_n(A) \cdot S_1(A) \subseteq S_{n+1}(A)\) by Lemma&#160;<a href="ch-wielandt.html#lem:word_span_mul">10.43</a>. </p>
 
   </div>
 </div>
@@ -5268,7 +6346,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">10.57</span>
+    <span class="theorem_thmlabel">10.69</span>
     <span class="theorem_thmtitle">Cumulative span equals word span under aperiodicity</span>
     <div class="thm_header_extras">
 
@@ -5279,7 +6357,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#thm:cumspan_eq_wordspan">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000731"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000753"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5299,7 +6377,7 @@
           
           <li><a href="ch-wielandt.html#def:word_span">Definition 10.1</a></li>
           
-          <li><a href="ch-wielandt.html#thm:wordspan_mono_aperiodic">Theorem 10.56</a></li>
+          <li><a href="ch-wielandt.html#thm:wordspan_mono_aperiodic">Theorem 10.68</a></li>
           
         </ul>
     
@@ -5334,7 +6412,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000731">
+<div class="proof_wrapper" id="a0000000753">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5342,7 +6420,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> By Theorem&#160;<a href="ch-wielandt.html#thm:wordspan_mono_aperiodic">10.56</a>, the word spans are monotone: \(S_0 \le S_1 \le \cdots \). The supremum \(T_n = S_0 + \cdots + S_n\) therefore equals the largest term&#160;\(S_n\). </p>
+  <p> By Theorem&#160;<a href="ch-wielandt.html#thm:wordspan_mono_aperiodic">10.68</a>, the word spans are monotone: \(S_0 \le S_1 \le \cdots \). The supremum \(T_n = S_0 + \cdots + S_n\) therefore equals the largest term&#160;\(S_n\). </p>
 
   </div>
 </div>
@@ -5351,7 +6429,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">10.58</span>
+    <span class="theorem_thmlabel">10.70</span>
     <span class="theorem_thmtitle">Cumulative spanning plus aperiodicity implies normality</span>
     <div class="thm_header_extras">
 
@@ -5362,7 +6440,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#thm:cumspan_to_normal">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000732"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000754"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5384,7 +6462,7 @@
           
           <li><a href="ch-wielandt.html#def:word_span">Definition 10.1</a></li>
           
-          <li><a href="ch-wielandt.html#thm:cumspan_eq_wordspan">Theorem 10.57</a></li>
+          <li><a href="ch-wielandt.html#thm:cumspan_eq_wordspan">Theorem 10.69</a></li>
           
         </ul>
     
@@ -5419,7 +6497,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000732">
+<div class="proof_wrapper" id="a0000000754">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5427,7 +6505,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> By Theorem&#160;<a href="ch-wielandt.html#thm:cumspan_eq_wordspan">10.57</a>, \(S_N(A) = T_N(A) = M_{D}(\mathbb {C})\). </p>
+  <p> By Theorem&#160;<a href="ch-wielandt.html#thm:cumspan_eq_wordspan">10.69</a>, \(S_N(A) = T_N(A) = M_{D}(\mathbb {C})\). </p>
 
   </div>
 </div>
@@ -5436,7 +6514,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">10.59</span>
+    <span class="theorem_thmlabel">10.71</span>
     <span class="theorem_thmtitle">Algebra span plus aperiodicity implies normality</span>
     <div class="thm_header_extras">
 
@@ -5447,7 +6525,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#thm:algspan_to_normal">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000733"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000755"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5469,7 +6547,7 @@
           
           <li><a href="ch-wielandt.html#def:word_span">Definition 10.1</a></li>
           
-          <li><a href="ch-wielandt.html#thm:cumspan_to_normal">Theorem 10.58</a></li>
+          <li><a href="ch-wielandt.html#thm:cumspan_to_normal">Theorem 10.70</a></li>
           
         </ul>
     
@@ -5504,7 +6582,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000733">
+<div class="proof_wrapper" id="a0000000755">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5512,7 +6590,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Since \(\operatorname{alg}(A) = M_{D}(\mathbb {C})\), there exists \(N\) with \(T_N(A) = M_{D}(\mathbb {C})\) (by the ascending chain condition on finite-dimensional subspaces). Apply Theorem&#160;<a href="ch-wielandt.html#thm:cumspan_to_normal">10.58</a>. </p>
+  <p> Since \(\operatorname{alg}(A) = M_{D}(\mathbb {C})\), there exists \(N\) with \(T_N(A) = M_{D}(\mathbb {C})\) (by the ascending chain condition on finite-dimensional subspaces). Apply Theorem&#160;<a href="ch-wielandt.html#thm:cumspan_to_normal">10.70</a>. </p>
 
   </div>
 </div>
@@ -5521,7 +6599,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">10.60</span>
+    <span class="theorem_thmlabel">10.72</span>
     <span class="theorem_thmtitle">Irreducible tensor plus aperiodicity implies normality</span>
     <div class="thm_header_extras">
 
@@ -5532,7 +6610,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#thm:irred_tensor_aperiodic_normal">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000734"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000756"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5554,7 +6632,7 @@
           
           <li><a href="ch-wielandt.html#def:word_span">Definition 10.1</a></li>
           
-          <li><a href="ch-wielandt.html#thm:algspan_to_normal">Theorem 10.59</a></li>
+          <li><a href="ch-wielandt.html#thm:algspan_to_normal">Theorem 10.71</a></li>
           
           <li><a href="ch-canonical.html#thm:burnside_matrix">Theorem 11.22</a></li>
           
@@ -5590,7 +6668,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   If \(A\) is an irreducible tensor, \(D {\gt} 0\), and \(\mathbb {1}\in S_1(A)\), then \(A\) is normal. This assembles the full chain: </p>
-<div class="displaymath" id="a0000000735">
+<div class="displaymath" id="a0000000757">
   \[  \text{irreducible tensor} \; \xrightarrow {\ref{thm:irreducible_tensor_to_action}}\;  \text{irreducible action} \; \xrightarrow {\text{Burnside}}\;  \operatorname{alg}(A) = M_{D}(\mathbb {C}) \; \xrightarrow {\ref{thm:algspan_to_normal}}\;  \text{normal}.  \]
 </div>
 <p> This corresponds to the irreducibility-to-normality direction of <span class="cite">
@@ -5603,7 +6681,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000734">
+<div class="proof_wrapper" id="a0000000756">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5611,7 +6689,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> By Theorem&#160;<a href="ch-canonical.html#thm:irreducible_tensor_to_action">11.21</a>, \(A\) acts irreducibly on \(\mathbb {C}^D\). By Theorem&#160;<a href="ch-canonical.html#thm:burnside_matrix">11.22</a>, \(\operatorname{alg}(A) = M_{D}(\mathbb {C})\). By Theorem&#160;<a href="ch-wielandt.html#thm:algspan_to_normal">10.59</a> with the aperiodicity hypothesis, \(A\) is normal. </p>
+  <p> By Theorem&#160;<a href="ch-canonical.html#thm:irreducible_tensor_to_action">11.21</a>, \(A\) acts irreducibly on \(\mathbb {C}^D\). By Theorem&#160;<a href="ch-canonical.html#thm:burnside_matrix">11.22</a>, \(\operatorname{alg}(A) = M_{D}(\mathbb {C})\). By Theorem&#160;<a href="ch-wielandt.html#thm:algspan_to_normal">10.71</a> with the aperiodicity hypothesis, \(A\) is normal. </p>
 
   </div>
 </div>
@@ -5620,7 +6698,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">10.61</span>
+    <span class="theorem_thmlabel">10.73</span>
     <span class="theorem_thmtitle">Primitive + positive definite fixed point imply normality</span>
     <div class="thm_header_extras">
 
@@ -5631,7 +6709,7 @@
 
     <a class="icon proof" href="ch-wielandt.html#thm:primitive_posDef_aperiodic_normal">#</a>
     
-    <a class="icon proof" href="ch-wielandt.html#a0000000736"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-wielandt.html#a0000000758"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5647,11 +6725,11 @@
         
         <ul class="uses">
           
-          <li><a href="ch-wielandt.html#def:primitive_mps">Definition 10.43</a></li>
+          <li><a href="ch-wielandt.html#def:primitive_mps">Definition 10.55</a></li>
           
           <li><a href="ch-mps.html#def:normal">Definition 2.26</a></li>
           
-          <li><a href="ch-wielandt.html#thm:strongly_irred_from_primitive">Theorem 10.52</a></li>
+          <li><a href="ch-wielandt.html#thm:strongly_irred_from_primitive">Theorem 10.64</a></li>
           
           <li><a href="ch-spectral.html#thm:wolf_6_8_conjunction">Theorem 9.64</a></li>
           
@@ -5688,7 +6766,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000736">
+<div class="proof_wrapper" id="a0000000758">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5696,7 +6774,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> By Theorem&#160;<a href="ch-wielandt.html#thm:strongly_irred_from_primitive">10.52</a>, \(A\) is strongly irreducible, i.e. primitive in Wolf’s sense. Under normalization, Theorem&#160;<a href="ch-spectral.html#thm:wolf_6_8_conjunction">9.64</a> therefore gives normality directly, hence eventual full Kraus rank. </p>
+  <p> By Theorem&#160;<a href="ch-wielandt.html#thm:strongly_irred_from_primitive">10.64</a>, \(A\) is strongly irreducible, i.e. primitive in Wolf’s sense. Under normalization, Theorem&#160;<a href="ch-spectral.html#thm:wolf_6_8_conjunction">9.64</a> therefore gives normality directly, hence eventual full Kraus rank. </p>
 
   </div>
 </div>
@@ -5705,7 +6783,7 @@
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">10.62</span>
+    <span class="remark_thmlabel">10.74</span>
     <span class="remark_thmtitle">Normal canonical form avoids the aperiodicity step</span>
     <div class="thm_header_extras">
 
