@@ -5756,12 +5756,101 @@
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:afterBlocking_sectorComparison_reindexed_commonPhaseCover">
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:after_blocking_common_primitive_irreducible_blocks_block_span_consequences">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
     Theorem
     </span>
     <span class="theorem_thmlabel">14.62</span>
+    <span class="theorem_thmtitle">Common-length sectors with conditional block-span consequences</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-assembly.html#thm:after_blocking_common_primitive_irreducible_blocks_block_span_consequences">#</a>
+    
+    <a class="icon proof" href="ch-assembly.html#a0000001022"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-assembly.html#def:common_sector_relabeling_hypothesis">Definition 14.61</a></li>
+          
+          <li><a href="ch-mps.html#def:same_mpv2_pos">Definition 2.13</a></li>
+          
+          <li><a href="ch-assembly.html#def:mpv_common_phase_cover">Definition 14.31</a></li>
+          
+          <li><a href="ch-canonical.html#thm:after_blocking_common_primitive_irreducible_blocks_reindexed">Theorem 11.176</a></li>
+          
+          <li><a href="ch-assembly.html#lem:mpv_common_phase_cover_span_eq">Lemma 14.33</a></li>
+          
+          <li><a href="ch-assembly.html#thm:nonzero_block_span_eq_of_proportional_decomposition">Theorem 14.38</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.afterBlocking_commonSector_blockSpan_of_reindexedNonzeroParts" class="lean_decl">MPSTensor.afterBlocking_commonSector_blockSpan_of_reindexedNonzeroParts</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   Assume two tensors generate the same MPV family and assume the blocked-word relabeling hypothesis used in the common-sector construction. Then there is a common blocking length at which both tensors have zero-tail decompositions whose nonzero parts are weighted families of trace-preserving, primitive, tensor-irreducible blocks with positive bond dimension and nonzero weights. The theorem further records the three positive-length MPV agreements \(\mathcal{V}^{+}(\cdot )=\mathcal{V}^{+}(\cdot )\): the two agreements comparing each blocked tensor with its own nonzero-sector part and the agreement comparing the two nonzero-sector parts, together with the length-zero zero-tail identity, as in Theorem&#160;<a href="ch-canonical.html#thm:after_blocking_common_primitive_irreducible_blocks_reindexed">11.176</a>. For these particular common-sector families, any common MPV phase cover gives the finite-length nonzero-block span equality needed by the zero-tail block-span theorem. A BNT proportional-decomposition conclusion for the same families gives the same span equality. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000001022">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> Apply Theorem&#160;<a href="ch-canonical.html#thm:after_blocking_common_primitive_irreducible_blocks_reindexed">11.176</a> to obtain the common-sector decompositions. The implication from a common MPV phase cover is Lemma&#160;<a href="ch-assembly.html#lem:mpv_common_phase_cover_span_eq">14.33</a>; the implication from proportional-decomposition data is Theorem&#160;<a href="ch-assembly.html#thm:nonzero_block_span_eq_of_proportional_decomposition">14.38</a>. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:afterBlocking_sectorComparison_reindexed_commonPhaseCover">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">14.63</span>
     <span class="theorem_thmtitle">Relabeled common sectors with a common MPV phase cover</span>
     <div class="thm_header_extras">
 
@@ -5772,7 +5861,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:afterBlocking_sectorComparison_reindexed_commonPhaseCover">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001022"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001023"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5829,7 +5918,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001022">
+<div class="proof_wrapper" id="a0000001023">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5846,7 +5935,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">14.63</span>
+    <span class="theorem_thmlabel">14.64</span>
     <span class="theorem_thmtitle">Cast-compatible MPV scaling implies phase-matched sector comparison</span>
     <div class="thm_header_extras">
 
@@ -5857,7 +5946,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:route_b_hetero_mpv_scaling">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001023"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001024"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5907,14 +5996,14 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Let \(P\) and \(Q\) be sector decompositions. Assume there is a permutation \(\pi \) matching the basis blocks, the multiplicities satisfy \(r_j^P = r_{\pi (j)}^Q\), and for each \(j\) the corresponding basis blocks have the same auxiliary dimension and satisfy </p>
-<div class="displaymath" id="a0000001024">
+<div class="displaymath" id="a0000001025">
   \[  V^{(N)}(Q_{\pi (j)})_\sigma = \zeta _j^N V^{(N)}(P_j)_\sigma  \]
 </div>
 <p> for some nonzero complex number \(\zeta _j\), after identifying the two basis tensors along that dimension equality. If the total MPV families of \(P\) and \(Q\) agree and the basis blocks of \(P\) are eventually linearly independent, then for each \(j\) the sector weight multiset of \(P_j\) equals the multiset obtained from that of \(Q_{\pi (j)}\) by multiplication by&#160;\(\zeta _j\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001023">
+<div class="proof_wrapper" id="a0000001024">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5926,19 +6015,19 @@
 
   </div>
 </div>
-<div class="remark_thmwrapper theorem-style-remark" id="a0000001025">
+<div class="remark_thmwrapper theorem-style-remark" id="a0000001026">
   <div class="remark_thmheading">
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">14.64</span>
+    <span class="remark_thmlabel">14.65</span>
     <span class="remark_thmtitle">Equal-case comparison after canonical reduction</span>
     <div class="thm_header_extras">
 
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-assembly.html#a0000001025">#</a>
+    <a class="icon proof" href="ch-assembly.html#a0000001026">#</a>
     
     
     
@@ -5964,7 +6053,7 @@
 	, Theorem&#160;<span class="ttfamily">thm1</span>, lines 1167–1183
 	]
 </span>. In the equal case, one expands each tensor in its basis of normal tensors and compares, for every basis tensor and every length \(N\), the power sums </p>
-<div class="displaymath" id="a0000001026">
+<div class="displaymath" id="a0000001027">
   \[  \sum _q \mu _{j,q}^N = \sum _q (\nu _{j,q}e^{i\phi _j})^N.  \]
 </div>
 <p> Newton identities, equivalently the elementary power-sum lemma used in the paper, recover the multiplicities and the weights. The blockwise gauge matrices are then placed on the diagonal to obtain the global conjugating matrix; this is the proof of <span class="cite">
@@ -5982,7 +6071,7 @@
 </span>. </p>
 <p>The comparison theorems in this chapter cover this latter part of the argument. Theorem&#160;<a href="ch-assembly.html#thm:ft_equal_explicit">14.6</a> proves the equal case when the coefficient identities are given explicitly, Theorem&#160;<a href="ch-assembly.html#thm:ft_equal_same_structure">14.8</a> proves the common block-structure special case, and Theorem&#160;<a href="ch-assembly.html#thm:route_b_equal">14.16</a> recovers the sector-weight multisets from the multiplicity data. The basis-of-normal-tensors construction is available for trace-preserving primitive irreducible nonzero blocks with positive bond dimensions and nonzero weights in Theorem&#160;<a href="ch-canonical.html#thm:bnt_sector_decomp_tp_prim_irr_collapsed">11.138</a>. When these blocks are injective, Theorems&#160;<a href="ch-canonical.html#thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_data">11.140</a> and&#160;<a href="ch-canonical.html#thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_data_span">11.141</a> give the asymptotic orthogonality and finite-length span preservation needed to separate coefficients. Theorem&#160;<a href="ch-assembly.html#thm:bnt_sector_decomp_pair_overlap_span_of_block_span">14.29</a> then turns equality of nonzero-sector spans into the hypotheses used by the sector comparison theorem. </p>
 <p>The same comparison can also be expressed through common phases. A common MPV phase cover gives equality of finite-length nonzero-block spans by Lemma&#160;<a href="ch-assembly.html#lem:mpv_common_phase_cover_span_eq">14.33</a>. A sector basis pre-matching gives the same span equality and the primitive overlap-span hypotheses by Lemma&#160;<a href="ch-assembly.html#lem:sector_basis_pre_matching_span_eq">14.35</a> and Theorem&#160;<a href="ch-assembly.html#thm:sector_basis_pre_matching_to_overlap_span">14.36</a>. The BNT comparison theorems produce such common phases from a proportional-decomposition conclusion in Theorems&#160;<a href="ch-assembly.html#thm:common_phase_cover_of_proportional_decomposition">14.37</a> and&#160;<a href="ch-assembly.html#thm:common_phase_cover_of_separated_normal_bnt">14.41</a>. </p>
-<p>Chapter&#160;<a href="ch-canonical.html">11</a> supplies the canonical-form reduction needed before these comparison theorems can be applied: a common physical blocking length, the zero-tail identities at that length, and relabeled cyclic-sector families on both sides. The unproved assertion is the exact equality, after relabeling blocked physical words, between the canonical blocked nonzero part and the relabeled cyclic-sector tensor for the whole weighted family. With that equality, Theorem&#160;<a href="ch-canonical.html#thm:after_blocking_common_primitive_irreducible_blocks_reindexed">11.176</a> gives the common weighted nonzero-sector decompositions needed for the comparison theorems. Theorem&#160;<a href="ch-assembly.html#thm:afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_spanHypotheses">14.60</a> then records the remaining hypotheses in their present form: equality of the zero-tail dimensions, injectivity of the common nonzero-sector blocks, and finite-length MPV span equality. Theorem&#160;<a href="ch-assembly.html#thm:afterBlocking_sectorComparison_reindexed_commonPhaseCover">14.62</a> shows that a common MPV phase cover supplies that span equality and therefore gives the same sector-weight conclusion. Establishing these hypotheses is the mathematical passage from equality of total MPV vectors to the componentwise power-sum identities used in the paper proof of Corollary&#160;IV.5. </p>
+<p>Chapter&#160;<a href="ch-canonical.html">11</a> supplies the canonical-form reduction needed before these comparison theorems can be applied: a common physical blocking length, the zero-tail identities at that length, and relabeled cyclic-sector families on both sides. The unproved assertion is the exact equality, after relabeling blocked physical words, between the canonical blocked nonzero part and the relabeled cyclic-sector tensor for the whole weighted family. With that equality, Theorem&#160;<a href="ch-canonical.html#thm:after_blocking_common_primitive_irreducible_blocks_reindexed">11.176</a> gives the common weighted nonzero-sector decompositions needed for the comparison theorems. Theorem&#160;<a href="ch-assembly.html#thm:afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_spanHypotheses">14.60</a> then records the remaining hypotheses in their present form: equality of the zero-tail dimensions, injectivity of the common nonzero-sector blocks, and finite-length MPV span equality. Theorem&#160;<a href="ch-assembly.html#thm:after_blocking_common_primitive_irreducible_blocks_block_span_consequences">14.62</a> records the corresponding conditional span consequence for the common-sector families themselves: a common MPV phase cover or a proportional-decomposition conclusion supplies the finite-length nonzero-block span equality. Theorem&#160;<a href="ch-assembly.html#thm:afterBlocking_sectorComparison_reindexed_commonPhaseCover">14.63</a> adds the zero-tail and injectivity data to the common phase-cover route and therefore gives the same sector-weight conclusion. Establishing these hypotheses is the mathematical passage from equality of total MPV vectors to the componentwise power-sum identities used in the paper proof of Corollary&#160;IV.5. </p>
 
   </div>
 </div>
