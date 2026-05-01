@@ -255,5 +255,276 @@ theorem stateCoeff_splitAtEdge (A : Tensor G d) (e : Edge G) (σ : V → Fin d) 
   intro η _
   exact prod_univ_splitAtEdge e (fun v : V => A.component v (fun ie => η ie.1) (σ v))
 
+/-- Boundary virtual data for the edge-centered three-block decomposition.
+
+For an edge `e = (u, w)`, this records the index on `e`, the residual indices on
+edges incident to `u` other than `e`, and the residual indices on edges incident
+to `w` other than `e`. The middle-region contraction below is fibred over this
+data. -/
+structure EdgeBoundaryConfig (A : Tensor G d) (e : Edge G) where
+  edgeIndex : Fin (A.bondDim e)
+  leftResidual : ResidualLocalConfig (G := G) A (edgeLeftIncident (G := G) e)
+  rightResidual : ResidualLocalConfig (G := G) A (edgeRightIncident (G := G) e)
+
+/-- Product model for edge-centered boundary configurations. -/
+def edgeBoundaryConfigEquivProd (A : Tensor G d) (e : Edge G) :
+    EdgeBoundaryConfig (G := G) A e ≃
+      Fin (A.bondDim e) ×
+        ResidualLocalConfig (G := G) A (edgeLeftIncident (G := G) e) ×
+        ResidualLocalConfig (G := G) A (edgeRightIncident (G := G) e) where
+  toFun β := (β.edgeIndex, β.leftResidual, β.rightResidual)
+  invFun x :=
+    { edgeIndex := x.1
+      leftResidual := x.2.1
+      rightResidual := x.2.2 }
+  left_inv β := by
+    cases β
+    rfl
+  right_inv x := by
+    rcases x with ⟨edgeIndex, leftResidual, rightResidual⟩
+    rfl
+
+noncomputable instance instFintypeEdgeBoundaryConfig (A : Tensor G d) (e : Edge G) :
+    Fintype (EdgeBoundaryConfig (G := G) A e) :=
+  Fintype.ofEquiv
+    (Fin (A.bondDim e) ×
+      ResidualLocalConfig (G := G) A (edgeLeftIncident (G := G) e) ×
+      ResidualLocalConfig (G := G) A (edgeRightIncident (G := G) e))
+    (edgeBoundaryConfigEquivProd (G := G) A e).symm
+
+/-- The local virtual configuration at the left endpoint determined by an
+edge-centered boundary configuration. -/
+noncomputable def edgeLeftLocalConfig (A : Tensor G d) (e : Edge G)
+    (β : EdgeBoundaryConfig (G := G) A e) : LocalVirtualConfig A e.1.1 :=
+  (localVirtualConfigSplitAt (G := G) A (edgeLeftIncident (G := G) e)).symm
+    (β.edgeIndex, β.leftResidual)
+
+/-- The local virtual configuration at the right endpoint determined by an
+edge-centered boundary configuration. -/
+noncomputable def edgeRightLocalConfig (A : Tensor G d) (e : Edge G)
+    (β : EdgeBoundaryConfig (G := G) A e) : LocalVirtualConfig A e.1.2 :=
+  (localVirtualConfigSplitAt (G := G) A (edgeRightIncident (G := G) e)).symm
+    (β.edgeIndex, β.rightResidual)
+
+omit [Fintype V] in
+@[simp] theorem edgeLeftLocalConfig_edgeIndex (A : Tensor G d) (e : Edge G)
+    (β : EdgeBoundaryConfig (G := G) A e) :
+    edgeLeftLocalConfig (G := G) A e β (edgeLeftIncident (G := G) e) =
+      β.edgeIndex := by
+  simpa [edgeLeftLocalConfig] using
+    localVirtualConfigSplitAt_symm_apply_fst (G := G) A (edgeLeftIncident (G := G) e)
+      (β.edgeIndex, β.leftResidual)
+
+omit [Fintype V] in
+@[simp] theorem edgeRightLocalConfig_edgeIndex (A : Tensor G d) (e : Edge G)
+    (β : EdgeBoundaryConfig (G := G) A e) :
+    edgeRightLocalConfig (G := G) A e β (edgeRightIncident (G := G) e) =
+      β.edgeIndex := by
+  simpa [edgeRightLocalConfig] using
+    localVirtualConfigSplitAt_symm_apply_fst (G := G) A (edgeRightIncident (G := G) e)
+      (β.edgeIndex, β.rightResidual)
+
+omit [Fintype V] in
+@[simp] theorem edgeLeftLocalConfig_residual (A : Tensor G d) (e : Edge G)
+    (β : EdgeBoundaryConfig (G := G) A e)
+    (ie : OtherIncidentEdge (G := G) e.1.1 (edgeLeftIncident (G := G) e)) :
+    edgeLeftLocalConfig (G := G) A e β ie.1 = β.leftResidual ie := by
+  simpa [edgeLeftLocalConfig] using
+    localVirtualConfigSplitAt_symm_apply_snd (G := G) A (edgeLeftIncident (G := G) e)
+      (β.edgeIndex, β.leftResidual) ie
+
+omit [Fintype V] in
+@[simp] theorem edgeRightLocalConfig_residual (A : Tensor G d) (e : Edge G)
+    (β : EdgeBoundaryConfig (G := G) A e)
+    (ie : OtherIncidentEdge (G := G) e.1.2 (edgeRightIncident (G := G) e)) :
+    edgeRightLocalConfig (G := G) A e β ie.1 = β.rightResidual ie := by
+  simpa [edgeRightLocalConfig] using
+    localVirtualConfigSplitAt_symm_apply_snd (G := G) A (edgeRightIncident (G := G) e)
+      (β.edgeIndex, β.rightResidual) ie
+
+/-- A global virtual configuration has prescribed edge-centered boundary data if
+it agrees with the distinguished edge index and both residual endpoint families. -/
+def edgeBoundaryMatches (A : Tensor G d) (e : Edge G)
+    (β : EdgeBoundaryConfig (G := G) A e) (η : VirtualConfig A) : Prop :=
+  η e = β.edgeIndex ∧
+    (∀ ie : OtherIncidentEdge (G := G) e.1.1 (edgeLeftIncident (G := G) e),
+      η ie.1.1 = β.leftResidual ie) ∧
+    (∀ ie : OtherIncidentEdge (G := G) e.1.2 (edgeRightIncident (G := G) e),
+      η ie.1.1 = β.rightResidual ie)
+
+/-- Global virtual configurations whose endpoint boundary data are fixed. These
+are the internal summation variables of the blocked middle tensor. -/
+abbrev EdgeMiddleConfig (A : Tensor G d) (e : Edge G)
+    (β : EdgeBoundaryConfig (G := G) A e) : Type _ :=
+  {η : VirtualConfig A // edgeBoundaryMatches (G := G) A e β η}
+
+noncomputable instance instFintypeEdgeMiddleConfig (A : Tensor G d) (e : Edge G)
+    (β : EdgeBoundaryConfig (G := G) A e) : Fintype (EdgeMiddleConfig (G := G) A e β) := by
+  classical
+  infer_instance
+
+/-- Read the edge-centered boundary data from a global virtual configuration. -/
+def edgeBoundaryOfVirtualConfig (A : Tensor G d) (e : Edge G)
+    (η : VirtualConfig A) : EdgeBoundaryConfig (G := G) A e where
+  edgeIndex := η e
+  leftResidual ie := η ie.1.1
+  rightResidual ie := η ie.1.1
+
+omit [Fintype V] in
+@[simp] theorem edgeBoundaryOfVirtualConfig_matches (A : Tensor G d) (e : Edge G)
+    (η : VirtualConfig A) :
+    edgeBoundaryMatches (G := G) A e (edgeBoundaryOfVirtualConfig (G := G) A e η) η := by
+  simp [edgeBoundaryMatches, edgeBoundaryOfVirtualConfig]
+
+/-- Global virtual configurations are equivalent to choosing their edge-centered
+boundary data together with a middle configuration in the corresponding fibre. -/
+noncomputable def virtualConfigEquivEdgeBoundary (A : Tensor G d) (e : Edge G) :
+    VirtualConfig A ≃
+      (Σ β : EdgeBoundaryConfig (G := G) A e, EdgeMiddleConfig (G := G) A e β) where
+  toFun η :=
+    ⟨edgeBoundaryOfVirtualConfig (G := G) A e η,
+      ⟨η, edgeBoundaryOfVirtualConfig_matches (G := G) A e η⟩⟩
+  invFun x := x.2.1
+  left_inv _ := rfl
+  right_inv x := by
+    rcases x with ⟨β, η, hη⟩
+    have hβ : edgeBoundaryOfVirtualConfig (G := G) A e η = β := by
+      rcases β with ⟨edgeIndex, leftResidual, rightResidual⟩
+      have hleft :
+          (fun ie : OtherIncidentEdge (G := G) e.1.1 (edgeLeftIncident (G := G) e) =>
+            η ie.1.1) = leftResidual := funext hη.2.1
+      have hright :
+          (fun ie : OtherIncidentEdge (G := G) e.1.2 (edgeRightIncident (G := G) e) =>
+            η ie.1.1) = rightResidual := funext hη.2.2
+      cases hη.1
+      cases hleft
+      cases hright
+      rfl
+    subst β
+    simp
+
+omit [Fintype V] in
+/-- The left endpoint local configuration obtained from a matching global virtual
+configuration is the one reconstructed from its boundary data. -/
+theorem edgeLeftLocalConfig_eq_of_boundaryMatches (A : Tensor G d) (e : Edge G)
+    (β : EdgeBoundaryConfig (G := G) A e) (η : VirtualConfig A)
+    (hη : edgeBoundaryMatches (G := G) A e β η) :
+    (fun ie : IncidentEdge G e.1.1 => η ie.1) = edgeLeftLocalConfig (G := G) A e β := by
+  funext ie
+  by_cases hie : ie = edgeLeftIncident (G := G) e
+  · subst ie
+    rw [edgeLeftLocalConfig_edgeIndex]
+    exact hη.1
+  · calc
+      η ie.1 = β.leftResidual ⟨ie, hie⟩ := hη.2.1 ⟨ie, hie⟩
+      _ = edgeLeftLocalConfig (G := G) A e β ie := by
+        simpa using (edgeLeftLocalConfig_residual (G := G) A e β ⟨ie, hie⟩).symm
+
+omit [Fintype V] in
+/-- The right endpoint local configuration obtained from a matching global
+virtual configuration is the one reconstructed from its boundary data. -/
+theorem edgeRightLocalConfig_eq_of_boundaryMatches (A : Tensor G d) (e : Edge G)
+    (β : EdgeBoundaryConfig (G := G) A e) (η : VirtualConfig A)
+    (hη : edgeBoundaryMatches (G := G) A e β η) :
+    (fun ie : IncidentEdge G e.1.2 => η ie.1) = edgeRightLocalConfig (G := G) A e β := by
+  funext ie
+  by_cases hie : ie = edgeRightIncident (G := G) e
+  · subst ie
+    rw [edgeRightLocalConfig_edgeIndex]
+    exact hη.1
+  · calc
+      η ie.1 = β.rightResidual ⟨ie, hie⟩ := hη.2.2 ⟨ie, hie⟩
+      _ = edgeRightLocalConfig (G := G) A e β ie := by
+        simpa using (edgeRightLocalConfig_residual (G := G) A e β ⟨ie, hie⟩).symm
+
+/-- The blocked middle tensor for an edge-centered decomposition, evaluated on a
+physical configuration and fixed endpoint boundary data. -/
+noncomputable def edgeMiddleWeight (A : Tensor G d) (e : Edge G) (σ : V → Fin d)
+    (β : EdgeBoundaryConfig (G := G) A e) : ℂ :=
+  ∑ η : EdgeMiddleConfig (G := G) A e β,
+    ∏ v ∈ edgeMiddleVertices e, A.component v (fun ie => η.1 ie.1) (σ v)
+
+/-- The PEPS coefficient written as a three-block contraction at the edge `e`: the
+left endpoint tensor, the blocked middle tensor, and the right endpoint tensor. -/
+noncomputable def edgeBlockedCoeff (A : Tensor G d) (e : Edge G) (σ : V → Fin d) : ℂ :=
+  ∑ β : EdgeBoundaryConfig (G := G) A e,
+    A.component e.1.1 (edgeLeftLocalConfig (G := G) A e β) (σ e.1.1) *
+      edgeMiddleWeight (G := G) A e σ β *
+      A.component e.1.2 (edgeRightLocalConfig (G := G) A e β) (σ e.1.2)
+
+/-- The edge-blocked coefficient is exactly the original PEPS coefficient. This is
+the algebraic form of the edge-centered blocking step before applying the
+three-site MPS fundamental theorem. -/
+theorem edgeBlockedCoeff_eq_stateCoeff (A : Tensor G d) (e : Edge G) (σ : V → Fin d) :
+    edgeBlockedCoeff (G := G) A e σ = stateCoeff A σ := by
+  classical
+  rw [stateCoeff_splitAtEdge]
+  change
+    (∑ β : EdgeBoundaryConfig (G := G) A e,
+        A.component e.1.1 (edgeLeftLocalConfig (G := G) A e β) (σ e.1.1) *
+          (∑ η : EdgeMiddleConfig (G := G) A e β,
+            ∏ v ∈ edgeMiddleVertices e, A.component v (fun ie => η.1 ie.1) (σ v)) *
+          A.component e.1.2 (edgeRightLocalConfig (G := G) A e β) (σ e.1.2)) =
+      ∑ η : VirtualConfig A,
+        A.component e.1.1 (fun ie => η ie.1) (σ e.1.1) *
+          (∏ v ∈ edgeMiddleVertices e, A.component v (fun ie => η ie.1) (σ v)) *
+          A.component e.1.2 (fun ie => η ie.1) (σ e.1.2)
+  calc
+    (∑ β : EdgeBoundaryConfig (G := G) A e,
+        A.component e.1.1 (edgeLeftLocalConfig (G := G) A e β) (σ e.1.1) *
+          (∑ η : EdgeMiddleConfig (G := G) A e β,
+            ∏ v ∈ edgeMiddleVertices e, A.component v (fun ie => η.1 ie.1) (σ v)) *
+          A.component e.1.2 (edgeRightLocalConfig (G := G) A e β) (σ e.1.2))
+      = ∑ β : EdgeBoundaryConfig (G := G) A e,
+          ∑ η : EdgeMiddleConfig (G := G) A e β,
+            A.component e.1.1 (edgeLeftLocalConfig (G := G) A e β) (σ e.1.1) *
+              (∏ v ∈ edgeMiddleVertices e, A.component v (fun ie => η.1 ie.1) (σ v)) *
+              A.component e.1.2 (edgeRightLocalConfig (G := G) A e β) (σ e.1.2) := by
+        refine Finset.sum_congr rfl ?_
+        intro β _
+        rw [Finset.mul_sum, Finset.sum_mul]
+    _ = ∑ x : (Σ β : EdgeBoundaryConfig (G := G) A e, EdgeMiddleConfig (G := G) A e β),
+          A.component e.1.1 (edgeLeftLocalConfig (G := G) A e x.1) (σ e.1.1) *
+            (∏ v ∈ edgeMiddleVertices e, A.component v (fun ie => x.2.1 ie.1) (σ v)) *
+            A.component e.1.2 (edgeRightLocalConfig (G := G) A e x.1) (σ e.1.2) := by
+        rw [← Fintype.sum_sigma']
+    _ = ∑ η : VirtualConfig A,
+          A.component e.1.1 (fun ie => η ie.1) (σ e.1.1) *
+            (∏ v ∈ edgeMiddleVertices e, A.component v (fun ie => η ie.1) (σ v)) *
+            A.component e.1.2 (fun ie => η ie.1) (σ e.1.2) := by
+        let φ := virtualConfigEquivEdgeBoundary (G := G) A e
+        let F : (Σ β : EdgeBoundaryConfig (G := G) A e,
+            EdgeMiddleConfig (G := G) A e β) → ℂ := fun x =>
+          A.component e.1.1 (edgeLeftLocalConfig (G := G) A e x.1) (σ e.1.1) *
+            (∏ v ∈ edgeMiddleVertices e, A.component v (fun ie => x.2.1 ie.1) (σ v)) *
+            A.component e.1.2 (edgeRightLocalConfig (G := G) A e x.1) (σ e.1.2)
+        calc
+          (∑ x : (Σ β : EdgeBoundaryConfig (G := G) A e,
+              EdgeMiddleConfig (G := G) A e β), F x)
+            = ∑ η : VirtualConfig A, F (φ η) := by
+              exact (φ.sum_comp F).symm
+          _ = ∑ η : VirtualConfig A,
+              A.component e.1.1 (fun ie => η ie.1) (σ e.1.1) *
+                (∏ v ∈ edgeMiddleVertices e, A.component v (fun ie => η ie.1) (σ v)) *
+                A.component e.1.2 (fun ie => η ie.1) (σ e.1.2) := by
+              refine Finset.sum_congr rfl ?_
+              intro η _
+              have hmatch : edgeBoundaryMatches (G := G) A e
+                  (edgeBoundaryOfVirtualConfig (G := G) A e η) η := by
+                simp
+              have hleft := edgeLeftLocalConfig_eq_of_boundaryMatches
+                (G := G) A e (edgeBoundaryOfVirtualConfig (G := G) A e η) η hmatch
+              have hright := edgeRightLocalConfig_eq_of_boundaryMatches
+                (G := G) A e (edgeBoundaryOfVirtualConfig (G := G) A e η) η hmatch
+              simp [F, φ, virtualConfigEquivEdgeBoundary, hleft.symm, hright.symm]
+
+/-- Equality of PEPS states gives equality of the corresponding edge-blocked
+three-block coefficients at every edge. -/
+theorem SameState.edgeBlockedCoeff_eq {A B : Tensor G d} (hAB : SameState A B)
+    (e : Edge G) (σ : V → Fin d) :
+    edgeBlockedCoeff (G := G) A e σ = edgeBlockedCoeff (G := G) B e σ := by
+  rw [edgeBlockedCoeff_eq_stateCoeff, edgeBlockedCoeff_eq_stateCoeff]
+  exact hAB σ
+
 end PEPS
 end TNLean
