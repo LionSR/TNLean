@@ -676,8 +676,8 @@ The results follow~\cite{Sanz2010Quantum}.
     \leanok
     \uses{def:word_span, def:normal, thm:fitting_decomp}
     Let $A$ be a normal MPS tensor with bond dimension $D \ge 1$.
-    Suppose that a Kraus operator $A^{i_0}$ is non-invertible and has
-    an eigenvector $\varphi\ne0$ with nonzero eigenvalue $\mu$.
+    Suppose that a Kraus operator $A^{i_0}$ is non-invertible and that
+    $A^{i_0}\varphi=\mu\varphi$ for some nonzero scalar $\mu$.
     Then, for every $\psi \in \C^D$,
     \[
         \ketbra{\varphi}{\psi} \in S_{D^2-D+1}(A).
@@ -799,7 +799,7 @@ The results follow~\cite{Sanz2010Quantum}.
 \begin{proof}
     \leanok
     \uses{thm:nonzero_trace_word_sharp_pos, thm:eigenvector_from_trace,
-          thm:isNormal_blockTensor, cor:wielandt_case2_generator,
+          thm:isNormal_blockTensor, thm:wielandt_case2_normal_generator,
           cor:wielandt_case3_generator}
     \begin{enumerate}
     \item \emph{$D = 1$:} In this case $\iota(A) = 0$, so the bound
