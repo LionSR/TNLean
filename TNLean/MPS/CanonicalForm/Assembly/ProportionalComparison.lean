@@ -22,6 +22,10 @@ BNT proportional-decomposition comparison of the nonzero-weight block families.
   finite-length MPV span equality for the nonzero part imply the sector-weight comparison.
 * `afterBlocking_sectorComparison_zeroTail_of_commonPhaseCover` — zero-tail decompositions
   plus common MPV phase-cover data imply the same sector-weight comparison.
+* `afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_commonPhaseCover` — the
+  common-length cyclic-sector output, together with the blocked-word relabeling
+  equality and the remaining zero-tail, injectivity, and common-cover assertions,
+  implies the sector-weight comparison.
 * `afterBlocking_sectorComparison_zeroTail_of_proportionalDecompositionConclusion` —
   the zero-tail common-cover theorem applied to BNT proportional-decomposition data.
 * `afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_spanHypotheses` —
@@ -84,6 +88,43 @@ theorem of_commonPhaseCover
   span_eq := fun N => cover.span_eq N
 
 end CommonPrimitiveSpanHypotheses
+
+/-- Remaining two-sided hypotheses for common primitive nonzero-sector families,
+formulated with a common MPV phase cover.
+
+This is the common-cover variant of `CommonPrimitiveSpanHypotheses`: the structural
+theorem supplies the same primitive nonzero-sector data, while the remaining inputs
+are equality of the zero-tail dimensions, one-site injectivity on both sides, and a
+common phase cover for the two block families. -/
+structure CommonPrimitivePhaseCoverHypotheses
+    {d p rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    (zeroTailA zeroTailB : ℕ)
+    (blocksA : (x : Fin rA) → MPSTensor (blockPhysDim d p) (dimA x))
+    (blocksB : (x : Fin rB) → MPSTensor (blockPhysDim d p) (dimB x)) : Prop where
+  /-- The two zero-tail dimensions agree. -/
+  zeroTail_eq : zeroTailA = zeroTailB
+  /-- The left nonzero-sector blocks are one-site injective. -/
+  left_injective : ∀ x : Fin rA, IsInjective (blocksA x)
+  /-- The right nonzero-sector blocks are one-site injective. -/
+  right_injective : ∀ x : Fin rB, IsInjective (blocksB x)
+  /-- The two nonzero-sector block families admit a common MPV phase cover. -/
+  cover : Nonempty (MPVCommonPhaseCover blocksA blocksB)
+
+namespace CommonPrimitivePhaseCoverHypotheses
+
+/-- A common MPV phase cover hypothesis implies the corresponding span hypothesis. -/
+theorem toSpanHypotheses
+    {d p rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    {zeroTailA zeroTailB : ℕ}
+    {blocksA : (x : Fin rA) → MPSTensor (blockPhysDim d p) (dimA x)}
+    {blocksB : (x : Fin rB) → MPSTensor (blockPhysDim d p) (dimB x)}
+    (h : CommonPrimitivePhaseCoverHypotheses zeroTailA zeroTailB blocksA blocksB) :
+    CommonPrimitiveSpanHypotheses zeroTailA zeroTailB blocksA blocksB := by
+  obtain ⟨cover⟩ := h.cover
+  exact CommonPrimitiveSpanHypotheses.of_commonPhaseCover
+    h.zeroTail_eq h.left_injective h.right_injective cover
+
+end CommonPrimitivePhaseCoverHypotheses
 
 /-- **Sector comparison from BNT proportional-decomposition data.**
 
@@ -383,15 +424,7 @@ theorem afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_spanHyp
     {d D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (hSame : SameMPV₂ A B)
-    (hReindexed : ∀ {r : ℕ} {dim : Fin r → ℕ}
-      (μ : Fin r → ℂ) (blocks : (k : Fin r) → MPSTensor d (dim k))
-      (F : CommonBlockedCyclicSectorFamily blocks),
-      SameMPV₂
-        (toTensorFromBlocks (d := blockPhysDim d F.p)
-          (μ := fun k : Fin r => (μ k) ^ F.p)
-          (fun k => blockTensor (d := d) (D := dim k) (blocks k) F.p))
-        (toTensorFromBlocks (d := blockPhysDim d F.p)
-          (μ := fun k : Fin r => (μ k) ^ F.p) F.commonReindexedBlock))
+    (hReindexed : CommonSectorRelabelingHypothesis d)
     (hRemaining : ∀ {p zeroTailA zeroTailB rA rB : ℕ}
       {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
       {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
@@ -458,5 +491,86 @@ theorem afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_spanHyp
     A B hSame hp μA blocksA μB blocksB hAblocks hBblocks hHyp.zeroTail_eq hTPA hTPB
     hIrrA hIrrB hPrimA hPrimB hHyp.left_injective hHyp.right_injective
     hμA hμB hHyp.span_eq
+
+/-- **Sector comparison from relabeled common sectors and a common phase cover.**
+
+Assume the blocked-word relabeling statement for common cyclic sectors.  Then the
+structural theorem
+`afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts` supplies one
+common positive blocking length and trace-preserving, primitive, irreducible
+nonzero-sector families on both sides.  If the remaining comparison assertions
+for exactly those families are available -- equality of the two zero-tail
+dimensions, injectivity at that blocking level, and a common MPV phase cover --
+then `CommonPrimitivePhaseCoverHypotheses.toSpanHypotheses` gives the span hypotheses
+needed by `afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_spanHypotheses`.
+
+Thus this theorem isolates the remaining open inputs: the blocked-word relabeling
+equality, the zero-tail/injectivity refinements, and the common phase cover (or
+equivalently the finite-length span equality supplied by that cover). -/
+theorem afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_commonPhaseCover
+    {d D₁ D₂ : ℕ}
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (hSame : SameMPV₂ A B)
+    (hReindexed : CommonSectorRelabelingHypothesis d)
+    (hRemaining : ∀ {p zeroTailA zeroTailB rA rB : ℕ}
+      {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+      {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
+      {blocksA : (x : Fin rA) → MPSTensor (blockPhysDim d p) (dimA x)}
+      {blocksB : (x : Fin rB) → MPSTensor (blockPhysDim d p) (dimB x)},
+      0 < p →
+      (∀ (N : ℕ) (σ : Fin N → Fin (blockPhysDim d p)),
+        mpv (blockTensor (d := d) (D := D₁) A p) σ =
+          mpv (zeroMPSTensor (blockPhysDim d p) zeroTailA) σ +
+            mpv (toTensorFromBlocks (d := blockPhysDim d p) (μ := μA) blocksA) σ) →
+      (∀ (N : ℕ) (σ : Fin N → Fin (blockPhysDim d p)),
+        mpv (blockTensor (d := d) (D := D₂) B p) σ =
+          mpv (zeroMPSTensor (blockPhysDim d p) zeroTailB) σ +
+            mpv (toTensorFromBlocks (d := blockPhysDim d p) (μ := μB) blocksB) σ) →
+      SameMPV₂Pos (blockTensor (d := d) (D := D₁) A p)
+        (toTensorFromBlocks (d := blockPhysDim d p) (μ := μA) blocksA) →
+      SameMPV₂Pos (blockTensor (d := d) (D := D₂) B p)
+        (toTensorFromBlocks (d := blockPhysDim d p) (μ := μB) blocksB) →
+      SameMPV₂Pos
+        (toTensorFromBlocks (d := blockPhysDim d p) (μ := μA) blocksA)
+        (toTensorFromBlocks (d := blockPhysDim d p) (μ := μB) blocksB) →
+      (∀ σ : Fin 0 → Fin (blockPhysDim d p),
+        (zeroTailA : ℂ) +
+            mpv (toTensorFromBlocks (d := blockPhysDim d p) (μ := μA) blocksA) σ =
+          (zeroTailB : ℂ) +
+            mpv (toTensorFromBlocks (d := blockPhysDim d p) (μ := μB) blocksB) σ) →
+      (∀ x, μA x ≠ 0) →
+      (∀ x, μB x ≠ 0) →
+      (∀ x, ∑ i : Fin (blockPhysDim d p), (blocksA x i)ᴴ * blocksA x i = 1) →
+      (∀ x, ∑ i : Fin (blockPhysDim d p), (blocksB x i)ᴴ * blocksB x i = 1) →
+      (∀ x, _root_.IsPrimitive
+        (transferMap (d := blockPhysDim d p) (D := dimA x) (blocksA x))) →
+      (∀ x, _root_.IsPrimitive
+        (transferMap (d := blockPhysDim d p) (D := dimB x) (blocksB x))) →
+      (∀ x, IsIrreducibleTensor (blocksA x)) →
+      (∀ x, IsIrreducibleTensor (blocksB x)) →
+      (∀ x, 0 < dimA x) →
+      (∀ x, 0 < dimB x) →
+      CommonPrimitivePhaseCoverHypotheses zeroTailA zeroTailB blocksA blocksB) :
+    ∃ p' : ℕ, 0 < p' ∧
+    ∃ P Q : SectorDecomposition (blockPhysDim d p'),
+      SameMPV₂Pos (blockTensor (d := d) (D := D₁) A p') P.toTensor ∧
+      SameMPV₂Pos (blockTensor (d := d) (D := D₂) B p') Q.toTensor ∧
+      SameMPV₂ P.toTensor Q.toTensor ∧
+      HasBNTSectorData P ∧ HasBNTSectorData Q ∧
+      ∃ perm : Fin P.basisCount ≃ Fin Q.basisCount,
+      ∃ hCopies : ∀ j, P.copies j = Q.copies (perm j),
+      ∃ ζ : Fin P.basisCount → ℂ,
+        (∀ j, ζ j ≠ 0) ∧
+        ∀ j : Fin P.basisCount,
+          Finset.univ.val.map (P.weight j) =
+            Finset.univ.val.map
+              (fun q => ζ j * Q.weight (perm j) (Fin.cast (hCopies j) q)) := by
+  refine afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_spanHypotheses
+    A B hSame hReindexed ?_
+  intro p zeroTailA zeroTailB rA rB dimA dimB μA μB blocksA blocksB hp
+    hAblocks hBblocks hAPos hBPos hNonzeroPos hZero hμA hμB hTPA hTPB hPrimA hPrimB
+    hIrrA hIrrB hDimA hDimB
+  exact (hRemaining hp hAblocks hBblocks hAPos hBPos hNonzeroPos hZero hμA hμB hTPA hTPB
+    hPrimA hPrimB hIrrA hIrrB hDimA hDimB).toSpanHypotheses
 
 end MPSTensor
