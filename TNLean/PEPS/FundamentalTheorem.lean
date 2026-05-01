@@ -20,10 +20,11 @@ import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Defs
 --   reduction from arXiv:1804.04964 §3. The local left inverse and the
 --   elementary blocking data are developed in `PEPS/VirtualInsertion` and
 --   `PEPS/Blocking`, and `localGauge_exists` has been reduced to the sharper
---   local hypothesis `HasLocalGaugeLift`. The abbreviation `BlockedMiddleGaugeHyp`
---   isolates the exact remaining step: build the blocked middle tensor,
---   compare it with the 3-site MPS theorem, and derive that explicit local
---   gauge formula from `SameState`.
+--   local hypothesis `HasLocalGaugeLift`. The edge-blocked coefficient and
+--   middle tensor are developed in `PEPS/Blocking`; the abbreviation
+--   `BlockedMiddleGaugeHyp` isolates the remaining step: compare that
+--   three-block contraction with the 3-site MPS theorem and derive the explicit
+--   local gauge formula from `SameState`.
 -- * The `hDim` step inside `fundamentalTheorem_PEPS` (issue #874) is now
 --   factored out as the conditional theorem `fundamentalTheorem_PEPS_of_bondDim`
 --   so that the bond-dimension obligation is orthogonal to `gaugeConsistency`.
@@ -502,8 +503,9 @@ factorized local gauge relation at `v`.
 
 The local left inverse and the canonical candidate operator are defined in
 `PEPS/LocalGauge`. The remaining PEPS-Fundamental-Theorem gap is to prove
-`BlockedMiddleGaugeHyp` from `SameState` via the blocked-middle / three-site-MPS
-reduction, then convert it to `HasLocalGaugeLift` by
+`BlockedMiddleGaugeHyp` from `SameState` by comparing the edge-blocked
+coefficient from `PEPS/Blocking` with the three-site MPS reduction, then convert
+it to `HasLocalGaugeLift` by
 `hasLocalGaugeLift_of_blockedMiddleGaugeHyp`. -/
 theorem localGauge_exists (A B : Tensor G d)
     (hA : IsVertexInjective A)
@@ -536,7 +538,8 @@ theorem gaugeConsistency (A B : Tensor G d)
         B.component v (fun ie => Fin.cast (congr_fun hDim ie.1) (η ie)) σ =
           gaugeVertex A X v η σ := by
   -- TODO: first derive `BlockedMiddleGaugeHyp A B hA hDim v` from `SameState`
-  -- at each vertex via the blocked-middle / three-site-MPS reduction, then use
+  -- at each vertex by comparing the edge-blocked coefficient from `PEPS/Blocking`
+  -- with the three-site MPS reduction, then use
   -- `hasLocalGaugeLift_of_blockedMiddleGaugeHyp` to obtain the local gauges.
   -- The key remaining consistency step is: for each edge e = (u,v), the gauges
   -- extracted from u and v must agree as inverse-transposes, with the

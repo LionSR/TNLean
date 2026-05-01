@@ -275,6 +275,148 @@ Theorem~2 of~\cite{Molnar2018NormalPEPS}.
     edge to the per-vertex product inside each summand.
 \end{proof}
 
+\begin{definition}[Edge-centered boundary data]%
+    \label{def:peps_edgeBoundaryConfig}
+    \lean{TNLean.PEPS.EdgeBoundaryConfig}
+    \leanok
+    \uses{def:peps_tensor, def:peps_localVirtualConfigSplitAt}
+    For an edge $e=(u,v)$, the boundary data consist of the virtual index on
+    $e$, the remaining virtual indices incident to $u$, and the remaining
+    virtual indices incident to $v$. These are the indices over which the
+    endpoint tensors couple to the blocked middle region.
+\end{definition}
+
+\begin{definition}[Boundary data read from a virtual configuration]%
+    \label{def:peps_edgeBoundaryOfVirtualConfig}
+    \lean{TNLean.PEPS.edgeBoundaryOfVirtualConfig}
+    \leanok
+    \uses{def:peps_edgeBoundaryConfig, def:peps_virtual_config}
+    A global virtual configuration determines edge-centered boundary data by
+    reading the index on the distinguished edge and the residual endpoint
+    indices.
+\end{definition}
+
+\begin{definition}[Boundary compatibility at an edge]%
+    \label{def:peps_edgeBoundaryMatches}
+    \lean{TNLean.PEPS.edgeBoundaryMatches}
+    \leanok
+    \uses{def:peps_edgeBoundaryConfig, def:peps_virtual_config}
+    A global virtual configuration is compatible with fixed edge-centered
+    boundary data if it has the prescribed index on the distinguished edge and
+    the prescribed residual indices at both endpoint stars.
+\end{definition}
+
+\begin{definition}[Middle configurations over fixed boundary data]%
+    \label{def:peps_edgeMiddleConfig}
+    \lean{TNLean.PEPS.EdgeMiddleConfig}
+    \leanok
+    \uses{def:peps_edgeBoundaryMatches}
+    For fixed boundary data $\beta$, the middle configurations are the subtype
+    of global virtual configurations satisfying the compatibility condition with
+    $\beta$.
+\end{definition}
+
+\begin{definition}[Virtual configurations fibred by edge boundary data]%
+    \label{def:peps_virtualConfigEquivEdgeBoundary}
+    \lean{TNLean.PEPS.virtualConfigEquivEdgeBoundary}
+    \leanok
+    \uses{def:peps_edgeBoundaryOfVirtualConfig, def:peps_edgeMiddleConfig}
+    A global virtual configuration is equivalently a choice of edge-centered
+    boundary data together with a middle configuration in the corresponding
+    fibre.
+\end{definition}
+
+\begin{definition}[Left endpoint local configuration from boundary data]%
+    \label{def:peps_edgeLeftLocalConfig}
+    \lean{TNLean.PEPS.edgeLeftLocalConfig}
+    \leanok
+    \uses{def:peps_edgeBoundaryConfig, def:peps_localVirtualConfigSplitAt}
+    The left endpoint local virtual configuration is reconstructed from the
+    edge index and the residual data on the left endpoint star.
+\end{definition}
+
+\begin{definition}[Right endpoint local configuration from boundary data]%
+    \label{def:peps_edgeRightLocalConfig}
+    \lean{TNLean.PEPS.edgeRightLocalConfig}
+    \leanok
+    \uses{def:peps_edgeBoundaryConfig, def:peps_localVirtualConfigSplitAt}
+    The right endpoint local virtual configuration is reconstructed from the
+    edge index and the residual data on the right endpoint star.
+\end{definition}
+
+\begin{theorem}[Left endpoint reconstruction for compatible boundary data]%
+    \label{thm:peps_edgeLeftLocalConfig_eq_of_boundaryMatches}
+    \lean{TNLean.PEPS.edgeLeftLocalConfig_eq_of_boundaryMatches}
+    \leanok
+    \uses{def:peps_edgeBoundaryMatches, def:peps_edgeLeftLocalConfig}
+    If a global virtual configuration is compatible with boundary data, then its
+    restriction to the left endpoint star is the local configuration reconstructed
+    from those data.
+\end{theorem}
+
+\begin{theorem}[Right endpoint reconstruction for compatible boundary data]%
+    \label{thm:peps_edgeRightLocalConfig_eq_of_boundaryMatches}
+    \lean{TNLean.PEPS.edgeRightLocalConfig_eq_of_boundaryMatches}
+    \leanok
+    \uses{def:peps_edgeBoundaryMatches, def:peps_edgeRightLocalConfig}
+    If a global virtual configuration is compatible with boundary data, then its
+    restriction to the right endpoint star is the local configuration
+    reconstructed from those data.
+\end{theorem}
+
+\begin{definition}[Blocked middle tensor at an edge]%
+    \label{def:peps_edgeMiddleWeight}
+    \lean{TNLean.PEPS.edgeMiddleWeight}
+    \leanok
+    \uses{def:peps_edgeBoundaryMatches, def:peps_edgeMiddleConfig,
+        def:peps_edgeMiddleVertices}
+    Fixing the edge-centered boundary data, the blocked middle tensor is the sum
+    over global virtual configurations compatible with those data of the product
+    of local tensor entries over the middle region $V\setminus\{u,v\}$.
+\end{definition}
+
+\begin{definition}[Edge-blocked PEPS coefficient]%
+    \label{def:peps_edgeBlockedCoeff}
+    \lean{TNLean.PEPS.edgeBlockedCoeff}
+    \leanok
+    \uses{def:peps_edgeLeftLocalConfig, def:peps_edgeMiddleWeight,
+        def:peps_edgeRightLocalConfig}
+    The edge-blocked coefficient is the three-block contraction obtained from
+    the left endpoint tensor, the blocked middle tensor, and the right endpoint
+    tensor at the chosen edge.
+\end{definition}
+
+\begin{theorem}[Edge-blocked coefficient equals the PEPS coefficient]%
+    \label{thm:peps_edgeBlockedCoeff_eq_stateCoeff}
+    \lean{TNLean.PEPS.edgeBlockedCoeff_eq_stateCoeff}
+    \leanok
+    \uses{def:peps_edgeBlockedCoeff, thm:peps_stateCoeff_splitAtEdge,
+        def:peps_virtualConfigEquivEdgeBoundary}
+    For every edge $e$, the edge-blocked three-block coefficient is exactly the
+    original PEPS state coefficient.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:peps_virtualConfigEquivEdgeBoundary,
+        thm:peps_edgeLeftLocalConfig_eq_of_boundaryMatches,
+        thm:peps_edgeRightLocalConfig_eq_of_boundaryMatches}
+    Fibre the global virtual sum by the edge-centered boundary data. The
+    remaining fibre sum is the blocked middle tensor, and the two endpoint
+    factors are reconstructed from the same boundary data.
+\end{proof}
+
+\begin{theorem}[Same state gives the same edge-blocked coefficients]%
+    \label{thm:peps_sameState_edgeBlockedCoeff_eq}
+    \lean{TNLean.PEPS.SameState.edgeBlockedCoeff_eq}
+    \leanok
+    \uses{def:peps_same_state, thm:peps_edgeBlockedCoeff_eq_stateCoeff}
+    If two PEPS tensors have the same state, then their edge-blocked
+    coefficients agree at every edge and every physical configuration.
+\end{theorem}
+\begin{proof}\leanok
+    Rewrite both edge-blocked coefficients as the corresponding PEPS state
+    coefficients and apply the same-state hypothesis.
+\end{proof}
+
 \begin{definition}[Sharpened local gauge lift datum]%
     \label{def:peps_hasLocalGaugeLift}
     \lean{TNLean.PEPS.HasLocalGaugeLift}
@@ -321,9 +463,9 @@ Theorem~2 of~\cite{Molnar2018NormalPEPS}.
     \leanok
     \uses{def:peps_hasLocalGaugeLift}
     Under the sharpened local lift hypothesis, the local gauge formula follows.
-    What remains open is to derive the blocked-middle formula from the global
-    same-state hypothesis via the blocked middle tensor and the corresponding
-    three-site injective-chain argument.
+    What remains open is to upgrade equality of the edge-blocked coefficients to
+    the blocked-middle formula using the corresponding three-site
+    injective-chain argument.
     Under that hypothesis, injectivity on the star neighbourhood provides a
     left inverse that isolates the local edge gauges:
     \begin{center}
@@ -415,8 +557,8 @@ Theorem~2 of~\cite{Molnar2018NormalPEPS}.
     the split at one incident edge, and the partition
     $V = \{u\} \sqcup (V \setminus \{u,v\}) \sqcup \{v\}$ isolate the local
     data needed for the edge-centered reduction of
-    ~\cite{Molnar2018NormalPEPS}, §3. The remaining three PEPS theorems still
-    require the blocked tensor on the middle region and the comparison with the
+    ~\cite{Molnar2018NormalPEPS}, §3. The middle-region blocked coefficient is
+    now formalized; the remaining local-gauge step is the comparison with the
     corresponding three-site injective chain. The uniqueness statement has now
     been repaired to a quotient by balanced edge scalars, but its proof still
     requires the same blocking construction together with the corresponding
