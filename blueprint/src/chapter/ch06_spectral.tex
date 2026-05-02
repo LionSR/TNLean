@@ -962,17 +962,19 @@ behind stationary states, following~\cite[\S6.4]{Wolf2012Quantum}.
     Since $\rho_\infty \neq 0$, we have $P \neq 0$, so $P = \Id$.
 \end{proof}
 
-\begin{remark}[Remaining stationary-support formulations]%
+\begin{remark}[Stationary-support formulations]%
     \label{rem:stationary_support_todo}
-    The non-trivial formulations needed here are:
+    The non-trivial formulations needed here are the following results from
+    Wolf:
     \begin{itemize}
-        \item \textbf{Prop.~6.10} (converse of Prop.~6.9):
-            if the support projection of \emph{every} PSD fixed point
-            is full, then the channel is irreducible.
-        \item \textbf{Prop.~6.11}: minimality of the stationary support
-            among invariant projections, without assuming irreducibility.
+        \item the converse direction of \cite[Proposition~6.10]{Wolf2012Quantum}:
+            if the support projection of every positive semidefinite fixed point
+            is full, then the channel is irreducible;
+        \item \cite[Proposition~6.11]{Wolf2012Quantum}: minimality of the
+            stationary support among invariant projections, without assuming
+            irreducibility.
     \end{itemize}
-    These statements are deferred in the present chapter.
+    These statements are not used elsewhere in this chapter.
 \end{remark}
 
 \subsection{Faithful compression onto the support sector}
@@ -1202,8 +1204,8 @@ used later.
     \lean{MPSTensor.hasEventuallyFullKrausRank_iff_stronglyIrreducible}
     \lean{MPSTensor.hasEventuallyFullKrausRank_iff_isNormal}
     \leanok
-    These are the pairwise equivalences appearing in Wolf's
-    Theorem~6.8.
+    These are the pairwise equivalences in
+    \cite[Theorem~6.8]{Wolf2012Quantum}.
 \end{remark}
 
 \begin{theorem}[Scalar fixed-point algebra case]

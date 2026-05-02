@@ -237,7 +237,8 @@ leave the genuine ones alone.
 - **Section names in Lean**: use mathematical terms (`section PerronFrobenius`,
   `section GaugeConstruction`, `section FinalConstruction`), not organizational
   terms (`section Assembly`, `section Pipeline`).
-- **Internal LaTeX labels** (e.g. `\label{ch:assembly}`, `\label{thm:pipeline_handoff}`)
+- **Internal LaTeX labels** (e.g. `\label{ch:assembly}`,
+  `\label{thm:irreducible_block_decomp_with_cfii}`)
   are not reader-facing and need not be renamed if doing so would break
   cross-references. But NEW labels should follow the standard.
 - **Definitions that are actually theorems**: if a statement asserts a mathematical

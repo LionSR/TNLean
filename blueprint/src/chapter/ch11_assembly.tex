@@ -1588,7 +1588,7 @@ two-basis sector comparison theorem.
 	Use Theorem~\ref{thm:common_primitive_phase_cover_hypotheses_to_span_hypotheses}
 	to form the remaining span hypotheses of
 	Definition~\ref{def:common_primitive_span_hypotheses}.  Then apply the
-	relabeled common-sector theorem with those span hypotheses.
+	common-sector comparison theorem with those span hypotheses.
 \end{proof}
 
 \begin{theorem}[Relabeled common sectors with proportional-comparison data]%
@@ -1610,7 +1610,7 @@ two-basis sector comparison theorem.
 	\uses{thm:common_primitive_proportional_hypotheses_to_phase_cover_hypotheses,
 		thm:afterBlocking_sectorComparison_reindexed_commonPhaseCover}
 	Convert the BNT proportional-decomposition comparison for the produced families
-	to common phase-cover hypotheses, and then apply the relabeled common-sector
+	to common phase-cover hypotheses, and then apply the common-sector
 	comparison theorem with common phase-cover data.
 \end{proof}
 
@@ -1757,15 +1757,15 @@ two-basis sector comparison theorem.
 
 	Chapter~\ref{ch:canonical} supplies the canonical-form reduction needed before
 	these comparison theorems can be applied: a common physical blocking length,
-	the zero-tail identities at that length, and relabeled cyclic-sector families
-	on both sides.  The unproved assertion is the exact equality, after relabeling
-	blocked physical words, between the canonical blocked nonzero part and the
-	relabeled cyclic-sector tensor for the whole weighted family.  With that
+	the zero-tail identities at that length, and cyclic-sector families for both
+	tensors on a common blocked alphabet.  The unproved assertion is the exact
+	equality, after identifying blocked physical words, between the blocked nonzero part and the
+	common cyclic-sector tensor for the whole weighted family.  With that
 	equality, Theorem~\ref{thm:after_blocking_common_primitive_irreducible_blocks_reindexed}
 	gives the common weighted nonzero-sector decompositions needed for the
 	comparison theorems.
 	Theorem~\ref{thm:afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_spanHypotheses}
-	then records the remaining hypotheses in their present form: equality of the
+	then records the remaining hypotheses: equality of the
 	zero-tail dimensions, injectivity of the common nonzero-sector blocks, and
 	finite-length MPV span equality.
 	Theorem~\ref{thm:after_blocking_common_primitive_irreducible_blocks_block_span_consequences}
@@ -1776,5 +1776,6 @@ two-basis sector comparison theorem.
 	adds the zero-tail and injectivity data to the common phase-cover route and
 	therefore gives the same sector-weight conclusion.  Establishing these
 	hypotheses is the mathematical passage from equality of total MPV vectors to the
-	componentwise power-sum identities used in the paper proof of Corollary~IV.5.
+	componentwise power-sum identities used in
+	\cite[Corollary~IV.5]{Cirac2021Matrix}.
 \end{remark}
