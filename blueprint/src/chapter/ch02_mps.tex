@@ -155,10 +155,9 @@ boundary conditions (PBC).
     \uses{def:mps_tensor}
     Two tensors $A$ and $B$ of the same bond dimension~$D$ are
     \emph{gauge equivalent} if there exists an invertible matrix
-    $X \in \GL_D(\C)$ such that
+    $X \in \GL_D(\C)$ such that, for every $i \in \{0,\ldots,d{-}1\}$,
     \[
         B^i \;=\; X \, A^i \, X^{-1}
-        \qquad \text{for all } i \in \{0,\ldots,d{-}1\}.
     \]
     In tensor-network notation,
     \begin{center}
@@ -261,10 +260,9 @@ boundary conditions (PBC).
     \uses{def:mps_tensor}
     Two tensors $A$ and $B$ are \emph{gauge-phase equivalent}
     if there exist $X \in \GL_D(\C)$ and $\zeta \in \C \setminus \{0\}$
-    such that
+    such that, for every physical index~$i$,
     \[
         B^i \;=\; \zeta \, X \, A^i \, X^{-1}
-        \qquad \text{for all } i.
     \]
 \end{definition}
 
@@ -311,10 +309,9 @@ boundary conditions (PBC).
     \lean{MPSTensor.mpv_eq_pow_mul_of_gaugePhase}
     \leanok
     \uses{def:gauge_phase_equiv, def:mpv}
-    If
+    If, for every physical index~$i$,
     \[
         B^i = \zeta \, X \, A^i \, X^{-1}
-        \qquad \text{for all } i,
     \]
     then for every system size~$N$ and configuration~$\sigma$ one has
     \[
