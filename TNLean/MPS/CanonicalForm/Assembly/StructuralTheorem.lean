@@ -1405,8 +1405,7 @@ theorem afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts
 
 /-- **Unconditional common primitive irreducible block decompositions.**
 
-If the Fintype-level coordinate assertion `flattenWordOfBlock_cast_eq` holds (the
-single remaining mathematical fact from #1075/#990), then the
+If the Fintype-level coordinate assertion `flattenWordOfBlock_cast_eq` holds, then the
 `afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts` theorem
 applies without any blocking-coordinate hypothesis.
 
@@ -1418,8 +1417,9 @@ The proof chains:
 3. `CommonSectorRelabelingHypothesis d` → the full common-block decomposition
    (via `afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts`)
 
-The remaining gap is therefore exactly the single `sorry` in
-`flattenWordOfBlock_cast_eq` in `CyclicSectorDecomposition.lean`. -/
+The remaining gap for the fully unconditional version is exactly `flattenWordOfBlock_cast_eq`
+in `CyclicSectorDecomposition.lean` (see docstring there for details on the mathematical
+truth and the missing Mathlib lemma). -/
 theorem unconditional_commonPrimitiveIrreducibleBlocks
     {d D₁ D₂ : ℕ}
     (h_flatten : ∀ {m n p : ℕ} (hp_eq : p = m * n)
