@@ -75,7 +75,7 @@ private lemma sectorDim_ne_zero_succ_of_cyclicSectorDecomp
 
 /-- Missing cyclic gauge-transport statement.
 
-This is the precise interface still needed for Eq. A.8 of arXiv:1708.00029. From the
+This is the precise interface still needed for Equation A.8 of arXiv:1708.00029. From the
 current `IsCyclicSectorDecomp` data one knows the projection shift
 `E†(P (k+1)) = P k` and the blocked trace realization of each compressed sector.
 To prove this statement, the cyclic-sector construction must additionally expose
@@ -129,7 +129,7 @@ private lemma sectorGaugePhaseEquiv_succ_of_cyclicTransport
 
 /-- Missing one-step cyclic transport statement for sector matches.
 
-This is the formal one-step version of Eq. A.8 in arXiv:1708.00029. The cyclic
+This is the formal one-step version of Equation A.8 in arXiv:1708.00029. The cyclic
 projection relation `E†(P (k+1)) = P k`, together with the compressed-sector
 realization, should transport a gauge-phase equivalence between sector pair
 `(u, v)` to one between `(u + 1, v + 1)`. The conclusion also propagates
@@ -198,11 +198,11 @@ private lemma gaugePhaseEquiv_cast_indices {d gA gB : ℕ}
   subst hj
   exact hg
 
-/-- **Translation propagation** (Eq. A.8 / blockedABprop of arXiv:1708.00029):
+/-- **Translation propagation** (Equation A.8 / blockedABprop of arXiv:1708.00029):
 Given one matching compressed sector pair at `(u₀, v₀)`, applying the
 translation operator `T^l` for `l = 1, …, m-1` yields matching for all
 sector pairs `(u₀ + l, v₀ + l)`. Each offset `l` gets its own gauge
-(the paper's Eq. blockedABprop produces a different unitary at each
+(the paper's Equation blockedABprop produces a different unitary at each
 sector, not a single transported gauge).
 
 The `hA_cyclic`/`hB_cyclic` hypotheses (see `IsCyclicSectorDecomp`)
@@ -267,7 +267,7 @@ lemma sectorMatch_propagation
 /-- Missing full-cycle contraction step for periodic-overlap Case 3.
 
 At this point the sector transport has already been abstracted into
-`hBlockMatch`, so the remaining gap is no longer the Eq. A.8 staircase
+`hBlockMatch`, so the remaining gap is no longer the Equation A.8 staircase
 identification.  What is still needed from Eqs. A.14-A.18 of
 arXiv:1708.00029 is the contraction argument around the whole cycle:
 for each sector `u`, normality gives a repetition length after which
@@ -323,7 +323,7 @@ private lemma repeatedBlocks_of_blockedSectorGaugePhase
   -- arXiv:1708.00029 still has to be formalized separately.
   sorry
 
-/-- **Per-site proportionality** (Eq. A.14 of arXiv:1708.00029):
+/-- **Per-site proportionality** (Equation A.14 of arXiv:1708.00029):
 After injectivity contraction, the sector-restricted tensors satisfy
 `A_u^i = κ_v · e^{iη/m} · B_v^i` with `∏ κ_v = 1` and `|κ_v| = 1`.
 
@@ -400,7 +400,7 @@ tensor. The `hSomeMatch` witness provides a single matching sector pair
 follows from `hNondegA`), from which translation propagation extends the
 match to all sectors.
 
-This is Eq. (A.17)–(A.18) of arXiv:1708.00029. -/
+This is Equation (A.17)–(A.18) of arXiv:1708.00029. -/
 theorem periodicOverlap_gaugeEquiv_of_sector_match
     [NeZero D] (A B : MPSTensor d D)
     {m : ℕ} [NeZero m]

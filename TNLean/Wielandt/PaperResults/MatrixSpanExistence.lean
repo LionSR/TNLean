@@ -52,7 +52,7 @@ variable {d D : ℕ}
 
 /-- **Lemma 2(b)** (coarse existential statement).
 
-If `A` is normalized and primitive in the paper sense, then there exists `N`
+If `A` is normalized and primitive under the source theorem hypotheses, then there exists `N`
 such that `S_N(A) = M_D(ℂ)`.
 
 This is the coarse existential consequence of Lemma 2(b): it does *not* claim
@@ -68,7 +68,7 @@ theorem exists_wordSpan_eq_top_of_isPrimitivePaper [NeZero D]
 
 /-- **Lemma 2(b)** (coarse rank-one corollary).
 
-If `A` is normalized and primitive in the paper sense, then there exists `N`
+If `A` is normalized and primitive under the source theorem hypotheses, then there exists `N`
 such that every rank-one matrix `|φ⟩⟨ψ|` belongs to `S_N(A)`.
 
 This states the same existential consequence of Lemma 2(b) as

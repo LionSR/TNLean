@@ -26,8 +26,8 @@ sides have TP-primitive decompositions.
 
 ## References
 
-* [Cirac–Pérez-García–Schuch–Verstraete, arXiv:1606.00608, §2.3 + Appendix A]
-* [Cirac–Pérez-García–Schuch–Verstraete, arXiv:2011.12127, §IV]
+* [Cirac–Pérez-García–Schuch–Verstraete, arXiv:1606.00608, Section 2.3 + Appendix A]
+* [Cirac–Pérez-García–Schuch–Verstraete, arXiv:2011.12127, Section IV]
 
 ## Tags
 
@@ -1153,7 +1153,7 @@ theorem zeroTail_commonFlat_transport_of_groupedBlockCastAgrees
   · intro x
     exact F.commonFlatWeight_ne_zero μ hμ x
 
-/-- The one-sided blocked-word relabeling hypothesis for common cyclic sectors.
+/-- The one-sided blocked-word relabeling hypothesis for cyclic-sector data.
 
 It says that, for every common cyclic-sector family, the canonically blocked
 weighted nonzero tensor agrees as an MPV family with the same blocks read through

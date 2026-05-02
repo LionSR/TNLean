@@ -10,48 +10,48 @@ import Mathlib.Tactic.LinearCombination
 import Mathlib.Algebra.BigOperators.Ring.Finset
 
 /-!
-# Wolf Chapter 2 representation corollaries (Props 2.2–2.4)
+# Wolf Chapter 2 representation corollaries (Propositions 2.2–2.4)
 
 This file formalises the remaining Chapter 2 representation corollaries from
 Wolf's *Quantum Channels & Operations: Guided Tour*:
 
-* **Prop 2.2** — every sesquilinear sandwich `A * X * Bᴴ` decomposes as a
+* **Proposition 2.2** — every sesquilinear sandwich `A * X * Bᴴ` decomposes as a
   signed complex combination of four CP-sandwich terms (polarization
   identity). Any linear map expressible as `∑ᵢ Aᵢ * X * Bᵢᴴ` is therefore
   a complex linear combination of CP maps.
-* **Prop 2.3** — no information without disturbance: any linear map fixing
+* **Proposition 2.3** — no information without disturbance: any linear map fixing
   every rank-one self-outer-product is the identity. In particular, a
   quantum channel that leaves every pure state invariant is the identity.
-* **Prop 2.4** — equivalence of ensembles (Hughston–Jozsa–Wootters): two
+* **Proposition 2.4** — equivalence of ensembles (Hughston–Jozsa–Wootters): two
   pure-state ensembles are related by an isometric mixing matrix iff they
   induce the same density operator. Both directions are formalised.
 
 ## Main results
 
-* `WolfProps.polarization_sandwich` — Prop 2.2 as a polarization identity.
-* `WolfProps.cp_decomposition_of_sandwich_sum` — Prop 2.2 corollary: every
+* `WolfProps.polarization_sandwich` — Proposition 2.2 as a polarization identity.
+* `WolfProps.cp_decomposition_of_sandwich_sum` — Proposition 2.2 corollary: every
   `∑ᵢ Aᵢ * X * Bᵢᴴ` is a signed ℂ-linear combination of CP maps.
 * `WolfProps.vecMulVec_star_eq_polarization` — polarization of rank-one
   outer products into rank-one self-outer-products.
-* `WolfProps.linearMap_eq_id_of_fixes_rankOne` — Prop 2.3 (linear-algebra
+* `WolfProps.linearMap_eq_id_of_fixes_rankOne` — Proposition 2.3 (linear-algebra
   form): a linear map fixing every `vecMulVec v (star v)` is the identity.
-* `WolfProps.channel_eq_id_of_fixes_pureStates` — Prop 2.3 (channel form):
+* `WolfProps.channel_eq_id_of_fixes_pureStates` — Proposition 2.3 (channel form):
   a quantum channel fixing every pure-state projector is the identity.
-* `WolfProps.pureEnsembleDensity_eq_of_isometric_mixing` — Prop 2.4
+* `WolfProps.pureEnsembleDensity_eq_of_isometric_mixing` — Proposition 2.4
   (sufficient direction): isometric mixing preserves the density operator.
-* `WolfProps.exists_isometric_mixing_of_pureEnsembleDensity_eq` — Prop 2.4
+* `WolfProps.exists_isometric_mixing_of_pureEnsembleDensity_eq` — Proposition 2.4
   (necessary direction, HJW converse): equal densities force an isometric
   mixing matrix between the two ensembles.
-* `WolfProps.pureEnsembleDensity_eq_iff_exists_isometric_mixing` — Prop 2.4
+* `WolfProps.pureEnsembleDensity_eq_iff_exists_isometric_mixing` — Proposition 2.4
   stated as an iff.
 
 ## Design notes
 
-The Prop 2.2 polarization is proved at the entry level by reducing to a
+The Proposition 2.2 polarization is proved at the entry level by reducing to a
 scalar polarization identity in `ℂ` (which is closed by
-`linear_combination`). The Prop 2.3 reduction chain exploits the fact that
+`linear_combination`). The Proposition 2.3 reduction chain exploits the fact that
 rank-one outer products span `M_D(ℂ)` over `ℂ`, obtained by specializing
-the rank-one polarization to standard-basis vectors. The Prop 2.4
+the rank-one polarization to standard-basis vectors. The Proposition 2.4
 sufficient direction is a direct algebraic computation matching the
 abstract Kraus-freedom sufficient-direction lemma
 `kraus_same_map_of_isometry_combination`; the HJW converse reduces to
@@ -63,7 +63,7 @@ rectangular isometry recovers the vector relation `ψᵢ = ∑ⱼ Vᵢⱼ · φ�
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Props 2.2–2.4][Wolf2012QChannels]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Propositions 2.2–2.4][Wolf2012QChannels]
 -/
 
 open scoped Matrix
@@ -76,7 +76,7 @@ namespace WolfProps
 /-! ### Scalar polarization -/
 
 /-- Scalar polarization identity used entry-wise to prove the sandwich
-polarization (Prop 2.2). For any four complex numbers `α β γ δ`,
+polarization (Proposition 2.2). For any four complex numbers `α β γ δ`,
 
   `4 · α · (star δ) = (α+β)(star γ + star δ) - (α-β)(star γ - star δ)
      + I · (α + I·β)(star γ - I·star δ) - I · (α - I·β)(star γ + I·star δ).`
@@ -99,9 +99,9 @@ be used inside `simp only` calls that operate on `star` syntactically. -/
 private theorem star_I_eq_neg_I : (star Complex.I : ℂ) = -Complex.I :=
   Complex.conj_I
 
-/-! ### Sandwich polarization (Prop 2.2 core identity) -/
+/-! ### Sandwich polarization (Proposition 2.2 core identity) -/
 
-/-- **Prop 2.2 (Wolf), polarization form**. The sesquilinear sandwich
+/-- **Proposition 2.2 (Wolf), polarization form**. The sesquilinear sandwich
 `A * X * Bᴴ` decomposes as a signed ℂ-linear combination of four
 CP-sandwich terms `K X Kᴴ`:
 
@@ -144,7 +144,7 @@ theorem polarization_sandwich (A B X : Matrix (Fin D) (Fin D) ℂ) :
           Finset.sum_congr rfl fun _ _ => pw _ _
     _ = _ := by simp only [Finset.sum_sub_distrib, Finset.sum_add_distrib]
 
-/-- **Prop 2.2 (Wolf), CP-decomposition form**. Every map expressible as
+/-- **Proposition 2.2 (Wolf), CP-decomposition form**. Every map expressible as
 `T(X) = ∑ᵢ Aᵢ * X * Bᵢᴴ` has the explicit ℂ-linear CP-decomposition
 
   `4 • T(X) = ∑ᵢ (Aᵢ+Bᵢ) X (Aᵢ+Bᵢ)ᴴ - ∑ᵢ (Aᵢ-Bᵢ) X (Aᵢ-Bᵢ)ᴴ
@@ -165,7 +165,7 @@ theorem cp_decomposition_of_sandwich_sum
   simp only [Finset.smul_sum, ← Finset.sum_sub_distrib, ← Finset.sum_add_distrib]
   exact Finset.sum_congr rfl fun i _ => polarization_sandwich (A i) (B i) X
 
-/-! ### Prop 2.3: no information without disturbance -/
+/-! ### Proposition 2.3: no information without disturbance -/
 
 /-- **Rank-one polarization identity**: every outer product `u · star v`
 is a signed ℂ-linear combination of four rank-one self-outer-products. -/
@@ -208,7 +208,7 @@ section Prop23
 
 variable (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
 
-/-- **Prop 2.3 (Wolf), linear-algebra form**: a linear map fixing every
+/-- **Proposition 2.3 (Wolf), linear-algebra form**: a linear map fixing every
 rank-one self-outer-product `vecMulVec v (star v)` is the identity map.
 
 This captures "no information without disturbance" at the algebra level:
@@ -242,7 +242,7 @@ theorem linearMap_eq_id_of_fixes_rankOne
         T_fixes_vecMulVec_star_of_fixes_self (D := D) T hT (Pi.single i (1 : ℂ))
           (Pi.single j (1 : ℂ))]
 
-/-- **Prop 2.3 (Wolf), pure-state form**: any linear map (in particular any
+/-- **Proposition 2.3 (Wolf), pure-state form**: any linear map (in particular any
 quantum channel) leaving every pure-state projector `vecMulVec v (star v)`
 invariant is the identity. This is the standard "no information without
 disturbance" statement in quantum information theory, phrased directly in
@@ -255,7 +255,7 @@ theorem channel_eq_id_of_fixes_pureStates
 
 end Prop23
 
-/-! ### Prop 2.4: equivalence of ensembles (sufficient direction) -/
+/-! ### Proposition 2.4: equivalence of ensembles (sufficient direction) -/
 
 /-- The density operator associated to a pure-state (unnormalized) ensemble
 `{ψᵢ}`: the sum of rank-one projectors `∑ᵢ |ψᵢ⟩⟨ψᵢ|`. The weights `pᵢ`
@@ -269,7 +269,7 @@ noncomputable def pureEnsembleDensity
     Matrix (Fin D) (Fin D) ℂ :=
   ∑ i, Matrix.vecMulVec (ψ i) (star (ψ i))
 
-/-- **Prop 2.4 (Wolf), sufficient direction** (Hughston–Jozsa–Wootters).
+/-- **Proposition 2.4 (Wolf), sufficient direction** (Hughston–Jozsa–Wootters).
 If two pure-state ensembles `{ψᵢ}_{i ∈ ι₁}` and `{φⱼ}_{j ∈ ι₂}` are related
 by an isometric mixing matrix `V : Matrix ι₁ ι₂ ℂ` (that is, `Vᴴ V = 1` and
 `ψᵢ = ∑ⱼ Vᵢⱼ • φⱼ`), then they induce the same density operator.
@@ -325,7 +325,7 @@ theorem pureEnsembleDensity_eq_of_isometric_mixing
           · intro j' _ hj; simp [show j' ≠ j from hj]
           · simp
 
-/-- **Prop 2.4 (Wolf), necessary direction** (Hughston–Jozsa–Wootters
+/-- **Proposition 2.4 (Wolf), necessary direction** (Hughston–Jozsa–Wootters
 converse). If two pure-state ensembles `{ψᵢ}_{i ∈ ι₁}` and
 `{φⱼ}_{j ∈ ι₂}` induce the same pure-ensemble density operator and
 `card ι₂ ≤ card ι₁`, then there exists a tall isometric mixing matrix
@@ -452,7 +452,7 @@ theorem exists_isometric_mixing_of_pureEnsembleDensity_eq
   simp only [Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul, hLjc₀] at h_entry
   exact h_entry
 
-/-- **Prop 2.4 (Wolf), Hughston–Jozsa–Wootters equivalence**. Two
+/-- **Proposition 2.4 (Wolf), Hughston–Jozsa–Wootters equivalence**. Two
 pure-state ensembles `{ψᵢ}_{i ∈ ι₁}` and `{φⱼ}_{j ∈ ι₂}` with
 `card ι₂ ≤ card ι₁` induce the same pure-ensemble density operator iff
 they are related by a tall isometric mixing matrix

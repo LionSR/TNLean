@@ -69,7 +69,7 @@ def SameState (A B : Tensor G d) : Prop :=
 `η ↦ A.component v η` (indexed by virtual configurations on the incident edges)
 is linearly independent in `Fin d → ℂ`.
 
-This matches the paper's definition (arXiv:1804.04964 §3, line 979):
+This matches the paper's definition (arXiv:1804.04964 Section 3, line 979):
 > *"all tensors interpreted as maps from the virtual space to the physical one
 > are injective"*
 

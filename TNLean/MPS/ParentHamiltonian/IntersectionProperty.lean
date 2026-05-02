@@ -35,7 +35,7 @@ of the parent Hamiltonian (see `UniqueGroundState.lean`).
 
 ## References
 
-* [CPGSV21] arXiv:2011.12127, parent Hamiltonian section (lines 2013–2094)
+* [Cirac--Perez-Garcia--Schuch--Verstraete 2021] arXiv:2011.12127, parent Hamiltonian section (lines 2013–2094)
 * [MPGSC18] arXiv:1804.04964, Section 3 (one-sided inverse)
 * [FNW92] Sections 3–4
 -/

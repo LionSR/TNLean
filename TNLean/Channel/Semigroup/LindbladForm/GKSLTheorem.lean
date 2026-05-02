@@ -13,9 +13,9 @@ This file proves the GKSL theorem characterizing generators of CPTP semigroups.
 
 ## Main results
 
-* `generator_shift_invariance` — **Prop 7.4** (Kraus shift freedom).
+* `generator_shift_invariance` — **Proposition 7.4** (Kraus shift freedom).
 * `IsGKSLGenerator` — definition.
-* `gksl_iff_lindbladForm` — **Thm 7.1**: GKSL ↔ Lindblad form.
+* `gksl_iff_lindbladForm` — **Theorem 7.1**: GKSL ↔ Lindblad form.
 -/
 
 open scoped Matrix ComplexOrder BigOperators NNReal MatrixOrder TNOperatorSpace
@@ -27,10 +27,10 @@ variable {D : ℕ}
 
 section LindbladForms
 
-/-! ## Prop 7.4: Freedom in generator representation (Wolf Proposition 7.4) -/
+/-! ## Proposition 7.4: Freedom in generator representation (Wolf Proposition 7.4) -/
 
 /-- **Wolf Proposition 7.4 (item 1)**: If we shift the Kraus operators by
-`L'ᵢ = Lᵢ + cᵢ 𝟙` and adjust `κ` accordingly (Eq. 7.19), we get the same
+`L'ᵢ = Lᵢ + cᵢ 𝟙` and adjust `κ` accordingly (Equation 7.19), we get the same
 generator. -/
 theorem generator_shift_invariance
     {r : ℕ} (K : Fin r → Matrix (Fin D) (Fin D) ℂ)
@@ -184,7 +184,7 @@ private lemma iH_half_S_eq_κ (κ S : Matrix (Fin D) (Fin D) ℂ) (hS : S = κ +
   rw [this, smul_smul]; norm_num
 
 /-- **Wolf Theorem 7.1 (Lindblad form)**: `L` is a GKSL generator iff it can be
-written in the standard Lindblad form (Eq. 7.21):
+written in the standard Lindblad form (Equation 7.21):
 `L(ρ) = i[ρ, H] + Σⱼ (Lⱼ ρ Lⱼ† - ½ {Lⱼ†Lⱼ, ρ}₊)`
 with `H = H†`. -/
 theorem gksl_iff_lindbladForm

@@ -17,7 +17,7 @@ finite order and states their cyclic behavior under a linear map.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Thm. 6.6]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Theorem 6.6]
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder BigOperators

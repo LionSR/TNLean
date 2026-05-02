@@ -39,7 +39,7 @@ parent Hamiltonians (NNCPH).
 
 ## References
 
-* arXiv:1606.00608, §3.3 Definition 3.9, Theorem 3.10
+* arXiv:1606.00608, Section 3.3 Definition 3.9, Theorem 3.10
 * S. Beigi, *J. Phys. A: Math. Theor.* **45** (2012) 025306 —
   ground-space characterization for commuting nearest-neighbor
   Hamiltonians in 1D (consumed only in the `NNCPH ⟹ RFP` direction)
@@ -122,7 +122,7 @@ theorem IsCommutingParentHam.ham_comm_localTerm {A : MPSTensor d D} {L N : ℕ}
 A normal renormalization fixed-point tensor has a nearest-neighbor
 commuting parent Hamiltonian.
 
-Per arXiv:1606.00608 §3.3 (source line 1307), this direction is
+Per arXiv:1606.00608 Section 3.3 (source line 1307), this direction is
 *"trivial from Theorem [charact-MPS]"*; it therefore does not depend
 on S. Beigi (2012). It is conditioned only on the product-of-entangled-pairs
 structural form (Appendix B), stated here as

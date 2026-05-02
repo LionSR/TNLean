@@ -12,7 +12,7 @@ This file contains the standalone Z-gauge matrix constructions used in the
 periodic equal-case fundamental theorem of arXiv:1708.00029. The declarations
 were moved out of `MPS/FundamentalTheorem/SectorDecomposition.lean` to complete
 the Gemma split between the general fundamental-theorem stack and the periodic
-§3–§4 definitions.
+Section 3–Section 4 definitions.
 -/
 
 open scoped Matrix

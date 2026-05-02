@@ -25,13 +25,13 @@ variable {d D : ℕ}
 
 A linear endomorphism `E` of `Mat_D ℂ` is *`p`-divisible* if it equals the `p`-fold
 composition of some CPTP map `E'`. This is the channel-theoretic notion appearing in
-arXiv:1708.00029, §4.1. -/
+arXiv:1708.00029, Section 4.1. -/
 def IsPDivisibleChannel
     (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) (p : ℕ) : Prop :=
   ∃ E' : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ,
     IsChannel E' ∧ E = E' ^ p
 
-/-- **`p`-refinement of an MPS tensor (arXiv:1708.00029, §4.1, Eq. (4.1)).**
+/-- **`p`-refinement of an MPS tensor (arXiv:1708.00029, Section 4.1, Equation (4.1)).**
 
 `B : MPSTensor d D` admits a `p`-refinement if there exists another tensor
 `A : MPSTensor d D` and an isometry `W : ℂ^d → (ℂ^d)^{⊗p}` (encoded as a matrix

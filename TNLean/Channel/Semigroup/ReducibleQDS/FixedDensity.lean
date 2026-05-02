@@ -6,7 +6,7 @@ import TNLean.Channel.Semigroup.ReducibleQDS.Defs
 import TNLean.MPS.Core.OrthogonalProjectionInvariance
 
 /-!
-# Fixed Density ↔ Kernel Element (Wolf Prop 7.6, (1) ↔ (2)) and (1) → (3)
+# Fixed Density ↔ Kernel Element (Wolf Proposition 7.6, (1) ↔ (2)) and (1) → (3)
 
 This file proves the equivalence between conditions (1) and (2) of Wolf
 Proposition 7.6, and the implication (1) → (3).
@@ -24,7 +24,7 @@ local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 /-! ## (1) ↔ (2): Fixed density ↔ kernel element
 
 This is the simplest equivalence, following directly from the bridge
-`L X = 0 ↔ exp(tL) X = X ∀ t ≥ 0` (Wolf §7.1, formalized in `Kernel.lean`).
+`L X = 0 ↔ exp(tL) X = X ∀ t ≥ 0` (Wolf Section 7.1, formalized in `Kernel.lean`).
 -/
 
 /-- **(2) → (1)**: A rank-deficient kernel element of `L` is automatically

@@ -6,11 +6,11 @@ import TNLean.Channel.OrderedCP
 
 /-!
 # Radon–Nikodym theorem for CP maps and open-system representation
-(Wolf Ch. 2, Thm 2.4 and Thm 2.5)
+(Wolf Chapter 2, Theorem 2.4 and Theorem 2.5)
 
 This file formalizes the canonical Radon–Nikodym theorem for completely
-positive maps (Wolf Thm 2.4) and the open-system representation theorem
-(Wolf Thm 2.5).
+positive maps (Wolf Theorem 2.4) and the open-system representation theorem
+(Wolf Theorem 2.5).
 
 The Radon–Nikodym theorem says: for CP maps `T₁, T₂`, there exist a
 Stinespring matrix `V` for `T₁ + T₂` and PSD operators `P₁, P₂` on the
@@ -35,16 +35,16 @@ evolution on a system-plus-environment.
   the identity: resolution of identity on the dilation space.
 * `Matrix.blockDiagTopProj_posSemidef`,
   `Matrix.blockDiagBotProj_posSemidef` — both are PSD.
-* `IsCPMap.exists_radon_nikodym` (Wolf Thm 2.4 binary form):
+* `IsCPMap.exists_radon_nikodym` (Wolf Theorem 2.4 binary form):
   for CP `T₁, T₂`, there exist a Stinespring matrix `V` and two PSD
   operators `P₁, P₂` with `P₁ + P₂ = 𝟙` such that `Tᵢ(A) = V†(A ⊗ Pᵢ)V`.
-* `IsChannel.exists_stinespring_open_system` (Wolf Thm 2.5 reduced form):
+* `IsChannel.exists_stinespring_open_system` (Wolf Theorem 2.5 reduced form):
   every CPTP map admits an isometric Stinespring dilation realizing it as
   the reduced dynamics `T(ρ) = tr_r(V ρ V†)`.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Thms 2.4, 2.5]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Theorems 2.4, 2.5]
   [Wolf2012QChannels]
 -/
 
@@ -287,7 +287,7 @@ realizing `T` as the reduced dynamics
   `T(ρ)_{ij} = ∑ₖ (V ρ V†)_{(i,k),(j,k)}`
 on a system-plus-environment Hilbert space. Equivalently `T(ρ) = tr_r(VρV†)`.
 
-This is the "reduced" form of Wolf's Thm 2.5; the full system-plus-environment
+This is the "reduced" form of Wolf's Theorem 2.5; the full system-plus-environment
 unitary form follows by extending `V` to a unitary `U` on `ℂ^D ⊗ ℂ^r` and
 writing `V = U(𝟙 ⊗ |0⟩)`, which requires an orthonormal basis extension.
 The isometric form here already carries the essential physical content:

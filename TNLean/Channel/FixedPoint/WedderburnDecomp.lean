@@ -15,7 +15,7 @@ This file states the Wedderburn--Artin decomposition for the fixed-point
 
 Every finite-dimensional `*`-subalgebra of `M_D(ℂ)` decomposes as a direct sum
 of full matrix algebras (over ℂ, since ℂ is algebraically closed). Concretely,
-Wolf Eq. (1.39) gives the embedding
+Wolf Equation (1.39) gives the embedding
 
     B = U (0 ⊕ ⊕_k M_{d_k} ⊗ 1_{m_k}) U†
 
@@ -42,15 +42,15 @@ The proof chain is:
    Wedderburn--Artin decomposition — available in Mathlib via
    `IsSemisimpleRing.exists_algEquiv_pi_matrix_of_isAlgClosed`.
 
-The concrete unitary block-diagonal embedding (Wolf Eq. 1.39) and the
-conditional expectation form with density operators ρ_k (Wolf Eq. 1.40)
+The concrete unitary block-diagonal embedding (Wolf Equation 1.39) and the
+conditional expectation form with density operators ρ_k (Wolf Equation 1.40)
 require additional representation-theoretic results and are deferred
 to future work.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Thm 6.14, §6.4]
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Eq. 1.39–1.40, §1]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Theorem 6.14, Section 6.4]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Equation 1.39–1.40, Section 1]
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder BigOperators Matrix.Norms.L2Operator
@@ -155,7 +155,7 @@ theorem fixedPointAlgebra_wedderburnArtin
 
 end AbstractDecomp
 
-/-! ## Concrete block-diagonal embedding (Wolf Eq. 1.39) -/
+/-! ## Concrete block-diagonal embedding (Wolf Equation 1.39) -/
 
 section ConcreteDecomp
 
@@ -165,7 +165,7 @@ to witness that the algebra is unitarily conjugate to
 `0 ⊕ ⊕_k M_{d_k} ⊗ 1_{m_k}`
 inside the ambient matrix algebra.
 
-This corresponds to Wolf Eq. (1.39). Since this declaration is a `structure`,
+This corresponds to Wolf Equation (1.39). Since this declaration is a `structure`,
 it stores decomposition data; the proposition asserting existence of such a
 decomposition is `Nonempty (IsWedderburnBlockDecomp S)`.
 
@@ -212,11 +212,11 @@ structure IsWedderburnBlockDecomp
 -- eventually be moved to `TNLean/Algebra/WedderburnArtin.lean` or similar.
 
 /-- Every finite-dimensional `*`-subalgebra of `M_D(ℂ)` admits a Wedderburn
-block decomposition (Wolf Eq. 1.39).
+block decomposition (Wolf Equation 1.39).
 
 The current `IsWedderburnBlockDecomp` structure states the abstract
 Wedderburn--Artin product decomposition, multiplicities set to `1`, and the
-ambient dimension bound. The unitary block-diagonal intertwiner is still
+dimension bound. The unitary block-diagonal intertwiner is still
 deferred in the structure TODO above. -/
 theorem starSubalgebra_hasWedderburnBlockDecomp
     (S : StarSubalgebra ℂ Mat) :

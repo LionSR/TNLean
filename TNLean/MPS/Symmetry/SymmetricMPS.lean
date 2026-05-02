@@ -10,8 +10,8 @@ such that the rotated tensor equals A conjugated by X(g).
 
 ## References
 
-* M. M. Wolf, *Quantum Channels & Operations: Guided Tour*, 2012, §6
-* arXiv:2011.12127 (CPSV review), Eq. 48
+* M. M. Wolf, *Quantum Channels & Operations: Guided Tour*, 2012, Section 6
+* arXiv:2011.12127 (CPSV review), Equation 48
 * arXiv:0802.0447 (PGWSVC 2008), Condition C1
 -/
 

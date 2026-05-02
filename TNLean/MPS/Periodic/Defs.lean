@@ -12,7 +12,7 @@ open scoped Matrix BigOperators
 # Periodic MPS definitions
 
 This file introduces the basic periodic MPS predicates and equivalence relations
-used by the periodic form theory (arXiv:1708.00029, §2.1).
+used by the periodic form theory (arXiv:1708.00029, Section 2.1).
 -/
 
 namespace MPSTensor
@@ -92,7 +92,7 @@ def IsLeftCanonical (A : MPSTensor d D) : Prop :=
 peripheral spectrum equal to the `m`-th roots of unity, positivity of `m`,
 and existence of a primitive `m`-th root.
 
-This is the periodic analogue of primitivity data in arXiv:1708.00029, §2.1. -/
+This is the periodic analogue of primitivity data in arXiv:1708.00029, Section 2.1. -/
 structure IsPeriodic (m : ℕ) (A : MPSTensor d D) : Prop where
   /-- No nontrivial invariant projection. -/
   irreducible : IsIrreducibleTensor A

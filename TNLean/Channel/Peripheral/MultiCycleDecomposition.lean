@@ -13,7 +13,7 @@ block-permutation formalization developed in
 asymptotic-image side of
 Wolf, *Quantum Channels & Operations*, Theorem 6.16.
 
-Concretely, Wolf Thm. 6.16 describes the asymptotic dynamics of a general
+Concretely, Wolf Theorem 6.16 describes the asymptotic dynamics of a general
 trace-preserving positive Schwarz map `T` as a permutation of Wedderburn
 blocks, with each block transported by a unitary.  Such a permutation may
 already be represented abstractly by the `CycleStructure` bundled data of
@@ -28,7 +28,7 @@ The corner-preservation proofs reuse the per-orbit proof pattern of
 `TNLean.Channel.Peripheral.CyclicDecomposition`, adapted to the setting
 where the per-cycle projections do not sum to the identity.  The
 *existence direction* — that every TP positive Schwarz map admits such a
-decomposition on its asymptotic image — depends on Wolf Thm. 6.14
+decomposition on its asymptotic image — depends on Wolf Theorem 6.14
 (Wedderburn decomposition of the fixed-point algebra, issues #27/#360)
 and is left to future work.
 
@@ -53,7 +53,7 @@ and is left to future work.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Thm. 6.16, §6.5]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Theorem 6.16, Section 6.5]
 -/
 
 open scoped Matrix BigOperators
@@ -81,11 +81,11 @@ with per-cycle periods and projection families for the underlying
 permutation structure, while `toCycleStructure` forgets that extra
 organisation.
 
-In Wolf's Thm. 6.16, the cycle-index `ι` runs over the equivalence classes
+In Wolf's Theorem 6.16, the cycle-index `ι` runs over the equivalence classes
 of Wedderburn blocks that share both a common multiplicity and a common
 period under the block permutation.  The existence of this data on the
 asymptotic image of an arbitrary TP positive Schwarz map depends on the
-Wedderburn decomposition of the fixed-point algebra (Wolf Thm. 6.14) and is
+Wedderburn decomposition of the fixed-point algebra (Wolf Theorem 6.14) and is
 deferred. -/
 structure MultiCycleDecomposition.{u} (T : MatrixEnd D) where
   /-- Finite index type for the cycles. -/
@@ -193,7 +193,7 @@ hypothesis on the sector projections (which is not available in the
 multi-cycle setting, where the per-cycle projections typically do not
 sum to the identity).
 
-Per Wolf Thm. 6.16 §6.5, this is the per-cycle restriction of the block
+Per Wolf Theorem 6.16 Section 6.5, this is the per-cycle restriction of the block
 permutation back to its own orbit: after `period c` applications of `T`,
 each cycle returns to itself. -/
 theorem preserves_corner_pow_period (M : MultiCycleDecomposition T)
@@ -255,7 +255,7 @@ theorem preserves_corner_pow_period (M : MultiCycleDecomposition T)
 Whenever `N` is divisible by every per-cycle period, `T^N` preserves each
 corner of the decomposition.
 
-In Wolf's Thm. 6.16, `N` is the global period (= LCM of per-cycle periods),
+In Wolf's Theorem 6.16, `N` is the global period (= LCM of per-cycle periods),
 after which the whole block permutation returns to the identity and the
 channel acts diagonally on each block. -/
 theorem preserves_corner_pow_of_dvd (M : MultiCycleDecomposition T)
@@ -303,7 +303,7 @@ The permutation is the sigma-product of per-cycle cyclic shifts; the
 projections are the flattened family; the cyclic action on the sigma
 index matches the per-cycle action on each `Fin (period c)`.
 
-This provides an assembly point: given a Wolf Thm. 6.16 Wedderburn-based
+This provides an assembly point: given a Wolf Theorem 6.16 Wedderburn-based
 existence result (currently blocked on issues #27/#360), the resulting
 `MultiCycleDecomposition` can be flattened to a `CycleStructure` for use
 with the existing block-permutation formalization in

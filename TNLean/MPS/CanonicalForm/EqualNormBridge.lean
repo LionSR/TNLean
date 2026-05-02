@@ -46,7 +46,7 @@ For block k gauge-phase equivalent to representative block j via `(X, ζ)`:
 
 ## Important: equal-norm blocks are NOT automatically gauge-phase equivalent
 
-The BNT of a tensor (CPGSV17, Proposition A.6) is constructed so that all pairs of
+The BNT of a tensor (Cirac--Perez-Garcia--Schuch--Verstraete 2017, Proposition A.6) is constructed so that all pairs of
 BNT elements have *decaying* cross-overlaps.  In particular, two BNT elements can
 share the same weight norm while being completely independent (non-GPE).  The BNT
 already groups gauge-equivalent blocks together; remaining blocks are pairwise
@@ -112,9 +112,9 @@ Theorem matching, etc.).
 
 ## References
 
-- [CPGSV17, Lemma A.2]: Overlap dichotomy for Normal Tensors.
-- [CPGSV17, Proposition A.6]: BNT construction and minimality.
-- [CPGSV17, Definition 2.6, Proposition 2.7]: BNT minimality and grouping.
+- [Cirac--Perez-Garcia--Schuch--Verstraete 2017, Lemma A.2]: Overlap dichotomy for Normal Tensors.
+- [Cirac--Perez-Garcia--Schuch--Verstraete 2017, Proposition A.6]: BNT construction and minimality.
+- [Cirac--Perez-Garcia--Schuch--Verstraete 2017, Definition 2.6, Proposition 2.7]: BNT minimality and grouping.
 -/
 
 namespace MPSTensor
@@ -131,7 +131,7 @@ private lemma isPrimitive_transferMap_cast_dim {d D₁ D₂ : ℕ} (h : D₁ = D
     _root_.IsPrimitive (transferMap (d := d) (D := D₁) A) := by
   subst h; rfl
 
-/-! ### §1. Gauge-phase equivalence from non-decaying overlaps -/
+/-! ### Section 1. Gauge-phase equivalence from non-decaying overlaps -/
 
 /-- **Gauge-phase equivalence from non-decaying cross-overlap.**
 
@@ -170,7 +170,7 @@ theorem gaugePhaseEquiv_of_nonDecaying_overlap
     (mpvOverlap_tendsto_zero_of_not_gaugePhaseEquiv_cast_left_of_irreducible_TP
       hdim A B hA_irr hB_irr hA_TP hB_TP hNotGPE)
 
-/-! ### §2. BNT grouping with gauge-phase equivalence -/
+/-! ### Section 2. BNT grouping with gauge-phase equivalence -/
 
 /-- **BNT grouping step with gauge-phase equivalence for equal-norm blocks.**
 
@@ -185,7 +185,7 @@ unit-norm phases, there exists a `SectorDecomposition P` with:
 1. `SameMPV₂ P.toTensor (toTensorFromBlocks μ blocks)`.
 2. `StrictAnti` on the BNT-level norms (one norm value per group).
 
-**Proof**: The construction is identical to `exists_bnt_grouping` (§5 of
+**Proof**: The construction is identical to `exists_bnt_grouping` (Section 5 of
 `BNTGrouping.lean`), except that the sector weight for copy q of group j is
 `ζ_{j,q} * μ_{enum(j,q)}` where `ζ_{j,q}` is the gauge phase relating
 `blocks(enum(j,q))` to `blocks(repr(j))`.  The `SameMPV₂` identity uses the
@@ -271,7 +271,7 @@ theorem exists_bnt_grouping_of_gaugePhaseEquiv
       classes.enum_norm i ⟨0, classes.copies_pos i⟩]
     exact classes.vals_strictAnti hij
 
-/-! ### §3. Construction of sector decomposition -/
+/-! ### Section 3. Construction of sector decomposition -/
 
 /-- **From TP + primitive + irreducible blocks to BNT-grouped
 `SectorDecomposition`.**
@@ -405,7 +405,7 @@ theorem bnt_grouping_single_norm_class_of_tp_primitive_irr_blocks
       exact ⟨ζ, hζne, hζ_norm, hmpv⟩
   exact bnt_grouping_single_norm_class μ blocks k0 hμne hNorm hPhase
 
-/-! ### §4. MPV phase-class representatives -/
+/-! ### Section 4. MPV phase-class representatives -/
 
 /-- Heterogeneous MPV phase equivalence between two individual blocks.
 
@@ -974,7 +974,7 @@ noncomputable def mpvPhaseClassData {r : ℕ} {dim : Fin r → ℕ}
     regroup := hRegroup
   }
 
-/-! ### §5. Eventual independence from separated overlap data -/
+/-! ### Section 5. Eventual independence from separated overlap data -/
 
 /-- **Eventual BNT linear independence for an already separated normal family.**
 
@@ -1478,7 +1478,7 @@ theorem exists_bnt_sectorDecomp_pair_with_overlapSpan_of_proportionalDecompositi
     (d := d) μA blocksA μB blocksB hTPA hTPB hIrrA hIrrB hPrimA hPrimB
     hInjA hInjB hμA hμB cover
 
-/-! ### §6. Conditional sector construction under BNT linear independence -/
+/-! ### Section 6. Conditional sector construction under BNT linear independence -/
 
 /-- **Minimal granular sector decomposition carrying current `HasBNTSectorData`.**
 

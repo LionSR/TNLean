@@ -13,7 +13,7 @@ import Mathlib.Data.Fin.Tuple.Basic
 This file introduces restriction maps obtained by fixing a prefix and reading the
 last `L` sites of a state on `K + L` sites. It states the resulting matrix
 identities needed for the open-chain range-reduction argument in
-[CPGSV21, §IV.C].
+[Cirac--Perez-Garcia--Schuch--Verstraete 2021, Section IV.C].
 
 ## Main results
 
@@ -27,7 +27,7 @@ identities needed for the open-chain range-reduction argument in
 
 ## References
 
-* [CPGSV21] arXiv:2011.12127, lines 2049–2078
+* [Cirac--Perez-Garcia--Schuch--Verstraete 2021] arXiv:2011.12127, lines 2049–2078
 -/
 
 open scoped Matrix

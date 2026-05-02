@@ -30,7 +30,7 @@ irreducibility-based version.
 **Hierarchy of hypotheses** (each implies the next):
   `IsInjective A` → `IsPrimitive (transferMap A)` → `IsIrreducibleMap (transferMap A)`
 
-Note: Injectivity implies primitivity (by Wolf Cor 6.5 / the Wielandt bound),
+Note: Injectivity implies primitivity (by Wolf Corollary 6.5 / the Wielandt bound),
 and primitivity (1 is the only peripheral eigenvalue) implies irreducibility.
 The converse fails: an irreducible channel can have period > 1.
 
@@ -43,7 +43,7 @@ but whose transfer maps are still irreducible (e.g., after blocking).
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, §6.2, Thm 6.3]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 6.2, Theorem 6.3]
 * [Evans, Høegh-Krohn, *Spectral properties of positive maps*, 1978]
 -/
 
@@ -53,7 +53,7 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- **Quantum Perron–Frobenius under irreducibility** (Wolf Thm 6.3).
+/-- **Quantum Perron–Frobenius under irreducibility** (Wolf Theorem 6.3).
 
 If the transfer map `E_A` is irreducible and trace-preserving (`∑ Aᵢ† Aᵢ = I`),
 then it has a unique positive definite fixed point.

@@ -45,8 +45,8 @@ BNT proportional-decomposition comparison of the nonzero-weight block families.
 
 ## References
 
-* [Cirac–Pérez-García–Schuch–Verstraete, arXiv:1606.00608, §2.3 + Appendix A]
-* [Cirac–Pérez-García–Schuch–Verstraete, arXiv:2011.12127, §IV]
+* [Cirac–Pérez-García–Schuch–Verstraete, arXiv:1606.00608, Section 2.3 + Appendix A]
+* [Cirac–Pérez-García–Schuch–Verstraete, arXiv:2011.12127, Section IV]
 
 ## Tags
 
@@ -715,7 +715,7 @@ theorem afterBlocking_commonSector_blockSpan_of_reindexedNonzeroParts
 
 /-- **Sector comparison from relabeled common sectors and a common phase cover.**
 
-Assume the blocked-word relabeling statement for common cyclic sectors.  Then the
+Assume the blocked-word relabeling statement for cyclic-sector data.  Then the
 structural theorem
 `afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts` supplies one
 common positive blocking length and trace-preserving, primitive, irreducible
@@ -796,7 +796,7 @@ theorem afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_commonP
 
 /-- **Sector comparison from relabeled common sectors and proportional-decomposition data.**
 
-Assume the blocked-word relabeling statement for common cyclic sectors.  Then the
+Assume the blocked-word relabeling statement for cyclic-sector data.  Then the
 structural theorem
 `afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts` supplies one
 common positive blocking length and trace-preserving, primitive, irreducible

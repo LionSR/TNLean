@@ -8,7 +8,7 @@ import TNLean.Channel.Peripheral.Spectrum
 # Peripheral powers
 
 This file provides small bridging lemmas used in the “periodicity removal” step
-in the canonical-form construction (cf. Wolf Thm 6.6 style arguments).
+in the canonical-form construction (cf. Wolf Theorem 6.6 style arguments).
 
 The core root-of-unity statement already lives in
 `TNLean/Channel/PeripheralSpectrum.lean` as

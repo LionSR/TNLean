@@ -133,7 +133,7 @@ private theorem projectedChoiMatrix_eq_choiMatrix_of_traceless
 If two Lindblad forms induce the same generator and both Kraus families are
 traceless, then their CP parts agree.
 
-This is the Choi-projection uniqueness step in Wolf Prop. 7.4 (item 2). -/
+This is the Choi-projection uniqueness step in Wolf Proposition 7.4 (item 2). -/
 theorem generatorDecomp_traceless_unique_phi
     (F F' : LindbladForm D)
     (hL : F.toLinearMap = F'.toLinearMap)
@@ -174,7 +174,7 @@ theorem generatorDecomp_traceless_unique_phi
 If two Lindblad forms induce the same generator and both Kraus families are
 traceless, then `κ' = κ + iλ·𝟙` for some `λ : ℝ`.
 
-This is the Hamiltonian uniqueness modulo global energy shift in Wolf Prop. 7.4
+This is the Hamiltonian uniqueness modulo global energy shift in Wolf Proposition 7.4
 (item 2). -/
 theorem generatorDecomp_traceless_unique_kappa_modPhase
     (F F' : LindbladForm D)

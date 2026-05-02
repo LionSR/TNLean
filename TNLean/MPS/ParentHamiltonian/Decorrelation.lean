@@ -14,7 +14,7 @@ decorrelation–commuting-parent-Hamiltonian equivalence: a commuting parent
 Hamiltonian implies decorrelation when observables respect locality.
 
 This is the backward direction of Proposition D.3 from arXiv:1606.00608,
-Appendix D, §D.2. The forward direction requires tensor-product formulation
+Appendix D, Section D.2. The forward direction requires tensor-product formulation
 and is deferred.
 
 ## Main definitions
@@ -33,7 +33,7 @@ and is deferred.
 
 ## References
 
-* arXiv:1606.00608, Appendix D, §D.2 (lines 2181–2290). The definitions
+* arXiv:1606.00608, Appendix D, Section D.2 (lines 2181–2290). The definitions
   are numbered D.1 (decorrelated) and D.2 (parent commuting Hamiltonian);
   the equivalence proposition is D.3.
 -/
@@ -107,7 +107,7 @@ subspace K) and families of operators `O_A` and `O_B` representing observables
 on regions A and B, regions A and B are **decorrelated** w.r.t. K when
 `P_K ∘ O_A ∘ (1 - P_K) ∘ O_B ∘ P_K = 0` for all observables `O_A`, `O_B`.
 
-See arXiv:1606.00608, Appendix D, §D.2, Definition D.1. -/
+See arXiv:1606.00608, Appendix D, Section D.2, Definition D.1. -/
 def IsDecorrelated (P_K : E →ₗ[ℂ] E)
     (ObsA ObsB : Set (E →ₗ[ℂ] E)) : Prop :=
   ∀ O_A ∈ ObsA, ∀ O_B ∈ ObsB,
@@ -131,7 +131,7 @@ satisfies this predicate for any idempotent `P_K`; non-trivial content
 arises only when combined with locality constraints (see
 `commutingHam_isDecorrelated`).
 
-See arXiv:1606.00608, Appendix D, §D.2, Definition D.2.
+See arXiv:1606.00608, Appendix D, Section D.2, Definition D.2.
 
 TODO(tensor-product): add locality constraints requiring `P_AX` to act on
 `H_A ⊗ H_X` and `P_XB` to act on `H_X ⊗ H_B`. Without these, the predicate
@@ -167,7 +167,7 @@ def HasCommutingParentHam.ofIdem
   hcomm := rfl
   hK := hK_idem
 
-/-- **Proposition D.3, backward direction** (arXiv:1606.00608, Appendix D, §D.2):
+/-- **Proposition D.3, backward direction** (arXiv:1606.00608, Appendix D, Section D.2):
 If a subspace K has a commuting parent Hamiltonian decomposition
 `P_K = P_AX ∘ P_XB` with `[P_AX, P_XB] = 0`, and observables on region A
 commute with `P_XB` while observables on region B commute with `P_AX`, then
@@ -193,7 +193,7 @@ In this abstract (non-tensor-product) setting, `HasCommutingParentHam` is
 trivially satisfiable by `P_AX = P_XB = P_K`, so an abstract iff would be
 vacuous. The forward direction is deferred to the tensor-product setting.
 
-See arXiv:1606.00608, Appendix D, §D.2, Proposition D.3. -/
+See arXiv:1606.00608, Appendix D, Section D.2, Proposition D.3. -/
 theorem commutingHam_isDecorrelated
     (P_K P_AX P_XB : E →ₗ[ℂ] E)
     (hAX_idem : P_AX ∘ₗ P_AX = P_AX)

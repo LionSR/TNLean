@@ -10,7 +10,7 @@ import Mathlib.Data.Complex.Basic
 # Partial trace on bipartite matrices
 
 This file defines partial traces for matrices indexed by product types,
-as needed for the Choi–Jamiolkowski isomorphism (Wolf Ch. 2, Prop 2.1).
+as needed for the Choi–Jamiolkowski isomorphism (Wolf Chapter 2, Proposition 2.1).
 
 ## Main definitions
 

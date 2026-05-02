@@ -43,7 +43,7 @@ convexity/concavity consequences for matrix power functions.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Ch. 5]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Chapter 5]
 * [T. Ando, *Concavity of certain maps on positive definite matrices*, 1979]
 * [E. H. Lieb, *Convex trace functions and the Wigner--Yanase--Dyson
   conjecture*, 1973]

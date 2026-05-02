@@ -36,7 +36,7 @@ No new proofs are introduced here; this is a documentation-only index module.
 
 ---
 
-## §6.2 Irreducible maps and Perron–Frobenius theory
+## Section 6.2 Irreducible maps and Perron–Frobenius theory
 
 ### Wolf Theorem 6.2 (Irreducible positive maps) — ITEMS 1,2,4 FORMALIZED
 
@@ -140,7 +140,7 @@ PARTIALLY FORMALIZED in `TNLean.Channel.Peripheral.CyclicDecomposition`.
 
 ---
 
-## §6.3 Primitive maps
+## Section 6.3 Primitive maps
 
 ### Wolf Theorem 6.7 (Primitive maps, 4 equivalent conditions)
 
@@ -179,9 +179,9 @@ conclusion.
 
 ---
 
-## §6.4 Fixed points
+## Section 6.4 Fixed points
 
-### Wolf §6 stationary-support state (Props. 6.9--6.11, Lems. 6.4--6.5)
+### Wolf Section 6 stationary-support state (Propositions 6.9--6.11, Lems. 6.4--6.5)
 
 In `TNLean.Channel.FixedPoint.StationarySupport`:
 
@@ -191,7 +191,7 @@ In `TNLean.Channel.FixedPoint.StationarySupport`:
   fixed point of an irreducible channel.
 * `Channel.stationarySupport_eq_one` — irreducible channels have full
   stationary support.
-* TODO: non-vacuous formalizations of Wolf Prop. 6.9 and Prop. 6.10
+* TODO: non-vacuous formalizations of Wolf Proposition 6.9 and Proposition 6.10
   (`irreducible_iff_support_full`, `stationary_support_minimal`) remain to be
   reinstated.
 
@@ -223,7 +223,7 @@ In `TNLean.Channel.FixedPoint.Algebra`:
   — the Kraus commutant is the **largest** `*`-subalgebra contained in the
   fixed-point set of the adjoint map.
 * `Kraus.adjointFixedPointsStarSubalgebra_eq_krausCommutantStarSubalgebra`
-  — under the hypotheses of Thm 6.12, the full adjoint fixed-point
+  — under the hypotheses of Theorem 6.12, the full adjoint fixed-point
   `*`-subalgebra coincides with the Kraus commutant.
 
 ### Wolf Theorem 6.10 (Brouwer's fixed point theorem)
@@ -305,7 +305,7 @@ The general irreducible case with period `h > 1` requires Wedderburn blocks
 
 ---
 
-## §6.5 Cycles and recurrences
+## Section 6.5 Cycles and recurrences
 
 ### Wolf Theorem 6.16 (Structure of cycles) — PARTIALLY FORMALIZED
 
@@ -322,7 +322,7 @@ The general irreducible case with period `h > 1` requires Wedderburn blocks
   - `CycleStructure.pow_orderOf_apply_proj` — `(T ^ orderOf σ) (P k) = P k`.
   - `CycleStructure.preserves_corner_pow_orderOf` — `T ^ orderOf σ` preserves
     each corner `P k · M_D(ℂ) · P k`, the corner-preservation half of
-    Thm. 6.16 in its permutation-of-blocks form.
+    Theorem 6.16 in its permutation-of-blocks form.
   - `CycleStructure.ofPermDecomp` — constructor from explicit permutation data.
 
 * Multi-cycle block-permutation data (disjoint union of cycles with possibly
@@ -344,14 +344,14 @@ The general irreducible case with period `h > 1` requires Wedderburn blocks
 * The remaining **existence direction** — that every trace-preserving positive
   Schwarz map admits a `MultiCycleDecomposition` on its asymptotic image, with
   the cycles coming from the Wedderburn decomposition of the fixed-point algebra
-  — depends on Wolf Thm. 6.14 (issues #27 / #360) and is left to future work.
+  — depends on Wolf Theorem 6.14 (issues #27 / #360) and is left to future work.
 
 ---
 
 ## The quantum Perron–Frobenius theorem
 
 * `quantum_perron_frobenius` — `TNLean.QPF.Assembly`
-  Combines existence + positive definiteness + uniqueness (Wolf Thm 6.3).
+  Combines existence + positive definiteness + uniqueness (Wolf Theorem 6.3).
 
 * `injective_transfer_unique_fixed_point'` — same, without `0 < D` hypothesis.
 -/

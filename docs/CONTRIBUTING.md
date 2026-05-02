@@ -30,7 +30,7 @@ type(scope): short description
 
 Examples:
 - `feat(MPS/CanonicalForm): assemble cyclic sectors at a common blocking length`
-- `doc(Wolf Ch6): add Lean tags for spectral theorems`
+- `doc(Wolf Chapter 6): add Lean tags for spectral theorems`
 - `style(MPS/CanonicalForm): rewrite equal-case prose in MPS language`
 
 ### Body template
@@ -51,7 +51,7 @@ Every PR body must contain three sections:
 - When renaming a public declaration and intentionally omitting a
   `@[deprecated] alias` because the old name encodes misleading terminology,
   explicitly note: `No compatibility alias is provided — the old name encodes
-  [term] (see docs/CONTRIBUTING.md §Mathematical-language renames).`
+  [term] (see docs/CONTRIBUTING.md Section Mathematical-language renames).`
 
 ### Testing
 - What was verified and how.
@@ -105,7 +105,7 @@ Use these forms:
 | CI or repository maintenance | `<area>: <concrete maintenance task>` |
 | Daily record | `<record type> -- <date>` |
 
-Keep issue titles bracket-free. Use `Wolf Ch6: ...`, not `[Wolf Ch6] ...`.
+Keep issue titles bracket-free. Use `Wolf Chapter 6: ...`, not `[Wolf Chapter 6] ...`.
 Do not put `feat(...)`, `fix(...)`, `doc(...)`, or `formalization(...)` at
 the start of an issue title. Put parent issue numbers, PR numbers, audit
 filenames, and implementation notes in the body unless they are needed to
@@ -270,7 +270,7 @@ Every PR touching Lean code should be reviewed against these criteria:
    and documentation standards in [doc.md](doc.md). See [pr-review.md](pr-review.md)
    for the full Mathlib review guide. For renames that intentionally omit
    deprecated aliases under the mathematical-language exception, confirm the
-   PR body states the reason (see [CONTRIBUTING.md §Mathematical-language renames](#mathematical-language-renames)).
+   PR body states the reason (see [CONTRIBUTING.md Section Mathematical-language renames](#mathematical-language-renames)).
 
 3. **Type safety** -- No universe mismatches, coercion problems, or unresolved
    metavariables.
@@ -351,7 +351,7 @@ one-step rename without a deprecated alias is preferred.
 
 Skip the alias when the old name contains a term that appears in, or is a
 contextual variant of, the banned-vocabulary list in
-[`docs/prose_style.md` §2](prose_style.md#2-banned-software-engineering-terms--replacements).
+[`docs/prose_style.md` Section 2](prose_style.md#2-banned-software-engineering-terms--replacements).
 Apply context-qualified bans only in the stated context: for example, "Assembly"
 is banned as a section or chapter title, but not when it is part of a standard
 mathematical phrase.
@@ -376,7 +376,7 @@ a matrix) — the old name is not misleading, just suboptimal.
 When a rename skips a deprecated alias under this exception, the PR body must explicitly say:
 
 > **No compatibility alias is provided.** The old name encodes [misleading term]
-> (see [`docs/CONTRIBUTING.md` §Mathematical-language renames](CONTRIBUTING.md#mathematical-language-renames)).
+> (see [`docs/CONTRIBUTING.md` Section Mathematical-language renames](CONTRIBUTING.md#mathematical-language-renames)).
 
 This makes the exception visible to reviewers and prevents downstream users from
 wondering whether the omission was an oversight.

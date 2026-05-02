@@ -22,7 +22,7 @@ positive definite when restricted to its support. This file states that fact.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Cor. 6.6]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Corollary 6.6]
 -/
 
 open scoped Matrix ComplexOrder BigOperators

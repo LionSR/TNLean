@@ -41,7 +41,7 @@ The proof combines three ingredients that already exist:
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, §6.2, Thm 6.6]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 6.2, Theorem 6.6]
 * [Evans, Høegh-Krohn, *Spectral properties of positive maps*, 1978]
 -/
 
@@ -310,7 +310,7 @@ The proof strategy uses Mathlib's `rootsOfUnity.isCyclic`:
    `CyclicDecomposition.lean`.
 -/
 
-/-- **The peripheral eigenvalues form a cyclic group** (Wolf Thm 6.6, without divisibility).
+/-- **The peripheral eigenvalues form a cyclic group** (Wolf Theorem 6.6, without divisibility).
 
 The peripheral eigenvalues form a finite subset of `ℂ`, contain `1`, and are
 closed under multiplication and inversion, so they form a finite subgroup of
@@ -445,7 +445,7 @@ theorem peripheral_eigenvalues_cyclic_structure
       exact this
   exact ⟨m, γ, hm_pos, hγ_prim, hset_eq⟩
 
-/-- **The peripheral eigenvalues form a cyclic group** (Wolf Thm 6.6).
+/-- **The peripheral eigenvalues form a cyclic group** (Wolf Theorem 6.6).
 
 Combines `peripheral_eigenvalues_cyclic_structure` (cyclic group without
 trace-preservation) with `channel_period_divides_dim` to additionally
@@ -487,7 +487,7 @@ theorem peripheral_eigenvalues_form_cyclic_group
     exact period_dvd_dim_of_cyclic_projections K hTP P hPproj hPsum hcyclic
   exact ⟨m, γ, hm_pos, hγ_prim, hm_dvd, hset_eq⟩
 
-/-- **Each peripheral eigenvalue has multiplicity 1** (Wolf Thm 6.6).
+/-- **Each peripheral eigenvalue has multiplicity 1** (Wolf Theorem 6.6).
 
 Follows from `fixed_eq_scalar_of_irreducible_unital` in
 `CyclicDecomposition.lean`: if `E(X) = X` with `E` irreducible and unital,

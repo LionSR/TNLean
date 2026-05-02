@@ -16,7 +16,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 This module introduces `IsCanonicalFormBNT`, which extends `IsCanonicalForm` with the
 requirement that distinct blocks are not gauge-phase equivalent (i.e., equivalent blocks
 have already been merged). This captures the "basis of normal tensors" (BNT) property of
-Def. 4.2 / Prop. char-BNT in arXiv:2011.12127 and arXiv:1606.00608, lines 1145–1148.
+Definition 4.2 / Proposition char-BNT in arXiv:2011.12127 and arXiv:1606.00608, lines 1145–1148.
 
 ## Main results
 
@@ -77,7 +77,7 @@ The strictly decreasing condition is justified by the BNT grouping step, which m
 gauge-phase-equivalent blocks with equal moduli. The base `IsCanonicalForm` only requires
 non-increasing (`Antitone`) moduli, matching the paper definitions.
 
-In the language of arXiv:2011.12127 Def. 4.2, this corresponds to a canonical form where
+In the language of arXiv:2011.12127 Definition 4.2, this corresponds to a canonical form where
 each block in the basis of normal tensors is represented by a single CF block. -/
 structure IsCanonicalFormBNT {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k)) : Prop extends
@@ -492,7 +492,7 @@ abbrev ProportionalDecompositionConclusion
             (cast (congr_arg (MPSTensor d) hdim) (A j))
             (B (perm j))
 
-/-- Split-data comparison theorem for CF-BNT-style decompositions (Thm 4.4).
+/-- Split-data comparison theorem for CF-BNT-style decompositions (Theorem 4.4).
 
 The theorem only needs the separated pieces of data used by the proportional-MPV argument:
 blockwise injectivity, left-canonical normalization, self-overlap normalization, and the BNT
@@ -535,7 +535,7 @@ theorem fundamentalTheorem_of_separated_CFBNT_data
     (_haLim_ne := hDecomp.haLim_ne) (_hbLim_ne := hDecomp.hbLim_ne)
     (hProp := hDecomp.hProp) (hc := hDecomp.hc) (_hcLim_ne := hDecomp.hcLim_ne)
 
-/-- **Fundamental theorem comparison for CF-BNT decompositions (Thm 4.4).**
+/-- **Fundamental theorem comparison for CF-BNT decompositions (Theorem 4.4).**
 
 If two families of tensors in canonical-form BNT give rise to proportional MPVs
 (with convergent nonzero coefficients), then the families have the same number
@@ -582,7 +582,7 @@ theorem fundamentalTheorem_of_IsCanonicalFormBNT
     ⟨A_total, B_total, aCoeff, bCoeff, aLim, bLim, c, cLim,
       hA_decomp, hB_decomp, haCoeff, hbCoeff, haLim_ne, hbLim_ne, hProp, hc, hcLim_ne⟩
 
-/-- Split-data comparison theorem for normal-CF-BNT-style decompositions (NT Thm 4.4). -/
+/-- Split-data comparison theorem for normal-CF-BNT-style decompositions (NT Theorem 4.4). -/
 theorem fundamentalTheorem_of_separated_normalCFBNT_data
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
@@ -624,7 +624,7 @@ theorem fundamentalTheorem_of_separated_normalCFBNT_data
     (_haLim_ne := hDecomp.haLim_ne) (_hbLim_ne := hDecomp.hbLim_ne)
     (hProp := hDecomp.hProp) (hc := hDecomp.hc) (_hcLim_ne := hDecomp.hcLim_ne)
 
-/-- Fundamental theorem comparison for normal-CF-BNT decompositions (NT Thm 4.4). -/
+/-- Fundamental theorem comparison for normal-CF-BNT decompositions (NT Theorem 4.4). -/
 theorem fundamentalTheorem_of_IsNormalCanonicalFormBNT
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}

@@ -32,7 +32,7 @@ entropy namespace used by the Simple MPDO RFP track
 
 ## References
 
-* arXiv:1606.00608 §4.4 (Prop 4.5)
+* arXiv:1606.00608 Section 4.4 (Proposition 4.5)
 * [M. Wolf, *Quantum Channels & Operations: Guided Tour*][Wolf2012QChannels]
 -/
 

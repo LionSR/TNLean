@@ -43,7 +43,7 @@ interface used in Wolf's determinant-rigidity argument.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, §6.1.1][Wolf2012QChannels]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 6.1.1][Wolf2012QChannels]
 
 ## Tags
 
@@ -126,7 +126,7 @@ theorem channelDet_ne_zero_iff_bijective (T : MatrixEnd d) :
     ⟨fun hT => ⟨hT, (LinearMap.injective_iff_surjective (f := T)).1 hT⟩, (·.1)⟩
   exact (channelDet_ne_zero_iff_injective (T := T)).trans hbij
 
-/-- Wolf Thm 6.1: `det T = 0` iff `T` is not invertible as a linear map on `M_d(ℂ)`. -/
+/-- Wolf Theorem 6.1: `det T = 0` iff `T` is not invertible as a linear map on `M_d(ℂ)`. -/
 theorem channelDet_eq_zero_iff_not_bijective (T : MatrixEnd d) :
     channelDet T = 0 ↔ ¬ Function.Bijective T := by
   simpa only [ne_eq, Decidable.not_not] using

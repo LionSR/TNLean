@@ -27,7 +27,7 @@ this bounded-orbit argument to eigenvectors of the channel.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, §6.1.1][Wolf2012QChannels]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 6.1.1][Wolf2012QChannels]
 
 ## Tags
 
@@ -279,7 +279,7 @@ private lemma channelDet_norm_le_one_of_eigenvalues_bounded
     _ = ‖(channelMatrix T).charpoly.roots.prod‖ := by rw [Matrix.det_eq_prod_roots_charpoly]
     _ ≤ 1 := ChannelDeterminant.Internal.norm_prod_le_one_of_forall_mem' _ hroot_le
 
-/-- Wolf Thm. 6.1(1): for a positive trace-preserving map on `M_d(ℂ)`, the channel
+/-- Wolf Theorem 6.1(1): for a positive trace-preserving map on `M_d(ℂ)`, the channel
 determinant satisfies `|det T| ≤ 1`. -/
 theorem channelDet_norm_le_one_of_positive_tracePreserving
     (hPos : IsPositiveMap T) (hTP : IsTracePreservingMap T) :

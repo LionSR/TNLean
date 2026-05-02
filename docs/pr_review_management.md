@@ -36,12 +36,12 @@ PRs should follow the mathlib review checklist — review for: **style**, **docu
 ### PR and issue title conventions
 @codex and @claude generate inconsistent titles. Unify before merging:
 - **Title format**: `type(scope): description`, for example
-  `feat(Wolf Ch6): add conditional expectation (Thm 6.15)`.
+  `feat(Wolf Chapter 6): add conditional expectation (Theorem 6.15)`.
 - **Types**: `feat` (new formalization), `fix` (mathematical or proof correction),
   `doc` (documentation only), `style` (formatting, naming, prose, or title
   cleanup), `refactor` (restructure without changing mathematical content),
   `ci` (CI/workflow changes), `chore` (dependencies or linting).
-- **Scope**: paper tag or chapter, such as `Wolf Ch2`, `Wolf Ch6`,
+- **Scope**: paper tag or chapter, such as `Wolf Chapter 2`, `Wolf Chapter 6`,
   `1804.04964`, `1708.00029`, `MPS/Chain`, or `PEPS`. No brackets.
 - **Description**: lowercase, imperative mood, concise. Reference
   theorem/proposition numbers where applicable.
@@ -52,9 +52,9 @@ PRs should follow the mathlib review checklist — review for: **style**, **docu
   cleanups and term-mode endpoint`. Rename to, for example,
   `style(MPS/Chain): BlockedChainFT term-mode endpoint and naming cleanup`.
 - **Issue titles**: do not use PR prefixes. Use plain mathematical titles such
-  as `Wolf Ch6: fixed-point decomposition for Schwarz maps`,
+  as `Wolf Chapter 6: fixed-point decomposition for Schwarz maps`,
   `MPS/CanonicalForm: assemble cyclic sectors at a common blocking length`, or
-  `Tracking: Wolf Ch6 spectral properties`.
+  `Tracking: Wolf Chapter 6 spectral properties`.
 
 ### Review checklist (docs/pr-review.md)
 - **Style**: code formatting, naming conventions (`naming.html`), PR title/description informative
@@ -159,7 +159,7 @@ Putting `@codex` or `@claude` in the body text when creating an issue does nothi
 ### Why @claude fails on codex branches — confirmed root cause
 Codex auto-generates branch names from the issue title:
 `codex/github-mention-{ISSUE_TITLE_SLUG}-{RANDOM}`. Issue titles with brackets,
-such as `[Wolf Ch6]` or `[1804.04964]`, can therefore put `]` into the branch
+such as `[Wolf Chapter 6]` or `[1804.04964]`, can therefore put `]` into the branch
 name.
 
 The `anthropics/claude-code-action` **explicitly validates branch names** and rejects any containing git special characters `~^:?*[\]`. The exact error:
@@ -173,8 +173,8 @@ This means **every PR created by @codex from a bracket-titled issue → @claude 
 **The root cause was the old issue naming convention.** Codex strips the `[` but keeps the `]` in the branch slug.
 
 **Solutions:**
-- **ADOPTED: Bracket-free issue naming convention.** Use `Wolf Ch6: ...` or
-  `1804.04964: ...` instead of `[Wolf Ch6] ...` or `[1804.04964] ...`. This
+- **ADOPTED: Bracket-free issue naming convention.** Use `Wolf Chapter 6: ...` or
+  `1804.04964: ...` instead of `[Wolf Chapter 6] ...` or `[1804.04964] ...`. This
   prevents `]` from appearing in codex branch names, making them
   @claude-compatible. Apply to all new issues going forward; existing issues
   can be renamed as needed.
@@ -290,9 +290,9 @@ Formalization PRs routinely merge without updating the blueprint. This creates d
 **Ask for MORE per issue** — @codex finishes fast and produces small PRs. Bundle more declarations into each sync issue to reduce PR overhead.
 
 ### Current sync issues (2026-03-24)
-- #217 → PR #220: Ch04 channels (Kraus converse, trace pairing)
-- #218 → PR #222: Ch06 spectral (Thm 6.2 item 3, Thm 6.8 wrappers, Thm 6.15)
-- #219 → PR #221: Ch02 MPS periodic + Ch11 assembly Z-gauge
+- #217 → PR #220: Chapter 04 channels (Kraus converse, trace pairing)
+- #218 → PR #222: Chapter 06 spectral (Theorem 6.2 item 3, Theorem 6.8 wrappers, Theorem 6.15)
+- #219 → PR #221: Chapter 02 MPS periodic + Chapter 11 assembly Z-gauge
 
 ## What Went Wrong — Session 2026-03-23
 

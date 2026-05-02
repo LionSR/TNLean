@@ -24,7 +24,7 @@ same block dimensions, and
 generate *equal* MPVs for all system sizes, then per-block gauge equivalence holds together
 with a global gauge equivalence of the block-diagonal tensors.
 
-### Theorem 2: Proportional-MPV Fundamental Theorem (Thm 4.4)
+### Theorem 2: Proportional-MPV Fundamental Theorem (Theorem 4.4)
 (`fundamentalTheorem_proportionalMPV_CFBNT`)
 
 **Theorem 4.4 (proportional case)**: If two families of tensors in canonical form with
@@ -74,7 +74,7 @@ specialized to the case where both families share the same block structure (same
 same `dim`, same `μ`).
 -/
 
-/-- **Equal-MPV Fundamental Theorem for CF-BNT (Cor. II_cor2, same structure).**
+/-- **Equal-MPV Fundamental Theorem for CF-BNT (Corollary II_cor2, same structure).**
 
 If two families of tensors in canonical form with BNT separation share the same
 block weights `μ`, the same number of blocks `r`, and the same block dimensions
@@ -108,13 +108,13 @@ theorem fundamentalTheorem_equalMPV_CFBNT_explicit
   fundamentalTheorem_canonicalForm_explicit μ A B hA.toIsCanonicalForm hA.mu_strict_anti
     hB.block_injective hB.leftCanonical hSame
 
-/-! ## Theorem 2: Proportional-MPV Fundamental Theorem (Thm 4.4)
+/-! ## Theorem 2: Proportional-MPV Fundamental Theorem (Theorem 4.4)
 
 This is the content of Theorem 4.4 from arXiv:1606.00608 (primitive branch).
 The theorem takes convergent coefficient data as explicit hypotheses.
 -/
 
-/-- Split-data proportional-MPV Fundamental Theorem for CF-BNT-style data (Thm 4.4).
+/-- Split-data proportional-MPV Fundamental Theorem for CF-BNT-style data (Theorem 4.4).
 
 This is the Stage B low-risk interface: it uses only the hypotheses actually used by the
 proportional-MPV argument, and leaves the legacy `IsCanonicalFormBNT` version below
@@ -174,7 +174,7 @@ theorem fundamentalTheorem_proportionalMPV_of_separated_CFBNT_data
     ⟨A_total, B_total, aCoeff, bCoeff, aLim, bLim, c, cLim,
       hA_decomp, hB_decomp, haCoeff, hbCoeff, haLim_ne, hbLim_ne, hProp, hc, hcLim_ne⟩
 
-/-- **Proportional-MPV Fundamental Theorem for CF-BNT (Thm 4.4).**
+/-- **Proportional-MPV Fundamental Theorem for CF-BNT (Theorem 4.4).**
 
 If two families of tensors in canonical form with BNT separation generate proportional
 MPV families (with explicitly convergent nonzero decomposition coefficients), then:
@@ -293,7 +293,7 @@ theorem fundamentalTheorem_proportionalMPV_normalCFBNT
 
 /-- **Equal MPVs imply proportional MPVs** (trivially, with proportionality constant `1`).
 
-This is useful for reducing Corollary II_cor2 to the proportional case of Thm 4.4. -/
+This is useful for reducing Corollary II_cor2 to the proportional case of Theorem 4.4. -/
 theorem sameMPV₂_implies_proportionalMPV₂
     {D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (h : SameMPV₂ A B) :

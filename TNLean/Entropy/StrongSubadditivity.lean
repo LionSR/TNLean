@@ -60,7 +60,7 @@ A review with conditions for equality", JMP 43, 4358 (2002).
 * Lieb, Ruskai, "Proof of the strong subadditivity of quantum-mechanical
   entropy", JMP 14, 1938 (1973)
 * [M. Wolf, *Quantum Channels & Operations: Guided Tour*][Wolf2012QChannels]
-* arXiv:1606.00608 §4.4
+* arXiv:1606.00608 Section 4.4
 -/
 
 open scoped Matrix ComplexOrder

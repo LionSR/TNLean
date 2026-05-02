@@ -56,7 +56,7 @@ All results are fully proved (no `sorry`).
 
 ## References
 
-* arXiv:1606.00608, Appendix D, §D.2 (Definitions D.1–D.2, Proposition D.3)
+* arXiv:1606.00608, Appendix D, Section D.2 (Definitions D.1–D.2, Proposition D.3)
 -/
 
 /-!
@@ -137,7 +137,7 @@ needed): `(1 − P) + (1 − Q) − (1 − P) ∘ (1 − Q) = 1 − P ∘ Q`.
 
 For commuting parent Hamiltonians, this shows that the "Hamiltonian"
 `Q_AX + Q_XB − Q_AX ∘ Q_XB` (with `Q = 1 − P`) equals `1 − P_K`.
-See arXiv:1606.00608, Appendix D, §D.2. -/
+See arXiv:1606.00608, Appendix D, Section D.2. -/
 theorem frustration_free_ham_eq
     {P Q : E →ₗ[ℂ] E} :
     (id - P) + (id - Q) - (id - P) ∘ₗ (id - Q) = id - P ∘ₗ Q := by

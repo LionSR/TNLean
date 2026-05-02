@@ -25,8 +25,8 @@ then the support projection $P = \mathrm{supp}(\rho)$ is invariant under each Kr
 $$(1-P) A_i P = 0.$$
 
 References:
-* Perez-Garcia et al., quant-ph/0608197, Thm. 3 (support projector argument)
-* Cirac et al., arXiv:1606.00608, §2.3
+* Perez-Garcia et al., quant-ph/0608197, Theorem 3 (support projector argument)
+* Cirac et al., arXiv:1606.00608, Section 2.3
 -/
 
 open scoped Matrix ComplexOrder BigOperators
@@ -396,9 +396,9 @@ matrix, and are essential for the "strict dimension decrease" argument used when
 iterating the canonical-form splitting step.
 
 References:
-* Perez-Garcia et al., quant-ph/0608197, Thm. 3 (lines 769–803): the recursion terminates
+* Perez-Garcia et al., quant-ph/0608197, Theorem 3 (lines 769–803): the recursion terminates
   because each irreducible block has strictly smaller bond dimension.
-* Cirac et al., arXiv:1606.00608, §2.3: the same argument in a slightly different presentation.
+* Cirac et al., arXiv:1606.00608, Section 2.3: the same argument in a slightly different presentation.
 -/
 
 section SupportProjNontriviality
@@ -482,8 +482,8 @@ projection $P := \mathrm{supp}(\rho)$ is invariant under the Kraus operators `(A
 explicit two-block block-diagonal tensor which is MPV-equivalent to `A`.
 
 References:
-* Perez-Garcia et al., quant-ph/0608197, Thm. 3 (support projection argument)
-* Cirac et al., arXiv:1606.00608, §2.3
+* Perez-Garcia et al., quant-ph/0608197, Theorem 3 (support projection argument)
+* Cirac et al., arXiv:1606.00608, Section 2.3
 -/
 
 /-- If `ρ` is a PSD fixed point of the transfer map, then `A` is MPV-equivalent to a
@@ -522,8 +522,8 @@ The proof composes:
 4. `exists_twoBlock_decomp_of_lowerZero_strict` — strict dimension bounds.
 
 References:
-* Perez-Garcia et al., quant-ph/0608197, Thm. 3
-* Cirac et al., arXiv:1606.00608, §2.3
+* Perez-Garcia et al., quant-ph/0608197, Theorem 3
+* Cirac et al., arXiv:1606.00608, Section 2.3
 -/
 theorem exists_twoBlock_decomp_of_posSemidef_fixedPoint_strict
     (A : MPSTensor d D)

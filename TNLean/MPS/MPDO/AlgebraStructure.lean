@@ -15,7 +15,7 @@ import TNLean.MPS.MPDO.FusionIsometries
 # Algebra-structure witnesses for MPDO renormalization fixed points
 
 This file replaces the earlier construction for the algebra-structure side of
-arXiv:1606.00608, §4.5.
+arXiv:1606.00608, Section 4.5.
 
 The paper's full statement uses coefficient systems
 $c_{\alpha,\beta,\gamma}^{(L)} =
@@ -100,7 +100,7 @@ available in this formalization.
 
 ## References
 
-* [CPGSV17] arXiv:1606.00608, §4.5 and Appendix C.3--C.4
+* [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608, Section 4.5 and Appendix C.3--C.4
 * [Wolf12] Wolf, *Quantum Channels & Operations*, Theorem 6.12
 -/
 
@@ -137,7 +137,7 @@ support algebra. The fields `m_apply` and `iota_apply` require that these maps
 are realized by the ambient matrix product and ambient inclusion.
 
 This structure contains only this realization data. It does **not** yet include
-the full §4.5 coherence / coefficient / BNT layer from the paper. -/
+the full Section 4.5 coherence / coefficient / BNT layer from the paper. -/
 structure AlgebraStructureData (d D : ℕ) where
   /-- Support algebra at blocked size `n`. -/
   A : ℕ → StarSubalgebra ℂ (Matrix (Fin D) (Fin D) ℂ)
@@ -515,7 +515,7 @@ theorem adjoint_blockedTransferMap_apply_of_adjoint_transferMap_apply
 
 /-! ### Diagonal $\chi$-matrices and the trace-power formula
 
-The paper arXiv:1606.00608 (CPGSV17), Theorem IV.13(ii) asserts that the
+The paper arXiv:1606.00608 (Cirac--Perez-Garcia--Schuch--Verstraete 2017), Theorem IV.13(ii) asserts that the
 structure coefficients $c_{\alpha,\beta,\gamma}^{(L)}$ of the blocked MPDO
 support algebra have the form
 $c_{\alpha,\beta,\gamma}^{(L)} = \operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{L})$
@@ -528,7 +528,7 @@ from a common index type `I`. The diagonal size `dim α β γ` is allowed to
 depend on the triple, and `entry α β γ` gives the diagonal entries as complex
 numbers.
 
-In the RFP characterization of [CPGSV17, Thm IV.13(ii)] the index type `I`
+In the RFP characterization of [Cirac--Perez-Garcia--Schuch--Verstraete 2017, Thm IV.13(ii)] the index type `I`
 collects the BNT labels `α, β, γ`, and every `χ_{α,β,γ}` is a diagonal matrix
 with positive real entries. Positivity is *not* part of this structure: it is
 supplied separately through `PosEntries` so that the bare data can be used in
@@ -566,7 +566,7 @@ theorem trace_matrix_pow (α β γ : I) (L : ℕ) :
   simp [matrix_pow, Matrix.trace_diagonal, tracePowerCoeff]
 
 /-- Predicate asserting that every entry of `χ_{α,β,γ}` is a positive real
-number, matching the positivity hypothesis of [CPGSV17, Thm IV.13(ii)].
+number, matching the positivity hypothesis of [Cirac--Perez-Garcia--Schuch--Verstraete 2017, Thm IV.13(ii)].
 Under the scoped `ComplexOrder` instance (opened at the top of the file), a
 strict inequality `0 < z` on `ℂ` is equivalent to `0 < z.re ∧ z.im = 0`. -/
 def PosEntries : Prop :=
@@ -587,7 +587,7 @@ the right-hand side a plain finite sum. The trace formulation
 `HasChiTracePowerForm.eq_trace_matrix_pow`.
 
 This is the Lean-level form of the target identity of
-[CPGSV17, Thm IV.13(ii)] for the blocked MPDO structure coefficients. It is a
+[Cirac--Perez-Garcia--Schuch--Verstraete 2017, Thm IV.13(ii)] for the blocked MPDO structure coefficients. It is a
 *binary* predicate on the pair `(c, χ)` rather than an existential in `χ`, so
 that callers can carry a specific witness `χ` around explicitly; an
 existential version `∃ χ, HasChiTracePowerForm c χ` is available on demand. -/

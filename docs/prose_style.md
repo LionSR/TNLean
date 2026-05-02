@@ -8,8 +8,9 @@ It is the authoritative source for:
 3. The banned LLM writing patterns.
 
 It extends — and does not replace — the general mathlib-pasted documentation
-guidance in [`doc.md`](doc.md) §"Doc strings" ("Doc strings should convey the
-mathematical meaning of the definition") and [`style.md`](style.md) §"Comments".
+guidance in the "Doc strings" section of [`doc.md`](doc.md) ("Doc strings should
+convey the mathematical meaning of the definition") and the "Comments" section
+of [`style.md`](style.md).
 Those files are upstream mathlib material and remain unmodified; the project-specific
 extensions below are layered on top of them.
 
@@ -77,6 +78,12 @@ without opening the `.lean` files, the prose has failed.
   `\quad\text{for every ...}`, or similar prose. Put the quantifier in the
   sentence introducing the display, or use ordinary mathematical notation inside
   the display when the quantifier itself is part of the formula.
+- **Source-reference shorthand.** Do not write `Wolf §2.3`, `Wolf Prop. 2.9`,
+  `CPGSV21 §IV.C`, `Eq. A.8`, `source label propsimple`, or source numbers as
+  titles. Put bibliographic information in a citation or in a complete sentence:
+  `\cite[Section~2.3]{Wolf2012Quantum}`,
+  `\cite[Proposition~IV.3]{Cirac2021Matrix}`, or "the commuting-form definition
+  in arXiv:1606.00608". Headings should name the mathematical content.
 
   Bad:
 
@@ -109,7 +116,7 @@ without opening the `.lean` files, the prose has failed.
 - Backticks around genuine Lean references (e.g. ``` `Fin d` ```, ``` `evalWord` ```)
   when explaining how to use the API of *this* declaration. Use sparingly — prefer
   mathematical phrasing.
-- The other software/LLM bans in §2 and §3 still apply.
+- The other software/LLM bans in Section 2 and Section 3 still apply.
 
 ---
 

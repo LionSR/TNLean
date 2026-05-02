@@ -27,7 +27,7 @@ is shown irreducible via `isIrreducibleMap_of_channel_posDef_fixedPoint_unique`.
 
 **Part 2 — Roots of unity → primitivity**:
 Given irreducibility at all times, peripheral eigenvalues are roots of unity
-(Wolf Thm 6.6). If `μ` is a peripheral eigenvalue of `T_t` with `μ^p = 1`,
+(Wolf Theorem 6.6). If `μ` is a peripheral eigenvalue of `T_t` with `μ^p = 1`,
 the eigenvector `V` is a fixed point of `T_{pt}`. By irreducibility of
 `T_{pt}`, `V` must be proportional to the unique faithful density fixed
 point `σ'`, giving `T_t σ' = μ σ'`. Trace preservation then forces `μ = 1`.

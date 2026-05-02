@@ -45,7 +45,7 @@ variable {d : ℕ}
 linear-independence condition.**
 
 `HasBNTSectorData P` asserts that the basis of the sector decomposition `P` is
-a basis of normal tensors in the sense of Def. 4.2 of arXiv:2011.12127: for all
+a basis of normal tensors in the sense of Definition 4.2 of arXiv:2011.12127: for all
 sufficiently large system sizes `N`, the MPV states `mpvState (P.basis j) N`
 are linearly independent.  It is a `Prop`; no data is bundled.
 
@@ -678,9 +678,9 @@ This structure collects the four pieces of data consumed by
 * per-block gauge-phase equivalence of the (dimension-transported) basis blocks.
 
 Producing a `SectorBasisMatching P Q` from an arbitrary `SameMPV₂ P.toTensor
-Q.toTensor` is the remaining combinatorial step in the Gap §1 closure
+Q.toTensor` is the remaining combinatorial step in the Gap Section 1 closure
 (see the remark in `blueprint/src/chapter/ch11_assembly.tex` and
-arXiv:2011.12127 §IV.B–IV.C). Once that extraction is available, the
+arXiv:2011.12127 Section IV.B–IV.C). Once that extraction is available, the
 algebraic reduction runs purely through
 `fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_sectorMatching`. -/
 structure SectorBasisMatching (P Q : SectorDecomposition d) where
@@ -829,7 +829,7 @@ sector decomposition at a time: positive basis dimensions, left-canonical
 normalization, self-overlap convergence to `1`, and off-diagonal overlap
 convergence to `0`. It intentionally omits one-site injectivity and the
 finite-length span comparison between two different bases, because those are
-separate inputs in the current Gap §1 route. -/
+separate inputs in the current Gap Section 1 route. -/
 structure SectorBasisOverlapOrthoHypotheses (P : SectorDecomposition d) : Prop where
   /-- The basis blocks have nonzero bond dimension. -/
   dim_pos : ∀ j : Fin P.basisCount, 0 < P.basisDim j
@@ -1000,7 +1000,7 @@ Corollary of `fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_matched_
 obtained by supplying the matching data in bundled form as a `SectorBasisMatching`. Once a
 theorem constructs a `SectorBasisMatching P Q` from arbitrary `SameMPV₂ P.toTensor
 Q.toTensor` (the remaining combinatorial step, following from the general
-basis-of-normal-tensors construction in #876), this result completes the Gap §1
+basis-of-normal-tensors construction in #876), this result completes the Gap Section 1
 heterogeneous sector comparison with the matching data gathered into a single argument. -/
 theorem fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_sectorMatching
     {P Q : SectorDecomposition d}

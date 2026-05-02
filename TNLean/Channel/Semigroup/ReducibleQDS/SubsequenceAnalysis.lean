@@ -10,7 +10,7 @@ import TNLean.Channel.Irreducible.Basic
 # Subsequence Analysis: (4) → (2) via Cesàro + subsequences
 
 This file proves that block-upper-triangular Lindblad form implies the existence
-of a rank-deficient kernel element (condition (2) of Wolf Prop 7.6).
+of a rank-deficient kernel element (condition (2) of Wolf Proposition 7.6).
 
 The proof combines:
 1. Cesàro fixed point within PMP

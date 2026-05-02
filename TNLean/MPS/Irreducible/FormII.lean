@@ -17,7 +17,7 @@ to channel / QPF normalization, following:
 
 * Cirac–Pérez-García–Schuch–Verstraete, arXiv:1606.00608, Appendix A
   (CFII definition: TP + full-rank diagonal fixed point), and
-* Cirac–Pérez-García–Schuch–Verstraete, arXiv:1708.00029, §2.1
+* Cirac–Pérez-García–Schuch–Verstraete, arXiv:1708.00029, Section 2.1
   (irreducible form II discussion, diagonal fixed point).
 
 ## Main results
@@ -42,8 +42,8 @@ to channel / QPF normalization, following:
 
 ## References
 
-* [Cirac et al., arXiv:1606.00608, §2.3 and Appendix A][Cirac2017Annals]
-* [Cirac et al., arXiv:1708.00029, §2.1][Cirac2017Irreducible]
+* [Cirac et al., arXiv:1606.00608, Section 2.3 and Appendix A][Cirac2017Annals]
+* [Cirac et al., arXiv:1708.00029, Section 2.1][Cirac2017Irreducible]
 * [Pérez-García et al., quant-ph/0608197, Theorem 3][PerezGarcia2007]
 -/
 

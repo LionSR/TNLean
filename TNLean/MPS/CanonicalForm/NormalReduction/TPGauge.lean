@@ -257,7 +257,7 @@ theorem exists_tp_gauge_blockwise
   exact ⟨r0, dim0, μ1, blocks1, hSame1, hIrr1, hLeft1, hμne1, hDim1⟩
 
 /-!
-## Zero-block separation + TP gauge threading (1606.00608 §2.3 + App. A)
+## Zero-block separation + TP gauge threading (1606.00608 Section 2.3 + App. A)
 
 This section composes the zero-block separation from `Existence.lean` with the
 blockwise Perron–Frobenius / TP-gauge theorem `exists_tp_gauge_blockwise`, producing an
@@ -274,7 +274,7 @@ This is the furthest unconditional arbitrary-input step available before periodi
 the cyclic-sector and equal-weight arguments.
 -/
 
-/-- **Arbitrary-input TP-gauge reduction (1606.00608 §2.3 + App. A, with zero-block separation).**
+/-- **Arbitrary-input TP-gauge reduction (1606.00608 Section 2.3 + App. A, with zero-block separation).**
 
 From any `A : MPSTensor d D`, produce:
 * a zero-tail of dimension `zeroTailDim` accumulating all-zero irreducible blocks;

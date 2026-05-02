@@ -161,7 +161,7 @@ theorem IsPositiveMap.image_bounded
       T A ≤ T ((b : ℝ) • I) := hT.map_le_map hb
       _ ≤ (b : ℝ) • I := hUpperScalar
 
-/-- Wolf Eq. 5.21 in matrix form: a positive subunital map sends the real spectrum of a
+/-- Wolf Equation 5.21 in matrix form: a positive subunital map sends the real spectrum of a
 Hermitian matrix into the same interval `[a,b]`, provided `0 ∈ [a,b]`. -/
 theorem IsPositiveMap.spectrum_contractivity
     {T : Mat →ₗ[ℂ] Mat} {A : Mat} {a b : ℝ}
