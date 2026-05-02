@@ -1484,131 +1484,53 @@ Given a common blocked physical alphabet index `i`, the flattened inner word obt
 decoding `i` through the cardinal equality `blockPhysDim (blockPhysDim d m) n = blockPhysDim d p`
 (with `p = m*n`) agrees with the direct decoding of `i` at the common period length.
 
-This is a compatibility statement between the two `Fintype.equivFin` enumerations used for
-`Fin p → Fin d` and `Fin n → Fin (blockPhysDim d m)`.  The `Fintype.equivFin` bijections
-for function types in Mathlib use lexicographic enumeration, which is compatible with the
-grouping described by `directToIteratedBlockIndex`.  Proving this equality therefore
-reduces to showing that the `Fintype` instance for `Fin p → Fin d` and the `Fintype`
-instance for `Fin n → Fin (blockPhysDim d m)` are compatible via the canonical currying.
-This is the single remaining mathematical fact needed to make
-`afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts`
-unconditional. -/
-set_option maxHeartbeats 400000 in
+**Mathematical truth.**  Both sides are `List (Fin d)` of length `m*n`.  The RHS
+`wordOfBlock d p i` decodes `i` via `Fintype.equivFin (Fin p → Fin d)`, returning the
+`i`-th function in the lexicographic enumeration of `Fin p → Fin d`.  The LHS first
+decodes `i` via `Fintype.equivFin (Fin n → Fin (blockPhysDim d m))`, which gives the
+`i`-th function `g : Fin n → Fin (blockPhysDim d m)` in the lexicographic enumeration
+of `Fin n → Fin (blockPhysDim d m)`.  Then each `g j : Fin (blockPhysDim d m)` is decoded
+via `Fintype.equivFin (Fin m → Fin d)` and the `n` lists of length `m` are flattened.
+
+Since Mathlib's `Fintype.equivFin` for function types uses `Fintype.piFinset` with
+subset of `Finset.pi`, both enumerations are lexicographic.  The lexicographic ordering
+of `Fin (m*n) → Fin d` coincides with the nested lexicographic ordering
+`Fin n → (Fin m → Fin d)` under the natural currying and the product equivalence
+`Fin (m*n) ≃ Fin n × Fin m` given by `finProdFinEquiv`.  Therefore the two decoding
+paths produce the same list for every `i`.
+
+**Attempted proofs.**  Several approaches were tried but all hit CI failures
+(heartbeat timeouts or type-inference complexity):
+1. Building an explicit equivalence `F` from `finProdFinEquiv`, `Equiv.curry`,
+   `Equiv.prodComm`, `finCongr` and using `Subsingleton.elim` on `Fintype.truncEquivFin`.
+   This typechecks locally but hits heartbeat limits (200k → 400k) on CI or has
+   unresolved `simp` goals in the `hF_apply` computation.
+2. Direct `Equiv.trans` chains instead of `calc` — same issues with type inference.
+3. `Fin.cast` vs `finCongr` distinctions for the cardinality equality.
+
+**What is needed.**  A Mathlib lemma establishing that `Fintype.equivFin` for `Fin L → Fin d`
+is compatible with `Fin L ≃ Fin L₁ × Fin L₂` product decompositions (like `finProdFinEquiv`)
+and currying (`Equiv.curry`).  The natural route is to prove that `Fintype.truncEquivFin`
+respects `Finset.map` of equivalences, which would give the compatibility generically.
+Alternatively, a characterization of `Fintype.equivFin` in terms of `Nat.digits`
+(via `Nat.bijOn_ofDigits`) could provide a computational proof.
+
+**Impact.**  As long as this lemma is unproved, the common-block chain
+(#942 / #990 / #1075) requires the hypothesis `CommonGroupedBlockCastHypothesis d`.
+The theorems `unconditional_commonPrimitiveIrreducibleBlocks`,
+`afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts`, and
+their downstream consequences remain conditional on this hypothesis.
+-/
 theorem flattenWordOfBlock_cast_eq {d m n p : ℕ}
     (hp_eq : p = m * n) (h_card : blockPhysDim (blockPhysDim d m) n = blockPhysDim d p)
     (i : Fin (blockPhysDim d p)) :
     flattenBlockedWord d m
       (wordOfBlock (blockPhysDim d m) n (Fin.cast h_card.symm i)) =
     wordOfBlock d p i := by
-  -- The two sides are lists of `Fin d` of the same length `p`.
-  -- Equality follows from compatibility of the Fintype.equivFin enumerations
-  -- for `Fin p → Fin d` (used on the RHS) and `Fin n → Fin (blockPhysDim d m)`
-  -- (used on the LHS).  The key insight: `Trunc` is a subsingleton, so
-  -- `Fintype.truncEquivFin` for two Fintypes related by an equivalence must
-  -- give compatible enumerations (up to `Fin.cast` of cardinality).
-  subst hp_eq
-  classical
-  set E_m := Fintype.equivFin (Fin m → Fin d) with hE_m
-  set E_n := Fintype.equivFin (Fin n → Fin (blockPhysDim d m)) with hE_n
-  set E_mn := Fintype.equivFin (Fin (m * n) → Fin d) with hE_mn
-  have hpos (j : Fin n) (t : Fin m) : m * (j : ℕ) + (t : ℕ) < m * n := by
-    calc
-      m * (j : ℕ) + (t : ℕ) < m * (j : ℕ) + m := Nat.add_lt_add_left t.2 _
-      _ = m * ((j : ℕ) + 1) := by ring
-      _ ≤ m * n := Nat.mul_le_mul_left m (Nat.succ_le_of_lt j.2)
-  -- Natural equivalence F : (Fin n → Fin (blockPhysDim d m)) ≃ (Fin (m*n) → Fin d)
-  -- mapping g to the function λ ⟨p, hp⟩ => (E_m.symm (g j)) t where p = m*j + t
-  let F : (Fin n → Fin (blockPhysDim d m)) ≃ (Fin (m * n) → Fin d) :=
-    calc
-      (Fin n → Fin (blockPhysDim d m)) ≃ (Fin n → Fin m → Fin d) :=
-        (Equiv.refl (Fin n)).arrowCongr E_m.symm
-      _ ≃ (Fin m × Fin n → Fin d) := (Equiv.curry (Fin m) (Fin n) (Fin d)).symm
-      _ ≃ (Fin n × Fin m → Fin d) :=
-        (Equiv.prodComm (Fin m) (Fin n)).arrowCongr (Equiv.refl (Fin d))
-      _ ≃ (Fin (n * m) → Fin d) :=
-        (finProdFinEquiv (m := n) (n := m)).arrowCongr (Equiv.refl (Fin d))
-      _ ≃ (Fin (m * n) → Fin d) :=
-        (finCongr (mul_comm n m)).arrowCongr (Equiv.refl (Fin d))
-  have hF_apply (g : Fin n → Fin (blockPhysDim d m)) (j : Fin n) (t : Fin m) :
-      (F g) ⟨m * (j : ℕ) + (t : ℕ), hpos j t⟩ = (E_m.symm (g j)) t := by
-    have h_finCongr : (finCongr (mul_comm n m)).symm ⟨m * (j : ℕ) + (t : ℕ), hpos j t⟩ =
-        ⟨m * (j : ℕ) + (t : ℕ), by simpa [mul_comm] using hpos j t⟩ := by
-      ext; simp
-    have hpos' : m * (j : ℕ) + (t : ℕ) < n * m := by simpa [mul_comm] using hpos j t
-    have h_finProd : (finProdFinEquiv (m := n) (n := m)).symm
-        ⟨m * (j : ℕ) + (t : ℕ), hpos'⟩ = (j, t) := by
-      apply (finProdFinEquiv (m := n) (n := m)).injective
-      have hprod_val : ((finProdFinEquiv (m := n) (n := m)) (j, t)).val =
-          m * (j : ℕ) + (t : ℕ) := by
-        simp [finProdFinEquiv, mul_comm]
-      ext; simp [finProdFinEquiv, mul_comm, hprod_val]
-    unfold F
-    simp [Equiv.trans_apply, Equiv.arrowCongr_apply, Equiv.curry_symm_apply,
-      Equiv.prodComm_symm, h_finCongr, h_finProd]
-  have h_card_eq : Fintype.card (Fin n → Fin (blockPhysDim d m)) =
-      Fintype.card (Fin (m * n) → Fin d) := by
-    simp [blockPhysDim_eq_pow, pow_mul, Fintype.card_fun, Fintype.card_fin]
-  -- Since Trunc is a subsingleton, the two truncEquivFin (mapped through F) are equal
-  have h_trunc_eq : Trunc.map (λ (e : (Fin n → Fin (blockPhysDim d m)) ≃
-      Fin (Fintype.card (Fin n → Fin (blockPhysDim d m)))) =>
-      F.symm.trans (e.trans (finCongr h_card_eq)))
-      (Fintype.truncEquivFin (Fin n → Fin (blockPhysDim d m))) =
-      Fintype.truncEquivFin (Fin (m * n) → Fin d) :=
-    Subsingleton.elim _ _
-  -- Extract the equality of the actual equivalences
-  have h_equiv_eq : E_mn = F.symm.trans (E_n.trans (finCongr h_card_eq)) := by
-    calc
-      E_mn = (Fintype.truncEquivFin (Fin (m * n) → Fin d)).out := rfl
-      _ = (Trunc.map (λ e => F.symm.trans (e.trans (finCongr h_card_eq)))
-          (Fintype.truncEquivFin (Fin n → Fin (blockPhysDim d m)))).out := by rw [h_trunc_eq]
-      _ = F.symm.trans (((Fintype.truncEquivFin (Fin n → Fin (blockPhysDim d m))).out).trans
-          (finCongr h_card_eq)) := by simp
-      _ = F.symm.trans (E_n.trans (finCongr h_card_eq)) := rfl
-  -- Invert h_equiv_eq to relate E_mn.symm and E_n.symm
-  have h_equiv_symm_eq : E_mn.symm =
-      (finCongr h_card_eq).symm.trans (E_n.symm.trans F) := by
-    rw [h_equiv_eq]
-    simp [Equiv.trans_symm, Equiv.symm_symm]
-  -- Now the key relationship: direct decoding equals F of nested decoding
-  have h_decode_eq (i : Fin (blockPhysDim d (m * n))) :
-      E_mn.symm i = F (E_n.symm (Fin.cast h_card.symm i)) := by
-    rw [h_equiv_symm_eq]
-    -- ((finCongr h_card_eq).symm.trans (E_n.symm.trans F)) i = F (E_n.symm (Fin.cast h_card.symm i))
-    simp [Equiv.trans_apply]
-    -- Remaining: F (E_n.symm ((finCongr h_card_eq).symm i)) = F (E_n.symm (Fin.cast h_card.symm i))
-    congr 1
-    -- Need: (finCongr h_card_eq).symm i = Fin.cast h_card.symm i
-    -- Since h_card_eq and h_card are the same equality (both express (d^m)^n = d^(m*n)),
-    -- finCongr and Fin.cast coincide on elements.
-    have : h_card_eq = h_card := by
-      dsimp [h_card_eq, blockPhysDim]
-      simp
-    subst this
-    ext; simp
-  -- Now expand both sides as lists and use h_decode_eq pointwise
-  calc
-    flattenBlockedWord d m
-      (wordOfBlock (blockPhysDim d m) n (Fin.cast h_card.symm i)) =
-        flattenBlockedWord d m
-          (List.ofFn (E_n.symm (Fin.cast h_card.symm i))) := rfl
-    _ = (List.ofFn (λ (j : Fin n) =>
-            wordOfBlock d m ((E_n.symm (Fin.cast h_card.symm i)) j))).flatten := by
-      simp [flattenBlockedWord, List.map_ofFn, hE_m, hE_n, wordOfBlock, decodeBlock]
-    _ = (List.ofFn (λ (j : Fin n) =>
-            List.ofFn (E_m.symm ((E_n.symm (Fin.cast h_card.symm i)) j)))).flatten := rfl
-    _ = (List.ofFn (λ (j : Fin n) =>
-            List.ofFn (λ (t : Fin m) =>
-              (F (E_n.symm (Fin.cast h_card.symm i))) ⟨m * (j : ℕ) + (t : ℕ), hpos j t⟩))).flatten := by
-      refine congrArg List.flatten (congrArg List.ofFn (funext (λ j => ?_)))
-      refine congrArg List.ofFn (funext (λ t => ?_))
-      rw [hF_apply]
-    _ = (List.ofFn (λ (j : Fin n) =>
-            List.ofFn (λ (t : Fin m) =>
-              (E_mn.symm i) ⟨m * (j : ℕ) + (t : ℕ), hpos j t⟩))).flatten := by
-      rw [h_decode_eq i]
-    _ = List.ofFn (E_mn.symm i) := by
-      simpa using (List.ofFn_mul' (m := m) (n := n) (f := E_mn.symm i)).symm
-    _ = wordOfBlock d (m * n) i := rfl
+  -- See docstring for detailed explanation of the mathematical truth and attempted
+  -- proof strategies.  The core missing lemma is compatibility of `Fintype.equivFin`
+  -- with currying and product decomposition of function types.
+  sorry
 
 /-- The global grouping-cast hypothesis applied to a specific family reduces to the
 core Fintype-level assertion. -/

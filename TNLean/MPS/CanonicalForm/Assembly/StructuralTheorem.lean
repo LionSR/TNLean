@@ -1405,9 +1405,9 @@ theorem afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts
 
 /-- **Unconditional common primitive irreducible block decompositions.**
 
-The Fintype-level coordinate assertion `flattenWordOfBlock_cast_eq` has been proved
-(closing #1075/#990/#1113).  This theorem now applies without any
-blocking-coordinate hypothesis.
+If the Fintype-level coordinate assertion `flattenWordOfBlock_cast_eq` holds, then the
+`afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts` theorem
+applies without any blocking-coordinate hypothesis.
 
 The proof chains:
 1. `flattenWordOfBlock_cast_eq` → `CommonGroupedBlockCastHypothesis d`
@@ -1417,12 +1417,17 @@ The proof chains:
 3. `CommonSectorRelabelingHypothesis d` → the full common-block decomposition
    (via `afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts`)
 
-The key lemma `flattenWordOfBlock_cast_eq` is proved in
-`CyclicSectorDecomposition.lean` using the fact that `Trunc` is a subsingleton,
-which forces the `Fintype.equivFin` enumerations for function types to be
-compatible under currying. -/
+The remaining gap for the fully unconditional version is exactly `flattenWordOfBlock_cast_eq`
+in `CyclicSectorDecomposition.lean` (see docstring there for details on the mathematical
+truth and the missing Mathlib lemma). -/
 theorem unconditional_commonPrimitiveIrreducibleBlocks
     {d D₁ D₂ : ℕ}
+    (h_flatten : ∀ {m n p : ℕ} (hp_eq : p = m * n)
+      (h_card : blockPhysDim (blockPhysDim d m) n = blockPhysDim d p)
+      (i : Fin (blockPhysDim d p)),
+      flattenBlockedWord d m
+        (wordOfBlock (blockPhysDim d m) n (Fin.cast h_card.symm i)) =
+      wordOfBlock d p i)
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (hSame : SameMPV₂ A B) :
     ∃ p : ℕ, 0 < p ∧
@@ -1463,13 +1468,6 @@ theorem unconditional_commonPrimitiveIrreducibleBlocks
       (∀ x, IsIrreducibleTensor (blocksB x)) ∧
       (∀ x, 0 < dimA x) ∧
       (∀ x, 0 < dimB x) := by
-  have h_flatten : ∀ {m n p : ℕ} (hp_eq : p = m * n)
-      (h_card : blockPhysDim (blockPhysDim d m) n = blockPhysDim d p)
-      (i : Fin (blockPhysDim d p)),
-      flattenBlockedWord d m
-        (wordOfBlock (blockPhysDim d m) n (Fin.cast h_card.symm i)) =
-      wordOfBlock d p i :=
-    λ m n p hp_eq h_card i => flattenWordOfBlock_cast_eq hp_eq h_card i
   have h_group : CommonGroupedBlockCastHypothesis d := by
     intro r dim blocks F k
     exact F.groupedBlockCastAgrees_of_flattenWordOfBlock_cast_eq h_flatten k
