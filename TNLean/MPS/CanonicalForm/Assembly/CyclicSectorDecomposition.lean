@@ -1273,7 +1273,7 @@ theorem commonFlatWeight_ne_zero (F : CommonBlockedCyclicSectorFamily blocks)
   pow_ne_zero F.p (hμ (F.flatKey x).1)
 
 /-- Per-block weight transport under common blocking: every sector belonging to original
-nonzero-weight block `k` carries the transported power `μ k ^ F.p`. -/
+nonzero-weight block `k` carries the transported power `μ k ^ F.p`. -/
 theorem commonFlatWeight_apply_of_block (F : CommonBlockedCyclicSectorFamily blocks)
     (μ : Fin r → ℂ) (k : Fin r) (s : Fin (F.period k)) :
     F.commonFlatWeight μ (finSigmaFinEquiv (Sigma.mk k s)) = μ k ^ F.p := by
@@ -1484,28 +1484,52 @@ Given a common blocked physical alphabet index `i`, the flattened inner word obt
 decoding `i` through the cardinal equality `blockPhysDim (blockPhysDim d m) n = blockPhysDim d p`
 (with `p = m*n`) agrees with the direct decoding of `i` at the common period length.
 
-This is a compatibility statement between the two `Fintype.equivFin` enumerations used for
-`Fin p → Fin d` and `Fin n → Fin (blockPhysDim d m)`.  The `Fintype.equivFin` bijections
-for function types in Mathlib use lexicographic enumeration, which is compatible with the
-grouping described by `directToIteratedBlockIndex`.  Proving this equality therefore
-reduces to showing that the `Fintype` instance for `Fin p → Fin d` and the `Fintype`
-instance for `Fin n → Fin (blockPhysDim d m)` are compatible via the canonical currying.
-This is the single remaining mathematical fact needed to make
-`afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts`
-unconditional. -/
+**Mathematical truth.**  Both sides are `List (Fin d)` of length `m*n`.  The RHS
+`wordOfBlock d p i` decodes `i` via `Fintype.equivFin (Fin p → Fin d)`, returning the
+`i`-th function in the lexicographic enumeration of `Fin p → Fin d`.  The LHS first
+decodes `i` via `Fintype.equivFin (Fin n → Fin (blockPhysDim d m))`, which gives the
+`i`-th function `g : Fin n → Fin (blockPhysDim d m)` in the lexicographic enumeration
+of `Fin n → Fin (blockPhysDim d m)`.  Then each `g j : Fin (blockPhysDim d m)` is decoded
+via `Fintype.equivFin (Fin m → Fin d)` and the `n` lists of length `m` are flattened.
+
+Since Mathlib's `Fintype.equivFin` for function types uses `Fintype.piFinset` with
+subset of `Finset.pi`, both enumerations are lexicographic.  The lexicographic ordering
+of `Fin (m*n) → Fin d` coincides with the nested lexicographic ordering
+`Fin n → (Fin m → Fin d)` under the natural currying and the product equivalence
+`Fin (m*n) ≃ Fin n × Fin m` given by `finProdFinEquiv`.  Therefore the two decoding
+paths produce the same list for every `i`.
+
+**Attempted proofs.**  Several approaches were tried but all hit CI failures
+(heartbeat timeouts or type-inference complexity):
+1. Building an explicit equivalence `F` from `finProdFinEquiv`, `Equiv.curry`,
+   `Equiv.prodComm`, `finCongr` and using `Subsingleton.elim` on `Fintype.truncEquivFin`.
+   This typechecks locally but hits heartbeat limits (200k → 400k) on CI or has
+   unresolved `simp` goals in the `hF_apply` computation.
+2. Direct `Equiv.trans` chains instead of `calc` — same issues with type inference.
+3. `Fin.cast` vs `finCongr` distinctions for the cardinality equality.
+
+**What is needed.**  A Mathlib lemma establishing that `Fintype.equivFin` for `Fin L → Fin d`
+is compatible with `Fin L ≃ Fin L₁ × Fin L₂` product decompositions (like `finProdFinEquiv`)
+and currying (`Equiv.curry`).  The natural route is to prove that `Fintype.truncEquivFin`
+respects `Finset.map` of equivalences, which would give the compatibility generically.
+Alternatively, a characterization of `Fintype.equivFin` in terms of `Nat.digits`
+(via `Nat.bijOn_ofDigits`) could provide a computational proof.
+
+**Impact.**  As long as this lemma is unproved, the common-block chain
+(#942 / #990 / #1075) requires the hypothesis `CommonGroupedBlockCastHypothesis d`.
+The theorems `unconditional_commonPrimitiveIrreducibleBlocks`,
+`afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts`, and
+their downstream consequences remain conditional on this hypothesis.
+-/
 theorem flattenWordOfBlock_cast_eq {d m n p : ℕ}
     (hp_eq : p = m * n) (h_card : blockPhysDim (blockPhysDim d m) n = blockPhysDim d p)
     (i : Fin (blockPhysDim d p)) :
     flattenBlockedWord d m
       (wordOfBlock (blockPhysDim d m) n (Fin.cast h_card.symm i)) =
     wordOfBlock d p i := by
-  -- The two sides are lists of `Fin d` of the same length `p`.
-  -- Equality follows from compatibility of the Fintype.equivFin enumerations
-  -- for `Fin p → Fin d` (used on the RHS) and `Fin n → Fin (blockPhysDim d m)`
-  -- (used on the LHS), together with the fact that grouping m-sized chunks of
-  -- a function `Fin p → Fin d` corresponds to the currying `Fin n → (Fin m → Fin d)`
-  -- under the product identification `Fin (m*n) ≃ Fin m × Fin n` encoded by
-  -- the standard Fintype instances.
+  -- See docstring for detailed explanation of the mathematical truth and attempted
+  -- proof strategies.  The core missing lemma is compatibility of `Fintype.equivFin`
+  -- with currying and product decomposition of function types.
   sorry
 
 /-- The global grouping-cast hypothesis applied to a specific family reduces to the
