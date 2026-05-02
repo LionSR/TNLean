@@ -30,10 +30,10 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     \leanok
     A linear map $E : \MN{D} \to \MN{D}$ is \emph{completely positive} (CP)
     if it admits a \emph{Kraus representation}: there exist operators
-    $\{K_i\}_{i=0}^{r-1}$ with $K_i \in \MN{D}$ such that
+    $\{K_i\}_{i=0}^{r-1}$ with $K_i \in \MN{D}$ such that, for every
+    $X \in \MN{D}$,
     \[
         E(X) = \sum_{i=0}^{r-1} K_i X K_i^\dagger
-        \quad \text{for all } X \in \MN{D}.
     \]
     We use the Kraus characterisation because it matches the later
     Kadison--Schwarz arguments. By Choi's theorem, this is equivalent
@@ -578,10 +578,9 @@ both unital and trace-preserving.
     \leanok
     \uses{thm:ks_gap_decomp_channels}
     Let $E$ be a unital Kraus map.
-    If $E(X^\dagger X) = E(X)^\dagger E(X)$, then
+    If $E(X^\dagger X) = E(X)^\dagger E(X)$, then, for every~$i$,
     \[
         X K_i^\dagger = K_i^\dagger E(X)
-        \qquad \text{for all } i.
     \]
 \end{theorem}
 
@@ -2077,12 +2076,11 @@ a common dilation space.
 Wolf \S2.3 discusses two families of normal forms for the transfer-matrix
 representation of a quantum channel: the \emph{singular value decomposition}
 (SVD) and, for qubit channels, the \emph{Lorentz normal form} obtained by
-$\mathrm{SL}(2,\mathbb{C})$ filtering operations. In this blueprint, the SVD
-normal form is fully formalised.  The Lorentz normal form existence is stated
-as a theorem (Theorem~\ref{thm:lorentz_normal_form_qubit}) but the proof
-requires a compactness / minimisation argument over $\mathrm{SL}(2,\mathbb{C})$
-filterings (Wolf Prop 2.9 / Prop 2.11) that remains open in this
-formalisation---see \S\ref{subsec:lorentz_normal_form}.
+$\mathrm{SL}(2,\mathbb{C})$ filtering operations. The SVD normal form is proved
+below. The Lorentz normal form theorem
+(Theorem~\ref{thm:lorentz_normal_form_qubit}) requires a compactness /
+minimisation argument over $\mathrm{SL}(2,\mathbb{C})$ filterings
+(Wolf Prop.~2.9 / Prop.~2.11); see \S\ref{subsec:lorentz_normal_form}.
 
 \begin{theorem}[SVD for positive semi-definite matrices]
     \label{thm:svd_posSemidef}
@@ -2198,10 +2196,6 @@ formalisation---see \S\ref{subsec:lorentz_normal_form}.
     there exist $\SL(2, \mathbb{C})$-filterings $\Phi_{1}, \Phi_{2}$ such that
     the filtered channel $T' = \Phi_{2} \circ T \circ \Phi_{1}$ is in one of
     the three Lorentz normal forms: diagonal, non-diagonal, or singular.
-    The three canonical forms are defined as the Lean predicates
-    \texttt{Wolf.IsLorentzDiagonal}, \texttt{Wolf.IsLorentzNonDiagonal},
-    \texttt{Wolf.IsLorentzSingular} in
-    \texttt{LorentzNormalForm.lean}.
     \textbf{Not yet proved}---proof blocked on
     Lemma~\ref{lem:infimum_is_attained} and the Lorentz group classification
     of $\SL(2, \mathbb{C})$ orbits.

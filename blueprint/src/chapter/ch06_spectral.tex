@@ -405,10 +405,10 @@ a block embedding of a mixed-transfer eigenvector.
     \uses{def:gauge_phase_equiv}
     Let $A$ and $B$ be tensors of the same bond dimension.
     Suppose there are invertible gauges taking them to families $A'$ and $B'$,
-    an invertible matrix $X'$, and a scalar $\mu$ with $|\mu| = 1$ such that
+    an invertible matrix $X'$, and a scalar $\mu$ with $|\mu| = 1$ such that,
+    for every physical index~$i$,
     \[
         A'^i X' = \mu \, X' B'^i
-        \qquad \text{for all } i.
     \]
     Then $A$ and $B$ are gauge-phase equivalent.
 \end{theorem}
@@ -456,12 +456,11 @@ a block embedding of a mixed-transfer eigenvector.
     \uses{def:injective}
     Let $A$ and $B$ be injective tensors of bond dimensions $D_1$ and $D_2$.
     If there exist $X \in M_{D_1 \times D_2}(\mathbb{C}) \setminus \{0\}$ and
-    $\mu \in \mathbb{C}$ such that
+    $\mu \in \mathbb{C}$ such that, for every physical index~$i$,
     \[
         X (B^i)^\dagger = \mu \, (A^i)^\dagger X,
         \qquad
         A^i X = \mu \, X B^i
-        \qquad \text{for all } i,
     \]
     then $D_1 = D_2$.
 \end{theorem}
@@ -883,10 +882,9 @@ behind stationary states, following~\cite[\S6.4]{Wolf2012Quantum}.
     \lean{MPSTensor.lowerZero_implies_invariance}
     \leanok
     Let $A$ be an MPS tensor and let $P$ be an orthogonal projection.
-    If
+    If, for every physical index~$i$,
     \[
         (\Id - P) A^i P = 0
-        \qquad \text{for all } i,
     \]
     then
     \[
@@ -982,9 +980,9 @@ behind stationary states, following~\cite[\S6.4]{Wolf2012Quantum}.
 This subsection establishes the results on the corner algebra,
 $*$-structure, and compression of a PSD fixed point onto its support sector
 needed for~\cite[Cor.~6.6]{Wolf2012Quantum}: the corner carries a
-$\C$-algebra and $*$-structure, the repository's corner submodule is
-identified with Mathlib's idempotent corner, and the compression of a PSD
-fixed point onto its support sector is positive definite.
+$\C$-algebra and $*$-structure, the two standard presentations of the corner
+are identified, and the compression of a PSD fixed point onto its support
+sector is positive definite.
 
 \begin{lemma}[Support projection annihilates the kernel]%
     \label{lem:supportProj_mulVec_eq_zero_of_mulVec_eq_zero}
@@ -1007,10 +1005,10 @@ fixed point onto its support sector is positive definite.
     \label{def:cornerSubmoduleCornerEquiv}
     \lean{MatrixCorner.cornerSubmoduleCornerEquiv}
     \leanok
-    For an idempotent $P \in \MN{D}$, the repository's corner submodule
-    $\{X \mid P X P = X\}$ and Mathlib's idempotent corner
-    $\{P\,X\,P \mid X \in \MN{D}\}$ are identified as $\C$-linear spaces
-    by the identity on underlying matrices.
+    For an idempotent $P \in \MN{D}$, the subspace
+    $\{X \mid P X P = X\}$ and the corner
+    $\{P\,X\,P \mid X \in \MN{D}\}$ are identified as $\C$-linear spaces by
+    the identity on underlying matrices.
 \end{definition}
 
 \begin{remark}[$\C$-algebra and $*$-structure on the corner]%
@@ -1020,8 +1018,8 @@ fixed point onto its support sector is positive definite.
     \lean{MatrixCorner.cornerStarRing}
     \lean{MatrixCorner.cornerStarModuleComplex}
     \leanok
-    Mathlib's \texttt{IsIdempotentElem.Corner} already carries a ring
-    structure with unit~$P$. For the matrix case we provide
+    The corner algebra associated to an idempotent already carries a ring
+    structure with unit~$P$. In the matrix case it also has
     $\C$-module and $\C$-algebra structures and, under the additional
     assumption $P^\dagger = P$, star, star ring, and star module
     structures over~$\C$.
@@ -1096,7 +1094,7 @@ fixed point onto its support sector is positive definite.
     semisimple algebras over an algebraically closed field.
 \end{proof}
 
-\begin{theorem}[Wedderburn data with ambient dimension bound]%
+\begin{theorem}[Fixed-point algebra decomposition with multiplicities]%
     \label{thm:adjointFixedPoints_wedderburnDecomp}
     \lean{Kraus.adjointFixedPoints_wedderburnDecomp}
     \leanok
@@ -1122,14 +1120,15 @@ fixed point onto its support sector is positive definite.
     multiplicities $m_k$ and the bound $\sum_k d_k m_k \le D$.
 \end{proof}
 
-\begin{remark}[Remaining Wedderburn statement]
-    The stronger ambient statement that the adjoint-fixed-point algebra is
-    unitarily conjugate to
+\begin{remark}[Block form of the fixed-point algebra]
+    Wolf's block form identifies the adjoint-fixed-point algebra, up to a
+    unitary change of basis, with
     \[
         0 \oplus \bigoplus_k M_{d_k}(\C) \otimes \Id_{m_k}
     \]
-    together with the density-block form $M_{d_k}(\C) \otimes \rho_k$ is not
-    yet included here.
+    together with the density-block form $M_{d_k}(\C) \otimes \rho_k$.
+    The theorem above records the product decomposition, multiplicities, and
+    dimension bound needed from this block form.
 \end{remark}
 
 \begin{theorem}[Weighted fixed points form a $*$-subalgebra]%

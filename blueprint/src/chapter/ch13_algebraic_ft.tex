@@ -289,16 +289,14 @@ forces the local tensors to be proportional.
     \uses{def:injective, def:decomposition_map, lem:center_scalar}
     Let $A_1, A_2$ and $B_1, B_2$ be injective MPS tensors with
     the same bond dimension $D$.
-    Suppose that for all $X \in \MN{D}$ (on the internal bond) and
-    all $Y \in \MN{D}$ (on the external bond),
+    Suppose that for all $X \in \MN{D}$ (on the internal bond),
+    all $Y \in \MN{D}$ (on the external bond), and all physical indices $i,j$,
     \begin{align}
         \tr(A_1^{i}\, X\, A_2^{j})
          &= \tr(B_1^{i}\, X\, B_2^{j})
-        \qquad \text{for all } i, j,
         \label{eq:internal_bond}\\
         \tr(A_2^{j}\, Y\, A_1^{i})
          &= \tr(B_2^{j}\, Y\, B_1^{i})
-        \qquad \text{for all } i, j.
         \label{eq:external_bond}
     \end{align}
     Diagrammatically, Eq.~\eqref{eq:internal_bond} is the equality obtained
@@ -329,12 +327,12 @@ forces the local tensors to be proportional.
     \uses{def:decomposition_map, lem:center_scalar}
     By cyclicity and non-degeneracy of the trace pairing,
     the conditions in Eqs.~\eqref{eq:internal_bond} and~\eqref{eq:external_bond}
-    give
+    give, for all physical indices $i,j$,
     \[
-        A_2^{j} A_1^{i} = B_2^{j} B_1^{i}
-        \qquad\text{and}\qquad
-        A_1^{i} A_2^{j} = B_1^{i} B_2^{j}
-        \qquad\text{for all } i, j.
+        \begin{aligned}
+        A_2^{j} A_1^{i} &= B_2^{j} B_1^{i},\\
+        A_1^{i} A_2^{j} &= B_1^{i} B_2^{j}.
+        \end{aligned}
     \]
     Write $\Id_D = \sum_j c_j A_2^j$ using the decomposition map
     $\Psi_{A_2}$, and define $Z := \sum_j c_j B_2^j \in \MN{D}$.
@@ -360,10 +358,9 @@ forces the local tensors to be proportional.
 \label{sec:ft_chain}
 %% ---------------------------------------------------------
 
-The current formalized result for chains is obtained by combining the site and
-physical indices into a single physical index and applying the single-block
-Fundamental Theorem to the resulting tensor. The paper-style fixed-length
-same-state statement is recovered only after adding a separate same-state
+The chain result below combines the site and physical indices into a single
+physical index and applies the single-block Fundamental Theorem to the resulting
+tensor. The fixed-length same-state statement requires a separate same-state
 reduction hypothesis.
 
 \begin{theorem}[Fundamental Theorem for injective chains (combined-tensor MPV version)]%
@@ -533,10 +530,10 @@ reduction hypothesis.
     \uses{def:same_mpv}
     Two tensors $A$ and $B$ of the same bond dimension satisfy
     \emph{finite-length MPV agreement from $N_0$ onward} if they generate
-    the same MPV family for all system sizes $N \ge N_0$:
+    the same MPV family for all system sizes $N \ge N_0$, meaning that for
+    every $N \ge N_0$ and $\sigma \in [d]^N$,
     \[
         V^{(N)}(A)_\sigma = V^{(N)}(B)_\sigma
-        \qquad \text{for all } N \ge N_0, \sigma \in [d]^N.
     \]
 \end{definition}
 
@@ -641,7 +638,6 @@ reduction hypothesis.
         B^i = \lambda\, Z^{-1}\, A^i\, Z
     \]
     for every physical index~$i$.
-    In the current Lean theorem one can take $\lambda = 1$.
 \end{corollary}
 
 \begin{proof}

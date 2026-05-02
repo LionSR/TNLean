@@ -489,10 +489,6 @@ The results follow~\cite{Sanz2010Quantum}.
     are not proved here.
 \end{remark}
 
-% Source check: Papers/0909.5347/main.tex lines 645--654, theorem
-% label thm:mainthm, state Theorem 1 cases (2) and (3). Lines
-% 660--664 give the dimension-growth proof of case (2), and lines
-% 679--684 identify the analogous proof of case (3).
 \begin{definition}[One-step augmentation]\label{def:one_step_augment}
     \lean{MPSTensor.oneStepAugment}
     \leanok
@@ -1428,10 +1424,9 @@ projection onto the fixed-point subspace.
     (has eventually full Kraus rank).
     No aperiodicity assumption is needed.
 
-    This is the key connection between the spectral-gap
-    primitivity of Definition~\ref{def:primitive_mps} and
-    normality, filling the gap left by the earlier
-    aperiodicity-based argument.
+    This is the key connection between the spectral-gap primitivity of
+    Definition~\ref{def:primitive_mps} and normality; it removes the need for
+    the aperiodicity-based argument.
 \end{theorem}
 
 \begin{proof}
@@ -1449,7 +1444,8 @@ projection onto the fixed-point subspace.
 Cumulative spanning ($T_N(A) = \MN{D}$, the union of word spans
 of all lengths~$\le N$) is weaker than normality
 ($S_L(A) = \MN{D}$ for a single length~$L$).
-The gap is closed by an aperiodicity hypothesis.
+An aperiodicity hypothesis upgrades cumulative spanning to a single-length word
+span.
 
 \begin{remark}[Aperiodicity condition]\label{rem:aperiodicity}\leanok
     We say $A$ satisfies the \emph{aperiodicity condition}
