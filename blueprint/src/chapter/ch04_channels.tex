@@ -171,7 +171,7 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     if whenever $P$ is an orthogonal projection satisfying
     $E(P \MN{D} P) \subseteq P \MN{D} P$,
     then $P = 0$ or $P = \Id$.
-    This is \cite[Thm.~6.2, condition~(1)]{Wolf2012Quantum}.
+    This is \cite[Theorem~6.2, condition~(1)]{Wolf2012Quantum}.
     The definition applies to any linear map; complete positivity
     is not required.
 \end{definition}
@@ -251,7 +251,7 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     fixed point with decomposition $X = P_+ - P_-$ into orthogonal
     positive and negative parts ($P_\pm \ge 0$, $\tr(P_+ P_-) = 0$).
     Then $E(P_+) = P_+$ and $E(P_-) = P_-$.
-    This is \cite[Prop.~6.8]{Wolf2012Quantum}.
+    This is \cite[Proposition~6.8]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}
@@ -290,7 +290,7 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     gives
     $\|E(\sigma_N) - \sigma_N\| = \frac{1}{N}\|E^N(\rho_0) - \rho_0\| \to 0$,
     so $E(\rho) = \rho$ by continuity.
-    In~\cite[Thm.~6.11]{Wolf2012Quantum}, existence is proved
+    In~\cite[Theorem~6.11]{Wolf2012Quantum}, existence is proved
     via Brouwer's fixed-point theorem; we use the Ces\`aro
     argument instead.
 \end{proof}
@@ -352,7 +352,7 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     are the eigenvalues $\lambda$ on the unit circle:
     $|\lambda| = 1$.
     For a channel, the spectral radius is~$1$
-    \cite[Prop.~6.1]{Wolf2012Quantum}, so these coincide with
+    \cite[Proposition~6.1]{Wolf2012Quantum}, so these coincide with
     the eigenvalues of maximal modulus.
 
     \textbf{Note:} The condition $|\lambda| = 1$ is appropriate
@@ -525,7 +525,7 @@ both unital and trace-preserving.
     \[
         E(X^\dagger X) \ge E(X)^\dagger E(X).
     \]
-    This is \cite[Eq.~(5.2)]{Wolf2012Quantum}.
+    This is \cite[Equation~(5.2)]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -747,7 +747,7 @@ matching the weighted-trace argument in
     A linear map is \emph{primitive} if its only peripheral eigenvalue
     is $\lambda = 1$, i.e.\
     $\mathrm{peripheral}(E) = \{1\}$.
-    For channels this corresponds to \cite[Thm.~6.7]{Wolf2012Quantum}.
+    For channels this corresponds to \cite[Theorem~6.7]{Wolf2012Quantum}.
     This definition applies to any linear endomorphism, not only
     to channels.
 \end{definition}
@@ -819,7 +819,7 @@ matching the weighted-trace argument in
 
 The following definitions support the Choi--Jamiol\-kowski isomorphism
 (Theorem~\ref{thm:cp_iff_choi_posSemidef}) and the representation theorems
-of~\cite[Ch.~2]{Wolf2012Quantum}.
+of~\cite[Chapter~2]{Wolf2012Quantum}.
 
 \begin{definition}[Partial traces]\label{def:partial_trace}
     \lean{Matrix.traceLeft, Matrix.traceRight}
@@ -891,7 +891,7 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
        = \frac{1}{D}\,(T(E_{i_2 j_2}))_{i_1 j_1}$
     where $E_{i_2 j_2}$ is the matrix unit.
     This is the Choi--Jamiol\-kowski convention of
-    \cite[Prop.~2.1]{Wolf2012Quantum}.
+    \cite[Proposition~2.1]{Wolf2012Quantum}.
 \end{definition}
 
 \begin{theorem}[Choi matrix of the identity map]\label{thm:choi_matrix_id}
@@ -992,7 +992,7 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
 
 The next three corollaries follow from the Choi/Kraus/Stinespring
 representations already developed above. They correspond to
-\cite[Props.~2.2--2.4]{Wolf2012Quantum}.
+\cite[Propositions~2.2--2.4]{Wolf2012Quantum}.
 
 \begin{theorem}[Polarization of sesquilinear sandwiches]
     \label{thm:polarization_sandwich}
@@ -1561,7 +1561,7 @@ representations already developed above. They correspond to
 \label{sec:ordered_cp}
 %% =========================================================
 
-The next three results form the structural part of~\cite[Thms.~2.3--2.5]{Wolf2012Quantum}:
+The next three results form the structural part of~\cite[Theorems~2.3--2.5]{Wolf2012Quantum}:
 the ordered CP-map theorem, the Radon--Nikodym theorem for completely positive
 maps, and the open-system representation. They refine the Stinespring dilation
 by tracking how two CP maps related by domination or decomposition sit inside
@@ -1641,7 +1641,7 @@ a common dilation space.
     \[
         V_1 = (\Id_D \otimes \widetilde C)\, V_2.
     \]
-    This is~\cite[Thm.~2.3]{Wolf2012Quantum}.
+    This is~\cite[Theorem~2.3]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -1689,7 +1689,7 @@ a common dilation space.
     \[
         T_i(A) = V^\dagger (A \otimes P_i) V, \qquad i = 1, 2.
     \]
-    This is~\cite[Thm.~2.4]{Wolf2012Quantum}.
+    This is~\cite[Theorem~2.4]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -1750,7 +1750,7 @@ a common dilation space.
 \begin{remark}[Unitary form]
     The fully unitary open-system form
     $T(\rho) = \operatorname{tr}_E(U (\rho \otimes \ketbra{\phi}{\phi})
-    U^\dagger)$ of~\cite[Thm.~2.5]{Wolf2012Quantum} follows from the
+    U^\dagger)$ of~\cite[Theorem~2.5]{Wolf2012Quantum} follows from the
     isometric form by extending the Stinespring isometry $V$ to a unitary
     $U$ on $\C^D \otimes \C^r$; this uses orthonormal basis extension and
     is recorded as an outstanding formalization item.
@@ -2073,15 +2073,15 @@ a common dilation space.
 \label{subsec:svd_normal_form}
 %% =========================================================
 
-Wolf \S2.3 discusses two families of normal forms for the transfer-matrix
-representation of a quantum channel: the \emph{singular value decomposition}
-(SVD) and, for qubit channels, the \emph{Lorentz normal form} obtained by
-$\mathrm{SL}(2,\mathbb{C})$ filtering operations. The SVD normal form is proved
-below. The Lorentz normal form theorem
-(Theorem~\ref{thm:lorentz_normal_form_qubit}) requires a compactness /
-minimisation argument over $\mathrm{SL}(2,\mathbb{C})$ filterings
-from \cite[Propositions~2.9 and~2.11]{Wolf2012Quantum};
-see \S\ref{subsec:lorentz_normal_form}.
+\cite[Section~2.3]{Wolf2012Quantum} discusses two families of normal forms for
+the transfer-matrix representation of a quantum channel: the \emph{singular
+value decomposition} (SVD) and, for qubit channels, the \emph{Lorentz normal
+form} obtained by $\mathrm{SL}(2,\mathbb{C})$ filtering operations. The SVD
+normal form is proved below. The Lorentz normal form theorem
+(Theorem~\ref{thm:lorentz_normal_form_qubit}) requires the compactness and
+minimisation argument for $\mathrm{SL}(2,\mathbb{C})$ filterings in
+\cite[Propositions~2.9 and~2.11]{Wolf2012Quantum}; see
+Subsection~\ref{subsec:lorentz_normal_form}.
 
 \begin{theorem}[SVD for positive semi-definite matrices]
     \label{thm:svd_posSemidef}
@@ -2144,15 +2144,19 @@ see \S\ref{subsec:lorentz_normal_form}.
     Theorem~\ref{thm:svd_of_isUnit} produces the singular values as an
     unordered family, without the usual convention that $\sigma_{i}$ are sorted
     in non-increasing order or the statement that they are uniquely determined
-    by $M$. Downstream applications in Wolf \S2.3 (trace-norm identities,
-    polar decomposition, Lorentz normal form) will typically require the
-    sorted / unique variant; that refinement is future work.
+    by $M$. Downstream applications in \cite[Section~2.3]{Wolf2012Quantum},
+    such as trace-norm identities, polar decomposition, and the Lorentz normal
+    form, will typically require the sorted / unique variant; that refinement is
+    future work.
 \end{remark}
 
 %% =========================================================
-\subsection{Lorentz normal form (Wolf \S2.3, existence statements)}
+\subsection{Lorentz normal form}
 \label{subsec:lorentz_normal_form}
 %% =========================================================
+
+This subsection records the existence statements from
+\cite[Section~2.3]{Wolf2012Quantum}.
 
 \begin{definition}[SL-filtering operation]\label{def:sl_filtering}
     \lean{Wolf.SLFiltering}\leanok
@@ -2209,7 +2213,7 @@ see \S\ref{subsec:lorentz_normal_form}.
 \label{sec:channel_determinant}
 %% =========================================================
 
-%% Wolf §6.1.1, Thm 6.1(2)
+%% Source: \cite[Section~6.1.1, Theorem~6.1(2)]{Wolf2012Quantum}.
 
 \begin{definition}[Channel determinant]\label{def:channel_det}
     \lean{channelDet}\leanok
@@ -2217,7 +2221,7 @@ see \S\ref{subsec:lorentz_normal_form}.
     \emph{channel determinant} $\det T$ is the determinant of the
     matrix of $T$ with respect to the standard matrix-unit basis
     of $\MN{D}$.
-    This is the quantity studied in \cite[§6.1.1]{Wolf2012Quantum}.
+    This is the quantity studied in \cite[Section~6.1.1]{Wolf2012Quantum}.
 \end{definition}
 
 \begin{remark}[Channel determinant as an operator determinant]
@@ -2257,7 +2261,7 @@ see \S\ref{subsec:lorentz_normal_form}.
     \uses{def:channel_det, def:positive_map, def:trace_preserving}
     For any positive trace-preserving map $T : \MN{D} \to \MN{D}$,
     $|\det T| \le 1$.
-    This is \cite[Thm.~6.1(1)]{Wolf2012Quantum}.
+    This is \cite[Theorem~6.1(1)]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -2279,7 +2283,7 @@ see \S\ref{subsec:lorentz_normal_form}.
         \;\iff\;
         \exists\, U \in \mathcal{U}(D),\quad T(\rho) = U\rho U^\dagger.
     \]
-    This is \cite[Thm.~6.1(2)]{Wolf2012Quantum}.
+    This is \cite[Theorem~6.1(2)]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}
@@ -2337,7 +2341,7 @@ see \S\ref{subsec:lorentz_normal_form}.
     Let $E$ be a unital Kraus map whose adjoint map $E^*$ has a positive
     definite fixed point $\rho > 0$.
     Then $\mathrm{Fix}(E)$ is a $*$-subalgebra of $\MN{D}$.
-    This is \cite[Thm.~6.12]{Wolf2012Quantum}.
+    This is \cite[Theorem~6.12]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -2504,7 +2508,7 @@ see \S\ref{subsec:lorentz_normal_form}.
     \[
         \mathrm{Fix}(E^*) = \{K_i, K_i^\dagger\}'.
     \]
-    This is \cite[Thm.~6.13]{Wolf2012Quantum}.
+    This is \cite[Theorem~6.13]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}\leanok
