@@ -2,6 +2,28 @@
 
 We study the fundamental theorem for periodic, translation-invariant matrix product vectors. The basic object is a family of matrices $\{A^i\}$, viewed as a tensor that generates vectors $\ket{V^{(N)}(A)}$ on chains of length $N$.
 
+The standard MPS form of the theorem is the following.  Put two tensors in
+canonical form,
+\[
+    A^i = \bigoplus_{j=1}^{g} \mu_j A_j^i,
+    \qquad
+    B^i = \bigoplus_{k=1}^{h} \nu_k B_k^i,
+\]
+with normal blocks forming bases of normal tensors
+\cite{PerezGarcia2007Matrix,Cirac2021Matrix}.  If
+$\ket{V^{(N)}(A)}=\ket{V^{(N)}(B)}$ for every chain length~$N$, then
+$g=h$ and, after permuting the blocks of~$B$, for each block $j$ there are
+an invertible matrix $X_j$ and a nonzero scalar $\zeta_j$ such that
+\[
+    B_j^i = \zeta_j X_j A_j^i X_j^{-1},
+    \qquad
+    \mu_j = \nu_j \zeta_j .
+\]
+Equivalently, after the block permutation and phase absorption, the two
+weighted block-diagonal tensors are gauge equivalent.  In the single
+injective-block case this reduces to the familiar conclusion
+$B^i=X A^i X^{-1}$ for all physical indices~$i$.
+
 Chapters~\ref{ch:mps} and~\ref{ch:single} describe the algebraic core. Chapter~\ref{ch:mps} introduces word evaluation, MPV coefficients, gauge equivalence, injectivity, blocking, overlap, and the block-injective canonical-form data. Chapter~\ref{ch:single} proves the single-block fundamental theorem by a purely algebraic argument through trace pairings, linear extension, simplicity of matrix algebras, and Skolem--Noether.
 
 The later chapters develop the spectral and canonical-form machinery needed for the full multi-block theorem. Chapter~\ref{ch:channels} studies positive maps and quantum channels. Chapters~\ref{ch:qpf} and~\ref{ch:spectral} supply Perron--Frobenius theory and overlap decay. Chapters~\ref{ch:wielandt} and~\ref{ch:canonical} connect blocking, primitivity, irreducibility, and the normal/canonical-form reductions. Chapters~\ref{ch:block_perm} and~\ref{ch:bnt} carry out block permutation and BNT theory; Chapter~\ref{ch:assembly} proves the blocking-based Fundamental Theorem, while Chapter~\ref{ch:periodic_ft_apps} develops the direct periodic extension.

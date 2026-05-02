@@ -986,7 +986,7 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
 \end{proof}
 
 %% =========================================================
-\section{Representation corollaries (Props 2.2--2.4)}
+\section{Representation corollaries for channel decompositions}
 \label{sec:representation_corollaries}
 %% =========================================================
 
@@ -994,7 +994,7 @@ The next three corollaries follow from the Choi/Kraus/Stinespring
 representations already developed above. They correspond to
 \cite[Props.~2.2--2.4]{Wolf2012Quantum}.
 
-\begin{theorem}[Prop.~2.2, polarization of sesquilinear sandwiches]
+\begin{theorem}[Polarization of sesquilinear sandwiches]
     \label{thm:polarization_sandwich}
     \lean{WolfProps.polarization_sandwich}
     \leanok
@@ -1018,7 +1018,7 @@ representations already developed above. They correspond to
     in $\mathbb{C}$, which holds after substituting $i^2 = -1$.
 \end{proof}
 
-\begin{theorem}[Prop.~2.2, CP decomposition of sandwich sums]
+\begin{theorem}[CP decomposition of sandwich sums]
     \label{thm:cp_decomposition_of_sandwich_sum}
     \lean{WolfProps.cp_decomposition_of_sandwich_sum}
     \leanok
@@ -1035,7 +1035,7 @@ representations already developed above. They correspond to
     Apply the polarization identity summand-by-summand.
 \end{proof}
 
-\begin{theorem}[Prop.~2.3, no information without disturbance]
+\begin{theorem}[No information without disturbance]
     \label{thm:linearMap_eq_id_of_fixes_rankOne}
     \lean{WolfProps.linearMap_eq_id_of_fixes_rankOne}
     \leanok
@@ -1067,7 +1067,7 @@ representations already developed above. They correspond to
     $\psi_i \mapsto \sqrt{p_i}\,\psi_i$.
 \end{definition}
 
-\begin{theorem}[Prop.~2.4, isometric mixing preserves the density]
+\begin{theorem}[Isometric mixing preserves the density]
     \label{thm:pureEnsembleDensity_eq_of_isometric_mixing}
     \lean{WolfProps.pureEnsembleDensity_eq_of_isometric_mixing}
     \leanok
@@ -1095,7 +1095,7 @@ representations already developed above. They correspond to
     \]
 \end{proof}
 
-\begin{theorem}[Prop.~2.4, Hughston--Jozsa--Wootters converse]
+\begin{theorem}[Hughston--Jozsa--Wootters converse]
     \label{thm:exists_isometric_mixing_of_pureEnsembleDensity_eq}
     \lean{WolfProps.exists_isometric_mixing_of_pureEnsembleDensity_eq}
     \leanok
@@ -1130,7 +1130,7 @@ representations already developed above. They correspond to
     $\psi_i = \sum_j V_{ij}\,\phi_j$.
 \end{proof}
 
-\begin{theorem}[Prop.~2.4, Hughston--Jozsa--Wootters equivalence]
+\begin{theorem}[Hughston--Jozsa--Wootters equivalence]
     \label{thm:pureEnsembleDensity_eq_iff_exists_isometric_mixing}
     \lean{WolfProps.pureEnsembleDensity_eq_iff_exists_isometric_mixing}
     \leanok
@@ -1627,7 +1627,7 @@ a common dilation space.
     action of $V_{K + \! + L}$ on those coordinates, which is precisely $V_K$.
 \end{proof}
 
-\begin{theorem}[Ordered CP maps, Wolf Thm.~2.3]\label{thm:cp_dominates_stinespring_contraction}
+\begin{theorem}[Ordered CP maps via Stinespring contractions]\label{thm:cp_dominates_stinespring_contraction}
     \lean{CPDominates.exists_stinespring_contraction}
     \leanok
     \uses{def:cp_dominates, def:stinespring_v, def:block_top_rows,
@@ -1676,7 +1676,7 @@ a common dilation space.
     and $P_{\mathrm{top}} + P_{\mathrm{bot}} = \Id$.
 \end{definition}
 
-\begin{theorem}[Radon--Nikodym for CP maps, Wolf Thm.~2.4]
+\begin{theorem}[Radon--Nikodym theorem for CP maps]
     \label{thm:cp_exists_radon_nikodym}
     \lean{IsCPMap.exists_radon_nikodym}
     \leanok
@@ -1709,7 +1709,7 @@ a common dilation space.
     $(T_1 + T_2)(A) - T_1(A) = T_2(A)$.
 \end{proof}
 
-\begin{theorem}[Open-system representation, Wolf Thm.~2.5 (isometric form)]
+\begin{theorem}[Open-system representation of quantum channels]
     \label{thm:channel_exists_stinespring_open_system}
     \lean{IsChannel.exists_stinespring_open_system}
     \leanok

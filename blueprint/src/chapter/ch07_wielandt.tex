@@ -597,8 +597,9 @@ The results follow~\cite{Sanz2010Quantum}.
           lem:one_step_augment_word_span, lem:one_step_augment_normal_kraus_rank,
           thm:wielandt_case2_normal_generator}
     Let $A$ be an MPS tensor with bond dimension $D \ge 1$, satisfying
-    $\sum_i (A^i)^\dagger A^i=\Id$, and suppose that $A$ is primitive in
-    the paper sense. If $S_1(A)$ contains an invertible matrix $X$, then
+    $\sum_i (A^i)^\dagger A^i=\Id$, and suppose that $A$ is primitive
+    with a positive-definite fixed point. If $S_1(A)$ contains an
+    invertible matrix $X$, then
     \[
         S_{D^2-\krausrk(A)+1}(A)=\MN{D}.
     \]
@@ -613,9 +614,9 @@ The results follow~\cite{Sanz2010Quantum}.
     \uses{lem:one_step_augment_word_span, lem:one_step_augment_normal_kraus_rank,
           thm:wielandt_case2_normal_generator}
     Adjoin $X$ as an extra first Kraus operator, obtaining
-    $\widetilde A$. Paper primitivity and normalization give normality
-    of $A$, hence normality of $\widetilde A$; the Kraus rank and all
-    exact word spans are unchanged. The first Kraus operator of
+    $\widetilde A$. Primitivity with a positive-definite fixed point and
+    normalization give normality of $A$, hence normality of $\widetilde A$;
+    the Kraus rank and all exact word spans are unchanged. The first Kraus operator of
     $\widetilde A$ is invertible, so
     Theorem~\ref{thm:wielandt_case2_normal_generator} gives
     $S_{D^2-\krausrk(\widetilde A)+1}(\widetilde A)=\MN{D}$.
@@ -649,8 +650,9 @@ The results follow~\cite{Sanz2010Quantum}.
     \uses{lem:kraus_mem_word_span_one, thm:wielandt_case2_one_step_span,
           cor:wielandt_case2_one_step_index}
     Let $A$ be an MPS tensor with bond dimension $D \ge 1$, satisfying
-    $\sum_i (A^i)^\dagger A^i=\Id$, and suppose that $A$ is primitive in
-    the paper sense. If some Kraus operator $A^{i_0}$ is invertible, then
+    $\sum_i (A^i)^\dagger A^i=\Id$, and suppose that $A$ is primitive
+    with a positive-definite fixed point. If some Kraus operator $A^{i_0}$
+    is invertible, then
     \[
         S_{D^2-\krausrk(A)+1}(A)=\MN{D},
         \qquad
@@ -702,9 +704,9 @@ The results follow~\cite{Sanz2010Quantum}.
           thm:eigenvector_spreading, lem:rank_one_noninvertible_eigenvector,
           thm:lemma2b_assembly}
     Let $A$ be an MPS tensor with bond dimension $D \ge 1$, satisfying
-    $\sum_i (A^i)^\dagger A^i=\Id$, and suppose that $A$ is primitive in
-    the paper sense. If $S_1(A)$ contains a non-invertible matrix $X$
-    with a nonzero eigenvalue, then
+    $\sum_i (A^i)^\dagger A^i=\Id$, and suppose that $A$ is primitive
+    with a positive-definite fixed point. If $S_1(A)$ contains a
+    non-invertible matrix $X$ with a nonzero eigenvalue, then
     \[
         S_{D^2}(A)=\MN{D}.
     \]
@@ -758,10 +760,10 @@ The results follow~\cite{Sanz2010Quantum}.
     \uses{lem:kraus_mem_word_span_one, thm:wielandt_case3_one_step_span,
           cor:wielandt_case3_one_step_index}
     Let $A$ be an MPS tensor with bond dimension $D \ge 1$, satisfying
-    $\sum_i (A^i)^\dagger A^i=\Id$, and suppose that $A$ is primitive in
-    the paper sense. If some Kraus operator $A^{i_0}$ is non-invertible
-    and has an eigenvector $\varphi\ne0$ with nonzero eigenvalue $\mu$,
-    then
+    $\sum_i (A^i)^\dagger A^i=\Id$, and suppose that $A$ is primitive
+    with a positive-definite fixed point. If some Kraus operator $A^{i_0}$
+    is non-invertible and has an eigenvector $\varphi\ne0$ with nonzero
+    eigenvalue $\mu$, then
     \[
         S_{D^2}(A)=\MN{D},
         \qquad
@@ -783,7 +785,7 @@ The results follow~\cite{Sanz2010Quantum}.
     \leanok
     \uses{def:normal}
     Let $A$ be a normalized MPS tensor ($\sum_i (A^i)^\dagger A^i = \Id$)
-    that is primitive in the paper sense.
+    that is primitive with a positive-definite fixed point.
     Then
     \[
         \iota(A) \;\le\;

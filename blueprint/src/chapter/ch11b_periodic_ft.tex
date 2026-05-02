@@ -506,7 +506,8 @@ The following is Theorem~3.8 (``equal case'') of \cite{DeLasCuevas2017Irreducibl
     Split on whether the bond dimensions agree. If not, the claim follows
     from Theorem~\ref{thm:periodic_overlap_zero_ne_dim}. If $D_1 = D_2$,
     suppose for contradiction that $A$ and $B$ are gauge-phase equivalent;
-    Perron--Frobenius eigenvalue uniqueness (Wolf Theorem~6.3) then forces
+    Perron--Frobenius eigenvalue uniqueness
+    \cite[Theorem~6.3]{Wolf2012Quantum} then forces
     equal periods, contradicting the hypothesis. Hence the tensors are not
     gauge-phase equivalent, and the overlap decays.
 \end{proof}
@@ -731,7 +732,8 @@ The following is Theorem~3.8 (``equal case'') of \cite{DeLasCuevas2017Irreducibl
     $2$-cochain $u : G \times G \to \C^{\times}$ such that
 
     \begin{enumerate}
-        \item every $Y_g$ realises the Corollary~4.1 intertwining with
+        \item every $Y_g$ realises the intertwining from
+              \cite[Corollary~4.1]{DeLasCuevas2017Irreducible} with
               the twisted tensor $\widetilde{A}_g$ for some accompanying
               $Z_g$ (with $Z_g^{m_g} = \Id$ and $[A^i, Z_g] = 0$); and
         \item the family obeys the projective multiplication law on the
@@ -762,8 +764,9 @@ The following is Theorem~3.8 (``equal case'') of \cite{DeLasCuevas2017Irreducibl
         X(g)\, X(h) \;=\; \omega(g, h)\, X(g h),
     \]
     while for each $g$ the matrix $X(g^{-1})$ still realises the
-    Corollary~4.1 $\Z_{m_g}$-intertwining between $A$ and the twisted
-    tensor $\widetilde{A}_g$.
+    $\Z_{m_g}$-intertwining from
+    \cite[Corollary~4.1]{DeLasCuevas2017Irreducible} between $A$ and
+    the twisted tensor $\widetilde{A}_g$.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -994,8 +997,10 @@ for the irreducible-form framework in \cite{DeLasCuevas2017Irreducible}.
     gives $\mathcal E_B = (\mathcal E_{A'})^p$.
 \end{proof}
 
-\begin{theorem}[Thm.~4.1 — $p$-refinability $\iff$ $p$-divisibility]%
+The following conditional statements isolate the refinability--divisibility
+equivalence from \cite[Theorem~4.1]{DeLasCuevas2017Irreducible}.
 
+\begin{theorem}[$p$-refinability iff transfer-map $p$-divisibility]%
     \label{thm:thm_4_1_p_refinement}
     \lean{MPSTensor.thm_4_1_p_refinement}
     \leanok
@@ -1019,7 +1024,7 @@ for the irreducible-form framework in \cite{DeLasCuevas2017Irreducible}.
     equivalence under those hypotheses.
 \end{proof}
 
-\begin{theorem}[Thm.~4.1 forward direction, conditional form]%
+\begin{theorem}[$p$-refinability implies transfer-map $p$-divisibility]%
     \label{thm:thm_4_1_p_refinement_forward}
     \lean{MPSTensor.thm_4_1_p_refinement_forward}
     \leanok
@@ -1070,7 +1075,7 @@ for the irreducible-form framework in \cite{DeLasCuevas2017Irreducible}.
     $\mathcal E_C = \mathcal E_{A'^{[p]}}$ by the blocking formula.
 \end{proof}
 
-\begin{theorem}[Thm.~4.1 reverse direction, conditional form]%
+\begin{theorem}[Transfer-map $p$-divisibility implies $p$-refinability]%
     \label{thm:thm_4_1_p_refinement_reverse}
     \lean{MPSTensor.thm_4_1_p_refinement_reverse}
     \leanok
@@ -1088,8 +1093,8 @@ for the irreducible-form framework in \cite{DeLasCuevas2017Irreducible}.
     $\mathcal{E}_B = \mathcal{E}_{A^{[p]}}$. This matches two finite Kraus
     families of the same completely positive map: the blocked family $A^{[p]}$
     with $d^{p}$ operators and the original family $B$ with $d$ operators.
-    The cardinality comparison $d \le d^{p}$ holds whenever $p \ge 1$, so Wolf
-    Theorem~2.18 on isometric freedom of Kraus representations supplies an isometry
+    The cardinality comparison $d \le d^{p}$ holds whenever $p \ge 1$, so
+    \cite[Theorem~2.18]{Wolf2012Quantum} supplies an isometry
     $V \in M_{d^p \times d}(\C)$ with $V^{\dagger} V = \Id$ and
     $(A^{[p]})^{\alpha} = \sum_{j} V_{\alpha,j}\, B^{j}$. Expanding
     $\mathrm{coeff}\,(A^{[p]})\,(\mathrm{ofFn}\,\tau)$ by linearity of matrix
