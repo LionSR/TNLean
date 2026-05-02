@@ -791,11 +791,11 @@ theorem sectorBasisOverlapSpanHypotheses_of_reindexedNonzeroParts_commonPhaseCov
       HasBNTSectorData P ∧ HasBNTSectorData Q ∧
       SectorBasisOverlapSpanHypotheses P Q :=
   sectorBasisOverlapSpanHypotheses_of_reindexedNonzeroParts A B hSame hReindexed
-    (fun p zeroTailA zeroTailB rA rB dimA dimB μA μB blocksA blocksB
-      hp hAblocks hBblocks hAPos hBPos hNonzeroPos hZero hμA hμB hTPA hTPB
-      hPrimA hPrimB hIrrA hIrrB hDimA hDimB => by
-      apply (hRemaining hp hAblocks hBblocks hAPos hBPos hNonzeroPos hZero hμA hμB
-        hTPA hTPB hPrimA hPrimB hIrrA hIrrB hDimA hDimB).toSpanHypotheses)
+    (fun p' ztA ztB rA' rB' dimA' dimB' μA' μB' blkA blkB
+      hp' hblkA hblkB hPosA hPosB hNzPos hZ hμA' hμB' hTPA' hTPB'
+      hPrimA' hPrimB' hIrrA' hIrrB' hDimA' hDimB' => by
+      apply (hRemaining hp' hblkA hblkB hPosA hPosB hNzPos hZ hμA' hμB'
+        hTPA' hTPB' hPrimA' hPrimB' hIrrA' hIrrB' hDimA' hDimB').toSpanHypotheses)
 
 /-- **Sector basis overlap-span data via a BNT proportional-decomposition comparison.**
 
@@ -853,11 +853,11 @@ theorem sectorBasisOverlapSpanHypotheses_of_reindexedNonzeroParts_proportional
       HasBNTSectorData P ∧ HasBNTSectorData Q ∧
       SectorBasisOverlapSpanHypotheses P Q :=
   sectorBasisOverlapSpanHypotheses_of_reindexedNonzeroParts A B hSame hReindexed
-    (fun p zeroTailA zeroTailB rA rB dimA dimB μA μB blocksA blocksB
-      hp hAblocks hBblocks hAPos hBPos hNonzeroPos hZero hμA hμB hTPA hTPB
-      hPrimA hPrimB hIrrA hIrrB hDimA hDimB => by
-      apply (hRemaining hp hAblocks hBblocks hAPos hBPos hNonzeroPos hZero hμA hμB
-        hTPA hTPB hPrimA hPrimB hIrrA hIrrB hDimA hDimB).toSpanHypotheses)
+    (fun p' ztA ztB rA' rB' dimA' dimB' μA' μB' blkA blkB
+      hp' hblkA hblkB hPosA hPosB hNzPos hZ hμA' hμB' hTPA' hTPB'
+      hPrimA' hPrimB' hIrrA' hIrrB' hDimA' hDimB' => by
+      apply (hRemaining hp' hblkA hblkB hPosA hPosB hNzPos hZ hμA' hμB'
+        hTPA' hTPB' hPrimA' hPrimB' hIrrA' hIrrB' hDimA' hDimB').toSpanHypotheses)
 
 
 /-- **Common-length primitive irreducible sectors with conditional block-span consequences.**
