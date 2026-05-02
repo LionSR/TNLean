@@ -2658,9 +2658,9 @@
   <li><p>a diagonal unitary matrix \(Z_j\) of size \(D_j \times D_j\) satisfying \(Z_j^{m_j} = \mathbb {1}\) and \([A_j^i, Z_j] = 0\) for all&#160;\(i\), </p>
 </li>
 </ol>
-<p> such that </p>
+<p> such that, for every physical index&#160;\(i\), </p>
 <div class="displaymath" id="a0000001073">
-  \[  Z_j\,  A_j^i = Y_j\,  B_{\pi (j)}^i\,  Y_j^{-1} \quad \text{for all physical indices } i.  \]
+  \[  Z_j\,  A_j^i = Y_j\,  B_{\pi (j)}^i\,  Y_j^{-1}  \]
 </div>
 <p> For each periodic block, the extra freedom is encoded by </p>
 <div class="centered"> <img class="tn-svg" src="tn_svg/tn-14703f62866f8608.svg" alt="\TNPeriodicGauge{m_j}{Z_j}{m_j}"> </div>
@@ -3859,7 +3859,7 @@
 	<a href="sect0001.html#DeLasCuevas2017Irreducible" >DlCCSPG17</a>
 	
 	]
-</span>). The current formulation is a <em>split-data</em> theorem: if one has periodic block families whose distinct blocks are pairwise non-repeating, together with explicit decompositions of two total MPV families into those blocks, coefficient arrays converging to nonzero limits, and proportionality \(\mathcal{V}(A_{\mathrm{tot}}) = \lambda _N \mathcal{V}(B_{\mathrm{tot}})\) with \(\lambda _N \to \lambda \neq 0\), then the bases of periodic tensors match up to the same repeated-block/gauge freedom as above. This extends Theorems&#160;<a href="ch-assembly.html#thm:ft_proportional">14.2</a> and&#160;<a href="ch-assembly.html#thm:ft_proportional_nt">14.4</a> to the periodic setting while isolating the remaining coefficient-extraction input from irreducible-form assembly. </p>
+</span>). In the form stated here, if one has periodic block families whose distinct blocks are pairwise non-repeating, together with explicit decompositions of two total MPV families into those blocks, coefficient arrays converging to nonzero limits, and proportionality \(\mathcal{V}(A_{\mathrm{tot}}) = \lambda _N \mathcal{V}(B_{\mathrm{tot}})\) with \(\lambda _N \to \lambda \neq 0\), then the bases of periodic tensors match up to the same repeated-block/gauge freedom as above. This extends Theorems&#160;<a href="ch-assembly.html#thm:ft_proportional">14.2</a> and&#160;<a href="ch-assembly.html#thm:ft_proportional_nt">14.4</a> to the periodic setting while isolating the remaining coefficient-extraction input from irreducible-form assembly. </p>
 
   </div>
 </div>
@@ -3947,9 +3947,9 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Let \(A\) be an MPS tensor in irreducible form&#160;II and let \(U : G \to \mathrm{GL}_d(\mathbb {C})\) be a representation of a group \(G\) on the physical leg, acting unitarily (\(U(g)\,  U(g)^{\dagger } = \mathbb {1}\)). Assume moreover the periodic equal-case Fundamental Theorem of MPS (Theorem&#160;<a href="ch-periodic_ft_apps.html#thm:periodic_ft">15.25</a>) as an explicit hypothesis on the pair \((d, D)\), expressed by the hypothesis  \(d\, D\). If \(A\) is on-site symmetric under&#160;\(U\) — that is, the twisted tensor \(\widetilde{A}_g\) has the same MPV family as&#160;\(A\) for every \(g \in G\) — then for each \(g \in G\) there exists a positive period \(m_g\) and a \(\mathbb {Z}_{m_g}\)-gauge equivalence between&#160;\(A\) and&#160;\(\widetilde{A}_g\). </p>
-<p>Concretely there are matrices \(Z_g\) and&#160;\(Y_g\), with \(Z_g^{m_g} = \mathbb {1}\) and \([A^i, Z_g] = 0\), satisfying </p>
+<p>Concretely there are matrices \(Z_g\) and&#160;\(Y_g\), with \(Z_g^{m_g} = \mathbb {1}\) and \([A^i, Z_g] = 0\), satisfying, for every physical index&#160;\(i\), </p>
 <div class="displaymath" id="a0000001082">
-  \[  Z_g\,  A^i = Y_g\,  \widetilde{A}_g^{\, i}\,  Y_g^{-1} \quad \text{for every physical index } i.  \]
+  \[  Z_g\,  A^i = Y_g\,  \widetilde{A}_g^{\, i}\,  Y_g^{-1}  \]
 </div>
 
   </div>
@@ -5081,7 +5081,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Bundle the forward implication (Theorem&#160;<a href="ch-periodic_ft_apps.html#thm:thm_4_1_p_refinement_forward">15.60</a>) with the reverse implication (Theorem&#160;<a href="ch-periodic_ft_apps.html#thm:thm_4_1_p_refinement_reverse">15.63</a>) into a single biconditional. Both directions are formalised conditionally on their respective canonicalization hypotheses, whose combination yields the full equivalence. </p>
+  <p> Bundle the forward implication (Theorem&#160;<a href="ch-periodic_ft_apps.html#thm:thm_4_1_p_refinement_forward">15.60</a>) with the reverse implication (Theorem&#160;<a href="ch-periodic_ft_apps.html#thm:thm_4_1_p_refinement_reverse">15.63</a>) into a single biconditional. The forward and reverse directions each assume the corresponding canonicalization hypothesis, and together they give the full equivalence under those hypotheses. </p>
 
   </div>
 </div>
@@ -5164,7 +5164,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>The canonicalization hypothesis supplies a witness \(A\) with \(\sum _i (A^i)^\dagger A^i = \mathbb {1}\) (left-canonical) and \(\mathcal{E}_B = \mathcal{E}_{A^{[p]}}\). The left-canonical property makes \(\mathcal{E}_A\) a CPTP channel, and the blocking identity \(\mathcal{E}_{A^{[p]}} = (\mathcal{E}_A)^p\) (formalised as ) then identifies \(\mathcal{E}_B\) with the \(p\)-th power of the channel \(\mathcal{E}_A\). </p>
+  <p>The canonicalization hypothesis supplies a witness \(A\) with \(\sum _i (A^i)^\dagger A^i = \mathbb {1}\) (left-canonical) and \(\mathcal{E}_B = \mathcal{E}_{A^{[p]}}\). The left-canonical property makes \(\mathcal{E}_A\) a CPTP channel, and the blocking identity \(\mathcal{E}_{A^{[p]}} = (\mathcal{E}_A)^p\) then identifies \(\mathcal{E}_B\) with the \(p\)-th power of the channel \(\mathcal{E}_A\). </p>
 
   </div>
 </div>
@@ -5396,7 +5396,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>From the inverse canonicalization hypothesis, extract \(A\) with \(\mathcal{E}_B = \mathcal{E}_{A^{[p]}}\). This matches two finite Kraus families of the same completely positive map: the blocked family \(A^{[p]}\) with \(d^{p}\) operators and the original family \(B\) with \(d\) operators. The cardinality comparison \(d \le d^{p}\) holds whenever \(p \ge 1\), so Wolf Theorem&#160;2.18 (isometric freedom of Kraus representations, formalised as ) supplies an isometry \(V \in M_{d^p \times d}(\mathbb {C})\) with \(V^{\dagger } V = \mathbb {1}\) and \((A^{[p]})^{\alpha } = \sum _{j} V_{\alpha ,j}\,  B^{j}\). Expanding \(\mathrm{coeff}\, (A^{[p]})\, (\mathrm{ofFn}\, \tau )\) by linearity of matrix multiplication and of the trace, the contributions reorganise into the \(V\)-weighted sum over length-\(N\) words of \(B\) required by Definition&#160;<a href="ch-periodic_ft_apps.html#def:p_refinable">15.51</a>, exhibiting \(V\) as the isometry \(W\) in the statement of \(p\)-refinability. </p>
+  <p>From the inverse canonicalization hypothesis, extract \(A\) with \(\mathcal{E}_B = \mathcal{E}_{A^{[p]}}\). This matches two finite Kraus families of the same completely positive map: the blocked family \(A^{[p]}\) with \(d^{p}\) operators and the original family \(B\) with \(d\) operators. The cardinality comparison \(d \le d^{p}\) holds whenever \(p \ge 1\), so Wolf Theorem&#160;2.18 on isometric freedom of Kraus representations supplies an isometry \(V \in M_{d^p \times d}(\mathbb {C})\) with \(V^{\dagger } V = \mathbb {1}\) and \((A^{[p]})^{\alpha } = \sum _{j} V_{\alpha ,j}\,  B^{j}\). Expanding \(\mathrm{coeff}\, (A^{[p]})\, (\mathrm{ofFn}\, \tau )\) by linearity of matrix multiplication and of the trace, the contributions reorganise into the \(V\)-weighted sum over length-\(N\) words of \(B\) required by Definition&#160;<a href="ch-periodic_ft_apps.html#def:p_refinable">15.51</a>, exhibiting \(V\) as the isometry \(W\) in the statement of \(p\)-refinability. </p>
 
   </div>
 </div>

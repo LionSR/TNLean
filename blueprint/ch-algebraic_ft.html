@@ -1836,9 +1836,9 @@
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>   Let \(A_1, A_2\) and \(B_1, B_2\) be injective MPS tensors with the same bond dimension \(D\). Suppose that for all \(X \in M_{D}(\mathbb {C})\) (on the internal bond) and all \(Y \in M_{D}(\mathbb {C})\) (on the external bond), </p>
-<div class="displaymath" id="<plasTeX.TeXFragment object at 0x7f5ac1a02c90>">
-  \begin{align}  \operatorname{tr}(A_1^{i}\,  X\,  A_2^{j}) & = \operatorname{tr}(B_1^{i}\,  X\,  B_2^{j}) \qquad \text{for all } i, j, \label{eq:internal_bond}\\ \operatorname{tr}(A_2^{j}\,  Y\,  A_1^{i}) & = \operatorname{tr}(B_2^{j}\,  Y\,  B_1^{i}) \qquad \text{for all } i, j. \label{eq:external_bond} \end{align}
+  <p>   Let \(A_1, A_2\) and \(B_1, B_2\) be injective MPS tensors with the same bond dimension \(D\). Suppose that for all \(X \in M_{D}(\mathbb {C})\) (on the internal bond), all \(Y \in M_{D}(\mathbb {C})\) (on the external bond), and all physical indices \(i,j\), </p>
+<div class="displaymath" id="<plasTeX.TeXFragment object at 0x7fd1302eddf0>">
+  \begin{align}  \operatorname{tr}(A_1^{i}\,  X\,  A_2^{j}) & = \operatorname{tr}(B_1^{i}\,  X\,  B_2^{j}) \label{eq:internal_bond}\\ \operatorname{tr}(A_2^{j}\,  Y\,  A_1^{i}) & = \operatorname{tr}(B_2^{j}\,  Y\,  B_1^{i}) \label{eq:external_bond} \end{align}
 </div>
 <p> Diagrammatically, Eq.&#160;?? is the equality obtained by inserting \(X\) on the bond between the two sites, </p>
 <div class="centered"> <img class="tn-svg" src="tn_svg/tn-6941374e0375f075.svg" alt="\TNInternalTraceInsertion{i}{j}{X}"> </div>
@@ -1861,9 +1861,9 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> By cyclicity and non-degeneracy of the trace pairing, the conditions in Eqs.&#160;?? and&#160;?? give </p>
+  <p> By cyclicity and non-degeneracy of the trace pairing, the conditions in Eqs.&#160;?? and&#160;?? give, for all physical indices \(i,j\), </p>
 <div class="displaymath" id="a0000001248">
-  \[  A_2^{j} A_1^{i} = B_2^{j} B_1^{i} \qquad \text{and}\qquad A_1^{i} A_2^{j} = B_1^{i} B_2^{j} \qquad \text{for all } i, j.  \]
+  \[  \begin{aligned}  A_2^{j} A_1^{i} & = B_2^{j} B_1^{i},\\ A_1^{i} A_2^{j} & = B_1^{i} B_2^{j}. \end{aligned}  \]
 </div>
 <p> Write \(\mathbb {1}_D = \sum _j c_j A_2^j\) using the decomposition map \(\Psi _{A_2}\), and define \(Z := \sum _j c_j B_2^j \in M_{D}(\mathbb {C})\). This is the point where the two-site comparison collapses to a single boundary matrix: </p>
 <div class="centered"> <img class="tn-svg" src="tn_svg/tn-3047ad6c2751a4de.svg" alt="\TNBoundaryRegrow{Z}{i}{j}{2}"> &#8195;&#8195;<img class="tn-svg" src="tn_svg/tn-1151c583c6fde47b.svg" alt="\TNLocalEqualityStep{Z}{\lambda \mathbb {1}}{i}"> </div>
@@ -1873,7 +1873,7 @@
 </div>
 <h1 id="sec:ft_chain">17.6 The Fundamental Theorem for injective chains</h1>
 
-<p>The current formalized result for chains is obtained by combining the site and physical indices into a single physical index and applying the single-block Fundamental Theorem to the resulting tensor. The paper-style fixed-length same-state statement is recovered only after adding a separate same-state reduction hypothesis. </p>
+<p>The chain result below combines the site and physical indices into a single physical index and applies the single-block Fundamental Theorem to the resulting tensor. The fixed-length same-state statement requires a separate same-state reduction hypothesis. </p>
 <div class="theorem_thmwrapper theorem-style-plain" id="thm:fundamentalTheorem_injective_chain">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
@@ -2479,9 +2479,9 @@
         </div>
   </div>
   <div class="definition_thmcontent">
-  <p>   Two tensors \(A\) and \(B\) of the same bond dimension satisfy <em>finite-length MPV agreement from \(N_0\) onward</em> if they generate the same MPV family for all system sizes \(N \ge N_0\): </p>
+  <p>   Two tensors \(A\) and \(B\) of the same bond dimension satisfy <em>finite-length MPV agreement from \(N_0\) onward</em> if they generate the same MPV family for all system sizes \(N \ge N_0\), meaning that for every \(N \ge N_0\) and \(\sigma \in [d]^N\), </p>
 <div class="displaymath" id="a0000001258">
-  \[  V^{(N)}(A)_\sigma = V^{(N)}(B)_\sigma \qquad \text{for all } N \ge N_0, \sigma \in [d]^N.  \]
+  \[  V^{(N)}(A)_\sigma = V^{(N)}(B)_\sigma  \]
 </div>
 
   </div>
@@ -2831,7 +2831,7 @@
 <div class="displaymath" id="a0000001264">
   \[  B^i = \lambda \,  Z^{-1}\,  A^i\,  Z  \]
 </div>
-<p> for every physical index&#160;\(i\). In the current Lean theorem one can take \(\lambda = 1\). </p>
+<p> for every physical index&#160;\(i\). </p>
 
   </div>
 </div>

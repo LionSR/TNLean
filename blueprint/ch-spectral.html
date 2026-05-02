@@ -2341,9 +2341,9 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   Let \(A\) and \(B\) be tensors of the same bond dimension. Suppose there are invertible gauges taking them to families \(A'\) and \(B'\), an invertible matrix \(X'\), and a scalar \(\mu \) with \(|\mu | = 1\) such that </p>
+  <p>   Let \(A\) and \(B\) be tensors of the same bond dimension. Suppose there are invertible gauges taking them to families \(A'\) and \(B'\), an invertible matrix \(X'\), and a scalar \(\mu \) with \(|\mu | = 1\) such that, for every physical index&#160;\(i\), </p>
 <div class="displaymath" id="a0000000610">
-  \[  A'^i X' = \mu \,  X' B'^i \qquad \text{for all } i.  \]
+  \[  A'^i X' = \mu \,  X' B'^i  \]
 </div>
 <p> Then \(A\) and \(B\) are gauge-phase equivalent. </p>
 
@@ -2539,9 +2539,9 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   Let \(A\) and \(B\) be injective tensors of bond dimensions \(D_1\) and \(D_2\). If there exist \(X \in M_{D_1 \times D_2}(\mathbb {C}) \setminus \{ 0\} \) and \(\mu \in \mathbb {C}\) such that </p>
+  <p>   Let \(A\) and \(B\) be injective tensors of bond dimensions \(D_1\) and \(D_2\). If there exist \(X \in M_{D_1 \times D_2}(\mathbb {C}) \setminus \{ 0\} \) and \(\mu \in \mathbb {C}\) such that, for every physical index&#160;\(i\), </p>
 <div class="displaymath" id="a0000000613">
-  \[  X (B^i)^\dagger = \mu \,  (A^i)^\dagger X, \qquad A^i X = \mu \,  X B^i \qquad \text{for all } i,  \]
+  \[  X (B^i)^\dagger = \mu \,  (A^i)^\dagger X, \qquad A^i X = \mu \,  X B^i  \]
 </div>
 <p> then \(D_1 = D_2\). </p>
 
@@ -4497,9 +4497,9 @@
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>  Let \(A\) be an MPS tensor and let \(P\) be an orthogonal projection. If </p>
+  <p>  Let \(A\) be an MPS tensor and let \(P\) be an orthogonal projection. If, for every physical index&#160;\(i\), </p>
 <div class="displaymath" id="a0000000630">
-  \[  (\mathbb {1}- P) A^i P = 0 \qquad \text{for all } i,  \]
+  \[  (\mathbb {1}- P) A^i P = 0  \]
 </div>
 <p> then </p>
 <div class="displaymath" id="a0000000631">
@@ -4856,7 +4856,7 @@
 	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
 	, Cor.&#160;6.6
 	]
-</span>: the corner carries a \(\mathbb {C}\)-algebra and \(*\)-structure, the repository’s corner submodule is identified with Mathlib’s idempotent corner, and the compression of a PSD fixed point onto its support sector is positive definite. </p>
+</span>: the corner carries a \(\mathbb {C}\)-algebra and \(*\)-structure, the two standard presentations of the corner are identified, and the compression of a PSD fixed point onto its support sector is positive definite. </p>
 <div class="lemma_thmwrapper theorem-style-plain" id="lem:supportProj_mulVec_eq_zero_of_mulVec_eq_zero">
   <div class="lemma_thmheading">
     <span class="lemma_thmcaption">
@@ -4956,7 +4956,7 @@
         </div>
   </div>
   <div class="definition_thmcontent">
-  <p>  For an idempotent \(P \in M_{D}(\mathbb {C})\), the repository’s corner submodule \(\{ X \mid P X P = X\} \) and Mathlib’s idempotent corner \(\{ P\, X\, P \mid X \in M_{D}(\mathbb {C})\} \) are identified as \(\mathbb {C}\)-linear spaces by the identity on underlying matrices. </p>
+  <p>  For an idempotent \(P \in M_{D}(\mathbb {C})\), the subspace \(\{ X \mid P X P = X\} \) and the corner \(\{ P\, X\, P \mid X \in M_{D}(\mathbb {C})\} \) are identified as \(\mathbb {C}\)-linear spaces by the identity on underlying matrices. </p>
 
   </div>
 </div>
@@ -4998,7 +4998,7 @@
         </div>
   </div>
   <div class="remark_thmcontent">
-  <p>     Mathlib’s <span class="ttfamily">IsIdempotentElem.Corner</span> already carries a ring structure with unit&#160;\(P\). For the matrix case we provide \(\mathbb {C}\)-module and \(\mathbb {C}\)-algebra structures and, under the additional assumption \(P^\dagger = P\), star, star ring, and star module structures over&#160;\(\mathbb {C}\). </p>
+  <p>     The corner algebra associated to an idempotent already carries a ring structure with unit&#160;\(P\). In the matrix case it also has \(\mathbb {C}\)-module and \(\mathbb {C}\)-algebra structures and, under the additional assumption \(P^\dagger = P\), star, star ring, and star module structures over&#160;\(\mathbb {C}\). </p>
 
   </div>
 </div>
@@ -5262,7 +5262,7 @@
     Theorem
     </span>
     <span class="theorem_thmlabel">9.59</span>
-    <span class="theorem_thmtitle">Wedderburn data with ambient dimension bound</span>
+    <span class="theorem_thmtitle">Fixed-point algebra decomposition with multiplicities</span>
     <div class="thm_header_extras">
 
     
@@ -5350,7 +5350,7 @@
     Remark
     </span>
     <span class="remark_thmlabel">9.60</span>
-    <span class="remark_thmtitle">Remaining Wedderburn statement</span>
+    <span class="remark_thmtitle">Block form of the fixed-point algebra</span>
     <div class="thm_header_extras">
 
         </div>
@@ -5363,11 +5363,11 @@
         </div>
   </div>
   <div class="remark_thmcontent">
-  <p> The stronger ambient statement that the adjoint-fixed-point algebra is unitarily conjugate to </p>
+  <p> Wolf’s block form identifies the adjoint-fixed-point algebra, up to a unitary change of basis, with </p>
 <div class="displaymath" id="a0000000644">
   \[  0 \oplus \bigoplus _k M_{d_k}(\mathbb {C}) \otimes \mathbb {1}_{m_k}  \]
 </div>
-<p> together with the density-block form \(M_{d_k}(\mathbb {C}) \otimes \rho _k\) is not yet included here. </p>
+<p> together with the density-block form \(M_{d_k}(\mathbb {C}) \otimes \rho _k\). The theorem above records the product decomposition, multiplicities, and dimension bound needed from this block form. </p>
 
   </div>
 </div>

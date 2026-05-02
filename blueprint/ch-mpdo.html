@@ -1254,9 +1254,9 @@
         </div>
   </div>
   <div class="definition_thmcontent">
-  <p>   An MPO tensor is <em>Hermitian</em> if </p>
+  <p>   An MPO tensor is <em>Hermitian</em> if, for all \(i,j \in \{ 0,\ldots ,d{-}1\} \), </p>
 <div class="displaymath" id="a0000000200">
-  \[  M^{ij} = (M^{ji})^\dagger \qquad \text{for all } i,j \in \{ 0,\ldots ,d{-}1\} .  \]
+  \[  M^{ij} = (M^{ji})^\dagger  \]
 </div>
 
   </div>
@@ -1720,9 +1720,9 @@
         </div>
   </div>
   <div class="definition_thmcontent">
-  <p>   An MPO tensor is an <em>MPDO</em> if </p>
+  <p>   An MPO tensor is an <em>MPDO</em> if, for every \(N \in \mathbb {N}\), </p>
 <div class="displaymath" id="a0000000206">
-  \[  \rho ^{(N)}(M) \ge 0 \qquad \text{for every } N \in \mathbb {N}.  \]
+  \[  \rho ^{(N)}(M) \ge 0  \]
 </div>
 <p> This is the global positivity condition of <span class="cite">
 	[
@@ -1794,9 +1794,9 @@
         </div>
   </div>
   <div class="definition_thmcontent">
-  <p>   An MPO tensor is an <em>LPDO</em> if there exist an ancilla dimension \(d_K\), an inner bond dimension \(D'\), an identification of bond indices \(e : \{ 0, \ldots , D - 1\}  \simeq \{ 0, \ldots , D' - 1\}  \times \{ 0, \ldots , D' - 1\} \) (equivalently, \(D\) and \((D')^2\) have the same cardinality), and matrices \(A^{(i,k)} \in M_{D'}(\mathbb {C})\) such that </p>
+  <p>   An MPO tensor is an <em>LPDO</em> if there exist an ancilla dimension \(d_K\), an inner bond dimension \(D'\), an identification of bond indices \(e : \{ 0, \ldots , D - 1\}  \simeq \{ 0, \ldots , D' - 1\}  \times \{ 0, \ldots , D' - 1\} \) (equivalently, \(D\) and \((D')^2\) have the same cardinality), and matrices \(A^{(i,k)} \in M_{D'}(\mathbb {C})\) such that, for all physical indices \(i,j\), </p>
 <div class="displaymath" id="a0000000207">
-  \[  M^{ij} = \Bigl(\sum _{k=0}^{d_K-1} A^{(i,k)} \otimes \overline{A^{(j,k)}}\Bigr)_{e,e} \qquad \text{for all } i,j,  \]
+  \[  M^{ij} = \Bigl(\sum _{k=0}^{d_K-1} A^{(i,k)} \otimes \overline{A^{(j,k)}}\Bigr)_{e,e}  \]
 </div>
 <p> where \(\otimes \) denotes the Kronecker product, \(\overline{(\cdot )}\) denotes entrywise complex conjugation, and \((\cdot )_{e,e}\) denotes reindexing along \(e\) from \(\{ 0, \ldots , D' - 1\}  \times \{ 0, \ldots , D' - 1\} \) back to \(\{ 0, \ldots , D - 1\} \). This is the local purification form of <span class="cite">
 	[
@@ -2100,7 +2100,7 @@
         </div>
   </div>
   <div class="remark_thmcontent">
-  <p>   The current purification-RFP condition is strictly weaker than MPO zero correlation length: there exists an MPO tensor with purification RFP whose transfer map is not idempotent. Equivalently, purification RFP does not imply MPO zero correlation length. </p>
+  <p>   Purification RFP is strictly weaker than MPO zero correlation length: there exists an MPO tensor with purification RFP whose transfer map is not idempotent. Equivalently, purification RFP does not imply MPO zero correlation length. </p>
 
   </div>
 </div>
@@ -2318,7 +2318,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   The current MPDO renormalization fixed-point condition is equivalent to the zero-correlation-length condition for MPO tensors. </p>
+  <p>   MPDO renormalization fixed points are exactly MPO tensors with zero correlation length. </p>
 
   </div>
 </div>
@@ -2407,7 +2407,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   The current MPDO RFP condition is equivalent to the pure-state RFP condition for the doubled-index MPS tensor. </p>
+  <p>   The MPDO RFP condition is equivalent to the pure-state RFP condition for the doubled-index MPS tensor. </p>
 
   </div>
 </div>
@@ -4029,7 +4029,7 @@
     Remark
     </span>
     <span class="remark_thmlabel">3.42</span>
-    <span class="remark_thmtitle">Finite-length span and selector criteria for the abstract biCF hypothesis</span>
+    <span class="remark_thmtitle">Finite witnesses for block-injective canonical form</span>
     <div class="thm_header_extras">
 
     
@@ -4065,13 +4065,13 @@
 <div class="displaymath" id="a0000000236">
   \[  w \longmapsto (A_k^w)_k  \]
 </div>
-<p> span the full product algebra of block matrices. The corresponding finite-length separation property asserts that there exists a length \(L\) such that if </p>
+<p> span the full product algebra of block matrices. The corresponding finite-length separation property asserts that there exists a length \(L\) such that if, for every word \(w\) of length&#160;\(L\), </p>
 <div class="displaymath" id="a0000000237">
-  \[  \sum _k \operatorname{tr}(\Delta _k A_k^w) = 0 \qquad \text{for every word } w \text{ of length } L,  \]
+  \[  \sum _k \operatorname{tr}(\Delta _k A_k^w) = 0  \]
 </div>
 <p> then these pairings vanish on a spanning set for the product algebra, so the induced linear functional on the product algebra is zero; by nondegeneracy of the product trace pairing, every \(\Delta _k\) vanishes. In other words, a single finite blocking length already separates the blocks by their word evaluations. Combined with injectivity, left-canonicality, and nonzero block weights, this finite-length separation yields the horizontal canonical-form data of the block-diagonal tensor. </p>
-<p>The entrywise scalar family of block-matrix coefficients encodes the same finite-length data. Linear independence of that scalar family implies the product-algebra spanning statement, hence block selectors and a biCF witness. The same criterion therefore gives horizontal canonical-form data directly. The duplicate-scalar counterexample shows that this finite-length witness is strictly stronger than blockwise injectivity, left-canonicality, and nonzero weights alone: two identical scalar blocks satisfy those hypotheses, but the biCF separation condition fails and no blocking length makes the entrywise family linearly independent. </p>
-<p>Proposition&#160;IV.3 gives a concrete sufficient criterion for the spanning condition: after a common blocking length each block is block-injective, and after a further finite blocking length one can form linear combinations of word evaluations which equal the identity on one chosen block and vanish on all others. Concatenating an injective prefix with such a selector suffix produces the product-algebra spanning condition above, so the selector-word hypotheses of Proposition&#160;IV.3 also deliver the horizontal canonical-form data. </p>
+<p>The entrywise scalar family of block-matrix coefficients encodes the same finite-length data. Linear independence of that scalar family implies the product-algebra spanning statement, hence a biCF witness. The same criterion therefore gives horizontal canonical-form data directly. The duplicate-scalar counterexample shows that this finite-length witness is strictly stronger than blockwise injectivity, left-canonicality, and nonzero weights alone: two identical scalar blocks satisfy those hypotheses, but the biCF separation condition fails and no blocking length makes the entrywise family linearly independent. </p>
+<p>Proposition&#160;IV.3 gives a concrete sufficient criterion for the spanning condition: after a common blocking length each block is block-injective, and after a further finite blocking length one can form linear combinations of word evaluations which equal the identity on one chosen block and vanish on all others. Concatenating an injective prefix with this finite block-separation data produces the product-algebra spanning condition, hence the horizontal canonical-form data. </p>
 
   </div>
 </div>
@@ -4081,7 +4081,7 @@
     Theorem
     </span>
     <span class="theorem_thmlabel">3.43</span>
-    <span class="theorem_thmtitle">Abstract Proposition&#160;IV.3 selector criterion</span>
+    <span class="theorem_thmtitle">A finite criterion from Proposition&#160;IV.3</span>
     <div class="thm_header_extras">
 
     
@@ -4140,7 +4140,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>    If a block family admits the finite-length selector data of Proposition&#160;IV.3, then it is in block-injective canonical form. </p>
+  <p>    If a block family admits the finite-length data described in Proposition&#160;IV.3, then it is in block-injective canonical form. </p>
 
   </div>
 </div>
@@ -4152,7 +4152,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> This is the direct implication from the abstract selector data to the finite-length trace-separation statement. What remains open in the full Proposition&#160;IV.3 is the derivation of the selector hypothesis from separated canonical-form / BNT data. </p>
+  <p> This is the direct implication from the finite-length data to the finite-length trace-separation statement. What remains open in the full Proposition&#160;IV.3 is the derivation of this finite witness from separated canonical-form / BNT data. </p>
 
   </div>
 </div>
@@ -4247,7 +4247,7 @@
 	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
 	, Appendix&#160;A
 	]
-</span>, using the abstract Proposition&#160;IV.3 selector criterion from Theorem&#160;<a href="ch-mpdo.html#thm:propblockinj_abstract">3.43</a>. Expanding the hypothesis over a word of length&#160;\(L+1\) beginning with the fixed site and folding each block contribution into a trace pairing against the corresponding first-site insertion tensor yields, upon taking the \(Y\)-\(Z\) difference, a tuple of block matrices whose trace pairings against every length-\(L\) block word vanish. The biCF hypothesis then forces each block difference to be zero, and dividing by the nonzero weight \(\mu _k^{L+1}\) concludes the blockwise equality of the two first-site insertions. </p>
+</span>, using the finite criterion from Theorem&#160;<a href="ch-mpdo.html#thm:propblockinj_abstract">3.43</a>. Expanding the hypothesis over a word of length&#160;\(L+1\) beginning with the fixed site and folding each block contribution into a trace pairing against the corresponding first-site insertion tensor yields, upon taking the \(Y\)-\(Z\) difference, a tuple of block matrices whose trace pairings against every length-\(L\) block word vanish. The biCF hypothesis then forces each block difference to be zero, and dividing by the nonzero weight \(\mu _k^{L+1}\) concludes the blockwise equality of the two first-site insertions. </p>
 
   </div>
 </div>
@@ -4330,7 +4330,7 @@
 	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
 	, §4.5
 	]
-</span>, the current formal development describes the transfer-map content of the fusion-isometry picture. For each blocked size \(n \ge 1\), the doubled-index blocked tensor of an MPO has a blocked transfer map \(E_n\) acting on bond-space matrices, and the support algebra is modeled by a subspace through which \(E_n\) factors as a retract. </p>
+</span>, the next definitions describe the transfer-map content of the fusion-isometry picture. For each blocked size \(n \ge 1\), the doubled-index blocked tensor of an MPO has a blocked transfer map \(E_n\) acting on bond-space matrices, and the support algebra is modeled by a subspace through which \(E_n\) factors as a retract. </p>
 <div class="definition_thmwrapper theorem-style-definition" id="def:mpdo_fusion_isometry">
   <div class="definition_thmheading">
     <span class="definition_thmcaption">
@@ -4523,8 +4523,6 @@
           
           <li><a href="../docs/find/#doc/MPOTensor.isRFP_of_isRFP_MPDO_via_fusion" class="lean_decl">MPOTensor.isRFP_of_isRFP_MPDO_via_fusion</a></li>
           
-          <li><a href="../docs/find/#doc/MPOTensor.IsRFP" class="lean_decl">MPOTensor.IsRFP</a></li>
-          
         </ul>
     
       </div>
@@ -4534,7 +4532,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   The fusion-isometry formulation implies the current predicate . </p>
+  <p>   The fusion-isometry formulation implies the MPDO RFP condition. </p>
 
   </div>
 </div>
@@ -4550,7 +4548,7 @@
 <div class="displaymath" id="a0000000244">
   \[ E_1^2 = S_1 T_1 S_1 T_1 = S_1 (T_1 S_1) T_1 = S_1 T_1 = E_1. \]
 </div>
-<p> Since \(E_1\) is the original transfer map, this is exactly . </p>
+<p> Since \(E_1\) is the original transfer map, this is exactly the MPDO RFP condition. </p>
 
   </div>
 </div>
@@ -4610,8 +4608,6 @@
           
           <li><a href="../docs/find/#doc/MPOTensor.isRFP_MPDO_via_fusion_iff_isRFP" class="lean_decl">MPOTensor.isRFP_MPDO_via_fusion_iff_isRFP</a></li>
           
-          <li><a href="../docs/find/#doc/MPOTensor.IsRFP" class="lean_decl">MPOTensor.IsRFP</a></li>
-          
         </ul>
     
       </div>
@@ -4621,7 +4617,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   The fusion-isometry formulation is equivalent to . </p>
+  <p>   The fusion-isometry formulation is equivalent to the MPDO RFP condition. </p>
 
   </div>
 </div>
@@ -4849,7 +4845,7 @@
 	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
 	, Theorem&#160;IV.13&#160;(ii)
 	]
-</span>, since the coefficient family \(c_{\alpha ,\beta ,\gamma }^{(L)}\) is not yet extracted. </p>
+</span>; that formulation also includes the coefficient family \(c_{\alpha ,\beta ,\gamma }^{(L)}\). </p>
 
   </div>
 </div>
@@ -5078,7 +5074,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   Assume the doubled tensor is trace-preserving and the transfer map admits a positive-definite fixed point. If, for every positive blocked size \(n\), the adjoint fixed-point space of the blocked transfer map agrees with the adjoint fixed-point space of the original transfer map, then the current algebra predicate holds. </p>
+  <p>   Assume the doubled tensor is trace-preserving and the transfer map admits a positive-definite fixed point. If, for every positive blocked size \(n\), the adjoint fixed-point space of the blocked transfer map agrees with the adjoint fixed-point space of the original transfer map, then the algebra-structure formulation holds. </p>
 
   </div>
 </div>
@@ -5090,17 +5086,17 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>Use the adjoint fixed-point algebra of the original transfer map as a constant support-algebra tower. The stabilization hypothesis identifies that same algebra with the adjoint fixed-point space of every positive blocked transfer map, so the stationary family is compatible with the present definition. </p>
+  <p>Use the adjoint fixed-point algebra of the original transfer map as a constant support-algebra tower. The stabilization hypothesis identifies that same algebra with the adjoint fixed-point space of every positive blocked transfer map, so the stationary family satisfies the definition. </p>
 
   </div>
 </div>
-<p>This still falls short of the full converse direction of <span class="cite">
+<p>This does not give the full converse direction of <span class="cite">
 	[
 	
 	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
 	, Theorem&#160;IV.13
 	]
-</span>: the present compatibility predicate only sees stabilized adjoint fixed-point algebras, not yet the paper’s coefficient/BNT data. The current formal layer still does not recover the special diagonal matrices \(\chi _{\alpha ,\beta ,\gamma }\) from Theorem&#160;IV.13(ii). What it does provide is the first explicit coefficient data attached to the algebra tower: a chosen basis of each support algebra, coordinate maps into a finite scalar family, and the corresponding multiplication / inclusion coefficient arrays. </p>
+</span>: the compatibility condition above only sees stabilized adjoint fixed-point algebras, not the coefficient/BNT data. In particular, Theorem&#160;IV.13(ii) also requires the special diagonal matrices \(\chi _{\alpha ,\beta ,\gamma }\). The coefficient data attached to the algebra tower are: a chosen basis of each support algebra, coordinate maps into a finite scalar family, and the corresponding multiplication / inclusion coefficient arrays. </p>
 <div class="definition_thmwrapper theorem-style-definition" id="def:mpdo_blocked_coefficients">
   <div class="definition_thmheading">
     <span class="definition_thmcaption">
@@ -5612,7 +5608,7 @@
     Remark
     </span>
     <span class="remark_thmlabel">3.63</span>
-    <span class="remark_thmtitle">Converse algebra-to-fusion gap</span>
+    <span class="remark_thmtitle">Why algebra data do not imply fusion data</span>
     <div class="thm_header_extras">
 
         </div>
@@ -5649,7 +5645,7 @@
         </div>
   </div>
   <div class="remark_thmcontent">
-  <p>  The converse implication \(\ref{def:mpdo_rfp_via_algebra} \Rightarrow \ref{def:mpdo_rfp_via_fusion}\) is not provable against the present predicate. Theorem <a href="ch-mpdo.html#thm:mpdo_adjoint_fix_descent">3.61</a> already gives the strongest available consequence of the algebra-structure data – exclusion of <em>finite order</em> (root-of-unity) peripheral eigenvalues of the adjoint transfer map, since any such eigenvalue would produce a new adjoint fixed point at some positive blocking size. This does <em>not</em>, however, exclude unit-modulus eigenvalues of irrational phase, nor force idempotence of the transfer map, so ergodic quantum channels with a strict spectral gap on the \(1\)-complement still satisfy the predicate without being RFPs. For instance, on \(M_D(\mathbb {C})\) with \(0 {\lt} \varepsilon {\lt} 1\) take </p>
+  <p>  The converse implication \(\ref{def:mpdo_rfp_via_algebra} \Rightarrow \ref{def:mpdo_rfp_via_fusion}\) requires a stronger hypothesis than the algebra-structure formulation above. Theorem <a href="ch-mpdo.html#thm:mpdo_adjoint_fix_descent">3.61</a> already gives the strongest available consequence of the algebra-structure data – exclusion of <em>finite order</em> (root-of-unity) peripheral eigenvalues of the adjoint transfer map, since any such eigenvalue would produce a new adjoint fixed point at some positive blocking size. This does <em>not</em>, however, exclude unit-modulus eigenvalues of irrational phase, nor force idempotence of the transfer map, so ergodic quantum channels with a strict spectral gap on the \(1\)-complement still satisfy the predicate without being RFPs. For instance, on \(M_D(\mathbb {C})\) with \(0 {\lt} \varepsilon {\lt} 1\) take </p>
 <div class="displaymath" id="a0000000255">
   \[  E(X) = \varepsilon \,  X + (1 - \varepsilon )\,  \Pi _{\mathrm{diag}}(X),  \]
 </div>
@@ -5664,13 +5660,13 @@
   </div>
 </div>
 <h2 id="a0000000020">3.10.1 Diagonal \(\chi \)-matrices and the trace-power formula</h2>
-<p>The following layer formalizes the target shape of <span class="cite">
+<p>The following statements isolate the form of <span class="cite">
 	[
 	
 	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
 	, Theorem&#160;IV.13&#160;(ii)
 	]
-</span> in which the structure coefficients of the length-\(L\) operator algebra are trace-powers of positive diagonal matrices \(\chi _{\alpha ,\beta ,\gamma }\). The RFP MPDO itself is not yet constructed here; what is formalized is the language in which the paper’s identity is stated, together with the elementary trace-power identity for diagonal matrices. </p>
+</span>: the structure coefficients of the length-\(L\) operator algebra are trace-powers of positive diagonal matrices \(\chi _{\alpha ,\beta ,\gamma }\). They state the coefficient identity and the elementary trace-power identity for diagonal matrices. </p>
 <div class="definition_thmwrapper theorem-style-definition" id="def:mpdo_diagonal_chi_family">
   <div class="definition_thmheading">
     <span class="definition_thmcaption">
@@ -6063,7 +6059,7 @@
         </div>
   </div>
   <div class="definition_thmcontent">
-  <p>    An MPO tensor is a Gibbs state of a nearest-neighbor commuting Hamiltonian if every finite-chain operator admits the equivalent positive-operator presentation \(\rho ^{(N)} = c \prod _i B_{i,i+1}\) with \(c {\gt} 0\) and commuting nearest-neighbor factors. The projector-limit convention after source label <span class="ttfamily">defrhoNComm</span> in <span class="cite">
+  <p>    An MPO tensor is a Gibbs state of a nearest-neighbor commuting Hamiltonian if every finite-chain operator admits the equivalent positive-operator presentation \(\rho ^{(N)} = c \prod _i B_{i,i+1}\) with \(c {\gt} 0\) and commuting nearest-neighbor factors. The projector-limit convention in <span class="cite">
 	[
 	
 	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
@@ -6222,7 +6218,7 @@
 	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
 	
 	]
-</span> (source label <span class="ttfamily">thm:main-simple</span>). </p>
+</span>. </p>
 
   </div>
 </div>
@@ -6458,7 +6454,7 @@
     Remark
     </span>
     <span class="remark_thmlabel">3.75</span>
-    <span class="remark_thmtitle">Remaining step toward source label <span class="ttfamily">propsimple</span></span>
+    <span class="remark_thmtitle">Remaining entropy-side construction</span>
     <div class="thm_header_extras">
 
         </div>
@@ -6468,27 +6464,10 @@
     
     
     
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
         </div>
   </div>
   <div class="remark_thmcontent">
-  <p> The remaining entropy-side theorem is to construct  from the local SAL and ZCL ingredients already formalized in <span class="ttfamily">TNLean/MPS/MPDO/SimpleLocalStructure.lean</span>. In particular, the missing piece is the extraction of explicit neighboring operators \(\eta _{k,h}\) from the Hayashi Markov decomposition; once that is in place, Theorem&#160;<a href="ch-mpdo.html#thm:mpdo_has_commuting_form_of_eta_local_structure">3.74</a> immediately yields the commuting-form conclusion, and the present file then recovers the GSNNCH target of source label <span class="ttfamily">propsimple</span>. </p>
+  <p> The remaining entropy-side theorem is to construct the local data needed for Theorem&#160;<a href="ch-mpdo.html#thm:mpdo_has_commuting_form_of_eta_local_structure">3.74</a> from the SAL and ZCL hypotheses. In particular, one must extract explicit neighboring operators \(\eta _{k,h}\) from the Hayashi Markov decomposition. Once these operators are available, Theorem&#160;<a href="ch-mpdo.html#thm:mpdo_has_commuting_form_of_eta_local_structure">3.74</a> yields the commuting-form conclusion and hence the GSNNCH branch of the simple-MPDO equivalence. </p>
 
   </div>
 </div>
@@ -6555,7 +6534,7 @@
         </div>
   </div>
   <div class="definition_thmcontent">
-  <p>    This structure collects the current local Appendix&#160;C.2 data: a normalized three-site reduced state with equality in strong subadditivity, the resulting local \(\eta \)-structure, and the rank-one conclusion for the auxiliary primitive matrix \(T\). </p>
+  <p>    This structure collects the local Appendix&#160;C.2 data: a normalized three-site reduced state with equality in strong subadditivity, the resulting local \(\eta \)-structure, and the rank-one conclusion for the auxiliary primitive matrix \(T\). </p>
 
   </div>
 </div>
@@ -6623,7 +6602,7 @@
         </div>
   </div>
   <div class="definition_thmcontent">
-  <p>    For an MPO tensor \(K\), this consists of the local Appendix&#160;C.2 data together with a compatibility relation attaching those local data to \(K\), the commuting-form property, and zero correlation length. The local component is retained so that the still-missing implication from the entropy-side hypotheses to commuting form has an explicit target, even though the current blocked-RFP consequences below use only the commuting-form and zero-correlation-length entries. </p>
+  <p>    For an MPO tensor \(K\), this consists of the local Appendix&#160;C.2 data together with a compatibility relation attaching those local data to \(K\), the commuting-form property, and zero correlation length. The local component records the hypotheses used in the entropy-side route to commuting form, while the blocked-RFP consequences below use only commuting form and zero correlation length. </p>
 
   </div>
 </div>
@@ -6708,7 +6687,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>Zero correlation length is the current MPDO RFP predicate. Applying the converse direction of Theorem&#160;<a href="ch-mpdo.html#thm:mpdo_rfp_via_fusion_iff">3.49</a> to that RFP witness yields fusion-isometry data at every positive blocked size; evaluating it at size \(2\) produces the blocked witness. </p>
+  <p>Zero correlation length is the MPDO RFP condition. Applying the converse direction of Theorem&#160;<a href="ch-mpdo.html#thm:mpdo_rfp_via_fusion_iff">3.49</a> to that RFP witness yields fusion-isometry data at every positive blocked size; evaluating it at size \(2\) produces the blocked witness. </p>
 
   </div>
 </div>
@@ -6797,7 +6776,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>The commuting-form and zero-correlation-length hypotheses give the GSNNCH–ZCL branch via Theorem&#160;<a href="ch-mpdo.html#thm:mpdo_is_gsnnch_zcl_iff_has_commuting_form_and_is_zcl">3.72</a>. The blocked witness is Theorem&#160;<a href="ch-mpdo.html#thm:structural_implies_rfp_blocked">3.78</a>. The full transfer-map fusion formulation follows by applying the converse direction of Theorem&#160;<a href="ch-mpdo.html#thm:mpdo_rfp_via_fusion_iff">3.49</a> to zero correlation length, which is the current RFP predicate. </p>
+  <p>The commuting-form and zero-correlation-length hypotheses give the GSNNCH–ZCL branch via Theorem&#160;<a href="ch-mpdo.html#thm:mpdo_is_gsnnch_zcl_iff_has_commuting_form_and_is_zcl">3.72</a>. The blocked witness is Theorem&#160;<a href="ch-mpdo.html#thm:structural_implies_rfp_blocked">3.78</a>. The full transfer-map fusion formulation follows by applying the converse direction of Theorem&#160;<a href="ch-mpdo.html#thm:mpdo_rfp_via_fusion_iff">3.49</a> to zero correlation length, which is the MPDO RFP condition. </p>
 
   </div>
 </div>
@@ -6807,7 +6786,7 @@
     Remark
     </span>
     <span class="remark_thmlabel">3.80</span>
-    <span class="remark_thmtitle">Remaining paper-level gap for Theorem&#160;4.9</span>
+    <span class="remark_thmtitle">Remaining implication for Theorem&#160;4.9</span>
     <div class="thm_header_extras">
 
         </div>
@@ -6844,7 +6823,7 @@
         </div>
   </div>
   <div class="remark_thmcontent">
-  <p>   Theorem&#160;<a href="ch-mpdo.html#thm:simple_mpdo_rfp_chain">3.79</a> is fully formalized, but to recover the original Appendix&#160;C.2 implication from SAL and ZCL alone one still needs a theorem deriving the commuting-form property from the local simple-MPDO structure of Lemmas&#160;C.3–C.4. The definition above is included so that this future implication has an explicit target. </p>
+  <p>   The implication from SAL and ZCL alone to the conclusion of Appendix&#160;C.2 requires a derivation of the commuting-form property from the local simple-MPDO structure of Lemmas&#160;C.3–C.4. Once that derivation is available, Theorem&#160;<a href="ch-mpdo.html#thm:simple_mpdo_rfp_chain">3.79</a> gives the GSNNCH–ZCL branch and the blocked fusion-isometry witness. </p>
 
   </div>
 </div>

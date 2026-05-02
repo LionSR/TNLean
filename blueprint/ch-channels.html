@@ -1100,9 +1100,9 @@
         </div>
   </div>
   <div class="definition_thmcontent">
-  <p>  A linear map \(E : M_{D}(\mathbb {C}) \to M_{D}(\mathbb {C})\) is <em>completely positive</em> (CP) if it admits a <em>Kraus representation</em>: there exist operators \(\{ K_i\} _{i=0}^{r-1}\) with \(K_i \in M_{D}(\mathbb {C})\) such that </p>
+  <p>  A linear map \(E : M_{D}(\mathbb {C}) \to M_{D}(\mathbb {C})\) is <em>completely positive</em> (CP) if it admits a <em>Kraus representation</em>: there exist operators \(\{ K_i\} _{i=0}^{r-1}\) with \(K_i \in M_{D}(\mathbb {C})\) such that, for every \(X \in M_{D}(\mathbb {C})\), </p>
 <div class="displaymath" id="a0000000282">
-  \[  E(X) = \sum _{i=0}^{r-1} K_i X K_i^\dagger \quad \text{for all } X \in M_{D}(\mathbb {C}).  \]
+  \[  E(X) = \sum _{i=0}^{r-1} K_i X K_i^\dagger  \]
 </div>
 <p> We use the Kraus characterisation because it matches the later Kadison–Schwarz arguments. By Choi’s theorem, this is equivalent to \(E \otimes \operatorname{id}_n\) being positive for all&#160;\(n\). </p>
 
@@ -3641,9 +3641,9 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>    Let \(E\) be a unital Kraus map. If \(E(X^\dagger X) = E(X)^\dagger E(X)\), then </p>
+  <p>    Let \(E\) be a unital Kraus map. If \(E(X^\dagger X) = E(X)^\dagger E(X)\), then, for every&#160;\(i\), </p>
 <div class="displaymath" id="a0000000314">
-  \[  X K_i^\dagger = K_i^\dagger E(X) \qquad \text{for all } i.  \]
+  \[  X K_i^\dagger = K_i^\dagger E(X)  \]
 </div>
 
   </div>
@@ -9730,7 +9730,7 @@
 </div>
 <h2 id="subsec:svd_normal_form">5.12.2 SVD normal form (existence)</h2>
 
-<p>Wolf §2.3 discusses two families of normal forms for the transfer-matrix representation of a quantum channel: the <em>singular value decomposition</em> (SVD) and, for qubit channels, the <em>Lorentz normal form</em> obtained by \(\mathrm{SL}(2,\mathbb {C})\) filtering operations. In this blueprint, the SVD normal form is fully formalised. The Lorentz normal form existence is stated as a theorem (Theorem&#160;<a href="ch-channels.html#thm:lorentz_normal_form_qubit">5.129</a>) but the proof requires a compactness / minimisation argument over \(\mathrm{SL}(2,\mathbb {C})\) filterings (Wolf Prop 2.9 / Prop 2.11) that remains open in this formalisation—see §<a href="ch-channels.html#subsec:lorentz_normal_form">5.12.3</a>. </p>
+<p>Wolf §2.3 discusses two families of normal forms for the transfer-matrix representation of a quantum channel: the <em>singular value decomposition</em> (SVD) and, for qubit channels, the <em>Lorentz normal form</em> obtained by \(\mathrm{SL}(2,\mathbb {C})\) filtering operations. The SVD normal form is proved below. The Lorentz normal form theorem (Theorem&#160;<a href="ch-channels.html#thm:lorentz_normal_form_qubit">5.129</a>) requires a compactness / minimisation argument over \(\mathrm{SL}(2,\mathbb {C})\) filterings (Wolf Prop.&#160;2.9 / Prop.&#160;2.11); see §<a href="ch-channels.html#subsec:lorentz_normal_form">5.12.3</a>. </p>
 <div class="theorem_thmwrapper theorem-style-plain" id="thm:svd_posSemidef">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
@@ -10217,7 +10217,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   For every qubit channel \(T : M_{2}(\mathbb {C}) \to M_{2}(\mathbb {C})\), there exist \(\SL (2, \mathbb {C})\)-filterings \(\Phi _{1}, \Phi _{2}\) such that the filtered channel \(T' = \Phi _{2} \circ T \circ \Phi _{1}\) is in one of the three Lorentz normal forms: diagonal, non-diagonal, or singular. The three canonical forms are defined as the Lean predicates <span class="ttfamily">Wolf.IsLorentzDiagonal</span>, <span class="ttfamily">Wolf.IsLorentzNonDiagonal</span>, <span class="ttfamily">Wolf.IsLorentzSingular</span> in <span class="ttfamily">LorentzNormalForm.lean</span>. <b class="bfseries">Not yet proved</b>—proof blocked on Lemma&#160;<a href="ch-channels.html#lem:infimum_is_attained">5.127</a> and the Lorentz group classification of \(\SL (2, \mathbb {C})\) orbits. </p>
+  <p>   For every qubit channel \(T : M_{2}(\mathbb {C}) \to M_{2}(\mathbb {C})\), there exist \(\SL (2, \mathbb {C})\)-filterings \(\Phi _{1}, \Phi _{2}\) such that the filtered channel \(T' = \Phi _{2} \circ T \circ \Phi _{1}\) is in one of the three Lorentz normal forms: diagonal, non-diagonal, or singular. <b class="bfseries">Not yet proved</b>—proof blocked on Lemma&#160;<a href="ch-channels.html#lem:infimum_is_attained">5.127</a> and the Lorentz group classification of \(\SL (2, \mathbb {C})\) orbits. </p>
 
   </div>
 </div>

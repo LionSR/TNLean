@@ -1163,9 +1163,9 @@
         </div>
   </div>
   <div class="definition_thmcontent">
-  <p>   Given a group representation \(U : G \to \mathrm{GL}_d(\mathbb {C})\) on the physical index, the <em>\(g\)-twisted tensor</em> is </p>
+  <p>   Given a group representation \(U : G \to \mathrm{GL}_d(\mathbb {C})\) on the physical index, the <em>\(g\)-twisted tensor</em> is defined, for each \(i \in \{ 0,\ldots ,d{-}1\} \), by </p>
 <div class="displaymath" id="a0000001327">
-  \[  \widetilde{A}_g^i := \sum _{j=0}^{d-1} U(g)_{ij}\,  A^j \qquad \text{for each } i \in \{ 0,\ldots ,d{-}1\} .  \]
+  \[  \widetilde{A}_g^i := \sum _{j=0}^{d-1} U(g)_{ij}\,  A^j  \]
 </div>
 
   </div>
@@ -1899,9 +1899,9 @@
         </div>
   </div>
   <div class="definition_thmcontent">
-  <p>   Given a scalar 2-cochain \(\omega \), a <em>projective representation</em> of \(G\) on \(\mathbb {C}^D\) is a map \(\rho : G \to \mathrm{GL}_D(\mathbb {C})\) satisfying </p>
+  <p>   Given a scalar 2-cochain \(\omega \), a <em>projective representation</em> of \(G\) on \(\mathbb {C}^D\) is a map \(\rho : G \to \mathrm{GL}_D(\mathbb {C})\) satisfying, for all \(g,h \in G\), </p>
 <div class="displaymath" id="a0000001337">
-  \[  \rho (g)\,  \rho (h) = \omega (g,h)\,  \rho (gh) \qquad \text{for all } g, h \in G.  \]
+  \[  \rho (g)\,  \rho (h) = \omega (g,h)\,  \rho (gh)  \]
 </div>
 
   </div>
@@ -2077,15 +2077,15 @@
 <ol class="enumerate">
   <li><p>a scalar 2-cochain \(\omega : G \times G \to \mathbb {C}^{\times }\), and </p>
 </li>
-  <li><p>a map \(\rho : G \to \mathrm{GL}_D(\mathbb {C})\) satisfying </p>
+  <li><p>a map \(\rho : G \to \mathrm{GL}_D(\mathbb {C})\) satisfying, for all \(g,h \in G\), </p>
 <div class="displaymath" id="a0000001341">
-  \[  \rho (g)\,  \rho (h) = \omega (g,h)\,  \rho (gh) \qquad \text{for all } g, h \in G,  \]
+  \[  \rho (g)\,  \rho (h) = \omega (g,h)\,  \rho (gh)  \]
 </div>
 </li>
 </ol>
-<p> such that, defining the gauge matrices \(X(g) := \rho (g^{-1})\), one has </p>
+<p> such that, defining the gauge matrices \(X(g) := \rho (g^{-1})\), one has, for every \(g \in G\) and \(i \in \{ 0,\ldots ,d{-}1\} \), </p>
 <div class="displaymath" id="a0000001342">
-  \[  \widetilde{A}_g^i = X(g)\,  A^i\,  X(g)^{-1} \qquad \text{for every } g \in G, i \in \{ 0,\ldots ,d{-}1\} .  \]
+  \[  \widetilde{A}_g^i = X(g)\,  A^i\,  X(g)^{-1}  \]
 </div>
 <p> In tensor-network notation, for each fixed&#160;\(g\) this is the local gauge relation </p>
 <div class="centered"> <img class="tn-svg" src="tn_svg/tn-e35ce9a7be9fb065.svg" alt="\TNGaugeConjugation{X(g)}{i}{X(g)^{-1}}"> </div>
@@ -2176,9 +2176,9 @@
         </div>
   </div>
   <div class="corollary_thmcontent">
-  <p>   If \(D {\gt} 0\), the factor system \(\omega \) from Theorem&#160;<a href="ch-symmetry.html#thm:virtual_rep_injective">19.15</a> satisfies the 2-cocycle identity: </p>
+  <p>   If \(D {\gt} 0\), the factor system \(\omega \) from Theorem&#160;<a href="ch-symmetry.html#thm:virtual_rep_injective">19.15</a> satisfies the 2-cocycle identity for all \(g,h,k \in G\): </p>
 <div class="displaymath" id="a0000001345">
-  \[  \omega (g, h)\,  \omega (gh, k) = \omega (g, hk)\,  \omega (h, k) \qquad \text{for all } g, h, k \in G.  \]
+  \[  \omega (g, h)\,  \omega (gh, k) = \omega (g, hk)\,  \omega (h, k)  \]
 </div>
 
   </div>
@@ -2257,9 +2257,9 @@
         </div>
   </div>
   <div class="definition_thmcontent">
-  <p>   A scalar 2-cocycle \(\omega \) is a <em>coboundary</em> if there exists \(\varphi \colon G \to \mathbb {C}^{\times }\) such that </p>
+  <p>   A scalar 2-cocycle \(\omega \) is a <em>coboundary</em> if there exists \(\varphi \colon G \to \mathbb {C}^{\times }\) such that, for all \(g,h \in G\), </p>
 <div class="displaymath" id="a0000001346">
-  \[  \omega (g,h) = \varphi (g) \varphi (h) \varphi (gh)^{-1} \qquad \text{for all } g,h\in G.  \]
+  \[  \omega (g,h) = \varphi (g) \varphi (h) \varphi (gh)^{-1}  \]
 </div>
 
   </div>
@@ -2324,9 +2324,9 @@
         </div>
   </div>
   <div class="definition_thmcontent">
-  <p>   Two cocycles \(\omega _1,\omega _2\) are <em>cohomologous</em> (written \(\omega _1 \sim \omega _2\)) if there exists \(\varphi \colon G\to \mathbb {C}^{\times }\) with </p>
+  <p>   Two cocycles \(\omega _1,\omega _2\) are <em>cohomologous</em> (written \(\omega _1 \sim \omega _2\)) if there exists \(\varphi \colon G\to \mathbb {C}^{\times }\) such that, for all \(g,h \in G\), </p>
 <div class="displaymath" id="a0000001347">
-  \[  \omega _1(g,h) = \varphi (g) \varphi (h) \varphi (gh)^{-1} \omega _2(g,h) \qquad \text{for all } g,h\in G.  \]
+  \[  \omega _1(g,h) = \varphi (g) \varphi (h) \varphi (gh)^{-1} \omega _2(g,h)  \]
 </div>
 
   </div>
@@ -2628,9 +2628,9 @@
         </div>
   </div>
   <div class="definition_thmcontent">
-  <p>  A scalar 2-cochain \(\omega \colon G\times G\to \mathbb {C}^{\times }\) is a <em>2-cocycle</em> if it satisfies </p>
+  <p>  A scalar 2-cochain \(\omega \colon G\times G\to \mathbb {C}^{\times }\) is a <em>2-cocycle</em> if it satisfies, for all \(g,h,k \in G\), </p>
 <div class="displaymath" id="a0000001353">
-  \[  \omega (g,h) \omega (gh,k) = \omega (g,hk) \omega (h,k) \qquad \text{for all } g,h,k\in G.  \]
+  \[  \omega (g,h) \omega (gh,k) = \omega (g,hk) \omega (h,k)  \]
 </div>
 
   </div>
@@ -3419,9 +3419,9 @@
         </div>
   </div>
   <div class="definition_thmcontent">
-  <p>   An MPS tensor \(A\) has <em>local symmetry</em> under a unitary \(u\) with respect to a boundary state \(\Lambda \) if there exist a unitary matrix \(V\) and a phase \(\mu \) with \(|\mu | = 1\) such that \(V^\dagger \Lambda V = \Lambda \) and </p>
+  <p>   An MPS tensor \(A\) has <em>local symmetry</em> under a unitary \(u\) with respect to a boundary state \(\Lambda \) if there exist a unitary matrix \(V\) and a phase \(\mu \) with \(|\mu | = 1\) such that \(V^\dagger \Lambda V = \Lambda \) and, for every physical index&#160;\(i\), </p>
 <div class="displaymath" id="a0000001369">
-  \[  \sum _j u_{ij}\,  A^j = \mu \,  V\,  A^i\,  V^\dagger \quad \text{for all } i.  \]
+  \[  \sum _j u_{ij}\,  A^j = \mu \,  V\,  A^i\,  V^\dagger  \]
 </div>
 <p> Informally, this means \(\| R_L(u)\|  = \| R_L(\mathbb {1})\| \) for all \(L\). </p>
 
@@ -4671,9 +4671,9 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   Let \(A\) be injective, assume \(u u^\dagger = \mathbb {1}\) and \(\mathcal{E}_A(\mathbb {1})=\mathbb {1}\). If \(A\) is gauge-phase equivalent to the companion tensor \(B_u\), then there exist a unitary \(V\) and a phase \(\mu \) with \(|\mu |=1\) such that </p>
+  <p>   Let \(A\) be injective, assume \(u u^\dagger = \mathbb {1}\) and \(\mathcal{E}_A(\mathbb {1})=\mathbb {1}\). If \(A\) is gauge-phase equivalent to the companion tensor \(B_u\), then there exist a unitary \(V\) and a phase \(\mu \) with \(|\mu |=1\) such that, for every physical index&#160;\(i\), </p>
 <div class="displaymath" id="a0000001391">
-  \[  \sum _j u_{ij} A^j = \mu \,  V A^i V^\dagger \qquad \text{for all } i.  \]
+  \[  \sum _j u_{ij} A^j = \mu \,  V A^i V^\dagger  \]
 </div>
 
   </div>
@@ -4753,9 +4753,9 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   Assume \(\mathcal{E}_A(\mathbb {1})=\mathbb {1}\) and </p>
+  <p>   Assume \(\mathcal{E}_A(\mathbb {1})=\mathbb {1}\) and that, for every physical index&#160;\(i\), </p>
 <div class="displaymath" id="a0000001393">
-  \[  \sum _j u_{ij} A^j = \mu \,  V A^i V^\dagger \qquad \text{for all } i,  \]
+  \[  \sum _j u_{ij} A^j = \mu \,  V A^i V^\dagger  \]
 </div>
 <p> with \(V\) unitary. Then \(V\) is an eigenmatrix of the twisted transfer map: </p>
 <div class="displaymath" id="a0000001394">
@@ -4841,9 +4841,9 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   Let \(A\) be injective, assume \(u u^\dagger = \mathbb {1}\), and let \(\Lambda \) be a positive definite boundary state with \(\operatorname{tr}(\Lambda )=1\) and \(\mathcal{E}_A^\dagger (\Lambda )=\Lambda \). If \(V\) is a unitary and \(\mu \) a phase satisfying </p>
+  <p>   Let \(A\) be injective, assume \(u u^\dagger = \mathbb {1}\), and let \(\Lambda \) be a positive definite boundary state with \(\operatorname{tr}(\Lambda )=1\) and \(\mathcal{E}_A^\dagger (\Lambda )=\Lambda \). If \(V\) is a unitary and \(\mu \) a phase satisfying, for every physical index&#160;\(i\), </p>
 <div class="displaymath" id="a0000001396">
-  \[  \sum _j u_{ij} A^j = \mu \,  V A^i V^\dagger \qquad \text{for all } i,  \]
+  \[  \sum _j u_{ij} A^j = \mu \,  V A^i V^\dagger  \]
 </div>
 <p> then </p>
 <div class="displaymath" id="a0000001397">
