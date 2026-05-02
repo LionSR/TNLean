@@ -36,6 +36,12 @@ BNT proportional-decomposition comparison of the nonzero-weight block families.
 * `afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_proportional` — the
   same relabeled common-sector output, with the common cover obtained from a BNT
   proportional-decomposition comparison for the produced nonzero-sector families.
+* `CommonPrimitiveBNTCoverHypotheses` — bundles the BNT-level remaining hypotheses
+  (`IsNormalCanonicalForm`, `BlocksNotGaugePhaseEquiv`, `ProportionalDecompositionData`,
+  zero-tail equality, and one-site injectivity) for the common-length cyclic sector families.
+  The structure provides `.toMPVCommonPhaseCover` and `.toCommonPrimitivePhaseCoverHypotheses`
+  bridges to the common phase-cover layer.
+  See the structure docstring for the explicit mathematical gaps that remain.
 
 ## References
 
@@ -179,6 +185,86 @@ theorem toSpanHypotheses
   h.toPhaseCoverHypotheses.toSpanHypotheses
 
 end CommonPrimitiveProportionalHypotheses
+
+/-- Remaining BNT-level inputs for constructing a common MPV phase cover
+from the common-length cyclic sector families produced by the structural theorem.
+
+The structural theorem
+`afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts`
+supplies trace-preserving, primitive, tensor-irreducible block families
+with nonzero weights and positive bond dimensions at a common blocking
+length.  The four fields below are the additional BNT hypotheses needed
+to compare the two families and obtain a common MPV phase cover.
+
+The remaining mathematical tasks are:
+1. Verify `IsNormalCanonicalForm` for the produced block families
+   (requires ordering the weights by decreasing modulus).
+2. Verify `BlocksNotGaugePhaseEquiv` for the cyclic-sector block families
+   (follows from the fact that distinct cyclic sectors carry
+   distinct peripheral eigenvalues and therefore cannot be
+   gauge-phase equivalent).
+3. Construct `ProportionalDecompositionData` from the `SameMPV₂`
+   equality of the two nonzero parts, which is available from the
+   structural theorem and the zero-tail identity. -/
+structure CommonPrimitiveBNTCoverHypotheses
+    {d p rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
+    {zeroTailA zeroTailB DtotA DtotB : ℕ}
+    (μA : Fin rA → ℂ) (μB : Fin rB → ℂ)
+    (blocksA : (x : Fin rA) → MPSTensor (blockPhysDim d p) (dimA x))
+    (blocksB : (x : Fin rB) → MPSTensor (blockPhysDim d p) (dimB x)) : Type where
+  /-- The left block family is in normal canonical form. -/
+  ncfA : IsNormalCanonicalForm (d := blockPhysDim d p) μA blocksA
+  /-- The right block family is in normal canonical form. -/
+  ncfB : IsNormalCanonicalForm (d := blockPhysDim d p) μB blocksB
+  /-- Distinct left blocks are not gauge-phase equivalent. -/
+  notGpeA : BlocksNotGaugePhaseEquiv (d := blockPhysDim d p) blocksA
+  /-- Distinct right blocks are not gauge-phase equivalent. -/
+  notGpeB : BlocksNotGaugePhaseEquiv (d := blockPhysDim d p) blocksB
+  /-- The two zero-tail dimensions agree. -/
+  zeroTail_eq : zeroTailA = zeroTailB
+  /-- The two nonzero-sector block families are one-site injective. -/
+  left_injective : ∀ x : Fin rA, IsInjective (blocksA x)
+  /-- The two nonzero-sector block families are one-site injective. -/
+  right_injective : ∀ x : Fin rB, IsInjective (blocksB x)
+  /-- Proportional decomposition data linking the two block families. -/
+  decompData : ProportionalDecompositionData (d := blockPhysDim d p)
+    blocksA blocksB DtotA DtotB
+
+namespace CommonPrimitiveBNTCoverHypotheses
+
+/-- A BNT cover hypothesis bundle produces a common MPV phase cover. -/
+theorem toMPVCommonPhaseCover
+    {d p rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
+    {zeroTailA zeroTailB DtotA DtotB : ℕ}
+    {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
+    {blocksA : (x : Fin rA) → MPSTensor (blockPhysDim d p) (dimA x)}
+    {blocksB : (x : Fin rB) → MPSTensor (blockPhysDim d p) (dimB x)}
+    (h : CommonPrimitiveBNTCoverHypotheses (zeroTailA := zeroTailA) (zeroTailB := zeroTailB)
+      (DtotA := DtotA) (DtotB := DtotB) μA μB blocksA blocksB) :
+    Nonempty (MPVCommonPhaseCover blocksA blocksB) :=
+  nonempty_mpvCommonPhaseCover_of_separated_normalCFBNT_data
+    (d := blockPhysDim d p) blocksA blocksB
+    h.ncfA h.notGpeA h.ncfB h.notGpeB h.decompData
+
+/-- A BNT cover hypothesis bundle produces the common primitive phase-cover hypotheses. -/
+theorem toCommonPrimitivePhaseCoverHypotheses
+    {d p rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
+    {zeroTailA zeroTailB DtotA DtotB : ℕ}
+    {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
+    {blocksA : (x : Fin rA) → MPSTensor (blockPhysDim d p) (dimA x)}
+    {blocksB : (x : Fin rB) → MPSTensor (blockPhysDim d p) (dimB x)}
+    (h : CommonPrimitiveBNTCoverHypotheses (zeroTailA := zeroTailA) (zeroTailB := zeroTailB)
+      (DtotA := DtotA) (DtotB := DtotB) μA μB blocksA blocksB) :
+    CommonPrimitivePhaseCoverHypotheses zeroTailA zeroTailB blocksA blocksB where
+  zeroTail_eq := h.zeroTail_eq
+  left_injective := h.left_injective
+  right_injective := h.right_injective
+  cover := h.toMPVCommonPhaseCover
+
+end CommonPrimitiveBNTCoverHypotheses
 
 /-- **Sector comparison from BNT proportional-decomposition data.**
 
