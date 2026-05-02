@@ -10,8 +10,14 @@ The blueprint links the mathematics to its Lean formalization. A reader should b
 4. **No filler prose.** Only precise definitions, theorem statements, and proof sketches. No "this is important because..." or "the transfer map governs the spectral theory...".
 5. **Cite non-trivial things.** Basic definitions (MPS tensor, MPV) don't need citations. Important results and non-obvious definitions should cite the source paper.
 6. **Don't invent terminology or notation.** Don't create ad-hoc notation like `⟨·,·⟩^ip` when standard notation exists. Don't name things that the literature doesn't name. If Lean calls it `IsInjective`, the blueprint says "injective" — not "Condition C1".
-7. **Match Lean's theorem/lemma/def exactly.** If Lean says `theorem X`, use `\begin{theorem}`. If Lean says `lemma X`, use `\begin{lemma}`. Never use `\begin{proposition}` (Lean has no `proposition` keyword). Label prefix: `thm:` for theorem, `lem:` for lemma, `def:` for definition.
-8. **Do not put prose quantifiers at the edge of displayed equations.** Avoid
+7. **Do not use external theorem numbers as titles.** Theorem, lemma, and
+   definition headings should name the mathematical content. Put external
+   numbering in the body with a full citation, e.g.
+   `This is \cite[Theorem~4.1]{...}`. Do not write headings such as
+   `Thm. 4.1` unless the source is also named and the title remains
+   mathematically descriptive.
+8. **Match Lean's theorem/lemma/def exactly.** If Lean says `theorem X`, use `\begin{theorem}`. If Lean says `lemma X`, use `\begin{lemma}`. Never use `\begin{proposition}` (Lean has no `proposition` keyword). Label prefix: `thm:` for theorem, `lem:` for lemma, `def:` for definition.
+9. **Do not put prose quantifiers at the edge of displayed equations.** Avoid
    `\qquad \text{for all ...}` and similar tails in displays. State the
    quantifier in the surrounding sentence, or use mathematical quantifier
    notation when it is part of the formula. See [`prose_style.md`](prose_style.md)
