@@ -653,7 +653,7 @@ which shows that such generators have the standard Lindblad form.
 
 \subsection{Completely positive semigroups and conditionally completely positive generators}
 
-\begin{theorem}[Generators of completely positive semigroups]
+\begin{theorem}[CP semigroups have CCP generators]
     \label{thm:cp_semigroup_implies_ccp}
     \lean{cp_semigroup_implies_ccp_generator}\leanok
     \uses{def:cp_map, def:is_ccp, def:exp_semigroup_ch12}
@@ -670,7 +670,7 @@ which shows that such generators have the standard Lindblad form.
     Then Theorem~\ref{thm:choi_projected_implies_ccp} gives CCP.
 \end{proof}
 
-\begin{theorem}[Conditionally completely positive generators]
+\begin{theorem}[CCP generators yield CP semigroups]
     \label{thm:ccp_implies_cp_semigroup}
     \lean{ccp_generator_implies_cp_semigroup}\leanok
     \uses{def:cp_map, def:is_ccp, def:exp_semigroup_ch12}
@@ -689,7 +689,7 @@ which shows that such generators have the standard Lindblad form.
     norm to $e^{tL}$, and the cone of CP maps is closed.
 \end{proof}
 
-\begin{theorem}[Complete positivity through the generator]
+\begin{theorem}[CP semigroups iff CCP generators]
     \label{thm:cp_semigroup_iff_ccp}
     \lean{cp_semigroup_iff_ccp_generator}\leanok
     \uses{def:cp_map, def:is_ccp, def:exp_semigroup_ch12}
@@ -1460,7 +1460,7 @@ which shows that such generators have the standard Lindblad form.
     $\mathcal{D}_{L_j}^*(A)$ is zero under the commutation hypotheses.
 \end{proof}
 
-\begin{theorem}[Adjoint kernel and commutant]
+\begin{theorem}[Adjoint kernel lies in the commutant]
     \label{thm:adjointKernel_eq_commutant}
     \lean{LindbladForm.mem_commutant_of_mem_adjointKernel_of_hasFaithfulStationaryState}\leanok
     \uses{def:lindblad_form, def:has_faithful_stationary_state_ch12,
@@ -1490,7 +1490,7 @@ which shows that such generators have the standard Lindblad form.
     $[A, H] = 0$.
 \end{proof}
 
-\begin{theorem}[Faithful stationary states give equality]
+\begin{theorem}[Adjoint kernel equals the commutant]
     \label{thm:adjointKernel_eq_commutant_full}
     \lean{LindbladForm.adjointKernel_eq_commutant_of_hasFaithfulStationaryState}\leanok
     \uses{thm:adjointKernel_eq_commutant, def:commutant_ch12, def:adjoint_kernel_ch12}
@@ -1620,7 +1620,7 @@ The four equivalent reducibility conditions of
     and~\ref{thm:semigroup_preserves_compression_from_generator_ch12}.
 \end{proof}
 
-\begin{theorem}[Rank-deficient fixed densities]
+\begin{theorem}[Rank-deficient fixed densities and kernel elements]
     \label{thm:wolf_prop_7_6_one_iff_two}
     \lean{wolf_prop_7_6_one_iff_two}\leanok
     \uses{def:has_rank_deficient_fixed_density,
@@ -1833,7 +1833,7 @@ The four equivalent reducibility conditions of
     $P = 0$ or $P = \Id$ — a contradiction.
 \end{proof}
 
-\begin{theorem}[Trivial commutant forbids triangular form]%
+\begin{theorem}[Hermitian span with trivial commutant forbids triangular form]%
     \label{thm:herm_span_trivial_commutant_no_block_ut}
     \lean{hermitian_span_trivial_commutant_implies_no_blockUpperTriangular}\leanok
     \uses{def:lindblad_form, def:is_lindblad_span_hermitian_closed,
