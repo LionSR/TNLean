@@ -1518,11 +1518,16 @@ theorem flattenWordOfBlock_cast_eq {d m n p : ℕ}
   -- Natural equivalence F : (Fin n → Fin (blockPhysDim d m)) ≃ (Fin (m*n) → Fin d)
   -- mapping g to the function λ ⟨p, hp⟩ => (E_m.symm (g j)) t where p = m*j + t
   let F : (Fin n → Fin (blockPhysDim d m)) ≃ (Fin (m * n) → Fin d) :=
-    ((Equiv.refl (Fin n)).arrowCongr E_m.symm).trans
-      ((Equiv.curry (Fin m) (Fin n) (Fin d)).symm.trans
-        (((Equiv.prodComm (Fin m) (Fin n)).arrowCongr (Equiv.refl (Fin d))).trans
-          ((finProdFinEquiv (m := n) (n := m)).arrowCongr (Equiv.refl (Fin d))).trans
-          ((finCongr (mul_comm n m)).arrowCongr (Equiv.refl (Fin d)))))
+    calc
+      (Fin n → Fin (blockPhysDim d m)) ≃ (Fin n → Fin m → Fin d) :=
+        (Equiv.refl (Fin n)).arrowCongr E_m.symm
+      _ ≃ (Fin m × Fin n → Fin d) := (Equiv.curry (Fin m) (Fin n) (Fin d)).symm
+      _ ≃ (Fin n × Fin m → Fin d) :=
+        (Equiv.prodComm (Fin m) (Fin n)).arrowCongr (Equiv.refl (Fin d))
+      _ ≃ (Fin (n * m) → Fin d) :=
+        (finProdFinEquiv (m := n) (n := m)).arrowCongr (Equiv.refl (Fin d))
+      _ ≃ (Fin (m * n) → Fin d) :=
+        (finCongr (mul_comm n m)).arrowCongr (Equiv.refl (Fin d))
   have hF_apply (g : Fin n → Fin (blockPhysDim d m)) (j : Fin n) (t : Fin m) :
       (F g) ⟨m * (j : ℕ) + (t : ℕ), hpos j t⟩ = (E_m.symm (g j)) t := by
     -- F is built from arrowCongr, curry.symm, prodComm, finProdFinEquiv (m:=n)(n:=m), and finCongr
