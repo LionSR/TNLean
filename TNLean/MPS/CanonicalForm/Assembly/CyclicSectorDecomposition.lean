@@ -1502,11 +1502,97 @@ theorem flattenWordOfBlock_cast_eq {d m n p : ℕ}
   -- The two sides are lists of `Fin d` of the same length `p`.
   -- Equality follows from compatibility of the Fintype.equivFin enumerations
   -- for `Fin p → Fin d` (used on the RHS) and `Fin n → Fin (blockPhysDim d m)`
-  -- (used on the LHS), together with the fact that grouping m-sized chunks of
-  -- a function `Fin p → Fin d` corresponds to the currying `Fin n → (Fin m → Fin d)`
-  -- under the product identification `Fin (m*n) ≃ Fin m × Fin n` encoded by
-  -- the standard Fintype instances.
-  sorry
+  -- (used on the LHS).  The key insight: `Trunc` is a subsingleton, so
+  -- `Fintype.truncEquivFin` for two Fintypes related by an equivalence must
+  -- give compatible enumerations (up to `Fin.cast` of cardinality).
+  subst hp_eq
+  classical
+  set E_m := Fintype.equivFin (Fin m → Fin d) with hE_m
+  set E_n := Fintype.equivFin (Fin n → Fin (blockPhysDim d m)) with hE_n
+  set E_mn := Fintype.equivFin (Fin (m * n) → Fin d) with hE_mn
+  have hpos (j : Fin n) (t : Fin m) : m * (j : ℕ) + (t : ℕ) < m * n := by
+    calc
+      m * (j : ℕ) + (t : ℕ) < m * (j : ℕ) + m := Nat.add_lt_add_left t.2 _
+      _ = m * ((j : ℕ) + 1) := by ring
+      _ ≤ m * n := Nat.mul_le_mul_left m (Nat.succ_le_of_lt j.2)
+  -- Natural equivalence F : (Fin n → Fin (blockPhysDim d m)) ≃ (Fin (m*n) → Fin d)
+  -- mapping g to the function λ ⟨p, hp⟩ => (E_m.symm (g j)) t where p = m*j + t
+  let F : (Fin n → Fin (blockPhysDim d m)) ≃ (Fin (m * n) → Fin d) := by
+    refine ((Equiv.refl (Fin n)).arrowCongr E_m.symm).trans ?_
+    refine (Equiv.curry (Fin m) (Fin n) (Fin d)).symm.trans ?_
+    exact ((finProdFinEquiv (m := n) (n := m)).arrowCongr (Equiv.refl (Fin d))).symm
+  have hF_apply (g : Fin n → Fin (blockPhysDim d m)) (j : Fin n) (t : Fin m) :
+      (F g) ⟨m * (j : ℕ) + (t : ℕ), hpos j t⟩ = (E_m.symm (g j)) t := by
+    -- F is built from arrowCongr, curry.symm, and finProdFinEquiv
+    -- finProdFinEquiv (m:=n)(n:=m) maps (j,t) to t + m*j = m*j + t
+    have hprod_val : ((finProdFinEquiv (m := n) (n := m)) (j, t)).val = m * (j : ℕ) + (t : ℕ) := by
+      simp [finProdFinEquiv, mul_comm]
+    have hprod_eq : (finProdFinEquiv (m := n) (n := m)) (j, t) =
+        ⟨m * (j : ℕ) + (t : ℕ), hpos j t⟩ := by
+      ext; exact hprod_val
+    simp [F, hE_m, hE_n, Equiv.arrowCongr_apply, Equiv.curry_symm_apply, hprod_eq]
+  have h_card_eq : Fintype.card (Fin n → Fin (blockPhysDim d m)) =
+      Fintype.card (Fin (m * n) → Fin d) := by
+    simp [blockPhysDim_eq_pow, pow_mul, Fintype.card_fun, Fintype.card_fin]
+  -- Since Trunc is a subsingleton, the two truncEquivFin (mapped through F) are equal
+  have h_trunc_eq : Trunc.map (λ (e : (Fin n → Fin (blockPhysDim d m)) ≃
+      Fin (Fintype.card (Fin n → Fin (blockPhysDim d m)))) =>
+      F.symm.trans (e.trans (Fin.cast h_card_eq)))
+      (Fintype.truncEquivFin (Fin n → Fin (blockPhysDim d m))) =
+      Fintype.truncEquivFin (Fin (m * n) → Fin d) :=
+    Subsingleton.elim _ _
+  -- Extract the equality of the actual equivalences
+  have h_equiv_eq : E_mn = F.symm.trans (E_n.trans (Fin.cast h_card_eq)) := by
+    calc
+      E_mn = (Fintype.truncEquivFin (Fin (m * n) → Fin d)).out := rfl
+      _ = (Trunc.map (λ e => F.symm.trans (e.trans (Fin.cast h_card_eq)))
+          (Fintype.truncEquivFin (Fin n → Fin (blockPhysDim d m)))).out := by rw [h_trunc_eq]
+      _ = F.symm.trans (((Fintype.truncEquivFin (Fin n → Fin (blockPhysDim d m))).out).trans
+          (Fin.cast h_card_eq)) := by simp
+      _ = F.symm.trans (E_n.trans (Fin.cast h_card_eq)) := rfl
+  -- Invert h_equiv_eq to relate E_mn.symm and E_n.symm
+  have h_equiv_symm_eq : E_mn.symm =
+      (Fin.cast h_card_eq).symm.trans (E_n.symm.trans F) := by
+    rw [h_equiv_eq]
+    simp
+  -- Now the key relationship: direct decoding equals F of nested decoding
+  have h_decode_eq (i : Fin (blockPhysDim d (m * n))) :
+      E_mn.symm i = F (E_n.symm (Fin.cast h_card.symm i)) := by
+    calc
+      E_mn.symm i = ((Fin.cast h_card_eq).symm.trans (E_n.symm.trans F)) i := by rw [h_equiv_symm_eq]
+      _ = (E_n.symm.trans F) ((Fin.cast h_card_eq).symm i) := rfl
+      _ = F (E_n.symm ((Fin.cast h_card_eq).symm i)) := rfl
+      _ = F (E_n.symm (Fin.cast h_card.symm i)) := by
+        -- h_card_eq and h_card are the same equality after unfolding blockPhysDim
+        have : h_card_eq = h_card := by
+          dsimp [h_card_eq, blockPhysDim]
+          simp
+        cases this
+        rfl
+  -- Now expand both sides as lists and use h_decode_eq pointwise
+  calc
+    flattenBlockedWord d m
+      (wordOfBlock (blockPhysDim d m) n (Fin.cast h_card.symm i)) =
+        flattenBlockedWord d m
+          (List.ofFn (E_n.symm (Fin.cast h_card.symm i))) := rfl
+    _ = (List.ofFn (λ (j : Fin n) =>
+            wordOfBlock d m ((E_n.symm (Fin.cast h_card.symm i)) j))).flatten := by
+      simp [flattenBlockedWord, List.map_ofFn, hE_m, hE_n, wordOfBlock, decodeBlock]
+    _ = (List.ofFn (λ (j : Fin n) =>
+            List.ofFn (E_m.symm ((E_n.symm (Fin.cast h_card.symm i)) j)))).flatten := rfl
+    _ = (List.ofFn (λ (j : Fin n) =>
+            List.ofFn (λ (t : Fin m) =>
+              (F (E_n.symm (Fin.cast h_card.symm i))) ⟨m * (j : ℕ) + (t : ℕ), hpos j t⟩))).flatten := by
+      refine congrArg List.flatten (congrArg List.ofFn (funext (λ j => ?_)))
+      refine congrArg List.ofFn (funext (λ t => ?_))
+      rw [hF_apply]
+    _ = (List.ofFn (λ (j : Fin n) =>
+            List.ofFn (λ (t : Fin m) =>
+              (E_mn.symm i) ⟨m * (j : ℕ) + (t : ℕ), hpos j t⟩))).flatten := by
+      rw [h_decode_eq i]
+    _ = List.ofFn (E_mn.symm i) := by
+      simpa using (List.ofFn_mul' (m := m) (n := n) (f := E_mn.symm i)).symm
+    _ = wordOfBlock d (m * n) i := rfl
 
 /-- The global grouping-cast hypothesis applied to a specific family reduces to the
 core Fintype-level assertion. -/
