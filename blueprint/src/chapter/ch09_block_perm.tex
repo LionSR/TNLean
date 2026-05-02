@@ -261,9 +261,10 @@ results of~\cite{Cirac2021Matrix}.
     \lean{MPSTensor.exists_twoBlock_decomp_of_lowerZero}
     \leanok
     \uses{def:same_mpv2}
-    Suppose $P$ is an orthogonal projection satisfying
+    Suppose $P$ is an orthogonal projection satisfying, for every physical
+    index~$i$,
     \[
-        (\Id - P) A^i P = 0 \qquad \text{for all } i.
+        (\Id - P) A^i P = 0.
     \]
     Then there exist $n,m$ with $n + m = D$ and MPS tensors $A_1, A_2$ of bond
     dimensions $n$ and $m$ such that $A$ and the two-block tensor
@@ -386,10 +387,9 @@ We use this notation throughout the block-separation argument.
     \uses{def:canonical_form}
     Let $C$ be a canonical form with block weights $\mu_1,\ldots,\mu_r$,
     and assume these weights are pairwise distinct.
-    If $c_1,\ldots,c_r \in \C$ satisfy
+    If $c_1,\ldots,c_r \in \C$ satisfy, for $N = 0,1,\ldots,r-1$,
     \[
         \sum_{k=1}^r c_k \mu_k^N = 0
-        \qquad \text{for } N = 0,1,\ldots,r-1,
     \]
     then $c_k = 0$ for all~$k$.
 \end{theorem}
