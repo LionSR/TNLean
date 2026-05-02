@@ -789,7 +789,7 @@ theorem sectorBasisOverlapSpanHypotheses_of_reindexedNonzeroParts_commonPhaseCov
     ∃ P Q : SectorDecomposition (blockPhysDim d p),
       SameMPV₂ P.toTensor Q.toTensor ∧
       HasBNTSectorData P ∧ HasBNTSectorData Q ∧
-      SectorBasisOverlapSpanHypotheses P Q :=
+      SectorBasisOverlapSpanHypotheses P Q := by
   obtain ⟨p, hp, zeroTailA, zeroTailB, rA, dimA, μA, blocksA,
       rB, dimB, μB, blocksB, hAblocks, hBblocks, hAPos, hBPos, hNonzeroPos,
       hZero, hμA, hμB, hTPA, hTPB, hPrimA, hPrimB, hIrrA, hIrrB, hDimA, hDimB⟩ :=
