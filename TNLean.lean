@@ -150,6 +150,7 @@ import TNLean.Spectral.QuantitativeGap
 
 -- Layer 3: MPS core
 import TNLean.MPS.Defs
+import TNLean.MPS.Tactic.Basic
 import TNLean.MPS.Chain.Defs
 import TNLean.MPS.Chain.VirtualInsertion
 import TNLean.MPS.Chain.TensorEquality
