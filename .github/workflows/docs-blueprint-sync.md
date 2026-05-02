@@ -45,6 +45,7 @@ safe-outputs:
     labels: [documentation, automation]
     if-no-changes: "warn"
     expires: 7d
+    allowed-files: [CLAUDE.md, AGENTS.md]
   noop:
   missing-data:
 ---
