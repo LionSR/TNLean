@@ -206,7 +206,7 @@ theorem cumulativeSpan_transposeTensor_eq_top_of_cumulativeSpan_eq_top
 /-! ## Row spreading: right action on row vectors -/
 
 /-- The linear map `M ↦ ψ ᵥ* M` for a fixed row vector `ψ`. -/
-def vecMulLinearMap (ψ : Fin D → ℂ) :
+noncomputable def vecMulLinearMap (ψ : Fin D → ℂ) :
     Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] (Fin D → ℂ) :=
   { toFun := fun M => Matrix.vecMul ψ M
     map_add' := fun M N => by
@@ -221,7 +221,7 @@ This is the row-analogue of `vectorSpreadSpan A φ n`.
 
 We keep it as a separate definition because `vectorSpreadSpan` uses `mulVec`
 (left action), while here we need `vecMul` (right action). -/
-def rowSpreadSpan (A : MPSTensor d D) (ψ : Fin D → ℂ) (n : ℕ) :
+noncomputable def rowSpreadSpan (A : MPSTensor d D) (ψ : Fin D → ℂ) (n : ℕ) :
     Submodule ℂ (Fin D → ℂ) :=
   Submodule.span ℂ (Set.range fun σ : Fin n → Fin d =>
     Matrix.vecMul ψ (evalWord A (List.ofFn σ)))

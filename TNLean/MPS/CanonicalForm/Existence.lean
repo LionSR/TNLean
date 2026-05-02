@@ -9,6 +9,7 @@ import TNLean.MPS.CanonicalForm.BlockingViaAdjoint
 import TNLean.MPS.Overlap.PeripheralToSpectralGap
 import TNLean.MPS.CanonicalForm.FromPeripheralPrimitive
 import TNLean.Wielandt.Primitivity.StronglyIrreducibleToFullRank
+import TNLean.MPS.Tactic.Basic
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
 open Filter
@@ -402,6 +403,7 @@ Every Kraus operator is the zero matrix. At `N = 0`, its mpv equals the bond dim
 of the identity); at `N > 0`, its mpv is `0`. -/
 def zeroMPSTensor (d D : ℕ) : MPSTensor d D := fun _ => 0
 
+@[mps_zero_tail]
 theorem mpv_zeroMPSTensor {N : ℕ} (σ : Fin N → Fin d') (D' : ℕ) :
     mpv (zeroMPSTensor d' D') σ = if N = 0 then (D' : ℂ) else 0 := by
   split

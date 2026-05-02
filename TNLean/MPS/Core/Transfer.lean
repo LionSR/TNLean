@@ -1,4 +1,5 @@
 import TNLean.MPS.Defs
+import TNLean.MPS.Tactic.Basic
 
 import Mathlib.Analysis.Complex.Basic
 import Mathlib.LinearAlgebra.Matrix.PosDef
@@ -25,7 +26,7 @@ noncomputable def transferMap (A : MPSTensor d D) :
   ∑ i : Fin d,
     (LinearMap.mulLeft ℂ (A i)).comp (LinearMap.mulRight ℂ (A i)ᴴ)
 
-@[simp]
+@[simp, mps_transfer]
 lemma transferMap_apply (A : MPSTensor d D) (X : Matrix (Fin D) (Fin D) ℂ) :
     transferMap (d := d) (D := D) A X = ∑ i : Fin d, A i * X * (A i)ᴴ := by
   classical

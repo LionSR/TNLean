@@ -79,7 +79,7 @@ The projections `P k` are typically the cyclic-sector projections of
 `IsCyclicSectorDecomp`; the definition itself does not require `(P k)` to be
 a projection, and the algebraic identities below isolate the hypotheses
 actually used. -/
-def cornerTransition {m : ℕ} [NeZero m] (A : MPSTensor d D)
+noncomputable def cornerTransition {m : ℕ} [NeZero m] (A : MPSTensor d D)
     (P : Fin m → Matrix (Fin D) (Fin D) ℂ) (k : Fin m) :
     MPSTensor d D :=
   fun i => P k * A i * P (k + 1)
@@ -147,7 +147,7 @@ For a word of length `L`, this expands to
 
 $$P_u \cdot A^{w_0} \cdot P_{u+1} \cdot A^{w_1} \cdot P_{u+2} \cdot
   \ldots \cdot A^{w_{L-1}} \cdot P_{u+L}.$$ -/
-def cornerEvalWord {m : ℕ} [NeZero m] (A : MPSTensor d D)
+noncomputable def cornerEvalWord {m : ℕ} [NeZero m] (A : MPSTensor d D)
     (P : Fin m → Matrix (Fin D) (Fin D) ℂ) :
     Fin m → List (Fin d) → Matrix (Fin D) (Fin D) ℂ
   | u, [] => P u

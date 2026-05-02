@@ -45,7 +45,7 @@ variable {d D : ℕ}
 
 ## Basic linear map lemmas -/
 /-- The linear map `M ↦ M *ᵥ φ` for a fixed vector `φ`. -/
-def mulVecLinearMap (φ : Fin D → ℂ) :
+noncomputable def mulVecLinearMap (φ : Fin D → ℂ) :
     Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] (Fin D → ℂ) :=
   { toFun := fun M => M *ᵥ φ
     map_add' := fun M N => Matrix.add_mulVec M N φ
