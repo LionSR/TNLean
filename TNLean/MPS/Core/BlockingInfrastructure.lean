@@ -495,6 +495,71 @@ theorem sameMPV₂_blockTensor_blockTensor_mul_reindex {D : ℕ}
   intro N σ
   rfl
 
+/-- Reindexing the physical alphabet of the iterated block tensor by the consecutive-grouping
+map returns the direct block tensor at length `m*n`.
+
+This lemma avoids the `Fin.cast` / `Fintype.equivFin` identification and instead uses the
+explicit bijection `directToIteratedBlockIndex` (PR #1096).  It gives a clean connection
+between iterated and direct blocking without needing `groupedBlockCastAgrees`. -/
+theorem reindexPhysical_directToIteratedBlockIndex_blockTensor {D : ℕ} (A : MPSTensor d D) (m n : ℕ) :
+    reindexPhysical (directToIteratedBlockIndex d m n)
+      (blockTensor (d := blockPhysDim d m) (D := D)
+        (blockTensor (d := d) (D := D) A m) n) =
+    blockTensor (d := d) (D := D) A (m * n) := by
+  calc
+    reindexPhysical (directToIteratedBlockIndex d m n)
+        (blockTensor (d := blockPhysDim d m) (D := D)
+          (blockTensor (d := d) (D := D) A m) n) =
+      reindexPhysical (directToIteratedBlockIndex d m n)
+        (reindexPhysical (iteratedBlockIndex d m n)
+          (blockTensor (d := d) (D := D) A (m * n))) := by
+      rw [blockTensor_blockTensor_eq_reindex A m n]
+    _ = blockTensor (d := d) (D := D) A (m * n) := by
+      ext i
+      simp [reindexPhysical, iteratedBlockIndex_directToIteratedBlockIndex d m n]
+
+/-- Iterated blocking expressed with the block-grouping bijection equals direct blocking.
+This is the tensor-level version of the blocked-word identity that underlies
+`groupedBlockCastAgrees`. -/
+theorem sameMPV₂_reindexPhysical_directToIteratedBlockIndex_blockTensor
+    {D : ℕ} (A : MPSTensor d D) (m n : ℕ) :
+    SameMPV₂
+      (reindexPhysical (directToIteratedBlockIndex d m n)
+        (blockTensor (d := blockPhysDim d m) (D := D)
+          (blockTensor (d := d) (D := D) A m) n))
+      (blockTensor (d := d) (D := D) A (m * n)) := by
+  rw [reindexPhysical_directToIteratedBlockIndex_blockTensor A m n]
+  intro N σ; rfl
+
+/-!
+### Blocked-word identification gap
+
+The lemma `reindexPhysical_directToIteratedBlockIndex_blockTensor` shows that applying the
+explicit block-grouping bijection to the iterated block tensor recovers the direct block
+tensor.  The remaining point for closing issue #990 is to prove that this bijection coincides
+with the `Fin.cast` identification used in `CommonBlockedCyclicSectorFamily`.  Concretely,
+one needs
+
+```lean
+Fin.cast ((F.blockPhysDim_nested_eq k).symm) i =
+  directToIteratedBlockIndex d (F.period k) (F.extra k)
+    (Fin.cast (congr_arg (blockPhysDim d) (F.p_eq_period_mul_extra k)) i)
+```
+
+for each block `k` and each physical index `i : Fin (blockPhysDim d F.p)`.
+
+The obstruction is purely combinatorial: the current blocked-index encoding uses
+`Fintype.equivFin`, which gives a noncanonical enumeration.  Proving the equality requires
+showing that the `Fintype.equivFin` enumeration of `Fin (m*n) → Fin d` agrees with the
+nested enumeration `Fin n → (Fin m → Fin d)` under the natural grouping isomorphism.
+This is likely a lemma about `Multiset.pi` or `Finset.univ` for function types, and
+the entry points suggested by earlier reviews (`Fin.prod_univ_succ`, `Fin.consEquiv`,
+`Fintype.piFinset` in `Mathlib/Data/Fin/Tuple/Finset.lean`) remain the natural path.
+Once proved in `TNLean/MPS/Core/BlockingInfrastructure.lean`, it unconditionally discharges
+`groupedBlockCastAgrees` and closes this issue together with all dependent conditional
+theorems in `CyclicSectorDecomposition.lean` and `StructuralTheorem.lean`.
+-/
+
 /-- Casting the physical dimension of both tensors preserves heterogeneous MPV equality. -/
 theorem sameMPV₂_cast_physDim {d₁ d₂ D₁ D₂ : ℕ} (h : d₁ = d₂)
     (A : MPSTensor d₁ D₁) (B : MPSTensor d₁ D₂) :

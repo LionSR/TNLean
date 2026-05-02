@@ -106,3 +106,23 @@ This is exactly the bookkeeping step between the common-length cyclic-sector dat
 used after the period-removal construction and the common-sector block family used
 by the later sector comparison theorems. It is independent of the Gemma/arXiv:1708
 periodic fundamental theorem route and of parent-Hamiltonian arguments.
+
+## 2026-05-01: reindexPhysical lemma (wave 27)
+
+Added `reindexPhysical_directToIteratedBlockIndex_blockTensor` in
+`TNLean/MPS/Core/BlockingInfrastructure.lean`.  This lemma bypasses the
+`Fin.cast` / `Fintype.equivFin` identification entirely and proves that the
+explicit block-grouping bijection `directToIteratedBlockIndex`, applied to
+the iterated block tensor via `reindexPhysical`, recovers the direct block
+tensor at length $m \cdot n$.
+
+The proof uses `blockTensor_blockTensor_eq_reindex` (already proved) and
+`iteratedBlockIndex_directToIteratedBlockIndex` to cancel the forward and
+inverse maps of the `directIteratedBlockEquiv`.
+
+The remaining obstruction for #990 is now documented explicitly in the
+source as a module doc comment (`### Blocked-word identification gap`):
+one must prove that the `Fin.cast` identification used in
+`CommonBlockedCyclicSectorFamily` coincides with `directToIteratedBlockIndex`.
+This is a pure statement about `Fintype.equivFin` for function types,
+independent of the MPS theory.
