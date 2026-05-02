@@ -1007,8 +1007,9 @@ equivalence from \cite[Theorem~4.1]{DeLasCuevas2017Irreducible}.
           thm:periodic_ft, thm:thm_4_1_p_refinement_forward,
           thm:thm_4_1_p_refinement_reverse}
     Let $B$ be an MPS tensor in irreducible form~II and let $p \ge 1$.
-    Assume the two left-canonical root hypotheses used in the one-way statements:
-    one for refinability $\Rightarrow$ divisibility and one for divisibility
+    Assume the two root hypotheses used in the one-way statements: the forward
+    left-canonical root hypothesis for refinability $\Rightarrow$ divisibility
+    and the reverse transfer-map root hypothesis for divisibility
     $\Rightarrow$ refinability. Then $B$ is $p$-refinable iff its transfer
     map $\mathcal{E}_B$ is $p$-divisible.
 \end{theorem}
@@ -1018,9 +1019,9 @@ equivalence from \cite[Theorem~4.1]{DeLasCuevas2017Irreducible}.
     Bundle the forward implication
     (Theorem~\ref{thm:thm_4_1_p_refinement_forward}) with the reverse
     implication (Theorem~\ref{thm:thm_4_1_p_refinement_reverse}) into a
-    single biconditional. The forward and reverse directions each assume the
-    corresponding left-canonical root hypothesis, and together they give the full
-    equivalence under those hypotheses.
+    single biconditional. The forward direction assumes the left-canonical root
+    hypothesis; the reverse direction assumes only the transfer-map root
+    hypothesis. Together they give the full equivalence under those hypotheses.
 \end{proof}
 
 \begin{theorem}[$p$-refinability implies transfer-map $p$-divisibility]%
@@ -1081,14 +1082,14 @@ equivalence from \cite[Theorem~4.1]{DeLasCuevas2017Irreducible}.
     \leanok
     \uses{def:irreducible_form, def:p_refinable, def:p_divisible_channel}
     Let $B$ be an MPS tensor in irreducible form~II and let $p \ge 1$.
-    Assume the reverse left-canonical root hypothesis: there is a tensor $A$ with
+    Assume the reverse transfer-map root hypothesis: there is a tensor $A$ with
     $\mathcal{E}_B = \mathcal{E}_{A^{[p]}}$ whenever $\mathcal{E}_B$ is
     $p$-divisible. Then $p$-divisibility of $\mathcal{E}_B$ implies
     $p$-refinability of $B$.
 \end{theorem}
 
 \begin{proof}\leanok
-    From the reverse left-canonical root hypothesis, extract $A$ with
+    From the reverse transfer-map root hypothesis, extract $A$ with
     $\mathcal{E}_B = \mathcal{E}_{A^{[p]}}$. This matches two finite Kraus
     families of the same completely positive map: the blocked family $A^{[p]}$
     with $d^{p}$ operators and the original family $B$ with $d$ operators.
