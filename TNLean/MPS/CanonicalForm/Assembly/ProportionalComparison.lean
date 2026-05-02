@@ -790,12 +790,38 @@ theorem sectorBasisOverlapSpanHypotheses_of_reindexedNonzeroParts_commonPhaseCov
       SameMPV₂ P.toTensor Q.toTensor ∧
       HasBNTSectorData P ∧ HasBNTSectorData Q ∧
       SectorBasisOverlapSpanHypotheses P Q :=
-  sectorBasisOverlapSpanHypotheses_of_reindexedNonzeroParts A B hSame hReindexed
-    (fun p' ztA ztB rA' rB' dimA' dimB' μA' μB' blkA blkB
-      hp' hblkA hblkB hPosA hPosB hNzPos hZ hμA' hμB' hTPA' hTPB'
-      hPrimA' hPrimB' hIrrA' hIrrB' hDimA' hDimB' => by
-      apply (hRemaining hp' hblkA hblkB hPosA hPosB hNzPos hZ hμA' hμB'
-        hTPA' hTPB' hPrimA' hPrimB' hIrrA' hIrrB' hDimA' hDimB').toSpanHypotheses)
+  obtain ⟨p, hp, zeroTailA, zeroTailB, rA, dimA, μA, blocksA,
+      rB, dimB, μB, blocksB, hAblocks, hBblocks, hAPos, hBPos, hNonzeroPos,
+      hZero, hμA, hμB, hTPA, hTPB, hPrimA, hPrimB, hIrrA, hIrrB, hDimA, hDimB⟩ :=
+    afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts A B hSame hReindexed
+  have hHyp : CommonPrimitivePhaseCoverHypotheses zeroTailA zeroTailB blocksA blocksB :=
+    hRemaining hp hAblocks hBblocks hAPos hBPos hNonzeroPos hZero hμA hμB hTPA hTPB
+      hPrimA hPrimB hIrrA hIrrB hDimA hDimB
+  have hSpanHyp : CommonPrimitiveSpanHypotheses zeroTailA zeroTailB blocksA blocksB :=
+    hHyp.toSpanHypotheses
+  letI : ∀ x : Fin rA, NeZero (dimA x) := fun x => ⟨Nat.ne_of_gt (hDimA x)⟩
+  letI : ∀ x : Fin rB, NeZero (dimB x) := fun x => ⟨Nat.ne_of_gt (hDimB x)⟩
+  let nonzeroA := toTensorFromBlocks (d := blockPhysDim d p) (μ := μA) blocksA
+  let nonzeroB := toTensorFromBlocks (d := blockPhysDim d p) (μ := μB) blocksB
+  have hAB : SameMPV₂ (blockTensor (d := d) (D := D₁) A p)
+                      (blockTensor (d := d) (D := D₂) B p) :=
+    sameMPV₂_blockTensor A B hSame p
+  have hNonzero : SameMPV₂ nonzeroA nonzeroB :=
+    sameMPV₂_live_of_sameMPV₂_with_zeroTail_eq
+      (blockTensor (d := d) (D := D₁) A p)
+      (blockTensor (d := d) (D := D₂) B p)
+      nonzeroA nonzeroB hAB hAblocks hBblocks hSpanHyp.zeroTail_eq
+  obtain ⟨P, Q, hPblocks, hQblocks, hPbnt, hQbnt, hOverlapSpan⟩ :=
+    exists_bnt_sectorDecomp_pair_with_overlapSpan_of_block_span_eq
+      (d := blockPhysDim d p) μA blocksA μB blocksB hTPA hTPB hIrrA hIrrB
+      hPrimA hPrimB hSpanHyp.left_injective hSpanHyp.right_injective hμA hμB hSpanHyp.span_eq
+  have hPQeq : SameMPV₂ P.toTensor Q.toTensor := by
+    intro N σ
+    calc
+      mpv P.toTensor σ = mpv nonzeroA σ := hPblocks N σ
+      _ = mpv nonzeroB σ := hNonzero N σ
+      _ = mpv Q.toTensor σ := (hQblocks N σ).symm
+  exact ⟨p, hp, P, Q, hPQeq, hPbnt, hQbnt, hOverlapSpan⟩
 
 /-- **Sector basis overlap-span data via a BNT proportional-decomposition comparison.**
 
@@ -851,13 +877,39 @@ theorem sectorBasisOverlapSpanHypotheses_of_reindexedNonzeroParts_proportional
     ∃ P Q : SectorDecomposition (blockPhysDim d p),
       SameMPV₂ P.toTensor Q.toTensor ∧
       HasBNTSectorData P ∧ HasBNTSectorData Q ∧
-      SectorBasisOverlapSpanHypotheses P Q :=
-  sectorBasisOverlapSpanHypotheses_of_reindexedNonzeroParts A B hSame hReindexed
-    (fun p' ztA ztB rA' rB' dimA' dimB' μA' μB' blkA blkB
-      hp' hblkA hblkB hPosA hPosB hNzPos hZ hμA' hμB' hTPA' hTPB'
-      hPrimA' hPrimB' hIrrA' hIrrB' hDimA' hDimB' => by
-      apply (hRemaining hp' hblkA hblkB hPosA hPosB hNzPos hZ hμA' hμB'
-        hTPA' hTPB' hPrimA' hPrimB' hIrrA' hIrrB' hDimA' hDimB').toSpanHypotheses)
+      SectorBasisOverlapSpanHypotheses P Q := by
+  obtain ⟨p, hp, zeroTailA, zeroTailB, rA, dimA, μA, blocksA,
+      rB, dimB, μB, blocksB, hAblocks, hBblocks, hAPos, hBPos, hNonzeroPos,
+      hZero, hμA, hμB, hTPA, hTPB, hPrimA, hPrimB, hIrrA, hIrrB, hDimA, hDimB⟩ :=
+    afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts A B hSame hReindexed
+  have hHyp : CommonPrimitiveProportionalHypotheses zeroTailA zeroTailB blocksA blocksB :=
+    hRemaining hp hAblocks hBblocks hAPos hBPos hNonzeroPos hZero hμA hμB hTPA hTPB
+      hPrimA hPrimB hIrrA hIrrB hDimA hDimB
+  have hSpanHyp : CommonPrimitiveSpanHypotheses zeroTailA zeroTailB blocksA blocksB :=
+    hHyp.toSpanHypotheses
+  letI : ∀ x : Fin rA, NeZero (dimA x) := fun x => ⟨Nat.ne_of_gt (hDimA x)⟩
+  letI : ∀ x : Fin rB, NeZero (dimB x) := fun x => ⟨Nat.ne_of_gt (hDimB x)⟩
+  let nonzeroA := toTensorFromBlocks (d := blockPhysDim d p) (μ := μA) blocksA
+  let nonzeroB := toTensorFromBlocks (d := blockPhysDim d p) (μ := μB) blocksB
+  have hAB : SameMPV₂ (blockTensor (d := d) (D := D₁) A p)
+                      (blockTensor (d := d) (D := D₂) B p) :=
+    sameMPV₂_blockTensor A B hSame p
+  have hNonzero : SameMPV₂ nonzeroA nonzeroB :=
+    sameMPV₂_live_of_sameMPV₂_with_zeroTail_eq
+      (blockTensor (d := d) (D := D₁) A p)
+      (blockTensor (d := d) (D := D₂) B p)
+      nonzeroA nonzeroB hAB hAblocks hBblocks hSpanHyp.zeroTail_eq
+  obtain ⟨P, Q, hPblocks, hQblocks, hPbnt, hQbnt, hOverlapSpan⟩ :=
+    exists_bnt_sectorDecomp_pair_with_overlapSpan_of_block_span_eq
+      (d := blockPhysDim d p) μA blocksA μB blocksB hTPA hTPB hIrrA hIrrB
+      hPrimA hPrimB hSpanHyp.left_injective hSpanHyp.right_injective hμA hμB hSpanHyp.span_eq
+  have hPQeq : SameMPV₂ P.toTensor Q.toTensor := by
+    intro N σ
+    calc
+      mpv P.toTensor σ = mpv nonzeroA σ := hPblocks N σ
+      _ = mpv nonzeroB σ := hNonzero N σ
+      _ = mpv Q.toTensor σ := (hQblocks N σ).symm
+  exact ⟨p, hp, P, Q, hPQeq, hPbnt, hQbnt, hOverlapSpan⟩
 
 
 /-- **Common-length primitive irreducible sectors with conditional block-span consequences.**
