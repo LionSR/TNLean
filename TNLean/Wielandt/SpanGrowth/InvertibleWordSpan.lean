@@ -54,11 +54,11 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-! ## Basic dimension bound for wordSpan -/
+/-! ## Basic ambient dimension bound for wordSpan -/
 
 /-- The dimension of `S_n(A) = wordSpan A n` is bounded by `D²`.
 
-This is the dimension bound used in the proof of arXiv:0909.5347,
+This is the ambient dimension bound used in the proof of arXiv:0909.5347,
 Theorem 1 case (2); Wolf, Theorem 6.9. -/
 theorem wordSpan_finrank_le (A : MPSTensor d D) (n : ℕ) :
     Module.finrank ℂ (wordSpan A n) ≤ D ^ 2 := by

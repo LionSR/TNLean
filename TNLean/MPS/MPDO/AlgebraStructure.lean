@@ -515,9 +515,9 @@ theorem adjoint_blockedTransferMap_apply_of_adjoint_transferMap_apply
 
 /-! ### Diagonal $\chi$-matrices and the trace-power formula
 
-The paper arXiv:1606.00608 (Cirac--Perez-Garcia--Schuch--Verstraete 2017), Theorem IV.13(ii) asserts that the
-structure coefficients $c_{\alpha,\beta,\gamma}^{(L)}$ of the blocked MPDO
-support algebra have the form
+The paper arXiv:1606.00608 (Cirac--Perez-Garcia--Schuch--Verstraete 2017),
+Theorem IV.13(ii) asserts that the structure coefficients
+$c_{\alpha,\beta,\gamma}^{(L)}$ of the blocked MPDO support algebra have the form
 $c_{\alpha,\beta,\gamma}^{(L)} = \operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{L})$
 for a family of diagonal matrices $\chi_{\alpha,\beta,\gamma}$ with positive
 entries. This subsection represents those diagonal matrices explicitly
@@ -528,7 +528,8 @@ from a common index type `I`. The diagonal size `dim α β γ` is allowed to
 depend on the triple, and `entry α β γ` gives the diagonal entries as complex
 numbers.
 
-In the RFP characterization of [Cirac--Perez-Garcia--Schuch--Verstraete 2017, Thm IV.13(ii)] the index type `I`
+In the RFP characterization of [Cirac--Perez-Garcia--Schuch--Verstraete 2017,
+Theorem IV.13(ii)] the index type `I`
 collects the BNT labels `α, β, γ`, and every `χ_{α,β,γ}` is a diagonal matrix
 with positive real entries. Positivity is *not* part of this structure: it is
 supplied separately through `PosEntries` so that the bare data can be used in
@@ -566,7 +567,8 @@ theorem trace_matrix_pow (α β γ : I) (L : ℕ) :
   simp [matrix_pow, Matrix.trace_diagonal, tracePowerCoeff]
 
 /-- Predicate asserting that every entry of `χ_{α,β,γ}` is a positive real
-number, matching the positivity hypothesis of [Cirac--Perez-Garcia--Schuch--Verstraete 2017, Thm IV.13(ii)].
+number, matching the positivity hypothesis of
+[Cirac--Perez-Garcia--Schuch--Verstraete 2017, Theorem IV.13(ii)].
 Under the scoped `ComplexOrder` instance (opened at the top of the file), a
 strict inequality `0 < z` on `ℂ` is equivalent to `0 < z.re ∧ z.im = 0`. -/
 def PosEntries : Prop :=
@@ -587,7 +589,8 @@ the right-hand side a plain finite sum. The trace formulation
 `HasChiTracePowerForm.eq_trace_matrix_pow`.
 
 This is the Lean-level form of the target identity of
-[Cirac--Perez-Garcia--Schuch--Verstraete 2017, Thm IV.13(ii)] for the blocked MPDO structure coefficients. It is a
+[Cirac--Perez-Garcia--Schuch--Verstraete 2017, Theorem IV.13(ii)] for the
+blocked MPDO structure coefficients. It is a
 *binary* predicate on the pair `(c, χ)` rather than an existential in `χ`, so
 that callers can carry a specific witness `χ` around explicitly; an
 existential version `∃ χ, HasChiTracePowerForm c χ` is available on demand. -/

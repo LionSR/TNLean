@@ -42,15 +42,14 @@ The proof chain is:
    Wedderburn--Artin decomposition — available in Mathlib via
    `IsSemisimpleRing.exists_algEquiv_pi_matrix_of_isAlgClosed`.
 
-The concrete unitary block-diagonal embedding (Wolf Equation 1.39) and the
-conditional expectation form with density operators ρ_k (Wolf Equation 1.40)
-require additional representation-theoretic results and are deferred
-to future work.
+The concrete unitary block-diagonal embedding and the conditional expectation
+form with density operators ρ_k (Wolf Equations 1.39–1.40) require additional
+representation-theoretic results and are deferred to future work.
 
 ## References
 
 * [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Theorem 6.14, Section 6.4]
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Equation 1.39–1.40, Section 1]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Equations 1.39–1.40, Section 1]
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder BigOperators Matrix.Norms.L2Operator
@@ -155,7 +154,7 @@ theorem fixedPointAlgebra_wedderburnArtin
 
 end AbstractDecomp
 
-/-! ## Concrete block-diagonal embedding (Wolf Equation 1.39) -/
+/-! ## Concrete block-diagonal embedding (Wolf Equations 1.39–1.40) -/
 
 section ConcreteDecomp
 
@@ -212,11 +211,11 @@ structure IsWedderburnBlockDecomp
 -- eventually be moved to `TNLean/Algebra/WedderburnArtin.lean` or similar.
 
 /-- Every finite-dimensional `*`-subalgebra of `M_D(ℂ)` admits a Wedderburn
-block decomposition (Wolf Equation 1.39).
+block decomposition (Wolf Equations 1.39–1.40).
 
 The current `IsWedderburnBlockDecomp` structure states the abstract
 Wedderburn--Artin product decomposition, multiplicities set to `1`, and the
-dimension bound. The unitary block-diagonal intertwiner is still
+ambient dimension bound. The unitary block-diagonal intertwiner is still
 deferred in the structure TODO above. -/
 theorem starSubalgebra_hasWedderburnBlockDecomp
     (S : StarSubalgebra ℂ Mat) :
