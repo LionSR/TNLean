@@ -467,7 +467,7 @@ The results follow~\cite{Sanz2010Quantum}.
     In particular, the cumulative span stabilises at index
     at most $D^2$.
     This is the cumulative-span part of \cite[Theorem~1]{Sanz2010Quantum}.
-    The paper's theorem is stronger: via Lemma~2(b) it upgrades this to a
+    The cited theorem is stronger: via Lemma~2(b) it upgrades this to a
     fixed-length conclusion $S_N(A) = \MN{D}$, stated below as a
     separate statement.
 \end{theorem}
@@ -838,7 +838,7 @@ The results follow~\cite{Sanz2010Quantum}.
     \end{enumerate}
 \end{proof}
 
-\begin{remark}[Quantitative vs.\ qualitative content of Theorem~\ref{thm:wielandt_general}]%
+\begin{remark}[Quantitative and qualitative Wielandt bounds]%
     \leanok
     The quantitative bound
     $\iota(A) \le (D^2 - d' + 1)\cdot D^2$
@@ -1179,7 +1179,7 @@ used to produce rank-one elements.
 	then $\rho_{\mathrm{spec}}(\E_A - P) < 1$.
 	When the choice of $\rho$ is irrelevant, we simply say that $A$
 	is a primitive MPS tensor.
-	This is weaker than the paper's notion, which requires
+	This is weaker than the primitive condition of \cite{Sanz2010Quantum}, which requires
 	$\rho > 0$; see Remark~\ref{rem:prim_definition_mismatch}.
 	The stronger positive-definite hypothesis is imposed separately in
 	Theorems~\ref{thm:primitive_implies_irreducible}
@@ -1309,14 +1309,14 @@ spectral gap. It is connected to normality through the following results.
     The last step uses the aperiodicity condition
     $\Id \in S_1(A)$ from Remark~\ref{rem:aperiodicity}.
     After restoring the positive-definite hypothesis,
-    \cite[Proposition~3]{Sanz2010Quantum} identifies the paper's
+    \cite[Proposition~3]{Sanz2010Quantum} identifies that
     primitive/strongly irreducible condition with eventual full
     Kraus rank, i.e. with our notion of normality.
 \end{remark}
 
 \subsection{Primitive implies irreducible}\label{subsec:prim_implies_irred}
 
-\begin{theorem}[Primitive with positive-definite fixed point implies irreducible tensor]%
+\begin{theorem}[Primitive tensors are irreducible]%
     \label{thm:primitive_implies_irreducible}
     \lean{MPSTensor.isIrreducibleTensor_of_isPrimitiveMPS_of_posDef}
     \leanok
@@ -1369,7 +1369,7 @@ Definition~\ref{def:primitive_mps} directly to normality
 using the convergence of the transfer-map iterates to the
 projection onto the fixed-point subspace.
 
-\begin{theorem}[Primitive MPS with positive-definite fixed point has irreducible transfer map]%
+\begin{theorem}[Primitive tensors have irreducible transfer map]%
     \label{thm:irreducible_map_from_primitive}
     \lean{MPSTensor.isIrreducibleMap_of_isPrimitiveMPS_of_posDef}
     \leanok
@@ -1395,7 +1395,7 @@ projection onto the fixed-point subspace.
     irreducibility applies.
 \end{proof}
 
-\begin{theorem}[Primitive MPS with positive-definite fixed point is strongly irreducible]%
+\begin{theorem}[Primitive tensors are strongly irreducible]%
     \label{thm:strongly_irred_from_primitive}
     \lean{MPSTensor.isStronglyIrreduciblePaper_of_isPrimitiveMPS_of_posDef}
     \leanok
@@ -1459,7 +1459,7 @@ span.
     Kraus operators.
     The aperiodicity condition is kept explicit in this section for
     generality.
-    For the paper-style primitive condition
+	    For the primitive condition with positive-definite fixed point
     (peripheral-spectrum primitivity together with a positive-definite
     fixed point), normality follows directly from Wolf's primitivity
     equivalence (Theorem~\ref{thm:wolf_6_8_conjunction}) without passing

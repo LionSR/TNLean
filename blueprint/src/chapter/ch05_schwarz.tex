@@ -341,11 +341,11 @@ convenience.
     \uses{def:kraus_map}
     For a Kraus map $E$, define
     \[
-        \mc{A}_R(E) := \{X \in \MN{D} : E(XY) = E(X) E(Y) \text{ for all } Y \in \MN{D}\}
+        \mc{A}_R(E) := \{X \in \MN{D} : \forall Y \in \MN{D},\ E(XY) = E(X) E(Y)\}
     \]
     and
     \[
-        \mc{A}_L(E) := \{X \in \MN{D} : E(YX) = E(Y) E(X) \text{ for all } Y \in \MN{D}\}.
+        \mc{A}_L(E) := \{X \in \MN{D} : \forall Y \in \MN{D},\ E(YX) = E(Y) E(X)\}.
     \]
     We follow the convention that $\mc{A}_R(E)$ controls right multiplication
     and $\mc{A}_L(E)$ controls left multiplication.

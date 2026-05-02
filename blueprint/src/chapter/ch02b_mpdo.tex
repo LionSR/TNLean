@@ -532,7 +532,7 @@ strong subadditivity for a normalized three-site reduced state.
         def:mpdo_explicit_eta_trace_matrix}
     The trace matrix induced by the extracted family is entrywise
     $T_{k,h} = 1$ in both its complex-valued form and its real-valued form,
-    matching the paper's normalization $T_{k,h} = a_k b_h$ with
+    matching the normalization $T_{k,h} = a_k b_h$ used in
     $a_k = b_h = 1$.
 \end{theorem}
 
@@ -755,7 +755,7 @@ strong subadditivity for a normalized three-site reduced state.
     but the biCF separation condition fails and no blocking length makes the
     entrywise family linearly independent.
 
-    Proposition~IV.3 gives a concrete sufficient criterion for the spanning
+    \cite[Proposition~IV.3]{Cirac2021Matrix} gives a concrete sufficient criterion for the spanning
     condition: after a common blocking length each block is block-injective,
     and after a further finite blocking length one can form linear combinations
     of word evaluations which equal the identity on one chosen block and vanish
@@ -764,13 +764,13 @@ strong subadditivity for a normalized three-site reduced state.
     horizontal canonical-form data.
 \end{remark}
 
-\begin{theorem}[A finite criterion from Proposition~IV.3]
+\begin{theorem}[Finite block-separation criterion]
     \label{thm:propblockinj_abstract}
     \lean{MPSTensor.hasBiCF_of_propBlockInjective}
     \leanok
     \uses{rem:word_tuple_span_top}
     If a block family admits the finite-length data described in
-    Proposition~IV.3, then it is in block-injective canonical form.
+    \cite[Proposition~IV.3]{Cirac2021Matrix}, then it is in block-injective canonical form.
 \end{theorem}
 
 \begin{proof}
@@ -778,7 +778,7 @@ strong subadditivity for a normalized three-site reduced state.
     \uses{rem:word_tuple_span_top}
     This is the direct implication from the finite-length data to the
     finite-length trace-separation statement. What remains open in the full
-    Proposition~IV.3 is the derivation of this finite witness from separated
+    \cite[Proposition~IV.3]{Cirac2021Matrix} is the derivation of this finite witness from separated
     canonical-form / BNT data.
 \end{proof}
 
@@ -1152,8 +1152,8 @@ the elementary trace-power identity for diagonal matrices.
     \leanok
     A family of diagonal complex matrices $\chi_{\alpha,\beta,\gamma}$ indexed
     by ordered triples drawn from a common index type, each of a specified
-    size. This is the paper's $\chi_{\alpha,\beta,\gamma}$ in
-    Theorem~IV.13(ii).
+    size. This is the matrix $\chi_{\alpha,\beta,\gamma}$ of
+    \cite[Theorem~IV.13(ii)]{Cirac2017MPDO_AnnPhys}.
 \end{definition}
 
 \begin{theorem}[Trace of $\chi^L$ equals the sum of $L$-th powers of entries]%
@@ -1256,7 +1256,7 @@ witness, and every GSNNCH witness remembers its underlying commuting-form data.
     \cite{Cirac2017MPDO_AnnPhys}.
 \end{definition}
 
-\begin{theorem}[GSNNCH with zero correlation length iff commuting form with zero correlation length]
+\begin{theorem}[GSNNCH--ZCL and commuting form]
     \label{thm:mpdo_is_gsnnch_zcl_iff_has_commuting_form_and_is_zcl}
     \lean{MPOTensor.isGSNNCHWithZCL_iff_hasCommutingForm_and_isZCL}
     \leanok
@@ -1293,8 +1293,8 @@ Theorem~\ref{thm:mpdo_is_gsnnch_iff_has_commuting_form}.
 For each $N \ge 2$, take the commuting-form datum given by these data.
 \end{proof}
 
-\begin{remark}[Remaining entropy-side construction]
-The remaining entropy-side theorem is to construct the local data needed for
+\begin{remark}[Entropy-side construction]
+The entropy-side theorem still to be supplied constructs the local data needed for
 Theorem~\ref{thm:mpdo_has_commuting_form_of_eta_local_structure} from the SAL
 and ZCL hypotheses. In particular, one must extract explicit neighboring
 operators $\eta_{k,h}$ from the Hayashi Markov decomposition. Once these

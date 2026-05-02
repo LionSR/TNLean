@@ -150,7 +150,7 @@ The main references are
 	Theorem~\ref{thm:overlap_decay} gives the decay.
 \end{proof}
 
-\begin{theorem}[Cross-overlap decay for distinct blocks in canonical form with BNT separation]\label{thm:cross_overlap_zero}
+\begin{theorem}[Cross-overlap decay for BNT-separated blocks]\label{thm:cross_overlap_zero}
 	\lean{MPSTensor.IsCanonicalFormBNT.cross_overlap_tendsto_zero}
 	\leanok
 	\uses{def:cf_bnt, def:mpv_overlap}
@@ -213,7 +213,7 @@ The main references are
 	eventual block injectivity needed here.
 \end{remark}
 
-\begin{theorem}[Normal canonical form with BNT separation yields a BNT after algebraic normality is supplied]
+\begin{theorem}[BNT separation gives a basis of normal tensors]
 	\label{thm:normal_cf_bnt_is_bnt}
 	\lean{MPSTensor.IsNormalCanonicalFormBNT.isBNT}
 	\leanok
@@ -401,7 +401,7 @@ The main references are
 	Theorem~\ref{thm:bnt_perm_same_card} yields the permutation conclusion.
 \end{proof}
 
-\begin{theorem}[Permutation rigidity for proportional decompositions, irreducible TP version]
+\begin{theorem}[Permutation rigidity for irreducible TP decompositions]
 	\label{thm:bnt_perm_prop_nt}
 	\lean{MPSTensor.exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp_of_irreducible_TP}
 	\leanok
@@ -538,7 +538,7 @@ The main references are
 	can take the form $\sum_q \mu_{j,q}^N$, where the $\mu_{j,q}$ are the
 	individual weights contributed by that block.
 	The oscillatory case with $|\mu_{j,q}| = 1$
-	is treated separately in the full paper.
+	is treated separately in the periodic comparison theorem.
 \end{remark}
 
 \section{Newton--Girard identities}

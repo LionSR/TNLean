@@ -145,7 +145,7 @@ used in this chapter.
 	Theorem~\ref{thm:bnt_perm_prop} is formulated in that abstract form.
 \end{remark}
 
-\begin{theorem}[Fundamental Theorem for normal canonical form in the proportional case]\label{thm:ft_proportional_nt}
+\begin{theorem}[Proportional Fundamental Theorem in normal canonical form]\label{thm:ft_proportional_nt}
 		\lean{MPSTensor.fundamentalTheorem_proportionalMPV_normalCFBNT}\leanok
 		\uses{def:normal_cf_bnt, def:gauge_phase_equiv}
 		Let $A_{\mathrm{tot}}$ and $B_{\mathrm{tot}}$ be MPS tensors
@@ -214,9 +214,9 @@ used in this chapter.
 	permutation of the matched blocks and blockwise gauge-phase equivalences.
 	One then compares the resulting MPV expansions from
 	Theorem~\ref{thm:mpv_decomposition}. The explicit-coefficient version
-	(Theorem~\ref{thm:ft_equal_explicit}) proves gauge equivalence of the
-	reindexed weighted block-diagonal tensors using BNT linear independence.
-	The remaining step combines this with the coefficient-array construction
+		(Theorem~\ref{thm:ft_equal_explicit}) proves gauge equivalence after
+		permuting the weighted block-diagonal tensors, using BNT linear independence.
+	The proof then combines this with the coefficient-array construction
 	of Remark~\ref{rem:cf_coeff_arrays} and the weight-recovery theorem
 	(Theorem~\ref{thm:route_b_equal}). After the weights are identified, the phase
 	factors are absorbed into them and the blockwise conjugacies combine to
@@ -248,7 +248,7 @@ used in this chapter.
 	\]
 	for every $N$ and $\sigma$, then $g_A = g_B$, and there is a
 	permutation $\pi$ such that $D_j^A = D_{\pi(j)}^B$ and, after
-	reindexing the $B$-blocks by $\pi$, the weighted block-diagonal tensors
+	ordering the $B$-blocks by $\pi$, the weighted block-diagonal tensors
 	$\bigoplus_{j=1}^{g_A} \mu_j^A A_j$ and
 	$\bigoplus_{j=1}^{g_A} \mu_{\pi(j)}^B B_{\pi(j)}$
 	are gauge equivalent.
@@ -294,7 +294,7 @@ used in this chapter.
 	\]
 	Thus the phase factors can be absorbed into the weights, and the
 	resulting blockwise conjugacies combine to give a gauge equivalence of the
-	reindexed weighted block-diagonal tensors.
+	permuted weighted block-diagonal tensors.
 \end{proof}
 
 \begin{remark}
@@ -727,7 +727,7 @@ single weighted block.
 \end{proof}
 
 
-\begin{theorem}[Nonzero-block span equality gives phase-class representative overlap-span data]%
+\begin{theorem}[Span equality for representative sector bases]%
 \label{thm:bnt_sector_decomp_pair_overlap_span_of_block_span}
 	\lean{MPSTensor.exists_bnt_sectorDecomp_pair_with_overlapSpan_of_block_span_eq}
 	\leanok
@@ -878,7 +878,7 @@ single weighted block.
 	the required MPV-phase equivalence.
 \end{proof}
 
-\begin{theorem}[Proportional-decomposition conclusion gives nonzero-block span equality]%
+\begin{theorem}[Span equality from proportional-decomposition data]%
 \label{thm:nonzero_block_span_eq_of_proportional_decomposition}
 	\lean{MPSTensor.mpv_span_eq_of_proportionalDecompositionConclusion}
 	\leanok
@@ -896,7 +896,7 @@ single weighted block.
 	comparison. The common-cover span lemma then gives the stated span equality.
 \end{proof}
 
-\begin{theorem}[Common phase cover gives phase-class representative overlap-span data]%
+\begin{theorem}[Overlap-span data from a common phase cover]%
 \label{thm:bnt_sectorDecomp_pair_overlapSpan_of_commonPhaseCover}
 	\lean{MPSTensor.exists_bnt_sectorDecomp_pair_with_overlapSpan_of_commonPhaseCover}
 	\leanok
@@ -918,7 +918,7 @@ single weighted block.
 	one-family overlap data.
 \end{proof}
 
-\begin{theorem}[Proportional-decomposition data give phase-class representative overlap-span data]%
+\begin{theorem}[Overlap-span data from proportional decomposition]%
 \label{thm:bnt_sectorDecomp_pair_overlapSpan_of_proportionalDecompositionConclusion}
 	\lean{MPSTensor.exists_bnt_sectorDecomp_pair_with_overlapSpan_of_proportionalDecompositionConclusion}
 	\leanok
@@ -1031,7 +1031,7 @@ single weighted block.
 	sector comparison theorem then gives the sector-weight multiset equalities.
 \end{proof}
 
-\begin{theorem}[Common nonzero-weight blocks with overlap-span data give sector comparison]%
+\begin{theorem}[Sector comparison from common blocks]%
 \label{thm:after_blocking_sector_common_blocks_overlap_span}
 	\lean{MPSTensor.fundamentalTheorem_after_blocking_sector_of_common_blocks_overlapSpan}
 	\leanok
@@ -1063,7 +1063,7 @@ single weighted block.
 \end{proof}
 
 
-\begin{theorem}[Common nonzero-weight blocks with derived overlap data and span comparison]%
+\begin{theorem}[Sector comparison from derived overlap data]%
 \label{thm:after_blocking_sector_common_blocks_injective_span}
 	\lean{MPSTensor.fundamentalTheorem_after_blocking_sector_of_common_blocks_injectiveSpan}
 	\leanok
@@ -1093,7 +1093,7 @@ single weighted block.
 \end{proof}
 
 
-\begin{theorem}[Common nonzero-weight blocks with nonzero-block span equality give sector comparison]%
+\begin{theorem}[Sector comparison from nonzero-block spans]%
 \label{thm:after_blocking_sector_common_blocks_block_span}
 	\lean{MPSTensor.fundamentalTheorem_after_blocking_sector_of_common_blocks_blockSpan}
 	\leanok
@@ -1126,7 +1126,7 @@ single weighted block.
 	sector-weight conclusion.
 \end{proof}
 
-\begin{theorem}[Common nonzero-weight blocks with a common MPV phase cover give sector comparison]%
+\begin{theorem}[Sector comparison from a common phase cover]%
 \label{thm:after_blocking_sector_common_blocks_phase_cover}
 	\lean{MPSTensor.fundamentalTheorem_after_blocking_sector_of_common_blocks_phaseCover}
 	\leanok
@@ -1152,7 +1152,7 @@ single weighted block.
 	without any additional sector-basis assumptions.
 \end{proof}
 
-\begin{theorem}[Common nonzero-weight blocks with common MPV phase-cover data give sector comparison]%
+\begin{theorem}[Sector comparison from phase-cover data]%
 \label{thm:after_blocking_sector_common_blocks_common_phase_cover}
 	\lean{MPSTensor.fundamentalTheorem_after_blocking_sector_of_common_blocks_commonPhaseCover}
 	\leanok
@@ -1175,7 +1175,7 @@ single weighted block.
 	hypotheses.
 \end{proof}
 
-\begin{theorem}[Common nonzero block decompositions with BNT proportional-decomposition data]%
+\begin{theorem}[Sector comparison from proportional-decomposition data]%
 \label{thm:afterBlocking_sectorComparison_of_proportionalDecompositionConclusion}
 	\lean{MPSTensor.afterBlocking_sectorComparison_of_proportionalDecompositionConclusion}
 	\leanok
@@ -1216,7 +1216,7 @@ single weighted block.
 	cancellation gives equality of the nonzero parts there too.
 \end{proof}
 
-\begin{theorem}[Common nonzero-weight blocks with zero-tail agreement and overlap-span data]%
+\begin{theorem}[Sector comparison with zero-tail agreement]%
 \label{thm:after_blocking_sector_common_blocks_overlap_span_zero_tail}
 	\lean{MPSTensor.fundamentalTheorem_after_blocking_sector_of_common_blocks_overlapSpan_zeroTail}
 	\leanok
@@ -1251,7 +1251,7 @@ single weighted block.
 two-basis sector comparison theorem.
 \end{proof}
 
-\begin{theorem}[Zero-tail nonzero block decompositions with nonzero-block span equality]%
+\begin{theorem}[Sector comparison from zero-tail and span data]%
 \label{thm:afterBlocking_sectorComparison_zeroTail_of_blockSpan}
 	\lean{MPSTensor.afterBlocking_sectorComparison_zeroTail_of_blockSpan}
 	\leanok
@@ -1286,19 +1286,19 @@ two-basis sector comparison theorem.
 	conclusion.
 \end{proof}
 
-\begin{definition}[Remaining span hypotheses for common primitive sectors]%
+\begin{definition}[Span hypotheses for common primitive sectors]%
 \label{def:common_primitive_span_hypotheses}
 	\lean{MPSTensor.CommonPrimitiveSpanHypotheses}
 	\leanok
 	\uses{def:mpv_state, def:injective}
 	For two common primitive nonzero-sector families at one blocking length, this
-	condition records the remaining hypotheses needed before applying the
+	condition records the hypotheses needed before applying the
 	zero-tail sector comparison: equality of the two zero-tail dimensions,
 	one-site injectivity of all blocks on both sides, and equality of the
 	finite-length MPV spans of the two block families for every system size.
 \end{definition}
 
-\begin{theorem}[Common phase cover supplies the remaining span hypotheses]%
+\begin{theorem}[Phase covers supply span hypotheses]%
 \label{thm:common_primitive_span_hypotheses_of_common_phase_cover}
 	\lean{MPSTensor.CommonPrimitiveSpanHypotheses.of_commonPhaseCover}
 	\leanok
@@ -1306,7 +1306,7 @@ two-basis sector comparison theorem.
 		lem:mpv_common_phase_cover_span_eq}
 	If the two common primitive nonzero-sector families have equal zero-tail
 	dimensions, are one-site injective, and are equipped with a common MPV phase cover, then
-	they satisfy the remaining span hypotheses of
+	they satisfy the span hypotheses of
 	Definition~\ref{def:common_primitive_span_hypotheses}.
 \end{theorem}
 
@@ -1318,7 +1318,7 @@ two-basis sector comparison theorem.
 	Lemma~\ref{lem:mpv_common_phase_cover_span_eq}.
 \end{proof}
 
-\begin{definition}[Remaining phase-cover hypotheses for common primitive sectors]%
+\begin{definition}[Phase-cover hypotheses for common primitive sectors]%
 \label{def:common_primitive_phase_cover_hypotheses}
 	\lean{MPSTensor.CommonPrimitivePhaseCoverHypotheses}
 	\leanok
@@ -1330,7 +1330,7 @@ two-basis sector comparison theorem.
 	common MPV phase cover for the two block families.
 \end{definition}
 
-\begin{theorem}[Phase-cover hypotheses imply the remaining span hypotheses]%
+\begin{theorem}[Phase-cover hypotheses imply span hypotheses]%
 \label{thm:common_primitive_phase_cover_hypotheses_to_span_hypotheses}
 	\lean{MPSTensor.CommonPrimitivePhaseCoverHypotheses.toSpanHypotheses}
 	\leanok
@@ -1339,7 +1339,7 @@ two-basis sector comparison theorem.
 	If two common primitive nonzero-sector families satisfy the phase-cover
 	hypotheses of
 	Definition~\ref{def:common_primitive_phase_cover_hypotheses}, then they
-	satisfy the remaining span hypotheses of
+	satisfy the span hypotheses of
 	Definition~\ref{def:common_primitive_span_hypotheses}.
 \end{theorem}
 
@@ -1352,7 +1352,7 @@ two-basis sector comparison theorem.
 	common MPV phase cover for the two block families.
 \end{proof}
 
-\begin{definition}[Remaining proportional-comparison hypotheses for common primitive sectors]%
+\begin{definition}[Proportional-comparison hypotheses for common primitive sectors]%
 \label{def:common_primitive_proportional_hypotheses}
 	\lean{MPSTensor.CommonPrimitiveProportionalHypotheses}
 	\leanok
@@ -1384,7 +1384,7 @@ two-basis sector comparison theorem.
 	Theorem~\ref{thm:common_phase_cover_of_proportional_decomposition}.
 \end{proof}
 
-\begin{theorem}[Proportional-comparison hypotheses imply the remaining span hypotheses]%
+\begin{theorem}[Proportional comparison implies span hypotheses]%
 \label{thm:common_primitive_proportional_hypotheses_to_span_hypotheses}
 	\lean{MPSTensor.CommonPrimitiveProportionalHypotheses.toSpanHypotheses}
 	\leanok
@@ -1404,7 +1404,7 @@ two-basis sector comparison theorem.
 	equality together with the zero-tail and injectivity hypotheses.
 \end{proof}
 
-\begin{theorem}[Zero-tail nonzero block decompositions with a common MPV phase cover]%
+\begin{theorem}[Sector comparison from a common phase cover]%
 \label{thm:afterBlocking_sectorComparison_zeroTail_of_commonPhaseCover}
 	\lean{MPSTensor.afterBlocking_sectorComparison_zeroTail_of_commonPhaseCover}
 	\leanok
@@ -1428,7 +1428,7 @@ two-basis sector comparison theorem.
 	each system size, then invoke the zero-tail block-span theorem.
 \end{proof}
 
-\begin{theorem}[Zero-tail nonzero block decompositions with BNT proportional-decomposition data]%
+\begin{theorem}[Sector comparison from proportional-comparison data]%
 \label{thm:afterBlocking_sectorComparison_zeroTail_of_proportionalDecompositionConclusion}
 	\lean{MPSTensor.afterBlocking_sectorComparison_zeroTail_of_proportionalDecompositionConclusion}
 	\leanok
@@ -1455,16 +1455,16 @@ two-basis sector comparison theorem.
 	phase-cover data. The preceding zero-tail theorem then applies.
 \end{proof}
 
-\begin{theorem}[Common primitive sectors with the remaining span hypotheses]%
+\begin{theorem}[Common primitive sectors with span hypotheses]%
 \label{thm:afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_spanHypotheses}
 	\lean{MPSTensor.afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_spanHypotheses}
 	\leanok
 	\uses{thm:after_blocking_common_primitive_irreducible_blocks_reindexed,
 		def:common_primitive_span_hypotheses,
 		thm:afterBlocking_sectorComparison_zeroTail_of_blockSpan}
-	Assume $A$ and $B$ have the same MPV family and that the canonically blocked
-	nonzero parts agree with the same families written using the reindexing of
-	blocked physical words.  The common primitive theorem then produces one
+		Assume $A$ and $B$ have the same MPV family and that the canonically blocked
+		nonzero parts agree with the same families written after identifying
+		blocked physical words.  The common primitive theorem then produces one
 	positive blocking length, zero-tail equations, trace-preserving primitive
 	irreducible nonzero-sector families with positive bond dimensions and nonzero
 	weights, and the positive-length and length-zero identities for those
@@ -1481,20 +1481,20 @@ two-basis sector comparison theorem.
 	\uses{thm:after_blocking_common_primitive_irreducible_blocks_reindexed,
 		thm:afterBlocking_sectorComparison_zeroTail_of_blockSpan}
 	Apply the common primitive theorem to obtain the nonzero-sector families and
-	their structural properties.  The remaining span hypotheses provide equal
+		their structural properties.  The span hypotheses provide equal
 	zero-tail dimensions, one-site injectivity, and finite-length nonzero-sector
 	span equality.  These are exactly the additional hypotheses required by the
 	zero-tail block-span comparison theorem.
 \end{proof}
 
-\begin{definition}[Blocked-word relabeling hypothesis for common sectors]%
+\begin{definition}[Blocked-word identification for common sectors]%
 \label{def:common_sector_relabeling_hypothesis}
 	\lean{MPSTensor.CommonSectorRelabelingHypothesis}
 	\leanok
-	This is the one-sided assertion that the canonically blocked weighted nonzero
-	part agrees, as an MPV family, with the same common cyclic-sector family after
-	the explicit relabeling of blocked physical words. It is the formal hypothesis
-	isolated by the remaining coordinate equality for direct and iterated blocking.
+		This is the one-sided assertion that the canonically blocked weighted nonzero
+		part agrees, as an MPV family, with the same common cyclic-sector family after
+		identifying blocked physical words. It isolates the coordinate equality for
+		direct and iterated blocking.
 \end{definition}
 
 \begin{definition}[Global coordinate-grouping hypothesis for common sectors]%
@@ -1509,15 +1509,15 @@ two-basis sector comparison theorem.
 	consecutive words of the period-removal length.
 \end{definition}
 
-\begin{theorem}[Coordinate grouping implies common-sector relabeling]%
+\begin{theorem}[Coordinate grouping gives the word identification]%
 \label{thm:common_grouped_block_cast_to_relabeling}
 	\lean{MPSTensor.CommonGroupedBlockCastHypothesis.toRelabelingHypothesis}
 	\leanok
 	\uses{def:common_grouped_block_cast_hypothesis,
 		def:common_sector_relabeling_hypothesis,
 		thm:common_blocked_cyclic_sector_blocked_word_comparison}
-	If the global coordinate-grouping hypothesis holds, then the blocked-word
-	relabeling hypothesis used by the common-sector structural theorem holds.  The
+		If the global coordinate-grouping hypothesis holds, then the blocked-word
+		identification used by the common-sector structural theorem holds.  The
 	proof is exactly the weighted finite-sum comparison for direct and iterated
 	blocking applied to each common cyclic-sector family.
 \end{theorem}
@@ -1529,14 +1529,14 @@ two-basis sector comparison theorem.
 	the original nonzero blocks with the transported powers of the weights.
 \end{proof}
 
-\begin{theorem}[Common-length sectors with conditional block-span consequences]%
+\begin{theorem}[Common-length sectors and span consequences]%
 \label{thm:after_blocking_common_primitive_irreducible_blocks_block_span_consequences}
 	\lean{MPSTensor.afterBlocking_commonSector_blockSpan_of_reindexedNonzeroParts}
 	\leanok
 	\uses{def:common_sector_relabeling_hypothesis, def:same_mpv2_pos,
 		def:mpv_common_phase_cover}
-	Assume two tensors generate the same MPV family and assume the blocked-word
-	relabeling hypothesis used in the common-sector construction.  Then there is a
+		Assume two tensors generate the same MPV family and assume the blocked-word
+		identification used in the common-sector construction.  Then there is a
 	common blocking length at which both tensors have zero-tail decompositions whose
 	nonzero parts are weighted families of trace-preserving, primitive,
 	tensor-irreducible blocks with positive bond dimension and nonzero weights.  The
@@ -1565,13 +1565,13 @@ two-basis sector comparison theorem.
 	Theorem~\ref{thm:nonzero_block_span_eq_of_proportional_decomposition}.
 \end{proof}
 
-\begin{theorem}[Relabeled common sectors with a common MPV phase cover]%
+\begin{theorem}[Common sectors from phase-cover data]%
 \label{thm:afterBlocking_sectorComparison_reindexed_commonPhaseCover}
 	\lean{MPSTensor.afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_commonPhaseCover}
 	\leanok
 	\uses{def:common_primitive_phase_cover_hypotheses,
 		def:common_sector_relabeling_hypothesis}
-	Let $A$ and $B$ have the same MPV family.  Assume the blocked-word relabeling
+		Let $A$ and $B$ have the same MPV family.  Assume the blocked-word identification
 	hypothesis for common cyclic sectors.  The common-sector structural theorem then
 	produces a common blocking length, zero-tail identities, and trace-preserving,
 	primitive, irreducible nonzero-sector families on both sides.  If those
@@ -1586,18 +1586,18 @@ two-basis sector comparison theorem.
 	\uses{thm:afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_spanHypotheses,
 		thm:common_primitive_phase_cover_hypotheses_to_span_hypotheses}
 	Use Theorem~\ref{thm:common_primitive_phase_cover_hypotheses_to_span_hypotheses}
-	to form the remaining span hypotheses of
+		to form the span hypotheses of
 	Definition~\ref{def:common_primitive_span_hypotheses}.  Then apply the
 	common-sector comparison theorem with those span hypotheses.
 \end{proof}
 
-\begin{theorem}[Relabeled common sectors with proportional-comparison data]%
+\begin{theorem}[Common sectors from proportional-comparison data]%
 \label{thm:afterBlocking_sectorComparison_reindexed_proportional}
 	\lean{MPSTensor.afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_proportional}
 	\leanok
 	\uses{def:common_primitive_proportional_hypotheses,
 		def:common_sector_relabeling_hypothesis}
-	Let $A$ and $B$ have the same MPV family, and assume the blocked-word relabeling
+		Let $A$ and $B$ have the same MPV family, and assume the blocked-word identification
 	hypothesis for common cyclic sectors. The common-sector structural theorem
 	produces the common primitive nonzero-sector families. If those families satisfy
 	the proportional-comparison hypotheses of
@@ -1620,13 +1620,13 @@ two-basis sector comparison theorem.
 	\leanok
 	\uses{def:common_sector_relabeling_hypothesis,
 		def:common_primitive_proportional_hypotheses}
-	These named hypotheses record the comparison data still needed for the
+		These hypotheses record the comparison data for the
 	periodic-theorem-free after-blocking formulation of the CPSV Fundamental
-	Theorem. They contain the blocked-word relabeling hypothesis for common cyclic
+		Theorem. They contain the blocked-word identification for common cyclic
 	sectors. For the common primitive nonzero-sector families produced from two
 	tensors with the same MPV family, the comparison field is supplied with their
 	isometry, primitivity, and irreducibility evidence before returning the
-	remaining proportional-comparison hypotheses for those blocks. The hypotheses
+		proportional-comparison hypotheses for those blocks. The hypotheses
 	are tied to the produced families rather than to an arbitrary chosen
 	decomposition.
 \end{definition}
@@ -1663,8 +1663,8 @@ two-basis sector comparison theorem.
 	Cirac--P\'erez-Garc\'ia--Schuch--Verstraete Fundamental Theorem: after
 	blocking, the tensor families are represented by BNT sector decompositions
 	whose basis sectors and weights match up to permutation and nonzero phases, as
-	in \cite{Cirac2016MPDO_arXiv} and \cite{Cirac2021Matrix}. The remaining hypotheses are explicit:
-	the statement does not assume away the blocked-word relabeling, zero-tail,
+	in \cite{Cirac2016MPDO_arXiv} and \cite{Cirac2021Matrix}. The explicit hypotheses are:
+	the statement does not assume away the blocked-word identification, zero-tail,
 	isometry, primitivity, irreducibility, or proportional-comparison inputs.
 \end{theorem}
 
@@ -1673,7 +1673,7 @@ two-basis sector comparison theorem.
 	\uses{thm:afterBlocking_sectorComparison_reindexed_proportional}
 	Apply
 	Theorem~\ref{thm:afterBlocking_sectorComparison_reindexed_proportional} with
-	the relabeling and proportional-comparison data from
+		the word-identification and proportional-comparison data from
 	Definition~\ref{def:after_blocking_fundamental_theorem_hypotheses}. The proof
 	then records the resulting blocking length, sector decompositions, BNT data,
 	permutation, multiplicity equalities, phases, and sector-weight
@@ -1723,7 +1723,7 @@ two-basis sector comparison theorem.
 		\sum_q \mu_{j,q}^N = \sum_q (\nu_{j,q}e^{i\phi_j})^N.
 	\]
 	Newton identities, equivalently the elementary power-sum lemma used in the
-	paper, recover the multiplicities and the weights.  The blockwise gauge
+	CPSV argument, recover the multiplicities and the weights.  The blockwise gauge
 	matrices are then placed on the diagonal to obtain the global conjugating
 	matrix; this is the equal-case corollary of the Fundamental Theorem in
 	\cite{Cirac2016MPDO_arXiv}, restated in \cite{Cirac2021Matrix}.
@@ -1765,7 +1765,7 @@ two-basis sector comparison theorem.
 	gives the common weighted nonzero-sector decompositions needed for the
 	comparison theorems.
 	Theorem~\ref{thm:afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_spanHypotheses}
-	then records the remaining hypotheses: equality of the
+		then records the hypotheses: equality of the
 	zero-tail dimensions, injectivity of the common nonzero-sector blocks, and
 	finite-length MPV span equality.
 	Theorem~\ref{thm:after_blocking_common_primitive_irreducible_blocks_block_span_consequences}
