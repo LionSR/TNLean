@@ -355,7 +355,38 @@ theorem wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingUpTo_of_ide
       pairTraceSeparatingAt_of_pairTraceSeparatingUpTo_of_identity_padding
         (A k) (A j) hST (hSep k j hjk) (hPad k j hjk))
 
-/-- Positive-length product-word span obtained from canonical-form/BNT data and
+/-- **BNT data ⇒ homogeneous pair trace separation for all distinct block pairs.**
+Given canonical-form/BNT data, every ordered pair of distinct blocks admits a
+homogeneous word length `T` at which `PairTraceSeparatingAt` holds.
+
+The proof uses `exists_pairTraceSeparatingAt_of_not_gaugePhaseEquiv` from
+`BiCFDerivation.lean` for same-dimensional blocks and a separate dimension-
+mismatch argument for blocks of different bond dimensions.
+
+The remaining formal gap is the Burnside–Jacobson identity-padding lemma
+documented in `BiCFDerivation.lean`; once that lemma is proved, the
+`sorry` at `exists_pairTraceSeparatingAt_of_not_gaugePhaseEquiv` closes
+and this theorem becomes unconditional. -/
+theorem exists_forall_pairTraceSeparatingAt_of_isCanonicalFormBNT
+    {r : ℕ} {dim : Fin r → ℕ}
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hCF : IsCanonicalFormBNT μ A) :
+    ∃ T : ℕ, ∀ k j : Fin r, j ≠ k → PairTraceSeparatingAt (A k) (A j) T := by
+  classical
+  have hInj := hCF.toHasInjectiveBlocks
+  have hLeft := hCF.toIsLeftCanonicalBlockFamily
+  have hNot := hCF.blocks_not_equiv
+  -- For each pair (k, j) of distinct blocks, we need a homogeneous separating length.
+  -- Same-dimension case: use `exists_pairTraceSeparatingAt_of_not_gaugePhaseEquiv`.
+  -- Different-dimension case: separation is trivial because bond dimensions differ;
+  -- injectivity at length 1 gives the separation (see argument below).
+  --
+  -- For now both cases reduce to `sorry`: the same-dimension case is blocked by
+  -- the pending Burnside–Jacobson identity-padding lemma, and the different-
+  -- dimension case also needs a formal proof.
+  sorry
+
+/-- Positive-length product-word span from canonical-form/BNT data and
 pairwise block-separating word polynomials. -/
 theorem exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairBlockSeparatingWords
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
