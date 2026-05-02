@@ -1493,6 +1493,7 @@ instance for `Fin n → Fin (blockPhysDim d m)` are compatible via the canonical
 This is the single remaining mathematical fact needed to make
 `afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts`
 unconditional. -/
+set_option maxHeartbeats 400000 in
 theorem flattenWordOfBlock_cast_eq {d m n p : ℕ}
     (hp_eq : p = m * n) (h_card : blockPhysDim (blockPhysDim d m) n = blockPhysDim d p)
     (i : Fin (blockPhysDim d p)) :
@@ -1530,17 +1531,20 @@ theorem flattenWordOfBlock_cast_eq {d m n p : ℕ}
         (finCongr (mul_comm n m)).arrowCongr (Equiv.refl (Fin d))
   have hF_apply (g : Fin n → Fin (blockPhysDim d m)) (j : Fin n) (t : Fin m) :
       (F g) ⟨m * (j : ℕ) + (t : ℕ), hpos j t⟩ = (E_m.symm (g j)) t := by
-    -- F is built from arrowCongr, curry.symm, prodComm, finProdFinEquiv (m:=n)(n:=m), and finCongr
-    -- finProdFinEquiv (m:=n)(n:=m) maps (j,t) to t + m*j = m*j + t
-    -- prodComm swaps the pair order: (t,j) → (j,t)
-    -- curry.symm evaluates: curry.symm h (a,b) = h b a
-    have hprod_val : ((finProdFinEquiv (m := n) (n := m)) (j, t)).val = m * (j : ℕ) + (t : ℕ) := by
-      simp [finProdFinEquiv, mul_comm]
-    have hprod_eq : (finProdFinEquiv (m := n) (n := m)) (j, t) =
-        ⟨m * (j : ℕ) + (t : ℕ), hpos j t⟩ := by
-      ext; exact hprod_val
-    simp [F, hE_m, Equiv.arrowCongr_apply, Equiv.curry_symm_apply,
-      Equiv.prodComm_symm, finCongr_apply_coe, hprod_eq]
+    have h_finCongr : (finCongr (mul_comm n m)).symm ⟨m * (j : ℕ) + (t : ℕ), hpos j t⟩ =
+        ⟨m * (j : ℕ) + (t : ℕ), by simpa [mul_comm] using hpos j t⟩ := by
+      ext; simp
+    have hpos' : m * (j : ℕ) + (t : ℕ) < n * m := by simpa [mul_comm] using hpos j t
+    have h_finProd : (finProdFinEquiv (m := n) (n := m)).symm
+        ⟨m * (j : ℕ) + (t : ℕ), hpos'⟩ = (j, t) := by
+      apply (finProdFinEquiv (m := n) (n := m)).injective
+      have hprod_val : ((finProdFinEquiv (m := n) (n := m)) (j, t)).val =
+          m * (j : ℕ) + (t : ℕ) := by
+        simp [finProdFinEquiv, mul_comm]
+      ext; simp [finProdFinEquiv, mul_comm, hprod_val]
+    unfold F
+    simp [Equiv.trans_apply, Equiv.arrowCongr_apply, Equiv.curry_symm_apply,
+      Equiv.prodComm_symm, h_finCongr, h_finProd]
   have h_card_eq : Fintype.card (Fin n → Fin (blockPhysDim d m)) =
       Fintype.card (Fin (m * n) → Fin d) := by
     simp [blockPhysDim_eq_pow, pow_mul, Fintype.card_fun, Fintype.card_fin]
@@ -1564,22 +1568,23 @@ theorem flattenWordOfBlock_cast_eq {d m n p : ℕ}
   have h_equiv_symm_eq : E_mn.symm =
       (finCongr h_card_eq).symm.trans (E_n.symm.trans F) := by
     rw [h_equiv_eq]
-    simp
+    simp [Equiv.trans_symm, Equiv.symm_symm]
   -- Now the key relationship: direct decoding equals F of nested decoding
   have h_decode_eq (i : Fin (blockPhysDim d (m * n))) :
       E_mn.symm i = F (E_n.symm (Fin.cast h_card.symm i)) := by
-    calc
-      E_mn.symm i = ((finCongr h_card_eq).symm.trans (E_n.symm.trans F)) i := by rw [h_equiv_symm_eq]
-      _ = (E_n.symm.trans F) ((finCongr h_card_eq).symm i) := rfl
-      _ = F (E_n.symm ((finCongr h_card_eq).symm i)) := rfl
-      _ = F (E_n.symm (Fin.cast h_card.symm i)) := by
-        -- h_card_eq.symm and h_card.symm are the same equality, so finCongr and Fin.cast coincide
-        congr 1
-        have : h_card_eq = h_card := by
-          dsimp [h_card_eq, blockPhysDim]
-          simp
-        subst this
-        simp
+    rw [h_equiv_symm_eq]
+    -- ((finCongr h_card_eq).symm.trans (E_n.symm.trans F)) i = F (E_n.symm (Fin.cast h_card.symm i))
+    simp [Equiv.trans_apply]
+    -- Remaining: F (E_n.symm ((finCongr h_card_eq).symm i)) = F (E_n.symm (Fin.cast h_card.symm i))
+    congr 1
+    -- Need: (finCongr h_card_eq).symm i = Fin.cast h_card.symm i
+    -- Since h_card_eq and h_card are the same equality (both express (d^m)^n = d^(m*n)),
+    -- finCongr and Fin.cast coincide on elements.
+    have : h_card_eq = h_card := by
+      dsimp [h_card_eq, blockPhysDim]
+      simp
+    subst this
+    ext; simp
   -- Now expand both sides as lists and use h_decode_eq pointwise
   calc
     flattenBlockedWord d m
