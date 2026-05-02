@@ -680,7 +680,8 @@ hypothesis, uses
 `isIrreducibleOnCorner_of_cyclic_decomp_mps_of_sectorFixedPointAlgebraRigidity`
 to obtain corner irreducibility of `((transferMap A†)^m)|_{P_k}`, and then
 applies the compression transport theorem above. -/
-theorem primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking_of_fixedAlgebraRigidity
+theorem
+  primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking_of_fixedAlgebraRigidity
     {d D m : ℕ} [NeZero D] [NeZero m]
     (A : MPSTensor d D)
     (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
@@ -910,7 +911,8 @@ concentrated in proving that the blocked sector adjoint fixed-point algebra is
 scalar. Once that hypothesis is available, the present theorem derives
 `SectorFixedPointAlgebraRigidity` and applies the orbit-sum / corner-compression
 reduction from the fixed-algebra-rigidity sector-block theorem. -/
-theorem primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking_of_scalarBlockedFixedPoints
+theorem
+  primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking_of_scalarBlockedFixedPoints
     {d D m : ℕ} [NeZero D] [NeZero m]
     (A : MPSTensor d D)
     (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
@@ -1461,6 +1463,72 @@ theorem groupedBlockCastAgrees_iff_iteratedBlockIndex_cast
       _ = directToIteratedBlockIndex d (F.period k) (F.extra k)
           (Fin.cast (congr_arg (blockPhysDim d) (F.p_eq_period_mul_extra k)) i) := by
             rw [hIndex i]
+
+/-- **Core Fintype-level coordinate assertion (remaining blocker for #942/#1075).**
+
+Given a common blocked physical alphabet index `i`, the flattened inner word obtained by
+decoding `i` through the cardinal equality `blockPhysDim (blockPhysDim d m) n = blockPhysDim d p`
+(with `p = m*n`) agrees with the direct decoding of `i` at the common period length.
+
+This is a compatibility statement between the two `Fintype.equivFin` enumerations used for
+`Fin p → Fin d` and `Fin n → Fin (blockPhysDim d m)`.  The `Fintype.equivFin` bijections
+for function types in Mathlib use lexicographic enumeration, which is compatible with the
+grouping described by `directToIteratedBlockIndex`.  Proving this equality therefore
+reduces to showing that the `Fintype` instance for `Fin p → Fin d` and the `Fintype`
+instance for `Fin n → Fin (blockPhysDim d m)` are compatible via the canonical currying.
+This is the single remaining mathematical fact needed to make
+`afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts`
+unconditional. -/
+theorem flattenWordOfBlock_cast_eq {d m n p : ℕ}
+    (hp_eq : p = m * n) (h_card : blockPhysDim (blockPhysDim d m) n = blockPhysDim d p)
+    (i : Fin (blockPhysDim d p)) :
+    flattenBlockedWord d m
+      (wordOfBlock (blockPhysDim d m) n (Fin.cast h_card.symm i)) =
+    wordOfBlock d p i := by
+  -- The two sides are lists of `Fin d` of the same length `p`.
+  -- Equality follows from compatibility of the Fintype.equivFin enumerations
+  -- for `Fin p → Fin d` (used on the RHS) and `Fin n → Fin (blockPhysDim d m)`
+  -- (used on the LHS), together with the fact that grouping m-sized chunks of
+  -- a function `Fin p → Fin d` corresponds to the currying `Fin n → (Fin m → Fin d)`
+  -- under the product identification `Fin (m*n) ≃ Fin m × Fin n` encoded by
+  -- the standard Fintype instances.
+  sorry
+
+/-- The global grouping-cast hypothesis applied to a specific family reduces to the
+core Fintype-level assertion. -/
+theorem groupedBlockCastAgrees_of_flattenWordOfBlock_cast_eq
+    {d : ℕ} (h_flatten : ∀ {m n p : ℕ} (hp_eq : p = m * n)
+      (h_card : blockPhysDim (blockPhysDim d m) n = blockPhysDim d p)
+      (i : Fin (blockPhysDim d p)),
+      flattenBlockedWord d m
+        (wordOfBlock (blockPhysDim d m) n (Fin.cast h_card.symm i)) =
+      wordOfBlock d p i)
+    {r : ℕ} {dim : Fin r → ℕ}
+    {blocks : (k : Fin r) → MPSTensor d (dim k)}
+    (F : CommonBlockedCyclicSectorFamily blocks) (k : Fin r) :
+    F.groupedBlockCastAgrees k := by
+  rw [F.groupedBlockCastAgrees_iff_iteratedBlockIndex_cast k]
+  intro i
+  let m := F.period k
+  let n := F.extra k
+  have hp_eq : F.p = m * n := F.p_eq_period_mul_extra k
+  have hcard_symm : blockPhysDim d F.p = blockPhysDim (blockPhysDim d m) n :=
+    (F.blockPhysDim_nested_eq k).symm
+  have hcast_eq : iteratedBlockIndex d m n (Fin.cast hcard_symm i) =
+      Fin.cast (congr_arg (blockPhysDim d) hp_eq) i := by
+    apply wordOfBlock_injective d (m * n)
+    calc
+      wordOfBlock d (m * n)
+        (iteratedBlockIndex d m n (Fin.cast hcard_symm i)) =
+        flattenBlockedWord d m
+          (wordOfBlock (blockPhysDim d m) n (Fin.cast hcard_symm i)) := by
+        rw [wordOfBlock_iteratedBlockIndex]
+      _ = wordOfBlock d F.p i := by
+        simpa [hcard_symm, hp_eq] using h_flatten hp_eq (F.blockPhysDim_nested_eq k) i
+      _ = wordOfBlock d (m * n)
+          (Fin.cast (congr_arg (blockPhysDim d) hp_eq) i) :=
+        (wordOfBlock_cast_length d hp_eq i).symm
+  simpa using hcast_eq
 
 /-- The blocked-word comparison follows if the canonical identification from the common
 alphabet to an iterated alphabet agrees with the grouping map that reads a direct word in
