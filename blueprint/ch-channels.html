@@ -195,6 +195,9 @@
 <li class="">
   <a href="ch-channels.html#subsec:svd_normal_form"><span class="toc_ref">5.12.2</span> <span class="toc_entry">SVD normal form (existence)</span></a>
  </li>
+<li class="">
+  <a href="ch-channels.html#subsec:lorentz_normal_form"><span class="toc_ref">5.12.3</span> <span class="toc_entry">Lorentz normal form (Wolf §2.3, existence statements)</span></a>
+ </li>
 
   </ul>
  </li>
@@ -9727,7 +9730,7 @@
 </div>
 <h2 id="subsec:svd_normal_form">5.12.2 SVD normal form (existence)</h2>
 
-<p>Wolf §2.3 discusses two families of normal forms for the transfer-matrix representation of a quantum channel: the <em>singular value decomposition</em> (SVD) and, for qubit channels, the <em>Lorentz normal form</em> obtained by \(\mathrm{SL}(2,\mathbb {C})\) filtering operations. In this blueprint, the full existence statement formalized below is the SVD normal form; the Lorentz normal form existence requires a compactness / minimisation argument over \(\mathrm{SL}(2,\mathbb {C})\) filterings (Wolf Prop 2.9 / Prop 2.11) that remains open in this formalisation. </p>
+<p>Wolf §2.3 discusses two families of normal forms for the transfer-matrix representation of a quantum channel: the <em>singular value decomposition</em> (SVD) and, for qubit channels, the <em>Lorentz normal form</em> obtained by \(\mathrm{SL}(2,\mathbb {C})\) filtering operations. In this blueprint, the SVD normal form is fully formalised. The Lorentz normal form existence is stated as a theorem (Theorem&#160;<a href="ch-channels.html#thm:lorentz_normal_form_qubit">5.129</a>) but the proof requires a compactness / minimisation argument over \(\mathrm{SL}(2,\mathbb {C})\) filterings (Wolf Prop 2.9 / Prop 2.11) that remains open in this formalisation—see §<a href="ch-channels.html#subsec:lorentz_normal_form">5.12.3</a>. </p>
 <div class="theorem_thmwrapper theorem-style-plain" id="thm:svd_posSemidef">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
@@ -9956,6 +9959,268 @@
 
   </div>
 </div>
+<h2 id="subsec:lorentz_normal_form">5.12.3 Lorentz normal form (Wolf §2.3, existence statements)</h2>
+
+<div class="definition_thmwrapper theorem-style-definition" id="def:sl_filtering">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">5.125</span>
+    <span class="definition_thmtitle">SL-filtering operation</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-channels.html#def:sl_filtering">#</a>
+    
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/Wolf.SLFiltering" class="lean_decl">Wolf.SLFiltering</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p> An <em>SL-filtering</em> for \(D \times D\) matrices is a completely positive map of the form \(\Phi (X) = S X S^{\dagger }\) where \(S \in M_{D}(\mathbb {C})\) satisfies \(\det S = 1\). Such maps are invertible and have Kraus rank&#160;1. </p>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:doubly_stochastic">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">5.126</span>
+    <span class="definition_thmtitle">Doubly-stochastic map</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-channels.html#def:doubly_stochastic">#</a>
+    
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/Wolf.DoublyStochastic" class="lean_decl">Wolf.DoublyStochastic</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p> A linear map \(T : M_{D}(\mathbb {C}) \to M_{D}(\mathbb {C})\) is <em>doubly-stochastic</em> if \(T(1) \propto 1\) and the reduced density matrix \(\operatorname{tr}_{1}[\tau ]\) of its Choi matrix \(\tau = (T \otimes \operatorname{id})(|\Omega \rangle \! \langle \Omega |)\) is proportional to the identity. This is the target normal form in Wolf Prop&#160;2.8. </p>
+
+  </div>
+</div>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:infimum_is_attained">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">5.127</span>
+    <span class="lemma_thmtitle">Infimum attainment for SL-filterings</span>
+    <div class="thm_header_extras">
+
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-channels.html#lem:infimum_is_attained">#</a>
+    
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/Wolf.infimum_is_attained" class="lean_decl">Wolf.infimum_is_attained</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>  For a positive-definite Choi matrix \(\tau \), the infimum of \(\operatorname{tr}\! \big[(S_{2} \otimes _{k} S_{1}) \tau (S_{2} \otimes _{k} S_{1})^{\dagger }\big]\) over \(S_{1}, S_{2} \in M_{D}(\mathbb {C})\) with \(\det S_{1} = \det S_{2} = 1\) is attained. <b class="bfseries">Not yet proved</b>—requires compactness of bounded subsets of \(\SL (D, \mathbb {C})\) and the extreme-value theorem. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:exists_normal_form_generic">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">5.128</span>
+    <span class="theorem_thmtitle">Generic normal form for CP maps</span>
+    <div class="thm_header_extras">
+
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-channels.html#thm:exists_normal_form_generic">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-channels.html#def:sl_filtering">Definition 5.125</a></li>
+          
+          <li><a href="ch-channels.html#def:doubly_stochastic">Definition 5.126</a></li>
+          
+          <li><a href="ch-channels.html#lem:infimum_is_attained">Lemma 5.127</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/Wolf.exists_normal_form_generic" class="lean_decl">Wolf.exists_normal_form_generic</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   Let \(T : M_{D}(\mathbb {C}) \to M_{D}(\mathbb {C})\) be a completely positive map whose Choi matrix is positive-definite (equivalently, \(T\) has full Kraus rank). Then there exist SL-filterings \(\Phi _{1}, \Phi _{2}\) such that \(\Phi _{2} \circ T \circ \Phi _{1}\) is doubly-stochastic. <b class="bfseries">Not yet proved</b>—proof blocked on Lemma&#160;<a href="ch-channels.html#lem:infimum_is_attained">5.127</a>. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:lorentz_normal_form_qubit">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">5.129</span>
+    <span class="theorem_thmtitle">Lorentz normal form for qubit channels</span>
+    <div class="thm_header_extras">
+
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-channels.html#thm:lorentz_normal_form_qubit">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-channels.html#def:sl_filtering">Definition 5.125</a></li>
+          
+          <li><a href="ch-channels.html#lem:infimum_is_attained">Lemma 5.127</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/Wolf.exists_lorentz_normal_form_qubit" class="lean_decl">Wolf.exists_lorentz_normal_form_qubit</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   For every qubit channel \(T : M_{2}(\mathbb {C}) \to M_{2}(\mathbb {C})\), there exist \(\SL (2, \mathbb {C})\)-filterings \(\Phi _{1}, \Phi _{2}\) such that the filtered channel \(T' = \Phi _{2} \circ T \circ \Phi _{1}\) is in one of the three Lorentz normal forms: diagonal, non-diagonal, or singular. The three canonical forms are defined as the Lean predicates <span class="ttfamily">Wolf.IsLorentzDiagonal</span>, <span class="ttfamily">Wolf.IsLorentzNonDiagonal</span>, <span class="ttfamily">Wolf.IsLorentzSingular</span> in <span class="ttfamily">LorentzNormalForm.lean</span>. <b class="bfseries">Not yet proved</b>—proof blocked on Lemma&#160;<a href="ch-channels.html#lem:infimum_is_attained">5.127</a> and the Lorentz group classification of \(\SL (2, \mathbb {C})\) orbits. </p>
+
+  </div>
+</div>
 <h1 id="sec:channel_determinant">5.13 Determinant of a quantum channel</h1>
 
 <div class="definition_thmwrapper theorem-style-definition" id="def:channel_det">
@@ -9963,7 +10228,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">5.125</span>
+    <span class="definition_thmlabel">5.130</span>
     <span class="definition_thmtitle">Channel determinant</span>
     <div class="thm_header_extras">
 
@@ -10013,7 +10278,7 @@
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">5.126</span>
+    <span class="remark_thmlabel">5.131</span>
     <span class="remark_thmtitle">Channel determinant as an operator determinant</span>
     <div class="thm_header_extras">
 
@@ -10055,7 +10320,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">5.127</span>
+    <span class="definition_thmlabel">5.132</span>
     <span class="definition_thmtitle">Unitary channel</span>
     <div class="thm_header_extras">
 
@@ -10101,7 +10366,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">5.128</span>
+    <span class="theorem_thmlabel">5.133</span>
     <span class="theorem_thmtitle">Unitary channels have determinant one</span>
     <div class="thm_header_extras">
 
@@ -10128,9 +10393,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-channels.html#def:channel_det">Definition 5.125</a></li>
+          <li><a href="ch-channels.html#def:channel_det">Definition 5.130</a></li>
           
-          <li><a href="ch-channels.html#def:unitary_channel">Definition 5.127</a></li>
+          <li><a href="ch-channels.html#def:unitary_channel">Definition 5.132</a></li>
           
         </ul>
     
@@ -10184,7 +10449,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">5.129</span>
+    <span class="theorem_thmlabel">5.134</span>
     <span class="theorem_thmtitle">Determinant bound for positive trace-preserving maps</span>
     <div class="thm_header_extras">
 
@@ -10211,7 +10476,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-channels.html#def:channel_det">Definition 5.125</a></li>
+          <li><a href="ch-channels.html#def:channel_det">Definition 5.130</a></li>
           
           <li><a href="ch-channels.html#def:positive_map">Definition 5.1</a></li>
           
@@ -10275,7 +10540,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">5.130</span>
+    <span class="theorem_thmlabel">5.135</span>
     <span class="theorem_thmtitle">Determinant one iff the channel is unitary</span>
     <div class="thm_header_extras">
 
@@ -10304,13 +10569,13 @@
           
           <li><a href="ch-channels.html#def:channel">Definition 5.8</a></li>
           
-          <li><a href="ch-channels.html#def:channel_det">Definition 5.125</a></li>
+          <li><a href="ch-channels.html#def:channel_det">Definition 5.130</a></li>
           
-          <li><a href="ch-channels.html#def:unitary_channel">Definition 5.127</a></li>
+          <li><a href="ch-channels.html#def:unitary_channel">Definition 5.132</a></li>
           
-          <li><a href="ch-channels.html#thm:channelDet_norm_le_one">Theorem 5.129</a></li>
+          <li><a href="ch-channels.html#thm:channelDet_norm_le_one">Theorem 5.134</a></li>
           
-          <li><a href="ch-channels.html#thm:channel_det_unitary_eq_one">Theorem 5.128</a></li>
+          <li><a href="ch-channels.html#thm:channel_det_unitary_eq_one">Theorem 5.133</a></li>
           
         </ul>
     
@@ -10365,7 +10630,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Reverse direction is Theorem&#160;<a href="ch-channels.html#thm:channel_det_unitary_eq_one">5.128</a>. Forward direction: \(|\det T| = 1\) together with \(|\mu | \le 1\) for every eigenvalue \(\mu \) (from trace preservation and positivity) forces every eigenvalue to satisfy \(|\mu | = 1\). Hence \(T\) is bijective. A bijective CPTP map is a \(*\)-automorphism: the Heisenberg dual \(T^*(Y) = \sum _i K_i^\dagger Y K_i\) is unital (since \(T\) is TP), so the Kadison–Schwarz inequality \(T^*(Y^\dagger Y) \ge T^*(Y)^\dagger T^*(Y)\) becomes an equality for every \(Y\). Hence \(T^*\), and therefore \(T\), preserves products. By the Skolem–Noether theorem, every \(*\)-automorphism of \(M_{D}(\mathbb {C})\) has the form \(T(\rho ) = U \rho U^\dagger \) for some unitary \(U\). Kraus freedom then gives \(K_i = c_i U\) with \(\sum _i |c_i|^2 = 1\). </p>
+  <p> Reverse direction is Theorem&#160;<a href="ch-channels.html#thm:channel_det_unitary_eq_one">5.133</a>. Forward direction: \(|\det T| = 1\) together with \(|\mu | \le 1\) for every eigenvalue \(\mu \) (from trace preservation and positivity) forces every eigenvalue to satisfy \(|\mu | = 1\). Hence \(T\) is bijective. A bijective CPTP map is a \(*\)-automorphism: the Heisenberg dual \(T^*(Y) = \sum _i K_i^\dagger Y K_i\) is unital (since \(T\) is TP), so the Kadison–Schwarz inequality \(T^*(Y^\dagger Y) \ge T^*(Y)^\dagger T^*(Y)\) becomes an equality for every \(Y\). Hence \(T^*\), and therefore \(T\), preserves products. By the Skolem–Noether theorem, every \(*\)-automorphism of \(M_{D}(\mathbb {C})\) has the form \(T(\rho ) = U \rho U^\dagger \) for some unitary \(U\). Kraus freedom then gives \(K_i = c_i U\) with \(\sum _i |c_i|^2 = 1\). </p>
 
   </div>
 </div>
@@ -10376,7 +10641,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">5.131</span>
+    <span class="definition_thmlabel">5.136</span>
     <span class="definition_thmtitle">Kraus fixed points</span>
     <div class="thm_header_extras">
 
@@ -10440,7 +10705,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">5.132</span>
+    <span class="theorem_thmlabel">5.137</span>
     <span class="theorem_thmtitle">Fixed points lie in the multiplicative domain</span>
     <div class="thm_header_extras">
 
@@ -10467,7 +10732,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-channels.html#def:kraus_fixed_points">Definition 5.131</a></li>
+          <li><a href="ch-channels.html#def:kraus_fixed_points">Definition 5.136</a></li>
           
           <li><a href="ch-channels.html#def:multiplicative_domain_channels">Definition 5.43</a></li>
           
@@ -10523,7 +10788,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">5.133</span>
+    <span class="theorem_thmlabel">5.138</span>
     <span class="theorem_thmtitle">Fixed points form a \(*\)-subalgebra</span>
     <div class="thm_header_extras">
 
@@ -10550,7 +10815,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-channels.html#def:kraus_fixed_points">Definition 5.131</a></li>
+          <li><a href="ch-channels.html#def:kraus_fixed_points">Definition 5.136</a></li>
           
           <li><a href="ch-channels.html#def:kraus_map_channels">Definition 5.36</a></li>
           
@@ -10614,7 +10879,7 @@
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">5.134</span>
+    <span class="remark_thmlabel">5.139</span>
     <div class="thm_header_extras">
 
     
@@ -10629,7 +10894,7 @@
         </div>
   </div>
   <div class="remark_thmcontent">
-  <p>Theorem&#160;<a href="ch-channels.html#thm:fixedPoints_in_multiplicativeDomain">5.132</a> records the trace-preserving / Heisenberg-picture counterpart of the same multiplicative-domain argument. </p>
+  <p>Theorem&#160;<a href="ch-channels.html#thm:fixedPoints_in_multiplicativeDomain">5.137</a> records the trace-preserving / Heisenberg-picture counterpart of the same multiplicative-domain argument. </p>
 
   </div>
 </div>
@@ -10638,7 +10903,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">5.135</span>
+    <span class="theorem_thmlabel">5.140</span>
     <span class="theorem_thmtitle">Projected elements lie in the multiplicative domain</span>
     <div class="thm_header_extras">
 
@@ -10665,11 +10930,11 @@
         
         <ul class="uses">
           
-          <li><a href="ch-channels.html#def:kraus_fixed_points">Definition 5.131</a></li>
+          <li><a href="ch-channels.html#def:kraus_fixed_points">Definition 5.136</a></li>
           
           <li><a href="ch-schwarz.html#def:unital_kraus">Definition 7.3</a></li>
           
-          <li><a href="ch-channels.html#thm:fixedPointsStarSubalgebra">Theorem 5.133</a></li>
+          <li><a href="ch-channels.html#thm:fixedPointsStarSubalgebra">Theorem 5.138</a></li>
           
           <li><a href="ch-schwarz.html#thm:md_characterization">Theorem 7.28</a></li>
           
@@ -10714,7 +10979,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Idempotence gives \(E(E(X)) = E(X)\), so \(E(X)\) is a fixed point. By the argument in Theorem&#160;<a href="ch-channels.html#thm:fixedPointsStarSubalgebra">5.133</a>, the Kadison–Schwarz gap for the fixed point \(E(X)\) vanishes, hence </p>
+  <p> Idempotence gives \(E(E(X)) = E(X)\), so \(E(X)\) is a fixed point. By the argument in Theorem&#160;<a href="ch-channels.html#thm:fixedPointsStarSubalgebra">5.138</a>, the Kadison–Schwarz gap for the fixed point \(E(X)\) vanishes, hence </p>
 <div class="displaymath" id="a0000000421">
   \[  E(E(X)^\dagger E(X)) = E(X)^\dagger E(X).  \]
 </div>
@@ -10731,7 +10996,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">5.136</span>
+    <span class="theorem_thmlabel">5.141</span>
     <span class="theorem_thmtitle">Choi–Effros left absorption</span>
     <div class="thm_header_extras">
 
@@ -10758,11 +11023,11 @@
         
         <ul class="uses">
           
-          <li><a href="ch-channels.html#def:kraus_fixed_points">Definition 5.131</a></li>
+          <li><a href="ch-channels.html#def:kraus_fixed_points">Definition 5.136</a></li>
           
           <li><a href="ch-schwarz.html#def:unital_kraus">Definition 7.3</a></li>
           
-          <li><a href="ch-channels.html#thm:map_mem_multiplicativeDomain_of_idempotent">Theorem 5.135</a></li>
+          <li><a href="ch-channels.html#thm:map_mem_multiplicativeDomain_of_idempotent">Theorem 5.140</a></li>
           
         </ul>
     
@@ -10817,7 +11082,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">5.137</span>
+    <span class="theorem_thmlabel">5.142</span>
     <span class="theorem_thmtitle">Choi–Effros right absorption</span>
     <div class="thm_header_extras">
 
@@ -10844,11 +11109,11 @@
         
         <ul class="uses">
           
-          <li><a href="ch-channels.html#def:kraus_fixed_points">Definition 5.131</a></li>
+          <li><a href="ch-channels.html#def:kraus_fixed_points">Definition 5.136</a></li>
           
           <li><a href="ch-schwarz.html#def:unital_kraus">Definition 7.3</a></li>
           
-          <li><a href="ch-channels.html#thm:map_mem_multiplicativeDomain_of_idempotent">Theorem 5.135</a></li>
+          <li><a href="ch-channels.html#thm:map_mem_multiplicativeDomain_of_idempotent">Theorem 5.140</a></li>
           
         </ul>
     
@@ -10903,7 +11168,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">5.138</span>
+    <span class="theorem_thmlabel">5.143</span>
     <span class="theorem_thmtitle">Choi–Effros symmetric absorption</span>
     <div class="thm_header_extras">
 
@@ -10930,13 +11195,13 @@
         
         <ul class="uses">
           
-          <li><a href="ch-channels.html#def:kraus_fixed_points">Definition 5.131</a></li>
+          <li><a href="ch-channels.html#def:kraus_fixed_points">Definition 5.136</a></li>
           
           <li><a href="ch-schwarz.html#def:unital_kraus">Definition 7.3</a></li>
           
-          <li><a href="ch-channels.html#thm:choi_effros_left">Theorem 5.136</a></li>
+          <li><a href="ch-channels.html#thm:choi_effros_left">Theorem 5.141</a></li>
           
-          <li><a href="ch-channels.html#thm:choi_effros_right">Theorem 5.137</a></li>
+          <li><a href="ch-channels.html#thm:choi_effros_right">Theorem 5.142</a></li>
           
         </ul>
     
@@ -10991,7 +11256,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">5.139</span>
+    <span class="theorem_thmlabel">5.144</span>
     <span class="theorem_thmtitle">Choi–Effros projected product</span>
     <div class="thm_header_extras">
 
@@ -11018,11 +11283,11 @@
         
         <ul class="uses">
           
-          <li><a href="ch-channels.html#def:kraus_fixed_points">Definition 5.131</a></li>
+          <li><a href="ch-channels.html#def:kraus_fixed_points">Definition 5.136</a></li>
           
           <li><a href="ch-schwarz.html#def:unital_kraus">Definition 7.3</a></li>
           
-          <li><a href="ch-channels.html#thm:map_mem_multiplicativeDomain_of_idempotent">Theorem 5.135</a></li>
+          <li><a href="ch-channels.html#thm:map_mem_multiplicativeDomain_of_idempotent">Theorem 5.140</a></li>
           
         </ul>
     
@@ -11084,7 +11349,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">5.140</span>
+    <span class="definition_thmlabel">5.145</span>
     <span class="definition_thmtitle">Adjoint fixed points</span>
     <div class="thm_header_extras">
 
@@ -11148,7 +11413,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">5.141</span>
+    <span class="theorem_thmlabel">5.146</span>
     <span class="theorem_thmtitle">Fixed points form a \(*\)-subalgebra in the Heisenberg picture</span>
     <div class="thm_header_extras">
 
@@ -11175,11 +11440,11 @@
         
         <ul class="uses">
           
-          <li><a href="ch-channels.html#def:adjoint_fixed_points">Definition 5.140</a></li>
+          <li><a href="ch-channels.html#def:adjoint_fixed_points">Definition 5.145</a></li>
           
           <li><a href="ch-channels.html#def:kraus_map_channels">Definition 5.36</a></li>
           
-          <li><a href="ch-channels.html#thm:fixedPointsStarSubalgebra">Theorem 5.133</a></li>
+          <li><a href="ch-channels.html#thm:fixedPointsStarSubalgebra">Theorem 5.138</a></li>
           
         </ul>
     
@@ -11224,7 +11489,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Apply Theorem&#160;<a href="ch-channels.html#thm:fixedPointsStarSubalgebra">5.133</a> to the adjoint family \(\{ K_i^\dagger \} \). </p>
+  <p> Apply Theorem&#160;<a href="ch-channels.html#thm:fixedPointsStarSubalgebra">5.138</a> to the adjoint family \(\{ K_i^\dagger \} \). </p>
 
   </div>
 </div>
@@ -11233,7 +11498,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">5.142</span>
+    <span class="definition_thmlabel">5.147</span>
     <span class="definition_thmtitle">Kraus commutant</span>
     <div class="thm_header_extras">
 
@@ -11299,7 +11564,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">5.143</span>
+    <span class="theorem_thmlabel">5.148</span>
     <span class="theorem_thmtitle">Adjoint fixed points equal the Kraus commutant</span>
     <div class="thm_header_extras">
 
@@ -11326,13 +11591,13 @@
         
         <ul class="uses">
           
-          <li><a href="ch-channels.html#def:adjoint_fixed_points">Definition 5.140</a></li>
+          <li><a href="ch-channels.html#def:adjoint_fixed_points">Definition 5.145</a></li>
           
-          <li><a href="ch-channels.html#def:kraus_commutant">Definition 5.142</a></li>
+          <li><a href="ch-channels.html#def:kraus_commutant">Definition 5.147</a></li>
           
           <li><a href="ch-channels.html#def:kraus_map_channels">Definition 5.36</a></li>
           
-          <li><a href="ch-channels.html#thm:adjointFixedPointsStarSubalgebra">Theorem 5.141</a></li>
+          <li><a href="ch-channels.html#thm:adjointFixedPointsStarSubalgebra">Theorem 5.146</a></li>
           
         </ul>
     
@@ -11363,7 +11628,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   Under the hypotheses of Theorem&#160;<a href="ch-channels.html#thm:adjointFixedPointsStarSubalgebra">5.141</a>, the adjoint fixed-point \(*\)-subalgebra equals the Kraus commutant: </p>
+  <p>   Under the hypotheses of Theorem&#160;<a href="ch-channels.html#thm:adjointFixedPointsStarSubalgebra">5.146</a>, the adjoint fixed-point \(*\)-subalgebra equals the Kraus commutant: </p>
 <div class="displaymath" id="a0000000435">
   \[  \mathrm{Fix}(E^*) = \{ K_i, K_i^\dagger \} '.  \]
 </div>
@@ -11394,7 +11659,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">5.144</span>
+    <span class="theorem_thmlabel">5.149</span>
     <span class="theorem_thmtitle">The Kraus commutant is the largest \(*\)-subalgebra inside the adjoint fixed points</span>
     <div class="thm_header_extras">
 
@@ -11421,7 +11686,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-channels.html#thm:adjointFixedPoints_eq_krausCommutant">Theorem 5.143</a></li>
+          <li><a href="ch-channels.html#thm:adjointFixedPoints_eq_krausCommutant">Theorem 5.148</a></li>
           
         </ul>
     
@@ -11464,7 +11729,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>By Theorem&#160;<a href="ch-channels.html#thm:adjointFixedPoints_eq_krausCommutant">5.143</a>, every \(*\)-subalgebra inside the adjoint fixed points is automatically contained in the Kraus commutant, while the Kraus commutant itself is such a \(*\)-subalgebra. </p>
+  <p>By Theorem&#160;<a href="ch-channels.html#thm:adjointFixedPoints_eq_krausCommutant">5.148</a>, every \(*\)-subalgebra inside the adjoint fixed points is automatically contained in the Kraus commutant, while the Kraus commutant itself is such a \(*\)-subalgebra. </p>
 
   </div>
 </div>
