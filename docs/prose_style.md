@@ -72,6 +72,29 @@ without opening the `.lean` files, the prose has failed.
   notation explicitly only when truly needed.
 - **"Condition C1" / "Condition (1)" naming.** If Lean calls it `IsInjective`, the
   blueprint says "injective", not "Condition C1".
+- **Prose quantifier tails in displayed equations.** Do not attach conditions to
+  the right side of a display with `\qquad \text{for all ...}`,
+  `\quad\text{for every ...}`, or similar prose. Put the quantifier in the
+  sentence introducing the display, or use ordinary mathematical notation inside
+  the display when the quantifier itself is part of the formula.
+
+  Bad:
+
+  ```tex
+  \[
+      \sum_k \tr(\Delta_k A_k^w) = 0
+      \qquad \text{for every word } w \text{ of length } L.
+  \]
+  ```
+
+  Good:
+
+  ```tex
+  For every word $w$ of length~$L$,
+  \[
+      \sum_k \tr(\Delta_k A_k^w) = 0.
+  \]
+  ```
 
 ### Allowed in the blueprint
 

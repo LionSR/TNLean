@@ -161,7 +161,7 @@ and~\cite[Ch.~6]{Wolf2012Quantum}.
 		=
 		\mc{V}\!\bigl(\textstyle\bigoplus_{k=1}^r \mu_k B_k\bigr)
 		\quad\Longrightarrow\quad
-		\mc{V}(A_k)=\mc{V}(B_k)\ \text{for all }k
+		\forall k,\ \mc{V}(A_k)=\mc{V}(B_k)
 	\]
 	is false if one assumes only that the weights $\mu_k$ are pairwise
 	distinct and nonzero.
@@ -3513,7 +3513,7 @@ The following results separate the zero blocks from the nonzero blocks.
 \section{Open directions}\label{sec:open_directions}
 
 \begin{remark}[Canonical-form reduction before the equal-case comparison]%
-	\label{rem:canonical_pipeline_gaps}
+\label{rem:canonical_pipeline_gaps}
 	\leanok
 	The canonical-form proof in the MPS literature first separates the nilpotent
 	part, which contributes only to the length-zero trace, from the nonzero part.
@@ -3529,7 +3529,7 @@ The following results separate the zero blocks from the nonzero blocks.
 	canonical-form information used before the basis-of-normal-tensors argument in
 	\cite[Proposition~IV.4 and Corollary~IV.5]{Cirac2021Matrix}.
 
-	The statements in this chapter mirror this reduction.  Theorem~\ref{thm:tp_gauge_arbitrary}
+	The statements in this chapter follow this reduction.  Theorem~\ref{thm:tp_gauge_arbitrary}
 	gives the zero-tail block and the trace-preserving irreducible nonzero block
 	family.  Theorem~\ref{thm:ft_after_blocking_per_block_cyclic_live_zero_tail}
 	applies the cyclic-sector decomposition to each nonzero block, preserving the
@@ -3554,7 +3554,7 @@ The following results separate the zero blocks from the nonzero blocks.
 	then rewrites the one-sided zero-tail identity with the weighted common-length
 	cyclic sectors under this blockwise word equality.
 
-	The next mathematical assertion is the corresponding equality, after relabeling
+	The remaining mathematical assertion is the corresponding equality, after relabeling
 	blocked physical words, between the canonical blocked nonzero part and the
 	cyclic-sector tensor for the whole weighted family.
 	Theorem~\ref{thm:zero_tail_common_flat_of_reindexed} gives the
@@ -3580,7 +3580,7 @@ The following results separate the zero blocks from the nonzero blocks.
 	states the exact remaining inputs after this point: equality of the zero-tail
 	dimensions, injectivity at the chosen common length, and a common MPV phase cover
 	(or the equivalent finite-length span equality) for the two nonzero-sector
-	families.  Thus the open canonical-form assertions are the blocked-word
+	families.  Thus the remaining canonical-form assertions are the blocked-word
 	relabeling equality for the whole weighted nonzero family, the zero-tail and
 	injectivity refinements, and the common-phase or proportional-decomposition
 	comparison for the common-length nonzero sectors.

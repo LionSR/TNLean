@@ -11,6 +11,11 @@ The blueprint links the mathematics to its Lean formalization. A reader should b
 5. **Cite non-trivial things.** Basic definitions (MPS tensor, MPV) don't need citations. Important results and non-obvious definitions should cite the source paper.
 6. **Don't invent terminology or notation.** Don't create ad-hoc notation like `⟨·,·⟩^ip` when standard notation exists. Don't name things that the literature doesn't name. If Lean calls it `IsInjective`, the blueprint says "injective" — not "Condition C1".
 7. **Match Lean's theorem/lemma/def exactly.** If Lean says `theorem X`, use `\begin{theorem}`. If Lean says `lemma X`, use `\begin{lemma}`. Never use `\begin{proposition}` (Lean has no `proposition` keyword). Label prefix: `thm:` for theorem, `lem:` for lemma, `def:` for definition.
+8. **Do not put prose quantifiers at the edge of displayed equations.** Avoid
+   `\qquad \text{for all ...}` and similar tails in displays. State the
+   quantifier in the surrounding sentence, or use mathematical quantifier
+   notation when it is part of the formula. See [`prose_style.md`](prose_style.md)
+   for the full rule and examples.
 
 ## Proof Sketches Must Match Lean
 This is the most important rule. Every proof in the blueprint must faithfully describe what the Lean proof does:

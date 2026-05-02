@@ -390,10 +390,9 @@ The following is Theorem~3.8 (``equal case'') of \cite{DeLasCuevas2017Irreducibl
               satisfying $Z_j^{m_j} = \Id$ and
               $[A_j^i, Z_j] = 0$ for all~$i$,
     \end{enumerate}
-    such that
+    such that, for every physical index~$i$,
     \[
         Z_j\, A_j^i = Y_j\, B_{\pi(j)}^i\, Y_j^{-1}
-        \quad\text{for all physical indices } i.
     \]
     For each periodic block, the extra freedom is encoded by
     \begin{center}
@@ -667,7 +666,7 @@ The following is Theorem~3.8 (``equal case'') of \cite{DeLasCuevas2017Irreducibl
     \lean{MPSTensor.fundamentalTheorem_periodic_proportional_ofProportionalDecomp}
     There is also a proportional-case version of the periodic Fundamental Theorem
     (Theorem~3.4, ``proportional case'', in \cite{DeLasCuevas2017Irreducible}).
-    The current formulation is a \emph{split-data} theorem: if one has periodic
+    In the form stated here, if one has periodic
     block families whose distinct blocks are pairwise non-repeating, together with
     explicit decompositions of two total MPV families into those blocks, coefficient
     arrays converging to nonzero limits, and
@@ -700,10 +699,9 @@ The following is Theorem~3.8 (``equal case'') of \cite{DeLasCuevas2017Irreducibl
     a $\Z_{m_g}$-gauge equivalence between~$A$ and~$\widetilde{A}_g$.
 
     Concretely there are matrices $Z_g$ and~$Y_g$, with $Z_g^{m_g} = \Id$
-    and $[A^i, Z_g] = 0$, satisfying
+    and $[A^i, Z_g] = 0$, satisfying, for every physical index~$i$,
     \[
         Z_g\, A^i = Y_g\, \widetilde{A}_g^{\,i}\, Y_g^{-1}
-        \quad\text{for every physical index } i.
     \]
 \end{theorem}
 
@@ -1016,9 +1014,9 @@ for the irreducible-form framework in \cite{DeLasCuevas2017Irreducible}.
     Bundle the forward implication
     (Theorem~\ref{thm:thm_4_1_p_refinement_forward}) with the reverse
     implication (Theorem~\ref{thm:thm_4_1_p_refinement_reverse}) into a
-    single biconditional. Both directions are formalised conditionally on their
-    respective canonicalization hypotheses, whose combination yields the full
-    equivalence.
+    single biconditional. The forward and reverse directions each assume the
+    corresponding canonicalization hypothesis, and together they give the full
+    equivalence under those hypotheses.
 \end{proof}
 
 \begin{theorem}[Thm.~4.1 forward direction, conditional form]%
@@ -1037,8 +1035,7 @@ for the irreducible-form framework in \cite{DeLasCuevas2017Irreducible}.
     $\sum_i (A^i)^\dagger A^i = \Id$ (left-canonical) and
     $\mathcal{E}_B = \mathcal{E}_{A^{[p]}}$. The left-canonical property makes
     $\mathcal{E}_A$ a CPTP channel, and the blocking identity
-    $\mathcal{E}_{A^{[p]}} = (\mathcal{E}_A)^p$ (formalised as
-    \lean{MPSTensor.transferMap_blockTensor}) then identifies
+    $\mathcal{E}_{A^{[p]}} = (\mathcal{E}_A)^p$ then identifies
     $\mathcal{E}_B$ with the $p$-th power of the channel $\mathcal{E}_A$.
 \end{proof}
 
@@ -1092,8 +1089,7 @@ for the irreducible-form framework in \cite{DeLasCuevas2017Irreducible}.
     families of the same completely positive map: the blocked family $A^{[p]}$
     with $d^{p}$ operators and the original family $B$ with $d$ operators.
     The cardinality comparison $d \le d^{p}$ holds whenever $p \ge 1$, so Wolf
-    Theorem~2.18 (isometric freedom of Kraus representations, formalised as
-    \lean{kraus_isometry_freedom_iff}) supplies an isometry
+    Theorem~2.18 on isometric freedom of Kraus representations supplies an isometry
     $V \in M_{d^p \times d}(\C)$ with $V^{\dagger} V = \Id$ and
     $(A^{[p]})^{\alpha} = \sum_{j} V_{\alpha,j}\, B^{j}$. Expanding
     $\mathrm{coeff}\,(A^{[p]})\,(\mathrm{ofFn}\,\tau)$ by linearity of matrix
