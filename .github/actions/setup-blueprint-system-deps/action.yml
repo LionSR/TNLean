@@ -14,23 +14,44 @@ inputs:
 runs:
   using: 'composite'
   steps:
+    - name: Prepare blueprint apt archive cache
+      id: blueprint-apt-cache-path
+      shell: bash
+      run: |
+        . /etc/os-release
+        cache_key_segment="${VERSION_CODENAME:-${VERSION_ID:-unknown}}"
+        archive_dir="$RUNNER_TEMP/blueprint-apt-archives/${{ inputs.cache-suffix }}"
+
+        mkdir -p "$archive_dir/partial"
+        if [ ! -d "$archive_dir" ] || [ -L "$archive_dir" ]; then
+          echo "::error::Apt archive cache path must be a real directory: $archive_dir"
+          exit 1
+        fi
+
+        echo "cache-key-segment=$cache_key_segment" >> "$GITHUB_OUTPUT"
+        echo "archive-dir=$archive_dir" >> "$GITHUB_OUTPUT"
+
     - name: Restore blueprint apt archive cache
       id: blueprint-apt-cache
       uses: actions/cache/restore@v5
       with:
-        path: .cache/apt/archives
-        key: blueprint-apt-${{ runner.os }}-${{ runner.arch }}-${{ inputs.cache-suffix }}
+        path: ${{ steps.blueprint-apt-cache-path.outputs.archive-dir }}
+        key: blueprint-apt-${{ runner.os }}-${{ runner.arch }}-${{ steps.blueprint-apt-cache-path.outputs.cache-key-segment }}-${{ inputs.cache-suffix }}
 
     - name: Install blueprint system dependencies
       shell: bash
       env:
+        APT_CACHE_DIR: ${{ steps.blueprint-apt-cache-path.outputs.archive-dir }}
         EXTRA_PACKAGES: ${{ inputs.extra-packages }}
       run: |
         sudo apt-get update
 
-        apt_cache_dir="$PWD/.cache/apt/archives"
+        apt_cache_dir="$APT_CACHE_DIR"
         mkdir -p "$apt_cache_dir/partial"
-        chmod -R a+rwX "$PWD/.cache/apt"
+        if [ ! -d "$apt_cache_dir" ] || [ -L "$apt_cache_dir" ]; then
+          echo "::error::Apt archive cache path must be a real directory: $apt_cache_dir"
+          exit 1
+        fi
 
         packages=(
           chktex
@@ -52,11 +73,11 @@ runs:
           -o Dir::Cache::archives="$apt_cache_dir" \
           "${packages[@]}"
 
-        sudo chown -R "$USER:$(id -gn)" .cache/apt
+        sudo chown -R "$USER:$(id -gn)" "$apt_cache_dir"
 
     - name: Save blueprint apt archive cache
       if: steps.blueprint-apt-cache.outputs.cache-hit != 'true'
       uses: actions/cache/save@v5
       with:
-        path: .cache/apt/archives
+        path: ${{ steps.blueprint-apt-cache-path.outputs.archive-dir }}
         key: ${{ steps.blueprint-apt-cache.outputs.cache-primary-key }}
