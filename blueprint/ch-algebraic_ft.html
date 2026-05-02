@@ -1269,7 +1269,7 @@
   \[  O_A(X)_{ij} := (\Psi _A(A^i X))_j,  \]
 </div>
 <p> so that row&#160;\(i\) of \(O_A(X)\) contains the decomposition coefficients of \(A^i X\) in the spanning set \(\{ A^j\} \). Diagrammatically, the inserted virtual matrix is re-expressed as a physical operation on the same local tensor: </p>
-<div class="centered"> <img class="tn-svg" src="tn_svg/tn-603e4a6100154620.svg" alt="\TNPhysicalRealization{X}{O_A(X)}"> </div>
+<div class="centered"> <img class="tn-svg" src="tn_svg/tn-db37f32483dab76f.svg" alt="\TNPhysicalRealization{X}{O_A(X)}"> </div>
 <p> The map \(X \mapsto O_A(X)\) is \(\mathbb {C}\)-linear. </p>
 
   </div>
@@ -1837,13 +1837,13 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   Let \(A_1, A_2\) and \(B_1, B_2\) be injective MPS tensors with the same bond dimension \(D\). Suppose that for all \(X \in M_{D}(\mathbb {C})\) (on the internal bond), all \(Y \in M_{D}(\mathbb {C})\) (on the external bond), and all physical indices \(i,j\), </p>
-<div class="displaymath" id="<plasTeX.TeXFragment object at 0x7f18a19b2e10>">
+<div class="displaymath" id="<plasTeX.TeXFragment object at 0x7fd60c3bae10>">
   \begin{align}  \operatorname{tr}(A_1^{i}\,  X\,  A_2^{j}) & = \operatorname{tr}(B_1^{i}\,  X\,  B_2^{j}) \label{eq:internal_bond}\\ \operatorname{tr}(A_2^{j}\,  Y\,  A_1^{i}) & = \operatorname{tr}(B_2^{j}\,  Y\,  B_1^{i}) \label{eq:external_bond} \end{align}
 </div>
 <p> Diagrammatically, Eq.&#160;?? is the equality obtained by inserting \(X\) on the bond between the two sites, </p>
-<div class="centered"> <img class="tn-svg" src="tn_svg/tn-6941374e0375f075.svg" alt="\TNInternalTraceInsertion{i}{j}{X}"> </div>
+<div class="centered"> <img class="tn-svg" src="tn_svg/tn-4732ce665aead944.svg" alt="\TNInternalTraceInsertion{i}{j}{X}"> </div>
 <p> while Eq.&#160;?? is the corresponding equality with the insertion \(Y\) on the outer trace bond, </p>
-<div class="centered"> <img class="tn-svg" src="tn_svg/tn-ad17e3454a1a364e.svg" alt="\TNExternalTraceInsertion{i}{j}{Y}"> </div>
+<div class="centered"> <img class="tn-svg" src="tn_svg/tn-541c5a300790c870.svg" alt="\TNExternalTraceInsertion{i}{j}{Y}"> </div>
 <p> so the two hypotheses distinguish the internal and external virtual loops of the two-site periodic chain. </p>
 <p>Then there exists a nonzero scalar \(\lambda \in \mathbb {C}^{\times }\) such that </p>
 <div class="displaymath" id="a0000001249">
@@ -1866,7 +1866,7 @@
   \[  \begin{aligned}  A_2^{j} A_1^{i} & = B_2^{j} B_1^{i},\\ A_1^{i} A_2^{j} & = B_1^{i} B_2^{j}. \end{aligned}  \]
 </div>
 <p> Write \(\mathbb {1}_D = \sum _j c_j A_2^j\) using the decomposition map \(\Psi _{A_2}\), and define \(Z := \sum _j c_j B_2^j \in M_{D}(\mathbb {C})\). This is the point where the two-site comparison collapses to a single boundary matrix: </p>
-<div class="centered"> <img class="tn-svg" src="tn_svg/tn-3047ad6c2751a4de.svg" alt="\TNBoundaryRegrow{Z}{i}{j}{2}"> &#8195;&#8195;<img class="tn-svg" src="tn_svg/tn-1151c583c6fde47b.svg" alt="\TNLocalEqualityStep{Z}{\lambda \mathbb {1}}{i}"> </div>
+<div class="centered"> <img class="tn-svg" src="tn_svg/tn-7be7e7122d2b1967.svg" alt="\TNBoundaryRegrow{Z}{i}{j}{2}"> &#8195;&#8195;<img class="tn-svg" src="tn_svg/tn-10b570d2dc29372f.svg" alt="\TNLocalEqualityStep{Z}{\lambda \mathbb {1}}{i}"> </div>
 <p> The first product identity gives \(A_1^i = Z B_1^i\), and the second gives \(A_1^i = B_1^i Z\). Hence \(Z\) commutes with every \(B_1^i\); since \(\{ B_1^i\} \) spans \(M_{D}(\mathbb {C})\), \(Z\) is central. By Lemma&#160;<a href="ch-algebraic_ft.html#lem:center_scalar">17.10</a>, \(Z = \lambda \mathbb {1}_D\) for some \(\lambda \in \mathbb {C}^{\times }\) (nonzero since the tensors are nonzero). Thus \(A_1^i = \lambda B_1^i\), and substituting into the first product identity forces \(A_2^j = \lambda ^{-1} B_2^j\). </p>
 
   </div>
@@ -5187,7 +5187,7 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   Diagrammatically, the hypothesis is that the two local gauges </p>
-<div class="centered"> <img class="tn-svg" src="tn_svg/tn-c791bef782713187.svg" alt="\TNGaugeConjugation{X}{i}{X^{-1}}"> &#8195;&#8195;and&#8195;&#8195;<img class="tn-svg" src="tn_svg/tn-bcd066488a8d3925.svg" alt="\TNGaugeConjugation{Y}{i}{Y^{-1}}"> </div>
+<div class="centered"> <img class="tn-svg" src="tn_svg/tn-b8d8107dd282944c.svg" alt="\TNGaugeConjugation{X}{i}{X^{-1}}"> &#8195;&#8195;and&#8195;&#8195;<img class="tn-svg" src="tn_svg/tn-d7bd736df2b92631.svg" alt="\TNGaugeConjugation{Y}{i}{Y^{-1}}"> </div>
 <p> produce the same target tensor \(B^i\) from the same source tensor \(A^i\). If \(X, Y \in \mathrm{GL}_D(\mathbb {C})\) both conjugate an MPS tensor \(A\) to the same tensor \(B\) (i.e. \(B^i = X A^i X^{-1} = Y A^i Y^{-1}\) for all \(i\)), then \(Y^{-1} X\) commutes with every \(A^i\). </p>
 
   </div>
@@ -5369,7 +5369,7 @@
   \[  X(h)\,  X(g) = c(g,h)\,  X(g \cdot h).  \]
 </div>
 <p> In fact \(c(g,h) \ne 0\) since both sides are invertible, so \(c(g,h) \in \mathbb {C}^{\times }\). Diagrammatically, the two candidate gauges are competing local replacements for the same twisted tensor: </p>
-<div class="centered"> <img class="tn-svg" src="tn_svg/tn-8f6c358bd4cdb712.svg" alt="\TNLocalEqualityStep{X(h)\, X(g)}{X(gh)}{i}"> </div>
+<div class="centered"> <img class="tn-svg" src="tn_svg/tn-39bca48285cb836b.svg" alt="\TNLocalEqualityStep{X(h)\, X(g)}{X(gh)}{i}"> </div>
 <p> and both sides conjugate \(A^i\) to the same twisted tensor \(\widetilde{A}_{gh}^i\). </p>
 
   </div>
