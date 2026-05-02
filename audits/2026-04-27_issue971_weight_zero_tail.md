@@ -63,3 +63,29 @@ as the comparison between this equivalence and the canonical identification used
 inside `CommonBlockedCyclicSectorFamily`.  The present transport theorem therefore
 uses the grouped-block coordinate assertion as the honest remaining input rather
 than replacing it by a stronger unproved coordinate choice.
+
+## 2026-05-02 update — per-block weight transport lemma and #1113 gap documentation
+
+New declarations in `TNLean/MPS/CanonicalForm/Assembly/CyclicSectorDecomposition.lean`:
+
+- `MPSTensor.CommonBlockedCyclicSectorFamily.commonFlatWeight_apply_of_block`: for each
+  sector `s` of original nonzero-weight block `k`, the common-sector weight is `μ k ^ F.p`.
+- `MPSTensor.CommonBlockedCyclicSectorFamily.commonFlatWeight_apply_block_eq`: all sectors
+  from the same original block carry the same transported weight.
+
+Updated documentation in `TNLean/MPS/Core/BlockingInfrastructure.lean`:
+
+- The blocked-word identification gap now explicitly references issue #1113
+  (Fintype coordinate equality for grouped-block relabeling).
+- Documents that `flattenWordOfBlock_cast_eq` (with its `sorry`) is the single
+  combinatorial assertion that blocks unconditional common-block decomposition.
+
+### Current status
+
+All MPS-level weight transport and zero-tail lemmas listed above are proved.
+The single remaining gap is the Fintype-level combinatorial identity
+`flattenWordOfBlock_cast_eq` (issue #1113), which says that the `Fintype.equivFin`
+enumeration for `Fin (m*n) → Fin d` is compatible with currying into
+`Fin n → (Fin m → Fin d)`.  Once this is proved, the conditional common-block
+theorem `unconditional_commonPrimitiveIrreducibleBlocks` becomes unconditional,
+closing issues #942, #944, #971, #990.

@@ -542,9 +542,9 @@ theorem sameMPV₂_reindexPhysical_directToIteratedBlockIndex_blockTensor
 
 The lemma `reindexPhysical_directToIteratedBlockIndex_blockTensor` shows that applying the
 explicit block-grouping bijection to the iterated block tensor recovers the direct block
-tensor.  The remaining point for closing issue #990 is to prove that this bijection coincides
-with the `Fin.cast` identification used in `CommonBlockedCyclicSectorFamily`.  Concretely,
-one needs
+tensor.  The remaining point for closing issues #990 and #971 is to prove that this bijection
+coincides with the `Fin.cast` identification used in `CommonBlockedCyclicSectorFamily`.
+Concretely, one needs
 
 ```lean
 Fin.cast ((F.blockPhysDim_nested_eq k).symm) i =
@@ -558,12 +558,18 @@ The obstruction is purely combinatorial: the current blocked-index encoding uses
 `Fintype.equivFin`, which gives a noncanonical enumeration.  Proving the equality requires
 showing that the `Fintype.equivFin` enumeration of `Fin (m*n) → Fin d` agrees with the
 nested enumeration `Fin n → (Fin m → Fin d)` under the natural grouping isomorphism.
-This is likely a lemma about `Multiset.pi` or `Finset.univ` for function types, and
-the entry points suggested by earlier reviews (`Fin.prod_univ_succ`, `Fin.consEquiv`,
-`Fintype.piFinset` in `Mathlib/Data/Fin/Tuple/Finset.lean`) remain the natural path.
-Once proved in `TNLean/MPS/Core/BlockingInfrastructure.lean`, it unconditionally discharges
-`groupedBlockCastAgrees` and closes this issue together with all dependent conditional
-theorems in `CyclicSectorDecomposition.lean` and `StructuralTheorem.lean`.
+This is tracked as issue #1113.
+
+Once proved, it unconditionally discharges `groupedBlockCastAgrees` and closes all
+dependent conditional theorems in `CyclicSectorDecomposition.lean` and
+`StructuralTheorem.lean`.
+
+### Relationship with `flattenWordOfBlock_cast_eq`
+
+The single `sorry` in `CyclicSectorDecomposition.lean` (line 1495) encodes the same
+combinatorial identity as a list equality.  The lemma
+`groupedBlockCastAgrees_of_flattenWordOfBlock_cast_eq` shows that this list-level
+assertion implies the coordinate-level one required by `groupedBlockCastAgrees`.
 -/
 
 /-- Casting the physical dimension of both tensors preserves heterogeneous MPV equality. -/
