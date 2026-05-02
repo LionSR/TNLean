@@ -1273,7 +1273,7 @@ theorem commonFlatWeight_ne_zero (F : CommonBlockedCyclicSectorFamily blocks)
   pow_ne_zero F.p (hμ (F.flatKey x).1)
 
 /-- Per-block weight transport under common blocking: every sector belonging to original
-nonzero-weight block `k` carries the transported power `μ k ^ F.p`. -/
+nonzero-weight block `k` carries the transported power `μ k ^ F.p`. -/
 theorem commonFlatWeight_apply_of_block (F : CommonBlockedCyclicSectorFamily blocks)
     (μ : Fin r → ℂ) (k : Fin r) (s : Fin (F.period k)) :
     F.commonFlatWeight μ (finSigmaFinEquiv (Sigma.mk k s)) = μ k ^ F.p := by
