@@ -196,7 +196,7 @@
   <a href="ch-channels.html#subsec:svd_normal_form"><span class="toc_ref">5.12.2</span> <span class="toc_entry">SVD normal form (existence)</span></a>
  </li>
 <li class="">
-  <a href="ch-channels.html#subsec:lorentz_normal_form"><span class="toc_ref">5.12.3</span> <span class="toc_entry">Lorentz normal form (Wolf §2.3, existence statements)</span></a>
+  <a href="ch-channels.html#subsec:lorentz_normal_form"><span class="toc_ref">5.12.3</span> <span class="toc_entry">Lorentz normal form</span></a>
  </li>
 
   </ul>
@@ -514,7 +514,7 @@
   <span class="expand-toc">▶</span>
   <ul class="sub-toc-2">
      <li class="">
-  <a href="ch-canonical.html#sec:sector_irreducibility_helpers"><span class="toc_ref">11.12.1</span> <span class="toc_entry">Sector irreducibility helpers</span></a>
+  <a href="ch-canonical.html#sec:sector_irreducibility_lemmas"><span class="toc_ref">11.12.1</span> <span class="toc_entry">Sector irreducibility lemmas</span></a>
  </li>
 
   </ul>
@@ -1647,7 +1647,7 @@
 </div>
 <h1 id="sec:virtual_bond_gauge">17.4 Same state forces a virtual bond gauge</h1>
 
-<p>This section presents the 3-site virtual-bond statement used later in the paper proof. Here the hypothesis is already the all-length MPV equality of the combined tensors, and the conclusion is the conjugacy of the middle-bond insertion data. </p>
+<p>This section presents the 3-site virtual-bond statement used later in the proof of the PEPS fundamental theorem. Here the hypothesis is already the all-length MPV equality of the combined tensors, and the conclusion is the conjugacy of the middle-bond insertion data. </p>
 <div class="lemma_thmwrapper theorem-style-plain" id="lem:virtual_bond_gauge">
   <div class="lemma_thmheading">
     <span class="lemma_thmcaption">
@@ -1728,13 +1728,13 @@
   \[  \operatorname{tr}(A_0^{i_0} X\,  A_1^{i_1} A_2^{i_2}) = \operatorname{tr}(B_0^{i_0} Z^{-1} X Z\,  B_1^{i_1} B_2^{i_2})  \]
 </div>
 <p> for all \(X \in M_{D}(\mathbb {C})\) and all physical indices \(i_0, i_1, i_2\). </p>
-<p>In the paper&#160;<span class="cite">
+<p>In <span class="cite">
 	[
 	
 	<a href="sect0001.html#Molnar2018NormalPEPS" >MGRPG+18</a>
-	
+	, Lemma&#160;1
 	]
-</span>, Lemma&#160;1 is stated for arbitrary chain length \(n \ge 3\) and any bond position, with uniqueness of \(Z\) up to scalar. The chain-level generalization to arbitrary \(n \ge 3\) and any bond position is not pursued here. </p>
+</span>, the statement is given for arbitrary chain length \(n \ge 3\) and any bond position, with uniqueness of \(Z\) up to scalar. The chain-level generalization to arbitrary \(n \ge 3\) and any bond position is not pursued here. </p>
 
   </div>
 </div>
@@ -1837,12 +1837,12 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   Let \(A_1, A_2\) and \(B_1, B_2\) be injective MPS tensors with the same bond dimension \(D\). Suppose that for all \(X \in M_{D}(\mathbb {C})\) (on the internal bond), all \(Y \in M_{D}(\mathbb {C})\) (on the external bond), and all physical indices \(i,j\), </p>
-<div class="displaymath" id="<plasTeX.TeXFragment object at 0x7f3a354e6e10>">
+<div class="displaymath" id="<plasTeX.TeXFragment object at 0x7f7fd21e0170>">
   \begin{align}  \operatorname{tr}(A_1^{i}\,  X\,  A_2^{j}) & = \operatorname{tr}(B_1^{i}\,  X\,  B_2^{j}) \label{eq:internal_bond}\\ \operatorname{tr}(A_2^{j}\,  Y\,  A_1^{i}) & = \operatorname{tr}(B_2^{j}\,  Y\,  B_1^{i}) \label{eq:external_bond} \end{align}
 </div>
-<p> Diagrammatically, Eq.&#160;?? is the equality obtained by inserting \(X\) on the bond between the two sites, </p>
+<p> Diagrammatically, Equation&#160;?? is the equality obtained by inserting \(X\) on the bond between the two sites, </p>
 <div class="centered"> <img class="tn-svg" src="tn_svg/tn-4732ce665aead944.svg" alt="\TNInternalTraceInsertion{i}{j}{X}"> </div>
-<p> while Eq.&#160;?? is the corresponding equality with the insertion \(Y\) on the outer trace bond, </p>
+<p> while Equation&#160;?? is the corresponding equality with the insertion \(Y\) on the outer trace bond, </p>
 <div class="centered"> <img class="tn-svg" src="tn_svg/tn-541c5a300790c870.svg" alt="\TNExternalTraceInsertion{i}{j}{Y}"> </div>
 <p> so the two hypotheses distinguish the internal and external virtual loops of the two-site periodic chain. </p>
 <p>Then there exists a nonzero scalar \(\lambda \in \mathbb {C}^{\times }\) such that </p>
@@ -1880,7 +1880,7 @@
     Theorem
     </span>
     <span class="theorem_thmlabel">17.13</span>
-    <span class="theorem_thmtitle">Fundamental Theorem for injective chains (combined-tensor MPV version)</span>
+    <span class="theorem_thmtitle">Fundamental Theorem for injective chains</span>
     <div class="thm_header_extras">
 
     
@@ -2854,7 +2854,7 @@
     Corollary
     </span>
     <span class="corollary_thmlabel">17.25</span>
-    <span class="corollary_thmtitle">Non-translation-invariant realisation of a translation-invariant state</span>
+    <span class="corollary_thmtitle">Translation-invariant states from nonuniform chains</span>
     <div class="thm_header_extras">
 
         </div>
@@ -3243,7 +3243,13 @@
         </div>
   </div>
   <div class="remark_thmcontent">
-  <p>The theorem above is the exact blocked-chain result established here. Recovering sitewise gauges for the original unblocked tensors, and hence the paper’s normal-MPS corollary, is not established here. </p>
+  <p>The theorem above is the blocked-chain result established here. Recovering sitewise gauges for the original unblocked tensors gives the normal-MPS corollary of <span class="cite">
+	[
+	
+	<a href="sect0001.html#Molnar2018NormalPEPS" >MGRPG+18</a>
+	
+	]
+</span>; that step is outside this blocked-chain statement. </p>
 
   </div>
 </div>

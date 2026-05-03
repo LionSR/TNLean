@@ -196,7 +196,7 @@
   <a href="ch-channels.html#subsec:svd_normal_form"><span class="toc_ref">5.12.2</span> <span class="toc_entry">SVD normal form (existence)</span></a>
  </li>
 <li class="">
-  <a href="ch-channels.html#subsec:lorentz_normal_form"><span class="toc_ref">5.12.3</span> <span class="toc_entry">Lorentz normal form (Wolf §2.3, existence statements)</span></a>
+  <a href="ch-channels.html#subsec:lorentz_normal_form"><span class="toc_ref">5.12.3</span> <span class="toc_entry">Lorentz normal form</span></a>
  </li>
 
   </ul>
@@ -514,7 +514,7 @@
   <span class="expand-toc">▶</span>
   <ul class="sub-toc-2">
      <li class="">
-  <a href="ch-canonical.html#sec:sector_irreducibility_helpers"><span class="toc_ref">11.12.1</span> <span class="toc_entry">Sector irreducibility helpers</span></a>
+  <a href="ch-canonical.html#sec:sector_irreducibility_lemmas"><span class="toc_ref">11.12.1</span> <span class="toc_entry">Sector irreducibility lemmas</span></a>
  </li>
 
   </ul>
@@ -1041,7 +1041,7 @@
 	[
 	
 	<a href="sect0001.html#DeLasCuevas2017Irreducible" >DlCCSPG17</a>
-	, §II
+	, Section&#160;II
 	]
 </span>. It extends the normal canonical form (Definition&#160;<a href="ch-canonical.html#def:is_normal_canonical_form">11.38</a>), which requires the stronger condition that every block is \(1\)-periodic. </p>
 
@@ -1213,7 +1213,13 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Unitary freedom of the Kraus representation (Theorem&#160;2.18, Wolf <em>Quantum Channels &amp; Operations</em>). </p>
+  <p> This is the unitary freedom of Kraus representations from <span class="cite">
+	[
+	
+	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
+	, Theorem&#160;2.18
+	]
+</span>. </p>
 
   </div>
 </div>
@@ -2375,7 +2381,7 @@
 </div>
 <h1 id="sec:periodic_ft">15.2 Periodic Fundamental Theorem</h1>
 
-<p>The theorems in Chapter&#160;<a href="ch-assembly.html">14</a> all require that each block has a <em>primitive</em> transfer map, i.e. peripheral spectrum exactly \(\{ 1\} \). This is achieved by blocking the original tensor by a common period. The paper <span class="cite">
+<p>The theorems in Chapter&#160;<a href="ch-assembly.html">14</a> all require that each block has a <em>primitive</em> transfer map, i.e. peripheral spectrum exactly \(\{ 1\} \). This is achieved by blocking the original tensor by a common period. <span class="cite">
 	[
 	
 	<a href="sect0001.html#DeLasCuevas2017Irreducible" >DlCCSPG17</a>
@@ -2665,13 +2671,13 @@
 <p> For each periodic block, the extra freedom is encoded by </p>
 <div class="centered"> <img class="tn-svg" src="tn_svg/tn-4169416fe0dfb66c.svg" alt="\TNPeriodicGauge{m_j}{Z_j}{m_j}"> </div>
 <p> rather than by an ordinary aperiodic gauge alone: the operator \(Z_j\) sits on the closing virtual bond and satisfies \(Z_j^{m_j}=\mathbb {1}\). Equivalently, setting \(Y = \bigoplus _j Y_j \otimes \mathbb {1}_{r_j}\) and \(Z = \bigoplus _j Z_j \otimes \mathbb {1}_{r_j}\), one has \(Z A^i = Y B^i Y^{-1}\) for all \(i\), with \([A^i, Z] = 0\) and \(\mathcal{V}(A) = \mathcal{V}(ZA)\). </p>
-<p><em>Remark.</em> The proof is conditional on the periodic-overlap dichotomy (Proposition&#160;3.3 of&#160;<span class="cite">
+<p><em>Remark.</em> The proof is conditional on the periodic-overlap dichotomy <span class="cite">
 	[
 	
 	<a href="sect0001.html#DeLasCuevas2017Irreducible" >DlCCSPG17</a>
-	
+	, Proposition&#160;3.3
 	]
-</span>), which is left here as a separate hypothesis. </p>
+</span>, which is left here as a separate hypothesis. </p>
 
   </div>
 </div>
@@ -2882,7 +2888,7 @@
     Definition
     </span>
     <span class="definition_thmlabel">15.29</span>
-    <span class="definition_thmtitle">Cyclic staircase product on blocked indices (Eq. A.8)</span>
+    <span class="definition_thmtitle">Cyclic staircase product on blocked indices (Equation A.8)</span>
     <div class="thm_header_extras">
 
     
@@ -3657,7 +3663,7 @@
 </span>): Work directly with the periodic blocks of \(A\) and \(B\). The conclusion includes an extra \(Z\)-gauge transformation reflecting the non-trivial phase ambiguity that arises for periodic blocks. The \(Z\) matrix satisfies \(Z^m = \mathbb {1}\) and commutes with all Kraus operators; it is invisible to the MPV family because it only introduces \(m\)-th roots of unity in the trace. </p>
 </li>
 </ol>
-<p>Chapters&#160;<a href="ch-canonical.html">11</a> and&#160;<a href="ch-assembly.html">14</a> follow only the blocking route: remove periodicity by blocking, then apply the aperiodic theory. The present chapter develops the separate periodic extension, in which the periodic blocks are treated directly. </p>
+<p>Chapters&#160;<a href="ch-canonical.html">11</a> and&#160;<a href="ch-assembly.html">14</a> follow only the blocking route: remove periodicity by blocking, then apply the aperiodic theory. The periodic extension treats periodic blocks directly. </p>
 
   </div>
 </div>
@@ -4142,7 +4148,13 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Unpack the rigidity hypothesis to extract the family \((Y, u)\) together with the Corollary-4.1 intertwiners. Set \(X(g) := Y(g^{-1})\) and \(\omega (g, h) := u(h^{-1}, g^{-1})\). The projective multiplication law \(X(g)\,  X(h) = \omega (g, h)\,  X(gh)\) is then exactly the \((h^{-1}, g^{-1})\)-instance of the factor-system identity, using \((gh)^{-1} = h^{-1} g^{-1}\). The intertwining relation between \(A\) and \(\widetilde{A}_g\) transports unchanged. </p>
+  <p> Unpack the rigidity hypothesis to extract the family \((Y, u)\) together with the intertwiners from <span class="cite">
+	[
+	
+	<a href="sect0001.html#DeLasCuevas2017Irreducible" >DlCCSPG17</a>
+	, Corollary&#160;4.1
+	]
+</span>. Set \(X(g) := Y(g^{-1})\) and \(\omega (g, h) := u(h^{-1}, g^{-1})\). The projective multiplication law \(X(g)\,  X(h) = \omega (g, h)\,  X(gh)\) is then exactly the \((h^{-1}, g^{-1})\)-instance of the factor-system identity, using \((gh)^{-1} = h^{-1} g^{-1}\). The intertwining relation between \(A\) and \(\widetilde{A}_g\) transports unchanged. </p>
 
   </div>
 </div>
@@ -4460,7 +4472,7 @@
   \[  V^{(N)}(A^{[p]})_\tau \; =\;  \sum _{\sigma \in \{ 0,\ldots ,d-1\} ^N} \Big(\prod _{k} W_{\tau (k),\, \sigma (k)}\Big)\,  V^{(N)}(B)_\sigma  \]
 </div>
 <p> for every \(N \in \mathbb {N}\) and every \(\tau \in \{ 0,\ldots ,d^p-1\} ^N\). </p>
-<p>In paper notation, this encodes \(|V_{pN}(A)\rangle  = W^{\otimes N}\,  |V_N(B)\rangle \) for all&#160;\(N\). </p>
+<p>In Dirac notation, this encodes \(|V_{pN}(A)\rangle  = W^{\otimes N}\,  |V_N(B)\rangle \) for all&#160;\(N\). </p>
 
   </div>
 </div>
@@ -4693,7 +4705,7 @@
     Definition
     </span>
     <span class="definition_thmlabel">15.55</span>
-    <span class="definition_thmtitle">Blocked equal-case continuation hypothesis</span>
+    <span class="definition_thmtitle">Blocked equal-case root hypothesis</span>
     <div class="thm_header_extras">
 
     
@@ -4751,7 +4763,7 @@
         </div>
   </div>
   <div class="definition_thmcontent">
-  <p>    Fix \((d,D,p)\). This states the combined continuation statement: whenever a blocked tensor \(C\) in irreducible form&#160;II has the same MPV family as a blocked root \(A^{[p]}\), one can replace \(A\) by a left-canonical tensor \(A'\) with \(\mathcal E_C = \mathcal E_{A'^{[p]}}\). </p>
+  <p>    Fix \((d,D,p)\). This states the combined root-existence statement: whenever a blocked tensor \(C\) in irreducible form&#160;II has the same MPV family as a blocked root \(A^{[p]}\), one can replace \(A\) by a left-canonical tensor \(A'\) with \(\mathcal E_C = \mathcal E_{A'^{[p]}}\). </p>
 
   </div>
 </div>
@@ -4761,7 +4773,7 @@
     Theorem
     </span>
     <span class="theorem_thmlabel">15.56</span>
-    <span class="theorem_thmtitle">Blocked equal-case continuation from Z-gauge extraction</span>
+    <span class="theorem_thmtitle">Blocked equal-case root from Z-gauge extraction</span>
     <div class="thm_header_extras">
 
     
@@ -4822,7 +4834,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>    If the blocked equal-case Z-gauge extraction hypothesis and the blocked-to-root reconstruction hypothesis both hold, then the combined blocked equal-case continuation hypothesis holds. </p>
+  <p>    If the blocked equal-case Z-gauge extraction hypothesis and the blocked-to-root reconstruction hypothesis both hold, then the combined blocked equal-case root hypothesis holds. </p>
 
   </div>
 </div>
@@ -4844,7 +4856,7 @@
     Theorem
     </span>
     <span class="theorem_thmlabel">15.57</span>
-    <span class="theorem_thmtitle">Reduction of forward canonicalization to the blocked equal-case stage</span>
+    <span class="theorem_thmtitle">Reduction to the blocked equal-case root hypothesis</span>
     <div class="thm_header_extras">
 
     
@@ -4907,7 +4919,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>    Assume the blocked equal-case continuation hypothesis. Then every \(p\)-refinable tensor \(B\) in irreducible form&#160;II admits a left-canonical root \(A'\) with \(\mathcal E_B = \mathcal E_{A'^{[p]}}\). </p>
+  <p>    Assume the blocked equal-case root hypothesis. Then every \(p\)-refinable tensor \(B\) in irreducible form&#160;II admits a left-canonical root \(A'\) with \(\mathcal E_B = \mathcal E_{A'^{[p]}}\). </p>
 
   </div>
 </div>
@@ -4919,7 +4931,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>Apply Theorem&#160;<a href="ch-periodic_ft_apps.html#thm:p_refinement_pullback_irreducible_form">15.52</a> to the refinement witness of \(B\). This produces a blocked tensor \(C\) in irreducible form&#160;II with \(\mathcal E_C = \mathcal E_B\) and the same MPV family as \(A^{[p]}\). The blocked equal-case continuation hypothesis then gives a left-canonical tensor \(A'\) with \(\mathcal E_C = \mathcal E_{A'^{[p]}}\). Combining the two transfer-map identities yields \(\mathcal E_B = \mathcal E_{A'^{[p]}}\). </p>
+  <p>Apply Theorem&#160;<a href="ch-periodic_ft_apps.html#thm:p_refinement_pullback_irreducible_form">15.52</a> to the refinement witness of \(B\). This produces a blocked tensor \(C\) in irreducible form&#160;II with \(\mathcal E_C = \mathcal E_B\) and the same MPV family as \(A^{[p]}\). The blocked equal-case root hypothesis then gives a left-canonical tensor \(A'\) with \(\mathcal E_C = \mathcal E_{A'^{[p]}}\). Combining the two transfer-map identities yields \(\mathcal E_B = \mathcal E_{A'^{[p]}}\). </p>
 
   </div>
 </div>
@@ -4929,7 +4941,7 @@
     Theorem
     </span>
     <span class="theorem_thmlabel">15.58</span>
-    <span class="theorem_thmtitle">Forward direction from the blocked equal-case continuation</span>
+    <span class="theorem_thmtitle">Forward direction from the blocked equal-case root hypothesis</span>
     <div class="thm_header_extras">
 
     
@@ -4994,7 +5006,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>    Assume the blocked equal-case continuation hypothesis. Then for every tensor \(B\) in irreducible form&#160;II, \(p\)-refinability of \(B\) implies \(p\)-divisibility of \(\mathcal E_B\). </p>
+  <p>    Assume the blocked equal-case root hypothesis. Then for every tensor \(B\) in irreducible form&#160;II, \(p\)-refinability of \(B\) implies \(p\)-divisibility of \(\mathcal E_B\). </p>
 
   </div>
 </div>
@@ -5094,7 +5106,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   Let \(B\) be an MPS tensor in irreducible form&#160;II and let \(p \ge 1\). Assume both canonicalization hypotheses used in the one-way statements: one for refinability \(\Rightarrow \) divisibility and one for divisibility \(\Rightarrow \) refinability. Then \(B\) is \(p\)-refinable iff its transfer map \(\mathcal{E}_B\) is \(p\)-divisible. </p>
+  <p>   Let \(B\) be an MPS tensor in irreducible form&#160;II and let \(p \ge 1\). Assume the two root hypotheses used in the one-way statements: the forward left-canonical root hypothesis for refinability \(\Rightarrow \) divisibility and the reverse transfer-map root hypothesis for divisibility \(\Rightarrow \) refinability. Then \(B\) is \(p\)-refinable iff its transfer map \(\mathcal{E}_B\) is \(p\)-divisible. </p>
 
   </div>
 </div>
@@ -5106,7 +5118,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Bundle the forward implication (Theorem&#160;<a href="ch-periodic_ft_apps.html#thm:thm_4_1_p_refinement_forward">15.60</a>) with the reverse implication (Theorem&#160;<a href="ch-periodic_ft_apps.html#thm:thm_4_1_p_refinement_reverse">15.63</a>) into a single biconditional. The forward and reverse directions each assume the corresponding canonicalization hypothesis, and together they give the full equivalence under those hypotheses. </p>
+  <p> Bundle the forward implication (Theorem&#160;<a href="ch-periodic_ft_apps.html#thm:thm_4_1_p_refinement_forward">15.60</a>) with the reverse implication (Theorem&#160;<a href="ch-periodic_ft_apps.html#thm:thm_4_1_p_refinement_reverse">15.63</a>) into a single biconditional. The forward direction assumes the left-canonical root hypothesis; the reverse direction assumes only the transfer-map root hypothesis. Together they give the full equivalence under those hypotheses. </p>
 
   </div>
 </div>
@@ -5177,7 +5189,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   Let \(B\) be an MPS tensor in irreducible form&#160;II. Assume a <em>canonicalization</em> hypothesis providing the remaining analytic assumptions (left-canonical witness with matching transfer map). Then \(p\)-refinability of \(B\) implies \(p\)-divisibility of \(\mathcal{E}_B\). </p>
+  <p>   Let \(B\) be an MPS tensor in irreducible form&#160;II. Assume a left-canonical root hypothesis: every refinement witness gives a tensor \(A\) with \(\sum _i (A^i)^\dagger A^i = \mathbb {1}\) and \(\mathcal{E}_B = \mathcal{E}_{A^{[p]}}\). Then \(p\)-refinability of \(B\) implies \(p\)-divisibility of \(\mathcal{E}_B\). </p>
 
   </div>
 </div>
@@ -5189,7 +5201,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>The canonicalization hypothesis supplies a witness \(A\) with \(\sum _i (A^i)^\dagger A^i = \mathbb {1}\) (left-canonical) and \(\mathcal{E}_B = \mathcal{E}_{A^{[p]}}\). The left-canonical property makes \(\mathcal{E}_A\) a CPTP channel, and the blocking identity \(\mathcal{E}_{A^{[p]}} = (\mathcal{E}_A)^p\) then identifies \(\mathcal{E}_B\) with the \(p\)-th power of the channel \(\mathcal{E}_A\). </p>
+  <p>The left-canonical root hypothesis supplies a witness \(A\) with \(\sum _i (A^i)^\dagger A^i = \mathbb {1}\) (left-canonical) and \(\mathcal{E}_B = \mathcal{E}_{A^{[p]}}\). The left-canonical property makes \(\mathcal{E}_A\) a CPTP channel, and the blocking identity \(\mathcal{E}_{A^{[p]}} = (\mathcal{E}_A)^p\) then identifies \(\mathcal{E}_B\) with the \(p\)-th power of the channel \(\mathcal{E}_A\). </p>
 
   </div>
 </div>
@@ -5409,7 +5421,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   Let \(B\) be an MPS tensor in irreducible form&#160;II and let \(p \ge 1\). Assume an <em>inverse canonicalization</em> hypothesis providing a witness \(A : \mathrm{MPSTensor}\  d\  D\) with \(\mathcal{E}_B = \mathcal{E}_{A^{[p]}}\) whenever \(\mathcal{E}_B\) is \(p\)-divisible. Then \(p\)-divisibility of \(\mathcal{E}_B\) implies \(p\)-refinability of \(B\). </p>
+  <p>   Let \(B\) be an MPS tensor in irreducible form&#160;II and let \(p \ge 1\). Assume the reverse transfer-map root hypothesis: there is a tensor \(A\) with \(\mathcal{E}_B = \mathcal{E}_{A^{[p]}}\) whenever \(\mathcal{E}_B\) is \(p\)-divisible. Then \(p\)-divisibility of \(\mathcal{E}_B\) implies \(p\)-refinability of \(B\). </p>
 
   </div>
 </div>
@@ -5421,7 +5433,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>From the inverse canonicalization hypothesis, extract \(A\) with \(\mathcal{E}_B = \mathcal{E}_{A^{[p]}}\). This matches two finite Kraus families of the same completely positive map: the blocked family \(A^{[p]}\) with \(d^{p}\) operators and the original family \(B\) with \(d\) operators. The cardinality comparison \(d \le d^{p}\) holds whenever \(p \ge 1\), so <span class="cite">
+  <p>From the reverse transfer-map root hypothesis, extract \(A\) with \(\mathcal{E}_B = \mathcal{E}_{A^{[p]}}\). This matches two finite Kraus families of the same completely positive map: the blocked family \(A^{[p]}\) with \(d^{p}\) operators and the original family \(B\) with \(d\) operators. The cardinality comparison \(d \le d^{p}\) holds whenever \(p \ge 1\), so <span class="cite">
 	[
 	
 	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>

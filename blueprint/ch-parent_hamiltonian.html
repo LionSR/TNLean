@@ -196,7 +196,7 @@
   <a href="ch-channels.html#subsec:svd_normal_form"><span class="toc_ref">5.12.2</span> <span class="toc_entry">SVD normal form (existence)</span></a>
  </li>
 <li class="">
-  <a href="ch-channels.html#subsec:lorentz_normal_form"><span class="toc_ref">5.12.3</span> <span class="toc_entry">Lorentz normal form (Wolf §2.3, existence statements)</span></a>
+  <a href="ch-channels.html#subsec:lorentz_normal_form"><span class="toc_ref">5.12.3</span> <span class="toc_entry">Lorentz normal form</span></a>
  </li>
 
   </ul>
@@ -514,7 +514,7 @@
   <span class="expand-toc">▶</span>
   <ul class="sub-toc-2">
      <li class="">
-  <a href="ch-canonical.html#sec:sector_irreducibility_helpers"><span class="toc_ref">11.12.1</span> <span class="toc_entry">Sector irreducibility helpers</span></a>
+  <a href="ch-canonical.html#sec:sector_irreducibility_lemmas"><span class="toc_ref">11.12.1</span> <span class="toc_entry">Sector irreducibility lemmas</span></a>
  </li>
 
   </ul>
@@ -6612,13 +6612,13 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> The remaining step is the closure property from <span class="cite">
+  <p> The closure property needed here is the one from <span class="cite">
 	[
 	
 	<a href="sect0001.html#Cirac2021Matrix" >CPGSV21</a>
-	, §&#160;IV.C
+	, Section&#160;IV.C
 	]
-</span>: Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:reduced_wrapped_boundary_compatibilities">20.50</a> supplies the two one-sided wrapped-boundary identities for the open-chain boundary matrix \(X\). The padded-annihilation lemma states that exact complement-span length mismatches are no longer the obstruction. The new conditional reduction theorem shows that the proof would finish as soon as those actual wrapped-window witnesses are compared after reindexing their complements to a common middle word. What is still missing is precisely that comparison of the witnesses themselves. </p>
+</span>. Theorem&#160;<a href="ch-parent_hamiltonian.html#thm:reduced_wrapped_boundary_compatibilities">20.50</a> supplies the two one-sided wrapped-boundary identities for the open-chain boundary matrix \(X\). The padded-annihilation lemma states that exact complement-span length mismatches are no longer the obstruction. The new conditional reduction theorem shows that the proof would finish as soon as those actual wrapped-window witnesses are compared after reindexing their complements to a common middle word. What is still missing is precisely that comparison of the witnesses themselves. </p>
 
   </div>
 </div>
@@ -7209,7 +7209,7 @@
         </div>
   </div>
   <div class="remark_thmcontent">
-  <p>                             On an even chain, one can extract the \(p\)-th adjacent two-site word of a configuration and compare the MPS coefficients with a repeated two-site pair state. The one-pair case recovers the original two-site amplitude. For an Appendix&#160;B structural witness, the gauge-removed tensor \(\Lambda U_i\) has the same MPV coefficients as \(A\), and the structural two-site amplitude is exactly the two-site MPV coefficient. Hence the coefficient part of the extraction reduces to proving the repeated-pair identity for this gauge-removed tensor. The corresponding data also include a family of idempotent chain-level projectors whose values are the nearest-neighbor local terms. The final theorem in these data shows that these local terms commute. Consequently the same data yields the nearest-neighbor commuting condition on every finite chain. The Appendix&#160;B construction extracts the already-proved structural decomposition from normal left-canonical RFP data and identifies the remaining internal step: construct product-pair extraction through the two-site amplitude determined by that structural witness. </p>
+  <p>                             On an even chain, one can extract the \(p\)-th adjacent two-site word of a configuration and compare the MPS coefficients with a repeated two-site pair state. The one-pair case recovers the original two-site amplitude. For an Appendix&#160;B structural witness, the gauge-removed tensor \(\Lambda U_i\) has the same MPV coefficients as \(A\), and the structural two-site amplitude is exactly the two-site MPV coefficient. Hence the coefficient part of the extraction reduces to proving the repeated-pair identity for this gauge-removed tensor. The corresponding data also include a family of idempotent chain-level projectors whose values are the nearest-neighbor local terms. The final theorem in these data shows that these local terms commute. Consequently the same data yields the nearest-neighbor commuting condition on every finite chain. The Appendix&#160;B construction extracts the structural decomposition from normal left-canonical RFP data. The missing mathematical input is the product-pair extraction through the two-site amplitude determined by that structural witness. </p>
 
   </div>
 </div>
@@ -7283,11 +7283,11 @@
 </div>
 <h1 id="sec:decorrelation">20.5 Decorrelation and commuting parent Hamiltonians</h1>
 
-<p>This section develops the abstract operator-algebraic formulation of decorrelation and its connection to commuting parent Hamiltonians, following Appendix&#160;D, §D.2 of&#160;<span class="cite">
+<p>This section develops the abstract operator-algebraic formulation of decorrelation and its connection to commuting parent Hamiltonians, following <span class="cite">
 	[
 	
 	<a href="sect0001.html#Cirac2021Matrix" >CPGSV21</a>
-	
+	, Appendix&#160;D, Section&#160;D.2
 	]
 </span>. </p>
 <div class="definition_thmwrapper theorem-style-definition" id="def:is_decorrelated">
@@ -8190,13 +8190,13 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   If a subspace \(K\) has a commuting parent Hamiltonian decomposition \(P_K = P_{AX} \circ P_{XB}\) with \([P_{AX}, P_{XB}] = 0\), and \(A\)-observables commute with \(P_{XB}\) while \(B\)-observables commute with \(P_{AX}\), then regions \(A\) and \(B\) are decorrelated w.r.t. \(K\). This is the backward direction of Proposition&#160;D.3 from&#160;<span class="cite">
+  <p>   If a subspace \(K\) has a commuting parent Hamiltonian decomposition \(P_K = P_{AX} \circ P_{XB}\) with \([P_{AX}, P_{XB}] = 0\), and \(A\)-observables commute with \(P_{XB}\) while \(B\)-observables commute with \(P_{AX}\), then regions \(A\) and \(B\) are decorrelated w.r.t. \(K\). This is the backward direction of <span class="cite">
 	[
 	
 	<a href="sect0001.html#Cirac2021Matrix" >CPGSV21</a>
-	
+	, Appendix&#160;D, Section&#160;D.2, Proposition&#160;D.3
 	]
-</span>, Appendix&#160;D, §D.2. </p>
+</span>. </p>
 
   </div>
 </div>
@@ -8417,9 +8417,9 @@
 	[
 	
 	<a href="sect0001.html#Cirac2021Matrix" >CPGSV21</a>
-	
+	, Appendix&#160;D, Section&#160;D.2
 	]
-</span>, Appendix&#160;D, §D.2. </p>
+</span>. </p>
 
   </div>
 </div>
@@ -10290,7 +10290,7 @@
     Lemma
     </span>
     <span class="lemma_thmlabel">20.124</span>
-    <span class="lemma_thmtitle">Parent-Hamiltonian finite-overlap norm-compression quadratic reduction</span>
+    <span class="lemma_thmtitle">Finite-overlap norm-compression reduction</span>
     <div class="thm_header_extras">
 
     
@@ -11852,7 +11852,13 @@
 <div class="displaymath" id="a0000001605">
   \[  \omega \longmapsto \bigl(A_j^{\omega }\bigr)_j  \]
 </div>
-<p> span the whole product algebra \(\prod _j M_{D_j}(\mathbb {C})\). The remaining mathematical step is to derive this condition for some positive length from the separated canonical-form/BNT hypotheses. This is the block-injective span requirement in CPGSV21 §IV.C: after blocking, the parent ground space is generated by the basis of normal tensors, with the improved bound coming from block-diagonal boundary conditions. </p>
+<p> span the whole product algebra \(\prod _j M_{D_j}(\mathbb {C})\). The remaining mathematical step is to derive this condition for some positive length from the separated canonical-form/BNT hypotheses. This is the block-injective span requirement in <span class="cite">
+	[
+	
+	<a href="sect0001.html#Cirac2021Matrix" >CPGSV21</a>
+	, Section&#160;IV.C
+	]
+</span>: after blocking, the parent ground space is generated by the basis of normal tensors, with the improved bound coming from block-diagonal boundary conditions. </p>
 
   </div>
 </div>
@@ -12110,7 +12116,7 @@
     Lemma
     </span>
     <span class="lemma_thmlabel">20.146</span>
-    <span class="lemma_thmtitle">Block decomposition: forward inclusion in the assembled parent ground space</span>
+    <span class="lemma_thmtitle">Forward inclusion for assembled parent ground spaces</span>
     <div class="thm_header_extras">
 
     
@@ -12886,7 +12892,13 @@
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>            If every ordered pair of distinct blocks admits a common-length pairwise separator, then full block-selector words exist. More precisely, multiplying the pairwise separators for a fixed block \(k\) against all other blocks gives a selector of length \((r-1)S\) for \(k\). Hence common block injectivity plus pairwise separators implies the Proposition-IV.3 finite product-word span and the biCF trace-separation condition. </p>
+  <p>            If every ordered pair of distinct blocks admits a common-length pairwise separator, then full block-selector words exist. More precisely, multiplying the pairwise separators for a fixed block \(k\) against all other blocks gives a selector of length \((r-1)S\) for \(k\). Hence common block injectivity plus pairwise separators implies the finite product-word span in <span class="cite">
+	[
+	
+	<a href="sect0001.html#Cirac2021Matrix" >CPGSV21</a>
+	, Proposition&#160;IV.3
+	]
+</span> and the block-injective canonical-form trace-separation condition. </p>
 
   </div>
 </div>
@@ -13106,11 +13118,11 @@
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>       Let \(A\) be in canonical-form/BNT, and assume \(1{\lt}L\), \(N \ge L+1\), and \(0{\lt}m\). Assume the remaining #911 hypothesis: every virtual sector projection lies in the pulled-back span of the length-\(m\) word products of the assembled tensor. If a boundary matrix for the assembled tensor commutes with all those length-\(m\) words, then the vector obtained by applying the assembled ground-space map to that boundary matrix lies in \(\bigsqcup _j \mathcal G_{N,L}(A_j)\). Consequently, if every assembled periodic-chain ground vector admits such a commuting boundary matrix representation (the result of the wrapping-window comparison), then </p>
+  <p>       Let \(A\) be in canonical-form/BNT, and assume \(1{\lt}L\), \(N \ge L+1\), and \(0{\lt}m\). Assume every virtual sector projection lies in the pulled-back span of the length-\(m\) word products of the assembled tensor. If a boundary matrix for the assembled tensor commutes with all those length-\(m\) words, then the vector obtained by applying the assembled ground-space map to that boundary matrix lies in \(\bigsqcup _j \mathcal G_{N,L}(A_j)\). Consequently, if every assembled periodic-chain ground vector admits such a commuting boundary matrix representation (the result of the wrapping-window comparison), then </p>
 <div class="displaymath" id="a0000001624">
   \[  \mathcal G_{N,L}\bigl(\operatorname {Assemble}(\mu , A)\bigr) \subseteq \bigsqcup _j \mathcal G_{N,L}(A_j),  \]
 </div>
-<p> and together with the already-proved forward inclusion this gives the corresponding conditional equality. Composing the reverse inclusion with blockwise injective uniqueness gives the conditional containment of the assembled parent ground space in the BNT span; this lemma is not a restatement of the final theorem, because it keeps the #911 projection-span and boundary representation hypotheses explicit. </p>
+<p> and together with the already-proved forward inclusion this gives the corresponding conditional equality. Composing the reverse inclusion with blockwise injective uniqueness gives the conditional containment of the assembled parent ground space in the BNT span; this lemma keeps the projection-span and boundary-representation hypotheses explicit. </p>
 
   </div>
 </div>
@@ -13298,7 +13310,13 @@
 <div class="displaymath" id="a0000001628">
   \[  \mathcal G_{N,L}\bigl(\operatorname {Assemble}(\mu , A)\bigr) \subseteq \bigsqcup _j \mathcal G_{N,L}(A_j).  \]
 </div>
-<p> Together with the forward inclusion, this gives the corresponding conditional block-splitting equality. In the parent-ground-space formulation, the same hypotheses imply containment in \(\operatorname {BNTSpan}_{N}(A)\). The selector-word hypothesis and the boundary representation remain explicit: this lemma does not derive selector existence from BNT separation, nor the wrapping/open-chain boundary representation. It is the formal composition matching the CPGSV21 §IV.C block-injective ground-space route, where the regrowing argument is restricted to block-diagonal boundary conditions. </p>
+<p> Together with the forward inclusion, this gives the corresponding conditional block-splitting equality. In the parent-ground-space formulation, the same hypotheses imply containment in \(\operatorname {BNTSpan}_{N}(A)\). The selector-word hypothesis and the boundary representation remain explicit: this lemma does not derive selector existence from BNT separation, nor the wrapping/open-chain boundary representation. It is the formal composition matching the block-injective ground-space route of <span class="cite">
+	[
+	
+	<a href="sect0001.html#Cirac2021Matrix" >CPGSV21</a>
+	, Section&#160;IV.C
+	]
+</span>, where the regrowing argument is restricted to block-diagonal boundary conditions. </p>
 
   </div>
 </div>
@@ -13493,7 +13511,7 @@
 
   </div>
 </div>
-<p><em>Remark.</em> A separate kernel-identification statement for these assembled block families is still to be established; at present, the formal results are stated in the chain-ground-space model rather than directly as \(\ker (H_{N})\).  </p>
+<p><em>Remark.</em> A separate kernel-identification statement for these assembled block families would convert the chain-ground-space statement into the corresponding statement for \(\ker (H_N)\).  </p>
 
 </div> <!--main-text -->
 </div> <!-- content-wrapper -->
