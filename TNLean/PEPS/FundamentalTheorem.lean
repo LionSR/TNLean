@@ -17,7 +17,7 @@ import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Defs
 --
 -- The remaining `sorry`s split into three independently tracked groups:
 -- * `gaugeConsistency` (issue #820) still requires the full edge-centred
---   reduction from arXiv:1804.04964 §3. The local left inverse and the
+--   reduction from arXiv:1804.04964 Section 3. The local left inverse and the
 --   elementary blocking data are developed in `PEPS/VirtualInsertion` and
 --   `PEPS/Blocking`, and `localGauge_exists` has been reduced to the sharper
 --   local hypothesis `HasLocalGaugeLift`. The edge-blocked coefficient and
@@ -728,7 +728,7 @@ theorem gauge_unique_mod_edge_scalars (A B : Tensor G d)
   -- `1`, then reconcile `c_u` and `c_w` on every shared edge `e = (u,w)` into a
   -- single global family `c : (e : Edge G) → Units ℂ` satisfying
   -- `IsVertexBalanced c`. This is the local scalar-ratio argument of
-  -- arXiv:1804.04964 §3; it is independent of the virtual-insertion / blocking
+  -- arXiv:1804.04964 Section 3; it is independent of the virtual-insertion / blocking
   -- machinery tracked in #763.
   sorry
 

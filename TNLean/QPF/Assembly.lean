@@ -22,9 +22,9 @@ theorem from its components:
 
 Together these formalize the core of **Wolf Theorem 6.3** (Spectral radius of
 irreducible maps), specialized to the trace-preserving (spectral radius = 1) setting:
-- Existence: there is a nonzero PSD fixed point (Wolf Thm 6.11 / Prop 6.3 route)
-- PosDef: under irreducibility the fixed point is strictly positive (Wolf Thm 6.3(2))
-- Uniqueness: the eigenvalue 1 is non-degenerate (Wolf Thm 6.3(2))
+- Existence: there is a nonzero PSD fixed point (Wolf Theorem 6.11 / Proposition 6.3 route)
+- PosDef: under irreducibility the fixed point is strictly positive (Wolf Theorem 6.3(2))
+- Uniqueness: the eigenvalue 1 is non-degenerate (Wolf Theorem 6.3(2))
 
 ## Main results
 
@@ -34,8 +34,8 @@ irreducible maps), specialized to the trace-preserving (spectral radius = 1) set
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, §6.2 Thm 6.3,
-  §6.4 Thm 6.11][Wolf2012QChannels]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 6.2 Theorem 6.3,
+  Section 6.4 Theorem 6.11][Wolf2012QChannels]
 * [Evans, Høegh-Krohn, *Spectral properties of positive maps*, 1978][Evans1978Spectral]
 -/
 
@@ -81,7 +81,7 @@ end Existence
 section PerronFrobenius
 
 /-- **The quantum Perron–Frobenius theorem for MPS transfer operators**
-(Wolf Thm 6.3, specialized to CP maps with spectral radius 1).
+(Wolf Theorem 6.3, specialized to CP maps with spectral radius 1).
 
 The transfer map of an injective MPS tensor has a unique PSD fixed point
 (up to scalar), and it is positive definite. -/

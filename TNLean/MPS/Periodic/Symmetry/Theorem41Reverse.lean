@@ -125,7 +125,7 @@ remaining analytic passage from `p`-divisibility of `transferMap B` to a compati
 Kraus-reducible witness). Then `IsPDivisibleChannel (transferMap B) p` implies
 `IsPRefinable B p`.
 
-The proof follows the paper (arXiv:1708.00029 §4.1, converse paragraph): from the inverse
+The proof follows the paper (arXiv:1708.00029 Section 4.1, converse paragraph): from the inverse
 canonicalization we obtain `A : MPSTensor d D` with
 `transferMap B = transferMap (blockTensor A p)`; this matches two Kraus representations of
 the same CP map (`blockTensor A p` with `d^p` operators and `B` with `d` operators), so
@@ -157,7 +157,7 @@ theorem thm_4_1_p_refinement_reverse
     have hEq : transferMap (blockTensor A p) X = transferMap B X := by
       rw [← hTransferEq]
     simpa [transferMap_apply] using hEq
-  -- Extract the isometric mixing matrix `V` from Wolf Thm 2.18.
+  -- Extract the isometric mixing matrix `V` from Wolf Theorem 2.18.
   obtain ⟨V, hV, hBA⟩ :=
     (kraus_isometry_freedom_iff (blockTensor A p) B hCard).mp hKraus
   refine ⟨A, V, hV, ?_⟩

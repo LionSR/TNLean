@@ -47,8 +47,8 @@ primitive block decomposition.
 
 ## References
 
-* [Cirac–Pérez-García–Schuch–Verstraete, arXiv:1606.00608, §2.3 + Appendix A]
-* [Cirac–Pérez-García–Schuch–Verstraete, arXiv:2011.12127, §IV]
+* [Cirac–Pérez-García–Schuch–Verstraete, arXiv:1606.00608, Section 2.3 + Appendix A]
+* [Cirac–Pérez-García–Schuch–Verstraete, arXiv:2011.12127, Section IV]
 
 ## Tags
 

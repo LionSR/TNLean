@@ -43,7 +43,7 @@ The split follows the same review-oriented pattern as the earlier `Full/` and
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, §6.1.1][Wolf2012QChannels]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 6.1.1][Wolf2012QChannels]
 
 ## Tags
 

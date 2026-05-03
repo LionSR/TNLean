@@ -18,8 +18,8 @@ Euler step approximation.
 
 ## Main results
 
-* `cp_semigroup_implies_ccp_generator` — **Prop 7.3** direction 1→2.
-* `cp_semigroup_iff_ccp_generator` — **Prop 7.3**: CP semigroup ↔ CCP generator.
+* `cp_semigroup_implies_ccp_generator` — **Proposition 7.3** direction 1→2.
+* `cp_semigroup_iff_ccp_generator` — **Proposition 7.3**: CP semigroup ↔ CCP generator.
 
 The main theorem gives the two directions: a CP exponential semigroup has a CCP
 generator, and a CCP generator yields CP maps at all nonnegative times.  The
@@ -39,7 +39,7 @@ section LindbladForms
 private abbrev MatChoi (D : ℕ) :=
   Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ
 
--- Prop 7.3 differentiates through these maps over `ℝ`, so we use the
+-- Proposition 7.3 differentiates through these maps over `ℝ`, so we use the
 -- corresponding real-restricted CLMs obtained from the ambient `ℂ`-linear maps.
 private def choiRCLM (D : ℕ) : MatrixCLM (Fin D) →L[ℝ] MatChoi D :=
   (ChoiJamiolkowski.choiCLM (D := D)).restrictScalars ℝ
@@ -47,7 +47,7 @@ private def choiRCLM (D : ℕ) : MatrixCLM (Fin D) →L[ℝ] MatChoi D :=
 private def sandRCLM (D : ℕ) (P : MatChoi D) : MatChoi D →L[ℝ] MatChoi D :=
   (ContinuousLinearMap.mulLeftRight ℂ (MatChoi D) P P).restrictScalars ℝ
 
-/-! ## Prop 7.3: CP semigroup ↔ CCP generator (Wolf Proposition 7.3) -/
+/-! ## Proposition 7.3: CP semigroup ↔ CCP generator (Wolf Proposition 7.3) -/
 
 set_option maxHeartbeats 2000000 in
 -- The proof composes CLM-valued derivatives with Choi/projected-Choi maps and
@@ -57,12 +57,12 @@ of completely positive maps, then `L` is conditionally completely positive.
 
 **Proof sketch** (Wolf): From `(T_t ⊗ id)(|Ω⟩⟨Ω|) ≥ 0` for all `t ≥ 0`, differentiate
 at `t = 0` to get `(L⊗id)(|Ω⟩⟨Ω|) + |Ω⟩⟨Ω|·(L⊗id)† ≥ 0` on the range of `P`,
-i.e. `P(L⊗id)(|Ω⟩⟨Ω|)P ≥ 0`. Then Prop 7.2 gives CCP.
+i.e. `P(L⊗id)(|Ω⟩⟨Ω|)P ≥ 0`. Then Proposition 7.2 gives CCP.
 
 **Proof ingredients**:
 1. The CP hypothesis gives positivity of the Choi matrix of `exp(tL)`.
 2. Boundary differentiation of a PSD-valued curve yields positivity of the projected derivative.
-3. Wolf Prop. 7.2 identifies projected Choi positivity with conditional complete positivity. -/
+3. Wolf Proposition 7.2 identifies projected Choi positivity with conditional complete positivity. -/
 theorem cp_semigroup_implies_ccp_generator
     (L : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (hCP : ∀ t : ℝ, 0 ≤ t → IsCPMap (expSemigroup L t)) :

@@ -39,7 +39,7 @@ primitive simultaneously.
 ## References
 
 * [arXiv:1606.00608, Appendix A — periodicity removal by blocking]
-* [arXiv:2011.12127, §IV — canonical form construction]
+* [arXiv:2011.12127, Section IV — canonical form construction]
 -/
 
 open scoped Matrix BigOperators

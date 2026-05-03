@@ -8,7 +8,7 @@ import TNLean.Channel.Stinespring
 import TNLean.Algebra.TracePairing
 
 /-!
-# Rectangular Kraus freedom (Wolf Thm 2.1 item 4, necessary direction)
+# Rectangular Kraus freedom (Wolf Theorem 2.1 item 4, necessary direction)
 
 This file proves the necessary direction of the Kraus freedom theorem:
 if two Kraus families define the same completely positive map, they are
@@ -22,7 +22,7 @@ related by a rectangular isometry.
   `∑ Bα X Bα† = ∑ Aj X Aj†` are related by a rectangular isometry `V` satisfying
   `V†V = 1` and `Bα = ∑j Vαj • Aj`
 
-## Proof outline (Wolf Thm 2.1 item 4)
+## Proof outline (Wolf Theorem 2.1 item 4)
 
 The proof establishes that equal completely positive maps force equal Gram
 structures on the vectorised Kraus operators, from which a rectangular isometry
@@ -35,8 +35,8 @@ Concretely:
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Thm 2.1 item 4][Wolf2012QChannels]
-* arXiv:1606.00608, §3 (application to RFP characterisation)
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Theorem 2.1 item 4][Wolf2012QChannels]
+* arXiv:1606.00608, Section 3 (application to RFP characterisation)
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder InnerProductSpace
@@ -144,7 +144,7 @@ private lemma toEuclideanLin_conjTranspose_mul_apply
 
 set_option maxHeartbeats 1600000 in
 -- The partial-isometry extension proof drives higher-order typeclass search in 4.29.
-/-- **Rectangular Kraus freedom** (Wolf Thm 2.1 item 4, necessary direction):
+/-- **Rectangular Kraus freedom** (Wolf Theorem 2.1 item 4, necessary direction):
 if two Kraus families of sizes `r₁` and `r₂` define the same CPM, then the
 first family is a linear combination of the second via a rectangular isometry
 `V : r₁ × r₂` with `V†V = 1`.

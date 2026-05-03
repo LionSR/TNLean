@@ -282,7 +282,7 @@ private theorem κ_add_conjTranspose_κ (F : LindbladForm D) :
   rw [h2, ← two_smul ℂ ((2 : ℂ)⁻¹ • S), smul_smul]
   norm_num
 
-/-- **Lindblad identity** (Wolf Eq. 7.27 variant).
+/-- **Lindblad identity** (Wolf Equation 7.27 variant).
 
 For any `A` in the adjoint kernel of a Lindblad form `F`, we have
 `F.toAdjointLinearMap (Aᴴ * A) = ∑ⱼ (A * F.L j − F.L j * A)ᴴ * (A * F.L j − F.L j * A)`.
@@ -394,7 +394,7 @@ private theorem each_commutator_eq_zero_of_sum_eq_zero
 
 /-- Wolf Theorem 7.2, faithful direction.
 
-The proof uses the direct algebraic approach (Wolf Eq. 7.27):
+The proof uses the direct algebraic approach (Wolf Equation 7.27):
 
 1. From `L*(A) = 0`, derive `L*(Aᴴ) = 0` (conjugation property).
 2. Prove the **Lindblad identity**: `L*(Aᴴ A) = Σⱼ [A, Lⱼ]ᴴ [A, Lⱼ]`.

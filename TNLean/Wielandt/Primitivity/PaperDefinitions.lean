@@ -170,7 +170,7 @@ For orientation, the codebase distinguishes four related notions:
 * `IsPeripherallyPrimitive A`: this thin transfer-map formulation.
 
 Paper: "E_A is primitive" means `1` is the only eigenvalue with `|λ| = 1`.
-Wolf Ch6 Definition 6.2(2). -/
+Wolf Chapter 6 Definition 6.2(2). -/
 def IsPeripherallyPrimitive (A : MPSTensor d D) : Prop :=
   _root_.IsPrimitive (transferMap (d := d) (D := D) A)
 
@@ -193,7 +193,7 @@ Conditions (1) and (3) together force the eigenvalue-1 eigenspace to be
 one-dimensional (spanned by `ρ`), which is essential for the (c)→(b) direction
 of Proposition 3.
 
-This corresponds to Wolf Ch6 Theorem 6.7 condition (3): the channel is
+This corresponds to Wolf Chapter 6 Theorem 6.7 condition (3): the channel is
 irreducible and aperiodic, with the irreducibility giving `ρ > 0` (via the
 quantum Perron–Frobenius theorem) and aperiodicity giving uniqueness of the
 peripheral eigenvalue.

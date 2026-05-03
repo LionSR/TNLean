@@ -91,7 +91,7 @@ matrix.
 
 ## References
 
-- [CPGSV17] arXiv:1606.00608, Appendix C.2, Lemmas C.3–C.4
+- [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608, Appendix C.2, Lemmas C.3–C.4
 - Hayashi, J. Phys. A: Math. Gen. 37 (2004) L205–L208
 - Ruskai, JMP 43, 4358 (2002)
 - Hayden, Jozsa, Petz, Winter, Commun. Math. Phys. 246, 359–374 (2004)

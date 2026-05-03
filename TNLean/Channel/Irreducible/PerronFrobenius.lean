@@ -27,7 +27,7 @@ positive maps on `M_D(ℂ)` needed for Wolf's Theorem 6.3, items 2 and 3.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, §6.2, Thm 6.3]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 6.2, Theorem 6.3]
   [Wolf2012QChannels]
 -/
 
@@ -38,7 +38,7 @@ variable {D : ℕ}
 
 /-! ## PSD eigenvector → PosDef (Wolf 6.3(2), upgrade) -/
 
-/-- **PSD eigenvectors of irreducible CP maps are PosDef** (Wolf Thm 6.3(2)).
+/-- **PSD eigenvectors of irreducible CP maps are PosDef** (Wolf Theorem 6.3(2)).
 
 If `E` is an irreducible CP map and `E ρ = r • ρ` with `ρ` PSD nonzero and
 `r > 0`, then `ρ` is positive definite.
@@ -61,7 +61,7 @@ theorem posDef_of_posSemidef_eigenvector_irreducible_cp
 
 /-! ## Existence of PosDef eigenvector (Wolf 6.3(2), existence) -/
 
-/-- **Existence of a PosDef eigenvector for irreducible CP maps** (Wolf Thm 6.3(2)).
+/-- **Existence of a PosDef eigenvector for irreducible CP maps** (Wolf Theorem 6.3(2)).
 
 If `E` is a nonzero irreducible CP map on `M_D(ℂ)` with `D > 0`, then there
 exist a PosDef matrix `ρ` and a positive real `r` with `E ρ = r • ρ`.
@@ -90,7 +90,7 @@ theorem exists_posDef_eigenvector_of_irreducible_cp
 
 /-! ## Uniqueness / proportionality (Wolf 6.3(2)–(3)) -/
 
-/-- **Uniqueness of PSD eigenvectors for irreducible CP maps** (Wolf Thm 6.3(2–3)).
+/-- **Uniqueness of PSD eigenvectors for irreducible CP maps** (Wolf Theorem 6.3(2–3)).
 
 If `E` is an irreducible CP map with `E ≠ 0` and `ρ, σ` are both nonzero PSD
 eigenvectors for the same eigenvalue `r > 0`, then `σ` is a scalar multiple
@@ -152,7 +152,7 @@ theorem posSemidef_eigenvector_unique_of_irreducible_cp
   exact MPSTensor.posSemidef_fixedPoint_unique_of_irreducible K' hIrr' ρ σ
     hρ_psd hρ_ne hσ_psd hρ_fix hσ_fix
 
-/-- **Positive eigenvalue is unique for irreducible CP maps** (Wolf Thm 6.3(3)).
+/-- **Positive eigenvalue is unique for irreducible CP maps** (Wolf Theorem 6.3(3)).
 
 If `ρ` and `σ` are nonzero PSD eigenvectors of an irreducible CP map `E`
 with positive real eigenvalues `r₁` and `r₂`, then `r₁ = r₂`.

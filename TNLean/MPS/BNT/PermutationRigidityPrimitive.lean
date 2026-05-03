@@ -366,7 +366,7 @@ theorem exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho
 end MPSTensor
 
 /-!
-## Fundamental Theorem — Thm 4.4, span-equality formulation (variable block count)
+## Fundamental Theorem — Theorem 4.4, span-equality formulation (variable block count)
 
 This section applies the permutation-rigidity lemma for BNT decompositions
 (`MPSTensor.exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho` above) into a more
@@ -397,7 +397,7 @@ entangled pair states*, Rev. Mod. Phys. **93** (2021) 045003; arXiv:2011.12127.
 namespace MPSTensor
 
 /--
-**Thm 4.4 (primitive, basis-of-normal-tensors permutation step), span-equality formulation.**
+**Theorem 4.4 (primitive, basis-of-normal-tensors permutation step), span-equality formulation.**
 
 Two BNT-like families with possibly different numbers of blocks `gA`, `gB`
 that are injective, normalised, asymptotically orthonormal, and span the same

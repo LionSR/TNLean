@@ -13,7 +13,7 @@ import TNLean.Algebra.ScalarPowerSumIdentity
 # Zero correlation length (ZCL) for MPS tensors
 
 This file defines zero-correlation-length (ZCL) conditions for MPS tensors,
-following arXiv:1606.00608 §3.2 (Cirac–Pérez-García–Schuch–Verstraete).
+following arXiv:1606.00608 Section 3.2 (Cirac–Pérez-García–Schuch–Verstraete).
 
 Three conditions are introduced:
 

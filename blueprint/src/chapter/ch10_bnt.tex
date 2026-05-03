@@ -150,7 +150,7 @@ The main references are
 	Theorem~\ref{thm:overlap_decay} gives the decay.
 \end{proof}
 
-\begin{theorem}[Cross-overlap decay for distinct blocks in canonical form with BNT separation]\label{thm:cross_overlap_zero}
+\begin{theorem}[Cross-overlap decay for BNT-separated blocks]\label{thm:cross_overlap_zero}
 	\lean{MPSTensor.IsCanonicalFormBNT.cross_overlap_tendsto_zero}
 	\leanok
 	\uses{def:cf_bnt, def:mpv_overlap}
@@ -213,7 +213,7 @@ The main references are
 	eventual block injectivity needed here.
 \end{remark}
 
-\begin{theorem}[Normal canonical form with BNT separation yields a BNT after algebraic normality is supplied]
+\begin{theorem}[Normal canonical-form BNT data give a BNT]
 	\label{thm:normal_cf_bnt_is_bnt}
 	\lean{MPSTensor.IsNormalCanonicalFormBNT.isBNT}
 	\leanok
@@ -401,7 +401,7 @@ The main references are
 	Theorem~\ref{thm:bnt_perm_same_card} yields the permutation conclusion.
 \end{proof}
 
-\begin{theorem}[Permutation rigidity for proportional decompositions, irreducible TP version]
+\begin{theorem}[Permutation rigidity for irreducible TP decompositions]
 	\label{thm:bnt_perm_prop_nt}
 	\lean{MPSTensor.exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp_of_irreducible_TP}
 	\leanok
@@ -505,9 +505,8 @@ The main references are
 
 \begin{remark}
 	These fixed-size Vandermonde theorems remain available for alternative
-	finite-length arguments, but the present BNT proof chain uses the eventual
-	linear independence from Theorem~\ref{thm:bnt_overlap_orthonormal_li}
-	instead.
+	finite-length arguments.  The BNT comparison below uses eventual linear
+	independence from Theorem~\ref{thm:bnt_overlap_orthonormal_li}.
 \end{remark}
 
 \section{Coefficient convergence}
@@ -535,11 +534,11 @@ The main references are
 	modulus is strictly dominant:
 	$|\mu_0| > |\mu_k|$ for $k \ge 1$.
 	In the more general periodic setting of
-	\cite[Eq.~(72a)]{Cirac2021Matrix}, the coefficient attached to block~$j$
+	\cite[Equation~(72a)]{Cirac2021Matrix}, the coefficient attached to block~$j$
 	can take the form $\sum_q \mu_{j,q}^N$, where the $\mu_{j,q}$ are the
 	individual weights contributed by that block.
 	The oscillatory case with $|\mu_{j,q}| = 1$
-	is treated separately in the full paper.
+	is treated separately in the periodic comparison theorem.
 \end{remark}
 
 \section{Newton--Girard identities}
@@ -591,7 +590,7 @@ The main references are
 	remain relevant for the general equal-MPV
 	Theorem~\ref{thm:ft_equal}, where one expects a power-sum step to
 	recover the multiplicity-weight data.
-	The present explicit-coefficient special case,
+	The explicit-coefficient special case,
 	Theorem~\ref{thm:ft_equal_explicit}, instead uses linear independence
 	of the block MPV family supplied by a basis of normal tensors.
 \end{remark}

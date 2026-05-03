@@ -18,13 +18,13 @@ radius) is also a consequence.
 
 ## Main results
 
-* `posSemidef_fixedPoint_unique`: uniqueness of PSD fixed points (Wolf Thm 6.3(2))
+* `posSemidef_fixedPoint_unique`: uniqueness of PSD fixed points (Wolf Theorem 6.3(2))
 * `posSemidef_fixedPoint_unique_of_irreducible`: same under irreducibility
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, §6.2,
-  Thm 6.3 items 2–3][Wolf2012QChannels]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 6.2,
+  Theorem 6.3 items 2–3][Wolf2012QChannels]
 * [Evans, Høegh-Krohn, *Spectral properties of positive maps*, 1978][Evans1978Spectral]
 -/
 
@@ -322,7 +322,7 @@ lemma exists_critical_scalar [Nonempty (Fin D)]
   · rw [h_key, hst]; intro h_pd
     exact hHc_not_pd ((Matrix.IsUnit.posDef_star_right_conjugate_iff hS_unit).mp h_pd)
 
-/-- **Uniqueness** (Wolf Thm 6.3(2), non-degeneracy): any two nonzero PSD
+/-- **Uniqueness** (Wolf Theorem 6.3(2), non-degeneracy): any two nonzero PSD
 fixed points of an injective transfer map are proportional. -/
 theorem posSemidef_fixedPoint_unique
     (A : MPSTensor d D) (hA : IsInjective A)
@@ -346,7 +346,7 @@ theorem posSemidef_fixedPoint_unique
     · exact ⟨↑c₀, sub_eq_zero.mp hτ_ne⟩
     · exact absurd (posSemidef_fixedPoint_isPosDef A hA τ hτ_psd hτ_ne hτ_fix) hτ_not_pd
 
-/-- **Uniqueness under irreducibility** (Wolf Thm 6.3(2)): any PSD fixed point
+/-- **Uniqueness under irreducibility** (Wolf Theorem 6.3(2)): any PSD fixed point
 of an irreducible transfer map is proportional to a fixed nonzero PSD fixed point. -/
 theorem posSemidef_fixedPoint_unique_of_irreducible
     (A : MPSTensor d D)

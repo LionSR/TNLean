@@ -26,7 +26,7 @@ The convergence proof avoids a full spectral/Jordan decomposition. Instead, it u
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Cor. 6.3][Wolf2012QChannels]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Corollary 6.3][Wolf2012QChannels]
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder Matrix.Norms.Frobenius

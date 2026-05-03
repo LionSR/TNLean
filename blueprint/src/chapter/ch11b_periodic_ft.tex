@@ -1,6 +1,6 @@
 %% =========================================================
 %% Chapter: Periodic MPS — irreducible form and the periodic
-%% Fundamental Theorem.  Mirrors §3--4 of arXiv:1708.00029
+%% Fundamental Theorem. Source: \cite[Sections~3--4]{DeLasCuevas2017Irreducible}.
 %% (de las Cuevas--Schuch--Pérez-García--Cirac).
 %% =========================================================
 
@@ -42,7 +42,8 @@ $p$-divisibility of the transfer map.
     each weight $\mu_j \neq 0$, and the blocks are pairwise
     non-repeated (no two distinct $j, j'$ have $A_j$ gauge-equivalent
     to $A_{j'}$).
-    This is the standard form introduced in \cite[\S II]{DeLasCuevas2017Irreducible}.
+    This is the standard form introduced in
+    \cite[Section~II]{DeLasCuevas2017Irreducible}.
     It extends the normal canonical form
     (Definition~\ref{def:is_normal_canonical_form}),
     which requires the stronger condition that every block is $1$-periodic.
@@ -79,8 +80,8 @@ $p$-divisibility of the transfer map.
 
 \begin{proof}\leanok
     \uses{lem:unitary_kraus_mixing}
-    Unitary freedom of the Kraus representation (Theorem~2.18,
-    Wolf \emph{Quantum Channels \& Operations}).
+    This is the unitary freedom of Kraus representations from
+    \cite[Theorem~2.18]{Wolf2012Quantum}.
 \end{proof}
 
 \begin{theorem}[Left-canonical preserved by physical rotation]%
@@ -322,7 +323,7 @@ $p$-divisibility of the transfer map.
 The theorems in Chapter~\ref{ch:assembly} all require that each block has a
 \emph{primitive} transfer map, i.e.\ peripheral spectrum exactly $\{1\}$.
 This is achieved by blocking the original tensor by a common period.
-The paper \cite{DeLasCuevas2017Irreducible} develops a framework that
+\cite{DeLasCuevas2017Irreducible} develops a framework that
 avoids this blocking step, giving a fundamental theorem that applies
 directly to periodic tensors.
 
@@ -407,7 +408,7 @@ The following is Theorem~3.8 (``equal case'') of \cite{DeLasCuevas2017Irreducibl
 
     \noindent\emph{Remark.}
     The proof is conditional on the periodic-overlap dichotomy
-    (Proposition~3.3 of~\cite{DeLasCuevas2017Irreducible}),
+    \cite[Proposition~3.3]{DeLasCuevas2017Irreducible},
     which is left here as a separate hypothesis.
 \end{theorem}
 
@@ -464,7 +465,7 @@ The following is Theorem~3.8 (``equal case'') of \cite{DeLasCuevas2017Irreducibl
     starting sector from $u$ to $u+1$.
 \end{definition}
 
-\begin{definition}[Cyclic staircase product on blocked indices (Eq. A.8)]%
+\begin{definition}[Cyclic staircase product on blocked indices (Equation A.8)]%
     \label{def:blocked_corner_transition_tensor}
     \lean{MPSTensor.blockedCornerTransitionTensor}
     \leanok
@@ -619,8 +620,7 @@ The following is Theorem~3.8 (``equal case'') of \cite{DeLasCuevas2017Irreducibl
 
     Chapters~\ref{ch:canonical} and~\ref{ch:assembly} follow only the
     blocking route: remove periodicity by blocking, then apply the
-    aperiodic theory. The present chapter develops the separate periodic
-    extension, in which the periodic blocks are treated directly.
+    aperiodic theory.  The periodic extension treats periodic blocks directly.
 \end{remark}
 
 \begin{theorem}[Peripheral proportional case from exact MPV equality]
@@ -773,7 +773,8 @@ The following is Theorem~3.8 (``equal case'') of \cite{DeLasCuevas2017Irreducibl
     \uses{cor:cor_4_1_physical_symmetry_zgauge,
           def:periodic_projective_rigidity}
     Unpack the rigidity hypothesis to extract the family
-    $(Y, u)$ together with the Corollary-4.1 intertwiners.  Set
+    $(Y, u)$ together with the intertwiners from
+    \cite[Corollary~4.1]{DeLasCuevas2017Irreducible}. Set
     $X(g) := Y(g^{-1})$ and $\omega(g, h) := u(h^{-1}, g^{-1})$.  The
     projective multiplication law $X(g)\, X(h) = \omega(g, h)\, X(gh)$
     is then exactly the $(h^{-1}, g^{-1})$-instance of the factor-system
@@ -872,7 +873,7 @@ for the irreducible-form framework in \cite{DeLasCuevas2017Irreducible}.
     for every $N \in \N$ and every
     $\tau \in \{0,\ldots,d^p-1\}^N$.
 
-    In paper notation, this encodes
+    In Dirac notation, this encodes
     $\ket{V_{pN}(A)} = W^{\otimes N}\, \ket{V_N(B)}$ for all~$N$.
 \end{definition}
 
@@ -927,18 +928,18 @@ for the irreducible-form framework in \cite{DeLasCuevas2017Irreducible}.
     $\mathcal E_C = \mathcal E_{A'^{[p]}}$.
 \end{definition}
 
-\begin{definition}[Blocked equal-case continuation hypothesis]
+\begin{definition}[Blocked equal-case root hypothesis]
     \label{def:peripheral_equalcase_periodicFT_sameMPV}
     \lean{MPSTensor.PeripheralEqualCasePeriodicFTOfSameMPV}
     \leanok
     \uses{def:irreducible_form, def:blocked_tensor, def:same_mpv}
-    Fix $(d,D,p)$. This states the combined continuation statement: whenever a
+    Fix $(d,D,p)$. This states the combined root-existence statement: whenever a
     blocked tensor $C$ in irreducible form~II has the same MPV family as a
     blocked root $A^{[p]}$, one can replace $A$ by a left-canonical tensor $A'$
     with $\mathcal E_C = \mathcal E_{A'^{[p]}}$.
 \end{definition}
 
-\begin{theorem}[Blocked equal-case continuation from Z-gauge extraction]
+\begin{theorem}[Blocked equal-case root from Z-gauge extraction]
     \label{thm:peripheral_equalcase_sameMPV_zgauge_reduction}
     \lean{MPSTensor.peripheralEqualCase_periodicFT_of_sameMPV}
     \leanok
@@ -947,7 +948,7 @@ for the irreducible-form framework in \cite{DeLasCuevas2017Irreducible}.
           def:peripheral_equalcase_periodicFT_sameMPV}
     If the blocked equal-case Z-gauge extraction hypothesis and the
     blocked-to-root reconstruction hypothesis both hold, then the combined
-    blocked equal-case continuation hypothesis holds.
+    blocked equal-case root hypothesis holds.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -956,14 +957,14 @@ for the irreducible-form framework in \cite{DeLasCuevas2017Irreducible}.
     reconstruction hypothesis to that witness.
 \end{proof}
 
-\begin{theorem}[Reduction of forward canonicalization to the blocked equal-case stage]
+\begin{theorem}[Reduction to the blocked equal-case root hypothesis]
     \label{thm:p_refinement_forward_equalcase_reduction}
     \lean{MPSTensor.pRefinementCanonicalization_of_peripheralEqualCase_periodicFT_of_sameMPV}
     \leanok
     \uses{def:peripheral_equalcase_periodicFT_sameMPV,
           def:irreducible_form, def:p_refinable,
           thm:p_refinement_pullback_irreducible_form}
-    Assume the blocked equal-case continuation hypothesis. Then every
+    Assume the blocked equal-case root hypothesis. Then every
     $p$-refinable tensor $B$ in irreducible form~II admits a left-canonical root
     $A'$ with $\mathcal E_B = \mathcal E_{A'^{[p]}}$.
 \end{theorem}
@@ -972,20 +973,20 @@ for the irreducible-form framework in \cite{DeLasCuevas2017Irreducible}.
     Apply Theorem~\ref{thm:p_refinement_pullback_irreducible_form} to the
     refinement witness of $B$. This produces a blocked tensor $C$ in
     irreducible form~II with $\mathcal E_C = \mathcal E_B$ and the same MPV
-    family as $A^{[p]}$. The blocked equal-case continuation hypothesis then
+    family as $A^{[p]}$. The blocked equal-case root hypothesis then
     gives a left-canonical tensor $A'$ with
     $\mathcal E_C = \mathcal E_{A'^{[p]}}$. Combining the two transfer-map
     identities yields $\mathcal E_B = \mathcal E_{A'^{[p]}}$.
 \end{proof}
 
-\begin{theorem}[Forward direction from the blocked equal-case continuation]
+\begin{theorem}[Forward direction from the blocked equal-case root hypothesis]
     \label{thm:thm_4_1_p_refinement_forward_blocked_equalcase}
     \lean{MPSTensor.thm_4_1_p_refinement_forward_of_peripheralEqualCase_periodicFT_of_sameMPV}
     \leanok
     \uses{def:peripheral_equalcase_periodicFT_sameMPV,
           def:irreducible_form, def:p_refinable, def:p_divisible_channel,
           thm:p_refinement_forward_equalcase_reduction}
-    Assume the blocked equal-case continuation hypothesis. Then for every tensor
+    Assume the blocked equal-case root hypothesis. Then for every tensor
     $B$ in irreducible form~II, $p$-refinability of $B$ implies
     $p$-divisibility of $\mathcal E_B$.
 \end{theorem}
@@ -1008,8 +1009,9 @@ equivalence from \cite[Theorem~4.1]{DeLasCuevas2017Irreducible}.
           thm:periodic_ft, thm:thm_4_1_p_refinement_forward,
           thm:thm_4_1_p_refinement_reverse}
     Let $B$ be an MPS tensor in irreducible form~II and let $p \ge 1$.
-    Assume both canonicalization hypotheses used in the one-way statements:
-    one for refinability $\Rightarrow$ divisibility and one for divisibility
+    Assume the two root hypotheses used in the one-way statements: the forward
+    left-canonical root hypothesis for refinability $\Rightarrow$ divisibility
+    and the reverse transfer-map root hypothesis for divisibility
     $\Rightarrow$ refinability. Then $B$ is $p$-refinable iff its transfer
     map $\mathcal{E}_B$ is $p$-divisible.
 \end{theorem}
@@ -1019,9 +1021,9 @@ equivalence from \cite[Theorem~4.1]{DeLasCuevas2017Irreducible}.
     Bundle the forward implication
     (Theorem~\ref{thm:thm_4_1_p_refinement_forward}) with the reverse
     implication (Theorem~\ref{thm:thm_4_1_p_refinement_reverse}) into a
-    single biconditional. The forward and reverse directions each assume the
-    corresponding canonicalization hypothesis, and together they give the full
-    equivalence under those hypotheses.
+    single biconditional. The forward direction assumes the left-canonical root
+    hypothesis; the reverse direction assumes only the transfer-map root
+    hypothesis. Together they give the full equivalence under those hypotheses.
 \end{proof}
 
 \begin{theorem}[$p$-refinability implies transfer-map $p$-divisibility]%
@@ -1029,14 +1031,15 @@ equivalence from \cite[Theorem~4.1]{DeLasCuevas2017Irreducible}.
     \lean{MPSTensor.thm_4_1_p_refinement_forward}
     \leanok
     \uses{def:irreducible_form, def:p_refinable, def:p_divisible_channel}
-    Let $B$ be an MPS tensor in irreducible form~II. Assume a
-    \emph{canonicalization} hypothesis providing the remaining analytic
-    assumptions (left-canonical witness with matching transfer map). Then
+    Let $B$ be an MPS tensor in irreducible form~II. Assume a left-canonical
+    root hypothesis: every refinement witness gives a tensor $A$ with
+    $\sum_i (A^i)^\dagger A^i = \Id$ and
+    $\mathcal{E}_B = \mathcal{E}_{A^{[p]}}$. Then
     $p$-refinability of $B$ implies $p$-divisibility of $\mathcal{E}_B$.
 \end{theorem}
 
 \begin{proof}\leanok
-    The canonicalization hypothesis supplies a witness $A$ with
+    The left-canonical root hypothesis supplies a witness $A$ with
     $\sum_i (A^i)^\dagger A^i = \Id$ (left-canonical) and
     $\mathcal{E}_B = \mathcal{E}_{A^{[p]}}$. The left-canonical property makes
     $\mathcal{E}_A$ a CPTP channel, and the blocking identity
@@ -1081,15 +1084,14 @@ equivalence from \cite[Theorem~4.1]{DeLasCuevas2017Irreducible}.
     \leanok
     \uses{def:irreducible_form, def:p_refinable, def:p_divisible_channel}
     Let $B$ be an MPS tensor in irreducible form~II and let $p \ge 1$.
-    Assume an \emph{inverse canonicalization} hypothesis providing a witness
-    $A : \mathrm{MPSTensor}\ d\ D$ with
+    Assume the reverse transfer-map root hypothesis: there is a tensor $A$ with
     $\mathcal{E}_B = \mathcal{E}_{A^{[p]}}$ whenever $\mathcal{E}_B$ is
     $p$-divisible. Then $p$-divisibility of $\mathcal{E}_B$ implies
     $p$-refinability of $B$.
 \end{theorem}
 
 \begin{proof}\leanok
-    From the inverse canonicalization hypothesis, extract $A$ with
+    From the reverse transfer-map root hypothesis, extract $A$ with
     $\mathcal{E}_B = \mathcal{E}_{A^{[p]}}$. This matches two finite Kraus
     families of the same completely positive map: the blocked family $A^{[p]}$
     with $d^{p}$ operators and the original family $B$ with $d$ operators.

@@ -49,7 +49,7 @@ its MPS-formulation for irreducible TP tensors.
 ## References
 
 * [Cirac–Pérez-García–Schuch–Verstraete, arXiv:1606.00608, Appendix A]
-* [Cirac–Pérez-García–Schuch–Verstraete, arXiv:2011.12127, §IV]
+* [Cirac–Pérez-García–Schuch–Verstraete, arXiv:2011.12127, Section IV]
 
 ## Tags
 
@@ -845,7 +845,7 @@ private theorem sector_supported_pow_fixed_eq_smul_projection_of_scalarFixedPoin
 its cyclic projections satisfy `SectorFixedPointAlgebraRigidity`.
 
 This is the strongest currently available general route in the direction of
-the scalar blocked fixed-point algebra result (see CPGSV21, Appendix A): once
+the scalar blocked fixed-point algebra result (see Cirac--Perez-Garcia--Schuch--Verstraete 2021, Appendix A): once
 the blocked fixed-point algebra is known to be scalar on all compressed sectors,
 every `((transferMap A†)^m)`-fixed corner element is a scalar multiple of the
 corresponding sector projection, so the one-step adjoint transition is

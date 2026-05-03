@@ -12,7 +12,7 @@ are in Chapter~\ref{ch:qpf}; this chapter uses them to produce
 left-canonical normalization data and the normal canonical form data.
 The reduction draws on
 \cite{PerezGarcia2007Matrix}, \cite{Cirac2021Matrix},
-and~\cite[Ch.~6]{Wolf2012Quantum}.
+and~\cite[Chapter~6]{Wolf2012Quantum}.
 
 \section{Block-diagonal construction}
 
@@ -253,15 +253,15 @@ and~\cite[Ch.~6]{Wolf2012Quantum}.
 	this forces $(\Id - P) A^i P = 0$.
 
 	This is the finite-dimensional version of
-	\cite[Prop.~6.10]{Wolf2012Quantum}
+	\cite[Proposition~6.10]{Wolf2012Quantum}
 	(``Stationary subspaces'': the support projection
 	of any stationary state is sub-harmonic, i.e.\
 	invariant under the channel).
 	The equivalence between irreducibility and
 	absence of nontrivial invariant projections is
-	\cite[Thm.~6.2]{Wolf2012Quantum};
+	\cite[Theorem~6.2]{Wolf2012Quantum};
 	see also
-	\cite[§IV.A.1]{Cirac2021Matrix}.
+	\cite[Section~IV.A.1]{Cirac2021Matrix}.
 \end{proof}
 
 \begin{theorem}[Two-block decomposition]\label{thm:two_block_decomp}
@@ -334,16 +334,15 @@ and~\cite[Ch.~6]{Wolf2012Quantum}.
 	Ces\`aro theorem is Theorem~\ref{thm:pf_eigenvector_existence};
 	the induction itself needs only the invariant projection.)
 
-	Both~\cite{PerezGarcia2007Matrix} (Theorem~4, ``TI
-	canonical form'') and~\cite{Cirac2021Matrix} (§IV.A.1)
-	obtain the block decomposition by the same
-	invariant-projection splitting used here.
+	Both \cite[Theorem~4]{PerezGarcia2007Matrix} and
+	\cite[Section~IV.A.1]{Cirac2021Matrix} obtain the block decomposition by
+	the same invariant-projection splitting used here.
 	An alternative derivation, developed
-	in~\cite[Thm.~6.14]{Wolf2012Quantum},
+	in~\cite[Theorem~6.14]{Wolf2012Quantum},
 	characterises the fixed-point set of a quantum channel
 	as a $*$-algebra and then applies the
 	Wedderburn--Artin decomposition
-	(\cite[Eq.~(1.39)]{Wolf2012Quantum})
+	(\cite[Equation~(1.39)]{Wolf2012Quantum})
 	to read off the block structure directly.
 	The block decomposition is obtained by iterating
 	the invariant-projection splitting and using strong
@@ -627,7 +626,7 @@ per-block peripheral-spectrum primitivity.
 	Chapter~\ref{ch:spectral}: peripheral-spectrum primitivity is first
 	converted to that spectral-gap condition, and the overlap limit is then
 	deduced from it.
-	In the paper~\cite{Cirac2021Matrix}, primitivity is obtained from
+	In \cite{Cirac2021Matrix}, primitivity is obtained from
 	irreducibility plus periodicity removal by blocking to period one.
 	Theorem~\ref{thm:blocking_primitivity} is precisely this
 	periodicity-removal step under irreducibility and TP normalization.
@@ -853,7 +852,7 @@ per-block peripheral-spectrum primitivity.
 \label{sec:canonical_pipeline_1606}
 
 This section combines the components of the canonical-form
-construction following \cite[\S2.3 and Appendix~A]{Cirac2017MPDO_AnnPhys}.
+construction following \cite[Section~2.3 and Appendix~A]{Cirac2017MPDO_AnnPhys}.
 The approach here requires blocking to remove non-trivial periodicity.
 A separate reduction for periodic blocks without blocking
 is developed in \cite{DeLasCuevas2017Irreducible}; see
@@ -904,7 +903,7 @@ Chapter~\ref{ch:periodic_ft_apps} for that direct periodic extension.
 \end{proof}
 
 \begin{theorem}[Irreducible block decomposition with left-canonical normalization]%
-	\label{thm:pipeline_handoff}
+	\label{thm:irreducible_block_decomp_with_cfii}
 	\lean{MPSTensor.exists_irreducible_blockDecomp_with_CFII}
 	\leanok
 	\uses{def:irreducible_tensor}
@@ -956,7 +955,7 @@ Chapter~\ref{ch:periodic_ft_apps} for that direct periodic extension.
 		that period can be chosen to be $1$.
 		Since the moduli $|\mu_k|$ are pairwise distinct, there is a reordering
 		of the blocks for which they become strictly decreasing.
-		After this reindexing, set $\nu_k := \mu_k$ and $B_k := A_k$ in the new
+		After this reordering, set $\nu_k := \mu_k$ and $B_k := A_k$ in the new
 		order.
 		Irreducibility, TP normalization, primitivity, nonzero weights, and
 		positive bond dimensions are unchanged by the reordering, so the
@@ -1219,7 +1218,7 @@ The following results separate the zero blocks from the nonzero blocks.
 	right-hand side is $d^{mn}$.
 \end{proof}
 
-\begin{theorem}[Iterated blocking and direct blocking yield the same MPV family after relabeling]
+\begin{theorem}[Compatibility of direct and iterated blocking]
 	\label{thm:iterated_blocking_samempv_reindex}
 	\lean{MPSTensor.sameMPV₂_blockTensor_blockTensor_mul_reindex}
 	\leanok
@@ -1626,7 +1625,7 @@ The following results separate the zero blocks from the nonzero blocks.
 	refinement or injectivity.
 \end{definition}
 
-\begin{theorem}[Trace-preserving irreducible tensors have primitive irreducible cyclic sectors]%
+\begin{theorem}[Primitive cyclic sectors of irreducible TP tensors]%
 \label{thm:has_primitive_irreducible_cyclic_sectors_tp_irr}
 	\lean{MPSTensor.hasPrimitiveIrreducibleCyclicSectors_of_TP_of_isIrreducibleTensor}
 	\leanok
@@ -1642,7 +1641,7 @@ The following results separate the zero blocks from the nonzero blocks.
 	the predicate of Definition~\ref{def:primitive_irreducible_cyclic_sectors}.
 \end{proof}
 
-\begin{definition}[Common reblocked cyclic-sector family]%
+\begin{definition}[Common cyclic-sector family]%
 \label{def:common_blocked_cyclic_sector_family}
 	\lean{MPSTensor.CommonBlockedCyclicSectorFamily}
 	\leanok
@@ -1694,8 +1693,8 @@ The following results separate the zero blocks from the nonzero blocks.
 	From a common reblocked cyclic-sector family, one may derive sector tensors at
 	the common alphabet directly from the original per-block sector tensors.  The
 	same flattened common-sector family is also provided at a prescribed length
-	$p'$ assuming the family length equals $p'$.  The reindexed block data
-	keep the reindexing of blocked physical words explicit: for the block $B_k$, it
+	$p'$ assuming the family length equals $p'$.  The block data
+	keep the identification of blocked physical words explicit: for the block $B_k$, it
 	uses $B_k^{[m_k e_k]}$ with the labels obtained by flattening an iterated
 	$(m_k,e_k)$ block.
 \end{definition}
@@ -1734,7 +1733,7 @@ The following results separate the zero blocks from the nonzero blocks.
 	positive power of a nonzero complex number is nonzero.
 \end{proof}
 
-\begin{theorem}[Reindexed blocks decompose into common cyclic sectors]%
+\begin{theorem}[Blocked sectors on a common alphabet]%
 \label{thm:common_blocked_cyclic_sector_reindexed_samempv}
 	\lean{MPSTensor.CommonBlockedCyclicSectorFamily.nestedBlock_sameMPV₂_commonReindexedBlock,
 		MPSTensor.CommonBlockedCyclicSectorFamily.commonReindexedBlock_sameMPV₂_commonSectorTensor,
@@ -1745,9 +1744,9 @@ The following results separate the zero blocks from the nonzero blocks.
 		thm:samempv_cast_phys_dim, thm:samempv_blocking_distributes,
 		thm:common_blocked_cyclic_sector_derived_properties}
 	For each block, the iterated block $(B_k^{[m_k]})^{[e_k]}$ agrees, after the
-	explicit reindexing of blocked physical words, with the block of length
+	explicit identification of blocked physical words, with the block of length
 	$m_k e_k$.  Combining this with the given cyclic-sector decomposition gives an
-	MPV equality between the reindexed block and the corresponding common-sector tensor.
+	MPV equality between the identified block and the corresponding common-sector tensor.
 	Summing over the original blocks transports the weights to $\mu_k^p$ and
 	flattens the two-level block/sector sum into one sector family.
 \end{theorem}
@@ -1775,7 +1774,7 @@ The following results separate the zero blocks from the nonzero blocks.
 	consecutive words of length $m_k$.
 \end{definition}
 
-\begin{theorem}[Comparison of direct and iterated blocking for weighted nonzero blocks]%
+\begin{theorem}[Direct and iterated blocking for weighted blocks]%
 \label{thm:common_blocked_cyclic_sector_blocked_word_comparison}
 	\lean{MPSTensor.CommonBlockedCyclicSectorFamily.wordOfBlock_eq_iteratedBlockIndex_of_groupedBlockCastAgrees,
 		MPSTensor.CommonBlockedCyclicSectorFamily.blockTensor_eq_commonReindexedBlock_of_word_eq,
@@ -1817,7 +1816,7 @@ The following results separate the zero blocks from the nonzero blocks.
 	common-sector statement.
 \end{proof}
 
-\begin{theorem}[Canonical blocked nonzero part after reindexing blocked words]%
+\begin{theorem}[Blocked nonzero part on the common alphabet]%
 \label{thm:common_blocked_cyclic_sector_reindexed_nonzero_part}
 	\lean{MPSTensor.CommonBlockedCyclicSectorFamily.sameMPV₂_weightedCanonicalBlock_commonFlat_of_reindexed,
 		MPSTensor.CommonBlockedCyclicSectorFamily.sameMPV₂_weightedCanonicalBlock_commonFlatAt_of_reindexed}
@@ -1825,7 +1824,7 @@ The following results separate the zero blocks from the nonzero blocks.
 	\uses{thm:common_blocked_cyclic_sector_reindexed_samempv,
 		def:common_blocked_cyclic_sector_derived_blocks}
 	Assume that the canonical blocked nonzero part agrees, as an MPV family, with
-	the reindexed cyclic-sector tensor coming from iterated blocking.  Then the
+	the cyclic-sector tensor coming from iterated blocking.  Then the
 	canonical weighted nonzero part agrees with the weighted common-sector
 	tensor.  The prescribed-length form gives the same conclusion after substituting
 	an equality between the family length and the chosen common length.
@@ -1833,7 +1832,7 @@ The following results separate the zero blocks from the nonzero blocks.
 
 \begin{proof}\leanok
 	\uses{thm:common_blocked_cyclic_sector_reindexed_samempv}
-	Compose the assumed MPV equality with the reindexed sector decomposition of
+	Compose the assumed MPV equality with the sector decomposition of
 	Theorem~\ref{thm:common_blocked_cyclic_sector_reindexed_samempv}.
 \end{proof}
 
@@ -1885,8 +1884,8 @@ The following results separate the zero blocks from the nonzero blocks.
 	Theorem~\ref{thm:exists_common_blocked_cyclic_sector_family_common_multiple}.
 \end{proof}
 
-\subsection{Sector irreducibility helpers}%
-\label{sec:sector_irreducibility_helpers}
+\subsection{Sector irreducibility lemmas}%
+\label{sec:sector_irreducibility_lemmas}
 
 \begin{lemma}[Pairwise orthogonality from projection sum]%
 	\label{lem:pairwise_ortho_proj_sum}
@@ -2534,7 +2533,7 @@ The following results separate the zero blocks from the nonzero blocks.
 
 \subsection{Basis of Normal Tensors}
 
-\begin{theorem}[Sorted reindexing by strictly decreasing weight norms]
+\begin{theorem}[Sorting by strictly decreasing weight norms]
 	\label{thm:bnt_sorted_reindexing}
 	\lean{MPSTensor.exists_sorted_reindexing}\leanok
 	If nonzero weights $(\mu_k)_{k=1}^r$ have pairwise distinct norms, then there is a permutation of
@@ -3007,7 +3006,7 @@ The following results separate the zero blocks from the nonzero blocks.
 	from Theorem~\ref{thm:blocked_irreducible_tp_primitive}.
 \end{proof}
 
-\begin{theorem}[Sorted TP-primitive irreducible data already forms a normal canonical form]%
+\begin{theorem}[Sorted TP primitive irreducible data form a normal canonical form]%
 	\label{thm:ncf_sorted_tp_primitive_irred}
 	\lean{MPSTensor.isNormalCanonicalForm_of_tp_primitive_irr_sorted}
 	\leanok
@@ -3149,7 +3148,7 @@ The following results separate the zero blocks from the nonzero blocks.
 	zero-tail MPV is its bond dimension, giving the stated length-zero identity.
 \end{proof}
 
-\begin{theorem}[Reblocked nonzero-part equality with zero-tail identity]%
+\begin{theorem}[Blocked nonzero parts and length zero]%
 	\label{thm:nonzero_block_block_power_zero_tail_identity}
 	\lean{MPSTensor.nonzeroBlock_blockPower_positive_sameMPV₂_and_zeroTail_identity_of_sameMPV₂}
 	\leanok
@@ -3187,7 +3186,7 @@ The following results separate the zero blocks from the nonzero blocks.
 	the common scalar term.
 \end{proof}
 
-\begin{theorem}[Structural after-blocking form with zero-tail equations]%
+\begin{theorem}[After-blocking structural form]%
 \label{thm:ft_after_blocking_structural_zero_tail}
 	\lean{MPSTensor.afterBlocking_tpPrimitiveBlockDecompositions_of_sameMPV₂}
 	\leanok
@@ -3207,7 +3206,7 @@ The following results separate the zero blocks from the nonzero blocks.
 	blocking the original equality.
 \end{proof}
 
-\begin{theorem}[Per-block cyclic-sector decomposition with zero-tail identity]%
+\begin{theorem}[Cyclic sectors after the zero-tail split]%
 \label{thm:ft_after_blocking_per_block_cyclic_live_zero_tail}
 	\lean{MPSTensor.fundamentalTheorem_after_blocking_perBlock_cyclic_live_with_zeroTail}
 	\leanok
@@ -3233,7 +3232,7 @@ The following results separate the zero blocks from the nonzero blocks.
 	trace-preserving irreducible nonzero-weight block.
 \end{proof}
 
-\begin{theorem}[Common reblocked nonzero cyclic sectors with zero-tail identity]%
+\begin{theorem}[Common blocking for cyclic sectors]%
 \label{thm:ft_after_blocking_common_blocked_cyclic_live_zero_tail}
 	\lean{MPSTensor.fundamentalTheorem_after_blocking_commonBlocked_cyclic_live_with_zeroTail}
 	\leanok
@@ -3284,7 +3283,7 @@ transport the zero-tail identity through this comparison.
 		thm:common_blocked_cyclic_sector_derived_properties}
 	Start from the common reblocked cyclic-sector families on the two sides.  Apply
 	the zero-tail reblocking theorem to the original nonzero-block decomposition, then
-	use the reindexed sector decomposition and the derived structural
+		use the common-alphabet sector decomposition and the derived structural
 	properties of the common-sector family.
 \end{proof}
 
@@ -3315,11 +3314,11 @@ transport the zero-tail identity through this comparison.
 	least common multiples of the period-removal lengths on the two sides, and
 	use $p=\mathrm{lcm}(p_A,p_B)$.  The prescribed-common-multiple theorem constructs both
 	one-sided sector families at this same length.  The zero-tail and positive-
-	length equalities are the existing reblocking statements, and the relabeled
-	sector conclusions are the reindexed common-sector MPV equalities.
+	length equalities are the existing reblocking statements, and the sector
+	conclusions are the common-alphabet MPV equalities.
 \end{proof}
 
-\begin{theorem}[Zero-tail identity under compatible blocking]%
+\begin{theorem}[Length-zero identity under compatible blocking]%
 \label{thm:zero_tail_common_flat_of_blocked_word_comparison}
 	\lean{MPSTensor.zeroTail_commonFlat_of_blockwise,
 		MPSTensor.zeroTail_commonFlat_of_word_eq,
@@ -3346,7 +3345,7 @@ transport the zero-tail identity through this comparison.
 	weighted common-sector tensor.
 \end{proof}
 
-\begin{theorem}[Zero-tail identity under word reindexing]%
+\begin{theorem}[Length-zero identity under word identification]%
 \label{thm:zero_tail_common_flat_of_reindexed}
 	\lean{MPSTensor.zeroTail_commonFlat_of_reindexed,
 		MPSTensor.zeroTail_commonFlatAt_of_reindexed,
@@ -3355,7 +3354,7 @@ transport the zero-tail identity through this comparison.
 	\uses{thm:zero_tail_to_tensor_from_blocks_block_power,
 		thm:common_blocked_cyclic_sector_reindexed_nonzero_part}
 	Assume a zero-tail/nonzero decomposition on one side.  If the blocked nonzero
-	tensor agrees, after reindexing blocked words, with the common cyclic-sector
+	tensor agrees, after identifying blocked words, with the common cyclic-sector
 	family, then the same zero-tail identity can be written in that common
 	alphabet.  At positive system sizes this says that the blocked tensor and the
 	weighted common-sector tensor have the same MPV coefficients.
@@ -3365,7 +3364,7 @@ transport the zero-tail identity through this comparison.
 	\uses{thm:zero_tail_to_tensor_from_blocks_block_power,
 		thm:common_blocked_cyclic_sector_reindexed_nonzero_part}
 	Transport the zero-tail/nonzero decomposition to the common blocking length.
-	The reindexing hypothesis then replaces the blocked nonzero tensor by the
+	The word-identification hypothesis then replaces the blocked nonzero tensor by the
 	weighted common-sector tensor.  At positive lengths the zero-tail tensor has
 	zero MPV coefficients.
 \end{proof}
@@ -3377,7 +3376,7 @@ transport the zero-tail identity through this comparison.
 	\uses{thm:ft_after_blocking_common_length_common_sector_theorem,
 		thm:common_blocked_cyclic_sector_reindexed_nonzero_part,
 		def:same_mpv2_pos}
-	Assume that the nonzero part can be reindexed into the common blocked
+	Assume that the nonzero part can be identified with the common blocked
 	alphabet.  Then two tensors with the same MPV family admit one positive
 	blocking length at which both nonzero parts are weighted sums of
 	trace-preserving, primitive, tensor-irreducible blocks with positive bond
@@ -3389,7 +3388,7 @@ transport the zero-tail identity through this comparison.
 		thm:common_blocked_cyclic_sector_reindexed_nonzero_part}
 	Apply Theorem~\ref{thm:ft_after_blocking_common_length_common_sector_theorem}
 	to choose the common blocking length and the two common cyclic-sector families.
-	The assumed word reindexing converts the blocked nonzero part into the weighted
+	The assumed word identification converts the blocked nonzero part into the weighted
 	common-sector family on each side.  The zero-tail equations then give the
 	displayed decompositions.  The structural properties and nonzero weights come
 	from the common-sector families.
@@ -3413,14 +3412,14 @@ transport the zero-tail identity through this comparison.
 	the positive-length equality and in the $N=0$ identity.
 \end{proof}
 
-\begin{theorem}[Common-sector zero-tail identity under reindexing]%
+\begin{theorem}[Length-zero identity for common sectors]%
 \label{thm:zero_tail_common_flat_transport_of_reindexed}
 	\lean{MPSTensor.zeroTail_commonFlat_transport_of_reindexed}
 	\leanok
 	\uses{thm:zero_tail_common_flat_of_reindexed,
 		thm:common_blocked_cyclic_sector_reindexed_nonzero_part,
 		thm:common_blocked_cyclic_sector_derived_properties}
-	If the blocked nonzero part agrees with the reindexed common-sector tensor,
+	If the blocked nonzero part agrees with the common-sector tensor,
 	then the zero-tail identity can be written with that common-sector tensor.
 	Nonzero original weights remain nonzero after the blocking power.
 \end{theorem}
@@ -3433,7 +3432,7 @@ transport the zero-tail identity through this comparison.
 	common-sector MPV equality and the nonzero-weight statement.
 \end{proof}
 
-\begin{theorem}[Common-sector zero-tail identity from grouped coordinates]%
+\begin{theorem}[Common sectors from grouped coordinates]%
 \label{thm:zero_tail_common_flat_transport_of_grouped_block_cast}
 	\lean{MPSTensor.zeroTail_commonFlat_transport_of_groupedBlockCastAgrees}
 	\leanok
@@ -3457,7 +3456,7 @@ transport the zero-tail identity through this comparison.
 	identity and the nonzero-weight statement.
 \end{proof}
 
-\begin{theorem}[Common sectors at a common length after reindexing]%
+\begin{theorem}[Common sectors at one blocking length]%
 \label{thm:ft_after_blocking_common_length_common_sector_reindexed}
 	\lean{MPSTensor.fundamentalTheorem_after_blocking_commonLength_commonSector_of_reindexed}
 	\leanok
@@ -3465,7 +3464,7 @@ transport the zero-tail identity through this comparison.
 		thm:common_blocked_cyclic_sector_reindexed_nonzero_part}
 	If two tensors generate the same MPV family, choose a common blocking length
 	for their cyclic-sector decompositions.  If each blocked nonzero part agrees
-	with its common-sector form after reindexing words, then all zero-tail
+	with its common-sector form after identifying words, then all zero-tail
 	identities and positive-length MPV equalities can be stated using the common
 	sector families.
 \end{theorem}
@@ -3474,7 +3473,7 @@ transport the zero-tail identity through this comparison.
 	\uses{thm:ft_after_blocking_common_length_common_sector_theorem,
 		thm:common_blocked_cyclic_sector_reindexed_nonzero_part}
 	Apply Theorem~\ref{thm:ft_after_blocking_common_length_common_sector_theorem}.
-	The two reindexing hypotheses identify the blocked nonzero parts with the
+	The two word-identification hypotheses identify the blocked nonzero parts with the
 	weighted common-sector tensors.  Substituting these MPV equalities into the
 	zero-tail equations gives the rewritten zero-tail identities, the
 	positive-length MPV equalities, and the $N=0$ identity.
@@ -3492,10 +3491,10 @@ transport the zero-tail identity through this comparison.
 	restricted to its cyclic spectral sectors.  These sector tensors are the normal
 	blocks used in the comparison theorem: they are trace-preserving, primitive,
 	irreducible, and have positive bond dimension.  For a finite nonzero block
-	family, the paper chooses one common multiple of all periods so that every
+	family, one chooses a common multiple of all periods so that every
 	sector is expressed over the same blocked physical alphabet.  This is the
 	construction of
-	\cite[\S2.3 and Appendix~A]{Cirac2017MPDO_AnnPhys}, and it is the
+	\cite[Section~2.3 and Appendix~A]{Cirac2017MPDO_AnnPhys}, and it is the
 	canonical-form information used before the basis-of-normal-tensors argument in
 	\cite[Proposition~IV.4 and Corollary~IV.5]{Cirac2021Matrix}.
 
@@ -3512,11 +3511,11 @@ transport the zero-tail identity through this comparison.
 	identities to that length, and supplies cyclic-sector families on a common
 	blocked alphabet.  The supporting blocking and transport results, including
 	Theorem~\ref{thm:iterated_blocking_samempv_reindex}, identify iterated blocking
-	with one blocking by the product length, after relabeling the blocked physical
+	with one blocking by the product length, after identifying the blocked physical
 	words.
 
-	The results above now separate the finite-sum comparison from the remaining
-	blocked-word assertion.  Theorem~\ref{thm:common_blocked_cyclic_sector_blocked_word_comparison}
+	The results above separate the finite-sum comparison from the blocked-word
+	assertion.  Theorem~\ref{thm:common_blocked_cyclic_sector_blocked_word_comparison}
 	shows that, once the length-$p$ word read directly from the common blocked
 	alphabet equals the word obtained by flattening an iterated $(m_k,e_k)$ block,
 	the weighted direct sum of directly blocked nonzero blocks agrees with the
@@ -3524,7 +3523,7 @@ transport the zero-tail identity through this comparison.
 	then rewrites the one-sided zero-tail identity with the weighted common-length
 	cyclic sectors under this blockwise word equality.
 
-	The remaining mathematical assertion is the corresponding equality, after relabeling
+	The mathematical assertion still needed is the corresponding equality, after identifying
 	blocked physical words, between the blocked nonzero part and the
 	cyclic-sector tensor for the whole weighted family.
 	Theorem~\ref{thm:zero_tail_common_flat_of_reindexed} gives the
@@ -3539,19 +3538,19 @@ transport the zero-tail identity through this comparison.
 	identities, while
 	Theorem~\ref{thm:after_blocking_common_primitive_irreducible_blocks_reindexed}
 	collects the resulting primitive irreducible sector decompositions needed for
-	comparison.  The remaining blocked-word assertion is the equality of these
+	comparison.  The blocked-word assertion is the equality of these
 	words for the chosen coordinates, or an equivalent final comparison with the
-	relabeling made explicit.
+	word identification made explicit.
 	Theorem~\ref{thm:after_blocking_common_primitive_irreducible_blocks_block_span_consequences}
 	records the intermediate span consequence for these common-sector families: a
 	common MPV phase cover or proportional-decomposition conclusion supplies the
 	finite-length nonzero-block span equality.
 	Theorem~\ref{thm:afterBlocking_sectorComparison_reindexed_commonPhaseCover}
-	states the exact remaining inputs after this point: equality of the zero-tail
+	states the exact inputs after this point: equality of the zero-tail
 	dimensions, injectivity at the chosen common length, and a common MPV phase cover
 	(or the equivalent finite-length span equality) for the two nonzero-sector
-	families.  Thus the remaining canonical-form assertions are the blocked-word
-	relabeling equality for the whole weighted nonzero family, the zero-tail and
+	families.  Thus the canonical-form assertions are the blocked-word
+	identification for the whole weighted nonzero family, the zero-tail and
 	injectivity refinements, and the common-phase or proportional-decomposition
 	comparison for the common-length nonzero sectors.
 

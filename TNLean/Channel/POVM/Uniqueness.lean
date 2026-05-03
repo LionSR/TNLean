@@ -25,7 +25,7 @@ This file provides additional interface around `TNLean.Channel.POVM`.
 
 ## References
 
-- [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Ch. 2][Wolf2012QChannels]
+- [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Chapter 2][Wolf2012QChannels]
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder InnerProductSpace

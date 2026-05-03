@@ -44,7 +44,7 @@ This auxiliary lemma is a prerequisite for the trace convexity axioms
 
 ## References
 
-* Bhatia, *Matrix Analysis*, Ch. V (matrix Jensen inequality).
+* Bhatia, *Matrix Analysis*, Chapter V (matrix Jensen inequality).
 -/
 
 open scoped Matrix ComplexOrder

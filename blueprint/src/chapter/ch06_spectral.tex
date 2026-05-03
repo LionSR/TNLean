@@ -875,7 +875,7 @@ the Perron--Frobenius fixed point.
 \section{Stationary support}
 
 This section records the support-projection theory
-behind stationary states, following~\cite[\S6.4]{Wolf2012Quantum}.
+behind stationary states, following~\cite[Section~6.4]{Wolf2012Quantum}.
 
 \begin{lemma}[Lower-triangular Kraus condition implies corner invariance]%
     \label{lem:lower_zero_invariance}
@@ -962,24 +962,26 @@ behind stationary states, following~\cite[\S6.4]{Wolf2012Quantum}.
     Since $\rho_\infty \neq 0$, we have $P \neq 0$, so $P = \Id$.
 \end{proof}
 
-\begin{remark}[Remaining stationary-support formulations]%
+\begin{remark}[Stationary-support formulations]%
     \label{rem:stationary_support_todo}
-    The non-trivial formulations needed here are:
+    The non-trivial formulations needed here are the following results from
+    Wolf:
     \begin{itemize}
-        \item \textbf{Prop.~6.10} (converse of Prop.~6.9):
-            if the support projection of \emph{every} PSD fixed point
-            is full, then the channel is irreducible.
-        \item \textbf{Prop.~6.11}: minimality of the stationary support
-            among invariant projections, without assuming irreducibility.
+        \item the converse direction of \cite[Proposition~6.10]{Wolf2012Quantum}:
+            if the support projection of every positive semidefinite fixed point
+            is full, then the channel is irreducible;
+        \item \cite[Proposition~6.11]{Wolf2012Quantum}: minimality of the
+            stationary support among invariant projections, without assuming
+            irreducibility.
     \end{itemize}
-    These statements are deferred in the present chapter.
+    These statements are not used elsewhere in this chapter.
 \end{remark}
 
 \subsection{Faithful compression onto the support sector}
 
 This subsection establishes the results on the corner algebra,
 $*$-structure, and compression of a PSD fixed point onto its support sector
-needed for~\cite[Cor.~6.6]{Wolf2012Quantum}: the corner carries a
+needed for~\cite[Corollary~6.6]{Wolf2012Quantum}: the corner carries a
 $\C$-algebra and $*$-structure, the two standard presentations of the corner
 are identified, and the compression of a PSD fixed point onto its support
 sector is positive definite.
@@ -1068,7 +1070,7 @@ sector is positive definite.
     \leanok
     \uses{thm:adjointFixedPointsStarSubalgebra}
     The subalgebra is finite-dimensional (as a subalgebra of~$\MN{D}$),
-    hence Artinian. By~\cite[Thm.~6.14]{Wolf2012Quantum}, it suffices to show
+    hence Artinian. By~\cite[Theorem~6.14]{Wolf2012Quantum}, it suffices to show
     the Jacobson radical~$J$ vanishes. If $x \in J$, then $x^*x \in J$
     (left-ideal closure). The radical of an Artinian ring is nilpotent,
     so $x^*x$ is nilpotent. A self-adjoint nilpotent matrix satisfies
@@ -1202,8 +1204,8 @@ used later.
     \lean{MPSTensor.hasEventuallyFullKrausRank_iff_stronglyIrreducible}
     \lean{MPSTensor.hasEventuallyFullKrausRank_iff_isNormal}
     \leanok
-    These are the pairwise equivalences appearing in Wolf's
-    Theorem~6.8.
+    These are the pairwise equivalences in
+    \cite[Theorem~6.8]{Wolf2012Quantum}.
 \end{remark}
 
 \begin{theorem}[Scalar fixed-point algebra case]

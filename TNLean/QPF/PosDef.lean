@@ -39,7 +39,7 @@ instead of `IsInjective A`.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, §6.2, Thm 6.3 item 2][Wolf2012QChannels]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 6.2, Theorem 6.3 item 2][Wolf2012QChannels]
 * [Evans, Høegh-Krohn, *Spectral properties of positive maps*, 1978][Evans1978Spectral]
 -/
 
@@ -110,7 +110,7 @@ private lemma ker_contains_all_of_span
   | smul c a _ ha =>
     simp [Matrix.conjTranspose_smul, Matrix.smul_mulVec, Matrix.mulVec_smul, ha]
 
-/-- **Positive definiteness from injectivity** (Wolf Thm 6.3(2)):
+/-- **Positive definiteness from injectivity** (Wolf Theorem 6.3(2)):
 If `A` is injective and `ρ` is a nonzero PSD fixed point of the transfer map,
 then `ρ` is positive definite. -/
 theorem posSemidef_fixedPoint_isPosDef
@@ -150,7 +150,7 @@ theorem posSemidef_fixedPoint_isPosDef
     simpa [Finset.sum_ite_eq, Finset.mem_univ] using h
   exact hρ_ne h_rho_zero
 
-/-- Corollary for the irreducibility-based formulation (still Wolf Thm 6.3(2),
+/-- Corollary for the irreducibility-based formulation (still Wolf Theorem 6.3(2),
 but with `IsIrreducibleMap E` instead of `IsInjective A`). -/
 theorem posSemidef_fixedPoint_isPosDef_of_irreducible
     (A : MPSTensor d D)

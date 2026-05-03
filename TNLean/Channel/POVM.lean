@@ -9,7 +9,7 @@ import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.Analysis.Matrix.Order
 
 /-!
-# POVMs, instruments, and the Naimark dilation (Wolf Ch. 2, Thm 2.6 / Neumark)
+# POVMs, instruments, and the Naimark dilation (Wolf Chapter 2, Theorem 2.6 / Neumark)
 
 This file defines positive operator-valued measures (POVMs) on `M_D(ℂ)`,
 quantum instruments, and proves the **Naimark extension theorem**: every
@@ -36,14 +36,14 @@ larger (dilated) Hilbert space via an isometry.
 * `POVM.naimarkProjection_hermitian` — `P_iᴴ = P_i`.
 * `POVM.naimarkProjection_orthogonal` — `P_i * P_j = 0` for `i ≠ j`.
 * `POVM.naimark_recovers_povm` — `Vᴴ * P_i * V = E_i` (main Naimark identity).
-* `POVM.exists_naimark_dilation` — the existential form of Wolf Thm 2.6.
+* `POVM.exists_naimark_dilation` — the existential form of Wolf Theorem 2.6.
 * `POVM.ofPSDResolutionOfIdentity` — converse direction: every isometry together
   with a PSD resolution of identity on the dilated space yields a POVM via
   `E_i := Vᴴ P_i V`.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Thm 2.6
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Theorem 2.6
   (Neumark's theorem)][Wolf2012QChannels]
 -/
 

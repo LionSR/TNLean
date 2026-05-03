@@ -44,7 +44,7 @@ Proposition 3 API, prefer `TNLean.Wielandt.Primitivity.Equivalence`; this file i
 specialized access to the (c)→(b) proof route and its quantitative
 intermediates.
 
-## Proof strategy (following the paper / Wolf Ch6)
+## Proof strategy (following the paper / Wolf Chapter 6)
 
 1. **Trace-pairing identity** (`sum_normSq_trace_conjTranspose_mul_evalWord`):
    $$\sum_{|\sigma|=n} |\operatorname{tr}(B^\dagger A_\sigma)|^2 =
@@ -70,7 +70,7 @@ intermediates.
 ## References
 
 - [Sanz, Pérez-García, Wolf, Cirac, arXiv:0909.5347], Proposition 3
-- [Wolf, *Quantum Channels & Operations: Guided Tour*], §6.2–6.4
+- [Wolf, *Quantum Channels & Operations: Guided Tour*], Section 6.2–6.4
 -/
 
 open scoped Matrix BigOperators ComplexConjugate ComplexOrder NNReal
@@ -1010,7 +1010,7 @@ end FinalConstruction
 /-- A primitive MPS tensor with a positive-definite fixed point has eventually
 full Kraus rank.
 
-This is the Prop.~3 route `(IsPrimitiveMPS + ρ.PosDef) → (c) → (b)`: first
+This is the Proposition ~3 route `(IsPrimitiveMPS + ρ.PosDef) → (c) → (b)`: first
 package the data as `IsStronglyIrreduciblePaper`, then apply the already
 formalized `StronglyIrreducible → HasEventuallyFullKrausRank` implication. -/
 theorem hasEventuallyFullKrausRank_of_isPrimitiveMPS_of_posDef [NeZero D]

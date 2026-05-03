@@ -26,7 +26,7 @@ on matrix algebras `M_D(ℂ)`.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, §6.2, Thm 6.2][Wolf2012QChannels]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 6.2, Theorem 6.2][Wolf2012QChannels]
 * [Evans, Høegh-Krohn, *Spectral properties of positive maps*, 1978][Evans1978Spectral]
 -/
 

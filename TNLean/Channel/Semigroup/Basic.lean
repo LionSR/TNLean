@@ -16,7 +16,7 @@ import Mathlib.Analysis.Calculus.Deriv.Shift
 import Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus
 
 /-!
-# Quantum Dynamical Semigroups — Definitions and Prop 7.1
+# Quantum Dynamical Semigroups — Definitions and Proposition 7.1
 
 This file defines **dynamical semigroups** on finite-dimensional matrix algebras
 and proves that every norm-continuous one-parameter semigroup on a
@@ -36,12 +36,12 @@ finite-dimensional space is of the form `T_t = exp(tL)` for some generator `L`
 * `expSemigroupCLM_zero` — `exp(0•L) = 1`.
 * `expSemigroupCLM_continuous` — `t ↦ exp(t•L)` is norm-continuous.
 * `hasDerivAt_expSemigroupCLM` — `d/dt exp(t•L) = exp(t•L) * L`.
-* `continuousDynSemigroup_eq_exp` — **Prop 7.1**: every norm-continuous
+* `continuousDynSemigroup_eq_exp` — **Proposition 7.1**: every norm-continuous
   semigroup on `M_D(ℂ)` equals `exp(tL)` for some generator `L`.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, §7.1, Prop 7.1][Wolf2012QChannels]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 7.1, Proposition 7.1][Wolf2012QChannels]
 -/
 
 open scoped Matrix ComplexOrder BigOperators NNReal TNOperatorSpace
@@ -109,7 +109,7 @@ abbrev endEquiv :
 
 /-- A family of linear maps `T : ℝ → (M_D(ℂ) →ₗ[ℂ] M_D(ℂ))` is a
 **dynamical semigroup** if `T(t + s) = T(t) ∘ T(s)` for all `t, s ≥ 0`
-and `T(0) = id`. This is Wolf Eq. (7.1). -/
+and `T(0) = id`. This is Wolf Equation (7.1). -/
 structure IsDynSemigroup
     (T : ℝ → Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) : Prop where
   /-- The semigroup law: T(t+s) = T(t) ∘ T(s) for t, s ≥ 0. -/
@@ -119,7 +119,7 @@ structure IsDynSemigroup
 
 /-- A dynamical semigroup is **norm-continuous** if `t ↦ T(t)` is continuous
 in the operator norm topology. In finite dimension this is equivalent to
-strong continuity (Wolf §7.1). -/
+strong continuity (Wolf Section 7.1). -/
 structure IsContinuousDynSemigroup
     (T : ℝ → Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) : Prop where
   /-- The semigroup law. -/
@@ -190,10 +190,10 @@ theorem expSemigroupCLM_continuous
   intro x
   exact (NormedSpace.exp_analytic (𝕂 := ℂ) x).continuousAt
 
-/-! ### The derivative of the exponential semigroup (Wolf Eq. 7.2) -/
+/-! ### The derivative of the exponential semigroup (Wolf Equation 7.2) -/
 
 /-- The derivative of `t ↦ exp(t • L)` at `t` is `exp(t • L) * L`.
-This is Wolf Eq. (7.2): `d/dt T_t = L · T_t`. -/
+This is Wolf Equation (7.2): `d/dt T_t = L · T_t`. -/
 theorem hasDerivAt_expSemigroupCLM
     (L : MatrixCLM (Fin D)) (t : ℝ) :
     HasDerivAt (fun u : ℝ => expSemigroupCLM L u)

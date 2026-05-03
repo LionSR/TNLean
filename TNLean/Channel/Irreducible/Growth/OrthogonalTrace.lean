@@ -22,7 +22,7 @@ binomial sum and isolates the contribution from a nonzero iterate.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, §6.2, Thm 6.2
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 6.2, Theorem 6.2
   item 4][Wolf2012QChannels]
 
 ## Tags

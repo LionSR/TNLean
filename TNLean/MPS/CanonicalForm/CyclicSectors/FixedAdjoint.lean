@@ -18,7 +18,7 @@ projections fixed by the adjoint transfer map.
 ## References
 
 * [Cirac–Pérez-García–Schuch–Verstraete, arXiv:1606.00608, Appendix A]
-* [Wolf, *Quantum Channels & Operations*, Ch. 6]
+* [Wolf, *Quantum Channels & Operations*, Chapter 6]
 -/
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder

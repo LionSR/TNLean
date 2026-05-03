@@ -254,7 +254,7 @@ end AdjointFixedPoints
 
 section Wolf612613
 
-/-- **Wolf Thm 6.12** with the prompt's naming convention.
+/-- **Wolf Theorem 6.12** with the prompt's naming convention.
 
 Here `adjointMap K` is the Heisenberg-picture map `T*`, while `map K` is its
 Schrödinger adjoint `T`. Under a positive-definite fixed point of `T`, every
@@ -271,7 +271,7 @@ theorem fixedPoints_in_multiplicativeDomain
     (by simpa [adjointMap, map] using hρ_fix)
     (by simpa [fixedPoints, adjointFixedPoints, map, adjointMap] using hX)
 
-/-- **Wolf Thm 6.12** stated as a `*`-subalgebra, with the prompt's naming
+/-- **Wolf Theorem 6.12** stated as a `*`-subalgebra, with the prompt's naming
 convention. -/
 noncomputable def fixedPoints_starSubalgebra
     (K : Fin d → Mat) (h_tp : IsTP K)
@@ -288,7 +288,7 @@ noncomputable def fixedPoints_starSubalgebra
   simpa only using
     (mem_adjointFixedPointsStarSubalgebra (K := K) h_tp hρ hρ_fix X)
 
-/-- **Wolf Thm 6.13** with the prompt's naming convention.
+/-- **Wolf Theorem 6.13** with the prompt's naming convention.
 
 If `X` and `Xᴴ * X` are fixed by the Heisenberg-picture adjoint map `adjointMap K`,
 then `X` commutes with every Kraus operator `K i`. -/

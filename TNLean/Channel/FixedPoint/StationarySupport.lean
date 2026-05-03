@@ -11,7 +11,7 @@ import TNLean.MPS.Irreducible.FixedPointProjection
 # Stationary support for irreducible channels
 
 This file collects the quantum-channel support-projection results for
-stationary states, in the spirit of Wolf §6.4 (Lemmas 6.4--6.5 and
+stationary states, in the spirit of Wolf Section 6.4 (Lemmas 6.4--6.5 and
 Propositions 6.9--6.11).
 
 ## Main declarations
@@ -23,9 +23,9 @@ Propositions 6.9--6.11).
   point of an irreducible channel.
 * `stationarySupport_eq_one`: for an irreducible channel, the stationary support
   is full (`= 1`).
-* TODO (Wolf Prop. 6.9): upgrade to the non-vacuous equivalence between
+* TODO (Wolf Proposition 6.9): upgrade to the non-vacuous equivalence between
   irreducibility and full support of stationary states.
-* TODO (Wolf Prop. 6.10): formalize minimality of stationary support without an
+* TODO (Wolf Proposition 6.10): formalize minimality of stationary support without an
   irreducibility hypothesis.
 -/
 
@@ -140,7 +140,7 @@ private lemma stationaryState_ne_zero
       _ = 0 := this
   exact one_ne_zero h10
 
-/-- Prop. 6.9: for an irreducible channel, the stationary support is full. -/
+/-- Proposition 6.9: for an irreducible channel, the stationary support is full. -/
 theorem stationarySupport_eq_one
     {E : Mat →ₗ[ℂ] Mat} (hE : IsChannel E)
     (hIrr : IsIrreducibleMap E) (hD : 0 < D) :
@@ -165,13 +165,13 @@ theorem stationarySupport_eq_one
   · simpa [P] using hP1
 
 /-
-TODO (Wolf Props. 6.9–6.10):
+TODO (Wolf Propositions 6.9–6.10):
 The original declarations `irreducible_iff_support_full` and
 `stationary_support_minimal` were removed because their previous formulations
 were vacuous/trivial. They should be replaced by:
-* a non-vacuous Prop. 6.9 equivalence (irreducibility ↔ full support of
+* a non-vacuous Proposition 6.9 equivalence (irreducibility ↔ full support of
   stationary states), and
-* Prop. 6.10 minimality of stationary support without assuming irreducibility.
+* Proposition 6.10 minimality of stationary support without assuming irreducibility.
 -/
 
 end Channel

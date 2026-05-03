@@ -42,7 +42,7 @@ variable {d D : ℕ}
 
 /-- **Lemma 2(a)** (paper-level statement).
 
-If `A` is normalized and primitive in the paper sense, and `φ` is a
+If `A` is normalized and primitive under the source theorem hypotheses, and `φ` is a
 nonzero eigenvector of some `A i₀` with nonzero corresponding eigenvalue `μ`,
 then `vectorSpreadSpan A φ (D - 1) = ⊤`.
 

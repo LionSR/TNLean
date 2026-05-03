@@ -18,14 +18,14 @@ import Mathlib.Analysis.Calculus.Deriv.Mul
 import Mathlib.NumberTheory.Real.Irrational
 
 /-!
-# Irreducibility implies primitivity for quantum dynamical semigroups — Prop 7.5
+# Irreducibility implies primitivity for quantum dynamical semigroups — Proposition 7.5
 
 ## Main results
 
-* `irreducible_semigroup_implies_primitive` — **Prop 7.5** (forward direction):
+* `irreducible_semigroup_implies_primitive` — **Proposition 7.5** (forward direction):
   If `T_{t₀} = exp(t₀ · L)` is irreducible for some `t₀ > 0`, then
   `T_t` is primitive for ALL `t > 0`.
-* `qds_irreducible_iff_primitive` — **Prop 7.5** (full equivalence):
+* `qds_irreducible_iff_primitive` — **Proposition 7.5** (full equivalence):
   `∃ t₀ > 0, T_{t₀} irreducible ↔ ∀ t > 0, T_t primitive`.
 
 ## Proof outline for `irreducible_semigroup_implies_primitive`
@@ -39,7 +39,7 @@ norm-continuous semigroup.  The Lean proof realizes this propagation in
 density at the irreducible time with a primitive positive fractional slice.
 
 **Step B**: `T_t` irreducible + channel → peripheral eigenvalues of `T_t` are roots
-of unity (Wolf Thm 6.6). This channel-level result is available as
+of unity (Wolf Theorem 6.6). This channel-level result is available as
 `peripheral_isRootOfUnity_of_irreducible_channel`, proved by choosing a Kraus
 representation, converting to an irreducible tensor, and applying the existing
 blocking-periodicity theorem.
@@ -59,7 +59,7 @@ space obtained from that slice.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, §7.1, Prop 7.5][Wolf2012QChannels]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 7.1, Proposition 7.5][Wolf2012QChannels]
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder BigOperators NNReal TNOperatorSpace
@@ -129,7 +129,7 @@ theorem eigenvalue_exp_of_eigenvalue_generator
 
 /-! ## Key lemma: exp(itθ) root of unity for all t > 0 implies θ = 0
 
-This is the number-theoretic heart of Prop 7.5. If `exp(i t θ)` is a root of unity
+This is the number-theoretic heart of Proposition 7.5. If `exp(i t θ)` is a root of unity
 for every `t > 0`, then `θ = 0`. The proof uses the density of irrationals:
 `exp(i t θ)^p = 1` means `t p θ ∈ 2π ℤ`, but this cannot hold for all `t > 0`
 unless `θ = 0` (since `t ↦ t θ / (2π)` takes irrational values). -/

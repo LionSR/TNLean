@@ -9,7 +9,7 @@ import TNLean.Channel.Semigroup.LindbladForm
 # Kossakowski Matrix Form — Wolf Theorem 7.1, Form (ii)
 
 This file defines the Kossakowski matrix form of a quantum dynamical semigroup
-generator (Wolf Eq. 7.23) and proves its equivalence with the Lindblad form.
+generator (Wolf Equation 7.23) and proves its equivalence with the Lindblad form.
 
 ## Main definitions
 
@@ -19,11 +19,11 @@ generator (Wolf Eq. 7.23) and proves its equivalence with the Lindblad form.
 
 ## Main results
 
-* `kossakowski_iff_lindblad` — **Thm 7.1 (ii ↔ i)**: Kossakowski ↔ Lindblad form.
+* `kossakowski_iff_lindblad` — **Theorem 7.1 (ii ↔ i)**: Kossakowski ↔ Lindblad form.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, §7.1.2, Thm 7.1, Eq. 7.23]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 7.1.2, Theorem 7.1, Equation 7.23]
 -/
 
 open scoped Matrix ComplexOrder BigOperators NNReal MatrixOrder TNMatrixCFC TNOperatorSpace
@@ -35,9 +35,9 @@ variable {D : ℕ}
 
 section KossakowskiForms
 
-/-! ## Wolf Theorem 7.1, Form (ii): Kossakowski matrix form (Eq. 7.23) -/
+/-! ## Wolf Theorem 7.1, Form (ii): Kossakowski matrix form (Equation 7.23) -/
 
-/-- The **Kossakowski form** of a generator (Wolf Eq. 7.23):
+/-- The **Kossakowski form** of a generator (Wolf Equation 7.23):
 `L(ρ) = i[ρ,H] + ½ Σ_{k,l} C_{kl} ([F_k, ρ F_l†] + [F_k ρ, F_l†])`
 where `C ≥ 0` is the Kossakowski matrix and `F` is the chosen family of
 matrices. In the paper this family is a basis of traceless matrices; the
@@ -192,7 +192,7 @@ private lemma adj_kraus_sum_eq_double_sum {n : ℕ}
 
 /-- The Kossakowski form is equivalent to the Lindblad form:
 diagonalizing `C = M†M` converts between the two.
-(Wolf proof of Thm 7.1, last paragraph) -/
+(Wolf proof of Theorem 7.1, last paragraph) -/
 theorem kossakowski_iff_lindblad
     (L : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) :
     (∃ K : KossakowskiForm D, L = K.toLinearMap) ↔

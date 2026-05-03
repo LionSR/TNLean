@@ -11,7 +11,7 @@ import TNLean.Channel.KrausFreedom
 # Pure-state renormalization fixed point (RFP) — definitions
 
 This file defines the notion of a **renormalization fixed point** (RFP) for a
-pure MPS tensor, following arXiv:1606.00608 §3.1
+pure MPS tensor, following arXiv:1606.00608 Section 3.1
 (Cirac–Pérez-García–Schuch–Verstraete).
 
 The key definition is `IsRFP A`, which says that the completely positive map
@@ -109,7 +109,7 @@ rectangular isometry `V` with `V†V = 1`.
 
 **Backward direction**: proved as `isRFP_of_kraus_isometry`.
 
-See arXiv:1606.00608, Theorem 3.1 and Wolf Thm 2.1 item 4. -/
+See arXiv:1606.00608, Theorem 3.1 and Wolf Theorem 2.1 item 4. -/
 theorem isRFP_iff_kraus_isometry (A : MPSTensor d D) :
     IsRFP A ↔
       ∃ V : Matrix (Fin d × Fin d) (Fin d) ℂ,
@@ -137,7 +137,7 @@ theorem isRFP_iff_kraus_isometry (A : MPSTensor d D) :
       simp_rw [Finset.mul_sum, Finset.sum_mul]
       apply Finset.sum_congr rfl; intro i₂ _
       rw [Matrix.conjTranspose_mul]; simp only [Matrix.mul_assoc]
-    -- Step 2: Apply rectangular Kraus freedom (Wolf Thm 2.1 item 4).
+    -- Step 2: Apply rectangular Kraus freedom (Wolf Theorem 2.1 item 4).
     obtain ⟨V, hV_iso, hV_decomp⟩ := kraus_rectangular_freedom'
       (fun p : Fin d × Fin d => A p.1 * A p.2) A hmap
       (by simp only [Fintype.card_fin, Fintype.card_prod]; exact Nat.le_mul_self d)

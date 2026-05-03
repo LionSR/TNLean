@@ -278,7 +278,7 @@ Proof strategy:
 
 References:
 * Pérez-García et al., Matrix Product State Representations (2007), Lemma 5
-* Wolf, Quantum Channels & Operations (2012), §6.2
+* Wolf, Quantum Channels & Operations (2012), Section 6.2
 -/
 
 -- (The old auxiliary lemmas `eigenvector_det_ne_zero` / `per_index_from_eigenvector`
@@ -377,7 +377,7 @@ private lemma gaugePhaseEquiv_of_gauged_det_intertwining [NeZero D]
     (A := A) (B := B) (SA := SA) (SB := SB) (X' := X') (μ := μ)
     hSA_det hSB_det (Ne.isUnit hX'_det) hμ hInter2
 
-/-- **Eigenvector implies gauge equivalence** (PGVWC 2007, Lemma 5; Wolf 2012, §6.2).
+/-- **Eigenvector implies gauge equivalence** (PGVWC 2007, Lemma 5; Wolf 2012, Section 6.2).
 
 If `F_{AB}(X) = μ • X` with `X ≠ 0` and `‖μ‖ = 1`, then injective normalized tensors
 `A` and `B` are gauge-phase equivalent.

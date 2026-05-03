@@ -247,10 +247,10 @@ private lemma nwExtendLinearMap_subunital (T : Mat →ₗ[ℂ] Mat)
       simp [nwExtendLinearMap, hOne11, Matrix.one_apply]
   simpa only [hEq] using hDiag
 
-/-- Wolf Thm. 5.5: Schwarz inequality for subnormal operators.
+/-- Wolf Theorem 5.5: Schwarz inequality for subnormal operators.
 
 The intended proof composes the given positive subunital map with the north-west
-block extraction map on a normal extension of `A`, then applies Wolf Prop. 5.1
+block extraction map on a normal extension of `A`, then applies Wolf Proposition 5.1
 (`schwarz_inequality_normal_operator`) to the resulting positive map. -/
 private theorem topLeft_schwarz_of_normal_extension
     (T : Mat →ₗ[ℂ] Mat)
@@ -400,7 +400,7 @@ private lemma krausAdjointMapLinear_isPositiveMap (K : Fin d → Mat) :
         simpa only [Matrix.mul_assoc, conjTranspose_conjTranspose] using
           hX.mul_mul_conjTranspose_same (B := (K i)ᴴ))
 
-/-- The missing order-theoretic step in Wolf Thm. 5.6: if `D ≥ 0` commutes with
+/-- The missing order-theoretic step in Wolf Theorem 5.6: if `D ≥ 0` commutes with
 `A` and dominates `Aᴴ * A`, then it also dominates `A * Aᴴ`.
 
 Wolf proves this first for invertible `D` using `X = A D^{-1/2}`, and then passes
@@ -431,7 +431,7 @@ theorem commuting_dominant_right_bound
         (Matrix.PosSemidef.one (n := Fin D) (R := ℂ)).smul hε.le
   simpa using commuting_dominant_right_bound_posDef A _ hPD hComm' hDom'
 
-/-- CP/Kraus version of Wolf Thm. 5.6 under both dominant bounds.
+/-- CP/Kraus version of Wolf Theorem 5.6 under both dominant bounds.
 
 Once both inequalities `Aᴴ * A ≤ D` and `A * Aᴴ ≤ D` are available, the proof is
 just Kadison--Schwarz for the adjoint Kraus map, followed by monotonicity of the
@@ -470,7 +470,7 @@ theorem kadison_schwarz_commuting_dominant_cp_of_two_sided_bound
     simpa only using hPosT.map_le_map hDomRight
   refine ⟨hKSLeft.trans hDomLeftMap, hKSRight.trans hDomRightMap⟩
 
-/-- Wolf Thm. 5.6 in the CP/Kraus setting.
+/-- Wolf Theorem 5.6 in the CP/Kraus setting.
 
 The only missing ingredient beyond `kadison_schwarz_commuting_dominant_cp_of_two_sided_bound`
 is the right-dominance lemma `commuting_dominant_right_bound`. -/
@@ -648,7 +648,7 @@ private lemma schwarz_commuting_dominant_posDef
   have hNstarN11 : (Nᴴ * N).toBlocks₁₁ = Dom := by rw [hNstarN]; simp
   simpa only [hNstar11, hN11, hNstarN11] using hBlock
 
-/-- Wolf Thm. 5.6: Schwarz inequality for commuting dominant operators.
+/-- Wolf Theorem 5.6: Schwarz inequality for commuting dominant operators.
 
 If `T` is a positive subunital linear map, `D ≥ 0` commutes with `A`, and
 `Aᴴ * A ≤ D`, then `T(Aᴴ) T(A) ≤ T(D)` and `T(A) T(Aᴴ) ≤ T(D)`.

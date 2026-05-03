@@ -37,7 +37,7 @@ global commuting-form target.
 
 ## References
 
-* [CPGSV17] arXiv:1606.00608, Appendix C.2, Proposition C.6
+* [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608, Appendix C.2, Proposition C.6
 -/
 
 open scoped ComplexOrder

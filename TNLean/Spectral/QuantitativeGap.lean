@@ -39,7 +39,7 @@ but gives no explicit bound. This file provides constructive bounds.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations*, §6.3]
+* [M. Wolf, *Quantum Channels & Operations*, Section 6.3]
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder BigOperators NNReal ENNReal

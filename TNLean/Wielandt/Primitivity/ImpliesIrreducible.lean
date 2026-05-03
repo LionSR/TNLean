@@ -23,7 +23,7 @@ complementary aperiodicity input is recovered from strong irreducibility
 ## References
 
 - Sanz, Pérez-García, Wolf, Cirac, arXiv:0909.5347, Proposition 3
-- Cirac, Pérez-García, Schuch, Verstraete, arXiv:1606.00608, §2.3
+- Cirac, Pérez-García, Schuch, Verstraete, arXiv:1606.00608, Section 2.3
 -/
 
 open scoped Matrix ComplexOrder BigOperators

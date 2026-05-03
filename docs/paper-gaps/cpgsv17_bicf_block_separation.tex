@@ -7,7 +7,7 @@
 
 \input{command}
 
-\title{Finite-Length Block Separation in CPGSV17 Proposition IV.3}
+\title{Finite-Length Block Separation in Cirac--Perez-Garcia--Schuch--Verstraete 2017 Proposition IV.3}
 \author{}
 \date{2026-04-30}
 
@@ -45,7 +45,7 @@ cross-block step: if $L$ is a blocking length after which every normal block is
 injective, then after $3(L+1)(D-1)$ blockings the tensor is block
 injective. The proposition records the resulting bound in the following form: after
 blocking at most $3D^5$ spins, every tensor in canonical form is in
-block-injective canonical form. This is the assertion labelled CPGSV17,
+block-injective canonical form. This is the assertion labelled Cirac--Perez-Garcia--Schuch--Verstraete 2017,
 Proposition~IV.3.
 The local source is
 \path{Papers/1606.00608/MPDO-22-12-17-2.tex}, lines 271--345. The cited
@@ -104,8 +104,9 @@ hypotheses remains open.
 
 \section{The counterexample boundary}
 
-A tempting shortcut is false. One cannot recover the finite-length biCF witness
-from blockwise injectivity, left-canonicality, and nonzero weights alone. Take
+A tempting shortcut is false. One cannot recover the finite-length
+trace-separation witness from blockwise injectivity, left-canonicality, and
+nonzero weights alone. Take
 two one-dimensional scalar blocks over a one-letter alphabet, with both block
 tensors equal to $1$ and with weights $1$ and $2$. Each block is injective and
 left-canonical, and the weights are nonzero and distinct. However every word
@@ -119,7 +120,7 @@ This example is formalized in
 \path{docs/counterexamples.md}, lines 29--35. It shows that the additional
 finite-length witness in the formal hypotheses is genuinely stronger than the
 other horizontal canonical-form assumptions. It does not refute
-CPGSV17 Proposition IV.3. The duplicate scalar blocks are related by similarity
+Cirac--Perez-Garcia--Schuch--Verstraete 2017 Proposition IV.3. The duplicate scalar blocks are related by similarity
 and phase, and therefore do not form a minimal basis of normal tensors in the
 sense of the source characterization.
 
@@ -132,7 +133,7 @@ small counterexample shows that those hypotheses cannot be derived from the
 weaker assumptions alone. The full source theorem remains plausible under the
 actual canonical-form and minimal basis-of-normal-tensors hypotheses.
 
-What remains to be formalized is the David2006/CPGSV17 finite-length
+What remains to be formalized is the David2006/Cirac--Perez-Garcia--Schuch--Verstraete 2017 finite-length
 block-separation argument: from minimality of the basis-of-normal-tensors blocks,
 together with single-block injectivity after Wielandt blocking, one must produce
 a common finite selector or entrywise linear-independence witness, with the

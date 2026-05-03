@@ -136,7 +136,7 @@ state `Λ`:
 $$R_L(u) = \mathrm{tr}(\Lambda \cdot \mathcal{E}_u^L(\mathbf{1}))$$
 
 This measures the overlap `⟨ψ_L | u^{⊗L} | ψ_L⟩` in the
-transfer-matrix formalism (Eq. (5) of arXiv:0802.0447). -/
+transfer-matrix formalism (Equation (5) of arXiv:0802.0447). -/
 noncomputable def stringOrderParam (A : MPSTensor d D)
     (u : Matrix (Fin d) (Fin d) ℂ)
     (Λ : Matrix (Fin D) (Fin D) ℂ) (L : ℕ) : ℂ :=
@@ -312,7 +312,7 @@ $$\sum_j u_{ij} A^j = V A^i V^\dagger$$
 
 This states that the on-site unitary `u` is intertwined by the
 virtual unitary `V` at the level of individual MPS matrices.
-(Eq. from Lemma 1 of arXiv:0802.0447, reformulated.) -/
+(Equation from Lemma 1 of arXiv:0802.0447, reformulated.) -/
 def CondC1 : Prop :=
   ∀ i : Fin d,
     ∑ j : Fin d, u i j • A j = V * A i * Vᴴ

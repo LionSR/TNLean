@@ -7,12 +7,12 @@ import TNLean.Channel.ChoiJamiolkowski
 import TNLean.Algebra.TracePairing
 
 /-!
-# Kraus representation theorem (Wolf Ch. 2, Thm 2.1)
+# Kraus representation theorem (Wolf Chapter 2, Theorem 2.1)
 
 This file proves key properties of the Kraus representation of completely
 positive maps `T(A) = ∑ⱼ Kⱼ A Kⱼ†`.
 
-## Main results (Wolf Thm 2.1)
+## Main results (Wolf Theorem 2.1)
 
 * `kraus_sum_conjTranspose_mul_of_tp` — TP ⟹ `∑ᵢ Kᵢ†Kᵢ = 𝟙`
 * `kraus_tp_of_sum_conjTranspose_mul` — `∑ᵢ Kᵢ†Kᵢ = 𝟙` ⟹ TP
@@ -28,7 +28,7 @@ positivity of the Choi matrix.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Thm 2.1][Wolf2012QChannels]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Theorem 2.1][Wolf2012QChannels]
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder
@@ -36,9 +36,9 @@ open Matrix Finset BigOperators
 
 variable {D : ℕ}
 
-/-! ### Kraus normalization conditions (Thm 2.1, item 1) -/
+/-! ### Kraus normalization conditions (Theorem 2.1, item 1) -/
 
-/-- **Thm 2.1 item 1 (TP ⟹ normalization)**:
+/-- **Theorem 2.1 item 1 (TP ⟹ normalization)**:
 If `T(X) = ∑ᵢ Kᵢ X Kᵢ†` is trace-preserving, then `∑ᵢ Kᵢ†Kᵢ = 𝟙`. -/
 theorem kraus_sum_conjTranspose_mul_of_tp
     {r : ℕ} (K : Fin r → Matrix (Fin D) (Fin D) ℂ)
@@ -64,7 +64,7 @@ theorem kraus_sum_conjTranspose_mul_of_tp
   conv_lhs => rw [← hK N]
   rw [htp N, sub_self]
 
-/-- **Thm 2.1 item 1 (normalization ⟹ TP)**:
+/-- **Theorem 2.1 item 1 (normalization ⟹ TP)**:
 If `∑ᵢ Kᵢ†Kᵢ = 𝟙`, then `T(X) = ∑ᵢ Kᵢ X Kᵢ†` is trace-preserving. -/
 theorem kraus_tp_of_sum_conjTranspose_mul
     {r : ℕ} (K : Fin r → Matrix (Fin D) (Fin D) ℂ)
@@ -79,7 +79,7 @@ theorem kraus_tp_of_sum_conjTranspose_mul
       rw [Matrix.trace_mul_cycle, Matrix.mul_assoc]]
   rw [← Matrix.trace_sum, ← Finset.sum_mul, hK_norm, Matrix.one_mul]
 
-/-! ### Kraus normalization for unital maps (Thm 2.1, item 1) -/
+/-! ### Kraus normalization for unital maps (Theorem 2.1, item 1) -/
 
 /-- If `T(𝟙) = 𝟙` and `T(X) = ∑ᵢ Kᵢ X Kᵢ†`, then `∑ᵢ Kᵢ Kᵢ† = 𝟙`. -/
 theorem kraus_sum_mul_conjTranspose_of_unital
@@ -93,9 +93,9 @@ theorem kraus_sum_mul_conjTranspose_of_unital
   rw [hunit] at this
   exact this.symm
 
-/-! ### Unitary freedom in Kraus operators (Thm 2.1, item 4) -/
+/-! ### Unitary freedom in Kraus operators (Theorem 2.1, item 4) -/
 
-/-- **Thm 2.1 item 4 (isometry freedom, sufficient direction)**:
+/-- **Theorem 2.1 item 4 (isometry freedom, sufficient direction)**:
 If `W` is an isometry (`Wᴴ W = 1`) and `Kⱼ = ∑ₗ Wⱼₗ K̃ₗ`, then `{Kⱼ}` and
 `{K̃ₗ}` define the same map: `∑ⱼ Kⱼ X Kⱼ† = ∑ₗ K̃ₗ X K̃ₗ†`.
 
@@ -143,7 +143,7 @@ theorem kraus_same_map_of_isometry_combination
           simp_rw [hW_entry]; simp
     _ = ∑ l, K' l * X * (K' l)ᴴ := by simp
 
-/-- **Thm 2.1 item 4 (unitary freedom, sufficient direction)**:
+/-- **Theorem 2.1 item 4 (unitary freedom, sufficient direction)**:
 If `U` is unitary (`Uᴴ U = 1`) and `Kⱼ = ∑ₗ Uⱼₗ K̃ₗ`, then `{Kⱼ}` and
 `{K̃ₗ}` define the same map: `∑ⱼ Kⱼ X Kⱼ† = ∑ₗ K̃ₗ X K̃ₗ†`. -/
 theorem kraus_same_map_of_unitary_combination
@@ -192,7 +192,7 @@ theorem kraus_same_map_of_exists_unitary_combination
 if two same-size Kraus families are related by a mixing matrix `U`, and both
 families are Hilbert–Schmidt orthonormal, then `U` is unitary.
 
-This isolates the linear-algebraic core used in Wolf Thm. 2.1 item 4:
+This isolates the linear-algebraic core used in Wolf Theorem 2.1 item 4:
 orthonormal Kraus decompositions have unitary change-of-coordinates. -/
 theorem kraus_transition_unitary_of_hs_orthonormal
     {r : ℕ}

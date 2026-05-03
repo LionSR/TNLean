@@ -31,7 +31,7 @@ can be normalized to a unitary.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, §6.1.1][Wolf2012QChannels]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 6.1.1][Wolf2012QChannels]
 
 ## Tags
 
@@ -173,7 +173,7 @@ private theorem extract_unitary_from_inner_form [NeZero d]
     smul_mul_assoc, smul_mul_assoc, mul_smul_comm, smul_smul,
     inv_mul_cancel₀ hr_ne, one_smul]
 
-/-- **Wolf Thm 6.1(2), forward direction.** -/
+/-- **Wolf Theorem 6.1(2), forward direction.** -/
 private theorem forward_det_one_implies_unitaryChannel [NeZero d]
     (hT : IsChannel T) (hdet : ‖channelDet T‖ = 1) :
     ∃ U : Matrix.unitaryGroup (Fin d) ℂ, T = unitaryChannel U := by
@@ -340,9 +340,9 @@ theorem channelDet_norm_eq_one_of_unitaryChannel (U : Matrix.unitaryGroup (Fin d
     ‖channelDet (unitaryChannel U)‖ = 1 := by
   simp only [channelDet_unitary_eq_one, one_mem, CStarRing.norm_of_mem_unitary]
 
-/-- Wolf Thm 6.1(2) restricted to CPTP maps: `‖det T‖ = 1 ↔ ∃ U, T = unitaryChannel U`.
+/-- Wolf Theorem 6.1(2) restricted to CPTP maps: `‖det T‖ = 1 ↔ ∃ U, T = unitaryChannel U`.
 
-The transposition branch from Wolf's general Thm 6.1(2) for positive TP maps does not
+The transposition branch from Wolf's general Theorem 6.1(2) for positive TP maps does not
 appear for CPTP maps since the transpose map is not completely positive. -/
 theorem channelDet_norm_eq_one_iff_exists_unitaryChannel
     (hT : IsChannel T) :

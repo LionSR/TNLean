@@ -69,7 +69,7 @@ private noncomputable def glConjEquiv (X : GL (Fin D) ℂ) :
 If two periodic tensors (same bond dimension) are gauge-phase equivalent,
 they must have the same period.
 
-arXiv:0909.5347, via eigenvalue uniqueness (Wolf Thm 6.3). -/
+arXiv:0909.5347, via eigenvalue uniqueness (Wolf Theorem 6.3). -/
 private theorem period_eq_of_gaugePhaseEquiv_of_isPeriodic
     [NeZero D] {A B : MPSTensor d D}
     {m_a m_b : ℕ} (hA : IsPeriodic m_a A) (hB : IsPeriodic m_b B)

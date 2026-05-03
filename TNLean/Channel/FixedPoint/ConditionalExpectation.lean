@@ -50,7 +50,7 @@ Wedderburn block decomposition from Wolf Theorem 6.14 (issue #27).
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Thm 6.15, §6.4]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Theorem 6.15, Section 6.4]
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder BigOperators TNMatrixCFC

@@ -18,7 +18,7 @@ produce the cyclic decomposition promised by Wolf Theorem 6.6.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Thm. 6.6]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Theorem 6.6]
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder BigOperators
