@@ -52,18 +52,10 @@ jobs:
           python-version: '3.12'
 
       - name: Install TeX and graphviz
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-            dvisvgm \
-            graphviz \
-            latexmk \
-            libgraphviz-dev \
-            texlive-fonts-recommended \
-            texlive-latex-extra \
-            texlive-pictures \
-            texlive-science \
-            texlive-xetex
+        uses: ./.github/actions/setup-blueprint-system-deps
+        with:
+          cache-suffix: docgen-v1
+          extra-packages: latexmk texlive-science texlive-xetex
 
       - name: Install leanblueprint
         run: |
