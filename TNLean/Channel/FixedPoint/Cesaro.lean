@@ -9,7 +9,7 @@ import TNLean.Channel.Basic
 
 This file proves that every quantum channel (CPTP map) on `M_D(ℂ)` has a nonzero
 PSD fixed point, using the Cesàro mean / Markov-Kakutani argument. It also states
-the decomposition of Hermitian fixed points (Wolf Prop 6.8).
+the decomposition of Hermitian fixed points (Wolf Proposition 6.8).
 
 Note: the proofs only use positivity + trace-preservation (not full CP), but the
 statements are for channels (`IsChannel`) which carry a CP hypothesis.
@@ -228,7 +228,7 @@ theorem cesaroMean_telescope (X : Matrix (Fin D) (Fin D) ℂ) (N : ℕ) (_hN : 0
 
 /-- **Existence of PSD fixed point for channels** (Cesàro mean argument).
 This is an alternative proof of **Wolf Theorem 6.11** (Stationary states)
-that avoids Brouwer's fixed point theorem (Wolf Thm 6.10) entirely.
+that avoids Brouwer's fixed point theorem (Wolf Theorem 6.10) entirely.
 
 Every trace-preserving positive map on `M_D(ℂ)` with `D > 0` has a
 nonzero PSD fixed point.

@@ -48,8 +48,8 @@ The proof is split across four supporting sub-modules for readability:
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, §6.2,
-  Thm 6.2][Wolf2012QChannels]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 6.2,
+  Theorem 6.2][Wolf2012QChannels]
 
 ## Tags
 

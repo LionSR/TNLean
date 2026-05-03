@@ -8,7 +8,7 @@ import Mathlib.Algebra.BigOperators.Fin
 import Mathlib.LinearAlgebra.Matrix.Kronecker
 
 /-!
-# Ordered completely positive maps (Wolf Ch. 2, Thm 2.3)
+# Ordered completely positive maps (Wolf Chapter 2, Theorem 2.3)
 
 This file relates two CP maps `T₁ ≤ T₂` through canonical Stinespring
 realizations. The central statement is Wolf's Theorem 2.3: if `T₂ - T₁` is CP,
@@ -26,20 +26,20 @@ co-isometry `C : ℂ^{r₁+s} → ℂ^{r₁}` (taking the first `r₁` coordinat
 * `Matrix.blockTopRows r s` — the rectangular `r × (r+s)` matrix whose rows
   are the first `r` rows of the identity; equivalently, the block `[𝟙_r | 0]`.
 
-## Main results (Wolf Thm 2.3)
+## Main results (Wolf Theorem 2.3)
 
 * `Matrix.blockTopRows_mul_conjTranspose` — `C * Cᴴ = 1_r` (co-isometry).
 * `Matrix.blockTopRows_conjTranspose_mul_le_one` — `Cᴴ * C ≤ 1` (contraction).
 * `stinespringV_eq_kronecker_blockTopRows_mul_append` — entrywise intertwining:
   `V₁ = (𝟙_D ⊗ C) * V₂` where `V₂ = stinespringV (Fin.append K L)`.
 * `CPDominates.exists_stinespring_contraction` — existential form of Wolf
-  Thm 2.3: if `T₁ ≤ T₂` (in the CP order), there exist Stinespring
+  Theorem 2.3: if `T₁ ≤ T₂` (in the CP order), there exist Stinespring
   realizations for both and a contraction on the dilation space that
   intertwines them.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Thm 2.3][Wolf2012QChannels]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Theorem 2.3][Wolf2012QChannels]
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder
@@ -230,7 +230,7 @@ theorem Matrix.blockTopRows_conjTranspose_mul_le_one (r s : ℕ) :
 
 /-! ### Intertwining identity for the canonical Stinespring matrices -/
 
-/-- **Entrywise intertwining (Wolf Thm 2.3 canonical form)**: the block-top
+/-- **Entrywise intertwining (Wolf Theorem 2.3 canonical form)**: the block-top
 co-isometry `C = blockTopRows r s` relates the Stinespring matrix of a Kraus
 family `K : Fin r → M` with that of its append with another family
 `L : Fin s → M`:

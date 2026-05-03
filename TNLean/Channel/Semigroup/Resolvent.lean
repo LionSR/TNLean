@@ -34,7 +34,7 @@ def eulerResolventStep (L : MatrixCLM (Fin D)) (lam : ℂ) : MatrixCLM (Fin D) :
 def eulerResolventApprox (L : MatrixCLM (Fin D)) (t : ℝ) (n : ℕ) : MatrixCLM (Fin D) :=
   (eulerResolventStep L ((n : ℂ) / (t : ℂ))) ^ n
 
-/-- Axiomatized Euler limit statement (Wolf Eq. (7.9)) in the present finite-dimensional setting. -/
+/-- Axiomatized Euler limit statement (Wolf Equation (7.9)) in the present finite-dimensional setting. -/
 def HasEulerResolventLimit (L : MatrixCLM (Fin D)) (t : ℝ) : Prop :=
   Filter.Tendsto (fun n : ℕ => eulerResolventApprox L t n) Filter.atTop
     (nhds (expSemigroupCLM L t))

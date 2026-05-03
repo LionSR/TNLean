@@ -35,7 +35,7 @@ Hilbert--Schmidt norm computations; and an AM--GM argument upgrades
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, §6.1.1][Wolf2012QChannels]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 6.1.1][Wolf2012QChannels]
 
 ## Tags
 
@@ -63,7 +63,7 @@ section WolfStatements
 
 variable {T : MatrixEnd d}
 
-/-! ### Auxiliary lemmas for the forward direction of Wolf Thm 6.1(2) -/
+/-! ### Auxiliary lemmas for the forward direction of Wolf Theorem 6.1(2) -/
 
 namespace ChannelDeterminant
 namespace Internal
@@ -264,7 +264,7 @@ the Hilbert-Schmidt norm satisfies `‖Φ‖²_HS ≥ d²`. This follows from AM
 on the singular values: their product is `|det Φ| = 1`, so their squared sum
 (= the HS norm) is at least `d²`.
 
-This is the analytic ingredient for Wolf Thm 6.1(2). -/
+This is the analytic ingredient for Wolf Theorem 6.1(2). -/
 lemma channelDet_norm_one_hs_norm_ge [NeZero d]
     (Φ : MatrixEnd d) (hdet_Φ : ‖channelDet Φ‖ = 1) :
     (d : ℝ) ^ 2 ≤ ∑ ij : Fin d × Fin d,

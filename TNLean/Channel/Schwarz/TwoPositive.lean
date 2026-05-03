@@ -56,7 +56,7 @@ so the theorem here applies strictly beyond the CP case.
   operator algebras*, Ann. Math. 56 (1952)]
 * [Choi, *A Schwarz inequality for positive linear maps on C*-algebras*,
   Illinois J. Math. 18 (1974)]
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, §5.1]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 5.1]
 * [Størmer, *Positive linear maps of operator algebras*, Springer (2013)]
 -/
 

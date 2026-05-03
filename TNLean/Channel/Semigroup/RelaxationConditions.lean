@@ -49,7 +49,7 @@ def HasLindbladSpanTrivialCommutant (F : LindbladForm D) : Prop :=
 
 /-- The minimal number of Lindblad operators across all GKSL representations
 of `L`.  This equals the rank of the Kossakowski matrix in the
-orthonormal-basis representation (Wolf §7.1). -/
+orthonormal-basis representation (Wolf Section 7.1). -/
 def kossakowskiRank (L : Mat →ₗ[ℂ] Mat) : ℕ :=
   sInf {n : ℕ | ∃ F : LindbladForm D, F.toLinearMap = L ∧ F.r = n}
 
@@ -839,7 +839,7 @@ private theorem exists_traceless_blockUT_lindblad_form
       exact hc j
 
 /-- Condition (3): Kossakowski rank `> D * D` forbids block-upper-triangular
-Lindblad decompositions (Wolf Cor. 7.2(3)).
+Lindblad decompositions (Wolf Corollary 7.2(3)).
 
 The hypothesis is stated using addition (`rank + D ≥ D ^ 2 + 1`) to avoid
 natural-number subtraction issues; this is equivalent to `rank > D * D`. -/

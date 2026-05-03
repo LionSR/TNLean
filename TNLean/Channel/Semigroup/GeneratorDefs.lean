@@ -8,7 +8,7 @@ import TNLean.Channel.Semigroup.Basic
 # Generator Definitions for Quantum Dynamical Semigroups
 
 This file defines the core structures and predicates for generators of quantum
-dynamical semigroups, following Wolf §7.1.
+dynamical semigroups, following Wolf Section 7.1.
 
 ## Main definitions
 
@@ -27,7 +27,7 @@ dynamical semigroups, following Wolf §7.1.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, §7.1.2, Eq. 7.14, 7.20]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 7.1.2, Equation 7.14, 7.20]
 -/
 
 open scoped Matrix ComplexOrder BigOperators NNReal MatrixOrder TNOperatorSpace
@@ -53,12 +53,12 @@ abbrev Matrix.anticommutator (A B : Matrix (Fin D) (Fin D) ℂ) :
 
 end CommutatorHelpers
 
-/-! ## The (φ, κ) generator decomposition (Wolf Eq. 7.14) -/
+/-! ## The (φ, κ) generator decomposition (Wolf Equation 7.14) -/
 
 /-- A **generator decomposition** represents a linear map as
 `L(ρ) = φ(ρ) - κρ - ρκ†` where `φ` is completely positive and `κ ∈ M_d(ℂ)`.
 
-This is the canonical form for generators of CP semigroups (Wolf Eq. 7.14). -/
+This is the canonical form for generators of CP semigroups (Wolf Equation 7.14). -/
 structure GeneratorDecomp (D : ℕ) where
   /-- The completely positive part. -/
   φ : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ
@@ -90,7 +90,7 @@ theorem GeneratorDecomp.toLinearMap_eq_sub_mulLeft_mulRight (G : GeneratorDecomp
   ext ρ
   simp [GeneratorDecomp.toLinearMap_apply]
 
-/-! ## Conditional complete positivity (Wolf Prop 7.2) -/
+/-! ## Conditional complete positivity (Wolf Proposition 7.2) -/
 
 /-- A linear map `L : M_d(ℂ) → M_d(ℂ)` is **conditionally completely positive**
 (CCP) if it can be written as `L(ρ) = φ(ρ) - κρ - ρκ†` for some CP map `φ`
@@ -112,11 +112,11 @@ def IsTraceAnnihilating
     (L : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) : Prop :=
   ∀ ρ : Matrix (Fin D) (Fin D) ℂ, trace (L ρ) = 0
 
-/-! ## The TP constraint for generators: `φ*(𝟙) = κ + κ†` (Wolf Eq. 7.20) -/
+/-! ## The TP constraint for generators: `φ*(𝟙) = κ + κ†` (Wolf Equation 7.20) -/
 
 /-- The trace-preservation constraint for a generator decomposition:
 `φ*(𝟙) = κ + κ†`. This is the infinitesimal trace-preservation condition
-from Wolf Eq. (7.20). -/
+from Wolf Equation (7.20). -/
 def GeneratorDecomp.isTraceConstraint (G : GeneratorDecomp D) : Prop :=
   ∃ (r : ℕ) (K : Fin r → Matrix (Fin D) (Fin D) ℂ),
     (∀ ρ, G.φ ρ = ∑ i, K i * ρ * (K i)ᴴ) ∧

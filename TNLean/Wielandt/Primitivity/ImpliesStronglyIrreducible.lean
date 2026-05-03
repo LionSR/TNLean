@@ -25,7 +25,7 @@ For the public Proposition 3 formulation, prefer
 `TNLean.Wielandt.Primitivity.Equivalence`; this file is retained for specialized
 access to the intermediate lemmas used in the (a)→(c) proof.
 
-## Proof strategy (following Wolf Ch6 / arXiv:0909.5347)
+## Proof strategy (following Wolf Chapter 6 / arXiv:0909.5347)
 
 1. **Sandwich identity** (`sandwich_vecMulVec`): `M * |φ⟩⟨φ| * M† = |Mφ⟩⟨Mφ|`.
 2. **Transfer map on rank-one** (`transferMap_pow_rankOne_eq_sum`): Expands
@@ -38,7 +38,7 @@ access to the intermediate lemmas used in the (a)→(c) proof.
 ## References
 
 - [Sanz, Pérez-García, Wolf, Cirac, arXiv:0909.5347], Proposition 3
-- Wolf, *Quantum Channels & Operations: Guided Tour*, §6.4
+- Wolf, *Quantum Channels & Operations: Guided Tour*, Section 6.4
 -/
 
 open scoped Matrix ComplexOrder BigOperators

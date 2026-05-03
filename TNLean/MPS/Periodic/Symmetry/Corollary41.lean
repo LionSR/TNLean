@@ -8,7 +8,7 @@ import TNLean.MPS.Periodic.Symmetry.EqualCaseFTHyp
 # Corollary 4.1 for periodic MPS
 
 This module contains the physical-symmetry-to-virtual-`Z`-gauge statements from
-§4.2 of arXiv:1708.00029.
+Section 4.2 of arXiv:1708.00029.
 -/
 
 open scoped Matrix BigOperators
@@ -27,7 +27,7 @@ lemma twistedTensor_eq_rotatePhysical
     (A : MPSTensor d D) (U : G →* Matrix (Fin d) (Fin d) ℂ) (g : G) :
     twistedTensor A U g = rotatePhysical (U g) A := rfl
 
-/-- **Corollary 4.1 (arXiv:1708.00029, §4.2): physical symmetry → virtual `Z`-gauge.**
+/-- **Corollary 4.1 (arXiv:1708.00029, Section 4.2): physical symmetry → virtual `Z`-gauge.**
 
 Let `A` be in irreducible form II and let `U : G →* Mat_d ℂ` be a representation of a
 group `G` on the physical leg, acting unitarily. If `A` is on-site symmetric under `U`

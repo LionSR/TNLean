@@ -16,7 +16,7 @@ import Mathlib.Analysis.SpecialFunctions.Integrals.Basic
 import Mathlib.Analysis.Normed.Group.InfiniteSum
 
 /-!
-# Perturbation theory for dynamical semigroups — Wolf §7.1
+# Perturbation theory for dynamical semigroups — Wolf Section 7.1
 
 ## Main results
 
@@ -24,12 +24,12 @@ import Mathlib.Analysis.Normed.Group.InfiniteSum
 * `perturbation_bound` — **Corollary 7.1** (perturbation of generators)
 * `dysonTerm_continuous` — continuity of each Dyson iterate in the time parameter
 * `norm_dysonRemainder_le` — factorial norm bound on the Dyson partial-sum remainder
-* `dyson_series_eq` — **Eq. 7.13** (Dyson–Phillips series = perturbed semigroup)
+* `dyson_series_eq` — **Equation 7.13** (Dyson–Phillips series = perturbed semigroup)
 * `tsum_dysonTerm_eq` — tsum form of the Dyson series identity
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, §7.1][Wolf2012QChannels]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 7.1][Wolf2012QChannels]
 -/
 
 open scoped Matrix ComplexOrder BigOperators NNReal TNOperatorSpace
@@ -262,7 +262,7 @@ lemma summable_dysonTerm_of_factorial_bound
   simpa [mul_div_assoc, mul_comm, mul_left_comm, mul_assoc] using
     (Real.summable_pow_div_factorial (t * ‖L' - L‖ * M)).mul_left M
 
-/-- Factorial norm bound for Dyson–Phillips iterates (Wolf Eq. 7.13 estimate).
+/-- Factorial norm bound for Dyson–Phillips iterates (Wolf Equation 7.13 estimate).
 For `s ∈ [0, t]` and `M = sup_{u ∈ [0,t]} ‖exp(uL)‖`:
 `‖T̃ⁿ(s)‖ ≤ M · (s · ‖Δ‖ · M)ⁿ / n!`. -/
 theorem norm_dysonTerm_le (L L' : MatrixCLM (Fin D)) {t : ℝ} (ht : 0 ≤ t) (n : ℕ)
@@ -427,7 +427,7 @@ private lemma integrableOn_remainder_integrand (L L' : MatrixCLM (Fin D)) (N : �
   · exact ((expSemigroupCLM_continuous L').sub
       (continuous_finset_sum _ fun n _ => dysonTerm_continuous L L' n)).continuousOn
 
-/-! ## Dyson series identity (Wolf Eq. 7.13) -/
+/-! ## Dyson series identity (Wolf Equation 7.13) -/
 
 /-- Integral representation of the Dyson series remainder:
 `T'_t − ∑_{n<N+1} T̃ⁿ(t) = ∫₀ᵗ T_{t−s} Δ (T'_s − ∑_{n<N} T̃ⁿ(s)) ds`. -/
@@ -533,7 +533,7 @@ theorem norm_dysonRemainder_le (L L' : MatrixCLM (Fin D)) {t : ℝ} (ht : 0 ≤ 
           field_simp
           ring
 
-/-- **Dyson series identity** (Wolf Eq. 7.13):
+/-- **Dyson series identity** (Wolf Equation 7.13):
 the Dyson–Phillips series `∑ₙ T̃⁽ⁿ⁾(t)` equals the perturbed semigroup `T'_t`.
 This completes the Dyson–Phillips expansion for matrix semigroups. -/
 theorem dyson_series_eq (L L' : MatrixCLM (Fin D)) {t : ℝ} (ht : 0 ≤ t) :

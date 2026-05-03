@@ -32,12 +32,12 @@ period `P` the weights become `(μ₀ k)^P`, and two distinct original weights `
 This file implements strategy **(b)** only in the restricted case where equal-modulus
 blocks on one side are already known to collapse to a single basis tensor. It is
 therefore a useful **special-case norm-class collapse** module, not the full
-basis-of-normal-tensors construction from [CPGSV17, Proposition A.6 /
+basis-of-normal-tensors construction from [Cirac--Perez-Garcia--Schuch--Verstraete 2017, Proposition A.6 /
 `prop:char-BNT`]. The general one-sided BNT construction remains open.
 
 ## Main results
 
-### §1 Sorting step: distinct norms → strictly decreasing permutation
+### Section 1 Sorting step: distinct norms → strictly decreasing permutation
 
 * `exists_sorted_reindexing` — If the norms `‖μ k‖` are pairwise distinct, there exists
   a bijection `e : Fin r ≃ Fin r` with `StrictAnti (fun k => ‖μ (e k)‖)`.  This is a
@@ -47,7 +47,7 @@ basis-of-normal-tensors construction from [CPGSV17, Proposition A.6 /
   `sameMPV₂_toTensorFromBlocks_perm` to produce a permuted block family that
   (i) has `SameMPV₂` to the original family and (ii) has strictly decreasing norms.
 
-### §2 NCF construction from unsorted distinct-norm data
+### Section 2 NCF construction from unsorted distinct-norm data
 
 * `exists_sortedNCF_of_distinct_norms` — If blocks satisfy all `IsNormalCanonicalForm`
   conditions except norm ordering (norms distinct but not yet decreasing), there exists
@@ -55,13 +55,13 @@ basis-of-normal-tensors construction from [CPGSV17, Proposition A.6 /
   and the assembled tensor is `SameMPV₂`-equivalent to the original.  This is the key
   bridging step from the reduction output to the canonical form.
 
-### §3 Trivial sector decomposition for the sorted distinct-norm case
+### Section 3 Trivial sector decomposition for the sorted distinct-norm case
 
 * `exists_trivialSectorDecomp_of_sorted_distinct_norms` — Forms from a sorted
   distinct-norm block family a `SectorDecomposition` with all multiplicities
   `copies j = 1`.
 
-### §4 BNT grouping for possibly-equal norms (proved via norm-class enumeration)
+### Section 4 BNT grouping for possibly-equal norms (proved via norm-class enumeration)
 
 * `exists_bnt_grouping` — For blocks with possibly equal norms, given that equal-norm
   blocks have the same MPV function (a consequence of BNT uniqueness), there exists a
@@ -74,15 +74,15 @@ basis-of-normal-tensors construction from [CPGSV17, Proposition A.6 /
 
 ## References
 
-- [CPGSV17, Definition 2.6, Proposition 2.7]: BNT minimality condition and grouping.
-- [CPGSV21, §IV.A]: Existence of canonical form.
+- [Cirac--Perez-Garcia--Schuch--Verstraete 2017, Definition 2.6, Proposition 2.7]: BNT minimality condition and grouping.
+- [Cirac--Perez-Garcia--Schuch--Verstraete 2021, Section IV.A]: Existence of canonical form.
 -/
 
 namespace MPSTensor
 
 variable {d : ℕ}
 
-/-! ### §1. Sorting permutation -/
+/-! ### Section 1. Sorting permutation -/
 
 /-- **Sorting permutation for a distinct-norm weight family.**
 
@@ -142,7 +142,7 @@ theorem exists_sorted_reindexing
     _ < vals i               := hvals_strict hij
     _ = ‖μ (e i)‖             := hi.symm
 
-/-! ### §2. MPV-preserving sorted block decomposition -/
+/-! ### Section 2. MPV-preserving sorted block decomposition -/
 
 /-- **Sorted block decomposition with preserved MPV.**
 
@@ -170,7 +170,7 @@ theorem exists_sorted_blockDecomp_of_distinct_norms
   -- We need the symmetric direction.
   exact (sameMPV₂_toTensorFromBlocks_perm μ blocks e N σ).symm
 
-/-! ### §3. Normal canonical form from unsorted distinct-norm block data -/
+/-! ### Section 3. Normal canonical form from unsorted distinct-norm block data -/
 
 /-- **Lift unsorted distinct-norm block data to `IsNormalCanonicalForm`.**
 
@@ -222,7 +222,7 @@ theorem exists_sortedNCF_of_distinct_norms
     dim_pos           := fun k => hDim (e k)
   }⟩
 
-/-! ### §4. Trivial sector decomposition -/
+/-! ### Section 4. Trivial sector decomposition -/
 
 /-- **Granular `SectorDecomposition` with one basis tensor per input block.**
 
@@ -294,7 +294,7 @@ theorem exists_trivialSectorDecomp_of_sorted_distinct_norms
   intro i j hij
   simpa [trivialSectorDecomp] using hAnti hij
 
-/-! ### §5. BNT grouping for blocks with possibly equal norms -/
+/-! ### Section 5. BNT grouping for blocks with possibly equal norms -/
 
 /-- Shared norm-class enumeration used by the BNT grouping constructions. -/
 structure NormClassGroupingData {r : ℕ} (μ : Fin r → ℂ) where
@@ -406,7 +406,7 @@ occur at the same modulus, they should survive as different basis elements rathe
 than being forced into one norm class.
 
 **Why `hMPVEq` arises in the full theory**:
-In the BNT theory (CPGSV17, §2.3), two blocks with the same weight norm are
+In the BNT theory (Cirac--Perez-Garcia--Schuch--Verstraete 2017, Section 2.3), two blocks with the same weight norm are
 gauge-phase equivalent, hence have the same MPV.  In the existence reduction, this
 property would be derived after applying the BNT uniqueness theorem.  The derivation
 of `hMPVEq` from blocked `SameMPV₂` data is the subject of `EqualNormBridge.lean`

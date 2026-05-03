@@ -589,8 +589,8 @@ both returned block dimensions are *strictly smaller* than `D`. This is the key
 ingredient for proving termination of the canonical-form recursion.
 
 References:
-* Perez-Garcia et al., quant-ph/0608197, Thm. 3 (lines 769–803): recursion on bond dimension.
-* Cirac et al., arXiv:1606.00608, §2.3: the same step in the "canonical forms" reduction.
+* Perez-Garcia et al., quant-ph/0608197, Theorem 3 (lines 769–803): recursion on bond dimension.
+* Cirac et al., arXiv:1606.00608, Section 2.3: the same step in the "canonical forms" reduction.
 -/
 
 section StrictDimDecrease

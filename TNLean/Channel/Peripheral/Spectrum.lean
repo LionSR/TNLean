@@ -36,8 +36,8 @@ the eigenvalues on the unit circle.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, §6.2–6.3, Thm 6.6][Wolf2012QChannels]
-* [arXiv:2011.12127, §IV — peripheral spectrum structure]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 6.2–6.3, Theorem 6.6][Wolf2012QChannels]
+* [arXiv:2011.12127, Section IV — peripheral spectrum structure]
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder BigOperators NNReal ENNReal
@@ -345,5 +345,5 @@ The peripheral spectrum framework connects to MPS theory via:
 4. For irreducible CPTP maps, multiplicative domain theory
    (`Channel/MultiplicativeDomain.lean`) shows peripheral eigenvectors are in the
    multiplicative domain ⟹ powers of eigenvalues remain eigenvalues ⟹
-   `peripheral_isRootOfUnity_of_pow_eigenvalue` gives roots of unity (Wolf Thm 6.6).
+   `peripheral_isRootOfUnity_of_pow_eigenvalue` gives roots of unity (Wolf Theorem 6.6).
 -/

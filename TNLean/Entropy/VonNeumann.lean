@@ -37,7 +37,7 @@ two spellings are interchangeable in tactics; in particular no
 ## References
 
 * [M. Wolf, *Quantum Channels & Operations: Guided Tour*][Wolf2012QChannels]
-* arXiv:1606.00608 §4.4
+* arXiv:1606.00608 Section 4.4
 -/
 
 namespace Entropy

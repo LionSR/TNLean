@@ -15,7 +15,7 @@ open scoped Matrix BigOperators ComplexOrder MatrixOrder
 open Filter
 
 /-!
-# Canonical form existence reduction (arXiv:1606.00608, §2.3 + Appendix A)
+# Canonical form existence reduction (arXiv:1606.00608, Section 2.3 + Appendix A)
 
 This file is an **intermediate construction for the early arbitrary-input part** of the
 canonical-form construction for MPS tensors from Cirac–Pérez-García–Schuch–Verstraete,
@@ -23,7 +23,7 @@ arXiv:1606.00608.
 
 We currently have the following components:
 
-* §2.3: iterated invariant-projection splitting → irreducible block decomposition.
+* Section 2.3: iterated invariant-projection splitting → irreducible block decomposition.
 * Appendix A (PF / TP gauge): irreducible + nonzero Kraus operator → Perron--Frobenius
   eigenvector → TP-normalized representative.
 * Appendix A (CFII part): inside that TP gauge, unitary conjugation → diagonal PD fixed point.
@@ -55,7 +55,7 @@ namespace MPSTensor
 variable {d D : ℕ}
 
 /-!
-## (1) Irreducible block decomposition (1606.00608 §2.3)
+## (1) Irreducible block decomposition (1606.00608 Section 2.3)
 
 We use `MPSTensor.exists_irreducible_blockDecomp` from `Reduction.lean` directly below.
 -/
@@ -294,7 +294,7 @@ Remaining gap for a full end-to-end canonical-form existence theorem:
   the later normal-canonical-form packaging lemmas and the downstream `IsCanonicalForm` builders.
 -/
 
-/-- **Unconditional TP-gauge continuation for the 1606 reduction (1606.00608 §2.3 + App. A).**
+/-- **Unconditional TP-gauge continuation for the 1606 reduction (1606.00608 Section 2.3 + App. A).**
 
 From an arbitrary tensor `A` we produce an irreducible block decomposition. Moreover, for each
 resulting block, if one separately knows that the block has some nonzero Kraus operator, then the
@@ -340,7 +340,7 @@ theorem exists_irreducible_blockDecomp_with_tpGauge
     (exists_tp_data_of_irreducible (d := d) (D := dim k)
       (A := blocks k) (hIrr := hIrr k) (hA := hNonzero))
 
-/-- **Legacy CFII continuation for the 1606 reduction (1606.00608 §2.3 + App. A).**
+/-- **Legacy CFII continuation for the 1606 reduction (1606.00608 Section 2.3 + App. A).**
 
 From an arbitrary tensor `A` we produce an irreducible block decomposition. Moreover, for each
 block, assuming one has already supplied (i) a TP representative and (ii) positive bond dimension,
@@ -380,7 +380,7 @@ theorem exists_irreducible_blockDecomp_with_CFII
       (A := blocks k) (hTP := hTPk) (hIrr := hIrr k) (hD := hDk))
 
 /-!
-## Zero-block separation (1606.00608 §2.3: partition into zero tail + nonzero blocks)
+## Zero-block separation (1606.00608 Section 2.3: partition into zero tail + nonzero blocks)
 
 The irreducible block decomposition may produce all-zero blocks. Because `SameMPV₂`
 at `N = 0` includes the identity `trace(I_D) = D`, we cannot silently drop these.
@@ -421,7 +421,7 @@ private theorem mpv_eq_dim_at_zero (A : MPSTensor d' D') (σ : Fin 0 → Fin d')
     mpv A σ = (D' : ℂ) := by
   simp [mpv, coeff, Matrix.trace_one]
 
-/-- **Zero-block separation (1606.00608 §2.3).**
+/-- **Zero-block separation (1606.00608 Section 2.3).**
 
 Every MPS tensor `A : MPSTensor d D` admits an irreducible block decomposition that is
 faithfully partitioned into:

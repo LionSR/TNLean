@@ -53,7 +53,7 @@ not as the final primitive-to-normal theorem.
 ## References
 
 - [Sanz, Pérez-García, Wolf, Cirac, *A quantum version of Wielandt's
-  inequality*, arXiv:0909.5347](https://arxiv.org/abs/0909.5347), Prop. 3
+  inequality*, arXiv:0909.5347](https://arxiv.org/abs/0909.5347), Proposition 3
 - [Cirac, Pérez-García, Schuch, Verstraete, *Matrix product density operators*,
   arXiv:1606.00608](https://arxiv.org/abs/1606.00608), Appendix A
 -/

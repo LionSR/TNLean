@@ -7,7 +7,7 @@ import TNLean.Channel.KrausRepresentation
 import Mathlib.LinearAlgebra.Matrix.Kronecker
 
 /-!
-# Stinespring representation theorem (Wolf Ch. 2, Thm 2.2)
+# Stinespring representation theorem (Wolf Chapter 2, Theorem 2.2)
 
 This file states and proves the Stinespring dilation theorem:
 every completely positive map can be written as `T*(A) = V†(A ⊗ 𝟙)V`
@@ -20,7 +20,7 @@ for an explicit isometry `V` constructed from the Kraus operators.
 * `stinespringV_apply`: entrywise evaluation lemma for `stinespringV`
 * `stinespringPi`: the concrete finite-dimensional representation `π(A) = A ⊗ 𝟙_r`
 
-## Main results (Wolf Thm 2.2)
+## Main results (Wolf Theorem 2.2)
 
 * `stinespringV_conjTranspose_mul` — `V†V = ∑ⱼ Kⱼ†Kⱼ`
 * `stinespringV_isometry_iff_kraus_normalized` — `V†V = 𝟙` ↔ `∑ⱼ Kⱼ†Kⱼ = 𝟙`
@@ -31,7 +31,7 @@ for an explicit isometry `V` constructed from the Kraus operators.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Thm 2.2][Wolf2012QChannels]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Theorem 2.2][Wolf2012QChannels]
 -/
 
 open scoped Matrix
@@ -66,7 +66,7 @@ theorem stinespringV_conjTranspose_mul {r : ℕ}
     Fintype.sum_prod_type, Matrix.sum_apply]
   exact Finset.sum_comm
 
-/-- **Stinespring isometry condition** (Wolf Thm 2.2):
+/-- **Stinespring isometry condition** (Wolf Theorem 2.2):
 `V†V = 𝟙` if and only if `∑ⱼ Kⱼ†Kⱼ = 𝟙`, i.e., the Kraus operators are normalized
 (equivalently, the map is trace-preserving). -/
 theorem stinespringV_isometry_iff_kraus_normalized {r : ℕ}
@@ -77,7 +77,7 @@ theorem stinespringV_isometry_iff_kraus_normalized {r : ℕ}
 
 /-! ### Stinespring representation of the dual and Schrödinger maps -/
 
-/-- **Stinespring representation, Heisenberg picture** (Wolf Thm 2.2):
+/-- **Stinespring representation, Heisenberg picture** (Wolf Theorem 2.2):
 
   `T*(A) = V† (A ⊗ 𝟙_r) V`
 
@@ -99,7 +99,7 @@ theorem stinespring_dual_representation {r : ℕ}
     mul_ite, mul_one, mul_zero, Finset.sum_ite_eq', Finset.mem_univ, ite_true]
   rw [Finset.sum_comm]
 
-/-- **Stinespring representation, Schrödinger picture** (Wolf Thm 2.2):
+/-- **Stinespring representation, Schrödinger picture** (Wolf Theorem 2.2):
 
   `T(ρ)_{ij} = ∑_k (V ρ V†)_{(i,k),(j,k)} = tr_r(V ρ V†)`
 
@@ -152,7 +152,7 @@ theorem stinespringPi_conjTranspose {r : ℕ}
   convert Matrix.conjTranspose_kronecker (x := A) (y := (1 : Matrix (Fin r) (Fin r) ℂ)) using 1
   simp
 
-/-- **Stinespring dilation (existential form, Wolf Thm 2.2)**:
+/-- **Stinespring dilation (existential form, Wolf Theorem 2.2)**:
 every CP map `E` admits an ancilla dimension `r`, a Kraus family `K`,
 and the concrete `*`-representation `π(A) = A ⊗ 𝟙_r` such that
 `E(A) = V† π(A) V` with `V = stinespringV K`.

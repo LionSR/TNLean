@@ -11,7 +11,7 @@ import Mathlib.LinearAlgebra.Matrix.Kronecker
 # MPO, MPDO, and LPDO — basic definitions
 
 This file introduces the core tensor types and predicates for mixed-state
-tensor networks, following arXiv:1606.00608 §4 (Cirac–Pérez-García–Schuch–
+tensor networks, following arXiv:1606.00608 Section 4 (Cirac–Pérez-García–Schuch–
 Verstraete):
 
 * **MPO** (Matrix Product Operator): a 4-index tensor `MPOTensor d D` with
@@ -41,7 +41,7 @@ Verstraete):
 
 ## References
 
-* [CPGSV17] arXiv:1606.00608, §4.1–4.3
+* [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608, Section 4.1–4.3
 * [VGRC04] Verstraete, Garcia-Ripoll, Cirac, PRL 93, 207204 (2004)
 * [ZV04] Zwolak, Vidal, PRL 93, 207205 (2004)
 -/
@@ -161,7 +161,7 @@ theorem transferMap_pos (M : MPOTensor d D)
 it generates positive semidefinite operators for all system sizes:
 `ρ^{(N)}(M) ≥ 0` for all `N`.
 
-See arXiv:1606.00608, §4. -/
+See arXiv:1606.00608, Section 4. -/
 def IsMPDO (M : MPOTensor d D) : Prop :=
   ∀ N : ℕ, (mpo M N).PosSemidef
 
@@ -178,7 +178,7 @@ where `⊗ₖ` is the Kronecker product and `conj` denotes entrywise complex
 conjugation, and where the resulting matrix on `Fin D' × Fin D'` is
 reindexed back to `Fin D` via the chosen equivalence `e` (implemented by
 `.submatrix ↑e ↑e`). This is the local purification condition following
-arXiv:1606.00608 §4.3 (Cirac–Pérez-García–Schuch–Verstraete), where the
+arXiv:1606.00608 Section 4.3 (Cirac–Pérez-García–Schuch–Verstraete), where the
 auxiliary purification space factors as a tensor product.
 
 Not every MPDO is an LPDO (De las Cuevas et al. 2016). -/
@@ -249,7 +249,7 @@ decomposes as `ρ^{(N)} = ∑_κ |ψ_κ⟩⟨ψ_κ|` where each `ψ_κ` is an MP
 vector built from the purifying tensor, giving a manifestly PSD sum of
 rank-1 positive semidefinite matrices.
 
-See arXiv:1606.00608, §4.3. -/
+See arXiv:1606.00608, Section 4.3. -/
 theorem IsLPDO.isMPDO {M : MPOTensor d D} (h : IsLPDO M) : IsMPDO M := by
   obtain ⟨dK, D', A, e, hM⟩ := h
   intro N

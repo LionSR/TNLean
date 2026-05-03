@@ -22,7 +22,7 @@ iff statements matching Wolf Theorem 2.18.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Thm 2.18][Wolf2012QChannels]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Theorem 2.18][Wolf2012QChannels]
 -/
 
 open scoped Matrix
@@ -30,7 +30,7 @@ open Matrix Finset BigOperators
 
 variable {D : ℕ}
 
-/-- **Wolf Thm. 2.18 (isometric form)**: two finite Kraus families define the
+/-- **Wolf Theorem 2.18 (isometric form)**: two finite Kraus families define the
 same completely positive map if and only if, after padding the smaller family
 with zeros, they are related by an isometric mixing matrix. -/
 theorem kraus_isometry_freedom_iff
@@ -47,7 +47,7 @@ theorem kraus_isometry_freedom_iff
   rintro ⟨V, hV, hBA⟩
   exact kraus_same_map_of_isometry_combination (K := B) (K' := A) (W := V) hV hBA
 
-/-- **Wolf Thm. 2.18 (unitary form)**: if two Kraus families have the same
+/-- **Wolf Theorem 2.18 (unitary form)**: if two Kraus families have the same
 finite index type, then they define the same completely positive map if and only
 if they are related by a unitary mixing matrix. -/
 theorem kraus_unitary_freedom_iff

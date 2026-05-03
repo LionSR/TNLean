@@ -47,7 +47,7 @@ once the remaining local-to-global implication has been formalized.
 
 ## References
 
-* [CPGSV17] arXiv:1606.00608, Appendix C.2, Proposition C.5 and Theorem 4.9
+* [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608, Appendix C.2, Proposition C.5 and Theorem 4.9
 -/
 
 open scoped Matrix ComplexOrder

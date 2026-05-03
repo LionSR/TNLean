@@ -12,9 +12,9 @@ import TNLean.MPS.SharedInfra.Scaling
 open scoped Matrix BigOperators
 
 /-!
-# Periodic Fundamental Theorem of MPS (arXiv:1708.00029, §3)
+# Periodic Fundamental Theorem of MPS (arXiv:1708.00029, Section 3)
 
-This file formalizes the periodic fundamental theorem of arXiv:1708.00029 §3 and the
+This file formalizes the periodic fundamental theorem of arXiv:1708.00029 Section 3 and the
 Z-gauge theory used in its equal-case strengthening:
 
 * **Theorem 3.4** (`fundamentalTheorem_periodic_proportional`): If two non-repeating
@@ -53,7 +53,7 @@ The Z-gauge construction (Theorem 3.8 steps 5–7) is fully proved.
 ## Key references
 
 * arXiv:1708.00029 (De las Cuevas–Schuch–Pérez-García–Cirac, 2017)
-* `blocks_match_of_sameMPV₂_CFBNT` in `Full.lean` — structural template for Thm 3.4
+* `blocks_match_of_sameMPV₂_CFBNT` in `Full.lean` — structural template for Theorem 3.4
 * Z-gauge construction lemmas in `ZGauge.lean` (PR #94)
 -/
 
@@ -289,7 +289,7 @@ The single-block proportional-to-equal reduction is now split explicitly.
 step, and `peripheralProportionalCase_periodicFT_of_rootFromRescaling` shows that,
 once this step is available, the exact-MPV theorem
 `peripheralProportionalCase_periodicFT_of_sameMPV` yields the heterogeneous
-repeated-block conclusion. Thus the remaining paper-level gap is the multi-block
+repeated-block conclusion. Thus the remaining mathematical gap is the multi-block
 existence step that turns proportionality of the assembled tensors into the
 non-decaying cross-overlap hypotheses `exists_nondecaying_A/B`.
 

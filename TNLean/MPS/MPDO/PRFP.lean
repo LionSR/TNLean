@@ -28,7 +28,7 @@ Definition 4.3.
 
 ## References
 
-* [CPGSV17] arXiv:1606.00608, §4.3
+* [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608, Section 4.3
 -/
 
 open scoped Matrix BigOperators Kronecker

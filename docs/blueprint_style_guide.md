@@ -6,7 +6,7 @@ The blueprint links the mathematics to its Lean formalization. A reader should b
 ## General Principles
 1. **Blueprint ↔ Lean must match.** Every `\lean{X}` tag must correspond to an actual Lean declaration. Every proof sketch must match what the Lean proof actually does — not a hand-wavy version of it.
 2. **Standalone.** `blueprint/` and `slides/` are independent — no cross-references, no shared files. Each has its own macros, its own `references.bib`.
-3. **Mathematical language only — zero Lean jargon.** See [`prose_style.md`](prose_style.md) §1 for the full rule and examples; in short, the `\lean{...}` tag is the link, the body text is standard mathematics.
+3. **Mathematical language only — zero Lean jargon.** See [`prose_style.md`](prose_style.md) Section 1 for the full rule and examples; in short, the `\lean{...}` tag is the link, the body text is standard mathematics.
 4. **No filler prose.** Only precise definitions, theorem statements, and proof sketches. No "this is important because..." or "the transfer map governs the spectral theory...".
 5. **Cite non-trivial things.** Basic definitions (MPS tensor, MPV) don't need citations. Important results and non-obvious definitions should cite the source paper.
 6. **Don't invent terminology or notation.** Don't create ad-hoc notation like `⟨·,·⟩^ip` when standard notation exists. Don't name things that the literature doesn't name. If Lean calls it `IsInjective`, the blueprint says "injective" — not "Condition C1".
@@ -14,7 +14,7 @@ The blueprint links the mathematics to its Lean formalization. A reader should b
    definition headings should name the mathematical content. Put external
    numbering in the body with a full citation, e.g.
    `This is \cite[Theorem~4.1]{...}`. Do not write headings such as
-   `Thm. 4.1` unless the source is also named and the title remains
+   `Theorem 4.1` unless the source is also named and the title remains
    mathematically descriptive.
 8. **Match Lean's theorem/lemma/def exactly.** If Lean says `theorem X`, use `\begin{theorem}`. If Lean says `lemma X`, use `\begin{lemma}`. Never use `\begin{proposition}` (Lean has no `proposition` keyword). Label prefix: `thm:` for theorem, `lem:` for lemma, `def:` for definition.
 9. **Do not put prose quantifiers at the edge of displayed equations.** Avoid
@@ -124,8 +124,8 @@ leanblueprint all     # pdf + web + checkdecls
 ```
 
 ## Fact-Check Lessons
-- **Ch 2**: `mpv` in Lean returns a scalar (the σ-component), NOT a ket vector. The ket is `mpvState`. Blueprint presents the ket form (standard physics) but `\lean{MPSTensor.mpv}` points to the component function — this is acceptable as long as it's clear.
-- **Ch 2**: Overlap and inner product differ by conjugation. Lean: `mpvOverlap A B N = star (mpvInner A B N)`. The overlap sums $V_\sigma \overline{W_\sigma}$; the inner product sums $\overline{V_\sigma} W_\sigma$.
-- **Ch 4**: KS inequality is for UNITAL maps, not TP. HS contraction requires BOTH.
-- **Ch 4**: `kraus_commute_of_ks_equality` proves $X K_i^\dagger = K_i^\dagger E(X)$, not Kraus commutation with a unitary.
-- **Ch 4**: Wolf citations: Eq (5.2) for KS; Prop 6.1 spectral radius; Prop 6.2 trivial Jordan; Thm 6.6 irreducibility; Prop 6.8 Hermitian FP; Thm 6.11 primitive; Thm 6.13 Cesàro.
+- **Chapter 2**: `mpv` in Lean returns a scalar (the σ-component), NOT a ket vector. The ket is `mpvState`. Blueprint presents the ket form (standard physics) but `\lean{MPSTensor.mpv}` points to the component function — this is acceptable as long as it's clear.
+- **Chapter 2**: Overlap and inner product differ by conjugation. Lean: `mpvOverlap A B N = star (mpvInner A B N)`. The overlap sums $V_\sigma \overline{W_\sigma}$; the inner product sums $\overline{V_\sigma} W_\sigma$.
+- **Chapter 4**: KS inequality is for UNITAL maps, not TP. HS contraction requires BOTH.
+- **Chapter 4**: `kraus_commute_of_ks_equality` proves $X K_i^\dagger = K_i^\dagger E(X)$, not Kraus commutation with a unitary.
+- **Chapter 4**: Wolf citations: Equation (5.2) for KS; Proposition 6.1 spectral radius; Proposition 6.2 trivial Jordan; Theorem 6.6 irreducibility; Proposition 6.8 Hermitian FP; Theorem 6.11 primitive; Theorem 6.13 Cesàro.

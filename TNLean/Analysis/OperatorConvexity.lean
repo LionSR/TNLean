@@ -53,8 +53,8 @@ Internally the convexity lemma:
 
 ## References
 
-* [Bhatia, *Matrix Analysis*, Ch. V]
-* [Wolf, *Quantum Channels & Operations*, Thm. 5.17 and subsequent corollary]
+* [Bhatia, *Matrix Analysis*, Chapter V]
+* [Wolf, *Quantum Channels & Operations*, Theorem 5.17 and subsequent corollary]
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder
@@ -290,7 +290,7 @@ private lemma trace_cfc_convex_bound
   rw [hsum_re (hA₁.1.cfc f), hsum_re (hA₂.1.cfc f)] at hR
   linarith [hR ▸ hsum_right]
 
-/-- **Trace concavity of `rpow`** for `p ∈ [0, 1]` (Bhatia, Ch. V; Wolf Thm. 5.17).
+/-- **Trace concavity of `rpow`** for `p ∈ [0, 1]` (Bhatia, Chapter V; Wolf Theorem 5.17).
 
 For PSD matrices `A₁, A₂` and `t ∈ [0, 1]`:
 `t · Re Tr(A₁^p) + (1 − t) · Re Tr(A₂^p) ≤
@@ -321,7 +321,7 @@ theorem trace_rpow_concave
     rpow_eq_cfc_power hPSD.nonneg hPSD.1]
   linarith
 
-/-- **Trace convexity of `rpow`** for `p ∈ [1, 2]` (Bhatia, Ch. V; Wolf Thm. 5.17).
+/-- **Trace convexity of `rpow`** for `p ∈ [1, 2]` (Bhatia, Chapter V; Wolf Theorem 5.17).
 
 For PSD matrices `A₁, A₂` and `t ∈ [0, 1]`:
 `Re Tr((t • A₁ + (1 − t) • A₂)^p) ≤

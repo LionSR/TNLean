@@ -32,7 +32,7 @@ facts about that field.
    isolates the individual blocks (identity on one block, zero on the others),
    then concatenating the two families yields the preceding span condition.
    This captures the finite-length block-separation content of
-   [CPGSV17], Proposition IV.3.
+   [Cirac--Perez-Garcia--Schuch--Verstraete 2017], Proposition IV.3.
 
 4. A **pairwise-to-global selector reduction**: if every ordered pair of
    distinct blocks admits a finite word polynomial that is the identity on the
@@ -1303,7 +1303,7 @@ theorem wordTupleSpanTop_of_wordEntryFamily_linearIndependent
             exact False.elim (hmem (Finset.mem_univ _))
     _ = M j a b := rfl
 
-/-- The linear-independence criterion above gives the abstract Proposition-IV.3
+/-- The linear-independence criterion above gives the abstract Proposition IV.3
 selector data as a corollary. -/
 theorem hasBlockSelectorWords_of_wordEntryFamily_linearIndependent
     (A : (k : Fin r) → MPSTensor d (dim k))
@@ -1333,7 +1333,7 @@ def PropBlockInjective
   ∃ L S : ℕ, (∀ k, IsNBlkInjective (A k) L) ∧ HasBlockSelectorWords A S
 
 /-- Common block injectivity plus pairwise block-separating word polynomials
-produce the abstract Proposition-IV.3 selector data. -/
+produce the abstract Proposition IV.3 selector data. -/
 theorem propBlockInjective_of_common_blockInjective_of_pairBlockSeparatingWords
     (A : (k : Fin r) → MPSTensor d (dim k))
     {L S : ℕ}
@@ -1467,7 +1467,7 @@ theorem hasBiCF_of_common_blockInjective_of_pairBlockSeparatingWords
   hasBiCF_of_wordTupleSpanTop A
     (wordTupleSpanTop_of_common_blockInjective_of_pairBlockSeparatingWords A hInj hPair)
 
-/-- The abstract Proposition-IV.3 selector data imply the finite-length
+/-- The abstract Proposition IV.3 selector data imply the finite-length
 word-tuple span condition. -/
 theorem wordTupleSpanTop_of_propBlockInjective
     (A : (k : Fin r) → MPSTensor d (dim k))
@@ -1477,7 +1477,7 @@ theorem wordTupleSpanTop_of_propBlockInjective
   exact ⟨L + S,
     wordTupleSpanTop_of_common_blockInjective_of_blockSelectorWords A hInj hSel⟩
 
-/-- The abstract Proposition-IV.3 selector data imply `HasBiCF`. -/
+/-- The abstract Proposition IV.3 selector data imply `HasBiCF`. -/
 theorem hasBiCF_of_propBlockInjective
     (A : (k : Fin r) → MPSTensor d (dim k))
     (hProp : PropBlockInjective A) :
@@ -1634,7 +1634,7 @@ theorem horizontalCFData_of_wordEntryFamily_linearIndependent
   horizontalCFData_of_wordTupleSpanTop A hInj hLeft hμne
     ⟨L, MPSTensor.wordTupleSpanTop_of_wordEntryFamily_linearIndependent A hLI⟩
 
-/-- Proposition-IV.3-style selector data yield `HorizontalCFData` through the
+/-- Proposition IV.3-style selector data yield `HorizontalCFData` through the
 finite-length span criterion. -/
 theorem horizontalCFData_of_propBlockInjective
     (A : (k : Fin r) → MPSTensor d (dim k))

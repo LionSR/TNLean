@@ -12,7 +12,7 @@ import Mathlib.Data.Real.Sqrt
 
 This file defines the maximally entangled state vector `Ω` and the outer product
 `Ω_proj = |Ω⟩⟨Ω|`, as well as the SWAP operator `F` on the tensor product space,
-as needed for the Choi–Jamiolkowski isomorphism (Wolf Ch. 2).
+as needed for the Choi–Jamiolkowski isomorphism (Wolf Chapter 2).
 
 ## Main definitions
 

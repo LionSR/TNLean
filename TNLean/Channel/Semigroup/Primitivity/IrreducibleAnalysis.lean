@@ -13,7 +13,7 @@ variable {D : ℕ}
 
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
-/-! ## Prop 7.5: Irreducibility implies primitivity for QDS -/
+/-! ## Proposition 7.5: Irreducibility implies primitivity for QDS -/
 
 theorem primitive_channel_pow_tendsto_zero_of_trace_zero [NeZero D]
     (E : Mat →ₗ[ℂ] Mat) (hE : IsChannel E) (hIrr : IsIrreducibleMap E)

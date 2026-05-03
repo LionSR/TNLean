@@ -9,7 +9,7 @@
 This chapter develops the theory of one-parameter semigroups of quantum
 channels and characterizes their generators via the
 GKSL (Gorini--Kossakowski--Sudarshan--Lindblad) theorem,
-following~\cite[Ch.~7]{Wolf2012Quantum}.
+following~\cite[Chapter~7]{Wolf2012Quantum}.
 
 Section~\ref{sec:semigroup_defs} establishes definitions and
 the basic exponential form
@@ -34,7 +34,7 @@ and proves the GKSL theorem.
               for all $t,s \ge 0$; and
         \item (initial condition) $T_0 = \id$.
     \end{enumerate}
-    This is \cite[Eq.~(7.1)]{Wolf2012Quantum}.
+    This is \cite[Equation~(7.1)]{Wolf2012Quantum}.
 \end{definition}
 
 \begin{definition}[Continuous dynamical semigroup]\label{def:continuous_dyn_semigroup_ch12}
@@ -99,7 +99,7 @@ and proves the GKSL theorem.
     \[
         \frac{d}{dt} e^{tL} = e^{tL} \cdot L.
     \]
-    This is \cite[Eq.~(7.2)]{Wolf2012Quantum}.
+    This is \cite[Equation~(7.2)]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}
@@ -208,7 +208,7 @@ and proves the GKSL theorem.
         T_t = e^{tL}
     \]
     for some generator $L \in \mathrm{End}_{\C}(\MN{D})$ and every $t \ge 0$.
-    This is \cite[Prop.~7.1]{Wolf2012Quantum}.
+    This is \cite[Proposition~7.1]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}
@@ -257,7 +257,7 @@ and proves the GKSL theorem.
              \cdot \sup_{s \in [0,t]}\|e^{sL'}\|,
     \]
     where $\Delta = L' - L$.
-    This is \cite[Cor.~7.1]{Wolf2012Quantum}.
+    This is \cite[Corollary~7.1]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}
@@ -397,7 +397,7 @@ and proves the GKSL theorem.
     pointwise, and integrates to recover the factorial.
 \end{proof}
 
-\begin{theorem}[Dyson series identity {\cite[Eq.~(7.13)]{Wolf2012Quantum}}]
+\begin{theorem}[Dyson series identity {\cite[Equation~(7.13)]{Wolf2012Quantum}}]
     \label{thm:dyson_series_eq_ch12}
     \lean{dyson_series_eq}\leanok
     \uses{thm:norm_dysonRemainder_le_ch12, cor:summable_dysonTerm_ch12}
@@ -455,7 +455,7 @@ which shows that such generators have the standard Lindblad form.
     \[
         L(\rho) = \phi(\rho) - \kappa\rho - \rho\kappa^\dagger.
     \]
-    This is \cite[Eq.~(7.14)]{Wolf2012Quantum}.
+    This is \cite[Equation~(7.14)]{Wolf2012Quantum}.
 \end{definition}
 
 \begin{definition}[Conditional complete positivity]\label{def:is_ccp}
@@ -465,7 +465,7 @@ which shows that such generators have the standard Lindblad form.
     completely positive} (CCP) if it admits a generator decomposition,
     i.e.\ there exist a CP map $\phi$ and a matrix $\kappa$ such that
     $L(\rho) = \phi(\rho) - \kappa\rho - \rho\kappa^\dagger$.
-    This is condition~1 of \cite[Prop.~7.2]{Wolf2012Quantum}.
+    This is condition~1 of \cite[Proposition~7.2]{Wolf2012Quantum}.
 \end{definition}
 
 \begin{definition}[Trace-annihilating map]\label{def:is_trace_annihilating}
@@ -481,7 +481,7 @@ which shows that such generators have the standard Lindblad form.
     A generator decomposition $(\phi, \kappa)$ satisfies the
     \emph{trace constraint} if $\phi^*(\Id) = \kappa + \kappa^\dagger$,
     where $\phi^*$ is the Hilbert--Schmidt adjoint.
-    This is the condition in \cite[Eq.~(7.20)]{Wolf2012Quantum}.
+    This is the condition in \cite[Equation~(7.20)]{Wolf2012Quantum}.
 \end{definition}
 
 \begin{theorem}[Trace constraint implies trace-annihilating]
@@ -521,7 +521,7 @@ which shows that such generators have the standard Lindblad form.
           \Bigr),
     \]
     where $[A,B] = AB - BA$ and $\{A,B\}_+ = AB + BA$.
-    This is \cite[Eq.~(7.21)]{Wolf2012Quantum}.
+    This is \cite[Equation~(7.21)]{Wolf2012Quantum}.
 \end{definition}
 
 \begin{theorem}[Lindblad form is trace-annihilating]
@@ -549,7 +549,7 @@ which shows that such generators have the standard Lindblad form.
     the same linear map as the generator decomposition $(\phi, \kappa)$
     with $\phi(\rho) = \sum_j L_j \rho L_j^\dagger$ and
     $\kappa = iH + \frac{1}{2}\sum_j L_j^\dagger L_j$.
-    This is \cite[Eq.~(7.24)]{Wolf2012Quantum}.
+    This is \cite[Equation~(7.24)]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}
@@ -591,7 +591,7 @@ which shows that such generators have the standard Lindblad form.
                 + [L_j\rho,\,L_j^\dagger]\bigr),
     \]
     where $[A,B] = AB - BA$.
-    This is \cite[Eq.~(7.22)]{Wolf2012Quantum}.
+    This is \cite[Equation~(7.22)]{Wolf2012Quantum}.
 \end{definition}
 
 \begin{theorem}[Commutator form equals standard Lindblad form]
@@ -619,7 +619,7 @@ which shows that such generators have the standard Lindblad form.
     \[
         P((L \otimes \id)(\ketbra{\Omega}{\Omega}))P \ge 0.
     \]
-    This is \cite[Prop.~7.2]{Wolf2012Quantum}.
+    This is \cite[Proposition~7.2]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}
@@ -638,7 +638,7 @@ which shows that such generators have the standard Lindblad form.
     $P((L \otimes \id)(\ketbra{\Omega}{\Omega}))P \ge 0$
     where $P = \Id - \ketbra{\Omega}{\Omega}$,
     then $L$ is CCP.
-    This is \cite[Prop.~7.2]{Wolf2012Quantum}.
+    This is \cite[Proposition~7.2]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}
@@ -653,12 +653,12 @@ which shows that such generators have the standard Lindblad form.
 
 \subsection{Completely positive semigroups and conditionally completely positive generators}
 
-\begin{theorem}[A completely positive semigroup has a conditionally completely positive generator]
+\begin{theorem}[CP semigroups have CCP generators]
     \label{thm:cp_semigroup_implies_ccp}
     \lean{cp_semigroup_implies_ccp_generator}\leanok
     \uses{def:cp_map, def:is_ccp, def:exp_semigroup_ch12}
     If $e^{tL}$ is CP for all $t \ge 0$, then $L$ is CCP.
-    This is \cite[Prop.~7.3]{Wolf2012Quantum}.
+    This is \cite[Proposition~7.3]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}
@@ -670,12 +670,12 @@ which shows that such generators have the standard Lindblad form.
     Then Theorem~\ref{thm:choi_projected_implies_ccp} gives CCP.
 \end{proof}
 
-\begin{theorem}[A conditionally completely positive generator yields a completely positive semigroup]
+\begin{theorem}[CCP generators yield CP semigroups]
     \label{thm:ccp_implies_cp_semigroup}
     \lean{ccp_generator_implies_cp_semigroup}\leanok
     \uses{def:cp_map, def:is_ccp, def:exp_semigroup_ch12}
     If $L$ is CCP, then $e^{tL}$ is CP for all $t \ge 0$.
-    This is \cite[Prop.~7.3]{Wolf2012Quantum}.
+    This is \cite[Proposition~7.3]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}
@@ -689,7 +689,7 @@ which shows that such generators have the standard Lindblad form.
     norm to $e^{tL}$, and the cone of CP maps is closed.
 \end{proof}
 
-\begin{theorem}[A semigroup is completely positive iff its generator is conditionally completely positive]
+\begin{theorem}[CP semigroups iff CCP generators]
     \label{thm:cp_semigroup_iff_ccp}
     \lean{cp_semigroup_iff_ccp_generator}\leanok
     \uses{def:cp_map, def:is_ccp, def:exp_semigroup_ch12}
@@ -710,7 +710,7 @@ which shows that such generators have the standard Lindblad form.
     \lean{exists_traceless_kraus_shift}\leanok
     Assume $d > 0$. Given any Kraus operators $\{K_j\}$, there exist $c_j \in \C$
     such that $K_j' = K_j + c_j \Id$ is traceless.
-    This is part of \cite[Prop.~7.4]{Wolf2012Quantum}.
+    This is part of \cite[Proposition~7.4]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}
@@ -722,7 +722,7 @@ which shows that such generators have the standard Lindblad form.
     \label{thm:generator_shift_invariance}
     \lean{generator_shift_invariance}\leanok
     If $K_j' = K_j + c_j \Id$ and $\kappa'$ is adjusted per
-    \cite[Eq.~(7.19)]{Wolf2012Quantum},
+    \cite[Equation~(7.19)]{Wolf2012Quantum},
     then $(\phi', \kappa')$ and $(\phi, \kappa)$ define the same generator.
 \end{theorem}
 
@@ -747,7 +747,7 @@ which shows that such generators have the standard Lindblad form.
     If two Lindblad forms $F, F'$ induce the same generator and
     both have traceless Kraus operators, then their CP parts agree:
     $\phi = \phi'$.
-    This is part of \cite[Prop.~7.4, item~2]{Wolf2012Quantum}.
+    This is part of \cite[Proposition~7.4, item~2]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -763,7 +763,7 @@ which shows that such generators have the standard Lindblad form.
     both have traceless Kraus operators, then their drift matrices
     differ by an imaginary scalar: $\kappa' = \kappa + i\lambda\,\Id$
     for some $\lambda \in \R$.
-    This is part of \cite[Prop.~7.4, item~2]{Wolf2012Quantum}.
+    This is part of \cite[Proposition~7.4, item~2]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -844,7 +844,7 @@ which shows that such generators have the standard Lindblad form.
     If $L(\rho) = \phi(\rho) - \kappa\rho - \rho\kappa^\dagger$ with
     $\phi$ CP and $\phi^*(\Id) = \kappa + \kappa^\dagger$,
     then $L$ is a GKSL generator.
-    This is \cite[Thm.~7.1, Eq.~(7.20)]{Wolf2012Quantum}.
+    This is \cite[Theorem~7.1, Equation~(7.20)]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}
@@ -907,7 +907,7 @@ which shows that such generators have the standard Lindblad form.
           \Bigr)
     \]
     with $H = H^\dagger$.
-    This is \cite[Thm.~7.1]{Wolf2012Quantum}.
+    This is \cite[Theorem~7.1]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -965,7 +965,7 @@ which shows that such generators have the standard Lindblad form.
 \label{sec:qds_primitivity}
 %% ---------------------------------------------------------
 
-%% Wolf §7.1, Prop 7.5
+%% Source: \cite[Section~7.1, Proposition~7.5]{Wolf2012Quantum}.
 \subsection{Auxiliary spectral and semigroup lemmas}
 
 \begin{definition}[Quantum dynamical semigroup]
@@ -1348,7 +1348,7 @@ which shows that such generators have the standard Lindblad form.
     Let $T_t = e^{tL}$ be a quantum dynamical semigroup.
     If $T_{t_0}$ is irreducible for some $t_0 > 0$, then
     $T_t$ is primitive (and irreducible) for every $t > 0$.
-    This is \cite[Prop.~7.5]{Wolf2012Quantum}.
+    This is \cite[Proposition~7.5]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -1368,7 +1368,7 @@ which shows that such generators have the standard Lindblad form.
         \;\iff\;
         (\forall\, t > 0,\ T_t\ \text{primitive and irreducible}).
     \]
-    This is \cite[Prop.~7.5]{Wolf2012Quantum}.
+    This is \cite[Proposition~7.5]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -1383,7 +1383,7 @@ which shows that such generators have the standard Lindblad form.
 \label{sec:liouvillian_kernel}
 %% ---------------------------------------------------------
 
-%% Wolf §7.1, Thm 7.2
+%% Source: \cite[Section~7.1, Theorem~7.2]{Wolf2012Quantum}.
 
 \begin{definition}[Faithful stationary state]
     \label{def:has_faithful_stationary_state_ch12}
@@ -1460,7 +1460,7 @@ which shows that such generators have the standard Lindblad form.
     $\mathcal{D}_{L_j}^*(A)$ is zero under the commutation hypotheses.
 \end{proof}
 
-\begin{theorem}[The adjoint kernel is contained in the commutant under a faithful stationary state]
+\begin{theorem}[Adjoint kernel lies in the commutant]
     \label{thm:adjointKernel_eq_commutant}
     \lean{LindbladForm.mem_commutant_of_mem_adjointKernel_of_hasFaithfulStationaryState}\leanok
     \uses{def:lindblad_form, def:has_faithful_stationary_state_ch12,
@@ -1477,7 +1477,7 @@ which shows that such generators have the standard Lindblad form.
         [A,H] = [A,L_j] = [A,L_j^\dagger] = 0\ \forall j.
     \]
     That is, $\ker(L^*) \subseteq \{H, L_j, L_j^\dagger\}'$.
-    This is \cite[Thm.~7.2]{Wolf2012Quantum}.
+    This is \cite[Theorem~7.2]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}
@@ -1490,7 +1490,7 @@ which shows that such generators have the standard Lindblad form.
     $[A, H] = 0$.
 \end{proof}
 
-\begin{theorem}[The adjoint kernel equals the commutant under a faithful stationary state]
+\begin{theorem}[Adjoint kernel equals the commutant]
     \label{thm:adjointKernel_eq_commutant_full}
     \lean{LindbladForm.adjointKernel_eq_commutant_of_hasFaithfulStationaryState}\leanok
     \uses{thm:adjointKernel_eq_commutant, def:commutant_ch12, def:adjoint_kernel_ch12}
@@ -1500,7 +1500,7 @@ which shows that such generators have the standard Lindblad form.
         \ker(L^*) = \{H, L_j, L_j^\dagger\}',
     \]
     i.e.\ the adjoint kernel equals the commutant of $\{H, L_j, L_j^\dagger\}$.
-    This is \cite[Thm.~7.2]{Wolf2012Quantum}.
+    This is \cite[Theorem~7.2]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}
@@ -1517,10 +1517,10 @@ which shows that such generators have the standard Lindblad form.
 \label{sec:qds_reducibility}
 %% ---------------------------------------------------------
 
-%% Wolf §7.1.2, Prop 7.6
+%% Source: \cite[Section~7.1.2, Proposition~7.6]{Wolf2012Quantum}.
 
 The four equivalent reducibility conditions of
-\cite[Prop.~7.6]{Wolf2012Quantum} are as follows.
+\cite[Proposition~7.6]{Wolf2012Quantum} are as follows.
 
 \begin{definition}[Nontrivial projection]
     \label{def:is_nontrivial_projection_ch12}
@@ -1620,14 +1620,14 @@ The four equivalent reducibility conditions of
     and~\ref{thm:semigroup_preserves_compression_from_generator_ch12}.
 \end{proof}
 
-\begin{theorem}[Rank-deficient fixed densities are equivalent to rank-deficient kernel elements]
+\begin{theorem}[Rank-deficient fixed densities and kernel elements]
     \label{thm:wolf_prop_7_6_one_iff_two}
     \lean{wolf_prop_7_6_one_iff_two}\leanok
     \uses{def:has_rank_deficient_fixed_density,
           def:has_rank_deficient_kernel_element}
     A rank-deficient density matrix is a fixed point of $e^{tL}$ for all
     $t \ge 0$ if and only if it lies in $\ker L$.
-    This is \cite[Prop.~7.6, (1)$\leftrightarrow$(2)]{Wolf2012Quantum}.
+    This is \cite[Proposition~7.6, (1)$\leftrightarrow$(2)]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -1643,7 +1643,7 @@ The four equivalent reducibility conditions of
           def:has_invariant_compression, def:is_gksl_generator}
     If $L$ is a GKSL generator and there exists a rank-deficient fixed
     density matrix, then the semigroup preserves a nontrivial compression.
-    This is \cite[Prop.~7.6, (1)$\to$(3)]{Wolf2012Quantum}.
+    This is \cite[Proposition~7.6, (1)$\to$(3)]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -1689,7 +1689,7 @@ The four equivalent reducibility conditions of
     Theorem~\ref{thm:semigroup_preserves_compression_from_generator_ch12}.
 \end{proof}
 
-\begin{theorem}[Invariant compression is equivalent to block-upper-triangular Lindblad data]
+\begin{theorem}[Invariant compression and triangular Lindblad data]
     \label{thm:wolf_prop_7_6_three_iff_four}
     \lean{wolf_prop_7_6_three_implies_four, wolf_prop_7_6_four_implies_three}\leanok
     \uses{def:has_invariant_compression,
@@ -1697,7 +1697,7 @@ The four equivalent reducibility conditions of
     For a GKSL generator $L$, the semigroup preserves a nontrivial
     compression if and only if the Lindblad data can be chosen
     block-upper-triangular.
-    This is \cite[Prop.~7.6, (3)$\leftrightarrow$(4)]{Wolf2012Quantum}.
+    This is \cite[Proposition~7.6, (3)$\leftrightarrow$(4)]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -1707,7 +1707,7 @@ The four equivalent reducibility conditions of
     and~\ref{thm:hasBlockUpperTriangularLindblad_of_hasInvariantCompression_ch12}.
 \end{proof}
 
-\begin{theorem}[Block-upper-triangular Lindblad data yield a rank-deficient kernel element]
+\begin{theorem}[Triangular Lindblad data give deficient kernels]
     \label{thm:blockUpperTriangular_implies_rankDeficient}
     \lean{hasRankDeficientKernelElement_of_hasBlockUpperTriangularLindblad}\leanok
     \uses{def:has_block_upper_triangular_lindblad,
@@ -1716,7 +1716,7 @@ The four equivalent reducibility conditions of
     with respect to some nontrivial projector $P$,
     then there exists a density matrix $\rho_0$ with nontrivial kernel
     satisfying $L(\rho_0) = 0$.
-    This is \cite[Prop.~7.6, (4)$\to$(2)]{Wolf2012Quantum}.
+    This is \cite[Proposition~7.6, (4)$\to$(2)]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}
@@ -1747,7 +1747,7 @@ The four equivalent reducibility conditions of
         \item block-upper-triangular Lindblad form
     \end{enumerate}
     are equivalent.
-    This is \cite[Prop.~7.6]{Wolf2012Quantum}.
+    This is \cite[Proposition~7.6]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -1760,7 +1760,7 @@ The four equivalent reducibility conditions of
     the equivalence chain.
 \end{proof}
 
-%% Wolf Cor. 7.2 — sufficient conditions for non-reducibility
+%% Source: \cite[Corollary~7.2]{Wolf2012Quantum}.
 
 \subsection{Sufficient conditions for non-reducibility}
 \label{sec:cor_7_2_sufficient_conditions}
@@ -1833,7 +1833,7 @@ The four equivalent reducibility conditions of
     $P = 0$ or $P = \Id$ — a contradiction.
 \end{proof}
 
-\begin{theorem}[Hermitian span + trivial commutant forbids block-upper-triangular form]%
+\begin{theorem}[Hermitian span with trivial commutant forbids triangular form]%
     \label{thm:herm_span_trivial_commutant_no_block_ut}
     \lean{hermitian_span_trivial_commutant_implies_no_blockUpperTriangular}\leanok
     \uses{def:lindblad_form, def:is_lindblad_span_hermitian_closed,
@@ -1892,7 +1892,7 @@ The four equivalent reducibility conditions of
           thm:not_isReducibleQDS_of_no_blockUpperTriangular_ch12}
     If the algebra generated by $\{L_j\}$ and $\kappa$ is the entire
     matrix algebra $M_d(\C)$, then the QDS is not reducible.
-    This is \cite[Cor.~7.2, condition~1]{Wolf2012Quantum}.
+    This is \cite[Corollary~7.2, condition~1]{Wolf2012Quantum}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:full_algebra_gen_no_block_ut,
@@ -1911,7 +1911,7 @@ The four equivalent reducibility conditions of
           thm:not_isReducibleQDS_of_no_blockUpperTriangular_ch12}
     If the Lindblad span is Hermitian-closed and its commutant is trivial,
     then the QDS is not reducible.
-    This is \cite[Cor.~7.2, condition~2]{Wolf2012Quantum}.
+    This is \cite[Corollary~7.2, condition~2]{Wolf2012Quantum}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:herm_span_trivial_commutant_no_block_ut,
@@ -1928,7 +1928,7 @@ The four equivalent reducibility conditions of
           thm:large_kossakowski_rank_no_block_ut_ch12,
           thm:not_isReducibleQDS_of_no_blockUpperTriangular_ch12}
     If $\rank(C) > d^2 - d$, then the QDS is not reducible.
-    This is \cite[Cor.~7.2, condition~3]{Wolf2012Quantum}.
+    This is \cite[Corollary~7.2, condition~3]{Wolf2012Quantum}.
 \end{theorem}
 \begin{proof}\leanok
     The rank hypothesis rules out block-upper-triangular Lindblad data by

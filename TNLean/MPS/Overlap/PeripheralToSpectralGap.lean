@@ -89,7 +89,7 @@ private theorem transferMap_hermitian_fixedPoint_eq_zero_of_trace_eq_zero
   obtain ⟨ρ, hρ⟩ := injective_transfer_unique_fixed_point' (A := A) hInj hNorm
   set E := transferMap (d := d) (D := D) A
   have hCh : IsChannel E := transferMap_isChannel (A := A) hNorm
-  -- Decompose the Hermitian fixed point into PSD fixed points (Wolf Prop 6.8)
+  -- Decompose the Hermitian fixed point into PSD fixed points (Wolf Proposition 6.8)
   obtain ⟨Q₁, Q₂, hQ₁_psd, hQ₂_psd, hY_decomp, hEQ₁, hEQ₂⟩ :=
     IsChannel.posSemidef_parts_of_hermitian_fixedPoint (E := E) hCh hYherm (by
       simpa only [transferMap_apply, E] using hYfix)

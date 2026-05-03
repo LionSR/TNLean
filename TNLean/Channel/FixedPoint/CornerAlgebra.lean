@@ -10,7 +10,7 @@ import Mathlib.RingTheory.Idempotents
 
 Mathlib's `IsIdempotentElem.Corner` already provides the `Semiring` / `Ring` structure on the
 subsemigroup `Set.range (P * · * P)` for an idempotent `P`, with unit `P`. For the matrix
-corners appearing in the support-projection route for Wolf Cor. 6.6 we additionally need:
+corners appearing in the support-projection route for Wolf Corollary 6.6 we additionally need:
 
 * a `ℂ`-module and `ℂ`-algebra structure on the corner;
 * star, `StarRing`, and `StarModule ℂ` structures when `P` is self-adjoint;
@@ -22,7 +22,7 @@ equivalence `cornerSubmodule P ≃ₗ[ℂ] IsIdempotentElem.Corner hP`.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Cor. 6.6].
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Corollary 6.6].
 -/
 
 open scoped Matrix ComplexOrder BigOperators

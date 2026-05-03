@@ -29,7 +29,7 @@ than `D` as the power exponent. Key savings:
 
 ### References
 - arXiv:0909.5347, Lemma 2(b) (exact bound D²-D+1)
-- Wolf, "Quantum Channels & Operations", §6.2.4
+- Wolf, "Quantum Channels & Operations", Section 6.2.4
 -/
 
 section SharpDirectRoute

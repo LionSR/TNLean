@@ -15,7 +15,7 @@ This module combines two natural units:
 ## Part 1: Basic BNT definitions (from `BasisNormalTensors`)
 
 Introduces the basic definitions for the **basis of normal tensors** (BNT) notion, as in
-Def. 4.2 of arXiv:2011.12127.
+Definition 4.2 of arXiv:2011.12127.
 
 A decomposition into a basis of normal tensors for a tensor `A_total` is a finite family of
 normal tensors which
@@ -49,7 +49,7 @@ Theorem 4.4 of arXiv:2011.12127 (Cirac–Pérez-García–Schuch–Verstraete, R
   sufficiently large system sizes there is an invertible coefficient matrix `U_N` expressing one
   family in terms of the other.
 
-## Intended use (Thm 4.4 roadmap)
+## Intended use (Theorem 4.4 roadmap)
 
 1. **Block separation** produces two BNT families `A_bnt` and `B_bnt` from tensors `A_total` and
    `B_total` that generate the same MPV family.
@@ -65,7 +65,7 @@ namespace MPSTensor
 
 /--
 `IsBNT A_total g dim A_bnt` means that the family `A_bnt` is a **basis of normal tensors** (BNT)
-for `A_total` in the sense of Def. 4.2 of arXiv:2011.12127.
+for `A_total` in the sense of Definition 4.2 of arXiv:2011.12127.
 
 Informally, `A_bnt` is a finite family of normal tensors which spans the MPV family of `A_total`
 and whose MPV states become linearly independent for large enough system size. Here `IsNormal`
@@ -269,7 +269,7 @@ satisfying
 `mpvState (B j) N = ∑ i, U_N i j • mpvState (A i) N`.
 
 This is the algebraic bridge between "same MPV subspace" and "matrix equation" that is needed
-for the permutation-matching step in Thm 4.4.
+for the permutation-matching step in Theorem 4.4.
 -/
 theorem eventually_exists_invertible_changeBasis
     {d g : ℕ} {dimA dimB : Fin g → ℕ}

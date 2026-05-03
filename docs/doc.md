@@ -261,10 +261,10 @@ Note that you currently cannot use the closing square bracket `]` symbol in the 
 So the following will not result in a working link:
 
 ```markdown
-We follow [Euclid's *Elements* [Prop. 1]][heath1956a].
+We follow [Euclid's *Elements* [Proposition 1]][heath1956a].
 ```
 
-> We follow [Euclid's *Elements* [Prop. 1]][heath1956a].
+> We follow [Euclid's *Elements* [Proposition 1]][heath1956a].
 
 ## Language
 

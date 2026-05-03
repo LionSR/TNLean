@@ -51,7 +51,7 @@ with the periodic boundary condition:
 
 ## References
 
-* [CPGSV21] arXiv:2011.12127, lines 2013–2094 (full argument)
+* [Cirac--Perez-Garcia--Schuch--Verstraete 2021] arXiv:2011.12127, lines 2013–2094 (full argument)
 * [FNW92] Sections 3–4
 * [PGVWC07] arXiv:quant-ph/0608197, Sections 5–6
 -/
@@ -623,7 +623,7 @@ theorem groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_positive_word_comm
 MPV line.
 
 This combines the common-middle algebraic lemma in `WrappingWindow` with the
-positive-length amplification above.  Thus the only remaining paper-level gap is
+positive-length amplification above.  Thus the only remaining mathematical gap is
 to compare the two wrapped-window witnesses so that the hypotheses below hold for
 the actual common middle word. -/
 theorem groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_two_sided_middle_compatibility
@@ -738,7 +738,7 @@ with the span of the MPV with the reduced window `L > L₀` (instead of `2L₀`)
 
 The normality hypothesis enables the range reduction from `2L₀` to `L₀ + 1`
 via the structure theory of normal MPS (peripheral spectrum, canonical form).
-See [CPGSV21] arXiv:2011.12127 §IV.C. -/
+See [Cirac--Perez-Garcia--Schuch--Verstraete 2021] arXiv:2011.12127 Section IV.C. -/
 -- TODO(parent-hamiltonian): derive using the normal-form range reduction and
 -- the cyclic-window definition of `chainGroundSpace`.
 theorem chainGroundSpace_eq_mpvSubmodule_normal {A : MPSTensor d D} [NeZero D]

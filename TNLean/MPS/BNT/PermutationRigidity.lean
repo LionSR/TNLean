@@ -10,11 +10,11 @@ import Mathlib.Data.Fintype.Card
 import Mathlib.Data.Fintype.EquivFin
 
 /-!
-# Permutation rigidity for basis-of-normal-tensors (BNT) decompositions — Thm 4.4
+# Permutation rigidity for basis-of-normal-tensors (BNT) decompositions — Theorem 4.4
 (paper hypotheses, no span-equality)
 
 This module replaces the extra span-equality hypothesis used in
-`BNTPermutationSimple.lean` with the **paper-style** hypotheses from Thm 4.4
+`BNTPermutationSimple.lean` with the **paper-style** hypotheses from Theorem 4.4
 (arXiv:2011.12127 / 1606.00608, primitive branch): proportionality of the *full*
 MPV families together with explicit decompositions into BNT families.
 
@@ -39,7 +39,7 @@ namespace MPSTensor
 /-! ## Key paper step: some mixed overlap does not decay -/
 
 /--
-**Key step of Thm 4.4 (paper route).**
+**Key step of Theorem 4.4 (paper route).**
 
 Assume we have two families `A j` and `B k` whose within-family overlaps are
 asymptotically orthonormal, and that the *full* tensors `A_total` and `B_total`
@@ -168,7 +168,7 @@ with a `B k` does not decay.
 -/
 
 /--
-**Key step of Thm 4.4 (paper route), opposite direction.**
+**Key step of Theorem 4.4 (paper route), opposite direction.**
 
 Under the same proportionality + decomposition hypotheses as
 `exists_nonzero_overlap_of_proportional_decomp`, if the `A`-family overlaps are asymptotically

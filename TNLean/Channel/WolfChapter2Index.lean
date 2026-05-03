@@ -28,9 +28,9 @@ representations of quantum channels.
 
 ## Coverage summary
 
-### §2.1 Choi–Jamiolkowski and Kraus
+### Section 2.1 Choi–Jamiolkowski and Kraus
 
-* **Prop 2.1** (CJ isomorphism):
+* **Proposition 2.1** (CJ isomorphism):
   - `ChoiJamiolkowski.choiMatrix` — Choi matrix `τ = (T ⊗ id)(|Ω⟩⟨Ω|)` ✅️
   - `ChoiJamiolkowski.cp_iff_choi_posSemidef` — CP ↔ `τ ≥ 0` ✅️
   - `ChoiJamiolkowski.traceLeft_choiMatrix_of_tp` — TP ⟹ `tr_A(τ) = 𝟙/D` ✅️
@@ -46,7 +46,7 @@ representations of quantum channels.
     `Channel.hasKrausRankLE_choiRank_of_cptp`
     — minimal Kraus constructions from the Choi spectral decomposition ✅️
 
-* **Thm 2.1** (Kraus representation):
+* **Theorem 2.1** (Kraus representation):
   - `kraus_tp_of_sum_conjTranspose_mul` — `∑Kᵢ†Kᵢ = 𝟙` ⟹ TP ✅️
   - `kraus_sum_conjTranspose_mul_of_tp` — TP ⟹ `∑Kᵢ†Kᵢ = 𝟙` ✅️
   - `kraus_sum_mul_conjTranspose_of_unital` — unital ⟹ `∑KᵢKᵢ† = 𝟙` ✅️
@@ -60,16 +60,16 @@ representations of quantum channels.
   - `kraus_rectangular_freedom` / `kraus_rectangular_freedom'`
     — rectangular Kraus freedom (necessary direction) ✅️
   - `kraus_isometry_freedom_iff`
-    — Wolf Thm 2.18 in isometric form, including zero-padding of the smaller family ✅️
+    — Wolf Theorem 2.18 in isometric form, including zero-padding of the smaller family ✅️
   - `kraus_unitary_freedom_iff`
-    — Wolf Thm 2.18 in same-size unitary form ✅️
+    — Wolf Theorem 2.18 in same-size unitary form ✅️
 
-* **Thm 2.2** (Stinespring dilation):
+* **Theorem 2.2** (Stinespring dilation):
   - `stinespring_dual_representation` — `T*(A) = V†(A ⊗ 𝟙)V` ✅️
   - `stinespringV_isometry_iff_kraus_normalized` — `V†V = 𝟙` ↔ TP ✅️
   - `stinespring_schrodinger_representation` — `T(ρ) = tr_r(VρV†)` ✅️
 
-* **Thm 2.3** (ordered CP-maps):
+* **Theorem 2.3** (ordered CP-maps):
   - `CPDominates` — CP partial order: `S - T` is completely positive ✅️
   - `Matrix.blockTopRows` / `Matrix.blockTopRows_mul_conjTranspose` /
     `Matrix.blockTopRows_conjTranspose_mul_le_one` — explicit block-top
@@ -77,24 +77,24 @@ representations of quantum channels.
   - `stinespringV_eq_kronecker_blockTopRows_mul_append` — intertwining
     `V_{K} = (𝟙_D ⊗ C) · V_{K ++ L}` for the block-top projector ✅️
   - `CPDominates.exists_stinespring_contraction` — existential form of
-    Wolf Thm 2.3: `T₁ ≤ T₂` gives Stinespring realizations and a contraction ✅️
+    Wolf Theorem 2.3: `T₁ ≤ T₂` gives Stinespring realizations and a contraction ✅️
 
-* **Thm 2.4** (Radon–Nikodym for CP maps):
+* **Theorem 2.4** (Radon–Nikodym for CP maps):
   - `Matrix.blockDiagTopProj` / `Matrix.blockDiagBotProj` — orthogonal
     block projectors on the dilation space, PSD and summing to `𝟙` ✅️
   - `Matrix.kroneckerMap_conjTranspose_mul_kroneckerMap` — Kronecker
     identity `A ⊗ (CᴴC) = (𝟙 ⊗ C)ᴴ (A ⊗ 𝟙) (𝟙 ⊗ C)` ✅️
-  - `IsCPMap.exists_radon_nikodym` — Wolf Thm 2.4 binary form:
+  - `IsCPMap.exists_radon_nikodym` — Wolf Theorem 2.4 binary form:
     for CP `T₁, T₂`, a Stinespring matrix for `T₁ + T₂` yields
     PSD `P₁ + P₂ = 𝟙` with `Tᵢ(A) = V†(A ⊗ Pᵢ)V` ✅️
 
-* **Thm 2.5** (open-system representation, reduced form):
+* **Theorem 2.5** (open-system representation, reduced form):
   - `IsChannel.exists_stinespring_open_system` — every CPTP map is
     `T(ρ)_{ij} = ∑ₖ (V ρ V†)_{(i,k),(j,k)}` for an isometric `V` ✅️
   - `IsChannel.exists_stinespring_open_system_traceRight` — equivalent
     form via `Matrix.traceRight`: `T(ρ) = tr_E[V ρ V†]` ✅️
 
-* **Thm 2.6** (Naimark / Neumark dilation for POVMs):
+* **Theorem 2.6** (Naimark / Neumark dilation for POVMs):
   - `POVM` — positive operator-valued measure structure ✅️
   - `POVM.naimarkIsometry_isometry` — `V†V = 𝟙` ✅️
   - `POVM.naimarkProjection_mul_self` / `_hermitian` / `_orthogonal` /
@@ -111,15 +111,15 @@ representations of quantum channels.
   - `Instrument` — quantum-instrument structure + `total_isChannel`,
     `sum_probability`, `posteriorState` interface ✅️
 
-### §2.1 Representation corollaries (Props 2.2–2.4)
+### Section 2.1 Representation corollaries (Propositions 2.2–2.4)
 
-* **Prop 2.2** (CP decomposition):
+* **Proposition 2.2** (CP decomposition):
   - `WolfProps.polarization_sandwich` — `4 • (A X Bᴴ) = (A+B) X (A+B)ᴴ
     − (A−B) X (A−B)ᴴ + I•(A+I·B) X (A+I·B)ᴴ − I•(A−I·B) X (A−I·B)ᴴ` ✅️
   - `WolfProps.cp_decomposition_of_sandwich_sum` — every
     `∑ᵢ Aᵢ X Bᵢᴴ` is a signed ℂ-linear combination of four CP maps ✅️
 
-* **Prop 2.3** (no information without disturbance):
+* **Proposition 2.3** (no information without disturbance):
   - `WolfProps.vecMulVec_star_eq_polarization` — rank-one outer products
     polarize into rank-one self-outer-products ✅️
   - `WolfProps.linearMap_eq_id_of_fixes_rankOne` — a linear map fixing
@@ -127,7 +127,7 @@ representations of quantum channels.
   - `WolfProps.channel_eq_id_of_fixes_pureStates` — a channel fixing
     every pure-state projector is the identity channel ✅️
 
-* **Prop 2.4** (equivalence of ensembles, Hughston–Jozsa–Wootters):
+* **Proposition 2.4** (equivalence of ensembles, Hughston–Jozsa–Wootters):
   - `WolfProps.pureEnsembleDensity` — density operator of a pure-state
     ensemble `∑ᵢ |ψᵢ⟩⟨ψᵢ|` ✅️
   - `WolfProps.pureEnsembleDensity_eq_of_isometric_mixing` — sufficient
@@ -139,7 +139,7 @@ representations of quantum channels.
   - `WolfProps.pureEnsembleDensity_eq_iff_exists_isometric_mixing` —
     both directions stated as an iff ✅️
 
-### §2.2 Transfer matrix
+### Section 2.2 Transfer matrix
 
 * `transferMatrix` — the `D² × D²` matrix representing `T` in the
   standard-basis vectorization ✅️
@@ -151,28 +151,28 @@ representations of quantum channels.
 * `MPSTensor.transferMatrix_eq` — MPS bridge:
   `E_A` has transfer matrix `∑ᵢ Āᵢ ⊗ₖ Aᵢ` ✅️
 
-### §2.2–2.3 Transfer matrix characterizations & normal forms (Props 2.5-2.8)
+### Section 2.2–2.3 Transfer matrix characterizations & normal forms (Propositions 2.5-2.8)
 
-* `transferMatrix_tp_iff` — **Prop 2.6**: TP ↔ column-diagonal sums = δ ✅️
-* `transferMatrix_unital_iff` — **Prop 2.6**: unital ↔ row-diagonal sums = δ ✅️
-* `transferMatrix_hermiticityPreserving_iff` — **Prop 2.5**: HP ↔ conjugation
+* `transferMatrix_tp_iff` — **Proposition 2.6**: TP ↔ column-diagonal sums = δ ✅️
+* `transferMatrix_unital_iff` — **Proposition 2.6**: unital ↔ row-diagonal sums = δ ✅️
+* `transferMatrix_hermiticityPreserving_iff` — **Proposition 2.5**: HP ↔ conjugation
   symmetry of transfer matrix entries ✅️
 * `unitaryConjLM` — unitary conjugation map `Ad_U(X) = U X U†` ✅️
-* `transferMatrix_unitaryConj` — **Prop 2.7 ingredient**: `(Ad_U)^ = Ū ⊗ₖ U` ✅️
+* `transferMatrix_unitaryConj` — **Proposition 2.7 ingredient**: `(Ad_U)^ = Ū ⊗ₖ U` ✅️
 * `unitaryConjLM_isChannel_of_unitary` — `Ad_U` is a channel for unitary `U` ✅️
-* `transferMatrix_unitaryConj_sandwich` — **Props 2.7-2.8 key identity**:
+* `transferMatrix_unitaryConj_sandwich` — **Propositions 2.7-2.8 key identity**:
   `(Ad_{U₁} ∘ T ∘ Ad_{U₂})^ = (Ū₁⊗U₁) T̂ (Ū₂⊗U₂)` ✅️
 
-### §2.3 SVD normal form (existence)
+### Section 2.3 SVD normal form (existence)
 
 * `Matrix.svd_of_posSemidef` — **SVD for PSD matrices** (spectral theorem
   formulated): `M = U * diagonal σ * Uᴴ` with `σ ≥ 0` ✅️
 * `Matrix.svd_of_isUnit` — **SVD existence for invertible complex matrices**:
   `M = U * diagonal σ * Vᴴ` with `U, V` unitary and `σ > 0` ✅️
 * `transferMatrix_svd_of_isUnit` — **SVD representation of a transfer
-  matrix** (Wolf §2.3): every invertible transfer matrix admits an SVD ✅️
+  matrix** (Wolf Section 2.3): every invertible transfer matrix admits an SVD ✅️
 
-### §2.3 Lorentz normal form (existence)
+### Section 2.3 Lorentz normal form (existence)
 
 * `Wolf.SLFiltering` — **SL(d, ℂ)-filtering operation**: a CP map
   Φ(X) = S X S† with det(S) = 1 ✅️ (definitional)
@@ -182,16 +182,16 @@ representations of quantum channels.
   tr₁[τ] ∝ 1 ✅️ (definitional)
 * `pauliMatrices` — the four Pauli matrices (qubit basis) ✅️ (definitional)
 * `pauliTransferEntry` — Pauli-basis transfer matrix entry ✅️ (definitional)
-* `IsLorentzDiagonal` — diagonal Lorentz normal form (Wolf Prop 2.9 case 1) ✅️
+* `IsLorentzDiagonal` — diagonal Lorentz normal form (Wolf Proposition 2.9 case 1) ✅️
 * `IsLorentzNonDiagonal` — non-diagonal Lorentz normal form (case 2) ✅️
 * `IsLorentzSingular` — singular Lorentz normal form (case 3) ✅️
 * `Wolf.infimum_is_attained` — **key compactness lemma**: trace minimisation
   over SL(d, ℂ) filterings attains its infimum ⚠ (stated with `sorry`;
   requires compactness of bounded SL(n, ℂ) sets)
-* `Wolf.exists_normal_form_generic` — **Wolf Prop 2.9 (generic normal form)**:
+* `Wolf.exists_normal_form_generic` — **Wolf Proposition 2.9 (generic normal form)**:
   every CP map with full Kraus rank admits SL-filterings making it
   doubly-stochastic ⚠ (depends on `infimum_is_attained`)
-* `Wolf.exists_lorentz_normal_form_qubit` — **Wolf Prop 2.9/2.11 (Lorentz
+* `Wolf.exists_lorentz_normal_form_qubit` — **Wolf Proposition 2.9/2.11 (Lorentz
   normal form for qubit channels)**: conclusion is a three-way disjunction
   `IsLorentzDiagonal ∨ IsLorentzNonDiagonal ∨ IsLorentzSingular` ⚠
   (depends on `infimum_is_attained` and Lorentz group classification)
@@ -229,13 +229,13 @@ representations of quantum channels.
 
 | Result | Notes |
 |--------|-------|
-| Thm 2.5 (unitary form) | Reduced isometric form formalized; unitary form needs basis extension |
-| §2.3 Lorentz normal form (full proof) | Statement formalised (`exists_lorentz_normal_form_qubit`);
+| Theorem 2.5 (unitary form) | Reduced isometric form formalized; unitary form needs basis extension |
+| Section 2.3 Lorentz normal form (full proof) | Statement formalised (`exists_lorentz_normal_form_qubit`);
   proof blocked on compactness of bounded SL(n, ℂ) sets (`infimum_is_attained`) —
   see `LorentzNormalForm.lean` for details |
-| §2.3 Generic normal form (full proof) | Statement formalised (`exists_normal_form_generic`);
+| Section 2.3 Generic normal form (full proof) | Statement formalised (`exists_normal_form_generic`);
   proof blocked on same compactness lemma |
-| §2.3 Sorted singular values | Current SVD is unsorted; later uses want sorted values |
+| Section 2.3 Sorted singular values | Current SVD is unsorted; later uses want sorted values |
 
 ## References
 

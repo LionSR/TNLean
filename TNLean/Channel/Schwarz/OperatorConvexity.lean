@@ -52,7 +52,7 @@ These are consumed by the Corollary 5.2 proofs in `OperatorMonotone.lean`.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Thm. 5.1]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Theorem 5.1]
 * [F. Hansen, G. K. Pedersen, *Jensen's operator inequality*, 2003]
 -/
 
@@ -80,7 +80,7 @@ private local instance instOperatorConvexityNonnegSpectrumClass : NonnegSpectrum
 private local instance instOperatorConvexityCStarAlgebra : CStarAlgebra Mat :=
   CStarAlgebra.mk
 
-/-- **Operator Jensen for concave `rpow`** (Wolf Thm. 5.1 applied to
+/-- **Operator Jensen for concave `rpow`** (Wolf Theorem 5.1 applied to
 `x ↦ x ^ p` for `p ∈ [0, 1]`).
 
 For a positive subunital map `T` and `p ∈ [0, 1]`:
@@ -97,7 +97,7 @@ theorem IsPositiveMap.rpow_concave_jensen
     T (A ^ p) ≤ (T A) ^ p :=
   posMap_rpow_concave_jensen hT hSub hp hA
 
-/-- **Operator Jensen for convex `rpow`** (Wolf Thm. 5.1 applied to
+/-- **Operator Jensen for convex `rpow`** (Wolf Theorem 5.1 applied to
 `x ↦ x ^ p` for `p ∈ [1, 2]`).
 
 For a positive subunital map `T` and `p ∈ [1, 2]`:
@@ -114,7 +114,7 @@ theorem IsPositiveMap.rpow_convex_jensen
     (T A) ^ p ≤ T (A ^ p) :=
   posMap_rpow_convex_jensen hT hSub hp hA
 
-/-- **Operator Jensen for concave `log`** (Wolf Thm. 5.1 applied to `log`).
+/-- **Operator Jensen for concave `log`** (Wolf Theorem 5.1 applied to `log`).
 
 For a positive **unital** map `T` and positive-definite `A`:
   `T(log A) ≤ log(T A)`.

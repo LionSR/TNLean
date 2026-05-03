@@ -222,7 +222,7 @@ operation on the physical indices.
 %% ---------------------------------------------------------
 
 This section presents the 3-site virtual-bond statement used later in the
-paper proof. Here the hypothesis is already the
+proof of the PEPS fundamental theorem. Here the hypothesis is already the
 all-length MPV equality of the combined tensors, and the conclusion is the
 conjugacy of the middle-bond insertion data.
 
@@ -243,7 +243,7 @@ conjugacy of the middle-bond insertion data.
     \]
     for all $X \in \MN{D}$ and all physical indices $i_0, i_1, i_2$.
 
-    In the paper~\cite{Molnar2018NormalPEPS}, Lemma~1 is stated for
+    In \cite[Lemma~1]{Molnar2018NormalPEPS}, the statement is given for
     arbitrary chain length $n \ge 3$ and any bond position, with
     uniqueness of $Z$ up to scalar.
     The chain-level generalization to arbitrary $n \ge 3$
@@ -299,12 +299,12 @@ forces the local tensors to be proportional.
          &= \tr(B_2^{j}\, Y\, B_1^{i})
         \label{eq:external_bond}
     \end{align}
-    Diagrammatically, Eq.~\eqref{eq:internal_bond} is the equality obtained
+    Diagrammatically, Equation~\eqref{eq:internal_bond} is the equality obtained
     by inserting $X$ on the bond between the two sites,
     \begin{center}
         \TNInternalTraceInsertion{i}{j}{X}
     \end{center}
-    while Eq.~\eqref{eq:external_bond} is the corresponding equality with
+    while Equation~\eqref{eq:external_bond} is the corresponding equality with
     the insertion $Y$ on the outer trace bond,
     \begin{center}
         \TNExternalTraceInsertion{i}{j}{Y}
@@ -363,7 +363,7 @@ physical index and applies the single-block Fundamental Theorem to the resulting
 tensor. The fixed-length same-state statement requires a separate same-state
 reduction hypothesis.
 
-\begin{theorem}[Fundamental Theorem for injective chains (combined-tensor MPV version)]%
+\begin{theorem}[Fundamental Theorem for injective chains]%
     \label{thm:fundamentalTheorem_injective_chain}
     \lean{MPSChainTensor.fundamentalTheorem_injective_chain}
     \leanok
@@ -652,7 +652,7 @@ reduction hypothesis.
 
 \subsection{Non-translation-invariant descriptions of translation-invariant states}
 
-\begin{corollary}[Non-translation-invariant realisation of a translation-invariant state]%
+\begin{corollary}[Translation-invariant states from nonuniform chains]%
     \label{cor:non_ti_to_ti}
     \notready
     \uses{def:same_state_reduction_hyp, def:non_ti_chain}
@@ -756,9 +756,10 @@ Chapter~\ref{ch:symmetry}.
 \end{proof}
 
 \begin{remark}
-    The theorem above is the exact blocked-chain result established here.
-    Recovering sitewise gauges for the original unblocked tensors, and hence
-    the paper's normal-MPS corollary, is not established here.
+    The theorem above is the blocked-chain result established here.
+    Recovering sitewise gauges for the original unblocked tensors gives the
+    normal-MPS corollary of \cite{Molnar2018NormalPEPS}; that step is outside
+    this blocked-chain statement.
 \end{remark}
 
 %% ---------------------------------------------------------

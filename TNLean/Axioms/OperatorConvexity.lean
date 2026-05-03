@@ -63,7 +63,7 @@ All results are axiomatized. The specific Mathlib TODOs blocking proofs:
 ## References
 
 * [R. Bhatia, *Matrix Analysis*, Springer GTM 169, Chapter V]
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Thm. 5.1]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Theorem 5.1]
 * [F. Hansen, G. K. Pedersen, *Jensen's operator inequality*, 2003]
 * [E. H. Lieb, *Convex trace functions and the Wigner--Yanase--Dyson
   conjecture*, 1973]
@@ -95,49 +95,49 @@ private local instance instAxiomOCCStarAlgebra : CStarAlgebra Mat :=
 
 /-! ## Jensen inequality axioms for positive maps -/
 
-/-- **Operator Jensen for concave `rpow`** (Wolf Thm. 5.1, `p ∈ [0, 1]`).
+/-- **Operator Jensen for concave `rpow`** (Wolf Theorem 5.1, `p ∈ [0, 1]`).
 
 For a positive subunital map `T` and `p ∈ [0, 1]`:
   `T(A ^ p) ≤ (T A) ^ p`.
 
-Follows from operator concavity of `rpow` (Bhatia, Ch. V) combined with
+Follows from operator concavity of `rpow` (Bhatia, Chapter V) combined with
 the Hansen--Pedersen operator Jensen inequality for positive subunital maps.
 
 References:
-* Wolf, Thm. 5.1
+* Wolf, Theorem 5.1
 * Hansen--Pedersen, *Jensen's operator inequality*, 2003 -/
 axiom posMap_rpow_concave_jensen
     {T : Mat →ₗ[ℂ] Mat} (hT : IsPositiveMap T) (hSub : T 1 ≤ (1 : Mat))
     {p : ℝ} (hp : p ∈ Set.Icc (0 : ℝ) 1) {A : Mat} (hA : 0 ≤ A) :
     T (A ^ p) ≤ (T A) ^ p
 
-/-- **Operator Jensen for convex `rpow`** (Wolf Thm. 5.1, `p ∈ [1, 2]`).
+/-- **Operator Jensen for convex `rpow`** (Wolf Theorem 5.1, `p ∈ [1, 2]`).
 
 For a positive subunital map `T` and `p ∈ [1, 2]`:
   `(T A) ^ p ≤ T(A ^ p)`.
 
-Follows from operator convexity of `rpow` (Bhatia, Ch. V) combined with
+Follows from operator convexity of `rpow` (Bhatia, Chapter V) combined with
 the Hansen--Pedersen operator Jensen inequality for positive subunital maps.
 
 References:
-* Wolf, Thm. 5.1
+* Wolf, Theorem 5.1
 * Hansen--Pedersen, *Jensen's operator inequality*, 2003 -/
 axiom posMap_rpow_convex_jensen
     {T : Mat →ₗ[ℂ] Mat} (hT : IsPositiveMap T) (hSub : T 1 ≤ (1 : Mat))
     {p : ℝ} (hp : p ∈ Set.Icc (1 : ℝ) 2) {A : Mat} (hA : 0 ≤ A) :
     (T A) ^ p ≤ T (A ^ p)
 
-/-- **Operator Jensen for concave `log`** (Wolf Thm. 5.1, log case).
+/-- **Operator Jensen for concave `log`** (Wolf Theorem 5.1, log case).
 
 For a positive **unital** map `T` and positive-definite `A`:
   `T(log A) ≤ log(T A)`.
 
-Follows from operator concavity of `log` (Bhatia, Ch. V) combined with
+Follows from operator concavity of `log` (Bhatia, Chapter V) combined with
 the operator Jensen inequality. Requires unitality (`T 1 = 1`), not
 merely subunitality.
 
 References:
-* Wolf, Thm. 5.1
+* Wolf, Theorem 5.1
 * Hansen--Pedersen, *Jensen's operator inequality*, 2003 -/
 axiom posMap_log_concave_jensen
     {T : Mat →ₗ[ℂ] Mat} (hT : IsPositiveMap T) (hUnit : T 1 = (1 : Mat))

@@ -8,10 +8,10 @@ import Mathlib.Analysis.Matrix.PosDef
 import Mathlib.Analysis.Matrix.Order
 
 /-!
-# SVD normal form for (transfer) matrices (Wolf §2.3)
+# SVD normal form for (transfer) matrices (Wolf Section 2.3)
 
 This file formalizes the singular value decomposition (SVD) existence result
-from Wolf §2.3, which serves as the key technical building block for the
+from Wolf Section 2.3, which serves as the key technical building block for the
 transfer-matrix normal forms discussed there.
 
 * **SVD for PSD matrices.** Every positive semi-definite complex square matrix
@@ -21,13 +21,13 @@ transfer-matrix normal forms discussed there.
   admits a decomposition `M = U * diagonal σ * Vᴴ` with `U, V` unitary and
   `σ : n → ℝ` strictly positive.
 
-The full Wolf §2.3 Lorentz normal form (Prop 2.9 / Prop 2.11 for qubit
+The full Wolf Section 2.3 Lorentz normal form (Proposition 2.9 / Proposition 2.11 for qubit
 channels) requires an optimization / compactness step to show the infimum of
 `tr τ'` over `SL(2, ℂ)` filterings is attained; that iterative argument is out
 of scope for this existence milestone and is tracked in the Chapter 2 index.
 
 The singular values produced here are not sorted and not proven unique;
-downstream Wolf §2.3 applications that need the sorted / unique variant will
+downstream Wolf Section 2.3 applications that need the sorted / unique variant will
 require additional work.
 
 ## Main results
@@ -40,7 +40,7 @@ require additional work.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, §2.3][Wolf2012QChannels]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 2.3][Wolf2012QChannels]
 -/
 
 open scoped Matrix BigOperators ComplexOrder
@@ -191,7 +191,7 @@ section TransferMatrixSVD
 
 variable {D : ℕ}
 
-/-- **SVD representation of a transfer matrix** (existence, Wolf §2.3).
+/-- **SVD representation of a transfer matrix** (existence, Wolf Section 2.3).
 Every invertible transfer matrix admits a singular value decomposition
 `T̂ = U * diagonal σ * Vᴴ` with `U, V` unitary and `σ` strictly positive.
 

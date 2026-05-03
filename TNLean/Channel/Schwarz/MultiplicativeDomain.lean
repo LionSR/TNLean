@@ -32,7 +32,7 @@ then directly implies `E(X†Y) = E(X)†E(Y)` for all `Y`.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, §6.2][Wolf2012QChannels]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 6.2][Wolf2012QChannels]
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder

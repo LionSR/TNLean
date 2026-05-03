@@ -11,7 +11,7 @@ This file formalizes the *block-permutation* side of
 Wolf, *Quantum Channels & Operations*, Theorem 6.16, on top of the existing
 cyclic-decomposition formalization.
 
-Thm. 6.16 describes the asymptotic dynamics of a general trace-preserving
+Theorem 6.16 describes the asymptotic dynamics of a general trace-preserving
 positive Schwarz map `T` as acting on a direct sum of equal-size blocks by
 conjugation with a unitary followed by a permutation of the blocks.  Concretely
 
@@ -23,9 +23,9 @@ The current file isolates and formalizes the *block-permutation* data
 (the projection family together with the permutation `π`) as a reusable
 structure `CycleStructure T`.  All results below are sorry-free.
 
-The remaining *existence* direction of Thm. 6.16 — that every TP positive
+The remaining *existence* direction of Theorem 6.16 — that every TP positive
 Schwarz map admits such a block-permutation decomposition on its asymptotic
-image — relies on Wolf Thm. 6.14 (Wedderburn decomposition of the
+image — relies on Wolf Theorem 6.14 (Wedderburn decomposition of the
 fixed-point algebra, issues #27/#360) and is left to future work.
 
 ## Main definitions
@@ -42,7 +42,7 @@ fixed-point algebra, issues #27/#360) and is left to future work.
 
 * `CycleStructure.preserves_corner_pow_orderOf` — `T ^ orderOf σ` preserves
   each corner `P k · M_D(ℂ) · P k`.  This is the corner-preservation half
-  of Wolf Thm. 6.16 in its permutation-of-blocks form and is the basis for
+  of Wolf Theorem 6.16 in its permutation-of-blocks form and is the basis for
   descending the dynamics of `T ^ orderOf σ` to each block.
 
 * `CycleStructure.ofPermDecomp` — convenient constructor from explicit
@@ -50,7 +50,7 @@ fixed-point algebra, issues #27/#360) and is left to future work.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Thm. 6.16, §6.5]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Theorem 6.16, Section 6.5]
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder BigOperators
@@ -103,7 +103,7 @@ variable {T : MatrixEnd D}
 /-- The `n`-th iterate of `T` sends the projection labelled by `σ^n k`
 back to `P k`.  This is the permutation-of-blocks analogue of the
 single-cycle result `(T ^ n) (P (cyclicIndex k n)) = P k` used in the
-irreducible case of Wolf Thm. 6.6. -/
+irreducible case of Wolf Theorem 6.6. -/
 theorem map_proj_pow (C : CycleStructure T) (n : ℕ) (k : C.ι) :
     (T ^ n) (C.P ((C.σ ^ n) k)) = C.P k := by
   induction n with
@@ -132,7 +132,7 @@ theorem pow_orderOf_apply_proj (C : CycleStructure T) (k : C.ι) :
 
 The `orderOf σ`-th iterate of `T` preserves each corner
 `P k · M_D(ℂ) · P k`.  This is the fundamental corner-preservation half
-of Wolf Thm. 6.16 in its permutation-of-blocks form and is what allows
+of Wolf Theorem 6.16 in its permutation-of-blocks form and is what allows
 one to descend the dynamics of `T ^ orderOf σ` to each block.
 
 It is obtained by specialising the generic permutation-decomposition

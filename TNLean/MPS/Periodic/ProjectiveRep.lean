@@ -7,11 +7,11 @@ import TNLean.Algebra.ProjectiveRepresentation
 import TNLean.Algebra.CocycleCohomology
 
 /-!
-# Periodic MPS — projective-representation upgrade of Cor 4.1 (arXiv:1708.00029, §4.2)
+# Periodic MPS — projective-representation upgrade of Corollary 4.1 (arXiv:1708.00029, Section 4.2)
 
 This file upgrades `MPSTensor.cor_4_1_physical_symmetry_zgauge_explicit`
 (obtained in `MPS/Periodic/Symmetry.lean`) to a *genuine projective representation*
-of the symmetry group `G` on the bond space, following §4.2 of arXiv:1708.00029.
+of the symmetry group `G` on the bond space, following Section 4.2 of arXiv:1708.00029.
 
 The injective analogue is `MPSTensor.virtual_rep_of_symmetric_injective`
 (in `MPS/Symmetry/VirtualRepresentation.lean`): there, gauge uniqueness
@@ -42,7 +42,7 @@ representation data — the cocycle identity and the construction of a
 
 ## References
 
-* arXiv:1708.00029 §4.2 (de las Cuevas–Schuch–Pérez-García–Cirac, 2017) —
+* arXiv:1708.00029 Section 4.2 (de las Cuevas–Schuch–Pérez-García–Cirac, 2017) —
   SPT cocycle classification.
 * arXiv:0802.0447 — original projective-representation construction (injective
   case).
@@ -94,7 +94,7 @@ def PeriodicProjectiveRigidity
 
 /-! ## Projective representation from the rigidity hypothesis -/
 
-/-- **Corollary 4.1 projective-representation upgrade (arXiv:1708.00029, §4.2).**
+/-- **Corollary 4.1 projective-representation upgrade (arXiv:1708.00029, Section 4.2).**
 
 If the `Y_g` family from `cor_4_1_physical_symmetry_zgauge_explicit` can be chosen
 to satisfy the periodic projective-representation rigidity hypothesis, then the

@@ -33,7 +33,7 @@ of a PEPS to a three-partite chain.
 ## References
 
 - [Molnár, Schuch, Verstraete, Cirac, *Fundamental Theorem for injective PEPS*,
-  arXiv:1804.04964, §3](https://arxiv.org/abs/1804.04964)
+  arXiv:1804.04964, Section 3](https://arxiv.org/abs/1804.04964)
 -/
 
 namespace TNLean
@@ -242,7 +242,7 @@ theorem prod_univ_splitAtEdge {M : Type*} [CommMonoid M] (e : Edge G) (f : V →
 /-- `stateCoeff` evaluates the two endpoint tensors against an independent
 product over the middle region. This isolates the two endpoints of an edge in
 the PEPS amplitude, matching the edge-centred blocking of
-arXiv:1804.04964 §3. -/
+arXiv:1804.04964 Section 3. -/
 theorem stateCoeff_splitAtEdge (A : Tensor G d) (e : Edge G) (σ : V → Fin d) :
     stateCoeff A σ =
       ∑ η : VirtualConfig A,

@@ -51,7 +51,7 @@ variable {d D : ℕ}
 
 /-- **Lemma 1** (existential version).
 
-If `A` is normalized and primitive in the paper sense, then there exists a
+If `A` is normalized and primitive under the source theorem hypotheses, then there exists a
 word `w` with `|w| ≤ D^2` such that `tr (evalWord A w) ≠ 0`.
 
 See also `exists_nonzero_trace_word_of_isPrimitivePaper_sharp` for the
@@ -67,7 +67,7 @@ theorem exists_nonzero_trace_word_of_isPrimitivePaper [NeZero D]
 
 /-- **Lemma 1, sharp version**.
 
-If `A` is normalized and primitive in the paper sense, then there exists a
+If `A` is normalized and primitive under the source theorem hypotheses, then there exists a
 word `w` with `|w| ≤ D² − krausRank(A) + 1` such that `tr (evalWord A w) ≠ 0`.
 
 This is the exact quantitative bound from Lemma 1 of arXiv:0909.5347:
@@ -92,7 +92,7 @@ theorem exists_nonzero_trace_word_of_isPrimitivePaper_sharp [NeZero D]
 
 /-- **Lemma 1, sharp cumulative span** (paper-level statement).
 
-If `A` is normalized and primitive in the paper sense, then the cumulative
+If `A` is normalized and primitive under the source theorem hypotheses, then the cumulative
 span reaches ⊤ by step D² − krausRank(A) + 1:
   T_{D²−krausRank(A)+1}(A) = M_D(ℂ).
 
@@ -108,7 +108,7 @@ theorem cumulativeSpan_eq_top_of_isPrimitivePaper_sharp [NeZero D]
 
 /-- **Lemma 1, sharp positive-length version** (paper-level statement).
 
-For `D ≥ 2`, if `A` is normalized and primitive in the paper sense, then there
+For `D ≥ 2`, if `A` is normalized and primitive under the source theorem hypotheses, then there
 exists a **positive-length** word `w` with `|w| ≤ D² − krausRank(A) + 1`
 such that `tr(evalWord A w) ≠ 0`.
 

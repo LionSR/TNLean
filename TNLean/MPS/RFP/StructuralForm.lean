@@ -12,7 +12,7 @@ import TNLean.Spectral.QuantitativeGap
 # Structural form of RFP tensors
 
 This file states the structural characterisation theorems for MPS tensors
-that are renormalization fixed points, following arXiv:1606.00608 §3.4
+that are renormalization fixed points, following arXiv:1606.00608 Section 3.4
 (Cirac–Pérez-García–Schuch–Verstraete) and Appendix B.
 
 ## Main results

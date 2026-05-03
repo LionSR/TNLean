@@ -8,7 +8,7 @@ import TNLean.MPS.ParentHamiltonian.SuffixWindow
 /-!
 # Right-extension for block-injective parent-Hamiltonian ground spaces
 
-This file proves the open-chain grow-back step from [CPGSV21, §IV.C].
+This file proves the open-chain grow-back step from [Cirac--Perez-Garcia--Schuch--Verstraete 2021, Section IV.C].
 Starting from the compatibility family extracted by
 `MPSTensor.exists_left_tail_compatibility`, we show that block injectivity forces
 all boundary matrices `Z j` to share a common right factor. This yields the
@@ -24,7 +24,7 @@ open-chain extension theorem `groundSpace_extend_right_of_isNBlkInjective`.
 
 ## References
 
-* [CPGSV21] arXiv:2011.12127, lines 2049–2078
+* [Cirac--Perez-Garcia--Schuch--Verstraete 2021] arXiv:2011.12127, lines 2049–2078
 -/
 
 open scoped Matrix

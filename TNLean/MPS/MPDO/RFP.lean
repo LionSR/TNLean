@@ -23,7 +23,7 @@ supported by the current formalization.
 
 ## References
 
-* [CPGSV17] arXiv:1606.00608, §4.1
+* [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608, Section 4.1
 -/
 
 open scoped Matrix

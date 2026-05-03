@@ -7,7 +7,7 @@ import TNLean.Channel.Semigroup.ReducibleQDS.GeneratorCompression
 import TNLean.Channel.Semigroup.ReducibleQDS.SubsequenceAnalysis
 
 /-!
-# Reducibility Definition and Full Equivalence (Wolf Prop 7.6)
+# Reducibility Definition and Full Equivalence (Wolf Proposition 7.6)
 
 This file defines `IsReducibleQDS` and proves the full four-way equivalence
 of Wolf Proposition 7.6.
@@ -30,7 +30,7 @@ orthogonal projection `P` such that `T_t` preserves the compressed algebra
 
 Note: for a single map, `IsIrreducibleMap` checks that no nontrivial `P`
 satisfies `P E(PXP) P = E(PXP)` for all `X`. Here we require this for ALL
-`T_t` simultaneously, which by Prop 7.6 is equivalent to requiring it for
+`T_t` simultaneously, which by Proposition 7.6 is equivalent to requiring it for
 the generator `L`. -/
 def IsReducibleQDS (L : Mat →ₗ[ℂ] Mat) : Prop :=
   HasInvariantCompression L

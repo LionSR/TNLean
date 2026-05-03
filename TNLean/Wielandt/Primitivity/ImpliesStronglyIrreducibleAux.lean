@@ -14,7 +14,7 @@ This file continues the (a)→(c) direction of Proposition 3 from arXiv:0909.534
 It builds on the auxiliary lemmas in `ImpliesStronglyIrreducible` (Parts 1–8) and develops:
 
 - **Part 9: Spectral perturbation** — from peripheral eigenvectors to PSD non-PosDef
-  fixed points (the argument for case (iii) of Wolf §6.4 Theorem 6.7).
+  fixed points (the argument for case (iii) of Wolf Section 6.4 Theorem 6.7).
 - **Part 10: Uniqueness** of PSD fixed points under paper-primitivity.
 - **Part 11: Channel structure** — the iterated transfer map `E^p` is a quantum channel.
 - **Part 12: Hermitian vanishing** — Hermitian trace-zero `E^p`-fixed points vanish
@@ -31,7 +31,7 @@ access to the intermediate lemmas used in the (a)→(c) proof.
 ## References
 
 - [Sanz, Pérez-García, Wolf, Cirac, arXiv:0909.5347], Proposition 3
-- Wolf, *Quantum Channels & Operations: Guided Tour*, §6.4
+- Wolf, *Quantum Channels & Operations: Guided Tour*, Section 6.4
 -/
 
 open scoped Matrix ComplexOrder BigOperators
@@ -50,7 +50,7 @@ all ingredients toward constructing a matrix `τ` satisfying:
 - `τ.PosSemidef`, `τ ≠ 0`, `(E ^ p) τ = τ`, `¬ τ.PosDef`
 
 Paper: This corresponds to the spectral-perturbation argument in Proposition 3,
-case (iii), and in Wolf §6.4 Theorem 6.7.
+case (iii), and in Wolf Section 6.4 Theorem 6.7.
 -/
 
 section SpectralPerturbation
@@ -342,7 +342,7 @@ fixed points: any two nonzero PSD fixed points of `E^p` under paper-primitivity
 must be proportional.
 
 Paper: this corresponds to the non-degeneracy/uniqueness claim in Proposition 3
-(a)→(c) of arXiv:0909.5347 and Wolf Thm 6.7, case (iii). -/
+(a)→(c) of arXiv:0909.5347 and Wolf Theorem 6.7, case (iii). -/
 
 section Uniqueness
 
@@ -465,7 +465,7 @@ If `A` is paper-primitive with witness `q`, and normalized (`∑ A_i† * A_i = 
 then any Hermitian matrix `H` with `trace(H) = 0` and `E^p(H) = H` must be zero.
 
 **Proof outline:**
-1. Decompose `H = Q₁ - Q₂` via CFC (Wolf Prop 6.8), with `Q₁, Q₂` PSD and
+1. Decompose `H = Q₁ - Q₂` via CFC (Wolf Proposition 6.8), with `Q₁, Q₂` PSD and
    `E^p`-fixed.
 2. By PSD uniqueness (Part 10): if both `Q₁, Q₂ ≠ 0`, then `Q₁ = c₁ • ρ` and
    `Q₂ = c₂ • ρ` for some common PosDef `ρ`.
@@ -484,7 +484,7 @@ theorem hermitian_pow_fixedPoint_eq_zero_of_trace_eq_zero_of_isPrimitivePaper [N
   set Ep := ((transferMap (d := d) (D := D) A) ^ p :
     Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) with hEp_def
   have hCh : IsChannel Ep := transferMap_pow_isChannel A hNorm p
-  -- Step 2: Decompose H = Q₁ - Q₂ with both PSD and E^p-fixed (Wolf Prop 6.8)
+  -- Step 2: Decompose H = Q₁ - Q₂ with both PSD and E^p-fixed (Wolf Proposition 6.8)
   obtain ⟨Q₁, Q₂, hQ₁_psd, hQ₂_psd, hH_decomp, hEQ₁, hEQ₂⟩ :=
     IsChannel.posSemidef_parts_of_hermitian_fixedPoint (E := Ep) hCh hH_herm hH_fix
   -- Step 3: Get a PosDef E-fixed point ρ₀ for reference
@@ -541,7 +541,7 @@ a nonzero Hermitian trace-zero E^p-fixed matrix — which must vanish by Part 12
 This gives the desired contradiction.
 
 Paper: this is case (iii) of the contradiction argument in Proposition 3 (a)→(c)
-of arXiv:0909.5347 and Wolf §6.4 Theorem 6.7. -/
+of arXiv:0909.5347 and Wolf Section 6.4 Theorem 6.7. -/
 
 section PeripheralContradiction
 
@@ -576,7 +576,7 @@ end PeripheralContradiction
 The culminating theorem of the (a)→(c) direction: paper-primitivity of an MPS
 tensor `A` implies peripheral primitivity of its transfer map.
 
-**Proof strategy** (following Wolf §6.4 / arXiv:0909.5347 Proposition 3):
+**Proof strategy** (following Wolf Section 6.4 / arXiv:0909.5347 Proposition 3):
 
 1. Paper-primitivity implies tensor-irreducibility (Part 7).
 2. Tensor-irreducibility + normalization imply (via the blocking-periodicity
@@ -602,7 +602,7 @@ reduction (`exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor`),
 eigenvector power lifting, and the peripheral-eigenvalue contradiction engine
 (Part 13).
 
-Paper: Proposition 3 (a)⟹(c) of arXiv:0909.5347. Wolf §6.4 Theorem 6.7. -/
+Paper: Proposition 3 (a)⟹(c) of arXiv:0909.5347. Wolf Section 6.4 Theorem 6.7. -/
 theorem isPeripherallyPrimitive_of_isPrimitivePaper [NeZero D]
     (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)

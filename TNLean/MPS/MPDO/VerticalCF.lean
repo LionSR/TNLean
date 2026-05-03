@@ -10,7 +10,7 @@ import TNLean.MPS.SharedInfra.BlockAssembly
 # Vertical canonical form for MPO tensors
 
 This file introduces a block-decomposed version of the vertical canonical-form
-structure used in the MPDO analysis of arXiv:1606.00608, §4.4.
+structure used in the MPDO analysis of arXiv:1606.00608, Section 4.4.
 
 The paper's Proposition IV.12 writes the tensor, after a local isometry on the
 physical indices, as a direct sum
@@ -38,7 +38,7 @@ surrogate for the paper's vertical canonical form.
   Lemma L from the paper's appendix, proved here using the block-injective
   canonical-form (biCF) field of `HorizontalCFData`.
 
-The full Proposition IV.12 / Prop. 4.13 bridge from horizontal to vertical
+The full Proposition IV.12 / Proposition 4.13 bridge from horizontal to vertical
 canonical form is deferred to a follow-up PR: its blueprint entry
 `thm:vertical_cf_of_horizontal_cf` is marked `\notready`, and the corresponding
 Lean statement will be introduced together with its proof rather than as an
@@ -53,7 +53,7 @@ the MPS-scoped location matches the existing layering.
 
 ## References
 
-* [CPGSV17] arXiv:1606.00608, Proposition IV.12 and the auxiliary Lemma L in the appendix
+* [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608, Proposition IV.12 and the auxiliary Lemma L in the appendix
 -/
 
 open scoped Matrix BigOperators ComplexOrder
@@ -123,7 +123,7 @@ structure HorizontalCFData {r : ℕ} {dim : Fin r → ℕ}
   `Δ k : Matrix (Fin (dim k)) (Fin (dim k)) ℂ` pairs to zero against every
   length-`L` block-diagonal product, then each `Δ k` vanishes individually.
 
-  This is the block-decomposed surrogate for [CPGSV17], Proposition IV.3
+  This is the block-decomposed surrogate for [Cirac--Perez-Garcia--Schuch--Verstraete 2017], Proposition IV.3
   (arXiv:1606.00608, "`propblockinj`"): after blocking at most `3 D^5` spins,
   where `D` denotes the bond dimension in the paper (in this block-decomposed
   setting one may take `D` to be a global bound such as `⨆ k, dim k`),
@@ -136,7 +136,7 @@ structure HorizontalCFData {r : ℕ} {dim : Fin r → ℕ}
   (`PropBlockInjective`), and from the more concrete linear-independence criterion
   `wordEntryFamily`. What is still open is to derive one of those finite-length
   witnesses from the remaining canonical-form/BNT data alone, i.e. the actual
-  Proposition-IV.3 theorem from [CPGSV17]. -/
+  Proposition IV.3 theorem from [Cirac--Perez-Garcia--Schuch--Verstraete 2017]. -/
   biCF : ∃ L : ℕ, ∀ (Δ : (k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
     (∀ w : Fin L → Fin d,
         (∑ k : Fin r, Matrix.trace (Δ k * MPSTensor.evalWord (A k) (List.ofFn w))) = 0) →
@@ -319,7 +319,7 @@ theorem blockwise_insert_eq_of_mpv_agree
     (smul_eq_zero.mp hk).resolve_left hμne
   exact sub_eq_zero.mp hdiff
 
--- The full bridge `verticalCF_of_horizontalCF` (Proposition IV.12 / Prop. 4.13
+-- The full bridge `verticalCF_of_horizontalCF` (Proposition IV.12 / Proposition 4.13
 -- of arXiv:1606.00608) — every MPDO in horizontal canonical form is in vertical
 -- canonical form — is tracked by the blueprint entry
 -- `thm:vertical_cf_of_horizontal_cf` (currently `\notready`) and will be added

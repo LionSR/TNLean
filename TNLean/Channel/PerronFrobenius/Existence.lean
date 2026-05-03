@@ -43,7 +43,7 @@ backwards compatibility even though the file no longer introduces an axiom).
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, §6.2 Thms 6.3/6.5][Wolf2012QChannels]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 6.2 Theorems 6.3/6.5][Wolf2012QChannels]
 * [Cirac et al., arXiv:1606.00608, Appendix A][Cirac2017Annals]
 * [Evans–Høegh-Krohn, *Spectral properties of positive maps*, 1978][Evans1978Spectral]
 -/
@@ -62,7 +62,7 @@ Let `E` be a positive linear map on `M_D(ℂ)` (with `D > 0`) such that `E ρ �
 nonzero PSD matrix `ρ`. Then there exists a nonzero PSD matrix `ρ` and a positive real `r`
 such that `E ρ = r • ρ`.
 
-Wolf Thm 6.5 states this for *any* positive map (the spectral radius is always an
+Wolf Theorem 6.5 states this for *any* positive map (the spectral radius is always an
 eigenvalue with a PSD eigenvector). Our version adds the nonvanishing hypothesis
 `hNZ` to ensure `r > 0`.
 
@@ -213,7 +213,7 @@ theorem adjointTransferMap_ne_zero_of_nonzero
   exact hi (Matrix.conjTranspose_eq_zero.mp this)
 
 /-- **PosDef fixed point of the adjoint transfer map (after rescaling)**
-(combines Wolf Thm 6.5 for existence with Wolf Thm 6.3(2) for positive definiteness).
+(combines Wolf Theorem 6.5 for existence with Wolf Theorem 6.3(2) for positive definiteness).
 
 For an irreducible MPS tensor `A` with `D > 0` and some `A i ≠ 0`, there exist:
 * a positive definite matrix `σ`,
@@ -225,12 +225,12 @@ In other words: `∑ ((1/√r) • A i)ᴴ * σ * ((1/√r) • A i) = σ`.
 
 This is equivalent to saying `∑ (A i)ᴴ * σ * A i = r • σ` (eigenvector equation).
 
-This theorem is obtained by applying `exists_posSemidef_eigenvector` (Wolf Thm 6.5)
+This theorem is obtained by applying `exists_posSemidef_eigenvector` (Wolf Theorem 6.5)
 to the adjoint transfer map, noting that irreducibility transfers to that adjoint
 map because an invariant projection there would yield the complementary invariant
 projection for the original transfer map after taking adjoints, and then upgrading
 the resulting PSD fixed point to a PosDef one using irreducibility
-(Wolf Thm 6.3 item 2). -/
+(Wolf Theorem 6.3 item 2). -/
 theorem exists_posDef_adjoint_eigenvector
     [NeZero D]
     (A : MPSTensor d D)

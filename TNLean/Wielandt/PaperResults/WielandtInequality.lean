@@ -11,7 +11,7 @@ import TNLean.Wielandt.SpanGrowth.InvertibleWordSpan
 import TNLean.Wielandt.RankOne.Products
 
 /-!
-# Theorem 1 — Quantum Wielandt's inequality (arXiv:0909.5347 / Wolf §6.9)
+# Theorem 1 — Quantum Wielandt's inequality (arXiv:0909.5347 / Wolf Section 6.9)
 
 This file contains the public paper-level statements for the currently
 formalized parts of **Theorem 1** from Sanz–Pérez-García–Wolf–Cirac,

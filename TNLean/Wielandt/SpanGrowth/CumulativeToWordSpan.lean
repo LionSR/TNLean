@@ -60,7 +60,7 @@ supplied by strong irreducibility, i.e. peripheral spectrum `{1}`.
 ## References
 
 * arXiv:0909.5347, Proposition 3
-* arXiv:1606.00608, §2.3 (canonical form + periodicity discussion)
+* arXiv:1606.00608, Section 2.3 (canonical form + periodicity discussion)
 -/
 
 open scoped Matrix

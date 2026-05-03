@@ -21,7 +21,7 @@ peripheral-spectrum development.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Thm. 6.6, Thm. 6.16]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Theorem 6.6, Theorem 6.16]
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder BigOperators
@@ -249,7 +249,7 @@ variable {ι : Type*} [Fintype ι] [DecidableEq ι]
 omit [Fintype ι] [DecidableEq ι] in
 /-- Permutation-based variant of `preserves_corner_pow_of_cyclic_decomp`.
 
-This isolates the part of Wolf Thm. 6.16 that only needs a permutation action on blocks:
+This isolates the part of Wolf Theorem 6.16 that only needs a permutation action on blocks:
 if `T` permutes a family of sector projections via a permutation `σ`, then the `orderOf σ`-th
 iterate preserves each sector corner. -/
 theorem preserves_corner_pow_orderOf_of_perm_decomp

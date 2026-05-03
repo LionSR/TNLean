@@ -11,7 +11,7 @@ import Mathlib.Analysis.SpecificLimits.Normed
 This module proves that the normalized decomposition coefficients `(μ k / μ 0)^N` converge
 automatically from the separated weight hypothesis `HasStrictOrderedNonzeroWeights μ`
 (with legacy formulations through `IsCanonicalForm`), and provides a self-contained version of the
-Fundamental Theorem (Thm 4.4) that derives the decomposition data from canonical form structure.
+Fundamental Theorem (Theorem 4.4) that derives the decomposition data from canonical form structure.
 
 ## Main results
 
@@ -33,7 +33,7 @@ an adjusted proportionality constant; equivalently, the dominant factors `μ₀^
 into `c`.
 
 ### `fundamentalTheorem_proportionalMPV_CFBNT_auto`
-Self-contained Fundamental Theorem (Thm 4.4) that derives the BNT decomposition
+Self-contained Fundamental Theorem (Theorem 4.4) that derives the BNT decomposition
 data automatically from `IsCanonicalFormBNT`. The user supplies:
 - Two CF-BNT families
 - A proportionality constant `c : ℕ → ℂ` with
@@ -210,7 +210,7 @@ theorem proportional_normalized_of_proportional
   rw [div_pow, ← inv_pow]
   ring
 
-/-! ## Self-contained Fundamental Theorem (Thm 4.4)
+/-! ## Self-contained Fundamental Theorem (Theorem 4.4)
 
 The auto version derives the BNT decomposition data from the canonical form structure.
 The user only needs to supply:

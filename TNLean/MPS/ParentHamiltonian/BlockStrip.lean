@@ -37,7 +37,7 @@ words of length `L₀`.
 
 ## References
 
-* [CPGSV21] arXiv:2011.12127, §IV.C
+* [Cirac--Perez-Garcia--Schuch--Verstraete 2021] arXiv:2011.12127, Section IV.C
 -/
 
 open scoped Matrix BigOperators

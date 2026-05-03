@@ -28,7 +28,7 @@ endomorphisms as physical linear maps on the local physical space.
 ## References
 
 - [Molnár, Schuch, Verstraete, Cirac, *Fundamental Theorem for injective PEPS*,
-  arXiv:1804.04964, §3](https://arxiv.org/abs/1804.04964)
+  arXiv:1804.04964, Section 3](https://arxiv.org/abs/1804.04964)
 -/
 
 namespace TNLean

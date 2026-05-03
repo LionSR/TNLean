@@ -55,7 +55,7 @@ Newton--Girard identities.
 ## References
 
 * [PerezGarcia2007String] Pérez-García, Verstraete, Wolf, Cirac (quant-ph/0608197), Appendix E
-* [Cirac2017MPS] De las Cuevas, Schuch, Pérez-García, Cirac (arXiv:2011.12127), §IV
+* [Cirac2017MPS] De las Cuevas, Schuch, Pérez-García, Cirac (arXiv:2011.12127), Section IV
 -/
 
 set_option linter.unusedSectionVars false

@@ -11,7 +11,7 @@ import Mathlib.Analysis.Matrix.Order
 import Mathlib.Analysis.InnerProductSpace.Positive
 
 /-!
-# Choi–Jamiolkowski isomorphism (Wolf Ch. 2, Prop 2.1)
+# Choi–Jamiolkowski isomorphism (Wolf Chapter 2, Proposition 2.1)
 
 This file defines the Choi matrix of a linear map and proves the key
 equivalences of the Choi–Jamiolkowski correspondence.
@@ -21,7 +21,7 @@ equivalences of the Choi–Jamiolkowski correspondence.
 * `ChoiJamiolkowski.choiMatrix T`: the Choi matrix `τ = (T ⊗ id)(|Ω⟩⟨Ω|)` for a
   linear map `T : M_D(ℂ) → M_D(ℂ)`
 
-## Main results (Wolf Prop 2.1)
+## Main results (Wolf Proposition 2.1)
 
 * `ChoiJamiolkowski.cp_iff_choi_posSemidef` — `T` is CP ↔ `τ ≥ 0`
 * `ChoiJamiolkowski.traceLeft_choiMatrix_of_tp` — `T` is TP ↔ `tr_A(τ) = 𝟙/D`
@@ -42,7 +42,7 @@ indexed by `Fin D × Fin D`, matching the formalization in
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Prop 2.1][Wolf2012QChannels]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Proposition 2.1][Wolf2012QChannels]
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder
@@ -232,7 +232,7 @@ theorem choiMatrix_mulRight
 
 /-! ### Choi matrix of Kraus maps -/
 
-/-- **Easy direction of Prop 2.1** (Wolf): the Choi matrix of a Kraus map is PSD.
+/-- **Easy direction of Proposition 2.1** (Wolf): the Choi matrix of a Kraus map is PSD.
 
 If `T(X) = ∑ᵢ Kᵢ X Kᵢ†`, then `τ = (T ⊗ id)(|Ω⟩⟨Ω|) ≥ 0`. -/
 theorem choiMatrix_of_kraus_posSemidef
@@ -370,13 +370,13 @@ theorem projectedChoiMatrix_mulRight_eq_zero
   rw [projectedChoiMatrix, choiMatrix_mulRight, Matrix.mul_vecMulVec,
     Matrix.one_sub_omegaProj_mulVec_omegaVec, Matrix.zero_vecMulVec, Matrix.zero_mul]
 
-/-! ### Prop 2.1 correspondences -/
+/-! ### Proposition 2.1 correspondences -/
 
 section Correspondences
 
 variable (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
 
-/-- **Prop 2.1, CP correspondence** (Wolf):
+/-- **Proposition 2.1, CP correspondence** (Wolf):
 `T` is completely positive (in the Kraus sense) if and only if
 the Choi matrix `τ = (T ⊗ id)(|Ω⟩⟨Ω|)` is positive semidefinite.
 
@@ -396,7 +396,7 @@ theorem cp_iff_choi_posSemidef [NeZero D] :
       exists_kraus_of_choiMatrix_eq_sum_vecMulVec (T := T) (ι := Fin r) v hchoi
     exact ⟨r, K, hK⟩
 
-/-- **Prop 2.1, trace-preserving correspondence** (Wolf):
+/-- **Proposition 2.1, trace-preserving correspondence** (Wolf):
 If `T` is trace-preserving, then `tr_A(τ) = (1/D) · 𝟙_D`.
 
 (Here `tr_A = traceLeft`, the partial trace over the first tensor factor.) -/
@@ -436,7 +436,7 @@ theorem traceLeft_choiMatrix_of_tp
                 star ((1 : ℂ) / ((D : ℝ).sqrt : ℂ)))) hij)
       _ = ((1 / (D : ℂ)) • (1 : Matrix (Fin D) (Fin D) ℂ)) i j := by simp [hij]
 
-/-- **Prop 2.1, Hermiticity correspondence** (Wolf):
+/-- **Proposition 2.1, Hermiticity correspondence** (Wolf):
 `T` preserves Hermiticity (i.e., `T(B†) = T(B)†` for all `B`)
 if and only if the Choi matrix `τ` is Hermitian. -/
 theorem choiMatrix_isHermitian_iff_hermiticityPreserving [NeZero D] :
@@ -628,7 +628,7 @@ theorem choiMatrix_id :
 
 /-! ### Normalization and trace -/
 
-/-- **Prop 2.1, trace normalization** (Wolf):
+/-- **Proposition 2.1, trace normalization** (Wolf):
 For a trace-preserving map `T`, `tr(τ) = 1`. -/
 theorem trace_choiMatrix_of_tp (hd : 0 < D)
     (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)

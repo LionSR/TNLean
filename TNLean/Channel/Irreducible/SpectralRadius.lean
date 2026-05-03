@@ -34,7 +34,7 @@ The proof uses a TP-gauge reduction. Starting from a positive-definite right
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, §6.2, Thm 6.3]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 6.2, Theorem 6.3]
   [Wolf2012QChannels]
 -/
 
@@ -191,7 +191,7 @@ private lemma spectralRadius_smul
           exact @le_iSup₂ ENNReal ℂ (· ∈ spectrum ℂ (c • F)) _
             (fun k _ => (‖k‖₊ : ENNReal)) (c • μ) hcμ_spec
 
-/-- **Perron eigenvalue = spectral radius** (Wolf Thm 6.3(4)).
+/-- **Perron eigenvalue = spectral radius** (Wolf Theorem 6.3(4)).
 
 Let `E` be an irreducible CP map and assume `ρ > 0` is a positive-definite
 right eigenvector with `E ρ = r • ρ`, `r > 0`. Then the spectral radius of `E`
@@ -448,7 +448,7 @@ theorem spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp
     _ = ENNReal.ofReal r * 1 := by rw [hscaled_one]
     _ = ENNReal.ofReal r := by rw [mul_one]
 
-/-- **Real-valued spectral-radius identity** (Wolf Thm 6.3(4), real form).
+/-- **Real-valued spectral-radius identity** (Wolf Theorem 6.3(4), real form).
 
 Convenience corollary of `spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp`:
 the Perron–Frobenius eigenvalue `r > 0` equals the `ℝ`-valued spectral radius

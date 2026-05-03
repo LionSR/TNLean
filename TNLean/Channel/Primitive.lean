@@ -10,14 +10,14 @@ import Mathlib.LinearAlgebra.Matrix.Trace
 # Primitive Quantum Channels
 
 This file contains basic formalization toward the theory of **primitive** quantum channels
-(Wolf §6.3, Theorem 6.7: equivalent characterizations of primitivity).
+(Wolf Section 6.3, Theorem 6.7: equivalent characterizations of primitivity).
 
 We formalize the **rank-one projection** onto a fixed point and the algebraic decomposition
 \[
   E^n = P + (E-P)^n \qquad (n \ge 1)
 \]
 where `P` is the fixed-point projection. This decomposition is the algebraic core
-of Wolf Thm 6.7 item 3 → item 1: the spectral gap `‖E - P‖ < 1` ensures
+of Wolf Theorem 6.7 item 3 → item 1: the spectral gap `‖E - P‖ < 1` ensures
 `(E - P)^n → 0`, so `E^n → P`, giving convergence to the unique fixed state.
 
 ## Main definitions
@@ -37,7 +37,7 @@ Within `section SpectralGapDecomposition`, we use local notation:
 * `N` for `E - P` (the complementary part)
 
 ## References
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, §6.3 Thm 6.7][Wolf2012QChannels]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 6.3 Theorem 6.7][Wolf2012QChannels]
 -/
 
 open Matrix

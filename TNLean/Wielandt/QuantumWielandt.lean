@@ -48,7 +48,7 @@ Proposition 3 / Theorem 1 wrappers should prefer
 - Sanz, Pérez-García, Wolf, Cirac, *A quantum version of Wielandt's inequality*,
   arXiv:0909.5347, Proposition 3
 - Cirac, Pérez-García, Schuch, Verstraete, *Matrix product unitaries: structure,
-  symmetries, and topological invariants*, arXiv:1606.00608, §2.3
+  symmetries, and topological invariants*, arXiv:1606.00608, Section 2.3
 -/
 
 open scoped Matrix ComplexOrder BigOperators

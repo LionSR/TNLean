@@ -11,18 +11,18 @@ import TNLean.MPS.Periodic.Defs
 
 This module states two axioms that together realize the equivalence
 `IsRFP A ⇔ IsNNCPH A N` used in the proof of Theorem 3.10 of
-arXiv:1606.00608. Following the proof in §3.3 of that paper, the two
+arXiv:1606.00608. Following the proof in Section 3.3 of that paper, the two
 directions have very different external provenance and so are
 stated here as **separate** axioms with **separate** citations:
 
 * `Axioms.rfp_to_nncph_commute` — RFP ⟹ NNCPH. Per
-  arXiv:1606.00608 §3.3 (line 1307 of the source): *"The implication
+  arXiv:1606.00608 Section 3.3 (line 1307 of the source): *"The implication
   RFP ⟹ NNCPH is trivial from Theorem [charact-MPS]"*. It is
   therefore **not** gated on [Beigi 2012]; it is gated only on
   Theorem 3.10 of arXiv:1606.00608 (the full structural
   characterization of RFPs via product-of-entangled-pairs).
 * `Axioms.beigi_nncph_to_rfp` — NNCPH ⟹ RFP. This is the
-  non-trivial direction. Per arXiv:1606.00608 §3.3 (line 1307): *"To
+  non-trivial direction. Per arXiv:1606.00608 Section 3.3 (line 1307): *"To
   prove the reverse, we will use [Beigi]"*. It is gated on S. Beigi,
   *J. Phys. A: Math. Theor.* **45** (2012) 025306 — the ground-space
   theorem for nearest-neighbor commuting 1D Hamiltonians with finite
@@ -78,14 +78,14 @@ states. Formalization is expected to require:
   arXiv:1606.00608).
 * Cirac, Pérez-García, Schuch, Verstraete, "Matrix Product States and
   Projected Entangled Pair States: Concepts, Symmetries, and Theorems",
-  arXiv:1606.00608 §3.3 Theorem 3.10, Appendix B and Appendix D.2.
+  arXiv:1606.00608 Section 3.3 Theorem 3.10, Appendix B and Appendix D.2.
 -/
 
 open scoped Matrix BigOperators
 
 namespace Axioms
 
-/-- **RFP ⟹ NNCPH** direction of arXiv:1606.00608 §3.3 Theorem 3.10.
+/-- **RFP ⟹ NNCPH** direction of arXiv:1606.00608 Section 3.3 Theorem 3.10.
 
 For a normal MPS tensor `A` in RFP, the two-site parent-Hamiltonian
 `localTerm` projectors pairwise commute on every finite periodic chain
@@ -97,7 +97,7 @@ Unfolded on the NNCPH side, the commutativity condition is exactly
 unfolded form avoids a circular import between this axiom module and
 the file that consumes it.
 
-**Citation.** This direction is attributed in arXiv:1606.00608 §3.3
+**Citation.** This direction is attributed in arXiv:1606.00608 Section 3.3
 (source line 1307) as *"trivial from Theorem [charact-MPS]"*, i.e.,
 from Theorem 3.10 itself. It does **not** depend on S. Beigi (2012);
 it depends only on the product-of-entangled-pairs structural form
@@ -113,7 +113,7 @@ axiom rfp_to_nncph_commute {d D : ℕ} [NeZero D]
       MPSTensor.localTerm A 2 N i * MPSTensor.localTerm A 2 N j =
         MPSTensor.localTerm A 2 N j * MPSTensor.localTerm A 2 N i
 
-/-- **NNCPH ⟹ RFP** direction of arXiv:1606.00608 §3.3 Theorem 3.10,
+/-- **NNCPH ⟹ RFP** direction of arXiv:1606.00608 Section 3.3 Theorem 3.10,
 the non-trivial implication gated on [Beigi 2012].
 
 For a normal MPS tensor `A` in left-canonical form, if the two-site
@@ -124,7 +124,7 @@ holds).
 
 **Citation.** This is the only direction that uses the external
 result of S. Beigi, *J. Phys. A: Math. Theor.* **45** (2012) 025306.
-Per arXiv:1606.00608 §3.3 (source line 1307): *"To prove the reverse,
+Per arXiv:1606.00608 Section 3.3 (source line 1307): *"To prove the reverse,
 we will use [Beigi] where it is shown that the ground space of any
 nearest-neighbor commuting Hamiltonian in a 1D spin chain with a
 finite (independent of system size) degeneracy `g` is spanned by `g`

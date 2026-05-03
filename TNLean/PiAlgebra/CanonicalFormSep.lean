@@ -411,7 +411,7 @@ Compared to the naive statement in `PiAlgebra/BlockSeparation.lean`, we assume:
   `mpvOverlap (A k) (A k) N → 1` as `N → ∞`. This rules out the "overlap → 0" branch
   in the equal-or-orthogonal dichotomy.
 
-The proof follows Pérez-García et al. (2007, Appendix E) / Cirac et al. (2021, Thm. IV.3):
+The proof follows Pérez-García et al. (2007, Appendix E) / Cirac et al. (2021, Theorem IV.3):
 we take overlaps with the leading block, divide by the leading weight, and use the
 strict modulus ordering of the weights together with uniform overlap bounds to invoke
 `peeling_exponential_bound`. Thus the geometric decay comes from the weight ratio,

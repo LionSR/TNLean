@@ -28,7 +28,7 @@ i.e. $A$ is positive definite.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, §6.2, Thm 6.2
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 6.2, Theorem 6.2
   item 2][Wolf2012QChannels]
 
 ## Tags
@@ -45,7 +45,7 @@ variable {D : ℕ}
 
 section OneStep
 
-/-- **Structural lemma (Wolf Thm 6.2, (1)→(2), key step)**:
+/-- **Structural lemma (Wolf Theorem 6.2, (1)→(2), key step)**:
 If `E` is an irreducible CP map and `A` is PSD, nonzero, with
 `ker(A) ⊆ ker(E(A))`, then `A` is positive definite.
 

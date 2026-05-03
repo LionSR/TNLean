@@ -6,7 +6,7 @@ import TNLean.Algebra.MatrixOperatorSpace
 import TNLean.Channel.Semigroup.ReducibleQDS.Defs
 
 /-!
-# Generator-Level Compression Preservation (Wolf Prop 7.6, (3) ↔ (4))
+# Generator-Level Compression Preservation (Wolf Proposition 7.6, (3) ↔ (4))
 
 This file proves that the semigroup-level invariant compression implies
 block-upper-triangular Lindblad form ((3) → (4)), and vice versa ((4) → (3)).
@@ -43,7 +43,7 @@ then the Lindblad operators and κ must be block-upper-triangular.
 
 /-- If the generator preserves the compression, then all Lindblad operators
 are block-upper-triangular: `(1-P)*Lⱼ*P = 0` for every `j`. This is the
-key algebraic step in Wolf Prop 7.6. -/
+key algebraic step in Wolf Proposition 7.6. -/
 theorem lindblad_block_of_generatorPreservesCompression
     {P : Mat} (hP : IsOrthogonalProjection P) (F : LindbladForm D)
     (hgen : GeneratorPreservesCompression F.toLinearMap P) :
@@ -96,8 +96,8 @@ theorem lindblad_block_of_generatorPreservesCompression
 
 /-- If the generator preserves the compression and all Lindblad operators
 satisfy `(1-P)*Lⱼ*P = 0`, then the effective Hamiltonian `κ` also satisfies
-`(1-P)*κ*P = 0`. This is a shared step used in both Wolf Prop 7.6 and
-Cor 7.2(1). -/
+`(1-P)*κ*P = 0`. This is a shared step used in both Wolf Proposition 7.6 and
+Corollary 7.2(1). -/
 theorem kappa_block_of_generatorPreservesCompression
     {P : Mat} (hP : IsOrthogonalProjection P) (F : LindbladForm D)
     (hgen : GeneratorPreservesCompression F.toLinearMap P)

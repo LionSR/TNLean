@@ -20,7 +20,7 @@ blocked physical indices. When `(P_k)` is the cyclic-sector projection family
 of `IsCyclicSectorDecomp` (see `TNLean/MPS/Periodic/Overlap.lean`), the m-fold
 staircase product at sector `u`, evaluated on a blocked physical index, is the
 ambient-algebra representative of the compressed blocked sector tensor
-`blocksA u`. This is the matrix-level content of Eq. A.8 in Appendix A of
+`blocksA u`. This is the matrix-level content of Equation A.8 in Appendix A of
 `arXiv:1708.00029`: the identification with the compressed tensor through the
 per-sector compression isometry `φ k` (now exposed by
 `exists_compressedTensor_of_supported_projection`) is carried out in the
@@ -49,7 +49,7 @@ the ambient matrix algebra needed by those bridges.
 * `MPSTensor.cornerEvalWord_proj_left` — head-projection absorption of the
   staircase evaluation under idempotence of the intermediate projections.
 * `MPSTensor.blockedCornerTransitionTensor_apply` — the m-fold cyclic
-  staircase product as the ambient-algebra form of Eq. A.8.
+  staircase product as the ambient-algebra form of Equation A.8.
 
 ## References
 

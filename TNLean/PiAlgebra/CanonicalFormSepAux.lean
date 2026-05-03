@@ -151,7 +151,7 @@ end IsLeftCanonicalBlockFamily
 /-- Non-increasing weight ordering together with nonvanishing coefficients.
 
 This is the relaxed weight-ordering condition matching the paper definitions
-(PGVWC07, CPGSV21): block weights are non-increasing by modulus, but ties are
+(PGVWC07, Cirac--Perez-Garcia--Schuch--Verstraete 2021): block weights are non-increasing by modulus, but ties are
 permitted. The strictly decreasing variant `HasStrictOrderedNonzeroWeights`
 is used internally by the block-separation and coefficient-convergence proofs. -/
 structure HasOrderedNonzeroWeights {r : ℕ} (μ : Fin r → ℂ) : Prop where
@@ -226,7 +226,7 @@ end HasNormalizedSelfOverlap
 `∑ᵢ Aᵢ† Aᵢ = I`, non-increasing weight data, and overlap normalization in a single proposition.
 
 The weight ordering is `Antitone` (non-increasing by modulus), matching the paper definitions
-(PGVWC07, CPGSV21) which allow blocks with equal moduli. The strictly decreasing variant
+(PGVWC07, Cirac--Perez-Garcia--Schuch--Verstraete 2021) which allow blocks with equal moduli. The strictly decreasing variant
 is enforced at the BNT level (`IsCanonicalFormBNT`) after the grouping step. -/
 structure IsCanonicalForm {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k)) : Prop where

@@ -10,7 +10,7 @@ import TNLean.MPS.Periodic.Symmetry.Theorem41Reverse
 import TNLean.MPS.Periodic.Symmetry.Theorem41Bundle
 
 /-!
-# Periodic MPS — physical symmetries and `p`-refinement (arXiv:1708.00029, §4)
+# Periodic MPS — physical symmetries and `p`-refinement (arXiv:1708.00029, Section 4)
 
 This module is the public entry point for the periodic-symmetry and Theorem 4.1
 formalization. It keeps the historical import path
@@ -51,8 +51,8 @@ names, including `PeriodicEqualCaseFT`,
 
 ## References
 
-* arXiv:1708.00029 §4 (de las Cuevas–Schuch–Pérez-García–Cirac, 2017)
-* arXiv:0802.0447 §III (Pérez-García–Wolf–Sanz–Verstraete–Cirac,
+* arXiv:1708.00029 Section 4 (de las Cuevas–Schuch–Pérez-García–Cirac, 2017)
+* arXiv:0802.0447 Section III (Pérez-García–Wolf–Sanz–Verstraete–Cirac,
   *Characterizing Symmetries in a Projected Entangled Pair State*)
-* M. M. Wolf, *Quantum Channels & Operations*, Ch. 6.
+* M. M. Wolf, *Quantum Channels & Operations*, Chapter 6.
 -/

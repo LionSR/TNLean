@@ -7,19 +7,19 @@ gauge constructions, ergodicity of irreducible channels, the
 spectral-radius identification of Perron eigenvalues, and Wolf's
 spectral characterization of irreducibility.
 The conceptual source is Wolf's treatment of irreducible positive
-maps~\cite[Ch.~6, especially Thms.~6.2--6.5 and Cor.~6.3]{Wolf2012Quantum}
+maps~\cite[Chapter~6, especially Theorems~6.2--6.5 and Corollary~6.3]{Wolf2012Quantum}
 and~\cite{Evans1978Spectral}.
 
 \section{Positive definiteness}
 
 \begin{remark}\leanok
 	Wolf's general theory treats irreducible positive maps first
-	(\cite[Thm.~6.2]{Wolf2012Quantum}), then derives non-degeneracy
-	and positive definiteness (\cite[Thm.~6.3]{Wolf2012Quantum}).
+	(\cite[Theorem~6.2]{Wolf2012Quantum}), then derives non-degeneracy
+	and positive definiteness (\cite[Theorem~6.3]{Wolf2012Quantum}).
 	The injective-tensor version (Theorem~\ref{thm:psd_fp_pd}) uses
 	a shorter direct kernel argument; the irreducible
 	CP-map version (Theorem~\ref{thm:psd_fp_pd_irred}) follows
-	via the support-projection argument of~\cite[Thm.~6.2]{Wolf2012Quantum}.
+	via the support-projection argument of~\cite[Theorem~6.2]{Wolf2012Quantum}.
 \end{remark}
 
 \begin{theorem}[PSD fixed point is positive definite]\label{thm:psd_fp_pd}
@@ -46,10 +46,10 @@ and~\cite{Evans1978Spectral}.
 	for every matrix $M$. Given any vector $w$, choose $M$ with
 	$M v = w$. Then $\rho w = 0$ for every $w$, so $\rho = 0$,
 	contradicting $\rho \neq 0$.
-	In~\cite[Thm.~6.3, item~2]{Wolf2012Quantum},
+	In~\cite[Theorem~6.3, item~2]{Wolf2012Quantum},
 	the same conclusion is reached via the
 	growth condition $(\Id + T)^{d-1}(X) > 0$
-	of~\cite[Thm.~6.2, condition~(2)]{Wolf2012Quantum};
+	of~\cite[Theorem~6.2, condition~(2)]{Wolf2012Quantum};
 	here the direct kernel argument is shorter under
 	injectivity.
 \end{proof}
@@ -81,7 +81,7 @@ and~\cite{Evans1978Spectral}.
 	contradicting our assumption.
 	Hence $\rho$ must be positive definite.
 	This is the support-projection direction
-	of~\cite[Thm.~6.2, condition~(1)]{Wolf2012Quantum}.
+	of~\cite[Theorem~6.2, condition~(1)]{Wolf2012Quantum}.
 \end{proof}
 
 \begin{theorem}[Orthogonal trace condition]\label{thm:orthogonal_trace_cond}
@@ -100,7 +100,7 @@ and~\cite{Evans1978Spectral}.
 \begin{proof}
 	\leanok
 	The growth theorem for irreducible CP maps
-	(\cite[Thm.~6.2, item~2]{Wolf2012Quantum}) gives
+	(\cite[Theorem~6.2, item~2]{Wolf2012Quantum}) gives
 	$(\Id + E)^{D-1}(A) > 0$ (positive definite).
 	Since $B \ge 0$ is nonzero,
 	$\tr\bigl(B \cdot (\Id + E)^{D-1}(A)\bigr) > 0$.
@@ -113,7 +113,7 @@ and~\cite{Evans1978Spectral}.
 	($\tr(B A) = 0$).
 	Hence at least one $k \in \{1, \ldots, D-1\}$ contributes
 	a strictly positive term.
-	This is~\cite[Thm.~6.2, item~4]{Wolf2012Quantum}:
+	This is~\cite[Theorem~6.2, item~4]{Wolf2012Quantum}:
 	item~(2) (growth condition) implies item~(4)
 	by a binomial expansion and PSD positivity argument.
 \end{proof}
@@ -144,9 +144,9 @@ and~\cite{Evans1978Spectral}.
 	By Theorem~\ref{thm:psd_fp_pd}, $\tau$ must be zero,
 	giving $\sigma = c_0 \rho$.
 	\smallskip\noindent\textbf{Relation to Wolf:}
-	In~\cite[Thm.~6.3, item~2]{Wolf2012Quantum}, uniqueness
+	In~\cite[Theorem~6.3, item~2]{Wolf2012Quantum}, uniqueness
 	is proved via the growth condition
-	of~\cite[Thm.~6.2]{Wolf2012Quantum}.
+	of~\cite[Theorem~6.2]{Wolf2012Quantum}.
 	The same minimal-eigenvalue argument applies here, using the
 	injective-tensor positive-definiteness
 	(Theorem~\ref{thm:psd_fp_pd}) in place of the
@@ -198,7 +198,7 @@ and~\cite{Evans1978Spectral}.
 	Applying this to both $(\rho, r_1)$ and $(\sigma, r_2)$
 	gives $r_1 = t = r_2$.
 	\smallskip\noindent\textbf{Relation to Wolf:}
-	This is~\cite[Thm.~6.3, item~3]{Wolf2012Quantum},
+	This is~\cite[Theorem~6.3, item~3]{Wolf2012Quantum},
 	establishing non-degeneracy of the spectral-radius eigenvalue
 	for irreducible CP maps. The proof follows Wolf's dual-map
 	trace argument.
@@ -328,7 +328,7 @@ and~\cite{Evans1978Spectral}.
 	The invertibility of $C$ then forces $Q = 0$ or $Q = \Id$,
 	a contradiction.
 	This is the full similarity version of
-	\cite[Prop.~6.6]{Wolf2012Quantum};
+	\cite[Proposition~6.6]{Wolf2012Quantum};
 	the scalar case ($C = \Id$) gives the scaling result stated next.
 \end{proof}
 
@@ -381,7 +381,7 @@ and~\cite{Evans1978Spectral}.
 	If $E$ is an irreducible map and $c \neq 0$, then $c E$
 	is also irreducible.
 	This is the scalar special case ($C = \Id$) of
-	\cite[Prop.~6.6]{Wolf2012Quantum}.
+	\cite[Proposition~6.6]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -397,10 +397,10 @@ This section establishes the existence of a positive definite
 eigenvector for the adjoint transfer map of an irreducible MPS
 tensor, and uses it to construct a TP-gauge normalization.
 The PSD-eigenvector step corresponds to
-\cite[Thm.~6.5]{Wolf2012Quantum} (general positive maps) and
+\cite[Theorem~6.5]{Wolf2012Quantum} (general positive maps) and
 \cite{Evans1978Spectral}; the upgrade to positive definiteness
 uses the irreducible-map theory of
-\cite[Thm.~6.3]{Wolf2012Quantum}. The TP-gauge application
+\cite[Theorem~6.3]{Wolf2012Quantum}. The TP-gauge application
 follows~\cite[Appendix~A]{Cirac2017MPDO_AnnPhys}.
 
 \begin{theorem}[PSD eigenvector for positive maps]%
@@ -416,7 +416,7 @@ follows~\cite[Appendix~A]{Cirac2017MPDO_AnnPhys}.
 
 	This is the finite-dimensional Perron--Frobenius theorem for
 	positive maps on matrix algebras
-	(\cite[Thm.~6.5]{Wolf2012Quantum}; see also~\cite{Evans1978Spectral}).
+	(\cite[Theorem~6.5]{Wolf2012Quantum}; see also~\cite{Evans1978Spectral}).
 	The proof applies Brouwer's fixed-point theorem to the
 	normalization map $\rho \mapsto E(\rho) / \tr(E(\rho))$ on the
 	compact convex set of density matrices.
@@ -450,9 +450,9 @@ follows~\cite[Appendix~A]{Cirac2017MPDO_AnnPhys}.
 	$\E_A^\dagger(\sigma) = r \sigma$.
 
 	This combines the general PF existence
-	(\cite[Thm.~6.5]{Wolf2012Quantum}) with the
+	(\cite[Theorem~6.5]{Wolf2012Quantum}) with the
 	irreducible upgrade to positive definiteness
-	(\cite[Thm.~6.3, item~2]{Wolf2012Quantum});
+	(\cite[Theorem~6.3, item~2]{Wolf2012Quantum});
 	the application to the adjoint transfer map follows
 	\cite[Appendix~A]{Cirac2017MPDO_AnnPhys}.
 \end{theorem}
@@ -533,7 +533,7 @@ follows~\cite[Appendix~A]{Cirac2017MPDO_AnnPhys}.
 		\sum_{k=0}^{D-1} \frac{t^k}{k!} E^k(A)
 	\]
 	is positive definite.
-	This is the finite-sum core of \cite[Thm.~6.2, item~(3)]{Wolf2012Quantum}.
+	This is the finite-sum core of \cite[Theorem~6.2, item~(3)]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}
@@ -561,7 +561,7 @@ follows~\cite[Appendix~A]{Cirac2017MPDO_AnnPhys}.
 		\exp(tE)(A) = \sum_{k=0}^{\infty} \frac{t^k}{k!} E^k(A)
 	\]
 	is positive definite.
-	This is \cite[Thm.~6.2, item~(3)]{Wolf2012Quantum}.
+	This is \cite[Theorem~6.2, item~(3)]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}
@@ -583,7 +583,7 @@ follows~\cite[Appendix~A]{Cirac2017MPDO_AnnPhys}.
 	Let $E$ be an irreducible quantum channel on $\MN{D}$ with $D > 0$.
 	Then there exists a unique density matrix $\sigma$ such that $E(\sigma)=\sigma$.
 	Moreover $\sigma$ is positive definite.
-	This is the qualitative form of \cite[Cor.~6.3]{Wolf2012Quantum}.
+	This is the qualitative form of \cite[Corollary~6.3]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}
@@ -609,7 +609,7 @@ follows~\cite[Appendix~A]{Cirac2017MPDO_AnnPhys}.
 		\frac{1}{N} \sum_{n=0}^{N-1} E^n(\rho)
 	\]
 	converge to the unique positive definite density-matrix fixed point of~$E$.
-	This is \cite[Cor.~6.3]{Wolf2012Quantum}.
+	This is \cite[Corollary~6.3]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}
@@ -631,7 +631,7 @@ follows~\cite[Appendix~A]{Cirac2017MPDO_AnnPhys}.
 	Let $E$ be an irreducible completely positive map on $\MN{D}$.
 	Suppose $\rho > 0$ and $E(\rho) = r\rho$ with $r > 0$.
 	Then the spectral radius of $E$ is $r$.
-	This is \cite[Thm.~6.3, item~(4)]{Wolf2012Quantum}.
+	This is \cite[Theorem~6.3, item~(4)]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}
@@ -669,7 +669,7 @@ follows~\cite[Appendix~A]{Cirac2017MPDO_AnnPhys}.
 	\leanok
 	\uses{def:cp_map}
 	A completely positive map $E$ on $\MN{D}$ has the \emph{spectral properties}
-	of \cite[Thm.~6.4]{Wolf2012Quantum} if there exist a positive real number $r$,
+	of \cite[Theorem~6.4]{Wolf2012Quantum} if there exist a positive real number $r$,
 	a positive definite right eigenvector $\rho$, and a positive definite left
 	eigenvector $\sigma$ for the adjoint map such that
 	$E(\rho)=r\rho$, $E^\dagger(\sigma)=r\sigma$, every positive semidefinite
@@ -724,7 +724,7 @@ follows~\cite[Appendix~A]{Cirac2017MPDO_AnnPhys}.
 	Let $E$ be a nonzero completely positive map on $\MN{D}$.
 	Then $E$ is irreducible if and only if it has the spectral properties of
 	Definition~\ref{def:has_spectral_properties}.
-	This is \cite[Thm.~6.4]{Wolf2012Quantum}.
+	This is \cite[Theorem~6.4]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}

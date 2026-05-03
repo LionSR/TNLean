@@ -18,7 +18,7 @@ Mathlib already proves operator monotonicity of `x ↦ x^p` for `p ∈ [0,1]` an
 Corollary 5.2 from the operator Jensen inequality
 (`OperatorConvexity.lean`).
 
-**Status note:** The Cor. 5.2 theorems in this file depend on Jensen-type lemmas
+**Status note:** The Corollary 5.2 theorems in this file depend on Jensen-type lemmas
 imported from `OperatorConvexity.lean` that are currently `sorry` placeholders.
 They should be understood as conditional on those axioms and are not yet fully
 verified Lean theorems.
@@ -77,7 +77,7 @@ theorem matrix_log_le_log
   exact CFC.log_le_log (A := Mat) hAB
     (ha := Matrix.isStrictlyPositive_iff_posDef.mpr hA)
 
-/-- Wolf Cor. 5.2(1) in matrix form.
+/-- Wolf Corollary 5.2(1) in matrix form.
 
 For a positive subunital map `T`, `p ≥ 1`, and `A ≥ 0`:
   `T(A) ≤ (T(A ^ p)) ^ (1/p)`.
@@ -104,7 +104,7 @@ theorem IsPositiveMap.cor52_item1_rpow_of_subunital
   rw [hcomp] at hJ
   exact hJ
 
-/-- Wolf Cor. 5.2(2) in matrix form.
+/-- Wolf Corollary 5.2(2) in matrix form.
 
 For a positive subunital map `T`, `p ∈ [1/2, 1]`, and positive-definite `A`:
   `(T(A ^ p)) ^ (1/p) ≤ T(A)`.
@@ -134,7 +134,7 @@ theorem IsPositiveMap.cor52_item2_rpow_of_subunital
   rw [hcomp] at hJ
   exact hJ
 
-/-- Wolf Cor. 5.2(3) in matrix form.
+/-- Wolf Corollary 5.2(3) in matrix form.
 
 For a positive **unital** map `T` and positive-definite `A`:
   `T(log A) ≤ log(T A)`.

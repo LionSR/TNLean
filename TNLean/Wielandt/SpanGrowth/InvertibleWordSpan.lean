@@ -15,7 +15,7 @@ import Mathlib.LinearAlgebra.Dimension.Constructions
 
 This file establishes key structural properties of word spans when some
 Kraus operator `A i₀` is invertible, toward **case (2)** of the Quantum
-Wielandt inequality (arXiv:0909.5347, Theorem 1; Wolf §6.9).
+Wielandt inequality (arXiv:0909.5347, Theorem 1; Wolf Section 6.9).
 
 ## What is proved here
 
@@ -54,7 +54,7 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-! ## Basic dimension bound for wordSpan -/
+/-! ## Basic ambient dimension bound for wordSpan -/
 
 /-- The dimension of `S_n(A) = wordSpan A n` is bounded by `D²`.
 
