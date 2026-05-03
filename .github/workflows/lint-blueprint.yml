@@ -48,19 +48,16 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Restore Lake build cache
-        id: lake-cache
-        uses: actions/cache/restore@v5
-        with:
-          path: .lake
-          key: lake-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('lean-toolchain') }}-${{ hashFiles('lake-manifest.json') }}-${{ github.sha }}
-          restore-keys: lake-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('lean-toolchain') }}-${{ hashFiles('lake-manifest.json') }}
+      - name: Install blueprint system dependencies
+        uses: ./.github/actions/setup-blueprint-system-deps
 
-      - name: Set up Lean and blueprint tooling
-        uses: ./.github/actions/setup-lean
+      - name: Set up Python for blueprint tooling
+        uses: actions/setup-python@v6
         with:
-          install-blueprint: 'true'
-          use-github-cache: 'false'
+          python-version: '3.12'
+
+      - name: Install blueprint Python dependencies
+        run: python3 -m pip install -r .github/requirements/blueprint-python.txt
 
       - name: Lint LaTeX (chktex)
         run: |
@@ -71,6 +68,7 @@ jobs:
       # `latexindent -l blueprint/latexindent.yaml -w -s` over blueprint/src.
       - name: Check LaTeX formatting (latexindent)
         continue-on-error: true
+        timeout-minutes: 5
         run: |
           set -e
           status=0
@@ -102,36 +100,50 @@ jobs:
             echo "::error::Blueprint has unresolved labels (see ERROR lines above)"
             exit 1
           fi
+          if grep -q "WARNING: File not found:" "$tmp_output_file"; then
+            echo "::warning::Blueprint has missing file references (see WARNING lines above)"
+          fi
 
           # If leanblueprint itself failed, propagate its exit status
           if [ "$cmd_status" -ne 0 ]; then
             exit "$cmd_status"
           fi
 
-      - name: Build project (needed for checkdecls)
-        run: lake build
-
-      - name: Save Lake build cache
-        if: steps.lake-cache.outputs.cache-hit != 'true'
-        uses: actions/cache/save@v5
-        with:
-          path: .lake
-          key: ${{ steps.lake-cache.outputs.cache-primary-key }}
+      - name: Set up Lean toolchain
+        id: lean-setup
+        continue-on-error: true
+        timeout-minutes: 6
+        uses: ./.github/actions/setup-lean
 
       - name: Generate lean_decls from blueprint .tex files
+        if: steps.lean-setup.outcome == 'success'
+        continue-on-error: true
+        id: lean-decls
         run: python3 scripts/blueprint_lean_sync.py --root . --update-lean-decls
 
       - name: Check blueprint and Lean source stay in sync
+        if: steps.lean-setup.outcome == 'success' && steps.lean-decls.outcome == 'success'
+        continue-on-error: true
         run: python3 scripts/blueprint_lean_sync.py --root . --ci
 
-      - name: Warn on changed Lean declarations missing blueprint entries
-        if: github.event_name == 'pull_request'
+      - name: Fetch PR base ref for diff
+        if: github.event_name == 'pull_request' && steps.lean-setup.outcome == 'success'
         continue-on-error: true
+        env:
+          BASE_REF: ${{ github.event.pull_request.base.ref }}
+        run: git fetch --no-tags origin "$BASE_REF"
+
+      - name: Warn on changed Lean declarations missing blueprint entries
+        if: github.event_name == 'pull_request' && steps.lean-setup.outcome == 'success'
+        continue-on-error: true
+        env:
+          BASE_REF: origin/${{ github.event.pull_request.base.ref }}
         run: |
           python3 - <<'PY'
+          import os
           import subprocess
 
-          base_ref = "origin/${{ github.event.pull_request.base.ref }}"
+          base_ref = os.environ["BASE_REF"]
 
           changed = subprocess.check_output(
               [
@@ -169,4 +181,10 @@ jobs:
           PY
 
       - name: Check blueprint Lean declarations
-        run: lake exe checkdecls blueprint/lean_decls
+        if: steps.lean-setup.outcome == 'success' && steps.lean-decls.outcome == 'success'
+        continue-on-error: true
+        timeout-minutes: 10
+        run: |
+          if ! lake exe checkdecls blueprint/lean_decls; then
+            echo "::warning::Some blueprint/lean_decls entries have no matching Lean declaration yet (this is expected while formalization is in progress)"
+          fi

@@ -40,7 +40,7 @@ tools:
 safe-outputs:
   create-pull-request:
     title-prefix: "[blueprint-sync] "
-    labels: [blueprint, automation]
+    labels: [blueprint, blueprint-sync]
     if-no-changes: "warn"
     expires: 7d
   noop:
@@ -97,7 +97,7 @@ For each reported issue, determine the root cause:
 
 4. **Multi-declaration references**: Some `\lean{}` tags list multiple declarations separated by commas (e.g., `\lean{Foo, Bar}`). Each must be checked individually.
 
-5. **lean_decls drift**: If the `.tex` refs are correct but `lean_decls` is stale:
+5. **lean_decls drift**: `blueprint/lean_decls` is not tracked in git (it is generated). Regenerate it locally with:
    - Run `python3 scripts/blueprint_lean_sync.py --root . --update-lean-decls`
 
 ### Step 3: Verify fixes
@@ -128,7 +128,7 @@ grep -n "sorry" TNLean/path/to/file.lean
 
 ## Scope rules
 
-- Only modify files under `blueprint/src/chapter/` and `blueprint/lean_decls`.
+- Only modify files under `blueprint/src/chapter/`.
 - Do NOT modify Lean source files.
 - Do NOT change mathematical content in `.tex` files — only update `\lean{}`, `\leanok`, and `\uses{}` annotations.
 - Preserve the existing `.tex` formatting and style exactly.
@@ -139,10 +139,12 @@ When you make updates, create a PR that includes:
 
 - A summary table of sync issues found and how each was resolved
 - Which `.tex` files were modified
-- Whether `lean_decls` was updated
+- Whether `lean_decls` was regenerated (it is gitignored; CI generates it)
 - The current formalization progress (from the sync checker output)
 - The theorem, lemma, or definition labels affected by the changes
 - Mathematical descriptions without AI vocabulary or software-process metaphors
+- Motivation: which paper or blueprint statement needed synchronization, with
+  `.tex` file path, line number, theorem label, and Lean declaration name.
 
 ## Safety and quality constraints
 

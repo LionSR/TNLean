@@ -27,14 +27,11 @@ runs:
 
     - name: Set up Python for blueprint tooling
       if: inputs.install-blueprint == 'true'
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v6
       with:
         python-version: '3.12'
 
     - name: Install leanblueprint
       if: inputs.install-blueprint == 'true'
       shell: bash
-      run: |
-        pipx install leanblueprint
-        pipx inject --include-apps --force leanblueprint plastex
-        python3 -m pip install -r .github/requirements/blueprint-python.txt
+      run: python3 -m pip install -r .github/requirements/blueprint-python.txt

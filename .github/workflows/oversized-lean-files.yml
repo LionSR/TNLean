@@ -1,0 +1,32 @@
+name: Oversized Lean file guard
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+# This check is advisory while main still has files above the 1000-line style
+# limit. Remove continue-on-error below once those files have been split.
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  guard:
+    name: Check Lean file lengths
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Run oversized-file guard
+        continue-on-error: true
+        run: python3 scripts/check_oversized_lean_files.py --root .

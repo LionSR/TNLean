@@ -13,6 +13,9 @@ This repository uses [Claude Code](https://docs.anthropic.com/en/docs/claude-cod
   - [Issue Classification](#issue-classification-issue-classificationyml)
   - [CI Failure Auto-Fix](#ci-failure-auto-fix-auto-fixyml)
   - [Blueprint Auto-Fix](#blueprint-auto-fix-auto-fixyml)
+  - [Oversized Lean File Guard](#oversized-lean-file-guard-oversized-lean-filesyml)
+  - [Lean Linter-Warning Sweep](#lean-linter-warning-sweep-lean-linter-warning-sweepyml)
+  - [Lean Linter-Warning Auto-Fix](#lean-linter-warning-auto-fix-lean-linter-warning-autofixyml)
   - [Codex Auto-Fix (CI/Blueprint/Review)](#codex-auto-fix-ciblueprintreview-auto-fix-codexyml)
   - [Review Comment Auto-Fix](#review-comment-auto-fix-auto-fixyml)
   - [Claude Mention Handler](#claude-mention-handler-claudeyml)
@@ -221,6 +224,45 @@ runs only after a maintainer has checked the mathematical source and added
 - Posts a summary comment on the PR
 
 **No label required** — this runs on all PRs automatically.
+
+---
+
+### Oversized Lean File Guard (`oversized-lean-files.yml`)
+
+**What it does**: Reports `.lean` files above the 1000-line style limit.
+
+**When it runs**: On pull requests. The check is advisory while `main` still
+contains existing files above the limit; once those files are split, remove the
+`continue-on-error` line in the workflow to make it a blocking gate.
+
+---
+
+### Lean Linter-Warning Sweep (`lean-linter-warning-sweep.yml`)
+
+**What it does**: Runs `lake exe cache get && lake build -q --log-level=info`,
+parses Lean compiler/linter warnings with
+`scripts/lean_linter_warning_report.py`, writes the summary to the workflow
+summary, and uploads the log plus JSON/text reports.
+
+**When it runs**: Weekly and by manual dispatch. It is report-only and never
+edits files or opens pull requests.
+
+---
+
+### Lean Linter-Warning Auto-Fix (`lean-linter-warning-autofix.yml`)
+
+**What it does**: Runs the same warning capture as the sweep, then optionally
+asks Claude to apply only the listed Lean linter-warning fixes.
+
+**When it runs**: Manual dispatch only. PR creation requires `base_ref=main`,
+`create_pr=true`, an available `CLAUDE_CODE_OAUTH_TOKEN`, a successful initial
+Lean build, at least one warning, and a non-empty Lean-only diff.
+
+**Safety guards**: The workflow refuses to open a PR if the automated edit
+creates untracked files, deletes files, changes non-Lean files, changes the
+file list during validation, or adds proof-integrity tokens such as `sorry`,
+`admit`, `axiom`, `unsafe`, `native_decide`, `unsafeCast`, `unsafeCoerce`,
+`lcProof`, `ofReduceBool`, or `ofReduceNat`.
 
 ---
 
