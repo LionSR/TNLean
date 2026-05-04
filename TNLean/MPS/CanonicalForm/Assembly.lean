@@ -71,15 +71,15 @@ nonzero-sector families after a common blocking, once the blocked-word relabelin
 established.  To reach the sector-weight conclusion of the Cirac--Pérez-García--Schuch--Verstraete
 Fundamental Theorem for exactly those produced families, one still needs comparison data for
 those produced families.  The field `comparison` is supplied with their trace-preserving,
-primitive, and irreducible structural evidence, so the remaining assumptions cannot be applied to
-a different decomposition. -/
+primitive, irreducible, and positive bond-dimension evidence, so the remaining assumptions
+cannot be applied to a different decomposition. -/
 structure AfterBlockingFundamentalTheoremHypotheses
     {d D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂) : Prop where
   /-- The one-sided blocked-word relabeling equality for common cyclic-sector families. -/
   relabel : CommonSectorRelabelingHypothesis d
   /-- The remaining BNT-cover comparison data for the produced common primitive
   nonzero-sector families, with the structural evidence for trace preservation,
-  primitivity, and irreducibility supplied. -/
+  primitivity, irreducibility, and positive bond dimensions supplied. -/
   comparison : ∀ {p zeroTailA zeroTailB rA rB : ℕ}
       {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
       [∀ x : Fin rA, NeZero (dimA x)]
