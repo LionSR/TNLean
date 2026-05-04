@@ -9,9 +9,8 @@ import Mathlib.Analysis.SpecificLimits.Normed
 # Coefficient convergence for canonical-form BNT decompositions
 
 This module proves that the normalized decomposition coefficients `(μ k / μ 0)^N` converge
-automatically from the separated weight hypothesis `HasStrictOrderedNonzeroWeights μ`
-(with legacy formulations through `IsCanonicalForm`), and provides a self-contained version of the
-Fundamental Theorem (Theorem 4.4) that derives the decomposition data from canonical form structure.
+from separated nonzero weights, and provides a self-contained version of the Fundamental Theorem
+(Theorem 4.4) that derives the decomposition data from canonical-form structure.
 
 ## Main results
 
@@ -34,7 +33,7 @@ into `c`.
 
 ### `fundamentalTheorem_proportionalMPV_CFBNT_auto`
 Self-contained Fundamental Theorem (Theorem 4.4) that derives the BNT decomposition
-data automatically from `IsCanonicalFormBNT`. The user supplies:
+data from `IsCanonicalFormBNT`. Its remaining hypotheses are:
 - Two CF-BNT families
 - A proportionality constant `c : ℕ → ℂ` with
   `mpv(toTensorFromBlocks μA A) σ = c N * mpv(toTensorFromBlocks μB B) σ`
@@ -224,15 +223,15 @@ first normalizes by the dominant weight, so the relevant arrays are `(μ k / μ 
 converge to `0` for non-dominant blocks, while the overall factor `μ 0^N` is absorbed into the
 proportionality constant. In grouped equal-modulus sectors even the normalized sums can still
 oscillate. The paper resolves this via induction on block count, matching dominant blocks first
-and stripping them off. Our formalization takes the needed convergent coefficient data as
+and stripping them off. The needed convergent coefficient data is therefore recorded as
 explicit hypotheses.
 
-**What is derived automatically from `IsCanonicalFormBNT`:**
+**Consequences of the canonical-form hypotheses:**
 - The overlap properties (self → 1, cross → 0)
 - The decomposition identity `mpv(toTensorFromBlocks μ A) σ = Σ_k (μ_k)^N * mpv(A_k) σ`
 - Injectivity and left-canonical normalization
 
-**What the user must supply:**
+**Additional hypotheses:**
 - The proportionality `mpv(A_total) = c_N * mpv(B_total)`
 - Convergent decomposition coefficients `aCoeff`, `bCoeff` with nonzero limits
 - The convergence of the proportionality constant `c` -/
@@ -247,14 +246,14 @@ theorem fundamentalTheorem_proportionalMPV_CFBNT_auto
     (B : (k : Fin rB) → MPSTensor d (dimB k))
     (hA : IsCanonicalFormBNT μA A)
     (hB : IsCanonicalFormBNT μB B)
-    -- Decomposition coefficients (supplied by the caller; see design note above)
+    -- Coefficient families for the finite-length decompositions
     (aCoeff : ℕ → Fin rA → ℂ) (bCoeff : ℕ → Fin rB → ℂ)
     (aLim : Fin rA → ℂ) (bLim : Fin rB → ℂ)
     (haCoeff : ∀ j, Tendsto (fun N => aCoeff N j) atTop (nhds (aLim j)))
     (hbCoeff : ∀ k, Tendsto (fun N => bCoeff N k) atTop (nhds (bLim k)))
     (haLim_ne : ∀ j, aLim j ≠ 0)
     (hbLim_ne : ∀ k, bLim k ≠ 0)
-    -- Decomposition identities (with the supplied coefficients)
+    -- Decomposition identities for the chosen coefficient families
     (hA_decomp : ∀ N (σ : Fin N → Fin d),
       mpv (toTensorFromBlocks μA A) σ =
         ∑ j : Fin rA, (aCoeff N j) * mpv (A j) σ)
