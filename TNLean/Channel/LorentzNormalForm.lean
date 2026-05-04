@@ -282,20 +282,14 @@ def IsLorentzDiagonal
 normal form** (Wolf Proposition 2.9, case 2) if its Pauli-basis transfer matrix has
 `Δ = diag(x/√3, x/√3, 1/3)` and `v = (0, 0, 2/3)` for some `x ∈ [0, 1]`.
 
-In Pauli-entry terms:
-- `T̂_{00} = 1` (TP)
-- `T̂_{0j} = 0` for `j > 0` (TP)
-- `T̂_{10} = T̂_{20} = 0`, `T̂_{30} = 2/3`
-- `T̂_{11} = T̂_{22} = x/√3`, `T̂_{33} = 1/3`
-- All other off-diagonals are zero. -/
+The channel condition supplies the trace-preserving first row. The predicate
+records the non-trivial translation entry, the three diagonal entries, and the
+vanishing of all off-diagonal entries except the allowed translation. -/
 def IsLorentzNonDiagonal
     (T' : Matrix (Fin 2) (Fin 2) ℂ →ₗ[ℂ] Matrix (Fin 2) (Fin 2) ℂ) : Prop :=
   IsChannel T' ∧
     ∃ x : ℝ, 0 ≤ x ∧ x ≤ 1 ∧
-      pauliTransferEntry T' 0 0 = 1 ∧
-      (∀ j : Fin 4, j ≠ 0 → pauliTransferEntry T' 0 j = 0) ∧
       pauliTransferEntry T' 3 0 = (2/3 : ℂ) ∧
-      pauliTransferEntry T' 1 0 = 0 ∧ pauliTransferEntry T' 2 0 = 0 ∧
       pauliTransferEntry T' 1 1 = ((x / Real.sqrt 3 : ℝ) : ℂ) ∧
       pauliTransferEntry T' 2 2 = ((x / Real.sqrt 3 : ℝ) : ℂ) ∧
       pauliTransferEntry T' 3 3 = (1/3 : ℂ) ∧
