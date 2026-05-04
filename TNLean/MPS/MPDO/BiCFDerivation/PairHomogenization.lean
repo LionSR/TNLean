@@ -227,6 +227,25 @@ theorem pairTraceSeparatingAll_of_injective_not_gaugePhaseEquiv
   -- Step 1: duality ⇒ all-length trace separation
   exact pairTraceSeparatingAll_of_pairAllWordsSpanTop A B hPairSpanTop
 
+/-- Placeholder for the Burnside–Jacobson identity-padding lemma.
+Once proved, it supplies the missing input to
+`pairTraceSeparatingAt_of_pairTraceSeparatingUpTo_of_identity_padding` and
+thereby completes `exists_pairTraceSeparatingAt_of_not_gaugePhaseEquiv`.
+
+The statement: for injective, non-gauge-equivalent tensors `A, B`, there
+exists `L` such that the pair identity `(1, 1)` belongs to the homogeneous
+pair word span at every length `≥ L` (or at least at an arithmetic progression
+that covers all offsets needed for the padding argument). -/
+theorem pairIdentity_mem_pairWordTupleSpan_eventually_of_not_gaugePhaseEquiv
+    {d D : ℕ} [NeZero D]
+    (A B : MPSTensor d D)
+    (hA_inj : IsInjective A) (hB_inj : IsInjective B)
+    (hNot : ¬ GaugePhaseEquiv A B) :
+    ∃ L : ℕ, ∀ n : ℕ, n ≥ L →
+      ((1 : Matrix (Fin D) (Fin D) ℂ), (1 : Matrix (Fin D) (Fin D) ℂ)) ∈
+        Submodule.span ℂ (Set.range (pairWordTuple A B n)) := by
+  sorry
+
 /-- **Homogeneous pair trace separation from BNT non-equivalence (Route B).**
 Under the same hypotheses, there exists a finite homogeneous length `S` such
 that `PairTraceSeparatingAt A B S` holds.
@@ -257,37 +276,12 @@ theorem exists_pairTraceSeparatingAt_of_not_gaugePhaseEquiv
   -- Step 2: finite cumulative cutoff (Noetherian chain stabilization)
   obtain ⟨S, hSepUpTo⟩ := exists_pairTraceSeparatingUpTo_of_pairTraceSeparatingAll A B hSepAll
   -- Step 3: homogenize via identity padding.
-  -- We need a length L such that `(1, 1)` is in the homogeneous pair span
-  -- at all lengths ≥ L.  Once L is available, choose T = L + S and the
-  -- identity-padding lemma gives the result.
-  --
-  -- **Remaining blocker:**  Prove `∃ L,` the pair identity `(1, 1)` belongs
-  -- to `Submodule.span ℂ (Set.range (pairWordTuple A B L))` for all
-  -- sufficiently large homogeneous lengths (or at least at an arithmetic
-  -- progression that covers all padding offsets needed by the lemma below).
-  -- This is the Burnside–Jacobson density statement for the pair algebra:
-  -- once the pair algebra equals M_D × M_D, the identity `(1, 1)` is a
-  -- polynomial in the generators, and padding with enough copies of a
-  -- simultaneously-invertible word lifts it to a single homogeneous length.
-  sorry
-
-/-- Placeholder for the Burnside–Jacobson identity-padding lemma.
-Once proved, it supplies the missing input to
-`pairTraceSeparatingAt_of_pairTraceSeparatingUpTo_of_identity_padding` and
-thereby completes `exists_pairTraceSeparatingAt_of_not_gaugePhaseEquiv`.
-
-The statement: for injective, non-gauge-equivalent tensors `A, B`, there
-exists `L` such that the pair identity `(1, 1)` belongs to the homogeneous
-pair word span at every length `≥ L` (or at least at an arithmetic progression
-that covers all offsets needed for the padding argument). -/
-theorem pairIdentity_mem_pairWordTupleSpan_eventually_of_not_gaugePhaseEquiv
-    {d D : ℕ} [NeZero D]
-    (A B : MPSTensor d D)
-    (hA_inj : IsInjective A) (hB_inj : IsInjective B)
-    (hNot : ¬ GaugePhaseEquiv A B) :
-    ∃ L : ℕ, ∀ n : ℕ, n ≥ L →
-      ((1 : Matrix (Fin D) (Fin D) ℂ), (1 : Matrix (Fin D) (Fin D) ℂ)) ∈
-        Submodule.span ℂ (Set.range (pairWordTuple A B n)) := by
-  sorry
+  obtain ⟨L, hPadAll⟩ :=
+    pairIdentity_mem_pairWordTupleSpan_eventually_of_not_gaugePhaseEquiv
+      A B hA_inj hB_inj hNot
+  refine ⟨L + S, ?_⟩
+  exact pairTraceSeparatingAt_of_pairTraceSeparatingUpTo_of_identity_padding
+    A B (S := S) (T := L + S) (by omega) hSepUpTo
+    (fun l hl => hPadAll (L + S - l) (by omega))
 
 end MPSTensor
