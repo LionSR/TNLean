@@ -3,36 +3,33 @@ import TNLean.PEPS.LocalGauge
 import Mathlib.LinearAlgebra.LinearIndependent.Basic
 import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Defs
 
--- The forward direction and contraction algebra are formalized, while the
--- converse PEPS fundamental theorem remains as `sorry` placeholders marking
--- proof obligations for future PRs (see #128).
+-- The forward direction and contraction algebra are formalized. The converse
+-- PEPS fundamental theorem still depends on the mathematical hypotheses listed
+-- below.
 --
 -- Provability note: `IsVertexInjective` in `PEPS.Defs` is the
 -- linear-independence formulation `∀ v, LinearIndependent ℂ (A.component v)`
 -- (see issue #633 for the switch away from function-level injectivity, which
 -- is strictly weaker). Linear independence gives each vertex tensor a left
--- inverse on its image, removes the old definitional blocker, and is the
--- correct hypothesis for the repaired uniqueness statement
--- `gauge_unique_mod_edge_scalars`.
+-- inverse on its image and is the correct hypothesis for the repaired
+-- uniqueness statement `gauge_unique_mod_edge_scalars`.
 --
--- The remaining `sorry`s split into three independently tracked groups:
--- * `gaugeConsistency` (issue #820) still requires the full edge-centred
---   reduction from arXiv:1804.04964 Section 3. The local left inverse and the
---   elementary blocking data are developed in `PEPS/VirtualInsertion` and
---   `PEPS/Blocking`, and `localGauge_exists` has been reduced to the sharper
---   local hypothesis `HasLocalGaugeLift`. The edge-blocked coefficient and
---   middle tensor are developed in `PEPS/Blocking`; the abbreviation
---   `BlockedMiddleGaugeHyp` isolates the remaining step: compare that
---   three-block contraction with the 3-site MPS theorem and derive the explicit
---   local gauge formula from `SameState`.
--- * The `hDim` step inside `fundamentalTheorem_PEPS` (issue #874) is now
---   factored out as the conditional theorem `fundamentalTheorem_PEPS_of_bondDim`
---   so that the bond-dimension obligation is orthogonal to `gaugeConsistency`.
---   Its derivation from `SameState` plus vertex injectivity still needs a
---   boundary-insertion / blocking lemma.
--- * `gauge_unique_mod_edge_scalars` (issue #842) is the repaired uniqueness
---   statement, but its proof still needs the same blocking infrastructure
---   together with a local tensor-factor uniqueness lemma for the balanced
+-- The unproved converse ingredients split into three groups:
+-- * `gaugeConsistency` requires the full edge-centred reduction from
+--   arXiv:1804.04964 Section 3. The local left inverse and the elementary
+--   blocking data are developed in `PEPS/VirtualInsertion` and `PEPS/Blocking`,
+--   and `localGauge_exists` has been reduced to the sharper local hypothesis
+--   `HasFactorizedLocalGauge`. The edge-blocked coefficient and middle tensor are
+--   developed in `PEPS/Blocking`; the abbreviation `BlockedMiddleGaugeFormula`
+--   isolates the remaining implication from `SameState` to the explicit local
+--   gauge formula.
+-- * The `hDim` step inside `fundamentalTheorem_PEPS` is factored out as the
+--   conditional theorem `fundamentalTheorem_PEPS_of_bondDim`, so that the
+--   bond-dimension equality is orthogonal to `gaugeConsistency`. Its derivation
+--   from `SameState` plus vertex injectivity still requires a boundary-insertion
+--   / blocking lemma.
+-- * `gauge_unique_mod_edge_scalars` is the repaired uniqueness statement. Its
+--   proof still requires local tensor-factor uniqueness for the balanced
 --   edge-scalar quotient.
 
 /-!
@@ -498,19 +495,18 @@ noncomputable def localTensorEval (A : Tensor G d) (v : V)
   ∑ η : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1),
     (∏ ie : IncidentEdge G v, f ie (η ie)) * A.component v η σ
 
-/-- Under the sharper local hypothesis `HasLocalGaugeLift`, one obtains a
+/-- Under the sharper local hypothesis `HasFactorizedLocalGauge`, one obtains a
 factorized local gauge relation at `v`.
 
-The local left inverse and the canonical candidate operator are defined in
-`PEPS/LocalGauge`. The remaining PEPS-Fundamental-Theorem gap is to prove
-`BlockedMiddleGaugeHyp` from `SameState` by comparing the edge-blocked
-coefficient from `PEPS/Blocking` with the three-site MPS reduction, then convert
-it to `HasLocalGaugeLift` by
-`hasLocalGaugeLift_of_blockedMiddleGaugeHyp`. -/
+The local left inverse and the canonical local gauge map are defined in
+`PEPS/LocalGauge`. It remains to derive `BlockedMiddleGaugeFormula` from
+`SameState` by comparing the edge-blocked coefficient from `PEPS/Blocking` with
+the three-site MPS reduction, then convert it to `HasFactorizedLocalGauge` by
+`hasFactorizedLocalGauge_of_blockedMiddleGaugeFormula`. -/
 theorem localGauge_exists (A B : Tensor G d)
     (hA : IsVertexInjective A)
     (hDim : A.bondDim = B.bondDim) (v : V)
-    (hLift : HasLocalGaugeLift A B hA hDim v) :
+    (hFactorized : HasFactorizedLocalGauge A B hA hDim v) :
     ∃ (Xv : (e : Edge G) → GL (Fin (A.bondDim e)) ℂ),
       ∀ (η : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1)) (σ : Fin d),
         B.component v (fun ie => Fin.cast (congr_fun hDim ie.1) (η ie)) σ =
@@ -518,7 +514,7 @@ theorem localGauge_exists (A B : Tensor G d)
             (∏ ie : IncidentEdge G v,
               (↑(Xv ie.1) : Matrix _ _ ℂ) (η ie) (η' ie)) *
               A.component v η' σ :=
-  localGauge_exists_of_liftData A B hA hDim v hLift
+  localGauge_exists_of_factorizedLocalGauge A B hA hDim v hFactorized
 
 /-! ### Gauge consistency across edges -/
 
@@ -537,10 +533,11 @@ theorem gaugeConsistency (A B : Tensor G d)
       ∀ (v : V) (η : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1)) (σ : Fin d),
         B.component v (fun ie => Fin.cast (congr_fun hDim ie.1) (η ie)) σ =
           gaugeVertex A X v η σ := by
-  -- TODO: first derive `BlockedMiddleGaugeHyp A B hA hDim v` from `SameState`
-  -- at each vertex by comparing the edge-blocked coefficient from `PEPS/Blocking`
-  -- with the three-site MPS reduction, then use
-  -- `hasLocalGaugeLift_of_blockedMiddleGaugeHyp` to obtain the local gauges.
+  -- Derive `BlockedMiddleGaugeFormula A B hA hDim v` from `SameState` at each
+  -- vertex by comparing the edge-blocked coefficient from `PEPS/Blocking` with
+  -- the three-site MPS reduction, then use
+  -- `hasFactorizedLocalGauge_of_blockedMiddleGaugeFormula` to obtain the local
+  -- gauges.
   -- The key remaining consistency step is: for each edge e = (u,v), the gauges
   -- extracted from u and v must agree as inverse-transposes, with the
   -- orientation convention in `edgeGaugeAt`.
@@ -552,12 +549,11 @@ theorem gaugeConsistency (A B : Tensor G d)
 equality** (arXiv:1804.04964, Theorem 2).
 
 Given matching bond dimensions, two vertex-injective PEPS that generate the
-same state are gauge-equivalent. This isolates the two remaining blockers of
+same state are gauge-equivalent. This isolates the two unproved ingredients of
 `fundamentalTheorem_PEPS` into orthogonal hypotheses:
 
-* the bond-dimension equality `hDim` (tracked in issue #874), and
-* the globally consistent edge gauges produced by `gaugeConsistency`
-  (tracked in issue #820).
+* the bond-dimension equality `hDim`, and
+* the globally consistent edge gauges produced by `gaugeConsistency`.
 
 Downstream consumers that already have a specific bond-dimension witness can
 call this conditional form directly, without waiting for the boundary-insertion
@@ -577,7 +573,7 @@ the same state, then they are gauge-equivalent: there exist invertible matrices
 
 The proof proceeds in two stages:
 1. **Local extraction** (`localGauge_exists`): after proving the sharper local
-   hypothesis `HasLocalGaugeLift`, injectivity and the chosen left inverse
+   hypothesis `HasFactorizedLocalGauge`, injectivity and the chosen left inverse
    produce a factorized local gauge relation.
 2. **Global consistency** (`gaugeConsistency`): local gauges along shared
    edges are shown to be compatible, yielding a single coherent family of
@@ -588,17 +584,13 @@ theorem fundamentalTheorem_PEPS (A B : Tensor G d)
     (hA : IsVertexInjective A) (hB : IsVertexInjective B)
     (hAB : SameState A B) :
     GaugeEquiv A B := by
-  -- Step 1: Show bond dimensions must agree.  Tracked in issue #874.
-  -- `SameState` captures only the fully-contracted scalar, whereas the PEPS FT
-  -- derivation of bond-dimension equality uses the full family of boundary
+  -- Bond-dimension equality should follow from the full family of boundary
   -- insertions. Linear independence at each vertex (`IsVertexInjective`) gives
-  -- the right local data, but the global argument that different bond
-  -- dimensions cannot yield the same state family still requires a
+  -- the right local data, while the global comparison still requires a
   -- boundary-insertion / blocking lemma.
   have hDim : A.bondDim = B.bondDim := by
     sorry
-  -- Step 2: Extract globally consistent gauges via `gaugeConsistency`
-  -- (tracked in issue #820).
+  -- With matching bond dimensions, `gaugeConsistency` supplies the global gauges.
   exact fundamentalTheorem_PEPS_of_bondDim A B hA hB hAB hDim
 
 /-! ### Balanced edge scalars -/
@@ -721,15 +713,14 @@ theorem gauge_unique_mod_edge_scalars (A B : Tensor G d)
         ∏ ie : IncidentEdge G v, edgeGaugeAt A Y v ie (η ie) (η' ie) :=
     fun v η η' =>
       edgeGaugeProduct_eq_of_gaugeVertex_eq (G := G) A hA v X Y (hGauge v) η η'
-  -- Remaining step (issue #842): the tensor-factor uniqueness lemma.
   -- From `hProd v` at each vertex `v`, extract a nonzero scalar `c_v(ie)` on
   -- each incident edge such that `edgeGaugeAt A X v ie = c_v(ie) • edgeGaugeAt A Y v ie`
   -- with the oriented product of `c_v(ie)` over incident `ie` at `v` equal to
   -- `1`, then reconcile `c_u` and `c_w` on every shared edge `e = (u,w)` into a
   -- single global family `c : (e : Edge G) → Units ℂ` satisfying
   -- `IsVertexBalanced c`. This is the local scalar-ratio argument of
-  -- arXiv:1804.04964 Section 3; it is independent of the virtual-insertion / blocking
-  -- machinery tracked in #763.
+  -- arXiv:1804.04964 Section 3; it is independent of the virtual-insertion and
+  -- blocking lemmas used for local gauge existence.
   sorry
 
 end PEPS
