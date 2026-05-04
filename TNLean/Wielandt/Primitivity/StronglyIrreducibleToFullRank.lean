@@ -39,10 +39,10 @@ Sanz–Pérez-García–Wolf–Cirac, *A quantum version of Wielandt's inequalit
 > point, irreducible, unique peripheral eigenvalue `{1}`), then `A` has
 > eventually full Kraus rank (i.e., word products eventually span `M_D(ℂ)`).
 
-This file gives the direction-specific proof. For the two-sided Proposition 3
-equivalence, prefer `TNLean.Wielandt.Primitivity.Equivalence`; this file is
-retained for specialized access to the (c)→(b) proof route and its quantitative
-intermediates.
+This file gives the direction-specific proof. For the full Proposition 3
+equivalence of (a), (b), and (c), prefer
+`TNLean.Wielandt.Primitivity.Equivalence`; this file is retained for specialized
+access to the (c)→(b) proof route and its quantitative intermediates.
 
 ## Proof strategy (following the paper / Wolf Chapter 6)
 
@@ -715,7 +715,7 @@ private theorem norm_tracePairBilin_le [NeZero D]
     _ ≤ ∑ p ∈ Finset.univ ×ˢ Finset.univ,
         ‖Bᴴ‖ * ‖Φ‖ * ‖B‖ := by
           apply Finset.sum_le_sum; intro p _
-          -- ‖F x‖ = ‖Φ x‖ since Φ wraps F with continuous structure
+          -- ‖F x‖ = ‖Φ x‖ because `Φ` is the continuous-linear-map form of `F`.
           have hFΦ : ‖F (Matrix.single p.1 p.2 1)‖ =
               ‖Φ (Matrix.single p.1 p.2 (1 : ℂ))‖ := by rfl
           calc ‖(Bᴴ * F (Matrix.single p.1 p.2 1) *
