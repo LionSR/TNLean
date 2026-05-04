@@ -859,7 +859,7 @@ namely to find $n_0$ such that $S_{n_0}(A) = \MN{D}$
 (i.e.\ word products of \emph{exactly} one length span all matrices).
 
 \begin{definition}[Fixed-length vector span]\label{def:vector_spread_span}
-    \lean{MPSTensor.vectorSpreadSpan_eq_top_of_isPrimitivePaper_of_eigenvector}
+    \lean{MPSTensor.vectorSpreadSpan}
     \leanok
     \uses{def:mps_tensor, def:eval_word}
     The \emph{fixed-length vector span} at length~$n$ is
@@ -1044,7 +1044,7 @@ used to produce rank-one elements.
 \end{proof}
 
 \begin{theorem}[Blocked fixed-length matrix spanning]\label{thm:wielandt_blocked_assembly}
-    \lean{MPSTensor.wielandt_blocked_assembly_complete}
+    \lean{MPSTensor.wielandt_blocked_assembly}
     \leanok
     \uses{def:word_span, def:normal, def:blocked_tensor}
     Suppose $A$ is normal and $L > 0$, and we have:
@@ -1080,6 +1080,23 @@ used to produce rank-one elements.
     Theorem~\ref{thm:blockTensor_single_eigenvector}.
     Transfer back to the original tensor via
     Lemma~\ref{lem:blocking_transfer}.
+\end{proof}
+
+\begin{theorem}[Blocked fixed-length matrix spanning from word eigenvectors]
+    \label{thm:wielandt_blocked_assembly_complete}
+    \lean{MPSTensor.wielandt_blocked_assembly_complete}
+    \leanok
+    \uses{thm:wielandt_blocked_assembly}
+    Suppose $A$ is normal and $L > 0$. If a length-$L$ word has a nonzero
+    eigenvector and a length-$L$ word has a nonzero transpose eigenvector, then
+    there exists $N$ such that $S_N(A)=\MN{D}$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:rankone_extraction_blockTensor, thm:wielandt_blocked_assembly}
+    The rank-one extraction theorem supplies the blocked rank-one element
+    required by Theorem~\ref{thm:wielandt_blocked_assembly}; apply the blocked
+    assembly theorem.
 \end{proof}
 
 \begin{theorem}[Rank-one extraction for blocked tensor]%

@@ -15,8 +15,9 @@ Wielandt development and recalls the normality side of the chain from
 `WielandtBound.lean`.
 
 It does **not** prove `HasPrimitiveFixedPoint → IsNormal`. The currently formalized route
-with extra `ρ.PosDef` and aperiodicity hypotheses is assembled in
-`QuantumWielandt.lean`; the unconditional implication remains future work.
+from paper-style primitivity to normality with an additional positive-definite
+fixed point hypothesis is assembled in `QuantumWielandt.lean`; exact-length
+positivity witnesses still require the separate aperiodicity input.
 
 ## Main results
 
