@@ -29,8 +29,7 @@ The supporting modules are:
 
 ## Main statements
 
-The imported modules provide the canonical-form reduction theorems at the
-original names, including
+The imported modules provide the canonical-form reduction theorems, including
 `exists_tp_primitive_blockDecomp_after_blocking`,
 `isNormal_of_tp_primitive_irreducible`,
 `isIrreducibleTensor_blockTensor_of_tp_primitive_irr`,
@@ -39,7 +38,7 @@ original names, including
 `primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking_of_fixedAlgebraRigidity`,
 `primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking`,
 `bilateral_commonPeriod_blocking_tp_primitive_normal`, and
-`fundamentalTheorem_after_blocking_structural`.
+`afterBlocking_structuralData_of_sameMPV₂`.
 
 This public entry point also records a conditional formulation of the
 Cirac--Pérez-García--Schuch--Verstraete after-blocking theorem that does not
