@@ -1708,7 +1708,7 @@ The following results separate the zero blocks from the nonzero blocks.
 	The weight is the constant value $1$, so it is nonzero.
 \end{proof}
 
-\begin{definition}[Derived common-alphabet cyclic sectors]%
+\begin{definition}[Common-alphabet cyclic sectors]%
 \label{def:common_blocked_cyclic_sector_derived_blocks}
 	\lean{MPSTensor.CommonBlockedCyclicSectorFamily.flatKey,
 		MPSTensor.CommonBlockedCyclicSectorFamily.commonSectorBlock,
@@ -1721,16 +1721,16 @@ The following results separate the zero blocks from the nonzero blocks.
 	\leanok
 	\uses{def:common_blocked_cyclic_sector_family, def:blocked_tensor,
 		def:tensor_from_blocks, thm:iterated_blocking_samempv_reindex}
-	From a common reblocked cyclic-sector family, one may derive sector tensors at
-	the common alphabet directly from the original per-block sector tensors.  The
-	same flattened common-sector family is also provided at a prescribed length
-	$p'$ assuming the family length equals $p'$.  The block data
-	keep the identification of blocked physical words explicit: for the block $B_k$, it
+	For a common reblocked cyclic-sector family, the sector tensors over the
+	common alphabet are obtained directly from the original per-block sector
+	tensors.  The same flattened common-sector family is available at a
+	prescribed length $p'$ assuming the family length equals $p'$.  The block data
+	specify the identification of blocked physical words: for the block $B_k$, it
 	uses $B_k^{[m_k e_k]}$ with the labels obtained by flattening an iterated
 	$(m_k,e_k)$ block.
 \end{definition}
 
-\begin{theorem}[Derived common-alphabet cyclic sectors retain structural properties]%
+\begin{theorem}[Common-alphabet cyclic sectors retain structural properties]%
 \label{thm:common_blocked_cyclic_sector_derived_properties}
 	\lean{MPSTensor.CommonBlockedCyclicSectorFamily.commonSectorBlock_tp,
 		MPSTensor.CommonBlockedCyclicSectorFamily.commonSectorBlock_primitive,
@@ -1747,10 +1747,10 @@ The following results separate the zero blocks from the nonzero blocks.
 		thm:tp_primitive_irreducible_extra_blocking,
 		thm:left_canonical_cast_phys_dim, thm:primitive_transfer_cast_phys_dim,
 		thm:irreducible_tensor_cast_phys_dim}
-	The derived common-alphabet sectors are trace-preserving, have primitive transfer
+	The common-alphabet sectors are trace-preserving, have primitive transfer
 	maps, are tensor-irreducible, and have positive bond dimensions.  Original
 	nonzero weights remain nonzero after being transported to the common
-	blocking length and replicated over the derived flattened sector family.
+	blocking length and replicated over the flattened sector family.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -3627,11 +3627,11 @@ transport the zero-tail identity through this comparison.
 	Theorem~\ref{thm:zero_tail_common_flat_of_reindexed} gives the
 	one-sided form of this conversion, and
 	Theorem~\ref{thm:ft_after_blocking_common_length_common_sector_reindexed}
-	records it simultaneously for the two common-length sector families.  The
+	states it simultaneously for the two common-length sector families.  The
 	auxiliary transport statements,
 	Theorems~\ref{thm:zero_tail_common_flat_transport_of_reindexed},
 	\ref{thm:zero_tail_common_flat_transport_of_grouped_block_cast}, and
-	\ref{thm:samempv_pos_zero_tail_identity_transport}, record the nonzero
+	\ref{thm:samempv_pos_zero_tail_identity_transport}, give the nonzero
 	transported weights and the preservation of the positive-length and length-zero
 	identities, while
 	Theorem~\ref{thm:after_blocking_common_primitive_irreducible_blocks_reindexed}
@@ -3639,7 +3639,7 @@ transport the zero-tail identity through this comparison.
 	comparison.  Theorem~\ref{thm:common_blocked_cyclic_sector_flatten_word_of_block_cast}
 	supplies the direct word equality for the chosen coordinates.
 	Theorem~\ref{thm:after_blocking_common_primitive_irreducible_blocks_block_span_consequences}
-	records the intermediate span consequence for these common-sector families: a
+	gives the intermediate span consequence for these common-sector families: a
 	common MPV phase cover or proportional-decomposition conclusion supplies the
 	finite-length nonzero-block span equality.
 	Theorem~\ref{thm:afterBlocking_sectorComparison_reindexed_commonPhaseCover}

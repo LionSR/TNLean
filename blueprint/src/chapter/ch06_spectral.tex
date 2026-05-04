@@ -203,7 +203,7 @@ The spectral-gap proofs use the Frobenius (Hilbert--Schmidt) norm
 as the natural norm for the finite-dimensional matrix algebra.
 We write $\|{\cdot}\|_F$ for this norm; it coincides with, and we use it
 interchangeably with, the Hilbert--Schmidt norm $\|{\cdot}\|_{\mathrm{HS}}$ on finite-dimensional spaces.
-We record the squared version and an isometric embedding into
+We use the squared version and an isometric embedding into
 Euclidean space.
 
 \begin{definition}[Frobenius norm squared]\label{def:frob_sq}
@@ -874,7 +874,7 @@ the Perron--Frobenius fixed point.
 
 \section{Stationary support}
 
-This section records the support-projection theory
+This section develops the support-projection theory
 behind stationary states, following~\cite[Section~6.4]{Wolf2012Quantum}.
 
 \begin{lemma}[Lower-triangular Kraus condition implies corner invariance]%
@@ -1129,7 +1129,7 @@ sector is positive definite.
         0 \oplus \bigoplus_k M_{d_k}(\C) \otimes \Id_{m_k}
     \]
     together with the density-block form $M_{d_k}(\C) \otimes \rho_k$.
-    The theorem above records the product decomposition, multiplicities, and
+    The theorem above gives the product decomposition, multiplicities, and
     dimension bound needed from this block form.
 \end{remark}
 
@@ -1164,7 +1164,7 @@ sector is positive definite.
 
 \section{Further irreducibility and primitivity equivalences}
 
-This section records several criteria and equivalences from Wolf's Chapter~6 that are
+This section collects several criteria and equivalences from Wolf's Chapter~6 that are
 used later.
 
 \begin{theorem}[Exponential positivity condition]%
@@ -1241,7 +1241,7 @@ used later.
     \label{def:multi_cycle_decomposition}
     \lean{MultiCycleDecomposition}
     \leanok
-    A \emph{multi-cycle decomposition} of $T : \MN{D} \to \MN{D}$ records a
+    A \emph{multi-cycle decomposition} of $T : \MN{D} \to \MN{D}$ consists of a
     finite cycle index $\iota$, a per-cycle period
     $m : \iota \to \mathbb{N}_{>0}$, a projection family
     $P_{c,k} \in \MN{D}$ for $c \in \iota$ and $k \in \Fin{m(c)}$
