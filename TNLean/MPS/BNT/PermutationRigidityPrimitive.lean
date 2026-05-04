@@ -14,9 +14,8 @@ import Mathlib.LinearAlgebra.Dimension.Constructions
 # Permutation rigidity for basis-of-normal-tensors (BNT) decompositions — simplified
 (primitive branch)
 
-This is a *simpler* alternative to `BNTPermutation.lean`, implementing the
-permutation/phase-rigidity step for families satisfying the basis-of-normal-tensors (BNT)
-condition in the
+This module proves the span-equality version of the permutation/phase-rigidity step for
+families satisfying the basis-of-normal-tensors (BNT) condition in the
 primitive (aperiodic) branch of the Fundamental Theorem of MPS (Theorem 4.4 of
 arXiv:2011.12127).
 
