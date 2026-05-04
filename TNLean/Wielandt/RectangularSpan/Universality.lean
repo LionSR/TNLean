@@ -766,75 +766,16 @@ theorem vecMulVec_eigenvector_exact_wordSpan
 
 end ExactPropagation
 
-/-! ## Section 9: Summary -/
+/-!
+The rank-one extraction and top-level assembly are in `RankOne/ExtractionFull.lean`.
+The main downstream declarations are:
 
-/-- The rank-one extraction and unconditional assembly are provided in
-`RankOne/ExtractionFull.lean`:
-- `exists_rankOne_in_wordSpan_blockTensor_of_wordEigenvectors`: given external
-  word eigenvectors and `IsNormal A`, places `vecMulVec φ ψ` in a word span of
-  the blocked tensor.
-- `wielandt_blocked_assembly_complete`: combines the rank-one extraction with the
-  conditional assembly to produce `∃ N, wordSpan A N = ⊤` unconditionally.
-- `wielandt_lemma2b`: the fully unconditional Lemma 2(b).
-
-### Sharp direct route (Section 8f)
-The sharp direct route via `nilpIndex` provides:
-- `rank_pow_nilpIndex_eq`: `rank((A i₀)^r) = rank((A i₀)^D)`
-- `rank_pow_D_add_dimV0`: `rank((A i₀)^D) + dim(V₀) = D`
-- `range_mulLeft_pow_nilpIndex_eq`: range equality for mulLeft at nilpIndex
-- `vecMulVec_eigenvector_mem_wordSpan_nilpIndex`: direct route costing `r + n₀`
-- `sharp_bound_le`: `D · D̃ + r ≤ D² - D + 1` (pure arithmetic)
-- `vecMulVec_eigenvector_sharp_of_rectSpan`: conditional sharp Lemma 2(b)
-  — `∀ ψ, vecMulVec φ ψ ∈ cumulativeSpan A (D² - D + 1)`
-
-### NilpIndex growth lemmas (Section 8f½)
-Mirrors Section 8 growth for P = (A i₀)^r where r = nilpIndex:
-- `mulLeft_mem_rectSpan_nilpIndex_succ`: left-step membership
-- `rectSpanNilpIndexLeftStep`: the linear map
-- `rectSpan_nilpIndex_finrank_mono`: finrank non-decreasing
-- `rectSpan_nilpIndex_finrank_le`: tight ceiling D * D̃
-- `exists_finrank_eq_succ_of_rectSpan_nilpIndex`: pigeonhole
-- `rectSpan_nilpIndex_finrank_ceiling_permanent`: ceiling finrank stays permanent
-- `rectSpan_nilpIndex_eq_range_of_finrank_eq_ceiling`: finrank = ceiling → rectSpan = range
-- `rectSpan_nilpIndex_range_permanent`: once rectSpan = range, stays there
-
-### Strict growth reduction (Section 8g)
-The strict growth section reduces the fully unconditional sharp D²-D+1 bound to:
-- `strict_growth_reaches_ceiling`: combinatorial: strict + mono + bounded → ceiling
-- `rectSpan_nilpIndex_eq_range_of_strict_growth`: **strict growth only** → rectSpan = range
-  within D·D̃ steps (monotonicity automatic via Section 8f½)
-- `wielandt_unconditional_sharp_of_strict_growth`: **strict growth only** + ¬IsUnit + eigenvector
-  → ∀ ψ, vecMulVec φ ψ ∈ cumulativeSpan A (D²-D+1)
-- `rectSpan_eq_mulLeft_image_of_finrank_eq`: structural invariance from finrank stabilization
-  — `rectSpan P A (n+1) = (A i₀) · rectSpan P A n`
-- `proj_gen_in_leftStep_of_finrank_eq`: all generators captured by i₀ direction
-
-### Exact-level propagation and strict growth (Section 8h)  ⭐ NEW
-The permanence chain that closes the Appendix-A bottleneck:
-- `wordSpan_succ_eq_mul_right`: `wordSpan A (n+1) = wordSpan A n * wordSpan A 1`
-- `rectSpan_succ_eq_iSup_mulRight`: right-expansion of rectSpan
-- `rectSpan_nilpIndex_succ2_eq_mulLeft_of_finrank_eq`: structural permanence
-- `rectSpan_nilpIndex_finrank_permanence'`: finrank permanence (one-step)
-- `rectSpan_nilpIndex_finrank_constant'`: constant finrank from stabilization
-- `rectSpan_nilpIndex_strict_growth_of_isNormal`: **strict growth under IsNormal** ⭐
-  — `finrank(R_n) < D·D̃ → finrank(R_n) < finrank(R_{n+1})`
-- `wielandt_sharp_unconditional`: **unconditional sharp D²-D+1 Lemma 2(b)** ⭐⭐
-  — `IsNormal → ¬IsUnit → eigenvector → ∀ψ,
-      vecMulVec φ ψ ∈ cumulativeSpan A (D²-D+1)`
-
-### Eigenvector padding and exact wordSpan (Section 8h, Part 7)  ⭐⭐⭐ NEW
-Upgrades the cumulativeSpan result to exact wordSpan at the paper level D²-D+1:
-- `vecMulVec_eigenvector_pad_wordSpan`: one-step padding via eigenvector
-- `vecMulVec_eigenvector_pad_wordSpan_add`: iterated padding by `k` levels
-- `vecMulVec_eigenvector_mem_wordSpan_of_le`: monotone padding `n ≤ m → ∈ wordSpan m`
-- `vecMulVec_eigenvector_exact_wordSpan`: **exact paper-level D²-D+1** ⭐⭐⭐
-  — `IsNormal → ¬IsUnit → eigenvector → ∀ψ, vecMulVec φ ψ ∈ wordSpan A (D²-D+1)`
-
-This completes the exact-level result at the paper level. The remaining work
-to get a fully unconditional `wordSpan A N = ⊤` for `N = D²-D+1` is purely
-in the top-level assembly: connecting eigenvector existence, blocking, and
-the sharp rank-one placement.
+* `exists_rankOne_in_wordSpan_blockTensor_of_wordEigenvectors`, placing
+  `vecMulVec φ ψ` in a word span of the blocked tensor from external word eigenvectors
+  and `IsNormal A`;
+* `wielandt_blocked_assembly_complete`, combining rank-one extraction with the
+  conditional assembly to produce some `N` with `wordSpan A N = ⊤`;
+* `wielandt_lemma2b`, the fully unconditional Lemma 2(b) statement.
 -/
-theorem wielandt_summary_documentation : True := trivial
 
 end MPSTensor
