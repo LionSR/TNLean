@@ -2036,6 +2036,9 @@
 
     <a class="icon proof" href="ch-mps.html#def:gauge_phase_equiv">#</a>
     
+    <a class="icon proof" href="ch-mps.html#a0000000168"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
     
     <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
 </button>
@@ -2071,6 +2074,8 @@
           
           <li><a href="../docs/find/#doc/MPSTensor.GaugePhaseEquiv" class="lean_decl">MPSTensor.GaugePhaseEquiv</a></li>
           
+          <li><a href="../docs/find/#doc/MPSTensor.GaugeEquiv.toGaugePhaseEquiv" class="lean_decl">MPSTensor.GaugeEquiv.toGaugePhaseEquiv</a></li>
+          
         </ul>
     
       </div>
@@ -2080,14 +2085,26 @@
         </div>
   </div>
   <div class="definition_thmcontent">
-  <p>   Two tensors \(A\) and \(B\) are <em>gauge-phase equivalent</em> if there exist \(X \in \mathrm{GL}_D(\mathbb {C})\) and \(\zeta \in \mathbb {C}\setminus \{ 0\} \) such that, for every physical index&#160;\(i\), </p>
-<div class="displaymath" id="a0000000168">
+  <p>    Two tensors \(A\) and \(B\) are <em>gauge-phase equivalent</em> if there exist \(X \in \mathrm{GL}_D(\mathbb {C})\) and \(\zeta \in \mathbb {C}\setminus \{ 0\} \) such that, for every physical index&#160;\(i\), </p>
+<div class="displaymath" id="a0000000169">
   \[  B^i \; =\;  \zeta \,  X \,  A^i \,  X^{-1}  \]
 </div>
 
   </div>
 </div>
-<div class="remark_thmwrapper theorem-style-remark" id="a0000000169">
+<div class="proof_wrapper" id="a0000000168">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Gauge equivalence is the special case \(\zeta =1\). </p>
+
+  </div>
+</div>
+<div class="remark_thmwrapper theorem-style-remark" id="a0000000170">
   <div class="remark_thmheading">
     <span class="remark_thmcaption">
     Remark
@@ -2100,7 +2117,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-mps.html#a0000000169">#</a>
+    <a class="icon proof" href="ch-mps.html#a0000000170">#</a>
     
     
     
@@ -2127,7 +2144,7 @@
 
     <a class="icon proof" href="ch-mps.html#lem:eval_word_gauge">#</a>
     
-    <a class="icon proof" href="ch-mps.html#a0000000170"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mps.html#a0000000171"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2177,13 +2194,13 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   If \(B^i = X \,  A^i \,  X^{-1}\) for all&#160;\(i\), then for every word&#160;\(w\), </p>
-<div class="displaymath" id="a0000000171">
+<div class="displaymath" id="a0000000172">
   \[  B^w \; =\;  X \,  A^w \,  X^{-1}.  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000170">
+<div class="proof_wrapper" id="a0000000171">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2211,7 +2228,7 @@
 
     <a class="icon proof" href="ch-mps.html#thm:gauge_invariance">#</a>
     
-    <a class="icon proof" href="ch-mps.html#a0000000172"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mps.html#a0000000173"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2266,7 +2283,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000172">
+<div class="proof_wrapper" id="a0000000173">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2294,7 +2311,7 @@
 
     <a class="icon proof" href="ch-mps.html#thm:gauge_phase_mpv_scaling">#</a>
     
-    <a class="icon proof" href="ch-mps.html#a0000000173"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mps.html#a0000000174"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2348,17 +2365,17 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   If, for every physical index&#160;\(i\), </p>
-<div class="displaymath" id="a0000000174">
+<div class="displaymath" id="a0000000175">
   \[  B^i = \zeta \,  X \,  A^i \,  X^{-1}  \]
 </div>
 <p> then for every system size&#160;\(N\) and configuration&#160;\(\sigma \) one has </p>
-<div class="displaymath" id="a0000000175">
+<div class="displaymath" id="a0000000176">
   \[  V^{(N)}(B)_\sigma = \zeta ^N V^{(N)}(A)_\sigma .  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000173">
+<div class="proof_wrapper" id="a0000000174">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2515,7 +2532,7 @@
 
     <a class="icon proof" href="ch-mps.html#lem:one_block_injective_of_injective">#</a>
     
-    <a class="icon proof" href="ch-mps.html#a0000000176"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mps.html#a0000000177"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2568,7 +2585,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000176">
+<div class="proof_wrapper" id="a0000000177">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2650,7 +2667,7 @@
 
   </div>
 </div>
-<div class="remark_thmwrapper theorem-style-remark" id="a0000000177">
+<div class="remark_thmwrapper theorem-style-remark" id="a0000000178">
   <div class="remark_thmheading">
     <span class="remark_thmcaption">
     Remark
@@ -2663,7 +2680,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-mps.html#a0000000177">#</a>
+    <a class="icon proof" href="ch-mps.html#a0000000178">#</a>
     
     
     
@@ -2761,7 +2778,7 @@
 </li>
 </ol>
 <p> The associated tensor is the block-diagonal tensor </p>
-<div class="displaymath" id="a0000000178">
+<div class="displaymath" id="a0000000179">
   \[  A^i \; =\;  \bigoplus _{k=1}^{r} \mu _k \,  A_k^i.  \]
 </div>
 <p> This is the block-injective version of the canonical-form data; see&#160;<span class="cite">
@@ -2914,7 +2931,7 @@
 
     <a class="icon proof" href="ch-mps.html#lem:block_diagonal_iff_off_block_zero">#</a>
     
-    <a class="icon proof" href="ch-mps.html#a0000000179"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mps.html#a0000000180"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2965,7 +2982,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000179">
+<div class="proof_wrapper" id="a0000000180">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2993,7 +3010,7 @@
 
     <a class="icon proof" href="ch-mps.html#lem:block_diagonal_of_commutes_block_projection">#</a>
     
-    <a class="icon proof" href="ch-mps.html#a0000000180"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mps.html#a0000000181"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3050,7 +3067,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000180">
+<div class="proof_wrapper" id="a0000000181">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3123,7 +3140,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   Given \(r\) blocks with bond dimensions \((D_k)_{k=1}^r\), per-block tensors \(\{ A_k^i\} \), and scaling factors \((\mu _k)_{k=1}^r\), the associated <em>block-diagonal tensor</em> is the tensor of total bond dimension \(D = \sum _{k=1}^r D_k\) defined by </p>
-<div class="displaymath" id="a0000000181">
+<div class="displaymath" id="a0000000182">
   \[  A^i \; =\;  \bigoplus _{k=1}^{r} \mu _k \,  A_k^i.  \]
 </div>
 
@@ -3145,7 +3162,7 @@
 
     <a class="icon proof" href="ch-mps.html#lem:eval_word_block_diagonal_tensor">#</a>
     
-    <a class="icon proof" href="ch-mps.html#a0000000182"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mps.html#a0000000183"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3195,13 +3212,13 @@
   </div>
   <div class="lemma_thmcontent">
   <p>    For a word \(w\), the word evaluation of a block-diagonal tensor remains block diagonal: </p>
-<div class="displaymath" id="a0000000183">
+<div class="displaymath" id="a0000000184">
   \[  A^w = \bigoplus _k \mu _k^{|w|} A_k^w .  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000182">
+<div class="proof_wrapper" id="a0000000183">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3229,7 +3246,7 @@
 
     <a class="icon proof" href="ch-mps.html#thm:mpv_decomposition">#</a>
     
-    <a class="icon proof" href="ch-mps.html#a0000000184"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mps.html#a0000000185"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3287,17 +3304,17 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   The MPV of a block-diagonal tensor decomposes as </p>
-<div class="displaymath" id="a0000000185">
+<div class="displaymath" id="a0000000186">
   \[  |V^{(N)}(A)\rangle  \; =\;  \sum _{k=1}^{r} \mu _k^N \,  |V^{(N)}(A_k)\rangle .  \]
 </div>
 <p> Equivalently, for each configuration \(\sigma \) one has </p>
-<div class="displaymath" id="a0000000186">
+<div class="displaymath" id="a0000000187">
   \[  V^{(N)}(A)_\sigma \; =\;  \sum _{k=1}^{r} \mu _k^N \,  V^{(N)}(A_k)_\sigma .  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000184">
+<div class="proof_wrapper" id="a0000000185">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3371,7 +3388,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   Given a tensor&#160;\(A\) and a blocking length \(L\), the <em>\(L\)-blocked tensor</em> is the tensor with physical index set \(\{ 0,\ldots ,d{-}1\} ^L\) (hence physical dimension \(d^L\)) and the same bond dimension&#160;\(D\), whose matrices are indexed by words \((i_1, \ldots , i_L) \in \{ 0,\ldots ,d{-}1\} ^L\): </p>
-<div class="displaymath" id="a0000000187">
+<div class="displaymath" id="a0000000188">
   \[  (A^{[L]})^{(i_1, \ldots , i_L)} \; =\;  A^{i_1} A^{i_2} \cdots A^{i_L}.  \]
 </div>
 
@@ -3393,7 +3410,7 @@
 
     <a class="icon proof" href="ch-mps.html#lem:eval_word_block">#</a>
     
-    <a class="icon proof" href="ch-mps.html#a0000000188"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mps.html#a0000000189"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3445,13 +3462,13 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   If \(w = (J_1, \ldots , J_m)\) is a word in the blocked alphabet, where each \(J_k\) is an \(L\)-tuple in \(\{ 0, \ldots , d{-}1\} ^L\), then concatenating the block words gives a word \(\widetilde{w}\) of length \(mL\) in the original alphabet and one has </p>
-<div class="displaymath" id="a0000000189">
+<div class="displaymath" id="a0000000190">
   \[  (A^{[L]})^w = A^{\widetilde{w}}.  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000188">
+<div class="proof_wrapper" id="a0000000189">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3479,7 +3496,7 @@
 
     <a class="icon proof" href="ch-mps.html#lem:mpv_block">#</a>
     
-    <a class="icon proof" href="ch-mps.html#a0000000190"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mps.html#a0000000191"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3535,13 +3552,13 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   For each basis state \(\sigma = (\sigma _1, \ldots , \sigma _N)\) of the blocked system, where each \(\sigma _k\) is an \(L\)-tuple in \(\{ 0, \ldots , d{-}1\} ^L\), there exists a basis state \(\widetilde{\sigma } = (\widetilde{\sigma }_1, \ldots , \widetilde{\sigma }_{NL})\) of the original system such that </p>
-<div class="displaymath" id="a0000000191">
+<div class="displaymath" id="a0000000192">
   \[  V^{(N)}(A^{[L]})_\sigma \; =\;  V^{(NL)}(A)_{\widetilde{\sigma }}.  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000190">
+<div class="proof_wrapper" id="a0000000191">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3569,7 +3586,7 @@
 
     <a class="icon proof" href="ch-mps.html#thm:blocking_same_mpv">#</a>
     
-    <a class="icon proof" href="ch-mps.html#a0000000192"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mps.html#a0000000193"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3624,7 +3641,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000192">
+<div class="proof_wrapper" id="a0000000193">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3762,7 +3779,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   The <em>MPV inner product</em> between two tensors \(A\) and \(B\) at system size&#160;\(N\) is </p>
-<div class="displaymath" id="a0000000193">
+<div class="displaymath" id="a0000000194">
   \[  \langle V^{(N)}(A) | V^{(N)}(B) \rangle  \; :=\;  \sum _{\sigma \in \{ 0,\ldots ,d{-}1\} ^N} \overline{V^{(N)}(A)_\sigma } \;  V^{(N)}(B)_\sigma ,  \]
 </div>
 <p> i.e. the Euclidean inner product on \(\mathbb {C}^{d^N}\) (conjugate-linear in the first argument). </p>
@@ -3830,7 +3847,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   The <em>MPV overlap</em> between two tensors \(A\) (of bond dimension \(D_1\)) and \(B\) (of bond dimension \(D_2\)) at system size&#160;\(N\) is </p>
-<div class="displaymath" id="a0000000194">
+<div class="displaymath" id="a0000000195">
   \[  O_{AB}(N) \; :=\;  \sum _{\sigma \in \{ 0,\ldots ,d{-}1\} ^N} V^{(N)}(A)_\sigma \;  \overline{V^{(N)}(B)_\sigma }.  \]
 </div>
 <p> This is the bilinear overlap (without complex conjugation) used later. By Lemma&#160;<a href="ch-mps.html#lem:overlap_eq_inner">2.44</a>, it is the complex conjugate of the Hilbert-space inner product from Definition&#160;<a href="ch-mps.html#def:mpv_inner">2.42</a>. </p>
@@ -3853,7 +3870,7 @@
 
     <a class="icon proof" href="ch-mps.html#lem:overlap_eq_inner">#</a>
     
-    <a class="icon proof" href="ch-mps.html#a0000000195"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mps.html#a0000000196"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3910,7 +3927,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000195">
+<div class="proof_wrapper" id="a0000000196">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3938,7 +3955,7 @@
 
     <a class="icon proof" href="ch-mps.html#lem:overlap_eq_of_pos_mpv">#</a>
     
-    <a class="icon proof" href="ch-mps.html#a0000000196"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mps.html#a0000000197"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3991,7 +4008,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000196">
+<div class="proof_wrapper" id="a0000000197">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
