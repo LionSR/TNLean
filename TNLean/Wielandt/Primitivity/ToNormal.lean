@@ -13,9 +13,9 @@ import TNLean.Spectral.MixedTransfer
 /-!
 # Preparatory lemmas for the current `IsPrimitiveMPS → IsNormal` bridge
 
-This file collects spectral-gap consequences of `IsPrimitiveMPS` together with a
-small transfer-map compatibility API. It stops short of proving any `IsNormal`
-theorem; the actual primitive-to-normal bridge now lives in
+This file collects spectral-gap consequences of `IsPrimitiveMPS` together with
+basic transfer-map compatibility lemmas. It stops short of proving any
+`IsNormal` theorem; the actual primitive-to-normal bridge now lives in
 `Primitivity/StronglyIrreducibleToFullRank.lean`, while `QuantumWielandt.lean`
 keeps a backward-compatible exact-word-span witness theorem whose public
 statement still carries an aperiodicity parameter.
@@ -29,7 +29,7 @@ statement still carries an aperiodicity parameter.
   `ρ`
 * `IsPrimitiveMPS.complement_pow_tendsto_zero`: `(E - P_ρ)^n → 0`
 
-### Transfer-map wrappers
+### Transfer-map compatibility
 
 * `IsPrimitiveMPS.transferMap_isChannel`
 * `IsPrimitiveMPS.transferMap_trace_preserving`
@@ -42,7 +42,7 @@ statement still carries an aperiodicity parameter.
 
 ## Important note on definitions
 
-Our `IsPrimitiveMPS` hypothesis records a spectral gap around a nonzero PSD
+Our `IsPrimitiveMPS` hypothesis consists of a spectral gap around a nonzero PSD
 fixed point. This is weaker than the paper's primitive condition in
 arXiv:0909.5347, Proposition 3, which additionally forces the fixed point to be
 positive definite.
@@ -163,7 +163,7 @@ theorem IsPrimitiveMPS.transferMap_trace_preserving
 
 /-- **Irreducible transfer map implies a positive-definite fixed point.**
 
-If `ρ` is the PSD fixed point packaged by `IsPrimitiveMPS A ρ` and the transfer
+If `ρ` is the PSD fixed point in `IsPrimitiveMPS A ρ` and the transfer
 map is irreducible, then `ρ` is positive definite.
 
 This is the Perron–Frobenius `PosDef` result from `TNLean.QPF.PosDef`
@@ -177,7 +177,7 @@ theorem posDef_of_isIrreducibleMap_of_isPrimitiveMPS
     hP.fixedPoint_psd hP.fixedPoint_ne_zero hP.fixedPoint_is_fixed
 
 omit [NeZero D] in
-/-- Bridge from irreducible tensor to irreducible map, recorded here for convenience. -/
+/-- Irreducibility of a tensor gives irreducibility of its transfer map. -/
 theorem isIrreducibleMap_of_isIrreducibleTensor
     (A : MPSTensor d D) (hIrr : IsIrreducibleTensor (d := d) (D := D) A) :
     IsIrreducibleMap (transferMap (d := d) (D := D) A) :=
