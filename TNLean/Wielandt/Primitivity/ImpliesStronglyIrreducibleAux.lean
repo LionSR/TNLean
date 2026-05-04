@@ -571,7 +571,9 @@ theorem not_isPrimitivePaper_of_root_of_unity_eigenvector [NeZero D]
 
 end PeripheralContradiction
 
-/-! ## Part 14: Proposition 3(a) → (c) conclusion — IsPrimitivePaper implies IsPeripherallyPrimitive
+/-! ## Part 14: Proposition 3(a) → (c) conclusion
+
+Paper-primitivity implies peripheral primitivity.
 
 The culminating theorem of the (a)→(c) direction: paper-primitivity of an MPS
 tensor `A` implies peripheral primitivity of its transfer map.
@@ -693,7 +695,7 @@ theorem isStronglyIrreduciblePaper_of_isPrimitivePaper [NeZero D]
   have hIrr : IsIrreducibleMap E :=
     isIrreducibleCP_transferMap_of_isIrreducibleTensor A
       (isIrreducibleTensor_of_isPrimitivePaper A ⟨q, hq⟩)
-  -- Step 6: Package into IsStronglyIrreduciblePaper
+  -- Step 6: assemble `IsStronglyIrreduciblePaper`.
   exact isStronglyIrreduciblePaper_of ρ hρ_pd hρ_fix hCPrim hIrr
 
 end Construction

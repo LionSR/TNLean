@@ -19,7 +19,7 @@ Wielandt inequality (arXiv:0909.5347, Theorem 1; Wolf Section 6.9).
 
 ## What is proved here
 
-### Sorry-free infrastructure
+### Established span-growth lemmas
 * `wordSpan_finrank_le`: `dim(S_n) ≤ D²`.
 * `mulLeft_image_wordSpan_le_succ`: `A i₀ · S_n ⊆ S_{n+1}`.
 * `wordSpan_finrank_mono_of_isUnit`: `dim(S_{n+1}) ≥ dim(S_n)` when `A i₀`

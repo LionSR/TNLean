@@ -15,7 +15,7 @@ has no nontrivial invariant orthogonal projection, i.e., it is an irreducible te
 * `isIrreducibleTensor_of_isPrimitiveMPS_of_posDef`:
   `IsPrimitiveMPS A ρ → ρ.PosDef → IsIrreducibleTensor A`
 
-This is the irreducibility half of the later primitive-to-normal bridge: the
+This is the irreducibility half of the later primitive-to-normal implication: the
 complementary aperiodicity input is recovered from strong irreducibility
 (peripheral spectrum `{1}`) in `ImpliesStronglyIrreducible.lean` /
 `StronglyIrreducibleToFullRank.lean`.

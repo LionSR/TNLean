@@ -40,7 +40,7 @@ additional `hAper : 1 ∈ wordSpan A 1` to upgrade `IsNormal A` to monotone
 exact-length word spans.
 
 This module is intentionally auxiliary. Downstream users who only need
-Proposition 3 / Theorem 1 wrappers should prefer
+Proposition 3 / Theorem 1 statements should prefer
 `Primitivity/Equivalence.lean` and `PaperResults/WielandtInequality.lean`.
 
 ## References
