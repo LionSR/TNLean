@@ -1774,6 +1774,25 @@ The following results separate the zero blocks from the nonzero blocks.
 	consecutive words of length $m_k$.
 \end{definition}
 
+\begin{theorem}[Flattening direct blocked words]%
+\label{thm:common_blocked_cyclic_sector_flatten_word_of_block_cast}
+	\lean{MPSTensor.CommonBlockedCyclicSectorFamily.flattenWordOfBlock_cast_eq}
+	\leanok
+	\uses{def:common_blocked_cyclic_sector_grouped_block_cast}
+	Let $p=m n$.  For every common blocked physical index of length $p$, the
+	word obtained by direct base-$d$ decoding is the same as the word obtained by
+	decoding the index as $n$ consecutive blocks of length $m$ and concatenating
+	those $n$ words.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	Compare the $t$th letter in the $j$th block on both sides.  Both readings
+	extract the same base-$d$ digit of the original blocked index, since division
+	by the block powers and reduction modulo the alphabet size commute with this
+	block decomposition.
+\end{proof}
+
 \begin{theorem}[Direct and iterated blocking for weighted blocks]%
 \label{thm:common_blocked_cyclic_sector_blocked_word_comparison}
 	\lean{MPSTensor.CommonBlockedCyclicSectorFamily.wordOfBlock_eq_iteratedBlockIndex_of_groupedBlockCastAgrees,
@@ -3523,9 +3542,9 @@ transport the zero-tail identity through this comparison.
 	then rewrites the one-sided zero-tail identity with the weighted common-length
 	cyclic sectors under this blockwise word equality.
 
-	The mathematical assertion still needed is the corresponding equality, after identifying
-	blocked physical words, between the blocked nonzero part and the
-	cyclic-sector tensor for the whole weighted family.
+	The remaining blocked-word equality, after identifying blocked physical
+	words, is the equality between the blocked nonzero part and the cyclic-sector
+	tensor for the whole weighted family.
 	Theorem~\ref{thm:zero_tail_common_flat_of_reindexed} gives the
 	one-sided form of this conversion, and
 	Theorem~\ref{thm:ft_after_blocking_common_length_common_sector_reindexed}
@@ -3538,9 +3557,8 @@ transport the zero-tail identity through this comparison.
 	identities, while
 	Theorem~\ref{thm:after_blocking_common_primitive_irreducible_blocks_reindexed}
 	collects the resulting primitive irreducible sector decompositions needed for
-	comparison.  The blocked-word assertion is the equality of these
-	words for the chosen coordinates, or an equivalent final comparison with the
-	word identification made explicit.
+	comparison.  Theorem~\ref{thm:common_blocked_cyclic_sector_flatten_word_of_block_cast}
+	supplies the direct word equality for the chosen coordinates.
 	Theorem~\ref{thm:after_blocking_common_primitive_irreducible_blocks_block_span_consequences}
 	records the intermediate span consequence for these common-sector families: a
 	common MPV phase cover or proportional-decomposition conclusion supplies the
