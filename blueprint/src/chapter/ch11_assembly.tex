@@ -1761,14 +1761,14 @@ two-basis sector comparison theorem.
 	\lean{MPSTensor.AfterBlockingFundamentalTheoremHypotheses}
 	\leanok
 	\uses{def:common_sector_relabeling_hypothesis,
-		def:common_primitive_proportional_hypotheses}
+		def:common_primitive_bnt_cover_hypotheses}
 		These hypotheses consist of the comparison data for the
 	periodic-theorem-free after-blocking formulation of the CPSV Fundamental
 		Theorem. They contain the blocked-word identification for common cyclic
 	sectors. For the common primitive nonzero-sector families produced from two
 	tensors with the same MPV family, the comparison field is supplied with their
-	isometry, primitivity, and irreducibility evidence before returning the
-		proportional-comparison hypotheses for those blocks. The hypotheses
+	isometry, primitivity, irreducibility, and positive bond-dimension evidence
+	before returning BNT-cover comparison hypotheses for those blocks. The hypotheses
 	are tied to the produced families rather than to an arbitrary chosen
 	decomposition.
 \end{definition}
@@ -1793,7 +1793,7 @@ two-basis sector comparison theorem.
 	\leanok
 	\uses{def:after_blocking_fundamental_theorem_hypotheses,
 		def:after_blocking_fundamental_theorem_conclusion,
-		thm:afterBlocking_sectorComparison_reindexed_proportional}
+		thm:afterBlocking_sectorComparison_reindexed_bntCover}
 	Let $A$ and $B$ generate the same MPV family. Assume the after-blocking
 	comparison hypotheses of
 	Definition~\ref{def:after_blocking_fundamental_theorem_hypotheses}. Then the
@@ -1807,15 +1807,16 @@ two-basis sector comparison theorem.
 	whose basis sectors and weights match up to permutation and nonzero phases, as
 	in \cite{Cirac2016MPDO_arXiv} and \cite{Cirac2021Matrix}. The explicit hypotheses are:
 	the statement does not assume away the blocked-word identification, zero-tail,
-	isometry, primitivity, irreducibility, or proportional-comparison inputs.
+	isometry, primitivity, irreducibility, positive bond-dimension, or BNT-cover
+	comparison inputs.
 \end{theorem}
 
 \begin{proof}
 	\leanok
-	\uses{thm:afterBlocking_sectorComparison_reindexed_proportional}
+	\uses{thm:afterBlocking_sectorComparison_reindexed_bntCover}
 	Apply
-	Theorem~\ref{thm:afterBlocking_sectorComparison_reindexed_proportional} with
-		the word-identification and proportional-comparison data from
+	Theorem~\ref{thm:afterBlocking_sectorComparison_reindexed_bntCover} with
+		the word-identification and BNT-cover comparison data from
 	Definition~\ref{def:after_blocking_fundamental_theorem_hypotheses}. The proof
 	then packages the resulting blocking length, sector decompositions, BNT data,
 	permutation, multiplicity equalities, phases, and sector-weight
