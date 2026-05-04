@@ -75,8 +75,8 @@ basis-of-normal-tensors construction from
 
 ## References
 
-- [Cirac--Perez-Garcia--Schuch--Verstraete 2017, Definition 2.6,
-  Proposition 2.7]: BNT minimality condition and grouping.
+- [Cirac--Perez-Garcia--Schuch--Verstraete 2017, Definition 2.6, Proposition 2.7]:
+  BNT minimality condition and grouping.
 - [Cirac--Perez-Garcia--Schuch--Verstraete 2021, Section IV.A]: Existence of canonical form.
 -/
 

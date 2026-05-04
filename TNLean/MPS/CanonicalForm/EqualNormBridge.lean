@@ -115,8 +115,8 @@ Theorem matching, etc.).
 
 - [Cirac--Perez-Garcia--Schuch--Verstraete 2017, Lemma A.2]: Overlap dichotomy for Normal Tensors.
 - [Cirac--Perez-Garcia--Schuch--Verstraete 2017, Proposition A.6]: BNT construction and minimality.
-- [Cirac--Perez-Garcia--Schuch--Verstraete 2017, Definition 2.6,
-  Proposition 2.7]: BNT minimality and grouping.
+- [Cirac--Perez-Garcia--Schuch--Verstraete 2017, Definition 2.6, Proposition 2.7]:
+  BNT minimality and grouping.
 -/
 
 namespace MPSTensor
