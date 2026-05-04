@@ -19,8 +19,8 @@ The paper's Lemma 2(b) uses a Jordan/Fitting argument:
 * multiplication by `M` is injective on that invertible block,
 * hence certain "rectangular spans" grow in dimension until they stabilize.
 
-Here we start formalizing the linear-algebraic core, using the new range lemma from
-`TNLean/Wielandt/RankOneExtraction.lean`:
+Here we start formalizing the linear-algebraic core, using the range lemma from
+`TNLean.Wielandt.RankOne.Extraction`:
 
 `LinearMap.range (f^D) = ⨆ (μ ≠ 0), maxGenEigenspace f μ`.
 
@@ -87,7 +87,7 @@ theorem disjoint_ker_iSup_maxGenEigenspace_ne_zero (f : End ℂ (Fin D → ℂ))
 
 /-- `ker f` is disjoint from `range (f^D)`.
 
-This is where we use the new range description from `RankOneExtraction.lean`. -/
+This is where we use the range description from `TNLean.Wielandt.RankOne.Extraction`. -/
 theorem disjoint_ker_range_pow (f : End ℂ (Fin D → ℂ)) :
     Disjoint (LinearMap.ker f) (LinearMap.range (f ^ D)) := by
   -- Start from disjointness with the iSup of nonzero generalized eigenspaces,
