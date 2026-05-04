@@ -431,29 +431,29 @@ Theorem~2 of~\cite{Molnar2018NormalPEPS}.
 \end{definition}
 
 \begin{definition}[Blocked-middle local gauge formula]%
-	\label{def:peps_blockedMiddleGaugeFormula}
-	\lean{TNLean.PEPS.BlockedMiddleGaugeFormula}
-	\leanok
-	This states the explicit local gauge formula that the edge-centered
-	blocked-middle reduction is expected to produce: a family of invertible
-	matrices on the incident edges of $v$ whose product kernel reconstructs each
+    \label{def:peps_blockedMiddleGaugeFormula}
+    \lean{TNLean.PEPS.BlockedMiddleGaugeFormula}
+    \leanok
+    This states the explicit local gauge formula that the edge-centered
+    blocked-middle reduction is expected to produce: a family of invertible
+    matrices on the incident edges of $v$ whose product kernel reconstructs each
     local component of $B$ from those of $A$.
 \end{definition}
 
 \begin{theorem}[Blocked-middle formula implies factorized local gauge]%
     \label{thm:peps_hasFactorizedLocalGauge_of_blockedMiddleGaugeFormula}
     \lean{TNLean.PEPS.hasFactorizedLocalGauge_of_blockedMiddleGaugeFormula}
-	\leanok
-	\uses{def:peps_blockedMiddleGaugeFormula, def:peps_hasFactorizedLocalGauge}
-	Any explicit local gauge formula from the blocked-middle reduction yields
-	the factorized local gauge datum. The remaining open step is to derive this
-	blocked-middle formula from equality of PEPS states.
+    \leanok
+    \uses{def:peps_blockedMiddleGaugeFormula, def:peps_hasFactorizedLocalGauge}
+    Any explicit local gauge formula from the blocked-middle reduction yields
+    the factorized local gauge datum. The remaining open step is to derive this
+    blocked-middle formula from equality of PEPS states.
 \end{theorem}
 \begin{proof}\leanok
-	The explicit local gauge formula already places each local component of
-	$B$ in the image of the local tensor map of $A$. Applying the chosen left
-	inverse of $A$ identifies the canonical candidate with the same factorized
-	coefficient kernel, so both parts of the factorized local gauge datum follow.
+    The explicit local gauge formula already places each local component of
+    $B$ in the image of the local tensor map of $A$. Applying the chosen left
+    inverse of $A$ identifies the canonical candidate with the same factorized
+    coefficient kernel, so both parts of the factorized local gauge datum follow.
 \end{proof}
 
 \begin{theorem}[Local gauge extraction]%
@@ -472,8 +472,8 @@ Theorem~2 of~\cite{Molnar2018NormalPEPS}.
     \end{center}
 \end{theorem}
 \begin{proof}\leanok
-	The factorized local gauge datum already supplies the incident-edge
-	invertible matrices and the factorized local coefficient identity.
+    The factorized local gauge datum already supplies the incident-edge
+    invertible matrices and the factorized local coefficient identity.
 \end{proof}
 
 \begin{theorem}[Gauge consistency]%
