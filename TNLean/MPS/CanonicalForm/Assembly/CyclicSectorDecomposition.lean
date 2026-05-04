@@ -1368,6 +1368,27 @@ theorem commonFlatDim_pos (F : CommonBlockedCyclicSectorFamily blocks)
   let y := F.flatKey x
   simpa [commonFlatDim, y] using F.commonSectorBlock_dim_pos y.1 y.2
 
+/-- A common blocked cyclic-sector family is a normal canonical form once its
+transported flat weights are sorted by strictly decreasing modulus. -/
+theorem isNormalCanonicalForm_commonFlatBlocks
+    (F : CommonBlockedCyclicSectorFamily blocks)
+    (μ : Fin r → ℂ)
+    (hμ : ∀ k, μ k ≠ 0)
+    (hAnti : StrictAnti
+      (fun x : Fin (∑ k : Fin r, F.period k) => ‖F.commonFlatWeight μ x‖)) :
+    IsNormalCanonicalForm (d := blockPhysDim d F.p)
+      (F.commonFlatWeight μ) F.commonFlatBlocks :=
+  isNormalCanonicalForm_of_tp_primitive_irr_sorted
+    (d' := blockPhysDim d F.p)
+    (μ := F.commonFlatWeight μ)
+    F.commonFlatBlocks
+    F.commonFlatBlocks_tp
+    F.commonFlatBlocks_primitive
+    F.commonFlatDim_pos
+    (F.commonFlatWeight_ne_zero μ hμ)
+    F.commonFlatBlocks_irreducible
+    hAnti
+
 /-- Iterated blocking of a nonzero-weight block is the relabeled common block. -/
 theorem nestedBlock_sameMPV₂_commonReindexedBlock
     (F : CommonBlockedCyclicSectorFamily blocks) (k : Fin r) :

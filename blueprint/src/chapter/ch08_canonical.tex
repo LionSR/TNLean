@@ -1741,25 +1741,31 @@ The following results separate the zero blocks from the nonzero blocks.
 		MPSTensor.CommonBlockedCyclicSectorFamily.commonFlatBlocks_irreducible,
 		MPSTensor.CommonBlockedCyclicSectorFamily.commonFlatDim_pos,
 		MPSTensor.CommonBlockedCyclicSectorFamily.commonBlockWeight_ne_zero,
-		MPSTensor.CommonBlockedCyclicSectorFamily.commonFlatWeight_ne_zero}
+		MPSTensor.CommonBlockedCyclicSectorFamily.commonFlatWeight_ne_zero,
+		MPSTensor.CommonBlockedCyclicSectorFamily.isNormalCanonicalForm_commonFlatBlocks}
 	\leanok
 	\uses{def:common_blocked_cyclic_sector_derived_blocks,
 		thm:tp_primitive_irreducible_extra_blocking,
 		thm:left_canonical_cast_phys_dim, thm:primitive_transfer_cast_phys_dim,
-		thm:irreducible_tensor_cast_phys_dim}
+		thm:irreducible_tensor_cast_phys_dim, thm:ncf_sorted_tp_primitive_irred}
 	The common-alphabet sectors are trace-preserving, have primitive transfer
 	maps, are tensor-irreducible, and have positive bond dimensions.  Original
 	nonzero weights remain nonzero after being transported to the common
-	blocking length and replicated over the flattened sector family.
+	blocking length and replicated over the flattened sector family.  If the
+	original weights are nonzero and the transported weights are sorted by
+	strictly decreasing norm, the flattened common-sector family is a normal
+	canonical form.
 \end{theorem}
 
 \begin{proof}\leanok
 	\uses{thm:tp_primitive_irreducible_extra_blocking,
 		thm:left_canonical_cast_phys_dim, thm:primitive_transfer_cast_phys_dim,
-		thm:irreducible_tensor_cast_phys_dim}
+		thm:irreducible_tensor_cast_phys_dim, thm:ncf_sorted_tp_primitive_irred}
 	Apply the extra-blocking theorem to each period-removal sector, substitute the
 	equality between the iterated and common physical alphabets, and use that a
-	positive power of a nonzero complex number is nonzero.
+	positive power of a nonzero complex number is nonzero.  The normal canonical
+	form statement is Theorem~\ref{thm:ncf_sorted_tp_primitive_irred} applied to
+	these derived sector data.
 \end{proof}
 
 \begin{theorem}[Weights of common-alphabet sectors]%
