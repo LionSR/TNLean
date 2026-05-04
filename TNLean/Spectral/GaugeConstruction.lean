@@ -11,7 +11,7 @@ import Mathlib.Data.Matrix.Block
 import Mathlib.Analysis.Matrix.Normed
 
 /-!
-# Shared gauge-construction infrastructure for spectral-gap rigidity
+# Shared gauge construction for spectral-gap rigidity
 
 This module factors out the common "modulus-one eigenvector gives intertwining"
 core used by the spectral-gap rigidity arguments.  The shared pattern is:
@@ -27,7 +27,7 @@ open scoped Matrix Matrix.Norms.Operator MatrixOrder ComplexOrder BigOperators
 
 attribute [local instance] Matrix.linftyOpNormedAddCommGroup Matrix.linftyOpNormedSpace
 
-/-! ### ContinuousLinearMap endomorphism infrastructure
+/-! ### ContinuousLinearMap endomorphism structure
 
 These definitions provide the analytic structure on `Matrix (Fin m) (Fin n) ℂ →L[ℂ] …`
 needed by the spectral-radius arguments. They are activated locally via

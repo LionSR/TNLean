@@ -11,11 +11,11 @@ import Mathlib.LinearAlgebra.Matrix.Trace
 /-!
 # Trace expansion over matrix units
 
-Shared infrastructure for expanding `LinearMap.trace` as a sum over matrix-unit basis elements,
+Trace-expansion lemmas for `LinearMap.trace` as a sum over matrix-unit basis elements,
 and for evaluating entries of products involving `Matrix.single`.
 
-The lemmas are stated over a general `CommRing 𝕜` so that no import of complex-number
-infrastructure is required here. Downstream files instantiate `𝕜 := ℂ`.
+The lemmas are stated over a general `CommRing 𝕜`, so this file does not need
+complex-number imports. Downstream files instantiate `𝕜 := ℂ`.
 
 ## Main results
 
