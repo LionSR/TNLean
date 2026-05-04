@@ -13,9 +13,14 @@ while the development is split into focused submodules.
 
 The supporting modules are:
 
-* `TNLean.MPS.MPDO.BiCFDerivation.Basic` — finite-length span criteria,
-  selector data, pair trace-separation criteria, and constructors for
-  `HorizontalCFData`.
+* `TNLean.MPS.MPDO.BiCFDerivation.Basic` — historical re-export path for the
+  finite-length biCF criteria.
+* `TNLean.MPS.MPDO.BiCFDerivation.Core` — tuple-span, linear-independence, and
+  finite/cumulative pair trace-separation criteria.
+* `TNLean.MPS.MPDO.BiCFDerivation.PairHomogenization` — homogeneous pair-span
+  padding and Burnside-Jacobson pair-algebra placeholders.
+* `TNLean.MPS.MPDO.BiCFDerivation.Selectors` — selector data and constructors
+  for `HorizontalCFData`.
 * `TNLean.MPS.MPDO.BiCFDerivation.Counterexample` — the duplicate scalar-block
   obstruction showing that blockwise injectivity, left-canonicality, and
   nonzero weights do not imply the biCF property.
