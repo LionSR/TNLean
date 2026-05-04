@@ -2194,9 +2194,53 @@ This subsection records the existence statements from
     \textbf{Not yet proved}---proof blocked on Lemma~\ref{lem:infimum_is_attained}.
 \end{theorem}
 
+\begin{definition}[Diagonal Lorentz normal form]\label{def:lorentz_diagonal}
+    \lean{Wolf.IsLorentzDiagonal}\leanok
+    For a qubit channel $T' : M_{2}(\C) \to M_{2}(\C)$, write $\widehat{T'}$
+    for its matrix in the normalized Pauli basis
+    $\{\sigma_{0}/\sqrt{2},\sigma_{1}/\sqrt{2},
+    \sigma_{2}/\sqrt{2},\sigma_{3}/\sqrt{2}\}$.  The channel is in
+    \emph{diagonal Lorentz normal form} when it is unital and every
+    off-diagonal entry of $\widehat{T'}$ is zero.
+\end{definition}
+
+\begin{definition}[Non-diagonal Lorentz normal form]\label{def:lorentz_non_diagonal}
+    \lean{Wolf.IsLorentzNonDiagonal}
+    For a qubit channel $T' : M_{2}(\C) \to M_{2}(\C)$, write $\widehat{T'}$
+    in the normalized Pauli basis.  The channel is in \emph{non-diagonal
+    Lorentz normal form} when, for some $x \in [0,1]$,
+    \[
+        \widehat{T'} =
+        \begin{pmatrix}
+            1 & 0 & 0 & 0 \\
+            0 & x/\sqrt{3} & 0 & 0 \\
+            0 & 0 & x/\sqrt{3} & 0 \\
+            2/3 & 0 & 0 & 1/3
+        \end{pmatrix}.
+    \]
+\end{definition}
+
+\begin{definition}[Singular Lorentz normal form]\label{def:lorentz_singular}
+    \lean{Wolf.IsLorentzSingular}\leanok
+    For a qubit channel $T' : M_{2}(\C) \to M_{2}(\C)$, write $\widehat{T'}$
+    in the normalized Pauli basis.  The channel is in \emph{singular Lorentz
+    normal form} when
+    \[
+        \widehat{T'} =
+        \begin{pmatrix}
+            1 & 0 & 0 & 0 \\
+            0 & 0 & 0 & 0 \\
+            0 & 0 & 0 & 0 \\
+            1 & 0 & 0 & 0
+        \end{pmatrix},
+    \]
+    equivalently, every input state is mapped to $(1+\sigma_{3})/2$.
+\end{definition}
+
 \begin{theorem}[Lorentz normal form for qubit channels]\label{thm:lorentz_normal_form_qubit}
     \lean{Wolf.exists_lorentz_normal_form_qubit}
-    \uses{def:sl_filtering, lem:infimum_is_attained}
+    \uses{def:sl_filtering, lem:infimum_is_attained, def:lorentz_diagonal,
+    def:lorentz_non_diagonal, def:lorentz_singular}
     For every qubit channel $T : M_{2}(\mathbb{C}) \to M_{2}(\mathbb{C})$,
     there exist $\SL(2, \mathbb{C})$-filterings $\Phi_{1}, \Phi_{2}$ such that
     the filtered channel $T' = \Phi_{2} \circ T \circ \Phi_{1}$ is in one of
