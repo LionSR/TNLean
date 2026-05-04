@@ -8,7 +8,7 @@ import TNLean.Wielandt.RankOne.Products
 import TNLean.Wielandt.SpanGrowth.EigenvectorSpreading
 
 /-!
-# Quantum Wielandt Bound - proof roadmap
+# Quantum Wielandt Bound - cumulative span chain
 
 This file collects the main results of the quantum Wielandt bound
 from arXiv:0909.5347 (Sanz, Pérez-García, Wolf, Cirac).
@@ -38,12 +38,11 @@ We formalize the proof chain up to the following:
 4. **Eigenvector spreading**: The cumulative vector span reaches ⊤ in D-1 steps
    (`eigenvector_spreading` from `EigenvectorSpreading.lean`)
 
-5. **Proof synthesis**: connecting these pieces into the Wielandt bound.
+5. **Cumulative conclusion**: connecting these pieces into the cumulative span bound.
 
-The paper-level fixed-length matrix-spanning step, Lemma 2(b), is now carried by
-the `TNLean.Wielandt.PaperResults` and rank-one extraction modules. This file
-keeps the original cumulative-span and eigenvector-spreading chain as a compact
-roadmap and compatibility layer for the later fixed-length results.
+The fixed-length matrix-spanning form of Lemma 2(b) is obtained by continuing
+this chain with rank-one extraction and exact word-length padding. The results
+below record the cumulative span and eigenvector-spreading part of the argument.
 
 ## References
 
@@ -229,11 +228,11 @@ theorem wielandt_chain [NeZero D]
   · intro φ hφ
     exact vector_spanning_from_normality A hN φ hφ
 
-/-! ## Part 5: Remarks on the full bound -/
+/-! ## Part 5: Relation with the fixed-length bound -/
 
-/-- **Summary of what's proven and what remains.**
+/-- **Summary of the cumulative chain and fixed-length bound.**
 
-### Proven:
+### Cumulative chain:
 1. `cumulativeSpan_eq_top`: T_{D²}(A) = M_D(ℂ) for normal A
 2. `exists_nonzero_trace_word`: Lemma 1 — ∃ word with nonzero trace, length ≤ D²
 3. `exists_eigenvector_of_trace_ne_zero`: Nonzero trace → eigenvalue/eigenvector
@@ -245,9 +244,9 @@ theorem wielandt_chain [NeZero D]
 9. `evalWord_replicate_eigenvector`: Iterated pumping
 
 ### Fixed-length bound route:
-The later paper-results modules combine the word-eigenvector extraction, the
-blocked rank-one construction, and fixed-length assembly to prove the paper-level
-index bound. This theorem remains as a named roadmap anchor for older references.
+The fixed-length argument continues from this cumulative chain by extracting
+rank-one matrices from eigenvectors, padding them to one exact word length, and
+assembling a full matrix span at the Wielandt index bound.
 -/
 theorem wielandt_roadmap : True := trivial
 
