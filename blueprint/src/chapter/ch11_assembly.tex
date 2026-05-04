@@ -1604,9 +1604,25 @@ two-basis sector comparison theorem.
 	consecutive words of the period-removal length.
 \end{definition}
 
-\begin{theorem}[Coordinate grouping gives the word identification]%
+	\begin{theorem}[Canonical coordinate grouping]%
+	\label{thm:common_grouped_block_cast_of_flatten_word}
+		\lean{MPSTensor.CommonGroupedBlockCastHypothesis.of_flattenWordOfBlock_cast_eq}
+		\leanok
+		\uses{def:common_grouped_block_cast_hypothesis,
+			thm:common_blocked_cyclic_sector_flatten_word_of_block_cast}
+		The canonical coordinate grouping holds for every common blocked
+		cyclic-sector family.  The proof identifies each grouped block with the
+		corresponding direct blocked word.
+	\end{theorem}
+
+	\begin{proof}\leanok
+		\uses{thm:common_blocked_cyclic_sector_flatten_word_of_block_cast}
+		Apply the grouped-block cast comparison to each original nonzero block.
+	\end{proof}
+
+	\begin{theorem}[Coordinate grouping gives the word identification]%
 \label{thm:common_grouped_block_cast_to_relabeling}
-	\lean{MPSTensor.CommonGroupedBlockCastHypothesis.toRelabelingHypothesis}
+		\lean{MPSTensor.CommonGroupedBlockCastHypothesis.toRelabelingHypothesis}
 	\leanok
 	\uses{def:common_grouped_block_cast_hypothesis,
 		def:common_sector_relabeling_hypothesis,
@@ -1757,18 +1773,17 @@ two-basis sector comparison theorem.
 \end{proof}
 
 \begin{definition}[After-blocking hypotheses for the CPSV formulation]%
-\label{def:after_blocking_fundamental_theorem_hypotheses}
-	\lean{MPSTensor.AfterBlockingFundamentalTheoremHypotheses}
-	\leanok
-	\uses{def:common_sector_relabeling_hypothesis,
-		def:common_primitive_bnt_cover_hypotheses}
-		These hypotheses consist of the comparison data for the
-	periodic-theorem-free after-blocking formulation of the CPSV Fundamental
-		Theorem. They contain the blocked-word identification for common cyclic
-	sectors. For the common primitive nonzero-sector families produced from two
-	tensors with the same MPV family, the comparison field is supplied with their
-	trace-preserving normalization, primitivity, irreducibility, and
-	positive bond-dimension evidence
+	\label{def:after_blocking_fundamental_theorem_hypotheses}
+		\lean{MPSTensor.AfterBlockingFundamentalTheoremHypotheses}
+		\leanok
+		\uses{def:common_primitive_bnt_cover_hypotheses}
+			These hypotheses consist of the comparison data for the
+		periodic-theorem-free after-blocking formulation of the CPSV Fundamental
+			Theorem. The blocked-word identification for common cyclic sectors is
+		now derived from the grouped-block cast theorem. For the common primitive nonzero-sector families produced from two
+		tensors with the same MPV family, the comparison field is supplied with their
+		trace-preserving normalization, primitivity, irreducibility, and
+		positive bond-dimension evidence
 	before returning BNT-cover comparison hypotheses for those blocks. The hypotheses
 	are tied to the produced families rather than to an arbitrary chosen
 	decomposition.
@@ -1793,8 +1808,7 @@ two-basis sector comparison theorem.
 	\lean{MPSTensor.fundamentalTheorem_afterBlocking_of_comparisonHypotheses}
 	\leanok
 	\uses{def:after_blocking_fundamental_theorem_hypotheses,
-		def:after_blocking_fundamental_theorem_conclusion,
-		thm:afterBlocking_sectorComparison_reindexed_bntCover}
+			def:after_blocking_fundamental_theorem_conclusion}
 	Let $A$ and $B$ generate the same MPV family. Assume the after-blocking
 	comparison hypotheses of
 	Definition~\ref{def:after_blocking_fundamental_theorem_hypotheses}. Then the
@@ -1804,21 +1818,25 @@ two-basis sector comparison theorem.
 
 	The conclusion matches the sector-decomposition part of the
 	Cirac--P\'erez-Garc\'ia--Schuch--Verstraete Fundamental Theorem: after
-	blocking, the tensor families are represented by BNT sector decompositions
-	whose basis sectors and weights match up to permutation and nonzero phases, as
-	in \cite{Cirac2016MPDO_arXiv} and \cite{Cirac2021Matrix}. The explicit hypotheses are:
-	the statement does not assume away the blocked-word identification, zero-tail,
-	trace-preserving normalization, primitivity, irreducibility, positive bond-dimension,
-	or BNT-cover comparison inputs.
+		blocking, the tensor families are represented by BNT sector decompositions
+		whose basis sectors and weights match up to permutation and nonzero phases, as
+		in \cite{Cirac2016MPDO_arXiv} and \cite{Cirac2021Matrix}. The explicit hypotheses are:
+		the statement does not assume away zero-tail, trace-preserving normalization,
+		primitivity, irreducibility, positive bond-dimension, or BNT-cover comparison
+		inputs.
 \end{theorem}
 
-\begin{proof}
-	\leanok
-	\uses{thm:afterBlocking_sectorComparison_reindexed_bntCover}
-	Apply
-	Theorem~\ref{thm:afterBlocking_sectorComparison_reindexed_bntCover} with
-		the word-identification and BNT-cover comparison data from
-	Definition~\ref{def:after_blocking_fundamental_theorem_hypotheses}. The proof
+	\begin{proof}
+		\leanok
+		\uses{thm:common_grouped_block_cast_of_flatten_word,
+			thm:common_grouped_block_cast_to_relabeling,
+			thm:afterBlocking_sectorComparison_reindexed_bntCover}
+		Apply
+		Theorem~\ref{thm:afterBlocking_sectorComparison_reindexed_bntCover} with
+			the word-identification derived from
+		Theorem~\ref{thm:common_grouped_block_cast_to_relabeling} and the BNT-cover
+		comparison data from
+		Definition~\ref{def:after_blocking_fundamental_theorem_hypotheses}. The proof
 	then packages the resulting blocking length, sector decompositions, BNT data,
 	permutation, multiplicity equalities, phases, and sector-weight
 	multiset equalities as the conclusion structure.
