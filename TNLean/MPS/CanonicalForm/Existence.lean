@@ -17,9 +17,8 @@ open Filter
 /-!
 # Canonical form existence reduction (arXiv:1606.00608, Section 2.3 + Appendix A)
 
-This file is an **intermediate construction for the early arbitrary-input part** of the
-canonical-form construction for MPS tensors from Cirac–Pérez-García–Schuch–Verstraete,
-arXiv:1606.00608.
+This file collects the arbitrary-tensor reductions toward the canonical-form construction for
+MPS tensors from Cirac–Pérez-García–Schuch–Verstraete, arXiv:1606.00608.
 
 We currently have the following components:
 
@@ -29,25 +28,24 @@ We currently have the following components:
 * Appendix A (CFII part): inside that TP gauge, unitary conjugation → diagonal PD fixed point.
 * Appendix A (periodicity): TP + irreducible → primitive after blocking.
 
-We also keep a couple of downstream compatibility formulations for already-normalized primitive /
-injective block families, but those are **not** assembled from arbitrary input in this file.
+We also keep a couple of formulations for already-normalized primitive / injective block families,
+but those are **not** obtained from arbitrary input in this file.
 
 Note: the Appendix-A CFII story is genuinely two-step:
 first a generally non-unitary TP similarity from the adjoint Perron--Frobenius eigenvector,
 then a unitary diagonalization **within** that TP gauge.
 
-What is **not** yet assembled end-to-end here:
+What is **not** yet proved here:
 
 * Thread the TP-gauge and periodicity theorems through the irreducible block decomposition while
   handling possible zero blocks exactly under `SameMPV₂` (which remembers the `N = 0` sector).
 * Resolve the post-blocking cyclic-sector / equal-weight issues needed to produce a primitive
   weighted block family with strictly ordered nonzero weights.
-* Pass that data to the later block-injective / `IsCanonicalForm` builders and downstream FT
-  results.
+* Pass that data to the block-injective / `IsCanonicalForm` hypotheses needed for the
+  fundamental-theorem results.
 
-Accordingly, this file should be read as a collection of early-stage
-reduction lemmas plus explicit continuation statements, **not** as a
-near-final canonical-form existence theorem for arbitrary input tensors.
+Accordingly, this file gives reduction lemmas and explicit conditional statements,
+**not** a complete canonical-form existence theorem for arbitrary input tensors.
 -/
 
 namespace MPSTensor
@@ -179,9 +177,9 @@ theorem isNormal_of_isPrimitiveMPS
 
 
 /-!
-## (5) Downstream compatibility imports
+## (5) Normality from primitive spectral-gap hypotheses
 
-For later-stage overlap and canonical-form builders we use the dedicated results from
+For overlap and canonical-form hypotheses involving primitive transfer maps, we use the results from
 `PeripheralToSpectralGap.lean` and `FromPeripheralPrimitive.lean` directly.
 -/
 
@@ -272,36 +270,36 @@ theorem isIrreducibleTensor_allZero_dim_le_one
 
 
 /-!
-## Unconditional arbitrary-input continuations
+## Conditional reductions from arbitrary input
 
-The last unconditional arbitrary-input step currently available here is the blockwise PF / TP-gauge
-continuation below: after decomposing `A` into irreducible blocks, one may continue on each block
-once one separately knows that the block has a nonzero Kraus operator. This explicit side condition
-is essential because, under the current `SameMPV₂` relation, zero scalar blocks cannot simply be
+The strongest arbitrary-input statement proved here is the blockwise PF / TP-gauge reduction below:
+after decomposing `A` into irreducible blocks, one may apply the theorem to each block once one
+separately knows that the block has a nonzero Kraus operator. This explicit side condition is
+essential because, under the current `SameMPV₂` relation, zero scalar blocks cannot simply be
 discarded: the `N = 0` sector is remembered.
 
-The newer normal-canonical-form file collects a later stage once one already has
-a primitive weighted block family with positive bond dimensions and distinct nonzero weights. This
-file does **not** currently construct that input from an arbitrary tensor.
+The normal-canonical-form file starts from a primitive weighted block family with positive bond
+dimensions and distinct nonzero weights. This file does **not** currently construct that input from
+an arbitrary tensor.
 
-Remaining gap for a full end-to-end canonical-form existence theorem:
+Remaining gap for a complete canonical-form existence theorem:
 
 * Apply the irreducible-to-TP-gauge theorem blockwise through the irreducible block decomposition
   while handling possible zero blocks exactly.
 * Apply the TP-irreducible-to-primitive blocking theorem and then perform the post-blocking cyclic
   sector and equal-weight arguments needed for strict nonzero weight ordering.
 * Use the resulting data to reach the stronger normal / injective-by-blocking hypotheses needed by
-  the later normal-canonical-form packaging lemmas and the downstream `IsCanonicalForm` builders.
+  the normal-canonical-form lemmas and the `IsCanonicalForm` constructors.
 -/
 
-/-- **Unconditional TP-gauge continuation for the 1606 reduction (1606.00608 Section 2.3 + App. A).**
+/-- **Unconditional TP-gauge reduction for the 1606 theorem (1606.00608 Section 2.3 + App. A).**
 
 From an arbitrary tensor `A` we produce an irreducible block decomposition. Moreover, for each
 resulting block, if one separately knows that the block has some nonzero Kraus operator, then the
 Perron--Frobenius / TP-gauge step can be applied to that block.
 
-This is the next unconditional continuation from arbitrary input under the
-current API. The nonzero side condition is explicit because `SameMPV₂`
+This is the available unconditional reduction from arbitrary input under the
+current statements. The nonzero side condition is explicit because `SameMPV₂`
 remembers the `N = 0` sector, so zero scalar blocks cannot be silently
 discarded. -/
 theorem exists_irreducible_blockDecomp_with_tpGauge
@@ -340,16 +338,16 @@ theorem exists_irreducible_blockDecomp_with_tpGauge
     (exists_tp_data_of_irreducible (d := d) (D := dim k)
       (A := blocks k) (hIrr := hIrr k) (hA := hNonzero))
 
-/-- **Legacy CFII continuation for the 1606 reduction (1606.00608 Section 2.3 + App. A).**
+/-- **CFII fixed-point data for the 1606 reduction (1606.00608 Section 2.3 + App. A).**
 
 From an arbitrary tensor `A` we produce an irreducible block decomposition. Moreover, for each
 block, assuming one has already supplied (i) a TP representative and (ii) positive bond dimension,
 we can produce CFII fixed-point data (unitary conjugation + diagonal PD fixed point).
 
-This is an optional Appendix-A side branch, not a near-final theorem: it does not thread the PF
-/ TP-gauge or periodicity-removal steps through the block decomposition. Later packaging into
-normal canonical form, once primitive weighted blocks are already in hand, lives in the later
-normal-canonical-form packaging file. -/
+This is the CFII part of Appendix A, not a complete existence theorem: it does not carry the PF
+/ TP-gauge or periodicity-removal arguments through the block decomposition. The normal canonical
+form, for primitive weighted blocks already in hand, is treated in the normal-canonical-form
+file. -/
 theorem exists_irreducible_blockDecomp_with_CFII
     (A : MPSTensor d D) :
     ∃ r : ℕ, ∃ dim : Fin r → ℕ,
