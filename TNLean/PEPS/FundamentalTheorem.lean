@@ -11,16 +11,16 @@ import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Defs
 -- linear-independence formulation `∀ v, LinearIndependent ℂ (A.component v)`
 -- (see issue #633 for the switch away from function-level injectivity, which
 -- is strictly weaker). Linear independence gives each vertex tensor a left
--- inverse on its image and is the correct hypothesis for the repaired uniqueness statement
--- `gauge_unique_mod_edge_scalars`.
+-- inverse on its image and is the correct hypothesis for the repaired
+-- uniqueness statement `gauge_unique_mod_edge_scalars`.
 --
 -- The unproved converse ingredients split into three groups:
 -- * `gaugeConsistency` requires the full edge-centred reduction from
 --   arXiv:1804.04964 Section 3. The local left inverse and the elementary
 --   blocking data are developed in `PEPS/VirtualInsertion` and `PEPS/Blocking`,
 --   and `localGauge_exists` has been reduced to the sharper local hypothesis
---   `HasLocalGaugeLift`. The edge-blocked coefficient and middle tensor are
---   developed in `PEPS/Blocking`; the abbreviation `BlockedMiddleGaugeHyp`
+--   `HasFactorizedLocalGauge`. The edge-blocked coefficient and middle tensor are
+--   developed in `PEPS/Blocking`; the abbreviation `BlockedMiddleGaugeFormula`
 --   isolates the remaining implication from `SameState` to the explicit local
 --   gauge formula.
 -- * The `hDim` step inside `fundamentalTheorem_PEPS` is factored out as the
@@ -495,18 +495,18 @@ noncomputable def localTensorEval (A : Tensor G d) (v : V)
   ∑ η : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1),
     (∏ ie : IncidentEdge G v, f ie (η ie)) * A.component v η σ
 
-/-- Under the sharper local hypothesis `HasLocalGaugeLift`, one obtains a
+/-- Under the sharper local hypothesis `HasFactorizedLocalGauge`, one obtains a
 factorized local gauge relation at `v`.
 
-The local left inverse and the canonical candidate operator are defined in
-`PEPS/LocalGauge`. It remains to derive `BlockedMiddleGaugeHyp` from `SameState`
-by comparing the edge-blocked coefficient from `PEPS/Blocking` with the
-three-site MPS reduction, then convert it to `HasLocalGaugeLift` by
-`hasLocalGaugeLift_of_blockedMiddleGaugeHyp`. -/
+The local left inverse and the canonical local gauge map are defined in
+`PEPS/LocalGauge`. It remains to derive `BlockedMiddleGaugeFormula` from
+`SameState` by comparing the edge-blocked coefficient from `PEPS/Blocking` with
+the three-site MPS reduction, then convert it to `HasFactorizedLocalGauge` by
+`hasFactorizedLocalGauge_of_blockedMiddleGaugeFormula`. -/
 theorem localGauge_exists (A B : Tensor G d)
     (hA : IsVertexInjective A)
     (hDim : A.bondDim = B.bondDim) (v : V)
-    (hLift : HasLocalGaugeLift A B hA hDim v) :
+    (hFactorized : HasFactorizedLocalGauge A B hA hDim v) :
     ∃ (Xv : (e : Edge G) → GL (Fin (A.bondDim e)) ℂ),
       ∀ (η : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1)) (σ : Fin d),
         B.component v (fun ie => Fin.cast (congr_fun hDim ie.1) (η ie)) σ =
@@ -514,7 +514,7 @@ theorem localGauge_exists (A B : Tensor G d)
             (∏ ie : IncidentEdge G v,
               (↑(Xv ie.1) : Matrix _ _ ℂ) (η ie) (η' ie)) *
               A.component v η' σ :=
-  localGauge_exists_of_liftData A B hA hDim v hLift
+  localGauge_exists_of_factorizedLocalGauge A B hA hDim v hFactorized
 
 /-! ### Gauge consistency across edges -/
 
@@ -533,10 +533,11 @@ theorem gaugeConsistency (A B : Tensor G d)
       ∀ (v : V) (η : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1)) (σ : Fin d),
         B.component v (fun ie => Fin.cast (congr_fun hDim ie.1) (η ie)) σ =
           gaugeVertex A X v η σ := by
-  -- TODO: first derive `BlockedMiddleGaugeHyp A B hA hDim v` from `SameState`
-  -- at each vertex by comparing the edge-blocked coefficient from `PEPS/Blocking`
-  -- with the three-site MPS reduction, then use
-  -- `hasLocalGaugeLift_of_blockedMiddleGaugeHyp` to obtain the local gauges.
+  -- Derive `BlockedMiddleGaugeFormula A B hA hDim v` from `SameState` at each
+  -- vertex by comparing the edge-blocked coefficient from `PEPS/Blocking` with
+  -- the three-site MPS reduction, then use
+  -- `hasFactorizedLocalGauge_of_blockedMiddleGaugeFormula` to obtain the local
+  -- gauges.
   -- The key remaining consistency step is: for each edge e = (u,v), the gauges
   -- extracted from u and v must agree as inverse-transposes, with the
   -- orientation convention in `edgeGaugeAt`.
@@ -572,7 +573,7 @@ the same state, then they are gauge-equivalent: there exist invertible matrices
 
 The proof proceeds in two stages:
 1. **Local extraction** (`localGauge_exists`): after proving the sharper local
-   hypothesis `HasLocalGaugeLift`, injectivity and the chosen left inverse
+   hypothesis `HasFactorizedLocalGauge`, injectivity and the chosen left inverse
    produce a factorized local gauge relation.
 2. **Global consistency** (`gaugeConsistency`): local gauges along shared
    edges are shown to be compatible, yielding a single coherent family of
