@@ -810,9 +810,9 @@ The theorems in this section bridge the gap between BNT block non-equivalence
 (`¬ GaugePhaseEquiv A B` for injective blocks) and the existence of a homogeneous
 length `T` at which `PairTraceSeparatingAt A B T` holds.
 
-**Route A (spectral, completed upstream):**
+**Route A (spectral):**
 `¬ GaugePhaseEquiv` → `spectralRadius(mixedTransfer) < 1` → `mpvOverlap → 0`.
-This is proved in `TNLean/Spectral/SpectralGap.lean`.
+This is the non-decaying overlap argument from the spectral-gap development.
 
 **Route B (algebraic, this section):**
 `¬ GaugePhaseEquiv` → `PairTraceSeparatingAll A B` → cumulative finite cutoff
