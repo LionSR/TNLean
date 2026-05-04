@@ -21,7 +21,7 @@ sides have TP-primitive decompositions.
 * `bilateral_commonPeriod_blocking_tp_primitive_normal` — two tensors with
   primitive blocked transfer maps have a common positive blocking period that
   preserves primitivity, left-canonical normalization, and normality.
-* `fundamentalTheorem_after_blocking_structural` — two tensors with the
+* `afterBlocking_structuralData_of_sameMPV₂` — two tensors with the
   same MPVs have blocked TP-primitive decompositions on both sides.
 
 ## References
@@ -69,7 +69,7 @@ The current library already settles the common-period blocking arithmetic and
 now has a one-sided phase-class BNT construction for TP primitive irreducible
 nonzero-weight blocks, one-sided overlap data, and witness-producing sector comparison
 from primitive overlap-span hypotheses. The theorem
-`fundamentalTheorem_after_blocking_perBlock_cyclic_live_with_zeroTail`
+`afterBlocking_perBlockCyclicDataWithZeroTail_of_sameMPV₂`
 keeps the faithful paper order: first split off the zero tail and TP-gauge the
 irreducible nonzero-weight blocks, then remove each block's period by cyclic sectors.
 It deliberately does not identify that period-removal length with the later
@@ -194,7 +194,7 @@ followed by a two-basis equal-case comparison theorem for those sector decomposi
 
 This theorem therefore gives the structural statement currently available on the
 way to arXiv:1606.00608, Theorem 1. -/
-theorem fundamentalTheorem_after_blocking_structural
+theorem afterBlocking_structuralData_of_sameMPV₂
     {d D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (_hSame : SameMPV₂ A B) :
@@ -227,7 +227,7 @@ theorem fundamentalTheorem_after_blocking_structural
 /-- A strengthened after-blocking structural statement that keeps the blocked `SameMPV₂`
 relations at the reduction periods. This is a genuine step forward because the
 common equality is no longer discarded by the public structural theorem. -/
-theorem fundamentalTheorem_after_blocking_structural_with_blockedSameMPV₂
+theorem afterBlocking_structuralDataWithBlockedSameMPV₂_of_sameMPV₂
     {d D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (hSame : SameMPV₂ A B) :
@@ -251,7 +251,7 @@ theorem fundamentalTheorem_after_blocking_structural_with_blockedSameMPV₂
       (∀ k, 0 < dimB k) := by
   obtain ⟨pA, hpA, rA, dimA, μA, blocksA, pB, hpB, rB, dimB, μB, blocksB,
     hTPA, hTPB, hPrimA, hPrimB, hμA, hμB, hDimA, hDimB⟩ :=
-    fundamentalTheorem_after_blocking_structural A B hSame
+    afterBlocking_structuralData_of_sameMPV₂ A B hSame
   refine ⟨pA, hpA, rA, dimA, μA, blocksA, pB, hpB, rB, dimB, μB, blocksB,
     ?_, ?_, hTPA, hTPB, hPrimA, hPrimB, hμA, hμB, hDimA, hDimB⟩
   · exact sameMPV₂_blockTensor A B hSame pA
@@ -471,7 +471,7 @@ The theorem intentionally keeps the per-block period-removal lengths inside
 later common-refinement or Wielandt/injectivity blocking length; assembling the
 per-block cyclic sectors at one physical blocking level is the next formal
 statement in the reduction chain. -/
-theorem fundamentalTheorem_after_blocking_perBlock_cyclic_live_with_zeroTail
+theorem afterBlocking_perBlockCyclicDataWithZeroTail_of_sameMPV₂
     {d D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (hSame : SameMPV₂ A B) :
@@ -536,10 +536,10 @@ maps, are tensor-irreducible, have positive bond dimensions, and carry nonzero
 unit weights.  The statement keeps the checked zero-tail equations,
 positive-length equality of the nonzero parts, and the length-zero identity at the unblocked
 nonzero-block level.  The companion theorem
-`fundamentalTheorem_after_blocking_reindexed_commonSector_live_with_zeroTail`
+`afterBlocking_reindexedCommonSectorDataWithZeroTail_of_sameMPV₂`
 adds the explicitly relabeled cyclic-sector flattening available after
 the iterated-blocking comparison theorem. -/
-theorem fundamentalTheorem_after_blocking_commonBlocked_cyclic_live_with_zeroTail
+theorem afterBlocking_commonBlockedCyclicDataWithZeroTail_of_sameMPV₂
     {d D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (hSame : SameMPV₂ A B) :
@@ -575,7 +575,7 @@ theorem fundamentalTheorem_after_blocking_commonBlocked_cyclic_live_with_zeroTai
       zeroTailB, rB, dimB, μB, blocksB,
       hIrrA, hIrrB, hTPA, hTPB, hμA, hμB, hDimA, hDimB,
       hMPVA, hMPVB, hPos, hZero, hCycA, hCycB⟩ :=
-    fundamentalTheorem_after_blocking_perBlock_cyclic_live_with_zeroTail A B hSame
+    afterBlocking_perBlockCyclicDataWithZeroTail_of_sameMPV₂ A B hSame
   obtain ⟨familyA⟩ :=
     exists_commonBlockedCyclicSectorFamily_of_hasPrimitiveIrreducibleCyclicSectors
       blocksA hCycA
@@ -594,7 +594,7 @@ theorem fundamentalTheorem_after_blocking_commonBlocked_cyclic_live_with_zeroTai
 /-- **Relabeled common-sector data with zero-tail reblocking.**
 
 This companion to
-`fundamentalTheorem_after_blocking_commonBlocked_cyclic_live_with_zeroTail`
+`afterBlocking_commonBlockedCyclicDataWithZeroTail_of_sameMPV₂`
 uses the common cyclic-sector family to express the reindexed block data available
 after the iterated-blocking comparison theorem.  For each side, the cyclic
 sectors are expressed as derived common-alphabet blocks `family.commonFlatBlocks`,
@@ -606,7 +606,7 @@ The statement is deliberately explicit about the reindexing of blocked physical
 words: the relabeled block field is the block `B_k^[family.p]` after applying
 `iteratedBlockIndex`.  It does not assert that the canonical blocked family and
 the per-block reindexed family are identical as physical-word indexed tensors. -/
-theorem fundamentalTheorem_after_blocking_reindexed_commonSector_live_with_zeroTail
+theorem afterBlocking_reindexedCommonSectorDataWithZeroTail_of_sameMPV₂
     {d D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (hSame : SameMPV₂ A B) :
@@ -658,7 +658,7 @@ theorem fundamentalTheorem_after_blocking_reindexed_commonSector_live_with_zeroT
       zeroTailB, rB, dimB, μB, blocksB,
       familyA, familyB, _hIrrA, _hIrrB, _hTPA, _hTPB, hμA, hμB, _hDimA, _hDimB,
       hMPVA, hMPVB, _hPos, _hZero, _hUnitA, _hUnitB⟩ :=
-    fundamentalTheorem_after_blocking_commonBlocked_cyclic_live_with_zeroTail A B hSame
+    afterBlocking_commonBlockedCyclicDataWithZeroTail_of_sameMPV₂ A B hSame
   refine ⟨zeroTailA, rA, dimA, μA, blocksA,
     zeroTailB, rB, dimB, μB, blocksB, familyA, familyB, ?_, ?_, ?_, ?_, ?_, ?_,
     ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
@@ -707,7 +707,7 @@ The last two `SameMPV₂` conclusions are deliberately stated for the relabeled
 blocked sector blocks.  They isolate the remaining equality under the chosen word
 reindexing needed to replace the canonical blocked nonzero blocks in the zero-tail
 equations by the derived primitive irreducible common-sector blocks. -/
-theorem fundamentalTheorem_after_blocking_commonLength_commonSector
+theorem afterBlocking_commonLengthCommonSectorData_of_sameMPV₂
     {d D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (hSame : SameMPV₂ A B) :
@@ -776,7 +776,7 @@ theorem fundamentalTheorem_after_blocking_commonLength_commonSector
       zeroTailB, rB, dimB, μB, blocksB,
       _hIrrA, _hIrrB, _hTPA, _hTPB, hμA, hμB, _hDimA, _hDimB,
       hMPVA, hMPVB, _hPos, _hZero, hCycA, hCycB⟩ :=
-    fundamentalTheorem_after_blocking_perBlock_cyclic_live_with_zeroTail A B hSame
+    afterBlocking_perBlockCyclicDataWithZeroTail_of_sameMPV₂ A B hSame
   let periodA : Fin rA → ℕ := fun k => (hCycA k).choose
   let periodB : Fin rB → ℕ := fun k => (hCycB k).choose
   have periodA_pos : ∀ k, 0 < periodA k := fun k => (hCycA k).choose_spec.1
@@ -1265,7 +1265,7 @@ theorem afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts
       hFamilyA, hFamilyB, hZA, hZB, hPosCanon, hZeroCanon,
       _hReindexedA, _hReindexedB, hμA, hμB, hTPA, hTPB, hPrimA, hPrimB,
       hIrrA, hIrrB, hDimA, hDimB⟩ :=
-    fundamentalTheorem_after_blocking_commonLength_commonSector A B hSame
+    afterBlocking_commonLengthCommonSectorData_of_sameMPV₂ A B hSame
   have hWordA := hReindexed μA₀ blocksA₀ familyA
   have hWordB := hReindexed μB₀ blocksB₀ familyB
   have hFlatA_raw := familyA.sameMPV₂_weightedCanonicalBlock_commonFlat_of_reindexed μA₀ hWordA
@@ -1484,7 +1484,7 @@ records the common cyclic-sector families.  If the canonical blocked nonzero
 families agree with the explicitly reindexed blocked-word families, then the
 nonzero parts are equal to the weighted common-sector families, and the zero-tail
 equations are rewritten with those common-sector families. -/
-theorem fundamentalTheorem_after_blocking_commonLength_commonSector_of_reindexed
+theorem afterBlocking_commonLengthCommonSectorData_of_reindexed
     {d D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (hSame : SameMPV₂ A B) :
@@ -1569,7 +1569,7 @@ theorem fundamentalTheorem_after_blocking_commonLength_commonSector_of_reindexed
       hFamilyA, hFamilyB, hZA, hZB, hPos, hZero,
       _hReindexA, _hReindexB, hμA, hμB, hTPA, hTPB, hPrimA, hPrimB,
       hIrrA, hIrrB, hDimA, hDimB⟩ :=
-    fundamentalTheorem_after_blocking_commonLength_commonSector A B hSame
+    afterBlocking_commonLengthCommonSectorData_of_sameMPV₂ A B hSame
   refine ⟨p, hp, zeroTailA, rA, dimA, μA, blocksA,
     zeroTailB, rB, dimB, μB, blocksB, familyA, familyB, hFamilyA, hFamilyB,
     hμA, hμB, hTPA, hTPB, hPrimA, hPrimB, hIrrA, hIrrB, hDimA, hDimB, ?_⟩

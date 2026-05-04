@@ -3179,7 +3179,7 @@ The following results separate the zero blocks from the nonzero blocks.
 
 \begin{theorem}[Structural after-blocking form of the fundamental theorem]%
 	\label{thm:ft_after_blocking_structural}
-	\lean{MPSTensor.fundamentalTheorem_after_blocking_structural}
+	\lean{MPSTensor.afterBlocking_structuralData_of_sameMPV₂}
 	\leanok
 	\uses{def:blocked_tensor}
 	If two tensors generate the same MPV family, then each tensor admits some
@@ -3306,7 +3306,7 @@ The following results separate the zero blocks from the nonzero blocks.
 
 \begin{theorem}[Cyclic sectors after the zero-tail split]%
 \label{thm:ft_after_blocking_per_block_cyclic_live_zero_tail}
-	\lean{MPSTensor.fundamentalTheorem_after_blocking_perBlock_cyclic_live_with_zeroTail}
+	\lean{MPSTensor.afterBlocking_perBlockCyclicDataWithZeroTail_of_sameMPV₂}
 	\leanok
 	\uses{thm:tp_gauge_arbitrary, thm:nonzero_block_zero_tail_identity,
 		def:primitive_irreducible_cyclic_sectors,
@@ -3332,7 +3332,7 @@ The following results separate the zero blocks from the nonzero blocks.
 
 \begin{theorem}[Common blocking for cyclic sectors]%
 \label{thm:ft_after_blocking_common_blocked_cyclic_live_zero_tail}
-	\lean{MPSTensor.fundamentalTheorem_after_blocking_commonBlocked_cyclic_live_with_zeroTail}
+	\lean{MPSTensor.afterBlocking_commonBlockedCyclicDataWithZeroTail_of_sameMPV₂}
 	\leanok
 	\uses{thm:ft_after_blocking_per_block_cyclic_live_zero_tail,
 		thm:exists_common_blocked_cyclic_sector_family,
@@ -3362,7 +3362,7 @@ transport the zero-tail identity through this comparison.
 
 \begin{theorem}[Common cyclic sectors after reblocking]%
 \label{thm:ft_after_blocking_reindexed_common_sector_live_zero_tail}
-	\lean{MPSTensor.fundamentalTheorem_after_blocking_reindexed_commonSector_live_with_zeroTail}
+	\lean{MPSTensor.afterBlocking_reindexedCommonSectorDataWithZeroTail_of_sameMPV₂}
 	\leanok
 	\uses{thm:ft_after_blocking_common_blocked_cyclic_live_zero_tail,
 		thm:zero_tail_to_tensor_from_blocks_block_power,
@@ -3387,7 +3387,7 @@ transport the zero-tail identity through this comparison.
 
 \begin{theorem}[Common blocking length for cyclic sectors]%
 \label{thm:ft_after_blocking_common_length_common_sector_theorem}
-	\lean{MPSTensor.fundamentalTheorem_after_blocking_commonLength_commonSector}
+	\lean{MPSTensor.afterBlocking_commonLengthCommonSectorData_of_sameMPV₂}
 	\leanok
 	\uses{thm:ft_after_blocking_per_block_cyclic_live_zero_tail,
 		thm:exists_common_blocked_cyclic_sector_family_common_multiple,
@@ -3556,7 +3556,7 @@ transport the zero-tail identity through this comparison.
 
 \begin{theorem}[Common sectors at one blocking length]%
 \label{thm:ft_after_blocking_common_length_common_sector_reindexed}
-	\lean{MPSTensor.fundamentalTheorem_after_blocking_commonLength_commonSector_of_reindexed}
+	\lean{MPSTensor.afterBlocking_commonLengthCommonSectorData_of_reindexed}
 	\leanok
 	\uses{thm:ft_after_blocking_common_length_common_sector_theorem,
 		thm:common_blocked_cyclic_sector_reindexed_nonzero_part}
