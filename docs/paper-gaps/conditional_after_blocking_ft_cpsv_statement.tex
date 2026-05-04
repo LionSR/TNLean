@@ -93,14 +93,14 @@ Formally this is the structure
 \path{MPSTensor.fundamentalTheorem_afterBlocking_of_comparisonHypotheses}.
 
 The hypotheses of this theorem are collected in
-\path{MPSTensor.AfterBlockingFundamentalTheoremHypotheses}.  They consist of a
-blocked-word relabeling assertion for cyclic-sector data and a comparison
-field for the common primitive nonzero-sector families produced by the preceding
-structural theorem.  That field is supplied with trace-preserving, primitive, and
-irreducible structural data and positive bond dimensions for the produced
-families; it then returns BNT-cover data containing the zero-tail, injectivity,
-normal-form separation, and proportional-decomposition comparison needed for
-those produced families.
+\path{MPSTensor.AfterBlockingFundamentalTheoremHypotheses}.  They now consist
+of the comparison field for the common primitive nonzero-sector families
+produced by the preceding structural theorem; the blocked-word relabeling
+assertion for cyclic-sector data is derived inside the wrapper.  The comparison
+field is supplied with trace-preserving, primitive, and irreducible structural
+data and positive bond dimensions for the produced families; it then returns
+BNT-cover data containing the zero-tail, injectivity, normal-form separation,
+and proportional-decomposition comparison needed for those produced families.
 
 These hypotheses are not written as hypotheses of Theorem~\texttt{thm1} or of
 Corollary~\texttt{II\_cor2} in the cited papers. They are the formal boundary
@@ -147,13 +147,12 @@ The other hypotheses are best understood as coordinate and transport data expose
 by the formal representation. They are mathematical assertions, but the papers do
 not state them because their notation identifies the relevant objects implicitly.
 
-The blocked-word relabeling hypothesis says that the nonzero part obtained by
+The blocked-word relabeling theorem says that the nonzero part obtained by
 blocking once at the common length agrees with the same sector family obtained by
 first removing each period and then grouping the resulting blocks. In ordinary
 paper notation both tensors are simply regarded as tensors over words of the
-common blocked length. In the formal statement, the direct alphabet of words of
-length $p$ and the nested alphabet obtained from iterated blocking are different
-coordinate descriptions, so their equality must be recorded explicitly.
+common blocked length. In the formal theorem, this coordinate identification is
+now derived inside the wrapper from the grouped-block cast construction.
 
 The zero-tail condition has a similar origin. The source definition of matrix
 product vectors is for positive lengths, and zero blocks are invisible there.
@@ -166,7 +165,8 @@ hypothesis appearing in the paper theorem.
 
 The transport of weights and zero-tail identities through the chosen common-sector
 representatives is likewise a coordinate-transport condition. The comparison theorem must be
-applied to exactly the final family of blocks after common blocking and relabeling.
+applied to exactly the final family of blocks after common blocking and the
+canonical relabeling supplied by the structural route.
 The paper moves between these descriptions without naming each transport map; the
 formal proof must show that the weights, nonzero-sector tensors, and zero-tail
 identities survive these changes of description.
@@ -183,10 +183,9 @@ paper-level inputs and formal coordinate transports made visible.
 This note records a proof gap in the present Lean development rather than a
 source error. The cited papers compress the canonical-form reduction, blocking,
 BNT matching, and injectivity refinements in the usual paper notation. The Lean
-development should keep the theorem conditional until the injectivity refinement,
-the BNT-cover comparison for the produced sectors, the blocked-word
-relabeling, and the zero-tail and weight transports have been proved for the same
-final common-sector data.
+development should keep the theorem conditional until the injectivity
+refinement, the BNT-cover comparison for the produced sectors, and the zero-tail
+and weight transports have been proved for the same final common-sector data.
 
 \bibliographystyle{alpha}
 \bibliography{references}
