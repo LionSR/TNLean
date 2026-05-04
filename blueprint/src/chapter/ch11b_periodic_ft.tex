@@ -367,6 +367,9 @@ directly to periodic tensors.
 \subsection{Statement of the periodic Fundamental Theorem}
 
 The following is Theorem~3.8 (``equal case'') of \cite{DeLasCuevas2017Irreducible}.
+The Lean entries listed here are conditional components of that route: the final
+entry still assumes periodic-overlap and power-equality hypotheses, so the
+literature theorem is not yet a single unconditional Lean statement.
 
 \begin{theorem}[Periodic Fundamental Theorem]\notready
     \label{thm:periodic_ft}
@@ -465,7 +468,7 @@ The following is Theorem~3.8 (``equal case'') of \cite{DeLasCuevas2017Irreducibl
     starting sector from $u$ to $u+1$.
 \end{definition}
 
-\begin{definition}[Cyclic staircase product on blocked indices (Equation A.8)]%
+\begin{definition}[Cyclic staircase product on blocked indices]%
     \label{def:blocked_corner_transition_tensor}
     \lean{MPSTensor.blockedCornerTransitionTensor}
     \leanok
@@ -590,7 +593,7 @@ The following is Theorem~3.8 (``equal case'') of \cite{DeLasCuevas2017Irreducibl
     $N \ge N_0$ the vectors $\{\ket{V^{(pN)}(A_j)}\}_j$ are linearly independent.
 \end{theorem}
 
-\begin{remark}[Comparison with the 1606.00608 approach]\notready
+\begin{remark}[Comparison with the blocking approach]\notready
     \label{rem:periodic_vs_blocking_ft}
     Theorem~\ref{thm:periodic_ft} and the equal-MPV Fundamental Theorem
     (Theorem~\ref{thm:ft_equal}) both characterize the gauge freedom

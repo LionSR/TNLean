@@ -8,7 +8,7 @@ import TNLean.Wielandt.RankOne.Products
 import TNLean.Wielandt.SpanGrowth.EigenvectorSpreading
 
 /-!
-# Quantum Wielandt Bound — proof roadmap
+# Quantum Wielandt Bound - proof roadmap
 
 This file collects the main results of the quantum Wielandt bound
 from arXiv:0909.5347 (Sanz, Pérez-García, Wolf, Cirac).
@@ -40,11 +40,10 @@ We formalize the proof chain up to the following:
 
 5. **Proof synthesis**: connecting these pieces into the Wielandt bound.
 
-The gap between vector spanning (step 4) and matrix spanning (the full bound)
-corresponds to Lemma 2(b) of the paper, which requires converting
-"word products applied to φ span ℂ^D" into "word products span M_D(ℂ)".
-This step uses the Jordan/Fitting decomposition and needs additional lemmas for
-the full formalization.
+The paper-level fixed-length matrix-spanning step, Lemma 2(b), is now carried by
+the `TNLean.Wielandt.PaperResults` and rank-one extraction modules. This file
+keeps the original cumulative-span and eigenvector-spreading chain as a compact
+roadmap and compatibility layer for the later fixed-length results.
 
 ## References
 
@@ -139,21 +138,21 @@ theorem vector_spanning_from_normality [NeZero D]
   cumulativeVectorSpan_eq_top_of_cumulativeSpan_eq_top A φ hφ
     (cumulativeSpan_eq_top A hN)
 
-/-! ## Part 3: Wielandt bound — main statements
+/-! ## Part 3: Wielandt bound - main statements
 
-The full Wielandt bound `i(A) ≤ (D²-d+1)·D²` requires Lemma 2(b),
-which converts vector spanning into matrix spanning. We state the
-key intermediate results and the final bound.
+The exact fixed-length paper bound is proved in
+`TNLean.Wielandt.PaperResults.WielandtInequality` using the matrix-span and
+rank-one extraction modules. The results below record the older cumulative
+normality route used by that proof chain.
 
 ### What we prove:
 - `cumulative_wielandt_bound`: T_{D²}(A) = ⊤ for normal tensors
 - `isNormal_iff_cumulativeSpan_eq_top`: characterization of normality
   via cumulative span
 
-### What needs Lemma 2(b) for the full proof:
-- Converting `cumulativeVectorSpan A φ N = ⊤` (all vectors reachable)
-  into `wordSpan A N' = ⊤` (all matrices reachable with fixed-length words)
-- This is the step from "S_n(A)|φ⟩ = ℂ^D" to "S_{N'}(A) = M_D(ℂ)"
+### Fixed-length passage:
+The conversion from vector spanning to fixed-length matrix spanning is formalized
+by the Lemma 2(b) results in `TNLean.Wielandt.PaperResults.MatrixSpanSharpBound`.
 -/
 
 /-- **Cumulative Wielandt bound**: Under `IsNormal`, the cumulative word
@@ -245,21 +244,10 @@ theorem wielandt_chain [NeZero D]
 8. `evalWord_append_eigenvector`: Pumping lemma for eigenvectors
 9. `evalWord_replicate_eigenvector`: Iterated pumping
 
-### Remaining for full D⁴ bound (Lemma 2(b)):
-- Converting "word products applied to φ span ℂ^D" (vector spanning)
-  into "word products of fixed length span M_D(ℂ)" (matrix spanning)
-- This requires showing that rank-1 matrices |φ⟩⟨ψ| can be realized
-  as linear combinations of word products, using the Fitting decomposition
-  to control the nilpotent and invertible parts separately
-- The paper achieves this via Jordan NF (we have Fitting instead)
-
-### Architecture for completing the bound:
-To prove `IsNormal A → IsNBlkInjective A (D^4)`:
-1. Use `exists_word_eigenvector` to get w₀ with |w₀| ≤ D²
-2. Consider the |w₀|-th power channel
-3. Apply `eigenvector_spreading` to the power channel
-4. Use Fitting decomposition on `evalWord A w₀` to convert vector → matrix
-5. Conclude `wordSpan A (|w₀| · D²) = ⊤`, giving the bound
+### Fixed-length bound route:
+The later paper-results modules combine the word-eigenvector extraction, the
+blocked rank-one construction, and fixed-length assembly to prove the paper-level
+index bound. This theorem remains as a named roadmap anchor for older references.
 -/
 theorem wielandt_roadmap : True := trivial
 

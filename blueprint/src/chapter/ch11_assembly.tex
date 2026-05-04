@@ -66,10 +66,9 @@ used in this chapter.
     The normal canonical form data provide the BNT separation
     and overlap convergence hypotheses;
     the non-degeneracy condition (no two distinct blocks in the same
-    family are gauge-phase equivalent) ensures that the permutation
-    $\pi$ produced by Theorem~\ref{thm:ft_proportional_nt} is uniquely
-    determined, so that the per-block gauge equivalences can be
-    assembled consistently.
+    family are gauge-phase equivalent) is one of the hypotheses used to
+    obtain an existential block-count equality, a matching permutation,
+    and per-block gauge-phase equivalences.
 \end{proof}
 
 \section{Proportional Fundamental Theorem}%
@@ -1924,12 +1923,10 @@ two-basis sector comparison theorem.
 	Chapter~\ref{ch:canonical} supplies the canonical-form reduction needed before
 	these comparison theorems can be applied: a common physical blocking length,
 	the zero-tail identities at that length, and cyclic-sector families for both
-	tensors on a common blocked alphabet.  The unproved assertion is the exact
-	equality, after identifying blocked physical words, between the blocked nonzero part and the
-	common cyclic-sector tensor for the whole weighted family.  With that
-	equality, Theorem~\ref{thm:after_blocking_common_primitive_irreducible_blocks_reindexed}
-	gives the common weighted nonzero-sector decompositions needed for the
-	comparison theorems.
+	tensors on a common blocked alphabet.  The blocked-word relabelling and the
+	common primitive irreducible nonzero-sector decompositions are now part of the
+	formalized reduction, culminating in
+	Theorem~\ref{thm:after_blocking_common_primitive_irreducible_blocks_reindexed}.
 	Theorem~\ref{thm:afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_spanHypotheses}
 		then states the hypotheses: equality of the
 	zero-tail dimensions, injectivity of the common nonzero-sector blocks, and

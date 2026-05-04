@@ -2404,23 +2404,23 @@ chosen sector bases and the sector-weight conclusion follows from the original
 gives the corresponding zero-tail route when full overlap-span data
 are supplied.
 
-The remaining formal work for the completely unconditional
-`fundamentalTheorem_after_blocking_sector` is therefore to derive, from the
-structural reduction itself:
+The blocked-word relabelling and common primitive irreducible nonzero-block
+decompositions are now part of this file's structural reduction. The remaining
+formal work for the completely unconditional
+`fundamentalTheorem_after_blocking_sector` is therefore narrower:
 
-1. a common nonzero-block decomposition with primitive **and irreducible** blocks at
-   the same physical blocking level;
-2. the `N = 0` identity for the zero-tail contribution;
-3. one-site injectivity of the nonzero-weight blocks, or a blocked replacement of the
+1. the `N = 0` identity for the zero-tail contribution;
+2. one-site injectivity of the nonzero-weight blocks, or a blocked replacement of the
    rigidity hypothesis; and
-4. equality of the finite-length MPV spans for the original nonzero-weight block families
-   (or directly for the two BNT bases), followed by the final global gauge
-   construction of the equal-case FT.
+3. equality of the finite-length MPV spans for the original nonzero-weight block families
+   (or directly for the two BNT bases), equivalently a common phase/BNT-cover comparison,
+   followed by the final global gauge construction of the equal-case FT.
 
-Thus the common-period arithmetic and the abstract sector-matching witness are no
-longer the main blockers; the remaining gap is the paper-level derivation of the
-listed nonzero-block, zero-tail, injectivity, and span facts for the actual sector
-tensors produced by the after-blocking reduction.
+Thus the common-period arithmetic, the blocked-word relabelling, the common
+primitive irreducible nonzero-sector families, and the abstract sector-matching
+witness are no longer the main blockers. The remaining gap is the paper-level
+derivation of the listed zero-tail, injectivity, and span/comparison facts for
+the actual sector tensors produced by the after-blocking reduction.
 -/
 
 end FundamentalTheoremAfterBlocking
