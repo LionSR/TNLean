@@ -4623,6 +4623,10 @@
           
           <li><a href="../docs/find/#doc/TNLean.OperatorJensen.povmDiagonal_posDef" class="lean_decl">TNLean.OperatorJensen.povmDiagonal_posDef</a></li>
           
+          <li><a href="../docs/find/#doc/TNLean.OperatorJensen.povmDiagonal_inv" class="lean_decl">TNLean.OperatorJensen.povmDiagonal_inv</a></li>
+          
+          <li><a href="../docs/find/#doc/TNLean.OperatorJensen.povmIsometry_compress_diagonal_inv" class="lean_decl">TNLean.OperatorJensen.povmIsometry_compress_diagonal_inv</a></li>
+          
         </ul>
     
       </div>
@@ -4644,7 +4648,10 @@
 <div class="displaymath" id="a0000000535">
   \[  \sum _{i \in \iota } C_i C_i^\ast + S S^\ast = \mathbb {1},  \]
 </div>
-<p> and strict positivity of all weights implies positivity of the scalar block-diagonal matrix. </p>
+<p> and strict positivity of all weights together with \(t{\gt}0\) implies positive definiteness of the scalar block-diagonal matrix. If all weights are nonzero and the defect scalar is nonzero, the inverse diagonal has reciprocal weights, and compressing this inverse gives </p>
+<div class="displaymath" id="a0000000536">
+  \[  \sum _{i \in \iota } w_i^{-1}\,  C_i C_i^\ast + t^{-1}\,  S S^\ast .  \]
+</div>
 
   </div>
 </div>
@@ -4656,7 +4663,99 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>Expand the block matrix multiplication entrywise. The defect identity gives the isometry relation after summing the \(\iota \)-blocks and the defect block, and the weighted compression identity follows from the same expansion with the scalar diagonal inserted. Positivity of the scalar block-diagonal matrix is immediate from positivity of its diagonal entries. </p>
+  <p>Expand the block matrix multiplication entrywise. The defect identity gives the isometry relation after summing the \(\iota \)-blocks and the defect block, and the weighted compression identity follows from the same expansion with the scalar diagonal inserted. Positive definiteness uses strict positivity of every diagonal entry, while the inverse formula uses the nonvanishing of every diagonal entry. </p>
+
+  </div>
+</div>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:operator_jensen_povm_resolvent">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">7.52</span>
+    <span class="lemma_thmtitle">Finite-POVM resolvent inequality</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-schwarz.html#lem:operator_jensen_povm_resolvent">#</a>
+    
+    <a class="icon proof" href="ch-schwarz.html#a0000000537"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-schwarz.html#lem:operator_jensen_povm_compression">Lemma 7.51</a></li>
+          
+          <li><a href="ch-schwarz.html#lem:operator_jensen_inverse_compression">Lemma 7.50</a></li>
+          
+          <li><a href="ch-schwarz.html#lem:operator_jensen_povm_compression">Lemma 7.51</a></li>
+          
+          <li><a href="ch-schwarz.html#lem:operator_jensen_inverse_compression">Lemma 7.50</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/TNLean.OperatorJensen.povm_resolvent_inv_le" class="lean_decl">TNLean.OperatorJensen.povm_resolvent_inv_le</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>   Let \(w_i\ge 0\) and \(t{\gt}0\). If the defect block satisfies </p>
+<div class="displaymath" id="a0000000538">
+  \[  S S^\ast = \mathbb {1}- \sum _{i \in \iota } C_i C_i^\ast ,  \]
+</div>
+<p> then </p>
+<div class="displaymath" id="a0000000539">
+  \[  \left(\sum _{i \in \iota } w_i\,  C_i C_i^\ast + t\, \mathbb {1}\right)^{-1} \le \sum _{i \in \iota } (w_i+t)^{-1}\,  C_i C_i^\ast + t^{-1}\,  S S^\ast .  \]
+</div>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000537">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> Apply the compression inequality to the positive definite scalar block-diagonal matrix with entries \(w_i+t\) and defect entry \(t\). The compression identities rewrite the compressed matrix as \(\sum _i w_i C_i C_i^\ast + t\mathbb {1}\) and its inverse compression as the displayed upper bound. </p>
 
   </div>
 </div>
@@ -4665,7 +4764,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">7.52</span>
+    <span class="theorem_thmlabel">7.53</span>
     <span class="theorem_thmtitle">Jensen for concave real powers</span>
     <div class="thm_header_extras">
 
@@ -4688,6 +4787,8 @@
         <ul class="uses">
           
           <li><a href="ch-channels.html#def:positive_map">Definition 5.1</a></li>
+          
+          <li><a href="ch-schwarz.html#lem:operator_jensen_povm_resolvent">Lemma 7.52</a></li>
           
         </ul>
     
@@ -4719,7 +4820,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   For a positive subunital map \(T\) and \(p\in [0,1]\): </p>
-<div class="displaymath" id="a0000000536">
+<div class="displaymath" id="a0000000540">
   \[  T(A^p) \le (TA)^p.  \]
 </div>
 <p> This is <span class="cite">
@@ -4737,7 +4838,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">7.53</span>
+    <span class="theorem_thmlabel">7.54</span>
     <span class="theorem_thmtitle">Map form of Jensen for concave real powers</span>
     <div class="thm_header_extras">
 
@@ -4746,7 +4847,7 @@
 
     <a class="icon proof" href="ch-schwarz.html#thm:rpow_concave_jensen">#</a>
     
-    <a class="icon proof" href="ch-schwarz.html#a0000000537"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-schwarz.html#a0000000541"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4762,7 +4863,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-schwarz.html#thm:posMap_rpow_concave_jensen">Theorem 7.52</a></li>
+          <li><a href="ch-schwarz.html#thm:posMap_rpow_concave_jensen">Theorem 7.53</a></li>
           
         </ul>
     
@@ -4793,11 +4894,11 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   This is the corresponding map-form statement of Theorem&#160;<a href="ch-schwarz.html#thm:posMap_rpow_concave_jensen">7.52</a>. Its proof is deferred until Theorem&#160;<a href="ch-schwarz.html#thm:posMap_rpow_concave_jensen">7.52</a> is proved. </p>
+  <p>   This is the corresponding map-form statement of Theorem&#160;<a href="ch-schwarz.html#thm:posMap_rpow_concave_jensen">7.53</a>. Its proof is deferred until Theorem&#160;<a href="ch-schwarz.html#thm:posMap_rpow_concave_jensen">7.53</a> is proved. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000537">
+<div class="proof_wrapper" id="a0000000541">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4814,7 +4915,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">7.54</span>
+    <span class="theorem_thmlabel">7.55</span>
     <span class="theorem_thmtitle">Jensen for convex real powers</span>
     <div class="thm_header_extras">
 
@@ -4868,7 +4969,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   For a positive subunital map \(T\) and \(p\in [1,2]\): </p>
-<div class="displaymath" id="a0000000538">
+<div class="displaymath" id="a0000000542">
   \[  (TA)^p \le T(A^p).  \]
 </div>
 <p> This is <span class="cite">
@@ -4886,7 +4987,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">7.55</span>
+    <span class="theorem_thmlabel">7.56</span>
     <span class="theorem_thmtitle">Map form of Jensen for convex real powers</span>
     <div class="thm_header_extras">
 
@@ -4895,7 +4996,7 @@
 
     <a class="icon proof" href="ch-schwarz.html#thm:rpow_convex_jensen">#</a>
     
-    <a class="icon proof" href="ch-schwarz.html#a0000000539"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-schwarz.html#a0000000543"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4911,7 +5012,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-schwarz.html#thm:posMap_rpow_convex_jensen">Theorem 7.54</a></li>
+          <li><a href="ch-schwarz.html#thm:posMap_rpow_convex_jensen">Theorem 7.55</a></li>
           
         </ul>
     
@@ -4942,11 +5043,11 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   This is the corresponding map-form statement of Theorem&#160;<a href="ch-schwarz.html#thm:posMap_rpow_convex_jensen">7.54</a>. Its proof is deferred until Theorem&#160;<a href="ch-schwarz.html#thm:posMap_rpow_convex_jensen">7.54</a> is proved. </p>
+  <p>   This is the corresponding map-form statement of Theorem&#160;<a href="ch-schwarz.html#thm:posMap_rpow_convex_jensen">7.55</a>. Its proof is deferred until Theorem&#160;<a href="ch-schwarz.html#thm:posMap_rpow_convex_jensen">7.55</a> is proved. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000539">
+<div class="proof_wrapper" id="a0000000543">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4963,7 +5064,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">7.56</span>
+    <span class="theorem_thmlabel">7.57</span>
     <span class="theorem_thmtitle">Jensen for concave log</span>
     <div class="thm_header_extras">
 
@@ -5017,7 +5118,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   For a positive <em>unital</em> map \(T\) and positive-definite&#160;\(A\): </p>
-<div class="displaymath" id="a0000000540">
+<div class="displaymath" id="a0000000544">
   \[  T(\log A) \le \log (TA).  \]
 </div>
 <p> This is <span class="cite">
@@ -5035,7 +5136,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">7.57</span>
+    <span class="theorem_thmlabel">7.58</span>
     <span class="theorem_thmtitle">Map form of Jensen for the concave logarithm</span>
     <div class="thm_header_extras">
 
@@ -5044,7 +5145,7 @@
 
     <a class="icon proof" href="ch-schwarz.html#thm:log_concave_jensen">#</a>
     
-    <a class="icon proof" href="ch-schwarz.html#a0000000541"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-schwarz.html#a0000000545"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5060,7 +5161,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-schwarz.html#thm:posMap_log_concave_jensen">Theorem 7.56</a></li>
+          <li><a href="ch-schwarz.html#thm:posMap_log_concave_jensen">Theorem 7.57</a></li>
           
         </ul>
     
@@ -5091,11 +5192,11 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   This is the corresponding map-form statement of Theorem&#160;<a href="ch-schwarz.html#thm:posMap_log_concave_jensen">7.56</a>. Its proof is deferred until Theorem&#160;<a href="ch-schwarz.html#thm:posMap_log_concave_jensen">7.56</a> is proved. </p>
+  <p>   This is the corresponding map-form statement of Theorem&#160;<a href="ch-schwarz.html#thm:posMap_log_concave_jensen">7.57</a>. Its proof is deferred until Theorem&#160;<a href="ch-schwarz.html#thm:posMap_log_concave_jensen">7.57</a> is proved. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000541">
+<div class="proof_wrapper" id="a0000000545">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5113,7 +5214,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">7.58</span>
+    <span class="theorem_thmlabel">7.59</span>
     <span class="theorem_thmtitle">Lieb concavity</span>
     <div class="thm_header_extras">
 
@@ -5147,7 +5248,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>  For \(s\in [0,1]\), any matrix&#160;\(K\), and positive-definite matrices \(A_1,A_2,B_1,B_2\), the map \((A,B)\mapsto \operatorname{tr}(K^\dagger A^s K B^{1-s})\) is jointly concave: </p>
-<div class="displaymath" id="a0000000542">
+<div class="displaymath" id="a0000000546">
   \[  t\, \Re \operatorname{tr}(K^\dagger A_1^s K B_1^{1-s}) +(1-t)\, \Re \operatorname{tr}(K^\dagger A_2^s K B_2^{1-s}) \; \le \;  \Re \operatorname{tr}\! \bigl(K^\dagger (tA_1+(1-t)A_2)^s K (tB_1+(1-t)B_2)^{1-s}\bigr).  \]
 </div>
 <p> See Lieb (1973) and Ando (1979). </p>
@@ -5159,7 +5260,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">7.59</span>
+    <span class="theorem_thmlabel">7.60</span>
     <span class="theorem_thmtitle">Map form of Lieb concavity</span>
     <div class="thm_header_extras">
 
@@ -5168,7 +5269,7 @@
 
     <a class="icon proof" href="ch-schwarz.html#thm:lieb_concavity">#</a>
     
-    <a class="icon proof" href="ch-schwarz.html#a0000000543"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-schwarz.html#a0000000547"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5184,7 +5285,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-schwarz.html#thm:lieb_concavity_axiom">Theorem 7.58</a></li>
+          <li><a href="ch-schwarz.html#thm:lieb_concavity_axiom">Theorem 7.59</a></li>
           
         </ul>
     
@@ -5215,11 +5316,11 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   This is the corresponding map-form statement of Theorem&#160;<a href="ch-schwarz.html#thm:lieb_concavity_axiom">7.58</a>. Its proof is deferred until Theorem&#160;<a href="ch-schwarz.html#thm:lieb_concavity_axiom">7.58</a> is proved. </p>
+  <p>   This is the corresponding map-form statement of Theorem&#160;<a href="ch-schwarz.html#thm:lieb_concavity_axiom">7.59</a>. Its proof is deferred until Theorem&#160;<a href="ch-schwarz.html#thm:lieb_concavity_axiom">7.59</a> is proved. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000543">
+<div class="proof_wrapper" id="a0000000547">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5236,7 +5337,7 @@
     <span class="corollary_thmcaption">
     Corollary
     </span>
-    <span class="corollary_thmlabel">7.60</span>
+    <span class="corollary_thmlabel">7.61</span>
     <span class="corollary_thmtitle">Lieb concavity, \(K=\mathbb {1}\) case</span>
     <div class="thm_header_extras">
 
@@ -5247,7 +5348,7 @@
 
     <a class="icon proof" href="ch-schwarz.html#cor:lieb_concavity_id">#</a>
     
-    <a class="icon proof" href="ch-schwarz.html#a0000000544"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-schwarz.html#a0000000548"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5263,7 +5364,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-schwarz.html#thm:lieb_concavity">Theorem 7.59</a></li>
+          <li><a href="ch-schwarz.html#thm:lieb_concavity">Theorem 7.60</a></li>
           
         </ul>
     
@@ -5295,14 +5396,14 @@
   </div>
   <div class="corollary_thmcontent">
   <p>   For \(s\in [0,1]\), \(t\in [0,1]\), and positive-definite matrices \(A_1,A_2,B_1,B_2\), the map \((A,B)\mapsto \Re \operatorname{tr}(A^s B^{1-s})\) is jointly concave: </p>
-<div class="displaymath" id="a0000000545">
+<div class="displaymath" id="a0000000549">
   \[  t\, \Re \operatorname{tr}(A_1^s B_1^{1-s})+(1-t)\, \Re \operatorname{tr}(A_2^s B_2^{1-s}) \; \le \;  \Re \operatorname{tr}\! \bigl((tA_1+(1-t)A_2)^s (tB_1+(1-t)B_2)^{1-s}\bigr).  \]
 </div>
-<p> Obtained from Theorem&#160;<a href="ch-schwarz.html#thm:lieb_concavity">7.59</a> by taking \(K=\mathbb {1}\). </p>
+<p> Obtained from Theorem&#160;<a href="ch-schwarz.html#thm:lieb_concavity">7.60</a> by taking \(K=\mathbb {1}\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000544">
+<div class="proof_wrapper" id="a0000000548">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5310,7 +5411,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>Specialize Theorem&#160;<a href="ch-schwarz.html#thm:lieb_concavity">7.59</a> at \(K=\mathbb {1}\) and simplify \(\mathbb {1}^{\dagger }=\mathbb {1}\) together with \(\mathbb {1}\cdot X=X\cdot \mathbb {1}=X\). </p>
+  <p>Specialize Theorem&#160;<a href="ch-schwarz.html#thm:lieb_concavity">7.60</a> at \(K=\mathbb {1}\) and simplify \(\mathbb {1}^{\dagger }=\mathbb {1}\) together with \(\mathbb {1}\cdot X=X\cdot \mathbb {1}=X\). </p>
 
   </div>
 </div>
@@ -5319,7 +5420,7 @@
     <span class="corollary_thmcaption">
     Corollary
     </span>
-    <span class="corollary_thmlabel">7.61</span>
+    <span class="corollary_thmlabel">7.62</span>
     <span class="corollary_thmtitle">Concavity of Lieb’s map in the first argument</span>
     <div class="thm_header_extras">
 
@@ -5330,7 +5431,7 @@
 
     <a class="icon proof" href="ch-schwarz.html#cor:lieb_concavity_in_fst">#</a>
     
-    <a class="icon proof" href="ch-schwarz.html#a0000000546"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-schwarz.html#a0000000550"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5346,7 +5447,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-schwarz.html#thm:lieb_concavity">Theorem 7.59</a></li>
+          <li><a href="ch-schwarz.html#thm:lieb_concavity">Theorem 7.60</a></li>
           
         </ul>
     
@@ -5378,13 +5479,13 @@
   </div>
   <div class="corollary_thmcontent">
   <p>    For \(s\in [0,1]\), \(t\in [0,1]\), matrix \(K\), and positive-definite matrices \(A_1,A_2,B\), the map \(A\mapsto \Re \operatorname{tr}(K^\dagger A^s K B^{1-s})\) is concave: </p>
-<div class="displaymath" id="a0000000547">
+<div class="displaymath" id="a0000000551">
   \[  t\, \Re \operatorname{tr}(K^\dagger A_1^s K B^{1-s}) +(1-t)\, \Re \operatorname{tr}(K^\dagger A_2^s K B^{1-s}) \; \le \;  \Re \operatorname{tr}\! \bigl(K^\dagger (tA_1+(1-t)A_2)^s K B^{1-s}\bigr).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000546">
+<div class="proof_wrapper" id="a0000000550">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5392,7 +5493,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>Specialize Theorem&#160;<a href="ch-schwarz.html#thm:lieb_concavity">7.59</a> at \(B_1=B_2=B\), so that the convex combination collapses: \(tB+(1-t)B=B\). </p>
+  <p>Specialize Theorem&#160;<a href="ch-schwarz.html#thm:lieb_concavity">7.60</a> at \(B_1=B_2=B\), so that the convex combination collapses: \(tB+(1-t)B=B\). </p>
 
   </div>
 </div>
@@ -5401,7 +5502,7 @@
     <span class="corollary_thmcaption">
     Corollary
     </span>
-    <span class="corollary_thmlabel">7.62</span>
+    <span class="corollary_thmlabel">7.63</span>
     <span class="corollary_thmtitle">Concavity of Lieb’s map in the second argument</span>
     <div class="thm_header_extras">
 
@@ -5412,7 +5513,7 @@
 
     <a class="icon proof" href="ch-schwarz.html#cor:lieb_concavity_in_snd">#</a>
     
-    <a class="icon proof" href="ch-schwarz.html#a0000000548"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-schwarz.html#a0000000552"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5428,7 +5529,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-schwarz.html#thm:lieb_concavity">Theorem 7.59</a></li>
+          <li><a href="ch-schwarz.html#thm:lieb_concavity">Theorem 7.60</a></li>
           
         </ul>
     
@@ -5460,13 +5561,13 @@
   </div>
   <div class="corollary_thmcontent">
   <p>    For \(s\in [0,1]\), \(t\in [0,1]\), matrix \(K\), and positive-definite matrices \(A,B_1,B_2\), the map \(B\mapsto \Re \operatorname{tr}(K^\dagger A^s K B^{1-s})\) is concave: </p>
-<div class="displaymath" id="a0000000549">
+<div class="displaymath" id="a0000000553">
   \[  t\, \Re \operatorname{tr}(K^\dagger A^s K B_1^{1-s}) +(1-t)\, \Re \operatorname{tr}(K^\dagger A^s K B_2^{1-s}) \; \le \;  \Re \operatorname{tr}\! \bigl(K^\dagger A^s K (tB_1+(1-t)B_2)^{1-s}\bigr).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000548">
+<div class="proof_wrapper" id="a0000000552">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5474,7 +5575,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>Specialize Theorem&#160;<a href="ch-schwarz.html#thm:lieb_concavity">7.59</a> at \(A_1=A_2=A\), so that the convex combination collapses: \(tA+(1-t)A=A\). </p>
+  <p>Specialize Theorem&#160;<a href="ch-schwarz.html#thm:lieb_concavity">7.60</a> at \(A_1=A_2=A\), so that the convex combination collapses: \(tA+(1-t)A=A\). </p>
 
   </div>
 </div>
