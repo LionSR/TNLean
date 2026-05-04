@@ -30,7 +30,7 @@ Combined with the stabilization results from Section 8b showing
 `rectSpan P A n = range(mulLeft P)`, this yields the key universality statement:
 for every `ψ`, `vecMulVec φ ψ ∈ rectSpan P A n`.
 
-This is the backend engine for the exact Lemma 2(b) of arXiv:0909.5347: once the
+This is the core implication behind the exact Lemma 2(b) of arXiv:0909.5347: once the
 one-sided rectangular span stabilizes to the full range, every rank-one matrix
 `|φ⟩⟨ψ|` with `φ` in the range of the D-th power projection lands in
 `rectSpan ⊆ wordSpan`.
@@ -250,8 +250,8 @@ Under `IsNormal A` and with an eigenvector `A i₀ *ᵥ φ = μ • φ` (`μ ≠
 there exists `n` such that for **every** `ψ`,
 `vecMulVec φ ψ ∈ wordSpan A (D + n)`.
 
-This is the backend theorem that directly feeds into the paper's Lemma 2(b)
-conditional assembly. -/
+This is the theorem that directly feeds into the paper's Lemma 2(b) conditional
+assembly. -/
 theorem exists_wordSpan_forall_vecMulVec_eigenvector
     (A : MPSTensor d D) (i₀ : Fin d) (hN : IsNormal A)
     {φ : Fin D → ℂ} {μ : ℂ} (hμ : μ ≠ 0)

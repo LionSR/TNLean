@@ -11,11 +11,11 @@ import TNLean.QPF.PosDef
 import TNLean.Spectral.MixedTransfer
 
 /-!
-# Preparatory lemmas for the current `IsPrimitiveMPS → IsNormal` bridge
+# Preparatory lemmas for the current `IsPrimitiveMPS → IsNormal` route
 
 This file collects spectral-gap consequences of `IsPrimitiveMPS` together with
 basic transfer-map compatibility lemmas. It stops short of proving any
-`IsNormal` theorem; the actual primitive-to-normal bridge now lives in
+`IsNormal` theorem; the actual primitive-to-normal implication now lives in
 `Primitivity/StronglyIrreducibleToFullRank.lean`, while `QuantumWielandt.lean`
 keeps a backward-compatible exact-word-span witness theorem whose public
 statement still carries an aperiodicity parameter.
@@ -47,7 +47,7 @@ fixed point. This is weaker than the paper's primitive condition in
 arXiv:0909.5347, Proposition 3, which additionally forces the fixed point to be
 positive definite.
 
-Accordingly, this file should be read as preparatory material for the bridge,
+Accordingly, this file should be read as preparatory material for the implication,
 not as the final primitive-to-normal theorem.
 
 ## References
@@ -185,7 +185,7 @@ theorem isIrreducibleMap_of_isIrreducibleTensor
 
 /-- **IsIrreducibleTensor ⟹ PosDef** for primitive tensors.
 
-Combines the bridge `IsIrreducibleTensor → IsIrreducibleMap` with
+Combines the implication `IsIrreducibleTensor → IsIrreducibleMap` with
 `posSemidef_fixedPoint_isPosDef_of_irreducible`. -/
 theorem posDef_of_isIrreducibleTensor_of_isPrimitiveMPS
     {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
@@ -199,7 +199,7 @@ theorem posDef_of_isIrreducibleTensor_of_isPrimitiveMPS
 
 This file intentionally stops before any `IsNormal` theorem.
 
-What it does provide is the preparatory material reused by the later bridge:
+What it does provide is the preparatory material reused by the later implication:
 
 1. `fixedPoint_unique`: the `1`-eigenspace of the transfer map is spanned by
    `ρ`
@@ -217,7 +217,7 @@ formalized here.
 
 For the legacy exact-word-span witness theorem with an explicit aperiodicity
 parameter, see `QuantumWielandt.lean`. For the actual
-`IsPrimitiveMPS + PosDef → IsNormal` bridge, see
+`IsPrimitiveMPS + PosDef → IsNormal` implication, see
 `Primitivity/StronglyIrreducibleToFullRank.lean`.
 -/
 

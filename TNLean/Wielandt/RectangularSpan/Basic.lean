@@ -14,12 +14,12 @@ import Mathlib.Data.Fin.Tuple.Basic
 /-!
 # Rectangular Span Foundations and Lemma 2(b) Assembly
 
-This module contains the foundational rectangular-span API used in the Wielandt
+This module contains the foundational rectangular-span theory used in the Wielandt
 bound: blocking preserves normality, blocked eigenvector transfer, the basic
 one-sided and cumulative rectangular spans, and the conditional and blocked
 assembly steps for Lemma 2(b).
 
-The later growth, stabilization, universality, and sharp quantitative backends
+The later growth, stabilization, universality, and sharp quantitative theorems
 live in `TNLean.Wielandt.RectangularSpan.Growth` and
 `TNLean.Wielandt.RectangularSpan.Universality`.
 

@@ -11,7 +11,7 @@ import Mathlib.LinearAlgebra.Matrix.ToLin
 /-!
 # Manufacturing a rank-one matrix in the range of two-sided multiplication
 
-This file provides a small helper lemma used in the rank-one step of the Wielandt proof:
+This file proves a lemma used in the rank-one step of the Wielandt proof:
 
 If a column vector `φ` lies in the range of left-multiplication by `P` (as a linear map on
 vectors), and a row vector `ψ` lies in the range of right-multiplication by `Q` (again as a

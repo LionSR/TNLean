@@ -38,7 +38,7 @@ in the `IsPrimitivePaper` language of the paper.
 ## Proof strategy
 
 Use Proposition 3 to pass from `IsPrimitivePaper A` to eventually full Kraus
-rank, rewrite this as `IsNormal A`, and then apply the backend nonzero-trace
+rank, rewrite this as `IsNormal A`, and then apply the nonzero-trace
 result from `NonzeroTraceProduct.lean`.
 -/
 

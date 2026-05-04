@@ -40,7 +40,7 @@ case analysis of `PaperResults/WielandtInequality.lean`.
 1. Use Proposition 3 to pass from `IsPrimitivePaper A` to eventually full Kraus
    rank (`HasEventuallyFullKrausRank A`).
 2. Rewrite as `IsNormal A`.
-3. Apply the backend existential theorem `wielandt_lemma2b`.
+3. Apply the existential theorem `wielandt_lemma2b`.
 -/
 
 open scoped Matrix ComplexOrder BigOperators

@@ -13,7 +13,7 @@ import Mathlib.LinearAlgebra.Matrix.ToLin
 import Mathlib.Analysis.Complex.Polynomial.Basic
 
 /-!
-# Eigenvalue Extraction and Rank-One Products (Lemma 2(b) Infrastructure)
+# Eigenvalue Extraction and Rank-One Products (Lemma 2(b) Ingredients)
 
 This file provides the eigenvalue/eigenvector extraction lemmas needed for
 the Quantum Wielandt bound assembly, corresponding to **Lemma 2(b)** of
@@ -28,12 +28,12 @@ The paper's proof of the main theorem proceeds by:
    word products applied to `φ` span all of `ℂ^D`
 4. Converting vector spanning to matrix spanning (Lemma 2(b))
 
-This file handles step 2 and provides the bridge between traces and eigenvalues.
+This file handles step 2 and relates nonzero traces to nonzero eigenvalues.
 
 ## Our approach
 
 We avoid the paper's Jordan Normal Form argument for Lemma 2(b) by using
-Mathlib's generalized eigenspace infrastructure via our `FittingDecomposition`.
+Mathlib's generalized eigenspace theory via our `FittingDecomposition`.
 The core insight is:
 - Nonzero trace implies nonzero eigenvalue (over algebraically closed fields)
 - Nonzero eigenvalue gives an eigenvector
@@ -109,8 +109,8 @@ theorem Matrix.exists_nonzero_spectrum_mem [NeZero D]
 
 /-- **Nonzero trace implies `HasEigenvalue` for the associated linear map.**
 
-This bridges between the matrix world and Mathlib's linear map eigenvalue theory.
-The eigenvalue is for `Matrix.toLin' M`, which is the linear map `v ↦ M *ᵥ v`.
+This relates a matrix eigenvalue to the corresponding eigenvalue of the linear
+map `Matrix.toLin' M`, namely `v ↦ M *ᵥ v`.
 
 Paper: used implicitly in Theorem 1 proof. -/
 theorem exists_hasEigenvalue_of_trace_ne_zero [NeZero D]

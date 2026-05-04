@@ -43,8 +43,8 @@ We formalize the proof chain up to the following:
 The gap between vector spanning (step 4) and matrix spanning (the full bound)
 corresponds to Lemma 2(b) of the paper, which requires converting
 "word products applied to φ span ℂ^D" into "word products span M_D(ℂ)".
-This step uses the Jordan/Fitting decomposition but needs additional
-infrastructure for the full formalization.
+This step uses the Jordan/Fitting decomposition and needs additional lemmas for
+the full formalization.
 
 ## References
 

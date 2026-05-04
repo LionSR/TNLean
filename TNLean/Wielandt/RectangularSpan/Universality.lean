@@ -7,10 +7,10 @@ Authors: TNLean contributors
 import TNLean.Wielandt.RectangularSpan.UniversalityAux
 
 /-!
-# Rectangular Span Universality — Sharp Backends (Sections 8g–8h)
+# Rectangular Span Universality — Sharp Bounds (Sections 8g–8h)
 
-This module is the second half of the rectangular-span universality proof.  It imports
-all the auxiliary infrastructure from `UniversalityAux` and proves the key unconditional
+This module is the second half of the rectangular-span universality proof. It imports
+the auxiliary lemmas from `UniversalityAux` and proves the key unconditional
 theorems.
 
 ## Main results
@@ -163,7 +163,7 @@ theorem rectSpan_nilpIndex_eq_range_of_strict_growth
   set C := D * dTilde
   set a := fun n => finrank ℂ (rectSpan P A n)
   have hrank_eq : P.rank = dTilde := rank_pow_nilpIndex_eq A i₀
-  -- Monotonicity from nilpIndex growth infrastructure
+  -- Monotonicity from the nilpIndex growth lemmas.
   have hMono : ∀ n, a n ≤ a (n + 1) :=
     fun n => rectSpan_nilpIndex_finrank_mono A i₀ n
   -- Ceiling: finrank(R_n) ≤ D * D̃ for all n
@@ -303,7 +303,7 @@ theorem proj_gen_in_leftStep_of_finrank_eq
 /-! ### Part 5: NilpIndex structural consequences
 
 Analogues of Part 4 for `P = (A i₀)^r` where `r = nilpIndex(toLin'(A i₀))`.
-These use the nilpIndex growth infrastructure from Section 8f½. -/
+These use the nilpIndex growth lemmas from Section 8f½. -/
 
 /-- **NilpIndex version of structural invariance**: when finrank stabilizes
 at the nilpIndex power, `rectSpan P A (n+1) = (A i₀) · rectSpan P A n`. -/
@@ -399,11 +399,14 @@ Combined with the **commutativity** of `mulLeft` and `mulRight` on submodules
 1. **Right-expansion**: `rectSpan P A (n+1) = ⨆_j mulRight(A j)(rectSpan P A n)`
 2. **Structural permanence**: if `R_{n+1} = A i₀ · R_n` (from finrank stabilization),
    then `R_{n+2} = A i₀ · R_{n+1}` (by substituting and using commutativity)
-3. **Finrank permanence**: finrank(R_n) = finrank(R_{n+1}) ⟹ finrank(R_{n+1}) = finrank(R_{n+2})
-4. **Constant finrank**: stabilization at level n ⟹ finrank(R_m) = finrank(R_n) ∀ m ≥ n
+3. **Finrank permanence**:
+   finrank(R_n) = finrank(R_{n+1}) ⟹ finrank(R_{n+1}) = finrank(R_{n+2})
+4. **Constant finrank**:
+   stabilization at level n ⟹ finrank(R_m) = finrank(R_n) ∀ m ≥ n
 5. **Strict growth under IsNormal**: contrapositive of (4) using existence of N
    with rectSpan P A N = range(mulLeft P)
-6. **Unconditional sharp D²-D+1**: plugging (5) into `wielandt_unconditional_sharp_of_strict_growth`
+6. **Unconditional sharp D²-D+1**:
+   plug (5) into `wielandt_unconditional_sharp_of_strict_growth`
 -/
 
 section ExactPropagation
@@ -433,7 +436,7 @@ theorem wordSpan_succ_eq_mul_right (A : MPSTensor d D) (n : ℕ) :
       (Submodule.subset_span ⟨σ₂, rfl⟩)
   · exact wordSpan_mul_le A n 1
 
-/-! ### Helpers for length-1 word spans -/
+/-! ### Lemmas for length-1 word spans -/
 
 /-- `evalWord A (List.ofFn σ) = A (σ 0)` for `σ : Fin 1 → Fin d`. -/
 private lemma evalWord_ofFn_one (A : MPSTensor d D) (σ : Fin 1 → Fin d) :
@@ -784,7 +787,7 @@ The sharp direct route via `nilpIndex` provides:
 - `vecMulVec_eigenvector_sharp_of_rectSpan`: conditional sharp Lemma 2(b)
   — `∀ ψ, vecMulVec φ ψ ∈ cumulativeSpan A (D² - D + 1)`
 
-### NilpIndex growth infrastructure (Section 8f½)
+### NilpIndex growth lemmas (Section 8f½)
 Mirrors Section 8 growth for P = (A i₀)^r where r = nilpIndex:
 - `mulLeft_mem_rectSpan_nilpIndex_succ`: left-step membership
 - `rectSpanNilpIndexLeftStep`: the linear map
@@ -816,7 +819,8 @@ The permanence chain that closes the Appendix-A bottleneck:
 - `rectSpan_nilpIndex_strict_growth_of_isNormal`: **strict growth under IsNormal** ⭐
   — `finrank(R_n) < D·D̃ → finrank(R_n) < finrank(R_{n+1})`
 - `wielandt_sharp_unconditional`: **unconditional sharp D²-D+1 Lemma 2(b)** ⭐⭐
-  — `IsNormal → ¬IsUnit → eigenvector → ∀ψ, vecMulVec φ ψ ∈ cumulativeSpan A (D²-D+1)`
+  — `IsNormal → ¬IsUnit → eigenvector → ∀ψ,
+      vecMulVec φ ψ ∈ cumulativeSpan A (D²-D+1)`
 
 ### Eigenvector padding and exact wordSpan (Section 8h, Part 7)  ⭐⭐⭐ NEW
 Upgrades the cumulativeSpan result to exact wordSpan at the paper level D²-D+1:
@@ -826,7 +830,7 @@ Upgrades the cumulativeSpan result to exact wordSpan at the paper level D²-D+1:
 - `vecMulVec_eigenvector_exact_wordSpan`: **exact paper-level D²-D+1** ⭐⭐⭐
   — `IsNormal → ¬IsUnit → eigenvector → ∀ψ, vecMulVec φ ψ ∈ wordSpan A (D²-D+1)`
 
-This completes the exact-level backend at the paper level. The remaining work
+This completes the exact-level result at the paper level. The remaining work
 to get a fully unconditional `wordSpan A N = ⊤` for `N = D²-D+1` is purely
 in the top-level assembly: connecting eigenvector existence, blocking, and
 the sharp rank-one placement.

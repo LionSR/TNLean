@@ -108,7 +108,7 @@ noncomputable def colRangeSubmodule (P : Matrix (Fin D) (Fin D) ℂ) :
     simpa [hcol] using
       (Submodule.smul_mem (LinearMap.range (Matrix.toLin' P)) a (hM j))
 
-/-- Package the range of left-multiplication as the submodule of matrices whose columns lie in
+/-- Identify the range of left-multiplication as the submodule of matrices whose columns lie in
 `range (Matrix.toLin' P)`. -/
 theorem range_mulLeft_eq_pi (P : Matrix (Fin D) (Fin D) ℂ) :
     LinearMap.range (LinearMap.mulLeft ℂ P) = colRangeSubmodule (D := D) P := by
@@ -244,7 +244,7 @@ noncomputable def rowRangeSubmodule (Q : Matrix (Fin D) (Fin D) ℂ) :
     simpa [hrow] using
       (Submodule.smul_mem (LinearMap.range (Q.vecMulLinear)) a (hM i))
 
-/-- Package the range of right-multiplication as the submodule of matrices whose rows lie in
+/-- Identify the range of right-multiplication as the submodule of matrices whose rows lie in
 `range (Q.vecMulLinear)`. -/
 theorem range_mulRight_eq_pi (Q : Matrix (Fin D) (Fin D) ℂ) :
     LinearMap.range (LinearMap.mulRight ℂ Q) = rowRangeSubmodule (D := D) Q := by

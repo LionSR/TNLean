@@ -50,7 +50,7 @@ access to the (c)→(b) proof route and its quantitative intermediates.
    $$\sum_{|\sigma|=n} |\operatorname{tr}(B^\dagger A_\sigma)|^2 =
    \operatorname{Re}\Bigl(\sum_{i,k} [B^\dagger \mathcal E^n(e_{ik}) B]_{ik}\Bigr)$$
 
-2. **Primitivity bridge**: From strong irreducibility, derive `IsPrimitiveMPS A ρ`
+2. **Primitivity step**: From strong irreducibility, derive `IsPrimitiveMPS A ρ`
    with the *original* positive-definite fixed point `ρ`.
 
 3. **Convergence**: The complementary map `(E - P_ρ)^n → 0` in operator norm,
@@ -63,7 +63,7 @@ access to the (c)→(b) proof route and its quantitative intermediates.
 ## Main results
 
 * `sum_normSq_trace_conjTranspose_mul_evalWord` — the trace-pairing identity
-* `isPrimitiveMPS_of_isStronglyIrreduciblePaper` — primitivity bridge
+* `isPrimitiveMPS_of_isStronglyIrreduciblePaper` — primitivity implication
 * `IsPrimitiveMPS.transferMap_pow_apply_tendsto` — convergence `E^n → P_ρ`
 * `eq_zero_of_trace_conjTranspose_mul_posDef_mul_eq_zero` — PosDef nondegeneracy
 
@@ -190,7 +190,7 @@ theorem sum_normSq_trace_conjTranspose_mul_evalWord
     norm_cast
   rw [hlhs, sum_trace_mul_star_eq]
 
-/-! ### Part 2: Primitivity bridge
+/-! ### Part 2: Primitivity implication
 
 From `IsStronglyIrreduciblePaper A` + left-canonical normalization, we derive
 `IsPrimitiveMPS A ρ` with the *same* positive-definite fixed point `ρ` from the
@@ -203,7 +203,7 @@ definition. The proof chains:
 4. obtain `IsPrimitiveMPS A ρ`
 -/
 
-/-- **Primitivity bridge**: strong irreducibility implies the spectral-gap
+/-- **Primitivity implication**: strong irreducibility implies the spectral-gap
 predicate `IsPrimitiveMPS A ρ` for some positive-definite `ρ`.
 
 This is the key structural step in the (c) → (b) direction: it connects the
@@ -860,7 +860,7 @@ end UniformPositivity
 
 /-! ### Part 8: Final construction — (c) → (b)
 
-Combining the trace-pairing identity (Part 1), primitivity bridge (Part 2),
+Combining the trace-pairing identity (Part 1), primitivity implication (Part 2),
 convergence (Part 3), trace-pairing computation (Part 4), PosDef nondegeneracy
 (Part 5), word-span positivity criterion (Lemma A), operator-norm bound (Lemma B),
 and compactness lower bound (Step C), we prove the main theorem:

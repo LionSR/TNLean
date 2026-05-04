@@ -9,15 +9,14 @@ import TNLean.Wielandt.RectangularSpan.Basic
 /-!
 # Rectangular Span Growth and Stabilization
 
-This module develops the one-sided rectangular-span growth argument used in the
-Wielandt Lemma 2(b) backend. It proves that left-multiplication by `A i₀`
+This module develops the one-sided rectangular-span growth argument used in
+Wielandt Lemma 2(b). It proves that left-multiplication by `A i₀`
 induces an injective step map on `rectSpan ((A i₀)^D) A n`, deduces monotonicity
-of the associated finrank sequence, and records the stabilization criteria that
+of the associated finrank sequence, and proves the stabilization criteria that
 identify `rectSpan` and `cumulativeRectSpan` with `range (mulLeft P)`.
 
 `TNLean.Wielandt.RectangularSpan.Universality` builds on this file to turn stabilized
-rectangular spans into rank-one universality and the later sharp D²-D+1
-backends.
+rectangular spans into rank-one universality and the later sharp D²-D+1 theorems.
 -/
 
 open scoped Matrix

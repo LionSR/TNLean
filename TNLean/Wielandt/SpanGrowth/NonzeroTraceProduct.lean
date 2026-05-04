@@ -30,7 +30,7 @@ We prove both the coarse and sharp versions:
 4. `exists_nonzero_trace_word_sharp`: There exists a word product of
    length ≤ D² − dim(S₁) + 1 with nonzero trace.
 
-The sharp bound uses `dim(S₁(A))` instead of the raw parameter `d`
+The sharp bound uses `dim(S₁(A))` instead of the ambient alphabet size `d`
 since `dim(S₁(A)) ≤ d` in general. When the Kraus operators are
 linearly independent, `dim(S₁(A)) = d` and the bounds coincide.
 
@@ -252,7 +252,7 @@ private theorem cumulativeSpan_dim_growth_from_one
             cumulativeSpan_finrank_strict_mono A hlt
         omega
 
-/-- The key step helper for the sharp bound: if `IsNormal` and
+/-- The key step for the sharp bound: if `IsNormal` and
 `dim(S₁) = r`, then `cumulativeSpan A (D² − r + 1) = ⊤`.
 
 This is the argument from arXiv:0909.5347, Lemma 1: the dimension of T_n
@@ -365,7 +365,7 @@ Paper: "If E_A is primitive, then there exists A^(n) ∈ S_n(A)
 with n ≤ D²−d+1 such that tr(A^(n)) ≠ 0."
 
 We use `dim(S₁(A))` (which equals `krausRank A` in the paper-facing
-layer) instead of the raw parameter `d`, since in general
+layer) instead of the ambient alphabet size `d`, since in general
 `dim(S₁(A)) ≤ d` and `dim(S₁(A))` is the tight quantity.
 (arXiv:0909.5347, Lemma 1) -/
 theorem exists_nonzero_trace_word_sharp [NeZero D]

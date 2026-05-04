@@ -16,7 +16,7 @@ This file introduces a two-sided ("bi-rectangular") span
 
 `biRectSpan P Q B n = span{ P * M * Q : M ∈ wordSpan B n }`
 
-and develops basic API (membership, finrank bounds, injectivity tools) for the
+and develops membership, finrank bounds, and injectivity lemmas for the
 missing rank-one extraction step in the Quantum Wielandt proof.
 
 The eventual goal is to show that for suitable choices of `P,Q` (coming from
@@ -286,7 +286,7 @@ theorem biRectSpan_finrank_le
 /-!
 ## Injectivity tools on invertible blocks
 
-The next lemmas package the `RankOneSpanGrowth` disjointness statement into
+The next lemmas turn the `RankOneSpanGrowth` disjointness statement into
 convenient pointwise injectivity statements for left and right multiplication.
 -/
 
@@ -386,7 +386,7 @@ end WielandtRankOne
 The intended use is with `P = (B i₀)^D` and `Q = (B i₁)^D` coming from the
 nilpotent-killing powers of word-eigenvalue products.
 
-At this stage we record a basic (coarse) monotonicity statement for `finrank`.
+At this stage we prove a basic (coarse) monotonicity statement for `finrank`.
 -/
 
 noncomputable section BiRectSpanDimGrowth
