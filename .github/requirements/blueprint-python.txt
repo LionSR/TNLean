@@ -1,1 +1,3 @@
+leanblueprint
+plastex
 pybtex==0.26.1

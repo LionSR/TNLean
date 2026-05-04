@@ -30,6 +30,8 @@ env:
 jobs:
   codex:
     # Skip when:
+    #   - repository variable CODEX_MENTION_ENABLED is exactly "false".
+    #     Unset, or any other value, preserves the default enabled behavior.
     #   - sender is a bot (e.g. Copilot reposting a review that contains "@chatgpt") —
     #     openai/codex-action errors out on non-collaborator actors anyway, so the
     #     job would just burn minutes setting up Lean before failing.
@@ -40,6 +42,7 @@ jobs:
     #   - the same trigger also mentions @claude — let claude.yml handle it to avoid
     #     two bots editing the same branch in parallel.
     if: |
+      vars.CODEX_MENTION_ENABLED != 'false' &&
       github.event.sender.type != 'Bot' && (
         (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@chatgpt') && !contains(github.event.comment.body, '@claude') && contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association)) ||
         (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@chatgpt') && !contains(github.event.comment.body, '@claude') && contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association)) ||

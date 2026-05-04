@@ -406,6 +406,9 @@ The following workflows run automatically:
 | **Claude Code Review** (`claude-code-review.yml`) | PR opened/synced/reopened touching `.lean`, `.tex`, `lakefile.toml`, `lean-toolchain` | Automated review for sorrys, Mathlib style, type safety, performance, modularity, documentation |
 | **Issue Tracker** (`tracking-issue-sync.yml`) | Issue closed/reopened; PR merged/opened; review submitted | Updates tracking-issue checkboxes (checks on close, unchecks on reopen), posts progress comments on linked issues when PRs merge, scans merged PRs for follow-ups (deferred review feedback, new `sorry` markers, missing blueprint tags), creates follow-up issues with `follow-up` label, adds `all-resolved` when all tasks complete |
 | **Blueprint Lint** (`lint-blueprint.yml`) | PRs touching blueprint files | Validates LaTeX blueprint for broken labels and references |
+| **Oversized Lean File Guard** (`oversized-lean-files.yml`) | PRs | Reports `.lean` files above the 1000-line style limit; advisory while main still has existing oversized files |
+| **Lean Linter-Warning Sweep** (`lean-linter-warning-sweep.yml`) | Weekly + manual dispatch | Captures Lean compiler/linter warnings and uploads a report for maintainer triage |
+| **Lean Linter-Warning Auto-Fix** (`lean-linter-warning-autofix.yml`) | Manual dispatch | Runs the warning sweep and can open a guarded Lean-only PR when explicitly requested |
 | **Docs & Blueprint Sync** (`docs-blueprint-sync.lock.yml`) | Daily (weekdays) + manual dispatch | Detects stale documentation and opens a sync PR if needed |
 | **Lean Audit** (`lean-audit.yml`) | On demand | Audits Lean code for style and correctness |
 | **PR Cleanup** (`pr-cleanup.yml`) | Bot-generated PR opened (`claude/*` or `codex/*` branches) | Normalizes title to `type(scope): desc`, restructures body to PR template, copies labels from linked issue, adds `Addresses #N` reference, comments on the issue |
