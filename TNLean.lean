@@ -241,7 +241,9 @@ import TNLean.MPS.CanonicalForm.Assembly.NormalityChain
 import TNLean.MPS.CanonicalForm.Assembly.PrimitiveBlocks
 import TNLean.MPS.CanonicalForm.Assembly.CommonBlockedCyclicSectorFamily
 import TNLean.MPS.CanonicalForm.Assembly.CyclicSectorDecomposition
+import TNLean.MPS.CanonicalForm.Assembly.StructuralData
 import TNLean.MPS.CanonicalForm.Assembly.StructuralTheorem
+import TNLean.MPS.CanonicalForm.Assembly.CommonSectorTransport
 import TNLean.MPS.CanonicalForm.BNTGrouping
 import TNLean.MPS.CanonicalForm.EqualNormBridge
 import TNLean.MPS.Core.BlockingInfrastructure
