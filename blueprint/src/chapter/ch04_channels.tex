@@ -2208,11 +2208,16 @@ This subsection records the existence statements from
     \lean{Wolf.IsLorentzNonDiagonal}\leanok
     For a qubit channel $T' : M_{2}(\C) \to M_{2}(\C)$, write $\widehat{T'}$
     in the normalized Pauli basis.  The channel is in \emph{non-diagonal
-    Lorentz normal form} when
-    $\widehat{T'}_{30}=2/3$, $\widehat{T'}_{10}=\widehat{T'}_{20}=0$,
-    $\widehat{T'}_{33}=1/3$, the entries $\widehat{T'}_{11}$ and
-    $\widehat{T'}_{22}$ are equal, and every off-diagonal entry of
-    $\widehat{T'}$ vanishes except possibly $\widehat{T'}_{30}$.
+    Lorentz normal form} when, for some $x \in [0,1]$,
+    \[
+        \widehat{T'} =
+        \begin{pmatrix}
+            1 & 0 & 0 & 0 \\
+            0 & x/\sqrt{3} & 0 & 0 \\
+            0 & 0 & x/\sqrt{3} & 0 \\
+            2/3 & 0 & 0 & 1/3
+        \end{pmatrix}.
+    \]
 \end{definition}
 
 \begin{definition}[Singular Lorentz normal form]\label{def:lorentz_singular}
