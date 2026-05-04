@@ -116,9 +116,8 @@ The theorem takes convergent coefficient data as explicit hypotheses.
 
 /-- Split-data proportional-MPV Fundamental Theorem for CF-BNT-style data (Theorem 4.4).
 
-This is the Stage B low-risk interface: it uses only the hypotheses actually used by the
-proportional-MPV argument, and leaves the legacy `IsCanonicalFormBNT` version below
-unchanged. -/
+This formulation exposes exactly the hypotheses used by the proportional-MPV argument,
+separating the BNT matching data from the bundled `IsCanonicalFormBNT` interface. -/
 abbrev BlockPermutationGaugeWitness
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
