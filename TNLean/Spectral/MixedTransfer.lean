@@ -62,7 +62,7 @@ lemma mixedTransferMap_apply (A B : MPSTensor d D) (X : Matrix (Fin D) (Fin D) â
   classical
   simp [mixedTransferMap, Matrix.mul_assoc]
 
-/-- Definitional helper: the mixed transfer operator with `A = B` is the standard transfer map. -/
+/-- The mixed transfer operator with `A = B` is the standard transfer map. -/
 theorem mixedTransferMap_self (A : MPSTensor d D) :
     mixedTransferMap A A = transferMap (d := d) (D := D) A := by
   ext X
@@ -86,8 +86,8 @@ end MixedTransfer
 
 /-! ## Iterated mixed transfer and MPV cross-correlations
 
-The key bridge: iterating the mixed transfer operator `N` times connects
-to sums over all words of length `N` of products of word evaluations.
+Iterating the mixed transfer operator `N` times gives the corresponding sum
+over all words of length `N` of products of word evaluations.
 -/
 
 section IteratedTransfer
