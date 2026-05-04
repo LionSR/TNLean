@@ -236,6 +236,51 @@ structure CommonPrimitiveBNTCoverHypotheses
 
 namespace CommonPrimitiveBNTCoverHypotheses
 
+/-- Form `CommonPrimitiveBNTCoverHypotheses` from common primitive structural data
+and explicit BNT comparison inputs. -/
+def ofCommonPrimitiveData
+    {d p rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
+    {zeroTailA zeroTailB DtotA DtotB : ℕ}
+    {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
+    {blocksA : (x : Fin rA) → MPSTensor (blockPhysDim d p) (dimA x)}
+    {blocksB : (x : Fin rB) → MPSTensor (blockPhysDim d p) (dimB x)}
+    (hμA : ∀ x, μA x ≠ 0)
+    (hμB : ∀ x, μB x ≠ 0)
+    (hTPA : ∀ x, ∑ i : Fin (blockPhysDim d p), (blocksA x i)ᴴ * blocksA x i = 1)
+    (hTPB : ∀ x, ∑ i : Fin (blockPhysDim d p), (blocksB x i)ᴴ * blocksB x i = 1)
+    (hPrimA : ∀ x, _root_.IsPrimitive
+      (transferMap (d := blockPhysDim d p) (D := dimA x) (blocksA x)))
+    (hPrimB : ∀ x, _root_.IsPrimitive
+      (transferMap (d := blockPhysDim d p) (D := dimB x) (blocksB x)))
+    (hIrrA : ∀ x, IsIrreducibleTensor (blocksA x))
+    (hIrrB : ∀ x, IsIrreducibleTensor (blocksB x))
+    (hAntiA : StrictAnti (fun x : Fin rA => ‖μA x‖))
+    (hAntiB : StrictAnti (fun x : Fin rB => ‖μB x‖))
+    (hNotGpeA : BlocksNotGaugePhaseEquiv (d := blockPhysDim d p) blocksA)
+    (hNotGpeB : BlocksNotGaugePhaseEquiv (d := blockPhysDim d p) blocksB)
+    (hZeroTail : zeroTailA = zeroTailB)
+    (hInjA : ∀ x, IsInjective (blocksA x))
+    (hInjB : ∀ x, IsInjective (blocksB x))
+    (hDecomp : ProportionalDecompositionData (d := blockPhysDim d p)
+      blocksA blocksB DtotA DtotB) :
+    CommonPrimitiveBNTCoverHypotheses (zeroTailA := zeroTailA) (zeroTailB := zeroTailB)
+      (DtotA := DtotA) (DtotB := DtotB) μA μB blocksA blocksB where
+  ncfA := by
+    have hDimA : ∀ x, 0 < dimA x := fun x => Nat.pos_of_ne_zero (NeZero.ne (dimA x))
+    exact isNormalCanonicalForm_of_tp_primitive_irr_sorted
+      (d' := blockPhysDim d p) (μ := μA) blocksA hTPA hPrimA hDimA hμA hIrrA hAntiA
+  ncfB := by
+    have hDimB : ∀ x, 0 < dimB x := fun x => Nat.pos_of_ne_zero (NeZero.ne (dimB x))
+    exact isNormalCanonicalForm_of_tp_primitive_irr_sorted
+      (d' := blockPhysDim d p) (μ := μB) blocksB hTPB hPrimB hDimB hμB hIrrB hAntiB
+  notGpeA := hNotGpeA
+  notGpeB := hNotGpeB
+  zeroTail_eq := hZeroTail
+  left_injective := hInjA
+  right_injective := hInjB
+  decompData := hDecomp
+
 /-- A BNT cover hypothesis bundle produces a common MPV phase cover. -/
 theorem toMPVCommonPhaseCover
     {d p rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
