@@ -255,8 +255,6 @@ def ofCommonPrimitiveData
       (transferMap (d := blockPhysDim d p) (D := dimB x) (blocksB x)))
     (hIrrA : ∀ x, IsIrreducibleTensor (blocksA x))
     (hIrrB : ∀ x, IsIrreducibleTensor (blocksB x))
-    (hDimA : ∀ x, 0 < dimA x)
-    (hDimB : ∀ x, 0 < dimB x)
     (hAntiA : StrictAnti (fun x : Fin rA => ‖μA x‖))
     (hAntiB : StrictAnti (fun x : Fin rB => ‖μB x‖))
     (hNotGpeA : BlocksNotGaugePhaseEquiv (d := blockPhysDim d p) blocksA)
@@ -268,10 +266,14 @@ def ofCommonPrimitiveData
       blocksA blocksB DtotA DtotB) :
     CommonPrimitiveBNTCoverHypotheses (zeroTailA := zeroTailA) (zeroTailB := zeroTailB)
       (DtotA := DtotA) (DtotB := DtotB) μA μB blocksA blocksB where
-  ncfA := isNormalCanonicalForm_of_tp_primitive_irr_sorted
-    (d' := blockPhysDim d p) (μ := μA) blocksA hTPA hPrimA hDimA hμA hIrrA hAntiA
-  ncfB := isNormalCanonicalForm_of_tp_primitive_irr_sorted
-    (d' := blockPhysDim d p) (μ := μB) blocksB hTPB hPrimB hDimB hμB hIrrB hAntiB
+  ncfA := by
+    have hDimA : ∀ x, 0 < dimA x := fun x => Nat.pos_of_ne_zero (NeZero.ne (dimA x))
+    exact isNormalCanonicalForm_of_tp_primitive_irr_sorted
+      (d' := blockPhysDim d p) (μ := μA) blocksA hTPA hPrimA hDimA hμA hIrrA hAntiA
+  ncfB := by
+    have hDimB : ∀ x, 0 < dimB x := fun x => Nat.pos_of_ne_zero (NeZero.ne (dimB x))
+    exact isNormalCanonicalForm_of_tp_primitive_irr_sorted
+      (d' := blockPhysDim d p) (μ := μB) blocksB hTPB hPrimB hDimB hμB hIrrB hAntiB
   notGpeA := hNotGpeA
   notGpeB := hNotGpeB
   zeroTail_eq := hZeroTail
