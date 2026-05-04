@@ -25,12 +25,26 @@ jobs:
       id-token: write
 
     steps:
+      - name: Check Claude review switch
+        id: claude-switch
+        env:
+          CLAUDE_REVIEW_ENABLED: ${{ vars.CLAUDE_REVIEW_ENABLED }}
+        run: |
+          if [ "$CLAUDE_REVIEW_ENABLED" = "false" ]; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            echo "::notice::Skipping PR cleanup: CLAUDE_REVIEW_ENABLED=false"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Checkout repository
+        if: steps.claude-switch.outputs.skip != 'true'
         uses: actions/checkout@v6
         with:
           fetch-depth: 1
 
       - name: Sanitize PR body
+        if: steps.claude-switch.outputs.skip != 'true'
         id: sanitize
         uses: actions/github-script@v8
         with:
@@ -43,6 +57,7 @@ jobs:
             core.setOutput('body', sanitized);
 
       - name: Clean up bot-generated PR
+        if: steps.claude-switch.outputs.skip != 'true'
         uses: anthropics/claude-code-action@v1
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}

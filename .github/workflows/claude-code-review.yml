@@ -31,7 +31,20 @@ jobs:
       id-token: write
 
     steps:
+      - name: Check Claude review switch
+        id: claude-switch
+        env:
+          CLAUDE_REVIEW_ENABLED: ${{ vars.CLAUDE_REVIEW_ENABLED }}
+        run: |
+          if [ "$CLAUDE_REVIEW_ENABLED" = "false" ]; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            echo "::notice::Skipping Claude code review: CLAUDE_REVIEW_ENABLED=false"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Check if head commit is a bot auto-fix
+        if: steps.claude-switch.outputs.skip != 'true'
         id: bot-check
         uses: actions/github-script@v8
         with:
@@ -52,17 +65,17 @@ jobs:
             if (isBot) core.notice(`Skipping review for bot-fix commit: ${msg.split('\n')[0]}`);
 
       - name: Checkout repository
-        if: steps.bot-check.outputs.skip != 'true'
+        if: steps.claude-switch.outputs.skip != 'true' && steps.bot-check.outputs.skip != 'true'
         uses: actions/checkout@v6
         with:
           fetch-depth: 1
 
       - name: Set up Lean toolchain and cache
-        if: steps.bot-check.outputs.skip != 'true'
+        if: steps.claude-switch.outputs.skip != 'true' && steps.bot-check.outputs.skip != 'true'
         uses: ./.github/actions/setup-lean
 
       - name: Run Claude Code Review
-        if: steps.bot-check.outputs.skip != 'true'
+        if: steps.claude-switch.outputs.skip != 'true' && steps.bot-check.outputs.skip != 'true'
         id: claude-review
         uses: anthropics/claude-code-action@v1
         with:
