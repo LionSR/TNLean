@@ -289,7 +289,8 @@ theorem blockPhysDim_blockPhysDim (d m n : ℕ) :
 /-- Encode a word of length `L` as a single blocked physical index. -/
 noncomputable def blockIndexOfList (d L : ℕ) (w : List (Fin d)) (h : w.length = L) :
     Fin (blockPhysDim d L) :=
-  (Fintype.equivFin (Fin L → Fin d)) (fun i => w.get (Fin.cast h.symm i))
+  Fin.cast (blockPhysDim_eq_pow d L).symm
+    (finFunctionFinEquiv (fun i => w.get (Fin.cast h.symm i)))
 
 /-- Decoding the blocked index associated to a list returns the original list. -/
 theorem wordOfBlock_blockIndexOfList (d L : ℕ) (w : List (Fin d))
@@ -365,7 +366,7 @@ theorem wordOfBlock_injective (d L : ℕ) : Function.Injective (wordOfBlock d L)
   have hdecode : decodeBlock d L i = decodeBlock d L j := by
     exact List.ofFn_injective hij
   unfold decodeBlock at hdecode
-  exact (Fintype.equivFin (Fin L → Fin d)).symm.injective hdecode
+  exact ((finCongr (blockPhysDim_eq_pow d L)).trans finFunctionFinEquiv.symm).injective hdecode
 
 /-- Flattening the grouped iterated index recovers the direct blocked word. -/
 theorem flattenBlockedWord_wordOfBlock_directToIteratedBlockIndex (d m n : ℕ)
@@ -507,7 +508,8 @@ map returns the direct block tensor at length `m*n`.
 This lemma avoids the `Fin.cast` / `Fintype.equivFin` identification and instead uses the
 explicit bijection `directToIteratedBlockIndex` (PR #1096).  It gives a clean connection
 between iterated and direct blocking without needing `groupedBlockCastAgrees`. -/
-theorem reindexPhysical_directToIteratedBlockIndex_blockTensor {D : ℕ} (A : MPSTensor d D) (m n : ℕ) :
+theorem reindexPhysical_directToIteratedBlockIndex_blockTensor {D : ℕ}
+    (A : MPSTensor d D) (m n : ℕ) :
     reindexPhysical (directToIteratedBlockIndex d m n)
       (blockTensor (d := blockPhysDim d m) (D := D)
         (blockTensor (d := d) (D := D) A m) n) =
@@ -566,7 +568,7 @@ dependent conditional theorems in `CyclicSectorDecomposition.lean` and
 
 ### Relationship with `flattenWordOfBlock_cast_eq`
 
-The single `sorry` in `CyclicSectorDecomposition.lean` (line 1495) encodes the same
+The theorem `flattenWordOfBlock_cast_eq` in `CyclicSectorDecomposition.lean` encodes the same
 combinatorial identity as a list equality.  The lemma
 `groupedBlockCastAgrees_of_flattenWordOfBlock_cast_eq` shows that this list-level
 assertion implies the coordinate-level one required by `groupedBlockCastAgrees`.

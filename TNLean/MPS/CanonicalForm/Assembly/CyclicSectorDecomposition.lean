@@ -844,9 +844,10 @@ private theorem sector_supported_pow_fixed_eq_smul_projection_of_scalarFixedPoin
 /-- If each blocked sector channel has only scalar adjoint fixed points, then
 its cyclic projections satisfy `SectorFixedPointAlgebraRigidity`.
 
-This is the strongest currently available general route in the direction of
-the scalar blocked fixed-point algebra result (see Cirac--Perez-Garcia--Schuch--Verstraete 2021, Appendix A): once
-the blocked fixed-point algebra is known to be scalar on all compressed sectors,
+This is the strongest currently available general route in the direction of the scalar
+blocked fixed-point algebra result
+(see Cirac--Perez-Garcia--Schuch--Verstraete 2021, Appendix A): once the blocked
+fixed-point algebra is known to be scalar on all compressed sectors,
 every `((transferMap A†)^m)`-fixed corner element is a scalar multiple of the
 corresponding sector projection, so the one-step adjoint transition is
 automatically multiplicative on the sector fixed-point algebra. -/
@@ -1277,7 +1278,7 @@ nonzero-weight block `k` carries the transported power `μ k ^ F.p`. -/
 theorem commonFlatWeight_apply_of_block (F : CommonBlockedCyclicSectorFamily blocks)
     (μ : Fin r → ℂ) (k : Fin r) (s : Fin (F.period k)) :
     F.commonFlatWeight μ (finSigmaFinEquiv (Sigma.mk k s)) = μ k ^ F.p := by
-  simp [commonFlatWeight, flatKey, finSigmaFinEquiv]
+  simp [commonFlatWeight, flatKey]
 
 /-- All sectors from the same original block carry the same transported weight. -/
 theorem commonFlatWeight_apply_block_eq (F : CommonBlockedCyclicSectorFamily blocks)
@@ -1478,64 +1479,44 @@ theorem groupedBlockCastAgrees_iff_iteratedBlockIndex_cast
           (Fin.cast (congr_arg (blockPhysDim d) (F.p_eq_period_mul_extra k)) i) := by
             rw [hIndex i]
 
-/-- **Core Fintype-level coordinate assertion (remaining blocker for #942/#1075).**
+private lemma finFunctionFinEquiv_block_digit (x d m j : ℕ) (t : Fin m) :
+    x / (d ^ m) ^ j % d ^ m / d ^ (t : ℕ) % d =
+      x / d ^ (m * j + (t : ℕ)) % d := by
+  have ht_le : (t : ℕ) ≤ m := Nat.le_of_lt t.isLt
+  have hpow : d ^ m = d ^ (t : ℕ) * d ^ (m - (t : ℕ)) := by
+    rw [← Nat.pow_add, Nat.add_sub_of_le ht_le]
+  nth_rewrite 2 [hpow]
+  rw [Nat.mod_mul_right_div_self]
+  rw [Nat.mod_mod_of_dvd]
+  · rw [Nat.div_div_eq_div_mul]
+    have hden : (d ^ m) ^ j * d ^ (t : ℕ) = d ^ (m * j + (t : ℕ)) := by
+      rw [← Nat.pow_mul, ← Nat.pow_add]
+    rw [hden]
+  · simpa using Nat.pow_dvd_pow d (by omega : 1 ≤ m - (t : ℕ))
 
-Given a common blocked physical alphabet index `i`, the flattened inner word obtained by
-decoding `i` through the cardinal equality `blockPhysDim (blockPhysDim d m) n = blockPhysDim d p`
-(with `p = m*n`) agrees with the direct decoding of `i` at the common period length.
-
-**Mathematical truth.**  Both sides are `List (Fin d)` of length `m*n`.  The RHS
-`wordOfBlock d p i` decodes `i` via `Fintype.equivFin (Fin p → Fin d)`, returning the
-`i`-th function in the lexicographic enumeration of `Fin p → Fin d`.  The LHS first
-decodes `i` via `Fintype.equivFin (Fin n → Fin (blockPhysDim d m))`, which gives the
-`i`-th function `g : Fin n → Fin (blockPhysDim d m)` in the lexicographic enumeration
-of `Fin n → Fin (blockPhysDim d m)`.  Then each `g j : Fin (blockPhysDim d m)` is decoded
-via `Fintype.equivFin (Fin m → Fin d)` and the `n` lists of length `m` are flattened.
-
-Since Mathlib's `Fintype.equivFin` for function types uses `Fintype.piFinset` with
-subset of `Finset.pi`, both enumerations are lexicographic.  The lexicographic ordering
-of `Fin (m*n) → Fin d` coincides with the nested lexicographic ordering
-`Fin n → (Fin m → Fin d)` under the natural currying and the product equivalence
-`Fin (m*n) ≃ Fin n × Fin m` given by `finProdFinEquiv`.  Therefore the two decoding
-paths produce the same list for every `i`.
-
-**Attempted proofs.**  Several approaches were tried but all hit CI failures
-(heartbeat timeouts or type-inference complexity):
-1. Building an explicit equivalence `F` from `finProdFinEquiv`, `Equiv.curry`,
-   `Equiv.prodComm`, `finCongr` and using `Subsingleton.elim` on `Fintype.truncEquivFin`.
-   This typechecks locally but hits heartbeat limits (200k → 400k) on CI or has
-   unresolved `simp` goals in the `hF_apply` computation.
-2. Direct `Equiv.trans` chains instead of `calc` — same issues with type inference.
-3. `Fin.cast` vs `finCongr` distinctions for the cardinality equality.
-
-**What is needed.**  A Mathlib lemma establishing that `Fintype.equivFin` for `Fin L → Fin d`
-is compatible with `Fin L ≃ Fin L₁ × Fin L₂` product decompositions (like `finProdFinEquiv`)
-and currying (`Equiv.curry`).  The natural route is to prove that `Fintype.truncEquivFin`
-respects `Finset.map` of equivalences, which would give the compatibility generically.
-Alternatively, a characterization of `Fintype.equivFin` in terms of `Nat.digits`
-(via `Nat.bijOn_ofDigits`) could provide a computational proof.
-
-**Impact.**  As long as this lemma is unproved, the common-block chain
-(#942 / #990 / #1075) requires the hypothesis `CommonGroupedBlockCastHypothesis d`.
-The theorems `unconditional_commonPrimitiveIrreducibleBlocks`,
-`afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts`, and
-their downstream consequences remain conditional on this hypothesis.
--/
+/-- Flattening the explicit length-`n` blocked decoding of a length-`m*n` index agrees with
+the direct length-`m*n` decoding. -/
 theorem flattenWordOfBlock_cast_eq {d m n p : ℕ}
     (hp_eq : p = m * n) (h_card : blockPhysDim (blockPhysDim d m) n = blockPhysDim d p)
     (i : Fin (blockPhysDim d p)) :
     flattenBlockedWord d m
       (wordOfBlock (blockPhysDim d m) n (Fin.cast h_card.symm i)) =
     wordOfBlock d p i := by
-  -- See docstring for detailed explanation of the mathematical truth and attempted
-  -- proof strategies.  The core missing lemma is compatibility of `Fintype.equivFin`
-  -- with currying and product decomposition of function types.
-  sorry
+  subst hp_eq
+  simp only [flattenBlockedWord, wordOfBlock, decodeBlock, List.map_ofFn, Function.comp_apply]
+  rw [List.ofFn_mul']
+  apply congrArg List.flatten
+  exact congrArg List.ofFn (funext fun j => by
+    simp only [wordOfBlock, decodeBlock, Fin.cast_cast, Function.comp_apply]
+    exact congrArg List.ofFn (funext fun t => by
+      apply Fin.ext
+      simpa [blockPhysDim_eq_pow] using
+        finFunctionFinEquiv_block_digit (x := (i : ℕ)) (d := d) (m := m) (j := (j : ℕ)) t))
 
 /-- The global grouping-cast hypothesis applied to a specific family reduces to the
 core Fintype-level assertion. -/
 theorem groupedBlockCastAgrees_of_flattenWordOfBlock_cast_eq
-    {d : ℕ} (h_flatten : ∀ {m n p : ℕ} (hp_eq : p = m * n)
+    {d : ℕ} (h_flatten : ∀ {m n p : ℕ} (_ : p = m * n)
       (h_card : blockPhysDim (blockPhysDim d m) n = blockPhysDim d p)
       (i : Fin (blockPhysDim d p)),
       flattenBlockedWord d m
