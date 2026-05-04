@@ -97,9 +97,10 @@ The hypotheses of this theorem are collected in
 blocked-word relabeling assertion for cyclic-sector data and a comparison
 field for the common primitive nonzero-sector families produced by the preceding
 structural theorem.  That field is supplied with trace-preserving, primitive, and
-irreducible structural data for the produced families; it then returns equality
-of the zero-tail dimensions, one-site injectivity on both sides, and a BNT
-proportional-comparison conclusion for those produced families.
+irreducible structural data and positive bond dimensions for the produced
+families; it then returns BNT-cover data containing the zero-tail, injectivity,
+normal-form separation, and proportional-decomposition comparison needed for
+those produced families.
 
 These hypotheses are not written as hypotheses of Theorem~\texttt{thm1} or of
 Corollary~\texttt{II\_cor2} in the cited papers. They are the formal boundary
@@ -123,16 +124,16 @@ The formal proof must still show that this refinement holds for the final
 common primitive sector families to which the overlap-rigidity comparison is
 applied.
 
-Second, the BNT proportional-comparison hypothesis is the paper-level comparison
-itself, specialized to the produced nonzero-sector families. In the source, once
-the tensors are in canonical form and the bases of normal tensors have been
-chosen, proportionality or equality of all matrix product vectors matches the
-basis tensors up to phases and gauges. The formal theorem in \ghpr{1104} still
-takes the corresponding proportional-decomposition conclusion as input for the
-specific common-sector families. A complete proof without the periodic
-Fundamental Theorem must derive that conclusion from the equality of the original
-tensors' matrix product vector families, after all blockings and reindexings have
-been accounted for.
+Second, the BNT-cover hypothesis contains the paper-level comparison itself,
+specialized to the produced nonzero-sector families. In the source, once the
+tensors are in canonical form and the bases of normal tensors have been chosen,
+proportionality or equality of all matrix product vectors matches the basis
+tensors up to phases and gauges. The formal theorem in \ghpr{1104} still takes
+the corresponding BNT-cover data, including the proportional-decomposition
+conclusion, as input for the specific common-sector families. A complete proof
+without the periodic Fundamental Theorem must derive that data from the equality
+of the original tensors' matrix product vector families, after all blockings and
+reindexings have been accounted for.
 
 These two inputs are therefore not extra assumptions proposed by the papers. They
 are parts of the paper argument that remain to be connected to the current
@@ -181,7 +182,7 @@ This note records a proof gap in the present Lean development rather than a
 source error. The cited papers compress the canonical-form reduction, blocking,
 BNT matching, and injectivity refinements in the usual paper notation. The Lean
 development should keep the theorem conditional until the injectivity refinement,
-the BNT proportional comparison for the produced sectors, the blocked-word
+the BNT-cover comparison for the produced sectors, the blocked-word
 relabeling, and the zero-tail and weight transports have been proved for the same
 final common-sector data.
 

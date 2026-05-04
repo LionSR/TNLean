@@ -77,10 +77,13 @@ structure AfterBlockingFundamentalTheoremHypotheses
     {d D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂) : Prop where
   /-- The one-sided blocked-word relabeling equality for common cyclic-sector families. -/
   relabel : CommonSectorRelabelingHypothesis d
-  /-- The remaining comparison data for the produced common primitive nonzero-sector families,
-  with the structural evidence for trace preservation, primitivity, and irreducibility supplied. -/
+  /-- The remaining BNT-cover comparison data for the produced common primitive
+  nonzero-sector families, with the structural evidence for trace preservation,
+  primitivity, and irreducibility supplied. -/
   comparison : ∀ {p zeroTailA zeroTailB rA rB : ℕ}
       {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+      [∀ x : Fin rA, NeZero (dimA x)]
+      [∀ x : Fin rB, NeZero (dimB x)]
       {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
       {blocksA : (x : Fin rA) → MPSTensor (blockPhysDim d p) (dimA x)}
       {blocksB : (x : Fin rB) → MPSTensor (blockPhysDim d p) (dimB x)},
@@ -117,7 +120,10 @@ structure AfterBlockingFundamentalTheoremHypotheses
       (∀ x, IsIrreducibleTensor (blocksB x)) →
       (∀ x, 0 < dimA x) →
       (∀ x, 0 < dimB x) →
-      CommonPrimitiveProportionalHypotheses zeroTailA zeroTailB blocksA blocksB
+      ∃ DtotA DtotB,
+        Nonempty
+          (CommonPrimitiveBNTCoverHypotheses (zeroTailA := zeroTailA) (zeroTailB := zeroTailB)
+            (DtotA := DtotA) (DtotB := DtotB) μA μB blocksA blocksB)
 
 /-- Conclusion of the conditional after-blocking Fundamental Theorem formulation.
 
@@ -171,7 +177,7 @@ hypotheses, there is a positive blocking after which the two tensors admit BNT s
 decompositions with the same sector MPV family, matched basis-sector multiplicities, and matched
 sector-weight multisets up to nonzero phases.  This is the conditional formulation proved by the
 present periodic-theorem-free derivation: it is a direct consequence of
-`afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_proportional`, not a hidden
+`afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_bntCover`, not a hidden
 assumption or an appeal to the periodic Fundamental Theorem. -/
 theorem fundamentalTheorem_afterBlocking_of_comparisonHypotheses
     {d D₁ D₂ : ℕ}
@@ -181,7 +187,7 @@ theorem fundamentalTheorem_afterBlocking_of_comparisonHypotheses
     Nonempty (AfterBlockingFundamentalTheoremConclusion A B) := by
   obtain ⟨p, hp, P, Q, hA, hB, hPQ, hPbnt, hQbnt,
       perm, hCopies, phase, hPhase, hWeights⟩ :=
-    afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_proportional
+    afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_bntCover
       A B hSame h.relabel h.comparison
   exact ⟨{
     p := p
