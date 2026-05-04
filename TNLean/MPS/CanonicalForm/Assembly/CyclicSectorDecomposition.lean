@@ -800,7 +800,8 @@ private theorem sector_supported_pow_fixed_eq_smul_projection_of_scalarFixedPoin
                         simp [Matrix.conjTranspose_mul, hPherm]
                 _ = (blockTensor A m i)ᴴ * (P k * X * P k) * blockTensor A m i := by
                         simp [Matrix.mul_assoc]
-                -- keep the ᴴᴴ so the summand matches `transferMap K` with `K = (blockTensor …)ᴴ`
+                -- Keep the ᴴᴴ so the summand matches `transferMap K`
+                -- with `K = (blockTensor …)ᴴ`.
                 _ = (blockTensor A m i)ᴴ * X * (blockTensor A m i)ᴴᴴ := by
                         simpa using congrArg
                           (fun Z => (blockTensor A m i)ᴴ * Z * (blockTensor A m i)ᴴᴴ) hXcorner
