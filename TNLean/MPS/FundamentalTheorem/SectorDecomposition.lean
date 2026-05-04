@@ -375,11 +375,12 @@ available equal-case result for sector decompositions sharing a common BNT basis
 multiplicities produce equal total MPVs, then the sector weight multisets are equal for each
 basis block.
 
-**What remains open**: global gauge equivalence of the assembled tensors. This would follow
-from `fundamentalTheorem_proportionalMPV_CFBNT` (the proportional-case FT in `Full.lean`)
-if one could additionally supply convergent decomposition coefficients with nonzero limits.
-The sector decomposition coefficients `∑_q μ_{j,q}^N` are sums of geometric sequences that
-may oscillate (unit-modulus terms), so coefficient convergence is not automatic and requires
+**What remains open**: global gauge equivalence of the assembled tensors. The
+coefficient-explicit route goes through `fundamentalTheorem_proportionalMPV_CFBNT`
+in `EqualProportional.lean`, but it still needs convergent decomposition
+coefficients with nonzero limits. The sector decomposition coefficients
+`∑_q μ_{j,q}^N` are sums of geometric sequences that may oscillate
+(unit-modulus terms), so coefficient convergence is not automatic and requires
 either a dominant-weight hypothesis or an explicit normalization strategy.
 -/
 
@@ -677,11 +678,11 @@ This structure collects the four pieces of data consumed by
 * per-block bond-dimension equality, and
 * per-block gauge-phase equivalence of the (dimension-transported) basis blocks.
 
-Producing a `SectorBasisMatching P Q` from an arbitrary `SameMPV₂ P.toTensor
-Q.toTensor` is the remaining combinatorial step in the Gap Section 1 closure
-(see the remark in `blueprint/src/chapter/ch11_assembly.tex` and
-arXiv:2011.12127 Section IV.B–IV.C). Once that extraction is available, the
-algebraic reduction runs purely through
+Producing a `SectorBasisMatching P Q` is now handled by the overlap/span route
+when `SectorBasisOverlapSpanHypotheses` are available. The remaining work is to
+derive those hypotheses, or an equivalent common phase/BNT-cover comparison, for
+the sector decompositions produced by the after-blocking reduction. Once that
+extraction is available, the algebraic reduction runs purely through
 `fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_sectorMatching`. -/
 structure SectorBasisMatching (P Q : SectorDecomposition d) where
   /-- Permutation matching basis indices of `P` and `Q`. -/
@@ -997,11 +998,10 @@ end SectorBasisOverlapSpanHypotheses
 /-- **Heterogeneous sector comparison via a bundled basis matching witness.**
 
 Corollary of `fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_matched_basis`
-obtained by supplying the matching data in bundled form as a `SectorBasisMatching`. Once a
-theorem constructs a `SectorBasisMatching P Q` from arbitrary `SameMPV₂ P.toTensor
-Q.toTensor` (the remaining combinatorial step, following from the general
-basis-of-normal-tensors construction in #876), this result completes the Gap Section 1
-heterogeneous sector comparison with the matching data gathered into a single argument. -/
+obtained by supplying the matching data in bundled form as a `SectorBasisMatching`.
+The matching can be extracted from `SectorBasisOverlapSpanHypotheses`; the current
+blocker is producing those hypotheses, or equivalent common phase/BNT-cover data,
+for the actual after-blocking sector decompositions. -/
 theorem fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_sectorMatching
     {P Q : SectorDecomposition d}
     (M : SectorBasisMatching P Q)

@@ -298,8 +298,8 @@ Then `wordSpan A (n+m) = ⊤`.
 This is the part of Lemma 2(b) that turns rank-one operators + vector spanning
 into full matrix spanning.
 
-The remaining hard part (TODO) is to construct these rank-one operators from the
-Jordan/Fitting analysis of an eigenvalue word.
+The rank-one operators are constructed later by the Fitting-based extraction
+theorems in `TNLean.Wielandt.RankOne.ExtractionFull`.
 -/
 theorem wordSpan_eq_top_of_vectorSpreadSpan_eq_top_of_rankOneBasis
     (A : MPSTensor d D) (φ : Fin D → ℂ) {n m : ℕ}
