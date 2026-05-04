@@ -235,10 +235,11 @@ non-gauge-phase-equivalent BNT blocks admit a homogeneous pair-trace separator.
 Pairs with different bond dimensions are handled by a separate dimension-mismatch
 argument.
 
-The remaining formal ingredient is the Burnside--Jacobson identity-padding step
-that upgrades the pair-separation witness to the uniform homogeneous length used
-below. Once this padding result is available, the same-dimensional separator and
-therefore this BNT pair-separation theorem become unconditional. -/
+Two formal ingredients remain. The same-dimensional branch needs the
+Burnside–Jacobson identity-padding step, which upgrades a pair-separation witness
+to the common homogeneous length appearing in the statement. The different
+bond-dimension branch still needs its dimension-mismatch separation proof. Once both
+branches are available, this BNT pair-separation theorem becomes unconditional. -/
 theorem exists_forall_pairTraceSeparatingAt_of_isCanonicalFormBNT
     {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
