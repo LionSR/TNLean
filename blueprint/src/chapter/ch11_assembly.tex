@@ -1757,18 +1757,17 @@ two-basis sector comparison theorem.
 \end{proof}
 
 \begin{definition}[After-blocking hypotheses for the CPSV formulation]%
-\label{def:after_blocking_fundamental_theorem_hypotheses}
-	\lean{MPSTensor.AfterBlockingFundamentalTheoremHypotheses}
-	\leanok
-	\uses{def:common_sector_relabeling_hypothesis,
-		def:common_primitive_bnt_cover_hypotheses}
-		These hypotheses consist of the comparison data for the
-	periodic-theorem-free after-blocking formulation of the CPSV Fundamental
-		Theorem. They contain the blocked-word identification for common cyclic
-	sectors. For the common primitive nonzero-sector families produced from two
-	tensors with the same MPV family, the comparison field is supplied with their
-	trace-preserving normalization, primitivity, irreducibility, and
-	positive bond-dimension evidence
+	\label{def:after_blocking_fundamental_theorem_hypotheses}
+		\lean{MPSTensor.AfterBlockingFundamentalTheoremHypotheses}
+		\leanok
+		\uses{def:common_primitive_bnt_cover_hypotheses}
+			These hypotheses consist of the comparison data for the
+		periodic-theorem-free after-blocking formulation of the CPSV Fundamental
+			Theorem. The blocked-word identification for common cyclic sectors is
+		now derived by the wrapper. For the common primitive nonzero-sector families produced from two
+		tensors with the same MPV family, the comparison field is supplied with their
+		trace-preserving normalization, primitivity, irreducibility, and
+		positive bond-dimension evidence
 	before returning BNT-cover comparison hypotheses for those blocks. The hypotheses
 	are tied to the produced families rather than to an arbitrary chosen
 	decomposition.
@@ -1793,8 +1792,9 @@ two-basis sector comparison theorem.
 	\lean{MPSTensor.fundamentalTheorem_afterBlocking_of_comparisonHypotheses}
 	\leanok
 	\uses{def:after_blocking_fundamental_theorem_hypotheses,
-		def:after_blocking_fundamental_theorem_conclusion,
-		thm:afterBlocking_sectorComparison_reindexed_bntCover}
+			def:after_blocking_fundamental_theorem_conclusion,
+			thm:common_grouped_block_cast_to_relabeling,
+			thm:afterBlocking_sectorComparison_reindexed_bntCover}
 	Let $A$ and $B$ generate the same MPV family. Assume the after-blocking
 	comparison hypotheses of
 	Definition~\ref{def:after_blocking_fundamental_theorem_hypotheses}. Then the
@@ -1804,12 +1804,12 @@ two-basis sector comparison theorem.
 
 	The conclusion matches the sector-decomposition part of the
 	Cirac--P\'erez-Garc\'ia--Schuch--Verstraete Fundamental Theorem: after
-	blocking, the tensor families are represented by BNT sector decompositions
-	whose basis sectors and weights match up to permutation and nonzero phases, as
-	in \cite{Cirac2016MPDO_arXiv} and \cite{Cirac2021Matrix}. The explicit hypotheses are:
-	the statement does not assume away the blocked-word identification, zero-tail,
-	trace-preserving normalization, primitivity, irreducibility, positive bond-dimension,
-	or BNT-cover comparison inputs.
+		blocking, the tensor families are represented by BNT sector decompositions
+		whose basis sectors and weights match up to permutation and nonzero phases, as
+		in \cite{Cirac2016MPDO_arXiv} and \cite{Cirac2021Matrix}. The explicit hypotheses are:
+		the statement does not assume away zero-tail, trace-preserving normalization,
+		primitivity, irreducibility, positive bond-dimension, or BNT-cover comparison
+		inputs.
 \end{theorem}
 
 \begin{proof}
