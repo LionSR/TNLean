@@ -68,7 +68,7 @@ namespace MPSTensor
 
 Starting from `SameMPV₂ A B`, the present derivation constructs common primitive
 nonzero-sector families after a common blocking.  The blocked-word relabeling assertion is now
-derived inside the wrapper from the grouped-block cast theorem.  To reach the sector-weight
+derived in this formulation from the grouped-block cast theorem.  To reach the sector-weight
 conclusion of the Cirac--Pérez-García--Schuch--Verstraete Fundamental Theorem for exactly those
 produced families, one still needs comparison data for those produced families.  The field
 `comparison` is supplied with their trace-preserving, primitive, irreducible, and positive
@@ -184,11 +184,8 @@ theorem fundamentalTheorem_afterBlocking_of_comparisonHypotheses
     (hSame : SameMPV₂ A B)
     (h : AfterBlockingFundamentalTheoremHypotheses A B) :
     Nonempty (AfterBlockingFundamentalTheoremConclusion A B) := by
-  have h_group : CommonGroupedBlockCastHypothesis d := by
-    intro r dim blocks F k
-    exact F.groupedBlockCastAgrees_of_flattenWordOfBlock_cast_eq
-      (fun hp_eq h_card i =>
-        CommonBlockedCyclicSectorFamily.flattenWordOfBlock_cast_eq hp_eq h_card i) k
+  have h_group : CommonGroupedBlockCastHypothesis d :=
+    CommonGroupedBlockCastHypothesis.of_flattenWordOfBlock_cast_eq d
   have h_relabel : CommonSectorRelabelingHypothesis d :=
     h_group.toRelabelingHypothesis
   obtain ⟨p, hp, P, Q, hA, hB, hPQ, hPbnt, hQbnt,

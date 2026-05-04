@@ -1183,6 +1183,13 @@ abbrev CommonGroupedBlockCastHypothesis (d : ℕ) : Prop :=
 
 namespace CommonGroupedBlockCastHypothesis
 
+/-- The canonical coordinate grouping for common blocked cyclic-sector families. -/
+theorem of_flattenWordOfBlock_cast_eq (d : ℕ) : CommonGroupedBlockCastHypothesis d := by
+  intro r dim blocks F k
+  exact F.groupedBlockCastAgrees_of_flattenWordOfBlock_cast_eq
+    (fun hp_eq h_card i =>
+      CommonBlockedCyclicSectorFamily.flattenWordOfBlock_cast_eq hp_eq h_card i) k
+
 /-- The coordinate-grouping assertion implies the one-sided reindexing hypothesis
 used by the common-sector structural theorem. -/
 theorem toRelabelingHypothesis {d : ℕ}
@@ -1459,11 +1466,8 @@ theorem unconditional_commonPrimitiveIrreducibleBlocks
       (∀ x, IsIrreducibleTensor (blocksB x)) ∧
       (∀ x, 0 < dimA x) ∧
       (∀ x, 0 < dimB x) := by
-  have h_group : CommonGroupedBlockCastHypothesis d := by
-    intro r dim blocks F k
-    exact F.groupedBlockCastAgrees_of_flattenWordOfBlock_cast_eq
-      (fun hp_eq h_card i =>
-        CommonBlockedCyclicSectorFamily.flattenWordOfBlock_cast_eq hp_eq h_card i) k
+  have h_group : CommonGroupedBlockCastHypothesis d :=
+    CommonGroupedBlockCastHypothesis.of_flattenWordOfBlock_cast_eq d
   have h_relabel : CommonSectorRelabelingHypothesis d :=
     h_group.toRelabelingHypothesis
   exact afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts
