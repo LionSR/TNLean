@@ -1014,7 +1014,7 @@ theorem sectorFixedPointAlgebraRigidity_of_irreducible_tp
     (hPproj : ∀ k, IsOrthogonalProjection (P k))
     (hPsum : ∑ k : Fin m, P k = 1)
     (hcyclic : ∀ k,
-      transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k+1)) = P k) :
+      transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k) :
     SectorFixedPointAlgebraRigidity
       (transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) P := by
   let T : MatrixEnd D := transferMap (d := d) (D := D) (fun i => (A i)ᴴ)
