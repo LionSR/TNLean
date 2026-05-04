@@ -131,45 +131,33 @@ describing the mathematics.
 ### Multi-part work
 
 For work spanning multiple PRs, create an umbrella **tracking issue** and put
-the part numbering in the body or in sub-issue relations when it is not needed
-to distinguish the mathematical statement:
+the part numbering in the body or in native GitHub sub-issue relations when it
+is not needed to distinguish the mathematical statement:
 
 ```
 RFP/MPDO: algebra structure and fusion isometries
 RFP/MPDO: commuting parent Hamiltonians and decorrelation theorem
 ```
 
-The tracking issue lists each sub-issue using a **native GitHub tasklist** block
-so that child issues display "Tracked by #N" in their sidebar:
+Attach child issues using GitHub's native **Sub-issues** panel so that each
+child displays "Tracked by #N" in its sidebar. Do not mirror that relation with
+Markdown tasklists or checkbox lists in the tracking issue body. If the tracking
+template includes issue numbers in the body, attach those numbers through the
+Sub-issues panel after creation and keep the body for mathematical scope,
+sources, dependencies, and order.
 
-````markdown
-```[tasklist]
-### Tasks
-- [ ] #101
-- [ ] #102
-- [ ] #103
-```
-````
-
-**Important:** Each `- [ ]` line must contain *only* the issue reference (`#N`).
-Do not add descriptions on the same line — put those in the sub-issue titles or
-in prose above the tasklist block. Items that are not issue references (plain text
-TODOs) cannot go inside the tasklist block; list them as ordinary checkboxes
-outside it.
-
-Generated tracking issues should create sub-issues for the mathematical tasks
-rather than using Markdown task lists as the only record of work. Each sub-issue
-should carry its own source citation and precise statement.
+Generated tracking issues should create sub-issues for the mathematical tasks.
+Each sub-issue should carry its own source citation and precise statement.
 
 ### Tracking issues
 
 Use the **Tracking Issue** template (`.github/ISSUE_TEMPLATE/tracking-issue.yml`).
-Label with `tracking`. The `tracking-issue-sync` workflow will automatically:
+Label with `tracking`. The `tracking-issue-sync` workflow reads the native
+Sub-issues relation and will automatically:
 
-- Check boxes when referenced issues are closed (including auto-closure by merged PRs).
-- Uncheck boxes when referenced issues are reopened.
+- Post progress comments when sub-issues are closed or reopened.
 - Post progress comments on linked issues when PRs are merged (what was done, what remains).
-- Add the `all-resolved` label when every task is complete.
+- Add the `all-resolved` label when every native sub-issue is complete.
 
 ### Pinned issues
 
@@ -404,7 +392,7 @@ The following workflows run automatically:
 |----------|---------|-------------|
 | **Lean CI** (`lean_action_ci.yml`) | Push to `main`, PRs touching `.lean`/`lakefile.toml`/`lean-toolchain` | Runs `lake build` with Mathlib cache |
 | **Claude Code Review** (`claude-code-review.yml`) | PR opened/synced/reopened touching `.lean`, `.tex`, `lakefile.toml`, `lean-toolchain` | Automated review for sorrys, Mathlib style, type safety, performance, modularity, documentation |
-| **Issue Tracker** (`tracking-issue-sync.yml`) | Issue closed/reopened; PR merged/opened; review submitted | Updates tracking-issue checkboxes (checks on close, unchecks on reopen), posts progress comments on linked issues when PRs merge, scans merged PRs for follow-ups (deferred review feedback, new `sorry` markers, missing blueprint tags), creates follow-up issues with `follow-up` label, adds `all-resolved` when all tasks complete |
+| **Issue Tracker** (`tracking-issue-sync.yml`) | Issue closed/reopened; PR merged/opened; review submitted | Reads native Sub-issues, posts progress comments on tracking and linked issues, scans merged PRs for follow-ups (deferred review feedback, new `sorry` markers, missing blueprint tags), creates follow-up issues with `follow-up` label, adds `all-resolved` when all native sub-issues complete |
 | **Blueprint Lint** (`lint-blueprint.yml`) | PRs touching blueprint files | Validates LaTeX blueprint for broken labels and references |
 | **Oversized Lean File Guard** (`oversized-lean-files.yml`) | PRs | Reports `.lean` files above the 1000-line style limit; advisory while main still has existing oversized files |
 | **Lean Linter-Warning Sweep** (`lean-linter-warning-sweep.yml`) | Weekly + manual dispatch | Captures Lean compiler/linter warnings and uploads a report for maintainer triage |

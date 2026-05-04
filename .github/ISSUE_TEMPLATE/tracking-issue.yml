@@ -9,8 +9,9 @@ body:
         ## Tracking Issue
         Use this template for a family of related mathematical tasks.
         Each task should be a separate GitHub issue with its own statement and source citation.
-        List sub-issues inside a native tasklist block so GitHub shows "Tracked by" on child issues.
-        Do not use ordinary Markdown checklists for tracked work.
+        Create each mathematical task as a separate issue, then attach those
+        issues in GitHub's native Sub-issues panel. Do not use Markdown
+        tasklists or checkbox lists for tracked work.
         The title should begin with `Tracking:` and should not contain brackets.
 
   - type: input
@@ -54,20 +55,16 @@ body:
     attributes:
       label: Sub-issues
       description: |
-        List issue numbers to track using a native GitHub tasklist block.
-        Each line must contain only the issue reference (no descriptions).
-        Put mathematical descriptions in the sub-issue titles and bodies.
-        The tracking workflow updates checkboxes when issues are closed or reopened.
+        List issue numbers that should be attached in GitHub's native
+        Sub-issues panel after this issue is created. Each line should contain
+        only an issue reference. Put mathematical descriptions in the
+        sub-issue titles and bodies.
       value: |
-        ```[tasklist]
-        ### Tasks
-        ```
+        #42
+        #43
       placeholder: |
-        ```[tasklist]
-        ### Tasks
-        - [ ] #42
-        - [ ] #43
-        ```
+        #42
+        #43
     validations:
       required: true
 
