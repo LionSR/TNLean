@@ -18,15 +18,15 @@ import TNLean.Channel.Peripheral.Spectrum
 import Mathlib.Analysis.Complex.Basic
 
 /-!
-# Separated canonical-form hypotheses — Auxiliary definitions and helpers
+# Separated canonical-form hypotheses — auxiliary definitions and lemmas
 
 This file contains the structure definitions, algebraic lemmas, overlap bounds, peeling lemma,
-and block-separation core helper lemmas that underpin the main block-separation results in
+and block-separation core lemmas that underpin the main block-separation results in
 `CanonicalFormSep.lean`.
 
 ## Contents
 
-- Additive split API: `HasInjectiveBlocks`, `HasIrreducibleBlocks`, `HasPrimitiveBlocks`,
+- Additive split conditions: `HasInjectiveBlocks`, `HasIrreducibleBlocks`, `HasPrimitiveBlocks`,
   `IsLeftCanonicalBlockFamily`, `HasOrderedNonzeroWeights`, `HasStrictOrderedNonzeroWeights`,
   `HasNormalizedSelfOverlap`.
 - Bundled conditions: `IsCanonicalForm`, `IsNormalCanonicalForm` with projections and
@@ -35,7 +35,7 @@ and block-separation core helper lemmas that underpin the main block-separation 
 - Section `OverlapBounds`: MPV overlap bounds from left-canonical normalization.
 - Left-canonical trace bounds: `leftCanonical_evalWord_trace_bound`.
 - Section `PeelingLemma`: `peeling_exponential_bound` for the block-separation induction.
-- Section `BlockSeparationCoreHelpers`: local helper lemmas used by the induction in
+- Section `BlockSeparationCoreHelpers`: local lemmas used by the induction in
   `CanonicalFormSep.lean`.
 -/
 
@@ -58,9 +58,9 @@ Equivalently, the associated transfer map is trace-preserving. We do **not** ass
 unital identity `∑ᵢ Aᵢ Aᵢ† = I`.
 -/
 
-/-! ### Additive split API for canonical-form hypotheses
+/-! ### Additive split conditions for canonical-form hypotheses
 
-The existing `IsCanonicalForm` bundle is kept unchanged for backwards compatibility.  The
+The existing `IsCanonicalForm` predicate is kept unchanged for backwards compatibility.  The
 structures below expose weaker pieces of data so theorem signatures can migrate gradually without
 forcing an immediate project-wide refactor.
 -/
@@ -241,7 +241,7 @@ structure IsCanonicalForm {r : ℕ} {dim : Fin r → ℕ}
   /-- **Aperiodicity / overlap normalization**: the MPV self-overlap converges to `1`.
 
   This field is kept for backward compatibility with the original separated FT interface. In the
-  normal-canonical-form API the same conclusion is derived from irreducibility, left-canonical
+  normal-canonical-form formulation the same conclusion is derived from irreducibility, left-canonical
   normalization, and peripheral-spectrum primitivity via
   `MPSTensor.overlap_tendsto_one_of_peripheralPrimitive_of_irreducible`. -/
   overlap_tendsto_one :
@@ -274,7 +274,7 @@ def toHasNormalizedSelfOverlap (hCF : IsCanonicalForm μ A) :
     HasNormalizedSelfOverlap (d := d) A :=
   HasNormalizedSelfOverlap.ofForall hCF.overlap_tendsto_one
 
-/-- Rebuild the `IsCanonicalForm` bundle from the additive split API (relaxed ordering). -/
+/-- Assemble `IsCanonicalForm` from the additive split conditions (relaxed ordering). -/
 def ofSeparatedData
     (hInj : HasInjectiveBlocks (d := d) A)
     (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
@@ -287,7 +287,7 @@ def ofSeparatedData
   mu_ne_zero := hμ.mu_ne_zero
   overlap_tendsto_one := hOverlap.overlap_tendsto_one
 
-/-- Rebuild the `IsCanonicalForm` bundle from the additive split API (strict ordering). -/
+/-- Assemble `IsCanonicalForm` from the additive split conditions (strict ordering). -/
 def ofStrictSeparatedData
     (hInj : HasInjectiveBlocks (d := d) A)
     (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
@@ -356,7 +356,7 @@ def toHasOrderedNonzeroWeights (hNCF : IsNormalCanonicalForm μ A) :
   mu_antitone := hNCF.mu_antitone
   mu_ne_zero := hNCF.mu_ne_zero
 
-/-- Rebuild the `IsNormalCanonicalForm` bundle from the additive split API (relaxed ordering). -/
+/-- Assemble `IsNormalCanonicalForm` from the additive split conditions (relaxed ordering). -/
 def ofSeparatedData
     (hIrr : HasIrreducibleBlocks (d := d) A)
     (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
@@ -371,7 +371,7 @@ def ofSeparatedData
   mu_ne_zero := hμ.mu_ne_zero
   dim_pos := hDim
 
-/-- Rebuild the `IsNormalCanonicalForm` bundle from the additive split API (strict ordering). -/
+/-- Assemble `IsNormalCanonicalForm` from the additive split conditions (strict ordering). -/
 def ofStrictSeparatedData
     (hIrr : HasIrreducibleBlocks (d := d) A)
     (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
