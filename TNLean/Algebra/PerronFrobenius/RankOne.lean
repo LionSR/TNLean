@@ -14,7 +14,7 @@ import Mathlib.Tactic.Ring
 This module isolates the finite-dimensional matrix step used in Appendix C.2,
 Lemma C.4 of arXiv:1606.00608.  The bare Perron--Frobenius statement
 "primitive plus constant trace powers implies rank one" is false, so the
-usable theorem here records the extra diagonalizability supplied by positive
+usable theorem here includes the extra diagonalizability supplied by positive
 semidefiniteness.
 
 The main corrected theorem is

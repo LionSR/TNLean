@@ -33,8 +33,8 @@ Lieb concavity (Lieb–Ruskai 1973). This requires:
 
 Replace `hayashi_ssa_equality_characterization` with a proof of the equality
 case of strong subadditivity. A faithful formalization is expected to require:
-1. Conditional mutual information / recovery-map infrastructure
-2. A finite-dimensional direct-sum / tensor-factorization API compatible with
+1. Conditional mutual information and recovery maps
+2. A finite-dimensional direct-sum / tensor-factorization theory compatible with
    basis changes on the middle subsystem
 3. The equivalence between equality in SSA and the quantum Markov-chain
    structure of the tripartite state
@@ -121,7 +121,7 @@ end HayashiMarkov
 /-- Data witnessing the Hayashi / Ruskai / Hayden--Jozsa--Petz--Winter
 quantum-Markov-chain structure for a tripartite density matrix.
 
-The record encodes an explicit finite direct-sum decomposition of the middle
+This structure specifies an explicit finite direct-sum decomposition of the middle
 system `B`, an explicit unitary basis change on `B`, probabilities `p_j`, and
 left/right density matrices `ρ_{A B_jᴸ}` and `ρ_{B_jᴿ C}` such that after
 conjugating `ρ_ABC` by `1_A ⊗ U_B ⊗ 1_C` and reindexing `B` along the chosen
@@ -212,7 +212,7 @@ unitary basis change on `B`, the probabilities `p_j`, the component density
 matrices, and the block-diagonal equality.
 
 This result is introduced here as a **sanctioned axiom**: the full proof needs
-operator-algebra / recovery-map infrastructure that is not yet formalized in
+operator-algebra and recovery-map theory that is not yet formalized in
 Mathlib or in this repository. Downstream consumers should import the theorem
 statement from `TNLean/Entropy/MarkovChain.lean`, not this axiom module.
 
