@@ -18,6 +18,10 @@ concurrency:
 
 jobs:
   claude-review:
+    # Repository variable kill switch:
+    #   CLAUDE_REVIEW_ENABLED=false disables Claude-powered PR review.
+    #   unset or any other value preserves the default enabled behavior.
+    if: vars.CLAUDE_REVIEW_ENABLED != 'false'
     runs-on: ubuntu-latest
     permissions:
       contents: read
