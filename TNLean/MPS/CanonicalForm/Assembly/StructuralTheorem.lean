@@ -56,7 +56,7 @@ The full proof chain is:
 3. Common blocking to primitive (`exists_common_blocking_all_primitive_of_TP_irr`)
 4. Cyclic sector decomposition per block (`exists_cyclic_sector_decomp_after_blocking`)
 
-### Current status
+### Remaining mathematical inputs
 
 The theorem `exists_tp_sector_decomp_after_blocking` below provides:
 - A blocking period `p > 0`
@@ -236,7 +236,7 @@ theorem afterBlocking_structuralDecompositionData_of_sameMPV₂
     zeroTailB, pB, hpB, rB, dimB, μB, blocksB,
     hTPA, hTPB, hPrimA, hPrimB, hμA, hμB, hDimA, hDimB, hMPVA, hMPVB⟩
 
-/-- Compatibility wrapper for the older structural data shape.
+/-- Compatibility formulation for the older structural data shape.
 
 This keeps the historical witness order while the stronger decomposition version
 `afterBlocking_structuralDecompositionData_of_sameMPV₂` exposes the zero-tail MPV
