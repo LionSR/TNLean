@@ -2196,8 +2196,9 @@ This subsection records the existence statements from
 
 \begin{definition}[Diagonal Lorentz normal form]\label{def:lorentz_diagonal}
     \lean{Wolf.IsLorentzDiagonal}\leanok
-    For a qubit channel $T' : M_{2}(\C) \to M_{2}(\C)$, write $\widehat{T'}$
-    for its matrix in the normalized Pauli basis
+    For a completely positive, trace-preserving qubit channel
+    $T' : M_{2}(\C) \to M_{2}(\C)$, write $\widehat{T'}$ for its matrix
+    in the normalized Pauli basis
     $\{\sigma_{0}/\sqrt{2},\sigma_{1}/\sqrt{2},
     \sigma_{2}/\sqrt{2},\sigma_{3}/\sqrt{2}\}$.  The channel is in
     \emph{diagonal Lorentz normal form} when it is unital and every
@@ -2206,9 +2207,10 @@ This subsection records the existence statements from
 
 \begin{definition}[Non-diagonal Lorentz normal form]\label{def:lorentz_non_diagonal}
     \lean{Wolf.IsLorentzNonDiagonal}\leanok
-    For a qubit channel $T' : M_{2}(\C) \to M_{2}(\C)$, write $\widehat{T'}$
-    in the normalized Pauli basis.  The channel is in \emph{non-diagonal
-    Lorentz normal form} when, for some $x \in [0,1]$,
+    For a completely positive, trace-preserving qubit channel
+    $T' : M_{2}(\C) \to M_{2}(\C)$, write $\widehat{T'}$ in the normalized
+    Pauli basis.  The channel is in \emph{non-diagonal Lorentz normal form}
+    when, for some $x \in [0,1]$,
     \[
         \widehat{T'} =
         \begin{pmatrix}
@@ -2222,9 +2224,9 @@ This subsection records the existence statements from
 
 \begin{definition}[Singular Lorentz normal form]\label{def:lorentz_singular}
     \lean{Wolf.IsLorentzSingular}\leanok
-    For a qubit channel $T' : M_{2}(\C) \to M_{2}(\C)$, write $\widehat{T'}$
-    in the normalized Pauli basis.  The channel is in \emph{singular Lorentz
-    normal form} when
+    For a completely positive, trace-preserving qubit channel
+    $T' : M_{2}(\C) \to M_{2}(\C)$, write $\widehat{T'}$ in the normalized
+    Pauli basis.  The channel is in \emph{singular Lorentz normal form} when
     \[
         \widehat{T'} =
         \begin{pmatrix}
