@@ -1479,20 +1479,22 @@ theorem groupedBlockCastAgrees_iff_iteratedBlockIndex_cast
           (Fin.cast (congr_arg (blockPhysDim d) (F.p_eq_period_mul_extra k)) i) := by
             rw [hIndex i]
 
-private lemma finFunctionFinEquiv_block_digit (x d m j : ℕ) (t : Fin m) :
-    x / (d ^ m) ^ j % d ^ m / d ^ (t : ℕ) % d =
-      x / d ^ (m * j + (t : ℕ)) % d := by
-  have ht_le : (t : ℕ) ≤ m := Nat.le_of_lt t.isLt
+/-- Reading the `t`th base-`d` digit inside the `j`th block of length `m`
+is the same as reading digit `m*j+t` directly. -/
+private lemma Nat.div_pow_mod_pow_block (x d m j t : ℕ) (ht : t < m) :
+    x / (d ^ m) ^ j % d ^ m / d ^ t % d =
+      x / d ^ (m * j + t) % d := by
+  have ht_le : t ≤ m := Nat.le_of_lt ht
   have hpow : d ^ m = d ^ (t : ℕ) * d ^ (m - (t : ℕ)) := by
     rw [← Nat.pow_add, Nat.add_sub_of_le ht_le]
   nth_rewrite 2 [hpow]
   rw [Nat.mod_mul_right_div_self]
   rw [Nat.mod_mod_of_dvd]
   · rw [Nat.div_div_eq_div_mul]
-    have hden : (d ^ m) ^ j * d ^ (t : ℕ) = d ^ (m * j + (t : ℕ)) := by
+    have hden : (d ^ m) ^ j * d ^ t = d ^ (m * j + t) := by
       rw [← Nat.pow_mul, ← Nat.pow_add]
     rw [hden]
-  · simpa using Nat.pow_dvd_pow d (by omega : 1 ≤ m - (t : ℕ))
+  · simpa using Nat.pow_dvd_pow d (by omega : 1 ≤ m - t)
 
 /-- Flattening the explicit length-`n` blocked decoding of a length-`m*n` index agrees with
 the direct length-`m*n` decoding. -/
@@ -1511,7 +1513,8 @@ theorem flattenWordOfBlock_cast_eq {d m n p : ℕ}
     exact congrArg List.ofFn (funext fun t => by
       apply Fin.ext
       simpa [blockPhysDim_eq_pow] using
-        finFunctionFinEquiv_block_digit (x := (i : ℕ)) (d := d) (m := m) (j := (j : ℕ)) t))
+        Nat.div_pow_mod_pow_block (x := (i : ℕ)) (d := d) (m := m)
+          (j := (j : ℕ)) (t := (t : ℕ)) t.isLt))
 
 /-- The global grouping-cast hypothesis applied to a specific family reduces to the
 core Fintype-level assertion. -/
