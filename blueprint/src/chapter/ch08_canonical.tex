@@ -2199,6 +2199,29 @@ The following results separate the zero blocks from the nonzero blocks.
 	using the cyclic relation $\E_A^\dagger(P_k)=P_{k-1}$.
 \end{proof}
 
+\begin{theorem}[Sector fixed-point-algebra rigidity for trace-preserving tensors]%
+	\label{thm:sector_fixed_algebra_irred_tp}
+	\lean{MPSTensor.sectorFixedPointAlgebraRigidity_of_irreducible_tp}
+	\leanok
+	\uses{def:sector_fixed_point_algebra_rigidity, thm:sector_fixed_algebra_irred_cyclic}
+	Let $A$ be an irreducible trace-preserving MPS tensor, and let
+	$(P_k)_{k=1}^m$ be cyclic orthogonal sector projections for
+	$\E_A^\dagger$ with $\sum_k P_k = \Id$. Then the sector
+	fixed-point-algebra rigidity property holds for $\E_A^\dagger$.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{def:sector_fixed_point_algebra_rigidity, thm:md_characterization,
+		thm:sector_fixed_algebra_irred_cyclic}
+	The trace-preserving hypothesis makes $\E_A^\dagger$ unital. The cyclic
+	shift relation and Kadison--Schwarz equality place each sector projection in
+	the multiplicative domain of the adjoint Kraus family, by
+	Theorem~\ref{thm:md_characterization}. Hence multiplication by a sector
+	projection is preserved by $\E_A^\dagger$.
+	Theorem~\ref{thm:sector_fixed_algebra_irred_cyclic} then gives the sector
+	fixed-point-algebra rigidity property.
+\end{proof}
+
 \begin{theorem}[Sector fixed-point-algebra rigidity from scalar blocked fixed points]%
 	\label{thm:sector_fixed_algebra_scalar_blocked}
 	\lean{MPSTensor.sectorFixedPointAlgebraRigidity_of_cyclic_decomp_after_blocking_of_scalarBlockedFixedPoints}
