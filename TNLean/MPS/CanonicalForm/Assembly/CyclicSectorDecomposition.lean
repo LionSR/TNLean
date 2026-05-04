@@ -1165,17 +1165,6 @@ theorem exists_commonBlockedCyclicSectorFamily_of_commonMultiple
     intro k
     simpa [p_eq_period_mul_extra k] using
       (blockPhysDim_blockPhysDim d (period k) (extra k))
-  let flatKey : Fin (∑ k : Fin r, period k) → ((k : Fin r) × Fin (period k)) :=
-    fun x => finSigmaFinEquiv.symm x
-  let flatDim : Fin (∑ k : Fin r, period k) → ℕ :=
-    fun x => sectorDim (flatKey x).1 (flatKey x).2
-  let flatBlocks : (x : Fin (∑ k : Fin r, period k)) →
-      MPSTensor (blockPhysDim d p) (flatDim x) := fun x =>
-    let y := flatKey x
-    show MPSTensor (blockPhysDim d p) (sectorDim y.1 y.2) from
-      cast (congr_arg (fun d' => MPSTensor d' (sectorDim y.1 y.2)) (hPhys y.1))
-        (blockTensor (d := blockPhysDim d (period y.1)) (D := sectorDim y.1 y.2)
-          (sectorBlocks y.1 y.2) (extra y.1))
   have hExtra : ∀ k s,
       (∑ i : Fin (blockPhysDim (blockPhysDim d (period k)) (extra k)),
         (blockTensor (d := blockPhysDim d (period k)) (D := sectorDim k s)
@@ -1196,34 +1185,6 @@ theorem exists_commonBlockedCyclicSectorFamily_of_commonMultiple
       (d := blockPhysDim d (period k)) (D := sectorDim k s)
       (A := sectorBlocks k s) (sector_tp k s) (sector_primitive k s)
       (sector_irreducible k s) (hk := extra_pos k)
-  have flat_tp : ∀ x,
-      ∑ i : Fin (blockPhysDim d p), (flatBlocks x i)ᴴ * flatBlocks x i = 1 := by
-    intro x
-    let y := flatKey x
-    have hcast := (leftCanonical_cast_physDim (hPhys y.1)
-      (A := blockTensor (d := blockPhysDim d (period y.1)) (D := sectorDim y.1 y.2)
-        (sectorBlocks y.1 y.2) (extra y.1))).2 (hExtra y.1 y.2).1
-    simpa [flatBlocks, y] using hcast
-  have flat_primitive : ∀ x,
-      _root_.IsPrimitive
-        (transferMap (d := blockPhysDim d p) (D := flatDim x) (flatBlocks x)) := by
-    intro x
-    let y := flatKey x
-    have hcast := (isPrimitive_transferMap_cast_physDim (hPhys y.1)
-      (A := blockTensor (d := blockPhysDim d (period y.1)) (D := sectorDim y.1 y.2)
-        (sectorBlocks y.1 y.2) (extra y.1))).2 (hExtra y.1 y.2).2.1
-    simpa [flatBlocks, flatDim, y] using hcast
-  have flat_irreducible : ∀ x, IsIrreducibleTensor (flatBlocks x) := by
-    intro x
-    let y := flatKey x
-    have hcast := (isIrreducibleTensor_cast_physDim (hPhys y.1)
-      (A := blockTensor (d := blockPhysDim d (period y.1)) (D := sectorDim y.1 y.2)
-        (sectorBlocks y.1 y.2) (extra y.1))).2 (hExtra y.1 y.2).2.2
-    simpa [flatBlocks, y] using hcast
-  have flat_dim_pos : ∀ x, 0 < flatDim x := by
-    intro x
-    let y := flatKey x
-    simpa [flatDim, y] using sector_dim_pos y.1 y.2
   have nested_same : ∀ k,
       SameMPV₂
         (cast (congr_arg (fun d' => MPSTensor d' (dim k)) (hPhys k))
@@ -1274,12 +1235,6 @@ theorem exists_commonBlockedCyclicSectorFamily_of_commonMultiple
     sector_irreducible := sector_irreducible
     sector_dim_pos := sector_dim_pos
     blockPhysDim_nested_eq := hPhys
-    flatDim := flatDim
-    flatBlocks := flatBlocks
-    flat_tp := flat_tp
-    flat_primitive := flat_primitive
-    flat_irreducible := flat_irreducible
-    flat_dim_pos := flat_dim_pos
     nested_same := nested_same }, rfl⟩⟩
 
 /-- A finite family of nonzero-weight blocks with per-block primitive irreducible cyclic sectors

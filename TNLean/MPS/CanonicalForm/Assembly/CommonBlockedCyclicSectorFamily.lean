@@ -9,26 +9,23 @@ open scoped Matrix BigOperators ComplexOrder MatrixOrder
 /-!
 # Common blocked cyclic-sector families
 
-This file contains the common reblocking data used to assemble primitive cyclic sectors
-at a shared physical blocking length.
+This file contains the common reblocking data used to assemble the primitive cyclic
+sectors of finitely many nonzero-weight blocks at a shared physical blocking length.
 -/
 
 namespace MPSTensor
 
 /-- Common reblocking data for the cyclic sectors of a finite nonzero-weight block family.
 
-For each original nonzero-weight block, `period k` is the period-removal length produced by
-cyclic-sector decomposition, while `extra k` is the later positive blocking length
-that moves all sectors to the single physical alphabet `blockPhysDim d p`.  The
-flattened family `flatBlocks` is indexed by the finite type
-`Fin (∑ k, period k)`, using `finSigmaFinEquiv` to identify an index with an
-original nonzero-weight block and one of its cyclic sectors.
+Each original block is first decomposed into cyclic sectors and then blocked again
+so that every sector is expressed over one common blocked physical alphabet. The
+structure records the period-removal lengths, the additional positive blocking
+lengths, the primitive irreducible sector tensors, and the MPV compatibility between
+the iterated block and the corresponding unit-weight sum of reblocked cyclic
+sectors.
 
-The field `nested_same` gives the checked MPV compatibility condition available
-at this stage: the iterated blocked nonzero-weight block is MPV-equivalent to the corresponding
-unit-weight reblocked cyclic sectors, all at the common physical dimension.  The
-remaining work is the single-step iterated-blocking identification
-and the weighted direct-sum flattening across the original nonzero weights. -/
+The flattened common-sector family is derived canonically from these data, so there
+is only one sector family associated to a given witness. -/
 structure CommonBlockedCyclicSectorFamily {d r : ℕ} {dim : Fin r → ℕ}
     (blocks : (k : Fin r) → MPSTensor d (dim k)) where
   /-- The common physical blocking length. -/
@@ -70,20 +67,6 @@ structure CommonBlockedCyclicSectorFamily {d r : ℕ} {dim : Fin r → ℕ}
   /-- The iterated blocked physical alphabet is propositionally the common alphabet. -/
   blockPhysDim_nested_eq : ∀ k,
     blockPhysDim (blockPhysDim d (period k)) (extra k) = blockPhysDim d p
-  /-- Bond dimensions of the flattened common-alphabet sector family. -/
-  flatDim : Fin (∑ k : Fin r, period k) → ℕ
-  /-- The flattened common-alphabet sector family. -/
-  flatBlocks : (x : Fin (∑ k : Fin r, period k)) → MPSTensor (blockPhysDim d p) (flatDim x)
-  /-- Flattened common-alphabet sectors are trace-preserving. -/
-  flat_tp : ∀ x,
-    ∑ i : Fin (blockPhysDim d p), (flatBlocks x i)ᴴ * flatBlocks x i = 1
-  /-- Flattened common-alphabet sectors have primitive transfer maps. -/
-  flat_primitive : ∀ x,
-    _root_.IsPrimitive (transferMap (d := blockPhysDim d p) (D := flatDim x) (flatBlocks x))
-  /-- Flattened common-alphabet sectors are tensor-irreducible. -/
-  flat_irreducible : ∀ x, IsIrreducibleTensor (flatBlocks x)
-  /-- Flattened common-alphabet sectors have positive bond dimensions. -/
-  flat_dim_pos : ∀ x, 0 < flatDim x
   /-- The checked MPV compatibility condition for each original nonzero-weight block
   after later reblocking. -/
   nested_same : ∀ k,
