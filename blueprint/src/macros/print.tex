@@ -27,14 +27,14 @@
 
 \newcommand{\tnleanStatusBadge}[3]{%
   \leavevmode\unskip
-  \nobreak\hspace{0.35em}%
+  \penalty0\hspace{0.3em plus 0.15em minus 0.05em}%
   \begingroup
   \setlength{\fboxsep}{1.4pt}%
   \fcolorbox{#1}{#2!8}{%
     \textcolor{#1}{\sffamily\scriptsize\bfseries #3}%
   }%
   \endgroup
-  \nobreak\hspace{0.25em}%
+  \penalty0\hspace{0.2em plus 0.1em minus 0.05em}%
   \ignorespaces
 }
 
@@ -59,7 +59,7 @@
     \href{\tnleanDocHome/find/\#doc/\tl_use:N \l_tmpa_tl}
       {
         \tnleanStatusBadge{tnleanStatusBlue}{tnleanStatusBlue}
-          {\texttt{\tl_to_str:N \l_tmpb_tl}}
+          {Lean}
       }
   }
 \NewDocumentCommand{\lean}{m}
@@ -74,19 +74,19 @@
 \newcommand{\leanok}{%
   \iftnleanInProof
     \tnleanStatusBadge{tnleanStatusGreen}{tnleanStatusGreen}
-      {\ensuremath{\checkmark}\ Proof OK}%
+      {\ensuremath{\checkmark}\ Proof}%
   \else
     \tnleanStatusBadge{tnleanStatusGreen}{tnleanStatusGreen}
-      {\ensuremath{\checkmark}\ Stmt OK}%
+      {\ensuremath{\checkmark}\ Stmt}%
   \fi
 }
 \newcommand{\mathlibok}{%
   \iftnleanInProof
     \tnleanStatusBadge{tnleanStatusGreen}{tnleanStatusGreen}
-      {\ensuremath{\checkmark}\ Mathlib proof}%
+      {\ensuremath{\checkmark}\ ML proof}%
   \else
     \tnleanStatusBadge{tnleanStatusGreen}{tnleanStatusGreen}
-      {\ensuremath{\checkmark}\ Mathlib stmt}%
+      {\ensuremath{\checkmark}\ ML stmt}%
   \fi
 }
 \newcommand{\notready}{%
