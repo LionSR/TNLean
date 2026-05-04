@@ -291,12 +291,16 @@ In Pauli-entry terms:
 def IsLorentzNonDiagonal
     (T' : Matrix (Fin 2) (Fin 2) ℂ →ₗ[ℂ] Matrix (Fin 2) (Fin 2) ℂ) : Prop :=
   IsChannel T' ∧
-    pauliTransferEntry T' 3 0 = (2/3 : ℂ) ∧
-    pauliTransferEntry T' 1 0 = 0 ∧ pauliTransferEntry T' 2 0 = 0 ∧
-    pauliTransferEntry T' 3 3 = (1/3 : ℂ) ∧
-    pauliTransferEntry T' 1 1 = pauliTransferEntry T' 2 2 ∧
-    (∀ (i j : Fin 4), i ≠ j → pauliTransferEntry T' i j = 0 ∨
-      (i = 3 ∧ j = 0) ∨ (i = 1 ∧ j = 1) ∨ (i = 2 ∧ j = 2) ∨ (i = 3 ∧ j = 3))
+    ∃ x : ℝ, 0 ≤ x ∧ x ≤ 1 ∧
+      pauliTransferEntry T' 0 0 = 1 ∧
+      (∀ j : Fin 4, j ≠ 0 → pauliTransferEntry T' 0 j = 0) ∧
+      pauliTransferEntry T' 3 0 = (2/3 : ℂ) ∧
+      pauliTransferEntry T' 1 0 = 0 ∧ pauliTransferEntry T' 2 0 = 0 ∧
+      pauliTransferEntry T' 1 1 = ((x / Real.sqrt 3 : ℝ) : ℂ) ∧
+      pauliTransferEntry T' 2 2 = ((x / Real.sqrt 3 : ℝ) : ℂ) ∧
+      pauliTransferEntry T' 3 3 = (1/3 : ℂ) ∧
+      ∀ (i j : Fin 4), i ≠ j → (i, j) ≠ ((3 : Fin 4), (0 : Fin 4)) →
+        pauliTransferEntry T' i j = 0
 
 /-- A Hermiticity-preserving TP qubit channel `T'` is in **singular Lorentz normal
 form** (Wolf Proposition 2.9, case 3) if its Pauli-basis transfer matrix has
