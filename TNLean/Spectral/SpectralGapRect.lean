@@ -73,7 +73,7 @@ theorem mixedTransferSpectralRadius₂_eq
 
 /-! ## Rectangular Frobenius norm and Euclidean-space embedding
 
-The general definitions `frobSq`, `matToES`, and their basic API are imported from
+The general definitions `frobSq`, `matToES`, and their basic lemmas are imported from
 `TNLean.Spectral.FrobeniusNorm`.  We introduce `frobSq₂` as a deprecated alias kept
 for local readability, and add the mixed-shape submultiplicativity lemma. -/
 

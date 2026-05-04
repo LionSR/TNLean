@@ -76,7 +76,7 @@ theorem mixedTransferSpectralRadius_eq (A B : MPSTensor d D) :
 
 /-! ### Frobenius norm squared
 
-The definition and basic API (`frobSq`, `frobSq_nonneg`, `frobSq_eq_zero_iff`,
+The definition and basic lemmas (`frobSq`, `frobSq_nonneg`, `frobSq_eq_zero_iff`,
 `frobSq_pos_of_ne_zero`, `frobSq_smul`, `frobSq_trace`, `matToES`, …) are
 provided by `TNLean.Spectral.FrobeniusNorm` for general rectangular matrices.
 Below we add the square-matrix-specific lemma `frobSq_mul_le`. -/
@@ -98,7 +98,7 @@ lemma eigenvector_pow {V : Type*} [AddCommMonoid V] [Module ℂ V]
     change (F ^ n) (F v) = _
     rw [h, map_smul, ih, smul_smul, mul_comm]; ring_nf
 
-/-! ### Helper lemmas for the HS contraction bound -/
+/-! ### Hilbert–Schmidt contraction estimates -/
 
 /-- Iterated TP condition: `∑_σ evalWord(K,σ)† evalWord(K,σ) = I`. -/
 lemma word_conjTranspose_mul_sum (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
@@ -129,7 +129,7 @@ lemma trace_transferMap (A : MPSTensor d D) (Z : Matrix (Fin D) (Fin D) ℂ)
 
 /-! ### Hilbert–Schmidt contraction for the mixed transfer operator
 
-The Euclidean-space embedding `matToES` and its basic API are imported from
+The Euclidean-space embedding `matToES` and its basic lemmas are imported from
 `TNLean.Spectral.FrobeniusNorm`.  Below we add square-matrix submultiplicativity. -/
 
 private lemma frobSq_mul_le (A B : Matrix (Fin D) (Fin D) ℂ) :
@@ -251,7 +251,7 @@ theorem spectralRadius_mixedTransfer_le_one
     exact_mod_cast eigenvalue_norm_le_one A B hA_norm hB_norm k
       (Module.End.hasEigenvalue_iff_mem_spectrum.mpr (h_spec ▸ hk))
 
-/-! ### Helper lemmas for the eigenvalue rigidity theorem -/
+/-! ### Eigenvalue rigidity lemmas -/
 
 /-
 **Eigenvector implies gauge** (the algebraic core of eigenvalue rigidity).
