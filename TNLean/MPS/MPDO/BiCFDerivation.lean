@@ -7,15 +7,20 @@ import TNLean.MPS.MPDO.BiCFDerivation.Counterexample
 /-!
 # Finite-length sufficient conditions and obstructions for MPDO biCF
 
-This module is the public entry point for the MPDO biCF derivation layer. It
-keeps the historical import path `TNLean.MPS.MPDO.BiCFDerivation` available
-while the development is split into focused submodules.
+This module retains the historical import path for the MPDO biCF derivation
+layer while the finite-length criteria are organized by their mathematical
+role.
 
 The supporting modules are:
 
-* `TNLean.MPS.MPDO.BiCFDerivation.Basic` — finite-length span criteria,
-  selector data, pair trace-separation criteria, and constructors for
-  `HorizontalCFData`.
+* `TNLean.MPS.MPDO.BiCFDerivation.Basic` — historical import path for the
+  finite-length biCF criteria.
+* `TNLean.MPS.MPDO.BiCFDerivation.Core` — tuple-span, linear-independence, and
+  finite/cumulative pair trace-separation criteria.
+* `TNLean.MPS.MPDO.BiCFDerivation.PairHomogenization` — homogeneous pair-span
+  padding and Burnside-Jacobson pair-algebra placeholders.
+* `TNLean.MPS.MPDO.BiCFDerivation.Selectors` — selector data and constructors
+  for `HorizontalCFData`.
 * `TNLean.MPS.MPDO.BiCFDerivation.Counterexample` — the duplicate scalar-block
   obstruction showing that blockwise injectivity, left-canonicality, and
   nonzero weights do not imply the biCF property.
