@@ -165,6 +165,32 @@ theorem pairTraceSeparatingAt_of_pairTraceSeparatingUpTo_of_identity_padding
     (pairWordTupleSpanTop_of_pairCumulativeWordTupleSpanTop_of_identity_padding
       A B hST (pairCumulativeWordTupleSpanTop_of_pairTraceSeparatingUpTo A B hSep) hPad)
 
+/-! ### Conditional all-words homogenization -/
+
+/-- All-words pair separation plus eventual homogeneous identity padding gives
+one homogeneous pair-trace separating length.
+
+This is the proved interface between the pair-product algebra density theorem
+(`PairAllWordsSpanTop`) and the Burnside-Jacobson identity-padding theorem.
+It records that once the two independent inputs are available, no additional
+BNT-specific argument is needed to obtain `PairTraceSeparatingAt`. -/
+theorem exists_pairTraceSeparatingAt_of_pairAllWordsSpanTop_of_identity_padding
+    {D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (hSpan : PairAllWordsSpanTop A B)
+    (hPad : ∃ L : ℕ, ∀ n : ℕ, n ≥ L →
+      ((1 : Matrix (Fin D₁) (Fin D₁) ℂ), (1 : Matrix (Fin D₂) (Fin D₂) ℂ)) ∈
+        Submodule.span ℂ (Set.range (pairWordTuple A B n))) :
+    ∃ T : ℕ, PairTraceSeparatingAt A B T := by
+  have hSepAll : PairTraceSeparatingAll A B :=
+    pairTraceSeparatingAll_of_pairAllWordsSpanTop A B hSpan
+  obtain ⟨S, hSepUpTo⟩ :=
+    exists_pairTraceSeparatingUpTo_of_pairTraceSeparatingAll A B hSepAll
+  obtain ⟨L, hPadAll⟩ := hPad
+  refine ⟨L + S, ?_⟩
+  exact pairTraceSeparatingAt_of_pairTraceSeparatingUpTo_of_identity_padding
+    A B (S := S) (T := L + S) (by omega) hSepUpTo
+    (fun l hl => hPadAll (L + S - l) (by omega))
+
 /-! ### Burnside–Jacobson homogenization: from non-equivalence to homogeneous separation
 
 The theorems in this section bridge the gap between BNT block non-equivalence
@@ -266,19 +292,12 @@ theorem exists_pairTraceSeparatingAt_of_not_gaugePhaseEquiv
     (hB_norm : ∑ i : Fin d, (B i)ᴴ * B i = 1)
     (hNot : ¬ GaugePhaseEquiv A B) :
     ∃ T : ℕ, PairTraceSeparatingAt A B T := by
-  -- Step 1: non-gauge-equivalence ⇒ all-length separation
-  have hSepAll : PairTraceSeparatingAll A B :=
-    pairTraceSeparatingAll_of_injective_not_gaugePhaseEquiv
-      A B hA_inj hB_inj hA_norm hB_norm hNot
-  -- Step 2: finite cumulative cutoff (Noetherian chain stabilization)
-  obtain ⟨S, hSepUpTo⟩ := exists_pairTraceSeparatingUpTo_of_pairTraceSeparatingAll A B hSepAll
-  -- Step 3: homogenize via identity padding.
-  obtain ⟨L, hPadAll⟩ :=
-    pairIdentity_mem_pairWordTupleSpan_eventually_of_not_gaugePhaseEquiv
+  apply exists_pairTraceSeparatingAt_of_pairAllWordsSpanTop_of_identity_padding
+  · have hSepAll : PairTraceSeparatingAll A B :=
+      pairTraceSeparatingAll_of_injective_not_gaugePhaseEquiv
+        A B hA_inj hB_inj hA_norm hB_norm hNot
+    exact (pairAllWordsSpanTop_iff_pairTraceSeparatingAll A B).2 hSepAll
+  · exact pairIdentity_mem_pairWordTupleSpan_eventually_of_not_gaugePhaseEquiv
       A B hA_inj hB_inj hNot
-  refine ⟨L + S, ?_⟩
-  exact pairTraceSeparatingAt_of_pairTraceSeparatingUpTo_of_identity_padding
-    A B (S := S) (T := L + S) (by omega) hSepUpTo
-    (fun l hl => hPadAll (L + S - l) (by omega))
 
 end MPSTensor

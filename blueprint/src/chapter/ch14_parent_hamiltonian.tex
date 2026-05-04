@@ -3103,6 +3103,7 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     \lean{MPSTensor.pair_mul_mem_span_pairWordTuple_add}
     \lean{MPSTensor.pairWordTupleSpanTop_of_pairCumulativeWordTupleSpanTop_of_identity_padding}
     \lean{MPSTensor.pairTraceSeparatingAt_of_pairTraceSeparatingUpTo_of_identity_padding}
+    \lean{MPSTensor.exists_pairTraceSeparatingAt_of_pairAllWordsSpanTop_of_identity_padding}
     \leanok
     \uses{def:pair_trace_separation_words, lem:all_length_pair_trace_separation_finite_cutoff}
     Suppose $S\le T$ and pair words of length at most $S$ span the product
@@ -3110,7 +3111,9 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     to the span of pair words of length $T-\ell$, then pair words of the single
     length $T$ already span the product algebra.  Equivalently, cumulative
     trace separation up to $S$ becomes homogeneous trace separation at length
-    $T$ under the same identity-padding hypothesis.
+    $T$ under the same identity-padding hypothesis.  Consequently, an all-word
+    product-span theorem together with eventual homogeneous identity padding
+    yields a homogeneous pair trace-separation length.
 \end{lemma}
 
 \begin{proof}
