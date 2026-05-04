@@ -14,9 +14,9 @@ import Mathlib.Data.Fintype.EquivFin
 (paper hypotheses, no span-equality)
 
 This module replaces the extra span-equality hypothesis used in
-`BNTPermutationSimple.lean` with the **paper-style** hypotheses from Theorem 4.4
-(arXiv:2011.12127 / 1606.00608, primitive branch): proportionality of the *full*
-MPV families together with explicit decompositions into BNT families.
+`PermutationRigidityPrimitive.lean` with the **paper-style** hypotheses from Theorem 4.4
+(arXiv:2011.12127 / 1606.00608, primitive branch): proportionality of the full MPV
+families together with explicit decompositions into BNT families.
 
 It contains both directions of the key nonvanishing-overlap step and the resulting
 full permutation / gauge-phase matching theorems, in both the injective and
@@ -50,7 +50,7 @@ Then for each `k`, it is impossible that `mpvOverlap (A j) (B k)` tends to `0`
 for all `j`.
 
 This lemma is the replacement for the span-equality-based argument
-`exists_nonzero_overlap` in `BNTPermutationSimple.lean`.
+`exists_nonzero_overlap` in `PermutationRigidityPrimitive.lean`.
 -/
 theorem exists_nonzero_overlap_of_proportional_decomp
     {d : ℕ}
