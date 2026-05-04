@@ -208,7 +208,12 @@ jobs:
             esac
           done < "$changed_files_path"
 
-          if git diff HEAD --unified=0 | grep -E '^\+[^+]' | grep -E '(^|[^[:alnum:]_])(sorry|admit|axiom|unsafe|native_decide|unsafeCast|unsafeCoerce|lcProof|ofReduceBool|ofReduceNat)([^[:alnum:]_]|$)'; then
+          forbidden_token_re='(^|[^[:alnum:]_])'
+          forbidden_token_re+='(sorry|admit|axiom|unsafe|native_decide|unsafeCast|unsafeCoerce'
+          forbidden_token_re+='|lcProof|ofReduceBool|ofReduceNat)([^[:alnum:]_]|$)'
+          added_lines=$(git diff HEAD --unified=0 |
+            awk '/^\+\+\+/ { next } /^\+/ { print substr($0, 2) }')
+          if printf '%s\n' "$added_lines" | grep -E "$forbidden_token_re"; then
             echo "::error::Auto-fix diff adds a forbidden proof-integrity token."
             exit 1
           fi
@@ -252,7 +257,12 @@ jobs:
             exit 1
           fi
 
-          if git diff HEAD --unified=0 | grep -E '^\+[^+]' | grep -E '(^|[^[:alnum:]_])(sorry|admit|axiom|unsafe|native_decide|unsafeCast|unsafeCoerce|lcProof|ofReduceBool|ofReduceNat)([^[:alnum:]_]|$)'; then
+          forbidden_token_re='(^|[^[:alnum:]_])'
+          forbidden_token_re+='(sorry|admit|axiom|unsafe|native_decide|unsafeCast|unsafeCoerce'
+          forbidden_token_re+='|lcProof|ofReduceBool|ofReduceNat)([^[:alnum:]_]|$)'
+          added_lines=$(git diff HEAD --unified=0 |
+            awk '/^\+\+\+/ { next } /^\+/ { print substr($0, 2) }')
+          if printf '%s\n' "$added_lines" | grep -E "$forbidden_token_re"; then
             echo "::error::Validation left a forbidden proof-integrity token in the diff."
             exit 1
           fi
