@@ -25,13 +25,19 @@ permissions:
 
 jobs:
   setup:
+    # Repository variable kill switch:
+    #   CODEX_AUTO_FIX_ENABLED=false disables this workflow.
+    #   unset or any other value preserves the default enabled behavior.
     if: |
-      (github.event_name == 'workflow_run' &&
-       github.event.workflow_run.pull_requests[0] &&
-       github.event.workflow_run.head_repository.full_name == github.repository) ||
-      (github.event_name == 'pull_request' && github.event.label.name == 'auto-fix-codex' &&
-       github.event.pull_request.state == 'open' &&
-       github.event.pull_request.head.repo.full_name == github.repository)
+      vars.CODEX_AUTO_FIX_ENABLED != 'false' &&
+      (
+        (github.event_name == 'workflow_run' &&
+         github.event.workflow_run.pull_requests[0] &&
+         github.event.workflow_run.head_repository.full_name == github.repository) ||
+        (github.event_name == 'pull_request' && github.event.label.name == 'auto-fix-codex' &&
+         github.event.pull_request.state == 'open' &&
+         github.event.pull_request.head.repo.full_name == github.repository)
+      )
     runs-on: ubuntu-latest
     outputs:
       run_ci_fix: ${{ steps.resolve.outputs.run_ci_fix }}

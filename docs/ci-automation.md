@@ -13,9 +13,13 @@ This repository uses [Claude Code](https://docs.anthropic.com/en/docs/claude-cod
   - [Issue Classification](#issue-classification-issue-classificationyml)
   - [CI Failure Auto-Fix](#ci-failure-auto-fix-auto-fixyml)
   - [Blueprint Auto-Fix](#blueprint-auto-fix-auto-fixyml)
+  - [Oversized Lean File Guard](#oversized-lean-file-guard-oversized-lean-filesyml)
+  - [Lean Linter-Warning Sweep](#lean-linter-warning-sweep-lean-linter-warning-sweepyml)
+  - [Lean Linter-Warning Auto-Fix](#lean-linter-warning-auto-fix-lean-linter-warning-autofixyml)
   - [Codex Auto-Fix (CI/Blueprint/Review)](#codex-auto-fix-ciblueprintreview-auto-fix-codexyml)
   - [Review Comment Auto-Fix](#review-comment-auto-fix-auto-fixyml)
   - [Claude Mention Handler](#claude-mention-handler-claudeyml)
+  - [Codex Mention Handler](#codex-mention-handler-codexyml)
   - [Shared CI Auto-Fix Template](#shared-ci-auto-fix-template-_ci-auto-fix-sharedyml)
   - [Shared CI Auto-Fix Template (Codex)](#shared-ci-auto-fix-template-codex-_codex-auto-fix-sharedyml)
 - [Safety Mechanisms](#safety-mechanisms)
@@ -105,6 +109,13 @@ When you push to a PR branch, several things happen in parallel:
   │  │  Claude Mention Handler (claude.yml)                         │
   │  │  General-purpose assistant. Responds to ad-hoc requests      │
   │  │  like "fix this proof" or "explain this tactic".             │
+  │  └──────────────────────────────────────────────────────────────┘
+  │
+  │  ┌──────────────────────────────────────────────────────────────┐
+  │  │ Runs when someone writes "@chatgpt" in a comment             │
+  │  │                                                              │
+  │  │  Codex Mention Handler (codex.yml)                           │
+  │  │  General-purpose Codex responder for ad-hoc requests.        │
   │  └──────────────────────────────────────────────────────────────┘
 ```
 
@@ -224,6 +235,45 @@ runs only after a maintainer has checked the mathematical source and added
 
 ---
 
+### Oversized Lean File Guard (`oversized-lean-files.yml`)
+
+**What it does**: Reports `.lean` files above the 1000-line style limit.
+
+**When it runs**: On pull requests. The check is advisory while `main` still
+contains existing files above the limit; once those files are split, remove the
+`continue-on-error` line in the workflow to make it a blocking gate.
+
+---
+
+### Lean Linter-Warning Sweep (`lean-linter-warning-sweep.yml`)
+
+**What it does**: Runs `lake exe cache get && lake build -q --log-level=info`,
+parses Lean compiler/linter warnings with
+`scripts/lean_linter_warning_report.py`, writes the summary to the workflow
+summary, and uploads the log plus JSON/text reports.
+
+**When it runs**: Weekly and by manual dispatch. It is report-only and never
+edits files or opens pull requests.
+
+---
+
+### Lean Linter-Warning Auto-Fix (`lean-linter-warning-autofix.yml`)
+
+**What it does**: Runs the same warning capture as the sweep, then optionally
+asks Claude to apply only the listed Lean linter-warning fixes.
+
+**When it runs**: Manual dispatch only. PR creation requires `base_ref=main`,
+`create_pr=true`, an available `CLAUDE_CODE_OAUTH_TOKEN`, a successful initial
+Lean build, at least one warning, and a non-empty Lean-only diff.
+
+**Safety guards**: The workflow refuses to open a PR if the automated edit
+creates untracked files, deletes files, changes non-Lean files, changes the
+file list during validation, or adds proof-integrity tokens such as `sorry`,
+`admit`, `axiom`, `unsafe`, `native_decide`, `unsafeCast`, `unsafeCoerce`,
+`lcProof`, `ofReduceBool`, or `ofReduceNat`.
+
+---
+
 ### Codex Auto-Fix (CI/Blueprint/Review) (`auto-fix-codex.yml`)
 
 **What it does**: Provides a Codex-based auto-fix path for CI failures, blueprint failures, and review
@@ -286,6 +336,23 @@ to the repository, and the GitHub event sender must not be a bot.
 
 ---
 
+### Codex Mention Handler (`codex.yml`)
+
+**What it does**: A general-purpose Codex responder for requests that mention
+`@chatgpt`. The workflow intentionally uses `@chatgpt` rather than `@codex` so it
+does not collide with the OpenAI Codex GitHub Connector handle.
+
+**When it runs**: On issue comments, PR review comments, PR reviews, and issue
+title/body text that contain `@chatgpt`; the triggering author must have write
+access to the repository, the event sender must not be a bot, and the same
+trigger must not also mention `@claude`.
+
+**Global switch**: Set repository variable `CODEX_MENTION_ENABLED=false` to
+disable the `@chatgpt` responder globally. Unset it, or set another value, to
+restore the default enabled behavior.
+
+---
+
 ### Shared CI Auto-Fix Template (`_ci-auto-fix-shared.yml`)
 
 **What it does**: A reusable workflow template called by the CI-fix and
@@ -328,6 +395,29 @@ concurrency group: `bot-fix-<branch-name>`. This means:
 - If a new fix triggers while one is running, the old one is cancelled
 - CI-fix, blueprint-fix, and review-fix never run simultaneously on the same branch
 
+### Repository Kill Switches
+
+Repository variables can disable auto-fix globally. These variables default to
+enabled when unset; only the literal value `false` disables the corresponding
+provider or mention handler.
+
+| Variable | Disabled workflows |
+|----------|--------------------|
+| `CLAUDE_AUTO_FIX_ENABLED=false` | `auto-fix.yml` and manual PR creation in `lean-linter-warning-autofix.yml` |
+| `CODEX_AUTO_FIX_ENABLED=false` | `auto-fix-codex.yml` |
+| `CODEX_MENTION_ENABLED=false` | `codex.yml` (`@chatgpt` mention handler) |
+
+Set them with:
+
+```bash
+gh variable set CLAUDE_AUTO_FIX_ENABLED --body false
+gh variable set CODEX_AUTO_FIX_ENABLED --body false
+gh variable set CODEX_MENTION_ENABLED --body false
+```
+
+Re-enable by deleting the variable or setting it to any value other than
+`false`.
+
 ### Fork Guard
 
 All `workflow_run`-triggered workflows check that the PR comes from the same repository (`head_repository.full_name == github.repository`). PRs from forks are skipped entirely. This prevents a malicious fork from triggering auto-fix workflows that have write access to the repository.
@@ -354,7 +444,7 @@ CI logs and review comments are untrusted input — they could contain text desi
 
 CI-failure and blueprint auto-fix workflows run automatically on every PR. No
 setup needed. When CI fails, the auto-fix workflow will attempt a fix and push
-it.
+it, unless `CLAUDE_AUTO_FIX_ENABLED=false` is set as a repository variable.
 
 ### Auto-fix labels are PR-only
 
@@ -395,6 +485,10 @@ request.
 5. Codex will run only for labeled PRs and only on failure/review events described above
 6. Remove the label at any time to stop Codex auto-fix on that PR
 
+To disable Codex auto-fix globally, set repository variable
+`CODEX_AUTO_FIX_ENABLED=false`. Unset it, or set another value, to restore the
+default enabled behavior.
+
 ### To enable the review-fix loop
 
 1. Add the `auto-fix-claude` label to your PR
@@ -403,6 +497,10 @@ request.
    read the comments and push fixes
 4. The cycle repeats until the review finds no issues or 5 iterations are reached
 5. Remove the label at any time to stop the loop
+
+To disable Claude auto-fix globally, set repository variable
+`CLAUDE_AUTO_FIX_ENABLED=false`. Unset it, or set another value, to restore the
+default enabled behavior.
 
 ### To ask Claude for help directly
 

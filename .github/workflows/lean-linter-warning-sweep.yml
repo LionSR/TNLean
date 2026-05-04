@@ -1,0 +1,73 @@
+name: Lean linter-warning sweep
+
+on:
+  schedule:
+    - cron: "0 9 * * 1"
+  workflow_dispatch:
+
+concurrency:
+  group: lean-linter-warning-sweep
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  sweep:
+    name: Capture Lean linter warnings
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Set up Lean toolchain and cache
+        uses: ./.github/actions/setup-lean
+
+      - name: Run Lean build and capture warnings
+        run: |
+          set -euo pipefail
+          log_file="$RUNNER_TEMP/lean-linter-warning-sweep.log"
+
+          # Report-only: summarize and upload warnings without editing files or
+          # opening pull requests.
+          {
+            lake exe cache get
+            lake build -q --log-level=info
+          } 2>&1 | tee "$log_file"
+
+      - name: Set up Python for warning summary
+        if: always()
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Summarize linter warnings
+        if: always()
+        env:
+          REPORT_PREFIX: ${{ runner.temp }}/lean-linter-warning-sweep
+        run: |
+          python3 scripts/lean_linter_warning_report.py \
+            --log "$REPORT_PREFIX.log" \
+            --json "$REPORT_PREFIX.json" \
+            --text "$REPORT_PREFIX.txt" \
+            --github-summary "$GITHUB_STEP_SUMMARY"
+
+          {
+            echo
+            echo "A guarded manual auto-fix wrapper is available in"
+            echo "\`.github/workflows/lean-linter-warning-autofix.yml\`."
+            echo "It only creates a PR when explicitly dispatched in write mode,"
+            echo "when warnings are present, and when the automated edit produces a non-empty diff."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload linter-warning report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lean-linter-warning-sweep-report
+          path: |
+            ${{ runner.temp }}/lean-linter-warning-sweep.log
+            ${{ runner.temp }}/lean-linter-warning-sweep.json
+            ${{ runner.temp }}/lean-linter-warning-sweep.txt
+          if-no-files-found: error
