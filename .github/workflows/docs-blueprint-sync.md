@@ -45,7 +45,8 @@ safe-outputs:
     labels: [documentation, automation]
     if-no-changes: "warn"
     expires: 7d
-    allowed-files: [CLAUDE.md, AGENTS.md]
+    allowed-files: [README.md, docs/**, blueprint/**]
+    protected-files: fallback-to-issue
   noop:
   missing-data:
 ---
@@ -76,6 +77,9 @@ Use `TNLean/` and recent git history as the source of truth for current implemen
 4. Keep edits minimal, factual, and specific.
 5. Do not modify code files unless required to fix broken docs tooling references (prefer doc-only changes).
 6. Ensure all changed files are documentation and/or blueprint artifacts.
+7. Do not modify assistant instruction or workflow files such as `CLAUDE.md`,
+   `AGENTS.md`, `.github/`, or `.agents/`. If those files appear stale, call
+   `missing-data` and explain the needed human review instead of opening a PR.
 
 ## Pull request requirements
 
