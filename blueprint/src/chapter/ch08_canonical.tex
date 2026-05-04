@@ -3185,12 +3185,21 @@ The following results separate the zero blocks from the nonzero blocks.
 
 \begin{theorem}[Structural after-blocking form of the fundamental theorem]%
 	\label{thm:ft_after_blocking_structural}
-	\lean{MPSTensor.afterBlocking_structuralData_of_sameMPV₂}
+	\lean{MPSTensor.afterBlocking_structuralDecompositionData_of_sameMPV₂}
 	\leanok
-	\uses{def:blocked_tensor}
+	\uses{def:blocked_tensor, def:same_mpv2, def:zero_mps_tensor, def:tensor_from_blocks}
 	If two tensors generate the same MPV family, then each tensor admits some
-	blocking after which it decomposes into nonzero left-canonical blocks with
-	primitive transfer maps and positive bond dimensions.
+	blocking after which it decomposes into a zero-tail tensor plus nonzero
+	left-canonical blocks with primitive transfer maps and positive bond
+	dimensions. Moreover, at every blocked system size and every blocked word,
+	the MPV of the blocked tensor is the sum of the zero-tail MPV and the MPV of
+	the weighted nonzero-block tensor:
+	\[
+		V^{(N)}(A^{[p_A]})_\sigma
+		= V^{(N)}(Z_{p_A,z_A})_\sigma
+		  + V^{(N)}\!\left(\bigoplus_k \mu^A_k A_k\right)_\sigma,
+	\]
+	and likewise for $B$.
 \end{theorem}
 
 \begin{proof}\leanok
