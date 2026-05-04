@@ -14,6 +14,10 @@ concurrency:
 
 jobs:
   blueprint-and-prose:
+    # Repository variable kill switch:
+    #   CLAUDE_REVIEW_ENABLED=false disables Claude-powered blueprint/prose review.
+    #   unset or any other value preserves the default enabled behavior.
+    if: vars.CLAUDE_REVIEW_ENABLED != 'false'
     runs-on: ubuntu-latest
     permissions:
       contents: read
