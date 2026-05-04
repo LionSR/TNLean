@@ -1453,6 +1453,29 @@ two-basis sector comparison theorem.
 	hypotheses. The preceding theorem supplies the common MPV phase cover.
 \end{proof}
 
+\begin{theorem}[Phase-cover data give overlap-span hypotheses]%
+\label{thm:sector_basis_overlap_span_reindexed_commonPhaseCover}
+	\lean{MPSTensor.sectorBasisOverlapSpanHypotheses_of_reindexedNonzeroParts_commonPhaseCover}
+	\leanok
+	\uses{def:common_primitive_phase_cover_hypotheses,
+		def:common_sector_relabeling_hypothesis}
+	Let $A$ and $B$ have the same MPV family, and assume the blocked-word
+	identification hypothesis for the cyclic-sector data. The common-sector
+	structural theorem produces common primitive nonzero-sector families. If those
+	families satisfy the phase-cover hypotheses, then the associated sector
+	decompositions have BNT data, agree as full MPV families, and satisfy the
+	primitive overlap-span hypotheses.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{thm:common_primitive_phase_cover_hypotheses_to_span_hypotheses,
+		thm:bnt_sector_decomp_pair_overlap_span_of_block_span}
+	Convert the phase-cover hypotheses for the produced families into span
+	hypotheses. The BNT sector-decomposition theorem with block-span equality then
+	gives the sector decompositions and their primitive overlap-span hypotheses.
+\end{proof}
+
 \begin{theorem}[BNT-cover data give overlap-span hypotheses]%
 \label{thm:sector_basis_overlap_span_reindexed_bnt_cover}
 	\lean{MPSTensor.sectorBasisOverlapSpanHypotheses_of_reindexedNonzeroParts_bntCover}
@@ -1469,7 +1492,8 @@ two-basis sector comparison theorem.
 
 \begin{proof}
 	\leanok
-	\uses{thm:common_primitive_bnt_cover_hypotheses_to_phase_cover_hypotheses}
+	\uses{thm:common_primitive_bnt_cover_hypotheses_to_phase_cover_hypotheses,
+		thm:sector_basis_overlap_span_reindexed_commonPhaseCover}
 	Convert the BNT-cover hypotheses for the produced families into common
 	phase-cover hypotheses. The common phase-cover construction then gives the
 	sector decompositions and their primitive overlap-span hypotheses.
