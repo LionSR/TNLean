@@ -24,8 +24,8 @@ import Mathlib.Analysis.Normed.Module.RCLike.Real
 This file proves the $(c) \to (b)$ direction of Proposition 3 from
 Sanz--Pérez-García--Wolf--Cirac (arXiv:0909.5347): strong irreducibility of the
 transfer map forces eventual full word span / Kraus rank. It collects the
-results connecting strong irreducibility, convergence of transfer powers, and the final full-rank
-conclusion used by the public equivalence API.
+results connecting strong irreducibility, convergence of transfer powers, and
+the full-rank conclusion used by the Proposition 3 equivalence.
 -/
 
 /-!
@@ -39,9 +39,9 @@ Sanz–Pérez-García–Wolf–Cirac, *A quantum version of Wielandt's inequalit
 > point, irreducible, unique peripheral eigenvalue `{1}`), then `A` has
 > eventually full Kraus rank (i.e., word products eventually span `M_D(ℂ)`).
 
-It is a direction-specific implementation module. For the packaged public
-Proposition 3 API, prefer `TNLean.Wielandt.Primitivity.Equivalence`; this file is retained for
-specialized access to the (c)→(b) proof route and its quantitative
+This file gives the direction-specific proof. For the two-sided Proposition 3
+equivalence, prefer `TNLean.Wielandt.Primitivity.Equivalence`; this file is
+retained for specialized access to the (c)→(b) proof route and its quantitative
 intermediates.
 
 ## Proof strategy (following the paper / Wolf Chapter 6)
@@ -85,7 +85,7 @@ variable {d D : ℕ}
 /-- Complex-valued form of the trace-pairing identity:
 `∑_σ tr(B† A_σ) · star(tr(B† A_σ)) = ∑_{i,k} [B† · E^n(e_{ik}) · B]_{ik}`.
 
-This is the raw algebraic content before extracting the real part. -/
+This is the complex trace identity before extracting the real part. -/
 private theorem sum_trace_mul_star_eq [NeZero D]
     (A : MPSTensor d D) (n : ℕ)
     (B : Matrix (Fin D) (Fin D) ℂ) :
@@ -200,7 +200,7 @@ definition. The proof chains:
 2. `IsIrreducibleTensor` → unique trace-zero fixed point (`huniq_fp`)
 3. `huniq_fp` + `IsPeripherallyPrimitive` → spectral gap
    (complement spectral radius < 1)
-4. Package as `IsPrimitiveMPS A ρ`
+4. obtain `IsPrimitiveMPS A ρ`
 -/
 
 /-- **Primitivity bridge**: strong irreducibility implies the spectral-gap
@@ -511,7 +511,7 @@ This bounds the error term `Q_{(E − P_ρ)^n}(B)` uniformly. -/
 
 section UniformPositivity
 
-/-! #### Helper: representing dual functionals via the trace pairing
+/-! #### Trace representation of dual functionals
 
 Every linear functional `φ : M_D(ℂ) → ℂ` can be represented as
 `φ(N) = tr(M_φ · N)` for a unique matrix `M_φ`.  We prove this concretely
@@ -1011,8 +1011,8 @@ end FinalConstruction
 full Kraus rank.
 
 This is the Proposition ~3 route `(IsPrimitiveMPS + ρ.PosDef) → (c) → (b)`: first
-package the data as `IsStronglyIrreduciblePaper`, then apply the already
-formalized `StronglyIrreducible → HasEventuallyFullKrausRank` implication. -/
+view the hypotheses as `IsStronglyIrreduciblePaper`, then apply the formalized
+`StronglyIrreducible → HasEventuallyFullKrausRank` implication. -/
 theorem hasEventuallyFullKrausRank_of_isPrimitiveMPS_of_posDef [NeZero D]
     {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : IsPrimitiveMPS A ρ)
@@ -1031,4 +1031,3 @@ theorem isNormal_of_isPrimitiveMPS_with_posDef [NeZero D]
     (hasEventuallyFullKrausRank_of_isPrimitiveMPS_of_posDef hP hρ_pd)
 
 end MPSTensor
-
