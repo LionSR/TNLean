@@ -25,7 +25,8 @@ namespace MPSTensor
 variable {d D : ℕ}
 
 private noncomputable def singleBlockEquiv (d : ℕ) : Fin (blockPhysDim d 1) ≃ Fin d :=
-  (Fintype.equivFin (Fin 1 → Fin d)).symm.trans (Equiv.funUnique (Fin 1) (Fin d))
+  ((finCongr (blockPhysDim_eq_pow d 1)).trans finFunctionFinEquiv.symm).trans
+    (Equiv.funUnique (Fin 1) (Fin d))
 
 @[simp] private lemma wordOfBlock_one (i : Fin (blockPhysDim d 1)) :
     wordOfBlock d 1 i = [singleBlockEquiv d i] := by

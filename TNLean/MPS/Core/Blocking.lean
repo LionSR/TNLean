@@ -10,6 +10,7 @@ import Mathlib.Data.Fintype.BigOperators
 import Mathlib.Data.Fintype.Card
 import Mathlib.Data.Fintype.EquivFin
 import Mathlib.Data.Fin.Tuple.Basic
+import Mathlib.Algebra.BigOperators.Fin
 
 /-!
 # Physical blocking of MPS tensors
@@ -40,7 +41,7 @@ lemma blockPhysDim_eq_pow (d L : ℕ) : blockPhysDim d L = d ^ L := by
 
 /-- Decode a blocked physical index into the corresponding length-`L` word. -/
 noncomputable def decodeBlock (d L : ℕ) : Fin (blockPhysDim d L) → (Fin L → Fin d) :=
-  (Fintype.equivFin (Fin L → Fin d)).symm
+  finFunctionFinEquiv.symm ∘ Fin.cast (blockPhysDim_eq_pow d L)
 
 /-- Turn a blocked physical index into a list (word) of length `L`. -/
 noncomputable def wordOfBlock (d L : ℕ) (i : Fin (blockPhysDim d L)) : List (Fin d) :=
@@ -60,7 +61,8 @@ noncomputable def blockTensor (A : MPSTensor d D) (L : ℕ) :
 noncomputable def flattenBlockedWord (d L : ℕ) : List (Fin (blockPhysDim d L)) → List (Fin d)
   | w => (w.map (wordOfBlock d L)).flatten
 
-@[simp, mps_block_words] lemma flattenBlockedWord_nil (d L : ℕ) : flattenBlockedWord d L [] = [] := by
+@[simp, mps_block_words]
+lemma flattenBlockedWord_nil (d L : ℕ) : flattenBlockedWord d L [] = [] := by
   simp [flattenBlockedWord]
 
 @[mps_block_words]
@@ -188,7 +190,7 @@ theorem leftCanonical_blockTensor
       (blockTensor (d := d) (D := D) A L i)ᴴ *
         blockTensor (d := d) (D := D) A L i = 1 := by
   let e : Fin (blockPhysDim d L) ≃ (Fin L → Fin d) :=
-    (Fintype.equivFin (Fin L → Fin d)).symm
+    (finCongr (blockPhysDim_eq_pow d L)).trans finFunctionFinEquiv.symm
   calc
     ∑ i : Fin (blockPhysDim d L),
         (blockTensor (d := d) (D := D) A L i)ᴴ *

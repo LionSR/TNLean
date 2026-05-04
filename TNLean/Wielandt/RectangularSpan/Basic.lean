@@ -114,11 +114,9 @@ theorem wordSpan_le_wordSpan_blockTensor (A : MPSTensor d D) (L n : ℕ) :
     rw [hfactor]
     -- First factor: evalWord A (List.ofFn σ₀) is a single blocked Kraus operator
     set B := blockTensor (d := d) (D := D) A L
-    set σ₀_enc := (Fintype.equivFin (Fin L → Fin d)) σ₀
+    set σ₀_enc := Fin.cast (blockPhysDim_eq_pow d L).symm (finFunctionFinEquiv σ₀)
     have hfirst_eq : evalWord A (List.ofFn σ₀) = B σ₀_enc := by
-      simp only [B, blockTensor, wordOfBlock, decodeBlock, σ₀_enc]
-      congr 1
-      simp [Equiv.symm_apply_apply]
+      simp [B, blockTensor, wordOfBlock, decodeBlock, σ₀_enc, Fin.cast_cast]
     have hfirst : evalWord A (List.ofFn σ₀) ∈ wordSpan B 1 := by
       rw [hfirst_eq]
       apply Submodule.subset_span
@@ -159,7 +157,7 @@ theorem isNormal_blockTensor (A : MPSTensor d D) (L : ℕ) (hL : 0 < L)
 /-- Encoding a function `σ₀ : Fin L → Fin d` as a blocked index. -/
 noncomputable def encodeBlock (d L : ℕ) (σ₀ : Fin L → Fin d) :
     Fin (blockPhysDim d L) :=
-  (Fintype.equivFin (Fin L → Fin d)) σ₀
+  Fin.cast (blockPhysDim_eq_pow d L).symm (finFunctionFinEquiv σ₀)
 
 /-- The Kraus operator of the blocked tensor at the encoded index
 equals the word evaluation. -/
@@ -168,9 +166,7 @@ theorem blockTensor_apply_encodeBlock (A : MPSTensor d D) (L : ℕ)
     (blockTensor (d := d) (D := D) A L) (encodeBlock d L σ₀) =
       evalWord A (List.ofFn σ₀) := by
   classical
-  simp only [blockTensor, wordOfBlock, decodeBlock, encodeBlock]
-  congr 1
-  simp [Equiv.symm_apply_apply]
+  simp [blockTensor, wordOfBlock, decodeBlock, encodeBlock, Fin.cast_cast]
 
 /-- **Word eigenvector → single-index eigenvector of the blocked tensor.** -/
 theorem blockTensor_single_eigenvector (A : MPSTensor d D)

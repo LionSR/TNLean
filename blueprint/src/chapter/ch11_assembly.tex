@@ -1565,6 +1565,30 @@ two-basis sector comparison theorem.
 	Theorem~\ref{thm:nonzero_block_span_eq_of_proportional_decomposition}.
 \end{proof}
 
+\begin{theorem}[Unconditional common primitive block decompositions]%
+\label{thm:unconditional_common_primitive_irreducible_blocks}
+	\lean{MPSTensor.unconditional_commonPrimitiveIrreducibleBlocks}
+	\leanok
+	\uses{thm:after_blocking_common_primitive_irreducible_blocks_reindexed}
+	Let $A$ and $B$ have the same MPV family.  Then there is a positive blocking
+	length at which both blocked tensors decompose into a zero-tail part and a
+	weighted direct sum of trace-preserving, primitive, tensor-irreducible blocks
+	with positive bond dimensions and nonzero weights.  The two nonzero-sector
+	families have the same positive-length MPV family, and the zero-tail parts
+	satisfy the length-zero identity.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{thm:common_blocked_cyclic_sector_flatten_word_of_block_cast,
+		thm:common_grouped_block_cast_to_relabeling,
+		thm:after_blocking_common_primitive_irreducible_blocks_reindexed}
+	The direct digit computation gives the global coordinate-grouping hypothesis.
+	This implies the blocked-word identification for common sectors.  Applying the
+	common primitive decomposition theorem with this identification gives the
+	unconditional decomposition.
+\end{proof}
+
 \begin{theorem}[Common sectors from phase-cover data]%
 \label{thm:afterBlocking_sectorComparison_reindexed_commonPhaseCover}
 	\lean{MPSTensor.afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_commonPhaseCover}
