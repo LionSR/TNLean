@@ -230,14 +230,16 @@ theorem wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingUpTo_of_ide
 Given canonical-form/BNT data, every ordered pair of distinct blocks admits a
 homogeneous word length `T` at which `PairTraceSeparatingAt` holds.
 
-The proof uses `exists_pairTraceSeparatingAt_of_not_gaugePhaseEquiv` from
-`BiCFDerivation.lean` for same-dimensional blocks and a separate dimension-
-mismatch argument for blocks of different bond dimensions.
+Same-dimensional block pairs are reduced to the biCF derivation: two
+non-gauge-phase-equivalent BNT blocks admit a homogeneous pair-trace separator.
+Pairs with different bond dimensions are handled by a separate dimension-mismatch
+argument.
 
-The remaining formal gap is the Burnside–Jacobson identity-padding lemma
-documented in `BiCFDerivation.lean`; once that lemma is proved, the
-`sorry` at `exists_pairTraceSeparatingAt_of_not_gaugePhaseEquiv` closes
-and this theorem becomes unconditional. -/
+Two formal ingredients remain. The same-dimensional branch needs the
+Burnside–Jacobson identity-padding step, which upgrades a pair-separation witness
+to the common homogeneous length appearing in the statement. The different
+bond-dimension branch still needs its dimension-mismatch separation proof. Once both
+branches are available, this BNT pair-separation theorem becomes unconditional. -/
 theorem exists_forall_pairTraceSeparatingAt_of_isCanonicalFormBNT
     {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
