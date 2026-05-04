@@ -49,13 +49,13 @@ Theorem 4.4 of arXiv:2011.12127 (Cirac–Pérez-García–Schuch–Verstraete, R
   sufficiently large system sizes there is an invertible coefficient matrix `U_N` expressing one
   family in terms of the other.
 
-## Intended use (Theorem 4.4 roadmap)
+## Intended use in Theorem 4.4
 
 1. **Block separation** produces two BNT families `A_bnt` and `B_bnt` from tensors `A_total` and
    `B_total` that generate the same MPV family.
 2. This module supplies the invertible `U_N` relating the two BNT families at each large `N`.
-3. A **subsequent step** (not in this file) will show that `U_N` converges to a
-   permutation-times-phase matrix, using the overlap orthonormality conditions.
+3. The permutation-rigidity argument identifies the limiting coefficient matrix as a
+   permutation times diagonal phases, using the overlap orthonormality conditions.
 -/
 
 open scoped BigOperators InnerProductSpace Matrix

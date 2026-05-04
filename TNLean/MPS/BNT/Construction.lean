@@ -23,18 +23,18 @@ Definition 4.2 / Proposition char-BNT in arXiv:2011.12127 and arXiv:1606.00608, 
 1. **`IsCanonicalFormBNT`**: A strengthened canonical form where no two distinct blocks are
    gauge-phase equivalent (the BNT grouping step has been performed).
 
-2. **`cross_overlap_tendsto_zero_of_separated_CFBNT_data`** and the legacy formulation
+2. **`cross_overlap_tendsto_zero_of_separated_CFBNT_data`** and the bundled-data formulation
    **`IsCanonicalFormBNT.cross_overlap_tendsto_zero`**: distinct CF-BNT blocks have decaying
    cross-overlaps. The proof combines:
    - Dimension-mismatch case: `mpvOverlap_tendsto_zero_of_dim_ne`
    - Same-dimension case: `mpvOverlap_tendsto_zero` (using `blocks_not_equiv` to supply
      `¬GaugePhaseEquiv`)
 
-3. **`isBNT_of_separated_CFBNT_data`** and the legacy formulation **`IsCanonicalFormBNT.isBNT`**:
+3. **`isBNT_of_separated_CFBNT_data`** and the bundled-data formulation **`IsCanonicalFormBNT.isBNT`**:
    a canonical-form decomposition into a basis of normal tensors yields a valid `IsBNT`
    structure, assembling all overlap and independence properties.
 
-4. **`fundamentalTheorem_of_separated_CFBNT_data`** and the legacy formulation
+4. **`fundamentalTheorem_of_separated_CFBNT_data`** and the bundled-data formulation
    **`fundamentalTheorem_of_IsCanonicalFormBNT`**: if two CF-BNT decompositions generate
    proportional MPVs with convergent nonzero coefficients, then the blocks match up to
    permutation, dimension equality, and gauge-phase equivalence. This connects
@@ -314,7 +314,8 @@ variable {μ : Fin r → ℂ} {A : (k : Fin r) → MPSTensor d (dim k)}
 /-- **Cross-overlap decay for CF-BNT blocks**: distinct blocks have
 `mpvOverlap (A j) (A k) N → 0` as `N → ∞`.
 
-This legacy theorem now delegates to `cross_overlap_tendsto_zero_of_separated_CFBNT_data`. -/
+This bundled-data theorem is a direct consequence of
+`cross_overlap_tendsto_zero_of_separated_CFBNT_data`. -/
 theorem cross_overlap_tendsto_zero
     [∀ k, NeZero (dim k)]
     (hCF : IsCanonicalFormBNT μ A) (j k : Fin r) (hjk : j ≠ k) :
@@ -330,7 +331,7 @@ theorem cross_overlap_tendsto_zero
 /-- A canonical-form decomposition into a basis of normal tensors yields a valid `IsBNT`
 structure.
 
-This legacy theorem now delegates to `isBNT_of_separated_CFBNT_data`. -/
+This bundled-data theorem is a direct consequence of `isBNT_of_separated_CFBNT_data`. -/
 theorem isBNT [∀ k, NeZero (dim k)]
     (hCF : IsCanonicalFormBNT μ A) :
     IsBNT (toTensorFromBlocks μ A) r dim A :=
@@ -542,7 +543,8 @@ If two families of tensors in canonical-form BNT give rise to proportional MPVs
 of blocks, and blocks match up to permutation, dimension equality, and gauge-phase
 equivalence.
 
-This legacy theorem now delegates to `fundamentalTheorem_of_separated_CFBNT_data`. -/
+This bundled-data theorem is a direct consequence of
+`fundamentalTheorem_of_separated_CFBNT_data`. -/
 theorem fundamentalTheorem_of_IsCanonicalFormBNT
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
