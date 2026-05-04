@@ -32,7 +32,8 @@ period `P` the weights become `(μ₀ k)^P`, and two distinct original weights `
 This file implements strategy **(b)** only in the restricted case where equal-modulus
 blocks on one side are already known to collapse to a single basis tensor. It is
 therefore a useful **special-case norm-class collapse** module, not the full
-basis-of-normal-tensors construction from [Cirac--Perez-Garcia--Schuch--Verstraete 2017, Proposition A.6 /
+basis-of-normal-tensors construction from
+[Cirac--Perez-Garcia--Schuch--Verstraete 2017, Proposition A.6 /
 `prop:char-BNT`]. The general one-sided BNT construction remains open.
 
 ## Main results
@@ -74,7 +75,8 @@ basis-of-normal-tensors construction from [Cirac--Perez-Garcia--Schuch--Verstrae
 
 ## References
 
-- [Cirac--Perez-Garcia--Schuch--Verstraete 2017, Definition 2.6, Proposition 2.7]: BNT minimality condition and grouping.
+- [Cirac--Perez-Garcia--Schuch--Verstraete 2017, Definition 2.6, Proposition 2.7]:
+  BNT minimality condition and grouping.
 - [Cirac--Perez-Garcia--Schuch--Verstraete 2021, Section IV.A]: Existence of canonical form.
 -/
 
@@ -406,11 +408,12 @@ occur at the same modulus, they should survive as different basis elements rathe
 than being forced into one norm class.
 
 **Why `hMPVEq` arises in the full theory**:
-In the BNT theory (Cirac--Perez-Garcia--Schuch--Verstraete 2017, Section 2.3), two blocks with the same weight norm are
-gauge-phase equivalent, hence have the same MPV.  In the existence reduction, this
-property would be derived after applying the BNT uniqueness theorem.  The derivation
-of `hMPVEq` from blocked `SameMPV₂` data is the subject of `EqualNormBridge.lean`
-and downstream theorems (see `exists_sectorDecomp_of_tp_primitive_irr_blocks`).
+In the BNT theory (Cirac--Perez-Garcia--Schuch--Verstraete 2017, Section 2.3),
+two blocks with the same weight norm are gauge-phase equivalent, hence have the
+same MPV. In the existence reduction, this property would be derived after
+applying the BNT uniqueness theorem. The derivation of `hMPVEq` from blocked
+`SameMPV₂` data is the subject of `EqualNormBridge.lean` and downstream
+theorems (see `exists_sectorDecomp_of_tp_primitive_irr_blocks`).
 
 **Proof:**
 1. Let `S = Finset.univ.image (‖μ ·‖)`, `g = S.card`.

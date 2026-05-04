@@ -46,8 +46,9 @@ For block k gauge-phase equivalent to representative block j via `(X, ζ)`:
 
 ## Important: equal-norm blocks are NOT automatically gauge-phase equivalent
 
-The BNT of a tensor (Cirac--Perez-Garcia--Schuch--Verstraete 2017, Proposition A.6) is constructed so that all pairs of
-BNT elements have *decaying* cross-overlaps.  In particular, two BNT elements can
+The BNT of a tensor (Cirac--Perez-Garcia--Schuch--Verstraete 2017,
+Proposition A.6) is constructed so that all pairs of BNT elements have
+*decaying* cross-overlaps. In particular, two BNT elements can
 share the same weight norm while being completely independent (non-GPE).  The BNT
 already groups gauge-equivalent blocks together; remaining blocks are pairwise
 non-gauge-equivalent.  A counter-example shows that the
@@ -114,7 +115,8 @@ Theorem matching, etc.).
 
 - [Cirac--Perez-Garcia--Schuch--Verstraete 2017, Lemma A.2]: Overlap dichotomy for Normal Tensors.
 - [Cirac--Perez-Garcia--Schuch--Verstraete 2017, Proposition A.6]: BNT construction and minimality.
-- [Cirac--Perez-Garcia--Schuch--Verstraete 2017, Definition 2.6, Proposition 2.7]: BNT minimality and grouping.
+- [Cirac--Perez-Garcia--Schuch--Verstraete 2017, Definition 2.6, Proposition 2.7]:
+  BNT minimality and grouping.
 -/
 
 namespace MPSTensor
