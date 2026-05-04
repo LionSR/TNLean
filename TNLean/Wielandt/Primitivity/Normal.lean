@@ -14,7 +14,7 @@ This file states the low-level consequences of `HasPrimitiveFixedPoint` used in 
 Wielandt development and recalls the normality side of the chain from
 `WielandtBound.lean`.
 
-It does **not** prove `HasPrimitiveFixedPoint → IsNormal`. The currently formalized bridge
+It does **not** prove `HasPrimitiveFixedPoint → IsNormal`. The currently formalized route
 with extra `ρ.PosDef` and aperiodicity hypotheses is assembled in
 `QuantumWielandt.lean`; the unconditional implication remains future work.
 
@@ -149,7 +149,7 @@ theorem wielandt_full_analysis [NeZero D]
       cumulativeVectorSpan A φ (D ^ 2) = ⊤) :=
   wielandt_chain A hN
 
-/-! ## Part 4: Status of the primitive → normal bridge
+/-! ## Part 4: Status of the primitive → normal implication
 
 The unconditional implication `HasPrimitiveFixedPoint → IsNormal` is still open
 in this file. The currently formalized route in `QuantumWielandt.lean` proves

@@ -100,7 +100,7 @@ theorem wordSpan_mul_le (A : MPSTensor d D) (m n : ℕ) :
   -- Rewrite the product using `evalWord_append`.
   simpa [evalWord_append] using hmem
 
-/-- Helper: `⊤ * ⊤ = ⊤` for submodules of the matrix algebra. -/
+/-- The product of two full matrix-algebra submodules is full. -/
 private theorem top_mul_top_eq_top :
     (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) *
       (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) = ⊤ := by

@@ -19,10 +19,10 @@ open scoped Matrix
 
 namespace MPSTensor
 
-/-! ## Section 8f½: NilpIndex growth infrastructure
+/-! ## Section 8f½: NilpIndex growth lemmas
 
-The growth infrastructure in Section 8 (left-step membership, injectivity,
-finrank monotonicity, surjectivity) was proved for `P = (A i₀)^D`.
+The growth lemmas in Section 8 (left-step membership, injectivity,
+finrank monotonicity, surjectivity) were proved for `P = (A i₀)^D`.
 Here we prove the analogous results for `P = (A i₀)^r` where `r = nilpIndex`.
 
 The key observation: since `range((A i₀)^r) = range((A i₀)^D)` (by

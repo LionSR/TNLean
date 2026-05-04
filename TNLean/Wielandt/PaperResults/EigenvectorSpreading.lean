@@ -25,7 +25,7 @@ Sanz–Pérez-García–Wolf–Cirac, *A quantum version of Wielandt's inequalit
 1. Use Proposition 3 to pass from `IsPrimitivePaper A` to eventually full Kraus
    rank.
 2. Rewrite this as `IsNormal A`.
-3. Apply the backend cumulative spreading theorem `eigenvector_spreading`.
+3. Apply the cumulative spreading theorem `eigenvector_spreading`.
 4. Convert the cumulative conclusion to the exact fixed-length paper statement
    using `vectorSpreadSpan_eq_top_of_cumulativeVectorSpan_eq_top_of_eigenvector`.
 

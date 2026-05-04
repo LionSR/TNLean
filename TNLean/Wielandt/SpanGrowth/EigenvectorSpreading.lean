@@ -367,8 +367,8 @@ Deviation: we prove the cumulative conclusion `K_{D-1} = ⊤` instead of the pap
 single-level conclusion `H_{D-1} = ⊤`. This is enough for every downstream use in this
 formalization.
 
-The eigenvector data are kept in the statement for API compatibility with the paper and
-with downstream wrappers. The current cumulative proof uses only `hφ` together with
+The eigenvector data are kept in the statement to match the paper and downstream
+theorems. The current cumulative proof uses only `hφ` together with
 the normality witness. -/
 theorem eigenvector_spreading [NeZero D]
     (A : MPSTensor d D) (φ : Fin D → ℂ) (hφ : φ ≠ 0)

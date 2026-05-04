@@ -38,7 +38,7 @@ variable {d D : ℕ}
 /-- If `M = evalWord A w`, then the matrix power `M ^ k` lies in the fixed-length
 word span at length `k * w.length`.
 
-This is a small helper for later bounded-length constructions. -/
+This lemma is used in later bounded-length constructions. -/
 theorem evalWord_pow_mem_wordSpan (A : MPSTensor d D) (w : List (Fin d)) (k : ℕ) :
     (evalWord A w) ^ k ∈ wordSpan A (k * w.length) := by
   classical
@@ -88,7 +88,7 @@ lemma pow_mulVec_eq_smul_of_mulVec_eq_smul
 
 namespace WielandtRankOne
 
-/-- Helper: if a linear map preserves a submodule, then all powers preserve it. -/
+/-- If a linear map preserves a submodule, then all powers preserve it. -/
 private lemma pow_apply_mem_of_mapsTo
     {V : Type*} [AddCommGroup V] [Module ℂ V]
     (f : End ℂ V) (U : Submodule ℂ V)
@@ -105,7 +105,7 @@ private lemma pow_apply_mem_of_mapsTo
       -- `f^(n+1) v = f^n (f v)`.
       simpa [pow_succ, Module.End.mul_apply] using ih (v := f v) hv'
 
-/-- Helper: on `V = Fin D → ℂ`, the zero generalized eigenspace is the kernel of `f ^ D`. -/
+/-- On `V = Fin D → ℂ`, the zero generalized eigenspace is the kernel of `f ^ D`. -/
 private lemma maxGenEigenspace_zero_eq_ker_pow
     (f : End ℂ (Fin D → ℂ)) :
     f.maxGenEigenspace (0 : ℂ) = LinearMap.ker (f ^ D) := by

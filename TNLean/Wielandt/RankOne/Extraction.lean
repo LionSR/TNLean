@@ -49,7 +49,7 @@ namespace WielandtRankOne
 
 /-- Coercing a restricted endomorphism back to the ambient space commutes with powers.
 
-This is a small helper for transporting computations from a generalized eigenspace
+This lemma transports computations from a generalized eigenspace
 (submodule) back to the full space. -/
 private lemma coe_pow_restrict
     {V : Type*} [AddCommGroup V] [Module ℂ V]

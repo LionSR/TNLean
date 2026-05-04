@@ -20,7 +20,7 @@ namespace MPSTensor
 
 /-! ## Section 8e: Quantitative ceiling for one-sided rectangular span
 
-This section provides the quantitative dimension-counting infrastructure for the
+This section provides the quantitative dimension-counting lemmas for the
 exact Lemma 2(b) bound. The key results are:
 
 1. **Initial dimension**: `rectSpan P A 0` has finrank 1 when `P ≠ 0` (it equals `span{P}`).
@@ -257,7 +257,8 @@ such that `rectSpan ((A i₀)^D) A n₀ = range(mulLeft ((A i₀)^D))`, we get:
 i.e., the word span at length `D + n₀ + 2D - 2` is the full matrix algebra.
 
 ### Proof strategy
-1. Eigenvector `φ` lies in `range(toLin' ((A i₀)^D))` → for all `ψ`, `vecMulVec φ ψ ∈ rectSpan`
+1. Eigenvector `φ` lies in `range(toLin' ((A i₀)^D))`, so for all `ψ`,
+   `vecMulVec φ ψ ∈ rectSpan`.
 2. `rectSpan` stabilized at `n₀` → `vecMulVec φ ψ ∈ wordSpan A (D + n₀)`
 3. Apply conditional assembly (eigenvector spreading + row spreading)
 4. Output: `wordSpan A ((D-1) + ((D + n₀) + (D-1))) = ⊤`

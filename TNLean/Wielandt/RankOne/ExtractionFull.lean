@@ -47,9 +47,9 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-! ## Helper lemmas -/
+/-! ## Linear-algebra lemmas -/
 
-section Helpers
+section LinearAlgebraLemmas
 
 /-- An eigenvector with nonzero eigenvalue lies in the range of the matrix. -/
 theorem mem_range_toLin'_of_eigenvector
@@ -192,7 +192,7 @@ private theorem BlockedTensorRangeData.rankOne_mem_wordSpan_of_cumulativeSpan_eq
     (d := blockPhysDim d L) (D := D)
     data.B data.P data.Q data.hP data.hQ hcs hone) data.rankOne_mem_range
 
-end Helpers
+end LinearAlgebraLemmas
 
 /-! ## Nonzero-trace word extraction from a full word span -/
 
