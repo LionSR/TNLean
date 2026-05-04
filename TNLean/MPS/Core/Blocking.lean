@@ -39,6 +39,11 @@ lemma blockPhysDim_eq_pow (d L : ℕ) : blockPhysDim d L = d ^ L := by
   -- `Fintype.card_fun` gives `card (α → β) = card β ^ card α`.
   simp [Fintype.card_fin]
 
+/-- The physical alphabet after blocking one site is equivalent to the original alphabet. -/
+noncomputable def singleBlockEquiv (d : ℕ) : Fin (blockPhysDim d 1) ≃ Fin d :=
+  ((finCongr (blockPhysDim_eq_pow d 1)).trans finFunctionFinEquiv.symm).trans
+    (Equiv.funUnique (Fin 1) (Fin d))
+
 /-- Decode a blocked physical index into the corresponding length-`L` word. -/
 noncomputable def decodeBlock (d L : ℕ) : Fin (blockPhysDim d L) → (Fin L → Fin d) :=
   finFunctionFinEquiv.symm ∘ Fin.cast (blockPhysDim_eq_pow d L)
@@ -52,10 +57,20 @@ noncomputable def wordOfBlock (d L : ℕ) (i : Fin (blockPhysDim d L)) : List (F
   classical
   simp [wordOfBlock]
 
+@[simp, mps_block_words]
+lemma wordOfBlock_one (d : ℕ) (i : Fin (blockPhysDim d 1)) :
+    wordOfBlock d 1 i = [singleBlockEquiv d i] := by
+  rfl
+
 /-- Block (coarse-grain) an MPS tensor by grouping `L` physical sites into one. -/
 noncomputable def blockTensor (A : MPSTensor d D) (L : ℕ) :
     MPSTensor (blockPhysDim d L) D :=
   fun i => evalWord A (wordOfBlock d L i)
+
+@[simp, mps_block_words]
+lemma blockTensor_one_apply (A : MPSTensor d D) (i : Fin (blockPhysDim d 1)) :
+    blockTensor (d := d) (D := D) A 1 i = A (singleBlockEquiv d i) := by
+  simp [blockTensor, MPSTensor.evalWord]
 
 /-- Flatten a word in blocked indices into an ordinary word in `Fin d` (list-level). -/
 noncomputable def flattenBlockedWord (d L : ℕ) : List (Fin (blockPhysDim d L)) → List (Fin d)
@@ -71,6 +86,13 @@ lemma flattenBlockedWord_cons (d L : ℕ) (i : Fin (blockPhysDim d L))
     flattenBlockedWord d L (i :: w) = wordOfBlock d L i ++ flattenBlockedWord d L w := by
   simp [flattenBlockedWord]
 
+@[simp, mps_block_words]
+lemma flattenBlockedWord_one (d : ℕ) (w : List (Fin (blockPhysDim d 1))) :
+    flattenBlockedWord d 1 w = w.map (singleBlockEquiv d) := by
+  induction w with
+  | nil => simp [flattenBlockedWord]
+  | cons i w ih => simp [flattenBlockedWord_cons, ih]
+
 @[mps_block_words]
 lemma evalWord_blockTensor (A : MPSTensor d D) (L : ℕ) :
     ∀ w : List (Fin (blockPhysDim d L)),
@@ -84,6 +106,14 @@ lemma evalWord_blockTensor (A : MPSTensor d D) (L : ℕ) :
       -- Flattening splits off the first block word:
       -- `flattenBlockedWord (i :: w) = wordOfBlock i ++ flattenBlockedWord w`.
       simp [evalWord, blockTensor, flattenBlockedWord_cons, ih, evalWord_append]
+
+@[simp, mps_block_words]
+lemma mpv_blockTensor_one (A : MPSTensor d D) {N : ℕ}
+    (σ : Fin N → Fin (blockPhysDim d 1)) :
+    mpv (blockTensor (d := d) (D := D) A 1) σ =
+      mpv A (fun n => singleBlockEquiv d (σ n)) := by
+  simp [mpv, coeff, evalWord_blockTensor, List.map_ofFn]
+  rfl
 
 /-- Length of a flattened blocked word. -/
 @[mps_block_words]

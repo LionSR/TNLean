@@ -24,31 +24,6 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-private noncomputable def singleBlockEquiv (d : ℕ) : Fin (blockPhysDim d 1) ≃ Fin d :=
-  ((finCongr (blockPhysDim_eq_pow d 1)).trans finFunctionFinEquiv.symm).trans
-    (Equiv.funUnique (Fin 1) (Fin d))
-
-@[simp] private lemma wordOfBlock_one (i : Fin (blockPhysDim d 1)) :
-    wordOfBlock d 1 i = [singleBlockEquiv d i] := by
-  rfl
-
-@[simp] private lemma blockTensor_one_apply (A : MPSTensor d D) (i : Fin (blockPhysDim d 1)) :
-    blockTensor (d := d) (D := D) A 1 i = A (singleBlockEquiv d i) := by
-  simp [blockTensor, wordOfBlock_one, MPSTensor.evalWord]
-
-@[simp] private lemma flattenBlockedWord_one (w : List (Fin (blockPhysDim d 1))) :
-    flattenBlockedWord d 1 w = w.map (singleBlockEquiv d) := by
-  induction w with
-  | nil => simp [flattenBlockedWord]
-  | cons i w ih => simp [flattenBlockedWord_cons, ih, wordOfBlock_one]
-
-private lemma mpv_blockTensor_one (A : MPSTensor d D) {N : ℕ}
-    (σ : Fin N → Fin (blockPhysDim d 1)) :
-    mpv (blockTensor (d := d) (D := D) A 1) σ =
-      mpv A (fun n => singleBlockEquiv d (σ n)) := by
-  simp [mpv, coeff, evalWord_blockTensor, flattenBlockedWord_one, List.map_ofFn]
-  rfl
-
 private theorem isIrreducibleTensor_blockTensor_one
     (A : MPSTensor d D) (hIrr : IsIrreducibleTensor A) :
     IsIrreducibleTensor (d := blockPhysDim d 1) (D := D)
