@@ -404,6 +404,7 @@ provider or mention handler.
 | Variable | Disabled workflows |
 |----------|--------------------|
 | `CLAUDE_AUTO_FIX_ENABLED=false` | `auto-fix.yml` and manual PR creation in `lean-linter-warning-autofix.yml` |
+| `CLAUDE_REVIEW_ENABLED=false` | `claude-code-review.yml`, `blueprint-prose-review.yml`, and `pr-cleanup.yml` |
 | `CODEX_AUTO_FIX_ENABLED=false` | `auto-fix-codex.yml` |
 | `CODEX_MENTION_ENABLED=false` | `codex.yml` (`@chatgpt` mention handler) |
 
@@ -411,6 +412,7 @@ Set them with:
 
 ```bash
 gh variable set CLAUDE_AUTO_FIX_ENABLED --body false
+gh variable set CLAUDE_REVIEW_ENABLED --body false
 gh variable set CODEX_AUTO_FIX_ENABLED --body false
 gh variable set CODEX_MENTION_ENABLED --body false
 ```
