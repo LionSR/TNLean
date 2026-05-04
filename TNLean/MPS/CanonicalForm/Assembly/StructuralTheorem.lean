@@ -184,8 +184,8 @@ theorem bilateral_commonPeriod_blocking_tp_primitive_normal
 
 For any two MPS tensors `A, B` with `SameMPV₂ A B`, this theorem gives the
 currently formalized one-sided reduction data on both sides: after blocking,
-each tensor admits a decomposition into TP blocks with primitive transfer maps,
-nonzero weights, and positive bond dimensions.
+each tensor admits a decomposition into a zero-tail tensor and TP blocks with
+primitive transfer maps, nonzero weights, and positive bond dimensions.
 
 The theorem does not yet use `SameMPV₂ A B` to compare the two blocked
 families. The subsequent content is the sector-level comparison:
@@ -194,10 +194,57 @@ followed by a two-basis equal-case comparison theorem for those sector decomposi
 
 This theorem therefore gives the structural statement currently available on the
 way to arXiv:1606.00608, Theorem 1. -/
-theorem afterBlocking_structuralData_of_sameMPV₂
+theorem afterBlocking_structuralDecompositionData_of_sameMPV₂
     {d D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (_hSame : SameMPV₂ A B) :
+    -- Both tensors have blocked TP-primitive decompositions
+    ∃ (zeroTailA : ℕ) (pA : ℕ) (_ : 0 < pA)
+      (rA : ℕ) (dimA : Fin rA → ℕ) (μA : Fin rA → ℂ)
+      (blocksA : (k : Fin rA) → MPSTensor (blockPhysDim d pA) (dimA k)),
+    ∃ (zeroTailB : ℕ) (pB : ℕ) (_ : 0 < pB)
+      (rB : ℕ) (dimB : Fin rB → ℕ) (μB : Fin rB → ℂ)
+      (blocksB : (k : Fin rB) → MPSTensor (blockPhysDim d pB) (dimB k)),
+      -- Blocks are TP
+      (∀ k, ∑ i, (blocksA k i)ᴴ * blocksA k i = 1) ∧
+      (∀ k, ∑ i, (blocksB k i)ᴴ * blocksB k i = 1) ∧
+      -- Blocks have primitive transfer maps
+      (∀ k, _root_.IsPrimitive (transferMap (blocksA k))) ∧
+      (∀ k, _root_.IsPrimitive (transferMap (blocksB k))) ∧
+      -- Nonzero weights
+      (∀ k, μA k ≠ 0) ∧
+      (∀ k, μB k ≠ 0) ∧
+      -- Positive bond dimensions
+      (∀ k, 0 < dimA k) ∧
+      (∀ k, 0 < dimB k) ∧
+      -- MPV decomposition equations
+      (∀ (N : ℕ) (σ : Fin N → Fin (blockPhysDim d pA)),
+        mpv (blockTensor (d := d) (D := D₁) A pA) σ =
+          mpv (zeroMPSTensor (blockPhysDim d pA) zeroTailA) σ +
+            mpv (toTensorFromBlocks (d := blockPhysDim d pA) (μ := μA) blocksA) σ) ∧
+      (∀ (N : ℕ) (σ : Fin N → Fin (blockPhysDim d pB)),
+        mpv (blockTensor (d := d) (D := D₂) B pB) σ =
+          mpv (zeroMPSTensor (blockPhysDim d pB) zeroTailB) σ +
+            mpv (toTensorFromBlocks (d := blockPhysDim d pB) (μ := μB) blocksB) σ) := by
+  obtain ⟨zeroTailA, pA, hpA, rA, dimA, μA, blocksA,
+    hTPA, hPrimA, hDimA, hμA, hMPVA⟩ :=
+    exists_tp_primitive_blockDecomp_after_blocking A
+  obtain ⟨zeroTailB, pB, hpB, rB, dimB, μB, blocksB,
+    hTPB, hPrimB, hDimB, hμB, hMPVB⟩ :=
+    exists_tp_primitive_blockDecomp_after_blocking B
+  exact ⟨zeroTailA, pA, hpA, rA, dimA, μA, blocksA,
+    zeroTailB, pB, hpB, rB, dimB, μB, blocksB,
+    hTPA, hTPB, hPrimA, hPrimB, hμA, hμB, hDimA, hDimB, hMPVA, hMPVB⟩
+
+/-- Compatibility wrapper for the older structural data shape.
+
+This keeps the historical witness order while the stronger decomposition version
+`afterBlocking_structuralDecompositionData_of_sameMPV₂` exposes the zero-tail MPV
+equations needed for the paper-facing statement. -/
+theorem afterBlocking_structuralData_of_sameMPV₂
+    {d D₁ D₂ : ℕ}
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (hSame : SameMPV₂ A B) :
     -- Both tensors have blocked TP-primitive decompositions
     ∃ (pA : ℕ) (_ : 0 < pA)
       (rA : ℕ) (dimA : Fin rA → ℕ) (μA : Fin rA → ℂ)
@@ -217,10 +264,10 @@ theorem afterBlocking_structuralData_of_sameMPV₂
       -- Positive bond dimensions
       (∀ k, 0 < dimA k) ∧
       (∀ k, 0 < dimB k) := by
-  obtain ⟨_, pA, hpA, rA, dimA, μA, blocksA, hTPA, hPrimA, hDimA, hμA, _⟩ :=
-    exists_tp_primitive_blockDecomp_after_blocking A
-  obtain ⟨_, pB, hpB, rB, dimB, μB, blocksB, hTPB, hPrimB, hDimB, hμB, _⟩ :=
-    exists_tp_primitive_blockDecomp_after_blocking B
+  obtain ⟨_zeroTailA, pA, hpA, rA, dimA, μA, blocksA,
+    _zeroTailB, pB, hpB, rB, dimB, μB, blocksB,
+    hTPA, hTPB, hPrimA, hPrimB, hμA, hμB, hDimA, hDimB, _hMPVA, _hMPVB⟩ :=
+    afterBlocking_structuralDecompositionData_of_sameMPV₂ A B hSame
   exact ⟨pA, hpA, rA, dimA, μA, blocksA, pB, hpB, rB, dimB, μB, blocksB,
     hTPA, hTPB, hPrimA, hPrimB, hμA, hμB, hDimA, hDimB⟩
 
@@ -249,7 +296,8 @@ theorem afterBlocking_structuralDataWithBlockedSameMPV₂_of_sameMPV₂
       (∀ k, μB k ≠ 0) ∧
       (∀ k, 0 < dimA k) ∧
       (∀ k, 0 < dimB k) := by
-  obtain ⟨pA, hpA, rA, dimA, μA, blocksA, pB, hpB, rB, dimB, μB, blocksB,
+  obtain ⟨pA, hpA, rA, dimA, μA, blocksA,
+    pB, hpB, rB, dimB, μB, blocksB,
     hTPA, hTPB, hPrimA, hPrimB, hμA, hμB, hDimA, hDimB⟩ :=
     afterBlocking_structuralData_of_sameMPV₂ A B hSame
   refine ⟨pA, hpA, rA, dimA, μA, blocksA, pB, hpB, rB, dimB, μB, blocksB,
