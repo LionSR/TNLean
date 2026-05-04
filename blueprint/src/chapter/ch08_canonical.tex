@@ -2620,6 +2620,25 @@ The following results separate the zero blocks from the nonzero blocks.
 	Apply Theorem~\ref{thm:normal_from_primitive_posdef}.
 \end{proof}
 
+\begin{theorem}[TP-primitive irreducible tensor is injective after blocking]%
+	\label{thm:tp_primitive_irred_block_injective}
+	\lean{MPSTensor.exists_blockTensor_isInjective_of_tp_primitive_irreducible}
+	\leanok
+	\uses{thm:normal_tp_primitive_irred,
+		lem:isNBlkInjective_iff_blockTensor_isInjective}
+	Let $A$ be a left-canonical MPS tensor with $D > 0$,
+	irreducible transfer map, and peripheral spectrum $\{1\}$.
+	Then some blocking $A^{[L]}$ is one-site injective.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:normal_tp_primitive_irred,
+		lem:isNBlkInjective_iff_blockTensor_isInjective}
+	The previous theorem gives normality, which is eventual block injectivity.
+	The blocked-chain equivalence identifies this with one-site injectivity of
+	the corresponding blocked tensor.
+\end{proof}
+
 \begin{theorem}[Blocking preserves normality]%
 	\label{thm:normal_blocking_preserved}
 	\lean{MPSTensor.isNormal_blockTensor_of_isNormal}
