@@ -257,7 +257,7 @@ theorem stateCoeff_splitAtEdge (A : Tensor G d) (e : Edge G) (σ : V → Fin d) 
 
 /-- Boundary virtual data for the edge-centered three-block decomposition.
 
-For an edge `e = (u, w)`, this records the index on `e`, the residual indices on
+For an edge `e = (u, w)`, this consists of the index on `e`, the residual indices on
 edges incident to `u` other than `e`, and the residual indices on edges incident
 to `w` other than `e`. The middle-region contraction below is fibred over this
 data. -/

@@ -10,18 +10,18 @@ any local physical vector back to a coefficient function on the virtual star at 
 vertex `v`. When `A` and `B` have the same bond dimensions, this yields a
 canonical candidate endomorphism on the local virtual coefficient space of `A`.
 
-The remaining PEPS Fundamental-Theorem blocker is that this candidate must still
-be shown to
+To complete the PEPS Fundamental-Theorem argument, this candidate must still be
+shown to
 
 1. reconstruct the local tensors of `B`, equivalently that the local image of
    `B` lies in the image of `localTensorMap A v`, and
 2. factor into independent edge gauges.
 
-We capture those two requirements as `HasLocalGaugeLift`. This isolates the exact
-output still needed from the blocked-middle / three-site-MPS reduction in
-arXiv:1804.04964 Section 3, and `hasLocalGaugeLift_of_localGaugeFormula` is the final
-conversion that turns an explicit local gauge formula into that
-sharper datum.
+We capture those two requirements as `HasLocalGaugeLift`. This isolates the
+exact output of the blocked-middle / three-site-MPS reduction in
+arXiv:1804.04964 Section 3, and `hasLocalGaugeLift_of_localGaugeFormula` is the
+final conversion that turns an explicit local gauge formula into that sharper
+datum.
 -/
 
 open scoped BigOperators Matrix
@@ -204,10 +204,10 @@ theorem hasLocalGaugeLift_of_localGaugeFormula (A B : Tensor G d)
 /-- Abbreviated proposition for the output expected from the edge-centered
 blocked-middle / three-site-MPS reduction at a vertex.
 
-The remaining open PEPS step should prove this proposition from `SameState`:
-an incident-edge family of invertible matrices whose local gauge formula
-already reconstructs the local tensors of `B` from those of `A`. The next
-theorem then turns this explicit local formula into `HasLocalGaugeLift`. -/
+The PEPS fundamental theorem requires deriving this proposition from `SameState`:
+an incident-edge family of invertible matrices whose local gauge formula already
+reconstructs the local tensors of `B` from those of `A`. The next theorem then
+turns this explicit local formula into `HasLocalGaugeLift`. -/
 abbrev BlockedMiddleGaugeHyp (A B : Tensor G d) (_hA : IsVertexInjective A)
     (hDim : A.bondDim = B.bondDim) (v : V) : Prop :=
   ∃ Xv : (e : Edge G) → GL (Fin (A.bondDim e)) ℂ,
@@ -230,9 +230,9 @@ theorem hasLocalGaugeLift_of_blockedMiddleGaugeHyp (A B : Tensor G d)
 /-- Under `HasLocalGaugeLift`, one obtains the factorized local-gauge formula at
 vertex `v`.
 
-This is the current local endpoint available in Lean: the remaining PEPS
-Fundamental-Theorem gap is to prove `BlockedMiddleGaugeHyp` from `SameState` via
-the blocked-middle / three-site-MPS reduction and then apply
+This theorem gives the local factorized gauge relation under `HasLocalGaugeLift`.
+Deriving that hypothesis from `SameState` remains the blocked-middle /
+three-site-MPS reduction, followed by
 `hasLocalGaugeLift_of_blockedMiddleGaugeHyp`. -/
 theorem localGauge_exists_of_liftData (A B : Tensor G d)
     (hA : IsVertexInjective A) (hDim : A.bondDim = B.bondDim) (v : V)
