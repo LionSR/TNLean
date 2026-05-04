@@ -10,7 +10,7 @@ import TNLean.MPS.CanonicalForm.Assembly.ProportionalComparison
 This module is the public entry point for the end-to-end canonical-form
 reduction after blocking. It keeps the historical import path
 `TNLean.MPS.CanonicalForm.Assembly` available while the underlying development is
-split across six focused supporting modules.
+split across focused supporting modules.
 
 The supporting modules are:
 
@@ -20,10 +20,16 @@ The supporting modules are:
   TP-primitive irreducible blocks and preservation of normality under blocking.
 * `TNLean.MPS.CanonicalForm.Assembly.PrimitiveBlocks` — blocked irreducibility
   and the conditional weak block-matching theorem.
+* `TNLean.MPS.CanonicalForm.Assembly.CommonBlockedCyclicSectorFamily` —
+  common-period cyclic-sector family API.
 * `TNLean.MPS.CanonicalForm.Assembly.CyclicSectorDecomposition` — cyclic sector
   decomposition after blocking.
-* `TNLean.MPS.CanonicalForm.Assembly.StructuralTheorem` — common-period blocking
-  and the structural after-blocking theorem.
+* `TNLean.MPS.CanonicalForm.Assembly.StructuralData` — common-period blocking
+  and structural after-blocking data.
+* `TNLean.MPS.CanonicalForm.Assembly.StructuralTheorem` — historical re-export
+  path for structural data and common-sector transport.
+* `TNLean.MPS.CanonicalForm.Assembly.CommonSectorTransport` — zero-tail and
+  common-sector transport after the structural theorem.
 * `TNLean.MPS.CanonicalForm.Assembly.ProportionalComparison` — sector comparison
   from BNT proportional-decomposition data.
 
