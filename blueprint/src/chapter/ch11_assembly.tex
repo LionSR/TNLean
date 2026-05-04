@@ -206,20 +206,32 @@ used in this chapter.
 \end{theorem}
 
 \begin{proof}
-	\uses{thm:ft_proportional, thm:ft_equal_explicit, thm:mpv_decomposition,
-	      rem:cf_coeff_arrays, thm:route_b_equal}
-	Begin by applying Theorem~\ref{thm:ft_proportional} with $c_N = 1$,
-	which yields a
-	permutation of the matched blocks and blockwise gauge-phase equivalences.
-	One then compares the resulting MPV expansions from
-	Theorem~\ref{thm:mpv_decomposition}. The explicit-coefficient version
-		(Theorem~\ref{thm:ft_equal_explicit}) proves gauge equivalence after
-		permuting the weighted block-diagonal tensors, using BNT linear independence.
-	The proof then combines this with the coefficient-array construction
-	of Remark~\ref{rem:cf_coeff_arrays} and the weight-recovery theorem
-	(Theorem~\ref{thm:route_b_equal}). After the weights are identified, the phase
-	factors are absorbed into them and the blockwise conjugacies combine to
-	a global gauge equivalence.
+	\uses{thm:ft_equal_explicit, thm:mpv_decomposition,
+	      rem:cf_coeff_arrays, thm:route_b_equal,
+	      thm:afterBlocking_sectorComparison_reindexed_bntCover,
+	      thm:common_phase_cover_of_proportional_decomposition,
+	      def:common_primitive_bnt_cover_hypotheses}
+	The formalized comparison starts with explicit decomposition coefficients.
+	Theorem~\ref{thm:mpv_decomposition} expands the two canonical-form tensors in
+	their BNT bases, and Remark~\ref{rem:cf_coeff_arrays} describes the resulting
+	coefficient arrays.  When the required coefficient identities are supplied,
+	Theorem~\ref{thm:ft_equal_explicit} proves gauge equivalence after permuting
+	the weighted block-diagonal tensors.  The sector-weight comparison of
+	Theorem~\ref{thm:route_b_equal} recovers the multiplicities and weights from
+	these identities.
+
+	The missing bridge for the bare equal-MPV statement is the synchronization
+	step that derives the coefficient identities and common phase data directly
+	from equality of the full MPV families.  The after-blocking comparison theorem
+	(Theorem~\ref{thm:afterBlocking_sectorComparison_reindexed_bntCover}) gives
+	this conclusion conditionally from BNT-cover data, while
+	Theorem~\ref{thm:common_phase_cover_of_proportional_decomposition} explains
+	how proportional block comparisons supply common phases.  Completing this
+	theorem therefore amounts to deriving the BNT-cover, overlap-span, or
+	common-phase hypotheses for the canonical decompositions produced from the
+	bare equality assumption.  Once those data are available, the phases are
+	absorbed into the recovered weights and the blockwise conjugacies assemble
+	into a global gauge equivalence.
 \end{proof}
 
 \begin{theorem}[Fundamental Theorem --- equal MPV case with explicit coefficients]\label{thm:ft_equal_explicit}
