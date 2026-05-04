@@ -1417,7 +1417,9 @@ two-basis sector comparison theorem.
 \begin{definition}[BNT-cover hypotheses for common primitive sectors]%
 \label{def:common_primitive_bnt_cover_hypotheses}
 	\lean{MPSTensor.CommonPrimitiveBNTCoverHypotheses,
-		MPSTensor.CommonPrimitiveBNTCoverHypotheses.ofCommonPrimitiveData}
+		MPSTensor.CommonPrimitiveBNTCoverHypotheses.ofCommonPrimitiveData,
+		MPSTensor.CommonPrimitiveBNTCoverHypotheses.ofCommonPrimitiveData_zeroTailIdentity,
+		MPSTensor.zeroTail_eq_of_proportionalDecompositionConclusion}
 	\leanok
 	\uses{def:is_normal_canonical_form, def:blocks_not_gauge_phase_equiv,
 		def:injective, thm:ncf_sorted_tp_primitive_irred}
@@ -1428,7 +1430,9 @@ two-basis sector comparison theorem.
 	injectivity, and a proportional-decomposition comparison. When the primitive
 	structural data and strict weight ordering are supplied in place of normal
 	canonical-form data, together with the remaining conditions above, they yield the
-	BNT-cover hypotheses.
+	BNT-cover hypotheses. The length-zero identity and the proportional matching
+	identify the zero-tail dimensions, so this equality need not be supplied
+	separately once the proportional data are present.
 \end{definition}
 
 \begin{theorem}[BNT-cover hypotheses produce a common phase cover]%

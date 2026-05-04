@@ -121,7 +121,7 @@ structure CommonPrimitivePhaseCoverHypotheses
   left_injective : ∀ x : Fin rA, IsInjective (blocksA x)
   /-- The right nonzero-sector blocks are one-site injective. -/
   right_injective : ∀ x : Fin rB, IsInjective (blocksB x)
-  /-- The two nonzero-sector block families admit a common MPV phase cover. -/
+  /-- The two nonzero-sector block families carry a common MPV phase cover. -/
   cover : Nonempty (MPVCommonPhaseCover blocksA blocksB)
 
 namespace CommonPrimitivePhaseCoverHypotheses
@@ -188,6 +188,69 @@ theorem toSpanHypotheses
   h.toPhaseCoverHypotheses.toSpanHypotheses
 
 end CommonPrimitiveProportionalHypotheses
+
+/-! ### Zero-tail equality from proportional block matching -/
+
+/-- At length zero, a block-diagonal tensor contributes the sum of the block dimensions. -/
+private theorem mpv_toTensorFromBlocks_zero_eq_sum_dim
+    {d r : ℕ} {dim : Fin r → ℕ}
+    (μ : Fin r → ℂ) (blocks : (x : Fin r) → MPSTensor d (dim x))
+    (σ : Fin 0 → Fin d) :
+    mpv (toTensorFromBlocks (d := d) (μ := μ) blocks) σ =
+      ∑ x : Fin r, (dim x : ℂ) := by
+  rw [mpv_toTensorFromBlocks_eq_sum]
+  refine Finset.sum_congr rfl fun x _ => ?_
+  simp [mpv, coeff, Matrix.trace_one]
+
+/-- A proportional-decomposition matching identifies the total nonzero bond dimensions. -/
+private theorem sum_dim_eq_of_proportionalDecompositionConclusion
+    {d rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    {blocksA : (x : Fin rA) → MPSTensor d (dimA x)}
+    {blocksB : (x : Fin rB) → MPSTensor d (dimB x)}
+    (hMatch : ProportionalDecompositionConclusion (d := d) blocksA blocksB) :
+    (∑ x : Fin rA, (dimA x : ℂ)) = ∑ y : Fin rB, (dimB y : ℂ) := by
+  rcases hMatch with ⟨_, perm, hmatch⟩
+  calc
+    (∑ x : Fin rA, (dimA x : ℂ)) =
+        ∑ x : Fin rA, (dimB (perm x) : ℂ) := by
+          refine Finset.sum_congr rfl fun x _ => ?_
+          obtain ⟨hdim, _⟩ := hmatch x
+          simp [hdim]
+    _ = ∑ y : Fin rB, (dimB y : ℂ) := by
+          let f : Fin rA → ℂ := fun x => (dimB (perm x) : ℂ)
+          let g : Fin rB → ℂ := fun y => (dimB y : ℂ)
+          have hfg : ∀ x, f x = g (perm x) := fun _ => rfl
+          simpa [f, g] using (Fintype.sum_equiv perm f g hfg)
+
+/-- The length-zero identity and proportional block matching force equal zero-tail dimensions.
+
+The structural theorem already supplies the length-zero equation for the two zero-tail plus
+nonzero-sector decompositions. A proportional-decomposition conclusion matches the nonzero
+blocks by a permutation with equal bond dimensions, so the nonzero length-zero contributions
+cancel. -/
+theorem zeroTail_eq_of_proportionalDecompositionConclusion
+    {d rA rB zeroTailA zeroTailB : ℕ}
+    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
+    {blocksA : (x : Fin rA) → MPSTensor d (dimA x)}
+    {blocksB : (x : Fin rB) → MPSTensor d (dimB x)}
+    (hZero : ∀ σ : Fin 0 → Fin d,
+      (zeroTailA : ℂ) + mpv (toTensorFromBlocks (d := d) (μ := μA) blocksA) σ =
+        (zeroTailB : ℂ) + mpv (toTensorFromBlocks (d := d) (μ := μB) blocksB) σ)
+    (hMatch : ProportionalDecompositionConclusion (d := d) blocksA blocksB) :
+    zeroTailA = zeroTailB := by
+  let σ : Fin 0 → Fin d := Fin.elim0
+  have hsum :=
+    sum_dim_eq_of_proportionalDecompositionConclusion
+      (d := d) (blocksA := blocksA) (blocksB := blocksB) hMatch
+  have hzero := hZero σ
+  rw [mpv_toTensorFromBlocks_zero_eq_sum_dim μA blocksA σ,
+    mpv_toTensorFromBlocks_zero_eq_sum_dim μB blocksB σ] at hzero
+  have hzero' :
+      (zeroTailA : ℂ) + ∑ y : Fin rB, (dimB y : ℂ) =
+        (zeroTailB : ℂ) + ∑ y : Fin rB, (dimB y : ℂ) := by
+    simpa [hsum] using hzero
+  exact (Nat.cast_injective (R := ℂ)) (add_right_cancel hzero')
 
 /-- Remaining BNT-level inputs for constructing a common MPV phase cover
 from the common-length cyclic sector families produced by the structural theorem.
@@ -280,6 +343,55 @@ def ofCommonPrimitiveData
   left_injective := hInjA
   right_injective := hInjB
   decompData := hDecomp
+
+/-- Form `CommonPrimitiveBNTCoverHypotheses` from common primitive structural data,
+deriving zero-tail equality from the length-zero identity and the BNT proportional
+matching. -/
+def ofCommonPrimitiveData_zeroTailIdentity
+    {d p rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
+    {zeroTailA zeroTailB DtotA DtotB : ℕ}
+    {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
+    {blocksA : (x : Fin rA) → MPSTensor (blockPhysDim d p) (dimA x)}
+    {blocksB : (x : Fin rB) → MPSTensor (blockPhysDim d p) (dimB x)}
+    (hμA : ∀ x, μA x ≠ 0)
+    (hμB : ∀ x, μB x ≠ 0)
+    (hTPA : ∀ x, ∑ i : Fin (blockPhysDim d p), (blocksA x i)ᴴ * blocksA x i = 1)
+    (hTPB : ∀ x, ∑ i : Fin (blockPhysDim d p), (blocksB x i)ᴴ * blocksB x i = 1)
+    (hPrimA : ∀ x, _root_.IsPrimitive
+      (transferMap (d := blockPhysDim d p) (D := dimA x) (blocksA x)))
+    (hPrimB : ∀ x, _root_.IsPrimitive
+      (transferMap (d := blockPhysDim d p) (D := dimB x) (blocksB x)))
+    (hIrrA : ∀ x, IsIrreducibleTensor (blocksA x))
+    (hIrrB : ∀ x, IsIrreducibleTensor (blocksB x))
+    (hAntiA : StrictAnti (fun x : Fin rA => ‖μA x‖))
+    (hAntiB : StrictAnti (fun x : Fin rB => ‖μB x‖))
+    (hNotGpeA : BlocksNotGaugePhaseEquiv (d := blockPhysDim d p) blocksA)
+    (hNotGpeB : BlocksNotGaugePhaseEquiv (d := blockPhysDim d p) blocksB)
+    (hZero : ∀ σ : Fin 0 → Fin (blockPhysDim d p),
+      (zeroTailA : ℂ) + mpv (toTensorFromBlocks (d := blockPhysDim d p) (μ := μA) blocksA) σ =
+        (zeroTailB : ℂ) +
+          mpv (toTensorFromBlocks (d := blockPhysDim d p) (μ := μB) blocksB) σ)
+    (hInjA : ∀ x, IsInjective (blocksA x))
+    (hInjB : ∀ x, IsInjective (blocksB x))
+    (hDecomp : ProportionalDecompositionData (d := blockPhysDim d p)
+      blocksA blocksB DtotA DtotB) :
+    CommonPrimitiveBNTCoverHypotheses (zeroTailA := zeroTailA) (zeroTailB := zeroTailB)
+      (DtotA := DtotA) (DtotB := DtotB) μA μB blocksA blocksB := by
+  have hDimA : ∀ x, 0 < dimA x := fun x => Nat.pos_of_ne_zero (NeZero.ne (dimA x))
+  have hDimB : ∀ x, 0 < dimB x := fun x => Nat.pos_of_ne_zero (NeZero.ne (dimB x))
+  have hNcfA : IsNormalCanonicalForm (d := blockPhysDim d p) μA blocksA :=
+    isNormalCanonicalForm_of_tp_primitive_irr_sorted
+      (d' := blockPhysDim d p) (μ := μA) blocksA hTPA hPrimA hDimA hμA hIrrA hAntiA
+  have hNcfB : IsNormalCanonicalForm (d := blockPhysDim d p) μB blocksB :=
+    isNormalCanonicalForm_of_tp_primitive_irr_sorted
+      (d' := blockPhysDim d p) (μ := μB) blocksB hTPB hPrimB hDimB hμB hIrrB hAntiB
+  have hMatch : ProportionalDecompositionConclusion (d := blockPhysDim d p) blocksA blocksB :=
+    fundamentalTheorem_of_separated_normalCFBNT_data
+      blocksA blocksB hNcfA hNotGpeA hNcfB hNotGpeB hDecomp
+  exact ofCommonPrimitiveData hμA hμB hTPA hTPB hPrimA hPrimB hIrrA hIrrB
+    hAntiA hAntiB hNotGpeA hNotGpeB
+    (zeroTail_eq_of_proportionalDecompositionConclusion hZero hMatch) hInjA hInjB hDecomp
 
 /-- A BNT cover hypothesis bundle produces a common MPV phase cover. -/
 theorem toMPVCommonPhaseCover
