@@ -1236,6 +1236,37 @@ The following results separate the zero blocks from the nonzero blocks.
 	evaluations, and hence all MPV coefficients, agree.
 \end{proof}
 
+\begin{theorem}[Block-grouping bijection recovers direct blocking]
+	\label{thm:reindex_direct_to_iterated_block_tensor}
+	\lean{MPSTensor.reindexPhysical_directToIteratedBlockIndex_blockTensor}
+	\leanok
+	\uses{def:blocked_tensor}
+	Reindexing the physical alphabet of the iterated block tensor by the
+	consecutive-grouping bijection returns the tensor obtained by blocking
+	$mn$ original sites directly.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	Apply the tensor-level direct-to-iterated blocking identity and cancel the
+	forward and inverse maps of the grouping bijection.
+\end{proof}
+
+\begin{corollary}[Block-grouping bijection preserves the MPV family]
+	\label{cor:samempv2_reindex_direct_to_iterated_block_tensor}
+	\lean{MPSTensor.sameMPV₂_reindexPhysical_directToIteratedBlockIndex_blockTensor}
+	\leanok
+	\uses{def:same_mpv2, def:blocked_tensor}
+	Under the block-grouping bijection, the iterated block tensor and the
+	directly blocked tensor have the same matrix-product-vector family.
+\end{corollary}
+
+\begin{proof}
+	\leanok
+	\uses{thm:reindex_direct_to_iterated_block_tensor}
+	This is the matrix-product-vector form of the preceding tensor identity.
+\end{proof}
+
 \begin{theorem}[Physical-dimension transport and MPV equality]
 	\label{thm:samempv_cast_phys_dim}
 	\lean{MPSTensor.sameMPV₂_cast_physDim}
