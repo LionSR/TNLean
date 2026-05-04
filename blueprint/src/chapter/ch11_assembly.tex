@@ -1406,15 +1406,19 @@ two-basis sector comparison theorem.
 
 \begin{definition}[BNT-cover hypotheses for common primitive sectors]%
 \label{def:common_primitive_bnt_cover_hypotheses}
-	\lean{MPSTensor.CommonPrimitiveBNTCoverHypotheses}
+	\lean{MPSTensor.CommonPrimitiveBNTCoverHypotheses,
+		MPSTensor.CommonPrimitiveBNTCoverHypotheses.ofCommonPrimitiveData}
 	\leanok
 	\uses{def:is_normal_canonical_form, def:blocks_not_gauge_phase_equiv,
-		def:injective}
+		def:injective, thm:ncf_sorted_tp_primitive_irred}
 	For two common primitive nonzero-sector families at one blocking length, this
 	condition contains the BNT data needed to construct a common MPV phase cover:
 	normal canonical-form data on both sides, separation of distinct sectors by
 	gauge-phase equivalence, equality of the zero-tail dimensions, one-site
-	injectivity, and a proportional-decomposition comparison.
+	injectivity, and a proportional-decomposition comparison. When the primitive
+	structural data and strict weight ordering are supplied in place of normal
+	canonical-form data, together with the remaining fields above, they yield the
+	BNT-cover hypotheses.
 \end{definition}
 
 \begin{theorem}[BNT-cover hypotheses produce a common phase cover]%
