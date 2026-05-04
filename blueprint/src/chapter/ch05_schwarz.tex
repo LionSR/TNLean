@@ -847,7 +847,12 @@ are not developed in this chapter.
 \end{proof}
 
 \begin{lemma}[Finite-POVM compression identities]\label{lem:operator_jensen_povm_compression}
-    \lean{TNLean.OperatorJensen.povmIsometry_star_mul, TNLean.OperatorJensen.povmIsometry_compress_diagonal, TNLean.OperatorJensen.povm_sum_add_defect, TNLean.OperatorJensen.povmDiagonal_posDef}
+    \lean{TNLean.OperatorJensen.povmIsometry_star_mul,
+        TNLean.OperatorJensen.povmIsometry_compress_diagonal,
+        TNLean.OperatorJensen.povm_sum_add_defect,
+        TNLean.OperatorJensen.povmDiagonal_posDef,
+        TNLean.OperatorJensen.povmDiagonal_inv,
+        TNLean.OperatorJensen.povmIsometry_compress_diagonal_inv}
     \leanok
     If the defect block satisfies
     \[
@@ -862,8 +867,13 @@ are not developed in this chapter.
     \[
         \sum_{i \in \iota} C_i C_i^\ast + S S^\ast = \Id,
     \]
-    and strict positivity of all weights implies positivity of the scalar
-    block-diagonal matrix.
+    and strict positivity of all weights together with $t>0$ implies positive
+    definiteness of the scalar block-diagonal matrix. If all weights are nonzero
+    and the defect scalar is nonzero, the inverse diagonal has reciprocal
+    weights, and compressing this inverse gives
+    \[
+        \sum_{i \in \iota} w_i^{-1}\, C_i C_i^\ast + t^{-1}\, S S^\ast.
+    \]
 \end{lemma}
 
 \begin{proof}
@@ -871,14 +881,41 @@ are not developed in this chapter.
     Expand the block matrix multiplication entrywise. The defect identity gives
     the isometry relation after summing the $\iota$-blocks and the defect block,
     and the weighted compression identity follows from the same expansion with
-    the scalar diagonal inserted. Positivity of the scalar block-diagonal matrix
-    is immediate from positivity of its diagonal entries.
+    the scalar diagonal inserted. Positive definiteness uses strict positivity
+    of every diagonal entry, while the inverse formula uses the nonvanishing of
+    every diagonal entry.
+\end{proof}
+
+\begin{lemma}[Finite-POVM resolvent inequality]\label{lem:operator_jensen_povm_resolvent}
+    \lean{TNLean.OperatorJensen.povm_resolvent_inv_le}
+    \leanok
+    \uses{lem:operator_jensen_povm_compression, lem:operator_jensen_inverse_compression}
+    Let $w_i\ge 0$ and $t>0$. If the defect block satisfies
+    \[
+        S S^\ast = \Id - \sum_{i \in \iota} C_i C_i^\ast,
+    \]
+    then
+    \[
+        \left(\sum_{i \in \iota} w_i\, C_i C_i^\ast + t\,\Id\right)^{-1}
+        \le
+        \sum_{i \in \iota} (w_i+t)^{-1}\, C_i C_i^\ast + t^{-1}\, S S^\ast.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:operator_jensen_povm_compression, lem:operator_jensen_inverse_compression}
+    Apply the compression inequality to the positive definite scalar
+    block-diagonal matrix with entries $w_i+t$ and defect entry $t$.  The
+    compression identities rewrite the compressed matrix as
+    $\sum_i w_i C_i C_i^\ast + t\Id$ and its inverse compression as the displayed
+    upper bound.
 \end{proof}
 
 \begin{theorem}[Jensen for concave real powers]\label{thm:posMap_rpow_concave_jensen}
     \lean{posMap_rpow_concave_jensen}
     \notready
-    \uses{def:positive_map}
+    \uses{def:positive_map, lem:operator_jensen_povm_resolvent}
     For a positive subunital map $T$ and $p\in[0,1]$:
     \[
         T(A^p) \le (TA)^p.
