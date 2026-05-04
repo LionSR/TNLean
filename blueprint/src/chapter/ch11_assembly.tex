@@ -1605,18 +1605,18 @@ two-basis sector comparison theorem.
 \end{definition}
 
 	\begin{theorem}[Canonical coordinate grouping]%
-\label{thm:common_grouped_block_cast_of_flatten_word}
+	\label{thm:common_grouped_block_cast_of_flatten_word}
 		\lean{MPSTensor.CommonGroupedBlockCastHypothesis.of_flattenWordOfBlock_cast_eq}
 		\leanok
 		\uses{def:common_grouped_block_cast_hypothesis,
-			thm:common_blocked_cyclic_sector_grouped_block_cast}
+			thm:common_blocked_cyclic_sector_flatten_word_of_block_cast}
 		The canonical coordinate grouping holds for every common blocked
 		cyclic-sector family.  The proof identifies each grouped block with the
 		corresponding direct blocked word.
 	\end{theorem}
 
 	\begin{proof}\leanok
-		\uses{thm:common_blocked_cyclic_sector_grouped_block_cast}
+		\uses{thm:common_blocked_cyclic_sector_flatten_word_of_block_cast}
 		Apply the grouped-block cast comparison to each original nonzero block.
 	\end{proof}
 
