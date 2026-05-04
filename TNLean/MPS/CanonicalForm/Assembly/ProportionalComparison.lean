@@ -832,8 +832,8 @@ This is the BNT-cover variant of
 `sectorBasisOverlapSpanHypotheses_of_reindexedNonzeroParts_commonPhaseCover`.
 The remaining input provides the BNT-level data for the produced nonzero-sector
 families, with whatever total dimensions support the proportional-decomposition
-data. The BNT-cover bridge converts that data to common primitive phase-cover
-hypotheses, and the common-phase-cover theorem supplies the overlap-span data. -/
+data. The conversion from BNT-cover hypotheses to common primitive phase-cover
+hypotheses then lets the common-phase-cover theorem supply the overlap-span data. -/
 theorem sectorBasisOverlapSpanHypotheses_of_reindexedNonzeroParts_bntCover
     {d D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
@@ -1154,8 +1154,9 @@ theorem afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_commonP
 
 Assume the blocked-word relabeling statement for cyclic-sector data. The structural
 theorem supplies common primitive nonzero-sector families; if those families carry
-BNT-cover data, then the BNT-cover bridge gives the common phase-cover hypotheses.
-The common-phase-cover consumer theorem then gives the same sector-weight comparison
+BNT-cover data, then the conversion to phase-cover hypotheses gives the common
+phase-cover hypotheses. The common-phase-cover consumer theorem gives the same
+sector-weight comparison
 conclusion. -/
 theorem afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_bntCover
     {d D₁ D₂ : ℕ}
