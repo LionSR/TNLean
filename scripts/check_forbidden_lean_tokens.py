@@ -15,6 +15,17 @@ FORBIDDEN_TOKEN_RE = re.compile(
 )
 
 
+def added_source_lines(diff: str) -> list[str]:
+    """Return added source lines from a unified diff."""
+    lines: list[str] = []
+    for line in diff.splitlines():
+        if line.startswith("+++ b/") or line == "+++ /dev/null":
+            continue
+        if line.startswith("+"):
+            lines.append(line[1:])
+    return lines
+
+
 def added_lines(base_ref: str) -> list[str]:
     """Return added source lines from a zero-context git diff."""
     diff = subprocess.run(
@@ -23,11 +34,7 @@ def added_lines(base_ref: str) -> list[str]:
         stdout=subprocess.PIPE,
         text=True,
     ).stdout
-    return [
-        line[1:]
-        for line in diff.splitlines()
-        if line.startswith("+") and not line.startswith("+++")
-    ]
+    return added_source_lines(diff)
 
 
 def check_diff(base_ref: str, message: str) -> int:
