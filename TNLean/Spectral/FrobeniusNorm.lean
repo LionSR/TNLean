@@ -8,7 +8,7 @@ import Mathlib.Analysis.Matrix.Order
 /-!
 # Frobenius norm squared and Euclidean-space embedding for matrices
 
-Shared infrastructure for the spectral-gap modules (`SpectralGap.lean`,
+Shared Frobenius-norm identities for the spectral-gap modules (`SpectralGap.lean`,
 `SpectralGapRect.lean`).  Everything here works for *rectangular*
 `Matrix (Fin m) (Fin n) ℂ`; the square case is obtained by setting `m = n`.
 
@@ -22,7 +22,7 @@ Shared infrastructure for the spectral-gap modules (`SpectralGap.lean`,
 * `MPSTensor.frobSq_trace`: `frobSq X = (trace(X† X)).re`.
 * `MPSTensor.frobSq_eq_zero_iff`, `frobSq_pos_of_ne_zero`, `frobSq_smul`.
 * `MPSTensor.norm_matToES_sq`: `‖matToES X‖² = frobSq X`.
-* `MPSTensor.norm_sq_sum_mul_le`: Cauchy–Schwarz helper for norm-squared of
+* `MPSTensor.norm_sq_sum_mul_le`: Cauchy–Schwarz estimate for norm-squared of
   an inner product.
 -/
 
@@ -102,7 +102,7 @@ lemma norm_matToES_sq (M : Matrix (Fin m) (Fin n) ℂ) :
       ← Complex.ofReal_pow]]
   exact Complex.ofReal_re _
 
-/-! ### Cauchy–Schwarz helper -/
+/-! ### Cauchy–Schwarz estimate -/
 
 /-- Cauchy–Schwarz for `‖∑ aₖ bₖ‖²`. -/
 lemma norm_sq_sum_mul_le {D : ℕ} (a b : Fin D → ℂ) :
