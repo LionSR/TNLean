@@ -274,7 +274,8 @@ This is the furthest unconditional arbitrary-input step available before periodi
 the cyclic-sector and equal-weight arguments.
 -/
 
-/-- **Arbitrary-input TP-gauge reduction (1606.00608 Section 2.3 + App. A, with zero-block separation).**
+/-- **Arbitrary-input TP-gauge reduction
+(1606.00608 Section 2.3 + App. A, with zero-block separation).**
 
 From any `A : MPSTensor d D`, produce:
 * a zero-tail of dimension `zeroTailDim` accumulating all-zero irreducible blocks;
