@@ -417,9 +417,9 @@ Theorem~2 of~\cite{Molnar2018NormalPEPS}.
     coefficients and apply the same-state hypothesis.
 \end{proof}
 
-\begin{definition}[Sharpened local gauge lift datum]%
-    \label{def:peps_hasLocalGaugeLift}
-    \lean{TNLean.PEPS.HasLocalGaugeLift}
+\begin{definition}[Factorized local gauge datum]%
+    \label{def:peps_hasFactorizedLocalGauge}
+    \lean{TNLean.PEPS.HasFactorizedLocalGauge}
     \leanok
     \uses{def:peps_localTensorMap, def:peps_localLeftInverse}
     For fixed $A$, $B$, a bond-dimension equality, and a vertex $v$, this
@@ -430,22 +430,22 @@ Theorem~2 of~\cite{Molnar2018NormalPEPS}.
     $A$ factorizes as one invertible matrix on each incident edge.
 \end{definition}
 
-\begin{definition}[Blocked-middle local gauge data]%
-    \label{def:peps_blockedMiddleGaugeHyp}
-    \lean{TNLean.PEPS.BlockedMiddleGaugeHyp}
+\begin{definition}[Blocked-middle local gauge formula]%
+    \label{def:peps_blockedMiddleGaugeFormula}
+    \lean{TNLean.PEPS.BlockedMiddleGaugeFormula}
     \leanok
-    \uses{def:peps_hasLocalGaugeLift}
+    \uses{def:peps_hasFactorizedLocalGauge}
     This states the explicit local gauge formula that the edge-centered
     blocked-middle reduction is expected to produce: a family of invertible
     matrices on the incident edges of $v$ whose product kernel reconstructs each
     local component of $B$ from those of $A$.
 \end{definition}
 
-\begin{theorem}[Blocked-middle local gauge data implies sharpened lift]%
-    \label{thm:peps_hasLocalGaugeLift_of_blockedMiddleGaugeHyp}
-    \lean{TNLean.PEPS.hasLocalGaugeLift_of_blockedMiddleGaugeHyp}
+\begin{theorem}[Blocked-middle formula implies factorized local gauge]%
+    \label{thm:peps_hasFactorizedLocalGauge_of_blockedMiddleGaugeFormula}
+    \lean{TNLean.PEPS.hasFactorizedLocalGauge_of_blockedMiddleGaugeFormula}
     \leanok
-    \uses{def:peps_blockedMiddleGaugeHyp, def:peps_hasLocalGaugeLift}
+    \uses{def:peps_blockedMiddleGaugeFormula, def:peps_hasFactorizedLocalGauge}
     Any explicit local gauge formula from the blocked-middle reduction yields
     the sharpened local lift. The remaining open step is to derive this
     blocked-middle formula from equality of PEPS states.
@@ -461,8 +461,8 @@ Theorem~2 of~\cite{Molnar2018NormalPEPS}.
     \label{thm:localGauge_exists}
     \lean{TNLean.PEPS.localGauge_exists}
     \leanok
-    \uses{def:peps_hasLocalGaugeLift}
-    Under the sharpened local lift hypothesis, the local gauge formula follows.
+    \uses{def:peps_hasFactorizedLocalGauge}
+    Under the factorized local gauge hypothesis, the local gauge formula follows.
     What remains open is to upgrade equality of the edge-blocked coefficients to
     the blocked-middle formula using the corresponding three-site
     injective-chain argument.
