@@ -15,7 +15,7 @@ individual block equalities `mpv(A_k, σ) = mpv(B_k, σ)` for each `k`.
 requires *fixed* coefficients at each power, but here the "coefficients"
 `mpv(A_k, σ) - mpv(B_k, σ)` depend on `σ : Fin N → Fin d` whose type varies with `N`.
 
-**Alternative route recorded here (repeated-word / Newton's identities)**:
+**Alternative route via repeated words and Newton's identities**:
 
 1. For any fixed word `w` of length `M`, consider the `L`-fold concatenation `w^L` of
    length `M · L`. The evalWord identity gives
@@ -38,7 +38,7 @@ separating the combined eigenvalue multiset into per-block multisets. This is a
 polynomial/algebraic-geometry argument (Zariski density of the non-collision locus)
 that is not yet available in Mathlib.
 
-This file records that alternative Vandermonde / Newton route and the elementary
+This file develops that alternative Vandermonde / Newton route and the elementary
 repeated-word lemmas supporting it. It is **not** part of the current checked
 end-to-end proof chain: the canonical-form reduction uses the mixed-transfer
 peeling argument in `CanonicalFormSep.lean`, and the later weight-multiset
@@ -72,7 +72,7 @@ section BlockSeparation
 
 variable {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
 
-/-! #### Helper: evalWord of a replicated list -/
+/-! #### Evaluation on replicated lists -/
 
 /-- `evalWord A` on a replicated single letter gives a matrix power. -/
 lemma evalWord_replicate (A : MPSTensor d D) (i : Fin d) (L : ℕ) :
@@ -149,7 +149,7 @@ per-block `mpv(A_k,σ) = mpv(B_k,σ)` uses the multiplicative structure of `eval
 The formal gap is step (3): the genericity argument (Zariski density of the non-collision
 locus) requires algebraic geometry tools not currently in Mathlib.
 
-This comment records the same alternative route as the module docstring. The
+This comment gives the same alternative route as the module docstring. The
 current checked reduction instead proceeds through `CanonicalFormSep.lean` and
 later BNT linear-independence arguments.
 
@@ -168,7 +168,7 @@ The per-block separation statement one might hope for,
 is **false** without additional hypotheses (e.g. canonical-form normalization
 preventing rescalings between the block tensors and the phases `μ k`).
 
-Accordingly, this file currently only provides the trustworthy helper lemmas
+Accordingly, this file currently only provides the trustworthy lemmas
 `evalWord_replicate`, `evalWord_flatten_replicate`, `mpv_const_eq_trace_pow`,
 and `sameMPV₂_repeated_word`.
 
