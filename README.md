@@ -146,6 +146,7 @@ import.  The main source tree is organized as follows.
 | `TNLean/Channel` | Quantum-channel representations, Schwarz theory, fixed points, irreducibility, peripheral spectra, semigroups, determinants, POVMs, and Wolf chapter index modules. |
 | `TNLean/QPF`, `TNLean/Spectral` | Perron--Frobenius, positivity, mixed transfers, overlap decay, spectral gaps, and quantitative correlation estimates. |
 | `TNLean/MPS/Core`, `TNLean/MPS/Chain`, `TNLean/MPS/Overlap` | MPS tensors, words, blocking, chains, transfer maps, and overlap matrices. |
+| `TNLean/MPS/Tactic` | Custom `simp` attribute sets (`mps_block_words`, `mps_transfer`, `mps_zero_tail`) and tactic macros (`mpv_ext`, `block_words`, `transfer_simp`, `zero_tail_simp`) for recurring MPS proof patterns. |
 | `TNLean/MPS/FundamentalTheorem`, `TNLean/MPS/BNT`, `TNLean/MPS/CanonicalForm`, `TNLean/MPS/Periodic`, `TNLean/MPS/Structure` | Single-block, same-structure, BNT, periodic, and canonical-form Fundamental-Theorem material. |
 | `TNLean/MPS/ParentHamiltonian` | Parent Hamiltonians, local projectors, ground spaces, intersection and wrapping-window arguments, commuting cases, and martingale estimates. |
 | `TNLean/MPS/MPDO`, `TNLean/MPS/RFP` | MPDO/LPDO foundations, canonical-form and zero-correlation-length predicates, pure RFP structures, and structural bridges. |
