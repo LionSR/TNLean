@@ -40,10 +40,9 @@ We formalize the proof chain up to the following:
 
 5. **Cumulative conclusion**: connecting these pieces into the cumulative span bound.
 
-The paper-level fixed-length matrix-spanning step, Lemma 2(b), is now carried by
-the `TNLean.Wielandt.PaperResults` and rank-one extraction modules. This file keeps
-the original cumulative-span and eigenvector-spreading chain as named cumulative
-formulations used by the later fixed-length results.
+The fixed-length matrix-spanning form of Lemma 2(b) is obtained by continuing
+this chain with rank-one extraction and exact word-length padding. The results
+below record the cumulative span and eigenvector-spreading part of the argument.
 
 ## References
 
@@ -245,9 +244,9 @@ theorem wielandt_chain [NeZero D]
 9. `evalWord_replicate_eigenvector`: Iterated pumping
 
 ### Fixed-length bound route:
-The later paper-results modules combine the word-eigenvector extraction, the
-blocked rank-one construction, and fixed-length assembly to prove the paper-level
-index bound. This theorem remains as a named summary declaration for older references.
+The fixed-length argument continues from this cumulative chain by extracting
+rank-one matrices from eigenvectors, padding them to one exact word length, and
+assembling a full matrix span at the Wielandt index bound.
 -/
 theorem wielandt_roadmap : True := trivial
 

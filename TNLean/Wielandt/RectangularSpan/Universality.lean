@@ -71,9 +71,9 @@ under `IsNormal` (the "Appendix A" argument from arXiv:0909.5347 / Paz).
 The structural theorem `rectSpan_eq_mulLeft_image_of_finrank_eq` shows that
 finrank stabilization below the ceiling forces `rectSpan P A (n+1) = (A i₀) · rectSpan P A n`
 (all generators A i captured by the i₀-direction modulo `ker(mulLeft P)`), which
-combined with primitivity gives the contradiction. The theorem
-`rectSpan_nilpIndex_strict_growth_of_isNormal` proves this statement, and
-`wielandt_sharp_unconditional` applies it to Lemma 2(b).
+combined with primitivity gives the contradiction. This proves rank-one
+membership in the cumulative span at the sharp bound; an eigenvector-padding
+step later upgrades this to the exact fixed-length word-span form.
 -/
 
 section StrictGrowthReduction
@@ -233,8 +233,9 @@ level `n+1` only through the `A i₀` direction (modulo `ker(mulLeft P)`).
 Under `IsNormal` (primitivity), this invariance leads to a contradiction
 unless the finrank equals the ceiling `D · D̃`.
 
-This structural invariance is contradicted by primitivity in
-`rectSpan_nilpIndex_strict_growth_of_isNormal`. -/
+Primitivity contradicts this structural invariance: normality eventually forces
+the rectangular span to fill the whole range of left multiplication, while
+stabilization below the ceiling would keep it in a proper invariant subspace. -/
 theorem rectSpan_leftStep_image_eq_of_finrank_eq
     (A : MPSTensor d D) (i₀ : Fin d) (n : ℕ)
     (hfin : finrank ℂ (rectSpan ((A i₀) ^ D) A n) =
@@ -367,8 +368,9 @@ If `finrank(rectSpan P A n) < D * D̃` and `finrank(rectSpan P A n) =
 finrank(rectSpan P A (n+1))`, then `rectSpan P A n` is a proper subspace of
 `range(mulLeft P)` that absorbs all generator products via `A i₀`.
 
-This is the precise algebraic hypothesis contradicted by primitivity in the
-strict growth proof. -/
+Primitivity rules out this situation because normality eventually makes the
+rectangular span equal to the full range, whereas absorption after stabilization
+would keep it proper. -/
 theorem rectSpan_nilpIndex_proper_absorption
     (A : MPSTensor d D) (i₀ : Fin d) (n : ℕ)
     (hlt : finrank ℂ (rectSpan ((A i₀) ^ nilpIndex (toLin' (A i₀))) A n) <
@@ -769,15 +771,10 @@ theorem vecMulVec_eigenvector_exact_wordSpan
 end ExactPropagation
 
 /-!
-The rank-one extraction and top-level assembly are in `RankOne/ExtractionFull.lean`.
-The main declarations there are:
-
-* `exists_rankOne_in_wordSpan_blockTensor_of_wordEigenvectors`, placing
-  `vecMulVec φ ψ` in a word span of the blocked tensor from external word eigenvectors
-  and `IsNormal A`;
-* `wielandt_blocked_assembly_complete`, combining rank-one extraction with the
-  conditional assembly to produce some `N` with `wordSpan A N = ⊤`;
-* `wielandt_lemma2b`, the fully unconditional Lemma 2(b) statement.
+The subsequent rank-one step applies the exact word-span result above to word
+eigenvectors of suitable blocked tensors. Combined with the conditional
+rank-one assembly theorem, this gives a single word length whose evaluations span
+the full matrix algebra, and hence the fully unconditional form of Lemma 2(b).
 -/
 
 end MPSTensor
