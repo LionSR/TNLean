@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.CanonicalForm.Assembly.TPPrimitiveReduction
+import TNLean.MPS.Chain.BlockedChainFT
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
 open Filter
@@ -24,6 +25,8 @@ normality.
 
 * `isNormal_of_tp_primitive_irreducible` — TP, primitive transfer map, and
   tensor irreducibility imply normality.
+* `exists_blockTensor_isInjective_of_tp_primitive_irreducible` — the same
+  hypotheses give an extra blocking whose blocked tensor is one-site injective.
 * `isNormal_live_block_of_primitive` — the same conclusion for a single
   nonzero-weight block from the reduction data.
 * `isNormal_blockTensor_of_isNormal` — blocking preserves normality.
@@ -85,6 +88,21 @@ theorem isNormal_of_tp_primitive_irreducible [NeZero D]
     posDef_of_isIrreducibleTensor_of_isPrimitiveMPS hPrimMPS hIrr
   -- Step 4: IsNormal from spectral gap + PosDef.
   exact isNormal_of_isPrimitiveMPS_with_posDef hPrimMPS hPD
+
+/-- **TP + primitive + irreducible → injective after blocking**.
+
+Normality is eventual block injectivity.  Combining
+`isNormal_of_tp_primitive_irreducible` with the equivalence between `N`-block
+injectivity and one-site injectivity of `blockTensor A N` gives a blocking length
+whose blocked tensor is injective. -/
+theorem exists_blockTensor_isInjective_of_tp_primitive_irreducible [NeZero D]
+    (A : MPSTensor d D)
+    (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (hPrim : _root_.IsPrimitive (transferMap (d := d) (D := D) A))
+    (hIrr : IsIrreducibleTensor A) :
+    ∃ L : ℕ, IsInjective (blockTensor A L) := by
+  obtain ⟨L, hL⟩ := isNormal_of_tp_primitive_irreducible A hTP hPrim hIrr
+  exact ⟨L, (isNBlkInjective_iff_blockTensor_isInjective A L).1 hL⟩
 
 /-!
 ## Combined reduction: arbitrary → IsNormal (per block, for primitive blocks)
