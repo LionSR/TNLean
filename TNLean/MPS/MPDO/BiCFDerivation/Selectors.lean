@@ -8,7 +8,7 @@ import TNLean.MPS.MPDO.BiCFDerivation.PairHomogenization
 # Selector constructors for MPDO biCF
 
 This module builds block-selector word families from pairwise separation and
-packages the resulting finite-length witnesses into horizontal canonical-form
+collects the resulting finite-length witnesses into horizontal canonical-form
 data.
 -/
 
@@ -171,7 +171,8 @@ theorem hasBlockSelectorOn_empty
   · exact Submodule.subset_span ⟨fun i => Fin.elim0 i, rfl⟩
   · simp [wordTuple]
   · intro j hj
-    simp at hj
+    have hnot : j ∉ (∅ : Finset (Fin r)) := by simp
+    exact False.elim (hnot hj)
 
 /-- Multiplying two partial selectors for the same block produces a selector
 that vanishes on the union of their target sets. -/

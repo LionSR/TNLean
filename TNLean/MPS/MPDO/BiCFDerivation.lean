@@ -7,13 +7,13 @@ import TNLean.MPS.MPDO.BiCFDerivation.Counterexample
 /-!
 # Finite-length sufficient conditions and obstructions for MPDO biCF
 
-This module is the public entry point for the MPDO biCF derivation layer. It
-keeps the historical import path `TNLean.MPS.MPDO.BiCFDerivation` available
-while the development is split into focused submodules.
+This module retains the historical import path for the MPDO biCF derivation
+layer while the finite-length criteria are organized by their mathematical
+role.
 
 The supporting modules are:
 
-* `TNLean.MPS.MPDO.BiCFDerivation.Basic` — historical re-export path for the
+* `TNLean.MPS.MPDO.BiCFDerivation.Basic` — historical import path for the
   finite-length biCF criteria.
 * `TNLean.MPS.MPDO.BiCFDerivation.Core` — tuple-span, linear-independence, and
   finite/cumulative pair trace-separation criteria.
