@@ -98,6 +98,7 @@ jobs:
           BUILD_OUTCOME: ${{ steps.build.outcome }}
           CREATE_PR: ${{ inputs.create_pr }}
           HAS_TOKEN: ${{ steps.claude_token.outputs.available }}
+          CLAUDE_AUTO_FIX_ENABLED: ${{ vars.CLAUDE_AUTO_FIX_ENABLED }}
           WARNING_COUNT: ${{ steps.warnings.outputs.warning_count }}
         run: |
           should_run=false
@@ -106,6 +107,8 @@ jobs:
             reason="Lean build failed; no linter auto-fix PR will be opened"
           elif [ "$WARNING_COUNT" = "0" ]; then
             reason="no Lean warnings found"
+          elif [ "$CLAUDE_AUTO_FIX_ENABLED" = "false" ]; then
+            reason="CLAUDE_AUTO_FIX_ENABLED=false"
           elif [ "$CREATE_PR" != "true" ]; then
             reason="create_pr input is false"
           elif [ "$HAS_TOKEN" != "true" ]; then
@@ -183,7 +186,7 @@ jobs:
             exit 1
           fi
 
-          deleted_files=$(git diff --name-only --diff-filter=D)
+          deleted_files=$(git diff HEAD --name-only --diff-filter=D)
           if [ -n "$deleted_files" ]; then
             echo "::error::Auto-fix deleted files; refusing to open an automated PR."
             printf '%s\n' "$deleted_files"
@@ -191,7 +194,7 @@ jobs:
           fi
 
           changed_files_path="$RUNNER_TEMP/lean-linter-warning-autofix-changed-files.txt"
-          git diff --name-only > "$changed_files_path"
+          git diff HEAD --name-only > "$changed_files_path"
           echo "Changed files:"
           cat "$changed_files_path"
           while IFS= read -r path; do
@@ -204,7 +207,7 @@ jobs:
             esac
           done < "$changed_files_path"
 
-          if git diff --unified=0 | grep -E '^\+[^+]' | grep -E '(^|[^[:alnum:]_])(sorry|admit|axiom|unsafe|native_decide|unsafeCast|unsafeCoerce|lcProof|ofReduceBool|ofReduceNat)([^[:alnum:]_]|$)'; then
+          if git diff HEAD --unified=0 | grep -E '^\+[^+]' | grep -E '(^|[^[:alnum:]_])(sorry|admit|axiom|unsafe|native_decide|unsafeCast|unsafeCoerce|lcProof|ofReduceBool|ofReduceNat)([^[:alnum:]_]|$)'; then
             echo "::error::Auto-fix diff adds a forbidden proof-integrity token."
             exit 1
           fi
@@ -230,7 +233,7 @@ jobs:
             exit 1
           fi
 
-          deleted_files=$(git diff --name-only --diff-filter=D)
+          deleted_files=$(git diff HEAD --name-only --diff-filter=D)
           if [ -n "$deleted_files" ]; then
             echo "::error::Validation deleted files; refusing to open an automated PR."
             printf '%s\n' "$deleted_files"
@@ -238,7 +241,7 @@ jobs:
           fi
 
           after_files="$RUNNER_TEMP/lean-linter-warning-autofix-changed-files-after-validation.txt"
-          git diff --name-only > "$after_files"
+          git diff HEAD --name-only > "$after_files"
           if ! cmp -s "$changed_files_path" "$after_files"; then
             echo "::error::Validation changed the guarded diff file list; refusing to open an automated PR."
             echo "Before validation:"
@@ -248,7 +251,7 @@ jobs:
             exit 1
           fi
 
-          if git diff --unified=0 | grep -E '^\+[^+]' | grep -E '(^|[^[:alnum:]_])(sorry|admit|axiom|unsafe|native_decide|unsafeCast|unsafeCoerce|lcProof|ofReduceBool|ofReduceNat)([^[:alnum:]_]|$)'; then
+          if git diff HEAD --unified=0 | grep -E '^\+[^+]' | grep -E '(^|[^[:alnum:]_])(sorry|admit|axiom|unsafe|native_decide|unsafeCast|unsafeCoerce|lcProof|ofReduceBool|ofReduceNat)([^[:alnum:]_]|$)'; then
             echo "::error::Validation left a forbidden proof-integrity token in the diff."
             exit 1
           fi

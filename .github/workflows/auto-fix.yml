@@ -35,13 +35,19 @@ jobs:
   setup:
     # For pull_request:labeled, this is the real trigger filter: only the
     # auto-fix-claude label on an open same-repo PR should proceed.
+    # Repository variable kill switch:
+    #   CLAUDE_AUTO_FIX_ENABLED=false disables this workflow.
+    #   unset or any other value preserves the default enabled behavior.
     if: |
-      (github.event_name == 'workflow_run' &&
-       github.event.workflow_run.pull_requests[0] &&
-       github.event.workflow_run.head_repository.full_name == github.repository) ||
-      (github.event_name == 'pull_request' && github.event.label.name == 'auto-fix-claude' &&
-       github.event.pull_request.state == 'open' &&
-       github.event.pull_request.head.repo.full_name == github.repository)
+      vars.CLAUDE_AUTO_FIX_ENABLED != 'false' &&
+      (
+        (github.event_name == 'workflow_run' &&
+         github.event.workflow_run.pull_requests[0] &&
+         github.event.workflow_run.head_repository.full_name == github.repository) ||
+        (github.event_name == 'pull_request' && github.event.label.name == 'auto-fix-claude' &&
+         github.event.pull_request.state == 'open' &&
+         github.event.pull_request.head.repo.full_name == github.repository)
+      )
     runs-on: ubuntu-latest
     outputs:
       run_ci_fix: ${{ steps.resolve.outputs.run_ci_fix }}
