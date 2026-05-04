@@ -1405,9 +1405,9 @@ theorem afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts
 
 /-- **Unconditional common primitive irreducible block decompositions.**
 
-If the Fintype-level coordinate assertion `flattenWordOfBlock_cast_eq` holds, then the
-`afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts` theorem
-applies without any blocking-coordinate hypothesis.
+The proved blocked-word flattening identity supplies the grouped-cast hypothesis needed to
+apply `afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts` without any
+blocking-coordinate hypothesis.
 
 The proof chains:
 1. `flattenWordOfBlock_cast_eq` → `CommonGroupedBlockCastHypothesis d`
@@ -1416,18 +1416,9 @@ The proof chains:
    (via `CommonGroupedBlockCastHypothesis.toRelabelingHypothesis`)
 3. `CommonSectorRelabelingHypothesis d` → the full common-block decomposition
    (via `afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts`)
-
-The remaining gap for the fully unconditional version is exactly `flattenWordOfBlock_cast_eq`
-in `CyclicSectorDecomposition.lean` (see docstring there for details on the mathematical
-truth and the missing Mathlib lemma). -/
+-/
 theorem unconditional_commonPrimitiveIrreducibleBlocks
     {d D₁ D₂ : ℕ}
-    (h_flatten : ∀ {m n p : ℕ} (hp_eq : p = m * n)
-      (h_card : blockPhysDim (blockPhysDim d m) n = blockPhysDim d p)
-      (i : Fin (blockPhysDim d p)),
-      flattenBlockedWord d m
-        (wordOfBlock (blockPhysDim d m) n (Fin.cast h_card.symm i)) =
-      wordOfBlock d p i)
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (hSame : SameMPV₂ A B) :
     ∃ p : ℕ, 0 < p ∧
@@ -1470,7 +1461,9 @@ theorem unconditional_commonPrimitiveIrreducibleBlocks
       (∀ x, 0 < dimB x) := by
   have h_group : CommonGroupedBlockCastHypothesis d := by
     intro r dim blocks F k
-    exact F.groupedBlockCastAgrees_of_flattenWordOfBlock_cast_eq h_flatten k
+    exact F.groupedBlockCastAgrees_of_flattenWordOfBlock_cast_eq
+      (fun hp_eq h_card i =>
+        CommonBlockedCyclicSectorFamily.flattenWordOfBlock_cast_eq hp_eq h_card i) k
   have h_relabel : CommonSectorRelabelingHypothesis d :=
     h_group.toRelabelingHypothesis
   exact afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts

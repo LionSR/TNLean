@@ -289,7 +289,8 @@ theorem blockPhysDim_blockPhysDim (d m n : ℕ) :
 /-- Encode a word of length `L` as a single blocked physical index. -/
 noncomputable def blockIndexOfList (d L : ℕ) (w : List (Fin d)) (h : w.length = L) :
     Fin (blockPhysDim d L) :=
-  (Fintype.equivFin (Fin L → Fin d)) (fun i => w.get (Fin.cast h.symm i))
+  Fin.cast (blockPhysDim_eq_pow d L).symm
+    (finFunctionFinEquiv (fun i => w.get (Fin.cast h.symm i)))
 
 /-- Decoding the blocked index associated to a list returns the original list. -/
 theorem wordOfBlock_blockIndexOfList (d L : ℕ) (w : List (Fin d))
@@ -365,7 +366,7 @@ theorem wordOfBlock_injective (d L : ℕ) : Function.Injective (wordOfBlock d L)
   have hdecode : decodeBlock d L i = decodeBlock d L j := by
     exact List.ofFn_injective hij
   unfold decodeBlock at hdecode
-  exact (Fintype.equivFin (Fin L → Fin d)).symm.injective hdecode
+  exact ((finCongr (blockPhysDim_eq_pow d L)).trans finFunctionFinEquiv.symm).injective hdecode
 
 /-- Flattening the grouped iterated index recovers the direct blocked word. -/
 theorem flattenBlockedWord_wordOfBlock_directToIteratedBlockIndex (d m n : ℕ)
@@ -507,7 +508,8 @@ map returns the direct block tensor at length `m*n`.
 This lemma avoids the `Fin.cast` / `Fintype.equivFin` identification and instead uses the
 explicit bijection `directToIteratedBlockIndex` (PR #1096).  It gives a clean connection
 between iterated and direct blocking without needing `groupedBlockCastAgrees`. -/
-theorem reindexPhysical_directToIteratedBlockIndex_blockTensor {D : ℕ} (A : MPSTensor d D) (m n : ℕ) :
+theorem reindexPhysical_directToIteratedBlockIndex_blockTensor {D : ℕ}
+    (A : MPSTensor d D) (m n : ℕ) :
     reindexPhysical (directToIteratedBlockIndex d m n)
       (blockTensor (d := blockPhysDim d m) (D := D)
         (blockTensor (d := d) (D := D) A m) n) =
@@ -538,13 +540,13 @@ theorem sameMPV₂_reindexPhysical_directToIteratedBlockIndex_blockTensor
   intro N σ; rfl
 
 /-!
-### Blocked-word identification gap
+### Blocked-word identification
 
 The lemma `reindexPhysical_directToIteratedBlockIndex_blockTensor` shows that applying the
 explicit block-grouping bijection to the iterated block tensor recovers the direct block
-tensor.  The remaining point for closing issues #990 and #971 is to prove that this bijection
-coincides with the `Fin.cast` identification used in `CommonBlockedCyclicSectorFamily`.
-Concretely, one needs
+tensor.  For common-block cyclic sectors, the corresponding coordinate assertion is that this
+bijection coincides with the `Fin.cast` identification used in
+`CommonBlockedCyclicSectorFamily`.  Concretely, one compares
 
 ```lean
 Fin.cast ((F.blockPhysDim_nested_eq k).symm) i =
@@ -554,22 +556,17 @@ Fin.cast ((F.blockPhysDim_nested_eq k).symm) i =
 
 for each block `k` and each physical index `i : Fin (blockPhysDim d F.p)`.
 
-The obstruction is purely combinatorial: the current blocked-index encoding uses
-`Fintype.equivFin`, which gives a noncanonical enumeration.  Proving the equality requires
-showing that the `Fintype.equivFin` enumeration of `Fin (m*n) → Fin d` agrees with the
-nested enumeration `Fin n → (Fin m → Fin d)` under the natural grouping isomorphism.
-This is tracked as issue #1113.
-
-Once proved, it unconditionally discharges `groupedBlockCastAgrees` and closes all
-dependent conditional theorems in `CyclicSectorDecomposition.lean` and
-`StructuralTheorem.lean`.
+The proof is purely combinatorial.  With the explicit `finFunctionFinEquiv` encoding, the
+coordinate comparison reduces to the base-`d` digit identity relating a length-`m*n`
+word to a length-`n` word over length-`m` blocks.
 
 ### Relationship with `flattenWordOfBlock_cast_eq`
 
-The single `sorry` in `CyclicSectorDecomposition.lean` (line 1495) encodes the same
+The theorem `flattenWordOfBlock_cast_eq` in `CyclicSectorDecomposition.lean` encodes the same
 combinatorial identity as a list equality.  The lemma
 `groupedBlockCastAgrees_of_flattenWordOfBlock_cast_eq` shows that this list-level
-assertion implies the coordinate-level one required by `groupedBlockCastAgrees`.
+assertion implies the coordinate-level one required by `groupedBlockCastAgrees`, and the
+assembly theorem uses it to remove the former blocking-coordinate hypothesis.
 -/
 
 /-- Casting the physical dimension of both tensors preserves heterogeneous MPV equality. -/

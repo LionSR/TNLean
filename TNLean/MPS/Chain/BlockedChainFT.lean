@@ -30,8 +30,8 @@ lemma isNBlkInjective_iff_blockTensor_isInjective (A : MPSTensor d D) (N : ℕ) 
     · rintro ⟨i, rfl⟩
       exact ⟨decodeBlock d N i, rfl⟩
     · rintro ⟨σ, rfl⟩
-      exact ⟨(Fintype.equivFin (Fin N → Fin d)) σ, by
-        simp [decodeBlock]⟩
+      exact ⟨Fin.cast (blockPhysDim_eq_pow d N).symm (finFunctionFinEquiv σ), by
+        simp [decodeBlock, Fin.cast_cast]⟩
   unfold IsNBlkInjective IsInjective blockTensor
   have hSpan :
       Submodule.span ℂ
