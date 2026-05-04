@@ -106,6 +106,13 @@ def GaugePhaseEquiv {d D : ℕ} (A B : MPSTensor d D) : Prop :=
     B i = ζ • ((X : Matrix (Fin D) (Fin D) ℂ) * A i *
       ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ))
 
+/-- Gauge equivalence gives gauge-phase equivalence with scalar `1`. -/
+theorem GaugeEquiv.toGaugePhaseEquiv {A B : MPSTensor d D} (h : GaugeEquiv A B) :
+    GaugePhaseEquiv A B := by
+  rcases h with ⟨X, hX⟩
+  refine ⟨X, 1, one_ne_zero, fun i => ?_⟩
+  simpa using hX i
+
 /-! ### Injectivity and normality -/
 
 /-- Algebraic injectivity (spanning formulation): the matrices `{A i}` span the full matrix

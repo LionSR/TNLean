@@ -256,6 +256,7 @@ boundary conditions (PBC).
 
 \begin{definition}[Gauge-phase equivalence]\label{def:gauge_phase_equiv}
     \lean{MPSTensor.GaugePhaseEquiv}
+    \lean{MPSTensor.GaugeEquiv.toGaugePhaseEquiv}
     \leanok
     \uses{def:mps_tensor}
     Two tensors $A$ and $B$ are \emph{gauge-phase equivalent}
@@ -265,6 +266,10 @@ boundary conditions (PBC).
         B^i \;=\; \zeta \, X \, A^i \, X^{-1}
     \]
 \end{definition}
+
+\begin{proof}\leanok
+    Gauge equivalence is the special case $\zeta=1$.
+\end{proof}
 
 \begin{remark}\leanok
     After spectral-radius normalization one may restrict $\zeta$
