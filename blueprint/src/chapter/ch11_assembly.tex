@@ -209,22 +209,21 @@ used in this chapter.
 	\uses{thm:ft_equal_explicit, thm:mpv_decomposition,
 	      rem:cf_coeff_arrays, thm:route_b_equal,
 	      thm:afterBlocking_sectorComparison_reindexed_bntCover,
-	      thm:common_phase_cover_of_proportional_decomposition,
-	      def:common_primitive_bnt_cover_hypotheses}
+	      thm:common_phase_cover_of_proportional_decomposition}
 	The formalized comparison starts with explicit decomposition coefficients.
 	Theorem~\ref{thm:mpv_decomposition} expands the two canonical-form tensors in
 	their BNT bases, and Remark~\ref{rem:cf_coeff_arrays} describes the resulting
 	coefficient arrays.  When the required coefficient identities are supplied,
 	Theorem~\ref{thm:ft_equal_explicit} proves gauge equivalence after permuting
 	the weighted block-diagonal tensors.  The sector-weight comparison of
-	Theorem~\ref{thm:route_b_equal} recovers the multiplicities and weights from
-	these identities.
+	Theorem~\ref{thm:route_b_equal} uses the supplied multiplicity data to recover
+	the sector-weight multisets from these identities.
 
-	The missing bridge for the bare equal-MPV statement is the synchronization
-	step that derives the coefficient identities and common phase data directly
-	from equality of the full MPV families.  The after-blocking comparison theorem
-	(Theorem~\ref{thm:afterBlocking_sectorComparison_reindexed_bntCover}) gives
-	this conclusion conditionally from BNT-cover data, while
+	The remaining synchronization statement for the bare equal-MPV theorem must
+	derive the coefficient identities and common phase data directly from equality
+	of the full MPV families.  The after-blocking comparison theorem
+	(Theorem~\ref{thm:afterBlocking_sectorComparison_reindexed_bntCover}) gives the
+	matched sector-weight conclusion once BNT-cover comparison data are supplied.
 	Theorem~\ref{thm:common_phase_cover_of_proportional_decomposition} explains
 	how proportional block comparisons supply common phases.  Completing this
 	theorem therefore amounts to deriving the BNT-cover, overlap-span, or
