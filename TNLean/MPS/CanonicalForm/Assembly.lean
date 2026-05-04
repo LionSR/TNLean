@@ -67,16 +67,15 @@ namespace MPSTensor
 /-- Remaining hypotheses for the after-blocking Fundamental Theorem formulation.
 
 Starting from `SameMPV₂ A B`, the present derivation constructs common primitive
-nonzero-sector families after a common blocking, once the blocked-word relabeling assertion is
-established.  To reach the sector-weight conclusion of the Cirac--Pérez-García--Schuch--Verstraete
-Fundamental Theorem for exactly those produced families, one still needs comparison data for
-those produced families.  The field `comparison` is supplied with their trace-preserving,
-primitive, irreducible, and positive bond-dimension evidence, so the remaining assumptions
-cannot be applied to a different decomposition. -/
+nonzero-sector families after a common blocking.  The blocked-word relabeling assertion is now
+derived in this formulation from the grouped-block cast theorem.  To reach the sector-weight
+conclusion of the Cirac--Pérez-García--Schuch--Verstraete Fundamental Theorem for exactly those
+produced families, one still needs comparison data for those produced families.  The field
+`comparison` is supplied with their trace-preserving, primitive, irreducible, and positive
+bond-dimension evidence, so the remaining assumptions cannot be applied to a different
+decomposition. -/
 structure AfterBlockingFundamentalTheoremHypotheses
     {d D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂) : Prop where
-  /-- The one-sided blocked-word relabeling equality for common cyclic-sector families. -/
-  relabel : CommonSectorRelabelingHypothesis d
   /-- The remaining BNT-cover comparison data for the produced common primitive
   nonzero-sector families, with the structural evidence for trace preservation,
   primitivity, irreducibility, and positive bond dimensions supplied. -/
@@ -185,10 +184,14 @@ theorem fundamentalTheorem_afterBlocking_of_comparisonHypotheses
     (hSame : SameMPV₂ A B)
     (h : AfterBlockingFundamentalTheoremHypotheses A B) :
     Nonempty (AfterBlockingFundamentalTheoremConclusion A B) := by
+  have h_group : CommonGroupedBlockCastHypothesis d :=
+    CommonGroupedBlockCastHypothesis.of_flattenWordOfBlock_cast_eq d
+  have h_relabel : CommonSectorRelabelingHypothesis d :=
+    h_group.toRelabelingHypothesis
   obtain ⟨p, hp, P, Q, hA, hB, hPQ, hPbnt, hQbnt,
       perm, hCopies, phase, hPhase, hWeights⟩ :=
     afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_bntCover
-      A B hSame h.relabel h.comparison
+      A B hSame h_relabel h.comparison
   exact ⟨{
     p := p
     p_pos := hp
