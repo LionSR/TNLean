@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 
 import TNLean.Wielandt.RectangularSpan.Basic
+import TNLean.Wielandt.RankOne.SpanGrowth
 
 /-!
 # Rectangular Span Growth and Stabilization
@@ -117,26 +118,6 @@ The proof uses the Fitting-decomposition disjointness: `ker(A i₀)` is disjoint
 `range((A i₀)^D)`. Since every element of `rectSpan ((A i₀)^D) A n` lies in that range,
 left-multiplication by `A i₀` is injective on it. -/
 
-/-- `ker f` is disjoint from `range (f^D)` (local proof using Fitting decomposition).
-This is a local copy of `WielandtRankOne.disjoint_ker_range_pow` from
-`RankOneSpanGrowth.lean`, proved from the same ingredients which are accessible
-through our imports of `RankOneExtraction` and `FittingDecomposition`. -/
-private theorem disjoint_ker_range_pow_local (f : End ℂ (Fin D → ℂ)) :
-    Disjoint (LinearMap.ker f) (LinearMap.range (f ^ D)) := by
-  -- ker f ≤ maxGenEigenspace 0
-  have hker_le : LinearMap.ker f ≤ f.maxGenEigenspace (0 : ℂ) := by
-    intro x hx
-    refine (Module.End.mem_maxGenEigenspace f (0 : ℂ) x).2 ⟨1, ?_⟩
-    simpa using (LinearMap.mem_ker.mp hx)
-  -- maxGenEigenspace 0 is disjoint from ⨆ (μ ≠ 0), maxGenEigenspace μ
-  have hindep : iSupIndep f.maxGenEigenspace :=
-    Wielandt.independent_maxGenEigenspace f
-  have hdisj0 : Disjoint (f.maxGenEigenspace (0 : ℂ))
-      (⨆ (μ : ℂ) (_ : μ ≠ (0 : ℂ)), f.maxGenEigenspace μ) := hindep 0
-  -- range(f^D) = ⨆ (μ ≠ 0), maxGenEigenspace μ
-  simpa [WielandtRankOne.range_pow_eq_iSup_maxGenEigenspace_ne_zero (D := D) f] using
-    Disjoint.mono_left hker_le hdisj0
-
 /-- Vector-level injectivity: if `v ∈ range((A i₀)^D)` and `(A i₀) *ᵥ v = 0`, then `v = 0`.
 
 This uses the Fitting-decomposition disjointness between `ker(f)` and `range(f^D)`. -/
@@ -147,7 +128,7 @@ private theorem vec_eq_zero_of_mulVec_eq_zero_of_mem_range_pow'
   classical
   let f : End ℂ (Fin D → ℂ) := Matrix.toLin' (A i₀)
   have hdisj : Disjoint (LinearMap.ker f) (LinearMap.range (f ^ D)) :=
-    disjoint_ker_range_pow_local (D := D) f
+    WielandtRankOne.disjoint_ker_range_pow (D := D) f
   have hv' : v ∈ LinearMap.range (f ^ D) := by
     simpa [f, Matrix.toLin'_pow] using hv
   have hker : v ∈ LinearMap.ker f := by
