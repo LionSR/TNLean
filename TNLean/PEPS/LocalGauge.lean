@@ -3,24 +3,24 @@ import TNLean.PEPS.VirtualInsertion
 import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Defs
 
 /-!
-# Local gauge candidates for injective PEPS
+# Local gauge maps for injective PEPS
 
 For a vertex-injective PEPS tensor `A`, the chosen local left inverse lets us pull
 any local physical vector back to a coefficient function on the virtual star at a
 vertex `v`. When `A` and `B` have the same bond dimensions, this yields a
-canonical candidate endomorphism on the local virtual coefficient space of `A`.
+canonical endomorphism on the local virtual coefficient space of `A`.
 
-The remaining PEPS Fundamental-Theorem blocker is that this candidate must still
+To complete the PEPS Fundamental-Theorem argument, this endomorphism must still
 be shown to
 
 1. reconstruct the local tensors of `B`, equivalently that the local image of
    `B` lies in the image of `localTensorMap A v`, and
 2. factor into independent edge gauges.
 
-We capture those two requirements as `HasLocalGaugeLift`. This isolates the exact
-output still needed from the blocked-middle / three-site-MPS reduction in
-arXiv:1804.04964 Section 3, and `hasLocalGaugeLift_of_localGaugeFormula` is the final
-conversion that turns an explicit local gauge formula into that
+We capture those two requirements as `HasFactorizedLocalGauge`. This isolates
+the exact output of the blocked-middle / three-site-MPS reduction in
+arXiv:1804.04964 Section 3, and `hasFactorizedLocalGauge_of_localGaugeFormula`
+is the final conversion that turns an explicit local gauge formula into that
 sharper datum.
 -/
 
@@ -92,9 +92,9 @@ omit [Fintype V] in
       simpa using congrArg (castLocalVirtualConfig A B hDim v) hs
     simp [castLocalCoeffMap_apply, hξ, hs]
 
-/-- The canonical local coefficient-space candidate obtained by pulling the local
+/-- The canonical local coefficient-space map obtained by pulling the local
 `B`-tensor back through the chosen left inverse of `A`. -/
-noncomputable def localGaugeCandidate (A B : Tensor G d)
+noncomputable def localGaugeMap (A B : Tensor G d)
     (hA : IsVertexInjective A) (hDim : A.bondDim = B.bondDim) (v : V) :
     LocalVirtualOp A v :=
   (localLeftInverse A hA v).comp <|
@@ -109,14 +109,14 @@ theorem localTensorMap_castLocalCoeffMap_single (A B : Tensor G d)
       B.component v (castLocalVirtualConfig A B hDim v η) := by
   rw [castLocalCoeffMap_single, localTensorMap_apply_single]
 
-/-- The canonical local gauge candidate reconstructs the projection of `B`'s
+/-- The canonical local gauge map reconstructs the projection of `B`'s
 local tensor into the image of `localTensorMap A v`. -/
-theorem localGaugeCandidate_apply_single (A B : Tensor G d)
+theorem localGaugeMap_apply_single (A B : Tensor G d)
     (hA : IsVertexInjective A) (hDim : A.bondDim = B.bondDim) (v : V)
     (η : LocalVirtualConfig A v) :
-    localTensorMap A v (localGaugeCandidate A B hA hDim v (Pi.single η (1 : ℂ))) =
+    localTensorMap A v (localGaugeMap A B hA hDim v (Pi.single η (1 : ℂ))) =
       localProjector A hA v (B.component v (castLocalVirtualConfig A B hDim v η)) := by
-  rw [localGaugeCandidate, LinearMap.comp_apply, LinearMap.comp_apply,
+  rw [localGaugeMap, LinearMap.comp_apply, LinearMap.comp_apply,
     localTensorMap_castLocalCoeffMap_single]
   simp [localProjector, physRealizeLocalOp]
 
@@ -126,30 +126,30 @@ This states exactly the two local conclusions still needed from the blocked-midd
 reduction in arXiv:1804.04964 Section 3:
 
 1. the local components of `B` lie in the image of `localTensorMap A v`, and
-2. the canonical candidate `localGaugeCandidate` factorizes into one invertible
+2. the canonical map `localGaugeMap` factorizes into one invertible
    matrix on each incident edge. -/
-structure HasLocalGaugeLift (A B : Tensor G d) (hA : IsVertexInjective A)
+structure HasFactorizedLocalGauge (A B : Tensor G d) (hA : IsVertexInjective A)
     (hDim : A.bondDim = B.bondDim) (v : V) : Prop where
   projector_fixes :
     ∀ η : LocalVirtualConfig A v,
       localProjector A hA v (B.component v (castLocalVirtualConfig A B hDim v η)) =
         B.component v (castLocalVirtualConfig A B hDim v η)
-  factorized_candidate :
+  factorized_localGaugeMap :
     ∃ Xv : (e : Edge G) → GL (Fin (A.bondDim e)) ℂ,
       ∀ η η' : LocalVirtualConfig A v,
-        localGaugeCandidate A B hA hDim v (Pi.single η (1 : ℂ)) η' =
+        localGaugeMap A B hA hDim v (Pi.single η (1 : ℂ)) η' =
           ∏ ie : IncidentEdge G v,
             (↑(Xv ie.1) : Matrix (Fin (A.bondDim ie.1)) (Fin (A.bondDim ie.1)) ℂ)
               (η ie) (η' ie)
 
 /-- Any explicit edgewise local gauge formula at `v` yields the sharper datum
-`HasLocalGaugeLift`.
+`HasFactorizedLocalGauge`.
 
 This is the final algebraic conversion after the blocked-middle / three-site-MPS
 reduction: once that reduction produces invertible incident-edge gauges
-realizing the local tensors of `B`, the canonical candidate pulled back through
+realizing the local tensors of `B`, the canonical map pulled back through
 `localLeftInverse` is forced to be the same factorized operator. -/
-theorem hasLocalGaugeLift_of_localGaugeFormula (A B : Tensor G d)
+theorem hasFactorizedLocalGauge_of_localGaugeFormula (A B : Tensor G d)
     (hA : IsVertexInjective A) (hDim : A.bondDim = B.bondDim) (v : V)
     (hLocal :
       ∃ Xv : (e : Edge G) → GL (Fin (A.bondDim e)) ℂ,
@@ -160,7 +160,7 @@ theorem hasLocalGaugeLift_of_localGaugeFormula (A B : Tensor G d)
                 (↑(Xv ie.1) : Matrix (Fin (A.bondDim ie.1))
                     (Fin (A.bondDim ie.1)) ℂ) (η ie) (η' ie)) *
                 A.component v η' σ) :
-    HasLocalGaugeLift A B hA hDim v := by
+    HasFactorizedLocalGauge A B hA hDim v := by
   rcases hLocal with ⟨Xv, hXv⟩
   refine ⟨?_, ⟨Xv, ?_⟩⟩
   · intro η
@@ -189,13 +189,13 @@ theorem hasLocalGaugeLift_of_localGaugeFormula (A B : Tensor G d)
       ext σ
       simpa [c, localTensorMap, Fintype.linearCombination_apply] using hXv η σ
     have hcand :
-        localGaugeCandidate A B hA hDim v (Pi.single η (1 : ℂ)) = c := by
+        localGaugeMap A B hA hDim v (Pi.single η (1 : ℂ)) = c := by
       ext ξ
       calc
-        localGaugeCandidate A B hA hDim v (Pi.single η (1 : ℂ)) ξ =
+        localGaugeMap A B hA hDim v (Pi.single η (1 : ℂ)) ξ =
             localLeftInverse A hA v
               (B.component v (castLocalVirtualConfig A B hDim v η)) ξ := by
-              rw [localGaugeCandidate, LinearMap.comp_apply, LinearMap.comp_apply,
+              rw [localGaugeMap, LinearMap.comp_apply, LinearMap.comp_apply,
                 localTensorMap_castLocalCoeffMap_single]
         _ = localLeftInverse A hA v (localTensorMap A v c) ξ := by rw [hcomp]
         _ = c ξ := by simp
@@ -204,11 +204,11 @@ theorem hasLocalGaugeLift_of_localGaugeFormula (A B : Tensor G d)
 /-- Abbreviated proposition for the output expected from the edge-centered
 blocked-middle / three-site-MPS reduction at a vertex.
 
-The remaining open PEPS step should prove this proposition from `SameState`:
-an incident-edge family of invertible matrices whose local gauge formula
-already reconstructs the local tensors of `B` from those of `A`. The next
-theorem then turns this explicit local formula into `HasLocalGaugeLift`. -/
-abbrev BlockedMiddleGaugeHyp (A B : Tensor G d) (_hA : IsVertexInjective A)
+The PEPS fundamental theorem requires deriving this proposition from `SameState`:
+an incident-edge family of invertible matrices whose local gauge formula already
+reconstructs the local tensors of `B` from those of `A`. The next theorem then
+turns this explicit local formula into `HasFactorizedLocalGauge`. -/
+abbrev BlockedMiddleGaugeFormula (A B : Tensor G d) (_hA : IsVertexInjective A)
     (hDim : A.bondDim = B.bondDim) (v : V) : Prop :=
   ∃ Xv : (e : Edge G) → GL (Fin (A.bondDim e)) ℂ,
     ∀ (η : LocalVirtualConfig A v) (σ : Fin d),
@@ -220,23 +220,23 @@ abbrev BlockedMiddleGaugeHyp (A B : Tensor G d) (_hA : IsVertexInjective A)
             A.component v η' σ
 
 /-- The blocked-middle / three-site-MPS output immediately yields
-`HasLocalGaugeLift`. -/
-theorem hasLocalGaugeLift_of_blockedMiddleGaugeHyp (A B : Tensor G d)
+`HasFactorizedLocalGauge`. -/
+theorem hasFactorizedLocalGauge_of_blockedMiddleGaugeFormula (A B : Tensor G d)
     (hA : IsVertexInjective A) (hDim : A.bondDim = B.bondDim) (v : V)
-    (hBlocked : BlockedMiddleGaugeHyp A B hA hDim v) :
-    HasLocalGaugeLift A B hA hDim v :=
-  hasLocalGaugeLift_of_localGaugeFormula A B hA hDim v hBlocked
+    (hBlocked : BlockedMiddleGaugeFormula A B hA hDim v) :
+    HasFactorizedLocalGauge A B hA hDim v :=
+  hasFactorizedLocalGauge_of_localGaugeFormula A B hA hDim v hBlocked
 
-/-- Under `HasLocalGaugeLift`, one obtains the factorized local-gauge formula at
+/-- Under `HasFactorizedLocalGauge`, one obtains the factorized local-gauge formula at
 vertex `v`.
 
-This is the current local endpoint available in Lean: the remaining PEPS
-Fundamental-Theorem gap is to prove `BlockedMiddleGaugeHyp` from `SameState` via
-the blocked-middle / three-site-MPS reduction and then apply
-`hasLocalGaugeLift_of_blockedMiddleGaugeHyp`. -/
-theorem localGauge_exists_of_liftData (A B : Tensor G d)
+This theorem gives the local factorized gauge relation under `HasFactorizedLocalGauge`.
+Deriving that hypothesis from `SameState` remains the blocked-middle /
+three-site-MPS reduction, followed by
+`hasFactorizedLocalGauge_of_blockedMiddleGaugeFormula`. -/
+theorem localGauge_exists_of_factorizedLocalGauge (A B : Tensor G d)
     (hA : IsVertexInjective A) (hDim : A.bondDim = B.bondDim) (v : V)
-    (hLift : HasLocalGaugeLift A B hA hDim v) :
+    (hFactorized : HasFactorizedLocalGauge A B hA hDim v) :
     ∃ (Xv : (e : Edge G) → GL (Fin (A.bondDim e)) ℂ),
       ∀ (η : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1)) (σ : Fin d),
         B.component v (fun ie => Fin.cast (congr_fun hDim ie.1) (η ie)) σ =
@@ -244,22 +244,22 @@ theorem localGauge_exists_of_liftData (A B : Tensor G d)
             (∏ ie : IncidentEdge G v,
               (↑(Xv ie.1) : Matrix _ _ ℂ) (η ie) (η' ie)) *
               A.component v η' σ := by
-  rcases hLift.factorized_candidate with ⟨Xv, hXv⟩
+  rcases hFactorized.factorized_localGaugeMap with ⟨Xv, hXv⟩
   refine ⟨Xv, ?_⟩
   intro η σ
-  have hproj := congrArg (fun f : Fin d → ℂ => f σ) (hLift.projector_fixes η)
+  have hproj := congrArg (fun f : Fin d → ℂ => f σ) (hFactorized.projector_fixes η)
   have hspec := congrArg (fun f : Fin d → ℂ => f σ)
-    (localGaugeCandidate_apply_single A B hA hDim v η)
+    (localGaugeMap_apply_single A B hA hDim v η)
   calc
     B.component v (fun ie => Fin.cast (congr_fun hDim ie.1) (η ie)) σ =
         (localProjector A hA v
           (B.component v (castLocalVirtualConfig A B hDim v η))) σ := by
           simpa [castLocalVirtualConfig_apply] using hproj.symm
     _ = (localTensorMap A v
-          (localGaugeCandidate A B hA hDim v (Pi.single η (1 : ℂ)))) σ := by
+          (localGaugeMap A B hA hDim v (Pi.single η (1 : ℂ)))) σ := by
           simpa using hspec.symm
     _ = ∑ η' : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1),
-          localGaugeCandidate A B hA hDim v (Pi.single η (1 : ℂ)) η' *
+          localGaugeMap A B hA hDim v (Pi.single η (1 : ℂ)) η' *
             A.component v η' σ := by
           simp [localTensorMap, Fintype.linearCombination_apply]
     _ = ∑ η' : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1),
