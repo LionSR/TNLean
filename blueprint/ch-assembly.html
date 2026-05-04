@@ -1301,8 +1301,6 @@
           
           <li><a href="ch-mps.html#def:gauge_equiv">Definition 2.10</a></li>
           
-          <li><a href="ch-assembly.html#thm:ft_proportional">Theorem 14.2</a></li>
-          
           <li><a href="ch-assembly.html#thm:ft_equal_explicit">Theorem 14.6</a></li>
           
           <li><a href="ch-mps.html#thm:mpv_decomposition">Theorem 2.36</a></li>
@@ -1310,6 +1308,10 @@
           <li><a href="ch-assembly.html#rem:cf_coeff_arrays">Remark 14.3</a></li>
           
           <li><a href="ch-assembly.html#thm:route_b_equal">Theorem 14.16</a></li>
+          
+          <li><a href="ch-assembly.html#thm:afterBlocking_sectorComparison_reindexed_bntCover">Theorem 14.77</a></li>
+          
+          <li><a href="ch-assembly.html#thm:common_phase_cover_of_proportional_decomposition">Theorem 14.37</a></li>
           
         </ul>
     
@@ -1337,7 +1339,8 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Begin by applying Theorem&#160;<a href="ch-assembly.html#thm:ft_proportional">14.2</a> with \(c_N = 1\), which yields a permutation of the matched blocks and blockwise gauge-phase equivalences. One then compares the resulting MPV expansions from Theorem&#160;<a href="ch-mps.html#thm:mpv_decomposition">2.36</a>. The explicit-coefficient version (Theorem&#160;<a href="ch-assembly.html#thm:ft_equal_explicit">14.6</a>) proves gauge equivalence after permuting the weighted block-diagonal tensors, using BNT linear independence. The proof then combines this with the coefficient-array construction of Remark&#160;<a href="ch-assembly.html#rem:cf_coeff_arrays">14.3</a> and the weight-recovery theorem (Theorem&#160;<a href="ch-assembly.html#thm:route_b_equal">14.16</a>). After the weights are identified, the phase factors are absorbed into them and the blockwise conjugacies combine to a global gauge equivalence. </p>
+  <p> The formalized comparison starts with explicit decomposition coefficients. Theorem&#160;<a href="ch-mps.html#thm:mpv_decomposition">2.36</a> expands the two canonical-form tensors in their BNT bases, and Remark&#160;<a href="ch-assembly.html#rem:cf_coeff_arrays">14.3</a> describes the resulting coefficient arrays. When the required coefficient identities are supplied, Theorem&#160;<a href="ch-assembly.html#thm:ft_equal_explicit">14.6</a> proves gauge equivalence after permuting the weighted block-diagonal tensors. The sector-weight comparison of Theorem&#160;<a href="ch-assembly.html#thm:route_b_equal">14.16</a> uses the supplied multiplicity data to recover the sector-weight multisets from these identities. </p>
+<p>The remaining synchronization statement for the bare equal-MPV theorem must derive the coefficient identities and common phase data directly from equality of the full MPV families. The after-blocking comparison theorem (Theorem&#160;<a href="ch-assembly.html#thm:afterBlocking_sectorComparison_reindexed_bntCover">14.77</a>) gives the matched sector-weight conclusion once BNT-cover comparison data are supplied. Theorem&#160;<a href="ch-assembly.html#thm:common_phase_cover_of_proportional_decomposition">14.37</a> explains how proportional block comparisons supply common phases. Completing this theorem therefore amounts to deriving the BNT-cover, overlap-span, or common-phase hypotheses for the canonical decompositions produced from the bare equality assumption. Once those data are available, the phases are absorbed into the recovered weights and the blockwise conjugacies assemble into a global gauge equivalence. </p>
 
   </div>
 </div>
