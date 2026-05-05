@@ -248,6 +248,7 @@ import TNLean.MPS.CanonicalForm.Assembly.StructuralData
 import TNLean.MPS.CanonicalForm.Assembly.SectorComparisonCore
 import TNLean.MPS.CanonicalForm.Assembly.StructuralTheorem
 import TNLean.MPS.CanonicalForm.Assembly.CommonSectorTransport
+import TNLean.MPS.CanonicalForm.Assembly.CommonPrimitiveProportionalData
 import TNLean.MPS.CanonicalForm.BNTGrouping
 import TNLean.MPS.CanonicalForm.PhaseCover
 import TNLean.MPS.CanonicalForm.PhaseClassSectorData
