@@ -366,6 +366,28 @@ theorem exists_pos_productWordSpan_of_isCanonicalFormBNT_of_identity_padding
   exact exists_pos_productWordSpan_of_pairTraceSeparatingAll_of_identity_padding μ A hCF
     (pairTraceSeparatingAll_of_isCanonicalFormBNT μ A hCF) hPad
 
+/-- Canonical-form/BNT data plus period-window identity-padding certificates give a common
+homogeneous trace-separating length for all ordered pairs of distinct blocks.
+
+The BNT data supply all-words pair trace separation.  The period-window hypotheses are the
+remaining Burnside-Jacobson input needed to convert the cumulative separation data to one
+homogeneous length. -/
+theorem exists_forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_identity_period_windows
+    [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hCF : IsCanonicalFormBNT μ A)
+    (hWindow : ∀ k j : Fin r, j ≠ k → ∃ start period : ℕ, 0 < period ∧
+      ((1 : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
+          (1 : Matrix (Fin (dim j)) (Fin (dim j)) ℂ)) ∈
+        Submodule.span ℂ (Set.range (pairWordTuple (A k) (A j) period)) ∧
+      ∀ s : ℕ, s < period →
+        ((1 : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
+            (1 : Matrix (Fin (dim j)) (Fin (dim j)) ℂ)) ∈
+          Submodule.span ℂ (Set.range (pairWordTuple (A k) (A j) (start + s)))) :
+    ∃ T : ℕ, ∀ k j : Fin r, j ≠ k → PairTraceSeparatingAt (A k) (A j) T :=
+  exists_forall_pairTraceSeparatingAt_of_pairTraceSeparatingAll_of_identity_period_windows
+    A (pairTraceSeparatingAll_of_isCanonicalFormBNT μ A hCF) hWindow
+
 /-- Positive-length product-word span from canonical-form/BNT data plus a
 finite period-window identity-padding certificate for every ordered pair of
 distinct blocks.
@@ -391,8 +413,8 @@ theorem exists_pos_productWordSpan_of_isCanonicalFormBNT_of_identity_period_wind
       (⊤ : Submodule ℂ
         ((k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) := by
   obtain ⟨T, hT⟩ :=
-    exists_forall_pairTraceSeparatingAt_of_pairTraceSeparatingAll_of_identity_period_windows
-      A (pairTraceSeparatingAll_of_isCanonicalFormBNT μ A hCF) hWindow
+    exists_forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_identity_period_windows
+      μ A hCF hWindow
   exact exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingAt μ A hCF hT
 
 /-- Positive-length product-word span from cumulative pair trace separation plus
