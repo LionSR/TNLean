@@ -104,6 +104,102 @@ theorem exists_blockTensor_isInjective_of_tp_primitive_irreducible [NeZero D]
   obtain ⟨L, hL⟩ := isNormal_of_tp_primitive_irreducible A hTP hPrim hIrr
   exact ⟨L, (isNBlkInjective_iff_blockTensor_isInjective A L).1 hL⟩
 
+/-- A trace-preserving scalar tensor has a nonzero Kraus matrix. -/
+private theorem exists_nonzero_kraus_of_tp [NeZero D]
+    (A : MPSTensor d D)
+    (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
+    ∃ i : Fin d, A i ≠ 0 := by
+  by_contra hnone
+  push Not at hnone
+  have hsum_zero :
+      ∑ i : Fin d, (A i)ᴴ * A i = (0 : Matrix (Fin D) (Fin D) ℂ) := by
+    apply Finset.sum_eq_zero
+    intro i _
+    simp [hnone i]
+  have hone_zero : (1 : Matrix (Fin D) (Fin D) ℂ) =
+      (0 : Matrix (Fin D) (Fin D) ℂ) := by
+    rw [← hTP, hsum_zero]
+  let a : Fin D := ⟨0, NeZero.pos D⟩
+  have hentry : (1 : Matrix (Fin D) (Fin D) ℂ) a a = 0 := by
+    simpa using congr_fun (congr_fun hone_zero a) a
+  exact one_ne_zero hentry
+
+/-- A nonzero scalar matrix spans the scalar matrix algebra. -/
+private theorem isInjective_of_dim_one_of_exists_nonzero
+    (A : MPSTensor d 1) (hA : ∃ i : Fin d, A i ≠ 0) :
+    IsInjective A := by
+  obtain ⟨i₀, hi₀⟩ := hA
+  rw [IsInjective]
+  have hentry : A i₀ 0 0 ≠ 0 := by
+    intro h
+    apply hi₀
+    ext i j
+    have hi : i = 0 := Fin.eq_zero i
+    have hj : j = 0 := Fin.eq_zero j
+    subst hi
+    subst hj
+    simpa using h
+  have hsingle :
+      (ℂ ∙ A i₀ : Submodule ℂ (Matrix (Fin 1) (Fin 1) ℂ)) = ⊤ := by
+    refine (Submodule.span_singleton_eq_top_iff ℂ (A i₀)).2 ?_
+    intro M
+    refine ⟨M 0 0 / A i₀ 0 0, ?_⟩
+    ext i j
+    have hi : i = 0 := Fin.eq_zero i
+    have hj : j = 0 := Fin.eq_zero j
+    subst hi
+    subst hj
+    simp [div_eq_mul_inv, hentry]
+  exact eq_top_iff.mpr <| by
+    rw [← hsingle]
+    exact Submodule.span_mono (Set.singleton_subset_iff.mpr (Set.mem_range_self i₀))
+
+/-- Zero-length word products cannot span a matrix algebra of dimension at least two. -/
+private theorem wordSpan_zero_ne_top_of_two_le [NeZero D]
+    (A : MPSTensor d D) (hD : 2 ≤ D) :
+    wordSpan A 0 ≠ (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) := by
+  intro h
+  have h1 : Module.finrank ℂ (wordSpan A 0) = 1 := by
+    rw [wordSpan_zero, finrank_span_singleton one_ne_zero]
+  rw [h, finrank_top] at h1
+  simp only [Module.finrank_matrix, Fintype.card_fin,
+    Module.finrank_self, mul_one] at h1
+  have hfour : 2 * 2 ≤ D * D := Nat.mul_le_mul hD hD
+  omega
+
+/-- **TP + primitive + irreducible → injective after positive blocking**.
+
+The normality witness may be zero in scalar bond dimension, so the positivity
+claim is proved separately: scalar trace-preserving tensors are already
+one-site injective, while dimensions at least two cannot have full
+zero-length word span. -/
+theorem exists_pos_blockTensor_isInjective_of_tp_primitive_irreducible [NeZero D]
+    (A : MPSTensor d D)
+    (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (hPrim : _root_.IsPrimitive (transferMap (d := d) (D := D) A))
+    (hIrr : IsIrreducibleTensor A) :
+    ∃ L : ℕ, 0 < L ∧ IsInjective (blockTensor A L) := by
+  by_cases hD : D = 1
+  · subst D
+    have hInj : IsInjective A :=
+      isInjective_of_dim_one_of_exists_nonzero A (exists_nonzero_kraus_of_tp A hTP)
+    exact ⟨1, Nat.zero_lt_one,
+      (isNBlkInjective_iff_blockTensor_isInjective A 1).1
+        (isNBlkInjective_one_of_isInjective hInj)⟩
+  · have hD_pos : 0 < D := NeZero.pos D
+    have hD_ge : 2 ≤ D := by omega
+    obtain ⟨L, hL⟩ :=
+      exists_blockTensor_isInjective_of_tp_primitive_irreducible A hTP hPrim hIrr
+    refine ⟨L, ?_, hL⟩
+    by_contra hL_nonpos
+    have hL_zero : L = 0 := Nat.eq_zero_of_not_pos hL_nonpos
+    subst L
+    have hzero :
+        wordSpan A 0 = (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) :=
+      (wordSpan_eq_top_iff_isNBlkInjective A 0).mpr
+        ((isNBlkInjective_iff_blockTensor_isInjective A 0).2 hL)
+    exact wordSpan_zero_ne_top_of_two_le A hD_ge hzero
+
 /-!
 ## Combined reduction: arbitrary → IsNormal (per block, for primitive blocks)
 
@@ -170,6 +266,25 @@ private theorem wordSpan_mul_eq_top_of_wordSpan_eq_top
               wordSpan_le_wordSpan_add_of_wordSpan_eq_top A hN (n * N)
           _ = wordSpan A ((n + 1) * N) := by ring_nf
       exact eq_top_iff.mpr (hprev ▸ hle)
+
+/-- Fixed-length injectivity persists at positive multiples of the length. -/
+theorem isNBlkInjective_mul_of_isNBlkInjective
+    (A : MPSTensor d D) {N m : ℕ} (hm : 0 < m) (hN : IsNBlkInjective A N) :
+    IsNBlkInjective A (m * N) := by
+  have hwordN : wordSpan A N = ⊤ :=
+    (wordSpan_eq_top_iff_isNBlkInjective A N).mpr hN
+  exact (wordSpan_eq_top_iff_isNBlkInjective A (m * N)).mp
+    (wordSpan_mul_eq_top_of_wordSpan_eq_top A hwordN m hm)
+
+/-- One-site injectivity of a blocked tensor persists after a positive further
+blocking, read back as direct blocking of the original tensor. -/
+theorem blockTensor_isInjective_mul_of_blockTensor_isInjective
+    (A : MPSTensor d D) {N m : ℕ} (hm : 0 < m)
+    (hN : IsInjective (blockTensor A N)) :
+    IsInjective (blockTensor A (m * N)) := by
+  exact (isNBlkInjective_iff_blockTensor_isInjective A (m * N)).1
+    (isNBlkInjective_mul_of_isNBlkInjective A hm
+      ((isNBlkInjective_iff_blockTensor_isInjective A N).2 hN))
 
 /-- **IsNormal is preserved by blocking.**
 
