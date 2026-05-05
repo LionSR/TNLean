@@ -17,7 +17,7 @@ This module introduces `IsCanonicalFormBNT`, which extends `IsCanonicalForm` wit
 requirement that distinct blocks are not gauge-phase equivalent (i.e., equivalent blocks
 have already been merged). The blocks are already chosen as basis-of-normal-tensors
 representatives. This should not be confused with the source term "block-injective canonical
-form" (`biCF`), which is the separate exact-length direct-sum span condition from
+form" (biCF), which is the separate exact-length direct-sum span condition from
 arXiv:1606.00608, lines 317–345.
 
 ## Main results
@@ -82,7 +82,7 @@ non-increasing (`Antitone`) moduli, matching the paper definitions.
 
 In the language of arXiv:2011.12127 Definition 4.2, this corresponds to a canonical form where
 each block in the basis of normal tensors is represented by a single CF block. It is not
-the paper's `biCF` condition; block-injectivity is a further fixed-length span input. -/
+the paper's biCF condition; block-injectivity is a further fixed-length span input. -/
 structure IsCanonicalFormBNT {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k)) : Prop extends
     IsCanonicalForm μ A where
