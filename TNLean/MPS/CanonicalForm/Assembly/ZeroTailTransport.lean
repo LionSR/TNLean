@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.CanonicalForm.Existence
+import TNLean.MPS.Core.BlockingInfrastructure
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
 
@@ -14,6 +15,74 @@ tensor into a zero tail plus a nonzero part.
 -/
 
 namespace MPSTensor
+
+/-! ## Zero-tail and weight transport through blocking -/
+
+/-- Reblocking preserves a zero-tail/nonzero-part MPV decomposition.
+
+The positive-period hypothesis is exactly what keeps the zero-tail contribution
+confined to length zero after blocking: a blocked chain of positive length expands
+to a positive number of original sites. -/
+theorem zeroTail_mpv_decomp_blockTensor
+    {d D L z p : ℕ}
+    (A : MPSTensor d D) (nonzeroPart : MPSTensor d L)
+    (hp : 0 < p)
+    (hMPV : ∀ (N : ℕ) (σ : Fin N → Fin d),
+      mpv A σ = mpv (zeroMPSTensor d z) σ + mpv nonzeroPart σ) :
+    ∀ (N : ℕ) (σ : Fin N → Fin (blockPhysDim d p)),
+      mpv (blockTensor (d := d) (D := D) A p) σ =
+        mpv (zeroMPSTensor (blockPhysDim d p) z) σ +
+          mpv (blockTensor (d := d) (D := L) nonzeroPart p) σ := by
+  intro N σ
+  let σflat := blockedFlatConfig (d := d) p σ
+  rw [mpv_blockTensor_eq_mpv_blockedFlatConfig (d := d) A p σ]
+  rw [hMPV (N * p) σflat]
+  have hNP_iff : N * p = 0 ↔ N = 0 := by
+    rw [Nat.mul_eq_zero]
+    exact ⟨fun h => h.resolve_right hp.ne', fun h => Or.inl h⟩
+  have hZero :
+      mpv (zeroMPSTensor d z) σflat =
+        mpv (zeroMPSTensor (blockPhysDim d p) z) σ := by
+    rw [mpv_zeroMPSTensor, mpv_zeroMPSTensor]
+    simp [hNP_iff]
+  rw [hZero]
+  congr 1
+  exact (mpv_blockTensor_eq_mpv_blockedFlatConfig (d := d) nonzeroPart p σ).symm
+
+/-- Reblocking a zero-tail plus weighted nonzero-block decomposition transports every
+nonzero-block weight to the corresponding blocking power. -/
+theorem zeroTail_toTensorFromBlocks_blockPower
+    {d D r z p : ℕ} {dim : Fin r → ℕ}
+    (A : MPSTensor d D)
+    (μ : Fin r → ℂ)
+    (blocks : (k : Fin r) → MPSTensor d (dim k))
+    (hp : 0 < p)
+    (hMPV : ∀ (N : ℕ) (σ : Fin N → Fin d),
+      mpv A σ = mpv (zeroMPSTensor d z) σ +
+        mpv (toTensorFromBlocks (d := d) (μ := μ) blocks) σ) :
+    ∀ (N : ℕ) (σ : Fin N → Fin (blockPhysDim d p)),
+      mpv (blockTensor (d := d) (D := D) A p) σ =
+        mpv (zeroMPSTensor (blockPhysDim d p) z) σ +
+          mpv (toTensorFromBlocks (d := blockPhysDim d p)
+            (fun k => (μ k) ^ p)
+            (fun k => blockTensor (d := d) (D := dim k) (blocks k) p)) σ := by
+  intro N σ
+  have hBlock :=
+    zeroTail_mpv_decomp_blockTensor
+      (d := d) (D := D) (L := ∑ k : Fin r, dim k) (z := z) (p := p)
+      A (toTensorFromBlocks (d := d) (μ := μ) blocks) hp hMPV N σ
+  have hNonzeroPart := sameMPV₂_blockTensor_toTensorFromBlocks
+    (d := d) (dim := dim) μ blocks p
+  calc
+    mpv (blockTensor (d := d) (D := D) A p) σ =
+        mpv (zeroMPSTensor (blockPhysDim d p) z) σ +
+          mpv (blockTensor (d := d) (D := ∑ k : Fin r, dim k)
+            (toTensorFromBlocks (d := d) (μ := μ) blocks) p) σ := hBlock
+    _ = mpv (zeroMPSTensor (blockPhysDim d p) z) σ +
+          mpv (toTensorFromBlocks (d := blockPhysDim d p)
+            (fun k => (μ k) ^ p)
+            (fun k => blockTensor (d := d) (D := dim k) (blocks k) p)) σ := by
+          rw [hNonzeroPart N σ]
 
 /-- Transport a zero-tail decomposition along an MPV equivalence of its nonzero part. -/
 theorem zeroTail_eq_of_sameMPV₂
