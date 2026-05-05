@@ -21,10 +21,10 @@ heterogeneous equal-case fundamental theorem — the block matching stage that f
 ## Implementation notes
 
 The proof proceeds by strong induction on `rA + rB` combined with a dominant-weight
-projection argument. Convergence helpers live in
+projection argument. Convergence auxiliary lemmas live in
 `TNLean.MPS.FundamentalTheorem.OverlapConvergenceAux`; the dominant-weight comparison
 lives in `TNLean.MPS.FundamentalTheorem.Full.DominantWeight`; small
-overlap/inner-product helpers live in `TNLean.MPS.FundamentalTheorem.Full.Helpers`.
+overlap/inner-product auxiliary lemmas live in `TNLean.MPS.FundamentalTheorem.Full.Helpers`.
 
 ## References
 

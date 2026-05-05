@@ -7,10 +7,10 @@ import TNLean.MPS.FundamentalTheorem.Full.Helpers
 /-!
 # Dominant-weight comparison for the full BNT theorem
 
-This module contains the dominant-weight norm comparison used by
-`exists_nondecaying_overlap_of_sameMPV₂_CFBNT`.  It is split out from the main
-non-decaying-overlap induction so that the induction file only carries the recursive
-matching argument.
+For two BNT families with equal total matrix product vectors, the leading weights in
+their strict norm order have the same norm. The proof compares normalized inner products
+against the leading block on each side: if one leading norm were smaller, the normalized
+identity would have one side converging to `0` and the other to `1`.
 
 ## Main statements
 

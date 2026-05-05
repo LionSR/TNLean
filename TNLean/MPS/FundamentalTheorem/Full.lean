@@ -30,8 +30,8 @@ blockwise gauge-phase equivalence.
 
 The proof is split across supporting sub-modules for readability:
 
-* `TNLean.MPS.FundamentalTheorem.Full.Helpers` — small overlap / inner-product helpers and
-  the single-block Layer-2 gauge-phase equivalence lemma.
+* `TNLean.MPS.FundamentalTheorem.Full.Helpers` — small overlap / inner-product auxiliary
+  lemmas and the single-block Layer-2 gauge-phase equivalence lemma.
 * `TNLean.MPS.FundamentalTheorem.Full.DominantWeight` — the largest-weight norm
   comparison used by the dominant-block projection.
 * `TNLean.MPS.FundamentalTheorem.Full.NondecayingOverlap` — Layer 1a,
