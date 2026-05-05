@@ -9,9 +9,10 @@ open scoped Matrix BigOperators ComplexOrder MatrixOrder
 /-!
 # Cyclic-sector relations for blocked tensors
 
-This module contains the channel-level bridge between a cyclic decomposition of
-the adjoint transfer map and the sector decomposition of the tensor obtained by
-blocking over one full period.
+A cyclic decomposition of the adjoint transfer map determines a sector
+decomposition for the tensor obtained by blocking over one full period.  The
+connection is made by comparing the blocked adjoint transfer map with the
+corresponding power of the original adjoint transfer map.
 
 ## References
 
