@@ -1167,6 +1167,27 @@ theorem pairTraceSeparatingAll_of_injective_dim_ne
       (pairAlgSpan_eq_top_of_injective_dim_ne A B hA_inj hB_inj hdim)
   exact pairTraceSeparatingAll_of_pairAllWordsSpanTop A B hPairSpanTop
 
+/-- Unequal bond dimensions plus a finite period-window of homogeneous pair spans
+give one homogeneous pair trace-separating length.
+
+The dimension mismatch supplies all-words pair trace separation.  The
+period-window span hypothesis supplies the identity padding needed to convert
+that cumulative separation into a single homogeneous length. -/
+theorem exists_pairTraceSeparatingAt_of_injective_dim_ne_of_pairWordTupleSpanTop_period_window
+    {d D₁ D₂ : ℕ} [NeZero D₁] [NeZero D₂]
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (hA_inj : IsInjective A) (hB_inj : IsInjective B)
+    (hdim : D₁ ≠ D₂)
+    {start period : ℕ} (hperiod_pos : 0 < period)
+    (hperiod : PairWordTupleSpanTop A B period)
+    (hwindow : ∀ r : ℕ, r < period → PairWordTupleSpanTop A B (start + r)) :
+    ∃ T : ℕ, PairTraceSeparatingAt A B T := by
+  apply exists_pairTraceSeparatingAt_of_pairAllWordsSpanTop_of_identity_padding
+  · exact (pairAllWordsSpanTop_iff_pairTraceSeparatingAll A B).2
+      (pairTraceSeparatingAll_of_injective_dim_ne A B hA_inj hB_inj hdim)
+  · exact pairIdentity_mem_pairWordTupleSpan_eventually_of_pairWordTupleSpanTop_period_window
+      A B hperiod_pos hperiod hwindow
+
 /-- Placeholder for the Burnside–Jacobson identity-padding lemma.
 Once proved, it supplies the missing input to
 `pairTraceSeparatingAt_of_pairTraceSeparatingUpTo_of_identity_padding` and
