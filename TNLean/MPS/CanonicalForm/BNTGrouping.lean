@@ -62,7 +62,7 @@ basis-of-normal-tensors construction from
   distinct-norm block family a `SectorDecomposition` with all multiplicities
   `copies j = 1`.
 
-### Section 4 BNT grouping for possibly-equal norms (proved via norm-class enumeration)
+### Section 4 Restricted norm-class collapse for possibly-equal norms
 
 * `exists_bnt_grouping` — For blocks with possibly equal norms, given that equal-norm
   blocks have the same MPV function (a consequence of BNT uniqueness), there exists a
@@ -273,14 +273,14 @@ lemma sameMPV₂_trivialSectorDecomp {r : ℕ} {dim : Fin r → ℕ}
           symm
           simpa [smul_eq_mul] using mpv_toTensorFromBlocks_eq_sum μ blocks σ
 
-/-- **Trivial `SectorDecomposition` from a sorted block family.**
+/-- **Granular `SectorDecomposition` from a sorted block family.**
 
 Specialization of `trivialSectorDecomp` to the sorted distinct-norm case: every block
 becomes its own basis tensor with `copies j = 1`, the assembled tensor has
 `SameMPV₂` with `toTensorFromBlocks μ blocks`, and the BNT-level norm ordering is
 `StrictAnti` because each basis carries exactly one weight `μ j`, already strictly
 decreasing. -/
-theorem exists_trivialSectorDecomp_of_sorted_distinct_norms
+lemma exists_trivialSectorDecomp_of_sorted_distinct_norms
     {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ)
     (blocks : (k : Fin r) → MPSTensor d (dim k))
@@ -296,7 +296,7 @@ theorem exists_trivialSectorDecomp_of_sorted_distinct_norms
   intro i j hij
   simpa [trivialSectorDecomp] using hAnti hij
 
-/-! ### Section 5. BNT grouping for blocks with possibly equal norms -/
+/-! ### Section 5. Restricted norm-class collapse for blocks with possibly equal norms -/
 
 /-- Shared norm-class enumeration used by the BNT grouping constructions. -/
 structure NormClassGroupingData {r : ℕ} (μ : Fin r → ℂ) where
@@ -382,7 +382,7 @@ noncomputable def normClassGroupingData {r : ℕ} (μ : Fin r → ℂ) :
     regroup := hRegroup
   }
 
-/-- **Restricted BNT grouping step (equal-norm collapse via norm-class enumeration).**
+/-- **Restricted norm-class collapse via norm-class enumeration.**
 
 Given a weighted block family `(μ, blocks)` where some blocks may share the same norm
 `‖μ j‖ = ‖μ k‖`, and given that equal-norm blocks already share the same MPV function,
@@ -402,7 +402,7 @@ fixed by the chosen representative `reprFn j`, and other members of the same nor
 class may have different dimensions — their MPV values are matched via `hMPVEq`,
 which uses the heterogeneous `SameMPV₂` to accommodate different bond dimensions.
 
-This theorem is intentionally a **restricted collapse theorem**. It is not the
+This lemma is intentionally a **restricted collapse statement**. It is not the
 paper's full basis-of-normal-tensors construction: if two distinct basis tensors
 occur at the same modulus, they should survive as different basis elements rather
 than being forced into one norm class.
@@ -432,7 +432,7 @@ theorems (see `exists_sectorDecomp_of_tp_primitive_irr_blocks`).
    `= mpv (toTensorFromBlocks μ blocks) σ`.
 5. **StrictAnti** holds because the `v_j` are strictly decreasing and
    `‖P.weight j ⟨0, _⟩‖ = ‖μ (enum j 0)‖ = v_j`. -/
-theorem exists_bnt_grouping
+lemma exists_bnt_grouping
     {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ)
     (blocks : (k : Fin r) → MPSTensor d (dim k))

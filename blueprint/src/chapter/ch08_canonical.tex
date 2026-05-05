@@ -2766,14 +2766,14 @@ The following results separate the zero blocks from the nonzero blocks.
 	block-sum expression for $\bigoplus_k \mu_k B_k$.
 \end{proof}
 
-\begin{theorem}[Trivial sector decomposition for the sorted distinct-norm case]
+\begin{lemma}[Granular sector decomposition for the sorted distinct-norm case]
 	\label{thm:bnt_trivial_sector}
 	\lean{MPSTensor.exists_trivialSectorDecomp_of_sorted_distinct_norms}\leanok
 	\uses{def:trivial_sector_decomp, lem:trivial_sector_decomp_same_mpv}
 	If all weights are nonzero and strictly decreasing in norm, one obtains a
 	sector decomposition with one copy per sector that preserves the represented
 	MPS family.
-\end{theorem}
+\end{lemma}
 
 \begin{definition}[Norm-class partition]
 	\label{def:norm_class_grouping_data}
@@ -2788,13 +2788,13 @@ The following results separate the zero blocks from the nonzero blocks.
 	From any finite weight family, construct norm classes ordered by strictly decreasing norm values.
 \end{definition}
 
-\begin{theorem}[BNT grouping theorem]
+\begin{lemma}[Restricted norm-class collapse]
 	\label{thm:bnt_grouping}
 	\lean{MPSTensor.exists_bnt_grouping}\leanok
 	\uses{def:norm_class_grouping, thm:bnt_trivial_sector}
 	If equal-norm blocks represent the same MPS family, then one obtains a sector
 	decomposition whose sector norms are strictly decreasing.
-\end{theorem}
+\end{lemma}
 
 \subsection{Equal-Norm Blocks}
 
@@ -3264,13 +3264,13 @@ The following results separate the zero blocks from the nonzero blocks.
 	normality are both preserved under blocking.
 \end{proof}
 
-\begin{theorem}[Structural after-blocking form of the fundamental theorem]%
+\begin{lemma}[Bilateral structural decomposition after blocking]%
 	\label{thm:ft_after_blocking_structural}
-	\lean{MPSTensor.afterBlocking_structuralDecompositionData_of_sameMPV₂}
+	\lean{MPSTensor.exists_bilateral_tp_primitive_blockDecomp_after_blocking}
 	\leanok
-	\uses{def:blocked_tensor, def:same_mpv2, def:zero_mps_tensor, def:tensor_from_blocks}
-	If two tensors generate the same MPV family, then each tensor admits some
-	blocking after which it decomposes into a zero-tail tensor plus nonzero
+	\uses{def:blocked_tensor, def:zero_mps_tensor, def:tensor_from_blocks}
+	Each of two tensors admits some blocking after which it decomposes
+	independently into a zero-tail tensor plus nonzero
 	left-canonical blocks with primitive transfer maps and positive bond
 	dimensions. Moreover, at every blocked system size and every blocked word,
 	the MPV of the blocked tensor is the sum of the zero-tail MPV and the MPV of
@@ -3281,7 +3281,10 @@ The following results separate the zero blocks from the nonzero blocks.
 		  + V^{(N)}\!\left(\bigoplus_k \mu^A_k A_k\right)_\sigma,
 	\]
 	and likewise for $B$.
-\end{theorem}
+	This lemma does not use an equality hypothesis between the two original
+	families; the comparison is supplied only by later after-blocking
+	statements.
+\end{lemma}
 
 \begin{proof}\leanok
 	\uses{thm:tp_primitive_blockdecomp}

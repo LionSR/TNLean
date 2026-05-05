@@ -66,7 +66,7 @@ The imported modules provide the canonical-form reduction theorems, including
 `primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking_of_fixedAlgebraRigidity`,
 `primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking`,
 `bilateral_commonPeriod_blocking_tp_primitive_normal`, and
-`afterBlocking_structuralData_of_sameMPV₂`.
+`exists_bilateral_tp_primitive_blockDecomp_after_blocking`.
 
 This public entry point also records a conditional formulation of the
 Cirac--Pérez-García--Schuch--Verstraete after-blocking theorem that does not
