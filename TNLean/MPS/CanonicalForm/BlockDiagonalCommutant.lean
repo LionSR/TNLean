@@ -5,6 +5,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.MPS.CanonicalForm.BlockDiagonalCommutant.ProjectionSpan
 import TNLean.MPS.BNT.Construction
 import TNLean.MPS.MPDO.BiCFDerivation
+import TNLean.MPS.MPDO.BiCFDerivation.PairHomogenization
 import TNLean.MPS.SharedInfra.BlockAssembly
 
 /-!
@@ -364,6 +365,35 @@ theorem exists_pos_productWordSpan_of_isCanonicalFormBNT_of_identity_padding
         ((k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) := by
   exact exists_pos_productWordSpan_of_pairTraceSeparatingAll_of_identity_padding μ A hCF
     (pairTraceSeparatingAll_of_isCanonicalFormBNT μ A hCF) hPad
+
+/-- Positive-length product-word span from canonical-form/BNT data plus a
+finite period-window identity-padding certificate for every ordered pair of
+distinct blocks.
+
+For a block family in canonical BNT form, it suffices to provide the finite
+period-window identity-padding certificates for the ordered pairs of distinct
+blocks.  The all-words pair separation follows from the BNT hypotheses. -/
+theorem exists_pos_productWordSpan_of_isCanonicalFormBNT_of_identity_period_windows
+    [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hCF : IsCanonicalFormBNT μ A)
+    (hWindow : ∀ k j : Fin r, j ≠ k → ∃ start period : ℕ, 0 < period ∧
+      ((1 : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
+          (1 : Matrix (Fin (dim j)) (Fin (dim j)) ℂ)) ∈
+        Submodule.span ℂ (Set.range (pairWordTuple (A k) (A j) period)) ∧
+      ∀ s : ℕ, s < period →
+        ((1 : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
+            (1 : Matrix (Fin (dim j)) (Fin (dim j)) ℂ)) ∈
+          Submodule.span ℂ (Set.range (pairWordTuple (A k) (A j) (start + s)))) :
+    ∃ m : ℕ, 0 < m ∧
+      Submodule.span ℂ (Set.range fun ω : Fin m → Fin d =>
+        fun k : Fin r => evalWord (A k) (List.ofFn ω)) =
+      (⊤ : Submodule ℂ
+        ((k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) := by
+  obtain ⟨T, hT⟩ :=
+    exists_forall_pairTraceSeparatingAt_of_pairTraceSeparatingAll_of_identity_period_windows
+      A (pairTraceSeparatingAll_of_isCanonicalFormBNT μ A hCF) hWindow
+  exact exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingAt μ A hCF hT
 
 /-- Positive-length product-word span from cumulative pair trace separation plus
 exact identity padding. -/
