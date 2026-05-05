@@ -292,9 +292,82 @@ theorem exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingA
   simpa [WordTupleSpanTop, wordTuple] using
     wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingAt μ A hCF hSep
 
+/-- Positive-length product-word span from all-words pair separation plus eventual
+identity padding for every ordered pair of distinct BNT blocks.
+
+This is the BNT-facing finite-maximum wrapper around
+`exists_forall_pairTraceSeparatingAt_of_pairTraceSeparatingAll_of_identity_padding`.
+It keeps the Burnside-Jacobson identity-padding input explicit. -/
+theorem exists_pos_productWordSpan_of_pairTraceSeparatingAll_of_identity_padding
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hCF : IsCanonicalFormBNT μ A)
+    (hSep : ∀ k j : Fin r, j ≠ k → PairTraceSeparatingAll (A k) (A j))
+    (hPad : ∀ k j : Fin r, j ≠ k → ∃ L : ℕ, ∀ n : ℕ, n ≥ L →
+      ((1 : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
+          (1 : Matrix (Fin (dim j)) (Fin (dim j)) ℂ)) ∈
+        Submodule.span ℂ (Set.range (pairWordTuple (A k) (A j) n))) :
+    ∃ m : ℕ, 0 < m ∧
+      Submodule.span ℂ (Set.range fun ω : Fin m → Fin d =>
+        fun k : Fin r => evalWord (A k) (List.ofFn ω)) =
+      (⊤ : Submodule ℂ
+        ((k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) := by
+  obtain ⟨T, hT⟩ :=
+    exists_forall_pairTraceSeparatingAt_of_pairTraceSeparatingAll_of_identity_padding
+      A hSep hPad
+  exact exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingAt μ A hCF hT
+
+/-- Canonical-form/BNT data give all-words pair trace separation for every
+ordered pair of distinct blocks.
+
+Equal-dimensional pairs use the BNT non-gauge-phase-equivalence hypothesis and
+the pair-product algebra density theorem.  Unequal-dimensional pairs use the
+dimension-mismatch pair-product density theorem. -/
+theorem pairTraceSeparatingAll_of_isCanonicalFormBNT
+    [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hCF : IsCanonicalFormBNT μ A) :
+    ∀ k j : Fin r, j ≠ k → PairTraceSeparatingAll (A k) (A j) := by
+  intro k j hjk
+  by_cases hdim : dim k = dim j
+  · exact pairTraceSeparatingAll_of_injective_not_gaugePhaseEquiv_cast_left hdim
+      (A k) (A j)
+      (hCF.toHasInjectiveBlocks.block_injective k)
+      (hCF.toHasInjectiveBlocks.block_injective j)
+      (hCF.toIsLeftCanonicalBlockFamily.leftCanonical k)
+      (hCF.toIsLeftCanonicalBlockFamily.leftCanonical j)
+      (hCF.blocks_not_equiv k j hjk.symm hdim)
+  · exact pairTraceSeparatingAll_of_injective_dim_ne
+      (A k) (A j)
+      (hCF.toHasInjectiveBlocks.block_injective k)
+      (hCF.toHasInjectiveBlocks.block_injective j)
+      hdim
+
+/-- Positive-length product-word span from canonical-form/BNT data plus eventual
+identity padding for every ordered pair of distinct blocks.
+
+This is the BNT-facing consumer for the Burnside-Jacobson identity-padding
+input: the all-words pair-separation part is derived from BNT data here, while
+the homogeneous identity-padding theorem remains an explicit hypothesis. -/
+theorem exists_pos_productWordSpan_of_isCanonicalFormBNT_of_identity_padding
+    [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hCF : IsCanonicalFormBNT μ A)
+    (hPad : ∀ k j : Fin r, j ≠ k → ∃ L : ℕ, ∀ n : ℕ, n ≥ L →
+      ((1 : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
+          (1 : Matrix (Fin (dim j)) (Fin (dim j)) ℂ)) ∈
+        Submodule.span ℂ (Set.range (pairWordTuple (A k) (A j) n))) :
+    ∃ m : ℕ, 0 < m ∧
+      Submodule.span ℂ (Set.range fun ω : Fin m → Fin d =>
+        fun k : Fin r => evalWord (A k) (List.ofFn ω)) =
+      (⊤ : Submodule ℂ
+        ((k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) := by
+  exact exists_pos_productWordSpan_of_pairTraceSeparatingAll_of_identity_padding μ A hCF
+    (pairTraceSeparatingAll_of_isCanonicalFormBNT μ A hCF) hPad
+
 /-- Positive-length product-word span from cumulative pair trace separation plus
 exact identity padding. -/
-theorem exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingUpTo_of_identity_padding
+theorem
+    exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingUpTo_of_identity_padding
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hCF : IsCanonicalFormBNT μ A) {S T : ℕ}
     (hST : S ≤ T)
