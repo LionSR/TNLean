@@ -1136,6 +1136,33 @@ theorem
   exact pairIdentity_mem_pairWordTupleSpan_eventually_of_period_window
     (A k) (A j) hperiod_pos hperiod hwindow
 
+/-- A finite family of all-words pair-separation hypotheses and per-pair
+period windows of full homogeneous pair spans admits one common homogeneous
+trace-separating length.
+
+This is the homogeneous-span version of
+`exists_forall_pairTraceSeparatingAt_of_pairTraceSeparatingAll_of_identity_period_windows`.
+It keeps the fixed-length period-window producer explicit and only converts full
+homogeneous pair span into the identity-padding certificates needed by the
+generic homogenization theorem. -/
+theorem
+    exists_forall_pairTraceSeparatingAt_of_pairSpanTop_period_windows
+    (A : (k : Fin r) → MPSTensor d (dim k))
+    (hSep : ∀ k j : Fin r, j ≠ k → PairTraceSeparatingAll (A k) (A j))
+    (hWindow : ∀ k j : Fin r, j ≠ k → ∃ start period : ℕ, 0 < period ∧
+      PairWordTupleSpanTop (A k) (A j) period ∧
+      ∀ s : ℕ, s < period → PairWordTupleSpanTop (A k) (A j) (start + s)) :
+    ∃ T : ℕ, ∀ k j : Fin r, j ≠ k → PairTraceSeparatingAt (A k) (A j) T := by
+  refine exists_forall_pairTraceSeparatingAt_of_pairTraceSeparatingAll_of_identity_period_windows
+    A hSep ?_
+  intro k j hj
+  rcases hWindow k j hj with ⟨start, period, hperiod_pos, hperiod, hwindow⟩
+  refine ⟨start, period, hperiod_pos, ?_, ?_⟩
+  · exact pairIdentity_mem_pairWordTupleSpan_of_pairWordTupleSpanTop (A k) (A j) hperiod
+  · intro s hs
+    exact pairIdentity_mem_pairWordTupleSpan_of_pairWordTupleSpanTop (A k) (A j)
+      (hwindow s hs)
+
 /-! ### Burnside–Jacobson homogenization: from non-equivalence to homogeneous separation
 
 The theorems in this section bridge the gap between BNT block non-equivalence
