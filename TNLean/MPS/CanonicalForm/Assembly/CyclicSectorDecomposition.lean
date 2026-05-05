@@ -22,30 +22,11 @@ its MPS-formulation for irreducible TP tensors.
 
 ## Main statements
 
-* `adjointTransferMap_pow_fixes_cyclic_projection` — iterating the cyclic
-  relation for the adjoint transfer map fixes each cyclic projection after one
-  period.
-* `transferMap_adjoint_blocked_eq_pow` — the blocked adjoint transfer map agrees
-  with the corresponding power of the adjoint transfer map.
-* `exists_cyclic_sector_decomp_after_blocking` — channel-level cyclic
-  decomposition for a blocked periodic tensor.
-* `exists_cyclic_sector_decomp_of_TP_of_isIrreducibleTensor` — MPS-level cyclic
-  sector decomposition for irreducible TP tensors.
-* `primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking_of_projStep`
-  — under the remaining one-step orbit-lift hypothesis `hProjStep`, each
-  compressed cyclic sector has primitive transfer map and is tensor-irreducible.
-* `primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking_of_fixedAlgebraRigidity`
-  — the same conclusion under the structured fixed-point-algebra rigidity
-  hypothesis from `SectorIrreducibility/HLift.lean`.
-* `sectorFixedPointAlgebraRigidity_of_cyclic_decomp_after_blocking_of_scalarBlockedFixedPoints`
-  — a scalar blocked fixed-point algebra hypothesis implies the sector
-  rigidity needed by the orbit-sum argument.
-* The scalar blocked fixed-point variant of the sector-block theorem — the same
-  blocked fixed-point algebra hypothesis yields primitive, tensor-irreducible
-  compressed sectors.
-* `primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking`
-  — the unconditional conclusion using
-  `isIrreducibleOnCorner_of_cyclic_decomp_mps`.
+The first theorem derives the MPS-level cyclic-sector decomposition for an
+irreducible trace-preserving tensor.  The remaining results lift primitive and
+irreducible structure from the blocked tensor to each cyclic sector, first under
+explicit orbit-lift or fixed-point-algebra hypotheses and finally without those
+extra assumptions.
 
 ## References
 
