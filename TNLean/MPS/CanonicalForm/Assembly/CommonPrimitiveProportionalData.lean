@@ -223,19 +223,14 @@ The structural theorem
 `afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts`
 supplies trace-preserving, primitive, tensor-irreducible block families
 with nonzero weights and positive bond dimensions at a common blocking
-length.  The four fields below are the additional BNT hypotheses needed
+length.  The fields below record the additional BNT hypotheses needed
 to compare the two families and obtain a common MPV phase cover.
 
-The remaining mathematical tasks are:
-1. Verify `IsNormalCanonicalForm` for the produced block families
-   (requires ordering the weights by decreasing modulus).
-2. Verify `BlocksNotGaugePhaseEquiv` for the cyclic-sector block families
-   (follows from the fact that distinct cyclic sectors carry
-   distinct peripheral eigenvalues and therefore cannot be
-   gauge-phase equivalent).
-3. Construct `ProportionalDecompositionData` from the `SameMPV₂`
-   equality of the two nonzero parts, which is available from the
-   structural theorem and the zero-tail identity. -/
+For non-periodic tensors, the comparison is applied after choosing one
+representative for each group of common cyclic sectors with the same transported
+weight. On that representative family one can impose strict ordering, BNT
+separation, and proportional block matching without confusing sectors that
+belong to the same original block. -/
 structure CommonPrimitiveBNTCoverHypotheses
     {d p rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
