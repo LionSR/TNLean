@@ -13,9 +13,7 @@ open Filter
 This file collects the final structural statements in the current
 canonical-form reduction following arXiv:1606.00608. It gives a common-period blocking theorem
 for two tensors and the resulting structural after-blocking statement that both
-sides have TP-primitive decompositions. The common-sector continuation now lives
-in `TNLean.MPS.CanonicalForm.Assembly.CommonSectorData`, which this module
-imports to preserve the historical import surface.
+sides have TP-primitive decompositions.
 
 ## Main statements
 
@@ -86,12 +84,11 @@ those bases. The zero-tail-aware theorem
 separately gives the length-zero identity when full overlap-span hypotheses are
 available.
 
-The common-sector continuation in
-`TNLean.MPS.CanonicalForm.Assembly.CommonSectorData` flattens the per-block
-cyclic-sector data to a single common physical blocking level. The remaining
-paper-level inputs are one-site injectivity (or a blocked replacement), finite-length
-span comparison for the flattened family, and the zero-tail length-zero identity
-from the structural after-blocking reduction itself.
+The subsequent common-sector step flattens the per-block cyclic-sector data to a
+single common physical blocking level. The remaining paper-level inputs are
+one-site injectivity (or a blocked replacement), finite-length span comparison
+for the flattened family, and the zero-tail length-zero identity from the
+structural after-blocking reduction itself.
 -/
 
 section FundamentalTheoremAfterBlocking

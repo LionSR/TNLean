@@ -16,7 +16,7 @@ This file collects the common-sector continuation of the structural
 canonical-form reduction following arXiv:1606.00608. Starting from the
 zero-tail and TP-gauge decomposition, it records the per-block cyclic-sector
 data, chooses common blocking lengths, and states the relabeled common-sector
-data used by the later sector-comparison modules.
+data needed to compare the resulting sector families.
 
 ## Main statements
 
