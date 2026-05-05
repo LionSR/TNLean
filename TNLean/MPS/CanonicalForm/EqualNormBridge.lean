@@ -17,24 +17,24 @@ open scoped Matrix BigOperators
 open Filter
 
 /-!
-# Equal-norm comparison for BNT grouping hypotheses
+# Equal-norm comparison for restricted norm-class collapse hypotheses
 
-This file relates the BNT overlap/spectral theory to the
-BNT grouping theorem (`exists_bnt_grouping`), which requires `hMPVEq`
-for equal-norm blocks.
+This file relates the BNT overlap/spectral theory to the restricted norm-class
+collapse: blocks with the same weight norm must already generate the same MPS
+family before they can be represented by one sector.
 
 ## Background
 
 The canonical-form reduction produces TP + primitive blocks with
-nonzero weights.  The BNT grouping theorem groups blocks by weight norm into a
-`SectorDecomposition`, and requires one hypothesis for equal-norm blocks:
+nonzero weights. The restricted norm-class collapse groups blocks by weight norm into a
+sector decomposition, and requires one mathematical input for equal-norm blocks:
 
-* `hMPVEq`: equal-norm blocks have `SameMPV₂`.
+* equal-norm blocks generate the same MPS family.
 
 The grouped sector's bond dimension is fixed by the chosen representative of each
 norm class, so no separate equal-dimension hypothesis is needed.
 
-## Strategy: gauge-phase-aware BNT grouping
+## Strategy: gauge-phase-aware norm-class collapse
 
 When equal-norm blocks are known to be gauge-phase equivalent (e.g., because they
 originate from the cyclic-sector decomposition of a single irreducible block, or
@@ -66,7 +66,7 @@ Theorem matching, etc.).
   TP + irreducible blocks implies equal bond dimensions and gauge-phase equivalence.
   Uses the spectral dichotomy from `SpectralGap.lean`.  **Fully proved.**
 
-* `exists_bnt_grouping_of_gaugePhaseEquiv` — BNT grouping theorem taking gauge-phase
+* `exists_bnt_grouping_of_gaugePhaseEquiv` — restricted collapse taking gauge-phase
   equivalence data (rather than `SameMPV₂`) for equal-norm blocks.  **Fully proved.**
 
 * `exists_sectorDecomp_of_tp_primitive_irr_blocks` — Construction connecting
@@ -174,9 +174,9 @@ theorem gaugePhaseEquiv_of_nonDecaying_overlap
     (mpvOverlap_tendsto_zero_of_not_gaugePhaseEquiv_cast_left_of_irreducible_TP
       hdim A B hA_irr hB_irr hA_TP hB_TP hNotGPE)
 
-/-! ### Section 2. BNT grouping with gauge-phase equivalence -/
+/-! ### Section 2. Restricted norm-class collapse with gauge-phase equivalence -/
 
-/-- **BNT grouping step with gauge-phase equivalence for equal-norm blocks.**
+/-- **Restricted norm-class collapse with gauge-phase equivalence for equal-norm blocks.**
 
 This form of `exists_bnt_grouping` uses gauge-phase equivalence data
 (rather than `SameMPV₂`) for equal-norm blocks.  The gauge phases are absorbed into
@@ -319,7 +319,7 @@ theorem exists_sectorDecomp_of_tp_primitive_irr_blocks
     exact gaugePhaseEquiv_of_nonDecaying_overlap
       (blocks j) (blocks k) (hIrr j) (hIrr k) (hTP j) (hTP k)
       (hNonDecay j k hjk hNorm)
-  -- Step 2: Derive GPE data with unit-norm phase for the grouping theorem.
+  -- Step 2: Derive GPE data with unit-norm phase for the collapse lemma.
   have hGPEζ : ∀ j k : Fin r, ‖μ j‖ = ‖μ k‖ →
       ∃ ζ : ℂ, ζ ≠ 0 ∧ ‖ζ‖ = 1 ∧
         ∀ (N : ℕ) (σ : Fin N → Fin d),
@@ -352,7 +352,7 @@ theorem exists_sectorDecomp_of_tp_primitive_irr_blocks
           (hPrim k)
           X ζ hX
       exact ⟨ζ, hζne, hζ_norm, hmpv⟩
-  -- Step 3: Apply the gauge-phase-aware BNT grouping theorem.
+  -- Step 3: Apply the gauge-phase-aware collapse lemma.
   exact exists_bnt_grouping_of_gaugePhaseEquiv μ blocks hμne hGPEζ
 
 /-- One-sector specialization of the TP + primitive + irreducible grouping route.
