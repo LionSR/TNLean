@@ -378,7 +378,7 @@ and~\cite[Chapter~6]{Wolf2012Quantum}.
 \end{proof}
 
 \subsection{External Burnside--Jacobson connection to algebra span}
-\label{subsec:burnside_bridge}
+\label{subsec:burnside_jacobson_connection}
 
 The irreducibility condition (Definition~\ref{def:irreducible_tensor}) is formulated
 in terms of invariant \emph{projections}.
@@ -457,7 +457,7 @@ endomorphism algebra.
 \end{proof}
 
 \begin{remark}\leanok
-	This Burnside/Jacobson-density step is a substantial external algebraic
+	This Burnside--Jacobson density step is a substantial external algebraic
 	ingredient in the chapter.  The cited MPS arguments provide the
 	invariant-subspace decomposition and the later blocking-to-injectivity
 	results; they do not name Burnside as a separate theorem at this point.
@@ -470,7 +470,7 @@ endomorphism algebra.
 	It does not by itself assert fixed-length word-span injectivity or normality.
 \end{remark}
 
-\begin{corollary}[Irreducible action implies eventual cumulative spanning]%
+\begin{theorem}[Irreducible action implies eventual cumulative spanning]%
 	\label{thm:irreducible_action_cumulative_span}
 	\lean{MPSTensor.exists_cumulativeSpan_eq_top_of_isIrreducibleAction}\leanok
 	\uses{def:cumulative_span, def:irreducible_action}
@@ -481,7 +481,7 @@ endomorphism algebra.
 	\[
 		T_N(A) = \MN{D}.
 	\]
-\end{corollary}
+\end{theorem}
 
 \begin{proof}\leanok\uses{thm:burnside_matrix}
 	By Theorem~\ref{thm:burnside_matrix}, $\algspn(A) = \MN{D}$.
@@ -493,13 +493,13 @@ endomorphism algebra.
 \end{proof}
 
 \begin{remark}\leanok
-	The conclusion of Corollary~\ref{thm:irreducible_action_cumulative_span}
-	is a cumulative-span statement.  It proves
+	The conclusion of Theorem~\ref{thm:irreducible_action_cumulative_span}
+	is a cumulative-span statement:
 	\[
-		\algspn(A)=\MN{D},
-		\qquad
 		\exists N,\ T_N(A)=\MN{D}.
 	\]
+	The intermediate equality $\algspn(A)=\MN{D}$ is the content of
+	Theorem~\ref{thm:burnside_matrix}.
 	It does not by itself prove fixed-length word-span injectivity, nor does it
 	prove normality.  Those stronger conclusions require the later
 	aperiodicity, primitivity, or quantum-Wielandt inputs.
