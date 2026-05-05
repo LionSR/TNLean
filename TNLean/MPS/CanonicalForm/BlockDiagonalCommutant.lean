@@ -228,18 +228,11 @@ theorem wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingUpTo_of_ide
 
 /-- Homogeneous pair trace separation for all distinct BNT block pairs.
 
-Given canonical-form/BNT data, every ordered pair of distinct blocks admits a
-homogeneous word length `T` at which `PairTraceSeparatingAt` holds.
-
-Same-dimensional block pairs are reduced to the biCF derivation: two
-non-gauge-phase-equivalent BNT blocks admit a homogeneous pair-trace separator
-once the Burnside-Jacobson identity-padding step is available. Pairs with
-different bond dimensions use the period-window dimension-mismatch adapter.
-
-The same-dimensional branch uses homogeneous Burnside-Jacobson identity padding.
-The different bond-dimension branch uses a finite period-window homogeneous
-pair-span certificate. Uniform certificates over the finite BNT block family
-produce one common homogeneous length. -/
+For a finite BNT family, trace functionals separating distinct ordered block
+pairs at homogeneous lengths can be chosen with one common length. The
+conclusion asserts simultaneous homogeneous pair trace separation for every
+ordered pair of distinct blocks, which is the pair-separation input for the
+product-word span theorem. -/
 theorem exists_forall_pairTraceSeparatingAt_of_isCanonicalFormBNT
     {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -249,10 +242,7 @@ theorem exists_forall_pairTraceSeparatingAt_of_isCanonicalFormBNT
   have hInj := hCF.toHasInjectiveBlocks
   have hLeft := hCF.toIsLeftCanonicalBlockFamily
   have hNot := hCF.blocks_not_equiv
-  -- A homogeneous separating length is chosen for each ordered pair of distinct
-  -- blocks and then replaced by a finite maximum. Equal dimensions use the
-  -- non-gauge-equivalence branch; unequal dimensions use the dimension-mismatch
-  -- branch.
+  -- Pairwise homogeneous separation is combined over the finite ordered-pair set.
   sorry
 
 /-- Positive-length product-word span from canonical-form/BNT data and
