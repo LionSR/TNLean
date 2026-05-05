@@ -22,11 +22,15 @@ The supporting modules are:
 * `TNLean.MPS.CanonicalForm.Assembly.PrimitiveBlocks` — blocked irreducibility
   and the conditional weak block-matching theorem.
 * `TNLean.MPS.CanonicalForm.Assembly.CommonBlockedCyclicSectorFamily` —
-  common-period cyclic-sector family API.
+  definitions and lemmas for common-period cyclic-sector families.
+* `TNLean.MPS.CanonicalForm.Assembly.CommonBlockedCyclicSectorRepresentatives` —
+  definitions and lemmas for representative common-sector families.
 * `TNLean.MPS.CanonicalForm.Assembly.CyclicSectorDecomposition` — cyclic sector
   decomposition after blocking.
 * `TNLean.MPS.CanonicalForm.Assembly.CommonBlockedCyclicSectorConstruction` —
   construction of common-period cyclic-sector families.
+* `TNLean.MPS.CanonicalForm.Assembly.ZeroTailTransport` — generic zero-tail
+  MPV transport lemmas.
 * `TNLean.MPS.CanonicalForm.Assembly.StructuralData` — common-period blocking
   and structural after-blocking data.
 * `TNLean.MPS.CanonicalForm.Assembly.SectorComparisonCore` — conditional
