@@ -459,56 +459,6 @@ The main references are
 	(Theorem~\ref{thm:bnt_perm_prop}) suffices for the Fundamental Theorem.
 \end{remark}
 
-\subsection{Fixed-size separation by Vandermonde inversion}
-
-\begin{lemma}[Vandermonde separation]
-	\label{lem:bnt_vandermonde_separation}
-	\lean{MPSTensor.vandermonde_separation}
-	\leanok
-	\uses{def:is_canonical_form}
-	Let $C$ be a canonical form with $r$ blocks and pairwise distinct
-	weights $\mu_k$.
-	If coefficients $c_k$ satisfy
-	\[
-		\sum_k c_k \mu_k^N = 0
-	\]
-	for $N = 0, \ldots, r-1$, then every $c_k$ vanishes.
-\end{lemma}
-
-\begin{proof}\leanok
-	The Vandermonde matrix with entries $V_{Nk} = \mu_k^N$ is invertible when
-	the weights are pairwise distinct. Therefore the displayed linear system
-	has only the zero solution.
-\end{proof}
-
-\begin{lemma}[Fixed-size linear independence of block MPVs]
-	\label{lem:block_mpvs_fixed_size_li}
-	\lean{MPSTensor.block_mpvs_lin_indep_at_fixed_size}
-	\leanok
-	\uses{lem:bnt_vandermonde_separation}
-	Let $C$ be a canonical form with $r$ blocks and pairwise distinct
-	weights $\mu_k$, and fix a system size $N_0$. Assume that each block MPV
-	$\ket{V^{(N_0)}(A_k)}$ is nonzero. If
-	\[
-		\sum_k c_k\,V^{(N_0)}(A_k)_\sigma\,\mu_k^i = 0
-	\]
-	for every word $\sigma$ of length $N_0$ and every $i = 0, \ldots, r-1$,
-	then $c_k = 0$ for all $k$.
-\end{lemma}
-
-\begin{proof}\leanok\uses{lem:bnt_vandermonde_separation}
-	Apply Lemma~\ref{lem:bnt_vandermonde_separation} pointwise in the word
-	$\sigma$. This shows that every component of
-	$c_k\ket{V^{(N_0)}(A_k)}$ vanishes. Since the MPV of each block is
-	nonzero at size $N_0$, some component survives, so $c_k = 0$.
-\end{proof}
-
-\begin{remark}
-	These fixed-size Vandermonde theorems remain available for alternative
-	finite-length arguments.  The BNT comparison below uses eventual linear
-	independence from Theorem~\ref{thm:bnt_overlap_orthonormal_li}.
-\end{remark}
-
 \section{Coefficient convergence}
 
 \begin{theorem}[Coefficient ratio decay]\label{thm:coeff_ratio_decay}
@@ -564,6 +514,21 @@ The main references are
 	Equal power sums for $A$ and $B$ therefore give equal coefficients,
 	hence equal characteristic polynomials.
 \end{proof}
+
+\begin{remark}[How the power-sum input is used]
+	The equal-MPV corollary in the source compares, for each matched basis
+	tensor, the sums
+	\[
+		\sum_q \mu_{j,q}^N
+	\]
+	on the two sides. The Newton--Girard input says that equality of all these
+	power sums determines the multiset of weights with multiplicity. It is not
+	a replacement for the BNT matching argument: the block permutation and the
+	phase gauges must already have identified which basis tensor is being
+	compared. Once that matching is available, the power-sum lemma supplies the
+	multiplicity and weight equality needed to assemble the weighted
+	block-diagonal gauge.
+\end{remark}
 
 \begin{theorem}[Equal power sums imply equal multisets]\label{thm:power_sum_multiset}
 	\lean{Matrix.sum_pow_eq_implies_multiset_eq}

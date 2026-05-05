@@ -11,8 +11,8 @@ The step from global `SameMPV₂` on block-diagonal tensors to per-block `SameMP
 separating the weighted sum `∑_k μ_k^N · mpv(A_k, σ) = ∑_k μ_k^N · mpv(B_k, σ)` into
 individual block equalities `mpv(A_k, σ) = mpv(B_k, σ)` for each `k`.
 
-**The difficulty**: the standard Vandermonde argument (as in `vandermonde_separation_fun`)
-requires *fixed* coefficients at each power, but here the "coefficients"
+**The difficulty**: a direct Vandermonde argument requires *fixed* coefficients
+at each power, but here the "coefficients"
 `mpv(A_k, σ) - mpv(B_k, σ)` depend on `σ : Fin N → Fin d` whose type varies with `N`.
 
 **Alternative route via repeated words and Newton's identities**:
