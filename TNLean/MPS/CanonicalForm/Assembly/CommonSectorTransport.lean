@@ -43,9 +43,8 @@ matrix product states, canonical form, common sectors, zero-tail decomposition
 representative weights are strictly ordered and the representatives are
 BNT-separated.
 
-This packages the representative normal-canonical-form theorem with the
-explicit BNT separation hypothesis; it does not assert that the representative
-family already gives the full common phase-cover data. -/
+It combines the representative normal-canonical-form statement with the
+explicit hypothesis that distinct representatives are not gauge-phase equivalent. -/
 theorem isNormalCanonicalFormBNT_commonRepresentativeBlocksAt
     {d r : ℕ} {dim : Fin r → ℕ}
     {blocks : (k : Fin r) → MPSTensor d (dim k)}

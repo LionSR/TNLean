@@ -1742,8 +1742,7 @@ The following results separate the zero blocks from the nonzero blocks.
 		MPSTensor.CommonBlockedCyclicSectorFamily.commonFlatDim_pos,
 		MPSTensor.CommonBlockedCyclicSectorFamily.commonBlockWeight_ne_zero,
 		MPSTensor.CommonBlockedCyclicSectorFamily.commonFlatWeight_ne_zero,
-		MPSTensor.CommonBlockedCyclicSectorFamily.isNormalCanonicalForm_commonFlatBlocks,
-		MPSTensor.isNormalCanonicalFormBNT_commonRepresentativeBlocksAt}
+		MPSTensor.CommonBlockedCyclicSectorFamily.isNormalCanonicalForm_commonFlatBlocks}
 	\leanok
 	\uses{def:common_blocked_cyclic_sector_derived_blocks,
 		thm:tp_primitive_irreducible_extra_blocking,
@@ -1767,6 +1766,28 @@ The following results separate the zero blocks from the nonzero blocks.
 	positive power of a nonzero complex number is nonzero.  The normal canonical
 	form statement is Theorem~\ref{thm:ncf_sorted_tp_primitive_irred} applied to
 	these derived sector data.
+\end{proof}
+
+\begin{theorem}[Common-sector representatives form a BNT-separated normal canonical form]%
+\label{thm:common_representative_normal_bnt}
+	\lean{MPSTensor.isNormalCanonicalFormBNT_commonRepresentativeBlocksAt}
+	\leanok
+	\uses{def:common_blocked_cyclic_sector_derived_blocks,
+		thm:common_blocked_cyclic_sector_derived_properties,
+		def:normal_cf_bnt}
+	For a prescribed common blocking length, choose one representative for
+	each original block among the common-alphabet cyclic sectors.  If the
+	transported representative weights are strictly ordered by decreasing
+	norm, and distinct representatives are not gauge-phase equivalent, then
+	the representative family is in normal canonical form with BNT
+	separation.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:common_blocked_cyclic_sector_derived_properties,
+		def:normal_cf_bnt}
+	Apply the normal-canonical-form statement for the representative family
+	and include the assumed separation of distinct representatives.
 \end{proof}
 
 \begin{theorem}[Weights of common-alphabet sectors]%
