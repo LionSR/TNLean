@@ -405,7 +405,7 @@ multiplicity $r_j$ and the multiset of weights attached to the basis block.
 \end{theorem}
 
 \begin{lemma}[Heterogeneous geometric sequence extrapolation]%
-\label{thm:geom_extrapolation_hetero}
+\label{lem:geom_extrapolation_hetero}
 	\lean{MPSTensor.SectorWeightData.power_sums_eq_of_eventually_eq_hetero}
 	\leanok
 	If two finite families of nonzero complex numbers, possibly with different
@@ -424,7 +424,7 @@ multiplicity $r_j$ and the multiset of weights attached to the basis block.
 \end{proof}
 
 \begin{lemma}[Geometric sequence extrapolation]%
-\label{thm:geom_extrapolation}
+\label{lem:geom_extrapolation}
 	\lean{MPSTensor.SectorWeightData.power_sums_eq_of_eventually_eq}
 	\leanok
 	If two finite families of nonzero complex numbers with the same
@@ -435,12 +435,12 @@ multiplicity $r_j$ and the multiset of weights attached to the basis block.
 
 \begin{proof}
 	\leanok
-	\uses{thm:geom_extrapolation_hetero}
+	\uses{lem:geom_extrapolation_hetero}
 	This is the equal-cardinality specialization of
-	Lemma~\ref{thm:geom_extrapolation_hetero}.
+	Lemma~\ref{lem:geom_extrapolation_hetero}.
 \end{proof}
 
-\begin{lemma}[Copy-count recovery from eventual coefficient equality]%
+\begin{theorem}[Copy-count recovery from eventual coefficient equality]%
 \label{thm:copies_eq_of_eventually_coeff_eq}
 	\lean{MPSTensor.SectorWeightData.copies_eq_of_eventually_coeff_eq}
 	\leanok
@@ -449,12 +449,12 @@ multiplicity $r_j$ and the multiset of weights attached to the basis block.
 	arrays satisfy $c_{S,j}^{(N)} = c_{T,j}^{(N)}$ for every basis block $j$
 	and all sufficiently large $N$, then their copy counts agree:
 	$r_j^S = r_j^T$ for every~$j$.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
 	\leanok
-	\uses{thm:geom_extrapolation_hetero}
-	Apply Lemma~\ref{thm:geom_extrapolation_hetero} to the two weight
+	\uses{lem:geom_extrapolation_hetero}
+	Apply Lemma~\ref{lem:geom_extrapolation_hetero} to the two weight
 	families in a fixed sector and then evaluate the resulting power-sum
 	equality at exponent $0$. Since each summand is then $1$, the equality
 	is exactly equality of the two copy counts.
@@ -481,22 +481,22 @@ multiplicity $r_j$ and the multiset of weights attached to the basis block.
 \begin{proof}
 	\leanok
 	\uses{thm:coeff_eventually_eq, thm:copies_eq_of_eventually_coeff_eq,
-	      thm:geom_extrapolation, thm:power_sum_multiset}
+	      lem:geom_extrapolation, thm:power_sum_multiset}
 	BNT linear independence and equality of total MPVs give eventual
 	coefficient equality by Theorem~\ref{thm:coeff_eventually_eq}. Then
-	Lemma~\ref{thm:copies_eq_of_eventually_coeff_eq} recovers the
+	Theorem~\ref{thm:copies_eq_of_eventually_coeff_eq} recovers the
 	copy-count equalities. After identifying the two index sets via these
 	copy-count equalities, the positive-power coefficient equalities extend
 	to all positive exponents by
-	Lemma~\ref{thm:geom_extrapolation}, and Newton--Girard
+	Lemma~\ref{lem:geom_extrapolation}, and Newton--Girard
 	(Theorem~\ref{thm:power_sum_multiset}) recovers the weight multisets.
 \end{proof}
 
-\begin{corollary}[Weight multiset recovery with fixed multiplicities]%
+\begin{theorem}[Weight multiset recovery with fixed multiplicities]%
 \label{thm:route_b_equal}
 	\lean{MPSTensor.SectorWeightData.weight_multiset_eq_of_sameMPV_bnt}
 	\leanok
-	\uses{thm:coeff_eventually_eq, thm:geom_extrapolation, thm:power_sum_multiset, def:paper_sector_data, def:bnt}
+	\uses{thm:coeff_eventually_eq, lem:geom_extrapolation, thm:power_sum_multiset, def:paper_sector_data, def:bnt}
 	Let $S$ and $T$ be two sector data over the same basis with
 	the same multiplicities ($r_j^S = r_j^T$ for all~$j$).
 	If the basis is eventually linearly independent and the total MPVs
@@ -509,17 +509,16 @@ multiplicity $r_j$ and the multiset of weights attached to the basis block.
 		      equality (Theorem~\ref{thm:coeff_eventually_eq});
 		\item Geometric extrapolation $\Rightarrow$ full coefficient
 		      equality for all positive~$k$
-		      (Lemma~\ref{thm:geom_extrapolation});
+		      (Lemma~\ref{lem:geom_extrapolation});
 		\item Newton--Girard $\Rightarrow$ equal weight multisets
 		      (Theorem~\ref{thm:power_sum_multiset}).
 	\end{enumerate}
 	At the level of block contributions, this is the fixed-multiplicity
 	specialization of Theorem~\ref{thm:route_b_equal_with_copies}: one compares
 	the weighted sector sums
-	$\sum_j c_{A,j}^{(N)} V^{(N)}(A_j)$ and
-	$\sum_j c_{B,j}^{(N)} V^{(N)}(B_j)$, with the coefficients
-	now aggregated over the multiplicity layers.
-\end{corollary}
+	$\sum_j c_{S,j}^{(N)} V^{(N)}(A_j)$ and
+	$\sum_j c_{T,j}^{(N)} V^{(N)}(A_j)$ over the same basis block family.
+\end{theorem}
 
 \begin{theorem}[Two-basis sector comparison after phase matching]%
 \label{thm:route_b_hetero_phase_match}
@@ -546,7 +545,7 @@ multiplicity $r_j$ and the multiset of weights attached to the basis block.
 	basis blocks of $P$. The phase-matching hypothesis and the sector
 	decomposition formula show that the resulting decomposition has the same
 	total MPV family as~$Q$, hence also as~$P$. One is then in the
-	shared-basis situation of Corollary~\ref{thm:route_b_equal}, which yields
+	shared-basis situation of Theorem~\ref{thm:route_b_equal}, which yields
 	the claimed equality of multisets.
 \end{proof}
 
