@@ -1289,6 +1289,25 @@ produce a positive period and a complete residue window of full homogeneous
 pair-word spans, but the later argument needs only the identity-padding
 conclusion below. -/
 private theorem
+    exists_pairIdentity_mem_pairWordTupleSpan_padding_window_of_pairIdentity_mem_pairCumulativeSpan
+    {d D : ℕ} [NeZero D]
+    (A B : MPSTensor d D) {S : ℕ}
+    (_hI :
+      ((1 : Matrix (Fin D) (Fin D) ℂ), (1 : Matrix (Fin D) (Fin D) ℂ)) ∈
+        pairCumulativeSpan A B S) :
+    ∃ start period : ℕ, 0 < period ∧ S ≤ period ∧
+      (∀ r : ℕ, r < period → S ≤ start + r) ∧
+      (∀ l : ℕ, l ≤ S →
+        ((1 : Matrix (Fin D) (Fin D) ℂ), (1 : Matrix (Fin D) (Fin D) ℂ)) ∈
+          Submodule.span ℂ (Set.range (pairWordTuple A B (period - l)))) ∧
+      ∀ r : ℕ, r < period → ∀ l : ℕ, l ≤ S →
+        ((1 : Matrix (Fin D) (Fin D) ℂ), (1 : Matrix (Fin D) (Fin D) ℂ)) ∈
+          Submodule.span ℂ (Set.range (pairWordTuple A B (start + r - l))) := by
+  -- This is the exact remaining homogenization step: turn a cumulative
+  -- representation of the pair identity into exact-length identity padding.
+  sorry
+
+private theorem
     exists_pairIdentity_mem_pairWordTupleSpan_padding_window_of_pairCumulativeWordTupleSpanTop
     {d D : ℕ} [NeZero D]
     (A B : MPSTensor d D) {S : ℕ}
@@ -1301,9 +1320,14 @@ private theorem
       ∀ r : ℕ, r < period → ∀ l : ℕ, l ≤ S →
         ((1 : Matrix (Fin D) (Fin D) ℂ), (1 : Matrix (Fin D) (Fin D) ℂ)) ∈
           Submodule.span ℂ (Set.range (pairWordTuple A B (start + r - l))) := by
-  -- This is the remaining finite-dimensional Burnside-Jacobson identity-padding
-  -- step.  It is weaker than producing homogeneous full spans directly.
-  sorry
+  have hI :
+      ((1 : Matrix (Fin D) (Fin D) ℂ), (1 : Matrix (Fin D) (Fin D) ℂ)) ∈
+        pairCumulativeSpan A B S := by
+    rw [hS]
+    exact Submodule.mem_top
+  exact
+    exists_pairIdentity_mem_pairWordTupleSpan_padding_window_of_pairIdentity_mem_pairCumulativeSpan
+      A B hI
 
 private theorem exists_pairWordTupleSpanTop_period_window_of_pairCumulativeWordTupleSpanTop
     {d D : ℕ} [NeZero D]
