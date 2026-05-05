@@ -231,15 +231,17 @@ Given canonical-form/BNT data, every ordered pair of distinct blocks admits a
 homogeneous word length `T` at which `PairTraceSeparatingAt` holds.
 
 Same-dimensional block pairs are reduced to the biCF derivation: two
-non-gauge-phase-equivalent BNT blocks admit a homogeneous pair-trace separator.
-Pairs with different bond dimensions are handled by a separate dimension-mismatch
-argument.
+non-gauge-phase-equivalent BNT blocks admit a homogeneous pair-trace separator
+once the Burnside-Jacobson identity-padding step is available. Pairs with
+different bond dimensions use the period-window dimension-mismatch adapter.
 
 Two formal ingredients remain. The same-dimensional branch needs the
-Burnside–Jacobson identity-padding step, which upgrades a pair-separation witness
+Burnside-Jacobson identity-padding step, which upgrades a pair-separation witness
 to the common homogeneous length appearing in the statement. The different
-bond-dimension branch still needs its dimension-mismatch separation proof. Once both
-branches are available, this BNT pair-separation theorem becomes unconditional. -/
+bond-dimension branch is available conditionally on a finite period-window
+homogeneous pair-span certificate. Once these certificates are produced uniformly
+for the BNT block family, this BNT pair-separation theorem becomes
+unconditional. -/
 theorem exists_forall_pairTraceSeparatingAt_of_isCanonicalFormBNT
     {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -254,9 +256,10 @@ theorem exists_forall_pairTraceSeparatingAt_of_isCanonicalFormBNT
   -- Different-dimension case: separation is trivial because bond dimensions differ;
   -- injectivity at length 1 gives the separation (see argument below).
   --
-  -- For now both cases reduce to `sorry`: the same-dimension case is blocked by
-  -- the pending Burnside–Jacobson identity-padding lemma, and the different-
-  -- dimension case also needs a formal proof.
+  -- For now the same-dimension case is blocked by the pending Burnside-Jacobson
+  -- identity-padding lemma. The different-dimension branch has a period-window
+  -- adapter, but this BNT theorem still has to produce the required finite
+  -- homogeneous pair-span certificate uniformly over the block family.
   sorry
 
 /-- Positive-length product-word span from canonical-form/BNT data and
