@@ -48,16 +48,32 @@ jobs:
             exit 1
           fi
 
+      - name: Check write-mode kill switch
+        id: write_mode
+        env:
+          CREATE_PR: ${{ inputs.create_pr }}
+          CLAUDE_AUTO_FIX_ENABLED: ${{ vars.CLAUDE_AUTO_FIX_ENABLED }}
+        run: |
+          set -euo pipefail
+          if [ "$CREATE_PR" = "true" ] && [ "$CLAUDE_AUTO_FIX_ENABLED" = "false" ]; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            echo "CLAUDE_AUTO_FIX_ENABLED=false; skipping before Lean setup/build." >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Set up Lean toolchain and cache
+        if: steps.write_mode.outputs.skip != 'true'
         uses: ./.github/actions/setup-lean
 
       - name: Set up Python for warning summary
-        if: always()
+        if: always() && steps.write_mode.outputs.skip != 'true'
         uses: actions/setup-python@v6
         with:
           python-version: "3.12"
 
       - name: Run Lean build and capture warnings
+        if: steps.write_mode.outputs.skip != 'true'
         id: build
         continue-on-error: true
         run: |
@@ -70,7 +86,7 @@ jobs:
 
       - name: Summarize linter warnings
         id: warnings
-        if: always()
+        if: always() && steps.write_mode.outputs.skip != 'true'
         env:
           REPORT_PREFIX: ${{ runner.temp }}/lean-linter-warning-autofix
         run: |
@@ -82,6 +98,7 @@ jobs:
             --count-output "$GITHUB_OUTPUT"
 
       - name: Check Claude token availability
+        if: steps.write_mode.outputs.skip != 'true'
         id: claude_token
         env:
           CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
@@ -94,6 +111,7 @@ jobs:
           fi
 
       - name: Decide whether to run auto-fix
+        if: steps.write_mode.outputs.skip != 'true'
         id: decide
         env:
           BUILD_OUTCOME: ${{ steps.build.outcome }}
@@ -316,7 +334,7 @@ jobs:
           echo "Opened $pr_url" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload auto-fix warning report
-        if: always()
+        if: always() && steps.write_mode.outputs.skip != 'true'
         uses: actions/upload-artifact@v4
         with:
           name: lean-linter-warning-autofix-report
@@ -327,7 +345,7 @@ jobs:
           if-no-files-found: warn
 
       - name: Fail if Lean build failed
-        if: steps.build.outcome != 'success'
+        if: steps.write_mode.outputs.skip != 'true' && steps.build.outcome != 'success'
         run: |
           echo "The initial Lean build failed; inspect the uploaded log before running linter auto-fix."
           exit 1
