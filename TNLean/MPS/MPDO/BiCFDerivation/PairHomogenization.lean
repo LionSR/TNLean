@@ -1051,13 +1051,13 @@ theorem pairTraceSeparatingAt_of_pairTraceSeparatingUpTo_of_identity_padding
     (pairWordTupleSpanTop_of_pairCumulativeWordTupleSpanTop_of_identity_padding
       A B hST (pairCumulativeWordTupleSpanTop_of_pairTraceSeparatingUpTo A B hSep) hPad)
 
-/-! ### Conditional all-words homogenization
+/-! ### Homogeneous separation from all-length hypotheses
 
-The declarations in this subsection are padding adapters: they convert
-all-length or cumulative separation to one homogeneous length only after an
-explicit homogeneous identity-padding hypothesis has already been supplied.
-They are not source-facing BNT separation producers. The paper-facing route
-should use the fixed-length or period-window interfaces below.
+The declarations in this subsection convert all-length or cumulative separation
+to one homogeneous length only after an explicit homogeneous identity-padding
+hypothesis has already been supplied. They do not supply the finite-length
+direct-sum input used in the David/Perez-Garcia BNT argument. For that input,
+BNT applications should use fixed-length or period-window hypotheses.
 -/
 
 /-- All-words pair separation plus eventual homogeneous identity padding gives
@@ -1068,9 +1068,9 @@ This is the proved interface between the pair-product algebra density theorem
 It records that once the two independent inputs are available, no additional
 BNT-specific argument is needed to obtain `PairTraceSeparatingAt`.
 
-This is a conditional auxiliary lemma, not the David/Perez-Garcia direct-sum
-input. In source-faithful BNT applications the homogeneous padding must be
-supplied by a fixed-length or period-window hypothesis. -/
+This lemma is conditional on identity padding; it is not the
+David/Perez-Garcia direct-sum input. In BNT applications the homogeneous
+padding must be supplied by a fixed-length or period-window hypothesis. -/
 theorem exists_pairTraceSeparatingAt_of_pairAllWordsSpanTop_of_identity_padding
     {D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (hSpan : PairAllWordsSpanTop A B)
@@ -1095,8 +1095,8 @@ For finitely many ordered pairs of blocks, if each pair has trace separation ove
 word lengths and the pair identity belongs to every sufficiently long homogeneous
 pair-word span, then one word length separates all ordered pairs simultaneously.
 
-This finite-family adapter is conditional on homogeneous identity padding; it is
-not a producer of the source-paper finite-length direct-sum input. -/
+This finite-family statement is conditional on homogeneous identity padding; it
+does not supply the finite-length direct-sum input. -/
 theorem exists_forall_pairTraceSeparatingAt_of_pairTraceSeparatingAll_of_identity_padding
     (A : (k : Fin r) → MPSTensor d (dim k))
     (hSep : ∀ k j : Fin r, j ≠ k → PairTraceSeparatingAll (A k) (A j))
@@ -1156,8 +1156,8 @@ trace-separating length.
 
 This is the homogeneous-span version of
 `exists_forall_pairTraceSeparatingAt_of_pairTraceSeparatingAll_of_identity_period_windows`.
-It keeps the fixed-length period-window producer explicit and only converts full
-homogeneous pair span into the identity-padding certificates needed by the
+It keeps the fixed-length period-window hypothesis explicit and only converts
+full homogeneous pair span into the identity-padding certificates needed by the
 generic homogenization theorem. -/
 theorem
     exists_forall_pairTraceSeparatingAt_of_pairSpanTop_period_windows

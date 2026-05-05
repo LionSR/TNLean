@@ -3158,9 +3158,9 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     homogeneous pair spans, then the simultaneous identity pair lies in all
     sufficiently large homogeneous pair spans.  Combined with all-length pair
     trace separation, this period-window input gives one homogeneous
-    pair trace-separation length.  The cumulative-to-homogeneous conversion
-    remains only a conditional auxiliary: cumulative span-top alone is not the
-    source-paper direct-sum input and is not used here as a producer.
+    pair trace-separation length.  This does not prove the
+    David--Perez-Garcia direct-sum input by itself: fullness of spans up to a
+    bounded length is weaker than the exact homogeneous input used here.
 \end{lemma}
 
 \begin{proof}
@@ -3170,8 +3170,8 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     if the identity pair is in the span at lengths $m$ and $n$, componentwise
     multiplication puts it in the span at length $m+n$.  A period witness and a
     complete residue window therefore give homogeneous padding at every
-    sufficiently large length, which is the input needed by the conditional
-    all-length-to-fixed-length adapter.
+    sufficiently large length, which is the input needed by the
+    all-length-to-fixed-length implication.
 \end{proof}
 
 \begin{lemma}[Pair trace separation gives pairwise selectors]
@@ -3262,7 +3262,7 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     pairwise separators for every ordered pair of distinct blocks; by
     Lemma~\ref{lem:pair_trace_separation_to_pairwise_selectors}, a common
     pair trace-separation length is one sufficient finite-dimensional witness.
-    The paper-facing route keeps this witness homogeneous: either it is supplied
+    This witness remains homogeneous: either it is supplied
     directly as fixed-length pair separation, or it is obtained from an explicit
     period-window hypothesis as in
     Lemma~\ref{lem:pair_trace_separation_homogenization_with_padding}.

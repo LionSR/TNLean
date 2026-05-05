@@ -263,9 +263,9 @@ The proof takes a finite maximum over the separating and padding lengths for the
 ordered block pairs, obtaining a single homogeneous word length whose block-product
 word evaluations span the full direct product algebra.
 
-This is an auxiliary adapter, not a source-facing BNT separation producer: the
-homogeneous identity-padding input must be supplied separately, preferably via
-the fixed-length or period-window interfaces below. -/
+This theorem does not supply BNT separation by itself: the homogeneous
+identity-padding input must be supplied separately, preferably by fixed-length
+or period-window hypotheses. -/
 theorem exists_pos_productWordSpan_of_pairTraceSeparatingAll_of_identity_padding
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hCF : IsCanonicalFormBNT μ A)
@@ -318,8 +318,8 @@ identity-padding hypotheses have been supplied. The BNT hypotheses provide
 all-words trace separation for each pair; the generic homogenization lemma
 chooses one length that works for the whole finite block family.
 
-This declaration is deliberately conditional on the homogeneous padding data and
-should not be read as the David/Perez-Garcia finite-length direct-sum input. -/
+The conclusion depends explicitly on homogeneous padding data; it is not the
+David/Perez-Garcia finite-length direct-sum input. -/
 theorem exists_forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_identity_padding
     [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -340,9 +340,9 @@ Together with eventual homogeneous identity padding for each ordered block pair,
 gives a positive word length at which the block-product word evaluations span the full
 direct product algebra.
 
-This is an auxiliary conditional adapter. The source-faithful route should use an
-explicit fixed-length or period-window hypothesis rather than treating cumulative
-or all-words separation as a producer. -/
+This theorem depends explicitly on homogeneous padding data. Use a
+fixed-length or period-window hypothesis rather than replacing that input by
+cumulative or all-words separation. -/
 theorem exists_pos_productWordSpan_of_isCanonicalFormBNT_of_identity_padding
     [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
