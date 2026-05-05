@@ -56,7 +56,7 @@ basis-of-normal-tensors construction from
   and the assembled tensor is `SameMPV₂`-equivalent to the original.  This is the key
   bridging step from the reduction output to the canonical form.
 
-### Section 3 Trivial sector decomposition for the sorted distinct-norm case
+### Section 3 Granular sector decomposition for the sorted distinct-norm case
 
 * `exists_trivialSectorDecomp_of_sorted_distinct_norms` — Forms from a sorted
   distinct-norm block family a `SectorDecomposition` with all multiplicities
@@ -224,7 +224,7 @@ theorem exists_sortedNCF_of_distinct_norms
     dim_pos           := fun k => hDim (e k)
   }⟩
 
-/-! ### Section 4. Trivial sector decomposition -/
+/-! ### Section 4. Granular sector decomposition -/
 
 /-- **Granular `SectorDecomposition` with one basis tensor per input block.**
 
