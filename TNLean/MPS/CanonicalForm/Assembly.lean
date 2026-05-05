@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.CanonicalForm.Assembly.ProportionalComparison
+import TNLean.MPS.CanonicalForm.Assembly.SectorComparisonCore
 
 /-!
 # Canonical-form reduction after blocking
@@ -26,6 +27,8 @@ The supporting modules are:
   decomposition after blocking.
 * `TNLean.MPS.CanonicalForm.Assembly.StructuralData` — common-period blocking
   and structural after-blocking data.
+* `TNLean.MPS.CanonicalForm.Assembly.SectorComparisonCore` — conditional
+  sector comparison after structural blocking.
 * `TNLean.MPS.CanonicalForm.Assembly.StructuralTheorem` — historical re-export
   path for structural data and common-sector transport.
 * `TNLean.MPS.CanonicalForm.Assembly.CommonSectorTransport` — zero-tail and
