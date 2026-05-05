@@ -86,7 +86,7 @@ identity as padding.
 
 \section{Formal boundary}
 
-The current formal development has safe consumers of this input.
+The current formal development includes downstream lemmas that depend on this input.
 \begin{itemize}
   \item \leanid{WordTupleSpanTop} expresses exact-length span of a direct-sum
         block family.
@@ -96,32 +96,24 @@ The current formal development has safe consumers of this input.
         \path{TNLean/MPS/MPDO/BiCFDerivation/PairHomogenization.lean} turn a
         positive homogeneous window of \leanid{PairWordTupleSpanTop} data into
         homogeneous trace separation.
-  \item The BNT wrappers in
+  \item The BNT-level reformulations in
         \path{TNLean/MPS/CanonicalForm/BlockDiagonalCommutant.lean} turn
         pairwise period-window data into a common \leanid{WordTupleSpanTop}
         length for a canonical-form BNT family.
 \end{itemize}
 
-What remains is the producer theorem matching the source statement: from the
-canonical-form BNT representatives, their injectivity after the prescribed
-blocking, and their phase-gauge inequivalence, produce the exact-length
-direct-sum span or the equivalent homogeneous period-window certificates.  Until
-that theorem is formalized, the final BNT pair-separation theorem should remain
-conditional on the explicit period-window or fixed-length span input.
+\section{Conclusion}
 
-\section{Retirement test}
-
-Any formal theorem in this part should be checked against the source input
-above.  It is source-faithful if it states one of the following:
-\begin{enumerate}
-  \item exact-length direct-sum span for the selected canonical BNT
-        representatives;
-  \item the trace-dual homogeneous separation statement at one positive length;
-  \item a period-window package that implies the same homogeneous conclusion.
-\end{enumerate}
-It is too weak if it only records cumulative span fullness.  It is too strong
-or misleading if it claims homogeneous identity padding from the empty-word
-identity or from cumulative identity membership alone.
+The present status is a theorem-level gap.  The source-paper theorem itself has
+not yet been formalized in MPS notation: from the canonical-form BNT
+representatives, their injectivity after the prescribed blocking, and their
+phase-gauge inequivalence, one must derive the exact-length direct-sum span, or
+equivalently the homogeneous trace-dual separation statement at one positive
+length.  Until that theorem is formalized, the final BNT pair-separation theorem
+should remain conditional on an explicit period-window or fixed-length span
+input.  A candidate formal theorem is too weak if it only records cumulative
+span fullness, and it is misleading if it claims homogeneous identity padding
+from the empty-word identity or from cumulative identity membership alone.
 
 \bibliographystyle{alpha}
 \bibliography{docs/paper-gaps/references}
