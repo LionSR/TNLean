@@ -4420,7 +4420,7 @@
 </div>
 <h1 id="sec:zero_block_separation">11.9 Zero-block separation</h1>
 
-<p>In the irreducible block decomposition, some blocks may have all-zero Kraus operators. Such blocks contribute to the MPV only at word length \(N = 0\) (where their contribution equals their bond dimension). The following results separate the zero blocks from the nonzero blocks. </p>
+<p>In the irreducible block decomposition, some blocks may have all-zero Kraus operators. Such blocks contribute to the MPV only at word length \(N = 0\) (where their contribution equals their bond dimension). The following results separate the zero blocks from the nonzero blocks. Following arXiv:1606.00608, equation&#160;(8), this is the case \(\sum _k D_k \le D\), where “there can be zero blocks”. In this case the <em>zero-tail bond dimension</em> is the total bond dimension of these all-zero leftover blocks. It is not an additional source-paper structure; it is a name for the all-zero summand \(\mathbf{0}_{d,D_0}\) used to retain the \(N=0\) MPV coefficient. </p>
 <div class="definition_thmwrapper theorem-style-definition" id="def:zero_mps_tensor">
   <div class="definition_thmheading">
     <span class="definition_thmcaption">
@@ -4627,7 +4627,7 @@
 <div class="displaymath" id="a0000000818">
   \[  V^{(N)}(A)_\sigma = V^{(N)}(\mathbf{0}_{d,D_0})_\sigma + V^{(N)}\! \bigl(\textstyle \bigoplus _{k=1}^r B_k\bigr)_\sigma  \]
 </div>
-<p> for every spin configuration \(\sigma \) of length \(N\). At \(N = 0\) this reads \(D = D_0 + \sum _{k=1}^r D_k\). For \(N \ge 1\) the zero-tail term vanishes. </p>
+<p> for every spin configuration \(\sigma \) of length \(N\). At \(N = 0\) this reads \(D = D_0 + \sum _{k=1}^r D_k\). For \(N \ge 1\) this all-zero, zero-tail term vanishes. </p>
 
   </div>
 </div>
@@ -4716,7 +4716,7 @@
   <div class="theorem_thmcontent">
   <p>   For any MPS tensor \(A\), there exist: </p>
 <ol class="enumerate">
-  <li><p>a zero-tail bond dimension \(D_0\), </p>
+  <li><p>a zero-tail bond dimension \(D_0\), namely the total bond dimension of the separated all-zero blocks, </p>
 </li>
   <li><p>nontrivial blocks \((B_k)_{k=1}^r\) with nonzero weights \((\mu _k)_{k=1}^r\), each block irreducible and left-canonical (\(\sum _i (B_k^i)^\dagger B_k^i = \mathbb {1}\)), with positive bond dimension, </p>
 </li>
@@ -14281,7 +14281,7 @@
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>   Each of two tensors admits some blocking after which it decomposes independently into a zero-tail tensor plus left-canonical blocks with primitive transfer maps, nonzero scalar weights, and positive bond dimensions. Moreover, at every blocked system size and every blocked word, the MPV of the blocked tensor is the sum of the zero-tail MPV and the MPV of the weighted nonzero-block tensor: </p>
+  <p>   Each of two tensors admits some blocking after which it decomposes independently into an all-zero tensor of zero-tail bond dimension plus left-canonical blocks with primitive transfer maps, nonzero scalar weights, and positive bond dimensions. Moreover, at every blocked system size and every blocked word, the MPV of the blocked tensor is the sum of the zero-tail MPV and the MPV of the weighted nonzero-block tensor: </p>
 <div class="displaymath" id="a0000000929">
   \[  V^{(N)}(A^{[p_A]})_\sigma = V^{(N)}(Z_{p_A,z_A})_\sigma + V^{(N)}\! \left(\bigoplus _k \mu ^A_k A_k\right)_\sigma ,  \]
 </div>
@@ -14307,7 +14307,7 @@
     Theorem
     </span>
     <span class="theorem_thmlabel">11.174</span>
-    <span class="theorem_thmtitle">Zero-tail decomposition after blocking</span>
+    <span class="theorem_thmtitle">All-zero-block contribution after blocking</span>
     <div class="thm_header_extras">
 
     
@@ -14366,7 +14366,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   Suppose \(A\) is expressed as a zero-tail tensor plus a nonzero part \(L\) at all system sizes. For every positive blocking length \(p\), the blocked tensor \(A^{[p]}\) is expressed as the same zero-tail bond dimension plus \(L^{[p]}\). The zero-tail term still contributes only at blocked length \(0\). </p>
+  <p>   Suppose \(A\) is expressed as an all-zero tensor of zero-tail bond dimension plus a nonzero part \(L\) at all system sizes. For every positive blocking length \(p\), the blocked tensor \(A^{[p]}\) is expressed as the same zero-tail bond dimension plus \(L^{[p]}\). The all-zero term still contributes only at blocked length \(0\). </p>
 
   </div>
 </div>
@@ -14388,7 +14388,7 @@
     Theorem
     </span>
     <span class="theorem_thmlabel">11.175</span>
-    <span class="theorem_thmtitle">Zero-tail weighted block decomposition after blocking</span>
+    <span class="theorem_thmtitle">All-zero-block weighted block decomposition after blocking</span>
     <div class="thm_header_extras">
 
     
@@ -14449,7 +14449,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   Suppose \(A\) is expressed as a zero-tail tensor plus the weighted nonzero-block tensor \(\bigoplus _k \mu _k B_k\). For every positive blocking length \(p\), \(A^{[p]}\) is expressed as the same zero-tail contribution plus the weighted blocked nonzero tensor \(\bigoplus _k \mu _k^p B_k^{[p]}\). </p>
+  <p>   Suppose \(A\) is expressed as an all-zero tensor of zero-tail bond dimension plus the weighted nonzero-block tensor \(\bigoplus _k \mu _k B_k\). For every positive blocking length \(p\), \(A^{[p]}\) is expressed as the same zero-tail contribution plus the weighted blocked nonzero tensor \(\bigoplus _k \mu _k^p B_k^{[p]}\). </p>
 
   </div>
 </div>
@@ -14471,7 +14471,7 @@
     Theorem
     </span>
     <span class="theorem_thmlabel">11.176</span>
-    <span class="theorem_thmtitle">Zero-tail identity for nonzero block tensors</span>
+    <span class="theorem_thmtitle">Length-zero identity for nonzero block tensors</span>
     <div class="thm_header_extras">
 
     
@@ -14534,7 +14534,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   Suppose two tensors have the same MPV family and each is expressed as a zero-tail tensor plus a weighted nonzero-block tensor. Then the two nonzero-block tensors agree on every positive system size, and at size \(0\) the equality is exactly the equality of the two zero-tail contributions plus the two nonzero bond-dimension traces. </p>
+  <p>   Suppose two tensors have the same MPV family and each is expressed as an all-zero tensor of zero-tail bond dimension plus a weighted nonzero-block tensor. Then the two nonzero-block tensors agree on every positive system size, and at size \(0\) the equality is exactly the equality of the two zero-tail contributions plus the two nonzero bond-dimension traces. </p>
 
   </div>
 </div>
@@ -14546,7 +14546,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> For \(N{\gt}0\), the MPV of a zero-tail tensor is zero, so the two decompositions can be compared directly through the common MPV family. For \(N=0\), the zero-tail MPV is its bond dimension, giving the stated length-zero identity. </p>
+  <p> For \(N{\gt}0\), the MPV of the all-zero tensor is zero, so the two decompositions can be compared directly through the common MPV family. For \(N=0\), the zero-tail MPV is its bond dimension, giving the stated length-zero identity. </p>
 
   </div>
 </div>
@@ -14639,7 +14639,7 @@
     Theorem
     </span>
     <span class="theorem_thmlabel">11.178</span>
-    <span class="theorem_thmtitle">Equal zero tails give full nonzero-part MPV equality</span>
+    <span class="theorem_thmtitle">Equal leftover zero-block dimensions give full nonzero-part MPV equality</span>
     <div class="thm_header_extras">
 
     
@@ -14805,7 +14805,7 @@
     Theorem
     </span>
     <span class="theorem_thmlabel">11.180</span>
-    <span class="theorem_thmtitle">Cyclic sectors after the zero-tail split</span>
+    <span class="theorem_thmtitle">Cyclic sectors after all-zero-block separation</span>
     <div class="thm_header_extras">
 
     
@@ -14874,7 +14874,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   If two tensors generate the same MPV family, then after the zero-tail split and trace-preserving gauge each side has irreducible nonzero-weight blocks. The nonzero-block tensors agree at all positive system sizes, while the length-zero case is included as the exact zero-tail identity. Moreover each nonzero-weight block has primitive irreducible cyclic sectors. The period-removal length for those sectors is kept separate from any later common blocking or injectivity length. </p>
+  <p>   If two tensors generate the same MPV family, then after all-zero-block separation and trace-preserving gauge each side has irreducible nonzero-weight blocks. The nonzero-block tensors agree at all positive system sizes, while the length-zero case is included as the exact zero-tail identity. Moreover each nonzero-weight block has primitive irreducible cyclic sectors. The period-removal length for those sectors is kept separate from any later common blocking or injectivity length. </p>
 
   </div>
 </div>
@@ -14886,7 +14886,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Apply the arbitrary-tensor TP-gauge theorem separately to \(A\) and \(B\). The zero-tail identity theorem compares the two resulting nonzero parts at positive lengths and gives the \(N=0\) identity. Finally apply Theorem&#160;<a href="ch-canonical.html#thm:has_primitive_irreducible_cyclic_sectors_tp_irr">11.84</a> to every trace-preserving irreducible nonzero-weight block. </p>
+  <p> Apply the arbitrary-tensor TP-gauge theorem separately to \(A\) and \(B\). The length-zero identity theorem compares the two resulting nonzero parts at positive lengths and gives the \(N=0\) identity. Finally apply Theorem&#160;<a href="ch-canonical.html#thm:has_primitive_irreducible_cyclic_sectors_tp_irr">11.84</a> to every trace-preserving irreducible nonzero-weight block. </p>
 
   </div>
 </div>
