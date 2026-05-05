@@ -3109,6 +3109,9 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     \lean{MPSTensor.pairTraceSeparatingAll_of_pairAlgSpan_eq_top}
     \lean{MPSTensor.gaugePhaseEquiv_of_pairAlgSpan_eq_graph_algEquiv}
     \lean{MPSTensor.not_pairAlgSpan_eq_graph_algEquiv_of_not_gaugePhaseEquiv}
+    \lean{MPSTensor.subdirect_matrix_pair_eq_top_of_dim_ne}
+    \lean{MPSTensor.pairAlgSpan_eq_top_of_injective_dim_ne}
+    \lean{MPSTensor.pairTraceSeparatingAll_of_injective_dim_ne}
     \leanok
     \uses{def:pair_trace_separation_words}
     If one of the two blocks is injective, then the corresponding coordinate
@@ -3118,7 +3121,9 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     by the pair algebra.  If the pair algebra is the graph of an algebra
     automorphism of the matrix algebra, Skolem--Noether turns this graph case
     into gauge-phase equivalence, so under non-gauge-equivalence the graph
-    branch is impossible.
+    branch is impossible.  For two blocks of unequal bond dimensions, the graph
+    branch is also impossible because it would identify matrix algebras with
+    different finite dimensions over \(\C\).
 \end{lemma}
 
 \begin{proof}
