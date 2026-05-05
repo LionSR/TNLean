@@ -10,6 +10,25 @@ The conceptual source is Wolf's treatment of irreducible positive
 maps~\cite[Chapter~6, especially Theorems~6.2--6.5 and Corollary~6.3]{Wolf2012Quantum}
 and~\cite{Evans1978Spectral}.
 
+\begin{theorem}[Brouwer fixed point on density matrices]%
+	\label{thm:brouwer_density_matrices}
+	\lean{brouwer_fixedPoint_densityMatrices}
+	\lean{fixedPoint_of_compact_retract, fixedPoint_of_compact_retract_fin}
+	\lean{exists_fixedPoint_closedCube, exists_fixedPoint_unitCube}
+	\leanok
+	\uses{def:density_matrices, thm:density_compact}
+	Let $D > 0$. Every continuous map from the compact convex set of
+	density matrices in $\MN{D}$ to itself has a fixed point.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	The proof starts from Brouwer's theorem for products of simplices,
+	transfers it to closed cubes, and then to compact retracts of
+	finite-dimensional real normed spaces. The density-matrix set is
+	such a compact retract, using the explicit density retraction.
+\end{proof}
+
 \section{Positive definiteness}
 
 \begin{remark}\leanok
