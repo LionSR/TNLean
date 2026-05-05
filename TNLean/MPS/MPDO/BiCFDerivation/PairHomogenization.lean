@@ -1288,6 +1288,39 @@ sufficiently large single length.  A stronger way to prove this would be to
 produce a positive period and a complete residue window of full homogeneous
 pair-word spans, but the later argument needs only the identity-padding
 conclusion below. -/
+private theorem
+    exists_pairIdentity_mem_pairWordTupleSpan_padding_window_of_pairCumulativeWordTupleSpanTop
+    {d D : ℕ} [NeZero D]
+    (A B : MPSTensor d D) {S : ℕ}
+    (hS : PairCumulativeWordTupleSpanTop A B S) :
+    ∃ start period : ℕ, 0 < period ∧ S ≤ period ∧
+      (∀ r : ℕ, r < period → S ≤ start + r) ∧
+      (∀ l : ℕ, l ≤ S →
+        ((1 : Matrix (Fin D) (Fin D) ℂ), (1 : Matrix (Fin D) (Fin D) ℂ)) ∈
+          Submodule.span ℂ (Set.range (pairWordTuple A B (period - l)))) ∧
+      ∀ r : ℕ, r < period → ∀ l : ℕ, l ≤ S →
+        ((1 : Matrix (Fin D) (Fin D) ℂ), (1 : Matrix (Fin D) (Fin D) ℂ)) ∈
+          Submodule.span ℂ (Set.range (pairWordTuple A B (start + r - l))) := by
+  -- This is the remaining finite-dimensional Burnside-Jacobson identity-padding
+  -- step.  It is weaker than producing homogeneous full spans directly.
+  sorry
+
+private theorem exists_pairWordTupleSpanTop_period_window_of_pairCumulativeWordTupleSpanTop
+    {d D : ℕ} [NeZero D]
+    (A B : MPSTensor d D) {S : ℕ}
+    (hS : PairCumulativeWordTupleSpanTop A B S) :
+    ∃ start period : ℕ, 0 < period ∧ PairWordTupleSpanTop A B period ∧
+      ∀ r : ℕ, r < period → PairWordTupleSpanTop A B (start + r) := by
+  obtain ⟨start, period, hperiod_pos, hS_period, hS_window, hperiodPad, hwindowPad⟩ :=
+    exists_pairIdentity_mem_pairWordTupleSpan_padding_window_of_pairCumulativeWordTupleSpanTop
+      A B hS
+  refine ⟨start, period, hperiod_pos, ?_, ?_⟩
+  · exact pairWordTupleSpanTop_of_pairCumulativeWordTupleSpanTop_of_identity_padding
+      A B hS_period hS hperiodPad
+  · intro r hr
+    exact pairWordTupleSpanTop_of_pairCumulativeWordTupleSpanTop_of_identity_padding
+      A B (hS_window r hr) hS (hwindowPad r hr)
+
 private theorem exists_pairWordTupleSpanTop_period_window_of_pairAlgSpan_eq_top
     {d D : ℕ} [NeZero D]
     (A B : MPSTensor d D)
@@ -1298,15 +1331,7 @@ private theorem exists_pairWordTupleSpanTop_period_window_of_pairAlgSpan_eq_top
     pairAllWordsSpanTop_of_pairAlgSpan_eq_top A B hAlg
   obtain ⟨S, hS⟩ :=
     exists_pairCumulativeWordTupleSpanTop_of_pairAllWordsSpanTop A B hAll
-  have hIdCum :
-      ((1 : Matrix (Fin D) (Fin D) ℂ), (1 : Matrix (Fin D) (Fin D) ℂ)) ∈
-        pairCumulativeSpan A B S := by
-    rw [hS]
-    exact Submodule.mem_top
-  -- The finite-dimensional algebra argument reaches the cumulative cutoff `hS`.
-  -- The missing Burnside-Jacobson step is upgrading that cutoff to a positive
-  -- period and full residue window of homogeneous spans.
-  sorry
+  exact exists_pairWordTupleSpanTop_period_window_of_pairCumulativeWordTupleSpanTop A B hS
 
 private theorem exists_pairIdentity_mem_pairWordTupleSpan_eventually_of_pairAlgSpan_eq_top
     {d D : ℕ} [NeZero D]
