@@ -226,25 +226,6 @@ theorem wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingUpTo_of_ide
       pairTraceSeparatingAt_of_pairTraceSeparatingUpTo_of_identity_padding
         (A k) (A j) hST (hSep k j hjk) (hPad k j hjk))
 
-/-- Homogeneous pair trace separation for all distinct BNT block pairs.
-
-For a finite BNT family, trace functionals separating distinct ordered block
-pairs at homogeneous lengths can be chosen with one common length. The
-conclusion asserts simultaneous homogeneous pair trace separation for every
-ordered pair of distinct blocks, which is the pair-separation input for the
-product-word span theorem. -/
-theorem exists_forall_pairTraceSeparatingAt_of_isCanonicalFormBNT
-    {r : ℕ} {dim : Fin r → ℕ}
-    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
-    (hCF : IsCanonicalFormBNT μ A) :
-    ∃ T : ℕ, ∀ k j : Fin r, j ≠ k → PairTraceSeparatingAt (A k) (A j) T := by
-  classical
-  have hInj := hCF.toHasInjectiveBlocks
-  have hLeft := hCF.toIsLeftCanonicalBlockFamily
-  have hNot := hCF.blocks_not_equiv
-  -- Pairwise homogeneous separation is combined over the finite ordered-pair set.
-  sorry
-
 /-- Positive-length product-word span from canonical-form/BNT data and
 pairwise block-separating word polynomials. -/
 theorem exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairBlockSeparatingWords
