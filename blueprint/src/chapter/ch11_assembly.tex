@@ -1452,8 +1452,10 @@ two-basis sector comparison theorem.
 \begin{definition}[BNT-cover hypotheses for common primitive sectors]%
 \label{def:common_primitive_bnt_cover_hypotheses}
 	\lean{MPSTensor.CommonPrimitiveBNTCoverHypotheses,
+		MPSTensor.CommonRepresentativeBNTCoverHypotheses,
 		MPSTensor.CommonPrimitiveBNTCoverHypotheses.ofCommonPrimitiveData,
 		MPSTensor.CommonPrimitiveBNTCoverHypotheses.ofCommonPrimitiveData_zeroTailIdentity,
+		MPSTensor.CommonPrimitiveBNTCoverHypotheses.ofCommonRepresentativeBNTCoverHypotheses,
 		MPSTensor.zeroTail_eq_of_proportionalDecompositionConclusion}
 	\leanok
 	\uses{def:is_normal_canonical_form, def:blocks_not_gauge_phase_equiv,
@@ -1467,7 +1469,9 @@ two-basis sector comparison theorem.
 	canonical-form data, together with the remaining conditions above, they yield the
 	BNT-cover hypotheses. The length-zero identity and the proportional matching
 	identify the zero-tail dimensions, so this equality need not be supplied
-	separately once the proportional data are present.
+	separately once the proportional data are present. For common cyclic sectors,
+	the same condition is stated on the representative or grouped sector family,
+	where the strict ordering and BNT-separation hypotheses are meaningful.
 \end{definition}
 
 \begin{theorem}[BNT-cover hypotheses produce a common phase cover]%

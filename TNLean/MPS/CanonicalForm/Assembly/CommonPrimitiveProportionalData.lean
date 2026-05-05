@@ -261,6 +261,58 @@ structure CommonPrimitiveBNTCoverHypotheses
   decompData : ProportionalDecompositionData (d := blockPhysDim d p)
     blocksA blocksB DtotA DtotB
 
+/-- BNT-cover inputs for representative common-sector families.
+
+The common cyclic-sector family can contain several sectors from the same original block with
+the same transported weight.  This structure collects the representative-sector hypotheses:
+one representative per original nonzero block, strict ordering of the representative weights,
+BNT separation among representatives, the length-zero identity for the representative nonzero
+parts, one-site injectivity, and proportional decomposition data for the two representative
+families. -/
+structure CommonRepresentativeBNTCoverHypotheses
+    {d p rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    {blocksA : (k : Fin rA) → MPSTensor d (dimA k)}
+    {blocksB : (k : Fin rB) → MPSTensor d (dimB k)}
+    (FA : CommonBlockedCyclicSectorFamily blocksA)
+    (FB : CommonBlockedCyclicSectorFamily blocksB)
+    (hpA : FA.p = p) (hpB : FB.p = p)
+    [∀ k, NeZero (FA.commonRepresentativeDim k)]
+    [∀ k, NeZero (FB.commonRepresentativeDim k)]
+    {zeroTailA zeroTailB DtotA DtotB : ℕ}
+    (μA : Fin rA → ℂ) (μB : Fin rB → ℂ) : Type where
+  /-- The original left nonzero-sector weights are nonzero. -/
+  left_weight_ne_zero : ∀ k, μA k ≠ 0
+  /-- The original right nonzero-sector weights are nonzero. -/
+  right_weight_ne_zero : ∀ k, μB k ≠ 0
+  /-- The transported left representative weights are strictly ordered by norm. -/
+  left_weight_strict_anti :
+    StrictAnti (fun k : Fin rA => ‖FA.commonRepresentativeWeight μA k‖)
+  /-- The transported right representative weights are strictly ordered by norm. -/
+  right_weight_strict_anti :
+    StrictAnti (fun k : Fin rB => ‖FB.commonRepresentativeWeight μB k‖)
+  /-- Distinct left representatives are not gauge-phase equivalent. -/
+  notGpeA :
+    BlocksNotGaugePhaseEquiv (d := blockPhysDim d p) (FA.commonRepresentativeBlocksAt hpA)
+  /-- Distinct right representatives are not gauge-phase equivalent. -/
+  notGpeB :
+    BlocksNotGaugePhaseEquiv (d := blockPhysDim d p) (FB.commonRepresentativeBlocksAt hpB)
+  /-- The length-zero identity for the representative nonzero parts. -/
+  zero_length_identity : ∀ σ : Fin 0 → Fin (blockPhysDim d p),
+    (zeroTailA : ℂ) +
+        mpv (toTensorFromBlocks (d := blockPhysDim d p)
+          (μ := FA.commonRepresentativeWeight μA) (FA.commonRepresentativeBlocksAt hpA)) σ =
+      (zeroTailB : ℂ) +
+        mpv (toTensorFromBlocks (d := blockPhysDim d p)
+          (μ := FB.commonRepresentativeWeight μB) (FB.commonRepresentativeBlocksAt hpB)) σ
+  /-- The left representative common-sector blocks are one-site injective. -/
+  left_injective : ∀ k, IsInjective (FA.commonRepresentativeBlocksAt hpA k)
+  /-- The right representative common-sector blocks are one-site injective. -/
+  right_injective : ∀ k, IsInjective (FB.commonRepresentativeBlocksAt hpB k)
+  /-- Proportional decomposition data linking the two representative families. -/
+  decompData : ProportionalDecompositionData (d := blockPhysDim d p)
+    (FA.commonRepresentativeBlocksAt hpA)
+    (FB.commonRepresentativeBlocksAt hpB) DtotA DtotB
+
 namespace CommonPrimitiveBNTCoverHypotheses
 
 /-- Form `CommonPrimitiveBNTCoverHypotheses` from common primitive structural data
@@ -414,7 +466,7 @@ def ofNormalCanonicalFormBNT_zeroTailIdentity
   exact ofNormalCanonicalFormBNT hA hB
     (zeroTail_eq_of_proportionalDecompositionConclusion hZero hMatch) hInjA hInjB hDecomp
 
-/-- Representative common-sector families give the BNT-cover hypothesis bundle once the
+/-- Representative common-sector families give the BNT-cover hypotheses once the
 representative weights are strictly ordered, representatives are BNT-separated, and the
 remaining zero-tail, injectivity, and proportional-decomposition inputs are supplied. -/
 noncomputable def ofCommonRepresentatives_zeroTailIdentity
@@ -462,7 +514,35 @@ noncomputable def ofCommonRepresentatives_zeroTailIdentity
       FB hpB μB hμB hAntiB hNotGpeB)
     hZero hInjA hInjB hDecomp
 
-/-- A BNT cover hypothesis bundle produces a common MPV phase cover. -/
+/-- Representative BNT-cover data convert to the primitive BNT-cover hypotheses for the
+representative common-sector families. -/
+noncomputable def ofCommonRepresentativeBNTCoverHypotheses
+    {d p rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    {blocksA : (k : Fin rA) → MPSTensor d (dimA k)}
+    {blocksB : (k : Fin rB) → MPSTensor d (dimB k)}
+    (FA : CommonBlockedCyclicSectorFamily blocksA)
+    (FB : CommonBlockedCyclicSectorFamily blocksB)
+    (hpA : FA.p = p) (hpB : FB.p = p)
+    [∀ k, NeZero (FA.commonRepresentativeDim k)]
+    [∀ k, NeZero (FB.commonRepresentativeDim k)]
+    {zeroTailA zeroTailB DtotA DtotB : ℕ}
+    (μA : Fin rA → ℂ) (μB : Fin rB → ℂ)
+    (h : CommonRepresentativeBNTCoverHypotheses (zeroTailA := zeroTailA)
+      (zeroTailB := zeroTailB) (DtotA := DtotA) (DtotB := DtotB)
+      FA FB hpA hpB μA μB) :
+    CommonPrimitiveBNTCoverHypotheses (zeroTailA := zeroTailA) (zeroTailB := zeroTailB)
+      (DtotA := DtotA) (DtotB := DtotB)
+      (FA.commonRepresentativeWeight μA) (FB.commonRepresentativeWeight μB)
+      (FA.commonRepresentativeBlocksAt hpA)
+      (FB.commonRepresentativeBlocksAt hpB) :=
+  ofCommonRepresentatives_zeroTailIdentity
+    FA FB hpA hpB μA μB
+    h.left_weight_ne_zero h.right_weight_ne_zero
+    h.left_weight_strict_anti h.right_weight_strict_anti
+    h.notGpeA h.notGpeB
+    h.zero_length_identity h.left_injective h.right_injective h.decompData
+
+/-- BNT-cover hypotheses produce a common MPV phase cover. -/
 theorem toMPVCommonPhaseCover
     {d p rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
@@ -477,7 +557,7 @@ theorem toMPVCommonPhaseCover
     (d := blockPhysDim d p) blocksA blocksB
     h.ncfA h.notGpeA h.ncfB h.notGpeB h.decompData
 
-/-- A BNT cover hypothesis bundle produces the common primitive phase-cover hypotheses. -/
+/-- BNT-cover hypotheses produce the common primitive phase-cover hypotheses. -/
 theorem toCommonPrimitivePhaseCoverHypotheses
     {d p rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
