@@ -20,23 +20,19 @@ For a primitive quantum channel `E_A` on `M_D(ℂ)` with `d` Kraus operators:
 
 where `i(A) = min{n : S_n(A) = M_D(ℂ)}` (the "full Kraus rank index").
 
-## Formalized statements
+## Cumulative-span consequences
 
-This file records the cumulative-span part of the Wielandt argument:
+Normality gives the following cumulative-span data:
 
 1. **Cumulative span reaches ⊤**: Under `IsNormal`, `T_{D²}(A) = M_D(ℂ)`
-   (`cumulativeSpan_eq_top` from `NonzeroTraceProduct.lean`)
 
 2. **Nonzero trace product exists**: Under `IsNormal`, ∃ word `w₀` of length
    ≤ D² with `tr(evalWord A w₀) ≠ 0`
-   (`exists_nonzero_trace_word` from `NonzeroTraceProduct.lean`)
 
 3. **Eigenvalue/eigenvector extraction**: A matrix with nonzero trace has a
    nonzero eigenvalue and eigenvector
-   (`exists_eigenvector_of_trace_ne_zero` from `RankOneProducts.lean`)
 
 4. **Eigenvector spreading**: The cumulative vector span reaches ⊤ in D-1 steps
-   (`eigenvector_spreading` from `EigenvectorSpreading.lean`)
 
 5. **Cumulative conclusion**: these facts imply the cumulative span bound.
 
@@ -60,10 +56,10 @@ variable {d D : ℕ}
 /-! ## Part 1: Eigenvalue extraction data
 
 For a normal tensor, the following data are available:
-1. `cumulativeSpan A (D²) = ⊤` (from NonzeroTraceProduct)
-2. `∃ w₀, |w₀| ≤ D² ∧ tr(evalWord A w₀) ≠ 0` (from NonzeroTraceProduct)
-3. `∃ μ ≠ 0, ∃ φ ≠ 0, evalWord A w₀ *ᵥ φ = μ • φ` (from RankOneProducts)
-4. `cumulativeVectorSpan A φ (D-1) = ⊤` (from EigenvectorSpreading)
+1. `cumulativeSpan A (D²) = ⊤`
+2. `∃ w₀, |w₀| ≤ D² ∧ tr(evalWord A w₀) ≠ 0`
+3. `∃ μ ≠ 0, ∃ φ ≠ 0, evalWord A w₀ *ᵥ φ = μ • φ`
+4. `cumulativeVectorSpan A φ (D-1) = ⊤`
 
 These facts are combined into a single analysis structure. -/
 
@@ -140,10 +136,9 @@ theorem vector_spanning_from_normality [NeZero D]
 
 /-! ## Part 3: Wielandt bound - main statements
 
-The exact fixed-length paper bound is proved in
-`TNLean.Wielandt.PaperResults.WielandtInequality` using the matrix-span and
-rank-one extraction modules. The results below record the cumulative normality
-consequences.
+The fixed-length inequality additionally requires rank-one extraction and exact
+word-length padding. The cumulative statements below supply the
+normality-to-spanning input for that fixed-length passage.
 
 ### What we prove:
 - `cumulative_wielandt_bound`: T_{D²}(A) = ⊤ for normal tensors
@@ -151,8 +146,8 @@ consequences.
   via cumulative span
 
 ### Fixed-length passage:
-The conversion from vector spanning to fixed-length matrix spanning is formalized
-by the Lemma 2(b) results in `TNLean.Wielandt.PaperResults.MatrixSpanSharpBound`.
+The conversion from vector spanning to fixed-length matrix spanning is the
+Lemma 2(b) passage from the paper.
 -/
 
 /-- **Cumulative Wielandt bound**: Under `IsNormal`, the cumulative word
