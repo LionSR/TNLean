@@ -287,6 +287,21 @@ theorem isNormalCanonicalForm_commonFlatBlocks
     F.commonFlatBlocks_irreducible
     hAnti
 
+/-- The derived flattened common-sector family is a normal canonical form when
+expressed at a prescribed common blocking length. -/
+theorem isNormalCanonicalForm_commonFlatBlocksAt
+    (F : CommonBlockedCyclicSectorFamily blocks)
+    {p' : ℕ} (hp : F.p = p')
+    (μ : Fin r → ℂ)
+    (hμ : ∀ k, μ k ≠ 0)
+    (hAnti : StrictAnti
+      (fun x : Fin (∑ k : Fin r, F.period k) => ‖F.commonFlatWeight μ x‖)) :
+    IsNormalCanonicalForm (d := blockPhysDim d p')
+      (F.commonFlatWeight μ) (F.commonFlatBlocksAt hp) := by
+  subst p'
+  simpa [commonFlatBlocksAt] using
+    F.isNormalCanonicalForm_commonFlatBlocks μ hμ hAnti
+
 /-- Iterated blocking of a nonzero-weight block is the relabeled common block. -/
 theorem nestedBlock_sameMPV₂_commonReindexedBlock
     (F : CommonBlockedCyclicSectorFamily blocks) (k : Fin r) :
