@@ -59,7 +59,8 @@ The full proof chain is:
 
 The theorem `exists_tp_sector_decomp_after_blocking` below provides:
 - A blocking period `p > 0`
-- A trivial block of dimension `zeroTailDim`
+- A trivial all-zero block of dimension `zeroTailDim`, representing the source-paper
+  allowance `∑ k, D_k ≤ D` where zero blocks may occur
 - A family of TP sector blocks
 - The MPV relationship: `blockTensor A p` is `SameMPV₂`-equivalent to
   `zeroMPSTensor + toTensorFromBlocks μ sectors` for some weights `μ`
@@ -69,8 +70,9 @@ now has a one-sided phase-class BNT construction for TP primitive irreducible
 nonzero-weight blocks, one-sided overlap data, and witness-producing sector comparison
 from primitive overlap-span hypotheses. The theorem
 `afterBlocking_perBlockCyclicDataWithZeroTail_of_sameMPV₂`
-keeps the faithful paper order: first split off the zero tail and TP-gauge the
-irreducible nonzero-weight blocks, then remove each block's period by cyclic sectors.
+keeps the faithful paper order: first separate the all-zero leftover block and
+TP-gauge the irreducible nonzero-weight blocks, then remove each block's period by
+cyclic sectors.
 It deliberately does not identify that period-removal length with the later
 finite blocking length used for common refinement or injectivity.
 

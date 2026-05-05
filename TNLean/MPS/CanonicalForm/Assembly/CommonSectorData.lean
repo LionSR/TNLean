@@ -14,9 +14,11 @@ open Filter
 
 This file collects the common-sector continuation of the structural
 canonical-form reduction following arXiv:1606.00608. Starting from the
-zero-tail and TP-gauge decomposition, it records the per-block cyclic-sector
-data, chooses common blocking lengths, and states the relabeled common-sector
-data needed to compare the resulting sector families.
+all-zero leftover block and TP-gauge decomposition, it records the per-block
+cyclic-sector data, chooses common blocking lengths, and states the relabeled
+common-sector data needed to compare the resulting sector families.  The
+`zeroTail` variables below name the total bond dimension of the all-zero blocks,
+corresponding to the source-paper allowance `∑ k, D_k ≤ D`.
 
 ## Main statements
 
@@ -46,9 +48,9 @@ section FundamentalTheoremAfterBlocking
 /-- **Per-block cyclic-sector decomposition with a zero-tail identity.**
 
 This is the faithful predecessor to the common nonzero-sector statement. From
-`SameMPV₂ A B`, it first uses the invariant-subspace/zero-tail split and TP gauge
-to obtain irreducible nonzero-weight blocks on both sides. It then removes the period of
-each block separately, producing primitive irreducible cyclic sectors for
+`SameMPV₂ A B`, it first separates the all-zero leftover block and then applies
+the TP gauge to obtain irreducible nonzero-weight blocks on both sides. It then
+removes the period of each block separately, producing primitive irreducible cyclic sectors for
 every nonzero-weight block. The nonzero parts agree at positive lengths, and the length-zero
 case is given as the explicit zero-tail identity.
 
