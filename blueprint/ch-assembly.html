@@ -1309,7 +1309,7 @@
           
           <li><a href="ch-assembly.html#thm:route_b_equal">Theorem 14.16</a></li>
           
-          <li><a href="ch-assembly.html#thm:afterBlocking_sectorComparison_reindexed_bntCover">Theorem 14.78</a></li>
+          <li><a href="ch-assembly.html#thm:afterBlocking_sectorComparison_reindexed_bntCover">Theorem 14.80</a></li>
           
           <li><a href="ch-assembly.html#thm:common_phase_cover_of_proportional_decomposition">Theorem 14.37</a></li>
           
@@ -1340,7 +1340,7 @@
   </div>
   <div class="proof_content">
   <p> The formalized comparison starts with explicit decomposition coefficients. Theorem&#160;<a href="ch-mps.html#thm:mpv_decomposition">2.36</a> expands the two canonical-form tensors in their BNT bases, and Remark&#160;<a href="ch-assembly.html#rem:cf_coeff_arrays">14.3</a> describes the resulting coefficient arrays. When the required coefficient identities are supplied, Theorem&#160;<a href="ch-assembly.html#thm:ft_equal_explicit">14.6</a> proves gauge equivalence after permuting the weighted block-diagonal tensors. The sector-weight comparison of Theorem&#160;<a href="ch-assembly.html#thm:route_b_equal">14.16</a> uses the supplied multiplicity data to recover the sector-weight multisets from these identities. </p>
-<p>The remaining synchronization statement for the bare equal-MPV theorem must derive the coefficient identities and common phase data directly from equality of the full MPV families. The after-blocking comparison theorem (Theorem&#160;<a href="ch-assembly.html#thm:afterBlocking_sectorComparison_reindexed_bntCover">14.78</a>) gives the matched sector-weight conclusion once BNT-cover comparison data are supplied. Theorem&#160;<a href="ch-assembly.html#thm:common_phase_cover_of_proportional_decomposition">14.37</a> explains how proportional block comparisons supply common phases. Completing this theorem therefore amounts to deriving the BNT-cover, overlap-span, or common-phase hypotheses for the canonical decompositions produced from the bare equality assumption. Once those data are available, the phases are absorbed into the recovered weights and the blockwise conjugacies assemble into a global gauge equivalence. </p>
+<p>The remaining synchronization statement for the bare equal-MPV theorem must derive the coefficient identities and common phase data directly from equality of the full MPV families. The after-blocking comparison theorem (Theorem&#160;<a href="ch-assembly.html#thm:afterBlocking_sectorComparison_reindexed_bntCover">14.80</a>) gives the matched sector-weight conclusion once BNT-cover comparison data are supplied. Theorem&#160;<a href="ch-assembly.html#thm:common_phase_cover_of_proportional_decomposition">14.37</a> explains how proportional block comparisons supply common phases. Completing this theorem therefore amounts to deriving the BNT-cover, overlap-span, or common-phase hypotheses for the canonical decompositions produced from the bare equality assumption. Once those data are available, the phases are absorbed into the recovered weights and the blockwise conjugacies assemble into a global gauge equivalence. </p>
 
   </div>
 </div>
@@ -3777,12 +3777,93 @@
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:nonzero_block_span_eq_of_proportional_decomposition">
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:common_phase_cover_of_equiv_phase">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
     Theorem
     </span>
     <span class="theorem_thmlabel">14.38</span>
+    <span class="theorem_thmtitle">Common phase cover from a bijective phase matching</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-assembly.html#thm:common_phase_cover_of_equiv_phase">#</a>
+    
+    <a class="icon proof" href="ch-assembly.html#a0000001042"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-assembly.html#def:mpv_common_phase_cover">Definition 14.31</a></li>
+          
+          <li><a href="ch-assembly.html#def:mpv_block_phase_equiv">Definition 14.30</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.nonempty_mpvCommonPhaseCover_of_equiv_phase" class="lean_decl">MPSTensor.nonempty_mpvCommonPhaseCover_of_equiv_phase</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   If two block families are matched by a bijection and corresponding blocks have the same matrix product vectors up to a nonzero scalar power depending on the length, then the two families have a common MPV phase cover. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000001042">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Take the first block family as the common family. The bijection and its inverse give the two class maps, and the assumed phase match gives the second family’s phase data. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:nonzero_block_span_eq_of_proportional_decomposition">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">14.39</span>
     <span class="theorem_thmtitle">Span equality from proportional-decomposition data</span>
     <div class="thm_header_extras">
 
@@ -3793,7 +3874,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:nonzero_block_span_eq_of_proportional_decomposition">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001042"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001043"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3850,7 +3931,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001042">
+<div class="proof_wrapper" id="a0000001043">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3862,12 +3943,93 @@
 
   </div>
 </div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:nonzero_block_span_eq_of_equiv_phase">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">14.40</span>
+    <span class="theorem_thmtitle">Span equality from a bijective phase matching</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-assembly.html#thm:nonzero_block_span_eq_of_equiv_phase">#</a>
+    
+    <a class="icon proof" href="ch-assembly.html#a0000001044"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-assembly.html#thm:common_phase_cover_of_equiv_phase">Theorem 14.38</a></li>
+          
+          <li><a href="ch-assembly.html#lem:mpv_common_phase_cover_span_eq">Lemma 14.33</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.mpv_span_eq_of_equiv_phase" class="lean_decl">MPSTensor.mpv_span_eq_of_equiv_phase</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   A bijective phase matching gives equality, for every system size, of the finite-length MPV spans of the two block families. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000001044">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>First form the common MPV phase cover from the bijective phase matching. The common-cover span lemma then gives the stated span equality. </p>
+
+  </div>
+</div>
 <div class="theorem_thmwrapper theorem-style-plain" id="thm:bnt_sectorDecomp_pair_overlapSpan_of_commonPhaseCover">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">14.39</span>
+    <span class="theorem_thmlabel">14.41</span>
     <span class="theorem_thmtitle">Overlap-span data from a common phase cover</span>
     <div class="thm_header_extras">
 
@@ -3878,7 +4040,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:bnt_sectorDecomp_pair_overlapSpan_of_commonPhaseCover">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001043"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001045"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3935,7 +4097,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001043">
+<div class="proof_wrapper" id="a0000001045">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3952,7 +4114,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">14.40</span>
+    <span class="theorem_thmlabel">14.42</span>
     <span class="theorem_thmtitle">Overlap-span data from proportional decomposition</span>
     <div class="thm_header_extras">
 
@@ -3963,7 +4125,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:bnt_sectorDecomp_pair_overlapSpan_of_proportionalDecompositionConclusion">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001044"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001046"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3983,7 +4145,7 @@
           
           <li><a href="ch-assembly.html#thm:common_phase_cover_of_proportional_decomposition">Theorem 14.37</a></li>
           
-          <li><a href="ch-assembly.html#thm:bnt_sectorDecomp_pair_overlapSpan_of_commonPhaseCover">Theorem 14.39</a></li>
+          <li><a href="ch-assembly.html#thm:bnt_sectorDecomp_pair_overlapSpan_of_commonPhaseCover">Theorem 14.41</a></li>
           
         </ul>
     
@@ -4018,7 +4180,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001044">
+<div class="proof_wrapper" id="a0000001046">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4035,7 +4197,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">14.41</span>
+    <span class="theorem_thmlabel">14.43</span>
     <span class="theorem_thmtitle">Separated normal canonical-form data produce a common phase cover</span>
     <div class="thm_header_extras">
 
@@ -4046,7 +4208,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:common_phase_cover_of_separated_normal_bnt">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001045"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001047"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4107,7 +4269,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001045">
+<div class="proof_wrapper" id="a0000001047">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4124,7 +4286,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">14.42</span>
+    <span class="theorem_thmlabel">14.44</span>
     <span class="theorem_thmtitle">Separated normal canonical-form data give nonzero-block span equality</span>
     <div class="thm_header_extras">
 
@@ -4135,7 +4297,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:separated_normal_bnt_span_eq">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001046"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001048"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4151,11 +4313,11 @@
         
         <ul class="uses">
           
-          <li><a href="ch-assembly.html#thm:common_phase_cover_of_separated_normal_bnt">Theorem 14.41</a></li>
+          <li><a href="ch-assembly.html#thm:common_phase_cover_of_separated_normal_bnt">Theorem 14.43</a></li>
           
           <li><a href="ch-assembly.html#lem:mpv_common_phase_cover_span_eq">Lemma 14.33</a></li>
           
-          <li><a href="ch-assembly.html#thm:common_phase_cover_of_separated_normal_bnt">Theorem 14.41</a></li>
+          <li><a href="ch-assembly.html#thm:common_phase_cover_of_separated_normal_bnt">Theorem 14.43</a></li>
           
           <li><a href="ch-assembly.html#lem:mpv_common_phase_cover_span_eq">Lemma 14.33</a></li>
           
@@ -4188,11 +4350,11 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   For two separated normal canonical-form block families as in Theorem&#160;<a href="ch-assembly.html#thm:common_phase_cover_of_separated_normal_bnt">14.41</a>, the BNT comparison data imply equality, at every system size, of the finite-length MPV spans of the two basis families. </p>
+  <p>   For two separated normal canonical-form block families as in Theorem&#160;<a href="ch-assembly.html#thm:common_phase_cover_of_separated_normal_bnt">14.43</a>, the BNT comparison data imply equality, at every system size, of the finite-length MPV spans of the two basis families. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001046">
+<div class="proof_wrapper" id="a0000001048">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4209,7 +4371,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">14.43</span>
+    <span class="theorem_thmlabel">14.45</span>
     <span class="theorem_thmtitle">Sector comparison via a sector-basis matching</span>
     <div class="thm_header_extras">
 
@@ -4220,7 +4382,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:route_b_hetero_sector_matching">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001047"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001049"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4275,7 +4437,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001047">
+<div class="proof_wrapper" id="a0000001049">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4292,7 +4454,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">14.44</span>
+    <span class="theorem_thmlabel">14.46</span>
     <span class="theorem_thmtitle">After-blocking sector comparison from overlap-span hypotheses</span>
     <div class="thm_header_extras">
 
@@ -4303,7 +4465,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:after_blocking_sector_bnt_pair_overlap_span">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001048"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001050"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4321,11 +4483,11 @@
           
           <li><a href="ch-assembly.html#def:sector_basis_overlap_span_hyps">Definition 14.22</a></li>
           
-          <li><a href="ch-assembly.html#thm:route_b_hetero_sector_matching">Theorem 14.43</a></li>
+          <li><a href="ch-assembly.html#thm:route_b_hetero_sector_matching">Theorem 14.45</a></li>
           
           <li><a href="ch-assembly.html#thm:sector_basis_overlap_span_to_matching">Theorem 14.28</a></li>
           
-          <li><a href="ch-assembly.html#thm:route_b_hetero_sector_matching">Theorem 14.43</a></li>
+          <li><a href="ch-assembly.html#thm:route_b_hetero_sector_matching">Theorem 14.45</a></li>
           
         </ul>
     
@@ -4360,7 +4522,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001048">
+<div class="proof_wrapper" id="a0000001050">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4377,7 +4539,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">14.45</span>
+    <span class="theorem_thmlabel">14.47</span>
     <span class="theorem_thmtitle">Sector comparison from common blocks</span>
     <div class="thm_header_extras">
 
@@ -4388,7 +4550,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:after_blocking_sector_common_blocks_overlap_span">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001049"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001051"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4412,7 +4574,7 @@
           
           <li><a href="ch-assembly.html#thm:sector_basis_overlap_span_to_matching">Theorem 14.28</a></li>
           
-          <li><a href="ch-assembly.html#thm:route_b_hetero_sector_matching">Theorem 14.43</a></li>
+          <li><a href="ch-assembly.html#thm:route_b_hetero_sector_matching">Theorem 14.45</a></li>
           
         </ul>
     
@@ -4443,11 +4605,11 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   Let \(A\) and \(B\) have the same MPV family. Fix a common blocking period \(p{\gt}0\) and exact nonzero-block decompositions of \(A^{[p]}\) and \(B^{[p]}\) as weighted block tensors whose blocks have nonzero bond dimensions, are trace-preserving, primitive, irreducible, and have nonzero weights. Assume moreover that any pair of BNT sector decompositions equivalent to these two nonzero-block tensors satisfies the primitive overlap-span hypotheses. Then the after-blocking sector comparison conclusion of Theorem&#160;<a href="ch-assembly.html#thm:after_blocking_sector_bnt_pair_overlap_span">14.44</a> holds for the sector decompositions obtained from the nonzero-weight block families. </p>
+  <p>   Let \(A\) and \(B\) have the same MPV family. Fix a common blocking period \(p{\gt}0\) and exact nonzero-block decompositions of \(A^{[p]}\) and \(B^{[p]}\) as weighted block tensors whose blocks have nonzero bond dimensions, are trace-preserving, primitive, irreducible, and have nonzero weights. Assume moreover that any pair of BNT sector decompositions equivalent to these two nonzero-block tensors satisfies the primitive overlap-span hypotheses. Then the after-blocking sector comparison conclusion of Theorem&#160;<a href="ch-assembly.html#thm:after_blocking_sector_bnt_pair_overlap_span">14.46</a> holds for the sector decompositions obtained from the nonzero-weight block families. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001049">
+<div class="proof_wrapper" id="a0000001051">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4455,7 +4617,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Apply the one-sided phase-class BNT construction (Theorem&#160;<a href="ch-canonical.html#thm:bnt_sector_decomp_tp_prim_irr_collapsed">11.145</a>) to the two nonzero-weight block families. The resulting sector decompositions satisfy the overlap-span hypotheses; Theorem&#160;<a href="ch-assembly.html#thm:sector_basis_overlap_span_to_matching">14.28</a> then produces a sector basis matching, and Theorem&#160;<a href="ch-assembly.html#thm:route_b_hetero_sector_matching">14.43</a> gives the matched sector-weight conclusion. </p>
+  <p> Apply the one-sided phase-class BNT construction (Theorem&#160;<a href="ch-canonical.html#thm:bnt_sector_decomp_tp_prim_irr_collapsed">11.145</a>) to the two nonzero-weight block families. The resulting sector decompositions satisfy the overlap-span hypotheses; Theorem&#160;<a href="ch-assembly.html#thm:sector_basis_overlap_span_to_matching">14.28</a> then produces a sector basis matching, and Theorem&#160;<a href="ch-assembly.html#thm:route_b_hetero_sector_matching">14.45</a> gives the matched sector-weight conclusion. </p>
 
   </div>
 </div>
@@ -4464,7 +4626,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">14.46</span>
+    <span class="theorem_thmlabel">14.48</span>
     <span class="theorem_thmtitle">Sector comparison from derived overlap data</span>
     <div class="thm_header_extras">
 
@@ -4475,7 +4637,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:after_blocking_sector_common_blocks_injective_span">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001050"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001052"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4495,7 +4657,7 @@
           
           <li><a href="ch-assembly.html#thm:sector_basis_overlap_ortho_to_span">Theorem 14.23</a></li>
           
-          <li><a href="ch-assembly.html#thm:route_b_hetero_sector_matching">Theorem 14.43</a></li>
+          <li><a href="ch-assembly.html#thm:route_b_hetero_sector_matching">Theorem 14.45</a></li>
           
           <li><a href="ch-canonical.html#thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_ortho">Theorem 11.146</a></li>
           
@@ -4503,7 +4665,7 @@
           
           <li><a href="ch-assembly.html#thm:sector_basis_overlap_span_to_matching">Theorem 14.28</a></li>
           
-          <li><a href="ch-assembly.html#thm:route_b_hetero_sector_matching">Theorem 14.43</a></li>
+          <li><a href="ch-assembly.html#thm:route_b_hetero_sector_matching">Theorem 14.45</a></li>
           
         </ul>
     
@@ -4534,11 +4696,11 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   Let \(A\) and \(B\) have the same MPV family and fix exact nonzero-block decompositions at a common blocking period as in Theorem&#160;<a href="ch-assembly.html#thm:after_blocking_sector_common_blocks_overlap_span">14.45</a>. Assume in addition that the nonzero-weight blocks are one-site injective, and that the two chosen BNT sector bases have equal finite-length MPV spans. Then the same matched sector-weight conclusion holds. </p>
+  <p>   Let \(A\) and \(B\) have the same MPV family and fix exact nonzero-block decompositions at a common blocking period as in Theorem&#160;<a href="ch-assembly.html#thm:after_blocking_sector_common_blocks_overlap_span">14.47</a>. Assume in addition that the nonzero-weight blocks are one-site injective, and that the two chosen BNT sector bases have equal finite-length MPV spans. Then the same matched sector-weight conclusion holds. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001050">
+<div class="proof_wrapper" id="a0000001052">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4555,7 +4717,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">14.47</span>
+    <span class="theorem_thmlabel">14.49</span>
     <span class="theorem_thmtitle">Sector comparison from nonzero-block spans</span>
     <div class="thm_header_extras">
 
@@ -4566,7 +4728,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:after_blocking_sector_common_blocks_block_span">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001051"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001053"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4586,13 +4748,13 @@
           
           <li><a href="ch-assembly.html#thm:sector_basis_overlap_span_to_matching">Theorem 14.28</a></li>
           
-          <li><a href="ch-assembly.html#thm:route_b_hetero_sector_matching">Theorem 14.43</a></li>
+          <li><a href="ch-assembly.html#thm:route_b_hetero_sector_matching">Theorem 14.45</a></li>
           
           <li><a href="ch-assembly.html#thm:bnt_sector_decomp_pair_overlap_span_of_block_span">Theorem 14.29</a></li>
           
           <li><a href="ch-assembly.html#thm:sector_basis_overlap_span_to_matching">Theorem 14.28</a></li>
           
-          <li><a href="ch-assembly.html#thm:route_b_hetero_sector_matching">Theorem 14.43</a></li>
+          <li><a href="ch-assembly.html#thm:route_b_hetero_sector_matching">Theorem 14.45</a></li>
           
         </ul>
     
@@ -4627,7 +4789,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001051">
+<div class="proof_wrapper" id="a0000001053">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4635,7 +4797,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Theorem&#160;<a href="ch-assembly.html#thm:bnt_sector_decomp_pair_overlap_span_of_block_span">14.29</a> converts the nonzero-block span equality into the primitive overlap-span hypotheses for the chosen sector bases. Equality of the blocked total MPVs gives equality of the sector tensors, so Theorem&#160;<a href="ch-assembly.html#thm:sector_basis_overlap_span_to_matching">14.28</a> produces the sector basis matching and Theorem&#160;<a href="ch-assembly.html#thm:route_b_hetero_sector_matching">14.43</a> gives the sector-weight conclusion. </p>
+  <p> Theorem&#160;<a href="ch-assembly.html#thm:bnt_sector_decomp_pair_overlap_span_of_block_span">14.29</a> converts the nonzero-block span equality into the primitive overlap-span hypotheses for the chosen sector bases. Equality of the blocked total MPVs gives equality of the sector tensors, so Theorem&#160;<a href="ch-assembly.html#thm:sector_basis_overlap_span_to_matching">14.28</a> produces the sector basis matching and Theorem&#160;<a href="ch-assembly.html#thm:route_b_hetero_sector_matching">14.45</a> gives the sector-weight conclusion. </p>
 
   </div>
 </div>
@@ -4644,7 +4806,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">14.48</span>
+    <span class="theorem_thmlabel">14.50</span>
     <span class="theorem_thmtitle">Sector comparison from a common phase cover</span>
     <div class="thm_header_extras">
 
@@ -4655,7 +4817,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:after_blocking_sector_common_blocks_phase_cover">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001052"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001054"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4673,11 +4835,11 @@
           
           <li><a href="ch-assembly.html#lem:nonzero_block_span_eq_of_common_phase_cover">Lemma 14.32</a></li>
           
-          <li><a href="ch-assembly.html#thm:after_blocking_sector_common_blocks_block_span">Theorem 14.47</a></li>
+          <li><a href="ch-assembly.html#thm:after_blocking_sector_common_blocks_block_span">Theorem 14.49</a></li>
           
           <li><a href="ch-assembly.html#lem:nonzero_block_span_eq_of_common_phase_cover">Lemma 14.32</a></li>
           
-          <li><a href="ch-assembly.html#thm:after_blocking_sector_common_blocks_block_span">Theorem 14.47</a></li>
+          <li><a href="ch-assembly.html#thm:after_blocking_sector_common_blocks_block_span">Theorem 14.49</a></li>
           
         </ul>
     
@@ -4708,11 +4870,11 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   Let \(A\) and \(B\) have the same MPV family, and fix exact nonzero-block decompositions at a common blocking period as in Theorem&#160;<a href="ch-assembly.html#thm:after_blocking_sector_common_blocks_block_span">14.47</a>. Assume the nonzero blocks are trace-preserving, primitive, irreducible, injective, and have nonzero weights. Suppose moreover that both nonzero-weight block families map surjectively to one common family of blocks, and that every block is MPV-phase equivalent to its image in the common family. Then the same sector comparison conclusion as in Theorem&#160;<a href="ch-assembly.html#thm:after_blocking_sector_common_blocks_block_span">14.47</a> holds. </p>
+  <p>   Let \(A\) and \(B\) have the same MPV family, and fix exact nonzero-block decompositions at a common blocking period as in Theorem&#160;<a href="ch-assembly.html#thm:after_blocking_sector_common_blocks_block_span">14.49</a>. Assume the nonzero blocks are trace-preserving, primitive, irreducible, injective, and have nonzero weights. Suppose moreover that both nonzero-weight block families map surjectively to one common family of blocks, and that every block is MPV-phase equivalent to its image in the common family. Then the same sector comparison conclusion as in Theorem&#160;<a href="ch-assembly.html#thm:after_blocking_sector_common_blocks_block_span">14.49</a> holds. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001052">
+<div class="proof_wrapper" id="a0000001054">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4720,7 +4882,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Lemma&#160;<a href="ch-assembly.html#lem:nonzero_block_span_eq_of_common_phase_cover">14.32</a> converts the common MPV phase cover into equality of the nonzero-block finite-length spans. Theorem&#160;<a href="ch-assembly.html#thm:after_blocking_sector_common_blocks_block_span">14.47</a> then applies without any additional sector-basis assumptions. </p>
+  <p> Lemma&#160;<a href="ch-assembly.html#lem:nonzero_block_span_eq_of_common_phase_cover">14.32</a> converts the common MPV phase cover into equality of the nonzero-block finite-length spans. Theorem&#160;<a href="ch-assembly.html#thm:after_blocking_sector_common_blocks_block_span">14.49</a> then applies without any additional sector-basis assumptions. </p>
 
   </div>
 </div>
@@ -4729,7 +4891,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">14.49</span>
+    <span class="theorem_thmlabel">14.51</span>
     <span class="theorem_thmtitle">Sector comparison from phase-cover data</span>
     <div class="thm_header_extras">
 
@@ -4740,7 +4902,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:after_blocking_sector_common_blocks_common_phase_cover">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001053"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001055"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4758,9 +4920,9 @@
           
           <li><a href="ch-assembly.html#def:mpv_common_phase_cover">Definition 14.31</a></li>
           
-          <li><a href="ch-assembly.html#thm:after_blocking_sector_common_blocks_phase_cover">Theorem 14.48</a></li>
+          <li><a href="ch-assembly.html#thm:after_blocking_sector_common_blocks_phase_cover">Theorem 14.50</a></li>
           
-          <li><a href="ch-assembly.html#thm:after_blocking_sector_common_blocks_phase_cover">Theorem 14.48</a></li>
+          <li><a href="ch-assembly.html#thm:after_blocking_sector_common_blocks_phase_cover">Theorem 14.50</a></li>
           
         </ul>
     
@@ -4791,11 +4953,11 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   Let \(A\) and \(B\) have the same MPV family, and fix exact nonzero-block decompositions at a common blocking period as in Theorem&#160;<a href="ch-assembly.html#thm:after_blocking_sector_common_blocks_phase_cover">14.48</a>. Assume the nonzero-weight blocks are trace-preserving, primitive, irreducible, injective, and have nonzero weights. If the two nonzero-weight block families are equipped with common MPV phase-cover data, then the same sector comparison conclusion holds. </p>
+  <p>   Let \(A\) and \(B\) have the same MPV family, and fix exact nonzero-block decompositions at a common blocking period as in Theorem&#160;<a href="ch-assembly.html#thm:after_blocking_sector_common_blocks_phase_cover">14.50</a>. Assume the nonzero-weight blocks are trace-preserving, primitive, irreducible, injective, and have nonzero weights. If the two nonzero-weight block families are equipped with common MPV phase-cover data, then the same sector comparison conclusion holds. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001053">
+<div class="proof_wrapper" id="a0000001055">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4812,7 +4974,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">14.50</span>
+    <span class="theorem_thmlabel">14.52</span>
     <span class="theorem_thmtitle">Sector comparison from proportional-decomposition data</span>
     <div class="thm_header_extras">
 
@@ -4823,7 +4985,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:afterBlocking_sectorComparison_of_proportionalDecompositionConclusion">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001054"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001056"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4839,11 +5001,11 @@
         
         <ul class="uses">
           
-          <li><a href="ch-assembly.html#thm:after_blocking_sector_common_blocks_common_phase_cover">Theorem 14.49</a></li>
+          <li><a href="ch-assembly.html#thm:after_blocking_sector_common_blocks_common_phase_cover">Theorem 14.51</a></li>
           
           <li><a href="ch-assembly.html#thm:common_phase_cover_of_proportional_decomposition">Theorem 14.37</a></li>
           
-          <li><a href="ch-assembly.html#thm:after_blocking_sector_common_blocks_common_phase_cover">Theorem 14.49</a></li>
+          <li><a href="ch-assembly.html#thm:after_blocking_sector_common_blocks_common_phase_cover">Theorem 14.51</a></li>
           
         </ul>
     
@@ -4874,11 +5036,11 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   Let \(A\) and \(B\) have the same MPV family, and fix exact decompositions of the nonzero parts at a common blocking period as in Theorem&#160;<a href="ch-assembly.html#thm:after_blocking_sector_common_blocks_common_phase_cover">14.49</a>. Assume the blocks in the nonzero parts are trace-preserving, primitive, irreducible, injective, and have nonzero weights. If a BNT proportional-decomposition comparison supplies a permutation, equal bond dimensions, and gauge-phase equivalences between the two block families, then the same sector comparison conclusion holds. </p>
+  <p>   Let \(A\) and \(B\) have the same MPV family, and fix exact decompositions of the nonzero parts at a common blocking period as in Theorem&#160;<a href="ch-assembly.html#thm:after_blocking_sector_common_blocks_common_phase_cover">14.51</a>. Assume the blocks in the nonzero parts are trace-preserving, primitive, irreducible, injective, and have nonzero weights. If a BNT proportional-decomposition comparison supplies a permutation, equal bond dimensions, and gauge-phase equivalences between the two block families, then the same sector comparison conclusion holds. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001054">
+<div class="proof_wrapper" id="a0000001056">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4886,7 +5048,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> The BNT proportional-decomposition data give common MPV phase-cover data. Apply Theorem&#160;<a href="ch-assembly.html#thm:after_blocking_sector_common_blocks_common_phase_cover">14.49</a> to those data. </p>
+  <p> The BNT proportional-decomposition data give common MPV phase-cover data. Apply Theorem&#160;<a href="ch-assembly.html#thm:after_blocking_sector_common_blocks_common_phase_cover">14.51</a> to those data. </p>
 
   </div>
 </div>
@@ -4895,7 +5057,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">14.51</span>
+    <span class="lemma_thmlabel">14.53</span>
     <span class="lemma_thmtitle">Zero-tail cancellation</span>
     <div class="thm_header_extras">
 
@@ -4906,7 +5068,7 @@
 
     <a class="icon proof" href="ch-assembly.html#lem:sameMPV2_live_of_zeroTail_eq">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001055"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001057"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4961,7 +5123,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001055">
+<div class="proof_wrapper" id="a0000001057">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4978,7 +5140,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">14.52</span>
+    <span class="theorem_thmlabel">14.54</span>
     <span class="theorem_thmtitle">Sector comparison with zero-tail agreement</span>
     <div class="thm_header_extras">
 
@@ -4989,7 +5151,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:after_blocking_sector_common_blocks_overlap_span_zero_tail">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001056"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001058"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5007,19 +5169,19 @@
           
           <li><a href="ch-mps.html#def:same_mpv2_pos">Definition 2.13</a></li>
           
-          <li><a href="ch-assembly.html#lem:sameMPV2_live_of_zeroTail_eq">Lemma 14.51</a></li>
+          <li><a href="ch-assembly.html#lem:sameMPV2_live_of_zeroTail_eq">Lemma 14.53</a></li>
           
           <li><a href="ch-canonical.html#thm:bnt_sector_decomp_tp_prim_irr_collapsed">Theorem 11.145</a></li>
           
           <li><a href="ch-assembly.html#def:sector_basis_overlap_span_hyps">Definition 14.22</a></li>
           
-          <li><a href="ch-assembly.html#lem:sameMPV2_live_of_zeroTail_eq">Lemma 14.51</a></li>
+          <li><a href="ch-assembly.html#lem:sameMPV2_live_of_zeroTail_eq">Lemma 14.53</a></li>
           
           <li><a href="ch-canonical.html#thm:bnt_sector_decomp_tp_prim_irr_collapsed">Theorem 11.145</a></li>
           
           <li><a href="ch-assembly.html#thm:sector_basis_overlap_span_to_matching">Theorem 14.28</a></li>
           
-          <li><a href="ch-assembly.html#thm:route_b_hetero_sector_matching">Theorem 14.43</a></li>
+          <li><a href="ch-assembly.html#thm:route_b_hetero_sector_matching">Theorem 14.45</a></li>
           
         </ul>
     
@@ -5050,11 +5212,11 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   Let \(A\) and \(B\) have the same MPV family. Fix \(p {\gt} 0\) and suppose \(A^{[p]}\) and \(B^{[p]}\) each decompose as a zero-tail tensor plus a weighted nonzero-block tensor, with all blocks trace-preserving, primitive, irreducible, and with nonzero weights. If the two zero-tail dimensions agree and any pair of BNT sector decompositions equivalent to the two nonzero-block tensors satisfies the primitive overlap-span hypotheses, then there exist positive \(p'\) and sector decompositions \(P\), \(Q\) such that \(A^{[p']}\) equals \(P\)’s tensor at all positive lengths, \(B^{[p']}\) equals \(Q\)’s tensor at all positive lengths, \(P\) and \(Q\) have the same full MPV family, both have BNT data, and the matched sector-weight conclusion of Theorem&#160;<a href="ch-assembly.html#thm:after_blocking_sector_bnt_pair_overlap_span">14.44</a> holds. </p>
+  <p>   Let \(A\) and \(B\) have the same MPV family. Fix \(p {\gt} 0\) and suppose \(A^{[p]}\) and \(B^{[p]}\) each decompose as a zero-tail tensor plus a weighted nonzero-block tensor, with all blocks trace-preserving, primitive, irreducible, and with nonzero weights. If the two zero-tail dimensions agree and any pair of BNT sector decompositions equivalent to the two nonzero-block tensors satisfies the primitive overlap-span hypotheses, then there exist positive \(p'\) and sector decompositions \(P\), \(Q\) such that \(A^{[p']}\) equals \(P\)’s tensor at all positive lengths, \(B^{[p']}\) equals \(Q\)’s tensor at all positive lengths, \(P\) and \(Q\) have the same full MPV family, both have BNT data, and the matched sector-weight conclusion of Theorem&#160;<a href="ch-assembly.html#thm:after_blocking_sector_bnt_pair_overlap_span">14.46</a> holds. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001056">
+<div class="proof_wrapper" id="a0000001058">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5062,7 +5224,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Apply the zero-tail cancellation lemma to recover full equality of the nonzero-block tensors. Then proceed as in Theorem&#160;<a href="ch-assembly.html#thm:after_blocking_sector_common_blocks_overlap_span">14.45</a>: apply the BNT construction to each block family, compose the sector equivalences to obtain equality of the total MPV families of \(P\) and \(Q\), apply the overlap-span matching theorem, and conclude with the two-basis sector comparison theorem. </p>
+  <p> Apply the zero-tail cancellation lemma to recover full equality of the nonzero-block tensors. Then proceed as in Theorem&#160;<a href="ch-assembly.html#thm:after_blocking_sector_common_blocks_overlap_span">14.47</a>: apply the BNT construction to each block family, compose the sector equivalences to obtain equality of the total MPV families of \(P\) and \(Q\), apply the overlap-span matching theorem, and conclude with the two-basis sector comparison theorem. </p>
 
   </div>
 </div>
@@ -5071,7 +5233,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">14.53</span>
+    <span class="theorem_thmlabel">14.55</span>
     <span class="theorem_thmtitle">Sector comparison from zero-tail and span data</span>
     <div class="thm_header_extras">
 
@@ -5082,7 +5244,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:afterBlocking_sectorComparison_zeroTail_of_blockSpan">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001057"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001059"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5098,21 +5260,21 @@
         
         <ul class="uses">
           
-          <li><a href="ch-assembly.html#lem:sameMPV2_live_of_zeroTail_eq">Lemma 14.51</a></li>
+          <li><a href="ch-assembly.html#lem:sameMPV2_live_of_zeroTail_eq">Lemma 14.53</a></li>
           
           <li><a href="ch-assembly.html#thm:bnt_sector_decomp_pair_overlap_span_of_block_span">Theorem 14.29</a></li>
           
           <li><a href="ch-assembly.html#thm:sector_basis_overlap_span_to_matching">Theorem 14.28</a></li>
           
-          <li><a href="ch-assembly.html#thm:route_b_hetero_sector_matching">Theorem 14.43</a></li>
+          <li><a href="ch-assembly.html#thm:route_b_hetero_sector_matching">Theorem 14.45</a></li>
           
-          <li><a href="ch-assembly.html#lem:sameMPV2_live_of_zeroTail_eq">Lemma 14.51</a></li>
+          <li><a href="ch-assembly.html#lem:sameMPV2_live_of_zeroTail_eq">Lemma 14.53</a></li>
           
           <li><a href="ch-assembly.html#thm:bnt_sector_decomp_pair_overlap_span_of_block_span">Theorem 14.29</a></li>
           
           <li><a href="ch-assembly.html#thm:sector_basis_overlap_span_to_matching">Theorem 14.28</a></li>
           
-          <li><a href="ch-assembly.html#thm:route_b_hetero_sector_matching">Theorem 14.43</a></li>
+          <li><a href="ch-assembly.html#thm:route_b_hetero_sector_matching">Theorem 14.45</a></li>
           
         </ul>
     
@@ -5147,7 +5309,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001057">
+<div class="proof_wrapper" id="a0000001059">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5164,7 +5326,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">14.54</span>
+    <span class="definition_thmlabel">14.56</span>
     <span class="definition_thmtitle">Span hypotheses for common primitive sectors</span>
     <div class="thm_header_extras">
 
@@ -5230,7 +5392,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">14.55</span>
+    <span class="theorem_thmlabel">14.57</span>
     <span class="theorem_thmtitle">Phase covers supply span hypotheses</span>
     <div class="thm_header_extras">
 
@@ -5241,7 +5403,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:common_primitive_span_hypotheses_of_common_phase_cover">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001058"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001060"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5257,7 +5419,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-assembly.html#def:common_primitive_span_hypotheses">Definition 14.54</a></li>
+          <li><a href="ch-assembly.html#def:common_primitive_span_hypotheses">Definition 14.56</a></li>
           
           <li><a href="ch-assembly.html#def:mpv_common_phase_cover">Definition 14.31</a></li>
           
@@ -5294,11 +5456,11 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   If the two common primitive nonzero-sector families have equal zero-tail dimensions, are one-site injective, and are equipped with a common MPV phase cover, then they satisfy the span hypotheses of Definition&#160;<a href="ch-assembly.html#def:common_primitive_span_hypotheses">14.54</a>. </p>
+  <p>   If the two common primitive nonzero-sector families have equal zero-tail dimensions, are one-site injective, and are equipped with a common MPV phase cover, then they satisfy the span hypotheses of Definition&#160;<a href="ch-assembly.html#def:common_primitive_span_hypotheses">14.56</a>. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001058">
+<div class="proof_wrapper" id="a0000001060">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5315,7 +5477,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">14.56</span>
+    <span class="definition_thmlabel">14.58</span>
     <span class="definition_thmtitle">Phase-cover hypotheses for common primitive sectors</span>
     <div class="thm_header_extras">
 
@@ -5372,7 +5534,7 @@
         </div>
   </div>
   <div class="definition_thmcontent">
-  <p>   For two common primitive nonzero-sector families at one blocking length, this condition is the phase-cover version of Definition&#160;<a href="ch-assembly.html#def:common_primitive_span_hypotheses">14.54</a>: equality of the two zero-tail dimensions, one-site injectivity of all blocks on both sides, and a common MPV phase cover for the two block families. </p>
+  <p>   For two common primitive nonzero-sector families at one blocking length, this condition is the phase-cover version of Definition&#160;<a href="ch-assembly.html#def:common_primitive_span_hypotheses">14.56</a>: equality of the two zero-tail dimensions, one-site injectivity of all blocks on both sides, and a common MPV phase cover for the two block families. </p>
 
   </div>
 </div>
@@ -5381,7 +5543,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">14.57</span>
+    <span class="theorem_thmlabel">14.59</span>
     <span class="theorem_thmtitle">Phase-cover hypotheses imply span hypotheses</span>
     <div class="thm_header_extras">
 
@@ -5392,7 +5554,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:common_primitive_phase_cover_hypotheses_to_span_hypotheses">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001059"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001061"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5408,11 +5570,11 @@
         
         <ul class="uses">
           
-          <li><a href="ch-assembly.html#def:common_primitive_phase_cover_hypotheses">Definition 14.56</a></li>
+          <li><a href="ch-assembly.html#def:common_primitive_phase_cover_hypotheses">Definition 14.58</a></li>
           
-          <li><a href="ch-assembly.html#def:common_primitive_span_hypotheses">Definition 14.54</a></li>
+          <li><a href="ch-assembly.html#def:common_primitive_span_hypotheses">Definition 14.56</a></li>
           
-          <li><a href="ch-assembly.html#thm:common_primitive_span_hypotheses_of_common_phase_cover">Theorem 14.55</a></li>
+          <li><a href="ch-assembly.html#thm:common_primitive_span_hypotheses_of_common_phase_cover">Theorem 14.57</a></li>
           
         </ul>
     
@@ -5443,11 +5605,11 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   If two common primitive nonzero-sector families satisfy the phase-cover hypotheses of Definition&#160;<a href="ch-assembly.html#def:common_primitive_phase_cover_hypotheses">14.56</a>, then they satisfy the span hypotheses of Definition&#160;<a href="ch-assembly.html#def:common_primitive_span_hypotheses">14.54</a>. </p>
+  <p>   If two common primitive nonzero-sector families satisfy the phase-cover hypotheses of Definition&#160;<a href="ch-assembly.html#def:common_primitive_phase_cover_hypotheses">14.58</a>, then they satisfy the span hypotheses of Definition&#160;<a href="ch-assembly.html#def:common_primitive_span_hypotheses">14.56</a>. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001059">
+<div class="proof_wrapper" id="a0000001061">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5455,7 +5617,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> The zero-tail equality and the two injectivity assertions are already part of the phase-cover hypotheses. Apply Theorem&#160;<a href="ch-assembly.html#thm:common_primitive_span_hypotheses_of_common_phase_cover">14.55</a> to a common MPV phase cover for the two block families. </p>
+  <p> The zero-tail equality and the two injectivity assertions are already part of the phase-cover hypotheses. Apply Theorem&#160;<a href="ch-assembly.html#thm:common_primitive_span_hypotheses_of_common_phase_cover">14.57</a> to a common MPV phase cover for the two block families. </p>
 
   </div>
 </div>
@@ -5464,7 +5626,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">14.58</span>
+    <span class="definition_thmlabel">14.60</span>
     <span class="definition_thmtitle">Proportional-comparison hypotheses for common primitive sectors</span>
     <div class="thm_header_extras">
 
@@ -5519,7 +5681,7 @@
         </div>
   </div>
   <div class="definition_thmcontent">
-  <p>   For two common primitive nonzero-sector families at one blocking length, this condition asserts equality of the two zero-tail dimensions, one-site injectivity of all blocks on both sides, and a BNT proportional-decomposition comparison for the two block families. It is the BNT-comparison version of Definition&#160;<a href="ch-assembly.html#def:common_primitive_phase_cover_hypotheses">14.56</a>. </p>
+  <p>   For two common primitive nonzero-sector families at one blocking length, this condition asserts equality of the two zero-tail dimensions, one-site injectivity of all blocks on both sides, and a BNT proportional-decomposition comparison for the two block families. It is the BNT-comparison version of Definition&#160;<a href="ch-assembly.html#def:common_primitive_phase_cover_hypotheses">14.58</a>. </p>
 
   </div>
 </div>
@@ -5528,7 +5690,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">14.59</span>
+    <span class="theorem_thmlabel">14.61</span>
     <span class="theorem_thmtitle">Proportional-comparison hypotheses imply phase-cover hypotheses</span>
     <div class="thm_header_extras">
 
@@ -5539,7 +5701,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:common_primitive_proportional_hypotheses_to_phase_cover_hypotheses">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001060"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001062"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5555,9 +5717,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-assembly.html#def:common_primitive_proportional_hypotheses">Definition 14.58</a></li>
+          <li><a href="ch-assembly.html#def:common_primitive_proportional_hypotheses">Definition 14.60</a></li>
           
-          <li><a href="ch-assembly.html#def:common_primitive_phase_cover_hypotheses">Definition 14.56</a></li>
+          <li><a href="ch-assembly.html#def:common_primitive_phase_cover_hypotheses">Definition 14.58</a></li>
           
           <li><a href="ch-assembly.html#thm:common_phase_cover_of_proportional_decomposition">Theorem 14.37</a></li>
           
@@ -5592,11 +5754,11 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   If two common primitive nonzero-sector families satisfy the proportional-comparison hypotheses, then they satisfy the phase-cover hypotheses of Definition&#160;<a href="ch-assembly.html#def:common_primitive_phase_cover_hypotheses">14.56</a>. </p>
+  <p>   If two common primitive nonzero-sector families satisfy the proportional-comparison hypotheses, then they satisfy the phase-cover hypotheses of Definition&#160;<a href="ch-assembly.html#def:common_primitive_phase_cover_hypotheses">14.58</a>. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001060">
+<div class="proof_wrapper" id="a0000001062">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5613,7 +5775,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">14.60</span>
+    <span class="theorem_thmlabel">14.62</span>
     <span class="theorem_thmtitle">Proportional comparison implies span hypotheses</span>
     <div class="thm_header_extras">
 
@@ -5624,7 +5786,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:common_primitive_proportional_hypotheses_to_span_hypotheses">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001061"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001063"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5640,13 +5802,13 @@
         
         <ul class="uses">
           
-          <li><a href="ch-assembly.html#def:common_primitive_proportional_hypotheses">Definition 14.58</a></li>
+          <li><a href="ch-assembly.html#def:common_primitive_proportional_hypotheses">Definition 14.60</a></li>
           
-          <li><a href="ch-assembly.html#def:common_primitive_span_hypotheses">Definition 14.54</a></li>
+          <li><a href="ch-assembly.html#def:common_primitive_span_hypotheses">Definition 14.56</a></li>
           
-          <li><a href="ch-assembly.html#thm:common_primitive_proportional_hypotheses_to_phase_cover_hypotheses">Theorem 14.59</a></li>
+          <li><a href="ch-assembly.html#thm:common_primitive_proportional_hypotheses_to_phase_cover_hypotheses">Theorem 14.61</a></li>
           
-          <li><a href="ch-assembly.html#thm:common_primitive_phase_cover_hypotheses_to_span_hypotheses">Theorem 14.57</a></li>
+          <li><a href="ch-assembly.html#thm:common_primitive_phase_cover_hypotheses_to_span_hypotheses">Theorem 14.59</a></li>
           
         </ul>
     
@@ -5677,11 +5839,11 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   If two common primitive nonzero-sector families satisfy the proportional-comparison hypotheses, then they satisfy the remaining span hypotheses of Definition&#160;<a href="ch-assembly.html#def:common_primitive_span_hypotheses">14.54</a>. </p>
+  <p>   If two common primitive nonzero-sector families satisfy the proportional-comparison hypotheses, then they satisfy the remaining span hypotheses of Definition&#160;<a href="ch-assembly.html#def:common_primitive_span_hypotheses">14.56</a>. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001061">
+<div class="proof_wrapper" id="a0000001063">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5698,7 +5860,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">14.61</span>
+    <span class="definition_thmlabel">14.63</span>
     <span class="definition_thmtitle">BNT-cover hypotheses for common primitive sectors</span>
     <div class="thm_header_extras">
 
@@ -5774,7 +5936,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">14.62</span>
+    <span class="theorem_thmlabel">14.64</span>
     <span class="theorem_thmtitle">BNT-cover hypotheses produce a common phase cover</span>
     <div class="thm_header_extras">
 
@@ -5785,7 +5947,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:common_primitive_bnt_cover_hypotheses_to_common_phase_cover">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001062"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001064"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5801,11 +5963,11 @@
         
         <ul class="uses">
           
-          <li><a href="ch-assembly.html#def:common_primitive_bnt_cover_hypotheses">Definition 14.61</a></li>
+          <li><a href="ch-assembly.html#def:common_primitive_bnt_cover_hypotheses">Definition 14.63</a></li>
           
           <li><a href="ch-assembly.html#def:mpv_common_phase_cover">Definition 14.31</a></li>
           
-          <li><a href="ch-assembly.html#thm:common_phase_cover_of_separated_normal_bnt">Theorem 14.41</a></li>
+          <li><a href="ch-assembly.html#thm:common_phase_cover_of_separated_normal_bnt">Theorem 14.43</a></li>
           
         </ul>
     
@@ -5840,7 +6002,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001062">
+<div class="proof_wrapper" id="a0000001064">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5848,7 +6010,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> The normal canonical-form data, gauge-phase separation, and proportional decomposition are exactly the hypotheses of Theorem&#160;<a href="ch-assembly.html#thm:common_phase_cover_of_separated_normal_bnt">14.41</a>. </p>
+  <p> The normal canonical-form data, gauge-phase separation, and proportional decomposition are exactly the hypotheses of Theorem&#160;<a href="ch-assembly.html#thm:common_phase_cover_of_separated_normal_bnt">14.43</a>. </p>
 
   </div>
 </div>
@@ -5857,7 +6019,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">14.63</span>
+    <span class="theorem_thmlabel">14.65</span>
     <span class="theorem_thmtitle">BNT-cover hypotheses imply phase-cover hypotheses</span>
     <div class="thm_header_extras">
 
@@ -5868,7 +6030,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:common_primitive_bnt_cover_hypotheses_to_phase_cover_hypotheses">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001063"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001065"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5884,11 +6046,11 @@
         
         <ul class="uses">
           
-          <li><a href="ch-assembly.html#def:common_primitive_bnt_cover_hypotheses">Definition 14.61</a></li>
+          <li><a href="ch-assembly.html#def:common_primitive_bnt_cover_hypotheses">Definition 14.63</a></li>
           
-          <li><a href="ch-assembly.html#def:common_primitive_phase_cover_hypotheses">Definition 14.56</a></li>
+          <li><a href="ch-assembly.html#def:common_primitive_phase_cover_hypotheses">Definition 14.58</a></li>
           
-          <li><a href="ch-assembly.html#thm:common_primitive_bnt_cover_hypotheses_to_common_phase_cover">Theorem 14.62</a></li>
+          <li><a href="ch-assembly.html#thm:common_primitive_bnt_cover_hypotheses_to_common_phase_cover">Theorem 14.64</a></li>
           
         </ul>
     
@@ -5919,11 +6081,11 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   If two common primitive nonzero-sector families satisfy the BNT-cover hypotheses, then they satisfy the phase-cover hypotheses of Definition&#160;<a href="ch-assembly.html#def:common_primitive_phase_cover_hypotheses">14.56</a>. </p>
+  <p>   If two common primitive nonzero-sector families satisfy the BNT-cover hypotheses, then they satisfy the phase-cover hypotheses of Definition&#160;<a href="ch-assembly.html#def:common_primitive_phase_cover_hypotheses">14.58</a>. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001063">
+<div class="proof_wrapper" id="a0000001065">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5940,7 +6102,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">14.64</span>
+    <span class="theorem_thmlabel">14.66</span>
     <span class="theorem_thmtitle">Phase-cover data give overlap-span hypotheses</span>
     <div class="thm_header_extras">
 
@@ -5951,7 +6113,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:sector_basis_overlap_span_reindexed_commonPhaseCover">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001064"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001066"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5967,11 +6129,11 @@
         
         <ul class="uses">
           
-          <li><a href="ch-assembly.html#def:common_primitive_phase_cover_hypotheses">Definition 14.56</a></li>
+          <li><a href="ch-assembly.html#def:common_primitive_phase_cover_hypotheses">Definition 14.58</a></li>
           
-          <li><a href="ch-assembly.html#def:common_sector_relabeling_hypothesis">Definition 14.71</a></li>
+          <li><a href="ch-assembly.html#def:common_sector_relabeling_hypothesis">Definition 14.73</a></li>
           
-          <li><a href="ch-assembly.html#thm:common_primitive_phase_cover_hypotheses_to_span_hypotheses">Theorem 14.57</a></li>
+          <li><a href="ch-assembly.html#thm:common_primitive_phase_cover_hypotheses_to_span_hypotheses">Theorem 14.59</a></li>
           
           <li><a href="ch-assembly.html#thm:bnt_sector_decomp_pair_overlap_span_of_block_span">Theorem 14.29</a></li>
           
@@ -6008,7 +6170,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001064">
+<div class="proof_wrapper" id="a0000001066">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6025,7 +6187,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">14.65</span>
+    <span class="theorem_thmlabel">14.67</span>
     <span class="theorem_thmtitle">BNT-cover data give overlap-span hypotheses</span>
     <div class="thm_header_extras">
 
@@ -6036,7 +6198,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:sector_basis_overlap_span_reindexed_bnt_cover">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001065"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001067"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6052,13 +6214,13 @@
         
         <ul class="uses">
           
-          <li><a href="ch-assembly.html#def:common_primitive_bnt_cover_hypotheses">Definition 14.61</a></li>
+          <li><a href="ch-assembly.html#def:common_primitive_bnt_cover_hypotheses">Definition 14.63</a></li>
           
-          <li><a href="ch-assembly.html#def:common_sector_relabeling_hypothesis">Definition 14.71</a></li>
+          <li><a href="ch-assembly.html#def:common_sector_relabeling_hypothesis">Definition 14.73</a></li>
           
-          <li><a href="ch-assembly.html#thm:common_primitive_bnt_cover_hypotheses_to_phase_cover_hypotheses">Theorem 14.63</a></li>
+          <li><a href="ch-assembly.html#thm:common_primitive_bnt_cover_hypotheses_to_phase_cover_hypotheses">Theorem 14.65</a></li>
           
-          <li><a href="ch-assembly.html#thm:sector_basis_overlap_span_reindexed_commonPhaseCover">Theorem 14.64</a></li>
+          <li><a href="ch-assembly.html#thm:sector_basis_overlap_span_reindexed_commonPhaseCover">Theorem 14.66</a></li>
           
         </ul>
     
@@ -6093,7 +6255,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001065">
+<div class="proof_wrapper" id="a0000001067">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6110,7 +6272,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">14.66</span>
+    <span class="theorem_thmlabel">14.68</span>
     <span class="theorem_thmtitle">Explicit BNT data give overlap-span hypotheses</span>
     <div class="thm_header_extras">
 
@@ -6121,7 +6283,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:sector_basis_overlap_span_commonPrimitiveBNTData">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001066"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001068"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6137,17 +6299,17 @@
         
         <ul class="uses">
           
-          <li><a href="ch-assembly.html#def:common_primitive_bnt_cover_hypotheses">Definition 14.61</a></li>
+          <li><a href="ch-assembly.html#def:common_primitive_bnt_cover_hypotheses">Definition 14.63</a></li>
           
-          <li><a href="ch-assembly.html#def:common_sector_relabeling_hypothesis">Definition 14.71</a></li>
+          <li><a href="ch-assembly.html#def:common_sector_relabeling_hypothesis">Definition 14.73</a></li>
           
-          <li><a href="ch-assembly.html#thm:sector_basis_overlap_span_reindexed_bnt_cover">Theorem 14.65</a></li>
+          <li><a href="ch-assembly.html#thm:sector_basis_overlap_span_reindexed_bnt_cover">Theorem 14.67</a></li>
           
-          <li><a href="ch-assembly.html#def:common_primitive_bnt_cover_hypotheses">Definition 14.61</a></li>
+          <li><a href="ch-assembly.html#def:common_primitive_bnt_cover_hypotheses">Definition 14.63</a></li>
           
-          <li><a href="ch-assembly.html#def:common_sector_relabeling_hypothesis">Definition 14.71</a></li>
+          <li><a href="ch-assembly.html#def:common_sector_relabeling_hypothesis">Definition 14.73</a></li>
           
-          <li><a href="ch-assembly.html#thm:sector_basis_overlap_span_reindexed_bnt_cover">Theorem 14.65</a></li>
+          <li><a href="ch-assembly.html#thm:sector_basis_overlap_span_reindexed_bnt_cover">Theorem 14.67</a></li>
           
         </ul>
     
@@ -6182,7 +6344,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001066">
+<div class="proof_wrapper" id="a0000001068">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6199,7 +6361,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">14.67</span>
+    <span class="theorem_thmlabel">14.69</span>
     <span class="theorem_thmtitle">Explicit BNT data with derived zero-tail identity give overlap-span hypotheses</span>
     <div class="thm_header_extras">
 
@@ -6210,7 +6372,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:sector_basis_overlap_span_commonPrimitiveBNTData_zeroTailIdentity">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001067"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001069"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6226,15 +6388,15 @@
         
         <ul class="uses">
           
-          <li><a href="ch-assembly.html#def:common_primitive_bnt_cover_hypotheses">Definition 14.61</a></li>
+          <li><a href="ch-assembly.html#def:common_primitive_bnt_cover_hypotheses">Definition 14.63</a></li>
           
-          <li><a href="ch-assembly.html#def:common_sector_relabeling_hypothesis">Definition 14.71</a></li>
+          <li><a href="ch-assembly.html#def:common_sector_relabeling_hypothesis">Definition 14.73</a></li>
           
-          <li><a href="ch-assembly.html#thm:sector_basis_overlap_span_reindexed_bnt_cover">Theorem 14.65</a></li>
+          <li><a href="ch-assembly.html#thm:sector_basis_overlap_span_reindexed_bnt_cover">Theorem 14.67</a></li>
           
-          <li><a href="ch-assembly.html#def:common_primitive_bnt_cover_hypotheses">Definition 14.61</a></li>
+          <li><a href="ch-assembly.html#def:common_primitive_bnt_cover_hypotheses">Definition 14.63</a></li>
           
-          <li><a href="ch-assembly.html#thm:sector_basis_overlap_span_reindexed_bnt_cover">Theorem 14.65</a></li>
+          <li><a href="ch-assembly.html#thm:sector_basis_overlap_span_reindexed_bnt_cover">Theorem 14.67</a></li>
           
         </ul>
     
@@ -6269,7 +6431,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001067">
+<div class="proof_wrapper" id="a0000001069">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6286,7 +6448,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">14.68</span>
+    <span class="theorem_thmlabel">14.70</span>
     <span class="theorem_thmtitle">Sector comparison from a common phase cover</span>
     <div class="thm_header_extras">
 
@@ -6297,7 +6459,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:afterBlocking_sectorComparison_zeroTail_of_commonPhaseCover">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001068"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001070"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6317,11 +6479,11 @@
           
           <li><a href="ch-assembly.html#lem:mpv_common_phase_cover_span_eq">Lemma 14.33</a></li>
           
-          <li><a href="ch-assembly.html#thm:afterBlocking_sectorComparison_zeroTail_of_blockSpan">Theorem 14.53</a></li>
+          <li><a href="ch-assembly.html#thm:afterBlocking_sectorComparison_zeroTail_of_blockSpan">Theorem 14.55</a></li>
           
           <li><a href="ch-assembly.html#lem:mpv_common_phase_cover_span_eq">Lemma 14.33</a></li>
           
-          <li><a href="ch-assembly.html#thm:afterBlocking_sectorComparison_zeroTail_of_blockSpan">Theorem 14.53</a></li>
+          <li><a href="ch-assembly.html#thm:afterBlocking_sectorComparison_zeroTail_of_blockSpan">Theorem 14.55</a></li>
           
         </ul>
     
@@ -6352,11 +6514,11 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   Under the hypotheses of Theorem&#160;<a href="ch-assembly.html#thm:afterBlocking_sectorComparison_zeroTail_of_blockSpan">14.53</a>, a common MPV phase cover for the two nonzero-weight block families supplies the finite-length span equality. Hence there exist a period \(p' {\gt} 0\) and sector decompositions \(P,Q\) such that \(A^{[p']}\) and \(B^{[p']}\) agree with the corresponding sector tensors at every positive length, \(P\) and \(Q\) have the same full MPV family, both have BNT data, and their sector weights satisfy the matched sector-weight conclusion. </p>
+  <p>   Under the hypotheses of Theorem&#160;<a href="ch-assembly.html#thm:afterBlocking_sectorComparison_zeroTail_of_blockSpan">14.55</a>, a common MPV phase cover for the two nonzero-weight block families supplies the finite-length span equality. Hence there exist a period \(p' {\gt} 0\) and sector decompositions \(P,Q\) such that \(A^{[p']}\) and \(B^{[p']}\) agree with the corresponding sector tensors at every positive length, \(P\) and \(Q\) have the same full MPV family, both have BNT data, and their sector weights satisfy the matched sector-weight conclusion. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001068">
+<div class="proof_wrapper" id="a0000001070">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6373,7 +6535,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">14.69</span>
+    <span class="theorem_thmlabel">14.71</span>
     <span class="theorem_thmtitle">Sector comparison from proportional-comparison data</span>
     <div class="thm_header_extras">
 
@@ -6384,7 +6546,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:afterBlocking_sectorComparison_zeroTail_of_proportionalDecompositionConclusion">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001069"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001071"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6402,11 +6564,11 @@
           
           <li><a href="ch-assembly.html#thm:common_phase_cover_of_proportional_decomposition">Theorem 14.37</a></li>
           
-          <li><a href="ch-assembly.html#thm:afterBlocking_sectorComparison_zeroTail_of_commonPhaseCover">Theorem 14.68</a></li>
+          <li><a href="ch-assembly.html#thm:afterBlocking_sectorComparison_zeroTail_of_commonPhaseCover">Theorem 14.70</a></li>
           
           <li><a href="ch-assembly.html#thm:common_phase_cover_of_proportional_decomposition">Theorem 14.37</a></li>
           
-          <li><a href="ch-assembly.html#thm:afterBlocking_sectorComparison_zeroTail_of_commonPhaseCover">Theorem 14.68</a></li>
+          <li><a href="ch-assembly.html#thm:afterBlocking_sectorComparison_zeroTail_of_commonPhaseCover">Theorem 14.70</a></li>
           
         </ul>
     
@@ -6441,7 +6603,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001069">
+<div class="proof_wrapper" id="a0000001071">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6458,7 +6620,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">14.70</span>
+    <span class="theorem_thmlabel">14.72</span>
     <span class="theorem_thmtitle">Common primitive sectors with span hypotheses</span>
     <div class="thm_header_extras">
 
@@ -6469,7 +6631,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_spanHypotheses">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001070"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001072"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6487,13 +6649,13 @@
           
           <li><a href="ch-canonical.html#thm:after_blocking_common_primitive_irreducible_blocks_reindexed">Theorem 11.183</a></li>
           
-          <li><a href="ch-assembly.html#def:common_primitive_span_hypotheses">Definition 14.54</a></li>
+          <li><a href="ch-assembly.html#def:common_primitive_span_hypotheses">Definition 14.56</a></li>
           
-          <li><a href="ch-assembly.html#thm:afterBlocking_sectorComparison_zeroTail_of_blockSpan">Theorem 14.53</a></li>
+          <li><a href="ch-assembly.html#thm:afterBlocking_sectorComparison_zeroTail_of_blockSpan">Theorem 14.55</a></li>
           
           <li><a href="ch-canonical.html#thm:after_blocking_common_primitive_irreducible_blocks_reindexed">Theorem 11.183</a></li>
           
-          <li><a href="ch-assembly.html#thm:afterBlocking_sectorComparison_zeroTail_of_blockSpan">Theorem 14.53</a></li>
+          <li><a href="ch-assembly.html#thm:afterBlocking_sectorComparison_zeroTail_of_blockSpan">Theorem 14.55</a></li>
           
         </ul>
     
@@ -6524,11 +6686,11 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   Assume \(A\) and \(B\) have the same MPV family and that the canonically blocked nonzero parts agree with the same families written after identifying blocked physical words. The common primitive theorem then produces one positive blocking length, zero-tail equations, trace-preserving primitive irreducible nonzero-sector families with positive bond dimensions and nonzero weights, and the positive-length and length-zero identities for those families. If these produced families also satisfy Definition&#160;<a href="ch-assembly.html#def:common_primitive_span_hypotheses">14.54</a>, then the zero-tail sector comparison conclusion holds: after a positive blocking, there are sector decompositions \(P,Q\) agreeing with \(A\) and \(B\) at all positive lengths, with \(P\) and \(Q\) generating the same full MPV family, carrying BNT data, and with their sector weights matched up to a permutation and nonzero phases. </p>
+  <p>   Assume \(A\) and \(B\) have the same MPV family and that the canonically blocked nonzero parts agree with the same families written after identifying blocked physical words. The common primitive theorem then produces one positive blocking length, zero-tail equations, trace-preserving primitive irreducible nonzero-sector families with positive bond dimensions and nonzero weights, and the positive-length and length-zero identities for those families. If these produced families also satisfy Definition&#160;<a href="ch-assembly.html#def:common_primitive_span_hypotheses">14.56</a>, then the zero-tail sector comparison conclusion holds: after a positive blocking, there are sector decompositions \(P,Q\) agreeing with \(A\) and \(B\) at all positive lengths, with \(P\) and \(Q\) generating the same full MPV family, carrying BNT data, and with their sector weights matched up to a permutation and nonzero phases. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001070">
+<div class="proof_wrapper" id="a0000001072">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6545,7 +6707,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">14.71</span>
+    <span class="definition_thmlabel">14.73</span>
     <span class="definition_thmtitle">Blocked-word identification for common sectors</span>
     <div class="thm_header_extras">
 
@@ -6589,7 +6751,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">14.72</span>
+    <span class="definition_thmlabel">14.74</span>
     <span class="definition_thmtitle">Global coordinate-grouping hypothesis for common sectors</span>
     <div class="thm_header_extras">
 
@@ -6653,7 +6815,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">14.73</span>
+    <span class="theorem_thmlabel">14.75</span>
     <span class="theorem_thmtitle">Canonical coordinate grouping</span>
     <div class="thm_header_extras">
 
@@ -6664,7 +6826,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:common_grouped_block_cast_of_flatten_word">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001071"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001073"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6680,7 +6842,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-assembly.html#def:common_grouped_block_cast_hypothesis">Definition 14.72</a></li>
+          <li><a href="ch-assembly.html#def:common_grouped_block_cast_hypothesis">Definition 14.74</a></li>
           
           <li><a href="ch-canonical.html#thm:common_blocked_cyclic_sector_flatten_word_of_block_cast">Theorem 11.93</a></li>
           
@@ -6719,7 +6881,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001071">
+<div class="proof_wrapper" id="a0000001073">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6736,7 +6898,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">14.74</span>
+    <span class="theorem_thmlabel">14.76</span>
     <span class="theorem_thmtitle">Coordinate grouping gives the word identification</span>
     <div class="thm_header_extras">
 
@@ -6747,7 +6909,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:common_grouped_block_cast_to_relabeling">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001072"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001074"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6763,9 +6925,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-assembly.html#def:common_grouped_block_cast_hypothesis">Definition 14.72</a></li>
+          <li><a href="ch-assembly.html#def:common_grouped_block_cast_hypothesis">Definition 14.74</a></li>
           
-          <li><a href="ch-assembly.html#def:common_sector_relabeling_hypothesis">Definition 14.71</a></li>
+          <li><a href="ch-assembly.html#def:common_sector_relabeling_hypothesis">Definition 14.73</a></li>
           
           <li><a href="ch-canonical.html#thm:common_blocked_cyclic_sector_blocked_word_comparison">Theorem 11.94</a></li>
           
@@ -6804,7 +6966,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001072">
+<div class="proof_wrapper" id="a0000001074">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6821,7 +6983,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">14.75</span>
+    <span class="theorem_thmlabel">14.77</span>
     <span class="theorem_thmtitle">Common-length sectors and span consequences</span>
     <div class="thm_header_extras">
 
@@ -6832,7 +6994,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:after_blocking_common_primitive_irreducible_blocks_block_span_consequences">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001073"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001075"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6848,7 +7010,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-assembly.html#def:common_sector_relabeling_hypothesis">Definition 14.71</a></li>
+          <li><a href="ch-assembly.html#def:common_sector_relabeling_hypothesis">Definition 14.73</a></li>
           
           <li><a href="ch-mps.html#def:same_mpv2_pos">Definition 2.13</a></li>
           
@@ -6858,7 +7020,7 @@
           
           <li><a href="ch-assembly.html#lem:mpv_common_phase_cover_span_eq">Lemma 14.33</a></li>
           
-          <li><a href="ch-assembly.html#thm:nonzero_block_span_eq_of_proportional_decomposition">Theorem 14.38</a></li>
+          <li><a href="ch-assembly.html#thm:nonzero_block_span_eq_of_proportional_decomposition">Theorem 14.39</a></li>
           
         </ul>
     
@@ -6893,7 +7055,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001073">
+<div class="proof_wrapper" id="a0000001075">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6901,7 +7063,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Apply Theorem&#160;<a href="ch-canonical.html#thm:after_blocking_common_primitive_irreducible_blocks_reindexed">11.183</a> to obtain the common-sector decompositions. The implication from a common MPV phase cover is Lemma&#160;<a href="ch-assembly.html#lem:mpv_common_phase_cover_span_eq">14.33</a>; the implication from proportional-decomposition data is Theorem&#160;<a href="ch-assembly.html#thm:nonzero_block_span_eq_of_proportional_decomposition">14.38</a>. </p>
+  <p> Apply Theorem&#160;<a href="ch-canonical.html#thm:after_blocking_common_primitive_irreducible_blocks_reindexed">11.183</a> to obtain the common-sector decompositions. The implication from a common MPV phase cover is Lemma&#160;<a href="ch-assembly.html#lem:mpv_common_phase_cover_span_eq">14.33</a>; the implication from proportional-decomposition data is Theorem&#160;<a href="ch-assembly.html#thm:nonzero_block_span_eq_of_proportional_decomposition">14.39</a>. </p>
 
   </div>
 </div>
@@ -6910,7 +7072,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">14.76</span>
+    <span class="theorem_thmlabel">14.78</span>
     <span class="theorem_thmtitle">Unconditional common primitive block decompositions</span>
     <div class="thm_header_extras">
 
@@ -6921,7 +7083,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:unconditional_common_primitive_irreducible_blocks">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001074"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001076"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6941,7 +7103,7 @@
           
           <li><a href="ch-canonical.html#thm:common_blocked_cyclic_sector_flatten_word_of_block_cast">Theorem 11.93</a></li>
           
-          <li><a href="ch-assembly.html#thm:common_grouped_block_cast_to_relabeling">Theorem 14.74</a></li>
+          <li><a href="ch-assembly.html#thm:common_grouped_block_cast_to_relabeling">Theorem 14.76</a></li>
           
           <li><a href="ch-canonical.html#thm:after_blocking_common_primitive_irreducible_blocks_reindexed">Theorem 11.183</a></li>
           
@@ -6978,7 +7140,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001074">
+<div class="proof_wrapper" id="a0000001076">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6995,7 +7157,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">14.77</span>
+    <span class="theorem_thmlabel">14.79</span>
     <span class="theorem_thmtitle">Common sectors from phase-cover data</span>
     <div class="thm_header_extras">
 
@@ -7006,7 +7168,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:afterBlocking_sectorComparison_reindexed_commonPhaseCover">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001075"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001077"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7022,13 +7184,13 @@
         
         <ul class="uses">
           
-          <li><a href="ch-assembly.html#def:common_primitive_phase_cover_hypotheses">Definition 14.56</a></li>
+          <li><a href="ch-assembly.html#def:common_primitive_phase_cover_hypotheses">Definition 14.58</a></li>
           
-          <li><a href="ch-assembly.html#def:common_sector_relabeling_hypothesis">Definition 14.71</a></li>
+          <li><a href="ch-assembly.html#def:common_sector_relabeling_hypothesis">Definition 14.73</a></li>
           
-          <li><a href="ch-assembly.html#thm:afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_spanHypotheses">Theorem 14.70</a></li>
+          <li><a href="ch-assembly.html#thm:afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_spanHypotheses">Theorem 14.72</a></li>
           
-          <li><a href="ch-assembly.html#thm:common_primitive_phase_cover_hypotheses_to_span_hypotheses">Theorem 14.57</a></li>
+          <li><a href="ch-assembly.html#thm:common_primitive_phase_cover_hypotheses_to_span_hypotheses">Theorem 14.59</a></li>
           
         </ul>
     
@@ -7059,11 +7221,11 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   Let \(A\) and \(B\) have the same MPV family. Assume the blocked-word identification hypothesis for the cyclic-sector data. The common-sector structural theorem then produces a common blocking length, zero-tail identities, and trace-preserving, primitive, irreducible nonzero-sector families on both sides. If those families satisfy the phase-cover hypotheses of Definition&#160;<a href="ch-assembly.html#def:common_primitive_phase_cover_hypotheses">14.56</a>, then the sector decompositions obtained from the two sides have BNT data, agree as full MPV families, and their sector weights satisfy the matched sector-weight conclusion. </p>
+  <p>   Let \(A\) and \(B\) have the same MPV family. Assume the blocked-word identification hypothesis for the cyclic-sector data. The common-sector structural theorem then produces a common blocking length, zero-tail identities, and trace-preserving, primitive, irreducible nonzero-sector families on both sides. If those families satisfy the phase-cover hypotheses of Definition&#160;<a href="ch-assembly.html#def:common_primitive_phase_cover_hypotheses">14.58</a>, then the sector decompositions obtained from the two sides have BNT data, agree as full MPV families, and their sector weights satisfy the matched sector-weight conclusion. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001075">
+<div class="proof_wrapper" id="a0000001077">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7071,7 +7233,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Use Theorem&#160;<a href="ch-assembly.html#thm:common_primitive_phase_cover_hypotheses_to_span_hypotheses">14.57</a> to form the span hypotheses of Definition&#160;<a href="ch-assembly.html#def:common_primitive_span_hypotheses">14.54</a>. Then apply the common-sector comparison theorem with those span hypotheses. </p>
+  <p> Use Theorem&#160;<a href="ch-assembly.html#thm:common_primitive_phase_cover_hypotheses_to_span_hypotheses">14.59</a> to form the span hypotheses of Definition&#160;<a href="ch-assembly.html#def:common_primitive_span_hypotheses">14.56</a>. Then apply the common-sector comparison theorem with those span hypotheses. </p>
 
   </div>
 </div>
@@ -7080,7 +7242,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">14.78</span>
+    <span class="theorem_thmlabel">14.80</span>
     <span class="theorem_thmtitle">Common sectors from BNT-cover data</span>
     <div class="thm_header_extras">
 
@@ -7091,7 +7253,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:afterBlocking_sectorComparison_reindexed_bntCover">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001076"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001078"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7107,13 +7269,13 @@
         
         <ul class="uses">
           
-          <li><a href="ch-assembly.html#def:common_primitive_bnt_cover_hypotheses">Definition 14.61</a></li>
+          <li><a href="ch-assembly.html#def:common_primitive_bnt_cover_hypotheses">Definition 14.63</a></li>
           
-          <li><a href="ch-assembly.html#def:common_sector_relabeling_hypothesis">Definition 14.71</a></li>
+          <li><a href="ch-assembly.html#def:common_sector_relabeling_hypothesis">Definition 14.73</a></li>
           
-          <li><a href="ch-assembly.html#thm:common_primitive_bnt_cover_hypotheses_to_phase_cover_hypotheses">Theorem 14.63</a></li>
+          <li><a href="ch-assembly.html#thm:common_primitive_bnt_cover_hypotheses_to_phase_cover_hypotheses">Theorem 14.65</a></li>
           
-          <li><a href="ch-assembly.html#thm:afterBlocking_sectorComparison_reindexed_commonPhaseCover">Theorem 14.77</a></li>
+          <li><a href="ch-assembly.html#thm:afterBlocking_sectorComparison_reindexed_commonPhaseCover">Theorem 14.79</a></li>
           
         </ul>
     
@@ -7148,7 +7310,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001076">
+<div class="proof_wrapper" id="a0000001078">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7165,7 +7327,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">14.79</span>
+    <span class="theorem_thmlabel">14.81</span>
     <span class="theorem_thmtitle">Common sectors from explicit common primitive BNT data</span>
     <div class="thm_header_extras">
 
@@ -7176,7 +7338,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:afterBlocking_sectorComparison_commonPrimitiveBNTData">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001077"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001079"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7192,17 +7354,17 @@
         
         <ul class="uses">
           
-          <li><a href="ch-assembly.html#def:common_primitive_bnt_cover_hypotheses">Definition 14.61</a></li>
+          <li><a href="ch-assembly.html#def:common_primitive_bnt_cover_hypotheses">Definition 14.63</a></li>
           
-          <li><a href="ch-assembly.html#def:common_sector_relabeling_hypothesis">Definition 14.71</a></li>
+          <li><a href="ch-assembly.html#def:common_sector_relabeling_hypothesis">Definition 14.73</a></li>
           
-          <li><a href="ch-assembly.html#thm:afterBlocking_sectorComparison_reindexed_bntCover">Theorem 14.78</a></li>
+          <li><a href="ch-assembly.html#thm:afterBlocking_sectorComparison_reindexed_bntCover">Theorem 14.80</a></li>
           
-          <li><a href="ch-assembly.html#def:common_primitive_bnt_cover_hypotheses">Definition 14.61</a></li>
+          <li><a href="ch-assembly.html#def:common_primitive_bnt_cover_hypotheses">Definition 14.63</a></li>
           
-          <li><a href="ch-assembly.html#def:common_sector_relabeling_hypothesis">Definition 14.71</a></li>
+          <li><a href="ch-assembly.html#def:common_sector_relabeling_hypothesis">Definition 14.73</a></li>
           
-          <li><a href="ch-assembly.html#thm:afterBlocking_sectorComparison_reindexed_bntCover">Theorem 14.78</a></li>
+          <li><a href="ch-assembly.html#thm:afterBlocking_sectorComparison_reindexed_bntCover">Theorem 14.80</a></li>
           
         </ul>
     
@@ -7237,7 +7399,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001077">
+<div class="proof_wrapper" id="a0000001079">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7254,7 +7416,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">14.80</span>
+    <span class="theorem_thmlabel">14.82</span>
     <span class="theorem_thmtitle">Common sectors from proportional-comparison data</span>
     <div class="thm_header_extras">
 
@@ -7265,7 +7427,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:afterBlocking_sectorComparison_reindexed_proportional">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001078"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001080"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7281,13 +7443,13 @@
         
         <ul class="uses">
           
-          <li><a href="ch-assembly.html#def:common_primitive_proportional_hypotheses">Definition 14.58</a></li>
+          <li><a href="ch-assembly.html#def:common_primitive_proportional_hypotheses">Definition 14.60</a></li>
           
-          <li><a href="ch-assembly.html#def:common_sector_relabeling_hypothesis">Definition 14.71</a></li>
+          <li><a href="ch-assembly.html#def:common_sector_relabeling_hypothesis">Definition 14.73</a></li>
           
-          <li><a href="ch-assembly.html#thm:common_primitive_proportional_hypotheses_to_phase_cover_hypotheses">Theorem 14.59</a></li>
+          <li><a href="ch-assembly.html#thm:common_primitive_proportional_hypotheses_to_phase_cover_hypotheses">Theorem 14.61</a></li>
           
-          <li><a href="ch-assembly.html#thm:afterBlocking_sectorComparison_reindexed_commonPhaseCover">Theorem 14.77</a></li>
+          <li><a href="ch-assembly.html#thm:afterBlocking_sectorComparison_reindexed_commonPhaseCover">Theorem 14.79</a></li>
           
         </ul>
     
@@ -7318,11 +7480,11 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   Let \(A\) and \(B\) have the same MPV family, and assume the blocked-word identification hypothesis for the cyclic-sector data. The common-sector structural theorem produces the common primitive nonzero-sector families. If those families satisfy the proportional-comparison hypotheses of Definition&#160;<a href="ch-assembly.html#def:common_primitive_proportional_hypotheses">14.58</a>, then the same sector-weight comparison conclusion holds. </p>
+  <p>   Let \(A\) and \(B\) have the same MPV family, and assume the blocked-word identification hypothesis for the cyclic-sector data. The common-sector structural theorem produces the common primitive nonzero-sector families. If those families satisfy the proportional-comparison hypotheses of Definition&#160;<a href="ch-assembly.html#def:common_primitive_proportional_hypotheses">14.60</a>, then the same sector-weight comparison conclusion holds. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001078">
+<div class="proof_wrapper" id="a0000001080">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7339,7 +7501,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">14.81</span>
+    <span class="definition_thmlabel">14.83</span>
     <span class="definition_thmtitle">After-blocking hypotheses for the CPSV formulation</span>
     <div class="thm_header_extras">
 
@@ -7363,7 +7525,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-assembly.html#def:common_primitive_bnt_cover_hypotheses">Definition 14.61</a></li>
+          <li><a href="ch-assembly.html#def:common_primitive_bnt_cover_hypotheses">Definition 14.63</a></li>
           
         </ul>
     
@@ -7404,7 +7566,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">14.82</span>
+    <span class="definition_thmlabel">14.84</span>
     <span class="definition_thmtitle">CPSV after-blocking Fundamental Theorem conclusion</span>
     <div class="thm_header_extras">
 
@@ -7468,7 +7630,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">14.83</span>
+    <span class="theorem_thmlabel">14.85</span>
     <span class="theorem_thmtitle">Conditional after-blocking CPSV formulation</span>
     <div class="thm_header_extras">
 
@@ -7479,7 +7641,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:fundamental_theorem_after_blocking_comparison_hypotheses">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001079"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001081"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7495,15 +7657,15 @@
         
         <ul class="uses">
           
-          <li><a href="ch-assembly.html#def:after_blocking_fundamental_theorem_hypotheses">Definition 14.81</a></li>
+          <li><a href="ch-assembly.html#def:after_blocking_fundamental_theorem_hypotheses">Definition 14.83</a></li>
           
-          <li><a href="ch-assembly.html#def:after_blocking_fundamental_theorem_conclusion">Definition 14.82</a></li>
+          <li><a href="ch-assembly.html#def:after_blocking_fundamental_theorem_conclusion">Definition 14.84</a></li>
           
-          <li><a href="ch-assembly.html#thm:common_grouped_block_cast_of_flatten_word">Theorem 14.73</a></li>
+          <li><a href="ch-assembly.html#thm:common_grouped_block_cast_of_flatten_word">Theorem 14.75</a></li>
           
-          <li><a href="ch-assembly.html#thm:common_grouped_block_cast_to_relabeling">Theorem 14.74</a></li>
+          <li><a href="ch-assembly.html#thm:common_grouped_block_cast_to_relabeling">Theorem 14.76</a></li>
           
-          <li><a href="ch-assembly.html#thm:afterBlocking_sectorComparison_reindexed_bntCover">Theorem 14.78</a></li>
+          <li><a href="ch-assembly.html#thm:afterBlocking_sectorComparison_reindexed_bntCover">Theorem 14.80</a></li>
           
         </ul>
     
@@ -7534,7 +7696,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   Let \(A\) and \(B\) generate the same MPV family. Assume the after-blocking comparison hypotheses of Definition&#160;<a href="ch-assembly.html#def:after_blocking_fundamental_theorem_hypotheses">14.81</a>. Then the CPSV conclusion of Definition&#160;<a href="ch-assembly.html#def:after_blocking_fundamental_theorem_conclusion">14.82</a> is nonempty. </p>
+  <p>   Let \(A\) and \(B\) generate the same MPV family. Assume the after-blocking comparison hypotheses of Definition&#160;<a href="ch-assembly.html#def:after_blocking_fundamental_theorem_hypotheses">14.83</a>. Then the CPSV conclusion of Definition&#160;<a href="ch-assembly.html#def:after_blocking_fundamental_theorem_conclusion">14.84</a> is nonempty. </p>
 <p>The conclusion matches the sector-decomposition part of the Cirac–Pérez-García–Schuch–Verstraete Fundamental Theorem: after blocking, the tensor families are represented by BNT sector decompositions whose basis sectors and weights match up to permutation and nonzero phases, as in <span class="cite">
 	[
 	
@@ -7552,7 +7714,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001079">
+<div class="proof_wrapper" id="a0000001081">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7560,7 +7722,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Apply Theorem&#160;<a href="ch-assembly.html#thm:afterBlocking_sectorComparison_reindexed_bntCover">14.78</a> with the word-identification derived from Theorem&#160;<a href="ch-assembly.html#thm:common_grouped_block_cast_to_relabeling">14.74</a> and the BNT-cover comparison data from Definition&#160;<a href="ch-assembly.html#def:after_blocking_fundamental_theorem_hypotheses">14.81</a>. The proof then packages the resulting blocking length, sector decompositions, BNT data, permutation, multiplicity equalities, phases, and sector-weight multiset equalities as the conclusion structure. </p>
+  <p> Apply Theorem&#160;<a href="ch-assembly.html#thm:afterBlocking_sectorComparison_reindexed_bntCover">14.80</a> with the word-identification derived from Theorem&#160;<a href="ch-assembly.html#thm:common_grouped_block_cast_to_relabeling">14.76</a> and the BNT-cover comparison data from Definition&#160;<a href="ch-assembly.html#def:after_blocking_fundamental_theorem_hypotheses">14.83</a>. The proof then packages the resulting blocking length, sector decompositions, BNT data, permutation, multiplicity equalities, phases, and sector-weight multiset equalities as the conclusion structure. </p>
 
   </div>
 </div>
@@ -7569,7 +7731,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">14.84</span>
+    <span class="theorem_thmlabel">14.86</span>
     <span class="theorem_thmtitle">Cast-compatible MPV scaling implies phase-matched sector comparison</span>
     <div class="thm_header_extras">
 
@@ -7580,7 +7742,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:route_b_hetero_mpv_scaling">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001080"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001082"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7630,14 +7792,14 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Let \(P\) and \(Q\) be sector decompositions. Assume there is a permutation \(\pi \) matching the basis blocks, the multiplicities satisfy \(r_j^P = r_{\pi (j)}^Q\), and for each \(j\) the corresponding basis blocks have the same auxiliary dimension and satisfy </p>
-<div class="displaymath" id="a0000001081">
+<div class="displaymath" id="a0000001083">
   \[  V^{(N)}(Q_{\pi (j)})_\sigma = \zeta _j^N V^{(N)}(P_j)_\sigma  \]
 </div>
 <p> for some nonzero complex number \(\zeta _j\), after identifying the two basis tensors along that dimension equality. If the total MPV families of \(P\) and \(Q\) agree and the basis blocks of \(P\) are eventually linearly independent, then for each \(j\) the sector weight multiset of \(P_j\) equals the multiset obtained from that of \(Q_{\pi (j)}\) by multiplication by&#160;\(\zeta _j\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001080">
+<div class="proof_wrapper" id="a0000001082">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7649,19 +7811,19 @@
 
   </div>
 </div>
-<div class="remark_thmwrapper theorem-style-remark" id="a0000001082">
+<div class="remark_thmwrapper theorem-style-remark" id="a0000001084">
   <div class="remark_thmheading">
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">14.85</span>
+    <span class="remark_thmlabel">14.87</span>
     <span class="remark_thmtitle">Equal-case comparison after canonical reduction</span>
     <div class="thm_header_extras">
 
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-assembly.html#a0000001082">#</a>
+    <a class="icon proof" href="ch-assembly.html#a0000001084">#</a>
     
     
     
@@ -7681,7 +7843,7 @@
 	
 	]
 </span>. Equality, or proportionality, of the MPV families then pairs the two bases by phase and gauge, as in the Fundamental Theorem of Matrix Product Vectors. In the equal case, one expands each tensor in its basis of normal tensors and compares, for every basis tensor and every length \(N\), the power sums </p>
-<div class="displaymath" id="a0000001083">
+<div class="displaymath" id="a0000001085">
   \[  \sum _q \mu _{j,q}^N = \sum _q (\nu _{j,q}e^{i\phi _j})^N.  \]
 </div>
 <p> Newton identities, equivalently the elementary power-sum lemma used in the CPSV argument, recover the multiplicities and the weights. The blockwise gauge matrices are then placed on the diagonal to obtain the global conjugating matrix; this is the equal-case corollary of the Fundamental Theorem in <span class="cite">
@@ -7698,8 +7860,8 @@
 	]
 </span>. </p>
 <p>The comparison theorems in this chapter cover this latter part of the argument. Theorem&#160;<a href="ch-assembly.html#thm:ft_equal_explicit">14.6</a> proves the equal case when the coefficient identities are given explicitly, Theorem&#160;<a href="ch-assembly.html#thm:ft_equal_same_structure">14.8</a> proves the common block-structure special case, and Theorem&#160;<a href="ch-assembly.html#thm:route_b_equal">14.16</a> recovers the sector-weight multisets from the multiplicity data. The basis-of-normal-tensors construction is available for trace-preserving primitive irreducible nonzero blocks with positive bond dimensions and nonzero weights in Theorem&#160;<a href="ch-canonical.html#thm:bnt_sector_decomp_tp_prim_irr_collapsed">11.145</a>. When these blocks are injective, Theorems&#160;<a href="ch-canonical.html#thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_data">11.147</a> and&#160;<a href="ch-canonical.html#thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_data_span">11.148</a> give the asymptotic orthogonality and finite-length span preservation needed to separate coefficients. Theorem&#160;<a href="ch-assembly.html#thm:bnt_sector_decomp_pair_overlap_span_of_block_span">14.29</a> then turns equality of nonzero-sector spans into the hypotheses used by the sector comparison theorem. </p>
-<p>The same comparison can also be expressed through common phases. A common MPV phase cover gives equality of finite-length nonzero-block spans by Lemma&#160;<a href="ch-assembly.html#lem:mpv_common_phase_cover_span_eq">14.33</a>. A sector basis pre-matching gives the same span equality and the primitive overlap-span hypotheses by Lemma&#160;<a href="ch-assembly.html#lem:sector_basis_pre_matching_span_eq">14.35</a> and Theorem&#160;<a href="ch-assembly.html#thm:sector_basis_pre_matching_to_overlap_span">14.36</a>. The BNT comparison theorems produce such common phases from a proportional-decomposition conclusion in Theorems&#160;<a href="ch-assembly.html#thm:common_phase_cover_of_proportional_decomposition">14.37</a> and&#160;<a href="ch-assembly.html#thm:common_phase_cover_of_separated_normal_bnt">14.41</a>. </p>
-<p>Chapter&#160;<a href="ch-canonical.html">11</a> supplies the canonical-form reduction needed before these comparison theorems can be applied: a common physical blocking length, the zero-tail identities at that length, and cyclic-sector families for both tensors on a common blocked alphabet. The blocked-word relabelling and the common primitive irreducible nonzero-sector decompositions are now part of the formalized reduction, culminating in Theorem&#160;<a href="ch-canonical.html#thm:after_blocking_common_primitive_irreducible_blocks_reindexed">11.183</a>. Theorem&#160;<a href="ch-assembly.html#thm:afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_spanHypotheses">14.70</a> then states the hypotheses: equality of the zero-tail dimensions, injectivity of the common nonzero-sector blocks, and finite-length MPV span equality. Theorem&#160;<a href="ch-assembly.html#thm:after_blocking_common_primitive_irreducible_blocks_block_span_consequences">14.75</a> gives the corresponding conditional span consequence for the common-sector families themselves: a common MPV phase cover or a proportional-decomposition conclusion supplies the finite-length nonzero-block span equality. Theorem&#160;<a href="ch-assembly.html#thm:afterBlocking_sectorComparison_reindexed_commonPhaseCover">14.77</a> adds the zero-tail and injectivity data to the common phase-cover route and therefore gives the same sector-weight conclusion. Establishing these hypotheses is the mathematical passage from equality of total MPV vectors to the componentwise power-sum identities used in <span class="cite">
+<p>The same comparison can also be expressed through common phases. A common MPV phase cover gives equality of finite-length nonzero-block spans by Lemma&#160;<a href="ch-assembly.html#lem:mpv_common_phase_cover_span_eq">14.33</a>. A sector basis pre-matching gives the same span equality and the primitive overlap-span hypotheses by Lemma&#160;<a href="ch-assembly.html#lem:sector_basis_pre_matching_span_eq">14.35</a> and Theorem&#160;<a href="ch-assembly.html#thm:sector_basis_pre_matching_to_overlap_span">14.36</a>. The BNT comparison theorems produce such common phases from a proportional-decomposition conclusion in Theorems&#160;<a href="ch-assembly.html#thm:common_phase_cover_of_proportional_decomposition">14.37</a> and&#160;<a href="ch-assembly.html#thm:common_phase_cover_of_separated_normal_bnt">14.43</a>. </p>
+<p>Chapter&#160;<a href="ch-canonical.html">11</a> supplies the canonical-form reduction needed before these comparison theorems can be applied: a common physical blocking length, the zero-tail identities at that length, and cyclic-sector families for both tensors on a common blocked alphabet. The blocked-word relabelling and the common primitive irreducible nonzero-sector decompositions are now part of the formalized reduction, culminating in Theorem&#160;<a href="ch-canonical.html#thm:after_blocking_common_primitive_irreducible_blocks_reindexed">11.183</a>. Theorem&#160;<a href="ch-assembly.html#thm:afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_spanHypotheses">14.72</a> then states the hypotheses: equality of the zero-tail dimensions, injectivity of the common nonzero-sector blocks, and finite-length MPV span equality. Theorem&#160;<a href="ch-assembly.html#thm:after_blocking_common_primitive_irreducible_blocks_block_span_consequences">14.77</a> gives the corresponding conditional span consequence for the common-sector families themselves: a common MPV phase cover or a proportional-decomposition conclusion supplies the finite-length nonzero-block span equality. Theorem&#160;<a href="ch-assembly.html#thm:afterBlocking_sectorComparison_reindexed_commonPhaseCover">14.79</a> adds the zero-tail and injectivity data to the common phase-cover route and therefore gives the same sector-weight conclusion. Establishing these hypotheses is the mathematical passage from equality of total MPV vectors to the componentwise power-sum identities used in <span class="cite">
 	[
 	
 	<a href="sect0001.html#Cirac2021Matrix" >CPGSV21</a>
