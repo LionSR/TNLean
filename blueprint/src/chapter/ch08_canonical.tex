@@ -1799,6 +1799,31 @@ The following results separate the zero blocks from the nonzero blocks.
 	the assumed separation of distinct representatives.
 \end{proof}
 
+\begin{theorem}[Common further blocking for representative sectors]%
+\label{thm:common_representative_common_further_blocking}
+	\lean{MPSTensor.CommonBlockedCyclicSectorFamily.commonRepresentativeBlocksAt_exists_pos_blockTensor_isInjective,
+		MPSTensor.CommonBlockedCyclicSectorFamily.commonRepresentativeBlocksAt_blockTensor_isInjective_commonMultiple,
+		MPSTensor.CommonBlockedCyclicSectorFamily.exists_commonRepresentativeBlocksAt_blockTensor_isInjective,
+		MPSTensor.CommonBlockedCyclicSectorFamily.exists_commonRepresentativeBlocksAt_blockTensor_isInjective_of_positive_witnesses}
+	\leanok
+	Each representative common-sector block has a positive further blocking
+	at which it is one-site injective. Since there are finitely many
+	representatives, the product of these local blocking lengths is one
+	positive common further blocking length at which every representative
+	remains one-site injective.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:tp_primitive_irred_block_injective,
+		thm:normal_blocking_preserved}
+	First apply the positive-blocking consequence of trace preservation,
+	primitivity, and irreducibility to each representative.  For a fixed
+	representative, factor the common product as its local blocking length times
+	the product of all other local lengths.  Full fixed-length word span persists
+	under positive multiples, so the direct block at the common product remains
+	injective.
+\end{proof}
+
 \begin{theorem}[Weights of common-alphabet sectors]%
 \label{thm:common_flat_weight_apply_of_block}
 	\lean{MPSTensor.CommonBlockedCyclicSectorFamily.commonFlatWeight_apply_of_block}
@@ -2653,13 +2678,14 @@ The following results separate the zero blocks from the nonzero blocks.
 
 \begin{theorem}[TP-primitive irreducible tensor is injective after blocking]%
 	\label{thm:tp_primitive_irred_block_injective}
-	\lean{MPSTensor.exists_blockTensor_isInjective_of_tp_primitive_irreducible}
+	\lean{MPSTensor.exists_blockTensor_isInjective_of_tp_primitive_irreducible,
+		MPSTensor.exists_pos_blockTensor_isInjective_of_tp_primitive_irreducible}
 	\leanok
 	\uses{thm:normal_tp_primitive_irred,
 		lem:isNBlkInjective_iff_blockTensor_isInjective}
 	Let $A$ be a left-canonical MPS tensor with $D > 0$,
 	irreducible transfer map, and peripheral spectrum $\{1\}$.
-	Then some blocking $A^{[L]}$ is one-site injective.
+	Then some positive blocking $A^{[L]}$ is one-site injective.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -2667,12 +2693,17 @@ The following results separate the zero blocks from the nonzero blocks.
 		lem:isNBlkInjective_iff_blockTensor_isInjective}
 	The previous theorem gives normality, which is eventual block injectivity.
 	The blocked-chain equivalence identifies this with one-site injectivity of
-	the corresponding blocked tensor.
+	the corresponding blocked tensor.  If the normality witness has length zero,
+	then either the bond dimension is scalar, where trace preservation gives a
+	nonzero one-site Kraus matrix, or the zero-length word span cannot be the
+	full matrix algebra.
 \end{proof}
 
 \begin{theorem}[Blocking preserves normality]%
 	\label{thm:normal_blocking_preserved}
-	\lean{MPSTensor.isNormal_blockTensor_of_isNormal}
+	\lean{MPSTensor.isNBlkInjective_mul_of_isNBlkInjective,
+		MPSTensor.blockTensor_isInjective_mul_of_blockTensor_isInjective,
+		MPSTensor.isNormal_blockTensor_of_isNormal}
 	\leanok
 	\uses{def:normal, def:blocked_tensor}
 	If $A$ is normal and $p \ge 1$, then $A^{[p]}$ is normal.

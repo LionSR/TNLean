@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.CanonicalForm.Assembly.CommonBlockedCyclicSectorFamily
+import TNLean.MPS.CanonicalForm.Assembly.NormalityChain
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
 
@@ -133,6 +134,81 @@ theorem commonRepresentativeBlocksAt_exists_blockTensor_isInjective
     (F.commonRepresentativeBlocksAt_tp hp k)
     (F.commonRepresentativeBlocksAt_primitive hp k)
     (F.commonRepresentativeBlocksAt_irreducible hp k)
+
+/-- Each representative common-sector block becomes injective after a positive
+further blocking. -/
+theorem commonRepresentativeBlocksAt_exists_pos_blockTensor_isInjective
+    (F : CommonBlockedCyclicSectorFamily blocks)
+    {p' : ℕ} (hp : F.p = p') (k : Fin r) :
+    ∃ L : ℕ, 0 < L ∧
+      IsInjective (blockTensor (F.commonRepresentativeBlocksAt hp k) L) := by
+  haveI : NeZero (F.commonRepresentativeDim k) :=
+    ⟨Nat.ne_of_gt (F.commonRepresentativeDim_pos k)⟩
+  exact exists_pos_blockTensor_isInjective_of_tp_primitive_irreducible
+    (F.commonRepresentativeBlocksAt hp k)
+    (F.commonRepresentativeBlocksAt_tp hp k)
+    (F.commonRepresentativeBlocksAt_primitive hp k)
+    (F.commonRepresentativeBlocksAt_irreducible hp k)
+
+/-- A finite representative family can use one common further blocking length,
+provided positive local injective-blocking witnesses have already been chosen.
+
+This is the source-faithful finite-max/common-multiple step: it does not assert
+that the representatives are injective at the common cyclic period itself. -/
+theorem commonRepresentativeBlocksAt_blockTensor_isInjective_commonMultiple
+    (F : CommonBlockedCyclicSectorFamily blocks)
+    {p' : ℕ} (hp : F.p = p')
+    (L : Fin r → ℕ)
+    (hL_pos : ∀ k, 0 < L k)
+    (hL : ∀ k, IsInjective (blockTensor (F.commonRepresentativeBlocksAt hp k) (L k)))
+    (k : Fin r) :
+    IsInjective
+      (blockTensor (F.commonRepresentativeBlocksAt hp k) (∏ j : Fin r, L j)) := by
+  classical
+  have hcommon :
+      (∏ j : Fin r, L j) = (∏ j ∈ Finset.univ.erase k, L j) * L k := by
+    simpa using (Finset.prod_erase_mul (s := Finset.univ) (a := k) (f := L)
+      (Finset.mem_univ k)).symm
+  have hmult_pos : 0 < ∏ j ∈ Finset.univ.erase k, L j :=
+    Finset.prod_pos fun j _ => hL_pos j
+  have hmul := blockTensor_isInjective_mul_of_blockTensor_isInjective
+    (F.commonRepresentativeBlocksAt hp k) hmult_pos (hL k)
+  rw [hcommon]
+  exact hmul
+
+/-- Existential form of
+`commonRepresentativeBlocksAt_blockTensor_isInjective_commonMultiple`. -/
+theorem exists_commonRepresentativeBlocksAt_blockTensor_isInjective_of_positive_witnesses
+    (F : CommonBlockedCyclicSectorFamily blocks)
+    {p' : ℕ} (hp : F.p = p')
+    (h : ∃ L : Fin r → ℕ,
+      (∀ k, 0 < L k) ∧
+        ∀ k, IsInjective (blockTensor (F.commonRepresentativeBlocksAt hp k) (L k))) :
+    ∃ L₀ : ℕ, 0 < L₀ ∧
+      ∀ k : Fin r, IsInjective (blockTensor (F.commonRepresentativeBlocksAt hp k) L₀) := by
+  obtain ⟨L, hL_pos, hL⟩ := h
+  refine ⟨∏ k : Fin r, L k, Finset.prod_pos fun k _ => hL_pos k, ?_⟩
+  exact F.commonRepresentativeBlocksAt_blockTensor_isInjective_commonMultiple hp L hL_pos hL
+
+/-- Representative common-sector blocks have one positive common further
+blocking length at which every representative is one-site injective. -/
+theorem exists_commonRepresentativeBlocksAt_blockTensor_isInjective
+    (F : CommonBlockedCyclicSectorFamily blocks)
+    {p' : ℕ} (hp : F.p = p') :
+    ∃ L₀ : ℕ, 0 < L₀ ∧
+      ∀ k : Fin r, IsInjective (blockTensor (F.commonRepresentativeBlocksAt hp k) L₀) := by
+  classical
+  let L : Fin r → ℕ := fun k =>
+    Classical.choose (F.commonRepresentativeBlocksAt_exists_pos_blockTensor_isInjective hp k)
+  have hL_pos : ∀ k, 0 < L k := fun k =>
+    (Classical.choose_spec
+      (F.commonRepresentativeBlocksAt_exists_pos_blockTensor_isInjective hp k)).1
+  have hL : ∀ k, IsInjective (blockTensor (F.commonRepresentativeBlocksAt hp k) (L k)) :=
+    fun k =>
+      (Classical.choose_spec
+        (F.commonRepresentativeBlocksAt_exists_pos_blockTensor_isInjective hp k)).2
+  exact F.exists_commonRepresentativeBlocksAt_blockTensor_isInjective_of_positive_witnesses
+    hp ⟨L, hL_pos, hL⟩
 
 /-- A representative common-sector family is a normal canonical form once its transported
 representative weights are sorted by strictly decreasing modulus. -/
