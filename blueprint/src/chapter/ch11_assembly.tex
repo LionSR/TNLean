@@ -208,7 +208,7 @@ used in this chapter.
 \begin{proof}
 	\uses{thm:ft_equal_explicit, thm:fundamentalTheorem_equalMPV_CFBNT_hetero,
 	      thm:mpv_decomposition,
-	      rem:cf_coeff_arrays, thm:route_b_equal,
+	      rem:cf_coeff_arrays, thm:route_b_equal_with_copies,
 	      thm:afterBlocking_sectorComparison_reindexed_bntCover,
 	      thm:common_phase_cover_of_proportional_decomposition}
 	The formalized comparison starts with explicit decomposition coefficients.
@@ -216,9 +216,10 @@ used in this chapter.
 	their BNT bases, and Remark~\ref{rem:cf_coeff_arrays} describes the resulting
 	coefficient arrays.  When the required coefficient identities are supplied,
 	Theorem~\ref{thm:ft_equal_explicit} proves gauge equivalence after permuting
-	the weighted block-diagonal tensors.  The sector-weight comparison of
-	Theorem~\ref{thm:route_b_equal} uses the supplied multiplicity data to recover
-	the sector-weight multisets from these identities.
+	the weighted block-diagonal tensors.  The sector-multiplicity comparison of
+	Theorem~\ref{thm:route_b_equal_with_copies} uses the supplied multiplicity
+	data to recover both the copy counts and the sector-weight multisets from
+	these identities.
 
 	The remaining synchronization statement for the bare equal-MPV theorem must
 	assemble the block-matching data into equality of the weighted block-diagonal
@@ -347,12 +348,20 @@ used in this chapter.
 	equivalence and hence global gauge equivalence.
 \end{proof}
 
-\subsection{Multiplicity structure for repeated blocks}%
+\subsection{Sector multiplicities and weight recovery}%
 \label{sec:route_b}
 
-This subsection presents the multiplicity data in which repeated copies
-of the same basis block are kept separate rather than merged into a
-single weighted block.
+This subsection records the coefficient comparison used when several
+canonical-form blocks are phase and gauge transforms of the same basis
+normal tensor.  If the $j$th basis block occurs with nonzero weights
+$\mu_{j,1},\dotsc,\mu_{j,r_j}$, its length-$N$ contribution is governed by
+the power sum
+\[
+	c_{S,j}^{(N)}=\sum_{q=1}^{r_j}\mu_{j,q}^{N}.
+\]
+Thus BNT linear independence separates the coefficient arrays
+$c_{S,j}^{(N)}$, and elementary power-sum algebra recovers both the
+multiplicity $r_j$ and the multiset of weights attached to the basis block.
 
 \begin{definition}[Sector data and sector decomposition]%
 \label{def:paper_sector_data}
@@ -395,8 +404,8 @@ single weighted block.
 	sufficiently large $N$.
 \end{theorem}
 
-\begin{theorem}[Heterogeneous geometric sequence extrapolation]%
-\label{thm:geom_extrapolation_hetero}
+\begin{lemma}[Heterogeneous geometric sequence extrapolation]%
+\label{lem:geom_extrapolation_hetero}
 	\lean{MPSTensor.SectorWeightData.power_sums_eq_of_eventually_eq_hetero}
 	\leanok
 	If two finite families of nonzero complex numbers, possibly with different
@@ -404,7 +413,7 @@ single weighted block.
 	$\sum_i \alpha_i^k = \sum_j \beta_j^k$ for all sufficiently large
 	exponents $k$, then the same equality holds for every exponent
 	$k \geq 0$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
 	\leanok
@@ -414,21 +423,21 @@ single weighted block.
 	induction for such combinations forces it to vanish identically.
 \end{proof}
 
-\begin{theorem}[Geometric sequence extrapolation]%
-\label{thm:geom_extrapolation}
+\begin{lemma}[Geometric sequence extrapolation]%
+\label{lem:geom_extrapolation}
 	\lean{MPSTensor.SectorWeightData.power_sums_eq_of_eventually_eq}
 	\leanok
 	If two finite families of nonzero complex numbers with the same
 	cardinality have equal power sums
 	$\sum_i \alpha_i^k = \sum_i \beta_i^k$ for all $k > N_0$, then
 	equality holds for all $k \geq 0$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
 	\leanok
-	\uses{thm:geom_extrapolation_hetero}
+	\uses{lem:geom_extrapolation_hetero}
 	This is the equal-cardinality specialization of
-	Theorem~\ref{thm:geom_extrapolation_hetero}.
+	Lemma~\ref{lem:geom_extrapolation_hetero}.
 \end{proof}
 
 \begin{theorem}[Copy-count recovery from eventual coefficient equality]%
@@ -444,8 +453,8 @@ single weighted block.
 
 \begin{proof}
 	\leanok
-	\uses{thm:geom_extrapolation_hetero}
-	Apply Theorem~\ref{thm:geom_extrapolation_hetero} to the two weight
+	\uses{lem:geom_extrapolation_hetero}
+	Apply Lemma~\ref{lem:geom_extrapolation_hetero} to the two weight
 	families in a fixed sector and then evaluate the resulting power-sum
 	equality at exponent $0$. Since each summand is then $1$, the equality
 	is exactly equality of the two copy counts.
@@ -461,28 +470,33 @@ single weighted block.
 	independent and the total MPVs of $S$ and $T$ agree, then there are
 	copy-count equalities $r_j^S = r_j^T$ for every basis block~$j$, and,
 	after transporting along these equalities, the sector weight multisets
-	$\{\mu_{j,q}^S\}$ and $\{\mu_{j,q}^T\}$ are equal for every~$j$.
+	are equal for every~$j$:
+	\[
+		\{\mu_{j,q}^{S}:1\le q\le r_j^S\}
+		=
+		\{\mu_{j,q}^{T}:1\le q\le r_j^T\}.
+	\]
 \end{theorem}
 
 \begin{proof}
 	\leanok
 	\uses{thm:coeff_eventually_eq, thm:copies_eq_of_eventually_coeff_eq,
-	      thm:geom_extrapolation, thm:power_sum_multiset}
+	      lem:geom_extrapolation, thm:power_sum_multiset}
 	BNT linear independence and equality of total MPVs give eventual
 	coefficient equality by Theorem~\ref{thm:coeff_eventually_eq}. Then
 	Theorem~\ref{thm:copies_eq_of_eventually_coeff_eq} recovers the
 	copy-count equalities. After identifying the two index sets via these
 	copy-count equalities, the positive-power coefficient equalities extend
 	to all positive exponents by
-	Theorem~\ref{thm:geom_extrapolation}, and Newton--Girard
+	Lemma~\ref{lem:geom_extrapolation}, and Newton--Girard
 	(Theorem~\ref{thm:power_sum_multiset}) recovers the weight multisets.
 \end{proof}
 
-\begin{theorem}[Weight multiset recovery from multiplicity data]%
+\begin{theorem}[Weight multiset recovery with fixed multiplicities]%
 \label{thm:route_b_equal}
 	\lean{MPSTensor.SectorWeightData.weight_multiset_eq_of_sameMPV_bnt}
 	\leanok
-	\uses{thm:coeff_eventually_eq, thm:geom_extrapolation, thm:power_sum_multiset, def:paper_sector_data, def:bnt}
+	\uses{thm:coeff_eventually_eq, lem:geom_extrapolation, thm:power_sum_multiset, def:paper_sector_data, def:bnt}
 	Let $S$ and $T$ be two sector data over the same basis with
 	the same multiplicities ($r_j^S = r_j^T$ for all~$j$).
 	If the basis is eventually linearly independent and the total MPVs
@@ -495,14 +509,15 @@ single weighted block.
 		      equality (Theorem~\ref{thm:coeff_eventually_eq});
 		\item Geometric extrapolation $\Rightarrow$ full coefficient
 		      equality for all positive~$k$
-		      (Theorem~\ref{thm:geom_extrapolation});
+		      (Lemma~\ref{lem:geom_extrapolation});
 		\item Newton--Girard $\Rightarrow$ equal weight multisets
 		      (Theorem~\ref{thm:power_sum_multiset}).
 	\end{enumerate}
-	At the level of block contributions, one compares the weighted sector sums
-	$\sum_j c_{A,j}^{(N)} V^{(N)}(A_j)$ and
-	$\sum_j c_{B,j}^{(N)} V^{(N)}(B_j)$, with the coefficients
-	now aggregated over the multiplicity layers.
+	At the level of block contributions, this is the fixed-multiplicity
+	specialization of Theorem~\ref{thm:route_b_equal_with_copies}: one compares
+	the weighted sector sums
+	$\sum_j c_{S,j}^{(N)} V^{(N)}(A_j)$ and
+	$\sum_j c_{T,j}^{(N)} V^{(N)}(A_j)$ over the same basis block family.
 \end{theorem}
 
 \begin{theorem}[Two-basis sector comparison after phase matching]%
@@ -2043,8 +2058,9 @@ two-basis sector comparison theorem.
 	Theorem~\ref{thm:ft_equal_explicit} proves the equal case when the coefficient
 	identities are given explicitly,
 	Theorem~\ref{thm:ft_equal_same_structure} proves the common block-structure
-	special case, and Theorem~\ref{thm:route_b_equal} recovers the sector-weight
-	multisets from the multiplicity data.  The basis-of-normal-tensors construction
+	special case, and Theorem~\ref{thm:route_b_equal_with_copies} recovers the
+	copy counts and sector-weight multisets from the multiplicity data.  The
+	basis-of-normal-tensors construction
 	is available for trace-preserving primitive irreducible nonzero blocks with
 	positive bond dimensions and nonzero weights in
 	Theorem~\ref{thm:bnt_sector_decomp_tp_prim_irr_collapsed}.  When these blocks
