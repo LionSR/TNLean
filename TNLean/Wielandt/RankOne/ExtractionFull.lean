@@ -367,12 +367,12 @@ theorem wielandt_lemma2b [NeZero D]
 
 end WielandtLemma2b
 
-/-! ## Rank-one extraction with external eigenvectors -/
+/-! ## Parametrized rank-one extraction lemmas -/
 
 section ExternalEigenvectors
 
-/-- **Rank-one element in a bounded cumulative span of the blocked tensor, given external
-word eigenvectors and a cumulative spanning witness.**
+/-- **Rank-one element in a bounded cumulative span of the blocked tensor, from supplied
+word-eigenvector data and a cumulative spanning witness.**
 
 This is the cumulative analogue of the later exact-word-span result: the manufactured rank-one
 matrix lies in `T_{D + N + D}` of the blocked tensor as soon as `T_N` is already full. -/
@@ -427,7 +427,8 @@ theorem exists_rankOne_in_wordSpan_blockTensor_of_wordEigenvectors_of_cumulative
   simpa [data.hB] using
     data.rankOne_mem_wordSpan_of_cumulativeSpan_eq_top_of_aperiodic hcsB honeB
 
-/-- **Rank-one element in the word span of the blocked tensor, given external eigenvectors.**
+/-- **Rank-one element in the word span of the blocked tensor, from supplied word-eigenvector
+data.**
 
 Given:
 - A blocking length `L > 0` and eigenvector data (word functions `σ₀`, `τ₀`, eigenvectors
@@ -470,7 +471,7 @@ theorem exists_rankOne_in_wordSpan_blockTensor_of_wordEigenvectors
   exact ⟨D + N₁ + D, by
     simpa [data.hB] using data.rankOne_mem_wordSpan_of_wordSpan_eq_top hBtop⟩
 
-/-- **Wielandt Lemma 2(b) blocked assembly — unconditional version with external eigenvectors.**
+/-- **Wielandt Lemma 2(b) blocked assembly from supplied word-eigenvector data.**
 
 Given word eigenvectors of length `L` with nonzero eigenvalues and `IsNormal A`,
 produces `wordSpan A N = ⊤` for an explicit `N`.
