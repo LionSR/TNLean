@@ -1277,6 +1277,23 @@ theorem exists_pairTraceSeparatingAt_of_injective_dim_ne_of_pairWordTupleSpanTop
   · exact pairIdentity_mem_pairWordTupleSpan_eventually_of_pairWordTupleSpanTop_period_window
       A B hperiod_pos hperiod hwindow
 
+/- The remaining Burnside-Jacobson input for the same-dimension branch:
+produce one positive period and a complete residue window whose homogeneous
+pair-word spans are already full.
+
+The current pair-algebra density theorem gives `PairAllWordsSpanTop A B`.
+Turning that all-words statement into this finite homogeneous period/window
+certificate is the substantive mathematical gap in issue #1133. -/
+private theorem exists_pairWordTupleSpanTop_period_window_of_injective_not_gaugePhaseEquiv
+    {d D : ℕ} [NeZero D]
+    (A B : MPSTensor d D)
+    (hA_inj : IsInjective A) (hB_inj : IsInjective B)
+    (hNot : ¬ GaugePhaseEquiv A B) :
+    ∃ start period : ℕ, 0 < period ∧
+      PairWordTupleSpanTop A B period ∧
+        ∀ r : ℕ, r < period → PairWordTupleSpanTop A B (start + r) := by
+  sorry
+
 /-- Placeholder for the Burnside–Jacobson identity-padding lemma.
 Once proved, it supplies the missing input to
 `pairTraceSeparatingAt_of_pairTraceSeparatingUpTo_of_identity_padding` and
@@ -1294,7 +1311,11 @@ theorem pairIdentity_mem_pairWordTupleSpan_eventually_of_not_gaugePhaseEquiv
     ∃ L : ℕ, ∀ n : ℕ, n ≥ L →
       ((1 : Matrix (Fin D) (Fin D) ℂ), (1 : Matrix (Fin D) (Fin D) ℂ)) ∈
         Submodule.span ℂ (Set.range (pairWordTuple A B n)) := by
-  sorry
+  rcases exists_pairWordTupleSpanTop_period_window_of_injective_not_gaugePhaseEquiv
+      A B hA_inj hB_inj hNot with
+    ⟨start, period, hperiod_pos, hperiod, hwindow⟩
+  exact pairIdentity_mem_pairWordTupleSpan_eventually_of_pairWordTupleSpanTop_period_window
+    A B hperiod_pos hperiod hwindow
 
 /-- **Homogeneous pair trace separation from BNT non-equivalence (Route B).**
 Under the same hypotheses, there exists a finite homogeneous length `S` such
