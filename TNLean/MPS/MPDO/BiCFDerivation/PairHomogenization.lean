@@ -1065,10 +1065,9 @@ theorem exists_pairTraceSeparatingAt_of_pairAllWordsSpanTop_of_identity_padding
 /-- A finite family of all-words pair-separation hypotheses and eventual identity
 padding hypotheses admits one common homogeneous trace-separating length.
 
-This packages the finite maximum needed by the BNT block-family argument.  It is
-conditional only on per-pair all-words separation and per-pair eventual homogeneous
-identity padding; the Burnside-Jacobson identity-padding theorem is the remaining
-mathematical input that supplies the second hypothesis in the equal-dimension branch. -/
+For finitely many ordered pairs of blocks, if each pair has trace separation over all
+word lengths and the pair identity belongs to every sufficiently long homogeneous
+pair-word span, then one word length separates all ordered pairs simultaneously. -/
 theorem exists_forall_pairTraceSeparatingAt_of_pairTraceSeparatingAll_of_identity_padding
     (A : (k : Fin r) → MPSTensor d (dim k))
     (hSep : ∀ k j : Fin r, j ≠ k → PairTraceSeparatingAll (A k) (A j))
@@ -1183,11 +1182,9 @@ theorem pairTraceSeparatingAll_of_injective_not_gaugePhaseEquiv
       (pairAlgSpan_eq_top_of_injective_not_gaugePhaseEquiv A B hA_inj hB_inj hNot)
   exact pairTraceSeparatingAll_of_pairAllWordsSpanTop A B hPairSpanTop
 
-/-- Cast-left spelling of
-`pairTraceSeparatingAll_of_injective_not_gaugePhaseEquiv`.
-
-This is the form used by block families whose bond dimensions are only
-propositionally equal. -/
+/-- If two injective blocks have propositionally equal bond dimensions and are not
+gauge-phase equivalent after identifying those dimensions, then their simultaneous pair
+words are trace separating over all lengths. -/
 theorem pairTraceSeparatingAll_of_injective_not_gaugePhaseEquiv_cast_left
     {d D₁ D₂ : ℕ} [NeZero D₁] [NeZero D₂] (h : D₁ = D₂)
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)

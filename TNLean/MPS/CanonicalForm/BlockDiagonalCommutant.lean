@@ -295,9 +295,9 @@ theorem exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingA
 /-- Positive-length product-word span from all-words pair separation plus eventual
 identity padding for every ordered pair of distinct BNT blocks.
 
-This is the BNT-facing finite-maximum wrapper around
-`exists_forall_pairTraceSeparatingAt_of_pairTraceSeparatingAll_of_identity_padding`.
-It keeps the Burnside-Jacobson identity-padding input explicit. -/
+The proof takes a finite maximum over the separating and padding lengths for the
+ordered block pairs, obtaining a single homogeneous word length whose block-product
+word evaluations span the full direct product algebra. -/
 theorem exists_pos_productWordSpan_of_pairTraceSeparatingAll_of_identity_padding
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hCF : IsCanonicalFormBNT μ A)
@@ -345,9 +345,10 @@ theorem pairTraceSeparatingAll_of_isCanonicalFormBNT
 /-- Positive-length product-word span from canonical-form/BNT data plus eventual
 identity padding for every ordered pair of distinct blocks.
 
-This is the BNT-facing consumer for the Burnside-Jacobson identity-padding
-input: the all-words pair-separation part is derived from BNT data here, while
-the homogeneous identity-padding theorem remains an explicit hypothesis. -/
+Canonical-form/BNT separation gives all-words trace separation for distinct blocks.
+Together with eventual homogeneous identity padding for each ordered block pair, this
+gives a positive word length at which the block-product word evaluations span the full
+direct product algebra. -/
 theorem exists_pos_productWordSpan_of_isCanonicalFormBNT_of_identity_padding
     [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
