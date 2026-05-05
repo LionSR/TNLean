@@ -10,10 +10,10 @@ open scoped Matrix BigOperators ComplexOrder MatrixOrder
 /-!
 # Sector-basis overlap-span hypotheses from common primitive data
 
-This module packages the overlap-span hypotheses produced from the common primitive
-nonzero-sector families obtained after blocked-word reindexing.  It keeps the span,
+This module collects the overlap-span hypotheses produced from the common primitive
+nonzero-sector families obtained after blocked-word reindexing. It keeps the span,
 common phase-cover, BNT-cover, explicit BNT-data, and proportional-comparison variants
-in one place, while leaving the final sector-comparison wrappers in
+in one place, while leaving the final sector-comparison reformulations in
 `TNLean.MPS.CanonicalForm.Assembly.ProportionalComparison`.
 
 ## References
