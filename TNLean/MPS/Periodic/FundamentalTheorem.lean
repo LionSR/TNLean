@@ -41,12 +41,14 @@ Theorem 3.4 is stated in two forms:
   plus the existence of non-decaying cross-family overlaps (`exists_nondecaying_A/B`),
   which encode the paper's proportional-MPV assumption.
 
-  **Caveat**: `periodicOverlapDichotomy` is stated and callable, but its proof in
-  `TNLean/MPS/Periodic/Overlap.lean` still depends on several
-  admitted sub-lemmas (see that file's header: "should not yet be relied on as a
-  completed formalization of Proposition 3.3"). Subsequent results using the
-  `_of_isPeriodic` variant therefore inherit those remaining proof obligations and
-  should not be treated as unconditional.
+  **Caveat**: `periodicOverlapDichotomy` is stated and callable, but its proof still
+  depends on admitted lemmas in the split periodic-overlap modules:
+  `TNLean.MPS.Periodic.Overlap.SelfOverlap`,
+  `TNLean.MPS.Periodic.Overlap.Case2`,
+  `TNLean.MPS.Periodic.Overlap.Case3`, and
+  `TNLean.MPS.Periodic.Overlap.Dichotomy`. Subsequent results using the
+  `_of_isPeriodic` variant therefore inherit those proof obligations and should
+  not be treated as unconditional.
 
 The Z-gauge construction (Theorem 3.8 steps 5–7) is fully proved.
 
@@ -110,9 +112,9 @@ abbrev PeriodicBlockMatchingWitness
 /-- Hypothesis giving the periodic overlap dichotomy (Proposition 3.3 of 1708.00029).
 
 The `hetRepeatedBlocks_of_nondecaying` field can be filled via `periodicOverlapDichotomy`
-(see `PeriodicOverlapHypothesis.ofIsPeriodic`), though that dichotomy's proof in
-`PeriodicOverlap.lean` still relies on several admitted sub-lemmas. The fields capture
-the essential results:
+(see `PeriodicOverlapHypothesis.ofIsPeriodic`), though that dichotomy still relies on
+admitted sub-lemmas in the split `TNLean.MPS.Periodic.Overlap.*` modules. The fields
+capture the essential results:
 1. For each block in one family, a non-decaying overlap partner exists in the other.
 2. Non-decaying overlap forces `HetRepeatedBlocks`.
 
@@ -145,15 +147,14 @@ The `exists_nondecaying_A/B` fields remain as explicit hypotheses — they encod
 paper's content that proportional total MPVs force non-vanishing per-block overlaps.
 
 **Remaining proof obligations.** `periodicOverlapDichotomy` is stated and callable, but
-its proof in `TNLean/MPS/Periodic/Overlap.lean` transitively depends
-on several admitted sub-lemmas (`periodicSelfOverlap_tendsto`,
-`sectorBlocked_isNormal_of_isPeriodic`, `periodicOverlap_gaugeEquiv_of_sector_match`,
-`periodicOverlap_tendsto_zero_of_no_sector_match`,
-`exists_cyclic_sector_decomp_after_blocking`). The module header of `PeriodicOverlap.lean`
-states that file "should not yet be relied on as a completed formalization of
-Proposition 3.3". Subsequent users of this constructor therefore inherit those
-obligations and should not treat the resulting `PeriodicOverlapHypothesis` as
-unconditionally proven. -/
+its proof transitively depends on admitted lemmas in the split overlap development:
+`TNLean.MPS.Periodic.Overlap.SelfOverlap` for self-overlap and cyclic-sector setup,
+`TNLean.MPS.Periodic.Overlap.Case2` for the no-sector-match decay route,
+`TNLean.MPS.Periodic.Overlap.Case3` for the sector-match repeated-block route, and
+`TNLean.MPS.Periodic.Overlap.Dichotomy` for the final dichotomy and eventual
+linear-independence packaging. Subsequent users of this constructor therefore inherit
+those obligations and
+should not treat the resulting `PeriodicOverlapHypothesis` as unconditionally proven. -/
 def PeriodicOverlapHypothesis.ofIsPeriodic
     {rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
@@ -297,8 +298,9 @@ The `PeriodicOverlapHypothesis` parameter can be supplied via
 `PeriodicOverlapHypothesis.ofIsPeriodic`, which uses `periodicOverlapDichotomy`
 (PR #573, partially addressing #81) to fill the `hetRepeatedBlocks_of_nondecaying`
 field; see `fundamentalTheorem_periodic_proportional_of_isPeriodic`. Note that
-`periodicOverlapDichotomy`'s proof in `PeriodicOverlap.lean` still relies on several
-admitted sub-lemmas, so callers going through that route inherit those obligations. -/
+`periodicOverlapDichotomy` still relies on several admitted sub-lemmas in the split
+`TNLean.MPS.Periodic.Overlap.*` modules, so callers going through that route inherit
+those obligations. -/
 theorem fundamentalTheorem_periodic_proportional
     (A : (j : Fin rA) → MPSTensor d (dimA j))
     (B : (k : Fin rB) → MPSTensor d (dimB k))
