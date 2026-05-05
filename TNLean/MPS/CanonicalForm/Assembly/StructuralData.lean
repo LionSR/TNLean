@@ -57,7 +57,7 @@ The full proof chain is:
 
 ### Remaining mathematical inputs
 
-The theorem `exists_tp_sector_decomp_after_blocking` below provides:
+The after-blocking primitive block decomposition provides:
 - A blocking period `p > 0`
 - A trivial all-zero block of dimension `zeroTailDim`, representing the source-paper
   allowance `∑ k, D_k ≤ D` where zero blocks may occur
