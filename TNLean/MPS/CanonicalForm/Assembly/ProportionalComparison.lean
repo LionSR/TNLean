@@ -1276,14 +1276,13 @@ theorem sectorBasisOverlapSpanHypotheses_of_commonPrimitiveBNTData_zeroTailIdent
     hμA hμB hTPA hTPB hPrimA hPrimB hIrrA hIrrB hAntiA hAntiB hNotGpeA hNotGpeB
     hZero hInjA hInjB hPacked.1
 
-/-- **Sector basis overlap-span data from normal-CF-BNT common primitive data,
-deriving the zero-tail identity.**
+/-- **Sector-basis overlap-span hypotheses from normal-CF-BNT common primitive data,
+with the zero-tail identity derived from length-zero proportionality.**
 
-This variant accepts already-packaged normal-CF-BNT data for the common primitive
-families, instead of rebuilding the normal form and BNT separation fields from
-lower-level trace-preserving, primitive, irreducible, strict-ordering, and
-non-equivalence hypotheses.  The proportional-decomposition data and block
-injectivity hypotheses remain explicit. -/
+Normal canonical form together with BNT separation for the common primitive
+families, proportional-decomposition data, and injectivity of the nonzero blocks
+imply the overlap-span hypotheses.  The equality of the zero tails follows from
+the length-zero proportionality relation. -/
 theorem sectorBasisOverlapSpanHypotheses_of_commonPrimitiveNormalBNTData_zeroTailIdentity
     {d D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
