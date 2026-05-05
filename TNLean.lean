@@ -310,6 +310,7 @@ import TNLean.Wielandt.WielandtBound
 -- transitively through `Prop3` for specialized use.
 import TNLean.Wielandt.Primitivity.PaperDefinitions
 import TNLean.Wielandt.Primitivity.EasyDirections
+import TNLean.Wielandt.Primitivity.PrimitiveBridge
 import TNLean.Wielandt.Primitivity.Equivalence
 import TNLean.Wielandt.PaperResults.NonzeroTraceWord
 import TNLean.Wielandt.PaperResults.EigenvectorSpreading
