@@ -19,9 +19,10 @@ that together prove the self-contained equal-case fundamental theorem
 
 * `tendsto_norm_selfOverlap_one`: normed form of a self-overlap tending to `1`.
 * `tendsto_inner_zero_swap`: swapping a decaying overlap conjugates the inner product.
+* `eq_one_of_pow_tendsto_nhds_one`: powers converging to `1` force the base to be `1`.
 
-This file currently consists of these two public auxiliary lemmas used by the full
-heterogeneous equal-case theorem.
+This file collects public auxiliary lemmas used by the full heterogeneous equal-case
+theorem.
 
 ## References
 
@@ -64,5 +65,19 @@ lemma tendsto_inner_zero_swap
     simp [mpvInner, inner_conj_symm]
   rw [hSwap]
   simpa using hAB.star
+
+/-- If the powers of a complex number converge to `1`, then the number itself is `1`. -/
+lemma eq_one_of_pow_tendsto_nhds_one {c : ℂ}
+    (hc : Tendsto (fun N : ℕ => c ^ N) atTop (nhds 1)) :
+    c = 1 := by
+  have h_shift : Tendsto (fun N : ℕ => c ^ (N + 1)) atTop (nhds 1) :=
+    hc.comp (tendsto_add_atTop_nat 1)
+  have h_mul : Tendsto (fun N : ℕ => c * c ^ N) atTop (nhds (c * 1)) :=
+    tendsto_const_nhds.mul hc
+  have h_eq_fun : (fun N : ℕ => c ^ (N + 1)) = fun N : ℕ => c * c ^ N := by
+    ext N
+    rw [pow_succ, mul_comm]
+  have hlim := tendsto_nhds_unique (h_eq_fun ▸ h_shift) h_mul
+  simpa using hlim.symm
 
 end MPSTensor

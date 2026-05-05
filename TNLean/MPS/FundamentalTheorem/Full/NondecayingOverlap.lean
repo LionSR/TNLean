@@ -630,18 +630,7 @@ lemma exists_nondecaying_overlap_of_sameMPV₂_CFBNT
       have h_sub := h_prod.sub h_err
       rw [sub_zero] at h_sub
       exact h_sub.congr h_decomp
-    -- NOTE (extract): The "c^N → 1 and ‖c‖ = 1 implies c = 1" argument below
-    -- (shift + unique-limit) is a general-purpose lemma.  A future refactor
-    -- could extract it as `eq_one_of_pow_tendsto_nhds_one` in a utility file.
-    -- ratio^N → 1 implies ratio = 1 (shift argument).
-    have h_shift : Tendsto (fun N => ratio ^ (N + 1)) atTop (nhds 1) :=
-      h_ratio_tendsto.comp (tendsto_add_atTop_nat 1)
-    have h_mul : Tendsto (fun N => ratio * ratio ^ N) atTop (nhds (ratio * 1)) :=
-      tendsto_const_nhds.mul h_ratio_tendsto
-    have h_eq_fun : (fun N => ratio ^ (N + 1)) = (fun N => ratio * ratio ^ N) := by
-      ext N; rw [pow_succ, mul_comm]
-    have := tendsto_nhds_unique (h_eq_fun ▸ h_shift) h_mul
-    simpa using this.symm
+    exact eq_one_of_pow_tendsto_nhds_one h_ratio_tendsto
   have hTailState : ∀ N,
       ∑ j ∈ Finset.univ.erase a0, μA j ^ N • (A j).mpvState N =
       ∑ k ∈ Finset.univ.erase b0, μB k ^ N • (B k).mpvState N := by
