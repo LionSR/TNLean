@@ -368,9 +368,9 @@ theorem exists_pos_productWordSpan_of_isCanonicalFormBNT_of_identity_padding
 finite period-window identity-padding certificate for every ordered pair of
 distinct blocks.
 
-This is the BNT-facing consumer for the period-window version of the
-Burnside-Jacobson input.  The all-words pair-separation part is derived from
-BNT data here, while the finite period-window certificates remain explicit. -/
+For a block family in canonical BNT form, it suffices to provide the finite
+period-window identity-padding certificates for the ordered pairs of distinct
+blocks.  The all-words pair separation follows from the BNT hypotheses. -/
 theorem exists_pos_productWordSpan_of_isCanonicalFormBNT_of_identity_period_windows
     [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
