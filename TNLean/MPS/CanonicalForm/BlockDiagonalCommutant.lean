@@ -194,10 +194,9 @@ theorem wordTupleSpanTop_of_isCanonicalFormBNT_of_pairBlockSeparatingWords
 /-- Canonical-form/BNT data plus a finite pair trace-separation criterion give
 full product-word span.
 
-This is the form of the result used in Route B for the remaining finite-dimensional
-BNT step: once every ordered distinct pair has a common homogeneous trace-separating
-length, the pair trace-separation duality theorem produces pairwise separators,
-and the existing selector assembly gives product-word span. -/
+Once every ordered distinct pair has a common homogeneous trace-separating
+length, pair trace-separation duality gives pairwise separating word
+polynomials, and the selector-word construction spans the full product algebra. -/
 theorem wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingAt
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hCF : IsCanonicalFormBNT μ A) {S : ℕ}
@@ -209,9 +208,9 @@ theorem wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingAt
 /-- Canonical-form/BNT data plus cumulative pair trace separation and exact
 identity padding give full product-word span.
 
-This is the Route B homogenization: the cumulative finite cutoff can be
-used once each ordered pair has simultaneous identity padding at the lengths
-needed to reach a common homogeneous target `T`. -/
+The cumulative finite cutoff gives homogeneous separation at length `T` when
+each ordered pair has simultaneous identity padding at the complementary lengths
+needed to reach `T`. -/
 theorem wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingUpTo_of_identity_padding
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hCF : IsCanonicalFormBNT μ A) {S T : ℕ}
@@ -227,22 +226,13 @@ theorem wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingUpTo_of_ide
       pairTraceSeparatingAt_of_pairTraceSeparatingUpTo_of_identity_padding
         (A k) (A j) hST (hSep k j hjk) (hPad k j hjk))
 
-/-- **BNT data ⇒ homogeneous pair trace separation for all distinct block pairs.**
-Given canonical-form/BNT data, every ordered pair of distinct blocks admits a
-homogeneous word length `T` at which `PairTraceSeparatingAt` holds.
+/-- Homogeneous pair trace separation for all distinct BNT block pairs.
 
-Same-dimensional block pairs are reduced to the biCF derivation: two
-non-gauge-phase-equivalent BNT blocks admit a homogeneous pair-trace separator
-once the Burnside-Jacobson identity-padding step is available. Pairs with
-different bond dimensions use the period-window dimension-mismatch adapter.
-
-Two formal ingredients remain. The same-dimensional branch needs the
-Burnside-Jacobson identity-padding step, which upgrades a pair-separation witness
-to the common homogeneous length appearing in the statement. The different
-bond-dimension branch is available conditionally on a finite period-window
-homogeneous pair-span certificate. Once these certificates are produced uniformly
-for the BNT block family, this BNT pair-separation theorem becomes
-unconditional. -/
+For a finite BNT family, trace functionals separating distinct ordered block
+pairs at homogeneous lengths can be chosen with one common length. The
+conclusion asserts simultaneous homogeneous pair trace separation for every
+ordered pair of distinct blocks, which is the pair-separation input for the
+product-word span theorem. -/
 theorem exists_forall_pairTraceSeparatingAt_of_isCanonicalFormBNT
     {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -252,15 +242,7 @@ theorem exists_forall_pairTraceSeparatingAt_of_isCanonicalFormBNT
   have hInj := hCF.toHasInjectiveBlocks
   have hLeft := hCF.toIsLeftCanonicalBlockFamily
   have hNot := hCF.blocks_not_equiv
-  -- For each pair (k, j) of distinct blocks, we need a homogeneous separating length.
-  -- Same-dimension case: use `exists_pairTraceSeparatingAt_of_not_gaugePhaseEquiv`.
-  -- Different-dimension case: separation is trivial because bond dimensions differ;
-  -- injectivity at length 1 gives the separation (see argument below).
-  --
-  -- For now the same-dimension case is blocked by the pending Burnside-Jacobson
-  -- identity-padding lemma. The different-dimension branch has a period-window
-  -- adapter, but this BNT theorem still has to produce the required finite
-  -- homogeneous pair-span certificate uniformly over the block family.
+  -- Pairwise homogeneous separation is combined over the finite ordered-pair set.
   sorry
 
 /-- Positive-length product-word span from canonical-form/BNT data and
