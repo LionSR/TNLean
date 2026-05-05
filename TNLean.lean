@@ -323,6 +323,7 @@ import TNLean.Wielandt.SpanGrowth.InvertibleWordSpan
 import TNLean.Wielandt.Primitivity.Normal
 import TNLean.Wielandt.Primitivity.ToNormal
 import TNLean.Wielandt.Primitivity.ImpliesIrreducible
+import TNLean.Wielandt.Primitivity.TracePairing
 import TNLean.Wielandt.RankOne.Element
 import TNLean.Wielandt.RankOne.Extraction
 import TNLean.Wielandt.RankOne.SpanGrowth
