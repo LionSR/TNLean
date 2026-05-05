@@ -249,6 +249,7 @@ import TNLean.MPS.CanonicalForm.Assembly.SectorComparisonCore
 import TNLean.MPS.CanonicalForm.Assembly.StructuralTheorem
 import TNLean.MPS.CanonicalForm.Assembly.CommonSectorTransport
 import TNLean.MPS.CanonicalForm.BNTGrouping
+import TNLean.MPS.CanonicalForm.PhaseCover
 import TNLean.MPS.CanonicalForm.EqualNormBridge
 import TNLean.MPS.Core.BlockingInfrastructure
 import TNLean.MPS.Irreducible.FormII
