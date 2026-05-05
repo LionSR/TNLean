@@ -12806,6 +12806,10 @@
           
           <li><a href="../docs/find/#doc/MPSTensor.exists_pairTraceSeparatingAt_of_pairAllWordsSpanTop_of_identity_padding" class="lean_decl">MPSTensor.exists_pairTraceSeparatingAt_of_pairAllWordsSpanTop_of_identity_padding</a></li>
           
+          <li><a href="../docs/find/#doc/MPSTensor.exists_forall_pairTraceSeparatingAt_of_pairTraceSeparatingAll_of_identity_padding" class="lean_decl">MPSTensor.exists_forall_pairTraceSeparatingAt_of_pairTraceSeparatingAll_of_identity_padding</a></li>
+          
+          <li><a href="../docs/find/#doc/MPSTensor.pairTraceSeparatingAll_of_injective_not_gaugePhaseEquiv_cast_left" class="lean_decl">MPSTensor.pairTraceSeparatingAll_of_injective_not_gaugePhaseEquiv_cast_left</a></li>
+          
           <li><a href="../docs/find/#doc/MPSTensor.exists_pairTraceSeparatingAt_of_injective_dim_ne_of_pairWordTupleSpanTop_period_window" class="lean_decl">MPSTensor.exists_pairTraceSeparatingAt_of_injective_dim_ne_of_pairWordTupleSpanTop_period_window</a></li>
           
         </ul>
@@ -12817,7 +12821,7 @@
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>           Suppose \(S\le T\) and pair words of length at most \(S\) span the product algebra. If, for every \(\ell \le S\), the simultaneous identity pair belongs to the span of pair words of length \(T-\ell \), then pair words of the single length \(T\) already span the product algebra. Equivalently, cumulative trace separation up to \(S\) becomes homogeneous trace separation at length \(T\) under the same identity-padding hypothesis. Consequently, an all-word product-span theorem together with eventual homogeneous identity padding yields a homogeneous pair trace-separation length. </p>
+  <p>             Suppose \(S\le T\) and pair words of length at most \(S\) span the product algebra. If, for every \(\ell \le S\), the simultaneous identity pair belongs to the span of pair words of length \(T-\ell \), then pair words of the single length \(T\) already span the product algebra. Equivalently, cumulative trace separation up to \(S\) becomes homogeneous trace separation at length \(T\) under the same identity-padding hypothesis. Consequently, an all-word product-span theorem together with eventual homogeneous identity padding yields a homogeneous pair trace-separation length. </p>
 
   </div>
 </div>
@@ -13103,6 +13107,12 @@
           
           <li><a href="../docs/find/#doc/MPSTensor.exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingAt" class="lean_decl">MPSTensor.exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingAt</a></li>
           
+          <li><a href="../docs/find/#doc/MPSTensor.exists_pos_productWordSpan_of_pairTraceSeparatingAll_of_identity_padding" class="lean_decl">MPSTensor.exists_pos_productWordSpan_of_pairTraceSeparatingAll_of_identity_padding</a></li>
+          
+          <li><a href="../docs/find/#doc/MPSTensor.pairTraceSeparatingAll_of_isCanonicalFormBNT" class="lean_decl">MPSTensor.pairTraceSeparatingAll_of_isCanonicalFormBNT</a></li>
+          
+          <li><a href="../docs/find/#doc/MPSTensor.exists_pos_productWordSpan_of_isCanonicalFormBNT_of_identity_padding" class="lean_decl">MPSTensor.exists_pos_productWordSpan_of_isCanonicalFormBNT_of_identity_padding</a></li>
+          
           <li><a href="../docs/find/#doc/MPSTensor.wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingUpTo_of_identity_padding" class="lean_decl">MPSTensor.wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingUpTo_of_identity_padding</a></li>
           
           <li><a href="../docs/find/#doc/MPSTensor.exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingUpTo_of_identity_padding" class="lean_decl">MPSTensor.exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingUpTo_of_identity_padding</a></li>
@@ -13122,7 +13132,7 @@
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>             Let \(((\mu _j),(A_j))\) be in canonical form with BNT separation. Suppose there are length-\(S\) block-selector words: for each sector \(k\), a linear combination of length-\(S\) words evaluates to \(I\) on \(A_k\) and to \(0\) on every other block. Then the simultaneous length-\((1+S)\) block-word evaluations span \(\prod _j M_{D_j}(\mathbb {C})\), with positive length. It is enough, by Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:block_selectors_from_pairwise_separators">20.156</a>, to construct pairwise separators for every ordered pair of distinct blocks; by Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:pair_trace_separation_to_pairwise_selectors">20.155</a>, a common pair trace-separation length is one sufficient finite-dimensional witness. A cumulative pair trace cutoff is also enough, once \(S\le T\), when paired with the simultaneous identity-padding hypothesis of Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:pair_trace_separation_homogenization_with_padding">20.154</a>. Consequently, the pulled-back words at the resulting length for \(\operatorname {Assemble}(\mu ,A)\) span every virtual sector projection, and the corresponding commutant reduction is available. </p>
+  <p>                Let \(((\mu _j),(A_j))\) be in canonical form with BNT separation. Suppose there are length-\(S\) block-selector words: for each sector \(k\), a linear combination of length-\(S\) words evaluates to \(I\) on \(A_k\) and to \(0\) on every other block. Then the simultaneous length-\((1+S)\) block-word evaluations span \(\prod _j M_{D_j}(\mathbb {C})\), with positive length. It is enough, by Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:block_selectors_from_pairwise_separators">20.156</a>, to construct pairwise separators for every ordered pair of distinct blocks; by Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:pair_trace_separation_to_pairwise_selectors">20.155</a>, a common pair trace-separation length is one sufficient finite-dimensional witness. A cumulative pair trace cutoff is also enough, once \(S\le T\), when paired with the simultaneous identity-padding hypothesis of Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:pair_trace_separation_homogenization_with_padding">20.154</a>. Consequently, the pulled-back words at the resulting length for \(\operatorname {Assemble}(\mu ,A)\) span every virtual sector projection, and the corresponding commutant reduction is available. </p>
 
   </div>
 </div>
