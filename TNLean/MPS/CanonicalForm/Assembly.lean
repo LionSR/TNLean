@@ -6,6 +6,7 @@ import TNLean.MPS.CanonicalForm.Assembly.ProportionalComparison
 import TNLean.MPS.CanonicalForm.Assembly.CommonPrimitiveProportionalData
 import TNLean.MPS.CanonicalForm.Assembly.BasicSectorComparison
 import TNLean.MPS.CanonicalForm.Assembly.OverlapSpanComparison
+import TNLean.MPS.CanonicalForm.Assembly.CommonSectorData
 import TNLean.MPS.CanonicalForm.Assembly.SectorComparisonCore
 
 /-!
@@ -34,6 +35,8 @@ The supporting modules are:
   construction of common-period cyclic-sector families.
 * `TNLean.MPS.CanonicalForm.Assembly.ZeroTailTransport` — generic zero-tail
   MPV transport lemmas.
+* `TNLean.MPS.CanonicalForm.Assembly.CommonSectorData` — common-sector data
+  after the zero-tail and TP-gauge structural reduction.
 * `TNLean.MPS.CanonicalForm.Assembly.StructuralData` — common-period blocking
   and structural after-blocking data.
 * `TNLean.MPS.CanonicalForm.Assembly.SectorComparisonCore` — conditional
