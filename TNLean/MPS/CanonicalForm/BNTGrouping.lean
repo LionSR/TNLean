@@ -38,17 +38,19 @@ basis-of-normal-tensors construction from
 
 ## Main results
 
-### Section 1 Sorting step: distinct norms → strictly decreasing permutation
+### Section 1 Sorting permutation
 
 * `exists_sorted_reindexing` — If the norms `‖μ k‖` are pairwise distinct, there exists
   a bijection `e : Fin r ≃ Fin r` with `StrictAnti (fun k => ‖μ (e k)‖)`.  This is a
   pure combinatorial sorting result.
 
+### Section 2 MPV-preserving sorted block decomposition
+
 * `exists_sorted_blockDecomp_of_distinct_norms` — Combines sorting with
   `sameMPV₂_toTensorFromBlocks_perm` to produce a permuted block family that
   (i) has `SameMPV₂` to the original family and (ii) has strictly decreasing norms.
 
-### Section 2 NCF construction from unsorted distinct-norm data
+### Section 3 Normal canonical form from unsorted distinct-norm block data
 
 * `exists_sortedNCF_of_distinct_norms` — If blocks satisfy all `IsNormalCanonicalForm`
   conditions except norm ordering (norms distinct but not yet decreasing), there exists
@@ -56,13 +58,13 @@ basis-of-normal-tensors construction from
   and the assembled tensor is `SameMPV₂`-equivalent to the original.  This is the key
   bridging step from the reduction output to the canonical form.
 
-### Section 3 Granular sector decomposition for the sorted distinct-norm case
+### Section 4 Granular sector decomposition for the sorted distinct-norm case
 
 * `exists_trivialSectorDecomp_of_sorted_distinct_norms` — Forms from a sorted
   distinct-norm block family a `SectorDecomposition` with all multiplicities
   `copies j = 1`.
 
-### Section 4 Restricted norm-class collapse for possibly-equal norms
+### Section 5 Restricted norm-class collapse for possibly-equal norms
 
 * `exists_bnt_grouping` — For blocks with possibly equal norms, given that equal-norm
   blocks have the same MPV function (a consequence of BNT uniqueness), there exists a

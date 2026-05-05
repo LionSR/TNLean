@@ -2771,8 +2771,9 @@ The following results separate the zero blocks from the nonzero blocks.
 	\lean{MPSTensor.exists_trivialSectorDecomp_of_sorted_distinct_norms}\leanok
 	\uses{def:trivial_sector_decomp, lem:trivial_sector_decomp_same_mpv}
 	If all weights are nonzero and strictly decreasing in norm, one obtains a
-	sector decomposition with one copy per sector that preserves the represented
-	MPS family.
+	sector decomposition $P$ with one basis block per original block such that
+	$P$ represents the same MPS family as $\bigoplus_k \mu_k B_k$ and whose
+	sector-weight norms are strictly decreasing.
 \end{lemma}
 
 \begin{definition}[Norm-class partition]
@@ -2794,11 +2795,9 @@ The following results separate the zero blocks from the nonzero blocks.
 	\uses{def:norm_class_grouping, thm:bnt_trivial_sector}
 	Let $(\mu_k,A_k)_{k=1}^r$ be a weighted block family with
 	$\mu_k \neq 0$ for every $k$. If equal-norm blocks represent the same
-	MPS family, then one obtains a sector decomposition $P$ such that
-	\[
-		P_{\mathrm{tot}} \sim \bigoplus_{k=1}^r \mu_k A_k
-	\]
-	as MPV families, and whose sector norms are strictly decreasing.
+	MPS family, then one obtains a sector decomposition whose associated total
+	tensor generates the same MPV family as $\bigoplus_{k=1}^r \mu_k A_k$, and
+	whose sector norms are strictly decreasing.
 \end{lemma}
 
 \subsection{Equal-Norm Blocks}
