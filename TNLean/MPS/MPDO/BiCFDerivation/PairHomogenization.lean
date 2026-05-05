@@ -1062,6 +1062,39 @@ theorem exists_pairTraceSeparatingAt_of_pairAllWordsSpanTop_of_identity_padding
     A B (S := S) (T := L + S) (by omega) hSepUpTo
     (fun l hl => hPadAll (L + S - l) (by omega))
 
+/-- A finite family of all-words pair-separation hypotheses and eventual identity
+padding hypotheses admits one common homogeneous trace-separating length.
+
+For finitely many ordered pairs of blocks, if each pair has trace separation over all
+word lengths and the pair identity belongs to every sufficiently long homogeneous
+pair-word span, then one word length separates all ordered pairs simultaneously. -/
+theorem exists_forall_pairTraceSeparatingAt_of_pairTraceSeparatingAll_of_identity_padding
+    (A : (k : Fin r) → MPSTensor d (dim k))
+    (hSep : ∀ k j : Fin r, j ≠ k → PairTraceSeparatingAll (A k) (A j))
+    (hPad : ∀ k j : Fin r, j ≠ k → ∃ L : ℕ, ∀ n : ℕ, n ≥ L →
+      ((1 : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
+          (1 : Matrix (Fin (dim j)) (Fin (dim j)) ℂ)) ∈
+        Submodule.span ℂ (Set.range (pairWordTuple (A k) (A j) n))) :
+    ∃ T : ℕ, ∀ k j : Fin r, j ≠ k → PairTraceSeparatingAt (A k) (A j) T := by
+  classical
+  obtain ⟨S, hSepUpTo⟩ :=
+    exists_forall_pairTraceSeparatingUpTo_of_forall_pairTraceSeparatingAll A hSep
+  let Lij : Fin r × Fin r → ℕ := fun p =>
+    if h : p.2 ≠ p.1 then Classical.choose (hPad p.1 p.2 h) else 0
+  let L : ℕ := Finset.univ.sup Lij
+  refine ⟨L + S, ?_⟩
+  intro k j hjk
+  have hPadBase : ∀ n : ℕ, n ≥ Lij (k, j) →
+      ((1 : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
+          (1 : Matrix (Fin (dim j)) (Fin (dim j)) ℂ)) ∈
+        Submodule.span ℂ (Set.range (pairWordTuple (A k) (A j) n)) := by
+    simpa [Lij, hjk] using Classical.choose_spec (hPad k j hjk)
+  have hLij_le : Lij (k, j) ≤ L := by
+    exact Finset.le_sup (s := Finset.univ) (f := Lij) (Finset.mem_univ (k, j))
+  exact pairTraceSeparatingAt_of_pairTraceSeparatingUpTo_of_identity_padding
+    (A k) (A j) (S := S) (T := L + S) (by omega) (hSepUpTo k j hjk)
+    (fun l hl => hPadBase (L + S - l) (by omega))
+
 /-! ### Burnside–Jacobson homogenization: from non-equivalence to homogeneous separation
 
 The theorems in this section bridge the gap between BNT block non-equivalence
@@ -1148,6 +1181,21 @@ theorem pairTraceSeparatingAll_of_injective_not_gaugePhaseEquiv
     exact pairAllWordsSpanTop_of_pairAlgSpan_eq_top A B
       (pairAlgSpan_eq_top_of_injective_not_gaugePhaseEquiv A B hA_inj hB_inj hNot)
   exact pairTraceSeparatingAll_of_pairAllWordsSpanTop A B hPairSpanTop
+
+/-- If two injective blocks have propositionally equal bond dimensions and are not
+gauge-phase equivalent after identifying those dimensions, then their simultaneous pair
+words are trace separating over all lengths. -/
+theorem pairTraceSeparatingAll_of_injective_not_gaugePhaseEquiv_cast_left
+    {d D₁ D₂ : ℕ} [NeZero D₁] [NeZero D₂] (h : D₁ = D₂)
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (hA_inj : IsInjective A) (hB_inj : IsInjective B)
+    (hA_norm : ∑ i : Fin d, (A i)ᴴ * (A i) = 1)
+    (hB_norm : ∑ i : Fin d, (B i)ᴴ * (B i) = 1)
+    (hNot : ¬ GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h) A) B) :
+    PairTraceSeparatingAll A B := by
+  subst h
+  simpa using pairTraceSeparatingAll_of_injective_not_gaugePhaseEquiv
+    A B hA_inj hB_inj hA_norm hB_norm hNot
 
 /-- **Dimension mismatch ⇒ all-length pair trace separation.**
 
