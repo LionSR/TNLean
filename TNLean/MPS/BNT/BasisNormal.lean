@@ -33,7 +33,7 @@ def mpvFun (A : MPSTensor d D) (N : ℕ) : (Fin N → Fin d) → ℂ :=
 /-- The Vandermonde separation lemma: if the scaling factors `μ k` are distinct,
 then any linear relation `∑ k, c k * (μ k) ^ N = 0` holding for `N = 0, …, r-1`
 forces all coefficients `c k` to vanish. -/
-theorem vandermonde_separation (C : CanonicalForm d)
+lemma vandermonde_separation (C : CanonicalForm d)
     (hμ : Function.Injective C.μ)
     (c : Fin C.numBlocks → ℂ)
     (hc : ∀ N : Fin C.numBlocks,
@@ -45,7 +45,7 @@ theorem vandermonde_separation (C : CanonicalForm d)
 
 If `μ` is injective and we have Vandermonde-type relations pointwise in `a : α`, then the whole
 family of functions must vanish. -/
-theorem vandermonde_separation_fun {n : ℕ} {α : Type*}
+lemma vandermonde_separation_fun {n : ℕ} {α : Type*}
     (μ : Fin n → ℂ) (hμ : Function.Injective μ)
     (v : Fin n → α → ℂ)
     (hv : ∀ i : Fin n, ∀ a : α, (∑ j : Fin n, v j a * μ j ^ (i : ℕ)) = 0) :
@@ -60,7 +60,7 @@ theorem vandermonde_separation_fun {n : ℕ} {α : Type*}
 This is the basic linear-algebraic fact we use later: once the coefficient vectors are fixed (here,
 functions `σ ↦ mpv (blockTensor k) σ` for a fixed `N₀`), distinct scaling factors `μ k` allow one to
 separate the contributions by looking at finitely many powers. -/
-theorem block_mpvs_separation_at_fixed_size (C : CanonicalForm d)
+lemma block_mpvs_separation_at_fixed_size (C : CanonicalForm d)
     (hμ : Function.Injective C.μ) (N₀ : ℕ)
     (c : Fin C.numBlocks → ℂ)
     (hc : ∀ i : Fin C.numBlocks, ∀ σ : Fin N₀ → Fin d,
@@ -78,7 +78,7 @@ theorem block_mpvs_separation_at_fixed_size (C : CanonicalForm d)
 
 if each block MPV is nonzero at size `N₀`, then the Vandermonde relations force the coefficients
 themselves to vanish. -/
-theorem block_mpvs_lin_indep_at_fixed_size (C : CanonicalForm d)
+lemma block_mpvs_lin_indep_at_fixed_size (C : CanonicalForm d)
     (hμ : Function.Injective C.μ) (N₀ : ℕ)
     (hnonzero : ∀ k : Fin C.numBlocks, mpvFun (C.blockTensor k) N₀ ≠ 0)
     (c : Fin C.numBlocks → ℂ)

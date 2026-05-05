@@ -372,7 +372,7 @@ The main references are
 	abstract permutation argument from this canonical-form setting.
 \end{remark}
 
-\begin{theorem}[Permutation rigidity with asymptotically orthonormal overlaps]\label{thm:bnt_perm_simple}
+\begin{lemma}[Permutation rigidity with asymptotically orthonormal overlaps]\label{lem:bnt_perm_simple}
 	\lean{MPSTensor.exists_eq_numBlocks_and_equiv_gaugePhase_of_overlapOrtho}
 	\leanok
 	\uses{def:injective, def:mpv, def:mpv_overlap, def:gauge_phase_equiv}
@@ -391,7 +391,7 @@ The main references are
 	then $g_A = g_B$, and there is a permutation $\pi$ of the common
 	block index set such that $A_j$ and $B_{\pi(j)}$ have the same bond
 	dimension and are gauge-phase equivalent for each~$j$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok\uses{thm:bnt_overlap_orthonormal_li, thm:bnt_perm_same_card}
 	By Theorem~\ref{thm:bnt_overlap_orthonormal_li}, both families are
@@ -454,15 +454,15 @@ The main references are
 \end{proof}
 
 \begin{remark}
-	Theorem~\ref{thm:bnt_perm_simple} is retained for completeness but is
+	Lemma~\ref{lem:bnt_perm_simple} is retained for completeness but is
 	not used in the proofs given here; the proportional version
 	(Theorem~\ref{thm:bnt_perm_prop}) suffices for the Fundamental Theorem.
 \end{remark}
 
 \subsection{Fixed-size separation by Vandermonde inversion}
 
-\begin{theorem}[Vandermonde separation]
-	\label{thm:bnt_vandermonde_separation}
+\begin{lemma}[Vandermonde separation]
+	\label{lem:bnt_vandermonde_separation}
 	\lean{MPSTensor.vandermonde_separation}
 	\leanok
 	\uses{def:is_canonical_form}
@@ -473,7 +473,7 @@ The main references are
 		\sum_k c_k \mu_k^N = 0
 	\]
 	for $N = 0, \ldots, r-1$, then every $c_k$ vanishes.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
 	The Vandermonde matrix with entries $V_{Nk} = \mu_k^N$ is invertible when
@@ -481,11 +481,11 @@ The main references are
 	has only the zero solution.
 \end{proof}
 
-\begin{theorem}[Fixed-size linear independence of block MPVs]
-	\label{thm:block_mpvs_fixed_size_li}
+\begin{lemma}[Fixed-size linear independence of block MPVs]
+	\label{lem:block_mpvs_fixed_size_li}
 	\lean{MPSTensor.block_mpvs_lin_indep_at_fixed_size}
 	\leanok
-	\uses{thm:bnt_vandermonde_separation}
+	\uses{lem:bnt_vandermonde_separation}
 	Let $C$ be a canonical form with $r$ blocks and pairwise distinct
 	weights $\mu_k$, and fix a system size $N_0$. Assume that each block MPV
 	$\ket{V^{(N_0)}(A_k)}$ is nonzero. If
@@ -494,10 +494,10 @@ The main references are
 	\]
 	for every word $\sigma$ of length $N_0$ and every $i = 0, \ldots, r-1$,
 	then $c_k = 0$ for all $k$.
-\end{theorem}
+\end{lemma}
 
-\begin{proof}\leanok\uses{thm:bnt_vandermonde_separation}
-	Apply Theorem~\ref{thm:bnt_vandermonde_separation} pointwise in the word
+\begin{proof}\leanok\uses{lem:bnt_vandermonde_separation}
+	Apply Lemma~\ref{lem:bnt_vandermonde_separation} pointwise in the word
 	$\sigma$. This shows that every component of
 	$c_k\ket{V^{(N_0)}(A_k)}$ vanishes. Since the MPV of each block is
 	nonzero at size $N_0$, some component survives, so $c_k = 0$.

@@ -71,8 +71,9 @@ forces:
 3. Blockwise gauge-phase equivalence: for each `j`, `dimA j = dimB (perm j)` and
    `GaugePhaseEquiv (cast … (A j)) (B (perm j))`.
 
-Unlike `fundamentalTheorem_proportionalMPV_CFBNT` and `fundamentalTheorem_equalMPV_full`,
-this theorem requires **no** explicit `aCoeff`, `bCoeff`, `aLim`, `bLim` arguments. The
+Unlike `fundamentalTheorem_proportionalMPV_CFBNT` and
+`fundamentalTheorem_equalMPV_of_explicit_coefficients`, this theorem requires **no** explicit
+`aCoeff`, `bCoeff`, `aLim`, `bLim` arguments. The
 coefficient convergence question that plagues the general proportional-case theorem is
 bypassed entirely: the BNT decomposition identity
   `∑_j (μA j)^N * mpv(A j) σ = ∑_k (μB k)^N * mpv(B k) σ`
