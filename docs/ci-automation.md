@@ -403,7 +403,7 @@ provider or mention handler.
 
 | Variable | Disabled workflows |
 |----------|--------------------|
-| `CLAUDE_AUTO_FIX_ENABLED=false` | `auto-fix.yml` and manual PR creation in `lean-linter-warning-autofix.yml` |
+| `CLAUDE_AUTO_FIX_ENABLED=false` | `auto-fix.yml`; write-mode linter auto-fix skips before Lean setup/build |
 | `CLAUDE_REVIEW_ENABLED=false` | `claude-code-review.yml`, `blueprint-prose-review.yml`, `pr-cleanup.yml`, and `tracking-issue-sync.yml` |
 | `CODEX_AUTO_FIX_ENABLED=false` | `auto-fix-codex.yml` |
 | `CODEX_MENTION_ENABLED=false` | `codex.yml` (`@chatgpt` mention handler) |
