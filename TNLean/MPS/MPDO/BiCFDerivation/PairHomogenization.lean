@@ -1277,43 +1277,31 @@ theorem exists_pairTraceSeparatingAt_of_injective_dim_ne_of_pairWordTupleSpanTop
   · exact pairIdentity_mem_pairWordTupleSpan_eventually_of_pairWordTupleSpanTop_period_window
       A B hperiod_pos hperiod hwindow
 
-/-- Burnside–Jacobson identity padding for injective, non-gauge-equivalent
-same-dimension blocks.
-
-For injective tensors whose simultaneous pair algebra is the full product
-algebra, the pair identity `(1, 1)` belongs to the homogeneous pair-word span at
-every sufficiently large length. -/
-theorem pairIdentity_mem_pairWordTupleSpan_eventually_of_not_gaugePhaseEquiv
-    {d D : ℕ} [NeZero D]
-    (A B : MPSTensor d D)
-    (hA_inj : IsInjective A) (hB_inj : IsInjective B)
-    (hNot : ¬ GaugePhaseEquiv A B) :
-    ∃ L : ℕ, ∀ n : ℕ, n ≥ L →
-      ((1 : Matrix (Fin D) (Fin D) ℂ), (1 : Matrix (Fin D) (Fin D) ℂ)) ∈
-        Submodule.span ℂ (Set.range (pairWordTuple A B n)) := by
-  sorry
-
-/-- Homogeneous pair trace separation from BNT non-equivalence.
+/-- Homogeneous pair trace separation from same-dimension BNT non-equivalence
+and a homogeneous identity-padding period window.
 
 For injective same-dimension tensors satisfying the left-canonical
-normalization hypotheses and not gauge-phase equivalent, the pair trace
-functionals separate at some fixed homogeneous length. Burnside-Jacobson
-identity padding converts cumulative separation into separation at one word
-length. -/
-theorem exists_pairTraceSeparatingAt_of_not_gaugePhaseEquiv
+normalization hypotheses and not gauge-phase equivalent, the simultaneous pair
+words are trace-separating over all finite lengths.  A period-window of full
+homogeneous pair spans supplies the identity padding needed to convert that
+all-length separation into one homogeneous trace-separating length. -/
+theorem exists_pairTraceSeparatingAt_of_not_gaugePhaseEquiv_of_pairWordTupleSpanTop_period_window
     {d D : ℕ} [NeZero D]
     (A B : MPSTensor d D)
     (hA_inj : IsInjective A) (hB_inj : IsInjective B)
     (hA_norm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hB_norm : ∑ i : Fin d, (B i)ᴴ * B i = 1)
-    (hNot : ¬ GaugePhaseEquiv A B) :
+    (hNot : ¬ GaugePhaseEquiv A B)
+    {start period : ℕ} (hperiod_pos : 0 < period)
+    (hperiod : PairWordTupleSpanTop A B period)
+    (hwindow : ∀ r : ℕ, r < period → PairWordTupleSpanTop A B (start + r)) :
     ∃ T : ℕ, PairTraceSeparatingAt A B T := by
   apply exists_pairTraceSeparatingAt_of_pairAllWordsSpanTop_of_identity_padding
   · have hSepAll : PairTraceSeparatingAll A B :=
       pairTraceSeparatingAll_of_injective_not_gaugePhaseEquiv
         A B hA_inj hB_inj hA_norm hB_norm hNot
     exact (pairAllWordsSpanTop_iff_pairTraceSeparatingAll A B).2 hSepAll
-  · exact pairIdentity_mem_pairWordTupleSpan_eventually_of_not_gaugePhaseEquiv
-      A B hA_inj hB_inj hNot
+  · exact pairIdentity_mem_pairWordTupleSpan_eventually_of_pairWordTupleSpanTop_period_window
+      A B hperiod_pos hperiod hwindow
 
 end MPSTensor
