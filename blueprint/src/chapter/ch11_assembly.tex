@@ -1222,48 +1222,29 @@ single weighted block.
 	hypotheses.
 \end{proof}
 
-\begin{theorem}[Sector comparison from proportional-decomposition data]%
-\label{thm:afterBlocking_sectorComparison_of_proportionalDecompositionConclusion}
-	\lean{MPSTensor.afterBlocking_sectorComparison_of_proportionalDecompositionConclusion}
-	\leanok
-	\uses{thm:after_blocking_sector_common_blocks_common_phase_cover}
-	Let $A$ and $B$ have the same MPV family, and fix exact decompositions of the
-	nonzero parts at a common blocking period as in
-	Theorem~\ref{thm:after_blocking_sector_common_blocks_common_phase_cover}. Assume
-	the blocks in the nonzero parts are trace-preserving, primitive, irreducible,
-	injective, and have nonzero weights. If a BNT proportional-decomposition
-	comparison supplies a permutation, equal bond dimensions, and gauge-phase
-	equivalences between the two block families, then the same sector comparison
-	conclusion holds.
-\end{theorem}
-
-\begin{proof}
-	\leanok
-	\uses{thm:common_phase_cover_of_proportional_decomposition,
-		thm:after_blocking_sector_common_blocks_common_phase_cover}
-	The BNT proportional-decomposition data give common MPV phase-cover data.
-	Apply Theorem~\ref{thm:after_blocking_sector_common_blocks_common_phase_cover}
-	to those data.
-\end{proof}
-
-\begin{lemma}[Zero-tail cancellation]\label{lem:sameMPV2_live_of_zeroTail_eq}
+\begin{lemma}[Zero-tail cancellation for leftover zero blocks]\label{lem:sameMPV2_live_of_zeroTail_eq}
 	\lean{MPSTensor.sameMPV₂_live_of_sameMPV₂_with_zeroTail_eq}
 	\leanok
 	\uses{def:same_mpv2, def:mpv}
-	Let $A$ and $B$ have the same MPV family, each decomposed as a zero-tail
-	tensor plus a nonzero part. If the zero-tail dimensions agree, then the
-	nonzero parts themselves have the same MPV family, including at length zero.
+	Let $A$ and $B$ have the same MPV family, each decomposed as an all-zero
+	leftover block, called the zero-tail part in this formal convention, plus a
+	nonzero part. If the leftover zero-block dimensions agree, then the nonzero
+	parts themselves have the same MPV family, including at length zero.
 \end{lemma}
 
 \begin{proof}
 	\leanok
-	\uses{def:mpv}
-	At positive lengths the zero-tail term vanishes, so the nonzero parts
-	agree. At length zero the zero-tail values are equal by hypothesis, and
-	cancellation gives equality of the nonzero parts there too.
+	\uses{thm:mpv_zero_tensor}
+	At positive lengths the all-zero leftover block vanishes, so the nonzero
+	parts agree. Theorem~\ref{thm:mpv_zero_tensor} gives the exact value
+	\[
+		V^{(0)}(\mathbf{0}_{d,D_0})_\varnothing=D_0,
+	\]
+	so equality of the two leftover zero-block dimensions gives cancellation
+	at length zero as well.
 \end{proof}
 
-\begin{theorem}[Sector comparison with zero-tail agreement]%
+\begin{theorem}[Sector comparison with zero-tail zero-block agreement]%
 \label{thm:after_blocking_sector_common_blocks_overlap_span_zero_tail}
 	\lean{MPSTensor.fundamentalTheorem_after_blocking_sector_of_common_blocks_overlapSpan_zeroTail}
 	\leanok
@@ -1271,10 +1252,11 @@ single weighted block.
 		thm:bnt_sector_decomp_tp_prim_irr_collapsed,
 		def:sector_basis_overlap_span_hyps}
 	Let $A$ and $B$ have the same MPV family. Fix $p > 0$ and suppose
-	$A^{[p]}$ and $B^{[p]}$ each decompose as a zero-tail tensor plus a
-	weighted nonzero-block tensor, with all blocks trace-preserving, primitive,
-	irreducible, and with nonzero weights. If the two zero-tail dimensions
-	agree and any pair of BNT sector decompositions equivalent to the two
+	$A^{[p]}$ and $B^{[p]}$ each decompose as an all-zero leftover block plus
+	a weighted nonzero-block tensor, with all nonzero blocks trace-preserving,
+	primitive, irreducible, and with nonzero weights. If the two leftover
+	zero-block dimensions agree and any pair of BNT sector decompositions
+	equivalent to the two
 	nonzero-block tensors satisfies the primitive overlap-span hypotheses, then there
 	exist positive $p'$ and sector decompositions $P$, $Q$ such that
 	$A^{[p']}$ equals $P$'s tensor at all positive lengths, $B^{[p']}$ equals
@@ -1289,8 +1271,8 @@ single weighted block.
 		thm:bnt_sector_decomp_tp_prim_irr_collapsed,
 		thm:sector_basis_overlap_span_to_matching,
 		thm:route_b_hetero_sector_matching}
-	Apply the zero-tail cancellation lemma to recover full equality of the
-	nonzero-block tensors. Then proceed as in
+	Apply the leftover-zero-block cancellation lemma to recover full equality
+	of the nonzero-block tensors. Then proceed as in
 	Theorem~\ref{thm:after_blocking_sector_common_blocks_overlap_span}: apply
 	the BNT construction to each block family, compose the sector
 	equivalences to obtain equality of the total MPV families of $P$ and $Q$,
@@ -1307,10 +1289,11 @@ two-basis sector comparison theorem.
 		thm:sector_basis_overlap_span_to_matching,
 		thm:route_b_hetero_sector_matching}
 	Let $A$ and $B$ have the same MPV family. Fix $p>0$ and suppose $A^{[p]}$
-	and $B^{[p]}$ each decompose as a zero-tail tensor plus a weighted nonzero
-	part, with all blocks in the nonzero part trace-preserving, primitive,
-	irreducible, injective, and with nonzero weights. If the two zero-tail
-	dimensions agree and the two nonzero-weight block families have equal
+	and $B^{[p]}$ each decompose as an all-zero leftover block plus a weighted
+	nonzero part, with all blocks in the nonzero part trace-preserving,
+	primitive, irreducible, injective, and with nonzero weights. If the two
+	leftover zero-block dimensions agree and the two nonzero-weight block
+	families have equal
 	finite-length MPV spans at every system size, then there exist a period
 	$p' > 0$ and sector decompositions $P,Q$ such that $A^{[p']}$ and
 	$B^{[p']}$ agree with the corresponding sector tensors at every positive
@@ -1325,12 +1308,12 @@ two-basis sector comparison theorem.
 		thm:sector_basis_overlap_span_to_matching,
 		thm:route_b_hetero_sector_matching}
 	The finite-length span equality gives the primitive overlap-span hypotheses
-	for the BNT sector bases of the two nonzero parts. Zero-tail cancellation
-	identifies the two nonzero parts as full MPV families, while the zero-tail
-	summands vanish at positive lengths, giving the positive-length comparison of
-	$A^{[p]}$ and $B^{[p]}$ with the two sector decompositions. The sector-basis
-	matching and two-basis comparison theorems then give the sector-weight
-	conclusion.
+	for the BNT sector bases of the two nonzero parts. Cancellation of leftover
+	zero blocks identifies the two nonzero parts as full MPV families, while the
+	leftover zero-block summands vanish at positive lengths, giving the
+	positive-length comparison of $A^{[p]}$ and $B^{[p]}$ with the two sector
+	decompositions. The sector-basis matching and two-basis comparison theorems
+	then give the sector-weight conclusion.
 \end{proof}
 
 \begin{definition}[Span hypotheses for common primitive sectors]%
@@ -1340,9 +1323,10 @@ two-basis sector comparison theorem.
 	\uses{def:mpv_state, def:injective}
 	For two common primitive nonzero-sector families at one blocking length, this
 	condition consists of the hypotheses needed before applying the
-	zero-tail sector comparison: equality of the two zero-tail dimensions,
-	one-site injectivity of all blocks on both sides, and equality of the
-	finite-length MPV spans of the two block families for every system size.
+	zero-block sector comparison: equality of the two leftover zero-block
+	dimensions, one-site injectivity of all blocks on both sides, and equality
+	of the finite-length MPV spans of the two block families for every system
+	size.
 \end{definition}
 
 \begin{theorem}[Phase covers supply span hypotheses]%
@@ -1782,19 +1766,20 @@ two-basis sector comparison theorem.
 	\leanok
 	\uses{def:common_sector_relabeling_hypothesis, def:same_mpv2_pos,
 		def:mpv_common_phase_cover}
-		Assume two tensors generate the same MPV family and assume the blocked-word
-		identification used in the common-sector construction.  Then there is a
-	common blocking length at which both tensors have zero-tail decompositions whose
-	nonzero parts are weighted families of trace-preserving, primitive,
-	tensor-irreducible blocks with positive bond dimension and nonzero weights.  The
-	theorem further includes the three positive-length MPV agreements
+	Assume two tensors generate the same MPV family and assume the blocked-word
+	identification used in the common-sector construction.  Then there is a
+	common blocking length at which both tensors decompose into a leftover
+	all-zero block and a weighted nonzero part whose summands are
+	trace-preserving, primitive, tensor-irreducible blocks with positive bond
+	dimension and nonzero weights.  The theorem further includes the three
+	positive-length MPV agreements
 	\(\mc{V}^{+}(\cdot)=\mc{V}^{+}(\cdot)\): the two agreements comparing each
 	blocked tensor with its own nonzero-sector part and the agreement comparing the
-	two nonzero-sector parts, together with the length-zero zero-tail identity, as
-	in
+	two nonzero-sector parts, together with the length-zero leftover-block
+	identity, as in
 	Theorem~\ref{thm:after_blocking_common_primitive_irreducible_blocks_reindexed}.
 	For these particular common-sector families, any common MPV phase cover gives
-	the finite-length nonzero-block span equality needed by the zero-tail block-span
+	the finite-length nonzero-block span equality needed by the zero-block block-span
 	theorem.  A BNT proportional-decomposition conclusion for the same families
 	gives the same span equality.
 \end{theorem}
@@ -1818,11 +1803,11 @@ two-basis sector comparison theorem.
 	\leanok
 	\uses{thm:after_blocking_common_primitive_irreducible_blocks_reindexed}
 	Let $A$ and $B$ have the same MPV family.  Then there is a positive blocking
-	length at which both blocked tensors decompose into a zero-tail part and a
-	weighted direct sum of trace-preserving, primitive, tensor-irreducible blocks
-	with positive bond dimensions and nonzero weights.  The two nonzero-sector
-	families have the same positive-length MPV family, and the zero-tail parts
-	satisfy the length-zero identity.
+	length at which both blocked tensors decompose into a leftover all-zero
+	block and a weighted direct sum of trace-preserving, primitive,
+	tensor-irreducible blocks with positive bond dimensions and nonzero weights.
+	The two nonzero-sector families have the same positive-length MPV family,
+	and the leftover zero blocks satisfy the length-zero identity.
 \end{theorem}
 
 \begin{proof}

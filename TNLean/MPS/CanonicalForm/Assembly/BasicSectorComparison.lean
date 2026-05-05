@@ -10,9 +10,8 @@ open scoped Matrix BigOperators ComplexOrder MatrixOrder
 # Basic sector comparisons from phase covers
 
 This module contains the first sector-comparison consequences used after the
-canonical-form reduction: proportional-decomposition comparisons, zero-tail
-block-span comparisons, common MPV phase covers, and the corresponding
-zero-tail proportional-decomposition specialization.
+canonical-form reduction: zero-tail block-span comparisons and common MPV
+phase-cover routes for the leftover all-zero block bookkeeping.
 
 ## References
 
@@ -25,59 +24,6 @@ matrix product states, canonical form, BNT, proportional decomposition
 -/
 
 namespace MPSTensor
-
-/-- **Sector comparison from BNT proportional-decomposition data.**
-
-A proportional-decomposition comparison supplies a common MPV phase cover of the two
-nonzero-weight block families. Therefore the common-cover sector theorem applies without an
-extra finite-length span hypothesis. -/
-theorem afterBlocking_sectorComparison_of_proportionalDecompositionConclusion
-    {d D₁ D₂ p rA rB : ℕ}
-    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
-    [∀ k : Fin rA, NeZero (dimA k)]
-    [∀ k : Fin rB, NeZero (dimB k)]
-    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
-    (hSame : SameMPV₂ A B)
-    (hp : 0 < p)
-    (μA : Fin rA → ℂ)
-    (blocksA : (k : Fin rA) → MPSTensor (blockPhysDim d p) (dimA k))
-    (μB : Fin rB → ℂ)
-    (blocksB : (k : Fin rB) → MPSTensor (blockPhysDim d p) (dimB k))
-    (hMatch : ProportionalDecompositionConclusion (d := blockPhysDim d p) blocksA blocksB)
-    (hAblocks : SameMPV₂ (blockTensor (d := d) (D := D₁) A p)
-      (toTensorFromBlocks (d := blockPhysDim d p) (μ := μA) blocksA))
-    (hBblocks : SameMPV₂ (blockTensor (d := d) (D := D₂) B p)
-      (toTensorFromBlocks (d := blockPhysDim d p) (μ := μB) blocksB))
-    (hTPA : ∀ k, ∑ i : Fin (blockPhysDim d p), (blocksA k i)ᴴ * blocksA k i = 1)
-    (hTPB : ∀ k, ∑ i : Fin (blockPhysDim d p), (blocksB k i)ᴴ * blocksB k i = 1)
-    (hIrrA : ∀ k, IsIrreducibleTensor (blocksA k))
-    (hIrrB : ∀ k, IsIrreducibleTensor (blocksB k))
-    (hPrimA : ∀ k, _root_.IsPrimitive
-      (transferMap (d := blockPhysDim d p) (D := dimA k) (blocksA k)))
-    (hPrimB : ∀ k, _root_.IsPrimitive
-      (transferMap (d := blockPhysDim d p) (D := dimB k) (blocksB k)))
-    (hInjA : ∀ k, IsInjective (blocksA k))
-    (hInjB : ∀ k, IsInjective (blocksB k))
-    (hμA : ∀ k, μA k ≠ 0)
-    (hμB : ∀ k, μB k ≠ 0) :
-    ∃ p' : ℕ, 0 < p' ∧
-    ∃ P Q : SectorDecomposition (blockPhysDim d p'),
-      SameMPV₂ (blockTensor (d := d) (D := D₁) A p') P.toTensor ∧
-      SameMPV₂ (blockTensor (d := d) (D := D₂) B p') Q.toTensor ∧
-      HasBNTSectorData P ∧ HasBNTSectorData Q ∧
-      ∃ perm : Fin P.basisCount ≃ Fin Q.basisCount,
-      ∃ hCopies : ∀ j, P.copies j = Q.copies (perm j),
-      ∃ ζ : Fin P.basisCount → ℂ,
-        (∀ j, ζ j ≠ 0) ∧
-        ∀ j : Fin P.basisCount,
-          Finset.univ.val.map (P.weight j) =
-            Finset.univ.val.map
-              (fun q => ζ j * Q.weight (perm j) (Fin.cast (hCopies j) q)) := by
-  obtain ⟨cover⟩ := nonempty_mpvCommonPhaseCover_of_proportionalDecompositionConclusion
-    (d := blockPhysDim d p) blocksA blocksB hMatch
-  exact fundamentalTheorem_after_blocking_sector_of_common_blocks_commonPhaseCover
-    A B hSame hp μA blocksA μB blocksB cover hAblocks hBblocks hTPA hTPB hIrrA hIrrB
-    hPrimA hPrimB hInjA hInjB hμA hμB
 
 /-- **Zero-tail sector comparison from finite-length nonzero-block span equality.**
 

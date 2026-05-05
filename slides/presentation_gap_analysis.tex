@@ -786,14 +786,6 @@ theorem vandermonde_separation (C : CanonicalForm d)
     (hc : (*@$\forall$@*) N : Fin C.numBlocks,
       ((*@$\sum$@*) k, c k * (C.(*@$\mu$@*) k) ^ (N : (*@$\mathbb{N}$@*))) = 0) :
     c = 0
-
--- Function-valued Vandermonde (BasisNormal.lean)
-theorem vandermonde_separation_fun {n : (*@$\mathbb{N}$@*)} {(*@$\alpha$@*) : Type*}
-    ((*@$\mu$@*) : Fin n (*@$\to$@*) (*@$\mathbb{C}$@*)) (h(*@$\mu$@*) : Function.Injective (*@$\mu$@*))
-    (v : Fin n (*@$\to$@*) (*@$\alpha$@*) (*@$\to$@*) (*@$\mathbb{C}$@*))
-    (hv : (*@$\forall$@*) i : Fin n, (*@$\forall$@*) a : (*@$\alpha$@*),
-      ((*@$\sum$@*) j, v j a * (*@$\mu$@*) j ^ (i : (*@$\mathbb{N}$@*))) = 0) :
-    v = 0
 \end{lstlisting}
 
 \vspace{0.05em}

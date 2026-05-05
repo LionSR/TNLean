@@ -79,12 +79,6 @@ heterogeneous block-matching theorem is a genuine formal endpoint for the
 block-matching part, while the final global weighted gauge equivalence remains
 the paper-level equal-MPV target.
 
-\paragraph{Parent-Hamiltonian statements.}
-The parent-Hamiltonian chapter uses additional intersection-property,
-periodic-chain, and ground-space-span results.  These are cited mathematical
-ingredients for the parent-Hamiltonian consequences, not extra theorems in the
-non-periodic Fundamental Theorem proof.
-
 \section{External lemmas need explanations}
 
 When a result is needed but the MPS source only cites it, the formal
@@ -117,12 +111,6 @@ This applies in particular to the following families of external input.
     they are not proved in the MPS source.  When they are used to recover
     coefficients, multiplicities, or weight multisets, the blueprint should
     explain the finite linear system or the power-sum recursion.
-  \item Parent-Hamiltonian gap statements use the FNW intersection-property and
-    martingale estimates from \cite{Fannes1992Finitely,Nachtergaele1996Spectral}
-    and later refinements such as \cite{Kastoryano2018Martingale}.  If the
-    source only invokes these estimates, the blueprint should state the
-    finite-size criterion and the constants being used before applying it to
-    MPS parent Hamiltonians.
   \item Perron--Frobenius and peripheral-spectrum facts for quantum channels are
     standard inputs from finite-dimensional channel theory, but they are not
     interchangeable.  A formal theorem should specify whether it uses
@@ -145,13 +133,21 @@ paper-level theorems.
     \]
     It is not the full equal-MPV corollary from the papers.  It assumes the
     coefficient arrays and their nonzero limits.
-  \item The Vandermonde fixed-size separation declarations are lemmas.  They
-    remain available for finite-length arguments, but the main BNT comparison
-    route uses eventual linear independence and overlap orthogonality.
+  \item The unused fixed-size BNT Vandermonde MPV declarations have been
+    removed.  The scalar Vandermonde separation lemma remains because it is a
+    small algebraic input elsewhere, but it is not presented as part of the
+    main BNT comparison route.
   \item The equal-span permutation rigidity statement with asymptotically
     orthonormal overlaps is a lemma.  It is a useful span route, but the
     proportional BNT permutation theorem is the theorem used by the main
     proportional Fundamental Theorem in Chapter~11.
+  \item The older wrapper from proportional-decomposition data to sector
+    comparison without leftover-zero-block bookkeeping has been removed.  The
+    active after-blocking route keeps this bookkeeping visible because the
+    formal equality relation includes the empty word.  This is not terminology
+    from \cite{Cirac2016MPDO_arXiv}; the source only says that canonical forms
+    may have zero blocks through the inequality
+    \(\sum_k D_k \le D\) \cite[lines~217--219]{Cirac2016MPDO_arXiv}.
 \end{itemize}
 
 \section{Statements to keep visibly conditional}
@@ -164,11 +160,6 @@ should remain visibly conditional until the missing paper input is produced.
     canonical-form theorem.
   \item The explicit-coefficient equal case assumes coefficient arrays rather
     than deriving the BNT power-sum data from bare equality of MPVs.
-  \item The parent-Hamiltonian unique-ground-state endpoints depend on the
-    normal chain ground-space identification, and the BNT ground-space span
-    endpoint depends on the periodic block-decomposition inclusion.  They are
-    paper-level targets, but the proof surface should keep those dependencies
-    explicit until the corresponding lemmas are completed.
 \end{itemize}
 
 \section{Retirement criterion}
