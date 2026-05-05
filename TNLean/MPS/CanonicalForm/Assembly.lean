@@ -23,6 +23,8 @@ The supporting modules are:
   and the conditional weak block-matching theorem.
 * `TNLean.MPS.CanonicalForm.Assembly.CommonBlockedCyclicSectorFamily` —
   common-period cyclic-sector family API.
+* `TNLean.MPS.CanonicalForm.Assembly.CommonBlockedCyclicSectorRepresentatives` —
+  representative common-sector family API.
 * `TNLean.MPS.CanonicalForm.Assembly.CyclicSectorDecomposition` — cyclic sector
   decomposition after blocking.
 * `TNLean.MPS.CanonicalForm.Assembly.CommonBlockedCyclicSectorConstruction` —
