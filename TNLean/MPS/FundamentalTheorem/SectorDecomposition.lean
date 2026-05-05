@@ -14,14 +14,10 @@ import Mathlib.Data.Fintype.BigOperators
 /-!
 # Sector decomposition comparison theorems
 
-The shared multiplicity layer
-`SectorWeightData` / `SectorDecomposition` now lives in
-`TNLean.MPS.SharedInfra.SectorDecomposition`.
-
-This file adds the higher-level equal-case Fundamental Theorem constructions:
-
-* sector-weight comparison data from `TNLean.MPS.FundamentalTheorem.SectorWeightComparison`,
-* the combined equal-case corollaries used by the FT stack.
+This chapter compares two finite sector decompositions that describe the same
+matrix-product vector family.  It combines the coefficient comparison, the
+recovery of sector weights from power sums, and the equal-case corollaries
+needed to match sectors up to permutation and nonzero phase factors.
 
 ## References
 

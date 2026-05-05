@@ -109,18 +109,15 @@ The connection between "eventually equal coefficients" (for `N > N₀`) and
 "equal coefficients for every positive `k`" rests on a **telescoping induction**
 on linear combinations of geometric sequences.
 
-**Key lemma** (`geom_sum_eventually_zero`): a finite linear combination
-`N ↦ ∑ᵢ cᵢ · wᵢᴺ` with all bases `wᵢ ≠ 0` that vanishes for all `N ≥ M` vanishes
-identically.
+For a finite sum `N ↦ ∑ᵢ cᵢ · wᵢᴺ` with every `wᵢ` nonzero, vanishing for all
+sufficiently large `N` forces vanishing for every exponent.  The proof subtracts
+`w₀` times the equation at `N` from the equation at `N+1`, eliminating the first
+base and reducing the number of terms.  The induction gives the shorter identity
+for all exponents, and the original sequence then satisfies a geometric
+recurrence whose value at the eventual-vanishing cutoff is zero.
 
-**Proof**: by induction on the number of terms `n`. Subtract `w₀` times the equation at `N`
-from the equation at `N+1` to telescope out the `i = 0` term, reducing to a sum with `n − 1`
-nonzero terms. By the inductive hypothesis this shorter sum vanishes for *all* `k`, giving the
-recurrence `S(k+1) = w₀ · S(k)`, hence `S(k) = w₀ᵏ · S(0)`. Since `S(M) = 0` and
-`w₀ᴹ ≠ 0`, we conclude `S(0) = 0`, so `S ≡ 0`.
-
-The main lemma `eventually_coeff_eq_implies_all_pos_eq` reduces to this by concatenating the
-two weight families (using `Fin.append`) with coefficients `+1` and `−1`.
+Applying this to the signed union of two weight families converts eventual
+equality of their power sums into equality at every positive exponent.
 -/
 
 /-- A linear combination of geometric sequences `∑ cᵢ wᵢᵏ` with all bases `wᵢ ≠ 0` that
@@ -285,12 +282,11 @@ private lemma eventually_coeff_eq_implies_all_pos_eq
 /-- **Equal-case corollary: BNT linear independence + same multiplicities + equal total MPVs
 → equal sector weight multisets.**
 
-This combines:
-1. `coeff_eventually_eq_of_sameMPV`: BNT LI + equal MPVs → eventual coefficient equality.
-2. Extrapolation (`eventually_coeff_eq_implies_all_pos_eq`): eventual equality →
-   full equality for all positive `k` (telescoping induction on geometric sums).
-3. `weight_multiset_eq_of_copies_eq_of_coeff_eq`: full coefficient equality + same
-   multiplicities → equal weight multisets (Newton–Girard). -/
+BNT linear independence turns equality of the total matrix-product-vector
+families into eventual equality of the sector coefficients.  The geometric
+extrapolation above promotes eventual equality to equality of all positive
+power sums, and Newton--Girard then recovers the weight multiset in each
+sector once the copy counts have been aligned. -/
 theorem weight_multiset_eq_of_sameMPV_bnt
     {dim : Fin g → ℕ}
     (basis : (j : Fin g) → MPSTensor d (dim j))
