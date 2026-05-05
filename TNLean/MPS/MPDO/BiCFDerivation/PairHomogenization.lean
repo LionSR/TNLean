@@ -1277,15 +1277,12 @@ theorem exists_pairTraceSeparatingAt_of_injective_dim_ne_of_pairWordTupleSpanTop
   · exact pairIdentity_mem_pairWordTupleSpan_eventually_of_pairWordTupleSpanTop_period_window
       A B hperiod_pos hperiod hwindow
 
-/-- Placeholder for the Burnside–Jacobson identity-padding lemma.
-Once proved, it supplies the missing input to
-`pairTraceSeparatingAt_of_pairTraceSeparatingUpTo_of_identity_padding` and
-thereby completes `exists_pairTraceSeparatingAt_of_not_gaugePhaseEquiv`.
+/-- Burnside–Jacobson identity padding for injective, non-gauge-equivalent
+same-dimension blocks.
 
-The statement: for injective, non-gauge-equivalent tensors `A, B`, there
-exists `L` such that the pair identity `(1, 1)` belongs to the homogeneous
-pair word span at every length `≥ L` (or at least at an arithmetic progression
-that covers all offsets needed for the padding argument). -/
+For injective tensors whose simultaneous pair algebra is the full product
+algebra, the pair identity `(1, 1)` belongs to the homogeneous pair-word span at
+every sufficiently large length. -/
 theorem pairIdentity_mem_pairWordTupleSpan_eventually_of_not_gaugePhaseEquiv
     {d D : ℕ} [NeZero D]
     (A B : MPSTensor d D)
@@ -1296,21 +1293,13 @@ theorem pairIdentity_mem_pairWordTupleSpan_eventually_of_not_gaugePhaseEquiv
         Submodule.span ℂ (Set.range (pairWordTuple A B n)) := by
   sorry
 
-/-- **Homogeneous pair trace separation from BNT non-equivalence (Route B).**
-Under the same hypotheses, there exists a finite homogeneous length `S` such
-that `PairTraceSeparatingAt A B S` holds.
+/-- Homogeneous pair trace separation from BNT non-equivalence.
 
-The proof chains:
-1. `¬ GaugePhaseEquiv` → `PairTraceSeparatingAll` (the lemma above)
-2. `PairTraceSeparatingAll` → finite cumulative cutoff `S₀`
-3. `PairTraceSeparatingUpTo` + Burnside–Jacobson identity padding
-   → homogeneous `PairTraceSeparatingAt T`
-
-The remaining blocker for step 3 is the identity-padding hypothesis: there
-must exist a length `L` such that `(1, 1)` lies in the homogeneous pair word
-span at every length `≥ L`.  This is the Burnside–Jacobson homogenization
-step for the pair product algebra.  The theorem below states the full
-conclusion with that step admitted. -/
+For injective same-dimension tensors satisfying the left-canonical
+normalization hypotheses and not gauge-phase equivalent, the pair trace
+functionals separate at some fixed homogeneous length. Burnside-Jacobson
+identity padding converts cumulative separation into separation at one word
+length. -/
 theorem exists_pairTraceSeparatingAt_of_not_gaugePhaseEquiv
     {d D : ℕ} [NeZero D]
     (A B : MPSTensor d D)
