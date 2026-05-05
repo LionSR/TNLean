@@ -1289,19 +1289,32 @@ produce a positive period and a complete residue window of full homogeneous
 pair-word spans, but the later argument needs only the identity-padding
 conclusion below. -/
 private theorem
+    pairIdentity_mem_pairWordTupleSpan_padding_gap_of_pairIdentity_mem_pairCumulativeSpan
+    {d D : ℕ} [NeZero D]
+    (A B : MPSTensor d D) {S T l : ℕ} (_hST : S ≤ T) (_hl : l ≤ S)
+    (_hI :
+      ((1 : Matrix (Fin D) (Fin D) ℂ), (1 : Matrix (Fin D) (Fin D) ℂ)) ∈
+        pairCumulativeSpan A B S) :
+      ((1 : Matrix (Fin D) (Fin D) ℂ), (1 : Matrix (Fin D) (Fin D) ℂ)) ∈
+        Submodule.span ℂ (Set.range (pairWordTuple A B (T - l))) := by
+  -- Remaining Burnside-Jacobson exact-gap step: cumulative identity membership
+  -- must be upgraded to homogeneous identity padding at this single gap length.
+  sorry
+
+private theorem
     pairIdentity_mem_pairWordTupleSpan_padding_length_of_pairIdentity_mem_pairCumulativeSpan
     {d D : ℕ} [NeZero D]
-    (A B : MPSTensor d D) {S T : ℕ} (_hST : S ≤ T)
-    (_hI :
+    (A B : MPSTensor d D) {S T : ℕ} (hST : S ≤ T)
+    (hI :
       ((1 : Matrix (Fin D) (Fin D) ℂ), (1 : Matrix (Fin D) (Fin D) ℂ)) ∈
         pairCumulativeSpan A B S) :
     ∀ l : ℕ, l ≤ S →
       ((1 : Matrix (Fin D) (Fin D) ℂ), (1 : Matrix (Fin D) (Fin D) ℂ)) ∈
         Submodule.span ℂ (Set.range (pairWordTuple A B (T - l))) := by
-  -- This is the remaining exact-length extraction step: the cumulative identity
-  -- representation has to be converted into homogeneous identity padding at a
-  -- prescribed target length.
-  sorry
+  intro l hl
+  exact
+    pairIdentity_mem_pairWordTupleSpan_padding_gap_of_pairIdentity_mem_pairCumulativeSpan
+      A B hST hl hI
 
 private theorem
     exists_pairIdentity_mem_pairWordTupleSpan_padding_window_of_pairIdentity_mem_pairCumulativeSpan
