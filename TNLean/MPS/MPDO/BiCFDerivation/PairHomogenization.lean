@@ -1288,6 +1288,26 @@ sufficiently large single length.  A stronger way to prove this would be to
 produce a positive period and a complete residue window of full homogeneous
 pair-word spans, but the later argument needs only the identity-padding
 conclusion below. -/
+private theorem exists_pairWordTupleSpanTop_period_window_of_pairAlgSpan_eq_top
+    {d D : ℕ} [NeZero D]
+    (A B : MPSTensor d D)
+    (hAlg : pairAlgSpan A B = (⊤ : Subalgebra ℂ (MatD D × MatD D))) :
+    ∃ start period : ℕ, 0 < period ∧ PairWordTupleSpanTop A B period ∧
+      ∀ r : ℕ, r < period → PairWordTupleSpanTop A B (start + r) := by
+  have hAll : PairAllWordsSpanTop A B :=
+    pairAllWordsSpanTop_of_pairAlgSpan_eq_top A B hAlg
+  obtain ⟨S, hS⟩ :=
+    exists_pairCumulativeWordTupleSpanTop_of_pairAllWordsSpanTop A B hAll
+  have hIdCum :
+      ((1 : Matrix (Fin D) (Fin D) ℂ), (1 : Matrix (Fin D) (Fin D) ℂ)) ∈
+        pairCumulativeSpan A B S := by
+    rw [hS]
+    exact Submodule.mem_top
+  -- The finite-dimensional algebra argument reaches the cumulative cutoff `hS`.
+  -- The missing Burnside-Jacobson step is upgrading that cutoff to a positive
+  -- period and full residue window of homogeneous spans.
+  sorry
+
 private theorem exists_pairIdentity_mem_pairWordTupleSpan_eventually_of_pairAlgSpan_eq_top
     {d D : ℕ} [NeZero D]
     (A B : MPSTensor d D)
@@ -1295,9 +1315,10 @@ private theorem exists_pairIdentity_mem_pairWordTupleSpan_eventually_of_pairAlgS
     ∃ L : ℕ, ∀ n : ℕ, n ≥ L →
       ((1 : Matrix (Fin D) (Fin D) ℂ), (1 : Matrix (Fin D) (Fin D) ℂ)) ∈
         Submodule.span ℂ (Set.range (pairWordTuple A B n)) := by
-  have hAll : PairAllWordsSpanTop A B :=
-    pairAllWordsSpanTop_of_pairAlgSpan_eq_top A B hAlg
-  sorry
+  obtain ⟨start, period, hperiod_pos, hperiod, hwindow⟩ :=
+    exists_pairWordTupleSpanTop_period_window_of_pairAlgSpan_eq_top A B hAlg
+  exact pairIdentity_mem_pairWordTupleSpan_eventually_of_pairWordTupleSpanTop_period_window
+    A B hperiod_pos hperiod hwindow
 
 /-- Burnside–Jacobson identity padding for injective, non-gauge-equivalent
 same-dimension blocks.
