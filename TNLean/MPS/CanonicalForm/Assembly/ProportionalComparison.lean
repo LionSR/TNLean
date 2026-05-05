@@ -1781,6 +1781,92 @@ theorem afterBlocking_sectorComparison_zeroTail_of_commonPrimitiveBNTData
     hμA hμB hTPA hTPB hPrimA hPrimB hIrrA hIrrB hAntiA hAntiB hNotGpeA hNotGpeB
     hZeroTail hInjA hInjB hPacked.1
 
+/-- **Sector comparison from normal-CF-BNT common primitive data.**
+
+Assume the blocked-word relabeling statement for cyclic-sector data.  If the common primitive
+families supplied by the structural theorem are already in normal canonical form with BNT
+separation, and if they also carry proportional-decomposition data and one-site injectivity,
+then the zero-tail sector comparison follows.  The zero-tail equality is derived from the
+length-zero identity and the proportional comparison. -/
+theorem afterBlocking_sectorComparison_zeroTail_of_commonPrimitiveNormalBNTData_zeroTailIdentity
+    {d D₁ D₂ : ℕ}
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (hSame : SameMPV₂ A B)
+    (hReindexed : CommonSectorRelabelingHypothesis d)
+    (hRemaining : ∀ {p zeroTailA zeroTailB rA rB : ℕ}
+      {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+      [∀ x : Fin rA, NeZero (dimA x)]
+      [∀ x : Fin rB, NeZero (dimB x)]
+      {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
+      {blocksA : (x : Fin rA) → MPSTensor (blockPhysDim d p) (dimA x)}
+      {blocksB : (x : Fin rB) → MPSTensor (blockPhysDim d p) (dimB x)},
+      0 < p →
+      (∀ (N : ℕ) (σ : Fin N → Fin (blockPhysDim d p)),
+        mpv (blockTensor (d := d) (D := D₁) A p) σ =
+          mpv (zeroMPSTensor (blockPhysDim d p) zeroTailA) σ +
+            mpv (toTensorFromBlocks (d := blockPhysDim d p) (μ := μA) blocksA) σ) →
+      (∀ (N : ℕ) (σ : Fin N → Fin (blockPhysDim d p)),
+        mpv (blockTensor (d := d) (D := D₂) B p) σ =
+          mpv (zeroMPSTensor (blockPhysDim d p) zeroTailB) σ +
+            mpv (toTensorFromBlocks (d := blockPhysDim d p) (μ := μB) blocksB) σ) →
+      SameMPV₂Pos (blockTensor (d := d) (D := D₁) A p)
+        (toTensorFromBlocks (d := blockPhysDim d p) (μ := μA) blocksA) →
+      SameMPV₂Pos (blockTensor (d := d) (D := D₂) B p)
+        (toTensorFromBlocks (d := blockPhysDim d p) (μ := μB) blocksB) →
+      SameMPV₂Pos
+        (toTensorFromBlocks (d := blockPhysDim d p) (μ := μA) blocksA)
+        (toTensorFromBlocks (d := blockPhysDim d p) (μ := μB) blocksB) →
+      (∀ σ : Fin 0 → Fin (blockPhysDim d p),
+        (zeroTailA : ℂ) +
+            mpv (toTensorFromBlocks (d := blockPhysDim d p) (μ := μA) blocksA) σ =
+          (zeroTailB : ℂ) +
+            mpv (toTensorFromBlocks (d := blockPhysDim d p) (μ := μB) blocksB) σ) →
+      (∀ x, μA x ≠ 0) →
+      (∀ x, μB x ≠ 0) →
+      (∀ x, ∑ i : Fin (blockPhysDim d p), (blocksA x i)ᴴ * blocksA x i = 1) →
+      (∀ x, ∑ i : Fin (blockPhysDim d p), (blocksB x i)ᴴ * blocksB x i = 1) →
+      (∀ x, _root_.IsPrimitive
+        (transferMap (d := blockPhysDim d p) (D := dimA x) (blocksA x))) →
+      (∀ x, _root_.IsPrimitive
+        (transferMap (d := blockPhysDim d p) (D := dimB x) (blocksB x))) →
+      (∀ x, IsIrreducibleTensor (blocksA x)) →
+      (∀ x, IsIrreducibleTensor (blocksB x)) →
+      (∀ x, 0 < dimA x) →
+      (∀ x, 0 < dimB x) →
+      Σ DtotA : ℕ, Σ DtotB : ℕ,
+        { _hDecomp : ProportionalDecompositionData (d := blockPhysDim d p)
+            blocksA blocksB DtotA DtotB //
+          IsNormalCanonicalFormBNT (d := blockPhysDim d p) μA blocksA ∧
+          IsNormalCanonicalFormBNT (d := blockPhysDim d p) μB blocksB ∧
+          (∀ x, IsInjective (blocksA x)) ∧
+          (∀ x, IsInjective (blocksB x)) }) :
+    ∃ p' : ℕ, 0 < p' ∧
+    ∃ P Q : SectorDecomposition (blockPhysDim d p'),
+      SameMPV₂Pos (blockTensor (d := d) (D := D₁) A p') P.toTensor ∧
+      SameMPV₂Pos (blockTensor (d := d) (D := D₂) B p') Q.toTensor ∧
+      SameMPV₂ P.toTensor Q.toTensor ∧
+      HasBNTSectorData P ∧ HasBNTSectorData Q ∧
+      ∃ perm : Fin P.basisCount ≃ Fin Q.basisCount,
+      ∃ hCopies : ∀ j, P.copies j = Q.copies (perm j),
+      ∃ ζ : Fin P.basisCount → ℂ,
+        (∀ j, ζ j ≠ 0) ∧
+        ∀ j : Fin P.basisCount,
+          Finset.univ.val.map (P.weight j) =
+            Finset.univ.val.map
+              (fun q => ζ j * Q.weight (perm j) (Fin.cast (hCopies j) q)) := by
+  refine afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_bntCover
+    A B hSame hReindexed ?_
+  intro p zeroTailA zeroTailB rA rB dimA dimB _ _ μA μB blocksA blocksB hp
+    hAblocks hBblocks hAPos hBPos hNonzeroPos hZero hμA hμB hTPA hTPB hPrimA hPrimB
+    hIrrA hIrrB hDimA hDimB
+  obtain ⟨DtotA, DtotB, hPacked⟩ :=
+    hRemaining hp hAblocks hBblocks hAPos hBPos hNonzeroPos hZero hμA hμB hTPA hTPB
+      hPrimA hPrimB hIrrA hIrrB hDimA hDimB
+  rcases hPacked.2 with ⟨hA, hB, hInjA, hInjB⟩
+  refine ⟨DtotA, DtotB, ⟨?_⟩⟩
+  exact CommonPrimitiveBNTCoverHypotheses.ofNormalCanonicalFormBNT_zeroTailIdentity
+    hA hB hZero hInjA hInjB hPacked.1
+
 /-- **Sector comparison from relabeled common sectors and proportional-decomposition data.**
 
 Assume the blocked-word relabeling statement for cyclic-sector data.  Then the
