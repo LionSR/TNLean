@@ -1,0 +1,121 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{docs/paper-gaps/command}
+
+\title{The Direct-Sum Input from the Older MPS Representation Paper}
+\author{}
+\date{2026-05-05}
+
+\begin{document}
+\maketitle
+
+\section{Source statement}
+
+The finite-length direct-sum input used behind the block-injective
+canonical-form route is not proved in the 2016 MPDO source.  The 2016 paper
+cites the older representation paper for the block-injective-after-blocking
+step \cite[lines~340--345]{Cirac2016MPDO_arXiv}.  The local source for the
+older argument is \path{Papers/quant-ph_0608197/MPSarchive.tex}.
+
+That source first introduces the injectivity condition \(C1\): for some
+\(L_0\), the map
+\[
+  \Gamma_{L_0}(X)
+    =
+    \sum_{i_1,\ldots,i_{L_0}}
+      \operatorname{tr}(X A_{i_1}\cdots A_{i_{L_0}})
+      |i_1,\ldots,i_{L_0}\rangle
+\]
+is injective.  It immediately identifies this with the exact-length word
+products of length \(L_0\) spanning the full matrix algebra
+\cite[lines~888--908]{PerezGarcia2007MPSReps}.
+
+The technical algebraic lemma then says that, for nonzero \(D\times D\)
+matrices \(C\), every matrix \(X\) is a finite sum
+\[
+  X = \sum_i R_i C S_i .
+\]
+The proof reduces \(C\) to a matrix unit by elementary matrix operations and
+then reconstructs \(X\) from permuted copies of that matrix unit
+\cite[lines~1333--1344]{PerezGarcia2007MPSReps}.
+
+The next lemma is the direct-sum statement.  Its local hypotheses are important:
+the tensor has \(b \ge 2\) canonical blocks \(A^1,\ldots,A^b\), each block
+satisfies \(C1\), the common length is
+\(L_0=\max_j L_0^{A^j}\), the block sizes are ordered, and the block states are
+assumed pairwise different
+\cite[lines~1321--1330]{PerezGarcia2007MPSReps}.  Under these hypotheses, if
+\(L \ge 3(b-1)(L_0+1)\), then
+\[
+  \sum_{j=1}^b \mathcal G_L^{A^j}
+\]
+is a direct sum \cite[lines~1346--1408]{PerezGarcia2007MPSReps}.  The proof is
+by induction on the number of blocks.  The base case uses \(C1\) and the
+matrix-factorization lemma to show that a nontrivial linear dependence would
+force inclusion, then equality, of the two length-\(L_0+1\) MPS subspaces,
+contradicting uniqueness of the associated injective parent-space
+characterization.  The induction step isolates one block with a local
+projector, applies the induction hypothesis to the remaining blocks, and then
+uses \(C1\) plus the factorization lemma to force the remaining coefficient to
+vanish.
+
+\section{MPS translation}
+
+For the non-periodic Fundamental Theorem route, the mathematical consequence is
+homogeneous and positive-length.  After the canonical-form and
+basis-of-normal-tensors reduction, the selected representatives should admit one
+length at which their simultaneous word evaluations separate the direct-sum
+blocks.  In trace-dual form, if
+\[
+  \sum_{j=1}^g \operatorname{tr}(\Delta_j A_j^w)=0
+  \qquad\text{for every word } w \text{ of length } L,
+\]
+then each \(\Delta_j\) is zero.  This is the finite-length direct-sum span input
+needed by the BNT pair-separation route.
+
+This statement is not a consequence of the empty word and is not a cumulative
+span statement.  The exact length \(L\) is part of the content.  Therefore the
+formal proof should not replace the source input by a hypothesis that only says
+the cumulative pair algebra is full, nor by a theorem that uses the length-zero
+identity as padding.
+
+\section{Formal boundary}
+
+The current formal development includes downstream lemmas that depend on this input.
+\begin{itemize}
+  \item \leanid{WordTupleSpanTop} expresses exact-length span of a direct-sum
+        block family.
+  \item \leanid{PairWordTupleSpanTop} and \leanid{PairTraceSeparatingAt}
+        express the two-block trace-dual form used in the pair route.
+  \item The period-window theorems in
+        \path{TNLean/MPS/MPDO/BiCFDerivation/PairHomogenization.lean} turn a
+        positive homogeneous window of \leanid{PairWordTupleSpanTop} data into
+        homogeneous trace separation.
+  \item The BNT-level reformulations in
+        \path{TNLean/MPS/CanonicalForm/BlockDiagonalCommutant.lean} turn
+        pairwise period-window data into a common \leanid{WordTupleSpanTop}
+        length for a canonical-form BNT family.
+\end{itemize}
+
+\section{Conclusion}
+
+The present status is a theorem-level gap.  The source-paper theorem itself has
+not yet been formalized in MPS notation: from the canonical-form BNT
+representatives, their injectivity after the prescribed blocking, and their
+phase-gauge inequivalence, one must derive the exact-length direct-sum span, or
+equivalently the homogeneous trace-dual separation statement at one positive
+length.  Until that theorem is formalized, the final BNT pair-separation theorem
+should remain conditional on an explicit period-window or fixed-length span
+input.  A candidate formal theorem is too weak if it only records cumulative
+span fullness, and it is misleading if it claims homogeneous identity padding
+from the empty-word identity or from cumulative identity membership alone.
+
+\bibliographystyle{alpha}
+\bibliography{docs/paper-gaps/references}
+
+\end{document}

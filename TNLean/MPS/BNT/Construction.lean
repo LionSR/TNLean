@@ -15,8 +15,10 @@ Released under Apache 2.0 license as described in the file LICENSE.
 
 This module introduces `IsCanonicalFormBNT`, which extends `IsCanonicalForm` with the
 requirement that distinct blocks are not gauge-phase equivalent (i.e., equivalent blocks
-have already been merged). This captures the "basis of normal tensors" (BNT) property of
-Definition 4.2 / Proposition char-BNT in arXiv:2011.12127 and arXiv:1606.00608, lines 1145–1148.
+have already been merged). The blocks are already chosen as basis-of-normal-tensors
+representatives. This should not be confused with the source term "block-injective canonical
+form" (biCF), which is the separate exact-length direct-sum span condition from
+arXiv:1606.00608, lines 317–345.
 
 ## Main results
 
@@ -30,7 +32,8 @@ Definition 4.2 / Proposition char-BNT in arXiv:2011.12127 and arXiv:1606.00608, 
    - Same-dimension case: `mpvOverlap_tendsto_zero` (using `blocks_not_equiv` to supply
      `¬GaugePhaseEquiv`)
 
-3. **`isBNT_of_separated_CFBNT_data`** and the bundled-data formulation **`IsCanonicalFormBNT.isBNT`**:
+3. **`isBNT_of_separated_CFBNT_data`** and the bundled-data formulation
+   **`IsCanonicalFormBNT.isBNT`**:
    a canonical-form decomposition into a basis of normal tensors yields a valid `IsBNT`
    structure, assembling all overlap and independence properties.
 
@@ -78,7 +81,8 @@ gauge-phase-equivalent blocks with equal moduli. The base `IsCanonicalForm` only
 non-increasing (`Antitone`) moduli, matching the paper definitions.
 
 In the language of arXiv:2011.12127 Definition 4.2, this corresponds to a canonical form where
-each block in the basis of normal tensors is represented by a single CF block. -/
+each block in the basis of normal tensors is represented by a single CF block. It is not
+the paper's biCF condition; block-injectivity is a further fixed-length span input. -/
 structure IsCanonicalFormBNT {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k)) : Prop extends
     IsCanonicalForm μ A where
@@ -114,7 +118,8 @@ def toHasNormalizedSelfOverlap (hCF : IsCanonicalFormBNT μ A) :
     HasNormalizedSelfOverlap (d := d) A :=
   hCF.toIsCanonicalForm.toHasNormalizedSelfOverlap
 
-/-- Rebuild `IsCanonicalFormBNT` from the additive split formulation plus the BNT separation assumption. -/
+/-- Rebuild `IsCanonicalFormBNT` from the additive split formulation plus the BNT
+separation assumption. -/
 def ofSeparatedData
     (hInj : HasInjectiveBlocks (d := d) A)
     (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
