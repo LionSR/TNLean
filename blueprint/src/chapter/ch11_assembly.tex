@@ -888,6 +888,23 @@ single weighted block.
 	the required MPV-phase equivalence.
 \end{proof}
 
+\begin{theorem}[Common phase cover from a bijective phase matching]%
+\label{thm:common_phase_cover_of_equiv_phase}
+	\lean{MPSTensor.nonempty_mpvCommonPhaseCover_of_equiv_phase}
+	\leanok
+	\uses{def:mpv_common_phase_cover, def:mpv_block_phase_equiv}
+	If two block families are matched by a bijection and corresponding blocks have
+	the same matrix product vectors up to a nonzero scalar power depending on the
+	length, then the two families have a common MPV phase cover.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	Take the first block family as the common family. The bijection and its inverse
+	give the two class maps, and the assumed phase match gives the second
+	family's phase data.
+\end{proof}
+
 \begin{theorem}[Span equality from proportional-decomposition data]%
 \label{thm:nonzero_block_span_eq_of_proportional_decomposition}
 	\lean{MPSTensor.mpv_span_eq_of_proportionalDecompositionConclusion}
@@ -904,6 +921,22 @@ single weighted block.
 		lem:mpv_common_phase_cover_span_eq}
 	First form the common MPV phase cover from the proportional-decomposition
 	comparison. The common-cover span lemma then gives the stated span equality.
+\end{proof}
+
+\begin{theorem}[Span equality from a bijective phase matching]%
+\label{thm:nonzero_block_span_eq_of_equiv_phase}
+	\lean{MPSTensor.mpv_span_eq_of_equiv_phase}
+	\leanok
+	\uses{thm:common_phase_cover_of_equiv_phase,
+		lem:mpv_common_phase_cover_span_eq}
+	A bijective phase matching gives equality, for every system size, of the
+	finite-length MPV spans of the two block families.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	First form the common MPV phase cover from the bijective phase matching. The
+	common-cover span lemma then gives the stated span equality.
 \end{proof}
 
 \begin{theorem}[Overlap-span data from a common phase cover]%
