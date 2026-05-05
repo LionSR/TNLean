@@ -364,8 +364,8 @@ theorem exists_pos_productWordSpan_of_isCanonicalFormBNT_of_identity_padding
   exact exists_pos_productWordSpan_of_pairTraceSeparatingAll_of_identity_padding μ A hCF
     (pairTraceSeparatingAll_of_isCanonicalFormBNT μ A hCF) hPad
 
-/-- Canonical-form/BNT data plus period-window identity-padding certificates give one
-homogeneous pair trace-separating length for every ordered pair of distinct blocks.
+/-- Canonical-form/BNT data plus period-window identity-padding certificates give a common
+homogeneous trace-separating length for all ordered pairs of distinct blocks.
 
 The BNT data supply all-words pair trace separation.  The period-window hypotheses are the
 remaining Burnside-Jacobson input needed to convert the cumulative separation data to one
