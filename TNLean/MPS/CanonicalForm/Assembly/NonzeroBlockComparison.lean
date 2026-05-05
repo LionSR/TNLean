@@ -2,7 +2,7 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import TNLean.MPS.CanonicalForm.Assembly.TPPrimitiveReduction
+import TNLean.MPS.CanonicalForm.Assembly.ZeroTailTransport
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
 open Filter
@@ -12,7 +12,7 @@ open Filter
 
 When two matrix-product-vector families are written as a zero-tail contribution
 plus a weighted nonzero block tensor, equality at positive lengths compares the
-nonzero parts directly.  The length-zero equation records the residual
+nonzero parts directly. The length-zero equation records the residual
 zero-tail contribution, and full equality of the nonzero parts follows once the
 zero tails agree.
 
