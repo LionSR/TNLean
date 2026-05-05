@@ -5,6 +5,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.MPS.CanonicalForm.BlockDiagonalCommutant.ProjectionSpan
 import TNLean.MPS.BNT.Construction
 import TNLean.MPS.MPDO.BiCFDerivation
+import TNLean.MPS.MPDO.BiCFDerivation.PairHomogenization
 import TNLean.MPS.SharedInfra.BlockAssembly
 
 /-!
