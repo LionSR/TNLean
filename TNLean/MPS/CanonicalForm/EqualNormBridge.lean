@@ -19,17 +19,17 @@ open Filter
 /-!
 # Equal-norm comparison for restricted norm-class collapse hypotheses
 
-This file relates the BNT overlap/spectral theory to the
-restricted norm-class collapse lemma (`exists_bnt_grouping`), which requires `hMPVEq`
-for equal-norm blocks.
+This file relates the BNT overlap/spectral theory to the restricted norm-class
+collapse: blocks with the same weight norm must already generate the same MPS
+family before they can be represented by one sector.
 
 ## Background
 
 The canonical-form reduction produces TP + primitive blocks with
 nonzero weights. The restricted norm-class collapse groups blocks by weight norm into a
-`SectorDecomposition`, and requires one hypothesis for equal-norm blocks:
+sector decomposition, and requires one mathematical input for equal-norm blocks:
 
-* `hMPVEq`: equal-norm blocks have `SameMPV₂`.
+* equal-norm blocks generate the same MPS family.
 
 The grouped sector's bond dimension is fixed by the chosen representative of each
 norm class, so no separate equal-dimension hypothesis is needed.

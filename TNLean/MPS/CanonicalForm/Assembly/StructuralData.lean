@@ -179,14 +179,14 @@ theorem bilateral_commonPeriod_blocking_tp_primitive_normal
   · exact isNormal_blockTensor_of_isNormal (d := d) (D := D₁) A hp hNormalA
   · exact isNormal_blockTensor_of_isNormal (d := d) (D := D₂) B hp hNormalB
 
-/-- **Bilateral one-sided structural decomposition after blocking.**
+/-- **Independent one-sided structural decompositions after blocking.**
 
-For any two MPS tensors `A, B`, this theorem gives the one-sided reduction data
+For any two MPS tensors `A, B`, this lemma gives the one-sided reduction data
 on both sides: after blocking, each tensor admits a decomposition into a
 zero-tail tensor and TP blocks with primitive transfer maps, nonzero weights,
 and positive bond dimensions.
 
-This theorem intentionally has no `SameMPV₂ A B` hypothesis: it does not compare
+This lemma intentionally has no `SameMPV₂ A B` hypothesis: it does not compare
 the two blocked families. The comparison enters only in later statements that
 also keep blocked `SameMPV₂` data. -/
 lemma exists_bilateral_tp_primitive_blockDecomp_after_blocking
