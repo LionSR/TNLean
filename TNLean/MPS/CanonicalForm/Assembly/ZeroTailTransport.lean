@@ -8,19 +8,22 @@ import TNLean.MPS.Core.BlockingInfrastructure
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
 
 /-!
-# Zero-tail MPV transport
+# All-zero-block MPV transport
 
 This module contains generic lemmas for transporting decompositions of an MPS
-tensor into a zero tail plus a nonzero part.
+tensor into an all-zero-block contribution plus a nonzero part.  The `zeroTail`
+names in this file are the formal variables for the total bond dimension of the
+all-zero leftover blocks, corresponding to the source-paper allowance
+`∑ k, D_k ≤ D`.
 -/
 
 namespace MPSTensor
 
 /-! ## Zero-tail and weight transport through blocking -/
 
-/-- Reblocking preserves a zero-tail/nonzero-part MPV decomposition.
+/-- Reblocking preserves an all-zero-block/nonzero-part MPV decomposition.
 
-The positive-period hypothesis is exactly what keeps the zero-tail contribution
+The positive-period hypothesis is exactly what keeps the all-zero-block contribution
 confined to length zero after blocking: a blocked chain of positive length expands
 to a positive number of original sites. -/
 theorem zeroTail_mpv_decomp_blockTensor
@@ -49,7 +52,7 @@ theorem zeroTail_mpv_decomp_blockTensor
   congr 1
   exact (mpv_blockTensor_eq_mpv_blockedFlatConfig (d := d) nonzeroPart p σ).symm
 
-/-- Reblocking a zero-tail plus weighted nonzero-block decomposition transports every
+/-- Reblocking an all-zero-block plus weighted nonzero-block decomposition transports every
 nonzero-block weight to the corresponding blocking power. -/
 theorem zeroTail_toTensorFromBlocks_blockPower
     {d D r z p : ℕ} {dim : Fin r → ℕ}
@@ -84,7 +87,7 @@ theorem zeroTail_toTensorFromBlocks_blockPower
             (fun k => blockTensor (d := d) (D := dim k) (blocks k) p)) σ := by
           rw [hNonzeroPart N σ]
 
-/-- Transport a zero-tail decomposition along an MPV equivalence of its nonzero part. -/
+/-- Transport an all-zero-block decomposition along an MPV equivalence of its nonzero part. -/
 theorem zeroTail_eq_of_sameMPV₂
     {d D L L' z : ℕ} (A : MPSTensor d D) (live : MPSTensor d L)
     (flat : MPSTensor d L')

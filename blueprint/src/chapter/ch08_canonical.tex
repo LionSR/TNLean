@@ -999,6 +999,12 @@ In the irreducible block decomposition, some blocks may have all-zero
 Kraus operators. Such blocks contribute to the MPV only at word length
 $N = 0$ (where their contribution equals their bond dimension).
 The following results separate the zero blocks from the nonzero blocks.
+Following arXiv:1606.00608, equation~(8), this is the case
+$\sum_k D_k \le D$, where ``there can be zero blocks''.  In this
+case the \emph{zero-tail bond dimension} is the total bond
+dimension of these all-zero leftover blocks.  It is not an additional
+source-paper structure; it is a name for the all-zero summand
+$\mathbf{0}_{d,D_0}$ used to retain the $N=0$ MPV coefficient.
 
 \begin{definition}[Zero MPS tensor]\label{def:zero_mps_tensor}
 	\lean{MPSTensor.zeroMPSTensor}
@@ -1046,7 +1052,7 @@ The following results separate the zero blocks from the nonzero blocks.
 	\]
 	for every spin configuration $\sigma$ of length $N$.
 	At $N = 0$ this reads $D = D_0 + \sum_{k=1}^r D_k$.
-	For $N \ge 1$ the zero-tail term vanishes.
+	For $N \ge 1$ this all-zero, zero-tail term vanishes.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -1069,7 +1075,8 @@ The following results separate the zero blocks from the nonzero blocks.
 	\uses{def:irreducible_tensor, def:zero_mps_tensor}
 	For any MPS tensor $A$, there exist:
 	\begin{enumerate}
-		\item a zero-tail bond dimension $D_0$,
+		\item a zero-tail bond dimension $D_0$, namely the total bond
+		      dimension of the separated all-zero blocks,
 		\item nontrivial blocks $(B_k)_{k=1}^r$ with nonzero weights
 		      $(\mu_k)_{k=1}^r$, each block irreducible and
 		      left-canonical ($\sum_i (B_k^i)^\dagger B_k^i = \Id$),
@@ -3303,7 +3310,8 @@ The following results separate the zero blocks from the nonzero blocks.
 	\leanok
 	\uses{def:blocked_tensor, def:zero_mps_tensor, def:tensor_from_blocks}
 	Each of two tensors admits some blocking after which it decomposes
-	independently into a zero-tail tensor plus left-canonical blocks with
+	independently into an all-zero tensor of zero-tail bond dimension plus
+	left-canonical blocks with
 	primitive transfer maps, nonzero scalar weights, and positive bond
 	dimensions. Moreover, at every blocked system size and every blocked word,
 	the MPV of the blocked tensor is the sum of the zero-tail MPV and the MPV of
@@ -3324,15 +3332,15 @@ The following results separate the zero blocks from the nonzero blocks.
 	Apply Theorem~\ref{thm:tp_primitive_blockdecomp} separately to the two tensors.
 \end{proof}
 
-\begin{theorem}[Zero-tail decomposition after blocking]%
+\begin{theorem}[All-zero-block contribution after blocking]%
 	\label{thm:zero_tail_decomp_block_tensor}
 	\lean{MPSTensor.zeroTail_mpv_decomp_blockTensor}
 	\leanok
 	\uses{def:blocked_tensor, def:zero_mps_tensor}
-	Suppose $A$ is expressed as a zero-tail tensor plus a nonzero part $L$ at all
-	system sizes. For every positive blocking length $p$, the blocked tensor
+	Suppose $A$ is expressed as an all-zero tensor of zero-tail bond dimension
+	plus a nonzero part $L$ at all system sizes. For every positive blocking length $p$, the blocked tensor
 	$A^{[p]}$ is expressed as the same zero-tail bond dimension plus $L^{[p]}$.
-	The zero-tail term still contributes only at blocked length $0$.
+	The all-zero term still contributes only at blocked length $0$.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -3341,13 +3349,13 @@ The following results separate the zero blocks from the nonzero blocks.
 	unchanged by the reblocking convention.
 \end{proof}
 
-\begin{theorem}[Zero-tail weighted block decomposition after blocking]%
+\begin{theorem}[All-zero-block weighted block decomposition after blocking]%
 	\label{thm:zero_tail_to_tensor_from_blocks_block_power}
 	\lean{MPSTensor.zeroTail_toTensorFromBlocks_blockPower}
 	\leanok
 	\uses{thm:zero_tail_decomp_block_tensor, thm:block_tensor_to_tensor_from_blocks,
 	      def:tensor_from_blocks}
-	Suppose $A$ is expressed as a zero-tail tensor plus the weighted nonzero-block
+	Suppose $A$ is expressed as an all-zero tensor of zero-tail bond dimension plus the weighted nonzero-block
 	tensor $\bigoplus_k \mu_k B_k$. For every positive blocking length $p$,
 	$A^{[p]}$ is expressed as the same zero-tail contribution plus the weighted
 	blocked nonzero tensor $\bigoplus_k \mu_k^p B_k^{[p]}$.
@@ -3359,21 +3367,22 @@ The following results separate the zero blocks from the nonzero blocks.
 	Theorem~\ref{thm:block_tensor_to_tensor_from_blocks}.
 \end{proof}
 
-\begin{theorem}[Zero-tail identity for nonzero block tensors]%
+\begin{theorem}[Length-zero identity for nonzero block tensors]%
 \label{thm:nonzero_block_zero_tail_identity}
 	\lean{MPSTensor.nonzeroBlock_positive_sameMPV₂_and_zeroTail_identity_of_sameMPV₂}
 	\leanok
 	\uses{def:same_mpv2, def:zero_mps_tensor, def:tensor_from_blocks}
-	Suppose two tensors have the same MPV family and each is expressed as a
-	zero-tail tensor plus a weighted nonzero-block tensor. Then the two nonzero-block
-	tensors agree on every positive system size, and at size $0$ the equality is
+	Suppose two tensors have the same MPV family and each is expressed as an
+	all-zero tensor of zero-tail bond dimension plus a weighted nonzero-block
+	tensor. Then the two nonzero-block tensors agree on every positive system
+	size, and at size $0$ the equality is
 	exactly the equality of the two zero-tail contributions plus the two nonzero
 	bond-dimension traces.
 \end{theorem}
 
 \begin{proof}\leanok
 	\uses{def:zero_mps_tensor}
-	For $N>0$, the MPV of a zero-tail tensor is zero, so the two decompositions
+	For $N>0$, the MPV of the all-zero tensor is zero, so the two decompositions
 	can be compared directly through the common MPV family. For $N=0$, the
 	zero-tail MPV is its bond dimension, giving the stated length-zero identity.
 \end{proof}
@@ -3398,7 +3407,7 @@ The following results separate the zero blocks from the nonzero blocks.
 	dimension.
 \end{proof}
 
-\begin{theorem}[Equal zero tails give full nonzero-part MPV equality]%
+\begin{theorem}[Equal leftover zero-block dimensions give full nonzero-part MPV equality]%
 \label{thm:nonzero_block_same_mpv_zero_tail_eq}
 	\lean{MPSTensor.nonzeroBlock_sameMPV₂_of_sameMPV₂_of_zeroTail_eq}
 	\leanok
@@ -3436,14 +3445,14 @@ The following results separate the zero blocks from the nonzero blocks.
 	blocking the original equality.
 \end{proof}
 
-\begin{theorem}[Cyclic sectors after the zero-tail split]%
+\begin{theorem}[Cyclic sectors after all-zero-block separation]%
 \label{thm:ft_after_blocking_per_block_cyclic_live_zero_tail}
 	\lean{MPSTensor.afterBlocking_perBlockCyclicDataWithZeroTail_of_sameMPV₂}
 	\leanok
 	\uses{thm:tp_gauge_arbitrary, thm:nonzero_block_zero_tail_identity,
 		def:primitive_irreducible_cyclic_sectors,
 		thm:has_primitive_irreducible_cyclic_sectors_tp_irr}
-	If two tensors generate the same MPV family, then after the zero-tail split and
+	If two tensors generate the same MPV family, then after all-zero-block separation and
 	trace-preserving gauge each side has irreducible nonzero-weight blocks.
 	The nonzero-block tensors agree at all positive system sizes, while the
 	length-zero case is included as the exact zero-tail identity.
@@ -3455,8 +3464,8 @@ The following results separate the zero blocks from the nonzero blocks.
 \begin{proof}\leanok
 	\uses{thm:tp_gauge_arbitrary, thm:nonzero_block_zero_tail_identity,
 		thm:has_primitive_irreducible_cyclic_sectors_tp_irr}
-	Apply the arbitrary-tensor TP-gauge theorem separately to $A$ and $B$. The
-	zero-tail identity theorem compares the two resulting nonzero parts at
+		Apply the arbitrary-tensor TP-gauge theorem separately to $A$ and $B$. The
+		length-zero identity theorem compares the two resulting nonzero parts at
 	positive lengths and gives the $N=0$ identity. Finally apply
 	Theorem~\ref{thm:has_primitive_irreducible_cyclic_sectors_tp_irr} to every
 	trace-preserving irreducible nonzero-weight block.
