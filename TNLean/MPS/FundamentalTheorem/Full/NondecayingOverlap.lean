@@ -2,7 +2,7 @@
 Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import TNLean.MPS.FundamentalTheorem.Full.Helpers
+import TNLean.MPS.FundamentalTheorem.Full.DominantWeight
 
 /-!
 # Non-decaying overlap existence for equal-MPV BNT families
@@ -21,9 +21,10 @@ heterogeneous equal-case fundamental theorem — the block matching stage that f
 ## Implementation notes
 
 The proof proceeds by strong induction on `rA + rB` combined with a dominant-weight
-projection argument. Convergence helpers live in
-`TNLean.MPS.FundamentalTheorem.OverlapConvergenceAux`; small overlap/inner-product
-helpers live in `TNLean.MPS.FundamentalTheorem.Full.Helpers`.
+projection argument. Convergence auxiliary lemmas live in
+`TNLean.MPS.FundamentalTheorem.OverlapConvergenceAux`; the dominant-weight comparison
+lives in `TNLean.MPS.FundamentalTheorem.Full.DominantWeight`; small
+overlap/inner-product auxiliary lemmas live in `TNLean.MPS.FundamentalTheorem.Full.Helpers`.
 
 ## References
 
@@ -134,66 +135,11 @@ lemma exists_nondecaying_overlap_of_sameMPV₂_CFBNT
   have hμB_le : ∀ k : Fin rB, ‖μB k‖ ≤ ‖μB ⟨0, hrB_pos⟩‖ := by
     intro k; exact hB.toIsCanonicalForm.mu_antitone
       (show (⟨0, hrB_pos⟩ : Fin rB) ≤ k from Fin.mk_le_mk.mpr (Nat.zero_le _))
-  -- Convergence helpers (`tendsto_inner_zero`, `tendsto_inner_one`,
-  -- `bounded_mul_tendsto_zero`, `geometric_mul_bounded_tendsto_zero`,
-  -- `geometric_mul_inner_tendsto_zero`, `sum_tendsto_one_of_diag`) are in
-  -- `TNLean.MPS.FundamentalTheorem.OverlapConvergenceAux`.
   -- ── Step A: Prove ‖μA 0‖ = ‖μB 0‖. ──
   have mu0_norm_eq : ‖μA ⟨0, hrA_pos⟩‖ = ‖μB ⟨0, hrB_pos⟩‖ := by
-    by_contra hne
-    rcases lt_or_gt_of_ne hne with h_lt | h_gt
-    · -- Case ‖μA 0‖ < ‖μB 0‖: normalized identity with X = B 0, divide by (μB 0)^N.
-      -- LHS → 0 (all A-ratios < 1); RHS → 1 (B-self-overlap). Contradiction.
-      have h_eq := normalized_identity (B ⟨0, hrB_pos⟩) (μB ⟨0, hrB_pos⟩) hμB_ne
-      have hLHS : Tendsto (fun N => ∑ j, (μA j / μB ⟨0, hrB_pos⟩) ^ N *
-          mpvInner (d := d) (B ⟨0, hrB_pos⟩) (A j) N) atTop (nhds 0) := by
-        have := tendsto_finset_sum (Finset.univ : Finset (Fin rA))
-          (fun (j : Fin rA) _ => show Tendsto (fun N => (μA j / μB ⟨0, hrB_pos⟩) ^ N *
-            mpvInner (d := d) (B ⟨0, hrB_pos⟩) (A j) N) atTop (nhds (0 : ℂ)) from ?_)
-        · simpa using this
-        -- Each term: geometric(< 1) × Cauchy-Schwarz-bounded inner product → 0.
-        have hratio : ‖μA j / μB ⟨0, hrB_pos⟩‖ < 1 := by
-          rw [norm_div]; exact (div_lt_one (norm_pos_iff.mpr hμB_ne)).mpr
-            (lt_of_le_of_lt (hμA_le j) h_lt)
-        exact geometric_mul_inner_tendsto_zero _ _ _ hratio (hB_self _) (hA_self j)
-      -- RHS → 1: the ⟨0,_⟩ term → 1, cross terms → 0.
-      have hRHS : Tendsto (fun N => ∑ k, (μB k / μB ⟨0, hrB_pos⟩) ^ N *
-          mpvInner (d := d) (B ⟨0, hrB_pos⟩) (B k) N) atTop (nhds 1) :=
-        sum_tendsto_one_of_diag (hμ0 := hμB_ne) (j0 := ⟨0, hrB_pos⟩) rfl (hB_inner_diag _)
-          (fun k hk => by
-            rw [norm_div]
-            exact (div_lt_one (norm_pos_iff.mpr hμB_ne)).mpr
-              (hB.mu_strict_anti (by
-                simp only [Fin.lt_def]; exact Nat.pos_of_ne_zero (by
-                  intro h; exact hk (Fin.ext h)))))
-          (fun k hk => hB_inner_off _ _ hk.symm)
-      exact zero_ne_one (tendsto_nhds_unique (hLHS.congr (fun N => h_eq N)) hRHS)
-    · -- Case ‖μA 0‖ > ‖μB 0‖: symmetric argument with X = A 0, divide by (μA 0)^N.
-      have h_eq := normalized_identity (A ⟨0, hrA_pos⟩) (μA ⟨0, hrA_pos⟩) hμA_ne
-      have hLHS : Tendsto (fun N => ∑ j, (μA j / μA ⟨0, hrA_pos⟩) ^ N *
-          mpvInner (d := d) (A ⟨0, hrA_pos⟩) (A j) N) atTop (nhds 1) :=
-        sum_tendsto_one_of_diag (hμ0 := hμA_ne) (j0 := ⟨0, hrA_pos⟩) rfl (hA_inner_diag _)
-          (fun j hj => by
-            rw [norm_div]
-            exact (div_lt_one (norm_pos_iff.mpr hμA_ne)).mpr
-              (hA.mu_strict_anti (by
-                simp only [Fin.lt_def]; exact Nat.pos_of_ne_zero (by
-                  intro h; exact hj (Fin.ext h)))))
-          (fun j hj => hA_inner_off _ _ hj.symm)
-      have hRHS : Tendsto (fun N => ∑ k : Fin rB, (μB k / μA ⟨0, hrA_pos⟩) ^ N *
-          mpvInner (d := d) (A ⟨0, hrA_pos⟩) (B k) N) atTop (nhds (0 : ℂ)) := by
-        have hterm : ∀ k : Fin rB,
-            Tendsto (fun N => (μB k / μA ⟨0, hrA_pos⟩) ^ N *
-              mpvInner (d := d) (A ⟨0, hrA_pos⟩) (B k) N) atTop (nhds (0 : ℂ)) := by
-          intro k
-          have hratio : ‖μB k / μA ⟨0, hrA_pos⟩‖ < 1 := by
-            rw [norm_div]; exact (div_lt_one (norm_pos_iff.mpr hμA_ne)).mpr
-              (lt_of_le_of_lt (hμB_le k) h_gt)
-          exact geometric_mul_inner_tendsto_zero _ _ _ hratio (hA_self _) (hB_self k)
-        have := tendsto_finset_sum (Finset.univ : Finset (Fin rB))
-          (fun (k : Fin rB) _ => hterm k)
-        simpa using this
-      exact one_ne_zero (tendsto_nhds_unique (hLHS.congr (fun N => h_eq N)) hRHS)
+    simpa [hrA_pos, hrB_pos] using
+      dominant_weight_norm_eq_of_sameMPV₂_CFBNT
+        (A := A) (B := B) hA hB hrA hrB hSumState hA_self hB_self hA_cross hB_cross
   -- ── Steps B+C: Match existence via dominant-weight contradiction + induction. ──
   set a0 : Fin rA := ⟨0, hrA_pos⟩
   set b0 : Fin rB := ⟨0, hrB_pos⟩
