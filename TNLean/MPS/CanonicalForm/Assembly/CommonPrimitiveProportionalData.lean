@@ -11,7 +11,7 @@ open scoped Matrix BigOperators ComplexOrder MatrixOrder
 # Common primitive proportional data
 
 This file records the span, phase-cover, proportional-comparison, and BNT-cover
-hypotheses for common primitive nonzero-sector families.  These packages express
+hypotheses for common primitive nonzero-sector families.  These structures express
 the remaining data needed to pass from the common-sector structural theorem to
 the BNT overlap-rigidity comparison.
 
