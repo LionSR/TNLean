@@ -119,6 +119,21 @@ theorem commonRepresentativeDim_pos (F : CommonBlockedCyclicSectorFamily blocks)
   simpa [commonRepresentativeDim] using
     F.commonSectorBlock_dim_pos k ⟨0, F.period_pos k⟩
 
+/-- Each representative common-sector block becomes injective after a further
+blocking.  This deliberately does not assert one-site injectivity at the chosen
+common blocking length. -/
+theorem commonRepresentativeBlocksAt_exists_blockTensor_isInjective
+    (F : CommonBlockedCyclicSectorFamily blocks)
+    {p' : ℕ} (hp : F.p = p') (k : Fin r) :
+    ∃ L : ℕ, IsInjective (blockTensor (F.commonRepresentativeBlocksAt hp k) L) := by
+  haveI : NeZero (F.commonRepresentativeDim k) :=
+    ⟨Nat.ne_of_gt (F.commonRepresentativeDim_pos k)⟩
+  exact exists_blockTensor_isInjective_of_tp_primitive_irreducible
+    (F.commonRepresentativeBlocksAt hp k)
+    (F.commonRepresentativeBlocksAt_tp hp k)
+    (F.commonRepresentativeBlocksAt_primitive hp k)
+    (F.commonRepresentativeBlocksAt_irreducible hp k)
+
 /-- A representative common-sector family is a normal canonical form once its transported
 representative weights are sorted by strictly decreasing modulus. -/
 theorem isNormalCanonicalForm_commonRepresentativeBlocks
