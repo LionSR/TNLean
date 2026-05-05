@@ -206,7 +206,8 @@ used in this chapter.
 \end{theorem}
 
 \begin{proof}
-	\uses{thm:ft_equal_explicit, thm:mpv_decomposition,
+	\uses{thm:ft_equal_explicit, thm:fundamentalTheorem_equalMPV_CFBNT_hetero,
+	      thm:mpv_decomposition,
 	      rem:cf_coeff_arrays, thm:route_b_equal,
 	      thm:afterBlocking_sectorComparison_reindexed_bntCover,
 	      thm:common_phase_cover_of_proportional_decomposition}
@@ -220,21 +221,24 @@ used in this chapter.
 	the sector-weight multisets from these identities.
 
 	The remaining synchronization statement for the bare equal-MPV theorem must
-	derive the coefficient identities and common phase data directly from equality
-	of the full MPV families.  The after-blocking comparison theorem
+	assemble the block-matching data into equality of the weighted block-diagonal
+	tensors.  The heterogeneous equal-case theorem
+	(Theorem~\ref{thm:fundamentalTheorem_equalMPV_CFBNT_hetero}) now proves the
+	block-count, bond-dimension, and gauge-phase matching directly from equality
+	of the full MPV families, without explicit coefficient limits.  The
+	after-blocking comparison theorem
 	(Theorem~\ref{thm:afterBlocking_sectorComparison_reindexed_bntCover}) gives the
 	matched sector-weight conclusion once BNT-cover comparison data are supplied.
 	Theorem~\ref{thm:common_phase_cover_of_proportional_decomposition} explains
 	how proportional block comparisons supply common phases.  Completing this
-	theorem therefore amounts to deriving the BNT-cover, overlap-span, or
-	common-phase hypotheses for the canonical decompositions produced from the
-	bare equality assumption.  Once those data are available, the phases are
-	absorbed into the recovered weights and the blockwise conjugacies assemble
-	into a global gauge equivalence.
+	theorem therefore amounts to deriving the BNT-cover and sector-weight data for
+	the canonical decompositions produced from the bare equality assumption.  Once
+	those data are available, the phases are absorbed into the recovered weights
+	and the blockwise conjugacies assemble into a global gauge equivalence.
 \end{proof}
 
-\begin{theorem}[Fundamental Theorem --- equal MPV case with explicit coefficients]\label{thm:ft_equal_explicit}
-	\lean{MPSTensor.fundamentalTheorem_equalMPV_full}
+\begin{theorem}[Equal MPV comparison with explicit coefficients]\label{thm:ft_equal_explicit}
+	\lean{MPSTensor.fundamentalTheorem_equalMPV_of_explicit_coefficients}
 	\leanok
 	\uses{def:cf_bnt, def:gauge_equiv}
 	Let $A_{\mathrm{tot}}$ and $B_{\mathrm{tot}}$ be MPS tensors
@@ -708,8 +712,8 @@ single weighted block.
 
 \begin{proof}
 	\leanok
-	\uses{thm:bnt_perm_simple, thm:sector_basis_pre_matching_to_matching}
-	The permutation-rigidity theorem for bases of normal tensors gives a
+	\uses{lem:bnt_perm_simple, thm:sector_basis_pre_matching_to_matching}
+	The permutation-rigidity lemma for bases of normal tensors gives a
 	permutation, the matched bond dimensions, and the gauge-phase equivalences
 	of the basis blocks, hence a sector basis pre-matching. Asymptotic
 	orthonormality gives the BNT linear-independence condition, and

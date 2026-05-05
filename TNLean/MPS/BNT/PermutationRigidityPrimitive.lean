@@ -365,11 +365,11 @@ theorem exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho
 end MPSTensor
 
 /-!
-## Fundamental Theorem — Theorem 4.4, span-equality formulation (variable block count)
+## Permutation rigidity from equal spans
 
 This section applies the permutation-rigidity lemma for BNT decompositions
 (`MPSTensor.exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho` above) into a more
-general **paper-style** statement where the two BNT families may have **different**
+general auxiliary statement where the two BNT families may have **different**
 numbers of blocks (`gA ≠ gB`).
 
 The key new ingredient is a proof that the equal-span hypothesis forces
@@ -396,14 +396,14 @@ entangled pair states*, Rev. Mod. Phys. **93** (2021) 045003; arXiv:2011.12127.
 namespace MPSTensor
 
 /--
-**Theorem 4.4 (primitive, basis-of-normal-tensors permutation step), span-equality formulation.**
+**Primitive basis-of-normal-tensors permutation step, span-equality formulation.**
 
 Two BNT-like families with possibly different numbers of blocks `gA`, `gB`
 that are injective, normalised, asymptotically orthonormal, and span the same
 MPV subspace at every system size must have `gA = gB` and agree blockwise up to
 a permutation, dimension equality, and gauge-phase equivalence.
 -/
-theorem exists_eq_numBlocks_and_equiv_gaugePhase_of_overlapOrtho
+lemma exists_eq_numBlocks_and_equiv_gaugePhase_of_overlapOrtho
     {d gA gB : ℕ}
     {dimA : Fin gA → ℕ} {dimB : Fin gB → ℕ}
     [∀ j, NeZero (dimA j)] [∀ j, NeZero (dimB j)]

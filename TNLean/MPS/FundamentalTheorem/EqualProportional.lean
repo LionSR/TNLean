@@ -312,7 +312,7 @@ This theorem states the equal-case conclusion that *is* derivable from those res
 same coefficient hypotheses as the proportional theorem, equal MPVs force the phase-corrected
 weights to match blockwise.  After reindexing the `B`-family by the permutation from the
 proportional FT, the assembled weighted block tensors are globally gauge equivalent. -/
-theorem fundamentalTheorem_equalMPV_full
+theorem fundamentalTheorem_equalMPV_of_explicit_coefficients
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]

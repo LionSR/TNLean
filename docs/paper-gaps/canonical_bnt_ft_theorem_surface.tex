@@ -1,0 +1,192 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{docs/paper-gaps/command}
+
+\title{Theorem Surface Audit for Canonical Form, BNT, and the Non-periodic MPS Fundamental Theorem}
+\author{}
+\date{2026-05-05}
+
+\begin{document}
+\maketitle
+
+\section{Purpose}
+
+This note compares the theorem surface in the formal development with the
+statements in the source papers.  It is not an issue index.  The goal is to
+separate four kinds of results:
+\begin{enumerate}
+  \item named statements appearing directly in the papers;
+  \item cited mathematical results used by the papers;
+  \item auxiliary formal statements needed to make an implicit proof step exact;
+  \item stronger or alternative statements that should not be presented as part
+        of the paper-level proof unless they become necessary.
+\end{enumerate}
+
+\section{Named source statements}
+
+The 2016 source has a small number of named statements in the canonical-form
+and BNT part:
+\begin{itemize}
+  \item normal tensor and canonical form definitions
+    \cite[lines~233--255]{Cirac2016MPDO_arXiv};
+  \item basis of normal tensors definition and characterization
+    \cite[lines~271--280]{Cirac2016MPDO_arXiv};
+  \item injective and block-injective canonical form definitions, together with
+    the quantum-Wielandt and block-injective-after-blocking assertions
+    \cite[lines~317--345]{Cirac2016MPDO_arXiv};
+  \item the proportional Fundamental Theorem and the equal-MPV corollary
+    \cite[lines~347--356]{Cirac2016MPDO_arXiv}.
+\end{itemize}
+The 2021 review gives the same normal tensor, BNT, proportional theorem, and
+equal-MPV corollary in Section~IV
+\cite[lines~1828--1899]{Cirac2021Matrix}.
+
+These are the paper-level targets.  They should remain the prominent theorem
+statements in the blueprint.
+
+\section{Why the formalization has more declarations}
+
+The paper proof suppresses finite-dimensional and finite-index operations that
+must be named in a proof assistant.  In this part of the development the extra
+formal statements usually fall into one of the following categories.
+
+\paragraph{Reduction statements.}
+The canonical-form proof splits the paper's ``put the tensor in canonical
+form'' step into invariant-subspace extraction, block-diagonal decomposition,
+trace-preserving normalization, period-removing blocking, and primitive-block
+normality.  These are not new mathematical claims beyond the source reduction,
+but they need separate hypotheses and conclusions so later theorems can apply
+them.
+
+\paragraph{Common blocking statements.}
+The paper says that periodicity is removed by blocking a common multiple of the
+periods.  The formalization must record positivity of the chosen block length,
+persistence of injectivity under further blocking, and the simultaneous
+application to a finite family of representative sectors.  These statements are
+auxiliary, but they are mathematically faithful to the period-removal step.
+
+\paragraph{BNT comparison statements.}
+The source BNT characterization selects one representative from each
+phase-gauge equivalence class and compares the power sums of weights.  The
+formalization separates this into overlap decay, eventual linear independence,
+permutation rigidity, sector-weight comparison, and phase absorption.  The
+heterogeneous block-matching theorem is a genuine formal endpoint for the
+block-matching part, while the final global weighted gauge equivalence remains
+the paper-level equal-MPV target.
+
+\paragraph{Parent-Hamiltonian statements.}
+The parent-Hamiltonian chapter uses additional intersection-property,
+periodic-chain, and ground-space-span results.  These are cited mathematical
+ingredients for the parent-Hamiltonian consequences, not extra theorems in the
+non-periodic Fundamental Theorem proof.
+
+\section{External lemmas need explanations}
+
+When a result is needed but the MPS source only cites it, the formal
+development should give a pedagogical explanation at the point where the result
+enters the proof.  A citation alone is not enough in this situation.  The
+explanation should include:
+\begin{enumerate}
+  \item the exact mathematical statement used;
+  \item the hypotheses in the MPS notation, after blocking or reindexing if
+        necessary;
+  \item a short proof idea, or a precise indication that the proof is imported
+        from the cited source;
+  \item the formal declaration that supplies the result, if it has already been
+        formalized.
+\end{enumerate}
+
+This applies in particular to the following families of external input.
+\begin{itemize}
+  \item The quantum Wielandt theorem supplies finite-length matrix-algebra span
+    from normality or primitivity \cite{Sanz2010Quantum}.  The paper cites it in
+    the canonical-form reduction; the formal text should say whether it is using
+    cumulative span, exact-length span, injectivity of the map $\Gamma_L$, or
+    block-injectivity of a direct sum.
+  \item The block-injective canonical-form bound uses the older MPS
+    injectivity and block-injectivity argument of
+    \cite{PerezGarcia2007MPSReps}.  The formal statement should identify the
+    common blocked physical alphabet and the direct-sum matrix algebra that is
+    being spanned.
+  \item Vandermonde inversion and Newton--Girard identities are elementary, but
+    they are not proved in the MPS source.  When they are used to recover
+    coefficients, multiplicities, or weight multisets, the blueprint should
+    explain the finite linear system or the power-sum recursion.
+  \item Parent-Hamiltonian gap statements use the FNW intersection-property and
+    martingale estimates from \cite{Fannes1992Finitely,Nachtergaele1996Spectral}
+    and later refinements such as \cite{Kastoryano2018Martingale}.  If the
+    source only invokes these estimates, the blueprint should state the
+    finite-size criterion and the constants being used before applying it to
+    MPS parent Hamiltonians.
+  \item Perron--Frobenius and peripheral-spectrum facts for quantum channels are
+    standard inputs from finite-dimensional channel theory, but they are not
+    interchangeable.  A formal theorem should specify whether it uses
+    irreducibility, primitivity, trace preservation, a faithful fixed point, or
+    a rank-one peripheral projection.
+\end{itemize}
+
+This rule also gives a retirement test.  If an external-looking lemma has no
+source citation, no proof explanation, and no current proof path needing it, it
+should not remain as a headline theorem in the paper-level blueprint.
+
+\section{Current demotions}
+
+The following declarations are auxiliary and should not be read as independent
+paper-level theorems.
+\begin{itemize}
+  \item The explicit-coefficient equal-MPV result is named
+    \[
+      \texttt{fundamentalTheorem\_equalMPV\_of\_explicit\_coefficients}.
+    \]
+    It is not the full equal-MPV corollary from the papers.  It assumes the
+    coefficient arrays and their nonzero limits.
+  \item The Vandermonde fixed-size separation declarations are lemmas.  They
+    remain available for finite-length arguments, but the main BNT comparison
+    route uses eventual linear independence and overlap orthogonality.
+  \item The equal-span permutation rigidity statement with asymptotically
+    orthonormal overlaps is a lemma.  It is a useful span route, but the
+    proportional BNT permutation theorem is the theorem used by the main
+    proportional Fundamental Theorem in Chapter~11.
+\end{itemize}
+
+\section{Statements to keep visibly conditional}
+
+Several declarations should stay in the development, but their statements
+should remain visibly conditional until the missing paper input is produced.
+\begin{itemize}
+  \item The conditional after-blocking Fundamental Theorem assumes the
+    post-blocking sector hypotheses.  It should not be cited as the unconditional
+    canonical-form theorem.
+  \item The explicit-coefficient equal case assumes coefficient arrays rather
+    than deriving the BNT power-sum data from bare equality of MPVs.
+  \item The parent-Hamiltonian unique-ground-state endpoints depend on the
+    normal chain ground-space identification, and the BNT ground-space span
+    endpoint depends on the periodic block-decomposition inclusion.  They are
+    paper-level targets, but the proof surface should keep those dependencies
+    explicit until the corresponding lemmas are completed.
+\end{itemize}
+
+\section{Retirement criterion}
+
+An auxiliary declaration should be removed or moved out of the main blueprint
+route when all three conditions hold:
+\begin{enumerate}
+  \item it is not a statement in the cited paper and is not a cited outside
+        result;
+  \item no current proof of a paper-level target uses it;
+  \item it states a stronger finite-length, span, or synchronization hypothesis
+        than the source proof requires.
+\end{enumerate}
+If a declaration is still used but only as a formal intermediate result, it
+should be a lemma or a clearly conditional theorem, not a headline replacement
+for the paper theorem.
+
+\bibliographystyle{alpha}
+\bibliography{docs/paper-gaps/references}
+
+\end{document}
