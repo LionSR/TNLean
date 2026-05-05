@@ -28,6 +28,56 @@ matrix product states, canonical form, BNT, overlap spans
 
 namespace MPSTensor
 
+/-- **One-sided BNT overlap-orthogonality data from reindexed nonzero sectors.**
+
+The common primitive irreducible block theorem supplies the final nonzero-sector
+families after the chosen blocking and blocked-word reindexing. Applying the
+phase-class BNT construction separately to the two families gives sector bases
+with positive dimensions, left-canonical normalization, self-overlap limit `1`,
+and off-overlap limit `0` for distinct representatives.
+
+This theorem deliberately stops before the two-family finite-length span
+comparison and one-site injectivity inputs. Those are the remaining data needed
+to upgrade the one-sided overlap-orthogonality hypotheses to
+`SectorBasisOverlapSpanHypotheses`. -/
+theorem sectorBasisOverlapOrthoHypotheses_of_reindexedNonzeroParts
+    {d D₁ D₂ : ℕ}
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (hSame : SameMPV₂ A B)
+    (hReindexed : CommonSectorRelabelingHypothesis d) :
+    ∃ p : ℕ, 0 < p ∧
+    ∃ P Q : SectorDecomposition (blockPhysDim d p),
+      SameMPV₂Pos (blockTensor (d := d) (D := D₁) A p) P.toTensor ∧
+      SameMPV₂Pos (blockTensor (d := d) (D := D₂) B p) Q.toTensor ∧
+      HasBNTSectorData P ∧ HasBNTSectorData Q ∧
+      SectorBasisOverlapOrthoHypotheses P ∧
+      SectorBasisOverlapOrthoHypotheses Q := by
+  obtain ⟨p, hp, zeroTailA, zeroTailB, rA, dimA, μA, blocksA,
+      rB, dimB, μB, blocksB, _hAblocks, _hBblocks, hAPos, hBPos, _hNonzeroPos,
+      _hZero, hμA, hμB, hTPA, hTPB, hPrimA, hPrimB, hIrrA, hIrrB, hDimA, hDimB⟩ :=
+    afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts A B hSame hReindexed
+  letI : ∀ x : Fin rA, NeZero (dimA x) := fun x => ⟨Nat.ne_of_gt (hDimA x)⟩
+  letI : ∀ x : Fin rB, NeZero (dimB x) := fun x => ⟨Nat.ne_of_gt (hDimB x)⟩
+  let nonzeroA := toTensorFromBlocks (d := blockPhysDim d p) (μ := μA) blocksA
+  let nonzeroB := toTensorFromBlocks (d := blockPhysDim d p) (μ := μB) blocksB
+  obtain ⟨P, hPblocks, hPbnt, hPOrtho, _hPInj_of⟩ :=
+    exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_with_overlapOrtho
+      (d := blockPhysDim d p) μA blocksA hTPA hIrrA hPrimA hμA
+  obtain ⟨Q, hQblocks, hQbnt, hQOrtho, _hQInj_of⟩ :=
+    exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_with_overlapOrtho
+      (d := blockPhysDim d p) μB blocksB hTPB hIrrB hPrimB hμB
+  have hAP : SameMPV₂Pos (blockTensor (d := d) (D := D₁) A p) P.toTensor := by
+    intro N hN σ
+    calc
+      mpv (blockTensor (d := d) (D := D₁) A p) σ = mpv nonzeroA σ := hAPos N hN σ
+      _ = mpv P.toTensor σ := (hPblocks N σ).symm
+  have hBQ : SameMPV₂Pos (blockTensor (d := d) (D := D₂) B p) Q.toTensor := by
+    intro N hN σ
+    calc
+      mpv (blockTensor (d := d) (D := D₂) B p) σ = mpv nonzeroB σ := hBPos N hN σ
+      _ = mpv Q.toTensor σ := (hQblocks N σ).symm
+  exact ⟨p, hp, P, Q, hAP, hBQ, hPbnt, hQbnt, hPOrtho, hQOrtho⟩
+
 /-- **Sector basis overlap-span data from common primitive nonzero-sector families.**
 
 The common primitive irreducible block theorem supplies the two nonzero-sector decompositions

@@ -1506,6 +1506,29 @@ two-basis sector comparison theorem.
 	hypotheses. The preceding theorem supplies the common MPV phase cover.
 \end{proof}
 
+\begin{theorem}[Reindexed sectors give single-family overlap data]%
+\label{thm:sector_basis_overlap_ortho_reindexed}
+	\lean{MPSTensor.sectorBasisOverlapOrthoHypotheses_of_reindexedNonzeroParts}
+	\leanok
+	\uses{def:common_sector_relabeling_hypothesis,
+		def:sector_basis_overlap_ortho_hyps}
+	Let $A$ and $B$ have the same MPV family, and assume the blocked-word
+	identification hypothesis for the cyclic-sector data. After the common
+	blocking and reindexing, each nonzero-sector family admits a BNT sector
+	decomposition with positive-length MPV agreement, BNT data, and the
+	single-family overlap-orthogonality hypotheses.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{thm:after_blocking_common_primitive_irreducible_blocks_reindexed,
+		thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_ortho}
+	The common primitive reindexing theorem produces trace-preserving,
+	primitive, irreducible nonzero-sector families with positive dimensions.
+	Apply the one-sided phase-class BNT construction separately to the two
+	families.
+\end{proof}
+
 \begin{theorem}[Phase-cover data give overlap-span hypotheses]%
 \label{thm:sector_basis_overlap_span_reindexed_commonPhaseCover}
 	\lean{MPSTensor.sectorBasisOverlapSpanHypotheses_of_reindexedNonzeroParts_commonPhaseCover}
