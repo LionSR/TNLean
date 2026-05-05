@@ -10,45 +10,18 @@ import TNLean.MPS.CanonicalForm.SectorIrreducibility.HLift
 /-!
 # Sector irreducibility helpers
 
-This module keeps the historical import path
-`TNLean.MPS.CanonicalForm.SectorIrreducibility` available while the underlying
-material is organized across three focused modules.
-
-The supporting modules are:
-
-* `TNLean.MPS.CanonicalForm.SectorIrreducibility.ProjectionOrtho` — pairwise
-  orthogonality of orthogonal projections and corner preservation from adjoint
-  fixed projections.
-* `TNLean.MPS.CanonicalForm.SectorIrreducibility.OrbitSum` — orbit-sum
-  fixed-point and sector-support lemmas.
-* `TNLean.MPS.CanonicalForm.SectorIrreducibility.HLiftCore` — the fixed-point
-  upgrade, orbit-sum lift, and direct cyclic-sector irreducibility theorems.
-* `TNLean.MPS.CanonicalForm.SectorIrreducibility.HLift` — fixed-point-algebra
-  rigidity and the resulting unconditional irreducibility theorems on cyclic
-  sectors.
+The sector-irreducibility argument for cyclic decompositions starts from a
+partition of unity by orthogonal projections. Adjoint fixed projections preserve
+their corners, orbit sums transport sector-supported operators around the cycle,
+and the fixed-point upgrade turns corner preservation into fixedness. These
+facts give irreducibility on each cyclic-sector corner.
 
 ## Main statements
 
-The imported modules provide the original declarations at their existing names,
-including `pairwise_mul_zero_of_orthogonalProjection_sum_one`,
-`preservesCorner_of_adjoint_fixed_projection`,
-`orbitSumProjection_fixed_of_pow_fix`,
-`orbit_iterate_supported_on_shifted_sector`,
-`orbit_iterate_isOrthogonalProjection`,
-`orbitSumProjection_eq_one_of_full_sector`,
-`hFixUpgrade_of_peripheral`,
-`SectorFixedPointAlgebraRigidity`,
-`hProjStep_of_sectorFixedPointAlgebraRigidity`,
-`sectorFixedPointAlgebraRigidity_of_irreducible_cyclicDecomp`,
-`hLift_cyclicDecomp_mps_of_fixUpgrade`,
-`hLift_cyclicDecomp_mps_of_projStep`,
-`hLift_cyclicDecomp_mps_of_sectorFixedPointAlgebraRigidity`,
-`hLift_cyclicDecomp_mps`,
-`isIrreducibleOnCorner_of_cyclic_decomp_mps_of_hLift`,
-`isIrreducibleOnCorner_of_cyclic_decomp_mps_of_projStep`,
-`isIrreducibleOnCorner_of_cyclic_decomp_mps_of_fixUpgrade`,
-`isIrreducibleOnCorner_of_cyclic_decomp_mps_of_sectorFixedPointAlgebraRigidity`, and
-`isIrreducibleOnCorner_of_cyclic_decomp_mps`.
+The main results give pairwise orthogonality from a projection-valued partition
+of unity, fixedness of orbit sums, recovery of sector-supported operators by
+compression, fixed-point-algebra rigidity for irreducible cyclic decompositions,
+and irreducibility of the corner maps.
 
 ## Tags
 

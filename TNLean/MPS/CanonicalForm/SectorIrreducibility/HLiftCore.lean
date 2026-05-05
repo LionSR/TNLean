@@ -6,7 +6,7 @@ import TNLean.MPS.CanonicalForm.SectorIrreducibility.OrbitSum
 import TNLean.Channel.Peripheral.CyclicDecomposition.PeripheralUnitary
 
 /-!
-# Sector irreducibility: the abstract `hLift` core
+# Sector irreducibility from orbit sums
 
 The fixed-point upgrade and orbit-sum lift give the first sector-irreducibility
 step for cyclic decompositions. Corner preservation becomes fixedness in the
@@ -16,18 +16,10 @@ on each cyclic-sector corner.
 
 ## Main statements
 
-* `hFixUpgrade_of_peripheral` — corner preservation under the `m`-th adjoint
-  iterate implies fixedness in the irreducible trace-preserving case.
-* `recover_supported_from_orbitSumProjection` — compression of an orbit sum
-  recovers the original sector-supported operator.
-* `hLift_cyclicDecomp_mps_of_fixUpgrade` — the orbit-sum construction supplies
-  the `hLift` input.
-* `hLift_cyclicDecomp_mps_of_projStep` — the fixed-point hypothesis is supplied
-  by `hFixUpgrade_of_peripheral`.
-* `isIrreducibleOnCorner_of_cyclic_decomp_mps_of_hLift`,
-  `isIrreducibleOnCorner_of_cyclic_decomp_mps_of_projStep`, and
-  `isIrreducibleOnCorner_of_cyclic_decomp_mps_of_fixUpgrade` — direct
-  irreducibility consequences for cyclic-sector corners.
+The main results show that invariant corners for the adjoint transfer map are
+fixed, that compressing an orbit sum to its original sector recovers the
+sector-supported operator, and that these facts imply irreducibility of each
+corner map in a cyclic decomposition.
 
 ## Tags
 
@@ -190,8 +182,7 @@ theorem recover_supported_from_orbitSumProjection
   · intro hmem
     exact absurd (Finset.mem_univ (0 : Fin m)) hmem
 
-/-- Orbit-sum lift producing the `hLift` hypothesis required by
-`isIrreducible_restriction_of_cyclic_decomp`.
+/-- Orbit-sum lift for cyclic-sector irreducibility.
 
 Given the cyclic-sector setup, a one-step projection-preservation hypothesis
 `hProjStep` on sectors, and a fixed-point upgrade `hFixUpgrade` promoting
@@ -200,23 +191,10 @@ Given the cyclic-sector setup, a one-step projection-preservation hypothesis
 projection that preserves the corner under `T`, and the zero/full-sector
 equivalences hold.
 
-This assembles the in-file sublemmas
-`orbit_iterate_supported_on_shifted_sector`,
-`orbit_iterate_isOrthogonalProjection`,
-`orbitSumProjection_fixed_of_pow_fix`,
-`orbitSumProjection_eq_one_of_full_sector`,
-`preservesCorner_of_adjoint_fixed_projection`, and
-`pairwise_mul_zero_of_orthogonalProjection_sum_one` into a single theorem
-matching the shape of the `hLift` argument of
-`isIrreducibleOnCorner_of_cyclic_decomp_mps_of_hLift`.
-
-The input `hFixUpgrade` is abstract only for the theorem signature: in the
-irreducible trace-preserving case it is discharged by
-`hFixUpgrade_of_peripheral`, using a positive definite fixed point of
-`transferMap A` and a weighted-trace argument. Likewise, the remaining
-one-step input `hProjStep` is now discharged in the same cyclic setting by
-`sectorFixedPointAlgebraRigidity_of_irreducible_cyclicDecomp`, so the present
-theorem is kept mainly as the reusable abstract statement for later applications. -/
+The construction uses sector support of the iterates, pairwise orthogonality of
+the sector projections, fixedness of the orbit sum, and the equivalence between
+the original corner being zero or full and the same statement for the orbit
+sum. -/
 theorem hLift_cyclicDecomp_mps_of_fixUpgrade
     [NeZero m]
     {A : MPSTensor d D}
