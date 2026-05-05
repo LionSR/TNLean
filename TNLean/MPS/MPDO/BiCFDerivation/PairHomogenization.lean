@@ -1100,8 +1100,8 @@ theorem exists_forall_pairTraceSeparatingAt_of_pairTraceSeparatingAll_of_identit
 period-window identity-padding certificates admits one common homogeneous
 trace-separating length.
 
-This is only the finite-family arithmetic wrapper: the mathematical input is
-the period-window identity certificate for each ordered pair. -/
+The proof is a finite-family arithmetic reduction: the mathematical hypothesis
+is the period-window identity certificate for each ordered pair. -/
 theorem
     exists_forall_pairTraceSeparatingAt_of_pairTraceSeparatingAll_of_identity_period_windows
     (A : (k : Fin r) → MPSTensor d (dim k))
