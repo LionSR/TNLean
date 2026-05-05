@@ -1295,10 +1295,11 @@ theorem pairIdentity_mem_pairWordTupleSpan_eventually_of_not_gaugePhaseEquiv
 
 /-- Homogeneous pair trace separation from BNT non-equivalence.
 
-For injective same-dimension tensors in normal form that are not gauge-phase
-equivalent, the pair trace functionals separate at some fixed homogeneous
-length.  Burnside-Jacobson identity padding converts cumulative separation into
-separation at one word length. -/
+For injective same-dimension tensors satisfying the left-canonical
+normalization hypotheses and not gauge-phase equivalent, the pair trace
+functionals separate at some fixed homogeneous length. Burnside-Jacobson
+identity padding converts cumulative separation into separation at one word
+length. -/
 theorem exists_pairTraceSeparatingAt_of_not_gaugePhaseEquiv
     {d D : ℕ} [NeZero D]
     (A B : MPSTensor d D)
