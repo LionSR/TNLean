@@ -731,6 +731,41 @@ theorem nonempty_mpvCommonPhaseCover_of_proportionalDecompositionConclusion
   · intro j
     exact ⟨perm j, by simp⟩
 
+/-- A bijective MPV-phase matching gives a common MPV phase cover.
+
+This is the direct implication used when a comparison theorem has already identified
+the phase classes by a bijection, without restating the data as a proportional
+decomposition conclusion. -/
+theorem nonempty_mpvCommonPhaseCover_of_equiv_phase
+    {rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    (blocksA : (j : Fin rA) → MPSTensor d (dimA j))
+    (blocksB : (k : Fin rB) → MPSTensor d (dimB k))
+    (e : Fin rA ≃ Fin rB)
+    (hPhase : ∀ j : Fin rA, MPVBlockPhaseEquiv (blocksA j) (blocksB (e j))) :
+    Nonempty (MPVCommonPhaseCover blocksA blocksB) := by
+  refine ⟨?_⟩
+  refine {
+    rC := rA
+    dimC := dimA
+    common := blocksA
+    classA := id
+    classB := e.symm
+    phaseA := ?_
+    phaseB := ?_
+    surjA := ?_
+    surjB := ?_
+  }
+  · intro j
+    exact MPVBlockPhaseEquiv.refl (blocksA j)
+  · intro k
+    have h := hPhase (e.symm k)
+    rw [e.apply_symm_apply k] at h
+    exact h
+  · intro j
+    exact ⟨j, rfl⟩
+  · intro j
+    exact ⟨e j, by simp⟩
+
 /-- A BNT proportional-decomposition conclusion gives finite-length MPV span equality.
 
 The conclusion is obtained by taking the left family as the common MPV phase-cover family and
@@ -745,6 +780,20 @@ theorem mpv_span_eq_of_proportionalDecompositionConclusion
     Submodule.span ℂ (Set.range (fun k : Fin rB => mpvState (d := d) (blocksB k) N)) := by
   obtain ⟨cover⟩ := nonempty_mpvCommonPhaseCover_of_proportionalDecompositionConclusion
     (d := d) blocksA blocksB h
+  exact cover.span_eq N
+
+/-- A bijective MPV-phase matching gives finite-length MPV span equality. -/
+theorem mpv_span_eq_of_equiv_phase
+    {rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    (blocksA : (j : Fin rA) → MPSTensor d (dimA j))
+    (blocksB : (k : Fin rB) → MPSTensor d (dimB k))
+    (e : Fin rA ≃ Fin rB)
+    (hPhase : ∀ j : Fin rA, MPVBlockPhaseEquiv (blocksA j) (blocksB (e j)))
+    (N : ℕ) :
+    Submodule.span ℂ (Set.range (fun j : Fin rA => mpvState (d := d) (blocksA j) N)) =
+    Submodule.span ℂ (Set.range (fun k : Fin rB => mpvState (d := d) (blocksB k) N)) := by
+  obtain ⟨cover⟩ := nonempty_mpvCommonPhaseCover_of_equiv_phase
+    (d := d) blocksA blocksB e hPhase
   exact cover.span_eq N
 
 /-- Separated normal canonical-form data and a proportional decomposition produce a common MPV
