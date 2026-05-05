@@ -414,6 +414,54 @@ def ofNormalCanonicalFormBNT_zeroTailIdentity
   exact ofNormalCanonicalFormBNT hA hB
     (zeroTail_eq_of_proportionalDecompositionConclusion hZero hMatch) hInjA hInjB hDecomp
 
+/-- Representative common-sector families give the BNT-cover hypothesis bundle once the
+representative weights are strictly ordered, representatives are BNT-separated, and the
+remaining zero-tail, injectivity, and proportional-decomposition inputs are supplied. -/
+noncomputable def ofCommonRepresentatives_zeroTailIdentity
+    {d p rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    {blocksA : (k : Fin rA) → MPSTensor d (dimA k)}
+    {blocksB : (k : Fin rB) → MPSTensor d (dimB k)}
+    (FA : CommonBlockedCyclicSectorFamily blocksA)
+    (FB : CommonBlockedCyclicSectorFamily blocksB)
+    (hpA : FA.p = p) (hpB : FB.p = p)
+    [∀ k, NeZero (FA.commonRepresentativeDim k)]
+    [∀ k, NeZero (FB.commonRepresentativeDim k)]
+    {zeroTailA zeroTailB DtotA DtotB : ℕ}
+    (μA : Fin rA → ℂ) (μB : Fin rB → ℂ)
+    (hμA : ∀ k, μA k ≠ 0)
+    (hμB : ∀ k, μB k ≠ 0)
+    (hAntiA : StrictAnti (fun k : Fin rA => ‖FA.commonRepresentativeWeight μA k‖))
+    (hAntiB : StrictAnti (fun k : Fin rB => ‖FB.commonRepresentativeWeight μB k‖))
+    (hNotGpeA : BlocksNotGaugePhaseEquiv (d := blockPhysDim d p)
+      (FA.commonRepresentativeBlocksAt hpA))
+    (hNotGpeB : BlocksNotGaugePhaseEquiv (d := blockPhysDim d p)
+      (FB.commonRepresentativeBlocksAt hpB))
+    (hZero : ∀ σ : Fin 0 → Fin (blockPhysDim d p),
+      (zeroTailA : ℂ) +
+          mpv (toTensorFromBlocks (d := blockPhysDim d p) (μ := FA.commonRepresentativeWeight μA)
+            (FA.commonRepresentativeBlocksAt hpA)) σ =
+        (zeroTailB : ℂ) +
+          mpv (toTensorFromBlocks (d := blockPhysDim d p) (μ := FB.commonRepresentativeWeight μB)
+            (FB.commonRepresentativeBlocksAt hpB)) σ)
+    (hInjA : ∀ k, IsInjective
+      (FA.commonRepresentativeBlocksAt hpA k))
+    (hInjB : ∀ k, IsInjective
+      (FB.commonRepresentativeBlocksAt hpB k))
+    (hDecomp : ProportionalDecompositionData (d := blockPhysDim d p)
+      (FA.commonRepresentativeBlocksAt hpA)
+      (FB.commonRepresentativeBlocksAt hpB) DtotA DtotB) :
+    CommonPrimitiveBNTCoverHypotheses (zeroTailA := zeroTailA) (zeroTailB := zeroTailB)
+      (DtotA := DtotA) (DtotB := DtotB)
+      (FA.commonRepresentativeWeight μA) (FB.commonRepresentativeWeight μB)
+      (FA.commonRepresentativeBlocksAt hpA)
+      (FB.commonRepresentativeBlocksAt hpB) := by
+  exact ofNormalCanonicalFormBNT_zeroTailIdentity
+    (isNormalCanonicalFormBNT_commonRepresentativeBlocksAt
+      FA hpA μA hμA hAntiA hNotGpeA)
+    (isNormalCanonicalFormBNT_commonRepresentativeBlocksAt
+      FB hpB μB hμB hAntiB hNotGpeB)
+    hZero hInjA hInjB hDecomp
+
 /-- A BNT cover hypothesis bundle produces a common MPV phase cover. -/
 theorem toMPVCommonPhaseCover
     {d p rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
