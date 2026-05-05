@@ -50,6 +50,18 @@ theorem commonRepresentativeWeight_ne_zero (F : CommonBlockedCyclicSectorFamily 
     F.commonRepresentativeWeight μ k ≠ 0 :=
   F.commonBlockWeight_ne_zero μ hμ k
 
+/-- Strict ordering by weight norm is preserved when passing to representative
+common-sector weights. -/
+theorem commonRepresentativeWeight_strictAnti_of_weight_strictAnti
+    (F : CommonBlockedCyclicSectorFamily blocks)
+    (μ : Fin r → ℂ)
+    (hAnti : StrictAnti (fun k : Fin r => ‖μ k‖)) :
+    StrictAnti (fun k : Fin r => ‖F.commonRepresentativeWeight μ k‖) := by
+  intro k l hkl
+  have hpow : ‖μ l‖ ^ F.p < ‖μ k‖ ^ F.p :=
+    pow_lt_pow_left₀ (hAnti hkl) (norm_nonneg (μ l)) (Nat.ne_of_gt F.p_pos)
+  simpa [commonRepresentativeWeight, norm_pow] using hpow
+
 /-- The representative common-sector family is trace-preserving. -/
 theorem commonRepresentativeBlocks_tp (F : CommonBlockedCyclicSectorFamily blocks)
     (k : Fin r) :
@@ -72,6 +84,34 @@ theorem commonRepresentativeBlocks_irreducible (F : CommonBlockedCyclicSectorFam
     (k : Fin r) : IsIrreducibleTensor (F.commonRepresentativeBlocks k) := by
   simpa [commonRepresentativeBlocks, commonRepresentativeDim] using
     F.commonSectorBlock_irreducible k ⟨0, F.period_pos k⟩
+
+/-- The representative common-sector family is trace-preserving at a prescribed
+common blocking length. -/
+theorem commonRepresentativeBlocksAt_tp (F : CommonBlockedCyclicSectorFamily blocks)
+    {p' : ℕ} (hp : F.p = p') (k : Fin r) :
+    ∑ i : Fin (blockPhysDim d p'),
+      (F.commonRepresentativeBlocksAt hp k i)ᴴ *
+        F.commonRepresentativeBlocksAt hp k i = 1 := by
+  subst p'
+  simpa [commonRepresentativeBlocksAt] using F.commonRepresentativeBlocks_tp k
+
+/-- The representative common-sector family has primitive transfer maps at a
+prescribed common blocking length. -/
+theorem commonRepresentativeBlocksAt_primitive (F : CommonBlockedCyclicSectorFamily blocks)
+    {p' : ℕ} (hp : F.p = p') (k : Fin r) :
+    _root_.IsPrimitive
+      (transferMap (d := blockPhysDim d p') (D := F.commonRepresentativeDim k)
+        (F.commonRepresentativeBlocksAt hp k)) := by
+  subst p'
+  simpa [commonRepresentativeBlocksAt] using F.commonRepresentativeBlocks_primitive k
+
+/-- The representative common-sector family is tensor-irreducible at a prescribed
+common blocking length. -/
+theorem commonRepresentativeBlocksAt_irreducible (F : CommonBlockedCyclicSectorFamily blocks)
+    {p' : ℕ} (hp : F.p = p') (k : Fin r) :
+    IsIrreducibleTensor (F.commonRepresentativeBlocksAt hp k) := by
+  subst p'
+  simpa [commonRepresentativeBlocksAt] using F.commonRepresentativeBlocks_irreducible k
 
 /-- The representative common-sector family has positive bond dimensions. -/
 theorem commonRepresentativeDim_pos (F : CommonBlockedCyclicSectorFamily blocks)
