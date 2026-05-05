@@ -15,10 +15,10 @@ Released under Apache 2.0 license as described in the file LICENSE.
 
 This module introduces `IsCanonicalFormBNT`, which extends `IsCanonicalForm` with the
 requirement that distinct blocks are not gauge-phase equivalent (i.e., equivalent blocks
-have already been merged). This is a Lean comparison package for a canonical form whose
-blocks are already chosen as basis-of-normal-tensors representatives. It should not be
-confused with the source term "block-injective canonical form" (`biCF`), which is the
-separate exact-length direct-sum span condition from arXiv:1606.00608, lines 317–345.
+have already been merged). The blocks are already chosen as basis-of-normal-tensors
+representatives. This should not be confused with the source term "block-injective canonical
+form" (`biCF`), which is the separate exact-length direct-sum span condition from
+arXiv:1606.00608, lines 317–345.
 
 ## Main results
 
