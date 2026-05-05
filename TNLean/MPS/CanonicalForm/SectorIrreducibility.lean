@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.CanonicalForm.SectorIrreducibility.ProjectionOrtho
 import TNLean.MPS.CanonicalForm.SectorIrreducibility.OrbitSum
+import TNLean.MPS.CanonicalForm.SectorIrreducibility.HLiftCore
 import TNLean.MPS.CanonicalForm.SectorIrreducibility.HLift
 
 /-!
@@ -20,9 +21,11 @@ The supporting modules are:
   fixed projections.
 * `TNLean.MPS.CanonicalForm.SectorIrreducibility.OrbitSum` — orbit-sum
   fixed-point and sector-support lemmas.
-* `TNLean.MPS.CanonicalForm.SectorIrreducibility.HLift` — the
-  `hFixUpgrade`/`hProjStep`/`hLift` cluster and the resulting irreducibility
-  theorems on cyclic sectors.
+* `TNLean.MPS.CanonicalForm.SectorIrreducibility.HLiftCore` — the fixed-point
+  upgrade, orbit-sum lift, and direct cyclic-sector irreducibility theorems.
+* `TNLean.MPS.CanonicalForm.SectorIrreducibility.HLift` — fixed-point-algebra
+  rigidity and the resulting unconditional irreducibility theorems on cyclic
+  sectors.
 
 ## Main statements
 
