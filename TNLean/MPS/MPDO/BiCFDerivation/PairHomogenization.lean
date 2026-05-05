@@ -1289,60 +1289,6 @@ produce a positive period and a complete residue window of full homogeneous
 pair-word spans, but the later argument needs only the identity-padding
 conclusion below. -/
 private theorem
-    pairIdentity_mem_pairWordTupleSpan_padding_gap_of_pairIdentity_mem_pairCumulativeSpan
-    {d D : ℕ} [NeZero D]
-    (A B : MPSTensor d D) {S T l : ℕ} (_hST : S ≤ T) (_hl : l ≤ S)
-    (_hI :
-      ((1 : Matrix (Fin D) (Fin D) ℂ), (1 : Matrix (Fin D) (Fin D) ℂ)) ∈
-        pairCumulativeSpan A B S) :
-      ((1 : Matrix (Fin D) (Fin D) ℂ), (1 : Matrix (Fin D) (Fin D) ℂ)) ∈
-        Submodule.span ℂ (Set.range (pairWordTuple A B (T - l))) := by
-  -- Remaining Burnside-Jacobson exact-gap step: cumulative identity membership
-  -- must be upgraded to homogeneous identity padding at this single gap length.
-  sorry
-
-private theorem
-    pairIdentity_mem_pairWordTupleSpan_padding_length_of_pairIdentity_mem_pairCumulativeSpan
-    {d D : ℕ} [NeZero D]
-    (A B : MPSTensor d D) {S T : ℕ} (hST : S ≤ T)
-    (hI :
-      ((1 : Matrix (Fin D) (Fin D) ℂ), (1 : Matrix (Fin D) (Fin D) ℂ)) ∈
-        pairCumulativeSpan A B S) :
-    ∀ l : ℕ, l ≤ S →
-      ((1 : Matrix (Fin D) (Fin D) ℂ), (1 : Matrix (Fin D) (Fin D) ℂ)) ∈
-        Submodule.span ℂ (Set.range (pairWordTuple A B (T - l))) := by
-  intro l hl
-  exact
-    pairIdentity_mem_pairWordTupleSpan_padding_gap_of_pairIdentity_mem_pairCumulativeSpan
-      A B hST hl hI
-
-private theorem
-    exists_pairIdentity_mem_pairWordTupleSpan_padding_window_of_pairIdentity_mem_pairCumulativeSpan
-    {d D : ℕ} [NeZero D]
-    (A B : MPSTensor d D) {S : ℕ}
-    (_hI :
-      ((1 : Matrix (Fin D) (Fin D) ℂ), (1 : Matrix (Fin D) (Fin D) ℂ)) ∈
-        pairCumulativeSpan A B S) :
-    ∃ start period : ℕ, 0 < period ∧ S ≤ period ∧
-      (∀ r : ℕ, r < period → S ≤ start + r) ∧
-      (∀ l : ℕ, l ≤ S →
-        ((1 : Matrix (Fin D) (Fin D) ℂ), (1 : Matrix (Fin D) (Fin D) ℂ)) ∈
-          Submodule.span ℂ (Set.range (pairWordTuple A B (period - l)))) ∧
-      ∀ r : ℕ, r < period → ∀ l : ℕ, l ≤ S →
-        ((1 : Matrix (Fin D) (Fin D) ℂ), (1 : Matrix (Fin D) (Fin D) ℂ)) ∈
-          Submodule.span ℂ (Set.range (pairWordTuple A B (start + r - l))) := by
-  refine ⟨S, S + 1, by omega, by omega, ?_, ?_, ?_⟩
-  · intro r _hr
-    omega
-  · exact
-      pairIdentity_mem_pairWordTupleSpan_padding_length_of_pairIdentity_mem_pairCumulativeSpan
-        A B (by omega) _hI
-  · intro r _hr
-    exact
-      pairIdentity_mem_pairWordTupleSpan_padding_length_of_pairIdentity_mem_pairCumulativeSpan
-        A B (by omega) _hI
-
-private theorem
     exists_pairIdentity_mem_pairWordTupleSpan_padding_window_of_pairCumulativeWordTupleSpanTop
     {d D : ℕ} [NeZero D]
     (A B : MPSTensor d D) {S : ℕ}
@@ -1355,14 +1301,13 @@ private theorem
       ∀ r : ℕ, r < period → ∀ l : ℕ, l ≤ S →
         ((1 : Matrix (Fin D) (Fin D) ℂ), (1 : Matrix (Fin D) (Fin D) ℂ)) ∈
           Submodule.span ℂ (Set.range (pairWordTuple A B (start + r - l))) := by
-  have hI :
-      ((1 : Matrix (Fin D) (Fin D) ℂ), (1 : Matrix (Fin D) (Fin D) ℂ)) ∈
-        pairCumulativeSpan A B S := by
-    rw [hS]
-    exact Submodule.mem_top
-  exact
-    exists_pairIdentity_mem_pairWordTupleSpan_padding_window_of_pairIdentity_mem_pairCumulativeSpan
-      A B hI
+  -- Remaining Burnside-Jacobson period-window input: a finite cumulative
+  -- full-span cutoff must produce homogeneous identity-padding witnesses for
+  -- one positive period and all sufficiently large residue representatives.
+  -- This is stronger than the false exact-gap statement from mere cumulative
+  -- identity membership: the present hypothesis is the full pair-word span at
+  -- the cutoff, not just the empty-word occurrence of the identity.
+  sorry
 
 private theorem exists_pairWordTupleSpanTop_period_window_of_pairCumulativeWordTupleSpanTop
     {d D : ℕ} [NeZero D]
