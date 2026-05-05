@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.CanonicalForm.Assembly.CommonBlockedCyclicSectorConstruction
+import TNLean.MPS.CanonicalForm.Assembly.SectorComparisonCore
 import TNLean.MPS.CanonicalForm.Assembly.ZeroTailTransport
 import TNLean.MPS.CanonicalForm.EqualNormBridge
 
@@ -1055,120 +1056,6 @@ theorem afterBlocking_commonLengthCommonSectorData_of_reindexed
           (μ := familyB.commonFlatWeight μB) (familyB.commonFlatBlocksAt hFamilyB)) σ := by
             rw [hFlatB 0 σ]
   exact ⟨hFlatA, hFlatB, hZAflat, hZBflat, hApos, hBpos, hFlatPos, hZeroFlat⟩
-
-/-- **Common nonzero-block sector comparison with an explicit zero-tail identity.**
-
-This is the zero-tail-aware variant of
-`fundamentalTheorem_after_blocking_sector_of_common_blocks_overlapSpan`.
-The blocked tensors are related to their nonzero parts only at positive lengths,
-which is the strongest statement available after removing a nonzero zero tail. If the two
-zero-tail dimensions agree, the nonzero parts themselves are full `SameMPV₂`, including `N = 0`,
-so the existing sector-matching layer applies unchanged. -/
-theorem fundamentalTheorem_after_blocking_sector_of_common_blocks_overlapSpan_zeroTail
-    {d D₁ D₂ p rA rB zeroTailA zeroTailB : ℕ}
-    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
-    [∀ k : Fin rA, NeZero (dimA k)]
-    [∀ k : Fin rB, NeZero (dimB k)]
-    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
-    (hSame : SameMPV₂ A B)
-    (hp : 0 < p)
-    (μA : Fin rA → ℂ)
-    (blocksA : (k : Fin rA) → MPSTensor (blockPhysDim d p) (dimA k))
-    (μB : Fin rB → ℂ)
-    (blocksB : (k : Fin rB) → MPSTensor (blockPhysDim d p) (dimB k))
-    (hAblocks :
-      ∀ (N : ℕ) (σ : Fin N → Fin (blockPhysDim d p)),
-        mpv (blockTensor (d := d) (D := D₁) A p) σ =
-          mpv (zeroMPSTensor (blockPhysDim d p) zeroTailA) σ +
-            mpv (toTensorFromBlocks (d := blockPhysDim d p) (μ := μA) blocksA) σ)
-    (hBblocks :
-      ∀ (N : ℕ) (σ : Fin N → Fin (blockPhysDim d p)),
-        mpv (blockTensor (d := d) (D := D₂) B p) σ =
-          mpv (zeroMPSTensor (blockPhysDim d p) zeroTailB) σ +
-            mpv (toTensorFromBlocks (d := blockPhysDim d p) (μ := μB) blocksB) σ)
-    (hZeroTail : zeroTailA = zeroTailB)
-    (hTPA : ∀ k, ∑ i : Fin (blockPhysDim d p), (blocksA k i)ᴴ * blocksA k i = 1)
-    (hTPB : ∀ k, ∑ i : Fin (blockPhysDim d p), (blocksB k i)ᴴ * blocksB k i = 1)
-    (hIrrA : ∀ k, IsIrreducibleTensor (blocksA k))
-    (hIrrB : ∀ k, IsIrreducibleTensor (blocksB k))
-    (hPrimA : ∀ k, _root_.IsPrimitive
-      (transferMap (d := blockPhysDim d p) (D := dimA k) (blocksA k)))
-    (hPrimB : ∀ k, _root_.IsPrimitive
-      (transferMap (d := blockPhysDim d p) (D := dimB k) (blocksB k)))
-    (hμA : ∀ k, μA k ≠ 0)
-    (hμB : ∀ k, μB k ≠ 0)
-    (overlapSpanData :
-      ∀ P Q : SectorDecomposition (blockPhysDim d p),
-        SameMPV₂ P.toTensor (toTensorFromBlocks (d := blockPhysDim d p) (μ := μA) blocksA) →
-        SameMPV₂ Q.toTensor (toTensorFromBlocks (d := blockPhysDim d p) (μ := μB) blocksB) →
-        HasBNTSectorData P → HasBNTSectorData Q →
-        SectorBasisOverlapSpanHypotheses P Q) :
-    ∃ p' : ℕ, 0 < p' ∧
-    ∃ P Q : SectorDecomposition (blockPhysDim d p'),
-      SameMPV₂Pos (blockTensor (d := d) (D := D₁) A p') P.toTensor ∧
-      SameMPV₂Pos (blockTensor (d := d) (D := D₂) B p') Q.toTensor ∧
-      SameMPV₂ P.toTensor Q.toTensor ∧
-      HasBNTSectorData P ∧ HasBNTSectorData Q ∧
-      ∃ perm : Fin P.basisCount ≃ Fin Q.basisCount,
-      ∃ hCopies : ∀ j, P.copies j = Q.copies (perm j),
-      ∃ ζ : Fin P.basisCount → ℂ,
-        (∀ j, ζ j ≠ 0) ∧
-        ∀ j : Fin P.basisCount,
-          Finset.univ.val.map (P.weight j) =
-            Finset.univ.val.map
-              (fun q => ζ j * Q.weight (perm j) (Fin.cast (hCopies j) q)) := by
-  let liveA := toTensorFromBlocks (d := blockPhysDim d p) (μ := μA) blocksA
-  let liveB := toTensorFromBlocks (d := blockPhysDim d p) (μ := μB) blocksB
-  obtain ⟨P, hPblocks, hPbnt⟩ :=
-    exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks
-      (d := blockPhysDim d p) μA blocksA hTPA hIrrA hPrimA hμA
-  obtain ⟨Q, hQblocks, hQbnt⟩ :=
-    exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks
-      (d := blockPhysDim d p) μB blocksB hTPB hIrrB hPrimB hμB
-  have hAB : SameMPV₂ (blockTensor (d := d) (D := D₁) A p)
-                      (blockTensor (d := d) (D := D₂) B p) :=
-    sameMPV₂_blockTensor A B hSame p
-  have hLive : SameMPV₂ liveA liveB :=
-    sameMPV₂_live_of_sameMPV₂_with_zeroTail_eq
-      (blockTensor (d := d) (D := D₁) A p)
-      (blockTensor (d := d) (D := D₂) B p)
-      liveA liveB hAB hAblocks hBblocks hZeroTail
-  have hPeqPos : SameMPV₂Pos (blockTensor (d := d) (D := D₁) A p) P.toTensor := by
-    intro N hN σ
-    have hZero :
-        mpv (zeroMPSTensor (blockPhysDim d p) zeroTailA) σ = 0 := by
-      rw [mpv_zeroMPSTensor]
-      simp [Nat.ne_of_gt hN]
-    calc
-      mpv (blockTensor (d := d) (D := D₁) A p) σ
-          = mpv (zeroMPSTensor (blockPhysDim d p) zeroTailA) σ + mpv liveA σ :=
-            hAblocks N σ
-      _ = mpv liveA σ := by rw [hZero]; simp
-      _ = mpv P.toTensor σ := (hPblocks N σ).symm
-  have hQeqPos : SameMPV₂Pos (blockTensor (d := d) (D := D₂) B p) Q.toTensor := by
-    intro N hN σ
-    have hZero :
-        mpv (zeroMPSTensor (blockPhysDim d p) zeroTailB) σ = 0 := by
-      rw [mpv_zeroMPSTensor]
-      simp [Nat.ne_of_gt hN]
-    calc
-      mpv (blockTensor (d := d) (D := D₂) B p) σ
-          = mpv (zeroMPSTensor (blockPhysDim d p) zeroTailB) σ + mpv liveB σ :=
-            hBblocks N σ
-      _ = mpv liveB σ := by rw [hZero]; simp
-      _ = mpv Q.toTensor σ := (hQblocks N σ).symm
-  have hPQeq : SameMPV₂ P.toTensor Q.toTensor := by
-    intro N σ
-    calc
-      mpv P.toTensor σ = mpv liveA σ := hPblocks N σ
-      _ = mpv liveB σ := hLive N σ
-      _ = mpv Q.toTensor σ := (hQblocks N σ).symm
-  have hOverlapSpan := overlapSpanData P Q hPblocks hQblocks hPbnt hQbnt
-  obtain ⟨M⟩ := hOverlapSpan.exists_sectorBasisMatching hPQeq
-  obtain ⟨ζ, hζne, hMultiset⟩ :=
-    fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_sectorMatching M hPbnt hPQeq
-  exact ⟨p, hp, P, Q, hPeqPos, hQeqPos, hPQeq, hPbnt, hQbnt,
-          M.perm, M.copies_eq, ζ, hζne, hMultiset⟩
 
 /-!
 ### What remains for the full 1606.00608 Fundamental Theorem
