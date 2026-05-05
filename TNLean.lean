@@ -240,6 +240,7 @@ import TNLean.MPS.CanonicalForm.Assembly.TPPrimitiveReduction
 import TNLean.MPS.CanonicalForm.Assembly.NormalityChain
 import TNLean.MPS.CanonicalForm.Assembly.PrimitiveBlocks
 import TNLean.MPS.CanonicalForm.Assembly.CommonBlockedCyclicSectorFamily
+import TNLean.MPS.CanonicalForm.Assembly.CommonBlockedCyclicSectorRepresentatives
 import TNLean.MPS.CanonicalForm.Assembly.CyclicSectorDecomposition
 import TNLean.MPS.CanonicalForm.Assembly.CommonBlockedCyclicSectorConstruction
 import TNLean.MPS.CanonicalForm.Assembly.StructuralData
