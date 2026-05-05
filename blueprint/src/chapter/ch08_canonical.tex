@@ -1770,24 +1770,33 @@ The following results separate the zero blocks from the nonzero blocks.
 
 \begin{theorem}[Common-sector representatives form a BNT-separated normal canonical form]%
 \label{thm:common_representative_normal_bnt}
-	\lean{MPSTensor.isNormalCanonicalFormBNT_commonRepresentativeBlocksAt}
+	\lean{MPSTensor.CommonBlockedCyclicSectorFamily.commonRepresentativeWeight_strictAnti_of_weight_strictAnti,
+		MPSTensor.CommonBlockedCyclicSectorFamily.commonRepresentativeBlocksAt_tp,
+		MPSTensor.CommonBlockedCyclicSectorFamily.commonRepresentativeBlocksAt_primitive,
+		MPSTensor.CommonBlockedCyclicSectorFamily.commonRepresentativeBlocksAt_irreducible,
+		MPSTensor.isNormalCanonicalFormBNT_commonRepresentativeBlocksAt}
 	\leanok
 	\uses{def:common_blocked_cyclic_sector_derived_blocks,
 		thm:common_blocked_cyclic_sector_derived_properties,
 		def:normal_cf_bnt}
 	For a prescribed common blocking length, choose one representative for
-	each original block among the common-alphabet cyclic sectors.  If the
-	transported representative weights are strictly ordered by decreasing
-	norm, and distinct representatives are not gauge-phase equivalent, then
-	the representative family is in normal canonical form with BNT
-	separation.
+	each original block among the common-alphabet cyclic sectors.  Strict
+	ordering of the original weights transports to strict ordering of the
+	representative weights by decreasing norm, and the representative blocks
+	retain the trace-preserving, primitive, and tensor-irreducible properties
+	at the prescribed length.  If distinct representatives are not
+	gauge-phase equivalent, then the representative family is in normal
+	canonical form with BNT separation.
 \end{theorem}
 
 \begin{proof}\leanok
 	\uses{thm:common_blocked_cyclic_sector_derived_properties,
 		def:normal_cf_bnt}
-	Apply the normal-canonical-form statement for the representative family
-	and include the assumed separation of distinct representatives.
+	First transport the strict ordering of weights and the structural
+	trace-preserving, primitive, and tensor-irreducible properties to the
+	representative blocks at the prescribed length.  Apply the
+	normal-canonical-form statement for the representative family and include
+	the assumed separation of distinct representatives.
 \end{proof}
 
 \begin{theorem}[Weights of common-alphabet sectors]%
