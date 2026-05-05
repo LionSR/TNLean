@@ -1096,6 +1096,32 @@ theorem exists_forall_pairTraceSeparatingAt_of_pairTraceSeparatingAll_of_identit
     (A k) (A j) (S := S) (T := L + S) (by omega) (hSepUpTo k j hjk)
     (fun l hl => hPadBase (L + S - l) (by omega))
 
+/-- A finite family of all-words pair-separation hypotheses and per-pair
+period-window identity-padding certificates admits one common homogeneous
+trace-separating length.
+
+This is only the finite-family arithmetic wrapper: the mathematical input is
+the period-window identity certificate for each ordered pair. -/
+theorem
+    exists_forall_pairTraceSeparatingAt_of_pairTraceSeparatingAll_of_identity_period_windows
+    (A : (k : Fin r) → MPSTensor d (dim k))
+    (hSep : ∀ k j : Fin r, j ≠ k → PairTraceSeparatingAll (A k) (A j))
+    (hWindow : ∀ k j : Fin r, j ≠ k → ∃ start period : ℕ, 0 < period ∧
+      ((1 : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
+          (1 : Matrix (Fin (dim j)) (Fin (dim j)) ℂ)) ∈
+        Submodule.span ℂ (Set.range (pairWordTuple (A k) (A j) period)) ∧
+      ∀ s : ℕ, s < period →
+        ((1 : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
+            (1 : Matrix (Fin (dim j)) (Fin (dim j)) ℂ)) ∈
+          Submodule.span ℂ (Set.range (pairWordTuple (A k) (A j) (start + s)))) :
+    ∃ T : ℕ, ∀ k j : Fin r, j ≠ k → PairTraceSeparatingAt (A k) (A j) T := by
+  refine exists_forall_pairTraceSeparatingAt_of_pairTraceSeparatingAll_of_identity_padding
+    A hSep ?_
+  intro k j hj
+  rcases hWindow k j hj with ⟨start, period, hperiod_pos, hperiod, hwindow⟩
+  exact pairIdentity_mem_pairWordTupleSpan_eventually_of_period_window
+    (A k) (A j) hperiod_pos hperiod hwindow
+
 /-! ### Burnside–Jacobson homogenization: from non-equivalence to homogeneous separation
 
 The theorems in this section bridge the gap between BNT block non-equivalence
