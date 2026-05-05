@@ -29,6 +29,8 @@ The supporting modules are:
   decomposition after blocking.
 * `TNLean.MPS.CanonicalForm.Assembly.CommonBlockedCyclicSectorConstruction` —
   construction of common-period cyclic-sector families.
+* `TNLean.MPS.CanonicalForm.Assembly.ZeroTailTransport` — generic zero-tail
+  MPV transport lemmas.
 * `TNLean.MPS.CanonicalForm.Assembly.StructuralData` — common-period blocking
   and structural after-blocking data.
 * `TNLean.MPS.CanonicalForm.Assembly.SectorComparisonCore` — conditional

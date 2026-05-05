@@ -243,6 +243,7 @@ import TNLean.MPS.CanonicalForm.Assembly.CommonBlockedCyclicSectorFamily
 import TNLean.MPS.CanonicalForm.Assembly.CommonBlockedCyclicSectorRepresentatives
 import TNLean.MPS.CanonicalForm.Assembly.CyclicSectorDecomposition
 import TNLean.MPS.CanonicalForm.Assembly.CommonBlockedCyclicSectorConstruction
+import TNLean.MPS.CanonicalForm.Assembly.ZeroTailTransport
 import TNLean.MPS.CanonicalForm.Assembly.StructuralData
 import TNLean.MPS.CanonicalForm.Assembly.SectorComparisonCore
 import TNLean.MPS.CanonicalForm.Assembly.StructuralTheorem
