@@ -742,6 +742,23 @@ theorem pairIdentity_mem_pairWordTupleSpan_eventually_of_period_window {D₁ D�
   rw [← hlen]
   exact hpad
 
+/-- A finite residue window of full homogeneous pair spans gives eventual
+identity padding. -/
+theorem pairIdentity_mem_pairWordTupleSpan_eventually_of_pairWordTupleSpanTop_period_window
+    {D₁ D₂ : ℕ}
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    {start period : ℕ} (hperiod_pos : 0 < period)
+    (hperiod : PairWordTupleSpanTop A B period)
+    (hwindow : ∀ r : ℕ, r < period → PairWordTupleSpanTop A B (start + r)) :
+    ∃ L : ℕ, ∀ n : ℕ, n ≥ L →
+      ((1 : Matrix (Fin D₁) (Fin D₁) ℂ), (1 : Matrix (Fin D₂) (Fin D₂) ℂ)) ∈
+        Submodule.span ℂ (Set.range (pairWordTuple A B n)) :=
+  pairIdentity_mem_pairWordTupleSpan_eventually_of_period_window
+    (A := A) (B := B) hperiod_pos
+    (pairIdentity_mem_pairWordTupleSpan_of_pairWordTupleSpanTop A B hperiod)
+    (fun r hr =>
+      pairIdentity_mem_pairWordTupleSpan_of_pairWordTupleSpanTop A B (hwindow r hr))
+
 /-- A cumulative pair span can be homogenized once the simultaneous pair identity
 is available at every padding length needed to reach the target length.
 
