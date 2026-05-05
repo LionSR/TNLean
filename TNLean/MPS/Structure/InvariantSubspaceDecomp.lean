@@ -265,7 +265,7 @@ theorem exists_twoBlock_decomp_of_lowerZero
             · subst h
               -- On the `1`-eigenspace, the diagonal entries are `1`.
               -- Here `s.2` is the defining property `f s.1 = 1`.
-              -- `Equiv.sumCompl p (Sum.inl s)` is definitionaly `s.1`, so this is exactly `s.2`.
+              -- `Equiv.sumCompl p (Sum.inl s)` is definitionally `s.1`, so this is exactly `s.2`.
               simpa [p] using s.2
             · -- Off-diagonal entries vanish.
               simp [Matrix.fromBlocks_apply₁₁, h]

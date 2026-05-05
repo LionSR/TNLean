@@ -50,14 +50,14 @@ noncomputable def twoBlockBlocks (A₁ : MPSTensor d n) (A₂ : MPSTensor d m) :
   fun k =>
     Fin.cases (motive := fun k => MPSTensor d (![n, m] k))
       (by
-        -- At `k = 0`, the dimension is definitionaly `n`.
+        -- At `k = 0`, the dimension is definitionally `n`.
         exact A₁)
       (fun j => by
         -- Here `j : Fin 1`, so we split into the (only) case `j = 0`.
         refine
           Fin.cases (motive := fun j => MPSTensor d (![n, m] (Fin.succ j)))
             (by
-              -- At `j = 0`, the dimension is definitionaly `m`.
+              -- At `j = 0`, the dimension is definitionally `m`.
               exact A₂)
             (fun j0 => by
               -- `j0 : Fin 0` is impossible.
