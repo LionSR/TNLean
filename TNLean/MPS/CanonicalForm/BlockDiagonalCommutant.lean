@@ -309,10 +309,10 @@ theorem pairTraceSeparatingAll_of_isCanonicalFormBNT
 /-- Canonical-form/BNT data plus eventual identity padding give a common
 homogeneous trace-separating length for all ordered pairs of distinct blocks.
 
-This is the finite-maximum packaging needed after the pairwise Burnside-Jacobson
-identity-padding input has been supplied. The BNT hypotheses provide all-words
-trace separation for each pair; the generic homogenization lemma chooses one
-length that works for the whole finite block family. -/
+This is the finite-maximum step after the pairwise Burnside-Jacobson
+identity-padding hypotheses have been supplied. The BNT hypotheses provide
+all-words trace separation for each pair; the generic homogenization lemma
+chooses one length that works for the whole finite block family. -/
 theorem exists_forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_identity_padding
     [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -371,6 +371,50 @@ theorem exists_forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_identity_pe
     ∃ T : ℕ, ∀ k j : Fin r, j ≠ k → PairTraceSeparatingAt (A k) (A j) T :=
   exists_forall_pairTraceSeparatingAt_of_pairTraceSeparatingAll_of_identity_period_windows
     A (pairTraceSeparatingAll_of_isCanonicalFormBNT μ A hCF) hWindow
+
+/-- Product-word span from canonical-form/BNT data plus period-window identity-padding
+certificates for every ordered pair of distinct blocks.
+
+This is the direct word-span form of
+`exists_forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_identity_period_windows`.
+It keeps the period-window hypothesis explicit and takes a finite maximum over block pairs
+to obtain a common length for later commutant and projection-span lemmas. -/
+theorem exists_wordTupleSpanTop_of_isCanonicalFormBNT_of_identity_period_windows
+    [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hCF : IsCanonicalFormBNT μ A)
+    (hWindow : ∀ k j : Fin r, j ≠ k → ∃ start period : ℕ, 0 < period ∧
+      ((1 : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
+          (1 : Matrix (Fin (dim j)) (Fin (dim j)) ℂ)) ∈
+        Submodule.span ℂ (Set.range (pairWordTuple (A k) (A j) period)) ∧
+      ∀ s : ℕ, s < period →
+        ((1 : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
+            (1 : Matrix (Fin (dim j)) (Fin (dim j)) ℂ)) ∈
+          Submodule.span ℂ (Set.range (pairWordTuple (A k) (A j) (start + s)))) :
+    ∃ T : ℕ, WordTupleSpanTop A (1 + (r - 1) * T) := by
+  obtain ⟨T, hT⟩ :=
+    exists_forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_identity_period_windows
+      μ A hCF hWindow
+  exact ⟨T, wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingAt μ A hCF hT⟩
+
+/-- Product-word span from canonical-form/BNT data plus period windows of full
+homogeneous pair spans for every ordered pair of distinct blocks.
+
+This is the same BNT finite-family wrapper as
+`exists_wordTupleSpanTop_of_isCanonicalFormBNT_of_identity_period_windows`, but
+with the period-window input stated as fixed-length full pair spans. -/
+theorem exists_wordTupleSpanTop_of_isCanonicalFormBNT_of_pairSpanTop_period_windows
+    [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hCF : IsCanonicalFormBNT μ A)
+    (hWindow : ∀ k j : Fin r, j ≠ k → ∃ start period : ℕ, 0 < period ∧
+      PairWordTupleSpanTop (A k) (A j) period ∧
+      ∀ s : ℕ, s < period → PairWordTupleSpanTop (A k) (A j) (start + s)) :
+    ∃ T : ℕ, WordTupleSpanTop A (1 + (r - 1) * T) := by
+  obtain ⟨T, hT⟩ :=
+    exists_forall_pairTraceSeparatingAt_of_pairSpanTop_period_windows
+      A (pairTraceSeparatingAll_of_isCanonicalFormBNT μ A hCF) hWindow
+  exact ⟨T, wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingAt μ A hCF hT⟩
 
 /-- Positive-length product-word span from canonical-form/BNT data plus a
 finite period-window identity-padding certificate for every ordered pair of
