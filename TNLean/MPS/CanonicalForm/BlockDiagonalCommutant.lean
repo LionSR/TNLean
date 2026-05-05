@@ -343,6 +343,25 @@ theorem pairTraceSeparatingAll_of_isCanonicalFormBNT
       (hCF.toHasInjectiveBlocks.block_injective j)
       hdim
 
+/-- Canonical-form/BNT data plus eventual identity padding give a common
+homogeneous trace-separating length for all ordered pairs of distinct blocks.
+
+This is the finite-maximum packaging needed after the pairwise Burnside-Jacobson
+identity-padding input has been supplied. The BNT hypotheses provide all-words
+trace separation for each pair; the generic homogenization lemma chooses one
+length that works for the whole finite block family. -/
+theorem exists_forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_identity_padding
+    [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hCF : IsCanonicalFormBNT μ A)
+    (hPad : ∀ k j : Fin r, j ≠ k → ∃ L : ℕ, ∀ n : ℕ, n ≥ L →
+      ((1 : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
+          (1 : Matrix (Fin (dim j)) (Fin (dim j)) ℂ)) ∈
+        Submodule.span ℂ (Set.range (pairWordTuple (A k) (A j) n))) :
+    ∃ T : ℕ, ∀ k j : Fin r, j ≠ k → PairTraceSeparatingAt (A k) (A j) T :=
+  exists_forall_pairTraceSeparatingAt_of_pairTraceSeparatingAll_of_identity_padding
+    A (pairTraceSeparatingAll_of_isCanonicalFormBNT μ A hCF) hPad
+
 /-- Positive-length product-word span from canonical-form/BNT data plus eventual
 identity padding for every ordered pair of distinct blocks.
 
@@ -363,8 +382,10 @@ theorem exists_pos_productWordSpan_of_isCanonicalFormBNT_of_identity_padding
         fun k : Fin r => evalWord (A k) (List.ofFn ω)) =
       (⊤ : Submodule ℂ
         ((k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) := by
-  exact exists_pos_productWordSpan_of_pairTraceSeparatingAll_of_identity_padding μ A hCF
-    (pairTraceSeparatingAll_of_isCanonicalFormBNT μ A hCF) hPad
+  obtain ⟨T, hT⟩ :=
+    exists_forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_identity_padding
+      μ A hCF hPad
+  exact exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingAt μ A hCF hT
 
 /-- Canonical-form/BNT data plus period-window identity-padding certificates give a common
 homogeneous trace-separating length for all ordered pairs of distinct blocks.
