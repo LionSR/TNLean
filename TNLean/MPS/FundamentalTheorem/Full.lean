@@ -28,10 +28,12 @@ blockwise gauge-phase equivalence.
 
 ## Implementation notes
 
-The proof is split across three sub-modules for readability:
+The proof is split across supporting sub-modules for readability:
 
 * `TNLean.MPS.FundamentalTheorem.Full.Helpers` — small overlap / inner-product helpers and
   the single-block Layer-2 gauge-phase equivalence lemma.
+* `TNLean.MPS.FundamentalTheorem.Full.DominantWeight` — the largest-weight norm
+  comparison used by the dominant-block projection.
 * `TNLean.MPS.FundamentalTheorem.Full.NondecayingOverlap` — Layer 1a,
   `exists_nondecaying_overlap_of_sameMPV₂_CFBNT`, a strong induction on `rA + rB` using a
   dominant-weight projection argument.
