@@ -953,13 +953,13 @@
 	
 	]
 </span>. </p>
-<h1 id="a0000000055">8.1 Positive definiteness</h1>
-<div class="remark_thmwrapper theorem-style-remark" id="a0000000557">
-  <div class="remark_thmheading">
-    <span class="remark_thmcaption">
-    Remark
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:brouwer_density_matrices">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
     </span>
-    <span class="remark_thmlabel">8.1</span>
+    <span class="theorem_thmlabel">8.1</span>
+    <span class="theorem_thmtitle">Brouwer fixed point on density matrices</span>
     <div class="thm_header_extras">
 
     
@@ -967,7 +967,96 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-qpf.html#a0000000557">#</a>
+    <a class="icon proof" href="ch-qpf.html#thm:brouwer_density_matrices">#</a>
+    
+    <a class="icon proof" href="ch-qpf.html#a0000000557"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-channels.html#def:density_matrices">Definition 5.9</a></li>
+          
+          <li><a href="ch-channels.html#thm:density_compact">Theorem 5.10</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/brouwer_fixedPoint_densityMatrices" class="lean_decl">brouwer_fixedPoint_densityMatrices</a></li>
+          
+          <li><a href="../docs/find/#doc/fixedPoint_of_compact_retract" class="lean_decl">fixedPoint_of_compact_retract</a></li>
+          
+          <li><a href="../docs/find/#doc/fixedPoint_of_compact_retract_fin" class="lean_decl">fixedPoint_of_compact_retract_fin</a></li>
+          
+          <li><a href="../docs/find/#doc/exists_fixedPoint_closedCube" class="lean_decl">exists_fixedPoint_closedCube</a></li>
+          
+          <li><a href="../docs/find/#doc/exists_fixedPoint_unitCube" class="lean_decl">exists_fixedPoint_unitCube</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>     Let \(D {\gt} 0\). Every continuous map from the compact convex set of density matrices in \(M_{D}(\mathbb {C})\) to itself has a fixed point. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000557">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>The proof starts from Brouwer’s theorem for products of simplices, transfers it to closed cubes, and then to compact retracts of finite-dimensional real normed spaces. The density-matrix set is such a compact retract, using the explicit density retraction. </p>
+
+  </div>
+</div>
+<h1 id="a0000000055">8.1 Positive definiteness</h1>
+<div class="remark_thmwrapper theorem-style-remark" id="a0000000558">
+  <div class="remark_thmheading">
+    <span class="remark_thmcaption">
+    Remark
+    </span>
+    <span class="remark_thmlabel">8.2</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-qpf.html#a0000000558">#</a>
     
     
     
@@ -986,7 +1075,7 @@
 	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
 	, Theorem&#160;6.3
 	]
-</span>). The injective-tensor version (Theorem&#160;<a href="ch-qpf.html#thm:psd_fp_pd">8.2</a>) uses a shorter direct kernel argument; the irreducible CP-map version (Theorem&#160;<a href="ch-qpf.html#thm:psd_fp_pd_irred">8.3</a>) follows via the support-projection argument of&#160;<span class="cite">
+</span>). The injective-tensor version (Theorem&#160;<a href="ch-qpf.html#thm:psd_fp_pd">8.3</a>) uses a shorter direct kernel argument; the irreducible CP-map version (Theorem&#160;<a href="ch-qpf.html#thm:psd_fp_pd_irred">8.4</a>) follows via the support-projection argument of&#160;<span class="cite">
 	[
 	
 	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
@@ -1001,7 +1090,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">8.2</span>
+    <span class="theorem_thmlabel">8.3</span>
     <span class="theorem_thmtitle">PSD fixed point is positive definite</span>
     <div class="thm_header_extras">
 
@@ -1012,7 +1101,7 @@
 
     <a class="icon proof" href="ch-qpf.html#thm:psd_fp_pd">#</a>
     
-    <a class="icon proof" href="ch-qpf.html#a0000000558"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-qpf.html#a0000000559"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1065,7 +1154,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000558">
+<div class="proof_wrapper" id="a0000000559">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1094,7 +1183,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">8.3</span>
+    <span class="theorem_thmlabel">8.4</span>
     <span class="theorem_thmtitle">PSD fixed point is positive definite — irreducible version</span>
     <div class="thm_header_extras">
 
@@ -1105,7 +1194,7 @@
 
     <a class="icon proof" href="ch-qpf.html#thm:psd_fp_pd_irred">#</a>
     
-    <a class="icon proof" href="ch-qpf.html#a0000000559"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-qpf.html#a0000000560"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1160,7 +1249,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000559">
+<div class="proof_wrapper" id="a0000000560">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1183,7 +1272,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">8.4</span>
+    <span class="theorem_thmlabel">8.5</span>
     <span class="theorem_thmtitle">Orthogonal trace condition</span>
     <div class="thm_header_extras">
 
@@ -1194,7 +1283,7 @@
 
     <a class="icon proof" href="ch-qpf.html#thm:orthogonal_trace_cond">#</a>
     
-    <a class="icon proof" href="ch-qpf.html#a0000000560"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-qpf.html#a0000000561"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1242,13 +1331,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Let \(E\) be an irreducible completely positive map on \(M_{D}(\mathbb {C})\), and let \(A, B \ge 0\) be nonzero positive semidefinite matrices with \(\operatorname{tr}(B A) = 0\). Then there exists \(t\) with \(1 \le t \le D - 1\) such that </p>
-<div class="displaymath" id="a0000000561">
+<div class="displaymath" id="a0000000562">
   \[  \operatorname{tr}\bigl(B \cdot E^t(A)\bigr) {\gt} 0.  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000560">
+<div class="proof_wrapper" id="a0000000561">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1263,7 +1352,7 @@
 	, Theorem&#160;6.2, item&#160;2
 	]
 </span>) gives \((\mathbb {1}+ E)^{D-1}(A) {\gt} 0\) (positive definite). Since \(B \ge 0\) is nonzero, \(\operatorname{tr}\bigl(B \cdot (\mathbb {1}+ E)^{D-1}(A)\bigr) {\gt} 0\). Expanding by the binomial theorem: </p>
-<div class="displaymath" id="a0000000562">
+<div class="displaymath" id="a0000000563">
   \[  \operatorname{tr}\Bigl(B \cdot \sum _{k=0}^{D-1} \tbinom {D-1}{k} E^k(A)\Bigr) {\gt} 0.  \]
 </div>
 <p> Each term \(\operatorname{tr}(B \cdot E^k(A)) \ge 0\) since both factors are PSD. The \(k = 0\) term vanishes by hypothesis (\(\operatorname{tr}(B A) = 0\)). Hence at least one \(k \in \{ 1, \ldots , D-1\} \) contributes a strictly positive term. This is&#160;<span class="cite">
@@ -1282,7 +1371,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">8.5</span>
+    <span class="theorem_thmlabel">8.6</span>
     <span class="theorem_thmtitle">Uniqueness of PSD fixed point</span>
     <div class="thm_header_extras">
 
@@ -1293,7 +1382,7 @@
 
     <a class="icon proof" href="ch-qpf.html#thm:psd_fp_unique">#</a>
     
-    <a class="icon proof" href="ch-qpf.html#a0000000563"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-qpf.html#a0000000564"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1313,7 +1402,7 @@
           
           <li><a href="ch-mps.html#def:transfer_map">Definition 2.5</a></li>
           
-          <li><a href="ch-qpf.html#thm:psd_fp_pd">Theorem 8.2</a></li>
+          <li><a href="ch-qpf.html#thm:psd_fp_pd">Theorem 8.3</a></li>
           
         </ul>
     
@@ -1348,7 +1437,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000563">
+<div class="proof_wrapper" id="a0000000564">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1356,7 +1445,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Both \(\rho \) and \(\sigma \) are positive definite by Theorem&#160;<a href="ch-qpf.html#thm:psd_fp_pd">8.2</a>. Write \(\rho = S S^\dagger \) via a spectral square root and set \(H = (S^\dagger )^{-1} \sigma S^{-1}\), which is Hermitian and positive definite. Let \(c_0\) be the minimal eigenvalue of&#160;\(H\). Then \(\tau := \sigma - c_0 \rho \) is a PSD fixed point which is <em>not</em> positive definite (it has a zero eigenvalue by construction of&#160;\(c_0\)). By Theorem&#160;<a href="ch-qpf.html#thm:psd_fp_pd">8.2</a>, \(\tau \) must be zero, giving \(\sigma = c_0 \rho \). <b class="bfseries">Relation to Wolf:</b> In&#160;<span class="cite">
+  <p> Both \(\rho \) and \(\sigma \) are positive definite by Theorem&#160;<a href="ch-qpf.html#thm:psd_fp_pd">8.3</a>. Write \(\rho = S S^\dagger \) via a spectral square root and set \(H = (S^\dagger )^{-1} \sigma S^{-1}\), which is Hermitian and positive definite. Let \(c_0\) be the minimal eigenvalue of&#160;\(H\). Then \(\tau := \sigma - c_0 \rho \) is a PSD fixed point which is <em>not</em> positive definite (it has a zero eigenvalue by construction of&#160;\(c_0\)). By Theorem&#160;<a href="ch-qpf.html#thm:psd_fp_pd">8.3</a>, \(\tau \) must be zero, giving \(\sigma = c_0 \rho \). <b class="bfseries">Relation to Wolf:</b> In&#160;<span class="cite">
 	[
 	
 	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
@@ -1368,16 +1457,16 @@
 	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
 	, Theorem&#160;6.2
 	]
-</span>. The same minimal-eigenvalue argument applies here, using the injective-tensor positive-definiteness (Theorem&#160;<a href="ch-qpf.html#thm:psd_fp_pd">8.2</a>) in place of the growth condition. </p>
+</span>. The same minimal-eigenvalue argument applies here, using the injective-tensor positive-definiteness (Theorem&#160;<a href="ch-qpf.html#thm:psd_fp_pd">8.3</a>) in place of the growth condition. </p>
 
   </div>
 </div>
-<div class="remark_thmwrapper theorem-style-remark" id="a0000000564">
+<div class="remark_thmwrapper theorem-style-remark" id="a0000000565">
   <div class="remark_thmheading">
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">8.6</span>
+    <span class="remark_thmlabel">8.7</span>
     <div class="thm_header_extras">
 
     
@@ -1385,7 +1474,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-qpf.html#a0000000564">#</a>
+    <a class="icon proof" href="ch-qpf.html#a0000000565">#</a>
     
     
     
@@ -1401,7 +1490,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">8.7</span>
+    <span class="theorem_thmlabel">8.8</span>
     <span class="theorem_thmtitle">Uniqueness of positive eigenvalue for irreducible CP maps</span>
     <div class="thm_header_extras">
 
@@ -1412,7 +1501,7 @@
 
     <a class="icon proof" href="ch-qpf.html#thm:eigenvalue_unique_irred">#</a>
     
-    <a class="icon proof" href="ch-qpf.html#a0000000565"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-qpf.html#a0000000566"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1430,9 +1519,9 @@
           
           <li><a href="ch-channels.html#def:irreducible_cp">Definition 5.15</a></li>
           
-          <li><a href="ch-qpf.html#thm:pf_eigenvector_existence">Theorem 8.17</a></li>
+          <li><a href="ch-qpf.html#thm:pf_eigenvector_existence">Theorem 8.18</a></li>
           
-          <li><a href="ch-qpf.html#thm:psd_fp_pd_irred">Theorem 8.3</a></li>
+          <li><a href="ch-qpf.html#thm:psd_fp_pd_irred">Theorem 8.4</a></li>
           
         </ul>
     
@@ -1467,7 +1556,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000565">
+<div class="proof_wrapper" id="a0000000566">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1475,8 +1564,8 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Extract Kraus operators \(K\) for \(E\). Irreducibility of \(E\) passes to the adjoint transfer map \(E^\dagger (\, \cdot \, ) = \sum _i K_i^\dagger \, (\, \cdot \, )\, K_i\), which is a positive CP map. The Perron–Frobenius existence theorem (Theorem&#160;<a href="ch-qpf.html#thm:pf_eigenvector_existence">8.17</a>) together with the irreducible positive-definiteness upgrade (Theorem&#160;<a href="ch-qpf.html#thm:psd_fp_pd_irred">8.3</a>) gives a positive definite eigenvector \(\tau {\gt} 0\) with eigenvalue \(t {\gt} 0\): \(E^\dagger (\tau ) = t\, \tau \). For any nonzero PSD \(X\) with \(E(X) = s X\), the trace pairing identity yields </p>
-<div class="displaymath" id="a0000000566">
+  <p> Extract Kraus operators \(K\) for \(E\). Irreducibility of \(E\) passes to the adjoint transfer map \(E^\dagger (\, \cdot \, ) = \sum _i K_i^\dagger \, (\, \cdot \, )\, K_i\), which is a positive CP map. The Perron–Frobenius existence theorem (Theorem&#160;<a href="ch-qpf.html#thm:pf_eigenvector_existence">8.18</a>) together with the irreducible positive-definiteness upgrade (Theorem&#160;<a href="ch-qpf.html#thm:psd_fp_pd_irred">8.4</a>) gives a positive definite eigenvector \(\tau {\gt} 0\) with eigenvalue \(t {\gt} 0\): \(E^\dagger (\tau ) = t\, \tau \). For any nonzero PSD \(X\) with \(E(X) = s X\), the trace pairing identity yields </p>
+<div class="displaymath" id="a0000000567">
   \[  s \cdot \operatorname{tr}(\tau X) = \operatorname{tr}\bigl(\tau \cdot E(X)\bigr) = \operatorname{tr}\bigl(E^\dagger (\tau ) \cdot X\bigr) = t \cdot \operatorname{tr}(\tau X).  \]
 </div>
 <p> Since \(\tau {\gt} 0\) and \(X \ge 0\), \(X \neq 0\), the scalar \(\operatorname{tr}(\tau X) {\gt} 0\), so \(s = t\). Applying this to both \((\rho , r_1)\) and \((\sigma , r_2)\) gives \(r_1 = t = r_2\). <b class="bfseries">Relation to Wolf:</b> This is&#160;<span class="cite">
@@ -1495,7 +1584,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">8.8</span>
+    <span class="theorem_thmlabel">8.9</span>
     <span class="theorem_thmtitle">Existence of PSD fixed point</span>
     <div class="thm_header_extras">
 
@@ -1506,7 +1595,7 @@
 
     <a class="icon proof" href="ch-qpf.html#thm:psd_fp_exists">#</a>
     
-    <a class="icon proof" href="ch-qpf.html#a0000000567"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-qpf.html#a0000000568"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1561,7 +1650,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000567">
+<div class="proof_wrapper" id="a0000000568">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1578,7 +1667,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">8.9</span>
+    <span class="theorem_thmlabel">8.10</span>
     <span class="theorem_thmtitle">Quantum Perron–Frobenius</span>
     <div class="thm_header_extras">
 
@@ -1589,7 +1678,7 @@
 
     <a class="icon proof" href="ch-qpf.html#thm:qpf">#</a>
     
-    <a class="icon proof" href="ch-qpf.html#a0000000568"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-qpf.html#a0000000569"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1609,11 +1698,11 @@
           
           <li><a href="ch-mps.html#def:transfer_map">Definition 2.5</a></li>
           
-          <li><a href="ch-qpf.html#thm:psd_fp_exists">Theorem 8.8</a></li>
+          <li><a href="ch-qpf.html#thm:psd_fp_exists">Theorem 8.9</a></li>
           
-          <li><a href="ch-qpf.html#thm:psd_fp_pd">Theorem 8.2</a></li>
+          <li><a href="ch-qpf.html#thm:psd_fp_pd">Theorem 8.3</a></li>
           
-          <li><a href="ch-qpf.html#thm:psd_fp_unique">Theorem 8.5</a></li>
+          <li><a href="ch-qpf.html#thm:psd_fp_unique">Theorem 8.6</a></li>
           
         </ul>
     
@@ -1648,7 +1737,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000568">
+<div class="proof_wrapper" id="a0000000569">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1656,7 +1745,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Combine Theorems&#160;<a href="ch-qpf.html#thm:psd_fp_exists">8.8</a>, <a href="ch-qpf.html#thm:psd_fp_pd">8.2</a>, and&#160;<a href="ch-qpf.html#thm:psd_fp_unique">8.5</a>. </p>
+  <p> Combine Theorems&#160;<a href="ch-qpf.html#thm:psd_fp_exists">8.9</a>, <a href="ch-qpf.html#thm:psd_fp_pd">8.3</a>, and&#160;<a href="ch-qpf.html#thm:psd_fp_unique">8.6</a>. </p>
 
   </div>
 </div>
@@ -1666,7 +1755,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">8.10</span>
+    <span class="theorem_thmlabel">8.11</span>
     <span class="theorem_thmtitle">Right-canonical (unital) gauge</span>
     <div class="thm_header_extras">
 
@@ -1677,7 +1766,7 @@
 
     <a class="icon proof" href="ch-qpf.html#thm:right_canonical_gauge">#</a>
     
-    <a class="icon proof" href="ch-qpf.html#a0000000569"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-qpf.html#a0000000570"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1708,7 +1797,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000569">
+<div class="proof_wrapper" id="a0000000570">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1725,7 +1814,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">8.11</span>
+    <span class="theorem_thmlabel">8.12</span>
     <span class="theorem_thmtitle">Left-canonical (trace-preserving) gauge</span>
     <div class="thm_header_extras">
 
@@ -1736,7 +1825,7 @@
 
     <a class="icon proof" href="ch-qpf.html#thm:left_canonical_gauge">#</a>
     
-    <a class="icon proof" href="ch-qpf.html#a0000000570"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-qpf.html#a0000000571"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1767,7 +1856,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000570">
+<div class="proof_wrapper" id="a0000000571">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1779,12 +1868,12 @@
 
   </div>
 </div>
-<div class="remark_thmwrapper theorem-style-remark" id="a0000000571">
+<div class="remark_thmwrapper theorem-style-remark" id="a0000000572">
   <div class="remark_thmheading">
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">8.12</span>
+    <span class="remark_thmlabel">8.13</span>
     <div class="thm_header_extras">
 
     
@@ -1792,14 +1881,14 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-qpf.html#a0000000571">#</a>
+    <a class="icon proof" href="ch-qpf.html#a0000000572">#</a>
     
     
     
         </div>
   </div>
   <div class="remark_thmcontent">
-  <p>The right-canonical gauge of Theorem&#160;<a href="ch-qpf.html#thm:right_canonical_gauge">8.10</a> and the left-canonical gauge of Theorem&#160;<a href="ch-qpf.html#thm:left_canonical_gauge">8.11</a> are generally different similarity transforms: one is built from a fixed point of \(\mathcal{E}_A\), the other from a fixed point of the adjoint transfer map. This section does not claim that a single gauge makes the transfer map simultaneously unital and trace-preserving. </p>
+  <p>The right-canonical gauge of Theorem&#160;<a href="ch-qpf.html#thm:right_canonical_gauge">8.11</a> and the left-canonical gauge of Theorem&#160;<a href="ch-qpf.html#thm:left_canonical_gauge">8.12</a> are generally different similarity transforms: one is built from a fixed point of \(\mathcal{E}_A\), the other from a fixed point of the adjoint transfer map. This section does not claim that a single gauge makes the transfer map simultaneously unital and trace-preserving. </p>
 
   </div>
 </div>
@@ -1809,7 +1898,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">8.13</span>
+    <span class="lemma_thmlabel">8.14</span>
     <span class="lemma_thmtitle">Similarity transform preserves irreducibility</span>
     <div class="thm_header_extras">
 
@@ -1820,7 +1909,7 @@
 
     <a class="icon proof" href="ch-qpf.html#lem:similarity_irred">#</a>
     
-    <a class="icon proof" href="ch-qpf.html#a0000000572"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-qpf.html#a0000000573"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1870,14 +1959,14 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   Let \(E\) be an irreducible completely positive map on \(M_{D}(\mathbb {C})\), let \(C \in M_{D}(\mathbb {C})\) be invertible (\(\det C \neq 0\)), and let \(c {\gt} 0\). Define the similarity-transformed map </p>
-<div class="displaymath" id="a0000000573">
+<div class="displaymath" id="a0000000574">
   \[  E'(X) \; =\;  c \cdot C^{-1}\,  E\! \bigl(C\, X\, C^\dagger \bigr)\, (C^\dagger )^{-1}.  \]
 </div>
 <p> Then \(E'\) is also irreducible. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000572">
+<div class="proof_wrapper" id="a0000000573">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1900,7 +1989,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">8.14</span>
+    <span class="lemma_thmlabel">8.15</span>
     <span class="lemma_thmtitle">Similarity is an involution</span>
     <div class="thm_header_extras">
 
@@ -1911,7 +2000,7 @@
 
     <a class="icon proof" href="ch-qpf.html#lem:similarity_involution">#</a>
     
-    <a class="icon proof" href="ch-qpf.html#a0000000574"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-qpf.html#a0000000575"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1939,13 +2028,13 @@
   </div>
   <div class="lemma_thmcontent">
   <p>  For any invertible \(C \in M_{D}(\mathbb {C})\) and any linear map \(E\) on \(M_{D}(\mathbb {C})\), the similarity transforms by \(C\) and \(C^{-1}\) compose to the identity: </p>
-<div class="displaymath" id="a0000000575">
+<div class="displaymath" id="a0000000576">
   \[  X \; \mapsto \;  C\bigl(C^{-1}\,  E(C\, X\, C^\dagger )\, (C^\dagger )^{-1}\bigr)\, C^\dagger \; =\;  E(X).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000574">
+<div class="proof_wrapper" id="a0000000575">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1962,7 +2051,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">8.15</span>
+    <span class="lemma_thmlabel">8.16</span>
     <span class="lemma_thmtitle">Irreducibility is invariant under similarity</span>
     <div class="thm_header_extras">
 
@@ -1973,7 +2062,7 @@
 
     <a class="icon proof" href="ch-qpf.html#lem:similarity_irred_iff">#</a>
     
-    <a class="icon proof" href="ch-qpf.html#a0000000576"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-qpf.html#a0000000577"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1991,13 +2080,13 @@
           
           <li><a href="ch-channels.html#def:irreducible_cp">Definition 5.15</a></li>
           
-          <li><a href="ch-qpf.html#lem:similarity_irred">Lemma 8.13</a></li>
+          <li><a href="ch-qpf.html#lem:similarity_irred">Lemma 8.14</a></li>
           
-          <li><a href="ch-qpf.html#lem:similarity_involution">Lemma 8.14</a></li>
+          <li><a href="ch-qpf.html#lem:similarity_involution">Lemma 8.15</a></li>
           
-          <li><a href="ch-qpf.html#lem:similarity_irred">Lemma 8.13</a></li>
+          <li><a href="ch-qpf.html#lem:similarity_irred">Lemma 8.14</a></li>
           
-          <li><a href="ch-qpf.html#lem:similarity_involution">Lemma 8.14</a></li>
+          <li><a href="ch-qpf.html#lem:similarity_involution">Lemma 8.15</a></li>
           
         </ul>
     
@@ -2032,7 +2121,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000576">
+<div class="proof_wrapper" id="a0000000577">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2040,7 +2129,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> The forward direction follows from Lemma&#160;<a href="ch-qpf.html#lem:similarity_irred">8.13</a> applied with the inverse \(C^{-1}\) (whose determinant is also nonzero): if the similarity transform of \(E\) by \(C\) is irreducible, then so is its similarity transform by \(C^{-1}\), which equals \(E\) by Lemma&#160;<a href="ch-qpf.html#lem:similarity_involution">8.14</a>. The reverse direction is Lemma&#160;<a href="ch-qpf.html#lem:similarity_irred">8.13</a> itself (with \(c = 1\)). </p>
+  <p> The forward direction follows from Lemma&#160;<a href="ch-qpf.html#lem:similarity_irred">8.14</a> applied with the inverse \(C^{-1}\) (whose determinant is also nonzero): if the similarity transform of \(E\) by \(C\) is irreducible, then so is its similarity transform by \(C^{-1}\), which equals \(E\) by Lemma&#160;<a href="ch-qpf.html#lem:similarity_involution">8.15</a>. The reverse direction is Lemma&#160;<a href="ch-qpf.html#lem:similarity_irred">8.14</a> itself (with \(c = 1\)). </p>
 
   </div>
 </div>
@@ -2049,7 +2138,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">8.16</span>
+    <span class="theorem_thmlabel">8.17</span>
     <span class="theorem_thmtitle">Scaling preserves irreducibility</span>
     <div class="thm_header_extras">
 
@@ -2060,7 +2149,7 @@
 
     <a class="icon proof" href="ch-qpf.html#thm:irred_map_smul">#</a>
     
-    <a class="icon proof" href="ch-qpf.html#a0000000577"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-qpf.html#a0000000578"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2117,7 +2206,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000577">
+<div class="proof_wrapper" id="a0000000578">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2161,7 +2250,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">8.17</span>
+    <span class="theorem_thmlabel">8.18</span>
     <span class="theorem_thmtitle">PSD eigenvector for positive maps</span>
     <div class="thm_header_extras">
 
@@ -2238,7 +2327,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">8.18</span>
+    <span class="theorem_thmlabel">8.19</span>
     <span class="theorem_thmtitle">Adjoint transfer map is nonzero</span>
     <div class="thm_header_extras">
 
@@ -2249,7 +2338,7 @@
 
     <a class="icon proof" href="ch-qpf.html#thm:adjoint_transfer_ne_zero">#</a>
     
-    <a class="icon proof" href="ch-qpf.html#a0000000578"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-qpf.html#a0000000579"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2300,7 +2389,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000578">
+<div class="proof_wrapper" id="a0000000579">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2317,7 +2406,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">8.19</span>
+    <span class="theorem_thmlabel">8.20</span>
     <span class="theorem_thmtitle">Positive-definite adjoint eigenvector for irreducible tensors</span>
     <div class="thm_header_extras">
 
@@ -2328,7 +2417,7 @@
 
     <a class="icon proof" href="ch-qpf.html#thm:posDef_adjoint_eigenvector">#</a>
     
-    <a class="icon proof" href="ch-qpf.html#a0000000579"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-qpf.html#a0000000580"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2348,13 +2437,13 @@
           
           <li><a href="ch-mps.html#def:transfer_map">Definition 2.5</a></li>
           
-          <li><a href="ch-qpf.html#thm:pf_eigenvector_existence">Theorem 8.17</a></li>
+          <li><a href="ch-qpf.html#thm:pf_eigenvector_existence">Theorem 8.18</a></li>
           
-          <li><a href="ch-qpf.html#thm:irred_map_smul">Theorem 8.16</a></li>
+          <li><a href="ch-qpf.html#thm:irred_map_smul">Theorem 8.17</a></li>
           
-          <li><a href="ch-qpf.html#thm:adjoint_transfer_ne_zero">Theorem 8.18</a></li>
+          <li><a href="ch-qpf.html#thm:adjoint_transfer_ne_zero">Theorem 8.19</a></li>
           
-          <li><a href="ch-qpf.html#thm:psd_fp_pd_irred">Theorem 8.3</a></li>
+          <li><a href="ch-qpf.html#thm:psd_fp_pd_irred">Theorem 8.4</a></li>
           
         </ul>
     
@@ -2408,7 +2497,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000579">
+<div class="proof_wrapper" id="a0000000580">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2416,7 +2505,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> By Theorem&#160;<a href="ch-qpf.html#thm:adjoint_transfer_ne_zero">8.18</a>, \(\mathcal{E}_A^\dagger \neq 0\). Since \(\mathcal{E}_A^\dagger (X) = \sum _i (A^i)^\dagger X A^i\) is a Kraus map, it is positive. Irreducibility of \(A\) transfers to the adjoint transfer map. More precisely: if \(P\) is invariant for \(\mathcal{E}_A\) (i.e. \((\mathbb {1}- P)K_i P = 0\) for all Kraus operators \(K_i\)), then taking adjoints gives \(P K_i^\dagger (\mathbb {1}- P) = 0\), which means \(\mathbb {1}- P\) is invariant for \(\mathcal{E}_A^\dagger \). Hence \(\mathcal{E}_A\) irreducible \(\Longleftrightarrow \) \(\mathcal{E}_A^\dagger \) irreducible, and together with \(\mathcal{E}_A^\dagger \neq 0\) this implies \(\mathcal{E}_A^\dagger (\tau ) \neq 0\) for every nonzero PSD matrix \(\tau \). Hence Theorem&#160;<a href="ch-qpf.html#thm:pf_eigenvector_existence">8.17</a> applies to \(\mathcal{E}_A^\dagger \), giving \(\sigma _0 \ge 0\) (PSD, nonzero) and \(r {\gt} 0\) with \(\mathcal{E}_A^\dagger (\sigma _0) = r \sigma _0\). Rescale: set \(T^i = r^{-1/2} (A^i)^\dagger \). Then \(\mathcal{E}_T(\sigma _0) = \sigma _0\), and \(\mathcal{E}_T\) is irreducible (by Theorem&#160;<a href="ch-qpf.html#thm:irred_map_smul">8.16</a>, since irreducibility of \(\mathcal{E}_A\) transfers to the adjoint and is preserved under scaling). Since \(\mathcal{E}_T\) is irreducible with a PSD fixed point, the positive-definiteness upgrade (Theorem&#160;<a href="ch-qpf.html#thm:psd_fp_pd_irred">8.3</a>) gives \(\sigma _0\) positive definite. </p>
+  <p> By Theorem&#160;<a href="ch-qpf.html#thm:adjoint_transfer_ne_zero">8.19</a>, \(\mathcal{E}_A^\dagger \neq 0\). Since \(\mathcal{E}_A^\dagger (X) = \sum _i (A^i)^\dagger X A^i\) is a Kraus map, it is positive. Irreducibility of \(A\) transfers to the adjoint transfer map. More precisely: if \(P\) is invariant for \(\mathcal{E}_A\) (i.e. \((\mathbb {1}- P)K_i P = 0\) for all Kraus operators \(K_i\)), then taking adjoints gives \(P K_i^\dagger (\mathbb {1}- P) = 0\), which means \(\mathbb {1}- P\) is invariant for \(\mathcal{E}_A^\dagger \). Hence \(\mathcal{E}_A\) irreducible \(\Longleftrightarrow \) \(\mathcal{E}_A^\dagger \) irreducible, and together with \(\mathcal{E}_A^\dagger \neq 0\) this implies \(\mathcal{E}_A^\dagger (\tau ) \neq 0\) for every nonzero PSD matrix \(\tau \). Hence Theorem&#160;<a href="ch-qpf.html#thm:pf_eigenvector_existence">8.18</a> applies to \(\mathcal{E}_A^\dagger \), giving \(\sigma _0 \ge 0\) (PSD, nonzero) and \(r {\gt} 0\) with \(\mathcal{E}_A^\dagger (\sigma _0) = r \sigma _0\). Rescale: set \(T^i = r^{-1/2} (A^i)^\dagger \). Then \(\mathcal{E}_T(\sigma _0) = \sigma _0\), and \(\mathcal{E}_T\) is irreducible (by Theorem&#160;<a href="ch-qpf.html#thm:irred_map_smul">8.17</a>, since irreducibility of \(\mathcal{E}_A\) transfers to the adjoint and is preserved under scaling). Since \(\mathcal{E}_T\) is irreducible with a PSD fixed point, the positive-definiteness upgrade (Theorem&#160;<a href="ch-qpf.html#thm:psd_fp_pd_irred">8.4</a>) gives \(\sigma _0\) positive definite. </p>
 
   </div>
 </div>
@@ -2425,7 +2514,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">8.20</span>
+    <span class="theorem_thmlabel">8.21</span>
     <span class="theorem_thmtitle">TP-gauge existence for irreducible tensors</span>
     <div class="thm_header_extras">
 
@@ -2436,7 +2525,7 @@
 
     <a class="icon proof" href="ch-qpf.html#thm:tp_data_irreducible">#</a>
     
-    <a class="icon proof" href="ch-qpf.html#a0000000580"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-qpf.html#a0000000581"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2454,9 +2543,9 @@
           
           <li><a href="ch-canonical.html#def:irreducible_tensor">Definition 11.15</a></li>
           
-          <li><a href="ch-qpf.html#thm:posDef_adjoint_eigenvector">Theorem 8.19</a></li>
+          <li><a href="ch-qpf.html#thm:posDef_adjoint_eigenvector">Theorem 8.20</a></li>
           
-          <li><a href="ch-qpf.html#thm:left_canonical_gauge">Theorem 8.11</a></li>
+          <li><a href="ch-qpf.html#thm:left_canonical_gauge">Theorem 8.12</a></li>
           
         </ul>
     
@@ -2488,7 +2577,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Let \(A\) be an irreducible MPS tensor with \(D {\gt} 0\) and some \(A^i \neq 0\). Then there exist a positive real&#160;\(r\), a positive definite matrix&#160;\(\sigma \), and a gauge-equivalent tensor&#160;\(B\) such that </p>
-<div class="displaymath" id="a0000000581">
+<div class="displaymath" id="a0000000582">
   \[  B^i = \sigma ^{1/2} \cdot (r^{-1/2} A^i) \cdot \sigma ^{-1/2}  \]
 </div>
 <p> is trace-preserving: \(\sum _i (B^i)^\dagger B^i = \mathbb {1}\). </p>
@@ -2502,7 +2591,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000580">
+<div class="proof_wrapper" id="a0000000581">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2510,7 +2599,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> By Theorem&#160;<a href="ch-qpf.html#thm:posDef_adjoint_eigenvector">8.19</a>, obtain \(\sigma \) positive definite and \(r {\gt} 0\) with \(\mathcal{E}_A^\dagger (\sigma ) = r \sigma \). Set \(c = r^{-1/2}\) and \(A'^i = c A^i\). Then \(\mathcal{E}_{A'}^\dagger (\sigma ) = \sigma \). By the TP gauge construction (Theorem&#160;<a href="ch-qpf.html#thm:left_canonical_gauge">8.11</a>), \(B^i = \sigma ^{1/2} A'^i \sigma ^{-1/2}\) satisfies \(\sum _i (B^i)^\dagger B^i = \mathbb {1}\). </p>
+  <p> By Theorem&#160;<a href="ch-qpf.html#thm:posDef_adjoint_eigenvector">8.20</a>, obtain \(\sigma \) positive definite and \(r {\gt} 0\) with \(\mathcal{E}_A^\dagger (\sigma ) = r \sigma \). Set \(c = r^{-1/2}\) and \(A'^i = c A^i\). Then \(\mathcal{E}_{A'}^\dagger (\sigma ) = \sigma \). By the TP gauge construction (Theorem&#160;<a href="ch-qpf.html#thm:left_canonical_gauge">8.12</a>), \(B^i = \sigma ^{1/2} A'^i \sigma ^{-1/2}\) satisfies \(\sum _i (B^i)^\dagger B^i = \mathbb {1}\). </p>
 
   </div>
 </div>
@@ -2520,7 +2609,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">8.21</span>
+    <span class="theorem_thmlabel">8.22</span>
     <span class="theorem_thmtitle">Exponential truncation is positive definite</span>
     <div class="thm_header_extras">
 
@@ -2531,7 +2620,7 @@
 
     <a class="icon proof" href="ch-qpf.html#thm:exp_truncation_pd_irred">#</a>
     
-    <a class="icon proof" href="ch-qpf.html#a0000000582"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-qpf.html#a0000000583"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2549,7 +2638,7 @@
           
           <li><a href="ch-channels.html#def:irreducible_cp">Definition 5.15</a></li>
           
-          <li><a href="ch-qpf.html#thm:orthogonal_trace_cond">Theorem 8.4</a></li>
+          <li><a href="ch-qpf.html#thm:orthogonal_trace_cond">Theorem 8.5</a></li>
           
         </ul>
     
@@ -2581,7 +2670,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    Let \(E\) be an irreducible completely positive map on \(M_{D}(\mathbb {C})\), let \(A \ge 0\) be nonzero, and let \(t {\gt} 0\). Then the finite exponential truncation </p>
-<div class="displaymath" id="a0000000583">
+<div class="displaymath" id="a0000000584">
   \[  \sum _{k=0}^{D-1} \frac{t^k}{k!} E^k(A)  \]
 </div>
 <p> is positive definite. This is the finite-sum core of <span class="cite">
@@ -2594,7 +2683,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000582">
+<div class="proof_wrapper" id="a0000000583">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2602,7 +2691,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> If a nonzero vector \(v\) annihilated this quadratic form, then every term \(E^k(A)\) with \(0 \le k \le D-1\) would annihilate \(v\). The growth theorem for irreducible CP maps (that is, \((\mathbb {1}+ E)^{D-1}(A) {\gt} 0\) for irreducible \(E\) and nonzero PSD \(A\), as established in the proof of Theorem&#160;<a href="ch-qpf.html#thm:orthogonal_trace_cond">8.4</a>) then forces \((\mathbb {1}+ E)^{D-1}(A)\) to annihilate \(v\), contradicting its positive definiteness. </p>
+  <p> If a nonzero vector \(v\) annihilated this quadratic form, then every term \(E^k(A)\) with \(0 \le k \le D-1\) would annihilate \(v\). The growth theorem for irreducible CP maps (that is, \((\mathbb {1}+ E)^{D-1}(A) {\gt} 0\) for irreducible \(E\) and nonzero PSD \(A\), as established in the proof of Theorem&#160;<a href="ch-qpf.html#thm:orthogonal_trace_cond">8.5</a>) then forces \((\mathbb {1}+ E)^{D-1}(A)\) to annihilate \(v\), contradicting its positive definiteness. </p>
 
   </div>
 </div>
@@ -2611,7 +2700,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">8.22</span>
+    <span class="theorem_thmlabel">8.23</span>
     <span class="theorem_thmtitle">Exponential positivity for irreducible CP maps</span>
     <div class="thm_header_extras">
 
@@ -2622,7 +2711,7 @@
 
     <a class="icon proof" href="ch-qpf.html#thm:exp_pd_irred">#</a>
     
-    <a class="icon proof" href="ch-qpf.html#a0000000584"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-qpf.html#a0000000585"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2640,7 +2729,7 @@
           
           <li><a href="ch-channels.html#def:irreducible_cp">Definition 5.15</a></li>
           
-          <li><a href="ch-qpf.html#thm:exp_truncation_pd_irred">Theorem 8.21</a></li>
+          <li><a href="ch-qpf.html#thm:exp_truncation_pd_irred">Theorem 8.22</a></li>
           
         </ul>
     
@@ -2672,7 +2761,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    Let \(E\) be an irreducible completely positive map on \(M_{D}(\mathbb {C})\), let \(A \ge 0\) be nonzero, and let \(t {\gt} 0\). Then </p>
-<div class="displaymath" id="a0000000585">
+<div class="displaymath" id="a0000000586">
   \[  \exp (tE)(A) = \sum _{k=0}^{\infty } \frac{t^k}{k!} E^k(A)  \]
 </div>
 <p> is positive definite. This is <span class="cite">
@@ -2685,7 +2774,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000584">
+<div class="proof_wrapper" id="a0000000585">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2693,7 +2782,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>By Theorem&#160;<a href="ch-qpf.html#thm:exp_truncation_pd_irred">8.21</a>, the first \(D\) terms already form a positive definite matrix. Every remaining term is positive semidefinite, so the full exponential series is the sum of a positive definite matrix and a positive semidefinite tail. </p>
+  <p>By Theorem&#160;<a href="ch-qpf.html#thm:exp_truncation_pd_irred">8.22</a>, the first \(D\) terms already form a positive definite matrix. Every remaining term is positive semidefinite, so the full exponential series is the sum of a positive definite matrix and a positive semidefinite tail. </p>
 
   </div>
 </div>
@@ -2703,7 +2792,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">8.23</span>
+    <span class="theorem_thmlabel">8.24</span>
     <span class="theorem_thmtitle">Unique density-matrix fixed point for an irreducible channel</span>
     <div class="thm_header_extras">
 
@@ -2714,7 +2803,7 @@
 
     <a class="icon proof" href="ch-qpf.html#thm:channel_density_fp_irred">#</a>
     
-    <a class="icon proof" href="ch-qpf.html#a0000000586"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-qpf.html#a0000000587"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2775,7 +2864,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000586">
+<div class="proof_wrapper" id="a0000000587">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2792,7 +2881,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">8.24</span>
+    <span class="theorem_thmlabel">8.25</span>
     <span class="theorem_thmtitle">Cesàro convergence for irreducible channels</span>
     <div class="thm_header_extras">
 
@@ -2803,7 +2892,7 @@
 
     <a class="icon proof" href="ch-qpf.html#thm:channel_cesaro_irred">#</a>
     
-    <a class="icon proof" href="ch-qpf.html#a0000000587"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-qpf.html#a0000000588"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2825,7 +2914,7 @@
           
           <li><a href="ch-channels.html#def:cesaro_mean">Definition 5.19</a></li>
           
-          <li><a href="ch-qpf.html#thm:channel_density_fp_irred">Theorem 8.23</a></li>
+          <li><a href="ch-qpf.html#thm:channel_density_fp_irred">Theorem 8.24</a></li>
           
         </ul>
     
@@ -2857,7 +2946,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    Let \(E\) be an irreducible quantum channel on \(M_{D}(\mathbb {C})\) with \(D {\gt} 0\), and let \(\rho \) be any density matrix. Then the Cesàro means </p>
-<div class="displaymath" id="a0000000588">
+<div class="displaymath" id="a0000000589">
   \[  \frac{1}{N} \sum _{n=0}^{N-1} E^n(\rho )  \]
 </div>
 <p> converge to the unique positive definite density-matrix fixed point of&#160;\(E\). This is <span class="cite">
@@ -2870,7 +2959,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000587">
+<div class="proof_wrapper" id="a0000000588">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2878,7 +2967,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>Every subsequential limit of the Cesàro means is again a density-matrix fixed point. By Theorem&#160;<a href="ch-qpf.html#thm:channel_density_fp_irred">8.23</a>, there is only one such fixed point, so every convergent subsequence has the same limit. Compactness then forces the whole sequence to converge to that limit. </p>
+  <p>Every subsequential limit of the Cesàro means is again a density-matrix fixed point. By Theorem&#160;<a href="ch-qpf.html#thm:channel_density_fp_irred">8.24</a>, there is only one such fixed point, so every convergent subsequence has the same limit. Compactness then forces the whole sequence to converge to that limit. </p>
 
   </div>
 </div>
@@ -2888,7 +2977,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">8.25</span>
+    <span class="theorem_thmlabel">8.26</span>
     <span class="theorem_thmtitle">Spectral radius is the Perron eigenvalue</span>
     <div class="thm_header_extras">
 
@@ -2899,7 +2988,7 @@
 
     <a class="icon proof" href="ch-qpf.html#thm:spectral_radius_pf_irred">#</a>
     
-    <a class="icon proof" href="ch-qpf.html#a0000000589"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-qpf.html#a0000000590"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2956,7 +3045,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000589">
+<div class="proof_wrapper" id="a0000000590">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2973,7 +3062,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">8.26</span>
+    <span class="theorem_thmlabel">8.27</span>
     <span class="theorem_thmtitle">Real spectral-radius identity</span>
     <div class="thm_header_extras">
 
@@ -2984,7 +3073,7 @@
 
     <a class="icon proof" href="ch-qpf.html#thm:spectral_radius_real_pf_irred">#</a>
     
-    <a class="icon proof" href="ch-qpf.html#a0000000590"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-qpf.html#a0000000591"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3000,7 +3089,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-qpf.html#thm:spectral_radius_pf_irred">Theorem 8.25</a></li>
+          <li><a href="ch-qpf.html#thm:spectral_radius_pf_irred">Theorem 8.26</a></li>
           
         </ul>
     
@@ -3031,11 +3120,11 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>    Under the hypotheses of Theorem&#160;<a href="ch-qpf.html#thm:spectral_radius_pf_irred">8.25</a>, the real-valued spectral radius of \(E\) is also equal to&#160;\(r\). </p>
+  <p>    Under the hypotheses of Theorem&#160;<a href="ch-qpf.html#thm:spectral_radius_pf_irred">8.26</a>, the real-valued spectral radius of \(E\) is also equal to&#160;\(r\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000590">
+<div class="proof_wrapper" id="a0000000591">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3043,7 +3132,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>This is the real-valued reformulation of Theorem&#160;<a href="ch-qpf.html#thm:spectral_radius_pf_irred">8.25</a>. </p>
+  <p>This is the real-valued reformulation of Theorem&#160;<a href="ch-qpf.html#thm:spectral_radius_pf_irred">8.26</a>. </p>
 
   </div>
 </div>
@@ -3053,7 +3142,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">8.27</span>
+    <span class="definition_thmlabel">8.28</span>
     <span class="definition_thmtitle">Spectral properties</span>
     <div class="thm_header_extras">
 
@@ -3123,7 +3212,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">8.28</span>
+    <span class="theorem_thmlabel">8.29</span>
     <span class="theorem_thmtitle">Irreducibility gives the spectral properties</span>
     <div class="thm_header_extras">
 
@@ -3134,7 +3223,7 @@
 
     <a class="icon proof" href="ch-qpf.html#thm:has_spectral_properties_irred">#</a>
     
-    <a class="icon proof" href="ch-qpf.html#a0000000591"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-qpf.html#a0000000592"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3150,11 +3239,11 @@
         
         <ul class="uses">
           
-          <li><a href="ch-qpf.html#def:has_spectral_properties">Definition 8.27</a></li>
+          <li><a href="ch-qpf.html#def:has_spectral_properties">Definition 8.28</a></li>
           
           <li><a href="ch-channels.html#def:irreducible_cp">Definition 5.15</a></li>
           
-          <li><a href="ch-qpf.html#thm:spectral_radius_pf_irred">Theorem 8.25</a></li>
+          <li><a href="ch-qpf.html#thm:spectral_radius_pf_irred">Theorem 8.26</a></li>
           
         </ul>
     
@@ -3185,11 +3274,11 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>    Every nonzero irreducible completely positive map on \(M_{D}(\mathbb {C})\) has the spectral properties of Definition&#160;<a href="ch-qpf.html#def:has_spectral_properties">8.27</a>. </p>
+  <p>    Every nonzero irreducible completely positive map on \(M_{D}(\mathbb {C})\) has the spectral properties of Definition&#160;<a href="ch-qpf.html#def:has_spectral_properties">8.28</a>. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000591">
+<div class="proof_wrapper" id="a0000000592">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3197,7 +3286,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Combine Perron–Frobenius existence for the map and its adjoint with the uniqueness theorem for positive semidefinite Perron eigenvectors and the spectral-radius identity of Theorem&#160;<a href="ch-qpf.html#thm:spectral_radius_pf_irred">8.25</a>. </p>
+  <p> Combine Perron–Frobenius existence for the map and its adjoint with the uniqueness theorem for positive semidefinite Perron eigenvectors and the spectral-radius identity of Theorem&#160;<a href="ch-qpf.html#thm:spectral_radius_pf_irred">8.26</a>. </p>
 
   </div>
 </div>
@@ -3206,7 +3295,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">8.29</span>
+    <span class="theorem_thmlabel">8.30</span>
     <span class="theorem_thmtitle">Spectral properties imply irreducibility</span>
     <div class="thm_header_extras">
 
@@ -3217,7 +3306,7 @@
 
     <a class="icon proof" href="ch-qpf.html#thm:irred_from_spectral_properties">#</a>
     
-    <a class="icon proof" href="ch-qpf.html#a0000000592"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-qpf.html#a0000000593"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3233,7 +3322,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-qpf.html#def:has_spectral_properties">Definition 8.27</a></li>
+          <li><a href="ch-qpf.html#def:has_spectral_properties">Definition 8.28</a></li>
           
         </ul>
     
@@ -3264,11 +3353,11 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>    If a completely positive map on \(M_{D}(\mathbb {C})\) has the spectral properties of Definition&#160;<a href="ch-qpf.html#def:has_spectral_properties">8.27</a>, then it is irreducible. </p>
+  <p>    If a completely positive map on \(M_{D}(\mathbb {C})\) has the spectral properties of Definition&#160;<a href="ch-qpf.html#def:has_spectral_properties">8.28</a>, then it is irreducible. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000592">
+<div class="proof_wrapper" id="a0000000593">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3276,7 +3365,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>Gauge by the positive definite left eigenvector and rescale by the Perron eigenvalue to obtain a trace-preserving map with a positive definite fixed point. A nontrivial invariant projection would then produce, by Cesàro averaging in its corner algebra, a second positive semidefinite fixed point not proportional to the Perron vector, contradicting the uniqueness clause in Definition&#160;<a href="ch-qpf.html#def:has_spectral_properties">8.27</a>. </p>
+  <p>Gauge by the positive definite left eigenvector and rescale by the Perron eigenvalue to obtain a trace-preserving map with a positive definite fixed point. A nontrivial invariant projection would then produce, by Cesàro averaging in its corner algebra, a second positive semidefinite fixed point not proportional to the Perron vector, contradicting the uniqueness clause in Definition&#160;<a href="ch-qpf.html#def:has_spectral_properties">8.28</a>. </p>
 
   </div>
 </div>
@@ -3285,7 +3374,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">8.30</span>
+    <span class="theorem_thmlabel">8.31</span>
     <span class="theorem_thmtitle">Irreducibility iff the spectral properties hold</span>
     <div class="thm_header_extras">
 
@@ -3296,7 +3385,7 @@
 
     <a class="icon proof" href="ch-qpf.html#thm:irred_iff_spectral_properties">#</a>
     
-    <a class="icon proof" href="ch-qpf.html#a0000000593"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-qpf.html#a0000000594"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3312,13 +3401,13 @@
         
         <ul class="uses">
           
-          <li><a href="ch-qpf.html#def:has_spectral_properties">Definition 8.27</a></li>
+          <li><a href="ch-qpf.html#def:has_spectral_properties">Definition 8.28</a></li>
           
           <li><a href="ch-channels.html#def:irreducible_cp">Definition 5.15</a></li>
           
-          <li><a href="ch-qpf.html#thm:has_spectral_properties_irred">Theorem 8.28</a></li>
+          <li><a href="ch-qpf.html#thm:has_spectral_properties_irred">Theorem 8.29</a></li>
           
-          <li><a href="ch-qpf.html#thm:irred_from_spectral_properties">Theorem 8.29</a></li>
+          <li><a href="ch-qpf.html#thm:irred_from_spectral_properties">Theorem 8.30</a></li>
           
         </ul>
     
@@ -3349,7 +3438,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>    Let \(E\) be a nonzero completely positive map on \(M_{D}(\mathbb {C})\). Then \(E\) is irreducible if and only if it has the spectral properties of Definition&#160;<a href="ch-qpf.html#def:has_spectral_properties">8.27</a>. This is <span class="cite">
+  <p>    Let \(E\) be a nonzero completely positive map on \(M_{D}(\mathbb {C})\). Then \(E\) is irreducible if and only if it has the spectral properties of Definition&#160;<a href="ch-qpf.html#def:has_spectral_properties">8.28</a>. This is <span class="cite">
 	[
 	
 	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
@@ -3359,7 +3448,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000593">
+<div class="proof_wrapper" id="a0000000594">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3367,7 +3456,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>Combine Theorems&#160;<a href="ch-qpf.html#thm:has_spectral_properties_irred">8.28</a> and&#160;<a href="ch-qpf.html#thm:irred_from_spectral_properties">8.29</a>. </p>
+  <p>Combine Theorems&#160;<a href="ch-qpf.html#thm:has_spectral_properties_irred">8.29</a> and&#160;<a href="ch-qpf.html#thm:irred_from_spectral_properties">8.30</a>. </p>
 
   </div>
 </div>
