@@ -1706,10 +1706,12 @@ two-basis sector comparison theorem.
 \label{def:common_sector_relabeling_hypothesis}
 	\lean{MPSTensor.CommonSectorRelabelingHypothesis}
 	\leanok
-		This is the one-sided assertion that the canonically blocked weighted nonzero
-		part agrees, as an MPV family, with the same common cyclic-sector family after
-		identifying blocked physical words. It isolates the coordinate equality for
-		direct and iterated blocking.
+	This is the one-sided assertion that the canonically blocked weighted nonzero
+	part agrees, as an MPV family, with the same common cyclic-sector family after
+	identifying blocked physical words. It is a formal interface for the
+	coordinate equality between direct and iterated blocking. The
+	coordinate-grouping theorem below supplies this interface in the wrappers that
+	invoke it, so it is not a new paper-level mathematical hypothesis.
 \end{definition}
 
 \begin{definition}[Global coordinate-grouping hypothesis for common sectors]%
@@ -1721,7 +1723,8 @@ two-basis sector comparison theorem.
 	common blocked cyclic-sector family satisfies the coordinate-grouping condition
 	for each original nonzero block.  Equivalently, the canonical identification with
 	each iterated blocked alphabet agrees with grouping the direct blocked word into
-	consecutive words of the period-removal length.
+	consecutive words of the period-removal length.  The next theorem proves this
+	assertion from the concrete word-cast construction.
 \end{definition}
 
 	\begin{theorem}[Canonical coordinate grouping]%
@@ -1827,11 +1830,10 @@ two-basis sector comparison theorem.
 	\leanok
 	\uses{def:common_primitive_phase_cover_hypotheses,
 		def:common_sector_relabeling_hypothesis}
-	Let $A$ and $B$ have the same MPV family. Assume the blocked-word
-	identification hypothesis for the cyclic-sector data. The common-sector
-	structural theorem then produces a common blocking length, zero-tail
-	identities, and trace-preserving, primitive, irreducible nonzero-sector
-	families on both sides. If those
+	Let $A$ and $B$ have the same MPV family.  Given the formal blocked-word
+	identification for the common-sector data, the common-sector structural theorem
+	produces a common blocking length, zero-tail identities, and trace-preserving,
+	primitive, irreducible nonzero-sector families on both sides. If those
 	families satisfy the phase-cover hypotheses of
 	Definition~\ref{def:common_primitive_phase_cover_hypotheses}, then the sector
 	decompositions obtained from the two sides have BNT data, agree as full MPV
@@ -1854,9 +1856,9 @@ two-basis sector comparison theorem.
 	\leanok
 	\uses{def:common_primitive_bnt_cover_hypotheses,
 		def:common_sector_relabeling_hypothesis}
-	Let $A$ and $B$ have the same MPV family, and assume the blocked-word
-	identification hypothesis for the cyclic-sector data. The common-sector
-	structural theorem produces the common primitive nonzero-sector families. If
+	Let $A$ and $B$ have the same MPV family.  Given the formal blocked-word
+	identification for the common-sector data, the common-sector structural theorem
+	produces the common primitive nonzero-sector families. If
 	those families satisfy the BNT-cover hypotheses, then the same sector-weight
 	comparison conclusion holds.
 \end{theorem}

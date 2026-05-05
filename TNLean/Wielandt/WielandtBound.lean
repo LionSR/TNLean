@@ -226,7 +226,8 @@ theorem wielandt_chain [NeZero D]
 
 /-! ## Part 5: Relation with the fixed-length bound -/
 
-/-- **Summary of the cumulative chain and fixed-length bound.**
+/-
+Summary of the cumulative chain and fixed-length bound.
 
 ### Cumulative chain:
 1. `cumulativeSpan_eq_top`: T_{D²}(A) = M_D(ℂ) for normal A
@@ -244,6 +245,5 @@ The fixed-length argument continues from this cumulative chain by extracting
 rank-one matrices from eigenvectors, padding them to one exact word length, and
 assembling a full matrix span at the Wielandt index bound.
 -/
-theorem wielandt_roadmap : True := trivial
 
 end MPSTensor
