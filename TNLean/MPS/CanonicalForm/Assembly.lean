@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.CanonicalForm.Assembly.ProportionalComparison
 import TNLean.MPS.CanonicalForm.Assembly.CommonPrimitiveProportionalData
+import TNLean.MPS.CanonicalForm.Assembly.BasicSectorComparison
 import TNLean.MPS.CanonicalForm.Assembly.SectorComparisonCore
 
 /-!
@@ -42,6 +43,8 @@ The supporting modules are:
   common-sector transport after the structural theorem.
 * `TNLean.MPS.CanonicalForm.Assembly.CommonPrimitiveProportionalData` —
   common primitive span, phase-cover, proportional, and BNT-cover hypotheses.
+* `TNLean.MPS.CanonicalForm.Assembly.BasicSectorComparison` — basic sector
+  comparisons from block-span, phase-cover, and proportional data.
 * `TNLean.MPS.CanonicalForm.Assembly.ProportionalComparison` — sector comparison
   from BNT proportional-decomposition data.
 
