@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.CanonicalForm.Assembly.StructuralData
+import TNLean.MPS.CanonicalForm.Assembly.CommonBlockedCyclicSectorRepresentatives
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
 open Filter
@@ -37,6 +38,29 @@ produced common cyclic-sector data.
 
 matrix product states, canonical form, common sectors, zero-tail decomposition
 -/
+
+/-- The representative common-sector family is normal-CF-BNT once the
+representative weights are strictly ordered and the representatives are
+BNT-separated.
+
+It combines the representative normal-canonical-form statement with the
+explicit hypothesis that distinct representatives are not gauge-phase equivalent. -/
+theorem isNormalCanonicalFormBNT_commonRepresentativeBlocksAt
+    {d r : ℕ} {dim : Fin r → ℕ}
+    {blocks : (k : Fin r) → MPSTensor d (dim k)}
+    (F : CommonBlockedCyclicSectorFamily blocks)
+    {p : ℕ} (hp : F.p = p)
+    (μ : Fin r → ℂ)
+    (hμ : ∀ k, μ k ≠ 0)
+    (hAnti : StrictAnti (fun k : Fin r => ‖F.commonRepresentativeWeight μ k‖))
+    (hNotGpe : BlocksNotGaugePhaseEquiv
+      (d := blockPhysDim d p) (F.commonRepresentativeBlocksAt hp)) :
+    IsNormalCanonicalFormBNT (d := blockPhysDim d p)
+      (F.commonRepresentativeWeight μ) (F.commonRepresentativeBlocksAt hp) where
+  toIsNormalCanonicalForm :=
+    F.isNormalCanonicalForm_commonRepresentativeBlocksAt hp μ hμ hAnti
+  mu_strict_anti := hAnti
+  blocks_not_equiv := hNotGpe
 
 /-- If each directly blocked nonzero block agrees with its iterated-blocking version,
 the zero-tail equation can be written using the derived common-sector family. -/
