@@ -256,12 +256,16 @@ theorem exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingA
   simpa [WordTupleSpanTop, wordTuple] using
     wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingAt μ A hCF hSep
 
-/-- Positive-length product-word span from all-words pair separation plus eventual
+/-- Conditional positive-length product-word span from all-words pair separation plus eventual
 identity padding for every ordered pair of distinct BNT blocks.
 
 The proof takes a finite maximum over the separating and padding lengths for the
 ordered block pairs, obtaining a single homogeneous word length whose block-product
-word evaluations span the full direct product algebra. -/
+word evaluations span the full direct product algebra.
+
+This is an auxiliary adapter, not a source-facing BNT separation producer: the
+homogeneous identity-padding input must be supplied separately, preferably via
+the fixed-length or period-window interfaces below. -/
 theorem exists_pos_productWordSpan_of_pairTraceSeparatingAll_of_identity_padding
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hCF : IsCanonicalFormBNT μ A)
@@ -312,7 +316,10 @@ homogeneous trace-separating length for all ordered pairs of distinct blocks.
 This is the finite-maximum step after the pairwise Burnside-Jacobson
 identity-padding hypotheses have been supplied. The BNT hypotheses provide
 all-words trace separation for each pair; the generic homogenization lemma
-chooses one length that works for the whole finite block family. -/
+chooses one length that works for the whole finite block family.
+
+This declaration is deliberately conditional on the homogeneous padding data and
+should not be read as the David/Perez-Garcia finite-length direct-sum input. -/
 theorem exists_forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_identity_padding
     [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -325,13 +332,17 @@ theorem exists_forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_identity_pa
   exists_forall_pairTraceSeparatingAt_of_pairTraceSeparatingAll_of_identity_padding
     A (pairTraceSeparatingAll_of_isCanonicalFormBNT μ A hCF) hPad
 
-/-- Positive-length product-word span from canonical-form/BNT data plus eventual
+/-- Conditional positive-length product-word span from canonical-form/BNT data plus eventual
 identity padding for every ordered pair of distinct blocks.
 
 Canonical-form/BNT separation gives all-words trace separation for distinct blocks.
 Together with eventual homogeneous identity padding for each ordered block pair, this
 gives a positive word length at which the block-product word evaluations span the full
-direct product algebra. -/
+direct product algebra.
+
+This is an auxiliary conditional adapter. The source-faithful route should use an
+explicit fixed-length or period-window hypothesis rather than treating cumulative
+or all-words separation as a producer. -/
 theorem exists_pos_productWordSpan_of_isCanonicalFormBNT_of_identity_padding
     [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))

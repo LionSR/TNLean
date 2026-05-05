@@ -3141,42 +3141,37 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     equivalence with scalar $1$.
 \end{proof}
 
-\begin{lemma}[Homogenizing cumulative pair separation]
+\begin{lemma}[Conditional padding from exact homogeneous identity witnesses]
     \label{lem:pair_trace_separation_homogenization_with_padding}
     \lean{MPSTensor.pairEvalWordTuple_mem_span_pairWordTuple_length}
     \lean{MPSTensor.pair_mul_mem_span_pairWordTuple_add}
     \lean{MPSTensor.pairIdentity_mem_pairWordTupleSpan_add}
     \lean{MPSTensor.pairIdentity_mem_pairWordTupleSpan_eventually_of_pairWordTupleSpanTop_period_window}
-    \lean{MPSTensor.pairWordTupleSpanTop_of_pairCumulativeWordTupleSpanTop_of_identity_padding}
-    \lean{MPSTensor.pairTraceSeparatingAt_of_pairTraceSeparatingUpTo_of_identity_padding}
-    \lean{MPSTensor.exists_pairTraceSeparatingAt_of_pairAllWordsSpanTop_of_identity_padding}
-    \lean{MPSTensor.exists_forall_pairTraceSeparatingAt_of_pairTraceSeparatingAll_of_identity_padding}
     \lean{MPSTensor.exists_forall_pairTraceSeparatingAt_of_pairTraceSeparatingAll_of_identity_period_windows}
     \lean{MPSTensor.exists_forall_pairTraceSeparatingAt_of_pairSpanTop_period_windows}
-    \lean{MPSTensor.pairTraceSeparatingAll_of_injective_not_gaugePhaseEquiv_cast_left}
     \lean{MPSTensor.exists_pairTraceSeparatingAt_of_not_gaugePhaseEquiv_of_pairWordTupleSpanTop_period_window}
     \lean{MPSTensor.exists_pairTraceSeparatingAt_of_injective_dim_ne_of_pairWordTupleSpanTop_period_window}
     \leanok
     \uses{def:pair_trace_separation_words, lem:all_length_pair_trace_separation_finite_cutoff}
-    Suppose $S\le T$ and pair words of length at most $S$ span the product
-    algebra.  If, for every $\ell\le S$, the simultaneous identity pair belongs
-    to the span of pair words of length $T-\ell$, then pair words of the single
-    length $T$ already span the product algebra.  Equivalently, cumulative
-    trace separation up to $S$ becomes homogeneous trace separation at length
-    $T$ under the same identity-padding hypothesis.  Consequently, an all-word
-    product-span theorem together with eventual homogeneous identity padding
-    yields a homogeneous pair trace-separation length.
+    Homogeneous identity-padding witnesses multiply by concatenation of words.
+    Therefore, if one has a positive period and a full residue window of
+    homogeneous pair spans, then the simultaneous identity pair lies in all
+    sufficiently large homogeneous pair spans.  Combined with all-length pair
+    trace separation, this period-window input gives one homogeneous
+    pair trace-separation length.  The cumulative-to-homogeneous conversion
+    remains only a conditional auxiliary: cumulative span-top alone is not the
+    source-paper direct-sum input and is not used here as a producer.
 \end{lemma}
 
 \begin{proof}
     \leanok
-    A pair word of length $\ell$ is multiplied by a length-$T-\ell$ expression
-    for the simultaneous identity.  Componentwise multiplication concatenates
-    words, so each cumulative generator is rewritten as a linear combination of
-    length-$T$ pair words.  The trace-dual version follows from homogeneous
-    pair trace duality.  In particular, homogeneous identity-padding witnesses
-    multiply to give another identity-padding witness at the sum of their
-    lengths.
+    The length-zero word gives the identity only at length zero, so it is not a
+    positive-length padding theorem.  The useful padding facts are homogeneous:
+    if the identity pair is in the span at lengths $m$ and $n$, componentwise
+    multiplication puts it in the span at length $m+n$.  A period witness and a
+    complete residue window therefore give homogeneous padding at every
+    sufficiently large length, which is the input needed by the conditional
+    all-length-to-fixed-length adapter.
 \end{proof}
 
 \begin{lemma}[Pair trace separation gives pairwise selectors]
@@ -3247,14 +3242,9 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     \lean{MPSTensor.wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingAt}
     \lean{MPSTensor.exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairBlockSeparatingWords}
     \lean{MPSTensor.exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingAt}
-    \lean{MPSTensor.exists_pos_productWordSpan_of_pairTraceSeparatingAll_of_identity_padding}
-    \lean{MPSTensor.pairTraceSeparatingAll_of_isCanonicalFormBNT}
-    \lean{MPSTensor.exists_pos_productWordSpan_of_isCanonicalFormBNT_of_identity_padding}
     \lean{MPSTensor.exists_wordTupleSpanTop_of_isCanonicalFormBNT_of_identity_period_windows}
     \lean{MPSTensor.exists_wordTupleSpanTop_of_isCanonicalFormBNT_of_pairSpanTop_period_windows}
     \lean{MPSTensor.exists_pos_productWordSpan_of_isCanonicalFormBNT_of_identity_period_windows}
-    \lean{MPSTensor.wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingUpTo_of_identity_padding}
-    \lean{MPSTensor.exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingUpTo_of_identity_padding}
     \lean{MPSTensor.exists_pos_productWordSpan_of_isCanonicalFormBNT_of_blockSelectorWords}
     \lean{MPSTensor.blockProjection_mem_span_reindexed_toTensorFromBlocks_of_bntSelectorWords}
     \lean{MPSTensor.isBlockDiagonal'_of_commutes_reindexed_toTensorFromBlocks_of_bntSelectorWords}
@@ -3272,8 +3262,9 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     pairwise separators for every ordered pair of distinct blocks; by
     Lemma~\ref{lem:pair_trace_separation_to_pairwise_selectors}, a common
     pair trace-separation length is one sufficient finite-dimensional witness.
-    A cumulative pair trace cutoff is also enough, once $S\le T$, when paired
-    with the simultaneous identity-padding hypothesis of
+    The paper-facing route keeps this witness homogeneous: either it is supplied
+    directly as fixed-length pair separation, or it is obtained from an explicit
+    period-window hypothesis as in
     Lemma~\ref{lem:pair_trace_separation_homogenization_with_padding}.
     Consequently, the pulled-back words at the resulting length for
     $\operatorname{Assemble}(\mu,A)$ span every virtual sector projection, and the
