@@ -321,75 +321,27 @@ facts used to recover the lists of weights from those power sums.
 	\]
 \end{lemma}
 
-\begin{lemma}[Heterogeneous geometric sequence extrapolation]%
-\label{lem:geom_extrapolation_hetero}
-	\lean{MPSTensor.SectorWeightData.power_sums_eq_of_eventually_eq_hetero}
-	\leanok
-	If two finite families of nonzero complex numbers, possibly with different
-	cardinalities, have equal power sums eventually, so there is $N_0$ such that
-	\[
-		\forall N\ge N_0,\qquad
-		\sum_i \alpha_i^N = \sum_j \beta_j^N,
-	\]
-	then the same equality holds for every exponent:
-	\[
-		\forall k\ge 0,\qquad
-		\sum_i \alpha_i^k = \sum_j \beta_j^k.
-	\]
-\end{lemma}
-
-\begin{proof}
-	\leanok
-	Concatenate the two families with coefficients $+1$ and $-1$.
-	The resulting finite linear combination of nonzero geometric sequences
-	vanishes for all sufficiently large exponents, so the telescoping
-	induction for such combinations forces it to vanish identically.
-\end{proof}
-
-\begin{lemma}[Geometric sequence extrapolation]%
-\label{lem:geom_extrapolation}
-	\lean{MPSTensor.SectorWeightData.power_sums_eq_of_eventually_eq}
-	\leanok
-	If two finite families of nonzero complex numbers with the same cardinality
-	have equal power sums eventually, so there is $N_0$ such that
-	\[
-		\forall N\ge N_0,\qquad
-		\sum_i \alpha_i^N = \sum_i \beta_i^N,
-	\]
-	then equality holds for all exponents $k\ge 0$.
-\end{lemma}
-
-\begin{proof}
-	\leanok
-	\uses{lem:geom_extrapolation_hetero}
-	This is the equal-cardinality specialization of
-	Lemma~\ref{lem:geom_extrapolation_hetero}.
-\end{proof}
-
-\begin{lemma}[Copy-count recovery from eventual coefficient equality]%
+\begin{lemma}[Eventual coefficient equality recovers copy counts]%
 \label{lem:copies_eq_of_eventually_coeff_eq}
 	\lean{MPSTensor.SectorWeightData.copies_eq_of_eventually_coeff_eq}
 	\leanok
 	\uses{def:paper_sector_data}
-	Let $S$ and $T$ be sector data over the same basis. If there is $N_0$
-	such that their coefficient arrays satisfy
+	If two sector data $S,T$ over the same basis have
 	\[
-		\forall N>N_0,\ \forall j,\qquad
-		c_{S,j}^{(N)} = c_{T,j}^{(N)},
+		c_{S,j}^{(N)}=c_{T,j}^{(N)}
 	\]
-	then their copy counts agree:
-	\[
-		\forall j,\qquad r_j^S = r_j^T.
-	\]
+	for every basis block $j$ and all sufficiently large $N$, then
+	$r_j^S=r_j^T$ for every~$j$.
 \end{lemma}
 
 \begin{proof}
 	\leanok
-	\uses{lem:geom_extrapolation_hetero}
-	Apply Lemma~\ref{lem:geom_extrapolation_hetero} to the two weight
-	families in a fixed sector and then evaluate the resulting power-sum
-	equality at exponent $0$. Since each summand is then $1$, the equality
-	is exactly equality of the two copy counts.
+	For a fixed basis sector \(j\), the coefficient equality is equality of
+	the power sums of the two nonzero weight families for all sufficiently large
+	exponents.  Moving one side to the other gives a finite signed sum of
+	nonzero geometric sequences which vanishes eventually.  The resulting
+	linear recurrence extends the identity to exponent \(0\), where the two
+	power sums are \(r_j^S\) and \(r_j^T\).
 \end{proof}
 
 \begin{lemma}[BNT recovery of copy counts and sector weights]%
@@ -413,15 +365,51 @@ facts used to recover the lists of weights from those power sums.
 \begin{proof}
 	\leanok
 	\uses{lem:coeff_eventually_eq, lem:copies_eq_of_eventually_coeff_eq,
-	      lem:geom_extrapolation, thm:power_sum_multiset}
+		thm:power_sum_multiset}
 	BNT linear independence and equality of total MPVs give eventual
-	coefficient equality by Lemma~\ref{lem:coeff_eventually_eq}. Then
-	Lemma~\ref{lem:copies_eq_of_eventually_coeff_eq} recovers the
-	copy-count equalities. After identifying the two index sets via these
-	copy-count equalities, the positive-power coefficient equalities extend
-	to all positive exponents by
-	Lemma~\ref{lem:geom_extrapolation}, and Newton--Girard
-	(Theorem~\ref{thm:power_sum_multiset}) recovers the weight multisets.
+	coefficient equality by Lemma~\ref{lem:coeff_eventually_eq}.  Thus, for each
+	basis sector \(j\), the two finite nonzero weight families satisfy
+	\[
+		\sum_{q=1}^{r_j^S}(\mu_{j,q}^S)^N
+		=
+		\sum_{q=1}^{r_j^T}(\mu_{j,q}^T)^N
+	\]
+	for all sufficiently large \(N\).  Lemma~\ref{lem:copies_eq_of_eventually_coeff_eq}
+	applies the signed-geometric-sequence argument at exponent \(0\), so
+	\(r_j^S=r_j^T\).  After transporting the right-hand index set along this
+	copy-count equality, the identities for positive powers become equality of
+	the power sums of two same-cardinality weight lists.  Newton--Girard
+	(Theorem~\ref{thm:power_sum_multiset}) then recovers equality of the sector
+	weight multisets.
+\end{proof}
+
+\begin{lemma}[Phase matching recovers copy counts and sector weights]%
+\label{lem:route_b_hetero_phase_match_copies}
+	\lean{MPSTensor.fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_phaseMatch_exists_copies}
+	\leanok
+	\uses{def:paper_sector_data}
+	Let $P$ and $Q$ be sector decompositions. Assume there is a permutation
+	$\pi$ matching the basis blocks and, for each $j$, a nonzero complex
+	number $\zeta_j$ such that
+	\[
+		V^{(N)}(Q_{\pi(j)})_\sigma = \zeta_j^N V^{(N)}(P_j)_\sigma
+	\]
+	for every $N$ and $\sigma$. If the total MPV families of $P$ and $Q$
+	agree and the basis blocks of $P$ are eventually linearly independent,
+	then the copy counts satisfy $r_j^P=r_{\pi(j)}^Q$, and after multiplying
+	the weights of $Q_{\pi(j)}$ by $\zeta_j$ the sector weight multisets agree.
+\end{lemma}
+
+\begin{proof}
+	\leanok
+	\uses{lem:paper_decomp_formula, lem:route_b_equal_with_copies}
+	Absorb the factors $\zeta_j$ into the sector weights of $Q$ and keep the
+	basis blocks of $P$. The phase-matching hypothesis and the sector
+	decomposition formula show that the resulting decomposition has the same
+	total MPV family as~$Q$, hence also as~$P$. One is then in the
+	shared-basis situation of Lemma~\ref{lem:route_b_equal_with_copies},
+	which recovers both the copy-count equalities and the claimed equality of
+	weight multisets.
 \end{proof}
 
 \begin{lemma}[Two-basis sector comparison after phase matching]%
@@ -444,14 +432,11 @@ facts used to recover the lists of weights from those power sums.
 
 \begin{proof}
 	\leanok
-	\uses{lem:paper_decomp_formula, lem:route_b_equal_with_copies}
-	Absorb the factors $\zeta_j$ into the sector weights of $Q$ and keep the
-	basis blocks of $P$. The phase-matching hypothesis and the sector
-	decomposition formula show that the resulting decomposition has the same
-	total MPV family as~$Q$, hence also as~$P$. One is then in the
-	shared-basis situation with recovered copy counts in
-	Lemma~\ref{lem:route_b_equal_with_copies}, which yields the claimed
-	equality of multisets.
+	\uses{lem:route_b_hetero_phase_match_copies}
+	Lemma~\ref{lem:route_b_hetero_phase_match_copies} gives copy-count
+	equalities and the corresponding weight-multiset equality. The recovered
+	copy-count equalities coincide with the assumed ones, so the weight-multiset
+	equality gives the conclusion.
 \end{proof}
 
 \begin{lemma}[Gauge-phase paired bases imply phase-matched sector comparison]%
@@ -553,29 +538,6 @@ facts used to recover the lists of weights from those power sums.
 	the remaining injectivity and span-comparison hypotheses.
 \end{proof}
 
-\begin{lemma}[Phase-matched comparison recovers copy counts]%
-\label{lem:route_b_hetero_phase_match_copies}
-	\lean{MPSTensor.fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_phaseMatch_exists_copies}
-	\leanok
-	\uses{def:paper_sector_data}
-	Let $P$ and $Q$ be sector decompositions whose basis blocks are matched by
-	a permutation and whose matched MPVs differ by nonzero phase powers. If
-	the total MPV families agree and the basis MPVs of $P$ are eventually
-	linearly independent, then the matched copy counts agree. After absorbing
-	the phases into the weights of $Q$, the corresponding sector-weight
-	multisets agree.
-\end{lemma}
-
-\begin{proof}
-	\leanok
-	\uses{lem:route_b_equal_with_copies}
-	Absorb the phase powers into the sector weights of $Q$ and write both
-	decompositions over the basis of $P$. Linear independence gives eventual
-	equality of the coefficient power sums, and
-	Lemma~\ref{lem:route_b_equal_with_copies} recovers both the copy-count
-	equalities and the phase-adjusted weight-multiset equalities.
-\end{proof}
-
 \begin{lemma}[A pre-matching gives a sector basis matching]%
 \label{lem:sector_basis_pre_matching_to_matching}
 	\lean{MPSTensor.SectorBasisPreMatching.exists_sectorBasisMatching_of_sameMPV}
@@ -583,18 +545,23 @@ facts used to recover the lists of weights from those power sums.
 	\uses{def:sector_basis_pre_matching, def:sector_basis_matching}
 	Let $M$ be a sector basis pre-matching between $P$ and $Q$. If the total
 	MPV families agree and the basis MPVs of $P$ are eventually linearly
-	independent, then the copy-count equalities recovered by
-	Lemma~\ref{lem:route_b_hetero_phase_match_copies} turn $M$ into a full
-	sector basis matching.
+	independent, then the copy-count equalities recovered by the phase-matched
+	BNT coefficient comparison turn $M$ into a full sector basis matching.
 \end{lemma}
 
 \begin{proof}
 	\leanok
 	\uses{lem:route_b_hetero_phase_match_copies}
 	Gauge-phase equivalence gives the required phase-scaling identities for
-	the corresponding basis MPVs. Lemma~\ref{lem:route_b_hetero_phase_match_copies}
-	recovers the missing copy-count equalities, which are precisely the extra
-	fields needed for Definition~\ref{def:sector_basis_matching}.
+	the corresponding basis MPVs:
+	\[
+		V^{(N)}(Q_{\pi(j)})_\sigma
+		=
+		\zeta_j^N V^{(N)}(P_j)_\sigma.
+	\]
+	Lemma~\ref{lem:route_b_hetero_phase_match_copies} then recovers the
+	missing copy-count equalities, which are precisely the extra fields needed
+	for Definition~\ref{def:sector_basis_matching}.
 \end{proof}
 
 \begin{theorem}[Overlap rigidity gives a sector basis matching]%
@@ -1377,35 +1344,6 @@ BNT-cover inputs needed by the zero-block sector comparison below.
 	then assembles the resulting blocking length, sector decompositions, BNT data,
 	permutation, multiplicity equalities, phases, and sector-weight
 	multiset equalities as the conclusion structure.
-\end{proof}
-
-\begin{lemma}[Cast-compatible MPV scaling implies phase-matched sector comparison]%
-\label{lem:route_b_hetero_mpv_scaling}
-	\lean{MPSTensor.fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_mpvScaling_matched_basis}
-	\leanok
-	\uses{def:paper_sector_data}
-	Let $P$ and $Q$ be sector decompositions. Assume there is a permutation
-	$\pi$ matching the basis blocks, the multiplicities satisfy
-	$r_j^P = r_{\pi(j)}^Q$, and for each $j$ the corresponding basis blocks have the
-	same auxiliary dimension and satisfy
-	\[
-		V^{(N)}(Q_{\pi(j)})_\sigma = \zeta_j^N V^{(N)}(P_j)_\sigma
-	\]
-	for some nonzero complex number $\zeta_j$, after identifying the two basis
-	tensors along that dimension equality. If the total MPV families of $P$
-	and $Q$ agree and the basis blocks of $P$ are eventually linearly
-	independent, then for each $j$ the sector weight multiset of $P_j$ equals
-	the multiset obtained from that of $Q_{\pi(j)}$ by multiplication
-	by~$\zeta_j$.
-\end{lemma}
-
-\begin{proof}
-	\leanok
-	\uses{lem:route_b_hetero_phase_match}
-	After transporting the corresponding basis tensor of $P_j$ across the dimension
-	identity, this is exactly the hypothesis of
-	Lemma~\ref{lem:route_b_hetero_phase_match}. The conclusion is therefore
-	the same multiset equality.
 \end{proof}
 
 \begin{remark}[Equal-case comparison after canonical reduction]\notready
