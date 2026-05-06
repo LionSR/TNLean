@@ -291,12 +291,16 @@ lemma commonFlatDim_pos (F : CommonBlockedCyclicSectorFamily blocks)
   simpa [commonFlatDim, y] using F.commonSectorBlock_dim_pos y.1 y.2
 
 /-- A common blocked cyclic-sector family is a normal canonical form once its
-transported flat weights are sorted by strictly decreasing modulus. -/
+transported flat weights are sorted by non-increasing modulus.
+
+Equal flat weights can occur for different cyclic sectors of the same original
+block.  They are allowed in the paper's canonical form and should be retained as
+sector multiplicity data rather than collapsed by a strict-ordering hypothesis. -/
 lemma isNormalCanonicalForm_commonFlatBlocks
     (F : CommonBlockedCyclicSectorFamily blocks)
     (μ : Fin r → ℂ)
     (hμ : ∀ k, μ k ≠ 0)
-    (hAnti : StrictAnti
+    (hAnti : Antitone
       (fun x : Fin (∑ k : Fin r, F.period k) => ‖F.commonFlatWeight μ x‖)) :
     IsNormalCanonicalForm (d := blockPhysDim d F.p)
       (F.commonFlatWeight μ) F.commonFlatBlocks :=
@@ -318,7 +322,7 @@ lemma isNormalCanonicalForm_commonFlatBlocksAt
     {p' : ℕ} (hp : F.p = p')
     (μ : Fin r → ℂ)
     (hμ : ∀ k, μ k ≠ 0)
-    (hAnti : StrictAnti
+    (hAnti : Antitone
       (fun x : Fin (∑ k : Fin r, F.period k) => ‖F.commonFlatWeight μ x‖)) :
     IsNormalCanonicalForm (d := blockPhysDim d p')
       (F.commonFlatWeight μ) (F.commonFlatBlocksAt hp) := by
