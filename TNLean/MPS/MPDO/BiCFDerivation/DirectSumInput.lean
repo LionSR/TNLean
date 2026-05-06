@@ -33,6 +33,23 @@ namespace MPSTensor
 
 variable {d D₁ D₂ L : ℕ}
 
+/-- The length-`L` trace-test map \(Z\mapsto(t\mapsto \operatorname{tr}(ZA_t))\).
+
+This is the trace-dual coordinate form of the finite-chain image space
+\(\mathcal G_L^A\) used in the direct-sum argument. -/
+noncomputable def leftTraceWordMap (A : MPSTensor d D) (L : ℕ) :
+    Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] (Fin L → Fin d) → ℂ :=
+  LinearMap.pi fun t : Fin L → Fin d =>
+    (Matrix.traceLinearMap (Fin D) ℂ ℂ).comp
+      (LinearMap.mulRight ℂ (evalWord A (List.ofFn t)))
+
+@[simp]
+lemma leftTraceWordMap_apply (A : MPSTensor d D) (L : ℕ)
+    (Z : Matrix (Fin D) (Fin D) ℂ) (t : Fin L → Fin d) :
+    leftTraceWordMap A L Z t =
+      Matrix.trace (Z * evalWord A (List.ofFn t)) := by
+  simp [leftTraceWordMap, Matrix.traceLinearMap_apply]
+
 /-- **Three-block direct-sum input, left block.**
 
 Assume the word products of `A` of length `L` span the full matrix algebra and
@@ -152,5 +169,56 @@ theorem exists_left_trace_test_of_three_block_trace_relation_right
         simpa [add_comm] using hRel w) W
   exact ⟨Z, fun t => by
     simpa [add_comm] using hZ t⟩
+
+/-- The three-block relation gives inclusion of length-`L` trace-test images.
+
+This is the formal image-space version of the first inclusion step in
+David--Perez-Garcia--Schuch--Wolf, Lemma `lem:direct-sum`. -/
+theorem leftTraceWordMap_range_le_of_three_block_trace_relation_left
+    {A : MPSTensor d D₁} {B : MPSTensor d D₂}
+    {ΔA : Matrix (Fin D₁) (Fin D₁) ℂ}
+    {ΔB : Matrix (Fin D₂) (Fin D₂) ℂ}
+    (hA : IsNBlkInjective A L) (hΔA : ΔA ≠ 0)
+    (hRel : ∀ w : Fin (L + (L + L)) → Fin d,
+      Matrix.trace (ΔA * evalWord A (List.ofFn w)) +
+        Matrix.trace (ΔB * evalWord B (List.ofFn w)) = 0) :
+    (leftTraceWordMap A L).range ≤ (leftTraceWordMap B L).range := by
+  rintro f ⟨Z, rfl⟩
+  obtain ⟨W, hW⟩ :=
+    exists_right_trace_test_of_three_block_trace_relation_left hA hΔA hRel Z
+  refine ⟨-W, ?_⟩
+  ext t
+  calc
+    leftTraceWordMap B L (-W) t =
+        -Matrix.trace (W * evalWord B (List.ofFn t)) := by simp
+    _ = Matrix.trace (Z * evalWord A (List.ofFn t)) := by
+        simpa using neg_eq_of_add_eq_zero_left (hW t)
+    _ = leftTraceWordMap A L Z t := by simp
+
+/-- If both middle test matrices are nonzero, the three-block relation gives
+equality of the two length-`L` trace-test images. -/
+theorem leftTraceWordMap_range_eq_of_three_block_trace_relation
+    {A : MPSTensor d D₁} {B : MPSTensor d D₂}
+    {ΔA : Matrix (Fin D₁) (Fin D₁) ℂ}
+    {ΔB : Matrix (Fin D₂) (Fin D₂) ℂ}
+    (hA : IsNBlkInjective A L) (hB : IsNBlkInjective B L)
+    (hΔA : ΔA ≠ 0) (hΔB : ΔB ≠ 0)
+    (hRel : ∀ w : Fin (L + (L + L)) → Fin d,
+      Matrix.trace (ΔA * evalWord A (List.ofFn w)) +
+        Matrix.trace (ΔB * evalWord B (List.ofFn w)) = 0) :
+    (leftTraceWordMap A L).range = (leftTraceWordMap B L).range := by
+  apply le_antisymm
+  · exact leftTraceWordMap_range_le_of_three_block_trace_relation_left hA hΔA hRel
+  · rintro f ⟨W, rfl⟩
+    obtain ⟨Z, hZ⟩ :=
+      exists_left_trace_test_of_three_block_trace_relation_right hB hΔB hRel W
+    refine ⟨-Z, ?_⟩
+    ext t
+    calc
+      leftTraceWordMap A L (-Z) t =
+          -Matrix.trace (Z * evalWord A (List.ofFn t)) := by simp
+      _ = Matrix.trace (W * evalWord B (List.ofFn t)) := by
+          simpa using neg_eq_of_add_eq_zero_right (hZ t)
+      _ = leftTraceWordMap B L W t := by simp
 
 end MPSTensor
