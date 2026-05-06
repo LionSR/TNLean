@@ -14,10 +14,9 @@ decomposition for the tensor obtained by blocking over one full period.  The
 connection is made by comparing the blocked adjoint transfer map with the
 corresponding power of the original adjoint transfer map.
 
-The mathematical source is the cyclic projection structure for irreducible
-quantum channels from Wolf Chapter 6, together with the off-diagonal form and
-period-blocking lemmas for periodic MPS blocks in arXiv:1708.00029.  The formulas
-formalized here are
+An irreducible quantum channel has cyclic projections as in Wolf Chapter 6, and
+periodic MPS blocks have the off-diagonal form and period-blocking behavior of
+arXiv:1708.00029.  The relevant identities are
 $$
   \mathcal E_A^*(P_{u+1}) = P_u,\qquad
   A^i = \sum_u P_u A^i P_{u+1},\qquad

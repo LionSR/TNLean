@@ -13,11 +13,10 @@ This file contains the common reblocking data used to compare the primitive cycl
 sectors of finitely many nonzero-weight blocks at a shared physical blocking length.
 
 For one periodic block, arXiv:1708.00029 blocks by the period and obtains normal
-sector tensors $C_u = P_u A^{[m]} P_u$.  This file starts after that one-block
-decomposition has been chosen for each original block.  It records a common
-length $p = m_k e_k$ so that every sector can be regarded as a tensor over the
-same blocked physical alphabet.  Thus this shared-alphabet condition is
-finite-family comparison data, not a separate theorem in the paper source.
+sector tensors $C_u = P_u A^{[m]} P_u$.  For a finite family of nonzero-weight
+blocks, choose positive integers $e_k$ and a common length $p = m_k e_k$ for
+each block period $m_k$.  Every cyclic sector can then be regarded as a tensor
+over the same blocked physical alphabet.
 
 ## References
 
