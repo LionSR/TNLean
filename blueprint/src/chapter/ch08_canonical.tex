@@ -377,18 +377,27 @@ and~\cite[Chapter~6]{Wolf2012Quantum}.
 	normalization.
 \end{proof}
 
-\subsection{External Burnside--Jacobson connection to algebra span}
+\subsection{External Burnside--Jacobson input for algebra span}
 \label{subsec:burnside_jacobson_connection}
 
-The irreducibility condition (Definition~\ref{def:irreducible_tensor}) is formulated
-in terms of invariant \emph{projections}.
-For Burnside-style arguments it is more natural to work with invariant
-\emph{subspaces} of $\C^D$ under the Kraus operators.
 The canonical-form reduction of \cite[Section~2.3]{Cirac2016MPDO_arXiv}
-provides the invariant-subspace reduction: repeated removal of invariant
-subspaces leaves blocks with no nontrivial invariant subspace.  The next step
-used here is a separate finite-dimensional algebra input: over $\C$, an
-irreducible matrix action generates the full endomorphism algebra.
+is stated in terms of invariant subspaces $S \le \C^D$ for the matrices
+$A^i$.  Repeated removal of minimal invariant subspaces leaves blocks with
+no nontrivial invariant subspace.  The paper does not invoke Burnside's
+theorem at this point, and this absence matters: injectivity, meaning
+one-site spanning of $\MN{D}$, is introduced later and is obtained only after
+blocking by the quantum Wielandt theorem.
+
+The algebraic input isolated here is external to that source step.  It is the
+finite-dimensional complex theorem
+\[
+	\bigl(\text{the only common invariant subspaces of the }A^i
+	\text{ are }0\text{ and }\C^D\bigr)
+	\quad\Longrightarrow\quad
+	\C\langle A^i\rangle = \MN{D}.
+\]
+The projection language in Definition~\ref{def:irreducible_tensor} is bridged
+to this subspace formulation first.
 
 \begin{definition}[Algebra span]\label{def:alg_span}
 	\lean{MPSTensor.algSpan}\leanok
@@ -416,13 +425,13 @@ irreducible matrix action generates the full endomorphism algebra.
 	$A$-invariant subspace is trivial, i.e. equal to $0$ or to $\C^D$.
 \end{definition}
 
-\begin{theorem}[Irreducible tensor implies irreducible action]\label{thm:irreducible_tensor_to_action}
+\begin{lemma}[Irreducible tensor implies irreducible action]\label{lem:irreducible_tensor_to_action}
 	\lean{MPSTensor.isIrreducibleAction_of_isIrreducibleTensor}\leanok
 	\uses{def:irreducible_tensor, def:irreducible_action}
 	If $A$ is irreducible as a tensor (Definition~\ref{def:irreducible_tensor}),
 	then the Kraus operators act irreducibly on $\C^D$
 	(Definition~\ref{def:irreducible_action}).
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
 	Let $W \le \C^D$ be an $A$-invariant subspace.
@@ -464,7 +473,7 @@ irreducible matrix action generates the full endomorphism algebra.
 	ingredient in the chapter.  The source MPS argument provides the
 	invariant-subspace decomposition and the later blocking-to-injectivity
 	results; it does not name Burnside as a separate theorem at this point.
-	The formal algebraic input used here is precisely
+	The algebraic input used here is precisely
 	\[
 		\text{irreducible action on }\C^D
 		\quad\Longrightarrow\quad
@@ -473,8 +482,8 @@ irreducible matrix action generates the full endomorphism algebra.
 	It does not by itself assert fixed-length word-span injectivity or normality.
 \end{remark}
 
-\begin{theorem}[Irreducible action implies eventual cumulative spanning]%
-	\label{thm:irreducible_action_cumulative_span}
+\begin{lemma}[Irreducible action implies eventual cumulative spanning]%
+	\label{lem:irreducible_action_cumulative_span}
 	\lean{MPSTensor.exists_cumulativeSpan_eq_top_of_isIrreducibleAction}\leanok
 	\uses{def:cumulative_span, def:irreducible_action}
 	Assume $D > 0$.
@@ -484,7 +493,7 @@ irreducible matrix action generates the full endomorphism algebra.
 	\[
 		T_N(A) = \MN{D}.
 	\]
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok\uses{thm:burnside_matrix}
 	By Theorem~\ref{thm:burnside_matrix}, $\algspn(A) = \MN{D}$.
@@ -496,7 +505,7 @@ irreducible matrix action generates the full endomorphism algebra.
 \end{proof}
 
 \begin{remark}\leanok
-	The conclusion of Theorem~\ref{thm:irreducible_action_cumulative_span}
+	The conclusion of Lemma~\ref{lem:irreducible_action_cumulative_span}
 	is a cumulative-span statement:
 	\[
 		\exists N,\ T_N(A)=\MN{D}.
