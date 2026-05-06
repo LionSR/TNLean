@@ -3398,40 +3398,53 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     of block-selector words.
 \end{proof}
 
-\begin{lemma}[Product-word span from BNT selector words]
+\begin{lemma}[Product-word span from block-injective selector words]
     \label{lem:product_word_span_from_bnt_selectors}
+    \lean{MPSTensor.wordTupleSpanTop_of_hasInjectiveBlocks_of_blockSelectorWords}
     \lean{MPSTensor.wordTupleSpanTop_of_isCanonicalFormBNT_of_blockSelectorWords}
+    \lean{MPSTensor.wordTupleSpanTop_of_hasInjectiveBlocks_of_pairBlockSeparatingWords}
     \lean{MPSTensor.wordTupleSpanTop_of_isCanonicalFormBNT_of_pairBlockSeparatingWords}
+    \lean{MPSTensor.wordTupleSpanTop_of_hasInjectiveBlocks_of_pairTraceSeparatingAt}
     \lean{MPSTensor.wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingAt}
+    \lean{MPSTensor.wordTupleSpanTop_of_hasInjectiveBlocks_of_pairTraceSeparatingUpTo_of_identity_padding}
+    \lean{MPSTensor.wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingUpTo_of_identity_padding}
+    \lean{MPSTensor.exists_pos_productWordSpan_of_hasInjectiveBlocks_of_pairBlockSeparatingWords}
     \lean{MPSTensor.exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairBlockSeparatingWords}
+    \lean{MPSTensor.exists_pos_productWordSpan_of_hasInjectiveBlocks_of_pairTraceSeparatingAt}
     \lean{MPSTensor.exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingAt}
+    \lean{MPSTensor.exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingUpTo_of_identity_padding}
     \lean{MPSTensor.exists_wordTupleSpanTop_of_isCanonicalFormBNT_of_identity_period_windows}
     \lean{MPSTensor.exists_wordTupleSpanTop_of_isCanonicalFormBNT_of_pairSpanTop_period_windows}
     \lean{MPSTensor.exists_pos_productWordSpan_of_isCanonicalFormBNT_of_identity_period_windows}
+    \lean{MPSTensor.exists_pos_productWordSpan_of_hasInjectiveBlocks_of_blockSelectorWords}
     \lean{MPSTensor.exists_pos_productWordSpan_of_isCanonicalFormBNT_of_blockSelectorWords}
+    \lean{MPSTensor.blockProjection_mem_span_reindexed_toTensorFromBlocks_of_selectorWords}
     \lean{MPSTensor.blockProjection_mem_span_reindexed_toTensorFromBlocks_of_bntSelectorWords}
+    \lean{MPSTensor.isBlockDiagonal'_of_commutes_reindexed_toTensorFromBlocks_of_selectorWords}
     \lean{MPSTensor.isBlockDiagonal'_of_commutes_reindexed_toTensorFromBlocks_of_bntSelectorWords}
     \leanok
     \uses{def:cf_bnt, lem:pair_trace_separation_to_pairwise_selectors,
         lem:pair_trace_separation_homogenization_with_padding,
         lem:block_selectors_from_pairwise_separators,
         lem:block_projection_span_from_product_word_span}
-    Let $((\mu_j),(A_j))$ be in canonical form with BNT separation.  Suppose there are
+    Let $(A_j)$ be a finite family of block-injective tensors.  Suppose there are
     length-$S$ block-selector words: for each sector $k$, a linear combination of
     length-$S$ words evaluates to $I$ on $A_k$ and to $0$ on every other block.
     Then the simultaneous length-$(1+S)$ block-word evaluations span
-    $\prod_j \MN{D_j}$, with positive length.  It is enough, by
-    Lemma~\ref{lem:block_selectors_from_pairwise_separators}, to construct
-    pairwise separators for every ordered pair of distinct blocks; by
+    $\prod_j \MN{D_j}$, with positive length.  In particular, a canonical form
+    with BNT separation supplies the required block injectivity, but the
+    selector-word conclusion does not require the full canonical-form/BNT data.
+    It is enough, by Lemma~\ref{lem:block_selectors_from_pairwise_separators}, to
+    construct pairwise separators for every ordered pair of distinct blocks.
     Lemma~\ref{lem:pair_trace_separation_to_pairwise_selectors}, a common
     pair trace-separation length is one sufficient finite-dimensional witness.
     This witness remains homogeneous: either it is supplied
     directly as fixed-length pair separation, or it is obtained from an explicit
     period-window hypothesis as in
     Lemma~\ref{lem:pair_trace_separation_homogenization_with_padding}.
-    Consequently, the pulled-back words at the resulting length for
-    $\operatorname{Assemble}(\mu,A)$ span every virtual sector projection, and the
-    corresponding commutant reduction is available.
+    If the assembly weights are all nonzero, then the pulled-back words at the
+    resulting length for $\operatorname{Assemble}(\mu,A)$ span every virtual
+    sector projection, and the corresponding commutant reduction is available.
 \end{lemma}
 
 \begin{proof}
@@ -3440,6 +3453,8 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
         lem:pair_trace_separation_to_pairwise_selectors,
         lem:block_selectors_from_pairwise_separators,
         lem:block_projection_span_from_product_word_span}
+    Block injectivity writes each target sector matrix as a fixed-length linear
+    combination of word evaluations.  For a canonical-form/BNT family,
     Definition~\ref{def:cf_bnt} gives one-site injectivity of each block, hence
     $1$-block injectivity by Lemma~\ref{lem:one_block_injective_of_injective}.
     For a target tuple $(M_j)_j$, write $M_k$ as a
