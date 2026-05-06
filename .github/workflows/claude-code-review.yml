@@ -105,20 +105,28 @@ jobs:
             echo "reason=$REVIEW_PROVIDER token is not configured" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Checkout repository
+      - name: Checkout repository under review
         if: steps.claude-switch.outputs.skip != 'true' && steps.bot-check.outputs.skip != 'true' && steps.provider-token.outputs.skip != 'true'
         uses: actions/checkout@v6
         with:
           fetch-depth: 1
 
+      - name: Checkout trusted automation
+        if: steps.claude-switch.outputs.skip != 'true' && steps.bot-check.outputs.skip != 'true' && steps.provider-token.outputs.skip != 'true'
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          path: .trusted-actions
+          fetch-depth: 1
+
       - name: Set up Lean toolchain and cache
         if: steps.claude-switch.outputs.skip != 'true' && steps.bot-check.outputs.skip != 'true' && steps.provider-token.outputs.skip != 'true'
-        uses: ./.github/actions/setup-lean
+        uses: ./.trusted-actions/.github/actions/setup-lean
 
       - name: Run Claude Code Review
         if: steps.claude-switch.outputs.skip != 'true' && steps.bot-check.outputs.skip != 'true' && steps.provider-token.outputs.skip != 'true'
         id: claude-review
-        uses: ./.github/actions/claude-code-with-provider
+        uses: ./.trusted-actions/.github/actions/claude-code-with-provider
         with:
           provider: ${{ matrix.provider }}
           model-tier: opus
@@ -129,7 +137,7 @@ jobs:
           plugins: |
             code-review@claude-code-plugins
             lean@leanprover
-          claude-prompt-file: .github/prompts/claude-code-review-prompt.md
+          claude-prompt-file: .trusted-actions/.github/prompts/claude-code-review-prompt.md
           claude-prompt-context: |
             PR number: ${{ github.event.pull_request.number }}
             Repository: ${{ github.repository }}
@@ -138,4 +146,4 @@ jobs:
             Review this Lean 4 pull request: ${{ github.repository }}/pull/${{ github.event.pull_request.number }}
             Review provider: ${{ matrix.provider }}
             Trigger event: ${{ github.event.action }}
-          system-prompt-file: .github/prompts/claude-code-review-system-prompt.md
+          system-prompt-file: .trusted-actions/.github/prompts/claude-code-review-system-prompt.md
