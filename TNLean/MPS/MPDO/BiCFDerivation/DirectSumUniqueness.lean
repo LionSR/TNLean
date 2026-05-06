@@ -59,6 +59,28 @@ theorem mpvSubmodule_ne_of_not_exists_mpv_eq_smul
   obtain ⟨c, hc⟩ := hmem
   exact ⟨c, hc.symm⟩
 
+/-- Pointwise non-proportionality implies non-proportionality of the bundled
+MPV states. -/
+theorem not_exists_mpv_eq_smul_of_not_exists_forall_mpv_eq_mul
+    {A : MPSTensor d D₁} {B : MPSTensor d D₂}
+    (hDistinct :
+      ¬ ∃ c : ℂ, ∀ σ : Fin N → Fin d, mpv A σ = c * mpv B σ) :
+    ¬ ∃ c : ℂ, (mpv A : NSiteSpace d N) = c • (mpv B : NSiteSpace d N) := by
+  rintro ⟨c, hc⟩
+  apply hDistinct
+  refine ⟨c, ?_⟩
+  intro σ
+  simpa [Pi.smul_apply, smul_eq_mul] using congrFun hc σ
+
+/-- A pointwise non-proportional MPV state has a distinct MPV line. -/
+theorem mpvSubmodule_ne_of_not_exists_forall_mpv_eq_mul
+    {A : MPSTensor d D₁} {B : MPSTensor d D₂}
+    (hDistinct :
+      ¬ ∃ c : ℂ, ∀ σ : Fin N → Fin d, mpv A σ = c * mpv B σ) :
+    mpvSubmodule A N ≠ mpvSubmodule B N :=
+  mpvSubmodule_ne_of_not_exists_mpv_eq_smul
+    (not_exists_mpv_eq_smul_of_not_exists_forall_mpv_eq_mul hDistinct)
+
 /-- Distinct periodic MPV lines rule out the equal-size local-image collapse.
 
 This is the parent-Hamiltonian uniqueness input used in the equal-size branch
@@ -110,6 +132,20 @@ theorem not_bondDim_eq_and_groundSpace_eq_of_exists_not_mpv_eq_smul
   exact not_bondDim_eq_and_groundSpace_eq_of_not_exists_mpv_eq_smul
     hA hB hN hL hLN hSep
 
+/-- A sufficiently long pointwise non-proportional MPV state rules out the
+equal-size local-image collapse. -/
+theorem not_bondDim_eq_and_groundSpace_eq_of_exists_not_forall_mpv_eq_mul
+    {A : MPSTensor d D₁} {B : MPSTensor d D₂} [NeZero D₁] [NeZero D₂]
+    (hA : IsInjective A) (hB : IsInjective B) (hL : 1 < L)
+    (hDistinct :
+      ∃ N : ℕ, 2 ≤ N ∧ L ≤ N ∧
+        ¬ ∃ c : ℂ, ∀ σ : Fin N → Fin d, mpv A σ = c * mpv B σ) :
+    ¬ (D₁ = D₂ ∧ groundSpace A L = groundSpace B L) := by
+  rcases hDistinct with ⟨N, hN, hLN, hSep⟩
+  exact not_bondDim_eq_and_groundSpace_eq_of_not_exists_mpv_eq_smul
+    hA hB hN hL hLN
+    (not_exists_mpv_eq_smul_of_not_exists_forall_mpv_eq_mul hSep)
+
 /-- Two-block directness with the equal-size branch discharged by distinct MPV
 lines.
 
@@ -154,5 +190,20 @@ theorem groundSpace_inf_eq_bot_of_exists_not_mpv_eq_smul_of_dim_ge
   exact groundSpace_inf_eq_bot_of_not_bondDim_eq_and_groundSpace_eq_of_dim_ge
     hAblk hBblk hD
     (not_bondDim_eq_and_groundSpace_eq_of_exists_not_mpv_eq_smul hA hB hL hDistinct)
+
+/-- Two-block directness from a sufficiently long pointwise non-proportional
+MPV state. -/
+theorem groundSpace_inf_eq_bot_of_exists_not_forall_mpv_eq_mul_of_dim_ge
+    {A : MPSTensor d D₁} {B : MPSTensor d D₂} [NeZero D₁] [NeZero D₂]
+    (hAblk : IsNBlkInjective A L) (hBblk : IsNBlkInjective B L)
+    (hA : IsInjective A) (hB : IsInjective B) (hD : D₂ ≤ D₁) (hL : 1 < L)
+    (hDistinct :
+      ∃ N : ℕ, 2 ≤ N ∧ L ≤ N ∧
+        ¬ ∃ c : ℂ, ∀ σ : Fin N → Fin d, mpv A σ = c * mpv B σ) :
+    groundSpace A (L + (L + L)) ⊓ groundSpace B (L + (L + L)) = ⊥ := by
+  exact groundSpace_inf_eq_bot_of_not_bondDim_eq_and_groundSpace_eq_of_dim_ge
+    hAblk hBblk hD
+    (not_bondDim_eq_and_groundSpace_eq_of_exists_not_forall_mpv_eq_mul
+      hA hB hL hDistinct)
 
 end MPSTensor

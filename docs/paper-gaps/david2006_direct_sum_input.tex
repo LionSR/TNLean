@@ -129,6 +129,13 @@ and
 \leanid{MPSTensor.groundSpace_inf_eq_bot_of_exists_not_mpv_eq_smul_of_dim_ge}
 are the corresponding existential forms, where the caller supplies some chain
 length \(N\ge \max\{2,L\}\) at which the two MPV states are not proportional.
+\leanid{MPSTensor.exists_ge_not_forall_mpv_eq_mul_of_not_gaugePhaseEquiv_of_irreducible_TP}
+proves the analytic source of such witnesses for irreducible trace-preserving
+blocks with normalized self-overlaps: if two blocks are not gauge-phase
+equivalent, then arbitrarily far out there is a chain length at which their MPV
+states are not proportional.  The direct-sum file records the pointwise
+conversion by
+\leanid{MPSTensor.groundSpace_inf_eq_bot_of_exists_not_forall_mpv_eq_mul_of_dim_ge}.
 This is still not the full BNT source theorem: the remaining BNT-level task is
 to derive the required non-proportionality of MPV states from the paper's
 pairwise different canonical blocks, after the prescribed blocking.
