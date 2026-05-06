@@ -203,7 +203,7 @@ theorem pairTraceSeparatingAt_symm {D₁ D₂ : ℕ}
 /-- Remove a propositional bond-dimension cast from the left block in
 homogeneous pair trace separation. -/
 theorem pairTraceSeparatingAt_uncast_left {D₁ D₁' D₂ : ℕ}
-    (h : D₁ = D₁') (A : MPSTensor d D₁) (B : MPSTensor d D₂) {S : ℕ}
+    (h : D₁ = D₁') {A : MPSTensor d D₁} {B : MPSTensor d D₂} {S : ℕ}
     (hSep : PairTraceSeparatingAt (cast (congr_arg (MPSTensor d) h) A) B S) :
     PairTraceSeparatingAt A B S := by
   subst h

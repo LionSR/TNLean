@@ -84,7 +84,10 @@ theorem groundSpace_finrank_eq_of_isNBlkInjective {A : MPSTensor d D}
   exact leftTraceWordMap_range_finrank_eq_of_isNBlkInjective hA
 
 /-- Equal finite-chain image spaces for two block-injective tensors force equal
-bond dimensions. -/
+bond dimensions.
+
+This dimension step is exported separately because the direct-sum argument uses
+it before strengthening an image-space inclusion to equality. -/
 theorem bondDim_eq_of_groundSpace_eq_of_isNBlkInjective
     {A : MPSTensor d D₁} {B : MPSTensor d D₂}
     (hA : IsNBlkInjective A L) (hB : IsNBlkInjective B L)
