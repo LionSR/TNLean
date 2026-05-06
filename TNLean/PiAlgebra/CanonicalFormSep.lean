@@ -8,18 +8,18 @@ import TNLean.PiAlgebra.CanonicalFormSepAux
 # Separated canonical-form hypotheses and block separation
 
 This file proves the core block-separation result from the separated canonical-form hypotheses
-defined in `CanonicalFormSepAux`, and then rebuilds legacy canonical-form wrappers on top.
+defined in `CanonicalFormSepAux`, and then rebuilds legacy canonical-form formulations on top.
 
 ## Main results
 
 - `block_separation_core` — extracts per-block `SameMPV` from a weighted sum identity,
   using the injective-block variant.
 - `block_separation_all_words` / `block_separation_all_words_of_irreducible_TP` — public
-  wrappers around the core induction.
+  formulations of the core induction.
 - `per_block_sameMPV_of_canonical_form` / `per_block_sameMPV_of_normal_canonical_form` —
   block-separation from bundled canonical-form predicates.
 - `fundamentalTheorem_canonicalForm` / `fundamentalTheorem_canonicalForm_explicit` —
-  backwards-compatible wrappers for the MPS fundamental theorem.
+  canonical-form formulations of the MPS fundamental theorem.
 -/
 
 set_option linter.unusedSectionVars false
@@ -489,7 +489,7 @@ theorem sameMPV_of_charpoly_eq_all_words
 Under canonical form hypotheses, the summed identity implies per-block SameMPV.
 Requires injectivity of all blocks (used in the core lemma for the spectral gap
 argument). -/
-theorem block_separation_all_words
+lemma block_separation_all_words
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ)
     (A B : (k : Fin r) → MPSTensor d (dim k))
@@ -512,7 +512,7 @@ theorem block_separation_all_words
 /-- NT / normal-canonical-form version of `block_separation_all_words`.
 
 Besides irreducibility and left-canonical normalization on both block families,
-this theorem also assumes the self-overlap convergence hypothesis on the
+this lemma also assumes the self-overlap convergence hypothesis on the
 `A`-blocks: `mpvOverlap (A k) (A k) N → 1`.
 
 The proof is the same peeling / induction argument as `block_separation_core`.
@@ -524,7 +524,7 @@ bond-dimension mismatch, and
 `gaugePhaseEquiv_of_mpvOverlap_tendsto_one_of_irreducible_TP` replaces the
 injective equal-dimension overlap-decay contradiction via the irreducible
 modulus-one-eigenvalue-rigidity route. -/
-theorem block_separation_all_words_of_irreducible_TP
+lemma block_separation_all_words_of_irreducible_TP
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ)
     (A B : (k : Fin r) → MPSTensor d (dim k))
@@ -591,12 +591,12 @@ private lemma per_block_sameMPV_of_sameMPV₂_of_card_le_one
 
 /-- Additive split version of `per_block_sameMPV_of_canonical_form`.
 
-This theorem isolates exactly the pieces of the canonical-form bundle used in the
+This lemma isolates exactly the pieces of the canonical-form bundle used in the
 block-separation argument: injectivity, left-canonical normalization, strict nonzero weights,
-and self-overlap normalization. The backwards-compatible wrapper below is recovered by
+and self-overlap normalization. The canonical-form formulation below is recovered by
 projection from `IsCanonicalForm`.
 -/
-theorem per_block_sameMPV_of_separated_canonical_data
+lemma per_block_sameMPV_of_separated_canonical_data
     (μ : Fin r → ℂ)
     (A B : (k : Fin r) → MPSTensor d (dim k))
     (hWeights : HasStrictOrderedNonzeroWeights μ)
@@ -615,10 +615,10 @@ theorem per_block_sameMPV_of_separated_canonical_data
       hA_overlap.overlap_tendsto_one
       (summed_block_difference_eq_zero_of_sameMPV₂ μ A B hSame₂)
 
-/-- Wrapper extracting per-block `SameMPV` from canonical-form data with a strict ordering
-witness. The strict ordering is available at the BNT level (`IsCanonicalFormBNT.mu_strict_anti`)
+/-- Reformulation extracting per-block `SameMPV` from canonical-form data with a strict
+ordering witness. The strict ordering is available at the BNT level (`IsCanonicalFormBNT.mu_strict_anti`)
 but not from the base `IsCanonicalForm` which only guarantees non-increasing moduli. -/
-theorem per_block_sameMPV_of_canonical_form
+lemma per_block_sameMPV_of_canonical_form
     (μ : Fin r → ℂ)
     (A B : (k : Fin r) → MPSTensor d (dim k))
     (hA : IsCanonicalForm μ A)
@@ -641,12 +641,12 @@ theorem per_block_sameMPV_of_canonical_form
 This is the analogue of `per_block_sameMPV_of_canonical_form`, replacing
 injective canonical-form blocks by irreducible + primitive + left-canonical
 blocks. The underlying proof uses the same peeling argument as the injective
-canonical-form theorem, but the leading-block identification step uses the
+canonical-form lemma, but the leading-block identification step uses the
 irreducible modulus-one-eigenvalue-rigidity theorem (after separately ruling out
 a bond-dimension mismatch) instead of the injective overlap-decay
 contradiction. Since both block families use the same dimension function, the
 conclusion is the homogeneous predicate `SameMPV`. -/
-theorem per_block_sameMPV_of_normal_canonical_form
+lemma per_block_sameMPV_of_normal_canonical_form
     {μ : Fin r → ℂ} {A : (k : Fin r) → MPSTensor d (dim k)}
     (hA : IsNormalCanonicalForm μ A)
     (hStrict : StrictAnti (fun k : Fin r => ‖μ k‖))
@@ -667,10 +667,10 @@ theorem per_block_sameMPV_of_normal_canonical_form
 
 /-- Separated-data variant of `fundamentalTheorem_canonicalForm`.
 
-This is the preferred interface: it only asks for the pieces of canonical-form
-structure actually used by the proof.  The backwards-compatible wrapper below remains available
+This is the preferred formulation: it only asks for the pieces of canonical-form
+structure actually used by the proof. The canonical-form formulation below remains available
 around this one. -/
-theorem fundamentalTheorem_of_separated_canonical_data
+lemma fundamentalTheorem_of_separated_canonical_data
     (μ : Fin r → ℂ)
     (A B : (k : Fin r) → MPSTensor d (dim k))
     (hWeights : HasStrictOrderedNonzeroWeights μ)
@@ -687,7 +687,7 @@ theorem fundamentalTheorem_of_separated_canonical_data
   exact fundamentalTheorem_multiBlock_full μ A B hA_inj.block_injective hSep
 
 /-- Explicit gauge-matrix version of `fundamentalTheorem_of_separated_canonical_data`. -/
-theorem fundamentalTheorem_of_separated_canonical_data_explicit
+lemma fundamentalTheorem_of_separated_canonical_data_explicit
     (μ : Fin r → ℂ)
     (A B : (k : Fin r) → MPSTensor d (dim k))
     (hWeights : HasStrictOrderedNonzeroWeights μ)
@@ -704,7 +704,7 @@ theorem fundamentalTheorem_of_separated_canonical_data_explicit
     hWeights hA_inj hA_left hA_overlap hB_inj hB_left hSame₂
   exact fundamentalTheorem_multiBlock_explicit A B hA_inj.block_injective hSep
 
-/-- Wrapper around `fundamentalTheorem_of_separated_canonical_data` for canonical-form data
+/-- Reformulation of `fundamentalTheorem_of_separated_canonical_data` for canonical-form data
 with an explicit strict-ordering witness. -/
 theorem fundamentalTheorem_canonicalForm
     (μ : Fin r → ℂ)
@@ -725,9 +725,9 @@ theorem fundamentalTheorem_canonicalForm
     (IsLeftCanonicalBlockFamily.ofForall hB_lc)
     hSame₂
 
-/-- Explicit gauge-matrix wrapper around
+/-- Explicit gauge-matrix reformulation of
 `fundamentalTheorem_of_separated_canonical_data_explicit` with strict-ordering witness. -/
-theorem fundamentalTheorem_canonicalForm_explicit
+lemma fundamentalTheorem_canonicalForm_explicit
     (μ : Fin r → ℂ)
     (A B : (k : Fin r) → MPSTensor d (dim k))
     (hA : IsCanonicalForm μ A)

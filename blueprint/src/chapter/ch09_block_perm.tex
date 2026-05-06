@@ -483,7 +483,7 @@ We use this notation throughout the block-separation argument.
     $\mu_0^N$, the induction hypothesis applies.
 \end{proof}
 
-\begin{theorem}[Block separation from canonical form]\label{thm:block_sep}
+\begin{lemma}[Block separation from canonical form]\label{lem:block_sep}
     \lean{MPSTensor.per_block_sameMPV_of_canonical_form}
     \leanok
     \uses{def:is_canonical_form}
@@ -494,7 +494,7 @@ We use this notation throughout the block-separation argument.
     $\bigoplus_k \mu_k A_k$ and $\bigoplus_k \mu_k B_k$
     generate the same MPV family, then each pair
     $(A_k, B_k)$ generates the same MPV family.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -511,7 +511,7 @@ We use this notation throughout the block-separation argument.
     TP normalization.
 \end{proof}
 
-\begin{theorem}[Block separation from normal canonical form]\label{thm:block_sep_normal}
+\begin{lemma}[Block separation from normal canonical form]\label{lem:block_sep_normal}
     \lean{MPSTensor.per_block_sameMPV_of_normal_canonical_form}\leanok
     \uses{def:is_normal_canonical_form}
     Let $((\mu_k), (A_k))$ satisfy the normal canonical form conditions,
@@ -521,11 +521,11 @@ We use this notation throughout the block-separation argument.
     $\bigoplus_k \mu_k A_k$ and $\bigoplus_k \mu_k B_k$
     generate the same MPV family, then each pair
     $(A_k, B_k)$ generates the same MPV family.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:ncf_overlap_tendsto_one, thm:nt_modulus_one_gauge, thm:block_sep}
-    The proof follows the same peeling argument as Theorem~\ref{thm:block_sep},
+    \uses{thm:ncf_overlap_tendsto_one, thm:nt_modulus_one_gauge, lem:block_sep}
+    The proof follows the same peeling argument as Lemma~\ref{lem:block_sep},
     with Theorem~\ref{thm:nt_modulus_one_gauge} (modulus-one eigenvalue rigidity
     for irreducible tensors) replacing the injective overlap-decay argument at
     the identification step, since the blocks are irreducible rather than
@@ -540,7 +540,7 @@ We use this notation throughout the block-separation argument.
     \lean{MPSTensor.fundamentalTheorem_canonicalForm}
     \leanok
     \uses{def:is_canonical_form, def:gauge_equiv, def:tensor_from_blocks}
-    Under the hypotheses of Theorem~\ref{thm:block_sep}, each pair
+    Under the hypotheses of Lemma~\ref{lem:block_sep}, each pair
     $(A_k, B_k)$ is gauge equivalent. Hence the block-diagonal tensors
     $\bigoplus_k \mu_k A_k$ and $\bigoplus_k \mu_k B_k$
     are gauge equivalent.
@@ -548,8 +548,8 @@ We use this notation throughout the block-separation argument.
 
 \begin{proof}
     \leanok
-    \uses{thm:block_sep, thm:per_block_gauge}
-    Theorem~\ref{thm:block_sep} gives per-block same MPV.
+    \uses{lem:block_sep, thm:per_block_gauge}
+    Lemma~\ref{lem:block_sep} gives per-block same MPV.
     Theorem~\ref{thm:per_block_gauge} then converts this to
     per-block gauge equivalence and then to global gauge equivalence
     of the block-diagonal tensors.
