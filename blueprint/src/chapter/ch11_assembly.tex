@@ -577,13 +577,14 @@ facts used to recover the lists of weights from those power sums.
 
 \begin{proof}
 	\leanok
-	\uses{lem:paper_decomp_formula, thm:route_b_equal}
+	\uses{lem:paper_decomp_formula, thm:route_b_equal_with_copies}
 	Absorb the factors $\zeta_j$ into the sector weights of $Q$ and keep the
 	basis blocks of $P$. The phase-matching hypothesis and the sector
 	decomposition formula show that the resulting decomposition has the same
 	total MPV family as~$Q$, hence also as~$P$. One is then in the
-	shared-basis situation of Theorem~\ref{thm:route_b_equal}, which yields
-	the claimed equality of multisets.
+	shared-basis situation with recovered copy counts in
+	Theorem~\ref{thm:route_b_equal_with_copies}, which yields the claimed
+	equality of multisets.
 \end{proof}
 
 \begin{theorem}[Gauge-phase paired bases imply phase-matched sector comparison]%
