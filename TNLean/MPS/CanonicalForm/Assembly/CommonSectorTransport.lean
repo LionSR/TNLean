@@ -62,7 +62,7 @@ theorem isNormalCanonicalFormBNT_commonRepresentativeBlocksAt
     IsNormalCanonicalFormBNT (d := blockPhysDim d p)
       (F.commonRepresentativeWeight μ) (F.commonRepresentativeBlocksAt hp) where
   toIsNormalCanonicalForm :=
-    F.isNormalCanonicalForm_commonRepresentativeBlocksAt hp μ hμ hAnti
+    F.isNormalCanonicalForm_commonRepresentativeBlocksAt hp μ hμ hAnti.antitone
   mu_strict_anti := hAnti
   blocks_not_equiv := hNotGpe
 
