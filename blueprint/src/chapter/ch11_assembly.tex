@@ -211,7 +211,7 @@ used in this chapter.
 	      rem:cf_coeff_arrays, lem:route_b_equal_with_copies,
 	      thm:afterBlocking_sectorComparison_reindexed_bntCover,
 	      thm:common_phase_cover_of_proportional_decomposition}
-	The formalized comparison starts with explicit decomposition coefficients.
+	The comparison starts with explicit decomposition coefficients.
 	Theorem~\ref{thm:mpv_decomposition} expands the two canonical-form tensors in
 	their BNT bases, and Remark~\ref{rem:cf_coeff_arrays} describes the resulting
 	coefficient arrays.  When the required coefficient identities are supplied,
@@ -1372,6 +1372,12 @@ two-basis sector comparison theorem.
 	then give the sector-weight conclusion.
 \end{proof}
 
+The following common-primitive hypotheses are auxiliary comparison data for the
+after-blocking route.  They are not separate statements in arXiv:1606.00608:
+the source proof passes from canonical-form/BNT decompositions to the final
+comparison directly, while these definitions isolate the span, phase-cover, and
+BNT-cover inputs needed by the zero-block sector comparison below.
+
 \begin{definition}[Span hypotheses for common primitive sectors]%
 \label{def:common_primitive_span_hypotheses}
 	\lean{MPSTensor.CommonPrimitiveSpanHypotheses}
@@ -1385,8 +1391,8 @@ two-basis sector comparison theorem.
 	size.
 \end{definition}
 
-\begin{theorem}[Phase covers supply span hypotheses]%
-\label{thm:common_primitive_span_hypotheses_of_common_phase_cover}
+\begin{lemma}[Phase covers supply span hypotheses]%
+\label{lem:common_primitive_span_hypotheses_of_common_phase_cover}
 	\lean{MPSTensor.CommonPrimitiveSpanHypotheses.of_commonPhaseCover}
 	\leanok
 	\uses{def:common_primitive_span_hypotheses, def:mpv_common_phase_cover,
@@ -1395,7 +1401,7 @@ two-basis sector comparison theorem.
 	dimensions, are one-site injective, and are equipped with a common MPV phase cover, then
 	they satisfy the span hypotheses of
 	Definition~\ref{def:common_primitive_span_hypotheses}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
 	\leanok
@@ -1417,8 +1423,8 @@ two-basis sector comparison theorem.
 	common MPV phase cover for the two block families.
 \end{definition}
 
-\begin{theorem}[Phase-cover hypotheses imply span hypotheses]%
-\label{thm:common_primitive_phase_cover_hypotheses_to_span_hypotheses}
+\begin{lemma}[Phase-cover hypotheses imply span hypotheses]%
+\label{lem:common_primitive_phase_cover_hypotheses_to_span_hypotheses}
 	\lean{MPSTensor.CommonPrimitivePhaseCoverHypotheses.toSpanHypotheses}
 	\leanok
 	\uses{def:common_primitive_phase_cover_hypotheses,
@@ -1428,14 +1434,14 @@ two-basis sector comparison theorem.
 	Definition~\ref{def:common_primitive_phase_cover_hypotheses}, then they
 	satisfy the span hypotheses of
 	Definition~\ref{def:common_primitive_span_hypotheses}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
 	\leanok
-	\uses{thm:common_primitive_span_hypotheses_of_common_phase_cover}
+	\uses{lem:common_primitive_span_hypotheses_of_common_phase_cover}
 	The zero-tail equality and the two injectivity assertions are already part of
 	the phase-cover hypotheses.  Apply
-	Theorem~\ref{thm:common_primitive_span_hypotheses_of_common_phase_cover} to a
+	Lemma~\ref{lem:common_primitive_span_hypotheses_of_common_phase_cover} to a
 	common MPV phase cover for the two block families.
 \end{proof}
 
@@ -1453,8 +1459,8 @@ two-basis sector comparison theorem.
 	of Definition~\ref{def:common_primitive_phase_cover_hypotheses}.
 \end{definition}
 
-\begin{theorem}[Proportional-comparison hypotheses imply phase-cover hypotheses]%
-\label{thm:common_primitive_proportional_hypotheses_to_phase_cover_hypotheses}
+\begin{lemma}[Proportional-comparison hypotheses imply phase-cover hypotheses]%
+\label{lem:common_primitive_proportional_hypotheses_to_phase_cover_hypotheses}
 	\lean{MPSTensor.CommonPrimitiveProportionalHypotheses.toPhaseCoverHypotheses}
 	\leanok
 	\uses{def:common_primitive_proportional_hypotheses,
@@ -1463,7 +1469,7 @@ two-basis sector comparison theorem.
 	If two common primitive nonzero-sector families satisfy the proportional-comparison
 	hypotheses, then they satisfy the phase-cover hypotheses of
 	Definition~\ref{def:common_primitive_phase_cover_hypotheses}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
 	\leanok
@@ -1473,8 +1479,8 @@ two-basis sector comparison theorem.
 	Theorem~\ref{thm:common_phase_cover_of_proportional_decomposition}.
 \end{proof}
 
-\begin{theorem}[Proportional comparison implies span hypotheses]%
-\label{thm:common_primitive_proportional_hypotheses_to_span_hypotheses}
+\begin{lemma}[Proportional comparison implies span hypotheses]%
+\label{lem:common_primitive_proportional_hypotheses_to_span_hypotheses}
 	\lean{MPSTensor.CommonPrimitiveProportionalHypotheses.toSpanHypotheses}
 	\leanok
 	\uses{def:common_primitive_proportional_hypotheses,
@@ -1482,14 +1488,14 @@ two-basis sector comparison theorem.
 	If two common primitive nonzero-sector families satisfy the proportional-comparison
 	hypotheses, then they satisfy the remaining span hypotheses of
 	Definition~\ref{def:common_primitive_span_hypotheses}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
 	\leanok
-	\uses{thm:common_primitive_proportional_hypotheses_to_phase_cover_hypotheses,
-		thm:common_primitive_phase_cover_hypotheses_to_span_hypotheses}
+	\uses{lem:common_primitive_proportional_hypotheses_to_phase_cover_hypotheses,
+		lem:common_primitive_phase_cover_hypotheses_to_span_hypotheses}
 	First convert the BNT proportional-decomposition comparison into common phase-cover
-	hypotheses. The phase-cover-to-span theorem then gives the finite-length span
+	hypotheses. The phase-cover-to-span lemma then gives the finite-length span
 	equality together with the zero-tail and injectivity hypotheses.
 \end{proof}
 
@@ -1519,15 +1525,15 @@ two-basis sector comparison theorem.
 	where the strict ordering and BNT-separation hypotheses are meaningful.
 \end{definition}
 
-\begin{theorem}[BNT-cover hypotheses produce a common phase cover]%
-\label{thm:common_primitive_bnt_cover_hypotheses_to_common_phase_cover}
+\begin{lemma}[BNT-cover hypotheses produce a common phase cover]%
+\label{lem:common_primitive_bnt_cover_hypotheses_to_common_phase_cover}
 	\lean{MPSTensor.CommonPrimitiveBNTCoverHypotheses.toMPVCommonPhaseCover}
 	\leanok
 	\uses{def:common_primitive_bnt_cover_hypotheses,
 		def:mpv_common_phase_cover}
 	If two common primitive nonzero-sector families satisfy the BNT-cover
 	hypotheses, then they have a common MPV phase cover.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
 	\leanok
@@ -1537,8 +1543,8 @@ two-basis sector comparison theorem.
 	Theorem~\ref{thm:common_phase_cover_of_separated_normal_bnt}.
 \end{proof}
 
-\begin{theorem}[BNT-cover hypotheses imply phase-cover hypotheses]%
-\label{thm:common_primitive_bnt_cover_hypotheses_to_phase_cover_hypotheses}
+\begin{lemma}[BNT-cover hypotheses imply phase-cover hypotheses]%
+\label{lem:common_primitive_bnt_cover_hypotheses_to_phase_cover_hypotheses}
 	\lean{MPSTensor.CommonPrimitiveBNTCoverHypotheses.toCommonPrimitivePhaseCoverHypotheses}
 	\leanok
 	\uses{def:common_primitive_bnt_cover_hypotheses,
@@ -1546,13 +1552,13 @@ two-basis sector comparison theorem.
 	If two common primitive nonzero-sector families satisfy the BNT-cover
 	hypotheses, then they satisfy the phase-cover hypotheses of
 	Definition~\ref{def:common_primitive_phase_cover_hypotheses}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
 	\leanok
-	\uses{thm:common_primitive_bnt_cover_hypotheses_to_common_phase_cover}
+	\uses{lem:common_primitive_bnt_cover_hypotheses_to_common_phase_cover}
 	The zero-tail equality and injectivity assumptions are part of the BNT-cover
-	hypotheses. The preceding theorem supplies the common MPV phase cover.
+	hypotheses. The preceding lemma supplies the common MPV phase cover.
 \end{proof}
 
 \begin{theorem}[Reindexed sectors give single-family overlap data]%
@@ -1594,7 +1600,7 @@ two-basis sector comparison theorem.
 
 \begin{proof}
 	\leanok
-	\uses{thm:common_primitive_phase_cover_hypotheses_to_span_hypotheses,
+	\uses{lem:common_primitive_phase_cover_hypotheses_to_span_hypotheses,
 		thm:bnt_sector_decomp_pair_overlap_span_of_block_span}
 	Convert the phase-cover hypotheses for the produced families into span
 	hypotheses. The BNT sector-decomposition theorem with block-span equality then
@@ -1617,7 +1623,7 @@ two-basis sector comparison theorem.
 
 \begin{proof}
 	\leanok
-	\uses{thm:common_primitive_bnt_cover_hypotheses_to_phase_cover_hypotheses,
+	\uses{lem:common_primitive_bnt_cover_hypotheses_to_phase_cover_hypotheses,
 		thm:sector_basis_overlap_span_reindexed_commonPhaseCover}
 	Convert the BNT-cover hypotheses for the produced families into common
 	phase-cover hypotheses. The common phase-cover construction then gives the
@@ -1886,7 +1892,7 @@ two-basis sector comparison theorem.
 	\leanok
 	\uses{def:common_primitive_phase_cover_hypotheses,
 		def:common_sector_relabeling_hypothesis}
-	Let $A$ and $B$ have the same MPV family.  Assume the formal blocked-word
+	Let $A$ and $B$ have the same MPV family.  Assume the blocked-word
 	identification for the common-sector data.  The common-sector structural
 	theorem then produces a common blocking length, zero-tail identities, and
 	trace-preserving, primitive, irreducible nonzero-sector families on both sides. If those
@@ -1899,8 +1905,8 @@ two-basis sector comparison theorem.
 \begin{proof}
 	\leanok
 	\uses{thm:afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_spanHypotheses,
-		thm:common_primitive_phase_cover_hypotheses_to_span_hypotheses}
-	Use Theorem~\ref{thm:common_primitive_phase_cover_hypotheses_to_span_hypotheses}
+		lem:common_primitive_phase_cover_hypotheses_to_span_hypotheses}
+	Use Lemma~\ref{lem:common_primitive_phase_cover_hypotheses_to_span_hypotheses}
 		to form the span hypotheses of
 	Definition~\ref{def:common_primitive_span_hypotheses}.  Then apply the
 	common-sector comparison theorem with those span hypotheses.
@@ -1912,7 +1918,7 @@ two-basis sector comparison theorem.
 	\leanok
 	\uses{def:common_primitive_bnt_cover_hypotheses,
 		def:common_sector_relabeling_hypothesis}
-	Let $A$ and $B$ have the same MPV family. Assume the formal blocked-word
+	Let $A$ and $B$ have the same MPV family. Assume the blocked-word
 	identification for the common-sector data.  The common-sector structural
 	theorem gives common primitive nonzero-sector families. If those families
 	satisfy the BNT-cover hypotheses, then the same sector-weight comparison
@@ -1921,7 +1927,7 @@ two-basis sector comparison theorem.
 
 \begin{proof}
 	\leanok
-	\uses{thm:common_primitive_bnt_cover_hypotheses_to_phase_cover_hypotheses,
+	\uses{lem:common_primitive_bnt_cover_hypotheses_to_phase_cover_hypotheses,
 		thm:afterBlocking_sectorComparison_reindexed_commonPhaseCover}
 	Convert the BNT-cover hypotheses for the common primitive nonzero-sector
 	families to common phase-cover hypotheses, and then apply the common-sector
@@ -1969,7 +1975,7 @@ two-basis sector comparison theorem.
 
 \begin{proof}
 	\leanok
-	\uses{thm:common_primitive_proportional_hypotheses_to_phase_cover_hypotheses,
+	\uses{lem:common_primitive_proportional_hypotheses_to_phase_cover_hypotheses,
 		thm:afterBlocking_sectorComparison_reindexed_commonPhaseCover}
 	Convert the BNT proportional-decomposition comparison for the common primitive
 	nonzero-sector families to common phase-cover hypotheses, and then apply the
@@ -2045,7 +2051,7 @@ two-basis sector comparison theorem.
 		Theorem~\ref{thm:common_grouped_block_cast_to_relabeling} and the BNT-cover
 		comparison data from
 		Definition~\ref{def:after_blocking_fundamental_theorem_hypotheses}. The proof
-	then packages the resulting blocking length, sector decompositions, BNT data,
+	then assembles the resulting blocking length, sector decompositions, BNT data,
 	permutation, multiplicity equalities, phases, and sector-weight
 	multiset equalities as the conclusion structure.
 \end{proof}
@@ -2131,7 +2137,7 @@ two-basis sector comparison theorem.
 	the zero-tail identities at that length, and cyclic-sector families for both
 	tensors on a common blocked alphabet.  The blocked-word relabelling and the
 	common primitive irreducible nonzero-sector decompositions are now part of the
-	formalized reduction, culminating in
+	reduction, culminating in
 	Theorem~\ref{thm:after_blocking_common_primitive_irreducible_blocks_reindexed}.
 	Theorem~\ref{thm:afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_spanHypotheses}
 		then states the hypotheses: equality of the
