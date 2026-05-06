@@ -8,7 +8,6 @@ The direct canonical-form files are now in a much better state than they were be
 
 - `MPSTensor.CommonSectorRelabelingHypothesis` names the remaining blocked-word relabeling assertion.
 - `MPSTensor.CommonPrimitiveSpanHypotheses` and `MPSTensor.CommonPrimitivePhaseCoverHypotheses` name the two common primitive comparison inputs.
-- `MPSTensor.afterBlocking_commonSector_blockSpan_of_reindexedNonzeroParts` records the finite-length span consequences available from a common phase cover or from proportional-decomposition data.
 - `MPSTensor.afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_commonPhaseCover` composes the common primitive sector output with the common-cover comparison theorem.
 
 A useful high-level picture is:

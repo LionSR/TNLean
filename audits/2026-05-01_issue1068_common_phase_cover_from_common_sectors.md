@@ -7,19 +7,9 @@ the finite-length nonzero-block span hypothesis used by the zero-tail sector
 comparison theorem, or equivalently to common MPV phase-cover data for the two
 nonzero-sector families.
 
-The Lean theorem added in this round is
-`MPSTensor.afterBlocking_commonSector_blockSpan_of_reindexedNonzeroParts`
-in `TNLean/MPS/CanonicalForm/Assembly/ProportionalComparison.lean`.  It starts
-from `SameMPV₂ A B` and the one-sided equality after relabeling blocked physical
-words used by
-`MPSTensor.afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts`.
-It then returns the common blocking length, the two zero-tail decompositions, the
-weighted common-sector nonzero families, and their trace-preserving, primitive,
-tensor-irreducible, positive-dimension, nonzero-weight, positive-length, and
-length-zero conclusions.
-
-For these exact common-sector families it records two conditional span
-consequences:
+The retired wrapper theorem formerly added in this round packaged the common
+blocking length, the two zero-tail decompositions, and two conditional span
+consequences for the produced common-sector families:
 
 - a common MPV phase cover gives the finite-length nonzero-block span equality by
   `MPSTensor.MPVCommonPhaseCover.span_eq`;
@@ -52,13 +42,9 @@ the finite-length MPV spans.
 
 ## Blueprint updates
 
-The theorem is recorded in
-`blueprint/src/chapter/ch11_assembly.tex` as
-`thm:after_blocking_common_primitive_irreducible_blocks_block_span_consequences`.
-The Ch. 8 open-direction remark now points to this theorem as the intermediate
-span consequence between the common-sector decomposition and the zero-tail sector
-comparison theorem.  The Ch. 11 equal-case remark states that this step remains
-conditional on the common phase cover or proportional-decomposition comparison.
+This wrapper theorem surface was later retired because it was not used by the
+active BNT-cover route.  The blueprint now records the common phase-cover and
+BNT-cover sector-comparison consumers directly.
 
 ## Remaining inputs
 
