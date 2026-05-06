@@ -208,7 +208,7 @@ used in this chapter.
 \begin{proof}
 	\uses{lem:ft_equal_explicit, thm:fundamentalTheorem_equalMPV_CFBNT_hetero,
 	      thm:mpv_decomposition,
-	      rem:cf_coeff_arrays, thm:route_b_equal_with_copies,
+	      rem:cf_coeff_arrays, lem:route_b_equal_with_copies,
 	      thm:afterBlocking_sectorComparison_reindexed_bntCover,
 	      thm:common_phase_cover_of_proportional_decomposition}
 	The formalized comparison starts with explicit decomposition coefficients.
@@ -217,7 +217,7 @@ used in this chapter.
 	coefficient arrays.  When the required coefficient identities are supplied,
 	Lemma~\ref{lem:ft_equal_explicit} proves gauge equivalence after permuting
 	the weighted block-diagonal tensors.  The sector-multiplicity comparison of
-	Theorem~\ref{thm:route_b_equal_with_copies} uses the supplied multiplicity
+	Lemma~\ref{lem:route_b_equal_with_copies} uses the supplied multiplicity
 	data to recover both the copy counts and the sector-weight multisets from
 	these identities.
 
@@ -500,8 +500,8 @@ facts used to recover the lists of weights from those power sums.
 	is exactly equality of the two copy counts.
 \end{proof}
 
-\begin{theorem}[BNT recovery of copy counts and sector weights]%
-\label{thm:route_b_equal_with_copies}
+\begin{lemma}[BNT recovery of copy counts and sector weights]%
+\label{lem:route_b_equal_with_copies}
 	\lean{MPSTensor.SectorWeightData.exists_copies_eq_and_weight_multiset_eq_of_sameMPV_bnt}
 	\leanok
 	\uses{def:paper_sector_data, def:bnt}
@@ -516,7 +516,7 @@ facts used to recover the lists of weights from those power sums.
 		=
 		\{\mu_{j,q}^{T}:1\le q\le r_j^T\}.
 	\]
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
 	\leanok
@@ -532,8 +532,8 @@ facts used to recover the lists of weights from those power sums.
 	(Theorem~\ref{thm:power_sum_multiset}) recovers the weight multisets.
 \end{proof}
 
-\begin{theorem}[Weight multiset recovery with fixed multiplicities]%
-\label{thm:route_b_equal}
+\begin{lemma}[Weight multiset recovery with fixed multiplicities]%
+\label{lem:route_b_equal}
 	\lean{MPSTensor.SectorWeightData.weight_multiset_eq_of_sameMPV_bnt}
 	\leanok
 	\uses{lem:coeff_eventually_eq, lem:geom_extrapolation, thm:power_sum_multiset, def:paper_sector_data, def:bnt}
@@ -554,14 +554,14 @@ facts used to recover the lists of weights from those power sums.
 		      (Theorem~\ref{thm:power_sum_multiset}).
 	\end{enumerate}
 	At the level of block contributions, this is the fixed-multiplicity
-	specialization of Theorem~\ref{thm:route_b_equal_with_copies}: one compares
+	specialization of Lemma~\ref{lem:route_b_equal_with_copies}: one compares
 	the weighted sector sums
 	$\sum_j c_{S,j}^{(N)} V^{(N)}(A_j)$ and
 	$\sum_j c_{T,j}^{(N)} V^{(N)}(A_j)$ over the same basis block family.
-\end{theorem}
+\end{lemma}
 
-\begin{theorem}[Two-basis sector comparison after phase matching]%
-\label{thm:route_b_hetero_phase_match}
+\begin{lemma}[Two-basis sector comparison after phase matching]%
+\label{lem:route_b_hetero_phase_match}
 	\lean{MPSTensor.fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_phaseMatch}
 	\leanok
 	\uses{def:paper_sector_data}
@@ -576,22 +576,22 @@ facts used to recover the lists of weights from those power sums.
 	agree and the basis blocks of $P$ are eventually linearly independent,
 	then for each $j$ the sector weight multiset of $P_j$ equals the
 	multiset obtained from that of $Q_{\pi(j)}$ by multiplication by~$\zeta_j$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
 	\leanok
-	\uses{lem:paper_decomp_formula, thm:route_b_equal_with_copies}
+	\uses{lem:paper_decomp_formula, lem:route_b_equal_with_copies}
 	Absorb the factors $\zeta_j$ into the sector weights of $Q$ and keep the
 	basis blocks of $P$. The phase-matching hypothesis and the sector
 	decomposition formula show that the resulting decomposition has the same
 	total MPV family as~$Q$, hence also as~$P$. One is then in the
 	shared-basis situation with recovered copy counts in
-	Theorem~\ref{thm:route_b_equal_with_copies}, which yields the claimed
+	Lemma~\ref{lem:route_b_equal_with_copies}, which yields the claimed
 	equality of multisets.
 \end{proof}
 
-\begin{theorem}[Gauge-phase paired bases imply phase-matched sector comparison]%
-\label{thm:route_b_hetero_matched_basis}
+\begin{lemma}[Gauge-phase paired bases imply phase-matched sector comparison]%
+\label{lem:route_b_hetero_matched_basis}
 	\lean{MPSTensor.fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_matched_basis}
 	\leanok
 	\uses{def:paper_sector_data, def:gauge_phase_equiv}
@@ -603,15 +603,15 @@ facts used to recover the lists of weights from those power sums.
 	for each $j$ the sector weight multiset of $P_j$ equals the multiset
 	obtained from that of $Q_{\pi(j)}$ after multiplication by the
 	corresponding gauge phase.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
 	\leanok
-	\uses{thm:gauge_phase_mpv_scaling, thm:route_b_hetero_phase_match}
+	\uses{thm:gauge_phase_mpv_scaling, lem:route_b_hetero_phase_match}
 	Gauge-phase equivalence gives the required phase-scaling identity for the
 	MPVs by Theorem~\ref{thm:gauge_phase_mpv_scaling}. The conclusion then
 	follows immediately from
-	Theorem~\ref{thm:route_b_hetero_phase_match}.
+	Lemma~\ref{lem:route_b_hetero_phase_match}.
 \end{proof}
 
 \begin{definition}[Sector basis matching witness]%
@@ -630,7 +630,7 @@ facts used to recover the lists of weights from those power sums.
 		      after transporting $P_j$ across the bond-dimension equality.
 	\end{enumerate}
 	The hypotheses consumed by
-	Theorem~\ref{thm:route_b_hetero_matched_basis} are exactly the fields of
+	Lemma~\ref{lem:route_b_hetero_matched_basis} are exactly the fields of
 	this matching datum.
 \end{definition}
 
@@ -689,8 +689,8 @@ facts used to recover the lists of weights from those power sums.
 	the remaining injectivity and span-comparison hypotheses.
 \end{proof}
 
-\begin{theorem}[Phase-matched comparison recovers copy counts]%
-\label{thm:route_b_hetero_phase_match_copies}
+\begin{lemma}[Phase-matched comparison recovers copy counts]%
+\label{lem:route_b_hetero_phase_match_copies}
 	\lean{MPSTensor.fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_phaseMatch_exists_copies}
 	\leanok
 	\uses{def:paper_sector_data}
@@ -700,15 +700,15 @@ facts used to recover the lists of weights from those power sums.
 	linearly independent, then the matched copy counts agree. After absorbing
 	the phases into the weights of $Q$, the corresponding sector-weight
 	multisets agree.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
 	\leanok
-	\uses{thm:route_b_equal_with_copies}
+	\uses{lem:route_b_equal_with_copies}
 	Absorb the phase powers into the sector weights of $Q$ and write both
 	decompositions over the basis of $P$. Linear independence gives eventual
 	equality of the coefficient power sums, and
-	Theorem~\ref{thm:route_b_equal_with_copies} recovers both the copy-count
+	Lemma~\ref{lem:route_b_equal_with_copies} recovers both the copy-count
 	equalities and the phase-adjusted weight-multiset equalities.
 \end{proof}
 
@@ -720,15 +720,15 @@ facts used to recover the lists of weights from those power sums.
 	Let $M$ be a sector basis pre-matching between $P$ and $Q$. If the total
 	MPV families agree and the basis MPVs of $P$ are eventually linearly
 	independent, then the copy-count equalities recovered by
-	Theorem~\ref{thm:route_b_hetero_phase_match_copies} turn $M$ into a full
+	Lemma~\ref{lem:route_b_hetero_phase_match_copies} turn $M$ into a full
 	sector basis matching.
 \end{lemma}
 
 \begin{proof}
 	\leanok
-	\uses{thm:route_b_hetero_phase_match_copies}
+	\uses{lem:route_b_hetero_phase_match_copies}
 	Gauge-phase equivalence gives the required phase-scaling identities for
-	the corresponding basis MPVs. Theorem~\ref{thm:route_b_hetero_phase_match_copies}
+	the corresponding basis MPVs. Lemma~\ref{lem:route_b_hetero_phase_match_copies}
 	recovers the missing copy-count equalities, which are precisely the extra
 	fields needed for Definition~\ref{def:sector_basis_matching}.
 \end{proof}
@@ -747,10 +747,10 @@ facts used to recover the lists of weights from those power sums.
 
 \begin{proof}
 	\leanok
-	\uses{thm:route_b_hetero_phase_match_copies}
+	\uses{lem:route_b_hetero_phase_match_copies}
 	The gauge-phase equivalences in the pre-matching give the phase-scaling
 	identities for the corresponding basis MPVs.
-	Theorem~\ref{thm:route_b_hetero_phase_match_copies} then gives the
+	Lemma~\ref{lem:route_b_hetero_phase_match_copies} then gives the
 	copy-count equalities and the phase-adjusted multiset equalities.
 \end{proof}
 
@@ -1090,7 +1090,7 @@ facts used to recover the lists of weights from those power sums.
 \label{thm:route_b_hetero_sector_matching}
 	\lean{MPSTensor.fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_sectorMatching}
 	\leanok
-	\uses{def:sector_basis_matching, thm:route_b_hetero_matched_basis}
+	\uses{def:sector_basis_matching, lem:route_b_hetero_matched_basis}
 	Given two sector decompositions $P$ and $Q$, a sector basis matching
 	(Definition~\ref{def:sector_basis_matching}) between them, eventual
 	linear independence of the basis MPV states of $P$, and equality of the
@@ -1101,10 +1101,10 @@ facts used to recover the lists of weights from those power sums.
 
 \begin{proof}
 	\leanok
-	\uses{thm:route_b_hetero_matched_basis}
+	\uses{lem:route_b_hetero_matched_basis}
 	The sector-basis matching contains exactly the permutation, copy, and
-	gauge-phase hypotheses of Theorem~\ref{thm:route_b_hetero_matched_basis},
-	so the conclusion follows directly from that theorem.
+	gauge-phase hypotheses of Lemma~\ref{lem:route_b_hetero_matched_basis},
+	so the conclusion follows directly from that lemma.
 \end{proof}
 
 \begin{theorem}[After-blocking sector comparison from overlap-span hypotheses]%
@@ -2050,8 +2050,8 @@ two-basis sector comparison theorem.
 	multiset equalities as the conclusion structure.
 \end{proof}
 
-\begin{theorem}[Cast-compatible MPV scaling implies phase-matched sector comparison]%
-\label{thm:route_b_hetero_mpv_scaling}
+\begin{lemma}[Cast-compatible MPV scaling implies phase-matched sector comparison]%
+\label{lem:route_b_hetero_mpv_scaling}
 	\lean{MPSTensor.fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_mpvScaling_matched_basis}
 	\leanok
 	\uses{def:paper_sector_data}
@@ -2068,14 +2068,14 @@ two-basis sector comparison theorem.
 	independent, then for each $j$ the sector weight multiset of $P_j$ equals
 	the multiset obtained from that of $Q_{\pi(j)}$ by multiplication
 	by~$\zeta_j$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
 	\leanok
-	\uses{thm:route_b_hetero_phase_match}
+	\uses{lem:route_b_hetero_phase_match}
 	After transporting the corresponding basis tensor of $P_j$ across the dimension
 	identity, this is exactly the hypothesis of
-	Theorem~\ref{thm:route_b_hetero_phase_match}. The conclusion is therefore
+	Lemma~\ref{lem:route_b_hetero_phase_match}. The conclusion is therefore
 	the same multiset equality.
 \end{proof}
 
@@ -2102,7 +2102,7 @@ two-basis sector comparison theorem.
 	Lemma~\ref{lem:ft_equal_explicit} proves the equal case when the coefficient
 	identities are given explicitly,
 	Theorem~\ref{thm:ft_equal_same_structure} proves the common block-structure
-	special case, and Theorem~\ref{thm:route_b_equal_with_copies} recovers the
+	special case, and Lemma~\ref{lem:route_b_equal_with_copies} recovers the
 	copy counts and sector-weight multisets from the multiplicity data.  The
 	basis-of-normal-tensors construction
 	is available for trace-preserving primitive irreducible nonzero blocks with

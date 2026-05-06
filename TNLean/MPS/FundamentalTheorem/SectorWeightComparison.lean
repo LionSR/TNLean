@@ -295,7 +295,7 @@ families into eventual equality of the sector coefficients.  The geometric
 extrapolation above promotes eventual equality to equality of all positive
 power sums, and Newton--Girard then recovers the weight multiset in each
 sector once the copy counts have been aligned. -/
-theorem weight_multiset_eq_of_sameMPV_bnt
+lemma weight_multiset_eq_of_sameMPV_bnt
     {dim : Fin g → ℕ}
     (basis : (j : Fin g) → MPSTensor d (dim j))
     (S T : SectorWeightData g)
@@ -317,7 +317,7 @@ theorem weight_multiset_eq_of_sameMPV_bnt
 This variant does not assume matching copy counts. Eventual coefficient equality is
 first extrapolated to exponent `0`, which recovers the cardinalities of the two
 weight families, and then Newton--Girard recovers the multisets. -/
-theorem exists_copies_eq_and_weight_multiset_eq_of_sameMPV_bnt
+lemma exists_copies_eq_and_weight_multiset_eq_of_sameMPV_bnt
     {dim : Fin g → ℕ}
     (basis : (j : Fin g) → MPSTensor d (dim j))
     (S T : SectorWeightData g)
