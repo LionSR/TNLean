@@ -1,6 +1,7 @@
 import TNLean.PiAlgebra.CanonicalFormSep
 import TNLean.Spectral.SpectralGapRect
 import TNLean.Spectral.SpectralGapNT
+import TNLean.MPS.FundamentalTheorem.Proportional
 import TNLean.MPS.BNT.Basic
 import TNLean.MPS.BNT.PermutationRigidity
 import TNLean.MPS.Overlap.CastDecay
@@ -221,6 +222,40 @@ def ofSeparatedData
   blocks_not_equiv := hBlocks
 
 end IsNormalCanonicalFormBNT
+
+/-- Distinct same-dimension blocks in a separated irreducible trace-preserving
+family are not proportional at arbitrarily large chain lengths. -/
+theorem exists_ge_not_forall_mpv_eq_mul_of_blocksNotGaugePhaseEquiv_of_irreducible_TP
+    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
+    (A : (k : Fin r) → MPSTensor d (dim k))
+    (hIrr : HasIrreducibleBlocks (d := d) A)
+    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
+    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
+    {j k : Fin r} (hjk : j ≠ k) (hdim : dim j = dim k) (Nmin : ℕ) :
+    ∃ N : ℕ, Nmin ≤ N ∧
+      ¬ ∃ c : ℂ, ∀ σ : Fin N → Fin d,
+        mpv (cast (congr_arg (MPSTensor d) hdim) (A j)) σ = c * mpv (A k) σ := by
+  have hA_self_cast :
+      Tendsto
+        (fun N =>
+          mpvOverlap (d := d) (cast (congr_arg (MPSTensor d) hdim) (A j))
+            (cast (congr_arg (MPSTensor d) hdim) (A j)) N)
+        atTop (nhds (1 : ℂ)) := by
+    refine (hOverlap.overlap_tendsto_one j).congr ?_
+    intro N
+    unfold mpvOverlap
+    apply Finset.sum_congr rfl
+    intro σ _
+    rw [mpv_cast_dim hdim (A j) N σ]
+  exact exists_ge_not_forall_mpv_eq_mul_of_not_gaugePhaseEquiv_of_irreducible_TP
+    (cast (congr_arg (MPSTensor d) hdim) (A j)) (A k)
+    ((isIrreducibleTensor_cast_dim hdim (A j)).mpr (hIrr.block_irreducible j))
+    (hIrr.block_irreducible k)
+    ((leftCanonical_cast_dim hdim (A j)).mpr (hLeft.leftCanonical j))
+    (hLeft.leftCanonical k)
+    hA_self_cast (hOverlap.overlap_tendsto_one k)
+    (hBlocks j k hjk hdim) Nmin
 
 /-- The block-diagonal tensor `toTensorFromBlocks μ A` carries the obvious coefficient
 expansion over its blocks. -/

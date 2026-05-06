@@ -429,12 +429,16 @@ The main references are
 \begin{theorem}[Non-equivalent primitive blocks are eventually non-proportional]
 	\label{thm:not_gauge_phase_eventually_not_proportional}
 	\lean{MPSTensor.exists_ge_not_forall_mpv_eq_mul_of_not_gaugePhaseEquiv_of_irreducible_TP}
+	\lean{MPSTensor.exists_ge_not_forall_mpv_eq_mul_of_blocksNotGaugePhaseEquiv_of_irreducible_TP}
 	\leanok
 	\uses{def:gauge_phase_equiv, def:mpv_overlap, def:irreducible_tensor}
 	Let \(A\) and \(B\) be irreducible trace-preserving blocks whose
 	self-overlaps converge to \(1\).  If they are not gauge-phase equivalent,
 	then for every lower bound \(N_0\) there is \(N\ge N_0\) such that
-	\(V^{(N)}(A)\) is not proportional to \(V^{(N)}(B)\).
+	\(V^{(N)}(A)\) is not proportional to \(V^{(N)}(B)\).  Consequently,
+	in an already separated same-dimensional BNT block family, any two
+	distinct blocks have such non-proportional MPV states at arbitrarily
+	large lengths.
 \end{theorem}
 
 \begin{proof}\leanok
