@@ -126,4 +126,31 @@ theorem exists_right_trace_test_of_three_block_trace_relation_left
               simp [Matrix.trace_smul, mul_add]
       _ = 0 := by simp [hW t]
 
+/-- **Three-block direct-sum input, right block.**
+
+This is the symmetric form of
+`exists_right_trace_test_of_three_block_trace_relation_left`: a nonzero test
+matrix on `B` lets every trace test against `B` be matched by a trace test
+against `A`. -/
+theorem exists_left_trace_test_of_three_block_trace_relation_right
+    {A : MPSTensor d D₁} {B : MPSTensor d D₂}
+    {ΔA : Matrix (Fin D₁) (Fin D₁) ℂ}
+    {ΔB : Matrix (Fin D₂) (Fin D₂) ℂ}
+    (hB : IsNBlkInjective B L) (hΔB : ΔB ≠ 0)
+    (hRel : ∀ w : Fin (L + (L + L)) → Fin d,
+      Matrix.trace (ΔA * evalWord A (List.ofFn w)) +
+        Matrix.trace (ΔB * evalWord B (List.ofFn w)) = 0)
+    (W : Matrix (Fin D₂) (Fin D₂) ℂ) :
+    ∃ Z : Matrix (Fin D₁) (Fin D₁) ℂ, ∀ t : Fin L → Fin d,
+      Matrix.trace (Z * evalWord A (List.ofFn t)) +
+        Matrix.trace (W * evalWord B (List.ofFn t)) = 0 := by
+  classical
+  obtain ⟨Z, hZ⟩ :=
+    exists_right_trace_test_of_three_block_trace_relation_left
+      (A := B) (B := A) (ΔA := ΔB) (ΔB := ΔA) hB hΔB
+      (fun w => by
+        simpa [add_comm] using hRel w) W
+  exact ⟨Z, fun t => by
+    simpa [add_comm] using hZ t⟩
+
 end MPSTensor
