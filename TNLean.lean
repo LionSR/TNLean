@@ -203,7 +203,6 @@ import TNLean.MPS.Symmetry.StringOrder
 
 -- Layer 5: Multi-block
 import TNLean.MPS.Core.MultiBlock
-import TNLean.MPS.CanonicalForm.BlockDiagonalCommutant.ProjectionSpan
 import TNLean.MPS.CanonicalForm.BlockDiagonalCommutant
 import TNLean.Algebra.BlockTriangularTrace
 import TNLean.Algebra.ProjectionTriangularTrace
@@ -255,7 +254,6 @@ import TNLean.MPS.CanonicalForm.Assembly.StructuralTheorem
 import TNLean.MPS.CanonicalForm.Assembly.CommonSectorTransport
 import TNLean.MPS.CanonicalForm.Assembly.CommonPrimitiveProportionalData
 import TNLean.MPS.CanonicalForm.Assembly.BasicSectorComparison
-import TNLean.MPS.CanonicalForm.Assembly.OverlapSpanComparison
 import TNLean.MPS.CanonicalForm.BNTGrouping
 import TNLean.MPS.CanonicalForm.PhaseCover
 import TNLean.MPS.CanonicalForm.PhaseClassSectorData
