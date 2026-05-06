@@ -97,6 +97,19 @@ theorem not_bondDim_eq_and_groundSpace_eq_of_not_exists_mpv_eq_smul
   exact not_bondDim_eq_and_groundSpace_eq_of_mpvSubmodule_ne hA hB hN hL hLN
     (mpvSubmodule_ne_of_not_exists_mpv_eq_smul hDistinct)
 
+/-- A sufficiently long non-proportional MPV state rules out the equal-size
+local-image collapse. -/
+theorem not_bondDim_eq_and_groundSpace_eq_of_exists_not_mpv_eq_smul
+    {A : MPSTensor d D₁} {B : MPSTensor d D₂} [NeZero D₁] [NeZero D₂]
+    (hA : IsInjective A) (hB : IsInjective B) (hL : 1 < L)
+    (hDistinct :
+      ∃ N : ℕ, 2 ≤ N ∧ L ≤ N ∧
+        ¬ ∃ c : ℂ, (mpv A : NSiteSpace d N) = c • (mpv B : NSiteSpace d N)) :
+    ¬ (D₁ = D₂ ∧ groundSpace A L = groundSpace B L) := by
+  rcases hDistinct with ⟨N, hN, hLN, hSep⟩
+  exact not_bondDim_eq_and_groundSpace_eq_of_not_exists_mpv_eq_smul
+    hA hB hN hL hLN hSep
+
 /-- Two-block directness with the equal-size branch discharged by distinct MPV
 lines.
 
@@ -128,5 +141,18 @@ theorem groundSpace_inf_eq_bot_of_not_exists_mpv_eq_smul_of_dim_ge
   exact groundSpace_inf_eq_bot_of_mpvSubmodule_ne_of_dim_ge
     hAblk hBblk hA hB hD hN hL hLN
     (mpvSubmodule_ne_of_not_exists_mpv_eq_smul hDistinct)
+
+/-- Two-block directness from a sufficiently long non-proportional MPV state. -/
+theorem groundSpace_inf_eq_bot_of_exists_not_mpv_eq_smul_of_dim_ge
+    {A : MPSTensor d D₁} {B : MPSTensor d D₂} [NeZero D₁] [NeZero D₂]
+    (hAblk : IsNBlkInjective A L) (hBblk : IsNBlkInjective B L)
+    (hA : IsInjective A) (hB : IsInjective B) (hD : D₂ ≤ D₁) (hL : 1 < L)
+    (hDistinct :
+      ∃ N : ℕ, 2 ≤ N ∧ L ≤ N ∧
+        ¬ ∃ c : ℂ, (mpv A : NSiteSpace d N) = c • (mpv B : NSiteSpace d N)) :
+    groundSpace A (L + (L + L)) ⊓ groundSpace B (L + (L + L)) = ⊥ := by
+  exact groundSpace_inf_eq_bot_of_not_bondDim_eq_and_groundSpace_eq_of_dim_ge
+    hAblk hBblk hD
+    (not_bondDim_eq_and_groundSpace_eq_of_exists_not_mpv_eq_smul hA hB hL hDistinct)
 
 end MPSTensor
