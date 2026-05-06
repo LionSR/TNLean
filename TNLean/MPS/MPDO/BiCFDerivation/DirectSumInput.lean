@@ -293,4 +293,26 @@ theorem leftTraceWordMap_range_eq_of_three_block_trace_relation_left_of_dim_ge
   exact leftTraceWordMap_range_eq_of_range_le_of_isNBlkInjective_of_dim_ge
     hA hB hD (leftTraceWordMap_range_le_of_three_block_trace_relation_left hA hΔA hRel)
 
+/-- Strictly unequal bond dimensions rule out the three-block relation in the
+dimension-ordered branch of the two-block direct-sum argument.
+
+This is the strict-size case in David--Perez-Garcia--Schuch--Wolf,
+Lemma `lem:direct-sum`: once the length-`L` trace-test image of the larger block
+is included in the smaller one, the dimension step would force equal bond
+dimensions. -/
+lemma not_three_block_trace_relation_left_of_isNBlkInjective_of_dim_gt
+    {A : MPSTensor d D₁} {B : MPSTensor d D₂}
+    {ΔA : Matrix (Fin D₁) (Fin D₁) ℂ}
+    {ΔB : Matrix (Fin D₂) (Fin D₂) ℂ}
+    (hA : IsNBlkInjective A L) (hB : IsNBlkInjective B L)
+    (hD : D₂ < D₁) (hΔA : ΔA ≠ 0) :
+    ¬ ∀ w : Fin (L + (L + L)) → Fin d,
+      Matrix.trace (ΔA * evalWord A (List.ofFn w)) +
+        Matrix.trace (ΔB * evalWord B (List.ofFn w)) = 0 := by
+  intro hRel
+  obtain ⟨hEq, _⟩ :=
+    leftTraceWordMap_range_eq_of_three_block_trace_relation_left_of_dim_ge
+      hA hB (Nat.le_of_lt hD) hΔA hRel
+  exact (Nat.ne_of_gt hD) hEq
+
 end MPSTensor

@@ -137,4 +137,48 @@ theorem bondDim_eq_and_groundSpace_eq_of_three_block_trace_relation_left_of_dim_
   exact bondDim_eq_and_groundSpace_eq_of_groundSpace_le_of_isNBlkInjective_of_dim_ge
     hA hB hD (groundSpace_le_of_three_block_trace_relation_left hA hΔA hRel)
 
+/-- Conditional two-block directness for the three-block image spaces.
+
+If the source-level contradiction input says that the two blocks cannot have
+both equal bond dimension and equal length-`L` image space, then their
+three-block image spaces have zero intersection.  This packages the formal
+part of the two-block direct-sum argument: a nonzero vector in the intersection
+would give a homogeneous three-block trace relation, and the dimension step
+would force the forbidden equality. -/
+theorem groundSpace_inf_eq_bot_of_not_bondDim_eq_and_groundSpace_eq_of_dim_ge
+    {A : MPSTensor d D₁} {B : MPSTensor d D₂}
+    (hA : IsNBlkInjective A L) (hB : IsNBlkInjective B L)
+    (hD : D₂ ≤ D₁)
+    (hNoCollapse : ¬ (D₁ = D₂ ∧ groundSpace A L = groundSpace B L)) :
+    groundSpace A (L + (L + L)) ⊓ groundSpace B (L + (L + L)) = ⊥ := by
+  rw [eq_bot_iff]
+  intro ψ hψ
+  rcases Submodule.mem_inf.mp hψ with ⟨hψA, hψB⟩
+  rw [groundSpace, LinearMap.mem_range] at hψA hψB
+  rcases hψA with ⟨X, hXψ⟩
+  rcases hψB with ⟨Y, hYψ⟩
+  by_cases hX : X = 0
+  · subst hX
+    simpa using hXψ.symm
+  · exfalso
+    apply hNoCollapse
+    refine bondDim_eq_and_groundSpace_eq_of_three_block_trace_relation_left_of_dim_ge
+      (ΔA := X) (ΔB := -Y)
+      hA hB hD hX ?_
+    intro w
+    let Aw := evalWord A (List.ofFn w)
+    let Bw := evalWord B (List.ofFn w)
+    have hcoeff :
+        Matrix.trace (Aw * X) = Matrix.trace (Bw * Y) := by
+      simpa [Aw, Bw, groundSpaceMap_apply] using
+        congrArg (fun f : NSiteSpace d (L + (L + L)) => f w) (hXψ.trans hYψ.symm)
+    calc
+      Matrix.trace (X * evalWord A (List.ofFn w)) +
+          Matrix.trace ((-Y) * evalWord B (List.ofFn w))
+          = Matrix.trace (Aw * X) + -Matrix.trace (Y * Bw) := by
+              simp [Aw, Bw, Matrix.trace_mul_comm X Aw]
+      _ = Matrix.trace (Aw * X) + -Matrix.trace (Bw * Y) := by
+              rw [Matrix.trace_mul_comm Y Bw]
+      _ = 0 := by simp [hcoeff]
+
 end MPSTensor
