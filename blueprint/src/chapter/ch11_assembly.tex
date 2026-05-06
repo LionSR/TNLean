@@ -1556,12 +1556,12 @@ BNT-cover inputs needed by the zero-block sector comparison below.
 	common blocked cyclic-sector family satisfies the coordinate-grouping condition
 	for each original nonzero block.  Equivalently, the canonical identification with
 	each iterated blocked alphabet agrees with grouping the direct blocked word into
-	consecutive words of the period-removal length.  The next theorem proves this
+	consecutive words of the period-removal length.  The next lemma proves this
 	assertion from the concrete word-cast construction.
 \end{definition}
 
-	\begin{theorem}[Canonical coordinate grouping]%
-	\label{thm:common_grouped_block_cast_of_flatten_word}
+	\begin{lemma}[Canonical coordinate grouping]%
+	\label{lem:common_grouped_block_cast_of_flatten_word}
 		\lean{MPSTensor.CommonGroupedBlockCastHypothesis.of_flattenWordOfBlock_cast_eq}
 		\leanok
 		\uses{def:common_grouped_block_cast_hypothesis,
@@ -1569,15 +1569,15 @@ BNT-cover inputs needed by the zero-block sector comparison below.
 		The canonical coordinate grouping holds for every common blocked
 		cyclic-sector family.  The proof identifies each grouped block with the
 		corresponding direct blocked word.
-	\end{theorem}
+	\end{lemma}
 
 	\begin{proof}\leanok
 		\uses{lem:common_blocked_cyclic_sector_flatten_word_of_block_cast}
 		Apply the grouped-block cast comparison to each original nonzero block.
 	\end{proof}
 
-	\begin{theorem}[Coordinate grouping gives the word identification]%
-\label{thm:common_grouped_block_cast_to_relabeling}
+	\begin{lemma}[Coordinate grouping gives the word identification]%
+\label{lem:common_grouped_block_cast_to_relabeling}
 		\lean{MPSTensor.CommonGroupedBlockCastHypothesis.toRelabelingHypothesis}
 	\leanok
 	\uses{def:common_grouped_block_cast_hypothesis,
@@ -1587,7 +1587,7 @@ BNT-cover inputs needed by the zero-block sector comparison below.
 		identification used by the common-sector structural theorem holds.  The
 	proof is exactly the weighted finite-sum comparison for direct and iterated
 	blocking applied to each common cyclic-sector family.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
 	\leanok
@@ -1649,7 +1649,7 @@ BNT-cover inputs needed by the zero-block sector comparison below.
 \begin{proof}
 	\leanok
 	\uses{lem:common_blocked_cyclic_sector_flatten_word_of_block_cast,
-		thm:common_grouped_block_cast_to_relabeling,
+		lem:common_grouped_block_cast_to_relabeling,
 		thm:after_blocking_common_primitive_irreducible_blocks_reindexed}
 	The direct digit computation gives the global coordinate-grouping hypothesis.
 	This implies the blocked-word identification for common sectors.  Applying the
@@ -1813,13 +1813,13 @@ BNT-cover inputs needed by the zero-block sector comparison below.
 
 	\begin{proof}
 		\leanok
-		\uses{thm:common_grouped_block_cast_of_flatten_word,
-			thm:common_grouped_block_cast_to_relabeling,
+		\uses{lem:common_grouped_block_cast_of_flatten_word,
+			lem:common_grouped_block_cast_to_relabeling,
 			thm:afterBlocking_sectorComparison_reindexed_bntCover}
 		Apply
 		Theorem~\ref{thm:afterBlocking_sectorComparison_reindexed_bntCover} with
 			the word-identification derived from
-		Theorem~\ref{thm:common_grouped_block_cast_to_relabeling} and the BNT-cover
+		Lemma~\ref{lem:common_grouped_block_cast_to_relabeling} and the BNT-cover
 		comparison data from
 		Definition~\ref{def:after_blocking_fundamental_theorem_hypotheses}. The proof
 	then assembles the resulting blocking length, sector decompositions, BNT data,

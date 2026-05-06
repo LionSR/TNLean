@@ -49,7 +49,7 @@ BNT-separated.
 
 It combines the representative normal-canonical-form statement with the
 explicit hypothesis that distinct representatives are not gauge-phase equivalent. -/
-theorem isNormalCanonicalFormBNT_commonRepresentativeBlocksAt
+lemma isNormalCanonicalFormBNT_commonRepresentativeBlocksAt
     {d r : ℕ} {dim : Fin r → ℕ}
     {blocks : (k : Fin r) → MPSTensor d (dim k)}
     (F : CommonBlockedCyclicSectorFamily blocks)
@@ -379,7 +379,7 @@ abbrev CommonGroupedBlockCastHypothesis (d : ℕ) : Prop :=
 namespace CommonGroupedBlockCastHypothesis
 
 /-- The canonical coordinate grouping for common blocked cyclic-sector families. -/
-theorem of_flattenWordOfBlock_cast_eq (d : ℕ) : CommonGroupedBlockCastHypothesis d := by
+lemma of_flattenWordOfBlock_cast_eq (d : ℕ) : CommonGroupedBlockCastHypothesis d := by
   intro r dim blocks F k
   exact F.groupedBlockCastAgrees_of_flattenWordOfBlock_cast_eq
     (fun hp_eq h_card i =>
@@ -387,7 +387,7 @@ theorem of_flattenWordOfBlock_cast_eq (d : ℕ) : CommonGroupedBlockCastHypothes
 
 /-- The coordinate-grouping assertion implies the one-sided reindexing hypothesis
 used by the common-sector structural theorem. -/
-theorem toRelabelingHypothesis {d : ℕ}
+lemma toRelabelingHypothesis {d : ℕ}
     (hCast : CommonGroupedBlockCastHypothesis d) :
     CommonSectorRelabelingHypothesis d := by
   intro r dim μ blocks F
