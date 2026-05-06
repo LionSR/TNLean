@@ -287,31 +287,6 @@ private lemma eventually_coeff_eq_implies_all_pos_eq
   simp only [SectorWeightData.coeff]
   exact hAll.trans (hReindex k)
 
-/-- **Equal-case corollary: BNT linear independence + same multiplicities + equal total MPVs
-→ equal sector weight multisets.**
-
-BNT linear independence turns equality of the total matrix-product-vector
-families into eventual equality of the sector coefficients.  The geometric
-extrapolation above promotes eventual equality to equality of all positive
-power sums, and Newton--Girard then recovers the weight multiset in each
-sector once the copy counts have been aligned. -/
-lemma weight_multiset_eq_of_sameMPV_bnt
-    {dim : Fin g → ℕ}
-    (basis : (j : Fin g) → MPSTensor d (dim j))
-    (S T : SectorWeightData g)
-    (hCopies : ∀ j, S.copies j = T.copies j)
-    (hLI : ∃ N0 : ℕ, ∀ N > N0,
-      LinearIndependent ℂ (fun j : Fin g => mpvState (basis j) N))
-    (hSame : ∀ (N : ℕ) (σ : Fin N → Fin d),
-      ∑ j : Fin g, S.coeff N j * mpv (basis j) σ =
-      ∑ j : Fin g, T.coeff N j * mpv (basis j) σ) :
-    ∀ j : Fin g,
-      Finset.univ.val.map (S.weight j) =
-        Finset.univ.val.map (fun q => T.weight j (Fin.cast (hCopies j) q)) := by
-  obtain ⟨_, hCoeffEventuallyEq⟩ := coeff_eventually_eq_of_sameMPV basis S T hLI hSame
-  have hCoeffAllPosEq := eventually_coeff_eq_implies_all_pos_eq S T hCopies hCoeffEventuallyEq
-  exact weight_multiset_eq_of_copies_eq_of_coeff_eq S T hCopies hCoeffAllPosEq
-
 /-- **BNT coefficient comparison recovers multiplicities and weight multisets.**
 
 This variant does not assume matching copy counts. Eventual coefficient equality is
