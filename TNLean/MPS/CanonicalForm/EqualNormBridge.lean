@@ -2,14 +2,9 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import TNLean.MPS.BNT.Construction
-import TNLean.MPS.CanonicalForm.PhaseCover
-import TNLean.MPS.CanonicalForm.PhaseClassSectorData
-import TNLean.MPS.FundamentalTheorem.SectorDecomposition
 import TNLean.MPS.Overlap.CastDecay
 import TNLean.MPS.Overlap.CastLemmas
 import TNLean.MPS.SharedInfra.GaugePhase
-import TNLean.MPS.Structure.PrimitivityBridge
 import TNLean.Spectral.SpectralGapNT
 
 open scoped Matrix BigOperators
@@ -65,16 +60,6 @@ The BNT sector constructors formerly summarized here now live in
 namespace MPSTensor
 
 variable {d : ℕ}
-
-/-! ### Auxiliary cast lemma -/
-
-/-- Casting the bond dimension preserves the primitivity of the transfer map. -/
-private lemma isPrimitive_transferMap_cast_dim {d D₁ D₂ : ℕ} (h : D₁ = D₂)
-    (A : MPSTensor d D₁) :
-    _root_.IsPrimitive (transferMap (d := d) (D := D₂)
-      (cast (congr_arg (MPSTensor d) h) A)) ↔
-    _root_.IsPrimitive (transferMap (d := d) (D := D₁) A) := by
-  subst h; rfl
 
 /-! ### Section 1. Gauge-phase equivalence from non-decaying overlaps -/
 
