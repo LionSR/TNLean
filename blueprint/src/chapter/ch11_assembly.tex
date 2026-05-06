@@ -1140,8 +1140,8 @@ BNT-cover inputs needed by the zero-block sector comparison below.
 	hypotheses. The preceding lemma supplies the common MPV phase cover.
 \end{proof}
 
-\begin{theorem}[Common primitive sectors with span hypotheses]%
-\label{thm:afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_spanHypotheses}
+\begin{lemma}[Common primitive sectors with span hypotheses]%
+\label{lem:afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_spanHypotheses}
 	\lean{MPSTensor.afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_spanHypotheses}
 	\leanok
 	\uses{thm:after_blocking_common_primitive_irreducible_blocks_reindexed,
@@ -1159,7 +1159,7 @@ BNT-cover inputs needed by the zero-block sector comparison below.
 	sector decompositions $P,Q$ agreeing with $A$ and $B$ at all positive lengths,
 	with $P$ and $Q$ generating the same full MPV family, carrying BNT data, and
 	with their sector weights matched up to a permutation and nonzero phases.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
 	\leanok
@@ -1257,8 +1257,8 @@ BNT-cover inputs needed by the zero-block sector comparison below.
 	unconditional decomposition.
 \end{proof}
 
-\begin{theorem}[Common sectors from phase-cover data]%
-\label{thm:afterBlocking_sectorComparison_reindexed_commonPhaseCover}
+\begin{lemma}[Common sectors from phase-cover data]%
+\label{lem:afterBlocking_sectorComparison_reindexed_commonPhaseCover}
 	\lean{MPSTensor.afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_commonPhaseCover}
 	\leanok
 	\uses{def:common_primitive_phase_cover_hypotheses,
@@ -1271,11 +1271,11 @@ BNT-cover inputs needed by the zero-block sector comparison below.
 	Definition~\ref{def:common_primitive_phase_cover_hypotheses}, then the sector
 	decompositions obtained from the two sides have BNT data, agree as full MPV
 	families, and their sector weights satisfy the matched sector-weight conclusion.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
 	\leanok
-	\uses{thm:afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_spanHypotheses,
+	\uses{lem:afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_spanHypotheses,
 		lem:common_primitive_phase_cover_hypotheses_to_span_hypotheses}
 	Use Lemma~\ref{lem:common_primitive_phase_cover_hypotheses_to_span_hypotheses}
 		to form the span hypotheses of
@@ -1283,8 +1283,8 @@ BNT-cover inputs needed by the zero-block sector comparison below.
 	common-sector comparison theorem with those span hypotheses.
 \end{proof}
 
-\begin{theorem}[Common sectors from BNT-cover data]%
-\label{thm:afterBlocking_sectorComparison_reindexed_bntCover}
+\begin{lemma}[Common sectors from BNT-cover data]%
+\label{lem:afterBlocking_sectorComparison_reindexed_bntCover}
 	\lean{MPSTensor.afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_bntCover}
 	\leanok
 	\uses{def:common_primitive_bnt_cover_hypotheses,
@@ -1294,12 +1294,12 @@ BNT-cover inputs needed by the zero-block sector comparison below.
 	theorem gives common primitive nonzero-sector families. If those families
 	satisfy the BNT-cover hypotheses, then the same sector-weight comparison
 	conclusion holds.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
 	\leanok
 	\uses{lem:common_primitive_bnt_cover_hypotheses_to_phase_cover_hypotheses,
-		thm:afterBlocking_sectorComparison_reindexed_commonPhaseCover}
+		lem:afterBlocking_sectorComparison_reindexed_commonPhaseCover}
 	Convert the BNT-cover hypotheses for the common primitive nonzero-sector
 	families to common phase-cover hypotheses, and then apply the common-sector
 	comparison theorem with common phase-cover data.
@@ -1367,9 +1367,9 @@ BNT-cover inputs needed by the zero-block sector comparison below.
 		\leanok
 		\uses{lem:common_grouped_block_cast_of_flatten_word,
 			lem:common_grouped_block_cast_to_relabeling,
-			thm:afterBlocking_sectorComparison_reindexed_bntCover}
+			lem:afterBlocking_sectorComparison_reindexed_bntCover}
 		Apply
-		Theorem~\ref{thm:afterBlocking_sectorComparison_reindexed_bntCover} with
+		Lemma~\ref{lem:afterBlocking_sectorComparison_reindexed_bntCover} with
 			the word-identification derived from
 		Lemma~\ref{lem:common_grouped_block_cast_to_relabeling} and the BNT-cover
 		comparison data from
@@ -1462,11 +1462,11 @@ BNT-cover inputs needed by the zero-block sector comparison below.
 	common primitive irreducible nonzero-sector decompositions are now part of the
 	reduction, culminating in
 	Theorem~\ref{thm:after_blocking_common_primitive_irreducible_blocks_reindexed}.
-	Theorem~\ref{thm:afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_spanHypotheses}
+	Lemma~\ref{lem:afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_spanHypotheses}
 		then states the hypotheses: equality of the
 	zero-tail dimensions, injectivity of the common nonzero-sector blocks, and
 	finite-length MPV span equality.
-	Theorem~\ref{thm:afterBlocking_sectorComparison_reindexed_commonPhaseCover}
+	Lemma~\ref{lem:afterBlocking_sectorComparison_reindexed_commonPhaseCover}
 	adds the zero-tail and injectivity data to the common phase-cover route and
 	therefore gives the same sector-weight conclusion.  Establishing these
 	hypotheses is the mathematical passage from equality of total MPV vectors to the

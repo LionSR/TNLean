@@ -54,10 +54,9 @@ obtained after blocked-word reindexing. If the remaining zero-tail equality, one
 injectivity, and finite-length span equality are supplied for those same families, then the
 zero-tail block-span comparison theorem gives the sector-weight conclusion.
 
-This theorem deliberately keeps the blocked-word reindexing equality and the final span or
-common-cover assertion as hypotheses, so it does not duplicate the separate coordinate and
-common-cover constructions. -/
-theorem afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_spanHypotheses
+This lemma states the blocked-word reindexing equality and the final span or
+common-cover assertion as separate hypotheses. -/
+lemma afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_spanHypotheses
     {d D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (hSame : SameMPV₂ A B)
@@ -142,10 +141,10 @@ dimensions, injectivity at that blocking level, and a common MPV phase cover --
 then `CommonPrimitivePhaseCoverHypotheses.toSpanHypotheses` gives the span hypotheses
 needed by `afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_spanHypotheses`.
 
-Thus this theorem isolates the remaining open inputs: the blocked-word relabeling
+Thus this statement isolates the remaining open inputs: the blocked-word relabeling
 equality, the zero-tail/injectivity refinements, and the common phase cover (or
 equivalently the finite-length span equality supplied by that cover). -/
-theorem afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_commonPhaseCover
+lemma afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_commonPhaseCover
     {d D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (hSame : SameMPV₂ A B)
@@ -216,10 +215,10 @@ theorem afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_commonP
 Assume the blocked-word relabeling statement for cyclic-sector data. The structural
 theorem supplies common primitive nonzero-sector families; if those families carry
 BNT-cover data, then the conversion to phase-cover hypotheses gives the common
-phase-cover hypotheses. The common-phase-cover consumer theorem gives the same
+phase-cover hypotheses. The common-phase-cover comparison gives the same
 sector-weight comparison
 conclusion. -/
-theorem afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_bntCover
+lemma afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_bntCover
     {d D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (hSame : SameMPV₂ A B)
