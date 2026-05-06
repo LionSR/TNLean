@@ -359,11 +359,18 @@ the power sum
 \[
 	c_{S,j}^{(N)}=\sum_{q=1}^{r_j}\mu_{j,q}^{N}.
 \]
-Thus BNT linear independence separates the coefficient arrays
+This is the scalar part of the source decomposition
+\[
+	A^i=\bigoplus_{j=1}^g\bigoplus_{q=1}^{r_j}
+		\mu_{j,q}X_{j,q}A_j^iX_{j,q}^{-1}.
+\]
+The sector tensor used below is the representative form after the gauge
+conjugations $X_{j,q}$ have already been absorbed into the choice of basis
+block and gauge-phase data.  Thus BNT linear independence separates the coefficient arrays
 $c_{S,j}^{(N)}$, and elementary power-sum algebra recovers both the
 multiplicity $r_j$ and the multiset of weights attached to the basis block.
-In the source paper this information is not presented as a separate chain of
-MPS comparison theorems: Theorem~IV.13 of~\cite{Cirac2017MPDO_AnnPhys} uses
+In the later PEPS application this information is not presented as a separate
+chain of MPS comparison theorems: Theorem~IV.13 of~\cite{Cirac2017MPDO_AnnPhys} uses
 structure coefficients
 \[
 	c_{\alpha,\beta,\gamma}^{(L)}
@@ -531,34 +538,6 @@ facts used to recover the lists of weights from those power sums.
 	Lemma~\ref{lem:geom_extrapolation}, and Newton--Girard
 	(Theorem~\ref{thm:power_sum_multiset}) recovers the weight multisets.
 \end{proof}
-
-\begin{lemma}[Weight multiset recovery with fixed multiplicities]%
-\label{lem:route_b_equal}
-	\lean{MPSTensor.SectorWeightData.weight_multiset_eq_of_sameMPV_bnt}
-	\leanok
-	\uses{lem:coeff_eventually_eq, lem:geom_extrapolation, thm:power_sum_multiset, def:paper_sector_data, def:bnt}
-	Let $S$ and $T$ be two sector data over the same basis with
-	the same multiplicities ($r_j^S = r_j^T$ for all~$j$).
-	If the basis is eventually linearly independent and the total MPVs
-	of $S$ and $T$ agree, then for each basis block~$j$ the sector weight
-	multisets $\{\mu_{j,q}^S\}$ and $\{\mu_{j,q}^T\}$ are equal.
-
-	The argument proceeds as follows:
-	\begin{enumerate}
-		\item BNT LI $+$ equal MPVs $\Rightarrow$ eventual coefficient
-		      equality (Lemma~\ref{lem:coeff_eventually_eq});
-		\item Geometric extrapolation $\Rightarrow$ full coefficient
-		      equality for all positive~$k$
-		      (Lemma~\ref{lem:geom_extrapolation});
-		\item Newton--Girard $\Rightarrow$ equal weight multisets
-		      (Theorem~\ref{thm:power_sum_multiset}).
-	\end{enumerate}
-	At the level of block contributions, this is the fixed-multiplicity
-	specialization of Lemma~\ref{lem:route_b_equal_with_copies}: one compares
-	the weighted sector sums
-	$\sum_j c_{S,j}^{(N)} V^{(N)}(A_j)$ and
-	$\sum_j c_{T,j}^{(N)} V^{(N)}(A_j)$ over the same basis block family.
-\end{lemma}
 
 \begin{lemma}[Two-basis sector comparison after phase matching]%
 \label{lem:route_b_hetero_phase_match}
@@ -731,27 +710,6 @@ facts used to recover the lists of weights from those power sums.
 	the corresponding basis MPVs. Lemma~\ref{lem:route_b_hetero_phase_match_copies}
 	recovers the missing copy-count equalities, which are precisely the extra
 	fields needed for Definition~\ref{def:sector_basis_matching}.
-\end{proof}
-
-\begin{theorem}[Two-basis sector comparison from a pre-matching]%
-\label{thm:route_b_hetero_pre_matching}
-	\lean{MPSTensor.fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_preMatching}
-	\leanok
-	\uses{def:sector_basis_pre_matching, def:paper_sector_data}
-	Let $M$ be a sector basis pre-matching between sector decompositions $P$
-	and $Q$. If the total MPV families agree and the basis MPVs of $P$ are
-	eventually linearly independent, then the matched copy counts agree, and
-	after absorbing the gauge phases into the weights of $Q$ the corresponding
-	sector-weight multisets agree.
-\end{theorem}
-
-\begin{proof}
-	\leanok
-	\uses{lem:route_b_hetero_phase_match_copies}
-	The gauge-phase equivalences in the pre-matching give the phase-scaling
-	identities for the corresponding basis MPVs.
-	Lemma~\ref{lem:route_b_hetero_phase_match_copies} then gives the
-	copy-count equalities and the phase-adjusted multiset equalities.
 \end{proof}
 
 \begin{theorem}[Overlap rigidity gives a sector basis matching]%
