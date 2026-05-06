@@ -5,9 +5,13 @@ inputs:
   provider:
     description: 'Provider name (anthropic or deepseek)'
     required: false
-    default: anthropic
+    default: ''
   claude-oauth-token:
-    description: 'Anthropic token for claude-code (legacy mode)'
+    description: 'Anthropic OAuth token for Claude Code'
+    required: false
+    default: ''
+  anthropic-api-key:
+    description: 'Anthropic API key for Claude Code'
     required: false
     default: ''
   deepseek-api-key:
@@ -78,6 +82,16 @@ inputs:
     required: false
     default: ''
 
+  claude-prompt-file:
+    description: 'Path to a prompt file for Claude Code.'
+    required: false
+    default: ''
+
+  claude-prompt-context:
+    description: 'Optional context to append to the selected prompt.'
+    required: false
+    default: ''
+
   system-prompt:
     description: 'Optional system prompt to inject via appendSystemPrompt.'
     required: false
@@ -99,153 +113,225 @@ runs:
       id: resolve
       shell: bash
       env:
-        INPUT_PROVIDER: ${{ inputs.provider }}
-        INPUT_MODEL_TIER: ${{ inputs.model-tier }}
-        INPUT_CLAUDE_OAUTH_TOKEN: ${{ inputs.claude-oauth-token }}
-        INPUT_DEEPSEEK_API_KEY: ${{ inputs.deepseek-api-key }}
-        INPUT_ANTHROPIC_BASE_URL: ${{ inputs.anthropic-base-url }}
-        INPUT_DEEPSEEK_BASE_URL: ${{ inputs.deepseek-base-url }}
-        INPUT_CLAUDE_OPUS_MODEL: ${{ inputs.claude-opus-model }}
-        INPUT_CLAUDE_SONNET_MODEL: ${{ inputs.claude-sonnet-model }}
-        INPUT_DEEPSEEK_OPUS_MODEL: ${{ inputs.deepseek-opus-model }}
-        INPUT_DEEPSEEK_SONNET_MODEL: ${{ inputs.deepseek-sonnet-model }}
-        INPUT_ALLOWED_TOOLS: ${{ inputs.allowed-tools }}
-        INPUT_SYSTEM_PROMPT: ${{ inputs.system-prompt }}
-        INPUT_SYSTEM_PROMPT_FILE: ${{ inputs.system-prompt-file }}
-        INPUT_CLAUDE_ARGS: ${{ inputs.claude-args }}
+        INPUT_PROVIDER: ${{ inputs['provider'] }}
+        INPUT_CLAUDE_OAUTH_TOKEN: ${{ inputs['claude-oauth-token'] }}
+        INPUT_ANTHROPIC_API_KEY: ${{ inputs['anthropic-api-key'] }}
+        INPUT_DEEPSEEK_API_KEY: ${{ inputs['deepseek-api-key'] }}
+        INPUT_ANTHROPIC_BASE_URL: ${{ inputs['anthropic-base-url'] }}
+        INPUT_DEEPSEEK_BASE_URL: ${{ inputs['deepseek-base-url'] }}
+        INPUT_CLAUDE_OPUS_MODEL: ${{ inputs['claude-opus-model'] }}
+        INPUT_CLAUDE_SONNET_MODEL: ${{ inputs['claude-sonnet-model'] }}
+        INPUT_DEEPSEEK_OPUS_MODEL: ${{ inputs['deepseek-opus-model'] }}
+        INPUT_DEEPSEEK_SONNET_MODEL: ${{ inputs['deepseek-sonnet-model'] }}
+        INPUT_MODEL_TIER: ${{ inputs['model-tier'] }}
+        INPUT_ALLOWED_BOTS: ${{ inputs['allowed-bots'] }}
+        INPUT_BRANCH_NAME_TEMPLATE: ${{ inputs['branch-name-template'] }}
+        INPUT_ADDITIONAL_PERMISSIONS: ${{ inputs['additional-permissions'] }}
+        INPUT_PLUGIN_MARKETPLACES: ${{ inputs['plugin-marketplaces'] }}
+        INPUT_PLUGINS: ${{ inputs['plugins'] }}
+        INPUT_PROMPT: ${{ inputs.prompt }}
+        INPUT_PROMPT_FILE: ${{ inputs['claude-prompt-file'] }}
+        INPUT_PROMPT_CONTEXT: ${{ inputs['claude-prompt-context'] }}
+        INPUT_ALLOWED_TOOLS: ${{ inputs['allowed-tools'] }}
+        INPUT_SYSTEM_PROMPT: ${{ inputs['system-prompt'] }}
+        INPUT_SYSTEM_PROMPT_FILE: ${{ inputs['system-prompt-file'] }}
+        INPUT_CLAUDE_ARGS: ${{ inputs['claude-args'] }}
       run: |
-          set -euo pipefail
+        set -euo pipefail
 
-          write_output() {
-            local name="$1"
-            local value="$2"
-            local delimiter="__${name}_$(date +%s%N)__"
-            {
-              printf '%s<<%s\n' "$name" "$delimiter"
-              printf '%s\n' "$value"
-              printf '%s\n' "$delimiter"
-            } >> "$GITHUB_OUTPUT"
-          }
+        write_output() {
+          local name="$1"
+          local value="$2"
+          local delimiter="__${name}_$(date +%s%N)__"
+          {
+            printf '%s<<%s\n' "$name" "$delimiter"
+            printf '%s\n' "$value"
+            printf '%s\n' "$delimiter"
+          } >> "$GITHUB_OUTPUT"
+        }
 
-          provider="$INPUT_PROVIDER"
-          provider="${provider,,}"
-          provider="${provider:-anthropic}"
-          model_tier="$INPUT_MODEL_TIER"
-          model_tier="${model_tier:-opus}"
-          claude_oauth_token_input="$INPUT_CLAUDE_OAUTH_TOKEN"
-          if [ -z "$claude_oauth_token_input" ]; then
-            claude_oauth_token_input="${CLAUDE_CODE_OAUTH_TOKEN-}"
+        provider="$INPUT_PROVIDER"
+        provider="${provider,,}"
+        provider="${provider:-anthropic}"
+        model_tier="$INPUT_MODEL_TIER"
+        model_tier="${model_tier:-opus}"
+
+        claude_oauth_token_input="$INPUT_CLAUDE_OAUTH_TOKEN"
+        if [ -z "$claude_oauth_token_input" ]; then
+          claude_oauth_token_input="${CLAUDE_CODE_OAUTH_TOKEN-}"
+        fi
+
+        anthropic_api_key_input="$INPUT_ANTHROPIC_API_KEY"
+        if [ -z "$anthropic_api_key_input" ]; then
+          anthropic_api_key_input="${ANTHROPIC_API_KEY-}"
+        fi
+
+        deepseek_api_key_input="$INPUT_DEEPSEEK_API_KEY"
+        if [ -z "$deepseek_api_key_input" ]; then
+          deepseek_api_key_input="${DEEPSEEK_API_KEY-}"
+        fi
+
+        claude_code_oauth_token=""
+        anthropic_api_key=""
+
+        if [ "$provider" = "deepseek" ]; then
+          token="$deepseek_api_key_input"
+          if [ -z "$token" ]; then
+            token="${DEEPSEEK_API_KEY-}"
+          fi
+          anthropic_api_key="$token"
+
+          model_opus="$INPUT_DEEPSEEK_OPUS_MODEL"
+          if [ -z "$model_opus" ]; then
+            model_opus="${DEEPSEEK_OPUS_MODEL:-${CLAUDE_DEEPSEEK_OPUS_MODEL:-deepseek-v4-pro[1m]}}"
           fi
 
-          if [ "$provider" = "deepseek" ]; then
-            token="$INPUT_DEEPSEEK_API_KEY"
-            if [ -z "$token" ]; then
-              token="${DEEPSEEK_API_KEY-}"
-            fi
+          model_sonnet="$INPUT_DEEPSEEK_SONNET_MODEL"
+          if [ -z "$model_sonnet" ]; then
+            model_sonnet="${DEEPSEEK_SONNET_MODEL:-${CLAUDE_DEEPSEEK_SONNET_MODEL:-deepseek-v4-flash}}"
+          fi
 
-            model_opus="$INPUT_DEEPSEEK_OPUS_MODEL"
-            if [ -z "$model_opus" ]; then
-              model_opus="${DEEPSEEK_OPUS_MODEL-deepseek-v4-pro[1m]}"
-            fi
-
-            model_sonnet="$INPUT_DEEPSEEK_SONNET_MODEL"
-            if [ -z "$model_sonnet" ]; then
-              model_sonnet="${DEEPSEEK_SONNET_MODEL-deepseek-v4-flash}"
-            fi
-
-            base_url="$INPUT_DEEPSEEK_BASE_URL"
-            if [ -z "$base_url" ]; then
-              base_url="${DEEPSEEK_BASE_URL-https://api.deepseek.com/anthropic}"
-            fi
+          base_url="$INPUT_DEEPSEEK_BASE_URL"
+          if [ -z "$base_url" ]; then
+            base_url="${DEEPSEEK_BASE_URL:-https://api.deepseek.com/anthropic}"
+          fi
+        else
+          token="$claude_oauth_token_input"
+          if [ -z "$token" ]; then
+            token="$anthropic_api_key_input"
+          fi
+          if [ -z "$token" ]; then
+            token="${ANTHROPIC_AUTH_TOKEN-}"
+          fi
+          if [ -n "$claude_oauth_token_input" ]; then
+            claude_code_oauth_token="$claude_oauth_token_input"
           else
-            token="$claude_oauth_token_input"
-            if [ -z "$token" ]; then
-              token="${ANTHROPIC_AUTH_TOKEN-}"
-            fi
-
-            model_opus="$INPUT_CLAUDE_OPUS_MODEL"
-            if [ -z "$model_opus" ]; then
-              model_opus="${CLAUDE_OPUS_MODEL-claude-opus-4-7}"
-            fi
-
-            model_sonnet="$INPUT_CLAUDE_SONNET_MODEL"
-            if [ -z "$model_sonnet" ]; then
-              model_sonnet="${CLAUDE_SONNET_MODEL-claude-sonnet-4-6}"
-            fi
-
-            base_url="$INPUT_ANTHROPIC_BASE_URL"
-            if [ -z "$base_url" ]; then
-              base_url="${ANTHROPIC_BASE_URL-https://api.anthropic.com/v1}"
-            fi
+            anthropic_api_key="$token"
           fi
 
-          allowed_tools="$INPUT_ALLOWED_TOOLS"
-          if [ -z "$allowed_tools" ]; then
-            allowed_tools="${CLAUDE_ALLOWED_TOOLS-}"
+          model_opus="$INPUT_CLAUDE_OPUS_MODEL"
+          if [ -z "$model_opus" ]; then
+            model_opus="${CLAUDE_OPUS_MODEL:-claude-opus-4-7}"
           fi
 
-          system_prompt="$INPUT_SYSTEM_PROMPT"
-          system_prompt_path=""
-          if [ -z "$system_prompt" ]; then
-            system_prompt_path="$INPUT_SYSTEM_PROMPT_FILE"
-          fi
-          if [ -n "$system_prompt_path" ]; then
-            if [ ! -f "$system_prompt_path" ]; then
-              echo "::error::System prompt file not found: ${system_prompt_path}"
-              exit 1
-            fi
-            system_prompt="$(cat "$system_prompt_path")"
-          fi
-          if [ -z "$system_prompt" ] && [ -n "${CLAUDE_APPEND_SYSTEM_PROMPT-}" ]; then
-            system_prompt="${CLAUDE_APPEND_SYSTEM_PROMPT}"
-          fi
-          if [ -n "$system_prompt" ]; then
-            system_prompt="$(printf '%s' "$system_prompt" | tr '\n' ' ')"
+          model_sonnet="$INPUT_CLAUDE_SONNET_MODEL"
+          if [ -z "$model_sonnet" ]; then
+            model_sonnet="${CLAUDE_SONNET_MODEL:-claude-sonnet-4-6}"
           fi
 
-          claude_args="$INPUT_CLAUDE_ARGS"
-          claude_args="${claude_args//--allowed-tools/--allowedTools}"
-          append_system_prompt=''
-          if [ -n "$system_prompt" ] && ! printf '%s\n' "$claude_args" | grep -q -- '--append-system-prompt'; then
-            append_system_prompt="$system_prompt"
+          base_url="$INPUT_ANTHROPIC_BASE_URL"
+          if [ -z "$base_url" ]; then
+            base_url="${ANTHROPIC_BASE_URL:-https://api.anthropic.com/v1}"
           fi
-          if [ -n "$allowed_tools" ] && ! printf '%s\n' "$claude_args" | grep -q -- '--allowedTools'; then
-            if [ -n "$claude_args" ]; then
-              claude_args="${claude_args} "
-            fi
-            claude_args="${claude_args}--allowedTools \"${allowed_tools}\""
+        fi
+
+        allowed_bots="$INPUT_ALLOWED_BOTS"
+        branch_name_template="$INPUT_BRANCH_NAME_TEMPLATE"
+        additional_permissions="$INPUT_ADDITIONAL_PERMISSIONS"
+        plugin_marketplaces="$INPUT_PLUGIN_MARKETPLACES"
+        plugins="$INPUT_PLUGINS"
+
+        allowed_tools="$INPUT_ALLOWED_TOOLS"
+        if [ -z "$allowed_tools" ]; then
+          allowed_tools="${CLAUDE_ALLOWED_TOOLS-}"
+        fi
+
+        system_prompt="$INPUT_SYSTEM_PROMPT"
+        system_prompt_path=""
+        if [ -z "$system_prompt" ]; then
+          system_prompt_path="$INPUT_SYSTEM_PROMPT_FILE"
+        fi
+        if [ -n "$system_prompt_path" ]; then
+          if [ ! -f "$system_prompt_path" ]; then
+            echo "::error::System prompt file not found: ${system_prompt_path}"
+            exit 1
           fi
+          system_prompt="$(cat "$system_prompt_path")"
+        fi
+        if [ -z "$system_prompt" ] && [ -n "${CLAUDE_APPEND_SYSTEM_PROMPT-}" ]; then
+          system_prompt="${CLAUDE_APPEND_SYSTEM_PROMPT}"
+        fi
+        if [ -n "$system_prompt" ]; then
+          system_prompt="$(printf '%s' "$system_prompt" | tr '\n' ' ')"
+        fi
 
-          case "$model_tier" in
-            sonnet)
-              model="$model_sonnet"
-              ;;
-            *)
-              model="$model_opus"
-              ;;
-          esac
+        prompt="$INPUT_PROMPT"
+        prompt_file="$INPUT_PROMPT_FILE"
+        prompt_context="$INPUT_PROMPT_CONTEXT"
 
-          write_output "auth_token" "$token"
-          write_output "base_url" "$base_url"
-          write_output "model" "$model"
-          write_output "provider" "$provider"
-          write_output "claude_args" "$claude_args"
-          write_output "append_system_prompt" "$append_system_prompt"
+        if [ -z "$prompt" ] && [ -n "$prompt_file" ]; then
+          if [ ! -f "$prompt_file" ]; then
+            echo "::error::Prompt file not found: ${prompt_file}"
+            exit 1
+          fi
+          prompt="$(cat "$prompt_file")"
+        fi
+
+        if [ -n "$prompt_context" ]; then
+          if [ -n "$prompt" ]; then
+            prompt="${prompt}"$'\n'"${prompt_context}"
+          else
+            prompt="$prompt_context"
+          fi
+        fi
+
+        if [ -n "$prompt" ]; then
+          prompt="$(printf '%s' "$prompt" | tr '\n' ' ')"
+        fi
+
+        claude_args="$INPUT_CLAUDE_ARGS"
+        claude_args="${claude_args//--allowed-tools/--allowedTools}"
+        append_system_prompt=''
+        if [ -n "$system_prompt" ] && ! printf '%s\n' "$claude_args" | grep -q -- '--append-system-prompt'; then
+          append_system_prompt="$system_prompt"
+          claude_args="${claude_args} --append-system-prompt \"${append_system_prompt}\""
+        fi
+        if [ -n "$allowed_tools" ] && ! printf '%s\n' "$claude_args" | grep -q -- '--allowedTools'; then
+          if [ -n "$claude_args" ]; then
+            claude_args="${claude_args} "
+          fi
+          claude_args="${claude_args}--allowedTools \"${allowed_tools}\""
+        fi
+
+        case "$model_tier" in
+          sonnet)
+            model="$model_sonnet"
+            ;;
+          *)
+            model="$model_opus"
+            ;;
+        esac
+
+        write_output auth_token "$token"
+        write_output claude_code_oauth_token "$claude_code_oauth_token"
+        write_output anthropic_api_key "$anthropic_api_key"
+        write_output base_url "$base_url"
+        write_output model "$model"
+        write_output provider "$provider"
+        write_output allowed_bots "$allowed_bots"
+        write_output branch_name_template "$branch_name_template"
+        write_output additional_permissions "$additional_permissions"
+        write_output plugin_marketplaces "$plugin_marketplaces"
+        write_output plugins "$plugins"
+        write_output prompt "$prompt"
+        write_output claude_args "$claude_args"
+        write_output append_system_prompt "$append_system_prompt"
 
     - name: Run Claude Code
       uses: anthropics/claude-code-action@v1
       env:
         ANTHROPIC_BASE_URL: ${{ steps.resolve.outputs.base_url }}
+        ANTHROPIC_API_KEY: ${{ steps.resolve.outputs.anthropic_api_key }}
         ANTHROPIC_AUTH_TOKEN: ${{ steps.resolve.outputs.auth_token }}
-        APPEND_SYSTEM_PROMPT: ${{ steps.resolve.outputs.append_system_prompt }}
       with:
-        claude_code_oauth_token: ${{ steps.resolve.outputs.auth_token }}
-        allowed_bots: ${{ inputs.allowed-bots }}
-        branch_name_template: ${{ inputs.branch-name-template }}
-        additional_permissions: ${{ inputs.additional-permissions }}
-        plugin_marketplaces: ${{ inputs.plugin-marketplaces }}
-        plugins: ${{ inputs.plugins }}
-        prompt: ${{ inputs.prompt }}
+        claude_code_oauth_token: ${{ steps.resolve.outputs.claude_code_oauth_token }}
+        anthropic_api_key: ${{ steps.resolve.outputs.anthropic_api_key }}
+        allowed_bots: ${{ steps.resolve.outputs.allowed_bots }}
+        branch_name_template: ${{ steps.resolve.outputs.branch_name_template }}
+        additional_permissions: ${{ steps.resolve.outputs.additional_permissions }}
+        plugin_marketplaces: ${{ steps.resolve.outputs.plugin_marketplaces }}
+        plugins: ${{ steps.resolve.outputs.plugins }}
+        prompt: ${{ steps.resolve.outputs.prompt }}
         claude_args: |
           --model ${{ steps.resolve.outputs.model }}
           ${{ steps.resolve.outputs.claude_args }}

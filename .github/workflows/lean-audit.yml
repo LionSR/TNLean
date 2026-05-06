@@ -16,6 +16,15 @@ on:
 jobs:
   audit:
     runs-on: ubuntu-latest
+    env:
+      CLAUDE_CODE_PROVIDER: ${{ vars.CLAUDE_CODE_PROVIDER || 'anthropic' }}
+      CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+      DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+      ANTHROPIC_BASE_URL: ${{ vars.ANTHROPIC_BASE_URL }}
+      CLAUDE_OPUS_MODEL: ${{ vars.CLAUDE_OPUS_MODEL }}
+      CLAUDE_SONNET_MODEL: ${{ vars.CLAUDE_SONNET_MODEL }}
+      CLAUDE_DEEPSEEK_OPUS_MODEL: ${{ vars.CLAUDE_DEEPSEEK_OPUS_MODEL }}
+      CLAUDE_DEEPSEEK_SONNET_MODEL: ${{ vars.CLAUDE_DEEPSEEK_SONNET_MODEL }}
     permissions:
       contents: read
       issues: write
@@ -35,30 +44,16 @@ jobs:
       - name: Run Lean Audit
         uses: ./.github/actions/claude-code-with-provider
         with:
-          provider: ${{ vars.CLAUDE_CODE_PROVIDER || 'anthropic' }}
-          claude-oauth-token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
-          deepseek-api-key: ${{ secrets.DEEPSEEK_API_KEY }}
-          anthropic-base-url: ${{ vars.ANTHROPIC_BASE_URL }}
-          claude-opus-model: ${{ vars.CLAUDE_OPUS_MODEL }}
-          claude-sonnet-model: ${{ vars.CLAUDE_SONNET_MODEL }}
-          deepseek-opus-model: ${{ vars.CLAUDE_DEEPSEEK_OPUS_MODEL }}
-          deepseek-sonnet-model: ${{ vars.CLAUDE_DEEPSEEK_SONNET_MODEL }}
+          provider: ${{ env.CLAUDE_CODE_PROVIDER }}
           model-tier: sonnet
           system-prompt-file: .github/prompts/lean-audit-system-prompt.md
           allowed-tools: "Read,Glob,Grep,Bash(lake build),Bash(lake exe cache get),Bash(lake update),Bash(lake env),Bash(lean *),Bash(elan *),Bash(grep *),Bash(find *),Bash(wc *),Bash(leanblueprint *)"
-          prompt: |
-            REPO: ${{ github.repository }}
-            BRANCH: ${{ github.ref_name }}
-            AUDIT TYPE: ${{ github.event.inputs.audit_type }}
+          claude-prompt-file: .github/prompts/lean-audit-prompt.md
+          claude-prompt-context: |
+            Repository: ${{ github.repository }}
+            Branch: ${{ github.ref_name }}
+            Audit type: ${{ github.event.inputs.audit_type }}
 
             ${{ github.event.inputs.audit_type == 'sorry-audit' && 'Task: Scan the entire TNLean/ directory for `sorry` usage. For each sorry found, report: (1) file path and line number, (2) the theorem/lemma name, (3) a brief assessment of difficulty to complete (easy/medium/hard based on context). Summarize total count and group by difficulty. Output a markdown table.' || '' }}
-
             ${{ github.event.inputs.audit_type == 'blueprint-check' && 'Task: Compare the blueprint/ directory (look for .tex files listing theorems/lemmas to formalize) against the TNLean/ directory. Report: (1) which blueprint items are fully formalized (no sorry), (2) which are partially formalized (have sorry), (3) which are missing entirely. Output a markdown progress report with percentages.' || '' }}
-
             ${{ github.event.inputs.audit_type == 'mathlib-readiness' && 'Task: Review the TNLean/ directory for lemmas that could be upstreamed to Mathlib. Look for: (1) general-purpose lemmas not specific to the MPS/quantum channel domain, (2) lemmas that fill gaps in existing Mathlib files (check import paths), (3) well-documented, sorry-free results. For each candidate, note the file, lemma name, and which Mathlib module it could belong to. Output a markdown list.' || '' }}
-
-            Write the audit as mathematics first. For each formalization item, give
-            file path, line number, declaration name, mathematical statement, and
-            paper or blueprint source when available. Avoid AI vocabulary,
-            software-process metaphors, and local shorthand when describing
-            mathematics.

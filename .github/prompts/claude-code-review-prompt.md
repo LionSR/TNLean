@@ -1,4 +1,4 @@
-Use `gh pr diff ${{ github.event.pull_request.number }}` to see the changes.
+Use `gh pr diff <PR_NUMBER>` to see the changes.
 
 Focus your review on the categories below. Each category has a severity level
 that determines whether the PR can be approved with outstanding issues.
@@ -103,8 +103,8 @@ Step 1 — Query thread IDs via GraphQL (returns up to 100 threads; see Step 3 f
 ```bash
 gh api graphql -f query='
 {
-  repository(owner: "${{ github.repository_owner }}", name: "${{ github.event.repository.name }}") {
-    pullRequest(number: ${{ github.event.pull_request.number }}) {
+  repository(owner: "<REPOSITORY_OWNER>", name: "<REPOSITORY_NAME>") {
+    pullRequest(number: <PR_NUMBER>) {
       reviewThreads(first: 100) {
         nodes {
           id
@@ -134,8 +134,8 @@ Step 3 — If there are more than 100 threads, paginate:
 ```bash
 gh api graphql -f query='
 {
-  repository(owner: "${{ github.repository_owner }}", name: "${{ github.event.repository.name }}") {
-    pullRequest(number: ${{ github.event.pull_request.number }}) {
+  repository(owner: "<REPOSITORY_OWNER>", name: "<REPOSITORY_NAME>") {
+    pullRequest(number: <PR_NUMBER>) {
       reviewThreads(first: 100, after: "CURSOR_FROM_PREVIOUS_PAGE") {
         nodes { id isResolved isOutdated comments(first: 1) { nodes { author { login } body } } }
         pageInfo { hasNextPage endCursor }

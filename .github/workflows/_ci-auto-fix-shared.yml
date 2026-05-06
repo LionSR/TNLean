@@ -41,17 +41,17 @@ on:
       allowed-tools:
         required: true
         type: string
-        description: The --allowedTools string for claude_args
+        description: The tool allowlist passed as the Claude Code allowedTools value
       system-prompt:
         required: false
         type: string
-        description: Optional fallback for --append-system-prompt content when no file or env var is provided.
+        description: Optional fallback content for APPEND_SYSTEM_PROMPT when no file or env var is provided.
         default: ''
       system-prompt-file:
         required: false
         type: string
         default: ''
-        description: File path for the --append-system-prompt text.
+        description: File path for APPEND_SYSTEM_PROMPT content.
       plugin-marketplaces:
         required: false
         type: string
@@ -71,6 +71,15 @@ on:
 jobs:
   auto-fix:
     runs-on: ubuntu-latest
+    env:
+      CLAUDE_CODE_PROVIDER: ${{ vars.CLAUDE_CODE_PROVIDER || 'anthropic' }}
+      CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+      DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+      ANTHROPIC_BASE_URL: ${{ vars.ANTHROPIC_BASE_URL }}
+      CLAUDE_OPUS_MODEL: ${{ vars.CLAUDE_OPUS_MODEL }}
+      CLAUDE_SONNET_MODEL: ${{ vars.CLAUDE_SONNET_MODEL }}
+      CLAUDE_DEEPSEEK_OPUS_MODEL: ${{ vars.CLAUDE_DEEPSEEK_OPUS_MODEL }}
+      CLAUDE_DEEPSEEK_SONNET_MODEL: ${{ vars.CLAUDE_DEEPSEEK_SONNET_MODEL }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -105,6 +114,20 @@ jobs:
         with:
           workflow-run-id: ${{ inputs.workflow_run_id }}
 
+      - name: Parse CI failure details
+        if: steps.loop_guard.outputs.skip != 'true'
+        id: failure_payload
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > "$RUNNER_TEMP/failure-details.json" << 'JSON'
+          ${{ steps.failure_details.outputs.result }}
+          JSON
+
+          echo "failure_run_url=$(jq -r '.runUrl // ""' "$RUNNER_TEMP/failure-details.json")" >> "$GITHUB_OUTPUT"
+          echo "failed_jobs=$(jq -r '[.failedJobs[]?] | join(\", \")' "$RUNNER_TEMP/failure-details.json")" >> "$GITHUB_OUTPUT"
+          echo "error_logs=$(jq -c '.errorLogs // []' "$RUNNER_TEMP/failure-details.json")" >> "$GITHUB_OUTPUT"
+
       - name: Compose Claude prompt
         if: steps.loop_guard.outputs.skip != 'true'
         id: compose-prompt
@@ -114,9 +137,9 @@ jobs:
           prompt='${{ inputs.claude-prompt }}'
           prompt_file='${{ inputs.claude-prompt-file }}'
           prompt_context='${{ inputs.claude-prompt-context }}'
-          failure_run_url='${{ fromJSON(steps.failure_details.outputs.result).runUrl }}'
-          failed_jobs="${{ join(fromJSON(steps.failure_details.outputs.result).failedJobs, ', ') }}"
-          error_logs='${{ toJSON(fromJSON(steps.failure_details.outputs.result).errorLogs) }}'
+          failure_run_url='${{ steps.failure_payload.outputs.failure_run_url }}'
+          failed_jobs='${{ steps.failure_payload.outputs.failed_jobs }}'
+          error_logs='${{ steps.failure_payload.outputs.error_logs }}'
           bot_iteration='${{ steps.loop_guard.outputs.next_iteration }}'
           bot_cap='${{ steps.loop_guard.outputs.max_iterations }}'
 
@@ -155,14 +178,7 @@ jobs:
         id: claude
         uses: ./.github/actions/claude-code-with-provider
         with:
-          provider: ${{ vars.CLAUDE_CODE_PROVIDER || 'anthropic' }}
-          claude-oauth-token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
-          deepseek-api-key: ${{ secrets.DEEPSEEK_API_KEY }}
-          anthropic-base-url: ${{ vars.ANTHROPIC_BASE_URL }}
-          claude-opus-model: ${{ vars.CLAUDE_OPUS_MODEL }}
-          claude-sonnet-model: ${{ vars.CLAUDE_SONNET_MODEL }}
-          deepseek-opus-model: ${{ vars.CLAUDE_DEEPSEEK_OPUS_MODEL }}
-          deepseek-sonnet-model: ${{ vars.CLAUDE_DEEPSEEK_SONNET_MODEL }}
+          provider: ${{ env.CLAUDE_CODE_PROVIDER }}
           model-tier: opus
           allowed-bots: 'claude,chatgpt-codex-connector,cursor[bot],cursor,copilot-pull-request-reviewer'
           plugin-marketplaces: ${{ inputs.plugin-marketplaces }}

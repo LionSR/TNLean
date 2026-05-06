@@ -115,19 +115,6 @@ jobs:
         if: steps.claude-switch.outputs.skip != 'true' && steps.bot-check.outputs.skip != 'true' && steps.provider-token.outputs.skip != 'true'
         uses: ./.github/actions/setup-lean
 
-      - name: Prepare review prompt
-        if: steps.claude-switch.outputs.skip != 'true' && steps.bot-check.outputs.skip != 'true' && steps.provider-token.outputs.skip != 'true'
-        id: review-prompts
-        run: |
-          {
-            printf 'prompt<<EOF\n'
-            printf 'Review this Lean 4 pull request: %s\n' '${{ github.repository }}/pull/${{ github.event.pull_request.number }}'
-            printf 'Review provider: %s\n' '${{ matrix.provider }}'
-            printf 'Trigger event: %s\n\n' '${{ github.event.action }}'
-            cat .github/prompts/claude-code-review-prompt.md
-            printf '\nEOF\n'
-          } >> "$GITHUB_OUTPUT"
-
       - name: Run Claude Code Review
         if: steps.claude-switch.outputs.skip != 'true' && steps.bot-check.outputs.skip != 'true' && steps.provider-token.outputs.skip != 'true'
         id: claude-review
@@ -142,5 +129,13 @@ jobs:
           plugins: |
             code-review@claude-code-plugins
             lean@leanprover
-          prompt: ${{ steps.review-prompts.outputs.prompt }}
+          claude-prompt-file: .github/prompts/claude-code-review-prompt.md
+          claude-prompt-context: |
+            PR number: ${{ github.event.pull_request.number }}
+            Repository: ${{ github.repository }}
+            Repository owner: ${{ github.repository_owner }}
+            Repository name: ${{ github.event.repository.name }}
+            Review this Lean 4 pull request: ${{ github.repository }}/pull/${{ github.event.pull_request.number }}
+            Review provider: ${{ matrix.provider }}
+            Trigger event: ${{ github.event.action }}
           system-prompt-file: .github/prompts/claude-code-review-system-prompt.md
