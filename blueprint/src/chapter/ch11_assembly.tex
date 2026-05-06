@@ -1383,8 +1383,8 @@ BNT-cover inputs needed by the zero-block sector comparison below.
 	hypotheses. The preceding lemma supplies the common MPV phase cover.
 \end{proof}
 
-\begin{theorem}[Reindexed sectors give single-family overlap data]%
-\label{thm:sector_basis_overlap_ortho_reindexed}
+\begin{lemma}[Reindexed sectors give single-family overlap data]%
+\label{lem:sector_basis_overlap_ortho_reindexed}
 	\lean{MPSTensor.sectorBasisOverlapOrthoHypotheses_of_reindexedNonzeroParts}
 	\leanok
 	\uses{def:common_sector_relabeling_hypothesis,
@@ -1394,7 +1394,7 @@ BNT-cover inputs needed by the zero-block sector comparison below.
 	blocking and reindexing, each nonzero-sector family admits a BNT sector
 	decomposition with positive-length MPV agreement, BNT data, and the
 	single-family overlap-orthogonality hypotheses.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
 	\leanok
@@ -1406,8 +1406,8 @@ BNT-cover inputs needed by the zero-block sector comparison below.
 	families.
 \end{proof}
 
-\begin{theorem}[Phase-cover data give overlap-span hypotheses]%
-\label{thm:sector_basis_overlap_span_reindexed_commonPhaseCover}
+\begin{lemma}[Phase-cover data give overlap-span hypotheses]%
+\label{lem:sector_basis_overlap_span_reindexed_commonPhaseCover}
 	\lean{MPSTensor.sectorBasisOverlapSpanHypotheses_of_reindexedNonzeroParts_commonPhaseCover}
 	\leanok
 	\uses{def:common_primitive_phase_cover_hypotheses,
@@ -1418,7 +1418,7 @@ BNT-cover inputs needed by the zero-block sector comparison below.
 	families satisfy the phase-cover hypotheses, then the associated sector
 	decompositions have BNT data, agree as full MPV families, and satisfy the
 	primitive overlap-span hypotheses.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
 	\leanok
@@ -1429,8 +1429,8 @@ BNT-cover inputs needed by the zero-block sector comparison below.
 	gives the sector decompositions and their primitive overlap-span hypotheses.
 \end{proof}
 
-\begin{theorem}[BNT-cover data give overlap-span hypotheses]%
-\label{thm:sector_basis_overlap_span_reindexed_bnt_cover}
+\begin{lemma}[BNT-cover data give overlap-span hypotheses]%
+\label{lem:sector_basis_overlap_span_reindexed_bnt_cover}
 	\lean{MPSTensor.sectorBasisOverlapSpanHypotheses_of_reindexedNonzeroParts_bntCover}
 	\leanok
 	\uses{def:common_primitive_bnt_cover_hypotheses,
@@ -1441,24 +1441,24 @@ BNT-cover inputs needed by the zero-block sector comparison below.
 	families satisfy the BNT-cover hypotheses, then the associated sector
 	decompositions have BNT data, agree as full MPV families, and satisfy the
 	primitive overlap-span hypotheses.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
 	\leanok
 	\uses{lem:common_primitive_bnt_cover_hypotheses_to_phase_cover_hypotheses,
-		thm:sector_basis_overlap_span_reindexed_commonPhaseCover}
+		lem:sector_basis_overlap_span_reindexed_commonPhaseCover}
 	Convert the BNT-cover hypotheses for the produced families into common
 	phase-cover hypotheses. The common phase-cover construction then gives the
 	sector decompositions and their primitive overlap-span hypotheses.
 \end{proof}
 
-\begin{theorem}[Explicit BNT data give overlap-span hypotheses]%
-\label{thm:sector_basis_overlap_span_commonPrimitiveBNTData}
+\begin{lemma}[Explicit BNT data give overlap-span hypotheses]%
+\label{lem:sector_basis_overlap_span_commonPrimitiveBNTData}
 	\lean{MPSTensor.sectorBasisOverlapSpanHypotheses_of_commonPrimitiveBNTData}
 	\leanok
 	\uses{def:common_primitive_bnt_cover_hypotheses,
 		def:common_sector_relabeling_hypothesis,
-		thm:sector_basis_overlap_span_reindexed_bnt_cover}
+		lem:sector_basis_overlap_span_reindexed_bnt_cover}
 	Let $A$ and $B$ have the same MPV family, and assume the blocked-word
 	identification hypothesis for the cyclic-sector data. The common-sector
 	structural theorem produces common primitive nonzero-sector families. If
@@ -1466,24 +1466,24 @@ BNT-cover inputs needed by the zero-block sector comparison below.
 	equal zero-tail dimension, one-site injectivity, and proportional-decomposition
 	data, then the associated sector decompositions have BNT data, agree as full
 	MPV families, and satisfy the primitive overlap-span hypotheses.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
 	\leanok
 	\uses{def:common_primitive_bnt_cover_hypotheses,
 		def:common_sector_relabeling_hypothesis,
-		thm:sector_basis_overlap_span_reindexed_bnt_cover}
+		lem:sector_basis_overlap_span_reindexed_bnt_cover}
 	First form the BNT-cover hypotheses for the produced families from the stated
-	common primitive data. Then apply the BNT-cover overlap-span theorem.
+	common primitive data. Then apply the BNT-cover overlap-span lemma.
 \end{proof}
 
-\begin{theorem}[Explicit BNT data with derived zero-tail identity give overlap-span hypotheses]%
-\label{thm:sector_basis_overlap_span_commonPrimitiveBNTData_zeroTailIdentity}
+\begin{lemma}[Explicit BNT data with derived zero-tail identity give overlap-span hypotheses]%
+\label{lem:sector_basis_overlap_span_commonPrimitiveBNTData_zeroTailIdentity}
 	\lean{MPSTensor.sectorBasisOverlapSpanHypotheses_of_commonPrimitiveBNTData_zeroTailIdentity}
 	\leanok
 	\uses{def:common_primitive_bnt_cover_hypotheses,
 		def:common_sector_relabeling_hypothesis,
-		thm:sector_basis_overlap_span_reindexed_bnt_cover}
+		lem:sector_basis_overlap_span_reindexed_bnt_cover}
 	Let $A$ and $B$ have the same MPV family, and assume the blocked-word
 	identification hypothesis for the cyclic-sector data. The common-sector
 	structural theorem produces common primitive nonzero-sector families. If
@@ -1492,15 +1492,15 @@ BNT-cover inputs needed by the zero-block sector comparison below.
 	MPV identity determines the zero tail, and the associated sector decompositions
 	have BNT data, agree as full MPV families, and satisfy the primitive
 	overlap-span hypotheses.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
 	\leanok
 	\uses{def:common_primitive_bnt_cover_hypotheses,
-		thm:sector_basis_overlap_span_reindexed_bnt_cover}
+		lem:sector_basis_overlap_span_reindexed_bnt_cover}
 	First form the BNT-cover hypotheses for the produced families, deriving the
 	zero-tail identity from the proportional-decomposition data. Then apply the
-	BNT-cover overlap-span theorem.
+	BNT-cover overlap-span lemma.
 \end{proof}
 
 \begin{theorem}[Common primitive sectors with span hypotheses]%

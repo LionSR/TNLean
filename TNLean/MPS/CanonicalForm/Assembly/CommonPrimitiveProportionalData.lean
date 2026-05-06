@@ -196,7 +196,7 @@ The structural theorem already supplies the length-zero equation for the two zer
 nonzero-sector decompositions. A proportional-decomposition conclusion matches the nonzero
 blocks by a permutation with equal bond dimensions, so the nonzero length-zero contributions
 cancel. -/
-theorem zeroTail_eq_of_proportionalDecompositionConclusion
+lemma zeroTail_eq_of_proportionalDecompositionConclusion
     {d rA rB zeroTailA zeroTailB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
