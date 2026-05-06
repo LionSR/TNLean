@@ -953,8 +953,8 @@ decomposition.
     the block-diagonal structure.
 \end{proof}
 
-\begin{theorem}[Explicit per-block gauges]%
-    \label{thm:fundamentalTheorem_multiBlock_explicit}
+\begin{lemma}[Explicit per-block gauges]%
+    \label{lem:fundamentalTheorem_multiBlock_explicit}
     \lean{MPSTensor.fundamentalTheorem_multiBlock_explicit}
     \leanok
     \uses{thm:fundamentalTheorem_multiBlock_full}
@@ -965,7 +965,7 @@ decomposition.
         B_k^i = X_k\, A_k^i\, X_k^{-1}
     \]
     for every block $k$ and every physical index $i$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -974,8 +974,8 @@ decomposition.
     Theorem~\ref{thm:fundamentalTheorem_multiBlock_full} for each block.
 \end{proof}
 
-\begin{theorem}[Product-algebra decomposition of the multi-block theorem]%
-    \label{thm:fundamentalTheorem_multiBlock_decomposition}
+\begin{lemma}[Product-algebra decomposition of the multi-block theorem]%
+    \label{lem:fundamentalTheorem_multiBlock_decomposition}
     \lean{MPSTensor.fundamentalTheorem_multiBlock_decomposition}
     \leanok
     \uses{thm:fundamentalTheorem_multiBlock_full}
@@ -988,7 +988,7 @@ decomposition.
     equalities, and invertible matrices $X_k$ such that, after reindexing the
     target block $\sigma(k)$ back to block $k$, the action on the $k$th matrix
     block is $M \mapsto X_k M X_k^{-1}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -997,15 +997,15 @@ decomposition.
     automorphism built from the per-block linear extensions.
 \end{proof}
 
-\begin{theorem}[Per-block equality of MPV families and per-block gauge equivalence]%
-    \label{thm:perBlock_sameMPV_iff_gaugeEquiv}
+\begin{lemma}[Per-block equality of MPV families and per-block gauge equivalence]%
+    \label{lem:perBlock_sameMPV_iff_gaugeEquiv}
     \lean{MPSTensor.perBlock_sameMPV_iff_gaugeEquiv}
     \leanok
     \uses{def:injective, def:same_mpv, def:gauge_equiv}
     Let $\{A_k\}$ be a family of injective block tensors.
     Then $\mc{V}(A_k) = \mc{V}(B_k)$ for all~$k$ if and only if
     $A_k$ and $B_k$ are gauge equivalent for all~$k$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok\uses{def:gauge_equiv}
     The forward direction is the single-block Fundamental Theorem applied
@@ -1062,8 +1062,8 @@ which is then combined with overlap estimates and the leading-block peel.
     \emph{primitive} (the transfer map has spectral gap).
 \end{definition}
 
-\begin{theorem}[Block separation from weighted word identities]%
-    \label{thm:block_separation_all_words}
+\begin{lemma}[Block separation from weighted word identities]%
+    \label{lem:block_separation_all_words}
     \lean{MPSTensor.block_separation_all_words}
     \leanok
     \uses{def:same_mpv}
@@ -1076,7 +1076,7 @@ which is then combined with overlap estimates and the leading-block peel.
         \sum_k \mu_k^N \bigl(V^{(N)}(A_k)_\sigma - V^{(N)}(B_k)_\sigma\bigr)=0.
     \]
     Then $\mc{V}(A_k)=\mc{V}(B_k)$ for every block $k$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1086,8 +1086,8 @@ which is then combined with overlap estimates and the leading-block peel.
     weight, and one then iterates on the remaining blocks.
 \end{proof}
 
-\begin{theorem}[Block separation from canonical form]%
-    \label{thm:per_block_sameMPV_of_canonical_form}
+\begin{lemma}[Block separation from canonical form]%
+    \label{lem:per_block_sameMPV_of_canonical_form}
     \lean{MPSTensor.per_block_sameMPV_of_canonical_form}
     \leanok
     \uses{def:isCanonicalForm, def:same_mpv}
@@ -1100,7 +1100,7 @@ which is then combined with overlap estimates and the leading-block peel.
     The proof isolates the leading block and treats the remaining blocks
     as an exponentially decaying tail with
     $\rho = |\mu_1|/|\mu_0| < 1$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1137,8 +1137,8 @@ which is then combined with overlap estimates and the leading-block peel.
     yields $\mc{V}(A_k) = \mc{V}(B_k)$ for all remaining $k$.
 \end{proof}
 
-\begin{theorem}[Block separation from separated canonical data]%
-    \label{thm:per_block_sameMPV_of_separated_canonical_data}
+\begin{lemma}[Block separation from separated canonical data]%
+    \label{lem:per_block_sameMPV_of_separated_canonical_data}
     \lean{MPSTensor.per_block_sameMPV_of_separated_canonical_data}
     \leanok
     \uses{def:same_mpv}
@@ -1147,59 +1147,59 @@ which is then combined with overlap estimates and the leading-block peel.
     the $B$-blocks are injective and left-canonical, and the assembled
     block-diagonal tensors generate the same MPV family.
     Then $\mc{V}(A_k)=\mc{V}(B_k)$ for every block $k$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
-    \uses{thm:block_separation_all_words}
+    \uses{lem:block_separation_all_words}
     Equality of the assembled MPV families gives the weighted word identity
-    required by Theorem~\ref{thm:block_separation_all_words}.
+    required by Lemma~\ref{lem:block_separation_all_words}.
     The separated hypotheses supply exactly the injectivity,
     left-canonicality, strict-weight, and self-overlap assumptions needed
     there.
 \end{proof}
 
-\begin{theorem}[Fundamental Theorem from separated canonical data]%
-    \label{thm:fundamentalTheorem_of_separated_canonical_data}
+\begin{lemma}[Fundamental Theorem from separated canonical data]%
+    \label{lem:fundamentalTheorem_of_separated_canonical_data}
     \lean{MPSTensor.fundamentalTheorem_of_separated_canonical_data}
     \leanok
-    \uses{thm:per_block_sameMPV_of_separated_canonical_data}
+    \uses{lem:per_block_sameMPV_of_separated_canonical_data}
     Under the hypotheses of
-    Theorem~\ref{thm:per_block_sameMPV_of_separated_canonical_data}, every
+    Lemma~\ref{lem:per_block_sameMPV_of_separated_canonical_data}, every
     block pair $A_k,B_k$ is gauge equivalent, and the assembled block-diagonal
     tensors are globally gauge equivalent.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
-    \uses{thm:per_block_sameMPV_of_separated_canonical_data,
+    \uses{lem:per_block_sameMPV_of_separated_canonical_data,
         thm:fundamentalTheorem_multiBlock_full}
     First apply
-    Theorem~\ref{thm:per_block_sameMPV_of_separated_canonical_data} to get
+    Lemma~\ref{lem:per_block_sameMPV_of_separated_canonical_data} to get
     $\mc{V}(A_k)=\mc{V}(B_k)$ blockwise.
     Then apply
     Theorem~\ref{thm:fundamentalTheorem_multiBlock_full}.
 \end{proof}
 
-\begin{theorem}[Explicit gauge from separated canonical data]%
-    \label{thm:fundamentalTheorem_of_separated_canonical_data_explicit}
+\begin{lemma}[Explicit gauge from separated canonical data]%
+    \label{lem:fundamentalTheorem_of_separated_canonical_data_explicit}
     \lean{MPSTensor.fundamentalTheorem_of_separated_canonical_data_explicit}
     \leanok
-    \uses{thm:fundamentalTheorem_of_separated_canonical_data}
+    \uses{lem:fundamentalTheorem_of_separated_canonical_data}
     Under the same hypotheses, there exist invertible matrices
     $X_k \in \GL_{D_k}(\C)$ such that
     \[
         B_k^i = X_k\, A_k^i\, X_k^{-1}
     \]
     for every block $k$ and physical index $i$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
-    \uses{thm:per_block_sameMPV_of_separated_canonical_data,
-        thm:fundamentalTheorem_multiBlock_explicit}
+    \uses{lem:per_block_sameMPV_of_separated_canonical_data,
+        lem:fundamentalTheorem_multiBlock_explicit}
     Combine blockwise MPV equality from
-    Theorem~\ref{thm:per_block_sameMPV_of_separated_canonical_data} with the
+    Lemma~\ref{lem:per_block_sameMPV_of_separated_canonical_data} with the
     explicit-gauge form of the multi-block Fundamental Theorem.
 \end{proof}
 
@@ -1207,25 +1207,25 @@ which is then combined with overlap estimates and the leading-block peel.
     \label{thm:fundamentalTheorem_canonicalForm}
     \lean{MPSTensor.fundamentalTheorem_canonicalForm}
     \leanok
-    \uses{thm:per_block_sameMPV_of_canonical_form,
+    \uses{lem:per_block_sameMPV_of_canonical_form,
         thm:fundamentalTheorem_multiBlock_full}
     Under the hypotheses of
-    Theorem~\ref{thm:per_block_sameMPV_of_canonical_form},
+    Lemma~\ref{lem:per_block_sameMPV_of_canonical_form},
     every block pair $A_k, B_k$ is gauge equivalent, and the
     block-diagonal tensors are globally gauge equivalent.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:per_block_sameMPV_of_canonical_form,
+    \uses{lem:per_block_sameMPV_of_canonical_form,
         thm:fundamentalTheorem_multiBlock_full}
-    Theorem~\ref{thm:per_block_sameMPV_of_canonical_form} gives per-block
+    Lemma~\ref{lem:per_block_sameMPV_of_canonical_form} gives per-block
     $\mc{V}(A_k) = \mc{V}(B_k)$.
     Theorem~\ref{thm:fundamentalTheorem_multiBlock_full} converts this
     to per-block and global gauge equivalence.
 \end{proof}
 
-\begin{theorem}[Explicit gauge from canonical form]%
-    \label{thm:fundamentalTheorem_canonicalForm_explicit}
+\begin{lemma}[Explicit gauge from canonical form]%
+    \label{lem:fundamentalTheorem_canonicalForm_explicit}
     \lean{MPSTensor.fundamentalTheorem_canonicalForm_explicit}
     \leanok
     \uses{thm:fundamentalTheorem_canonicalForm}
@@ -1233,7 +1233,7 @@ which is then combined with overlap estimates and the leading-block peel.
     $X_k \in \GL_{D_k}(\C)$ such that
     $B_k^i = X_k\, A_k^i\, X_k^{-1}$
     for every block $k$ and physical index $i$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:fundamentalTheorem_canonicalForm}
