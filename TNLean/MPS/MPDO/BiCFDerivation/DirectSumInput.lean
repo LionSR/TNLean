@@ -245,12 +245,7 @@ theorem leftTraceWordMap_range_finrank_eq_of_isNBlkInjective {A : MPSTensor d D}
     Module.finrank ℂ ((leftTraceWordMap A L).range) = D ^ 2 := by
   rw [LinearMap.finrank_range_of_inj
     (leftTraceWordMap_injective_of_isNBlkInjective hA)]
-  calc
-    Module.finrank ℂ (Matrix (Fin D) (Fin D) ℂ)
-        = (Fintype.card (Fin D) * Fintype.card (Fin D)) * Module.finrank ℂ ℂ := by
-            simpa using (Module.finrank_matrix ℂ ℂ (Fin D) (Fin D))
-    _ = D * D := by simp
-    _ = D ^ 2 := by simp [pow_two]
+  exact Matrix.finrank_matrix_fin_eq_sq D
 
 /-- The paper's dimension step for the two-block direct-sum argument.
 
