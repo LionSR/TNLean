@@ -66,9 +66,17 @@ jobs:
       - name: Run Blueprint Sync & Prose Review
         if: steps.claude-switch.outputs.skip != 'true' && steps.bot-check.outputs.skip != 'true'
         id: blueprint-prose-review
-        uses: anthropics/claude-code-action@v1
+        uses: ./.github/actions/claude-code-with-provider
         with:
-          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          provider: ${{ vars.CLAUDE_CODE_PROVIDER || 'anthropic' }}
+          claude-oauth-token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          deepseek-api-key: ${{ secrets.DEEPSEEK_API_KEY }}
+          anthropic-base-url: ${{ vars.ANTHROPIC_BASE_URL }}
+          claude-opus-model: ${{ vars.CLAUDE_OPUS_MODEL }}
+          claude-sonnet-model: ${{ vars.CLAUDE_SONNET_MODEL }}
+          deepseek-opus-model: ${{ vars.CLAUDE_DEEPSEEK_OPUS_MODEL }}
+          deepseek-sonnet-model: ${{ vars.CLAUDE_DEEPSEEK_SONNET_MODEL }}
+          model-tier: sonnet
           allowed_bots: 'claude,chatgpt-codex-connector,cursor[bot],cursor,copilot-pull-request-reviewer'
           prompt: |
             Review this PR for TWO categories ONLY:
@@ -221,7 +229,6 @@ jobs:
                     pageInfo { hasNextPage endCursor } } } } }'
             ```
 
-          claude_args: |
-            --model claude-sonnet-4-6
+          claude-args: |
             --allowedTools "Read,Glob,Grep,Bash(gh pr diff:*),Bash(gh pr view:*),Bash(gh pr comment:*),Bash(gh api graphql:*),Bash(grep *),mcp__github__*"
             --append-system-prompt "TNLean is a Lean 4 / Mathlib formalization of MPS / quantum-channel / Wielandt theory. You are a focused reviewer with TWO concerns: (A) blueprint ↔ Lean **mathematical equivalence and status accuracy** — verify that the blueprint statement matches the Lean signature on quantifiers, hypotheses, conclusion, indices, and notation; verify that every \\leanok actually holds (no sorry/admit/native_decide in the cited proof) and every \\notready is still genuinely not-ready; flag missing \\leanok on now-formalized results and stale \\lean{...} tags after renames. (B) prose quality per docs/prose_style.md (no Lean jargon, no banned SE/LLM language). Do NOT comment on proof integrity, Mathlib style, performance, modularity, or other concerns reviewed by the main workflow. The project's Fact-Check Lessons in docs/blueprint_style_guide.md document common subtle mismatches (e.g. mpvOverlap vs mpvInner conjugation, KS for unital vs TP maps) — apply that level of mathematical care. Apply judgment on context-sensitive prose entries; the prose doc says which."

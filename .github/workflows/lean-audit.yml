@@ -33,9 +33,17 @@ jobs:
           install-blueprint: 'true'
 
       - name: Run Lean Audit
-        uses: anthropics/claude-code-action@v1
+        uses: ./.github/actions/claude-code-with-provider
         with:
-          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          provider: ${{ vars.CLAUDE_CODE_PROVIDER || 'anthropic' }}
+          claude-oauth-token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          deepseek-api-key: ${{ secrets.DEEPSEEK_API_KEY }}
+          anthropic-base-url: ${{ vars.ANTHROPIC_BASE_URL }}
+          claude-opus-model: ${{ vars.CLAUDE_OPUS_MODEL }}
+          claude-sonnet-model: ${{ vars.CLAUDE_SONNET_MODEL }}
+          deepseek-opus-model: ${{ vars.CLAUDE_DEEPSEEK_OPUS_MODEL }}
+          deepseek-sonnet-model: ${{ vars.CLAUDE_DEEPSEEK_SONNET_MODEL }}
+          model-tier: sonnet
           prompt: |
             REPO: ${{ github.repository }}
             BRANCH: ${{ github.ref_name }}
@@ -53,7 +61,6 @@ jobs:
             software-process metaphors, and local shorthand when describing
             mathematics.
 
-          claude_args: |
-            --model claude-sonnet-4-6
+          claude-args: |
             --allowedTools "Read,Glob,Grep,Bash(lake build),Bash(lake exe cache get),Bash(lake update),Bash(lake env),Bash(lean *),Bash(elan *),Bash(grep *),Bash(find *),Bash(wc *),Bash(leanblueprint *)"
             --append-system-prompt "This is a Lean 4 / Mathlib formalization project for quantum information theory. Be thorough and precise. Report findings in clean markdown format."

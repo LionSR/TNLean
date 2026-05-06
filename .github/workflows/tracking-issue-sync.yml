@@ -16,6 +16,7 @@ on:
 # GitHub's pending-queue depth limit (which cancels middle runs when
 # many PRs merge simultaneously). The risk of concurrent writes to the
 # same tracking issue body is low and acceptable vs losing updates.
+#
 concurrency:
   group: issue-tracker-${{ github.event.pull_request.number || github.event.issue.number || github.run_id }}
   cancel-in-progress: false
@@ -64,12 +65,19 @@ jobs:
       - name: Run Claude Code
         if: steps.claude-switch.outputs.skip != 'true'
         id: claude
-        uses: anthropics/claude-code-action@v1
+        uses: ./.github/actions/claude-code-with-provider
         with:
-          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          provider: ${{ vars.CLAUDE_CODE_PROVIDER || 'anthropic' }}
+          claude-oauth-token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          deepseek-api-key: ${{ secrets.DEEPSEEK_API_KEY }}
+          anthropic-base-url: ${{ vars.ANTHROPIC_BASE_URL }}
+          claude-opus-model: ${{ vars.CLAUDE_OPUS_MODEL }}
+          claude-sonnet-model: ${{ vars.CLAUDE_SONNET_MODEL }}
+          deepseek-opus-model: ${{ vars.CLAUDE_DEEPSEEK_OPUS_MODEL }}
+          deepseek-sonnet-model: ${{ vars.CLAUDE_DEEPSEEK_SONNET_MODEL }}
+          model-tier: sonnet
           allowed_bots: '*'
-          claude_args: |
-            --model claude-sonnet-4-6
+          claude-args: |
             --allowedTools "mcp__github__*,Bash(git diff *),Bash(git log *),Bash(git show *)"
 
           prompt: |

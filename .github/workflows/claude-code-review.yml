@@ -77,9 +77,17 @@ jobs:
       - name: Run Claude Code Review
         if: steps.claude-switch.outputs.skip != 'true' && steps.bot-check.outputs.skip != 'true'
         id: claude-review
-        uses: anthropics/claude-code-action@v1
+        uses: ./.github/actions/claude-code-with-provider
         with:
-          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          provider: ${{ vars.CLAUDE_CODE_PROVIDER || 'anthropic' }}
+          claude-oauth-token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          deepseek-api-key: ${{ secrets.DEEPSEEK_API_KEY }}
+          anthropic-base-url: ${{ vars.ANTHROPIC_BASE_URL }}
+          claude-opus-model: ${{ vars.CLAUDE_OPUS_MODEL }}
+          claude-sonnet-model: ${{ vars.CLAUDE_SONNET_MODEL }}
+          deepseek-opus-model: ${{ vars.CLAUDE_DEEPSEEK_OPUS_MODEL }}
+          deepseek-sonnet-model: ${{ vars.CLAUDE_DEEPSEEK_SONNET_MODEL }}
+          model-tier: opus
           allowed_bots: 'claude,chatgpt-codex-connector,cursor[bot],cursor,copilot-pull-request-reviewer'
           plugin_marketplaces: |
             https://github.com/anthropics/claude-code.git
@@ -238,7 +246,6 @@ jobs:
             }'
             ```
 
-          claude_args: |
-            --model claude-opus-4-7
+          claude-args: |
             --allowedTools "Read,Glob,Grep,Bash(gh pr diff:*),Bash(gh pr view:*),Bash(gh pr comment:*),Bash(gh api graphql:*),Bash(lake build),Bash(lake exe cache get),Bash(lake update),Bash(lake env),Bash(lean *),Bash(elan *),Bash(grep *),mcp__github__*"
             --append-system-prompt "This is a Lean 4 / Mathlib formalization project for quantum information theory (MPS tensors, quantum channels, Wielandt theorem). Review with mathematical rigor. Flag any sorry that is not clearly marked as a known TODO. Generated review prose should name the theorem, lemma, definition, proof obligation, or paper-gap assertion directly and cite paper or blueprint path, line, label, and short quotation or precise paraphrase when a mathematical source discrepancy is involved. Paper-gap notes under docs/paper-gaps/ are mathematical documents; review them against docs/paper-gaps/policy.tex for self-contained exposition, faithful citation, precise comparison with the blueprint and Lean formalization, and a clear verdict."

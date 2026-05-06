@@ -92,9 +92,17 @@ jobs:
 
       - name: Scout Mathlib
         if: steps.decide.outputs.should_scout == 'true'
-        uses: anthropics/claude-code-action@v1
+        uses: ./.github/actions/claude-code-with-provider
         with:
-          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          provider: ${{ vars.CLAUDE_CODE_PROVIDER || 'anthropic' }}
+          claude-oauth-token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          deepseek-api-key: ${{ secrets.DEEPSEEK_API_KEY }}
+          anthropic-base-url: ${{ vars.ANTHROPIC_BASE_URL }}
+          claude-opus-model: ${{ vars.CLAUDE_OPUS_MODEL }}
+          claude-sonnet-model: ${{ vars.CLAUDE_SONNET_MODEL }}
+          deepseek-opus-model: ${{ vars.CLAUDE_DEEPSEEK_OPUS_MODEL }}
+          deepseek-sonnet-model: ${{ vars.CLAUDE_DEEPSEEK_SONNET_MODEL }}
+          model-tier: sonnet
 
           prompt: |
             A Mathlib scouting report has been requested for a formalization
@@ -149,7 +157,6 @@ jobs:
 
             5. Do NOT create any files, branches, or PRs. Only post the scouting comment.
 
-          claude_args: |
-            --model claude-sonnet-4-6
+          claude-args: |
             --allowedTools "Read,Glob,Grep,Bash(lean *),Bash(lake env),mcp__github__add_issue_comment,mcp__github__issue_read"
             --append-system-prompt "This is a Lean 4 / Mathlib repository for quantum information theory (MPS tensors, quantum channels, Wielandt theorem). Your ONLY task is to scout Mathlib and the existing codebase for relevant lemmas and post a scouting report. Do NOT write code or create files. Be thorough -- search multiple keywords and naming conventions. Mathlib sources are under .lake/packages/mathlib/Mathlib/."

@@ -151,9 +151,17 @@ jobs:
             };
 
       - name: Generate standup summary with Claude
-        uses: anthropics/claude-code-action@v1
+        uses: ./.github/actions/claude-code-with-provider
         with:
-          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          provider: ${{ vars.CLAUDE_CODE_PROVIDER || 'anthropic' }}
+          claude-oauth-token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          deepseek-api-key: ${{ secrets.DEEPSEEK_API_KEY }}
+          anthropic-base-url: ${{ vars.ANTHROPIC_BASE_URL }}
+          claude-opus-model: ${{ vars.CLAUDE_OPUS_MODEL }}
+          claude-sonnet-model: ${{ vars.CLAUDE_SONNET_MODEL }}
+          deepseek-opus-model: ${{ vars.CLAUDE_DEEPSEEK_OPUS_MODEL }}
+          deepseek-sonnet-model: ${{ vars.CLAUDE_DEEPSEEK_SONNET_MODEL }}
+          model-tier: sonnet
           prompt: |
             You are a pure mathematician and Lean 4 formalization expert writing a daily
             standup summary for the TNLean repository (${{ github.repository }}).
@@ -271,6 +279,5 @@ jobs:
               include your reasoning process, tool calls, or analysis steps. Present
               only polished conclusions.
 
-          claude_args: |
-            --model claude-sonnet-4-6
+          claude-args: |
             --allowedTools "Read,Glob,Grep,Bash(git log *),Bash(git diff *),Bash(git show *),Bash(gh label create *),mcp__github__search_issues,mcp__github__issue_write,mcp__github__issue_read,mcp__github__add_issue_comment,mcp__github__get_label,mcp__github__list_issues,mcp__github__search_pull_requests,mcp__github__list_pull_requests,mcp__github__pull_request_read,mcp__github__list_commits"

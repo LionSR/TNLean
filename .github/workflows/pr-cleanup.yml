@@ -58,9 +58,17 @@ jobs:
 
       - name: Clean up bot-generated PR
         if: steps.claude-switch.outputs.skip != 'true'
-        uses: anthropics/claude-code-action@v1
+        uses: ./.github/actions/claude-code-with-provider
         with:
-          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          provider: ${{ vars.CLAUDE_CODE_PROVIDER || 'anthropic' }}
+          claude-oauth-token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          deepseek-api-key: ${{ secrets.DEEPSEEK_API_KEY }}
+          anthropic-base-url: ${{ vars.ANTHROPIC_BASE_URL }}
+          claude-opus-model: ${{ vars.CLAUDE_OPUS_MODEL }}
+          claude-sonnet-model: ${{ vars.CLAUDE_SONNET_MODEL }}
+          deepseek-opus-model: ${{ vars.CLAUDE_DEEPSEEK_OPUS_MODEL }}
+          deepseek-sonnet-model: ${{ vars.CLAUDE_DEEPSEEK_SONNET_MODEL }}
+          model-tier: sonnet
           allowed_bots: 'claude,chatgpt-codex-connector'
           prompt: |
             You are a PR-cleanup bot. Your job is to bring bot-generated pull requests
@@ -268,6 +276,5 @@ jobs:
               )"
               ```
 
-          claude_args: |
-            --model claude-sonnet-4-6
+          claude-args: |
             --allowedTools "Read,Glob,Grep,Bash(gh pr:*),Bash(gh issue:*)"

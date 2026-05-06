@@ -1,0 +1,214 @@
+name: 'Claude Code with Provider'
+description: 'Run anthropics/claude-code-action with automatic Anthropic/DeepSeek provider selection'
+
+inputs:
+  provider:
+    description: 'Provider name (anthropic or deepseek)'
+    required: false
+    default: anthropic
+  claude-oauth-token:
+    description: 'Anthropic token for claude-code (legacy mode)'
+    required: false
+    default: ''
+  deepseek-api-key:
+    description: 'DeepSeek API key for deepseek provider mode'
+    required: false
+    default: ''
+  anthropic-base-url:
+    description: 'Anthropic-compatible base URL'
+    required: false
+    default: ''
+  deepseek-base-url:
+    description: 'DeepSeek Anthropic-compatible base URL'
+    required: false
+    default: 'https://api.deepseek.com/anthropic'
+  claude-opus-model:
+    description: 'Anthropic model name for Opus-tier runs'
+    required: false
+    default: ''
+  claude-sonnet-model:
+    description: 'Anthropic model name for Sonnet-tier runs'
+    required: false
+    default: ''
+  deepseek-opus-model:
+    description: 'DeepSeek model name for Opus-tier runs'
+    required: false
+    default: ''
+  deepseek-sonnet-model:
+    description: 'DeepSeek model name for Sonnet-tier runs'
+    required: false
+    default: ''
+  model-tier:
+    description: 'Model tier to select: opus or sonnet'
+    required: false
+    default: opus
+
+  allowed_bots:
+    description: 'Allowed bots override (legacy underscore key).'
+    required: false
+    default: ''
+  allowed-bots:
+    description: 'Allowed bots override.'
+    required: false
+    default: 'claude,chatgpt-codex-connector,cursor[bot],cursor,copilot-pull-request-reviewer'
+
+  branch_name_template:
+    description: 'Legacy underscore key for branch name template.'
+    required: false
+    default: ''
+  branch-name-template:
+    description: 'Branch-name template for the checkout branch.'
+    required: false
+    default: ''
+
+  additional_permissions:
+    description: 'Legacy underscore key for additional permissions.'
+    required: false
+    default: ''
+  additional-permissions:
+    description: 'Additional permissions for the Claude bot.'
+    required: false
+    default: ''
+
+  plugin_marketplaces:
+    description: 'Legacy underscore key for plugin marketplaces.'
+    required: false
+    default: ''
+  plugin-marketplaces:
+    description: 'Plugin marketplaces.'
+    required: false
+    default: ''
+
+  plugins:
+    description: 'Plugins loaded into Claude Code.'
+    required: false
+    default: ''
+
+  prompt:
+    description: 'Prompt for Claude Code.'
+    required: false
+    default: ''
+
+  claude_args:
+    description: 'Legacy underscore key for additional claude args.'
+    required: false
+    default: ''
+  claude-args:
+    description: 'Additional claude args. The action prepends --model automatically.'
+    required: false
+    default: ''
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Resolve Claude provider settings
+      id: resolve
+      shell: bash
+      run: |
+        set -euo pipefail
+
+        provider="${{ inputs.provider }}"
+        provider="${provider,,}"
+        provider="${provider:-anthropic}"
+        model_tier="${{ inputs.model-tier }}"
+        model_tier="${model_tier:-opus}"
+
+        if [ "$provider" = "deepseek" ]; then
+          token="${{ inputs.deepseek-api-key }}"
+          if [ -n "${{ inputs.deepseek-opus-model }}" ]; then
+            model_opus="${{ inputs.deepseek-opus-model }}"
+          else
+            model_opus='deepseek-v4-pro[1m]'
+          fi
+
+          if [ -n "${{ inputs.deepseek-sonnet-model }}" ]; then
+            model_sonnet="${{ inputs.deepseek-sonnet-model }}"
+          else
+            model_sonnet='deepseek-v4-flash'
+          fi
+
+          base_url="${{ inputs.deepseek-base-url }}"
+          base_url="${base_url:-https://api.deepseek.com/anthropic}"
+        else
+          token="${{ inputs.claude-oauth-token }}"
+          if [ -n "${{ inputs.claude-opus-model }}" ]; then
+            model_opus="${{ inputs.claude-opus-model }}"
+          else
+            model_opus='claude-opus-4-7'
+          fi
+
+          if [ -n "${{ inputs.claude-sonnet-model }}" ]; then
+            model_sonnet="${{ inputs.claude-sonnet-model }}"
+          else
+            model_sonnet='claude-sonnet-4-6'
+          fi
+
+          base_url="${{ inputs.anthropic-base-url }}"
+          base_url="${base_url:-https://api.anthropic.com/v1}"
+        fi
+
+        allowed_bots="${{ inputs.allowed_bots }}"
+        if [ -z "$allowed_bots" ]; then
+          allowed_bots="${{ inputs['allowed-bots'] }}"
+        fi
+
+        branch_name_template="${{ inputs.branch_name_template }}"
+        if [ -z "$branch_name_template" ]; then
+          branch_name_template="${{ inputs['branch-name-template'] }}"
+        fi
+
+        additional_permissions="${{ inputs.additional_permissions }}"
+        if [ -z "$additional_permissions" ]; then
+          additional_permissions="${{ inputs['additional-permissions'] }}"
+        fi
+
+        plugin_marketplaces="${{ inputs.plugin_marketplaces }}"
+        if [ -z "$plugin_marketplaces" ]; then
+          plugin_marketplaces="${{ inputs['plugin-marketplaces'] }}"
+        fi
+
+        plugins='${{ inputs.plugins }}'
+        prompt='${{ inputs.prompt }}'
+
+        claude_args='${{ inputs.claude_args }}'
+        if [ -z "$claude_args" ]; then
+          claude_args="${{ inputs['claude-args'] }}"
+        fi
+
+        case "$model_tier" in
+          sonnet)
+            model="$model_sonnet"
+            ;;
+          *)
+            model="$model_opus"
+            ;;
+        esac
+
+        echo "auth_token=$token" >> "$GITHUB_OUTPUT"
+        echo "base_url=$base_url" >> "$GITHUB_OUTPUT"
+        echo "model=$model" >> "$GITHUB_OUTPUT"
+        echo "provider=$provider" >> "$GITHUB_OUTPUT"
+        echo "allowed_bots=$allowed_bots" >> "$GITHUB_OUTPUT"
+        echo "branch_name_template=$branch_name_template" >> "$GITHUB_OUTPUT"
+        echo "additional_permissions=$additional_permissions" >> "$GITHUB_OUTPUT"
+        echo "plugin_marketplaces=$plugin_marketplaces" >> "$GITHUB_OUTPUT"
+        echo "plugins=$plugins" >> "$GITHUB_OUTPUT"
+        echo "prompt=$prompt" >> "$GITHUB_OUTPUT"
+        echo "claude_args=$claude_args" >> "$GITHUB_OUTPUT"
+
+    - name: Run Claude Code
+      uses: anthropics/claude-code-action@v1
+      env:
+        ANTHROPIC_BASE_URL: ${{ steps.resolve.outputs.base_url }}
+        ANTHROPIC_AUTH_TOKEN: ${{ steps.resolve.outputs.auth_token }}
+      with:
+        claude_code_oauth_token: ${{ steps.resolve.outputs.auth_token }}
+        allowed_bots: ${{ steps.resolve.outputs.allowed_bots }}
+        branch_name_template: ${{ steps.resolve.outputs.branch_name_template }}
+        additional_permissions: ${{ steps.resolve.outputs.additional_permissions }}
+        plugin_marketplaces: ${{ steps.resolve.outputs.plugin_marketplaces }}
+        plugins: ${{ steps.resolve.outputs.plugins }}
+        prompt: ${{ steps.resolve.outputs.prompt }}
+        claude_args: |
+          --model ${{ steps.resolve.outputs.model }}
+          ${{ steps.resolve.outputs.claude_args }}

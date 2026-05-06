@@ -192,6 +192,7 @@ jobs:
     uses: ./.github/workflows/_ci-auto-fix-shared.yml
     secrets:
       CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+      DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
     with:
       head_sha: ${{ needs.setup.outputs.head_sha }}
       head_branch: ${{ needs.setup.outputs.head_branch }}
@@ -249,6 +250,7 @@ jobs:
     uses: ./.github/workflows/_ci-auto-fix-shared.yml
     secrets:
       CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+      DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
     with:
       head_sha: ${{ needs.setup.outputs.head_sha }}
       head_branch: ${{ needs.setup.outputs.head_branch }}
@@ -333,9 +335,17 @@ jobs:
         if: |
           steps.guard.outputs.skip != 'true' &&
           fromJSON(steps.review_comments.outputs.result).skip != true
-        uses: anthropics/claude-code-action@v1
+        uses: ./.github/actions/claude-code-with-provider
         with:
-          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          provider: ${{ vars.CLAUDE_CODE_PROVIDER || 'anthropic' }}
+          claude-oauth-token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          deepseek-api-key: ${{ secrets.DEEPSEEK_API_KEY }}
+          anthropic-base-url: ${{ vars.ANTHROPIC_BASE_URL }}
+          claude-opus-model: ${{ vars.CLAUDE_OPUS_MODEL }}
+          claude-sonnet-model: ${{ vars.CLAUDE_SONNET_MODEL }}
+          deepseek-opus-model: ${{ vars.CLAUDE_DEEPSEEK_OPUS_MODEL }}
+          deepseek-sonnet-model: ${{ vars.CLAUDE_DEEPSEEK_SONNET_MODEL }}
+          model-tier: opus
           allowed_bots: 'claude,chatgpt-codex-connector,cursor[bot],cursor,copilot-pull-request-reviewer'
           plugin_marketplaces: 'https://github.com/leanprover/skills.git'
           plugins: 'lean@leanprover'
@@ -401,7 +411,6 @@ jobs:
             - Paper-gap notes: changed notes under docs/paper-gaps/ must follow `docs/paper-gaps/policy.tex`; they should introduce notation, state the cited assertion, isolate the mathematical obstruction, compare with the blueprint and Lean statement when relevant, and give a precise verdict for third-party mathematical readers.
             If you cannot satisfy a BLOCKER category, STOP and post a PR comment explaining the obstacle instead of pushing a half-fix.
 
-          claude_args: |
-            --model claude-opus-4-7
+          claude-args: |
             --allowedTools "Edit,Write,Read,Glob,Grep,Bash(lake build),Bash(lake exe cache get),Bash(lake update),Bash(lake env),Bash(lean *),Bash(elan *),Bash(git add *),Bash(git commit *),Bash(git push *),Bash(git diff *),Bash(git status),Bash(gh pr *),Bash(gh api *),mcp__github__*"
             --append-system-prompt "This is a Lean 4 / Mathlib repository. Fix only the issues raised in the review. Prefer minimal diffs. Hold your fix to the same quality bar used by Claude Code Review (proof integrity, proof correctness, Mathlib style, type safety, performance, modularity, documentation, blueprint sync, and paper-gap notes). See docs/PROOF_INTEGRITY.md for the full integrity ruleset and docs/paper-gaps/policy.tex for paper-gap note standards. Use your judgment on when Mathlib scouting is warranted — it is essential when closing sorrys or rewriting proofs, but unnecessary for naming fixes, docstrings, style changes, or paper-gap prose unless a formal statement is involved. When scouting IS needed, use exact?, apply?, rw?, simp?, and grep Mathlib source files. Reuse Mathlib lemmas rather than reproving from scratch. If a mathematical result looks wrong, too strong, or suspiciously general, scout the LaTeX sources in Papers/ and Notes/ where the original theorems and proofs are stored — read the relevant sections, compare hypotheses and conclusions, and cite the specific paper/section when flagging a discrepancy. Generated PR comments should name the theorem, lemma, definition, proof obligation, or paper-gap assertion directly and cite paper or blueprint path, line, label, and short quotation or precise paraphrase when available. You MUST fully close every lemma and theorem — never leave sorry, admit, native_decide on non-trivial goals, or any placeholder. Validate Lean changes with lake build before committing. Use GitHub MCP tools (mcp__github__*) to comment on the PR."
