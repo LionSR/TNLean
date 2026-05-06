@@ -85,6 +85,132 @@ proved.
   lemma.
 \end{description}
 
+\subsection{Verdict}
+
+There is no mathematical discrepancy with the source theorem if the conditional
+formal hypotheses are read as names for source inputs that still have to be
+produced from the canonical-form proof.  The source theorem assumes two tensors
+already in canonical form and then compares their bases of normal tensors.  It
+does not assume arbitrary phase covers, raw cyclic-sector lists, cumulative
+pair-span fullness, or length-zero matrix product vector equality.
+
+The present formal boundary is therefore a proof gap, not a different theorem.
+The remaining inputs are the representative-family BNT cover, the exact-length
+direct-sum span supplied by block-injective canonical form, and the transport of
+those data through the common blocking and word-reindexing steps.  Until these
+inputs are proved, the downstream after-blocking theorem should stay visibly
+conditional.
+
+The phrase ``zero tail'' is formalization terminology.  The 2016 source says
+only that, after extracting the nonzero invariant blocks,
+\(\sum_k D_k \le D\), and explains this as the possible presence of zero blocks
+\cite[lines~214--219]{Cirac2016MPDO_arXiv}.  Thus a zero tail in the formal
+text means the unused all-zero block summand of dimension
+\(D - \sum_k D_k\).  It is not a paper term and should not be used without this
+definition.
+
+\subsection{Source label map}
+
+The comparison below uses the labels in the local 2016 source wherever the
+paper gives one:
+\[
+  A^i = \sum_{k=1}^r P_k B^i P_k
+      = \bigoplus_{k=1}^r \mu_k A_k^i
+  \tag{\texttt{eq:II\_Aiplusk1}}
+\]
+is the canonical-form reduction; the following source sentence adds
+\(\sum_k D_k \le D\), explaining the possible all-zero leftover block.  The
+canonical-form display is the equation labelled \texttt{eq:II\_CF1}:
+\[
+  A^i = \bigoplus_{k=1}^r \mu_k A_k^i
+  \tag{\texttt{eq:II\_CF1}}
+\]
+The phase-gauge relation used in the BNT characterization is labelled
+\texttt{eq:II:A=XAX}:
+\[
+  \tilde A_k = e^{i\phi_k} X_k A_j X_k^{-1}
+  \tag{\texttt{eq:II:A=XAX}}
+\]
+The BNT characterization is \texttt{prop:char-BNT}, and the BNT decomposition is
+the subequation labelled \texttt{eq:II\_ABasicTensors}:
+\[
+  A^i =
+  X\left[\bigoplus_{j=1}^g(M_j\otimes A_j^i)\right]X^{-1}
+  =
+  \bigoplus_{j=1}^g\bigoplus_{q=1}^{r_j}
+    \mu_{j,q}X_{j,q}A_j^iX_{j,q}^{-1}
+  \tag{\texttt{eq:II\_ABasicTensors}}
+\]
+Its matrix product vector expansion is the displayed formula labelled
+\texttt{decBSV}.  The block-injective definition and bound are labelled
+\texttt{defnbi} and \texttt{propblockinj}.  The proportional Fundamental
+Theorem is \texttt{thm1}; the equal-MPV corollary is \texttt{II\_cor2}.
+
+In the proof appendix, the normal-block overlap and phase-gauge criterion is
+\texttt{equalMPS}, the phase equality corollary is \texttt{eqV}, and the finite
+power-sum lemma is \texttt{Lem:app\_simple}.  These labels are the source
+objects that the formal BNT comparison should match.  Statements about raw
+flattened cyclic sectors, common phase covers, or cumulative pair algebras are
+formal intermediates; they are source-faithful only insofar as they are proved
+to imply the labelled BNT comparison objects above.
+
+\subsection{Formula-by-formula translation}
+
+Reading the labelled source formulas literally gives the following translation
+rules for the formal theorem surface.
+
+\begin{enumerate}
+  \item The displays \texttt{eq:II\_Aiplusk1} and \texttt{eq:II\_CF1} give a
+  block diagonal tensor
+  \[
+    A^i=\bigoplus_k \mu_k A_k^i
+  \]
+  whose displayed blocks have dimensions summing to at most the original bond
+  dimension.  The formal zero-tail parameter is therefore only the dimension of
+  the omitted all-zero summand.  It is not an additional normal tensor, a BNT
+  representative, or a separate scalar weight in the paper decomposition.
+
+  \item The phase-gauge relation \texttt{eq:II:A=XAX} and the characterization
+  \texttt{prop:char-BNT} quotient the canonical-form blocks by phase and gauge.
+  Thus the paper's BNT is a list of representatives of equivalence classes.
+  A formal common phase cover on raw cyclic sectors is not yet the paper's BNT
+  matching statement until it has been pushed down to these representatives.
+
+  \item The BNT expansion \texttt{eq:II\_ABasicTensors} and \texttt{decBSV}
+  separate the representative index \(j\) from the copy index \(q\):
+  \[
+    |V^{(N)}(A)\rangle
+      =
+    \sum_j\left(\sum_q\mu_{j,q}^N\right)|V^{(N)}(A_j)\rangle .
+  \]
+  Repeated blocks therefore appear in the paper through the power sums of the
+  weights attached to one representative.  They should not be exposed as a new
+  family of theorem-level sector-matching statements unless the statement is
+  exactly about recovering those multiplicities or weights.
+
+  \item The source definitions \texttt{defnbi} and \texttt{propblockinj} give
+  exact physical-length span after blocking:
+  \[
+    \operatorname{span}\{\tilde A^i\}_i
+      =
+    \bigoplus_j M_{D_j}(\mathbb C)
+  \]
+  for the blocked physical alphabet.  Cumulative algebra fullness, or
+  membership of the identity at length zero, is not this assertion.
+
+  \item The Fundamental Theorem \texttt{thm1} compares the BNT representatives
+  of two tensors in canonical form.  The equal-case corollary \texttt{II\_cor2}
+  then uses \texttt{Lem:app\_simple} on the already matched coefficient power
+  sums.  Hence the formal equal-case route should first establish the
+  representative matching and only then recover multiplicities and weights.
+\end{enumerate}
+
+These translation rules are also the naming rule for this part of the
+formalization.  Results that merely package raw cyclic-sector data into one of
+these hypotheses are supporting lemmas.  Theorems should be reserved for the
+source-level milestones above, or for final statements that explicitly include
+the remaining paper-facing hypotheses.
+
 \subsection{Positive-length matrix product vectors}
 
 The 2016 paper defines the matrix product vector family only for positive chain
@@ -107,7 +233,7 @@ length-zero trace.
 The first source step removes invariant subspaces. Starting from a tensor
 \(B\), the 2016 paper replaces it by block-diagonal matrices
 \[
-  A^i=\bigoplus_{k=1}^r \mu_k A_k^i
+  A^i=\bigoplus_{k=1}^r \mu_k A_k^i,\qquad \sum_kD_k\le D
 \]
 which generate the same positive-length matrix product vectors
 \cite[lines~214--225]{Cirac2016MPDO_arXiv}. Each block is then treated through
@@ -294,10 +420,10 @@ cumulative pair-span, and it is not a restatement of the empty-word observation.
 
 The equal-case source proof compares BNT decompositions after the canonical form
 has been chosen. The after-blocking theorem reaches this situation through a
-longer route: remove the zero tail, choose one common physical blocking length
-for both tensors, reindex nested blocked words against flat words, separate
-period removal from later injectivity blocking, and then compare the resulting
-nonzero sector families.
+longer route: discard the formal zero-tail summand just defined, choose one
+common physical blocking length for both tensors, reindex nested blocked words
+against flat words, separate period removal from later injectivity blocking, and
+then compare the resulting nonzero sector families.
 
 The common-blocking question is mathematical rather than clerical. If a block has
 period-removal length \(m_k\) and the final common length is \(p=m_ke_k\), the
