@@ -230,11 +230,9 @@ with nonzero weights and positive bond dimensions at a common blocking
 length.  The fields below record the additional BNT hypotheses needed
 to compare the two families and obtain a common MPV phase cover.
 
-For non-periodic tensors, the comparison is applied after choosing one
-representative for each group of common cyclic sectors with the same transported
-weight. On that representative family one can impose strict ordering, BNT
-separation, and proportional block matching without confusing sectors that
-belong to the same original block. -/
+For non-periodic tensors, the comparison is applied at the BNT-cover level:
+the representative/grouping choices are implementation details of the
+structural construction, not a separate paper-level hypothesis surface. -/
 structure CommonPrimitiveBNTCoverHypotheses
     {d p rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
@@ -259,58 +257,6 @@ structure CommonPrimitiveBNTCoverHypotheses
   /-- Proportional decomposition data linking the two block families. -/
   decompData : ProportionalDecompositionData (d := blockPhysDim d p)
     blocksA blocksB DtotA DtotB
-
-/-- BNT-cover inputs for representative common-sector families.
-
-The common cyclic-sector family can contain several sectors from the same original block with
-the same transported weight.  This structure collects the representative-sector hypotheses:
-one representative per original nonzero block, strict ordering of the representative weights,
-BNT separation among representatives, the length-zero identity for the representative nonzero
-parts, one-site injectivity, and proportional decomposition data for the two representative
-families. -/
-structure CommonRepresentativeBNTCoverHypotheses
-    {d p rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
-    {blocksA : (k : Fin rA) → MPSTensor d (dimA k)}
-    {blocksB : (k : Fin rB) → MPSTensor d (dimB k)}
-    (FA : CommonBlockedCyclicSectorFamily blocksA)
-    (FB : CommonBlockedCyclicSectorFamily blocksB)
-    (hpA : FA.p = p) (hpB : FB.p = p)
-    [∀ k, NeZero (FA.commonRepresentativeDim k)]
-    [∀ k, NeZero (FB.commonRepresentativeDim k)]
-    {zeroTailA zeroTailB DtotA DtotB : ℕ}
-    (μA : Fin rA → ℂ) (μB : Fin rB → ℂ) : Type where
-  /-- The original left nonzero-sector weights are nonzero. -/
-  left_weight_ne_zero : ∀ k, μA k ≠ 0
-  /-- The original right nonzero-sector weights are nonzero. -/
-  right_weight_ne_zero : ∀ k, μB k ≠ 0
-  /-- The transported left representative weights are strictly ordered by norm. -/
-  left_weight_strict_anti :
-    StrictAnti (fun k : Fin rA => ‖FA.commonRepresentativeWeight μA k‖)
-  /-- The transported right representative weights are strictly ordered by norm. -/
-  right_weight_strict_anti :
-    StrictAnti (fun k : Fin rB => ‖FB.commonRepresentativeWeight μB k‖)
-  /-- Distinct left representatives are not gauge-phase equivalent. -/
-  notGpeA :
-    BlocksNotGaugePhaseEquiv (d := blockPhysDim d p) (FA.commonRepresentativeBlocksAt hpA)
-  /-- Distinct right representatives are not gauge-phase equivalent. -/
-  notGpeB :
-    BlocksNotGaugePhaseEquiv (d := blockPhysDim d p) (FB.commonRepresentativeBlocksAt hpB)
-  /-- The length-zero identity for the representative nonzero parts. -/
-  zero_length_identity : ∀ σ : Fin 0 → Fin (blockPhysDim d p),
-    (zeroTailA : ℂ) +
-        mpv (toTensorFromBlocks (d := blockPhysDim d p)
-          (μ := FA.commonRepresentativeWeight μA) (FA.commonRepresentativeBlocksAt hpA)) σ =
-      (zeroTailB : ℂ) +
-        mpv (toTensorFromBlocks (d := blockPhysDim d p)
-          (μ := FB.commonRepresentativeWeight μB) (FB.commonRepresentativeBlocksAt hpB)) σ
-  /-- The left representative common-sector blocks are one-site injective. -/
-  left_injective : ∀ k, IsInjective (FA.commonRepresentativeBlocksAt hpA k)
-  /-- The right representative common-sector blocks are one-site injective. -/
-  right_injective : ∀ k, IsInjective (FB.commonRepresentativeBlocksAt hpB k)
-  /-- Proportional decomposition data linking the two representative families. -/
-  decompData : ProportionalDecompositionData (d := blockPhysDim d p)
-    (FA.commonRepresentativeBlocksAt hpA)
-    (FB.commonRepresentativeBlocksAt hpB) DtotA DtotB
 
 namespace CommonPrimitiveBNTCoverHypotheses
 
@@ -468,82 +414,6 @@ def ofNormalCanonicalFormBNT_zeroTailIdentity
       hDecomp
   exact ofNormalCanonicalFormBNT hA hB
     (zeroTail_eq_of_proportionalDecompositionConclusion hZero hMatch) hInjA hInjB hDecomp
-
-/-- Representative common-sector families give the BNT-cover hypotheses once the
-representative weights are strictly ordered, representatives are BNT-separated, and the
-remaining zero-tail, injectivity, and proportional-decomposition inputs are supplied. -/
-noncomputable def ofCommonRepresentatives_zeroTailIdentity
-    {d p rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
-    {blocksA : (k : Fin rA) → MPSTensor d (dimA k)}
-    {blocksB : (k : Fin rB) → MPSTensor d (dimB k)}
-    (FA : CommonBlockedCyclicSectorFamily blocksA)
-    (FB : CommonBlockedCyclicSectorFamily blocksB)
-    (hpA : FA.p = p) (hpB : FB.p = p)
-    [∀ k, NeZero (FA.commonRepresentativeDim k)]
-    [∀ k, NeZero (FB.commonRepresentativeDim k)]
-    {zeroTailA zeroTailB DtotA DtotB : ℕ}
-    (μA : Fin rA → ℂ) (μB : Fin rB → ℂ)
-    (hμA : ∀ k, μA k ≠ 0)
-    (hμB : ∀ k, μB k ≠ 0)
-    (hAntiA : StrictAnti (fun k : Fin rA => ‖FA.commonRepresentativeWeight μA k‖))
-    (hAntiB : StrictAnti (fun k : Fin rB => ‖FB.commonRepresentativeWeight μB k‖))
-    (hNotGpeA : BlocksNotGaugePhaseEquiv (d := blockPhysDim d p)
-      (FA.commonRepresentativeBlocksAt hpA))
-    (hNotGpeB : BlocksNotGaugePhaseEquiv (d := blockPhysDim d p)
-      (FB.commonRepresentativeBlocksAt hpB))
-    (hZero : ∀ σ : Fin 0 → Fin (blockPhysDim d p),
-      (zeroTailA : ℂ) +
-          mpv (toTensorFromBlocks (d := blockPhysDim d p) (μ := FA.commonRepresentativeWeight μA)
-            (FA.commonRepresentativeBlocksAt hpA)) σ =
-        (zeroTailB : ℂ) +
-          mpv (toTensorFromBlocks (d := blockPhysDim d p) (μ := FB.commonRepresentativeWeight μB)
-            (FB.commonRepresentativeBlocksAt hpB)) σ)
-    (hInjA : ∀ k, IsInjective
-      (FA.commonRepresentativeBlocksAt hpA k))
-    (hInjB : ∀ k, IsInjective
-      (FB.commonRepresentativeBlocksAt hpB k))
-    (hDecomp : ProportionalDecompositionData (d := blockPhysDim d p)
-      (FA.commonRepresentativeBlocksAt hpA)
-      (FB.commonRepresentativeBlocksAt hpB) DtotA DtotB) :
-    CommonPrimitiveBNTCoverHypotheses (zeroTailA := zeroTailA) (zeroTailB := zeroTailB)
-      (DtotA := DtotA) (DtotB := DtotB)
-      (FA.commonRepresentativeWeight μA) (FB.commonRepresentativeWeight μB)
-      (FA.commonRepresentativeBlocksAt hpA)
-      (FB.commonRepresentativeBlocksAt hpB) := by
-  exact ofNormalCanonicalFormBNT_zeroTailIdentity
-    (isNormalCanonicalFormBNT_commonRepresentativeBlocksAt
-      FA hpA μA hμA hAntiA hNotGpeA)
-    (isNormalCanonicalFormBNT_commonRepresentativeBlocksAt
-      FB hpB μB hμB hAntiB hNotGpeB)
-    hZero hInjA hInjB hDecomp
-
-/-- Representative BNT-cover data convert to the primitive BNT-cover hypotheses for the
-representative common-sector families. -/
-noncomputable def ofCommonRepresentativeBNTCoverHypotheses
-    {d p rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
-    {blocksA : (k : Fin rA) → MPSTensor d (dimA k)}
-    {blocksB : (k : Fin rB) → MPSTensor d (dimB k)}
-    (FA : CommonBlockedCyclicSectorFamily blocksA)
-    (FB : CommonBlockedCyclicSectorFamily blocksB)
-    (hpA : FA.p = p) (hpB : FB.p = p)
-    [∀ k, NeZero (FA.commonRepresentativeDim k)]
-    [∀ k, NeZero (FB.commonRepresentativeDim k)]
-    {zeroTailA zeroTailB DtotA DtotB : ℕ}
-    (μA : Fin rA → ℂ) (μB : Fin rB → ℂ)
-    (h : CommonRepresentativeBNTCoverHypotheses (zeroTailA := zeroTailA)
-      (zeroTailB := zeroTailB) (DtotA := DtotA) (DtotB := DtotB)
-      FA FB hpA hpB μA μB) :
-    CommonPrimitiveBNTCoverHypotheses (zeroTailA := zeroTailA) (zeroTailB := zeroTailB)
-      (DtotA := DtotA) (DtotB := DtotB)
-      (FA.commonRepresentativeWeight μA) (FB.commonRepresentativeWeight μB)
-      (FA.commonRepresentativeBlocksAt hpA)
-      (FB.commonRepresentativeBlocksAt hpB) :=
-  ofCommonRepresentatives_zeroTailIdentity
-    FA FB hpA hpB μA μB
-    h.left_weight_ne_zero h.right_weight_ne_zero
-    h.left_weight_strict_anti h.right_weight_strict_anti
-    h.notGpeA h.notGpeB
-    h.zero_length_identity h.left_injective h.right_injective h.decompData
 
 /-- BNT-cover hypotheses produce a common MPV phase cover. -/
 lemma toMPVCommonPhaseCover
