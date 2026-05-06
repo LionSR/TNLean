@@ -12,7 +12,7 @@ import TNLean.MPS.CanonicalForm.Assembly.SectorComparisonCore
 /-!
 # Canonical-form reduction after blocking
 
-This module is the public entry point for the end-to-end canonical-form
+This module is the public entry point for the complete canonical-form
 reduction after blocking. It keeps the historical import path
 `TNLean.MPS.CanonicalForm.Assembly` available while the underlying development is
 split across focused supporting modules.
@@ -68,14 +68,13 @@ The imported modules provide the canonical-form reduction theorems, including
 `bilateral_commonPeriod_blocking_tp_primitive_normal`, and
 `exists_bilateral_tp_primitive_blockDecomp_after_blocking`.
 
-This public entry point also records a conditional formulation of the
-Cirac--Pérez-García--Schuch--Verstraete after-blocking theorem that does not
-invoke the periodic Fundamental Theorem.  The structure
-`AfterBlockingFundamentalTheoremHypotheses` names the remaining comparison inputs,
-while `fundamentalTheorem_afterBlocking_of_comparisonHypotheses` gives the
-corresponding sector-decomposition conclusion: after blocking, the two tensors
-are represented by BNT sector decompositions whose basis sectors and weights
-match up to permutation and nonzero phases.
+The after-blocking comparison of two tensors with the same MPV family has a
+conditional form here. Equality of MPV families gives the common blocking and
+common primitive sector data; the BNT-cover comparison data for those sectors
+are separate hypotheses. Under those hypotheses,
+`fundamentalTheorem_afterBlocking_of_comparisonHypotheses` gives BNT sector
+decompositions whose basis sectors and weights match up to permutation and
+nonzero phases.
 
 ## References
 
@@ -91,21 +90,20 @@ open scoped Matrix BigOperators ComplexOrder MatrixOrder
 
 namespace MPSTensor
 
-/-- Remaining hypotheses for the after-blocking Fundamental Theorem formulation.
+/-- BNT-cover comparison hypotheses for the after-blocking comparison theorem.
 
-Starting from `SameMPV₂ A B`, the present derivation constructs common primitive
-nonzero-sector families after a common blocking.  The blocked-word relabeling assertion is now
-derived in this formulation from the grouped-block cast theorem.  To reach the sector-weight
-conclusion of the Cirac--Pérez-García--Schuch--Verstraete Fundamental Theorem for exactly those
-produced families, one still needs comparison data for those produced families.  The field
-`comparison` is supplied with their trace-preserving, primitive, irreducible, and positive
-bond-dimension evidence, so the remaining assumptions cannot be applied to a different
-decomposition. -/
+For tensors with the same MPV family, the structural reduction gives common primitive
+nonzero-sector families after a common blocking.  The blocked-word relabeling assertion is
+derived from the grouped-block cast theorem.  This predicate supplies the additional BNT-cover
+comparison data for those exact families; equality of MPV families alone is not used here to
+derive that data.  The field `comparison` includes their trace-preserving, primitive,
+irreducible, and positive bond-dimension evidence, so the comparison assumptions are tied to the
+families obtained after blocking. -/
 structure AfterBlockingFundamentalTheoremHypotheses
     {d D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂) : Prop where
-  /-- The remaining BNT-cover comparison data for the produced common primitive
-  nonzero-sector families, with the structural evidence for trace preservation,
-  primitivity, irreducibility, and positive bond dimensions supplied. -/
+  /-- BNT-cover comparison data for the reindexed common primitive nonzero-sector families, with
+  the structural evidence for trace preservation, primitivity, irreducibility, and positive bond
+  dimensions supplied. -/
   comparison : ∀ {p zeroTailA zeroTailB rA rB : ℕ}
       {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
       [∀ x : Fin rA, NeZero (dimA x)]
@@ -151,7 +149,7 @@ structure AfterBlockingFundamentalTheoremHypotheses
           (CommonPrimitiveBNTCoverHypotheses (zeroTailA := zeroTailA) (zeroTailB := zeroTailB)
             (DtotA := DtotA) (DtotB := DtotB) μA μB blocksA blocksB)
 
-/-- Conclusion of the conditional after-blocking Fundamental Theorem formulation.
+/-- Conclusion obtained from supplied after-blocking comparison data.
 
 The conclusion follows the Cirac--Pérez-García--Schuch--Verstraete statement at the level of
 BNT sector decompositions.  After one positive blocking, there are sector decompositions `P` and
@@ -196,15 +194,14 @@ structure AfterBlockingFundamentalTheoremConclusion
       Finset.univ.val.map
         (fun q => phase j * Q.weight (perm j) (Fin.cast (copies_eq j) q))
 
-/-- **Conditional after-blocking Fundamental Theorem formulation.**
+/-- **After-blocking comparison from supplied BNT-cover data.**
 
-Let `A` and `B` generate the same MPV family.  Under the explicit remaining comparison
-hypotheses, there is a positive blocking after which the two tensors admit BNT sector
+Let `A` and `B` generate the same MPV family.  If BNT-cover comparison data are supplied for
+the common primitive nonzero-sector families obtained after blocking, there is a positive
+blocking after which the two tensors admit BNT sector
 decompositions with the same sector MPV family, matched basis-sector multiplicities, and matched
-sector-weight multisets up to nonzero phases.  This is the conditional formulation proved by the
-present periodic-theorem-free derivation: it is a direct consequence of
-`afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_bntCover`, not a hidden
-assumption or an appeal to the periodic Fundamental Theorem. -/
+sector-weight multisets up to nonzero phases.  The `comparison` field is an independent
+hypothesis of this theorem; the result does not derive it from `SameMPV₂`. -/
 theorem fundamentalTheorem_afterBlocking_of_comparisonHypotheses
     {d D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
