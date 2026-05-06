@@ -2701,9 +2701,9 @@ summand $\mathbf{0}_{d,D_0}$ used to retain the $N=0$ MPV coefficient.
 \begin{theorem}[TP-primitive irreducible tensor is normal]%
 	\label{thm:normal_tp_primitive_irred}
 	\lean{MPSTensor.isNormal_of_tp_primitive_irreducible}
-	\leanok
-	\uses{def:primitive_mps, def:irreducible_tensor, def:normal,
-		thm:psd_fp_pd_irred}
+		\leanok
+		\uses{def:primitive_mps, def:primitive_channel, def:irreducible_tensor,
+			def:normal}
 	Let $A$ be a left-canonical MPS tensor with $D > 0$,
 	irreducible tensor action, and primitive transfer map, equivalently
 	peripheral spectrum $\{1\}$.
@@ -2712,8 +2712,9 @@ summand $\mathbf{0}_{d,D_0}$ used to retain the $N=0$ MPV coefficient.
 
 \begin{proof}\leanok
 	\uses{thm:normal_from_primitive_posdef, thm:psd_fp_pd_irred}
-	The channel-theoretic input from Wolf Chapter~6 is used in three distinct
-	places.  First, trace preservation fixes the left-canonical convention, and
+		The channel-theoretic results of \cite[Chapter~6]{Wolf2012Quantum} are used
+		in three distinct places.  First, trace preservation fixes the
+		left-canonical convention, and
 	peripheral primitivity says that the only peripheral eigenvalue of
 	$\E_A$ is~$1$.  Together with irreducibility, this gives a primitive
 	Perron fixed-point datum.  Second, irreducibility upgrades the nonzero

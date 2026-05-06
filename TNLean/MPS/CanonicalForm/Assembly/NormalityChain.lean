@@ -72,9 +72,8 @@ For a single MPS tensor that is left-canonical (TP), has a primitive transfer ma
 (peripheral eigenvalues = {1}), and is irreducible (no nontrivial invariant
 projection), the tensor is normal (eventually full Kraus rank).
 
-Here `hPrim` is the peripheral-primitivity hypothesis for the transfer map:
-the only peripheral eigenvalue is `1`.  The conclusion is obtained by the
-following implications:
+The transfer-map primitivity hypothesis says that the only peripheral eigenvalue
+is `1`.  The conclusion is obtained by the following implications:
 
 * TP + peripheral primitivity + irreducibility give an `IsPrimitiveMPS` datum,
   including a Perron fixed point for the transfer map.
@@ -88,7 +87,8 @@ theorem isNormal_of_tp_primitive_irreducible [NeZero D]
     (hPrim : _root_.IsPrimitive (transferMap (d := d) (D := D) A))
     (hIrr : IsIrreducibleTensor A) :
     IsNormal A := by
-  -- Step 1: Peripheral primitivity plus irreducibility gives primitive MPS data.
+  -- Step 1: TP normalization, peripheral primitivity, and irreducibility give
+  -- primitive MPS data.
   have hMPSPrim : MPSTensor.HasPrimitiveFixedPoint A :=
     hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible A hIrr hTP hPrim
   -- Step 2: Extract the Perron fixed point.
