@@ -159,59 +159,102 @@ theorem isBlockDiagonal'_of_commutes_reindexed_toTensorFromBlocks_of_wordTuple_s
       (d := d) (dim := dim) μ A hμ hSpan)
     hComm
 
-/-- Canonical-form/BNT data plus finite block-selector words give full product-word span.
+/-- Block injectivity plus finite block-selector words give full product-word span.
 
-The remaining paper-level separation step is the construction of the selector words
-from the BNT non-equivalence hypothesis. Once those selectors are available,
-canonical-form injectivity supplies a one-letter prefix spanning the selected
-block algebra, and concatenating prefix and selector words spans the whole
-product algebra. -/
-theorem wordTupleSpanTop_of_isCanonicalFormBNT_of_blockSelectorWords
-    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
-    (hCF : IsCanonicalFormBNT μ A) {S : ℕ}
+Once the selector words are available, only blockwise injectivity is needed:
+a one-letter prefix spans the selected block algebra, and concatenating the
+prefix and selector words spans the whole product algebra. -/
+theorem wordTupleSpanTop_of_hasInjectiveBlocks_of_blockSelectorWords
+    (A : (k : Fin r) → MPSTensor d (dim k))
+    (hInj : HasInjectiveBlocks (d := d) A) {S : ℕ}
     (hSel : HasBlockSelectorWords A S) :
     WordTupleSpanTop A (1 + S) := by
   refine wordTupleSpanTop_of_common_blockInjective_of_blockSelectorWords
     (A := A) (L := 1) (S := S) ?_ hSel
   intro k
-  exact isNBlkInjective_one_of_isInjective (hCF.toHasInjectiveBlocks.block_injective k)
+  exact isNBlkInjective_one_of_isInjective (hInj.block_injective k)
 
-/-- Canonical-form/BNT data plus pairwise block-separating word polynomials give
-full product-word span.
+/-- Canonical-form/BNT data plus finite block-selector words give full product-word span. -/
+theorem wordTupleSpanTop_of_isCanonicalFormBNT_of_blockSelectorWords
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hCF : IsCanonicalFormBNT μ A) {S : ℕ}
+    (hSel : HasBlockSelectorWords A S) :
+    WordTupleSpanTop A (1 + S) :=
+  wordTupleSpanTop_of_hasInjectiveBlocks_of_blockSelectorWords A hCF.toHasInjectiveBlocks hSel
+
+/-- Block injectivity plus pairwise block-separating word polynomials give full
+product-word span.
 
 The pairwise hypotheses ask only for a word polynomial separating one ordered
 pair of distinct blocks at a time.  The finite selector assembly in
 `hasBlockSelectorWords_of_pairBlockSeparatingWords` turns these pairwise
 separators into full block selectors, and the selector-word reduction then gives
 product-word span. -/
+theorem wordTupleSpanTop_of_hasInjectiveBlocks_of_pairBlockSeparatingWords
+    (A : (k : Fin r) → MPSTensor d (dim k))
+    (hInj : HasInjectiveBlocks (d := d) A) {S : ℕ}
+    (hPair : HasPairBlockSeparatingWords A S) :
+    WordTupleSpanTop A (1 + (r - 1) * S) :=
+  wordTupleSpanTop_of_hasInjectiveBlocks_of_blockSelectorWords A hInj
+    (hasBlockSelectorWords_of_pairBlockSeparatingWords A hPair)
+
+/-- Canonical-form/BNT data plus pairwise block-separating word polynomials give
+full product-word span. -/
 theorem wordTupleSpanTop_of_isCanonicalFormBNT_of_pairBlockSeparatingWords
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hCF : IsCanonicalFormBNT μ A) {S : ℕ}
     (hPair : HasPairBlockSeparatingWords A S) :
     WordTupleSpanTop A (1 + (r - 1) * S) :=
-  wordTupleSpanTop_of_isCanonicalFormBNT_of_blockSelectorWords μ A hCF
-    (hasBlockSelectorWords_of_pairBlockSeparatingWords A hPair)
+  wordTupleSpanTop_of_hasInjectiveBlocks_of_pairBlockSeparatingWords A
+    hCF.toHasInjectiveBlocks hPair
 
-/-- Canonical-form/BNT data plus a finite pair trace-separation criterion give
-full product-word span.
+/-- Block injectivity plus a finite pair trace-separation criterion give full
+product-word span.
 
 Once every ordered distinct pair has a common homogeneous trace-separating
 length, pair trace-separation duality gives pairwise separating word
 polynomials, and the selector-word construction spans the full product algebra. -/
+theorem wordTupleSpanTop_of_hasInjectiveBlocks_of_pairTraceSeparatingAt
+    (A : (k : Fin r) → MPSTensor d (dim k))
+    (hInj : HasInjectiveBlocks (d := d) A) {S : ℕ}
+    (hSep : ∀ k j : Fin r, j ≠ k → PairTraceSeparatingAt (A k) (A j) S) :
+    WordTupleSpanTop A (1 + (r - 1) * S) :=
+  wordTupleSpanTop_of_hasInjectiveBlocks_of_pairBlockSeparatingWords A hInj
+    (hasPairBlockSeparatingWords_of_forall_pairTraceSeparatingAt A hSep)
+
+/-- Canonical-form/BNT data plus a finite pair trace-separation criterion give
+full product-word span. -/
 theorem wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingAt
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hCF : IsCanonicalFormBNT μ A) {S : ℕ}
     (hSep : ∀ k j : Fin r, j ≠ k → PairTraceSeparatingAt (A k) (A j) S) :
     WordTupleSpanTop A (1 + (r - 1) * S) :=
-  wordTupleSpanTop_of_isCanonicalFormBNT_of_pairBlockSeparatingWords μ A hCF
-    (hasPairBlockSeparatingWords_of_forall_pairTraceSeparatingAt A hSep)
+  wordTupleSpanTop_of_hasInjectiveBlocks_of_pairTraceSeparatingAt A
+    hCF.toHasInjectiveBlocks hSep
 
-/-- Canonical-form/BNT data plus cumulative pair trace separation and exact
-identity padding give full product-word span.
+/-- Block injectivity plus cumulative pair trace separation and exact identity
+padding give full product-word span.
 
 The cumulative finite cutoff gives homogeneous separation at length `T` when
 each ordered pair has simultaneous identity padding at the complementary lengths
 needed to reach `T`. -/
+theorem wordTupleSpanTop_of_hasInjectiveBlocks_of_pairTraceSeparatingUpTo_of_identity_padding
+    (A : (k : Fin r) → MPSTensor d (dim k))
+    (hInj : HasInjectiveBlocks (d := d) A) {S T : ℕ}
+    (hST : S ≤ T)
+    (hSep : ∀ k j : Fin r, j ≠ k → PairTraceSeparatingUpTo (A k) (A j) S)
+    (hPad : ∀ k j : Fin r, j ≠ k → ∀ l : ℕ, l ≤ S →
+      ((1 : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
+          (1 : Matrix (Fin (dim j)) (Fin (dim j)) ℂ)) ∈
+        Submodule.span ℂ (Set.range (pairWordTuple (A k) (A j) (T - l)))) :
+    WordTupleSpanTop A (1 + (r - 1) * T) :=
+  wordTupleSpanTop_of_hasInjectiveBlocks_of_pairTraceSeparatingAt A hInj
+    (fun k j hjk =>
+      pairTraceSeparatingAt_of_pairTraceSeparatingUpTo_of_identity_padding
+        (A k) (A j) hST (hSep k j hjk) (hPad k j hjk))
+
+/-- Canonical-form/BNT data plus cumulative pair trace separation and exact
+identity padding give full product-word span. -/
 theorem wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingUpTo_of_identity_padding
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hCF : IsCanonicalFormBNT μ A) {S T : ℕ}
@@ -222,10 +265,23 @@ theorem wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingUpTo_of_ide
           (1 : Matrix (Fin (dim j)) (Fin (dim j)) ℂ)) ∈
         Submodule.span ℂ (Set.range (pairWordTuple (A k) (A j) (T - l)))) :
     WordTupleSpanTop A (1 + (r - 1) * T) :=
-  wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingAt μ A hCF
-    (fun k j hjk =>
-      pairTraceSeparatingAt_of_pairTraceSeparatingUpTo_of_identity_padding
-        (A k) (A j) hST (hSep k j hjk) (hPad k j hjk))
+  wordTupleSpanTop_of_hasInjectiveBlocks_of_pairTraceSeparatingUpTo_of_identity_padding
+    A hCF.toHasInjectiveBlocks hST hSep hPad
+
+/-- Positive-length product-word span from block injectivity and
+pairwise block-separating word polynomials. -/
+theorem exists_pos_productWordSpan_of_hasInjectiveBlocks_of_pairBlockSeparatingWords
+    (A : (k : Fin r) → MPSTensor d (dim k))
+    (hInj : HasInjectiveBlocks (d := d) A) {S : ℕ}
+    (hPair : HasPairBlockSeparatingWords A S) :
+    ∃ m : ℕ, 0 < m ∧
+      Submodule.span ℂ (Set.range fun ω : Fin m → Fin d =>
+        fun k : Fin r => evalWord (A k) (List.ofFn ω)) =
+      (⊤ : Submodule ℂ
+        ((k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) := by
+  refine ⟨1 + (r - 1) * S, Nat.add_pos_left Nat.zero_lt_one _, ?_⟩
+  simpa [WordTupleSpanTop, wordTuple] using
+    wordTupleSpanTop_of_hasInjectiveBlocks_of_pairBlockSeparatingWords A hInj hPair
 
 /-- Positive-length product-word span from canonical-form/BNT data and
 pairwise block-separating word polynomials. -/
@@ -237,10 +293,24 @@ theorem exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairBlockSeparatingW
       Submodule.span ℂ (Set.range fun ω : Fin m → Fin d =>
         fun k : Fin r => evalWord (A k) (List.ofFn ω)) =
       (⊤ : Submodule ℂ
+        ((k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) :=
+  exists_pos_productWordSpan_of_hasInjectiveBlocks_of_pairBlockSeparatingWords A
+    hCF.toHasInjectiveBlocks hPair
+
+/-- Positive-length product-word span obtained from block injectivity and
+the finite pair trace-separation criterion. -/
+theorem exists_pos_productWordSpan_of_hasInjectiveBlocks_of_pairTraceSeparatingAt
+    (A : (k : Fin r) → MPSTensor d (dim k))
+    (hInj : HasInjectiveBlocks (d := d) A) {S : ℕ}
+    (hSep : ∀ k j : Fin r, j ≠ k → PairTraceSeparatingAt (A k) (A j) S) :
+    ∃ m : ℕ, 0 < m ∧
+      Submodule.span ℂ (Set.range fun ω : Fin m → Fin d =>
+        fun k : Fin r => evalWord (A k) (List.ofFn ω)) =
+      (⊤ : Submodule ℂ
         ((k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) := by
   refine ⟨1 + (r - 1) * S, Nat.add_pos_left Nat.zero_lt_one _, ?_⟩
   simpa [WordTupleSpanTop, wordTuple] using
-    wordTupleSpanTop_of_isCanonicalFormBNT_of_pairBlockSeparatingWords μ A hCF hPair
+    wordTupleSpanTop_of_hasInjectiveBlocks_of_pairTraceSeparatingAt A hInj hSep
 
 /-- Positive-length product-word span obtained from canonical-form/BNT data and
 the finite pair trace-separation criterion. -/
@@ -252,10 +322,9 @@ theorem exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingA
       Submodule.span ℂ (Set.range fun ω : Fin m → Fin d =>
         fun k : Fin r => evalWord (A k) (List.ofFn ω)) =
       (⊤ : Submodule ℂ
-        ((k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) := by
-  refine ⟨1 + (r - 1) * S, Nat.add_pos_left Nat.zero_lt_one _, ?_⟩
-  simpa [WordTupleSpanTop, wordTuple] using
-    wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingAt μ A hCF hSep
+        ((k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) :=
+  exists_pos_productWordSpan_of_hasInjectiveBlocks_of_pairTraceSeparatingAt A
+    hCF.toHasInjectiveBlocks hSep
 
 /-- Positive-length product-word span from canonical-form/BNT separation and
 the source-faithful three-block direct-sum hypotheses.
@@ -618,11 +687,29 @@ theorem
     wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingUpTo_of_identity_padding
       μ A hCF hST hSep hPad
 
+/-- Positive-length product-word span obtained from block injectivity and finite
+block-selector words.
+
+This separates the selector-word hypothesis from the product-span conclusion, anticipating
+the finite selector-word existence theorem. -/
+theorem exists_pos_productWordSpan_of_hasInjectiveBlocks_of_blockSelectorWords
+    (A : (k : Fin r) → MPSTensor d (dim k))
+    (hInj : HasInjectiveBlocks (d := d) A) {S : ℕ}
+    (hSel : HasBlockSelectorWords A S) :
+    ∃ m : ℕ, 0 < m ∧
+      Submodule.span ℂ (Set.range fun ω : Fin m → Fin d =>
+        fun k : Fin r => evalWord (A k) (List.ofFn ω)) =
+      (⊤ : Submodule ℂ
+        ((k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) := by
+  refine ⟨1 + S, Nat.add_pos_left Nat.zero_lt_one S, ?_⟩
+  simpa [WordTupleSpanTop, wordTuple] using
+    wordTupleSpanTop_of_hasInjectiveBlocks_of_blockSelectorWords A hInj hSel
+
 /-- Positive-length product-word span obtained from canonical-form/BNT data and
 finite block-selector words.
 
-This is the goal shape with the still-missing selector-word theorem
-kept explicit rather than replaced by the conclusion. -/
+This separates the selector-word hypothesis from the product-span conclusion, anticipating
+the finite selector-word existence theorem. -/
 theorem exists_pos_productWordSpan_of_isCanonicalFormBNT_of_blockSelectorWords
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hCF : IsCanonicalFormBNT μ A) {S : ℕ}
@@ -632,9 +719,24 @@ theorem exists_pos_productWordSpan_of_isCanonicalFormBNT_of_blockSelectorWords
         fun k : Fin r => evalWord (A k) (List.ofFn ω)) =
       (⊤ : Submodule ℂ
         ((k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) := by
-  refine ⟨1 + S, Nat.add_pos_left Nat.zero_lt_one S, ?_⟩
-  simpa [WordTupleSpanTop, wordTuple] using
-    wordTupleSpanTop_of_isCanonicalFormBNT_of_blockSelectorWords μ A hCF hSel
+  exact exists_pos_productWordSpan_of_hasInjectiveBlocks_of_blockSelectorWords A
+    hCF.toHasInjectiveBlocks hSel
+
+/-- Nonzero weights, block injectivity, and selector words give the projection-span
+input for the assembled tensor. -/
+theorem blockProjection_mem_span_reindexed_toTensorFromBlocks_of_selectorWords
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hμ : ∀ k : Fin r, μ k ≠ 0)
+    (hInj : HasInjectiveBlocks (d := d) A) {S : ℕ}
+    (hSel : HasBlockSelectorWords A S) :
+    ∀ k : Fin r,
+      Matrix.blockProjection (n := fun k : Fin r => Fin (dim k)) (R := ℂ) k ∈
+        Submodule.span ℂ (Set.range fun ω : Fin (1 + S) → Fin d =>
+          Matrix.reindex finSigmaFinEquiv.symm finSigmaFinEquiv.symm
+            (evalWord (toTensorFromBlocks (d := d) (μ := μ) A) (List.ofFn ω))) := by
+  exact blockProjection_mem_span_reindexed_toTensorFromBlocks_of_wordTupleSpanTop
+    (d := d) (dim := dim) μ A hμ
+    (wordTupleSpanTop_of_hasInjectiveBlocks_of_blockSelectorWords A hInj hSel)
 
 /-- Canonical-form/BNT data and selector words give the projection-span input for
 the assembled tensor. -/
@@ -647,9 +749,30 @@ theorem blockProjection_mem_span_reindexed_toTensorFromBlocks_of_bntSelectorWord
         Submodule.span ℂ (Set.range fun ω : Fin (1 + S) → Fin d =>
           Matrix.reindex finSigmaFinEquiv.symm finSigmaFinEquiv.symm
             (evalWord (toTensorFromBlocks (d := d) (μ := μ) A) (List.ofFn ω))) := by
-  exact blockProjection_mem_span_reindexed_toTensorFromBlocks_of_wordTupleSpanTop
+  exact blockProjection_mem_span_reindexed_toTensorFromBlocks_of_selectorWords
     (d := d) (dim := dim) μ A hCF.toHasStrictOrderedNonzeroWeights.mu_ne_zero
-    (wordTupleSpanTop_of_isCanonicalFormBNT_of_blockSelectorWords μ A hCF hSel)
+    hCF.toHasInjectiveBlocks hSel
+
+/-- Selector-word version of the assembled-tensor commutant criterion.
+
+The finite selectors and block injectivity give the projection-span input; only
+nonzero assembly weights are needed to pass through `toTensorFromBlocks`. -/
+theorem isBlockDiagonal'_of_commutes_reindexed_toTensorFromBlocks_of_selectorWords
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hμ : ∀ k : Fin r, μ k ≠ 0)
+    (hInj : HasInjectiveBlocks (d := d) A) {S : ℕ}
+    (hSel : HasBlockSelectorWords A S)
+    {X : Matrix (Fin (∑ k : Fin r, dim k)) (Fin (∑ k : Fin r, dim k)) ℂ}
+    (hComm : ∀ ω : Fin (1 + S) → Fin d,
+      X * evalWord (toTensorFromBlocks (d := d) (μ := μ) A) (List.ofFn ω) =
+        evalWord (toTensorFromBlocks (d := d) (μ := μ) A) (List.ofFn ω) * X) :
+    Matrix.IsBlockDiagonal'
+      (Matrix.reindex finSigmaFinEquiv.symm finSigmaFinEquiv.symm X) := by
+  exact isBlockDiagonal'_of_commutes_reindexed_wordSpan
+    (B := toTensorFromBlocks (d := d) (μ := μ) A)
+    (blockProjection_mem_span_reindexed_toTensorFromBlocks_of_selectorWords
+      (d := d) (dim := dim) μ A hμ hInj hSel)
+    hComm
 
 /-- Selector-word version of the assembled-tensor commutant criterion.
 
@@ -666,11 +789,9 @@ theorem isBlockDiagonal'_of_commutes_reindexed_toTensorFromBlocks_of_bntSelector
         evalWord (toTensorFromBlocks (d := d) (μ := μ) A) (List.ofFn ω) * X) :
     Matrix.IsBlockDiagonal'
       (Matrix.reindex finSigmaFinEquiv.symm finSigmaFinEquiv.symm X) := by
-  exact isBlockDiagonal'_of_commutes_reindexed_wordSpan
-    (B := toTensorFromBlocks (d := d) (μ := μ) A)
-    (blockProjection_mem_span_reindexed_toTensorFromBlocks_of_bntSelectorWords
-      (d := d) (dim := dim) μ A hCF hSel)
-    hComm
+  exact isBlockDiagonal'_of_commutes_reindexed_toTensorFromBlocks_of_selectorWords
+    (d := d) (dim := dim) μ A hCF.toHasStrictOrderedNonzeroWeights.mu_ne_zero
+    hCF.toHasInjectiveBlocks hSel hComm
 
 /-- Entrywise off-block-zero corollary of
 `isBlockDiagonal'_of_commutes_reindexed_wordSpan`.
