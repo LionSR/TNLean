@@ -1620,7 +1620,7 @@ span.
     This assembles the full chain:
     \[
         \text{irreducible tensor}
-        \;\xrightarrow{\ref{thm:irreducible_tensor_to_action}}\;
+        \;\xrightarrow{\ref{lem:irreducible_tensor_to_action}}\;
         \text{irreducible action}
         \;\xrightarrow{\text{Burnside}}\;
         \algspn(A) = \MN{D}
@@ -1630,16 +1630,15 @@ span.
     This corresponds to the irreducibility-to-normality direction of
     \cite[Proposition~3]{Sanz2010Quantum}.
     For the Burnside step, we appeal forward to
-    Theorems~\ref{thm:irreducible_tensor_to_action}
-    and~\ref{thm:burnside_matrix}; this is a
-    presentation-level forward dependency,
-    but the mathematical dependency is acyclic.
+    Lemma~\ref{lem:irreducible_tensor_to_action}
+    and~\ref{thm:burnside_matrix}; these references point forward in the
+    chapter order, but the mathematical dependency is acyclic.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:algspan_to_normal, thm:burnside_matrix,
-          thm:irreducible_tensor_to_action}
-    By Theorem~\ref{thm:irreducible_tensor_to_action},
+          lem:irreducible_tensor_to_action}
+    By Lemma~\ref{lem:irreducible_tensor_to_action},
     $A$ acts irreducibly on $\C^D$.
     By Theorem~\ref{thm:burnside_matrix},
     $\algspn(A) = \MN{D}$.
