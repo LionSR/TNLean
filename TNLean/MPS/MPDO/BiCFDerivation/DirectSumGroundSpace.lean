@@ -109,18 +109,9 @@ theorem bondDim_eq_and_groundSpace_eq_of_groundSpace_le_of_isNBlkInjective_of_di
     (hA : IsNBlkInjective A L) (hB : IsNBlkInjective B L)
     (hD : D₂ ≤ D₁) (hLe : groundSpace A L ≤ groundSpace B L) :
     D₁ = D₂ ∧ groundSpace A L = groundSpace B L := by
-  have hfinLe := Submodule.finrank_mono hLe
-  have hfinA := groundSpace_finrank_eq_of_isNBlkInjective (A := A) hA
-  have hfinB := groundSpace_finrank_eq_of_isNBlkInjective (A := B) hB
-  have hsq_le : D₁ ^ 2 ≤ D₂ ^ 2 := by
-    simpa [hfinA, hfinB] using hfinLe
-  have hsq_ge : D₂ ^ 2 ≤ D₁ ^ 2 := Nat.pow_le_pow_left hD 2
-  have hsq : D₁ ^ 2 = D₂ ^ 2 := le_antisymm hsq_le hsq_ge
-  have hD_eq : D₁ = D₂ := Nat.mul_self_inj.mp (by simpa [pow_two] using hsq)
-  have hfinEq :
-      Module.finrank ℂ (groundSpace A L) = Module.finrank ℂ (groundSpace B L) := by
-    simpa [hfinA, hfinB] using hsq
-  exact ⟨hD_eq, Submodule.eq_of_le_of_finrank_eq hLe hfinEq⟩
+  rw [groundSpace_eq_leftTraceWordMap_range A L, groundSpace_eq_leftTraceWordMap_range B L]
+    at hLe ⊢
+  exact leftTraceWordMap_range_eq_of_range_le_of_isNBlkInjective_of_dim_ge hA hB hD hLe
 
 /-- The three-block trace relation plus the paper's size ordering gives equality
 of finite-chain image spaces in the two-block direct-sum argument. -/
