@@ -6,7 +6,7 @@ import TNLean.PiAlgebra.Construction
 import TNLean.MPS.FundamentalTheorem.Multi
 
 /-!
-# End-to-end multi-block Fundamental Theorem from per-block SameMPV
+# Multi-block Fundamental Theorem from per-block SameMPV
 
 This file provides the complete construction from per-block `SameMPV` to:
 - Per-block gauge equivalence
@@ -18,11 +18,11 @@ It also handles the single-block case where `SameMPV₂` directly gives `SameMPV
 ## Main results
 
 * `fundamentalTheorem_multiBlock_full` — multi-block FT with per-block and global gauge
-* `fundamentalTheorem_multiBlock_decomposition` — support lemma exposing block permutation
+* `fundamentalTheorem_multiBlock_decomposition` — auxiliary lemma exposing block permutation
 * `sameMPV₂_single_block` — for `r = 1`, SameMPV₂ gives per-block SameMPV (no PF needed)
 * `fundamentalTheorem_singleBlock_fromMPV₂` — single-block FT from SameMPV₂
-* `fundamentalTheorem_multiBlock_fromSameMPV₂` — end-to-end from SameMPV₂ + separation hyp
-* `perBlock_sameMPV_iff_gaugeEquiv` — support lemma for SameMPV ↔ GaugeEquiv under injectivity
+* `fundamentalTheorem_multiBlock_fromSameMPV₂` — from SameMPV₂ and separation data
+* `perBlock_sameMPV_iff_gaugeEquiv` — auxiliary lemma for SameMPV ↔ GaugeEquiv under injectivity
 
 ## References
 
@@ -129,7 +129,7 @@ theorem fundamentalTheorem_singleBlock_fromMPV₂
 
 end SingleBlockSeparation
 
-/-! ### Compatibility wrappers exposing the `SameMPV₂` + separation interface
+/-! ### Reformulations using `SameMPV₂` and separation data
 
 These lemmas present the complete construction
 `SameMPV₂` → per-block `SameMPV` (via `hSep`) → per-block `GaugeEquiv`
@@ -144,7 +144,7 @@ section EndToEnd
 
 variable {r : ℕ} {dim : Fin r → ℕ}
 
-/-- **Compatibility wrapper for the end-to-end multi-block FT from `SameMPV₂`.**
+/-- **Multi-block FT reformulation from `SameMPV₂` and separation data.**
 
 Starting from `SameMPV₂` on block-diagonal tensors, the per-block separation
 hypothesis (the only piece requiring PF theory) yields:
@@ -152,9 +152,8 @@ hypothesis (the only piece requiring PF theory) yields:
 - Global gauge equivalence of the block-diagonal tensors
 - Block-permutation decomposition of the product algebra automorphism
 
-The `hSame₂` hypothesis is retained so that this lemma continues to present
-the full end-to-end interface, even though the wrapper proof only uses the
-supplied separation data `hSep`. -/
+The `hSame₂` hypothesis is retained to record the full source hypothesis, even though
+the formal implication used below is the supplied separation data `hSep`. -/
 lemma fundamentalTheorem_multiBlock_fromSameMPV₂
     [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ)
@@ -175,10 +174,10 @@ lemma fundamentalTheorem_multiBlock_fromSameMPV₂
   let hFull := fundamentalTheorem_multiBlock_full μ A B hA hSep
   exact ⟨hFull.1, hFull.2, piAlgEquiv_decomposition A B hA hSep⟩
 
-/-- **Compatibility wrapper for the explicit-gauge multi-block FT from `SameMPV₂`.**
+/-- **Explicit-gauge reformulation of the multi-block FT from `SameMPV₂`.**
 
-As above, `hSame₂` is kept for interface compatibility, while the wrapper proof
-itself only uses `hSep`. -/
+As above, `hSame₂` is kept to record the source hypothesis, while the formal implication
+used below is `hSep`. -/
 lemma fundamentalTheorem_multiBlock_explicit_fromSameMPV₂
     (μ : Fin r → ℂ)
     (A B : (k : Fin r) → MPSTensor d (dim k))
