@@ -311,4 +311,28 @@ lemma not_three_block_trace_relation_left_of_isNBlkInjective_of_dim_gt
       hA hB (Nat.le_of_lt hD) hΔA hRel
   exact (Nat.ne_of_gt hD) hEq
 
+/-- Strictly unequal bond dimensions give homogeneous pair trace separation at
+the three-block length in the dimension-ordered branch.
+
+This is the selector-facing form of the strict-size case of
+David--Perez-Garcia--Schuch--Wolf, Lemma `lem:direct-sum`.  If a homogeneous
+three-block trace relation annihilates the ordered pair, the larger block's
+test matrix must vanish by the strict-size contradiction.  The remaining test
+matrix then vanishes by block injectivity at the three-block length. -/
+lemma pairTraceSeparatingAt_threeBlock_of_isNBlkInjective_of_dim_gt
+    {A : MPSTensor d D₁} {B : MPSTensor d D₂}
+    (hA : IsNBlkInjective A L) (hB : IsNBlkInjective B L)
+    (hB3 : IsNBlkInjective B (L + (L + L))) (hD : D₂ < D₁) :
+    PairTraceSeparatingAt A B (L + (L + L)) := by
+  intro ΔA ΔB hRel
+  have hΔA : ΔA = 0 := by
+    by_contra hΔA_ne
+    exact not_three_block_trace_relation_left_of_isNBlkInjective_of_dim_gt
+      (A := A) (B := B) (ΔA := ΔA) (ΔB := ΔB) hA hB hD hΔA_ne hRel
+  have hΔB : ΔB = 0 := by
+    apply leftTraceWordMap_injective_of_isNBlkInjective hB3
+    ext w
+    simpa [leftTraceWordMap_apply, hΔA] using hRel w
+  exact ⟨hΔA, hΔB⟩
+
 end MPSTensor
