@@ -68,7 +68,7 @@ theorem isNormalCanonicalFormBNT_commonRepresentativeBlocksAt
 
 /-- If each directly blocked nonzero block agrees with its iterated-blocking version,
 the zero-tail equation can be written using the derived common-sector family. -/
-theorem zeroTail_commonFlat_of_blockwise
+lemma zeroTail_commonFlat_of_blockwise
     {d D r z : ℕ} {dim : Fin r → ℕ}
     (A : MPSTensor d D) (μ : Fin r → ℂ)
     (blocks : (k : Fin r) → MPSTensor d (dim k))
@@ -93,7 +93,7 @@ theorem zeroTail_commonFlat_of_blockwise
 
 /-- If the blocked-word decodings agree for every nonzero block, the zero-tail equation
 can be written using the derived common-sector family. -/
-theorem zeroTail_commonFlat_of_word_eq
+lemma zeroTail_commonFlat_of_word_eq
     {d D r z : ℕ} {dim : Fin r → ℕ}
     (A : MPSTensor d D) (μ : Fin r → ℂ)
     (blocks : (k : Fin r) → MPSTensor d (dim k))
@@ -116,7 +116,7 @@ theorem zeroTail_commonFlat_of_word_eq
 
 /-- If the canonical identifications agree with consecutive grouping for every nonzero block,
 the zero-tail equation can be written using the derived common-sector family. -/
-theorem zeroTail_commonFlat_of_groupedBlockCastAgrees
+lemma zeroTail_commonFlat_of_groupedBlockCastAgrees
     {d D r z : ℕ} {dim : Fin r → ℕ}
     (A : MPSTensor d D) (μ : Fin r → ℂ)
     (blocks : (k : Fin r) → MPSTensor d (dim k))
@@ -135,7 +135,7 @@ theorem zeroTail_commonFlat_of_groupedBlockCastAgrees
 
 /-- The preceding zero-tail rewriting from the coordinate-grouping condition, expressed at a
 prescribed common length. -/
-theorem zeroTail_commonFlatAt_of_groupedBlockCastAgrees
+lemma zeroTail_commonFlatAt_of_groupedBlockCastAgrees
     {d D r z : ℕ} {dim : Fin r → ℕ}
     (A : MPSTensor d D) (μ : Fin r → ℂ)
     (blocks : (k : Fin r) → MPSTensor d (dim k))
@@ -156,7 +156,7 @@ theorem zeroTail_commonFlatAt_of_groupedBlockCastAgrees
 
 /-- At positive lengths, the blocked tensor has the same MPV coefficients as the
 weighted common-sector family whenever the coordinate-grouping condition holds. -/
-theorem sameMPV₂Pos_blockTensor_commonFlatAt_of_groupedBlockCastAgrees
+lemma sameMPV₂Pos_blockTensor_commonFlatAt_of_groupedBlockCastAgrees
     {d D r z : ℕ} {dim : Fin r → ℕ}
     (A : MPSTensor d D) (μ : Fin r → ℂ)
     (blocks : (k : Fin r) → MPSTensor d (dim k))
@@ -177,9 +177,9 @@ theorem sameMPV₂Pos_blockTensor_commonFlatAt_of_groupedBlockCastAgrees
 
 /-- If the canonical blocked nonzero part agrees with the common reindexed blocks,
 the zero-tail equation can be rewritten using the derived common-sector family.
-This is the one-sided theorem that puts the reindexed data above in the form used
+This is the one-sided statement that puts the reindexed data above in the form used
 by the span and BNT comparison theorems. -/
-theorem zeroTail_commonFlat_of_reindexed
+lemma zeroTail_commonFlat_of_reindexed
     {d D r z : ℕ} {dim : Fin r → ℕ}
     (A : MPSTensor d D) (μ : Fin r → ℂ)
     (blocks : (k : Fin r) → MPSTensor d (dim k))
@@ -205,7 +205,7 @@ theorem zeroTail_commonFlat_of_reindexed
   exact zeroTail_eq_of_sameMPV₂ _ _ _ hCanon hFlat
 
 /-- The preceding zero-tail rewriting expressed at a prescribed common length. -/
-theorem zeroTail_commonFlatAt_of_reindexed
+lemma zeroTail_commonFlatAt_of_reindexed
     {d D r z : ℕ} {dim : Fin r → ℕ}
     (A : MPSTensor d D) (μ : Fin r → ℂ)
     (blocks : (k : Fin r) → MPSTensor d (dim k))
@@ -231,7 +231,7 @@ theorem zeroTail_commonFlatAt_of_reindexed
 
 /-- At positive lengths, the blocked tensor has the same MPV coefficients as the
 weighted common-sector family once the blocked words have been reindexed. -/
-theorem sameMPV₂Pos_blockTensor_commonFlatAt_of_reindexed
+lemma sameMPV₂Pos_blockTensor_commonFlatAt_of_reindexed
     {d D r z : ℕ} {dim : Fin r → ℕ}
     (A : MPSTensor d D) (μ : Fin r → ℂ)
     (blocks : (k : Fin r) → MPSTensor d (dim k))
@@ -257,7 +257,7 @@ theorem sameMPV₂Pos_blockTensor_commonFlatAt_of_reindexed
 
 /-- Replacing nonzero parts by MPV-equivalent tensors preserves the positive-length
 MPV equality and the length-zero zero-tail identity. -/
-theorem sameMPV₂Pos_and_zeroTail_identity_of_sameMPV₂
+lemma sameMPV₂Pos_and_zeroTail_identity_of_sameMPV₂
     {d LA LB LA' LB' zeroTailA zeroTailB : ℕ}
     (liveA : MPSTensor d LA) (liveB : MPSTensor d LB)
     (flatA : MPSTensor d LA') (flatB : MPSTensor d LB')
@@ -285,7 +285,7 @@ theorem sameMPV₂Pos_and_zeroTail_identity_of_sameMPV₂
 /-- Once the canonical blocked nonzero part agrees with the reindexed common-sector
 nonzero part, the zero-tail equation, the transported-weight equality, and the
 nonvanishing of the common-sector weights are available together. -/
-theorem zeroTail_commonFlat_transport_of_reindexed
+lemma zeroTail_commonFlat_transport_of_reindexed
     {d D r z : ℕ} {dim : Fin r → ℕ}
     (A : MPSTensor d D) (μ : Fin r → ℂ)
     (blocks : (k : Fin r) → MPSTensor d (dim k))
@@ -320,7 +320,7 @@ theorem zeroTail_commonFlat_transport_of_reindexed
 
 /-- The one-sided zero-tail equation, weighted nonzero-part equality, and nonvanishing
 of transported common-sector weights obtained from the coordinate-grouping condition. -/
-theorem zeroTail_commonFlat_transport_of_groupedBlockCastAgrees
+lemma zeroTail_commonFlat_transport_of_groupedBlockCastAgrees
     {d D r z : ℕ} {dim : Fin r → ℕ}
     (A : MPSTensor d D) (μ : Fin r → ℂ)
     (blocks : (k : Fin r) → MPSTensor d (dim k))

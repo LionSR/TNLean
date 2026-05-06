@@ -3616,8 +3616,8 @@ transport the all-zero-block identity through this comparison.
 	conclusions are the common-alphabet MPV equalities.
 \end{proof}
 
-\begin{theorem}[Length-zero identity under compatible blocking]%
-\label{thm:zero_tail_common_flat_of_blocked_word_comparison}
+\begin{lemma}[Length-zero identity under compatible blocking]%
+\label{lem:zero_tail_common_flat_of_blocked_word_comparison}
 	\lean{MPSTensor.zeroTail_commonFlat_of_blockwise,
 		MPSTensor.zeroTail_commonFlat_of_word_eq,
 		MPSTensor.zeroTail_commonFlat_of_groupedBlockCastAgrees,
@@ -3632,7 +3632,7 @@ transport the all-zero-block identity through this comparison.
 	blocking, then the all-zero-block identity can be rewritten using the common
 	cyclic-sector family.  The coordinate-grouping condition supplies this
 	agreement at any prescribed common blocking length.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
 	\uses{thm:zero_tail_to_tensor_from_blocks_block_power,
@@ -3643,8 +3643,8 @@ transport the all-zero-block identity through this comparison.
 	weighted common-sector tensor.
 \end{proof}
 
-\begin{theorem}[Length-zero identity under word identification]%
-\label{thm:zero_tail_common_flat_of_reindexed}
+\begin{lemma}[Length-zero identity under word identification]%
+\label{lem:zero_tail_common_flat_of_reindexed}
 	\lean{MPSTensor.zeroTail_commonFlat_of_reindexed,
 		MPSTensor.zeroTail_commonFlatAt_of_reindexed,
 		MPSTensor.sameMPV₂Pos_blockTensor_commonFlatAt_of_reindexed}
@@ -3656,7 +3656,7 @@ transport the all-zero-block identity through this comparison.
 	family, then the same all-zero-block identity can be written in that common
 	alphabet.  At positive system sizes this says that the blocked tensor and the
 	weighted common-sector tensor have the same MPV coefficients.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
 	\uses{thm:zero_tail_to_tensor_from_blocks_block_power,
@@ -3692,8 +3692,8 @@ transport the all-zero-block identity through this comparison.
 	from the common-sector families.
 \end{proof}
 
-\begin{theorem}[Transport of MPV and length-zero identities]%
-\label{thm:samempv_pos_zero_tail_identity_transport}
+\begin{lemma}[Transport of MPV and length-zero identities]%
+\label{lem:samempv_pos_zero_tail_identity_transport}
 	\lean{MPSTensor.sameMPV₂Pos_and_zeroTail_identity_of_sameMPV₂}
 	\leanok
 	\uses{def:same_mpv2, def:same_mpv2_pos}
@@ -3702,7 +3702,7 @@ transport the all-zero-block identity through this comparison.
 	$L_A'$ and $L_B'$ generate the same MPV families as $L_A$ and $L_B$, respectively,
 	then $L_A'$ and $L_B'$ satisfy the same positive-length equality and the same
 	length-zero all-zero-block identity.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
 	\uses{def:same_mpv2, def:same_mpv2_pos}
@@ -3710,31 +3710,31 @@ transport the all-zero-block identity through this comparison.
 	the positive-length equality and in the $N=0$ identity.
 \end{proof}
 
-\begin{theorem}[Length-zero identity for common sectors]%
-\label{thm:zero_tail_common_flat_transport_of_reindexed}
+\begin{lemma}[Length-zero identity for common sectors]%
+\label{lem:zero_tail_common_flat_transport_of_reindexed}
 	\lean{MPSTensor.zeroTail_commonFlat_transport_of_reindexed}
 	\leanok
-	\uses{thm:zero_tail_common_flat_of_reindexed,
+	\uses{lem:zero_tail_common_flat_of_reindexed,
 		lem:common_blocked_cyclic_sector_reindexed_nonzero_part,
 		lem:common_blocked_cyclic_sector_derived_properties}
 	If the blocked nonzero part agrees with the common-sector tensor,
 	then the all-zero-block identity can be written with that common-sector tensor.
 	Nonzero original weights remain nonzero after the blocking power.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
-	\uses{thm:zero_tail_common_flat_of_reindexed,
+	\uses{lem:zero_tail_common_flat_of_reindexed,
 		lem:common_blocked_cyclic_sector_reindexed_nonzero_part,
 		lem:common_blocked_cyclic_sector_derived_properties}
-	Combine Theorem~\ref{thm:zero_tail_common_flat_of_reindexed} with the
+	Combine Lemma~\ref{lem:zero_tail_common_flat_of_reindexed} with the
 	common-sector MPV equality and the nonzero-weight statement.
 \end{proof}
 
-\begin{theorem}[Common sectors from grouped coordinates]%
-\label{thm:zero_tail_common_flat_transport_of_grouped_block_cast}
+\begin{lemma}[Common sectors from grouped coordinates]%
+\label{lem:zero_tail_common_flat_transport_of_grouped_block_cast}
 	\lean{MPSTensor.zeroTail_commonFlat_transport_of_groupedBlockCastAgrees}
 	\leanok
-	\uses{thm:zero_tail_common_flat_of_blocked_word_comparison,
+	\uses{lem:zero_tail_common_flat_of_blocked_word_comparison,
 		lem:common_blocked_cyclic_sector_blocked_word_comparison,
 		lem:common_blocked_cyclic_sector_derived_properties,
 		def:same_mpv2}
@@ -3742,10 +3742,10 @@ transport the all-zero-block identity through this comparison.
 	blocked alphabet is identified with each iterated alphabet by grouping
 	consecutive words, then the all-zero-block identity can be written with the
 	weighted common-sector family.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
-	\uses{thm:zero_tail_common_flat_of_blocked_word_comparison,
+	\uses{lem:zero_tail_common_flat_of_blocked_word_comparison,
 		lem:common_blocked_cyclic_sector_blocked_word_comparison,
 		lem:common_blocked_cyclic_sector_derived_properties,
 		def:same_mpv2}
@@ -3817,21 +3817,21 @@ transport the all-zero-block identity through this comparison.
 	shows that, once the length-$p$ word read directly from the common blocked
 	alphabet equals the word obtained by flattening an iterated $(m_k,e_k)$ block,
 	the weighted direct sum of directly blocked nonzero blocks agrees with the
-	common-sector family.  Theorem~\ref{thm:zero_tail_common_flat_of_blocked_word_comparison}
+	common-sector family.  Lemma~\ref{lem:zero_tail_common_flat_of_blocked_word_comparison}
 	then rewrites the one-sided all-zero-block identity with the weighted common-length
 	cyclic sectors under this blockwise word equality.
 
 	The remaining blocked-word equality, after identifying blocked physical
 	words, is the equality between the blocked nonzero part and the cyclic-sector
 	tensor for the whole weighted family.
-	Theorem~\ref{thm:zero_tail_common_flat_of_reindexed} gives the
+	Lemma~\ref{lem:zero_tail_common_flat_of_reindexed} gives the
 	one-sided form of this conversion, and
 	Theorem~\ref{thm:ft_after_blocking_common_length_common_sector_reindexed}
 	states it simultaneously for the two common-length sector families.  The
 	auxiliary transport statements,
-	Theorems~\ref{thm:zero_tail_common_flat_transport_of_reindexed},
-	\ref{thm:zero_tail_common_flat_transport_of_grouped_block_cast}, and
-	\ref{thm:samempv_pos_zero_tail_identity_transport}, give the nonzero
+	Lemmas~\ref{lem:zero_tail_common_flat_transport_of_reindexed},
+	\ref{lem:zero_tail_common_flat_transport_of_grouped_block_cast}, and
+	\ref{lem:samempv_pos_zero_tail_identity_transport}, give the nonzero
 	transported weights and the preservation of the positive-length and length-zero
 	identities, while
 	Theorem~\ref{thm:after_blocking_common_primitive_irreducible_blocks_reindexed}
