@@ -114,8 +114,8 @@ The main references are
 	\end{enumerate}
 \end{definition}
 
-\begin{lemma}[Restricted equal-norm collapse]
-	\label{thm:bnt_grouping_equal_norm}
+\begin{lemma}[Restricted norm-class collapse]
+	\label{lem:bnt_grouping_equal_norm}
 	\lean{MPSTensor.exists_bnt_grouping}
 	\leanok
 	\uses{def:mpv}
@@ -125,7 +125,11 @@ The main references are
 	same MPV family. Then one can regroup the blocks into a sector
 	decomposition whose associated total tensor generates the same MPV family
 	as $\bigoplus_k \mu_k A_k$, and whose sector-weight norms are strictly
-	decreasing.
+	decreasing.  This is a special-case regrouping lemma, not the full BNT
+	characterization of arXiv:1606.00608: the hypothesis that equal-norm
+	blocks already generate the same MPV family is an input here, while the
+	source BNT construction obtains the representatives by the minimal
+	phase-gauge equivalence relation.
 \end{lemma}
 
 \begin{proof}\leanok
