@@ -117,42 +117,43 @@ theorem span_range_evalWord_mul_nonzero_mul_evalWord_eq_top {A : MPSTensor d D}
   have hmul_right_gen : ∀ {R : Matrix (Fin D) (Fin D) ℂ},
       R ∈ Submodule.span ℂ E → ∀ v : Fin N → Fin d,
         R * X * evalWord A (List.ofFn v) ∈ T := by
-    intro R hR v
-    exact Submodule.span_induction
-      (fun M hM v => by
-        rcases hM with ⟨u, rfl⟩
-        exact Submodule.subset_span ⟨(u, v), rfl⟩)
-      (by
-        intro v
-        simp [T])
-      (fun R₁ R₂ _ _ hR₁ hR₂ v => by
-        simpa [Matrix.add_mul, Matrix.mul_add, Matrix.mul_assoc, T] using
-          Submodule.add_mem T (hR₁ v) (hR₂ v))
-      (fun a R _ hR v => by
-        have hEq : (a • R) * X * evalWord A (List.ofFn v) =
-            a • (R * X * evalWord A (List.ofFn v)) := by
-          simp [Matrix.mul_assoc]
-        rw [hEq]
-        exact Submodule.smul_mem T a (hR v))
-      hR v
+    intro R hR
+    induction hR using Submodule.span_induction with
+    | mem M hM =>
+      intro v
+      rcases hM with ⟨u, rfl⟩
+      exact Submodule.subset_span ⟨(u, v), rfl⟩
+    | zero =>
+      intro v
+      simp [T]
+    | add R₁ R₂ _ _ hR₁ hR₂ =>
+      intro v
+      simpa [Matrix.add_mul, Matrix.mul_add, Matrix.mul_assoc, T] using
+        Submodule.add_mem T (hR₁ v) (hR₂ v)
+    | smul a R _ hR =>
+      intro v
+      have hEq : (a • R) * X * evalWord A (List.ofFn v) =
+          a • (R * X * evalWord A (List.ofFn v)) := by
+        simp [Matrix.mul_assoc]
+      rw [hEq]
+      exact Submodule.smul_mem T a (hR v)
   have hmul : ∀ {R S : Matrix (Fin D) (Fin D) ℂ},
       R ∈ Submodule.span ℂ E → S ∈ Submodule.span ℂ E → R * X * S ∈ T := by
     intro R S hR hS
-    exact Submodule.span_induction
-      (fun M hM => by
-        rcases hM with ⟨v, rfl⟩
-        exact hmul_right_gen hR v)
-      (by
-        simp [T])
-      (fun S₁ S₂ _ _ hS₁ hS₂ => by
-        simpa [Matrix.mul_add, Matrix.mul_assoc, T] using
-          Submodule.add_mem T hS₁ hS₂)
-      (fun a S _ hS => by
-        have hEq : R * X * (a • S) = a • (R * X * S) := by
-          simp [Matrix.mul_assoc]
-        rw [hEq]
-        exact Submodule.smul_mem T a hS)
-      hS
+    induction hS using Submodule.span_induction with
+    | mem M hM =>
+      rcases hM with ⟨v, rfl⟩
+      exact hmul_right_gen hR v
+    | zero =>
+      simp [T]
+    | add S₁ S₂ _ _ hS₁ hS₂ =>
+      simpa [Matrix.mul_add, Matrix.mul_assoc, T] using
+        Submodule.add_mem T hS₁ hS₂
+    | smul a S _ hS =>
+      have hEq : R * X * (a • S) = a • (R * X * S) := by
+        simp [Matrix.mul_assoc]
+      rw [hEq]
+      exact Submodule.smul_mem T a hS
   apply eq_top_iff.mpr
   have hsource :
       Submodule.span ℂ
