@@ -19,7 +19,7 @@ all-zero leftover blocks, corresponding to the source-paper allowance
 
 namespace MPSTensor
 
-/-! ## Zero-tail and weight transport through blocking -/
+/-! ## All-zero-block and weight transport through blocking -/
 
 /-- Reblocking preserves an all-zero-block/nonzero-part MPV decomposition.
 
@@ -102,7 +102,7 @@ lemma zeroTail_eq_of_sameMPV₂
     _ = mpv (zeroMPSTensor d z) σ + mpv flat σ := by
       rw [hFlat N σ]
 
-/-- At positive lengths, a zero-tail decomposition reduces to the nonzero part. -/
+/-- At positive lengths, an all-zero-block decomposition reduces to the nonzero part. -/
 lemma sameMPV₂Pos_of_zeroTail_eq
     {d D L z : ℕ} (A : MPSTensor d D) (live : MPSTensor d L)
     (hZeroTail : ∀ (N : ℕ) (σ : Fin N → Fin d),
@@ -117,12 +117,12 @@ lemma sameMPV₂Pos_of_zeroTail_eq
     _ = mpv live σ := by
       rw [hZero, zero_add]
 
-/-- Remove matching zero tails from two MPV identities.
+/-- Remove matching all-zero-block contributions from two MPV identities.
 
-If `A` and `B` have the same MPVs, and each is expressed as a zero tail plus a nonzero part,
-then equality of the zero-tail dimensions gives full `SameMPV₂` equality of the nonzero parts.
-For positive lengths the zero tails vanish; at length zero this is exactly the missing
-zero-tail condition. -/
+If `A` and `B` have the same MPVs, and each is expressed as a leftover all-zero block plus a
+nonzero part, then equality of the leftover block dimensions gives full `SameMPV₂` equality of
+the nonzero parts. For positive lengths the all-zero blocks vanish; at length zero this is
+exactly the missing dimension condition. -/
 lemma sameMPV₂_live_of_sameMPV₂_with_zeroTail_eq
     {d D₁ D₂ L₁ L₂ z₁ z₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)

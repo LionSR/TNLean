@@ -263,7 +263,7 @@ This section composes the zero-block separation from `Existence.lean` with the
 blockwise Perron–Frobenius / TP-gauge theorem `exists_tp_gauge_blockwise`, producing an
 arbitrary-input result: from any `A : MPSTensor d D`, we obtain:
 
-* a zero-tail dimension `zeroTailDim` (accumulating all-zero irreducible blocks), and
+* an all-zero leftover block of bond dimension `zeroTailDim`, and
 * a TP-gauged family of irreducible blocks with nonzero weights.
 
 The MPV relationship accounts exactly for both contributions:
@@ -279,7 +279,7 @@ the cyclic-sector and equal-weight arguments.
 1606.00608 Section 2.3 and Appendix A, with zero-block separation.
 
 From any `A : MPSTensor d D`, produce:
-* a zero-tail of dimension `zeroTailDim` accumulating all-zero irreducible blocks;
+* an all-zero leftover block of bond dimension `zeroTailDim`;
 * TP-gauged irreducible blocks `blocks k` with nonzero weights `μ k`.
 
 Every nonzero block satisfies:
@@ -288,7 +288,7 @@ Every nonzero block satisfies:
 * positive bond dimension;
 * nonzero weight.
 
-The MPV of `A` equals the zero-tail contribution plus the weighted nonzero-block sum. -/
+The MPV of `A` equals the all-zero-block contribution plus the weighted nonzero-block sum. -/
 theorem exists_tp_gauge_from_arbitrary_with_zeroTail (A : MPSTensor d D) :
     ∃ (zeroTailDim : ℕ) (r : ℕ) (dim : Fin r → ℕ)
       (μ : Fin r → ℂ)

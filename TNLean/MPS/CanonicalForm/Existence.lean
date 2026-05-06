@@ -425,7 +425,7 @@ private theorem mpv_eq_dim_at_zero (A : MPSTensor d' D') (σ : Fin 0 → Fin d')
 Every MPS tensor `A : MPSTensor d D` admits an irreducible block decomposition that is
 faithfully partitioned into:
 
-* a **zero tail** of dimension `zeroTailDim` (accumulating all-zero irreducible blocks), and
+* an **all-zero leftover block** of bond dimension `zeroTailDim`, and
 * a family of **nonzero blocks** `blocks k : MPSTensor d (dim k)` for `k : Fin r`, each with at
   least one nonzero Kraus operator, positive bond dimension, and irreducibility.
 
@@ -434,10 +434,10 @@ The MPV relationship is:
   `mpv A σ = mpv (zeroMPSTensor d zeroTailDim) σ + mpv (toTensorFromBlocks μ≡1 blocks) σ`
 
 which at `N = 0` reduces to `D = zeroTailDim + ∑ k, dim k` and at `N > 0` reduces to
-`mpv A σ = mpv (toTensorFromBlocks μ≡1 blocks) σ` (zero tail vanishes).
+`mpv A σ = mpv (toTensorFromBlocks μ≡1 blocks) σ` (the all-zero block vanishes).
 
-This separation is **exact**: the zero tail is not silently discarded, and the length-zero
-identity is preserved. -/
+This separation is **exact**: the leftover all-zero block is not silently discarded, and the
+length-zero identity is preserved. -/
 theorem exists_irreducible_blockDecomp_nonzeroBlocks (A : MPSTensor d D) :
     ∃ (zeroTailDim : ℕ) (r : ℕ) (dim : Fin r → ℕ)
       (blocks : (k : Fin r) → MPSTensor d (dim k)),
