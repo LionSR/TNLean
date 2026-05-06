@@ -59,7 +59,7 @@ theorem exists_eventually_linearIndependent_of_tp_primitive_irr_blocks_of_blocks
 /-- **Separated-family BNT sector construction.**
 
 If the given TP primitive irreducible blocks are already pairwise separated by
-non-gauge-phase-equivalence, the granular sector decomposition is a genuine BNT
+non-gauge-phase-equivalence, the one-sector-per-block sector decomposition is a genuine BNT
 sector decomposition: it represents the original weighted block sum and satisfies
 `HasBNTSectorData` by the overlap-derived eventual linear independence above.
 
@@ -534,19 +534,18 @@ theorem exists_bnt_sectorDecomp_pair_with_overlapSpan_of_proportionalDecompositi
 
 /-! ### Conditional sector construction under BNT linear independence -/
 
-/-- **Minimal granular sector decomposition carrying current `HasBNTSectorData`.**
+/-- **One-sector-per-block sector decomposition carrying current `HasBNTSectorData`.**
 
 This is the formulation of the conditional sector construction.  The
 predicate `HasBNTSectorData` now means eventual linear independence of the sector
 basis MPV states.  TP, irreducibility, primitivity, and nonzero weights do not by
-themselves provide that linear-independence statement for the granular basis; the
-genuine one-sided BNT construction must first choose representatives forming a basis of normal
-tensors.
+themselves provide that linear-independence statement for the one-sector-per-block basis; the
+one-sided BNT construction must first choose representatives forming a basis of normal tensors.
 
-Accordingly this theorem gives the simplest construction: if the granular basis
-is already known to satisfy the current BNT linear-independence hypothesis,
-then `trivialSectorDecomp` gives the requested `SectorDecomposition` and the
-`HasBNTSectorData` certificate is exactly the supplied `hLI`. -/
+Accordingly this theorem gives the direct structural construction: if the
+one-sector-per-block basis is already known to satisfy the current BNT
+linear-independence hypothesis, then `trivialSectorDecomp` gives the requested
+`SectorDecomposition` and the `HasBNTSectorData` certificate is exactly the supplied `hLI`. -/
 theorem exists_bnt_sectorDecomp_of_linearIndependent
     {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ)
