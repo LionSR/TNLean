@@ -2725,13 +2725,13 @@ primitivity and normality results to the sector blocks.
 
 \begin{proof}\leanok
 	\uses{thm:tp_gauge_arbitrary, thm:common_blocking_period,
-	      lem:block_weights_ne_zero, thm:zero_tail_to_tensor_from_blocks_block_power}
+	      lem:block_weights_ne_zero, lem:zero_tail_to_tensor_from_blocks_block_power}
 	Apply Theorem~\ref{thm:tp_gauge_arbitrary} to get the trivial block
 	and left-canonical nontrivial blocks.
 	Apply Theorem~\ref{thm:common_blocking_period} to find a common
 	blocking period $p$ making all transfer maps primitive. Lemma~\ref{lem:block_weights_ne_zero}
 	keeps the blocked weights nonzero, and
-	Theorem~\ref{thm:zero_tail_to_tensor_from_blocks_block_power} transports the
+	Lemma~\ref{lem:zero_tail_to_tensor_from_blocks_block_power} transports the
 	all-zero-block/nonzero MPV identity through the blocking step.
 \end{proof}
 
@@ -3386,8 +3386,8 @@ primitivity and normality results to the sector blocks.
 	Apply Theorem~\ref{thm:tp_primitive_blockdecomp} separately to the two tensors.
 \end{proof}
 
-\begin{theorem}[All-zero-block contribution after blocking]%
-	\label{thm:zero_tail_decomp_block_tensor}
+\begin{lemma}[All-zero-block contribution after blocking]%
+	\label{lem:zero_tail_decomp_block_tensor}
 	\lean{MPSTensor.zeroTail_mpv_decomp_blockTensor}
 	\leanok
 	\uses{def:blocked_tensor, def:zero_mps_tensor}
@@ -3397,7 +3397,7 @@ primitivity and normality results to the sector blocks.
 	tensor $A^{[p]}$ is expressed as the same all-zero-block contribution plus
 	$L^{[p]}$.
 	The all-zero term still contributes only at blocked length $0$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
 	Flatten a blocked word of length $N$ to an original word of length $Np$. Since
@@ -3405,21 +3405,21 @@ primitivity and normality results to the sector blocks.
 	unchanged by the reblocking convention.
 \end{proof}
 
-\begin{theorem}[All-zero-block weighted block decomposition after blocking]%
-	\label{thm:zero_tail_to_tensor_from_blocks_block_power}
+\begin{lemma}[All-zero-block weighted block decomposition after blocking]%
+	\label{lem:zero_tail_to_tensor_from_blocks_block_power}
 	\lean{MPSTensor.zeroTail_toTensorFromBlocks_blockPower}
 	\leanok
-	\uses{thm:zero_tail_decomp_block_tensor, thm:block_tensor_to_tensor_from_blocks,
+	\uses{lem:zero_tail_decomp_block_tensor, thm:block_tensor_to_tensor_from_blocks,
 	      def:tensor_from_blocks}
 	Suppose $A$ is expressed as an all-zero tensor, carrying the zero-block bond
 	dimension, plus the weighted nonzero-block
 	tensor $\bigoplus_k \mu_k B_k$. For every positive blocking length $p$,
 	$A^{[p]}$ is expressed as the same all-zero-block contribution plus the weighted
 	blocked nonzero tensor $\bigoplus_k \mu_k^p B_k^{[p]}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
-	Apply Theorem~\ref{thm:zero_tail_decomp_block_tensor} to the assembled
+	Apply Lemma~\ref{lem:zero_tail_decomp_block_tensor} to the assembled
 	weighted nonzero tensor and rewrite the blocked assembled tensor using
 	Theorem~\ref{thm:block_tensor_to_tensor_from_blocks}.
 \end{proof}
@@ -3450,7 +3450,7 @@ primitivity and normality results to the sector blocks.
 	\lean{MPSTensor.nonzeroBlock_blockPower_positive_sameMPV₂_and_zeroTail_identity_of_sameMPV₂}
 	\leanok
 	\uses{thm:nonzero_block_zero_tail_identity,
-	      thm:zero_tail_to_tensor_from_blocks_block_power, def:same_mpv2_pos}
+	      lem:zero_tail_to_tensor_from_blocks_block_power, def:same_mpv2_pos}
 	In the setting of Theorem~\ref{thm:nonzero_block_zero_tail_identity}, after
 	any positive common blocking length $p$, the powered weighted nonzero-block tensors
 	agree on all positive blocked system sizes. At blocked length $0$, the same
@@ -3459,7 +3459,7 @@ primitivity and normality results to the sector blocks.
 \end{theorem}
 
 \begin{proof}\leanok
-	Use Theorem~\ref{thm:zero_tail_to_tensor_from_blocks_block_power} on both
+	Use Lemma~\ref{lem:zero_tail_to_tensor_from_blocks_block_power} on both
 	all-zero-block decompositions, block the original MPV equality, and apply
 	Theorem~\ref{thm:nonzero_block_zero_tail_identity} at the blocked physical
 	dimension.
@@ -3565,7 +3565,7 @@ transport the all-zero-block identity through this comparison.
 	\lean{MPSTensor.afterBlocking_reindexedCommonSectorDataWithZeroTail_of_sameMPV₂}
 	\leanok
 	\uses{thm:ft_after_blocking_common_blocked_cyclic_live_zero_tail,
-		thm:zero_tail_to_tensor_from_blocks_block_power,
+		lem:zero_tail_to_tensor_from_blocks_block_power,
 		lem:common_blocked_cyclic_sector_reindexed_samempv,
 		lem:common_blocked_cyclic_sector_derived_properties}
 	If two tensors generate the same MPV family, then after reblocking the nonzero
@@ -3576,7 +3576,7 @@ transport the all-zero-block identity through this comparison.
 
 \begin{proof}\leanok
 	\uses{thm:ft_after_blocking_common_blocked_cyclic_live_zero_tail,
-		thm:zero_tail_to_tensor_from_blocks_block_power,
+		lem:zero_tail_to_tensor_from_blocks_block_power,
 		lem:common_blocked_cyclic_sector_reindexed_samempv,
 		lem:common_blocked_cyclic_sector_derived_properties}
 	Start from the common reblocked cyclic-sector families on the two sides.  Apply
@@ -3591,7 +3591,7 @@ transport the all-zero-block identity through this comparison.
 	\leanok
 	\uses{thm:ft_after_blocking_per_block_cyclic_live_zero_tail,
 		thm:exists_common_blocked_cyclic_sector_family_common_multiple,
-		thm:zero_tail_to_tensor_from_blocks_block_power,
+		lem:zero_tail_to_tensor_from_blocks_block_power,
 		thm:nonzero_block_block_power_zero_tail_identity,
 		lem:common_blocked_cyclic_sector_reindexed_samempv,
 		lem:common_blocked_cyclic_sector_derived_properties}
@@ -3604,7 +3604,7 @@ transport the all-zero-block identity through this comparison.
 \begin{proof}\leanok
 	\uses{thm:ft_after_blocking_per_block_cyclic_live_zero_tail,
 		thm:exists_common_blocked_cyclic_sector_family_common_multiple,
-		thm:zero_tail_to_tensor_from_blocks_block_power,
+		lem:zero_tail_to_tensor_from_blocks_block_power,
 		thm:nonzero_block_block_power_zero_tail_identity,
 		lem:common_blocked_cyclic_sector_reindexed_samempv,
 		lem:common_blocked_cyclic_sector_derived_properties}
@@ -3624,7 +3624,7 @@ transport the all-zero-block identity through this comparison.
 		MPSTensor.zeroTail_commonFlatAt_of_groupedBlockCastAgrees,
 		MPSTensor.sameMPV₂Pos_blockTensor_commonFlatAt_of_groupedBlockCastAgrees}
 	\leanok
-	\uses{thm:zero_tail_to_tensor_from_blocks_block_power,
+	\uses{lem:zero_tail_to_tensor_from_blocks_block_power,
 		lem:common_blocked_cyclic_sector_blocked_word_comparison,
 		def:same_mpv2_pos}
 	Assume an all-zero-block/nonzero decomposition on one side.  If direct blocking of
@@ -3635,7 +3635,7 @@ transport the all-zero-block identity through this comparison.
 \end{lemma}
 
 \begin{proof}\leanok
-	\uses{thm:zero_tail_to_tensor_from_blocks_block_power,
+	\uses{lem:zero_tail_to_tensor_from_blocks_block_power,
 		lem:common_blocked_cyclic_sector_blocked_word_comparison,
 		def:same_mpv2_pos}
 	Transport the all-zero-block/nonzero decomposition to the common blocking length.
@@ -3649,7 +3649,7 @@ transport the all-zero-block identity through this comparison.
 		MPSTensor.zeroTail_commonFlatAt_of_reindexed,
 		MPSTensor.sameMPV₂Pos_blockTensor_commonFlatAt_of_reindexed}
 	\leanok
-	\uses{thm:zero_tail_to_tensor_from_blocks_block_power,
+	\uses{lem:zero_tail_to_tensor_from_blocks_block_power,
 		lem:common_blocked_cyclic_sector_reindexed_nonzero_part}
 	Assume an all-zero-block/nonzero decomposition on one side.  If the blocked nonzero
 	tensor agrees, after identifying blocked words, with the common cyclic-sector
@@ -3659,7 +3659,7 @@ transport the all-zero-block identity through this comparison.
 \end{lemma}
 
 \begin{proof}\leanok
-	\uses{thm:zero_tail_to_tensor_from_blocks_block_power,
+	\uses{lem:zero_tail_to_tensor_from_blocks_block_power,
 		lem:common_blocked_cyclic_sector_reindexed_nonzero_part}
 	Transport the all-zero-block/nonzero decomposition to the common blocking length.
 	The word-identification hypothesis then replaces the blocked nonzero tensor by the
