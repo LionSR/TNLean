@@ -466,13 +466,13 @@ This gives the paper's auxiliary power-sum lemma in the notation of the BNT
 comparison.  It is not an additional Fundamental Theorem statement.
 -/
 
-/-- **Equal power sums imply equal multisets (Lem:app_simple).**
+/-- **Equal power sums imply equal multisets.**
 
 If two sequences of complex numbers `α : Fin n → ℂ` and `β : Fin n → ℂ` satisfy
 `∑ i, (α i)^k = ∑ i, (β i)^k` for all positive `k`, then `α` and `β` have the same
 multiset of values (counted with multiplicity).
 
-This is the paper's Lemma Lem:app_simple, proved via Newton's identities
+This is the paper's auxiliary power-sum lemma, proved via Newton's identities
 (`Matrix.sum_pow_eq_implies_multiset_eq` from `ScalarPowerSumIdentity.lean`). -/
 lemma power_sum_eq_implies_multiset_eq (n : ℕ)
     (α β : Fin n → ℂ)
