@@ -26,7 +26,7 @@ namespace MPSTensor
 The positive-period hypothesis is exactly what keeps the all-zero-block contribution
 confined to length zero after blocking: a blocked chain of positive length expands
 to a positive number of original sites. -/
-theorem zeroTail_mpv_decomp_blockTensor
+lemma zeroTail_mpv_decomp_blockTensor
     {d D L z p : ℕ}
     (A : MPSTensor d D) (nonzeroPart : MPSTensor d L)
     (hp : 0 < p)
@@ -54,7 +54,7 @@ theorem zeroTail_mpv_decomp_blockTensor
 
 /-- Reblocking an all-zero-block plus weighted nonzero-block decomposition transports every
 nonzero-block weight to the corresponding blocking power. -/
-theorem zeroTail_toTensorFromBlocks_blockPower
+lemma zeroTail_toTensorFromBlocks_blockPower
     {d D r z p : ℕ} {dim : Fin r → ℕ}
     (A : MPSTensor d D)
     (μ : Fin r → ℂ)
@@ -88,7 +88,7 @@ theorem zeroTail_toTensorFromBlocks_blockPower
           rw [hNonzeroPart N σ]
 
 /-- Transport an all-zero-block decomposition along an MPV equivalence of its nonzero part. -/
-theorem zeroTail_eq_of_sameMPV₂
+lemma zeroTail_eq_of_sameMPV₂
     {d D L L' z : ℕ} (A : MPSTensor d D) (live : MPSTensor d L)
     (flat : MPSTensor d L')
     (hZeroTail : ∀ (N : ℕ) (σ : Fin N → Fin d),
@@ -103,7 +103,7 @@ theorem zeroTail_eq_of_sameMPV₂
       rw [hFlat N σ]
 
 /-- At positive lengths, a zero-tail decomposition reduces to the nonzero part. -/
-theorem sameMPV₂Pos_of_zeroTail_eq
+lemma sameMPV₂Pos_of_zeroTail_eq
     {d D L z : ℕ} (A : MPSTensor d D) (live : MPSTensor d L)
     (hZeroTail : ∀ (N : ℕ) (σ : Fin N → Fin d),
       mpv A σ = mpv (zeroMPSTensor d z) σ + mpv live σ) :
@@ -123,7 +123,7 @@ If `A` and `B` have the same MPVs, and each is expressed as a zero tail plus a n
 then equality of the zero-tail dimensions gives full `SameMPV₂` equality of the nonzero parts.
 For positive lengths the zero tails vanish; at length zero this is exactly the missing
 zero-tail condition. -/
-theorem sameMPV₂_live_of_sameMPV₂_with_zeroTail_eq
+lemma sameMPV₂_live_of_sameMPV₂_with_zeroTail_eq
     {d D₁ D₂ L₁ L₂ z₁ z₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (liveA : MPSTensor d L₁) (liveB : MPSTensor d L₂)
