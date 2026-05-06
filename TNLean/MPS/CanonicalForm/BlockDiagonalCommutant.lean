@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.CanonicalForm.BlockDiagonalCommutant.ProjectionSpan
+import TNLean.MPS.CanonicalForm.Assembly.NormalityChain
 import TNLean.MPS.BNT.Construction
 import TNLean.MPS.MPDO.BiCFDerivation
 import TNLean.MPS.MPDO.BiCFDerivation.PairHomogenization
@@ -255,6 +256,145 @@ theorem exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingA
   refine ⟨1 + (r - 1) * S, Nat.add_pos_left Nat.zero_lt_one _, ?_⟩
   simpa [WordTupleSpanTop, wordTuple] using
     wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingAt μ A hCF hSep
+
+/-- Positive-length product-word span from canonical-form/BNT separation and
+the source-faithful three-block direct-sum hypotheses.
+
+The BNT data supply non-gauge-equivalence for equal-dimensional distinct
+blocks.  Unequal-dimensional pairs use the strict-size branch of the
+direct-sum argument.  The fixed-length block-injectivity hypotheses are kept
+explicit, matching the direct-sum input rather than inferring them from BNT
+data. -/
+theorem exists_pos_productWordSpan_of_isCanonicalFormBNT_of_directSum_threeBlock
+    [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hCF : IsCanonicalFormBNT μ A)
+    (hIrr : HasIrreducibleBlocks (d := d) A)
+    {L : ℕ}
+    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L)
+    (hBlk3 : ∀ k : Fin r, IsNBlkInjective (A k) (L + (L + L)))
+    (hL : 1 < L) :
+    ∃ m : ℕ, 0 < m ∧
+      Submodule.span ℂ (Set.range fun ω : Fin m → Fin d =>
+        fun k : Fin r => evalWord (A k) (List.ofFn ω)) =
+      (⊤ : Submodule ℂ
+        ((k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) :=
+  exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingAt μ A hCF
+    (forall_pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv
+      A hIrr hCF.toIsLeftCanonicalBlockFamily hCF.toHasNormalizedSelfOverlap
+      hCF.blocks_not_equiv hBlk hBlk3 hCF.toHasInjectiveBlocks.block_injective hL)
+
+/-- Positive-length product-word span from canonical-form/BNT separation and
+one-site injectivity of the BNT blocks.
+
+This specializes the three-block direct-sum theorem to `L = 2`.  The
+canonical-form/BNT hypotheses provide one-site injectivity for each block, and
+fixed-length injectivity persists at positive multiples, giving the length-`2`
+and length-`6` direct-sum inputs required by the source argument.  Irreducibility
+remains explicit because the BNT predicate records injectivity and normalization
+but not the tensor-irreducibility hypothesis used by the direct-sum comparison. -/
+lemma exists_pos_productWordSpan_of_isCanonicalFormBNT_of_directSum_injectiveBlocks
+    [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hCF : IsCanonicalFormBNT μ A)
+    (hIrr : HasIrreducibleBlocks (d := d) A) :
+    ∃ m : ℕ, 0 < m ∧
+      Submodule.span ℂ (Set.range fun ω : Fin m → Fin d =>
+        fun k : Fin r => evalWord (A k) (List.ofFn ω)) =
+      (⊤ : Submodule ℂ
+        ((k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) := by
+  refine exists_pos_productWordSpan_of_isCanonicalFormBNT_of_directSum_threeBlock
+    (d := d) (dim := dim) μ A hCF hIrr (L := 2) ?_ ?_ ?_
+  · intro k
+    simpa using isNBlkInjective_mul_of_isNBlkInjective (A k) (N := 1) (m := 2)
+      (by norm_num) (isNBlkInjective_one_of_isInjective
+        (hCF.toHasInjectiveBlocks.block_injective k))
+  · intro k
+    simpa using isNBlkInjective_mul_of_isNBlkInjective (A k) (N := 1) (m := 6)
+      (by norm_num) (isNBlkInjective_one_of_isInjective
+        (hCF.toHasInjectiveBlocks.block_injective k))
+  · norm_num
+
+/-- Positive-length product-word span from normal-CF-BNT data plus explicit
+one-site injectivity.
+
+Normal-CF-BNT data provide the irreducibility, trace-preserving normalization,
+self-overlap normalization, weight ordering, and BNT separation used by the
+direct-sum comparison.  The additional one-site injectivity hypothesis supplies
+the `IsCanonicalFormBNT` injectivity field, after which the previous lemma
+specializes the fixed-length direct-sum input to \(L=2\). -/
+lemma exists_pos_productWordSpan_of_isNormalCanonicalFormBNT_of_directSum_injectiveBlocks
+    [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hNCF : IsNormalCanonicalFormBNT μ A)
+    (hInj : ∀ k : Fin r, IsInjective (A k)) :
+    ∃ m : ℕ, 0 < m ∧
+      Submodule.span ℂ (Set.range fun ω : Fin m → Fin d =>
+        fun k : Fin r => evalWord (A k) (List.ofFn ω)) =
+      (⊤ : Submodule ℂ
+        ((k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) := by
+  let hCF : IsCanonicalFormBNT μ A :=
+    IsCanonicalFormBNT.ofSeparatedData
+      (HasInjectiveBlocks.ofForall hInj)
+      hNCF.toIsLeftCanonicalBlockFamily
+      hNCF.toHasStrictOrderedNonzeroWeights
+      hNCF.toHasNormalizedSelfOverlap
+      hNCF.blocks_not_equiv
+  exact exists_pos_productWordSpan_of_isCanonicalFormBNT_of_directSum_injectiveBlocks
+    μ A hCF hNCF.toHasIrreducibleBlocks
+
+/-- `WordTupleSpanTop` version of the direct-sum span theorem for
+canonical-form/BNT block families. -/
+lemma exists_wordTupleSpanTop_of_isCanonicalFormBNT_of_directSum_injectiveBlocks
+    [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hCF : IsCanonicalFormBNT μ A)
+    (hIrr : HasIrreducibleBlocks (d := d) A) :
+    ∃ m : ℕ, 0 < m ∧ WordTupleSpanTop A m := by
+  obtain ⟨m, hm, hSpan⟩ :=
+    exists_pos_productWordSpan_of_isCanonicalFormBNT_of_directSum_injectiveBlocks
+      μ A hCF hIrr
+  exact ⟨m, hm, by simpa [WordTupleSpanTop, wordTuple] using hSpan⟩
+
+/-- `WordTupleSpanTop` version of the direct-sum span theorem for
+normal-CF-BNT block families with explicit one-site injectivity. -/
+lemma exists_wordTupleSpanTop_of_isNormalCanonicalFormBNT_of_directSum_injectiveBlocks
+    [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hNCF : IsNormalCanonicalFormBNT μ A)
+    (hInj : ∀ k : Fin r, IsInjective (A k)) :
+    ∃ m : ℕ, 0 < m ∧ WordTupleSpanTop A m := by
+  obtain ⟨m, hm, hSpan⟩ :=
+    exists_pos_productWordSpan_of_isNormalCanonicalFormBNT_of_directSum_injectiveBlocks
+      μ A hNCF hInj
+  exact ⟨m, hm, by simpa [WordTupleSpanTop, wordTuple] using hSpan⟩
+
+/-- Canonical-form/BNT direct-sum separation gives the block-injective
+horizontal-canonical-form field used by the MPDO bicanonical-form package. -/
+lemma hasBiCF_of_isCanonicalFormBNT_of_directSum_injectiveBlocks
+    [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hCF : IsCanonicalFormBNT μ A)
+    (hIrr : HasIrreducibleBlocks (d := d) A) :
+    HasBiCF A := by
+  obtain ⟨m, _hm, hSpan⟩ :=
+    exists_wordTupleSpanTop_of_isCanonicalFormBNT_of_directSum_injectiveBlocks
+      μ A hCF hIrr
+  exact hasBiCF_of_wordTupleSpanTop A hSpan
+
+/-- Normal-CF-BNT direct-sum separation gives the block-injective
+horizontal-canonical-form field used by the MPDO bicanonical-form package,
+provided one-site injectivity is supplied explicitly. -/
+lemma hasBiCF_of_isNormalCanonicalFormBNT_of_directSum_injectiveBlocks
+    [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hNCF : IsNormalCanonicalFormBNT μ A)
+    (hInj : ∀ k : Fin r, IsInjective (A k)) :
+    HasBiCF A := by
+  obtain ⟨m, _hm, hSpan⟩ :=
+    exists_wordTupleSpanTop_of_isNormalCanonicalFormBNT_of_directSum_injectiveBlocks
+      μ A hNCF hInj
+  exact hasBiCF_of_wordTupleSpanTop A hSpan
 
 /-- Conditional positive-length product-word span from all-words pair separation plus eventual
 identity padding for every ordered pair of distinct BNT blocks.

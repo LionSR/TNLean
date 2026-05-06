@@ -86,7 +86,80 @@ identity as padding.
 
 \section{Formal boundary}
 
-The current formal development includes downstream lemmas that depend on this input.
+The current formal development now formalizes the matrix-factorization input
+from Lemma~\texttt{lem1}: \leanid{Matrix.span_range_mul_nonzero_mul_eq_top}
+states that \(\operatorname{span}\{RCS\}=M_D(\mathbb C)\) whenever
+\(C\ne0\), and
+\leanid{MPSTensor.span_range_evalWord_mul_nonzero_mul_evalWord_eq_top}
+translates this into the exact-length word-product form
+\(\operatorname{span}\{A_u X A_v: |u|=|v|=L\}=M_D(\mathbb C)\) under
+\(L\)-block injectivity and \(X\ne0\).
+
+It also formalizes the next finite-dimensional part of the two-block
+direct-sum proof.  The trace-dual three-block reduction gives inclusion of the
+length-\(L\) image spaces
+\(\mathcal G_L^A\subseteq\mathcal G_L^B\).  Since block injectivity makes
+\(\dim\mathcal G_L^A=D_A^2\) and \(\dim\mathcal G_L^B=D_B^2\), this inclusion
+and the source-paper size ordering \(D_B\le D_A\) force \(D_A=D_B\) and
+\(\mathcal G_L^A=\mathcal G_L^B\).  This is recorded by
+\leanid{MPSTensor.bondDim_eq_and_groundSpace_eq_of_three_block_trace_relation_left_of_dim_ge}.
+The strict-size branch is also formalized:
+\leanid{MPSTensor.not_three_block_trace_relation_left_of_isNBlkInjective_of_dim_gt}
+states that, if \(D_B<D_A\), a nonzero coefficient on the larger block cannot
+satisfy the homogeneous three-block trace relation.
+\leanid{MPSTensor.pairTraceSeparatingAt_threeBlock_of_isNBlkInjective_of_dim_gt}
+is the corresponding trace-separation form: once the smaller block is also
+block-injective at the three-block length, the strict-size branch gives
+homogeneous pair trace separation at that exact length.
+\leanid{MPSTensor.pairTraceSeparatingAt_threeBlock_of_isNBlkInjective_of_dim_ne}
+removes the ordering convention, using the symmetry of pair trace separation.
+The conditional directness package
+\leanid{MPSTensor.groundSpace_inf_eq_bot_of_not_bondDim_eq_and_groundSpace_eq_of_dim_ge}
+turns any external proof of the source contradiction
+\(\neg(D_A=D_B \wedge \mathcal G_L^A=\mathcal G_L^B)\) into
+\(\mathcal G_{3L}^A\cap\mathcal G_{3L}^B=\{0\}\).
+The equal-size uniqueness branch is now isolated as well:
+\leanid{MPSTensor.not_bondDim_eq_and_groundSpace_eq_of_mpvSubmodule_ne}
+shows that, for injective tensors, equal local image spaces would force equality
+of the periodic MPV lines, so a separately supplied distinct-MPV-line hypothesis
+rules out the equal-size collapse.
+\leanid{MPSTensor.groundSpace_inf_eq_bot_of_exists_not_forall_mpv_eq_mul_of_dim_ge}
+combines this uniqueness input with the finite-dimensional step in the form
+used downstream: the caller supplies some chain length \(N\ge \max\{2,L\}\) at
+which the two MPV states are not pointwise proportional.
+\leanid{MPSTensor.exists_ge_not_forall_mpv_eq_mul_of_not_gaugePhaseEquiv_of_irreducible_TP}
+proves the analytic source of such witnesses for irreducible trace-preserving
+blocks with normalized self-overlaps: if two blocks are not gauge-phase
+equivalent, then arbitrarily far out there is a chain length at which their MPV
+states are not proportional.
+\leanid{MPSTensor.exists_ge_not_forall_mpv_eq_mul_of_blocksNotGaugePhaseEquiv_of_irreducible_TP}
+is the corresponding already-blocked BNT-family wrapper for same-dimensional
+distinct blocks.  The direct-sum file records the pointwise conversion by
+\leanid{MPSTensor.groundSpace_inf_eq_bot_of_exists_not_forall_mpv_eq_mul_of_dim_ge}.
+\leanid{MPSTensor.groundSpace_inf_eq_bot_of_blocksNotGaugePhaseEquiv_same_dim_of_dim_ge}
+then packages these two ingredients for the same-dimensional equal-size
+direct-sum branch: BNT separation supplies the long-chain non-proportional MPV
+witness, while injectivity and length-\(L\) block injectivity are still stated
+as explicit direct-sum hypotheses.
+\leanid{MPSTensor.pairTraceSeparatingAt_of_groundSpace_inf_eq_bot_of_isNBlkInjective}
+turns zero intersection of the two image spaces at a fixed length into
+homogeneous pair trace separation, provided the two boundary-to-chain maps are
+injective at that fixed length.  Hence
+\leanid{MPSTensor.pairTraceSeparatingAt_threeBlock_of_exists_not_forall_mpv_eq_mul_of_dim_ge}
+and
+\leanid{MPSTensor.pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv_same_dim_of_dim_ge}
+record the pair-trace versions consumed by selector and word-span
+constructions.
+\leanid{MPSTensor.forall_pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv}
+combines the same-dimension BNT branch with the strict-size branch for all
+ordered pairs of distinct blocks at the common length \(3L\), and
+\leanid{MPSTensor.exists_pos_productWordSpan_of_isCanonicalFormBNT_of_directSum_threeBlock}
+feeds that common pair separation into the selector/product-span construction.
+This is still conditional on the direct-sum hypotheses: a caller must supply the
+fixed block-injectivity lengths after the prescribed blocking.
+
+The current formal development also includes downstream lemmas that depend on
+the remaining direct-sum input.
 \begin{itemize}
   \item \leanid{WordTupleSpanTop} expresses exact-length span of a direct-sum
         block family.

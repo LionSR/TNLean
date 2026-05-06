@@ -98,6 +98,42 @@ The results follow~\cite{Sanz2010Quantum}.
     length~$L$ equals $\MN{D}$.
 \end{proof}
 
+\begin{lemma}[Two-sided span from one nonzero matrix]
+    \label{lem:two_sided_nonzero_matrix_span}
+    \lean{Matrix.span_range_mul_nonzero_mul_eq_top}
+    \leanok
+    If \(C\in M_D(\mathbb C)\) is nonzero, then
+    \[
+        \operatorname{span}\{RCS:R,S\in M_D(\mathbb C)\}=M_D(\mathbb C).
+    \]
+    This is the matrix-factorization input used in
+    \cite[Lemma~\texttt{lem1}]{PerezGarcia2007Matrix}.
+\end{lemma}
+
+\begin{proof}\leanok
+    Choose a nonzero entry \(C_{pq}\).  Then every matrix unit \(E_{ij}\)
+    is a scalar multiple of \(E_{ip}CE_{qj}\), so the displayed span
+    contains the standard matrix basis.
+\end{proof}
+
+\begin{lemma}[Exact words around a nonzero middle matrix]
+    \label{lem:block_injective_two_sided_word_span}
+    \lean{MPSTensor.span_range_evalWord_mul_nonzero_mul_evalWord_eq_top}
+    \leanok
+    \uses{def:l_blk_injective, lem:two_sided_nonzero_matrix_span}
+    If \(A\) is \(L\)-block injective and \(X\neq 0\), then
+    \[
+        \operatorname{span}\{A_uXA_v: |u|=|v|=L\}=M_D(\mathbb C).
+    \]
+\end{lemma}
+
+\begin{proof}\leanok\uses{lem:two_sided_nonzero_matrix_span}
+    By \(L\)-block injectivity, the length-\(L\) word products span
+    \(M_D(\mathbb C)\).  Bilinearity of \((R,S)\mapsto RXS\) reduces the
+    preceding lemma to products with \(R\) and \(S\) chosen among those
+    word products.
+\end{proof}
+
 \section{Fitting decomposition}
 
 \begin{definition}[Fitting decomposition]\label{def:fitting_decomp}

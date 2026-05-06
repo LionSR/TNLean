@@ -3058,6 +3058,169 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     $S$, and the all-length variant allows every finite word.
 \end{definition}
 
+\begin{lemma}[Three-block trace reduction from a nonzero middle matrix]
+    \label{lem:three_block_trace_reduction_nonzero_middle}
+    \lean{MPSTensor.exists_right_trace_test_of_three_block_trace_relation_left}
+    \lean{MPSTensor.exists_left_trace_test_of_three_block_trace_relation_right}
+    \leanok
+    \uses{def:l_blk_injective, lem:block_injective_two_sided_word_span}
+    Let \(A\) be \(L\)-block injective, and let \(\Delta_A\neq 0\).
+    Suppose that, for all words \(u,v,t\) of length \(L\),
+    \[
+        \tr\!\bigl(\Delta_A A_v A_t A_u\bigr)
+        + \tr\!\bigl(\Delta_B B_v B_t B_u\bigr)=0 .
+    \]
+    Then for every \(Z\in M_{D_A}(\mathbb C)\) there is a matrix
+    \(W\in M_{D_B}(\mathbb C)\) such that, for all words \(t\) of
+    length \(L\),
+    \[
+        \tr(ZA_t)+\tr(WB_t)=0 .
+    \]
+    This is the trace-dual algebraic step in the two-block case of the
+    direct-sum lemma of \cite{PerezGarcia2007Matrix}.
+\end{lemma}
+
+\begin{proof}\leanok\uses{lem:block_injective_two_sided_word_span}
+    Since \(\Delta_A\neq0\), Lemma~\ref{lem:block_injective_two_sided_word_span}
+    writes \(Z\) as a linear combination of matrices \(A_u\Delta_A A_v\).
+    For one such term, cyclicity of the trace rewrites the three-block relation
+    as
+    \[
+        \tr(A_u\Delta_A A_vA_t)
+        +\tr(B_u\Delta_B B_vB_t)=0 .
+    \]
+    Taking the same linear combination of the matrices \(B_u\Delta_BB_v\)
+    gives the required \(W\), and linearity gives the general case.
+\end{proof}
+
+\begin{lemma}[Finite-chain image inclusion from a three-block relation]
+    \label{lem:three_block_relation_ground_space_inclusion}
+    \lean{MPSTensor.leftTraceWordMap}
+    \lean{MPSTensor.groundSpaceMap_eq_leftTraceWordMap}
+    \lean{MPSTensor.groundSpace_eq_leftTraceWordMap_range}
+    \lean{MPSTensor.leftTraceWordMap_range_le_of_three_block_trace_relation_left}
+    \lean{MPSTensor.leftTraceWordMap_range_eq_of_three_block_trace_relation}
+    \lean{MPSTensor.groundSpace_le_of_three_block_trace_relation_left}
+    \lean{MPSTensor.groundSpace_eq_of_three_block_trace_relation}
+    \leanok
+    \uses{lem:three_block_trace_reduction_nonzero_middle}
+    Under the hypotheses of
+    Lemma~\ref{lem:three_block_trace_reduction_nonzero_middle}, the length-\(L\)
+    image spaces satisfy
+    \[
+        \mathcal G_L^A \subseteq \mathcal G_L^B .
+    \]
+    If the corresponding nonzero middle matrix exists on both sides, then
+    \(\mathcal G_L^A=\mathcal G_L^B\).
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:three_block_trace_reduction_nonzero_middle}
+    Write a vector in \(\mathcal G_L^A\) as
+    \(t\mapsto \tr(A_tZ)\).  The preceding lemma supplies \(W\) with
+    \(\tr(ZA_t)+\tr(WB_t)=0\) for every word \(t\).  Cyclicity of the
+    trace gives
+    \[
+        \tr(A_tZ)=\tr(ZA_t)=-\tr(WB_t)=\tr(B_t(-W)),
+    \]
+    so the vector lies in \(\mathcal G_L^B\).  The equality statement follows
+    by applying the same argument with the two blocks exchanged.
+\end{proof}
+
+\begin{lemma}[Dimension step for two-block direct-sum image spaces]
+    \label{lem:direct_sum_two_block_dimension_step}
+    \lean{MPSTensor.leftTraceWordMap_injective_of_isNBlkInjective}
+    \lean{MPSTensor.leftTraceWordMap_range_finrank_eq_of_isNBlkInjective}
+    \lean{MPSTensor.leftTraceWordMap_range_eq_of_range_le_of_isNBlkInjective_of_dim_ge}
+    \lean{MPSTensor.leftTraceWordMap_range_eq_of_three_block_trace_relation_left_of_dim_ge}
+    \lean{MPSTensor.not_three_block_trace_relation_left_of_isNBlkInjective_of_dim_gt}
+    \lean{MPSTensor.groundSpace_finrank_eq_of_isNBlkInjective}
+    \lean{MPSTensor.bondDim_eq_of_groundSpace_eq_of_isNBlkInjective}
+    \lean{MPSTensor.bondDim_eq_and_groundSpace_eq_of_groundSpace_le_of_isNBlkInjective_of_dim_ge}
+    \lean{MPSTensor.bondDim_eq_and_groundSpace_eq_of_three_block_trace_relation_left_of_dim_ge}
+    \lean{MPSTensor.groundSpace_inf_eq_bot_of_not_bondDim_eq_and_groundSpace_eq_of_dim_ge}
+    \lean{MPSTensor.pairTraceSeparatingAt_threeBlock_of_isNBlkInjective_of_dim_gt}
+    \lean{MPSTensor.pairTraceSeparatingAt_threeBlock_of_isNBlkInjective_of_dim_ne}
+    \lean{MPSTensor.chainGroundSpace_eq_of_groundSpace_eq}
+    \lean{MPSTensor.mpvSubmodule_ne_of_not_exists_mpv_eq_smul}
+    \lean{MPSTensor.not_exists_mpv_eq_smul_of_not_exists_forall_mpv_eq_mul}
+    \lean{MPSTensor.not_bondDim_eq_and_groundSpace_eq_of_mpvSubmodule_ne}
+    \lean{MPSTensor.groundSpace_inf_eq_bot_of_exists_not_forall_mpv_eq_mul_of_dim_ge}
+    \lean{MPSTensor.pairTraceSeparatingAt_of_groundSpace_inf_eq_bot_of_injective_groundSpaceMap}
+    \lean{MPSTensor.pairTraceSeparatingAt_of_groundSpace_inf_eq_bot_of_isNBlkInjective}
+    \lean{MPSTensor.pairTraceSeparatingAt_threeBlock_of_exists_not_forall_mpv_eq_mul_of_dim_ge}
+    \lean{MPSTensor.groundSpace_inf_eq_bot_of_blocksNotGaugePhaseEquiv_same_dim_of_dim_ge}
+    \lean{MPSTensor.pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv_same_dim_of_dim_ge}
+    \lean{MPSTensor.forall_pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv}
+    \lean{MPSTensor.exists_forall_pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv}
+    \lean{MPSTensor.exists_pos_productWordSpan_of_isCanonicalFormBNT_of_directSum_threeBlock}
+    \lean{MPSTensor.exists_pos_productWordSpan_of_isCanonicalFormBNT_of_directSum_injectiveBlocks}
+    \lean{MPSTensor.exists_pos_productWordSpan_of_isNormalCanonicalFormBNT_of_directSum_injectiveBlocks}
+    \lean{MPSTensor.exists_wordTupleSpanTop_of_isCanonicalFormBNT_of_directSum_injectiveBlocks}
+    \lean{MPSTensor.exists_wordTupleSpanTop_of_isNormalCanonicalFormBNT_of_directSum_injectiveBlocks}
+    \lean{MPSTensor.hasBiCF_of_isCanonicalFormBNT_of_directSum_injectiveBlocks}
+    \lean{MPSTensor.hasBiCF_of_isNormalCanonicalFormBNT_of_directSum_injectiveBlocks}
+    \leanok
+    \uses{lem:three_block_relation_ground_space_inclusion,
+        thm:chain_ground_space_eq_mpv_blk}
+    If \(A\) and \(B\) are length-\(L\) block-injective, the map
+    \(Z\mapsto(t\mapsto\tr(A_tZ))\) has image dimension \(D_A^2\), and
+    similarly for \(B\).  Therefore an inclusion
+    \(\mathcal G_L^A\subseteq \mathcal G_L^B\), together with
+    \(D_B\le D_A\), forces \(D_A=D_B\) and
+    \(\mathcal G_L^A=\mathcal G_L^B\).  In particular, the three-block
+    trace relation from
+    Lemma~\ref{lem:three_block_relation_ground_space_inclusion} gives this
+    equality whenever the source-paper size ordering is available.  If the
+    inclusion comes from the strictly larger block, \(D_B<D_A\), then the same
+    dimension step already contradicts the existence of the three-block trace
+    relation.  More generally, if an external source input rules out the
+    simultaneous conclusion \(D_A=D_B\) and
+    \(\mathcal G_L^A=\mathcal G_L^B\), then the three-block image spaces
+    \(\mathcal G_{3L}^A\) and \(\mathcal G_{3L}^B\) have zero intersection.
+    With injectivity at the three-block length, the strict-size branch itself
+    already gives homogeneous pair trace separation at length \(3L\).
+    One such source input is non-proportionality of the periodic MPV states
+    at a sufficiently long chain length, equivalently distinctness of the
+    corresponding periodic MPV lines: equality of the local image spaces gives
+    equality of the periodic-chain constraint spaces, and injective uniqueness
+    identifies those spaces with the two MPV lines.  For same-dimensional
+    separated BNT blocks, the non-equivalence condition supplies such
+    non-proportional MPV states at arbitrarily large chain lengths; the
+    direct-sum injectivity hypotheses remain explicit.  Zero intersection of
+    the two three-block image spaces also gives homogeneous pair trace
+    separation at that length once the boundary-to-chain maps at the
+    three-block length are injective.  Combining the equal-dimension and
+    unequal-dimension branches over all ordered block pairs gives one common
+    three-block trace-separation length, and hence the positive-length
+    product-word span required by the selector construction.  Since
+    canonical-form/BNT blocks are one-site injective, one may take \(L=2\);
+    injectivity at lengths \(2\) and \(6\) then follows by passing from a
+    fixed injective length to positive multiples.  The same conclusion applies
+    to normal-CF-BNT data once one-site injectivity is supplied explicitly,
+    since the normal-CF-BNT predicate carries the irreducibility and
+    normalization hypotheses used in the direct-sum comparison.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:three_block_relation_ground_space_inclusion}
+    Block injectivity makes the boundary-to-chain map injective, so
+    \(\dim\mathcal G_L^A=D_A^2\) and \(\dim\mathcal G_L^B=D_B^2\).
+    Inclusion gives \(D_A^2\le D_B^2\), while \(D_B\le D_A\) gives the
+    reverse inequality.  Hence \(D_A=D_B\), and equality of dimensions inside
+    the inclusion gives equality of the image spaces.  In the strict-size
+    branch this contradicts \(D_B<D_A\).  For the conditional directness
+    statement, a vector in the intersection of the two three-block image spaces
+    has two boundary representations.  If the first boundary matrix is zero,
+    the vector is zero.  Otherwise the difference of the two coefficient
+    formulas is exactly the homogeneous three-block trace relation, so the
+    dimension step gives the forbidden collapse.  In the equal-size branch,
+    equal local image spaces impose the same cyclic local constraints on a
+    periodic chain.  The injective uniqueness theorem then identifies both
+    cyclic ground spaces with the spans of their MPV states, contradicting
+    non-proportionality of those states.
+\end{proof}
+
 \begin{lemma}[All-length pair trace separation has finite cumulative length]
     \label{lem:all_length_pair_trace_separation_finite_cutoff}
     \lean{MPSTensor.pairEvalWordTuple_mem_pairCumulativeSpan}

@@ -21,6 +21,7 @@ Extracted from various files for reusability.
 ## Main results
 
 - `Matrix.sum_mul_mul`: pull fixed left/right factors through a finite sum
+- `Matrix.finrank_matrix_fin_eq_sq`: square `Fin D` matrices have dimension `D ^ 2`
 - `Matrix.dim_le_of_mulVec_injective`: injective mulVec implies dimension bound
 - `Matrix.PosSemidef.mulVec_eq_zero_left/right`: kernel containment for PSD matrix sums
 - `Matrix.trace_eq_of_charpoly_eq`: equal characteristic polynomials imply equal traces
@@ -29,6 +30,22 @@ Extracted from various files for reusability.
 open scoped Matrix BigOperators ComplexOrder
 
 namespace Matrix
+
+/-- The complex vector-space dimension of `D × D` matrices is `D ^ 2`. -/
+theorem finrank_matrix_fin_eq_sq (D : ℕ) :
+    Module.finrank ℂ (Matrix (Fin D) (Fin D) ℂ) = D ^ 2 := by
+  calc
+    Module.finrank ℂ (Matrix (Fin D) (Fin D) ℂ)
+        = Fintype.card (Fin D) * Fintype.card (Fin D) * Module.finrank ℂ ℂ :=
+            Module.finrank_matrix ℂ ℂ _ _
+    _ = D * D * 1 := by
+          simp only [Fintype.card_fin, Module.finrank_self, mul_one]
+    _ = D ^ 2 := by ring
+
+/-- The top submodule of `D × D` matrices has dimension `D ^ 2`. -/
+theorem finrank_top_matrix_fin_eq_sq (D : ℕ) :
+    Module.finrank ℂ (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) = D ^ 2 := by
+  simpa using finrank_matrix_fin_eq_sq D
 
 /-- Pull fixed left and right matrix factors through a finite sum indexed by `Fin d`. -/
 theorem sum_mul_mul {α : Type*} [NonUnitalNonAssocSemiring α]
