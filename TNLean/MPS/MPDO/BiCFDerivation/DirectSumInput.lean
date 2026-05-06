@@ -83,12 +83,9 @@ theorem exists_right_trace_test_of_three_block_trace_relation_left
         evalWord A (List.ofFn uv.1) * ΔA * evalWord A (List.ofFn uv.2))
     rw [span_range_evalWord_mul_nonzero_mul_evalWord_eq_top hA hΔA]
     exact Submodule.mem_top
-  refine Submodule.span_induction
-    (p := fun Y _ => ∃ W : Matrix (Fin D₂) (Fin D₂) ℂ, ∀ t : Fin L → Fin d,
-      Matrix.trace (Y * evalWord A (List.ofFn t)) +
-        Matrix.trace (W * evalWord B (List.ofFn t)) = 0)
-    ?mem ?zero ?add ?smul hZ
-  · rintro Y ⟨uv, rfl⟩
+  induction hZ using Submodule.span_induction with
+  | mem Y hY =>
+    rcases hY with ⟨uv, rfl⟩
     rcases uv with ⟨u, v⟩
     refine ⟨evalWord B (List.ofFn u) * ΔB * evalWord B (List.ofFn v), ?_⟩
     intro t
@@ -112,10 +109,11 @@ theorem exists_right_trace_test_of_three_block_trace_relation_left
     rw [hAcycle, hBcycle]
     simpa [Au, Av, At, Bu, Bv, Bt, List.ofFn_fin_append, evalWord_append,
       Matrix.mul_assoc] using hRel'
-  · refine ⟨0, ?_⟩
+  | zero =>
+    refine ⟨0, ?_⟩
     intro t
     simp
-  · intro Y₁ Y₂ _ _ hY₁ hY₂
+  | add Y₁ Y₂ _ _ hY₁ hY₂ =>
     rcases hY₁ with ⟨W₁, hW₁⟩
     rcases hY₂ with ⟨W₂, hW₂⟩
     refine ⟨W₁ + W₂, ?_⟩
@@ -131,7 +129,7 @@ theorem exists_right_trace_test_of_three_block_trace_relation_left
               Matrix.trace (W₂ * evalWord B (List.ofFn t))) := by
               simp [Matrix.add_mul, Matrix.trace_add, add_assoc, add_left_comm]
       _ = 0 := by simp [h1, h2]
-  · intro a Y _ hY
+  | smul a Y _ hY =>
     rcases hY with ⟨W, hW⟩
     refine ⟨a • W, ?_⟩
     intro t

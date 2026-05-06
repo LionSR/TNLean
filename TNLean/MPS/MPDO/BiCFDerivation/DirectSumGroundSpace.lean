@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.MPDO.BiCFDerivation.DirectSumInput
-import TNLean.MPS.ParentHamiltonian.BlockStrip
+import TNLean.MPS.ParentHamiltonian.GroundSpace
 
 /-!
 # Direct-sum image-space consequences
@@ -28,6 +28,20 @@ namespace MPSTensor
 
 variable {d D₁ D₂ L : ℕ}
 
+/-- The ground-space map and the trace-test map have the same values; the only
+difference is the side on which the boundary matrix is written before applying
+trace cyclicity. -/
+theorem groundSpaceMap_eq_leftTraceWordMap {D : ℕ} (A : MPSTensor d D) (L : ℕ) :
+    groundSpaceMap A L = leftTraceWordMap A L := by
+  ext X t
+  simpa [groundSpaceMap_apply, leftTraceWordMap_apply] using
+    Matrix.trace_mul_comm (evalWord A (List.ofFn t)) X
+
+/-- The finite-chain image space is the range of the trace-test map. -/
+theorem groundSpace_eq_leftTraceWordMap_range {D : ℕ} (A : MPSTensor d D) (L : ℕ) :
+    groundSpace A L = (leftTraceWordMap A L).range := by
+  rw [groundSpace, groundSpaceMap_eq_leftTraceWordMap]
+
 /-- The three-block trace relation gives inclusion of the finite-chain image
 spaces \(\mathcal G_L^A\subseteq \mathcal G_L^B\).
 
@@ -43,22 +57,8 @@ theorem groundSpace_le_of_three_block_trace_relation_left
       Matrix.trace (ΔA * evalWord A (List.ofFn w)) +
         Matrix.trace (ΔB * evalWord B (List.ofFn w)) = 0) :
     groundSpace A L ≤ groundSpace B L := by
-  rintro ψ ⟨Z, rfl⟩
-  obtain ⟨W, hW⟩ :=
-    exists_right_trace_test_of_three_block_trace_relation_left hA hΔA hRel Z
-  refine ⟨-W, ?_⟩
-  ext t
-  calc
-    groundSpaceMap B L (-W) t =
-        Matrix.trace (evalWord B (List.ofFn t) * (-W)) := by simp
-    _ = Matrix.trace ((-W) * evalWord B (List.ofFn t)) := by
-        rw [Matrix.trace_mul_comm]
-    _ = -Matrix.trace (W * evalWord B (List.ofFn t)) := by simp
-    _ = Matrix.trace (Z * evalWord A (List.ofFn t)) := by
-        simpa using neg_eq_of_add_eq_zero_left (hW t)
-    _ = Matrix.trace (evalWord A (List.ofFn t) * Z) := by
-        rw [Matrix.trace_mul_comm]
-    _ = groundSpaceMap A L Z t := by simp
+  rw [groundSpace_eq_leftTraceWordMap_range A L, groundSpace_eq_leftTraceWordMap_range B L]
+  exact leftTraceWordMap_range_le_of_three_block_trace_relation_left hA hΔA hRel
 
 /-- If both middle test matrices are nonzero, the three-block trace relation
 gives equality of the finite-chain image spaces at length `L`. -/
@@ -72,38 +72,16 @@ theorem groundSpace_eq_of_three_block_trace_relation
       Matrix.trace (ΔA * evalWord A (List.ofFn w)) +
         Matrix.trace (ΔB * evalWord B (List.ofFn w)) = 0) :
     groundSpace A L = groundSpace B L := by
-  apply le_antisymm
-  · exact groundSpace_le_of_three_block_trace_relation_left hA hΔA hRel
-  · rintro ψ ⟨W, rfl⟩
-    obtain ⟨Z, hZ⟩ :=
-      exists_left_trace_test_of_three_block_trace_relation_right hB hΔB hRel W
-    refine ⟨-Z, ?_⟩
-    ext t
-    calc
-      groundSpaceMap A L (-Z) t =
-          Matrix.trace (evalWord A (List.ofFn t) * (-Z)) := by simp
-      _ = Matrix.trace ((-Z) * evalWord A (List.ofFn t)) := by
-          rw [Matrix.trace_mul_comm]
-      _ = -Matrix.trace (Z * evalWord A (List.ofFn t)) := by simp
-      _ = Matrix.trace (W * evalWord B (List.ofFn t)) := by
-          simpa using neg_eq_of_add_eq_zero_right (hZ t)
-      _ = Matrix.trace (evalWord B (List.ofFn t) * W) := by
-          rw [Matrix.trace_mul_comm]
-      _ = groundSpaceMap B L W t := by simp
+  rw [groundSpace_eq_leftTraceWordMap_range A L, groundSpace_eq_leftTraceWordMap_range B L]
+  exact leftTraceWordMap_range_eq_of_three_block_trace_relation hA hB hΔA hΔB hRel
 
 /-- Under block injectivity, the finite-chain image space has dimension equal to
 the boundary matrix algebra. -/
 theorem groundSpace_finrank_eq_of_isNBlkInjective {A : MPSTensor d D}
     (hA : IsNBlkInjective A L) :
     Module.finrank ℂ (groundSpace A L) = D ^ 2 := by
-  rw [groundSpace, LinearMap.finrank_range_of_inj
-    (groundSpaceMap_injective_of_isNBlkInjective hA)]
-  calc
-    Module.finrank ℂ (Matrix (Fin D) (Fin D) ℂ)
-        = (Fintype.card (Fin D) * Fintype.card (Fin D)) * Module.finrank ℂ ℂ := by
-            simpa using (Module.finrank_matrix ℂ ℂ (Fin D) (Fin D))
-    _ = D * D := by simp
-    _ = D ^ 2 := by simp [pow_two]
+  rw [groundSpace_eq_leftTraceWordMap_range]
+  exact leftTraceWordMap_range_finrank_eq_of_isNBlkInjective hA
 
 /-- Equal finite-chain image spaces for two block-injective tensors force equal
 bond dimensions. -/
