@@ -495,8 +495,8 @@ The results follow~\cite{Sanz2010Quantum}.
     (Theorem~\ref{thm:eigenvector_spreading}).
 \end{proof}
 
-\begin{theorem}[Wielandt bound]\label{thm:wielandt_bound}
-    \lean{MPSTensor.isNormal_implies_cumulativeSpan}
+\begin{theorem}[Cumulative Wielandt bound]\label{thm:cumulative_wielandt_bound}
+    \lean{MPSTensor.cumulative_wielandt_bound}
     \leanok
     \uses{def:cumulative_span, def:normal}
     If $A$ is a normal MPS tensor with bond dimension~$D$,
@@ -516,7 +516,7 @@ The results follow~\cite{Sanz2010Quantum}.
 \end{proof}
 
 \begin{remark}[Explicit blocking-length estimates]\leanok
-    Theorem~\ref{thm:wielandt_bound} gives the $D^2$
+    Theorem~\ref{thm:cumulative_wielandt_bound} gives the $D^2$
     cumulative-span bound.
     The full-rank index bound $\iota(A) \le (D^2 - d + 1) \cdot D^2$
     (Theorem 1 case (1) of \cite{Sanz2010Quantum}) is proved in
@@ -1018,7 +1018,7 @@ namely to find $n_0$ such that $S_{n_0}(A) = \MN{D}$
     The source papers use the quantum Wielandt theorem as an input converting
     normality into injectivity after blocking. In the notation of this chapter,
     the input has two distinct conclusions. First,
-    Theorem~\ref{thm:wielandt_bound} gives cumulative saturation
+    Theorem~\ref{thm:cumulative_wielandt_bound} gives cumulative saturation
     $T_{D^2}(A)=\MN{D}$. This alone is not the injectivity statement used in
     canonical form, because injectivity requires products of one fixed length.
     Second, Lemma~2(b) of~\cite{Sanz2010Quantum}, formalized here through

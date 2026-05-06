@@ -142,8 +142,8 @@ normality-to-spanning input for that fixed-length passage.
 
 ### What we prove:
 - `cumulative_wielandt_bound`: T_{D²}(A) = ⊤ for normal tensors
-- `isNormal_iff_cumulativeSpan_eq_top`: characterization of normality
-  via cumulative span
+- `isNormal_implies_cumulativeSpan_eq_top'`: eventual cumulative spanning
+  from normality
 
 ### Fixed-length passage:
 The conversion from vector spanning to fixed-length matrix spanning is the
@@ -162,6 +162,9 @@ theorem cumulative_wielandt_bound [NeZero D]
     cumulativeSpan A (D ^ 2) = ⊤ :=
   cumulativeSpan_eq_top A hN
 
+@[deprecated (since := "2026-05-06")]
+alias isNormal_implies_cumulativeSpan := cumulative_wielandt_bound
+
 /-- **Normality implies cumulative spanning.**
 
 If `IsNormal A` (word products of a single fixed length span M_D(ℂ)),
@@ -178,17 +181,6 @@ lemma isNormal_implies_cumulativeSpan_eq_top'
     (A : MPSTensor d D) (hN : IsNormal A) :
     ∃ N, cumulativeSpan A N = ⊤ :=
   cumulativeSpan_eq_top_of_isNormal A hN
-
-/-- **Normality implies cumulative spanning at D².**
-
-The forward direction of the characterization: if `IsNormal A`, then
-`cumulativeSpan A (D²) = ⊤`.
-
-Paper: arXiv:0909.5347, Lemma 1. -/
-theorem isNormal_implies_cumulativeSpan [NeZero D]
-    (A : MPSTensor d D) (hN : IsNormal A) :
-    cumulativeSpan A (D ^ 2) = ⊤ :=
-  cumulativeSpan_eq_top A hN
 
 /-! ## Part 4: Cumulative Wielandt analysis
 
