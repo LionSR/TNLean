@@ -415,7 +415,7 @@ In the BNT theory (Cirac--Perez-Garcia--Schuch--Verstraete 2017, Section 2.3),
 two blocks with the same weight norm are gauge-phase equivalent, hence have the
 same MPV. In the existence reduction, this property would be derived after
 applying the BNT uniqueness theorem. The phase-class construction in
-`PhaseClassSectorData.lean` is the source-facing route for that BNT step.
+`PhaseClassSectorData.lean` carries out that BNT construction step.
 
 **Proof:**
 1. Let `S = Finset.univ.image (‖μ ·‖)`, `g = S.card`.
