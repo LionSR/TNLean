@@ -118,7 +118,7 @@ This is the coefficient-extraction part of the heterogeneous sector comparison:
 copy-count equality is not an input, but is recovered from the exponent-zero
 case of the power-sum identity after eventual coefficient equality has been
 extrapolated to all exponents. -/
-theorem fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_phaseMatch_exists_copies
+lemma fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_phaseMatch_exists_copies
     (P Q : SectorDecomposition d)
     (perm : Fin P.basisCount ≃ Fin Q.basisCount)
     (hPhase : ∀ j : Fin P.basisCount,
@@ -222,7 +222,7 @@ matching copy counts, and per-basis MPV relations
 `mpv (Q.basis (perm j)) σ = ζ_j^N * mpv (P.basis j) σ`. If the total tensors are
 `SameMPV₂`, then after absorbing the phases `ζ_j` into the sector weights on the `Q` side,
 the per-basis sector weight multisets agree. -/
-theorem fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_phaseMatch
+lemma fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_phaseMatch
     (P Q : SectorDecomposition d)
     (perm : Fin P.basisCount ≃ Fin Q.basisCount)
     (hCopies : ∀ j : Fin P.basisCount, P.copies j = Q.copies (perm j))
@@ -249,10 +249,10 @@ theorem fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_phaseMatch
 
 /-- **Cast-compatible MPV scaling implies the phase-matched heterogeneous sector comparison.**
 
-This theorem isolates the weaker data actually consumed by the
+This lemma isolates the weaker data actually consumed by the
 phase-absorption argument: after matching basis dimensions, each block pair
 only needs a nonzero phase `ζ` relating the MPVs of the matched basis tensors. -/
-theorem fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_mpvScaling_matched_basis
+lemma fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_mpvScaling_matched_basis
     (P Q : SectorDecomposition d)
     (perm : Fin P.basisCount ≃ Fin Q.basisCount)
     (hCopies : ∀ j : Fin P.basisCount, P.copies j = Q.copies (perm j))
@@ -285,12 +285,12 @@ theorem fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_mpvScaling_mat
 
 /-- **Gauge-phase matched sector bases imply the phase-matched heterogeneous sector comparison.**
 
-This theorem converts blockwise gauge-phase equivalence into the corresponding
+This lemma converts blockwise gauge-phase equivalence into the corresponding
 power-law scaling of matrix-product vectors, then consumes the heterogeneous
 sector comparison for a supplied permutation of basis blocks. Thus the
 phase-absorption step is already available once the basis permutation,
 multiplicity equality, and per-block phase data have been supplied. -/
-theorem fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_matched_basis
+lemma fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_matched_basis
     (P Q : SectorDecomposition d)
     (perm : Fin P.basisCount ≃ Fin Q.basisCount)
     (hCopies : ∀ j : Fin P.basisCount, P.copies j = Q.copies (perm j))
