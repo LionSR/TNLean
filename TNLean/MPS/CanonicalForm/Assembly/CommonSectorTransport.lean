@@ -62,7 +62,7 @@ lemma isNormalCanonicalFormBNT_commonRepresentativeBlocksAt
     IsNormalCanonicalFormBNT (d := blockPhysDim d p)
       (F.commonRepresentativeWeight μ) (F.commonRepresentativeBlocksAt hp) where
   toIsNormalCanonicalForm :=
-    F.isNormalCanonicalForm_commonRepresentativeBlocksAt hp μ hμ hAnti.antitone
+    F.isNormalCanonicalForm_commonRepresentativeBlocksAt hp μ hμ hAnti
   mu_strict_anti := hAnti
   blocks_not_equiv := hNotGpe
 
