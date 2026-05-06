@@ -1455,6 +1455,26 @@ summand $\mathbf{0}_{d,D_0}$ used to retain the $N=0$ MPV coefficient.
 \section{Cyclic sector decomposition}%
 \label{sec:cyclic_sectors}
 
+The source input is the cyclic peripheral structure of an irreducible unital
+map from \cite[Chapter~6]{Wolf2012Quantum}, applied to the adjoint transfer
+map, together with the cyclic-block form used in
+\cite[equation~(1) and Lemma~1]{DeLasCuevas2017Irreducible}.  The source writes
+$\E_A^\dagger(P_u)=P_{u+1}$ and
+$A^i=\sum_u P_u A^i P_{u+1}$.  After reversing the cyclic order, the convention
+here is, with sector indices modulo the period $m$,
+\[
+	\E_A^\dagger(P_{u+1}) = P_u,\qquad
+	A^i = \sum_u P_{u+1} A^i P_u .
+\]
+The tensor $C_u$ is obtained by compressing the blocked tensor $A^{[m]}$ to
+the corner $P_u$.  The later finite-family entries starting at
+Definition~\ref{def:common_blocked_cyclic_sector_family} record the additional
+common-blocking data needed when several original blocks must be compared at
+one physical alphabet; they are not separate cyclic-decomposition assertions.
+
+\subsection{Cyclic projections and period removal}%
+\label{sec:cyclic_projection_period_removal}
+
 \begin{theorem}[Compression to a supported projection sector]%
 	\label{thm:compressed_sector}
 	\lean{MPSTensor.exists_compressedTensor_of_supported_projection}
@@ -1711,6 +1731,17 @@ summand $\mathbf{0}_{d,D_0}$ used to retain the $N=0$ MPV coefficient.
 	the predicate of Definition~\ref{def:primitive_irreducible_cyclic_sectors}.
 \end{proof}
 
+\subsection{Common-blocking comparison data}%
+\label{sec:common_blocked_cyclic_sector_comparison}
+
+The following entries concern a finite family of irreducible nonzero-weight
+blocks.  After each block has been decomposed into period-removed sectors, the
+least common multiple of the periods is used to express all sectors over the
+same blocked physical alphabet.  The definitions below record the flattening of
+the double index $(k,u)$, the transported weights $\mu_k^p$, and the
+identification between iterated blocking at $(m_k,e_k)$ and direct blocking at
+the common length $p=m_k e_k$.
+
 \begin{definition}[Common cyclic-sector family]%
 \label{def:common_blocked_cyclic_sector_family}
 	\lean{MPSTensor.CommonBlockedCyclicSectorFamily}
@@ -1734,14 +1765,14 @@ summand $\mathbf{0}_{d,D_0}$ used to retain the $N=0$ MPV coefficient.
 	unit weights inherited from cyclic period removal.
 \end{definition}
 
-\begin{theorem}[Unit weights are nonzero for common reblocked cyclic sectors]%
-\label{thm:common_blocked_cyclic_sector_flat_weight_ne_zero}
+\begin{lemma}[Unit weights are nonzero for common reblocked cyclic sectors]%
+\label{lem:common_blocked_cyclic_sector_flat_weight_ne_zero}
 	\lean{MPSTensor.CommonBlockedCyclicSectorFamily.flatWeight_ne_zero}
 	\leanok
 	\uses{def:common_blocked_cyclic_sector_flat_weight}
 	Every unit weight in Definition~\ref{def:common_blocked_cyclic_sector_flat_weight}
 	is nonzero.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
 	The weight is the constant value $1$, so it is nonzero.
@@ -1863,31 +1894,31 @@ summand $\mathbf{0}_{d,D_0}$ used to retain the $N=0$ MPV coefficient.
 	injective.
 \end{proof}
 
-\begin{theorem}[Weights of common-alphabet sectors]%
-\label{thm:common_flat_weight_apply_of_block}
+\begin{lemma}[Weights of common-alphabet sectors]%
+\label{lem:common_flat_weight_apply_of_block}
 	\lean{MPSTensor.CommonBlockedCyclicSectorFamily.commonFlatWeight_apply_of_block}
 	\leanok
 	\uses{def:common_blocked_cyclic_sector_derived_blocks}
 	For a sector $s$ of the original block $k$, the weight assigned to the
 	corresponding common-alphabet sector is $\mu_k^p$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
 	Unfold the flattened-sector indexing and the definition of the transported
 	weight.
 \end{proof}
 
-\begin{theorem}[Equal weights inside one original block]%
-\label{thm:common_flat_weight_apply_block_eq}
+\begin{lemma}[Equal weights inside one original block]%
+\label{lem:common_flat_weight_apply_block_eq}
 	\lean{MPSTensor.CommonBlockedCyclicSectorFamily.commonFlatWeight_apply_block_eq}
 	\leanok
 	\uses{def:common_blocked_cyclic_sector_derived_blocks}
 	All common-alphabet sectors coming from the same original block carry the same
 	transported weight.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
-	\uses{thm:common_flat_weight_apply_of_block}
+	\uses{lem:common_flat_weight_apply_of_block}
 	Apply the formula for each sector of the fixed original block.
 \end{proof}
 
@@ -2060,8 +2091,14 @@ summand $\mathbf{0}_{d,D_0}$ used to retain the $N=0$ MPV coefficient.
 	Theorem~\ref{thm:exists_common_blocked_cyclic_sector_family_common_multiple}.
 \end{proof}
 
-\subsection{Sector irreducibility lemmas}%
+\subsection{Preliminary lemmas for sector irreducibility}%
 \label{sec:sector_irreducibility_lemmas}
+
+This part records the finite-dimensional projection and fixed-point-algebra
+steps used to prove that the period-removed sectors are irreducible.  The
+source cyclic-block statement supplies the projections and the period $m$; the
+entries here justify the corner irreducibility needed before applying
+primitivity and normality results to the sector blocks.
 
 \begin{lemma}[Pairwise orthogonality from projection sum]%
 	\label{lem:pairwise_ortho_proj_sum}
@@ -3500,7 +3537,7 @@ summand $\mathbf{0}_{d,D_0}$ used to retain the $N=0$ MPV coefficient.
 	\leanok
 	\uses{thm:ft_after_blocking_per_block_cyclic_live_zero_tail,
 		thm:exists_common_blocked_cyclic_sector_family,
-		thm:common_blocked_cyclic_sector_flat_weight_ne_zero}
+		lem:common_blocked_cyclic_sector_flat_weight_ne_zero}
 	If two tensors generate the same MPV family, then the all-zero-block/TP-gauge
 	reduction for nonzero-weight blocks can be combined with a common reblocking
 	of all per-block cyclic sectors.  Each side obtains a finite flattened sector family
@@ -3513,11 +3550,11 @@ summand $\mathbf{0}_{d,D_0}$ used to retain the $N=0$ MPV coefficient.
 \begin{proof}\leanok
 	\uses{thm:ft_after_blocking_per_block_cyclic_live_zero_tail,
 		thm:exists_common_blocked_cyclic_sector_family,
-		thm:common_blocked_cyclic_sector_flat_weight_ne_zero}
+		lem:common_blocked_cyclic_sector_flat_weight_ne_zero}
 	Apply Theorem~\ref{thm:ft_after_blocking_per_block_cyclic_live_zero_tail}.
 	Then apply Theorem~\ref{thm:exists_common_blocked_cyclic_sector_family} to the
 	per-block cyclic-sector data on each side.  The nonzero unit-weight conclusion
-	is Theorem~\ref{thm:common_blocked_cyclic_sector_flat_weight_ne_zero}.
+	is Lemma~\ref{lem:common_blocked_cyclic_sector_flat_weight_ne_zero}.
 \end{proof}
 
 The next results put the cyclic-sector decompositions on a common blocked
