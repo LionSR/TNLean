@@ -3058,6 +3058,41 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     $S$, and the all-length variant allows every finite word.
 \end{definition}
 
+\begin{lemma}[Three-block trace reduction from a nonzero middle matrix]
+    \label{lem:three_block_trace_reduction_nonzero_middle}
+    \lean{MPSTensor.exists_right_trace_test_of_three_block_trace_relation_left}
+    \leanok
+    \uses{def:l_blk_injective, def:pair_trace_separation_words,
+        lem:block_injective_two_sided_word_span}
+    Let \(A\) be \(L\)-block injective, and let \(\Delta_A\neq 0\).
+    Suppose that, for all words \(u,v,t\) of length \(L\),
+    \[
+        \tr\!\bigl(\Delta_A A_v A_t A_u\bigr)
+        + \tr\!\bigl(\Delta_B B_v B_t B_u\bigr)=0 .
+    \]
+    Then for every \(Z\in M_{D_A}(\mathbb C)\) there is a matrix
+    \(W\in M_{D_B}(\mathbb C)\) such that, for all words \(t\) of
+    length \(L\),
+    \[
+        \tr(ZA_t)+\tr(WB_t)=0 .
+    \]
+    This is the trace-dual algebraic step in the two-block case of the
+    direct-sum lemma of \cite{PerezGarcia2007Matrix}.
+\end{lemma}
+
+\begin{proof}\leanok\uses{lem:block_injective_two_sided_word_span}
+    Since \(\Delta_A\neq0\), Lemma~\ref{lem:block_injective_two_sided_word_span}
+    writes \(Z\) as a linear combination of matrices \(A_u\Delta_A A_v\).
+    For one such term, cyclicity of the trace rewrites the three-block relation
+    as
+    \[
+        \tr(A_u\Delta_A A_vA_t)
+        +\tr(B_u\Delta_B B_vB_t)=0 .
+    \]
+    Taking the same linear combination of the matrices \(B_u\Delta_BB_v\)
+    gives the required \(W\), and linearity gives the general case.
+\end{proof}
+
 \begin{lemma}[All-length pair trace separation has finite cumulative length]
     \label{lem:all_length_pair_trace_separation_finite_cutoff}
     \lean{MPSTensor.pairEvalWordTuple_mem_pairCumulativeSpan}
