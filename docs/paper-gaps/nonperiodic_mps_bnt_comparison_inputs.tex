@@ -359,12 +359,17 @@ mathematical layers.
 \begin{itemize}
   \item \path{TNLean/MPS/BNT/Construction.lean} defines
   \leanid{IsCanonicalFormBNT} as canonical form plus strict weight ordering and
-  non-equivalence of distinct BNT representatives. In the same file,
-  \leanid{ProportionalDecompositionData} records the decomposition coefficients
-  used by the proportional comparison theorem. The split comparison theorems
+  non-equivalence of distinct representatives. This is a restricted
+  already-grouped surface: it suppresses the repeated-copy data
+  \(r_j,\mu_{j,q}\) that appear in the BNT expansion and Appendix BNT
+  characterization of \cite{Cirac2016MPDO_arXiv}.
+  In the same file, \leanid{ProportionalDecompositionData} records explicit
+  decomposition coefficients used by a conditional proportional comparison.
+  The split comparison theorems
   \path{fundamentalTheorem_of_separated_CFBNT_data} and
-  \path{fundamentalTheorem_of_separated_normalCFBNT_data} are the formal
-  BNT-level comparison statements.
+  \path{fundamentalTheorem_of_separated_normalCFBNT_data} are therefore
+  strict-representative special cases, not the general BNT theorem stated in
+  the source paper.
 
   \item \path{TNLean/MPS/CanonicalForm/Assembly.lean} records the
   after-blocking theorem in conditional form. The structure

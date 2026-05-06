@@ -2881,7 +2881,7 @@ primitivity and normality results to the sector blocks.
 \end{definition}
 
 \begin{lemma}[Restricted norm-class collapse]
-	\label{thm:bnt_grouping}
+	\label{lem:bnt_grouping}
 	\lean{MPSTensor.exists_bnt_grouping}\leanok
 	\uses{def:norm_class_grouping, thm:bnt_trivial_sector}
 	Let $(\mu_k,A_k)_{k=1}^r$ be a weighted block family with
@@ -2896,7 +2896,8 @@ primitivity and normality results to the sector blocks.
 \begin{theorem}[Gauge equivalence from non-decaying cross-overlap]
 	\label{thm:gauge_equiv_nondecay}
 	\lean{MPSTensor.gaugePhaseEquiv_of_nonDecaying_overlap}\leanok
-	For trace-preserving irreducible blocks, a non-decaying cross-overlap forces equal bond dimensions and gauge equivalence up to a unit-modulus phase.
+	For trace-preserving irreducible blocks, a non-decaying cross-overlap
+	forces equal bond dimensions and gauge-phase equivalence.
 \end{theorem}
 
 \begin{theorem}[Gauge phases have unit modulus for primitive irreducible blocks]
@@ -2913,21 +2914,10 @@ primitivity and normality results to the sector blocks.
 	so the gauge phase must have modulus one.
 \end{proof}
 
-\begin{theorem}[BNT partition from gauge equivalence]
-	\label{thm:bnt_grouping_gauge_equiv}
-	\lean{MPSTensor.exists_bnt_grouping_of_gaugePhaseEquiv}\leanok
-	\uses{thm:bnt_grouping}
-	If equal-norm blocks are related by gauge equivalence with unit-modulus phase, the phases can be absorbed into sector weights to obtain a BNT grouping with strictly decreasing sector norms.
-\end{theorem}
-
-\begin{theorem}[Sector decomposition from TP primitive irreducible blocks]
-	\label{thm:sector_decomp_tp_prim_irr}
-	\lean{MPSTensor.exists_sectorDecomp_of_tp_primitive_irr_blocks}\leanok
-	\uses{thm:gauge_equiv_nondecay, thm:bnt_grouping_gauge_equiv}
-	From a trace-preserving primitive irreducible block decomposition with nonzero
-	weights and non-decaying cross-overlaps for equal-norm blocks, one obtains a
-	sector decomposition with strict norm ordering.
-\end{theorem}
+The preceding norm-class collapse is a restricted lemma, not the source BNT
+construction.  The phase-class construction below carries out that grouping step:
+it keeps minimal gauge-phase representatives and records repeated copies through
+sector weights.
 
 \begin{lemma}[Existential BNT independence from overlap limits]
 	\label{lem:bnt_li_from_overlap_limits_exists}
