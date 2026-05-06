@@ -211,7 +211,7 @@ then the exact word span at level `D ^ 2` is the full matrix algebra.
 
 Paper: arXiv:0909.5347, Theorem 1 case (3); Wolf, Theorem 6.9.
 -/
-theorem wordSpan_eq_top_of_isPrimitivePaper_of_noninvertible_eigenvector
+lemma wordSpan_eq_top_of_isPrimitivePaper_of_noninvertible_eigenvector
     [NeZero D]
     (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
@@ -229,7 +229,7 @@ theorem wordSpan_eq_top_of_isPrimitivePaper_of_noninvertible_eigenvector
 
 Paper: arXiv:0909.5347, Theorem 1 case (3); Wolf, Theorem 6.9.
 -/
-theorem iIndex_le_sq_of_noninvertible_eigenvector
+lemma iIndex_le_sq_of_noninvertible_eigenvector
     [NeZero D]
     (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
@@ -311,7 +311,7 @@ If `A` is normalized and primitive in the paper's sense and some Kraus operator
 
 Paper: arXiv:0909.5347, Theorem 1 case (2); Wolf, Theorem 6.9.
 -/
-theorem wordSpan_eq_top_of_isPrimitivePaper_of_isUnit
+lemma wordSpan_eq_top_of_isPrimitivePaper_of_isUnit
     [NeZero D]
     (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
@@ -326,7 +326,7 @@ theorem wordSpan_eq_top_of_isPrimitivePaper_of_isUnit
 
 Paper: arXiv:0909.5347, Theorem 1 case (2); Wolf, Theorem 6.9.
 -/
-theorem iIndex_le_of_isPrimitivePaper_of_isUnit
+lemma iIndex_le_of_isPrimitivePaper_of_isUnit
     [NeZero D]
     (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
