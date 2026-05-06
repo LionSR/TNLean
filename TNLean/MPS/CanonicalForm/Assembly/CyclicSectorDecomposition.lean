@@ -20,6 +20,17 @@ relates powers of the adjoint transfer map to blocked transfer maps, applies the
 channel-level cyclic decomposition to a blocked periodic tensor, and then derives
 its MPS-formulation for irreducible TP tensors.
 
+The paper-level theorem being formalized is the passage from a periodic
+irreducible block to normal blocks after blocking by the period.  In the notation
+of arXiv:1708.00029, the cyclic projections satisfy
+$$
+  \mathcal E_A^*(P_{u+1}) = P_u,
+  \qquad A^i = \sum_u P_u A^i P_{u+1},
+  \qquad C_u = P_u A^{[m]} P_u.
+$$
+The later common-length constructions for several original blocks are separate
+finite-family data used by the non-periodic fundamental-theorem proof.
+
 ## Main statements
 
 The first theorem derives the MPS-level cyclic-sector decomposition for an
@@ -30,8 +41,8 @@ extra assumptions.
 
 ## References
 
-* [Cirac–Pérez-García–Schuch–Verstraete, arXiv:1606.00608, Appendix A]
-* [Cirac–Pérez-García–Schuch–Verstraete, arXiv:2011.12127, Section IV]
+* [Wolf, *Quantum Channels & Operations*, Chapter 6]
+* [De las Cuevas et al., arXiv:1708.00029, periodic-block decomposition]
 
 ## Tags
 

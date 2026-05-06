@@ -9,8 +9,23 @@ open scoped Matrix BigOperators ComplexOrder MatrixOrder
 /-!
 # Common blocked cyclic-sector families
 
-This file contains the common reblocking data used to assemble the primitive cyclic
+This file contains the common reblocking data used to compare the primitive cyclic
 sectors of finitely many nonzero-weight blocks at a shared physical blocking length.
+
+For one periodic block, arXiv:1708.00029 blocks by the period and obtains normal
+sector tensors $C_u = P_u A^{[m]} P_u$.  This file starts after that one-block
+decomposition has been chosen for each original block.  It records a common
+length $p = m_k e_k$ so that every sector can be regarded as a tensor over the
+same blocked physical alphabet.  Thus this shared-alphabet condition is
+finite-family comparison data, not a separate theorem in the paper source.
+
+## References
+
+* [De las Cuevas et al., arXiv:1708.00029, blocking periodic tensors]
+
+## Tags
+
+matrix product states, cyclic sectors, blocking, canonical form
 -/
 
 namespace MPSTensor
@@ -64,7 +79,7 @@ structure CommonBlockedCyclicSectorFamily {d r : ℕ} {dim : Fin r → ℕ}
   sector_irreducible : ∀ k s, IsIrreducibleTensor (sectorBlocks k s)
   /-- The sector bond dimensions are positive before later reblocking. -/
   sector_dim_pos : ∀ k s, 0 < sectorDim k s
-  /-- The iterated blocked physical alphabet is propositionally the common alphabet. -/
+  /-- The iterated blocked physical alphabet is propositionally the shared alphabet. -/
   blockPhysDim_nested_eq : ∀ k,
     blockPhysDim (blockPhysDim d (period k)) (extra k) = blockPhysDim d p
   /-- The checked MPV compatibility condition for each original nonzero-weight block
