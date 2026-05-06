@@ -3333,13 +3333,14 @@ sector weights.
 	block decomposition.
 \end{proof}
 
-\begin{theorem}[Conditional block matching after blocking]%
+\begin{theorem}[Conditional matching for restricted separated representatives after blocking]%
 	\label{thm:weak_ft_conditional_ch8}
 	\lean{MPSTensor.weakFundamentalTheorem_conditional}
 	\leanok
 	\uses{def:is_normal_canonical_form}
-	Consider two block families in normal canonical form, with no two distinct
-	blocks of the same dimension related by gauge-phase equivalence.
+	Consider two restricted separated representative block families in normal
+	canonical form, with no two distinct blocks of the same dimension related by
+	gauge-phase equivalence.
 	If two tensors decompose into these families with coefficient sequences having
 	nonzero limits, and the two tensors are asymptotically proportional
 	coefficientwise, then the numbers of blocks agree and the blocks match up to
@@ -3349,7 +3350,8 @@ sector weights.
 \begin{proof}\leanok
 	This is the block-matching statement from the multi-block fundamental theorem
 	applied to two decompositions that already satisfy the normal-canonical-form
-	and BNT-separation hypotheses.
+	and separated-representative hypotheses. The repeated-copy BNT comparison is
+	handled later by sector-decomposition and multiplicity data.
 \end{proof}
 
 \begin{theorem}[Common blocking period for two primitive normal tensors]%

@@ -62,7 +62,7 @@ used in this chapter.
 
 \begin{proof}\leanok
     \uses{thm:ft_proportional_nt}
-    This is exactly the normal-canonical-form Fundamental Theorem
+    This is the restricted normal-CF-BNT proportional comparison
     (Theorem~\ref{thm:ft_proportional_nt}).
     The normal canonical form data provide the BNT separation
     and overlap convergence hypotheses;
@@ -197,14 +197,14 @@ obtained after the proportional Fundamental Theorem by matching the BNT blocks,
 then comparing the sector-weight power sums.
 
 We record the comparison statements in the two forms needed below. The
-heterogeneous equal-case theorem, stated as
+restricted heterogeneous equal-case theorem, stated as
 Theorem~\ref{thm:fundamentalTheorem_equalMPV_CFBNT_hetero}, gives the
 block-count, bond-dimension, and gauge-phase matching directly from equality of
 the assembled MPV families. The common-structure theorem below proves the
 global gauge statement when the two sides already share the same block data.
-The remaining source-facing assembly step is to combine the heterogeneous
-matching with sector-weight recovery and the copy-count equalities into one
-global block-diagonal gauge.
+The general CPSV endpoint still passes through sector decompositions, copy-count
+recovery, and sector-weight multiset comparison before one obtains a global
+block-diagonal gauge.
 
 \begin{theorem}[Fundamental Theorem --- equal MPV case, common block structure]\label{thm:ft_equal_same_structure}
 	\lean{MPSTensor.fundamentalTheorem_equalMPV_CFBNT}
