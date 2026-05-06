@@ -146,11 +146,12 @@ theorem exists_tp_primitive_blockDecomp_after_blocking (A : MPSTensor d D) :
 /-!
 ## Conditional normal canonical form
 
-If the blocked weights happen to have pairwise distinct norms, and the blocked
+If the blocked weights are ordered by non-increasing norm, and the blocked
 blocks are irreducible, then the data can be shown to satisfy
-`IsNormalCanonicalForm` after sorting by weight norm.
+`IsNormalCanonicalForm`.  Equal weight moduli are allowed; requiring pairwise
+distinct norms is only a restricted separated-representative branch.
 
-This is a conditional theorem: the two extra hypotheses are genuine conditions
+This is a conditional theorem: the extra hypotheses are genuine conditions
 that the reduction does not produce automatically (see gap documentation above).
 -/
 
