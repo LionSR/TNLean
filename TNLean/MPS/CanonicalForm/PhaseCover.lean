@@ -88,8 +88,8 @@ end MPVBlockPhaseEquiv
 The data consist of the finite common family, the class maps from the two block
 families to it, the MPV-phase equivalences between each block and its chosen
 common block, and surjectivity of both class maps.  These are the paper-level
-data needed by the span comparison theorem; constructing them from the full
-structural `SameMPV₂` data is a separate comparison theorem. -/
+data needed by the span comparison result; constructing them from the full
+structural `SameMPV₂` data is a separate comparison step. -/
 structure MPVCommonPhaseCover {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     (blocksA : (j : Fin rA) → MPSTensor d (dimA j))
@@ -218,7 +218,7 @@ lemma mpv_span_eq_of_surjective_phase_cover {r rC : ℕ}
 /-- Two block families with a common surjective MPV-phase quotient have equal finite-length
 MPV spans.
 
-This theorem is deliberately independent of the sector weights.  It states the precise
+This lemma is deliberately independent of the sector weights.  It states the precise
 linear-algebra hypothesis used by the nonzero-part after-blocking theorem once a common-blocking
 result supplies a common representative family and shows that both sides cover it. -/
 lemma mpv_span_eq_of_common_phase_cover {rA rB rC : ℕ}
@@ -383,7 +383,7 @@ lemma nonempty_mpvCommonPhaseCover_of_equiv_phase
 /-- A BNT proportional-decomposition conclusion gives finite-length MPV span equality.
 
 The conclusion is obtained by taking the left family as the common MPV phase-cover family and
-then applying the common-cover span theorem. -/
+then applying the common-cover span lemma. -/
 lemma mpv_span_eq_of_proportionalDecompositionConclusion
     {rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     (blocksA : (j : Fin rA) → MPSTensor d (dimA j))
@@ -414,7 +414,7 @@ lemma mpv_span_eq_of_equiv_phase
 phase cover.
 
 The proof uses the BNT comparison theorem to obtain a permutation and gauge phases between the
-basis blocks; applying the proportional-decomposition cover theorem to that matching yields the
+basis blocks; applying the proportional-decomposition cover lemma to that matching yields the
 common MPV phase cover. It does not use a finite-length span equality hypothesis. -/
 lemma nonempty_mpvCommonPhaseCover_of_separated_normalCFBNT_data
     {rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
@@ -436,7 +436,7 @@ lemma nonempty_mpvCommonPhaseCover_of_separated_normalCFBNT_data
 /-- Separated normal canonical-form data give finite-length MPV span equality.
 
 The BNT comparison theorem gives a proportional-decomposition conclusion, hence a common
-MPV phase cover, and the common-cover theorem gives equality of the two block-family spans. -/
+MPV phase cover, and the common-cover span lemma gives equality of the two block-family spans. -/
 lemma mpv_span_eq_of_separated_normalCFBNT_data
     {rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
