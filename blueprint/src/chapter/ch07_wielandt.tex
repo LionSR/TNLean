@@ -429,13 +429,13 @@ The results follow~\cite{Sanz2010Quantum}.
     Immediate from Theorem~\ref{thm:eigenvalue_extraction}.
 \end{proof}
 
-\begin{theorem}[Wielandt chain]\label{thm:wielandt_chain}
+\begin{lemma}[Cumulative Wielandt analysis]\label{lem:wielandt_chain}
     \lean{MPSTensor.wielandt_chain}
     \leanok
     \uses{def:wielandt_analysis, def:cumulative_vector_span, def:normal,
           def:cumulative_span}
     Let $A$ be a normal MPS tensor with bond dimension~$D \ge 1$.
-    Then the following hold simultaneously:
+    Then the following auxiliary consequences hold simultaneously:
     \begin{enumerate}
         \item $T_{D^2}(A) = \MN{D}$ (cumulative span stabilises);
         \item there exists a word $w_0$ with $|w_0| \le D^2$ and
@@ -445,7 +445,7 @@ The results follow~\cite{Sanz2010Quantum}.
         \item for every $\varphi \ne 0$,
               $K_{D^2}(A, \varphi) = \C^D$.
     \end{enumerate}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -821,7 +821,7 @@ The results follow~\cite{Sanz2010Quantum}.
               $S_{D^2 \cdot n}(A) = \MN{D}$.
         \item If $A^w$ is non-invertible (non-invertible case),
               the eigenvector $\varphi$ spans a proper subspace,
-              and the Wielandt chain argument gives
+              and the rank-one extraction argument gives
               $S_{D^2}(B) = \MN{D}$, whence
               $S_{D^2 \cdot n}(A) = \MN{D}$.
         \end{enumerate}
