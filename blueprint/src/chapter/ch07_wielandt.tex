@@ -439,63 +439,7 @@ The results follow~\cite{Sanz2010Quantum}.
 
 \section{Proof of the cumulative Wielandt bound}
 
-\begin{definition}[Wielandt analysis]\label{def:wielandt_analysis}
-    \lean{MPSTensor.WielandtAnalysis}
-    \leanok
-    \uses{def:mps_tensor, def:normal}
-    A \emph{Wielandt analysis} for a normal MPS tensor~$A$
-    consists of:
-    a word $w_0$ of length $\le D^2$,
-    a nonzero eigenvalue $\mu$,
-    and a nonzero eigenvector $\varphi$
-    of the matrix $A^{w_0}$, such that
-    $A^{w_0} \varphi = \mu \varphi$.
-\end{definition}
-
-\begin{lemma}[Wielandt analysis exists]\label{lem:wielandt_analysis}
-    \lean{MPSTensor.wielandtAnalysis}
-    \leanok
-    \uses{def:wielandt_analysis, def:normal}
-    Every normal MPS tensor with bond dimension $D \ge 1$ admits a
-    Wielandt analysis.
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    \uses{thm:eigenvalue_extraction}
-    Immediate from Theorem~\ref{thm:eigenvalue_extraction}.
-\end{proof}
-
-\begin{lemma}[Cumulative Wielandt analysis]\label{lem:wielandt_chain}
-    \lean{MPSTensor.wielandt_chain}
-    \leanok
-    \uses{def:wielandt_analysis, def:cumulative_vector_span, def:normal,
-          def:cumulative_span}
-    Let $A$ be a normal MPS tensor with bond dimension~$D \ge 1$.
-    Then the following auxiliary consequences hold simultaneously:
-    \begin{enumerate}
-        \item $T_{D^2}(A) = \MN{D}$ (cumulative span stabilises);
-        \item there exists a word $w_0$ with $|w_0| \le D^2$ and
-              $\tr(A^{w_0}) \ne 0$;
-        \item there exist $w_0, \mu \ne 0, \varphi \ne 0$ with
-              $|w_0| \le D^2$ and $A^{w_0} \varphi = \mu\,\varphi$;
-        \item for every $\varphi \ne 0$,
-              $K_{D^2}(A, \varphi) = \C^D$.
-    \end{enumerate}
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    \uses{lem:wielandt_analysis, thm:eigenvector_spreading,
-          thm:cumulative_eq_top}
-    Items (1)--(3) follow from earlier results
-    (Theorem~\ref{thm:cumulative_eq_top}
-    and Lemma~\ref{lem:wielandt_analysis}).
-    Item (4) combines these with the eigenvector spreading bound
-    (Theorem~\ref{thm:eigenvector_spreading}).
-\end{proof}
-
-\begin{theorem}[Cumulative Wielandt bound]\label{thm:cumulative_wielandt_bound}
+\begin{theorem}[Wielandt bound]\label{thm:wielandt_bound}
     \lean{MPSTensor.cumulative_wielandt_bound}
     \leanok
     \uses{def:cumulative_span, def:normal}
@@ -516,7 +460,7 @@ The results follow~\cite{Sanz2010Quantum}.
 \end{proof}
 
 \begin{remark}[Explicit blocking-length estimates]\leanok
-    Theorem~\ref{thm:cumulative_wielandt_bound} gives the $D^2$
+    Theorem~\ref{thm:wielandt_bound} gives the $D^2$
     cumulative-span bound.
     The full-rank index bound $\iota(A) \le (D^2 - d + 1) \cdot D^2$
     (Theorem 1 case (1) of \cite{Sanz2010Quantum}) is proved in
@@ -1018,7 +962,7 @@ namely to find $n_0$ such that $S_{n_0}(A) = \MN{D}$
     The source papers use the quantum Wielandt theorem as an input converting
     normality into injectivity after blocking. In the notation of this chapter,
     the input has two distinct conclusions. First,
-    Theorem~\ref{thm:cumulative_wielandt_bound} gives cumulative saturation
+    Theorem~\ref{thm:wielandt_bound} gives cumulative saturation
     $T_{D^2}(A)=\MN{D}$. This alone is not the injectivity statement used in
     canonical form, because injectivity requires products of one fixed length.
     Second, Lemma~2(b) of~\cite{Sanz2010Quantum}, formalized here through
