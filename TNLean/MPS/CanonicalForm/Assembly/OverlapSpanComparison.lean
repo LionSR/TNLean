@@ -35,10 +35,10 @@ phase-class BNT construction separately to the two families gives sector bases
 with positive dimensions, left-canonical normalization, self-overlap limit `1`,
 and off-overlap limit `0` for distinct representatives.
 
-This theorem contains only the one-sided overlap-orthogonality conclusions. It
+This lemma contains only the one-sided overlap-orthogonality conclusions. It
 does not assume or prove the two-family finite-length span comparison or
 one-site injectivity hypotheses needed for `SectorBasisOverlapSpanHypotheses`. -/
-theorem sectorBasisOverlapOrthoHypotheses_of_reindexedNonzeroParts
+lemma sectorBasisOverlapOrthoHypotheses_of_reindexedNonzeroParts
     {d D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (hSame : SameMPV₂ A B)
@@ -96,7 +96,7 @@ of the nonzero-weight blocks, and equality of their finite-length MPV spans. The
 these can be supplied by a common MPV phase cover (via
 `CommonPrimitiveSpanHypotheses.of_commonPhaseCover`) or by a BNT proportional-decomposition
 comparison (via `CommonPrimitiveProportionalHypotheses.toSpanHypotheses`). -/
-theorem sectorBasisOverlapSpanHypotheses_of_reindexedNonzeroParts
+lemma sectorBasisOverlapSpanHypotheses_of_reindexedNonzeroParts
     {d D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (hSame : SameMPV₂ A B)
@@ -183,7 +183,7 @@ This is the common-phase-cover form of
 finite-length span equality directly, it asks for a common MPV phase cover of the two
 nonzero-weight block families. The cover supplies the span equality through
 `MPVCommonPhaseCover.span_eq`. -/
-theorem sectorBasisOverlapSpanHypotheses_of_reindexedNonzeroParts_commonPhaseCover
+lemma sectorBasisOverlapSpanHypotheses_of_reindexedNonzeroParts_commonPhaseCover
     {d D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (hSame : SameMPV₂ A B)
@@ -272,8 +272,8 @@ This is the BNT-cover form of
 The additional input provides the BNT-level data for the reindexed nonzero-sector
 families, with whatever total dimensions support the proportional-decomposition
 data. The conversion from BNT-cover hypotheses to common primitive phase-cover
-hypotheses then lets the common-phase-cover theorem supply the overlap-span data. -/
-theorem sectorBasisOverlapSpanHypotheses_of_reindexedNonzeroParts_bntCover
+hypotheses then lets the common-phase-cover lemma supply the overlap-span data. -/
+lemma sectorBasisOverlapSpanHypotheses_of_reindexedNonzeroParts_bntCover
     {d D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (hSame : SameMPV₂ A B)
@@ -344,8 +344,8 @@ theorem sectorBasisOverlapSpanHypotheses_of_reindexedNonzeroParts_bntCover
 This is the explicit-data form of
 `sectorBasisOverlapSpanHypotheses_of_reindexedNonzeroParts_bntCover`. It forms the
 BNT-cover hypotheses from the common primitive structural data together with the
-BNT comparison inputs, then applies the BNT-cover overlap-span theorem. -/
-theorem sectorBasisOverlapSpanHypotheses_of_commonPrimitiveBNTData
+BNT comparison inputs, then applies the BNT-cover overlap-span lemma. -/
+lemma sectorBasisOverlapSpanHypotheses_of_commonPrimitiveBNTData
     {d D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (hSame : SameMPV₂ A B)
@@ -426,7 +426,7 @@ deriving the zero-tail identity.**
 This form of `sectorBasisOverlapSpanHypotheses_of_commonPrimitiveBNTData`
 removes the explicit zero-tail equality from the hypotheses. The identity is derived
 from the length-zero MPV equality and proportional-decomposition data. -/
-theorem sectorBasisOverlapSpanHypotheses_of_commonPrimitiveBNTData_zeroTailIdentity
+lemma sectorBasisOverlapSpanHypotheses_of_commonPrimitiveBNTData_zeroTailIdentity
     {d D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (hSame : SameMPV₂ A B)
@@ -507,7 +507,7 @@ Normal canonical form together with BNT separation for the common primitive
 families, proportional-decomposition data, and injectivity of the nonzero blocks
 imply the overlap-span hypotheses.  The equality of the zero tails follows from
 the length-zero proportionality relation. -/
-theorem sectorBasisOverlapSpanHypotheses_of_commonPrimitiveNormalBNTData_zeroTailIdentity
+lemma sectorBasisOverlapSpanHypotheses_of_commonPrimitiveNormalBNTData_zeroTailIdentity
     {d D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (hSame : SameMPV₂ A B)
@@ -584,7 +584,7 @@ This is the proportional-comparison form of
 conclusion for the two nonzero-weight block families gives a common MPV phase cover, hence the
 finite-length span equality needed to construct BNT representatives of MPV
 phase-equivalence classes. -/
-theorem sectorBasisOverlapSpanHypotheses_of_reindexedNonzeroParts_proportional
+lemma sectorBasisOverlapSpanHypotheses_of_reindexedNonzeroParts_proportional
     {d D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (hSame : SameMPV₂ A B)
