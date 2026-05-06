@@ -179,17 +179,6 @@ lemma isNormal_implies_cumulativeSpan_eq_top'
     ∃ N, cumulativeSpan A N = ⊤ :=
   cumulativeSpan_eq_top_of_isNormal A hN
 
-/-- **Normality implies cumulative spanning at D².**
-
-The forward direction of the characterization: if `IsNormal A`, then
-`cumulativeSpan A (D²) = ⊤`.
-
-Paper: arXiv:0909.5347, Lemma 1. -/
-theorem isNormal_implies_cumulativeSpan [NeZero D]
-    (A : MPSTensor d D) (hN : IsNormal A) :
-    cumulativeSpan A (D ^ 2) = ⊤ :=
-  cumulativeSpan_eq_top A hN
-
 /-! ## Part 4: Cumulative Wielandt analysis
 
 The paper states the pieces below as Lemma 1, eigenvector extraction in the proof
