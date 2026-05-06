@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.MPDO.BiCFDerivation.Counterexample
 import TNLean.MPS.MPDO.BiCFDerivation.DirectSumGroundSpace
-import TNLean.MPS.MPDO.BiCFDerivation.DirectSumInput
 
 /-!
 # Finite-length sufficient conditions and obstructions for MPDO biCF
