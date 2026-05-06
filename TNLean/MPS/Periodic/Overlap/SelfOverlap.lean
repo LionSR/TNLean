@@ -824,12 +824,21 @@ theorem periodicSelfOverlap_tendsto
     [NeZero D] (A : MPSTensor d D) {m : ℕ}
     (hP : IsPeriodic m A) :
     Tendsto (fun k => mpvOverlap A A (m * k)) atTop (nhds (m : ℂ)) := by
-  -- PROOF STRUCTURE: see lemma
-  -- `blockTensor_selfOverlap_tendsto_of_cyclicSectorDecomp` for the planned
-  -- proof route.
-  -- Currently sorry-backed pending discharge of
-  -- `primitive_and_irreducible_sectorBlocks_of_cyclicDecomp`.
-  sorry
+  letI : NeZero m := ⟨Nat.ne_of_gt hP.period_pos⟩
+  obtain ⟨dim, blocks, hBlocks_lc, hBlocks_mpv, hCyclic, hNondeg⟩ :=
+    exists_cyclic_sector_decomp_after_blocking_of_isPeriodic A hP
+  have hBlocked :
+      Tendsto
+        (fun k => mpvOverlap (d := blockPhysDim d m)
+          (blockTensor (d := d) (D := D) A m)
+          (blockTensor (d := d) (D := D) A m) k)
+        atTop (nhds (m : ℂ)) :=
+    blockTensor_selfOverlap_tendsto_of_cyclicSectorDecomp
+      A hP blocks hBlocks_lc hBlocks_mpv hCyclic hNondeg
+  refine hBlocked.congr' ?_
+  filter_upwards with k
+  rw [mpvOverlap_blockTensor_self_eq]
+  simp [Nat.mul_comm]
 
 
 end MPSTensor
