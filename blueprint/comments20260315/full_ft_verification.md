@@ -1,139 +1,104 @@
-# Verification: literature equal-MPV FT versus the current Lean endpoint
+# Verification: equal-MPV FT endpoints after retiring the explicit-coefficient route
 
-This note records the status after the March 17, 2026 refinement of
-`MPSTensor.fundamentalTheorem_equalMPV_of_explicit_coefficients` in
-`TNLean/MPS/FundamentalTheorem/EqualProportional.lean`.
+This note records the equal-MPV Fundamental Theorem surface after the
+explicit-coefficient equal-case endpoint was retired. The current development
+keeps the literature equal case as the chapter-level target and exposes the
+surviving checked endpoints below.
 
-The key point is simple: the current Lean theorem is now an
-explicit-coefficient equal-case upgrade of the currently formalized
-proportional Fundamental Theorem. It is not yet the unconditional
-literature corollary `[CPGSV21, Corollary IV.5]` / `II_cor2`.
+The source-paper equal case compares repeated BNT blocks through the
+coefficients
+`sum_q mu_{j,q}^N`. The proof therefore needs both BNT matching and the
+power-sum recovery step; it is not just a multiplicity-one coefficient-limit
+argument.
 
 ---
 
-## 1. Distinguish the three statements
+## 1. Literature equal-MPV FT
 
-### Literature equal-MPV FT (`thm:ft_equal` in the blueprint)
+The blueprint theorem `thm:ft_equal` is the literature-level statement:
+if two tensors in canonical form generate the same MPV family at every
+system size, then the total block-diagonal tensors are gauge equivalent.
 
-If two tensors in canonical form generate the same MPV family for all
-system sizes, then the total block-diagonal tensors are gauge
-equivalent.
+This remains the target statement for the full non-periodic equal case.
+The current proof route has source-faithful pieces, but still keeps some
+comparison inputs explicit before the final theorem can be closed.
 
-This is the chapter-level target corresponding to the literature equal
-case. In the papers, however, the equal-case argument keeps additional
-multiplicity data, so this remains a target statement rather than a
-formalized theorem in the present Lean development.
+---
 
-### Explicit-coefficient Lean theorem
-(`fundamentalTheorem_equalMPV_of_explicit_coefficients`)
+## 2. Surviving Lean endpoints
 
-Under the CF-BNT hypotheses, together with explicit coefficient arrays
-`aCoeff`, `bCoeff`, convergence to nonzero limits, and equality of MPVs,
-Lean proves:
-
-- equality of the block counts,
-- a permutation matching the block dimensions,
-- a global `GaugeEquiv` between the reindexed weighted block tensors.
-
-This is the equal-case upgrade of the current formalized proportional FT.
-It is **not** the unconditional literature corollary.
-
-### Same-structure special case (`fundamentalTheorem_equalMPV_CFBNT`)
+### Common-block-structure special case
+`MPSTensor.fundamentalTheorem_equalMPV_CFBNT`
 
 If the block count, block dimensions, and weights are fixed in advance,
-then equal MPVs imply per-block gauge equivalence and hence global gauge
-equivalence.
-
-This remains a different formalized special case.
+equal MPVs imply per-block gauge equivalence and hence global gauge
+equivalence. This is a useful special case, but it is not the full
+literature theorem because the block matching and multiplicity recovery
+are assumed through the shared structure.
 
 ### Heterogeneous block-matching theorem
-(`fundamentalTheorem_equalMPV_CFBNT_hetero`)
+`MPSTensor.fundamentalTheorem_equalMPV_CFBNT_hetero`
 
 This theorem starts from equal MPVs for two CF-BNT families with different
 block counts and bond dimensions. It proves equality of the block counts,
 a permutation preserving bond dimensions, and blockwise gauge-phase
-equivalence. It does not yet assert the final global weighted gauge
-equivalence of the assembled block-diagonal tensors.
+equivalence. It is the block-matching part of the equal case, not the
+final global weighted gauge equivalence.
+
+### Sector-decomposition multiplicity route
+`MPSTensor.fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_phaseMatch_exists_copies`
+
+This is the closer match to the source-paper repeated-block argument.
+It compares sector coefficient sums, recovers copy counts and sector
+weight multisets, and packages the phase-matched sector data needed for
+the weighted comparison.
 
 ---
 
-## 2. What the refined Lean theorem actually proves
+## 3. Remaining gap to the literature corollary
 
-The proof in `Full.lean` now follows this route.
+Several ingredients still have to be assembled before `thm:ft_equal`
+matches the paper-level equal case.
 
-1. Convert equal MPVs to proportional MPVs with constant `c_N = 1`.
-2. Apply `fundamentalTheorem_proportionalMPV_CFBNT` using the explicit
-   coefficient hypotheses. This gives a permutation `π`, pointwise
-   dimension equalities, and blockwise gauge-phase equivalences
-   $$B_{\pi(j)}^i = \zeta_j X_j A_j^i X_j^{-1}.$$
-3. Use `mpv_toTensorFromBlocks_eq_sum` together with BNT linear
-   independence to show that for all large `N`,
-   $$ (\mu_j^A)^N = (\mu_{\pi(j)}^B \zeta_j)^N. $$
-4. Compare two consecutive exponents to deduce
-   $$ \mu_j^A = \mu_{\pi(j)}^B \zeta_j. $$
-5. Absorb the factors `\zeta_j` into the weights and assemble the
-   weighted block conjugacies to obtain a global gauge equivalence of the
-   reindexed totals.
+- The heterogeneous CF-BNT theorem stops at blockwise gauge-phase matching.
+- The repeated-copy BNT comparison requires the sector-decomposition data
+  and the power-sum recovery step.
+- The after-blocking route still records comparison hypotheses explicitly
+  before obtaining the final weighted gauge conclusion.
+- Zero-block bookkeeping is tracked separately through the zero-tail
+  dimension identities.
 
-This description matches the current Lean code.
-
----
-
-## 3. Why this is still not Corollary IV.5 / `II_cor2`
-
-Several gaps remain between the current Lean theorem and the paper-level
-full equal-case theorem.
-
-- The theorem still assumes explicit coefficient arrays with nonzero
-  limits. These hypotheses are not discharged internally from the CF-BNT
-  data alone.
-- The current coefficient-convergence lemmas give normalized ratios with
-  limit `1` for the dominant block and `0` for subdominant blocks. They
-  do **not** provide the nonzero limits required by the formalized
-  proportional FT.
-- The paper-level equal case compares multiplicity-weight data, i.e.
-  power sums of the form `\sum_q \mu_{j,q}^N` after the proportional FT.
-  Recovering the individual weights in that generality needs a
-  power-sum / Newton--Girard step (`Lem:app_simple`), not just the
-  multiplicity-one linear-independence shortcut.
-- The heterogeneous block-matching theorem now starts from equal MPVs
-  without explicit coefficient limits, but it stops at blockwise
-  gauge-phase matching. It does not yet upgrade all the way to the final
-  global weighted gauge equivalence of the literature corollary.
-
-So the refined theorem is honest and useful, but it is still a special
-formalized endpoint.
+Thus the full equal-MPV theorem should not be presented as closed merely
+because the common-block and heterogeneous block-matching endpoints exist.
 
 ---
 
 ## 4. Blueprint consequences
 
-The blueprint should reflect the following separation.
+The blueprint should keep the following separation visible.
 
-- `thm:ft_equal` should remain the unformalized target / literature-level
-  equal-MPV theorem.
-- `MPSTensor.fundamentalTheorem_equalMPV_of_explicit_coefficients`
-  should back a separate theorem for the explicit-coefficient equal case.
-- `MPSTensor.fundamentalTheorem_equalMPV_CFBNT_hetero` should back the
-  block-matching part of the heterogeneous equal case.
-- `fundamentalTheorem_equalMPV_CFBNT` should remain labeled as the
-  common-block-structure special case, not as the full equal-MPV theorem.
+- `thm:ft_equal` remains the literature-level target.
+- `MPSTensor.fundamentalTheorem_equalMPV_CFBNT_hetero` backs the
+  heterogeneous block-matching part.
+- `MPSTensor.fundamentalTheorem_equalMPV_CFBNT` backs the
+  common-block-structure special case.
+- The repeated-copy and power-sum route should be described through the
+  sector-decomposition comparison theorems, not through a retired
+  explicit-coefficient endpoint.
 
 ---
 
-## 5. Revised status table
+## 5. Status table
 
 | Item | Status |
 | --- | --- |
-| Literature equal-MPV FT / Cor. IV.5 | target only; not yet formalized |
-| `fundamentalTheorem_equalMPV_of_explicit_coefficients` | formalized explicit-coefficient equal-case upgrade of the proportional FT |
-| `fundamentalTheorem_equalMPV_CFBNT_hetero` | formalized heterogeneous block-matching theorem |
-| `fundamentalTheorem_equalMPV_CFBNT` | formalized common-block-structure special case |
-| Power-sum / Newton--Girard tools | still relevant for the full literature route |
-| BNT linear-independence argument | valid for the explicit-coefficient special theorem now in Lean |
+| Literature equal-MPV FT / Cor. IV.5 | target; not yet closed |
+| `fundamentalTheorem_equalMPV_CFBNT_hetero` | checked heterogeneous block-matching theorem |
+| `fundamentalTheorem_equalMPV_CFBNT` | checked common-block-structure special case |
+| Sector-decomposition repeated-copy route | checked comparison endpoint, still an input to final assembly |
+| Power-sum / Newton-Girard tools | checked support for the repeated-copy route |
+| Zero-block bookkeeping | tracked through zero-tail dimension identities |
 
----
-
-This supersedes the earlier reading in which the bare CF-BNT equal-case
-statement was treated as the current Lean target. That is no longer the
-correct interpretation after the March 17, 2026 refinement.
+This supersedes the March 17, 2026 reading that treated the
+explicit-coefficient equal-case endpoint as part of the current theorem
+surface.
