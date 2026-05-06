@@ -45,8 +45,6 @@ jobs:
       ANTHROPIC_BASE_URL: ${{ vars.ANTHROPIC_BASE_URL }}
       CLAUDE_OPUS_MODEL: ${{ vars.CLAUDE_OPUS_MODEL }}
       CLAUDE_SONNET_MODEL: ${{ vars.CLAUDE_SONNET_MODEL }}
-      CLAUDE_DEEPSEEK_OPUS_MODEL: ${{ vars.CLAUDE_DEEPSEEK_OPUS_MODEL }}
-      CLAUDE_DEEPSEEK_SONNET_MODEL: ${{ vars.CLAUDE_DEEPSEEK_SONNET_MODEL }}
     permissions:
       contents: read
       pull-requests: read
