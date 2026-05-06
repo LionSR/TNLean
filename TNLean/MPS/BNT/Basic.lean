@@ -89,7 +89,7 @@ then the MPV states `mpvState (A j) N` are eventually linearly independent.
 This is a convenient formulation around
 `MPSTensor.eventually_linearIndependent_of_gram_tendsto_id`.
 -/
-theorem eventually_linearIndependent_of_overlap_tendsto_orthonormal
+lemma eventually_linearIndependent_of_overlap_tendsto_orthonormal
     {d : ℕ} {g : ℕ} {dim : Fin g → ℕ}
     (A : (j : Fin g) → MPSTensor d (dim j))
     (h_self : ∀ j,
@@ -175,7 +175,7 @@ This is the key algebraic step in the BNT permutation-matching argument: it conv
 subspace-level agreement of two BNT families into a *matrix* equation whose asymptotics
 (as the system size grows) can then be analysed.
 -/
-theorem exists_invertible_changeBasis
+lemma exists_invertible_changeBasis
     (v w : Fin g → V)
     (_hv : LinearIndependent ℂ v)
     (hw : LinearIndependent ℂ w)
@@ -247,7 +247,7 @@ This is a direct repackaging of
 `MPSTensor.eventually_linearIndependent_of_overlap_tendsto_orthonormal`
 in the exact form used by the BNT permutation-matching argument.
 -/
-theorem bntFamilies_eventually_linearIndependent
+lemma bntFamilies_eventually_linearIndependent
     {d g : ℕ} {dim : Fin g → ℕ}
     (A : (j : Fin g) → MPSTensor d (dim j))
     (h_diag : ∀ j,
@@ -268,10 +268,10 @@ satisfying
 
 `mpvState (B j) N = ∑ i, U_N i j • mpvState (A i) N`.
 
-This is the algebraic bridge between "same MPV subspace" and "matrix equation" that is needed
-for the permutation-matching step in Theorem 4.4.
+This converts the equal-MPV-subspace condition into a matrix equation whose
+asymptotics can then be analysed in the permutation-matching step of Theorem 4.4.
 -/
-theorem eventually_exists_invertible_changeBasis
+lemma eventually_exists_invertible_changeBasis
     {d g : ℕ} {dimA dimB : Fin g → ℕ}
     (A : (j : Fin g) → MPSTensor d (dimA j))
     (B : (j : Fin g) → MPSTensor d (dimB j))

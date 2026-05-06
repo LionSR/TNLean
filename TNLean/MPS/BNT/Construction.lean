@@ -240,7 +240,7 @@ If the self-overlaps of a finite block family tend to `1` and the cross-overlaps
 of distinct blocks tend to `0`, then the MPV states are linearly independent for
 every sufficiently large system size.  This is the threshold form of
 `bntFamilies_eventually_linearIndependent`. -/
-theorem exists_eventually_linearIndependent_of_overlap_tendsto_orthonormal
+lemma exists_eventually_linearIndependent_of_overlap_tendsto_orthonormal
     {r : ℕ} {dim : Fin r → ℕ}
     (A : (k : Fin r) → MPSTensor d (dim k))
     (hSelf : ∀ j,

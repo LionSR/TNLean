@@ -416,12 +416,13 @@ The results follow~\cite{Sanz2010Quantum}.
     $A^{w_0} \varphi = \mu \varphi$.
 \end{definition}
 
-\begin{theorem}[Wielandt analysis exists]\label{thm:wielandt_analysis}
+\begin{lemma}[Wielandt analysis exists]\label{lem:wielandt_analysis}
     \lean{MPSTensor.wielandtAnalysis}
     \leanok
     \uses{def:wielandt_analysis, def:normal}
-    Every normal MPS tensor admits a Wielandt analysis.
-\end{theorem}
+    Every normal MPS tensor with bond dimension $D \ge 1$ admits a
+    Wielandt analysis.
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -449,11 +450,11 @@ The results follow~\cite{Sanz2010Quantum}.
 
 \begin{proof}
     \leanok
-    \uses{thm:wielandt_analysis, thm:eigenvector_spreading,
+    \uses{lem:wielandt_analysis, thm:eigenvector_spreading,
           thm:cumulative_eq_top}
     Items (1)--(3) follow from earlier results
-    (Theorems~\ref{thm:cumulative_eq_top},
-    \ref{thm:wielandt_analysis}).
+    (Theorem~\ref{thm:cumulative_eq_top}
+    and Lemma~\ref{lem:wielandt_analysis}).
     Item (4) combines these with the eigenvector spreading bound
     (Theorem~\ref{thm:eigenvector_spreading}).
 \end{proof}
