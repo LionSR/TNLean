@@ -31,7 +31,8 @@ Proposition A.6) is constructed so that all pairs of BNT elements have
 share the same weight norm while being completely independent (non-GPE).  The BNT
 already groups gauge-equivalent blocks together; remaining blocks are pairwise
 non-gauge-equivalent.  A counter-example shows that the
-MPV-level hypothesis `hFullTensor` alone cannot force non-decaying cross-overlaps.
+MPV-equality hypothesis for the total tensor alone cannot force non-decaying
+cross-overlaps.
 
 To obtain GPE for equal-norm blocks, one must derive the non-decay property from
 structural properties of the decomposition (cyclic-sector origin, Fundamental
@@ -63,8 +64,10 @@ If two TP + irreducible blocks have a cross-overlap that does not decay to zero,
 then they must have equal bond dimensions and be gauge-phase equivalent.
 
 The proof uses the **spectral dichotomy** for injective TP-normalized blocks: either
-- `spectralRadius(F_{AB}) < 1`, which forces `mpvOverlap A B N → 0`, or
-- `spectralRadius(F_{AB}) ≥ 1`, which forces `GaugePhaseEquiv A B`.
+- the mixed transfer operator has spectral radius less than one, forcing the
+  cross-overlap to tend to zero, or
+- the mixed transfer operator has spectral radius at least one, forcing
+  `GaugePhaseEquiv A B`.
 
 If the overlap does NOT decay, we are in the second case. Dimension equality
 follows from `mpvOverlap_tendsto_zero_of_dim_ne_of_irreducible_TP` (contrapositive). -/
