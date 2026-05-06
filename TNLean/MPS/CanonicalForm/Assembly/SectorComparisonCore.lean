@@ -25,89 +25,17 @@ namespace MPSTensor
 
 section FundamentalTheoremAfterBlocking
 
-/-- **Conditional after-blocking sector comparison.**
-
-Given two tensors with `SameMPV₂`, a common-period BNT sector pair, and a
-basis-block matching theorem, this theorem produces the target conclusion: a
-common blocking period, a `SectorDecomposition` on each side carrying BNT basis
-data, and matched sector-weight data for the canonical-form reduction.
-
-The two hypotheses are intentionally separated:
-
-* `bntSectorPair` supplies a common-period BNT sector decomposition for both
-  sides, `SameMPV₂`-equivalent to the blocked tensors and carrying
-  `HasBNTSectorData`.
-* `matchedBasisData` supplies a permutation of basis blocks, equality of copy
-  numbers, and per-block gauge-phase equivalence from `SameMPV₂` between two
-  sector decompositions whose first entry has BNT basis data.
-
-The body is a kernel-checked composition of the existing structural theorem's
-blocking compatibility (`sameMPV₂_blockTensor`), the two hypotheses, and
-`fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_matched_basis`. The
-later theorems below instantiate the matching side with primitive overlap-span
-hypotheses rather than assuming the witness directly. -/
-theorem fundamentalTheorem_after_blocking_sector_of_bntPair_matched
-    {d D₁ D₂ : ℕ}
-    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
-    (hSame : SameMPV₂ A B)
-    (bntSectorPair :
-      ∃ p : ℕ, 0 < p ∧
-      ∃ P Q : SectorDecomposition (blockPhysDim d p),
-        SameMPV₂ (blockTensor (d := d) (D := D₁) A p) P.toTensor ∧
-        SameMPV₂ (blockTensor (d := d) (D := D₂) B p) Q.toTensor ∧
-        HasBNTSectorData P ∧ HasBNTSectorData Q)
-    (matchedBasisData : ∀ {d' : ℕ} (P Q : SectorDecomposition d'),
-      HasBNTSectorData P → SameMPV₂ P.toTensor Q.toTensor →
-      ∃ perm : Fin P.basisCount ≃ Fin Q.basisCount,
-        (∀ j, P.copies j = Q.copies (perm j)) ∧
-        ∀ j : Fin P.basisCount,
-          ∃ hdim : P.basisDim j = Q.basisDim (perm j),
-            GaugePhaseEquiv (d := d')
-              (cast (congr_arg (MPSTensor d') hdim) (P.basis j))
-              (Q.basis (perm j))) :
-    ∃ p : ℕ, 0 < p ∧
-    ∃ P Q : SectorDecomposition (blockPhysDim d p),
-      SameMPV₂ (blockTensor (d := d) (D := D₁) A p) P.toTensor ∧
-      SameMPV₂ (blockTensor (d := d) (D := D₂) B p) Q.toTensor ∧
-      HasBNTSectorData P ∧ HasBNTSectorData Q ∧
-      ∃ perm : Fin P.basisCount ≃ Fin Q.basisCount,
-      ∃ hCopies : ∀ j, P.copies j = Q.copies (perm j),
-      ∃ ζ : Fin P.basisCount → ℂ,
-        (∀ j, ζ j ≠ 0) ∧
-        ∀ j : Fin P.basisCount,
-          Finset.univ.val.map (P.weight j) =
-            Finset.univ.val.map
-              (fun q => ζ j * Q.weight (perm j) (Fin.cast (hCopies j) q)) := by
-  obtain ⟨p, hp, P, Q, hPeq, hQeq, hPbnt, hQbnt⟩ := bntSectorPair
-  have hAB : SameMPV₂ (blockTensor (d := d) (D := D₁) A p)
-                      (blockTensor (d := d) (D := D₂) B p) :=
-    sameMPV₂_blockTensor A B hSame p
-  have hPQeq : SameMPV₂ P.toTensor Q.toTensor := by
-    intro N σ
-    calc
-      mpv P.toTensor σ
-          = mpv (blockTensor (d := d) (D := D₁) A p) σ := (hPeq N σ).symm
-      _ = mpv (blockTensor (d := d) (D := D₂) B p) σ := hAB N σ
-      _ = mpv Q.toTensor σ := hQeq N σ
-  obtain ⟨perm, hCopies, hBasisGPE⟩ := matchedBasisData P Q hPbnt hPQeq
-  obtain ⟨ζ, hζne, hMultiset⟩ :=
-    fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_matched_basis
-      P Q perm hCopies hBasisGPE hPbnt hPQeq
-  exact ⟨p, hp, P, Q, hPeq, hQeq, hPbnt, hQbnt,
-          perm, hCopies, ζ, hζne, hMultiset⟩
-
 /-- **After-blocking sector comparison from primitive overlap-span hypotheses.**
 
-This theorem replaces the abstract `matchedBasisData` hypothesis in
-`fundamentalTheorem_after_blocking_sector_of_bntPair_matched` by the
-paper-level overlap-rigidity hypotheses collected in
-`SectorBasisOverlapSpanHypotheses`. The hypotheses still include a BNT sector
-pair at a common blocking period, but the matching witness itself is now
-constructed by `SectorBasisOverlapSpanHypotheses.exists_sectorBasisMatching` and
-then used in the two-basis sector comparison theorem.
+Assume that a common positive blocking period gives sector decompositions for
+the two blocked tensors, that both sector decompositions carry BNT data, and
+that their bases satisfy the primitive overlap-span hypotheses. These
+hypotheses construct the sector-basis matching, and the two-basis sector
+comparison theorem then gives the matched sector-weight conclusion.
 
-Thus the theorem connects the comparison machinery without assuming a
-`SectorBasisMatching` or a permutation with copy-count equalities as a hypothesis. -/
+Thus the matched sector-weight conclusion is derived from primitive overlap-span
+data, rather than from an assumed `SectorBasisMatching` or an assumed
+permutation with copy-count equalities. -/
 theorem fundamentalTheorem_after_blocking_sector_of_bntPair_overlapSpan
     {d D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
