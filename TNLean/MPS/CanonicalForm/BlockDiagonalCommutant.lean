@@ -369,6 +369,33 @@ lemma exists_wordTupleSpanTop_of_isNormalCanonicalFormBNT_of_directSum_injective
       μ A hNCF hInj
   exact ⟨m, hm, by simpa [WordTupleSpanTop, wordTuple] using hSpan⟩
 
+/-- Canonical-form/BNT direct-sum separation gives the block-injective
+horizontal-canonical-form field used by the MPDO bicanonical-form package. -/
+lemma hasBiCF_of_isCanonicalFormBNT_of_directSum_injectiveBlocks
+    [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hCF : IsCanonicalFormBNT μ A)
+    (hIrr : HasIrreducibleBlocks (d := d) A) :
+    HasBiCF A := by
+  obtain ⟨m, _hm, hSpan⟩ :=
+    exists_wordTupleSpanTop_of_isCanonicalFormBNT_of_directSum_injectiveBlocks
+      μ A hCF hIrr
+  exact hasBiCF_of_wordTupleSpanTop A hSpan
+
+/-- Normal-CF-BNT direct-sum separation gives the block-injective
+horizontal-canonical-form field used by the MPDO bicanonical-form package,
+provided one-site injectivity is supplied explicitly. -/
+lemma hasBiCF_of_isNormalCanonicalFormBNT_of_directSum_injectiveBlocks
+    [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hNCF : IsNormalCanonicalFormBNT μ A)
+    (hInj : ∀ k : Fin r, IsInjective (A k)) :
+    HasBiCF A := by
+  obtain ⟨m, _hm, hSpan⟩ :=
+    exists_wordTupleSpanTop_of_isNormalCanonicalFormBNT_of_directSum_injectiveBlocks
+      μ A hNCF hInj
+  exact hasBiCF_of_wordTupleSpanTop A hSpan
+
 /-- Conditional positive-length product-word span from all-words pair separation plus eventual
 identity padding for every ordered pair of distinct BNT blocks.
 
