@@ -3094,6 +3094,38 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     gives the required \(W\), and linearity gives the general case.
 \end{proof}
 
+\begin{lemma}[Finite-chain image inclusion from a three-block relation]
+    \label{lem:three_block_relation_ground_space_inclusion}
+    \lean{MPSTensor.leftTraceWordMap}
+    \lean{MPSTensor.leftTraceWordMap_range_le_of_three_block_trace_relation_left}
+    \lean{MPSTensor.leftTraceWordMap_range_eq_of_three_block_trace_relation}
+    \lean{MPSTensor.groundSpace_le_of_three_block_trace_relation_left}
+    \lean{MPSTensor.groundSpace_eq_of_three_block_trace_relation}
+    \leanok
+    \uses{lem:three_block_trace_reduction_nonzero_middle}
+    Under the hypotheses of
+    Lemma~\ref{lem:three_block_trace_reduction_nonzero_middle}, the length-\(L\)
+    image spaces satisfy
+    \[
+        \mathcal G_L^A \subseteq \mathcal G_L^B .
+    \]
+    If the corresponding nonzero middle matrix exists on both sides, then
+    \(\mathcal G_L^A=\mathcal G_L^B\).
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:three_block_trace_reduction_nonzero_middle}
+    Write a vector in \(\mathcal G_L^A\) as
+    \(t\mapsto \tr(A_tZ)\).  The preceding lemma supplies \(W\) with
+    \(\tr(ZA_t)+\tr(WB_t)=0\) for every word \(t\).  Cyclicity of the
+    trace gives
+    \[
+        \tr(A_tZ)=\tr(ZA_t)=-\tr(WB_t)=\tr(B_t(-W)),
+    \]
+    so the vector lies in \(\mathcal G_L^B\).  The equality statement follows
+    by applying the same argument with the two blocks exchanged.
+\end{proof}
+
 \begin{lemma}[All-length pair trace separation has finite cumulative length]
     \label{lem:all_length_pair_trace_separation_finite_cutoff}
     \lean{MPSTensor.pairEvalWordTuple_mem_pairCumulativeSpan}

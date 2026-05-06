@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.MPDO.BiCFDerivation.Counterexample
+import TNLean.MPS.MPDO.BiCFDerivation.DirectSumGroundSpace
 import TNLean.MPS.MPDO.BiCFDerivation.DirectSumInput
 
 /-!
@@ -28,6 +29,8 @@ The supporting modules are:
 * `TNLean.MPS.MPDO.BiCFDerivation.DirectSumInput` — the trace-dual algebraic
   input from David--Perez-Garcia--Schuch--Wolf Lemma `lem:direct-sum` that
   follows from the two-sided nonzero span lemma.
+* `TNLean.MPS.MPDO.BiCFDerivation.DirectSumGroundSpace` — the corresponding
+  inclusion/equality of finite-chain image spaces.
 
 ## References
 
