@@ -343,6 +343,32 @@ lemma exists_pos_productWordSpan_of_isNormalCanonicalFormBNT_of_directSum_inject
   exact exists_pos_productWordSpan_of_isCanonicalFormBNT_of_directSum_injectiveBlocks
     μ A hCF hNCF.toHasIrreducibleBlocks
 
+/-- `WordTupleSpanTop` version of the direct-sum span theorem for
+canonical-form/BNT block families. -/
+lemma exists_wordTupleSpanTop_of_isCanonicalFormBNT_of_directSum_injectiveBlocks
+    [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hCF : IsCanonicalFormBNT μ A)
+    (hIrr : HasIrreducibleBlocks (d := d) A) :
+    ∃ m : ℕ, 0 < m ∧ WordTupleSpanTop A m := by
+  obtain ⟨m, hm, hSpan⟩ :=
+    exists_pos_productWordSpan_of_isCanonicalFormBNT_of_directSum_injectiveBlocks
+      μ A hCF hIrr
+  exact ⟨m, hm, by simpa [WordTupleSpanTop, wordTuple] using hSpan⟩
+
+/-- `WordTupleSpanTop` version of the direct-sum span theorem for
+normal-CF-BNT block families with explicit one-site injectivity. -/
+lemma exists_wordTupleSpanTop_of_isNormalCanonicalFormBNT_of_directSum_injectiveBlocks
+    [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hNCF : IsNormalCanonicalFormBNT μ A)
+    (hInj : ∀ k : Fin r, IsInjective (A k)) :
+    ∃ m : ℕ, 0 < m ∧ WordTupleSpanTop A m := by
+  obtain ⟨m, hm, hSpan⟩ :=
+    exists_pos_productWordSpan_of_isNormalCanonicalFormBNT_of_directSum_injectiveBlocks
+      μ A hNCF hInj
+  exact ⟨m, hm, by simpa [WordTupleSpanTop, wordTuple] using hSpan⟩
+
 /-- Conditional positive-length product-word span from all-words pair separation plus eventual
 identity padding for every ordered pair of distinct BNT blocks.
 
