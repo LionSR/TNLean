@@ -379,11 +379,9 @@ lemma sectorTensor_proportional_of_blockedMatch
     (hNondeg : ∀ u, dimA u ≠ 0)
     (hNormal : ∀ u, IsNormal (blocksA u)) :
     RepeatedBlocks A B := by
-  -- PROOF STRUCTURE: see lemma
-  -- `repeatedBlocks_of_blockedSectorGaugePhase` for the planned proof route.
-  -- Currently sorry-backed pending discharge of
-  -- `repeatedBlocks_of_blockedSectorGaugePhase`.
-  sorry
+  exact repeatedBlocks_of_blockedSectorGaugePhase
+    A B hA_lc hB_lc blocksA blocksB hA_blocks_lc hB_blocks_lc
+    hA_mpv hB_mpv hA_cyclic hB_cyclic q hBlockMatch hNondeg hNormal
 
 /-- **Case 3: a matching sector implies gauge equivalence**. If two periodic tensors have
 the same period and a compressed sector match exists, then they are related by a gauge
