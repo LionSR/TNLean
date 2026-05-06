@@ -414,9 +414,8 @@ than being forced into one norm class.
 In the BNT theory (Cirac--Perez-Garcia--Schuch--Verstraete 2017, Section 2.3),
 two blocks with the same weight norm are gauge-phase equivalent, hence have the
 same MPV. In the existence reduction, this property would be derived after
-applying the BNT uniqueness theorem. The derivation of `hMPVEq` from blocked
-`SameMPV₂` data is the subject of `EqualNormBridge.lean` and downstream
-theorems (see `exists_sectorDecomp_of_tp_primitive_irr_blocks`).
+applying the BNT uniqueness theorem. The phase-class construction in
+`PhaseClassSectorData.lean` is the source-facing route for that BNT step.
 
 **Proof:**
 1. Let `S = Finset.univ.image (‖μ ·‖)`, `g = S.card`.
@@ -504,71 +503,5 @@ lemma exists_bnt_grouping
       classes.enum_norm i ⟨0, classes.copies_pos i⟩]
     exact classes.vals_strictAnti hij
 
-/-- Collapse a single norm class onto one sector basis tensor, keeping the full sector-weight
-multiplicity data. This is the one-class special case of the sector-decomposition surface used
-by the broader BNT grouping story. -/
-theorem bnt_grouping_single_norm_class
-    {r : ℕ} {dim : Fin r → ℕ}
-    (μ : Fin r → ℂ)
-    (blocks : (k : Fin r) → MPSTensor d (dim k))
-    (k0 : Fin r)
-    (hμne : ∀ k, μ k ≠ 0)
-    (hNorm : ∀ k : Fin r, ‖μ k‖ = ‖μ k0‖)
-    (hPhase : ∀ k : Fin r,
-      ∃ ζ : ℂ, ζ ≠ 0 ∧ ‖ζ‖ = 1 ∧
-        ∀ (N : ℕ) (σ : Fin N → Fin d),
-          mpv (blocks k) σ = ζ ^ N * mpv (blocks k0) σ) :
-    ∃ P : SectorDecomposition d,
-      P.basisCount = 1 ∧
-      P.totalCopies = r ∧
-      SameMPV₂ P.toTensor (toTensorFromBlocks (d := d) (μ := μ) blocks) ∧
-      (∀ s : Fin P.totalCopies, ‖P.flatWeight s‖ = ‖μ k0‖) := by
-  classical
-  let ζFn : Fin r → ℂ := fun k => (hPhase k).choose
-  have hζ_ne : ∀ k : Fin r, ζFn k ≠ 0 := fun k => (hPhase k).choose_spec.1
-  have hζ_norm : ∀ k : Fin r, ‖ζFn k‖ = 1 := fun k => (hPhase k).choose_spec.2.1
-  have hζ_mpv : ∀ (k : Fin r) (N : ℕ) (σ : Fin N → Fin d),
-      mpv (blocks k) σ = (ζFn k) ^ N * mpv (blocks k0) σ :=
-    fun k N σ => (hPhase k).choose_spec.2.2 N σ
-  have hr : 0 < r := by
-    exact Nat.lt_of_lt_of_le (Nat.zero_lt_succ _) (Nat.succ_le_of_lt k0.isLt)
-  let sectors : SectorWeightData 1 := {
-    copies := fun _ => r
-    copies_pos := fun _ => hr
-    weight := fun _ q => ζFn q * μ q
-    weight_ne_zero := fun _ q => mul_ne_zero (hζ_ne q) (hμne q)
-  }
-  let P : SectorDecomposition d := {
-    basisCount := 1
-    basisDim := fun _ => dim k0
-    basis := fun _ => blocks k0
-    sectors := sectors
-  }
-  refine ⟨P, rfl, ?_, ?_, ?_⟩
-  · simp [P, sectors, SectorDecomposition.totalCopies]
-  · intro N σ
-    calc
-      mpv P.toTensor σ
-          = ∑ j : Fin P.basisCount,
-              ∑ q : Fin (P.copies j), (P.weight j q) ^ N * mpv (P.basis j) σ :=
-              P.mpv_toTensor_eq_sum_sectors σ
-      _ = ∑ q : Fin r, (ζFn q * μ q) ^ N * mpv (blocks k0) σ := by
-            simp [P, sectors]
-      _ = ∑ q : Fin r, (μ q) ^ N * mpv (blocks q) σ := by
-            refine Finset.sum_congr rfl fun q _ => ?_
-            rw [mul_pow, hζ_mpv q N σ]
-            ring
-      _ = mpv (toTensorFromBlocks (d := d) (μ := μ) blocks) σ := by
-            symm
-            simpa [smul_eq_mul] using mpv_toTensorFromBlocks_eq_sum μ blocks σ
-  · intro s
-    set t : ((j : Fin P.basisCount) × Fin (P.copies j)) := P.flatIndexEquiv.symm s with ht
-    rcases t with ⟨j, q⟩
-    have hj : j = 0 := Subsingleton.elim _ _
-    subst hj
-    rw [SectorDecomposition.flatWeight, ht.symm]
-    change ‖P.weight 0 q‖ = ‖μ k0‖
-    change ‖ζFn q * μ q‖ = ‖μ k0‖
-    rw [norm_mul, hζ_norm q, one_mul, hNorm q]
 
 end MPSTensor

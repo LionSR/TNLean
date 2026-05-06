@@ -3,7 +3,6 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.BNT.Construction
-import TNLean.MPS.CanonicalForm.BNTGrouping
 import TNLean.MPS.CanonicalForm.PhaseCover
 import TNLean.MPS.CanonicalForm.PhaseClassSectorData
 import TNLean.MPS.FundamentalTheorem.SectorDecomposition
@@ -17,34 +16,20 @@ open scoped Matrix BigOperators
 open Filter
 
 /-!
-# Equal-norm comparison for restricted norm-class collapse hypotheses
+# Equal-norm overlap bridge for phase-class BNT data
 
-This file relates the BNT overlap/spectral theory to the restricted norm-class
-collapse: blocks with the same weight norm must already generate the same MPS
-family before they can be represented by one sector.
+This file records the overlap/spectral bridge used before the phase-class BNT
+construction: if two trace-preserving irreducible blocks have a non-decaying
+cross-overlap, then they are gauge-phase equivalent after identifying bond
+dimensions.
 
 ## Background
 
 The canonical-form reduction produces TP + primitive blocks with
-nonzero weights. The restricted norm-class collapse groups blocks by weight norm into a
-sector decomposition, and requires one mathematical input for equal-norm blocks:
-
-* equal-norm blocks generate the same MPS family.
-
-The grouped sector's bond dimension is fixed by the chosen representative of each
-norm class, so no separate equal-dimension hypothesis is needed.
-
-## Strategy: gauge-phase-aware norm-class collapse
-
-When equal-norm blocks are known to be gauge-phase equivalent (e.g., because they
-originate from the cyclic-sector decomposition of a single irreducible block, or
-because the Fundamental Theorem matches them), the gauge phases can be absorbed
-into sector weights.
-
-For block k gauge-phase equivalent to representative block j via `(X, ζ)`:
-- `mpv(blocks k)(σ) = ζ^N * mpv(blocks j)(σ)`
-- Contribution to total: `(μ_k)^N * mpv(blocks k)(σ) = (ζ * μ_k)^N * mpv(blocks j)(σ)`
-- Effective sector weight: `ζ * μ_k`, with `‖ζ * μ_k‖ = ‖μ_k‖` (since `‖ζ‖ = 1`)
+nonzero weights. Equal-modulus blocks are not automatically one BNT sector:
+the source BNT construction keeps minimal gauge-phase representatives and
+records repeated copies through sector weights. The phase-class construction in
+`PhaseClassSectorData.lean` is the source-facing route for that step.
 
 ## Important: equal-norm blocks are NOT automatically gauge-phase equivalent
 
@@ -60,58 +45,14 @@ To obtain GPE for equal-norm blocks, one must derive the non-decay property from
 structural properties of the decomposition (cyclic-sector origin, Fundamental
 Theorem matching, etc.).
 
-## Main results
+## Main local result
 
 * `gaugePhaseEquiv_of_nonDecaying_overlap` — Non-decaying cross-overlap between two
   TP + irreducible blocks implies equal bond dimensions and gauge-phase equivalence.
   Uses the spectral dichotomy from `SpectralGap.lean`.  **Fully proved.**
 
-* `exists_bnt_grouping_of_gaugePhaseEquiv` — restricted collapse taking gauge-phase
-  equivalence data (rather than `SameMPV₂`) for equal-norm blocks.  **Fully proved.**
-
-* `exists_sectorDecomp_of_tp_primitive_irr_blocks` — Construction connecting
-  the reduction result to a BNT-grouped `SectorDecomposition`.  **Fully proved.**
-  Requires a `hNonDecay` hypothesis for equal-norm blocks.
-
-* `exists_eventually_linearIndependent_of_overlap_tendsto_orthonormal` —
-  turns asymptotic orthonormality of MPV overlaps into the existential eventual
-  linear-independence form used by `HasBNTSectorData`.
-
-* `exists_eventually_linearIndependent_of_tp_primitive_irr_blocks_of_blocksNotGaugePhaseEquiv` —
-  derives that eventual linear independence from TP / primitive / irreducible
-  blocks once the family is already separated by non-gauge-phase-equivalence.
-
-* `exists_bnt_sectorDecomp_of_linearIndependent` — conditional construction
-  toward the `HasBNTSectorData` predicate.  It forms the one-sector-per-block
-  `trivialSectorDecomp` as a BNT sector decomposition when the actual BNT
-  linear-independence condition is supplied explicitly.
-
-* `exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_of_blocksNotGaugePhaseEquiv` —
-  the separated-family constructor: it retains all separated basis blocks,
-  including equal-modulus ones, and proves `HasBNTSectorData` from overlap
-  asymptotics rather than from an explicit linear-independence hypothesis.
-
-* `exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks` — the representative
-  construction: it quotients arbitrary TP / primitive / irreducible blocks by MPV phase
-  equivalence, absorbs the scalar factors into sector weights, proves representative
-  separation, and then obtains `HasBNTSectorData` from the separated-family theorem.
-
-* `exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_of_linearIndependent` —
-  signature-compatible reformulation retaining the TP / primitive / irreducible
-  hypotheses used by the one-sided BNT construction chain.
-
-* `mpv_span_eq_of_common_phase_cover` — finite-length MPV span equality for
-  block families arising from a common family covered surjectively up to MPV phase.
-
-* `MPVCommonPhaseCover` — common-family, class-map, phase, and
-  surjectivity data for the same span-equality theorem.
-
-* `SectorBasisPreMatching.commonPhaseCover` — turns BNT pre-matching data into
-  a common MPV phase cover, hence into finite-length basis-span equality.
-
-* `nonempty_mpvCommonPhaseCover_of_separated_normalCFBNT_data` — the
-  span-equality-free BNT proportional-decomposition comparison gives
-  common-cover existence.
+The BNT sector constructors formerly summarized here now live in
+`PhaseClassSectorData.lean`.
 
 ## References
 
@@ -173,240 +114,5 @@ theorem gaugePhaseEquiv_of_nonDecaying_overlap
   exact hNonDecay
     (mpvOverlap_tendsto_zero_of_not_gaugePhaseEquiv_cast_left_of_irreducible_TP
       hdim A B hA_irr hB_irr hA_TP hB_TP hNotGPE)
-
-/-! ### Section 2. Restricted norm-class collapse with gauge-phase equivalence -/
-
-/-- **Restricted norm-class collapse with gauge-phase equivalence for equal-norm blocks.**
-
-This form of `exists_bnt_grouping` uses gauge-phase equivalence data
-(rather than `SameMPV₂`) for equal-norm blocks.  The gauge phases are absorbed into
-the sector weights, preserving norm-class membership since `‖ζ‖ = 1`.
-
-Given a weighted block family `(μ, blocks)` where some blocks may share the same norm
-`‖μ j‖ = ‖μ k‖`, and given that equal-norm blocks are gauge-phase equivalent with
-unit-norm phases, there exists a `SectorDecomposition P` with:
-
-1. `SameMPV₂ P.toTensor (toTensorFromBlocks μ blocks)`.
-2. `StrictAnti` on the BNT-level norms (one norm value per group).
-
-**Proof**: The construction is identical to `exists_bnt_grouping` (Section 5 of
-`BNTGrouping.lean`), except that the sector weight for copy q of group j is
-`ζ_{j,q} * μ_{enum(j,q)}` where `ζ_{j,q}` is the gauge phase relating
-`blocks(enum(j,q))` to `blocks(repr(j))`.  The `SameMPV₂` identity uses the
-factorization `(ζ * μ)^N = ζ^N * μ^N` to replace `mpv(blocks(repr j))` with
-`mpv(blocks(enum j q))`. -/
-theorem exists_bnt_grouping_of_gaugePhaseEquiv
-    {r : ℕ} {dim : Fin r → ℕ}
-    (μ : Fin r → ℂ)
-    (blocks : (k : Fin r) → MPSTensor d (dim k))
-    (hμne : ∀ k, μ k ≠ 0)
-    -- Equal-norm blocks are gauge-phase equivalent with unit-norm phase.
-    (hGPE : ∀ j k : Fin r, ‖μ j‖ = ‖μ k‖ →
-      ∃ ζ : ℂ, ζ ≠ 0 ∧ ‖ζ‖ = 1 ∧
-        ∀ (N : ℕ) (σ : Fin N → Fin d),
-          mpv (blocks k) σ = ζ ^ N * mpv (blocks j) σ) :
-    ∃ P : SectorDecomposition d,
-      SameMPV₂ P.toTensor (toTensorFromBlocks (d := d) (μ := μ) blocks) ∧
-      StrictAnti (fun j : Fin P.basisCount =>
-        ‖P.sectors.weight j ⟨0, P.sectors.copies_pos j⟩‖) := by
-  classical
-  let classes := normClassGroupingData μ
-  let reprFn : Fin classes.g → Fin r := fun j => classes.enum j ⟨0, classes.copies_pos j⟩
-  have hRepr_norm : ∀ j, ‖μ (reprFn j)‖ = classes.vals j :=
-    fun j => classes.enum_norm j ⟨0, classes.copies_pos j⟩
-  -- ── Step 1: Extract gauge-phase data for each norm class ─────────────────
-  have hGPE_repr : ∀ j q,
-      ∃ ζ : ℂ, ζ ≠ 0 ∧ ‖ζ‖ = 1 ∧ ∀ (N : ℕ) (σ : Fin N → Fin d),
-        mpv (blocks (classes.enum j q)) σ = ζ ^ N * mpv (blocks (reprFn j)) σ :=
-    fun j q => hGPE (reprFn j) (classes.enum j q)
-      (hRepr_norm j |>.trans (classes.enum_norm j q).symm)
-  let ζFn : (j : Fin classes.g) → Fin (classes.copies j) → ℂ :=
-    fun j q => (hGPE_repr j q).choose
-  have hζ_ne : ∀ j q, ζFn j q ≠ 0 := fun j q => (hGPE_repr j q).choose_spec.1
-  have hζ_norm : ∀ j q, ‖ζFn j q‖ = 1 := fun j q => (hGPE_repr j q).choose_spec.2.1
-  have hζ_mpv : ∀ j (q : Fin (classes.copies j)) (N : ℕ) (σ : Fin N → Fin d),
-      mpv (blocks (classes.enum j q)) σ = (ζFn j q) ^ N * mpv (blocks (reprFn j)) σ :=
-    fun j q N σ => (hGPE_repr j q).choose_spec.2.2 N σ
-  -- ── Step 2: Build the SectorDecomposition ────────────────────────────────
-  let sectors : SectorWeightData classes.g := {
-    copies         := classes.copies
-    copies_pos     := classes.copies_pos
-    weight         := fun j q => ζFn j q * μ (classes.enum j q)
-    weight_ne_zero := fun j q => mul_ne_zero (hζ_ne j q) (hμne (classes.enum j q))
-  }
-  let P : SectorDecomposition d := {
-    basisCount := classes.g
-    basisDim   := fun j => dim (reprFn j)
-    basis      := fun j => blocks (reprFn j)
-    sectors    := sectors
-  }
-  refine ⟨P, ?_, ?_⟩
-  · -- ── SameMPV₂ proof ──────────────────────────────────────────────────────
-    intro N σ
-    calc mpv P.toTensor σ
-        = ∑ j : Fin P.basisCount,
-            ∑ q : Fin (P.copies j), (P.weight j q) ^ N * mpv (P.basis j) σ :=
-            P.mpv_toTensor_eq_sum_sectors σ
-      _ = ∑ j : Fin classes.g,
-            ∑ q : Fin (classes.copies j),
-              (ζFn j q * μ (classes.enum j q)) ^ N * mpv (blocks (reprFn j)) σ := rfl
-      _ = ∑ j : Fin classes.g,
-            ∑ q : Fin (classes.copies j),
-              (μ (classes.enum j q)) ^ N * mpv (blocks (classes.enum j q)) σ := by
-              refine Finset.sum_congr rfl (fun j _ =>
-                Finset.sum_congr rfl (fun q _ => ?_))
-              rw [mul_pow]
-              -- Goal: ζFn j q ^ N * μ(enum j q) ^ N * mpv(blocks(repr j)) σ
-              --     = μ(enum j q) ^ N * mpv(blocks(enum j q)) σ
-              -- Use: mpv(blocks(enum j q)) = ζFn j q ^ N * mpv(blocks(repr j))
-              rw [hζ_mpv j q N σ]
-              ring
-      _ = ∑ k : Fin r, (μ k) ^ N * mpv (blocks k) σ :=
-            classes.regroup (fun k => (μ k) ^ N * mpv (blocks k) σ)
-      _ = mpv (toTensorFromBlocks (d := d) (μ := μ) blocks) σ := by
-              symm
-              simpa [smul_eq_mul] using mpv_toTensorFromBlocks_eq_sum μ blocks σ
-  · -- ── StrictAnti proof ────────────────────────────────────────────────────
-    intro i j hij
-    change ‖ζFn j ⟨0, classes.copies_pos j⟩ * μ (classes.enum j ⟨0, classes.copies_pos j⟩)‖ <
-      ‖ζFn i ⟨0, classes.copies_pos i⟩ * μ (classes.enum i ⟨0, classes.copies_pos i⟩)‖
-    simp only [norm_mul, hζ_norm, one_mul]
-    rw [classes.enum_norm j ⟨0, classes.copies_pos j⟩,
-      classes.enum_norm i ⟨0, classes.copies_pos i⟩]
-    exact classes.vals_strictAnti hij
-
-/-! ### Section 3. Construction of sector decomposition -/
-
-/-- **From TP + primitive + irreducible blocks to BNT-grouped
-`SectorDecomposition`.**
-
-This theorem relates the result of the existence reduction
-(`exists_tp_primitive_blockDecomp_after_blocking` in `Assembly.lean`) to a
-`SectorDecomposition` with strictly decreasing BNT-level norms.  It does not by
-itself prove `HasBNTSectorData`: that predicate means eventual linear
-independence of the basis MPV states, not merely TP / irreducible / primitive
-block data.
-
-The `hNonDecay` hypothesis states that equal-norm blocks have non-decaying
-cross-overlaps.  This is NOT automatic from the block properties alone (see
-issue #299 for counter-example).  It must be derived from structural
-properties of the decomposition, such as:
-
-* Blocks originating from cyclic-sector decomposition of a single irreducible
-  block (rotated copies have non-decaying overlaps by construction).
-* Fundamental Theorem matching between two canonical-form decompositions. -/
-theorem exists_sectorDecomp_of_tp_primitive_irr_blocks
-    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
-    (μ : Fin r → ℂ)
-    (blocks : (k : Fin r) → MPSTensor d (dim k))
-    (hTP : ∀ k, ∑ i : Fin d, (blocks k i)ᴴ * blocks k i = 1)
-    (hIrr : ∀ k, IsIrreducibleTensor (blocks k))
-    (hPrim : ∀ k, _root_.IsPrimitive (transferMap (d := d) (D := dim k) (blocks k)))
-    (hμne : ∀ k, μ k ≠ 0)
-    -- The non-decay hypothesis is not automatic from the block properties alone.
-    (hNonDecay : ∀ j k : Fin r, j ≠ k → ‖μ j‖ = ‖μ k‖ →
-      ¬ Tendsto (fun N => mpvOverlap (d := d) (blocks j) (blocks k) N) atTop (nhds 0)) :
-    ∃ P : SectorDecomposition d,
-      SameMPV₂ P.toTensor (toTensorFromBlocks (d := d) (μ := μ) blocks) ∧
-      StrictAnti (fun j : Fin P.basisCount =>
-        ‖P.sectors.weight j ⟨0, P.sectors.copies_pos j⟩‖) := by
-  -- Step 1: Derive gauge-phase equivalence for equal-norm blocks.
-  have hGPE_raw : ∀ j k : Fin r, j ≠ k → ‖μ j‖ = ‖μ k‖ →
-      ∃ hdim : dim j = dim k,
-        GaugePhaseEquiv (d := d)
-          (cast (congr_arg (MPSTensor d) hdim) (blocks j)) (blocks k) := by
-    intro j k hjk hNorm
-    exact gaugePhaseEquiv_of_nonDecaying_overlap
-      (blocks j) (blocks k) (hIrr j) (hIrr k) (hTP j) (hTP k)
-      (hNonDecay j k hjk hNorm)
-  -- Step 2: Derive GPE data with unit-norm phase for the collapse lemma.
-  have hGPEζ : ∀ j k : Fin r, ‖μ j‖ = ‖μ k‖ →
-      ∃ ζ : ℂ, ζ ≠ 0 ∧ ‖ζ‖ = 1 ∧
-        ∀ (N : ℕ) (σ : Fin N → Fin d),
-          mpv (blocks k) σ = ζ ^ N * mpv (blocks j) σ := by
-    intro j k hNorm
-    by_cases hjk : j = k
-    · -- Self-case: ζ = 1.
-      subst hjk
-      exact ⟨1, one_ne_zero, norm_one, fun N σ => by simp⟩
-    · -- Different blocks: use gauge-phase equivalence data.
-      obtain ⟨hdim, X, ζ, hζne, hX⟩ := hGPE_raw j k hjk hNorm
-      have hmpv : ∀ (N : ℕ) (σ : Fin N → Fin d),
-          mpv (blocks k) σ = ζ ^ N * mpv (blocks j) σ := by
-        intro N σ
-        rw [mpv_eq_pow_mul_of_gaugePhase
-          (A := cast (congr_arg (MPSTensor d) hdim) (blocks j))
-          (B := blocks k) X ζ hX N σ,
-          mpv_cast_dim hdim (blocks j) N σ]
-      -- Show ‖ζ‖ = 1 using the overlap analysis.
-      -- Cast blocks j to have dimension dim k (using hdim).
-      have hζ_norm : ‖ζ‖ = 1 := by
-        exact norm_gaugePhase_eq_one_of_irr_TP_primitive
-          (cast (congr_arg (MPSTensor d) hdim) (blocks j))
-          (blocks k)
-          ((isIrreducibleTensor_cast_dim hdim (blocks j)).mpr (hIrr j))
-          (hIrr k)
-          ((leftCanonical_cast_dim hdim (blocks j)).mpr (hTP j))
-          (hTP k)
-          ((isPrimitive_transferMap_cast_dim hdim (blocks j)).mpr (hPrim j))
-          (hPrim k)
-          X ζ hX
-      exact ⟨ζ, hζne, hζ_norm, hmpv⟩
-  -- Step 3: Apply the gauge-phase-aware collapse lemma.
-  exact exists_bnt_grouping_of_gaugePhaseEquiv μ blocks hμne hGPEζ
-
-/-- One-sector specialization of the TP + primitive + irreducible grouping route.
-
-This is a genuine restricted result: if all weights lie in a single norm class
-and every block has non-decaying overlap with a chosen representative, then the whole family
-collapses to a one-basis `SectorDecomposition`. -/
-theorem bnt_grouping_single_norm_class_of_tp_primitive_irr_blocks
-    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
-    (μ : Fin r → ℂ)
-    (blocks : (k : Fin r) → MPSTensor d (dim k))
-    (k0 : Fin r)
-    (hTP : ∀ k, ∑ i : Fin d, (blocks k i)ᴴ * blocks k i = 1)
-    (hIrr : ∀ k, IsIrreducibleTensor (blocks k))
-    (hPrim : ∀ k, _root_.IsPrimitive (transferMap (d := d) (D := dim k) (blocks k)))
-    (hμne : ∀ k, μ k ≠ 0)
-    (hNorm : ∀ k : Fin r, ‖μ k‖ = ‖μ k0‖)
-    (hNonDecay : ∀ k : Fin r, k ≠ k0 →
-      ¬ Tendsto (fun N => mpvOverlap (d := d) (blocks k0) (blocks k) N) atTop (nhds 0)) :
-    ∃ P : SectorDecomposition d,
-      P.basisCount = 1 ∧
-      P.totalCopies = r ∧
-      SameMPV₂ P.toTensor (toTensorFromBlocks (d := d) (μ := μ) blocks) ∧
-      (∀ s : Fin P.totalCopies, ‖P.flatWeight s‖ = ‖μ k0‖) := by
-  have hPhase : ∀ k : Fin r,
-      ∃ ζ : ℂ, ζ ≠ 0 ∧ ‖ζ‖ = 1 ∧
-        ∀ (N : ℕ) (σ : Fin N → Fin d),
-          mpv (blocks k) σ = ζ ^ N * mpv (blocks k0) σ := by
-    intro k
-    by_cases hk : k = k0
-    · subst hk
-      exact ⟨1, one_ne_zero, norm_one, fun N σ => by simp⟩
-    · obtain ⟨hdim, X, ζ, hζne, hX⟩ := gaugePhaseEquiv_of_nonDecaying_overlap
-        (blocks k0) (blocks k) (hIrr k0) (hIrr k) (hTP k0) (hTP k)
-        (hNonDecay k hk)
-      have hmpv : ∀ (N : ℕ) (σ : Fin N → Fin d),
-          mpv (blocks k) σ = ζ ^ N * mpv (blocks k0) σ := by
-        intro N σ
-        rw [mpv_eq_pow_mul_of_gaugePhase
-          (A := cast (congr_arg (MPSTensor d) hdim) (blocks k0))
-          (B := blocks k) X ζ hX N σ,
-          mpv_cast_dim hdim (blocks k0) N σ]
-      have hζ_norm : ‖ζ‖ = 1 := by
-        exact norm_gaugePhase_eq_one_of_irr_TP_primitive
-          (cast (congr_arg (MPSTensor d) hdim) (blocks k0))
-          (blocks k)
-          ((isIrreducibleTensor_cast_dim hdim (blocks k0)).mpr (hIrr k0))
-          (hIrr k)
-          ((leftCanonical_cast_dim hdim (blocks k0)).mpr (hTP k0))
-          (hTP k)
-          ((isPrimitive_transferMap_cast_dim hdim (blocks k0)).mpr (hPrim k0))
-          (hPrim k)
-          X ζ hX
-      exact ⟨ζ, hζne, hζ_norm, hmpv⟩
-  exact bnt_grouping_single_norm_class μ blocks k0 hμne hNorm hPhase
 
 end MPSTensor
