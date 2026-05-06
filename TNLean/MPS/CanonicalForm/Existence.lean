@@ -434,9 +434,9 @@ The MPV relationship is:
   `mpv A σ = mpv (zeroMPSTensor d zeroTailDim) σ + mpv (toTensorFromBlocks μ≡1 blocks) σ`
 
 which at `N = 0` reduces to `D = zeroTailDim + ∑ k, dim k` and at `N > 0` reduces to
-`mpv A σ = mpv (toTensorFromBlocks μ≡1 blocks) σ` (the all-zero block vanishes).
+`mpv A σ = mpv (toTensorFromBlocks μ≡1 blocks) σ` (the all-zero leftover block vanishes).
 
-This separation is **exact**: the leftover all-zero block is not silently discarded, and the
+This separation is **exact**: the all-zero leftover block is not silently discarded, and the
 length-zero identity is preserved. -/
 theorem exists_irreducible_blockDecomp_nonzeroBlocks (A : MPSTensor d D) :
     ∃ (zeroTailDim : ℕ) (r : ℕ) (dim : Fin r → ℕ)
