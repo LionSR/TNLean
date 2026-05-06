@@ -112,6 +112,17 @@ The conditional directness package
 turns any external proof of the source contradiction
 \(\neg(D_A=D_B \wedge \mathcal G_L^A=\mathcal G_L^B)\) into
 \(\mathcal G_{3L}^A\cap\mathcal G_{3L}^B=\{0\}\).
+The equal-size uniqueness branch is now isolated as well:
+\leanid{MPSTensor.not_bondDim_eq_and_groundSpace_eq_of_mpvSubmodule_ne}
+shows that, for injective tensors, equal local image spaces would force equality
+of the periodic MPV lines, so a separately supplied distinct-MPV-line hypothesis
+rules out the equal-size collapse.  Consequently
+\leanid{MPSTensor.groundSpace_inf_eq_bot_of_mpvSubmodule_ne_of_dim_ge}
+combines the finite-dimensional step with this uniqueness input to prove
+zero intersection of the two three-block image spaces.  This is still not the
+full BNT source theorem: the remaining BNT-level task is to derive the required
+distinctness of the MPV lines from the paper's pairwise different canonical
+blocks, after the prescribed blocking.
 
 The current formal development also includes downstream lemmas that depend on
 the remaining direct-sum input.

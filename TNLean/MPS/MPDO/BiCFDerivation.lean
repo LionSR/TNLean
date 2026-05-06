@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.MPDO.BiCFDerivation.Counterexample
 import TNLean.MPS.MPDO.BiCFDerivation.DirectSumGroundSpace
+import TNLean.MPS.MPDO.BiCFDerivation.DirectSumUniqueness
 
 /-!
 # Finite-length sufficient conditions and obstructions for MPDO biCF
@@ -30,6 +31,9 @@ The supporting modules are:
   follows from the two-sided nonzero span lemma.
 * `TNLean.MPS.MPDO.BiCFDerivation.DirectSumGroundSpace` — the corresponding
   inclusion/equality of finite-chain image spaces.
+* `TNLean.MPS.MPDO.BiCFDerivation.DirectSumUniqueness` — the parent-Hamiltonian
+  uniqueness input that rules out the equal-size direct-sum collapse once the
+  two injective block states have distinct MPV lines.
 
 ## References
 

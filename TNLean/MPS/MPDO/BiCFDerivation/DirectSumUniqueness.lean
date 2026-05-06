@@ -1,0 +1,91 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+-/
+import TNLean.MPS.MPDO.BiCFDerivation.DirectSumGroundSpace
+import TNLean.MPS.ParentHamiltonian.UniqueGroundState
+
+/-!
+# Direct-sum uniqueness input
+
+This file records the equal-size branch of the two-block direct-sum argument
+from David--Perez-Garcia--Schuch--Wolf, Lemma `lem:direct-sum`.
+
+The preceding direct-sum files prove the trace-dual and finite-dimensional
+steps: a homogeneous three-block relation forces equality of bond dimensions
+and equality of the length-`L` local image spaces.  The remaining equal-size
+contradiction in the source uses the uniqueness of injective parent ground
+spaces: if the local image spaces are equal, then the periodic ground-state
+line is the same.  Therefore distinct injective block states rule out the
+equal-size collapse.
+
+## References
+
+* [David--Perez-Garcia--Schuch--Wolf 2006, Lemma `lem:direct-sum`]
+
+## Tags
+
+matrix product states, canonical form, direct sum, parent Hamiltonian
+-/
+
+open scoped Matrix
+
+namespace MPSTensor
+
+variable {d D₁ D₂ L N : ℕ}
+
+/-- Equal local image spaces impose the same periodic-chain constraints. -/
+theorem chainGroundSpace_eq_of_groundSpace_eq
+    {A : MPSTensor d D₁} {B : MPSTensor d D₂}
+    (hG : groundSpace A L = groundSpace B L) :
+    chainGroundSpace A L N = chainGroundSpace B L N := by
+  rw [chainGroundSpace, chainGroundSpace]
+  by_cases h : 0 < N ∧ L ≤ N
+  · simp [h, hG]
+  · simp [h]
+
+/-- Distinct periodic MPV lines rule out the equal-size local-image collapse.
+
+This is the parent-Hamiltonian uniqueness input used in the equal-size branch
+of the two-block direct-sum proof.  It is intentionally stated with the
+external distinctness hypothesis on the MPV lines: later BNT-level arguments
+must supply that hypothesis from the paper's pairwise-different block states. -/
+theorem not_bondDim_eq_and_groundSpace_eq_of_mpvSubmodule_ne
+    {A : MPSTensor d D₁} {B : MPSTensor d D₂} [NeZero D₁] [NeZero D₂]
+    (hA : IsInjective A) (hB : IsInjective B)
+    (hN : 2 ≤ N) (hL : 1 < L) (hLN : L ≤ N)
+    (hDistinct : mpvSubmodule A N ≠ mpvSubmodule B N) :
+    ¬ (D₁ = D₂ ∧ groundSpace A L = groundSpace B L) := by
+  rintro ⟨hD, hG⟩
+  subst hD
+  have hChain : chainGroundSpace A L N = chainGroundSpace B L N :=
+    chainGroundSpace_eq_of_groundSpace_eq hG
+  have hAeq : chainGroundSpace A L N = mpvSubmodule A N :=
+    chainGroundSpace_eq_mpvSubmodule hA hN hL hLN
+  have hBeq : chainGroundSpace B L N = mpvSubmodule B N :=
+    chainGroundSpace_eq_mpvSubmodule hB hN hL hLN
+  apply hDistinct
+  calc
+    mpvSubmodule A N = chainGroundSpace A L N := hAeq.symm
+    _ = chainGroundSpace B L N := hChain
+    _ = mpvSubmodule B N := hBeq
+
+/-- Two-block directness with the equal-size branch discharged by distinct MPV
+lines.
+
+The hypotheses mirror the already-formalized finite-dimensional step together
+with the source-paper uniqueness input: block injectivity controls the
+three-block trace relation, while injective parent-Hamiltonian uniqueness and a
+distinct MPV-line hypothesis exclude the equal-size collapse. -/
+theorem groundSpace_inf_eq_bot_of_mpvSubmodule_ne_of_dim_ge
+    {A : MPSTensor d D₁} {B : MPSTensor d D₂} [NeZero D₁] [NeZero D₂]
+    (hAblk : IsNBlkInjective A L) (hBblk : IsNBlkInjective B L)
+    (hA : IsInjective A) (hB : IsInjective B)
+    (hD : D₂ ≤ D₁) (hN : 2 ≤ N) (hL : 1 < L) (hLN : L ≤ N)
+    (hDistinct : mpvSubmodule A N ≠ mpvSubmodule B N) :
+    groundSpace A (L + (L + L)) ⊓ groundSpace B (L + (L + L)) = ⊥ := by
+  exact groundSpace_inf_eq_bot_of_not_bondDim_eq_and_groundSpace_eq_of_dim_ge
+    hAblk hBblk hD
+    (not_bondDim_eq_and_groundSpace_eq_of_mpvSubmodule_ne hA hB hN hL hLN hDistinct)
+
+end MPSTensor

@@ -3140,8 +3140,12 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     \lean{MPSTensor.bondDim_eq_and_groundSpace_eq_of_groundSpace_le_of_isNBlkInjective_of_dim_ge}
     \lean{MPSTensor.bondDim_eq_and_groundSpace_eq_of_three_block_trace_relation_left_of_dim_ge}
     \lean{MPSTensor.groundSpace_inf_eq_bot_of_not_bondDim_eq_and_groundSpace_eq_of_dim_ge}
+    \lean{MPSTensor.chainGroundSpace_eq_of_groundSpace_eq}
+    \lean{MPSTensor.not_bondDim_eq_and_groundSpace_eq_of_mpvSubmodule_ne}
+    \lean{MPSTensor.groundSpace_inf_eq_bot_of_mpvSubmodule_ne_of_dim_ge}
     \leanok
-    \uses{lem:three_block_relation_ground_space_inclusion}
+    \uses{lem:three_block_relation_ground_space_inclusion,
+        thm:chain_ground_space_eq_mpv_blk}
     If \(A\) and \(B\) are length-\(L\) block-injective, the map
     \(Z\mapsto(t\mapsto\tr(A_tZ))\) has image dimension \(D_A^2\), and
     similarly for \(B\).  Therefore an inclusion
@@ -3157,6 +3161,10 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     simultaneous conclusion \(D_A=D_B\) and
     \(\mathcal G_L^A=\mathcal G_L^B\), then the three-block image spaces
     \(\mathcal G_{3L}^A\) and \(\mathcal G_{3L}^B\) have zero intersection.
+    One such source input is distinctness of the periodic MPV lines: equality
+    of the local image spaces gives equality of the periodic-chain constraint
+    spaces, and injective uniqueness identifies those spaces with the two MPV
+    lines.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -3171,7 +3179,11 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     has two boundary representations.  If the first boundary matrix is zero,
     the vector is zero.  Otherwise the difference of the two coefficient
     formulas is exactly the homogeneous three-block trace relation, so the
-    dimension step gives the forbidden collapse.
+    dimension step gives the forbidden collapse.  In the equal-size branch,
+    equal local image spaces impose the same cyclic local constraints on a
+    periodic chain.  The injective uniqueness theorem then identifies both
+    cyclic ground spaces with the spans of their MPV states, contradicting
+    distinctness of those spans.
 \end{proof}
 
 \begin{lemma}[All-length pair trace separation has finite cumulative length]
