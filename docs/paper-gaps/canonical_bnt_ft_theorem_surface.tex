@@ -91,6 +91,22 @@ the paper-level equal-MPV target.
 The overlap-to-linear-independence and change-of-basis declarations are
 linear-algebra support lemmas for the permutation-rigidity theorem, not
 additional BNT theorems from the source.
+The repeated-copy part should be written around the displayed coefficients
+\[
+  c_{S,j}^{(N)}=\sum_{q=1}^{r_j^S}(\mu^S_{j,q})^N
+\]
+and the resulting multiset equality
+\[
+  \{\!\{\mu^S_{j,q}:1\le q\le r_j^S\}\!\}
+  =
+  \{\!\{\mu^T_{j,q}:1\le q\le r_j^T\}\!\}.
+\]
+Here the double braces denote multisets, so repeated weights are counted with
+their multiplicities.
+In this notation, BNT linear independence separates the coefficient arrays, and
+Newton--Girard recovers the weights.  The formal declarations that only package
+these two algebra steps in sector-data notation are support lemmas, even when
+their names mention the Fundamental Theorem.
 
 \section{External lemmas need explanations}
 
@@ -235,6 +251,21 @@ paper-level theorems.
     constant \(1\) is also lemma-level.  The displayed subscript \(2\) denotes
     the Unicode subscript \(2\) used in the Lean declaration name.  It is a
     logical conversion between hypotheses, not a separate source theorem.
+  \item The BNT sector-weight recovery declarations
+    \path{weight_multiset_eq_of_sameMPV_bnt} and
+    \path{exists_copies_eq_and_weight_multiset_eq_of_sameMPV_bnt}
+    are lemma-level.  They formalize the coefficient comparison
+    \(c_{S,j}^{(N)}=c_{T,j}^{(N)}\) and the elementary recovery of copy counts
+    and weight multisets; they are not additional BNT theorems beyond the
+    source's basis-normal-tensor comparison.
+  \item The phase-matched sector-comparison adapters
+    \path{fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_phaseMatch}
+    and
+    \path{fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_matched_basis}
+    are also lemma-level.  They transport the same coefficient and multiset
+    formulas across a supplied phase or matched-basis identification.  The
+    theorem-level surface begins only when the proof supplies the actual
+    matching data from the BNT hypotheses.
 \end{itemize}
 
 \section{Statements to keep visibly conditional}
