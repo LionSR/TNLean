@@ -54,10 +54,15 @@ therefore commute with every blocked letter at the **same** index:
 `P k * (blockTensor A m) i = (blockTensor A m) i * P k`.
 
 The projections arise from the peripheral spectrum of the original (unblocked)
-transfer map, where they satisfy the *shifted* relation `E†(P (k+1)) = P k`.
-After blocking by the period `m`, the blocked transfer map `E^m` fixes every
-`P k`, so `commutes_letters_of_adjoint_fixed_projection` gives same-index
-commutation with the blocked letters.
+transfer map, with the shifted relation `E†(P (k+1)) = P k`.  In the
+off-diagonal convention of arXiv:1708.00029, Appendix A, the displayed blocks
+satisfy `A^i = ∑ u, P_u A^i P_{u+1}` and the same adjoint transfer map is
+written `E^*`, with source labels satisfying `E^*(P_u) = P_{u+1}`.  The two
+conventions agree after inverse cyclic reindexing: `P k` corresponds to the
+source projection with index `-k` modulo the period.  After blocking by the
+period `m`, the blocked transfer map `E^m` fixes every `P k`, so
+`commutes_letters_of_adjoint_fixed_projection` gives same-index commutation with
+the blocked letters.
 
 The per-sector trace relation ties each compressed block `blocks k` back to the
 projection `P k` via `mpv (blocks k) σ = tr(P k · evalWord(blockTensor A m)(σ))`,
@@ -184,38 +189,6 @@ private theorem exists_cyclic_sector_decomp_after_blocking_of_isPeriodic
   exact ⟨dim, blocks, hLC, hMPV,
     ⟨P, φ, hPproj, hPsum, hCyclic, hComm, hTrace, hIntertwine, hMul, hStar⟩, hNondeg⟩
 
-
-/-- One-step projection transport for `((E_A^†)^m)`-fixed cyclic-sector projections.
-
-This gives the exact `hProjStep`-style consequence needed in the overlap
-argument, assuming the fixed-point-algebra rigidity input on cyclic sectors.
-It is kept as a named theorem for callers that still work through
-`SectorFixedPointAlgebraRigidity`, even though the main self-overlap proof now
-uses the unconditional orbit-sum lift from `SectorIrreducibility.HLift`. -/
-theorem hProjStep_cyclic_sector_supported
-    [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
-    {P : Fin m → MatrixAlg D}
-    (hRigidity :
-      SectorFixedPointAlgebraRigidity
-        (D := D) (m := m)
-        (transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) P)
-    {k : Fin m} {X : MatrixAlg D}
-    (hXproj : IsOrthogonalProjection X)
-    (hXP : X * P k = X)
-    (hPX : P k * X = X)
-    (hXfix :
-      ((transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ^ m) X = X) :
-    IsOrthogonalProjection
-      (transferMap (d := d) (D := D) (fun i => (A i)ᴴ) X) := by
-  let T : MatrixEnd D := transferMap (d := d) (D := D) (fun i => (A i)ᴴ)
-  have hStarT : ∀ Y : MatrixAlg D, T Yᴴ = (T Y)ᴴ := by
-    intro Y
-    simpa [T, MPSTensor.transferMap_apply, Kraus.map] using
-      (Kraus.map_conjTranspose (K := fun i => (A i)ᴴ) Y).symm
-  simpa [T] using
-    hProjStep_of_sectorFixedPointAlgebraRigidity
-      (D := D) (m := m) (T := T) (P := P) hStarT (by simpa [T] using hRigidity)
-      (k := k) (X := X) hXproj hXP hPX hXfix
 
 /-- Corner primitivity and irreducibility for a cyclic sector.
 
