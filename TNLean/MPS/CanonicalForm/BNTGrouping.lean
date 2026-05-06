@@ -410,13 +410,13 @@ paper's full basis-of-normal-tensors construction: if two distinct basis tensors
 occur at the same modulus, they should survive as different basis elements rather
 than being forced into one norm class.
 
-**Why equal-norm blocks must share an MPV function in this collapse**:
-Equal modulus alone does not force two normal tensors to be gauge-phase equivalent.
-The paper's BNT construction keeps distinct non-equivalent equal-modulus tensors
-as separate basis elements. This collapse lemma is therefore applicable only
-after a separate non-decay, gauge-phase, or equality argument has identified the
-blocks in the same norm class. The phase-class construction carries that
-identification data explicitly.
+**Role of `hMPVEq`**:
+The hypothesis is an extra input for this restricted collapse lemma.  The full
+BNT theory of Cirac--Perez-Garcia--Schuch--Verstraete 2017, Section 2.3 does not
+collapse all equal-modulus sectors into one block: repeated basis tensors can
+survive as multiplicities with separate coefficients.  Thus `hMPVEq` should be
+proved only in situations where a restricted same-MPV collapse has already been
+justified, not assumed as a general consequence of equal weight norm alone.
 
 **Proof:**
 1. Let `S = Finset.univ.image (‖μ ·‖)`, `g = S.card`.

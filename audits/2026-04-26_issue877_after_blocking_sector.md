@@ -25,15 +25,10 @@ comparison step. Instead it adds three kernel-checked compositions.
    theorem. The permutation, dimension transport, gauge-phase data, and copy
    alignment are outputs, not assumptions.
 
-2. `MPSTensor.fundamentalTheorem_after_blocking_sector_of_bntPair_overlapSpan`
-   in `TNLean/MPS/CanonicalForm/Assembly/StructuralTheorem.lean` replaces the
-   old abstract `matchedBasisData` argument with a BNT sector pair carrying
-   `SectorBasisOverlapSpanHypotheses P Q`. It derives
-   `SameMPV₂ P.toTensor Q.toTensor` from the original
-   `hSame : SameMPV₂ A B`, constructs the matching witness through #860, and
-   then applies
-   `fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_sectorMatching` to
-   obtain the actual sector-weight multiset conclusion.
+2. The intermediate overlap-span formulation later proved unnecessary for the active
+   zero-tail/BNT-cover route and was retired. The remaining comparison route
+   applies the zero-tail block-span theorem and the common phase-cover/BNT-cover
+   consumers directly.
 
 3. `MPSTensor.fundamentalTheorem_after_blocking_sector_of_common_blocks_overlapSpan`
    additionally invokes the #923 one-sided constructor
