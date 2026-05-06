@@ -30,6 +30,10 @@ families. It combines the zero-block separation, TP gauge, and
 common blocking steps into a blocked decomposition whose nontrivial blocks are
 left-canonical and have primitive transfer maps.
 
+The "zero tail" in the produced decomposition is the total bond dimension of
+the separated all-zero leftover blocks.  This is formalization shorthand for
+the source-paper allowance `∑ k, D_k ≤ D` and its possible zero blocks.
+
 It also includes two immediate consequences when extra hypotheses are already
 available: the sorted normal-canonical-form criterion for blocked primitive
 families and the trivial-blocking shortcut for tensors that already come with a

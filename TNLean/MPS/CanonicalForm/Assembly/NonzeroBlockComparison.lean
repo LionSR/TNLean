@@ -16,6 +16,11 @@ nonzero parts directly. The length-zero equation records the residual
 zero-tail contribution, and full equality of the nonzero parts follows once the
 zero tails agree.
 
+Here "zero-tail" is the formal variable for the total bond dimension of the
+separated all-zero leftover blocks.  It corresponds to the source-paper
+allowance `∑ k, D_k ≤ D`, where the block decomposition may include zero
+blocks.
+
 ## References
 
 * [Cirac-Perez-Garcia-Schuch-Verstraete, arXiv:1606.00608, Section 2.3 + Appendix A]
@@ -23,7 +28,7 @@ zero tails agree.
 
 ## Tags
 
-matrix product states, canonical form, zero tail, blocking
+matrix product states, canonical form, zero-tail convention, blocking
 -/
 
 namespace MPSTensor

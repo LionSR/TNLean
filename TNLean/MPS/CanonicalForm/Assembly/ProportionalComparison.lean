@@ -13,6 +13,10 @@ The results here give after-blocking sector-comparison consequences from finite-
 comparisons and common MPV phase covers, and record the special case where the cover comes from a
 BNT proportional-decomposition comparison of the nonzero-weight block families.
 
+The zero-tail hypotheses mentioned below compare the total bond dimensions of
+the separated all-zero leftover blocks.  This is the formal counterpart of the
+source-paper block-decomposition allowance `∑ k, D_k ≤ D` and its zero blocks.
+
 ## Main statements
 
 * `TNLean.MPS.CanonicalForm.Assembly.BasicSectorComparison` contains the basic
