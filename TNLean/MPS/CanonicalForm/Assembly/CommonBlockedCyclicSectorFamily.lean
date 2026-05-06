@@ -121,7 +121,7 @@ def flatWeight (F : CommonBlockedCyclicSectorFamily blocks) :
   fun _ => 1
 
 /-- The unit weights of the flattened common-alphabet sectors are nonzero. -/
-theorem flatWeight_ne_zero (F : CommonBlockedCyclicSectorFamily blocks)
+lemma flatWeight_ne_zero (F : CommonBlockedCyclicSectorFamily blocks)
     (x : Fin (∑ k : Fin r, F.period k)) : F.flatWeight x ≠ 0 := by
   simp [flatWeight]
 
@@ -197,13 +197,13 @@ theorem commonFlatWeight_ne_zero (F : CommonBlockedCyclicSectorFamily blocks)
 
 /-- Per-block weight transport under common blocking: every sector belonging to original
 nonzero-weight block `k` carries the transported power `μ k ^ F.p`. -/
-theorem commonFlatWeight_apply_of_block (F : CommonBlockedCyclicSectorFamily blocks)
+lemma commonFlatWeight_apply_of_block (F : CommonBlockedCyclicSectorFamily blocks)
     (μ : Fin r → ℂ) (k : Fin r) (s : Fin (F.period k)) :
     F.commonFlatWeight μ (finSigmaFinEquiv (Sigma.mk k s)) = μ k ^ F.p := by
   simp [commonFlatWeight, flatKey]
 
 /-- All sectors from the same original block carry the same transported weight. -/
-theorem commonFlatWeight_apply_block_eq (F : CommonBlockedCyclicSectorFamily blocks)
+lemma commonFlatWeight_apply_block_eq (F : CommonBlockedCyclicSectorFamily blocks)
     (μ : Fin r → ℂ) (k : Fin r) (s t : Fin (F.period k)) :
     F.commonFlatWeight μ (finSigmaFinEquiv (Sigma.mk k s)) =
     F.commonFlatWeight μ (finSigmaFinEquiv (Sigma.mk k t)) := by
