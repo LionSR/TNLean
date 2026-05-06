@@ -17,6 +17,10 @@ This module contains the zero-tail transport lemmas and common-sector
 reindexing hypotheses used after the structural canonical-form reduction has
 produced common cyclic-sector data.
 
+Here "zero-tail" means the total bond dimension of the separated all-zero
+leftover blocks in the block decomposition.  It is the dimension gap allowed by
+`∑ k, D_k ≤ D`, where the remaining summands are zero blocks.
+
 ## Main statements
 
 * `zeroTail_commonFlat_of_reindexed` and
