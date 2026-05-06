@@ -190,6 +190,25 @@ def PairTraceSeparatingAt {D₁ D₂ : ℕ}
           Matrix.trace (ΔB * evalWord B (List.ofFn w)) = 0) →
       ΔA = 0 ∧ ΔB = 0
 
+/-- Homogeneous pair trace separation is symmetric in the two blocks. -/
+theorem pairTraceSeparatingAt_symm {D₁ D₂ : ℕ}
+    {A : MPSTensor d D₁} {B : MPSTensor d D₂} {S : ℕ}
+    (hSep : PairTraceSeparatingAt A B S) :
+    PairTraceSeparatingAt B A S := by
+  intro ΔB ΔA hRel
+  obtain ⟨hA, hB⟩ := hSep ΔA ΔB fun w => by
+    simpa [add_comm] using hRel w
+  exact ⟨hB, hA⟩
+
+/-- Remove a propositional bond-dimension cast from the left block in
+homogeneous pair trace separation. -/
+theorem pairTraceSeparatingAt_uncast_left {D₁ D₁' D₂ : ℕ}
+    (h : D₁ = D₁') {A : MPSTensor d D₁} {B : MPSTensor d D₂} {S : ℕ}
+    (hSep : PairTraceSeparatingAt (cast (congr_arg (MPSTensor d) h) A) B S) :
+    PairTraceSeparatingAt A B S := by
+  subst h
+  simpa using hSep
+
 /-- The simultaneous word evaluation of two blocks for an arbitrary finite word. -/
 def pairEvalWordTuple {D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)

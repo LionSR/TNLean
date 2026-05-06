@@ -1,3 +1,4 @@
+import TNLean.Algebra.MatrixAux
 import TNLean.MPS.Defs
 import TNLean.MPS.Overlap.Basic
 
@@ -45,13 +46,8 @@ lemma groundSpace_finrank_le (A : MPSTensor d D) (L : ℕ) :
   have hRange : Module.finrank ℂ (groundSpace A L) ≤
       Module.finrank ℂ (Matrix (Fin D) (Fin D) ℂ) := by
     simpa [groundSpace] using LinearMap.finrank_range_le (groundSpaceMap A L)
-  have hMatrix : Module.finrank ℂ (Matrix (Fin D) (Fin D) ℂ) = D ^ 2 := by
-    calc
-      Module.finrank ℂ (Matrix (Fin D) (Fin D) ℂ)
-          = (Fintype.card (Fin D) * Fintype.card (Fin D)) * Module.finrank ℂ ℂ := by
-              simpa using (Module.finrank_matrix ℂ ℂ (Fin D) (Fin D))
-      _ = D * D := by simp
-      _ = D ^ 2 := by simp [pow_two]
+  have hMatrix : Module.finrank ℂ (Matrix (Fin D) (Fin D) ℂ) = D ^ 2 :=
+    Matrix.finrank_matrix_fin_eq_sq D
   exact hRange.trans (by simp [hMatrix])
 
 /-- The ambient local space has dimension `d^L`. -/

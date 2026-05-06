@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 
 import TNLean.Wielandt.SpanGrowth.CumulativeSpan
+import TNLean.Algebra.MatrixAux
 import TNLean.Wielandt.Primitivity.PaperDefinitions
 import TNLean.Wielandt.SpanGrowth.VectorToMatrixSpan
 import TNLean.Wielandt.RectangularSpan.Universality
@@ -65,11 +66,7 @@ theorem wordSpan_finrank_le (A : MPSTensor d D) (n : ℕ) :
   calc Module.finrank ℂ (wordSpan A n)
       ≤ Module.finrank ℂ (Matrix (Fin D) (Fin D) ℂ) :=
         Submodule.finrank_le _
-    _ = Fintype.card (Fin D) * Fintype.card (Fin D) *
-        Module.finrank ℂ ℂ := Module.finrank_matrix ℂ ℂ _ _
-    _ = D * D * 1 := by
-          simp only [Fintype.card_fin, Module.finrank_self, mul_one]
-    _ = D ^ 2 := by ring
+    _ = D ^ 2 := Matrix.finrank_matrix_fin_eq_sq D
 
 
 /-! ## One-step span elements as redundant generators -/
@@ -323,18 +320,6 @@ theorem wordSpan_eq_top_of_ge_of_isUnit (A : MPSTensor d D)
 
 /-! ## Right-multiplication stabilization and strict growth -/
 
-private theorem finrank_top_matrix :
-    Module.finrank ℂ (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) = D ^ 2 := by
-  calc
-    Module.finrank ℂ (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ))
-        = Module.finrank ℂ (Matrix (Fin D) (Fin D) ℂ) := by
-          simp
-    _ = Fintype.card (Fin D) * Fintype.card (Fin D) *
-        Module.finrank ℂ ℂ := Module.finrank_matrix ℂ ℂ _ _
-    _ = D * D * 1 := by
-          simp only [Fintype.card_fin, Module.finrank_self, mul_one]
-    _ = D ^ 2 := by ring
-
 private theorem finrank_eq_finrank_map_mulRight_of_isUnit
     (S : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ))
     {b : Matrix (Fin D) (Fin D) ℂ} (hU : IsUnit b) :
@@ -516,7 +501,7 @@ theorem wordSpan_finrank_strict_mono_of_isUnit_of_isNormal
     wordSpan_eq_top_of_ge_of_isUnit A i₀ hU hNtop (le_max_right n N)
   have hfull : Module.finrank ℂ (wordSpan A (max n N)) = D ^ 2 := by
     rw [htopMax]
-    exact finrank_top_matrix (D := D)
+    exact Matrix.finrank_top_matrix_fin_eq_sq D
   have hconst' : Module.finrank ℂ (wordSpan A (max n N)) =
       Module.finrank ℂ (wordSpan A n) := by
     rw [hk]
@@ -533,7 +518,7 @@ private theorem wordSpan_eq_top_of_finrank_eq_sq
     _ = Module.finrank ℂ
           (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) := by
           symm
-          exact finrank_top_matrix (D := D)
+          exact Matrix.finrank_top_matrix_fin_eq_sq D
 
 private theorem wordSpan_finrank_lt_of_ne_top
     (A : MPSTensor d D) (n : ℕ) (hneq : wordSpan A n ≠ ⊤) :

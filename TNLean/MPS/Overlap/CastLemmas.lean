@@ -41,6 +41,14 @@ lemma isInjective_cast_dim {d D₁ D₂ : ℕ} (h : D₁ = D₂) (A : MPSTensor 
     IsInjective (cast (congr_arg (MPSTensor d) h) A) ↔ IsInjective A := by
   subst h; simp
 
+/-- Casting the bond dimension preserves fixed-length block injectivity. -/
+lemma isNBlkInjective_cast_dim {d D₁ D₂ : ℕ} (h : D₁ = D₂)
+    (A : MPSTensor d D₁) (N : ℕ) :
+    IsNBlkInjective (cast (congr_arg (MPSTensor d) h) A) N ↔
+      IsNBlkInjective A N := by
+  subst h
+  simp
+
 /-- Casting the bond dimension preserves irreducibility. -/
 lemma isIrreducibleTensor_cast_dim {d D₁ D₂ : ℕ} (h : D₁ = D₂) (A : MPSTensor d D₁) :
     IsIrreducibleTensor (cast (congr_arg (MPSTensor d) h) A) ↔ IsIrreducibleTensor A := by
