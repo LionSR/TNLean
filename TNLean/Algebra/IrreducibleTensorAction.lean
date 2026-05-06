@@ -31,7 +31,7 @@ noncomputable section
 
 If a nontrivial `A`-invariant submodule `W` existed, its orthogonal projection would give a
 nontrivial invariant orthogonal projection matrix, contradicting `IsIrreducibleTensor`. -/
-theorem isIrreducibleAction_of_isIrreducibleTensor
+lemma isIrreducibleAction_of_isIrreducibleTensor
     {d D : ℕ} (A : MPSTensor d D)
     (hIrrT : IsIrreducibleTensor (d := d) (D := D) A) :
     IsIrreducibleAction (d := d) (D := D) A := by

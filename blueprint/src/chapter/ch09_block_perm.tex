@@ -222,13 +222,13 @@ results of~\cite{Cirac2021Matrix}.
 
 \section{Burnside and invariant projections}
 
-\begin{theorem}[The algebra span reaches a finite cumulative span]\label{thm:algspan_cumulative_span}
+\begin{lemma}[The algebra span reaches a finite cumulative span]\label{lem:algspan_cumulative_span}
     \lean{MPSTensor.exists_cumulativeSpan_eq_top_of_algSpan_eq_top}
     \leanok
     \uses{def:alg_span, def:cumulative_span}
     If the generated unital algebra satisfies $\algspn(A) = \MN{D}$,
     then there exists $N$ such that $T_N(A) = \MN{D}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -241,13 +241,14 @@ results of~\cite{Cirac2021Matrix}.
     single $N$ with $T_N(A) = \MN{D}$.
 \end{proof}
 
-\begin{theorem}[Irreducible action gives an irreducible tensor]\label{thm:irreducible_action_to_tensor}
+\begin{lemma}[Irreducible action gives an irreducible tensor]%
+\label{lem:irreducible_action_to_tensor}
     \lean{MPSTensor.isIrreducibleTensor_of_isIrreducibleAction}
     \leanok
     \uses{def:irreducible_action, def:irreducible_tensor}
     If the letters of $A$ act irreducibly on $\C^D$, then $A$ has no nontrivial
     invariant orthogonal projection.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
