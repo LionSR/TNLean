@@ -16,10 +16,18 @@ sector decompositions over a common BNT basis.  Eventual coefficient equality is
 upgraded to equality of the sector-weight multisets by a geometric-sequence
 extrapolation and the Newton identities.
 
+In arXiv:1606.00608, Theorem IV.13 and its appendix proof use positive diagonal
+matrices whose traces enter the structure coefficients as power sums.  The
+geometric extrapolation and Newton--Girard steps below are the finite-sequence
+algebra needed to recover the weight lists from those power sums once the basis
+blocks have been matched.
+
 ## References
 
 - [PGVWC07] Pérez-García, Verstraete, Wolf, Cirac, *Matrix Product State Representations*,
   Quantum Inf. Comput. 7 (2007), arXiv:quant-ph/0608197.
+- [CPSV17] Cirac, Pérez-García, Schuch, Verstraete, *Fundamental Theorems for PEPS*,
+  arXiv:1606.00608 (2017).
 - [CPSV21] Cirac, Pérez-García, Schuch, Verstraete, *Matrix product states and projected
   entangled pair states: Concepts, symmetries, theorems*, Rev. Mod. Phys. 93 (2021),
   arXiv:2011.12127.
@@ -84,7 +92,7 @@ basis block. Uses `Fin.cast (hCopies j)` to align the two families over the same
 
 This is a direct application of Newton–Girard
 (`Matrix.sum_pow_eq_implies_multiset_eq`). -/
-theorem weight_multiset_eq_of_copies_eq_of_coeff_eq
+lemma weight_multiset_eq_of_copies_eq_of_coeff_eq
     (S T : SectorWeightData g)
     (hCopies : ∀ j, S.copies j = T.copies j)
     (hCoeff : ∀ (k : ℕ), 0 < k → ∀ j : Fin g,

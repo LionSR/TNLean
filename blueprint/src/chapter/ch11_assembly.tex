@@ -362,6 +362,25 @@ the power sum
 Thus BNT linear independence separates the coefficient arrays
 $c_{S,j}^{(N)}$, and elementary power-sum algebra recovers both the
 multiplicity $r_j$ and the multiset of weights attached to the basis block.
+In the source paper this information is not presented as a separate chain of
+MPS comparison theorems: Theorem~IV.13 of~\cite{Cirac2017MPDO_AnnPhys} uses
+structure coefficients
+\[
+	c_{\alpha,\beta,\gamma}^{(L)}
+	=\operatorname{tr}\!\left(\chi_{\alpha,\beta,\gamma}^L\right),
+	\qquad
+	m_\gamma=\sum_{\alpha,\beta}c_{\alpha,\beta,\gamma}^{(1)}
+		m_\alpha m_\beta,
+\]
+and the appendix writes the vertical canonical forms as
+$\bigoplus_\alpha \mu_\alpha\otimes M_\alpha$ and
+$\bigoplus_\beta \nu_\beta\otimes A_\beta$, with
+$m_\alpha=\operatorname{tr}(\mu_\alpha)$ and
+$n_\beta=\operatorname{tr}(\nu_\beta)$.
+The one-index coefficients $c_{S,j}^{(N)}$ below are the corresponding
+power-sum comparison after the basis blocks have already been matched.  The
+geometric extrapolation and Newton--Girard steps are external finite-sequence
+facts used to recover the lists of weights from those power sums.
 
 \begin{definition}[Sector data and sector decomposition]%
 \label{def:paper_sector_data}
@@ -379,8 +398,8 @@ multiplicity $r_j$ and the multiset of weights attached to the basis block.
 	$(A_j)_{j=1}^g$ together with their sector data.
 \end{definition}
 
-\begin{theorem}[Sector decomposition formula]%
-\label{thm:paper_decomp_formula}
+\begin{lemma}[Sector decomposition formula]%
+\label{lem:paper_decomp_formula}
 	\lean{MPSTensor.SectorDecomposition.mpv_toTensor_eq_sum_coeff}
 	\leanok
 	\uses{def:paper_sector_data}
@@ -390,7 +409,7 @@ multiplicity $r_j$ and the multiset of weights attached to the basis block.
 		V^{(N)}(A_{\mathrm{tot}})_\sigma
 		= \sum_{j=1}^{g} c_{S,j}^{(N)} V^{(N)}(A_j)_\sigma.
 	\]
-\end{theorem}
+\end{lemma}
 
 \begin{lemma}[Eventual coefficient comparison from BNT linear independence]%
 \label{lem:coeff_eventually_eq}
@@ -558,7 +577,7 @@ multiplicity $r_j$ and the multiset of weights attached to the basis block.
 
 \begin{proof}
 	\leanok
-	\uses{thm:paper_decomp_formula, thm:route_b_equal}
+	\uses{lem:paper_decomp_formula, thm:route_b_equal}
 	Absorb the factors $\zeta_j$ into the sector weights of $Q$ and keep the
 	basis blocks of $P$. The phase-matching hypothesis and the sector
 	decomposition formula show that the resulting decomposition has the same
