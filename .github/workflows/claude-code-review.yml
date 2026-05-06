@@ -135,8 +135,8 @@ jobs:
         with:
           provider: ${{ matrix.provider }}
           model-tier: opus
-          allowed_bots: 'claude,chatgpt-codex-connector,cursor[bot],cursor,copilot-pull-request-reviewer'
-          plugin_marketplaces: |
+          allowed-bots: 'claude,chatgpt-codex-connector,cursor[bot],cursor,copilot-pull-request-reviewer'
+          plugin-marketplaces: |
             https://github.com/anthropics/claude-code.git
             https://github.com/leanprover/skills.git
           plugins: |

@@ -43,46 +43,26 @@ inputs:
     required: false
     default: opus
 
-  allowed_bots:
-    description: 'Allowed bots override (legacy underscore key).'
-    required: false
-    default: ''
   allowed-bots:
     description: 'Allowed bots override.'
     required: false
     default: 'claude,chatgpt-codex-connector,cursor[bot],cursor,copilot-pull-request-reviewer'
 
   allowed-tools:
-    description: 'Optional allowedTools value applied by default.'
-    required: false
-    default: ''
-  allowed_tools:
-    description: 'Legacy underscore key for allowed tools.'
+    description: 'Optional --allowedTools value applied by default.'
     required: false
     default: ''
 
-  branch_name_template:
-    description: 'Legacy underscore key for branch name template.'
-    required: false
-    default: ''
   branch-name-template:
     description: 'Branch-name template for the checkout branch.'
     required: false
     default: ''
 
-  additional_permissions:
-    description: 'Legacy underscore key for additional permissions.'
-    required: false
-    default: ''
   additional-permissions:
     description: 'Additional permissions for the Claude bot.'
     required: false
     default: ''
 
-  plugin_marketplaces:
-    description: 'Legacy underscore key for plugin marketplaces.'
-    required: false
-    default: ''
   plugin-marketplaces:
     description: 'Plugin marketplaces.'
     required: false
@@ -98,16 +78,8 @@ inputs:
     required: false
     default: ''
 
-  system_prompt:
-    description: 'Optional system prompt to inject via --append-system-prompt.'
-    required: false
-    default: ''
   system-prompt:
-    description: 'Optional system prompt to inject via --append-system-prompt.'
-    required: false
-    default: ''
-  system_prompt_file:
-    description: 'Optional path to a system-prompt file.'
+    description: 'Optional system prompt to inject via appendSystemPrompt.'
     required: false
     default: ''
   system-prompt-file:
@@ -115,10 +87,6 @@ inputs:
     required: false
     default: ''
 
-  claude_args:
-    description: 'Legacy underscore key for additional claude args.'
-    required: false
-    default: ''
   claude-args:
     description: 'Additional claude args. The action prepends --model automatically.'
     required: false
@@ -185,70 +153,46 @@ runs:
             fi
           fi
 
-          allowed_bots="${{ inputs.allowed_bots }}"
-          if [ -z "$allowed_bots" ]; then
-            allowed_bots="${{ inputs['allowed-bots'] }}"
-          fi
+          allowed_bots="${{ inputs['allowed-bots'] }}"
 
-          branch_name_template="${{ inputs.branch_name_template }}"
-          if [ -z "$branch_name_template" ]; then
-            branch_name_template="${{ inputs['branch-name-template'] }}"
-          fi
+          branch_name_template="${{ inputs['branch-name-template'] }}"
 
-          additional_permissions="${{ inputs.additional_permissions }}"
-          if [ -z "$additional_permissions" ]; then
-            additional_permissions="${{ inputs['additional-permissions'] }}"
-          fi
+          additional_permissions="${{ inputs['additional-permissions'] }}"
 
-          plugin_marketplaces="${{ inputs.plugin_marketplaces }}"
-          if [ -z "$plugin_marketplaces" ]; then
-            plugin_marketplaces="${{ inputs['plugin-marketplaces'] }}"
-          fi
+          plugin_marketplaces="${{ inputs['plugin-marketplaces'] }}"
 
           allowed_tools="${{ inputs.allowed-tools }}"
-          if [ -z "$allowed_tools" ]; then
-            allowed_tools="${{ inputs.allowed_tools }}"
-          fi
           if [ -z "$allowed_tools" ]; then
             allowed_tools="${CLAUDE_ALLOWED_TOOLS-}"
           fi
 
           system_prompt="${{ inputs.system-prompt }}"
+          system_prompt_path=""
           if [ -z "$system_prompt" ]; then
-            system_prompt="${{ inputs.system_prompt }}"
+            system_prompt_path="${{ inputs['system-prompt-file'] }}"
           fi
-          if [ -z "$system_prompt" ]; then
-            system_prompt_path="${{ inputs.system-prompt-file }}"
-            if [ -z "$system_prompt_path" ]; then
-              system_prompt_path="${{ inputs.system_prompt_file }}"
+          if [ -n "$system_prompt_path" ]; then
+            if [ ! -f "$system_prompt_path" ]; then
+              echo "::error::System prompt file not found: ${system_prompt_path}"
+              exit 1
             fi
-            if [ -n "$system_prompt_path" ]; then
-              if [ ! -f "$system_prompt_path" ]; then
-                echo "::error::System prompt file not found: ${system_prompt_path}"
-                exit 1
-              fi
-              system_prompt="$(cat "$system_prompt_path")"
-            fi
+            system_prompt="$(cat "$system_prompt_path")"
           fi
           if [ -z "$system_prompt" ] && [ -n "${CLAUDE_APPEND_SYSTEM_PROMPT-}" ]; then
             system_prompt="${CLAUDE_APPEND_SYSTEM_PROMPT}"
           fi
-          if [ -n "$system_prompt" ] && [ -n "$system_prompt" ]; then
+          if [ -n "$system_prompt" ]; then
             system_prompt="$(printf '%s' "$system_prompt" | tr '\n' ' ')"
           fi
 
           plugins='${{ inputs.plugins }}'
           prompt='${{ inputs.prompt }}'
 
-          claude_args='${{ inputs.claude_args }}'
-          if [ -z "$claude_args" ]; then
-            claude_args="${{ inputs['claude-args'] }}"
-          fi
+          claude_args="${{ inputs['claude-args'] }}"
+          claude_args="${claude_args//--allowed-tools/--allowedTools}"
+          append_system_prompt=''
           if [ -n "$system_prompt" ] && ! printf '%s\n' "$claude_args" | grep -q -- '--append-system-prompt'; then
-            if [ -n "$claude_args" ]; then
-              claude_args="${claude_args} "
-            fi
-            claude_args="${claude_args}--append-system-prompt \"${system_prompt}\""
+            append_system_prompt="$system_prompt"
           fi
           if [ -n "$allowed_tools" ] && ! printf '%s\n' "$claude_args" | grep -q -- '--allowedTools'; then
             if [ -n "$claude_args" ]; then
@@ -277,12 +221,14 @@ runs:
           echo "plugins=$plugins" >> "$GITHUB_OUTPUT"
           echo "prompt=$prompt" >> "$GITHUB_OUTPUT"
           echo "claude_args=$claude_args" >> "$GITHUB_OUTPUT"
+          echo "append_system_prompt=$append_system_prompt" >> "$GITHUB_OUTPUT"
 
     - name: Run Claude Code
       uses: anthropics/claude-code-action@v1
       env:
         ANTHROPIC_BASE_URL: ${{ steps.resolve.outputs.base_url }}
         ANTHROPIC_AUTH_TOKEN: ${{ steps.resolve.outputs.auth_token }}
+        APPEND_SYSTEM_PROMPT: ${{ steps.resolve.outputs.append_system_prompt }}
       with:
         claude_code_oauth_token: ${{ steps.resolve.outputs.auth_token }}
         allowed_bots: ${{ steps.resolve.outputs.allowed_bots }}

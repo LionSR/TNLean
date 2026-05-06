@@ -69,7 +69,7 @@ jobs:
           deepseek-opus-model: ${{ vars.CLAUDE_DEEPSEEK_OPUS_MODEL }}
           deepseek-sonnet-model: ${{ vars.CLAUDE_DEEPSEEK_SONNET_MODEL }}
           model-tier: sonnet
-          allowed_bots: 'claude,chatgpt-codex-connector'
+          allowed-bots: 'claude,chatgpt-codex-connector'
           prompt: |
             You are a PR-cleanup bot. Your job is to bring bot-generated pull requests
             into compliance with this project's conventions. Do NOT touch code — only

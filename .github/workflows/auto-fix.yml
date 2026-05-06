@@ -199,9 +199,9 @@ jobs:
       workflow_run_id: ${{ fromJSON(needs.setup.outputs.ci_run_id) }}
       pr_number: ${{ fromJSON(needs.setup.outputs.pr_number) }}
       setup_lean: true
-      plugin_marketplaces: 'https://github.com/leanprover/skills.git'
+      plugin-marketplaces: 'https://github.com/leanprover/skills.git'
       plugins: 'lean@leanprover'
-      claude_prompt: |
+      claude-prompt: |
         The Lean CI build failed. Your task is to fix the build errors.
 
         Instructions:
@@ -232,8 +232,8 @@ jobs:
         - Documentation: new definitions and key theorems get docstrings that explain mathematical meaning, not Lean syntax.
         - Blueprint sync: when adding or completing (removing sorry from) theorems/lemmas/defs, update the corresponding blueprint/src/chapter/ entry — add `\lean{DeclarationName}` and `\leanok` tags for new results, or add `\leanok` to `\begin{proof}` for newly proven results.
         If you cannot satisfy a BLOCKER category, STOP and post a PR comment explaining the obstacle instead of pushing a half-fix.
-      claude_allowed_tools: "Edit,Write,Read,Glob,Grep,Bash(lake build),Bash(lake exe cache get),Bash(lake update),Bash(lake env),Bash(lean *),Bash(elan *),Bash(git add *),Bash(git commit *),Bash(git push *),Bash(git diff *),Bash(git status),mcp__github__*"
-      claude_system_prompt_file: .github/prompts/auto-fix-ci-system-prompt.md
+      allowed-tools: "Edit,Write,Read,Glob,Grep,Bash(lake build),Bash(lake exe cache get),Bash(lake update),Bash(lake env),Bash(lean *),Bash(elan *),Bash(git add *),Bash(git commit *),Bash(git push *),Bash(git diff *),Bash(git status),mcp__github__*"
+      system-prompt-file: .github/prompts/auto-fix-ci-system-prompt.md
 
   # ──────────────────────────────────────────────────────
   # Blueprint compilation auto-fix
@@ -257,7 +257,7 @@ jobs:
       workflow_run_id: ${{ fromJSON(needs.setup.outputs.blueprint_run_id) }}
       pr_number: ${{ fromJSON(needs.setup.outputs.pr_number) }}
       setup_lean: false
-      claude_prompt: |
+      claude-prompt: |
         The blueprint compilation (leanblueprint web) failed. Your task is to fix the blueprint errors.
 
         Instructions:
@@ -278,8 +278,8 @@ jobs:
         5. Make minimal, targeted fixes. Do not refactor unrelated LaTeX.
         6. Commit and push your fix to the current branch. Prefix commit messages with `[claude-auto-fix]`.
         7. After pushing, use the GitHub MCP tools to post a comment on the PR summarizing what was fixed.
-      claude_allowed_tools: "Edit,Write,Read,Glob,Grep,Bash(pip install leanblueprint plastex),Bash(cd blueprint && leanblueprint *),Bash(leanblueprint *),Bash(python3 scripts/*),Bash(git add *),Bash(git commit *),Bash(git push *),Bash(git diff *),Bash(git status),mcp__github__*"
-      claude_system_prompt_file: .github/prompts/auto-fix-blueprint-system-prompt.md
+      allowed-tools: "Edit,Write,Read,Glob,Grep,Bash(pip install leanblueprint plastex),Bash(cd blueprint && leanblueprint *),Bash(leanblueprint *),Bash(python3 scripts/*),Bash(git add *),Bash(git commit *),Bash(git push *),Bash(git diff *),Bash(git status),mcp__github__*"
+      system-prompt-file: .github/prompts/auto-fix-blueprint-system-prompt.md
 
   # ──────────────────────────────────────────────────────
   # Review comments auto-fix
@@ -346,8 +346,8 @@ jobs:
           deepseek-opus-model: ${{ vars.CLAUDE_DEEPSEEK_OPUS_MODEL }}
           deepseek-sonnet-model: ${{ vars.CLAUDE_DEEPSEEK_SONNET_MODEL }}
           model-tier: opus
-          allowed_bots: 'claude,chatgpt-codex-connector,cursor[bot],cursor,copilot-pull-request-reviewer'
-          plugin_marketplaces: 'https://github.com/leanprover/skills.git'
+          allowed-bots: 'claude,chatgpt-codex-connector,cursor[bot],cursor,copilot-pull-request-reviewer'
+          plugin-marketplaces: 'https://github.com/leanprover/skills.git'
           plugins: 'lean@leanprover'
           allowed-tools: "Edit,Write,Read,Glob,Grep,Bash(lake build),Bash(lake exe cache get),Bash(lake update),Bash(lake env),Bash(lean *),Bash(elan *),Bash(git add *),Bash(git commit *),Bash(git push *),Bash(git diff *),Bash(git status),Bash(gh pr *),Bash(gh api *),mcp__github__*"
           prompt: |

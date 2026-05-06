@@ -76,7 +76,7 @@ jobs:
           deepseek-opus-model: ${{ vars.CLAUDE_DEEPSEEK_OPUS_MODEL }}
           deepseek-sonnet-model: ${{ vars.CLAUDE_DEEPSEEK_SONNET_MODEL }}
           model-tier: sonnet
-          allowed_bots: '*'
+          allowed-bots: '*'
           claude-args: |
             --allowedTools "mcp__github__*,Bash(git diff *),Bash(git log *),Bash(git show *)"
 
