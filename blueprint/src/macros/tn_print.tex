@@ -499,6 +499,513 @@
 
 % ---------- PEPS diagrams ----------
 
+\newcommand{\TNPEPSEdgeBlockingReduction}{%
+  \begin{tikzpicture}[tn picture]
+    \begin{scope}
+      \TN@tensordot{blockCone}{(0,0)}
+      \TN@tensordot{blockCtwo}{(1.00,0)}
+      \TN@tensordot{blockCthree}{(1.50,1.00)}
+      \TN@tensordot{blockCfour}{(0.60,1.50)}
+      \TN@tensordot{blockCfive}{(-0.60,1.50)}
+      \foreach \n in {blockCone,blockCtwo,blockCthree,blockCfour,blockCfive} {
+        \TN@upleg{\n}{0.50}
+      }
+      \draw[tn leg] (blockCone) -- (blockCtwo) -- (blockCthree) --
+        (blockCfour) -- (blockCfive) -- (blockCone);
+      \draw[tn leg] (blockCtwo) -- (blockCfive);
+      \draw[red, line width=0.45pt] (blockCone) circle (0.30cm);
+      \draw[red, line width=0.45pt] (blockCfive) circle (0.30cm);
+      \draw[red, rounded corners=2mm, line width=0.45pt]
+        (0.40,-0.20) rectangle (1.70,1.70);
+      \node[red] at (-0.45,-0.35) {$A'_2$};
+      \node[red] at (-1.10,1.80) {$A'_1$};
+      \node[red] at (1.70,1.80) {$A'_3$};
+    \end{scope}
+    \node at (2.70,0.70) {$\rightsquigarrow$};
+    \begin{scope}[xshift=3.75cm,yshift=0.70cm]
+      \draw[tn leg] (0.20,0) rectangle (4.00,-0.46);
+      \TN@tensordot{blkL}{(0.80,0)}
+      \TN@tensordot{blkM}{(2.10,0)}
+      \TN@tensordot{blkR}{(3.40,0)}
+      \foreach \n in {blkL,blkM,blkR} {
+        \TN@upleg{\n}{0.46}
+      }
+      \node at ($(blkL.south)+(0,-0.30)$) {$A'_1$};
+      \node at ($(blkM.south)+(0,-0.30)$) {$A'_2$};
+      \node at ($(blkR.south)+(0,-0.30)$) {$A'_3$};
+    \end{scope}
+  \end{tikzpicture}%
+}
+
+\newcommand{\TNPEPSEdgeInsertedCoeff}{%
+  \begin{tikzpicture}[tn picture]
+    \draw[tn leg] (0.40,0) rectangle (3.50,-0.46);
+    \TN@tensordot{edgeCoeffL}{(1.00,0)}
+    \TN@tensordot{edgeCoeffM}{(2.00,0)}
+    \TN@tensordot{edgeCoeffR}{(3.00,0)}
+    \foreach \n in {edgeCoeffL,edgeCoeffM,edgeCoeffR} {
+      \TN@upleg{\n}{0.46}
+    }
+    \TN@opdotabove{edgeCoeffX}{(1.50,0)}{X}
+    \node at ($(edgeCoeffL.south)+(0,-0.30)$) {$A'_1$};
+    \node at ($(edgeCoeffM.south)+(0,-0.30)$) {$A'_2$};
+    \node at ($(edgeCoeffR.south)+(0,-0.30)$) {$A'_3$};
+  \end{tikzpicture}%
+}
+
+\newcommand{\TNPEPSThreeSiteInsertionComparison}{%
+  \begin{tikzpicture}[tn picture]
+    \begin{scope}
+      \draw[tn leg] (0.40,0) rectangle (3.50,-0.46);
+      \TN@tensordot{insAone}{(1.00,0)}
+      \TN@tensordot{insAtwo}{(2.00,0)}
+      \TN@tensordot{insAthree}{(3.00,0)}
+      \foreach \n in {insAone,insAtwo,insAthree} {
+        \TN@upleg{\n}{0.46}
+      }
+      \TN@opdotabove{insX}{(1.50,0)}{X}
+      \node at ($(insAone.south)+(0,-0.30)$) {$A_1$};
+      \node at ($(insAtwo.south)+(0,-0.30)$) {$A_2$};
+      \node at ($(insAthree.south)+(0,-0.30)$) {$A_3$};
+    \end{scope}
+    \node at (4.20,0) {$=$};
+    \begin{scope}[xshift=4.90cm]
+      \draw[tn leg] (0.40,0) rectangle (3.50,-0.46);
+      \TN@tensordot{insBone}{(1.00,0)}
+      \TN@tensordot{insBtwo}{(2.00,0)}
+      \TN@tensordot{insBthree}{(3.00,0)}
+      \foreach \n in {insBone,insBtwo,insBthree} {
+        \TN@upleg{\n}{0.46}
+      }
+      \TN@opdotabove{insY}{(1.50,0)}{Y}
+      \node at ($(insBone.south)+(0,-0.30)$) {$B_1$};
+      \node at ($(insBtwo.south)+(0,-0.30)$) {$B_2$};
+      \node at ($(insBthree.south)+(0,-0.30)$) {$B_3$};
+    \end{scope}
+  \end{tikzpicture}%
+}
+
+\newcommand{\TNPEPSInsertionPhysicalRealization}{%
+  \begin{tikzpicture}[tn picture]
+    \begin{scope}
+      \draw[tn leg] (0.40,0) rectangle (3.50,-0.46);
+      \TN@tensordot{realAone}{(1.00,0)}
+      \TN@tensordot{realAtwo}{(2.00,0)}
+      \TN@tensordot{realAthree}{(3.00,0)}
+      \foreach \n in {realAone,realAtwo,realAthree} {
+        \TN@upleg{\n}{0.46}
+      }
+      \TN@opdotabove{realX}{(1.50,0)}{X}
+      \node at ($(realAone.south)+(0,-0.30)$) {$A_1$};
+      \node at ($(realAtwo.south)+(0,-0.30)$) {$A_2$};
+      \node at ($(realAthree.south)+(0,-0.30)$) {$A_3$};
+    \end{scope}
+    \node at (3.75,0) {$=$};
+    \begin{scope}[xshift=4.15cm]
+      \draw[tn leg] (0.40,0) rectangle (3.50,-0.46);
+      \TN@tensordot{realLone}{(1.00,0)}
+      \TN@tensordot{realLtwo}{(2.00,0)}
+      \TN@tensordot{realLthree}{(3.00,0)}
+      \foreach \n in {realLone,realLtwo,realLthree} {
+        \TN@upleg{\n}{0.46}
+      }
+      \TN@opdotleft{realOone}{(1.00,0.72)}{O_1}
+      \draw[tn phys leg] (realLone.north) -- (realOone.south);
+      \draw[tn phys leg, red] (realOone.north) -- ++(0,0.36);
+      \node at ($(realLone.south)+(0,-0.30)$) {$A_1$};
+      \node at ($(realLtwo.south)+(0,-0.30)$) {$A_2$};
+      \node at ($(realLthree.south)+(0,-0.30)$) {$A_3$};
+    \end{scope}
+    \node at (7.95,0) {$=$};
+    \begin{scope}[xshift=8.35cm]
+      \draw[tn leg] (0.40,0) rectangle (3.50,-0.46);
+      \TN@tensordot{realRone}{(1.00,0)}
+      \TN@tensordot{realRtwo}{(2.00,0)}
+      \TN@tensordot{realRthree}{(3.00,0)}
+      \foreach \n in {realRone,realRtwo,realRthree} {
+        \TN@upleg{\n}{0.46}
+      }
+      \TN@opdotleft{realOtwo}{(2.00,0.72)}{O_2}
+      \draw[tn phys leg] (realRtwo.north) -- (realOtwo.south);
+      \draw[tn phys leg, red] (realOtwo.north) -- ++(0,0.36);
+      \node at ($(realRone.south)+(0,-0.30)$) {$A_1$};
+      \node at ($(realRtwo.south)+(0,-0.30)$) {$A_2$};
+      \node at ($(realRthree.south)+(0,-0.30)$) {$A_3$};
+    \end{scope}
+  \end{tikzpicture}%
+}
+
+\newcommand{\TNPEPSPhysicalToVirtualInsertion}{%
+  \begin{tikzpicture}[tn picture]
+    \begin{scope}
+      \draw[tn leg] (0.40,0) rectangle (3.50,-0.46);
+      \TN@tensordot{physVirtLone}{(1.00,0)}
+      \TN@tensordot{physVirtLtwo}{(2.00,0)}
+      \TN@tensordot{physVirtLthree}{(3.00,0)}
+      \foreach \n in {physVirtLone,physVirtLtwo,physVirtLthree} {
+        \TN@upleg{\n}{0.46}
+      }
+      \TN@opdotleft{physVirtOone}{(1.00,0.72)}{O_1}
+      \draw[tn phys leg] (physVirtLone.north) -- (physVirtOone.south);
+      \draw[tn phys leg, red] (physVirtOone.north) -- ++(0,0.36);
+      \node at ($(physVirtLone.south)+(0,-0.30)$) {$B_1$};
+      \node at ($(physVirtLtwo.south)+(0,-0.30)$) {$B_2$};
+      \node at ($(physVirtLthree.south)+(0,-0.30)$) {$B_3$};
+    \end{scope}
+    \node at (3.75,0) {$=$};
+    \begin{scope}[xshift=4.15cm]
+      \draw[tn leg] (0.40,0) rectangle (3.50,-0.46);
+      \TN@tensordot{physVirtRone}{(1.00,0)}
+      \TN@tensordot{physVirtRtwo}{(2.00,0)}
+      \TN@tensordot{physVirtRthree}{(3.00,0)}
+      \foreach \n in {physVirtRone,physVirtRtwo,physVirtRthree} {
+        \TN@upleg{\n}{0.46}
+      }
+      \TN@opdotleft{physVirtOtwo}{(2.00,0.72)}{O_2}
+      \draw[tn phys leg] (physVirtRtwo.north) -- (physVirtOtwo.south);
+      \draw[tn phys leg, red] (physVirtOtwo.north) -- ++(0,0.36);
+      \node at ($(physVirtRone.south)+(0,-0.30)$) {$B_1$};
+      \node at ($(physVirtRtwo.south)+(0,-0.30)$) {$B_2$};
+      \node at ($(physVirtRthree.south)+(0,-0.30)$) {$B_3$};
+    \end{scope}
+    \node at (7.95,0) {$\Longrightarrow$};
+    \begin{scope}[xshift=8.40cm]
+      \draw[tn leg] (0.40,0) rectangle (3.50,-0.46);
+      \TN@tensordot{physVirtWone}{(1.00,0)}
+      \TN@tensordot{physVirtWtwo}{(2.00,0)}
+      \TN@tensordot{physVirtWthree}{(3.00,0)}
+      \foreach \n in {physVirtWone,physVirtWtwo,physVirtWthree} {
+        \TN@upleg{\n}{0.46}
+      }
+      \TN@opdotabove{physVirtW}{(1.50,0)}{W}
+      \node at ($(physVirtWone.south)+(0,-0.30)$) {$B_1$};
+      \node at ($(physVirtWtwo.south)+(0,-0.30)$) {$B_2$};
+      \node at ($(physVirtWthree.south)+(0,-0.30)$) {$B_3$};
+    \end{scope}
+  \end{tikzpicture}%
+}
+
+\newcommand{\TNPEPSEdgeInsertionEquality}{%
+  \begin{tikzpicture}[tn picture]
+    \begin{scope}
+      \TN@tensordot{edgeEqAone}{(0,0)}
+      \TN@tensordot{edgeEqAtwo}{(1.00,0)}
+      \TN@tensordot{edgeEqAthree}{(1.50,1.00)}
+      \TN@tensordot{edgeEqAfour}{(0.60,1.50)}
+      \TN@tensordot{edgeEqAfive}{(-0.60,1.50)}
+      \foreach \n in {edgeEqAone,edgeEqAtwo,edgeEqAthree,edgeEqAfour,edgeEqAfive} {
+        \TN@upleg{\n}{0.50}
+      }
+      \node at ($(edgeEqAone.south)+(0,-0.25)$) {$A_1$};
+      \node at ($(edgeEqAtwo.south)+(0,-0.25)$) {$A_2$};
+      \node at ($(edgeEqAthree.south)+(0,-0.25)$) {$A_3$};
+      \node at ($(edgeEqAfour.south)+(0,-0.25)$) {$A_4$};
+      \node at ($(edgeEqAfive.south)+(0,-0.25)$) {$A_5$};
+      \draw[tn leg] (edgeEqAone) -- (edgeEqAtwo) -- (edgeEqAthree) --
+        (edgeEqAfour) -- (edgeEqAfive) -- (edgeEqAone);
+      \draw[tn leg] (edgeEqAtwo) -- (edgeEqAfive);
+      \TN@opdotright{edgeInsA}{($(edgeEqAtwo)!0.50!(edgeEqAfive)$)}{X}
+    \end{scope}
+    \node at (2.75,0.70) {$=$};
+    \begin{scope}[xshift=4.15cm]
+      \TN@tensordot{edgeEqBone}{(0,0)}
+      \TN@tensordot{edgeEqBtwo}{(1.00,0)}
+      \TN@tensordot{edgeEqBthree}{(1.50,1.00)}
+      \TN@tensordot{edgeEqBfour}{(0.60,1.50)}
+      \TN@tensordot{edgeEqBfive}{(-0.60,1.50)}
+      \foreach \n in {edgeEqBone,edgeEqBtwo,edgeEqBthree,edgeEqBfour,edgeEqBfive} {
+        \TN@upleg{\n}{0.50}
+      }
+      \node at ($(edgeEqBone.south)+(0,-0.25)$) {$\widetilde B_1$};
+      \node at ($(edgeEqBtwo.south)+(0,-0.25)$) {$\widetilde B_2$};
+      \node at ($(edgeEqBthree.south)+(0,-0.25)$) {$\widetilde B_3$};
+      \node at ($(edgeEqBfour.south)+(0,-0.25)$) {$\widetilde B_4$};
+      \node at ($(edgeEqBfive.south)+(0,-0.25)$) {$\widetilde B_5$};
+      \draw[tn leg] (edgeEqBone) -- (edgeEqBtwo) -- (edgeEqBthree) --
+        (edgeEqBfour) -- (edgeEqBfive) -- (edgeEqBone);
+      \draw[tn leg] (edgeEqBtwo) -- (edgeEqBfive);
+      \TN@opdotright{edgeInsB}{($(edgeEqBtwo)!0.50!(edgeEqBfive)$)}{X}
+    \end{scope}
+  \end{tikzpicture}%
+}
+
+\newcommand{\TNPEPSEdgeGaugeAbsorption}{%
+  \begin{tikzpicture}[tn picture]
+    \begin{scope}
+      \TN@tensordot{absB}{(0,0)}
+      \TN@upleg{absB}{0.44}
+      \draw[tn leg] (absB.west) -- ++(-0.62,0);
+      \draw[tn leg] (absB.east) -- ++(0.62,0);
+      \draw[tn leg] ($(absB.south)-(0.18,0)$) -- ++(-0.50,-0.58);
+      \draw[tn leg] ($(absB.south)+(0.18,0)$) -- ++(0.50,-0.58);
+      \node at ($(absB.south)+(0,-0.95)$) {$B_v$};
+    \end{scope}
+    \node at (1.15,0) {$\longmapsto$};
+    \begin{scope}[xshift=2.30cm]
+      \TN@tensordot{absBt}{(0,0)}
+      \TN@upleg{absBt}{0.44}
+      \TN@opdotleft{absL}{(-0.70,0)}{Z_{e_1}^{\pm1}}
+      \TN@opdotright{absR}{(0.70,0)}{Z_{e_2}^{\pm1}}
+      \TN@opdotbelow{absDL}{(-0.48,-0.60)}{Z_{e_3}^{\pm1}}
+      \TN@opdotbelow{absDR}{(0.48,-0.60)}{Z_{e_4}^{\pm1}}
+      \draw[tn leg] (absL.west) -- ++(-0.28,0);
+      \draw[tn leg] (absL.east) -- (absBt.west);
+      \draw[tn leg] (absBt.east) -- (absR.west);
+      \draw[tn leg] (absR.east) -- ++(0.28,0);
+      \draw[tn leg] ($(absBt.south)-(0.18,0)$) -- (absDL.north);
+      \draw[tn leg] ($(absBt.south)+(0.18,0)$) -- (absDR.north);
+      \draw[tn leg] (absDL.south) -- ++(-0.20,-0.28);
+      \draw[tn leg] (absDR.south) -- ++(0.20,-0.28);
+      \node at ($(absBt.south)+(0,-1.10)$) {$\widetilde B_v$};
+    \end{scope}
+  \end{tikzpicture}%
+}
+
+\newcommand{\TNPEPSTwoInjectiveTensorInsertionComparison}{%
+  \begin{tikzpicture}[tn picture]
+    \begin{scope}
+      \TN@tensordot{twoInjAone}{(0,0)}
+      \TN@tensordot{twoInjAtwo}{(2.50,0)}
+      \TN@upleg{twoInjAone}{0.42}
+      \TN@upleg{twoInjAtwo}{0.42}
+      \TN@opdotabove{twoInjAX}{(1.25,0.45)}{X}
+      \draw[tn leg] (twoInjAone) to[out=30,in=180] (twoInjAX.west);
+      \draw[tn leg] (twoInjAX.east) to[out=0,in=150] (twoInjAtwo);
+      \draw[tn leg] (twoInjAone) to[bend right=12] (twoInjAtwo);
+      \draw[tn leg] (twoInjAone) to[bend right=38] (twoInjAtwo);
+      \node at (1.25,-0.08) {$\vdots$};
+      \node at ($(twoInjAone.south)+(0,-0.30)$) {$A_1$};
+      \node at ($(twoInjAtwo.south)+(0,-0.30)$) {$A_2$};
+    \end{scope}
+    \node at (3.20,0) {$=$};
+    \begin{scope}[xshift=3.90cm]
+      \TN@tensordot{twoInjBone}{(0,0)}
+      \TN@tensordot{twoInjBtwo}{(2.50,0)}
+      \TN@upleg{twoInjBone}{0.42}
+      \TN@upleg{twoInjBtwo}{0.42}
+      \TN@opdotabove{twoInjBX}{(1.25,0.45)}{X}
+      \draw[tn leg] (twoInjBone) to[out=30,in=180] (twoInjBX.west);
+      \draw[tn leg] (twoInjBX.east) to[out=0,in=150] (twoInjBtwo);
+      \draw[tn leg] (twoInjBone) to[bend right=12] (twoInjBtwo);
+      \draw[tn leg] (twoInjBone) to[bend right=38] (twoInjBtwo);
+      \node at (1.25,-0.08) {$\vdots$};
+      \node at ($(twoInjBone.south)+(0,-0.30)$) {$B_1$};
+      \node at ($(twoInjBtwo.south)+(0,-0.30)$) {$B_2$};
+    \end{scope}
+  \end{tikzpicture}%
+}
+
+\newcommand{\TNPEPSTwoInjectiveGaugeScalarReduction}{%
+  \begin{tikzpicture}[tn picture]
+    \begin{scope}
+      \TN@tensordot{gaugeRedA}{(0,0)}
+      \TN@upleg{gaugeRedA}{0.42}
+      \draw[tn leg] (gaugeRedA) -- ++(0.75,0.45);
+      \draw[tn leg] (gaugeRedA) -- ++(0.78,-0.05);
+      \draw[tn leg] (gaugeRedA) -- ++(0.65,-0.55);
+      \node at ($(gaugeRedA.south)+(0,-0.30)$) {$A_1$};
+    \end{scope}
+    \node at (1.25,0) {$=$};
+    \begin{scope}[xshift=2.05cm]
+      \TN@tensordot{gaugeRedBZ}{(0,0)}
+      \TN@upleg{gaugeRedBZ}{0.42}
+      \draw[tn leg] (gaugeRedBZ) -- ++(0.75,0.45);
+      \draw[tn leg] (gaugeRedBZ) -- ++(0.78,-0.05);
+      \draw[tn leg] (gaugeRedBZ) -- ++(0.65,-0.55);
+      \draw[red, line width=0.9pt] (0.35,-0.46) arc (-55:5:0.55);
+      \node[red] at (0.70,-0.24) {$Z$};
+      \node at ($(gaugeRedBZ.south)+(0,-0.30)$) {$B_1$};
+    \end{scope}
+    \node at (3.30,0) {$=$};
+    \begin{scope}[xshift=4.10cm]
+      \TN@tensordot{gaugeRedBU}{(0,0)}
+      \TN@upleg{gaugeRedBU}{0.42}
+      \draw[tn leg] (gaugeRedBU) -- ++(0.75,0.45);
+      \draw[tn leg] (gaugeRedBU) -- ++(0.78,-0.05);
+      \draw[tn leg] (gaugeRedBU) -- ++(0.65,-0.55);
+      \draw[red, line width=0.9pt] (0.35,-0.06) arc (-10:45:0.55);
+      \node[red] at (0.72,0.24) {$U$};
+      \node at ($(gaugeRedBU.south)+(0,-0.30)$) {$B_1$};
+    \end{scope}
+    \node at (5.35,0) {$=$};
+    \begin{scope}[xshift=6.15cm]
+      \TN@tensordot{gaugeRedBW}{(0,0)}
+      \TN@upleg{gaugeRedBW}{0.42}
+      \draw[tn leg] (gaugeRedBW) -- ++(0.75,0.45);
+      \draw[tn leg] (gaugeRedBW) -- ++(0.40,-0.07);
+      \draw[tn leg] (gaugeRedBW) -- ++(0.65,-0.55);
+      \draw[red, line width=0.9pt] (0.35,-0.46) arc (-55:45:0.55);
+      \node[red] at (0.79,0.00) {$W$};
+      \node at ($(gaugeRedBW.south)+(0,-0.30)$) {$B_1$};
+    \end{scope}
+  \end{tikzpicture}%
+}
+
+\newcommand{\TNPEPSOneVertexComplementComparison}{%
+  \begin{tikzpicture}[tn picture]
+    \begin{scope}
+      \TN@tensordot{oneSiteAR}{(1.00,0)}
+      \TN@tensordot{oneSiteA}{(2.00,0)}
+      \TN@upleg{oneSiteAR}{0.42}
+      \TN@upleg{oneSiteA}{0.42}
+      \draw[tn leg] (0.50,0) -- (oneSiteAR) -- (oneSiteA) -- (2.50,0);
+      \node at ($(oneSiteAR.south)+(0,-0.30)$) {$A_R$};
+      \node at ($(oneSiteA.south)+(0,-0.30)$) {$A_v$};
+    \end{scope}
+    \node at (3.12,0) {$=$};
+    \begin{scope}[xshift=3.55cm]
+      \TN@tensordot{oneSiteAS}{(1.00,0)}
+      \TN@upleg{oneSiteAS}{0.42}
+      \draw[tn leg] (0.50,0) -- (oneSiteAS) -- (1.50,0);
+      \node at ($(oneSiteAS.south)+(0,-0.30)$) {$A_S$};
+    \end{scope}
+    \node at (5.42,0) {$\propto$};
+    \begin{scope}[xshift=5.95cm]
+      \TN@tensordot{oneSiteBS}{(1.00,0)}
+      \TN@upleg{oneSiteBS}{0.42}
+      \draw[tn leg] (0.50,0) -- (oneSiteBS) -- (1.50,0);
+      \node at ($(oneSiteBS.south)+(0,-0.30)$) {$\widetilde B_S$};
+    \end{scope}
+    \node at (7.82,0) {$=$};
+    \begin{scope}[xshift=8.25cm]
+      \TN@tensordot{oneSiteBR}{(1.00,0)}
+      \TN@tensordot{oneSiteB}{(2.00,0)}
+      \TN@upleg{oneSiteBR}{0.42}
+      \TN@upleg{oneSiteB}{0.42}
+      \draw[tn leg] (0.50,0) -- (oneSiteBR) -- (oneSiteB) -- (2.50,0);
+      \node at ($(oneSiteBR.south)+(0,-0.30)$) {$\widetilde B_R$};
+      \node at ($(oneSiteB.south)+(0,-0.30)$) {$\widetilde B_v$};
+    \end{scope}
+  \end{tikzpicture}%
+}
+
+\newcommand{\TNPEPSInjectiveRegionUnion}{%
+  \begin{tikzpicture}[tn picture]
+    \TN@tensordot{unionAB}{(0,0)}
+    \TN@tensordot{unionI}{(0.70,0.70)}
+    \TN@tensordot{unionBA}{(2.00,0)}
+    \TN@tensordot{unionC}{(1.30,-0.70)}
+    \foreach \n in {unionAB,unionI,unionBA,unionC} {
+      \TN@upleg{\n}{0.42}
+    }
+    \draw[tn leg] (unionAB) -- (unionI) -- (unionBA) -- (unionC) --
+      (unionAB) -- (unionBA);
+    \draw[tn leg] (unionI) -- (unionC);
+    \node[anchor=east] at ($(unionAB)+(-0.12,-0.20)$) {$A\setminus B$};
+    \node[anchor=west] at ($(unionI)+(0.12,0.02)$) {$A\cap B$};
+    \node[anchor=west] at ($(unionBA)+(0.12,-0.20)$) {$B\setminus A$};
+    \node at ($(unionC)+(0,-0.38)$) {$(A\cup B)^c$};
+  \end{tikzpicture}%
+}
+
+\newcommand{\TNPEPSNormalRegionsRS}{%
+  \begin{tikzpicture}[tn picture, scale=0.90]
+    \begin{scope}
+      \clip (-0.25,0.75) rectangle (2.25,3.25);
+      \draw[step=0.5, tn leg] (-1,-1) grid (4,4);
+      \foreach \x in {0,0.5,...,3} {
+        \foreach \y in {0,0.5,...,3} {
+          \node[tn tensor dot] at (\x,\y) {};
+        }
+      }
+      \draw[red, fill=red!35, thick, rounded corners=1mm]
+        (0.3,1.3) -- (1.2,1.3) -- (1.2,1.8) -- (1.7,1.8) --
+        (1.7,2.7) -- (0.3,2.7) -- cycle;
+      \node at (0.75,2.0) {$R$};
+    \end{scope}
+    \node at (2.85,2.00) {and};
+    \begin{scope}[xshift=3.55cm]
+      \clip (-0.25,0.75) rectangle (2.25,3.25);
+      \draw[step=0.5, tn leg] (-1,-1) grid (4,4);
+      \foreach \x in {0,0.5,...,3} {
+        \foreach \y in {0,0.5,...,3} {
+          \node[tn tensor dot] at (\x,\y) {};
+        }
+      }
+      \draw[red, fill=red!35, thick, rounded corners=1mm]
+        (0.3,1.3) rectangle (1.7,2.7);
+      \node at (1.00,2.00) {$S$};
+    \end{scope}
+  \end{tikzpicture}%
+}
+
+\newcommand{\TNPEPSNormalRegionT}{%
+  \begin{tikzpicture}[tn picture, scale=0.90]
+    \clip (-0.25,0.25) rectangle (3.25,3.25);
+    \draw[step=0.5, tn leg] (-1,-1) grid (4,4);
+    \foreach \x in {0,0.5,...,3} {
+      \foreach \y in {0,0.5,...,3} {
+        \node[tn tensor dot] at (\x,\y) {};
+      }
+    }
+    \filldraw[draw=red, fill=red!35, thick, rounded corners=1mm,
+      even odd rule]
+      (0.3,2.7) -- (1.2,2.7) -- (1.2,1.7) -- (2.7,1.7) --
+      (2.7,0.8) -- (1.3,0.8) -- (1.3,1.3) -- (0.3,1.3) -- cycle
+      (-0.25,0.25) rectangle (3.25,3.25);
+    \node at (2.0,2.3) {$T$};
+  \end{tikzpicture}%
+}
+
+\newcommand{\TNPEPSNormalEdgeBlockingReduction}{%
+  \begin{tikzpicture}[tn picture, scale=0.90]
+    \begin{scope}
+      \clip (-0.25,-0.25) rectangle (3.25,3.25);
+      \draw[step=0.5, tn leg] (-1,-1) grid (4,4);
+      \draw[line width=0.6mm, green!65!black] (1,1.5) -- (1.5,1.5);
+      \foreach \x in {0,0.5,...,3} {
+        \foreach \y in {0,0.5,...,3} {
+          \node[tn tensor dot] at (\x,\y) {};
+        }
+      }
+      \draw[red, thick, rounded corners=1mm] (0.3,1.3) rectangle (1.2,2.7);
+      \draw[blue, thick, rounded corners=1mm] (1.3,1.7) rectangle (2.7,0.8);
+    \end{scope}
+    \node at (3.75,1.45) {$\Rightarrow$};
+    \begin{scope}[xshift=4.45cm,yshift=1.50cm]
+      \draw[tn leg] (0.50,0) rectangle (3.50,-0.46);
+      \draw[line width=0.6mm, green!65!black] (1.00,0) -- (2.00,0);
+      \foreach \x/\c/\lab in {1/red/A_1,2/blue/A_2,3/black/A_3} {
+        \TN@tensordot{normalBlock\x}{(\x,0)}
+        \TN@upleg{normalBlock\x}{0.46}
+        \node[\c] at ($(normalBlock\x.south)+(0,-0.30)$) {$\lab$};
+      }
+    \end{scope}
+  \end{tikzpicture}%
+}
+
+\newcommand{\TNPEPSTINormalGaugeAbsorption}{%
+  \begin{tikzpicture}[tn picture]
+    \begin{scope}
+      \TN@tensordot{tiB}{(0,0)}
+      \TN@upleg{tiB}{0.46}
+      \draw[tn leg] (tiB.west) -- ++(-0.60,0);
+      \draw[tn leg] (tiB.east) -- ++(0.60,0);
+      \draw[tn leg] (tiB.south) -- ++(0,-0.60);
+      \draw[tn leg] (tiB.north) -- ++(0,0.38);
+      \node at ($(tiB.south)+(0,-0.88)$) {$B$};
+    \end{scope}
+    \node at (1.25,0) {$=$};
+    \begin{scope}[xshift=2.35cm]
+      \TN@tensordot{tiA}{(0,0)}
+      \TN@upleg{tiA}{0.46}
+      \TN@opdotleft{tiXL}{(-0.76,0)}{X}
+      \TN@opdotright{tiXR}{(0.76,0)}{X^{-1}}
+      \TN@opdotbelow{tiYD}{(0,-0.76)}{Y}
+      \TN@opdotabove{tiYU}{(0,0.76)}{Y^{-1}}
+      \draw[tn leg] (tiXL.west) -- ++(-0.24,0);
+      \draw[tn leg] (tiXL.east) -- (tiA.west);
+      \draw[tn leg] (tiA.east) -- (tiXR.west);
+      \draw[tn leg] (tiXR.east) -- ++(0.24,0);
+      \draw[tn leg] (tiYD.south) -- ++(0,-0.24);
+      \draw[tn leg] (tiYD.north) -- (tiA.south);
+      \draw[tn leg] (tiA.north) -- (tiYU.south);
+      \draw[tn leg] (tiYU.north) -- ++(0,0.24);
+      \node at ($(tiA.south)+(0,-1.20)$) {$\lambda A$};
+    \end{scope}
+  \end{tikzpicture}%
+}
+
 \newcommand{\TNPEPSEdgeGaugeOrientation}{%
   \begin{tikzpicture}[tn picture]
     \TN@tensordot{tnU}{(0,0)}

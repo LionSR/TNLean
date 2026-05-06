@@ -87,6 +87,9 @@ enforced by the dedicated `Blueprint Sync & Prose Review` CI workflow.
 - Each chapter is a separate file in `chapter/`
 - Definitions/theorems numbered within chapters: `\newtheorem{theorem}{Theorem}[chapter]`
 
+Tensor-network diagram conventions are recorded separately in
+[`docs/tn_diagram_grammar.md`](tn_diagram_grammar.md).
+
 ## Lean Blueprint Macros
 - `\lean{Namespace.DeclName}` — links to Lean declaration
 - `\leanok` — marks definition/theorem/proof as fully formalized

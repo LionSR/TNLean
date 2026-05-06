@@ -1,0 +1,184 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+\providecommand{\ghissue}[1]{GitHub issue~\##1}
+
+\title{Normal PEPS Fundamental Theorem: Section 3 Route}
+\author{}
+\date{2026-05-06}
+
+\begin{document}
+\maketitle
+
+\section{The source argument}
+
+The normal-PEPS part of \cite{Molnar2018NormalPEPS} begins after the injective
+PEPS theorem.  Its purpose is not to replace the injective proof, but to make
+the injective proof applicable after a controlled blocking.  A normal PEPS is
+one for which sufficiently large regions can be blocked into injective tensors.
+Once such injective regions are available, the proof again applies the
+three-site injective-chain argument around a chosen edge.
+
+The source proof has three layers.  First, Lemma \path{injective_union} proves
+that the union of two injective regions is injective.  The proof blocks the
+network into the four regions \(A\setminus B\), \(A\cap B\),
+\(B\setminus A\), and \((A\cup B)^c\).  If a boundary tensor kills the
+contraction over \(A\cup B\), injectivity of \(A\) first removes the
+\(A\setminus B\) and \(A\cap B\) part, and injectivity of \(B\) then removes
+the remaining \(A\cap B\) and \(B\setminus A\) part.
+\footnote{The source is
+\path{Papers/1804.04964/paper_normal.tex:1324--1400}.}
+
+Second, for the translationally invariant square-lattice theorem, the paper
+assumes that every \(2\times 3\) and \(3\times 2\) region is injective.  By
+repeatedly applying the union lemma, the regions denoted \(R\), \(S\), and \(T\)
+in the paper are injective.  The regions \(R\) and \(S\) differ by one site,
+and their complements are injective when the system is large enough.  These are
+the regions used in the last comparison step.
+\footnote{The regions \(R\), \(S\), and \(T\) are drawn at
+\path{Papers/1804.04964/paper_normal.tex:1407--1443}.}
+
+Third, the proof of Theorem \path{3} blocks a neighborhood of each edge into
+three injective pieces.  The red region is \(A_1\), the blue region is \(A_2\),
+and the complement is \(A_3\).  This produces the same three-site injective MPS
+configuration used in the injective PEPS proof.  Lemma \path{inj_isomorph}
+therefore gives a gauge on every edge.  Translation invariance reduces these
+edge gauges to one horizontal matrix \(X\) and one vertical matrix \(Y\).  After
+absorbing them into the second tensor, the final comparison of the \(R\) and
+\(S\) regions gives \(A\propto \widetilde B\).
+\footnote{The proof of Theorem \path{3} is
+\path{Papers/1804.04964/paper_normal.tex:1449--1572}.}
+
+The general theorem \path{normal} removes the square-lattice specialization.
+It assumes precisely the blockings needed above: every edge can be blocked into
+a three-site injective chain, and every site admits two injective regions with
+injective complements that differ exactly in that site.
+\footnote{The general theorem is
+\path{Papers/1804.04964/paper_normal.tex:1574--1585}.}
+
+\section{Current formal representation}
+
+The injective PEPS objects used by the normal theorem are represented in
+\path{TNLean/PEPS/Defs.lean}, \path{TNLean/PEPS/VirtualInsertion.lean}, and
+\path{TNLean/PEPS/Blocking.lean}.  Chapter 13a of the blueprint now has a
+separate normal-PEPS section after the injective theorem.  This separation is
+important: the normal theorem needs extra blocking hypotheses before the
+injective proof route can be invoked.
+
+The present blueprint nodes are the following.
+
+\begin{itemize}
+\item \path{lem:peps_injectiveRegion_union} states the union-of-injective
+  regions lemma.  It is tracked by \ghissue{1374}.
+\item \path{def:peps_normalSquareBlockingRegions} records the square-lattice
+  regions \(R\), \(S\), and \(T\).  It is part of \ghissue{1375}.
+\item \path{thm:peps_normalEdgeBlockingToInjectiveChain} states that the
+  normal square-lattice hypotheses allow a blocking around every edge into
+  three injective regions.  It is part of \ghissue{1375}.
+\item \path{thm:peps_tiNormalGaugeAbsorption} records the translationally
+  invariant gauge absorption with horizontal gauge \(X\) and vertical gauge
+  \(Y\).  It is part of \ghissue{1375}.
+\item \path{thm:fundamentalTheorem_normalSquarePEPS} records the square-lattice
+  theorem corresponding to Theorem \path{3}.  It is part of \ghissue{1375}.
+\item \path{thm:fundamentalTheorem_normalPEPS} records the general normal PEPS
+  theorem following Theorem \path{3}.  It is part of \ghissue{1375}.
+\end{itemize}
+
+The normal route itself is tracked by \ghissue{1373}.  The normal-section
+diagram work is tracked by \ghissue{1376}.  The general PEPS status tracker is
+\ghissue{1252}.
+
+\section{Remaining mathematical obligations}
+
+The normal PEPS theorem cannot be obtained by citing the injective theorem
+alone.  The following additional obligations remain.
+
+\begin{enumerate}
+\item Define a formal notion of injectivity for a blocked region, not only for
+  a single vertex.  The statement must be able to express the regions
+  \(A\setminus B\), \(A\cap B\), \(B\setminus A\), \(R\), \(S\), \(T\), and
+  complements of such regions.
+\item Prove the union-of-injective-regions lemma.  The proof must follow the
+  source proof by applying the left inverses for \(A\) and \(B\) in sequence.
+\item Package the square-lattice normal hypotheses: every \(2\times 3\) and
+  \(3\times 2\) region is injective, and the ambient size is large enough for
+  the required complements.
+\item Prove that the paper's regions \(R\), \(S\), and \(T\) are injective
+  under those hypotheses.  This is where the union lemma is used repeatedly.
+\item Prove that the edge-centered red, blue, and complementary regions form a
+  three-site injective chain around every edge.  This is the normal analogue of
+  the injective edge-blocking bridge tracked by \ghissue{1366}.
+\item Reuse the injective-chain insertion route after this blocking:
+  \ghissue{1367}, \ghissue{1368}, \ghissue{1363}, \ghissue{1364},
+  \ghissue{1361}, and \ghissue{1360}.
+\item In the translationally invariant case, show that the edge gauges obtained
+  after blocking reduce to one horizontal gauge \(X\) and one vertical gauge
+  \(Y\), up to scalar.
+\item Prove the scalar condition \(\lambda^{nm}=1\) for the square-lattice
+  theorem, and state separately the scalar freedom in the non-translation
+  invariant normal theorem.
+\end{enumerate}
+
+\section{Source-to-formalization ledger}
+
+\begin{itemize}
+\item Lemma \path{injective_union}: blueprint
+  \path{lem:peps_injectiveRegion_union}, issue \#1374.
+\item Regions \(R\), \(S\), and \(T\): blueprint
+  \path{def:peps_normalSquareBlockingRegions}, issue \#1375.
+\item Edge blocking into red, blue, and complementary injective regions:
+  blueprint \path{thm:peps_normalEdgeBlockingToInjectiveChain}, issue \#1375.
+\item Application of Lemma \path{inj_isomorph} after normal blocking:
+  downstream issues \#1367, \#1368, \#1363, and \#1364.
+\item Translationally invariant gauge absorption:
+  blueprint \path{thm:peps_tiNormalGaugeAbsorption}, issue \#1375.
+\item Final \(R\) and \(S\) comparison:
+  blueprint \path{thm:peps_oneVertexComplementComparison}, issue \#1360.
+\item Theorem \path{3}: blueprint
+  \path{thm:fundamentalTheorem_normalSquarePEPS}, issue \#1375.
+\item General theorem \path{normal}: blueprint
+  \path{thm:fundamentalTheorem_normalPEPS}, issue \#1375.
+\end{itemize}
+
+\section{Blueprint diagrams}
+
+The normal route now has its own semantic tensor-network commands.  These are
+not substitutes for the injective theorem diagrams; they attach the additional
+normal blocking layer to named proof nodes.
+
+\begin{itemize}
+\item \(\backslash\)\texttt{TNPEPSInjectiveRegionUnion} depicts the four
+  regions used in Lemma \path{injective_union}.
+\item \(\backslash\)\texttt{TNPEPSNormalRegionsRS} depicts the regions \(R\)
+  and \(S\) from the square-lattice proof.
+\item \(\backslash\)\texttt{TNPEPSNormalRegionT} depicts the region \(T\).
+\item \(\backslash\)\texttt{TNPEPSNormalEdgeBlockingReduction} depicts the
+  red/blue/complementary blocking around a distinguished edge and the
+  resulting three-site chain.
+\item \(\backslash\)\texttt{TNPEPSTINormalGaugeAbsorption} depicts the final
+  translationally invariant local gauge formula with horizontal gauge \(X\) and
+  vertical gauge \(Y\).
+\end{itemize}
+
+All of these commands are registered in
+\path{blueprint/src/Packages/tn_diagrams.py}, so the PDF and web blueprint use
+the same public diagram names.
+
+\section{Conclusion}
+
+The normal PEPS route is now separated from the injective PEPS route in the
+blueprint and in the GitHub issue tree.  The formal proof still remains open:
+the next genuine mathematical step is to introduce blocked-region injectivity
+and prove Lemma \path{injective_union}.  Once that lemma and the normal
+edge-blocking hypotheses are formalized, the downstream proof should reuse the
+injective edge-insertion route rather than duplicate it.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

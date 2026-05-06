@@ -1,0 +1,264 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+\providecommand{\leanid}[1]{\path{#1}}
+
+\title{Injective PEPS Fundamental Theorem: Section 3 Route}
+\author{}
+\date{2026-05-06}
+
+\begin{document}
+\maketitle
+
+\section{The source argument}
+
+The injective PEPS part of \cite{Molnar2018NormalPEPS} proves the
+Fundamental Theorem for tensor networks on finite graphs without double edges
+and without self-loops.  The proof is local.  It does not slice a two-dimensional
+network into a long one-dimensional chain.  Instead, it fixes an edge, blocks
+the graph around that edge into a three-site injective MPS, applies the
+one-dimensional injective theorem, and repeats this construction over all
+edges.\footnote{The edge-blocking construction is
+\path{Papers/1804.04964/paper_normal.tex:981--1009}.  The equality of the two
+PEPS before blocking is at
+\path{Papers/1804.04964/paper_normal.tex:1010--1036}.  The application of the
+three-site injective MPS theorem is at
+\path{Papers/1804.04964/paper_normal.tex:1037--1065}.}
+
+For a chosen edge \(e=(u,v)\), all vertices other than \(u\) and \(v\) are
+grouped into the middle tensor.  The two endpoint tensors and the middle tensor
+form a three-site MPS.  Injectivity of the PEPS tensors implies injectivity of
+this blocked MPS.  Since the two original PEPS represent the same state, the two
+blocked MPS represent the same state.  The one-dimensional injective theorem
+therefore gives an algebra isomorphism between matrix insertions on the chosen
+bond.  Equivalently, an arbitrary matrix \(X\) inserted on that bond in one
+network is matched by a matrix on the corresponding bond in the other network.
+
+After choosing the resulting edge gauges for every edge and absorbing them into
+one tensor family, the paper obtains the following stronger comparison: for
+every edge and every matrix \(X\), inserting \(X\) on that edge in the first
+PEPS gives the same state as inserting \(X\) on the same edge in the modified
+second PEPS.\footnote{This is the displayed equation labelled
+\path{eq:inj_equal_edge} in
+\path{Papers/1804.04964/paper_normal.tex:1037--1065}.}
+
+\section{Current formal representation}
+
+The finite graph, edge, incident-edge, tensor, virtual configuration, state
+coefficient, equality of states, and vertex injectivity are represented in
+\path{TNLean/PEPS/Defs.lean}.  Vertex injectivity is the linear independence of
+the local physical vectors indexed by local virtual configurations, matching
+the paper's statement that each tensor is injective as a map from the virtual
+space to the physical space.
+
+The local linear-algebraic realization of virtual operations at an injective
+vertex is represented in \path{TNLean/PEPS/VirtualInsertion.lean}.  The chosen
+left inverse of the local tensor map and the resulting physical realization of
+local virtual endomorphisms correspond to the same observation used in the
+three-site MPS proof: a virtual operation can be represented by a physical
+operation on a neighboring site.
+
+The edge-centered blocking data are represented in
+\path{TNLean/PEPS/Blocking.lean}.  The existing declarations split local virtual
+configurations at a distinguished incident edge and split the vertex product
+into the left endpoint, the middle region, and the right endpoint.  The
+edge-blocked coefficient is proved equal to the original PEPS coefficient.
+
+The next formal layer is the matrix-insertion comparison.  The declarations
+\leanid{TNLean.PEPS.EdgeInsertedBoundaryConfig},
+\leanid{TNLean.PEPS.edgeBoundaryToInsertedBoundaryConfig},
+\leanid{TNLean.PEPS.EdgeDiagonalInsertedBoundaryConfig},
+\leanid{TNLean.PEPS.edgeBoundaryConfigEquivDiagonalInsertedBoundaryConfig},
+\leanid{TNLean.PEPS.edgeMiddleConfigToOpenMiddleConfig},
+\leanid{TNLean.PEPS.edgeOpenMiddleConfigToMiddleConfig},
+\leanid{TNLean.PEPS.edgeMiddleConfigEquivOpenMiddleConfig},
+\leanid{TNLean.PEPS.edgeOpenMiddleWeight}, and
+\leanid{TNLean.PEPS.edgeInsertedCoeff} represent the open edge contraction used
+when an arbitrary matrix is inserted on the distinguished edge.  These
+definitions are the formal counterpart of the matrix insertion appearing before
+and after the equation labelled \path{eq:inj_equal_edge}.
+The two maps
+\leanid{TNLean.PEPS.edgeMiddleConfigToOpenMiddleConfig} and
+\leanid{TNLean.PEPS.edgeOpenMiddleConfigToMiddleConfig} have been packaged as
+the finite equivalence
+\leanid{TNLean.PEPS.edgeMiddleConfigEquivOpenMiddleConfig}.  This isolates the
+reindexing needed for the identity-insertion specialization.  The current Lean
+layer includes the corresponding middle-tensor reindexing theorem
+\leanid{TNLean.PEPS.edgeMiddleWeight_eq_edgeOpenMiddleWeight}.  The diagonal
+summand has also been isolated in
+\leanid{TNLean.PEPS.edgeInsertedCoeff_identity_diagonal_summand}.  The
+pointwise off-diagonal vanishing is recorded as
+\leanid{TNLean.PEPS.edgeInsertedCoeff_identity_offDiagonal_summand}; what
+remains is to use
+\leanid{TNLean.PEPS.edgeBoundaryConfigEquivDiagonalInsertedBoundaryConfig} to
+reindex the finite inserted-boundary sum along the diagonal.
+
+\section{Remaining mathematical obligations}
+
+The following statements are still needed before the injective PEPS Fundamental
+Theorem can be proved in the manner of the paper.
+
+\begin{enumerate}
+\item The identity matrix coefficient must be used to collapse the two inserted
+  bond indices to the diagonal.  The diagonal summand theorem
+  \path{thm:peps_edgeInsertedCoeff_identity_diagonal_summand} and the
+  off-diagonal summand theorem
+  \path{thm:peps_edgeInsertedCoeff_identity_offDiagonal_summand} reduce this to
+  the diagonal equivalence
+  \path{def:peps_edgeBoundaryConfigEquivDiagonalInsertedBoundaryConfig} and the
+  finite diagonal reindexing theorem
+  \path{thm:peps_edgeInsertedCoeff_identity}, identifying the matrix-insertion
+  formalism with the ordinary three-block contraction when no nontrivial matrix
+  is inserted.  This remaining finite-sum step is tracked by issue~\#1372.
+\item Vertex injectivity must be shown to pass to the edge-blocked three-site
+  object.  This is the formal version of the paper's assertion that the
+  regrouped MPS is injective.  In the blueprint this is the not-yet-formalized
+  theorem \path{thm:peps_edgeBlockedThreeSiteInjective}.
+\item The two internal steps in Lemma \path{inj_isomorph} must be formalized for
+  the edge-blocked three-site MPS.  The virtual-to-physical realization
+  \(X\mapsto O_1,O_2\) is
+  \path{thm:peps_virtualInsertionPhysicalRealization}; the converse recovery
+  \(O_1,O_2\mapsto W\) is
+  \path{thm:peps_physicalToVirtualInsertion}.
+\item Equality of PEPS states must be upgraded to equality of edge-inserted
+  coefficients after the three-site reduction.  This is the step that produces
+  the matrix-algebra isomorphism on the chosen bond.  In the blueprint this is
+  the not-yet-formalized theorem
+  \path{thm:peps_edgeBlockedInsertionAlgebraIsomorphism}.
+\item The algebra isomorphism must be converted into an invertible edge gauge,
+  using the same finite-dimensional matrix-algebra argument as the
+  one-dimensional injective theorem.  In the blueprint this is the
+  not-yet-formalized theorem
+  \path{thm:peps_edgeGaugeFromInsertionAlgebraIsomorphism}.
+\item After all edge gauges have been absorbed into the second tensor family,
+  producing the modified tensors \(\widetilde B_v\), the formalization must
+  prove the analogue of \path{eq:inj_equal_edge}: arbitrary insertions of the
+  same matrix on the same edge give equal PEPS states for the first tensor
+  family and the modified second tensor family. In the blueprint the absorption
+  step is the not-yet-formalized theorem
+  \path{thm:peps_edgeGaugeAbsorption}, and the post-absorption insertion
+  equality is the not-yet-formalized theorem
+  \path{thm:peps_postAbsorptionEdgeInsertionEquality}.
+\item The generalized two-injective-tensor comparison from
+  \path{lem:inj_equal_tensors_2} must be formalized.  It says that equality of
+  all virtual-bond insertions for two pairs of injective tensors forces
+  \(A_1=\lambda B_1\) and \(A_2=\lambda^{-1}B_2\).  In the blueprint this is
+  split into the scalar-reduction substep
+  \path{thm:peps_twoInjectiveGaugeScalarReduction} and the not-yet-formalized
+  theorem
+  \path{thm:peps_twoInjectiveTensorInsertionComparison}.
+\item The final two-tensor comparison must then be applied by blocking one
+  vertex against its complement.  The paper uses this to prove
+  \(A_i=\lambda_i\widetilde B_i\) at each vertex, and then incorporates the
+  scalars into the local gauges.  In the blueprint this specialization is the
+  separate not-yet-formalized theorem
+  \path{thm:peps_oneVertexComplementComparison}.
+\end{enumerate}
+
+\section{Source-to-formalization ledger}
+
+The following ledger records the present status of the Section~3 proof route.
+It is meant to prevent the proof from drifting away from the source argument.
+
+\begin{itemize}
+\item \path{eq:block_to_mps} edge blocking:
+  \path{edgeBlockedCoeff_eq_stateCoeff} is locally proved; the injectivity
+  bridge is \path{thm:peps_edgeBlockedThreeSiteInjective}, tracked by
+  issue~\#1366.
+\item Identity insertion on the chosen bond:
+  \path{thm:peps_edgeInsertedCoeff_identity} is reduced to finite diagonal
+  reindexing, tracked by issue~\#1372.
+\item Lemma \path{inj_isomorph}, \(X\mapsto O_1,O_2\):
+  \path{thm:peps_virtualInsertionPhysicalRealization}, tracked by issue~\#1369.
+\item Lemma \path{inj_isomorph}, \(O_1,O_2\mapsto W\):
+  \path{thm:peps_physicalToVirtualInsertion}, tracked by issue~\#1370.
+\item Matrix-insertion algebra isomorphism:
+  \path{thm:peps_edgeBlockedInsertionAlgebraIsomorphism}, tracked by
+  issue~\#1367.
+\item Edge gauge from the algebra isomorphism:
+  \path{thm:peps_edgeGaugeFromInsertionAlgebraIsomorphism}, tracked by
+  issue~\#1368.
+\item Absorption of edge gauges into \(B\):
+  \path{thm:peps_edgeGaugeAbsorption}, tracked by issue~\#1363.
+\item Equation \path{eq:inj_equal_edge}:
+  \path{thm:peps_postAbsorptionEdgeInsertionEquality}, tracked by issue~\#1364.
+\item Lemma \path{inj_equal_tensors_2}, scalar step:
+  \path{thm:peps_twoInjectiveGaugeScalarReduction}, tracked by issue~\#1362.
+\item Lemma \path{inj_equal_tensors_2}, comparison:
+  \path{thm:peps_twoInjectiveTensorInsertionComparison}, tracked by
+  issue~\#1361.
+\item One vertex versus its complement:
+  \path{thm:peps_oneVertexComplementComparison}, tracked by issue~\#1360.
+\item Final gauge equivalence and uniqueness:
+  \path{thm:fundamentalTheorem_PEPS_of_bondDim} and the uniqueness endpoint,
+  tracked by issues~\#780 and~\#842.
+\end{itemize}
+
+\section{Blueprint diagrams}
+
+The blueprint now uses semantic tensor-network commands for the Section 3 moves
+that should remain visually attached to the proof.
+
+\begin{itemize}
+\item \(\backslash\)\texttt{TNPEPSEdgeBlockingReduction} depicts the chosen edge
+  and the passage to the three-site chain.  Its endpoint labels follow
+  \path{eq:block_to_mps}: the two circled endpoints are \(A'_1\) and \(A'_2\),
+  while the boxed complement is \(A'_3\).
+\item \(\backslash\)\texttt{TNPEPSEdgeInsertedCoeff} depicts the single
+  edge-blocked contraction with one virtual matrix \(X\) inserted on the chosen
+  bond.  This is the diagram attached to the definition of the inserted-edge
+  coefficient, before comparing two tensor networks.
+\item \(\backslash\)\texttt{TNPEPSThreeSiteInsertionComparison} depicts the
+  comparison of a virtual insertion in the two three-site chains, as in the
+  statement of \path{lem:inj_isomorph}.
+\item \(\backslash\)\texttt{TNPEPSInsertionPhysicalRealization} depicts the
+  realization of a virtual insertion as a physical operation on either
+  neighboring site.
+\item \(\backslash\)\texttt{TNPEPSPhysicalToVirtualInsertion} depicts the
+  converse step in which two neighboring physical operations determine a
+  virtual operation on the shared bond.
+\item \(\backslash\)\texttt{TNPEPSEdgeInsertionEquality} depicts the full
+  PEPS comparison after the edge gauges have been absorbed into the second
+  tensor family, matching the five-vertex graph and the distinguished
+  \((2,5)\)-edge insertion in \path{eq:inj_equal_edge}.
+\item \(\backslash\)\texttt{TNPEPSEdgeGaugeAbsorption} depicts the local
+  absorption of incident oriented edge gauges into a \(B\)-tensor, producing
+  \(\widetilde B_v\).
+\item \(\backslash\)\texttt{TNPEPSTwoInjectiveTensorInsertionComparison}
+  depicts the generalized two-injective-tensor comparison with an arbitrary
+  matrix inserted on a shared virtual bond.
+\item \(\backslash\)\texttt{TNPEPSTwoInjectiveGaugeScalarReduction} depicts the
+  residual virtual operators \(Z,U,W\) that appear after applying an inverse
+  for one injective block in the proof of
+  \path{lem:inj_equal_tensors_2}.
+\item \(\backslash\)\texttt{TNPEPSOneVertexComplementComparison} depicts the
+  final one-vertex-versus-complement comparison used to prove
+  \(A_v\propto\widetilde B_v\).  It follows the source paper's displayed
+  comparison by drawing the one-vertex enlargement and the smaller injective
+  region as tensor-network tensors, rather than as an auxiliary formal block.
+\end{itemize}
+
+These diagrams deliberately keep the local dot convention used in the blueprint,
+but they preserve the distinctions that matter in the paper: tensor sites,
+blocked regions, virtual matrix insertions, and physical operations are not
+drawn as the same object.
+
+\section{Conclusion}
+
+The current formalization has reached the edge-blocked coefficient and has begun
+the matrix-insertion layer needed for the Section 3 proof.  It has not yet
+proved the three-site injectivity transfer, the insertion comparison, the
+resulting edge gauge construction, or the final one-vertex-versus-complement
+comparison.  Those are the remaining mathematical steps required to turn the
+current PEPS definitions into a proof of the injective PEPS Fundamental Theorem
+faithful to \cite[Section~3]{Molnar2018NormalPEPS}.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
