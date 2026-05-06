@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.CanonicalForm.Assembly.StructuralTheorem
-import TNLean.MPS.CanonicalForm.Assembly.SectorComparisonCore
+import TNLean.MPS.CanonicalForm.EqualNormBridge
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
 
@@ -212,7 +212,10 @@ structure CommonPrimitiveBNTCoverHypotheses
 namespace CommonPrimitiveBNTCoverHypotheses
 
 /-- Form `CommonPrimitiveBNTCoverHypotheses` from common primitive structural data
-and explicit BNT comparison inputs. -/
+and explicit strict-order BNT comparison inputs.
+
+This is a special constructor for already-ordered representative families.  It
+does not construct the full CPSV multiplicity BNT cover from raw cyclic sectors. -/
 def ofCommonPrimitiveData
     {d p rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
@@ -258,9 +261,12 @@ def ofCommonPrimitiveData
   right_injective := hInjB
   decompData := hDecomp
 
-/-- Form `CommonPrimitiveBNTCoverHypotheses` from common primitive structural data,
-deriving zero-tail equality from the length-zero identity and the BNT proportional
-matching. -/
+/-- Form `CommonPrimitiveBNTCoverHypotheses` from strict-order common primitive
+data, deriving zero-tail equality from the length-zero identity and the BNT
+proportional matching.
+
+This is a special constructor for already-ordered representative families.  It
+does not construct the full CPSV multiplicity BNT cover from raw cyclic sectors. -/
 def ofCommonPrimitiveData_zeroTailIdentity
     {d p rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
@@ -307,63 +313,6 @@ def ofCommonPrimitiveData_zeroTailIdentity
       blocksA blocksB hNcfA hNotGpeA hNcfB hNotGpeB hDecomp
   exact ofCommonPrimitiveData hμA hμB hTPA hTPB hPrimA hPrimB hIrrA hIrrB
     hAntiA hAntiB hNotGpeA hNotGpeB
-    (zeroTail_eq_of_proportionalDecompositionConclusion hZero hMatch) hInjA hInjB hDecomp
-
-/-- Form `CommonPrimitiveBNTCoverHypotheses` from normal-CF-BNT data and the remaining
-zero-tail, injectivity, and proportional-decomposition inputs. -/
-def ofNormalCanonicalFormBNT
-    {d p rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
-    [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
-    {zeroTailA zeroTailB DtotA DtotB : ℕ}
-    {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
-    {blocksA : (x : Fin rA) → MPSTensor (blockPhysDim d p) (dimA x)}
-    {blocksB : (x : Fin rB) → MPSTensor (blockPhysDim d p) (dimB x)}
-    (hA : IsNormalCanonicalFormBNT (d := blockPhysDim d p) μA blocksA)
-    (hB : IsNormalCanonicalFormBNT (d := blockPhysDim d p) μB blocksB)
-    (hZeroTail : zeroTailA = zeroTailB)
-    (hInjA : ∀ x, IsInjective (blocksA x))
-    (hInjB : ∀ x, IsInjective (blocksB x))
-    (hDecomp : ProportionalDecompositionData (d := blockPhysDim d p)
-      blocksA blocksB DtotA DtotB) :
-    CommonPrimitiveBNTCoverHypotheses (zeroTailA := zeroTailA) (zeroTailB := zeroTailB)
-      (DtotA := DtotA) (DtotB := DtotB) μA μB blocksA blocksB where
-  ncfA := hA.toIsNormalCanonicalForm
-  ncfB := hB.toIsNormalCanonicalForm
-  notGpeA := hA.blocks_not_equiv
-  notGpeB := hB.blocks_not_equiv
-  zeroTail_eq := hZeroTail
-  left_injective := hInjA
-  right_injective := hInjB
-  decompData := hDecomp
-
-/-- Form `CommonPrimitiveBNTCoverHypotheses` from normal-CF-BNT data, deriving zero-tail
-equality from the length-zero identity and the proportional BNT comparison. -/
-def ofNormalCanonicalFormBNT_zeroTailIdentity
-    {d p rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
-    [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
-    {zeroTailA zeroTailB DtotA DtotB : ℕ}
-    {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
-    {blocksA : (x : Fin rA) → MPSTensor (blockPhysDim d p) (dimA x)}
-    {blocksB : (x : Fin rB) → MPSTensor (blockPhysDim d p) (dimB x)}
-    (hA : IsNormalCanonicalFormBNT (d := blockPhysDim d p) μA blocksA)
-    (hB : IsNormalCanonicalFormBNT (d := blockPhysDim d p) μB blocksB)
-    (hZero : ∀ σ : Fin 0 → Fin (blockPhysDim d p),
-      (zeroTailA : ℂ) + mpv (toTensorFromBlocks (d := blockPhysDim d p) (μ := μA) blocksA) σ =
-        (zeroTailB : ℂ) +
-          mpv (toTensorFromBlocks (d := blockPhysDim d p) (μ := μB) blocksB) σ)
-    (hInjA : ∀ x, IsInjective (blocksA x))
-    (hInjB : ∀ x, IsInjective (blocksB x))
-    (hDecomp : ProportionalDecompositionData (d := blockPhysDim d p)
-      blocksA blocksB DtotA DtotB) :
-    CommonPrimitiveBNTCoverHypotheses (zeroTailA := zeroTailA) (zeroTailB := zeroTailB)
-      (DtotA := DtotA) (DtotB := DtotB) μA μB blocksA blocksB := by
-  have hMatch : ProportionalDecompositionConclusion (d := blockPhysDim d p) blocksA blocksB :=
-    fundamentalTheorem_of_separated_normalCFBNT_data
-      blocksA blocksB
-      hA.toIsNormalCanonicalForm hA.blocks_not_equiv
-      hB.toIsNormalCanonicalForm hB.blocks_not_equiv
-      hDecomp
-  exact ofNormalCanonicalFormBNT hA hB
     (zeroTail_eq_of_proportionalDecompositionConclusion hZero hMatch) hInjA hInjB hDecomp
 
 /-- BNT-cover hypotheses produce a common MPV phase cover. -/

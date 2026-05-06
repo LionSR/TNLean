@@ -115,7 +115,10 @@ def toIsLeftCanonicalBlockFamily (hCF : IsCanonicalFormBNT μ A) :
     IsLeftCanonicalBlockFamily (d := d) A :=
   hCF.toIsCanonicalForm.toIsLeftCanonicalBlockFamily
 
-/-- Project CF-BNT data to strict weight data (available at the BNT level). -/
+/-- Project restricted CF-BNT data to strict weight data.
+
+This projection is for the already-grouped single-representative special case, not
+for the full CPSV multiplicity BNT surface. -/
 def toHasStrictOrderedNonzeroWeights (hCF : IsCanonicalFormBNT μ A) :
     HasStrictOrderedNonzeroWeights μ where
   mu_strict_anti := hCF.mu_strict_anti
@@ -165,8 +168,10 @@ theorem IsCanonicalForm.toIsCanonicalFormBNT_of_distinct_dims
 and that the block weight moduli are **strictly decreasing**.
 
 Here `IsNormalCanonicalForm` encodes the spectral / primitive-transfer-map version of
-normality with non-increasing moduli. The BNT level adds the same restricted already-grouped
-strict ordering as `IsCanonicalFormBNT`, together with the BNT separation assumption.
+normality with non-increasing moduli. This predicate is the restricted,
+already-grouped analogue of the BNT comparison data: it keeps one representative per
+strict norm class and therefore does not represent the full CPSV multiplicity
+BNT surface, where repeated equal-modulus sectors are retained.
 
 The later `IsBNT` predicate instead asks for blockwise `IsNormal`, i.e. the
 equivalent algebraic eventual-block-injectivity notion, so the primitive-to-normal
@@ -201,7 +206,10 @@ def toHasPrimitiveBlocks (hNCF : IsNormalCanonicalFormBNT μ A) :
     HasPrimitiveBlocks (d := d) A :=
   hNCF.toIsNormalCanonicalForm.toHasPrimitiveBlocks
 
-/-- Project normal-CF-BNT data to strict weight data (available at the BNT level). -/
+/-- Project restricted normal-CF-BNT data to strict weight data.
+
+This projection is for the already-grouped single-representative special case, not
+for the full CPSV multiplicity BNT surface. -/
 def toHasStrictOrderedNonzeroWeights (hNCF : IsNormalCanonicalFormBNT μ A) :
     HasStrictOrderedNonzeroWeights μ where
   mu_strict_anti := hNCF.mu_strict_anti
@@ -540,11 +548,12 @@ abbrev ProportionalDecompositionConclusion
             (cast (congr_arg (MPSTensor d) hdim) (A j))
             (B (perm j))
 
-/-- Split-data comparison theorem for CF-BNT-style decompositions (Theorem 4.4).
+/-- Split-data comparison theorem for separated CF-BNT-style decompositions.
 
 The theorem only needs the separated pieces of data used by the proportional-MPV argument:
 blockwise injectivity, left-canonical normalization, self-overlap normalization, and the BNT
-non-equivalence condition that forces cross-overlap decay. -/
+non-equivalence condition that forces cross-overlap decay. It is a strict
+special case of the CPSV comparison argument, not the full multiplicity BNT theorem. -/
 theorem fundamentalTheorem_of_separated_CFBNT_data
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
@@ -583,12 +592,16 @@ theorem fundamentalTheorem_of_separated_CFBNT_data
     (_haLim_ne := hDecomp.haLim_ne) (_hbLim_ne := hDecomp.hbLim_ne)
     (hProp := hDecomp.hProp) (hc := hDecomp.hc) (_hcLim_ne := hDecomp.hcLim_ne)
 
-/-- **Fundamental theorem comparison for CF-BNT decompositions (Theorem 4.4).**
+/-- **Proportional comparison for restricted CF-BNT decompositions.**
 
 If two families of tensors in canonical-form BNT give rise to proportional MPVs
 (with convergent nonzero coefficients), then the families have the same number
 of blocks, and blocks match up to permutation, dimension equality, and gauge-phase
 equivalence.
+
+This bundled theorem uses the strict/already-grouped CF-BNT special case. The general
+CPSV BNT comparison keeps repeated sectors through the multiplicity data handled
+elsewhere in the sector-decomposition surface.
 
 This bundled-data theorem is a direct consequence of
 `fundamentalTheorem_of_separated_CFBNT_data`. -/
@@ -631,7 +644,10 @@ theorem fundamentalTheorem_of_IsCanonicalFormBNT
     ⟨A_total, B_total, aCoeff, bCoeff, aLim, bLim, c, cLim,
       hA_decomp, hB_decomp, haCoeff, hbCoeff, haLim_ne, hbLim_ne, hProp, hc, hcLim_ne⟩
 
-/-- Split-data comparison theorem for normal-CF-BNT-style decompositions (NT Theorem 4.4). -/
+/-- Split-data comparison theorem for separated normal-CF-BNT-style decompositions.
+
+This is the normal-form analogue of the strict comparison above. It is
+not the full CPSV multiplicity BNT theorem. -/
 theorem fundamentalTheorem_of_separated_normalCFBNT_data
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
@@ -673,7 +689,7 @@ theorem fundamentalTheorem_of_separated_normalCFBNT_data
     (_haLim_ne := hDecomp.haLim_ne) (_hbLim_ne := hDecomp.hbLim_ne)
     (hProp := hDecomp.hProp) (hc := hDecomp.hc) (_hcLim_ne := hDecomp.hcLim_ne)
 
-/-- Fundamental theorem comparison for normal-CF-BNT decompositions (NT Theorem 4.4). -/
+/-- Proportional comparison for restricted normal-CF-BNT decompositions. -/
 theorem fundamentalTheorem_of_IsNormalCanonicalFormBNT
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}

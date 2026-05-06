@@ -58,7 +58,7 @@ Each step in this chain is now explained in detail.
 `SameMPV₂ A B` and `AfterBlockingFundamentalTheoremHypotheses A B` and produces
 the BNT sector-weight comparison conclusion.
 
-This conditional wrapper is already proved.  It composes:
+This conditional theorem is already proved.  It composes:
 1. The structural `afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts` (uses `h.relabel`) → produces common nonzero-block families
 2. The BNT-cover consumer uses the converted phase-cover hypotheses to produce the sector-weight conclusion.
 
