@@ -608,12 +608,12 @@ hypotheses through `SectorBasisOverlapSpanHypotheses.exists_sectorBasisMatching`
 
 The current comparison route passes through
 `afterBlocking_sectorComparison_zeroTail_of_blockSpan` and the common phase-cover
-or BNT-cover theorems. This avoids keeping separate common-block wrapper
-theorems as public waypoints: the formal residue is the paper-level residue,
-namely blocked-word relabelling, finite-length nonzero-block span comparison,
+or BNT-cover theorems. This avoids keeping separate common-block comparison
+variants as public waypoints: the formal residue is the paper-level residue,
+namely blocked-word relabeling, finite-length nonzero-block span comparison,
 and BNT sector matching.
 
-The blocked-word relabelling and common primitive irreducible nonzero-block
+The blocked-word relabeling and common primitive irreducible nonzero-block
 decompositions are now part of this file's structural reduction. The remaining
 formal work for the completely unconditional
 `fundamentalTheorem_after_blocking_sector` is therefore narrower:
@@ -625,7 +625,7 @@ formal work for the completely unconditional
    (or directly for the two BNT bases), equivalently a common phase/BNT-cover comparison,
    followed by the final global gauge construction of the equal-case FT.
 
-Thus the common-period arithmetic, the blocked-word relabelling, the common
+Thus the common-period arithmetic, the blocked-word relabeling, the common
 primitive irreducible nonzero-sector families, and the abstract sector-matching
 witness are no longer the main blockers. The remaining gap is the paper-level
 derivation of the listed zero-tail, injectivity, and span/comparison facts for
