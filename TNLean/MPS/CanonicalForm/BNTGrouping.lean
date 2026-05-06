@@ -66,8 +66,8 @@ basis-of-normal-tensors construction from
 
 ### Section 5 Restricted norm-class collapse for possibly-equal norms
 
-* `exists_bnt_grouping` — For blocks with possibly equal norms, given that equal-norm
-  blocks have the same MPV function (a consequence of BNT uniqueness), there exists a
+* `exists_bnt_grouping` — For blocks with possibly equal norms, given the explicit
+  hypothesis that equal-norm blocks have the same MPV function, there exists a
   `SectorDecomposition` whose assembled tensor is `SameMPV₂`-equivalent to the original
   and whose BNT-level norms are strictly decreasing.  The proof constructs a
   `SectorDecomposition` from norm-class enumeration and uses the representative block's
@@ -410,12 +410,13 @@ paper's full basis-of-normal-tensors construction: if two distinct basis tensors
 occur at the same modulus, they should survive as different basis elements rather
 than being forced into one norm class.
 
-**Why `hMPVEq` arises in the full theory**:
-In the BNT theory (Cirac--Perez-Garcia--Schuch--Verstraete 2017, Section 2.3),
-two blocks with the same weight norm are gauge-phase equivalent, hence have the
-same MPV. In the existence reduction, this property would be derived after
-applying the BNT uniqueness theorem. The phase-class construction in
-`PhaseClassSectorData.lean` carries out that BNT construction step.
+**Why `hMPVEq` is an explicit hypothesis**:
+Equal modulus alone does not force two normal tensors to be gauge-phase equivalent.
+The paper's BNT construction keeps distinct non-equivalent equal-modulus tensors
+as separate basis elements. This collapse lemma is therefore applicable only
+after a separate non-decay, gauge-phase, or equality argument has identified the
+blocks in the same norm class. The phase-class construction carries that
+identification data explicitly.
 
 **Proof:**
 1. Let `S = Finset.univ.image (‖μ ·‖)`, `g = S.card`.
