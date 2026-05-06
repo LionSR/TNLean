@@ -1,4 +1,5 @@
 import TNLean.MPS.Defs
+import TNLean.Algebra.MatrixAux
 
 import Mathlib.Data.Complex.Basic
 import Mathlib.Data.Matrix.Basis
