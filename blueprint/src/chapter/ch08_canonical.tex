@@ -1455,13 +1455,17 @@ summand $\mathbf{0}_{d,D_0}$ used to retain the $N=0$ MPV coefficient.
 \section{Cyclic sector decomposition}%
 \label{sec:cyclic_sectors}
 
-The source input is the cyclic peripheral structure of an irreducible unital
-map from \cite[Chapter~6]{Wolf2012Quantum}, applied to the adjoint transfer
-map, together with the cyclic-block form used in
-\cite[equation~(1) and Lemma~1]{DeLasCuevas2017Irreducible}.  The source writes
-$\E_A^\dagger(P_u)=P_{u+1}$ and
-$A^i=\sum_u P_u A^i P_{u+1}$.  After reversing the cyclic order, the convention
-here is, with sector indices modulo the period $m$,
+The non-periodic canonical-form argument of \cite{Cirac2016MPDO_arXiv} uses
+only the blocking consequence: after blocking by the least common multiple of
+the periods, each block has no non-trivial peripheral period.  The explicit
+projection-sector form used here comes from the periodic decomposition of
+\cite[Theorem~5.7]{PerezGarcia2007Matrix}, refined by the cyclic-block form in
+\cite[equation~(1) and Lemma~1]{DeLasCuevas2017Irreducible}, together with the
+cyclic peripheral structure of an irreducible unital map from
+\cite[Chapter~6]{Wolf2012Quantum}.  In the convention of
+\cite{PerezGarcia2007Matrix}, the sector projections satisfy
+$A^i P_u=P_{u-1} A^i$.  After reversing the cyclic order, the convention here
+is, with sector indices modulo the period $m$,
 \[
 	\E_A^\dagger(P_{u+1}) = P_u,\qquad
 	A^i = \sum_u P_{u+1} A^i P_u .
@@ -1597,14 +1601,14 @@ one physical alphabet; they are not separate cyclic-decomposition assertions.
 	point.
 \end{proof}
 
-\begin{theorem}[One full cyclic turn fixes the sector projections]%
-	\label{thm:cyclic_projection_periodic_fixed}
+\begin{lemma}[One full cyclic turn fixes the sector projections]%
+	\label{lem:cyclic_projection_periodic_fixed}
 	\lean{MPSTensor.adjointTransferMap_pow_fixes_cyclic_projection}
 	\leanok
-	If a family of projections $(P_k)_{k=1}^m$ satisfies
+	If a family of projections $(P_k)_{k=0}^{m-1}$ satisfies
 	$\E^\dagger(P_{k+1}) = P_k$, then the $m$-th iterate of $\E^\dagger$
 	fixes each projection $P_k$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
 	Iterate the cyclic relation $m$ times.
@@ -1649,11 +1653,11 @@ one physical alphabet; they are not separate cyclic-decomposition assertions.
 \end{theorem}
 
 \begin{proof}\leanok
-	\uses{thm:cyclic_projection_periodic_fixed, thm:blocked_adjoint_transfer_pow,
+	\uses{lem:cyclic_projection_periodic_fixed, thm:blocked_adjoint_transfer_pow,
 	      thm:blockdecomp_adjoint_fixed}
 	The cyclic decomposition of the adjoint transfer map gives projections
 	$(P_k)$ with $\E_{A^\dagger}(P_{k+1}) = P_k$.
-	Theorem~\ref{thm:cyclic_projection_periodic_fixed} upgrades this to
+	Lemma~\ref{lem:cyclic_projection_periodic_fixed} upgrades this to
 	$(\E_{A^\dagger})^m(P_k) = P_k$, and
 	Theorem~\ref{thm:blocked_adjoint_transfer_pow} identifies
 	$(\E_{A^\dagger})^m$ with the adjoint transfer map of the blocked tensor.

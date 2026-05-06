@@ -71,7 +71,7 @@ private lemma cyclicShift_succ_left {m : ℕ} [NeZero m] (k : Fin m) (n : ℕ) :
 
 /-- Iterating the cyclic relation `E†(P(k+1)) = P_k` exactly `m` times gives
 `(E†)^m (P_k) = P_k`. -/
-theorem adjointTransferMap_pow_fixes_cyclic_projection
+lemma adjointTransferMap_pow_fixes_cyclic_projection
     {d D m : ℕ} [NeZero m]
     (K : Fin d → MatrixAlg D)
     (P : Fin m → MatrixAlg D)
