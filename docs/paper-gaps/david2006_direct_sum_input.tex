@@ -86,7 +86,17 @@ identity as padding.
 
 \section{Formal boundary}
 
-The current formal development includes downstream lemmas that depend on this input.
+The current formal development now formalizes the matrix-factorization input
+from Lemma~\texttt{lem1}: \leanid{Matrix.span_range_mul_nonzero_mul_eq_top}
+states that \(\operatorname{span}\{RCS\}=M_D(\mathbb C)\) whenever
+\(C\ne0\), and
+\leanid{MPSTensor.span_range_evalWord_mul_nonzero_mul_evalWord_eq_top}
+translates this into the exact-length word-product form
+\(\operatorname{span}\{A_u X A_v: |u|=|v|=L\}=M_D(\mathbb C)\) under
+\(L\)-block injectivity and \(X\ne0\).
+
+The current formal development also includes downstream lemmas that depend on
+the remaining direct-sum input.
 \begin{itemize}
   \item \leanid{WordTupleSpanTop} expresses exact-length span of a direct-sum
         block family.
