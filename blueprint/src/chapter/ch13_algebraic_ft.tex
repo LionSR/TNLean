@@ -1228,7 +1228,7 @@ which is then combined with overlap estimates and the leading-block peel.
     \label{lem:fundamentalTheorem_canonicalForm_explicit}
     \lean{MPSTensor.fundamentalTheorem_canonicalForm_explicit}
     \leanok
-    \uses{thm:fundamentalTheorem_canonicalForm}
+    \uses{lem:fundamentalTheorem_of_separated_canonical_data_explicit}
     Under the same hypotheses, there exist invertible matrices
     $X_k \in \GL_{D_k}(\C)$ such that
     $B_k^i = X_k\, A_k^i\, X_k^{-1}$
@@ -1236,9 +1236,9 @@ which is then combined with overlap estimates and the leading-block peel.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:fundamentalTheorem_canonicalForm}
-    Extract the gauge matrices from
-    Theorem~\ref{thm:fundamentalTheorem_canonicalForm} by choice.
+    \uses{lem:fundamentalTheorem_of_separated_canonical_data_explicit}
+    Apply Lemma~\ref{lem:fundamentalTheorem_of_separated_canonical_data_explicit}
+    with the strict-ordering data extracted from the canonical form.
 \end{proof}
 
 %% ---------------------------------------------------------
