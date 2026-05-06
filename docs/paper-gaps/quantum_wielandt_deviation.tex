@@ -9,7 +9,7 @@
 
 \title{The One-Step Subspace in the Quantum Wielandt Inequality}
 \author{}
-\date{2026-04-30}
+\date{2026-05-06}
 
 \begin{document}
 \maketitle
@@ -88,31 +88,31 @@ formal equivalence between the primitive condition used by Sanz--Pérez-García-
 and eventual full Kraus rank under normalization is in
 \path{TNLean/Wielandt/Primitivity/Equivalence.lean:169--191}.}
 
-The two improved estimates are where the statements diverge. The formal
-invertible case assumes that one of the Kraus matrices, say $A_{i_0}$, is
-invertible; under that assumption it proves
+The two improved estimates now use the paper's one-step subspace hypotheses.
+For the invertible case, the formal statement assumes a matrix
+\(X\in S_1(A)\) and \(X\) invertible; under that assumption it proves
 \[
   S_{D^2-\operatorname{kr}(A)+1}(A)=M_D(\mathbb C).
 \]
-The formal non-invertible case assumes that one Kraus matrix $A_{i_0}$ is
-non-invertible and has a nonzero eigenvalue; under that assumption it proves
+For the non-invertible case, the formal statement assumes a matrix
+\(X\in S_1(A)\), \(X\) non-invertible, and a nonzero eigenvalue of \(X\);
+under that assumption it proves
 \[
   S_{D^2}(A)=M_D(\mathbb C).
 \]
-The paper's hypotheses are weaker: they allow the invertible or non-invertible
-matrix to be any element of $S_1(A)$, hence any linear combination of the Kraus
-matrices.\footnote{The formal invertible case is
-\leanid{MPSTensor.wordSpan\_eq\_top\_of\_isPrimitivePaper\_of\_isUnit} and
-\leanid{MPSTensor.iIndex\_le\_of\_isPrimitivePaper\_of\_isUnit} in
-\path{TNLean/Wielandt/PaperResults/WielandtInequality.lean:182--217}. The
-formal non-invertible case is
-\leanid{MPSTensor.wordSpan\_eq\_top\_of\_isPrimitivePaper\_of\_noninvertible\_eigenvector}
-and \leanid{MPSTensor.iIndex\_le\_sq\_of\_noninvertible\_eigenvector} in
-\path{TNLean/Wielandt/PaperResults/WielandtInequality.lean:119--178}.}
+These are the hypotheses in \cite[Theorem~1]{Sanz2010Quantum}.  The older
+chosen-Kraus statements are still present, but only as corollaries obtained by
+taking \(X=A_{i_0}\).\footnote{The paper-facing names are the two
+``\path{mem_wordSpan_one}'' word-span and index statements for the invertible
+case, and the two corresponding
+``\path{mem_wordSpan_one_of_noninvertible_eigenvector}'' statements for the
+non-invertible case, in
+\path{TNLean/Wielandt/PaperResults/WielandtInequality.lean}.  The shorter
+chosen-generator statements in the same file are corollaries.}
 
-\section{The mathematical difference}
+\section{Resolved one-step-subspace issue}
 
-The distinction is small but genuine. Suppose first that the paper gives an
+The former distinction was small but genuine. Suppose first that the paper gives an
 invertible matrix $X\in S_1(A)$. Since $X$ is a linear combination of the
 $A_i$, multiplication by $X$ sends $S_n(A)$ into $S_{n+1}(A)$. Since $X$ is
 invertible, this multiplication is injective on $M_D(\mathbb C)$. This is the
@@ -120,24 +120,16 @@ linear-algebra reason why the dimensions of the spaces $S_n(A)$ cannot stagnate
 for too long; it is the dimension-growth step used in the proof of the sharper
 bound.
 
-If $X$ is itself one of the Kraus matrices, then every product $XW$ with
-$W\in S_n(A)$ is visibly a linear combination of words of length $n+1$ whose
-first letter is fixed. This is the case now covered by the formal theorem. If
-$X$ is only a linear combination of Kraus matrices, the same inclusion
-$XS_n(A)\subseteq S_{n+1}(A)$ is still true, but it has to be used in that more
-linear form. The proof should not need the matrix $X$ to be a distinguished
-letter; it only needs $X$ to lie in $S_1(A)$ and to have the relevant spectral
-property.
+The formal proof now uses this one-step-subspace version.  It adjoins the
+chosen \(X\in S_1(A)\) as a redundant generator and proves that the exact word
+spans and the Kraus rank are unchanged.  This reduces the paper's hypothesis to
+the single-generator argument without changing the channel invariant being
+bounded.
 
 The same issue appears in the non-invertible case. The source hypothesis gives
 a matrix $X\in S_1(A)$ which is singular but has a nonzero eigenvalue. The
-formal theorem proves the corresponding statement when this matrix is one of
-the Kraus matrices. The natural generalization is to run the same argument with
-an arbitrary such $X\in S_1(A)$, using the inclusion $XS_n(A)\subseteq S_{n+1}(A)$
-rather than a distinguished first letter. Equivalently, one could prove a change
-of Kraus representation which places $X$ among the displayed Kraus operators
-without changing the channel or the spaces $S_n(A)$ in the relevant way. Either
-approach would match the paper's statement.
+formal proof again uses the redundant-generator construction, so the theorem is
+stated for an arbitrary such \(X\), not only for a distinguished Kraus matrix.
 
 \section{What is not a discrepancy}
 
@@ -170,18 +162,16 @@ intermediate hypothesis is legitimate.
 \section{Conclusion}
 
 The general quantum Wielandt bound has been formalized with the right index and
-with the paper's linearly independent Kraus count made explicit. The remaining
-difference concerns only the two improved estimates.
+with the paper's linearly independent Kraus count made explicit. The two
+improved estimates have also been upgraded to the paper's hypotheses: the
+distinguished matrix is any element of \(S_1(A)\) with the required spectral
+property. The chosen-Kraus statements remain useful corollaries, but they should
+not be cited as the paper-facing theorem surface.
 
-For those estimates, the paper assumes that the one-step space $S_1(A)$ contains
-a matrix with a specified spectral property. The formal statements presently
-assume that such a matrix is one of the chosen Kraus operators. This is a
-stronger hypothesis. Mathematically, the expected correction is clear: prove the
-two arguments for an arbitrary qualifying matrix $X\in S_1(A)$, using the
-inclusion $XS_n(A)\subseteq S_{n+1}(A)$ and the same dimension-growth reasoning,
-or prove an explicit Kraus-representation invariance result which reduces the
-paper's hypotheses to the chosen-Kraus-matrix hypotheses without changing the
-channel or the index $i(A)$.
+The remaining caution is theorem-surface hygiene.  Cumulative-span declarations
+and bundled analysis chains are useful support lemmas for the proof, while the
+paper-facing results are the exact-length statements about \(S_n(A)\) and the
+index \(i(A)\).
 
 \bibliographystyle{alpha}
 \bibliography{references}
