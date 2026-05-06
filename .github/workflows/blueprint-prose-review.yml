@@ -76,7 +76,7 @@ jobs:
         if: steps.claude-switch.outputs.skip != 'true' && steps.bot-check.outputs.skip != 'true'
         uses: actions/checkout@v6
         with:
-          ref: ${{ github.event.pull_request.base.sha }}
+          ref: ${{ github.event.pull_request.base.ref }}
           path: .trusted-actions
           fetch-depth: 1
 
