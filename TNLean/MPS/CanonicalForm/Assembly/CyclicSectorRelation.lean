@@ -16,12 +16,15 @@ corresponding power of the original adjoint transfer map.
 
 An irreducible quantum channel has cyclic projections as in Wolf Chapter 6, and
 periodic MPS blocks have the off-diagonal form and period-blocking behavior of
-arXiv:1708.00029.  The relevant identities are
+arXiv:1708.00029.  In the cyclic order used there, the relevant identities are
 $$
-  \mathcal E_A^*(P_{u+1}) = P_u,\qquad
+  \mathcal E_A^*(P_u) = P_{u+1},\qquad
   A^i = \sum_u P_u A^i P_{u+1},\qquad
   C_u = P_u A^{[m]} P_u.
 $$
+Reversing the cyclic order gives the equivalent convention
+$\mathcal E_A^*(P_{u+1}) = P_u$, which is the indexing used by the cyclic
+iteration lemmas below.
 
 ## References
 
