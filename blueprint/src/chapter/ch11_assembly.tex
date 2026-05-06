@@ -1788,14 +1788,14 @@ two-basis sector comparison theorem.
 		\lean{MPSTensor.CommonGroupedBlockCastHypothesis.of_flattenWordOfBlock_cast_eq}
 		\leanok
 		\uses{def:common_grouped_block_cast_hypothesis,
-			thm:common_blocked_cyclic_sector_flatten_word_of_block_cast}
+			lem:common_blocked_cyclic_sector_flatten_word_of_block_cast}
 		The canonical coordinate grouping holds for every common blocked
 		cyclic-sector family.  The proof identifies each grouped block with the
 		corresponding direct blocked word.
 	\end{theorem}
 
 	\begin{proof}\leanok
-		\uses{thm:common_blocked_cyclic_sector_flatten_word_of_block_cast}
+		\uses{lem:common_blocked_cyclic_sector_flatten_word_of_block_cast}
 		Apply the grouped-block cast comparison to each original nonzero block.
 	\end{proof}
 
@@ -1805,7 +1805,7 @@ two-basis sector comparison theorem.
 	\leanok
 	\uses{def:common_grouped_block_cast_hypothesis,
 		def:common_sector_relabeling_hypothesis,
-		thm:common_blocked_cyclic_sector_blocked_word_comparison}
+		lem:common_blocked_cyclic_sector_blocked_word_comparison}
 		If the global coordinate-grouping hypothesis holds, then the blocked-word
 		identification used by the common-sector structural theorem holds.  The
 	proof is exactly the weighted finite-sum comparison for direct and iterated
@@ -1814,7 +1814,7 @@ two-basis sector comparison theorem.
 
 \begin{proof}
 	\leanok
-	\uses{thm:common_blocked_cyclic_sector_blocked_word_comparison}
+	\uses{lem:common_blocked_cyclic_sector_blocked_word_comparison}
 	Apply the coordinate-grouping comparison to each one-sided family and sum over
 	the original nonzero blocks with the transported powers of the weights.
 \end{proof}
@@ -1871,7 +1871,7 @@ two-basis sector comparison theorem.
 
 \begin{proof}
 	\leanok
-	\uses{thm:common_blocked_cyclic_sector_flatten_word_of_block_cast,
+	\uses{lem:common_blocked_cyclic_sector_flatten_word_of_block_cast,
 		thm:common_grouped_block_cast_to_relabeling,
 		thm:after_blocking_common_primitive_irreducible_blocks_reindexed}
 	The direct digit computation gives the global coordinate-grouping hypothesis.

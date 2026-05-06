@@ -1438,14 +1438,14 @@ summand $\mathbf{0}_{d,D_0}$ used to retain the $N=0$ MPV coefficient.
 	Theorem~\ref{thm:primitive_blocking_divisible} applies to every block.
 \end{proof}
 
-\begin{theorem}[Formula for common-period blocking]%
-	\label{thm:common_period_blocking_apply}
+\begin{lemma}[Formula for common-period blocking]%
+	\label{lem:common_period_blocking_apply}
 	\lean{MPSTensor.commonPeriodBlocking_apply}
 	\leanok
 	\uses{def:common_period_blocking_ch8}
 	Each block of the common-period blocking is exactly the corresponding tensor
 	blocked at the common least common multiple.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
 	\uses{def:common_period_blocking_ch8}
@@ -1800,8 +1800,8 @@ the common length $p=m_k e_k$.
 	$(m_k,e_k)$ block.
 \end{definition}
 
-\begin{theorem}[Common-alphabet cyclic sectors retain structural properties]%
-\label{thm:common_blocked_cyclic_sector_derived_properties}
+\begin{lemma}[Common-alphabet cyclic sectors retain structural properties]%
+\label{lem:common_blocked_cyclic_sector_derived_properties}
 	\lean{MPSTensor.CommonBlockedCyclicSectorFamily.commonSectorBlock_tp,
 		MPSTensor.CommonBlockedCyclicSectorFamily.commonSectorBlock_primitive,
 		MPSTensor.CommonBlockedCyclicSectorFamily.commonSectorBlock_irreducible,
@@ -1825,7 +1825,7 @@ the common length $p=m_k e_k$.
 	original weights are nonzero and the transported weights are sorted by
 	strictly decreasing norm, the flattened common-sector family is a normal
 	canonical form.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
 	\uses{thm:tp_primitive_irreducible_extra_blocking,
@@ -1847,7 +1847,7 @@ the common length $p=m_k e_k$.
 		MPSTensor.isNormalCanonicalFormBNT_commonRepresentativeBlocksAt}
 	\leanok
 	\uses{def:common_blocked_cyclic_sector_derived_blocks,
-		thm:common_blocked_cyclic_sector_derived_properties,
+		lem:common_blocked_cyclic_sector_derived_properties,
 		def:normal_cf_bnt}
 	For a prescribed common blocking length, choose one representative for
 	each original block among the common-alphabet cyclic sectors.  Strict
@@ -1860,7 +1860,7 @@ the common length $p=m_k e_k$.
 \end{theorem}
 
 \begin{proof}\leanok
-	\uses{thm:common_blocked_cyclic_sector_derived_properties,
+	\uses{lem:common_blocked_cyclic_sector_derived_properties,
 		def:normal_cf_bnt}
 	First transport the strict ordering of weights and the structural
 	trace-preserving, primitive, and tensor-irreducible properties to the
@@ -1869,8 +1869,8 @@ the common length $p=m_k e_k$.
 	the assumed separation of distinct representatives.
 \end{proof}
 
-\begin{theorem}[Common further blocking for representative sectors]%
-\label{thm:common_representative_common_further_blocking}
+\begin{lemma}[Common further blocking for representative sectors]%
+\label{lem:common_representative_common_further_blocking}
 	\lean{MPSTensor.CommonBlockedCyclicSectorFamily.commonRepresentativeBlocksAt_exists_pos_blockTensor_isInjective,
 		MPSTensor.CommonBlockedCyclicSectorFamily.commonRepresentativeBlocksAt_blockTensor_isInjective_commonMultiple,
 		MPSTensor.CommonBlockedCyclicSectorFamily.exists_commonRepresentativeBlocksAt_blockTensor_isInjective,
@@ -1881,7 +1881,7 @@ the common length $p=m_k e_k$.
 	representatives, the product of these local blocking lengths is one
 	positive common further blocking length at which every representative
 	remains one-site injective.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
 	\uses{thm:tp_primitive_irred_block_injective,
@@ -1922,8 +1922,8 @@ the common length $p=m_k e_k$.
 	Apply the formula for each sector of the fixed original block.
 \end{proof}
 
-\begin{theorem}[Blocked sectors on a common alphabet]%
-\label{thm:common_blocked_cyclic_sector_reindexed_samempv}
+\begin{lemma}[Blocked sectors on a common alphabet]%
+\label{lem:common_blocked_cyclic_sector_reindexed_samempv}
 	\lean{MPSTensor.CommonBlockedCyclicSectorFamily.nestedBlock_sameMPV₂_commonReindexedBlock,
 		MPSTensor.CommonBlockedCyclicSectorFamily.commonReindexedBlock_sameMPV₂_commonSectorTensor,
 		MPSTensor.CommonBlockedCyclicSectorFamily.sameMPV₂_weightedCommonReindexedBlock_commonFlat}
@@ -1931,19 +1931,19 @@ the common length $p=m_k e_k$.
 	\uses{def:common_blocked_cyclic_sector_derived_blocks,
 		thm:iterated_blocking_samempv_reindex,
 		thm:samempv_cast_phys_dim, thm:samempv_blocking_distributes,
-		thm:common_blocked_cyclic_sector_derived_properties}
+		lem:common_blocked_cyclic_sector_derived_properties}
 	For each block, the iterated block $(B_k^{[m_k]})^{[e_k]}$ agrees, after the
 	explicit identification of blocked physical words, with the block of length
 	$m_k e_k$.  Combining this with the given cyclic-sector decomposition gives an
 	MPV equality between the identified block and the corresponding common-sector tensor.
 	Summing over the original blocks transports the weights to $\mu_k^p$ and
 	flattens the two-level block/sector sum into one sector family.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
 	\uses{thm:iterated_blocking_samempv_reindex,
 		thm:samempv_cast_phys_dim, thm:samempv_blocking_distributes,
-		thm:common_blocked_cyclic_sector_derived_properties}
+		lem:common_blocked_cyclic_sector_derived_properties}
 	First use the iterated-blocking comparison theorem and substitute the common
 	physical alphabet.  Then compose with the per-block cyclic-sector MPV
 	equivalence supplied by the family.  Finally expand both block-diagonal tensors as
@@ -1963,15 +1963,15 @@ the common length $p=m_k e_k$.
 	consecutive words of length $m_k$.
 \end{definition}
 
-\begin{theorem}[Flattening direct blocked words]%
-\label{thm:common_blocked_cyclic_sector_flatten_word_of_block_cast}
+\begin{lemma}[Flattening direct blocked words]%
+\label{lem:common_blocked_cyclic_sector_flatten_word_of_block_cast}
 	\lean{MPSTensor.CommonBlockedCyclicSectorFamily.flattenWordOfBlock_cast_eq}
 	\leanok
 	Let $p=m n$.  For every physical alphabet index $i \in \{0,\ldots,d^p-1\}$, the
 	word obtained by direct base-$d$ decoding is the same as the word obtained by
 	decoding the index as $n$ consecutive blocks of length $m$ and concatenating
 	those $n$ words.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
 	\leanok
@@ -1981,8 +1981,8 @@ the common length $p=m_k e_k$.
 	block decomposition.
 \end{proof}
 
-\begin{theorem}[Direct and iterated blocking for weighted blocks]%
-\label{thm:common_blocked_cyclic_sector_blocked_word_comparison}
+\begin{lemma}[Direct and iterated blocking for weighted blocks]%
+\label{lem:common_blocked_cyclic_sector_blocked_word_comparison}
 	\lean{MPSTensor.CommonBlockedCyclicSectorFamily.wordOfBlock_eq_iteratedBlockIndex_of_groupedBlockCastAgrees,
 		MPSTensor.CommonBlockedCyclicSectorFamily.blockTensor_eq_commonReindexedBlock_of_word_eq,
 		MPSTensor.CommonBlockedCyclicSectorFamily.blockTensor_eq_commonReindexedBlock_of_groupedBlockCastAgrees,
@@ -1997,7 +1997,7 @@ the common length $p=m_k e_k$.
 	\leanok
 	\uses{def:common_blocked_cyclic_sector_derived_blocks,
 		def:common_blocked_cyclic_sector_grouped_block_cast,
-		thm:common_blocked_cyclic_sector_reindexed_samempv}
+		lem:common_blocked_cyclic_sector_reindexed_samempv}
 	The comparison has two forms.  First, assume that each directly blocked
 	nonzero block has the same MPV family as its corresponding iterated-blocking
 	tensor.  Then the weighted direct sum of the directly blocked nonzero blocks
@@ -2007,40 +2007,40 @@ the common length $p=m_k e_k$.
 	read from the common blocked alphabet is the same word as the one obtained by
 	viewing the index as an iterated $(m_k,e_k)$ block and flattening it; under this
 	condition the two individual block tensors are equal.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
 	\uses{thm:mpv_decomposition,
 		def:common_blocked_cyclic_sector_grouped_block_cast,
-		thm:common_blocked_cyclic_sector_reindexed_samempv}
+		lem:common_blocked_cyclic_sector_reindexed_samempv}
 	The word equality gives equality of the corresponding block tensors, hence
 	blockwise MPV equality. The coordinate-grouping predicate supplies this word
 	equality by comparing the canonical identification with the explicit consecutive grouping
 	of a direct blocked word. Expanding both weighted block-diagonal tensors as
 	finite sums over the original block index and applying the blockwise equality
 	term by term gives the weighted comparison.  Composing with
-	Theorem~\ref{thm:common_blocked_cyclic_sector_reindexed_samempv} gives the
+	Lemma~\ref{lem:common_blocked_cyclic_sector_reindexed_samempv} gives the
 	common-sector statement.
 \end{proof}
 
-\begin{theorem}[Blocked nonzero part on the common alphabet]%
-\label{thm:common_blocked_cyclic_sector_reindexed_nonzero_part}
+\begin{lemma}[Blocked nonzero part on the common alphabet]%
+\label{lem:common_blocked_cyclic_sector_reindexed_nonzero_part}
 	\lean{MPSTensor.CommonBlockedCyclicSectorFamily.sameMPV₂_weightedCanonicalBlock_commonFlat_of_reindexed,
 		MPSTensor.CommonBlockedCyclicSectorFamily.sameMPV₂_weightedCanonicalBlock_commonFlatAt_of_reindexed}
 	\leanok
-	\uses{thm:common_blocked_cyclic_sector_reindexed_samempv,
+	\uses{lem:common_blocked_cyclic_sector_reindexed_samempv,
 		def:common_blocked_cyclic_sector_derived_blocks}
 	Assume that the canonical blocked nonzero part agrees, as an MPV family, with
 	the cyclic-sector tensor coming from iterated blocking.  Then the
 	canonical weighted nonzero part agrees with the weighted common-sector
 	tensor.  The prescribed-length form gives the same conclusion after substituting
 	an equality between the family length and the chosen common length.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
-	\uses{thm:common_blocked_cyclic_sector_reindexed_samempv}
+	\uses{lem:common_blocked_cyclic_sector_reindexed_samempv}
 	Compose the assumed MPV equality with the sector decomposition of
-	Theorem~\ref{thm:common_blocked_cyclic_sector_reindexed_samempv}.
+	Lemma~\ref{lem:common_blocked_cyclic_sector_reindexed_samempv}.
 \end{proof}
 
 \begin{theorem}[Common reblocking at a prescribed common multiple]%
@@ -3566,8 +3566,8 @@ transport the all-zero-block identity through this comparison.
 	\leanok
 	\uses{thm:ft_after_blocking_common_blocked_cyclic_live_zero_tail,
 		thm:zero_tail_to_tensor_from_blocks_block_power,
-		thm:common_blocked_cyclic_sector_reindexed_samempv,
-		thm:common_blocked_cyclic_sector_derived_properties}
+		lem:common_blocked_cyclic_sector_reindexed_samempv,
+		lem:common_blocked_cyclic_sector_derived_properties}
 	If two tensors generate the same MPV family, then after reblocking the nonzero
 	blocks one obtains cyclic-sector families over a common alphabet.  These
 	families preserve the MPV of the reblocked nonzero part, with nonzero
@@ -3577,8 +3577,8 @@ transport the all-zero-block identity through this comparison.
 \begin{proof}\leanok
 	\uses{thm:ft_after_blocking_common_blocked_cyclic_live_zero_tail,
 		thm:zero_tail_to_tensor_from_blocks_block_power,
-		thm:common_blocked_cyclic_sector_reindexed_samempv,
-		thm:common_blocked_cyclic_sector_derived_properties}
+		lem:common_blocked_cyclic_sector_reindexed_samempv,
+		lem:common_blocked_cyclic_sector_derived_properties}
 	Start from the common reblocked cyclic-sector families on the two sides.  Apply
 	the all-zero-block reblocking theorem to the original nonzero-block decomposition, then
 		use the common-alphabet sector decomposition and the derived structural
@@ -3593,8 +3593,8 @@ transport the all-zero-block identity through this comparison.
 		thm:exists_common_blocked_cyclic_sector_family_common_multiple,
 		thm:zero_tail_to_tensor_from_blocks_block_power,
 		thm:nonzero_block_block_power_zero_tail_identity,
-		thm:common_blocked_cyclic_sector_reindexed_samempv,
-		thm:common_blocked_cyclic_sector_derived_properties}
+		lem:common_blocked_cyclic_sector_reindexed_samempv,
+		lem:common_blocked_cyclic_sector_derived_properties}
 	If two tensors generate the same MPV family, then the cyclic-sector
 	decompositions on the two sides can be expressed at one common positive
 	blocking length.  At this length the nonzero parts still agree at positive
@@ -3606,8 +3606,8 @@ transport the all-zero-block identity through this comparison.
 		thm:exists_common_blocked_cyclic_sector_family_common_multiple,
 		thm:zero_tail_to_tensor_from_blocks_block_power,
 		thm:nonzero_block_block_power_zero_tail_identity,
-		thm:common_blocked_cyclic_sector_reindexed_samempv,
-		thm:common_blocked_cyclic_sector_derived_properties}
+		lem:common_blocked_cyclic_sector_reindexed_samempv,
+		lem:common_blocked_cyclic_sector_derived_properties}
 	Start from the per-block cyclic-sector theorem.  Let $p_A$ and $p_B$ be the
 	least common multiples of the period-removal lengths on the two sides, and
 	use $p=\mathrm{lcm}(p_A,p_B)$.  The prescribed-common-multiple theorem constructs both
@@ -3625,7 +3625,7 @@ transport the all-zero-block identity through this comparison.
 		MPSTensor.sameMPV₂Pos_blockTensor_commonFlatAt_of_groupedBlockCastAgrees}
 	\leanok
 	\uses{thm:zero_tail_to_tensor_from_blocks_block_power,
-		thm:common_blocked_cyclic_sector_blocked_word_comparison,
+		lem:common_blocked_cyclic_sector_blocked_word_comparison,
 		def:same_mpv2_pos}
 	Assume an all-zero-block/nonzero decomposition on one side.  If direct blocking of
 	each nonzero block agrees with the corresponding iterated cyclic-sector
@@ -3636,7 +3636,7 @@ transport the all-zero-block identity through this comparison.
 
 \begin{proof}\leanok
 	\uses{thm:zero_tail_to_tensor_from_blocks_block_power,
-		thm:common_blocked_cyclic_sector_blocked_word_comparison,
+		lem:common_blocked_cyclic_sector_blocked_word_comparison,
 		def:same_mpv2_pos}
 	Transport the all-zero-block/nonzero decomposition to the common blocking length.
 	The blockwise comparison then replaces the directly blocked nonzero part by the
@@ -3650,7 +3650,7 @@ transport the all-zero-block identity through this comparison.
 		MPSTensor.sameMPV₂Pos_blockTensor_commonFlatAt_of_reindexed}
 	\leanok
 	\uses{thm:zero_tail_to_tensor_from_blocks_block_power,
-		thm:common_blocked_cyclic_sector_reindexed_nonzero_part}
+		lem:common_blocked_cyclic_sector_reindexed_nonzero_part}
 	Assume an all-zero-block/nonzero decomposition on one side.  If the blocked nonzero
 	tensor agrees, after identifying blocked words, with the common cyclic-sector
 	family, then the same all-zero-block identity can be written in that common
@@ -3660,7 +3660,7 @@ transport the all-zero-block identity through this comparison.
 
 \begin{proof}\leanok
 	\uses{thm:zero_tail_to_tensor_from_blocks_block_power,
-		thm:common_blocked_cyclic_sector_reindexed_nonzero_part}
+		lem:common_blocked_cyclic_sector_reindexed_nonzero_part}
 	Transport the all-zero-block/nonzero decomposition to the common blocking length.
 	The word-identification hypothesis then replaces the blocked nonzero tensor by the
 	weighted common-sector tensor.  At positive lengths the all-zero tensor has
@@ -3672,7 +3672,7 @@ transport the all-zero-block identity through this comparison.
 	\lean{MPSTensor.afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts}
 	\leanok
 	\uses{thm:ft_after_blocking_common_length_common_sector_theorem,
-		thm:common_blocked_cyclic_sector_reindexed_nonzero_part,
+		lem:common_blocked_cyclic_sector_reindexed_nonzero_part,
 		def:same_mpv2_pos}
 	Assume that the nonzero part can be identified with the common blocked
 	alphabet.  Then two tensors with the same MPV family admit one positive
@@ -3683,7 +3683,7 @@ transport the all-zero-block identity through this comparison.
 
 \begin{proof}\leanok
 	\uses{thm:ft_after_blocking_common_length_common_sector_theorem,
-		thm:common_blocked_cyclic_sector_reindexed_nonzero_part}
+		lem:common_blocked_cyclic_sector_reindexed_nonzero_part}
 	Apply Theorem~\ref{thm:ft_after_blocking_common_length_common_sector_theorem}
 	to choose the common blocking length and the two common cyclic-sector families.
 	The assumed word identification converts the blocked nonzero part into the weighted
@@ -3715,8 +3715,8 @@ transport the all-zero-block identity through this comparison.
 	\lean{MPSTensor.zeroTail_commonFlat_transport_of_reindexed}
 	\leanok
 	\uses{thm:zero_tail_common_flat_of_reindexed,
-		thm:common_blocked_cyclic_sector_reindexed_nonzero_part,
-		thm:common_blocked_cyclic_sector_derived_properties}
+		lem:common_blocked_cyclic_sector_reindexed_nonzero_part,
+		lem:common_blocked_cyclic_sector_derived_properties}
 	If the blocked nonzero part agrees with the common-sector tensor,
 	then the all-zero-block identity can be written with that common-sector tensor.
 	Nonzero original weights remain nonzero after the blocking power.
@@ -3724,8 +3724,8 @@ transport the all-zero-block identity through this comparison.
 
 \begin{proof}\leanok
 	\uses{thm:zero_tail_common_flat_of_reindexed,
-		thm:common_blocked_cyclic_sector_reindexed_nonzero_part,
-		thm:common_blocked_cyclic_sector_derived_properties}
+		lem:common_blocked_cyclic_sector_reindexed_nonzero_part,
+		lem:common_blocked_cyclic_sector_derived_properties}
 	Combine Theorem~\ref{thm:zero_tail_common_flat_of_reindexed} with the
 	common-sector MPV equality and the nonzero-weight statement.
 \end{proof}
@@ -3735,8 +3735,8 @@ transport the all-zero-block identity through this comparison.
 	\lean{MPSTensor.zeroTail_commonFlat_transport_of_groupedBlockCastAgrees}
 	\leanok
 	\uses{thm:zero_tail_common_flat_of_blocked_word_comparison,
-		thm:common_blocked_cyclic_sector_blocked_word_comparison,
-		thm:common_blocked_cyclic_sector_derived_properties,
+		lem:common_blocked_cyclic_sector_blocked_word_comparison,
+		lem:common_blocked_cyclic_sector_derived_properties,
 		def:same_mpv2}
 	Assume an all-zero-block/nonzero decomposition with nonzero weights.  If the common
 	blocked alphabet is identified with each iterated alphabet by grouping
@@ -3746,8 +3746,8 @@ transport the all-zero-block identity through this comparison.
 
 \begin{proof}\leanok
 	\uses{thm:zero_tail_common_flat_of_blocked_word_comparison,
-		thm:common_blocked_cyclic_sector_blocked_word_comparison,
-		thm:common_blocked_cyclic_sector_derived_properties,
+		lem:common_blocked_cyclic_sector_blocked_word_comparison,
+		lem:common_blocked_cyclic_sector_derived_properties,
 		def:same_mpv2}
 	The coordinate-grouping comparison identifies the directly blocked nonzero part
 	with the weighted common-sector family.  Combine this with the all-zero-block
@@ -3759,7 +3759,7 @@ transport the all-zero-block identity through this comparison.
 	\lean{MPSTensor.afterBlocking_commonLengthCommonSectorData_of_reindexed}
 	\leanok
 	\uses{thm:ft_after_blocking_common_length_common_sector_theorem,
-		thm:common_blocked_cyclic_sector_reindexed_nonzero_part}
+		lem:common_blocked_cyclic_sector_reindexed_nonzero_part}
 	If two tensors generate the same MPV family, choose a common blocking length
 	for their cyclic-sector decompositions.  If each blocked nonzero part agrees
 	with its common-sector form after identifying words, then all length-zero
@@ -3769,7 +3769,7 @@ transport the all-zero-block identity through this comparison.
 
 \begin{proof}\leanok
 	\uses{thm:ft_after_blocking_common_length_common_sector_theorem,
-		thm:common_blocked_cyclic_sector_reindexed_nonzero_part}
+		lem:common_blocked_cyclic_sector_reindexed_nonzero_part}
 	Apply Theorem~\ref{thm:ft_after_blocking_common_length_common_sector_theorem}.
 	The two word-identification hypotheses identify the blocked nonzero parts with the
 	weighted common-sector tensors.  Substituting these MPV equalities into the
@@ -3813,7 +3813,7 @@ transport the all-zero-block identity through this comparison.
 	words.
 
 	The results above separate the finite-sum comparison from the blocked-word
-	assertion.  Theorem~\ref{thm:common_blocked_cyclic_sector_blocked_word_comparison}
+	assertion.  Lemma~\ref{lem:common_blocked_cyclic_sector_blocked_word_comparison}
 	shows that, once the length-$p$ word read directly from the common blocked
 	alphabet equals the word obtained by flattening an iterated $(m_k,e_k)$ block,
 	the weighted direct sum of directly blocked nonzero blocks agrees with the
@@ -3836,7 +3836,7 @@ transport the all-zero-block identity through this comparison.
 	identities, while
 	Theorem~\ref{thm:after_blocking_common_primitive_irreducible_blocks_reindexed}
 	collects the resulting primitive irreducible sector decompositions needed for
-	comparison.  Theorem~\ref{thm:common_blocked_cyclic_sector_flatten_word_of_block_cast}
+	comparison.  Lemma~\ref{lem:common_blocked_cyclic_sector_flatten_word_of_block_cast}
 	supplies the direct word equality for the chosen coordinates.
 	Theorem~\ref{thm:after_blocking_common_primitive_irreducible_blocks_block_span_consequences}
 	gives the intermediate span consequence for these common-sector families: a
