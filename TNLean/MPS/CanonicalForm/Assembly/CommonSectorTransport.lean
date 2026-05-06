@@ -177,8 +177,8 @@ lemma sameMPV₂Pos_blockTensor_commonFlatAt_of_groupedBlockCastAgrees
 
 /-- If the canonical blocked nonzero part agrees with the common reindexed blocks,
 the zero-tail equation can be rewritten using the derived common-sector family.
-This is the one-sided statement that puts the reindexed data above in the form used
-by the span and BNT comparison theorems. -/
+Thus the blocked tensor has the same MPV coefficients as the weighted common-sector
+tensor, with the same all-zero-block contribution at length zero. -/
 lemma zeroTail_commonFlat_of_reindexed
     {d D r z : ℕ} {dim : Fin r → ℕ}
     (A : MPSTensor d D) (μ : Fin r → ℂ)
