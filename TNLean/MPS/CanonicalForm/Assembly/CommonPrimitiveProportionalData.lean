@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.CanonicalForm.Assembly.StructuralTheorem
-import TNLean.MPS.CanonicalForm.EqualNormBridge
+import TNLean.MPS.CanonicalForm.PhaseCover
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
 
@@ -248,12 +248,12 @@ def ofCommonPrimitiveData
     have hDimA : ∀ x, 0 < dimA x := fun x => Nat.pos_of_ne_zero (NeZero.ne (dimA x))
     exact isNormalCanonicalForm_of_tp_primitive_irr_sorted
       (d' := blockPhysDim d p) (μ := μA) blocksA hTPA hPrimA hDimA hμA hIrrA
-      hAntiA
+      hAntiA.antitone
   ncfB := by
     have hDimB : ∀ x, 0 < dimB x := fun x => Nat.pos_of_ne_zero (NeZero.ne (dimB x))
     exact isNormalCanonicalForm_of_tp_primitive_irr_sorted
       (d' := blockPhysDim d p) (μ := μB) blocksB hTPB hPrimB hDimB hμB hIrrB
-      hAntiB
+      hAntiB.antitone
   notGpeA := hNotGpeA
   notGpeB := hNotGpeB
   zeroTail_eq := hZeroTail
@@ -303,11 +303,11 @@ def ofCommonPrimitiveData_zeroTailIdentity
   have hNcfA : IsNormalCanonicalForm (d := blockPhysDim d p) μA blocksA :=
     isNormalCanonicalForm_of_tp_primitive_irr_sorted
       (d' := blockPhysDim d p) (μ := μA) blocksA hTPA hPrimA hDimA hμA hIrrA
-      hAntiA
+      hAntiA.antitone
   have hNcfB : IsNormalCanonicalForm (d := blockPhysDim d p) μB blocksB :=
     isNormalCanonicalForm_of_tp_primitive_irr_sorted
       (d' := blockPhysDim d p) (μ := μB) blocksB hTPB hPrimB hDimB hμB hIrrB
-      hAntiB
+      hAntiB.antitone
   have hMatch : ProportionalDecompositionConclusion (d := blockPhysDim d p) blocksA blocksB :=
     fundamentalTheorem_of_separated_normalCFBNT_data
       blocksA blocksB hNcfA hNotGpeA hNcfB hNotGpeB hDecomp
