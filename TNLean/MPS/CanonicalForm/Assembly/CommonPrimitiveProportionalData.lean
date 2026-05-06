@@ -54,7 +54,7 @@ structure CommonPrimitiveSpanHypotheses
 namespace CommonPrimitiveSpanHypotheses
 
 /-- A common MPV phase cover supplies the span field in the common primitive hypotheses. -/
-theorem of_commonPhaseCover
+lemma of_commonPhaseCover
     {d p rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     {zeroTailA zeroTailB : ℕ}
     {blocksA : (x : Fin rA) → MPSTensor (blockPhysDim d p) (dimA x)}
@@ -95,7 +95,7 @@ structure CommonPrimitivePhaseCoverHypotheses
 namespace CommonPrimitivePhaseCoverHypotheses
 
 /-- A common MPV phase cover hypothesis implies the corresponding span hypothesis. -/
-theorem toSpanHypotheses
+lemma toSpanHypotheses
     {d p rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     {zeroTailA zeroTailB : ℕ}
     {blocksA : (x : Fin rA) → MPSTensor (blockPhysDim d p) (dimA x)}
@@ -132,7 +132,7 @@ structure CommonPrimitiveProportionalHypotheses
 namespace CommonPrimitiveProportionalHypotheses
 
 /-- A proportional-decomposition comparison gives the corresponding phase-cover hypotheses. -/
-theorem toPhaseCoverHypotheses
+lemma toPhaseCoverHypotheses
     {d p rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     {zeroTailA zeroTailB : ℕ}
     {blocksA : (x : Fin rA) → MPSTensor (blockPhysDim d p) (dimA x)}
@@ -146,7 +146,7 @@ theorem toPhaseCoverHypotheses
     (d := blockPhysDim d p) blocksA blocksB h.proportional
 
 /-- A proportional-decomposition comparison gives the corresponding span hypotheses. -/
-theorem toSpanHypotheses
+lemma toSpanHypotheses
     {d p rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     {zeroTailA zeroTailB : ℕ}
     {blocksA : (x : Fin rA) → MPSTensor (blockPhysDim d p) (dimA x)}
@@ -542,7 +542,7 @@ noncomputable def ofCommonRepresentativeBNTCoverHypotheses
     h.zero_length_identity h.left_injective h.right_injective h.decompData
 
 /-- BNT-cover hypotheses produce a common MPV phase cover. -/
-theorem toMPVCommonPhaseCover
+lemma toMPVCommonPhaseCover
     {d p rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
     {zeroTailA zeroTailB DtotA DtotB : ℕ}
@@ -557,7 +557,7 @@ theorem toMPVCommonPhaseCover
     h.ncfA h.notGpeA h.ncfB h.notGpeB h.decompData
 
 /-- BNT-cover hypotheses produce the common primitive phase-cover hypotheses. -/
-theorem toCommonPrimitivePhaseCoverHypotheses
+lemma toCommonPrimitivePhaseCoverHypotheses
     {d p rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
     {zeroTailA zeroTailB DtotA DtotB : ℕ}
