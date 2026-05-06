@@ -335,4 +335,20 @@ lemma pairTraceSeparatingAt_threeBlock_of_isNBlkInjective_of_dim_gt
     simpa [leftTraceWordMap_apply, hΔA] using hRel w
   exact ⟨hΔA, hΔB⟩
 
+/-- Unequal bond dimensions give homogeneous pair trace separation at the
+three-block length once both blocks are injective at the source length and the
+target three-block length. -/
+lemma pairTraceSeparatingAt_threeBlock_of_isNBlkInjective_of_dim_ne
+    {A : MPSTensor d D₁} {B : MPSTensor d D₂}
+    (hA : IsNBlkInjective A L) (hB : IsNBlkInjective B L)
+    (hA3 : IsNBlkInjective A (L + (L + L)))
+    (hB3 : IsNBlkInjective B (L + (L + L))) (hD : D₁ ≠ D₂) :
+    PairTraceSeparatingAt A B (L + (L + L)) := by
+  rcases lt_or_gt_of_ne hD with hlt | hgt
+  · exact pairTraceSeparatingAt_symm
+      (pairTraceSeparatingAt_threeBlock_of_isNBlkInjective_of_dim_gt
+        (A := B) (B := A) hB hA hA3 hlt)
+  · exact pairTraceSeparatingAt_threeBlock_of_isNBlkInjective_of_dim_gt
+      (A := A) (B := B) hA hB hB3 hgt
+
 end MPSTensor
