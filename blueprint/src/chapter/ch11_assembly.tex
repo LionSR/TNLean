@@ -1247,74 +1247,6 @@ BNT-cover inputs needed by the zero-block sector comparison below.
 	hypotheses. The preceding lemma supplies the common MPV phase cover.
 \end{proof}
 
-\begin{lemma}[Reindexed sectors give single-family overlap data]%
-\label{lem:sector_basis_overlap_ortho_reindexed}
-	\lean{MPSTensor.sectorBasisOverlapOrthoHypotheses_of_reindexedNonzeroParts}
-	\leanok
-	\uses{def:common_sector_relabeling_hypothesis,
-		def:sector_basis_overlap_ortho_hyps}
-	Let $A$ and $B$ have the same MPV family, and assume the blocked-word
-	identification hypothesis for the cyclic-sector data. After the common
-	blocking and reindexing, each nonzero-sector family admits a BNT sector
-	decomposition with positive-length MPV agreement, BNT data, and the
-	single-family overlap-orthogonality hypotheses.
-\end{lemma}
-
-\begin{proof}
-	\leanok
-	\uses{thm:after_blocking_common_primitive_irreducible_blocks_reindexed,
-		thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_ortho}
-	The common primitive reindexing theorem produces trace-preserving,
-	primitive, irreducible nonzero-sector families with positive dimensions.
-	Apply the one-sided phase-class BNT construction separately to the two
-	families.
-\end{proof}
-
-\begin{lemma}[Phase-cover data give overlap-span hypotheses]%
-\label{lem:sector_basis_overlap_span_reindexed_commonPhaseCover}
-	\lean{MPSTensor.sectorBasisOverlapSpanHypotheses_of_reindexedNonzeroParts_commonPhaseCover}
-	\leanok
-	\uses{def:common_primitive_phase_cover_hypotheses,
-		def:common_sector_relabeling_hypothesis}
-	Let $A$ and $B$ have the same MPV family, and assume the blocked-word
-	identification hypothesis for the cyclic-sector data. The common-sector
-	structural theorem produces common primitive nonzero-sector families. If those
-	families satisfy the phase-cover hypotheses, then the associated sector
-	decompositions have BNT data, agree as full MPV families, and satisfy the
-	primitive overlap-span hypotheses.
-\end{lemma}
-
-\begin{proof}
-	\leanok
-	\uses{lem:common_primitive_phase_cover_hypotheses_to_span_hypotheses,
-		thm:bnt_sector_decomp_pair_overlap_span_of_block_span}
-	Convert the phase-cover hypotheses for the produced families into span
-	hypotheses. The BNT sector-decomposition theorem with block-span equality then
-	gives the sector decompositions and their primitive overlap-span hypotheses.
-\end{proof}
-
-\begin{lemma}[BNT-cover data give overlap-span hypotheses]%
-\label{lem:sector_basis_overlap_span_reindexed_bnt_cover}
-	\lean{MPSTensor.sectorBasisOverlapSpanHypotheses_of_reindexedNonzeroParts_bntCover}
-	\leanok
-	\uses{def:common_primitive_bnt_cover_hypotheses,
-		def:common_sector_relabeling_hypothesis}
-	Let $A$ and $B$ have the same MPV family, and assume the blocked-word
-	identification hypothesis for the cyclic-sector data. The common-sector
-	structural theorem produces common primitive nonzero-sector families. If those
-	families satisfy the BNT-cover hypotheses, then the associated sector
-	decompositions have BNT data, agree as full MPV families, and satisfy the
-	primitive overlap-span hypotheses.
-\end{lemma}
-
-\begin{proof}
-	\leanok
-	\uses{lem:common_primitive_bnt_cover_hypotheses_to_phase_cover_hypotheses,
-		lem:sector_basis_overlap_span_reindexed_commonPhaseCover}
-	Convert the BNT-cover hypotheses for the produced families into common
-	phase-cover hypotheses. The common phase-cover construction then gives the
-	sector decompositions and their primitive overlap-span hypotheses.
-\end{proof}
 \begin{theorem}[Common primitive sectors with span hypotheses]%
 \label{thm:afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_spanHypotheses}
 	\lean{MPSTensor.afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_spanHypotheses}
@@ -1408,43 +1340,6 @@ BNT-cover inputs needed by the zero-block sector comparison below.
 	the original nonzero blocks with the transported powers of the weights.
 \end{proof}
 
-\begin{theorem}[Common-length sectors and span consequences]%
-\label{thm:after_blocking_common_primitive_irreducible_blocks_block_span_consequences}
-	\lean{MPSTensor.afterBlocking_commonSector_blockSpan_of_reindexedNonzeroParts}
-	\leanok
-	\uses{def:common_sector_relabeling_hypothesis, def:same_mpv2_pos,
-		def:mpv_common_phase_cover}
-	Assume two tensors generate the same MPV family and assume the blocked-word
-	identification used in the common-sector construction.  Then there is a
-	common blocking length at which both tensors decompose into a leftover
-	all-zero block and a weighted nonzero part whose summands are
-	trace-preserving, primitive, tensor-irreducible blocks with positive bond
-	dimension and nonzero weights.  The theorem further includes the three
-	positive-length MPV agreements
-	\(\mc{V}^{+}(\cdot)=\mc{V}^{+}(\cdot)\): the two agreements comparing each
-	blocked tensor with its own nonzero-sector part and the agreement comparing the
-	two nonzero-sector parts, together with the length-zero leftover-block
-	identity, as in
-	Theorem~\ref{thm:after_blocking_common_primitive_irreducible_blocks_reindexed}.
-	For these particular common-sector families, any common MPV phase cover gives
-	the finite-length nonzero-block span equality needed by the zero-block block-span
-	theorem.  A BNT proportional-decomposition conclusion for the same families
-	gives the same span equality.
-\end{theorem}
-
-\begin{proof}
-	\leanok
-	\uses{thm:after_blocking_common_primitive_irreducible_blocks_reindexed,
-		lem:mpv_common_phase_cover_span_eq,
-		lem:nonzero_block_span_eq_of_proportional_decomposition}
-	Apply
-	Theorem~\ref{thm:after_blocking_common_primitive_irreducible_blocks_reindexed}
-	to obtain the common-sector decompositions.  The implication from a common MPV
-	phase cover is Lemma~\ref{lem:mpv_common_phase_cover_span_eq}; the implication
-	from proportional-decomposition data is
-	Lemma~\ref{lem:nonzero_block_span_eq_of_proportional_decomposition}.
-\end{proof}
-
 \begin{theorem}[Unconditional common primitive block decompositions]%
 \label{thm:unconditional_common_primitive_irreducible_blocks}
 	\lean{MPSTensor.unconditional_commonPrimitiveIrreducibleBlocks}
@@ -1515,29 +1410,6 @@ BNT-cover inputs needed by the zero-block sector comparison below.
 	Convert the BNT-cover hypotheses for the common primitive nonzero-sector
 	families to common phase-cover hypotheses, and then apply the common-sector
 	comparison theorem with common phase-cover data.
-\end{proof}
-
-\begin{theorem}[Common sectors from proportional-comparison data]%
-\label{thm:afterBlocking_sectorComparison_reindexed_proportional}
-	\lean{MPSTensor.afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_proportional}
-	\leanok
-	\uses{def:common_primitive_proportional_hypotheses,
-		def:common_sector_relabeling_hypothesis}
-	Let $A$ and $B$ have the same MPV family, and assume the blocked-word
-	identification hypothesis for the cyclic-sector data. The common-sector
-	structural theorem gives common primitive nonzero-sector families. If those
-	families satisfy the proportional-comparison hypotheses of
-	Definition~\ref{def:common_primitive_proportional_hypotheses}, then the same
-	sector-weight comparison conclusion holds.
-\end{theorem}
-
-\begin{proof}
-	\leanok
-	\uses{lem:common_primitive_proportional_hypotheses_to_phase_cover_hypotheses,
-		thm:afterBlocking_sectorComparison_reindexed_commonPhaseCover}
-	Convert the BNT proportional-decomposition comparison for the common primitive
-	nonzero-sector families to common phase-cover hypotheses, and then apply the
-	common-sector comparison theorem with common phase-cover data.
 \end{proof}
 
 \begin{definition}[After-blocking BNT-cover comparison hypotheses]%
@@ -1701,10 +1573,6 @@ BNT-cover inputs needed by the zero-block sector comparison below.
 		then states the hypotheses: equality of the
 	zero-tail dimensions, injectivity of the common nonzero-sector blocks, and
 	finite-length MPV span equality.
-	Theorem~\ref{thm:after_blocking_common_primitive_irreducible_blocks_block_span_consequences}
-	gives the corresponding conditional span consequence for the common-sector
-	families themselves: a common MPV phase cover or a proportional-decomposition
-	conclusion supplies the finite-length nonzero-block span equality.
 	Theorem~\ref{thm:afterBlocking_sectorComparison_reindexed_commonPhaseCover}
 	adds the zero-tail and injectivity data to the common phase-cover route and
 	therefore gives the same sector-weight conclusion.  Establishing these

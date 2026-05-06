@@ -60,7 +60,7 @@ the BNT sector-weight comparison conclusion.
 
 This conditional wrapper is already proved.  It composes:
 1. The structural `afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts` (uses `h.relabel`) → produces common nonzero-block families
-2. `afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_proportional` (uses `h.comparison`) → produces the sector-weight conclusion
+2. The BNT-cover consumer uses the converted phase-cover hypotheses to produce the sector-weight conclusion.
 
 ### Step 1: H1 — Fintype coordinate equality (#1075 / #990 / #1113)
 
@@ -191,7 +191,7 @@ case, organized by dependency level:
 ### Level 4: Conditional sector comparison
 - `afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_spanHypotheses` — needs H1+H2+H3
 - `afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_commonPhaseCover` — needs H1+H2+H3
-- `afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_proportional` — needs H1+H2+H3
+- BNT-cover sector comparison — needs H1+H2+H3
 
 ### Level 5: Conditional full FT statement
 - `fundamentalTheorem_afterBlocking_of_comparisonHypotheses` — clean conditional form, proved
