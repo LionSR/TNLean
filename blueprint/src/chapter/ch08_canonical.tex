@@ -2702,17 +2702,26 @@ summand $\mathbf{0}_{d,D_0}$ used to retain the $N=0$ MPV coefficient.
 	\label{thm:normal_tp_primitive_irred}
 	\lean{MPSTensor.isNormal_of_tp_primitive_irreducible}
 	\leanok
-	\uses{def:primitive_mps, def:irreducible_tensor, def:normal}
+	\uses{def:primitive_mps, def:primitive_channel, def:irreducible_tensor,
+		def:normal}
 	Let $A$ be a left-canonical MPS tensor with $D > 0$,
-	irreducible transfer map, and peripheral spectrum $\{1\}$.
+	irreducible tensor action, and primitive transfer map, equivalently
+	peripheral spectrum $\{1\}$.
 	Then $A$ is normal.
 \end{theorem}
 
 \begin{proof}\leanok
 	\uses{thm:normal_from_primitive_posdef, thm:psd_fp_pd_irred}
-	Peripheral primitivity and irreducibility yield the spectral-gap
-	condition.  The PSD fixed point is positive definite by
-	Theorem~\ref{thm:psd_fp_pd_irred}.
+	The channel-theoretic results of \cite[Chapter~6]{Wolf2012Quantum} are used
+	in three distinct places.  First, trace preservation fixes the
+	left-canonical convention, and
+	peripheral primitivity says that the only peripheral eigenvalue of
+	$\E_A$ is~$1$.  Together with irreducibility, this gives a primitive
+	Perron fixed-point datum.  Second, irreducibility upgrades the nonzero
+	positive semidefinite fixed point to a positive definite faithful fixed
+	point by Theorem~\ref{thm:psd_fp_pd_irred}.  Third, the primitive
+	spectral gap with this faithful fixed point is the hypothesis of
+	Theorem~\ref{thm:normal_from_primitive_posdef}.
 	Apply Theorem~\ref{thm:normal_from_primitive_posdef}.
 \end{proof}
 
@@ -2724,7 +2733,8 @@ summand $\mathbf{0}_{d,D_0}$ used to retain the $N=0$ MPV coefficient.
 	\uses{thm:normal_tp_primitive_irred,
 		lem:isNBlkInjective_iff_blockTensor_isInjective}
 	Let $A$ be a left-canonical MPS tensor with $D > 0$,
-	irreducible transfer map, and peripheral spectrum $\{1\}$.
+	irreducible tensor action, and primitive transfer map, equivalently
+	peripheral spectrum $\{1\}$.
 	Then some positive blocking $A^{[L]}$ is one-site injective.
 \end{theorem}
 
