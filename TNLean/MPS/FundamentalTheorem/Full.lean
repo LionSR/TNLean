@@ -5,26 +5,30 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.MPS.FundamentalTheorem.Full.BlocksMatch
 
 /-!
-# Full Fundamental Theorem of MPS — Heterogeneous Equal Case
+# Heterogeneous BNT block matching
 
-This module contains **Theorem 5**: the self-contained equal-case fundamental theorem for
-heterogeneous `IsCanonicalFormBNT` families. It is the entry point that exposes the
-constructions developed in three supporting sub-modules and provides the public theorem
-`fundamentalTheorem_equalMPV_CFBNT_hetero`.
+This module contains the heterogeneous block-matching lemma for canonical-form BNT
+families.  It exposes the constructions developed in three supporting sub-modules and
+provides the public lemma `fundamentalTheorem_equalMPV_CFBNT_hetero`.
 
-For Theorems 1–4 (equal-MPV FT, proportional-MPV FT, equal ⟹ proportional, power-sum
-multiset equality) and combined corollaries, see
+The source-paper equal-MPV corollary is stronger: after the BNT blocks have been matched,
+it compares the repeated-copy coefficients and obtains one global gauge for the original
+canonical-form tensors.  The lemma in this file proves the block-count, dimension, and
+gauge-phase matching part only.
+
+For common-block and proportional comparison lemmas, see
 `TNLean.MPS.FundamentalTheorem.EqualProportional`.
 
 ## Main statements
 
-### Theorem 5: Self-contained equal-case FT for heterogeneous CF-BNT
+### Heterogeneous equal-MPV block matching
 (`fundamentalTheorem_equalMPV_CFBNT_hetero`)
 
 Given two `IsCanonicalFormBNT` families with *different* block structures
 (`rA`, `rB`, `dimA`, `dimB`, `μA`, `μB`), the hypothesis `SameMPV₂` alone (no coefficient
 convergence data from the caller) forces block-count equality, a block permutation, and
-blockwise gauge-phase equivalence.
+blockwise gauge-phase equivalence.  It does not yet produce the global weighted gauge
+conclusion of Corollary II.2 in the source paper.
 
 ## Implementation notes
 
@@ -52,29 +56,27 @@ The proof is split across supporting sub-modules for readability:
 
 ## Tags
 
-matrix product states, fundamental theorem, BNT, heterogeneous, gauge-phase equivalence
+matrix product states, BNT, heterogeneous, block matching, gauge-phase equivalence
 -/
 
 open scoped Matrix BigOperators
 
 namespace MPSTensor
 
-/-- **Self-contained equal-case Fundamental Theorem for heterogeneous CF-BNT**
-([CPSV21, Corollary IV.5] / [CPSV17, Theorem 4.4 + equal-case corollary]).
+/-- **Heterogeneous equal-MPV block matching for CF-BNT families.**
 
 Given two `IsCanonicalFormBNT` families with *different* block structures
 (`rA`, `rB`, `dimA`, `dimB`, `μA`, `μB`), the hypothesis `SameMPV₂` for the assembled
-block-diagonal tensors — with **no** coefficient convergence data from the caller —
+block-diagonal tensors, with no coefficient convergence data from the caller,
 forces:
 1. Equal block counts: `rA = rB`.
 2. A block permutation: `perm : Fin rA ≃ Fin rB`.
 3. Blockwise gauge-phase equivalence: for each `j`, `dimA j = dimB (perm j)` and
    `GaugePhaseEquiv (cast … (A j)) (B (perm j))`.
 
-Unlike `fundamentalTheorem_proportionalMPV_CFBNT`, this theorem requires **no** explicit
-`aCoeff`, `bCoeff`, `aLim`, `bLim` arguments. The
-coefficient convergence question that plagues the general proportional-case theorem is
-bypassed entirely: the BNT decomposition identity
+This lemma is not the full equal-MPV corollary of the source paper.  It does not compare
+the repeated-copy coefficient power sums and does not construct one global gauge for the
+original canonical-form tensors.  Instead, the BNT decomposition identity
   `∑_j (μA j)^N * mpv(A j) σ = ∑_k (μB k)^N * mpv(B k) σ`
 is analyzed directly via the overlap dichotomy (CPSV17 Appendix A), yielding per-block
 gauge-phase matching.
@@ -92,7 +94,7 @@ The proof delegates to `blocks_match_of_sameMPV₂_CFBNT`, which is fully proved
 - Matching injectivity (BNT separation + GPE cross-overlap norm → 1): fully proved.
 - `rA = rB` (injective maps on finite types): fully proved.
 - Permutation construction and per-block data extraction: fully proved. -/
-theorem fundamentalTheorem_equalMPV_CFBNT_hetero
+lemma fundamentalTheorem_equalMPV_CFBNT_hetero
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]

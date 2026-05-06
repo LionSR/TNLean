@@ -10,8 +10,9 @@ import Mathlib.Analysis.SpecificLimits.Normed
 
 This module proves the geometric strict-dominance facts for normalized
 coefficients `(μ k / μ 0)^N` and provides an equivalent formulation of the
-proportional Fundamental Theorem that derives the structural BNT data from
-canonical-form hypotheses.
+restricted CF-BNT proportional comparison that derives the structural BNT data
+from canonical-form hypotheses while still assuming the needed coefficient
+convergence data.
 
 The ratio convergence lemmas are auxiliary. They are not the source paper's
 BNT coefficient theorem: away from a single surviving dominant sector the
@@ -40,8 +41,8 @@ an adjusted proportionality constant; equivalently, the dominant factors `μ₀^
 into `c`.
 
 ### `fundamentalTheorem_proportionalMPV_CFBNT_auto`
-Reformulation of the proportional Fundamental Theorem that derives the BNT
-decomposition data from `IsCanonicalFormBNT`. Its remaining hypotheses are:
+Reformulation of the restricted CF-BNT proportional comparison that derives the
+BNT decomposition data from `IsCanonicalFormBNT`. Its remaining hypotheses are:
 - Two CF-BNT families
 - A proportionality constant `c : ℕ → ℂ` with
   `mpv(toTensorFromBlocks μA A) σ = c N * mpv(toTensorFromBlocks μB B) σ`
@@ -218,9 +219,10 @@ theorem proportional_normalized_of_proportional
   rw [div_pow, ← inv_pow]
   ring
 
-/-! ## Self-contained Fundamental Theorem (Theorem 4.4)
+/-! ## Conditional CF-BNT proportional comparison adapter
 
-The auto version derives the BNT decomposition data from the canonical form structure.
+The auto version derives the BNT decomposition data from the canonical form structure,
+but it still assumes explicit coefficient convergence data.
 The user only needs to supply:
 1. Two CF-BNT families with proportional block-diagonal MPVs
 2. Coefficients and their limits for the re-weighted decomposition
@@ -244,9 +246,8 @@ needed convergent nonzero coefficient data is therefore recorded as explicit hyp
 - The proportionality `mpv(A_total) = c_N * mpv(B_total)`
 - Convergent decomposition coefficients `aCoeff`, `bCoeff` with nonzero limits
 - The convergence of the proportionality constant `c` -/
-/-- Self-contained CF-BNT proportional FT version using the assembled theorem from
-`FundamentalTheoremFull`. -/
-theorem fundamentalTheorem_proportionalMPV_CFBNT_auto
+/-- Conditional CF-BNT proportional comparison using the assembled comparison lemma. -/
+lemma fundamentalTheorem_proportionalMPV_CFBNT_auto
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
